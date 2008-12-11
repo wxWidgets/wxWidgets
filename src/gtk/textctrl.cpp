@@ -149,7 +149,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                                           gtk_text_iter_get_line(start) );
         gtk_text_iter_forward_line(&para_end);
 
-        wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXALIGNMENT", start, end);
+        wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXALIGNMENT", &para_start, &para_end);
 
         GtkJustification align;
         switch (attr.GetAlignment())
@@ -195,7 +195,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                                           gtk_text_iter_get_line(start) );
         gtk_text_iter_forward_line(&para_end);
 
-        wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXINDENT", start, end);
+        wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXINDENT", &para_start, &para_end);
 
         // Convert indent from 1/10th of a mm into pixels
         float factor =
@@ -239,7 +239,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                                           gtk_text_iter_get_line(start) );
         gtk_text_iter_forward_line(&para_end);
 
-        wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXTABS", start, end);
+        wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXTABS", &para_start, &para_end);
 
         const wxArrayInt& tabs = attr.GetTabs();
 
