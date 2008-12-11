@@ -199,8 +199,6 @@ public:
 private:
     wxGrid * const m_grid;
     const int m_col;
-
-    DECLARE_NO_ASSIGN_CLASS(wxGridHeaderColumn)
 };
 
 // header control retreiving column information from the grid
