@@ -108,6 +108,14 @@ bool operator == (const wxArrayInt& array1, const wxArrayInt& array2)
 #if wxUSE_SPINBTN
 
 
+#ifdef __WXMSW__
+  #define IS_MOTION_SPIN_SUPPORTED  1
+#else
+  #define IS_MOTION_SPIN_SUPPORTED  0
+#endif
+
+#if IS_MOTION_SPIN_SUPPORTED
+
 //
 // This class implements ability to rapidly change "spin" value
 // by moving mouse when one of the spin buttons is depressed.
@@ -222,6 +230,8 @@ private:
     }
 };
 
+#endif  // IS_MOTION_SPIN_SUPPORTED
+
 
 WX_PG_IMPLEMENT_INTERNAL_EDITOR_CLASS(SpinCtrl,
                                       wxPGSpinCtrlEditor,
@@ -245,7 +255,16 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 
     wxSpinButton* wnd2;
 
-    wnd2 = new wxPGSpinButton();
+#if IS_MOTION_SPIN_SUPPORTED
+    if ( property->GetAttributeAsLong(wxT("MotionSpin"), 0) )
+    {
+        wnd2 = new wxPGSpinButton();
+    }
+    else
+#endif
+    {
+        wnd2 = new wxSpinButton();
+    }
 
 #ifdef __WXMSW__
     wnd2->Hide();
@@ -296,11 +315,16 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 
     if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
     {
-        wxPGSpinButton* spinButton =
-            (wxPGSpinButton*) propgrid->GetEditorControlSecondary();
+    #if IS_MOTION_SPIN_SUPPORTED
+        if ( property->GetAttributeAsLong(wxT("MotionSpin"), 0) )
+        {
+            wxPGSpinButton* spinButton =
+                (wxPGSpinButton*) propgrid->GetEditorControlSecondary();
 
-        if ( spinButton )
-            spins = spinButton->GetSpins();
+            if ( spinButton )
+                spins = spinButton->GetSpins();
+        }
+    #endif
 
         wxString s;
         // Can't use wnd since it might be clipper window

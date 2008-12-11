@@ -128,6 +128,11 @@
 */
 #define wxPG_ATTR_SPINCTRL_WRAP             wxS("Wrap")
 
+/** SpinCtrl editor, bool. If @true, value can also by changed by moving
+    mouse when left mouse button is being pressed.
+*/
+#define wxPG_ATTR_SPINCTRL_MOTIONSPIN       wxS("MotionSpin")
+
 /** wxMultiChoiceProperty, int. If 0, no user strings allowed. If 1, user strings
     appear before list strings. If 2, user strings appear after list string.
 */
