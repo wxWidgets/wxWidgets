@@ -154,7 +154,7 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
 {
     // the vertical size is rather arbitrary but it looks better if we leave
     // some space around the text
-    return wxSize(IsEmpty() ? DEFAULT_ITEM_WIDTH
+    return wxSize(IsEmpty() ? wxHeaderCtrlBase::DoGetBestSize().x
                             : GetColEnd(GetColumnCount() - 1),
                   (7*GetCharHeight())/4);
 }
