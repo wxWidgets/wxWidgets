@@ -80,7 +80,7 @@ void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
     const unsigned col = event.GetColumn();
 
     int w = wxWindowBase::GetTextExtent(GetColumn(col).GetTitle()).x;
-    w += 2*GetCharWidth(); // add some arbitrary margins around text
+    w += 4*GetCharWidth(); // add some arbitrary margins around text
 
     if ( !UpdateColumnWidthToFit(col, w) )
         event.Skip();
