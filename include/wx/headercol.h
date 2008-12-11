@@ -153,7 +153,7 @@ protected:
 // wxSettableHeaderColumn: column which allows to change its fields too
 // ----------------------------------------------------------------------------
 
-class wxSettableHeaderColumn : public wxHeaderColumn
+class WXDLLIMPEXP_CORE wxSettableHeaderColumn : public wxHeaderColumn
 {
 public:
     virtual void SetTitle(const wxString& title) = 0;
