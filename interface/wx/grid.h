@@ -1381,8 +1381,35 @@ public:
         There is no equivalent method for drawing row columns as there is not
         native look for that. This option is useful when using wxGrid for
         displaying tables and not as a spread-sheet.
+
+        @see UseNativeHeader()
     */
     void SetUseNativeColLabels(bool native = true);
+
+    /**
+        Enable the use of native header window for column labels.
+
+        If this function is called with @true argument, a wxHeaderCtrl is used
+        instead to display the column labels instead of drawing them in wxGrid
+        code itself. This has the advantage of making the grid look and feel
+        perfectly the same as native applications (using SetUseNativeColLabels()
+        the grid can be made to look more natively but it still doesn't feel
+        natively, notably the column resizing and dragging still works slightly
+        differently as it is implemented in wxWidgets itself) but results in
+        different behaviour for column and row headers, for which there is no
+        equivalent function, and, most importantly, is unsuitable for grids
+        with huge numbers of columns as wxHeaderCtrl doesn't support virtual
+        mode. Because of this, by default the grid does not use the native
+        header control but you should call this function to enable it if you
+        are using the grid to display tabular data and don't have thousands of
+        columns in it.
+
+        Also note that currently @c wxEVT_GRID_LABEL_LEFT_DCLICK and @c
+        wxEVT_GRID_LABEL_RIGHT_DCLICK events are not generated for the column
+        labels if the native columns header is used (but this limitation could
+        possibly be lifted in the future).
+     */
+    void UseNativeColHeader(bool native = true);
 
     //@}
 

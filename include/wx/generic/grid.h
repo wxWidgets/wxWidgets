@@ -77,6 +77,7 @@ class WXDLLIMPEXP_FWD_ADV wxGridWindow;
 class WXDLLIMPEXP_FWD_ADV wxGridTypeRegistry;
 class WXDLLIMPEXP_FWD_ADV wxGridSelection;
 
+class WXDLLIMPEXP_FWD_CORE wxHeaderCtrl;
 class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxComboBox;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
@@ -1128,14 +1129,19 @@ public:
     // ------------------------
 
     // ctor and Create() create the grid window, as with the other controls
-    wxGrid();
+    wxGrid() { Init(); }
 
     wxGrid(wxWindow *parent,
             wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxWANTS_CHARS,
-            const wxString& name = wxGridNameStr);
+            const wxString& name = wxGridNameStr)
+    {
+        Init();
+
+        Create(parent, id, pos, size, style, name);
+    }
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -1379,7 +1385,13 @@ public:
     int      GetCellHighlightPenWidth() const { return m_cellHighlightPenWidth; }
     int      GetCellHighlightROPenWidth() const { return m_cellHighlightROPenWidth; }
 
-    void     SetUseNativeColLabels( bool native = true );
+    // this one will use wxHeaderCtrl for the column labels
+    void UseNativeColHeader(bool native = true);
+
+    // this one will still draw them manually but using the native renderer
+    // instead of using the same appearance as for the row labels
+    void SetUseNativeColLabels( bool native = true );
+
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
     void     HideRowLabels() { SetRowLabelSize( 0 ); }
@@ -1701,7 +1713,7 @@ public:
     // Accessors for component windows
     wxWindow* GetGridWindow() const            { return (wxWindow*)m_gridWin; }
     wxWindow* GetGridRowLabelWindow() const    { return (wxWindow*)m_rowLabelWin; }
-    wxWindow* GetGridColLabelWindow() const    { return (wxWindow*)m_colLabelWin; }
+    wxWindow* GetGridColLabelWindow() const    { return m_colWindow; }
     wxWindow* GetGridCornerLabelWindow() const { return (wxWindow*)m_cornerLabelWin; }
 
     // Allow adjustment of scroll increment. The default is (15, 15).
@@ -1730,12 +1742,10 @@ public:
             int x, int y, int w = wxDefaultCoord, int h = wxDefaultCoord,
             long style = wxWANTS_CHARS,
             const wxString& name = wxPanelNameStr )
-        : wxScrolledWindow( parent, wxID_ANY, wxPoint(x,y), wxSize(w,h),
-                            (style|wxWANTS_CHARS), name )
-        {
-            InitVars();
-            Create();
-        }
+    {
+        Init();
+        Create(parent, wxID_ANY, wxPoint(x, y), wxSize(w, h), style, name);
+    }
 
     void SetCellValue( const wxString& val, int row, int col )
         { SetCellValue( row, col, val ); }
@@ -1896,9 +1906,30 @@ protected:
     bool m_created;
 
     wxGridWindow             *m_gridWin;
-    wxGridRowLabelWindow     *m_rowLabelWin;
-    wxGridColLabelWindow     *m_colLabelWin;
     wxGridCornerLabelWindow  *m_cornerLabelWin;
+    wxGridRowLabelWindow     *m_rowLabelWin;
+
+    // the real type of the column window depends on m_useNativeHeader value:
+    // if it is true, its dynamic type is wxHeaderCtrl, otherwise it is
+    // wxGridColLabelWindow, use accessors below when the real type matters
+    wxWindow *m_colWindow;
+
+    wxHeaderCtrl *GetColHeader() const
+    {
+        wxASSERT_MSG( m_useNativeHeader, "no column header window" );
+
+        // static_cast<> doesn't work without the full class declaration in
+        // view and we prefer to avoid adding more compile-time dependencies
+        // even at the cost of using reinterpret_cast<>
+        return reinterpret_cast<wxHeaderCtrl *>(m_colWindow);
+    }
+
+    wxGridColLabelWindow *GetColLabelWindow() const
+    {
+        wxASSERT_MSG( !m_useNativeHeader, "no column label window" );
+
+        return reinterpret_cast<wxGridColLabelWindow *>(m_colWindow);
+    }
 
     wxGridTableBase          *m_table;
     bool                      m_ownTable;
@@ -1946,7 +1977,8 @@ protected:
     wxArrayInt m_colWidths;
     wxArrayInt m_colRights;
 
-    bool m_nativeColumnLabels;
+    bool m_useNativeHeader,
+         m_nativeColumnLabels;
 
     // get the col/row coords
     int GetColWidth(int col) const;
@@ -2119,9 +2151,9 @@ protected:
     int m_scrollLineX; // X scroll increment
     int m_scrollLineY; // Y scroll increment
 
+    void Init();        // common part of all ctors
     void Create();
-    void Init();
-    void InitVars();
+    void CreateColumnWindow();
     void CalcDimensions();
     void CalcWindowSizes();
     bool Redimension( wxGridTableMessage& );
@@ -2180,6 +2212,8 @@ protected:
     friend class wxGridRowLabelWindow;
     friend class wxGridWindow;
 
+    friend class wxGridHeaderCtrl;
+
 private:
     // implement wxScrolledWindow method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
@@ -2227,8 +2261,12 @@ private:
     void ProcessColLabelMouseEvent(wxMouseEvent& event);
     void ProcessCornerLabelMouseEvent(wxMouseEvent& event);
 
+    void DoStartResizeCol(int col);
+    void DoUpdateResizeCol(int x);
+    void DoUpdateResizeColWidth(int w);
+
     void DoEndDragResizeRow();
-    void DoEndDragResizeCol();
+    void DoEndDragResizeCol(wxMouseEvent *event = NULL);
     void DoEndDragMoveCol();
 
 
