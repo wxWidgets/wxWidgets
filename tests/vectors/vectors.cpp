@@ -82,6 +82,7 @@ private:
         CPPUNIT_TEST( Iterators );
         CPPUNIT_TEST( Objects );
         CPPUNIT_TEST( NonPODs );
+        CPPUNIT_TEST( Resize );
     CPPUNIT_TEST_SUITE_END();
 
     void PushPopTest();
@@ -90,6 +91,7 @@ private:
     void Iterators();
     void Objects();
     void NonPODs();
+    void Resize();
 
     DECLARE_NO_COPY_CLASS(VectorsTestCase)
 };
@@ -239,3 +241,28 @@ void VectorsTestCase::NonPODs()
     vs.erase(vs.begin());
     vs.clear();
 }
+
+void VectorsTestCase::Resize()
+{
+    wxVector<CountedObject> v;
+    v.resize(3);
+
+    CPPUNIT_ASSERT_EQUAL( 3, v.size() );
+    CPPUNIT_ASSERT_EQUAL( 3, CountedObject::GetCount() );
+    CPPUNIT_ASSERT_EQUAL( 0, v[0].GetValue() );
+    CPPUNIT_ASSERT_EQUAL( 0, v[1].GetValue() );
+    CPPUNIT_ASSERT_EQUAL( 0, v[2].GetValue() );
+
+    v.resize(1);
+    CPPUNIT_ASSERT_EQUAL( 1, v.size() );
+    CPPUNIT_ASSERT_EQUAL( 1, CountedObject::GetCount() );
+
+    v.resize(4, CountedObject(17));
+    CPPUNIT_ASSERT_EQUAL( 4, v.size() );
+    CPPUNIT_ASSERT_EQUAL( 4, CountedObject::GetCount() );
+    CPPUNIT_ASSERT_EQUAL( 0, v[0].GetValue() );
+    CPPUNIT_ASSERT_EQUAL( 17, v[1].GetValue() );
+    CPPUNIT_ASSERT_EQUAL( 17, v[2].GetValue() );
+    CPPUNIT_ASSERT_EQUAL( 17, v[3].GetValue() );
+}
+

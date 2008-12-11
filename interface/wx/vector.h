@@ -120,7 +120,7 @@ public:
         Return reverse iterator to end of the vector.
     */
     reverse_iterator rbegin();
-    
+
     /**
         Return reverse iterator to beginning of the vector.
     */
@@ -217,6 +217,19 @@ public:
         @see capacity()
     */
     void reserve(size_type n);
+
+    /**
+        Makes the vector of size @a n.
+
+        If @a n is less than the current size(), the elements at the end of the
+        vector are erased. If it is greater, then the vector is completed with
+        either the copies of the given object @a v or @c value_type() objects
+        until it becomes of size @a n.
+     */
+    //@{
+    void resize(size_type n);
+    void resize(size_type n, const value_type& v);
+    //@}
 
     /**
         Returns the size of the vector.

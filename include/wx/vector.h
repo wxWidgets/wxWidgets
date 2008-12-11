@@ -170,7 +170,7 @@ public:
     wxVector() : m_size(0), m_capacity(0), m_values(NULL) {}
 
     wxVector(size_type size)
-        : m_size(0), m_capacity(0), m_values(NULL) 
+        : m_size(0), m_capacity(0), m_values(NULL)
     {
         reserve(size);
         for ( size_t n = 0; n < size; n++ )
@@ -178,7 +178,7 @@ public:
     }
 
     wxVector(size_type size, const value_type& v)
-        : m_size(0), m_capacity(0), m_values(NULL) 
+        : m_size(0), m_capacity(0), m_values(NULL)
     {
         reserve(size);
         for ( size_t n = 0; n < size; n++ )
@@ -227,6 +227,22 @@ public:
 
         m_values = Ops::Realloc(m_values, n * sizeof(value_type), m_size);
         m_capacity = n;
+    }
+
+    void resize(size_type n)
+    {
+        if ( n < m_size )
+            Shrink(n);
+        else if ( n > m_size )
+            Extend(n, value_type());
+    }
+
+    void resize(size_type n, const value_type& v)
+    {
+        if ( n < m_size )
+            Shrink(n);
+        else if ( n > m_size )
+            Extend(n, v);
     }
 
     size_type size() const
@@ -386,6 +402,20 @@ private:
     }
 
 private:
+    void Shrink(size_type n)
+    {
+        for ( size_type i = n; i < m_size; i++ )
+            m_values[i].~T();
+        m_size = n;
+    }
+
+    void Extend(size_type n, const value_type& v)
+    {
+        reserve(n);
+        for ( size_type i = m_size; i < n; i++ )
+            push_back(v);
+    }
+
     size_type m_size,
               m_capacity;
     value_type *m_values;
