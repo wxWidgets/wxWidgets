@@ -374,12 +374,6 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             evtType = wxEVT_COMMAND_HEADER_BEGIN_RESIZE;
             // fall through
 
-        case HDN_TRACKA:
-        case HDN_TRACKW:
-            if ( evtType == wxEVT_NULL )
-                evtType = wxEVT_COMMAND_HEADER_RESIZING;
-            // fall through
-
         case HDN_ENDTRACKA:
         case HDN_ENDTRACKW:
             width = nmhdr->pitem->cxy;
@@ -399,8 +393,20 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             if ( nmhdr->pitem && (nmhdr->pitem->mask & HDI_WIDTH) )
             {
                 // prevent the column from being shrunk beneath its min width
-                if ( nmhdr->pitem->cxy < GetColumn(idx).GetMinWidth() )
+                width = nmhdr->pitem->cxy;
+                if ( width < GetColumn(idx).GetMinWidth() )
+                {
+                    // don't generate any events and prevent the change from
+                    // happening
                     veto = true;
+                }
+                else // width is acceptable
+                {
+                    // generate the resizing event from here as we don't seem
+                    // to be getting HDN_TRACK events at all, at least with
+                    // comctl32.dll v6
+                    evtType = wxEVT_COMMAND_HEADER_RESIZING;
+                }
             }
             break;
 
