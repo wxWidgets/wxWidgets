@@ -50,6 +50,7 @@ extern int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 void wxHeaderCtrl::Init()
 {
     m_imageList = NULL;
+    m_scrollOffset = 0;
 }
 
 bool wxHeaderCtrl::Create(wxWindow *parent,
@@ -96,6 +97,14 @@ wxHeaderCtrl::~wxHeaderCtrl()
 // wxHeaderCtrl scrolling
 // ----------------------------------------------------------------------------
 
+void wxHeaderCtrl::DoSetSize(int x, int y,
+                             int w, int h,
+                             int sizeFlags)
+{
+    wxHeaderCtrlBase::DoSetSize(x + m_scrollOffset, y, w - m_scrollOffset, h,
+                                sizeFlags);
+}
+
 void wxHeaderCtrl::DoScrollHorz(int dx)
 {
     // as the native control doesn't support offsetting its contents, we use a
@@ -104,7 +113,11 @@ void wxHeaderCtrl::DoScrollHorz(int dx)
     // itself: to be precise, offset it by the scroll increment to the left and
     // increment its width to still extend to the right boundary to compensate
     // for it (notice that dx is negative when scrolling to the right)
-    SetSize(GetPosition().x + dx, -1, GetSize().x - dx, -1, wxSIZE_USE_EXISTING);
+    m_scrollOffset += dx;
+
+    wxHeaderCtrlBase::DoSetSize(GetPosition().x + dx, -1,
+                                GetSize().x - dx, -1,
+                                wxSIZE_USE_EXISTING);
 }
 
 // ----------------------------------------------------------------------------

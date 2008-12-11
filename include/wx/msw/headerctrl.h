@@ -60,6 +60,9 @@ private:
 
     // override wxWindow methods which must be implemented by a new control
     virtual wxSize DoGetBestSize() const;
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 
     // override MSW-specific methods needed for new control
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
@@ -80,6 +83,9 @@ private:
 
     // the image list: initially NULL, created on demand
     wxImageList *m_imageList;
+
+    // the offset of the window used to emulate scrolling it
+    int m_scrollOffset;
 
     DECLARE_NO_COPY_CLASS(wxHeaderCtrl)
 };
