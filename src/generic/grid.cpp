@@ -6781,37 +6781,15 @@ void wxGrid::DoEndDragMoveCol()
 
 void wxGrid::SetColPos(int idx, int pos)
 {
+    // we're going to need m_colAt now, initialize it if needed
     if ( m_colAt.empty() )
     {
-        // we're going to need m_colAt now, initialize it
         m_colAt.reserve(m_numCols);
         for ( int i = 0; i < m_numCols; i++ )
             m_colAt.push_back(i);
     }
 
-    // create the updated copy of m_colAt
-    const unsigned count = m_colAt.size();
-
-    wxArrayInt colAt;
-    colAt.reserve(count);
-    for ( unsigned n = 0; n < count; n++ )
-    {
-        // NB: order of checks is important for this to work when the new
-        //     column position is the same as the old one
-
-        // insert the column at its new position
-        if ( colAt.size() == static_cast<unsigned>(pos) )
-            colAt.push_back(idx);
-
-        // delete the column from its old position
-        const int idxOld = m_colAt[n];
-        if ( idxOld == idx )
-            continue;
-
-        colAt.push_back(idxOld);
-    }
-
-    m_colAt = colAt;
+    wxHeaderCtrl::MoveColumnInOrderArray(m_colAt, idx, pos);
 
     // also recalculate the column rights
     if ( !m_colWidths.IsEmpty() )

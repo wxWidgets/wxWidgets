@@ -473,28 +473,7 @@ wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
 
 void wxHeaderCtrl::DoMoveCol(unsigned int idx, unsigned int pos)
 {
-    const unsigned count = m_colIndices.size();
-
-    wxArrayInt colIndices;
-    colIndices.reserve(count);
-    for ( unsigned n = 0; n < count; n++ )
-    {
-        // NB: order of checks is important for this to work when the new
-        //     column position is the same as the old one
-
-        // insert the column at its new position
-        if ( colIndices.size() == pos )
-            colIndices.push_back(idx);
-
-        // delete the column from its old position
-        const unsigned idxOld = m_colIndices[n];
-        if ( idxOld == idx )
-            continue;
-
-        colIndices.push_back(idxOld);
-    }
-
-    m_colIndices = colIndices;
+    MoveColumnInOrderArray(m_colIndices, idx, pos);
 
     Refresh();
 }

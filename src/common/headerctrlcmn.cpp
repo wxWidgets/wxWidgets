@@ -147,6 +147,38 @@ unsigned int wxHeaderCtrlBase::GetColumnPos(unsigned int idx) const
     return wxNO_COLUMN;
 }
 
+/* static */
+void wxHeaderCtrlBase::MoveColumnInOrderArray(wxArrayInt& order,
+                                              unsigned int idx,
+                                              unsigned int pos)
+{
+    const unsigned count = order.size();
+
+    wxArrayInt orderNew;
+    orderNew.reserve(count);
+    for ( unsigned n = 0; ; n++ )
+    {
+        // NB: order of checks is important for this to work when the new
+        //     column position is the same as the old one
+
+        // insert the column at its new position
+        if ( orderNew.size() == pos )
+            orderNew.push_back(idx);
+
+        if ( n == count )
+            break;
+
+        // delete the column from its old position
+        const unsigned idxOld = order[n];
+        if ( idxOld == idx )
+            continue;
+
+        orderNew.push_back(idxOld);
+    }
+
+    order.swap(orderNew);
+}
+
 // ============================================================================
 // wxHeaderCtrlSimple implementation
 // ============================================================================

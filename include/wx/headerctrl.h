@@ -98,6 +98,14 @@ public:
     // get the position at which this column is currently displayed
     unsigned int GetColumnPos(unsigned int idx) const;
 
+    // helper function used by the generic version of this control and also
+    // wxGrid: reshuffles the array of column indices indexed by positions
+    // (i.e. using the same convention as for SetColumnsOrder()) so that the
+    // column with the given index is found at the specified position
+    static void MoveColumnInOrderArray(wxArrayInt& order,
+                                       unsigned int idx,
+                                       unsigned int pos);
+
 
     // implementation only from now on
     // -------------------------------

@@ -272,6 +272,26 @@ public:
      */
     unsigned int GetColumnPos(unsigned int idx) const;
 
+    /**
+        Helper function to manipulate the array of column indices.
+
+        This function reshuffles the array of column indices indexed by
+        positions (i.e. using the same convention as for SetColumnsOrder()) so
+        that the column with the given index is found at the specified
+        position.
+
+        @param order
+            Array containing the indices of columns in order of their
+            positions.
+        @param idx
+            The index of the column to move.
+        @param pos
+            The new position for the column @a idx.
+     */
+    static void MoveColumnInOrderArray(wxArrayInt& order,
+                                       unsigned int idx,
+                                       unsigned int pos);
+
 protected:
     /**
         Method to be implemented by the derived classes to return the
