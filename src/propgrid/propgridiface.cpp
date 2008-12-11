@@ -317,9 +317,38 @@ void wxPropertyGridInterface::DeleteProperty( wxPGPropArg id )
     if ( grid->GetState() == state )
         grid->DoSelectProperty(NULL, wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
 
-    state->DoDelete( p );
+    state->DoDelete( p, true );
 
     RefreshGrid(state);
+}
+
+// -----------------------------------------------------------------------
+
+wxPGProperty* wxPropertyGridInterface::RemoveProperty( wxPGPropArg id )
+{
+    wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
+
+    wxCHECK( !p->GetChildCount() || p->HasFlag(wxPG_PROP_AGGREGATE),
+             wxNullProperty);
+
+    wxPropertyGridPageState* state = p->GetParentState();
+    wxPropertyGrid* grid = state->GetGrid();
+
+    if ( grid->GetState() == state )
+    {
+        grid->DoSelectProperty(NULL,
+            wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
+    }
+
+    state->DoDelete( p, false );
+
+    // Mark the property as 'unattached'
+    p->m_parentState = NULL;
+    p->m_parent = NULL;
+
+    RefreshGrid(state);
+
+    return p;
 }
 
 // -----------------------------------------------------------------------

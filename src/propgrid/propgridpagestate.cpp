@@ -1690,7 +1690,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridPageState::DoDelete( wxPGProperty* item )
+void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
 {
     wxCHECK_RET( item->GetParent(),
         wxT("this property was already deleted") );
@@ -1790,7 +1790,8 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item )
     if ( item->GetBaseName().Len() ) m_dictName.erase(item->GetBaseName());
 
     // We can actually delete it now
-    delete item;
+    if ( doDelete )
+        delete item;
 
     m_itemsAdded = 1; // Not a logical assignment (but required nonetheless).
 

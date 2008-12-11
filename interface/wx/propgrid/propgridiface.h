@@ -548,6 +548,16 @@ public:
     static void RegisterAdditionalEditors();
 
     /**
+        Removes and returns a property.
+
+        @param id
+            Pointer or name of a property.
+
+        @remarks Removed property cannot have any children.
+    */
+    wxPGProperty* RemoveProperty( wxPGPropArg id );
+
+    /**
         Replaces property with id with newly created one. For example,
         this code replaces existing property named "Flags" with one that
         will have different set of items:

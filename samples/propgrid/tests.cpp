@@ -919,6 +919,23 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
 
     {
+        RT_START_TEST(RemoveProperty)
+
+        wxPGProperty* p;
+
+        wxPGProperty* origParent =
+            pgman->GetProperty(wxT("Window Styles"))->GetParent();
+
+        p = pgman->RemoveProperty(wxT("Window Styles"));
+        pgman->Refresh();
+        pgman->Update();
+
+        pgman->AppendIn(origParent, p);
+        pgman->Refresh();
+        pgman->Update();
+    }
+
+    {
         RT_START_TEST(SetPropertyBackgroundColour)
         wxCommandEvent evt;
         evt.SetInt(1); // IsChecked() will return TRUE.

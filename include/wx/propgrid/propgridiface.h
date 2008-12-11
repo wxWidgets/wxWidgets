@@ -245,6 +245,16 @@ public:
      */
     void DeleteProperty( wxPGPropArg id );
 
+    /**
+        Removes and returns a property.
+
+        @param id
+            Pointer or name of a property.
+
+        @remarks Removed property cannot have any children.
+    */
+    wxPGProperty* RemoveProperty( wxPGPropArg id );
+
     /** Disables property. */
     bool DisableProperty( wxPGPropArg id ) { return EnableProperty(id,false); }
 

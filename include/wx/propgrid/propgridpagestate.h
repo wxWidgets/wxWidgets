@@ -421,7 +421,7 @@ public:
         Override this member function to add custom behavior on property
         deletion.
     */
-    virtual void DoDelete( wxPGProperty* item );
+    virtual void DoDelete( wxPGProperty* item, bool doDelete = true );
 
     wxSize DoFitColumns( bool allowGridResize = false );
 
