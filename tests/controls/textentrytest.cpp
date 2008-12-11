@@ -165,3 +165,27 @@ void TextEntryTestCase::InsertionPoint()
     CPPUNIT_ASSERT_EQUAL( 1, entry->GetInsertionPoint() );
 }
 
+void TextEntryTestCase::Replace()
+{
+    wxTextEntry * const entry = GetTestEntry();
+
+    entry->SetValue("Hello replace\n"
+                    "0123456789012");
+    entry->SetInsertionPoint(0);
+
+    entry->Replace(6, 13, "changed");
+
+    CPPUNIT_ASSERT_EQUAL("Hello changed\n"
+                         "0123456789012",
+                         entry->GetValue());
+    CPPUNIT_ASSERT_EQUAL(13, entry->GetInsertionPoint());
+
+    entry->Replace(13, -1, "");
+    CPPUNIT_ASSERT_EQUAL("Hello changed", entry->GetValue());
+    CPPUNIT_ASSERT_EQUAL(13, entry->GetInsertionPoint());
+
+    entry->Replace(0, 6, "Un");
+    CPPUNIT_ASSERT_EQUAL("Unchanged", entry->GetValue());
+    CPPUNIT_ASSERT_EQUAL(2, entry->GetInsertionPoint());
+}
+

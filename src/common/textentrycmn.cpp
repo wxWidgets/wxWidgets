@@ -73,6 +73,7 @@ void wxTextEntryBase::Replace(long from, long to, const wxString& value)
         Remove(from, to);
     }
 
+    SetInsertionPoint(from);
     WriteText(value);
 }
 

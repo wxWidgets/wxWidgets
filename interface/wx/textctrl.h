@@ -1476,6 +1476,9 @@ public:
         Removes the text starting at the first given position up to
         (but not including) the character at the last position.
 
+        This function puts the current insertion point position at @a to as a
+        side effect.
+
         @param from
             The first position.
         @param to
@@ -1486,6 +1489,9 @@ public:
     /**
         Replaces the text starting at the first position up to
         (but not including) the character at the last position with the given text.
+
+        This function puts the current insertion point position at @a to as a
+        side effect.
 
         @param from
             The first position.
