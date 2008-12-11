@@ -96,6 +96,16 @@ wxIcon wxAboutDialogInfo::GetIcon() const
     return icon;
 }
 
+wxString wxAboutDialogInfo::GetCopyrightToDisplay() const
+{
+    wxString ret = m_copyright;
+
+    ret.Replace("(c)", "\u00A9");
+    ret.Replace("(C)", "\u00A9");
+
+    return ret;
+}
+
 // ----------------------------------------------------------------------------
 // wxGenericAboutDialog
 // ----------------------------------------------------------------------------
@@ -120,7 +130,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
     m_sizerText->Add(label, wxSizerFlags().Centre().Border());
     m_sizerText->AddSpacer(5);
 
-    AddText(info.GetCopyright());
+    AddText(info.GetCopyrightToDisplay());
     AddText(info.GetDescription());
 
     if ( info.HasWebSite() )

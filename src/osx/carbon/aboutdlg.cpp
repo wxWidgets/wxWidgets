@@ -75,7 +75,7 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         }
 
         if ( info.HasCopyright() )
-            opts.Set(kHIAboutBoxCopyrightKey, info.GetCopyright());
+            opts.Set(kHIAboutBoxCopyrightKey, info.GetCopyrightToDisplay());
 
         opts.Set(kHIAboutBoxDescriptionKey, info.GetDescriptionAndCredits());
 

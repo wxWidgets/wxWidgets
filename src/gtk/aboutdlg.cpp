@@ -44,7 +44,7 @@ public:
     GtkArray() : m_strings(0), m_count(0)
     {
     }
-    
+
     // Create GtkArray from wxArrayString. Note that the created object is
     // only valid as long as 'a' is!
     GtkArray(const wxArrayString& a)
@@ -124,7 +124,7 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         else
             gtk_about_dialog_set_version(dlg, NULL);
         if ( info.HasCopyright() )
-            gtk_about_dialog_set_copyright(dlg, wxGTK_CONV_SYS(info.GetCopyright()));
+            gtk_about_dialog_set_copyright(dlg, wxGTK_CONV_SYS(info.GetCopyrightToDisplay()));
         else
             gtk_about_dialog_set_copyright(dlg, NULL);
         if ( info.HasDescription() )

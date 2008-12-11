@@ -62,7 +62,7 @@ public:
 
     void SetAttributedString( CFStringRef key, const wxString& value )
     {
-          wxCFRef<CFAttributedStringRef> attrString( 
+          wxCFRef<CFAttributedStringRef> attrString(
             CFAttributedStringCreate(kCFAllocatorDefault, wxCFStringRef(value), NULL) );
         CFDictionarySetValue(*this, key, attrString);
     }
@@ -92,7 +92,7 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         }
 
         if ( info.HasCopyright() )
-            opts.Set(CFSTR("Copyright"), info.GetCopyright());
+            opts.Set(CFSTR("Copyright"), info.GetCopyrightToDisplay());
 
         opts.SetAttributedString(CFSTR("Credits"), info.GetDescriptionAndCredits());
 
