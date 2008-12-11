@@ -43,11 +43,11 @@ enum
 };
 
 // ----------------------------------------------------------------------------
-// wxHeaderColumnBase: interface for a column in a header of controls such as
-//                     wxListCtrl, wxDataViewCtrl or wxGrid
+// wxHeaderColumn: interface for a column in a header of controls such as
+//                 wxListCtrl, wxDataViewCtrl or wxGrid
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxHeaderColumnBase
+class WXDLLIMPEXP_CORE wxHeaderColumn
 {
 public:
     // ctors and dtor
@@ -69,80 +69,65 @@ public:
 
     // virtual dtor for the base class to avoid gcc warnings even though we
     // don't normally delete the objects of this class via a pointer to
-    // wxHeaderColumnBase so it's not necessary, strictly speaking
-    virtual ~wxHeaderColumnBase() { }
+    // wxHeaderColumn so it's not necessary, strictly speaking
+    virtual ~wxHeaderColumn() { }
 
+    // getters for various attributes
+    // ------------------------------
 
-    // setters and getters for various attributes
-    // ------------------------------------------
+    // notice that wxHeaderColumn only provides getters as this is all the
+    // wxHeaderCtrl needs, various derived class must also provide some way to
+    // change these attributes but this can be done either at the column level
+    // (in which case they should inherit from wxSettableHeaderColumn) or via
+    // the methods of the main control in which case you don't need setters in
+    // the column class at all
 
     // title is the string shown for this column
-    virtual void SetTitle(const wxString& title) = 0;
     virtual wxString GetTitle() const = 0;
 
     // bitmap shown (instead of text) in the column header
-    virtual void SetBitmap(const wxBitmap& bitmap) = 0;
     virtual wxBitmap GetBitmap() const = 0;                                   \
 
     // width of the column in pixels, can be set to wxCOL_WIDTH_DEFAULT meaning
     // unspecified/default
-    virtual void SetWidth(int width) = 0;
     virtual int GetWidth() const = 0;
 
     // minimal width can be set for resizeable columns to forbid resizing them
     // below the specified size (set to 0 to remove)
-    virtual void SetMinWidth(int minWidth) = 0;
     virtual int GetMinWidth() const = 0;
 
     // alignment of the text: wxALIGN_CENTRE, wxALIGN_LEFT or wxALIGN_RIGHT
-    virtual void SetAlignment(wxAlignment align) = 0;
     virtual wxAlignment GetAlignment() const = 0;
 
 
     // flags manipulations:
     // --------------------
 
-    // notice that while we make Set/GetFlags() pure virtual here and implement
-    // the individual flags access in terms of them, for some derived classes
-    // it is more natural to implement access to each flag individually, in
-    // which case they can use SetIndividualFlags() and GetFromIndividualFlags()
-    // below to implement Set/GetFlags()
+    // notice that while we make GetFlags() pure virtual here and implement the
+    // individual flags access in terms of it, for some derived classes it is
+    // more natural to implement access to each flag individually, in which
+    // case they can use our GetFromIndividualFlags() helper below to implement
+    // GetFlags()
 
-    // set or retrieve all column flags at once: combination of wxCOL_XXX
-    // values above
-    virtual void SetFlags(int flags) = 0;
+    // retrieve all column flags at once: combination of wxCOL_XXX values above
     virtual int GetFlags() const = 0;
-
-    // change, set, clear, toggle or test for any individual flag
-    void ChangeFlag(int flag, bool set);
-    void SetFlag(int flag);
-    void ClearFlag(int flag);
-    void ToggleFlag(int flag);
 
     bool HasFlag(int flag) const { return (GetFlags() & flag) != 0; }
 
 
     // wxCOL_RESIZABLE
-    virtual void SetResizeable(bool resizeable)
-        { ChangeFlag(wxCOL_RESIZABLE, resizeable); }
     virtual bool IsResizeable() const
         { return HasFlag(wxCOL_RESIZABLE); }
 
     // wxCOL_SORTABLE
-    virtual void SetSortable(bool sortable)
-        { ChangeFlag(wxCOL_SORTABLE, sortable); }
     virtual bool IsSortable() const
         { return HasFlag(wxCOL_SORTABLE); }
 
     // wxCOL_REORDERABLE
-    virtual void SetReorderable(bool reorderable)
-        { ChangeFlag(wxCOL_REORDERABLE, reorderable); }
     virtual bool IsReorderable() const
         { return HasFlag(wxCOL_REORDERABLE); }
 
     // wxCOL_HIDDEN
-    virtual void SetHidden(bool hidden)
-        { ChangeFlag(wxCOL_HIDDEN, hidden); }
     virtual bool IsHidden() const
         { return HasFlag(wxCOL_HIDDEN); }
     bool IsShown() const
@@ -152,30 +137,67 @@ public:
     // sorting
     // -------
 
-    // set this column as the one used to sort the control
-    virtual void SetAsSortKey(bool sort = true) = 0;
-    void UnsetAsSortKey() { SetAsSortKey(false); }
-
-    // return true if the column is used for sorting
+    // return true if the column is the one currently used for sorting
     virtual bool IsSortKey() const = 0;
 
     // for sortable columns indicate whether we should sort in ascending or
     // descending order (this should only be taken into account if IsSortKey())
-    virtual void SetSortOrder(bool ascending) = 0;
-    void ToggleSortOrder() { SetSortOrder(!IsSortOrderAscending()); }
     virtual bool IsSortOrderAscending() const = 0;
 
 protected:
-    // helpers for the class overriding Set/IsXXX()
-    void SetIndividualFlags(int flags);
+    // helper for the class overriding IsXXX()
     int GetFromIndividualFlags() const;
 };
 
 // ----------------------------------------------------------------------------
-// wxHeaderColumnSimple: trivial generic implementation of wxHeaderColumnBase
+// wxSettableHeaderColumn: column which allows to change its fields too
 // ----------------------------------------------------------------------------
 
-class wxHeaderColumnSimple : public wxHeaderColumnBase
+class wxSettableHeaderColumn : public wxHeaderColumn
+{
+public:
+    virtual void SetTitle(const wxString& title) = 0;
+    virtual void SetBitmap(const wxBitmap& bitmap) = 0;
+    virtual void SetWidth(int width) = 0;
+    virtual void SetMinWidth(int minWidth) = 0;
+    virtual void SetAlignment(wxAlignment align) = 0;
+
+    // see comment for wxHeaderColumn::GetFlags() about the relationship
+    // between SetFlags() and Set{Sortable,Reorderable,...}
+
+    // change, set, clear, toggle or test for any individual flag
+    virtual void SetFlags(int flags) = 0;
+    void ChangeFlag(int flag, bool set);
+    void SetFlag(int flag);
+    void ClearFlag(int flag);
+    void ToggleFlag(int flag);
+
+    virtual void SetResizeable(bool resizeable)
+        { ChangeFlag(wxCOL_RESIZABLE, resizeable); }
+    virtual void SetSortable(bool sortable)
+        { ChangeFlag(wxCOL_SORTABLE, sortable); }
+    virtual void SetReorderable(bool reorderable)
+        { ChangeFlag(wxCOL_REORDERABLE, reorderable); }
+    virtual void SetHidden(bool hidden)
+        { ChangeFlag(wxCOL_HIDDEN, hidden); }
+
+    virtual void SetAsSortKey(bool sort = true) = 0;
+    void UnsetAsSortKey() { SetAsSortKey(false); }
+
+    virtual void SetSortOrder(bool ascending) = 0;
+    void ToggleSortOrder() { SetSortOrder(!IsSortOrderAscending()); }
+
+protected:
+    // helper for the class overriding individual SetXXX() methods instead of
+    // overriding SetFlags()
+    void SetIndividualFlags(int flags);
+};
+
+// ----------------------------------------------------------------------------
+// wxHeaderColumnSimple: trivial generic implementation of wxHeaderColumn
+// ----------------------------------------------------------------------------
+
+class wxHeaderColumnSimple : public wxSettableHeaderColumn
 {
 public:
     // ctors and dtor

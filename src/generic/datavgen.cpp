@@ -91,7 +91,7 @@ public:
 protected:
     // implement/override wxHeaderCtrl functions by forwarding them to the main
     // control
-    virtual wxHeaderColumnBase& GetColumn(unsigned int idx)
+    virtual wxHeaderColumn& GetColumn(unsigned int idx)
     {
         return *(GetOwner()->GetColumn(idx));
     }
@@ -176,8 +176,10 @@ private:
 
     void OnEndResize(wxHeaderCtrlEvent& event)
     {
+        wxDataViewCtrl * const owner = GetOwner();
+
         const unsigned col = event.GetColumn();
-        GetColumn(col).SetWidth(event.GetWidth());
+        owner->GetColumn(col)->SetWidth(event.GetWidth());
         GetOwner()->OnColumnChange(col);
     }
 

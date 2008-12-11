@@ -508,7 +508,7 @@ enum wxDataViewColumnFlags
     wxDATAVIEW_COL_HIDDEN        = wxCOL_HIDDEN
 };
 
-class WXDLLIMPEXP_ADV wxDataViewColumnBase : public wxHeaderColumnBase
+class WXDLLIMPEXP_ADV wxDataViewColumnBase : public wxSettableHeaderColumn
 {
 public:
     // ctor for the text columns: takes ownership of renderer

@@ -172,7 +172,7 @@ void wxHeaderCtrl::DoUpdate(unsigned int idx)
 
 void wxHeaderCtrl::DoInsertItem(unsigned int idx, int order)
 {
-    const wxHeaderColumnBase& col = GetColumn(idx);
+    const wxHeaderColumn& col = GetColumn(idx);
 
     wxHDITEM hdi;
 

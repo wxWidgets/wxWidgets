@@ -2706,7 +2706,7 @@ bool wxDataViewColumn::IsSortable() const
 
 void wxDataViewColumn::SetAsSortKey( bool WXUNUSED(sort) )
 {
-    // it might not make sense to have this function in wxHeaderColumnBase at
+    // it might not make sense to have this function in wxHeaderColumn at
     // all in fact, changing of the sort order should only be done using the
     // associated control API
     wxFAIL_MSG( "not implemented" );

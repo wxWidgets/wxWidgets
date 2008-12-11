@@ -42,9 +42,18 @@ enum
 
     Notice that this is an abstract base class which is implemented (usually
     using the information stored in the associated control) by the different
-    controls using wxHeaderCtrl. You may use wxHeaderCtrlSimple which uses
-    concrete wxHeaderColumnSimple if you don't already store the column
-    information somewhere.
+    controls using wxHeaderCtrl. As the control only needs to retrieve the
+    information about the column, this class defines only the methods for
+    accessing the various column properties but not for changing them as the
+    setters might not be needed at all, e.g. if the column attributes can only
+    be changed via the methods of the main associated control (this is the case
+    for wxGrid for example). If you do want to allow changing them directly
+    using the column itself, you should inherit from wxSettableHeaderColumn
+    instead of this class.
+
+    Finally, if you don't already store the column information at all anywhere,
+    you should use the concrete wxHeaderColumnSimple class and
+    wxHeaderCtrlSimple.
 
     @library{wxcore}
     @category{ctrl}
@@ -53,14 +62,130 @@ class wxHeaderColumn
 {
 public:
     /**
-        Set the text to display in the column header.
-     */
-    virtual void SetTitle(const wxString& title) = 0;
-
-    /**
         Get the text shown in the column header.
      */
     virtual wxString GetTitle() const = 0;
+
+    /**
+        Returns the bitmap in the header of the column, if any.
+
+        If the column has no associated bitmap, wxNullBitmap should be returned.
+    */
+    virtual wxBitmap GetBitmap() const = 0;
+
+    /**
+        Returns the current width of the column.
+
+        @return
+            Width of the column in pixels, never wxCOL_WIDTH_DEFAULT.
+    */
+    virtual int GetWidth() const = 0;
+
+    /**
+        Return the minimal column width.
+
+        @return
+            The minimal width such that the user can't resize the column to
+            lesser size (notice that it is still possible to set the column
+            width to smaller value from the program code). Return 0 from here
+            to allow resizing the column to arbitrarily small size.
+     */
+    virtual int GetMinWidth() const = 0;
+
+    /**
+        Returns the current column alignment.
+
+        @return
+            One of wxALIGN_CENTRE, wxALIGN_LEFT or wxALIGN_RIGHT.
+     */
+    virtual wxAlignment GetAlignment() const = 0;
+
+
+    /**
+        Get the column flags.
+
+        This method retrieves all the flags at once, you can also use HasFlag()
+        to test for any individual flag or IsResizeable(), IsSortable(),
+        IsReorderable() and IsHidden() to test for particular flags.
+     */
+    virtual int GetFlags() const = 0;
+
+    /**
+        Return @true if the specified flag is currently set for this column.
+     */
+    bool HasFlag(int flag) const;
+
+
+    /**
+        Return true if the column can be resized by the user.
+
+        Equivalent to HasFlag(wxCOL_RESIZABLE).
+     */
+    virtual bool IsResizeable() const;
+
+    /**
+        Returns @true if the column can be clicked by user to sort the control
+        contents by the field in this column.
+
+        This corresponds to wxCOL_SORTABLE flag which is off by default.
+    */
+    virtual bool IsSortable() const;
+
+    /**
+        Returns @true if the column can be dragged by user to change its order.
+
+        This corresponds to wxCOL_REORDERABLE flag which is on by default.
+    */
+    virtual bool IsReorderable() const;
+
+    /**
+        Returns @true if the column is currently hidden.
+
+        This corresponds to wxCOL_HIDDEN flag which is off by default.
+     */
+    virtual bool IsHidden() const;
+
+    /**
+        Returns @true if the column is currently shown.
+
+        This corresponds to the absence of wxCOL_HIDDEN flag.
+     */
+    bool IsShown() const;
+
+
+    /**
+        Returns @true if the column is currently used for sorting.
+     */
+    virtual bool IsSortKey() const = 0;
+
+    /**
+        Returns @true, if the sort order is ascending.
+
+        Notice that it only makes sense to call this function if the column is
+        used for sorting at all, i.e. if IsSortKey() returns @true.
+    */
+    virtual bool IsSortOrderAscending() const = 0;
+};
+
+/**
+    @class wxSettableHeaderColumn
+
+    Adds methods to set the column attributes to wxHeaderColumn.
+
+    This class adds setters for the column attributes defined by
+    wxHeaderColumn. It is still an abstract base class and needs to be
+    implemented before using it with wxHeaderCtrl.
+
+    @library{wxcore}
+    @category{ctrl}
+ */
+class wxSettableHeaderColumn : public wxHeaderColumn
+{
+public:
+    /**
+        Set the text to display in the column header.
+     */
+    virtual void SetTitle(const wxString& title) = 0;
 
     /**
         Set the bitmap to be displayed in the column header.
@@ -71,13 +196,6 @@ public:
     virtual void SetBitmap(const wxBitmap& bitmap) = 0;
 
     /**
-        Returns the bitmap in the header of the column, if any.
-
-        If the column has no associated bitmap, wxNullBitmap is returned.
-    */
-    virtual wxBitmap GetBitmap() const = 0;
-
-    /**
         Set the column width.
 
         @param width
@@ -85,14 +203,6 @@ public:
             meaning to use default width.
      */
     virtual void SetWidth(int width) = 0;
-
-    /**
-        Returns the current width of the column.
-
-        @return
-            Width of the column in pixels, never wxCOL_WIDTH_DEFAULT.
-    */
-    virtual int GetWidth() const = 0;
 
     /**
         Set the minimal column width.
@@ -109,14 +219,6 @@ public:
     virtual void SetMinWidth(int minWidth) = 0;
 
     /**
-        Return the minimal column width.
-
-        @return
-            The value previously set by SetMinWidth() or 0 by default.
-     */
-    virtual int GetMinWidth() const = 0;
-
-    /**
         Set the alignment of the column header.
 
         @param align
@@ -128,14 +230,6 @@ public:
             never returns it).
     */
     virtual void SetAlignment(wxAlignment align) = 0;
-
-    /**
-        Returns the current column alignment.
-
-        @return
-            One of wxALIGN_CENTRE, wxALIGN_LEFT or wxALIGN_RIGHT.
-     */
-    virtual wxAlignment GetAlignment() const = 0;
 
 
     /**
@@ -189,22 +283,6 @@ public:
      */
     void ToggleFlag(int flag);
 
-    /**
-        Get the column flags.
-
-        This method retrieves all the flags at once, you can also use HasFlag()
-        to test for any individual flag or IsResizeable(), IsSortable(),
-        IsReorderable() and IsHidden() to test for particular flags.
-
-        @see SetFlags()
-     */
-    virtual int GetFlags() const = 0;
-
-    /**
-        Return @true if the specified flag is currently set for this column.
-     */
-    bool HasFlag(int flag) const;
-
 
     /**
         Call this to enable or disable interactive resizing of the column by
@@ -215,13 +293,6 @@ public:
         Equivalent to ChangeFlag(wxCOL_RESIZABLE, resizeable).
      */
     virtual void SetResizeable(bool resizeable);
-
-    /**
-        Return true if the column can be resized by the user.
-
-        Equivalent to HasFlag(wxCOL_RESIZABLE).
-     */
-    virtual bool IsResizeable() const;
 
     /**
         Allow clicking the column to sort the control contents by the field in
@@ -236,30 +307,11 @@ public:
     virtual void SetSortable(bool sortable);
 
     /**
-        Returns @true if the column can be clicked by user to sort the control
-        contents by the field in this column.
-
-        This corresponds to wxCOL_SORTABLE flag which is off by default.
-
-        @see SetSortable()
-    */
-    virtual bool IsSortable() const;
-
-    /**
         Allow changing the column order by dragging it.
 
         Equivalent to ChangeFlag(wxCOL_REORDERABLE, reorderable).
      */
     virtual void SetReorderable(bool reorderable);
-
-    /**
-        Returns @true if the column can be dragged by user to change its order.
-
-        This corresponds to wxCOL_REORDERABLE flag which is on by default.
-
-        @see SetReorderable()
-    */
-    virtual bool IsReorderable() const;
 
     /**
         Hide or show the column.
@@ -270,21 +322,6 @@ public:
         Equivalent to ChangeFlag(wxCOL_HIDDEN, hidden).
      */
     virtual void SetHidden(bool hidden);
-
-    /**
-        Returns @true if the column is currently hidden.
-
-        This corresponds to wxCOL_HIDDEN flag which is off by default.
-     */
-    virtual bool IsHidden() const;
-
-    /**
-        Returns @true if the column is currently shown.
-
-        This corresponds to the absence of wxCOL_HIDDEN flag.
-     */
-    bool IsShown() const;
-
 
 
     /**
@@ -313,16 +350,6 @@ public:
     void UnsetAsSortKey();
 
     /**
-        Returns @true if the column is currently used for sorting.
-
-        Notice that this function simply returns the value last passed to
-        SetAsSortKey() (or @false if SetAsSortKey() had never been called), it
-        is up to the associated control to use this information to actually
-        sort its contents.
-     */
-    virtual bool IsSortKey() const = 0;
-
-    /**
         Sets the sort order for this column.
 
         This only makes sense for sortable columns which are currently used as
@@ -345,16 +372,6 @@ public:
         @see SetSortOrder(), IsSortOrderAscending()
      */
     void ToggleSortOrder();
-
-    /**
-        Returns @true, if the sort order is ascending.
-
-        Notice that it only makes sense to call this function if the column is
-        used for sorting at all, i.e. if IsSortKey() returns @true.
-
-        @see SetSortOrder()
-    */
-    virtual bool IsSortOrderAscending() const = 0;
 };
 
 /**
@@ -362,9 +379,9 @@ public:
 
     Simple container for the information about the column.
 
-    This is a concrete class implementing all base wxHeaderColumn class methods
-    in a trivial way, i.e. by just storing the information in the object
-    itself. It is used by and with wxHeaderCtrlSimple, e.g.
+    This is a concrete class implementing all wxSettableHeaderColumn class
+    methods in a trivial way, i.e. by just storing the information in the
+    object itself. It is used by and with wxHeaderCtrlSimple, e.g.
     @code
         wxHeaderCtrlSimple * header = new wxHeaderCtrlSimple(...);
         wxHeaderColumnSimple col("Title");

@@ -170,7 +170,7 @@ int wxHeaderCtrl::GetColStart(unsigned int idx) const
         if ( i == idx )
             break;
 
-        const wxHeaderColumnBase& col = self->GetColumn(i);
+        const wxHeaderColumn& col = self->GetColumn(i);
         if ( col.IsShown() )
             pos += col.GetWidth();
     }
@@ -194,7 +194,7 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
     for ( unsigned n = 0; n < count; n++ )
     {
         const unsigned idx = m_colIndices[n];
-        const wxHeaderColumnBase& col = self->GetColumn(idx);
+        const wxHeaderColumn& col = self->GetColumn(idx);
         if ( col.IsHidden() )
             continue;
 
@@ -531,7 +531,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     for ( unsigned int i = 0; i < count; i++ )
     {
         const unsigned idx = m_colIndices[i];
-        const wxHeaderColumnBase& col = GetColumn(idx);
+        const wxHeaderColumn& col = GetColumn(idx);
         if ( col.IsHidden() )
             continue;
 

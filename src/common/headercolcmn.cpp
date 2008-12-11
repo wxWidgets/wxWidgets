@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/headercolcmn.cpp
-// Purpose:     wxHeaderColumnBase implementation
+// Purpose:     wxHeaderColumn implementation
 // Author:      Vadim Zeitlin
 // Created:     2008-12-02
 // RCS-ID:      $Id$
@@ -29,18 +29,10 @@
 #include "wx/headercol.h"
 
 // ============================================================================
-// wxHeaderColumnBase implementation
+// wxHeaderColumn implementation
 // ============================================================================
 
-void wxHeaderColumnBase::SetIndividualFlags(int flags)
-{
-    SetResizeable((flags & wxCOL_RESIZABLE) != 0);
-    SetSortable((flags & wxCOL_SORTABLE) != 0);
-    SetReorderable((flags & wxCOL_REORDERABLE) != 0);
-    SetHidden((flags & wxCOL_HIDDEN) != 0);
-}
-
-int wxHeaderColumnBase::GetFromIndividualFlags() const
+int wxHeaderColumn::GetFromIndividualFlags() const
 {
     int flags = 0;
 
@@ -56,27 +48,39 @@ int wxHeaderColumnBase::GetFromIndividualFlags() const
     return flags;
 }
 
-void wxHeaderColumnBase::ChangeFlag(int flag, bool set)
+// ============================================================================
+// wxSettableHeaderColumn implementation
+// ============================================================================
+
+void wxSettableHeaderColumn::SetIndividualFlags(int flags)
+{
+    SetResizeable((flags & wxCOL_RESIZABLE) != 0);
+    SetSortable((flags & wxCOL_SORTABLE) != 0);
+    SetReorderable((flags & wxCOL_REORDERABLE) != 0);
+    SetHidden((flags & wxCOL_HIDDEN) != 0);
+}
+
+void wxSettableHeaderColumn::ChangeFlag(int flag, bool set)
 {
     if ( HasFlag(flag) != set )
         ToggleFlag(flag);
 }
 
-void wxHeaderColumnBase::SetFlag(int flag)
+void wxSettableHeaderColumn::SetFlag(int flag)
 {
     int flags = GetFlags();
     if ( !(flags & flag) )
         SetFlags(flags | flag);
 }
 
-void wxHeaderColumnBase::ClearFlag(int flag)
+void wxSettableHeaderColumn::ClearFlag(int flag)
 {
     int flags = GetFlags();
     if ( flags & flag )
         SetFlags(flags & ~flag);
 }
 
-void wxHeaderColumnBase::ToggleFlag(int flag)
+void wxSettableHeaderColumn::ToggleFlag(int flag)
 {
     int flags = GetFlags();
     if ( flags & flag )
