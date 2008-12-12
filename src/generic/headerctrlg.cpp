@@ -115,9 +115,14 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
 
         m_colIndices = colIndices;
     }
+    else // count didn't really change
+    {
+        return;
+    }
 
     m_numColumns = count;
 
+    InvalidateBestSize();
     Refresh();
 }
 
@@ -128,6 +133,8 @@ unsigned int wxHeaderCtrl::DoGetCount() const
 
 void wxHeaderCtrl::DoUpdate(unsigned int idx)
 {
+    InvalidateBestSize();
+
     // we need to refresh not only this column but also the ones after it in
     // case it was shown or hidden or its width changed -- it would be nice to
     // avoid doing this unnecessary by storing the old column width (TODO)
@@ -154,9 +161,11 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
 {
     // the vertical size is rather arbitrary but it looks better if we leave
     // some space around the text
-    return wxSize(IsEmpty() ? wxHeaderCtrlBase::DoGetBestSize().x
-                            : GetColEnd(GetColumnCount() - 1),
-                  (7*GetCharHeight())/4);
+    const wxSize size(IsEmpty() ? wxHeaderCtrlBase::DoGetBestSize().x
+                                : GetColEnd(GetColumnCount() - 1),
+                      (7*GetCharHeight())/4);
+    CacheBestSize(size);
+    return size;
 }
 
 int wxHeaderCtrl::GetColStart(unsigned int idx) const
