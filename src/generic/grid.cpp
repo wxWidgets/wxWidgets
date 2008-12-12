@@ -616,7 +616,7 @@ public:
     }
 
 
-    // Return the row or column at the given pixel coordinate.
+    // Return the index of the row or column at the given pixel coordinate.
     virtual int
         PosToLine(const wxGrid *grid, int pos, bool clip = false) const = 0;
 
@@ -5602,9 +5602,8 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg ) const
         CalcUnscrolledPosition( r.GetRight(), r.GetBottom(), &right, &bottom );
 
         // find the cells within these bounds
-        //
-        int row, col;
-        for ( row = internalYToRow(top); row < m_numRows; row++ )
+        wxArrayInt cols;
+        for ( int row = internalYToRow(top); row < m_numRows; row++ )
         {
             if ( GetRowBottom(row) <= top )
                 continue;
@@ -5612,19 +5611,23 @@ wxGridCellCoordsArray wxGrid::CalcCellsExposed( const wxRegion& reg ) const
             if ( GetRowTop(row) > bottom )
                 break;
 
-            int colPos;
-            for ( colPos = GetColPos( internalXToCol(left) ); colPos < m_numCols; colPos++ )
+            // add all dirty cells in this row: notice that the columns which
+            // are dirty don't depend on the row so we compute them only once
+            // for the first dirty row and then reuse for all the next ones
+            if ( cols.empty() )
             {
-                col = GetColAt( colPos );
+                // do determine the dirty columns
+                for ( int pos = XToPos(left); pos <= XToPos(right); pos++ )
+                    cols.push_back(GetColAt(pos));
 
-                if ( GetColRight(col) <= left )
-                    continue;
-
-                if ( GetColLeft(col) > right )
+                // if there are no dirty columns at all, nothing to do
+                if ( cols.empty() )
                     break;
-
-                cellsExposed.Add( wxGridCellCoords( row, col ) );
             }
+
+            const size_t count = cols.size();
+            for ( size_t n = 0; n < count; n++ )
+                cellsExposed.Add(wxGridCellCoords(row, cols[n]));
         }
 
         ++iter;
@@ -8737,15 +8740,14 @@ wxGridCellCoords wxGrid::XYToCell(int x, int y) const
 // m_defaultRowHeight/m_defaultColWidth or binary search on array of
 // m_rowBottoms/m_colRights to do it quickly (linear search shouldn't be used
 // for large grids)
-int
-wxGrid::PosToLine(int coord,
-                  bool clipToMinMax,
-                  const wxGridOperations& oper) const
+int wxGrid::PosToLinePos(int coord,
+                         bool clipToMinMax,
+                         const wxGridOperations& oper) const
 {
     const int numLines = oper.GetNumberOfLines(this);
 
     if ( coord < 0 )
-        return clipToMinMax && numLines > 0 ? oper.GetLineAt(this, 0) : -1;
+        return clipToMinMax && numLines > 0 ? 0 : wxNOT_FOUND;
 
     const int defaultLineSize = oper.GetDefaultLineSize(this);
     wxCHECK_MSG( defaultLineSize, -1, "can't have 0 default line size" );
@@ -8789,12 +8791,12 @@ wxGrid::PosToLine(int coord,
     // check if the position is beyond the last column
     const int lineAtMaxPos = oper.GetLineAt(this, maxPos);
     if ( coord >= lineEnds[lineAtMaxPos] )
-        return clipToMinMax ? lineAtMaxPos : -1;
+        return clipToMinMax ? maxPos : -1;
 
     // or before the first one
     const int lineAt0 = oper.GetLineAt(this, 0);
     if ( coord < lineEnds[lineAt0] )
-        return lineAt0;
+        return 0;
 
 
     // finally do perform the binary search
@@ -8803,10 +8805,10 @@ wxGrid::PosToLine(int coord,
         wxCHECK_MSG( lineEnds[oper.GetLineAt(this, minPos)] <= coord &&
                         coord < lineEnds[oper.GetLineAt(this, maxPos)],
                      -1,
-                     "wxGrid: internal error in PosToLine()" );
+                     "wxGrid: internal error in PosToLinePos()" );
 
         if ( coord >= lineEnds[oper.GetLineAt(this, maxPos - 1)] )
-            return oper.GetLineAt(this, maxPos);
+            return maxPos;
         else
             maxPos--;
 
@@ -8817,7 +8819,17 @@ wxGrid::PosToLine(int coord,
             minPos = median;
     }
 
-    return oper.GetLineAt(this, maxPos);
+    return maxPos;
+}
+
+int
+wxGrid::PosToLine(int coord,
+                  bool clipToMinMax,
+                  const wxGridOperations& oper) const
+{
+    int pos = PosToLinePos(coord, clipToMinMax, oper);
+
+    return pos == wxNOT_FOUND ? wxNOT_FOUND : oper.GetLineAt(this, pos);
 }
 
 int wxGrid::YToRow(int y, bool clipToMinMax) const
@@ -8828,6 +8840,11 @@ int wxGrid::YToRow(int y, bool clipToMinMax) const
 int wxGrid::XToCol(int x, bool clipToMinMax) const
 {
     return PosToLine(x, clipToMinMax, wxGridColumnOperations());
+}
+
+int wxGrid::XToPos(int x) const
+{
+    return PosToLinePos(x, true /* clip */, wxGridColumnOperations());
 }
 
 // return the row number that that the y coord is near the edge of, or -1 if

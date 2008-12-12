@@ -1313,6 +1313,12 @@ public:
     wxGridCellCoords XYToCell(const wxPoint& pos) const
         { return XYToCell(pos.x, pos.y); }
 
+    // these functions return the index of the row/columns corresponding to the
+    // given logical position in pixels
+    //
+    // if clipToMinMax is false (default, wxNOT_FOUND is returned if the
+    // position is outside any row/column, otherwise the first/last element is
+    // returned in this case
     int  YToRow( int y, bool clipToMinMax = false ) const;
     int  XToCol( int x, bool clipToMinMax = false ) const;
 
@@ -1505,32 +1511,47 @@ public:
 
     void     SetColSize( int col, int width );
 
-    //Column positions
-    int GetColAt( int colPos ) const
+    // columns index <-> positions mapping: by default, the position of the
+    // column is the same as its index, but the columns can also be reordered
+    // (either by calling SetColPos() explicitly or by the user dragging the
+    // columns around) in which case their indices don't correspond to their
+    // positions on display any longer
+    //
+    // internally we always work with indices except for the functions which
+    // have "Pos" in their names (and which work with columns, not pixels) and
+    // only the display and hit testing code really cares about display
+    // positions at all
+
+    // return the column index corresponding to the given (valid) position
+    int GetColAt(int pos) const
     {
-        if ( m_colAt.IsEmpty() )
-            return colPos;
-        else
-            return m_colAt[colPos];
+        return m_colAt.empty() ? pos : m_colAt[pos];
     }
 
-    void SetColPos( int colID, int newPos );
+    // reorder the columns so that the column with the given index is now shown
+    // as the position pos
+    void SetColPos(int idx, int pos);
 
-    int GetColPos( int colID ) const
+    // return the position at which the column with the given index is
+    // displayed: notice that this is a slow operation as we don't maintain the
+    // reverse mapping currently
+    int GetColPos(int idx) const
     {
         if ( m_colAt.IsEmpty() )
-            return colID;
-        else
+            return idx;
+
+        for ( int i = 0; i < m_numCols; i++ )
         {
-            for ( int i = 0; i < m_numCols; i++ )
-            {
-                if ( m_colAt[i] == colID )
-                    return i;
-            }
+            if ( m_colAt[i] == idx )
+                return i;
         }
 
-        return -1;
+        wxFAIL_MSG( "invalid column index" );
+
+        return wxNOT_FOUND;
     }
+
+
 
     // automatically size the column or row to fit to its contents, if
     // setAsMin is true, this optimal width will also be set as minimal width
@@ -2225,6 +2246,14 @@ private:
     void DoClipGridLines(bool& var, bool clip);
 
 
+    // return the position (not index) of the column at the given logical pixel
+    // position
+    //
+    // this always returns a valid position, even if the coordinate is out of
+    // bounds (in which case first/last column is returned)
+    int XToPos(int x) const;
+
+
     // event handlers and their helpers
     // --------------------------------
 
@@ -2273,8 +2302,10 @@ private:
     // common implementations of methods defined for both rows and columns
     void DeselectLine(int line, const wxGridOperations& oper);
     void DoEndDragResizeLine(const wxGridOperations& oper);
-    int  PosToLine(int pos, bool clipToMinMax,
-                   const wxGridOperations& oper) const;
+    int PosToLinePos(int pos, bool clipToMinMax,
+                     const wxGridOperations& oper) const;
+    int PosToLine(int pos, bool clipToMinMax,
+                  const wxGridOperations& oper) const;
     int PosToEdgeOfLine(int pos, const wxGridOperations& oper) const;
 
     bool DoMoveCursor(bool expandSelection,
