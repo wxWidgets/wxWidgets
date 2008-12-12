@@ -19,8 +19,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/headerctrl.h"
 #endif // WX_PRECOMP
+
+#include "wx/headerctrl.h"
 
 // ----------------------------------------------------------------------------
 // test class

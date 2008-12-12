@@ -19,8 +19,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/listctrl.h"
 #endif // WX_PRECOMP
+
+#include "wx/listctrl.h"
 
 // ----------------------------------------------------------------------------
 // test class
