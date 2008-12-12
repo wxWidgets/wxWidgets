@@ -92,7 +92,7 @@ public:
             instead.
         @param text
             Text for the menu item, as shown on the menu. An accelerator key can
-            be specified using the ampersand " character. In order to embed an
+            be specified using the ampersand @c & character. In order to embed an
             ampersand character in the menu item text, the ampersand must be doubled.
         @param helpString
             Optional help string that will be shown on the status bar.

@@ -37,7 +37,7 @@ enum wxZLibFlags {
     ::wxInvalidOffset.
 
     @library{wxbase}
-    @category{streams}
+    @category{archive,streams}
 
     @see wxOutputStream, wxZlibInputStream
 */
@@ -91,7 +91,7 @@ public:
     Also wxStreamBase::GetSize() is not supported, it always returns 0.
 
     @library{wxbase}
-    @category{streams}
+    @category{archive,streams}
 
     @see wxInputStream, wxZlibOutputStream.
 */

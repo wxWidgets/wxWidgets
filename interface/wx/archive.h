@@ -422,7 +422,7 @@ public:
 
         for (p = factory->GetProtocols(wxSTREAM_FILEEXT); *p; p++)
             list << *p << _T("\n");
-        @encode
+        @endcode
     */
     const wxChar* const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL) const;
 
