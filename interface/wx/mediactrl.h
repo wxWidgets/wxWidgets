@@ -407,7 +407,7 @@ public:
         default controls provided by the toolkit. The function takes a
         wxMediaCtrlPlayerControls enumeration, please see available show modes there.
 
-        For more see @ref mediactrl_player_controls.
+        For more info see @ref mediactrl_player_controls.
 
         Currently only implemented on the QuickTime and DirectShow backends.
         The function returns @true on success.

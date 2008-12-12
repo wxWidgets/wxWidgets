@@ -41,7 +41,7 @@
             DoACalculation();
 
             if ( !(i % 1000) )
-                wxTheApp-Yield();
+                wxTheApp->Yield();
         }
     @endcode
 
