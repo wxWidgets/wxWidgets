@@ -40,80 +40,6 @@
     This control is implemented using the native header control under MSW
     systems and a generic implementation elsewhere.
 
-    @beginStyleTable
-        @style{wxHD_DRAGDROP}
-            If this style is specified (it is by default), the user can reorder
-            the control columns by dragging them.
-        @style{wxHD_DEFAULT_STYLE}
-            Symbolic name for the default control style, currently equal to @c
-            wxHD_DRAGDROP.
-    @endStyleTable
-
-    @beginEventTable{wxHeaderCtrlEvent}
-        @event{EVT_HEADER_CLICK(id, func)}
-            A column heading was clicked.
-        @event{EVT_HEADER_RIGHT_CLICK(id, func)}
-            A column heading was right clicked.
-        @event{EVT_HEADER_MIDDLE_CLICK(id, func)}
-            A column heading was clicked with the middle mouse button.
-
-        @event{EVT_HEADER_DCLICK(id, func)}
-            A column heading was double clicked.
-        @event{EVT_HEADER_RIGHT_DCLICK(id, func)}
-            A column heading was right double clicked.
-        @event{EVT_HEADER_MIDDLE_DCLICK(id, func)}
-            A column heading was double clicked with the middle mouse button.
-
-        @event{EVT_HEADER_SEPARATOR_DCLICK(id, func)}
-            Separator to the right of the specified column was double clicked
-            (this action is commonly used to resize the column to fit its
-            contents width and the control provides UpdateColumnWidthToFit() method
-            to make implementing this easier).
-
-        @event{EVT_HEADER_BEGIN_RESIZE(id, func)}
-            The user started to drag the separator to the right of the column
-            with the specified index (this can only happen for the columns for
-            which wxHeaderColumn::IsResizeable() returns true). The event can
-            be vetoed to prevent the column from being resized. If it isn't,
-            the resizing and end resize (or dragging cancelled) events will be
-            generated later.
-        @event{EVT_HEADER_RESIZING(id, func)}
-            The user is dragging the column with the specified index resizing
-            it and its current width is wxHeaderCtrlEvent::GetWidth(). The
-            event can be vetoed to stop the dragging operation completely at
-            any time.
-        @event{EVT_HEADER_END_RESIZE(id, func)}
-            The user stopped dragging the column by releasing the mouse. The
-            column should normally be resized to the value of
-            wxHeaderCtrlEvent::GetWidth().
-
-        @event{EVT_HEADER_BEGIN_REORDER(id, func)}
-            The user started to drag the column with the specified index (this
-            can only happen for the controls with wxHD_DRAGDROP style). This
-            event can be vetoed to prevent the column from being reordered,
-            otherwise the end reorder message will be generated later.
-        @event{EVT_HEADER_END_REORDER(id, func)}
-            The user dropped the column in its new location. The event can be
-            vetoed to prevent the column from being placed at the new position
-            or handled to update the display of the data in the associated
-            control to match the new column location (available from
-            wxHeaderCtrlEvent::GetNewOrder()).
-
-        @event{EVT_HEADER_DRAGGING_CANCELLED(id, func)}
-            The resizing or reordering operation currently in progress was
-            cancelled. This can happen if the user pressed Esc key while
-            dragging the mouse or the mouse capture was lost for some other
-            reason. You only need to handle this event if your application
-            entered into some modal mode when resizing or reordering began, in
-            which case it should handle this event in addition to the matching
-            end resizing or reordering ones.
-    @endEventTable
-
-    @library{wxcore}
-    @category{ctrl}
-
-    @see wxGrid, wxListCtrl, wxDataViewCtrl
-
 
     @section headerctrl_improvements Future Improvements
 
@@ -124,6 +50,76 @@
         - Displaying bitmaps instead of or together with the text
         - Custom drawn headers
         - Filters associated with a column.
+
+
+    @beginStyleTable
+    @style{wxHD_DRAGDROP}
+        If this style is specified (it is by default), the user can reorder
+        the control columns by dragging them.
+    @style{wxHD_DEFAULT_STYLE}
+        Symbolic name for the default control style, currently equal to
+        @c wxHD_DRAGDROP.
+    @endStyleTable
+
+    @beginEventTable{wxHeaderCtrlEvent}
+    @event{EVT_HEADER_CLICK(id, func)}
+        A column heading was clicked.
+    @event{EVT_HEADER_RIGHT_CLICK(id, func)}
+        A column heading was right clicked.
+    @event{EVT_HEADER_MIDDLE_CLICK(id, func)}
+        A column heading was clicked with the middle mouse button.
+    @event{EVT_HEADER_DCLICK(id, func)}
+        A column heading was double clicked.
+    @event{EVT_HEADER_RIGHT_DCLICK(id, func)}
+        A column heading was right double clicked.
+    @event{EVT_HEADER_MIDDLE_DCLICK(id, func)}
+        A column heading was double clicked with the middle mouse button.
+    @event{EVT_HEADER_SEPARATOR_DCLICK(id, func)}
+        Separator to the right of the specified column was double clicked
+        (this action is commonly used to resize the column to fit its
+        contents width and the control provides UpdateColumnWidthToFit() method
+        to make implementing this easier).
+    @event{EVT_HEADER_BEGIN_RESIZE(id, func)}
+        The user started to drag the separator to the right of the column
+        with the specified index (this can only happen for the columns for
+        which wxHeaderColumn::IsResizeable() returns true). The event can
+        be vetoed to prevent the column from being resized. If it isn't,
+        the resizing and end resize (or dragging cancelled) events will be
+        generated later.
+    @event{EVT_HEADER_RESIZING(id, func)}
+        The user is dragging the column with the specified index resizing
+        it and its current width is wxHeaderCtrlEvent::GetWidth().
+        The event can be vetoed to stop the dragging operation completely at
+        any time.
+    @event{EVT_HEADER_END_RESIZE(id, func)}
+        The user stopped dragging the column by releasing the mouse.
+        The column should normally be resized to the value of
+        wxHeaderCtrlEvent::GetWidth().
+    @event{EVT_HEADER_BEGIN_REORDER(id, func)}
+        The user started to drag the column with the specified index (this
+        can only happen for the controls with wxHD_DRAGDROP style).
+        This event can be vetoed to prevent the column from being reordered,
+        otherwise the end reorder message will be generated later.
+    @event{EVT_HEADER_END_REORDER(id, func)}
+        The user dropped the column in its new location. The event can be
+        vetoed to prevent the column from being placed at the new position
+        or handled to update the display of the data in the associated
+        control to match the new column location (available from
+        wxHeaderCtrlEvent::GetNewOrder()).
+    @event{EVT_HEADER_DRAGGING_CANCELLED(id, func)}
+        The resizing or reordering operation currently in progress was
+        cancelled. This can happen if the user pressed Esc key while
+        dragging the mouse or the mouse capture was lost for some other
+        reason. You only need to handle this event if your application
+        entered into some modal mode when resizing or reordering began, in
+        which case it should handle this event in addition to the matching
+        end resizing or reordering ones.
+    @endEventTable
+
+    @library{wxcore}
+    @category{ctrl}
+
+    @see wxGrid, wxListCtrl, wxDataViewCtrl
 */
 class wxHeaderCtrl
 {
@@ -347,10 +343,13 @@ protected:
 
         Base class version simply returns @false.
 
-        @param width
+        @param idx
+            The zero-based index of the column to update.
+        @param widthTitle
             Contains minimal width needed to display the column header itself
             and will usually be used as a starting point for the fitting width
             calculation.
+
         @return
             @true to indicate that the column was resized, i.e. GetColumn() now
             returns the new width value, and so must be refreshed or @false

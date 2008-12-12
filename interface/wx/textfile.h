@@ -99,16 +99,22 @@ public:
     */
     bool Close();
 
-    //@{
     /**
-        Creates the file with the given name or the name which was given in the
-        @ref wxTextFile() constructor. The array of file lines is initially empty.
+        Creates the file with the name which was given in the
+        wxTextFile(const wxString&) constructor.
+        The array of file lines is initially empty.
 
         It will fail if the file already exists, Open() should be used in this case.
     */
     bool Create() const;
+
+    /**
+        Creates the file with the given name.
+        The array of file lines is initially empty.
+
+        It will fail if the file already exists, Open() should be used in this case.
+    */
     bool Create(const wxString& strFile) const;
-    //@}
 
     /**
         Returns @true if the current line is the last one.
@@ -239,7 +245,7 @@ public:
     //@{
     /**
         Open() opens the file with the given name or the name which was given in the
-        @ref wxTextFile() constructor and also loads file in memory on success.
+        wxTextFile(const wxString&) constructor and also loads file in memory on success.
 
         It will fail if the file does not exist, Create() should be used in this case.
 

@@ -13,7 +13,7 @@
     Create an object of this class on the stack to initialize/cleanup the library
     automatically.
 
-    @library{base}
+    @library{wxbase}
     @category{appmanagement}
 
     @see wxGLContext

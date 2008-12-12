@@ -410,6 +410,9 @@ public:
 
         This overload takes two additional arguments, @a msgIdLanguage and @a msgIdCharset.
 
+        @param domain
+            The catalog domain to add.
+
         @param msgIdLanguage
             Specifies the language of "msgid" strings in source code
             (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).

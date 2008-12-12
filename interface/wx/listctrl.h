@@ -891,8 +891,8 @@ protected:
 
     /**
         This function must be overloaded in the derived class for a control with
-        @c wxLC_VIRTUAL style having an @ref SetImageList() "image list"
-        (if the control doesn't have an image list, it is not necessary to overload it).
+        @c wxLC_VIRTUAL style having an "image list" (see SetImageList(); if the
+        control doesn't have an image list, it is not necessary to overload it).
         It should return the index of the items image in the controls image list
         or -1 for no image.
 
