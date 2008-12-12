@@ -275,7 +275,7 @@ inline const void *wxListCastElementToVoidPtr(const wxString& str)
             push_front( e );                                                  \
             return compatibility_iterator( this, begin() );                   \
         }                                                                     \
-        compatibility_iterator Insert( compatibility_iterator & i, elT e )    \
+        compatibility_iterator Insert(const compatibility_iterator & i, elT e)\
         {                                                                     \
             return compatibility_iterator( this, insert( i.m_iter, e ) );     \
         }                                                                     \
