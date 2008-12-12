@@ -448,7 +448,9 @@ wxString wxGUIAppTraits::GetDesktopEnvironment() const
 
 // see the hack below in wxCmdLineParser::GetUsageString().
 // TODO: replace this hack with a g_option_group_get_entries()
-//       call as soon as such function exists
+//       call as soon as such function exists;
+//       see http://bugzilla.gnome.org/show_bug.cgi?id=431021 for the relative
+//       feature request
 struct _GOptionGroup
 {
   gchar           *name;
@@ -498,36 +500,40 @@ wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
     wxString usage;
 
 #ifdef __WXGTK26__
-    // check whether GTK version is greater than 2.6 but also lower than 2.12
-    // because, as we use the undocumented _GOptionGroup struct, we don't want
-    // to run this code with future versions which might change it (2.11 is the
-    // latest one at the time of this writing)
-    if (!gtk_check_version(2,6,0) &&
-        gtk_check_version(2,12,0))
+    if (!gtk_check_version(2,6,0))
     {
-        usage << _("The following standard GTK+ options are also supported:\n");
+        // since GTK>=2.6, we can use the glib_check_version() symbol...
 
-        // passing true here means that the function can open the default
-        // display while parsing (not really used here anyhow)
-        GOptionGroup *gtkOpts = gtk_get_option_group(true);
-
-        // WARNING: here we access the internals of GOptionGroup:
-        GOptionEntry *entries = ((_GOptionGroup*)gtkOpts)->entries;
-        unsigned int n_entries = ((_GOptionGroup*)gtkOpts)->n_entries;
-        wxArrayString namesOptions, descOptions;
-
-        for ( size_t n = 0; n < n_entries; n++ )
+        // check whether GLib version is greater than 2.6 but also lower than 2.19
+        // because, as we use the undocumented _GOptionGroup struct, we don't want
+        // to run this code with future versions which might change it (2.19 is the
+        // latest one at the time of this writing)
+        if (!glib_check_version(2,6,0) && glib_check_version(2,19,0))
         {
-            if ( entries[n].flags & G_OPTION_FLAG_HIDDEN )
-                continue;       // skip
+            usage << _("The following standard GTK+ options are also supported:\n");
 
-            names.push_back(wxGetNameFromGtkOptionEntry(&entries[n]));
+            // passing true here means that the function can open the default
+            // display while parsing (not really used here anyhow)
+            GOptionGroup *gtkOpts = gtk_get_option_group(true);
 
-            const gchar * const entryDesc = entries[n].description;
-            desc.push_back(wxString(entryDesc));
+            // WARNING: here we access the internals of GOptionGroup:
+            GOptionEntry *entries = ((_GOptionGroup*)gtkOpts)->entries;
+            unsigned int n_entries = ((_GOptionGroup*)gtkOpts)->n_entries;
+            wxArrayString namesOptions, descOptions;
+
+            for ( size_t n = 0; n < n_entries; n++ )
+            {
+                if ( entries[n].flags & G_OPTION_FLAG_HIDDEN )
+                    continue;       // skip
+
+                names.push_back(wxGetNameFromGtkOptionEntry(&entries[n]));
+
+                const gchar * const entryDesc = entries[n].description;
+                desc.push_back(wxString(entryDesc));
+            }
+
+            g_option_group_free (gtkOpts);
         }
-
-        g_option_group_free (gtkOpts);
     }
 #else
     wxUnusedVar(names);
