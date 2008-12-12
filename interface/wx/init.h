@@ -6,6 +6,41 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    @class wxInitializer
+
+    Create an object of this class on the stack to initialize/cleanup the library
+    automatically.
+
+    @library{base}
+    @category{appmanagement}
+
+    @see wxGLContext
+*/
+class wxInitializer
+{
+public:
+    /**
+        Initializes the library.
+        Calls wxInitialize().
+    */
+    wxInitializer(int argc = 0, wxChar **argv = NULL);
+
+    /**
+        Has the initialization been successful? (explicit test)
+    */
+    bool IsOk() const;
+
+    /**
+        This dtor only does clean up if we initialized the library properly.
+        Calls wxUninitialize().
+    */
+    ~wxInitializer();
+};
+
+
+
 /** @ingroup group_funcmacro_appinitterm */
 //@{
 
@@ -35,6 +70,8 @@ bool wxEntryStart(int& argc, wxChar** argv);
     @note Under Windows CE platform, and only there, the type of @a pCmdLine is
     @c wchar_t *, otherwise it is @c char *, even in Unicode build.
 
+    @onlyfor{wxmsw}
+
     @header{wx/init.h}
 */
 bool wxEntryStart(HINSTANCE hInstance,
@@ -48,6 +85,28 @@ bool wxEntryStart(HINSTANCE hInstance,
     @header{wx/init.h}
 */
 void wxEntryCleanup();
+
+/**
+    Initialize the library (may be called as many times as needed, but each
+    call to wxInitialize() must be matched by wxUninitialize()).
+
+    With this function you may avoid DECLARE_APP() and IMPLEMENT_APP() macros
+    and use wxInitialize() and wxUninitialize() dynamically in the
+    program startup and termination.
+
+    @header{wx/init.h}
+*/
+bool wxInitialize(int argc = 0, wxChar **argv = NULL);
+
+/**
+    Clean up; the library can't be used any more after the last call to
+    wxUninitialize().
+
+    See wxInitialize() for more info.
+
+    @header{wx/init.h}
+*/
+void wxUninitialize();
 
 //@}
 
