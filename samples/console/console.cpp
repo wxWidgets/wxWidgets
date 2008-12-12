@@ -987,7 +987,10 @@ static void TestFileSetTimes()
 #include "wx/intl.h"
 #include "wx/utils.h"   // for wxSetEnv
 
-static wxLocale gs_localeDefault(wxLANGUAGE_ENGLISH);
+static wxLocale gs_localeDefault;
+    // NOTE: don't init it here as it needs a wxAppTraits object
+    //       and thus must be init-ed after creation of the wxInitializer
+    //       class in the main()
 
 // find the name of the language from its value
 static const wxChar *GetLangName(int lang)
@@ -1235,6 +1238,8 @@ static const wxChar *GetLangName(int lang)
 static void TestDefaultLang()
 {
     wxPuts(_T("*** Testing wxLocale::GetSystemLanguage ***"));
+
+    gs_localeDefault.Init(wxLANGUAGE_ENGLISH);
 
     static const wxChar *langStrings[] =
     {
@@ -2768,8 +2773,8 @@ protected:
         wxString type, val;
         for ( size_t n = 0; frame.GetParam(n, &type, &name, &val); n++ )
         {
-            printf("\t%s %s = %s\n", (const char*)type.mb_str(), 
-                                     (const char*)name.mb_str(), 
+            printf("\t%s %s = %s\n", (const char*)type.mb_str(),
+                                     (const char*)name.mb_str(),
                                      (const char*)val.mb_str());
         }
     }
@@ -3436,7 +3441,7 @@ static void TestZipStreamRead()
 
     static const wxString filename = _T("foo");
     wxFFileInputStream in(TESTFILE_ZIP);
-    wxZipInputStream istr(in); 
+    wxZipInputStream istr(in);
     wxZipEntry entry(filename);
     istr.OpenEntry(entry);
 
