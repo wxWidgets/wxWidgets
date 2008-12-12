@@ -38,7 +38,6 @@
 
 
 // global options which can be set through command-line options
-GLboolean g_speed_test = GL_FALSE;
 GLboolean g_use_vertex_arrays = GL_FALSE;
 GLboolean g_doubleBuffer = GL_TRUE;
 GLboolean g_smooth = GL_TRUE;
@@ -67,28 +66,21 @@ bool MyApp::OnInit()
 
 void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
 {
-    parser.AddSwitch("", "-sb");
-    parser.AddSwitch("", "-db");
-    parser.AddSwitch("", "-speed");
-    parser.AddSwitch("", "-va");
+    parser.AddSwitch("", "sb", "Do not use double buffering");
+    parser.AddSwitch("", "db", "Use double buffering");
+    parser.AddSwitch("", "va", "Use vertex arrays");
 
     wxApp::OnInitCmdLine(parser);
 }
 
 bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
 {
-    if (parser.Found("-sb"))
+    if (parser.Found("sb"))
         g_doubleBuffer = GL_FALSE;
-    else if (parser.Found("-db"))
+    else if (parser.Found("db"))
         g_doubleBuffer = GL_TRUE;
 
-    if (parser.Found("-speed"))
-    {
-        g_speed_test = GL_TRUE;
-        g_doubleBuffer = GL_TRUE;
-    }
-
-    if (parser.Found("-va"))
+    if (parser.Found("va"))
         g_use_vertex_arrays = GL_TRUE;
 
     return wxApp::OnCmdLineParsed(parser);
