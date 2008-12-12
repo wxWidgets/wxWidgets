@@ -17,8 +17,6 @@
     #pragma hdrstop
 #endif
 
-#ifdef __WXMSW__ // no generic version of this control yet
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/headerctrl.h"
@@ -40,10 +38,12 @@ private:
     CPPUNIT_TEST_SUITE( HeaderCtrlTestCase );
         CPPUNIT_TEST( AddDelete );
         CPPUNIT_TEST( BestSize );
+        CPPUNIT_TEST( Reorder );
     CPPUNIT_TEST_SUITE_END();
 
     void AddDelete();
     void BestSize();
+    void Reorder();
 
     wxHeaderCtrlSimple *m_header;
 
@@ -104,4 +104,43 @@ void HeaderCtrlTestCase::BestSize()
     CPPUNIT_ASSERT_EQUAL( sizeEmpty.y, size.y );
 }
 
-#endif // __WXMSW__
+void HeaderCtrlTestCase::Reorder()
+{
+    static const int COL_COUNT = 4;
+
+    int n;
+
+    for ( n = 0; n < COL_COUNT; n++ )
+        m_header->AppendColumn(wxHeaderColumnSimple(wxString::Format("%d", n)));
+
+    wxArrayInt order = m_header->GetColumnsOrder(); // initial order: [0 1 2 3]
+    for ( n = 0; n < COL_COUNT; n++ )
+        CPPUNIT_ASSERT_EQUAL( n, order[n] );
+
+    wxHeaderCtrl::MoveColumnInOrderArray(order, 0, 2);
+    m_header->SetColumnsOrder(order);   // change order to [1 2 0 3]
+
+    order = m_header->GetColumnsOrder();
+    CPPUNIT_ASSERT_EQUAL( 1, order[0] );
+    CPPUNIT_ASSERT_EQUAL( 2, order[1] );
+    CPPUNIT_ASSERT_EQUAL( 0, order[2] );
+    CPPUNIT_ASSERT_EQUAL( 3, order[3] );
+
+    order[2] = 3;
+    order[3] = 0;
+    m_header->SetColumnsOrder(order);   // and now [1 2 3 0]
+    order = m_header->GetColumnsOrder();
+    CPPUNIT_ASSERT_EQUAL( 1, order[0] );
+    CPPUNIT_ASSERT_EQUAL( 2, order[1] );
+    CPPUNIT_ASSERT_EQUAL( 3, order[2] );
+    CPPUNIT_ASSERT_EQUAL( 0, order[3] );
+
+    wxHeaderCtrl::MoveColumnInOrderArray(order, 1, 3);
+    m_header->SetColumnsOrder(order);    // finally [2 3 0 1]
+    order = m_header->GetColumnsOrder();
+    CPPUNIT_ASSERT_EQUAL( 2, order[0] );
+    CPPUNIT_ASSERT_EQUAL( 3, order[1] );
+    CPPUNIT_ASSERT_EQUAL( 0, order[2] );
+    CPPUNIT_ASSERT_EQUAL( 1, order[3] );
+}
+
