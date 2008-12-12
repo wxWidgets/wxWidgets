@@ -14,7 +14,7 @@
 These functions provide a platform-independent API for common file and
 directory functionality.
 
-@see wxPathList, wxDir, wxFile, wxFileName
+Related class group: @ref group_class_file
 
 */
 

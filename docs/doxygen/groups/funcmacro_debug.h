@@ -20,5 +20,7 @@ generate any user-visible effects. Finally, the compile time assertions don't
 happen during the run-time but result in the compilation error messages if the
 condition they check fail.
 
+Related class group: @ref group_class_debugging.
+
 */
 

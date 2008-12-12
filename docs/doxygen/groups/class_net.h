@@ -13,5 +13,7 @@
 
 wxWidgets provides its own classes for socket based networking.
 
+Related macros/global-functions group: @ref group_funcmacro_networkuseros
+
 */
 

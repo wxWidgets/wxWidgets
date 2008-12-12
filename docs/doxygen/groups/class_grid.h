@@ -11,5 +11,7 @@
 @defgroup group_class_grid Grid Related Classes
 @ingroup group_class
 
+Classes related to the wxGrid generic widget.
+
 */
 

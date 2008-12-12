@@ -21,5 +21,7 @@ unless you are thinking of modifying or adding any wxWidgets classes.
 
 Related Overviews: @ref overview_rtti
 
+Related class group: @ref group_class_rtti
+
 */
 

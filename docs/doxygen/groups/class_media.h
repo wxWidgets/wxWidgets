@@ -11,5 +11,7 @@
 @defgroup group_class_media Multimedia
 @ingroup group_class
 
+Classes for showing multimedia contents.
+
 */
 

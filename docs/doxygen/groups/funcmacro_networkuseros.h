@@ -14,5 +14,7 @@
 The functions in this section are used to retrieve information about the
 current computer and/or user characteristics.
 
+Related class group: @ref group_class_net.
+
 */
 

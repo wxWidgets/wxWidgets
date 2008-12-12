@@ -11,5 +11,9 @@
 @defgroup group_funcmacro_misc Miscellaneous
 @ingroup group_funcmacro
 
+Group of miscellaneous functions and macros.
+
+Related class group: @ref group_class_misc
+
 */
 

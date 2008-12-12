@@ -11,5 +11,9 @@
 @defgroup group_funcmacro_math Math
 @ingroup group_funcmacro
 
+The functions in this section are typically related with math operations and
+floating point numbers.
+
+
 */
 

@@ -11,5 +11,7 @@
 @defgroup group_class_archive Archive support
 @ingroup group_class
 
+Classes for managing (eventually compressed) archives.
+
 */
 

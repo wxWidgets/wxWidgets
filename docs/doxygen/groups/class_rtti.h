@@ -16,7 +16,7 @@ creation of objects given class names.
 
 Related Overviews: @ref overview_rtti
 
-See also: @ref group_funcmacro_rtti "RTTI Functions and Macros"
+Related macros/global-functions group: @ref group_funcmacro_rtti
 
 */
 

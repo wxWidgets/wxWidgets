@@ -16,5 +16,7 @@ An event object contains information about a specific event. Event handlers
 
 Related Overviews: @ref overview_eventhandling
 
+Related macros/global-functions group: @ref group_funcmacro_events
+
 */
 

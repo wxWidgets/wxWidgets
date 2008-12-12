@@ -18,5 +18,7 @@ the beginning of the program).
 
 Related Overviews: @ref overview_log
 
+Related class group: @ref group_class_logging
+
 */
 

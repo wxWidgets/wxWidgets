@@ -11,5 +11,7 @@
 @defgroup group_class_xml XML
 @ingroup group_class
 
+Group of classes loading and saving XML documents (http://www.w3.org/XML/).
+
 */
 

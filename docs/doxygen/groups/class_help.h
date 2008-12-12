@@ -11,5 +11,7 @@
 @defgroup group_class_help Help
 @ingroup group_class
 
+Classes for loading and displaying help manuals or help informations in general.
+
 */
 

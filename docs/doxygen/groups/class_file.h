@@ -15,5 +15,7 @@ wxWidgets has several small classes to work with disk files and directories.
 
 Related Overviews: @ref overview_file
 
+Related macros/global-functions group: @ref group_funcmacro_file
+
 */
 

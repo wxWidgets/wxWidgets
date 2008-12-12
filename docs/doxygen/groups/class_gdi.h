@@ -16,5 +16,8 @@ They provide an API for drawing on device contexts, windows, and printing.
 
 Related Overviews: @ref overview_dc, @ref overview_bitmap
 
+Related macros/global-functions group: @ref group_funcmacro_gdi
+
+
 */
 

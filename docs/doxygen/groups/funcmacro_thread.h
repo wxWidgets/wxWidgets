@@ -23,5 +23,7 @@ section only when needed.
 
 @sa wxThread, wxMutex, @ref overview_thread
 
+Related class group: @ref group_class_threading
+
 */
 

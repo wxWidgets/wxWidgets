@@ -16,5 +16,7 @@ Interface) access.
 
 Related Overviews: @ref overview_dc
 
+Related class group: @ref group_class_gdi
+
 */
 

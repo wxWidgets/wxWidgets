@@ -17,5 +17,7 @@ are similar in wxWidgets, but only dialogs may be modal.
 
 Related Overviews: @ref overview_cmndlg
 
+Related macros/global-functions group: @ref group_funcmacro_dialog
+
 */
 

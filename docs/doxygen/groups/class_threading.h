@@ -16,5 +16,7 @@ capabilities of the various platforms.
 
 Related Overviews: @ref overview_thread
 
+Related macros/global-functions group: @ref group_funcmacro_thread
+
 */
 

@@ -11,5 +11,7 @@
 @defgroup group_class_menus Menus
 @ingroup group_class
 
+Group of classes for handling menu bars and items.
+
 */
 

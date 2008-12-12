@@ -13,5 +13,7 @@
 
 Below are a number of functions/macros used with wxWidgets event-handling system.
 
+Related class group: @ref group_class_events
+
 */
 

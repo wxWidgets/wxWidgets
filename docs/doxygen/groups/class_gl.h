@@ -11,5 +11,7 @@
 @defgroup group_class_gl OpenGL
 @ingroup group_class
 
+Classes interfacing wxWidgets with OpenGL (http://opengl.org/).
+
 */
 

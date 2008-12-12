@@ -14,5 +14,7 @@
 The functions in this section are used on application startup/shutdown and also
 to control the behaviour of the main event loop of the GUI programs.
 
+Related macros/global-functions group: @ref group_class_appmanagement.
+
 */
 

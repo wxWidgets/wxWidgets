@@ -11,5 +11,7 @@
 @defgroup group_funcmacro_string Strings
 @ingroup group_funcmacro
 
+Global string functions and macros. See wxString for the wxWidgets string class.
+
 */
 

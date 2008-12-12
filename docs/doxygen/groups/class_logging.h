@@ -15,5 +15,7 @@ wxWidgets provides several classes and functions for message logging.
 
 Related Overviews: @ref overview_log
 
+Related macros/global-functions group: @ref group_funcmacro_log
+
 */
 
