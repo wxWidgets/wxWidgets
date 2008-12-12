@@ -197,8 +197,11 @@ public:
     virtual bool IsSortOrderAscending() const { return false; }
 
 private:
-    wxGrid * const m_grid;
-    const int m_col;
+    // these really should be const but are not because the column needs to be
+    // assignable to be used in a wxVector (in STL build, in non-STL build we
+    // avoid the need for this)
+    wxGrid *m_grid;
+    int m_col;
 };
 
 // header control retreiving column information from the grid
