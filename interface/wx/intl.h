@@ -381,7 +381,6 @@ public:
     */
     virtual ~wxLocale();
 
-    //@{
     /**
         Add a catalog for use with the current locale: it is searched for in standard
         places (current directory first, then the system one), but you may also prepend
@@ -390,33 +389,47 @@ public:
         All loaded catalogs will be used for message lookup by GetString() for
         the current locale.
 
-        Returns @true if catalog was successfully loaded, @false otherwise (which might
-        mean that the catalog is not found or that it isn't in the correct format).
-
-        The second form of this method takes two additional arguments,
-        @a msgIdLanguage and @a msgIdCharset.
-
-        @a msgIdLanguage specifies the language of "msgid" strings in source code
-        (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
-        It is used if AddCatalog() cannot find any catalog for current language:
-        if the language is same as source code language, then strings from source
-        code are used instead.
-
-        @a msgIdCharset lets you specify the charset used for msgids in sources
-        in case they use 8-bit characters (e.g. German or French strings).
-        This argument has no effect in Unicode build, because literals in sources are
-        Unicode strings; you have to use compiler-specific method of setting the right
-        charset when compiling with Unicode.
-
-        By default (i.e. when you use the first form), msgid strings are assumed
+        In this overload, @c msgid strings are assumed
         to be in English and written only using 7-bit ASCII characters.
         If you have to deal with non-English strings or 8-bit characters in the
         source code, see the instructions in @ref overview_nonenglish.
+
+        @return
+            @true if catalog was successfully loaded, @false otherwise (which might
+            mean that the catalog is not found or that it isn't in the correct format).
     */
     bool AddCatalog(const wxString& domain);
+
+    /**
+        Add a catalog for use with the current locale: it is searched for in standard
+        places (current directory first, then the system one), but you may also prepend
+        additional directories to the search path with AddCatalogLookupPathPrefix().
+
+        All loaded catalogs will be used for message lookup by GetString() for
+        the current locale.
+
+        This overload takes two additional arguments, @a msgIdLanguage and @a msgIdCharset.
+
+        @param msgIdLanguage
+            Specifies the language of "msgid" strings in source code
+            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
+            It is used if AddCatalog() cannot find any catalog for current language:
+            if the language is same as source code language, then strings from source
+            code are used instead.
+
+        @param msgIdCharset
+            Lets you specify the charset used for msgids in sources
+            in case they use 8-bit characters (e.g. German or French strings).
+            This argument has no effect in Unicode build, because literals in sources are
+            Unicode strings; you have to use compiler-specific method of setting the right
+            charset when compiling with Unicode.
+
+        @return
+            @true if catalog was successfully loaded, @false otherwise (which might
+            mean that the catalog is not found or that it isn't in the correct format).
+    */
     bool AddCatalog(const wxString& domain, wxLanguage msgIdLanguage,
                     const wxString& msgIdCharset);
-    //@}
 
     /**
         Add a prefix to the catalog lookup path: the message catalog files will
