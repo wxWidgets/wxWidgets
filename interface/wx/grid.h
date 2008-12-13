@@ -3124,6 +3124,17 @@ public:
 
     This event class contains information about various grid events.
 
+    Notice that all grid event table macros are available in two versions:
+    @c EVT_GRID_XXX and @c EVT_GRID_CMD_XXX. The only difference between the
+    two is that the former doesn't allow to specify the grid window identifier
+    and so takes a single parameter, the event handler, but is not suitable if
+    there is more than one grid control in the window where the event table is
+    used (as it would catch the events from all the grids). The version with @c
+    CMD takes the id as first argument and the event handler as the second one
+    and so can be used with multiple grids as well. Otherwise there are no
+    difference between the two and only the versions without the id are
+    documented below for brevity.
+
     @beginEventTable{wxGridEvent}
     @event{EVT_GRID_CELL_CHANGE(func)}
         The user changed the data in a cell. Processes a
@@ -3173,50 +3184,6 @@ public:
         columns display order without affecting the use of the column indices
         otherwise.
         This event macro corresponds to @c wxEVT_GRID_COL_MOVE event type.
-    @event{EVT_GRID_CMD_CELL_CHANGE(id, func)}
-        The user changed the data in a cell; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_CELL_CHANGE event type.
-    @event{EVT_GRID_CMD_CELL_LEFT_CLICK(id, func)}
-        The user clicked a cell with the left mouse button; variant taking a
-        window identifier. Processes a @c wxEVT_GRID_CELL_LEFT_CLICK event
-        type.
-    @event{EVT_GRID_CMD_CELL_LEFT_DCLICK(id, func)}
-        The user double-clicked a cell with the left mouse button; variant
-        taking a window identifier. Processes a @c wxEVT_GRID_CELL_LEFT_DCLICK
-        event type.
-    @event{EVT_GRID_CMD_CELL_RIGHT_CLICK(id, func)}
-        The user clicked a cell with the right mouse button; variant taking a
-        window identifier. Processes a @c wxEVT_GRID_CELL_RIGHT_CLICK event
-        type.
-    @event{EVT_GRID_CMD_CELL_RIGHT_DCLICK(id, func)}
-        The user double-clicked a cell with the right mouse button; variant
-        taking a window identifier. Processes a @c wxEVT_GRID_CELL_RIGHT_DCLICK
-        event type.
-    @event{EVT_GRID_CMD_EDITOR_HIDDEN(id, func)}
-        The editor for a cell was hidden; variant taking a window identifier.
-        Processes a @c wxEVT_GRID_EDITOR_HIDDEN event type.
-    @event{EVT_GRID_CMD_EDITOR_SHOWN(id, func)}
-        The editor for a cell was shown; variant taking a window identifier.
-        Processes a @c wxEVT_GRID_EDITOR_SHOWN event type.
-    @event{EVT_GRID_CMD_LABEL_LEFT_CLICK(id, func)}
-        The user clicked a label with the left mouse button; variant taking a
-        window identifier. Processes a @c wxEVT_GRID_LABEL_LEFT_CLICK event
-        type.
-    @event{EVT_GRID_CMD_LABEL_LEFT_DCLICK(id, func)}
-        The user double-clicked a label with the left mouse button; variant
-        taking a window identifier. Processes a @c wxEVT_GRID_LABEL_LEFT_DCLICK
-        event type.
-    @event{EVT_GRID_CMD_LABEL_RIGHT_CLICK(id, func)}
-        The user clicked a label with the right mouse button; variant taking a
-        window identifier. Processes a @c wxEVT_GRID_LABEL_RIGHT_CLICK event
-        type.
-    @event{EVT_GRID_CMD_LABEL_RIGHT_DCLICK(id, func)}
-        The user double-clicked a label with the right mouse button; variant
-        taking a window identifier. Processes a
-        @c wxEVT_GRID_LABEL_RIGHT_DCLICK event type.
-    @event{EVT_GRID_CMD_SELECT_CELL(id, func)}
-        The user moved to, and selected a cell; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_SELECT_CELL event type.
     @endEventTable
 
     @library{wxadv}
