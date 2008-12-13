@@ -1324,10 +1324,17 @@ wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
 
 int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
 {
-    int nitems = m_children.GetCount();
-    if ( nitems)
+    const int nitems = m_children.GetCount();
+    if ( nitems )
     {
-        if ( m_cols )
+        if ( m_cols && m_rows )
+        {
+            // if both rows and columns are specified by user, use the provided
+            // values even if we don't have enough items
+            ncols = m_cols;
+            nrows = m_rows;
+        }
+        else if ( m_cols )
         {
             ncols = m_cols;
             nrows = (nitems + m_cols - 1) / m_cols;
@@ -1341,7 +1348,8 @@ int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
         {
             wxFAIL_MSG( _T("grid sizer must have either rows or columns fixed") );
 
-            nrows = ncols = 0;
+            nrows =
+            ncols = 0;
         }
     }
 
