@@ -134,7 +134,7 @@ wxRendererNative& wxRendererNative::GetDefault()
     return s_rendererGTK;
 }
 
-GdkWindow* wxGetGdkWindowForDC(wxWindow* win, wxDC& dc)
+static GdkWindow* wxGetGdkWindowForDC(wxDC& dc)
 {
     GdkWindow* gdk_window = NULL;
 #if wxUSE_NEW_DC
@@ -163,7 +163,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 
     GtkWidget *button = wxGTKPrivate::GetHeaderButtonWidget();
 
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -202,7 +202,7 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
 {
     GtkWidget *tree = wxGTKPrivate::GetTreeWidget();
 
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -281,7 +281,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         return;
     }
 
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -341,7 +341,7 @@ wxRendererGTK::DrawDropArrow(wxWindow *WXUNUSED(win),
     // work for wxMemoryDC. So that is why we assume wxDC
     // is wxWindowDC (wxClientDC, wxMemoryDC and wxPaintDC
     // are derived from it) and use its m_window.
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -416,7 +416,7 @@ wxRendererGTK::DrawCheckBox(wxWindow *WXUNUSED(win),
 {
     GtkWidget *button = wxGTKPrivate::GetCheckButtonWidget();
 
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -460,7 +460,7 @@ wxRendererGTK::DrawPushButton(wxWindow *WXUNUSED(win),
 {
     GtkWidget *button = wxGTKPrivate::GetButtonWidget();
 
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -498,7 +498,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                                      const wxRect& rect,
                                      int flags )
 {
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -552,7 +552,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
 
 void wxRendererGTK::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
@@ -575,11 +575,11 @@ void wxRendererGTK::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, i
 }
 
 // Uses the theme to draw the border and fill for something like a wxTextCtrl
-void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+void wxRendererGTK::DrawTextCtrl(wxWindow*, wxDC& dc, const wxRect& rect, int flags)
 {
     GtkWidget *entry = wxGTKPrivate::GetTextEntryWidget();
 
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
 
     GtkStateType state = GTK_STATE_NORMAL;
     if ( flags & wxCONTROL_DISABLED )
@@ -607,11 +607,11 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
 }
 
 // Draw the equivallent of a wxComboBox
-void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+void wxRendererGTK::DrawComboBox(wxWindow*, wxDC& dc, const wxRect& rect, int flags)
 {
     GtkWidget *combo = wxGTKPrivate::GetComboBoxWidget();
 
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
 
     GtkStateType state = GTK_STATE_NORMAL;
     if ( flags & wxCONTROL_DISABLED )
@@ -690,11 +690,11 @@ void wxRendererGTK::DrawChoice(wxWindow* win, wxDC& dc,
 
     
 // Draw a themed radio button
-void wxRendererGTK::DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+void wxRendererGTK::DrawRadioButton(wxWindow*, wxDC& dc, const wxRect& rect, int flags)
 {
     GtkWidget *button = wxGTKPrivate::GetRadioButtonWidget();
 
-    GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
+    GdkWindow* gdk_window = wxGetGdkWindowForDC(dc);
     
     GtkShadowType shadow_type = GTK_SHADOW_OUT;
     if ( flags & wxCONTROL_CHECKED )
@@ -704,9 +704,9 @@ void wxRendererGTK::DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect,
         
     GtkStateType state = GTK_STATE_NORMAL;
     if ( flags & wxCONTROL_DISABLED )
-       state = GTK_STATE_INSENSITIVE;
+        state = GTK_STATE_INSENSITIVE;
     if ( flags & wxCONTROL_PRESSED )
-    state = GTK_STATE_ACTIVE;
+        state = GTK_STATE_ACTIVE;
 /*
     Don't know when to set this
        state_type = GTK_STATE_PRELIGHT;
