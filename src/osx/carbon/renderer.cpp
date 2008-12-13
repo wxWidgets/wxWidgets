@@ -35,6 +35,14 @@
 #include <Carbon/Carbon.h>
 #endif
 
+// check if we're currently in a paint event
+inline bool wxInPaintEvent(wxWindow* win, wxDC& dc)
+{
+    return ( win->MacGetCGContextRef() != NULL );
+}
+
+
+
 class WXDLLEXPORT wxRendererMac : public wxDelegateRendererNative
 {
 public:
@@ -86,6 +94,14 @@ public:
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
 
+    virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+
+    virtual void DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+
+    virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+
+    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+
 private:
     void DrawMacThemeButton(wxWindow *win,
                             wxDC& dc,
@@ -126,7 +142,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     HIRect headerRect = CGRectMake( x, y, w, h );
-    if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
+    if ( !wxInPaintEvent(win, dc) )
     {
         win->Refresh( &rect );
     }
@@ -209,7 +225,7 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     HIRect headerRect = CGRectMake( x, y, w, h );
-    if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
+    if ( !wxInPaintEvent(win, dc) )
     {
         win->Refresh( &rect );
     }
@@ -255,7 +271,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
     // under compositing we should only draw when called by the OS, otherwise just issue a redraw command
     // strange redraw errors occur if we don't do this
 
-    if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
+    if ( !wxInPaintEvent(win, dc) )
     {
         wxRect rect( (int) splitterRect.origin.x, (int) splitterRect.origin.y, (int) splitterRect.size.width,
                      (int) splitterRect.size.height );
@@ -312,7 +328,7 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     HIRect headerRect = CGRectMake( x, y, w, h );
-    if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
+    if ( !wxInPaintEvent(win, dc) )
     {
         win->Refresh( &rect );
     }
@@ -333,7 +349,9 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
         if (flags & wxCONTROL_UNDETERMINED)
             drawInfo.value = kThemeButtonMixed;
         drawInfo.adornment = adornment;
-
+        if (flags & wxCONTROL_FOCUSED)
+            drawInfo.adornment |= kThemeAdornmentFocus;
+        
         HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
     }
 }
@@ -347,8 +365,20 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
     if (flags & wxCONTROL_CHECKED)
         flags |= wxCONTROL_SELECTED;
 
+    int kind;
+    
+    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
+        (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
+        kind = kThemeCheckBoxSmall;
+    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI ||
+             (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
+        kind = kThemeCheckBoxMini;
+    else
+        kind = kThemeCheckBox;
+
+
     DrawMacThemeButton(win, dc, rect, flags,
-                       kThemeCheckBox, kThemeAdornmentNone);
+                       kind, kThemeAdornmentNone);
 }
 
 wxSize wxRendererMac::GetCheckBoxSize(wxWindow* WXUNUSED(win))
@@ -421,6 +451,7 @@ wxRendererMac::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int fl
     CGRect cgrect = CGRectMake( rect.x , rect.y , rect.width, rect.height ) ;
 
     HIThemeFrameDrawInfo info ;
+
     memset( &info, 0 , sizeof(info) ) ;
 
     info.version = 0 ;
@@ -433,3 +464,110 @@ wxRendererMac::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int fl
 
     HIThemeDrawFocusRect( &cgrect , true , cgContext , kHIThemeOrientationNormal ) ;
 }
+
+void wxRendererMac::DrawChoice(wxWindow* win, wxDC& dc,
+                           const wxRect& rect, int flags)
+{
+    int kind;
+    
+    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
+        (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
+        kind = kThemePopupButtonSmall;
+    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI ||
+             (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
+        kind = kThemePopupButtonMini;
+    else
+        kind = kThemePopupButton;
+
+    DrawMacThemeButton(win, dc, rect, flags, kind, kThemeAdornmentNone);
+}
+
+
+void wxRendererMac::DrawComboBox(wxWindow* win, wxDC& dc,
+                             const wxRect& rect, int flags)
+{
+    int kind;
+    
+    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
+        (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
+        kind = kThemeComboBoxSmall;
+    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI ||
+             (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
+        kind = kThemeComboBoxMini;
+    else
+        kind = kThemeComboBox;
+
+    DrawMacThemeButton(win, dc, rect, flags, kind, kThemeAdornmentNone);
+}
+
+void wxRendererMac::DrawRadioButton(wxWindow* win, wxDC& dc,
+                                const wxRect& rect, int flags)
+{
+    int kind;
+    
+    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
+        (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
+        kind = kThemeRadioButtonSmall;
+    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI ||
+             (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
+        kind = kThemeRadioButtonMini;
+    else
+        kind = kThemeRadioButton;
+
+    if (flags & wxCONTROL_CHECKED)
+        flags |= wxCONTROL_SELECTED;
+
+    DrawMacThemeButton(win, dc, rect, flags,
+                          kind, kThemeAdornmentNone);
+}
+
+void wxRendererMac::DrawTextCtrl(wxWindow* win, wxDC& dc,
+                             const wxRect& rect, int flags)
+{
+    const wxCoord x = rect.x;
+    const wxCoord y = rect.y;
+    const wxCoord w = rect.width;
+    const wxCoord h = rect.height;
+
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    dc.DrawRectangle(rect);
+    
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+
+    HIRect hiRect = CGRectMake( x, y, w, h );
+    if ( !wxInPaintEvent(win, dc) )
+    {
+        Rect r =
+        {
+            (short) hiRect.origin.y, (short) hiRect.origin.x,
+            (short) (hiRect.origin.y + hiRect.size.height),
+            (short) (hiRect.origin.x + hiRect.size.width)
+        };
+
+        RgnHandle updateRgn = NewRgn();
+        RectRgn( updateRgn, &r );
+        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
+        DisposeRgn( updateRgn );
+    }
+    else
+    {
+        CGContextRef cgContext;
+
+        cgContext = (CGContextRef) static_cast<wxGCDCImpl*>(dc.GetImpl())->GetGraphicsContext()->GetNativeContext();
+
+        {
+            HIThemeFrameDrawInfo drawInfo;
+
+            memset( &drawInfo, 0, sizeof(drawInfo) );
+            drawInfo.version = 0;
+            drawInfo.kind = kHIThemeFrameTextFieldSquare;
+            drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
+            if (flags & wxCONTROL_FOCUSED)
+                drawInfo.isFocused = true;
+
+            HIThemeDrawFrame( &hiRect, &drawInfo, cgContext, kHIThemeOrientationNormal);
+        }
+    }
+}
+

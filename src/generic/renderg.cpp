@@ -112,6 +112,14 @@ public:
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
 
+    virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+
+    virtual void DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+
+    virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+
+    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
     virtual wxRendererVersion GetVersion() const
@@ -725,6 +733,33 @@ wxRendererGeneric::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect
 
     dc.SetLogicalFunction(wxCOPY);
 }
+
+void wxRendererGeneric::DrawChoice(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
+                           const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
+{
+    // FIXME: Implement
+}
+
+void wxRendererGeneric::DrawComboBox(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
+                           const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
+{
+    // FIXME: Implement
+}
+
+void wxRendererGeneric::DrawRadioButton(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
+                           const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
+{
+    // FIXME: Implement
+}
+
+void wxRendererGeneric::DrawTextCtrl(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
+                           const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
+{
+    // FIXME: Implement
+}
+
+
+
 
 // ----------------------------------------------------------------------------
 // A module to allow cleanup of generic renderer.

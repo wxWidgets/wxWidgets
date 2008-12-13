@@ -38,11 +38,29 @@
 #include "wx/msw/dc.h"
 #include "wx/msw/uxtheme.h"
 
+#if wxUSE_GRAPHICS_CONTEXT
+// TODO remove this dependency (gdiplus needs the macros)
+#ifndef max
+#define max(a,b)            (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef min
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
+
+#include "gdiplus.h"
+using namespace Gdiplus;
+#endif
+
 // tmschema.h is in Win32 Platform SDK and might not be available with earlier
 // compilers
 #ifndef CP_DROPDOWNBUTTON
     #define BP_PUSHBUTTON      1
+    #define BP_RADIOBUTTON     2
     #define BP_CHECKBOX        3
+    #define RBS_UNCHECKEDNORMAL 1
+    #define RBS_CHECKEDNORMAL   (RBS_UNCHECKEDNORMAL + 4)
+    #define RBS_MIXEDNORMAL     (RBS_CHECKEDNORMAL + 4)
     #define CBS_UNCHECKEDNORMAL 1
     #define CBS_CHECKEDNORMAL   (CBS_UNCHECKEDNORMAL + 4)
     #define CBS_MIXEDNORMAL     (CBS_CHECKEDNORMAL + 4)
@@ -76,7 +94,59 @@
     #define HP_HEADERSORTARROW  4
     #define HSAS_SORTEDUP       1
     #define HSAS_SORTEDDOWN     2
+
+    #define EP_EDITTEXT         1
+    #define ETS_NORMAL          1
+    #define ETS_HOT             2
+    #define ETS_SELECTED        3
+    #define ETS_DISABLED        4
+    #define ETS_FOCUSED         5
+    #define ETS_READONLY        6
+    #define ETS_ASSIST          7
+    #define TMT_FILLCOLOR       3802
+    #define TMT_TEXTCOLOR       3803
+    #define TMT_BORDERCOLOR     3801
+    #define TMT_EDGEFILLCOLOR   3808
 #endif
+
+
+// ----------------------------------------------------------------------------
+// If the DC is a wxGCDC then pull out the HDC from the GraphicsContext when
+// it is needed, and handle the Release when done.
+
+class GraphicsHDC
+{
+public:
+    GraphicsHDC(wxDC* dc)
+    {
+#if wxUSE_GRAPHICS_CONTEXT
+        m_graphics = NULL;
+        wxGCDC* gcdc = wxDynamicCast(dc, wxGCDC);
+        if (gcdc) {
+            m_graphics = (Graphics*)gcdc->GetGraphicsContext()->GetNativeContext();
+            m_hdc = m_graphics->GetHDC();
+        }
+        else
+#endif
+            m_hdc = GetHdcOf(*dc);
+    }
+
+    ~GraphicsHDC()
+    {
+#if wxUSE_GRAPHICS_CONTEXT
+        if (m_graphics)
+            m_graphics->ReleaseHDC(m_hdc);
+#endif
+    }
+    
+    operator HDC() const { return m_hdc; }
+
+private:
+    HDC         m_hdc;
+#if wxUSE_GRAPHICS_CONTEXT
+    Graphics*   m_graphics;
+#endif
+};
 
 #if defined(__WXWINCE__)
     #ifndef DFCS_FLAT
@@ -121,6 +191,26 @@ public:
                                wxDC& dc,
                                const wxRect& rect,
                                int flags = 0);
+
+    virtual void DrawChoice(wxWindow* win, 
+                            wxDC& dc, 
+                            const wxRect& rect, 
+                            int flags=0);
+
+    virtual void DrawComboBox(wxWindow* win, 
+                                wxDC& dc, 
+                                const wxRect& rect, 
+                                int flags=0);
+
+    virtual void DrawTextCtrl(wxWindow* win, 
+                                wxDC& dc, 
+                                const wxRect& rect, 
+                                int flags=0);
+
+    virtual void DrawRadioButton(wxWindow* win, 
+                                wxDC& dc, 
+                                const wxRect& rect, 
+                                int flags=0);
 
     virtual wxSize GetCheckBoxSize(wxWindow *win);
 
@@ -230,7 +320,7 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
     if ( flags & wxCONTROL_PRESSED )
         style |= DFCS_PUSHED | DFCS_FLAT;
 
-    ::DrawFrameControl(GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())), &r, DFC_SCROLL, style);
+    ::DrawFrameControl(GraphicsHDC(((wxMSWDCImpl*)dc.GetImpl())), &r, DFC_SCROLL, style);
 }
 
 void
@@ -254,7 +344,7 @@ wxRendererMSW::DrawCheckBox(wxWindow * WXUNUSED(win),
     if ( flags & wxCONTROL_CURRENT )
         style |= DFCS_HOT;
 
-    ::DrawFrameControl(GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())), &r, DFC_BUTTON, style);
+    ::DrawFrameControl(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl())), &r, DFC_BUTTON, style);
 }
 
 void
@@ -283,7 +373,7 @@ wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
     RECT rc;
     wxCopyRectToRECT(rect, rc);
 
-    ::DrawFrameControl(GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())), &rc, DFC_BUTTON, style);
+    ::DrawFrameControl(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl())), &rc, DFC_BUTTON, style);
 }
 
 void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
@@ -294,7 +384,7 @@ void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
     RECT rc;
     wxCopyRectToRECT(rect, rc);
 
-    ::DrawFocusRect(GetHdcOf(*((wxMSWDCImpl*)dc.GetImpl())), &rc);
+    ::DrawFocusRect(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl())), &rc);
 }
 
 wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
@@ -324,6 +414,112 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * WXUNUSED(win))
     HDLAYOUT hdl = { &parentRect, &wp };
 
     return Header_Layout(hwndHeader, &hdl) ? wp.cy : DEFAULT_HEIGHT;
+}
+
+// Uses the theme to draw the border and fill for something like a wxTextCtrl
+void wxRendererMSW::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+    wxColour fill;
+    wxColour bdr;
+    COLORREF cref;
+    
+#if wxUSE_UXTHEME
+    wxUxThemeHandle hTheme(win, L"EDIT");
+    if (hTheme)
+    {
+        wxUxThemeEngine::Get()->GetThemeColor(hTheme, EP_EDITTEXT,
+                                              ETS_NORMAL, TMT_FILLCOLOR, &cref);
+        fill = wxRGBToColour(cref);
+
+        int etsState;
+        if ( flags & wxCONTROL_DISABLED )
+            etsState = ETS_DISABLED;
+        else
+            etsState = ETS_NORMAL;
+        
+        wxUxThemeEngine::Get()->GetThemeColor(hTheme, EP_EDITTEXT,
+                                              etsState, TMT_BORDERCOLOR, &cref);
+        bdr = wxRGBToColour(cref);        
+    }
+    else
+#endif
+    {
+        fill = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+        bdr = *wxBLACK;
+    }
+    
+    dc.SetPen( bdr );
+    dc.SetBrush( fill );
+    dc.DrawRectangle(rect);
+}
+
+
+// Draw the equivallent of a wxComboBox
+void wxRendererMSW::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+    // Draw the main part of the control same as TextCtrl
+    DrawTextCtrl(win, dc, rect, flags);    
+    
+    // Draw the button inside the border, on the right side
+    wxRect br(rect);
+    br.height -= 2;
+    br.x += br.width - br.height - 1;
+    br.width = br.height;
+    br.y += 1;
+
+    DrawComboBoxDropButton(win, dc, br, flags);
+}
+
+
+void wxRendererMSW::DrawChoice(wxWindow* win, wxDC& dc,
+                           const wxRect& rect, int flags)
+{
+    DrawComboBox(win, dc, rect, flags);
+}
+
+    
+// Draw a themed radio button
+void wxRendererMSW::DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+{
+#if wxUSE_UXTHEME
+    wxUxThemeHandle hTheme(win, L"BUTTON");
+    if ( !hTheme )
+#endif
+    {
+        // ??? m_rendererNative.DrawRadioButton(win, dc, rect, flags);
+        return;
+    }
+
+#if wxUSE_UXTHEME
+    RECT r;
+    wxCopyRectToRECT(rect, r);
+
+    int state;
+    if ( flags & wxCONTROL_CHECKED )
+        state = RBS_CHECKEDNORMAL;
+    else if ( flags & wxCONTROL_UNDETERMINED )
+        state = RBS_MIXEDNORMAL;
+    else
+        state = RBS_UNCHECKEDNORMAL;
+
+    // RBS_XXX is followed by RBX_XXXGOT, then RBS_XXXPRESSED and DISABLED
+    if ( flags & wxCONTROL_CURRENT )
+        state += 1;
+    else if ( flags & wxCONTROL_PRESSED )
+        state += 2;
+    else if ( flags & wxCONTROL_DISABLED )
+        state += 3;
+
+    wxUxThemeEngine::Get()->DrawThemeBackground
+                            (
+                                hTheme,
+                                GraphicsHDC(&dc),
+                                BP_RADIOBUTTON,
+                                state,
+                                &r,
+                                NULL
+                            );
+#endif
 }
 
 // ============================================================================
@@ -452,6 +648,8 @@ wxRendererXP::DrawTreeItemButton(wxWindow *win,
                             );
 }
 
+
+
 void
 wxRendererXP::DrawCheckBox(wxWindow *win,
                            wxDC& dc,
@@ -539,7 +737,6 @@ wxRendererXP::DrawPushButton(wxWindow * win,
                                 &r,
                                 NULL
                             );
-
 }
 
 void

@@ -119,9 +119,12 @@ namespace wxGTKPrivate
 // shutdown
 GtkWidget *GetButtonWidget();
 GtkWidget *GetCheckButtonWidget();
+GtkWidget *GetComboBoxWidget();
 GtkWidget *GetEntryWidget();
 GtkWidget *GetHeaderButtonWidget();
+GtkWidget *GetRadioButtonWidget();
 GtkWidget *GetSplitterWidget();
+GtkWidget *GetTextEntryWidget();
 GtkWidget *GetTreeWidget();
 
 } // wxGTKPrivate

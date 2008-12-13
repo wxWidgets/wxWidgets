@@ -78,6 +78,24 @@ GtkWidget *GetCheckButtonWidget()
     return s_button;
 }
 
+GtkWidget * GetComboBoxWidget()
+{
+    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_button )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_button = gtk_combo_box_new();
+        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_widget_realize( s_button );
+    }
+
+    return s_button;
+}
+
+
 GtkWidget *GetEntryWidget()
 {
     static GtkWidget *s_entry = NULL;
@@ -112,6 +130,23 @@ GtkWidget *GetHeaderButtonWidget()
     return s_button;
 }
 
+GtkWidget * GetRadioButtonWidget()
+{
+    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_button )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_button = gtk_radio_button_new(NULL);
+        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_widget_realize( s_button );
+    }
+
+    return s_button;
+}
+
 GtkWidget* GetSplitterWidget()
 {
     static GtkWidget* widget;
@@ -124,6 +159,23 @@ GtkWidget* GetSplitterWidget()
     }
 
     return widget;
+}
+
+GtkWidget * GetTextEntryWidget()
+{
+    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_button )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_button = gtk_entry_new();
+        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_widget_realize( s_button );
+    }
+
+    return s_button;
 }
 
 GtkWidget *GetTreeWidget()

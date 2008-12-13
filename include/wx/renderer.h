@@ -256,6 +256,18 @@ public:
     // only wxCONTROL_SELECTED makes sense in flags here
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0) = 0;
 
+    // Draw a native wxChoice
+    virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+
+    // Draw a native wxComboBox
+    virtual void DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+
+    // Draw a native wxTextCtrl frame
+    virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+
+    // Draw a native wxRadioButton (just the graphical portion)
+    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+
     // geometry functions
     // ------------------
 
@@ -394,6 +406,18 @@ public:
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0)
         { m_rendererNative.DrawFocusRect( win, dc, rect, flags ); }
+
+    virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0)
+        { m_rendererNative.DrawChoice( win, dc, rect, flags); }
+
+    virtual void DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0)
+        { m_rendererNative.DrawComboBox( win, dc, rect, flags); }
+
+    virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0)
+        { m_rendererNative.DrawTextCtrl( win, dc, rect, flags); }
+
+    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0)
+        { m_rendererNative.DrawRadioButton( win, dc, rect, flags); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }
