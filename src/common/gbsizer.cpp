@@ -228,6 +228,18 @@ wxSizerItem* wxGridBagSizer::Add( wxGBSizerItem *item )
     if ( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
 
+    // extend the number of rows/columns of the underlying wxFlexGridSizer if
+    // necessary
+    int row, col;
+    item->GetEndPos(row, col);
+    row++;
+    col++;
+
+    if ( row > GetRows() )
+        SetRows(row);
+    if ( col > GetCols() )
+        SetCols(col);
+
     return item;
 }
 
