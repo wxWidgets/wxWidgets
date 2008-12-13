@@ -320,7 +320,7 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
     if ( flags & wxCONTROL_PRESSED )
         style |= DFCS_PUSHED | DFCS_FLAT;
 
-    ::DrawFrameControl(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl()).HDC(), &r, DFC_SCROLL, style);
+    ::DrawFrameControl(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl()), &r, DFC_SCROLL, style);
 }
 
 void
@@ -344,7 +344,7 @@ wxRendererMSW::DrawCheckBox(wxWindow * WXUNUSED(win),
     if ( flags & wxCONTROL_CURRENT )
         style |= DFCS_HOT;
 
-    ::DrawFrameControl(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl()).HDC(), &r, DFC_BUTTON, style);
+    ::DrawFrameControl(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl()), &r, DFC_BUTTON, style);
 }
 
 void
@@ -373,7 +373,7 @@ wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
     RECT rc;
     wxCopyRectToRECT(rect, rc);
 
-    ::DrawFrameControl(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl()).HDC(), &rc, DFC_BUTTON, style);
+    ::DrawFrameControl(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl()), &rc, DFC_BUTTON, style);
 }
 
 void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
@@ -384,7 +384,7 @@ void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
     RECT rc;
     wxCopyRectToRECT(rect, rc);
 
-    ::DrawFocusRect(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl()).HDC(), &rc);
+    ::DrawFocusRect(GraphicsHDC((wxMSWDCImpl*)dc.GetImpl()), &rc);
 }
 
 wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
@@ -513,7 +513,7 @@ void wxRendererMSW::DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect,
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
                                 hTheme,
-                                GraphicsHDC(&dc).HDC(),
+                                GraphicsHDC(&dc),
                                 BP_RADIOBUTTON,
                                 state,
                                 &r,
