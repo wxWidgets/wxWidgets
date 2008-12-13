@@ -2133,7 +2133,6 @@ protected:
 
     //Column positions
     wxArrayInt m_colAt;
-    int m_moveToCol;
 
     bool    m_canDragRowSize;
     bool    m_canDragColSize;
@@ -2293,10 +2292,11 @@ private:
     void DoStartResizeCol(int col);
     void DoUpdateResizeCol(int x);
     void DoUpdateResizeColWidth(int w);
+    void DoStartMoveCol(int col);
 
     void DoEndDragResizeRow();
     void DoEndDragResizeCol(wxMouseEvent *event = NULL);
-    void DoEndDragMoveCol();
+    void DoEndMoveCol(int pos);
 
 
     // common implementations of methods defined for both rows and columns

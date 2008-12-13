@@ -275,9 +275,14 @@ private:
         event.Skip();
     }
 
+    void OnBeginReorder(wxHeaderCtrlEvent& event)
+    {
+        GetOwner()->DoStartMoveCol(event.GetColumn());
+    }
+
     void OnEndReorder(wxHeaderCtrlEvent& event)
     {
-        event.Skip(); // TODO: position it at event.GetNewOrder()
+        GetOwner()->DoEndMoveCol(event.GetNewOrder());
     }
 
     wxVector<wxGridHeaderColumn> m_columns;
@@ -291,6 +296,7 @@ BEGIN_EVENT_TABLE(wxGridHeaderCtrl, wxHeaderCtrl)
     EVT_HEADER_RESIZING(wxID_ANY, wxGridHeaderCtrl::OnResizing)
     EVT_HEADER_END_RESIZE(wxID_ANY, wxGridHeaderCtrl::OnEndResize)
 
+    EVT_HEADER_BEGIN_REORDER(wxID_ANY, wxGridHeaderCtrl::OnBeginReorder)
     EVT_HEADER_END_REORDER(wxID_ANY, wxGridHeaderCtrl::OnEndReorder)
 END_EVENT_TABLE()
 
@@ -5888,7 +5894,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             GetColLabelWindow()->CaptureMouse();
 
             if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL )
-                m_dragRowOrCol = XToCol( x );
+                DoStartMoveCol(XToCol(x));
         }
 
         if ( event.LeftIsDown() )
@@ -5911,25 +5917,15 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                 case WXGRID_CURSOR_MOVE_COL:
                 {
-                    if ( x < 0 )
-                        m_moveToCol = GetColAt( 0 );
-                    else
-                        m_moveToCol = XToCol( x );
+                    int posNew = XToPos(x);
+                    int colNew = GetColAt(posNew);
 
+                    // determine the position of the drop marker
                     int markerX;
-
-                    if ( m_moveToCol < 0 )
-                        markerX = GetColRight( GetColAt( m_numCols - 1 ) );
-                    else if ( x >= (GetColLeft( m_moveToCol ) + (GetColWidth(m_moveToCol) / 2)) )
-                    {
-                        m_moveToCol = GetColAt( GetColPos( m_moveToCol ) + 1 );
-                        if ( m_moveToCol < 0 )
-                            markerX = GetColRight( GetColAt( m_numCols - 1 ) );
-                        else
-                            markerX = GetColLeft( m_moveToCol );
-                    }
+                    if ( x >= GetColLeft(colNew) + (GetColWidth(colNew) / 2) )
+                        markerX = GetColRight(colNew);
                     else
-                        markerX = GetColLeft( m_moveToCol );
+                        markerX = GetColLeft(colNew);
 
                     if ( markerX != m_dragLastPos )
                     {
@@ -5955,9 +5951,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                         const wxColour *color;
                         //Moving to the same place? Don't draw a marker
-                        if ( (m_moveToCol == m_dragRowOrCol)
-                          || (GetColPos( m_moveToCol ) == GetColPos( m_dragRowOrCol ) + 1)
-                          || (m_moveToCol < 0 && m_dragRowOrCol == GetColAt( m_numCols - 1 )))
+                        if ( colNew == m_dragRowOrCol )
                             color = wxLIGHT_GREY;
                         else
                             color = wxBLUE;
@@ -6096,9 +6090,15 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 break;
 
             case WXGRID_CURSOR_MOVE_COL:
-                DoEndDragMoveCol();
-
-                SendEvent( wxEVT_GRID_COL_MOVE, -1, m_dragRowOrCol, event );
+                if ( m_dragLastPos == -1 )
+                {
+                    // The user clicked on the column but didn't actually drag
+                    m_colWindow->Refresh();   // "unpress" the column
+                }
+                else
+                {
+                    DoEndMoveCol(XToPos(x));
+                }
                 break;
 
             case WXGRID_CURSOR_SELECT_COL:
@@ -6763,26 +6763,20 @@ void wxGrid::DoEndDragResizeCol(wxMouseEvent *event)
         SendEvent( wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol );
 }
 
-void wxGrid::DoEndDragMoveCol()
+void wxGrid::DoStartMoveCol(int col)
 {
-    //The user clicked on the column but didn't actually drag
-    if ( m_dragLastPos < 0 )
-    {
-        m_colWindow->Refresh();   //Do this to "unpress" the column
-        return;
-    }
+    m_dragRowOrCol = col;
+}
 
-    int newPos;
-    if ( m_moveToCol == -1 )
-        newPos = m_numCols - 1;
-    else
-    {
-        newPos = GetColPos( m_moveToCol );
-        if ( newPos > GetColPos( m_dragRowOrCol ) )
-            newPos--;
-    }
+void wxGrid::DoEndMoveCol(int pos)
+{
+    wxASSERT_MSG( m_dragRowOrCol != -1, "no matching DoStartMoveCol?" );
 
-    SetColPos( m_dragRowOrCol, newPos );
+    if ( SendEvent(wxEVT_GRID_COL_MOVE, -1, m_dragRowOrCol) != -1 )
+        SetColPos(m_dragRowOrCol, pos);
+    //else: vetoed by user
+
+    m_dragRowOrCol = -1;
 }
 
 void wxGrid::SetColPos(int idx, int pos)

@@ -1641,7 +1641,9 @@ public:
 private:
     enum // control ids
     {
-        Id_Check_UseNative,
+        Id_Check_UseNativeHeader,
+        Id_Check_DrawNativeLabels,
+        Id_Check_ShowRowLabels,
         Id_Check_EnableColMove
     };
 
@@ -1649,7 +1651,26 @@ private:
 
     void OnToggleUseNativeHeader(wxCommandEvent&)
     {
-        m_grid->SetUseNativeColLabels(m_chkUseNative->IsChecked());
+        m_grid->UseNativeColHeader(m_chkUseNative->IsChecked());
+    }
+
+    void OnUpdateDrawNativeLabelsUI(wxUpdateUIEvent& event)
+    {
+        // we don't draw labels at all, native or otherwise, if we use the
+        // native header control
+        event.Enable( !m_chkUseNative->GetValue() );
+    }
+
+    void OnToggleDrawNativeLabels(wxCommandEvent&)
+    {
+        m_grid->SetUseNativeColLabels(m_chkDrawNative->IsChecked());
+    }
+
+    void OnToggleShowRowLabels(wxCommandEvent&)
+    {
+        m_grid->SetRowLabelSize(m_chkShowRowLabels->IsChecked()
+                                    ? wxGRID_AUTOSIZE
+                                    : 0);
     }
 
     void OnToggleColMove(wxCommandEvent&)
@@ -1671,7 +1692,20 @@ private:
 
     void OnGridColMove(wxGridEvent& event)
     {
-        UpdateOrder();
+        // can't update it yet as the order hasn't been changed, so do it a bit
+        // later
+        m_shouldUpdateOrder = true;
+
+        event.Skip();
+    }
+
+    void OnIdle(wxIdleEvent& event)
+    {
+        if ( m_shouldUpdateOrder )
+        {
+            m_shouldUpdateOrder = false;
+            UpdateOrder();
+        }
 
         event.Skip();
     }
@@ -1688,6 +1722,8 @@ private:
     // controls
     wxGrid *m_grid;
     wxCheckBox *m_chkUseNative,
+               *m_chkDrawNative,
+               *m_chkShowRowLabels,
                *m_chkEnableColMove;
 
     ColIndexEntry *m_txtColIndex,
@@ -1695,28 +1731,49 @@ private:
 
     wxStaticText *m_statOrder;
 
+    // fla for EVT_IDLE handler
+    bool m_shouldUpdateOrder;
+
     DECLARE_NO_COPY_CLASS(TabularGridFrame)
     DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
-    EVT_CHECKBOX(Id_Check_UseNative, TabularGridFrame::OnToggleUseNativeHeader)
-    EVT_CHECKBOX(Id_Check_EnableColMove, TabularGridFrame::OnToggleColMove)
+    EVT_CHECKBOX(Id_Check_UseNativeHeader,
+                 TabularGridFrame::OnToggleUseNativeHeader)
+    EVT_CHECKBOX(Id_Check_DrawNativeLabels,
+                 TabularGridFrame::OnToggleDrawNativeLabels)
+    EVT_CHECKBOX(Id_Check_ShowRowLabels,
+                 TabularGridFrame::OnToggleShowRowLabels)
+    EVT_CHECKBOX(Id_Check_EnableColMove,
+                 TabularGridFrame::OnToggleColMove)
+
+    EVT_UPDATE_UI(Id_Check_DrawNativeLabels,
+                  TabularGridFrame::OnUpdateDrawNativeLabelsUI)
 
     EVT_BUTTON(wxID_APPLY, TabularGridFrame::OnMoveColumn)
 
     EVT_GRID_COL_MOVE(TabularGridFrame::OnGridColMove)
+
+    EVT_IDLE(TabularGridFrame::OnIdle)
 END_EVENT_TABLE()
 
 TabularGridFrame::TabularGridFrame()
                 : wxFrame(NULL, wxID_ANY, "Tabular table")
 {
+    m_shouldUpdateOrder = false;
+
+    wxPanel * const panel = new wxPanel(this);
+
     // create and initialize the grid with the specified data
-    m_grid = new wxGrid(this, wxID_ANY);
+    m_grid = new wxGrid(panel, wxID_ANY,
+                        wxDefaultPosition, wxDefaultSize,
+                        wxBORDER_STATIC | wxWANTS_CHARS);
     m_grid->SetTable(new TabularGridTable, true, wxGrid::wxGridSelectRows);
 
-    m_grid->SetUseNativeColLabels();
     m_grid->EnableDragColMove();
+    m_grid->UseNativeColHeader();
+    m_grid->HideRowLabels();
 
     // add it and the other controls to the frame
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
@@ -1725,12 +1782,20 @@ TabularGridFrame::TabularGridFrame()
     wxSizer * const sizerControls = new wxBoxSizer(wxHORIZONTAL);
 
     wxSizer * const sizerStyles = new wxBoxSizer(wxVERTICAL);
-    m_chkUseNative = new wxCheckBox(this, Id_Check_UseNative,
+    m_chkUseNative = new wxCheckBox(panel, Id_Check_UseNativeHeader,
                                     "&Use native header");
     m_chkUseNative->SetValue(true);
     sizerStyles->Add(m_chkUseNative, wxSizerFlags().Border());
 
-    m_chkEnableColMove = new wxCheckBox(this, Id_Check_EnableColMove,
+    m_chkDrawNative = new wxCheckBox(panel, Id_Check_DrawNativeLabels,
+                                    "&Draw native column labels");
+    sizerStyles->Add(m_chkDrawNative, wxSizerFlags().Border());
+
+    m_chkShowRowLabels = new wxCheckBox(panel, Id_Check_ShowRowLabels,
+                                        "Show &row labels");
+    sizerStyles->Add(m_chkShowRowLabels, wxSizerFlags().Border());
+
+    m_chkEnableColMove = new wxCheckBox(panel, Id_Check_EnableColMove,
                                         "Allow column re&ordering");
     m_chkEnableColMove->SetValue(true);
     sizerStyles->Add(m_chkEnableColMove, wxSizerFlags().Border());
@@ -1742,21 +1807,21 @@ TabularGridFrame::TabularGridFrame()
     wxSizer * const sizerMoveCols = new wxBoxSizer(wxHORIZONTAL);
     const wxSizerFlags
         flagsHorz(wxSizerFlags().Border(wxLEFT | wxRIGHT).Centre());
-    sizerMoveCols->Add(new wxStaticText(this, wxID_ANY, "&Move column"),
+    sizerMoveCols->Add(new wxStaticText(panel, wxID_ANY, "&Move column"),
                        flagsHorz);
-    m_txtColIndex = new ColIndexEntry(this);
+    m_txtColIndex = new ColIndexEntry(panel);
     sizerMoveCols->Add(m_txtColIndex, flagsHorz);
-    sizerMoveCols->Add(new wxStaticText(this, wxID_ANY, "&to"), flagsHorz);
-    m_txtColPos = new ColIndexEntry(this);
+    sizerMoveCols->Add(new wxStaticText(panel, wxID_ANY, "&to"), flagsHorz);
+    m_txtColPos = new ColIndexEntry(panel);
     sizerMoveCols->Add(m_txtColPos, flagsHorz);
-    sizerMoveCols->Add(new wxButton(this, wxID_APPLY), flagsHorz);
+    sizerMoveCols->Add(new wxButton(panel, wxID_APPLY), flagsHorz);
 
     sizerColumns->Add(sizerMoveCols, wxSizerFlags().Expand().Border(wxBOTTOM));
 
     wxSizer * const sizerShowCols = new wxBoxSizer(wxHORIZONTAL);
-    sizerShowCols->Add(new wxStaticText(this, wxID_ANY, "Current order:"),
+    sizerShowCols->Add(new wxStaticText(panel, wxID_ANY, "Current order:"),
                        flagsHorz);
-    m_statOrder = new wxStaticText(this, wxID_ANY, "<default>");
+    m_statOrder = new wxStaticText(panel, wxID_ANY, "<default>");
     sizerShowCols->Add(m_statOrder, flagsHorz);
     sizerColumns->Add(sizerShowCols, wxSizerFlags().Expand().Border(wxTOP));
 
@@ -1764,8 +1829,11 @@ TabularGridFrame::TabularGridFrame()
 
     sizerTop->Add(sizerControls, wxSizerFlags().Expand().Border());
 
-    SetSizerAndFit(sizerTop);
-    SetBackgroundColour(*wxWHITE);
+    panel->SetSizer(sizerTop);
+
+    SetClientSize(panel->GetBestSize());
+    SetSizeHints(GetSize());
+
     Show();
 }
 
@@ -1773,4 +1841,3 @@ void GridFrame::OnTabularTable(wxCommandEvent&)
 {
     new TabularGridFrame;
 }
-

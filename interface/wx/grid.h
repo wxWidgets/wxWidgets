@@ -3161,6 +3161,18 @@ public:
     @event{EVT_GRID_SELECT_CELL(func)}
         The user moved to, and selected a cell. Processes a
         @c wxEVT_GRID_SELECT_CELL event type.
+    @event{EVT_GRID_COL_MOVE(func)}
+        The user tries to change the order of the columns in the grid by
+        dragging the column specified by GetCol(). This event can be vetoed to
+        either prevent the user from reordering the column change completely
+        (but notice that if you don't want to allow it at all, you simply
+        shouldn't call wxGrid::EnableDragColMove() in the first place), vetoed
+        but handled in some way in the handler, e.g. by really moving the
+        column to the new position at the associated table level, or allowed to
+        proceed in which case wxGrid::SetColPos() is used to reorder the
+        columns display order without affecting the use of the column indices
+        otherwise.
+        This event macro corresponds to @c wxEVT_GRID_COL_MOVE event type.
     @event{EVT_GRID_CMD_CELL_CHANGE(id, func)}
         The user changed the data in a cell; variant taking a window
         identifier. Processes a @c wxEVT_GRID_CELL_CHANGE event type.
