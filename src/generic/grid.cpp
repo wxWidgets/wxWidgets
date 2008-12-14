@@ -146,6 +146,7 @@ DEFINE_EVENT_TYPE(wxEVT_GRID_LABEL_RIGHT_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_GRID_ROW_SIZE)
 DEFINE_EVENT_TYPE(wxEVT_GRID_COL_SIZE)
 DEFINE_EVENT_TYPE(wxEVT_GRID_COL_MOVE)
+DEFINE_EVENT_TYPE(wxEVT_GRID_COL_SORT)
 DEFINE_EVENT_TYPE(wxEVT_GRID_RANGE_SELECT)
 DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_CHANGE)
 DEFINE_EVENT_TYPE(wxEVT_GRID_SELECT_CELL)
@@ -192,9 +193,15 @@ public:
         return flags;
     }
 
-    // TODO: currently there is no support for sorting
-    virtual bool IsSortKey() const { return false; }
-    virtual bool IsSortOrderAscending() const { return false; }
+    virtual bool IsSortKey() const
+    {
+        return m_grid->IsSortingBy(m_col);
+    }
+
+    virtual bool IsSortOrderAscending() const
+    {
+        return m_grid->IsSortOrderAscending();
+    }
 
 private:
     // these really should be const but are not because the column needs to be
@@ -249,6 +256,8 @@ private:
     // override to implement column auto sizing
     virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
     {
+        // TODO: currently grid doesn't support computing the column best width
+        //       from its contents so we just use the best label width as is
         GetOwner()->SetColSize(idx, widthTitle);
 
         return true;
@@ -256,6 +265,11 @@ private:
 
 
     // event handlers forwarding wxHeaderCtrl events to wxGrid
+    void OnClick(wxHeaderCtrlEvent& event)
+    {
+        GetOwner()->DoColHeaderClick(event.GetColumn());
+    }
+
     void OnBeginResize(wxHeaderCtrlEvent& event)
     {
         GetOwner()->DoStartResizeCol(event.GetColumn());
@@ -292,6 +306,8 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxGridHeaderCtrl, wxHeaderCtrl)
+    EVT_HEADER_CLICK(wxID_ANY, wxGridHeaderCtrl::OnClick)
+
     EVT_HEADER_BEGIN_RESIZE(wxID_ANY, wxGridHeaderCtrl::OnBeginResize)
     EVT_HEADER_RESIZING(wxID_ANY, wxGridHeaderCtrl::OnResizing)
     EVT_HEADER_END_RESIZE(wxID_ANY, wxGridHeaderCtrl::OnEndResize)
@@ -4884,6 +4900,9 @@ void wxGrid::Init()
     m_isDragging = false;
     m_startDragPos = wxDefaultPosition;
 
+    m_sortCol = wxNOT_FOUND;
+    m_sortIsAscending = true;
+
     m_useNativeHeader =
     m_nativeColumnLabels = false;
 
@@ -5849,6 +5868,60 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     }
 }
 
+void wxGrid::UpdateColumnSortingIndicator(int col)
+{
+    wxCHECK_RET( col != wxNOT_FOUND, "invalid column index" );
+
+    if ( m_useNativeHeader )
+        GetColHeader()->UpdateColumn(col);
+    else if ( m_nativeColumnLabels )
+        m_colWindow->Refresh();
+    //else: sorting indicator display not yet implemented in grid version
+}
+
+void wxGrid::SetSortingColumn(int col, bool ascending)
+{
+    if ( col == m_sortCol )
+    {
+        // we are already using this column for sorting (or not sorting at all)
+        // but we might still change the sorting order, check for it
+        if ( m_sortCol != wxNOT_FOUND && ascending != m_sortIsAscending )
+        {
+            m_sortIsAscending = ascending;
+
+            UpdateColumnSortingIndicator(m_sortCol);
+        }
+    }
+    else // we're changing the column used for sorting
+    {
+        const int sortColOld = m_sortCol;
+
+        // change it before updating the column as we want GetSortingColumn()
+        // to return the correct new value
+        m_sortCol = col;
+
+        if ( sortColOld != wxNOT_FOUND )
+            UpdateColumnSortingIndicator(sortColOld);
+
+        if ( m_sortCol != wxNOT_FOUND )
+        {
+            m_sortIsAscending = ascending;
+            UpdateColumnSortingIndicator(m_sortCol);
+        }
+    }
+}
+
+void wxGrid::DoColHeaderClick(int col)
+{
+    // we consider that the grid was resorted if this event is processed and
+    // not vetoed
+    if ( SendEvent(wxEVT_GRID_COL_SORT, -1, col) == 1 )
+    {
+        SetSortingColumn(col, IsSortingBy(col) ? !m_sortIsAscending : true);
+        Refresh();
+    }
+}
+
 void wxGrid::DoStartResizeCol(int col)
 {
     m_dragRowOrCol = col;
@@ -5882,10 +5955,11 @@ void wxGrid::DoUpdateResizeColWidth(int w)
 
 void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 {
-    int x, y, col;
+    int x, y;
     wxPoint pos( event.GetPosition() );
     CalcUnscrolledPosition( pos.x, pos.y, &x, &y );
 
+    int col = XToCol(x);
     if ( event.Dragging() )
     {
         if (!m_isDragging)
@@ -5893,8 +5967,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             m_isDragging = true;
             GetColLabelWindow()->CaptureMouse();
 
-            if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL )
-                DoStartMoveCol(XToCol(x));
+            if ( m_cursorMode == WXGRID_CURSOR_MOVE_COL && col != -1 )
+                DoStartMoveCol(col);
         }
 
         if ( event.LeftIsDown() )
@@ -5907,7 +5981,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                 case WXGRID_CURSOR_SELECT_COL:
                 {
-                    if ( (col = XToCol( x )) >= 0 )
+                    if ( col != -1 )
                     {
                         if ( m_selection )
                             m_selection->SelectCol(col, event);
@@ -6005,7 +6079,6 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         //
         if ( XToEdgeOfCol(x) < 0 )
         {
-            col = XToCol(x);
             if ( col >= 0 &&
                  !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, col, event ) )
             {
@@ -6059,10 +6132,9 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     //
     if ( event.LeftDClick() )
     {
-        col = XToEdgeOfCol(x);
-        if ( col < 0 )
+        const int colEdge = XToEdgeOfCol(x);
+        if ( colEdge == -1 )
         {
-            col = XToCol(x);
             if ( col >= 0 &&
                  ! SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, -1, col, event ) )
             {
@@ -6072,7 +6144,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         else
         {
             // adjust column width depending on label text
-            AutoSizeColLabelSize( col );
+            AutoSizeColLabelSize( colEdge );
 
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
             m_dragLastPos = -1;
@@ -6090,9 +6162,11 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 break;
 
             case WXGRID_CURSOR_MOVE_COL:
-                if ( m_dragLastPos == -1 )
+                if ( m_dragLastPos == -1 || col == m_dragRowOrCol )
                 {
-                    // The user clicked on the column but didn't actually drag
+                    // the column didn't actually move anywhere
+                    if ( col != -1 )
+                        DoColHeaderClick(col);
                     m_colWindow->Refresh();   // "unpress" the column
                 }
                 else
@@ -6105,7 +6179,8 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             case WXGRID_CURSOR_SELECT_CELL:
             case WXGRID_CURSOR_RESIZE_ROW:
             case WXGRID_CURSOR_SELECT_ROW:
-                // nothing to do (?)
+                if ( col != -1 )
+                    DoColHeaderClick(col);
                 break;
         }
 
@@ -6117,7 +6192,6 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     //
     else if ( event.RightDown() )
     {
-        col = XToCol(x);
         if ( col >= 0 &&
              !SendEvent( wxEVT_GRID_LABEL_RIGHT_CLICK, -1, col, event ) )
         {
@@ -6129,7 +6203,6 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     //
     else if ( event.RightDClick() )
     {
-        col = XToCol(x);
         if ( col >= 0 &&
              !SendEvent( wxEVT_GRID_LABEL_RIGHT_DCLICK, -1, col, event ) )
         {
@@ -8185,7 +8258,18 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
 
     if ( m_nativeColumnLabels )
     {
-        wxRendererNative::Get().DrawHeaderButton(GetColLabelWindow(), dc, rect, 0);
+        wxRendererNative::Get().DrawHeaderButton
+                                (
+                                    GetColLabelWindow(),
+                                    dc,
+                                    rect,
+                                    0,
+                                    IsSortingBy(col)
+                                        ? IsSortOrderAscending()
+                                            ? wxHDR_SORT_ICON_UP
+                                            : wxHDR_SORT_ICON_DOWN
+                                        : wxHDR_SORT_ICON_NONE
+                                );
     }
     else
     {

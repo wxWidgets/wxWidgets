@@ -1565,22 +1565,34 @@ public:
         ROW_MAX = 3
     };
 
+    TabularGridTable() { m_sortOrder = NULL; }
+
     virtual int GetNumberRows() { return ROW_MAX; }
     virtual int GetNumberCols() { return COL_MAX; }
 
     virtual wxString GetValue(int row, int col)
     {
-        // notice that column parameter here always refers to the internal
-        // column index, independently of its position on the screen
-        static const char *filedata[][COL_MAX] =
-        {
-            { "autoexec", "bat",    "412", "Apr 17  2004" },
-            { "boot",     "ini",    "604", "May 27  2006" },
-            { "io",       "sys",  "40774", "May 31  1994" },
-        };
-        wxCOMPILE_TIME_ASSERT( WXSIZEOF(filedata) == ROW_MAX, Mismatch );
+        if ( m_sortOrder )
+            row = m_sortOrder[row];
 
-        return filedata[row][col];
+        switch ( col )
+        {
+            case COL_NAME:
+            case COL_EXT:
+                return GetNameOrExt(row, col);
+
+            case COL_SIZE:
+                return wxString::Format("%lu", GetSize(row));
+
+            case COL_DATE:
+                return GetDate(row).FormatDate();
+
+            case COL_MAX:
+            default:
+                wxFAIL_MSG( "unknown column" );
+        }
+
+        return wxString();
     }
 
     virtual void SetValue(int, int, const wxString&)
@@ -1590,8 +1602,10 @@ public:
 
     virtual wxString GetColLabelValue(int col)
     {
+        // notice that column parameter here always refers to the internal
+        // column index, independently of its position on the screen
         static const char *labels[] = { "Name", "Extension", "Size", "Date" };
-        wxCOMPILE_TIME_ASSERT( WXSIZEOF(labels) == COL_MAX, Mismatch );
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(labels) == COL_MAX, LabelsMismatch );
 
         return labels[col];
     }
@@ -1600,6 +1614,54 @@ public:
     {
         wxFAIL_MSG( "shouldn't be called" );
     }
+
+    void Sort(int col, bool ascending)
+    {
+        // we hardcode all sorting orders for simplicity here
+        static int sortOrders[COL_MAX][2][ROW_MAX] =
+        {
+            // descending   ascending
+            { { 2, 1, 0 }, { 0, 1, 2 } },
+            { { 2, 1, 0 }, { 0, 1, 2 } },
+            { { 2, 1, 0 }, { 0, 1, 2 } },
+            { { 1, 0, 2 }, { 2, 0, 1 } },
+        };
+
+        m_sortOrder = col == wxNOT_FOUND ? NULL : sortOrders[col][ascending];
+    }
+
+private:
+    wxString GetNameOrExt(int row, int col) const
+    {
+        static const char *
+            names[] = { "autoexec.bat", "boot.ini", "io.sys" };
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(names) == ROW_MAX, NamesMismatch );
+
+        const wxString s(names[row]);
+        return col == COL_NAME ? s.BeforeFirst('.') : s.AfterLast('.');
+    }
+
+    unsigned long GetSize(int row) const
+    {
+        static const unsigned long
+            sizes[] = { 412, 604, 40774 };
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(sizes) == ROW_MAX, SizesMismatch );
+
+        return sizes[row];
+    }
+
+    wxDateTime GetDate(int row) const
+    {
+        static const char *
+            dates[] = { "2004-04-17", "2006-05-27", "1994-05-31" };
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(dates) == ROW_MAX, DatesMismatch );
+
+        wxDateTime dt;
+        dt.ParseISODate(dates[row]);
+        return dt;
+    }
+
+    int *m_sortOrder;
 };
 
 // specialized text control for column indexes entry
@@ -1690,6 +1752,13 @@ private:
         UpdateOrder();
     }
 
+    void OnGridColSort(wxGridEvent& event)
+    {
+        const int col = event.GetCol();
+        m_table->Sort(col, !(m_grid->IsSortingBy(col) &&
+                             m_grid->IsSortOrderAscending()));
+    }
+
     void OnGridColMove(wxGridEvent& event)
     {
         // can't update it yet as the order hasn't been changed, so do it a bit
@@ -1721,6 +1790,7 @@ private:
 
     // controls
     wxGrid *m_grid;
+    TabularGridTable *m_table;
     wxCheckBox *m_chkUseNative,
                *m_chkDrawNative,
                *m_chkShowRowLabels,
@@ -1753,6 +1823,7 @@ BEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
 
     EVT_BUTTON(wxID_APPLY, TabularGridFrame::OnMoveColumn)
 
+    EVT_GRID_COL_SORT(TabularGridFrame::OnGridColSort)
     EVT_GRID_COL_MOVE(TabularGridFrame::OnGridColMove)
 
     EVT_IDLE(TabularGridFrame::OnIdle)
@@ -1766,10 +1837,11 @@ TabularGridFrame::TabularGridFrame()
     wxPanel * const panel = new wxPanel(this);
 
     // create and initialize the grid with the specified data
+    m_table = new TabularGridTable;
     m_grid = new wxGrid(panel, wxID_ANY,
                         wxDefaultPosition, wxDefaultSize,
                         wxBORDER_STATIC | wxWANTS_CHARS);
-    m_grid->SetTable(new TabularGridTable, true, wxGrid::wxGridSelectRows);
+    m_grid->SetTable(m_table, true, wxGrid::wxGridSelectRows);
 
     m_grid->EnableDragColMove();
     m_grid->UseNativeColHeader();
@@ -1840,4 +1912,11 @@ TabularGridFrame::TabularGridFrame()
 void GridFrame::OnTabularTable(wxCommandEvent&)
 {
     new TabularGridFrame;
+}
+
+bool GridApp::OnInit()
+{
+    new TabularGridFrame();
+
+    return true;
 }

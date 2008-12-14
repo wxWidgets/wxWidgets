@@ -1749,6 +1749,31 @@ public:
 #endif // wxUSE_DRAG_AND_DROP
 
 
+    // ------- sorting support
+
+    // wxGrid doesn't support sorting on its own but it can indicate the sort
+    // order in the column header (currently only if native header control is
+    // used though)
+
+    // return the column currently displaying the sort indicator or wxNOT_FOUND
+    // if none
+    int GetSortingColumn() const { return m_sortCol; }
+
+    // return true if this column is currently used for sorting
+    bool IsSortingBy(int col) const { return GetSortingColumn() == col; }
+
+    // return the current sorting order (on GetSortingColumn()): true for
+    // ascending sort and false for descending; it doesn't make sense to call
+    // it if GetSortingColumn() returns wxNOT_FOUND
+    bool IsSortOrderAscending() const { return m_sortIsAscending; }
+
+    // set the sorting column (or unsets any existing one if wxNOT_FOUND) and
+    // the order in which to sort
+    void SetSortingColumn(int col, bool ascending = true);
+
+    // unset any existing sorting column
+    void UnsetSortingColumn() { SetSortingColumn(wxNOT_FOUND); }
+
 #ifdef WXWIN_COMPATIBILITY_2_8
     // ------ For compatibility with previous wxGrid only...
     //
@@ -1998,6 +2023,9 @@ protected:
     wxArrayInt m_colWidths;
     wxArrayInt m_colRights;
 
+    int m_sortCol;
+    bool m_sortIsAscending;
+
     bool m_useNativeHeader,
          m_nativeColumnLabels;
 
@@ -2244,6 +2272,13 @@ private:
     // common part of Clip{Horz,Vert}GridLines
     void DoClipGridLines(bool& var, bool clip);
 
+    // update the sorting indicator shown in the specified column (whose index
+    // must be valid)
+    //
+    // this will use GetSortingColumn() and IsSortOrderAscending() to determine
+    // the sorting indicator to effectively show
+    void UpdateColumnSortingIndicator(int col);
+
 
     // return the position (not index) of the column at the given logical pixel
     // position
@@ -2288,6 +2323,8 @@ private:
     void ProcessRowLabelMouseEvent(wxMouseEvent& event);
     void ProcessColLabelMouseEvent(wxMouseEvent& event);
     void ProcessCornerLabelMouseEvent(wxMouseEvent& event);
+
+    void DoColHeaderClick(int col);
 
     void DoStartResizeCol(int col);
     void DoUpdateResizeCol(int x);
@@ -2608,6 +2645,7 @@ extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_EDITOR_HIDDEN;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_EDITOR_CREATED;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_BEGIN_DRAG;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_COL_MOVE;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_COL_SORT;
 
 
 typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
@@ -2650,6 +2688,7 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_CMD_ROW_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(ROW_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_SIZE(id, fn)            wx__DECLARE_GRIDSIZEEVT(COL_SIZE, id, fn)
 #define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDEVT(COL_MOVE, id, fn)
+#define EVT_GRID_CMD_COL_SORT(id, fn)            wx__DECLARE_GRIDEVT(COL_SORT, id, fn)
 #define EVT_GRID_CMD_RANGE_SELECT(id, fn)        wx__DECLARE_GRIDRANGESELEVT(RANGE_SELECT, id, fn)
 #define EVT_GRID_CMD_CELL_CHANGE(id, fn)         wx__DECLARE_GRIDEVT(CELL_CHANGE, id, fn)
 #define EVT_GRID_CMD_SELECT_CELL(id, fn)         wx__DECLARE_GRIDEVT(SELECT_CELL, id, fn)
@@ -2671,6 +2710,7 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_ROW_SIZE(fn)            EVT_GRID_CMD_ROW_SIZE(wxID_ANY, fn)
 #define EVT_GRID_COL_SIZE(fn)            EVT_GRID_CMD_COL_SIZE(wxID_ANY, fn)
 #define EVT_GRID_COL_MOVE(fn)            EVT_GRID_CMD_COL_MOVE(wxID_ANY, fn)
+#define EVT_GRID_COL_SORT(fn)            EVT_GRID_CMD_COL_SORT(wxID_ANY, fn)
 #define EVT_GRID_RANGE_SELECT(fn)        EVT_GRID_CMD_RANGE_SELECT(wxID_ANY, fn)
 #define EVT_GRID_CELL_CHANGE(fn)         EVT_GRID_CMD_CELL_CHANGE(wxID_ANY, fn)
 #define EVT_GRID_SELECT_CELL(fn)         EVT_GRID_CMD_SELECT_CELL(wxID_ANY, fn)

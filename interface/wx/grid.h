@@ -3056,6 +3056,77 @@ protected:
         called for this row.
     */
     int GetRowMinimalHeight(int col) const;
+
+
+    /**
+        @name Sorting support.
+
+        wxGrid doesn't provide any support for sorting the data but it does
+        generate events allowing the user code to sort it and supports
+        displaying the sort indicator in the column used for sorting.
+
+        To use wxGrid sorting support you need to handle wxEVT_GRID_COL_SORT
+        event (and not veto it) and resort the data displayed in the grid. The
+        grid will automatically update the sorting indicator on the column
+        which was clicked.
+
+        You can also call the functions in this section directly to update the
+        sorting indicator. Once again, they don't do anything with the grid
+        data, it remains your responsibility to actually sort it appropriately.
+     */
+    //@{
+
+    /**
+        Return the column in which the sorting indicator is currently
+        displayed.
+
+        Returns @c wxNOT_FOUND if sorting indicator is not currently displayed
+        at all.
+
+        @see SetSortingColumn()
+     */
+    int GetSortingColumn() const;
+
+    /**
+        Return @true if this column is currently used for sorting.
+
+        @see GetSortingColumn()
+     */
+    bool IsSortingBy(int col) const;
+
+    /**
+        Return @true if the current sorting order is ascending or @false if it
+        is descending.
+
+        It only makes sense to call this function if GetSortingColumn() returns
+        a valid column index and not @c wxNOT_FOUND.
+
+        @see SetSortingColumn()
+     */
+    bool IsSortOrderAscending() const;
+
+    /**
+        Set the column to display the sorting indicator in and its direction.
+
+        @param col
+            The column to display the sorting indicator in or @c wxNOT_FOUND to
+            remove any currently displayed sorting indicator.
+        @param ascending
+            If @true, display the ascending sort indicator, otherwise display
+            the descending sort indicator.
+
+        @see GetSortingColumn(), IsSortOrderAscending()
+     */
+    void SetSortingColumn(int col, bool ascending = true);
+
+    /**
+        Remove any currently shown sorting indicator.
+
+        This is equivalent to calling SetSortingColumn() with @c wxNOT_FOUND
+        first argument.
+     */
+    void UnsetSortingColumn();
+    //@}
 };
 
 
@@ -3183,7 +3254,19 @@ public:
         proceed in which case wxGrid::SetColPos() is used to reorder the
         columns display order without affecting the use of the column indices
         otherwise.
+
         This event macro corresponds to @c wxEVT_GRID_COL_MOVE event type.
+    @event{EVT_GRID_COL_SORT(func)}
+        This event is generated when a column is clicked by the user and its
+        name is explained by the fact that the custom reaction to a click on a
+        column is to sort the grid contents by this column. However the grid
+        itself has no special support for sorting and it's up to the handler of
+        this event to update the associated table. But if the event is handled
+        (and not vetoed) the grid supposes that the table was indeed resorted
+        and updates the column to indicate the new sort order and refreshes
+        itself.
+
+        This event macro corresponds to @c wxEVT_GRID_COL_SORT event type.
     @endEventTable
 
     @library{wxadv}
