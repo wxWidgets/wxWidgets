@@ -60,13 +60,18 @@ wxSize wxControl::DoGetBestSize() const
     // Do not return any arbitrary default value...
     wxASSERT_MSG( m_widget, wxT("DoGetBestSize called before creation") );
 
-    GtkRequisition req;
-    req.width = 2;
-    req.height = 2;
-    (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
-        (m_widget, &req );
-
-    wxSize best(req.width, req.height);
+    wxSize best;
+    if (m_wxwindow)
+    {
+        // this is not a native control, size_request is likely to be (0,0)
+        best = wxControlBase::DoGetBestSize();
+    }
+    else
+    {
+        GtkRequisition req;
+        GTK_WIDGET_GET_CLASS(m_widget)->size_request(m_widget, &req);
+        best.Set(req.width, req.height);
+    }
     CacheBestSize(best);
     return best;
 }
