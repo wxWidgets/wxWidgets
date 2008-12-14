@@ -184,11 +184,15 @@ public:
 
     virtual int GetFlags() const
     {
-        int flags = 0;
+        // we can't know in advance whether we can sort by this column or not
+        // with wxGrid API so suppose we can by default
+        int flags = wxCOL_SORTABLE;
         if ( m_grid->CanDragColSize() )
             flags |= wxCOL_RESIZABLE;
         if ( m_grid->CanDragColMove() )
             flags |= wxCOL_REORDERABLE;
+        if ( GetWidth() == 0 )
+            flags |= wxCOL_HIDDEN;
 
         return flags;
     }
@@ -5124,20 +5128,6 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
     // cell it might want to save that stuff to might no longer exist.
     HideCellEditControl();
 
-#if 0
-    // if we were using the default widths/heights so far, we must change them
-    // now
-    if ( m_colWidths.IsEmpty() )
-    {
-        InitColWidths();
-    }
-
-    if ( m_rowHeights.IsEmpty() )
-    {
-        InitRowHeights();
-    }
-#endif
-
     switch ( msg.GetId() )
     {
         case wxGRIDTABLE_NOTIFY_ROWS_INSERTED:
@@ -6852,6 +6842,21 @@ void wxGrid::DoEndMoveCol(int pos)
     m_dragRowOrCol = -1;
 }
 
+void wxGrid::UpdateColumnRights()
+{
+    if ( m_colWidths.empty() )
+        return;
+
+    int colRight = 0;
+    for ( int colPos = 0; colPos < m_numCols; colPos++ )
+    {
+        int colID = GetColAt( colPos );
+
+        colRight += m_colWidths[colID];
+        m_colRights[colID] = colRight;
+    }
+}
+
 void wxGrid::SetColPos(int idx, int pos)
 {
     // we're going to need m_colAt now, initialize it if needed
@@ -6864,19 +6869,8 @@ void wxGrid::SetColPos(int idx, int pos)
 
     wxHeaderCtrl::MoveColumnInOrderArray(m_colAt, idx, pos);
 
-    // also recalculate the column rights
-    if ( !m_colWidths.IsEmpty() )
-    {
-        int colRight = 0;
-        int colPos;
-        for ( colPos = 0; colPos < m_numCols; colPos++ )
-        {
-            int colID = GetColAt( colPos );
-
-            colRight += m_colWidths[colID];
-            m_colRights[colID] = colRight;
-        }
-    }
+    // also recalculate the column rights as the column positions have changed
+    UpdateColumnRights();
 
     // and make the changes visible
     if ( m_useNativeHeader )
@@ -6886,34 +6880,28 @@ void wxGrid::SetColPos(int idx, int pos)
     m_gridWin->Refresh();
 }
 
-
+void wxGrid::ResetColPos()
+{
+    m_colAt.clear();
+}
 
 void wxGrid::EnableDragColMove( bool enable )
 {
     if ( m_canDragColMove == enable )
         return;
 
+    if ( m_useNativeHeader )
+    {
+        // update all columns to make them [not] reorderable
+        GetColHeader()->SetColumnCount(m_numCols);
+    }
+
     m_canDragColMove = enable;
 
-    if ( !m_canDragColMove )
-    {
-        m_colAt.Clear();
-
-        //Recalculate the column rights
-        if ( !m_colWidths.IsEmpty() )
-        {
-            int colRight = 0;
-            int colPos;
-            for ( colPos = 0; colPos < m_numCols; colPos++ )
-            {
-                colRight += m_colWidths[colPos];
-                m_colRights[colPos] = colRight;
-            }
-        }
-
-        m_colWindow->Refresh();
-        m_gridWin->Refresh();
-    }
+    // we use to call ResetColPos() from here if !enable but this doesn't seem
+    // right as it would mean there would be no way to "freeze" the current
+    // columns order by disabling moving them after putting them in the desired
+    // order, whereas now you can always call ResetColPos() manually if needed
 }
 
 
@@ -10401,8 +10389,9 @@ void wxGrid::SetColSize( int col, int width )
     // we intentionally don't test whether the width is less than
     // GetColMinimalWidth() here but we do compare it with
     // GetColMinimalAcceptableWidth() as otherwise things currently break (see
-    // #651)
-    if ( width < GetColMinimalAcceptableWidth() )
+    // #651) -- and we also always allow the width of 0 as it has the special
+    // sense of hiding the column
+    if ( width > 0 && width < GetColMinimalAcceptableWidth() )
         return;
 
     if ( m_colWidths.IsEmpty() )
@@ -10411,9 +10400,11 @@ void wxGrid::SetColSize( int col, int width )
         InitColWidths();
     }
 
-    int w = wxMax( 0, width );
-    int diff = w - m_colWidths[col];
-    m_colWidths[col] = w;
+    const int diff = width - m_colWidths[col];
+    m_colWidths[col] = width;
+    if ( m_useNativeHeader )
+        GetColHeader()->UpdateColumn(col);
+    //else: will be refreshed when the header is redrawn
 
     for ( int colPos = GetColPos(col); colPos < m_numCols; colPos++ )
     {

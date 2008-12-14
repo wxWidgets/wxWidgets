@@ -2085,16 +2085,32 @@ public:
     /**
         Sets the width of the specified column.
 
-        Notice that this function does not refresh the grid, you need to call
-        ForceRefresh() to make the changes take effect immediately.
-
         @param col
             The column index.
         @param width
-            The new column width in pixels or a negative value to fit the
-            column width to its label width.
+            The new column width in pixels, 0 to hide the column or -1 to fit
+            the column width to its label width.
     */
     void SetColSize(int col, int width);
+
+    /**
+        Hides the specified column.
+
+        To show the column later you need to call SetColSize() with non-0
+        width or ShowCol().
+
+        @param col
+            The column index.
+     */
+    void HideCol(int col);
+
+    /**
+        Shows the previously hidden column by resizing it to non-0 size.
+
+        @see HideCol(), SetColSize()
+     */
+    void ShowCol(int col);
+
 
     /**
         Sets the default width for columns in the grid.
@@ -2147,6 +2163,24 @@ public:
         See SetColSize() for more information.
     */
     void SetRowSize(int row, int height);
+
+    /**
+        Hides the specified row.
+
+        To show the row later you need to call SetRowSize() with non-0
+        width or ShowRow().
+
+        @param col
+            The row index.
+     */
+    void HideRow(int col);
+
+    /**
+        Shows the previously hidden row by resizing it to non-0 size.
+
+        @see HideRow(), SetRowSize()
+     */
+    void ShowRow(int col);
 
     //@}
 
@@ -2260,6 +2294,11 @@ public:
         Sets the position of the specified column.
     */
     void SetColPos(int colID, int newPos);
+
+    /**
+        Resets the position of the columns to the default.
+     */
+    void ResetColPos();
 
     //@}
 

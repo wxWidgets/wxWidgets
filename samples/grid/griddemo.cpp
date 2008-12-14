@@ -1740,6 +1740,13 @@ private:
         m_grid->EnableDragColMove(m_chkEnableColMove->IsChecked());
     }
 
+    void OnShowHideColumn(wxCommandEvent& event)
+    {
+        int col = m_txtColShowHide->GetCol();
+        if ( col != -1 )
+            m_grid->SetColSize(col, event.GetId() == wxID_ADD ? -1 : 0);
+    }
+
     void OnMoveColumn(wxCommandEvent&)
     {
         int col = m_txtColIndex->GetCol();
@@ -1797,7 +1804,8 @@ private:
                *m_chkEnableColMove;
 
     ColIndexEntry *m_txtColIndex,
-                  *m_txtColPos;
+                  *m_txtColPos,
+                  *m_txtColShowHide;
 
     wxStaticText *m_statOrder;
 
@@ -1822,6 +1830,8 @@ BEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
                   TabularGridFrame::OnUpdateDrawNativeLabelsUI)
 
     EVT_BUTTON(wxID_APPLY, TabularGridFrame::OnMoveColumn)
+    EVT_BUTTON(wxID_ADD, TabularGridFrame::OnShowHideColumn)
+    EVT_BUTTON(wxID_DELETE, TabularGridFrame::OnShowHideColumn)
 
     EVT_GRID_COL_SORT(TabularGridFrame::OnGridColSort)
     EVT_GRID_COL_MOVE(TabularGridFrame::OnGridColMove)
@@ -1896,6 +1906,15 @@ TabularGridFrame::TabularGridFrame()
     m_statOrder = new wxStaticText(panel, wxID_ANY, "<default>");
     sizerShowCols->Add(m_statOrder, flagsHorz);
     sizerColumns->Add(sizerShowCols, wxSizerFlags().Expand().Border(wxTOP));
+
+    wxSizer * const sizerShowHide = new wxBoxSizer(wxHORIZONTAL);
+    sizerShowHide->Add(new wxStaticText(panel, wxID_ANY, "Show/hide column:"),
+                       flagsHorz);
+    m_txtColShowHide = new ColIndexEntry(panel);
+    sizerShowHide->Add(m_txtColShowHide, flagsHorz);
+    sizerShowHide->Add(new wxButton(panel, wxID_ADD, "&Show"), flagsHorz);
+    sizerShowHide->Add(new wxButton(panel, wxID_DELETE, "&Hide"), flagsHorz);
+    sizerColumns->Add(sizerShowHide, wxSizerFlags().Expand().Border(wxTOP));
 
     sizerControls->Add(sizerColumns, wxSizerFlags(1).Expand().Border());
 

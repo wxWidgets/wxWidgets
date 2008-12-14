@@ -1505,11 +1505,19 @@ public:
         return s;
     }
 
+    // ------ row and col sizes
     void     SetDefaultRowSize( int height, bool resizeExistingRows = false );
     void     SetRowSize( int row, int height );
-    void     SetDefaultColSize( int width, bool resizeExistingCols = false );
+    void     HideRow(int row) { SetRowSize(row, 0); }
+    void     ShowRow(int row) { SetRowSize(row, -1); }
 
+    void     SetDefaultColSize( int width, bool resizeExistingCols = false );
     void     SetColSize( int col, int width );
+    void     HideCol(int col) { SetColSize(col, 0); }
+    void     ShowCol(int col) { SetColSize(col, -1); }
+
+
+    // ------- columns (only, for now) reordering
 
     // columns index <-> positions mapping: by default, the position of the
     // column is the same as its index, but the columns can also be reordered
@@ -1551,6 +1559,8 @@ public:
         return wxNOT_FOUND;
     }
 
+    // reset the columns positions to the default order
+    void ResetColPos();
 
 
     // automatically size the column or row to fit to its contents, if
@@ -2278,6 +2288,11 @@ private:
     // this will use GetSortingColumn() and IsSortOrderAscending() to determine
     // the sorting indicator to effectively show
     void UpdateColumnSortingIndicator(int col);
+
+    // update column right positions after their order changed (does nothing if
+    // we only use the default widths as in this case m_colRights is not used
+    // neither)
+    void UpdateColumnRights();
 
 
     // return the position (not index) of the column at the given logical pixel
