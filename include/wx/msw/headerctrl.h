@@ -71,15 +71,53 @@ private:
     // common part of all ctors
     void Init();
 
-    // wrapper around Header_InsertItem(): insert the item by using information
-    // from GetColumn(idx) and at the given display position if order != -1
-    void DoInsertItem(unsigned int idx, int order);
+    // wrapper around Header_InsertItem(): insert the item using information
+    // from the given column at the given index
+    void DoInsertItem(const wxHeaderColumn& col, unsigned int idx);
+
+    // get the number of currently visible items: this is also the total number
+    // of items contained in the native control
+    int GetShownColumnsCount() const;
+
+    // due to the discrepancy for the hidden columns which we know about but
+    // the native control does not, there can be a difference between the
+    // column indices we use and the ones used by the native control; these
+    // functions translate between them
+    //
+    // notice that MSWToNativeIdx() shouldn't be called for hidden columns and
+    // MSWFromNativeIdx() always returns an index of a visible column
+    int MSWToNativeIdx(int idx);
+    int MSWFromNativeIdx(int item);
+
+    // this is the same as above but for order, not index
+    int MSWFromNativeOrder(int order);
 
     // get the event type corresponding to a click or double click event
     // (depending on dblclk value) with the specified (using MSW convention)
     // mouse button
     wxEventType GetClickEventType(bool dblclk, int button);
 
+
+    // the number of columns in the control, including the hidden ones (not
+    // taken into account by the native control, see comment in DoGetCount())
+    unsigned int m_numColumns;
+
+    // this is a lookup table allowing us to check whether the column with the
+    // given index is currently shown in the native control, in which case the
+    // value of this array element with this index is 0, or hidden
+    //
+    // notice that this may be different from GetColumn(idx).IsHidden() and in
+    // fact we need this array precisely because it will be different from it
+    // in DoUpdate() when the column hidden flag gets toggled and we need it to
+    // handle this transition correctly
+    wxArrayInt m_isHidden;
+
+    // the order of our columns: this array contains the index of the column
+    // shown at the position n as the n-th element
+    //
+    // this is necessary only to handle the hidden columns: the native control
+    // doesn't know about them and so we can't use Header_GetOrderArray()
+    wxArrayInt m_colIndices;
 
     // the image list: initially NULL, created on demand
     wxImageList *m_imageList;

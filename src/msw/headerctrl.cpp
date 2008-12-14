@@ -49,6 +49,7 @@ extern int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 
 void wxHeaderCtrl::Init()
 {
+    m_numColumns = 0;
     m_imageList = NULL;
     m_scrollOffset = 0;
 }
@@ -144,7 +145,21 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
 
 unsigned int wxHeaderCtrl::DoGetCount() const
 {
-    return Header_GetItemCount(GetHwnd());
+    // we can't use Header_GetItemCount() here because it doesn't take the
+    // hidden columns into account and we can't find the hidden columns after
+    // the last shown one in MSWFromNativeIdx() without knowing where to stop
+    // so we have to store the columns count internally
+    return m_numColumns;
+}
+
+int wxHeaderCtrl::GetShownColumnsCount() const
+{
+    const int numItems = Header_GetItemCount(GetHwnd());
+
+    wxASSERT_MSG( numItems >= 0 && (unsigned)numItems <= m_numColumns,
+                  "unexpected number of items in the native control" );
+
+    return numItems;
 }
 
 void wxHeaderCtrl::DoSetCount(unsigned int count)
@@ -152,7 +167,7 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
     unsigned n;
 
     // first delete all old columns
-    const unsigned countOld = DoGetCount();
+    const unsigned countOld = GetShownColumnsCount();
     for ( n = 0; n < countOld; n++ )
     {
         if ( !Header_DeleteItem(GetHwnd(), 0) )
@@ -161,10 +176,25 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
         }
     }
 
+    // update the column indices order array before changing m_numColumns
+    DoResizeColumnIndices(m_colIndices, count);
+
     // and add the new ones
+    m_numColumns = count;
+    m_isHidden.resize(m_numColumns);
     for ( n = 0; n < count; n++ )
     {
-        DoInsertItem(n, -1 /* default order, i.e. append */);
+        const wxHeaderColumn& col = GetColumn(n);
+        if ( col.IsShown() )
+        {
+            m_isHidden[n] = false;
+
+            DoInsertItem(col, n);
+        }
+        else // hidden initially
+        {
+            m_isHidden[n] = true;
+        }
     }
 }
 
@@ -176,16 +206,38 @@ void wxHeaderCtrl::DoUpdate(unsigned int idx)
     // more complicated as we'd have to reset the old values as well as setting
     // the new ones -- so instead just recreate the column
 
-    // we need to preserve the old position ourselves as the column doesn't
-    // store it (TODO: should it?)
-    const unsigned int pos = GetColumnPos(idx);
-    Header_DeleteItem(GetHwnd(), idx);
-    DoInsertItem(idx, pos);
+    const wxHeaderColumn& col = GetColumn(idx);
+    if ( col.IsHidden() )
+    {
+        // column is hidden now
+        if ( !m_isHidden[idx] )
+        {
+            // but it wasn't hidden before, so remove it
+            Header_DeleteItem(GetHwnd(), MSWToNativeIdx(idx));
+
+            m_isHidden[idx] = true;
+        }
+        //else: nothing to do, updating hidden column doesn't have any effect
+    }
+    else // column is shown now
+    {
+        if ( m_isHidden[idx] )
+        {
+            m_isHidden[idx] = false;
+        }
+        else // and it was shown before as well
+        {
+            // we need to remove the old column
+            Header_DeleteItem(GetHwnd(), MSWToNativeIdx(idx));
+        }
+
+        DoInsertItem(col, idx);
+    }
 }
 
-void wxHeaderCtrl::DoInsertItem(unsigned int idx, int order)
+void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
 {
-    const wxHeaderColumn& col = GetColumn(idx);
+    wxASSERT_MSG( !col.IsHidden(), "should only be called for shown columns" );
 
     wxHDITEM hdi;
 
@@ -260,19 +312,17 @@ void wxHeaderCtrl::DoInsertItem(unsigned int idx, int order)
         hdi.fmt |= col.IsSortOrderAscending() ? HDF_SORTUP : HDF_SORTDOWN;
     }
 
-    if ( col.GetWidth() != wxCOL_WIDTH_DEFAULT || col.IsHidden() )
+    if ( col.GetWidth() != wxCOL_WIDTH_DEFAULT )
     {
         hdi.mask |= HDI_WIDTH;
-        hdi.cxy = col.IsHidden() ? 0 : col.GetWidth();
+        hdi.cxy = col.GetWidth();
     }
 
-    if ( order != -1 )
-    {
-        hdi.mask |= HDI_ORDER;
-        hdi.iOrder = order;
-    }
+    hdi.mask |= HDI_ORDER;
+    hdi.iOrder = m_colIndices.Index(idx);
 
-    if ( ::SendMessage(GetHwnd(), HDM_INSERTITEM, idx, (LPARAM)&hdi) == -1 )
+    if ( ::SendMessage(GetHwnd(), HDM_INSERTITEM,
+                       MSWToNativeIdx(idx), (LPARAM)&hdi) == -1 )
     {
         wxLogLastError(_T("Header_InsertItem()"));
     }
@@ -280,19 +330,81 @@ void wxHeaderCtrl::DoInsertItem(unsigned int idx, int order)
 
 void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
 {
-    if ( !Header_SetOrderArray(GetHwnd(), order.size(), &order[0]) )
+    wxArrayInt orderShown;
+    orderShown.reserve(m_numColumns);
+
+    for ( unsigned n = 0; n < m_numColumns; n++ )
+    {
+        const int idx = order[n];
+        if ( GetColumn(idx).IsShown() )
+            orderShown.push_back(MSWToNativeIdx(idx));
+    }
+
+    if ( !Header_SetOrderArray(GetHwnd(), orderShown.size(), &orderShown[0]) )
     {
         wxLogLastError(_T("Header_GetOrderArray"));
     }
+
+    m_colIndices = order;
 }
 
 wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
 {
-    const unsigned count = GetColumnCount();
-    wxArrayInt order(count);
-    if ( !Header_GetOrderArray(GetHwnd(), count, &order[0]) )
+    // we don't use Header_GetOrderArray() here because it doesn't return
+    // information about the hidden columns, instead we just save the columns
+    // order array in DoSetColumnsOrder() and update it when they're reordered
+    return m_colIndices;
+}
+
+int wxHeaderCtrl::MSWToNativeIdx(int idx)
+{
+    // don't check for GetColumn(idx).IsShown() as it could have just became
+    // false and we may be called from DoUpdate() to delete the old column
+    wxASSERT_MSG( !m_isHidden[idx],
+                  "column must be visible to have an "
+                  "index in the native control" );
+
+    for ( int i = 0; i < idx; i++ )
     {
-        wxLogLastError(_T("Header_GetOrderArray"));
+        if ( GetColumn(i).IsHidden() )
+            idx--; // one less column the native control knows about
+    }
+
+    return idx;
+}
+
+int wxHeaderCtrl::MSWFromNativeIdx(int item)
+{
+    wxASSERT_MSG( item >= 0 && item < GetShownColumnsCount(),
+                  "column index out of range" );
+
+    // reverse the above function
+    for ( int i = 0; i <= item; i++ )
+    {
+        if ( GetColumn(i).IsHidden() )
+            item++;
+    }
+
+    return item;
+}
+
+int wxHeaderCtrl::MSWFromNativeOrder(int order)
+{
+    wxASSERT_MSG( order >= 0 && order < GetShownColumnsCount(),
+                  "column position out of range" );
+
+    // notice that the loop condition is inclusive because if the column
+    // exactly at position order is hidden we should go to the next one
+    for ( int pos = 0; pos <= order; pos++ )
+    {
+        if ( GetColumn(m_colIndices[pos]).IsHidden() )
+        {
+            // order can't become greater than m_numColumns here because it is
+            // less than the number of shown columns initially and it is going
+            // to be incremented at most once for every hidden column and
+            // m_numColumns is the total columns number
+            order++;
+        }
     }
 
     return order;
@@ -335,11 +447,22 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     NMHEADER * const nmhdr = (NMHEADER *)lParam;
 
     wxEventType evtType = wxEVT_NULL;
-    int idx = nmhdr->iItem;
     int width = 0;
     int order = -1;
     bool veto = false;
     const UINT code = nmhdr->hdr.code;
+
+    // we don't have the index for all events, e.g. not for NM_RELEASEDCAPTURE
+    // so only access for header control events (and yes, the direction of
+    // comparisons with FIRST/LAST is correct even if it seems inverted)
+    int idx = code <= HDN_FIRST && code > HDN_LAST ? nmhdr->iItem : -1;
+    if ( idx != -1 )
+    {
+        // we also get bogus HDN_BEGINDRAG with -1 index so don't call
+        // MSWFromNativeIdx() unconditionally for nmhdr->iItem
+        idx = MSWFromNativeIdx(idx);
+    }
+
     switch ( code )
     {
         // click events
@@ -359,7 +482,10 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 POINT pt;
                 idx = wxMSWGetColumnClicked(&nmhdr->hdr, &pt);
                 if ( idx != wxNOT_FOUND )
+                {
+                    idx = MSWFromNativeIdx(idx);
                     evtType = GetClickEventType(code == NM_RDBLCLK, 1);
+                }
                 //else: ignore clicks outside any column
             }
             break;
@@ -429,7 +555,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         case HDN_BEGINDRAG:
             // Windows sometimes sends us events with invalid column indices
-            if ( idx == -1 )
+            if ( nmhdr->iItem == -1 )
                 break;
 
             // column must have the appropriate flag to be draggable
@@ -443,10 +569,17 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             break;
 
         case HDN_ENDDRAG:
-            evtType = wxEVT_COMMAND_HEADER_END_REORDER;
-
             wxASSERT_MSG( nmhdr->pitem->mask & HDI_ORDER, "should have order" );
             order = nmhdr->pitem->iOrder;
+
+            // we also get messages with invalid order when column reordering
+            // is cancelled (e.g. by pressing Esc)
+            if ( order == -1 )
+                break;
+
+            order = MSWFromNativeOrder(order);
+
+            evtType = wxEVT_COMMAND_HEADER_END_REORDER;
             break;
 
         case NM_RELEASEDCAPTURE:
@@ -468,11 +601,19 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         if ( GetEventHandler()->ProcessEvent(event) )
         {
             if ( event.IsAllowed() )
-                return true;
+                return true;    // skip default message handling below
 
             // we need to veto the default handling of this message, don't
             // return to execute the code in the "if veto" branch below
             veto = true;
+        }
+        else // not processed
+        {
+            // special post-processing for HDN_ENDDRAG: we need to update the
+            // internal column indices array if this is allowed to go ahead as
+            // the native control is going to reorder its columns now
+            if ( evtType == wxEVT_COMMAND_HEADER_END_REORDER )
+                MoveColumnInOrderArray(m_colIndices, idx, order);
         }
     }
 
