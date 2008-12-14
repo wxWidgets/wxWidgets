@@ -1744,7 +1744,11 @@ private:
     {
         int col = m_txtColShowHide->GetCol();
         if ( col != -1 )
+        {
             m_grid->SetColSize(col, event.GetId() == wxID_ADD ? -1 : 0);
+
+            UpdateOrderAndVisibility();
+        }
     }
 
     void OnMoveColumn(wxCommandEvent&)
@@ -1756,7 +1760,14 @@ private:
 
         m_grid->SetColPos(col, pos);
 
-        UpdateOrder();
+        UpdateOrderAndVisibility();
+    }
+
+    void OnResetColumnOrder(wxCommandEvent&)
+    {
+        m_grid->ResetColPos();
+
+        UpdateOrderAndVisibility();
     }
 
     void OnGridColSort(wxGridEvent& event)
@@ -1780,17 +1791,28 @@ private:
         if ( m_shouldUpdateOrder )
         {
             m_shouldUpdateOrder = false;
-            UpdateOrder();
+            UpdateOrderAndVisibility();
         }
 
         event.Skip();
     }
 
-    void UpdateOrder()
+    void UpdateOrderAndVisibility()
     {
         wxString s;
         for ( int pos = 0; pos < TabularGridTable::COL_MAX; pos++ )
-            s << m_grid->GetColAt(pos) << ' ';
+        {
+            const int col = m_grid->GetColAt(pos);
+            const bool isHidden = m_grid->GetColSize(col) == 0;
+
+            if ( isHidden )
+                s << '[';
+            s << col;
+            if ( isHidden )
+                s << ']';
+
+            s << ' ';
+        }
 
         m_statOrder->SetLabel(s);
     }
@@ -1830,6 +1852,7 @@ BEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
                   TabularGridFrame::OnUpdateDrawNativeLabelsUI)
 
     EVT_BUTTON(wxID_APPLY, TabularGridFrame::OnMoveColumn)
+    EVT_BUTTON(wxID_RESET, TabularGridFrame::OnResetColumnOrder)
     EVT_BUTTON(wxID_ADD, TabularGridFrame::OnShowHideColumn)
     EVT_BUTTON(wxID_DELETE, TabularGridFrame::OnShowHideColumn)
 
@@ -1905,6 +1928,7 @@ TabularGridFrame::TabularGridFrame()
                        flagsHorz);
     m_statOrder = new wxStaticText(panel, wxID_ANY, "<default>");
     sizerShowCols->Add(m_statOrder, flagsHorz);
+    sizerShowCols->Add(new wxButton(panel, wxID_RESET, "&Reset order"));
     sizerColumns->Add(sizerShowCols, wxSizerFlags().Expand().Border(wxTOP));
 
     wxSizer * const sizerShowHide = new wxBoxSizer(wxHORIZONTAL);
