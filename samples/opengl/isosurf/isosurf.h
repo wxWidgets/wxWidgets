@@ -47,10 +47,6 @@ class TestGLCanvas : public wxGLCanvas
 public:
     TestGLCanvas(wxWindow *parent,
                  wxWindowID id = wxID_ANY,
-                 const wxPoint& pos = wxDefaultPosition,
-                 const wxSize& size = wxDefaultSize,
-                 long style = 0,
-                 const wxString& name = _T("TestGLCanvas"),
                  int *gl_attrib = NULL);
 
     virtual ~TestGLCanvas();
@@ -85,8 +81,8 @@ class MyFrame : public wxFrame
 public:
     MyFrame(wxFrame *frame,
             const wxString& title,
-            const wxPoint& pos,
-            const wxSize& size,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE);
 
     virtual ~MyFrame();

@@ -2,7 +2,7 @@
 // Name:        isosurf.cpp
 // Purpose:     wxGLCanvas demo program
 // Author:      Brian Paul (original gltk version), Wolfram Gloger
-// Modified by: Julian Smart
+// Modified by: Julian Smart, Francesco Montorsi
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -29,9 +29,9 @@
 #include "wx/math.h"
 #include "wx/log.h"
 #include "wx/cmdline.h"
-#include "wx/archive.h"
 #include "wx/wfstream.h"
 #include "wx/zstream.h"
+#include "wx/txtstrm.h"
 
 #include "isosurf.h"
 #include "../../sample.xpm"
@@ -58,8 +58,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    SetTopWindow(new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"),
-                             wxDefaultPosition, wxDefaultSize));
+    SetTopWindow(new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample")));
 
     return true;
 }
@@ -131,7 +130,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
 
     if (!g_doubleBuffer)
     {
-        wxLogWarning("don't have double buffer, disabling\n");
+        wxLogWarning("Disabling double buffering");
 
 #ifdef __WXGTK__
         gl_attrib[9] = None;
@@ -142,8 +141,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     // Show the frame
     Show(true);
 
-    m_canvas = new TestGLCanvas(this, wxID_ANY, wxDefaultPosition,
-                                GetClientSize(), 0, _T("TestGLCanvas"), gl_attrib);
+    m_canvas = new TestGLCanvas(this, wxID_ANY, gl_attrib);
 }
 
 MyFrame::~MyFrame()
@@ -172,14 +170,13 @@ END_EVENT_TABLE()
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent,
                            wxWindowID id,
-                           const wxPoint& pos,
-                           const wxSize& size,
-                           long style,
-                           const wxString& name,
                            int* gl_attrib)
-    : wxGLCanvas(parent, id, gl_attrib, pos, size,
-                 style | wxFULL_REPAINT_ON_RESIZE, name)
+    : wxGLCanvas(parent, id, gl_attrib)
 {
+    m_xrot = 0;
+    m_yrot = 0;
+    m_numverts = 0;
+
     // Explicitly create a new rendering context instance for this canvas.
     m_glRC = new wxGLContext(this);
 
@@ -198,6 +195,12 @@ TestGLCanvas::~TestGLCanvas()
 
 void TestGLCanvas::LoadSurface(const wxString& filename)
 {
+    // FIXME
+    // we need to set english locale to force wxTextInputStream's calls to
+    // wxStrtod to use the point and not the comma as decimal separator...
+    // (the isosurf.dat contains points and not commas)...
+    wxLocale l(wxLANGUAGE_ENGLISH);
+
     wxZlibInputStream* stream =
         new wxZlibInputStream(new wxFFileInputStream(filename));
     if (!stream || !stream->IsOk())
@@ -207,32 +210,24 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
         return;
     }
 
-    m_numverts = 0;
-
-    const size_t sz = sizeof(GLfloat);
-    while (!stream->Eof() && m_numverts < MAXVERTS)
     {
-        // read a vertex
-        for (int i=0; i<3; i++)
-            if (stream->Read(&m_verts[m_numverts][i], sz).LastRead() != sz)
-            {
-                wxLogError("Cannot read the %d-th vertex in '%s'!",
-                           m_numverts, filename.c_str());
-                delete stream;
-                return;
-            }
+        // we suppose to have in input a text file containing floating numbers
+        // space/newline-separed... first 3 numbers are the coordinates of a
+        // vertex and the following 3 are the relative vertex normal and so on...
 
-        // read its normal
-        for (int i=0; i<3; i++)
-            if (stream->Read(&m_norms[m_numverts][i], sz).LastRead() != sz)
-            {
-                wxLogError("Cannot read the %d-th vertex in '%s'!",
-                           m_numverts, filename.c_str());
-                delete stream;
-                return;
-            }
+        wxTextInputStream inFile(*stream);
+        m_numverts = 0;
 
-        m_numverts++;
+        while (!stream->Eof() && m_numverts < MAXVERTS)// && m_numverts<MAXVERTS)
+        {
+            inFile >> m_verts[m_numverts][0] >> m_verts[m_numverts][1] >> m_verts[m_numverts][2];
+            inFile >> m_norms[m_numverts][0] >> m_norms[m_numverts][1] >> m_norms[m_numverts][2];
+
+            m_numverts++;
+        }
+
+        // discard last vertex; it is a zero caused by the EOF
+        m_numverts--;
     }
 
     delete stream;
@@ -257,11 +252,11 @@ void TestGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
     glRotatef( m_xrot, 1.0f, 0.0f, 0.0f );
 
     // draw the surface
-/*    if (g_use_vertex_arrays)
+    if (g_use_vertex_arrays)
     {
         glDrawArrays( GL_TRIANGLE_STRIP, 0, m_numverts );
     }
-    else*/
+    else
     {
         glBegin( GL_TRIANGLE_STRIP );
 
@@ -320,25 +315,17 @@ void TestGLCanvas::OnChar(wxKeyEvent& event)
     case 's': case 'S':
         g_smooth = !g_smooth;
         if (g_smooth)
-        {
             glShadeModel(GL_SMOOTH);
-        }
         else
-        {
             glShadeModel(GL_FLAT);
-        }
         break;
 
     case 'l': case 'L':
         g_lighting = !g_lighting;
         if (g_lighting)
-        {
             glEnable(GL_LIGHTING);
-        }
         else
-        {
             glDisable(GL_LIGHTING);
-        }
         break;
 
     default:
@@ -436,8 +423,8 @@ void TestGLCanvas::InitGL()
     {
         glVertexPointer( 3, GL_FLOAT, 0, m_verts );
         glNormalPointer( GL_FLOAT, 0, m_norms );
-        glEnable( GL_VERTEX_ARRAY_EXT );
-        glEnable( GL_NORMAL_ARRAY_EXT );
+        glEnable( GL_VERTEX_ARRAY );
+        glEnable( GL_NORMAL_ARRAY );
     }
 }
 
