@@ -98,6 +98,9 @@ public:
     // get the position at which this column is currently displayed
     unsigned int GetColumnPos(unsigned int idx) const;
 
+    // reset the columns order to the natural one
+    void ResetColumnsOrder();
+
     // helper function used by the generic version of this control and also
     // wxGrid: reshuffles the array of column indices indexed by positions
     // (i.e. using the same convention as for SetColumnsOrder()) so that the

@@ -269,6 +269,14 @@ public:
     unsigned int GetColumnPos(unsigned int idx) const;
 
     /**
+        Reset the columns order to the natural one.
+
+        After calling this function, the column with index @c idx appears at
+        position @c idx in the control.
+     */
+    void ResetColumnsOrder();
+
+    /**
         Helper function to manipulate the array of column indices.
 
         This function reshuffles the array of column indices indexed by

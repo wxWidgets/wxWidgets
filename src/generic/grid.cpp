@@ -6883,6 +6883,11 @@ void wxGrid::SetColPos(int idx, int pos)
 void wxGrid::ResetColPos()
 {
     m_colAt.clear();
+
+    if ( m_useNativeHeader )
+        GetColHeader()->ResetColumnsOrder();
+    else
+        m_colWindow->Refresh();
 }
 
 void wxGrid::EnableDragColMove( bool enable )

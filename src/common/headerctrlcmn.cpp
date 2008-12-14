@@ -113,6 +113,16 @@ void wxHeaderCtrlBase::SetColumnsOrder(const wxArrayInt& order)
     // TODO-RTL: do we need to reverse the array?
 }
 
+void wxHeaderCtrlBase::ResetColumnsOrder()
+{
+    const unsigned count = GetColumnCount();
+    wxArrayInt order(count);
+    for ( unsigned n = 0; n < count; n++ )
+        order[n] = n;
+
+    DoSetColumnsOrder(order);
+}
+
 wxArrayInt wxHeaderCtrlBase::GetColumnsOrder() const
 {
     const wxArrayInt order = DoGetColumnsOrder();
