@@ -71,25 +71,34 @@ enum wxCmdLineSplitType
 /**
     The structure wxCmdLineEntryDesc is used to describe the one command line
     switch, option or parameter. An array of such structures should be passed
-    to wxCmdLineParser::SetDesc(). Also, the meanings of parameters of the
-    wxCmdLineParser::AddXXX() functions are the same as of the corresponding
-    fields in this structure.
+    to wxCmdLineParser::SetDesc().
 
-    The field @c shortName is the usual, short, name of the switch or the
-    option. @c longName is the corresponding long name or empty if the option
-    has no long name. Both of these fields are unused for the parameters. Both
-    the short and long option names can contain only letters, digits and the
-    underscores.
-
-    @c description is used by the wxCmdLineEntryDesc::Usage() method to
-    construct a help message explaining the syntax of the program.
+    Also, the meanings of parameters of the wxCmdLineParser::AddXXX() functions
+    are the same as of the corresponding fields in this structure.
 */
 struct wxCmdLineEntryDesc
 {
     wxCmdLineEntryType kind;
+
+    /**
+        This is the usual, short, name of the switch or the option.
+    */
     const char *shortName;
+
+    /**
+        @c longName is the corresponding long name or empty if the option
+        has no long name. Both of these fields are unused for the parameters. Both
+        the short and long option names can contain only letters, digits and the
+        underscores.
+    */
     const char *longName;
+
+    /**
+        This description is used by the wxCmdLineEntryDesc::Usage() method to
+        construct a help message explaining the syntax of the program.
+    */
     const char *description;
+
     wxCmdLineParamType type;
     int flags;
 };
@@ -114,6 +123,9 @@ struct wxCmdLineEntryDesc
        use the @c AddXXX() functions later.
     -# Call Parse().
     -# Use Found() to retrieve the results.
+
+    You can also use wxApp's default command line processing just overriding
+    wxAppConsole::OnInitCmdLine() and wxAppConsole::OnCmdLineParsed().
 
     In the documentation below the following terminology is used:
 
@@ -208,7 +220,7 @@ struct wxCmdLineEntryDesc
     @library{wxbase}
     @category{appmanagement}
 
-    @see wxApp::argc, wxApp::argv, @ref page_samples_console "Console Sample"
+    @see wxApp::argc, wxApp::argv, @ref page_samples_console
 */
 class wxCmdLineParser
 {
@@ -218,20 +230,27 @@ public:
     */
     wxCmdLineParser();
 
-    //@{
     /**
         Constructor which specifies the command line to parse. This is the
         traditional (Unix) command line format. The parameters @a argc and
         @a argv have the same meaning as the typical @c main() function.
 
-        The second overloaded constructor is only available in Unicode build.
-        The first one is available in both ANSI and Unicode modes because under
+        This constructor is available in both ANSI and Unicode modes because under
         some platforms the command line arguments are passed as ASCII strings
         even to Unicode programs.
     */
     wxCmdLineParser(int argc, char** argv);
+
+    /**
+        Constructor which specifies the command line to parse.
+        This is the traditional (Unix) command line format.
+
+        The parameters @a argc and @a argv have the same meaning as the typical
+        @c main() function.
+
+        This constructor is only available in Unicode build.
+    */
     wxCmdLineParser(int argc, wchar_t** argv);
-    //@}
 
     /**
         Constructor which specify the command line to parse in Windows format.
