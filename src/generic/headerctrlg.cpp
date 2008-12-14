@@ -413,10 +413,12 @@ void wxHeaderCtrl::StartReordering(unsigned int col, int xPhysical)
     SetCursor(wxCursor(wxCURSOR_HAND));
     CaptureMouse();
 
-    UpdateReorderingMarker(xPhysical);
+    // do not call UpdateReorderingMarker() here: we don't want to give
+    // feedback for reordering until the user starts to really move the mouse
+    // as he might want to just click on the column and not move it at all
 }
 
-void wxHeaderCtrl::EndReordering(int xPhysical)
+bool wxHeaderCtrl::EndReordering(int xPhysical)
 {
     wxASSERT_MSG( IsReordering(), "shouldn't be called if we're not reordering" );
 
@@ -424,20 +426,33 @@ void wxHeaderCtrl::EndReordering(int xPhysical)
 
     ReleaseMouse();
 
-    wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_REORDER, GetId());
-    event.SetEventObject(this);
-    event.SetColumn(m_colBeingReordered);
-
-    const unsigned pos = GetColumnPos(FindColumnAtPoint(xPhysical));
-    event.SetNewOrder(pos);
-
-    if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
-    {
-        // do reorder the columns
-        DoMoveCol(m_colBeingReordered, pos);
-    }
+    const int colOld = m_colBeingReordered,
+              colNew = FindColumnAtPoint(xPhysical);
 
     m_colBeingReordered = COL_NONE;
+
+    if ( xPhysical - GetColStart(colOld) == m_dragOffset )
+        return false;
+
+    if ( colNew != colOld )
+    {
+        wxHeaderCtrlEvent event(wxEVT_COMMAND_HEADER_END_REORDER, GetId());
+        event.SetEventObject(this);
+        event.SetColumn(colOld);
+
+        const unsigned pos = GetColumnPos(FindColumnAtPoint(xPhysical));
+        event.SetNewOrder(pos);
+
+        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+        {
+            // do reorder the columns
+            DoMoveCol(colOld, pos);
+        }
+    }
+
+    // whether we moved the column or not, the user did move the mouse and so
+    // did try to do it so return true
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -588,12 +603,18 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 
     if ( IsReordering() )
     {
-        if ( mevent.LeftUp() )
-            EndReordering(xPhysical);
-        else // update the column position
+        if ( !mevent.LeftUp() )
+        {
+            // update the column position
             UpdateReorderingMarker(xPhysical);
 
-        return;
+            return;
+        }
+
+        // finish reordering and continue to generate a click event below if we
+        // didn't really reorder anything
+        if ( EndReordering(xPhysical) )
+            return;
     }
 
 

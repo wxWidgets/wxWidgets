@@ -127,7 +127,11 @@ private:
     // same functions as above but for column moving/reordering instead of
     // resizing
     void StartReordering(unsigned int col, int xPhysical);
-    void EndReordering(int xPhysical);
+
+    // returns true if we did drag the column somewhere else or false if we
+    // didn't really move it -- in this case we consider that no reordering
+    // took place and that a normal column click event should be generated
+    bool EndReordering(int xPhysical);
 
     // constrain the given position to be larger than the start position of the
     // given column plus its minimal width and return the effective width
