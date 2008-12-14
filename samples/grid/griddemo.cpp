@@ -1914,9 +1914,3 @@ void GridFrame::OnTabularTable(wxCommandEvent&)
     new TabularGridFrame;
 }
 
-bool GridApp::OnInit()
-{
-    new TabularGridFrame();
-
-    return true;
-}
