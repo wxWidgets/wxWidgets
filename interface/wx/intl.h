@@ -263,12 +263,12 @@ enum wxLanguage
 
 
 /**
-    wxLanguageInfo: encapsulates wxLanguage to OS native lang.desc.
+    wxLanguageInfo: encapsulates ::wxLanguage to OS native lang.desc.
                     translation information
 */
 struct WXDLLIMPEXP_BASE wxLanguageInfo
 {
-    /// wxLanguage id. It should be greater than wxLANGUAGE_USER_DEFINED.
+    /// ::wxLanguage id. It should be greater than wxLANGUAGE_USER_DEFINED.
     int Language;
     wxString CanonicalName;         //!< Canonical name, e.g. fr_FR.
 #ifdef __WXMSW__
@@ -485,10 +485,10 @@ public:
                             const wxString& domain = wxEmptyString) const;
 
     /**
-        Returns wxLanguage() constant of current language.
+        Returns the ::wxLanguage constant of current language.
 
         Note that you can call this function only if you used the form of
-        Init() that takes wxLanguage argument.
+        Init() that takes ::wxLanguage argument.
     */
     int GetLanguage() const;
 
@@ -595,7 +595,7 @@ public:
 
     /**
         Tries to detect the user's default language setting.
-        Returns wxLanguage value or @b wxLANGUAGE_UNKNOWN if the language-guessing
+        Returns the ::wxLanguage value or @b wxLANGUAGE_UNKNOWN if the language-guessing
         algorithm failed.
     */
     static int GetSystemLanguage() const;
@@ -612,7 +612,7 @@ public:
         try to translate the messages using the message catalogs for this locale.
 
         @param language
-            wxLanguage identifier of the locale.
+            ::wxLanguage identifier of the locale.
             @c wxLANGUAGE_DEFAULT has special meaning -- wxLocale will use system's
             default language (see GetSystemLanguage()).
         @param flags
@@ -664,11 +664,11 @@ public:
         this locale. For example in Windows 2000 and Windows XP, support for many
         locales is not installed by default. Returns @true if the locale is
         supported.
-        The argument @a lang is the wxLanguage identifier. To obtain this for a
-        given a two letter ISO language code, use
-        FindLanguageInfo() to obtain its
-        wxLanguageInfo structure. See AddLanguage() for
-        the wxLanguageInfo description.
+
+        The argument @a lang is the ::wxLanguage identifier. To obtain this for a
+        given a two letter ISO language code, use FindLanguageInfo() to obtain its
+        wxLanguageInfo structure.
+        See AddLanguage() for the wxLanguageInfo description.
 
         @since 2.7.1.
     */
