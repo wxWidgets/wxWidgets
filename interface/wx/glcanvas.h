@@ -154,7 +154,7 @@ enum
     context to the canvas, and then finally call SwapBuffers() to swap the
     buffers of the OpenGL canvas and thus show your current output.
 
-    Notice that previous versions of wxWidgets used to implicitly create a
+    Notice that versions of wxWidgets previous to 2.9 used to implicitly create a
     wxGLContext inside wxGLCanvas itself. This is still supported in the
     current version but is deprecated now and will be removed in the future,
     please update your code to create the rendering contexts explicitly.
@@ -164,11 +164,14 @@ enum
     the correct values of the @e attribList parameter. The values that should
     be set up and their meanings will be described below.
 
-    @note OpenGL is not enabled by default. To switch it on, you need to edit
-          setup.h under Windows and set @c wxUSE_GLCANVAS to 1 (you may also
-          need to have to add @c opengl32.lib and @c glu32.lib to the list of
-          libraries your program is linked with). On Unix, pass
-          @c --with-opengl to configure.
+    @note
+        On those platforms which use a configure script (e.g. Linux and Mac OS)
+        OpenGL support is automatically enabled if the relative headers and
+        libraries are found.
+        To switch it on under the other platforms (e.g. Windows), you need to edit
+        the @c setup.h file and set @c wxUSE_GLCANVAS to @c 1 and then also pass
+        @c USE_OPENGL=1 to the make utility. You may also need to add @c opengl32.lib
+        and @c glu32.lib to the list of the libraries your program is linked with.
 
     @library{wxgl}
     @category{gl}
