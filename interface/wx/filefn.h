@@ -108,6 +108,15 @@ public:
 const int wxInvalidOffset = -1;
 
 /**
+    The type used to store and provide byte offsets or byte sizes for files or streams.
+
+    It is type-defined as @c off_t on POSIX platforms
+    (see http://www.gnu.org/software/libc/manual/html_node/File-Position-Primitive.html)
+    or to @c wxLongLong_t on Windows when @c wxHAS_HUGE_FILES is defined.
+*/
+typedef off_t wxFileOffset;
+
+/**
     Under Unix this macro changes the current process umask to the given value,
     unless it is equal to -1 in which case nothing is done, and restores it to
     the original value on scope exit. It works by declaring a variable which
