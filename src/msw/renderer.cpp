@@ -48,9 +48,10 @@
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
+#include "wx/dcgraph.h"
 #include "gdiplus.h"
 using namespace Gdiplus;
-#endif
+#endif // wxUSE_GRAPHICS_CONTEXT
 
 // tmschema.h is in Win32 Platform SDK and might not be available with earlier
 // compilers
@@ -138,7 +139,7 @@ public:
             m_graphics->ReleaseHDC(m_hdc);
 #endif
     }
-    
+
     operator HDC() const { return m_hdc; }
 
 private:
@@ -192,24 +193,24 @@ public:
                                const wxRect& rect,
                                int flags = 0);
 
-    virtual void DrawChoice(wxWindow* win, 
-                            wxDC& dc, 
-                            const wxRect& rect, 
+    virtual void DrawChoice(wxWindow* win,
+                            wxDC& dc,
+                            const wxRect& rect,
                             int flags=0);
 
-    virtual void DrawComboBox(wxWindow* win, 
-                                wxDC& dc, 
-                                const wxRect& rect, 
+    virtual void DrawComboBox(wxWindow* win,
+                                wxDC& dc,
+                                const wxRect& rect,
                                 int flags=0);
 
-    virtual void DrawTextCtrl(wxWindow* win, 
-                                wxDC& dc, 
-                                const wxRect& rect, 
+    virtual void DrawTextCtrl(wxWindow* win,
+                                wxDC& dc,
+                                const wxRect& rect,
                                 int flags=0);
 
-    virtual void DrawRadioButton(wxWindow* win, 
-                                wxDC& dc, 
-                                const wxRect& rect, 
+    virtual void DrawRadioButton(wxWindow* win,
+                                wxDC& dc,
+                                const wxRect& rect,
                                 int flags=0);
 
     virtual wxSize GetCheckBoxSize(wxWindow *win);
@@ -422,7 +423,7 @@ void wxRendererMSW::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
     wxColour fill;
     wxColour bdr;
     COLORREF cref;
-    
+
 #if wxUSE_UXTHEME
     wxUxThemeHandle hTheme(win, L"EDIT");
     if (hTheme)
@@ -436,10 +437,10 @@ void wxRendererMSW::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
             etsState = ETS_DISABLED;
         else
             etsState = ETS_NORMAL;
-        
+
         wxUxThemeEngine::Get()->GetThemeColor(hTheme, EP_EDITTEXT,
                                               etsState, TMT_BORDERCOLOR, &cref);
-        bdr = wxRGBToColour(cref);        
+        bdr = wxRGBToColour(cref);
     }
     else
 #endif
@@ -447,7 +448,7 @@ void wxRendererMSW::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
         fill = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
         bdr = *wxBLACK;
     }
-    
+
     dc.SetPen( bdr );
     dc.SetBrush( fill );
     dc.DrawRectangle(rect);
@@ -458,8 +459,8 @@ void wxRendererMSW::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
 void wxRendererMSW::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
     // Draw the main part of the control same as TextCtrl
-    DrawTextCtrl(win, dc, rect, flags);    
-    
+    DrawTextCtrl(win, dc, rect, flags);
+
     // Draw the button inside the border, on the right side
     wxRect br(rect);
     br.height -= 2;
@@ -477,7 +478,7 @@ void wxRendererMSW::DrawChoice(wxWindow* win, wxDC& dc,
     DrawComboBox(win, dc, rect, flags);
 }
 
-    
+
 // Draw a themed radio button
 void wxRendererMSW::DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
