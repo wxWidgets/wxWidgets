@@ -6842,19 +6842,36 @@ void wxGrid::DoEndMoveCol(int pos)
     m_dragRowOrCol = -1;
 }
 
-void wxGrid::UpdateColumnRights()
+void wxGrid::RefreshAfterColPosChange()
 {
-    if ( m_colWidths.empty() )
-        return;
-
-    int colRight = 0;
-    for ( int colPos = 0; colPos < m_numCols; colPos++ )
+    // recalculate the column rights as the column positions have changed,
+    // unless we calculate them dynamically because all columns widths are the
+    // same and it's easy to do
+    if ( !m_colWidths.empty() )
     {
-        int colID = GetColAt( colPos );
+        int colRight = 0;
+        for ( int colPos = 0; colPos < m_numCols; colPos++ )
+        {
+            int colID = GetColAt( colPos );
 
-        colRight += m_colWidths[colID];
-        m_colRights[colID] = colRight;
+            colRight += m_colWidths[colID];
+            m_colRights[colID] = colRight;
+        }
     }
+
+    // and make the changes visible
+    if ( m_useNativeHeader )
+    {
+        if ( m_colAt.empty() )
+            GetColHeader()->ResetColumnsOrder();
+        else
+            GetColHeader()->SetColumnsOrder(m_colAt);
+    }
+    else
+    {
+        m_colWindow->Refresh();
+    }
+    m_gridWin->Refresh();
 }
 
 void wxGrid::SetColPos(int idx, int pos)
@@ -6869,25 +6886,14 @@ void wxGrid::SetColPos(int idx, int pos)
 
     wxHeaderCtrl::MoveColumnInOrderArray(m_colAt, idx, pos);
 
-    // also recalculate the column rights as the column positions have changed
-    UpdateColumnRights();
-
-    // and make the changes visible
-    if ( m_useNativeHeader )
-        GetColHeader()->SetColumnsOrder(m_colAt);
-    else
-        m_colWindow->Refresh();
-    m_gridWin->Refresh();
+    RefreshAfterColPosChange();
 }
 
 void wxGrid::ResetColPos()
 {
     m_colAt.clear();
 
-    if ( m_useNativeHeader )
-        GetColHeader()->ResetColumnsOrder();
-    else
-        m_colWindow->Refresh();
+    RefreshAfterColPosChange();
 }
 
 void wxGrid::EnableDragColMove( bool enable )

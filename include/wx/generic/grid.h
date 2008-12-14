@@ -2289,10 +2289,9 @@ private:
     // the sorting indicator to effectively show
     void UpdateColumnSortingIndicator(int col);
 
-    // update column right positions after their order changed (does nothing if
-    // we only use the default widths as in this case m_colRights is not used
-    // neither)
-    void UpdateColumnRights();
+    // update the grid after changing the columns order (common part of
+    // SetColPos() and ResetColPos())
+    void RefreshAfterColPosChange();
 
 
     // return the position (not index) of the column at the given logical pixel
