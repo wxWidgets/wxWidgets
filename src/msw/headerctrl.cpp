@@ -319,7 +319,7 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     }
 
     hdi.mask |= HDI_ORDER;
-    hdi.iOrder = m_colIndices.Index(idx);
+    hdi.iOrder = MSWToNativeOrder(m_colIndices.Index(idx));
 
     if ( ::SendMessage(GetHwnd(), HDM_INSERTITEM,
                        MSWToNativeIdx(idx), (LPARAM)&hdi) == -1 )
@@ -356,6 +356,10 @@ wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
     return m_colIndices;
 }
 
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl indexes and positions translation
+// ----------------------------------------------------------------------------
+
 int wxHeaderCtrl::MSWToNativeIdx(int idx)
 {
     // don't check for GetColumn(idx).IsShown() as it could have just became
@@ -364,13 +368,16 @@ int wxHeaderCtrl::MSWToNativeIdx(int idx)
                   "column must be visible to have an "
                   "index in the native control" );
 
+    int item = idx;
     for ( int i = 0; i < idx; i++ )
     {
         if ( GetColumn(i).IsHidden() )
-            idx--; // one less column the native control knows about
+            item--; // one less column the native control knows about
     }
 
-    return idx;
+    wxASSERT_MSG( item >= 0 && item <= GetShownColumnsCount(), "logic error" );
+
+    return item;
 }
 
 int wxHeaderCtrl::MSWFromNativeIdx(int item)
@@ -379,35 +386,57 @@ int wxHeaderCtrl::MSWFromNativeIdx(int item)
                   "column index out of range" );
 
     // reverse the above function
-    for ( int i = 0; i <= item; i++ )
+
+    unsigned idx = item;
+    for ( unsigned n = 0; n < m_numColumns; n++ )
     {
-        if ( GetColumn(i).IsHidden() )
-            item++;
+        if ( n > idx )
+            break;
+
+        if ( GetColumn(n).IsHidden() )
+            idx++;
     }
 
-    return item;
+    wxASSERT_MSG( MSWToNativeIdx(idx) == item, "logic error" );
+
+    return idx;
+}
+
+int wxHeaderCtrl::MSWToNativeOrder(int pos)
+{
+    wxASSERT_MSG( pos >= 0 && static_cast<unsigned>(pos) < m_numColumns,
+                  "column position out of range" );
+
+    int order = pos;
+    for ( int n = 0; n < pos; n++ )
+    {
+        if ( GetColumn(m_colIndices[n]).IsHidden() )
+            order--;
+    }
+
+    wxASSERT_MSG( order >= 0 && order <= GetShownColumnsCount(), "logic error" );
+
+    return order;
 }
 
 int wxHeaderCtrl::MSWFromNativeOrder(int order)
 {
     wxASSERT_MSG( order >= 0 && order < GetShownColumnsCount(),
-                  "column position out of range" );
+                  "native column position out of range" );
 
-    // notice that the loop condition is inclusive because if the column
-    // exactly at position order is hidden we should go to the next one
-    for ( int pos = 0; pos <= order; pos++ )
+    unsigned pos = order;
+    for ( unsigned n = 0; n < m_numColumns; n++ )
     {
-        if ( GetColumn(m_colIndices[pos]).IsHidden() )
-        {
-            // order can't become greater than m_numColumns here because it is
-            // less than the number of shown columns initially and it is going
-            // to be incremented at most once for every hidden column and
-            // m_numColumns is the total columns number
-            order++;
-        }
+        if ( n > pos )
+            break;
+
+        if ( GetColumn(m_colIndices[n]).IsHidden() )
+            pos++;
     }
 
-    return order;
+    wxASSERT_MSG( MSWToNativeOrder(pos) == order, "logic error" );
+
+    return pos;
 }
 
 // ----------------------------------------------------------------------------

@@ -90,6 +90,7 @@ private:
     int MSWFromNativeIdx(int item);
 
     // this is the same as above but for order, not index
+    int MSWToNativeOrder(int order);
     int MSWFromNativeOrder(int order);
 
     // get the event type corresponding to a click or double click event
