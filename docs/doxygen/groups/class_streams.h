@@ -14,5 +14,7 @@
 wxWidgets has its own set of stream classes, as an alternative to often buggy
 standard stream libraries, and to provide enhanced functionality.
 
+Related overviews: @ref overview_stream
+
 */
 

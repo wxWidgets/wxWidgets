@@ -99,12 +99,16 @@ public:
 /**
     @class wxStreamBuffer
 
-    @todo WRITE A DESCRIPTION
+    wxStreamBuffer is a cache manager for wxStreamBase: it manages a stream buffer
+    linked to a stream.
+
+    Each stream always has one autoinitialized stream buffer, but you may
+    attach more of them to the same stream.
 
     @library{wxbase}
     @category{streams}
 
-    @see wxStreamBase
+    @see wxStreamBase, @ref overview_stream
 */
 class wxStreamBuffer
 {
@@ -127,7 +131,9 @@ public:
 
         @code
         streambuffer.Read(...);
-        streambuffer2.Read(...); // This call erases previous error messages set by 'streambuffer'
+        streambuffer2.Read(...);
+            // This call erases previous error messages set by 'streambuffer'
+            // assuming that both instances are stream buffers for the same stream
         @endcode
 
         @see SetBufferIO()
