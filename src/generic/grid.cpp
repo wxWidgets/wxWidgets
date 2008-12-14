@@ -10398,14 +10398,10 @@ void wxGrid::SetColSize( int col, int width )
         width = wxMax(width, GetColMinimalAcceptableWidth());
     }
 
-    // should we check that it's bigger than GetColMinimalWidth(col) here?
-    //                                                                 (VZ)
-    // No, because it is reasonable to assume the library user know's
-    // what he is doing. However we should test against the weaker
-    // constraint of minimalAcceptableWidth, as this breaks rendering
-    //
-    // This test then fixes sf.net bug #645734
-
+    // we intentionally don't test whether the width is less than
+    // GetColMinimalWidth() here but we do compare it with
+    // GetColMinimalAcceptableWidth() as otherwise things currently break (see
+    // #651)
     if ( width < GetColMinimalAcceptableWidth() )
         return;
 
