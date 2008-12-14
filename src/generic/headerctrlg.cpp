@@ -92,33 +92,8 @@ wxHeaderCtrl::~wxHeaderCtrl()
 
 void wxHeaderCtrl::DoSetCount(unsigned int count)
 {
-    // update the column indices array if necessary
-    if ( count > m_numColumns )
-    {
-        // all new columns have default positions equal to their indices
-        for ( unsigned n = m_numColumns; n < count; n++ )
-            m_colIndices.push_back(n);
-    }
-    else if ( count < m_numColumns )
-    {
-        // filter out all the positions which are invalid now while keeping the
-        // order of the remaining ones
-        wxArrayInt colIndices;
-        for ( unsigned n = 0; n < m_numColumns; n++ )
-        {
-            const unsigned idx = m_colIndices[n];
-            if ( idx < count )
-                colIndices.push_back(idx);
-        }
-
-        wxASSERT_MSG( colIndices.size() == count, "logic error" );
-
-        m_colIndices = colIndices;
-    }
-    else // count didn't really change
-    {
-        return;
-    }
+    // update the column indices order array before changing m_numColumns
+    DoResizeColumnIndices(m_colIndices, count);
 
     m_numColumns = count;
 

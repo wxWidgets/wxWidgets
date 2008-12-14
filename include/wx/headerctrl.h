@@ -140,6 +140,11 @@ protected:
     // columns in the control changes
     virtual void OnColumnCountChanging(unsigned int WXUNUSED(count)) { }
 
+
+    // helper function for the derived classes: update the array of column
+    // indices after the number of columns changed
+    void DoResizeColumnIndices(wxArrayInt& colIndices, unsigned int count);
+
 private:
     // methods implementing our public API and defined in platform-specific
     // implementations

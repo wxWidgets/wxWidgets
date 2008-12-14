@@ -66,6 +66,9 @@ void wxHeaderCtrlBase::ScrollWindow(int dx,
 
 void wxHeaderCtrlBase::SetColumnCount(unsigned int count)
 {
+    if ( count == GetColumnCount() )
+        return;
+
     OnColumnCountChanging(count);
 
     DoSetCount(count);
@@ -187,6 +190,40 @@ void wxHeaderCtrlBase::MoveColumnInOrderArray(wxArrayInt& order,
     }
 
     order.swap(orderNew);
+}
+
+void
+wxHeaderCtrlBase::DoResizeColumnIndices(wxArrayInt& colIndices, unsigned int count)
+{
+    // update the column indices array if necessary
+    const unsigned countOld = colIndices.size();
+    if ( count > countOld )
+    {
+        // all new columns have default positions equal to their indices
+        for ( unsigned n = countOld; n < count; n++ )
+            colIndices.push_back(n);
+    }
+    else if ( count < countOld )
+    {
+        // filter out all the positions which are invalid now while keeping the
+        // order of the remaining ones
+        wxArrayInt colIndicesNew;
+        colIndicesNew.reserve(count);
+        for ( unsigned n = 0; n < countOld; n++ )
+        {
+            const unsigned idx = colIndices[n];
+            if ( idx < count )
+                colIndicesNew.push_back(idx);
+        }
+
+        colIndices.swap(colIndicesNew);
+    }
+    else // count didn't really change, we shouldn't even be called
+    {
+        wxFAIL_MSG( "useless call to DoResizeColumnIndices()" );
+    }
+
+    wxASSERT_MSG( colIndices.size() == count, "logic error" );
 }
 
 // ============================================================================
