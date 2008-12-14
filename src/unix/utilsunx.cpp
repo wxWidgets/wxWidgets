@@ -542,30 +542,10 @@ long wxExecute(char **argv, int flags, wxProcess *process)
     }
     else if ( pid == 0 )  // we're in child
     {
-        // These lines close the open file descriptors to to avoid any
-        // input/output which might block the process or irritate the user. If
-        // one wants proper IO for the subprocess, the right thing to do is to
-        // start an xterm executing it.
-        if ( !(flags & wxEXEC_SYNC) )
-        {
-            // FD_SETSIZE is unsigned under BSD, signed under other platforms
-            // so we need a cast to avoid warnings on all platforms
-            for ( int fd = 0; fd < (int)FD_SETSIZE; fd++ )
-            {
-                if ( fd == pipeIn[wxPipe::Read]
-                        || fd == pipeOut[wxPipe::Write]
-                        || fd == pipeErr[wxPipe::Write]
-                        || fd == (execData.pipeEndProcDetect)[wxPipe::Write] )
-                {
-                    // don't close this one, we still need it
-                    continue;
-                }
-
-                // leave stderr opened too, it won't do any harm
-                if ( fd != STDERR_FILENO )
-                    close(fd);
-            }
-        }
+        // NB: we used to close all the unused descriptors of the child here
+        //     but this broke some programs which relied on e.g. FD 1 being
+        //     always opened so don't do it any more, after all there doesn't
+        //     seem to be any real problem with keeping them opened
 
 #if !defined(__VMS) && !defined(__EMX__)
         if ( flags & wxEXEC_MAKE_GROUP_LEADER )
