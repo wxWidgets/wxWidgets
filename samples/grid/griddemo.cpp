@@ -33,6 +33,7 @@
 #include "wx/aboutdlg.h"
 
 #include "wx/grid.h"
+#include "wx/headerctrl.h"
 #include "wx/generic/gridctrl.h"
 
 #include "griddemo.h"
@@ -1797,6 +1798,20 @@ private:
         event.Skip();
     }
 
+    void OnColRightClick(wxHeaderCtrlEvent&)
+    {
+        int col = m_grid->GetGridColHeader()->ShowColumnsMenu("Columns:");
+        if ( col == wxID_NONE )
+            return;
+
+        if ( m_grid->IsColShown(col) )
+            m_grid->HideCol(col);
+        else
+            m_grid->ShowCol(col);
+
+        UpdateOrderAndVisibility();
+    }
+
     void UpdateOrderAndVisibility()
     {
         wxString s;
@@ -1880,6 +1895,14 @@ TabularGridFrame::TabularGridFrame()
     m_grid->UseNativeColHeader();
     m_grid->HideRowLabels();
 
+    m_grid->GetGridColHeader()->Connect
+        (
+            wxEVT_COMMAND_HEADER_RIGHT_CLICK,
+            wxHeaderCtrlEventHandler(TabularGridFrame::OnColRightClick),
+            NULL,
+            this
+        );
+
     // add it and the other controls to the frame
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(m_grid, wxSizerFlags(1).Expand().Border());
@@ -1926,7 +1949,7 @@ TabularGridFrame::TabularGridFrame()
     wxSizer * const sizerShowCols = new wxBoxSizer(wxHORIZONTAL);
     sizerShowCols->Add(new wxStaticText(panel, wxID_ANY, "Current order:"),
                        flagsHorz);
-    m_statOrder = new wxStaticText(panel, wxID_ANY, "<default>");
+    m_statOrder = new wxStaticText(panel, wxID_ANY, "<<< default >>>");
     sizerShowCols->Add(m_statOrder, flagsHorz);
     sizerShowCols->Add(new wxButton(panel, wxID_RESET, "&Reset order"));
     sizerColumns->Add(sizerShowCols, wxSizerFlags().Expand().Border(wxTOP));

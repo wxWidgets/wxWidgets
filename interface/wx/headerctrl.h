@@ -296,6 +296,24 @@ public:
                                        unsigned int idx,
                                        unsigned int pos);
 
+    /**
+        Show the popup menu allowing the user to show or hide the columns.
+
+        This functions shows the popup menu containing all columns with check
+        marks for the ones which are currently shown at the current mouse
+        position. It is meant to be called from EVT_HEADER_RIGHT_CLICK handler
+        and should toggle the visibility of the n-th column if the function
+        returns valid column index and not wxID_NONE which is returned if the
+        user cancels the menu.
+
+        @param title
+            The title for the menu if not empty.
+        @return
+            A valid column index or wxID_NONE if the user didn't select any
+            column.
+     */
+    int ShowColumnsMenu(const wxString& title = wxString());
+
 protected:
     /**
         Method to be implemented by the derived classes to return the

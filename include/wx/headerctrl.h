@@ -86,6 +86,10 @@ public:
         DoUpdate(idx);
     }
 
+
+    // columns order
+    // -------------
+
     // set the columns order: the array defines the column index which appears
     // the given position, it must have GetColumnCount() elements and contain
     // all indices exactly once
@@ -108,6 +112,17 @@ public:
     static void MoveColumnInOrderArray(wxArrayInt& order,
                                        unsigned int idx,
                                        unsigned int pos);
+
+
+    // UI helpers
+    // ----------
+
+    // show the popup menu containing all columns with check marks for the ones
+    // which are currently shown -- this is meant to be called from
+    // EVT_HEADER_RIGHT_CLICK handler and should toggle the visibility of the
+    // n-th column if the function returns valid column index and not wxID_NONE
+    // which is returned if the user cancels the menu
+    int ShowColumnsMenu(const wxString& title = wxString());
 
 
     // implementation only from now on

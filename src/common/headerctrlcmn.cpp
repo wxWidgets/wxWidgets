@@ -226,6 +226,29 @@ wxHeaderCtrlBase::DoResizeColumnIndices(wxArrayInt& colIndices, unsigned int cou
     wxASSERT_MSG( colIndices.size() == count, "logic error" );
 }
 
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl extra UI
+// ----------------------------------------------------------------------------
+
+int wxHeaderCtrlBase::ShowColumnsMenu(const wxString& title)
+{
+    wxMenu menu;
+    if ( !title.empty() )
+        menu.SetTitle(title);
+
+    const unsigned count = GetColumnCount();
+    for ( unsigned n = 0; n < count; n++ )
+    {
+        const wxHeaderColumn& col = GetColumn(n);
+        menu.AppendCheckItem(n, col.GetTitle());
+        if ( col.IsShown() )
+            menu.Check(n, true);
+    }
+
+    return GetPopupMenuSelectionFromUser(menu,
+                                         ScreenToClient(wxGetMousePosition()));
+}
+
 // ============================================================================
 // wxHeaderCtrlSimple implementation
 // ============================================================================
