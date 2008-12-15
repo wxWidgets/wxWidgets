@@ -204,6 +204,8 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
         }
     }
 
+    if ( onSeparator )
+        *onSeparator = false;
     return COL_NONE;
 }
 
