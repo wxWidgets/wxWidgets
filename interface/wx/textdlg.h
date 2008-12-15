@@ -14,7 +14,7 @@
 
     It is implemented as a generic wxWidgets dialog.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{cmndlg}
 
     @see @ref overview_cmndlg_password
@@ -57,7 +57,7 @@ public:
     This class represents a dialog that requests a one-line text string from the user.
     It is implemented as a generic wxWidgets dialog.
 
-    @library{wxbase}
+    @library{wxcore}
     @category{cmndlg}
 
     @see @ref overview_cmndlg_textentry
