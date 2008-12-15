@@ -24,6 +24,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/menu.h"
 #endif // WX_PRECOMP
 
 #include "wx/headerctrl.h"
