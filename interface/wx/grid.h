@@ -2015,6 +2015,11 @@ public:
     int GetColSize(int col) const;
 
     /**
+        Returns @true if the specified column is not currently hidden.
+     */
+    bool IsColShown(int col) const;
+
+    /**
         Returns the default height for column labels.
     */
     int GetDefaultColLabelSize() const;
@@ -2053,6 +2058,11 @@ public:
         Returns the height of the specified row.
     */
     int GetRowSize(int row) const;
+
+    /**
+        Returns @true if the specified row is not currently hidden.
+     */
+    bool IsRowShown(int row) const;
 
     /**
         Sets the height of the column labels.

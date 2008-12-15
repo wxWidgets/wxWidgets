@@ -1485,8 +1485,10 @@ public:
     //
     int      GetDefaultRowSize() const;
     int      GetRowSize( int row ) const;
+    bool     IsRowShown(int row) const { return GetRowSize(row) != 0; }
     int      GetDefaultColSize() const;
     int      GetColSize( int col ) const;
+    bool     IsColShown(int col) const { return GetColSize(col) != 0; }
     wxColour GetDefaultCellBackgroundColour() const;
     wxColour GetCellBackgroundColour( int row, int col ) const;
     wxColour GetDefaultCellTextColour() const;
