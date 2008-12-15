@@ -592,8 +592,8 @@ bool wxVarScrollHelperBase::DoScrollToUnit(size_t unit)
     // finally refresh the display -- but only redraw as few units as possible
     // to avoid flicker.  We can't do this if we have children because they
     // won't be scrolled
-    if ( (m_targetWindow->GetChildren().empty() &&
-         GetVisibleBegin() >= unitLastOld) || GetVisibleEnd() <= unitFirstOld )
+    if ( m_targetWindow->GetChildren().empty() &&
+         (GetVisibleBegin() >= unitLastOld || GetVisibleEnd() <= unitFirstOld) )
     {
         // the simplest case: we don't have any old units left, just redraw
         // everything
