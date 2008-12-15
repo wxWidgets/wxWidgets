@@ -78,7 +78,7 @@ WXDWORD wxHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
-    if ( style & wxHD_DRAGDROP )
+    if ( style & wxHD_ALLOW_REORDER )
         msStyle |= HDS_DRAGDROP;
 
     // the control looks nicer with these styles and there doesn't seem to be

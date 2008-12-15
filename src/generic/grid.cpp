@@ -224,7 +224,8 @@ public:
                        wxID_ANY,
                        wxDefaultPosition,
                        wxDefaultSize,
-                       owner->CanDragColMove() ? wxHD_DRAGDROP : 0)
+                       wxHD_ALLOW_HIDE |
+                       (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0))
     {
     }
 
@@ -265,6 +266,16 @@ private:
         GetOwner()->SetColSize(idx, widthTitle);
 
         return true;
+    }
+
+    // overridden to react to the actions using the columns popup menu
+    virtual void UpdateColumnVisibility(unsigned int idx, bool show)
+    {
+        GetOwner()->SetColSize(idx, show ? wxGRID_AUTOSIZE : 0);
+
+        // as this is done by the user we should notify the main program about
+        // it
+        GetOwner()->SendEvent(wxEVT_GRID_COL_SIZE, -1, idx);
     }
 
 

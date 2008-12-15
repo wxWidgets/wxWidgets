@@ -48,6 +48,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxHeaderCtrlNameStr[] = "wxHeaderCtrl";
 
 BEGIN_EVENT_TABLE(wxHeaderCtrlBase, wxControl)
     EVT_HEADER_SEPARATOR_DCLICK(wxID_ANY, wxHeaderCtrlBase::OnSeparatorDClick)
+    EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxHeaderCtrlBase::OnRClick)
 END_EVENT_TABLE()
 
 void wxHeaderCtrlBase::ScrollWindow(int dx,
@@ -67,11 +68,11 @@ void wxHeaderCtrlBase::ScrollWindow(int dx,
 
 void wxHeaderCtrlBase::SetColumnCount(unsigned int count)
 {
-    if ( count == GetColumnCount() )
-        return;
+    if ( count != GetColumnCount() )
+        OnColumnCountChanging(count);
 
-    OnColumnCountChanging(count);
-
+    // still call DoSetCount() even if the count didn't really change in order
+    // to update all the columns
     DoSetCount(count);
 }
 
@@ -90,6 +91,17 @@ void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
         event.Skip();
     else
         UpdateColumn(col);
+}
+
+void wxHeaderCtrlBase::OnRClick(wxHeaderCtrlEvent& event)
+{
+    if ( !HasFlag(wxHD_ALLOW_HIDE) )
+    {
+        event.Skip();
+        return;
+    }
+
+    ShowColumnsMenu(ScreenToClient(wxGetMousePosition()));
 }
 
 // ----------------------------------------------------------------------------
@@ -219,10 +231,7 @@ wxHeaderCtrlBase::DoResizeColumnIndices(wxArrayInt& colIndices, unsigned int cou
 
         colIndices.swap(colIndicesNew);
     }
-    else // count didn't really change, we shouldn't even be called
-    {
-        wxFAIL_MSG( "useless call to DoResizeColumnIndices()" );
-    }
+    //else: count didn't really change, nothing to do
 
     wxASSERT_MSG( colIndices.size() == count, "logic error" );
 }
@@ -231,8 +240,9 @@ wxHeaderCtrlBase::DoResizeColumnIndices(wxArrayInt& colIndices, unsigned int cou
 // wxHeaderCtrl extra UI
 // ----------------------------------------------------------------------------
 
-int wxHeaderCtrlBase::ShowColumnsMenu(const wxString& title)
+bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
 {
+    // construct the menu with the entries for all columns
     wxMenu menu;
     if ( !title.empty() )
         menu.SetTitle(title);
@@ -246,8 +256,35 @@ int wxHeaderCtrlBase::ShowColumnsMenu(const wxString& title)
             menu.Check(n, true);
     }
 
-    return GetPopupMenuSelectionFromUser(menu,
-                                         ScreenToClient(wxGetMousePosition()));
+    // ... and an extra one to show the customization dialog if the user is
+    // allowed to reorder the columns too
+    if ( HasFlag(wxHD_ALLOW_REORDER) )
+    {
+        menu.AppendSeparator();
+        menu.Append(count, _("&Customize..."));
+    }
+
+    // do show the menu and get the user selection
+    const int rc = GetPopupMenuSelectionFromUser(menu, pt);
+    if ( rc == wxID_NONE )
+        return false;
+
+    if ( static_cast<unsigned>(rc) == count )
+    {
+        return ShowCustomizeDialog();
+    }
+    else // a column selected from the menu
+    {
+        UpdateColumnVisibility(rc, !GetColumn(rc).IsShown());
+    }
+
+    return true;
+}
+
+bool wxHeaderCtrlBase::ShowCustomizeDialog()
+{
+    // TODO
+    return false;
 }
 
 // ============================================================================

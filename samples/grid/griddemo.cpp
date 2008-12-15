@@ -1746,7 +1746,8 @@ private:
         int col = m_txtColShowHide->GetCol();
         if ( col != -1 )
         {
-            m_grid->SetColSize(col, event.GetId() == wxID_ADD ? -1 : 0);
+            m_grid->SetColSize(col,
+                               event.GetId() == wxID_ADD ? wxGRID_AUTOSIZE : 0);
 
             UpdateOrderAndVisibility();
         }
@@ -1787,6 +1788,16 @@ private:
         event.Skip();
     }
 
+    void OnGridColSize(wxGridSizeEvent& event)
+    {
+        // we only catch this event to react to the user showing or hiding this
+        // column using the header control menu and not because we're
+        // interested in column resizing
+        UpdateOrderAndVisibility();
+
+        event.Skip();
+    }
+
     void OnIdle(wxIdleEvent& event)
     {
         if ( m_shouldUpdateOrder )
@@ -1796,20 +1807,6 @@ private:
         }
 
         event.Skip();
-    }
-
-    void OnColRightClick(wxHeaderCtrlEvent&)
-    {
-        int col = m_grid->GetGridColHeader()->ShowColumnsMenu("Columns:");
-        if ( col == wxID_NONE )
-            return;
-
-        if ( m_grid->IsColShown(col) )
-            m_grid->HideCol(col);
-        else
-            m_grid->ShowCol(col);
-
-        UpdateOrderAndVisibility();
     }
 
     void UpdateOrderAndVisibility()
@@ -1873,6 +1870,7 @@ BEGIN_EVENT_TABLE(TabularGridFrame, wxFrame)
 
     EVT_GRID_COL_SORT(TabularGridFrame::OnGridColSort)
     EVT_GRID_COL_MOVE(TabularGridFrame::OnGridColMove)
+    EVT_GRID_COL_SIZE(TabularGridFrame::OnGridColSize)
 
     EVT_IDLE(TabularGridFrame::OnIdle)
 END_EVENT_TABLE()
@@ -1894,14 +1892,6 @@ TabularGridFrame::TabularGridFrame()
     m_grid->EnableDragColMove();
     m_grid->UseNativeColHeader();
     m_grid->HideRowLabels();
-
-    m_grid->GetGridColHeader()->Connect
-        (
-            wxEVT_COMMAND_HEADER_RIGHT_CLICK,
-            wxHeaderCtrlEventHandler(TabularGridFrame::OnColRightClick),
-            NULL,
-            this
-        );
 
     // add it and the other controls to the frame
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);

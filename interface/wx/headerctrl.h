@@ -53,12 +53,12 @@
 
 
     @beginStyleTable
-    @style{wxHD_DRAGDROP}
+    @style{wxHD_ALLOW_REORDER}
         If this style is specified (it is by default), the user can reorder
         the control columns by dragging them.
     @style{wxHD_DEFAULT_STYLE}
         Symbolic name for the default control style, currently equal to
-        @c wxHD_DRAGDROP.
+        @c wxHD_ALLOW_REORDER.
     @endStyleTable
 
     @beginEventTable{wxHeaderCtrlEvent}
@@ -97,7 +97,7 @@
         wxHeaderCtrlEvent::GetWidth().
     @event{EVT_HEADER_BEGIN_REORDER(id, func)}
         The user started to drag the column with the specified index (this
-        can only happen for the controls with wxHD_DRAGDROP style).
+        can only happen for the controls with wxHD_ALLOW_REORDER style).
         This event can be vetoed to prevent the column from being reordered,
         otherwise the end reorder message will be generated later.
     @event{EVT_HEADER_END_REORDER(id, func)}
@@ -161,8 +161,8 @@ public:
             The control style, @c wxHD_DEFAULT_STYLE by default. Notice that
             the default style allows the user to reorder the columns by
             dragging them and you need to explicitly turn this feature off by
-            using @code wxHD_DEFAULT_STYLE & ~wxHD_DRAGDROP @endcode if this is
-            undesirable.
+            using @code wxHD_DEFAULT_STYLE & ~wxHD_ALLOW_REORDER @endcode if
+            this is undesirable.
         @param name
             The name of the control.
      */
@@ -236,11 +236,11 @@ public:
     /**
         Return the array describing the columns display order.
 
-        For the controls without wxHD_DRAGDROP style the returned array will be
-        the same as was passed to SetColumnsOrder() previously or define the
-        default order (with n-th element being n) if it hadn't been called. But
-        for the controls with wxHD_DRAGDROP style, the columns can be also
-        reordered by user.
+        For the controls without wxHD_ALLOW_REORDER style the returned array
+        will be the same as was passed to SetColumnsOrder() previously or
+        define the default order (with n-th element being n) if it hadn't been
+        called. But for the controls with wxHD_ALLOW_REORDER style, the columns
+        can be also reordered by user.
      */
     wxArrayInt GetColumnsOrder() const;
 

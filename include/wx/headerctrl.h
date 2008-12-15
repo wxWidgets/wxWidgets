@@ -30,10 +30,14 @@ class WXDLLIMPEXP_FWD_CORE wxHeaderCtrlEvent;
 enum
 {
     // allow column drag and drop
-    wxHD_DRAGDROP = 0x0001,
+    wxHD_ALLOW_REORDER = 0x0001,
+
+    // allow hiding (and showing back) the columns using the menu shown by
+    // right clicking the header
+    wxHD_ALLOW_HIDE = 0x0002,
 
     // style used by default when creating the control
-    wxHD_DEFAULT_STYLE = wxHD_DRAGDROP
+    wxHD_DEFAULT_STYLE = wxHD_ALLOW_REORDER
 };
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxHeaderCtrlNameStr[];
@@ -118,11 +122,22 @@ public:
     // ----------
 
     // show the popup menu containing all columns with check marks for the ones
-    // which are currently shown -- this is meant to be called from
-    // EVT_HEADER_RIGHT_CLICK handler and should toggle the visibility of the
-    // n-th column if the function returns valid column index and not wxID_NONE
-    // which is returned if the user cancels the menu
-    int ShowColumnsMenu(const wxString& title = wxString());
+    // which are currently shown and return true if something was done using it
+    // (in this case UpdateColumnVisibility() will have been called) or false
+    // if the menu was cancelled
+    //
+    // this is called from the default right click handler for the controls
+    // with wxHD_ALLOW_HIDE style
+    bool ShowColumnsMenu(const wxPoint& pt, const wxString& title = wxString());
+
+    // show the columns customization dialog and return true if something was
+    // changed using it (in which case UpdateColumnVisibility() and/or
+    // UpdateColumnWidth() will have been called)
+    //
+    // this is called by the control itself from ShowColumnsMenu() (which in
+    // turn is only called by the control if wxHD_ALLOW_HIDE style was
+    // specified) and if the control has wxHD_ALLOW_REORDER style as well
+    bool ShowCustomizeDialog();
 
 
     // implementation only from now on
@@ -148,6 +163,15 @@ protected:
                                         int WXUNUSED(widthTitle))
     {
         return false;
+    }
+
+    // this method is called from ShowColumnsMenu() and must be overridden to
+    // update the internal column visibility (there is no need to call
+    // UpdateColumn() from here, this will be done internally)
+    virtual void UpdateColumnVisibility(unsigned int WXUNUSED(idx),
+                                        bool WXUNUSED(show))
+    {
+        wxFAIL_MSG( "must be overridden if called" );
     }
 
     // this method can be overridden in the derived classes to do something
@@ -177,6 +201,7 @@ private:
 
     // event handlers
     void OnSeparatorDClick(wxHeaderCtrlEvent& event);
+    void OnRClick(wxHeaderCtrlEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
