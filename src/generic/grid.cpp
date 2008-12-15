@@ -4806,7 +4806,7 @@ wxGrid::SetTable(wxGridTableBase *table,
         m_numCols = table->GetNumberCols();
 
         if ( m_useNativeHeader )
-            GetColHeader()->SetColumnCount(m_numCols);
+            GetGridColHeader()->SetColumnCount(m_numCols);
 
         m_table = table;
         m_table->SetView( this );
@@ -5279,7 +5279,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             m_numCols += numCols;
 
             if ( m_useNativeHeader )
-                GetColHeader()->SetColumnCount(m_numCols);
+                GetGridColHeader()->SetColumnCount(m_numCols);
 
             if ( !m_colAt.IsEmpty() )
             {
@@ -5347,7 +5347,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             int oldNumCols = m_numCols;
             m_numCols += numCols;
             if ( m_useNativeHeader )
-                GetColHeader()->SetColumnCount(m_numCols);
+                GetGridColHeader()->SetColumnCount(m_numCols);
 
             if ( !m_colAt.IsEmpty() )
             {
@@ -5402,7 +5402,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             int numCols = msg.GetCommandInt2();
             m_numCols -= numCols;
             if ( m_useNativeHeader )
-                GetColHeader()->SetColumnCount(m_numCols);
+                GetGridColHeader()->SetColumnCount(m_numCols);
 
             if ( !m_colAt.IsEmpty() )
             {
@@ -5863,7 +5863,7 @@ void wxGrid::UpdateColumnSortingIndicator(int col)
     wxCHECK_RET( col != wxNOT_FOUND, "invalid column index" );
 
     if ( m_useNativeHeader )
-        GetColHeader()->UpdateColumn(col);
+        GetGridColHeader()->UpdateColumn(col);
     else if ( m_nativeColumnLabels )
         m_colWindow->Refresh();
     //else: sorting indicator display not yet implemented in grid version
@@ -6863,9 +6863,9 @@ void wxGrid::RefreshAfterColPosChange()
     if ( m_useNativeHeader )
     {
         if ( m_colAt.empty() )
-            GetColHeader()->ResetColumnsOrder();
+            GetGridColHeader()->ResetColumnsOrder();
         else
-            GetColHeader()->SetColumnsOrder(m_colAt);
+            GetGridColHeader()->SetColumnsOrder(m_colAt);
     }
     else
     {
@@ -6904,7 +6904,7 @@ void wxGrid::EnableDragColMove( bool enable )
     if ( m_useNativeHeader )
     {
         // update all columns to make them [not] reorderable
-        GetColHeader()->SetColumnCount(m_numCols);
+        GetGridColHeader()->SetColumnCount(m_numCols);
     }
 
     m_canDragColMove = enable;
@@ -8189,7 +8189,7 @@ void wxGrid::UseNativeColHeader(bool native)
     CreateColumnWindow();
 
     if ( m_useNativeHeader )
-        GetColHeader()->SetColumnCount(m_numCols);
+        GetGridColHeader()->SetColumnCount(m_numCols);
     CalcWindowSizes();
 }
 
@@ -9573,7 +9573,7 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
         {
             if ( m_useNativeHeader )
             {
-                GetColHeader()->UpdateColumn(col);
+                GetGridColHeader()->UpdateColumn(col);
             }
             else
             {
@@ -10414,7 +10414,7 @@ void wxGrid::SetColSize( int col, int width )
     const int diff = width - m_colWidths[col];
     m_colWidths[col] = width;
     if ( m_useNativeHeader )
-        GetColHeader()->UpdateColumn(col);
+        GetGridColHeader()->UpdateColumn(col);
     //else: will be refreshed when the header is redrawn
 
     for ( int colPos = GetColPos(col); colPos < m_numCols; colPos++ )
@@ -10581,7 +10581,7 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         {
             if ( m_useNativeHeader )
             {
-                GetColHeader()->UpdateColumn(col);
+                GetGridColHeader()->UpdateColumn(col);
             }
             else
             {

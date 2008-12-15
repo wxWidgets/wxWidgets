@@ -3166,6 +3166,71 @@ protected:
      */
     void UnsetSortingColumn();
     //@}
+
+    /**
+        @name Accessors for component windows.
+
+        Return the various child windows of wxGrid.
+
+        wxGrid is an empty parent window for 4 children representing the column
+        labels window (top), the row labels window (left), the corner window
+        (top left) and the main grid window. It may be necessary to use these
+        individual windows and not the wxGrid window itself if you need to
+        handle events for them (this can be done using wxEvtHandler::Connect()
+        or wxWindow::PushEventHandler()) or do something else requiring the use
+        of the correct window pointer. Notice that you should not, however,
+        change these windows (e.g. reposition them or draw over them) because
+        they are managed by wxGrid itself.
+     */
+    //@{
+
+    /**
+        Return the main grid window containing the grid cells.
+
+        This window is always shown.
+     */
+    wxWindow *GetGridWindow() const;
+
+    /**
+        Return the row labels window.
+
+        This window is not shown if the row labels were hidden using
+        HideRowLabels().
+     */
+    wxWindow *GetGridRowLabelWindow() const;
+
+    /**
+        Return the column labels window.
+
+        This window is not shown if the columns labels were hidden using
+        HideColLabels().
+
+        Depending on whether UseNativeColHeader() was called or not this can be
+        either a wxHeaderCtrl or a plain wxWindow.  This function returns a valid
+        window pointer in either case but in the former case you can also use
+        GetGridColHeader() to access it if you need wxHeaderCtrl-specific
+        functionality.
+     */
+    wxWindow *GetGridWindow() const;
+
+    /**
+        Return the window in the top left grid corner.
+
+        This window is shown only of both columns and row labels are shown and
+        normally doesn't contain anything. Clicking on it is handled by wxGrid
+        however and can be used to select the entire grid.
+     */
+    wxWindow *GetGridCornerLabelWindow() const;
+
+    /**
+        Return the header control used for column labels display.
+
+        This function can only be called if UseNativeColHeader() had been
+        called.
+     */
+    wxHeaderCtrl *GetGridColHeader() const;
+
+    //@}
 };
 
 

@@ -1747,6 +1747,17 @@ public:
     wxWindow* GetGridColLabelWindow() const    { return m_colWindow; }
     wxWindow* GetGridCornerLabelWindow() const { return (wxWindow*)m_cornerLabelWin; }
 
+    // This one can only be called if we are using the native header window
+    wxHeaderCtrl *GetGridColHeader() const
+    {
+        wxASSERT_MSG( m_useNativeHeader, "no column header window" );
+
+        // static_cast<> doesn't work without the full class declaration in
+        // view and we prefer to avoid adding more compile-time dependencies
+        // even at the cost of using reinterpret_cast<>
+        return reinterpret_cast<wxHeaderCtrl *>(m_colWindow);
+    }
+
     // Allow adjustment of scroll increment. The default is (15, 15).
     void SetScrollLineX(int x) { m_scrollLineX = x; }
     void SetScrollLineY(int y) { m_scrollLineY = y; }
@@ -1969,16 +1980,6 @@ protected:
     // if it is true, its dynamic type is wxHeaderCtrl, otherwise it is
     // wxGridColLabelWindow, use accessors below when the real type matters
     wxWindow *m_colWindow;
-
-    wxHeaderCtrl *GetColHeader() const
-    {
-        wxASSERT_MSG( m_useNativeHeader, "no column header window" );
-
-        // static_cast<> doesn't work without the full class declaration in
-        // view and we prefer to avoid adding more compile-time dependencies
-        // even at the cost of using reinterpret_cast<>
-        return reinterpret_cast<wxHeaderCtrl *>(m_colWindow);
-    }
 
     wxGridColLabelWindow *GetColLabelWindow() const
     {
