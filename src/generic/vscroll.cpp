@@ -373,8 +373,8 @@ bool wxVScrolledWindow::ScrollToLine(size_t line)
 
     // finally refresh the display -- but only redraw as few lines as possible
     // to avoid flicker
-    if ( GetVisibleBegin() >= lineLastOld ||
-            GetVisibleEnd() <= lineFirstOld )
+    if ( GetChildren().empty() &&
+         (GetVisibleBegin() >= lineLastOld || GetVisibleEnd() <= lineFirstOld ) )
     {
         // the simplest case: we don't have any old lines left, just redraw
         // everything
