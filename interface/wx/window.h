@@ -1060,28 +1060,35 @@ public:
     */
     wxWindow* GetParent() const;
 
+    //@{
     /**
         This function shows a popup menu at the given position in this window and
-        returns the selected id. It can be more convenient than the general purpose
-        PopupMenu() function for simple menus proposing a choice in a list of
-        strings to the user.
+        returns the selected id.
+
+        It can be more convenient than the general purpose PopupMenu() function
+        for simple menus proposing a choice in a list of strings to the user.
+
+        Notice that to avoid unexpected conflicts between the (usually
+        consecutive range of) ids used by the menu passed to this function and
+        the existing EVT_UPDATE_UI() handlers, this function temporarily
+        disables UI updates for the window, so you need to manually disable
+        (or toggle or ...) any items which should be disabled in the menu
+        before showing it.
 
         @param menu
-            The menu to show
+            The menu to show.
         @param pos
-            The position at which to show the menu in client coordinates
+            The position at which to show the menu in client coordinates.
 
-        @return The selected menu item id or wxID_NONE if none selected or an
-                 error occurred.
+        @return
+             The selected menu item id or @c wxID_NONE if none selected or an
+             error occurred.
+
+        @since 2.9.0
     */
     int GetPopupMenuSelectionFromUser(wxMenu& menu, const wxPoint& pos);
-
-    /**
-        See the GetPopupMenuSelectionFromUser(wxMenu&, const wxPoint&) overload.
-        This overload differs only because it takes two integers for the
-        menu position instead of a wxPoint.
-    */
     int GetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y);
+    //@}
 
     /**
         This gets the position of the window in pixels, relative to the parent window

@@ -2407,6 +2407,11 @@ void wxWindowBase::InternalOnPopupMenu(wxCommandEvent& event)
     gs_popupMenuSelection = event.GetId();
 }
 
+void wxWindowBase::InternalOnPopupMenuUpdate(wxUpdateUIEvent& WXUNUSED(event))
+{
+    // nothing to do but do not skip it
+}
+
 int
 wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
 {
@@ -2417,8 +2422,24 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
             NULL,
             this);
 
+    // it is common to construct the menu passed to this function dynamically
+    // using some fixed range of ids which could clash with the ids used
+    // elsewhere in the program, which could result in some menu items being
+    // unintentionally disabled or otherwise modified by update UI handlers
+    // elsewhere in the program code and this is difficult to avoid in the
+    // program itself, so instead we just temporarily suspend UI updating while
+    // this menu is shown
+    Connect(wxEVT_UPDATE_UI,
+            wxUpdateUIEventHandler(wxWindowBase::InternalOnPopupMenuUpdate),
+            NULL,
+            this);
+
     PopupMenu(&menu, x, y);
 
+    Disconnect(wxEVT_UPDATE_UI,
+               wxUpdateUIEventHandler(wxWindowBase::InternalOnPopupMenuUpdate),
+               NULL,
+               this);
     Disconnect(wxEVT_COMMAND_MENU_SELECTED,
                wxCommandEventHandler(wxWindowBase::InternalOnPopupMenu),
                NULL,

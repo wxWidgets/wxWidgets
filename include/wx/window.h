@@ -1651,8 +1651,9 @@ private:
     void NotifyWindowOnEnableChange(bool enabled);
 
 #if wxUSE_MENUS
-    // temporary event handler used by GetPopupMenuSelectionFromUser()
+    // temporary event handlers used by GetPopupMenuSelectionFromUser()
     void InternalOnPopupMenu(wxCommandEvent& event);
+    void InternalOnPopupMenuUpdate(wxUpdateUIEvent& event);
 
     // implementation of the public GetPopupMenuSelectionFromUser() method
     int DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y);
