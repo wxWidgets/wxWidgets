@@ -2805,7 +2805,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
     {
         case WXK_RETURN:
         {
-            if (m_currentRow > 0)
+            if (m_currentRow >= 0)
             {
                 wxWindow *parent = GetParent();
                 wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
