@@ -31,7 +31,7 @@
         @todo docme
 
     @nolibrary
-    @category{misc}
+    @category{smartpointers}
 */
 template<typename T>
 class wxWeakRefDynamic<T>
@@ -95,7 +95,7 @@ public:
         @todo docme
 
     @nolibrary
-    @category{misc}
+    @category{smartpointers}
 
     @see wxSharedPtr<T>, wxScopedPtr<T>
 */
