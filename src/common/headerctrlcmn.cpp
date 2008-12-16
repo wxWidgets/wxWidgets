@@ -28,15 +28,38 @@
 #endif // WX_PRECOMP
 
 #include "wx/headerctrl.h"
+#include "wx/rearrangectrl.h"
+
+namespace
+{
 
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
-namespace
-{
-
 const unsigned int wxNO_COLUMN = static_cast<unsigned>(-1);
+
+// ----------------------------------------------------------------------------
+// wxHeaderColumnsRearrangeDialog: dialog for customizing our columns
+// ----------------------------------------------------------------------------
+
+class wxHeaderColumnsRearrangeDialog : public wxRearrangeDialog
+{
+public:
+    wxHeaderColumnsRearrangeDialog(wxWindow *parent,
+                                   const wxArrayInt& order,
+                                   const wxArrayString& items)
+        : wxRearrangeDialog
+          (
+            parent,
+            _("Please select the columns to show and define their order:"),
+            _("Customize Columns"),
+            order,
+            items
+          )
+    {
+    }
+};
 
 } // anonymous namespace
 
@@ -283,8 +306,55 @@ bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
 
 bool wxHeaderCtrlBase::ShowCustomizeDialog()
 {
-    // TODO
-    return false;
+    // prepare the data for showing the dialog
+    wxArrayInt order = GetColumnsOrder();
+
+    const unsigned count = GetColumnCount();
+
+    // notice that titles are always in the index order, they will be shown
+    // rearranged according to the display order in the dialog
+    wxArrayString titles;
+    titles.reserve(count);
+    for ( unsigned n = 0; n < count; n++ )
+        titles.push_back(GetColumn(n).GetTitle());
+
+    // this loop is however over positions and not indices
+    unsigned pos;
+    for ( pos = 0; pos < count; pos++ )
+    {
+        int& idx = order[pos];
+        if ( GetColumn(idx).IsHidden() )
+        {
+            // indicate that this one is hidden
+            idx = ~idx;
+        }
+    }
+
+    // do show it
+    wxHeaderColumnsRearrangeDialog dlg(this, order, titles);
+    if ( dlg.ShowModal() != wxID_OK )
+        return false;
+
+    // and apply the changes
+    order = dlg.GetOrder();
+    for ( pos = 0; pos < count; pos++ )
+    {
+        int& idx = order[pos];
+        const bool show = idx >= 0;
+        if ( !show )
+        {
+            // make all indices positive for passing them to SetColumnsOrder()
+            idx = ~idx;
+        }
+
+        if ( show != GetColumn(idx).IsShown() )
+            UpdateColumnVisibility(idx, show);
+    }
+
+    UpdateColumnsOrder(order);
+    SetColumnsOrder(order);
+
+    return true;
 }
 
 // ============================================================================

@@ -684,6 +684,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/prntbase.cpp
     src/common/quantize.cpp
     src/common/radiocmn.cpp
+    src/common/rearrangectrl.cpp
     src/common/rendcmn.cpp
     src/common/rgncmn.cpp
     src/common/settcmn.cpp
@@ -813,6 +814,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/position.h
     wx/radiobox.h
     wx/radiobut.h
+    wx/rearrangectrl.h
     wx/renderer.h
     wx/scrolbar.h
     wx/scrolbar.h

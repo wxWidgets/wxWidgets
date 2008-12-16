@@ -404,6 +404,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_prntbase.obj &
 	$(OBJS)\monodll_quantize.obj &
 	$(OBJS)\monodll_radiocmn.obj &
+	$(OBJS)\monodll_rearrangectrl.obj &
 	$(OBJS)\monodll_rendcmn.obj &
 	$(OBJS)\monodll_rgncmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
@@ -643,6 +644,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_prntbase.obj &
 	$(OBJS)\monodll_quantize.obj &
 	$(OBJS)\monodll_radiocmn.obj &
+	$(OBJS)\monodll_rearrangectrl.obj &
 	$(OBJS)\monodll_rendcmn.obj &
 	$(OBJS)\monodll_rgncmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
@@ -1090,6 +1092,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_prntbase.obj &
 	$(OBJS)\monolib_quantize.obj &
 	$(OBJS)\monolib_radiocmn.obj &
+	$(OBJS)\monolib_rearrangectrl.obj &
 	$(OBJS)\monolib_rendcmn.obj &
 	$(OBJS)\monolib_rgncmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
@@ -1329,6 +1332,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_prntbase.obj &
 	$(OBJS)\monolib_quantize.obj &
 	$(OBJS)\monolib_radiocmn.obj &
+	$(OBJS)\monolib_rearrangectrl.obj &
 	$(OBJS)\monolib_rendcmn.obj &
 	$(OBJS)\monolib_rgncmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
@@ -1697,6 +1701,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_prntbase.obj &
 	$(OBJS)\coredll_quantize.obj &
 	$(OBJS)\coredll_radiocmn.obj &
+	$(OBJS)\coredll_rearrangectrl.obj &
 	$(OBJS)\coredll_rendcmn.obj &
 	$(OBJS)\coredll_rgncmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
@@ -1936,6 +1941,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_prntbase.obj &
 	$(OBJS)\coredll_quantize.obj &
 	$(OBJS)\coredll_radiocmn.obj &
+	$(OBJS)\coredll_rearrangectrl.obj &
 	$(OBJS)\coredll_rendcmn.obj &
 	$(OBJS)\coredll_rgncmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
@@ -2186,6 +2192,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_prntbase.obj &
 	$(OBJS)\corelib_quantize.obj &
 	$(OBJS)\corelib_radiocmn.obj &
+	$(OBJS)\corelib_rearrangectrl.obj &
 	$(OBJS)\corelib_rendcmn.obj &
 	$(OBJS)\corelib_rgncmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
@@ -2425,6 +2432,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_prntbase.obj &
 	$(OBJS)\corelib_quantize.obj &
 	$(OBJS)\corelib_radiocmn.obj &
+	$(OBJS)\corelib_rearrangectrl.obj &
 	$(OBJS)\corelib_rendcmn.obj &
 	$(OBJS)\corelib_rgncmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
@@ -7671,6 +7679,11 @@ $(OBJS)\monodll_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_rearrangectrl.obj :  .AUTODEPEND ..\..\src\common\rearrangectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_rendcmn.obj :  .AUTODEPEND ..\..\src\common\rendcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -9990,6 +10003,11 @@ $(OBJS)\monolib_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_rearrangectrl.obj :  .AUTODEPEND ..\..\src\common\rearrangectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -12341,6 +12359,11 @@ $(OBJS)\coredll_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_rearrangectrl.obj :  .AUTODEPEND ..\..\src\common\rearrangectrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_rendcmn.obj :  .AUTODEPEND ..\..\src\common\rendcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13811,6 +13834,11 @@ $(OBJS)\corelib_quantize.obj :  .AUTODEPEND ..\..\src\common\quantize.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_radiocmn.obj :  .AUTODEPEND ..\..\src\common\radiocmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_rearrangectrl.obj :  .AUTODEPEND ..\..\src\common\rearrangectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

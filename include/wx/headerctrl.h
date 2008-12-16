@@ -132,7 +132,7 @@ public:
 
     // show the columns customization dialog and return true if something was
     // changed using it (in which case UpdateColumnVisibility() and/or
-    // UpdateColumnWidth() will have been called)
+    // UpdateColumnsOrder() will have been called)
     //
     // this is called by the control itself from ShowColumnsMenu() (which in
     // turn is only called by the control if wxHD_ALLOW_HIDE style was
@@ -170,6 +170,15 @@ protected:
     // UpdateColumn() from here, this will be done internally)
     virtual void UpdateColumnVisibility(unsigned int WXUNUSED(idx),
                                         bool WXUNUSED(show))
+    {
+        wxFAIL_MSG( "must be overridden if called" );
+    }
+
+    // this method is called from ShowCustomizeDialog() to reorder all columns
+    // at once and should be implemented for controls using wxHD_ALLOW_REORDER
+    // style (there is no need to call SetColumnsOrder() from here, this is
+    // done by the control itself)
+    virtual void UpdateColumnsOrder(const wxArrayInt& WXUNUSED(order))
     {
         wxFAIL_MSG( "must be overridden if called" );
     }

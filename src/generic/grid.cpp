@@ -278,6 +278,14 @@ private:
         GetOwner()->SendEvent(wxEVT_GRID_COL_SIZE, -1, idx);
     }
 
+    // overridden to react to the columns order changes in the customization
+    // dialog
+    virtual void UpdateColumnsOrder(const wxArrayInt& order)
+    {
+        GetOwner()->SetColumnsOrder(order);
+    }
+
+
     // event handlers forwarding wxHeaderCtrl events to wxGrid
     void OnClick(wxHeaderCtrlEvent& event)
     {

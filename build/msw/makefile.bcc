@@ -1713,6 +1713,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_prntbase.obj \
 	$(OBJS)\monodll_quantize.obj \
 	$(OBJS)\monodll_radiocmn.obj \
+	$(OBJS)\monodll_rearrangectrl.obj \
 	$(OBJS)\monodll_rendcmn.obj \
 	$(OBJS)\monodll_rgncmn.obj \
 	$(OBJS)\monodll_settcmn.obj \
@@ -1950,6 +1951,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_prntbase.obj \
 	$(OBJS)\monodll_quantize.obj \
 	$(OBJS)\monodll_radiocmn.obj \
+	$(OBJS)\monodll_rearrangectrl.obj \
 	$(OBJS)\monodll_rendcmn.obj \
 	$(OBJS)\monodll_rgncmn.obj \
 	$(OBJS)\monodll_settcmn.obj \
@@ -2388,6 +2390,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_prntbase.obj \
 	$(OBJS)\monolib_quantize.obj \
 	$(OBJS)\monolib_radiocmn.obj \
+	$(OBJS)\monolib_rearrangectrl.obj \
 	$(OBJS)\monolib_rendcmn.obj \
 	$(OBJS)\monolib_rgncmn.obj \
 	$(OBJS)\monolib_settcmn.obj \
@@ -2625,6 +2628,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_prntbase.obj \
 	$(OBJS)\monolib_quantize.obj \
 	$(OBJS)\monolib_radiocmn.obj \
+	$(OBJS)\monolib_rearrangectrl.obj \
 	$(OBJS)\monolib_rendcmn.obj \
 	$(OBJS)\monolib_rgncmn.obj \
 	$(OBJS)\monolib_settcmn.obj \
@@ -2968,6 +2972,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_prntbase.obj \
 	$(OBJS)\coredll_quantize.obj \
 	$(OBJS)\coredll_radiocmn.obj \
+	$(OBJS)\coredll_rearrangectrl.obj \
 	$(OBJS)\coredll_rendcmn.obj \
 	$(OBJS)\coredll_rgncmn.obj \
 	$(OBJS)\coredll_settcmn.obj \
@@ -3205,6 +3210,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_prntbase.obj \
 	$(OBJS)\coredll_quantize.obj \
 	$(OBJS)\coredll_radiocmn.obj \
+	$(OBJS)\coredll_rearrangectrl.obj \
 	$(OBJS)\coredll_rendcmn.obj \
 	$(OBJS)\coredll_rgncmn.obj \
 	$(OBJS)\coredll_settcmn.obj \
@@ -3447,6 +3453,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_prntbase.obj \
 	$(OBJS)\corelib_quantize.obj \
 	$(OBJS)\corelib_radiocmn.obj \
+	$(OBJS)\corelib_rearrangectrl.obj \
 	$(OBJS)\corelib_rendcmn.obj \
 	$(OBJS)\corelib_rgncmn.obj \
 	$(OBJS)\corelib_settcmn.obj \
@@ -3684,6 +3691,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_prntbase.obj \
 	$(OBJS)\corelib_quantize.obj \
 	$(OBJS)\corelib_radiocmn.obj \
+	$(OBJS)\corelib_rearrangectrl.obj \
 	$(OBJS)\corelib_rendcmn.obj \
 	$(OBJS)\corelib_rgncmn.obj \
 	$(OBJS)\corelib_settcmn.obj \
@@ -7162,6 +7170,11 @@ $(OBJS)\monodll_radiocmn.obj: ..\..\src\common\radiocmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_rearrangectrl.obj: ..\..\src\common\rearrangectrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\rearrangectrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_rendcmn.obj: ..\..\src\common\rendcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\rendcmn.cpp
 !endif
@@ -9368,6 +9381,11 @@ $(OBJS)\monolib_quantize.obj: ..\..\src\common\quantize.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_radiocmn.obj: ..\..\src\common\radiocmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\radiocmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_rearrangectrl.obj: ..\..\src\common\rearrangectrl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\rearrangectrl.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -11604,6 +11622,11 @@ $(OBJS)\coredll_radiocmn.obj: ..\..\src\common\radiocmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_rearrangectrl.obj: ..\..\src\common\rearrangectrl.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\rearrangectrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_rendcmn.obj: ..\..\src\common\rendcmn.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\rendcmn.cpp
 !endif
@@ -12963,6 +12986,11 @@ $(OBJS)\corelib_quantize.obj: ..\..\src\common\quantize.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_radiocmn.obj: ..\..\src\common\radiocmn.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\common\radiocmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_rearrangectrl.obj: ..\..\src\common\rearrangectrl.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\common\rearrangectrl.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

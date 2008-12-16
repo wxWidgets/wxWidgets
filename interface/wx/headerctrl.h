@@ -14,13 +14,13 @@
     wxHeaderCtrl is the control containing the column headings which is usually
     used for display of tabular data.
 
-    It is used as part of wxGrid, in wxDataViewCtrl and in the report view of 
-    wxListCtrl but can be also used independently. 
-    In general this class is meant to be used as part of another
-    control which already stores the column information somewhere as it can't
-    be used directly: instead you need to inherit from it and implement the
-    GetColumn() method to provide column information. See wxHeaderCtrlSimple
-    for a concrete control class which can be used directly.
+    It is used as part of wxGrid, in generic version wxDataViewCtrl and report
+    view of wxListCtrl but can be also used independently. In general this
+    class is meant to be used as part of another control which already stores
+    the column information somewhere as it can't be used directly: instead you
+    need to inherit from it and implement the GetColumn() method to provide
+    column information. See wxHeaderCtrlSimple for a concrete control class
+    which can be used directly.
 
     In addition to labeling the columns, the control has the following
     features:
@@ -56,6 +56,11 @@
     @style{wxHD_ALLOW_REORDER}
         If this style is specified (it is by default), the user can reorder
         the control columns by dragging them.
+    @style{wxHD_ALLOW_HIDE}
+        If this style is specified, the control shows a popup menu allowing the
+        user to change the columns visibility on right mouse click. Notice that
+        the program can always hide or show the columns, this style only
+        affects the users capability to do it.
     @style{wxHD_DEFAULT_STYLE}
         Symbolic name for the default control style, currently equal to
         @c wxHD_ALLOW_REORDER.
@@ -300,19 +305,45 @@ public:
         Show the popup menu allowing the user to show or hide the columns.
 
         This functions shows the popup menu containing all columns with check
-        marks for the ones which are currently shown at the current mouse
-        position. It is meant to be called from EVT_HEADER_RIGHT_CLICK handler
-        and should toggle the visibility of the n-th column if the function
-        returns valid column index and not wxID_NONE which is returned if the
-        user cancels the menu.
+        marks for the ones which are currently shown and allows the user to
+        check or uncheck them to toggle their visibility. It is called from the
+        default EVT_HEADER_RIGHT_CLICK handler for the controls which have
+        wxHD_ALLOW_HIDE style. And if the column has wxHD_ALLOW_REORDER style
+        as well, the menu also contains an item to customize the columns shown
+        using which results in ShowCustomizeDialog() being called, please see
+        its description for more details.
 
+        If a column was toggled, UpdateColumnVisibility() virtual function is
+        called so it must be implemented for the controls with wxHD_ALLOW_HIDE
+        style or if you call this function explicitly.
+
+        @param pt
+            The position of the menu, in the header window coordinates.
         @param title
             The title for the menu if not empty.
         @return
-            A valid column index or wxID_NONE if the user didn't select any
-            column.
+            @true if a column was shown or hidden or @false if nothing was
+            done, e.g. because the menu was cancelled.
      */
-    int ShowColumnsMenu(const wxString& title = wxString());
+    int ShowColumnsMenu(const wxPoint& pt, const wxString& title = wxString());
+
+    /**
+        Show the column customization dialog.
+
+        This function displays a modal dialog containing the list of all
+        columns which the user can use to reorder them as well as show or hide
+        individual columns.
+
+        If the user accepts the changes done in the dialog, the virtual
+        methods UpdateColumnVisibility() and UpdateColumnsOrder() will be
+        called so they must be overridden in the derived class if this method
+        is ever called. Please notice that the user will be able to invoke it
+        interactively from the header popup menu if the control has both
+        wxHD_ALLOW_HIDE and wxHD_ALLOW_REORDER styles.
+
+        @see wxRearrangeDialog
+     */
+    bool ShowCustomizeDialog();
 
 protected:
     /**
@@ -324,6 +355,50 @@ protected:
             SetColumnCount().
      */
     virtual wxHeaderColumnBase& GetColumn(unsigned int idx) = 0;
+
+    /**
+        Method called when the column visibility is changed by the user.
+
+        This method is called from ShowColumnsMenu() or ShowCustomizeDialog()
+        when the user interactively hides or shows a column. A typical
+        implementation will simply update the internally stored column state.
+        Notice that there is no need to call UpdateColumn() from this method as
+        it is already done by wxHeaderCtrl itself.
+
+        The base class version doesn't do anything and must be overridden if
+        this method is called.
+
+        @param idx
+            The index of the column whose visibility was toggled.
+        @param show
+            The new visibility value, @true if the column is now shown or
+            @false if it is not hidden.
+     */
+    virtual void UpdateColumnVisibility(unsigned int idx, bool show);
+
+    /**
+        Method called when the columns order is changed in the customization
+        dialog.
+
+        This method is only called from ShowCustomizeDialog() when the user
+        changes the order of columns. In particular it is @em not called if a
+        single column changes place because the user dragged it to the new
+        location, the EVT_HEADER_END_REORDER event handler should be used to
+        react to this.
+
+        A typical implementation in a derived class will update the display
+        order of the columns in the associated control, if any. Notice that
+        there is no need to call SetColumnsOrder() from it as wxHeaderCtrl does
+        it itself.
+
+        The base class version doesn't do anything and must be overridden if
+        this method is called.
+
+        @param order
+            The new column order. This array uses the same convention as
+            SetColumnsOrder().
+     */
+    virtual void UpdateColumnsOrder(const wxArrayInt& order);
 
     /**
         Method which may be implemented by the derived classes to allow double

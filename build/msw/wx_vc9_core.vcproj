@@ -1123,6 +1123,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\rearrangectrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\rendcmn.cpp"
 				>
 			</File>
@@ -5357,6 +5361,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\rawbmp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\rearrangectrl.h"
 				>
 			</File>
 			<File

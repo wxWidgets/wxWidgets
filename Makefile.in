@@ -3673,6 +3673,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/position.h \
 	wx/radiobox.h \
 	wx/radiobut.h \
+	wx/rearrangectrl.h \
 	wx/renderer.h \
 	wx/scrolbar.h \
 	wx/scrolbar.h \
@@ -4250,6 +4251,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_prntbase.o \
 	monodll_quantize.o \
 	monodll_radiocmn.o \
+	monodll_rearrangectrl.o \
 	monodll_rendcmn.o \
 	monodll_rgncmn.o \
 	monodll_settcmn.o \
@@ -4440,6 +4442,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_prntbase.o \
 	monodll_quantize.o \
 	monodll_radiocmn.o \
+	monodll_rearrangectrl.o \
 	monodll_rendcmn.o \
 	monodll_rgncmn.o \
 	monodll_settcmn.o \
@@ -6070,6 +6073,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_prntbase.o \
 	monolib_quantize.o \
 	monolib_radiocmn.o \
+	monolib_rearrangectrl.o \
 	monolib_rendcmn.o \
 	monolib_rgncmn.o \
 	monolib_settcmn.o \
@@ -6260,6 +6264,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_prntbase.o \
 	monolib_quantize.o \
 	monolib_radiocmn.o \
+	monolib_rearrangectrl.o \
 	monolib_rendcmn.o \
 	monolib_rgncmn.o \
 	monolib_settcmn.o \
@@ -8040,6 +8045,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_prntbase.o \
 	coredll_quantize.o \
 	coredll_radiocmn.o \
+	coredll_rearrangectrl.o \
 	coredll_rendcmn.o \
 	coredll_rgncmn.o \
 	coredll_settcmn.o \
@@ -8230,6 +8236,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_prntbase.o \
 	coredll_quantize.o \
 	coredll_radiocmn.o \
+	coredll_rearrangectrl.o \
 	coredll_rendcmn.o \
 	coredll_rgncmn.o \
 	coredll_settcmn.o \
@@ -9552,6 +9559,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_prntbase.o \
 	corelib_quantize.o \
 	corelib_radiocmn.o \
+	corelib_rearrangectrl.o \
 	corelib_rendcmn.o \
 	corelib_rgncmn.o \
 	corelib_settcmn.o \
@@ -9742,6 +9750,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_prntbase.o \
 	corelib_quantize.o \
 	corelib_radiocmn.o \
+	corelib_rearrangectrl.o \
 	corelib_rendcmn.o \
 	corelib_rgncmn.o \
 	corelib_settcmn.o \
@@ -18365,6 +18374,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_radiocmn.o: $(srcdir)/src/common/radiocmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/radiocmn.cpp
 
+@COND_USE_GUI_1@monodll_rearrangectrl.o: $(srcdir)/src/common/rearrangectrl.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/rearrangectrl.cpp
+
 @COND_USE_GUI_1@monodll_rendcmn.o: $(srcdir)/src/common/rendcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/rendcmn.cpp
 
@@ -23059,6 +23071,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_radiocmn.o: $(srcdir)/src/common/radiocmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/radiocmn.cpp
+
+@COND_USE_GUI_1@monolib_rearrangectrl.o: $(srcdir)/src/common/rearrangectrl.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/rearrangectrl.cpp
 
 @COND_USE_GUI_1@monolib_rendcmn.o: $(srcdir)/src/common/rendcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/rendcmn.cpp
@@ -27944,6 +27959,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_radiocmn.o: $(srcdir)/src/common/radiocmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/radiocmn.cpp
 
+@COND_USE_GUI_1@coredll_rearrangectrl.o: $(srcdir)/src/common/rearrangectrl.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/rearrangectrl.cpp
+
 @COND_USE_GUI_1@coredll_rendcmn.o: $(srcdir)/src/common/rendcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/rendcmn.cpp
 
@@ -31465,6 +31483,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_radiocmn.o: $(srcdir)/src/common/radiocmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/radiocmn.cpp
+
+@COND_USE_GUI_1@corelib_rearrangectrl.o: $(srcdir)/src/common/rearrangectrl.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/rearrangectrl.cpp
 
 @COND_USE_GUI_1@corelib_rendcmn.o: $(srcdir)/src/common/rendcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/rendcmn.cpp

@@ -582,6 +582,10 @@ SOURCE=..\..\src\common\radiocmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\rearrangectrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\rendcmn.cpp
 # End Source File
 # Begin Source File
@@ -6354,6 +6358,10 @@ SOURCE=..\..\include\wx\radiobut.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\rawbmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\rearrangectrl.h
 # End Source File
 # Begin Source File
 

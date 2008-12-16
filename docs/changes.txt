@@ -325,6 +325,8 @@ All (GUI):
 - Added wxDataViewCtrl class and helper classes.
 - Integrated wxPropertyGrid in wxWidgets itself (Jaakko Salli).
 - Provide native implementation of wxCalendarCtrl under wxMSW and wxGTK.
+- Added wxHeaderCtrl and allow using it in wxGrid.
+- Added wxRearrangeList, wxRearrangeCtrl and wxRearrangeDialog.
 - Added {wxTextCtrl,wxComboBox}::AutoComplete() and AutoCompleteFileNames().
 - Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty).
 - Added wxNotificationMessage class for non-intrusive notifications.
