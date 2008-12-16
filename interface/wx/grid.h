@@ -2306,6 +2306,15 @@ public:
     void SetColPos(int colID, int newPos);
 
     /**
+        Sets the positions of all columns at once.
+
+        This method takes an array containing the indices of the columns in
+        their display order, i.e. uses the same convention as
+        wxHeaderCtrl::SetColumnsOrder().
+     */
+    void SetColumnsOrder(const wxArrayInt& order);
+
+    /**
         Resets the position of the columns to the default.
      */
     void ResetColPos();

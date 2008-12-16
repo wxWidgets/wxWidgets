@@ -278,7 +278,6 @@ private:
         GetOwner()->SendEvent(wxEVT_GRID_COL_SIZE, -1, idx);
     }
 
-
     // event handlers forwarding wxHeaderCtrl events to wxGrid
     void OnClick(wxHeaderCtrlEvent& event)
     {
@@ -6883,6 +6882,13 @@ void wxGrid::RefreshAfterColPosChange()
         m_colWindow->Refresh();
     }
     m_gridWin->Refresh();
+}
+
+void wxGrid::SetColumnsOrder(const wxArrayInt& order)
+{
+    m_colAt = order;
+
+    RefreshAfterColPosChange();
 }
 
 void wxGrid::SetColPos(int idx, int pos)

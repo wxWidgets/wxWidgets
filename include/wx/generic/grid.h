@@ -1532,6 +1532,10 @@ public:
     // only the display and hit testing code really cares about display
     // positions at all
 
+    // set the positions of all columns at once (this method uses the same
+    // conventions as wxHeaderCtrl::SetColumnsOrder() for the order array)
+    void SetColumnsOrder(const wxArrayInt& order);
+
     // return the column index corresponding to the given (valid) position
     int GetColAt(int pos) const
     {
