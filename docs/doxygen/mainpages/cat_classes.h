@@ -159,6 +159,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxGauge: A control to represent a varying quantity, such as time remaining
 @li wxGenericDirCtrl: A control for displaying a directory tree
 @li wxGrid: A control to display spread-sheet like data in tabular form
+@li wxHeaderCtrl: a small control to display the top header of tabular data
 @li wxHtmlListBox: An abstract class for creating listboxes showing HTML
     content
 @li wxHyperlinkCtrl: A static text which opens an URL when clicked

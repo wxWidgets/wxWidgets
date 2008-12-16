@@ -14,9 +14,9 @@
     wxHeaderCtrl is the control containing the column headings which is usually
     used for display of tabular data.
 
-    It is used as part of wxGrid and (will be used in the near future) in
-    in wxDataViewCtrl and report view of wxListCtrl but can be also used
-    independently. In general this class is meant to be used as part of another
+    It is used as part of wxGrid, in wxDataViewCtrl and in the report view of 
+    wxListCtrl but can be also used independently. 
+    In general this class is meant to be used as part of another
     control which already stores the column information somewhere as it can't
     be used directly: instead you need to inherit from it and implement the
     GetColumn() method to provide column information. See wxHeaderCtrlSimple
