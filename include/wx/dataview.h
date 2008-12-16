@@ -26,6 +26,7 @@
 #include "wx/weakref.h"
 
 #if !(defined(__WXGTK20__) || defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
+//#if !(defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_DATAVIEWCTRL
 #endif
 
@@ -878,7 +879,7 @@ private:
     long    m_min,m_max;
 };
 
-#ifndef __WXGTK20__
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxMAC)
 
 // -------------------------------------
 // wxDataViewChoiceRenderer

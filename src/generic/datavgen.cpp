@@ -2906,7 +2906,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     wxDataViewRenderer *cell = col->GetRenderer();
     unsigned int current = GetLineAt( y );
-    if ((current > GetRowCount()) || (x > GetEndOfLastCol()))
+    if ((current >= GetRowCount()) || (x > GetEndOfLastCol()))
     {
         // Unselect all if below the last row ?
         return;

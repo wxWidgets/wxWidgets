@@ -1275,7 +1275,7 @@ bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
 // wxDataViewChoiceRenderer
 // -------------------------------------
 
-#ifndef __WXGTK20__
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxMAC)
 
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString& choices, wxDataViewCellMode mode, int alignment ) :
    wxDataViewCustomRenderer(wxT("string"), mode, alignment )
