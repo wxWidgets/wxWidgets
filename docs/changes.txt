@@ -235,6 +235,8 @@ Deprecated methods and their replacements
   it with SetDeviceClippingRegion() if this was the correct thing to do in your
   code.
 - wxTE_AUTO_SCROLL style is deprecated as it's always on by default anyhow.
+- wxThreadHelper::Create() has been deprecated in favour of wxThreadHelper::CreateThread
+  which has a better name for a mix-in class, and allows setting the thread type.
 
 
 Major new features in this release

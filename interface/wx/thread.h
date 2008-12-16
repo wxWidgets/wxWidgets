@@ -455,6 +455,12 @@ public:
     virtual ExitCode Entry() = 0;
 
     /**
+        @deprecated
+        Use CreateThread() instead.
+    */
+    wxThreadError Create(unsigned int stackSize = 0);
+
+    /**
         Creates a new thread of the given @a kind.
 
         The thread object is created in the suspended state, and you
