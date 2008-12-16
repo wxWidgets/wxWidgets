@@ -34,9 +34,11 @@ enum wxXmlNodeType
     Node has a name and may have content and attributes.
 
     Most common node types are @c wxXML_TEXT_NODE (name and attributes are irrelevant)
-    and @c wxXML_ELEMENT_NODE (e.g. in @c \<title\>hi\</title\> there is an element
-    with name="title", irrelevant content and one child @c wxXML_TEXT_NODE
-    with content="hi").
+    and @c wxXML_ELEMENT_NODE.
+
+    Example: in <tt>\<title\>hi\</title\></tt> there is an element with the name
+    @c title and irrelevant content and one child of type @c wxXML_TEXT_NODE
+    with @c hi as content.
 
     If @c wxUSE_UNICODE is 0, all strings are encoded in the encoding given to
     wxXmlDocument::Load (default is UTF-8).
@@ -353,8 +355,8 @@ public:
 
     Represents a node attribute.
 
-    Example: in @c "\<img src="hello.gif" id="3"/\>", @c "src" is attribute with value
-    @c "hello.gif" and @c "id" is a attribute with value @c "3".
+    Example: in <tt>\<img src="hello.gif" id="3"/\></tt>, @c src is an attribute
+    with value @c hello.gif and @c id is an attribute with value @c 3.
 
     @library{wxxml}
     @category{xml}
@@ -427,16 +429,16 @@ public:
     @code
     wxXmlDocument doc;
     if (!doc.Load("myfile.xml"))
-        return @false;
+        return false;
 
     // start processing the XML file
     if (doc.GetRoot()->GetName() != "myroot-node")
-        return @false;
+        return false;
 
     wxXmlNode *child = doc.GetRoot()->GetChildren();
     while (child) {
 
-        if (child-GetName() == "tag1") {
+        if (child->GetName() == "tag1") {
 
             // process text enclosed by tag1/tag1
             wxString content = child->GetNodeContent();
