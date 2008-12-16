@@ -26,6 +26,7 @@
 
 #include "wx/dcsvg.h"
 #include "wx/wfstream.h"
+#include "wx/filename.h"
 
 #define wxSVG_DEBUG FALSE
 // or TRUE to see the calls being executed
@@ -656,6 +657,10 @@ void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
     wxBitmap myBitmap = bmp ;
 //save it
     bool bPNG_OK = myBitmap.SaveFile(sPNG,wxBITMAP_TYPE_PNG);
+
+// reference the bitmap from the SVG doc
+// only use filename & ext
+    sPNG = sPNG.AfterLast(wxFileName::GetPathSeparator());
 
 // refrence the bitmap from the SVG doc
     int w = myBitmap.GetWidth();
