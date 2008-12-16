@@ -4013,6 +4013,15 @@ void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
     gtk_tree_path_free( path );
 }
 
+bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
+{
+    GtkTreeIter iter;
+    iter.user_data = item.GetID();
+    GtkTreePath *path = m_internal->get_path( &iter );
+    gtk_tree_view_row_expanded( GTK_TREE_VIEW(m_treeview), path );
+    gtk_tree_path_free( path );
+}
+
 wxDataViewItem wxDataViewCtrl::GetSelection() const
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );

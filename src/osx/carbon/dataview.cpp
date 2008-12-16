@@ -1204,6 +1204,18 @@ void wxDataViewCtrl::Expand(wxDataViewItem const& item)
   MacDataViewListCtrlPtr->OpenContainer(reinterpret_cast<DataBrowserItemID>(item.GetID()));
 }
 
+bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
+{
+  if (item.IsOk())
+  {
+    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(m_peer));
+
+    // TODO ???
+    // This doesn't seem to be supported
+  }
+  return false;
+}
+
 wxDataViewColumn* wxDataViewCtrl::GetSortingColumn() const
 {
   DataBrowserPropertyID propertyID;

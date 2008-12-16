@@ -450,8 +450,8 @@ public:
   {
     this->Init();
   }
-  wxDataViewCtrl(wxWindow *parent, wxWindowID id, wxPoint const& pos = wxDefaultPosition, wxSize const& size = wxDefaultSize, long style = 0,
-                 wxValidator const& validator = wxDefaultValidator)
+  wxDataViewCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0,
+                 const wxValidator& validator = wxDefaultValidator)
   {
     this->Init();
     this->Create(parent, id, pos, size, style, validator );
@@ -460,8 +460,8 @@ public:
   ~wxDataViewCtrl();
 
  // explicit control creation
-  bool Create(wxWindow *parent, wxWindowID id, wxPoint const& pos=wxDefaultPosition, wxSize const& size=wxDefaultSize, long style=0,
-              wxValidator const& validator=wxDefaultValidator);
+  bool Create(wxWindow *parent, wxWindowID id, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=0,
+              const wxValidator& validator=wxDefaultValidator);
 
   virtual wxControl* GetMainWindow() // should disappear as it is not of any use for the native implementation
   {
@@ -473,34 +473,35 @@ public:
 
   virtual bool AppendColumn(wxDataViewColumn* columnPtr);
   virtual bool PrependColumn(wxDataViewColumn* columnPtr);
-  virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
+  virtual bool InsertColumn(unsigned int pos, wxDataViewColumn *col);
 
   virtual bool ClearColumns();
   virtual bool DeleteColumn(wxDataViewColumn* columnPtr);
   virtual wxDataViewColumn* GetColumn(unsigned int pos) const;
   virtual unsigned int GetColumnCount() const;
-  virtual int GetColumnPosition(wxDataViewColumn const* columnPtr) const;
+  virtual int GetColumnPosition(const wxDataViewColumn* columnPtr) const;
 
-  virtual void Collapse(wxDataViewItem const& item);
-  virtual void EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr=NULL);
-  virtual void Expand(wxDataViewItem const& item);
+  virtual void Collapse( const wxDataViewItem& item);
+  virtual void EnsureVisible(const wxDataViewItem& item, const wxDataViewColumn* columnPtr=NULL);
+  virtual void Expand(const wxDataViewItem& item);
+  virtual bool IsExpanded(const wxDataViewItem & item) const;
 
   virtual wxDataViewColumn* GetSortingColumn() const;
 
   virtual unsigned int GetCount() const;
-  virtual wxRect GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const;
+  virtual wxRect GetItemRect(const wxDataViewItem& item, const wxDataViewColumn* columnPtr) const;
   virtual wxDataViewItem GetSelection() const;
   virtual int GetSelections(wxDataViewItemArray& sel) const;
 
-  virtual void HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const;
+  virtual void HitTest(const wxPoint& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const;
 
-  virtual bool IsSelected(wxDataViewItem const& item) const;
+  virtual bool IsSelected(const wxDataViewItem& item) const;
 
   virtual void SelectAll();
-  virtual void Select(wxDataViewItem const& item);
-  virtual void SetSelections(wxDataViewItemArray const& sel);
+  virtual void Select(const wxDataViewItem& item);
+  virtual void SetSelections(const wxDataViewItemArray& sel);
 
-  virtual void Unselect(wxDataViewItem const& item);
+  virtual void Unselect(const wxDataViewItem& item);
   virtual void UnselectAll();
 
 //

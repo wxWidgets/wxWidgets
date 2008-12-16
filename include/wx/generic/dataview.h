@@ -446,6 +446,7 @@ public:
 
     virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );
+    virtual bool IsExpanded( const wxDataViewItem & item ) const;
 
     virtual void SetFocus();
 

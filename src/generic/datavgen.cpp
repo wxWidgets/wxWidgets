@@ -483,6 +483,7 @@ public:
 
     void Expand( unsigned int row ) { OnExpanding( row ); }
     void Collapse( unsigned int row ) { OnCollapsing( row ); }
+    bool IsExpanded( unsigned int row ) const;
 private:
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row ) const;
     //We did not need this temporarily
@@ -2411,6 +2412,23 @@ wxDataViewEvent wxDataViewMainWindow::SendExpanderEvent( wxEventType type, const
     return le;
 }
 
+
+bool wxDataViewMainWindow::IsExpanded( unsigned int row ) const
+{
+    if (IsVirtualList())
+       return false;
+       
+    wxDataViewTreeNode * node = GetTreeNodeByRow(row);
+    if (!node)
+       return false;
+       
+    if (!node->HasChildren())
+       return false;
+    
+    return node->IsOpen();
+}
+
+
 void wxDataViewMainWindow::OnExpanding( unsigned int row )
 {
     if (IsVirtualList())
@@ -3684,6 +3702,15 @@ void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
     if (row != -1)
         m_clientArea->Collapse(row);
 }
+
+bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
+{
+    int row = m_clientArea->GetRowByItem( item );
+    if (row != -1)
+        return m_clientArea->IsExpanded(row);
+    return false;
+}
+
 
  #endif
     // !wxUSE_GENERICDATAVIEWCTRL

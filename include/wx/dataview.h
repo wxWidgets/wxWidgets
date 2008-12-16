@@ -713,6 +713,7 @@ public:
 
     virtual void Expand( const wxDataViewItem & item ) = 0;
     virtual void Collapse( const wxDataViewItem & item ) = 0;
+    virtual bool IsExpanded( const wxDataViewItem & item ) const = 0;
 
     virtual void EnsureVisible( const wxDataViewItem & item,
                                 const wxDataViewColumn *column = NULL ) = 0;

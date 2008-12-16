@@ -429,6 +429,8 @@ public:
     virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );
 
+    virtual bool IsExpanded( const wxDataViewItem & item ) const;
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 

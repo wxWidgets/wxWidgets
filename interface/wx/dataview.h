@@ -947,6 +947,13 @@ public:
                          wxDataViewColumn*& col) const;
 
     /**
+        Return @true if the item is expanded.
+        
+        Currently not supported by OS X.
+    */
+    virtual bool IsExpanded(const wxDataViewItem& item) const;
+
+    /**
         Return @true if the item is selected.
     */
     virtual bool IsSelected(const wxDataViewItem& item) const;
@@ -1532,7 +1539,7 @@ enum wxDataViewColumnFlags
     @class wxDataViewColumn
 
     This class represents a column in a wxDataViewCtrl.
-    One wxDataViewColumn is bound to one column in the data model, to which the
+    One wxDataViewColumn is bound to one column in the data model to which the
     wxDataViewCtrl has been associated.
 
     An instance of wxDataViewRenderer is used by this class to render its data.
