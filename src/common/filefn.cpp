@@ -96,6 +96,10 @@
     #define _MAXPATHLEN 1024
 #endif
 
+#ifndef INVALID_FILE_ATTRIBUTES
+    #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
+#endif
+
 // ----------------------------------------------------------------------------
 // private globals
 // ----------------------------------------------------------------------------
@@ -316,7 +320,7 @@ wxFileExists (const wxString& filename)
     // it can cope with network (UNC) paths unlike them
     DWORD ret = ::GetFileAttributes(filename.fn_str());
 
-    return (ret != (DWORD)-1) && !(ret & FILE_ATTRIBUTE_DIRECTORY);
+    return (ret != INVALID_FILE_ATTRIBUTES) && !(ret & FILE_ATTRIBUTE_DIRECTORY);
 #else // !__WIN32__
     #ifndef S_ISREG
         #define S_ISREG(mode) ((mode) & S_IFREG)
@@ -1339,7 +1343,7 @@ bool wxDirExists(const wxString& pathName)
     // stat() can't cope with network paths
     DWORD ret = ::GetFileAttributes(strPath.fn_str());
 
-    return (ret != (DWORD)-1) && (ret & FILE_ATTRIBUTE_DIRECTORY);
+    return (ret != INVALID_FILE_ATTRIBUTES) && (ret & FILE_ATTRIBUTE_DIRECTORY);
 #elif defined(__OS2__)
     FILESTATUS3 Info = {{0}};
     APIRET rc = ::DosQueryPathInfo((PSZ)(WXSTRINGCAST strPath), FIL_STANDARD,
