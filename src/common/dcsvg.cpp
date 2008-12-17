@@ -579,7 +579,7 @@ void wxSVGFileDCImpl::NewGraphics ()
     }
 
     sLast.Printf( wxT("stroke-width:%d\" \n   transform=\"translate(%.2g %.2g) scale(%.2g %.2g)\">"),
-                  w, (double)m_logicalOriginX, m_logicalOriginY, m_scaleX, m_scaleY  );
+                  w, double(m_logicalOriginX), double(m_logicalOriginY), m_scaleX, m_scaleY  );
 
     s = sBrush + sPenCap + sPenJoin + sPenStyle + sLast + newline + sWarn;
     write(s);
