@@ -671,8 +671,6 @@ public: \
         Node *node = GetOrCreateNode( \
                 CLASSNAME##_wxImplementation_Pair( v.first, v.second ), \
                 created); \
-        if ( !created ) \
-            node->m_value.second = v.second; \
         return Insert_Result(iterator(node, this), created); \
     } \
  \
