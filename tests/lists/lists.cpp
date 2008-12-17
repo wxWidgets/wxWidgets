@@ -84,40 +84,31 @@ void ListsTestCase::wxListTest()
 {
     wxListInt list1;
     int dummy[5];
-    int i;
+    size_t i;
 
-    for ( i = 0; i < 5; ++i )
+    for ( i = 0; i < WXSIZEOF(dummy); ++i )
         list1.Append(dummy + i);
 
-    CPPUNIT_ASSERT( list1.GetCount() == 5 );
-    CPPUNIT_ASSERT( list1.Item(3)->GetData() == dummy + 3 );
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(dummy), list1.GetCount() );
+    CPPUNIT_ASSERT_EQUAL( dummy + 3, list1.Item(3)->GetData() );
     CPPUNIT_ASSERT( list1.Find(dummy + 4) );
 
-    wxListInt::compatibility_iterator node = list1.GetFirst();
-    i = 0;
-
-    while (node)
+    wxListInt::compatibility_iterator node;
+    for ( i = 0, node = list1.GetFirst(); node; ++i, node = node->GetNext() )
     {
-        CPPUNIT_ASSERT( node->GetData() == dummy + i );
-        node = node->GetNext();
-        ++i;
+        CPPUNIT_ASSERT_EQUAL( dummy + i, node->GetData() );
     }
 
-    CPPUNIT_ASSERT( size_t(i) == list1.GetCount() );
+    CPPUNIT_ASSERT_EQUAL( i, list1.GetCount() );
 
     list1.Insert(dummy + 0);
     list1.Insert(1, dummy + 1);
     list1.Insert(list1.GetFirst()->GetNext()->GetNext(), dummy + 2);
 
-    node = list1.GetFirst();
-    i = 0;
-
-    while (i < 3)
+    for ( i = 0, node = list1.GetFirst(); i < 3; ++i, node = node->GetNext() )
     {
         int* t = node->GetData();
-        CPPUNIT_ASSERT( t == dummy + i );
-        node = node->GetNext();
-        ++i;
+        CPPUNIT_ASSERT_EQUAL( dummy + i, t );
     }
 }
 
