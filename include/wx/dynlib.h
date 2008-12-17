@@ -80,7 +80,9 @@ enum wxDLFlags
 
     wxDL_QUIET      = 0x00000020,   // don't log an error if failed to load
 
-    // this flag is dangerous, for internal use of wxMSW only, don't use
+    // this flag is dangerous, for internal use of wxMSW only, don't use at all
+    // and especially don't use directly, use wxLoadedDLL instead if you really
+    // do need it
     wxDL_GET_LOADED = 0x00000040,   // Win32 only: return handle of already
                                     // loaded DLL or NULL otherwise; Unload()
                                     // should not be called so don't forget to
@@ -376,6 +378,28 @@ protected:
     DECLARE_NO_COPY_CLASS(wxDynamicLibrary)
 };
 
+#ifdef __WXMSW__
+
+// ----------------------------------------------------------------------------
+// wxLoadedDLL is a MSW-only internal helper class allowing to dynamically bind
+// to a DLL already loaded into the project address space
+// ----------------------------------------------------------------------------
+
+class wxLoadedDLL : public wxDynamicLibrary
+{
+public:
+    wxLoadedDLL(const wxString& dllname)
+        : wxDynamicLibrary(dllname, wxDL_GET_LOADED | wxDL_VERBATIM | wxDL_QUIET)
+    {
+    }
+
+    ~wxLoadedDLL()
+    {
+        Detach();
+    }
+};
+
+#endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
 // Interesting defines
