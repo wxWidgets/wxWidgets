@@ -1840,12 +1840,20 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
     // quoting the MSDN: "To obtain a handle to a directory, call the
     // CreateFile function with the FILE_FLAG_BACKUP_SEMANTICS flag", but this
     // doesn't work under Win9x/ME but then it's not needed there anyhow
-    bool isdir = wxDirExists(path);
-    if ( isdir && wxGetOsVersion() == wxOS_WINDOWS_9X )
+    const DWORD dwAttr = ::GetFileAttributes(path.fn_str());
+    if ( dwAttr == INVALID_FILE_ATTRIBUTES )
+    {
+        // file probably doesn't exist at all
+        return false;
+    }
+
+    if ( wxGetOsVersion() == wxOS_WINDOWS_9X )
     {
         // FAT directories always allow all access, even if they have the
-        // readonly flag set
-        return true;
+        // readonly flag set, and FAT files can only be read-only
+        return (dwAttr & FILE_ATTRIBUTE_DIRECTORY) ||
+                    (access != GENERIC_WRITE ||
+                        !(dwAttr & FILE_ATTRIBUTE_READONLY));
     }
 
     HANDLE h = ::CreateFile
@@ -1855,7 +1863,9 @@ static bool wxCheckWin32Permission(const wxString& path, DWORD access)
                     FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                     NULL,
                     OPEN_EXISTING,
-                    isdir ? FILE_FLAG_BACKUP_SEMANTICS : 0,
+                    dwAttr & FILE_ATTRIBUTE_DIRECTORY
+                        ? FILE_FLAG_BACKUP_SEMANTICS
+                        : 0,
                     NULL
                  );
     if ( h != INVALID_HANDLE_VALUE )
