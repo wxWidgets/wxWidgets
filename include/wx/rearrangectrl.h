@@ -12,6 +12,9 @@
 #define _WX_REARRANGECTRL_H_
 
 #include "wx/checklst.h"
+#include "wx/panel.h"
+#include "wx/dialog.h"
+
 #include "wx/arrstr.h"
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxRearrangeListNameStr[];
