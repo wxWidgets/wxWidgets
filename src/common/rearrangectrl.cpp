@@ -139,11 +139,10 @@ void wxRearrangeList::OnCheck(wxCommandEvent& event)
     // update the internal state to match the new item state
     const int n = event.GetInt();
 
-    const bool checked = IsChecked(n);
-    wxASSERT_MSG( (m_order[n] >= 0) == !checked,
-                  "discrepancy between internal state and GUI" );
-
     m_order[n] = ~m_order[n];
+
+    wxASSERT_MSG( (m_order[n] >= 0) == IsChecked(n),
+                  "discrepancy between internal state and GUI" );
 }
 
 // ============================================================================
