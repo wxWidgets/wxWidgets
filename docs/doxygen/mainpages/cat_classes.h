@@ -596,7 +596,7 @@ Related Overviews: @ref overview_debugging
 
 wxWidgets provides several classes and functions for message logging.
 
-Related Overviews: @ref overview_log
+Related overview: @ref overview_log
 
 @see @ref group_funcmacro_log "Logging Functions and Macros"
 
@@ -688,7 +688,7 @@ wxWidgets provides a few smart pointer class templates.
 
 wxWidgets has several small classes to work with disk files and directories.
 
-Related Overviews: @ref overview_file
+Related overview: @ref overview_file
 
 @li wxFileName: Operations with the file name and attributes
 @li wxDir: Class for enumerating files/subdirectories.
@@ -705,8 +705,10 @@ Related Overviews: @ref overview_file
 
 @section page_class_cat_streams Streams
 
-wxWidgets has its own set of stream classes, as an alternative to often buggy
-standard stream libraries, and to provide enhanced functionality.
+wxWidgets has its own set of stream classes as an alternative to the
+standard stream libraries and to provide enhanced functionality.
+
+Related overview: @ref overview_stream
 
 @li wxStreamBase: Stream base class
 @li wxStreamBuffer: Stream buffer class
@@ -763,7 +765,7 @@ standard stream libraries, and to provide enhanced functionality.
 Resources allow your application to create controls and other user interface
 elements from specifications stored in an XML format.
 
-Related Overviews: @ref overview_xrc
+Related overview: @ref overview_xrc
 
 @li wxXmlResource: The main class for working with resources
 @li wxXmlResourceHandler: The base class for XML resource handlers
@@ -793,7 +795,7 @@ wxWidgets provides its own classes for socket based networking.
 wxWidgets provides simple interprocess communications facilities based on
 Windows DDE, but available on most platforms using TCP.
 
-Related Overviews: @ref overview_ipc
+Related overview: @ref overview_ipc
 
 @li wxClient, wxDDEClient: Represents a client
 @li wxConnection, wxDDEConnection: Represents the connection between a client

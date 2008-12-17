@@ -8,7 +8,7 @@
 
 /**
 
-@page overview_stream wxStreams Overview
+@page overview_stream Stream classes overview
 
 Classes:
 @li wxStreamBase
@@ -17,6 +17,12 @@ Classes:
 @li wxOutputStream
 @li wxFilterInputStream
 @li wxFilterOutputStream
+@li wxFileInputStream
+@li wxFileOutputStream
+@li wxTextInputStream
+@li wxTextOutputStream
+@li wxDataInputStream
+@li wxDataOutputStream
 
 @li @ref overview_stream_intro
 @li @ref overview_stream_example
@@ -27,10 +33,9 @@ Classes:
 
 @section overview_stream_intro Introduction
 
-Standard C++ streams can cause problems on several platforms: they work quite
-well in most cases, but in the multi-threaded case, for example, they have many
-problems. Some Borland compilers refuse to work at all with them.
-@todo is this still true?
+wxWidgets provides its own set of stream classes in order to be
+independent of the standard C++ stream class and their different
+implementations.
 
 Besides, using @c std::iostream on Linux makes impossible to write programs that are
 binary compatible across different Linux distributions.
@@ -45,6 +50,9 @@ wxStream classes are divided in two main groups:
     wxFilterInputStream, wxFilterOutputStream
 @li The "IO" classes: wxSocketInputStream, wxSocketOutputStream,
     wxFileInputStream, wxFileOutputStream, ...
+@li Classes for reading text or binary data from a particular stream
+    such as wxTextInputStream, wxTextOutputStream, wxDataInputStream
+    and wxDataOutputStream
 
 wxStreamBase is the base definition of a stream. It defines, for example, the
 API of OnSysRead(), OnSysWrite(), OnSysSeek() and OnSysTell(). These functions are
