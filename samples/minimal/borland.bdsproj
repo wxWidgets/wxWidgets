@@ -90,7 +90,7 @@
           <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="$(BDS)\include"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="$(BDS)\include\vcl"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="..\..\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\lib\bcc_dll\mswd"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\lib\bcc_dll\mswud"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="$(BDS)\include\dinkumware"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
@@ -146,7 +146,7 @@
           <property category="win32.*.win32b.brcc32" name="option.INCLUDEPATH.arg.1" value="$(BDS)\include"/>
           <property category="win32.*.win32b.brcc32" name="option.INCLUDEPATH.arg.2" value="$(BDS)\include\vcl"/>
           <property category="win32.*.win32b.brcc32" name="option.INCLUDEPATH.arg.3" value="..\..\include"/>
-          <property category="win32.*.win32b.brcc32" name="option.INCLUDEPATH.arg.4" value="..\..\lib\bcc_lib\mswd"/>
+          <property category="win32.*.win32b.brcc32" name="option.INCLUDEPATH.arg.4" value="..\..\lib\bcc_lib\mswud"/>
           <property category="win32.*.win32b.brcc32" name="option.INCLUDEPATH.arg.5" value="$(BDS)\include\dinkumware"/>
           <property category="win32.*.win32b.brcc32" name="option.INCLUDEPATH.arg.merge" value="1"/>
           <property category="win32.*.win32b.brcc32" name="option.INCLUDEPATH.enabled" value="1"/>
@@ -197,7 +197,7 @@
           <property category="win32.*.win32b.tasm32" name="option.i.arg.1" value="$(BDS)\include"/>
           <property category="win32.*.win32b.tasm32" name="option.i.arg.2" value="$(BDS)\include\vcl"/>
           <property category="win32.*.win32b.tasm32" name="option.i.arg.3" value="..\..\include"/>
-          <property category="win32.*.win32b.tasm32" name="option.i.arg.4" value="..\..\lib\bcc_lib\mswd"/>
+          <property category="win32.*.win32b.tasm32" name="option.i.arg.4" value="..\..\lib\bcc_lib\mswud"/>
           <property category="win32.*.win32b.tasm32" name="option.i.arg.5" value="$(BDS)\include\dinkumware"/>
           <property category="win32.*.win32b.tasm32" name="option.i.arg.merge" value="1"/>
           <property category="win32.*.win32b.tasm32" name="option.i.enabled" value="1"/>

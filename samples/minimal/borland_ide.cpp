@@ -23,19 +23,21 @@
 #define WinMain WinMain
 
 //wx libs (you may not need all of these
-#pragma link  "wxbase29d.lib"
-#pragma link  "wxmsw29d_adv.lib"
-#pragma link  "wxmsw29d_core.lib"
-#pragma link  "wxmsw29d_html.lib"
-#pragma link  "wxmsw29d_media.lib"
-#pragma link  "wxmsw29d_xrc.lib"
-#pragma link  "wxmsw29d_aui.lib"
-#pragma link  "wxmsw29d_stc.lib"
-#pragma link  "wxmsw29d_richtext.lib"
+#pragma link  "wxbase29ud.lib"
+#pragma link  "wxmsw29ud_adv.lib"
+#pragma link  "wxmsw29ud_core.lib"
+#pragma link  "wxmsw29ud_html.lib"
+#pragma link  "wxmsw29ud_media.lib"
+#pragma link  "wxmsw29ud_xrc.lib"
+#pragma link  "wxmsw29ud_aui.lib"
+#pragma link  "wxmsw29ud_stc.lib"
+#pragma link  "wxmsw29ud_richtext.lib"
 
 //graphics libs
 #pragma link  "wxpngd.lib"
-#pragma link  "wxregexd.lib"
+#pragma link  "wxregexud.lib"
 #pragma link  "wxtiffd.lib"
 #pragma link  "wxzlibd.lib"
+//code aware lib
+#pragma link  "wxscintillad.lib"
 
