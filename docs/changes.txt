@@ -135,6 +135,10 @@ wxMSW:
 - Correct coordinates of wxDropFilesEvent (Dmitriy Maksimov).
 - Fix handling of abandoned mutexes in wxMutex (David Heffernan).
 
+wxMSW/CE:
+
+- Don't hardcode the menu bar height (Michele Spighi).
+
 wxGTK:
 
 - Fixed printing to use fonts sizes adjustment consistent with wxMSW.
