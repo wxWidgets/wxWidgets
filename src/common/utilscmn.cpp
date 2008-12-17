@@ -962,7 +962,11 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
     WinStruct<SHELLEXECUTEINFO> sei;
     sei.lpFile = document.wx_str();
     sei.lpVerb = _T("open");
+#ifdef __WXWINCE__
+    sei.nShow = SW_SHOWNORMAL; // SW_SHOWDEFAULT not defined under CE (#10216)
+#else
     sei.nShow = SW_SHOWDEFAULT;
+#endif
 
     // avoid Windows message box in case of error for consistency with
     // wxLaunchDefaultBrowser() even if don't show the error ourselves in this
