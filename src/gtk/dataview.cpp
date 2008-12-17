@@ -4018,8 +4018,10 @@ bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
     GtkTreeIter iter;
     iter.user_data = item.GetID();
     GtkTreePath *path = m_internal->get_path( &iter );
-    gtk_tree_view_row_expanded( GTK_TREE_VIEW(m_treeview), path );
+    bool res = gtk_tree_view_row_expanded( GTK_TREE_VIEW(m_treeview), path );
     gtk_tree_path_free( path );
+    
+    return res;
 }
 
 wxDataViewItem wxDataViewCtrl::GetSelection() const

@@ -1210,8 +1210,13 @@ bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
   {
     wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(m_peer));
 
-    // TODO ???
-    // This doesn't seem to be supported
+    DataBrowserItemState state = 0;
+    OSStatus err = ::GetDataBrowserItemState( 
+       MacDataViewListCtrlPtr->GetControlRef(), 
+       reinterpret_cast<DataBrowserItemID>(item.GetID()),
+       &state );
+    if ((err == 0) && (state & kDataBrowserContainerIsOpen))
+       return true;
   }
   return false;
 }

@@ -1026,6 +1026,9 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item: %s"), title );
+    
+    if (m_musicCtrl->IsExpanded( event.GetItem() ))
+    wxLogMessage(wxT("Item: %s is expanded"), title );
 }
 
 void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
