@@ -654,7 +654,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     for ( size_t n = 0; n < count; n++ )
     {
         if ( gs_regClassesInfo[n].basename == name )
-            return gs_regClassesInfo[n].regname;
+            return gs_regClassesInfo[n].regname.c_str();
     }
 
     // we need to register this class
@@ -696,7 +696,7 @@ const wxChar *wxApp::GetRegisteredClassName(const wxChar *name,
     {
         wxLogLastError(wxString::Format(wxT("RegisterClass(%s)"),
                        regClass.regname));
-        ::UnregisterClass(regClass.regname, wxhInstance);
+        ::UnregisterClass(regClass.regname.c_str(), wxhInstance);
         return NULL;
     }
 
@@ -728,13 +728,13 @@ void wxApp::UnregisterWindowClasses()
     for ( size_t n = 0; n < count; n++ )
     {
         const ClassRegInfo& regClass = gs_regClassesInfo[n];
-        if ( !::UnregisterClass(regClass.regname, wxhInstance) )
+        if ( !::UnregisterClass(regClass.regname.c_str(), wxhInstance) )
         {
             wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
                            regClass.regname));
         }
 
-        if ( !::UnregisterClass(regClass.regnameNR, wxhInstance) )
+        if ( !::UnregisterClass(regClass.regnameNR.c_str(), wxhInstance) )
         {
             wxLogLastError(wxString::Format(wxT("UnregisterClass(%s)"),
                            regClass.regnameNR));

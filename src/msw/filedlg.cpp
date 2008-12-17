@@ -494,7 +494,7 @@ int wxFileDialog::ShowModal()
 
     //=== Setting defaultFileName >>=========================================
 
-    wxStrlcpy(fileNameBuffer, m_fileName, WXSIZEOF(fileNameBuffer));
+    wxStrlcpy(fileNameBuffer, m_fileName.c_str(), WXSIZEOF(fileNameBuffer));
 
     of.lpstrFile = fileNameBuffer;  // holds returned filename
     of.nMaxFile  = wxMAXPATH;

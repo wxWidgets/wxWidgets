@@ -218,7 +218,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 
             if ( !host.empty() )
             {
-                wxStrlcpy(buf, host, maxSize);
+                wxStrlcpy(buf, host.c_str(), maxSize);
 
                 return true;
             }
