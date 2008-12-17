@@ -1354,7 +1354,7 @@ void wxScrollHelper::HandleOnChildFocus(wxChildFocusEvent& event)
         // scrolled into view
         return; 
 
-    wxSize view(m_targetWindow->GetClientSize());
+    const wxRect viewRect(m_targetWindow->GetClientRect());
 
     // For composite controls such as wxComboCtrl we should try to fit the
     // entire control inside the visible area of the target window, not just
@@ -1369,20 +1369,39 @@ void wxScrollHelper::HandleOnChildFocus(wxChildFocusEvent& event)
     {
         wxWindow *parent=win->GetParent();
         wxSize parent_size=parent->GetSize();
-        if (parent_size.GetWidth() <= view.GetWidth() &&
-            parent_size.GetHeight() <= view.GetHeight())
+        if (parent_size.GetWidth() <= viewRect.GetWidth() &&
+            parent_size.GetHeight() <= viewRect.GetHeight())
             // make the immediate parent visible instead of the focused control
             win=parent; 
     }
 
-    // if the child is not fully visible, try to scroll it into view:
+    // make win position relative to the m_targetWindow viewing area instead of
+    // its parent
+    const wxRect
+        winRect(m_targetWindow->ScreenToClient(win->GetScreenPosition()),
+                win->GetSize());
+
+    // check if it's fully visible
+    if ( viewRect.Contains(winRect) )
+    {
+        // it is, nothing to do
+        return;
+    }
+
+    // check if we can make it fully visible: this is only possible if it's not
+    // larger than our view area
+    if ( winRect.GetWidth() > viewRect.GetWidth() ||
+            winRect.GetHeight() > viewRect.GetHeight() )
+    {
+        // we can't make it fit so avoid scrolling it at all, this is only
+        // going to be confusing and not helpful
+        return;
+    }
+
+
+    // do make the window fit inside the view area by scrolling to it
     int stepx, stepy;
     GetScrollPixelsPerUnit(&stepx, &stepy);
-
-    // 'win' position coordinates are relative to it's parent
-    // convert them so that they are relative to the m_targetWindow viewing area
-    wxRect winrect(m_targetWindow->ScreenToClient(win->GetScreenPosition()),
-                   win->GetSize());
 
     int startx, starty;
     GetViewStart(&startx, &starty);
@@ -1392,13 +1411,13 @@ void wxScrollHelper::HandleOnChildFocus(wxChildFocusEvent& event)
     {
         int diff = 0;
 
-        if ( winrect.GetTop() < 0 )
+        if ( winRect.GetTop() < 0 )
         {
-            diff = winrect.GetTop();
+            diff = winRect.GetTop();
         }
-        else if ( winrect.GetBottom() > view.y )
+        else if ( winRect.GetBottom() > viewRect.GetHeight() )
         {
-            diff = winrect.GetBottom() - view.y + 1;
+            diff = winRect.GetBottom() - viewRect.GetHeight() + 1;
             // round up to next scroll step if we can't get exact position,
             // so that the window is fully visible:
             diff += stepy - 1;
@@ -1412,13 +1431,13 @@ void wxScrollHelper::HandleOnChildFocus(wxChildFocusEvent& event)
     {
         int diff = 0;
 
-        if ( winrect.GetLeft() < 0 )
+        if ( winRect.GetLeft() < 0 )
         {
-            diff = winrect.GetLeft();
+            diff = winRect.GetLeft();
         }
-        else if ( winrect.GetRight() > view.x )
+        else if ( winRect.GetRight() > viewRect.GetWidth() )
         {
-            diff = winrect.GetRight() - view.x + 1;
+            diff = winRect.GetRight() - viewRect.GetWidth() + 1;
             // round up to next scroll step if we can't get exact position,
             // so that the window is fully visible:
             diff += stepx - 1;
