@@ -25,6 +25,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/button.h"
+    #include "wx/stattext.h"
     #include "wx/sizer.h"
 #endif // WX_PRECOMP
 
