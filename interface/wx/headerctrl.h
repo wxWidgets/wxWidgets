@@ -354,7 +354,7 @@ protected:
             The column index, between 0 and the value last passed to
             SetColumnCount().
      */
-    virtual wxHeaderColumnBase& GetColumn(unsigned int idx) = 0;
+    virtual const wxHeaderColumnBase& GetColumn(unsigned int idx) const = 0;
 
     /**
         Method called when the column visibility is changed by the user.
@@ -426,7 +426,7 @@ protected:
             {
             public:
             protected:
-                virtual wxHeaderColumnBase& GetColumn(unsigned int idx)
+                virtual wxHeaderColumnBase& GetColumn(unsigned int idx) const
                 {
                     return m_cols[idx];
                 }

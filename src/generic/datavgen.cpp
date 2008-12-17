@@ -91,7 +91,7 @@ public:
 protected:
     // implement/override wxHeaderCtrl functions by forwarding them to the main
     // control
-    virtual wxHeaderColumn& GetColumn(unsigned int idx)
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const
     {
         return *(GetOwner()->GetColumn(idx));
     }

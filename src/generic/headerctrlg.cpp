@@ -145,8 +145,6 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
 
 int wxHeaderCtrl::GetColStart(unsigned int idx) const
 {
-    wxHeaderCtrl * const self = const_cast<wxHeaderCtrl *>(this);
-
     int pos = m_scrollOffset;
     for ( unsigned n = 0; ; n++ )
     {
@@ -154,7 +152,7 @@ int wxHeaderCtrl::GetColStart(unsigned int idx) const
         if ( i == idx )
             break;
 
-        const wxHeaderColumn& col = self->GetColumn(i);
+        const wxHeaderColumn& col = GetColumn(i);
         if ( col.IsShown() )
             pos += col.GetWidth();
     }
@@ -166,19 +164,17 @@ int wxHeaderCtrl::GetColEnd(unsigned int idx) const
 {
     int x = GetColStart(idx);
 
-    return x + const_cast<wxHeaderCtrl *>(this)->GetColumn(idx).GetWidth();
+    return x + GetColumn(idx).GetWidth();
 }
 
 unsigned int wxHeaderCtrl::FindColumnAtPoint(int x, bool *onSeparator) const
 {
-    wxHeaderCtrl * const self = const_cast<wxHeaderCtrl *>(this);
-
     int pos = 0;
     const unsigned count = GetColumnCount();
     for ( unsigned n = 0; n < count; n++ )
     {
         const unsigned idx = m_colIndices[n];
-        const wxHeaderColumn& col = self->GetColumn(idx);
+        const wxHeaderColumn& col = GetColumn(idx);
         if ( col.IsHidden() )
             continue;
 

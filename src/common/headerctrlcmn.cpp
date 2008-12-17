@@ -366,7 +366,7 @@ void wxHeaderCtrlSimple::Init()
     m_sortKey = wxNO_COLUMN;
 }
 
-wxHeaderColumn& wxHeaderCtrlSimple::GetColumn(unsigned int idx)
+const wxHeaderColumn& wxHeaderCtrlSimple::GetColumn(unsigned int idx) const
 {
     return m_cols[idx];
 }

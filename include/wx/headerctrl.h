@@ -154,7 +154,7 @@ public:
 protected:
     // this method must be implemented by the derived classes to return the
     // information for the given column
-    virtual wxHeaderColumn& GetColumn(unsigned int idx) = 0;
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const = 0;
 
     // this method is called from the default EVT_HEADER_SEPARATOR_DCLICK
     // handler to update the fitting column width of the given column, it
@@ -311,7 +311,7 @@ public:
 
 protected:
     // implement/override base class methods
-    virtual wxHeaderColumn& GetColumn(unsigned int idx);
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const;
     virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle);
 
     // and define another one to be overridden in the derived classes: it

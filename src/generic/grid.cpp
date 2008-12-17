@@ -230,7 +230,7 @@ public:
     }
 
 protected:
-    virtual wxHeaderColumn& GetColumn(unsigned int idx)
+    virtual const wxHeaderColumn& GetColumn(unsigned int idx) const
     {
         return m_columns[idx];
     }
