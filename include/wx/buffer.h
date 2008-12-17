@@ -182,7 +182,7 @@ private:
     struct Data : public wxPrivate::UntypedBufferData
     {
         Data(CharType *str, Kind kind = Owned)
-            : UntypedBufferData(str, kind)
+            : wxPrivate::UntypedBufferData(str, kind)
         {
         }
 
