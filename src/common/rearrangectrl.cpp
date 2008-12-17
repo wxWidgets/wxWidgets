@@ -24,6 +24,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/button.h"
+    #include "wx/sizer.h"
 #endif // WX_PRECOMP
 
 #include "wx/rearrangectrl.h"
