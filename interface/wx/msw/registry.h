@@ -77,6 +77,11 @@ public:
     */
     wxRegKey(const wxString& strKey);
     /**
+        The constructor to set the full name of the key using one of the 
+        standard keys, that is, HKCR, HKCU, HKLM, HKUSR, HKPD, HKCC or HKDD.
+    */
+    wxRegKey(StdKey keyParent, const wxString& strKey);
+    /**
         The constructor to set the full name of the key under a previously created
         parent.
     */
@@ -87,8 +92,43 @@ public:
     */
     enum AccessMode
     {
-        Read,   ///< Read-only
-        Write   ///< Read and Write
+        Read, ///< Read-only
+        Write ///< Read and Write
+    };
+
+    /** 
+        The standard registry key enumerator.
+    */
+    enum StdKey
+    {
+    HKCR,  ///< HKEY_CLASSES_ROOT
+    HKCU,  ///< HKEY_CURRENT_USER
+    HKLM,  ///< HKEY_LOCAL_MACHINE
+    HKUSR, ///< HKEY_USERS
+    HKPD,  ///< HKEY_PERFORMANCE_DATA (Windows NT and 2K only)
+    HKCC,  ///< HKEY_CURRENT_CONFIG
+    HKDD,  ///< HKEY_DYN_DATA (Windows 95 and 98 only)
+    HKMAX
+    };
+
+    /**
+        The value type enumerator.
+    */
+    enum ValueType
+    {
+    Type_None,                ///< No value type
+    Type_String,              ///< Unicode null-terminated string
+    Type_Expand_String,       ///< Unicode null-terminated string
+                              ///< (with environment variable references)
+    Type_Binary,              ///< Free form binary
+    Type_Dword,               ///< 32-bit number
+    Type_Dword_little_endian, ///< 32-bit number (same as Type_Dword)
+    Type_Dword_big_endian,    ///< 32-bit number
+    Type_Link,                ///< Symbolic Link (Unicode)
+    Type_Multi_String,        ///< Multiple Unicode strings
+    Type_Resource_list,       ///< Resource list in the resource map
+    Type_Full_resource_descriptor,  ///< Resource list in the hardware description
+    Type_Resource_requirements_list ///< 
     };
 
     /**
@@ -96,6 +136,23 @@ public:
     */
     void Close();
 
+    /**
+        Copy the entire contents of the key recursively to another location
+        using the name.
+    */
+    bool Copy(const wxString& szNewName);
+    /**
+        Copy the entire contents of the key recursively to another location
+        using the key.
+    */
+    bool Copy(wxRegKey& keyDst);
+    
+    /**
+        Copy the value to another key, possibly changing its name. By default
+        it will remain the same.
+    */
+    bool CopyValue(const wxString& szValue, wxRegKey& keyDst,    
+                  const wxString& szNewName = wxEmptyString);
     /**
         Creates the key. Will fail if the key already exists and @a bOkIfExists is
         @false.
@@ -122,6 +179,18 @@ public:
     */
     bool Exists() const;
 
+    /**
+        Write the contents of this key and all its subkeys to the given file.
+        (The file will not be overwritten; it's an error if it already exists.)
+        Note that we export the key in REGEDIT4 format, not RegSaveKey() binary
+        format nor the newer REGEDIT5.
+    */
+    bool Export(const wxString& filename) const;
+    /**
+        Write the contents of this key and all its subkeys to the opened stream.
+    */
+    bool Export(wxOutputStream& ostr) const;
+    
     /**
         Gets the first key.
     */
@@ -163,6 +232,11 @@ public:
     bool GetNextValue(wxString& strValueName, long& lIndex) const;
 
     /**
+        Gets the value type.
+    */
+    ValueType GetValueType(const wxString& szValue) const;
+    
+    /**
         Returns @true if given subkey exists.
     */
     bool HasSubKey(const wxString& szKey) const;
@@ -188,6 +262,11 @@ public:
     bool IsEmpty() const;
 
     /**
+        Returns true if the value contains a number.
+    */
+    bool IsNumericValue(const wxString& szValue) const;
+
+    /**
         Returns @true if the key is opened.
     */
     bool IsOpened() const;
@@ -200,14 +279,29 @@ public:
     bool Open(AccessMode mode = Write);
 
     /**
-        Retrieves the string value.
+        Return the default value of the key.
     */
-    bool QueryValue(const wxString& szValue, wxString& strValue) const;
+    wxString QueryDefaultValue() const;
+
+    /**
+        Retrieves the raw string value.
+    */
+    bool QueryRawValue(const wxString& szValue, wxString& strValue) const;
+
+    /**
+        Retrieves the raw or expanded string value.
+    */
+    bool QueryValue(const wxString& szValue, wxString& strValue, bool raw) const;
 
     /**
         Retrieves the numeric value.
     */
-    const bool QueryValue(const wxString& szValue, long* plValue) const;
+    bool QueryValue(const wxString& szValue, long* plValue) const;
+
+    /**
+        Retrieves the binary structure.
+    */
+    bool QueryValue(const wxString& szValue, wxMemoryBuffer& buf) const;
 
     /**
         Renames the key.
@@ -220,6 +314,30 @@ public:
     bool RenameValue(const wxString& szValueOld,
                      const wxString& szValueNew);
 
+    /**
+        Preallocate some memory for the name. For wxRegConfig usage only.
+    */
+    void ReserveMemoryForName(size_t bytes); 
+
+    /**
+        Set or change the HKEY handle.
+    */
+    void SetHkey(WXHKEY hKey);
+    
+    /**
+        Set the full key name. The name is absolute. It should start with
+        HKEY_xxx.
+    */
+    void SetName(const wxString& strKey);
+    /**
+        Set the name relative to the parent key
+    */
+    void SetName(StdKey keyParent, const wxString& strKey);
+    /**
+        Set the name relative to the parent key
+    */
+    void SetName(const wxRegKey& keyParent, const wxString& strKey);
+    
     /**
         Sets the given @a szValue which must be numeric.
         If the value doesn't exist, it is created.
