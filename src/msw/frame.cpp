@@ -434,19 +434,23 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
         SetToolBar(toolBar);
         menubar->SetToolBar(toolBar);
     }
-    // Now adjust size for menu bar
-    int menuHeight = 26;
 
-    //When the main window is created using CW_USEDEFAULT the height of the
-    // is created is not taken into account). So we resize the window after
-    // if a menubar is present
+    // When the main window is created using CW_USEDEFAULT the height of the
+    // menubar is not taken into account, so we resize it afterwards if a
+    // menubar is present
+    HWND hwndMenuBar = SHFindMenuBar(GetHwnd());
+    if ( hwndMenuBar )
     {
+        RECT mbRect;
+        ::GetWindowRect(hwndMenuBar, &mbRect);
+        const int menuHeight = mbRect.bottom - mbRect.top;
+
         RECT rc;
-        ::GetWindowRect((HWND) GetHWND(), &rc);
+        ::GetWindowRect(GetHwnd(), &rc);
         // adjust for menu / titlebar height
         rc.bottom -= (2*menuHeight-1);
 
-        ::MoveWindow((HWND) GetHWND(), rc.left, rc.top, rc.right, rc.bottom, FALSE);
+        ::MoveWindow(Gethwnd(), rc.left, rc.top, rc.right, rc.bottom, FALSE);
     }
 #endif
 
