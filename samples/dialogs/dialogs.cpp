@@ -877,8 +877,7 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString info;
-        MyExtraPanel *extra_panel
-            = static_cast<MyExtraPanel*>(dialog.GetExtraControl());
+        wxWindow * const extra = dialog.GetExtraControl();
         info.Printf(_T("Full file name: %s\n")
                     _T("Path: %s\n")
                     _T("Name: %s\n")
@@ -886,7 +885,8 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     dialog.GetPath().c_str(),
                     dialog.GetDirectory().c_str(),
                     dialog.GetFilename().c_str(),
-                    extra_panel->GetInfo().c_str());
+                    extra ? static_cast<MyExtraPanel*>(extra)->GetInfo()
+                          : wxString("None"));
         wxMessageDialog dialog2(this, info, _T("Selected file"));
         dialog2.ShowModal();
     }
