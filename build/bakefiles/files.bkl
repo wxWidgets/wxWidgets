@@ -778,7 +778,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/dirctrlg.h
     wx/generic/dragimgg.h
     wx/generic/filectrlg.h
-    wx/generic/headerctrl.h
+    wx/generic/headerctrlg.h
     wx/generic/logg.h
     wx/generic/msgdlgg.h
     wx/generic/numdlgg.h
