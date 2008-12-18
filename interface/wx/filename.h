@@ -148,6 +148,7 @@ wxULongLong wxInvalidSize;
     @li wxFileName::AssignCwd()
     @li wxFileName::AssignDir()
     @li wxFileName::AssignHomeDir()
+    @li wxFileName::AssignTempFileName()
     @li wxFileName::DirName()
     @li wxFileName::FileName()
     @li wxFileName::operator=()
@@ -334,17 +335,32 @@ public:
     */
     void AssignHomeDir();
 
-    //@{
     /**
         The function calls CreateTempFileName() to create a temporary file
         and sets this object to the name of the file.
 
         If a temporary file couldn't be created, the object is put into
-        an invalid state (see IsOk())
+        an invalid state (see IsOk()).
+    */
+    void AssignTempFileName(const wxString& prefix);
+
+    /**
+        The function calls CreateTempFileName() to create a temporary
+        file name and open @a fileTemp with it.
+
+        If the file couldn't be opened, the object is put into
+        an invalid state (see IsOk()).
     */
     void AssignTempFileName(const wxString& prefix, wxFile* fileTemp);
+
+    /**
+        The function calls CreateTempFileName() to create a temporary
+        file name and open @a fileTemp with it.
+
+        If the file couldn't be opened, the object is put into
+        an invalid state (see IsOk()).
+    */
     void AssignTempFileName(const wxString& prefix, wxFFile* fileTemp);
-    //@}
 
     /**
         Reset all components to default, uninitialized state.
