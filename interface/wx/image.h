@@ -533,13 +533,6 @@ public:
     bool ConvertAlphaToMask(unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
 
     /**
-        @deprecated
-        Use the equivalent @ref wxBitmap::wxBitmap "wxBitmap constructor"
-        (which takes wxImage and depth as its arguments) instead.
-    */
-    wxBitmap ConvertToBitmap() const;
-
-    /**
         Returns a greyscale version of the image.
 
         The returned image uses the luminance component of the original to
