@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 3 December 2008                                                     *
+# Date : 19 December 2008                                                    *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -211,7 +211,8 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		pickerbase.obj,\
 		listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj,\
-		wrapsizer.obj
+		wrapsizer.obj,headerctrlcmn.obj,headercolcmn.obj,\
+		rearrangectrl.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -642,3 +643,6 @@ windowid.obj : windowid.cpp
 calctrlcmn.obj : calctrlcmn.cpp
 sstream.obj : sstream.cpp
 wrapsizer.obj : wrapsizer.cpp
+headerctrlcmn.obj : headerctrlcmn.cpp
+headercolcmn.obj : headercolcmn.cpp
+rearrangectrl.obj : rearrangectrl.cpp
