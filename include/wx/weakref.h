@@ -14,15 +14,17 @@
 #include "wx/tracker.h"
 
 
-// Some compilers (VC6, Borland, otehrs?) have problem with template specialization.
+// Some compilers (VC6, Borland, g++ < 3.3) have problem with template specialization.
 // However, this is only used for optimization purposes (a smaller wxWeakRef pointer)
-// (and the corner case of wxWeakRef<wxObject>). So for those compilers, we can fall 
-// back to the non-optimal case, where we use a the same type of weak ref (static one) 
+// (and the corner case of wxWeakRef<wxObject>). So for those compilers, we can fall
+// back to the non-optimal case, where we use a the same type of weak ref (static one)
 // in all cases. See defs.h for various setting these defines depending on compiler.
 
-#if !defined(HAVE_PARTIAL_SPECIALIZATION) || !defined(HAVE_TEMPLATE_OVERLOAD_RESOLUTION)
-    #define USE_ONLY_STATIC_WEAKREF 
-#endif 
+#if !defined(HAVE_PARTIAL_SPECIALIZATION) || \
+    !defined(HAVE_TEMPLATE_OVERLOAD_RESOLUTION) || \
+    (defined(__GNUC__) && !wxCHECK_GCC_VERSION(3, 3))
+    #define USE_ONLY_STATIC_WEAKREF
+#endif
 
 
 #ifndef USE_ONLY_STATIC_WEAKREF
@@ -215,13 +217,13 @@ public:
         Assign(pobj);
     }
 
-    // We need this copy ctor, since otherwise a default compiler (binary) copy 
+    // We need this copy ctor, since otherwise a default compiler (binary) copy
     // happens (if embedded as an object member).
     wxWeakRef(const wxWeakRef<T>& wr)
     {
         Assign(wr.get());
     }
-    
+
     template <class TDerived>
     wxWeakRef<T>& operator=(TDerived* pobj)
     {
@@ -265,18 +267,18 @@ public:
     {
         Assign(wr.get());
     }
-    
+
     virtual ~wxWeakRefDynamic() { Release(); }
 
     // Smart pointer functions
     T& operator*() const    { wxASSERT(m_pobj); return *m_pobj; }
     T* operator->() const   { wxASSERT(m_pobj); return m_pobj; }
-    
+
     T* get() const          { return m_pobj; }
     operator T* () const    { return m_pobj; }
 
     T* operator = (T* pobj) { Assign(pobj); return m_pobj; }
-    
+
     // Assign from another weak ref, point to same object
     T* operator = (const wxWeakRef<T> &wr) { Assign( wr.get() ); return m_pobj; }
 
