@@ -13,7 +13,69 @@
 #ifndef _WX_TOGGLEBUTTON_H_
 #define _WX_TOGGLEBUTTON_H_
 
+#include "wx/bitmap.h"
+
 extern WXDLLIMPEXP_DATA_CORE(const char) wxCheckBoxNameStr[];
+
+//-----------------------------------------------------------------------------
+// wxBitmapToggleButton
+//-----------------------------------------------------------------------------
+
+
+class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButtonBase
+{
+public:
+    // construction/destruction
+    wxBitmapToggleButton() { Init(); }
+    wxBitmapToggleButton(wxWindow *parent,
+                   wxWindowID id,
+                   const wxBitmap& label,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = 0,
+                   const wxValidator& validator = wxDefaultValidator,
+                   const wxString& name = wxCheckBoxNameStr)
+    {
+        Create(parent, id, label, pos, size, style, validator, name);
+    }
+
+    // Create the control
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxBitmap& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize, long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxCheckBoxNameStr);
+
+    // Get/set the value
+    void SetValue(bool state);
+    bool GetValue() const;
+
+    // Set the label
+    virtual void SetLabel(const wxString& label) { wxControl::SetLabel(label); }
+    virtual void SetLabel(const wxBitmap& label);
+    bool Enable(bool enable = TRUE);
+
+protected:
+    void Init();
+    
+    wxBitmap  m_bitmap;
+    wxBitmap  m_disabledBitmap;
+    bool      m_capturing;
+    bool      m_depressed,m_oldValue;
+    
+    void OnPaint(wxPaintEvent &event);
+    void OnMouse(wxMouseEvent &event);
+    void OnChar(wxKeyEvent &event);
+    void OnSize(wxSizeEvent &event);
+
+    virtual wxSize DoGetBestSize() const;
+
+private:
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxBitmapToggleButton)
+};
 
 // Checkbox item (single checkbox)
 class WXDLLIMPEXP_CORE wxToggleButton : public wxToggleButtonBase
