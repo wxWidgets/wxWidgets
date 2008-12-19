@@ -91,12 +91,12 @@ Related Overviews: @ref overview_sizer
 These are the classes relevant to sizer-based layout:
 
 @li wxSizer: Abstract base class
+@li wxBoxSizer: A sizer for laying out windows in a row or column
 @li wxGridSizer: A sizer for laying out windows in a grid with all fields
     having the same size
 @li wxFlexGridSizer: A sizer for laying out windows in a flexible grid
 @li wxGridBagSizer: Another grid sizer that lets you specify the cell an item
     is in, and items can span rows and/or columns.
-@li wxBoxSizer: A sizer for laying out windows in a row or column
 @li wxStaticBoxSizer: Same as wxBoxSizer, but with a surrounding static box
 @li wxWrapSizer: A sizer which wraps its child controls as size permits
 
@@ -156,6 +156,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxDataViewCtrl: A control to display tabular or tree like data
 @li wxDataViewTreeCtrl: A specialized wxDataViewCtrl with a wxTreeCtrl-like API
 @li wxEditableListBox: A listbox with editable items.
+@li wxFileCtrl: A control for selecting a file. Useful for custom file dialogs.
 @li wxGauge: A control to represent a varying quantity, such as time remaining
 @li wxGenericDirCtrl: A control for displaying a directory tree
 @li wxGrid: A control to display spread-sheet like data in tabular form
@@ -174,6 +175,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxRadioBox: A group of radio buttons
 @li wxRadioButton: A round button to be used with others in a mutually
     exclusive way
+@li wxRearrangeCtrl: A control allowing the user to rearrange a list of items.
 @li wxRichTextCtrl: Generic rich text editing control
 @li wxSimpleHtmlListBox: A listbox showing HTML content
 @li wxStaticBox: A static, or group box for visually grouping related controls
@@ -280,19 +282,20 @@ Related Overviews: @ref overview_cmndlg
 @li wxDirDialog: Directory selector dialog
 @li wxFileDialog: File selector dialog
 @li wxFindReplaceDialog: Text search/replace dialog
-@li wxMultiChoiceDialog: Dialog to get one or more selections from a list
-@li wxSingleChoiceDialog: Dialog to get a single selection from a list and
-    return the string
-@li wxTextEntryDialog: Dialog to get a single line of text from the user
-@li wxPasswordEntryDialog: Dialog to get a password from the user
 @li wxFontDialog: Font chooser dialog
+@li wxMessageDialog: Simple message box dialog
+@li wxMultiChoiceDialog: Dialog to get one or more selections from a list
 @li wxPageSetupDialog: Standard page setup dialog
+@li wxPasswordEntryDialog: Dialog to get a password from the user
 @li wxPrintDialog: Standard print dialog
 @li wxProgressDialog: Progress indication dialog
-@li wxMessageDialog: Simple message box dialog
-@li wxSymbolPickerDialog: Symbol selector dialog
+@li wxRearrangeDialog: Dialog allowing the user to rearrange a list of items.
 @li wxRichTextFormattingDialog: A dialog for formatting the content of a
     wxRichTextCtrl
+@li wxSingleChoiceDialog: Dialog to get a single selection from a list and
+    return the string
+@li wxSymbolPickerDialog: Symbol selector dialog
+@li wxTextEntryDialog: Dialog to get a single line of text from the user
 @li wxWizard: A wizard dialog.
 
 
