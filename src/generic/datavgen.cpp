@@ -3038,6 +3038,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             // select single line
             SelectAllRows( false );
             SelectRow( m_lineSelectSingleOnUp, true );
+            SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
         }
 
         //Process the event of user clicking the expander
