@@ -3659,6 +3659,8 @@ void wxDataViewCtrl::EnsureVisible( int row, int column )
 
 void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataViewColumn * column )
 {
+    wxDataViewCtrlBase::EnsureVisible( item, column );
+  
     m_clientArea->RecalculateDisplay();
 
     int row = m_clientArea->GetRowByItem(item);

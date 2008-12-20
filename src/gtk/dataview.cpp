@@ -4187,8 +4187,10 @@ void wxDataViewCtrl::UnselectAll()
 }
 
 void wxDataViewCtrl::EnsureVisible(const wxDataViewItem& item,
-                                   const wxDataViewColumn *WXUNUSED(column))
+                                   const wxDataViewColumn *column)
 {
+    wxDataViewCtrlBase::EnsureVisible(item,column);
+
     GtkTreeIter iter;
     iter.user_data = (gpointer) item.GetID();
     GtkTreePath *path = m_internal->get_path( &iter );

@@ -1183,6 +1183,8 @@ void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 
 void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
 {
+  wxDataViewCtrlBase::EnsureVisible(item,columnPtr);
+
   if (item.IsOk())
   {
     DataBrowserPropertyID propertyID;

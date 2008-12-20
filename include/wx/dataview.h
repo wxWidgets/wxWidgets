@@ -26,7 +26,7 @@
 #include "wx/weakref.h"
 
 #if !(defined(__WXGTK20__) || defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
-//#if !(defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
+// #if !(defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_DATAVIEWCTRL
 #endif
 
@@ -717,7 +717,7 @@ public:
     virtual bool IsExpanded( const wxDataViewItem & item ) const = 0;
 
     virtual void EnsureVisible( const wxDataViewItem & item,
-                                const wxDataViewColumn *column = NULL ) = 0;
+                                const wxDataViewColumn *column = NULL );
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
 
@@ -879,7 +879,7 @@ private:
     long    m_min,m_max;
 };
 
-#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxMAC)
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXMAC__)
 
 // -------------------------------------
 // wxDataViewChoiceRenderer

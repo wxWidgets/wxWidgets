@@ -22,6 +22,7 @@
 #include "wx/choice.h"
 
 #include "wx/weakref.h"
+#include "wx/vector.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
@@ -895,6 +896,30 @@ const wxDataViewModel* wxDataViewCtrlBase::GetModel() const
     return m_model;
 }
 
+void wxDataViewCtrlBase::EnsureVisible( const wxDataViewItem & item,
+                                        const wxDataViewColumn *WXUNUSED(column) )
+{
+    if (!m_model) return;
+
+    wxVector<wxDataViewItem> parentChain;
+    
+    // at first we get all the parents of the selected item
+    wxDataViewItem parent = m_model->GetParent(item);
+    while (parent.IsOk())
+    {
+        parentChain.push_back(parent);
+        parent = m_model->GetParent(parent);
+    }
+    
+    // then we expand the parents, starting at the root
+    while (!parentChain.empty())
+    {
+         Expand(parentChain.back());
+         parentChain.pop_back();
+    }
+}
+
+
 wxDataViewColumn *
 wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
@@ -1275,7 +1300,7 @@ bool wxDataViewSpinRenderer::GetValue( wxVariant &value ) const
 // wxDataViewChoiceRenderer
 // -------------------------------------
 
-#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(wxMAC)
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXMAC__)
 
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString& choices, wxDataViewCellMode mode, int alignment ) :
    wxDataViewCustomRenderer(wxT("string"), mode, alignment )
