@@ -895,20 +895,19 @@ how tooltips can be centrally disabled and their latency controlled.
 @section page_samples_thread Thread Sample
 
 This sample demonstrates use of threads in connection with GUI programs.
+
 There are two fundamentally different ways to use threads in GUI programs and
 either way has to take care of the fact that the GUI library itself usually
 is not multi-threading safe, i.e. that it might crash if two threads try to
-access the GUI class simultaneously. One way to prevent that is have a normal
-GUI program in the main thread and some worker threads which work in the
-background. In order to make communication between the main thread and the
-worker threads possible, wxWidgets offers the wxPostEvent
-function and this sample makes use of this function.
+access the GUI class simultaneously.
 
-The other way to use a so called Mutex (such as those offered in the wxMutex
-class) that prevent threads from accessing the GUI classes as long as any other
-thread accesses them. For this, wxWidgets has the wxMutexGuiEnter
-and wxMutexGuiLeave functions, both of which are
-used and tested in the sample as well.
+One way to prevent that is have a normal GUI program in the main thread and some
+worker threads which work in the background. In order to make communication between
+the main thread and the worker threads possible, wxWidgets offers the ::wxQueueEvent
+function and this sample demonstrates its usage.
+
+The other way is to use a ::wxMutexGuiEnter and ::wxMutexGuiLeave functions, but
+this is not currently shown in the sample.
 
 See also @ref overview_thread and wxThread.
 

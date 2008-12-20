@@ -305,14 +305,14 @@ void *MyWorkerThread::Entry()
         event.SetInt( m_count );
 
         // send in a thread-safe way
-        wxPostEvent( m_frame, event );
+        wxQueueEvent( m_frame, new wxCommandEvent(event) );
 
         wxMilliSleep(200);
     }
 
     wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
     event.SetInt(-1); // that's all
-    wxPostEvent( m_frame, event );
+    wxQueueEvent( m_frame, new wxCommandEvent(event) );
 
     return NULL;
 }
@@ -416,7 +416,7 @@ bool MyApp::OnInit()
     menuBar->Append(menuHelp, _T("&Help"));
 
     frame->SetMenuBar(menuBar);
-    
+
     // Show the frame
     frame->Show(true);
 
@@ -431,7 +431,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
        : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     SetIcon(wxIcon(sample_xpm));
-    
+
     m_nRunning = m_nCount = 0;
 
     m_dlgProgress = (wxProgressDialog *)NULL;
