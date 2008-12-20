@@ -453,8 +453,15 @@ void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
 {
     wxCHECK_RET( p, wxT("invalid property id") );
 
-    if ( p->GetBaseName().Len() ) m_dictName.erase( p->GetBaseName() );
-    if ( newName.Len() ) m_dictName[newName] = (void*) p;
+    wxPGProperty* parent = p->GetParent();
+
+    if ( parent->IsCategory() || parent->IsRoot() )
+    {
+        if ( p->GetBaseName().length() )
+            m_dictName.erase( p->GetBaseName() );
+        if ( newName.length() )
+            m_dictName[newName] = (void*) p;
+    }
 
     p->DoSetName(newName);
 }
@@ -1676,7 +1683,8 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
     }
 
     // Only add name to hashmap if parent is root or category
-    if ( (parent->IsCategory() || parent->IsRoot()) && property->m_name.length() )
+    if ( property->m_name.length() &&
+        (parent->IsCategory() || parent->IsRoot()) )
         m_dictName[property->m_name] = (void*) property;
 
     VirtualHeightChanged();
@@ -1771,7 +1779,9 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         }
     }
 
-    if ( item->GetBaseName().Len() ) m_dictName.erase(item->GetBaseName());
+    if ( item->GetBaseName().length() && 
+         (parent->IsCategory() || parent->IsRoot()) )
+        m_dictName.erase(item->GetBaseName());
 
     // We can actually delete it now
     if ( doDelete )
