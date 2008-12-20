@@ -972,6 +972,10 @@ public:
     /**
         Returns the number of system CPUs or -1 if the value is unknown.
 
+        For multi-core systems the returned value is typically the total number
+        of @e cores, since the OS usually abstract a single N-core CPU
+        as N different cores.
+
         @see SetConcurrency()
     */
     static int GetCPUCount();
@@ -1634,7 +1638,7 @@ bool wxIsMainThread();
         wxMutexGuiEnter();
 
         // Call GUI here:
-        my_window-DrawSomething();
+        my_window->DrawSomething();
 
         wxMutexGuiLeave();
     }
