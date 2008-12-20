@@ -1444,6 +1444,11 @@ public:
     }
 
     /**
+        Deletes children of the property.
+    */
+    void DeleteChildren();
+
+    /**
         Removes entry from property's wxPGChoices and editor control (if it is
         active).
 
@@ -2073,9 +2078,6 @@ public:
     /** Returns index of given child property. */
     int Index( const wxPGProperty* p ) const;
 
-    /** Deletes all sub-properties. */
-    void Empty();
-
     // Puts correct indexes to children
     void FixIndicesOfChildren( unsigned int starthere = 0 );
 
@@ -2204,6 +2206,9 @@ protected:
                                   wxPGHashMapS2S* childResults = NULL ) const;
 
     void DoSetName(const wxString& str) { m_name = str; }
+
+    /** Deletes all sub-properties. */
+    void Empty();
 
     void InitAfterAdded( wxPropertyGridPageState* pageState,
                          wxPropertyGrid* propgrid );

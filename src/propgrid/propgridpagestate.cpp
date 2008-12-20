@@ -245,17 +245,17 @@ void wxPropertyGridPageState::InitNonCatMode()
 
     if ( m_properties->GetChildCount() )
     {
-        // Copy items.
-        wxPropertyGridIterator it( this, wxPG_ITERATE_DEFAULT|wxPG_ITERATE_CATEGORIES );
+        //
+        // Prepare m_abcArray
+        wxPropertyGridIterator it( this, wxPG_ITERATE_PROPERTIES );
 
         for ( ; !it.AtEnd(); it.Next() )
         {
             wxPGProperty* p = it.GetProperty();
             wxPGProperty* parent = p->GetParent();
-            if ( p->HasFlag(wxPG_PROP_MISC_PARENT) &&
-                ( parent == m_properties || (parent->IsCategory() || parent->IsRoot()) ) )
+            if ( parent->IsCategory() || parent->IsRoot() )
             {
-                m_abcArray->AddChild2( p );
+                m_abcArray->AddChild2(p);
                 p->m_parent = &m_regularArray;
             }
         }
@@ -1698,57 +1698,41 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     wxCHECK_RET( item != &m_regularArray && item != m_abcArray,
         wxT("wxPropertyGrid: Do not attempt to remove the root item.") );
 
-    size_t i;
     unsigned int indinparent = item->GetIndexInParent();
 
     wxPGProperty* pwc = (wxPGProperty*)item;
+    wxPGProperty* parent = item->GetParent();
 
-    wxCHECK_RET( !item->GetParent()->HasFlag(wxPG_PROP_AGGREGATE),
+    wxCHECK_RET( !parent->HasFlag(wxPG_PROP_AGGREGATE),
         wxT("wxPropertyGrid: Do not attempt to remove sub-properties.") );
 
-    if ( item->IsCategory() )
+    // Delete children
+    if ( item->GetChildCount() && !item->HasFlag(wxPG_PROP_AGGREGATE) )
     {
         // deleting a category
-
-        // erase category entries from the hash table
-        for ( i=0; i<pwc->GetChildCount(); i++ )
+        if ( item->IsCategory() )
         {
-            wxPGProperty* sp = pwc->Item( i );
-            if ( sp->GetBaseName().Len() ) m_dictName.erase(sp->GetBaseName());
+            if ( pwc == m_currentCategory )
+                m_currentCategory = (wxPropertyCategory*) NULL;
         }
 
-        if ( pwc == m_currentCategory )
-            m_currentCategory = (wxPropertyCategory*) NULL;
-
-        if ( m_abcArray )
-        {
-            // Remove children from non-categorized array.
-            for ( i=0; i<pwc->GetChildCount(); i++ )
-            {
-                wxPGProperty * p = pwc->Item( i );
-                wxASSERT( p != NULL );
-                if ( !p->IsCategory() )
-                    m_abcArray->RemoveChild(p);
-            }
-
-            if ( IsInNonCatMode() )
-                m_abcArray->FixIndicesOfChildren();
-        }
+        item->DeleteChildren();
     }
 
     if ( !IsInNonCatMode() )
     {
         // categorized mode - non-categorized array
 
-        // Remove from non-cat array, but only if parent is in it
-        if ( !item->IsCategory() && item->GetParent()->IsCategory() )
+        // Remove from non-cat array
+        if ( !item->IsCategory() &&
+             (parent->IsCategory() || parent->IsRoot()) )
         {
             if ( m_abcArray )
                 m_abcArray->RemoveChild(item);
         }
 
         // categorized mode - categorized array
-        wxArrayPGProperty& parentsChildren = item->m_parent->m_children;
+        wxArrayPGProperty& parentsChildren = parent->m_children;
         parentsChildren.erase( parentsChildren.begin() + indinparent );
         item->m_parent->FixIndicesOfChildren();
     }

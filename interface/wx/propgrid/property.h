@@ -908,6 +908,11 @@ public:
     bool AreChildrenComponents() const;
 
     /**
+        Deletes children of the property.
+    */
+    void DeleteChildren();
+
+    /**
         Removes entry from property's wxPGChoices and editor control (if it is active).
 
         If selected item is deleted, then the value is set to unspecified.

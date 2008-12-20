@@ -2276,6 +2276,17 @@ void wxPGProperty::Empty()
     m_children.clear();
 }
 
+void wxPGProperty::DeleteChildren()
+{
+    wxPropertyGridPageState* state = m_parentState;
+
+    while ( GetChildCount() )
+    {
+        wxPGProperty* child = Item(GetChildCount()-1);
+        state->DoDelete(child, true);
+    }
+}
+
 void wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
                                  int WXUNUSED(childIndex),
                                  wxVariant& WXUNUSED(childValue) ) const
