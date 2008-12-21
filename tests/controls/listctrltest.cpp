@@ -40,11 +40,13 @@ private:
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
         CPPUNIT_TEST( ColumnsOrder );
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
+        CPPUNIT_TEST( ItemRect );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
     void ColumnsOrder();
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
+    void ItemRect();
 
     wxListCtrl *m_list;
 
@@ -64,6 +66,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ListCtrlTestCase, "ListCtrlTestCase" );
 void ListCtrlTestCase::setUp()
 {
     m_list = new wxListCtrl(wxTheApp->GetTopWindow());
+    m_list->SetWindowStyle(wxLC_REPORT);
 }
 
 void ListCtrlTestCase::tearDown()
@@ -139,6 +142,35 @@ void ListCtrlTestCase::ColumnsOrder()
     li.SetColumn(2);
     CPPUNIT_ASSERT( m_list->GetItem(li) );
     CPPUNIT_ASSERT_EQUAL( "second in second", li.GetText() );
+}
+
+void ListCtrlTestCase::ItemRect()
+{
+    // set up for the test
+    m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
+    m_list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 50);
+    m_list->InsertColumn(2, "Column 2", wxLIST_FORMAT_LEFT, 40);
+
+    m_list->InsertItem(0, "Item 0");
+    m_list->SetItem(0, 1, "first column");
+    m_list->SetItem(0, 1, "second column");
+
+    // do test
+    wxRect r;
+    CPPUNIT_ASSERT( !m_list->GetItemRect(1, r) );
+    CPPUNIT_ASSERT( m_list->GetItemRect(0, r) );
+    CPPUNIT_ASSERT_EQUAL( 150, r.GetWidth() );
+
+    CPPUNIT_ASSERT( m_list->GetSubItemRect(0, 0, r) );
+    CPPUNIT_ASSERT_EQUAL( 60, r.GetWidth() );
+
+    CPPUNIT_ASSERT( m_list->GetSubItemRect(0, 1, r) );
+    CPPUNIT_ASSERT_EQUAL( 50, r.GetWidth() );
+
+    CPPUNIT_ASSERT( m_list->GetSubItemRect(0, 2, r) );
+    CPPUNIT_ASSERT_EQUAL( 40, r.GetWidth() );
+
+    CPPUNIT_ASSERT( !m_list->GetSubItemRect(0, 3, r) );
 }
 
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER

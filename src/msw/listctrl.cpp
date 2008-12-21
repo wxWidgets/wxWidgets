@@ -91,7 +91,9 @@ namespace
 // 4.3+
 //
 // this function does no error checking on item and subitem parameters, notice
-// that subitem is 0 for whole item or 1-based for the individual columns
+// that subitem 0 means the whole item so there is no way to retrieve the
+// rectangle of the first subitem using this function, in particular notice
+// that the index is *not* 1-based, in spite of what MSDN says
 inline bool
 wxGetListCtrlSubItemRect(HWND hwnd, int item, int subitem, int flags, RECT& rect)
 {
@@ -1151,19 +1153,6 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
     return GetSubItemRect( item, wxLIST_GETSUBITEMRECT_WHOLEITEM, rect, code) ;
 }
 
-/*!
- * Retrieve coordinates and size of a specified subitem of a listview control.
- * This function only works if the listview control is in the report mode.
- *
- * @param item : Item number
- * @param subItem : Subitem or column number, use -1 for the whole row including
- *                  all columns or subitems
- * @param rect : A pointer to an allocated wxRect object
- * @param code : Specify the part of the subitem coordinates you need. Choices are
- *               wxLIST_RECT_BOUNDS, wxLIST_RECT_ICON, wxLIST_RECT_LABEL
- *
- * @return bool  : True if successful.
- */
 bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code) const
 {
     // ListView_GetSubItemRect() doesn't do subItem error checking and returns
@@ -1201,9 +1190,11 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
 
     wxCopyRECTToRect(rectWin, rect);
 
-    // for the first sub item, i.e. the main item itself, the returned rect is
-    // the whole line one, we need to truncate it at first column ourselves
-    rect.width = GetColumnWidth(0);
+    // there is no way to retrieve the first sub item bounding rectangle using
+    // wxGetListCtrlSubItemRect() as 0 means the whole item, so we need to
+    // truncate it at first column ourselves
+    if ( subItem == 0 )
+        rect.width = GetColumnWidth(0);
 
     return true;
 }
