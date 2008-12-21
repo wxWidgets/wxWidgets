@@ -944,18 +944,23 @@ bool wxShutdown(int WXUNUSED_IN_WINCE(flags))
             TOKEN_PRIVILEGES tkp;
 
             // Get the LUID for the shutdown privilege.
-            ::LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,
-                                   &tkp.Privileges[0].Luid);
+            bOK = ::LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,
+                                         &tkp.Privileges[0].Luid) != 0;
 
-            tkp.PrivilegeCount = 1;  // one privilege to set
-            tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+            if ( bOK )
+            {
+                tkp.PrivilegeCount = 1;  // one privilege to set
+                tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            // Get the shutdown privilege for this process.
-            ::AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
-                                    (PTOKEN_PRIVILEGES)NULL, 0);
+                // Get the shutdown privilege for this process.
+                ::AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
+                                        (PTOKEN_PRIVILEGES)NULL, 0);
 
-            // Cannot test the return value of AdjustTokenPrivileges.
-            bOK = ::GetLastError() == ERROR_SUCCESS;
+                // Cannot test the return value of AdjustTokenPrivileges.
+                bOK = ::GetLastError() == ERROR_SUCCESS;
+            }
+
+            ::CloseHandle(hToken);
         }
     }
 
