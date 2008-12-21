@@ -92,6 +92,17 @@ public:
     virtual int  OnRun();
     virtual int  OnExit();
 
+#ifdef __WXDEBUG__
+    virtual void OnAssertFailure(const wxChar *,
+                                 int,
+                                 const wxChar *,
+                                 const wxChar *,
+                                 const wxChar *)
+    {
+        throw TestAssertFailure();
+    }
+#endif // __WXDEBUG__
+
 private:
     void List(Test *test, const string& parent = "") const;
 

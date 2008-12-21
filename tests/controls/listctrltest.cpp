@@ -170,7 +170,7 @@ void ListCtrlTestCase::ItemRect()
     CPPUNIT_ASSERT( m_list->GetSubItemRect(0, 2, r) );
     CPPUNIT_ASSERT_EQUAL( 40, r.GetWidth() );
 
-    CPPUNIT_ASSERT( !m_list->GetSubItemRect(0, 3, r) );
+    WX_ASSERT_FAILS_WITH_ASSERT( m_list->GetSubItemRect(0, 3, r) );
 }
 
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
