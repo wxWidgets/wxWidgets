@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
+all: access animate artprov aui calendar caret clipboard collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -74,6 +74,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>caret.bat
 	call caret.bat
 	@del caret.bat
+	@echo cd clipboard >clipboard.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>clipboard.bat
+	call clipboard.bat
+	@del clipboard.bat
 	@echo cd collpane >collpane.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>collpane.bat
 	call collpane.bat
@@ -382,6 +386,12 @@ caret:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>caret.bat
 	call caret.bat
 	@del caret.bat
+
+clipboard: 
+	@echo cd clipboard >clipboard.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>clipboard.bat
+	call clipboard.bat
+	@del clipboard.bat
 
 collpane: 
 	@echo cd collpane >collpane.bat
