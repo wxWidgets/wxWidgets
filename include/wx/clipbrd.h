@@ -19,6 +19,7 @@
 
 #include "wx/object.h"
 #include "wx/chartype.h"
+#include "wx/vector.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDataFormat;
 class WXDLLIMPEXP_FWD_CORE wxDataObject;
@@ -93,6 +94,43 @@ public:
     // (wxX11, wxMotif, ...) only
     bool m_usePrimary;
 };
+
+// ----------------------------------------------------------------------------
+// asynchronous clipboard event
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxClipboardEvent : public wxEvent
+{
+public:
+    wxClipboardEvent(wxEventType commandType = wxEVT_NULL)
+        : wxEvent(0,commandType)
+        { }
+
+    wxClipboardEvent(const wxClipboardEvent& event)
+        : wxEvent(event),
+          m_formats(event.m_formats)
+        { }
+
+    bool SupportsFormat( const wxDataFormat &format ) const;
+    void AddFormat( const wxDataFormat &format );
+
+    virtual wxEvent *Clone() const { return new wxClipboardEvent(*this); }
+
+protected:
+    wxVector<wxDataFormat> m_formats;
+
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxClipboardEvent)
+};
+
+extern WXDLLIMPEXP_CORE const wxEventType wxEVT_CLIPBOARD_CHANGED;
+
+typedef void (wxEvtHandler::*wxClipboardEventFunction)(wxClipboardEvent&);
+
+#define wxClipboardEventHandler(func) \
+    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxClipboardEventFunction, &func)
+
+#define EVT_CLIPBOARD_CHANGED(func) wx__DECLARE_EVT0(wxEVT_CLIPBOARD_CHANGED, wxClipboardEventHandler(func))
 
 // ----------------------------------------------------------------------------
 // globals

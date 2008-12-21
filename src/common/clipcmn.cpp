@@ -32,6 +32,31 @@
     #include "wx/module.h"
 #endif
 
+// ---------------------------------------------------------
+// wxClipboardEvent
+// ---------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxClipboardEvent,wxEvent)
+
+DEFINE_EVENT_TYPE(wxEVT_CLIPBOARD_CHANGED)
+
+bool wxClipboardEvent::SupportsFormat( const wxDataFormat &format ) const
+{ 
+    wxVector<wxDataFormat>::size_type n;
+    for (n = 0; n < m_formats.size(); n++)
+        { if (m_formats[n] == format) return true; }
+    return false;
+}     
+        
+void wxClipboardEvent::AddFormat( const wxDataFormat &format ) 
+{ 
+    m_formats.push_back( format );
+}
+
+// ---------------------------------------------------------
+// wxClipboardBase
+// ---------------------------------------------------------
+
 static wxClipboard *gs_clipboard = NULL;
 
 /*static*/ wxClipboard *wxClipboardBase::Get()

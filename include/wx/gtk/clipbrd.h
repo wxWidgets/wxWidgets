@@ -15,6 +15,8 @@
 // wxClipboard
 // ----------------------------------------------------------------------------
 
+#include "wx/weakref.h"
+
 class WXDLLIMPEXP_CORE wxClipboard : public wxClipboardBase
 {
 public:
@@ -45,6 +47,9 @@ public:
 
     // ask if data in correct format is available
     virtual bool IsSupported( const wxDataFormat& format );
+
+    // ask if data in correct format is available
+    virtual bool IsSupportedAsync( wxEvtHandler *sink );
 
     // fill data with data on the clipboard (if available)
     virtual bool GetData( wxDataObject& data );
@@ -116,6 +121,11 @@ private:
     bool m_open;
     bool m_formatSupported;
 
+public:
+    // async stuff
+    wxEvtHandlerRef    m_sink;
+private:
+    GtkWidget         *m_targetsWidgetAsync;  // for getting list of supported formats
 
     DECLARE_DYNAMIC_CLASS(wxClipboard)
 };
