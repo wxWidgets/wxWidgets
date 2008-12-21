@@ -203,6 +203,11 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
     bool ok = wxShellNotifyIcon(m_iconAdded ? NIM_MODIFY
                                             : NIM_ADD, &notifyData) != 0;
 
+    if ( !ok )
+    {
+        wxLogLastError(wxT("wxShellNotifyIcon(NIM_MODIFY/ADD)"));
+    }
+
     if ( !m_iconAdded && ok )
         m_iconAdded = true;
 
@@ -228,8 +233,10 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     notifyData.uFlags = 0;
     notifyData.uVersion = 3 /* NOTIFYICON_VERSION for Windows XP */;
 
-    wxShellNotifyIcon(NIM_SETVERSION, &notifyData);
-
+    if ( !wxShellNotifyIcon(NIM_SETVERSION, &notifyData) )
+    {
+        wxLogLastError(wxT("wxShellNotifyIcon(NIM_SETVERSION)"));
+    }
 
     // do show the balloon now
     notifyData = NotifyIconData(hwnd);
@@ -246,7 +253,13 @@ wxTaskBarIcon::ShowBalloon(const wxString& title,
     else if ( flags & wxICON_ERROR )
         notifyData.dwInfoFlags |= NIIF_ERROR;
 
-    return wxShellNotifyIcon(NIM_MODIFY, &notifyData) != 0;
+    bool ok = wxShellNotifyIcon(NIM_MODIFY, &notifyData) != 0;
+    if ( !ok )
+    {
+        wxLogLastError(wxT("wxShellNotifyIcon(NIM_MODIFY)"));
+    }
+
+    return ok;
 }
 
 #endif // wxUSE_TASKBARICON_BALLOONS
@@ -260,7 +273,13 @@ bool wxTaskBarIcon::RemoveIcon()
 
     NotifyIconData notifyData(GetHwndOf(m_win));
 
-    return wxShellNotifyIcon(NIM_DELETE, &notifyData) != 0;
+    bool ok = wxShellNotifyIcon(NIM_DELETE, &notifyData) != 0;
+    if ( !ok )
+    {
+        wxLogLastError(wxT("wxShellNotifyIcon(NIM_DELETE)"));
+    }
+
+    return ok;
 }
 
 #if wxUSE_MENUS
