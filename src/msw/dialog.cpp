@@ -145,7 +145,6 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData)
 
 void wxDialog::Init()
 {
-    m_oldFocus = (wxWindow *)NULL;
     m_isShown = false;
     m_modalData = NULL;
     m_endModalCalled = false;
@@ -164,9 +163,6 @@ bool wxDialog::Create(wxWindow *parent,
                       const wxString& name)
 {
     SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
-
-    // save focus before doing anything which can potentially change it
-    m_oldFocus = FindFocus();
 
     // All dialogs should really have this style
     style |= wxTAB_TRAVERSAL;
@@ -294,45 +290,10 @@ int wxDialog::ShowModal()
     // into account
     if ( !m_endModalCalled )
     {
-        // modal dialog needs a parent window, so try to find one
-        wxWindow *parent = GetParent();
-        if ( !parent )
-        {
-            parent = FindSuitableParent();
-        }
-
-        // remember where the focus was
-        wxWindow *oldFocus = m_oldFocus;
-        if ( !oldFocus )
-        {
-            // VZ: do we really want to do this?
-            oldFocus = parent;
-        }
-
-        // We have to remember the HWND because we need to check
-        // the HWND still exists (oldFocus can be garbage when the dialog
-        // exits, if it has been destroyed)
-        HWND hwndOldFocus = oldFocus ? GetHwndOf(oldFocus) : NULL;
-
-
         // enter and run the modal loop
-        {
-            wxDialogModalDataTiedPtr modalData(&m_modalData,
-                                               new wxDialogModalData(this));
-            modalData->RunLoop();
-        }
-
-
-        // and restore focus
-        // Note that this code MUST NOT access the dialog object's data
-        // in case the object has been deleted (which will be the case
-        // for a modal dialog that has been destroyed before calling EndModal).
-        if ( oldFocus && (oldFocus != this) && ::IsWindow(hwndOldFocus))
-        {
-            // This is likely to prove that the object still exists
-            if (wxFindWinFromHandle((WXHWND) hwndOldFocus) == oldFocus)
-                oldFocus->SetFocus();
-        }
+        wxDialogModalDataTiedPtr modalData(&m_modalData,
+                                           new wxDialogModalData(this));
+        modalData->RunLoop();
     }
 
     return GetReturnCode();
