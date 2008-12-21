@@ -663,6 +663,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "popup"=.\popup\popup.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "printing"=.\printing\printing.dsp - Package Owner=<4>
 
 Package=<5>
