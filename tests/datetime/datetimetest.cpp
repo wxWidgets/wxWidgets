@@ -738,13 +738,15 @@ void DateTimeTestCase::TestTimeSpanFormat()
         {  219,  0,  0,   0, "%H",            "219"                   },
         {  219,  0,  0,   0, "%D, %H",        "9, 03"                 },
         {  219,  0,  0,   0, "%E, %D, %H",    "1, 2, 03"              },
+        {    0, -1,  0,   0, "%H:%M:%S",      "-00:01:00"             },
+        {    0,  0, -1,   0, "%H:%M:%S",      "-00:00:01"             },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(testSpans); n++ )
     {
         const TimeSpanFormatTestData& td = testSpans[n];
         wxTimeSpan ts(td.h, td.min, td.sec, td.msec);
-        CPPUNIT_ASSERT_EQUAL( wxString(td.result), ts.Format(td.fmt) );
+        CPPUNIT_ASSERT_EQUAL( td.result, ts.Format(td.fmt) );
     }
 }
 
