@@ -4271,7 +4271,16 @@ enum TimeSpanPart
 //  %l          milliseconds (000 - 999)
 wxString wxTimeSpan::Format(const wxChar *format) const
 {
-    wxCHECK_MSG( format, wxEmptyString, _T("NULL format in wxTimeSpan::Format") );
+    // we deal with only positive time spans here and just add the sign in
+    // front for the negative ones
+    if ( IsNegative() )
+    {
+        wxString str(Negate().Format(format));
+        return "-" + str;
+    }
+
+    wxCHECK_MSG( format, wxEmptyString,
+                 _T("NULL format in wxTimeSpan::Format") );
 
     wxString str;
     str.Alloc(wxStrlen(format));
@@ -4341,13 +4350,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     n = GetHours();
                     if ( partBiggest < Part_Hour )
                     {
-                        if ( n < 0 )
-                        {
-                            // the sign has already been taken into account
-                            // when outputting the biggest part
-                            n = -n;
-                        }
-
                         n %= HOURS_PER_DAY;
                     }
                     else
@@ -4362,9 +4364,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     n = GetMilliseconds().ToLong();
                     if ( partBiggest < Part_MSec )
                     {
-                        if ( n < 0 )
-                            n = -n;
-
                         n %= 1000;
                     }
                     //else: no need to reset partBiggest to Part_MSec, it is
@@ -4377,9 +4376,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     n = GetMinutes();
                     if ( partBiggest < Part_Min )
                     {
-                        if ( n < 0 )
-                            n = -n;
-
                         n %= MIN_PER_HOUR;
                     }
                     else
@@ -4394,9 +4390,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
                     n = GetSeconds().ToLong();
                     if ( partBiggest < Part_Sec )
                     {
-                        if ( n < 0 )
-                            n = -n;
-
                         n %= SEC_PER_MIN;
                     }
                     else
@@ -4410,10 +4403,6 @@ wxString wxTimeSpan::Format(const wxChar *format) const
 
             if ( digits )
             {
-                // negative numbers need one extra position for '-' display
-                if ( n < 0 )
-                    digits++;
-
                 fmtPrefix << _T("0") << digits;
             }
 

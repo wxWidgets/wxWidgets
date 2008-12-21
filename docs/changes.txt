@@ -95,6 +95,7 @@ All:
 
 - wxHashMap::insert() doesn't update the value if it didn't insert the element
   any more (Marcin Malich).
+- Correct bug in wxTimeSpan::Format() for negative spans.
 - Added Vietnamese translation (Tran Ngoc Quan).
 - Updated Slovenian translation (Martin Srebotnjak).
 

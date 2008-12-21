@@ -706,6 +706,8 @@ void DateTimeTestCase::TestTimeSpanFormat()
         {  219,  0,  0,   0, _T("%H"),            _T("219")                   },
         {  219,  0,  0,   0, _T("%D, %H"),        _T("9, 03")                 },
         {  219,  0,  0,   0, _T("%E, %D, %H"),    _T("1, 2, 03")              },
+        {    0, -1,  0,   0, _T("%H:%M:%S"),      _T("-00:01:00")             },
+        {    0,  0, -1,   0, _T("%H:%M:%S"),      _T("-00:00:01")             },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(testSpans); n++ )
