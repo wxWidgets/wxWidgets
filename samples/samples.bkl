@@ -19,6 +19,7 @@
     <subproject id="aui" template="sub"/>
     <subproject id="calendar" template="sub"/>
     <subproject id="caret" template="sub"/>
+    <subproject id="clipboard" template="sub"/>
     <subproject id="collpane" template="sub"/>
     <subproject id="config" template="sub"/>
     <subproject id="combo" template="sub"/>
