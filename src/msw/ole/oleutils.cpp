@@ -95,12 +95,13 @@ WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr)
     wxString str(bStr, len);
 #else
     wxString str;
-    if ( !::WideCharToMultiByte(CP_ACP, 0 /* no flags */,
-                                bStr, len /* not necessary NUL-terminated */,
-                                wxStringBuffer(str, len + 1), len + 1,
-                                NULL, NULL /* no default char */) )
+    if (len)
     {
-        str.clear();
+        wxStringBufferLength buf(str, len); // asserts if len == 0
+        buf.SetLength(WideCharToMultiByte(CP_ACP, 0 /* no flags */,
+                                  bStr, len /* not necessarily NUL-terminated */,
+                                  buf, len,
+                                  NULL, NULL /* no default char */));
     }
 #endif
 
