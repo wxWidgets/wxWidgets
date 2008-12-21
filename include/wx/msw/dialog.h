@@ -120,8 +120,6 @@ private:
     // gripper if we have one
     void OnWindowCreate(wxWindowCreateEvent& event);
 
-    bool        m_endModalCalled; // allow for closing within InitDialog
-
 #if wxUSE_TOOLBAR && defined(__POCKETPC__)
     wxToolBar*  m_dialogToolBar;
 #endif

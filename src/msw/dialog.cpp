@@ -147,7 +147,6 @@ void wxDialog::Init()
 {
     m_isShown = false;
     m_modalData = NULL;
-    m_endModalCalled = false;
 #if wxUSE_TOOLBAR && defined(__POCKETPC__)
     m_dialogToolBar = NULL;
 #endif
@@ -281,14 +280,11 @@ int wxDialog::ShowModal()
 {
     wxASSERT_MSG( !IsModal(), _T("ShowModal() can't be called twice") );
 
-    m_endModalCalled = false;
-
     Show();
 
     // EndModal may have been called from InitDialog handler (called from
-    // inside Show()), which would cause an infinite loop if we didn't take it
-    // into account
-    if ( !m_endModalCalled )
+    // inside Show()) and hidden the dialog back again
+    if ( !IsShown() )
     {
         // enter and run the modal loop
         wxDialogModalDataTiedPtr modalData(&m_modalData,
@@ -303,7 +299,6 @@ void wxDialog::EndModal(int retCode)
 {
     wxASSERT_MSG( IsModal(), _T("EndModal() called for non modal dialog") );
 
-    m_endModalCalled = true;
     SetReturnCode(retCode);
 
     Hide();
