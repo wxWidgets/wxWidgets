@@ -144,6 +144,8 @@ void ListCtrlTestCase::ColumnsOrder()
     CPPUNIT_ASSERT_EQUAL( "second in second", li.GetText() );
 }
 
+#endif // wxHAS_LISTCTRL_COLUMN_ORDER
+
 void ListCtrlTestCase::ItemRect()
 {
     // set up for the test
@@ -173,4 +175,3 @@ void ListCtrlTestCase::ItemRect()
     WX_ASSERT_FAILS_WITH_ASSERT( m_list->GetSubItemRect(0, 3, r) );
 }
 
-#endif // wxHAS_LISTCTRL_COLUMN_ORDER
