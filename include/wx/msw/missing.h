@@ -303,6 +303,7 @@ typedef struct wxtagNMLVCUSTOMDRAW_ {
 
 #ifdef __DMC__
 
+#ifndef VER_NT_WORKSTATION
 typedef struct _OSVERSIONINFOEX {
     DWORD dwOSVersionInfoSize;
     DWORD dwMajorVersion;
@@ -316,6 +317,7 @@ typedef struct _OSVERSIONINFOEX {
     BYTE  wProductType;
     BYTE  wReserved;
 } OSVERSIONINFOEX;
+#endif // !defined(VER_NT_WORKSTATION)
 
 #ifndef _TrackMouseEvent
     #define _TrackMouseEvent TrackMouseEvent
