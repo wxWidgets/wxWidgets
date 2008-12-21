@@ -151,7 +151,7 @@ SimpleTransientPopup::~SimpleTransientPopup()
 {
 }
 
-void SimpleTransientPopup::Popup(wxWindow *focus)
+void SimpleTransientPopup::Popup(wxWindow* WXUNUSED(focus))
 {
     wxLogMessage( wxT("0x%lx SimpleTransientPopup::Popup"), long(this) );
     wxPopupTransientWindow::Popup();
@@ -380,7 +380,7 @@ MyFrame::~MyFrame()
 
 // event handlers
 
-void MyFrame::OnActivate(wxActivateEvent& event)
+void MyFrame::OnActivate(wxActivateEvent& WXUNUSED(event))
 {
     wxLogMessage( wxT("In activate...") );
 }
