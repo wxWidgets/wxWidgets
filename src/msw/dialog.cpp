@@ -284,7 +284,7 @@ int wxDialog::ShowModal()
 
     // EndModal may have been called from InitDialog handler (called from
     // inside Show()) and hidden the dialog back again
-    if ( !IsShown() )
+    if ( IsShown() )
     {
         // enter and run the modal loop
         wxDialogModalDataTiedPtr modalData(&m_modalData,
