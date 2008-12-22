@@ -4276,7 +4276,7 @@ wxString wxTimeSpan::Format(const wxChar *format) const
     if ( IsNegative() )
     {
         wxString str(Negate().Format(format));
-        return "-" + str;
+        return _T("-") + str;
     }
 
     wxCHECK_MSG( format, wxEmptyString,
