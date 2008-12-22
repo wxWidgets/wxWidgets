@@ -98,6 +98,7 @@ All:
 - Correct bug in wxTimeSpan::Format() for negative spans.
 - Added Vietnamese translation (Tran Ngoc Quan).
 - Updated Slovenian translation (Martin Srebotnjak).
+- Corrected Serbian locale name (Cody Precord).
 
 All (GUI):
 
