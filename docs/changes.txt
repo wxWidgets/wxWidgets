@@ -136,6 +136,7 @@ wxMSW:
 - Fix best size calculation for wxNotebook with multiple rows (Alex McCarthy).
 - Correct coordinates of wxDropFilesEvent (Dmitriy Maksimov).
 - Fix handling of abandoned mutexes in wxMutex (David Heffernan).
+- Avoid warnings about deprecated localtime with MSVC8/9 (Chris Stankevitz).
 
 wxMSW/CE:
 

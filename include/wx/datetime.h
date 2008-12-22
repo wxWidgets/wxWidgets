@@ -1100,13 +1100,8 @@ public:
     // another one to get the current time broken down
     static struct tm *GetTmNow()
     {
-#ifdef __WXWINCE__
         static struct tm l_CurrentTime;
         return GetTmNow(&l_CurrentTime);
-#else
-        time_t t = GetTimeNow();
-        return localtime(&t);
-#endif
     }
 
     // get current time using thread-safe function
