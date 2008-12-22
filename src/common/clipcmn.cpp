@@ -29,6 +29,7 @@
 #include "wx/clipbrd.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/dataobj.h"
     #include "wx/module.h"
 #endif
 

@@ -17,7 +17,7 @@
 #if wxUSE_CLIPBOARD
 
 
-#include "wx/object.h"
+#include "wx/event.h"
 #include "wx/chartype.h"
 #include "wx/vector.h"
 
