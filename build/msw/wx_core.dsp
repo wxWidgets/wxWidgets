@@ -5373,7 +5373,7 @@ SOURCE=..\..\include\wx\generic\gridsel.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\generic\headerctrl.h
+SOURCE=..\..\include\wx\generic\headerctrlg.h
 # End Source File
 # Begin Source File
 

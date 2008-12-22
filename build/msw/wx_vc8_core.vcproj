@@ -4377,7 +4377,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\headerctrl.h"
+				RelativePath="..\..\include\wx\generic\headerctrlg.h"
 				>
 			</File>
 			<File

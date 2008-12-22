@@ -3266,7 +3266,7 @@
 				RelativePath="..\..\include\wx\generic\gridsel.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\generic\headerctrl.h">
+				RelativePath="..\..\include\wx\generic\headerctrlg.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\helpext.h">
