@@ -1966,7 +1966,7 @@ bool wxGridCellBoolEditor::EndEdit(int row, int col,
     if ( changed )
     {
         wxGridTableBase * const table = grid->GetTable();
-        if ( table->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )
+        if ( table->CanSetValueAs(row, col, wxGRID_VALUE_BOOL) )
             table->SetValueAsBool(row, col, value);
         else
             table->SetValue(row, col, GetValue());
