@@ -225,7 +225,7 @@ void wxGridCellEnumRenderer::SetParameters(const wxString& params)
 wxGridCellEnumEditor::wxGridCellEnumEditor(const wxString& choices)
                      :wxGridCellChoiceEditor()
 {
-    m_startint = -1;
+    m_index = -1;
 
     if (!choices.empty())
         SetParameters(choices);
@@ -234,7 +234,7 @@ wxGridCellEnumEditor::wxGridCellEnumEditor(const wxString& choices)
 wxGridCellEditor *wxGridCellEnumEditor::Clone() const
 {
     wxGridCellEnumEditor *editor = new wxGridCellEnumEditor();
-    editor->m_startint = m_startint;
+    editor->m_index = m_index;
     return editor;
 }
 
@@ -247,40 +247,49 @@ void wxGridCellEnumEditor::BeginEdit(int row, int col, wxGrid* grid)
 
     if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
     {
-        m_startint = table->GetValueAsLong(row, col);
+        m_index = table->GetValueAsLong(row, col);
     }
     else
     {
         wxString startValue = table->GetValue(row, col);
         if (startValue.IsNumber() && !startValue.empty())
         {
-            startValue.ToLong(&m_startint);
+            startValue.ToLong(&m_index);
         }
         else
         {
-            m_startint=-1;
+            m_index = -1;
         }
     }
 
-    Combo()->SetSelection(m_startint);
+    Combo()->SetSelection(m_index);
     Combo()->SetInsertionPointEnd();
     Combo()->SetFocus();
 
 }
 
-bool wxGridCellEnumEditor::EndEdit(int row, int col, wxGrid* grid)
+bool wxGridCellEnumEditor::EndEdit(const wxString& WXUNUSED(oldval),
+                                   wxString *newval)
 {
-    int pos = Combo()->GetSelection();
-    bool changed = (pos != m_startint);
-    if (changed)
-    {
-        if (grid->GetTable()->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER))
-            grid->GetTable()->SetValueAsLong(row, col, pos);
-        else
-            grid->GetTable()->SetValue(row, col,wxString::Format(wxT("%i"),pos));
-    }
+    long idx = Combo()->GetSelection();
+    if ( idx == m_index )
+        return false;
 
-    return changed;
+    m_index = idx;
+
+    if ( newval )
+        newval->Printf("%ld", m_index);
+
+    return true;
+}
+
+void wxGridCellEnumEditor::ApplyEdit(int row, int col, wxGrid* grid)
+{
+    wxGridTableBase * const table = grid->GetTable();
+    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER) )
+        table->SetValueAsLong(row, col, m_index);
+    else
+        table->SetValue(row, col, wxString::Format("%ld", m_index));
 }
 
 #endif // wxUSE_COMBOBOX

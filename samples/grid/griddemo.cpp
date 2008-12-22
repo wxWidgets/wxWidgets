@@ -133,6 +133,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_COL_SIZE( GridFrame::OnColSize )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
+    EVT_GRID_CELL_CHANGING( GridFrame::OnCellValueChanging )
     EVT_GRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
     EVT_GRID_CELL_BEGIN_DRAG( GridFrame::OnCellBeginDrag )
 
@@ -1059,13 +1060,36 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
     ev.Skip();
 }
 
+void GridFrame::OnCellValueChanging( wxGridEvent& ev )
+{
+    int row = ev.GetRow(),
+        col = ev.GetCol();
+
+    wxLogMessage("Value of cell at (%d, %d): about to change "
+                 "from \"%s\" to \"%s\"",
+                 row, col,
+                 grid->GetCellValue(row, col), ev.GetString());
+
+    // test how vetoing works
+    if ( ev.GetString() == "42" )
+    {
+        wxLogMessage("Vetoing the change.");
+        ev.Veto();
+        return;
+    }
+
+    ev.Skip();
+}
+
 void GridFrame::OnCellValueChanged( wxGridEvent& ev )
 {
     int row = ev.GetRow(),
         col = ev.GetCol();
 
-    wxLogMessage(_T("Value changed for cell at row %d, col %d: now \"%s\""),
-                 row, col, grid->GetCellValue(row, col).c_str());
+    wxLogMessage("Value of cell at (%d, %d) changed and is now \"%s\" "
+                 "(was \"%s\")",
+                 row, col,
+                 grid->GetCellValue(row, col), ev.GetString());
 
     ev.Skip();
 }
@@ -1969,4 +1993,3 @@ void GridFrame::OnTabularTable(wxCommandEvent&)
 {
     new TabularGridFrame;
 }
-

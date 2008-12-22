@@ -199,6 +199,15 @@ Changes in behaviour which may result in compilation errors
   have been changed to accept "wxBitmapType bitmaptype", please use enum
   wxBitmapType in your code.
 
+- wxGridCellEditor::EndEdit() signature has changed and it was split in two
+  functions, one still called EndEdit() and ApplyEdit(). See the documentation
+  of the new functions for more details about how grid editors should be
+  written now.
+
+- wxEVT_GRID_CELL_CHANGE event renamed to wxEVT_GRID_CELL_CHANGED and shouldn't
+  be vetoed any more, use the new wxEVT_GRID_CELL_CHANGING event to do it.
+
+
 Deprecated methods and their replacements
 -----------------------------------------
 
@@ -416,6 +425,7 @@ All (GUI):
 - Improved drawing of the hint during column move in wxGrid (Santo Pfingsten).
 - Add wxGridSelectRowsOrColumns selection mode to wxGrid.
 - Get/HasModifiers() of wxKeyEvent are now also available in wxMouseEvent.
+- Provide new/old cell value in wxEVT_GRID_CELL_CHANGING/CHANGED events.
 
 wxGTK:
 

@@ -327,13 +327,26 @@ public:
     // version just fills it with background colour from the attribute
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
 
+
+    // The methods called by wxGrid when a cell is edited: first BeginEdit() is
+    // called, then EndEdit() is and if it returns true and if the change is
+    // not vetoed by a user-defined event handler, finally ApplyEdit() is called
+
     // Fetch the value from the table and prepare the edit control
     // to begin editing.  Set the focus to the edit control.
     virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
 
-    // Complete the editing of the current cell. Returns true if the value has
-    // changed.  If necessary, the control may be destroyed.
-    virtual bool EndEdit(int row, int col, wxGrid* grid) = 0;
+    // Returns false if nothing changed, otherwise returns true and return the
+    // new value in its string form in the newval output parameter.
+    //
+    // This should also store the new value in its real type internally so that
+    // it could be used by ApplyEdit().
+    virtual bool EndEdit(const wxString& oldval, wxString *newval) = 0;
+
+    // Complete the editing of the current cell by storing the value saved by
+    // the previous call to EndEdit() in the grid
+    virtual void ApplyEdit(int row, int col, wxGrid* grid) = 0;
+
 
     // Reset the value in the control back to its starting value
     virtual void Reset() = 0;
@@ -410,7 +423,8 @@ public:
 
     virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
     virtual void StartingKey(wxKeyEvent& event);
@@ -436,7 +450,7 @@ protected:
 
 private:
     size_t   m_maxChars;        // max number of chars allowed
-    wxString m_startValue;
+    wxString m_value;
 
     DECLARE_NO_COPY_CLASS(wxGridCellTextEditor)
 };
@@ -455,7 +469,8 @@ public:
 
     virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
     virtual void StartingKey(wxKeyEvent& event);
@@ -484,15 +499,15 @@ protected:
 #endif
     }
 
-    // string representation of m_valueOld
+    // string representation of our value
     wxString GetString() const
-        { return wxString::Format(_T("%ld"), m_valueOld); }
+        { return wxString::Format(_T("%ld"), m_value); }
 
 private:
     int m_min,
         m_max;
 
-    long m_valueOld;
+    long m_value;
 
     DECLARE_NO_COPY_CLASS(wxGridCellNumberEditor)
 };
@@ -509,7 +524,8 @@ public:
 
     virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
     virtual void StartingKey(wxKeyEvent& event);
@@ -521,13 +537,13 @@ public:
     virtual void SetParameters(const wxString& params);
 
 protected:
-    // string representation of m_valueOld
+    // string representation of our value
     wxString GetString() const;
 
 private:
     int m_width,
         m_precision;
-    double m_valueOld;
+    double m_value;
 
     DECLARE_NO_COPY_CLASS(wxGridCellFloatEditor)
 };
@@ -551,7 +567,8 @@ public:
 
     virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
     virtual void StartingClick();
@@ -577,7 +594,7 @@ protected:
     wxCheckBox *CBox() const { return (wxCheckBox *)m_control; }
 
 private:
-    bool m_startValue;
+    bool m_value;
 
     static wxString ms_stringValues[2];
 
@@ -606,7 +623,8 @@ public:
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
 
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
 
@@ -621,10 +639,7 @@ public:
 protected:
     wxComboBox *Combo() const { return (wxComboBox *)m_control; }
 
-// DJC - (MAPTEK) you at least need access to m_choices if you
-//                wish to override this class
-protected:
-    wxString        m_startValue;
+    wxString        m_value;
     wxArrayString   m_choices;
     bool            m_allowOthers;
 
@@ -2233,11 +2248,15 @@ protected:
                   const wxGridCellCoords& coords,
                   wxMouseEvent& e)
         { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), e); }
-    int SendEvent(const wxEventType evtType, int row, int col);
-    int SendEvent(const wxEventType evtType, const wxGridCellCoords& coords)
-        { return SendEvent(evtType, coords.GetRow(), coords.GetCol()); }
-    int SendEvent(const wxEventType evtType)
-        { return SendEvent(evtType, m_currentCellCoords); }
+    int SendEvent(const wxEventType evtType,
+                  int row, int col,
+                  const wxString& s = wxString());
+    int SendEvent(const wxEventType evtType,
+                  const wxGridCellCoords& coords,
+                  const wxString& s = wxString())
+        { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), s); }
+    int SendEvent(const wxEventType evtType, const wxString& s = wxString())
+        { return SendEvent(evtType, m_currentCellCoords, s); }
 
     void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
@@ -2659,7 +2678,8 @@ extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_ROW_SIZE;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_COL_SIZE;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_RANGE_SELECT;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_CHANGE;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_CHANGING;
+extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_CHANGED;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_SELECT_CELL;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_EDITOR_SHOWN;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_EDITOR_HIDDEN;
@@ -2667,7 +2687,6 @@ extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_EDITOR_CREATED;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_BEGIN_DRAG;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_COL_MOVE;
 extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_COL_SORT;
-
 
 typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
 typedef void (wxEvtHandler::*wxGridSizeEventFunction)(wxGridSizeEvent&);
@@ -2711,7 +2730,8 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_CMD_COL_MOVE(id, fn)            wx__DECLARE_GRIDEVT(COL_MOVE, id, fn)
 #define EVT_GRID_CMD_COL_SORT(id, fn)            wx__DECLARE_GRIDEVT(COL_SORT, id, fn)
 #define EVT_GRID_CMD_RANGE_SELECT(id, fn)        wx__DECLARE_GRIDRANGESELEVT(RANGE_SELECT, id, fn)
-#define EVT_GRID_CMD_CELL_CHANGE(id, fn)         wx__DECLARE_GRIDEVT(CELL_CHANGE, id, fn)
+#define EVT_GRID_CMD_CELL_CHANGING(id, fn)       wx__DECLARE_GRIDEVT(CELL_CHANGING, id, fn)
+#define EVT_GRID_CMD_CELL_CHANGED(id, fn)        wx__DECLARE_GRIDEVT(CELL_CHANGED, id, fn)
 #define EVT_GRID_CMD_SELECT_CELL(id, fn)         wx__DECLARE_GRIDEVT(SELECT_CELL, id, fn)
 #define EVT_GRID_CMD_EDITOR_SHOWN(id, fn)        wx__DECLARE_GRIDEVT(EDITOR_SHOWN, id, fn)
 #define EVT_GRID_CMD_EDITOR_HIDDEN(id, fn)       wx__DECLARE_GRIDEVT(EDITOR_HIDDEN, id, fn)
@@ -2733,12 +2753,24 @@ typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreat
 #define EVT_GRID_COL_MOVE(fn)            EVT_GRID_CMD_COL_MOVE(wxID_ANY, fn)
 #define EVT_GRID_COL_SORT(fn)            EVT_GRID_CMD_COL_SORT(wxID_ANY, fn)
 #define EVT_GRID_RANGE_SELECT(fn)        EVT_GRID_CMD_RANGE_SELECT(wxID_ANY, fn)
-#define EVT_GRID_CELL_CHANGE(fn)         EVT_GRID_CMD_CELL_CHANGE(wxID_ANY, fn)
+#define EVT_GRID_CELL_CHANGING(fn)       EVT_GRID_CMD_CELL_CHANGING(wxID_ANY, fn)
+#define EVT_GRID_CELL_CHANGED(fn)        EVT_GRID_CMD_CELL_CHANGED(wxID_ANY, fn)
 #define EVT_GRID_SELECT_CELL(fn)         EVT_GRID_CMD_SELECT_CELL(wxID_ANY, fn)
 #define EVT_GRID_EDITOR_SHOWN(fn)        EVT_GRID_CMD_EDITOR_SHOWN(wxID_ANY, fn)
 #define EVT_GRID_EDITOR_HIDDEN(fn)       EVT_GRID_CMD_EDITOR_HIDDEN(wxID_ANY, fn)
 #define EVT_GRID_EDITOR_CREATED(fn)      EVT_GRID_CMD_EDITOR_CREATED(wxID_ANY, fn)
 #define EVT_GRID_CELL_BEGIN_DRAG(fn)     EVT_GRID_CMD_CELL_BEGIN_DRAG(wxID_ANY, fn)
+
+// we used to have a single wxEVT_GRID_CELL_CHANGE event but it was split into
+// wxEVT_GRID_CELL_CHANGING and CHANGED ones in wx 2.9.0, however the CHANGED
+// is basically the same as the old CHANGE event so we keep the name for
+// compatibility
+#if WXWIN_COMPATIBILITY_2_8
+    #define wxEVT_GRID_CELL_CHANGE wxEVT_GRID_CELL_CHANGED
+
+    #define EVT_GRID_CMD_CELL_CHANGE EVT_GRID_CMD_CELL_CHANGED
+    #define EVT_GRID_CELL_CHANGE EVT_GRID_CELL_CHANGED
+#endif // WXWIN_COMPATIBILITY_2_8
 
 #if 0  // TODO: implement these ?  others ?
 

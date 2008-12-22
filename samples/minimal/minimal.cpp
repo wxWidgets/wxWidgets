@@ -99,6 +99,7 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
+    EVT_BUTTON(Minimal_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -167,6 +168,11 @@ MyFrame::MyFrame(const wxString& title)
     SetMenuBar(menuBar);
 #endif // wxUSE_MENUS
 
+    wxSizer * const sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(new wxButton(this, wxID_ABOUT));
+    sizer->Add(new wxButton(this, wxID_OPEN));
+    SetSizer(sizer);
+
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
@@ -185,6 +191,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
+    wxGetTextFromUser("Your text?");
+
+#if 0
     wxMessageBox(wxString::Format
                  (
                     "Welcome to %s!\n"
@@ -197,4 +206,5 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  "About wxWidgets minimal sample",
                  wxOK | wxICON_INFORMATION,
                  this);
+#endif
 }

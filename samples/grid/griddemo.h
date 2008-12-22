@@ -91,6 +91,7 @@ class GridFrame : public wxFrame
     void OnColSize( wxGridSizeEvent& );
     void OnSelectCell( wxGridEvent& );
     void OnRangeSelected( wxGridRangeSelectEvent& );
+    void OnCellValueChanging( wxGridEvent& );
     void OnCellValueChanged( wxGridEvent& );
     void OnCellBeginDrag( wxGridEvent& );
 

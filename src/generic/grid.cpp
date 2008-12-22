@@ -148,7 +148,8 @@ DEFINE_EVENT_TYPE(wxEVT_GRID_COL_SIZE)
 DEFINE_EVENT_TYPE(wxEVT_GRID_COL_MOVE)
 DEFINE_EVENT_TYPE(wxEVT_GRID_COL_SORT)
 DEFINE_EVENT_TYPE(wxEVT_GRID_RANGE_SELECT)
-DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_CHANGE)
+DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_CHANGING)
+DEFINE_EVENT_TYPE(wxEVT_GRID_CELL_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_GRID_SELECT_CELL)
 DEFINE_EVENT_TYPE(wxEVT_GRID_EDITOR_SHOWN)
 DEFINE_EVENT_TYPE(wxEVT_GRID_EDITOR_HIDDEN)
@@ -1259,9 +1260,9 @@ void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     wxASSERT_MSG(m_control, wxT("The wxGridCellEditor must be created first!"));
 
-    m_startValue = grid->GetTable()->GetValue(row, col);
+    m_value = grid->GetTable()->GetValue(row, col);
 
-    DoBeginEdit(m_startValue);
+    DoBeginEdit(m_value);
 }
 
 void wxGridCellTextEditor::DoBeginEdit(const wxString& startValue)
@@ -1272,31 +1273,35 @@ void wxGridCellTextEditor::DoBeginEdit(const wxString& startValue)
     Text()->SetFocus();
 }
 
-bool wxGridCellTextEditor::EndEdit(int row, int col, wxGrid* grid)
+bool wxGridCellTextEditor::EndEdit(const wxString& WXUNUSED(oldval),
+                                   wxString *newval)
 {
-    wxASSERT_MSG(m_control, wxT("The wxGridCellEditor must be created first!"));
+    wxCHECK_MSG( m_control, false,
+                 "wxGridCellTextEditor must be created first!" );
 
-    bool changed = false;
-    wxString value = Text()->GetValue();
-    if (value != m_startValue)
-        changed = true;
+    const wxString value = Text()->GetValue();
+    if ( value == m_value )
+        return false;
 
-    if (changed)
-        grid->GetTable()->SetValue(row, col, value);
+    m_value = value;
 
-    m_startValue = wxEmptyString;
+    if ( newval )
+        *newval = m_value;
 
-    // No point in setting the text of the hidden control
-    //Text()->SetValue(m_startValue);
+    return true;
+}
 
-    return changed;
+void wxGridCellTextEditor::ApplyEdit(int row, int col, wxGrid* grid)
+{
+    grid->GetTable()->SetValue(row, col, m_value);
+    m_value.clear();
 }
 
 void wxGridCellTextEditor::Reset()
 {
-    wxASSERT_MSG(m_control, wxT("The wxGridCellEditor must be created first!"));
+    wxASSERT_MSG( m_control, "wxGridCellTextEditor must be created first!" );
 
-    DoReset(m_startValue);
+    DoReset(m_value);
 }
 
 void wxGridCellTextEditor::DoReset(const wxString& startValue)
@@ -1438,13 +1443,13 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxGridTableBase *table = grid->GetTable();
     if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
     {
-        m_valueOld = table->GetValueAsLong(row, col);
+        m_value = table->GetValueAsLong(row, col);
     }
     else
     {
-        m_valueOld = 0;
+        m_value = 0;
         wxString sValue = table->GetValue(row, col);
-        if (! sValue.ToLong(&m_valueOld) && ! sValue.empty())
+        if (! sValue.ToLong(&m_value) && ! sValue.empty())
         {
             wxFAIL_MSG( _T("this cell doesn't have numeric value") );
             return;
@@ -1454,7 +1459,7 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
 #if wxUSE_SPINCTRL
     if ( HasRange() )
     {
-        Spin()->SetValue((int)m_valueOld);
+        Spin()->SetValue((int)m_value);
         Spin()->SetFocus();
     }
     else
@@ -1464,8 +1469,7 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
 }
 
-bool wxGridCellNumberEditor::EndEdit(int row, int col,
-                                     wxGrid* grid)
+bool wxGridCellNumberEditor::EndEdit(const wxString& oldval, wxString *newval)
 {
     long value = 0;
     wxString text;
@@ -1474,7 +1478,7 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
     if ( HasRange() )
     {
         value = Spin()->GetValue();
-        if ( value == m_valueOld )
+        if ( value == m_value )
             return false;
 
         text.Printf(wxT("%ld"), value);
@@ -1482,11 +1486,10 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
     else // using unconstrained input
 #endif // wxUSE_SPINCTRL
     {
-        const wxString textOld(grid->GetCellValue(row, col));
         text = Text()->GetValue();
         if ( text.empty() )
         {
-            if ( textOld.empty() )
+            if ( oldval.empty() )
                 return false;
         }
         else // non-empty text now (maybe 0)
@@ -1494,20 +1497,28 @@ bool wxGridCellNumberEditor::EndEdit(int row, int col,
             if ( !text.ToLong(&value) )
                 return false;
 
-            // if value == m_valueOld == 0 but old text was "" and new one is
+            // if value == m_value == 0 but old text was "" and new one is
             // "0" something still did change
-            if ( value == m_valueOld && (value || !textOld.empty()) )
+            if ( value == m_value && (value || !oldval.empty()) )
                 return false;
         }
     }
 
-    wxGridTableBase * const table = grid->GetTable();
-    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER) )
-        table->SetValueAsLong(row, col, value);
-    else
-        table->SetValue(row, col, text);
+    m_value = value;
+
+    if ( newval )
+        *newval = text;
 
     return true;
+}
+
+void wxGridCellNumberEditor::ApplyEdit(int row, int col, wxGrid* grid)
+{
+    wxGridTableBase * const table = grid->GetTable();
+    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_NUMBER) )
+        table->SetValueAsLong(row, col, m_value);
+    else
+        table->SetValue(row, col, wxString::Format("%ld", m_value));
 }
 
 void wxGridCellNumberEditor::Reset()
@@ -1515,7 +1526,7 @@ void wxGridCellNumberEditor::Reset()
 #if wxUSE_SPINCTRL
     if ( HasRange() )
     {
-        Spin()->SetValue((int)m_valueOld);
+        Spin()->SetValue((int)m_value);
     }
     else
 #endif
@@ -1643,16 +1654,16 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
     wxGridTableBase * const table = grid->GetTable();
     if ( table->CanGetValueAs(row, col, wxGRID_VALUE_FLOAT) )
     {
-        m_valueOld = table->GetValueAsDouble(row, col);
+        m_value = table->GetValueAsDouble(row, col);
     }
     else
     {
-        m_valueOld = 0.0;
+        m_value = 0.0;
 
         const wxString value = table->GetValue(row, col);
         if ( !value.empty() )
         {
-            if ( !value.ToDouble(&m_valueOld) )
+            if ( !value.ToDouble(&m_value) )
             {
                 wxFAIL_MSG( _T("this cell doesn't have float value") );
                 return;
@@ -1663,10 +1674,9 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
     DoBeginEdit(GetString());
 }
 
-bool wxGridCellFloatEditor::EndEdit(int row, int col, wxGrid* grid)
+bool wxGridCellFloatEditor::EndEdit(const wxString& oldval, wxString *newval)
 {
-    const wxString text(Text()->GetValue()),
-                   textOld(grid->GetCellValue(row, col));
+    const wxString text(Text()->GetValue());
 
     double value;
     if ( !text.empty() )
@@ -1676,7 +1686,7 @@ bool wxGridCellFloatEditor::EndEdit(int row, int col, wxGrid* grid)
     }
     else // new value is empty string
     {
-        if ( textOld.empty() )
+        if ( oldval.empty() )
             return false;           // nothing changed
 
         value = 0.;
@@ -1684,17 +1694,25 @@ bool wxGridCellFloatEditor::EndEdit(int row, int col, wxGrid* grid)
 
     // the test for empty strings ensures that we don't skip the value setting
     // when "" is replaced by "0" or vice versa as "" numeric value is also 0.
-    if ( wxIsSameDouble(value, m_valueOld) && !text.empty() && !textOld.empty() )
+    if ( wxIsSameDouble(value, m_value) && !text.empty() && !oldval.empty() )
         return false;           // nothing changed
 
+    m_value = value;
+
+    if ( newval )
+        *newval = text;
+
+    return true;
+}
+
+void wxGridCellFloatEditor::ApplyEdit(int row, int col, wxGrid* grid)
+{
     wxGridTableBase * const table = grid->GetTable();
 
     if ( table->CanSetValueAs(row, col, wxGRID_VALUE_FLOAT) )
-        table->SetValueAsDouble(row, col, value);
+        table->SetValueAsDouble(row, col, m_value);
     else
-        table->SetValue(row, col, text);
-
-    return true;
+        table->SetValue(row, col, Text()->GetValue());
 }
 
 void wxGridCellFloatEditor::Reset()
@@ -1780,7 +1798,7 @@ wxString wxGridCellFloatEditor::GetString() const
         fmt = _T("%f");
     }
 
-    return wxString::Format(fmt, m_valueOld);
+    return wxString::Format(fmt, m_value);
 }
 
 bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
@@ -1928,16 +1946,16 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
 
     if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
     {
-        m_startValue = grid->GetTable()->GetValueAsBool(row, col);
+        m_value = grid->GetTable()->GetValueAsBool(row, col);
     }
     else
     {
         wxString cellval( grid->GetTable()->GetValue(row, col) );
 
         if ( cellval == ms_stringValues[false] )
-            m_startValue = false;
+            m_value = false;
         else if ( cellval == ms_stringValues[true] )
-            m_startValue = true;
+            m_value = true;
         else
         {
             // do not try to be smart here and convert it to true or false
@@ -1948,31 +1966,32 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
         }
     }
 
-    CBox()->SetValue(m_startValue);
+    CBox()->SetValue(m_value);
     CBox()->SetFocus();
 }
 
-bool wxGridCellBoolEditor::EndEdit(int row, int col,
-                                   wxGrid* grid)
+bool wxGridCellBoolEditor::EndEdit(const wxString& WXUNUSED(oldval),
+                                   wxString *newval)
 {
-    wxASSERT_MSG(m_control,
-                 wxT("The wxGridCellEditor must be created first!"));
-
-    bool changed = false;
     bool value = CBox()->GetValue();
-    if ( value != m_startValue )
-        changed = true;
+    if ( value == m_value )
+        return false;
 
-    if ( changed )
-    {
-        wxGridTableBase * const table = grid->GetTable();
-        if ( table->CanSetValueAs(row, col, wxGRID_VALUE_BOOL) )
-            table->SetValueAsBool(row, col, value);
-        else
-            table->SetValue(row, col, GetValue());
-    }
+    m_value = value;
 
-    return changed;
+    if ( newval )
+        *newval = GetValue();
+
+    return true;
+}
+
+void wxGridCellBoolEditor::ApplyEdit(int row, int col, wxGrid* grid)
+{
+    wxGridTableBase * const table = grid->GetTable();
+    if ( table->CanSetValueAs(row, col, wxGRID_VALUE_BOOL) )
+        table->SetValueAsBool(row, col, m_value);
+    else
+        table->SetValue(row, col, GetValue());
 }
 
 void wxGridCellBoolEditor::Reset()
@@ -1980,7 +1999,7 @@ void wxGridCellBoolEditor::Reset()
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be created first!"));
 
-    CBox()->SetValue(m_startValue);
+    CBox()->SetValue(m_value);
 }
 
 void wxGridCellBoolEditor::StartingClick()
@@ -2123,9 +2142,9 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     if (evtHandler)
         evtHandler->SetInSetFocus(true);
 
-    m_startValue = grid->GetTable()->GetValue(row, col);
+    m_value = grid->GetTable()->GetValue(row, col);
 
-    Reset(); // this updates combo box to correspond to m_startValue
+    Reset(); // this updates combo box to correspond to m_value
 
     Combo()->SetFocus();
 
@@ -2139,29 +2158,37 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
 }
 
-bool wxGridCellChoiceEditor::EndEdit(int row, int col,
-                                     wxGrid* grid)
+bool wxGridCellChoiceEditor::EndEdit(const wxString& WXUNUSED(oldval),
+                                     wxString *newval)
 {
-    wxString value = Combo()->GetValue();
-    if ( value == m_startValue )
+    const wxString value = Combo()->GetValue();
+    if ( value == m_value )
         return false;
 
-    grid->GetTable()->SetValue(row, col, value);
+    m_value = value;
+
+    if ( newval )
+        *newval = value;
 
     return true;
+}
+
+void wxGridCellChoiceEditor::ApplyEdit(int row, int col, wxGrid* grid)
+{
+    grid->GetTable()->SetValue(row, col, m_value);
 }
 
 void wxGridCellChoiceEditor::Reset()
 {
     if (m_allowOthers)
     {
-        Combo()->SetValue(m_startValue);
+        Combo()->SetValue(m_value);
         Combo()->SetInsertionPointEnd();
     }
     else // the combobox is read-only
     {
         // find the right position, or default to the first if not found
-        int pos = Combo()->FindString(m_startValue);
+        int pos = Combo()->FindString(m_value);
         if (pos == wxNOT_FOUND)
             pos = 0;
         Combo()->SetSelection(pos);
@@ -7105,7 +7132,8 @@ wxGrid::SendEvent(const wxEventType type,
 
 // Generate a grid event of specified type, return value same as above
 //
-int wxGrid::SendEvent(const wxEventType type, int row, int col)
+int
+wxGrid::SendEvent(const wxEventType type, int row, int col, const wxString& s)
 {
    bool claimed, vetoed;
 
@@ -7121,6 +7149,7 @@ int wxGrid::SendEvent(const wxEventType type, int row, int col)
     else
     {
         wxGridEvent gridEvt( GetId(), type, this, row, col );
+        gridEvt.SetString(s);
 
         claimed = GetEventHandler()->ProcessEvent(gridEvt);
         vetoed  = !gridEvt.IsAllowed();
@@ -8573,7 +8602,6 @@ void wxGrid::EnableCellEditControl( bool enable )
         }
         else
         {
-            //FIXME:add veto support
             SendEvent(wxEVT_GRID_EDITOR_HIDDEN);
 
             HideCellEditControl();
@@ -8806,19 +8834,26 @@ void wxGrid::SaveEditControlValue()
 
         wxGridCellAttr* attr = GetCellAttr(row, col);
         wxGridCellEditor* editor = attr->GetEditor(this, row, col);
-        bool changed = editor->EndEdit(row, col, this);
 
-        editor->DecRef();
-        attr->DecRef();
+        wxString newval;
+        bool changed = editor->EndEdit(oldval, &newval);
 
-        if (changed)
+        if ( changed && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) != -1 )
         {
-            if ( SendEvent(wxEVT_GRID_CELL_CHANGE) == -1 )
+            editor->ApplyEdit(row, col, this);
+
+            // for compatibility reasons dating back to wx 2.8 when this event
+            // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
+            // didn't exist we allow vetoing this one too
+            if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == -1 )
             {
                 // Event has been vetoed, set the data back.
                 SetCellValue(row, col, oldval);
             }
         }
+
+        editor->DecRef();
+        attr->DecRef();
     }
 }
 

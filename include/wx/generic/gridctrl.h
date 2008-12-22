@@ -100,11 +100,12 @@ public:
 
     virtual wxGridCellEditor*  Clone() const;
 
-    virtual bool EndEdit(int row, int col, wxGrid* grid);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
 private:
-    long int   m_startint;
+    long m_index;
 
     DECLARE_NO_COPY_CLASS(wxGridCellEnumEditor)
 };

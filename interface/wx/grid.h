@@ -186,7 +186,13 @@ public:
 
     /**
         Fetch the value from the table and prepare the edit control to begin
-        editing. Sets the focus to the edit control.
+        editing.
+
+        This function should save the original value of the grid cell at the
+        given @a row and @a col and show the control allowing the user to
+        change it.
+
+        @see EndEdit()
     */
     virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
 
@@ -207,12 +213,27 @@ public:
     virtual void Destroy();
 
     /**
-        Complete the editing of the current cell. If necessary, the control may
-        be destroyed.
+        End editing the cell.
 
-        @return @true if the value has changed.
+        This function must check if the current value of the editing control is
+        valid and different from the original value (available as @a oldval in
+        its string form and possibly saved internally using its real type by
+        BeginEdit()). If it isn't, it just returns @false, otherwise it fills
+        @a newval with the representation of the new value in the string form,
+        if necessary saves it using its real type internally, and returns @true.
+
+        If the user-defined wxEVT_GRID_CELL_CHANGING event handler doesn't veto
+        this change, ApplyEdit() will be called next.
     */
     virtual bool EndEdit(int row, int col, wxGrid* grid) = 0;
+
+    /**
+        Effectively save the changes in the grid.
+
+        This function should save the value of the control in the grid. It is
+        called only after EndEdit() returns @true.
+     */
+    virtual void ApplyEdit(int row, int col, wxGrid* grid) = 0;
 
     /**
         Some types of controls on some platforms may need some help with the
@@ -3330,9 +3351,17 @@ public:
     documented below for brevity.
 
     @beginEventTable{wxGridEvent}
-    @event{EVT_GRID_CELL_CHANGE(func)}
-        The user changed the data in a cell. Processes a
-        @c wxEVT_GRID_CELL_CHANGE event type.
+    @event{EVT_GRID_CELL_CHANGING(func)}
+        The user is about to change the data in a cell. The new cell value as
+        string is available from GetString() event object method. This event
+        can be vetoed if the change is not allowed. Processes a @c
+        wxEVT_GRID_CELL_CHANGING event type.
+    @event{EVT_GRID_CELL_CHANGED(func)}
+        The user changed the data in a cell. The old cell value as string is
+        available from GetString() event object method. Notice that vetoing
+        this event still works for backwards compatibility reasons but any new
+        code should only veto EVT_GRID_CELL_CHANGING event and not this one.
+        Processes a @c wxEVT_GRID_CELL_CHANGED event type.
     @event{EVT_GRID_CELL_LEFT_CLICK(func)}
         The user clicked a cell with the left mouse button. Processes a
         @c wxEVT_GRID_CELL_LEFT_CLICK event type.
