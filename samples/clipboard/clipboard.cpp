@@ -27,7 +27,7 @@
 #endif
 
 
-#define USE_ASYNCHRONOUS_CLIPBOARD_REQUEST 0
+#define USE_ASYNCHRONOUS_CLIPBOARD_REQUEST 1
 
 class MyApp : public wxApp
 {
@@ -167,7 +167,12 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent&event)
 #if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
     if (m_request == Idle)
     {
-        wxTheClipboard->IsSupportedAsync( this );
+        if (!wxTheClipboard->IsSupportedAsync( this ))
+        {
+            // request failed, try again later
+            event.Enable( m_clipboardSupportsText ); // not yet known, assume last value
+            return;
+        }
         m_request = Waiting;
         event.Enable( m_clipboardSupportsText ); // not yet known, assume last value
     } 

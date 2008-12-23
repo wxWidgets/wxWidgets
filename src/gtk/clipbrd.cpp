@@ -367,6 +367,7 @@ async_targets_selection_received( GtkWidget *WXUNUSED(widget),
     if ( !selection_data || selection_data->length <= 0 )
     {
         clipboard->m_sink->QueueEvent( event );
+        clipboard->m_sink.Release();
         return;
     }
 
@@ -380,6 +381,7 @@ async_targets_selection_received( GtkWidget *WXUNUSED(widget),
                         _T("got unsupported clipboard target") );
 
             clipboard->m_sink->QueueEvent( event );
+            clipboard->m_sink.Release();
             return;
         }
     }
@@ -405,6 +407,7 @@ async_targets_selection_received( GtkWidget *WXUNUSED(widget),
     }
     
     clipboard->m_sink->QueueEvent( event );
+    clipboard->m_sink.Release();
 }
 }
 
@@ -521,8 +524,12 @@ void wxClipboard::AddSupportedTarget(GdkAtom atom)
 
 bool wxClipboard::IsSupportedAsync(wxEvtHandler *sink)
 {
+    if (m_sink.get())
+        return false;  // currently busy, come back later
+        
+    wxCHECK_MSG( sink, false, wxT("no sink given") );
+      
     m_sink = sink;
-    
     gtk_selection_convert( m_targetsWidgetAsync,
                            GTKGetClipboardAtom(),
                            g_targetsAtom,
