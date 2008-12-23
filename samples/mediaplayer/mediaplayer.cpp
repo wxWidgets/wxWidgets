@@ -1530,12 +1530,11 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
 
     //
-    //  Create and attach the sizer
+    //  Create and attach a 2-column grid sizer
     //
-    wxFlexGridSizer* sizer = new wxFlexGridSizer(2, 1, 0, 0);
-    this->SetSizer(sizer);
-    sizer->AddGrowableRow(0);
+    wxFlexGridSizer* sizer = new wxFlexGridSizer(2);
     sizer->AddGrowableCol(0);
+    this->SetSizer(sizer);
 
     //
     //  Create our media control
@@ -1664,6 +1663,9 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
                             wxSL_HORIZONTAL );
     horsizer3->Add(m_pbSlider, 1, wxALL, 5);
     sizer->Add(horsizer3, 1, wxCENTRE | wxALL, 5);
+
+    // Now that we have all our rows make some of them growable
+    sizer->AddGrowableRow(0);
 
     //
     // ListCtrl events
