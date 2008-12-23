@@ -1904,7 +1904,8 @@ void wxMultiChoiceProperty::GenerateValueAsString( wxVariant& value,
 
 wxArrayInt wxMultiChoiceProperty::GetValueAsIndices() const
 {
-    const wxArrayInt& valueArr = wxArrayIntRefFromVariant(GetValue());
+    wxVariant variant = GetValue();
+    const wxArrayInt& valueArr = wxArrayIntRefFromVariant(variant);
     unsigned int i;
 
     // Translate values to string indices.
