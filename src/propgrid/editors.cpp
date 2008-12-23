@@ -1577,6 +1577,9 @@ void wxPropertyGrid::CorrectEditorWidgetSizeX()
 
 void wxPropertyGrid::CorrectEditorWidgetPosY()
 {
+    if ( m_selColumn == -1 )
+        return;
+
     if ( m_selected && (m_wndEditor || m_wndEditor2) ) 
     {
         wxRect r = GetEditorWidgetRect(m_selected, m_selColumn);
