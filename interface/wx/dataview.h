@@ -955,8 +955,6 @@ public:
 
     /**
         Return @true if the item is expanded.
-        
-        Currently not supported by OS X.
     */
     virtual bool IsExpanded(const wxDataViewItem& item) const;
 
