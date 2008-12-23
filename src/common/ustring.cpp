@@ -3,7 +3,7 @@
 // Purpose:     wxUString class
 // Author:      Robert Roebling
 // Created:     2008-07-25
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2008 Robert Roebling
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
