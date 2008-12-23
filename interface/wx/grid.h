@@ -3422,7 +3422,7 @@ public:
     @endEventTable
 
     @library{wxadv}
-    @category{grid}
+    @category{grid,events}
 */
 class wxGridEvent : public wxNotifyEvent
 {
@@ -3504,7 +3504,7 @@ public:
     @endEventTable
 
     @library{wxadv}
-    @category{grid}
+    @category{grid,events}
 */
 class wxGridSizeEvent : public wxNotifyEvent
 {
@@ -3567,7 +3567,7 @@ public:
     @endEventTable
 
     @library{wxadv}
-    @category{grid}
+    @category{grid,events}
 */
 class wxGridRangeSelectEvent : public wxNotifyEvent
 {
@@ -3658,7 +3658,7 @@ public:
     @endEventTable
 
     @library{wxadv}
-    @category{grid}
+    @category{grid,events}
 */
 class wxGridEditorCreatedEvent : public wxCommandEvent
 {
