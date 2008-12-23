@@ -60,6 +60,9 @@ public:
     // ask if data in correct format is available
     virtual bool IsSupported( const wxDataFormat& format ) = 0;
 
+    // ask if data in correct format is available
+    virtual bool IsSupportedAsync( wxEvtHandler *sink );
+    
     // fill data with data on the clipboard (if available)
     virtual bool GetData( wxDataObject& data ) = 0;
 

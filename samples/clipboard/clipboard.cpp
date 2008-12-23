@@ -26,18 +26,23 @@
     #include "../sample.xpm"
 #endif
 
+
+#define USE_ASYNCHRONOUS_CLIPBOARD_REQUEST 0
+
 class MyApp : public wxApp
 {
 public:
     virtual bool OnInit();
 };
 
+#if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
 enum AsyncRequestState
 {
    Idle,
    Waiting,
    Finished
 };
+#endif
 
 class MyFrame : public wxFrame
 {
@@ -48,12 +53,16 @@ public:
     void OnAbout(wxCommandEvent&event);
     void OnWriteClipboardContents(wxCommandEvent&event);
     void OnUpdateUI(wxUpdateUIEvent&event);
+#if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
     void OnClipboardChange(wxClipboardEvent&event);
+#endif
 
 private:
     wxTextCtrl        *m_textctrl;
+#if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
     AsyncRequestState  m_request;
     bool               m_clipboardSupportsText;
+#endif
 
     DECLARE_EVENT_TABLE()
 };
@@ -71,7 +80,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_About, MyFrame::OnAbout)
     EVT_BUTTON(ID_Write, MyFrame::OnWriteClipboardContents)
     EVT_UPDATE_UI(ID_Write, MyFrame::OnUpdateUI)
+#if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
     EVT_CLIPBOARD_CHANGED(MyFrame::OnClipboardChange)
+#endif
 END_EVENT_TABLE()
 
 IMPLEMENT_APP(MyApp)
@@ -93,8 +104,10 @@ MyFrame::MyFrame(const wxString& title)
     // set the frame icon
     SetIcon(wxICON(sample));
     
+#if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
     m_request = Idle;
     m_clipboardSupportsText = false;
+#endif
 
 #if wxUSE_MENUS
     // create a menu bar
@@ -125,7 +138,7 @@ MyFrame::MyFrame(const wxString& title)
     panel->SetSizer( main_sizer );
 }
 
-void MyFrame::OnWriteClipboardContents(wxCommandEvent& event)
+void MyFrame::OnWriteClipboardContents(wxCommandEvent& WXUNUSED(event))
 {
    if (wxTheClipboard->Open())
    {
@@ -141,14 +154,17 @@ void MyFrame::OnWriteClipboardContents(wxCommandEvent& event)
    }
 }
 
+#if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
 void MyFrame::OnClipboardChange(wxClipboardEvent&event)
 {
     m_clipboardSupportsText = event.SupportsFormat( wxDF_UNICODETEXT );
     m_request = Finished;
 }
+#endif
 
 void MyFrame::OnUpdateUI(wxUpdateUIEvent&event)
 {
+#if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
     if (m_request == Idle)
     {
         wxTheClipboard->IsSupportedAsync( this );
@@ -164,6 +180,9 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent&event)
         event.Enable( m_clipboardSupportsText );
         m_request = Idle;
     }
+#else
+    event.Enable( wxTheClipboard->IsSupported( wxDF_UNICODETEXT ) );
+#endif
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
