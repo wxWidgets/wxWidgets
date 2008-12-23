@@ -18,8 +18,6 @@
 #include "wx/sizer.h"
 #include "wx/gbsizer.h"
 
-class WXDLLIMPEXP_FWD_CORE wxSizer;
-
 class WXDLLIMPEXP_XRC wxSizerXmlHandler : public wxXmlResourceHandler
 {
     DECLARE_DYNAMIC_CLASS(wxSizerXmlHandler)
@@ -45,7 +43,7 @@ private:
     wxSizer*  Handle_wxStaticBoxSizer();
 #endif
     wxSizer*  Handle_wxGridSizer();
-    wxSizer*  Handle_wxFlexGridSizer();
+    wxFlexGridSizer* Handle_wxFlexGridSizer();
     wxSizer*  Handle_wxGridBagSizer();
     wxSizer*  Handle_wxWrapSizer();
 

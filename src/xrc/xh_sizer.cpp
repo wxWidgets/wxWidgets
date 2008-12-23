@@ -197,6 +197,7 @@ wxObject* wxSizerXmlHandler::Handle_spacer()
 wxObject* wxSizerXmlHandler::Handle_sizer()
 {
     wxSizer *sizer = NULL;
+    wxFlexGridSizer *flexsizer = NULL;
 
     wxXmlNode *parentNode = m_node->GetParent();
 
@@ -210,21 +211,19 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
 
     if (m_class == wxT("wxBoxSizer"))
         sizer = Handle_wxBoxSizer();
-
 #if wxUSE_STATBOX
     else if (m_class == wxT("wxStaticBoxSizer"))
         sizer = Handle_wxStaticBoxSizer();
 #endif
-
     else if (m_class == wxT("wxGridSizer"))
         sizer = Handle_wxGridSizer();
-
     else if (m_class == wxT("wxFlexGridSizer"))
-        sizer = Handle_wxFlexGridSizer();
-
+    {
+        flexsizer = Handle_wxFlexGridSizer();
+        sizer = flexsizer;
+    }
     else if (m_class == wxT("wxGridBagSizer"))
         sizer = Handle_wxGridBagSizer();
-
     else if (m_class == wxT("wxWrapSizer"))
         sizer = Handle_wxWrapSizer();
 
@@ -248,6 +247,13 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     m_isGBS = (m_class == wxT("wxGridBagSizer"));
 
     CreateChildren(m_parent, true/*only this handler*/);
+
+    // set growable rows and cols for sizers which support this
+    if ( flexsizer )
+    {
+        SetGrowables(flexsizer, wxT("growablerows"), true);
+        SetGrowables(flexsizer, wxT("growablecols"), false);
+    }
 
     // restore state
     m_isInside = old_ins;
@@ -308,24 +314,16 @@ wxSizer*  wxSizerXmlHandler::Handle_wxGridSizer()
 }
 
 
-wxSizer*  wxSizerXmlHandler::Handle_wxFlexGridSizer()
+wxFlexGridSizer* wxSizerXmlHandler::Handle_wxFlexGridSizer()
 {
-    wxFlexGridSizer *sizer =
-        new wxFlexGridSizer(GetLong(wxT("rows")), GetLong(wxT("cols")),
-                            GetDimension(wxT("vgap")), GetDimension(wxT("hgap")));
-    SetGrowables(sizer, wxT("growablerows"), true);
-    SetGrowables(sizer, wxT("growablecols"), false);
-    return sizer;
+    return new wxFlexGridSizer(GetLong(wxT("rows")), GetLong(wxT("cols")),
+                               GetDimension(wxT("vgap")), GetDimension(wxT("hgap")));
 }
 
 
 wxSizer*  wxSizerXmlHandler::Handle_wxGridBagSizer()
 {
-    wxGridBagSizer *sizer =
-        new wxGridBagSizer(GetDimension(wxT("vgap")), GetDimension(wxT("hgap")));
-    SetGrowables(sizer, wxT("growablerows"), true);
-    SetGrowables(sizer, wxT("growablecols"), false);
-    return sizer;
+    return new wxGridBagSizer(GetDimension(wxT("vgap")), GetDimension(wxT("hgap")));
 }
 
 wxSizer*  wxSizerXmlHandler::Handle_wxWrapSizer()
@@ -346,13 +344,15 @@ void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
     while (tkn.HasMoreTokens())
     {
         if (!tkn.GetNextToken().ToULong(&l))
+        {
             wxLogError(wxT("growable[rows|cols] must be comma-separated list of row numbers"));
-        else {
-            if (rows)
-                sizer->AddGrowableRow(l);
-            else
-                sizer->AddGrowableCol(l);
+            break;
         }
+
+        if (rows)
+            sizer->AddGrowableRow(l);
+        else
+            sizer->AddGrowableCol(l);
     }
 }
 
