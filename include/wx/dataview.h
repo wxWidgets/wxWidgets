@@ -713,11 +713,12 @@ public:
     virtual void UnselectAll() = 0;
 
     virtual void Expand( const wxDataViewItem & item ) = 0;
+    virtual void ExpandAncestors( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item ) = 0;
     virtual bool IsExpanded( const wxDataViewItem & item ) const = 0;
 
     virtual void EnsureVisible( const wxDataViewItem & item,
-                                const wxDataViewColumn *column = NULL );
+                                const wxDataViewColumn *column = NULL ) = 0;
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
 

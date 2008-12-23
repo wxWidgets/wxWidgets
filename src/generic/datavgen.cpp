@@ -3524,18 +3524,33 @@ int wxDataViewCtrl::GetSelections( wxDataViewItemArray & sel ) const
 void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
 {
     wxDataViewSelection selection(wxDataViewSelectionCmp);
+
+    wxDataViewItem last_parent;
+
     int len = sel.GetCount();
     for( int i = 0; i < len; i ++ )
     {
-        int row = m_clientArea->GetRowByItem( sel[i] );
+        wxDataViewItem item = sel[i];
+        wxDataViewItem parent = GetModel()->GetParent( item );
+        if (parent)
+        {
+            if (parent != last_parent)
+                ExpandAncestors(item);
+        }
+        
+        last_parent = parent;
+        int row = m_clientArea->GetRowByItem( item );
         if( row >= 0 )
             selection.Add( static_cast<unsigned int>(row) );
     }
+    
     m_clientArea->SetSelections( selection );
 }
 
 void wxDataViewCtrl::Select( const wxDataViewItem & item )
 {
+    ExpandAncestors( item );
+    
     int row = m_clientArea->GetRowByItem( item );
     if( row >= 0 )
     {
@@ -3659,7 +3674,7 @@ void wxDataViewCtrl::EnsureVisible( int row, int column )
 
 void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataViewColumn * column )
 {
-    wxDataViewCtrlBase::EnsureVisible( item, column );
+    ExpandAncestors( item );
   
     m_clientArea->RecalculateDisplay();
 

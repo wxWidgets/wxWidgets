@@ -1183,7 +1183,7 @@ void wxDataViewCtrl::Collapse(wxDataViewItem const& item)
 
 void wxDataViewCtrl::EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)
 {
-  wxDataViewCtrlBase::EnsureVisible(item,columnPtr);
+  ExpandAncestors(item);
 
   if (item.IsOk())
   {
@@ -1334,6 +1334,8 @@ void wxDataViewCtrl::Select(wxDataViewItem const& item)
 {
   if (item.IsOk())
   {
+    ExpandAncestors(item);
+  
     DataBrowserItemID                              itemID(reinterpret_cast<DataBrowserItemID>(item.GetID()));
     wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(m_peer));
 
@@ -1343,18 +1345,31 @@ void wxDataViewCtrl::Select(wxDataViewItem const& item)
 
 void wxDataViewCtrl::SetSelections(wxDataViewItemArray const& sel)
 {
-  size_t const NoOfSelections = sel.GetCount();
+    size_t const NoOfSelections = sel.GetCount();
 
-  DataBrowserItemID* itemIDs;
+    wxDataViewItem last_parent;
 
-  wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(m_peer));
+    size_t i;
+    for (i = 0; i < NoOfSelections; i++)
+    {
+        wxDataViewItem item = sel[i];
+        wxDataViewItem parent = GetModel()->GetParent( item );
+        if (parent)
+        {
+            if (parent != last_parent)
+                ExpandAncestors(item);
+        }
+        last_parent = parent;
+    }
 
+    DataBrowserItemID* itemIDs;
+    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(m_peer));
 
-  itemIDs = new DataBrowserItemID[NoOfSelections];
-  for (size_t i=0; i<NoOfSelections; ++i)
-    itemIDs[i] = reinterpret_cast<DataBrowserItemID>(sel[i].GetID());
-  MacDataViewListCtrlPtr->SetSelectedItems(NoOfSelections,itemIDs,kDataBrowserItemsAssign);
-  delete[] itemIDs;
+    itemIDs = new DataBrowserItemID[NoOfSelections];
+    for (i=0; i<NoOfSelections; ++i)
+      itemIDs[i] = reinterpret_cast<DataBrowserItemID>(sel[i].GetID());
+    MacDataViewListCtrlPtr->SetSelectedItems(NoOfSelections,itemIDs,kDataBrowserItemsAssign);
+    delete[] itemIDs;
 }
 
 void wxDataViewCtrl::Unselect(wxDataViewItem const& item)

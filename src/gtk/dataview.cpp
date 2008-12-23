@@ -4113,12 +4113,23 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
 
     gtk_tree_selection_unselect_all( selection );
 
+    wxDataViewItem last_parent;
+
     size_t i;
     for (i = 0; i < sel.GetCount(); i++)
     {
+        wxDataViewItem item = sel[i];
+        wxDataViewItem parent = GetModel()->GetParent( item );
+        if (parent)
+        {
+            if (parent != last_parent)
+                ExpandAncestors(item);
+        }
+        last_parent = parent;
+
         GtkTreeIter iter;
         iter.stamp = m_internal->GetGtkModel()->stamp;
-        iter.user_data = (gpointer) sel[i].GetID();
+        iter.user_data = (gpointer) item.GetID();
         gtk_tree_selection_select_iter( selection, &iter );
     }
 
@@ -4127,6 +4138,8 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
 
 void wxDataViewCtrl::Select( const wxDataViewItem & item )
 {
+    ExpandAncestors(item);
+
     GtkDisableSelectionEvents();
 
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
@@ -4187,9 +4200,9 @@ void wxDataViewCtrl::UnselectAll()
 }
 
 void wxDataViewCtrl::EnsureVisible(const wxDataViewItem& item,
-                                   const wxDataViewColumn *column)
+                                   const wxDataViewColumn *WXUNUSED(column))
 {
-    wxDataViewCtrlBase::EnsureVisible(item,column);
+    ExpandAncestors(item);
 
     GtkTreeIter iter;
     iter.user_data = (gpointer) item.GetID();

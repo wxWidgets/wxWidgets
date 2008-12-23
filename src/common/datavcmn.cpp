@@ -896,10 +896,11 @@ const wxDataViewModel* wxDataViewCtrlBase::GetModel() const
     return m_model;
 }
 
-void wxDataViewCtrlBase::EnsureVisible( const wxDataViewItem & item,
-                                        const wxDataViewColumn *WXUNUSED(column) )
+void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
 {
     if (!m_model) return;
+    
+    if (!item.IsOk()) return;
 
     wxVector<wxDataViewItem> parentChain;
     
@@ -918,7 +919,6 @@ void wxDataViewCtrlBase::EnsureVisible( const wxDataViewItem & item,
          parentChain.pop_back();
     }
 }
-
 
 wxDataViewColumn *
 wxDataViewCtrlBase::AppendTextColumn( const wxString &label, unsigned int model_column,

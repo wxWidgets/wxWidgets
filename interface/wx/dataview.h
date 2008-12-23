@@ -888,6 +888,13 @@ public:
     virtual void Expand(const wxDataViewItem& item);
 
     /**
+       Expands all ancestors of the @a item. This method also
+       ensures that the item itself as well as all ancestor
+       items have been read from the model by the control.
+    */
+    virtual void ExpandAncestors( const wxDataViewItem & item );
+    
+    /**
         Returns pointer to the column. @a pos refers to the position in the
         control which may change after reordering columns by the user.
     */
