@@ -1328,9 +1328,12 @@ int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
     if ( m_cols && m_rows )
     {
         // if both rows and columns are specified by user, use the provided
-        // values even if we don't have enough items
+        // values even if we don't have enough items but check that we don't
+        // have too many of them as this is going to result in problems later
         ncols = m_cols;
         nrows = m_rows;
+
+        wxASSERT_MSG( ncols*nrows <= nitems, "too many items in grid sizer" );
     }
     else if ( m_cols )
     {
