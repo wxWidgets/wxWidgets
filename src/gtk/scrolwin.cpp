@@ -163,10 +163,10 @@ void wxScrollHelperNative::AdjustScrollbars()
     }
 }
 
-void wxScrollHelperNative::DoScroll(int orient,
-                                    int pos,
-                                    int pixelsPerLine,
-                                    int *posOld)
+void wxScrollHelperNative::DoScrollOneDir(int orient,
+                                          int pos,
+                                          int pixelsPerLine,
+                                          int *posOld)
 {
     if ( pos != -1 && pos != *posOld && pixelsPerLine )
     {
@@ -181,10 +181,10 @@ void wxScrollHelperNative::DoScroll(int orient,
     }
 }
 
-void wxScrollHelperNative::Scroll( int x_pos, int y_pos )
+void wxScrollHelperNative::DoScroll( int x_pos, int y_pos )
 {
     wxCHECK_RET( m_targetWindow != 0, _T("No target window") );
 
-    DoScroll(wxHORIZONTAL, x_pos, m_xScrollPixelsPerLine, &m_xScrollPosition);
-    DoScroll(wxVERTICAL, y_pos, m_yScrollPixelsPerLine, &m_yScrollPosition);
+    DoScrollOneDir(wxHORIZONTAL, x_pos, m_xScrollPixelsPerLine, &m_xScrollPosition);
+    DoScrollOneDir(wxVERTICAL, y_pos, m_yScrollPixelsPerLine, &m_yScrollPosition);
 }

@@ -894,7 +894,7 @@ void wxScrollHelper::SetScrollPageSize(int orient, int pageSize)
 /*
  * Scroll to given position (scroll position, not pixel position)
  */
-void wxScrollHelper::Scroll( int x_pos, int y_pos )
+void wxScrollHelper::DoScroll( int x_pos, int y_pos )
 {
     if (!m_targetWindow)
         return;
@@ -973,7 +973,7 @@ void wxScrollHelper::EnableScrolling (bool x_scroll, bool y_scroll)
 }
 
 // Where the current view starts from
-void wxScrollHelper::GetViewStart (int *x, int *y) const
+void wxScrollHelper::DoGetViewStart (int *x, int *y) const
 {
     if ( x )
         *x = m_xScrollPosition;

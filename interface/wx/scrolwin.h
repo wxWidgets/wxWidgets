@@ -251,6 +251,7 @@ public:
     */
     void GetScrollPixelsPerUnit(int* xUnit, int* yUnit) const;
 
+    //@{
     /**
         Get the position at which the visible portion of the window starts.
 
@@ -268,9 +269,11 @@ public:
                  have to multiply by the number of pixels per scroll
                  increment.
 
-        @see SetScrollbars()
+        @see SetScrollbars(), Scroll()
     */
     void GetViewStart(int* x, int* y) const;
+    wxPoint GetViewStart() const;
+    //@}
 
     /**
         Gets the size in device units of the scrollable window area (as
@@ -313,6 +316,7 @@ public:
     */
     void PrepareDC(wxDC& dc);
 
+    //@{
     /**
         Scrolls a window so the view start is at the given point.
 
@@ -323,13 +327,15 @@ public:
 
         @remarks The positions are in scroll units, not pixels, so to convert to
                  pixels you will have to multiply by the number of
-                 pixels per scroll increment. If either parameter is -1,
-                 that position will be ignored (no change in that
-                 direction).
+                 pixels per scroll increment. If either parameter is
+                 wxDefaultCoord (-1), that position will be ignored (no change
+                 in that direction).
 
         @see SetScrollbars(), GetScrollPixelsPerUnit()
     */
     void Scroll(int x, int y);
+    void Scroll(const wxPoint& pt);
+    //@}
 
     /**
         Set the horizontal and vertical scrolling increment only. See the

@@ -493,10 +493,7 @@ private:
         {
             m_inDoSync = true;
 
-            int x, y;
-            GetViewStart(&x, &y);
-
-            m_winSync->Scroll(x, y);
+            m_winSync->Scroll(GetViewStart());
 
             m_inDoSync = false;
         }
@@ -771,9 +768,7 @@ void MyCanvas::OnScrollWin( wxCommandEvent &WXUNUSED(event) )
 {
     wxLogMessage("Scrolling 2 units up.\n"
                  "The white square and the controls should move equally!");
-    int x,y;
-    GetViewStart( &x, &y );
-    Scroll( wxDefaultCoord, y+2 );
+    Scroll( wxDefaultCoord, GetViewStart().y+2 );
 }
 
 // ----------------------------------------------------------------------------
@@ -1059,20 +1054,14 @@ MyAutoScrollingWindow::DeviceCoordsToGraphicalChars(wxPoint pos) const
 {
     pos.x /= m_fontW;
     pos.y /= m_fontH;
-    int vX, vY;
-    GetViewStart(&vX, &vY);
-    pos.x += vX;
-    pos.y += vY;
+    pos += GetViewStart();
     return pos;
 }
 
 wxPoint
 MyAutoScrollingWindow::GraphicalCharToDeviceCoords(wxPoint pos) const
 {
-    int vX, vY;
-    GetViewStart(&vX, &vY);
-    pos.x -= vX;
-    pos.y -= vY;
+    pos -= GetViewStart();
     pos.x *= m_fontW;
     pos.y *= m_fontH;
     return pos;

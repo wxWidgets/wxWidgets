@@ -62,13 +62,14 @@ public:
                                bool noRefresh = false );
 
     // scroll to the given (in logical coords) position
-    virtual void Scroll(int x, int y);
+    void Scroll(int x, int y) { DoScroll(x, y); }
+    void Scroll(const wxPoint& pt) { DoScroll(pt.x, pt.y); }
 
     // get/set the page size for this orientation (wxVERTICAL/wxHORIZONTAL)
     int GetScrollPageSize(int orient) const;
     void SetScrollPageSize(int orient, int pageSize);
 
-    // get the number of lines the window can scroll, 
+    // get the number of lines the window can scroll,
     // returns 0 if no scrollbars are there.
     int GetScrollLines( int orient ) const;
 
@@ -87,7 +88,14 @@ public:
     virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
 
     // Get the view start
-    virtual void GetViewStart(int *x, int *y) const;
+    void GetViewStart(int *x, int *y) const { DoGetViewStart(x, y); }
+
+    wxPoint GetViewStart() const
+    {
+        wxPoint pt;
+        DoGetViewStart(&pt.x, &pt.y);
+        return pt;
+    }
 
     // Set the scale factor, used in PrepareDC
     void SetScale(double xs, double ys) { m_scaleX = xs; m_scaleY = ys; }
@@ -190,6 +198,10 @@ protected:
         if ( h )
             *h = size.y;
     }
+
+    // implementation of public methods with the same name
+    virtual void DoGetViewStart(int *x, int *y) const;
+    virtual void DoScroll(int x, int y);
 
     // implementations of various wxWindow virtual methods which should be
     // forwarded to us (this can be done by WX_FORWARD_TO_SCROLL_HELPER())

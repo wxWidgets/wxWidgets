@@ -27,7 +27,6 @@ public:
                                int xPos = 0, int yPos = 0,
                                bool noRefresh = false);
     virtual void AdjustScrollbars();
-    virtual void Scroll(int x, int y);
 
 protected:
     // this does (each) half of AdjustScrollbars() work
@@ -60,10 +59,12 @@ protected:
     }
 
     // and this does the same for Scroll()
-    void DoScroll(int orient,
-                  int pos,
-                  int pixelsPerLine,
-                  int *posOld);
+    void DoScrollOneDir(int orient,
+                        int pos,
+                        int pixelsPerLine,
+                        int *posOld);
+
+    virtual void DoScroll(int x, int y);
 
 private:
     DECLARE_NO_COPY_CLASS(wxScrollHelperNative)
