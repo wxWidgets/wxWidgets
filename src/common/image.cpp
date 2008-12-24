@@ -236,6 +236,7 @@ bool wxImage::Create( int width, int height, unsigned char* data, unsigned char*
     M_IMGDATA->m_height = height;
     M_IMGDATA->m_ok = true;
     M_IMGDATA->m_static = static_data;
+    M_IMGDATA->m_staticAlpha = static_data;
 
     return true;
 }
