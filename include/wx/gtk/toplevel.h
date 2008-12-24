@@ -90,8 +90,6 @@ public:
 
     GtkWidget    *m_mainWidget;
 
-    bool m_deferShow;
-
     bool          m_fsIsShowing;         /* full screen */
     int           m_fsSaveGdkFunc, m_fsSaveGdkDecor;
     wxRect        m_fsSaveFrame;
@@ -138,6 +136,8 @@ protected:
     // string shown in the title bar
     wxString m_title;
 
+    bool m_deferShow;
+
 private:
     wxSize& GetCachedDecorSize();
 
@@ -146,6 +146,8 @@ private:
 
     // is the frame currently grabbed explicitly by the application?
     bool m_grabbed;
+
+    bool m_updateDecorSize;
 };
 
 #endif // _WX_GTK_TOPLEVEL_H_

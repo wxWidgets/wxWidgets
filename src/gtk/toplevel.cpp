@@ -442,6 +442,7 @@ void wxTopLevelWindowGTK::Init()
     m_gdkFunc = 0;
     m_grabbed = false;
     m_deferShow = true;
+    m_updateDecorSize = true;
 
     m_urgency_hint = -2;
 }
@@ -779,18 +780,31 @@ bool wxTopLevelWindowGTK::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    bool deferShow = show && m_deferShow && !m_isShown;
+    bool deferShow = show && !m_isShown && m_deferShow;
     if (deferShow)
     {
-        m_deferShow =
-        deferShow = !GTK_WIDGET_REALIZED(m_widget) &&
-            gdk_x11_screen_supports_net_wm_hint(
-                gtk_widget_get_screen(m_widget),
-                gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false)) &&
+        deferShow = false;
+        if (!GTK_WIDGET_REALIZED(m_widget) &&
             g_signal_handler_find(m_widget,
                 GSignalMatchType(G_SIGNAL_MATCH_ID | G_SIGNAL_MATCH_DATA),
                 g_signal_lookup("property_notify_event", GTK_TYPE_WIDGET),
-                0, NULL, NULL, this);
+                0, NULL, NULL, this))
+        {
+            if (gdk_x11_screen_supports_net_wm_hint(
+                gtk_widget_get_screen(m_widget),
+                gdk_atom_intern("_NET_REQUEST_FRAME_EXTENTS", false)))
+            {
+                deferShow = true;
+            }
+            else
+            {
+                // Don't allow changes to m_decorSize, it breaks saving/restoring
+                // window size with GetSize()/SetSize() because it makes window
+                // bigger between each restore and save.
+                m_updateDecorSize = false;
+            }
+        }
+        m_deferShow = deferShow;
     }
     if (deferShow)
     {
@@ -995,7 +1009,7 @@ void wxTopLevelWindowGTK::GTKUpdateDecorSize(const wxSize& decorSize)
 {
     if (!IsMaximized() && !IsFullScreen())
         GetCachedDecorSize() = decorSize;
-    if (m_decorSize != decorSize)
+    if (m_updateDecorSize && m_decorSize != decorSize)
     {
         const wxSize diff = decorSize - m_decorSize;
         m_decorSize = decorSize;
