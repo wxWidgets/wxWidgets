@@ -1333,7 +1333,7 @@ int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
         ncols = m_cols;
         nrows = m_rows;
 
-        wxASSERT_MSG( ncols*nrows <= nitems, "too many items in grid sizer" );
+        wxASSERT_MSG( ncols*nrows >= nitems, "too many items in grid sizer" );
     }
     else if ( m_cols )
     {
