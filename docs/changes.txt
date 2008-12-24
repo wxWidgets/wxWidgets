@@ -343,6 +343,7 @@ All (GUI):
 - Added wxWrapSizer (Arne Steinarson).
 - Added wxSpinCtrlDouble (John Labenski).
 - Support custom labels in wxMessageDialog (Gareth Simpson for wxMac version).
+- Added wxScrolledWindow::ShowScrollbars().
 - Also added wxCANCEL_DEFAULT to wxMessageDialog.
 - Allow copying text in the log dialogs.
 - Added multisample (anti-aliasing) support to wxGLCanvas (Olivier Playez).

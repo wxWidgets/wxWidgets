@@ -20,6 +20,14 @@ class WXDLLIMPEXP_FWD_BASE wxTimer;
 // default scrolled window style: scroll in both directions
 #define wxScrolledWindowStyle (wxHSCROLL | wxVSCROLL)
 
+// values for the second argument of wxScrollHelper::ShowScrollbars()
+enum wxScrollbarVisibility
+{
+    wxSHOW_SB_NEVER = -1,   // never show the scrollbar at all
+    wxSHOW_SB_DEFAULT,      // show scrollbar only if it is needed
+    wxSHOW_SB_ALWAYS        // always show scrollbar, even if not needed
+};
+
 // ----------------------------------------------------------------------------
 // The hierarchy of scrolling classes is a bit complicated because we want to
 // put as much functionality as possible in a mix-in class not deriving from
@@ -79,6 +87,13 @@ public:
     // get the size of one logical unit in physical ones
     virtual void GetScrollPixelsPerUnit(int *pixelsPerUnitX,
                                         int *pixelsPerUnitY) const;
+
+    // Set scrollbar visibility: it is possible to show scrollbar only if it is
+    // needed (i.e. if our virtual size is greater than the current size of the
+    // associated window), always (as wxALWAYS_SHOW_SB style does) or never (in
+    // which case you should provide some other way to scroll the window as the
+    // user wouldn't be able to do it at all)
+    void ShowScrollbars(wxScrollbarVisibility horz, wxScrollbarVisibility vert);
 
     // Enable/disable Windows scrolling in either direction. If true, wxWidgets
     // scrolls the canvas and only a bit of the canvas is invalidated; no
@@ -202,6 +217,8 @@ protected:
     // implementation of public methods with the same name
     virtual void DoGetViewStart(int *x, int *y) const;
     virtual void DoScroll(int x, int y);
+    virtual void DoShowScrollbars(wxScrollbarVisibility horz,
+                                  wxScrollbarVisibility vert);
 
     // implementations of various wxWindow virtual methods which should be
     // forwarded to us (this can be done by WX_FORWARD_TO_SCROLL_HELPER())

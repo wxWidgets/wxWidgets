@@ -64,7 +64,10 @@ protected:
                         int pixelsPerLine,
                         int *posOld);
 
+    // implement the base class methods
     virtual void DoScroll(int x, int y);
+    virtual void DoShowScrollbars(wxScrollbarVisibility horz,
+                                  wxScrollbarVisibility vert);
 
 private:
     DECLARE_NO_COPY_CLASS(wxScrollHelperNative)

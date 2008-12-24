@@ -972,6 +972,18 @@ void wxScrollHelper::EnableScrolling (bool x_scroll, bool y_scroll)
     m_yScrollingEnabled = y_scroll;
 }
 
+void wxScrollHelper::ShowScrollbars(wxScrollbarVisibility horz,
+                                    wxScrollbarVisibility vert)
+{
+    DoShowScrollbars(horz, vert);
+}
+
+void wxScrollHelper::DoShowScrollbars(wxScrollbarVisibility horz,
+                                      wxScrollbarVisibility vert)
+{
+    // TODO
+}
+
 // Where the current view starts from
 void wxScrollHelper::DoGetViewStart (int *x, int *y) const
 {

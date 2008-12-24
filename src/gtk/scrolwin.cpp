@@ -188,3 +188,45 @@ void wxScrollHelperNative::DoScroll( int x_pos, int y_pos )
     DoScrollOneDir(wxHORIZONTAL, x_pos, m_xScrollPixelsPerLine, &m_xScrollPosition);
     DoScrollOneDir(wxVERTICAL, y_pos, m_yScrollPixelsPerLine, &m_yScrollPosition);
 }
+
+// ----------------------------------------------------------------------------
+// scrollbars visibility
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+GtkPolicyType GtkPolicyFromWX(wxScrollbarVisibility visibility)
+{
+    GtkPolicyType policy;
+    switch ( visibility )
+    {
+        case wxSHOW_SB_NEVER:
+            policy = GTK_POLICY_NEVER;
+            break;
+
+        case wxSHOW_SB_DEFAULT:
+            policy = GTK_POLICY_AUTOMATIC;
+            break;
+
+        case wxSHOW_SB_ALWAYS:
+            policy = GTK_POLICY_ALWAYS;
+            break;
+    }
+
+    return policy;
+}
+
+} // anonymous namespace
+
+void wxScrollHelperNative::DoShowScrollbars(wxScrollbarVisibility horz,
+                                            wxScrollbarVisibility vert)
+{
+    GtkScrolledWindow * const scrolled = GTK_SCROLLED_WINDOW(m_win->m_widget);
+    wxCHECK_RET( scrolled, "window must be created" );
+
+    gtk_scrolled_window_set_policy(scrolled,
+                                   GtkPolicyFromWX(horz),
+                                   GtkPolicyFromWX(vert));
+}
+

@@ -621,6 +621,7 @@ private:
     void OnTestAuto(wxCommandEvent& WXUNUSED(event)) { new MyAutoFrame(this); }
 
     void OnToggleSync(wxCommandEvent& event);
+    void OnToggleScrollbar(wxCommandEvent& event);
 
     MyScrolledWindowBase *m_win1,
                          *m_win2;
@@ -834,6 +835,7 @@ const wxWindowID Scroll_Test_Sub    = wxWindow::NewControlId();
 const wxWindowID Scroll_Test_Auto   = wxWindow::NewControlId();
 
 const wxWindowID Scroll_TglBtn_Sync = wxWindow::NewControlId();
+const wxWindowID Scroll_TglBtn_Scrollbar = wxWindow::NewControlId();
 
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
@@ -846,6 +848,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU(Scroll_Test_Auto, MyFrame::OnTestAuto)
 
     EVT_TOGGLEBUTTON(Scroll_TglBtn_Sync, MyFrame::OnToggleSync)
+    EVT_TOGGLEBUTTON(Scroll_TglBtn_Scrollbar, MyFrame::OnToggleScrollbar)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
@@ -896,8 +899,16 @@ MyFrame::MyFrame()
     sizerScrollWin->Add(m_win2, flagsExpand);
     topsizer->Add(sizerScrollWin, flagsExpand);
 
+    const wxSizerFlags flagsHBorder(wxSizerFlags().Border(wxLEFT | wxRIGHT));
+
     wxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
-    sizerBtns->Add(new wxToggleButton(this, Scroll_TglBtn_Sync, "&Synchronize"));
+    sizerBtns->Add(new wxToggleButton(this, Scroll_TglBtn_Sync, "S&ynchronize"),
+                   flagsHBorder);
+
+    wxToggleButton *btn =new wxToggleButton(this, Scroll_TglBtn_Scrollbar,
+                                            "&Show scrollbar");
+    btn->SetValue(true);
+    sizerBtns->Add(btn, flagsHBorder);
     topsizer->Add(sizerBtns, wxSizerFlags().Centre().Border());
 
     SetSizer(topsizer);
@@ -918,6 +929,13 @@ void MyFrame::OnToggleSync(wxCommandEvent& event)
         m_win1->SyncWith(NULL);
         m_win2->SyncWith(NULL);
     }
+}
+
+void MyFrame::OnToggleScrollbar(wxCommandEvent& event)
+{
+    m_win1->ShowScrollbars(wxSHOW_SB_NEVER,
+                           event.IsChecked() ? wxSHOW_SB_ALWAYS
+                                             : wxSHOW_SB_NEVER);
 }
 
 void MyFrame::OnQuit(wxCommandEvent &WXUNUSED(event))

@@ -7,6 +7,16 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    Possible values for the second argument of wxScrolled::ShowScrollbars().
+ */
+enum wxScrollbarVisibility
+{
+    wxSHOW_SB_NEVER = -1,   ///< Never show the scrollbar at all.
+    wxSHOW_SB_DEFAULT,      ///< Show scrollbar only if it is needed.
+    wxSHOW_SB_ALWAYS        ///< Always show scrollbar, even if not needed.
+};
+
+/**
 
     The wxScrolled class manages scrolling for its client area, transforming
     the coordinates according to the scrollbar positions, and setting the
@@ -236,6 +246,32 @@ public:
                  it is available, it is enabled by default.
     */
     void EnableScrolling(bool xScrolling, bool yScrolling);
+
+    /**
+        Set the scrollbar visibility.
+
+        By default the scrollbar in the corresponding direction is only shown
+        if it is needed, i.e. if the virtual size of the scrolled window in
+        this direction is greater than the current physical window size. Using
+        this function the scrollbar visibility can be changed to be:
+            - wxSHOW_SB_ALWAYS: To always show the scrollbar, even if it is
+                not needed currently (wxALWAYS_SHOW_SB style can be used during
+                the window creation to achieve the same effect but it applies
+                in both directions).
+            - wxSHOW_SB_NEVER: To never show the scrollbar at all. In this case
+                the program should presumably provide some other way for the
+                user to scroll the window.
+            - wxSHOW_SB_DEFAULT: To restore the default behaviour described
+                above.
+
+        @param horz
+            The desired visibility for the horizontal scrollbar.
+        @param vert
+            The desired visibility for the vertical scrollbar.
+
+        @since 2.9.0
+     */
+    void ShowScrollbars(wxScrollbarVisibility horz, wxScrollbarVisibility vert);
 
     /**
         Get the number of pixels per scroll unit (line), in each direction, as
