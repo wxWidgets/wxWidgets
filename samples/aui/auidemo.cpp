@@ -101,9 +101,9 @@ class MyFrame : public wxFrame
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
         ID_NotebookAlignBottom,
-        
+
         ID_SampleItem,
-        
+
         ID_FirstPerspective = ID_CreatePerspective+1000
     };
 
@@ -756,7 +756,7 @@ MyFrame::MyFrame(wxWindow* parent,
 
 
     // prepare a few custom overflow elements for the toolbars' overflow buttons
-    
+
     wxAuiToolBarItemArray prepend_items;
     wxAuiToolBarItemArray append_items;
     wxAuiToolBarItem item;
@@ -819,7 +819,7 @@ MyFrame::MyFrame(wxWindow* parent,
 
 
     wxAuiToolBar* tb4 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                         wxAUI_TB_DEFAULT_STYLE | 
+                                         wxAUI_TB_DEFAULT_STYLE |
                                          wxAUI_TB_OVERFLOW |
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
@@ -1397,35 +1397,35 @@ void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
     if (evt.IsDropDownClicked())
     {
         wxAuiToolBar* tb = static_cast<wxAuiToolBar*>(evt.GetEventObject());
-        
+
         tb->SetToolSticky(evt.GetId(), true);
-        
+
         // create the popup menu
         wxMenu menuPopup;
-        
+
         wxBitmap bmp = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
-        
+
         wxMenuItem* m1 =  new wxMenuItem(&menuPopup, 10001, _("Drop Down Item 1"));
         m1->SetBitmap(bmp);
         menuPopup.Append(m1);
-        
+
         wxMenuItem* m2 =  new wxMenuItem(&menuPopup, 10002, _("Drop Down Item 2"));
         m2->SetBitmap(bmp);
         menuPopup.Append(m2);
-        
+
         wxMenuItem* m3 =  new wxMenuItem(&menuPopup, 10003, _("Drop Down Item 3"));
         m3->SetBitmap(bmp);
         menuPopup.Append(m3);
-        
+
         wxMenuItem* m4 =  new wxMenuItem(&menuPopup, 10004, _("Drop Down Item 4"));
         m4->SetBitmap(bmp);
         menuPopup.Append(m4);
-        
+
         // line up our menu with the button
         wxRect rect = tb->GetToolRect(evt.GetId());
         wxPoint pt = tb->ClientToScreen(rect.GetBottomLeft());
         pt = ScreenToClient(pt);
-        
+
 
         PopupMenu(&menuPopup, pt);
 
@@ -1568,9 +1568,6 @@ wxAuiNotebook* MyFrame::CreateNotebook()
 
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
    wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
-   flex->AddGrowableRow( 0 );
-   flex->AddGrowableRow( 3 );
-   flex->AddGrowableCol( 1 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
    flex->Add( new wxStaticText( panel, -1, wxT("wxTextCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1)),
@@ -1579,6 +1576,9 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxSize(100,-1),
                 wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
+   flex->AddGrowableRow( 0 );
+   flex->AddGrowableRow( 3 );
+   flex->AddGrowableCol( 1 );
    panel->SetSizer( flex );
    ctrl->AddPage( panel, wxT("wxPanel"), false, page_bmp );
 
