@@ -223,7 +223,10 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
         sizer = flexsizer;
     }
     else if (m_class == wxT("wxGridBagSizer"))
-        sizer = Handle_wxGridBagSizer();
+    {
+        flexsizer = Handle_wxGridBagSizer();
+        sizer = flexsizer;
+    }
     else if (m_class == wxT("wxWrapSizer"))
         sizer = Handle_wxWrapSizer();
 
@@ -321,7 +324,7 @@ wxFlexGridSizer* wxSizerXmlHandler::Handle_wxFlexGridSizer()
 }
 
 
-wxSizer*  wxSizerXmlHandler::Handle_wxGridBagSizer()
+wxGridBagSizer* wxSizerXmlHandler::Handle_wxGridBagSizer()
 {
     return new wxGridBagSizer(GetDimension(wxT("vgap")), GetDimension(wxT("hgap")));
 }
