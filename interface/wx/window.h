@@ -2368,7 +2368,10 @@ public:
         @param thumbSize
             The size of the thumb, or visible portion of the scrollbar, in scroll units.
         @param range
-            The maximum position of the scrollbar.
+            The maximum position of the scrollbar. Value of -1 can be used to
+            ask for the scrollbar to be shown but in the disabled state: this
+            can be used to avoid removing the scrollbar even when it is not
+            needed (currently this is only implemented in wxMSW port).
         @param refresh
             @true to redraw the scrollbar, @false otherwise.
 

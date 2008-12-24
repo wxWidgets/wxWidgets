@@ -452,7 +452,7 @@ public:
                            wxDefaultPosition, wxDefaultSize,
                            wxBORDER_SUNKEN)
     {
-        m_nLines = 100;
+        m_nLines = 50;
         m_winSync = NULL;
         m_inDoSync = false;
 
@@ -621,7 +621,7 @@ private:
     void OnTestAuto(wxCommandEvent& WXUNUSED(event)) { new MyAutoFrame(this); }
 
     void OnToggleSync(wxCommandEvent& event);
-    void OnToggleScrollbar(wxCommandEvent& event);
+    void OnScrollbarVisibility(wxCommandEvent& event);
 
     MyScrolledWindowBase *m_win1,
                          *m_win2;
@@ -835,7 +835,7 @@ const wxWindowID Scroll_Test_Sub    = wxWindow::NewControlId();
 const wxWindowID Scroll_Test_Auto   = wxWindow::NewControlId();
 
 const wxWindowID Scroll_TglBtn_Sync = wxWindow::NewControlId();
-const wxWindowID Scroll_TglBtn_Scrollbar = wxWindow::NewControlId();
+const wxWindowID Scroll_Radio_ShowScrollbar = wxWindow::NewControlId();
 
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
@@ -848,7 +848,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU(Scroll_Test_Auto, MyFrame::OnTestAuto)
 
     EVT_TOGGLEBUTTON(Scroll_TglBtn_Sync, MyFrame::OnToggleSync)
-    EVT_TOGGLEBUTTON(Scroll_TglBtn_Scrollbar, MyFrame::OnToggleScrollbar)
+    EVT_RADIOBOX(Scroll_Radio_ShowScrollbar, MyFrame::OnScrollbarVisibility)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
@@ -879,10 +879,12 @@ MyFrame::MyFrame()
     SetMenuBar( mbar );
 
 
+    wxPanel *panel = new wxPanel(this);
+
     const wxSizerFlags flagsExpand(wxSizerFlags(1).Expand());
 
     wxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
-    topsizer->Add(new wxStaticText(this, wxID_ANY,
+    topsizer->Add(new wxStaticText(panel, wxID_ANY,
         "The windows below should behave in the same way, even though\n"
         "they're implemented quite differently, see the code for details.\n"
         "\n"
@@ -891,28 +893,39 @@ MyFrame::MyFrame()
         "don't be surprised by this."),
         wxSizerFlags().Centre().Border());
 
-    m_win1 = new MyScrolledWindowDumb(this);
-    m_win2 = new MyScrolledWindowSmart(this);
+    m_win1 = new MyScrolledWindowDumb(panel);
+    m_win2 = new MyScrolledWindowSmart(panel);
 
     wxSizer *sizerScrollWin = new wxBoxSizer(wxHORIZONTAL);
     sizerScrollWin->Add(m_win1, flagsExpand);
     sizerScrollWin->Add(m_win2, flagsExpand);
     topsizer->Add(sizerScrollWin, flagsExpand);
 
-    const wxSizerFlags flagsHBorder(wxSizerFlags().Border(wxLEFT | wxRIGHT));
+    const wxSizerFlags
+        flagsHBorder(wxSizerFlags().Centre().Border(wxLEFT | wxRIGHT));
 
     wxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
-    sizerBtns->Add(new wxToggleButton(this, Scroll_TglBtn_Sync, "S&ynchronize"),
+
+    // the radio buttons are in the same order as wxSHOW_SB_XXX values but
+    // offset by 1
+    const wxString visibilities[] = { "&never", "&default", "&always" };
+    wxRadioBox *radio = new wxRadioBox(panel, Scroll_Radio_ShowScrollbar,
+                                       "Left &scrollbar visibility: ",
+                                       wxDefaultPosition, wxDefaultSize,
+                                       WXSIZEOF(visibilities), visibilities);
+    radio->SetSelection(wxSHOW_SB_DEFAULT + 1);
+    sizerBtns->Add(radio, flagsHBorder);
+
+    sizerBtns->Add(new wxToggleButton(panel, Scroll_TglBtn_Sync, "S&ynchronize"),
                    flagsHBorder);
 
-    wxToggleButton *btn =new wxToggleButton(this, Scroll_TglBtn_Scrollbar,
-                                            "&Show scrollbar");
-    btn->SetValue(true);
-    sizerBtns->Add(btn, flagsHBorder);
     topsizer->Add(sizerBtns, wxSizerFlags().Centre().Border());
 
-    SetSizer(topsizer);
+    panel->SetSizer(topsizer);
 
+    wxSize size = panel->GetBestSize();
+    SetSizeHints(size);
+    SetClientSize(2*size);
 
     Show();
 }
@@ -931,11 +944,10 @@ void MyFrame::OnToggleSync(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnToggleScrollbar(wxCommandEvent& event)
+void MyFrame::OnScrollbarVisibility(wxCommandEvent& event)
 {
     m_win1->ShowScrollbars(wxSHOW_SB_NEVER,
-                           event.IsChecked() ? wxSHOW_SB_ALWAYS
-                                             : wxSHOW_SB_NEVER);
+                           wxScrollbarVisibility(event.GetSelection() - 1));
 }
 
 void MyFrame::OnQuit(wxCommandEvent &WXUNUSED(event))

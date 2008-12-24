@@ -1232,28 +1232,20 @@ void
 wxScrollHelper::DoAdjustScrollbar(int orient,
                                   int clientSize,
                                   int virtSize,
-                                  int& pixelsPerUnit,
+                                  int pixelsPerUnit,
                                   int& scrollUnits,
                                   int& scrollPosition,
+                                  int& scrollLinesPerPage,
                                   wxScrollbarVisibility visibility)
 {
-    if ( visibility == wxSHOW_SB_NEVER )
-    {
-        m_win->SetScrollbar(orient, 0, 0, 0);
-        return;
-    }
-
     // scroll lines per page: if 0, no scrolling is needed
-    int unitsPerPage;
-
     // check if we need scrollbar in this direction at all
-    if ( pixelsPerUnit == 0 ||
-            (clientSize >= virtSize && visibility != wxSHOW_SB_ALWAYS) )
+    if ( pixelsPerUnit == 0 || clientSize >= virtSize )
     {
         // scrolling is disabled or unnecessary
         scrollUnits =
         scrollPosition = 0;
-        unitsPerPage = 0;
+        scrollLinesPerPage = 0;
     }
     else // might need scrolling
     {
@@ -1261,23 +1253,23 @@ wxScrollHelper::DoAdjustScrollbar(int orient,
         scrollUnits = (virtSize + pixelsPerUnit - 1) / pixelsPerUnit;
 
         // Calculate the number of fully scroll units
-        unitsPerPage = clientSize / pixelsPerUnit;
+        scrollLinesPerPage = clientSize / pixelsPerUnit;
 
-        if (unitsPerPage >= scrollUnits)
+        if ( scrollLinesPerPage >= scrollUnits )
         {
             // we're big enough to not need scrolling
             scrollUnits =
             scrollPosition = 0;
-            unitsPerPage = 0;
+            scrollLinesPerPage = 0;
         }
         else // we do need a scrollbar
         {
-            if ( unitsPerPage < 1 )
-                unitsPerPage = 1;
+            if ( scrollLinesPerPage < 1 )
+                scrollLinesPerPage = 1;
 
             // Correct position if greater than extent of canvas minus
             // the visible portion of it or if below zero
-            const int posMax = scrollUnits - unitsPerPage;
+            const int posMax = scrollUnits - scrollLinesPerPage;
             if ( scrollPosition > posMax )
                 scrollPosition = posMax;
             else if ( scrollPosition < 0 )
@@ -1285,10 +1277,26 @@ wxScrollHelper::DoAdjustScrollbar(int orient,
         }
     }
 
-    m_win->SetScrollbar(orient, scrollPosition, unitsPerPage, scrollUnits);
+    // in wxSHOW_SB_NEVER case don't show the scrollbar even if it's needed, in
+    // wxSHOW_SB_ALWAYS case show the scrollbar even if it's not needed by
+    // passing a special range value to SetScrollbar()
+    int range wxDUMMY_INITIALIZE(0);
+    switch ( visibility )
+    {
+        case wxSHOW_SB_NEVER:
+            range = 0;
+            break;
 
-    // The amount by which we scroll when paging
-    SetScrollPageSize(orient, unitsPerPage);
+        case wxSHOW_SB_DEFAULT:
+            range = scrollUnits;
+            break;
+
+        case wxSHOW_SB_ALWAYS:
+            range = scrollUnits ? scrollUnits : -1;
+            break;
+    }
+
+    m_win->SetScrollbar(orient, scrollPosition, scrollLinesPerPage, range);
 }
 
 void wxScrollHelper::AdjustScrollbars()
@@ -1348,6 +1356,7 @@ void wxScrollHelper::AdjustScrollbars()
                           m_xScrollPixelsPerLine,
                           m_xScrollLines,
                           m_xScrollPosition,
+                          m_xScrollLinesPerPage,
                           m_xVisibility);
 
         DoAdjustScrollbar(wxVERTICAL,
@@ -1356,6 +1365,7 @@ void wxScrollHelper::AdjustScrollbars()
                           m_yScrollPixelsPerLine,
                           m_yScrollLines,
                           m_yScrollPosition,
+                          m_yScrollLinesPerPage,
                           m_yVisibility);
 
 

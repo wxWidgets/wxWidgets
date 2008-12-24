@@ -963,6 +963,9 @@ void wxWindowMSW::MSWUpdateUIState(int action, int state)
 // scrolling stuff
 // ---------------------------------------------------------------------------
 
+namespace
+{
+
 inline int GetScrollPosition(HWND hWnd, int wOrient)
 {
 #ifdef __WXMICROWIN__
@@ -978,12 +981,19 @@ inline int GetScrollPosition(HWND hWnd, int wOrient)
 #endif
 }
 
+inline UINT WXOrientToSB(int orient)
+{
+    return orient == wxHORIZONTAL ? SB_HORZ : SB_VERT;
+}
+
+} // anonymous namespace
+
 int wxWindowMSW::GetScrollPos(int orient) const
 {
     HWND hWnd = GetHwnd();
     wxCHECK_MSG( hWnd, 0, _T("no HWND in GetScrollPos") );
 
-    return GetScrollPosition(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT);
+    return GetScrollPosition(hWnd, WXOrientToSB(orient));
 }
 
 // This now returns the whole range, not just the number
@@ -994,15 +1004,9 @@ int wxWindowMSW::GetScrollRange(int orient) const
     HWND hWnd = GetHwnd();
     if ( !hWnd )
         return 0;
-#if 0
-    ::GetScrollRange(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
-                     &minPos, &maxPos);
-#endif
     WinStruct<SCROLLINFO> scrollInfo;
     scrollInfo.fMask = SIF_RANGE;
-    if ( !::GetScrollInfo(hWnd,
-                          orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
-                          &scrollInfo) )
+    if ( !::GetScrollInfo(hWnd, WXOrientToSB(orient), &scrollInfo) )
     {
         // Most of the time this is not really an error, since the return
         // value can also be zero when there is no scrollbar yet.
@@ -1035,8 +1039,7 @@ void wxWindowMSW::SetScrollPos(int orient, int pos, bool refresh)
         info.fMask |= SIF_DISABLENOSCROLL;
     }
 
-    ::SetScrollInfo(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
-                    &info, refresh);
+    ::SetScrollInfo(hWnd, WXOrientToSB(orient), &info, refresh);
 }
 
 // New function that will replace some of the above.
@@ -1046,28 +1049,37 @@ void wxWindowMSW::SetScrollbar(int orient,
                                int range,
                                bool refresh)
 {
+    // We have to set the variables here to make them valid in events
+    // triggered by ::SetScrollInfo()
+    *(orient == wxHORIZONTAL ? &m_xThumbSize : &m_yThumbSize) = pageSize;
+
+    HWND hwnd = GetHwnd();
+    if ( !hwnd )
+        return;
+
     WinStruct<SCROLLINFO> info;
-    info.nPage = pageSize;
-    info.nMin = 0;              // range is nMax - nMin + 1
-    info.nMax = range - 1;      //  as both nMax and nMax are inclusive
-    info.nPos = pos;
+    if ( range != -1 )
+    {
+        info.nPage = pageSize;
+        info.nMin = 0;              // range is nMax - nMin + 1
+        info.nMax = range - 1;      //  as both nMax and nMax are inclusive
+        info.nPos = pos;
+
+        // enable the scrollbar if it had been disabled before by specifying
+        // SIF_DISABLENOSCROLL below: as we can't know whether this had been
+        // done or not just do it always
+        ::EnableScrollBar(hwnd, WXOrientToSB(orient), ESB_ENABLE_BOTH);
+    }
+    //else: leave all the fields to be 0
+
     info.fMask = SIF_RANGE | SIF_PAGE | SIF_POS;
-    if ( HasFlag(wxALWAYS_SHOW_SB) )
+    if ( HasFlag(wxALWAYS_SHOW_SB) || range == -1 )
     {
         // disable scrollbar instead of removing it then
         info.fMask |= SIF_DISABLENOSCROLL;
     }
 
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-    {
-        // We have to set the variables here to make them valid in events
-        // triggered by ::SetScrollInfo()
-        *(orient == wxHORIZONTAL ? &m_xThumbSize : &m_yThumbSize) = pageSize;
-
-        ::SetScrollInfo(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
-                        &info, refresh);
-    }
+    ::SetScrollInfo(hwnd, WXOrientToSB(orient), &info, refresh);
 }
 
 void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
@@ -5783,8 +5795,7 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
             scrollInfo.fMask = SIF_TRACKPOS;
 
             if ( !::GetScrollInfo(GetHwnd(),
-                                  orientation == wxHORIZONTAL ? SB_HORZ
-                                                              : SB_VERT,
+                                  WXOrientToSB(orientation),
                                   &scrollInfo) )
             {
                 // Not necessarily an error, if there are no scrollbars yet.

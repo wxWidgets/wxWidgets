@@ -35,9 +35,10 @@ private:
     void DoAdjustScrollbar(int orient,
                            int clientSize,
                            int virtSize,
-                           int& pixelsPerUnit,
+                           int pixelsPerUnit,
                            int& scrollUnits,
                            int& scrollPosition,
+                           int& scrollLinesPerPage,
                            wxScrollbarVisibility visibility);
 
 
