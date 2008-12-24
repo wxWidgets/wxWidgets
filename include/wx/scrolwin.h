@@ -93,7 +93,10 @@ public:
     // associated window), always (as wxALWAYS_SHOW_SB style does) or never (in
     // which case you should provide some other way to scroll the window as the
     // user wouldn't be able to do it at all)
-    void ShowScrollbars(wxScrollbarVisibility horz, wxScrollbarVisibility vert);
+    void ShowScrollbars(wxScrollbarVisibility horz, wxScrollbarVisibility vert)
+    {
+        DoShowScrollbars(horz, vert);
+    }
 
     // Enable/disable Windows scrolling in either direction. If true, wxWidgets
     // scrolls the canvas and only a bit of the canvas is invalidated; no
@@ -246,7 +249,8 @@ protected:
                          int virtSize,
                          int& pixelsPerUnit,
                          int& scrollUnits,
-                         int& scrollPosition);
+                         int& scrollPosition,
+                         wxScrollbarVisibility visibility);
 
     // this function should be overridden to return the size available for
     // m_targetWindow inside m_win of the given size
@@ -293,6 +297,8 @@ protected:
 
     wxScrollHelperEvtHandler *m_handler;
 
+    wxScrollbarVisibility m_xVisibility,
+                          m_yVisibility;
 
     DECLARE_NO_COPY_CLASS(wxScrollHelper)
 };

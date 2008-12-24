@@ -323,6 +323,9 @@ wxScrollHelper::wxScrollHelper(wxWindow *win)
     m_xScrollingEnabled =
     m_yScrollingEnabled = true;
 
+    m_xVisibility =
+    m_yVisibility = wxSHOW_SB_DEFAULT;
+
     m_scaleX =
     m_scaleY = 1.0;
 #if wxUSE_MOUSEWHEEL
@@ -650,13 +653,21 @@ wxScrollHelper::AdjustScrollbar(int orient,
                                 int virtSize,
                                 int& pixelsPerUnit,
                                 int& scrollUnits,
-                                int& scrollPosition)
+                                int& scrollPosition,
+                                wxScrollbarVisibility visibility)
 {
+    if ( visibility == wxSHOW_SB_NEVER )
+    {
+        m_win->SetScrollbar(orient, 0, 0, 0);
+        return;
+    }
+
     // scroll lines per page: if 0, no scrolling is needed
     int unitsPerPage;
 
     // check if we need scrollbar in this direction at all
-    if ( pixelsPerUnit == 0 || clientSize >= virtSize )
+    if ( pixelsPerUnit == 0 ||
+            (clientSize >= virtSize && visibility != wxSHOW_SB_ALWAYS) )
     {
         // scrolling is disabled or unnecessary
         scrollUnits =
@@ -755,14 +766,16 @@ void wxScrollHelper::AdjustScrollbars()
                         virtSize.x,
                         m_xScrollPixelsPerLine,
                         m_xScrollLines,
-                        m_xScrollPosition);
+                        m_xScrollPosition,
+                        m_xVisibility);
 
         AdjustScrollbar(wxVERTICAL,
                         clientSize.y,
                         virtSize.y,
                         m_yScrollPixelsPerLine,
                         m_yScrollLines,
-                        m_yScrollPosition);
+                        m_yScrollPosition,
+                        m_yVisibility);
 
 
         // If a scrollbar (dis)appeared as a result of this, we need to adjust
@@ -972,16 +985,16 @@ void wxScrollHelper::EnableScrolling (bool x_scroll, bool y_scroll)
     m_yScrollingEnabled = y_scroll;
 }
 
-void wxScrollHelper::ShowScrollbars(wxScrollbarVisibility horz,
-                                    wxScrollbarVisibility vert)
-{
-    DoShowScrollbars(horz, vert);
-}
-
 void wxScrollHelper::DoShowScrollbars(wxScrollbarVisibility horz,
                                       wxScrollbarVisibility vert)
 {
-    // TODO
+    if ( horz != m_xVisibility || vert != m_yVisibility )
+    {
+        m_xVisibility = horz;
+        m_yVisibility = vert;
+
+        AdjustScrollbars();
+    }
 }
 
 // Where the current view starts from
