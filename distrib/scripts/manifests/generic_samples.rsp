@@ -1097,17 +1097,6 @@ samples/scroll/makefile.unx
 samples/scroll/makefile.wat
 samples/scroll/makefile.vc
 samples/scroll/scroll.cpp
-samples/scrollsub/scrollsub.bkl
-samples/scrollsub/scrollsub.rc
-samples/scrollsub/scrollsubM5.xml
-samples/scrollsub/scrollsub.dsp
-samples/scrollsub/Makefile.in
-samples/scrollsub/makefile.bcc
-samples/scrollsub/makefile.gcc
-samples/scrollsub/makefile.unx
-samples/scrollsub/makefile.wat
-samples/scrollsub/makefile.vc
-samples/scrollsub/scrollsub.cpp
 samples/shaped/descrip.mms
 samples/shaped/shaped.bkl
 samples/shaped/shaped.rc

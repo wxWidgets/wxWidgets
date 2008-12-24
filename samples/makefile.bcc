@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll scrollsub shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
+all: access animate artprov aui calendar caret clipboard collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal mobile nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -266,10 +266,6 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>scroll.bat
 	call scroll.bat
 	@del scroll.bat
-	@echo cd scrollsub >scrollsub.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>scrollsub.bat
-	call scrollsub.bat
-	@del scrollsub.bat
 	@echo cd shaped >shaped.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>shaped.bat
 	call shaped.bat
@@ -674,12 +670,6 @@ scroll:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>scroll.bat
 	call scroll.bat
 	@del scroll.bat
-
-scrollsub: 
-	@echo cd scrollsub >scrollsub.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>scrollsub.bat
-	call scrollsub.bat
-	@del scrollsub.bat
 
 shaped: 
 	@echo cd shaped >shaped.bat

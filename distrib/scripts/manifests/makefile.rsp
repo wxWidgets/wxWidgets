@@ -87,7 +87,6 @@ samples/richtext/Makefile.in
 samples/rotate/Makefile.in
 samples/sashtest/Makefile.in
 samples/scroll/Makefile.in
-samples/scrollsub/Makefile.in
 samples/shaped/Makefile.in
 samples/sockets/Makefile.in
 samples/sound/Makefile.in

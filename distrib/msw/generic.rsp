@@ -1076,19 +1076,6 @@ samples/scroll/*.txt
 samples/scroll/*.pro
 samples/scroll/*.bkl
 
-samples/scrollsub/*.cpp
-samples/scrollsub/*.h
-samples/scrollsub/makefile*
-samples/scrollsub/*.rc
-samples/scrollsub/*.bmp
-samples/scrollsub/*.xpm
-samples/scrollsub/*.xbm
-samples/scrollsub/*.png
-samples/scrollsub/*.ico
-samples/scrollsub/*.txt
-samples/scrollsub/*.pro
-samples/scrollsub/*.bkl
-
 samples/shaped/*.cpp
 samples/shaped/*.h
 samples/shaped/makefile*

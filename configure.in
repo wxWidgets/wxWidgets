@@ -6728,7 +6728,7 @@ fi
 if test "$wxUSE_SCROLLBAR" = "yes"; then
     AC_DEFINE(wxUSE_SCROLLBAR)
     USES_CONTROLS=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll scrollsub"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll"
 fi
 
 if test "$wxUSE_SEARCHCTRL" = "yes"; then

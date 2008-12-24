@@ -71,7 +71,6 @@ samples/regtest/*W7.xml
 samples/rotate/*W7.xml
 samples/sashtest/*W7.xml
 samples/scroll/*W7.xml
-samples/scrollsub/*W7.xml
 samples/shaped/*W7.xml
 samples/sockets/*W7.xml
 samples/splitter/*W7.xml

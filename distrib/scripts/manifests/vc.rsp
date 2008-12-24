@@ -188,8 +188,6 @@ samples/sashtest/sashtest.dsp
 samples/sashtest/sashtest.dsw
 samples/scroll/scroll.dsp
 samples/scroll/scroll.dsw
-samples/scrollsub/scrollsub.dsp
-samples/scrollsub/scrollsub.dsw
 samples/shaped/shaped.dsp
 samples/shaped/shaped.dsw
 samples/sockets/sockets_client.dsp

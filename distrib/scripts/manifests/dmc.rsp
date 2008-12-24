@@ -176,8 +176,6 @@ samples/sashtest/makefile.dmc
 samples/sashtest/makefile.dms
 samples/scroll/makefile.dmc
 samples/scroll/makefile.dms
-samples/scrollsub/makefile.dmc
-samples/scrollsub/makefile.dms
 samples/shaped/makefile.dmc
 samples/shaped/makefile.dms
 samples/sockets/makefile.dmc

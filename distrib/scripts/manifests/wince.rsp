@@ -167,8 +167,6 @@ samples/sashtest/sashtest.vcp
 samples/sashtest/sashtest.vcw
 samples/scroll/scroll.vcp
 samples/scroll/scroll.vcw
-samples/scrollsub/scrollsub.vcp
-samples/scrollsub/scrollsub.vcw
 samples/shaped/shaped.vcp
 samples/shaped/shaped.vcw
 samples/sockets/sockets_client.vcp

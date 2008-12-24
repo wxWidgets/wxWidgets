@@ -113,7 +113,6 @@ TODO: Organize them in a more human-readable way.
 @li @sample{richtext}
 @li @sample{sashtest}
 @li @sample{scroll}
-@li @sample{scrollsub}
 @li @sample{shaped}
 @li @sample{sockets}
 @li @sample{sound}
@@ -729,23 +728,17 @@ renderer and also how to write a shared library
 
 @sampleabout{wxScrolledWindow}
 
-@see @sample{scrollsub}
+This sample demonstrates use of the ::wxScrolledWindow
+class including placing subwindows into it and drawing simple graphics. It uses
+the SetTargetWindow method and thus the effect of scrolling does not show in
+the scrolled window itself, but in one of its subwindows.
+
+Additionally, this samples demonstrates how to optimize drawing operations in
+wxWidgets, in particular using the wxWindow::IsExposed() method with the aim to
+prevent unnecessary drawing in the window and thus reducing or removing flicker
+on screen.
 
 @sampledir{scroll}
-
-@section page_samples_scrollsub Scroll Subwindow Sample
-
-This sample demonstrates use of the ::wxScrolledWindow
-class including placing subwindows into it and drawing simple graphics. It uses the
-SetTargetWindow method and thus the effect
-of scrolling does not show in the scrolled window itself, but in one of its subwindows.
-
-Additionally, this samples demonstrates how to optimize drawing operations in wxWidgets,
-in particular using the wxWindow::IsExposed() method with
-the aim to prevent unnecessary drawing in the window and thus reducing or removing
-flicker on screen.
-
-@sampledir{scrollsub}
 
 @section page_samples_shaped Shaped Window Sample
 

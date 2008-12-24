@@ -138,8 +138,6 @@ samples/sashtest/*M?.xml
 samples/sashtest/*.mcp
 samples/scroll/*M?.xml
 samples/scroll/*.mcp
-samples/scrollsub/*M?.xml
-samples/scrollsub/*.mcp
 samples/shaped/*M?.xml
 samples/shaped/*.mcp
 samples/sockets/*M?.xml

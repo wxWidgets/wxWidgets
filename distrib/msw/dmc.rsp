@@ -113,7 +113,6 @@ samples/richedit/makefile.dm?
 samples/rotate/makefile.dm?
 samples/sashtest/makefile.dm?
 samples/scroll/makefile.dm?
-samples/scrollsub/makefile.dm?
 samples/shaped/makefile.dm?
 samples/sockets/makefile.dm?
 samples/sound/makefile.dm?

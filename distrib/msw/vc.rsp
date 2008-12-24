@@ -167,8 +167,6 @@ samples/sashtest/sashtest.dsp
 
 samples/scroll/scroll.dsp
 
-samples/scrollsub/scrollsub.dsp
-
 samples/shaped/shaped.dsp
 
 samples/sockets/sockets_client.dsp

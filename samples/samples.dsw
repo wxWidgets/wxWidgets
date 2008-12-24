@@ -675,18 +675,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "scrollsub"=.\scrollsub\scrollsub.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "socketclient"=.\sockets\sockets_client.dsp - Package Owner=<4>
 
 Package=<5>
