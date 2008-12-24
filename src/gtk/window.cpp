@@ -2584,17 +2584,43 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
     int w = m_width;
     int h = m_height;
 
-    if (m_wxwindow)
+    if ( m_wxwindow )
     {
         // if window is scrollable, account for scrollbars
-        for (int i = 0; i < 2 && m_scrollBar[i]; i++)
+        if ( GTK_IS_SCROLLED_WINDOW(m_widget) )
         {
-            GtkRequisition req;
-            GtkAdjustment* adj = gtk_range_get_adjustment(m_scrollBar[i]);
-            // if scrollbar enabled
-            if (adj->upper > adj->page_size)
+            GtkPolicyType policy[ScrollDir_Max];
+            gtk_scrolled_window_get_policy(GTK_SCROLLED_WINDOW(m_widget),
+                                           &policy[ScrollDir_Horz],
+                                           &policy[ScrollDir_Vert]);
+
+            for ( int i = 0; i < ScrollDir_Max; i++ )
             {
-                gtk_widget_size_request(GTK_WIDGET(m_scrollBar[i]), &req);
+                // don't account for the scrollbars we don't have
+                GtkRange * const range = m_scrollBar[i];
+                if ( !range )
+                    continue;
+
+                // nor for the ones we have but don't current show
+                switch ( policy[i] )
+                {
+                    case GTK_POLICY_NEVER:
+                        // never shown so doesn't take any place
+                        continue;
+
+                    case GTK_POLICY_ALWAYS:
+                        // no checks necessary
+                        break;
+
+                    case GTK_POLICY_AUTOMATIC:
+                        // may be shown or not, check
+                        GtkAdjustment *adj = gtk_range_get_adjustment(range);
+                        if ( adj->upper <= adj->page_size )
+                            continue;
+                }
+
+                GtkRequisition req;
+                gtk_widget_size_request(GTK_WIDGET(range), &req);
                 if (i == ScrollDir_Horz)
                     h -= req.height;
                 else
