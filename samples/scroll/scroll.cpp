@@ -20,6 +20,7 @@
 
 #include "wx/sizer.h"
 #include "wx/log.h"
+#include "wx/tglbtn.h"
 
 // ----------------------------------------------------------------------------
 // a trivial example
@@ -449,11 +450,31 @@ public:
     MyScrolledWindowBase(wxWindow *parent)
         : wxScrolledWindow(parent, wxID_ANY,
                            wxDefaultPosition, wxDefaultSize,
-                           wxBORDER_SUNKEN),
-          m_nLines( 100 )
+                           wxBORDER_SUNKEN)
     {
+        m_nLines = 100;
+        m_winSync = NULL;
+        m_inDoSync = false;
+
         wxClientDC dc(this);
         dc.GetTextExtent("Line 17", NULL, &m_hLine);
+    }
+
+    // this scrolled window can be synchronized with another one: if this
+    // function is called with a non-NULL pointer, the given window will be
+    // scrolled to the same position as this one
+    void SyncWith(MyScrolledWindowBase *win)
+    {
+        m_winSync = win;
+
+        DoSyncIfNecessary();
+    }
+
+    virtual void ScrollWindow(int dx, int dy, const wxRect *rect = NULL)
+    {
+        wxScrolledWindow::ScrollWindow(dx, dy, rect);
+
+        DoSyncIfNecessary();
     }
 
 protected:
@@ -462,6 +483,32 @@ protected:
 
     // the number of lines we draw
     size_t m_nLines;
+
+private:
+    bool WasScrolledFirst() const { return m_inDoSync; }
+
+    void DoSyncIfNecessary()
+    {
+        if ( m_winSync && !m_winSync->WasScrolledFirst() )
+        {
+            m_inDoSync = true;
+
+            int x, y;
+            GetViewStart(&x, &y);
+
+            m_winSync->Scroll(x, y);
+
+            m_inDoSync = false;
+        }
+    }
+
+    // the window to synchronize with this one or NULL
+    MyScrolledWindowBase *m_winSync;
+
+    // the flag preventing infinite recursion which would otherwise happen if
+    // one window synchronized the other one which in turn synchronized this
+    // one and so on
+    bool m_inDoSync;
 };
 
 // this class does "stupid" redrawing - it redraws everything each time
@@ -575,6 +622,11 @@ private:
     void OnTestSizer(wxCommandEvent& WXUNUSED(event)) { new MySizerFrame(this); }
     void OnTestSub(wxCommandEvent& WXUNUSED(event)) { new MySubFrame(this); }
     void OnTestAuto(wxCommandEvent& WXUNUSED(event)) { new MyAutoFrame(this); }
+
+    void OnToggleSync(wxCommandEvent& event);
+
+    MyScrolledWindowBase *m_win1,
+                         *m_win2;
 
     DECLARE_EVENT_TABLE()
 };
@@ -786,6 +838,8 @@ const wxWindowID Scroll_Test_Sizers = wxWindow::NewControlId();
 const wxWindowID Scroll_Test_Sub    = wxWindow::NewControlId();
 const wxWindowID Scroll_Test_Auto   = wxWindow::NewControlId();
 
+const wxWindowID Scroll_TglBtn_Sync = wxWindow::NewControlId();
+
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_EXIT,  MyFrame::OnQuit)
@@ -795,6 +849,8 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU(Scroll_Test_Sizers, MyFrame::OnTestSizer)
     EVT_MENU(Scroll_Test_Sub, MyFrame::OnTestSub)
     EVT_MENU(Scroll_Test_Auto, MyFrame::OnTestAuto)
+
+    EVT_TOGGLEBUTTON(Scroll_TglBtn_Sync, MyFrame::OnToggleSync)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
@@ -837,15 +893,36 @@ MyFrame::MyFrame()
         "don't be surprised by this."),
         wxSizerFlags().Centre().Border());
 
-    wxSizer *sizerBtm = new wxBoxSizer(wxHORIZONTAL);
-    sizerBtm->Add(new MyScrolledWindowDumb(this), flagsExpand);
-    sizerBtm->Add(new MyScrolledWindowSmart(this), flagsExpand);
-    topsizer->Add(sizerBtm, flagsExpand);
+    m_win1 = new MyScrolledWindowDumb(this);
+    m_win2 = new MyScrolledWindowSmart(this);
+
+    wxSizer *sizerScrollWin = new wxBoxSizer(wxHORIZONTAL);
+    sizerScrollWin->Add(m_win1, flagsExpand);
+    sizerScrollWin->Add(m_win2, flagsExpand);
+    topsizer->Add(sizerScrollWin, flagsExpand);
+
+    wxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
+    sizerBtns->Add(new wxToggleButton(this, Scroll_TglBtn_Sync, "&Synchronize"));
+    topsizer->Add(sizerBtns, wxSizerFlags().Centre().Border());
 
     SetSizer(topsizer);
 
 
     Show();
+}
+
+void MyFrame::OnToggleSync(wxCommandEvent& event)
+{
+    if ( event.IsChecked() )
+    {
+        m_win1->SyncWith(m_win2);
+        m_win2->SyncWith(m_win1);
+    }
+    else
+    {
+        m_win1->SyncWith(NULL);
+        m_win2->SyncWith(NULL);
+    }
 }
 
 void MyFrame::OnQuit(wxCommandEvent &WXUNUSED(event))
