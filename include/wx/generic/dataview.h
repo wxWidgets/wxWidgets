@@ -379,8 +379,8 @@ private:
 WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
                           class WXDLLIMPEXP_ADV);
 
-class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase,
-                                       public wxScrollHelperNative
+class WXDLLIMPEXP_ADV wxDataViewCtrl : public wxDataViewCtrlBase,
+                                       public wxScrollHelper
 {
     friend class wxDataViewMainWindow;
     friend class wxDataViewHeaderWindowBase;
@@ -389,7 +389,7 @@ class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase,
     friend class wxDataViewColumn;
 
 public:
-    wxDataViewCtrl() : wxScrollHelperNative(this)
+    wxDataViewCtrl() : wxScrollHelper(this)
     {
         Init();
     }
@@ -398,7 +398,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator )
-             : wxScrollHelperNative(this)
+             : wxScrollHelper(this)
     {
         Create(parent, id, pos, size, style, validator );
     }
