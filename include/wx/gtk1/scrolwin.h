@@ -16,20 +16,23 @@
 // wxScrolledWindow
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxScrollHelperNative : public wxScrollHelper
+class WXDLLIMPEXP_CORE wxScrollHelper : public wxScrollHelperBase
 {
 public:
-    // default ctor doesn't do anything
-    wxScrollHelperNative(wxWindow *win) : wxScrollHelper(win) { }
+    wxScrollHelper(wxWindow *win) : wxScrollHelperBase(win) { }
 
+    // implement base class pure virtuals
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
                                int xPos = 0, int yPos = 0,
                                bool noRefresh = false);
     virtual void AdjustScrollbars();
-    virtual void Scroll(int x, int y);
 
 protected:
+    virtual void DoScroll(int x, int y);
+    virtual void DoShowScrollbars(wxScrollbarVisibility horz,
+                                  wxScrollbarVisibility vert);
+
     // this does (each) half of AdjustScrollbars() work
     void DoAdjustScrollbar(GtkAdjustment *adj,
                            int pixelsPerLine,
@@ -40,14 +43,14 @@ protected:
                            int *linesPerPage);
 
     // and this does the same for Scroll()
-    void DoScroll(int orient,
-                  GtkAdjustment *adj,
-                  int pos,
-                  int pixelsPerLine,
-                  int *posOld);
+    void DoScrollOneDir(int orient,
+                        GtkAdjustment *adj,
+                        int pos,
+                        int pixelsPerLine,
+                        int *posOld);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxScrollHelperNative)
+    DECLARE_NO_COPY_CLASS(wxScrollHelper)
 };
 
 #endif // _WX_GTK_SCROLLWIN_H_

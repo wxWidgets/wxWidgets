@@ -16,11 +16,11 @@
 // wxScrolledWindow
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxScrollHelperNative : public wxScrollHelper
+class WXDLLIMPEXP_CORE wxScrollHelper : public wxScrollHelperBase
 {
 public:
     // default ctor doesn't do anything
-    wxScrollHelperNative(wxWindow *win) : wxScrollHelper(win) { }
+    wxScrollHelper(wxWindow *win) : wxScrollHelperBase(win) { }
 
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
@@ -70,7 +70,7 @@ protected:
                                   wxScrollbarVisibility vert);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxScrollHelperNative)
+    DECLARE_NO_COPY_CLASS(wxScrollHelper)
 };
 
 #endif // _WX_GTK_SCROLLWIN_H_

@@ -36,10 +36,10 @@
 // wxScrollHelper implementation
 // ----------------------------------------------------------------------------
 
-void wxScrollHelperNative::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
-                                         int noUnitsX, int noUnitsY,
-                                         int xPos, int yPos,
-                                         bool noRefresh)
+void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
+                                   int noUnitsX, int noUnitsY,
+                                   int xPos, int yPos,
+                                   bool noRefresh)
 {
     int xs, ys;
     GetViewStart(& xs, & ys);
@@ -81,13 +81,13 @@ void wxScrollHelperNative::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
     }
 }
 
-void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
-                                             int pixelsPerLine,
-                                             int winSize,
-                                             int virtSize,
-                                             int *pos,
-                                             int *lines,
-                                             int *linesPerPage)
+void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
+                                       int pixelsPerLine,
+                                       int winSize,
+                                       int virtSize,
+                                       int *pos,
+                                       int *lines,
+                                       int *linesPerPage)
 {
     int upper;
     int page_size;
@@ -119,7 +119,7 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
         *pos = *lines;
 }
 
-void wxScrollHelperNative::AdjustScrollbars()
+void wxScrollHelper::AdjustScrollbars()
 {
     int vw, vh;
     m_targetWindow->GetVirtualSize(&vw, &vh);
@@ -163,10 +163,10 @@ void wxScrollHelperNative::AdjustScrollbars()
     }
 }
 
-void wxScrollHelperNative::DoScrollOneDir(int orient,
-                                          int pos,
-                                          int pixelsPerLine,
-                                          int *posOld)
+void wxScrollHelper::DoScrollOneDir(int orient,
+                                    int pos,
+                                    int pixelsPerLine,
+                                    int *posOld)
 {
     if ( pos != -1 && pos != *posOld && pixelsPerLine )
     {
@@ -181,7 +181,7 @@ void wxScrollHelperNative::DoScrollOneDir(int orient,
     }
 }
 
-void wxScrollHelperNative::DoScroll( int x_pos, int y_pos )
+void wxScrollHelper::DoScroll( int x_pos, int y_pos )
 {
     wxCHECK_RET( m_targetWindow != 0, _T("No target window") );
 
@@ -219,8 +219,8 @@ GtkPolicyType GtkPolicyFromWX(wxScrollbarVisibility visibility)
 
 } // anonymous namespace
 
-void wxScrollHelperNative::DoShowScrollbars(wxScrollbarVisibility horz,
-                                            wxScrollbarVisibility vert)
+void wxScrollHelper::DoShowScrollbars(wxScrollbarVisibility horz,
+                                      wxScrollbarVisibility vert)
 {
     GtkScrolledWindow * const scrolled = GTK_SCROLLED_WINDOW(m_win->m_widget);
     wxCHECK_RET( scrolled, "window must be created" );

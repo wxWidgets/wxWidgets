@@ -37,11 +37,11 @@ enum wxScrollbarVisibility
 //
 // So we have
 //
-//                             wxScrollHelper
+//                           wxScrollHelperBase
 //                                   |
 //                                   |
 //                                  \|/
-//      wxWindow            wxScrollHelperNative
+//      wxWindow               wxScrollHelper
 //       |  \                   /        /
 //       |   \                 /        /
 //       |    _|             |_        /
@@ -56,12 +56,12 @@ enum wxScrollbarVisibility
 //
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxScrollHelper
+class WXDLLIMPEXP_CORE wxScrollHelperBase
 {
 public:
     // ctor must be given the associated window
-    wxScrollHelper(wxWindow *winToScroll);
-    virtual ~wxScrollHelper();
+    wxScrollHelperBase(wxWindow *winToScroll);
+    virtual ~wxScrollHelperBase();
 
     // configure the scrolling
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
@@ -85,8 +85,7 @@ public:
     void SetScrollRate( int xstep, int ystep );
 
     // get the size of one logical unit in physical ones
-    virtual void GetScrollPixelsPerUnit(int *pixelsPerUnitX,
-                                        int *pixelsPerUnitY) const;
+    void GetScrollPixelsPerUnit(int *pixelsPerUnitX, int *pixelsPerUnitY) const;
 
     // Set scrollbar visibility: it is possible to show scrollbar only if it is
     // needed (i.e. if our virtual size is greater than the current size of the
@@ -139,21 +138,21 @@ public:
         return p2;
     }
 
-    virtual void DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const;
-    virtual void DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
+    void DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const;
+    void DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
 
     // Adjust the scrollbars
-    virtual void AdjustScrollbars(void);
+    virtual void AdjustScrollbars() = 0;
 
     // Calculate scroll increment
-    virtual int CalcScrollInc(wxScrollWinEvent& event);
+    int CalcScrollInc(wxScrollWinEvent& event);
 
     // Normally the wxScrolledWindow will scroll itself, but in some rare
     // occasions you might want it to scroll [part of] another window (e.g. a
     // child of it in order to scroll only a portion the area between the
     // scrollbars (spreadsheet: only cell area will move).
-    virtual void SetTargetWindow(wxWindow *target);
-    virtual wxWindow *GetTargetWindow() const;
+    void SetTargetWindow(wxWindow *target);
+    wxWindow *GetTargetWindow() const;
 
     void SetTargetRect(const wxRect& rect) { m_rectToScroll = rect; }
     wxRect GetTargetRect() const { return m_rectToScroll; }
@@ -219,9 +218,9 @@ protected:
 
     // implementation of public methods with the same name
     virtual void DoGetViewStart(int *x, int *y) const;
-    virtual void DoScroll(int x, int y);
+    virtual void DoScroll(int x, int y) = 0;
     virtual void DoShowScrollbars(wxScrollbarVisibility horz,
-                                  wxScrollbarVisibility vert);
+                                  wxScrollbarVisibility vert) = 0;
 
     // implementations of various wxWindow virtual methods which should be
     // forwarded to us (this can be done by WX_FORWARD_TO_SCROLL_HELPER())
@@ -239,18 +238,6 @@ protected:
     // calls wxScrollHelperEvtHandler::ResetDrawnFlag(), see explanation
     // in wxScrollHelperEvtHandler::ProcessEvent()
     void ResetDrawnFlag();
-
-    // helper of AdjustScrollbars(): does the work for the single scrollbar
-    //
-    // notice that the parameters passed by non-const references are modified
-    // by this function
-    void AdjustScrollbar(int orient,
-                         int clientSize,
-                         int virtSize,
-                         int& pixelsPerUnit,
-                         int& scrollUnits,
-                         int& scrollPosition,
-                         wxScrollbarVisibility visibility);
 
     // this function should be overridden to return the size available for
     // m_targetWindow inside m_win of the given size
@@ -297,10 +284,7 @@ protected:
 
     wxScrollHelperEvtHandler *m_handler;
 
-    wxScrollbarVisibility m_xVisibility,
-                          m_yVisibility;
-
-    DECLARE_NO_COPY_CLASS(wxScrollHelper)
+    DECLARE_NO_COPY_CLASS(wxScrollHelperBase)
 };
 
 // this macro can be used in a wxScrollHelper-derived class to forward wxWindow
@@ -314,13 +298,14 @@ public:                                                                       \
     virtual wxSize GetBestVirtualSize() const                                 \
         { return ScrollGetBestVirtualSize(); }
 
-// include the declaration of wxScrollHelperNative if needed
+// include the declaration of the real wxScrollHelper
 #if defined(__WXGTK20__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk/scrolwin.h"
 #elif defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
     #include "wx/gtk1/scrolwin.h"
 #else
-    typedef wxScrollHelper wxScrollHelperNative;
+    #define wxHAS_GENERIC_SCROLLWIN
+    #include "wx/generic/scrolwin.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -331,7 +316,7 @@ public:                                                                       \
 struct WXDLLIMPEXP_CORE wxScrolledT_Helper
 {
     static wxSize FilterBestSize(const wxWindow *win,
-                                 const wxScrollHelperNative *helper,
+                                 const wxScrollHelper *helper,
                                  const wxSize& origBest);
 #ifdef __WXMSW__
     static WXLRESULT FilterMSWWindowProc(WXUINT nMsg, WXLRESULT origResult);
@@ -343,18 +328,18 @@ struct WXDLLIMPEXP_CORE wxScrolledT_Helper
 // not always desirable.
 template<class T>
 class WXDLLIMPEXP_CORE wxScrolled : public T,
-                                    public wxScrollHelperNative,
+                                    public wxScrollHelper,
                                     private wxScrolledT_Helper
 {
 public:
-    wxScrolled() : wxScrollHelperNative(this) { }
+    wxScrolled() : wxScrollHelper(this) { }
     wxScrolled(wxWindow *parent,
                wxWindowID winid = wxID_ANY,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxScrolledWindowStyle,
                const wxString& name = wxPanelNameStr)
-        : wxScrollHelperNative(this)
+        : wxScrollHelper(this)
     {
         Create(parent, winid, pos, size, style, name);
     }
