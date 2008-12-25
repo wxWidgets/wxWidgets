@@ -29,12 +29,10 @@
 #endif
 
 #include "wx/private/socket.h"
+#include "wx/msw/private.h"     // for wxGetInstance()
 #include "wx/apptrait.h"
 #include "wx/thread.h"
 #include "wx/dynlib.h"
-
-extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
-#define INSTANCE wxGetInstance()
 
 #ifdef __WXWINCE__
 /*
@@ -258,7 +256,7 @@ void wxSocketMSWManager::OnExit()
 #endif
   /* Destroy internal window */
   DestroyWindow(hWin);
-  UnregisterClass(CLASSNAME, INSTANCE);
+  UnregisterClass(CLASSNAME, wxGetInstance());
 
   WSACleanup();
 
