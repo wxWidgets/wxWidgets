@@ -3794,6 +3794,14 @@ public:
         return wxTE_HT_ON_TEXT;
     }
 
+    // just unhide it
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                            wxTextCoord *col,
+                                            wxTextCoord *row) const
+    {
+        return wxTextAreaBase::HitTest(pt, col, row);
+    }
+
 #ifndef SWIG
 protected:
     virtual bool DoLoadFile(const wxString& file, int fileType);
