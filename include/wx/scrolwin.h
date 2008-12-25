@@ -70,8 +70,12 @@ public:
                                bool noRefresh = false );
 
     // scroll to the given (in logical coords) position
-    void Scroll(int x, int y) { DoScroll(x, y); }
-    void Scroll(const wxPoint& pt) { DoScroll(pt.x, pt.y); }
+    //
+    // notice that for backwards compatibility reasons Scroll() is virtual as
+    // the existing code could override it but new code should override
+    // DoScroll() instead
+    virtual void Scroll(int x, int y) { DoScroll(x, y); }
+    virtual void Scroll(const wxPoint& pt) { DoScroll(pt.x, pt.y); }
 
     // get/set the page size for this orientation (wxVERTICAL/wxHORIZONTAL)
     int GetScrollPageSize(int orient) const;

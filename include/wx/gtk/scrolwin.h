@@ -22,6 +22,7 @@ public:
     // default ctor doesn't do anything
     wxScrollHelper(wxWindow *win) : wxScrollHelperBase(win) { }
 
+    // implement the base class methods
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
                                int xPos = 0, int yPos = 0,
@@ -29,6 +30,11 @@ public:
     virtual void AdjustScrollbars();
 
 protected:
+    virtual void DoScroll(int x, int y);
+    virtual void DoShowScrollbars(wxScrollbarVisibility horz,
+                                  wxScrollbarVisibility vert);
+
+private:
     // this does (each) half of AdjustScrollbars() work
     void DoAdjustScrollbar(GtkRange* range,
                            int pixelsPerLine,
@@ -63,11 +69,6 @@ protected:
                         int pos,
                         int pixelsPerLine,
                         int *posOld);
-
-    // implement the base class methods
-    virtual void DoScroll(int x, int y);
-    virtual void DoShowScrollbars(wxScrollbarVisibility horz,
-                                  wxScrollbarVisibility vert);
 
 private:
     DECLARE_NO_COPY_CLASS(wxScrollHelper)

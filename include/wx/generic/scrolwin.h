@@ -23,11 +23,12 @@ public:
     // implement base class pure virtuals
     virtual void AdjustScrollbars();
 
-private:
+protected:
     virtual void DoScroll(int x, int y);
     virtual void DoShowScrollbars(wxScrollbarVisibility horz,
                                   wxScrollbarVisibility vert);
 
+private:
     // helper of AdjustScrollbars(): does the work for the single scrollbar
     //
     // notice that the parameters passed by non-const references are modified
