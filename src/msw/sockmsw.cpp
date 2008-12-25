@@ -31,11 +31,10 @@
 #include "wx/private/socket.h"
 #include "wx/apptrait.h"
 #include "wx/thread.h"
+#include "wx/dynlib.h"
 
 extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
 #define INSTANCE wxGetInstance()
-
-#include <winsock.h>
 
 #ifdef __WXWINCE__
 /*
@@ -77,7 +76,7 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 #endif
 
 #ifndef __WXWINCE__
-typedef int (PASCAL *WSAAsyncSelectFunc)(SOCKET,HWND,u_int,long);
+typedef int (PASCAL *WSAAsyncSelect_t)(SOCKET,HWND,u_int,long);
 #else
 /* Typedef the needed function prototypes and the WSANETWORKEVENTS structure
 */
@@ -85,10 +84,10 @@ typedef struct _WSANETWORKEVENTS {
        long lNetworkEvents;
        int iErrorCode[10];
 } WSANETWORKEVENTS, FAR * LPWSANETWORKEVENTS;
-typedef HANDLE (PASCAL *WSACreateEventFunc)();
-typedef int (PASCAL *WSAEventSelectFunc)(SOCKET,HANDLE,long);
-typedef int (PASCAL *WSAWaitForMultipleEventsFunc)(long,HANDLE,BOOL,long,BOOL);
-typedef int (PASCAL *WSAEnumNetworkEventsFunc)(SOCKET,HANDLE,LPWSANETWORKEVENTS);
+typedef HANDLE (PASCAL *WSACreateEvent_t)();
+typedef int (PASCAL *WSAEventSelect_t)(SOCKET,HANDLE,long);
+typedef int (PASCAL *WSAWaitForMultipleEvents_t)(long,HANDLE,BOOL,long,BOOL);
+typedef int (PASCAL *WSAEnumNetworkEvents_t)(SOCKET,HANDLE,LPWSANETWORKEVENTS);
 #endif //__WXWINCE__
 
 LRESULT CALLBACK wxSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
@@ -101,15 +100,15 @@ static wxSocketImplMSW *socketList[MAXSOCKETS];
 static int firstAvailable;
 
 #ifndef __WXWINCE__
-static WSAAsyncSelectFunc gs_WSAAsyncSelect = NULL;
+static WSAAsyncSelect_t gs_WSAAsyncSelect = NULL;
 #else
 static SocketHash socketHash;
 static unsigned int currSocket;
 HANDLE hThread[MAXSOCKETS];
-static WSACreateEventFunc gs_WSACreateEvent = NULL;
-static WSAEventSelectFunc gs_WSAEventSelect = NULL;
-static WSAWaitForMultipleEventsFunc gs_WSAWaitForMultipleEvents = NULL;
-static WSAEnumNetworkEventsFunc gs_WSAEnumNetworkEvents = NULL;
+static WSACreateEvent_t gs_WSACreateEvent = NULL;
+static WSAEventSelect_t gs_WSAEventSelect = NULL;
+static WSAWaitForMultipleEvents_t gs_WSAWaitForMultipleEvents = NULL;
+static WSAEnumNetworkEvents_t gs_WSAEnumNetworkEvents = NULL;
 /* This structure will be used to pass data on to the thread that handles socket events.
 */
 typedef struct thread_data{
@@ -120,13 +119,11 @@ typedef struct thread_data{
 }thread_data;
 #endif
 
-static HMODULE gs_wsock32dll = 0;
-
-
 #ifdef __WXWINCE__
-/* This thread handles socket events on WinCE using WSAEventSelect() as WSAAsyncSelect is not supported.
-*  When an event occures for the socket, it is checked what kind of event happend and the correct message gets posted
-*  so that the hidden window can handle it as it would in other MSW builds.
+/* This thread handles socket events on WinCE using WSAEventSelect() as
+ * WSAAsyncSelect is not supported. When an event occurs for the socket, it is
+ * checked what kind of event happend and the correct message gets posted so
+ * that the hidden window can handle it as it would in other MSW builds.
 */
 DWORD WINAPI SocketThread(LPVOID data)
 {
@@ -186,7 +183,12 @@ public:
     }
     virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event);
     virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event);
+
+private:
+    static wxDynamicLibrary gs_wsock32dll;
 };
+
+wxDynamicLibrary wxSocketMSWManager::gs_wsock32dll;
 
 bool wxSocketMSWManager::OnInit()
 {
@@ -205,45 +207,42 @@ bool wxSocketMSWManager::OnInit()
   }
   firstAvailable = 0;
 
-  /* Load WSAAsyncSelect from wsock32.dll (we don't link against it
-     statically to avoid dependency on wsock32.dll for apps that don't use
-     sockets): */
-#ifndef __WXWINCE__
-  gs_wsock32dll = LoadLibrary(wxT("wsock32.dll"));
-  if (!gs_wsock32dll)
-      return false;
-  gs_WSAAsyncSelect =(WSAAsyncSelectFunc)GetProcAddress(gs_wsock32dll,
-                                                        "WSAAsyncSelect");
-  if (!gs_WSAAsyncSelect)
-      return false;
+  // we don't link with wsock32.dll (or ws2 in CE case) statically to avoid
+  // dependencies on it for all the application using wx even if they don't use
+  // sockets
+#ifdef __WXWINCE__
+    #define WINSOCK_DLL_NAME _T("ws2.dll")
 #else
-/*  On WinCE we load ws2.dll which will provide the needed functions.
-*/
-  gs_wsock32dll = LoadLibrary(wxT("ws2.dll"));
-  if (!gs_wsock32dll)
-      return false;
-  gs_WSAEventSelect =(WSAEventSelectFunc)GetProcAddress(gs_wsock32dll,
-                                                        wxT("WSAEventSelect"));
-  if (!gs_WSAEventSelect)
-      return false;
-
-  gs_WSACreateEvent =(WSACreateEventFunc)GetProcAddress(gs_wsock32dll,
-                                                        wxT("WSACreateEvent"));
-  if (!gs_WSACreateEvent)
-      return false;
-
-  gs_WSAWaitForMultipleEvents =(WSAWaitForMultipleEventsFunc)GetProcAddress(gs_wsock32dll,
-                                                                            wxT("WSAWaitForMultipleEvents"));
-  if (!gs_WSAWaitForMultipleEvents)
-      return false;
-
-  gs_WSAEnumNetworkEvents =(WSAEnumNetworkEventsFunc)GetProcAddress(gs_wsock32dll,
-                                                                    wxT("WSAEnumNetworkEvents"));
-  if (!gs_WSAEnumNetworkEvents)
-      return false;
-
-  currSocket = 0;
+    #define WINSOCK_DLL_NAME _T("wsock32.dll")
 #endif
+
+    gs_wsock32dll.Load(WINSOCK_DLL_NAME, wxDL_VERBATIM | wxDL_QUIET);
+    if ( !gs_wsock32dll.IsLoaded() )
+        return false;
+
+#ifndef __WXWINCE__
+    wxDL_INIT_FUNC(gs_, WSAAsyncSelect, gs_wsock32dll);
+    if ( !gs_WSAAsyncSelect )
+        return false;
+#else
+    wxDL_INIT_FUNC(gs_, WSAEventSelect, gs_wsock32dll);
+    if ( !gs_WSAEventSelect )
+        return false;
+
+    wxDL_INIT_FUNC(gs_, WSACreateEvent, gs_wsock32dll);
+    if ( !gs_WSACreateEvent )
+        return false;
+
+    wxDL_INIT_FUNC(gs_, WSAWaitForMultipleEvents, gs_wsock32dll);
+    if ( !gs_WSAWaitForMultipleEvents )
+        return false;
+
+    wxDL_INIT_FUNC(gs_, WSAEnumNetworkEvents, gs_wsock32dll);
+    if ( !gs_WSAEnumNetworkEvents )
+        return false;
+
+    currSocket = 0;
+#endif // !__WXWINCE__/__WXWINCE__
 
   // finally initialize WinSock
   WSADATA wsaData;
@@ -261,14 +260,9 @@ void wxSocketMSWManager::OnExit()
   DestroyWindow(hWin);
   UnregisterClass(CLASSNAME, INSTANCE);
 
-  /* Unlock wsock32.dll */
-  if (gs_wsock32dll)
-  {
-      FreeLibrary(gs_wsock32dll);
-      gs_wsock32dll = 0;
-  }
-
   WSACleanup();
+
+  gs_wsock32dll.Unload();
 }
 
 /* Per-socket GUI initialization / cleanup */
