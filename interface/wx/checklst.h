@@ -15,11 +15,6 @@
     When using this class under Windows wxWidgets must be compiled with
     wxUSE_OWNER_DRAWN set to 1.
 
-    Only the new functions for this class are documented; see also wxListBox.
-
-    Please note that wxCheckListBox uses client data in its implementation,
-    and therefore this is not available to the application.
-
     @beginEventTable{wxCommandEvent}
     @event{EVT_CHECKLISTBOX(id, func)}
            Process a wxEVT_COMMAND_CHECKLISTBOX_TOGGLED event, when an item in

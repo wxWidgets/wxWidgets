@@ -308,7 +308,6 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
     
             pNewItem->SetName(items[i]);
             m_aItems.Insert(pNewItem, n);
-            ::WinSendMsg(GetHwnd(), LM_SETITEMHANDLE, (MPARAM)n, MPFROMP(pNewItem));
             pNewItem->SetFont(GetFont());
         }
 #endif
@@ -384,17 +383,6 @@ void wxListBox::DoSetItemClientData(unsigned int n, void* pClientData)
 {
     wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxListBox::SetClientData") );
-
-#if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW )
-    {
-        //
-        // Client data must be pointer to wxOwnerDrawn, otherwise we would crash
-        // in OnMeasure/OnDraw.
-        //
-        wxFAIL_MSG(wxT("Can't use client data with owner-drawn listboxes"));
-    }
-#endif // wxUSE_OWNER_DRAWN
 
     ::WinSendMsg(GetHwnd(), LM_SETITEMHANDLE, MPFROMLONG(n), MPFROMP(pClientData));
 } // end of wxListBox::DoSetItemClientData
@@ -714,7 +702,6 @@ bool wxListBox::OS2OnDraw (
 )
 {
     POWNERITEM                      pDrawStruct = (POWNERITEM)pItem;
-    LONG                            lItemID = pDrawStruct->idItem;
     int                             eAction = 0;
     int                             eStatus = 0;
 
@@ -727,17 +714,10 @@ bool wxListBox::OS2OnDraw (
     //
     // The item may be -1 for an empty listbox
     //
-    if (lItemID == -1L)
+    if (pDrawStruct->idItem == -1L)
         return false;
 
-    wxListBoxItem*                   pData = (wxListBoxItem*)PVOIDFROMMR( ::WinSendMsg( GetHwnd()
-                                                                                       ,LM_QUERYITEMHANDLE
-                                                                                       ,MPFROMLONG(pDrawStruct->idItem)
-                                                                                       ,(MPARAM)0
-                                                                                      )
-                                                                        );
-
-    wxCHECK(pData, false );
+    wxListBoxItem* pData = (wxListBoxItem*)m_aItems[pDrawStruct->idItem];
 
     wxClientDC    vDc(this);
     wxPMDCImpl *impl = (wxPMDCImpl*) vDc.GetImpl();

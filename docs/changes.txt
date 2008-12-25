@@ -460,6 +460,7 @@ wxMSW:
 - Fixed infinite loop in wxThread::Wait() in console applications.
 - Return the restored window size from GetSize() when window is minimized.
 - wxCheckListBox now looks more native, especially under XP (Marcin Malich).
+- wxCheckListBox now also supports use of client data (Marcin Malich).
 - Allow tooltips longer than 64 (up to 128) characters in wxTaskBarIcon
 - Fix centering wxFileDialog and allow positioning it.
 - Allow centering wxMessageDialog on its parent window (troelsk).

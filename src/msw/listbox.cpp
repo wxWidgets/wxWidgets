@@ -356,15 +356,6 @@ void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
     wxCHECK_RET( IsValid(n),
                  wxT("invalid index in wxListBox::SetClientData") );
 
-#if wxUSE_OWNER_DRAWN
-    if ( m_windowStyle & wxLB_OWNERDRAW )
-    {
-        // client data must be pointer to wxOwnerDrawn, otherwise we would crash
-        // in OnMeasure/OnDraw.
-        wxFAIL_MSG(wxT("Can't use client data with owner-drawn listboxes"));
-    }
-#endif // wxUSE_OWNER_DRAWN
-
     if ( ListBox_SetItemData(GetHwnd(), n, clientData) == LB_ERR )
         wxLogDebug(wxT("LB_SETITEMDATA failed"));
 }
@@ -474,8 +465,6 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
             pNewItem->SetName(items[i]);
             pNewItem->SetFont(GetFont());
             m_aItems.Insert(pNewItem, n);
-
-            ListBox_SetItemData(GetHwnd(), n, pNewItem);
         }
 #endif // wxUSE_OWNER_DRAWN
         AssignNewItemClientData(n, clientData, i, type);
@@ -533,9 +522,6 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     {
         // update item's text
         m_aItems[n]->SetName(s);
-
-        // reassign the item's data
-        ListBox_SetItemData(GetHwnd(), n, m_aItems[n]);
     }
 #endif  //USE_OWNER_DRAWN
 
@@ -747,17 +733,12 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     wxCHECK( ((m_windowStyle & wxLB_OWNERDRAW) == wxLB_OWNERDRAW), false );
 
     DRAWITEMSTRUCT *pStruct = (DRAWITEMSTRUCT *)item;
-    UINT itemID = pStruct->itemID;
 
     // the item may be -1 for an empty listbox
-    if ( itemID == (UINT)-1 )
+    if ( pStruct->itemID == (UINT)-1 )
         return false;
 
-    LRESULT data = ListBox_GetItemData(GetHwnd(), pStruct->itemID);
-
-    wxCHECK( data && (data != LB_ERR), false );
-
-    wxListBoxItem *pItem = (wxListBoxItem *)data;
+    wxListBoxItem *pItem = (wxListBoxItem *)m_aItems[pStruct->itemID];
 
     wxDCTemp dc((WXHDC)pStruct->hDC);
     wxPoint pt1(pStruct->rcItem.left, pStruct->rcItem.top);
