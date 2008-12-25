@@ -54,8 +54,6 @@ private:
         wxSocketManager::Get()->Install_Callback(this);
     }
 
-    wxSocketError Input_Timeout();
-    wxSocketError Output_Timeout();
     wxSocketError Connect_Timeout();
     int Recv_Stream(void *buffer, int size);
     int Recv_Dgram(void *buffer, int size);

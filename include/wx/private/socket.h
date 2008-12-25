@@ -297,6 +297,15 @@ public:
 protected:
     wxSocketImpl(wxSocketBase& wxsocket);
 
+    // wait until input/output becomes available or m_timeout expires
+    //
+    // returns true if we do have input/output or false on timeout or error
+    // (also sets m_error accordingly)
+    bool BlockForInputWithTimeout()
+        { return DoBlockWithTimeout(wxSOCKET_INPUT_FLAG); }
+    bool BlockForOutputWithTimeout()
+        { return DoBlockWithTimeout(wxSOCKET_OUTPUT_FLAG); }
+
 private:
     // handle the given connect() return value (which may be 0 or EWOULDBLOCK
     // or something else)
@@ -337,6 +346,12 @@ private:
 
     // update local address after binding/connecting
     wxSocketError UpdateLocalAddress();
+
+    // wait for IO on the socket or until timeout expires
+    //
+    // the parameter can be one of wxSOCKET_INPUT/OUTPUT_FLAG (but could be
+    // their combination in the future, hence we take wxSocketEventFlags)
+    bool DoBlockWithTimeout(wxSocketEventFlags flags);
 
 
     // set in ctor and never changed except that it's reset to NULL when the

@@ -100,9 +100,6 @@ private:
     void EnableEvent(wxSocketNotify event);
     void DisableEvent(wxSocketNotify event);
 
-
-    wxSocketError Input_Timeout();
-    wxSocketError Output_Timeout();
     int Recv_Stream(void *buffer, int size);
     int Recv_Dgram(void *buffer, int size);
     int Send_Stream(const void *buffer, int size);

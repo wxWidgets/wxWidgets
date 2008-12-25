@@ -487,10 +487,9 @@ wxSocketImpl *wxSocketImplUnix::WaitConnection(wxSocketBase& wxsocket)
   }
 
   /* Wait for a connection (with timeout) */
-  if (Input_Timeout() == wxSOCKET_TIMEDOUT)
+  if ( !BlockForInputWithTimeout() )
   {
     delete connection;
-    /* m_error set by Input_Timeout */
     return NULL;
   }
 
@@ -588,23 +587,20 @@ wxSocketError wxSocketImplUnix::DoHandleConnect(int ret)
      */
     if ((err == EINPROGRESS) && (!m_non_blocking))
     {
-      if (Output_Timeout() == wxSOCKET_TIMEDOUT)
+      if ( !BlockForOutputWithTimeout() )
       {
         Close();
-        /* m_error is set in Output_Timeout */
         return wxSOCKET_TIMEDOUT;
       }
-      else
-      {
-        int error;
-        SOCKOPTLEN_T len = sizeof(error);
 
-        getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*) &error, &len);
-        EnableEvents();
+      int error;
+      SOCKOPTLEN_T len = sizeof(error);
 
-        if (!error)
-          return wxSOCKET_NOERROR;
-      }
+      getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*) &error, &len);
+      EnableEvents();
+
+      if (!error)
+        return wxSOCKET_NOERROR;
     }
 
     /* If connect failed with EINPROGRESS and the wxSocketImplUnix object
@@ -649,7 +645,8 @@ int wxSocketImplUnix::Read(void *buffer, int size)
   DisableEvent(wxSOCKET_INPUT);
 
   /* If the socket is blocking, wait for data (with a timeout) */
-  if (Input_Timeout() == wxSOCKET_TIMEDOUT) {
+  if ( !BlockForInputWithTimeout() )
+  {
     m_error = wxSOCKET_TIMEDOUT;
     /* Don't return here immediately, otherwise socket events would not be
      * re-enabled! */
@@ -712,7 +709,7 @@ int wxSocketImplUnix::Write(const void *buffer, int size)
   SOCKET_DEBUG(( "Write #2, size %d\n", size ));
 
   /* If the socket is blocking, wait for writability (with a timeout) */
-  if (Output_Timeout() == wxSOCKET_TIMEDOUT)
+  if ( !BlockForOutputWithTimeout() )
     return -1;
 
   SOCKET_DEBUG(( "Write #3, size %d\n", size ));
@@ -771,99 +768,6 @@ void wxSocketImplUnix::DisableEvent(wxSocketNotify event)
         m_detected |= (1 << event);
         wxSocketManager::Get()->Uninstall_Callback(this, event);
     }
-}
-
-/*
- *  For blocking sockets, wait until data is available or
- *  until timeout ellapses.
- */
-wxSocketError wxSocketImplUnix::Input_Timeout()
-{
-  fd_set readfds;
-  int ret;
-
-  // Linux select() will overwrite the struct on return so make a copy
-  struct timeval tv = m_timeout;
-
-  if (!m_non_blocking)
-  {
-    wxFD_ZERO(&readfds);
-    wxFD_SET(m_fd, &readfds);
-    ret = select(m_fd + 1, &readfds, NULL, NULL, &tv);
-    if (ret == 0)
-    {
-      SOCKET_DEBUG(( "Input_Timeout, select returned 0\n" ));
-      m_error = wxSOCKET_TIMEDOUT;
-      return wxSOCKET_TIMEDOUT;
-    }
-
-    if (ret == -1)
-    {
-      SOCKET_DEBUG(( "Input_Timeout, select returned -1\n" ));
-      if (errno == EBADF) { SOCKET_DEBUG(( "Invalid file descriptor\n" )); }
-      if (errno == EINTR) { SOCKET_DEBUG(( "A non blocked signal was caught\n" )); }
-      if (errno == EINVAL) { SOCKET_DEBUG(( "The highest number descriptor is negative\n" )); }
-      if (errno == ENOMEM) { SOCKET_DEBUG(( "Not enough memory\n" )); }
-      m_error = wxSOCKET_TIMEDOUT;
-      return wxSOCKET_TIMEDOUT;
-    }
-  }
-
-  return wxSOCKET_NOERROR;
-}
-
-/*
- *  For blocking sockets, wait until data can be sent without
- *  blocking or until timeout ellapses.
- */
-wxSocketError wxSocketImplUnix::Output_Timeout()
-{
-  fd_set writefds;
-  int ret;
-
-  // Linux select() will overwrite the struct on return so make a copy
-  struct timeval tv = m_timeout;
-
-  SOCKET_DEBUG( ("m_non_blocking has: %d\n", (int)m_non_blocking) );
-
-  if (!m_non_blocking)
-  {
-    wxFD_ZERO(&writefds);
-    wxFD_SET(m_fd, &writefds);
-    ret = select(m_fd + 1, NULL, &writefds, NULL, &tv);
-    if (ret == 0)
-    {
-      SOCKET_DEBUG(( "Output_Timeout, select returned 0\n" ));
-      m_error = wxSOCKET_TIMEDOUT;
-      return wxSOCKET_TIMEDOUT;
-    }
-
-    if (ret == -1)
-    {
-      SOCKET_DEBUG(( "Output_Timeout, select returned -1\n" ));
-      if (errno == EBADF) { SOCKET_DEBUG(( "Invalid file descriptor\n" )); }
-      if (errno == EINTR) { SOCKET_DEBUG(( "A non blocked signal was caught\n" )); }
-      if (errno == EINVAL) { SOCKET_DEBUG(( "The highest number descriptor is negative\n" )); }
-      if (errno == ENOMEM) { SOCKET_DEBUG(( "Not enough memory\n" )); }
-      m_error = wxSOCKET_TIMEDOUT;
-      return wxSOCKET_TIMEDOUT;
-    }
-
-    if ( ! wxFD_ISSET(m_fd, &writefds) )
-    {
-        SOCKET_DEBUG(( "Output_Timeout is buggy!\n" ));
-    }
-    else
-    {
-        SOCKET_DEBUG(( "Output_Timeout seems correct\n" ));
-    }
-  }
-  else
-  {
-    SOCKET_DEBUG(( "Output_Timeout, didn't try select!\n" ));
-  }
-
-  return wxSOCKET_NOERROR;
 }
 
 int wxSocketImplUnix::Recv_Stream(void *buffer, int size)

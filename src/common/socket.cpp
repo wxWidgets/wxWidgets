@@ -503,6 +503,38 @@ GAddress *wxSocketImpl::GetPeer()
   return NULL;
 }
 
+bool wxSocketImpl::DoBlockWithTimeout(wxSocketEventFlags flags)
+{
+    if ( !m_non_blocking )
+    {
+        fd_set fds;
+        wxFD_ZERO(&fds);
+        wxFD_SET(m_fd, &fds);
+
+        fd_set
+            *readfds = flags & wxSOCKET_INPUT_FLAG ? &fds : NULL,
+            *writefds = flags & wxSOCKET_OUTPUT_FLAG ? &fds : NULL;
+
+        // make a copy as it can be modified by select()
+        struct timeval tv = m_timeout;
+        int ret = select(m_fd + 1, readfds, writefds, NULL, &tv);
+
+        switch ( ret )
+        {
+            case 0:
+                m_error = wxSOCKET_TIMEDOUT;
+                return false;
+
+            case -1:
+                m_error = wxSOCKET_IOERR;
+                return false;
+        }
+    }
+    //else: we're non-blocking, never block
+
+    return true;
+}
+
 // ==========================================================================
 // wxSocketBase
 // ==========================================================================

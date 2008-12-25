@@ -488,10 +488,9 @@ wxSocketImpl *wxSocketImplMSW::WaitConnection(wxSocketBase& wxsocket)
   }
 
   /* Wait for a connection (with timeout) */
-  if (Input_Timeout() == wxSOCKET_TIMEDOUT)
+  if ( !BlockForInputWithTimeout() )
   {
     delete connection;
-    /* m_error set by Input_Timeout */
     return NULL;
   }
 
@@ -601,9 +600,8 @@ int wxSocketImplMSW::Read(void *buffer, int size)
   }
 
   /* If the socket is blocking, wait for data (with a timeout) */
-  if (Input_Timeout() == wxSOCKET_TIMEDOUT)
+  if ( !BlockForInputWithTimeout() )
   {
-    m_error = wxSOCKET_TIMEDOUT;
     return -1;
   }
 
@@ -636,7 +634,7 @@ int wxSocketImplMSW::Write(const void *buffer, int size)
   }
 
   /* If the socket is blocking, wait for writability (with a timeout) */
-  if (Output_Timeout() == wxSOCKET_TIMEDOUT)
+  if ( BlockForOutputWithTimeout() )
     return -1;
 
   /* Write the data */
@@ -665,48 +663,6 @@ int wxSocketImplMSW::Write(const void *buffer, int size)
 }
 
 /* Internals (IO) */
-
-/*
- *  For blocking sockets, wait until data is available or
- *  until timeout ellapses.
- */
-wxSocketError wxSocketImplMSW::Input_Timeout()
-{
-  fd_set readfds;
-
-  if (!m_non_blocking)
-  {
-    FD_ZERO(&readfds);
-    FD_SET(m_fd, &readfds);
-    if (select(0, &readfds, NULL, NULL, &m_timeout) == 0)
-    {
-      m_error = wxSOCKET_TIMEDOUT;
-      return wxSOCKET_TIMEDOUT;
-    }
-  }
-  return wxSOCKET_NOERROR;
-}
-
-/*
- *  For blocking sockets, wait until data can be sent without
- *  blocking or until timeout ellapses.
- */
-wxSocketError wxSocketImplMSW::Output_Timeout()
-{
-  fd_set writefds;
-
-  if (!m_non_blocking)
-  {
-    FD_ZERO(&writefds);
-    FD_SET(m_fd, &writefds);
-    if (select(0, NULL, &writefds, NULL, &m_timeout) == 0)
-    {
-      m_error = wxSOCKET_TIMEDOUT;
-      return wxSOCKET_TIMEDOUT;
-    }
-  }
-  return wxSOCKET_NOERROR;
-}
 
 /*
  *  For blocking sockets, wait until the connection is
