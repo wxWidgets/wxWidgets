@@ -185,6 +185,10 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             color = wxColor(ListStyle()->base[GTK_STATE_NORMAL]);
             break;
 
+        case wxSYS_COLOUR_LISTBOXTEXT:
+            color = wxColor(ListStyle()->text[GTK_STATE_NORMAL]);
+            break;
+
         case wxSYS_COLOUR_MENUTEXT:
         case wxSYS_COLOUR_WINDOWTEXT:
         case wxSYS_COLOUR_CAPTIONTEXT:

@@ -250,6 +250,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_CAPTIONTEXT:
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
         case wxSYS_COLOUR_BTNTEXT:
+        case wxSYS_COLOUR_LISTBOXTEXT:
             if (!gs_objects.m_colBtnText.Ok())
             {
                 int red, green, blue;

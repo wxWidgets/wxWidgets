@@ -75,6 +75,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         case wxSYS_COLOUR_CAPTIONTEXT:
         case wxSYS_COLOUR_INFOTEXT:
         case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
+        case wxSYS_COLOUR_LISTBOXTEXT:
             resultColor = *wxBLACK;
             break ;
 

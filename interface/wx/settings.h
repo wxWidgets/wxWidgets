@@ -67,12 +67,18 @@ enum wxSystemColour
     wxSYS_COLOUR_3DHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
     wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
 
-    wxSYS_COLOUR_LISTBOX,
+    wxSYS_COLOUR_LISTBOX,             ///< Background colour for list-like contols.
     wxSYS_COLOUR_HOTLIGHT,
     wxSYS_COLOUR_GRADIENTACTIVECAPTION,
     wxSYS_COLOUR_GRADIENTINACTIVECAPTION,
     wxSYS_COLOUR_MENUHILIGHT,
     wxSYS_COLOUR_MENUBAR,
+    /**
+        Text colour for list-like controls.
+
+        @since 2.9.0
+     */
+    wxSYS_COLOUR_LISTBOXTEXT,
 
     wxSYS_COLOUR_MAX
 };
