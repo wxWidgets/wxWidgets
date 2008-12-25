@@ -37,12 +37,6 @@ extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
 
 #include <winsock.h>
 
-#if defined(__CYGWIN__)
-    //CYGWIN gives annoying warning about runtime stuff if we don't do this
-#   define USE_SYS_TYPES_FD_SET
-#   include <sys/types.h>
-#endif
-
 #ifdef __WXWINCE__
 /*
  * As WSAAsyncSelect is not present on WinCE, it now uses WSACreateEvent,
