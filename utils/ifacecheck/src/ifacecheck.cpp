@@ -82,6 +82,8 @@ public:
         wxPrintf("\n");
         Flush();
     }
+
+    wxSUPPRESS_DOLOG_HIDE_WARNING()
 };
 
 class IfaceCheckApp : public wxAppConsole
