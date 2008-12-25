@@ -347,7 +347,7 @@ private:
 };
 
 #if defined(__WXMSW__)
-    #include "wx/msw/gsockmsw.h"
+    #include "wx/msw/private/sockmsw.h"
 #else
     #include "wx/unix/private/sockunix.h"
 #endif
