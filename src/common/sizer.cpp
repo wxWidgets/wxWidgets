@@ -1987,7 +1987,7 @@ void wxBoxSizer::RecalcSizes()
         }
         // NB: wxCENTRE is used here only for backwards compatibility,
         //     wxALIGN_CENTRE should be used in new code
-        else if ( flag & (wxCENTER | wxALIGN_CENTRE) )
+        else if ( flag & (wxCENTER | (IsVertical() ? wxALIGN_CENTRE_HORIZONTAL : wxALIGN_CENTRE_VERTICAL)))
         {
             PosInMinorDir(posChild) += (totalMinorSize - minorSize) / 2;
         }
