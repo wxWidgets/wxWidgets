@@ -33,8 +33,8 @@ public:
     virtual void Shutdown();
     virtual wxSocketImpl *WaitConnection(wxSocketBase& wxsocket);
 
-    int Read(char *buffer, int size);
-    int Write(const char *buffer, int size);
+    int Read(void *buffer, int size);
+    int Write(const void *buffer, int size);
     //attach or detach from main loop
     void Notify(bool flag);
 
@@ -103,10 +103,10 @@ private:
 
     wxSocketError Input_Timeout();
     wxSocketError Output_Timeout();
-    int Recv_Stream(char *buffer, int size);
-    int Recv_Dgram(char *buffer, int size);
-    int Send_Stream(const char *buffer, int size);
-    int Send_Dgram(const char *buffer, int size);
+    int Recv_Stream(void *buffer, int size);
+    int Recv_Dgram(void *buffer, int size);
+    int Send_Stream(const void *buffer, int size);
+    int Send_Dgram(const void *buffer, int size);
 
 
 protected:

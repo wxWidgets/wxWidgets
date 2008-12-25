@@ -635,7 +635,7 @@ wxSocketError wxSocketImplUnix::DoHandleConnect(int ret)
 /* Generic IO */
 
 /* Like recv(), send(), ... */
-int wxSocketImplUnix::Read(char *buffer, int size)
+int wxSocketImplUnix::Read(void *buffer, int size)
 {
   int ret;
 
@@ -697,7 +697,7 @@ int wxSocketImplUnix::Read(char *buffer, int size)
   return ret;
 }
 
-int wxSocketImplUnix::Write(const char *buffer, int size)
+int wxSocketImplUnix::Write(const void *buffer, int size)
 {
   int ret;
 
@@ -866,7 +866,7 @@ wxSocketError wxSocketImplUnix::Output_Timeout()
   return wxSOCKET_NOERROR;
 }
 
-int wxSocketImplUnix::Recv_Stream(char *buffer, int size)
+int wxSocketImplUnix::Recv_Stream(void *buffer, int size)
 {
   int ret;
   do
@@ -878,7 +878,7 @@ int wxSocketImplUnix::Recv_Stream(char *buffer, int size)
   return ret;
 }
 
-int wxSocketImplUnix::Recv_Dgram(char *buffer, int size)
+int wxSocketImplUnix::Recv_Dgram(void *buffer, int size)
 {
   wxSockAddr from;
   WX_SOCKLEN_T fromlen = sizeof(from);
@@ -919,7 +919,7 @@ int wxSocketImplUnix::Recv_Dgram(char *buffer, int size)
   return ret;
 }
 
-int wxSocketImplUnix::Send_Stream(const char *buffer, int size)
+int wxSocketImplUnix::Send_Stream(const void *buffer, int size)
 {
   int ret;
 
@@ -927,7 +927,7 @@ int wxSocketImplUnix::Send_Stream(const char *buffer, int size)
 
   do
   {
-    ret = send(m_fd, (char *)buffer, size, GSOCKET_MSG_NOSIGNAL);
+    ret = send(m_fd, buffer, size, GSOCKET_MSG_NOSIGNAL);
   }
   while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
 
@@ -936,7 +936,7 @@ int wxSocketImplUnix::Send_Stream(const char *buffer, int size)
   return ret;
 }
 
-int wxSocketImplUnix::Send_Dgram(const char *buffer, int size)
+int wxSocketImplUnix::Send_Dgram(const void *buffer, int size)
 {
   struct sockaddr *addr;
   int len, ret;
@@ -959,7 +959,7 @@ int wxSocketImplUnix::Send_Dgram(const char *buffer, int size)
 
   do
   {
-    ret = sendto(m_fd, (char *)buffer, size, 0, addr, len);
+    ret = sendto(m_fd, buffer, size, 0, addr, len);
   }
   while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
 

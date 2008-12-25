@@ -230,7 +230,7 @@ wxSocketError wxSocketImplMSW::DoHandleConnect(int ret)
 /* Generic IO */
 
 /* Like recv(), send(), ... */
-int wxSocketImplMSW::Read(char *buffer, int size)
+int wxSocketImplMSW::Read(void *buffer, int size)
 {
   int ret;
 
@@ -268,7 +268,7 @@ int wxSocketImplMSW::Read(char *buffer, int size)
   return ret;
 }
 
-int wxSocketImplMSW::Write(const char *buffer, int size)
+int wxSocketImplMSW::Write(const void *buffer, int size)
 {
   int ret;
 
@@ -378,19 +378,20 @@ wxSocketError wxSocketImplMSW::Connect_Timeout()
   return wxSOCKET_NOERROR;
 }
 
-int wxSocketImplMSW::Recv_Stream(char *buffer, int size)
+int wxSocketImplMSW::Recv_Stream(void *buffer, int size)
 {
-  return recv(m_fd, buffer, size, 0);
+    return recv(m_fd, static_cast<char *>(buffer), size, 0);
 }
 
-int wxSocketImplMSW::Recv_Dgram(char *buffer, int size)
+int wxSocketImplMSW::Recv_Dgram(void *buffer, int size)
 {
   wxSockAddr from;
   WX_SOCKLEN_T fromlen = sizeof(from);
   int ret;
   wxSocketError err;
 
-  ret = recvfrom(m_fd, buffer, size, 0, (sockaddr*)&from, &fromlen);
+  ret = recvfrom(m_fd, static_cast<char *>(buffer),
+                 size, 0, &from, &fromlen);
 
   if (ret == SOCKET_ERROR)
     return SOCKET_ERROR;
@@ -417,12 +418,12 @@ int wxSocketImplMSW::Recv_Dgram(char *buffer, int size)
   return ret;
 }
 
-int wxSocketImplMSW::Send_Stream(const char *buffer, int size)
+int wxSocketImplMSW::Send_Stream(const void *buffer, int size)
 {
-  return send(m_fd, buffer, size, 0);
+  return send(m_fd, static_cast<const char *>(buffer), size, 0);
 }
 
-int wxSocketImplMSW::Send_Dgram(const char *buffer, int size)
+int wxSocketImplMSW::Send_Dgram(const void *buffer, int size)
 {
   struct sockaddr *addr;
   int len, ret;
@@ -441,7 +442,7 @@ int wxSocketImplMSW::Send_Dgram(const char *buffer, int size)
     return -1;
   }
 
-  ret = sendto(m_fd, buffer, size, 0, addr, len);
+  ret = sendto(m_fd, static_cast<const char *>(buffer), size, 0, addr, len);
 
   /* Frees memory allocated by _GAddress_translate_to */
   free(addr);

@@ -252,8 +252,8 @@ public:
     // IO operations
     // -------------
 
-    virtual int Read(char *buffer, int size) = 0;
-    virtual int Write(const char *buffer, int size) = 0;
+    virtual int Read(void *buffer, int size) = 0;
+    virtual int Write(const void *buffer, int size) = 0;
 
     wxSocketEventFlags Select(wxSocketEventFlags flags);
 
