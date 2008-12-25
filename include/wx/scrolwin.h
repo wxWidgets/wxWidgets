@@ -189,9 +189,11 @@ public:
 #endif // wxUSE_MOUSEWHEEL
     void HandleOnChildFocus(wxChildFocusEvent& event);
 
-    // FIXME: this is needed for now for wxPlot compilation, should be removed
-    //        once it is fixed!
-    void OnScroll(wxScrollWinEvent& event) { HandleOnScroll(event); }
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED(
+        void OnScroll(wxScrollWinEvent& event) { HandleOnScroll(event); }
+    )
+#endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
     // get pointer to our scroll rect if we use it or NULL
