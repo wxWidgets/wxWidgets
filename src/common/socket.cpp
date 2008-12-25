@@ -1121,7 +1121,7 @@ wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags)
   fd_set exceptfds;
   struct timeval tv;
 
-  if (m_fd == -1)
+  if (m_fd == INVALID_SOCKET)
     return (wxSOCKET_LOST_FLAG & flags);
 
   /* Do not use a static struct, Linux can garble it */
