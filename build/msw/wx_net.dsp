@@ -294,10 +294,6 @@ SOURCE=..\..\src\common\url.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\msw\gsocket.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\msw\sockmsw.cpp
 # End Source File
 # Begin Source File

@@ -542,7 +542,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="NET_WIN32_SRC" hints="files">
-    src/msw/gsocket.cpp
     src/msw/sockmsw.cpp
     src/msw/urlmsw.cpp
 </set>

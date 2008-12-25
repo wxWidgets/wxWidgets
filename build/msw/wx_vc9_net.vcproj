@@ -836,10 +836,6 @@
 			UniqueIdentifier="{D030D8C2-53EE-5B96-8F89-D78157B06140}"
 			>
 			<File
-				RelativePath="..\..\src\msw\gsocket.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\msw\sockmsw.cpp"
 				>
 			</File>
