@@ -127,7 +127,12 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         0,          // MENUBAR (unused)
     };
 
-    if ( index == wxSYS_COLOUR_LISTBOX )
+    if ( index == wxSYS_COLOUR_LISTBOXTEXT)
+    {
+        // there is no standard colour with this index, map to another one
+        index = wxSYS_COLOUR_WINDOWTEXT;
+    }
+    else if ( index == wxSYS_COLOUR_LISTBOX )
     {
         // there is no standard colour with this index, map to another one
         index = wxSYS_COLOUR_WINDOW;
