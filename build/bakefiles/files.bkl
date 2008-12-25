@@ -546,9 +546,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/gsockmsw.cpp
     src/msw/urlmsw.cpp
 </set>
+<set var="NET_WIN32_HDR" hints="files">
+    wx/msw/gsockmsw.h
+</set>
 
 <set var="NET_WINCE_SRC" hints="files">
     <if cond="TOOLKIT=='WINCE'">src/msw/wince/net.cpp</if>
+</set>
+<set var="NET_WINCE_HDR" hints="files">
+    <if cond="TOOLKIT=='WINCE'">wx/msw/wince/net.h</if>
 </set>
 
 <set var="NET_OS2_SRC" hints="files">
@@ -3612,6 +3618,10 @@ src/osx/iphone/window.mm
         <if cond="PLATFORM_MACOSX=='1'">$(NET_UNIX_SRC) $(NET_OSX_SRC)</if>
         <if cond="PLATFORM_OS2=='1'">$(NET_OS2_SRC)</if>
     </set>
+    <set var="NET_PLATFORM_HDR" hints="files">
+        <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR) $(NET_WINCE_HDR)</if>
+    </set>
+
     <set var="NET_SRC" hints="files">
         $(NET_CMN_SRC) $(NET_PLATFORM_SRC)
     </set>
