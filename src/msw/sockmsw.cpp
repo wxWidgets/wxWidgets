@@ -30,6 +30,7 @@
 
 #include "wx/private/socket.h"
 #include "wx/apptrait.h"
+#include "wx/thread.h"
 
 extern "C" WXDLLIMPEXP_BASE HINSTANCE wxGetInstance();
 #define INSTANCE wxGetInstance()
@@ -101,7 +102,7 @@ LRESULT CALLBACK wxSocket_Internal_WinProc(HWND, UINT, WPARAM, LPARAM);
 /* Global variables */
 
 static HWND hWin;
-static CRITICAL_SECTION critical;
+wxCRIT_SECT_DECLARE_MEMBER(gs_critical);
 static wxSocketImplMSW *socketList[MAXSOCKETS];
 static int firstAvailable;
 
@@ -193,8 +194,6 @@ public:
     virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event);
 };
 
-/* Global initializers */
-
 bool wxSocketMSWManager::OnInit()
 {
   static LPCTSTR pclassname = NULL;
@@ -206,8 +205,6 @@ bool wxSocketMSWManager::OnInit()
       return false;
 
   /* Initialize socket list */
-  InitializeCriticalSection(&critical);
-
   for (i = 0; i < MAXSOCKETS; i++)
   {
     socketList[i] = NULL;
@@ -277,9 +274,6 @@ void wxSocketMSWManager::OnExit()
       gs_wsock32dll = 0;
   }
 
-  /* Delete critical section */
-  DeleteCriticalSection(&critical);
-
   WSACleanup();
 }
 
@@ -289,7 +283,7 @@ wxSocketImplMSW::wxSocketImplMSW(wxSocketBase& wxsocket)
     : wxSocketImpl(wxsocket)
 {
   /* Allocate a new message number for this socket */
-  EnterCriticalSection(&critical);
+  wxCRIT_SECT_LOCKER(lock, gs_critical);
 
   int i = firstAvailable;
   while (socketList[i] != NULL)
@@ -298,7 +292,6 @@ wxSocketImplMSW::wxSocketImplMSW(wxSocketBase& wxsocket)
 
     if (i == firstAvailable)    /* abort! */
     {
-      LeaveCriticalSection(&critical);
       m_msgnumber = 0; // invalid
       return;
     }
@@ -306,14 +299,12 @@ wxSocketImplMSW::wxSocketImplMSW(wxSocketBase& wxsocket)
   socketList[i] = this;
   firstAvailable = (i + 1) % MAXSOCKETS;
   m_msgnumber = (i + WM_USER);
-
-  LeaveCriticalSection(&critical);
 }
 
 wxSocketImplMSW::~wxSocketImplMSW()
 {
   /* Remove the socket from the list */
-  EnterCriticalSection(&critical);
+  wxCRIT_SECT_LOCKER(lock, gs_critical);
 
   if ( m_msgnumber )
   {
@@ -327,8 +318,6 @@ wxSocketImplMSW::~wxSocketImplMSW()
       socketList[m_msgnumber - WM_USER] = NULL;
   }
   //else: the socket has never been created successfully
-
-  LeaveCriticalSection(&critical);
 }
 
 /* Windows proc for asynchronous event handling */
@@ -338,55 +327,53 @@ LRESULT CALLBACK wxSocket_Internal_WinProc(HWND hWnd,
                                            WPARAM wParam,
                                            LPARAM lParam)
 {
-  wxSocketImplMSW *socket;
-  wxSocketNotify event;
+    if ( uMsg < WM_USER || uMsg > (WM_USER + MAXSOCKETS - 1))
+        return DefWindowProc(hWnd, uMsg, wParam, lParam);
 
-  if (uMsg >= WM_USER && uMsg <= (WM_USER + MAXSOCKETS - 1))
-  {
-    EnterCriticalSection(&critical);
-    socket = socketList[(uMsg - WM_USER)];
-    event = (wxSocketNotify) -1;
-
-    /* Check that the socket still exists (it has not been
-     * destroyed) and for safety, check that the m_fd field
-     * is what we expect it to be.
-     */
-    if ((socket != NULL) && ((WPARAM)socket->m_fd == wParam))
+    wxSocketImplMSW *socket;
+    wxSocketNotify event;
     {
-      switch WSAGETSELECTEVENT(lParam)
-      {
-        case FD_READ:    event = wxSOCKET_INPUT; break;
-        case FD_WRITE:   event = wxSOCKET_OUTPUT; break;
-        case FD_ACCEPT:  event = wxSOCKET_CONNECTION; break;
-        case FD_CONNECT:
+        wxCRIT_SECT_LOCKER(lock, gs_critical);
+
+        socket = socketList[(uMsg - WM_USER)];
+        event = (wxSocketNotify) -1;
+
+        /* Check that the socket still exists (it has not been
+         * destroyed) and for safety, check that the m_fd field
+         * is what we expect it to be.
+         */
+        if ((socket != NULL) && ((WPARAM)socket->m_fd == wParam))
         {
-          if (WSAGETSELECTERROR(lParam) != 0)
-            event = wxSOCKET_LOST;
-          else
-            event = wxSOCKET_CONNECTION;
-          break;
+            switch WSAGETSELECTEVENT(lParam)
+            {
+                case FD_READ:    event = wxSOCKET_INPUT; break;
+                case FD_WRITE:   event = wxSOCKET_OUTPUT; break;
+                case FD_ACCEPT:  event = wxSOCKET_CONNECTION; break;
+                case FD_CONNECT:
+                                 {
+                                     if (WSAGETSELECTERROR(lParam) != 0)
+                                         event = wxSOCKET_LOST;
+                                     else
+                                         event = wxSOCKET_CONNECTION;
+                                     break;
+                                 }
+                case FD_CLOSE:   event = wxSOCKET_LOST; break;
+            }
+
+            if (event != -1)
+            {
+                if (event == wxSOCKET_LOST)
+                    socket->m_detected = wxSOCKET_LOST_FLAG;
+                else
+                    socket->m_detected |= (1 << event);
+            }
         }
-        case FD_CLOSE:   event = wxSOCKET_LOST; break;
-      }
-
-      if (event != -1)
-      {
-        if (event == wxSOCKET_LOST)
-          socket->m_detected = wxSOCKET_LOST_FLAG;
-        else
-          socket->m_detected |= (1 << event);
-      }
-    }
-
-    LeaveCriticalSection(&critical);
+    } // unlock gs_critical
 
     if ( socket )
         socket->NotifyOnStateChange(event);
 
     return (LRESULT) 0;
-  }
-  else
-    return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
 /*
