@@ -160,6 +160,10 @@ public:
 
     virtual bool Load(const wxString& fileName);
     virtual bool Load(const wxURI& location);
+    virtual bool Load(const wxURI& location,
+                      const wxURI& proxy)
+        { return wxMediaBackendCommonBase::Load(location, proxy); }
+
 
     virtual wxMediaState GetState();
 
