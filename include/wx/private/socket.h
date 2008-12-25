@@ -3,7 +3,7 @@
 // Purpose:     wxSocketImpl nd related declarations
 // Authors:     Guilhem Lavaux, Vadim Zeitlin
 // Created:     April 1997
-// RCS-ID:      $Id: socket.h 56994 2008-11-28 12:47:07Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) 1997 Guilhem Lavaux
 //              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
@@ -78,7 +78,7 @@
 
 // define some symbols which winsock.h defines but traditional BSD headers
 // don't
-#ifndef SOCKET
+#ifndef __WXMSW__
     #define SOCKET int
 #endif
 
