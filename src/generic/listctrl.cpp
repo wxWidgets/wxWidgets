@@ -618,7 +618,7 @@ public:
     void OnPaint( wxPaintEvent &event );
 
     void OnChildFocus(wxChildFocusEvent& event);
-    
+
     void DrawImage( int index, wxDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height ) const;
     int GetTextLength( const wxString &s ) const;
@@ -4881,12 +4881,7 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-    // FIXME
-#if ( defined(__WXGTK__) || defined(__WXMAC__) ) && !defined(__WXUNIVERSAL__)
-    wxScrolledCanvas::OnScroll(event);
-#else
     HandleOnScroll( event );
-#endif
 
     // update our idea of which lines are shown when we redraw the window the
     // next time
