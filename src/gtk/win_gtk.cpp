@@ -73,6 +73,14 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
             // one window
             gdk_window_move_resize(widget->window,
                 alloc->x + border_x, alloc->y + border_y, w, h);
+                
+            if ((border_x > 0) || (border_y > 0))
+            {
+                // Otherwise we get can redraw artefacts from
+                // the border.
+                GtkWidget *parent = gtk_widget_get_parent( widget );
+                gtk_widget_queue_draw( parent );
+            }
         }
     }
     // adjust child positions
