@@ -807,7 +807,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/sockunix.cpp \
 	src/osx/core/sockosx.cpp \
 	src/msw/gsocket.cpp \
-	src/msw/gsockmsw.cpp \
+	src/msw/sockmsw.cpp \
 	src/msw/urlmsw.cpp \
 	$(NET_WINCE_SRC) \
 	src/xml/xml.cpp \
@@ -4046,7 +4046,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_UNIX_1@	monodll_socketiohandler.o monodll_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS =  \
 	monodll_gsocket.o \
-	monodll_gsockmsw.o \
+	monodll_sockmsw.o \
 	monodll_urlmsw.o \
 	$(__NET_WINCE_SRC_OBJECTS)
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS)
@@ -5868,7 +5868,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_UNIX_1@	monolib_socketiohandler.o monolib_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_gsocket.o \
-	monolib_gsockmsw.o \
+	monolib_sockmsw.o \
 	monolib_urlmsw.o \
 	$(__NET_WINCE_SRC_OBJECTS_1)
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_1)
@@ -7871,7 +7871,7 @@ COND_USE_SOSYMLINKS_1___netdll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_UNIX_1@	netdll_socketiohandler.o netdll_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_2 =  \
 	netdll_gsocket.o \
-	netdll_gsockmsw.o \
+	netdll_sockmsw.o \
 	netdll_urlmsw.o \
 	$(__NET_WINCE_SRC_OBJECTS_2)
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_2)
@@ -7894,7 +7894,7 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 @COND_PLATFORM_UNIX_1@	netlib_socketiohandler.o netlib_sockunix.o
 COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_3 =  \
 	netlib_gsocket.o \
-	netlib_gsockmsw.o \
+	netlib_sockmsw.o \
 	netlib_urlmsw.o \
 	$(__NET_WINCE_SRC_OBJECTS_3)
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___NET_PLATFORM_SRC_OBJECTS_3)
@@ -14552,8 +14552,8 @@ monodll_url.o: $(srcdir)/src/common/url.cpp $(MONODLL_ODEP)
 monodll_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
 
-monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+monodll_sockmsw.o: $(srcdir)/src/msw/sockmsw.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/sockmsw.cpp
 
 monodll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
@@ -19250,8 +19250,8 @@ monolib_url.o: $(srcdir)/src/common/url.cpp $(MONOLIB_ODEP)
 monolib_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
 
-monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+monolib_sockmsw.o: $(srcdir)/src/msw/sockmsw.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/sockmsw.cpp
 
 monolib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
@@ -24500,8 +24500,8 @@ netdll_url.o: $(srcdir)/src/common/url.cpp $(NETDLL_ODEP)
 netdll_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
 
-netdll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(NETDLL_ODEP)
-	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+netdll_sockmsw.o: $(srcdir)/src/msw/sockmsw.cpp $(NETDLL_ODEP)
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/sockmsw.cpp
 
 netdll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
@@ -24560,8 +24560,8 @@ netlib_url.o: $(srcdir)/src/common/url.cpp $(NETLIB_ODEP)
 netlib_gsocket.o: $(srcdir)/src/msw/gsocket.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/gsocket.cpp
 
-netlib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.cpp $(NETLIB_ODEP)
-	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/gsockmsw.cpp
+netlib_sockmsw.o: $(srcdir)/src/msw/sockmsw.cpp $(NETLIB_ODEP)
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/sockmsw.cpp
 
 netlib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp

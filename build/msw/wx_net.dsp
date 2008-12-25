@@ -298,7 +298,7 @@ SOURCE=..\..\src\msw\gsocket.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\gsockmsw.cpp
+SOURCE=..\..\src\msw\sockmsw.cpp
 # End Source File
 # Begin Source File
 
@@ -578,7 +578,7 @@ InputPath=..\..\include\wx\msw\genrcdefs.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\gsockmsw.h
+SOURCE=..\..\include\wx\msw\private\sockmsw.h
 # End Source File
 # End Group
 # Begin Group "Common Headers"

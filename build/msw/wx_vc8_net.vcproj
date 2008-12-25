@@ -844,7 +844,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\gsockmsw.cpp"
+				RelativePath="..\..\src\msw\sockmsw.cpp"
 				>
 			</File>
 			<File
@@ -1094,7 +1094,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\gsockmsw.h"
+				RelativePath="..\..\include\wx\msw\private\sockmsw.h"
 				>
 			</File>
 		</Filter>

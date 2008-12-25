@@ -421,7 +421,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_socket.obj \
 	$(OBJS)\monodll_url.obj \
 	$(OBJS)\monodll_gsocket.obj \
-	$(OBJS)\monodll_gsockmsw.obj \
+	$(OBJS)\monodll_sockmsw.obj \
 	$(OBJS)\monodll_urlmsw.obj \
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) \
 	$(OBJS)\monodll_xml.obj \
@@ -565,7 +565,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_socket.obj \
 	$(OBJS)\monolib_url.obj \
 	$(OBJS)\monolib_gsocket.obj \
-	$(OBJS)\monolib_gsockmsw.obj \
+	$(OBJS)\monolib_sockmsw.obj \
 	$(OBJS)\monolib_urlmsw.obj \
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) \
 	$(OBJS)\monolib_xml.obj \
@@ -846,7 +846,7 @@ NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_socket.obj \
 	$(OBJS)\netdll_url.obj \
 	$(OBJS)\netdll_gsocket.obj \
-	$(OBJS)\netdll_gsockmsw.obj \
+	$(OBJS)\netdll_sockmsw.obj \
 	$(OBJS)\netdll_urlmsw.obj
 NETLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_167)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
@@ -872,7 +872,7 @@ NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_socket.obj \
 	$(OBJS)\netlib_url.obj \
 	$(OBJS)\netlib_gsocket.obj \
-	$(OBJS)\netlib_gsockmsw.obj \
+	$(OBJS)\netlib_sockmsw.obj \
 	$(OBJS)\netlib_urlmsw.obj
 COREDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_181)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
@@ -6066,8 +6066,8 @@ $(OBJS)\monodll_url.obj: ..\..\src\common\url.cpp
 $(OBJS)\monodll_gsocket.obj: ..\..\src\msw\gsocket.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\gsocket.cpp
 
-$(OBJS)\monodll_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\gsockmsw.cpp
+$(OBJS)\monodll_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
 $(OBJS)\monodll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
@@ -8280,8 +8280,8 @@ $(OBJS)\monolib_url.obj: ..\..\src\common\url.cpp
 $(OBJS)\monolib_gsocket.obj: ..\..\src\msw\gsocket.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\gsocket.cpp
 
-$(OBJS)\monolib_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\gsockmsw.cpp
+$(OBJS)\monolib_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
 $(OBJS)\monolib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
@@ -10809,8 +10809,8 @@ $(OBJS)\netdll_url.obj: ..\..\src\common\url.cpp
 $(OBJS)\netdll_gsocket.obj: ..\..\src\msw\gsocket.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\msw\gsocket.cpp
 
-$(OBJS)\netdll_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\msw\gsockmsw.cpp
+$(OBJS)\netdll_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
 $(OBJS)\netdll_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETDLL_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
@@ -10851,8 +10851,8 @@ $(OBJS)\netlib_url.obj: ..\..\src\common\url.cpp
 $(OBJS)\netlib_gsocket.obj: ..\..\src\msw\gsocket.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\msw\gsocket.cpp
 
-$(OBJS)\netlib_gsockmsw.obj: ..\..\src\msw\gsockmsw.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\msw\gsockmsw.cpp
+$(OBJS)\netlib_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
 $(OBJS)\netlib_urlmsw.obj: ..\..\src\msw\urlmsw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(NETLIB_CXXFLAGS) ..\..\src\msw\urlmsw.cpp
