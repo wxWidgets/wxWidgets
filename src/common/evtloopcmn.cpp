@@ -28,6 +28,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/stopwatch.h"   // for wxMilliClock_t
 #endif //WX_PRECOMP
 
 // ----------------------------------------------------------------------------
