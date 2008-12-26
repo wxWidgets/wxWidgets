@@ -291,6 +291,7 @@ All:
 - Added wxMemoryInputStream(wxInputStream&) ctor (Stas Sergeev).
 - Implemented wxMemoryInputStream::CanRead().
 - Implemented wxMemoryFSHandler::FindFirst/Next().
+- Added wxEventLoop::DispatchTimeout().
 - Added wxEXEC_BLOCK flag (Hank Schultz).
 - Add support for wxStream-derived classes to wxRTTI (Stas Sergeev).
 - Added wxStreamBuffer::Truncate() (Stas Sergeev).

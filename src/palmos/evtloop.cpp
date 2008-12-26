@@ -135,6 +135,11 @@ bool wxGUIEventLoop::Dispatch()
     return false;
 }
 
+int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
+{
+    return -1;
+}
+
 void wxGUIEventLoop::WakeUp()
 {
     return;

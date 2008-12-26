@@ -83,6 +83,24 @@ public:
     virtual bool Dispatch() = 0;
 
     /**
+        Dispatch an event but not wait longer than the specified timeout for
+        it.
+
+        If an event is received before the specified @a timeout expires, it is
+        processed and the function returns 1 normally or 0 if the event loop
+        should quite. Otherwise, i.e. if the timeout expires, the functions
+        returns -1 without processing any events.
+
+        @param timeout
+            The maximal time to wait for the events in milliseconds.
+
+        @return
+            1 if an event was processed, 0 if the event loop should quit or -1
+            if the timeout expired.
+     */
+    virtual int DispatchTimeout(unsigned long timeout) = 0;
+
+    /**
         Return true if this event loop is currently running.
 
         Notice that even if this event loop hasn't terminated yet but has just

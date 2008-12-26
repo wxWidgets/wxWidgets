@@ -27,6 +27,7 @@ public:
 
     virtual bool Pending() const;
     virtual bool Dispatch();
+    virtual int DispatchTimeout(unsigned long timeout);
 
     // returns DirectFB event buffer used by wx
     static wxIDirectFBEventBufferPtr GetDirectFBEventBuffer();

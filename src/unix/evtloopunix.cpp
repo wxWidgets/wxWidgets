@@ -149,30 +149,34 @@ bool wxConsoleEventLoop::Pending() const
 
 bool wxConsoleEventLoop::Dispatch()
 {
-    // calculate the timeout until the next timer expiration
-    int timeout;
+    DispatchTimeout(wxFDIODispatcher::TIMEOUT_INFINITE);
 
+    return true;
+}
+
+int wxConsoleEventLoop::DispatchTimeout(unsigned long timeout)
+{
 #if wxUSE_TIMER
+    // check if we need to decrease the timeout to account for a timer
     wxUsecClock_t nextTimer;
     if ( wxTimerScheduler::Get().GetNext(&nextTimer) )
     {
-        // timeout is in ms
-        timeout = (nextTimer / 1000).ToLong();
+        unsigned long timeUntilNextTimer = wxMilliClockToLong(nextTimer / 1000);
+        if ( timeUntilNextTimer < timeout )
+            timeout = timeUntilNextTimer;
     }
-    else // no timers, we can block forever
 #endif // wxUSE_TIMER
-    {
-        timeout = wxFDIODispatcher::TIMEOUT_INFINITE;
-    }
 
-    m_dispatcher->Dispatch(timeout);
+    bool hadEvent = m_dispatcher->Dispatch(timeout);
 
 #if wxUSE_TIMER
-    wxTimerScheduler::Get().NotifyExpired();
-#endif
+    if ( wxTimerScheduler::Get().NotifyExpired() )
+        hadEvent = true;
+#endif // wxUSE_TIMER
 
     wxTheApp->ProcessPendingEvents();
-    return true;
+
+    return hadEvent ? 1 : -1;
 }
 
 void wxConsoleEventLoop::WakeUp()

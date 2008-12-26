@@ -83,18 +83,28 @@ bool wxGUIEventLoop::Pending() const
 
 bool wxGUIEventLoop::Dispatch()
 {
-    wxCHECK_MSG( ms_buffer, false, "invalid event buffer" );
-
     // NB: we don't block indefinitely waiting for an event, but instead
     //     time out after a brief period in order to make sure that
     //     OnNextIteration() will be called frequently enough
+    //
+    // TODO: remove this hack, instead use CreateFileDescriptor() to properly
+    //       multiplex GUI and socket input
     const int TIMEOUT = 100;
+
+    // treat time out (-1 return value) as normal successful return so that
+    // OnNextIteration() is called
+    return !!DispatchTimeout(TIMEOUT);
+}
+
+int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
+{
+    wxCHECK_MSG( ms_buffer, 0, "invalid event buffer" );
 
     // release the GUI mutex so that other threads have a chance to post
     // events:
     wxMutexGuiLeave();
 
-    bool rv = ms_buffer->WaitForEventWithTimeout(0, TIMEOUT);
+    bool rv = ms_buffer->WaitForEventWithTimeout(0, timeout);
 
     // and acquire it back before calling any event handlers:
     wxMutexGuiEnter();
@@ -112,9 +122,7 @@ bool wxGUIEventLoop::Dispatch()
             }
 
             case DFB_TIMEOUT:
-                // timed out, pretend we processed an event so that
-                // OnNextIteration is called
-                break;
+                return -1;
 
             default:
                 // don't terminate the loop due to errors (they were reported
@@ -123,7 +131,7 @@ bool wxGUIEventLoop::Dispatch()
         }
     }
 
-    return true;
+    return 1;
 }
 
 void wxGUIEventLoop::WakeUp()

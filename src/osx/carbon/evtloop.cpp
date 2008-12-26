@@ -48,6 +48,18 @@ void wxGUIEventLoop::WakeUp()
     wxMacWakeUp();
 }
 
+void wxGUIEventLoop::DispatchAndReleaseEvent(EventRef theEvent)
+{
+    if ( wxTheApp )
+        wxTheApp->MacSetCurrentEvent( theEvent, NULL );
+
+    OSStatus status = SendEventToEventTarget(theEvent, GetEventDispatcherTarget());
+    if (status == eventNotHandledErr && wxTheApp)
+        wxTheApp->MacHandleUnhandledEvent(theEvent);
+
+    ReleaseEvent( theEvent );
+}
+
 bool wxGUIEventLoop::Pending() const
 {
     EventRef theEvent;
@@ -95,17 +107,33 @@ bool wxGUIEventLoop::Dispatch()
             break;
 
         default:
-            if ( wxTheApp )
-                wxTheApp->MacSetCurrentEvent( theEvent, NULL );
-
-            OSStatus status = SendEventToEventTarget(theEvent, GetEventDispatcherTarget());
-            if (status == eventNotHandledErr && wxTheApp)
-                wxTheApp->MacHandleUnhandledEvent(theEvent);
-
-            ReleaseEvent( theEvent );
+            DispatchAndReleaseEvent(theEvent);
             m_sleepTime = kEventDurationNoWait ;
             break;
     }
 
     return true;
 }
+
+int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
+{
+    EventRef event;
+    OSStatus status = ReceiveNextEvent(0, NULL, timeout/1000, true, &event);
+    switch ( status )
+    {
+        default:
+            wxFAIL_MSG( "unexpected ReceiveNextEvent() error" );
+            // fall through
+
+        case eventLoopTimedOutErr:
+            return -1;
+
+        case eventLoopQuitErr:
+            return 0;
+
+        case noErr:
+            DispatchAndReleaseEvent(event);
+            return 1;
+    }
+}
+

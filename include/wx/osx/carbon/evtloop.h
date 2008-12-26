@@ -12,17 +12,25 @@
 #ifndef _WX_MAC_CARBON_EVTLOOP_H_
 #define _WX_MAC_CARBON_EVTLOOP_H_
 
+class OpaqueEventRef;
+typedef OpaqueEventRef *EventRef;
+
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopManual
 {
 public:
     wxGUIEventLoop();
 
+    // implement/override base class pure virtual
     virtual bool Pending() const;
     virtual bool Dispatch();
+    virtual int DispatchTimeout(unsigned long timeout);
 
-    // implement base class pure virtual
     virtual void WakeUp();
+
 private:
+    // dispatch an event and release it
+    void DispatchAndReleaseEvent(EventRef event);
+
     double      m_sleepTime;
 };
 

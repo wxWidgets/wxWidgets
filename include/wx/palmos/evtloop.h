@@ -26,6 +26,7 @@ public:
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
+    virtual int DispatchTimeout(unsigned long timeout);
     virtual bool IsRunning() const;
 
     // MSW-specific methods

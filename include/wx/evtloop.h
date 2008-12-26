@@ -31,6 +31,7 @@ public:
     // using it
     virtual bool IsOk() const { return true; }
 
+
     // start the event loop, return the exit code when it is finished
     virtual int Run() = 0;
 
@@ -42,6 +43,12 @@ public:
 
     // dispatch a single event, return false if we should exit from the loop
     virtual bool Dispatch() = 0;
+
+    // same as Dispatch() but doesn't wait for longer than the specified (in
+    // ms) timeout, return true if an event was processed, false if we should
+    // exit the loop or -1 if timeout expired
+    virtual int DispatchTimeout(unsigned long timeout) = 0;
+
 
     // return currently active (running) event loop, may be NULL
     static wxEventLoopBase *GetActive() { return ms_activeLoop; }
@@ -121,6 +128,8 @@ protected:
     #include "wx/dfb/evtloop.h"
 #else // other platform
 
+#define wxNEEDS_GENERIC_DISPATCH_TIMEOUT
+
 class WXDLLIMPEXP_FWD_CORE wxEventLoopImpl;
 
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
@@ -133,6 +142,7 @@ public:
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
+    virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp() { }
 
 protected:

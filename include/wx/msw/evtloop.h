@@ -32,6 +32,10 @@ protected:
     // get the next message from queue and return true or return false if we
     // got WM_QUIT or an error occurred
     bool GetNextMessage(WXMSG *msg);
+
+    // same as above but with a timeout and return value can be -1 meaning that
+    // time out expired in addition to
+    int GetNextMessageTimeout(WXMSG *msg, unsigned long timeout);
 };
 
 #if wxUSE_GUI
@@ -66,6 +70,7 @@ public:
 
     // override/implement base class virtuals
     virtual bool Dispatch();
+    virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
 
 protected:
@@ -92,7 +97,11 @@ public:
 
     // override/implement base class virtuals
     virtual bool Dispatch();
+    virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
+
+    // MSW-specific function to process a single message
+    virtual void ProcessMessage(WXMSG *msg);
 
 protected:
     virtual void OnNextIteration();
