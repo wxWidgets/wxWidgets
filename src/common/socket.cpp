@@ -1247,19 +1247,35 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
         eventLoop = NULL;
     }
 
+    // reset them before starting to wait
+    m_eventsgot = 0;
+
     // Wait in an active polling loop: notice that the loop is executed at
     // least once, even if timeout is 0 (i.e. polling).
     bool gotEvent = false;
     for ( ;; )
     {
-        // We always stop waiting when the connection is lost as it doesn't
-        // make sense to continue further, even if wxSOCKET_LOST_FLAG is not
-        // specified in flags to wait for.
-        const wxSocketEventFlags
-            result = m_impl->Select(flags | wxSOCKET_LOST_FLAG);
+        wxSocketEventFlags events;
+        if ( eventLoop )
+        {
+            // This function is only called if wxSOCKET_BLOCK flag was not used
+            // and so we should dispatch the events if there is an event loop
+            // capable of doing it.
+            if ( eventLoop->Pending() )
+                eventLoop->Dispatch();
+
+            events = m_eventsgot;
+        }
+        else
+        {
+            // We always stop waiting when the connection is lost as it doesn't
+            // make sense to continue further, even if wxSOCKET_LOST_FLAG is
+            // not specified in flags to wait for.
+            events = m_impl->Select(flags | wxSOCKET_LOST_FLAG);
+        }
 
         // Incoming connection (server) or connection established (client)?
-        if ( result & wxSOCKET_CONNECTION_FLAG )
+        if ( events & wxSOCKET_CONNECTION_FLAG )
         {
             m_connected = true;
             m_establishing = false;
@@ -1268,14 +1284,14 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
         }
 
         // Data available or output buffer ready?
-        if ( (result & wxSOCKET_INPUT_FLAG) || (result & wxSOCKET_OUTPUT_FLAG) )
+        if ( (events & wxSOCKET_INPUT_FLAG) || (events & wxSOCKET_OUTPUT_FLAG) )
         {
             gotEvent = true;
             break;
         }
 
         // Connection lost
-        if ( result & wxSOCKET_LOST_FLAG )
+        if ( events & wxSOCKET_LOST_FLAG )
         {
             m_connected = false;
             m_establishing = false;
@@ -1292,16 +1308,9 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
         if ( timeNow >= timeEnd )
             break;
 
-        if ( eventLoop )
-        {
-            // This function is only called if wxSOCKET_BLOCK flag was not used
-            // and so we should dispatch the events if there is an event loop
-            // capable of doing it.
-            if ( eventLoop->Pending() )
-                eventLoop->Dispatch();
-        }
 #if wxUSE_THREADS
-        else // no event loop or waiting in another thread
+        // no event loop or waiting in another thread
+        if ( !eventLoop )
         {
             // We're busy waiting but at least give up the rest of our current
             // time slice.
