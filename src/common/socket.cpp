@@ -667,7 +667,7 @@ bool wxSocketBase::Destroy()
     // Shutdown and close the socket
     Close();
 
-    // Supress events from now on
+    // Suppress events from now on
     Notify(false);
 
     // schedule this object for deletion
@@ -1540,8 +1540,6 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
 void wxSocketBase::Notify(bool notify)
 {
     m_notify = notify;
-    if (m_impl)
-        m_impl->Notify(notify);
 }
 
 void wxSocketBase::SetNotify(wxSocketEventFlags flags)
@@ -1632,7 +1630,6 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
     }
 
     // Setup the socket as server
-    m_impl->Notify(m_notify);
     m_impl->SetLocal(addr_man.GetAddress());
 
     if (GetFlags() & wxSOCKET_REUSEADDR) {
@@ -1818,9 +1815,6 @@ bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
     m_impl->SetPeer(addr_man.GetAddress());
     const wxSocketError err = m_impl->CreateClient();
 
-    //this will register for callbacks - must be called after m_impl->m_fd was initialized
-    m_impl->Notify(m_notify);
-
     if (err != wxSOCKET_NOERROR)
     {
         if (err == wxSOCKET_WOULDBLOCK)
@@ -1879,7 +1873,6 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
     if (!m_impl)
         return;
 
-    m_impl->Notify(m_notify);
     // Setup the socket as non connection oriented
     m_impl->SetLocal(addr.GetAddress());
     if (flags & wxSOCKET_REUSEADDR)

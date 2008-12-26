@@ -267,9 +267,6 @@ public:
     // named) OnRequest() method
     void NotifyOnStateChange(wxSocketNotify event);
 
-    // FIXME: this one probably isn't needed here at all
-    virtual void Notify(bool WXUNUSED(notify)) { }
-
     // TODO: make these fields protected and provide accessors for those of
     //       them that wxSocketBase really needs
 //protected:

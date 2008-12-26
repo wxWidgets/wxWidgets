@@ -26,7 +26,6 @@ public:
         m_fds[0] =
         m_fds[1] = -1;
 
-        m_use_events = false;
         m_enabledCallbacks = 0;
     }
 
@@ -35,8 +34,6 @@ public:
 
     int Read(void *buffer, int size);
     int Write(const void *buffer, int size);
-    //attach or detach from main loop
-    void Notify(bool flag);
 
     // wxFDIOHandler methods
     virtual void OnReadWaiting();
@@ -73,27 +70,16 @@ private:
         EnableEvents();
     }
 
-    // enable or disable notifications for socket input/output events but only
-    // if m_use_events is true; do nothing otherwise
-    virtual void EnableEvents()
-    {
-        if ( m_use_events )
-            DoEnableEvents(true);
+    // enable or disable notifications for socket input/output events
+    void EnableEvents() { DoEnableEvents(true); }
+    void DisableEvents() { DoEnableEvents(false);
     }
 
-    void DisableEvents()
-    {
-        if ( m_use_events )
-            DoEnableEvents(false);
-    }
-
-    // really enable or disable socket input/output events, regardless of
-    // m_use_events value
+    // really enable or disable socket input/output events
     void DoEnableEvents(bool enable);
 
 
-    // enable or disable events for the given event if m_use_events; do nothing
-    // otherwise
+    // enable or disable events for the given event
     //
     // notice that these functions also update m_detected: EnableEvent() clears
     // the corresponding bit in it and DisableEvent() sets it
@@ -107,9 +93,6 @@ private:
 
 
 protected:
-    // true if socket should fire events
-    bool m_use_events;
-
     // descriptors for input and output event notification channels associated
     // with the socket
     int m_fds[2];

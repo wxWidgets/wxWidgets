@@ -535,18 +535,8 @@ wxSocketImpl *wxSocketImplUnix::WaitConnection(wxSocketBase& wxsocket)
 #else
   ioctl(connection->m_fd, FIONBIO, &arg);
 #endif
-  if (m_use_events)
-    connection->Notify(true);
 
   return connection;
-}
-
-void wxSocketImplUnix::Notify(bool flag)
-{
-    if (flag == m_use_events)
-        return;
-    m_use_events = flag;
-    DoEnableEvents(flag);
 }
 
 void wxSocketImplUnix::DoEnableEvents(bool flag)
@@ -672,12 +662,9 @@ int wxSocketImplUnix::Read(void *buffer, int size)
     if ((ret == 0) && m_stream)
     {
       /* Make sure wxSOCKET_LOST event gets sent and shut down the socket */
-      if (m_use_events)
-      {
-        m_detected = wxSOCKET_LOST_FLAG;
-        OnReadWaiting();
-        return 0;
-      }
+      m_detected = wxSOCKET_LOST_FLAG;
+      OnReadWaiting();
+      return 0;
     }
     else if (ret == -1)
     {
@@ -754,20 +741,14 @@ int wxSocketImplUnix::Write(const void *buffer, int size)
 
 void wxSocketImplUnix::EnableEvent(wxSocketNotify event)
 {
-    if (m_use_events)
-    {
-        m_detected &= ~(1 << event);
-        wxSocketManager::Get()->Install_Callback(this, event);
-    }
+    m_detected &= ~(1 << event);
+    wxSocketManager::Get()->Install_Callback(this, event);
 }
 
 void wxSocketImplUnix::DisableEvent(wxSocketNotify event)
 {
-    if (m_use_events)
-    {
-        m_detected |= (1 << event);
-        wxSocketManager::Get()->Uninstall_Callback(this, event);
-    }
+    m_detected |= (1 << event);
+    wxSocketManager::Get()->Uninstall_Callback(this, event);
 }
 
 int wxSocketImplUnix::Recv_Stream(void *buffer, int size)
