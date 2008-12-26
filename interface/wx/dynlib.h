@@ -81,7 +81,7 @@ enum wxPluginCategory
     @class wxDynamicLibrary
 
     wxDynamicLibrary is a class representing dynamically loadable library
-    (Windows DLL, shared library under Unix etc.). Just create an object of
+    (Windows DLL, shared library under Unix etc). Just create an object of
     this class to load a library and don't worry about unloading it -- it will
     be done in the objects destructor automatically.
 
