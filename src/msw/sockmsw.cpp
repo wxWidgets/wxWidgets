@@ -634,7 +634,7 @@ int wxSocketImplMSW::Write(const void *buffer, int size)
   }
 
   /* If the socket is blocking, wait for writability (with a timeout) */
-  if ( BlockForOutputWithTimeout() )
+  if ( !BlockForOutputWithTimeout() )
     return -1;
 
   /* Write the data */
