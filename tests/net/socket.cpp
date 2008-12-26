@@ -37,17 +37,46 @@ static wxString gs_serverHost(wxGetenv("WX_TEST_SERVER"));
 class SocketTestCase : public CppUnit::TestCase
 {
 public:
-    SocketTestCase() { }
+    SocketTestCase() { m_useLoop = false; }
 
 private:
+    // we need to repeat the tests twice as the sockets behave differently when
+    // there is an active event loop and without it
+    #define ALL_SOCKET_TESTS() \
+        CPPUNIT_TEST( BlockingConnect ); \
+        CPPUNIT_TEST( NonblockingConnect ); \
+        CPPUNIT_TEST( ReadNormal ); \
+        CPPUNIT_TEST( ReadBlock ); \
+        CPPUNIT_TEST( ReadNowait ); \
+        CPPUNIT_TEST( ReadWaitall )
+
     CPPUNIT_TEST_SUITE( SocketTestCase );
-        CPPUNIT_TEST( BlockingConnect );
-        CPPUNIT_TEST( NonblockingConnect );
-        CPPUNIT_TEST( ReadNormal );
-        CPPUNIT_TEST( ReadBlock );
-        CPPUNIT_TEST( ReadNowait );
-        CPPUNIT_TEST( ReadWaitall );
+        ALL_SOCKET_TESTS();
+        CPPUNIT_TEST( PseudoTest_SetUseEventLoop );
+        ALL_SOCKET_TESTS();
     CPPUNIT_TEST_SUITE_END();
+
+    // helper event loop class which sets itself as active only if we pass it
+    // true in ctor
+    class SocketTestEventLoop : public wxEventLoop
+    {
+    public:
+        SocketTestEventLoop(bool useLoop)
+        {
+            m_useLoop = useLoop;
+            if ( useLoop )
+                SetActive(this);
+        }
+
+        virtual ~SocketTestEventLoop()
+        {
+            if ( m_useLoop )
+                SetActive(NULL);
+        }
+
+    private:
+        bool m_useLoop;
+    };
 
     // get the address to connect to, if NULL is returned it means that the
     // test is disabled and shouldn't run at all
@@ -57,12 +86,16 @@ private:
     // disabled
     wxSocketClientPtr GetHTTPSocket(int flags = wxSOCKET_NONE) const;
 
+    void PseudoTest_SetUseEventLoop() { m_useLoop = true; }
+
     void BlockingConnect();
     void NonblockingConnect();
     void ReadNormal();
     void ReadBlock();
     void ReadNowait();
     void ReadWaitall();
+
+    bool m_useLoop;
 
     DECLARE_NO_COPY_CLASS(SocketTestCase)
 };
@@ -118,7 +151,7 @@ void SocketTestCase::NonblockingConnect()
     if ( !addr.get() )
         return;
 
-    wxEventLoopGuarantor loop;
+    SocketTestEventLoop loop(m_useLoop);
 
     wxSocketClient sock;
     sock.Connect(*addr, false);
@@ -129,7 +162,7 @@ void SocketTestCase::NonblockingConnect()
 
 void SocketTestCase::ReadNormal()
 {
-    wxEventLoopGuarantor loop;
+    SocketTestEventLoop loop(m_useLoop);
 
     wxSocketClientPtr sock(GetHTTPSocket());
     if ( !sock.get() )
@@ -185,7 +218,7 @@ void SocketTestCase::ReadNowait()
 
 void SocketTestCase::ReadWaitall()
 {
-    wxEventLoopGuarantor loop;
+    SocketTestEventLoop loop(m_useLoop);
 
     wxSocketClientPtr sock(GetHTTPSocket(wxSOCKET_WAITALL));
     if ( !sock.get() )
