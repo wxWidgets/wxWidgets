@@ -1550,8 +1550,6 @@ public:
     */
     wxDEPRECATED( wxString GetValueString( int argFlags = 0 ) const );
 
-    void UpdateControl( wxWindow* primary );
-
     /**
         Returns wxPGCell of given column.
     */
@@ -2223,6 +2221,8 @@ protected:
     // if oldSelInd >= 0 and < new max items, then selection is
     // moved to it.
     void SubPropsChanged( int oldSelInd = -1 );
+
+    void UpdateControl( wxWindow* editorWnd );
 
     int GetY2( int lh ) const;
 

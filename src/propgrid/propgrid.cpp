@@ -3636,6 +3636,15 @@ bool wxPropertyGrid::UnfocusEditor()
 
 // -----------------------------------------------------------------------
 
+void wxPropertyGrid::RefreshEditor()
+{
+    if ( !m_selected || !m_wndEditor || m_frozen )
+        return;
+    m_selected->UpdateControl(m_wndEditor);
+}
+
+// -----------------------------------------------------------------------
+
 // This method is not inline because it called dozens of times
 // (i.e. two-arg function calls create smaller code size).
 bool wxPropertyGrid::DoClearSelection()

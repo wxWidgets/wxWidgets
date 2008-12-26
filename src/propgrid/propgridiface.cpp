@@ -523,6 +523,9 @@ void wxPropertyGridInterface::ClearModifiedStatus()
 
         pageIndex++;
     }
+
+    // Update active editor control, if any
+    GetPropertyGrid()->RefreshEditor();
 }
 
 // -----------------------------------------------------------------------

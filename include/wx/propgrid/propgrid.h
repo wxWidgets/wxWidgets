@@ -1179,6 +1179,11 @@ public:
         return m_wndEditor2;
     }
 
+    /**
+        Refreshes any active editor control.
+    */
+    void RefreshEditor();
+
     // Events from editor controls are forward to this function
     void HandleCustomEditorEvent( wxEvent &event );
 

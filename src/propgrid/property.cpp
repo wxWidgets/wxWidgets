@@ -639,10 +639,10 @@ int wxPGProperty::Index( const wxPGProperty* p ) const
     return wxNOT_FOUND;
 }
 
-void wxPGProperty::UpdateControl( wxWindow* primary )
+void wxPGProperty::UpdateControl( wxWindow* editorWnd )
 {
-    if ( primary )
-        GetEditorClass()->UpdateControl(this, primary);
+    if ( editorWnd )
+        GetEditorClass()->UpdateControl(this, editorWnd);
 }
 
 bool wxPGProperty::ValidateValue( wxVariant& WXUNUSED(value), wxPGValidationInfo& WXUNUSED(validationInfo) ) const
@@ -1336,18 +1336,13 @@ void wxPGProperty::SetFlagRecursively( FlagType flag, bool set )
 
 void wxPGProperty::RefreshEditor()
 {
-    if ( m_parent && GetParentState() )
-    {
-        wxPropertyGrid* pg = GetParentState()->GetGrid();
-        if ( pg->GetSelectedProperty() == this )
-        {
-            wxWindow* editor = pg->GetEditorControl();
-            if ( editor )
-                GetEditorClass()->UpdateControl( this, editor );
-        }
-    }
-}
+    if ( !m_parent )
+        return;
 
+    wxPropertyGrid* pg = GetGrid();
+    if ( pg && pg->GetSelectedProperty() == this )
+        UpdateControl(pg->GetEditorControl());
+}
 
 wxVariant wxPGProperty::GetDefaultValue() const
 {

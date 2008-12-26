@@ -659,6 +659,11 @@ public:
     bool IsFrozen() const;
 
     /**
+        Refreshes any active editor control.
+    */
+    void RefreshEditor();
+
+    /**
         Redraws given property.
     */
     virtual void RefreshProperty( wxPGProperty* p );
