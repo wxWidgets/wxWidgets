@@ -9,7 +9,7 @@
 
 # this function should be called with a single parameter containing addition
 # port-specific directories to scan
-function create_tags()
+create_tags()
 {
 ctags --totals --c++-kinds=+px --language-force=c++ \
 	--exclude=include/wx/vms_x_fix.h \
