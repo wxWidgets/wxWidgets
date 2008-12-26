@@ -255,7 +255,14 @@ public:
     virtual int Read(void *buffer, int size) = 0;
     virtual int Write(const void *buffer, int size) = 0;
 
-    wxSocketEventFlags Select(wxSocketEventFlags flags);
+    // basically a wrapper for select(): returns the condition of the socket,
+    // blocking for not longer than timeout ms for something to become
+    // available
+    //
+    // flags defines what kind of conditions we're interested in, the return
+    // value is composed of a (possibly empty) subset of the bits set in flags
+    wxSocketEventFlags Select(wxSocketEventFlags flags,
+                              unsigned long timeout = 0);
 
     virtual wxSocketImpl *WaitConnection(wxSocketBase& wxsocket) = 0;
 

@@ -69,6 +69,21 @@ IMPLEMENT_CLASS(wxSocketClient, wxSocketBase)
 IMPLEMENT_CLASS(wxDatagramSocket, wxSocketBase)
 IMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent)
 
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+namespace
+{
+
+void SetTimeValFromMS(timeval& tv, unsigned long ms)
+{
+    tv.tv_sec  = (ms / 1000);
+    tv.tv_usec = (ms % 1000) * 1000;
+}
+
+} // anonymous namespace
+
 // --------------------------------------------------------------------------
 // private classes
 // --------------------------------------------------------------------------
@@ -390,8 +405,7 @@ void wxSocketImpl::Shutdown()
  */
 void wxSocketImpl::SetTimeout(unsigned long millis)
 {
-    m_timeout.tv_sec  = (millis / 1000);
-    m_timeout.tv_usec = (millis % 1000) * 1000;
+    SetTimeValFromMS(m_timeout, millis);
 }
 
 void wxSocketImpl::NotifyOnStateChange(wxSocketNotify event)
@@ -1106,29 +1120,23 @@ wxSocketBase& wxSocketBase::Discard()
 // --------------------------------------------------------------------------
 
 /*
- *  Polls the socket to determine its status. This function will
- *  check for the events specified in the 'flags' parameter, and
- *  it will return a mask indicating which operations can be
- *  performed. This function won't block, regardless of the
- *  mode (blocking | nonblocking) of the socket.
+    This function will check for the events specified in the flags parameter,
+    and it will return a mask indicating which operations can be performed.
  */
-wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags)
+wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags,
+                                        unsigned long timeout)
 {
-  assert(this);
-
   wxSocketEventFlags result = 0;
-  fd_set readfds;
-  fd_set writefds;
-  fd_set exceptfds;
-  struct timeval tv;
 
   if (m_fd == INVALID_SOCKET)
     return (wxSOCKET_LOST_FLAG & flags);
 
-  /* Do not use a static struct, Linux can garble it */
-  tv.tv_sec = 0;
-  tv.tv_usec = 0;
+  struct timeval tv;
+  SetTimeValFromMS(tv, timeout);
 
+  fd_set readfds;
+  fd_set writefds;
+  fd_set exceptfds;
   wxFD_ZERO(&readfds);
   wxFD_ZERO(&writefds);
   wxFD_ZERO(&exceptfds);
@@ -1211,12 +1219,6 @@ wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags)
   return (result | m_detected) & flags;
 }
 
-// All Wait functions poll the socket using Select() to
-// check for the specified combination of conditions, until one
-// of these conditions become true, an error occurs, or the
-// timeout elapses. The polling loop runs the event loop so that
-// this won't block the GUI.
-
 bool
 wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
 {
@@ -1247,32 +1249,54 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
         eventLoop = NULL;
     }
 
-    // reset them before starting to wait
-    m_eventsgot = 0;
-
-    // Wait in an active polling loop: notice that the loop is executed at
-    // least once, even if timeout is 0 (i.e. polling).
+    // Wait until we receive the event we're waiting for or the timeout expires
+    // (but note that we always execute the loop at least once, even if timeout
+    // is 0 as this is used for polling)
     bool gotEvent = false;
-    for ( ;; )
+    for ( bool firstTime = true; !m_interrupt ; firstTime = false )
     {
+        long timeLeft = wxMilliClockToLong(timeEnd - wxGetLocalTimeMillis());
+        if ( timeLeft < 0 )
+        {
+            if ( !firstTime )
+                break;   // timed out
+
+            timeLeft = 0;
+        }
+
+        // This function is only called if wxSOCKET_BLOCK flag was not used and
+        // so we should dispatch the events if there is an event loop capable
+        // of doing it.
         wxSocketEventFlags events;
         if ( eventLoop )
         {
-            // This function is only called if wxSOCKET_BLOCK flag was not used
-            // and so we should dispatch the events if there is an event loop
-            // capable of doing it.
-            if ( eventLoop->Pending() )
-                eventLoop->Dispatch();
+            // reset them before starting to wait
+            m_eventsgot = 0;
+
+            eventLoop->DispatchTimeout(timeLeft);
 
             events = m_eventsgot;
         }
-        else
+        else // no event loop or waiting in another thread
         {
-            // We always stop waiting when the connection is lost as it doesn't
-            // make sense to continue further, even if wxSOCKET_LOST_FLAG is
-            // not specified in flags to wait for.
-            events = m_impl->Select(flags | wxSOCKET_LOST_FLAG);
+            // as explained below, we should always check for wxSOCKET_LOST_FLAG
+            events = m_impl->Select(flags | wxSOCKET_LOST_FLAG, timeLeft);
         }
+
+        // always check for wxSOCKET_LOST_FLAG, even if flags doesn't include
+        // it, as continuing to wait for anything else after getting it is
+        // pointless
+        if ( events & wxSOCKET_LOST_FLAG )
+        {
+            m_connected = false;
+            m_establishing = false;
+            if ( flags & wxSOCKET_LOST_FLAG )
+                gotEvent = true;
+            break;
+        }
+
+        // otherwise mask out the bits we're not interested in
+        events &= flags;
 
         // Incoming connection (server) or connection established (client)?
         if ( events & wxSOCKET_CONNECTION_FLAG )
@@ -1289,34 +1313,6 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
             gotEvent = true;
             break;
         }
-
-        // Connection lost
-        if ( events & wxSOCKET_LOST_FLAG )
-        {
-            m_connected = false;
-            m_establishing = false;
-            if ( flags & wxSOCKET_LOST_FLAG )
-                gotEvent = true;
-            break;
-        }
-
-        if ( m_interrupt )
-            break;
-
-        // Wait more?
-        const wxMilliClock_t timeNow = wxGetLocalTimeMillis();
-        if ( timeNow >= timeEnd )
-            break;
-
-#if wxUSE_THREADS
-        // no event loop or waiting in another thread
-        if ( !eventLoop )
-        {
-            // We're busy waiting but at least give up the rest of our current
-            // time slice.
-            wxThread::Yield();
-        }
-#endif // wxUSE_THREADS
     }
 
     return gotEvent;
@@ -1467,37 +1463,6 @@ void wxSocketBase::SetFlags(wxSocketFlags flags)
 
 void wxSocketBase::OnRequest(wxSocketNotify notification)
 {
-    switch ( notification )
-    {
-        case wxSOCKET_CONNECTION:
-            m_establishing = false;
-            m_connected = true;
-            break;
-
-            // If we are in the middle of a R/W operation, do not
-            // propagate events to users. Also, filter 'late' events
-            // which are no longer valid.
-
-        case wxSOCKET_INPUT:
-            if (m_reading || !m_impl->Select(wxSOCKET_INPUT_FLAG))
-                return;
-            break;
-
-        case wxSOCKET_OUTPUT:
-            if (m_writing || !m_impl->Select(wxSOCKET_OUTPUT_FLAG))
-                return;
-            break;
-
-        case wxSOCKET_LOST:
-            m_connected = false;
-            m_establishing = false;
-            break;
-
-        case wxSOCKET_MAX_EVENT:
-            wxFAIL_MSG( "unexpected notification" );
-            return;
-    }
-
     wxSocketEventFlags flag = 0;
     switch ( notification )
     {
@@ -1528,6 +1493,19 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
     // send the wx event if enabled and we're interested in it
     if ( m_notify && (m_eventmask & flag) && m_handler )
     {
+        // If we are in the middle of a R/W operation, do not propagate events
+        // to users. Also, filter 'late' events which are no longer valid.
+        if ( notification == wxSOCKET_INPUT )
+        {
+            if ( m_reading || !m_impl->Select(wxSOCKET_INPUT_FLAG) )
+                return;
+        }
+        else if ( notification == wxSOCKET_OUTPUT )
+        {
+            if ( m_writing || !m_impl->Select(wxSOCKET_OUTPUT_FLAG) )
+                return;
+        }
+
         wxSocketEvent event(m_id);
         event.m_event      = notification;
         event.m_clientData = m_clientData;
