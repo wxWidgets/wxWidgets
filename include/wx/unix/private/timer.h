@@ -110,8 +110,9 @@ public:
     // it returns false if there are no timers
     bool GetNext(wxUsecClock_t *remaining) const;
 
-    // trigger the timer event for all timers which have expired
-    void NotifyExpired();
+    // trigger the timer event for all timers which have expired, return true
+    // if any did
+    bool NotifyExpired();
 
 private:
     // ctor and dtor are private, this is a singleton class only created by

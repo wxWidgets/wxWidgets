@@ -134,10 +134,12 @@ bool wxTimerScheduler::GetNext(wxUsecClock_t *remaining) const
     return true;
 }
 
-void wxTimerScheduler::NotifyExpired()
+bool wxTimerScheduler::NotifyExpired()
 {
     if ( m_timers.empty() )
-      return;
+      return false;
+
+    bool notified = false;
 
     const wxUsecClock_t now = wxGetLocalTimeUsec();
 
@@ -182,7 +184,10 @@ void wxTimerScheduler::NotifyExpired()
 
         // and finally notify the timer
         timer->Notify();
+        notified = true;
     }
+
+    return notified;
 }
 
 // ============================================================================
