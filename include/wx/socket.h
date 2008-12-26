@@ -101,8 +101,6 @@ enum wxSocketType
 
 class WXDLLIMPEXP_NET wxSocketBase : public wxObject
 {
-  DECLARE_CLASS(wxSocketBase)
-
 public:
 
   // Public interface
@@ -251,11 +249,13 @@ private:
   void         *m_clientData;       // client data for events
   bool          m_notify;           // notify events to users?
   wxSocketEventFlags  m_eventmask;  // which events to notify?
+  wxSocketEventFlags  m_eventsgot;  // collects events received in OnRequest()
 
   // the initialization count, GSocket is initialized if > 0
   static size_t m_countInit;
 
   DECLARE_NO_COPY_CLASS(wxSocketBase)
+  DECLARE_CLASS(wxSocketBase)
 };
 
 

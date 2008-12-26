@@ -612,7 +612,8 @@ void wxSocketBase::Init()
     m_handler      = NULL;
     m_clientData   = NULL;
     m_notify       = false;
-    m_eventmask    = 0;
+    m_eventmask    =
+    m_eventsgot    = 0;
 
     if ( !IsInitialized() )
     {
@@ -1457,7 +1458,7 @@ void wxSocketBase::SetFlags(wxSocketFlags flags)
 
 void wxSocketBase::OnRequest(wxSocketNotify notification)
 {
-    switch(notification)
+    switch ( notification )
     {
         case wxSOCKET_CONNECTION:
             m_establishing = false;
@@ -1488,32 +1489,42 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
             return;
     }
 
-    // Schedule the event
-
     wxSocketEventFlags flag = 0;
-    wxUnusedVar(flag);
-    switch (notification)
+    switch ( notification )
     {
-        case wxSOCKET_INPUT:      flag = wxSOCKET_INPUT_FLAG; break;
-        case wxSOCKET_OUTPUT:     flag = wxSOCKET_OUTPUT_FLAG; break;
-        case wxSOCKET_CONNECTION: flag = wxSOCKET_CONNECTION_FLAG; break;
-        case wxSOCKET_LOST:       flag = wxSOCKET_LOST_FLAG; break;
+        case wxSOCKET_INPUT:
+            flag = wxSOCKET_INPUT_FLAG;
+            break;
+
+        case wxSOCKET_OUTPUT:
+            flag = wxSOCKET_OUTPUT_FLAG;
+            break;
+
+        case wxSOCKET_CONNECTION:
+            flag = wxSOCKET_CONNECTION_FLAG;
+            break;
+
+        case wxSOCKET_LOST:
+            flag = wxSOCKET_LOST_FLAG;
+            break;
+
         default:
-                               wxLogWarning(_("wxSocket: unknown event!."));
-                               return;
+            wxFAIL_MSG( "unknown wxSocket notification" );
     }
 
-    if (((m_eventmask & flag) == flag) && m_notify)
-    {
-        if (m_handler)
-        {
-            wxSocketEvent event(m_id);
-            event.m_event      = notification;
-            event.m_clientData = m_clientData;
-            event.SetEventObject(this);
+    // remember the events which were generated for this socket, we're going to
+    // use this in DoWait()
+    m_eventsgot |= flag;
 
-            m_handler->AddPendingEvent(event);
-        }
+    // send the wx event if enabled and we're interested in it
+    if ( m_notify && (m_eventmask & flag) && m_handler )
+    {
+        wxSocketEvent event(m_id);
+        event.m_event      = notification;
+        event.m_clientData = m_clientData;
+        event.SetEventObject(this);
+
+        m_handler->AddPendingEvent(event);
     }
 }
 
