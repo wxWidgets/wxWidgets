@@ -1486,6 +1486,10 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
             wxFAIL_MSG( "unknown wxSocket notification" );
     }
 
+    // if we lost the connection the socket is now closed
+    if ( notification == wxSOCKET_LOST )
+        m_closed = true;
+
     // remember the events which were generated for this socket, we're going to
     // use this in DoWait()
     m_eventsgot |= flag;
