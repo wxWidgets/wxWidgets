@@ -37,7 +37,7 @@ static wxString gs_serverHost(wxGetenv("WX_TEST_SERVER"));
 class SocketTestCase : public CppUnit::TestCase
 {
 public:
-    SocketTestCase() { m_useLoop = false; }
+    SocketTestCase() { }
 
 private:
     // we need to repeat the tests twice as the sockets behave differently when
@@ -86,7 +86,7 @@ private:
     // disabled
     wxSocketClientPtr GetHTTPSocket(int flags = wxSOCKET_NONE) const;
 
-    void PseudoTest_SetUseEventLoop() { m_useLoop = true; }
+    void PseudoTest_SetUseEventLoop() { ms_useLoop = true; }
 
     void BlockingConnect();
     void NonblockingConnect();
@@ -95,10 +95,12 @@ private:
     void ReadNowait();
     void ReadWaitall();
 
-    bool m_useLoop;
+    static bool ms_useLoop;
 
     DECLARE_NO_COPY_CLASS(SocketTestCase)
 };
+
+bool SocketTestCase::ms_useLoop = false;
 
 CPPUNIT_TEST_SUITE_REGISTRATION( SocketTestCase );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SocketTestCase, "SocketTestCase" );
@@ -151,7 +153,7 @@ void SocketTestCase::NonblockingConnect()
     if ( !addr.get() )
         return;
 
-    SocketTestEventLoop loop(m_useLoop);
+    SocketTestEventLoop loop(ms_useLoop);
 
     wxSocketClient sock;
     sock.Connect(*addr, false);
@@ -162,7 +164,7 @@ void SocketTestCase::NonblockingConnect()
 
 void SocketTestCase::ReadNormal()
 {
-    SocketTestEventLoop loop(m_useLoop);
+    SocketTestEventLoop loop(ms_useLoop);
 
     wxSocketClientPtr sock(GetHTTPSocket());
     if ( !sock.get() )
@@ -218,7 +220,7 @@ void SocketTestCase::ReadNowait()
 
 void SocketTestCase::ReadWaitall()
 {
-    SocketTestEventLoop loop(m_useLoop);
+    SocketTestEventLoop loop(ms_useLoop);
 
     wxSocketClientPtr sock(GetHTTPSocket(wxSOCKET_WAITALL));
     if ( !sock.get() )
