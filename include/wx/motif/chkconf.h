@@ -11,11 +11,6 @@
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
-#if wxUSE_NOTEBOOK && !wxUSE_TAB_DIALOG
-#   undef wxUSE_TAB_DIALOG
-#   define wxUSE_TAB_DIALOG 1
-#endif
-
 #if !defined(wxUSE_GADGETS)
 #   define wxUSE_GADGETS 0
 #endif

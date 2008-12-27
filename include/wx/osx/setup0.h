@@ -779,14 +779,6 @@
 // Recommended setting: 1
 #define wxUSE_TOOLBOOK 1
 
-// wxTabDialog is a generic version of wxNotebook but it is incompatible with
-// the new class. It shouldn't be used in new code.
-//
-// Default is 0.
-//
-// Recommended setting: 0 (use wxNotebook)
-#define wxUSE_TAB_DIALOG    0
-
 // wxTaskBarIcon is a small notification icon shown in the system toolbar or
 // dock.
 //
@@ -1282,17 +1274,17 @@
 // override some settings for Metrowerks
 //
 // VZ: isn't this file only used when building with Metrowerks anyhow?
-// CS: no, it is also used by the XCode projects 
+// CS: no, it is also used by the XCode projects
 #ifdef __MWERKS__
     #undef wxUSE_DEBUG_CONTEXT
     #define wxUSE_DEBUG_CONTEXT 1
 
     #undef wxUSE_STD_IOSTREAM
-    // CS: I have to set this to 0 now, as shared builds are having problems 
+    // CS: I have to set this to 0 now, as shared builds are having problems
     #define wxUSE_STD_IOSTREAM  0
 #endif
 
-#undef wxUSE_GRAPHICS_CONTEXT 
+#undef wxUSE_GRAPHICS_CONTEXT
 #define wxUSE_GRAPHICS_CONTEXT 1
 
 
@@ -1310,7 +1302,7 @@
 // Set to 0 for no libmspack
 #define wxUSE_LIBMSPACK     0
 
-// native toolbar does support embedding controls, but not comples panels, please test 
+// native toolbar does support embedding controls, but not comples panels, please test
 #define wxOSX_USE_NATIVE_TOOLBAR 1
 
 // make sure we have the proper dispatcher for the console event loop

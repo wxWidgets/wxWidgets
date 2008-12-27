@@ -372,8 +372,6 @@
 
 #define wxUSE_TOOLBOOK 1
 
-#define wxUSE_TAB_DIALOG    0
-
 #define wxUSE_TASKBARICON 1
 
 #define wxUSE_GRID 1

@@ -12,11 +12,11 @@
 #ifndef _WX_OSX_IPHONE_CHKCONF_H_
 #define _WX_OSX_IPHONE_CHKCONF_H_
 
-/* 
- * text rendering system 
+/*
+ * text rendering system
  */
 
-/* we have different options and we turn on all that make sense 
+/* we have different options and we turn on all that make sense
  * under a certain platform
  */
 
@@ -141,7 +141,6 @@
 #define wxUSE_WIZARDDLG 0
 #define wxUSE_TOOLBAR_NATIVE 0
 #define wxUSE_FINDREPLDLG 0
-#define wxUSE_TAB_DIALOG 0
 #define wxUSE_TASKBARICON 0
 
 

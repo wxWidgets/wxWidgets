@@ -220,7 +220,7 @@ typedef pid_t GPid;
 
 #if defined(__DMC__) || defined(__WATCOMC__) \
         || (defined(_MSC_VER) && _MSC_VER < 1200)
-    #define wxUSE_STD_DEFAULT  0  
+    #define wxUSE_STD_DEFAULT  0
 #else
     #define wxUSE_STD_DEFAULT  0
 #endif
@@ -402,8 +402,6 @@ typedef pid_t GPid;
 #define wxUSE_TREEBOOK 1
 
 #define wxUSE_TOOLBOOK 1
-
-#define wxUSE_TAB_DIALOG    1
 
 #define wxUSE_TASKBARICON 1
 
@@ -838,7 +836,7 @@ typedef pid_t GPid;
 
 /* define with the name of timezone variable */
 #undef WX_TIMEZONE
- 
+
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #define WX_SOCKLEN_T size_t
 
@@ -1223,7 +1221,7 @@ typedef pid_t GPid;
    Win32 adjustments section
    ---------------------------------------------------------------------
  */
- 
+
 #ifdef __WIN32__
 
 /* we need to define wxUSE_XPM_IN_MSW for MSW compilation for compatibil

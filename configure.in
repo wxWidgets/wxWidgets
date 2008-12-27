@@ -372,7 +372,6 @@ dnl features disabled by default
 DEFAULT_wxUSE_ACCESSIBILITY=no
 DEFAULT_wxUSE_GRAPHICS_CONTEXT=no
 DEFAULT_wxUSE_IPV6=no
-DEFAULT_wxUSE_TAB_DIALOG=no
 DEFAULT_wxUSE_GSTREAMER8=no
 
 dnl automatic features
@@ -838,7 +837,6 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_STATBOX=yes
   DEFAULT_wxUSE_STATLINE=yes
   DEFAULT_wxUSE_STATUSBAR=yes
-  DEFAULT_wxUSE_TAB_DIALOG=yes
   DEFAULT_wxUSE_TOGGLEBTN=yes
   DEFAULT_wxUSE_TOOLBAR=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
@@ -892,7 +890,6 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_STATBOX=no
   DEFAULT_wxUSE_STATLINE=no
   DEFAULT_wxUSE_STATUSBAR=no
-  DEFAULT_wxUSE_TAB_DIALOG=no
   DEFAULT_wxUSE_TOGGLEBTN=no
   DEFAULT_wxUSE_TOOLBAR=no
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
@@ -952,7 +949,6 @@ WX_ARG_FEATURE(statbox,     [  --enable-statbox        use wxStaticBox class], w
 WX_ARG_FEATURE(statline,    [  --enable-statline       use wxStaticLine class], wxUSE_STATLINE)
 WX_ARG_FEATURE(stattext,    [  --enable-stattext       use wxStaticText class], wxUSE_STATTEXT)
 WX_ARG_FEATURE(statusbar,   [  --enable-statusbar      use wxStatusBar class], wxUSE_STATUSBAR)
-WX_ARG_FEATURE(tabdialog,   [  --enable-tabdialog      use wxTabControl class], wxUSE_TAB_DIALOG)
 WX_ARG_FEATURE(taskbaricon, [  --enable-taskbaricon    use wxTaskBarIcon class], wxUSE_TASKBARICON)
 WX_ARG_FEATURE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxUSE_TEXTCTRL)
 WX_ARG_FEATURE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
@@ -6783,10 +6779,6 @@ if test "$wxUSE_STATUSBAR" = "yes"; then
     USES_CONTROLS=1
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS statbar"
-fi
-
-if test "$wxUSE_TAB_DIALOG" = "yes"; then
-    AC_DEFINE(wxUSE_TAB_DIALOG)
 fi
 
 if test "$wxUSE_TEXTCTRL" = "yes"; then

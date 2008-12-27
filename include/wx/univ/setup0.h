@@ -777,14 +777,6 @@
 // Recommended setting: 1
 #define wxUSE_TOOLBOOK 1
 
-// wxTabDialog is a generic version of wxNotebook but it is incompatible with
-// the new class. It shouldn't be used in new code.
-//
-// Default is 0.
-//
-// Recommended setting: 0 (use wxNotebook)
-#define wxUSE_TAB_DIALOG    0
-
 // wxTaskBarIcon is a small notification icon shown in the system toolbar or
 // dock.
 //

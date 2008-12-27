@@ -936,14 +936,6 @@
 #   endif
 #endif /* !defined(wxUSE_STATUSBAR) */
 
-#ifndef wxUSE_TAB_DIALOG
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_TAB_DIALOG must be defined."
-#   else
-#       define wxUSE_TAB_DIALOG 0
-#   endif
-#endif /* !defined(wxUSE_TAB_DIALOG) */
-
 #ifndef wxUSE_TASKBARICON
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_TASKBARICON must be defined."
