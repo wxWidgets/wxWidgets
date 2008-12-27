@@ -920,8 +920,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/splitter.h
     wx/srchctrl.h
     wx/statline.h
-    wx/tab.h
-    wx/tabctrl.h
     wx/tbarbase.h
     wx/tglbtn.h
     wx/tipwin.h
@@ -1048,7 +1046,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
-    src/generic/tabg.cpp
     <!-- Generic implementations used by wxGPE: -->
     src/generic/fontdlgg.cpp
     src/generic/msgdlgg.cpp
@@ -1105,7 +1102,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/fontdlgg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
-    wx/generic/tabg.h
     wx/gtk/accel.h
     wx/gtk/bmpbuttn.h
     wx/gtk/button.h
@@ -1237,7 +1233,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
-    src/generic/tabg.cpp
     <!-- GTK1 specific files: -->
     src/gtk1/bmpbuttn.cpp
     src/gtk1/button.cpp
@@ -1282,7 +1277,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/fontpickerg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
-    wx/generic/tabg.h
     wx/gtk1/accel.h
     wx/gtk1/bmpbuttn.h
     wx/gtk1/button.h
@@ -1409,7 +1403,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/generic/statline.cpp
     src/generic/statusbr.cpp
-    src/generic/tabg.cpp
 </set>
 <set var="MOTIF_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -1427,7 +1420,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/prntdlgg.h
     wx/generic/statline.h
     wx/generic/statusbr.h
-    wx/generic/tabg.h
     wx/motif/accel.h
     wx/motif/app.h
     wx/motif/bmpbuttn.h
@@ -1672,7 +1664,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/statusbar.cpp
     src/msw/statline.cpp
     src/msw/stattext.cpp
-    src/msw/tabctrl.cpp
     src/msw/toolbar.cpp
     src/msw/textctrl.cpp
     src/msw/textentry.cpp
@@ -1757,7 +1748,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/statusbar.h
     wx/msw/statline.h
     wx/msw/stattext.h
-    wx/msw/tabctrl.h
     wx/msw/toolbar.h
     wx/msw/textctrl.h
     wx/msw/textentry.h
@@ -2061,7 +2051,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/statbox.cpp
     src/os2/statline.cpp
     src/os2/stattext.cpp
-    src/os2/tabctrl.cpp
     src/os2/textctrl.cpp
     src/os2/textentry.cpp
     src/os2/tglbtn.cpp
@@ -2140,7 +2129,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/statbox.h
     wx/os2/statline.h
     wx/os2/stattext.h
-    wx/os2/tabctrl.h
     wx/os2/textctrl.h
     wx/os2/textentry.h
     wx/os2/tglbtn.h
@@ -2188,7 +2176,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/statbox_osx.cpp
     src/osx/statline_osx.cpp
     src/osx/stattext_osx.cpp
-    src/osx/tabctrl_osx.cpp
     src/osx/textctrl_osx.cpp
     src/osx/tglbtn_osx.cpp
     src/osx/toolbar_osx.cpp
@@ -2254,7 +2241,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/renderer.cpp
     src/osx/carbon/settings.cpp
     src/osx/carbon/statbrma.cpp
-    src/osx/carbon/tabctrl.cpp
     <!-- cocoa bridge -->
     src/osx/carbon/utilscocoa.mm
 </if>
@@ -2296,7 +2282,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/toolbar.cpp
     src/osx/carbon/tooltip.cpp
     src/osx/carbon/window.cpp
-    
+
     src/html/htmlctrl/webkit/webkit.mm
     <!-- Generic implementations used by wxMac: -->
     src/generic/caret.cpp
@@ -2309,7 +2295,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
-    src/generic/tabg.cpp
 </set>
 
 <!-- Header files like wx/osx/foo.h which include wx/osx/carbon/foo.h -->
@@ -2382,7 +2367,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/statline.h
     wx/osx/stattext.h
     wx/osx/statusbr.h
-    wx/osx/tabctrl.h
     wx/osx/taskbarosx.h
     wx/osx/textctrl.h
     wx/osx/tglbtn.h
@@ -2466,7 +2450,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/carbon/statline.h
     wx/osx/carbon/stattext.h
     wx/osx/carbon/statusbr.h
-    wx/osx/carbon/tabctrl.h
     wx/osx/carbon/textctrl.h
     wx/osx/carbon/tglbtn.h
     wx/osx/carbon/toolbar.h
@@ -2485,7 +2468,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/fontpickerg.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
-    wx/generic/tabg.h
     <!-- wxWebKit headers -->
     wx/html/webkit.h
 </set>
@@ -2535,7 +2517,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/generic/regiong.cpp
     src/generic/statusbr.cpp
-    src/generic/tabg.cpp
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
@@ -2657,7 +2638,6 @@ src/osx/iphone/window.mm
     src/generic/paletteg.cpp
     src/generic/regiong.cpp
     src/generic/statusbr.cpp
-    src/generic/tabg.cpp
 </set>
 <set var="COCOA_HDR" hints="files">
     wx/cocoa/NSApplication.h
@@ -2745,7 +2725,6 @@ src/osx/iphone/window.mm
     wx/generic/paletteg.h
     wx/generic/region.h
     wx/generic/statusbr.h
-    wx/generic/tabg.h
 </set>
 
 
@@ -2777,7 +2756,6 @@ src/osx/iphone/window.mm
     src/generic/mdig.cpp
     src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
-    src/generic/tabg.cpp
     src/univ/bmpbuttn.cpp
     src/univ/button.cpp
     src/univ/checkbox.cpp
@@ -2830,7 +2808,6 @@ src/osx/iphone/window.mm
     wx/generic/listctrl.h
     wx/generic/mdig.h
     wx/generic/statusbr.h
-    wx/generic/tabg.h
     wx/univ/app.h
     wx/univ/bmpbuttn.h
     wx/univ/button.h

@@ -1800,7 +1800,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_statusbar.obj \
 	$(OBJS)\monodll_statline.obj \
 	$(OBJS)\monodll_stattext.obj \
-	$(OBJS)\monodll_tabctrl.obj \
 	$(OBJS)\monodll_toolbar.obj \
 	$(OBJS)\monodll_textctrl.obj \
 	$(OBJS)\monodll_textentry.obj \
@@ -2006,7 +2005,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_mdig.obj \
 	$(OBJS)\monodll_msgdlgg.obj \
 	$(OBJS)\monodll_prntdlgg.obj \
-	$(OBJS)\monodll_tabg.obj \
 	$(OBJS)\monodll_bmpbuttn.obj \
 	$(OBJS)\monodll_button.obj \
 	$(OBJS)\monodll_checkbox.obj \
@@ -2483,7 +2481,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_statusbar.obj \
 	$(OBJS)\monolib_statline.obj \
 	$(OBJS)\monolib_stattext.obj \
-	$(OBJS)\monolib_tabctrl.obj \
 	$(OBJS)\monolib_toolbar.obj \
 	$(OBJS)\monolib_textctrl.obj \
 	$(OBJS)\monolib_textentry.obj \
@@ -2689,7 +2686,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_mdig.obj \
 	$(OBJS)\monolib_msgdlgg.obj \
 	$(OBJS)\monolib_prntdlgg.obj \
-	$(OBJS)\monolib_tabg.obj \
 	$(OBJS)\monolib_bmpbuttn.obj \
 	$(OBJS)\monolib_button.obj \
 	$(OBJS)\monolib_checkbox.obj \
@@ -3095,7 +3091,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_statusbar.obj \
 	$(OBJS)\coredll_statline.obj \
 	$(OBJS)\coredll_stattext.obj \
-	$(OBJS)\coredll_tabctrl.obj \
 	$(OBJS)\coredll_toolbar.obj \
 	$(OBJS)\coredll_textctrl.obj \
 	$(OBJS)\coredll_textentry.obj \
@@ -3301,7 +3296,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_mdig.obj \
 	$(OBJS)\coredll_msgdlgg.obj \
 	$(OBJS)\coredll_prntdlgg.obj \
-	$(OBJS)\coredll_tabg.obj \
 	$(OBJS)\coredll_bmpbuttn.obj \
 	$(OBJS)\coredll_button.obj \
 	$(OBJS)\coredll_checkbox.obj \
@@ -3582,7 +3576,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_statusbar.obj \
 	$(OBJS)\corelib_statline.obj \
 	$(OBJS)\corelib_stattext.obj \
-	$(OBJS)\corelib_tabctrl.obj \
 	$(OBJS)\corelib_toolbar.obj \
 	$(OBJS)\corelib_textctrl.obj \
 	$(OBJS)\corelib_textentry.obj \
@@ -3788,7 +3781,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_mdig.obj \
 	$(OBJS)\corelib_msgdlgg.obj \
 	$(OBJS)\corelib_prntdlgg.obj \
-	$(OBJS)\corelib_tabg.obj \
 	$(OBJS)\corelib_bmpbuttn.obj \
 	$(OBJS)\corelib_button.obj \
 	$(OBJS)\corelib_checkbox.obj \
@@ -6122,9 +6114,6 @@ $(OBJS)\monodll_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 $(OBJS)\monodll_statusbar.obj: ..\..\src\msw\statusbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
-$(OBJS)\monodll_tabctrl.obj: ..\..\src\msw\tabctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\tabctrl.cpp
-
 $(OBJS)\monodll_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\textentry.cpp
 
@@ -6151,9 +6140,6 @@ $(OBJS)\monodll_mdig.obj: ..\..\src\generic\mdig.cpp
 
 $(OBJS)\monodll_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
-
-$(OBJS)\monodll_tabg.obj: ..\..\src\generic\tabg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\tabg.cpp
 
 $(OBJS)\monodll_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\ctrlrend.cpp
@@ -8333,9 +8319,6 @@ $(OBJS)\monolib_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 $(OBJS)\monolib_statusbar.obj: ..\..\src\msw\statusbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
-$(OBJS)\monolib_tabctrl.obj: ..\..\src\msw\tabctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\tabctrl.cpp
-
 $(OBJS)\monolib_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\textentry.cpp
 
@@ -8362,9 +8345,6 @@ $(OBJS)\monolib_mdig.obj: ..\..\src\generic\mdig.cpp
 
 $(OBJS)\monolib_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
-
-$(OBJS)\monolib_tabg.obj: ..\..\src\generic\tabg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\tabg.cpp
 
 $(OBJS)\monolib_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\ctrlrend.cpp
@@ -10928,9 +10908,6 @@ $(OBJS)\coredll_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 $(OBJS)\coredll_statusbar.obj: ..\..\src\msw\statusbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
-$(OBJS)\coredll_tabctrl.obj: ..\..\src\msw\tabctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\tabctrl.cpp
-
 $(OBJS)\coredll_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\textentry.cpp
 
@@ -10957,9 +10934,6 @@ $(OBJS)\coredll_mdig.obj: ..\..\src\generic\mdig.cpp
 
 $(OBJS)\coredll_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
-
-$(OBJS)\coredll_tabg.obj: ..\..\src\generic\tabg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\tabg.cpp
 
 $(OBJS)\coredll_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\ctrlrend.cpp
@@ -12295,9 +12269,6 @@ $(OBJS)\corelib_spinctrl.obj: ..\..\src\msw\spinctrl.cpp
 $(OBJS)\corelib_statusbar.obj: ..\..\src\msw\statusbar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\statusbar.cpp
 
-$(OBJS)\corelib_tabctrl.obj: ..\..\src\msw\tabctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\tabctrl.cpp
-
 $(OBJS)\corelib_textentry.obj: ..\..\src\msw\textentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\textentry.cpp
 
@@ -12324,9 +12295,6 @@ $(OBJS)\corelib_mdig.obj: ..\..\src\generic\mdig.cpp
 
 $(OBJS)\corelib_msgdlgg.obj: ..\..\src\generic\msgdlgg.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\msgdlgg.cpp
-
-$(OBJS)\corelib_tabg.obj: ..\..\src\generic\tabg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\tabg.cpp
 
 $(OBJS)\corelib_ctrlrend.obj: ..\..\src\univ\ctrlrend.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\ctrlrend.cpp

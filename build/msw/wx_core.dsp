@@ -2394,41 +2394,6 @@ SOURCE=..\..\src\msw\statusbar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\tabctrl.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\msw\textctrl.cpp
 
 !IF  "$(CFG)" == "core - Win32 DLL Universal Release"
@@ -3131,41 +3096,6 @@ SOURCE=..\..\src\generic\statusbr.cpp
 
 !ELSEIF  "$(CFG)" == "core - Win32 Debug"
 
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\generic\tabg.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-# PROP Exclude_From_Build 1
 
 !ENDIF
 
@@ -5205,10 +5135,6 @@ SOURCE=..\..\include\wx\msw\statusbar.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\tabctrl.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\taskbar.h
 # End Source File
 # Begin Source File
@@ -5470,10 +5396,6 @@ SOURCE=..\..\include\wx\generic\stattextg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\statusbr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\tabg.h
 # End Source File
 # Begin Source File
 
@@ -6486,14 +6408,6 @@ SOURCE=..\..\include\wx\statusbr.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\stc\stc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\tab.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\tabctrl.h
 # End Source File
 # Begin Source File
 

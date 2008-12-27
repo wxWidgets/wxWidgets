@@ -1638,7 +1638,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_statusbar.o \
 	$(OBJS)\monodll_statline.o \
 	$(OBJS)\monodll_stattext.o \
-	$(OBJS)\monodll_tabctrl.o \
 	$(OBJS)\monodll_toolbar.o \
 	$(OBJS)\monodll_textctrl.o \
 	$(OBJS)\monodll_textentry.o \
@@ -1846,7 +1845,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_mdig.o \
 	$(OBJS)\monodll_msgdlgg.o \
 	$(OBJS)\monodll_prntdlgg.o \
-	$(OBJS)\monodll_tabg.o \
 	$(OBJS)\monodll_bmpbuttn.o \
 	$(OBJS)\monodll_button.o \
 	$(OBJS)\monodll_checkbox.o \
@@ -2321,7 +2319,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_statusbar.o \
 	$(OBJS)\monolib_statline.o \
 	$(OBJS)\monolib_stattext.o \
-	$(OBJS)\monolib_tabctrl.o \
 	$(OBJS)\monolib_toolbar.o \
 	$(OBJS)\monolib_textctrl.o \
 	$(OBJS)\monolib_textentry.o \
@@ -2529,7 +2526,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_mdig.o \
 	$(OBJS)\monolib_msgdlgg.o \
 	$(OBJS)\monolib_prntdlgg.o \
-	$(OBJS)\monolib_tabg.o \
 	$(OBJS)\monolib_bmpbuttn.o \
 	$(OBJS)\monolib_button.o \
 	$(OBJS)\monolib_checkbox.o \
@@ -2919,7 +2915,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_statusbar.o \
 	$(OBJS)\coredll_statline.o \
 	$(OBJS)\coredll_stattext.o \
-	$(OBJS)\coredll_tabctrl.o \
 	$(OBJS)\coredll_toolbar.o \
 	$(OBJS)\coredll_textctrl.o \
 	$(OBJS)\coredll_textentry.o \
@@ -3127,7 +3122,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_mdig.o \
 	$(OBJS)\coredll_msgdlgg.o \
 	$(OBJS)\coredll_prntdlgg.o \
-	$(OBJS)\coredll_tabg.o \
 	$(OBJS)\coredll_bmpbuttn.o \
 	$(OBJS)\coredll_button.o \
 	$(OBJS)\coredll_checkbox.o \
@@ -3408,7 +3402,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_statusbar.o \
 	$(OBJS)\corelib_statline.o \
 	$(OBJS)\corelib_stattext.o \
-	$(OBJS)\corelib_tabctrl.o \
 	$(OBJS)\corelib_toolbar.o \
 	$(OBJS)\corelib_textctrl.o \
 	$(OBJS)\corelib_textentry.o \
@@ -3616,7 +3609,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_mdig.o \
 	$(OBJS)\corelib_msgdlgg.o \
 	$(OBJS)\corelib_prntdlgg.o \
-	$(OBJS)\corelib_tabg.o \
 	$(OBJS)\corelib_bmpbuttn.o \
 	$(OBJS)\corelib_button.o \
 	$(OBJS)\corelib_checkbox.o \
@@ -5928,9 +5920,6 @@ $(OBJS)\monodll_spinctrl.o: ../../src/msw/spinctrl.cpp
 $(OBJS)\monodll_statusbar.o: ../../src/msw/statusbar.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_tabctrl.o: ../../src/msw/tabctrl.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monodll_textentry.o: ../../src/msw/textentry.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5956,9 +5945,6 @@ $(OBJS)\monodll_mdig.o: ../../src/generic/mdig.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_tabg.o: ../../src/generic/tabg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_ctrlrend.o: ../../src/univ/ctrlrend.cpp
@@ -8253,9 +8239,6 @@ $(OBJS)\monolib_spinctrl.o: ../../src/msw/spinctrl.cpp
 $(OBJS)\monolib_statusbar.o: ../../src/msw/statusbar.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_tabctrl.o: ../../src/msw/tabctrl.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\monolib_textentry.o: ../../src/msw/textentry.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8281,9 +8264,6 @@ $(OBJS)\monolib_mdig.o: ../../src/generic/mdig.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_tabg.o: ../../src/generic/tabg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_ctrlrend.o: ../../src/univ/ctrlrend.cpp
@@ -10962,9 +10942,6 @@ $(OBJS)\coredll_spinctrl.o: ../../src/msw/spinctrl.cpp
 $(OBJS)\coredll_statusbar.o: ../../src/msw/statusbar.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\coredll_tabctrl.o: ../../src/msw/tabctrl.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\coredll_textentry.o: ../../src/msw/textentry.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10990,9 +10967,6 @@ $(OBJS)\coredll_mdig.o: ../../src/generic/mdig.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_msgdlgg.o: ../../src/generic/msgdlgg.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\coredll_tabg.o: ../../src/generic/tabg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_ctrlrend.o: ../../src/univ/ctrlrend.cpp
@@ -12441,9 +12415,6 @@ $(OBJS)\corelib_spinctrl.o: ../../src/msw/spinctrl.cpp
 $(OBJS)\corelib_statusbar.o: ../../src/msw/statusbar.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\corelib_tabctrl.o: ../../src/msw/tabctrl.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\corelib_textentry.o: ../../src/msw/textentry.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12469,9 +12440,6 @@ $(OBJS)\corelib_mdig.o: ../../src/generic/mdig.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_msgdlgg.o: ../../src/generic/msgdlgg.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\corelib_tabg.o: ../../src/generic/tabg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_ctrlrend.o: ../../src/univ/ctrlrend.cpp

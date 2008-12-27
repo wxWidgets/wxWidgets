@@ -2280,26 +2280,6 @@
 				/>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\tabctrl.cpp"
-				>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
 				RelativePath="..\..\src\msw\textctrl.cpp"
 				>
 				<FileConfiguration
@@ -2765,26 +2745,6 @@
 				/>
 				<FileConfiguration
 					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-			</File>
-			<File
-				RelativePath="..\..\src\generic\tabg.cpp"
-				>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 				/>
 			</File>
@@ -4208,10 +4168,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\tabctrl.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\msw\taskbar.h"
 				>
 			</File>
@@ -4474,10 +4430,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\statusbr.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\generic\tabg.h"
 				>
 			</File>
 			<File
@@ -5493,14 +5445,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\stc\stc.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\tab.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\tabctrl.h"
 				>
 			</File>
 			<File

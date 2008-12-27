@@ -315,7 +315,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_statusbar.obj &
 	$(OBJS)\monodll_statline.obj &
 	$(OBJS)\monodll_stattext.obj &
-	$(OBJS)\monodll_tabctrl.obj &
 	$(OBJS)\monodll_toolbar.obj &
 	$(OBJS)\monodll_textctrl.obj &
 	$(OBJS)\monodll_textentry.obj &
@@ -523,7 +522,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_mdig.obj &
 	$(OBJS)\monodll_msgdlgg.obj &
 	$(OBJS)\monodll_prntdlgg.obj &
-	$(OBJS)\monodll_tabg.obj &
 	$(OBJS)\monodll_bmpbuttn.obj &
 	$(OBJS)\monodll_button.obj &
 	$(OBJS)\monodll_checkbox.obj &
@@ -1003,7 +1001,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_statusbar.obj &
 	$(OBJS)\monolib_statline.obj &
 	$(OBJS)\monolib_stattext.obj &
-	$(OBJS)\monolib_tabctrl.obj &
 	$(OBJS)\monolib_toolbar.obj &
 	$(OBJS)\monolib_textctrl.obj &
 	$(OBJS)\monolib_textentry.obj &
@@ -1211,7 +1208,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_mdig.obj &
 	$(OBJS)\monolib_msgdlgg.obj &
 	$(OBJS)\monolib_prntdlgg.obj &
-	$(OBJS)\monolib_tabg.obj &
 	$(OBJS)\monolib_bmpbuttn.obj &
 	$(OBJS)\monolib_button.obj &
 	$(OBJS)\monolib_checkbox.obj &
@@ -1612,7 +1608,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_statusbar.obj &
 	$(OBJS)\coredll_statline.obj &
 	$(OBJS)\coredll_stattext.obj &
-	$(OBJS)\coredll_tabctrl.obj &
 	$(OBJS)\coredll_toolbar.obj &
 	$(OBJS)\coredll_textctrl.obj &
 	$(OBJS)\coredll_textentry.obj &
@@ -1820,7 +1815,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_mdig.obj &
 	$(OBJS)\coredll_msgdlgg.obj &
 	$(OBJS)\coredll_prntdlgg.obj &
-	$(OBJS)\coredll_tabg.obj &
 	$(OBJS)\coredll_bmpbuttn.obj &
 	$(OBJS)\coredll_button.obj &
 	$(OBJS)\coredll_checkbox.obj &
@@ -2103,7 +2097,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_statusbar.obj &
 	$(OBJS)\corelib_statline.obj &
 	$(OBJS)\corelib_stattext.obj &
-	$(OBJS)\corelib_tabctrl.obj &
 	$(OBJS)\corelib_toolbar.obj &
 	$(OBJS)\corelib_textctrl.obj &
 	$(OBJS)\corelib_textentry.obj &
@@ -2311,7 +2304,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_mdig.obj &
 	$(OBJS)\corelib_msgdlgg.obj &
 	$(OBJS)\corelib_prntdlgg.obj &
-	$(OBJS)\corelib_tabg.obj &
 	$(OBJS)\corelib_bmpbuttn.obj &
 	$(OBJS)\corelib_button.obj &
 	$(OBJS)\corelib_checkbox.obj &
@@ -6173,9 +6165,6 @@ $(OBJS)\monodll_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
 $(OBJS)\monodll_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6201,9 +6190,6 @@ $(OBJS)\monodll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
@@ -8498,9 +8484,6 @@ $(OBJS)\monolib_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
 $(OBJS)\monolib_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -8526,9 +8509,6 @@ $(OBJS)\monolib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
@@ -11207,9 +11187,6 @@ $(OBJS)\coredll_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
 $(OBJS)\coredll_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -11235,9 +11212,6 @@ $(OBJS)\coredll_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
-$(OBJS)\coredll_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp
@@ -12686,9 +12660,6 @@ $(OBJS)\corelib_spinctrl.obj :  .AUTODEPEND ..\..\src\msw\spinctrl.cpp
 $(OBJS)\corelib_statusbar.obj :  .AUTODEPEND ..\..\src\msw\statusbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_tabctrl.obj :  .AUTODEPEND ..\..\src\msw\tabctrl.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_textentry.obj :  .AUTODEPEND ..\..\src\msw\textentry.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -12714,9 +12685,6 @@ $(OBJS)\corelib_mdig.obj :  .AUTODEPEND ..\..\src\generic\mdig.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_msgdlgg.obj :  .AUTODEPEND ..\..\src\generic\msgdlgg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
-$(OBJS)\corelib_tabg.obj :  .AUTODEPEND ..\..\src\generic\tabg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_ctrlrend.obj :  .AUTODEPEND ..\..\src\univ\ctrlrend.cpp

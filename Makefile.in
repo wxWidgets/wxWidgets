@@ -2531,8 +2531,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/generic/listctrl.h \
 	wx/generic/paletteg.h \
 	wx/generic/region.h \
-	wx/generic/statusbr.h \
-	wx/generic/tabg.h
+	wx/generic/statusbr.h
 @COND_TOOLKIT_COCOA@GUI_HDR = $(COND_TOOLKIT_COCOA_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR =  \
 	wx/generic/clrpickerg.h \
@@ -2546,7 +2545,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR =  \
 	wx/generic/fontpickerg.h \
 	wx/generic/listctrl.h \
 	wx/generic/statusbr.h \
-	wx/generic/tabg.h \
 	wx/gtk1/accel.h \
 	wx/gtk1/bmpbuttn.h \
 	wx/gtk1/button.h \
@@ -2588,7 +2586,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/generic/fontdlgg.h \
 	wx/generic/listctrl.h \
 	wx/generic/statusbr.h \
-	wx/generic/tabg.h \
 	wx/gtk/accel.h \
 	wx/gtk/bmpbuttn.h \
 	wx/gtk/button.h \
@@ -2652,7 +2649,6 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/generic/prntdlgg.h \
 	wx/generic/statline.h \
 	wx/generic/statusbr.h \
-	wx/generic/tabg.h \
 	wx/motif/accel.h \
 	wx/motif/app.h \
 	wx/motif/bmpbuttn.h \
@@ -2784,7 +2780,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/statusbar.h \
 	wx/msw/statline.h \
 	wx/msw/stattext.h \
-	wx/msw/tabctrl.h \
 	wx/msw/toolbar.h \
 	wx/msw/textctrl.h \
 	wx/msw/textentry.h \
@@ -2897,7 +2892,6 @@ COND_TOOLKIT_OSX_CARBON_GUI_HDR =  \
 	wx/osx/statline.h \
 	wx/osx/stattext.h \
 	wx/osx/statusbr.h \
-	wx/osx/tabctrl.h \
 	wx/osx/taskbarosx.h \
 	wx/osx/textctrl.h \
 	wx/osx/tglbtn.h \
@@ -2976,7 +2970,6 @@ COND_TOOLKIT_OSX_CARBON_GUI_HDR =  \
 	wx/osx/carbon/statline.h \
 	wx/osx/carbon/stattext.h \
 	wx/osx/carbon/statusbr.h \
-	wx/osx/carbon/tabctrl.h \
 	wx/osx/carbon/textctrl.h \
 	wx/osx/carbon/tglbtn.h \
 	wx/osx/carbon/toolbar.h \
@@ -2994,7 +2987,6 @@ COND_TOOLKIT_OSX_CARBON_GUI_HDR =  \
 	wx/generic/fontpickerg.h \
 	wx/generic/listctrl.h \
 	wx/generic/statusbr.h \
-	wx/generic/tabg.h \
 	wx/html/webkit.h
 @COND_TOOLKIT_OSX_CARBON@GUI_HDR = $(COND_TOOLKIT_OSX_CARBON_GUI_HDR)
 COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
@@ -3066,7 +3058,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/statline.h \
 	wx/osx/stattext.h \
 	wx/osx/statusbr.h \
-	wx/osx/tabctrl.h \
 	wx/osx/taskbarosx.h \
 	wx/osx/textctrl.h \
 	wx/osx/tglbtn.h \
@@ -3147,7 +3138,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/carbon/statline.h \
 	wx/osx/carbon/stattext.h \
 	wx/osx/carbon/statusbr.h \
-	wx/osx/carbon/tabctrl.h \
 	wx/osx/carbon/textctrl.h \
 	wx/osx/carbon/tglbtn.h \
 	wx/osx/carbon/toolbar.h \
@@ -3165,7 +3155,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/generic/fontpickerg.h \
 	wx/generic/listctrl.h \
 	wx/generic/statusbr.h \
-	wx/generic/tabg.h \
 	wx/html/webkit.h \
 	wx/generic/region.h
 @COND_TOOLKIT_OSX_COCOA@GUI_HDR = $(COND_TOOLKIT_OSX_COCOA_GUI_HDR)
@@ -3237,7 +3226,6 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/statbox.h \
 	wx/os2/statline.h \
 	wx/os2/stattext.h \
-	wx/os2/tabctrl.h \
 	wx/os2/textctrl.h \
 	wx/os2/textentry.h \
 	wx/os2/tglbtn.h \
@@ -3324,7 +3312,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/statusbar.h \
 	wx/msw/statline.h \
 	wx/msw/stattext.h \
-	wx/msw/tabctrl.h \
 	wx/msw/toolbar.h \
 	wx/msw/textctrl.h \
 	wx/msw/textentry.h \
@@ -3554,7 +3541,6 @@ COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
 	wx/generic/listctrl.h \
 	wx/generic/mdig.h \
 	wx/generic/statusbr.h \
-	wx/generic/tabg.h \
 	wx/univ/app.h \
 	wx/univ/bmpbuttn.h \
 	wx/univ/button.h \
@@ -3779,8 +3765,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/splitter.h \
 	wx/srchctrl.h \
 	wx/statline.h \
-	wx/tab.h \
-	wx/tabctrl.h \
 	wx/tbarbase.h \
 	wx/tglbtn.h \
 	wx/tipwin.h \
@@ -4318,7 +4302,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_mdig.o \
 	monodll_msgdlgg.o \
 	monodll_prntdlgg.o \
-	monodll_tabg.o \
 	monodll_univ_bmpbuttn.o \
 	monodll_univ_button.o \
 	monodll_univ_checkbox.o \
@@ -4880,8 +4863,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_msgdlgg.o \
 	monodll_paletteg.o \
 	monodll_regiong.o \
-	monodll_generic_statusbr.o \
-	monodll_tabg.o
+	monodll_generic_statusbr.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -4898,7 +4880,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_msgdlgg.o \
 	monodll_prntdlgg.o \
 	monodll_generic_statusbr.o \
-	monodll_tabg.o \
 	monodll_gtk1_bmpbuttn.o \
 	monodll_gtk1_button.o \
 	monodll_gtk1_checkbox.o \
@@ -4938,7 +4919,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_generic_listctrl.o \
 	monodll_prntdlgg.o \
 	monodll_generic_statusbr.o \
-	monodll_tabg.o \
 	monodll_fontdlgg.o \
 	monodll_msgdlgg.o \
 	monodll_artgtk.o \
@@ -5053,8 +5033,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_generic_notebook.o \
 	monodll_prntdlgg.o \
 	monodll_generic_statline.o \
-	monodll_generic_statusbr.o \
-	monodll_tabg.o
+	monodll_generic_statusbr.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_clrpickerg.o \
@@ -5104,7 +5083,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_statusbar.o \
 	monodll_msw_statline.o \
 	monodll_msw_stattext.o \
-	monodll_msw_tabctrl.o \
 	monodll_msw_toolbar.o \
 	monodll_msw_textctrl.o \
 	monodll_msw_textentry.o \
@@ -5159,8 +5137,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS =  \
 	monodll_fontpickerg.o \
 	monodll_generic_listctrl.o \
 	monodll_prntdlgg.o \
-	monodll_generic_statusbr.o \
-	monodll_tabg.o
+	monodll_generic_statusbr.o
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS) \
@@ -5202,8 +5179,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_generic_listctrl.o \
 	monodll_prntdlgg.o \
 	monodll_regiong.o \
-	monodll_generic_statusbr.o \
-	monodll_tabg.o
+	monodll_generic_statusbr.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
@@ -5281,7 +5257,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_os2_statbox.o \
 	monodll_os2_statline.o \
 	monodll_os2_stattext.o \
-	monodll_os2_tabctrl.o \
 	monodll_os2_textctrl.o \
 	monodll_os2_textentry.o \
 	monodll_os2_tglbtn.o \
@@ -5340,7 +5315,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_statusbar.o \
 	monodll_msw_statline.o \
 	monodll_msw_stattext.o \
-	monodll_msw_tabctrl.o \
 	monodll_msw_toolbar.o \
 	monodll_msw_textctrl.o \
 	monodll_msw_textentry.o \
@@ -6137,7 +6111,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_mdig.o \
 	monolib_msgdlgg.o \
 	monolib_prntdlgg.o \
-	monolib_tabg.o \
 	monolib_univ_bmpbuttn.o \
 	monolib_univ_button.o \
 	monolib_univ_checkbox.o \
@@ -6699,8 +6672,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_msgdlgg.o \
 	monolib_paletteg.o \
 	monolib_regiong.o \
-	monolib_generic_statusbr.o \
-	monolib_tabg.o
+	monolib_generic_statusbr.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -6717,7 +6689,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_msgdlgg.o \
 	monolib_prntdlgg.o \
 	monolib_generic_statusbr.o \
-	monolib_tabg.o \
 	monolib_gtk1_bmpbuttn.o \
 	monolib_gtk1_button.o \
 	monolib_gtk1_checkbox.o \
@@ -6757,7 +6728,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_listctrl.o \
 	monolib_prntdlgg.o \
 	monolib_generic_statusbr.o \
-	monolib_tabg.o \
 	monolib_fontdlgg.o \
 	monolib_msgdlgg.o \
 	monolib_artgtk.o \
@@ -6872,8 +6842,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_notebook.o \
 	monolib_prntdlgg.o \
 	monolib_generic_statline.o \
-	monolib_generic_statusbr.o \
-	monolib_tabg.o
+	monolib_generic_statusbr.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_clrpickerg.o \
@@ -6923,7 +6892,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_statusbar.o \
 	monolib_msw_statline.o \
 	monolib_msw_stattext.o \
-	monolib_msw_tabctrl.o \
 	monolib_msw_toolbar.o \
 	monolib_msw_textctrl.o \
 	monolib_msw_textentry.o \
@@ -6978,8 +6946,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1 =  \
 	monolib_fontpickerg.o \
 	monolib_generic_listctrl.o \
 	monolib_prntdlgg.o \
-	monolib_generic_statusbr.o \
-	monolib_tabg.o
+	monolib_generic_statusbr.o
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_0) \
@@ -7021,8 +6988,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_listctrl.o \
 	monolib_prntdlgg.o \
 	monolib_regiong.o \
-	monolib_generic_statusbr.o \
-	monolib_tabg.o
+	monolib_generic_statusbr.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_caret.o \
@@ -7100,7 +7066,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_os2_statbox.o \
 	monolib_os2_statline.o \
 	monolib_os2_stattext.o \
-	monolib_os2_tabctrl.o \
 	monolib_os2_textctrl.o \
 	monolib_os2_textentry.o \
 	monolib_os2_tglbtn.o \
@@ -7159,7 +7124,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_statusbar.o \
 	monolib_msw_statline.o \
 	monolib_msw_stattext.o \
-	monolib_msw_tabctrl.o \
 	monolib_msw_toolbar.o \
 	monolib_msw_textctrl.o \
 	monolib_msw_textentry.o \
@@ -8103,7 +8067,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_mdig.o \
 	coredll_msgdlgg.o \
 	coredll_prntdlgg.o \
-	coredll_tabg.o \
 	coredll_univ_bmpbuttn.o \
 	coredll_univ_button.o \
 	coredll_univ_checkbox.o \
@@ -8665,8 +8628,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_msgdlgg.o \
 	coredll_paletteg.o \
 	coredll_regiong.o \
-	coredll_generic_statusbr.o \
-	coredll_tabg.o
+	coredll_generic_statusbr.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -8683,7 +8645,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_msgdlgg.o \
 	coredll_prntdlgg.o \
 	coredll_generic_statusbr.o \
-	coredll_tabg.o \
 	coredll_gtk1_bmpbuttn.o \
 	coredll_gtk1_button.o \
 	coredll_gtk1_checkbox.o \
@@ -8723,7 +8684,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_listctrl.o \
 	coredll_prntdlgg.o \
 	coredll_generic_statusbr.o \
-	coredll_tabg.o \
 	coredll_fontdlgg.o \
 	coredll_msgdlgg.o \
 	coredll_artgtk.o \
@@ -8838,8 +8798,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_notebook.o \
 	coredll_prntdlgg.o \
 	coredll_generic_statline.o \
-	coredll_generic_statusbr.o \
-	coredll_tabg.o
+	coredll_generic_statusbr.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_clrpickerg.o \
@@ -8889,7 +8848,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_statusbar.o \
 	coredll_msw_statline.o \
 	coredll_msw_stattext.o \
-	coredll_msw_tabctrl.o \
 	coredll_msw_toolbar.o \
 	coredll_msw_textctrl.o \
 	coredll_msw_textentry.o \
@@ -8944,8 +8902,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2 =  \
 	coredll_fontpickerg.o \
 	coredll_generic_listctrl.o \
 	coredll_prntdlgg.o \
-	coredll_generic_statusbr.o \
-	coredll_tabg.o
+	coredll_generic_statusbr.o
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_8) \
@@ -8987,8 +8944,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_listctrl.o \
 	coredll_prntdlgg.o \
 	coredll_regiong.o \
-	coredll_generic_statusbr.o \
-	coredll_tabg.o
+	coredll_generic_statusbr.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_caret.o \
@@ -9066,7 +9022,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_os2_statbox.o \
 	coredll_os2_statline.o \
 	coredll_os2_stattext.o \
-	coredll_os2_tabctrl.o \
 	coredll_os2_textctrl.o \
 	coredll_os2_textentry.o \
 	coredll_os2_tglbtn.o \
@@ -9125,7 +9080,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_statusbar.o \
 	coredll_msw_statline.o \
 	coredll_msw_stattext.o \
-	coredll_msw_tabctrl.o \
 	coredll_msw_toolbar.o \
 	coredll_msw_textctrl.o \
 	coredll_msw_textentry.o \
@@ -9617,7 +9571,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_mdig.o \
 	corelib_msgdlgg.o \
 	corelib_prntdlgg.o \
-	corelib_tabg.o \
 	corelib_univ_bmpbuttn.o \
 	corelib_univ_button.o \
 	corelib_univ_checkbox.o \
@@ -10179,8 +10132,7 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_msgdlgg.o \
 	corelib_paletteg.o \
 	corelib_regiong.o \
-	corelib_generic_statusbr.o \
-	corelib_tabg.o
+	corelib_generic_statusbr.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -10197,7 +10149,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_msgdlgg.o \
 	corelib_prntdlgg.o \
 	corelib_generic_statusbr.o \
-	corelib_tabg.o \
 	corelib_gtk1_bmpbuttn.o \
 	corelib_gtk1_button.o \
 	corelib_gtk1_checkbox.o \
@@ -10237,7 +10188,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_listctrl.o \
 	corelib_prntdlgg.o \
 	corelib_generic_statusbr.o \
-	corelib_tabg.o \
 	corelib_fontdlgg.o \
 	corelib_msgdlgg.o \
 	corelib_artgtk.o \
@@ -10352,8 +10302,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_notebook.o \
 	corelib_prntdlgg.o \
 	corelib_generic_statline.o \
-	corelib_generic_statusbr.o \
-	corelib_tabg.o
+	corelib_generic_statusbr.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_clrpickerg.o \
@@ -10403,7 +10352,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_statusbar.o \
 	corelib_msw_statline.o \
 	corelib_msw_stattext.o \
-	corelib_msw_tabctrl.o \
 	corelib_msw_toolbar.o \
 	corelib_msw_textctrl.o \
 	corelib_msw_textentry.o \
@@ -10458,8 +10406,7 @@ COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3 =  \
 	corelib_fontpickerg.o \
 	corelib_generic_listctrl.o \
 	corelib_prntdlgg.o \
-	corelib_generic_statusbr.o \
-	corelib_tabg.o
+	corelib_generic_statusbr.o
 @COND_TOOLKIT_OSX_CARBON@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_CARBON___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_CARBON_COCOA_SRC_OBJECTS_9) \
@@ -10501,8 +10448,7 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_listctrl.o \
 	corelib_prntdlgg.o \
 	corelib_regiong.o \
-	corelib_generic_statusbr.o \
-	corelib_tabg.o
+	corelib_generic_statusbr.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_caret.o \
@@ -10580,7 +10526,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_os2_statbox.o \
 	corelib_os2_statline.o \
 	corelib_os2_stattext.o \
-	corelib_os2_tabctrl.o \
 	corelib_os2_textctrl.o \
 	corelib_os2_textentry.o \
 	corelib_os2_tglbtn.o \
@@ -10639,7 +10584,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_statusbar.o \
 	corelib_msw_statline.o \
 	corelib_msw_stattext.o \
-	corelib_msw_tabctrl.o \
 	corelib_msw_toolbar.o \
 	corelib_msw_textctrl.o \
 	corelib_msw_textentry.o \
@@ -11980,7 +11924,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS =  \
 	monodll_carbon_renderer.o \
 	monodll_carbon_settings.o \
 	monodll_statbrma.o \
-	monodll_carbon_tabctrl.o \
 	monodll_utilscocoa.o
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS)
 COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
@@ -12013,7 +11956,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
 	monodll_statbox_osx.o \
 	monodll_statline_osx.o \
 	monodll_stattext_osx.o \
-	monodll_tabctrl_osx.o \
 	monodll_textctrl_osx.o \
 	monodll_tglbtn_osx.o \
 	monodll_toolbar_osx.o \
@@ -12141,7 +12083,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_0 =  \
 	monolib_carbon_renderer.o \
 	monolib_carbon_settings.o \
 	monolib_statbrma.o \
-	monolib_carbon_tabctrl.o \
 	monolib_utilscocoa.o
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS_0 = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_0)
 COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17 =  \
@@ -12174,7 +12115,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17 =  \
 	monolib_statbox_osx.o \
 	monolib_statline_osx.o \
 	monolib_stattext_osx.o \
-	monolib_tabctrl_osx.o \
 	monolib_textctrl_osx.o \
 	monolib_tglbtn_osx.o \
 	monolib_toolbar_osx.o \
@@ -12302,7 +12242,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_8 =  \
 	coredll_carbon_renderer.o \
 	coredll_carbon_settings.o \
 	coredll_statbrma.o \
-	coredll_carbon_tabctrl.o \
 	coredll_utilscocoa.o
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS_8 = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_8)
 COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1 =  \
@@ -12335,7 +12274,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1 =  \
 	coredll_statbox_osx.o \
 	coredll_statline_osx.o \
 	coredll_stattext_osx.o \
-	coredll_tabctrl_osx.o \
 	coredll_textctrl_osx.o \
 	coredll_tglbtn_osx.o \
 	coredll_toolbar_osx.o \
@@ -12382,7 +12320,6 @@ COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_9 =  \
 	corelib_carbon_renderer.o \
 	corelib_carbon_settings.o \
 	corelib_statbrma.o \
-	corelib_carbon_tabctrl.o \
 	corelib_utilscocoa.o
 @COND_PLATFORM_MACOSX_1@__OSX_CARBON_COCOA_SRC_OBJECTS_9 = $(COND_PLATFORM_MACOSX_1___OSX_CARBON_COCOA_SRC_OBJECTS_9)
 COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
@@ -12415,7 +12352,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
 	corelib_statbox_osx.o \
 	corelib_statline_osx.o \
 	corelib_stattext_osx.o \
-	corelib_tabctrl_osx.o \
 	corelib_textctrl_osx.o \
 	corelib_tglbtn_osx.o \
 	corelib_toolbar_osx.o \
@@ -15572,9 +15508,6 @@ monodll_os2_statline.o: $(srcdir)/src/os2/statline.cpp $(MONODLL_ODEP)
 monodll_os2_stattext.o: $(srcdir)/src/os2/stattext.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/stattext.cpp
 
-monodll_os2_tabctrl.o: $(srcdir)/src/os2/tabctrl.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/tabctrl.cpp
-
 monodll_os2_textctrl.o: $(srcdir)/src/os2/textctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/textctrl.cpp
 
@@ -16997,12 +16930,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_stattext_osx.o: $(srcdir)/src/osx/stattext_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/stattext_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_tabctrl_osx.o: $(srcdir)/src/osx/tabctrl_osx.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/tabctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_tabctrl_osx.o: $(srcdir)/src/osx/tabctrl_osx.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/tabctrl_osx.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_textctrl_osx.o: $(srcdir)/src/osx/textctrl_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/textctrl_osx.cpp
 
@@ -17471,27 +17398,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monodll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_USE_GUI_1_WXUNIV_1@monodll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -17903,12 +17809,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_stattext.o: $(srcdir)/src/msw/stattext.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/stattext.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/tabctrl.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_msw_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/tabctrl.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_toolbar.o: $(srcdir)/src/msw/toolbar.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/toolbar.cpp
 
@@ -18100,12 +18000,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_statbrma.o: $(srcdir)/src/osx/carbon/statbrma.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/statbrma.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_carbon_tabctrl.o: $(srcdir)/src/osx/carbon/tabctrl.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/tabctrl.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_tabctrl.o: $(srcdir)/src/osx/carbon/tabctrl.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/tabctrl.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monodll_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
@@ -20267,9 +20161,6 @@ monolib_os2_statline.o: $(srcdir)/src/os2/statline.cpp $(MONOLIB_ODEP)
 monolib_os2_stattext.o: $(srcdir)/src/os2/stattext.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/stattext.cpp
 
-monolib_os2_tabctrl.o: $(srcdir)/src/os2/tabctrl.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/tabctrl.cpp
-
 monolib_os2_textctrl.o: $(srcdir)/src/os2/textctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/textctrl.cpp
 
@@ -21692,12 +21583,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_stattext_osx.o: $(srcdir)/src/osx/stattext_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/stattext_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_tabctrl_osx.o: $(srcdir)/src/osx/tabctrl_osx.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/tabctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_tabctrl_osx.o: $(srcdir)/src/osx/tabctrl_osx.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/tabctrl_osx.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_textctrl_osx.o: $(srcdir)/src/osx/textctrl_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/textctrl_osx.cpp
 
@@ -22166,27 +22051,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@monolib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_USE_GUI_1_WXUNIV_1@monolib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -22598,12 +22462,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_stattext.o: $(srcdir)/src/msw/stattext.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/stattext.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/tabctrl.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_msw_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/tabctrl.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_toolbar.o: $(srcdir)/src/msw/toolbar.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/toolbar.cpp
 
@@ -22795,12 +22653,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_statbrma.o: $(srcdir)/src/osx/carbon/statbrma.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/statbrma.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_carbon_tabctrl.o: $(srcdir)/src/osx/carbon/tabctrl.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/tabctrl.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_tabctrl.o: $(srcdir)/src/osx/carbon/tabctrl.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/tabctrl.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@monolib_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
@@ -25622,9 +25474,6 @@ coredll_os2_statline.o: $(srcdir)/src/os2/statline.cpp $(COREDLL_ODEP)
 coredll_os2_stattext.o: $(srcdir)/src/os2/stattext.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/stattext.cpp
 
-coredll_os2_tabctrl.o: $(srcdir)/src/os2/tabctrl.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/tabctrl.cpp
-
 coredll_os2_textctrl.o: $(srcdir)/src/os2/textctrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/textctrl.cpp
 
@@ -26573,12 +26422,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_stattext_osx.o: $(srcdir)/src/osx/stattext_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/stattext_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_tabctrl_osx.o: $(srcdir)/src/osx/tabctrl_osx.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/tabctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_tabctrl_osx.o: $(srcdir)/src/osx/tabctrl_osx.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/tabctrl_osx.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_textctrl_osx.o: $(srcdir)/src/osx/textctrl_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/textctrl_osx.cpp
 
@@ -27047,27 +26890,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@coredll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_USE_GUI_1_WXUNIV_1@coredll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -27479,12 +27301,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_stattext.o: $(srcdir)/src/msw/stattext.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/stattext.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/tabctrl.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_msw_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/tabctrl.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_toolbar.o: $(srcdir)/src/msw/toolbar.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/toolbar.cpp
 
@@ -27676,12 +27492,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_statbrma.o: $(srcdir)/src/osx/carbon/statbrma.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/statbrma.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_carbon_tabctrl.o: $(srcdir)/src/osx/carbon/tabctrl.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/tabctrl.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_tabctrl.o: $(srcdir)/src/osx/carbon/tabctrl.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/tabctrl.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@coredll_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
@@ -29147,9 +28957,6 @@ corelib_os2_statline.o: $(srcdir)/src/os2/statline.cpp $(CORELIB_ODEP)
 corelib_os2_stattext.o: $(srcdir)/src/os2/stattext.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/stattext.cpp
 
-corelib_os2_tabctrl.o: $(srcdir)/src/os2/tabctrl.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/tabctrl.cpp
-
 corelib_os2_textctrl.o: $(srcdir)/src/os2/textctrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/textctrl.cpp
 
@@ -30098,12 +29905,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_stattext_osx.o: $(srcdir)/src/osx/stattext_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/stattext_osx.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_tabctrl_osx.o: $(srcdir)/src/osx/tabctrl_osx.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/tabctrl_osx.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_tabctrl_osx.o: $(srcdir)/src/osx/tabctrl_osx.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/tabctrl_osx.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_textctrl_osx.o: $(srcdir)/src/osx/textctrl_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/textctrl_osx.cpp
 
@@ -30572,27 +30373,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_generic_statusbr.o: $(srcdir)/src/generic/statusbr.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/statusbr.cpp
 
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@corelib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
-@COND_USE_GUI_1_WXUNIV_1@corelib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
-
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -31004,12 +30784,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_stattext.o: $(srcdir)/src/msw/stattext.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/stattext.cpp
 
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/tabctrl.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_msw_tabctrl.o: $(srcdir)/src/msw/tabctrl.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/tabctrl.cpp
-
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_toolbar.o: $(srcdir)/src/msw/toolbar.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/toolbar.cpp
 
@@ -31201,12 +30975,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_statbrma.o: $(srcdir)/src/osx/carbon/statbrma.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/statbrma.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_carbon_tabctrl.o: $(srcdir)/src/osx/carbon/tabctrl.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/tabctrl.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_tabctrl.o: $(srcdir)/src/osx/carbon/tabctrl.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/tabctrl.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@corelib_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm

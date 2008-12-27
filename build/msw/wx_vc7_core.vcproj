@@ -1682,21 +1682,6 @@
 					ExcludedFromBuild="TRUE"/>
 			</File>
 			<File
-				RelativePath="..\..\src\msw\tabctrl.cpp">
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="TRUE"/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="TRUE"/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="TRUE"/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="TRUE"/>
-			</File>
-			<File
 				RelativePath="..\..\src\msw\textctrl.cpp">
 				<FileConfiguration
 					Name="DLL Universal Release|Win32"
@@ -2046,21 +2031,6 @@
 					ExcludedFromBuild="TRUE"/>
 				<FileConfiguration
 					Name="Universal Debug|Win32"
-					ExcludedFromBuild="TRUE"/>
-			</File>
-			<File
-				RelativePath="..\..\src\generic\tabg.cpp">
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					ExcludedFromBuild="TRUE"/>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					ExcludedFromBuild="TRUE"/>
-				<FileConfiguration
-					Name="Release|Win32"
-					ExcludedFromBuild="TRUE"/>
-				<FileConfiguration
-					Name="Debug|Win32"
 					ExcludedFromBuild="TRUE"/>
 			</File>
 			<File
@@ -3139,9 +3109,6 @@
 				RelativePath="..\..\include\wx\msw\statusbar.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\tabctrl.h">
-			</File>
-			<File
 				RelativePath="..\..\include\wx\msw\taskbar.h">
 			</File>
 			<File
@@ -3339,9 +3306,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\statusbr.h">
-			</File>
-			<File
-				RelativePath="..\..\include\wx\generic\tabg.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\textdlgg.h">
@@ -4104,12 +4068,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\stc\stc.h">
-			</File>
-			<File
-				RelativePath="..\..\include\wx\tab.h">
-			</File>
-			<File
-				RelativePath="..\..\include\wx\tabctrl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\aui\tabmdi.h">
