@@ -52,12 +52,7 @@ public:
 private:
     virtual void DoClose()
     {
-        wxSocketManager * const manager = wxSocketManager::Get();
-        if ( manager )
-        {
-            manager->Uninstall_Callback(this, wxSOCKET_INPUT);
-            manager->Uninstall_Callback(this, wxSOCKET_OUTPUT);
-        }
+        DisableEvents();
 
         close(m_fd);
     }
@@ -77,10 +72,6 @@ private:
     // really enable or disable socket input/output events
     void DoEnableEvents(bool enable);
 
-
-    // enable or disable events for the given event
-    void EnableEvent(wxSocketNotify event);
-    void DisableEvent(wxSocketNotify event);
 
     int Recv_Stream(void *buffer, int size);
     int Recv_Dgram(void *buffer, int size);

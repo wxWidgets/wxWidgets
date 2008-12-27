@@ -493,9 +493,6 @@ int wxSocketImplUnix::Read(void *buffer, int size)
     return -1;
   }
 
-  /* Disable events during query of socket status */
-  DisableEvent(wxSOCKET_INPUT);
-
   /* Read the data */
   if (m_stream)
       ret = Recv_Stream(buffer, size);
@@ -524,9 +521,6 @@ int wxSocketImplUnix::Read(void *buffer, int size)
       else
           m_error = wxSOCKET_IOERR;
   }
-
-  /* Enable events again now that we are done processing */
-  EnableEvent(wxSOCKET_INPUT);
 
   return ret;
 }
@@ -557,31 +551,12 @@ int wxSocketImplUnix::Write(const void *buffer, int size)
     {
       m_error = wxSOCKET_IOERR;
     }
-
-    /* Only reenable OUTPUT events after an error (just like WSAAsyncSelect
-     * in MSW). Once the first OUTPUT event is received, users can assume
-     * that the socket is writable until a read operation fails. Only then
-     * will further OUTPUT events be posted.
-     */
-    EnableEvent(wxSOCKET_OUTPUT);
-
-    return -1;
   }
 
   return ret;
 }
 
 /* Flags */
-
-void wxSocketImplUnix::EnableEvent(wxSocketNotify event)
-{
-    wxSocketManager::Get()->Install_Callback(this, event);
-}
-
-void wxSocketImplUnix::DisableEvent(wxSocketNotify event)
-{
-    wxSocketManager::Get()->Uninstall_Callback(this, event);
-}
 
 int wxSocketImplUnix::Recv_Stream(void *buffer, int size)
 {
@@ -690,7 +665,6 @@ int wxSocketImplUnix::Send_Dgram(const void *buffer, int size)
 
 void wxSocketImplUnix::OnStateChange(wxSocketNotify event)
 {
-    DisableEvent(event);
     NotifyOnStateChange(event);
 
     if ( event == wxSOCKET_LOST )
