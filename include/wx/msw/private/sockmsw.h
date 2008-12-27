@@ -52,7 +52,6 @@ private:
         wxSocketManager::Get()->Install_Callback(this);
     }
 
-    wxSocketError Connect_Timeout();
     int Recv_Stream(void *buffer, int size);
     int Recv_Dgram(void *buffer, int size);
     int Send_Stream(const void *buffer, int size);

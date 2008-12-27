@@ -528,33 +528,6 @@ int wxSocketImplMSW::Write(const void *buffer, int size)
 
 /* Internals (IO) */
 
-/*
- *  For blocking sockets, wait until the connection is
- *  established or fails, or until timeout ellapses.
- */
-wxSocketError wxSocketImplMSW::Connect_Timeout()
-{
-  fd_set writefds;
-  fd_set exceptfds;
-
-  FD_ZERO(&writefds);
-  FD_ZERO(&exceptfds);
-  FD_SET(m_fd, &writefds);
-  FD_SET(m_fd, &exceptfds);
-  if (select(0, NULL, &writefds, &exceptfds, &m_timeout) == 0)
-  {
-    m_error = wxSOCKET_TIMEDOUT;
-    return wxSOCKET_TIMEDOUT;
-  }
-  if (!FD_ISSET(m_fd, &writefds))
-  {
-    m_error = wxSOCKET_IOERR;
-    return wxSOCKET_IOERR;
-  }
-
-  return wxSOCKET_NOERROR;
-}
-
 int wxSocketImplMSW::Recv_Stream(void *buffer, int size)
 {
     return recv(m_fd, static_cast<char *>(buffer), size, 0);
