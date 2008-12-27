@@ -255,28 +255,34 @@ static bool DoCommonPostInit()
     //       the executable currently running, which are not necessarily all
     //       wxWidgets event classes.
     const wxClassInfo *ci = wxClassInfo::GetFirst();
-    while (ci)
+    for (; ci; ci = ci->GetNext())
     {
         // is this class derived from wxEvent?
-        if (ci->IsKindOf(CLASSINFO(wxEvent)) && wxString(ci->GetClassName()) != "wxEvent")
+        if (!ci->IsKindOf(CLASSINFO(wxEvent)) || wxString(ci->GetClassName()) == "wxEvent")
+            continue;
+
+        if (!ci->IsDynamic())
         {
-            if (!ci->IsDynamic())
-                wxLogWarning("The event class '%s' should have a DECLARE_DYNAMIC_CLASS macro!",
-                             ci->GetClassName());
-
-            // yes; test if it implements Clone() correctly
-            wxEvent* test = dynamic_cast<wxEvent*>(ci->CreateObject());
-            wxASSERT_MSG(test, "The event class should have a DECLARE_DYNAMIC_CLASS macro!");
-
-            wxEvent* cloned = test->Clone();
-            if (!cloned || cloned->GetClassInfo() != ci)
-                wxLogWarning("The event class '%s' does not correctly implements wxEvent::Clone()!",
-                             ci->GetClassName());
-
-            delete test;
+            wxLogWarning("The event class '%s' should have a DECLARE_DYNAMIC_CLASS macro!",
+                         ci->GetClassName());
+            continue;
         }
 
-        ci = ci->GetNext();
+        // yes; test if it implements Clone() correctly
+        wxEvent* test = dynamic_cast<wxEvent*>(ci->CreateObject());
+        if (test == NULL)
+        {
+            wxLogWarning("The event class '%s' should have a DECLARE_DYNAMIC_CLASS macro!",
+                         ci->GetClassName());
+            continue;
+        }
+
+        wxEvent* cloned = test->Clone();
+        if (!cloned || cloned->GetClassInfo() != ci)
+            wxLogWarning("The event class '%s' does not correctly implement Clone()!",
+                         ci->GetClassName());
+
+        delete test;
     }
 #endif
 
