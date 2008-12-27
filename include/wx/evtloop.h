@@ -126,6 +126,8 @@ protected:
     #include "wx/osx/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
+#elif defined(__WXGTK20__)
+    #include "wx/gtk/evtloop.h"
 #else // other platform
 
 #include "wx/stopwatch.h"   // for wxMilliClock_t

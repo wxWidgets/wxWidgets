@@ -2352,6 +2352,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 	wx/gtk/dcmemory.h \
 	wx/gtk/dcscreen.h \
 	wx/gtk/dnd.h \
+	wx/gtk/evtloop.h \
 	wx/gtk/font.h \
 	wx/gtk/minifram.h \
 	wx/gtk/pen.h \

@@ -1027,6 +1027,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/dcmemory.h
     wx/gtk/dcscreen.h
     wx/gtk/dnd.h
+    wx/gtk/evtloop.h
     wx/gtk/font.h
     wx/gtk/minifram.h
     wx/gtk/pen.h

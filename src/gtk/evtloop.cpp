@@ -25,7 +25,6 @@
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/ptr_scpd.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -33,63 +32,50 @@
 
 #include <gtk/gtk.h>
 
-// ----------------------------------------------------------------------------
-// wxEventLoopImpl
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxEventLoopImpl
-{
-public:
-    // ctor
-    wxEventLoopImpl() { SetExitCode(0); }
-
-    // set/get the exit code
-    void SetExitCode(int exitcode) { m_exitcode = exitcode; }
-    int GetExitCode() const { return m_exitcode; }
-
-private:
-    // the exit code of the event loop
-    int m_exitcode;
-};
-
 // ============================================================================
 // wxEventLoop implementation
 // ============================================================================
-
-wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopImpl)
 
 // ----------------------------------------------------------------------------
 // wxEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
-wxGUIEventLoop::~wxGUIEventLoop()
+wxGUIEventLoop::wxGUIEventLoop()
 {
-    wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );
+    m_exitcode = 0;
 }
 
 int wxGUIEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
-    wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
+    wxCHECK_MSG( !IsRunning(), -1, "can't reenter a message loop" );
 
     wxEventLoopActivator activate(this);
-
-    wxEventLoopImplTiedPtr impl(&m_impl, new wxEventLoopImpl);
 
     gtk_main();
 
     OnExit();
 
-    return m_impl->GetExitCode();
+    return m_exitcode;
 }
 
 void wxGUIEventLoop::Exit(int rc)
 {
-    wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
+    wxCHECK_RET( IsRunning(), "can't call Exit() if not running" );
 
-    m_impl->SetExitCode(rc);
+    m_exitcode = rc;
 
     gtk_main_quit();
+}
+
+void wxGUIEventLoop::WakeUp()
+{
+    // TODO: idle events handling should really be done by wxEventLoop itself
+    //       but for now it's completely in gtk/app.cpp so just call there when
+    //       we have wxTheApp and hope that it doesn't matter that we do
+    //       nothing when we don't...
+    if ( wxTheApp )
+        wxTheApp->WakeUpIdle();
 }
 
 // ----------------------------------------------------------------------------
@@ -98,14 +84,13 @@ void wxGUIEventLoop::Exit(int rc)
 
 bool wxGUIEventLoop::Pending() const
 {
-    bool pending;
-    wxApp* app = wxTheApp;
-    if (app != NULL)
-        // app->EventsPending() avoids false positives from our idle source
-        pending = app->EventsPending();
-    else
-        pending = gtk_events_pending() != 0;
-    return pending;
+    if ( wxTheApp )
+    {
+        // this avoids false positives from our idle source
+        return wxTheApp->EventsPending();
+    }
+
+    return gtk_events_pending() != 0;
 }
 
 bool wxGUIEventLoop::Dispatch()
@@ -115,3 +100,30 @@ bool wxGUIEventLoop::Dispatch()
     // gtk_main_iteration() returns TRUE only if gtk_main_quit() was called
     return !gtk_main_iteration();
 }
+
+extern "C" {
+static gboolean wx_event_loop_timeout(void* data)
+{
+    bool* expired = static_cast<bool*>(data);
+    *expired = true;
+
+    // return FALSE to remove this timeout
+    return FALSE;
+}
+}
+
+int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
+{
+    bool expired = false;
+    const unsigned id = g_timeout_add(timeout, wx_event_loop_timeout, &expired);
+    bool quit = gtk_main_iteration() != 0;
+
+    if ( expired )
+        return -1;
+
+    g_source_remove(id);
+
+    return !quit;
+}
+
+
