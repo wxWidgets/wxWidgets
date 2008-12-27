@@ -1680,7 +1680,7 @@ bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
 {
     wxASSERT_MSG( m_impl, _T("Socket not initialised") );
 
-    SOCKOPTLEN_T lenreal;
+    SOCKOPTLEN_T lenreal = *optlen;
     if ( getsockopt(m_impl->m_fd, level, optname,
                     static_cast<char *>(optval), &lenreal) != 0 )
         return false;
