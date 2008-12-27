@@ -29,11 +29,12 @@ public:
         m_enabledCallbacks = 0;
     }
 
-    virtual void Shutdown();
-    virtual wxSocketImpl *WaitConnection(wxSocketBase& wxsocket);
+    virtual wxSocketError GetLastError() const;
 
-    int Read(void *buffer, int size);
-    int Write(const void *buffer, int size);
+    virtual void Shutdown();
+
+    virtual int Read(void *buffer, int size);
+    virtual int Write(const void *buffer, int size);
 
     // wxFDIOHandler methods
     virtual void OnReadWaiting();
@@ -49,7 +50,6 @@ public:
     int GetEnabledCallbacks() const { return m_enabledCallbacks; }
 
 private:
-    virtual wxSocketError DoHandleConnect(int ret);
     virtual void DoClose()
     {
         wxSocketManager * const manager = wxSocketManager::Get();
@@ -151,7 +151,7 @@ protected:
 
             case wxSOCKET_CONNECTION:
                 // FIXME: explain this?
-                return socket->m_server ? FD_INPUT : FD_OUTPUT;
+                return socket->IsServer() ? FD_INPUT : FD_OUTPUT;
         }
     }
 

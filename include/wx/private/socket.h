@@ -191,7 +191,6 @@ public:
     // set various socket properties: all of those can only be called before
     // creating the socket
     void SetTimeout(unsigned long millisec);
-    void SetNonBlocking(bool non_blocking) { m_non_blocking = non_blocking; }
     void SetReusable() { m_reusable = true; }
     void SetBroadcast() { m_broadcast = true; }
     void DontDoBind() { m_dobind = false; }
@@ -207,11 +206,16 @@ public:
     // accessors
     // ---------
 
+    bool IsServer() const { return m_server; }
+
     GAddress *GetLocal();
     GAddress *GetPeer();
 
     wxSocketError GetError() const { return m_error; }
     bool IsOk() const { return m_error == wxSOCKET_NOERROR; }
+
+    // get the error code corresponding to the last operation
+    virtual wxSocketError GetLastError() const = 0;
 
 
     // creating/closing the socket
@@ -235,8 +239,8 @@ public:
     // (notice that DontDoBind() is ignored by this function)
     //
     // this function may return wxSOCKET_WOULDBLOCK in addition to the return
-    // values listed above
-    wxSocketError CreateClient();
+    // values listed above if wait is false
+    wxSocketError CreateClient(bool wait);
 
     // create (and bind unless DontDoBind() had been called) an UDP socket
     // associated with the given local address
@@ -256,15 +260,25 @@ public:
     virtual int Write(const void *buffer, int size) = 0;
 
     // basically a wrapper for select(): returns the condition of the socket,
-    // blocking for not longer than timeout ms for something to become
-    // available
+    // blocking for not longer than timeout if it is specified (otherwise just
+    // poll without blocking at all)
     //
     // flags defines what kind of conditions we're interested in, the return
     // value is composed of a (possibly empty) subset of the bits set in flags
     wxSocketEventFlags Select(wxSocketEventFlags flags,
-                              unsigned long timeout = 0);
+                              const timeval *timeout = NULL);
 
-    virtual wxSocketImpl *WaitConnection(wxSocketBase& wxsocket) = 0;
+    // convenient wrapper calling Select() with our default timeout
+    wxSocketEventFlags SelectWithTimeout(wxSocketEventFlags flags)
+    {
+        return Select(flags, &m_timeout);
+    }
+
+    // just a wrapper for accept(): it is called to create a new wxSocketImpl
+    // corresponding to a new server connection represented by the given
+    // wxSocketBase, returns NULL on error (including immediately if there are
+    // no pending connections as our sockets are non-blocking)
+    wxSocketImpl *Accept(wxSocketBase& wxsocket);
 
 
     // notifications
@@ -286,8 +300,6 @@ public:
     GAddress *m_peer;
     wxSocketError m_error;
 
-    bool m_non_blocking;
-    bool m_server;
     bool m_stream;
     bool m_establishing;
     bool m_reusable;
@@ -301,20 +313,10 @@ public:
 protected:
     wxSocketImpl(wxSocketBase& wxsocket);
 
-    // wait until input/output becomes available or m_timeout expires
-    //
-    // returns true if we do have input/output or false on timeout or error
-    // (also sets m_error accordingly)
-    bool BlockForInputWithTimeout()
-        { return DoBlockWithTimeout(wxSOCKET_INPUT_FLAG); }
-    bool BlockForOutputWithTimeout()
-        { return DoBlockWithTimeout(wxSOCKET_OUTPUT_FLAG); }
+    // true if we're a listening stream socket
+    bool m_server;
 
 private:
-    // handle the given connect() return value (which may be 0 or EWOULDBLOCK
-    // or something else)
-    virtual wxSocketError DoHandleConnect(int ret) = 0;
-
     // called by Close() if we have a valid m_fd
     virtual void DoClose() = 0;
 
@@ -350,12 +352,6 @@ private:
 
     // update local address after binding/connecting
     wxSocketError UpdateLocalAddress();
-
-    // wait for IO on the socket or until timeout expires
-    //
-    // the parameter can be one of wxSOCKET_INPUT/OUTPUT_FLAG (but could be
-    // their combination in the future, hence we take wxSocketEventFlags)
-    bool DoBlockWithTimeout(wxSocketEventFlags flags);
 
 
     // set in ctor and never changed except that it's reset to NULL when the

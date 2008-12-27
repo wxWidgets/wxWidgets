@@ -448,139 +448,22 @@ void wxSocketImplMSW::DoClose()
     closesocket(m_fd);
 }
 
-/*
- *  Waits for an incoming client connection. Returns a pointer to
- *  a wxSocketImpl object, or NULL if there was an error, in which case
- *  the last error field will be updated for the calling wxSocketImpl.
- *
- *  Error codes (set in the calling wxSocketImpl)
- *    wxSOCKET_INVSOCK    - the socket is not valid or not a server.
- *    wxSOCKET_TIMEDOUT   - timeout, no incoming connections.
- *    wxSOCKET_WOULDBLOCK - the call would block and the socket is nonblocking.
- *    wxSOCKET_MEMERR     - couldn't allocate memory.
- *    wxSOCKET_IOERR      - low-level error.
- */
-wxSocketImpl *wxSocketImplMSW::WaitConnection(wxSocketBase& wxsocket)
+wxSocketError wxSocketImplUnix::GetLastError() const
 {
-  wxSocketImpl *connection;
-  wxSockAddr from;
-  WX_SOCKLEN_T fromlen = sizeof(from);
-  wxSocketError err;
-  u_long arg = 1;
-
-  /* Reenable CONNECTION events */
-  m_detected &= ~wxSOCKET_CONNECTION_FLAG;
-
-  /* If the socket has already been created, we exit immediately */
-  if (m_fd == INVALID_SOCKET || !m_server)
-  {
-    m_error = wxSOCKET_INVSOCK;
-    return NULL;
-  }
-
-  /* Create a wxSocketImpl object for the new connection */
-  connection = wxSocketImplMSW::Create(wxsocket);
-
-  if (!connection)
-  {
-    m_error = wxSOCKET_MEMERR;
-    return NULL;
-  }
-
-  /* Wait for a connection (with timeout) */
-  if ( !BlockForInputWithTimeout() )
-  {
-    delete connection;
-    return NULL;
-  }
-
-  connection->m_fd = accept(m_fd, (sockaddr*)&from, &fromlen);
-
-  if (connection->m_fd == INVALID_SOCKET)
-  {
-    if (WSAGetLastError() == WSAEWOULDBLOCK)
-      m_error = wxSOCKET_WOULDBLOCK;
-    else
-      m_error = wxSOCKET_IOERR;
-
-    delete connection;
-    return NULL;
-  }
-
-  /* Initialize all fields */
-  connection->m_server   = false;
-  connection->m_stream   = true;
-
-  /* Setup the peer address field */
-  connection->m_peer = GAddress_new();
-  if (!connection->m_peer)
-  {
-    delete connection;
-    m_error = wxSOCKET_MEMERR;
-    return NULL;
-  }
-  err = _GAddress_translate_from(connection->m_peer, (sockaddr*)&from, fromlen);
-  if (err != wxSOCKET_NOERROR)
-  {
-    GAddress_destroy(connection->m_peer);
-    delete connection;
-    m_error = err;
-    return NULL;
-  }
-
-  ioctlsocket(connection->m_fd, FIONBIO, (u_long FAR *) &arg);
-  wxSocketManager::Get()->Install_Callback(connection);
-
-  return connection;
-}
-
-wxSocketError wxSocketImplMSW::DoHandleConnect(int ret)
-{
-    // TODO: review this
-    if (ret == SOCKET_ERROR)
+    switch ( WSAGetLastError() )
     {
-        int err = WSAGetLastError();
+        case 0:
+            return wxSOCKET_NOERROR;
 
-        /* If connect failed with EWOULDBLOCK and the wxSocketImpl object
-         * is in blocking mode, we select() for the specified timeout
-         * checking for writability to see if the connection request
-         * completes.
-         */
-        if ((err == WSAEWOULDBLOCK) && (!m_non_blocking))
-        {
-            err = Connect_Timeout();
+        case WSAENOTSOCK:
+            return wxSOCKET_INVSOCK;
 
-            if (err != wxSOCKET_NOERROR)
-            {
-                Close();
-                /* m_error is set in Connect_Timeout */
-            }
-
-            return (wxSocketError) err;
-        }
-
-        /* If connect failed with EWOULDBLOCK and the wxSocketImpl object
-         * is set to nonblocking, we set m_error to wxSOCKET_WOULDBLOCK
-         * (and return wxSOCKET_WOULDBLOCK) but we don't close the socket;
-         * this way if the connection completes, a wxSOCKET_CONNECTION
-         * event will be generated, if enabled.
-         */
-        if ((err == WSAEWOULDBLOCK) && (m_non_blocking))
-        {
-            m_establishing = true;
-            m_error = wxSOCKET_WOULDBLOCK;
+        case WSAEWOULDBLOCK:
             return wxSOCKET_WOULDBLOCK;
-        }
 
-        /* If connect failed with an error other than EWOULDBLOCK,
-         * then the call to Connect() has failed.
-         */
-        Close();
-        m_error = wxSOCKET_IOERR;
-        return wxSOCKET_IOERR;
+        default:
+            return wxSOCKET_IOERR;
     }
-
-    return wxSOCKET_NOERROR;
 }
 
 /* Generic IO */
@@ -596,12 +479,6 @@ int wxSocketImplMSW::Read(void *buffer, int size)
   if (m_fd == INVALID_SOCKET || m_server)
   {
     m_error = wxSOCKET_INVSOCK;
-    return -1;
-  }
-
-  /* If the socket is blocking, wait for data (with a timeout) */
-  if ( !BlockForInputWithTimeout() )
-  {
     return -1;
   }
 
@@ -632,10 +509,6 @@ int wxSocketImplMSW::Write(const void *buffer, int size)
     m_error = wxSOCKET_INVSOCK;
     return -1;
   }
-
-  /* If the socket is blocking, wait for writability (with a timeout) */
-  if ( !BlockForOutputWithTimeout() )
-    return -1;
 
   /* Write the data */
   if (m_stream)

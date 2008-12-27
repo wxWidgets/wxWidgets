@@ -102,31 +102,6 @@ public:
     DECLARE_NO_COPY_CLASS(wxSocketState)
 };
 
-// Conditionally make the socket non-blocking for the lifetime of this object.
-class wxSocketUnblocker
-{
-public:
-    wxSocketUnblocker(wxSocketImpl *socket, bool unblock = true)
-        : m_impl(socket),
-          m_unblock(unblock)
-    {
-        if ( m_unblock )
-            m_impl->SetNonBlocking(true);
-    }
-
-    ~wxSocketUnblocker()
-    {
-        if ( m_unblock )
-            m_impl->SetNonBlocking(false);
-    }
-
-private:
-    wxSocketImpl * const m_impl;
-    bool m_unblock;
-
-    DECLARE_NO_COPY_CLASS(wxSocketUnblocker)
-};
-
 // ============================================================================
 // wxSocketManager
 // ============================================================================
@@ -185,7 +160,6 @@ wxSocketImpl::wxSocketImpl(wxSocketBase& wxsocket)
     m_error           = wxSOCKET_NOERROR;
     m_server          = false;
     m_stream          = true;
-    m_non_blocking    = false;
 
     SetTimeout(wxsocket.GetTimeout() * 1000);
 
@@ -248,8 +222,8 @@ void wxSocketImpl::PostCreation()
     if ( m_initialSendBufferSize >= 0 )
         SetSocketOption(SO_SNDBUF, m_initialSendBufferSize);
 
-    // FIXME: shouldn't we check for m_non_blocking here? as it is now, all our
-    //        sockets are non-blocking
+    // we always put our sockets in unblocked mode and handle blocking
+    // ourselves in DoRead/Write() if wxSOCKET_WAITALL is specified
     UnblockAndRegisterWithEventLoop();
 }
 
@@ -309,7 +283,7 @@ wxSocketError wxSocketImpl::CreateServer()
     return UpdateLocalAddress();
 }
 
-wxSocketError wxSocketImpl::CreateClient()
+wxSocketError wxSocketImpl::CreateClient(bool wait)
 {
     if ( !PreCreateCheck(m_peer) )
         return m_error;
@@ -318,8 +292,8 @@ wxSocketError wxSocketImpl::CreateClient()
 
     if ( m_fd == INVALID_SOCKET )
     {
-      m_error = wxSOCKET_IOERR;
-      return wxSOCKET_IOERR;
+        m_error = wxSOCKET_IOERR;
+        return wxSOCKET_IOERR;
     }
 
     PostCreation();
@@ -335,9 +309,34 @@ wxSocketError wxSocketImpl::CreateClient()
         }
     }
 
-    // Connect to the peer and handle the EWOULDBLOCK return value in
-    // platform-specific code
-    return DoHandleConnect(connect(m_fd, m_peer->m_addr, m_peer->m_len));
+    // Do connect now
+    int rc = connect(m_fd, m_peer->m_addr, m_peer->m_len);
+    if ( rc == SOCKET_ERROR )
+    {
+        wxSocketError err = GetLastError();
+        if ( err == wxSOCKET_WOULDBLOCK )
+        {
+            m_establishing = true;
+
+            // block waiting for connection if we should (otherwise just return
+            // wxSOCKET_WOULDBLOCK to the caller)
+            if ( wait )
+            {
+                err = SelectWithTimeout(wxSOCKET_CONNECTION_FLAG)
+                        ? wxSOCKET_NOERROR
+                        : wxSOCKET_TIMEDOUT;
+                m_establishing = false;
+            }
+        }
+
+        m_error = err;
+    }
+    else // connected
+    {
+        m_error = wxSOCKET_NOERROR;
+    }
+
+    return m_error;
 }
 
 
@@ -372,6 +371,26 @@ wxSocketError wxSocketImpl::CreateUDP()
     }
 
     return wxSOCKET_NOERROR;
+}
+
+wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
+{
+    wxSockAddr from;
+    WX_SOCKLEN_T fromlen = sizeof(from);
+    const int fd = accept(m_fd, &from, &fromlen);
+
+    if ( fd == INVALID_SOCKET )
+        return NULL;
+
+    wxSocketImpl * const sock = Create(wxsocket);
+    sock->m_fd = fd;
+
+    sock->m_peer = GAddress_new();
+    _GAddress_translate_from(sock->m_peer, &from, fromlen);
+
+    sock->UnblockAndRegisterWithEventLoop();
+
+    return sock;
 }
 
 
@@ -515,38 +534,6 @@ GAddress *wxSocketImpl::GetPeer()
     return GAddress_copy(m_peer);
 
   return NULL;
-}
-
-bool wxSocketImpl::DoBlockWithTimeout(wxSocketEventFlags flags)
-{
-    if ( !m_non_blocking )
-    {
-        fd_set fds;
-        wxFD_ZERO(&fds);
-        wxFD_SET(m_fd, &fds);
-
-        fd_set
-            *readfds = flags & wxSOCKET_INPUT_FLAG ? &fds : NULL,
-            *writefds = flags & wxSOCKET_OUTPUT_FLAG ? &fds : NULL;
-
-        // make a copy as it can be modified by select()
-        struct timeval tv = m_timeout;
-        int ret = select(m_fd + 1, readfds, writefds, NULL, &tv);
-
-        switch ( ret )
-        {
-            case 0:
-                m_error = wxSOCKET_TIMEDOUT;
-                return false;
-
-            case -1:
-                m_error = wxSOCKET_IOERR;
-                return false;
-        }
-    }
-    //else: we're non-blocking, never block
-
-    return true;
 }
 
 // ==========================================================================
@@ -715,9 +702,6 @@ wxSocketError wxSocketBase::LastError() const
 
 // The following IO operations update m_error and m_lcount:
 // {Read, Write, ReadMsg, WriteMsg, Peek, Unread, Discard}
-//
-// TODO: Should Connect, Accept and AcceptWith update m_error?
-
 bool wxSocketBase::Close()
 {
     // Interrupt pending waits
@@ -773,7 +757,6 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
     // polling the socket and don't block at all.
     if ( m_flags & wxSOCKET_NOWAIT )
     {
-        wxSocketUnblocker unblock(m_impl);
         int ret = m_impl->Read(buffer, nbytes);
         if ( ret < 0 )
             return 0;
@@ -784,10 +767,8 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
     {
         for ( ;; )
         {
-            // Wait until socket becomes ready for reading dispatching the GUI
-            // events in the meanwhile unless wxSOCKET_BLOCK was explicitly
-            // specified to disable this.
-            if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForRead() )
+            // Wait until socket becomes ready for reading
+            if ( !WaitForRead() )
                 break;
 
             const int ret = m_impl->Read(buffer, nbytes);
@@ -981,7 +962,6 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
     wxUint32 total = 0;
     if ( m_flags & wxSOCKET_NOWAIT )
     {
-        wxSocketUnblocker unblock(m_impl);
         const int ret = m_impl->Write(buffer, nbytes);
         if ( ret > 0 )
             total += ret;
@@ -990,7 +970,7 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
     {
         for ( ;; )
         {
-            if ( !(m_flags & wxSOCKET_BLOCK) && !WaitForWrite() )
+            if ( !WaitForWrite() )
                 break;
 
             const int ret = m_impl->Write(buffer, nbytes);
@@ -1124,7 +1104,7 @@ wxSocketBase& wxSocketBase::Discard()
     and it will return a mask indicating which operations can be performed.
  */
 wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags,
-                                        unsigned long timeout)
+                                        const timeval *timeout)
 {
   wxSocketEventFlags result = 0;
 
@@ -1132,7 +1112,10 @@ wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags,
     return (wxSOCKET_LOST_FLAG & flags);
 
   struct timeval tv;
-  SetTimeValFromMS(tv, timeout);
+  if ( timeout )
+      tv = *timeout;
+  else
+      tv.tv_sec = tv.tv_usec = 0;
 
   fd_set readfds;
   fd_set writefds;
@@ -1237,9 +1220,10 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
     const wxMilliClock_t timeEnd = wxGetLocalTimeMillis() + timeout;
 
     // Get the active event loop which we'll use for the message dispatching
-    // when running in the main thread
+    // when running in the main thread unless this was explicitly disabled by
+    // setting wxSOCKET_BLOCK flag
     wxEventLoopBase *eventLoop;
-    if ( wxIsMainThread() )
+    if ( !(m_flags & wxSOCKET_BLOCK) && wxIsMainThread() )
     {
         eventLoop = wxEventLoop::GetActive();
     }
@@ -1280,7 +1264,9 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
         else // no event loop or waiting in another thread
         {
             // as explained below, we should always check for wxSOCKET_LOST_FLAG
-            events = m_impl->Select(flags | wxSOCKET_LOST_FLAG, timeLeft);
+            timeval tv;
+            SetTimeValFromMS(tv, timeLeft);
+            events = m_impl->Select(flags | wxSOCKET_LOST_FLAG, &tv);
         }
 
         // always check for wxSOCKET_LOST_FLAG, even if flags doesn't include
@@ -1642,17 +1628,34 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
 
 bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
 {
-    if (!m_impl)
-        return false;
+    if ( !m_impl || (m_impl->m_fd == INVALID_SOCKET) || !m_impl->IsServer() )
+    {
+        wxFAIL_MSG( "can only be called for a valid server socket" );
 
-    // If wait == false, then the call should be nonblocking.
-    // When we are finished, we put the socket to blocking mode
-    // again.
-    wxSocketUnblocker unblock(m_impl, !wait);
-    sock.m_impl = m_impl->WaitConnection(sock);
+        m_error = wxSOCKET_INVSOCK;
+
+        return false;
+    }
+
+    if ( wait )
+    {
+        // wait until we get a connection
+        if ( !m_impl->SelectWithTimeout(wxSOCKET_INPUT_FLAG) )
+        {
+            m_error = wxSOCKET_TIMEDOUT;
+
+            return false;
+        }
+    }
+
+    sock.m_impl = m_impl->Accept(sock);
 
     if ( !sock.m_impl )
+    {
+        m_error = m_impl->GetLastError();
+
         return false;
+    }
 
     sock.m_type = wxSOCKET_BASE;
     sock.m_connected = true;
@@ -1741,66 +1744,56 @@ wxSocketClient::~wxSocketClient()
 // Connect
 // --------------------------------------------------------------------------
 
-bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
+bool wxSocketClient::DoConnect(const wxSockAddress& remote,
                                const wxSockAddress* local,
                                bool wait)
 {
-    if (m_impl)
+    if ( m_impl )
     {
-        // Shutdown and destroy the socket
+        // Shutdown and destroy the old socket
         Close();
         delete m_impl;
     }
 
-    m_impl = wxSocketImpl::Create(*this);
     m_connected = false;
     m_establishing = false;
 
-    if (!m_impl)
+    // Create and set up the new one
+    m_impl = wxSocketImpl::Create(*this);
+    if ( !m_impl )
         return false;
-
-    // If wait == false, then the call should be nonblocking. When we are
-    // finished, we put the socket to blocking mode again.
-    wxSocketUnblocker unblock(m_impl, !wait);
 
     // Reuse makes sense for clients too, if we are trying to rebind to the same port
     if (GetFlags() & wxSOCKET_REUSEADDR)
-    {
         m_impl->SetReusable();
-    }
     if (GetFlags() & wxSOCKET_BROADCAST)
-    {
         m_impl->SetBroadcast();
-    }
     if (GetFlags() & wxSOCKET_NOBIND)
-    {
         m_impl->DontDoBind();
-    }
 
-    // If no local address was passed and one has been set, use the one that was Set
-    if (!local && m_localAddress.GetAddress())
-    {
+    // Bind to the local IP address and port, when provided or if one had been
+    // set before
+    if ( !local && m_localAddress.GetAddress() )
         local = &m_localAddress;
-    }
 
-    // Bind to the local IP address and port, when provided
-    if (local)
-    {
-        GAddress* la = local->GetAddress();
-
-        if (la && la->m_addr)
-            m_impl->SetLocal(la);
-    }
+    if ( local )
+        m_impl->SetLocal(local->GetAddress());
 
     m_impl->SetInitialSocketBuffers(m_initialRecvBufferSize, m_initialSendBufferSize);
 
-    m_impl->SetPeer(addr_man.GetAddress());
-    const wxSocketError err = m_impl->CreateClient();
+    m_impl->SetPeer(remote.GetAddress());
 
-    if (err != wxSOCKET_NOERROR)
+    // Finally do create the socket and connect to the peer
+    const wxSocketError err = m_impl->CreateClient(wait);
+
+    if ( err != wxSOCKET_NOERROR )
     {
-        if (err == wxSOCKET_WOULDBLOCK)
+        if ( err == wxSOCKET_WOULDBLOCK )
+        {
+            wxASSERT_MSG( !wait, "shouldn't get this for blocking connect" );
+
             m_establishing = true;
+        }
 
         return false;
     }
@@ -1809,16 +1802,16 @@ bool wxSocketClient::DoConnect(const wxSockAddress& addr_man,
     return true;
 }
 
-bool wxSocketClient::Connect(const wxSockAddress& addr_man, bool wait)
+bool wxSocketClient::Connect(const wxSockAddress& remote, bool wait)
 {
-    return DoConnect(addr_man, NULL, wait);
+    return DoConnect(remote, NULL, wait);
 }
 
-bool wxSocketClient::Connect(const wxSockAddress& addr_man,
+bool wxSocketClient::Connect(const wxSockAddress& remote,
                              const wxSockAddress& local,
                              bool wait)
 {
-    return DoConnect(addr_man, &local, wait);
+    return DoConnect(remote, &local, wait);
 }
 
 bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)

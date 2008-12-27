@@ -37,14 +37,12 @@ public:
 
     virtual ~wxSocketImplMSW();
 
-    virtual wxSocketImpl *WaitConnection(wxSocketBase& wxsocket);
+    virtual wxSocketError GetLastError() const;
 
-
-    int Read(void *buffer, int size);
-    int Write(const void *buffer, int size);
+    virtual int Read(void *buffer, int size);
+    virtual int Write(const void *buffer, int size);
 
 private:
-    virtual wxSocketError DoHandleConnect(int ret);
     virtual void DoClose();
 
     virtual void UnblockAndRegisterWithEventLoop()

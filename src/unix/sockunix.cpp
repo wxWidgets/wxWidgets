@@ -424,13 +424,6 @@ struct servent *wxGetservbyname_r(const char *port, const char *protocol,
   return se;
 }
 
-/* debugging helpers */
-#ifdef __GSOCKET_DEBUG__
-#  define SOCKET_DEBUG(args) printf args
-#else
-#  define SOCKET_DEBUG(args)
-#endif /* __GSOCKET_DEBUG__ */
-
 /* static */
 wxSocketImpl *wxSocketImpl::Create(wxSocketBase& wxsocket)
 {
@@ -450,93 +443,22 @@ void wxSocketImplUnix::Shutdown()
     wxSocketImpl::Shutdown();
 }
 
-/*
- *  Waits for an incoming client connection. Returns a pointer to
- *  a wxSocketImplUnix object, or NULL if there was an error, in which case
- *  the last error field will be updated for the calling wxSocketImplUnix.
- *
- *  Error codes (set in the calling wxSocketImplUnix)
- *    wxSOCKET_INVSOCK    - the socket is not valid or not a server.
- *    wxSOCKET_TIMEDOUT   - timeout, no incoming connections.
- *    wxSOCKET_WOULDBLOCK - the call would block and the socket is nonblocking.
- *    wxSOCKET_MEMERR     - couldn't allocate memory.
- *    wxSOCKET_IOERR      - low-level error.
- */
-wxSocketImpl *wxSocketImplUnix::WaitConnection(wxSocketBase& wxsocket)
+wxSocketError wxSocketImplUnix::GetLastError() const
 {
-  wxSockAddr from;
-  WX_SOCKLEN_T fromlen = sizeof(from);
-  wxSocketImpl *connection;
-  wxSocketError err;
-  int arg = 1;
+    switch ( errno )
+    {
+        case 0:
+            return wxSOCKET_NOERROR;
 
-  /* If the socket has already been created, we exit immediately */
-  if (m_fd == INVALID_SOCKET || !m_server)
-  {
-    m_error = wxSOCKET_INVSOCK;
-    return NULL;
-  }
+        case ENOTSOCK:
+            return wxSOCKET_INVSOCK;
 
-  /* Create a wxSocketImplUnix object for the new connection */
-  connection = wxSocketImplUnix::Create(wxsocket);
+        case EINPROGRESS:
+            return wxSOCKET_WOULDBLOCK;
 
-  if (!connection)
-  {
-    m_error = wxSOCKET_MEMERR;
-    return NULL;
-  }
-
-  /* Wait for a connection (with timeout) */
-  if ( !BlockForInputWithTimeout() )
-  {
-    delete connection;
-    return NULL;
-  }
-
-  connection->m_fd = accept(m_fd, (sockaddr*)&from, (WX_SOCKLEN_T *) &fromlen);
-
-  /* Reenable CONNECTION events */
-  EnableEvent(wxSOCKET_CONNECTION);
-
-  if (connection->m_fd == INVALID_SOCKET)
-  {
-    if (errno == EWOULDBLOCK)
-      m_error = wxSOCKET_WOULDBLOCK;
-    else
-      m_error = wxSOCKET_IOERR;
-
-    delete connection;
-    return NULL;
-  }
-
-  /* Initialize all fields */
-  connection->m_server   = false;
-  connection->m_stream   = true;
-
-  /* Setup the peer address field */
-  connection->m_peer = GAddress_new();
-  if (!connection->m_peer)
-  {
-    delete connection;
-    m_error = wxSOCKET_MEMERR;
-    return NULL;
-  }
-
-  err = _GAddress_translate_from(connection->m_peer, (sockaddr*)&from, fromlen);
-  if (err != wxSOCKET_NOERROR)
-  {
-    delete connection;
-    m_error = err;
-    return NULL;
-  }
-
-#if defined(__EMX__) || defined(__VISAGECPP__)
-  ioctl(connection->m_fd, FIONBIO, (char*)&arg, sizeof(arg));
-#else
-  ioctl(connection->m_fd, FIONBIO, &arg);
-#endif
-
-  return connection;
+        default:
+            return wxSOCKET_IOERR;
+    }
 }
 
 void wxSocketImplUnix::DoEnableEvents(bool flag)
@@ -552,70 +474,6 @@ void wxSocketImplUnix::DoEnableEvents(bool flag)
         manager->Uninstall_Callback(this, wxSOCKET_INPUT);
         manager->Uninstall_Callback(this, wxSOCKET_OUTPUT);
     }
-}
-
-wxSocketError wxSocketImplUnix::DoHandleConnect(int ret)
-{
-  /* We only call EnableEvents() if we know we aren't shutting down the socket.
-   * NB: EnableEvents() needs to be called whether the socket is blocking or
-   * non-blocking, it just shouldn't be called prior to knowing there is a
-   * connection _if_ blocking sockets are being used.
-   * If connect above returns 0, we are already connected and need to make the
-   * call to EnableEvents() now.
-   */
-  if ( m_non_blocking || (ret == 0) )
-    EnableEvents();
-
-  if (ret == -1)
-  {
-    const int err = errno;
-
-    /* If connect failed with EINPROGRESS and the wxSocketImplUnix object
-     * is in blocking mode, we select() for the specified timeout
-     * checking for writability to see if the connection request
-     * completes.
-     */
-    if ((err == EINPROGRESS) && (!m_non_blocking))
-    {
-      if ( !BlockForOutputWithTimeout() )
-      {
-        Close();
-        return wxSOCKET_TIMEDOUT;
-      }
-
-      int error;
-      SOCKOPTLEN_T len = sizeof(error);
-
-      getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*) &error, &len);
-      EnableEvents();
-
-      if (!error)
-        return wxSOCKET_NOERROR;
-    }
-
-    /* If connect failed with EINPROGRESS and the wxSocketImplUnix object
-     * is set to nonblocking, we set m_error to wxSOCKET_WOULDBLOCK
-     * (and return wxSOCKET_WOULDBLOCK) but we don't close the socket;
-     * this way if the connection completes, a wxSOCKET_CONNECTION
-     * event will be generated, if enabled.
-     */
-    if ((err == EINPROGRESS) && (m_non_blocking))
-    {
-      m_establishing = true;
-      m_error = wxSOCKET_WOULDBLOCK;
-      return wxSOCKET_WOULDBLOCK;
-    }
-
-    /* If connect failed with an error other than EINPROGRESS,
-     * then the call to Connect has failed.
-     */
-    Close();
-    m_error = wxSOCKET_IOERR;
-
-    return wxSOCKET_IOERR;
-  }
-
-  return wxSOCKET_NOERROR;
 }
 
 /* Generic IO */
@@ -634,45 +492,34 @@ int wxSocketImplUnix::Read(void *buffer, int size)
   /* Disable events during query of socket status */
   DisableEvent(wxSOCKET_INPUT);
 
-  /* If the socket is blocking, wait for data (with a timeout) */
-  if ( !BlockForInputWithTimeout() )
-  {
-    m_error = wxSOCKET_TIMEDOUT;
-    /* Don't return here immediately, otherwise socket events would not be
-     * re-enabled! */
-    ret = -1;
-  }
-  else
-  {
-    /* Read the data */
-    if (m_stream)
+  /* Read the data */
+  if (m_stream)
       ret = Recv_Stream(buffer, size);
-    else
+  else
       ret = Recv_Dgram(buffer, size);
 
-    /*
-     * If recv returned zero for a TCP socket (if m_stream == NULL, it's an UDP
-     * socket and empty datagrams are possible), then the connection has been
-     * gracefully closed.
-     *
-     * Otherwise, recv has returned an error (-1), in which case we have lost
-     * the socket only if errno does _not_ indicate that there may be more data
-     * to read.
-     */
-    if ((ret == 0) && m_stream)
-    {
+  /*
+   * If recv returned zero for a TCP socket (if m_stream == NULL, it's an UDP
+   * socket and empty datagrams are possible), then the connection has been
+   * gracefully closed.
+   *
+   * Otherwise, recv has returned an error (-1), in which case we have lost
+   * the socket only if errno does _not_ indicate that there may be more data
+   * to read.
+   */
+  if ((ret == 0) && m_stream)
+  {
       /* Make sure wxSOCKET_LOST event gets sent and shut down the socket */
       m_detected = wxSOCKET_LOST_FLAG;
       OnReadWaiting();
       return 0;
-    }
-    else if (ret == -1)
-    {
+  }
+  else if (ret == -1)
+  {
       if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
-        m_error = wxSOCKET_WOULDBLOCK;
+          m_error = wxSOCKET_WOULDBLOCK;
       else
-        m_error = wxSOCKET_IOERR;
-    }
+          m_error = wxSOCKET_IOERR;
   }
 
   /* Enable events again now that we are done processing */
@@ -685,21 +532,11 @@ int wxSocketImplUnix::Write(const void *buffer, int size)
 {
   int ret;
 
-  SOCKET_DEBUG(( "Write #1, size %d\n", size ));
-
   if (m_fd == INVALID_SOCKET || m_server)
   {
     m_error = wxSOCKET_INVSOCK;
     return -1;
   }
-
-  SOCKET_DEBUG(( "Write #2, size %d\n", size ));
-
-  /* If the socket is blocking, wait for writability (with a timeout) */
-  if ( !BlockForOutputWithTimeout() )
-    return -1;
-
-  SOCKET_DEBUG(( "Write #3, size %d\n", size ));
 
   /* Write the data */
   if (m_stream)
@@ -707,19 +544,15 @@ int wxSocketImplUnix::Write(const void *buffer, int size)
   else
     ret = Send_Dgram(buffer, size);
 
-  SOCKET_DEBUG(( "Write #4, size %d\n", size ));
-
   if (ret == -1)
   {
     if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
     {
       m_error = wxSOCKET_WOULDBLOCK;
-      SOCKET_DEBUG(( "Write error WOULDBLOCK\n" ));
     }
     else
     {
       m_error = wxSOCKET_IOERR;
-      SOCKET_DEBUG(( "Write error IOERR\n" ));
     }
 
     /* Only reenable OUTPUT events after an error (just like WSAAsyncSelect
@@ -731,8 +564,6 @@ int wxSocketImplUnix::Write(const void *buffer, int size)
 
     return -1;
   }
-
-  SOCKET_DEBUG(( "Write #5, size %d ret %d\n", size, ret ));
 
   return ret;
 }
