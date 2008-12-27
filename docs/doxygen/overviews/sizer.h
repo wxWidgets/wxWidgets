@@ -342,7 +342,7 @@ around the sizer. Note that this static box has to be created separately.
 
 @section overview_sizer_button CreateButtonSizer
 
-As a convenience, CreateButtonSizer(long flags) can be used to create a
+As a convenience, wxDialog::CreateButtonSizer(long flags) can be used to create a
 standard button sizer in which standard buttons are displayed. The following
 flags can be passed to this function:
 
