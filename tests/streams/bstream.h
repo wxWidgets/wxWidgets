@@ -173,9 +173,9 @@ protected:
 
         char buf[5];
         (void)stream_in.Read(buf, 5);
-        CPPUNIT_ASSERT(stream_in.LastRead() == 5);
+        CPPUNIT_ASSERT_EQUAL(5, stream_in.LastRead());
         (void)stream_in.GetC();
-        CPPUNIT_ASSERT(stream_in.LastRead() == 1);
+        CPPUNIT_ASSERT_EQUAL(1, stream_in.LastRead());
     }
 
     void Input_CanRead()
@@ -203,10 +203,10 @@ protected:
         // Try to Seek in the stream...
         // Note: streams not supporting this should register this test
         //       with CPPUNIT_TEST_FAIL instead of CPPUNIT_TEST.
-        CPPUNIT_ASSERT(stream_in.SeekI(2, wxFromStart) == 2);
-        CPPUNIT_ASSERT(stream_in.SeekI(2, wxFromCurrent) == 4);
+        CPPUNIT_ASSERT_EQUAL(2, stream_in.SeekI(2, wxFromStart));
+        CPPUNIT_ASSERT_EQUAL(4, stream_in.SeekI(2, wxFromCurrent));
         // Not sure the following line is correct, so test it differently.
-        //CPPUNIT_ASSERT(stream_in.SeekI(-2, wxFromEnd) == (off_t)stream_in.GetSize()-2);
+        //CPPUNIT_ASSERT_EQUAL(stream_in.GetSize()-2, stream_in.SeekI(-2, wxFromEnd));
         CPPUNIT_ASSERT(stream_in.SeekI(-2, wxFromEnd) != wxInvalidOffset);
         // Go beyond the stream size.
         CPPUNIT_ASSERT((stream_in.SeekI(10, wxFromCurrent) == wxInvalidOffset) == m_bSeekInvalidBeyondEnd);
@@ -224,19 +224,19 @@ protected:
         CPPUNIT_ASSERT(!stream_in.Eof());
 
         // Try to Get the location in the stream...
-        CPPUNIT_ASSERT(stream_in.TellI() == 0);
+        CPPUNIT_ASSERT_EQUAL(0, stream_in.TellI());
         (void)stream_in.GetC();
-        CPPUNIT_ASSERT(stream_in.TellI() == 1);
+        CPPUNIT_ASSERT_EQUAL(1, stream_in.TellI());
         if (!m_bSimpleTellITest)
         {
             wxFileOffset pos = stream_in.SeekI(5, wxFromStart);
-            CPPUNIT_ASSERT(stream_in.TellI() == pos);
+            CPPUNIT_ASSERT_EQUAL(pos, stream_in.TellI());
             (void)stream_in.GetC();
-            CPPUNIT_ASSERT(stream_in.TellI() == 6);
+            CPPUNIT_ASSERT_EQUAL(6, stream_in.TellI());
             pos = stream_in.SeekI(2, wxFromCurrent);
-            CPPUNIT_ASSERT(stream_in.TellI() == pos);
+            CPPUNIT_ASSERT_EQUAL(pos, stream_in.TellI());
             pos = stream_in.SeekI(5, wxFromStart);
-            CPPUNIT_ASSERT(stream_in.TellI() == pos);
+            CPPUNIT_ASSERT_EQUAL(pos, stream_in.TellI());
         }
     }
 
@@ -252,7 +252,7 @@ protected:
             char peekChar = stream_in.Peek();
             char getChar = stream_in.GetC();
             if (stream_in.LastRead() == 1)
-                CPPUNIT_ASSERT(peekChar == getChar);
+                CPPUNIT_ASSERT_EQUAL(getChar, peekChar);
         }
     }
 
@@ -267,7 +267,7 @@ protected:
         size_t ungetsize = stream_in.Ungetch(ungetstr, strlen(ungetstr) + 1);
         if (ungetsize != 0)
         {
-            CPPUNIT_ASSERT(ungetsize == strlen(ungetstr) + 1);
+            CPPUNIT_ASSERT_EQUAL(strlen(ungetstr) + 1, ungetsize);
             char buf[10];
             (void)stream_in.Read(buf, ungetsize);
             CPPUNIT_ASSERT(strcmp(buf, ungetstr) == 0);
@@ -275,7 +275,7 @@ protected:
 
         if (stream_in.Ungetch('a'))
         {
-            CPPUNIT_ASSERT(stream_in.GetC() == 'a');
+            CPPUNIT_ASSERT_EQUAL('a', stream_in.GetC());
         }
     }
 
@@ -327,9 +327,9 @@ protected:
 
         const char *buf = "12345";
         (void)stream_out.Write(buf, 5);
-        CPPUNIT_ASSERT(stream_out.LastWrite() == 5);
+        CPPUNIT_ASSERT_EQUAL(5, stream_out.LastWrite());
         (void)stream_out.PutC('1');
-        CPPUNIT_ASSERT(stream_out.LastWrite() == 1);
+        CPPUNIT_ASSERT_EQUAL(1, stream_out.LastWrite());
     }
 
     // Just try to perform a SeekO() on the output stream.
@@ -347,10 +347,10 @@ protected:
         // Try to Seek in the stream...
         // Note: streams not supporting this should register this test
         //       with CPPUNIT_TEST_FAIL instead of CPPUNIT_TEST.
-        CPPUNIT_ASSERT(stream_out.SeekO(2, wxFromStart) == 2);
-        CPPUNIT_ASSERT(stream_out.SeekO(2, wxFromCurrent) == 4);
+        CPPUNIT_ASSERT_EQUAL(2, stream_out.SeekO(2, wxFromStart));
+        CPPUNIT_ASSERT_EQUAL(4, stream_out.SeekO(2, wxFromCurrent));
         // Not sure the following line is correct, so test it differently.
-        //CPPUNIT_ASSERT(stream_out.SeekO(-2, wxFromEnd) == (off_t)stream_in.GetSize()-2);
+        //CPPUNIT_ASSERT_EQUAL(stream_in.GetSize()-2, stream_out.SeekO(-2, wxFromEnd));
         CPPUNIT_ASSERT(stream_out.SeekO(-2, wxFromEnd) != wxInvalidOffset);
         // Go beyond the stream size.
         CPPUNIT_ASSERT((stream_out.SeekO(10, wxFromCurrent) == wxInvalidOffset) == m_bSeekInvalidBeyondEnd);
@@ -366,9 +366,9 @@ protected:
         CPPUNIT_ASSERT( stream_out.IsSeekable() );
 
         // Try to Get the location in the stream...
-        CPPUNIT_ASSERT(stream_out.TellO() == 0);
+        CPPUNIT_ASSERT_EQUAL(0, stream_out.TellO());
         (void)stream_out.PutC('1');
-        CPPUNIT_ASSERT(stream_out.TellO() == 1);
+        CPPUNIT_ASSERT_EQUAL(1, stream_out.TellO());
         if (!m_bSimpleTellOTest)
         {
             // First put some extra data in the stream, so it's not empty.
@@ -376,13 +376,13 @@ protected:
             (void)stream_out.Write(buf, 10);
 
             off_t pos = stream_out.SeekO(5, wxFromStart);
-            CPPUNIT_ASSERT(stream_out.TellO() == pos);
+            CPPUNIT_ASSERT_EQUAL(pos, stream_out.TellO());
             (void)stream_out.PutC('1');
-            CPPUNIT_ASSERT(stream_out.TellO() == 6);
+            CPPUNIT_ASSERT_EQUAL(6, stream_out.TellO());
             pos = stream_out.SeekO(2, wxFromCurrent);
-            CPPUNIT_ASSERT(stream_out.TellO() == pos);
+            CPPUNIT_ASSERT_EQUAL(pos, stream_out.TellO());
             pos = stream_out.SeekO(5, wxFromStart);
-            CPPUNIT_ASSERT(stream_out.TellO() == pos);
+            CPPUNIT_ASSERT_EQUAL(pos, stream_out.TellO());
         }
     }
 
