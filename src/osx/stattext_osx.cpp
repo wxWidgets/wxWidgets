@@ -23,9 +23,6 @@
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
-#include "wx/notebook.h"
-#include "wx/tabctrl.h"
-
 #include "wx/osx/private.h"
 
 #include <stdio.h>
