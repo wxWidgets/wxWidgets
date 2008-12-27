@@ -116,11 +116,18 @@
             html/htmlwindow.cpp
             misc/guifuncs.cpp
             misc/selstoretest.cpp
+            <!--
+                This one is intentionally duplicated here (it is also part of
+                non-GUI test) as sockets behave differently in console and GUI
+                applications.
+             -->
+            net/socket.cpp
             window/clientsize.cpp
             window/setsize.cpp
         </sources>
         <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
+        <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
 

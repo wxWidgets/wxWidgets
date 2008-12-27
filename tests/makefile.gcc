@@ -112,6 +112,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_htmlwindow.o \
 	$(OBJS)\test_gui_guifuncs.o \
 	$(OBJS)\test_gui_selstoretest.o \
+	$(OBJS)\test_gui_socket.o \
 	$(OBJS)\test_gui_clientsize.o \
 	$(OBJS)\test_gui_setsize.o
 PRINTFBENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
@@ -164,10 +165,6 @@ EXTRALIBS_FOR_BASE =
 endif
 ifeq ($(MONOLITHIC),1)
 EXTRALIBS_FOR_BASE =  
-endif
-ifeq ($(MONOLITHIC),0)
-__WXLIB_NET_p = \
-	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_XML_p = \
@@ -227,6 +224,10 @@ __LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
 endif
 ifeq ($(USE_GUI),1)
 __LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
+endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_NET_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
 endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG = -O0
@@ -339,7 +340,7 @@ $(OBJS)\test.exe: $(TEST_OBJECTS)
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample_rc.o
-	$(CXX) -o $@ $(TEST_GUI_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(CPPUNIT_LIBS)  $(LDFLAGS)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+	$(CXX) -o $@ $(TEST_GUI_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) $(CPPUNIT_LIBS)  $(LDFLAGS)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 endif
 
 data: 
@@ -579,6 +580,9 @@ $(OBJS)\test_gui_guifuncs.o: ./misc/guifuncs.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_selstoretest.o: ./misc/selstoretest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_socket.o: ./net/socket.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_clientsize.o: ./window/clientsize.cpp
