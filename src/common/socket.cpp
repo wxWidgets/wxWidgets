@@ -255,7 +255,7 @@ void wxSocketImpl::PostCreation()
 
 wxSocketError wxSocketImpl::UpdateLocalAddress()
 {
-    WX_SOCKLEN_T lenAddr;
+    WX_SOCKLEN_T lenAddr = sizeof(*m_local->m_addr);
     if ( getsockname(m_fd, m_local->m_addr, &lenAddr) != 0 )
     {
         Close();
