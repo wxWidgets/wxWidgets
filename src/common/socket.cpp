@@ -597,7 +597,6 @@ void wxSocketBase::Init()
     m_establishing =
     m_reading      =
     m_writing      =
-    m_error        =
     m_closed       = false;
     m_lcount       = 0;
     m_timeout      = 600;
@@ -688,8 +687,13 @@ bool wxSocketBase::Destroy()
 }
 
 // ----------------------------------------------------------------------------
-// simply accessors
+// simple accessors
 // ----------------------------------------------------------------------------
+
+void wxSocketBase::SetError(wxSocketError error)
+{
+    m_impl->m_error = error;
+}
 
 wxSocketError wxSocketBase::LastError() const
 {
@@ -700,7 +704,7 @@ wxSocketError wxSocketBase::LastError() const
 // Basic IO calls
 // --------------------------------------------------------------------------
 
-// The following IO operations update m_error and m_lcount:
+// The following IO operations update m_lcount:
 // {Read, Write, ReadMsg, WriteMsg, Peek, Unread, Discard}
 bool wxSocketBase::Close()
 {
@@ -721,12 +725,6 @@ wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
     m_reading = true;
 
     m_lcount = DoRead(buffer, nbytes);
-
-    // If in wxSOCKET_WAITALL mode, all bytes should have been read.
-    if (m_flags & wxSOCKET_WAITALL)
-        m_error = (m_lcount != nbytes);
-    else
-        m_error = (m_lcount == 0);
 
     // Allow read events from now on
     m_reading = false;
@@ -758,10 +756,15 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
     if ( m_flags & wxSOCKET_NOWAIT )
     {
         int ret = m_impl->Read(buffer, nbytes);
-        if ( ret < 0 )
-            return 0;
-
-        total += ret;
+        if ( ret == -1 )
+        {
+            if ( m_impl->GetLastError() != wxSOCKET_WOULDBLOCK )
+                SetError(wxSOCKET_IOERR);
+        }
+        else // not an error, even if we didn't read anything
+        {
+            total += ret;
+        }
     }
     else // blocking socket
     {
@@ -782,10 +785,10 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
                 break;
             }
 
-            if ( ret < 0 )
+            if ( ret == -1 )
             {
-                // this will be always interpreted as error by Read()
-                return 0;
+                SetError(wxSOCKET_IOERR);
+                break;
             }
 
             total += ret;
@@ -803,6 +806,11 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
 
             buffer += ret;
         }
+
+        // it's an error to not read everything in wxSOCKET_WAITALL mode or to
+        // not read anything otherwise
+        if ( ((m_flags & wxSOCKET_WAITALL) && nbytes) || !total )
+            SetError(wxSOCKET_IOERR);
     }
 
     return total;
@@ -810,9 +818,6 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
 
 wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
 {
-    wxUint32 len, len2, sig, total;
-    bool error;
-    int old_flags;
     struct
     {
         unsigned char sig[4];
@@ -822,86 +827,69 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
     // Mask read events
     m_reading = true;
 
-    total = 0;
-    error = true;
-    old_flags = m_flags;
+    int old_flags = m_flags;
     SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
-    if (DoRead(&msg, sizeof(msg)) != sizeof(msg))
-        goto exit;
-
-    sig = (wxUint32)msg.sig[0];
-    sig |= (wxUint32)(msg.sig[1] << 8);
-    sig |= (wxUint32)(msg.sig[2] << 16);
-    sig |= (wxUint32)(msg.sig[3] << 24);
-
-    if (sig != 0xfeeddead)
+    bool ok = false;
+    if ( DoRead(&msg, sizeof(msg)) == sizeof(msg) )
     {
-        wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
-        goto exit;
-    }
+        wxUint32 sig = (wxUint32)msg.sig[0];
+        sig |= (wxUint32)(msg.sig[1] << 8);
+        sig |= (wxUint32)(msg.sig[2] << 16);
+        sig |= (wxUint32)(msg.sig[3] << 24);
 
-    len = (wxUint32)msg.len[0];
-    len |= (wxUint32)(msg.len[1] << 8);
-    len |= (wxUint32)(msg.len[2] << 16);
-    len |= (wxUint32)(msg.len[3] << 24);
-
-    if (len > nbytes)
-    {
-        len2 = len - nbytes;
-        len = nbytes;
-    }
-    else
-        len2 = 0;
-
-    // Don't attempt to read if the msg was zero bytes long.
-    if (len)
-    {
-        total = DoRead(buffer, len);
-
-        if (total != len)
-            goto exit;
-    }
-
-    if (len2)
-    {
-        char *discard_buffer = new char[MAX_DISCARD_SIZE];
-        long discard_len;
-
-        // NOTE: discarded bytes don't add to m_lcount.
-        do
+        if ( sig == 0xfeeddead )
         {
-            discard_len = ((len2 > MAX_DISCARD_SIZE)? MAX_DISCARD_SIZE : len2);
-            discard_len = DoRead(discard_buffer, (wxUint32)discard_len);
-            len2 -= (wxUint32)discard_len;
+            wxUint32 len = (wxUint32)msg.len[0];
+            len |= (wxUint32)(msg.len[1] << 8);
+            len |= (wxUint32)(msg.len[2] << 16);
+            len |= (wxUint32)(msg.len[3] << 24);
+
+            wxUint32 len2;
+            if (len > nbytes)
+            {
+                len2 = len - nbytes;
+                len = nbytes;
+            }
+            else
+                len2 = 0;
+
+            // Don't attempt to read if the msg was zero bytes long.
+            m_lcount = len ? DoRead(buffer, len) : 0;
+
+            if ( len2 )
+            {
+                char discard_buffer[MAX_DISCARD_SIZE];
+                long discard_len;
+
+                // NOTE: discarded bytes don't add to m_lcount.
+                do
+                {
+                    discard_len = len2 > MAX_DISCARD_SIZE
+                                    ? MAX_DISCARD_SIZE
+                                    : len2;
+                    discard_len = DoRead(discard_buffer, (wxUint32)discard_len);
+                    len2 -= (wxUint32)discard_len;
+                }
+                while ((discard_len > 0) && len2);
+            }
+
+            if ( !len2 && DoRead(&msg, sizeof(msg)) == sizeof(msg) )
+            {
+                sig = (wxUint32)msg.sig[0];
+                sig |= (wxUint32)(msg.sig[1] << 8);
+                sig |= (wxUint32)(msg.sig[2] << 16);
+                sig |= (wxUint32)(msg.sig[3] << 24);
+
+                if ( sig == 0xdeadfeed )
+                    ok = true;
+            }
         }
-        while ((discard_len > 0) && len2);
-
-        delete [] discard_buffer;
-
-        if (len2 != 0)
-            goto exit;
-    }
-    if (DoRead(&msg, sizeof(msg)) != sizeof(msg))
-        goto exit;
-
-    sig = (wxUint32)msg.sig[0];
-    sig |= (wxUint32)(msg.sig[1] << 8);
-    sig |= (wxUint32)(msg.sig[2] << 16);
-    sig |= (wxUint32)(msg.sig[3] << 24);
-
-    if (sig != 0xdeadfeed)
-    {
-        wxLogWarning(_("wxSocket: invalid signature in ReadMsg."));
-        goto exit;
     }
 
-    // everything was OK
-    error = false;
+    if ( !ok )
+        SetError(wxSOCKET_IOERR);
 
-exit:
-    m_error = error;
-    m_lcount = total;
     m_reading = false;
     SetFlags(old_flags);
 
@@ -916,12 +904,6 @@ wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
     m_lcount = DoRead(buffer, nbytes);
     Pushback(buffer, m_lcount);
 
-    // If in wxSOCKET_WAITALL mode, all bytes should have been read.
-    if (m_flags & wxSOCKET_WAITALL)
-        m_error = (m_lcount != nbytes);
-    else
-        m_error = (m_lcount == 0);
-
     // Allow read events again
     m_reading = false;
 
@@ -934,12 +916,6 @@ wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
     m_writing = true;
 
     m_lcount = DoWrite(buffer, nbytes);
-
-    // If in wxSOCKET_WAITALL mode, all bytes should have been written.
-    if (m_flags & wxSOCKET_WAITALL)
-        m_error = (m_lcount != nbytes);
-    else
-        m_error = (m_lcount == 0);
 
     // Allow write events again
     m_writing = false;
@@ -963,8 +939,15 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
     if ( m_flags & wxSOCKET_NOWAIT )
     {
         const int ret = m_impl->Write(buffer, nbytes);
-        if ( ret > 0 )
+        if ( ret == -1 )
+        {
+            if ( m_impl->GetLastError() != wxSOCKET_WOULDBLOCK )
+                SetError(wxSOCKET_IOERR);
+        }
+        else
+        {
             total += ret;
+        }
     }
     else // blocking socket
     {
@@ -980,8 +963,11 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
                 break;
             }
 
-            if ( ret < 0 )
-                return 0;
+            if ( ret == -1 )
+            {
+                SetError(wxSOCKET_IOERR);
+                break;
+            }
 
             total += ret;
             if ( !(m_flags & wxSOCKET_WAITALL) )
@@ -993,6 +979,9 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
 
             buffer += ret;
         }
+
+        if ( ((m_flags & wxSOCKET_WAITALL) && nbytes) || !total )
+            SetError(wxSOCKET_IOERR);
     }
 
     return total;
@@ -1000,8 +989,6 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
 
 wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
 {
-    wxUint32 total;
-    bool error;
     struct
     {
         unsigned char sig[4];
@@ -1011,8 +998,7 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
     // Mask write events
     m_writing = true;
 
-    error = true;
-    total = 0;
+    const int old_flags = m_flags;
     SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
 
     msg.sig[0] = (unsigned char) 0xad;
@@ -1025,33 +1011,31 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
     msg.len[2] = (unsigned char) ((nbytes >> 16) & 0xff);
     msg.len[3] = (unsigned char) ((nbytes >> 24) & 0xff);
 
-    if (DoWrite(&msg, sizeof(msg)) < sizeof(msg))
-        goto exit;
+    bool ok = false;
+    if ( DoWrite(&msg, sizeof(msg)) == sizeof(msg) )
+    {
+        m_lcount = DoWrite(buffer, nbytes);
+        if ( m_lcount == nbytes )
+        {
+            msg.sig[0] = (unsigned char) 0xed;
+            msg.sig[1] = (unsigned char) 0xfe;
+            msg.sig[2] = (unsigned char) 0xad;
+            msg.sig[3] = (unsigned char) 0xde;
+            msg.len[0] =
+            msg.len[1] =
+            msg.len[2] =
+            msg.len[3] = (char) 0;
 
-    total = DoWrite(buffer, nbytes);
+            if ( DoWrite(&msg, sizeof(msg)) == sizeof(msg))
+                ok = true;
+        }
+    }
 
-    if (total < nbytes)
-        goto exit;
+    if ( !ok )
+        SetError(wxSOCKET_IOERR);
 
-    msg.sig[0] = (unsigned char) 0xed;
-    msg.sig[1] = (unsigned char) 0xfe;
-    msg.sig[2] = (unsigned char) 0xad;
-    msg.sig[3] = (unsigned char) 0xde;
-    msg.len[0] =
-    msg.len[1] =
-    msg.len[2] =
-    msg.len[3] = (char) 0;
-
-    if ((DoWrite(&msg, sizeof(msg))) < sizeof(msg))
-        goto exit;
-
-    // everything was OK
-    error = false;
-
-exit:
-    m_error = error;
-    m_lcount = total;
     m_writing = false;
+    SetFlags(old_flags);
 
     return *this;
 }
@@ -1061,7 +1045,7 @@ wxSocketBase& wxSocketBase::Unread(const void *buffer, wxUint32 nbytes)
     if (nbytes != 0)
         Pushback(buffer, nbytes);
 
-    m_error = false;
+    SetError(wxSOCKET_NOERROR);
     m_lcount = nbytes;
 
     return *this;
@@ -1076,6 +1060,7 @@ wxSocketBase& wxSocketBase::Discard()
     // Mask read events
     m_reading = true;
 
+    const int old_flags = m_flags;
     SetFlags(wxSOCKET_NOWAIT);
 
     do
@@ -1087,10 +1072,12 @@ wxSocketBase& wxSocketBase::Discard()
 
     delete[] buffer;
     m_lcount = total;
-    m_error  = false;
+    SetError(wxSOCKET_NOERROR);
 
     // Allow read events again
     m_reading = false;
+
+    SetFlags(old_flags);
 
     return *this;
 }
@@ -1632,7 +1619,7 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
     {
         wxFAIL_MSG( "can only be called for a valid server socket" );
 
-        m_error = wxSOCKET_INVSOCK;
+        SetError(wxSOCKET_INVSOCK);
 
         return false;
     }
@@ -1642,7 +1629,7 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
         // wait until we get a connection
         if ( !m_impl->SelectWithTimeout(wxSOCKET_INPUT_FLAG) )
         {
-            m_error = wxSOCKET_TIMEDOUT;
+            SetError(wxSOCKET_TIMEDOUT);
 
             return false;
         }
@@ -1652,7 +1639,7 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
 
     if ( !sock.m_impl )
     {
-        m_error = m_impl->GetLastError();
+        SetError(m_impl->GetLastError());
 
         return false;
     }

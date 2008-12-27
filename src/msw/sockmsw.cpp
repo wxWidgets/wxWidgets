@@ -448,7 +448,7 @@ void wxSocketImplMSW::DoClose()
     closesocket(m_fd);
 }
 
-wxSocketError wxSocketImplUnix::GetLastError() const
+wxSocketError wxSocketImplMSW::GetLastError() const
 {
     switch ( WSAGetLastError() )
     {
