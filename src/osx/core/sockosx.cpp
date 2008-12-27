@@ -129,7 +129,7 @@ private:
         switch (callbackType)
         {
             case kCFSocketConnectCallBack:
-                wxASSERT(!socket->m_server);
+                wxASSERT(!socket->IsServer());
                 // KH: If data is non-NULL, the connect failed, do not call Detected_Write,
                 // which will only end up creating a spurious connect event because the
                 // call to getsocketopt SO_ERROR inexplicably returns no error.
@@ -219,8 +219,8 @@ int wxSocketManagerMac::GetCFCallback(wxSocketImpl *socket, wxSocketNotify event
     switch ( event )
     {
         case wxSOCKET_CONNECTION:
-            return socket->m_server ? kCFSocketReadCallBack
-                                    : kCFSocketConnectCallBack;
+            return socket->IsServer() ? kCFSocketReadCallBack
+                                      : kCFSocketConnectCallBack;
 
         case wxSOCKET_LOST:
         case wxSOCKET_INPUT:
