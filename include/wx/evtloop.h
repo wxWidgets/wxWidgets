@@ -128,7 +128,7 @@ protected:
     #include "wx/dfb/evtloop.h"
 #else // other platform
 
-#define wxNEEDS_GENERIC_DISPATCH_TIMEOUT
+#include "wx/stopwatch.h"   // for wxMilliClock_t
 
 class WXDLLIMPEXP_FWD_CORE wxEventLoopImpl;
 
@@ -142,7 +142,20 @@ public:
     virtual void Exit(int rc = 0);
     virtual bool Pending() const;
     virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout);
+    virtual int DispatchTimeout(unsigned long timeout)
+    {
+        // TODO: this is, of course, horribly inefficient and a proper wait with
+        //       timeout should be implemented for all ports natively...
+        const wxMilliClock_t timeEnd = wxGetLocalTimeMillis() + timeout;
+        for ( ;; )
+        {
+            if ( Pending() )
+                return Dispatch();
+
+            if ( wxGetLocalTimeMillis() >= timeEnd )
+                return -1;
+        }
+    }
     virtual void WakeUp() { }
 
 protected:

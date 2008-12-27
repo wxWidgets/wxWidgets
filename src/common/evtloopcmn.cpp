@@ -28,7 +28,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/stopwatch.h"   // for wxMilliClock_t
 #endif //WX_PRECOMP
 
 // ----------------------------------------------------------------------------
@@ -154,23 +153,4 @@ void wxEventLoopManual::Exit(int rc)
 }
 
 #endif // __WXMSW__ || __WXMAC__ || __WXDFB__
-
-#ifdef wxNEEDS_GENERIC_DISPATCH_TIMEOUT
-
-int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
-{
-    // TODO: this is, of course, horribly inefficient and a proper wait with
-    //       timeout should be implemented for all ports natively...
-    const wxMilliClock_t timeEnd = wxGetLocalTimeMillis() + timeout;
-    for ( ;; )
-    {
-        if ( Pending() )
-            return Dispatch();
-
-        if ( wxGetLocalTimeMillis() >= timeEnd )
-            return -1;
-    }
-}
-
-#endif // wxNEEDS_GENERIC_DISPATCH_TIMEOUT
 
