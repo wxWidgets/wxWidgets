@@ -27,10 +27,6 @@
     #include "wx/sizer.h"
 #endif // WX_PRECOMP
 
-#include "wx/notebook.h"
-#include "wx/tabctrl.h"
-#include "wx/spinbutt.h"
-
 #include "wx/osx/private.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)

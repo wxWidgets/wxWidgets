@@ -23,9 +23,6 @@
     #include "wx/settings.h"
 #endif // WX_PRECOMP
 
-#include "wx/notebook.h"
-#include "wx/tabctrl.h"
-
 #include "wx/osx/private.h"
 
 #include <stdio.h>
@@ -92,14 +89,14 @@ wxSize wxStaticText::DoGetBestSize() const
           to allow correct dynamic ellipsizing of the label
 */
 
-wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID id,
                                     const wxString& label,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle) 
+                                    long style,
+                                    long extraStyle)
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSTextField* v = [[wxNSTextField alloc] initWithFrame:r];
@@ -107,7 +104,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
     [v setBezeled:NO];
     [v setEditable:NO];
     [v setDrawsBackground:NO];
-    
+
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     [v setImplementation:c];
     return c;
