@@ -387,7 +387,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
         // so that we return true below and that out [Cancel] handler knew what
         // to do
         m_state = Finished;
-        if( !(GetWindowStyle() & wxPD_AUTO_HIDE) )
+        if( !HasFlag(wxPD_AUTO_HIDE) )
         {
             EnableClose();
             DisableSkip();
@@ -401,7 +401,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
                 m_msg->SetLabel(_("Done."));
             }
 
-            wxYieldIfNeeded() ;
+            wxYieldIfNeeded();
 
             (void)ShowModal();
         }
@@ -575,7 +575,7 @@ wxProgressDialog::~wxProgressDialog()
 
 void wxProgressDialog::ReenableOtherWindows()
 {
-    if ( GetWindowStyle() & wxPD_APP_MODAL )
+    if ( HasFlag(wxPD_APP_MODAL) )
     {
         delete m_winDisabler;
         m_winDisabler = (wxWindowDisabler *)NULL;
@@ -599,10 +599,10 @@ static void SetTimeLabel(unsigned long val, wxStaticText *label)
 
         if (val != (unsigned long)-1)
         {
-        unsigned long hours = val / 3600;
-        unsigned long minutes = (val % 3600) / 60;
-        unsigned long seconds = val % 60;
-        s.Printf(wxT("%lu:%02lu:%02lu"), hours, minutes, seconds);
+            unsigned long hours = val / 3600;
+            unsigned long minutes = (val % 3600) / 60;
+            unsigned long seconds = val % 60;
+            s.Printf(wxT("%lu:%02lu:%02lu"), hours, minutes, seconds);
         }
         else
         {
