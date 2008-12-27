@@ -160,17 +160,19 @@ public:
     wxCalendarEvent() : m_wday(wxDateTime::Inv_WeekDay)  { }
     wxCalendarEvent(wxWindow *win, const wxDateTime& dt, wxEventType type)
         : wxDateEvent(win, dt, type),
-          m_wday(wxDateTime::Inv_WeekDay)
-    {
-    }
+          m_wday(wxDateTime::Inv_WeekDay) { }
+    wxCalendarEvent(const wxCalendarEvent& event)
+        : wxDateEvent(event), m_wday(event.m_wday) { }
 
     void SetWeekDay(const wxDateTime::WeekDay wd) { m_wday = wd; }
     wxDateTime::WeekDay GetWeekDay() const { return m_wday; }
 
+    virtual wxEvent *Clone() const { return new wxCalendarEvent(*this); }
+
 private:
     wxDateTime::WeekDay m_wday;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxCalendarEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxCalendarEvent)
 };
 
 // ----------------------------------------------------------------------------

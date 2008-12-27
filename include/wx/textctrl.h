@@ -729,9 +729,14 @@ class WXDLLIMPEXP_CORE wxTextUrlEvent : public wxCommandEvent
 public:
     wxTextUrlEvent(int winid, const wxMouseEvent& evtMouse,
                    long start, long end)
-        : wxCommandEvent(wxEVT_COMMAND_TEXT_URL, winid)
-        , m_evtMouse(evtMouse), m_start(start), m_end(end)
+        : wxCommandEvent(wxEVT_COMMAND_TEXT_URL, winid),
+          m_evtMouse(evtMouse), m_start(start), m_end(end)
         { }
+    wxTextUrlEvent(const wxTextUrlEvent& event)
+        : wxCommandEvent(event),
+          m_evtMouse(event.m_evtMouse),
+          m_start(event.m_start),
+          m_end(event.m_end) { }
 
     // get the mouse event which happend over the URL
     const wxMouseEvent& GetMouseEvent() const { return m_evtMouse; }
@@ -742,6 +747,8 @@ public:
     // get the end of the URL
     long GetURLEnd() const { return m_end; }
 
+    virtual wxEvent *Clone() const { return new wxTextUrlEvent(*this); }
+
 protected:
     // the corresponding mouse event
     wxMouseEvent m_evtMouse;
@@ -751,7 +758,7 @@ protected:
          m_end;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxTextUrlEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTextUrlEvent)
 
 public:
     // for wxWin RTTI only, don't use
