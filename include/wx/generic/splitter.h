@@ -322,6 +322,8 @@ public:
         SetEventObject(splitter);
         if (splitter) m_id = splitter->GetId();
     }
+    wxSplitterEvent(const wxSplitterEvent& event)
+        : wxNotifyEvent(event), m_data(event.m_data) { }
 
     // SASH_POS_CHANGED methods
 
@@ -366,6 +368,8 @@ public:
         return m_data.pt.y;
     }
 
+    virtual wxEvent *Clone() const { return new wxSplitterEvent(*this); }
+
 private:
     friend class WXDLLIMPEXP_FWD_CORE wxSplitterWindow;
 
@@ -380,7 +384,7 @@ private:
         } pt;               // position of double click for DCLICK event
     } m_data;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSplitterEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSplitterEvent)
 };
 
 typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);

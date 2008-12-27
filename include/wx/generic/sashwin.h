@@ -221,6 +221,12 @@ public:
         m_edge = edge;
     }
 
+    wxSashEvent(const wxSashEvent& event)
+        : wxCommandEvent(event),
+          m_edge(event.m_edge),
+          m_dragRect(event.m_dragRect),
+          m_dragStatus(event.m_dragStatus) { }
+
     void SetEdge(wxSashEdgePosition edge) { m_edge = edge; }
     wxSashEdgePosition GetEdge() const { return m_edge; }
 
@@ -233,13 +239,15 @@ public:
     void SetDragStatus(wxSashDragStatus status) { m_dragStatus = status; }
     wxSashDragStatus GetDragStatus() const { return m_dragStatus; }
 
+    virtual wxEvent *Clone() const { return new wxSashEvent(*this); }
+
 private:
     wxSashEdgePosition  m_edge;
     wxRect              m_dragRect;
     wxSashDragStatus    m_dragStatus;
 
 private:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSashEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxSashEvent)
 };
 
 typedef void (wxEvtHandler::*wxSashEventFunction)(wxSashEvent&);

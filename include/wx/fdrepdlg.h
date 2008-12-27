@@ -142,6 +142,8 @@ class WXDLLIMPEXP_CORE wxFindDialogEvent : public wxCommandEvent
 public:
     wxFindDialogEvent(wxEventType commandType = wxEVT_NULL, int id = 0)
         : wxCommandEvent(commandType, id) { }
+    wxFindDialogEvent(const wxFindDialogEvent& event)
+        : wxCommandEvent(event), m_strReplace(event.m_strReplace) { }
 
     int GetFlags() const { return GetInt(); }
     wxString GetFindString() const { return GetString(); }
@@ -155,10 +157,12 @@ public:
     void SetFindString(const wxString& str) { SetString(str); }
     void SetReplaceString(const wxString& str) { m_strReplace = str; }
 
+    virtual wxEvent *Clone() const { return new wxFindDialogEvent(*this); }
+
 private:
     wxString m_strReplace;
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxFindDialogEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFindDialogEvent)
 };
 
 extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_FIND;
