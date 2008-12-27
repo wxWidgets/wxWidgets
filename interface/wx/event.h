@@ -60,8 +60,8 @@ public:
         Returns a copy of the event.
 
         Any event that is posted to the wxWidgets event system for later action
-        (via wxEvtHandler::AddPendingEvent or wxPostEvent()) must implement
-        this method.
+        (via wxEvtHandler::AddPendingEvent, wxEvtHandler::QueueEvent or wxPostEvent())
+        must implement this method.
 
         All wxWidgets events fully implement this method, but any derived events
         implemented by the user should also implement this method just in case they
