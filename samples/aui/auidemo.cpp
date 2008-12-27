@@ -671,7 +671,7 @@ MyFrame::MyFrame(wxWindow* parent,
     wxMenuBar* mb = new wxMenuBar;
 
     wxMenu* file_menu = new wxMenu;
-    file_menu->Append(wxID_EXIT, _("Exit"));
+    file_menu->Append(wxID_EXIT);
 
     wxMenu* view_menu = new wxMenu;
     view_menu->Append(ID_CreateText, _("Create Text Control"));
@@ -733,14 +733,14 @@ MyFrame::MyFrame(wxWindow* parent,
     m_perspectives_menu->Append(ID_FirstPerspective+1, _("All Panes"));
 
     wxMenu* help_menu = new wxMenu;
-    help_menu->Append(wxID_ABOUT, _("About..."));
+    help_menu->Append(wxID_ABOUT);
 
-    mb->Append(file_menu, _("File"));
-    mb->Append(view_menu, _("View"));
-    mb->Append(m_perspectives_menu, _("Perspectives"));
-    mb->Append(options_menu, _("Options"));
-    mb->Append(notebook_menu, _("Notebook"));
-    mb->Append(help_menu, _("Help"));
+    mb->Append(file_menu, _("&File"));
+    mb->Append(view_menu, _("&View"));
+    mb->Append(m_perspectives_menu, _("&Perspectives"));
+    mb->Append(options_menu, _("&Options"));
+    mb->Append(notebook_menu, _("&Notebook"));
+    mb->Append(help_menu, _("&Help"));
 
     SetMenuBar(mb);
 
