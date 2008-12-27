@@ -674,7 +674,7 @@ public:
                                        wxWindow* parent = NULL);
 
     /**
-        Find a window by its name (as given in a window constructor or @b Create
+        Find a window by its name (as given in a window constructor or Create()
         function call).
 
         If @a parent is @NULL, the search will start from all top-level frames
@@ -1278,11 +1278,14 @@ public:
     */
     virtual wxSize GetWindowBorderSize() const;
 
+    //@{
     /**
-        Gets the window style that was passed to the constructor or @b Create
-        method. @b GetWindowStyle() is another name for the same function.
+        Gets the window style that was passed to the constructor or Create()
+        method. GetWindowStyle() is another name for the same function.
     */
     virtual long GetWindowStyleFlag() const;
+    long GetWindowStyle() const;
+    //@}
 
     /**
         Returns the value previously passed to SetWindowVariant().
@@ -2553,11 +2556,7 @@ public:
     void SetVirtualSize(const wxSize& size);
     //@}
 
-    /**
-        Identical to SetWindowStyleFlag().
-    */
-    void SetWindowStyle(long style);
-
+    //@{
     /**
         Sets the style of the window. Please note that some styles cannot be changed
         after the window creation and that Refresh() might need to be be called
@@ -2568,6 +2567,8 @@ public:
         @see GetWindowStyleFlag()
     */
     virtual void SetWindowStyleFlag(long style);
+    void SetWindowStyle(long style);
+    //@}
 
     /**
         This function can be called under all platforms but only does anything under
