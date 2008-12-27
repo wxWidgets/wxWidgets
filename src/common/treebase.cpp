@@ -59,8 +59,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_TREE_ITEM_MENU)
 // Tree event
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxTreeEvent, wxNotifyEvent)
-
+IMPLEMENT_DYNAMIC_CLASS(wxTreeEvent, wxNotifyEvent)
 
 wxTreeEvent::wxTreeEvent(wxEventType commandType,
                          wxTreeCtrlBase *tree,
