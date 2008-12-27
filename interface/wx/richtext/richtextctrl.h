@@ -74,11 +74,6 @@ public:
     wxRichTextEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
     /**
-        Clones the event.
-    */
-    wxEvent* Clone() const;
-
-    /**
         Returns the character pressed, within a wxEVT_COMMAND_RICHTEXT_CHARACTER event.
     */
     wxChar GetCharacter() const;

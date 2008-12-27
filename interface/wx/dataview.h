@@ -71,11 +71,6 @@ public:
     //@}
 
     /**
-        Used to clone the event.
-    */
-    wxEvent* Clone() const;
-
-    /**
         Returns the position of the column in the control or -1
         if no column field was set by the event emitter.
     */
@@ -893,7 +888,7 @@ public:
        items have been read from the model by the control.
     */
     virtual void ExpandAncestors( const wxDataViewItem & item );
-    
+
     /**
         Returns pointer to the column. @a pos refers to the position in the
         control which may change after reordering columns by the user.

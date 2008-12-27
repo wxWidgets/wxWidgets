@@ -849,9 +849,6 @@ public:
     */
     bool CanVeto() const;
 
-    /** Copyer. */
-    virtual wxEvent* Clone() const;
-
     /**
         Returns highest level non-category, non-root parent of property for
         which event occurred. Useful when you have nested properties with
