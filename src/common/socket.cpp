@@ -154,7 +154,6 @@ wxSocketImpl::wxSocketImpl(wxSocketBase& wxsocket)
     : m_wxsocket(&wxsocket)
 {
     m_fd              = INVALID_SOCKET;
-    m_detected        = 0;
     m_local           = NULL;
     m_peer            = NULL;
     m_error           = wxSOCKET_NOERROR;
@@ -377,7 +376,7 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
 {
     wxSockAddr from;
     WX_SOCKLEN_T fromlen = sizeof(from);
-    const int fd = accept(m_fd, &from, &fromlen);
+    const SOCKET fd = accept(m_fd, &from, &fromlen);
 
     if ( fd == INVALID_SOCKET )
         return NULL;
@@ -414,8 +413,6 @@ void wxSocketImpl::Shutdown()
         shutdown(m_fd, 1 /* SD_SEND */);
         Close();
     }
-
-    m_detected = wxSOCKET_LOST_FLAG;
 }
 
 /*
@@ -1093,100 +1090,81 @@ wxSocketBase& wxSocketBase::Discard()
 wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags,
                                         const timeval *timeout)
 {
-  wxSocketEventFlags result = 0;
-
-  if (m_fd == INVALID_SOCKET)
-    return (wxSOCKET_LOST_FLAG & flags);
-
-  struct timeval tv;
-  if ( timeout )
-      tv = *timeout;
-  else
-      tv.tv_sec = tv.tv_usec = 0;
-
-  fd_set readfds;
-  fd_set writefds;
-  fd_set exceptfds;
-  wxFD_ZERO(&readfds);
-  wxFD_ZERO(&writefds);
-  wxFD_ZERO(&exceptfds);
-  wxFD_SET(m_fd, &readfds);
-  if (flags & wxSOCKET_OUTPUT_FLAG || flags & wxSOCKET_CONNECTION_FLAG)
-    wxFD_SET(m_fd, &writefds);
-  wxFD_SET(m_fd, &exceptfds);
-
-  /* Check 'sticky' CONNECTION flag first */
-  result |= wxSOCKET_CONNECTION_FLAG & m_detected;
-
-  /* If we have already detected a LOST event, then don't try
-   * to do any further processing.
-   */
-  if ((m_detected & wxSOCKET_LOST_FLAG) != 0)
-  {
-    m_establishing = false;
-    return (wxSOCKET_LOST_FLAG & flags);
-  }
-
-  /* Try select now */
-  if (select(m_fd + 1, &readfds, &writefds, &exceptfds, &tv) < 0)
-  {
-    /* What to do here? */
-    return (result & flags);
-  }
-
-  /* Check for exceptions and errors */
-  if (wxFD_ISSET(m_fd, &exceptfds))
-  {
-    m_establishing = false;
-    m_detected = wxSOCKET_LOST_FLAG;
-
-    /* LOST event: Abort any further processing */
-    return (wxSOCKET_LOST_FLAG & flags);
-  }
-
-  /* Check for readability */
-  if (wxFD_ISSET(m_fd, &readfds))
-  {
-    result |= wxSOCKET_INPUT_FLAG;
-
-    if (m_server && m_stream)
-    {
-      /* This is a TCP server socket that detected a connection.
-         While the INPUT_FLAG is also set, it doesn't matter on
-         this kind of  sockets, as we can only Accept() from them. */
-      m_detected |= wxSOCKET_CONNECTION_FLAG;
-    }
-  }
-
-  /* Check for writability */
-  if (wxFD_ISSET(m_fd, &writefds))
-  {
-    if (m_establishing && !m_server)
-    {
-      int error;
-      SOCKOPTLEN_T len = sizeof(error);
-      m_establishing = false;
-      getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
-
-      if (error)
-      {
-        m_detected = wxSOCKET_LOST_FLAG;
-
-        /* LOST event: Abort any further processing */
+    if ( m_fd == INVALID_SOCKET )
         return (wxSOCKET_LOST_FLAG & flags);
-      }
-      else
-      {
-        m_detected |= wxSOCKET_CONNECTION_FLAG;
-      }
-    }
-    else
-    {
-      result |= wxSOCKET_OUTPUT_FLAG;
-    }
-  }
 
-  return (result | m_detected) & flags;
+    struct timeval tv;
+    if ( timeout )
+        tv = *timeout;
+    else
+        tv.tv_sec = tv.tv_usec = 0;
+
+    // prepare the FD sets, passing NULL for the one(s) we don't use
+    fd_set
+        readfds, *preadfds = NULL,
+        writefds, *pwritefds = NULL,
+        exceptfds;                      // always want to know about errors
+
+    if ( flags & wxSOCKET_INPUT_FLAG )
+    {
+        preadfds = &readfds;
+        wxFD_ZERO(preadfds);
+        wxFD_SET(m_fd, preadfds);
+    }
+
+    // when using non-blocking connect() the socket becomes connected
+    // (successfully or not) when it becomes writable
+    if ( flags & (wxSOCKET_OUTPUT_FLAG | wxSOCKET_CONNECTION_FLAG) )
+    {
+        pwritefds = &writefds;
+        wxFD_ZERO(pwritefds);
+        wxFD_SET(m_fd, pwritefds);
+    }
+
+    wxFD_ZERO(&exceptfds);
+    wxFD_SET(m_fd, &exceptfds);
+
+    const int rc = select(m_fd + 1, preadfds, pwritefds, &exceptfds, &tv);
+
+    // check for errors first
+    if ( rc == -1 || wxFD_ISSET(m_fd, &exceptfds) )
+    {
+        m_establishing = false;
+
+        return wxSOCKET_LOST_FLAG & flags;
+    }
+
+    if ( rc == 0 )
+        return 0;
+
+    wxASSERT_MSG( rc == 1, "unexpected select() return value" );
+
+    wxSocketEventFlags detected = 0;
+    if ( preadfds && wxFD_ISSET(m_fd, preadfds) )
+        detected |= wxSOCKET_INPUT_FLAG;
+
+    if ( pwritefds && wxFD_ISSET(m_fd, pwritefds) )
+    {
+        // check for the case of non-blocking connect()
+        if ( m_establishing && !m_server )
+        {
+            int error;
+            SOCKOPTLEN_T len = sizeof(error);
+            m_establishing = false;
+            getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
+
+            if ( error )
+                detected = wxSOCKET_LOST_FLAG;
+            else
+                detected |= wxSOCKET_CONNECTION_FLAG;
+        }
+        else // not called to get non-blocking connect() status
+        {
+            detected |= wxSOCKET_OUTPUT_FLAG;
+        }
+    }
+
+    return detected & flags;
 }
 
 bool

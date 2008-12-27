@@ -308,8 +308,6 @@ public:
 
     struct timeval m_timeout;
 
-    wxSocketEventFlags m_detected;
-
 protected:
     wxSocketImpl(wxSocketBase& wxsocket);
 

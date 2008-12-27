@@ -513,9 +513,8 @@ int wxSocketImplUnix::Read(void *buffer, int size)
    */
   if ((ret == 0) && m_stream)
   {
-      /* Make sure wxSOCKET_LOST event gets sent and shut down the socket */
-      m_detected = wxSOCKET_LOST_FLAG;
-      OnReadWaiting();
+      m_establishing = false;
+      OnStateChange(wxSOCKET_LOST);
       return 0;
   }
   else if (ret == -1)
@@ -576,13 +575,11 @@ int wxSocketImplUnix::Write(const void *buffer, int size)
 
 void wxSocketImplUnix::EnableEvent(wxSocketNotify event)
 {
-    m_detected &= ~(1 << event);
     wxSocketManager::Get()->Install_Callback(this, event);
 }
 
 void wxSocketImplUnix::DisableEvent(wxSocketNotify event)
 {
-    m_detected |= (1 << event);
     wxSocketManager::Get()->Uninstall_Callback(this, event);
 }
 
@@ -709,17 +706,6 @@ void wxSocketImplUnix::OnReadWaiting()
     return;
   }
 
-  /* If we have already detected a LOST event, then don't try
-   * to do any further processing.
-   */
-  if ((m_detected & wxSOCKET_LOST_FLAG) != 0)
-  {
-    m_establishing = false;
-
-    OnStateChange(wxSOCKET_LOST);
-    return;
-  }
-
   int num =  recv(m_fd, &c, 1, MSG_PEEK | GSOCKET_MSG_NOSIGNAL);
 
   if (num > 0)
@@ -762,17 +748,6 @@ void wxSocketImplUnix::OnReadWaiting()
 
 void wxSocketImplUnix::OnWriteWaiting()
 {
-  /* If we have already detected a LOST event, then don't try
-   * to do any further processing.
-   */
-  if ((m_detected & wxSOCKET_LOST_FLAG) != 0)
-  {
-    m_establishing = false;
-
-    OnStateChange(wxSOCKET_LOST);
-    return;
-  }
-
   if (m_establishing && !m_server)
   {
     int error;

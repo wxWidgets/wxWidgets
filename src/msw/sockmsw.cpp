@@ -317,49 +317,49 @@ LRESULT CALLBACK wxSocket_Internal_WinProc(HWND hWnd,
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
 
     wxSocketImplMSW *socket;
-    wxSocketNotify event;
+    wxSocketNotify event = (wxSocketNotify)-1;
     {
         wxCRIT_SECT_LOCKER(lock, gs_critical);
 
         socket = socketList[(uMsg - WM_USER)];
-        event = (wxSocketNotify) -1;
+        if ( !socket )
+            return 0;
 
-        /* Check that the socket still exists (it has not been
-         * destroyed) and for safety, check that the m_fd field
-         * is what we expect it to be.
-         */
-        if ((socket != NULL) && ((WPARAM)socket->m_fd == wParam))
+        wxASSERT_MSG( socket->m_fd == (SOCKET)wParam,
+                      "mismatch between message and socket?" );
+
+        switch WSAGETSELECTEVENT(lParam)
         {
-            switch WSAGETSELECTEVENT(lParam)
-            {
-                case FD_READ:    event = wxSOCKET_INPUT; break;
-                case FD_WRITE:   event = wxSOCKET_OUTPUT; break;
-                case FD_ACCEPT:  event = wxSOCKET_CONNECTION; break;
-                case FD_CONNECT:
-                                 {
-                                     if (WSAGETSELECTERROR(lParam) != 0)
-                                         event = wxSOCKET_LOST;
-                                     else
-                                         event = wxSOCKET_CONNECTION;
-                                     break;
-                                 }
-                case FD_CLOSE:   event = wxSOCKET_LOST; break;
-            }
+            case FD_READ:
+                event = wxSOCKET_INPUT;
+                break;
 
-            if (event != -1)
-            {
-                if (event == wxSOCKET_LOST)
-                    socket->m_detected = wxSOCKET_LOST_FLAG;
-                else
-                    socket->m_detected |= (1 << event);
-            }
+            case FD_WRITE:
+                event = wxSOCKET_OUTPUT;
+                break;
+
+            case FD_ACCEPT:
+                event = wxSOCKET_CONNECTION;
+                break;
+
+            case FD_CONNECT:
+                event = WSAGETSELECTERROR(lParam) ? wxSOCKET_LOST
+                                                  : wxSOCKET_CONNECTION;
+                break;
+
+            case FD_CLOSE:
+                event = wxSOCKET_LOST;
+                break;
+
+            default:
+                wxFAIL_MSG( "unexpected socket notification" );
+                return 0;
         }
     } // unlock gs_critical
 
-    if ( socket )
-        socket->NotifyOnStateChange(event);
+    socket->NotifyOnStateChange(event);
 
-    return (LRESULT) 0;
+    return 0;
 }
 
 /*
@@ -473,9 +473,6 @@ int wxSocketImplMSW::Read(void *buffer, int size)
 {
   int ret;
 
-  /* Reenable INPUT events */
-  m_detected &= ~wxSOCKET_INPUT_FLAG;
-
   if (m_fd == INVALID_SOCKET || m_server)
   {
     m_error = wxSOCKET_INVSOCK;
@@ -523,12 +520,6 @@ int wxSocketImplMSW::Write(const void *buffer, int size)
     else
       m_error = wxSOCKET_WOULDBLOCK;
 
-    /* Only reenable OUTPUT events after an error (just like WSAAsyncSelect
-     * does). Once the first OUTPUT event is received, users can assume
-     * that the socket is writable until a read operation fails. Only then
-     * will further OUTPUT events be posted.
-     */
-    m_detected &= ~wxSOCKET_OUTPUT_FLAG;
     return -1;
   }
 

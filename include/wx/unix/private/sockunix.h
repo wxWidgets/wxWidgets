@@ -72,17 +72,13 @@ private:
 
     // enable or disable notifications for socket input/output events
     void EnableEvents() { DoEnableEvents(true); }
-    void DisableEvents() { DoEnableEvents(false);
-    }
+    void DisableEvents() { DoEnableEvents(false); }
 
     // really enable or disable socket input/output events
     void DoEnableEvents(bool enable);
 
 
     // enable or disable events for the given event
-    //
-    // notice that these functions also update m_detected: EnableEvent() clears
-    // the corresponding bit in it and DisableEvent() sets it
     void EnableEvent(wxSocketNotify event);
     void DisableEvent(wxSocketNotify event);
 
@@ -99,9 +95,6 @@ protected:
 
     // the events which are currently enabled for this socket, combination of
     // wxFDIO_INPUT and wxFDIO_OUTPUT values
-    //
-    // TODO: this overlaps with m_detected but the semantics of the latter are
-    //       very unclear so I don't dare to remove it right now
     int m_enabledCallbacks;
 
 private:
