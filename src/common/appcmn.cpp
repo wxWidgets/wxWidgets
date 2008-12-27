@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/appcmn.cpp
-// Purpose:     wxAppConsole and wxAppBase methods common to all platforms
+// Purpose:     wxAppBase methods common to all platforms
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     18.10.99
