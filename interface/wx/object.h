@@ -377,12 +377,6 @@ public:
     int GetSize() const;
 
     /**
-        Initializes pointers in the wxClassInfo objects for fast execution of IsKindOf().
-        Called in base wxWidgets library initialization.
-    */
-    static void InitializeClasses();
-
-    /**
         Returns @true if this class info can create objects of the associated class.
     */
     bool IsDynamic() const;
