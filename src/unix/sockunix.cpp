@@ -453,6 +453,10 @@ wxSocketError wxSocketImplUnix::GetLastError() const
         case ENOTSOCK:
             return wxSOCKET_INVSOCK;
 
+        // unfortunately EAGAIN only has the "would block" meaning for read(),
+        // not for connect() for which it means something rather different but
+        // we can't distinguish between these two situations currently...
+        case EAGAIN:
         case EINPROGRESS:
             return wxSOCKET_WOULDBLOCK;
 
