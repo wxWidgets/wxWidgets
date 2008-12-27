@@ -146,34 +146,6 @@ int _System soclose(int);
 #define INADDR_NONE INADDR_BROADCAST
 #endif
 
-#if defined(__VISAGECPP__) || defined(__WATCOMC__)
-
-    #define MASK_SIGNAL() {
-    #define UNMASK_SIGNAL() }
-
-#else
-    extern "C" { typedef void (*wxSigHandler)(int); }
-
-    #define MASK_SIGNAL()                       \
-    {                                           \
-        wxSigHandler old_handler = signal(SIGPIPE, SIG_IGN);
-
-    #define UNMASK_SIGNAL()                     \
-        signal(SIGPIPE, old_handler);           \
-    }
-
-#endif
-
-/* If a SIGPIPE is issued by a socket call on a remotely closed socket,
-   the program will "crash" unless it explicitly handles the SIGPIPE.
-   By using MSG_NOSIGNAL, the SIGPIPE is suppressed. Later, we will
-   use SO_NOSIGPIPE (if available), the BSD equivalent. */
-#ifdef MSG_NOSIGNAL
-#  define GSOCKET_MSG_NOSIGNAL MSG_NOSIGNAL
-#else /* MSG_NOSIGNAL not available (FreeBSD including OS X) */
-#  define GSOCKET_MSG_NOSIGNAL 0
-#endif /* MSG_NOSIGNAL */
-
 // ----------------------------------------------------------------------------
 // implementation of thread-safe/reentrant functions if they're missing
 // ----------------------------------------------------------------------------
@@ -452,7 +424,16 @@ wxSocketError wxSocketImplUnix::GetLastError() const
         // unfortunately EAGAIN only has the "would block" meaning for read(),
         // not for connect() for which it means something rather different but
         // we can't distinguish between these two situations currently...
+        //
+        // also notice that EWOULDBLOCK can be different from EAGAIN on some
+        // systems (HP-UX being the only known example) while it's defined as
+        // EAGAIN on most others (e.g. Linux)
         case EAGAIN:
+#ifdef EWOULDBLOCK
+    #if EWOULDBLOCK != EAGAIN
+        case EWOULDBLOCK:
+    #endif
+#endif // EWOULDBLOCK
         case EINPROGRESS:
             return wxSOCKET_WOULDBLOCK;
 
@@ -476,188 +457,6 @@ void wxSocketImplUnix::DoEnableEvents(bool flag)
     }
 }
 
-/* Generic IO */
-
-/* Like recv(), send(), ... */
-int wxSocketImplUnix::Read(void *buffer, int size)
-{
-  int ret;
-
-  if (m_fd == INVALID_SOCKET || m_server)
-  {
-    m_error = wxSOCKET_INVSOCK;
-    return -1;
-  }
-
-  /* Read the data */
-  if (m_stream)
-      ret = Recv_Stream(buffer, size);
-  else
-      ret = Recv_Dgram(buffer, size);
-
-  /*
-   * If recv returned zero for a TCP socket (if m_stream == NULL, it's an UDP
-   * socket and empty datagrams are possible), then the connection has been
-   * gracefully closed.
-   *
-   * Otherwise, recv has returned an error (-1), in which case we have lost
-   * the socket only if errno does _not_ indicate that there may be more data
-   * to read.
-   */
-  if ((ret == 0) && m_stream)
-  {
-      m_establishing = false;
-      OnStateChange(wxSOCKET_LOST);
-      return 0;
-  }
-  else if (ret == -1)
-  {
-      if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
-          m_error = wxSOCKET_WOULDBLOCK;
-      else
-          m_error = wxSOCKET_IOERR;
-  }
-
-  return ret;
-}
-
-int wxSocketImplUnix::Write(const void *buffer, int size)
-{
-  int ret;
-
-  if (m_fd == INVALID_SOCKET || m_server)
-  {
-    m_error = wxSOCKET_INVSOCK;
-    return -1;
-  }
-
-  /* Write the data */
-  if (m_stream)
-    ret = Send_Stream(buffer, size);
-  else
-    ret = Send_Dgram(buffer, size);
-
-  if (ret == -1)
-  {
-    if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
-    {
-      m_error = wxSOCKET_WOULDBLOCK;
-    }
-    else
-    {
-      m_error = wxSOCKET_IOERR;
-    }
-  }
-
-  return ret;
-}
-
-/* Flags */
-
-int wxSocketImplUnix::Recv_Stream(void *buffer, int size)
-{
-  int ret;
-  do
-  {
-    ret = recv(m_fd, buffer, size, GSOCKET_MSG_NOSIGNAL);
-  }
-  while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
-
-  return ret;
-}
-
-int wxSocketImplUnix::Recv_Dgram(void *buffer, int size)
-{
-  wxSockAddr from;
-  WX_SOCKLEN_T fromlen = sizeof(from);
-  int ret;
-  wxSocketError err;
-
-  fromlen = sizeof(from);
-
-  do
-  {
-    ret = recvfrom(m_fd, buffer, size, 0, (sockaddr*)&from, (WX_SOCKLEN_T *) &fromlen);
-  }
-  while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
-
-  if (ret == -1)
-    return -1;
-
-  /* Translate a system address into a wxSocketImplUnix address */
-  if (!m_peer)
-  {
-    m_peer = GAddress_new();
-    if (!m_peer)
-    {
-      m_error = wxSOCKET_MEMERR;
-      return -1;
-    }
-  }
-
-  err = _GAddress_translate_from(m_peer, (sockaddr*)&from, fromlen);
-  if (err != wxSOCKET_NOERROR)
-  {
-    GAddress_destroy(m_peer);
-    m_peer  = NULL;
-    m_error = err;
-    return -1;
-  }
-
-  return ret;
-}
-
-int wxSocketImplUnix::Send_Stream(const void *buffer, int size)
-{
-  int ret;
-
-  MASK_SIGNAL();
-
-  do
-  {
-    ret = send(m_fd, buffer, size, GSOCKET_MSG_NOSIGNAL);
-  }
-  while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
-
-  UNMASK_SIGNAL();
-
-  return ret;
-}
-
-int wxSocketImplUnix::Send_Dgram(const void *buffer, int size)
-{
-  struct sockaddr *addr;
-  int len, ret;
-  wxSocketError err;
-
-  if (!m_peer)
-  {
-    m_error = wxSOCKET_INVADDR;
-    return -1;
-  }
-
-  err = _GAddress_translate_to(m_peer, &addr, &len);
-  if (err != wxSOCKET_NOERROR)
-  {
-    m_error = err;
-    return -1;
-  }
-
-  MASK_SIGNAL();
-
-  do
-  {
-    ret = sendto(m_fd, buffer, size, 0, addr, len);
-  }
-  while (ret == -1 && errno == EINTR); /* Loop until not interrupted */
-
-  UNMASK_SIGNAL();
-
-  /* Frees memory allocated from _GAddress_translate_to */
-  free(addr);
-
-  return ret;
-}
 
 void wxSocketImplUnix::OnStateChange(wxSocketNotify event)
 {
@@ -676,7 +475,7 @@ void wxSocketImplUnix::OnReadWaiting()
     return;
   }
 
-  int num =  recv(m_fd, &c, 1, MSG_PEEK | GSOCKET_MSG_NOSIGNAL);
+  int num =  recv(m_fd, &c, 1, MSG_PEEK);
 
   if (num > 0)
   {

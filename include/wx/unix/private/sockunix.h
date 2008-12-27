@@ -31,9 +31,6 @@ public:
 
     virtual wxSocketError GetLastError() const;
 
-    virtual int Read(void *buffer, int size);
-    virtual int Write(const void *buffer, int size);
-
     // wxFDIOHandler methods
     virtual void OnReadWaiting();
     virtual void OnWriteWaiting();
@@ -69,13 +66,6 @@ private:
 
     // really enable or disable socket input/output events
     void DoEnableEvents(bool enable);
-
-
-    int Recv_Stream(void *buffer, int size);
-    int Recv_Dgram(void *buffer, int size);
-    int Send_Stream(const void *buffer, int size);
-    int Send_Dgram(const void *buffer, int size);
-
 
 protected:
     // descriptors for input and output event notification channels associated

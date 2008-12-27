@@ -260,8 +260,11 @@ public:
     // IO operations
     // -------------
 
-    virtual int Read(void *buffer, int size) = 0;
-    virtual int Write(const void *buffer, int size) = 0;
+    // basic IO, work for both TCP and UDP sockets
+    //
+    // return the number of bytes read/written (possibly 0) or -1 on error
+    int Read(void *buffer, int size);
+    int Write(const void *buffer, int size);
 
     // basically a wrapper for select(): returns the condition of the socket,
     // blocking for not longer than timeout if it is specified (otherwise just
@@ -354,6 +357,12 @@ private:
 
     // update local address after binding/connecting
     wxSocketError UpdateLocalAddress();
+
+    // functions used to implement Read/Write()
+    int RecvStream(void *buffer, int size);
+    int RecvDgram(void *buffer, int size);
+    int SendStream(const void *buffer, int size);
+    int SendDgram(const void *buffer, int size);
 
 
     // set in ctor and never changed except that it's reset to NULL when the

@@ -46,6 +46,28 @@
 #include "wx/private/fd.h"
 #include "wx/private/socket.h"
 
+#ifdef __UNIX__
+    #include <errno.h>
+#endif
+
+// we use MSG_NOSIGNAL to avoid getting SIGPIPE when sending data to a remote
+// host which closed the connection if it is available, otherwise we rely on
+// SO_NOSIGPIPE existency
+//
+// this should cover all the current Unix systems (Windows never sends any
+// signals anyhow) but if we find one that has neither we should explicitly
+// ignore SIGPIPE for it
+#ifdef MSG_NOSIGNAL
+    #define wxSOCKET_MSG_NOSIGNAL MSG_NOSIGNAL
+#else // MSG_NOSIGNAL not available (BSD including OS X)
+    #if defined(__UNIX__) && !defined(SO_NOSIGPIPE)
+        #error "Writing to socket could generate unhandled SIGPIPE."
+        #error "Please post information about your system to wx-dev."
+    #endif
+
+    #define wxSOCKET_MSG_NOSIGNAL 0
+#endif
+
 // DLL options compatibility check:
 #include "wx/build.h"
 WX_CHECK_BUILD_OPTIONS("wxNet")
@@ -531,6 +553,136 @@ GAddress *wxSocketImpl::GetPeer()
     return GAddress_copy(m_peer);
 
   return NULL;
+}
+
+// ----------------------------------------------------------------------------
+// wxSocketImpl IO
+// ----------------------------------------------------------------------------
+
+// this macro wraps the given expression (normally a syscall) in a loop which
+// ignores any interruptions, i.e. reevaluates it again if it failed and errno
+// is EINTR
+#ifdef __UNIX__
+    #define DO_WHILE_EINTR( rc, syscall ) \
+        do { \
+            rc = (syscall); \
+        } \
+        while ( rc == -1 && errno == EINTR )
+#else
+    #define DO_WHILE_EINTR( rc, syscall ) rc = (syscall)
+#endif
+
+int wxSocketImpl::RecvStream(void *buffer, int size)
+{
+    int ret;
+    DO_WHILE_EINTR( ret, recv(m_fd, static_cast<char *>(buffer), size, 0) );
+
+    if ( !ret )
+    {
+        // receiving 0 bytes for a TCP socket indicates that the connection was
+        // closed by peer so shut down our end as well (for UDP sockets empty
+        // datagrams are also possible)
+        m_establishing = false;
+        NotifyOnStateChange(wxSOCKET_LOST);
+
+        Shutdown();
+
+        // do not return an error in this case however
+    }
+
+    return ret;
+}
+
+int wxSocketImpl::SendStream(const void *buffer, int size)
+{
+    int ret;
+    DO_WHILE_EINTR( ret, send(m_fd, static_cast<const char *>(buffer), size,
+                              wxSOCKET_MSG_NOSIGNAL) );
+
+    return ret;
+}
+
+int wxSocketImpl::RecvDgram(void *buffer, int size)
+{
+    wxSockAddr from;
+    WX_SOCKLEN_T fromlen = sizeof(from);
+
+    int ret;
+    DO_WHILE_EINTR( ret, recvfrom(m_fd, static_cast<char *>(buffer), size,
+                                  0, &from, &fromlen) );
+
+    if ( ret == SOCKET_ERROR )
+        return SOCKET_ERROR;
+
+    /* Translate a system address into a wxSocketImpl address */
+    if ( !m_peer )
+        m_peer = GAddress_new();
+
+    m_error = _GAddress_translate_from(m_peer, &from, fromlen);
+    if ( m_error != wxSOCKET_NOERROR )
+    {
+        GAddress_destroy(m_peer);
+        m_peer  = NULL;
+        return -1;
+    }
+
+    return ret;
+}
+
+int wxSocketImpl::SendDgram(const void *buffer, int size)
+{
+    if ( !m_peer )
+    {
+        m_error = wxSOCKET_INVADDR;
+        return -1;
+    }
+
+    struct sockaddr *addr;
+    int len;
+    m_error = _GAddress_translate_to(m_peer, &addr, &len);
+    if ( m_error != wxSOCKET_NOERROR )
+        return -1;
+
+    int ret;
+    DO_WHILE_EINTR( ret, sendto(m_fd, static_cast<const char *>(buffer), size,
+                                0, addr, len) );
+
+    free(addr);
+
+    return ret;
+}
+
+int wxSocketImpl::Read(void *buffer, int size)
+{
+    // server sockets can't be used for IO, only to accept new connections
+    if ( m_fd == INVALID_SOCKET || m_server )
+    {
+        m_error = wxSOCKET_INVSOCK;
+        return -1;
+    }
+
+    int ret = m_stream ? RecvStream(buffer, size)
+                       : RecvDgram(buffer, size);
+
+    m_error = ret == SOCKET_ERROR ? GetLastError() : wxSOCKET_NOERROR;
+
+    return ret;
+}
+
+int wxSocketImpl::Write(const void *buffer, int size)
+{
+    if ( m_fd == INVALID_SOCKET || m_server )
+    {
+        m_error = wxSOCKET_INVSOCK;
+        return -1;
+    }
+
+    int ret = m_stream ? SendStream(buffer, size)
+                       : SendDgram(buffer, size);
+
+    m_error = ret == SOCKET_ERROR ? GetLastError() : wxSOCKET_NOERROR;
+
+    return ret;
 }
 
 // ==========================================================================
