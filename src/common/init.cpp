@@ -249,6 +249,37 @@ static bool DoCommonPostInit()
         return false;
     }
 
+#if defined(__WXDEBUG__)
+    // check if event classes implement Clone() correctly
+    // NOTE: the check is done against _all_ event classes which are linked to
+    //       the executable currently running, which are not necessarily all
+    //       wxWidgets event classes.
+    const wxClassInfo *ci = wxClassInfo::GetFirst();
+    while (ci)
+    {
+        // is this class derived from wxEvent?
+        if (ci->IsKindOf(CLASSINFO(wxEvent)) && wxString(ci->GetClassName()) != "wxEvent")
+        {
+            if (!ci->IsDynamic())
+                wxLogWarning("The event class '%s' should have a DECLARE_DYNAMIC_CLASS macro!",
+                             ci->GetClassName());
+
+            // yes; test if it implements Clone() correctly
+            wxEvent* test = dynamic_cast<wxEvent*>(ci->CreateObject());
+            wxASSERT_MSG(test, "The event class should have a DECLARE_DYNAMIC_CLASS macro!");
+
+            wxEvent* cloned = test->Clone();
+            if (!cloned || cloned->GetClassInfo() != ci)
+                wxLogWarning("The event class '%s' does not correctly implements wxEvent::Clone()!",
+                             ci->GetClassName());
+
+            delete test;
+        }
+
+        ci = ci->GetNext();
+    }
+#endif
+
     return true;
 }
 
