@@ -250,7 +250,11 @@ public:
     // it was indeed created
     void Close();
 
-    virtual void Shutdown();
+    // shuts down the writing end of the socket and closes it, this is a more
+    // graceful way to close
+    //
+    // does nothing if the socket wasn't created
+    void Shutdown();
 
 
     // IO operations

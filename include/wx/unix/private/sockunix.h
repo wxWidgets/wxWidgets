@@ -31,8 +31,6 @@ public:
 
     virtual wxSocketError GetLastError() const;
 
-    virtual void Shutdown();
-
     virtual int Read(void *buffer, int size);
     virtual int Write(const void *buffer, int size);
 

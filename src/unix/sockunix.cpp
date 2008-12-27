@@ -174,6 +174,10 @@ int _System soclose(int);
 #  define GSOCKET_MSG_NOSIGNAL 0
 #endif /* MSG_NOSIGNAL */
 
+// ----------------------------------------------------------------------------
+// implementation of thread-safe/reentrant functions if they're missing
+// ----------------------------------------------------------------------------
+
 #if wxUSE_THREADS && (defined(HAVE_GETHOSTBYNAME) || defined(HAVE_GETSERVBYNAME))
 #  include "wx/thread.h"
 #endif
@@ -424,24 +428,16 @@ struct servent *wxGetservbyname_r(const char *port, const char *protocol,
   return se;
 }
 
+// ============================================================================
+// wxSocketImpl implementation
+// ============================================================================
+
 /* static */
 wxSocketImpl *wxSocketImpl::Create(wxSocketBase& wxsocket)
 {
     return new wxSocketImplUnix(wxsocket);
 }
 
-
-/*
- *  Disallow further read/write operations on this socket, close
- *  the fd and disable all callbacks.
- */
-void wxSocketImplUnix::Shutdown()
-{
-    /* Don't allow events to fire after socket has been closed */
-    DisableEvents();
-
-    wxSocketImpl::Shutdown();
-}
 
 wxSocketError wxSocketImplUnix::GetLastError() const
 {
