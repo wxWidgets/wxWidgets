@@ -7,9 +7,26 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    The different ellipsization modes supported by wxStaticText and by
+    wxStaticText::Ellipsize function.
+
+    @note
+    The members of this enum are used both as window styles for wxStaticText
+    and both as enumeration values for wxStaticText::Ellipsize static function.
+*/
+enum wxEllipsizeMode
+{
+    wxST_ELLIPSIZE_START = 0x0004,
+    wxST_ELLIPSIZE_MIDDLE = 0x0008,
+    wxST_ELLIPSIZE_END = 0x0010
+};
+
+/**
     @class wxStaticText
 
     A static text control displays one or more lines of read-only text.
+    wxStaticText supports the three classic text alignments, label ellipsization
+    and formatting markup.
 
     @beginStyleTable
     @style{wxALIGN_LEFT}
@@ -26,15 +43,16 @@
            CENTER style because otherwise they won't make sense any longer
            after a call to SetLabel)
     @style{wxST_ELLIPSIZE_START}
-           If the text width exceeds the control width, replace the beginning
-           of the text with an ellipsis
+           If the labeltext width exceeds the control width, replace the beginning
+           of the label with an ellipsis
     @style{wxST_ELLIPSIZE_MIDDLE}
-           Same as above, but replace the text in the middle of the control
-           with an ellipsis
+           If the label text width exceeds the control width, replace the middle
+           of the label with an ellipsis
     @style{wxST_ELLIPSIZE_END}
-           Same as above, but replace the end of the text with an ellipsis
+           If the label text width exceeds the control width, replace the end
+           of the label with an ellipsis
     @style{wxST_MARKUP}
-           Support markup in the label; see SetLabel for more information
+           Support markup in the label; see SetLabel() for more information
     @endStyleTable
 
     @library{wxcore}
@@ -87,6 +105,30 @@ public:
                 const wxString& name = wxStaticTextNameStr);
 
     /**
+        Escapes all the symbols of @a str that have a special meaning (<tt><>"'&</tt>) for
+        wxStaticText objects with the @c wxST_MARKUP style.
+        Those symbols are replaced the corresponding entities (&lt; &gt; &quot; &apos; &amp;).
+    */
+    static wxString EscapeMarkup(const wxString& str);
+
+    /**
+        Replaces parts of the @a label string with ellipsis, if needed, so
+        that it doesn't exceed @a maxWidth.
+
+        @param label
+            The string to ellipsize
+        @param dc
+            The DC used to retrieve the character widths through the
+            wxDC::GetPartialTextExtents() function.
+        @param mode
+            The ellipsization modes. See ::wxEllipsizeMode.
+        @param maxWidth
+            The maximum width of the returned string in pixels.
+    */
+    static wxString Ellipsize(const wxString& label, const wxDC& dc,
+                              wxEllipsizeMode mode, int maxWidth);
+
+    /**
         Returns the contents of the control.
 
         Note that the returned string contains both the mnemonics (@& characters),
@@ -106,6 +148,20 @@ public:
         mnemonics characters (if any) and without the markup.
     */
     static wxString GetLabelText(const wxString& label);
+
+    /**
+        Returns @true if the window styles for this control contains one of the
+        @c wxST_ELLIPSIZE_START, @c wxST_ELLIPSIZE_MIDDLE or @c wxST_ELLIPSIZE_END styles.
+    */
+    bool IsEllipsized() const;
+
+    /**
+        Removes the markup accepted by wxStaticText when the @c wxST_MARKUP style is used,
+        and then returns the cleaned string.
+
+        See SetLabel() for more info about the markup.
+    */
+    static wxString RemoveMarkup(const wxString& str);
 
     /**
         Sets the static text label and updates the controls size to exactly fit the

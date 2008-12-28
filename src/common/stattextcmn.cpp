@@ -269,63 +269,12 @@ wxString wxStaticTextBase::EscapeMarkup(const wxString& text)
     return ret;
 }
 
-
-
-// ----------------------------------------------------------------------------
-// wxStaticTextBase - generic implementation for wxST_ELLIPSIZE_* support
-// ----------------------------------------------------------------------------
-
-void wxStaticTextBase::UpdateLabel()
-{
-    if (!IsEllipsized())
-        return;
-
-    wxString newlabel = GetEllipsizedLabelWithoutMarkup();
-
-    // we need to touch the "real" label (i.e. the text set inside the control,
-    // using port-specific functions) instead of the string returned by GetLabel().
-    //
-    // In fact, we must be careful not to touch the original label passed to 
-    // SetLabel() otherwise GetLabel() will behave in a strange way to the user
-    // (e.g. returning a "Ver...ing" instead of "Very long string") !
-    if (newlabel == DoGetLabel())
-        return;
-    DoSetLabel(newlabel);
-}
-
-wxString wxStaticTextBase::GetEllipsizedLabelWithoutMarkup() const
-{
-    // this function should be used only by ports which do not support
-    // ellipsis in static texts: we first remove markup (which cannot
-    // be handled safely by Ellipsize()) and then ellipsize the result.
-
-    wxString ret(m_labelOrig);
-
-    // the order of the following two blocks is important!
-
-    if (HasFlag(wxST_MARKUP))
-        ret = RemoveMarkup(ret);
-
-    if (IsEllipsized())
-        ret = Ellipsize(ret);
-
-    return ret;
-}
-
 #define wxELLIPSE_REPLACEMENT       wxT("...")
 
-wxString wxStaticTextBase::Ellipsize(const wxString& label) const
+/* static */
+wxString wxStaticTextBase::Ellipsize(const wxString& label, const wxDC& dc,
+                                     wxEllipsizeMode mode, int maxFinalWidth)
 {
-    wxSize sz(GetSize());
-    if (sz.GetWidth() < 2 || sz.GetHeight() < 2)
-    {
-        // the size of this window is not valid (yet)
-        return label;
-    }
-
-    wxClientDC dc(const_cast<wxStaticTextBase*>(this));
-    dc.SetFont(GetFont());
-
     wxArrayInt charOffsets;
     wxString ret;
 
@@ -333,7 +282,7 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
     int replacementWidth = dc.GetTextExtent(wxELLIPSE_REPLACEMENT).GetWidth();
     int marginWidth = dc.GetCharWidth()*2;
 
-    // handle correctly labels with newlines
+    // NB: we must handle correctly labels with newlines:
     wxString curLine;
     wxSize reqsize;
     size_t len;
@@ -348,17 +297,17 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
                 wxASSERT(charOffsets.GetCount() == len);
 
                 size_t totalWidth = charOffsets.Last();
-                if ( totalWidth > (size_t)sz.GetWidth() )
+                if ( totalWidth > (size_t)maxFinalWidth )
                 {
                     // we need to ellipsize this row
-                    int excessPixels = totalWidth - sz.GetWidth() + 
+                    int excessPixels = totalWidth - maxFinalWidth +
                                        replacementWidth +
                                        marginWidth;     // security margin (NEEDED!)
 
                     // remove characters in excess
                     size_t initialChar,     // index of first char to erase
                            nChars;          // how many chars do we need to erase?
-                    if (HasFlag(wxST_ELLIPSIZE_START))
+                    if (mode == wxST_ELLIPSIZE_START)
                     {
                         initialChar = 0;
                         for (nChars=0;
@@ -366,7 +315,7 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
                              nChars++)
                             ;
                     }
-                    else if (HasFlag(wxST_ELLIPSIZE_MIDDLE))
+                    else if (mode == wxST_ELLIPSIZE_MIDDLE)
                     {
                         // the start & end of the removed span of chars
                         initialChar = len/2;
@@ -410,13 +359,13 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
                     }
                     else
                     {
-                        wxASSERT(HasFlag(wxST_ELLIPSIZE_END));
+                        wxASSERT(mode == wxST_ELLIPSIZE_END);
                         wxASSERT(len > 0);
 
                         int maxWidth = totalWidth - excessPixels;
-                        for (initialChar=0; 
-                             initialChar < len && 
-                             charOffsets[initialChar] < maxWidth; 
+                        for (initialChar=0;
+                             initialChar < len &&
+                             charOffsets[initialChar] < maxWidth;
                              initialChar++)
                             ;
 
@@ -426,7 +375,7 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
                         }
                         else
                         {
-                            initialChar--;      // go back one character 
+                            initialChar--;      // go back one character
                             nChars = len - initialChar;
                         }
                     }
@@ -442,13 +391,13 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
                         curLine.erase(initialChar, nChars+1);
 
                         // if there is space for the replacement dots, add them
-                        if (sz.GetWidth() > replacementWidth)
+                        if (maxFinalWidth > replacementWidth)
                             curLine.insert(initialChar, wxELLIPSE_REPLACEMENT);
                     }
 
                     // if everything was ok, we should have shortened this line
-                    // enough to make it fit in sz.GetWidth():
-                    wxASSERT(dc.GetTextExtent(curLine).GetWidth() < sz.GetWidth());
+                    // enough to make it fit in sz.maxFinalWidth:
+                    wxASSERT(dc.GetTextExtent(curLine).GetWidth() < maxFinalWidth);
                 }
             }
 
@@ -485,7 +434,70 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
         }
     }
 
-    //return ret;
+    return ret;
+}
+
+
+
+// ----------------------------------------------------------------------------
+// wxStaticTextBase - generic implementation for wxST_ELLIPSIZE_* support
+// ----------------------------------------------------------------------------
+
+void wxStaticTextBase::UpdateLabel()
+{
+    if (!IsEllipsized())
+        return;
+
+    wxString newlabel = GetEllipsizedLabelWithoutMarkup();
+
+    // we need to touch the "real" label (i.e. the text set inside the control,
+    // using port-specific functions) instead of the string returned by GetLabel().
+    //
+    // In fact, we must be careful not to touch the original label passed to
+    // SetLabel() otherwise GetLabel() will behave in a strange way to the user
+    // (e.g. returning a "Ver...ing" instead of "Very long string") !
+    if (newlabel == DoGetLabel())
+        return;
+    DoSetLabel(newlabel);
+}
+
+wxString wxStaticTextBase::GetEllipsizedLabelWithoutMarkup() const
+{
+    // this function should be used only by ports which do not support
+    // ellipsis in static texts: we first remove markup (which cannot
+    // be handled safely by Ellipsize()) and then ellipsize the result.
+
+    wxString ret(m_labelOrig);
+
+    // the order of the following two blocks is important!
+
+    if (HasFlag(wxST_MARKUP))
+        ret = RemoveMarkup(ret);
+
+    if (IsEllipsized())
+        ret = Ellipsize(ret);
+
+    return ret;
+}
+
+wxString wxStaticTextBase::Ellipsize(const wxString& label) const
+{
+    wxSize sz(GetSize());
+    if (sz.GetWidth() < 2 || sz.GetHeight() < 2)
+    {
+        // the size of this window is not valid (yet)
+        return label;
+    }
+
+    wxClientDC dc(const_cast<wxStaticTextBase*>(this));
+    dc.SetFont(GetFont());
+
+    wxEllipsizeMode mode;
+    if (HasFlag(wxST_ELLIPSIZE_START)) mode = wxST_ELLIPSIZE_START;
+    else if (HasFlag(wxST_ELLIPSIZE_MIDDLE)) mode = wxST_ELLIPSIZE_MIDDLE;
+    else if (HasFlag(wxST_ELLIPSIZE_END)) mode = wxST_ELLIPSIZE_END;
+
+    return Ellipsize(label, dc, mode, sz.GetWidth());
 }
 
 #endif // wxUSE_STATTEXT

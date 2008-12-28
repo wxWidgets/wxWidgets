@@ -43,18 +43,23 @@ public:
     wxString GetLabelText() const;
 
     /**
-        Returns the given @a label string without mnemonics.
+        Returns the given @a label string without mnemonics ("&" characters).
     */
     static wxString GetLabelText(const wxString& label);
+
+    /**
+        Removes the mnemonics ("&" characters) from the given string.
+    */
+    static wxString RemoveMnemonics(const wxString& str);
 
     /**
         Sets the item's text.
 
         Any "&" characters in the @a label are special and indicate that the
-        following character is a mnemonic for this control and can be used to
+        following character is a @e mnemonic for this control and can be used to
         activate it from the keyboard (typically by using @e Alt key in
-        combination with it). To insert a literal ampersand character, you need
-        to double it, i.e. use "&&".
+        combination with it).
+        To insert a literal ampersand character, you need to double it, i.e. use "&&".
     */
     void SetLabel(const wxString& label);
 };
