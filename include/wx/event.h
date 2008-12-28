@@ -3080,9 +3080,9 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 // list containing event handlers with pending events for them
 //
 // notice that each event handler should occur at most once in this list
-extern WXDLLIMPEXP_BASE wxList *wxPendingEvents;
+extern WXDLLIMPEXP_BASE wxList *wxHandlersWithPendingEvents;
 #if wxUSE_THREADS
-    extern WXDLLIMPEXP_BASE wxCriticalSection *wxPendingEventsLocker;
+    extern WXDLLIMPEXP_BASE wxCriticalSection *wxHandlersWithPendingEventsLocker;
 #endif
 
 // ----------------------------------------------------------------------------

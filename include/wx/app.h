@@ -244,8 +244,8 @@ public:
     // (already) be dispatched
     static bool IsMainLoopRunning();
 
-    // process all events in the wxPendingEvents list -- it is necessary to
-    // call this function to process posted events. This happens during each
+    // process all events in the wxHandlersWithPendingEvents list -- it is necessary
+    // to call this function to process posted events. This happens during each
     // event loop iteration in GUI mode but if there is no main loop, it may be
     // also called directly.
     virtual void ProcessPendingEvents();

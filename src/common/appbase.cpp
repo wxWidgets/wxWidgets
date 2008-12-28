@@ -163,7 +163,7 @@ bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **argv)
 #endif // wxUSE_INTL
 
 #if wxUSE_THREADS
-    wxPendingEventsLocker = new wxCriticalSection;
+    wxHandlersWithPendingEventsLocker = new wxCriticalSection;
 #endif
 
 #ifndef __WXPALMOS__
@@ -190,12 +190,12 @@ void wxAppConsoleBase::CleanUp()
         m_mainLoop = NULL;
     }
 
-    delete wxPendingEvents;
-    wxPendingEvents = NULL;
+    delete wxHandlersWithPendingEvents;
+    wxHandlersWithPendingEvents = NULL;
 
 #if wxUSE_THREADS
-    delete wxPendingEventsLocker;
-    wxPendingEventsLocker = NULL;
+    delete wxHandlersWithPendingEventsLocker;
+    wxHandlersWithPendingEventsLocker = NULL;
 #endif // wxUSE_THREADS
 }
 
@@ -327,11 +327,11 @@ bool wxAppConsoleBase::Dispatch()
 
 bool wxAppConsoleBase::HasPendingEvents() const
 {
-    wxENTER_CRIT_SECT( *wxPendingEventsLocker );
+    wxENTER_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
 
-    bool has = wxPendingEvents && !wxPendingEvents->IsEmpty();
+    bool has = wxHandlersWithPendingEvents && !wxHandlersWithPendingEvents->IsEmpty();
 
-    wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+    wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
 
     return has;
 }
@@ -347,34 +347,34 @@ bool wxAppConsoleBase::IsMainLoopRunning()
 void wxAppConsoleBase::ProcessPendingEvents()
 {
 #if wxUSE_THREADS
-    if ( !wxPendingEventsLocker )
+    if ( !wxHandlersWithPendingEventsLocker )
         return;
 #endif
 
-    wxENTER_CRIT_SECT( *wxPendingEventsLocker );
+    wxENTER_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
 
-    if (wxPendingEvents)
+    if (wxHandlersWithPendingEvents)
     {
         // iterate until the list becomes empty: the handlers remove themselves
         // from it when they don't have any more pending events
-        wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
+        wxList::compatibility_iterator node = wxHandlersWithPendingEvents->GetFirst();
         while (node)
         {
             // In ProcessPendingEvents(), new handlers might be add
             // and we can safely leave the critical section here.
-            wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+            wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
 
             wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
             handler->ProcessPendingEvents();
 
-            wxENTER_CRIT_SECT( *wxPendingEventsLocker );
+            wxENTER_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
 
             // restart as the iterators could have been invalidated
-            node = wxPendingEvents->GetFirst();
+            node = wxHandlersWithPendingEvents->GetFirst();
         }
     }
 
-    wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+    wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
 }
 
 void wxAppConsoleBase::WakeUpIdle()

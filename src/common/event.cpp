@@ -145,11 +145,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule)
 
 // List containing event handlers with pending events (each handler can occur
 // at most once here)
-wxList *wxPendingEvents = NULL;
+wxList *wxHandlersWithPendingEvents = NULL;
 
 #if wxUSE_THREADS
-    // protects wxPendingEvents list
-    wxCriticalSection *wxPendingEventsLocker = NULL;
+    // protects wxHandlersWithPendingEvents list
+    wxCriticalSection *wxHandlersWithPendingEventsLocker = NULL;
 #endif
 
 // common event types are defined here, other event types are defined by the
@@ -1089,25 +1089,25 @@ wxEvtHandler::~wxEvtHandler()
         m_pendingEvents->DeleteContents(true);
     delete m_pendingEvents;
 
-    // Remove us from wxPendingEvents if necessary.
-    if ( wxPendingEvents )
+    // Remove us from wxHandlersWithPendingEvents if necessary.
+    if ( wxHandlersWithPendingEvents )
     {
 #if wxUSE_THREADS
-        if (wxPendingEventsLocker)
-            wxENTER_CRIT_SECT(*wxPendingEventsLocker);
+        if (wxHandlersWithPendingEventsLocker)
+            wxENTER_CRIT_SECT(*wxHandlersWithPendingEventsLocker);
 #endif
 
-        if ( wxPendingEvents->DeleteObject(this) )
+        if ( wxHandlersWithPendingEvents->DeleteObject(this) )
         {
             // check that we were present only once in the list
-            wxASSERT_MSG( !wxPendingEvents->Find(this),
-                          "Handler occurs twice in wxPendingEvents list" );
+            wxASSERT_MSG( !wxHandlersWithPendingEvents->Find(this),
+                          "Handler occurs twice in wxHandlersWithPendingEvents list" );
         }
         //else: we weren't in this list at all, it's ok
 
 #if wxUSE_THREADS
-        if (wxPendingEventsLocker)
-            wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
+        if (wxHandlersWithPendingEventsLocker)
+            wxLEAVE_CRIT_SECT(*wxHandlersWithPendingEventsLocker);
 #endif
     }
 
@@ -1146,19 +1146,19 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
     // 2) Add this event handler to list of event handlers that
     //    have pending events.
 
-    wxENTER_CRIT_SECT(*wxPendingEventsLocker);
+    wxENTER_CRIT_SECT(*wxHandlersWithPendingEventsLocker);
 
-    if ( !wxPendingEvents )
-        wxPendingEvents = new wxList;
-    if ( !wxPendingEvents->Find(this) )
-        wxPendingEvents->Append(this);
+    if ( !wxHandlersWithPendingEvents )
+        wxHandlersWithPendingEvents = new wxList;
+    if ( !wxHandlersWithPendingEvents->Find(this) )
+        wxHandlersWithPendingEvents->Append(this);
 
-    wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
+    wxLEAVE_CRIT_SECT(*wxHandlersWithPendingEventsLocker);
 
     // only release m_pendingEventsLock now because otherwise there is a race
     // condition as described in the ticket #9093: we could process the event
     // just added to m_pendingEvents in our ProcessPendingEvents() below before
-    // we had time to append this pointer to wxPendingEvents list; thus
+    // we had time to append this pointer to wxHandlersWithPendingEvents list; thus
     // breaking the invariant that a handler should be in the list iff it has
     // any pending events to process
     wxLEAVE_CRIT_SECT( m_pendingEventsLock );
@@ -1190,13 +1190,13 @@ void wxEvtHandler::ProcessPendingEvents()
     if ( m_pendingEvents->IsEmpty() )
     {
 #if wxUSE_THREADS
-        if (wxPendingEventsLocker)
-            wxENTER_CRIT_SECT(*wxPendingEventsLocker);
+        if (wxHandlersWithPendingEventsLocker)
+            wxENTER_CRIT_SECT(*wxHandlersWithPendingEventsLocker);
 #endif
-        wxPendingEvents->DeleteObject(this);
+        wxHandlersWithPendingEvents->DeleteObject(this);
 #if wxUSE_THREADS
-        if (wxPendingEventsLocker)
-            wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
+        if (wxHandlersWithPendingEventsLocker)
+            wxLEAVE_CRIT_SECT(*wxHandlersWithPendingEventsLocker);
 #endif
     }
 
