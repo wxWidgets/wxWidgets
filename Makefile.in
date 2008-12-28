@@ -2649,6 +2649,7 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/generic/prntdlgg.h \
 	wx/generic/statline.h \
 	wx/generic/statusbr.h \
+	wx/generic/tabg.h \
 	wx/motif/accel.h \
 	wx/motif/app.h \
 	wx/motif/bmpbuttn.h \
@@ -5033,7 +5034,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_generic_notebook.o \
 	monodll_prntdlgg.o \
 	monodll_generic_statline.o \
-	monodll_generic_statusbr.o
+	monodll_generic_statusbr.o \
+	monodll_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_clrpickerg.o \
@@ -6842,7 +6844,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_notebook.o \
 	monolib_prntdlgg.o \
 	monolib_generic_statline.o \
-	monolib_generic_statusbr.o
+	monolib_generic_statusbr.o \
+	monolib_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_clrpickerg.o \
@@ -8798,7 +8801,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_notebook.o \
 	coredll_prntdlgg.o \
 	coredll_generic_statline.o \
-	coredll_generic_statusbr.o
+	coredll_generic_statusbr.o \
+	coredll_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_clrpickerg.o \
@@ -10302,7 +10306,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_notebook.o \
 	corelib_prntdlgg.o \
 	corelib_generic_statline.o \
-	corelib_generic_statusbr.o
+	corelib_generic_statusbr.o \
+	corelib_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_clrpickerg.o \
@@ -14874,6 +14879,9 @@ monodll_generic_notebook.o: $(srcdir)/src/generic/notebook.cpp $(MONODLL_ODEP)
 
 monodll_generic_statline.o: $(srcdir)/src/generic/statline.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/statline.cpp
+
+monodll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
 
 monodll_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
@@ -19527,6 +19535,9 @@ monolib_generic_notebook.o: $(srcdir)/src/generic/notebook.cpp $(MONOLIB_ODEP)
 
 monolib_generic_statline.o: $(srcdir)/src/generic/statline.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/statline.cpp
+
+monolib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
 
 monolib_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
@@ -24841,6 +24852,9 @@ coredll_generic_notebook.o: $(srcdir)/src/generic/notebook.cpp $(COREDLL_ODEP)
 coredll_generic_statline.o: $(srcdir)/src/generic/statline.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/statline.cpp
 
+coredll_tabg.o: $(srcdir)/src/generic/tabg.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
+
 coredll_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
@@ -28323,6 +28337,9 @@ corelib_generic_notebook.o: $(srcdir)/src/generic/notebook.cpp $(CORELIB_ODEP)
 
 corelib_generic_statline.o: $(srcdir)/src/generic/statline.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/statline.cpp
+
+corelib_tabg.o: $(srcdir)/src/generic/tabg.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/tabg.cpp
 
 corelib_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp

@@ -1403,6 +1403,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/generic/statline.cpp
     src/generic/statusbr.cpp
+    src/generic/tabg.cpp
 </set>
 <set var="MOTIF_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -1420,6 +1421,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/prntdlgg.h
     wx/generic/statline.h
     wx/generic/statusbr.h
+    wx/generic/tabg.h
     wx/motif/accel.h
     wx/motif/app.h
     wx/motif/bmpbuttn.h

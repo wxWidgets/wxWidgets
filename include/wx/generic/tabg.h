@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        tabg.h
-// Purpose:     Generic tabbed dialogs
+// Purpose:     Generic tabbed dialogs; used by wxMotif's wxNotebook
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97

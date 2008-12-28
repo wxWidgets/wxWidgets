@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/generic/tabg.cpp
-// Purpose:     Generic tabbed dialogs
+// Purpose:     Generic tabbed dialogs; used by wxMotif's wxNotebook
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -16,8 +16,6 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_TAB_DIALOG
-
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/intl.h"
@@ -29,7 +27,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include "wx/tab.h"
+#include "wx/generic/tabg.h"
 #include "wx/listimpl.cpp"
 
 WX_DEFINE_LIST(wxTabLayerList)
@@ -1289,4 +1287,3 @@ void wxPanelTabView::ShowWindowForTab(int id)
   newWindow->Refresh();
 }
 
-#endif // wxUSE_TAB_DIALOG
