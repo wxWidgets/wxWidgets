@@ -1068,7 +1068,7 @@ public:
     - wxGridCellFloatEditor
     - wxGridCellNumberEditor
     - wxGridCellTextEditor
-    
+
     Please see wxGridEvent, wxGridSizeEvent, wxGridRangeSelectEvent, and
     wxGridEditorCreatedEvent for the documentation of all event types you can
     use with wxGrid.
@@ -1665,7 +1665,7 @@ public:
         See wxGridTableBase::CanGetValueAs() and the @ref overview_grid for
         more information.
     */
-    const wxString GetCellValue(const wxGridCellCoords& coords) const;
+    const wxString& GetCellValue(const wxGridCellCoords& coords) const;
 
     /**
         Returns a pointer to the current default grid cell editor.
@@ -2332,12 +2332,12 @@ public:
         This method takes an array containing the indices of the columns in
         their display order, i.e. uses the same convention as
         wxHeaderCtrl::SetColumnsOrder().
-     */
+    */
     void SetColumnsOrder(const wxArrayInt& order);
 
     /**
         Resets the position of the columns to the default.
-     */
+    */
     void ResetColPos();
 
     //@}
@@ -2345,7 +2345,7 @@ public:
 
     /**
         @name Cursor Movement
-     */
+    */
     //@{
 
     /**
@@ -3354,8 +3354,8 @@ public:
     @event{EVT_GRID_CELL_CHANGING(func)}
         The user is about to change the data in a cell. The new cell value as
         string is available from GetString() event object method. This event
-        can be vetoed if the change is not allowed. Processes a @c
-        wxEVT_GRID_CELL_CHANGING event type.
+        can be vetoed if the change is not allowed.
+        Processes a @c wxEVT_GRID_CELL_CHANGING event type.
     @event{EVT_GRID_CELL_CHANGED(func)}
         The user changed the data in a cell. The old cell value as string is
         available from GetString() event object method. Notice that vetoing
@@ -3406,7 +3406,6 @@ public:
         proceed in which case wxGrid::SetColPos() is used to reorder the
         columns display order without affecting the use of the column indices
         otherwise.
-
         This event macro corresponds to @c wxEVT_GRID_COL_MOVE event type.
     @event{EVT_GRID_COL_SORT(func)}
         This event is generated when a column is clicked by the user and its
@@ -3417,7 +3416,6 @@ public:
         (and not vetoed) the grid supposes that the table was indeed resorted
         and updates the column to indicate the new sort order and refreshes
         itself.
-
         This event macro corresponds to @c wxEVT_GRID_COL_SORT event type.
     @endEventTable
 

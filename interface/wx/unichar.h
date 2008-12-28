@@ -28,7 +28,7 @@ public:
     /**
         Default ctor.
     */
-    wxUniChar()
+    wxUniChar();
 
     //@{
     /**

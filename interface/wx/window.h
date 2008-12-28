@@ -1075,10 +1075,9 @@ public:
         (or toggle or ...) any items which should be disabled in the menu
         before showing it.
 
-        @param menu
-            The menu to show.
-        @param pos
-            The position at which to show the menu in client coordinates.
+        The parameter @a menu is the menu to show.
+        The parameter @a pos (or the parameters @a x and @a y) is the
+        position at which to show the menu in client coordinates.
 
         @return
              The selected menu item id or @c wxID_NONE if none selected or an

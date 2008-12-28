@@ -287,7 +287,6 @@ public:
     */
     void GetScrollPixelsPerUnit(int* xUnit, int* yUnit) const;
 
-    //@{
     /**
         Get the position at which the visible portion of the window starts.
 
@@ -296,20 +295,24 @@ public:
         @param y
             Receives the first visible y position in scroll units.
 
-        @remarks If either of the scrollbars is not at the home position, x
-                 and/or y will be greater than zero.  Combined with
-                 wxWindow::GetClientSize(), the application can use this
-                 function to efficiently redraw only the visible portion
-                 of the window.  The positions are in logical scroll
-                 units, not pixels, so to convert to pixels you will
-                 have to multiply by the number of pixels per scroll
-                 increment.
+        @remarks
+            If either of the scrollbars is not at the home position, @a x
+            and/or @a y will be greater than zero.
+            Combined with wxWindow::GetClientSize(), the application can use this
+            function to efficiently redraw only the visible portion of the window.
+            The positions are in logical scroll units, not pixels, so to convert
+            to pixels you will have to multiply by the number of pixels per scroll
+            increment.
 
         @see SetScrollbars(), Scroll()
     */
     void GetViewStart(int* x, int* y) const;
+
+    /**
+        This is a simple overload of GetViewStart(int*,int*); see that function
+        for more info.
+    */
     wxPoint GetViewStart() const;
-    //@}
 
     /**
         Gets the size in device units of the scrollable window area (as
@@ -352,7 +355,6 @@ public:
     */
     void PrepareDC(wxDC& dc);
 
-    //@{
     /**
         Scrolls a window so the view start is at the given point.
 
@@ -364,14 +366,17 @@ public:
         @remarks The positions are in scroll units, not pixels, so to convert to
                  pixels you will have to multiply by the number of
                  pixels per scroll increment. If either parameter is
-                 wxDefaultCoord (-1), that position will be ignored (no change
+                 ::wxDefaultCoord (-1), that position will be ignored (no change
                  in that direction).
 
         @see SetScrollbars(), GetScrollPixelsPerUnit()
     */
     void Scroll(int x, int y);
+
+    /**
+        This is an overload of Scroll(int,int); see that function for more info.
+    */
     void Scroll(const wxPoint& pt);
-    //@}
 
     /**
         Set the horizontal and vertical scrolling increment only. See the
