@@ -10,8 +10,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef __WXMAC_CLASSIC__
-    #error "wxEventLoop is not implemented for Classic build."
+#ifdef __WXOSX_COCOA__
+    #include "wx/osx/cocoa/evtloop.h"
 #else
     #include "wx/osx/carbon/evtloop.h"
 #endif

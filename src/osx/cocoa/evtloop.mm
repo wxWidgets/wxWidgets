@@ -92,3 +92,20 @@ bool wxGUIEventLoop::Dispatch()
 
     return true;
 }
+
+int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
+{
+    wxMacAutoreleasePool autoreleasepool;
+
+    NSEvent *event = [NSApp
+                nextEventMatchingMask:NSAnyEventMask
+                untilDate:[NSDate dateWithTimeIntervalSinceNow: timeout/1000]
+                inMode:NSDefaultRunLoopMode
+                dequeue: YES];
+    if ( !event )
+        return -1;
+
+    [NSApp sendEvent: event];
+
+    return true;
+}

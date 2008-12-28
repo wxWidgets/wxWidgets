@@ -2522,6 +2522,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
+    wx/osx/cocoa/evtloop.h
     wx/osx/cocoa/private.h
     $(OSX_CARBON_HDR) <!-- FIXME: these headers need moved somewhere shared... -->
     wx/generic/region.h

@@ -3070,6 +3070,7 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/uma.h \
 	wx/osx/window.h \
 	wx/osx/cocoa/chkconf.h \
+	wx/osx/cocoa/evtloop.h \
 	wx/osx/cocoa/private.h \
 	wx/osx/core/colour.h \
 	wx/osx/carbon/accel.h \
