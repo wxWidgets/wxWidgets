@@ -124,6 +124,8 @@ protected:
     #include "wx/msw/evtloop.h"
 #elif defined(__WXMAC__)
     #include "wx/osx/evtloop.h"
+#elif defined(__WXCOCOA__)
+    #include "wx/cocoa/evtloop.h"
 #elif defined(__WXDFB__)
     #include "wx/dfb/evtloop.h"
 #elif defined(__WXGTK20__)

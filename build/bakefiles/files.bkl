@@ -2682,6 +2682,7 @@ src/osx/iphone/window.mm
     wx/cocoa/dialog.h
     wx/cocoa/dirdlg.h
     wx/cocoa/drawer.h
+    wx/cocoa/evtloop.h
     wx/cocoa/filedlg.h
     wx/cocoa/font.h
     wx/cocoa/fontdlg.h
