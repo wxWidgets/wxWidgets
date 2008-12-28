@@ -272,12 +272,13 @@ public:
 
     wxWizardPage*   GetPage() const { return m_page; }
 
+    virtual wxEvent *Clone() const { return new wxWizardEvent(*this); }
+
 private:
     bool m_direction;
     wxWizardPage*    m_page;
 
-    DECLARE_DYNAMIC_CLASS(wxWizardEvent)
-    DECLARE_NO_COPY_CLASS(wxWizardEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWizardEvent)
 };
 
 // ----------------------------------------------------------------------------

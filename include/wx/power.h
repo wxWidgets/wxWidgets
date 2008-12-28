@@ -49,6 +49,9 @@ enum wxBatteryState
 class WXDLLIMPEXP_BASE wxPowerEvent : public wxEvent
 {
 public:
+    wxPowerEvent()            // just for use by wxRTTI
+        : m_veto(false) { }
+
     wxPowerEvent(wxEventType evtType) : wxEvent(wxID_NONE, evtType)
     {
         m_veto = false;
@@ -67,7 +70,7 @@ public:
 private:
     bool m_veto;
 
-    DECLARE_ABSTRACT_CLASS(wxPowerEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPowerEvent)
 };
 
 extern WXDLLIMPEXP_BASE const wxEventType wxEVT_POWER_SUSPENDING;

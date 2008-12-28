@@ -120,9 +120,9 @@ private:
 };
 #endif
 
-IMPLEMENT_CLASS( wxRichTextCtrl, wxControl )
+IMPLEMENT_DYNAMIC_CLASS( wxRichTextCtrl, wxControl )
 
-IMPLEMENT_CLASS( wxRichTextEvent, wxNotifyEvent )
+IMPLEMENT_DYNAMIC_CLASS( wxRichTextEvent, wxNotifyEvent )
 
 BEGIN_EVENT_TABLE( wxRichTextCtrl, wxControl )
     EVT_PAINT(wxRichTextCtrl::OnPaint)

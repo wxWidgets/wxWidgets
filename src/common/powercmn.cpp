@@ -39,7 +39,7 @@
     DEFINE_EVENT_TYPE(wxEVT_POWER_SUSPEND_CANCEL)
     DEFINE_EVENT_TYPE(wxEVT_POWER_RESUME)
 
-    IMPLEMENT_ABSTRACT_CLASS(wxPowerEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxPowerEvent, wxEvent)
 #endif
 
 // provide stubs for the systems not implementing these functions
