@@ -24,6 +24,13 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxControlNameStr[];
 
+enum wxEllipsizeMode
+{
+    wxELLIPSIZE_START,
+    wxELLIPSIZE_MIDDLE,
+    wxELLIPSIZE_END
+};
+
 // ----------------------------------------------------------------------------
 // wxControl is the base class for all controls
 // ----------------------------------------------------------------------------
@@ -66,6 +73,10 @@ public:
     }
 
     // static utilities:
+
+    // replaces parts of the string with ellipsis if needed
+    static wxString Ellipsize(const wxString& label, const wxDC& dc,
+                              wxEllipsizeMode mode, int maxWidth);
 
     // get the string without mnemonic characters ('&')
     static wxString GetLabelText(const wxString& label);

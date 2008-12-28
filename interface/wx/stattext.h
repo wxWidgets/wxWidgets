@@ -7,21 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    The different ellipsization modes supported by wxStaticText and by
-    wxStaticText::Ellipsize function.
-
-    @note
-    The members of this enum are used both as window styles for wxStaticText
-    and both as enumeration values for wxStaticText::Ellipsize static function.
-*/
-enum wxEllipsizeMode
-{
-    wxST_ELLIPSIZE_START = 0x0004,
-    wxST_ELLIPSIZE_MIDDLE = 0x0008,
-    wxST_ELLIPSIZE_END = 0x0010
-};
-
-/**
     @class wxStaticText
 
     A static text control displays one or more lines of read-only text.
@@ -30,29 +15,29 @@ enum wxEllipsizeMode
 
     @beginStyleTable
     @style{wxALIGN_LEFT}
-           Align the text to the left
+           Align the text to the left.
     @style{wxALIGN_RIGHT}
-           Align the text to the right
+           Align the text to the right.
     @style{wxALIGN_CENTRE}
-           Center the text (horizontally)
+           Center the text (horizontally).
     @style{wxST_NO_AUTORESIZE}
            By default, the control will adjust its size to exactly fit to the
            size of the text when  SetLabel is called. If this style flag is
            given, the control will not change its size (this style is
            especially useful with controls which also have wxALIGN_RIGHT or
            CENTER style because otherwise they won't make sense any longer
-           after a call to SetLabel)
+           after a call to SetLabel).
     @style{wxST_ELLIPSIZE_START}
            If the labeltext width exceeds the control width, replace the beginning
-           of the label with an ellipsis
+           of the label with an ellipsis; uses wxControl::Ellipsize.
     @style{wxST_ELLIPSIZE_MIDDLE}
            If the label text width exceeds the control width, replace the middle
-           of the label with an ellipsis
+           of the label with an ellipsis; uses wxControl::Ellipsize.
     @style{wxST_ELLIPSIZE_END}
            If the label text width exceeds the control width, replace the end
-           of the label with an ellipsis
+           of the label with an ellipsis; uses wxControl::Ellipsize.
     @style{wxST_MARKUP}
-           Support markup in the label; see SetLabel() for more information
+           Support markup in the label; see SetLabel() for more information.
     @endStyleTable
 
     @library{wxcore}
@@ -110,23 +95,6 @@ public:
         Those symbols are replaced the corresponding entities (&lt; &gt; &quot; &apos; &amp;).
     */
     static wxString EscapeMarkup(const wxString& str);
-
-    /**
-        Replaces parts of the @a label string with ellipsis, if needed, so
-        that it doesn't exceed @a maxWidth.
-
-        @param label
-            The string to ellipsize
-        @param dc
-            The DC used to retrieve the character widths through the
-            wxDC::GetPartialTextExtents() function.
-        @param mode
-            The ellipsization modes. See ::wxEllipsizeMode.
-        @param maxWidth
-            The maximum width of the returned string in pixels.
-    */
-    static wxString Ellipsize(const wxString& label, const wxDC& dc,
-                              wxEllipsizeMode mode, int maxWidth);
 
     /**
         Returns the contents of the control.

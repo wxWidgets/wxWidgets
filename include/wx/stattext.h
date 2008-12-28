@@ -23,15 +23,9 @@
  */
 #define wxST_NO_AUTORESIZE         0x0001
 #define wxST_MARKUP                0x0002
-
-// NOTE: the members of this enum are used both as window styles for wxStaticText
-//       and both as enumeration values for wxStaticText::Ellipsize static function
-enum wxEllipsizeMode
-{
-    wxST_ELLIPSIZE_START = 0x0004,
-    wxST_ELLIPSIZE_MIDDLE = 0x0008,
-    wxST_ELLIPSIZE_END = 0x0010
-};
+#define wxST_ELLIPSIZE_START       0x0004
+#define wxST_ELLIPSIZE_MIDDLE      0x0008
+#define wxST_ELLIPSIZE_END         0x0010
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxStaticTextNameStr[];
 
@@ -72,10 +66,6 @@ public:
     // escapes all special symbols (<>"'&) present in the given string
     // using the corresponding entities (&lt; &gt; &quot; &apos; &amp;)
     static wxString EscapeMarkup(const wxString& str);
-
-    // replaces parts of the string with ellipsis if needed
-    static wxString Ellipsize(const wxString& label, const wxDC& dc,
-                              wxEllipsizeMode mode, int maxWidth);
 
 protected:      // functions required for wxST_ELLIPSIZE_* support
 
