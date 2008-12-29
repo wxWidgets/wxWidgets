@@ -365,6 +365,9 @@ to run the tests, include CppUnit library here.
         <option name="SAMPLES_RPATH_FLAG"/>
         <option name="SAMPLES_RPATH_POSTLINK"/>
 
+        <!-- see configure.in; it's required by some samples on Mac OS X -->
+        <option name="HEADER_PAD_OPTION"/>
+
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>
         <set var="RUNTIME_LIBS">dynamic</set>
         <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->

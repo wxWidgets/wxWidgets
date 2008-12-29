@@ -3820,6 +3820,12 @@ done
 EOF
             chmod +x change-install-names
         fi
+
+        dnl the HEADER_PAD_OPTION is required by some wx samples to avoid the error:
+        dnl "install_name_tool: changing install names can't be redone for: the_exe_name
+        dnl (for architecture ppc) because larger updated load commands do not fit
+        dnl (the program must be relinked)"
+        HEADER_PAD_OPTION="-headerpad_max_install_names"
       ;;
 
       *-*-cygwin* | *-*-mingw32* )
@@ -7650,6 +7656,7 @@ AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(SAMPLES_RPATH_FLAG)
 AC_SUBST(SAMPLES_RPATH_POSTLINK)
+AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
 AC_SUBST(CPPUNIT_CFLAGS)
 AC_SUBST(CPPUNIT_LIBS)

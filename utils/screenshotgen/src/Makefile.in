@@ -42,6 +42,7 @@ CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
+HEADER_PAD_OPTION = @HEADER_PAD_OPTION@
 wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
@@ -182,7 +183,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 screenshotgen$(EXEEXT): $(SCREENSHOTGEN_OBJECTS) $(__screenshotgen___win32rc)
-	$(CXX) -o $@ $(SCREENSHOTGEN_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_AUI_p)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(SCREENSHOTGEN_OBJECTS)    -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(HEADER_PAD_OPTION) $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_AUI_p)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	
 	$(__screenshotgen___mac_setfilecmd)
 	$(__screenshotgen___os2_emxbindcmd)
