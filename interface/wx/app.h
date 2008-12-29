@@ -35,7 +35,7 @@
     @library{wxbase}
     @category{appmanagement}
 
-    @see @ref overview_app, wxApp, wxAppTraits, wxEventLoop
+    @see @ref overview_app, wxApp, wxAppTraits, wxEventLoopBase
 */
 class wxAppConsole : public wxEvtHandler
 {
@@ -517,12 +517,12 @@ public:
     video modes (see SetVideoMode()).
 
     In general, application-wide settings for GUI-only apps are accessible
-    from wxApp (or from wxSystemSettings).
+    from wxApp (or from wxSystemSettings or wxSystemOptions classes).
 
     @library{wxbase}
     @category{appmanagement}
 
-    @see @ref overview_app, wxAppTraits, wxEventLoop, wxSystemSettings
+    @see @ref overview_app, wxAppTraits, wxEventLoopBase, wxSystemSettings
 */
 class wxApp : public wxAppConsole
 {
