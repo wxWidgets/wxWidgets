@@ -82,7 +82,8 @@ public:
  */
 enum
 {
-    /// Use true color palette (on if no attributes at all specified).
+    /// Use true color (the default if no attributes at all are specified);
+    /// do not use a palette.
     WX_GL_RGBA = 1,
 
     /// Specifies the number of bits for buffer if not WX_GL_RGBA.
@@ -243,6 +244,16 @@ public:
         @return @true if attributes are supported.
     */
     static bool IsDisplaySupported(const int* attribList = NULL);
+
+    /**
+        Returns true if the extension with given name is supported
+
+        Notice that while this function is implemented for all of GLX, WGL and
+        AGL the extensions names are usually not the same for different
+        platforms and so the code using it still usually uses conditional
+        compilation.
+    */
+    static bool IsExtensionSupported(const char *extension);
 
     /**
         Sets the current colour for this window (using @c glcolor3f()), using
