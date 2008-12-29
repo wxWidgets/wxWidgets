@@ -232,6 +232,8 @@ Deprecated methods and their replacements
   respectively a wxBrushStyle and a wxPenStyle value instead of a plain "int style";
   use the new wxBrush/wxPen style names (wxBRUSHSTYLE_XXX and wxPENSTYLE_XXX) instead
   of the old deprecated wxXXX styles (which however are still available).
+- EVT_GRID_CELL_CHANGE was deprecated, use EVT_GRID_CELL_CHANGED instead if you
+  don't veto the event in its handler and EVT_GRID_CELL_CHANGING if you do.
 - EVT_CALENDAR_DAY event has been deprecated, use EVT_CALENDAR_SEL_CHANGED.
 - EVT_CALENDAR_MONTH and EVT_CALENDAR_YEAR events are deprecated,
   use EVT_CALENDAR_PAGE_CHANGED which replaces both of them.
@@ -426,6 +428,7 @@ All (GUI):
   marked for destruction but also if any of its parent windows are.
 - Improved drawing of the hint during column move in wxGrid (Santo Pfingsten).
 - Add wxGridSelectRowsOrColumns selection mode to wxGrid.
+- Add wxEVT_GRID_CELL_CHANGING event matching wxEVT_GRID_CELL_CHANGED.
 - Get/HasModifiers() of wxKeyEvent are now also available in wxMouseEvent.
 - Provide new/old cell value in wxEVT_GRID_CELL_CHANGING/CHANGED events.
 
