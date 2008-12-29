@@ -94,8 +94,17 @@ bool wxStaticText::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
 
-    if ( !MSWCreateControl(wxT("STATIC"), label, pos, size) )
+    if ( !MSWCreateControl(wxT("STATIC"), wxEmptyString, pos, size) )
         return false;
+
+    // we set the label here and not through MSWCreateControl() because we
+    // need to do many operation on it for ellipsization&markup support
+    SetLabel(label);
+
+    // NOTE: if the label contains ampersand characters which are interpreted as
+    //       accelerators, they will be rendered (at least on WinXP) only if the
+    //       static text is placed inside a window class which correctly handles
+    //       focusing by TAB traversal (e.g. wxPanel).
 
     return true;
 }
