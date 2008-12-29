@@ -53,6 +53,12 @@
         appearance but not all fonts are available in this quality,
         e.g. the Terminal font in small sizes is not and this option may be
         used if wider fonts selection is more important than higher quality.
+    @flag{wince.dialog.real-ok-cancel}
+        The PocketPC guidelines recommend for Ok/Cancel dialogs to use an OK button
+        located inside the caption bar and implement Cancel functionality through
+        Undo outside the dialog.
+        wxDialog::CreateButtonSizer will follow the native behaviour on WinCE but
+        it can be overridden with real wxButtons by setting the option below to 1.
     @endFlagTable
 
 
@@ -118,8 +124,7 @@
     @library{wxbase}
     @category{misc}
 
-    @see wxSystemOptions::SetOption, wxSystemOptions::GetOptionInt,
-    wxSystemOptions::HasOption
+    @see wxSystemSettings
 */
 class wxSystemOptions : public wxObject
 {
