@@ -177,6 +177,11 @@ public:
     static bool IsMainLoopRunning();
 
     /**
+        Returns @true if called from inside Yield().
+    */
+    bool IsYielding() const;
+
+    /**
         Process all pending events; it is necessary to call this function to
         process posted events.
 
@@ -466,6 +471,7 @@ public:
         user to perform actions which are not compatible with the current task.
         Disabling menu items or whole menus during processing can avoid unwanted
         reentrance of code: see ::wxSafeYield for a better function.
+        You can avoid unwanted reentrancies also using IsYielding().
 
         Note that Yield() will not flush the message logs. This is intentional as
         calling Yield() is usually done to quickly update the screen and popping up

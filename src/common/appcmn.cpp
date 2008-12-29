@@ -78,6 +78,8 @@ wxAppBase::wxAppBase()
 
     m_isActive = true;
 
+    m_isInsideYield = false;
+
     // We don't want to exit the app if the user code shows a dialog from its
     // OnInit() -- but this is what would happen if we set m_exitOnFrameDelete
     // to Yes initially as this dialog would be the last top level window.

@@ -777,9 +777,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     int i;
     for (i = 0; i < 2; i++)
     {
-        static bool s_inYield = false;
-
-        if ( s_inYield )
+        if ( m_isInsideYield )
         {
             if ( !onlyIfNeeded )
             {
@@ -789,11 +787,12 @@ bool wxApp::Yield(bool onlyIfNeeded)
             return false;
         }
 
-        s_inYield = true;
+        m_isInsideYield = true;
 
         // Make sure we have an event loop object,
         // or Pending/Dispatch will fail
-	wxEventLoopGuarantor dummyLoopIfNeeded;
+        wxEventLoopGuarantor dummyLoopIfNeeded;
+
         // Call dispatch at least once so that sockets
         // can be tested
         wxTheApp->Dispatch();
@@ -806,7 +805,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 #endif
         ProcessIdle();
 
-        s_inYield = false;
+        m_isInsideYield = false;
     }
 
     return true;

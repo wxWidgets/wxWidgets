@@ -509,9 +509,7 @@ void wxApp::OnQueryEndSession( wxCloseEvent& rEvent )
 //
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    static bool s_inYield = false;
-
-    if ( s_inYield )
+    if ( m_isInsideYield )
     {
         if ( !onlyIfNeeded )
         {
@@ -530,7 +528,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     //
     wxLog::Suspend();
 
-    s_inYield = true;
+    m_isInsideYield = true;
 
     //
     // We want to go back to the main message loop
@@ -545,6 +543,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         if (!wxTheApp->Dispatch())
             break;
     }
+
     //
     // If they are pending events, we must process them.
     //
@@ -552,11 +551,13 @@ bool wxApp::Yield(bool onlyIfNeeded)
         wxTheApp->ProcessPendingEvents();
 
     HandleSockets();
+
     //
     // Let the logs be flashed again
     //
     wxLog::Resume();
-    s_inYield = false;
+    m_isInsideYield = false;
+
     return true;
 } // end of wxYield
 

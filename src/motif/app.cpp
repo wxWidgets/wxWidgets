@@ -472,9 +472,7 @@ void wxApp::SetTopLevelRealizedWidget(WXDisplay* display, WXWidget widget)
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    static bool s_inYield = false;
-
-    if ( s_inYield )
+    if ( m_isInsideYield )
     {
         if ( !onlyIfNeeded )
         {
@@ -484,13 +482,13 @@ bool wxApp::Yield(bool onlyIfNeeded)
         return false;
     }
 
-    s_inYield = true;
+    m_isInsideYield = true;
 
     wxEventLoopGuarantor dummyLoopIfNeeded;
     while (wxTheApp && wxTheApp->Pending())
         wxTheApp->Dispatch();
 
-    s_inYield = false;
+    m_isInsideYield = false;
 
     return true;
 }

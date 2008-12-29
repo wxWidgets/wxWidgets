@@ -454,6 +454,10 @@ public:
         //          with _extreme_ care or, better, don't use at all!
     virtual bool Yield(bool onlyIfNeeded = false) = 0;
 
+        // returns true if the main thread is inside a Yield() call
+    bool IsYielding() const
+        { return m_isInsideYield; }
+
         // this virtual function is called in the GUI mode when the application
         // becomes idle and normally just sends wxIdleEvent to all interested
         // parties
@@ -576,6 +580,7 @@ protected:
     // does any of our windows have focus?
     bool m_isActive;
 
+    bool m_isInsideYield;
 
     DECLARE_NO_COPY_CLASS(wxAppBase)
 };

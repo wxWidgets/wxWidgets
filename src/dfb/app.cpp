@@ -171,9 +171,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         return true; // can't process events from other threads
 #endif // wxUSE_THREADS
 
-    static bool s_inYield = false;
-
-    if ( s_inYield )
+    if ( m_isInsideYield )
     {
         if ( !onlyIfNeeded )
         {
@@ -183,7 +181,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         return false;
     }
 
-    s_inYield = true;
+    m_isInsideYield = true;
 
 #if wxUSE_LOG
     wxLog::Suspend();
@@ -203,7 +201,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Resume();
 #endif // wxUSE_LOG
 
-    s_inYield = false;
+    m_isInsideYield = false;
 
     return true;
 }

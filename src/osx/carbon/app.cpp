@@ -184,7 +184,7 @@ short wxApp::MacHandleAEGURL(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
     if (err != noErr)
         return err;
 
-    url[actualSize] = '\0';    // Terminate the C string 
+    url[actualSize] = '\0';    // Terminate the C string
 
     ProcessSerialNumber PSN ;
     PSN.highLongOfPSN = 0 ;
@@ -357,9 +357,9 @@ void wxApp::MacReopenApp()
                 // make sure we don't show 'virtual toplevel windows' like wxTaskBarIconWindow
                 if ( firstHidden == NULL && ( wxDynamicCast( win, wxFrame ) || wxDynamicCast( win, wxDialog ) ) )
                    firstHidden = win ;
-            } 
+            }
             else if ( win->IsIconized() )
-            { 
+            {
                 if ( firstIconized == NULL )
                     firstIconized = win ;
             }
@@ -499,7 +499,7 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
 
         // is it part of the application or the Help menu, then look for the id directly
         if ( ( GetMenuHandle( kwxMacAppleMenuId ) != NULL && command.menu.menuRef == GetMenuHandle( kwxMacAppleMenuId ) ) ||
-             ( helpMenuHandle != NULL && command.menu.menuRef == helpMenuHandle ) || 
+             ( helpMenuHandle != NULL && command.menu.menuRef == helpMenuHandle ) ||
              wxMenuBar::MacGetWindowMenuHMenu() != NULL && command.menu.menuRef == wxMenuBar::MacGetWindowMenuHMenu() )
         {
             wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
@@ -576,7 +576,7 @@ wxMacAppMenuEventHandler( EventHandlerCallRef WXUNUSED(handler),
             case kEventMenuTargetItem:
                 {
                     HICommand command ;
-                    
+
                     command.menu.menuRef = menuRef;
                     command.menu.menuItemIndex = cEvent.GetParameter<MenuItemIndex>(kEventParamMenuItemIndex,typeMenuItemIndex) ;
                     command.commandID = cEvent.GetParameter<MenuCommand>(kEventParamMenuCommand,typeMenuCommand) ;
@@ -900,7 +900,7 @@ bool wxApp::DoInitGui()
 
     if ( !wxMacInitCocoa() )
         return false;
-        
+
     return true;
 }
 
@@ -1130,9 +1130,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 #endif // wxUSE_THREADS
 
-    static bool s_inYield = false;
-
-    if (s_inYield)
+    if (m_isInsideYield)
     {
         if ( !onlyIfNeeded )
         {
@@ -1142,7 +1140,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         return false;
     }
 
-    s_inYield = true;
+    m_isInsideYield = true;
 
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
@@ -1158,16 +1156,16 @@ bool wxApp::Yield(bool onlyIfNeeded)
         while ( loop->Pending() )
             loop->Dispatch();
     }
-    
+
     // it's necessary to call ProcessIdle() to update the frames sizes which
     // might have been changed (it also will update other things set from
     // OnUpdateUI() which is a nice (and desired) side effect)
     while ( ProcessIdle() ) {}
-    
+
 #if wxUSE_LOG
     wxLog::Resume();
 #endif // wxUSE_LOG
-    s_inYield = false;
+    m_isInsideYield = false;
 
     return true;
 }
@@ -1558,34 +1556,34 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
         {
             keyval = (keyval - '0') + WXK_NUMPAD0;
         }
-        else if (keycode >= 65 && keycode <= 81) 
+        else if (keycode >= 65 && keycode <= 81)
         {
             switch (keycode)
             {
                 case 76 :
                     keyval = WXK_NUMPAD_ENTER;
                     break;
-                    
+
                 case 81:
                     keyval = WXK_NUMPAD_EQUAL;
                     break;
-                    
+
                 case 67:
                     keyval = WXK_NUMPAD_MULTIPLY;
                     break;
-                    
+
                 case 75:
                     keyval = WXK_NUMPAD_DIVIDE;
                     break;
-                    
+
                 case 78:
                     keyval = WXK_NUMPAD_SUBTRACT;
                     break;
-                    
+
                 case 69:
                     keyval = WXK_NUMPAD_ADD;
                     break;
-                    
+
                 case 65:
                     keyval = WXK_NUMPAD_DECIMAL;
                     break;
@@ -1594,7 +1592,7 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
             }
         }
     }
-    
+
     event.m_shiftDown = modifiers & shiftKey;
     event.m_controlDown = modifiers & controlKey;
     event.m_altDown = modifiers & optionKey;
@@ -1621,7 +1619,7 @@ void wxApp::MacHideApp()
     HICommand command;
     memset( &command, 0 , sizeof(command) );
     command.commandID = kHICommandHide ;
-    event.SetParameter<HICommand>(kEventParamDirectObject, command );       
+    event.SetParameter<HICommand>(kEventParamDirectObject, command );
     SendEventToApplication( event );
 #endif
 }

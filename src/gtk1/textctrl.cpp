@@ -175,8 +175,6 @@ gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 // which implicitly calls wxYield()) so we override GtkText::draw() and simply
 // don't do anything if we're inside wxYield()
 
-extern bool wxIsInsideYield;
-
 extern "C" {
     typedef void (*GtkDrawCallback)(GtkWidget *widget, GdkRectangle *rect);
 }
@@ -186,7 +184,7 @@ static GtkDrawCallback gs_gtk_text_draw = NULL;
 extern "C" {
 static void wxgtk_text_draw( GtkWidget *widget, GdkRectangle *rect)
 {
-    if ( !wxIsInsideYield )
+    if ( !wxTheApp->IsYielding() )
     {
         wxCHECK_RET( gs_gtk_text_draw != wxgtk_text_draw,
                      _T("infinite recursion in wxgtk_text_draw aborted") );

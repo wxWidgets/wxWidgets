@@ -103,14 +103,9 @@ static wxMutex gs_idleTagsMutex;
 // wxYield
 //-----------------------------------------------------------------------------
 
-// not static because used by textctrl.cpp
-//
-// MT-FIXME
-bool wxIsInsideYield = false;
-
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    if ( wxIsInsideYield )
+    if ( m_isInsideYield )
     {
         if ( !onlyIfNeeded )
         {
@@ -128,7 +123,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 #endif // wxUSE_THREADS
 
-    wxIsInsideYield = true;
+    m_isInsideYield = true;
 
     // We need to remove idle callbacks or the loop will
     // never finish.
@@ -156,7 +151,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Resume();
 #endif
 
-    wxIsInsideYield = false;
+    m_isInsideYield = false;
 
     return true;
 }

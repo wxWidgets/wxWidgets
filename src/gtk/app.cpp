@@ -54,14 +54,9 @@ static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
 // wxYield
 //-----------------------------------------------------------------------------
 
-// not static because used by textctrl.cpp
-//
-// MT-FIXME
-bool wxIsInsideYield = false;
-
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    if ( wxIsInsideYield )
+    if ( m_isInsideYield )
     {
         if ( !onlyIfNeeded )
         {
@@ -79,7 +74,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 #endif // wxUSE_THREADS
 
-    wxIsInsideYield = true;
+    m_isInsideYield = true;
 
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
@@ -103,7 +98,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Resume();
 #endif
 
-    wxIsInsideYield = false;
+    m_isInsideYield = false;
 
     return true;
 }

@@ -1015,10 +1015,7 @@ int wxApp::GetShell32Version()
 
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    // MT-FIXME
-    static bool s_inYield = false;
-
-    if ( s_inYield )
+    if ( m_isInsideYield )
     {
         if ( !onlyIfNeeded )
         {
@@ -1029,8 +1026,8 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 
     // set the flag and don't forget to reset it before returning
-    s_inYield = true;
-    wxON_BLOCK_EXIT_SET(s_inYield, false);
+    m_isInsideYield = true;
+    wxON_BLOCK_EXIT_SET(m_isInsideYield, false);
 
 
 #if wxUSE_LOG

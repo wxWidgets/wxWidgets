@@ -297,16 +297,13 @@ void wxApp::Exit()
 // Yield to other processes
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    // MT-FIXME
-    static bool s_inYield = false;
-
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
     wxLog::Suspend();
 #endif // wxUSE_LOG
 
-    if (s_inYield)
+    if (m_isInsideYield)
     {
         if ( !onlyIfNeeded )
         {
@@ -316,7 +313,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         return false;
     }
 
-    s_inYield = true;
+    m_isInsideYield = true;
 
     // Run the event loop until it is out of events
     while(1)
@@ -358,7 +355,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Resume();
 #endif // wxUSE_LOG
 
-    s_inYield = false;
+    m_isInsideYield = false;
 
     return true;
 }

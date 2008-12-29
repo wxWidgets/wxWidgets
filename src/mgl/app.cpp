@@ -48,11 +48,9 @@ void wxApp::Exit()
 // wxYield
 //-----------------------------------------------------------------------------
 
-static bool gs_inYield = false;
-
 bool wxApp::Yield(bool onlyIfNeeded)
 {
-    if ( gs_inYield )
+    if ( m_isInsideYield )
     {
         if ( !onlyIfNeeded )
         {
@@ -70,7 +68,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 #endif // wxUSE_THREADS
 
-    gs_inYield = true;
+    m_isInsideYield = true;
 
     wxLog::Suspend();
 
@@ -88,7 +86,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     wxLog::Resume();
 
-    gs_inYield = false;
+    m_isInsideYield = false;
 
     return true;
 }
