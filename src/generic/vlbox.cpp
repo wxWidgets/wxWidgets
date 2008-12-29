@@ -261,15 +261,19 @@ bool wxVListBox::DoSetCurrent(int current)
     return true;
 }
 
+void wxVListBox::InitEvent(wxCommandEvent& event, int n)
+{
+    event.SetEventObject(this);
+    event.SetInt(n);
+}
+
 void wxVListBox::SendSelectedEvent()
 {
     wxASSERT_MSG( m_current != wxNOT_FOUND,
                     _T("SendSelectedEvent() shouldn't be called") );
 
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, GetId());
-    event.SetEventObject(this);
-    event.SetInt(m_current);
-
+    InitEvent(event, m_current);
     (void)GetEventHandler()->ProcessEvent(event);
 }
 
@@ -708,9 +712,7 @@ void wxVListBox::OnLeftDClick(wxMouseEvent& eventMouse)
         if ( item == m_current )
         {
             wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, GetId());
-            event.SetEventObject(this);
-            event.SetInt(item);
-
+            InitEvent(event, item);
             (void)GetEventHandler()->ProcessEvent(event);
         }
         else

@@ -302,6 +302,14 @@ protected:
     virtual wxString OnGetItem(size_t n) const
         { return m_items[n]; }
 
+    virtual void InitEvent(wxCommandEvent& event, int n)
+        {
+            // we're not a virtual control and we can include the string
+            // of the item which was clicked:
+            event.SetString(m_items[n]);
+            wxVListBox::InitEvent(event, n);
+        }
+
     wxArrayString   m_items;
     wxArrayPtrVoid  m_HTMLclientData;
 

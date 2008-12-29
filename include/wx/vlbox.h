@@ -249,6 +249,7 @@ protected:
 
     // send the wxEVT_COMMAND_LISTBOX_SELECTED event
     void SendSelectedEvent();
+    virtual void InitEvent(wxCommandEvent& event, int n);
 
     // common implementation of SelectAll() and DeselectAll()
     bool DoSelectAll(bool select);
