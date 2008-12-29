@@ -157,7 +157,7 @@ Constructors.
 
 \membersection{wxRichTextAttr::Apply}\label{wxrichtextattrapply}
 
-\func{bool}{Combine}{\param{const wxRichTextAttrEx\& }{style}, \param{const wxRichTextAttrEx* }{compareWith = NULL}}
+\func{bool}{Apply}{\param{const wxRichTextAttr\& }{style}, \param{const wxRichTextAttr* }{compareWith = NULL}}
 
 Applies the attributes in {\it style} to the original object, but not those attributes from {\it style} that are the same as those in {\it compareWith} (if passed).
 
@@ -165,7 +165,7 @@ See also \helpref{wxRichTextAttr::Combine}{wxrichtextattrcombine} for a function
 
 \membersection{wxRichTextAttr::Combine}\label{wxrichtextattrcombine}
 
-\constfunc{wxRichTextAttr}{Combine}{\param{const wxRichTextAttrEx\& }{style}, \param{const wxRichTextAttrEx* }{compareWith = NULL}}
+\constfunc{wxRichTextAttr}{Combine}{\param{const wxRichTextAttr\& }{style}, \param{const wxRichTextAttr* }{compareWith = NULL}}
 
 Combines 'this' with {\it style}, but not applying attributes from {\it style} that are the same as those in {\it compareWith} (if passed).
 A wxRichTextAttr object is returned and the original object is not changed.
