@@ -74,7 +74,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 // ============================================================================
 
 // TODO: use POSIX getaddrinfo() (also available in Winsock 2) for simplicity
-//       and IPv6 support
+//       and to use the same code for IPv4 and IPv6 support
 
 #ifdef __WXMSW__
     #define HAVE_INET_ADDR
@@ -85,6 +85,23 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
     // under MSW getxxxbyname() functions are MT-safe (but not reentrant) so
     // we don't need to serialize calls to them
     #define wxHAS_MT_SAFE_GETBY_FUNCS
+
+    #if wxUSE_IPV6
+        // this header does dynamic dispatching of getaddrinfo/freeaddrinfo()
+        // by implementing them in its own code if the system versions are not
+        // available (as is the case for anything < XP)
+        //
+        // NB: if this is not available for the other compilers (so far tested
+        //      with MSVC only) we should just use wxDynamicLibrary "manually"
+        #ifdef __VISUALC__
+            // disable a warning occurring in Microsoft own version of this file
+            #pragma warning(disable:4706)
+        #endif
+        #include <wspiapi.h>
+        #ifdef __VISUALC__
+            #pragma warning(default:4706)
+        #endif
+    #endif
 #endif // __WXMSW__
 
 // we assume that we have gethostbyaddr_r() if and only if we have

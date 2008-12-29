@@ -13,6 +13,10 @@
 
 #ifdef __WXMSW__
     #include "wx/msw/wrapwin.h"
+
+    #if wxUSE_IPV6
+        #include <ws2tcpip.h>
+    #endif
 #elif defined(__VMS__)
     #include <socket.h>
 
