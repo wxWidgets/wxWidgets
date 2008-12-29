@@ -106,10 +106,6 @@
 
 #if wxUSE_BASE
 
-// ----------------------------------------------------------------------------
-// common data
-// ----------------------------------------------------------------------------
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -125,7 +121,7 @@ int wxHexToDec(const wxString& buf)
     if (buf.GetChar(0) >= wxT('A'))
         firstDigit = buf.GetChar(0) - wxT('A') + 10;
     else
-       firstDigit = buf.GetChar(0) - wxT('0');
+        firstDigit = buf.GetChar(0) - wxT('0');
 
     if (buf.GetChar(1) >= wxT('A'))
         secondDigit = buf.GetChar(1) - wxT('A') + 10;
@@ -165,6 +161,16 @@ wxString wxDecToHex(int dec)
 // ----------------------------------------------------------------------------
 // misc functions
 // ----------------------------------------------------------------------------
+
+// Don't synthesize KeyUp events holding down a key and producing KeyDown
+// events with autorepeat. On by default and always on in wxMSW. wxGTK version
+// in utilsgtk.cpp.
+#ifndef __WXGTK__
+bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
+{
+    return true;    // detectable auto-repeat is the only mode MSW supports
+}
+#endif // !wxGTK
 
 // Return the current date/time
 wxString wxNow()
@@ -223,6 +229,10 @@ bool wxIsPlatformLittleEndian()
     return u.c[0] == 1;
 }
 
+
+// ----------------------------------------------------------------------------
+// wxPlatform
+// ----------------------------------------------------------------------------
 
 /*
  * Class to make it easier to specify platform-dependent values
@@ -644,18 +654,8 @@ long wxExecute(const wxString& command,
 }
 
 // ----------------------------------------------------------------------------
-// wxApp::Yield() wrappers for backwards compatibility
+// Id functions
 // ----------------------------------------------------------------------------
-
-bool wxYield()
-{
-    return wxTheApp && wxTheApp->Yield();
-}
-
-bool wxYieldIfNeeded()
-{
-    return wxTheApp && wxTheApp->Yield(true);
-}
 
 // Id generation
 static long wxCurrentId = 100;
@@ -710,16 +710,16 @@ Thanks,
 
 /* Byte-wise swap two items of size SIZE. */
 #define SWAP(a, b, size)                                                      \
-  do                                                                              \
-    {                                                                              \
-      register size_t __size = (size);                                              \
-      register char *__a = (a), *__b = (b);                                      \
+  do                                                                          \
+    {                                                                         \
+      register size_t __size = (size);                                        \
+      register char *__a = (a), *__b = (b);                                   \
       do                                                                      \
-        {                                                                      \
-          char __tmp = *__a;                                                      \
+        {                                                                     \
+          char __tmp = *__a;                                                  \
           *__a++ = *__b;                                                      \
-          *__b++ = __tmp;                                                      \
-        } while (--__size > 0);                                                      \
+          *__b++ = __tmp;                                                     \
+        } while (--__size > 0);                                               \
     } while (0)
 
 /* Discontinue quicksort algorithm when partition gets below this size.
@@ -922,9 +922,9 @@ void wxQsort(void *const pbase, size_t total_elems,
   }
 }
 
-
-
 #endif // wxUSE_BASE
+
+
 
 // ============================================================================
 // GUI-only functions from now on
@@ -1680,14 +1680,18 @@ bool wxSafeYield(wxWindow *win, bool onlyIfNeeded)
     return rc;
 }
 
-// Don't synthesize KeyUp events holding down a key and producing KeyDown
-// events with autorepeat. On by default and always on in wxMSW. wxGTK version
-// in utilsgtk.cpp.
-#ifndef __WXGTK__
-bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
+// ----------------------------------------------------------------------------
+// wxApp::Yield() wrappers for backwards compatibility
+// ----------------------------------------------------------------------------
+
+bool wxYield()
 {
-    return true;    // detectable auto-repeat is the only mode MSW supports
+    return wxTheApp && wxTheApp->Yield();
 }
-#endif // !wxGTK
+
+bool wxYieldIfNeeded()
+{
+    return wxTheApp && wxTheApp->Yield(true);
+}
 
 #endif // wxUSE_GUI
