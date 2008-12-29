@@ -2222,8 +2222,6 @@ protected:
     // moved to it.
     void SubPropsChanged( int oldSelInd = -1 );
 
-    void UpdateControl( wxWindow* editorWnd );
-
     int GetY2( int lh ) const;
 
     wxString                    m_label;

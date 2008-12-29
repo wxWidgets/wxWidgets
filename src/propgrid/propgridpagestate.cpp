@@ -1121,7 +1121,7 @@ bool wxPropertyGridPageState::DoSetPropertyValueString( wxPGProperty* p, const w
         {
             p->SetValue(variant);
             if ( m_selected==p && this==m_pPropGrid->GetState() )
-                p->UpdateControl(m_pPropGrid->GetEditorControl());
+                m_pPropGrid->RefreshEditor();
         }
 
         return true;
@@ -1137,7 +1137,7 @@ bool wxPropertyGridPageState::DoSetPropertyValue( wxPGProperty* p, wxVariant& va
     {
         p->SetValue(value);
         if ( m_selected==p && this==m_pPropGrid->GetState() )
-            p->UpdateControl(m_pPropGrid->GetEditorControl());
+            m_pPropGrid->RefreshEditor();
 
         return true;
     }
@@ -1504,9 +1504,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
         m_pPropGrid->Thaw();
 
         if ( this == m_pPropGrid->GetState() )
-        {
-            m_selected->UpdateControl(m_pPropGrid->GetEditorControl());
-        }
+            m_pPropGrid->RefreshEditor();
     }
 
 }

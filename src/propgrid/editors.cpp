@@ -285,19 +285,15 @@ void wxPGTextCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* ctrl )
 
     tc->SetValue(s);
 
-    // Update font boldness
-    wxPropertyGrid* pg = property->GetGrid();
-    if ( pg->HasFlag(wxPG_BOLD_MODIFIED) )
-    {
-        if ( property->HasFlag(wxPG_PROP_MODIFIED) )
-            tc->SetFont(pg->GetCaptionFont());
-        else
-            tc->SetFont(pg->GetFont());
-
+    //
+    // Fix indentation, just in case (change in font boldness is one good
+    // reason).
 #if defined(__WXMSW__) && !defined(__WXWINCE__)
-        ::SendMessage(GetHwndOf(tc), EM_SETMARGINS, EC_LEFTMARGIN | EC_RIGHTMARGIN, MAKELONG(0, 0));
+    ::SendMessage(GetHwndOf(tc),
+                  EM_SETMARGINS,
+                  EC_LEFTMARGIN | EC_RIGHTMARGIN,
+                  MAKELONG(0, 0));
 #endif
-    }
 }
 
 // Provided so that, for example, ComboBox editor can use the same code

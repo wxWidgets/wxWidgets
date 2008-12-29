@@ -639,12 +639,6 @@ int wxPGProperty::Index( const wxPGProperty* p ) const
     return wxNOT_FOUND;
 }
 
-void wxPGProperty::UpdateControl( wxWindow* editorWnd )
-{
-    if ( editorWnd )
-        GetEditorClass()->UpdateControl(this, editorWnd);
-}
-
 bool wxPGProperty::ValidateValue( wxVariant& WXUNUSED(value), wxPGValidationInfo& WXUNUSED(validationInfo) ) const
 {
     return true;
@@ -1341,7 +1335,7 @@ void wxPGProperty::RefreshEditor()
 
     wxPropertyGrid* pg = GetGrid();
     if ( pg && pg->GetSelectedProperty() == this )
-        UpdateControl(pg->GetEditorControl());
+        pg->RefreshEditor();
 }
 
 wxVariant wxPGProperty::GetDefaultValue() const

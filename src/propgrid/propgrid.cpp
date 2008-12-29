@@ -2130,11 +2130,9 @@ void wxPropertyGrid::DrawItemAndChildren( wxPGProperty* p )
     if ( m_pState->m_itemsAdded || m_frozen )
         return;
 
-    wxWindow* wndPrimary = GetEditorControl();
-
     // Update child control.
     if ( m_selected && m_selected->GetParent() == p )
-        m_selected->UpdateControl(wndPrimary);
+        RefreshEditor();
 
     const wxPGProperty* lastDrawn = p->GetLastVisibleSubItem();
 
@@ -2790,8 +2788,7 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     // control.
     if ( selFlags & wxPG_SEL_DIALOGVAL )
     {
-        if ( editor )
-            p->GetEditorClass()->UpdateControl(p, editor);
+        RefreshEditor();
     }
     else
     {
@@ -3638,9 +3635,25 @@ bool wxPropertyGrid::UnfocusEditor()
 
 void wxPropertyGrid::RefreshEditor()
 {
-    if ( !m_selected || !m_wndEditor || m_frozen )
+    wxPGProperty* p = m_selected;
+    if ( !p ) 
         return;
-    m_selected->UpdateControl(m_wndEditor);
+
+    wxWindow* wnd = GetEditorControl();
+    if ( !wnd )
+        return;
+
+    // Set editor font boldness - must do this before
+    // calling UpdateControl().
+    if ( HasFlag(wxPG_BOLD_MODIFIED) )
+    {
+        if ( p->HasFlag(wxPG_PROP_MODIFIED) )
+            wnd->SetFont(GetCaptionFont());
+        else
+            wnd->SetFont(GetFont());
+    }
+
+    p->GetEditorClass()->UpdateControl(p, wnd);
 }
 
 // -----------------------------------------------------------------------
