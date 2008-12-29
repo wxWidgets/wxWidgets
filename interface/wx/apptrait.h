@@ -93,12 +93,11 @@ public:
         It's normally the same for wxBase and wxGUI except in the case of wxMac
         and wxCocoa.
 
-        @todo the real function returns a reference to wxStandardPathsBase;
-              user looking at these docs will write code:
-                    wxStandardPaths &ref = ...->GetStandardPaths();
-              which won't compile...
+        @note
+        The returned reference is to a @c wxStandardPathsBase class but you
+        can consider it to be equivalent to wxStandardPaths (which is documented).
     */
-    virtual wxStandardPaths& GetStandardPaths();
+    virtual wxStandardPathsBase& GetStandardPaths();
 
     /**
         Returns the wxWidgets port ID used by the running program and eventually

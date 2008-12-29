@@ -8,7 +8,6 @@
 
 
 /**
-
     wxWeakRefDynamic<T> is a template class for weak references that is used in
     the same way as wxWeakRef<T>. The only difference is that wxWeakRefDynamic
     defaults to using @c dynamic_cast for establishing the object reference
@@ -28,7 +27,7 @@
     For API documentation, see: wxWeakRef<T>.
 
     @tparam T
-        @todo docme
+        The type to which the smart pointer points to.
 
     @nolibrary
     @category{smartpointers}
@@ -92,7 +91,7 @@ public:
     @endcode
 
     @tparam T
-        @todo docme
+        The type to which the smart pointer points to.
 
     @nolibrary
     @category{smartpointers}

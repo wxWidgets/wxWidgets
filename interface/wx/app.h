@@ -11,14 +11,31 @@
     @class wxAppConsole
 
     This class is essential for writing console-only or hybrid apps without
-    having to define wxUSE_GUI=0.
+    having to define @c wxUSE_GUI=0.
 
-    @todo MORE INFO
+    It is used to:
+    @li set and get application-wide properties (see wxAppConsole::CreateTraits
+        and wxAppConsole::SetXXX functions)
+    @li implement the windowing system message or event loop: events in fact are
+        supported even in console-mode applications (see wxAppConsole::HandleEvent
+        and wxAppConsole::ProcessPendingEvents);
+    @li initiate application processing via wxApp::OnInit;
+    @li allow default processing of events not handled by other
+        objects in the application (see wxAppConsole::FilterEvent)
+    @li implement Apple-specific event handlers (see wxAppConsole::MacXXX functions)
+
+    You should use the macro IMPLEMENT_APP(appClass) in your application
+    implementation file to tell wxWidgets how to create an instance of your
+    application class.
+
+    Use DECLARE_APP(appClass) in a header file if you want the ::wxGetApp() function
+    (which returns a reference to your application object) to be visible to other
+    files.
 
     @library{wxbase}
     @category{appmanagement}
 
-    @see @ref overview_app
+    @see @ref overview_app, wxApp, wxAppTraits, wxEventLoop
 */
 class wxAppConsole : public wxEvtHandler
 {
@@ -158,6 +175,15 @@ public:
         the events from them would never be processed.
     */
     static bool IsMainLoopRunning();
+
+    /**
+        Process all pending events; it is necessary to call this function to
+        process posted events.
+
+        This happens during each event loop iteration in GUI mode but if there is
+        no main loop, it may be also called directly.
+    */
+    virtual void ProcessPendingEvents();
 
     /**
         Called in response of an "open-application" Apple event.
@@ -478,26 +504,19 @@ public:
 /**
     @class wxApp
 
-    The wxApp class represents the application itself. It is used to:
+    The wxApp class represents the application itself when @c wxUSE_GUI=1.
 
-    @li set and get application-wide properties;
-    @li implement the windowing system message or event loop;
-    @li initiate application processing via wxApp::OnInit;
-    @li allow default processing of events not handled by other
-        objects in the application.
+    In addition to the features provided by wxAppConsole it keeps track of
+    the <em>top window</em> (see SetTopWindow()) and adds support for
+    video modes (see SetVideoMode()).
 
-    You should use the macro IMPLEMENT_APP(appClass) in your application
-    implementation file to tell wxWidgets how to create an instance of your
-    application class.
-
-    Use DECLARE_APP(appClass) in a header file if you want the wxGetApp function
-    (which returns a reference to your application object) to be visible to other
-    files.
+    In general, application-wide settings for GUI-only apps are accessible
+    from wxApp (or from wxSystemSettings).
 
     @library{wxbase}
     @category{appmanagement}
 
-    @see @ref overview_app
+    @see @ref overview_app, wxAppTraits, wxEventLoop, wxSystemSettings
 */
 class wxApp : public wxAppConsole
 {
@@ -514,11 +533,23 @@ public:
     virtual ~wxApp();
 
     /**
+        Get display mode that is used use. This is only used in framebuffer
+        wxWin ports (such as wxMGL or wxDFB).
+    */
+    virtual wxVideoMode GetDisplayMode() const;
+
+    /**
         Returns @true if the application will exit when the top-level frame is deleted.
 
         @see SetExitOnFrameDelete()
     */
     bool GetExitOnFrameDelete() const;
+
+    /**
+        Return the layout direction for the current locale or @c wxLayout_Default
+        if it's unknown.
+    */
+    virtual wxLayoutDirection GetLayoutDirection() const;
 
     /**
         Returns @true if the application will use the best visual on systems that support
@@ -586,6 +617,13 @@ public:
         @see wxIdleEvent
     */
     virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
+
+    /**
+        Set display mode to use. This is only used in framebuffer wxWin
+        ports (such as wxMGL or wxDFB). This method should be called from
+        wxApp::OnInitGui.
+    */
+    virtual bool SetDisplayMode(const wxVideoMode& info);
 
     /**
         Allows the programmer to specify whether the application will exit when the
@@ -670,7 +708,7 @@ public:
 //@{
 
 /**
-    This is used in headers to create a forward declaration of the wxGetApp()
+    This is used in headers to create a forward declaration of the ::wxGetApp()
     function implemented by IMPLEMENT_APP().
 
     It creates the declaration <tt>className& wxGetApp()</tt>.

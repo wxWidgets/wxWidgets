@@ -191,12 +191,12 @@ public:
 
         <TABLE>
             <TR>
-                <TD>@b Special character</TD>
-                <TD>@b Escape as</TD>
+                <TD><b>Special character</b></TD>
+                <TD><b>Escape as</b></TD>
             </TR>
             <TR>
                 <TD>@c &amp;</TD>
-                <TD>@c &amp;amp; or as &amp;&amp;</TD>
+                <TD>@c &amp;amp; or as @c &amp;&amp;</TD>
             </TR>
             <TR>
                 <TD>@c &apos;</TD>

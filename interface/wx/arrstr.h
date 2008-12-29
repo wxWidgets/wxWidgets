@@ -7,13 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @todo
-    the following functions are not documented; do they need to be?
-    WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxStringSortAscending(wxString*, wxString*);
-    WXDLLIMPEXP_BASE int wxCMPFUNC_CONV wxStringSortDescending(wxString*, wxString*);
-*/
-
-/**
     @class wxArrayString
 
     wxArrayString is an efficient container for storing wxString objects.
@@ -53,11 +46,16 @@
     @library{wxbase}
     @category{containers}
 
-    @see wxArray, wxString, @ref overview_string
+    @see wxArray<T>, wxString, @ref overview_string
 */
 class wxArrayString : public wxArray
 {
 public:
+    /**
+        The function type used with wxArrayString::Sort function.
+    */
+    typedef int (*CompareFunction)(const wxString& first, const wxString& second);
+
     /**
         Default constructor.
     */
@@ -198,7 +196,7 @@ public:
 
     /**
         Sorts the array using the specified @a compareFunction for item comparison.
-        @a CompareFunction is defined as a function taking two @e const wxString
+        @a CompareFunction is defined as a function taking two <em>const wxString&</em>
         parameters and returning an @e int value less than, equal to or greater
         than 0 if the first string is less than, equal to or greater than the
         second one.
@@ -305,7 +303,7 @@ public:
               bool bFromEnd = false) const;
 
     /**
-        @warning this function should not be used with sorted arrays because it
+        @warning This function should not be used with sorted arrays because it
                  could break the order of items and, for example, subsequent calls
                  to Index() would then not work!
     */
@@ -314,7 +312,7 @@ public:
 
     //@{
     /**
-        @warning this function should not be used with sorted array because it could
+        @warning This function should not be used with sorted array because it could
                  break the order of items and, for example, subsequent calls to Index()
                  would then not work! Also, sorting a wxSortedArrayString doesn't make
                  sense because its elements are always already sorted.
