@@ -42,6 +42,7 @@
 #if wxUSE_SOCKETS
 
 #include "wx/socket.h"
+#include "wx/private/sckaddr.h"
 
 #include <stddef.h>
 
@@ -90,23 +91,8 @@
     #define SOCKET_ERROR (-1)
 #endif
 
-#if wxUSE_IPV6
-    typedef struct sockaddr_storage wxSockAddr;
-#else
-    typedef struct sockaddr wxSockAddr;
-#endif
-
-enum GAddressType
-{
-    wxSOCKET_NOFAMILY = 0,
-    wxSOCKET_INET,
-    wxSOCKET_INET6,
-    wxSOCKET_UNIX
-};
-
 typedef int wxSocketEventFlags;
 
-struct GAddress;
 class wxSocketImpl;
 
 /*
@@ -200,16 +186,16 @@ public:
         m_initialSendBufferSize = send;
     }
 
-    wxSocketError SetLocal(GAddress *address);
-    wxSocketError SetPeer(GAddress *address);
+    wxSocketError SetLocal(const wxSockAddressImpl& address);
+    wxSocketError SetPeer(const wxSockAddressImpl& address);
 
     // accessors
     // ---------
 
     bool IsServer() const { return m_server; }
 
-    GAddress *GetLocal();
-    GAddress *GetPeer();
+    const wxSockAddressImpl& GetLocal(); // non const as may update m_local
+    const wxSockAddressImpl& GetPeer() const { return m_peer; }
 
     wxSocketError GetError() const { return m_error; }
     bool IsOk() const { return m_error == wxSOCKET_NOERROR; }
@@ -303,8 +289,8 @@ public:
     int m_initialRecvBufferSize;
     int m_initialSendBufferSize;
 
-    GAddress *m_local;
-    GAddress *m_peer;
+    wxSockAddressImpl m_local,
+                      m_peer;
     wxSocketError m_error;
 
     bool m_stream;
@@ -332,7 +318,7 @@ private:
     // check that the socket wasn't created yet and that the given address
     // (either m_local or m_peer depending on the socket kind) is valid and
     // set m_error and return false if this is not the case
-    bool PreCreateCheck(GAddress *addr);
+    bool PreCreateCheck(const wxSockAddressImpl& addr);
 
     // set the given socket option: this just wraps setsockopt(SOL_SOCKET)
     int SetSocketOption(int optname, int optval)
@@ -377,79 +363,6 @@ private:
 #else
     #include "wx/unix/private/sockunix.h"
 #endif
-
-
-/* GAddress */
-
-// TODO: make GAddress a real class instead of this mix of C and C++
-
-// Represents a socket endpoint, i.e. -- in spite of its name -- not an address
-// but an (address, port) pair
-struct GAddress
-{
-    struct sockaddr *m_addr;
-    size_t m_len;
-
-    GAddressType m_family;
-    int m_realfamily;
-
-    wxSocketError m_error;
-};
-
-GAddress *GAddress_new();
-GAddress *GAddress_copy(GAddress *address);
-void GAddress_destroy(GAddress *address);
-
-void GAddress_SetFamily(GAddress *address, GAddressType type);
-GAddressType GAddress_GetFamily(GAddress *address);
-
-/* The use of any of the next functions will set the address family to
- * the specific one. For example if you use GAddress_INET_SetHostName,
- * address family will be implicitly set to AF_INET.
- */
-
-wxSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname);
-wxSocketError GAddress_INET_SetBroadcastAddress(GAddress *address);
-wxSocketError GAddress_INET_SetAnyAddress(GAddress *address);
-wxSocketError GAddress_INET_SetHostAddress(GAddress *address,
-                                          unsigned long hostaddr);
-wxSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
-                                       const char *protocol);
-wxSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port);
-
-wxSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname,
-                                       size_t sbuf);
-unsigned long GAddress_INET_GetHostAddress(GAddress *address);
-unsigned short GAddress_INET_GetPort(GAddress *address);
-
-wxSocketError _GAddress_translate_from(GAddress *address,
-                                      struct sockaddr *addr, int len);
-wxSocketError _GAddress_translate_to  (GAddress *address,
-                                      struct sockaddr **addr, int *len);
-wxSocketError _GAddress_Init_INET(GAddress *address);
-
-#if wxUSE_IPV6
-
-wxSocketError GAddress_INET6_SetHostName(GAddress *address, const char *hostname);
-wxSocketError GAddress_INET6_SetAnyAddress(GAddress *address);
-wxSocketError GAddress_INET6_SetHostAddress(GAddress *address,
-                                          struct in6_addr hostaddr);
-wxSocketError GAddress_INET6_SetPortName(GAddress *address, const char *port,
-                                       const char *protocol);
-wxSocketError GAddress_INET6_SetPort(GAddress *address, unsigned short port);
-
-wxSocketError GAddress_INET6_GetHostName(GAddress *address, char *hostname,
-                                       size_t sbuf);
-wxSocketError GAddress_INET6_GetHostAddress(GAddress *address,struct in6_addr *hostaddr);
-unsigned short GAddress_INET6_GetPort(GAddress *address);
-
-#endif // wxUSE_IPV6
-
-// these functions are available under all platforms but only implemented under
-// Unix ones, elsewhere they just return wxSOCKET_INVADDR
-wxSocketError _GAddress_Init_UNIX(GAddress *address);
-wxSocketError GAddress_UNIX_SetPath(GAddress *address, const char *path);
-wxSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf);
 
 #endif /* wxUSE_SOCKETS */
 

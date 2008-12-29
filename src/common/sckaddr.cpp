@@ -2,12 +2,21 @@
 // Name:        src/common/sckaddr.cpp
 // Purpose:     Network address manager
 // Author:      Guilhem Lavaux
-// Modified by:
 // Created:     26/04/97
+// Modified by: Vadim Zeitlin to use wxSockAddressImpl on 2008-12-28
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
+//              (c) 2008 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -35,6 +44,20 @@
 #include "wx/socket.h"
 #include "wx/sckaddr.h"
 #include "wx/private/socket.h"
+#include "wx/private/sckaddr.h"
+
+#ifdef __UNIX__
+    #include <netdb.h>
+    #include <arpa/inet.h>
+#endif // __UNIX__
+
+#ifndef INADDR_NONE
+    #define INADDR_NONE INADDR_ANY
+#endif
+
+// ----------------------------------------------------------------------------
+// wxRTTI macros
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxSockAddress, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxIPaddress, wxSockAddress)
@@ -42,19 +65,634 @@ IMPLEMENT_DYNAMIC_CLASS(wxIPV4address, wxIPaddress)
 #if wxUSE_IPV6
 IMPLEMENT_DYNAMIC_CLASS(wxIPV6address, wxIPaddress)
 #endif
-#if defined(__UNIX__) && !defined(__WINDOWS__) && !defined(__WINE__) 
+#if defined(__UNIX__) && !defined(__WINDOWS__) && !defined(__WINE__)
 IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #endif
 
-// ---------------------------------------------------------------------------
+// ============================================================================
+// implementation of thread-safe/reentrant functions if they're missing
+// ============================================================================
+
+// TODO: use POSIX getaddrinfo() (also available in Winsock 2) for simplicity
+//       and IPv6 support
+
+#ifdef __WXMSW__
+    #define HAVE_INET_ADDR
+
+    #define HAVE_GETHOSTBYNAME
+    #define HAVE_GETSERVBYNAME
+
+    // under MSW getxxxbyname() functions are MT-safe (but not reentrant) so
+    // we don't need to serialize calls to them
+    #define wxHAS_MT_SAFE_GETBY_FUNCS
+#endif // __WXMSW__
+
+// we assume that we have gethostbyaddr_r() if and only if we have
+// gethostbyname_r() and that it uses the similar conventions to it (see
+// comment in configure)
+#define HAVE_GETHOSTBYADDR HAVE_GETHOSTBYNAME
+#ifdef HAVE_FUNC_GETHOSTBYNAME_R_3
+    #define HAVE_FUNC_GETHOSTBYADDR_R_3
+#endif
+#ifdef HAVE_FUNC_GETHOSTBYNAME_R_5
+    #define HAVE_FUNC_GETHOSTBYADDR_R_5
+#endif
+#ifdef HAVE_FUNC_GETHOSTBYNAME_R_6
+    #define HAVE_FUNC_GETHOSTBYADDR_R_6
+#endif
+
+// the _r functions need the extra buffer parameter but unfortunately its type
+// differs between different systems
+#ifdef HAVE_FUNC_GETHOSTBYNAME_R_3
+    typedef hostent_data wxGethostBuf;
+#else
+    typedef char wxGethostBuf[1024];
+#endif
+
+#ifdef HAVE_FUNC_GETSERVBYNAME_R_3
+    typedef servent_data wxGetservBuf;
+#else
+    typedef char wxGetservBuf[1024];
+#endif
+
+#ifdef wxHAS_MT_SAFE_GETBY_FUNCS
+    #define wxLOCK_GETBY_MUTEX(name)
+#else // may need mutexes to protect getxxxbyxxx() calls
+    #if defined(HAVE_GETHOSTBYNAME) || \
+        defined(HAVE_GETHOSTBYADDR) || \
+        defined(HAVE_GETSERVBYNAME)
+        #include "wx/thread.h"
+
+        namespace
+        {
+            // these mutexes are used to serialize
+            wxMutex nameLock,   // gethostbyname()
+                    addrLock,   // gethostbyaddr()
+                    servLock;   // getservbyname()
+        }
+
+        #define wxLOCK_GETBY_MUTEX(name) wxMutexLocker locker(name ## Lock)
+    #endif // we don't have _r functions
+#endif // wxUSE_THREADS
+
+namespace
+{
+
+#if defined(HAVE_GETHOSTBYNAME)
+hostent *deepCopyHostent(hostent *h,
+                         const hostent *he,
+                         char *buffer,
+                         int size,
+                         int *err)
+{
+    /* copy old structure */
+    memcpy(h, he, sizeof(hostent));
+
+    /* copy name */
+    int len = strlen(h->h_name);
+    if (len > size)
+    {
+        *err = ENOMEM;
+        return NULL;
+    }
+    memcpy(buffer, h->h_name, len);
+    buffer[len] = '\0';
+    h->h_name = buffer;
+
+    /* track position in the buffer */
+    int pos = len + 1;
+
+    /* reuse len to store address length */
+    len = h->h_length;
+
+    /* ensure pointer alignment */
+    unsigned int misalign = sizeof(char *) - pos%sizeof(char *);
+    if(misalign < sizeof(char *))
+        pos += misalign;
+
+    /* leave space for pointer list */
+    char **p = h->h_addr_list, **q;
+    char **h_addr_list = (char **)(buffer + pos);
+    while(*(p++) != 0)
+        pos += sizeof(char *);
+
+    /* copy addresses and fill new pointer list */
+    for (p = h->h_addr_list, q = h_addr_list; *p != 0; p++, q++)
+    {
+        if (size < pos + len)
+        {
+            *err = ENOMEM;
+            return NULL;
+        }
+        memcpy(buffer + pos, *p, len); /* copy content */
+        *q = buffer + pos; /* set copied pointer to copied content */
+        pos += len;
+    }
+    *++q = 0; /* null terminate the pointer list */
+    h->h_addr_list = h_addr_list; /* copy pointer to pointers */
+
+    /* ensure word alignment of pointers */
+    misalign = sizeof(char *) - pos%sizeof(char *);
+    if(misalign < sizeof(char *))
+        pos += misalign;
+
+    /* leave space for pointer list */
+    p = h->h_aliases;
+    char **h_aliases = (char **)(buffer + pos);
+    while(*(p++) != 0)
+        pos += sizeof(char *);
+
+    /* copy aliases and fill new pointer list */
+    for (p = h->h_aliases, q = h_aliases; *p != 0; p++, q++)
+    {
+        len = strlen(*p);
+        if (size <= pos + len)
+        {
+            *err = ENOMEM;
+            return NULL;
+        }
+        memcpy(buffer + pos, *p, len); /* copy content */
+        buffer[pos + len] = '\0';
+        *q = buffer + pos; /* set copied pointer to copied content */
+        pos += len + 1;
+    }
+    *++q = 0; /* null terminate the pointer list */
+    h->h_aliases = h_aliases; /* copy pointer to pointers */
+
+    return h;
+}
+#endif // HAVE_GETHOSTBYNAME
+
+hostent *wxGethostbyname_r(const char *hostname,
+                           hostent *h,
+                           wxGethostBuf buffer,
+                           int size,
+                           int *err)
+{
+    hostent *he;
+#if defined(HAVE_FUNC_GETHOSTBYNAME_R_6)
+    gethostbyname_r(hostname, h, buffer, size, &he, err);
+#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_5)
+    he = gethostbyname_r(hostname, h, buffer, size, err);
+#elif defined(HAVE_FUNC_GETHOSTBYNAME_R_3)
+    he = gethostbyname_r(hostname, h,  &buffer);
+    *err = h_errno;
+#elif defined(HAVE_GETHOSTBYNAME)
+    wxLOCK_GETBY_MUTEX(name);
+
+    he = gethostbyname(hostname);
+    *err = h_errno;
+
+    if ( he )
+        he = deepCopyHostent(h, he, buffer, size, err);
+#else
+    #error "No gethostbyname[_r]()"
+#endif
+
+    return he;
+}
+
+hostent *wxGethostbyaddr_r(const char *addr_buf,
+                           int buf_size,
+                           int proto,
+                           hostent *h,
+                           wxGethostBuf buffer,
+                           int size,
+                           int *err)
+{
+    hostent *he;
+#if defined(HAVE_FUNC_GETHOSTBYADDR_R_6)
+    gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer, size, &he, err);
+#elif defined(HAVE_FUNC_GETHOSTBYADDR_R_5)
+    he = gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer, size, err);
+#elif defined(HAVE_FUNC_GETHOSTBYADDR_R_3)
+    he = gethostbyaddr_r(addr_buf, buf_size, proto, h, buffer);
+    *err = h_errno;
+#elif defined(HAVE_GETHOSTBYADDR)
+    wxLOCK_GETBY_MUTEX(addr);
+
+    he = gethostbyaddr(addr_buf, buf_size, proto);
+    *err = h_errno;
+
+    if ( he )
+        he = deepCopyHostent(h, he, buffer, size, err);
+#else
+    #error "No gethostbyaddr[_r]()"
+#endif
+
+    return he;
+}
+
+#if defined(HAVE_GETSERVBYNAME)
+servent *deepCopyServent(servent *s,
+                         servent *se,
+                         char *buffer,
+                         int size)
+{
+    /* copy plain old structure */
+    memcpy(s, se, sizeof(servent));
+
+    /* copy name */
+    int len = strlen(s->s_name);
+    if (len >= size)
+    {
+        return NULL;
+    }
+    memcpy(buffer, s->s_name, len);
+    buffer[len] = '\0';
+    s->s_name = buffer;
+
+    /* track position in the buffer */
+    int pos = len + 1;
+
+    /* copy protocol */
+    len = strlen(s->s_proto);
+    if (pos + len >= size)
+    {
+        return NULL;
+    }
+    memcpy(buffer + pos, s->s_proto, len);
+    buffer[pos + len] = '\0';
+    s->s_proto = buffer + pos;
+
+    /* track position in the buffer */
+    pos += len + 1;
+
+    /* ensure pointer alignment */
+    unsigned int misalign = sizeof(char *) - pos%sizeof(char *);
+    if(misalign < sizeof(char *))
+        pos += misalign;
+
+    /* leave space for pointer list */
+    char **p = s->s_aliases, **q;
+    char **s_aliases = (char **)(buffer + pos);
+    while(*(p++) != 0)
+        pos += sizeof(char *);
+
+    /* copy addresses and fill new pointer list */
+    for (p = s->s_aliases, q = s_aliases; *p != 0; p++, q++){
+        len = strlen(*p);
+        if (size <= pos + len)
+        {
+            return NULL;
+        }
+        memcpy(buffer + pos, *p, len); /* copy content */
+        buffer[pos + len] = '\0';
+        *q = buffer + pos; /* set copied pointer to copied content */
+        pos += len + 1;
+    }
+    *++q = 0; /* null terminate the pointer list */
+    s->s_aliases = s_aliases; /* copy pointer to pointers */
+    return s;
+}
+#endif // HAVE_GETSERVBYNAME
+
+servent *wxGetservbyname_r(const char *port,
+                           const char *protocol,
+                           servent *serv,
+                           wxGetservBuf buffer,
+                           int size)
+{
+    servent *se;
+#if defined(HAVE_FUNC_GETSERVBYNAME_R_6)
+    getservbyname_r(port, protocol, serv, buffer, size, &se);
+#elif defined(HAVE_FUNC_GETSERVBYNAME_R_5)
+    se = getservbyname_r(port, protocol, serv, buffer, size);
+#elif defined(HAVE_FUNC_GETSERVBYNAME_R_4)
+    se = getservbyname_r(port, protocol, serv, &buffer);
+#elif defined(HAVE_GETSERVBYNAME)
+    wxLOCK_GETBY_MUTEX(serv);
+
+    se = getservbyname(port, protocol);
+    if ( se )
+        se = deepCopyServent(serv, se, buffer, size);
+#else
+    #error "No getservbyname[_r]()"
+#endif
+    return se;
+}
+
+} // anonymous namespace
+
+// ============================================================================
+// wxSockAddressImpl implementation
+// ============================================================================
+
+// FIXME-VC6: helper macros to call Alloc/Get() hiding the ugly dummy argument
+#define ALLOC(T) Alloc(static_cast<T *>(NULL))
+#define GET(T) Get(static_cast<T *>(NULL))
+
+// ----------------------------------------------------------------------------
+// INET or INET6 address family
+// ----------------------------------------------------------------------------
+
+wxString wxSockAddressImpl::GetHostName() const
+{
+    const void *addrbuf;
+    int addrbuflen;
+
+#if wxUSE_IPV6
+    if ( m_family == FAMILY_INET6 )
+    {
+        sockaddr_in6 * const addr6 = GET(sockaddr_in6);
+        addrbuf = &addr6->sin6_addr;
+        addrbuflen = sizeof(addr6->sin6_addr);
+    }
+    else
+#endif // wxUSE_IPV6
+    {
+        sockaddr_in * const addr = GET(sockaddr_in);
+        if ( !addr )
+            return wxString();
+
+        addrbuf = &addr->sin_addr;
+        addrbuflen = sizeof(addr->sin_addr);
+    }
+
+    hostent he;
+    wxGethostBuf buffer;
+    int err;
+    if ( !wxGethostbyaddr_r
+          (
+            static_cast<const char *>(addrbuf),
+            addrbuflen,
+            m_family,
+            &he,
+            buffer,
+            sizeof(buffer),
+            &err
+          ) )
+    {
+        return wxString();
+    }
+
+    return wxString::FromUTF8(he.h_name);
+}
+
+bool wxSockAddressImpl::SetPortName(const wxString& name, const char *protocol)
+{
+    // test whether it's a number first
+    unsigned long port;
+    if ( name.ToULong(&port) )
+    {
+        if ( port > 65535 )
+            return false;
+    }
+    else // it's a service name
+    {
+        wxGetservBuf buffer;
+        servent se;
+        if ( !wxGetservbyname_r(name.utf8_str(), protocol, &se,
+                                buffer, sizeof(buffer)) )
+            return false;
+
+        // s_port is in network byte order and SetPort() uses the host byte
+        // order and we prefer to reuse it from here instead of assigning to
+        // sin_port directly
+        port = ntohs(se.s_port);
+    }
+
+    return SetPort(port);
+}
+
+// ----------------------------------------------------------------------------
+// INET address family
+// ----------------------------------------------------------------------------
+
+void wxSockAddressImpl::CreateINET()
+{
+    wxASSERT_MSG( Is(FAMILY_UNSPEC), "recreating address as different type?" );
+
+    m_family = FAMILY_INET;
+    sockaddr_in * const addr = ALLOC(sockaddr_in);
+    addr->sin_family = FAMILY_INET;
+}
+
+bool wxSockAddressImpl::SetHostName4(const wxString& name)
+{
+    sockaddr_in * const addr = GET(sockaddr_in);
+    if ( !addr )
+        return false;
+
+    const wxUTF8Buf namebuf(name.utf8_str());
+
+    // first check if this is an address in quad dotted notation
+#if defined(HAVE_INET_ATON)
+    if ( inet_aton(namebuf, &addr->sin_addr) )
+        return true;
+#elif defined(HAVE_INET_ADDR)
+    addr->sin_addr.s_addr = inet_addr(namebuf);
+    if ( addr->sin_addr.s_addr != INADDR_NONE )
+        return true;
+#else
+    #error "Neither inet_aton() nor inet_addr() is available?"
+#endif
+
+    // it's a host name, resolve it
+    hostent he;
+    wxGethostBuf buffer;
+    int err;
+    if ( !wxGethostbyname_r(namebuf, &he, buffer, sizeof(buffer), &err) )
+        return false;
+
+    addr->sin_addr.s_addr = ((in_addr *)he.h_addr)->s_addr;
+    return true;
+}
+
+bool wxSockAddressImpl::GetHostAddress(wxUint32 *address) const
+{
+    sockaddr_in * const addr = GET(sockaddr_in);
+    if ( !addr )
+        return false;
+
+    *address = ntohl(addr->sin_addr.s_addr);
+
+    return true;
+}
+
+bool wxSockAddressImpl::SetHostAddress(wxUint32 address)
+{
+    sockaddr_in * const addr = GET(sockaddr_in);
+    if ( !addr )
+        return false;
+
+    addr->sin_addr.s_addr = htonl(address);
+
+    return true;
+}
+
+wxUint16 wxSockAddressImpl::GetPort4() const
+{
+    sockaddr_in * const addr = GET(sockaddr_in);
+    if ( !addr )
+        return 0;
+
+    return ntohs(addr->sin_port);
+}
+
+bool wxSockAddressImpl::SetPort4(wxUint16 port)
+{
+    sockaddr_in * const addr = GET(sockaddr_in);
+    if ( !addr )
+        return false;
+
+    addr->sin_port = htons(port);
+
+    return true;
+}
+
+#if wxUSE_IPV6
+
+// ----------------------------------------------------------------------------
+// INET6 address family
+// ----------------------------------------------------------------------------
+
+void wxSockAddressImpl::CreateINET6()
+{
+    wxASSERT_MSG( Is(FAMILY_UNSPEC), "recreating address as different type?" );
+
+    m_family = FAMILY_INET6;
+    sockaddr_in6 * const addr = ALLOC(sockaddr_in6);
+    addr->sin6_family = FAMILY_INET6;
+}
+
+bool wxSockAddressImpl::SetHostName6(const wxString& hostname)
+{
+    sockaddr_in6 * const addr = GET(sockaddr_in6);
+    if ( !addr )
+        return false;
+
+    addrinfo hints;
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET6;
+
+    addrinfo *info = NULL;
+    int rc = getaddrinfo(hostname.utf8_str(), NULL, &hints, &info);
+    if ( rc )
+    {
+        // use gai_strerror()?
+        return false;
+    }
+
+    wxCHECK_MSG( info, false, "should have info on success" );
+
+    wxASSERT_MSG( int(info->ai_addrlen) == m_len, "unexpected address length" );
+
+    memcpy(addr, info->ai_addr, info->ai_addrlen);
+    freeaddrinfo(info);
+
+    return true;
+}
+
+bool wxSockAddressImpl::GetHostAddress(in6_addr *address) const
+{
+    sockaddr_in6 * const addr = GET(sockaddr_in6);
+    if ( !addr )
+        return false;
+
+    *address = addr->sin6_addr;
+
+    return true;
+}
+
+bool wxSockAddressImpl::SetHostAddress(const in6_addr& address)
+{
+    sockaddr_in6 * const addr = GET(sockaddr_in6);
+    if ( !addr )
+        return false;
+
+    addr->sin6_addr = address;
+
+    return true;
+}
+
+wxUint16 wxSockAddressImpl::GetPort6() const
+{
+    sockaddr_in6 * const addr = GET(sockaddr_in6);
+    if ( !addr )
+        return 0;
+
+    return ntohs(addr->sin6_port);
+}
+
+bool wxSockAddressImpl::SetPort6(wxUint16 port)
+{
+    sockaddr_in6 * const addr = GET(sockaddr_in6);
+    if ( !addr )
+        return false;
+
+    addr->sin6_port = htons(port);
+
+    return true;
+}
+
+bool wxSockAddressImpl::SetToAnyAddress6()
+{
+    static const in6_addr any = IN6ADDR_ANY_INIT;
+
+    return SetHostAddress(any);
+}
+
+#endif // wxUSE_IPV6
+
+#ifdef wxHAS_UNIX_DOMAIN_SOCKETS
+
+// ----------------------------------------------------------------------------
+// Unix address family
+// ----------------------------------------------------------------------------
+
+#ifndef UNIX_PATH_MAX
+    #define UNIX_PATH_MAX (WXSIZEOF(((sockaddr_un *)NULL)->sun_path))
+#endif
+
+void wxSockAddressImpl::CreateUnix()
+{
+    wxASSERT_MSG( Is(FAMILY_UNSPEC), "recreating address as different type?" );
+
+    m_family = FAMILY_UNIX;
+    sockaddr_un * const addr = ALLOC(sockaddr_un);
+    addr->sun_family = FAMILY_UNIX;
+    addr->sun_path[0] = '\0';
+}
+
+bool wxSockAddressImpl::SetPath(const wxString& path)
+{
+    sockaddr_un * const addr = GET(sockaddr_un);
+    if ( !addr )
+        return false;
+
+    const wxUTF8Buf buf(path.utf8_str());
+    if ( strlen(buf) >= UNIX_PATH_MAX )
+        return false;
+
+    wxStrlcpy(addr->sun_path, buf, UNIX_PATH_MAX);
+
+    return true;
+}
+
+wxString wxSockAddressImpl::GetPath() const
+{
+    sockaddr_un * const addr = GET(sockaddr_un);
+    if ( !addr )
+        return wxString();
+
+    return wxString::FromUTF8(addr->sun_path);
+}
+
+#endif // wxHAS_UNIX_DOMAIN_SOCKETS
+
+#undef GET
+#undef ALLOC
+
+// ----------------------------------------------------------------------------
 // wxSockAddress
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 void wxSockAddress::Init()
 {
     if ( !wxSocketBase::IsInitialized() )
     {
-        // we must do it before using GAddress_XXX functions
+        // we must do it before using any socket functions
         (void)wxSocketBase::Initialize();
     }
 }
@@ -63,7 +701,7 @@ wxSockAddress::wxSockAddress()
 {
     Init();
 
-    m_address = GAddress_new();
+    m_impl = new wxSockAddressImpl();
 }
 
 wxSockAddress::wxSockAddress(const wxSockAddress& other)
@@ -71,248 +709,193 @@ wxSockAddress::wxSockAddress(const wxSockAddress& other)
 {
     Init();
 
-    m_address = GAddress_copy(other.m_address);
+    m_impl = new wxSockAddressImpl(*other.m_impl);
 }
 
 wxSockAddress::~wxSockAddress()
 {
-  GAddress_destroy(m_address);
+    delete m_impl;
 }
 
-void wxSockAddress::SetAddress(GAddress *address)
+void wxSockAddress::SetAddress(const wxSockAddressImpl& address)
 {
-    if ( address != m_address )
+    if ( &address != m_impl )
     {
-        GAddress_destroy(m_address);
-        m_address = GAddress_copy(address);
+        delete m_impl;
+        m_impl = new wxSockAddressImpl(address);
     }
 }
 
 wxSockAddress& wxSockAddress::operator=(const wxSockAddress& addr)
 {
-  SetAddress(addr.GetAddress());
-  return *this;
+    SetAddress(addr.GetAddress());
+
+    return *this;
 }
 
 void wxSockAddress::Clear()
 {
-  GAddress_destroy(m_address);
-  m_address = GAddress_new();
+    m_impl->Clear();
 }
 
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxIPaddress
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-wxIPaddress::wxIPaddress()
-            : wxSockAddress()
+wxSockAddressImpl& wxIPaddress::GetImpl()
 {
+    if ( m_impl->GetFamily() == wxSockAddressImpl::FAMILY_UNSPEC )
+        m_impl->CreateINET();
+
+    return *m_impl;
 }
 
-wxIPaddress::wxIPaddress(const wxIPaddress& other)
-            : wxSockAddress(other)
+bool wxIPaddress::Hostname(const wxString& name)
 {
+    wxCHECK_MSG( !name.empty(), false, "empty host name is invalid" );
+
+    m_origHostname = name;
+
+    return GetImpl().SetHostName(name);
 }
 
-wxIPaddress::~wxIPaddress()
+bool wxIPaddress::Service(const wxString& name)
 {
+    return GetImpl().SetPortName(name, "tcp");
 }
 
-// ---------------------------------------------------------------------------
-// wxIPV4address
-// ---------------------------------------------------------------------------
-
-wxIPV4address::wxIPV4address()
-             : wxIPaddress()
+bool wxIPaddress::Service(unsigned short port)
 {
+    return GetImpl().SetPort(port);
 }
 
-wxIPV4address::wxIPV4address(const wxIPV4address& other)
-             : wxIPaddress(other)
+bool wxIPaddress::LocalHost()
 {
+    return Hostname("localhost");
 }
 
-wxIPV4address::~wxIPV4address()
+wxString wxIPaddress::Hostname() const
 {
+    return GetImpl().GetHostName();
 }
 
-bool wxIPV4address::Hostname(const wxString& name)
+unsigned short wxIPaddress::Service() const
 {
-  // Some people are sometimes fool.
-  if (name.empty())
-  {
-    wxLogWarning( _("Trying to solve a NULL hostname: giving up") );
-    return false;
-  }
-  m_origHostname = name;
-  return (GAddress_INET_SetHostName(m_address, name.mb_str()) == wxSOCKET_NOERROR);
+    return GetImpl().GetPort();
 }
 
-bool wxIPV4address::Hostname(unsigned long addr)
-{
-  bool rv = (GAddress_INET_SetHostAddress(m_address, addr) == wxSOCKET_NOERROR);
-  if (rv)
-      m_origHostname = Hostname();
-  else
-      m_origHostname = wxEmptyString;
-  return rv;
-}
-
-bool wxIPV4address::Service(const wxString& name)
-{
-  return (GAddress_INET_SetPortName(m_address, name.mb_str(), "tcp") == wxSOCKET_NOERROR);
-}
-
-bool wxIPV4address::Service(unsigned short port)
-{
-  return (GAddress_INET_SetPort(m_address, port) == wxSOCKET_NOERROR);
-}
-
-bool wxIPV4address::LocalHost()
-{
-  return (GAddress_INET_SetHostName(m_address, "localhost") == wxSOCKET_NOERROR);
-}
-
-bool wxIPV4address::IsLocalHost() const
-{
-  return (Hostname() == wxT("localhost") || IPAddress() == wxT("127.0.0.1"));
-}
-
-bool wxIPV4address::BroadcastAddress()
-{
-  return (GAddress_INET_SetBroadcastAddress(m_address) == wxSOCKET_NOERROR);
-}
-
-bool wxIPV4address::AnyAddress()
-{
-  return (GAddress_INET_SetAnyAddress(m_address) == wxSOCKET_NOERROR);
-}
-
-wxString wxIPV4address::Hostname() const
-{
-   char hostname[1024];
-
-   hostname[0] = 0;
-   GAddress_INET_GetHostName(m_address, hostname, 1024);
-   return wxString::FromAscii(hostname);
-}
-
-unsigned short wxIPV4address::Service() const
-{
-  return GAddress_INET_GetPort(m_address);
-}
-
-wxSockAddress *wxIPV4address::Clone() const
-{
-    wxIPV4address *addr = new wxIPV4address(*this);
-    addr->m_origHostname = m_origHostname;
-    return addr;
-}
-
-wxString wxIPV4address::IPAddress() const
-{
-    unsigned long raw =  GAddress_INET_GetHostAddress(m_address);
-    return wxString::Format(_T("%lu.%lu.%lu.%lu"),
-                (raw>>24) & 0xff,
-                (raw>>16) & 0xff,
-                (raw>>8) & 0xff,
-                raw & 0xff
-        );
-}
-
-bool wxIPV4address::operator==(const wxIPV4address& addr) const
+bool wxIPaddress::operator==(const wxIPaddress& addr) const
 {
     return Hostname().Cmp(addr.Hostname()) == 0 &&
            Service() == addr.Service();
 }
 
+bool wxIPaddress::AnyAddress()
+{
+    return GetImpl().SetToAnyAddress();
+}
+
+// ----------------------------------------------------------------------------
+// wxIPV4address
+// ----------------------------------------------------------------------------
+
+void wxIPV4address::DoInitImpl()
+{
+    m_impl->CreateINET();
+}
+
+bool wxIPV4address::Hostname(unsigned long addr)
+{
+    if ( !GetImpl().SetHostAddress(addr) )
+    {
+        m_origHostname.clear();
+        return false;
+    }
+
+    m_origHostname = Hostname();
+    return true;
+}
+
+bool wxIPV4address::IsLocalHost() const
+{
+    return Hostname() == "localhost" || IPAddress() == "127.0.0.1";
+}
+
+wxString wxIPV4address::IPAddress() const
+{
+    wxUint32 addr;
+    if ( !GetImpl().GetHostAddress(&addr) )
+        return wxString();
+
+    return wxString::Format
+           (
+            "%lu.%lu.%lu.%lu",
+            (addr >> 24) & 0xff,
+            (addr >> 16) & 0xff,
+            (addr >> 8) & 0xff,
+            addr & 0xff
+           );
+}
+
+bool wxIPV4address::BroadcastAddress()
+{
+    return GetImpl().SetToBroadcastAddress();
+}
+
 #if wxUSE_IPV6
+
 // ---------------------------------------------------------------------------
 // wxIPV6address
 // ---------------------------------------------------------------------------
 
-wxIPV6address::wxIPV6address()
-  : wxIPaddress()
+void wxIPV6address::DoInitImpl()
 {
-}
-
-wxIPV6address::wxIPV6address(const wxIPV6address& other)
-             : wxIPaddress(other), m_origHostname(other.m_origHostname)
-{
-}
-
-wxIPV6address::~wxIPV6address()
-{
-}
-
-bool wxIPV6address::Hostname(const wxString& name)
-{
-  if (name.empty())
-  {
-    wxLogWarning( _("Trying to solve a NULL hostname: giving up") );
-    return false;
-  }
-  m_origHostname = name;
-  return (GAddress_INET6_SetHostName(m_address, name.mb_str()) == wxSOCKET_NOERROR);
+    m_impl->CreateINET6();
 }
 
 bool wxIPV6address::Hostname(unsigned char addr[16])
 {
-  wxString name;
-  unsigned short wk[8];
-  for ( int i = 0; i < 8; ++i )
-  {
-    wk[i] = addr[2*i];
-    wk[i] <<= 8;
-    wk[i] |= addr[2*i+1];
-  }
-  name.Printf("%x:%x:%x:%x:%x:%x:%x:%x",
-              wk[0], wk[1], wk[2], wk[3], wk[4], wk[5], wk[6], wk[7]);
-  return Hostname(name);
-}
+    unsigned short wk[8];
+    for ( int i = 0; i < 8; ++i )
+    {
+        wk[i] = addr[2*i];
+        wk[i] <<= 8;
+        wk[i] |= addr[2*i+1];
+    }
 
-bool wxIPV6address::Service(const wxString& name)
-{
-  return (GAddress_INET6_SetPortName(m_address, name.mb_str(), "tcp") == wxSOCKET_NOERROR);
-}
-
-bool wxIPV6address::Service(unsigned short port)
-{
-  return (GAddress_INET6_SetPort(m_address, port) == wxSOCKET_NOERROR);
-}
-
-bool wxIPV6address::LocalHost()
-{
-  return (GAddress_INET6_SetHostName(m_address, "localhost") == wxSOCKET_NOERROR);
+    return Hostname
+           (
+                wxString::Format
+                (
+                 "%x:%x:%x:%x:%x:%x:%x:%x",
+                 wk[0], wk[1], wk[2], wk[3], wk[4], wk[5], wk[6], wk[7]
+                )
+           );
 }
 
 bool wxIPV6address::IsLocalHost() const
 {
-  if ( Hostname() == "localhost" )
-      return true;
+    if ( Hostname() == "localhost" )
+        return true;
 
-  wxString addr = IPAddress();
-  return addr == wxT("::1") ||
-            addr == wxT("0:0:0:0:0:0:0:1") ||
-                addr == wxT("::ffff:127.0.0.1");
-}
-
-bool wxIPV6address::BroadcastAddress()
-{
-    wxFAIL_MSG( "not implemented" );
-
-    return false;
-}
-
-bool wxIPV6address::AnyAddress()
-{
-  return (GAddress_INET6_SetAnyAddress(m_address) == wxSOCKET_NOERROR);
+    wxString addr = IPAddress();
+    return addr == wxT("::1") ||
+                addr == wxT("0:0:0:0:0:0:0:1") ||
+                    addr == wxT("::ffff:127.0.0.1");
 }
 
 wxString wxIPV6address::IPAddress() const
 {
-    unsigned char addr[16];
-    GAddress_INET6_GetHostAddress(m_address,(in6_addr*)addr);
+    union
+    {
+        in6_addr addr6;
+        wxUint8 bytes[16];
+    } u;
+
+    if ( !GetImpl().GetHostAddress(&u.addr6) )
+        return wxString();
+
+    const wxUint8 * const addr = u.bytes;
 
     wxUint16 words[8];
     int i,
@@ -349,62 +932,32 @@ wxString wxIPV6address::IPAddress() const
     return result;
 }
 
-wxString wxIPV6address::Hostname() const
-{
-   char hostname[1024];
-   hostname[0] = 0;
-
-   if ( GAddress_INET6_GetHostName(m_address,
-                                   hostname,
-                                   WXSIZEOF(hostname)) != wxSOCKET_NOERROR )
-       return wxEmptyString;
-
-   return wxString::FromAscii(hostname);
-}
-
-unsigned short wxIPV6address::Service() const
-{
-  return GAddress_INET6_GetPort(m_address);
-}
-
 #endif // wxUSE_IPV6
 
-#if defined(__UNIX__) && !defined(__WINDOWS__) && !defined(__WINE__) 
+#ifdef wxHAS_UNIX_DOMAIN_SOCKETS
 
 // ---------------------------------------------------------------------------
 // wxUNIXaddress
 // ---------------------------------------------------------------------------
 
-wxUNIXaddress::wxUNIXaddress()
-             : wxSockAddress()
+wxSockAddressImpl& wxUNIXaddress::GetUNIX()
 {
-}
+    if ( m_impl->GetFamily() == wxSockAddressImpl::FAMILY_UNSPEC )
+        m_impl->CreateUnix();
 
-wxUNIXaddress::wxUNIXaddress(const wxUNIXaddress& other)
-             : wxSockAddress(other)
-{
-}
-
-wxUNIXaddress::~wxUNIXaddress()
-{
+    return *m_impl;
 }
 
 void wxUNIXaddress::Filename(const wxString& fname)
 {
-  GAddress_UNIX_SetPath(m_address, fname.fn_str());
+    GetUNIX().SetPath(fname);
 }
 
-wxString wxUNIXaddress::Filename()
+wxString wxUNIXaddress::Filename() const
 {
-  char path[1024];
-
-  path[0] = 0;
-  GAddress_UNIX_GetPath(m_address, path, 1024);
-
-  return wxString::FromAscii(path);
+    return GetUNIX().GetPath();
 }
 
-#endif // __UNIX__
+#endif // wxHAS_UNIX_DOMAIN_SOCKETS
 
-#endif
-  // wxUSE_SOCKETS
+#endif // wxUSE_SOCKETS

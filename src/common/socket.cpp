@@ -176,8 +176,6 @@ wxSocketImpl::wxSocketImpl(wxSocketBase& wxsocket)
     : m_wxsocket(&wxsocket)
 {
     m_fd              = INVALID_SOCKET;
-    m_local           = NULL;
-    m_peer            = NULL;
     m_error           = wxSOCKET_NOERROR;
     m_server          = false;
     m_stream          = true;
@@ -194,17 +192,11 @@ wxSocketImpl::wxSocketImpl(wxSocketBase& wxsocket)
 
 wxSocketImpl::~wxSocketImpl()
 {
-    if (m_fd != INVALID_SOCKET)
+    if ( m_fd != INVALID_SOCKET )
         Shutdown();
-
-    if (m_local)
-        GAddress_destroy(m_local);
-
-    if (m_peer)
-        GAddress_destroy(m_peer);
 }
 
-bool wxSocketImpl::PreCreateCheck(GAddress *addr)
+bool wxSocketImpl::PreCreateCheck(const wxSockAddressImpl& addr)
 {
     if ( m_fd != INVALID_SOCKET )
     {
@@ -212,7 +204,7 @@ bool wxSocketImpl::PreCreateCheck(GAddress *addr)
         return false;
     }
 
-    if ( !addr || !addr->m_addr )
+    if ( !addr.IsOk() )
     {
         m_error = wxSOCKET_INVADDR;
         return false;
@@ -250,15 +242,13 @@ void wxSocketImpl::PostCreation()
 
 wxSocketError wxSocketImpl::UpdateLocalAddress()
 {
-    WX_SOCKLEN_T lenAddr = sizeof(*m_local->m_addr);
-    if ( getsockname(m_fd, m_local->m_addr, &lenAddr) != 0 )
+    WX_SOCKLEN_T lenAddr = m_local.GetLen();
+    if ( getsockname(m_fd, m_local.GetWritableAddr(), &lenAddr) != 0 )
     {
         Close();
         m_error = wxSOCKET_IOERR;
         return m_error;
     }
-
-    m_local->m_len = lenAddr;
 
     return wxSOCKET_NOERROR;
 }
@@ -272,7 +262,7 @@ wxSocketError wxSocketImpl::CreateServer()
     m_stream = true;
 
     // do create the socket
-    m_fd = socket(m_local->m_realfamily, SOCK_STREAM, 0);
+    m_fd = socket(m_local.GetFamily(), SOCK_STREAM, 0);
 
     if ( m_fd == INVALID_SOCKET )
     {
@@ -285,7 +275,7 @@ wxSocketError wxSocketImpl::CreateServer()
     // and then bind to and listen on it
     //
     // FIXME: should we test for m_dobind here?
-    if ( bind(m_fd, m_local->m_addr, m_local->m_len) != 0 )
+    if ( bind(m_fd, m_local.GetAddr(), m_local.GetLen()) != 0 )
         m_error = wxSOCKET_IOERR;
 
     if ( IsOk() )
@@ -309,7 +299,7 @@ wxSocketError wxSocketImpl::CreateClient(bool wait)
     if ( !PreCreateCheck(m_peer) )
         return m_error;
 
-    m_fd = socket(m_peer->m_realfamily, SOCK_STREAM, 0);
+    m_fd = socket(m_peer.GetFamily(), SOCK_STREAM, 0);
 
     if ( m_fd == INVALID_SOCKET )
     {
@@ -320,9 +310,9 @@ wxSocketError wxSocketImpl::CreateClient(bool wait)
     PostCreation();
 
     // If a local address has been set, then bind to it before calling connect
-    if ( m_local && m_local->m_addr )
+    if ( m_local.IsOk() )
     {
-        if ( bind(m_fd, m_local->m_addr, m_local->m_len) != 0 )
+        if ( bind(m_fd, m_local.GetAddr(), m_local.GetLen()) != 0 )
         {
             Close();
             m_error = wxSOCKET_IOERR;
@@ -331,7 +321,7 @@ wxSocketError wxSocketImpl::CreateClient(bool wait)
     }
 
     // Do connect now
-    int rc = connect(m_fd, m_peer->m_addr, m_peer->m_len);
+    int rc = connect(m_fd, m_peer.GetAddr(), m_peer.GetLen());
     if ( rc == SOCKET_ERROR )
     {
         wxSocketError err = GetLastError();
@@ -369,7 +359,7 @@ wxSocketError wxSocketImpl::CreateUDP()
     m_stream = false;
     m_server = false;
 
-    m_fd = socket(m_local->m_realfamily, SOCK_DGRAM, 0);
+    m_fd = socket(m_local.GetFamily(), SOCK_DGRAM, 0);
 
     if ( m_fd == INVALID_SOCKET )
     {
@@ -381,7 +371,7 @@ wxSocketError wxSocketImpl::CreateUDP()
 
     if ( m_dobind )
     {
-        if ( bind(m_fd, m_local->m_addr, m_local->m_len) != 0 )
+        if ( bind(m_fd, m_local.GetAddr(), m_local.GetLen()) != 0 )
         {
             Close();
             m_error = wxSOCKET_IOERR;
@@ -396,18 +386,16 @@ wxSocketError wxSocketImpl::CreateUDP()
 
 wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
 {
-    wxSockAddr from;
+    wxSockAddressStorage from;
     WX_SOCKLEN_T fromlen = sizeof(from);
-    const SOCKET fd = accept(m_fd, &from, &fromlen);
+    const SOCKET fd = accept(m_fd, &from.addr, &fromlen);
 
     if ( fd == INVALID_SOCKET )
         return NULL;
 
     wxSocketImpl * const sock = Create(wxsocket);
     sock->m_fd = fd;
-
-    sock->m_peer = GAddress_new();
-    _GAddress_translate_from(sock->m_peer, &from, fromlen);
+    sock->m_peer = wxSockAddressImpl(from.addr, fromlen);
 
     sock->UnblockAndRegisterWithEventLoop();
 
@@ -452,107 +440,45 @@ void wxSocketImpl::NotifyOnStateChange(wxSocketNotify event)
 }
 
 /* Address handling */
-
-/*
- *  Set or get the local or peer address for this socket. The 'set'
- *  functions return wxSOCKET_NOERROR on success, an error code otherwise.
- *  The 'get' functions return a pointer to a GAddress object on success,
- *  or NULL otherwise, in which case they set the error code of the
- *  corresponding socket.
- *
- *  Error codes:
- *    wxSOCKET_INVSOCK - the socket is not valid.
- *    wxSOCKET_INVADDR - the address is not valid.
- */
-wxSocketError wxSocketImpl::SetLocal(GAddress *address)
+wxSocketError wxSocketImpl::SetLocal(const wxSockAddressImpl& local)
 {
-  /* the socket must be initialized, or it must be a server */
-  if (m_fd != INVALID_SOCKET && !m_server)
-  {
-    m_error = wxSOCKET_INVSOCK;
-    return wxSOCKET_INVSOCK;
-  }
+    /* the socket must be initialized, or it must be a server */
+    if (m_fd != INVALID_SOCKET && !m_server)
+    {
+        m_error = wxSOCKET_INVSOCK;
+        return wxSOCKET_INVSOCK;
+    }
 
-  /* check address */
-  if (address == NULL || address->m_family == wxSOCKET_NOFAMILY)
-  {
-    m_error = wxSOCKET_INVADDR;
-    return wxSOCKET_INVADDR;
-  }
+    if ( !local.IsOk() )
+    {
+        m_error = wxSOCKET_INVADDR;
+        return wxSOCKET_INVADDR;
+    }
 
-  if (m_local)
-    GAddress_destroy(m_local);
+    m_local = local;
 
-  m_local = GAddress_copy(address);
-
-  return wxSOCKET_NOERROR;
+    return wxSOCKET_NOERROR;
 }
 
-wxSocketError wxSocketImpl::SetPeer(GAddress *address)
+wxSocketError wxSocketImpl::SetPeer(const wxSockAddressImpl& peer)
 {
-  /* check address */
-  if (address == NULL || address->m_family == wxSOCKET_NOFAMILY)
-  {
-    m_error = wxSOCKET_INVADDR;
-    return wxSOCKET_INVADDR;
-  }
+    if ( !peer.IsOk() )
+    {
+        m_error = wxSOCKET_INVADDR;
+        return wxSOCKET_INVADDR;
+    }
 
-  if (m_peer)
-    GAddress_destroy(m_peer);
+    m_peer = peer;
 
-  m_peer = GAddress_copy(address);
-
-  return wxSOCKET_NOERROR;
+    return wxSOCKET_NOERROR;
 }
 
-GAddress *wxSocketImpl::GetLocal()
+const wxSockAddressImpl& wxSocketImpl::GetLocal()
 {
-  GAddress *address;
-  wxSockAddr addr;
-  WX_SOCKLEN_T size = sizeof(addr);
-  wxSocketError err;
+    if ( !m_local.IsOk() )
+        UpdateLocalAddress();
 
-  /* try to get it from the m_local var first */
-  if (m_local)
-    return GAddress_copy(m_local);
-
-  /* else, if the socket is initialized, try getsockname */
-  if (m_fd == INVALID_SOCKET)
-  {
-    m_error = wxSOCKET_INVSOCK;
-    return NULL;
-  }
-
-  if (getsockname(m_fd, (sockaddr*)&addr, &size) == SOCKET_ERROR)
-  {
-    m_error = wxSOCKET_IOERR;
-    return NULL;
-  }
-
-  /* got a valid address from getsockname, create a GAddress object */
-  if ((address = GAddress_new()) == NULL)
-  {
-     m_error = wxSOCKET_MEMERR;
-     return NULL;
-  }
-
-  if ((err = _GAddress_translate_from(address, (sockaddr*)&addr, size)) != wxSOCKET_NOERROR)
-  {
-     GAddress_destroy(address);
-     m_error = err;
-     return NULL;
-  }
-
-  return address;
-}
-
-GAddress *wxSocketImpl::GetPeer()
-{
-  /* try to get it from the m_peer var */
-  if (m_peer)
-    return GAddress_copy(m_peer);
-
-  return NULL;
+    return m_local;
 }
 
 // ----------------------------------------------------------------------------
@@ -604,50 +530,34 @@ int wxSocketImpl::SendStream(const void *buffer, int size)
 
 int wxSocketImpl::RecvDgram(void *buffer, int size)
 {
-    wxSockAddr from;
+    wxSockAddressStorage from;
     WX_SOCKLEN_T fromlen = sizeof(from);
 
     int ret;
     DO_WHILE_EINTR( ret, recvfrom(m_fd, static_cast<char *>(buffer), size,
-                                  0, &from, &fromlen) );
+                                  0, &from.addr, &fromlen) );
 
     if ( ret == SOCKET_ERROR )
         return SOCKET_ERROR;
 
-    /* Translate a system address into a wxSocketImpl address */
-    if ( !m_peer )
-        m_peer = GAddress_new();
-
-    m_error = _GAddress_translate_from(m_peer, &from, fromlen);
-    if ( m_error != wxSOCKET_NOERROR )
-    {
-        GAddress_destroy(m_peer);
-        m_peer  = NULL;
+    m_peer = wxSockAddressImpl(from.addr, fromlen);
+    if ( !m_peer.IsOk() )
         return -1;
-    }
 
     return ret;
 }
 
 int wxSocketImpl::SendDgram(const void *buffer, int size)
 {
-    if ( !m_peer )
+    if ( !m_peer.IsOk() )
     {
         m_error = wxSOCKET_INVADDR;
         return -1;
     }
 
-    struct sockaddr *addr;
-    int len;
-    m_error = _GAddress_translate_to(m_peer, &addr, &len);
-    if ( m_error != wxSOCKET_NOERROR )
-        return -1;
-
     int ret;
     DO_WHILE_EINTR( ret, sendto(m_fd, static_cast<const char *>(buffer), size,
-                                0, addr, len) );
-
-    free(addr);
+                                0, m_peer.GetAddr(), m_peer.GetLen()) );
 
     return ret;
 }
@@ -1463,36 +1373,28 @@ bool wxSocketBase::WaitForLost(long seconds, long milliseconds)
 // Get local or peer address
 //
 
-bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
+bool wxSocketBase::GetPeer(wxSockAddress& addr) const
 {
-    GAddress *peer;
+    wxCHECK_MSG( m_impl, false, "invalid socket" );
 
-    if (!m_impl)
+    const wxSockAddressImpl& peer = m_impl->GetPeer();
+    if ( !peer.IsOk() )
         return false;
 
-    peer = m_impl->GetPeer();
-
-    // copying a null address would just trigger an assert anyway
-
-    if (!peer)
-        return false;
-
-    addr_man.SetAddress(peer);
-    GAddress_destroy(peer);
+    addr.SetAddress(peer);
 
     return true;
 }
 
-bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
+bool wxSocketBase::GetLocal(wxSockAddress& addr) const
 {
-    GAddress *local;
+    wxCHECK_MSG( m_impl, false, "invalid socket" );
 
-    if (!m_impl)
+    const wxSockAddressImpl& local = m_impl->GetLocal();
+    if ( !local.IsOk() )
         return false;
 
-    local = m_impl->GetLocal();
-    addr_man.SetAddress(local);
-    GAddress_destroy(local);
+    addr.SetAddress(local);
 
     return true;
 }
@@ -1700,7 +1602,7 @@ wxUint32 wxSocketBase::GetPushback(void *buffer, wxUint32 size, bool peek)
 // Ctor
 // --------------------------------------------------------------------------
 
-wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
+wxSocketServer::wxSocketServer(const wxSockAddress& addr,
                                wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_SERVER)
 {
@@ -1715,7 +1617,7 @@ wxSocketServer::wxSocketServer(const wxSockAddress& addr_man,
     }
 
     // Setup the socket as server
-    m_impl->SetLocal(addr_man.GetAddress());
+    m_impl->SetLocal(addr.GetAddress());
 
     if (GetFlags() & wxSOCKET_REUSEADDR) {
         m_impl->SetReusable();
@@ -1825,17 +1727,9 @@ wxSocketBase::SetOption(int level, int optname, const void *optval, int optlen)
 
 bool wxSocketBase::SetLocal(const wxIPV4address& local)
 {
-    GAddress* la = local.GetAddress();
+    m_localAddress = local;
 
-    // If the address is valid, save it for use when we call Connect
-    if (la && la->m_addr)
-    {
-        m_localAddress = local;
-
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 // ==========================================================================
@@ -1890,7 +1784,7 @@ bool wxSocketClient::DoConnect(const wxSockAddress& remote,
 
     // Bind to the local IP address and port, when provided or if one had been
     // set before
-    if ( !local && m_localAddress.GetAddress() )
+    if ( !local && m_localAddress.GetAddress().IsOk() )
         local = &m_localAddress;
 
     if ( local )
