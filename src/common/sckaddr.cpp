@@ -47,6 +47,7 @@
 #include "wx/private/sckaddr.h"
 
 #ifdef __UNIX__
+    #include <errno.h>
     #include <netdb.h>
     #include <arpa/inet.h>
 #endif // __UNIX__
