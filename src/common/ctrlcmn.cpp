@@ -241,7 +241,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
                     // remove characters in excess
                     size_t initialChar,     // index of first char to erase
                            nChars;          // how many chars do we need to erase?
-                    if (mode == wxST_ELLIPSIZE_START)
+                    if (mode == wxELLIPSIZE_START)
                     {
                         initialChar = 0;
                         for (nChars=0;
@@ -249,7 +249,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
                              nChars++)
                             ;
                     }
-                    else if (mode == wxST_ELLIPSIZE_MIDDLE)
+                    else if (mode == wxELLIPSIZE_MIDDLE)
                     {
                         // the start & end of the removed span of chars
                         initialChar = len/2;
@@ -293,7 +293,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
                     }
                     else
                     {
-                        wxASSERT(mode == wxST_ELLIPSIZE_END);
+                        wxASSERT(mode == wxELLIPSIZE_END);
                         wxASSERT(len > 0);
 
                         int maxWidth = totalWidth - excessPixels;
@@ -330,7 +330,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
                     }
 
                     // if everything was ok, we should have shortened this line
-                    // enough to make it fit in sz.maxFinalWidth:
+                    // enough to make it fit in maxFinalWidth:
                     wxASSERT(dc.GetTextExtent(curLine).GetWidth() < maxFinalWidth);
                 }
             }
@@ -339,6 +339,7 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
             ret << curLine;
             if ( pc == label.end() )
             {
+                // NOTE: this is the return which always exits the function
                 return ret;
             }
             else
@@ -368,7 +369,10 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
         }
     }
 
-    return ret;
+    // this return would generate a 
+    //  warning C4702: unreachable code
+    // with MSVC since the function always exits from inside the loop 
+    //return ret;
 }
 
 wxBorder wxControlBase::GetDefaultBorder() const
