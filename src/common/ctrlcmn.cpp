@@ -29,6 +29,7 @@
 #include "wx/control.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
     #include "wx/log.h"
     #include "wx/radiobut.h"
     #include "wx/statbmp.h"
@@ -369,9 +370,9 @@ wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,
         }
     }
 
-    // this return would generate a 
+    // this return would generate a
     //  warning C4702: unreachable code
-    // with MSVC since the function always exits from inside the loop 
+    // with MSVC since the function always exits from inside the loop
     //return ret;
 }
 
