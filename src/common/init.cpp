@@ -282,6 +282,7 @@ static bool DoCommonPostInit()
             wxLogWarning("The event class '%s' does not correctly implement Clone()!",
                          ci->GetClassName());
 
+        delete cloned;
         delete test;
     }
 #endif
