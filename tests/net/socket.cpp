@@ -246,8 +246,9 @@ void SocketTestCase::UrlTest()
     SocketTestEventLoop loop(ms_useLoop);
 
     wxURL url("http://" + gs_serverHost);
-    wxInputStream * const in = url.GetInputStream();
-    CPPUNIT_ASSERT( in );
+
+    const std::auto_ptr<wxInputStream> in(url.GetInputStream());
+    CPPUNIT_ASSERT( in.get() );
 
     wxStringOutputStream out;
     CPPUNIT_ASSERT_EQUAL( wxSTREAM_EOF, in->Read(out).GetLastError() );
