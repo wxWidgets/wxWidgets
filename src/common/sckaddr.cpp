@@ -46,8 +46,9 @@
 #include "wx/private/socket.h"
 #include "wx/private/sckaddr.h"
 
+#include <errno.h>
+
 #ifdef __UNIX__
-    #include <errno.h>
     #include <netdb.h>
     #include <arpa/inet.h>
 #endif // __UNIX__
