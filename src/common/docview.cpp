@@ -57,6 +57,7 @@
 #include "wx/tokenzr.h"
 #include "wx/filename.h"
 #include "wx/vector.h"
+#include "wx/ptr_scpd.h"
 
 #if wxUSE_STD_IOSTREAM
     #include "wx/ioswrap.h"
@@ -779,20 +780,15 @@ wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
 
 wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
 {
-    wxView *view = DoCreateView();
-    if ( view == NULL )
+    wxScopedPtr<wxView> view(DoCreateView());
+    if ( !view )
         return NULL;
 
     view->SetDocument(doc);
-    if (view->OnCreate(doc, flags))
-    {
-        return view;
-    }
-    else
-    {
-        delete view;
+    if ( !view->OnCreate(doc, flags) )
         return NULL;
-    }
+
+    return view.release();
 }
 
 // The default (very primitive) format detection: check is the extension is

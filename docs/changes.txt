@@ -324,6 +324,7 @@ All:
 - Added wxArray::swap().
 - Added wxSHUTDOWN_LOGOFF and wxSHUTDOWN_FORCE wxShutdown() flags (troelsk).
 - Added wxSocket::ShutdownOutput().
+- Handle exceptions thrown from overridden wxView::OnCreate() gracefully.
 
 All (Unix):
 
