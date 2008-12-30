@@ -154,7 +154,7 @@ public:
     bool AcceptWith(wxSocketBase& socket, bool wait = true);
 
     /**
-        This function waits for an incoming connection.
+        Wait for an incoming connection.
 
         Use it if you want to call Accept() or AcceptWith() with @e wait set
         to @false, to detect when an incoming connection is waiting to be accepted.
@@ -720,18 +720,14 @@ public:
     bool Error() const;
 
     /**
-        This function returns the local address field of the socket. The local
-        address field contains the complete local address of the socket (local
-        address, local port, ...).
+        Return the local address of the socket.
 
         @return @true if no error happened, @false otherwise.
     */
     bool GetLocal(wxSockAddress& addr) const;
 
     /**
-        This function returns the peer address field of the socket. The peer
-        address field contains the complete peer host address of the socket
-        (address, port, ...).
+        Return the peer address field of the socket.
 
         @return @true if no error happened, @false otherwise.
     */
@@ -750,7 +746,7 @@ public:
     bool IsConnected() const;
 
     /**
-        This function waits until the socket is readable.
+        Check if the socket can be currently read or written.
 
         This might mean that queued data is available for reading or, for streamed
         sockets, that the connection has been closed, so that a read operation will
@@ -798,8 +794,7 @@ public:
     wxSocketError LastError() const;
 
     /**
-        This function restores the previous state of the socket, as saved
-        with SaveState().
+        Restore the previous state of the socket, as saved with SaveState().
 
         Calls to SaveState() and RestoreState() can be nested.
 
@@ -808,7 +803,8 @@ public:
     void RestoreState();
 
     /**
-        This function saves the current state of the socket in a stack.
+        Save the current state of the socket in a stack.
+
         Socket state includes flags, as set with SetFlags(), event mask, as set
         with SetNotify() and Notify(), user data, as set with SetClientData().
         Calls to SaveState and RestoreState can be nested.
@@ -828,9 +824,9 @@ public:
     //@{
 
     /**
-        This function shuts down the socket, disabling further transmission and
-        reception of data; it also disables events for the socket and frees the
-        associated system resources.
+        Shut down the socket, disabling further transmission and reception of
+        data and disable events for the socket and frees the associated system
+        resources.
 
         Upon socket destruction, Close() is automatically called, so in most cases
         you won't need to do it yourself, unless you explicitly want to shut down
@@ -854,14 +850,16 @@ public:
     void ShutdownOutput();
 
     /**
-        This function simply deletes all bytes in the incoming queue. This function
-        always returns immediately and its operation is not affected by IO flags.
+        Delete all bytes in the incoming queue.
+
+        This function always returns immediately and its operation is not
+        affected by IO flags.
 
         Use LastCount() to verify the number of bytes actually discarded.
 
         If you use Error(), it will always return @false.
     */
-    wxSocketBase Discard();
+    wxSocketBase& Discard();
 
     /**
         Returns current IO flags, as set with SetFlags()
@@ -884,9 +882,11 @@ public:
     void InterruptWait();
 
     /**
-        This function peeks a buffer of @a nbytes bytes from the socket.
+        Peek into the socket by copying the next bytes which would be read by
+        Read() into the provided buffer.
 
-        Peeking a buffer doesn't delete it from the socket input queue.
+        Peeking a buffer doesn't delete it from the socket input queue, i.e.
+        calling Read() will return the same data.
 
         Use LastCount() to verify the number of bytes actually peeked.
 
@@ -905,10 +905,11 @@ public:
 
         @see Error(), LastError(), LastCount(), SetFlags()
     */
-    wxSocketBase Peek(void* buffer, wxUint32 nbytes);
+    wxSocketBase& Peek(void* buffer, wxUint32 nbytes);
 
     /**
-        This function reads a buffer of @a nbytes bytes from the socket.
+        Read up to the given number of bytes from the socket.
+
         Use LastCount() to verify the number of bytes actually read.
         Use Error() to determine if the operation succeeded.
 
@@ -926,13 +927,14 @@ public:
         @see Error(), LastError(), LastCount(),
              SetFlags()
     */
-    wxSocketBase Read(void* buffer, wxUint32 nbytes);
+    wxSocketBase& Read(void* buffer, wxUint32 nbytes);
 
     /**
-        This function reads a buffer sent by WriteMsg()
-        on a socket. If the buffer passed to the function isn't big enough, the
-        remaining bytes will be discarded. This function always waits for the
-        buffer to be entirely filled, unless an error occurs.
+        Receive a message sent by WriteMsg().
+
+        If the buffer passed to the function isn't big enough, the remaining
+        bytes will be discarded. This function always waits for the buffer to
+        be entirely filled, unless an error occurs.
 
         Use LastCount() to verify the number of bytes actually read.
 
@@ -953,7 +955,7 @@ public:
 
         @see Error(), LastError(), LastCount(), SetFlags(), WriteMsg()
     */
-    wxSocketBase ReadMsg(void* buffer, wxUint32 nbytes);
+    wxSocketBase& ReadMsg(void* buffer, wxUint32 nbytes);
 
     /**
         Use SetFlags to customize IO operation for this socket.
@@ -995,24 +997,29 @@ public:
     void SetFlags(wxSocketFlags flags);
 
     /**
-        This function allows you to set the local address and port,
-        useful when an application needs to reuse a particular port. When
-        a local port is set for a wxSocketClient,
-        @b bind() will be called before @b connect().
+        Set the local address and port to use.
+
+        This function must always be called for the server sockets but may also
+        be called for client sockets, if it is, @b bind() is called before @b
+        connect().
     */
     bool SetLocal(const wxIPV4address& local);
 
     /**
-        This function sets the default socket timeout in seconds. This timeout
-        applies to all IO calls, and also to the Wait() family
-        of functions if you don't specify a wait interval. Initially, the default
+        Set the default socket timeout in seconds.
+
+        This timeout applies to all IO calls, and also to the Wait() family of
+        functions if you don't specify a wait interval. Initially, the default
         timeout is 10 minutes.
     */
     void SetTimeout(int seconds);
 
     /**
-        This function unreads a buffer. That is, the data in the buffer is put back
-        in the incoming queue. This function is not affected by wxSocket flags.
+        Put the specified data into the input queue.
+
+        The data in the buffer will be returned by the next call to Read().
+
+        This function is not affected by wxSocket flags.
 
         If you use LastCount(), it will always return @a nbytes.
 
@@ -1027,19 +1034,20 @@ public:
 
         @see Error(), LastCount(), LastError()
     */
-    wxSocketBase Unread(const void* buffer, wxUint32 nbytes);
+    wxSocketBase& Unread(const void* buffer, wxUint32 nbytes);
 
     /**
-        This function waits until any of the following conditions is @true:
+        Wait for any socket event.
 
+        Possible socket events are:
         @li The socket becomes readable.
         @li The socket becomes writable.
         @li An ongoing connection request has completed (wxSocketClient only)
         @li An incoming connection request has arrived (wxSocketServer only)
         @li The connection has been closed.
 
-        Note that it is recommended to use the individual Wait functions
-        to wait for the required condition, instead of this one.
+        Note that it is recommended to use the individual @b WaitForXXX()
+        functions to wait for the required condition, instead of this one.
 
         @param seconds
             Number of seconds to wait.
@@ -1048,8 +1056,9 @@ public:
         @param millisecond
             Number of milliseconds to wait.
 
-        @return Returns @true when any of the above conditions is satisfied,
-                @false if the timeout was reached.
+        @return
+           @true when any of the above conditions is satisfied or @false if the
+           timeout was reached.
 
         @see InterruptWait(), wxSocketServer::WaitForAccept(),
              WaitForLost(), WaitForRead(),
@@ -1058,8 +1067,10 @@ public:
     bool Wait(long seconds = -1, long millisecond = 0);
 
     /**
-        This function waits until the connection is lost. This may happen if
-        the peer gracefully closes the connection or if the connection breaks.
+        Wait until the connection is lost.
+
+        This may happen if the peer gracefully closes the connection or if the
+        connection breaks.
 
         @param seconds
             Number of seconds to wait.
@@ -1076,12 +1087,15 @@ public:
     bool WaitForLost(long seconds = -1, long millisecond = 0);
 
     /**
-        This function waits until the socket is readable.
+        Wait until the socket is readable.
 
         This might mean that queued data is available for reading or, for streamed
         sockets, that the connection has been closed, so that a read operation will
         complete immediately without blocking (unless the @b wxSOCKET_WAITALL flag
         is set, in which case the operation might still block).
+
+        Notice that this function should not be called if there is already data
+        available for reading on the socket.
 
         @param seconds
             Number of seconds to wait.
@@ -1097,12 +1111,15 @@ public:
     bool WaitForRead(long seconds = -1, long millisecond = 0);
 
     /**
-        This function waits until the socket becomes writable.
+        Wait until the socket becomes writable.
 
         This might mean that the socket is ready to send new data, or for streamed
         sockets, that the connection has been closed, so that a write operation is
         guaranteed to complete immediately (unless the @b wxSOCKET_WAITALL flag is set,
         in which case the operation might still block).
+
+        Notice that this function should not be called if the socket is already
+        writable.
 
         @param seconds
             Number of seconds to wait.
@@ -1118,7 +1135,7 @@ public:
     bool WaitForWrite(long seconds = -1, long millisecond = 0);
 
     /**
-        This function writes a buffer of @a nbytes bytes to the socket.
+        Write up to the given number of bytes to the socket.
 
         Use LastCount() to verify the number of bytes actually written.
 
@@ -1138,14 +1155,16 @@ public:
 
         @see Error(), LastError(), LastCount(), SetFlags()
     */
-    wxSocketBase Write(const void* buffer, wxUint32 nbytes);
+    wxSocketBase& Write(const void* buffer, wxUint32 nbytes);
 
     /**
-        This function writes a buffer of @a nbytes bytes from the socket, but it
-        writes a short header before so that ReadMsg() knows how much data should
-        it actually read. So, a buffer sent with WriteMsg() MUST be read with ReadMsg().
+        Sends a buffer which can be read using ReadMsg().
 
-        This function always waits for the entire buffer to be sent, unless an error occurs.
+        WriteMsg() sends a short header before the data so that ReadMsg()
+        knows how much data should be actually read.
+
+        This function always waits for the entire buffer to be sent, unless an
+        error occurs.
 
         Use LastCount() to verify the number of bytes actually written.
 
@@ -1168,7 +1187,7 @@ public:
         @see  Error(), LastError(), LastCount(), SetFlags(), ReadMsg()
 
     */
-    wxSocketBase WriteMsg(const void* buffer, wxUint32 nbytes);
+    wxSocketBase& WriteMsg(const void* buffer, wxUint32 nbytes);
 
     //@}
 
@@ -1274,7 +1293,8 @@ public:
     virtual ~wxDatagramSocket();
 
     /**
-        This function writes a buffer of @a nbytes bytes to the socket.
+        Write a buffer of @a nbytes bytes to the socket.
+
         Use wxSocketBase::LastCount() to verify the number of bytes actually wrote.
         Use wxSocketBase::Error() to determine if the operation succeeded.
 
