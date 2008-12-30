@@ -77,7 +77,7 @@ public:
   void OnOpenConnectionIPv6(wxCommandEvent& event);
 #endif
 
-  void OpenConnection(int family = AF_INET);
+  void OpenConnection(wxSockAddress::Family family);
 
   // event handlers for DatagramSocket menu (stub)
   void OnDatagram(wxCommandEvent& event);
@@ -273,29 +273,28 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
 {
-    OpenConnection(AF_INET);
+    OpenConnection(wxSockAddress::IPV4);
 }
 #if wxUSE_IPV6
 void MyFrame::OnOpenConnectionIPv6(wxCommandEvent& WXUNUSED(event))
 {
-    OpenConnection(AF_INET6);
+    OpenConnection(wxSockAddress::IPV6);
 }
 #endif // wxUSE_IPV6
 
-void MyFrame::OpenConnection(int family)
+void MyFrame::OpenConnection(wxSockAddress::Family family)
 {
+    wxUnusedVar(family); // unused in !wxUSE_IPV6 case
+
   wxIPaddress * addr;
   wxIPV4address addr4;
 #if wxUSE_IPV6
   wxIPV6address addr6;
-  if ( family==AF_INET6 )
+  if ( family == wxSockAddress::IPV6 )
     addr = &addr6;
   else
-    addr = &addr4;
-#else
-  wxUnusedVar(family);
-  addr = &addr4;
 #endif
+    addr = &addr4;
 
   m_menuSocket->Enable(CLIENT_OPEN, false);
 #if wxUSE_IPV6
