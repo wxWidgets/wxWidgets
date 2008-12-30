@@ -50,13 +50,13 @@ private:
         CPPUNIT_TEST( ReadNormal ); \
         CPPUNIT_TEST( ReadBlock ); \
         CPPUNIT_TEST( ReadNowait ); \
-        CPPUNIT_TEST( ReadWaitall )
+        CPPUNIT_TEST( ReadWaitall ); \
+        CPPUNIT_TEST( UrlTest )
 
     CPPUNIT_TEST_SUITE( SocketTestCase );
         ALL_SOCKET_TESTS();
         CPPUNIT_TEST( PseudoTest_SetUseEventLoop );
         ALL_SOCKET_TESTS();
-        CPPUNIT_TEST( UrlTest );
     CPPUNIT_TEST_SUITE_END();
 
     // helper event loop class which sets itself as active only if we pass it
