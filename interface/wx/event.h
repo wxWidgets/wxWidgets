@@ -3286,6 +3286,12 @@ public:
 //@{
 
 /**
+    A special event type usually used to indicate that some wxEvent has yet
+    no type assigned.
+*/
+wxEventType wxEVT_NULL;
+
+/**
     Each wxEvent-derived class has an @e event-type associated.
     See the macro DEFINE_EVENT_TYPE() for more info.
 
