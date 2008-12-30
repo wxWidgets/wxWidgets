@@ -130,6 +130,17 @@ public:
     // with wxHD_ALLOW_HIDE style
     bool ShowColumnsMenu(const wxPoint& pt, const wxString& title = wxString());
 
+    // append the entries for all our columns to the given menu, with the
+    // currently visible columns being checked
+    //
+    // this is used by ShowColumnsMenu() but can also be used if you use your
+    // own custom columns menu but nevertheless want to show all the columns in
+    // it
+    //
+    // the ids of the items corresponding to the columns are consecutive and
+    // start from idColumnsBase
+    void AddColumnsItems(wxMenu& menu, int idColumnsBase = 0);
+
     // show the columns customization dialog and return true if something was
     // changed using it (in which case UpdateColumnVisibility() and/or
     // UpdateColumnsOrder() will have been called)

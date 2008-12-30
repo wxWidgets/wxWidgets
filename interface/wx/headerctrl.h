@@ -328,6 +328,35 @@ public:
     int ShowColumnsMenu(const wxPoint& pt, const wxString& title = wxString());
 
     /**
+        Helper function appending the checkable items corresponding to all the
+        columns to the given menu.
+
+        This function is used by ShowColumnsMenu() but can also be used if you
+        show your own custom columns menu and still want all the columns shown
+        in it. It appends menu items with column labels as their text and
+        consecutive ids starting from @a idColumnsBase to the menu and checks
+        the items corresponding to the currently visible columns.
+
+        Example of use:
+        @code
+            wxMenu menu;
+            menu.Append(100, "Some custom command");
+            menu.AppendSeparator();
+            AddColumnsItems(menu, 200);
+            const int rc = GetPopupMenuSelectionFromUser(menu, pt);
+            if ( rc >= 200 )
+                ... toggle visibility of the column rc-200 ...
+        @endcode
+
+        @param menu
+            The menu to append the items to. It may be currently empty or not.
+        @param idColumnsBase
+            The id for the menu item corresponding to the first column, the
+            other ones are consecutive starting from it. It should be positive.
+     */
+    void AddColumnsItems(wxMenu& menu, int idColumnsBase = 0);
+
+    /**
         Show the column customization dialog.
 
         This function displays a modal dialog containing the list of all

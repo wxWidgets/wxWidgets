@@ -263,6 +263,18 @@ wxHeaderCtrlBase::DoResizeColumnIndices(wxArrayInt& colIndices, unsigned int cou
 // wxHeaderCtrl extra UI
 // ----------------------------------------------------------------------------
 
+void wxHeaderCtrlBase::AddColumnsItems(wxMenu& menu, int idColumnsBase)
+{
+    const unsigned count = GetColumnCount();
+    for ( unsigned n = 0; n < count; n++ )
+    {
+        const wxHeaderColumn& col = GetColumn(n);
+        menu.AppendCheckItem(idColumnsBase + n, col.GetTitle());
+        if ( col.IsShown() )
+            menu.Check(n, true);
+    }
+}
+
 bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
 {
     // construct the menu with the entries for all columns
@@ -270,17 +282,11 @@ bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
     if ( !title.empty() )
         menu.SetTitle(title);
 
-    const unsigned count = GetColumnCount();
-    for ( unsigned n = 0; n < count; n++ )
-    {
-        const wxHeaderColumn& col = GetColumn(n);
-        menu.AppendCheckItem(n, col.GetTitle());
-        if ( col.IsShown() )
-            menu.Check(n, true);
-    }
+    AddColumnsItems(menu);
 
     // ... and an extra one to show the customization dialog if the user is
     // allowed to reorder the columns too
+    const unsigned count = GetColumnCount();
     if ( HasFlag(wxHD_ALLOW_REORDER) )
     {
         menu.AppendSeparator();
