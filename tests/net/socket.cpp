@@ -26,6 +26,8 @@
 #if wxUSE_SOCKETS
 
 #include "wx/socket.h"
+#include "wx/url.h"
+#include "wx/sstream.h"
 #include "wx/evtloop.h"
 #include <memory>
 
@@ -54,6 +56,7 @@ private:
         ALL_SOCKET_TESTS();
         CPPUNIT_TEST( PseudoTest_SetUseEventLoop );
         ALL_SOCKET_TESTS();
+        CPPUNIT_TEST( UrlTest );
     CPPUNIT_TEST_SUITE_END();
 
     // helper event loop class which sets itself as active only if we pass it
@@ -94,6 +97,8 @@ private:
     void ReadBlock();
     void ReadNowait();
     void ReadWaitall();
+
+    void UrlTest();
 
     static bool ms_useLoop;
 
@@ -231,6 +236,21 @@ void SocketTestCase::ReadWaitall()
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(buf), sock->LastCount() );
+}
+
+void SocketTestCase::UrlTest()
+{
+    if ( gs_serverHost.empty() )
+        return;
+
+    SocketTestEventLoop loop(ms_useLoop);
+
+    wxURL url("http://" + gs_serverHost);
+    wxInputStream * const in = url.GetInputStream();
+    CPPUNIT_ASSERT( in );
+
+    wxStringOutputStream out;
+    CPPUNIT_ASSERT_EQUAL( wxSTREAM_EOF, in->Read(out).GetLastError() );
 }
 
 #endif // wxUSE_SOCKETS
