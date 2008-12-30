@@ -324,9 +324,18 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
     dc.SetFont(GetFont());
 
     wxEllipsizeMode mode;
-    if (HasFlag(wxST_ELLIPSIZE_START)) mode = wxELLIPSIZE_START;
-    else if (HasFlag(wxST_ELLIPSIZE_MIDDLE)) mode = wxELLIPSIZE_MIDDLE;
-    else if (HasFlag(wxST_ELLIPSIZE_END)) mode = wxELLIPSIZE_END;
+    if ( HasFlag(wxST_ELLIPSIZE_START) )
+        mode = wxELLIPSIZE_START;
+    else if ( HasFlag(wxST_ELLIPSIZE_MIDDLE) )
+        mode = wxELLIPSIZE_MIDDLE;
+    else if ( HasFlag(wxST_ELLIPSIZE_END) )
+        mode = wxELLIPSIZE_END;
+    else
+    {
+        wxFAIL_MSG( "should only be called if have one of wxST_ELLIPSIZE_XXX" );
+
+        return label;
+    }
 
     return wxControl::Ellipsize(label, dc, mode, sz.GetWidth());
 }
