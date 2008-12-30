@@ -798,8 +798,11 @@ wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
 
 wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
 {
+    wxCHECK_MSG( m_impl, 0, "socket must be valid" );
+
     // We use pointer arithmetic here which doesn't work with void pointers.
     char *buffer = static_cast<char *>(buffer_);
+    wxCHECK_MSG( buffer, 0, "NULL buffer" );
 
     // Try the push back buffer first, even before checking whether the socket
     // is valid to allow reading previously pushed back data from an already
@@ -808,72 +811,69 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
     nbytes -= total;
     buffer += total;
 
-    // If it's indeed closed or if read everything, there is nothing more to do.
-    if ( !m_impl || !nbytes )
+    // we can't read anything [more] if we're not connected
+    if ( !m_connected )
         return total;
 
-    wxCHECK_MSG( buffer, 0, "NULL buffer" );
-
-
-    // wxSOCKET_NOWAIT overrides all the other flags and means that we are
-    // polling the socket and don't block at all.
-    if ( m_flags & wxSOCKET_NOWAIT )
+    while ( nbytes )
     {
-        int ret = m_impl->Read(buffer, nbytes);
+        // our socket is non-blocking so Read() will return immediately if
+        // there is nothing to read yet and it's more efficient to try it first
+        // before entering WaitForRead() which is going to start dispatching
+        // GUI events and, even more importantly, we must do this under Windows
+        // where we're not going to get notifications about socket being ready
+        // for reading before we read all the existing data from it
+        const int ret = m_impl->Read(buffer, nbytes);
         if ( ret == -1 )
         {
-            if ( m_impl->GetLastError() != wxSOCKET_WOULDBLOCK )
-                SetError(wxSOCKET_IOERR);
-        }
-        else // not an error, even if we didn't read anything
-        {
-            total += ret;
-        }
-    }
-    else // blocking socket
-    {
-        for ( ;; )
-        {
-            // Wait until socket becomes ready for reading
-            if ( !WaitForRead() )
-                break;
-
-            // m_connected will be set to false if we lost connection while
-            // waiting, there is no need to call Read() if this happened
-            const int ret = m_connected ? m_impl->Read(buffer, nbytes) : -1;
-            if ( ret == 0 )
+            if ( m_impl->GetLastError() == wxSOCKET_WOULDBLOCK )
             {
-                // for connection-oriented (e.g. TCP) sockets we can only read
-                // 0 bytes if the other end has been closed, and for
-                // connectionless ones (UDP) this flag doesn't make sense
-                // anyhow so we can set it to true too without doing any harm
-                m_closed = true;
+                // if we don't want to wait, just return immediately
+                if ( m_flags & wxSOCKET_NOWAIT )
+                    break;
+
+                // otherwise wait until the socket becomes ready for reading
+                if ( !WaitForRead() )
+                {
+                    // and exit if the timeout elapsed before it did
+                    SetError(wxSOCKET_TIMEDOUT);
+                    break;
+                }
+
+                // retry reading
+                continue;
+            }
+            else // "real" error
+            {
+                SetError(wxSOCKET_IOERR);
                 break;
             }
+        }
+        else if ( ret == 0 )
+        {
+            // for connection-oriented (e.g. TCP) sockets we can only read
+            // 0 bytes if the other end has been closed, and for connectionless
+            // ones (UDP) this flag doesn't make sense anyhow so we can set it
+            // to true too without doing any harm
+            m_closed = true;
 
-            if ( ret == -1 )
-                break;
-
-            total += ret;
-
-            // If wxSOCKET_WAITALL is not set, we can leave now as we did read
-            // something and we don't need to wait for all nbytes bytes to be
-            // read.
-            if ( !(m_flags & wxSOCKET_WAITALL) )
-                break;
-
-            // Otherwise continue reading until we do read everything.
-            nbytes -= ret;
-            if ( !nbytes )
-                break;
-
-            buffer += ret;
+            // we're not going to read anything else and so if we haven't read
+            // anything (or not everything in wxSOCKET_WAITALL case) already,
+            // signal an error
+            if ( (m_flags & wxSOCKET_WAITALL) || !total )
+                SetError(wxSOCKET_IOERR);
+            break;
         }
 
-        // it's an error to not read everything in wxSOCKET_WAITALL mode or to
-        // not read anything otherwise
-        if ( ((m_flags & wxSOCKET_WAITALL) && nbytes) || !total )
-            SetError(wxSOCKET_IOERR);
+        total += ret;
+
+        // if we are happy to read something and not the entire nbytes bytes,
+        // then we're done
+        if ( !(m_flags & wxSOCKET_WAITALL) )
+            break;
+
+        nbytes -= ret;
+        buffer += ret;
     }
 
     return total;
@@ -987,61 +987,51 @@ wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
 }
 
 // This function is a mirror image of DoRead() except that it doesn't use the
-// push back buffer, please see comments there
+// push back buffer and doesn't treat 0 return value specially (normally this
+// shouldn't happen at all here), so please see comments there for explanations
 wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
 {
+    wxCHECK_MSG( m_impl, 0, "socket must be valid" );
+
     const char *buffer = static_cast<const char *>(buffer_);
-
-    // Return if there is nothing to read or the socket is (already?) closed.
-    if ( !m_impl || !nbytes )
-        return 0;
-
     wxCHECK_MSG( buffer, 0, "NULL buffer" );
 
+    if ( !m_connected )
+        return 0;
+
     wxUint32 total = 0;
-    if ( m_flags & wxSOCKET_NOWAIT )
+    while ( nbytes )
     {
         const int ret = m_impl->Write(buffer, nbytes);
         if ( ret == -1 )
         {
-            if ( m_impl->GetLastError() != wxSOCKET_WOULDBLOCK )
-                SetError(wxSOCKET_IOERR);
-        }
-        else
-        {
-            total += ret;
-        }
-    }
-    else // blocking socket
-    {
-        for ( ;; )
-        {
-            if ( !WaitForWrite() )
-                break;
-
-            const int ret = m_connected ? m_impl->Write(buffer, nbytes) : -1;
-            if ( ret == 0 )
+            if ( m_impl->GetLastError() == wxSOCKET_WOULDBLOCK )
             {
-                m_closed = true;
+                if ( m_flags & wxSOCKET_NOWAIT )
+                    break;
+
+                if ( !WaitForWrite() )
+                {
+                    SetError(wxSOCKET_TIMEDOUT);
+                    break;
+                }
+
+                continue;
+            }
+            else // "real" error
+            {
+                SetError(wxSOCKET_IOERR);
                 break;
             }
-
-            if ( ret == -1 )
-                break;
-
-            total += ret;
-            if ( !(m_flags & wxSOCKET_WAITALL) )
-                break;
-
-            nbytes -= ret;
-            if ( !nbytes )
-                break;
-
-            buffer += ret;
         }
 
-        if ( ((m_flags & wxSOCKET_WAITALL) && nbytes) || !total )
-            SetError(wxSOCKET_IOERR);
+        total += ret;
+
+        if ( !(m_flags & wxSOCKET_WAITALL) )
+            break;
+
+        nbytes -= ret;
+        buffer += ret;
     }
 
     return total;
@@ -1280,9 +1270,6 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
             timeLeft = 0;
         }
 
-        // This function is only called if wxSOCKET_BLOCK flag was not used and
-        // so we should dispatch the events if there is an event loop capable
-        // of doing it.
         wxSocketEventFlags events;
         if ( eventLoop )
         {
