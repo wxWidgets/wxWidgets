@@ -957,18 +957,30 @@ public:
 
     /**
         Use SetFlags to customize IO operation for this socket.
-        The @a flags parameter may be a combination of flags ORed together.
-        The following flags can be used:
 
+        The @a flags parameter may be a combination of flags ORed together.
+        Notice that not all combinations of flags affecting the IO calls
+        (Read() and Write()) make sense, e.g. @b wxSOCKET_NOWAIT can't be
+        combined with @b wxSOCKET_WAITALL nor with @b wxSOCKET_BLOCK.
+
+        The following flags can be used:
         @beginFlagTable
         @flag{wxSOCKET_NONE}
-            Normal functionality.
+            Default mode: the socket will read some data in the IO calls and
+            will process events to avoid blocking UI while waiting for the data
+            to become available.
         @flag{wxSOCKET_NOWAIT}
-            Read/write as much data as possible and return immediately.
+            Don't wait for the socket to become ready in IO calls, read as much
+            data as is available -- potentially 0 bytes -- and return
+            immediately.
         @flag{wxSOCKET_WAITALL}
-            Wait for all required data to be read/written unless an error occurs.
+            Don't return before the entire amount of data specified in IO calls
+            is read or written unless an error occurs. If this flag is not
+            specified, the IO calls return as soon as any amount of data, even
+            less than the total number of bytes, is processed.
         @flag{wxSOCKET_BLOCK}
-            Block the GUI (do not yield) while reading/writing data.
+            Don't process the UI events while waiting for the socket to become
+            ready. This means that UI will be unresponsive during socket IO.
         @flag{wxSOCKET_REUSEADDR}
             Allows the use of an in-use port (wxServerSocket only).
         @flag{wxSOCKET_BROADCAST}
