@@ -39,8 +39,7 @@ enum wxSocketNotify
     wxSOCKET_INPUT,
     wxSOCKET_OUTPUT,
     wxSOCKET_CONNECTION,
-    wxSOCKET_LOST,
-    wxSOCKET_MAX_EVENT
+    wxSOCKET_LOST
 };
 
 enum

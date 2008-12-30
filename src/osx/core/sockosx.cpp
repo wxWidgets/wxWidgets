@@ -222,15 +222,14 @@ int wxSocketManagerMac::GetCFCallback(wxSocketImpl *socket, wxSocketNotify event
             return socket->IsServer() ? kCFSocketReadCallBack
                                       : kCFSocketConnectCallBack;
 
-        case wxSOCKET_LOST:
         case wxSOCKET_INPUT:
             return kCFSocketReadCallBack;
 
         case wxSOCKET_OUTPUT:
             return kCFSocketWriteCallBack;
 
-        case wxSOCKET_MAX_EVENT:
-            wxFAIL_MSG( "invalid wxSocketNotify" );
+        case wxSOCKET_LOST:
+            wxFAIL_MSG( "unexpected wxSocketNotify" );
             return 0;
 
         default:

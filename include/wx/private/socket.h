@@ -144,10 +144,15 @@ public:
     // that both BSD and Winsock implementations actually use socket->m_server
     // value to determine what exactly should be monitored so it needs to be
     // set before calling these functions)
+    //
+    // the default event value is used just for the convenience of wxMSW
+    // implementation which doesn't use this parameter anyhow, it doesn't make
+    // sense to pass wxSOCKET_LOST for the Unix implementation which does use
+    // this parameter
     virtual void Install_Callback(wxSocketImpl *socket,
-                                  wxSocketNotify event = wxSOCKET_MAX_EVENT) = 0;
+                                  wxSocketNotify event = wxSOCKET_LOST) = 0;
     virtual void Uninstall_Callback(wxSocketImpl *socket,
-                                    wxSocketNotify event = wxSOCKET_MAX_EVENT) = 0;
+                                    wxSocketNotify event = wxSOCKET_LOST) = 0;
 
     virtual ~wxSocketManager() { }
 

@@ -179,8 +179,10 @@ public:
     {
         return new wxSocketImplMSW(wxsocket);
     }
-    virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event);
-    virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event);
+    virtual void Install_Callback(wxSocketImpl *socket,
+                                  wxSocketNotify event = wxSOCKET_LOST);
+    virtual void Uninstall_Callback(wxSocketImpl *socket,
+                                    wxSocketNotify event = wxSOCKET_LOST);
 
 private:
     static wxDynamicLibrary gs_wsock32dll;
@@ -402,7 +404,7 @@ void wxSocketMSWManager::Install_Callback(wxSocketImpl *socket_,
  *  Disable event notifications (used when shutting down the socket)
  */
 void wxSocketMSWManager::Uninstall_Callback(wxSocketImpl *socket_,
-                                           wxSocketNotify WXUNUSED(event))
+                                            wxSocketNotify WXUNUSED(event))
 {
     wxSocketImplMSW * const socket = static_cast<wxSocketImplMSW *>(socket_);
 
@@ -442,8 +444,7 @@ wxSocketImpl *wxSocketImpl::Create(wxSocketBase& wxsocket)
 
 void wxSocketImplMSW::DoClose()
 {
-    wxSocketManager::Get()->
-        Uninstall_Callback(this, wxSOCKET_MAX_EVENT /* unused anyhow */);
+    wxSocketManager::Get()->Uninstall_Callback(this);
 
     closesocket(m_fd);
 }

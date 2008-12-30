@@ -109,11 +109,12 @@ protected:
         switch ( event )
         {
             default:
-                wxFAIL_MSG( "unexpected socket event" );
-                // fall through
+                wxFAIL_MSG( "unknown socket event" );
+                return FD_INPUT; // we must return something
 
             case wxSOCKET_LOST:
-                // fall through
+                wxFAIL_MSG( "unexpected socket event" );
+                return FD_INPUT; // as above
 
             case wxSOCKET_INPUT:
                 return FD_INPUT;
@@ -122,7 +123,12 @@ protected:
                 return FD_OUTPUT;
 
             case wxSOCKET_CONNECTION:
-                // FIXME: explain this?
+                // for server sockets we're interested in events indicating
+                // that a new connection is pending, i.e. that accept() will
+                // succeed and this is indicated by socket becoming ready for
+                // reading, while for the other ones we're interested in the
+                // completion of non-blocking connect() which is indicated by
+                // the socket becoming ready for writing
                 return socket->IsServer() ? FD_INPUT : FD_OUTPUT;
         }
     }
