@@ -619,12 +619,9 @@ enum
     defines all basic IO functionality.
 
     @note
-    (Workaround for implementation limitation for wxWidgets up to 2.5.x)
-    If you want to use sockets or derived classes such as wxFTP in a secondary
-    thread, call @b wxSocketBase::Initialize() (undocumented) from the main
-    thread before creating any sockets - in wxApp::OnInit() for example.
-    See http://wiki.wxwidgets.org/wiki.pl?WxSocket or
-    http://www.litwindow.com/knowhow/knowhow.html for more details.
+    When using wxSocket from multiple threads, even implicitly (e.g. by using
+    wxFTP or wxHTTP in another thread) you must initialize the sockets from the
+    main thread by calling Initialize() before creating the other ones.
 
     @beginEventTable{wxSocketEvent}
     @event{EVT_SOCKET(id, func)}
@@ -677,6 +674,34 @@ public:
         @return Always @true.
     */
     bool Destroy();
+
+    /**
+        Perform the initialization needed in order to use the sockets.
+
+        This function is called from wxSocket constructor implicitly and so
+        normally doesn't need to be called explicitly. There is however one
+        important exception: as this function must be called from the main
+        (UI) thread, if you use wxSocket from multiple threads you must call
+        Initialize() from the main thread before creating wxSocket objects in
+        the other ones.
+
+        It is safe to call this function multiple times (only the first call
+        does anything) but you must call Shutdown() exactly once for every call
+        to Initialize().
+
+        @return
+            @true if the sockets can be used, @false if the initialization
+            failed and sockets are not available at all.
+     */
+    static bool Initialize();
+
+    /**
+        Shut down the sockets.
+
+        This function undoes the call to Initialize() and must be called after
+        every successful call to Initialize().
+     */
+    static void Shutdown();
 
     //@}
 
