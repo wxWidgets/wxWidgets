@@ -40,12 +40,12 @@ CPP_CLI_SUPPORT        = NO
 DISTRIBUTE_GROUP_DOC   = YES
 SUBGROUPING            = YES
 
-#---------------------------------------------------------------------------
-# Aliases
-#---------------------------------------------------------------------------
-
 # This is the most important part of the wxWidgets Doxyfile; aliases allow
-# us to keep the headers readable and "implement" wxWidgets-specific commands.
+# us to keep the headers readable and "implement" wxWidgets-specific commands:
+
+#---------------------------------------------------------------------------
+# Aliases - for use when documenting C++ classes
+#---------------------------------------------------------------------------
 
 # event aliases
 ALIASES = beginEventTable{1}="\n<span class='events'>Events:</span><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p>Event macros:<div>"
@@ -70,6 +70,13 @@ ALIASES += beginFlagTable="<div>"
 ALIASES += flag{1}="</div>\li <span class='flag'>\1</span>:<div class='flagDesc'>"
 ALIASES += endFlagTable="</div>\n"
 
+# creates appearance section: this should be used for all main GUI controls
+ALIASES += appearance{1}="\htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> \endhtmlonly"
+
+#---------------------------------------------------------------------------
+# Aliases - for use when documenting any C++ entity
+#---------------------------------------------------------------------------
+
 # aliases for additional wx-specific infos
 ALIASES += category{1}="\ingroup group_class_\1 \n<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1</span></div>"
 ALIASES += category{2}="\ingroup group_class_\1 group_class_\2 \n<div><span class='category'>Category:</span>&nbsp;&nbsp;<span class='category_text'>\ref group_class_\1, \ref group_class_\2</span></div>"
@@ -90,9 +97,6 @@ ALIASES += onlyfor{1}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;
 ALIASES += onlyfor{2}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2 ports.</div>       \xmlonly <onlyfor>\1,\2</onlyfor> \endxmlonly"
 ALIASES += onlyfor{3}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3 ports.</div>       \xmlonly <onlyfor>\1,\2,\3</onlyfor> \endxmlonly"
 ALIASES += onlyfor{4}="<div><span class='avail'>Availability:</span>&nbsp;&nbsp;only available for the \ref page_port_\1, \ref page_port_\2, \ref page_port_\3, \ref page_port_\4 ports.</div>       \xmlonly <onlyfor>\1,\2,\3,\4</onlyfor> \endxmlonly"
-
-# creates appearance section: this should be used for all main GUI controls
-ALIASES += appearance{1}="\htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> \endhtmlonly"
 
 # Use this in grouped global functions, and macros since they
 # wouldn't otherwise indicate what header they are defined in.
@@ -155,6 +159,10 @@ ALIASES += itemdef{10}="<tr><td><span class='itemdef'>\1</span></td> <td>\2,\3,\
 ALIASES += endDefList="</table>"
 ALIASES += stock{3}="<tr><td><span class='itemdef'>\1</span></td> <td> @image html gtk-\2.png\n</td><td>\3</td></tr>"
 
+#---------------------------------------------------------------------------
+# Aliases - for use when documenting wxPerl/wxPython-specific parts
+#---------------------------------------------------------------------------
+
 # See ENABLED_SECTIONS configuration key for more info about these:
 ALIASES += beginWxPerlOnly="\if WXPERL_MANUAL <b>wxPerl Note:</b> "
 ALIASES += endWxPerlOnly="\endif"
@@ -166,16 +174,22 @@ ALIASES += endWxPythonOnly="\endif"
 ALIASES += leftCurly="{"
 ALIASES += rightCurly="}"
 
-# Sample documentation related aliases
+#---------------------------------------------------------------------------
+# Aliases - for use when documenting samples
+#---------------------------------------------------------------------------
+
 # For indicating the a directory containing a sample
 ALIASES += sampledir{1}="\verbatim Location: samples/\1\endverbatim"
+
 # For refering to the corresponding sample in a class document or a overview
 # Usually placed in the queue of @see
 ALIASES += sample{1}="\ref page_samples_\1"
+
 # For generating a general description for a sample
 # \1 could be a class or an overview or a descriptive sentence
 # Shall be replaced by manual written description soon
 ALIASES += sampleabout{1}="This sample demonstrates \1."
+
 # For indicating the necessary condition of a sample or a class
 # \1 is the wxUSE_XXX macro
 ALIASES += buildwith{1}="<b>Build Note:</b> You may need to build the wxWidgets library with <tt>\1</tt> being set to 1 to be able to make it work, please read comments in @c <wx/setup_inc.h> for more info."
