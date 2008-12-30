@@ -31,7 +31,9 @@
 
 #include "wx/socket.h"
 #include "wx/url.h"
-#include "wx/wfstream.h"
+#include "wx/sstream.h"
+#include "wx/scopeguard.h"
+#include <memory>
 
 // --------------------------------------------------------------------------
 // resources
@@ -212,7 +214,8 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
 
 #if wxUSE_URL
   m_menuProtocols = new wxMenu();
-  m_menuProtocols->Append(CLIENT_TESTURL, _("Test URL"), _("Get data from the specified URL"));
+  m_menuProtocols->Append(CLIENT_TESTURL, _("Test URL\tCtrl-U"),
+                          _("Get data from the specified URL"));
 #endif
 
   // Append menus to the menubar
@@ -235,6 +238,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
                            _("Welcome to wxSocket demo: Client\nClient ready\n"),
                            wxDefaultPosition, wxDefaultSize,
                            wxTE_MULTILINE | wxTE_READONLY);
+  delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
   // Create the socket
   m_sock = new wxSocketClient();
@@ -577,62 +581,55 @@ void MyFrame::OnDatagram(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
 {
-  // Note that we are creating a new socket here, so this
-  // won't mess with the client/server demo.
+    // Ask for the URL
+    static wxString s_urlname("http://www.google.com/");
+    wxString urlname = wxGetTextFromUser
+                       (
+                        _("Enter an URL to get"),
+                        _("URL:"),
+                        s_urlname
+                       );
+    if ( urlname.empty() )
+        return; // cancelled by user
 
-  // Ask for the URL
-  m_text->AppendText(_("\n=== URL test begins ===\n"));
-  wxString urlname = wxGetTextFromUser(_("Enter an URL to get"),
-                                       _("URL:"),
-                                       _T("http://localhost"));
+    s_urlname = urlname;
 
-  // Parse the URL
-  wxURL url(urlname);
-  if (url.GetError() != wxURL_NOERR)
-  {
-    m_text->AppendText(_("Error: couldn't parse URL\n"));
-    m_text->AppendText(_("=== URL test ends ===\n"));
-    return;
-  }
 
-  // Try to get the input stream (connects to the given URL)
-  m_text->AppendText(_("Trying to establish connection...\n"));
-  wxYield();
-  wxInputStream *data = url.GetInputStream();
-  if (!data)
-  {
-    m_text->AppendText(_("Error: couldn't read from URL\n"));
-    m_text->AppendText(_("=== URL test ends ===\n"));
-    return;
-  }
+    wxLogMessage("=== URL test begins ===");
+    wxON_BLOCK_EXIT1( wxLogMessage, "=== URL test ends ===" );
 
-  // Print the contents type and file size
-  wxString s;
-  s.Printf(_("Contents type: %s\nFile size: %i\nStarting to download...\n"),
-             url.GetProtocol().GetContentType().c_str(),
-             data->GetSize());
-  m_text->AppendText(s);
-  wxYield();
+    // Parse the URL
+    wxURL url(urlname);
+    if ( url.GetError() != wxURL_NOERR )
+    {
+        wxLogError("Failed to parse URL \"%s\"", urlname);
+        return;
+    }
 
-  // Get the data
-  wxFile fileTest(wxT("test.url"), wxFile::write);
-  wxFileOutputStream sout(fileTest);
-  if (!sout.Ok())
-  {
-    m_text->AppendText(_("Error: couldn't open file for output\n"));
-    m_text->AppendText(_("=== URL test ends ===\n"));
-    return;
-  }
+    // Try to get the input stream (connects to the given URL)
+    wxLogMessage("Establishing connection to \"%s\"...", urlname);
+    const std::auto_ptr<wxInputStream> data(url.GetInputStream());
+    if ( !data.get() )
+    {
+        wxLogError("Failed to retrieve URL \"%s\"", urlname);
+        return;
+    }
 
-  data->Read(sout);
-  m_text->AppendText(_("Results written to file: test.url\n"));
-  m_text->AppendText(_("Done.\n"));
-  m_text->AppendText(_("=== URL test ends ===\n"));
+    // Print the contents type and file size
+    wxLogMessage("Contents type: %s\nFile size: %i\nStarting to download...",
+                 url.GetProtocol().GetContentType(),
+                 data->GetSize());
 
-  delete data;
+    // Get the data
+    wxStringOutputStream sout;
+    if ( data->Read(sout).GetLastError() != wxSTREAM_EOF )
+        wxLogError("Error reading the input stream.");
+
+    wxLogMessage("Text retrieved from URL \"%s\" follows:\n%s",
+                 urlname, sout.GetString());
 }
 
-#endif
+#endif // wxUSE_URL
 
 void MyFrame::OnSocketEvent(wxSocketEvent& event)
 {
