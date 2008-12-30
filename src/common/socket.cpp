@@ -811,10 +811,6 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
     nbytes -= total;
     buffer += total;
 
-    // we can't read anything [more] if we're not connected
-    if ( !m_connected )
-        return total;
-
     while ( nbytes )
     {
         // our socket is non-blocking so Read() will return immediately if
@@ -823,7 +819,7 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
         // GUI events and, even more importantly, we must do this under Windows
         // where we're not going to get notifications about socket being ready
         // for reading before we read all the existing data from it
-        const int ret = m_impl->Read(buffer, nbytes);
+        const int ret = m_connected ? m_impl->Read(buffer, nbytes) : 0;
         if ( ret == -1 )
         {
             if ( m_impl->GetLastError() == wxSOCKET_WOULDBLOCK )
@@ -996,12 +992,16 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
     const char *buffer = static_cast<const char *>(buffer_);
     wxCHECK_MSG( buffer, 0, "NULL buffer" );
 
-    if ( !m_connected )
-        return 0;
-
     wxUint32 total = 0;
     while ( nbytes )
     {
+        if ( !m_connected )
+        {
+            if ( (m_flags & wxSOCKET_WAITALL) || !total )
+                SetError(wxSOCKET_IOERR);
+            break;
+        }
+
         const int ret = m_impl->Write(buffer, nbytes);
         if ( ret == -1 )
         {
