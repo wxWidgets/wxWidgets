@@ -327,6 +327,11 @@ LRESULT CALLBACK wxSocket_Internal_WinProc(HWND hWnd,
         if ( !socket )
             return 0;
 
+        // the socket may be already closed but we could still receive
+        // notifications for it sent (asynchronously) before it got closed
+        if ( socket->m_fd == INVALID_SOCKET )
+            return 0;
+
         wxASSERT_MSG( socket->m_fd == (SOCKET)wParam,
                       "mismatch between message and socket?" );
 
