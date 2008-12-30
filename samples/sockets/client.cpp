@@ -32,7 +32,6 @@
 #include "wx/socket.h"
 #include "wx/url.h"
 #include "wx/sstream.h"
-#include "wx/scopeguard.h"
 #include <memory>
 
 // --------------------------------------------------------------------------
@@ -102,6 +101,24 @@ private:
 
   // any class wishing to process wxWidgets events must use this macro
   DECLARE_EVENT_TABLE()
+};
+
+// simple helper class to log start and end of each test
+class TestLogger
+{
+public:
+    TestLogger(const wxString& name) : m_name(name)
+    {
+        wxLogMessage("=== %s test begins ===", m_name);
+    }
+
+    ~TestLogger()
+    {
+        wxLogMessage("=== %s test ends ===", m_name);
+    }
+
+private:
+    const wxString m_name;
 };
 
 // --------------------------------------------------------------------------
@@ -595,8 +612,7 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
     s_urlname = urlname;
 
 
-    wxLogMessage("=== URL test begins ===");
-    wxON_BLOCK_EXIT1( wxLogMessage, "=== URL test ends ===" );
+    TestLogger logtest("URL");
 
     // Parse the URL
     wxURL url(urlname);
