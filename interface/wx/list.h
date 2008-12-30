@@ -7,8 +7,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @class wxList
-
     The wxList<T> class provides linked list functionality.
 
     This class has been rewritten to be type safe and to provide the full API of
@@ -16,22 +14,23 @@
     The exception is that wxList<T> actually stores pointers and therefore its
     iterators return pointers and not references to the actual objets in the list
     (see example below) and @e value_type is defined as @e T*.
-    wxList<T> destroys an object after removing it only if wxList::DeleteContents
+    wxList<T> destroys an object after removing it only if wxList<T>::DeleteContents
     has been called.
 
     wxList<T> is not a real template and it requires that you declare and define
-    each wxListT class in your program. This is done with @e WX_DECLARE_LIST
+    each wxList<T> class in your program. This is done with @e WX_DECLARE_LIST
     and @e WX_DEFINE_LIST macros (see example). We hope that we'll be able to
-    provide a proper template class providing both the STL std::list and the old
+    provide a proper template class providing both the STL @c std::list and the old
     wxList API in the future.
 
-    Please refer to the STL std::list documentation for further information on how
-    to use the class. Below we documented both the supported STL and the legacy API
+    Please refer to the STL @c std::list documentation (see http://www.cppreference.com/wiki/stl/list/start)
+    for further information on how to use the class.
+    Below we documented both the supported STL and the legacy API
     that originated from the old wxList class and which can still be used alternatively
     for the the same class.
 
-    Note that if you compile wxWidgets in STL mode (wxUSE_STL defined as 1)
-    then wxList<T> will actually derive from std::list and just add a legacy
+    Note that if you compile wxWidgets in STL mode (@c wxUSE_STL defined as 1)
+    then wxList<T> will actually derive from @c std::list and just add a legacy
     compatibility layer for the old wxList class.
 
     @code
@@ -86,11 +85,15 @@
     The use of the latter is especially discouraged as it is not only unsafe but
     is also much less efficient than wxArrayString class.
 
+    @tparam T
+        The type stored in the wxList nodes.
+
     @library{wxbase}
     @category{data}
 
-    @see wxArray<T>, wxVector<T>
+    @see wxArray<T>, wxVector<T>, wxNode<T>
 */
+template<typename T>
 class wxList<T>
 {
 public:
@@ -391,12 +394,10 @@ public:
 
 
 /**
-    @class wxNode
-
-    wxNodeBase is the node structure used in linked lists (see wxList) and derived
-    classes. You should never use wxNodeBase class directly, however, because it
+    wxNode<T> is the node structure used in linked lists (see wxList) and derived
+    classes. You should never use wxNode<T> class directly, however, because it
     works with untyped (@c void *) data and this is unsafe.
-    Use wxNodeBase-derived classes which are automatically defined by WX_DECLARE_LIST
+    Use wxNode<T>-derived classes which are automatically defined by WX_DECLARE_LIST
     and WX_DEFINE_LIST macros instead as described in wxList documentation
     (see example there).
 
@@ -409,11 +410,15 @@ public:
     written as wxNodeT even though it isn't really a template class -- but it
     helps to think of it as if it were.
 
+    @tparam T
+        The type stored in the wxNode.
+
     @library{wxbase}
     @category{data}
 
     @see wxList<T>, wxHashTable
 */
+template<typename T>
 class wxNode<T>
 {
 public:
