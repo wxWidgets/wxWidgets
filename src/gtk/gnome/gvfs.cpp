@@ -116,18 +116,15 @@ bool wxGnomeVFSMimeTypesManagerImpl::DoAssociation(const wxString& strType,
                        const wxArrayString& strExtensions,
                        const wxString& strDesc)
 {
-    int nIndex = AddToMimeData(strType, strIcon, entry, strExtensions, strDesc, true);
-
-    if ( nIndex == wxNOT_FOUND )
-        return false;
-
-    if (m_mailcapStylesInited & wxMAILCAP_GNOME)
-    {
-        // User modificationt to the MIME database
-        // are not supported :-)
-    }
-
-    return false;
+    return AddToMimeData
+           (
+            strType,
+            strIcon,
+            entry,
+            strExtensions,
+            strDesc,
+            true
+           ) != wxNOT_FOUND;
 }
 
 //----------------------------------------------------------------------------
