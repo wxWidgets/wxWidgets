@@ -119,14 +119,6 @@
 #    ifndef __WXMSW__
 #        define __WXMSW__
 #    endif
-
-#    ifndef _WIN32
-#        define _WIN32
-#    endif
-
-#    ifndef WIN32
-#        define WIN32
-#    endif
 #endif
 
 #if defined(__PALMOS__)
@@ -176,17 +168,25 @@
 #    ifndef __WXMSW__
 #        define __WXMSW__
 #    endif
-
-#    ifndef __WIN32__
-#        define __WIN32__
-#    endif
 #endif /* Win32 */
 
-#if defined(__WXMSW__) || defined(__WIN32__)
+#if defined(__WXMSW__)
 #   if !defined(__WINDOWS__)
 #       define __WINDOWS__
 #   endif
-#endif
+
+#   ifndef _WIN32
+#        define _WIN32
+#   endif
+
+#   ifndef WIN32
+#        define WIN32
+#   endif
+
+#   ifndef __WIN32__
+#        define __WIN32__
+#   endif
+#endif /* __WXMSW__ */
 
 /* detect MS SmartPhone */
 #if defined( WIN32_PLATFORM_WFSP )
