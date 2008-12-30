@@ -820,6 +820,15 @@ public:
     void Close();
 
     /**
+        Shuts down the writing end of the socket.
+
+        This function simply calls the standard shutdown() function on the
+        underlying socket, indicating that nothing will be written to this
+        socket any more.
+     */
+    void ShutdownOutput();
+
+    /**
         This function simply deletes all bytes in the incoming queue. This function
         always returns immediately and its operation is not affected by IO flags.
 

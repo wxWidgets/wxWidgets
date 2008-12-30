@@ -132,6 +132,7 @@ public:
 
   // base IO
   virtual bool  Close();
+  void ShutdownOutput();
   wxSocketBase& Discard();
   wxSocketBase& Peek(void* buffer, wxUint32 nbytes);
   wxSocketBase& Read(void* buffer, wxUint32 nbytes);

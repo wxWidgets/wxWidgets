@@ -323,9 +323,7 @@ All:
 - Added wxString::Capitalize() and MakeCapitalized().
 - Added wxArray::swap().
 - Added wxSHUTDOWN_LOGOFF and wxSHUTDOWN_FORCE wxShutdown() flags (troelsk).
-- Added wxArtProvider::GetNativeSizeHint(); GetSizeHint() as well as
-  GetNativeSizeHint() now return more sensible values in wxMSW and wxMac and
-  no longer return bogus values.
+- Added wxSocket::ShutdownOutput().
 
 All (Unix):
 
@@ -431,6 +429,9 @@ All (GUI):
 - Add wxEVT_GRID_CELL_CHANGING event matching wxEVT_GRID_CELL_CHANGED.
 - Get/HasModifiers() of wxKeyEvent are now also available in wxMouseEvent.
 - Provide new/old cell value in wxEVT_GRID_CELL_CHANGING/CHANGED events.
+- Added wxArtProvider::GetNativeSizeHint(); GetSizeHint() as well as
+  GetNativeSizeHint() now return more sensible values in wxMSW and wxMac and
+  no longer return bogus values.
 
 wxGTK:
 

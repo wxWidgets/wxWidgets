@@ -770,12 +770,17 @@ bool wxSocketBase::Close()
     // Interrupt pending waits
     InterruptWait();
 
-    if (m_impl)
-        m_impl->Shutdown();
+    ShutdownOutput();
 
     m_connected = false;
     m_establishing = false;
     return true;
+}
+
+void wxSocketBase::ShutdownOutput()
+{
+    if ( m_impl )
+        m_impl->Shutdown();
 }
 
 wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
