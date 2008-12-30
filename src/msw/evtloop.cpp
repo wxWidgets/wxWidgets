@@ -111,22 +111,33 @@ int wxMSWEventLoopBase::GetNextMessageTimeout(WXMSG *msg, unsigned long timeout)
     {
         // we use this function just in order to not block longer than the
         // given timeout, so we don't pass any handles to it at all
-        if ( ::MsgWaitForMultipleObjects
-               (
-                0, NULL,
-                FALSE,
-                timeout,
-                QS_ALLINPUT
-               ) == WAIT_TIMEOUT )
-        {
-            return -1;
-        }
+        DWORD rc = ::MsgWaitForMultipleObjects
+                     (
+                        0, NULL,
+                        FALSE,
+                        timeout,
+                        QS_ALLINPUT
+                     );
 
-        if ( !::PeekMessage(msg, 0, 0, 0, PM_REMOVE) )
+        switch ( rc )
         {
-            wxFAIL_MSG( _T("PeekMessage() should have succeeded") );
+            default:
+                wxLogDebug("unexpected MsgWaitForMultipleObjects() return "
+                           "value %lu", rc);
+                // fall through
 
-            return -1;
+            case WAIT_TIMEOUT:
+                return -1;
+
+            case WAIT_OBJECT_0:
+                if ( !::PeekMessage(msg, 0, 0, 0, PM_REMOVE) )
+                {
+                    // somehow it may happen that MsgWaitForMultipleObjects()
+                    // returns true but there are no messages -- just treat it
+                    // the same as timeout then
+                    return -1;
+                }
+                break;
         }
     }
 
