@@ -838,7 +838,9 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
             if ( !WaitForRead() )
                 break;
 
-            const int ret = m_impl->Read(buffer, nbytes);
+            // m_connected will be set to false if we lost connection while
+            // waiting, there is no need to call Read() if this happened
+            const int ret = m_connected ? m_impl->Read(buffer, nbytes) : -1;
             if ( ret == 0 )
             {
                 // for connection-oriented (e.g. TCP) sockets we can only read
@@ -850,10 +852,7 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
             }
 
             if ( ret == -1 )
-            {
-                SetError(wxSOCKET_IOERR);
                 break;
-            }
 
             total += ret;
 
@@ -1020,7 +1019,7 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
             if ( !WaitForWrite() )
                 break;
 
-            const int ret = m_impl->Write(buffer, nbytes);
+            const int ret = m_connected ? m_impl->Write(buffer, nbytes) : -1;
             if ( ret == 0 )
             {
                 m_closed = true;
@@ -1028,10 +1027,7 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
             }
 
             if ( ret == -1 )
-            {
-                SetError(wxSOCKET_IOERR);
                 break;
-            }
 
             total += ret;
             if ( !(m_flags & wxSOCKET_WAITALL) )
@@ -1238,6 +1234,10 @@ bool
 wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
 {
     wxCHECK_MSG( m_impl, false, "can't wait on invalid socket" );
+
+    // we're never going to become ready if we're not connected (any more)
+    if ( !m_connected && !m_establishing )
+        return (flags & wxSOCKET_LOST_FLAG) != 0;
 
     // This can be set to true from Interrupt() to exit this function a.s.a.p.
     m_interrupt = false;
