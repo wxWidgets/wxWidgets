@@ -173,6 +173,9 @@ private:
 class WXDLLIMPEXP_CORE wxRearrangeDialog : public wxDialog
 {
 public:
+    // default ctor, use Create() later
+    wxRearrangeDialog() { Init(); }
+
     // ctor for the dialog: message is shown inside the dialog itself, order
     // and items are passed to wxRearrangeList used internally
     wxRearrangeDialog(wxWindow *parent,
@@ -181,13 +184,29 @@ public:
                       const wxArrayInt& order,
                       const wxArrayString& items,
                       const wxPoint& pos = wxDefaultPosition,
-                      const wxString& name = wxRearrangeDialogNameStr);
+                      const wxString& name = wxRearrangeDialogNameStr)
+    {
+        Init();
+
+        Create(parent, message, title, order, items, pos, name);
+    }
+
+    bool Create(wxWindow *parent,
+                const wxString& message,
+                const wxString& title,
+                const wxArrayInt& order,
+                const wxArrayString& items,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxString& name = wxRearrangeDialogNameStr);
 
     // get the order of items after it was modified by the user
     wxArrayInt GetOrder() const
         { return m_ctrl->GetList()->GetCurrentOrder(); }
 
 private:
+    // common part of all ctors
+    void Init() { m_ctrl = NULL; }
+
     wxRearrangeCtrl *m_ctrl;
 
     DECLARE_NO_COPY_CLASS(wxRearrangeDialog)

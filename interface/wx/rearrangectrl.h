@@ -267,7 +267,28 @@ class wxRearrangeDialog
 {
 public:
     /**
+        Default constructor.
+
+        Create() must be called later to effectively create the control.
+     */
+    wxRearrangeDialog();
+
+    /**
         Constructor creating the dialog.
+
+        Please see Create() for the parameters description.
+     */
+    wxRearrangeDialog(wxWindow *parent,
+                      const wxString& message,
+                      const wxString& title,
+                      const wxArrayInt& order,
+                      const wxArrayString& items,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxString& name = wxRearrangeDialogNameStr);
+
+    /**
+        Effectively creates the dialog for an object created using the default
+        constructor. 
 
         @param parent
             The dialog parent, possibly @NULL.
@@ -284,14 +305,17 @@ public:
             Optional dialog position.
         @param name
             Optional dialog name.
+        @return
+            @true if the dialog was successfully created or @false if creation
+            failed.
      */
-    wxRearrangeDialog(wxWindow *parent,
-                      const wxString& message,
-                      const wxString& title,
-                      const wxArrayInt& order,
-                      const wxArrayString& items,
-                      const wxPoint& pos = wxDefaultPosition,
-                      const wxString& name = wxRearrangeDialogNameStr);
+    bool Create(wxWindow *parent,
+                const wxString& message,
+                const wxString& title,
+                const wxArrayInt& order,
+                const wxArrayString& items,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxString& name = wxRearrangeDialogNameStr);
 
     /**
         Return the array describing the order of items after it was modified by
