@@ -538,17 +538,7 @@ void wxRendererMac::DrawTextCtrl(wxWindow* win, wxDC& dc,
     HIRect hiRect = CGRectMake( x, y, w, h );
     if ( !wxInPaintEvent(win, dc) )
     {
-        Rect r =
-        {
-            (short) hiRect.origin.y, (short) hiRect.origin.x,
-            (short) (hiRect.origin.y + hiRect.size.height),
-            (short) (hiRect.origin.x + hiRect.size.width)
-        };
-
-        RgnHandle updateRgn = NewRgn();
-        RectRgn( updateRgn, &r );
-        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
-        DisposeRgn( updateRgn );
+        win->Refresh( &rect );
     }
     else
     {
