@@ -71,8 +71,6 @@ void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
 {
     wxCHECK_RET( number > 0, _T("invalid field number in SetFieldsCount") );
 
-    bool refresh = false;
-
     if ( (size_t)number > m_panes.GetCount() )
     {
         wxStatusBarPane newPane;
@@ -88,31 +86,28 @@ void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
         m_panes.RemoveAt(number, m_panes.GetCount()-number);
     }
 
-    refresh = true;
-
-    if ( widths )
-    {
-        SetStatusWidths(number, widths);
-
-        // already done from SetStatusWidths()
-        refresh = false;
-    }
-
-    if ( refresh )
-        Refresh();
+	// SetStatusWidths will automatically refresh
+	SetStatusWidths(number, widths);
 }
 
 void wxStatusBarBase::SetStatusWidths(int WXUNUSED_UNLESS_DEBUG(n),
                                       const int widths[])
 {
-    wxCHECK_RET( widths, _T("NULL pointer in SetStatusWidths") );
-
     wxASSERT_MSG( (size_t)n == m_panes.GetCount(), _T("field number mismatch") );
 
-    for ( size_t i = 0; i < m_panes.GetCount(); i++ )
-        m_panes[i].nWidth = widths[i];
+    if (widths == NULL)
+	{
+		// special value meaning: override explicit pane widths and make them all 
+		// of the same size
+		m_bSameWidthForAllPanes = true;
+	}
+	else
+	{
+		for ( size_t i = 0; i < m_panes.GetCount(); i++ )
+			m_panes[i].nWidth = widths[i];
 
-    m_bSameWidthForAllPanes = false;
+		m_bSameWidthForAllPanes = false;
+	}
 
     // update the display after the widths changed
     Refresh();

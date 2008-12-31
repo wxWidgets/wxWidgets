@@ -176,23 +176,8 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
     // only set status widths when n == number of statuswindows
     wxCHECK_RET( (size_t)n == m_panes.GetCount(), _T("status bar field count mismatch") );
 
-    // delete the old widths in any case - this function may be used to reset
-    // the widths to the default (all equal)
-    // MBN: this is incompatible with at least wxMSW and wxMAC and not
-    //      documented, but let's keep it for now
-    m_bSameWidthForAllPanes = true;
-    // FM: what MBN's comment is saying is that allowing widths_field = NULL
-    //     only for wxStatusBarGeneric is not documented...
-
     // forget the old cached pixel widths
     m_widthsAbs.Empty();
-
-    if ( !widths_field )
-    {
-        // not an error, see the comment above
-        Refresh();
-        return;
-    }
 
     wxStatusBarBase::SetStatusWidths(n, widths_field);
 }

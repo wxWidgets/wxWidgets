@@ -112,6 +112,8 @@ public:
     /**
         Saves the current field text in a per field stack, and sets the field text
         to the string passed as argument.
+		
+		@see PopStatusText()
     */
     void PushStatusText(const wxString& string, int field = 0);
 
@@ -164,7 +166,7 @@ public:
 
     /**
         Sets the widths of the fields in the status line. There are two types of
-        fields: fixed widths one and variable width fields. For the fixed width fields
+        fields: @b fixed widths and @b variable width fields. For the fixed width fields
         you should specify their (constant) width in pixels. For the variable width
         fields, specify a negative number which indicates how the field should expand:
         the space left for all variable width fields is divided between them according
@@ -182,6 +184,7 @@ public:
             Contains an array of n integers, each of which is either an
             absolute status field width in pixels if positive or indicates a
             variable width field if negative.
+			The special value @NULL means that all fields should get the same width.
 
         @remarks The widths of the variable fields are calculated from the total
                  width of all fields, minus the sum of widths of the
