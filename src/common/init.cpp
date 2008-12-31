@@ -269,7 +269,7 @@ static bool DoCommonPostInit()
         }
 
         // yes; test if it implements Clone() correctly
-        wxEvent* test = dynamic_cast<wxEvent*>(ci->CreateObject());
+        wxEvent* test = wxDynamicCast(ci->CreateObject(),wxEvent);
         if (test == NULL)
         {
             wxLogWarning("The event class '%s' should have a DECLARE_DYNAMIC_CLASS macro!",
