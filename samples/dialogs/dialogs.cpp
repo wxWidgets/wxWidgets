@@ -40,6 +40,8 @@
     #include "wx/choicdlg.h"
 #endif // wxUSE_CHOICEDLG
 
+#include "wx/rearrangectrl.h"
+
 #if wxUSE_STARTUP_TIPS
     #include "wx/tipdlg.h"
 #endif // wxUSE_STARTUP_TIPS
@@ -145,6 +147,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_SINGLE_CHOICE,                 MyFrame::SingleChoice)
     EVT_MENU(DIALOGS_MULTI_CHOICE,                  MyFrame::MultiChoice)
 #endif // wxUSE_CHOICEDLG
+
+    EVT_MENU(DIALOGS_REARRANGE,                     MyFrame::Rearrange)
 
 #if wxUSE_FILEDLG
     EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
@@ -295,6 +299,8 @@ bool MyApp::OnInit()
         choices_menu->Append(DIALOGS_MULTI_CHOICE,  _T("M&ultiple choice\tCtrl-U"));
     #endif // wxUSE_CHOICEDLG
 
+        choices_menu->Append(DIALOGS_REARRANGE,  _T("&Rearrange dialog\tCtrl-R"));
+
     #if USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
         choices_menu->AppendSeparator();
     #endif // USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
@@ -431,7 +437,7 @@ bool MyApp::OnInit()
 #endif // USE_SETTINGS_DIALOG
 
     wxMenu *menuNotif = new wxMenu;
-    menuNotif->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
+    menuNotif->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-Shift-R"));
 #if wxUSE_NOTIFICATION_MESSAGE
     menuNotif->Append(DIALOGS_NOTIFY_AUTO, "&Automatically hidden notification");
     menuNotif->Append(DIALOGS_NOTIFY_SHOW, "&Show manual notification");
@@ -816,6 +822,192 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
     //else: cancelled or nothing selected
 }
 #endif // wxUSE_CHOICEDLG
+
+// custom rearrange dialog: it adds the possibility to rename an item to the
+// base class functionality
+class MyRearrangeDialog : public wxRearrangeDialog
+{
+public:
+    MyRearrangeDialog(wxWindow *parent,
+                      wxArrayInt& order,
+                      wxArrayString& labels,
+                      wxArrayString& labelsOrig)
+        : wxRearrangeDialog
+          (
+           parent,
+           "Configure the columns shown:",
+           "wxRearrangeDialog example",
+           order,
+           labels
+          ),
+          m_order(order),
+          m_labels(labels),
+          m_labelsOrig(labelsOrig)
+    {
+        m_sel = wxNOT_FOUND;
+
+        wxPanel * const panel = new wxPanel(this);
+        wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
+
+        m_labelOrig = new wxStaticText(panel, wxID_ANY, "");
+        sizer->Add(m_labelOrig, wxSizerFlags().Centre().Border(wxRIGHT));
+
+        m_text = new wxTextCtrl(panel, wxID_ANY, "",
+                                wxDefaultPosition, wxDefaultSize,
+                                wxTE_PROCESS_ENTER);
+        sizer->Add(m_text, wxSizerFlags().Centre().Border(wxRIGHT));
+
+        sizer->Add(new wxButton(panel, wxID_APPLY, "&Rename"),
+                   wxSizerFlags().Centre());
+
+        panel->SetSizer(sizer);
+
+        // call this first to ensure that the controls have a reasonable best
+        // size before they're added
+        DoUpdateExtraControls(GetList()->GetSelection());
+
+        AddExtraControls(panel);
+    }
+
+    // call this instead of ShowModal() to update order and labels array in
+    // case the dialog was not cancelled
+    bool Rearrange()
+    {
+        if ( ShowModal() == wxID_CANCEL )
+            return false;
+
+        m_order = GetOrder();
+
+        return true;
+    }
+
+private:
+    void OnSelChange(wxCommandEvent& event)
+    {
+        DoUpdateExtraControls(event.GetInt());
+    }
+
+    void OnUpdateUIRename(wxUpdateUIEvent& event)
+    {
+        event.Enable( CanRename() );
+    }
+
+    void OnRename(wxCommandEvent& WXUNUSED(event))
+    {
+        if ( !CanRename() )
+            return;
+
+        m_labels[m_sel] = m_text->GetValue();
+        GetList()->SetString(m_sel, m_labels[m_sel]);
+    }
+
+    bool CanRename() const
+    {
+        // only allow renaming if the user modified the currently selected item
+        // text (which presupposes that we do have a current item)
+        return m_sel != wxNOT_FOUND && m_text->GetValue() != m_labels[m_sel];
+    }
+
+    void DoUpdateExtraControls(int sel)
+    {
+        m_sel = sel;
+
+        if ( m_sel == wxNOT_FOUND )
+        {
+            m_labelOrig->SetLabel("<no selection>");
+            m_text->Clear();
+            m_text->Disable();
+        }
+        else // have valid item
+        {
+            m_labelOrig->SetLabelText(m_labelsOrig[m_sel]);
+            m_text->Enable();
+            m_text->SetValue(m_labels[m_sel]);
+        }
+    }
+
+    wxArrayInt& m_order;
+    wxArrayString& m_labels,
+                   m_labelsOrig;
+
+    int m_sel;
+    wxStaticText *m_labelOrig;
+    wxTextCtrl *m_text;
+
+    DECLARE_EVENT_TABLE()
+    DECLARE_NO_COPY_CLASS(MyRearrangeDialog)
+};
+
+BEGIN_EVENT_TABLE(MyRearrangeDialog, wxRearrangeDialog)
+    EVT_LISTBOX(wxID_ANY, MyRearrangeDialog::OnSelChange)
+    EVT_UPDATE_UI(wxID_APPLY, MyRearrangeDialog::OnUpdateUIRename)
+    EVT_BUTTON(wxID_APPLY, MyRearrangeDialog::OnRename)
+    EVT_TEXT_ENTER(wxID_ANY, MyRearrangeDialog::OnRename)
+END_EVENT_TABLE()
+
+void MyFrame::Rearrange(wxCommandEvent& WXUNUSED(event))
+{
+    // the arrays are static so that we preserve the items order between calls
+    // to this function
+    static wxArrayInt s_order;
+    static wxArrayString s_labels,
+                         s_labelsOrig;
+
+    // initialize them on the first call
+    if ( s_labelsOrig.empty() )
+    {
+        static const struct ItemInfo
+        {
+            const char *label;
+            const char *labelOrig;
+            int order;
+        } items[] =
+        {
+            { "File name",      "Name",   0 },
+            { "File type",      "Ext",    1 },
+            { "Size",           "Size",   2 },
+            { "Creation time",  "Ctime", ~3 },  // negated so hidden
+            { "Last accessed",  "Atime", ~4 },
+            { "Last modified",  "Mtime",  5 },
+        };
+
+        s_order.reserve(WXSIZEOF(items));
+        s_labels.reserve(WXSIZEOF(items));
+        s_labelsOrig.reserve(WXSIZEOF(items));
+        for ( unsigned n = 0; n < WXSIZEOF(items); n++ )
+        {
+            const ItemInfo& item = items[n];
+            s_order.push_back(item.order);
+            s_labels.push_back(item.label);
+            s_labelsOrig.push_back(item.labelOrig);
+        }
+    }
+
+    MyRearrangeDialog dlg(this, s_order, s_labels, s_labelsOrig);
+    if ( !dlg.Rearrange() )
+        return;
+
+    wxString columns;
+    for ( unsigned n = 0; n < s_order.size(); n++ )
+    {
+        columns += wxString::Format("\n    %u: ", n);
+        int idx = s_order[n];
+        if ( idx < 0 )
+        {
+            columns += "[hidden] ";
+            idx = ~idx;
+        }
+
+        columns += s_labels[idx];
+        if ( s_labels[idx] != s_labelsOrig[idx] )
+        {
+            columns += wxString::Format(" (original label: \"%s\")",
+                                        s_labelsOrig[idx]);
+        }
+    }
+
+    wxLogMessage("The columns order now is:%s", columns);
+}
 
 #if wxUSE_FILEDLG
 

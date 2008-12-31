@@ -199,9 +199,21 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxString& name = wxRearrangeDialogNameStr);
 
+
+    // methods for the dialog customization
+
+    // add extra contents to the dialog below the wxRearrangeCtrl part: the
+    // given window (usually a wxPanel containing more control inside it) must
+    // have the dialog as its parent and will be inserted into it at the right
+    // place by this method
+    void AddExtraControls(wxWindow *win);
+
+    // return the wxRearrangeList control used by the dialog
+    wxRearrangeList *GetList() const;
+
+
     // get the order of items after it was modified by the user
-    wxArrayInt GetOrder() const
-        { return m_ctrl->GetList()->GetCurrentOrder(); }
+    wxArrayInt GetOrder() const;
 
 private:
     // common part of all ctors

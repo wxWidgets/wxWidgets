@@ -221,27 +221,76 @@ void wxRearrangeCtrl::OnButton(wxCommandEvent& event)
 extern
 WXDLLIMPEXP_DATA_CORE(const char) wxRearrangeDialogNameStr[] = "wxRearrangeDlg";
 
-wxRearrangeDialog::wxRearrangeDialog(wxWindow *parent,
-                                     const wxString& message,
-                                     const wxString& title,
-                                     const wxArrayInt& order,
-                                     const wxArrayString& items,
-                                     const wxPoint& pos,
-                                     const wxString& name)
-                 : wxDialog(parent, wxID_ANY, title,
-                            pos, wxDefaultSize,
-                            wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER,
-                            name)
+namespace
 {
+
+enum wxRearrangeDialogSizerPositions
+{
+    Pos_Label,
+    Pos_Ctrl,
+    Pos_Buttons,
+    Pos_Max
+};
+
+} // anonymous namespace
+
+bool wxRearrangeDialog::Create(wxWindow *parent,
+                               const wxString& message,
+                               const wxString& title,
+                               const wxArrayInt& order,
+                               const wxArrayString& items,
+                               const wxPoint& pos,
+                               const wxString& name)
+{
+    if ( !wxDialog::Create(parent, wxID_ANY, title,
+                           pos, wxDefaultSize,
+                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER,
+                           name) )
+        return false;
+
     m_ctrl = new wxRearrangeCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                  order, items);
 
+    // notice that the items in this sizer should be inserted accordingly to
+    // wxRearrangeDialogSizerPositions order
     wxSizer * const sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(new wxStaticText(this, wxID_ANY, message),
-                  wxSizerFlags().DoubleBorder());
+                  wxSizerFlags().Border());
     sizerTop->Add(m_ctrl,
                   wxSizerFlags(1).Expand().Border());
     sizerTop->Add(CreateSeparatedButtonSizer(wxOK | wxCANCEL),
                   wxSizerFlags().Expand().Border());
     SetSizerAndFit(sizerTop);
+
+    return true;
+}
+
+void wxRearrangeDialog::AddExtraControls(wxWindow *win)
+{
+    wxSizer * const sizer = GetSizer();
+    wxCHECK_RET( sizer, "the dialog must be created first" );
+
+    wxASSERT_MSG( sizer->GetChildren().GetCount() == Pos_Max,
+                  "calling AddExtraControls() twice?" );
+
+    sizer->Insert(Pos_Buttons, win, wxSizerFlags().Expand().Border());
+
+    win->MoveAfterInTabOrder(m_ctrl);
+
+    // we need to update the initial/minimal window size
+    sizer->SetSizeHints(this);
+}
+
+wxRearrangeList *wxRearrangeDialog::GetList() const
+{
+    wxCHECK_MSG( m_ctrl, NULL, "the dialog must be created first" );
+
+    return m_ctrl->GetList();
+}
+
+wxArrayInt wxRearrangeDialog::GetOrder() const
+{
+    wxCHECK_MSG( m_ctrl, wxArrayInt(), "the dialog must be created first" );
+
+    return m_ctrl->GetList()->GetCurrentOrder();
 }

@@ -310,6 +310,8 @@ public:
     void MultiChoice(wxCommandEvent& event);
 #endif // wxUSE_CHOICEDLG
 
+    void Rearrange(wxCommandEvent& event);
+
 #if wxUSE_TEXTDLG
     void TextEntry(wxCommandEvent& event);
     void PasswordEntry(wxCommandEvent& event);
@@ -448,6 +450,7 @@ enum
     DIALOGS_MESSAGE_BOX_WXINFO,
     DIALOGS_SINGLE_CHOICE,
     DIALOGS_MULTI_CHOICE,
+    DIALOGS_REARRANGE,
     DIALOGS_TEXT_ENTRY,
     DIALOGS_PASSWORD_ENTRY,
     DIALOGS_FILE_OPEN,
