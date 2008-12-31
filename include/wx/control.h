@@ -53,9 +53,6 @@ public:
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
 
-    // get just the text of the label, without mnemonic characters ('&')
-    wxString GetLabelText() const { return GetLabelText(GetLabel()); }
-
     virtual void SetLabel(const wxString& label)
     {
         m_labelOrig = label;
@@ -72,6 +69,14 @@ public:
         return m_labelOrig;
     }
 
+    // get just the text of the label, without mnemonic characters ('&')
+    wxString GetLabelText() const { return GetLabelText(GetLabel()); }
+
+    void SetLabelText(const wxString& text)
+    {
+        return SetLabel(EscapeMnemonics(text));
+    }
+
     // static utilities:
 
     // replaces parts of the string with ellipsis if needed
@@ -83,6 +88,9 @@ public:
 
     // removes the mnemonics characters
     static wxString RemoveMnemonics(const wxString& str);
+
+    // escapes (by doubling them) the mnemonics
+    static wxString EscapeMnemonics(const wxString& str);
 
     // return the accel index in the string or -1 if none and puts the modified
     // string into second parameter if non NULL

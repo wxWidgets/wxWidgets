@@ -160,6 +160,14 @@ wxString wxControlBase::RemoveMnemonics(const wxString& str)
 }
 
 /* static */
+wxString wxControlBase::EscapeMnemonics(const wxString& text)
+{
+    wxString label(text);
+    label.Replace("&", "&&");
+    return label;
+}
+
+/* static */
 int wxControlBase::FindAccelIndex(const wxString& label, wxString *labelOnly)
 {
     // the character following MNEMONIC_PREFIX is the accelerator for this

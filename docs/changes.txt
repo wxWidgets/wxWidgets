@@ -433,6 +433,7 @@ All (GUI):
 - Added wxArtProvider::GetNativeSizeHint(); GetSizeHint() as well as
   GetNativeSizeHint() now return more sensible values in wxMSW and wxMac and
   no longer return bogus values.
+- Added wxControl::SetLabelText() and EscapeMnemonics().
 
 wxGTK:
 
