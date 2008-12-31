@@ -42,12 +42,13 @@ public:
     {
     }
 
-    bool LoadFile(const wxString& name, wxBitmapType flags = wxICON_DEFAULT_TYPE,
+    bool LoadFile(const wxString& name, wxBitmapType flags,
                   int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
         { return wxBitmap::LoadFile(name, flags); }
 
     // unhide the base class version
-    virtual bool LoadFile(const wxString& name, wxBitmapType flags)
+    virtual bool LoadFile(const wxString& name,
+                          wxBitmapType flags = wxICON_DEFAULT_TYPE)
         { return wxBitmap::LoadFile(name, flags); }
 
     // create from bitmap (which should have a mask unless it's monochrome):
