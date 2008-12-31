@@ -867,16 +867,37 @@ public:
         DoUpdateExtraControls(GetList()->GetSelection());
 
         AddExtraControls(panel);
+
+
+        // another customization not directly supported by the dialog: add a
+        // custom button
+        wxWindow * const btnOk = FindWindow(wxID_OK);
+        wxCHECK_RET( btnOk, "no Ok button?" );
+
+        wxSizer * const sizerBtns = btnOk->GetContainingSizer();
+        wxCHECK_RET( sizerBtns, "no buttons sizer?" );
+
+        sizerBtns->Add(new wxButton(this, wxID_RESET, "&Reset all"),
+                       wxSizerFlags().Border(wxLEFT));
     }
 
     // call this instead of ShowModal() to update order and labels array in
     // case the dialog was not cancelled
     bool Rearrange()
     {
-        if ( ShowModal() == wxID_CANCEL )
-            return false;
+        switch ( ShowModal() )
+        {
+            case wxID_CANCEL:
+                return false;
 
-        m_order = GetOrder();
+            case wxID_OK:
+                m_order = GetOrder();
+                break;
+
+            case wxID_RESET:
+                // order already reset
+                break;
+        }
 
         return true;
     }
@@ -899,6 +920,21 @@ private:
 
         m_labels[m_sel] = m_text->GetValue();
         GetList()->SetString(m_sel, m_labels[m_sel]);
+    }
+
+    void OnReset(wxCommandEvent& WXUNUSED(event))
+    {
+        // in a real program we should probably ask if the user really wants to
+        // do this but here we just go ahead and reset all columns labels and
+        // their order without confirmation
+        const unsigned count = m_order.size();
+        for ( unsigned n = 0; n < count; n++ )
+        {
+            m_order[n] = n;
+            m_labels[n] = m_labelsOrig[n];
+        }
+
+        EndModal(wxID_RESET);
     }
 
     bool CanRename() const
@@ -940,9 +976,12 @@ private:
 
 BEGIN_EVENT_TABLE(MyRearrangeDialog, wxRearrangeDialog)
     EVT_LISTBOX(wxID_ANY, MyRearrangeDialog::OnSelChange)
+
     EVT_UPDATE_UI(wxID_APPLY, MyRearrangeDialog::OnUpdateUIRename)
-    EVT_BUTTON(wxID_APPLY, MyRearrangeDialog::OnRename)
+
     EVT_TEXT_ENTER(wxID_ANY, MyRearrangeDialog::OnRename)
+    EVT_BUTTON(wxID_APPLY, MyRearrangeDialog::OnRename)
+    EVT_BUTTON(wxID_RESET, MyRearrangeDialog::OnReset)
 END_EVENT_TABLE()
 
 void MyFrame::Rearrange(wxCommandEvent& WXUNUSED(event))
