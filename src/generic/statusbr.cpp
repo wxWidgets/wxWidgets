@@ -41,15 +41,20 @@
     IMPLEMENT_DYNAMIC_CLASS(wxStatusBarGeneric, wxWindow)
 #endif // wxUSE_NATIVE_STATUSBAR
 
+// Default status border dimensions
+#define wxTHICK_LINE_BORDER 2
+
+
+// ----------------------------------------------------------------------------
+// wxStatusBarGeneric
+// ----------------------------------------------------------------------------
+
 BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
     EVT_LEFT_DOWN(wxStatusBarGeneric::OnLeftDown)
     EVT_RIGHT_DOWN(wxStatusBarGeneric::OnRightDown)
     EVT_SYS_COLOUR_CHANGED(wxStatusBarGeneric::OnSysColourChanged)
 END_EVENT_TABLE()
-
-// Default status border dimensions
-#define         wxTHICK_LINE_BORDER 2
 
 void wxStatusBarGeneric::Init()
 {
@@ -98,7 +103,6 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
     return true;
 }
 
-
 wxSize wxStatusBarGeneric::DoGetBestSize() const
 {
     int width, height;
@@ -120,25 +124,26 @@ void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 {
     wxASSERT_MSG( number >= 0, _T("negative number of fields in wxStatusBar?") );
 
-    int i;
-    for(i = m_nFields; i < number; ++i)
+    // enlarge the m_statusStrings array if needed:
+    for (size_t i = m_panes.GetCount(); i < (size_t)number; ++i)
         m_statusStrings.Add( wxEmptyString );
 
-    for (i = m_nFields - 1; i >= number; --i)
-        m_statusStrings.RemoveAt(i);
+    // shrink the m_statusStrings array if needed:
+    for (int j = (int)m_panes.GetCount() - 1; j >= number; --j)
+        m_statusStrings.RemoveAt(j);
 
     // forget the old cached pixel widths
     m_widthsAbs.Empty();
 
     wxStatusBarBase::SetFieldsCount(number, widths);
 
-    wxASSERT_MSG( m_nFields == (int)m_statusStrings.GetCount(),
-                  _T("This really should never happen, can we do away with m_nFields here?") );
+    wxASSERT_MSG( m_panes.GetCount() == m_statusStrings.GetCount(),
+                  _T("This really should never happen, can we do away with m_panes.GetCount() here?") );
 }
 
 void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 {
-    wxCHECK_RET( (number >= 0) && (number < m_nFields),
+    wxCHECK_RET( (number >= 0) && ((size_t)number < m_panes.GetCount()),
                  _T("invalid status bar field index") );
 
     wxString oldText = m_statusStrings[number];
@@ -160,7 +165,7 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 
 wxString wxStatusBarGeneric::GetStatusText(int n) const
 {
-    wxCHECK_MSG( (n >= 0) && (n < m_nFields), wxEmptyString,
+    wxCHECK_MSG( (n >= 0) && ((size_t)n < m_panes.GetCount()), wxEmptyString,
                  _T("invalid status bar field index") );
 
     return m_statusStrings[n];
@@ -168,14 +173,16 @@ wxString wxStatusBarGeneric::GetStatusText(int n) const
 
 void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
 {
-    // only set status widths, when n == number of statuswindows
-    wxCHECK_RET( n == m_nFields, _T("status bar field count mismatch") );
+    // only set status widths when n == number of statuswindows
+    wxCHECK_RET( (size_t)n == m_panes.GetCount(), _T("status bar field count mismatch") );
 
     // delete the old widths in any case - this function may be used to reset
     // the widths to the default (all equal)
     // MBN: this is incompatible with at least wxMSW and wxMAC and not
     //      documented, but let's keep it for now
-    ReinitWidths();
+    m_bSameWidthForAllPanes = true;
+    // FM: what MBN's comment is saying is that allowing widths_field = NULL
+    //     only for wxStatusBarGeneric is not documented...
 
     // forget the old cached pixel widths
     m_widthsAbs.Empty();
@@ -241,7 +248,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
-    for (int i = 0; i < m_nFields; i ++)
+    for (size_t i = 0; i < m_panes.GetCount(); i ++)
         DrawField(dc, i);
 }
 
@@ -278,10 +285,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
     wxRect rect;
     GetFieldRect(i, rect);
 
-    int style = wxSB_NORMAL;
-    if (m_statusStyles)
-        style = m_statusStyles[i];
-
+    int style = m_panes[i].nStyle;
     if (style != wxSB_FLAT)
     {
         // Draw border
@@ -331,7 +335,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
   // Get the position and size of the field's internal bounding rectangle
 bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 {
-    wxCHECK_MSG( (n >= 0) && (n < m_nFields), false,
+    wxCHECK_MSG( (n >= 0) && ((size_t)n < m_panes.GetCount()), false,
                  _T("invalid status bar field index") );
 
     // FIXME: workarounds for OS/2 bugs have nothing to do here (VZ)

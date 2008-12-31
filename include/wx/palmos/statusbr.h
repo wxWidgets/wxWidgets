@@ -63,7 +63,7 @@ public:
 protected:
     void CopyFieldsWidth(const int widths[]);
     void SetFieldsWidth();
-
+/*
     // store the text in the status bar
     wxListString **StatusTextBuffer;
     void SetStatusBufferText(const wxString& text, int number);
@@ -71,6 +71,9 @@ protected:
     wxListString *GetOrCreateStatusBuffer(int i);
     wxListString *GetStatusBufferStack(int i) const;
     void DeleteStatusBuffer();
+
+    TODO: reuse wxStatusBarBase's stack routines instead of reimplementing them here
+*/
 
     // override base class virtual
     void DoMoveWindow(int x, int y, int width, int height);

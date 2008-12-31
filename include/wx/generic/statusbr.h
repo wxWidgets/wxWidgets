@@ -19,6 +19,11 @@
 #include "wx/pen.h"
 #include "wx/arrstr.h"
 
+
+// ----------------------------------------------------------------------------
+// wxStatusBarGeneric
+// ----------------------------------------------------------------------------
+
 class WXDLLIMPEXP_CORE wxStatusBarGeneric : public wxStatusBarBase
 {
 public:
@@ -87,11 +92,13 @@ protected:
     // common part of all ctors
     void Init();
 
+    // the array of the currently displayed strings
     wxArrayString     m_statusStrings;
 
     // the last known width of the client rect (used to rebuild cache)
     int               m_lastClientWidth;
-    // the widths of the status bar panes in pixels
+
+    // the absolute widths of the status bar panes in pixels
     wxArrayInt        m_widthsAbs;
 
     int               m_borderX;

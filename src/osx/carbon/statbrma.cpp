@@ -103,7 +103,7 @@ void wxStatusBarMac::DrawField(wxDC& dc, int i)
 
 void wxStatusBarMac::SetStatusText(const wxString& text, int number)
 {
-    wxCHECK_RET( (number >= 0) && (number < m_nFields),
+    wxCHECK_RET( (number >= 0) && ((size_t)number < m_panes.GetCount()),
         wxT("invalid status bar field index") );
 
     if ( m_statusStrings[number] == text )
@@ -162,12 +162,11 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.DrawLine(0, 0, w, 0);
     }
 
-    int i;
     if ( GetFont().Ok() )
         dc.SetFont(GetFont());
     dc.SetBackgroundMode(wxTRANSPARENT);
 
-    for ( i = 0; i < m_nFields; i ++ )
+    for ( size_t i = 0; i < m_panes.GetCount(); i ++ )
         DrawField(dc, i);
 }
 

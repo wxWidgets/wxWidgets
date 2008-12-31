@@ -161,7 +161,7 @@ void wxStatusBar::SetStatusWidths(int n, const int widths[])
 
 void wxStatusBar::SetFieldsWidth()
 {
-    if ( !m_nFields )
+    if ( m_panes.IsEmpty() )
         return;
 
     int aBorders[3];
@@ -170,17 +170,17 @@ void wxStatusBar::SetFieldsWidth()
     int extraWidth = aBorders[2]; // space between fields
 
     wxArrayInt widthsAbs =
-        CalculateAbsWidths(GetClientSize().x - extraWidth*(m_nFields - 1));
+        CalculateAbsWidths(GetClientSize().x - extraWidth*(m_panes.GetCount() - 1));
 
-    int *pWidths = new int[m_nFields];
+    int *pWidths = new int[m_panes.GetCount()];
 
     int nCurPos = 0;
-    for ( int i = 0; i < m_nFields; i++ ) {
+    for ( int i = 0; i < m_panes.GetCount(); i++ ) {
         nCurPos += widthsAbs[i] + extraWidth;
         pWidths[i] = nCurPos;
     }
 
-    if ( !StatusBar_SetParts(GetHwnd(), m_nFields, pWidths) ) {
+    if ( !StatusBar_SetParts(GetHwnd(), m_panes.GetCount(), pWidths) ) {
         wxLogLastError(wxT("StatusBar_SetParts"));
     }
 
@@ -200,24 +200,20 @@ void wxStatusBar::SetStatusText(const wxString& strText, int nField)
 
     // Get field style, if any
     int style;
-    if (m_statusStyles)
+    switch(m_panes[nField].nStyle)
     {
-        switch(m_statusStyles[nField])
-        {
-        case wxSB_RAISED:
-            style = SBT_POPOUT;
-            break;
-        case wxSB_FLAT:
-            style = SBT_NOBORDERS;
-            break;
-        case wxSB_NORMAL:
-        default:
-            style = 0;
-            break;
-        }
-    }
-    else
+    case wxSB_RAISED:
+        style = SBT_POPOUT;
+        break;
+    case wxSB_FLAT:
+        style = SBT_NOBORDERS;
+        break;
+
+    case wxSB_NORMAL:
+    default:
         style = 0;
+        break;
+    }
 
     // Pass both field number and style. MSDN library doesn't mention
     // that nField and style have to be 'ORed'
@@ -229,7 +225,7 @@ void wxStatusBar::SetStatusText(const wxString& strText, int nField)
 
 wxString wxStatusBar::GetStatusText(int nField) const
 {
-    wxCHECK_MSG( (nField >= 0) && (nField < m_nFields), wxEmptyString,
+    wxCHECK_MSG( (nField >= 0) && (nField < m_panes.GetCount()), wxEmptyString,
                  _T("invalid statusbar field index") );
 
     wxString str;
@@ -268,7 +264,7 @@ void wxStatusBar::SetMinHeight(int height)
 
 bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
 {
-    wxCHECK_MSG( (i >= 0) && (i < m_nFields), false,
+    wxCHECK_MSG( (i >= 0) && (i < m_panes.GetCount()), false,
                  _T("invalid statusbar field index") );
 
     RECT r;
@@ -309,10 +305,10 @@ wxSize wxStatusBar::DoGetBestSize() const
 
     // calculate width
     int width = 0;
-    for ( int i = 0; i < m_nFields; ++i )
+    for ( int i = 0; i < m_panes.GetCount(); ++i )
     {
-        int widthField = m_statusWidths ? m_statusWidths[i]
-                                        : DEFAULT_FIELD_WIDTH;
+        int widthField =
+            m_bSameWidthForAllPanes ? DEFAULT_FIELD_WIDTH : m_panes[i].nWidth;
         if ( widthField >= 0 )
         {
             width += widthField;
@@ -384,7 +380,7 @@ void wxStatusBar::SetStatusStyles(int n, const int styles[])
 {
     wxStatusBarBase::SetStatusStyles(n, styles);
 
-    if (n != m_nFields)
+    if (n != m_panes.GetCount())
         return;
 
     for (int i = 0; i < n; i++)

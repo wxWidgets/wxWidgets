@@ -16,7 +16,7 @@
 #include "wx/arrstr.h"
 
 // ----------------------------------------------------------------------------
-// wxStatusBar: a window near the bottom of the frame used for status info
+// wxStatusBarUniv: a window near the bottom of the frame used for status info
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxStatusBarUniv : public wxStatusBarBase,
@@ -95,7 +95,7 @@ protected:
     void Init();
 
 private:
-    // the status fields strings
+    // the current status fields strings
     wxArrayString m_statusText;
 
     // the absolute status fields widths
