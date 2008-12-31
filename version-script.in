@@ -25,6 +25,7 @@
 
 # public symbols added in 2.8.10 (please keep in alphabetical order):
 @WX_VERSION_TAG@.10 {
+        *wxArtProvider*PushBack*;
         *wxCArrayString*Release*;
         *wxDCBase*GetFontPointSizeAdjustment*;
         *wxWindowBase*DragAcceptFiles*;
