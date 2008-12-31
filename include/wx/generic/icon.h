@@ -43,7 +43,7 @@ public:
     }
 
     bool LoadFile(const wxString& name, wxBitmapType flags = wxICON_DEFAULT_TYPE,
-                  int WXUNUSED(desiredWidth)=-1, int WXUNUSED(desiredHeight)=-1)
+                  int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight))
         { return wxBitmap::LoadFile(name, flags); }
 
     // unhide the base class version
