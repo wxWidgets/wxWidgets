@@ -86,35 +86,35 @@ void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
         m_panes.RemoveAt(number, m_panes.GetCount()-number);
     }
 
-	// SetStatusWidths will automatically refresh
-	SetStatusWidths(number, widths);
+    // SetStatusWidths will automatically refresh
+    SetStatusWidths(number, widths);
 }
 
 void wxStatusBarBase::SetStatusWidths(int WXUNUSED_UNLESS_DEBUG(n),
-                                      const int widths[])
+                                    const int widths[])
 {
     wxASSERT_MSG( (size_t)n == m_panes.GetCount(), _T("field number mismatch") );
 
     if (widths == NULL)
-	{
-		// special value meaning: override explicit pane widths and make them all 
-		// of the same size
-		m_bSameWidthForAllPanes = true;
-	}
-	else
-	{
-		for ( size_t i = 0; i < m_panes.GetCount(); i++ )
-			m_panes[i].nWidth = widths[i];
+    {
+        // special value meaning: override explicit pane widths and make them all
+        // of the same size
+        m_bSameWidthForAllPanes = true;
+    }
+    else
+    {
+        for ( size_t i = 0; i < m_panes.GetCount(); i++ )
+            m_panes[i].nWidth = widths[i];
 
-		m_bSameWidthForAllPanes = false;
-	}
+        m_bSameWidthForAllPanes = false;
+    }
 
     // update the display after the widths changed
     Refresh();
 }
 
 void wxStatusBarBase::SetStatusStyles(int WXUNUSED_UNLESS_DEBUG(n),
-                                      const int styles[])
+                                    const int styles[])
 {
     wxCHECK_RET( styles, _T("NULL pointer in SetStatusStyles") );
 
@@ -153,8 +153,8 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
         // calculate the total width of all the fixed width fields and the
         // total number of var field widths counting with multiplicity
         size_t nTotalWidth = 0,
-               nVarCount = 0,
-               i;
+            nVarCount = 0,
+            i;
 
         for ( i = 0; i < m_panes.GetCount(); i++ )
         {
