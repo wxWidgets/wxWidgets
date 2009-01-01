@@ -1093,6 +1093,9 @@ public:
 
     /**
        Returns the number of items in the sizer.
+
+       If you just need to test whether the sizer is empty or not you can also
+       use IsEmpty() function.
     */
     size_t GetItemCount() const;
 
@@ -1245,6 +1248,13 @@ public:
         More readable way of calling wxSizer::Insert(0, 0, prop).
     */
     wxSizerItem* InsertStretchSpacer(size_t index, int prop = 1);
+
+    /**
+        Return @true if the sizer has no elements.
+
+        @see GetItemCount()
+     */
+    bool IsEmpty() const;
 
     /**
         Returns @true if the @a window is shown.

@@ -666,6 +666,7 @@ public:
         { SetDimension(wxPoint(x, y), wxSize(width, height)); }
 
     size_t GetItemCount() const { return m_children.GetCount(); }
+    bool IsEmpty() const { return m_children.IsEmpty(); }
 
     wxSizerItem* GetItem( wxWindow *window, bool recursive = false );
     wxSizerItem* GetItem( wxSizer *sizer, bool recursive = false );
