@@ -74,7 +74,7 @@ public:
 
     void SetLabelText(const wxString& text)
     {
-        return SetLabel(EscapeMnemonics(text));
+        SetLabel(EscapeMnemonics(text));
     }
 
     // static utilities:
