@@ -62,15 +62,6 @@ const char *GetSocketErrorMsg(int pSockError)
     }
 }
 
-// outputs log message with IP and TCP port number prepended
-void
-LogWorker(const wxIPV4address& addr,
-          const wxString& msg,
-          wxLogLevel level = wxLOG_Info)
-{
-    wxLogGeneric(level, "%s:%d %s", addr.IPAddress(), addr.Service(), msg);
-}
-
 //event sent by workers to server class
 //after client is served
 const wxEventType wxEVT_WORKER = wxNewEventType();
@@ -158,29 +149,42 @@ private:
 
 DECLARE_APP(Server);
 
+// just some common things shared between ThreadWorker and EventWorker
+class WorkerBase
+{
+protected:
+    // outputs log message with IP and TCP port number prepended
+    void LogWorker(const wxString& msg, wxLogLevel level = wxLOG_Info)
+    {
+        wxLogGeneric(level,
+                     "%s:%d %s", m_peer.IPAddress(), m_peer.Service(), msg);
+    }
+
+    wxIPV4address m_peer;
+};
+
 //thread based worker reads signature and all data first from connected client
 //and resends data to client after reading
-class ThreadWorker : public wxThread
+class ThreadWorker : public wxThread, private WorkerBase
 {
 public:
     ThreadWorker(wxSocketBase* pSocket);
     virtual ExitCode Entry();
+
 private:
     wxSocketBase* m_socket;
-    wxIPV4address m_peer;
 };
 
 //event based worker reads signature and creates buffer for incoming data.
 //When part of data arrives this worker resends it as soon as possible.
-class EventWorker : public wxEvtHandler
+class EventWorker : public wxEvtHandler, private WorkerBase
 {
-    DECLARE_EVENT_TABLE();
 public:
     EventWorker(wxSocketBase* pSock);
-    ~EventWorker();
+    virtual ~EventWorker();
+
 private:
     wxSocketBase* m_socket;
-    wxIPV4address m_peer;
 
     unsigned char m_signature[2];
     char* m_inbuf;
@@ -193,6 +197,8 @@ private:
     void OnSocketEvent(wxSocketEvent& pEvent);
     void DoWrite();
     void DoRead();
+
+    DECLARE_EVENT_TABLE();
 };
 
 /******************* Implementation ******************/
@@ -207,10 +213,12 @@ void
 Server::OnInitCmdLine(wxCmdLineParser& pParser)
 {
     wxApp::OnInitCmdLine(pParser);
-    pParser.AddSwitch("t","threads",_("Use thread based workers only"));
-    pParser.AddSwitch("e","events",_("Use event based workers only"));
-    pParser.AddOption("m","max",_("Exit after <n> connections"),wxCMD_LINE_VAL_NUMBER,wxCMD_LINE_PARAM_OPTIONAL);
-    pParser.AddOption("p","port",_("listen on given port (default 3000)"),wxCMD_LINE_VAL_NUMBER,wxCMD_LINE_PARAM_OPTIONAL);
+    pParser.AddSwitch("t","threads","Use thread based workers only");
+    pParser.AddSwitch("e","events","Use event based workers only");
+    pParser.AddOption("m","max","Exit after <n> connections",
+                      wxCMD_LINE_VAL_NUMBER);
+    pParser.AddOption("p","port","listen on given port (default 3000)",
+                      wxCMD_LINE_VAL_NUMBER);
 }
 
 void
@@ -220,13 +228,13 @@ Server::DumpStatistics()
     switch(m_workMode)
     {
         case EVENTS:
-            mode = _("Event based workers");
+            mode = "Event based workers";
             break;
         case THREADS:
-            mode = _("Thread based workers");
+            mode = "Thread based workers";
             break;
         case MIXED:
-            mode = _("Event and thread based workers");
+            mode = "Event and thread based workers";
             break;
     }
     wxLogMessage("Server mode: %s",mode);
@@ -259,7 +267,7 @@ Server::DumpStatistics()
 bool
 Server::OnCmdLineParsed(wxCmdLineParser& pParser)
 {
-    if (pParser.Found(_("verbose")))
+    if (pParser.Found("verbose"))
     {
         wxLog::AddTraceMask("wxSocket");
         wxLog::AddTraceMask("epolldispatcher");
@@ -479,26 +487,26 @@ wxThread::ExitCode ThreadWorker::Entry()
     WorkerEvent e(this);
     if (!m_socket->IsConnected())
     {
-        LogWorker(m_peer,"ThreadWorker: not connected",wxLOG_Error);
+        LogWorker("ThreadWorker: not connected",wxLOG_Error);
         return 0;
     }
     int to_process = -1;
     if (m_socket->IsConnected())
     {
         unsigned char signature[2];
-        LogWorker(m_peer,"ThreadWorker: reading for data");
+        LogWorker("ThreadWorker: reading for data");
         to_process = 2;
         do
         {
             m_socket->Read(&signature,to_process);
             if (m_socket->Error())
             {
-                LogWorker(m_peer,"ThreadWorker: Read error",wxLOG_Error);
+                LogWorker("ThreadWorker: Read error",wxLOG_Error);
                 wxGetApp().AddPendingEvent(e);
                 return 0;
             }
             to_process -= m_socket->LastCount();
-            LogWorker(m_peer,wxString::Format("to_process: %d",to_process));
+            LogWorker(wxString::Format("to_process: %d",to_process));
 
         }
         while (!m_socket->Error() && to_process != 0);
@@ -511,29 +519,29 @@ wxThread::ExitCode ThreadWorker::Entry()
 
         if (signature[0] == 0xCE)
         {
-            LogWorker(m_peer,_("This server does not support test2 from GUI client"),wxLOG_Error);
+            LogWorker("This server does not support test2 from GUI client",wxLOG_Error);
             e.m_workerFailed = true;
             e.m_exit = true;
             return 0;
         }
         int size = signature[1] * (signature[0] == 0xBE ? 1 : 1024);
         char* buf = new char[size];
-        LogWorker(m_peer,wxString::Format("Message signature: chunks: %d, kilobytes: %d, size: %d (bytes)",signature[0],signature[1],size));
+        LogWorker(wxString::Format("Message signature: chunks: %d, kilobytes: %d, size: %d (bytes)",signature[0],signature[1],size));
 
         to_process = size;
-        LogWorker(m_peer,wxString::Format("ThreadWorker: reading %d bytes of data",to_process));
+        LogWorker(wxString::Format("ThreadWorker: reading %d bytes of data",to_process));
 
         do
         {
             m_socket->Read(buf,to_process);
             if (m_socket->Error())
             {
-                LogWorker(m_peer,"ThreadWorker: Read error",wxLOG_Error);
+                LogWorker("ThreadWorker: Read error",wxLOG_Error);
                 wxGetApp().AddPendingEvent(e);
                 return 0;
             }
             to_process -= m_socket->LastCount();
-            LogWorker(m_peer,wxString::Format("ThreadWorker: %d bytes readed, %d todo",m_socket->LastCount(),to_process));
+            LogWorker(wxString::Format("ThreadWorker: %d bytes readed, %d todo",m_socket->LastCount(),to_process));
 
         }
         while(!m_socket->Error() && to_process != 0);
@@ -545,16 +553,16 @@ wxThread::ExitCode ThreadWorker::Entry()
             m_socket->Write(buf,to_process);
             if (m_socket->Error())
             {
-                LogWorker(m_peer,"ThreadWorker: Write error",wxLOG_Error);
+                LogWorker("ThreadWorker: Write error",wxLOG_Error);
                 break;
             }
            to_process -= m_socket->LastCount();
-           LogWorker(m_peer,wxString::Format("ThreadWorker: %d bytes written, %d todo",m_socket->LastCount(),to_process));
+           LogWorker(wxString::Format("ThreadWorker: %d bytes written, %d todo",m_socket->LastCount(),to_process));
         }
         while(!m_socket->Error() && to_process != 0);
     }
 
-    LogWorker(m_peer,"ThreadWorker: done");
+    LogWorker("ThreadWorker: done");
     e.m_workerFailed = to_process != 0;
     m_socket->Destroy();
     wxGetApp().AddPendingEvent(e);
@@ -595,7 +603,7 @@ EventWorker::DoRead()
             {
                 if (m_socket->LastError() != wxSOCKET_WOULDBLOCK)
                 {
-                    LogWorker(m_peer,wxString::Format("Read error (%d): %s",m_socket->LastError(),GetSocketErrorMsg(m_socket->LastError())),wxLOG_Error);
+                    LogWorker(wxString::Format("Read error (%d): %s",m_socket->LastError(),GetSocketErrorMsg(m_socket->LastError())),wxLOG_Error);
                     m_socket->Close();
                 }
             }
@@ -608,7 +616,7 @@ EventWorker::DoRead()
                     unsigned char type = m_signature[0];
                     if (type == 0xCE)
                     {
-                        LogWorker(m_peer,_("This server does not support test2 from GUI client"),wxLOG_Error);
+                        LogWorker("This server does not support test2 from GUI client",wxLOG_Error);
                         m_written = -1; //wxSOCKET_LOST will interpret this as failure
                         m_socket->Close();
                     }
@@ -620,11 +628,11 @@ EventWorker::DoRead()
                         m_infill = 0;
                         m_outfill = 0;
                         m_written = 0;
-                        LogWorker(m_peer,wxString::Format("Message signature: len: %d, type: %s, size: %d (bytes)",chunks,type == 0xBE ? "b" : "kB",m_size));
+                        LogWorker(wxString::Format("Message signature: len: %d, type: %s, size: %d (bytes)",chunks,type == 0xBE ? "b" : "kB",m_size));
                         break;
                     } else
                     {
-                        LogWorker(m_peer,wxString::Format("Unknown test type %x",type));
+                        LogWorker(wxString::Format("Unknown test type %x",type));
                         m_socket->Close();
                     }
                 }
@@ -651,13 +659,10 @@ EventWorker::DoRead()
         {
             if (m_socket->LastError() != wxSOCKET_WOULDBLOCK)
             {
-                LogWorker(
-                        m_peer,
-                        wxString::Format("Read error (%d): %s",
-                                        m_socket->LastError(),
-                                        GetSocketErrorMsg(m_socket->LastError())
-                                    ),
-                        wxLOG_Error);
+                LogWorker(wxString::Format("Read error (%d): %s",
+                          m_socket->LastError(),
+                          GetSocketErrorMsg(m_socket->LastError())),
+                          wxLOG_Error);
 
                 m_socket->Close();
             }
@@ -687,12 +692,12 @@ void EventWorker::OnSocketEvent(wxSocketEvent& pEvent)
             break;
 
         case wxSOCKET_CONNECTION:
-            LogWorker(m_peer,wxString::Format("Unexpected wxSOCKET_CONNECTION in EventWorker"),wxLOG_Error);
+            LogWorker(wxString::Format("Unexpected wxSOCKET_CONNECTION in EventWorker"),wxLOG_Error);
             break;
 
         case wxSOCKET_LOST:
             {
-                LogWorker(m_peer,wxString::Format("Connection lost"));
+                LogWorker(wxString::Format("Connection lost"));
                 WorkerEvent e(this);
                 e.m_workerFailed = m_written != m_size;
                 wxGetApp().AddPendingEvent(e);
@@ -710,7 +715,7 @@ void  EventWorker::DoWrite()
             delete [] m_outbuf;
             m_outbuf = NULL;
             m_outfill = 0;
-            LogWorker(m_peer, "All data written");
+            LogWorker( "All data written");
             return;
         }
         if (m_outfill - m_written == 0)
@@ -722,7 +727,7 @@ void  EventWorker::DoWrite()
         {
             if (m_socket->LastError() != wxSOCKET_WOULDBLOCK)
             {
-                LogWorker(m_peer,
+                LogWorker(
                             wxString::Format("Write error (%d): %s",
                                             m_socket->LastError(),
                                             GetSocketErrorMsg(m_socket->LastError())
@@ -733,7 +738,7 @@ void  EventWorker::DoWrite()
             }
             else
             {
-                LogWorker(m_peer,"Write would block, waiting for OUTPUT event");
+                LogWorker("Write would block, waiting for OUTPUT event");
             }
         }
         else
@@ -741,7 +746,8 @@ void  EventWorker::DoWrite()
             memmove(m_outbuf,m_outbuf+m_socket->LastCount(),m_outfill-m_socket->LastCount());
             m_written += m_socket->LastCount();
         }
-        LogWorker(m_peer,wxString::Format("Written %d of %d bytes, todo %d",m_socket->LastCount(),m_size,m_size - m_written));
+        LogWorker(wxString::Format("Written %d of %d bytes, todo %d",
+                  m_socket->LastCount(),m_size,m_size - m_written));
     }
     while (!m_socket->Error());
 }
