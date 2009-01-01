@@ -598,7 +598,7 @@ EventWorker::DoRead()
         //read message header
         do
         {
-            m_socket->Read(m_signature,2 - m_infill);
+            m_socket->Read(m_signature + m_infill, 2 - m_infill);
             if (m_socket->Error())
             {
                 if (m_socket->LastError() != wxSOCKET_WOULDBLOCK)
@@ -630,7 +630,8 @@ EventWorker::DoRead()
                         m_written = 0;
                         LogWorker(wxString::Format("Message signature: len: %d, type: %s, size: %d (bytes)",chunks,type == 0xBE ? "b" : "kB",m_size));
                         break;
-                    } else
+                    }
+                    else
                     {
                         LogWorker(wxString::Format("Unknown test type %x",type));
                         m_socket->Close();
