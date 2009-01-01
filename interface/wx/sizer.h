@@ -1094,8 +1094,8 @@ public:
     /**
        Returns the number of items in the sizer.
     */
-    size_t GetItemCount();
-    
+    size_t GetItemCount() const;
+
     /**
         Finds wxSizerItem which holds the given @a window.
         Use parameter @a recursive to search in subsizers too.

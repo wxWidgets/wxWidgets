@@ -79,28 +79,28 @@ public:
     wxSizerFlags& Centre() { return Align(wxALIGN_CENTRE); }
     wxSizerFlags& Center() { return Centre(); }
 
-    wxSizerFlags& Top() 
-    { 
-        m_flags &= ~(wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL); 
-        return *this; 
+    wxSizerFlags& Top()
+    {
+        m_flags &= ~(wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL);
+        return *this;
     }
 
-    wxSizerFlags& Left() 
-    { 
-        m_flags &= ~(wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL); 
-        return *this; 
+    wxSizerFlags& Left()
+    {
+        m_flags &= ~(wxALIGN_RIGHT | wxALIGN_CENTRE_HORIZONTAL);
+        return *this;
     }
 
-    wxSizerFlags& Right() 
-    { 
-        m_flags = (m_flags & ~wxALIGN_CENTRE_HORIZONTAL) | wxALIGN_RIGHT; 
-        return *this; 
+    wxSizerFlags& Right()
+    {
+        m_flags = (m_flags & ~wxALIGN_CENTRE_HORIZONTAL) | wxALIGN_RIGHT;
+        return *this;
     }
 
-    wxSizerFlags& Bottom() 
-    { 
-        m_flags = (m_flags & ~wxALIGN_CENTRE_VERTICAL) | wxALIGN_BOTTOM; 
-        return *this; 
+    wxSizerFlags& Bottom()
+    {
+        m_flags = (m_flags & ~wxALIGN_CENTRE_VERTICAL) | wxALIGN_BOTTOM;
+        return *this;
     }
 
 
@@ -384,9 +384,9 @@ public:
     wxPoint GetPosition() const
         { return m_pos; }
 
-    // Called once the first component of an item has been decided. This is 
-    // used in algorithms that depend on knowing the size in one direction 
-    // before the min size in the other direction can be known. 
+    // Called once the first component of an item has been decided. This is
+    // used in algorithms that depend on knowing the size in one direction
+    // before the min size in the other direction can be known.
     // Returns true if it made use of the information (and min size was changed).
     bool InformFirstDirection( int direction, int size, int availableOtherDir=-1 );
 
@@ -541,7 +541,7 @@ public:
     wxSizerItem* Insert(size_t index,
                         int width,
                         int height,
-                        const wxSizerFlags& flags);                        
+                        const wxSizerFlags& flags);
     virtual wxSizerItem* Insert( size_t index, wxSizerItem *item);
 
     wxSizerItem* InsertSpacer(size_t index, int size);
@@ -600,7 +600,7 @@ public:
     // Returns true if it made use of the informtion (and recalculated min size)
     virtual bool InformFirstDirection( int WXUNUSED(direction), int WXUNUSED(size), int WXUNUSED(availableOtherDir) )
         { return false; }
-    
+
     void SetMinSize( int width, int height )
         { DoSetMinSize( width, height ); }
     void SetMinSize( const wxSize& size )
@@ -665,7 +665,7 @@ public:
     void SetDimension(int x, int y, int width, int height)
         { SetDimension(wxPoint(x, y), wxSize(width, height)); }
 
-    size_t GetItemCount() { return m_children.GetCount(); }
+    size_t GetItemCount() const { return m_children.GetCount(); }
 
     wxSizerItem* GetItem( wxWindow *window, bool recursive = false );
     wxSizerItem* GetItem( wxSizer *sizer, bool recursive = false );
@@ -1036,9 +1036,9 @@ inline void wxSizerItem::SetSpacer(const wxSize& size)
 }
 
 inline void wxSizerItem::SetSpacer(int width, int height)
-{ 
-    DoSetSpacer(wxSize(width, height)); 
-} 
+{
+    DoSetSpacer(wxSize(width, height));
+}
 
 #endif // WXWIN_COMPATIBILITY_2_8
 
