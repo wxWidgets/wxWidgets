@@ -1092,6 +1092,11 @@ public:
     wxWindow* GetContainingWindow() const;
 
     /**
+       Returns the number of items in the sizer.
+    */
+    size_t GetItemCount();
+    
+    /**
         Finds wxSizerItem which holds the given @a window.
         Use parameter @a recursive to search in subsizers too.
         Returns pointer to item or @NULL.

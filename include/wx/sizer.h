@@ -665,6 +665,8 @@ public:
     void SetDimension(int x, int y, int width, int height)
         { SetDimension(wxPoint(x, y), wxSize(width, height)); }
 
+    size_t GetItemCount() { return m_children.GetCount(); }
+
     wxSizerItem* GetItem( wxWindow *window, bool recursive = false );
     wxSizerItem* GetItem( wxSizer *sizer, bool recursive = false );
     wxSizerItem* GetItem( size_t index );
