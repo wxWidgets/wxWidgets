@@ -211,7 +211,18 @@ private:
   // function returns false in this case
   //
   // false is always returned if we returned because of the timeout expiration
+  bool DoWait(long timeout, wxSocketEventFlags flags);
+
+  // a helper calling DoWait() using the same convention as the public
+  // WaitForXXX() functions use, i.e. use our timeout if seconds == -1 or the
+  // specified timeout otherwise
   bool DoWait(long seconds, long milliseconds, wxSocketEventFlags flags);
+
+  // another helper calling DoWait() using our m_timeout
+  bool DoWaitWithTimeout(wxSocketEventFlags flags)
+  {
+      return DoWait(m_timeout*1000, flags);
+  }
 
   // pushback buffer
   void     Pushback(const void *buffer, wxUint32 size);

@@ -815,8 +815,8 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
     {
         // our socket is non-blocking so Read() will return immediately if
         // there is nothing to read yet and it's more efficient to try it first
-        // before entering WaitForRead() which is going to start dispatching
-        // GUI events and, even more importantly, we must do this under Windows
+        // before entering DoWait() which is going to start dispatching GUI
+        // events and, even more importantly, we must do this under Windows
         // where we're not going to get notifications about socket being ready
         // for reading before we read all the existing data from it
         const int ret = m_connected ? m_impl->Read(buffer, nbytes) : 0;
@@ -828,8 +828,10 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
                 if ( m_flags & wxSOCKET_NOWAIT )
                     break;
 
-                // otherwise wait until the socket becomes ready for reading
-                if ( !WaitForRead() )
+                // otherwise wait until the socket becomes ready for reading or
+                // an error occurs on it
+                if ( !DoWaitWithTimeout(wxSOCKET_INPUT_FLAG |
+                                        wxSOCKET_LOST_FLAG) )
                 {
                     // and exit if the timeout elapsed before it did
                     SetError(wxSOCKET_TIMEDOUT);
@@ -1010,7 +1012,8 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
                 if ( m_flags & wxSOCKET_NOWAIT )
                     break;
 
-                if ( !WaitForWrite() )
+                if ( !DoWaitWithTimeout(wxSOCKET_OUTPUT_FLAG |
+                                        wxSOCKET_LOST_FLAG) )
                 {
                     SetError(wxSOCKET_TIMEDOUT);
                     break;
@@ -1223,6 +1226,19 @@ wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags,
 bool
 wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
 {
+    // Use either the provided timeout or the default timeout value associated
+    // with this socket.
+    //
+    // TODO: allow waiting forever, see #9443
+    const long timeout = seconds == -1 ? m_timeout * 1000
+                                       : seconds * 1000 + milliseconds;
+
+    return DoWait(timeout, flags);
+}
+
+bool
+wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
+{
     wxCHECK_MSG( m_impl, false, "can't wait on invalid socket" );
 
     // we're never going to become ready if we're not connected (any more)
@@ -1233,12 +1249,6 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
     m_interrupt = false;
 
 
-    // Use either the provided timeout or the default timeout value associated
-    // with this socket.
-    //
-    // TODO: allow waiting forever, see #9443
-    const long timeout = seconds == -1 ? m_timeout * 1000
-                                       : seconds * 1000 + milliseconds;
     const wxMilliClock_t timeEnd = wxGetLocalTimeMillis() + timeout;
 
     // Get the active event loop which we'll use for the message dispatching
@@ -1339,7 +1349,14 @@ bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
     if ( m_unread )
         return true;
 
-    // Note that wxSOCKET_INPUT_LOST has to be explicitly passed to DoWait
+    // Check if the socket is not already ready for input, if it is, there is
+    // no need to start waiting for it (worse, we'll actually never get a
+    // notification about the socket becoming ready if it is already under
+    // Windows)
+    if ( m_impl->Select(wxSOCKET_INPUT_FLAG) )
+        return true;
+
+    // Note that wxSOCKET_LOST_FLAG has to be explicitly passed to DoWait
     // because of the semantics of WaitForRead: a return value of true means
     // that a Read call will return immediately, not that there is
     // actually data to read.
@@ -1349,6 +1366,9 @@ bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
 
 bool wxSocketBase::WaitForWrite(long seconds, long milliseconds)
 {
+    if ( m_impl->Select(wxSOCKET_OUTPUT_FLAG) )
+        return true;
+
     return DoWait(seconds, milliseconds, wxSOCKET_OUTPUT_FLAG | wxSOCKET_LOST_FLAG);
 }
 
