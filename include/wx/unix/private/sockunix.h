@@ -36,7 +36,7 @@ public:
     virtual void OnWriteWaiting();
     virtual void OnExceptionWaiting();
 
-    // Unix-specific functions
+    // Unix-specific functions used by wxSocketFDIOManager only
     bool HasAnyEnabledCallbacks() const { return m_enabledCallbacks != 0; }
     void EnableCallback(wxFDIODispatcherEntryFlags flag)
         { m_enabledCallbacks |= flag; }

@@ -30,17 +30,17 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxSocketSelectManager
+// wxSocketFDIOManager: socket manager using wxFDIODispatcher
 // ----------------------------------------------------------------------------
 
-class wxSocketSelectManager : public wxSocketFDBasedManager
+class wxSocketFDIOManager : public wxSocketFDBasedManager
 {
 public:
     virtual void Install_Callback(wxSocketImpl *socket, wxSocketNotify event);
     virtual void Uninstall_Callback(wxSocketImpl *socket, wxSocketNotify event);
 };
 
-void wxSocketSelectManager::Install_Callback(wxSocketImpl *socket_,
+void wxSocketFDIOManager::Install_Callback(wxSocketImpl *socket_,
                                              wxSocketNotify event)
 {
     wxSocketImplUnix * const socket = static_cast<wxSocketImplUnix *>(socket_);
@@ -70,7 +70,7 @@ void wxSocketSelectManager::Install_Callback(wxSocketImpl *socket_,
         dispatcher->RegisterFD(fd, socket, socket->GetEnabledCallbacks());
 }
 
-void wxSocketSelectManager::Uninstall_Callback(wxSocketImpl *socket_,
+void wxSocketFDIOManager::Uninstall_Callback(wxSocketImpl *socket_,
                                                wxSocketNotify event)
 {
     wxSocketImplUnix * const socket = static_cast<wxSocketImplUnix *>(socket_);
@@ -106,7 +106,7 @@ static struct ManagerSetter
 {
     ManagerSetter()
     {
-        static wxSocketSelectManager s_manager;
+        static wxSocketFDIOManager s_manager;
         wxAppTraits::SetDefaultSocketManager(&s_manager);
     }
 } gs_managerSetter;
