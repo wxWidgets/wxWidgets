@@ -688,17 +688,17 @@ void EventWorker::OnSocketEvent(wxSocketEvent& pEvent)
             break;
 
         case wxSOCKET_OUTPUT:
-            if (m_inbuf != NULL)
+            if ( m_outbuf )
                 DoWrite();
             break;
 
         case wxSOCKET_CONNECTION:
-            LogWorker(wxString::Format("Unexpected wxSOCKET_CONNECTION in EventWorker"),wxLOG_Error);
+            LogWorker("Unexpected wxSOCKET_CONNECTION in EventWorker", wxLOG_Error);
             break;
 
         case wxSOCKET_LOST:
             {
-                LogWorker(wxString::Format("Connection lost"));
+                LogWorker("Connection lost");
                 WorkerEvent e(this);
                 e.m_workerFailed = m_written != m_size;
                 wxGetApp().AddPendingEvent(e);
