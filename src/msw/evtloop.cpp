@@ -363,12 +363,6 @@ void wxGUIEventLoop::WakeUp()
 
 #if wxUSE_CONSOLE_EVENTLOOP
 
-void wxConsoleEventLoop::OnNextIteration()
-{
-    if ( wxTheApp )
-        wxTheApp->ProcessPendingEvents();
-}
-
 void wxConsoleEventLoop::WakeUp()
 {
 #if wxUSE_THREADS

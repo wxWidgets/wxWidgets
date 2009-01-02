@@ -353,11 +353,11 @@ void wxAppBase::DeletePendingObjects()
 // Returns true if more time is needed.
 bool wxAppBase::ProcessIdle()
 {
-    // process pending wx events before sending idle events
-    ProcessPendingEvents();
-
+    // call the base class version first, it will process the pending events
+    // (which should be done before the idle events generation) and send the
+    // idle event to wxTheApp itself
+    bool needMore = wxAppConsoleBase::ProcessIdle();
     wxIdleEvent event;
-    bool needMore = false;
     wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
     while (node)
     {
@@ -366,9 +366,6 @@ bool wxAppBase::ProcessIdle()
             needMore = true;
         node = node->GetNext();
     }
-
-    if (wxAppConsole::ProcessIdle())
-        needMore = true;
 
     // 'Garbage' collection of windows deleted with Close().
     DeletePendingObjects();

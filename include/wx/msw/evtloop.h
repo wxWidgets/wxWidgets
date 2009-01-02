@@ -102,9 +102,6 @@ public:
 
     // MSW-specific function to process a single message
     virtual void ProcessMessage(WXMSG *msg);
-
-protected:
-    virtual void OnNextIteration();
 };
 
 #endif // wxUSE_CONSOLE_EVENTLOOP

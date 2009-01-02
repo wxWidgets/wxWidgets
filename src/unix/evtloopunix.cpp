@@ -174,8 +174,6 @@ int wxConsoleEventLoop::DispatchTimeout(unsigned long timeout)
         hadEvent = true;
 #endif // wxUSE_TIMER
 
-    wxTheApp->ProcessPendingEvents();
-
     return hadEvent ? 1 : -1;
 }
 
