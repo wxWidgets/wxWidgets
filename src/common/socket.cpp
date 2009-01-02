@@ -176,6 +176,8 @@ public:
     ~wxSocketReadGuard()
     {
         m_socket->m_reading = false;
+
+        m_socket->m_impl->ReenableEvents(wxSOCKET_INPUT_FLAG);
     }
 
 private:
@@ -193,6 +195,8 @@ public:
         wxASSERT_MSG( !m_socket->m_writing, "write reentrancy?" );
 
         m_socket->m_writing = true;
+
+        m_socket->m_impl->ReenableEvents(wxSOCKET_OUTPUT_FLAG);
     }
 
     ~wxSocketWriteGuard()
@@ -472,6 +476,10 @@ wxSocketImpl *wxSocketImpl::Accept(wxSocketBase& wxsocket)
     WX_SOCKLEN_T fromlen = sizeof(from);
     const SOCKET fd = accept(m_fd, &from.addr, &fromlen);
 
+    // accepting is similar to reading in the sense that it resets "ready for
+    // read" flag on the socket
+    ReenableEvents(wxSOCKET_INPUT_FLAG);
+
     if ( fd == INVALID_SOCKET )
         return NULL;
 
@@ -494,10 +502,6 @@ void wxSocketImpl::Close()
     }
 }
 
-/*
- *  Disallow further read/write operations on this socket, close
- *  the fd and disable all callbacks.
- */
 void wxSocketImpl::Shutdown()
 {
     if ( m_fd != INVALID_SOCKET )
@@ -1568,19 +1572,6 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
     // send the wx event if enabled and we're interested in it
     if ( m_notify && (m_eventmask & flag) && m_handler )
     {
-        // If we are in the middle of a R/W operation, do not propagate events
-        // to users. Also, filter 'late' events which are no longer valid.
-        if ( notification == wxSOCKET_INPUT )
-        {
-            if ( m_reading || !m_impl->Select(wxSOCKET_INPUT_FLAG) )
-                return;
-        }
-        else if ( notification == wxSOCKET_OUTPUT )
-        {
-            if ( m_writing || !m_impl->Select(wxSOCKET_OUTPUT_FLAG) )
-                return;
-        }
-
         wxSocketEvent event(m_id);
         event.m_event      = notification;
         event.m_clientData = m_clientData;

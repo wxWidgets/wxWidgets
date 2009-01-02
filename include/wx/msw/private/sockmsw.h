@@ -39,6 +39,14 @@ public:
 
     virtual wxSocketError GetLastError() const;
 
+    virtual void ReenableEvents(wxSocketEventFlags WXUNUSED(flags))
+    {
+        // notifications are never disabled in this implementation, there is no
+        // need for this as WSAAsyncSelect() only sends notification once when
+        // the new data becomes available anyhow, so there is no need to do
+        // anything here
+    }
+
 private:
     virtual void DoClose();
 

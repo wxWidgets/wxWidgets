@@ -104,21 +104,36 @@ wxSocketError wxSocketImplUnix::GetLastError() const
     }
 }
 
-void wxSocketImplUnix::DoEnableEvents(bool flag)
+void wxSocketImplUnix::DoEnableEvents(int flags, bool enable)
 {
     wxSocketManager * const manager = wxSocketManager::Get();
-    if ( flag )
+    if ( enable )
     {
-        manager->Install_Callback(this, wxSOCKET_INPUT);
-        manager->Install_Callback(this, wxSOCKET_OUTPUT);
+        if ( flags & wxSOCKET_INPUT_FLAG )
+            manager->Install_Callback(this, wxSOCKET_INPUT);
+        if ( flags & wxSOCKET_OUTPUT_FLAG )
+            manager->Install_Callback(this, wxSOCKET_OUTPUT);
     }
     else // off
     {
-        manager->Uninstall_Callback(this, wxSOCKET_INPUT);
-        manager->Uninstall_Callback(this, wxSOCKET_OUTPUT);
+        if ( flags & wxSOCKET_INPUT_FLAG )
+            manager->Uninstall_Callback(this, wxSOCKET_INPUT);
+        if ( flags & wxSOCKET_OUTPUT_FLAG )
+            manager->Uninstall_Callback(this, wxSOCKET_OUTPUT);
     }
 }
 
+int wxSocketImplUnix::CheckForInput()
+{
+    char c;
+    int rc;
+    do
+    {
+        rc = recv(m_fd, &c, 1, MSG_PEEK);
+    } while ( rc == -1 && errno == EINTR );
+
+    return rc;
+}
 
 void wxSocketImplUnix::OnStateChange(wxSocketNotify event)
 {
@@ -130,82 +145,91 @@ void wxSocketImplUnix::OnStateChange(wxSocketNotify event)
 
 void wxSocketImplUnix::OnReadWaiting()
 {
-  char c;
+    wxASSERT_MSG( m_fd != INVALID_SOCKET, "invalid socket ready for reading?" );
 
-  if (m_fd == INVALID_SOCKET)
-  {
-    return;
-  }
+    // we need to disable the read notifications until we read all the data
+    // already available for the socket, otherwise we're going to keep getting
+    // them continuously which is worse than inefficient: as IO notifications
+    // have higher priority than idle events in e.g. GTK+, our pending events
+    // whose handlers typically call Read() which would consume the data and so
+    // stop the notifications flood would never be dispatched at all if the
+    // notifications were not disabled
+    DisableEvents(wxSOCKET_INPUT_FLAG);
 
-  int num =  recv(m_fd, &c, 1, MSG_PEEK);
 
-  if (num > 0)
-  {
-    OnStateChange(wxSOCKET_INPUT);
-  }
-  else
-  {
-    if (m_server && m_stream)
+    // find out what are we going to notify about exactly
+    wxSocketNotify notify;
+
+    // TCP listening sockets become ready for reading when there is a pending
+    // connection
+    if ( m_server && m_stream )
     {
-      OnStateChange(wxSOCKET_CONNECTION);
+        notify = wxSOCKET_CONNECTION;
     }
-    else if (num == 0)
+    else // check if there is really any input available
     {
-      if (m_stream)
-      {
-        /* graceful shutdown */
-        OnStateChange(wxSOCKET_LOST);
-      }
-      else
-      {
-        /* Empty datagram received */
-        OnStateChange(wxSOCKET_INPUT);
-      }
+        switch ( CheckForInput() )
+        {
+            case 1:
+                notify = wxSOCKET_INPUT;
+                break;
+
+            case 0:
+                // reading 0 bytes for a TCP socket means that the connection
+                // was closed by peer but for UDP it just means that we got an
+                // empty datagram
+                notify = m_stream ? wxSOCKET_LOST : wxSOCKET_INPUT;
+                break;
+
+            default:
+                wxFAIL_MSG( "unexpected CheckForInput() return value" );
+                // fall through
+
+            case -1:
+                if ( GetLastError() == wxSOCKET_WOULDBLOCK )
+                {
+                    // just a spurious wake up
+                    EnableEvents(wxSOCKET_INPUT_FLAG);
+                    return;
+                }
+
+                notify = wxSOCKET_LOST;
+        }
     }
-    else
-    {
-      /* Do not throw a lost event in cases where the socket isn't really lost */
-      if ((errno == EWOULDBLOCK) || (errno == EAGAIN) || (errno == EINTR))
-      {
-        OnStateChange(wxSOCKET_INPUT);
-      }
-      else
-      {
-        OnStateChange(wxSOCKET_LOST);
-      }
-    }
-  }
+
+    OnStateChange(notify);
 }
 
 void wxSocketImplUnix::OnWriteWaiting()
 {
-  if (m_establishing && !m_server)
-  {
-    int error;
-    SOCKOPTLEN_T len = sizeof(error);
+    wxASSERT_MSG( m_fd != INVALID_SOCKET, "invalid socket ready for writing?" );
 
-    m_establishing = false;
+    // see comment in the beginning of OnReadWaiting() above
+    DisableEvents(wxSOCKET_OUTPUT_FLAG);
 
-    getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
 
-    if (error)
+    // check whether this is a notification for the completion of a
+    // non-blocking connect()
+    if ( m_establishing && !m_server )
     {
-      OnStateChange(wxSOCKET_LOST);
+        m_establishing = false;
+
+        // check whether we connected successfully
+        int error;
+        SOCKOPTLEN_T len = sizeof(error);
+
+        getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
+
+        if ( error )
+        {
+            OnStateChange(wxSOCKET_LOST);
+            return;
+        }
+
+        OnStateChange(wxSOCKET_CONNECTION);
     }
-    else
-    {
-      OnStateChange(wxSOCKET_CONNECTION);
-      /* We have to fire this event by hand because CONNECTION (for clients)
-       * and OUTPUT are internally the same and we just disabled CONNECTION
-       * events with the above macro.
-       */
-      OnStateChange(wxSOCKET_OUTPUT);
-    }
-  }
-  else
-  {
+
     OnStateChange(wxSOCKET_OUTPUT);
-  }
 }
 
 void wxSocketImplUnix::OnExceptionWaiting()

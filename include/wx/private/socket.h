@@ -286,6 +286,11 @@ public:
     // named) OnRequest() method
     void NotifyOnStateChange(wxSocketNotify event);
 
+    // called after reading/writing the data from/to the socket and should
+    // enable back the wxSOCKET_INPUT/OUTPUT_FLAG notifications if they were
+    // turned off when this data was first detected
+    virtual void ReenableEvents(wxSocketEventFlags flags) = 0;
+
     // TODO: make these fields protected and provide accessors for those of
     //       them that wxSocketBase really needs
 //protected:

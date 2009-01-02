@@ -31,6 +31,23 @@ public:
 
     virtual wxSocketError GetLastError() const;
 
+    virtual void ReenableEvents(wxSocketEventFlags flags)
+    {
+        // enable the notifications about input/output being available again in
+        // case they were disabled by OnRead/WriteWaiting()
+        //
+        // notice that we'd like to enable the events here only if there is
+        // nothing more left on the socket right now as otherwise we're going
+        // to get a "ready for whatever" notification immediately (well, during
+        // the next event loop iteration) and disable the event back again
+        // which is rather inefficient but unfortunately doing it like this
+        // doesn't work because the existing code (e.g. src/common/sckipc.cpp)
+        // expects to keep getting notifications about the data available from
+        // the socket even if it didn't read all the data the last time, so we
+        // absolutely have to continue generating them
+        EnableEvents(flags);
+    }
+
     // wxFDIOHandler methods
     virtual void OnReadWaiting();
     virtual void OnWriteWaiting();
@@ -61,11 +78,13 @@ private:
     }
 
     // enable or disable notifications for socket input/output events
-    void EnableEvents() { DoEnableEvents(true); }
-    void DisableEvents() { DoEnableEvents(false); }
+    void EnableEvents(int flags = wxSOCKET_INPUT_FLAG | wxSOCKET_OUTPUT_FLAG)
+        { DoEnableEvents(flags, true); }
+    void DisableEvents(int flags = wxSOCKET_INPUT_FLAG | wxSOCKET_OUTPUT_FLAG)
+        { DoEnableEvents(flags, false); }
 
     // really enable or disable socket input/output events
-    void DoEnableEvents(bool enable);
+    void DoEnableEvents(int flags, bool enable);
 
 protected:
     // descriptors for input and output event notification channels associated
@@ -80,6 +99,11 @@ private:
     // notify the associated wxSocket about a change in socket state and shut
     // down the socket if the event is wxSOCKET_LOST
     void OnStateChange(wxSocketNotify event);
+
+    // check if there is any input available, return 1 if yes, 0 if no or -1 on
+    // error
+    int CheckForInput();
+
 
     // give it access to our m_fds
     friend class wxSocketFDBasedManager;
