@@ -912,8 +912,7 @@ wxUint32 wxSocketBase::DoRead(void* buffer_, wxUint32 nbytes)
 
                 // otherwise wait until the socket becomes ready for reading or
                 // an error occurs on it
-                if ( !DoWaitWithTimeout(wxSOCKET_INPUT_FLAG |
-                                        wxSOCKET_LOST_FLAG) )
+                if ( !DoWaitWithTimeout(wxSOCKET_INPUT_FLAG) )
                 {
                     // and exit if the timeout elapsed before it did
                     SetError(wxSOCKET_TIMEDOUT);
@@ -1082,8 +1081,7 @@ wxUint32 wxSocketBase::DoWrite(const void *buffer_, wxUint32 nbytes)
                 if ( m_flags & wxSOCKET_NOWAIT )
                     break;
 
-                if ( !DoWaitWithTimeout(wxSOCKET_OUTPUT_FLAG |
-                                        wxSOCKET_LOST_FLAG) )
+                if ( !DoWaitWithTimeout(wxSOCKET_OUTPUT_FLAG) )
                 {
                     SetError(wxSOCKET_TIMEDOUT);
                     break;
@@ -1281,7 +1279,7 @@ wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags,
     return detected & flags;
 }
 
-bool
+int
 wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
 {
     // Use either the provided timeout or the default timeout value associated
@@ -1294,14 +1292,14 @@ wxSocketBase::DoWait(long seconds, long milliseconds, wxSocketEventFlags flags)
     return DoWait(timeout, flags);
 }
 
-bool
+int
 wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
 {
-    wxCHECK_MSG( m_impl, false, "can't wait on invalid socket" );
+    wxCHECK_MSG( m_impl, -1, "can't wait on invalid socket" );
 
     // we're never going to become ready if we're not connected (any more)
     if ( !m_connected && !m_establishing )
-        return (flags & wxSOCKET_LOST_FLAG) != 0;
+        return -1;
 
     // This can be set to true from Interrupt() to exit this function a.s.a.p.
     m_interrupt = false;
@@ -1326,8 +1324,8 @@ wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
     // Wait until we receive the event we're waiting for or the timeout expires
     // (but note that we always execute the loop at least once, even if timeout
     // is 0 as this is used for polling)
-    bool gotEvent = false;
-    for ( bool firstTime = true; !m_interrupt ; firstTime = false )
+    int rc = 0;
+    for ( bool firstTime = true; !m_interrupt; firstTime = false )
     {
         long timeLeft = wxMilliClockToLong(timeEnd - wxGetLocalTimeMillis());
         if ( timeLeft < 0 )
@@ -1363,8 +1361,7 @@ wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
         {
             m_connected = false;
             m_establishing = false;
-            if ( flags & wxSOCKET_LOST_FLAG )
-                gotEvent = true;
+            rc = -1;
             break;
         }
 
@@ -1376,29 +1373,27 @@ wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
         {
             m_connected = true;
             m_establishing = false;
-            gotEvent = true;
+            rc = true;
             break;
         }
 
         // Data available or output buffer ready?
         if ( (events & wxSOCKET_INPUT_FLAG) || (events & wxSOCKET_OUTPUT_FLAG) )
         {
-            gotEvent = true;
+            rc = true;
             break;
         }
     }
 
-    return gotEvent;
+    return rc;
 }
 
 bool wxSocketBase::Wait(long seconds, long milliseconds)
 {
     return DoWait(seconds, milliseconds,
-            wxSOCKET_INPUT_FLAG |
-            wxSOCKET_OUTPUT_FLAG |
-            wxSOCKET_CONNECTION_FLAG |
-            wxSOCKET_LOST_FLAG
-        );
+                  wxSOCKET_INPUT_FLAG |
+                  wxSOCKET_OUTPUT_FLAG |
+                  wxSOCKET_CONNECTION_FLAG) != 0;
 }
 
 bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
@@ -1414,11 +1409,7 @@ bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
     if ( m_impl->Select(wxSOCKET_INPUT_FLAG) )
         return true;
 
-    // Note that wxSOCKET_LOST_FLAG has to be explicitly passed to DoWait
-    // because of the semantics of WaitForRead: a return value of true means
-    // that a Read call will return immediately, not that there is
-    // actually data to read.
-    return DoWait(seconds, milliseconds, wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
+    return DoWait(seconds, milliseconds, wxSOCKET_INPUT_FLAG) != 0;
 }
 
 
@@ -1427,12 +1418,12 @@ bool wxSocketBase::WaitForWrite(long seconds, long milliseconds)
     if ( m_impl->Select(wxSOCKET_OUTPUT_FLAG) )
         return true;
 
-    return DoWait(seconds, milliseconds, wxSOCKET_OUTPUT_FLAG | wxSOCKET_LOST_FLAG);
+    return DoWait(seconds, milliseconds, wxSOCKET_OUTPUT_FLAG) != 0;
 }
 
 bool wxSocketBase::WaitForLost(long seconds, long milliseconds)
 {
-    return DoWait(seconds, milliseconds, wxSOCKET_LOST_FLAG);
+    return DoWait(seconds, milliseconds, wxSOCKET_LOST_FLAG) == -1;
 }
 
 // --------------------------------------------------------------------------
@@ -1756,7 +1747,7 @@ wxSocketBase *wxSocketServer::Accept(bool wait)
 
 bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
 {
-    return DoWait(seconds, milliseconds, wxSOCKET_CONNECTION_FLAG);
+    return DoWait(seconds, milliseconds, wxSOCKET_CONNECTION_FLAG) == 1;
 }
 
 bool wxSocketBase::GetOption(int level, int optname, void *optval, int *optlen)
@@ -1890,12 +1881,10 @@ bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
     wxCHECK_MSG( m_establishing && m_impl, false,
                  "No connection establishment attempt in progress" );
 
-    // we must specify wxSOCKET_LOST_FLAG here explicitly because we must return
-    // true if the connection establishment process is finished, whether it is
-    // over because we successfully connected or because we were not able to
-    // connect
-    return DoWait(seconds, milliseconds,
-        wxSOCKET_CONNECTION_FLAG | wxSOCKET_LOST_FLAG);
+    // notice that we return true even if DoWait() returned -1, i.e. if an
+    // error occurred and connection was lost: this is intentional as we should
+    // return false only if timeout expired without anything happening
+    return DoWait(seconds, milliseconds, wxSOCKET_CONNECTION_FLAG) != 0;
 }
 
 // ==========================================================================

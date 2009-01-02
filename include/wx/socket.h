@@ -204,21 +204,19 @@ private:
     // wait until the given flags are set for this socket or the given timeout
     // (or m_timeout) expires
     //
-    // notice that wxSOCKET_LOST_FLAG is always taken into account but the
-    // return value depends on whether it is included in flags or not: if it
-    // is, and the connection is indeed lost, true is returned, but if it isn't
-    // then the function returns false in this case
-    //
-    // false is always returned if we returned because of the timeout expiration
-    bool DoWait(long timeout, wxSocketEventFlags flags);
+    // notice that wxSOCKET_LOST_FLAG is always taken into account and the
+    // function returns -1 if the connection was lost; otherwise it returns
+    // true if any of the events specified by flags argument happened or false
+    // if the timeout expired
+    int DoWait(long timeout, wxSocketEventFlags flags);
 
     // a helper calling DoWait() using the same convention as the public
     // WaitForXXX() functions use, i.e. use our timeout if seconds == -1 or the
     // specified timeout otherwise
-    bool DoWait(long seconds, long milliseconds, wxSocketEventFlags flags);
+    int DoWait(long seconds, long milliseconds, wxSocketEventFlags flags);
 
     // another helper calling DoWait() using our m_timeout
-    bool DoWaitWithTimeout(wxSocketEventFlags flags)
+    int DoWaitWithTimeout(wxSocketEventFlags flags)
     {
         return DoWait(m_timeout*1000, flags);
     }
