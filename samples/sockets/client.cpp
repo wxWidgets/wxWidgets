@@ -215,16 +215,16 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   m_menuFile->Append(CLIENT_QUIT, _("E&xit\tAlt-X"), _("Quit client"));
 
   m_menuSocket = new wxMenu();
-  m_menuSocket->Append(CLIENT_OPEN, _("&Open session"), _("Connect to server"));
+  m_menuSocket->Append(CLIENT_OPEN, _("&Open session\tCtrl-O"), _("Connect to server"));
 #if wxUSE_IPV6
-  m_menuSocket->Append(CLIENT_OPENIPV6, _("&Open session(IPv6)"), _("Connect to server(IPv6)"));
+  m_menuSocket->Append(CLIENT_OPENIPV6, _("&Open session(IPv6)\tShift-Ctrl-O"), _("Connect to server(IPv6)"));
 #endif
   m_menuSocket->AppendSeparator();
-  m_menuSocket->Append(CLIENT_TEST1, _("Test &1"), _("Test basic functionality"));
-  m_menuSocket->Append(CLIENT_TEST2, _("Test &2"), _("Test ReadMsg and WriteMsg"));
-  m_menuSocket->Append(CLIENT_TEST3, _("Test &3"), _("Test large data transfer"));
+  m_menuSocket->Append(CLIENT_TEST1, _("Test &1\tCtrl-F1"), _("Test basic functionality"));
+  m_menuSocket->Append(CLIENT_TEST2, _("Test &2\tCtrl-F2"), _("Test ReadMsg and WriteMsg"));
+  m_menuSocket->Append(CLIENT_TEST3, _("Test &3\tCtrl-F3"), _("Test large data transfer"));
   m_menuSocket->AppendSeparator();
-  m_menuSocket->Append(CLIENT_CLOSE, _("&Close session"), _("Close connection"));
+  m_menuSocket->Append(CLIENT_CLOSE, _("&Close session\tCtrl-Q"), _("Close connection"));
 
   m_menuDatagramSocket = new wxMenu();
   m_menuDatagramSocket->Append(CLIENT_DGRAM, _("Send Datagram"), _("Test UDP sockets"));
@@ -423,9 +423,9 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
-  const wxChar *buf1 = _T("Test string (less than 256 chars!)");
-  unsigned char len  = (unsigned char)((wxStrlen(buf1) + 1)*sizeof(wxChar));
-  wxChar *buf2 = new wxChar[wxStrlen(buf1) + 1];
+  const char *buf1 = "Test string (less than 256 chars!)";
+  unsigned char len  = (unsigned char)(wxStrlen(buf1) + 1);
+  wxCharBuffer buf2(wxStrlen(buf1));
 
   m_text->AppendText(_("Sending a test buffer to the server ..."));
   m_sock->Write(&len, 1);
@@ -433,7 +433,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
   m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
   m_text->AppendText(_("Receiving the buffer back from server ..."));
-  m_sock->Read(buf2, len);
+  m_sock->Read(buf2.data(), len);
   m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
   m_text->AppendText(_("Comparing the two buffers ..."));
@@ -449,17 +449,12 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
   }
   m_text->AppendText(_("=== Test 1 ends ===\n"));
 
-  delete[] buf2;
   m_busy = false;
   UpdateStatusBar();
 }
 
 void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 {
-  const wxChar *msg1;
-  wxChar *msg2;
-  size_t len;
-
   // Disable socket menu entries (exception: Close Session)
   m_busy = true;
   UpdateStatusBar();
@@ -484,9 +479,9 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
     _("Test 2 ..."),
     _("Yes I like wxWidgets!"));
 
-  msg1 = s.c_str();
-  len  = (wxStrlen(msg1) + 1) * sizeof(wxChar);
-  msg2 = new wxChar[wxStrlen(msg1) + 1];
+  const wxUTF8Buf msg1(s.utf8_str());
+  size_t len  = wxStrlen(msg1) + 1;
+  wxCharBuffer msg2(wxStrlen(msg1));
 
   m_text->AppendText(_("Sending the string with WriteMsg ..."));
   m_sock->WriteMsg(msg1, len);
@@ -499,7 +494,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
   if (m_sock->IsData())
   {
     m_text->AppendText(_("Reading the string back with ReadMsg ..."));
-    m_sock->ReadMsg(msg2, len);
+    m_sock->ReadMsg(msg2.data(), len);
     m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
     m_text->AppendText(_("Comparing the two buffers ..."));
     if (memcmp(msg1, msg2, len) != 0)
@@ -518,17 +513,12 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 
   m_text->AppendText(_("=== Test 2 ends ===\n"));
 
-  delete[] msg2;
   m_busy = false;
   UpdateStatusBar();
 }
 
 void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
 {
-  char *buf1;
-  char *buf2;
-  unsigned char len;
-
   // Disable socket menu entries (exception: Close Session)
   m_busy = true;
   UpdateStatusBar();
@@ -547,12 +537,12 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
   // Note that len is in kbytes here!
-  len  = 32;
-  buf1 = new char[len * 1024];
-  buf2 = new char[len * 1024];
+  const unsigned char len  = 32;
+  wxCharBuffer buf1(len * 1024),
+               buf2(len * 1024);
 
-  for (int i = 0; i < len * 1024; i ++)
-    buf1[i] = (char)(i % 256);
+  for (size_t i = 0; i < len * 1024; i ++)
+    buf1.data()[i] = (char)(i % 256);
 
   m_text->AppendText(_("Sending a large buffer (32K) to the server ..."));
   m_sock->Write(&len, 1);
@@ -560,7 +550,7 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
   m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
   m_text->AppendText(_("Receiving the buffer back from server ..."));
-  m_sock->Read(buf2, len * 1024);
+  m_sock->Read(buf2.data(), len * 1024);
   m_text->AppendText(m_sock->Error() ? _("failed !\n") : _("done\n"));
 
   m_text->AppendText(_("Comparing the two buffers ..."));
@@ -576,7 +566,6 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
   }
   m_text->AppendText(_("=== Test 3 ends ===\n"));
 
-  delete[] buf2;
   m_busy = false;
   UpdateStatusBar();
 }
