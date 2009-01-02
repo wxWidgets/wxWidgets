@@ -245,7 +245,8 @@ private:
   bool          m_closed;           // was the other end closed?
   wxUint32      m_lcount;           // last IO transaction size
   unsigned long m_timeout;          // IO timeout value in seconds
-  wxList        m_states;           // stack of states
+                                    // (TODO: remove, wxSocketImpl has it too)
+  wxList        m_states;           // stack of states (TODO: remove!)
   bool          m_interrupt;        // interrupt ongoing wait operations?
   bool          m_beingDeleted;     // marked for delayed deletion?
   wxIPV4address m_localAddress;     // bind to local address?
@@ -263,8 +264,12 @@ private:
   wxSocketEventFlags  m_eventmask;  // which events to notify?
   wxSocketEventFlags  m_eventsgot;  // collects events received in OnRequest()
 
-  // the initialization count, GSocket is initialized if > 0
+  // the initialization count, wxSocket is initialized if > 0
   static size_t m_countInit;
+
+
+  friend class wxSocketReadGuard;
+  friend class wxSocketWriteGuard;
 
   DECLARE_NO_COPY_CLASS(wxSocketBase)
   DECLARE_CLASS(wxSocketBase)

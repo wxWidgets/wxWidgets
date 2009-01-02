@@ -124,6 +124,88 @@ public:
     DECLARE_NO_COPY_CLASS(wxSocketState)
 };
 
+// wxSocketWaitModeChanger: temporarily change the socket flags affecting its
+// wait mode
+class wxSocketWaitModeChanger
+{
+public:
+    // temporarily set the flags to include the flag value which may be either
+    // wxSOCKET_NOWAIT or wxSOCKET_WAITALL
+    wxSocketWaitModeChanger(wxSocketBase *socket, int flag)
+        : m_socket(socket),
+          m_oldflags(socket->GetFlags())
+
+    {
+        wxASSERT_MSG( flag == wxSOCKET_WAITALL || flag == wxSOCKET_NOWAIT,
+                      "not a wait flag" );
+
+        // preserve wxSOCKET_BLOCK value when switching to wxSOCKET_WAITALL
+        // mode but not when switching to wxSOCKET_NOWAIT as the latter is
+        // incompatible with wxSOCKET_BLOCK
+        if ( flag != wxSOCKET_NOWAIT )
+            flag |= m_oldflags & wxSOCKET_BLOCK;
+
+        socket->SetFlags(flag);
+    }
+
+    ~wxSocketWaitModeChanger()
+    {
+        m_socket->SetFlags(m_oldflags);
+    }
+
+private:
+    wxSocketBase * const m_socket;
+    const int m_oldflags;
+
+    DECLARE_NO_COPY_CLASS(wxSocketWaitModeChanger)
+};
+
+// wxSocketRead/WriteGuard are instantiated before starting reading
+// from/writing to the socket
+class wxSocketReadGuard
+{
+public:
+    wxSocketReadGuard(wxSocketBase *socket)
+        : m_socket(socket)
+    {
+        wxASSERT_MSG( !m_socket->m_reading, "read reentrancy?" );
+
+        m_socket->m_reading = true;
+    }
+
+    ~wxSocketReadGuard()
+    {
+        m_socket->m_reading = false;
+    }
+
+private:
+    wxSocketBase * const m_socket;
+
+    DECLARE_NO_COPY_CLASS(wxSocketReadGuard)
+};
+
+class wxSocketWriteGuard
+{
+public:
+    wxSocketWriteGuard(wxSocketBase *socket)
+        : m_socket(socket)
+    {
+        wxASSERT_MSG( !m_socket->m_writing, "write reentrancy?" );
+
+        m_socket->m_writing = true;
+    }
+
+    ~wxSocketWriteGuard()
+    {
+        m_socket->m_writing = false;
+    }
+
+private:
+    wxSocketBase * const m_socket;
+
+    DECLARE_NO_COPY_CLASS(wxSocketWriteGuard)
+};
+
 // ============================================================================
 // wxSocketManager
 // ============================================================================
@@ -647,7 +729,7 @@ void wxSocketBase::Shutdown()
 
 void wxSocketBase::Init()
 {
-    m_impl       = NULL;
+    m_impl         = NULL;
     m_type         = wxSOCKET_UNINIT;
 
     // state
@@ -785,13 +867,9 @@ void wxSocketBase::ShutdownOutput()
 
 wxSocketBase& wxSocketBase::Read(void* buffer, wxUint32 nbytes)
 {
-    // Mask read events
-    m_reading = true;
+    wxSocketReadGuard read(this);
 
     m_lcount = DoRead(buffer, nbytes);
-
-    // Allow read events from now on
-    m_reading = false;
 
     return *this;
 }
@@ -885,11 +963,9 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
         unsigned char len[4];
     } msg;
 
-    // Mask read events
-    m_reading = true;
+    wxSocketReadGuard read(this);
 
-    int old_flags = m_flags;
-    SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
+    wxSocketWaitModeChanger changeFlags(this, wxSOCKET_WAITALL);
 
     bool ok = false;
     if ( DoRead(&msg, sizeof(msg)) == sizeof(msg) )
@@ -951,35 +1027,25 @@ wxSocketBase& wxSocketBase::ReadMsg(void* buffer, wxUint32 nbytes)
     if ( !ok )
         SetError(wxSOCKET_IOERR);
 
-    m_reading = false;
-    SetFlags(old_flags);
-
     return *this;
 }
 
 wxSocketBase& wxSocketBase::Peek(void* buffer, wxUint32 nbytes)
 {
-    // Mask read events
-    m_reading = true;
+    wxSocketReadGuard read(this);
 
     m_lcount = DoRead(buffer, nbytes);
-    Pushback(buffer, m_lcount);
 
-    // Allow read events again
-    m_reading = false;
+    Pushback(buffer, m_lcount);
 
     return *this;
 }
 
 wxSocketBase& wxSocketBase::Write(const void *buffer, wxUint32 nbytes)
 {
-    // Mask write events
-    m_writing = true;
+    wxSocketWriteGuard write(this);
 
     m_lcount = DoWrite(buffer, nbytes);
-
-    // Allow write events again
-    m_writing = false;
 
     return *this;
 }
@@ -1048,11 +1114,9 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
         unsigned char len[4];
     } msg;
 
-    // Mask write events
-    m_writing = true;
+    wxSocketWriteGuard write(this);
 
-    const int old_flags = m_flags;
-    SetFlags((m_flags & wxSOCKET_BLOCK) | wxSOCKET_WAITALL);
+    wxSocketWaitModeChanger changeFlags(this, wxSOCKET_WAITALL);
 
     msg.sig[0] = (unsigned char) 0xad;
     msg.sig[1] = (unsigned char) 0xde;
@@ -1087,9 +1151,6 @@ wxSocketBase& wxSocketBase::WriteMsg(const void *buffer, wxUint32 nbytes)
     if ( !ok )
         SetError(wxSOCKET_IOERR);
 
-    m_writing = false;
-    SetFlags(old_flags);
-
     return *this;
 }
 
@@ -1110,11 +1171,9 @@ wxSocketBase& wxSocketBase::Discard()
     wxUint32 ret;
     wxUint32 total = 0;
 
-    // Mask read events
-    m_reading = true;
+    wxSocketReadGuard read(this);
 
-    const int old_flags = m_flags;
-    SetFlags(wxSOCKET_NOWAIT);
+    wxSocketWaitModeChanger changeFlags(this, wxSOCKET_NOWAIT);
 
     do
     {
@@ -1126,11 +1185,6 @@ wxSocketBase& wxSocketBase::Discard()
     delete[] buffer;
     m_lcount = total;
     SetError(wxSOCKET_NOERROR);
-
-    // Allow read events again
-    m_reading = false;
-
-    SetFlags(old_flags);
 
     return *this;
 }
