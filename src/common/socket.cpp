@@ -1804,10 +1804,6 @@ wxSocketClient::wxSocketClient(wxSocketFlags flags)
     m_initialSendBufferSize = -1;
 }
 
-wxSocketClient::~wxSocketClient()
-{
-}
-
 // --------------------------------------------------------------------------
 // Connect
 // --------------------------------------------------------------------------
