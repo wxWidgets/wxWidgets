@@ -37,23 +37,26 @@
 
 #include "wx/timer.h"
 #include "wx/datetime.h"
+#include "wx/vector.h"
 
-// ----------------------------------------------------------------------------
-// wxWin macros
-// ----------------------------------------------------------------------------
-
-
-// Define a new application
 class MyClient;
 
-class MyApp: public wxApp
+// ----------------------------------------------------------------------------
+// classes
+// ----------------------------------------------------------------------------
+
+class MyApp : public wxApp
 {
 public:
+    MyApp() { Connect(wxEVT_IDLE, wxIdleEventHandler(MyApp::OnIdle)); }
+
     virtual bool OnInit();
     virtual int OnExit();
 
-protected:
-    MyClient         *m_client;
+private:
+    void OnIdle(wxIdleEvent& event);
+
+    MyClient *m_client;
 };
 
 class MyConnection : public MyConnectionBase
@@ -66,20 +69,39 @@ public:
     virtual bool OnDisconnect();
 };
 
-class MyClient: public wxClient, public wxTimer
+class MyClient : public wxClient,
+                 private wxTimer
 {
 public:
     MyClient();
     virtual ~MyClient();
+
     bool Connect(const wxString& sHost, const wxString& sService, const wxString& sTopic);
     void Disconnect();
     wxConnectionBase *OnMakeConnection();
     bool IsConnected() { return m_connection != NULL; };
+
     virtual void Notify();
 
-protected:
-    MyConnection     *m_connection;
-    int              m_step;
+    void StartNextTestIfNecessary();
+
+private:
+    void TestRequest();
+    void TestPoke();
+    void TestExecute();
+    void TestStartAdvise();
+    void TestStopAdvise();
+    void TestDisconnect();
+
+
+    MyConnection *m_connection;
+
+    // the test functions to be executed by StartNextTestIfNecessary()
+    typedef void (MyClient::*MyClientTestFunc)();
+    wxVector<MyClientTestFunc> m_tests;
+
+    // number of seconds since the start of the test
+    int m_step;
 };
 
 // ============================================================================
@@ -99,14 +121,12 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-    delete wxLog::SetActiveTarget(new wxLogStderr);
-
     // Create a new client
     m_client = new MyClient;
     bool retval = m_client->Connect("localhost", "4242", "IPC TEST");
 
-    wxLogMessage(_T("Client host=\"localhost\" port=\"4242\" topic=\"IPC TEST\" %s"),
-        retval ? _T("connected") : _T("failed to connect"));
+    wxLogMessage("Client host=\"localhost\" port=\"4242\" topic=\"IPC TEST\" %s",
+                 retval ? "connected" : "failed to connect");
 
     return retval;
 }
@@ -118,25 +138,40 @@ int MyApp::OnExit()
     return 0;
 }
 
+void MyApp::OnIdle(wxIdleEvent& event)
+{
+    if ( m_client )
+        m_client->StartNextTestIfNecessary();
+
+    event.Skip();
+}
+
 // ----------------------------------------------------------------------------
 // MyClient
 // ----------------------------------------------------------------------------
 
-MyClient::MyClient() : wxClient()
+MyClient::MyClient()
+    : wxClient()
 {
     m_connection = NULL;
     m_step = 0;
 }
 
-bool MyClient::Connect(const wxString& sHost, const wxString& sService, const wxString& sTopic)
+bool
+MyClient::Connect(const wxString& sHost,
+                  const wxString& sService,
+                  const wxString& sTopic)
 {
     // suppress the log messages from MakeConnection()
     wxLogNull nolog;
 
     m_connection = (MyConnection *)MakeConnection(sHost, sService, sTopic);
-    if (m_connection)
-        Start(1000, false);
-    return m_connection != NULL;
+    if ( !m_connection )
+        return false;
+
+    Start(1000);
+
+    return true;
 }
 
 wxConnectionBase *MyClient::OnMakeConnection()
@@ -151,7 +186,7 @@ void MyClient::Disconnect()
         m_connection->Disconnect();
         delete m_connection;
         m_connection = NULL;
-        wxLogMessage(_T("Client disconnected from server"));
+        wxLogMessage("Client disconnected from server");
     }
     wxGetApp().ExitMainLoop();
 }
@@ -163,51 +198,102 @@ MyClient::~MyClient()
 
 void MyClient::Notify()
 {
-    switch (m_step++)
+    // we shouldn't call wxIPC methods from here directly as we may be called
+    // from inside an IPC call when using TCP/IP as the sockets are used in
+    // non-blocking code and so can dispatch events, including the timer ones,
+    // while waiting for IO and so starting another IPC call would result in
+    // fatal reentrancies -- instead, just set a flag and perform the test
+    // indicated by it later from our idle event handler
+    MyClientTestFunc testfunc = NULL;
+    switch ( m_step++ )
     {
         case 0:
-        {
-            size_t size;
-            m_connection->Request(_T("Date"));
-            m_connection->Request(_T("Date+len"), &size);
-            m_connection->Request(_T("bytes[3]"), &size, wxIPC_PRIVATE);
+            testfunc = &MyClient::TestRequest;
             break;
-        }
+
         case 1:
-        {
-            wxString s = wxDateTime::Now().Format();
-            m_connection->Poke(_T("Date"), s);
-            s = wxDateTime::Now().FormatTime() + _T(" ") + wxDateTime::Now().FormatDate();
-            m_connection->Poke(_T("Date"), (const char *)s.c_str(), s.length() + 1);
-            char bytes[3];
-            bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
-            m_connection->Poke(_T("bytes[3]"), bytes, 3, wxIPC_PRIVATE);
+            testfunc = &MyClient::TestPoke;
             break;
-        }
+
         case 2:
-        {
-            wxString s = _T("Date");
-            m_connection->Execute(s);
-            m_connection->Execute((const char *)s.c_str(), s.length() + 1);
-            char bytes[3];
-            bytes[0] = '1';
-            bytes[1] = '2';
-            bytes[2] = '3';
-            m_connection->Execute(bytes, WXSIZEOF(bytes));
+            testfunc = &MyClient::TestExecute;
             break;
-        }
+
         case 3:
-            wxLogMessage(_T("StartAdvise(\"something\")"));
-            m_connection->StartAdvise(_T("something"));
+            testfunc = &MyClient::TestStartAdvise;
             break;
+
         case 10:
-            wxLogMessage(_T("StopAdvise(\"something\")"));
-            m_connection->StopAdvise(_T("something"));
+            testfunc = &MyClient::TestStopAdvise;
             break;
+
         case 15:
-            Disconnect();
+            testfunc = &MyClient::TestDisconnect;
             break;
     }
+
+    if ( testfunc )
+        m_tests.push_back(testfunc);
+
+    wxWakeUpIdle();
+}
+
+void MyClient::StartNextTestIfNecessary()
+{
+    if ( !m_tests.empty() )
+    {
+        MyClientTestFunc testfunc = m_tests.front();
+        m_tests.erase(m_tests.begin());
+        (this->*testfunc)();
+    }
+}
+
+void MyClient::TestRequest()
+{
+    size_t size;
+    m_connection->Request("Date");
+    m_connection->Request("Date+len", &size);
+    m_connection->Request("bytes[3]", &size, wxIPC_PRIVATE);
+}
+
+void MyClient::TestPoke()
+{
+    wxString s = wxDateTime::Now().Format();
+    m_connection->Poke("Date", s);
+    s = wxDateTime::Now().FormatTime() + " " + wxDateTime::Now().FormatDate();
+    m_connection->Poke("Date", (const char *)s.c_str(), s.length() + 1);
+    char bytes[3];
+    bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
+    m_connection->Poke("bytes[3]", bytes, 3, wxIPC_PRIVATE);
+}
+
+void MyClient::TestExecute()
+{
+    wxString s = "Date";
+    m_connection->Execute(s);
+    m_connection->Execute((const char *)s.c_str(), s.length() + 1);
+    char bytes[3];
+    bytes[0] = '1';
+    bytes[1] = '2';
+    bytes[2] = '3';
+    m_connection->Execute(bytes, WXSIZEOF(bytes));
+}
+
+void MyClient::TestStartAdvise()
+{
+    wxLogMessage("StartAdvise(\"something\")");
+    m_connection->StartAdvise("something");
+}
+
+void MyClient::TestStopAdvise()
+{
+    wxLogMessage("StopAdvise(\"something\")");
+    m_connection->StopAdvise("something");
+}
+
+void MyClient::TestDisconnect()
+{
+    Disconnect();
 }
 
 // ----------------------------------------------------------------------------
@@ -217,35 +303,35 @@ void MyClient::Notify()
 bool MyConnection::OnAdvise(const wxString& topic, const wxString& item, const void *data,
     size_t size, wxIPCFormat format)
 {
-    Log(_T("OnAdvise"), topic, item, data, size, format);
+    Log("OnAdvise", topic, item, data, size, format);
     return true;
 }
 
 bool MyConnection::OnDisconnect()
 {
-    wxLogMessage(_T("OnDisconnect()"));
+    wxLogMessage("OnDisconnect()");
     wxGetApp().ExitMainLoop();
     return true;
 }
 
 bool MyConnection::DoExecute(const void *data, size_t size, wxIPCFormat format)
 {
-    Log(_T("Execute"), wxEmptyString, wxEmptyString, data, size, format);
+    Log("Execute", wxEmptyString, wxEmptyString, data, size, format);
     bool retval = wxConnection::DoExecute(data, size, format);
     if (!retval)
-        wxLogMessage(_T("Execute failed!"));
+        wxLogMessage("Execute failed!");
     return retval;
 }
 
 const void *MyConnection::Request(const wxString& item, size_t *size, wxIPCFormat format)
 {
     const void *data =  wxConnection::Request(item, size, format);
-    Log(_T("Request"), wxEmptyString, item, data, size ? *size : wxNO_LEN, format);
+    Log("Request", wxEmptyString, item, data, size ? *size : wxNO_LEN, format);
     return data;
 }
 
 bool MyConnection::DoPoke(const wxString& item, const void *data, size_t size, wxIPCFormat format)
 {
-    Log(_T("Poke"), wxEmptyString, item, data, size, format);
+    Log("Poke", wxEmptyString, item, data, size, format);
     return wxConnection::DoPoke(item, data, size, format);
 }
