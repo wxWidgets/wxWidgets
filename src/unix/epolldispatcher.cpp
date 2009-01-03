@@ -23,6 +23,7 @@
 
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/unix/private.h"
+#include "wx/stopwatch.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -162,26 +163,41 @@ bool wxEpollDispatcher::Dispatch(int timeout)
 {
     epoll_event events[16];
 
-    const int e_num = epoll_wait
-                      (
-                        m_epollDescriptor,
-                        events,
-                        WXSIZEOF(events),
-                        timeout == TIMEOUT_INFINITE ? -1 : timeout
-                      );
+    // the code below relies on TIMEOUT_INFINITE being -1 so that we can pass
+    // timeout value directly to epoll_wait() which interprets -1 as meaning to
+    // wait forever and would need to be changed if the value of
+    // TIMEOUT_INFINITE ever changes
+    wxCOMPILE_TIME_ASSERT( TIMEOUT_INFINITE == -1, UpdateThisCode );
 
-    if ( e_num == -1 )
+    wxMilliClock_t timeEnd;
+    if ( timeout != -1 )
+        timeEnd = wxGetLocalTimeMillis();
+
+    int rc;
+    for ( ;; )
     {
-        if ( errno != EINTR )
-        {
-            wxLogSysError(_("Waiting for IO on epoll descriptor %d failed"),
-                          m_epollDescriptor);
+        rc = epoll_wait(m_epollDescriptor, events, WXSIZEOF(events), timeout);
+        if ( rc != -1 || errno != EINTR )
+            break;
+
+        // we got interrupted, update the timeout and restart
+        if ( timeout == -1 )
+            continue;
+
+        timeout = wxMilliClockToLong(timeEnd - wxGetLocalTimeMillis());
+        if ( timeout < 0 )
             return false;
-        }
+    }
+
+    if ( rc == -1 )
+    {
+        wxLogSysError(_("Waiting for IO on epoll descriptor %d failed"),
+                      m_epollDescriptor);
+        return false;
     }
 
     bool gotEvents = false;
-    for ( epoll_event *p = events; p < events + e_num; p++ )
+    for ( epoll_event *p = events; p < events + rc; p++ )
     {
         wxFDIOHandler * const handler = (wxFDIOHandler *)(p->data.ptr);
         if ( !handler )
