@@ -471,6 +471,10 @@ TABLE.appearance {
 	/*font-weight: bold;*/
 }
 
+TD.green { color: green; }
+TD.orange { color: #ff8000; }
+TD.red { color: red; }
+
 SPAN.literal {
 	text-decoration: none;
 	font-weight: bold;

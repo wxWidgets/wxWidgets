@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 // Name:        translations.h
 // Purpose:     List of wxWidgets available translations
 // Author:      wxWidgets team
@@ -43,76 +43,94 @@ Please note that email addresses in the table below are intentionally invalid
 to foil spam robots, remove one <tt>\@</tt> from them.
 
 <table>
-<tr>
-    <td colspan="3">Languages supported by wxWidgets</td>
-</tr>
 
 <tr>
-    <td>Language</td>
-    <td>Status</td>
-    <td>Translator(s)</td>
+    <th>Language</th>
+    <th>Status</th>
+    <th>Translator(s)</th>
 </tr>
 
 <tr>
     <td>Afrikaans</td>
-    <td>@image html yes.gif</td>
+    <td class="orange">71%</td>
     <td><a href="mailto:rkwjpj@@puk.ac.za">Petri Jooste</a></td>
 </tr>
 
 <tr>
+    <td>Albanian</td>
+    <td class="orange">79%</td>
+    <td><a href="mailto:besnik@@programeshqip.org">Besnik Bleta</a></td>
+</tr>
+
+<tr>
+    <td>Basque</td>
+    <td class="red">18%</td>
+    <td><a href="mailto:3arrano@@euskalerria.org">3ARRANO Euskalgintza Taldea</a></td>
+</tr>
+
+<tr>
     <td>Catalan</td>
-    <td>@image html yes.gif</td>
+    <td class="orange">67%</td>
     <td><a href="mailto:paubcrespo@@hotmail.com">Pau Bosch i Crespo</a></td>
 </tr>
 
 <tr>
     <td>Chinese (simplified)</td>
-    <td>@image html yes.gif</td>
+    <td class="green">80%</td>
     <td><a href="mailto:mrfx@@fm365.com">mrfx</a></td>
 </tr>
 
 <tr>
     <td>Chinese (traditional)</td>
-    <td>@image html yes.gif</td>
+    <td class="green">80%</td>
     <td><a href="mailto:pal.tw@@yahoo.com.tw">pal.tw</a></td>
 </tr>
 
 <tr>
     <td>Czech</td>
-    <td>@image html yes.gif</td>
-    <td><a href="mailto:v.slavik@@volny.cz">Vaclav Slavik</a></td>
+    <td class="orange">68%</td>
+    <td>
+        <a href="mailto:v.slavik@@volny.cz">Vaclav Slavik</a>,
+        <a href="mailto:deirdre_skye@@web.de">Herbert Breunung</a>
+    </td>
 </tr>
 
 <tr>
     <td>Danish</td>
-    <td>@image html yes.gif</td>
+    <td class="orange">78%</td>
     <td>
         <a href="mailto:leif@@danmos.dk">Leif Jensen</a>,
-        <a href="mailto:Henrik@@fangorn.dk">Henrik Ræder Clausen</a>
+        <a href="mailto:Henrik@@fangorn.dk">Henrik Ræder Clausen</a>,
+        <a href="mailto:mulrich15@@yahoo.dk">Morten Råbjerg Ulrich</a>
     </td>
 </tr>
 
 <tr>
     <td>Dutch</td>
-    <td>@image html yes.gif</td>
+    <td class="green">92%</td>
     <td><a href="mailto:phubers@@solve-i-t.com">Patrick Hubers</a></td>
 </tr>
 
 <tr>
     <td>English (UK)</td>
-    <td>@image html yes.gif</td>
-    <td>Not required</td>
+    <td class="green">100%</td>
+    <td>N/A</td>
 </tr>
 
 <tr>
     <td>Finnish</td>
-    <td>@image html yes.gif</td>
-    <td><a href="mailto:kgb@@compart.fi">Kaj G Backas</a></td>
+    <td class="green">88%</td>
+    <td>
+        <a href="mailto:kgb@@compart.fi">Kaj G Backas</a>,
+        <a href="mailto:lanurmi@@iki.fi">Lauri Nurmi</a>,
+        <a href="mailto:jmsalli79@@hotmail.com">Jaakko Salli</a>,
+        <a href="mailto:elias.julkunen@gmail.com">Elias Julkunen</a>
+    </td>
 </tr>
 
 <tr>
     <td>French (standard)</td>
-    <td>@image html yes.gif</td>
+    <td class="green">95%</td>
     <td>
         <a href="mailto:Stephane.Junique@@optics.kth.se">Stephane Junique</a>,
         <a href="mailto:lionel.allorge@@lunerouge.com">Lionel Allorge</a>,
@@ -121,21 +139,32 @@ to foil spam robots, remove one <tt>\@</tt> from them.
 </tr>
 
 <tr>
+    <td>Galician</td>
+    <td class="green">80%</td>
+    <td>
+        <a href="mailto:leandro.regueiro@@gmail.com">Leandro Regueiro</a>,
+        <a href="mailto:correoadrian82@@hotmail.com">Adrián González Alba</a>
+    </td>
+</tr>
+
+<tr>
     <td>German</td>
-    <td>@image html yes.gif</td>
+    <td class="green">81%</td>
     <td>
         <a href="mailto:DanR@@gmx.de">Daniel Reith</a>,
         <a href="mailto:sparhawk@@aon.at">Gerhard Gruber</a>,
         <a href="mailto:stefan@@hedemann.de">Stefan Hedemann</a>,
         <a href="mailto:D.Reymann@@geisenheim.mnd.fh-wiesbaden.de">Dr. Detlev Reymann</a>,
-        <a href="mailto:NA">Mark Johnson</a>,
-        <a href="mailto:martinnost@@users.sf.net">Martin Jost</a>
+        Mark Johnson,
+        <a href="mailto:martinnost@@users.sf.net">Martin Jost</a>,
+        <a href="mailto:deirdre_skye@@web.de">Herbert Breunung</a>,
+        <a href="mailto:chbuck@@gmail.com">Ch. Buck</a>
     </td>
 </tr>
 
 <tr>
     <td>Greek</td>
-    <td>@image html no.gif</td>
+    <td class="orange">76%</td>
     <td>
         <a href="mailto:tsolako1@@otenet.gr">Tsolakos Stavros</a>,
         <a href="mailto:nassosy@@compulink.gr">Nassos Yiannopoulos</a>
@@ -143,8 +172,17 @@ to foil spam robots, remove one <tt>\@</tt> from them.
 </tr>
 
 <tr>
+    <td>Hindi</td>
+    <td class="green">92%</td>
+    <td>
+        <a href="mailto:dysxhi@@yahoo.co.in">Dhananjaya Sharma</a>,
+        <a href="mailto:priyank.bolia@@gmail.com">Priyank Bolia</a>
+    </td>
+</tr>
+
+<tr>
     <td>Hungarian</td>
-    <td>@image html yes.gif</td>
+    <td class="green">80%</td>
     <td>
         <a href="mailto:Janos_Vegh@@users.sourceforge.net">Végh János Dr.</a>
     </td>
@@ -152,7 +190,7 @@ to foil spam robots, remove one <tt>\@</tt> from them.
 
 <tr>
     <td>Indonesian</td>
-    <td>@image html yes.gif</td>
+    <td class="orange">73%</td>
     <td>
         <a href="mailto:bambang@@3wsi.com">Bambang Purnomosidi D. P.</a>
     </td>
@@ -160,8 +198,9 @@ to foil spam robots, remove one <tt>\@</tt> from them.
 
 <tr>
     <td>Italian</td>
-    <td>@image html yes.gif</td>
+    <td class="green">91%</td>
     <td>
+        <a href="mailto:mbarbon@@cpan.org">Mattia Barbon</a>,
         <a href="mailto:m.cavallini@@koansoftware.com">Marco Cavallini</a>
         (<a href="http://www.koansoftware.com">Koan Software</a>)
     </td>
@@ -169,64 +208,109 @@ to foil spam robots, remove one <tt>\@</tt> from them.
 
 <tr>
     <td>Japanese</td>
-    <td>@image html yes.gif</td>
+    <td class="green">81%</td>
     <td>
         <a href="mailto:james.bishop1@@tiscali.co.uk">James Bishop</a>,
-        <a href="mailto:saito@@inetrt.skcapi.co.jp">Hiroshi Saito</a>
+        <a href="mailto:saito@@inetrt.skcapi.co.jp">Hiroshi Saito</a>,
+        <a href="mailto:suzumizaki@@free.japandesign.ne.jp">Suzumizaki-Kimitaka</a>
     </td>
 </tr>
 
 <tr>
     <td>Latvian</td>
-    <td>@image html somewhat.gif</td>
+    <td class="red">21%</td>
     <td>
-        <a href="mailto:lauris@@nix.lv">Lauris Buk&#353;is</a>
+        <a href="mailto:lauris@@nix.lv">Lauris Bukshis</a>
+    </td>
+</tr>
+
+<tr>
+    <td>Malay</td>
+    <td class="green">95%</td>
+    <td>
+        <a href="mailto:mahrazi@@gmail.com">Mahrazi Mohd Kamal</a>
+    </td>
+</tr>
+
+<tr>
+    <td>Norwegian Bokmal</td>
+    <td class="orange">78%</td>
+    <td>
+        <a href="mailto:hans@@nordhaug.priv.no">Hans F. Nordhaug</a>
     </td>
 </tr>
 
 <tr>
     <td>Polish</td>
-    <td>@image html yes.gif</td>
+    <td class="green">81%</td>
     <td>
         <a href="mailto:matiso@@hoga.pl">Piotr Mackowiak</a>,
-        <a href="mailto:jpiw@@go2.pl">Janusz Piwowarski</a>
+        <a href="mailto:jpiw@@go2.pl">Janusz Piwowarski</a>,
+        <a href="mailto:abx@@abx.art.pl">ABX</a>
     </td>
 </tr>
 
 <tr>
-    <td>Portuguese</td>
-    <td>@image html no.gif</td>
-    <td><a href="mailto:bernardosw@@terra.com.br">Bernardo Santos Wernesback</a></td>
+    <td>Portuguese (pt)</td>
+    <td class="green">95%</td>
+    <td>
+        <a href="mailto:bernardosw@@terra.com.br">Bernardo Santos Wernesback</a>,
+        <a href="mailto:marionrpereira76@@hotmail.com">Mario Pereira</a>,
+        <a href="mailto:digiplan.pt@@gmail.com">Antonio Cardoso Martins</a>,
+        <a href="mailto:mail@@cgoncalves.info">Carlos Gonçalves</a>
+    </td>
+</tr>
+
+<tr>
+    <td>Portuguese (pt_BR)</td>
+    <td class="green">100%</td>
+    <td>
+        <a href="mailto:e.a.tacao@@terra.com.br">E.A. Tacao</a>,
+        <a href="mailto:jecdiniz@@yahoo.com.br">José Eduardo de Carvalho Diniz</a>,
+        <a href="mailto:adiel@@inf.ufsc.br">Adiel Mittmann</a>
+    </td>
 </tr>
 
 <tr>
     <td>Russian</td>
-    <td>@image html yes.gif</td>
+    <td class="orange">78%</td>
     <td>
+        <a href="mailto:wolfsoft@@mail.ru">Dennis Prochko</a>,
         <a href="mailto:rolinsky@@mema.ucl.ac.be">Roman Rolinsky</a>,
-        <a href="mailto:vadim@@wxwidgets.org">Vadim Zeitlin</a>
+        <a href="mailto:vadim@@wxwidgets.org">Vadim Zeitlin</a>,
         <a href="mailto:kai@@cmail.ru">Andrew V. Samoilov</a>
     </td>
 </tr>
 
 <tr>
-    <td>Serbian</td>
-    <td>@image html no.gif</td>
-    <td><a href="mailto:zlatkor@@eunet.yu">Zlatko Rosandic</a></td>
+    <td>Slovak</td>
+    <td class="orange">77%</td>
+    <td><a href="mailto:helix84@@centrum.sk">Ivan Masar</a></td>
+</tr>
+
+<tr>
+    <td>Slovenian</td>
+    <td class="green">100%</td>
+    <td>
+        <a href="mailto:roman.plevel@@iskratr.si">Roman Plevel</a>,
+        <a href="mailto:miles@@filmsi.net">Martin Srebotnjak</a>
+    </td>
 </tr>
 
 <tr>
     <td>Spanish</td>
-    <td>@image html yes.gif</td>
+    <td class="green">95%</td>
     <td>
         <a href="mailto:guille@@iies.es">Guillermo Rodriguez Garcia</a>,
-        <a href="mailto:jsj666@@hotmail.com">JSJ</a>
+        <a href="mailto:jsj666@@hotmail.com">JSJ</a>,
+        <a href="mailto:francisco.vila@@hispalinux.es">Francisco Vila</a>,
+        <a href="mailto:correoadrian82@@hotmail.com">Adrián González Alba</a>
     </td>
 </tr>
 
 <tr>
     <td>Swedish</td>
-    <td>@image html yes.gif</td>
+    <td class="green">95%</td>
     <td>
         <a href="mailto:jor@@mindless.com">Jonas Rydberg</a>,
         <a href="mailto:kgb@@compart.fi">Kaj G Backas</a>
@@ -235,17 +319,34 @@ to foil spam robots, remove one <tt>\@</tt> from them.
 
 <tr>
     <td>Turkish</td>
-    <td>@image html yes.gif</td>
+    <td class="green">92%</td>
     <td><a href="mailto:dogusanh@@dynaset.org">Hakki Dogusan</a></td>
 </tr>
 
 <tr>
     <td>Ukrainian</td>
-    <td>@image html yes.gif</td>
-    <td><a href="mailto:manko@@salingshot.co.nz">Eugene Manko</a></td>
+    <td class="green">95%</td>
+    <td>
+        <a href="mailto:manko@@salingshot.co.nz">Eugene Manko</a>,
+        <a href="mailto:yurchor@@ukr.net">Yuri Chornoivan</a>,
+        <a href="mailto:k_ilya@@ukr.net">Ylia K</a>
+    </td>
 </tr>
+
+<tr>
+    <td>Valencian (ca\@valencia)</td>
+    <td class="orange">67%</td>
+    <td><a href="mailto:rmh@@aybabtu.com">Robert Millan</a></td>
+</tr>
+
+<tr>
+    <td>Vietnamese</td>
+    <td class="green">100%</td>
+    <td><a href="mailto:vnwildman@gmail.com">Tran Ngoc Quan</a></td>
+</tr>
+
 </table>
-<br><br>
+<br/>
 
 
 @section page_translations_howtohelp How to help
