@@ -111,7 +111,7 @@ int wxSelectSets::Select(int nfds, struct timeval *tv)
     return select(nfds, &m_fds[Read], &m_fds[Write], &m_fds[Except], tv);
 }
 
-void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
+bool wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
 {
     for ( int n = 0; n < Max; n++ )
     {
@@ -122,9 +122,11 @@ void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
             (handler.*ms_handlers[n])();
             // callback can modify sets and destroy handler
             // this forces that one event can be processed at one time
-            return;
+            return true;
         }
     }
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -190,9 +192,9 @@ bool wxSelectDispatcher::UnregisterFD(int fd)
     return true;
 }
 
-bool wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
+int wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
 {
-    bool gotEvent = false;
+    int numEvents = 0;
     for ( int fd = 0; fd <= m_maxFD; fd++ )
     {
         if ( !sets.HasFD(fd) )
@@ -205,15 +207,14 @@ bool wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
             continue;
         }
 
-        gotEvent = true;
-
-        sets.Handle(fd, *handler);
+        if ( sets.Handle(fd, *handler) )
+            numEvents++;
     }
 
-    return gotEvent;
+    return numEvents;
 }
 
-bool wxSelectDispatcher::Dispatch(int timeout)
+int wxSelectDispatcher::DoSelect(wxSelectSets& sets, int timeout) const
 {
     struct timeval tv,
                   *ptv;
@@ -228,29 +229,38 @@ bool wxSelectDispatcher::Dispatch(int timeout)
         ptv = NULL;
     }
 
-    wxSelectSets sets = m_sets;
+    int ret = sets.Select(m_maxFD + 1, ptv);
 
-    const int ret = sets.Select(m_maxFD + 1, ptv);
-    switch ( ret )
+    // TODO: we need to restart select() in this case but for now just return
+    //       as if timeout expired
+    if ( ret == -1 && errno == EINTR )
+        ret = 0;
+
+    return ret;
+}
+
+bool wxSelectDispatcher::HasPending() const
+{
+    wxSelectSets sets(m_sets);
+    return DoSelect(sets, 0) > 0;
+}
+
+int wxSelectDispatcher::Dispatch(int timeout)
+{
+    wxSelectSets sets(m_sets);
+    switch ( DoSelect(sets, timeout) )
     {
         case -1:
-            if ( errno != EINTR )
-            {
-                wxLogSysError(_("Failed to monitor I/O channels"));
-            }
-            break;
+            wxLogSysError(_("Failed to monitor I/O channels"));
+            return -1;
 
         case 0:
             // timeout expired without anything happening
-            break;
+            return 0;
 
         default:
-            if ( ProcessSets(sets) )
-                return true;
+            return ProcessSets(sets);
     }
-
-    // nothing happened
-    return false;
 }
 
 #endif // wxUSE_SELECT_DISPATCHER

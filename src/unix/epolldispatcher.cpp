@@ -159,10 +159,9 @@ bool wxEpollDispatcher::UnregisterFD(int fd)
     return true;
 }
 
-bool wxEpollDispatcher::Dispatch(int timeout)
+int
+wxEpollDispatcher::DoPoll(epoll_event *events, int numEvents, int timeout) const
 {
-    epoll_event events[16];
-
     // the code below relies on TIMEOUT_INFINITE being -1 so that we can pass
     // timeout value directly to epoll_wait() which interprets -1 as meaning to
     // wait forever and would need to be changed if the value of
@@ -170,33 +169,48 @@ bool wxEpollDispatcher::Dispatch(int timeout)
     wxCOMPILE_TIME_ASSERT( TIMEOUT_INFINITE == -1, UpdateThisCode );
 
     wxMilliClock_t timeEnd;
-    if ( timeout != -1 )
+    if ( timeout > 0 )
         timeEnd = wxGetLocalTimeMillis();
 
     int rc;
     for ( ;; )
     {
-        rc = epoll_wait(m_epollDescriptor, events, WXSIZEOF(events), timeout);
+        rc = epoll_wait(m_epollDescriptor, events, numEvents, timeout);
         if ( rc != -1 || errno != EINTR )
             break;
 
         // we got interrupted, update the timeout and restart
-        if ( timeout == -1 )
-            continue;
-
-        timeout = wxMilliClockToLong(timeEnd - wxGetLocalTimeMillis());
-        if ( timeout < 0 )
-            return false;
+        if ( timeout > 0 )
+        {
+            timeout = wxMilliClockToLong(timeEnd - wxGetLocalTimeMillis());
+            if ( timeout < 0 )
+                return 0;
+        }
     }
+
+    return rc;
+}
+
+bool wxEpollDispatcher::HasPending() const
+{
+    epoll_event event;
+    return DoPoll(&event, 1, 0) == 1;
+}
+
+int wxEpollDispatcher::Dispatch(int timeout)
+{
+    epoll_event events[16];
+
+    const int rc = DoPoll(events, WXSIZEOF(events), timeout);
 
     if ( rc == -1 )
     {
         wxLogSysError(_("Waiting for IO on epoll descriptor %d failed"),
                       m_epollDescriptor);
-        return false;
+        return -1;
     }
 
-    bool gotEvents = false;
+    int numEvents = 0;
     for ( epoll_event *p = events; p < events + rc; p++ )
     {
         wxFDIOHandler * const handler = (wxFDIOHandler *)(p->data.ptr);
@@ -219,10 +233,10 @@ bool wxEpollDispatcher::Dispatch(int timeout)
         else
             continue;
 
-        gotEvents = true;
+        numEvents++;
     }
 
-    return gotEvents;
+    return numEvents;
 }
 
 #endif // wxUSE_EPOLL_DISPATCHER

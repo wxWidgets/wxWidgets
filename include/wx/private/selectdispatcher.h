@@ -56,8 +56,9 @@ public:
     // select() itself
     int Select(int nfds, struct timeval *tv);
 
-    // call the handler methods corresponding to the sets having this fd
-    void Handle(int fd, wxFDIOHandler& handler) const;
+    // call the handler methods corresponding to the sets having this fd if it
+    // is present in any set and return true if it is
+    bool Handle(int fd, wxFDIOHandler& handler) const;
 
 private:
     typedef void (wxFDIOHandler::*Callback)();
@@ -91,19 +92,24 @@ public:
     virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
     virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
     virtual bool UnregisterFD(int fd);
-    virtual bool Dispatch(int timeout = TIMEOUT_INFINITE);
+    virtual bool HasPending() const;
+    virtual int Dispatch(int timeout = TIMEOUT_INFINITE);
 
 private:
     // common part of RegisterFD() and ModifyFD()
     bool DoUpdateFDAndHandler(int fd, wxFDIOHandler *handler, int flags);
 
-    // call the handlers for the fds present in the given sets, return true if
-    // we called any handlers
-    bool ProcessSets(const wxSelectSets& sets);
+    // call the handlers for the fds present in the given sets, return the
+    // number of handlers we called
+    int ProcessSets(const wxSelectSets& sets);
 
     // helper of ProcessSets(): call the handler if its fd is in the set
     void DoProcessFD(int fd, const fd_set& fds, wxFDIOHandler *handler,
                      const char *name);
+
+    // common part of HasPending() and Dispatch(): calls select() with the
+    // specified timeout
+    int DoSelect(wxSelectSets& sets, int timeout) const;
 
 
     // the select sets containing all the registered fds

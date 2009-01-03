@@ -85,7 +85,7 @@ void wxConsoleEventLoop::PipeIOHandler::WakeUp()
 void wxConsoleEventLoop::PipeIOHandler::OnReadWaiting()
 {
     // got wakeup from child thread: read all data available in pipe just to
-    // make it empty (evevn though we write one byte at a time from WakeUp(),
+    // make it empty (even though we write one byte at a time from WakeUp(),
     // it could have been called several times)
     char buf[4];
     for ( ;; )
@@ -107,7 +107,9 @@ void wxConsoleEventLoop::PipeIOHandler::OnReadWaiting()
         }
     }
 
-    wxTheApp->ProcessPendingEvents();
+    // writing to the wake up pipe will make wxConsoleEventLoop return from
+    // wxFDIODispatcher::Dispatch() it might be currently blocking in, nothing
+    // else needs to be done
 }
 
 // ===========================================================================
@@ -144,7 +146,17 @@ wxConsoleEventLoop::wxConsoleEventLoop()
 
 bool wxConsoleEventLoop::Pending() const
 {
-    return wxTheApp->HasPendingEvents();
+    if ( m_dispatcher->HasPending() )
+        return true;
+
+#if wxUSE_TIMER
+    wxUsecClock_t nextTimer;
+    if ( wxTimerScheduler::Get().GetNext(&nextTimer) &&
+            !wxMilliClockToLong(nextTimer) )
+        return true;
+#endif // wxUSE_TIMER
+
+    return false;
 }
 
 bool wxConsoleEventLoop::Dispatch()
@@ -167,7 +179,7 @@ int wxConsoleEventLoop::DispatchTimeout(unsigned long timeout)
     }
 #endif // wxUSE_TIMER
 
-    bool hadEvent = m_dispatcher->Dispatch(timeout);
+    bool hadEvent = m_dispatcher->Dispatch(timeout) > 0;
 
 #if wxUSE_TIMER
     if ( wxTimerScheduler::Get().NotifyExpired() )

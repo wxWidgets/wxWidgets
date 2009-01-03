@@ -17,6 +17,8 @@
 
 #include "wx/private/fdiodispatcher.h"
 
+struct epoll_event;
+
 class WXDLLIMPEXP_CORE wxEpollDispatcher : public wxFDIODispatcher
 {
 public:
@@ -32,11 +34,17 @@ public:
     virtual bool RegisterFD(int fd, wxFDIOHandler* handler, int flags = wxFDIO_ALL);
     virtual bool ModifyFD(int fd, wxFDIOHandler* handler, int flags = wxFDIO_ALL);
     virtual bool UnregisterFD(int fd);
-    virtual bool Dispatch(int timeout = TIMEOUT_INFINITE);
+    virtual bool HasPending() const;
+    virtual int Dispatch(int timeout = TIMEOUT_INFINITE);
 
 private:
     // ctor is private, use Create()
     wxEpollDispatcher(int epollDescriptor);
+
+    // common part of HasPending() and Dispatch(): calls epoll_wait() with the
+    // given timeout
+    int DoPoll(epoll_event *events, int numEvents, int timeout) const;
+
 
     int m_epollDescriptor;
 };
