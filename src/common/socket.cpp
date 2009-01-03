@@ -1563,6 +1563,15 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
     // send the wx event if enabled and we're interested in it
     if ( m_notify && (m_eventmask & flag) && m_handler )
     {
+        // don't generate the events when we're inside DoWait() called from our
+        // own code as we are going to consume the data that has just become
+        // available ourselves and the user code won't see it at all
+        if ( (notification == wxSOCKET_INPUT && m_reading) ||
+                (notification == wxSOCKET_OUTPUT && m_writing) )
+        {
+            return;
+        }
+
         wxSocketEvent event(m_id);
         event.m_event      = notification;
         event.m_clientData = m_clientData;
