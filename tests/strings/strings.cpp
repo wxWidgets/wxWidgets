@@ -839,28 +839,28 @@ void StringTestCase::IndexedAccess()
     // this tests for a possible bug in UTF-8 based wxString implementation:
     // the 3rd character of the underlying byte string is going to change, but
     // the 3rd character of wxString should remain the same
-    s[0] = L'\u00e9';
+    s[0] = L'\xe9';
     CPPUNIT_ASSERT_EQUAL( 'r', (char)s[2] );
 }
 
 void StringTestCase::BeforeAndAfter()
 {
-    const wxString s(L"letter=\u00e9;\u00e7a=l\u00e0");
+    const wxString s(L"letter=\xe9;\xe7a=l\xe0");
 
     CPPUNIT_ASSERT_EQUAL( "letter", s.BeforeFirst('=') );
     CPPUNIT_ASSERT_EQUAL( s, s.BeforeFirst('!') );
-    CPPUNIT_ASSERT_EQUAL( L"letter=\u00e9", s.BeforeFirst(';') );
+    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeFirst(';') );
 
-    CPPUNIT_ASSERT_EQUAL( L"letter=\u00e9;\u00e7a", s.BeforeLast('=') );
+    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9;\xe7a", s.BeforeLast('=') );
     CPPUNIT_ASSERT_EQUAL( "", s.BeforeLast('!') );
-    CPPUNIT_ASSERT_EQUAL( L"letter=\u00e9", s.BeforeLast(';') );
+    CPPUNIT_ASSERT_EQUAL( L"letter=\xe9", s.BeforeLast(';') );
 
-    CPPUNIT_ASSERT_EQUAL( L"\u00e9;\u00e7a=l\u00e0", s.AfterFirst('=') );
+    CPPUNIT_ASSERT_EQUAL( L"\xe9;\xe7a=l\xe0", s.AfterFirst('=') );
     CPPUNIT_ASSERT_EQUAL( "", s.AfterFirst('!') );
-    CPPUNIT_ASSERT_EQUAL( L"\u00e7a=l\u00e0", s.AfterFirst(';') );
+    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", s.AfterFirst(';') );
 
-    CPPUNIT_ASSERT_EQUAL( L"l\u00e0", s.AfterLast('=') );
+    CPPUNIT_ASSERT_EQUAL( L"l\xe0", s.AfterLast('=') );
     CPPUNIT_ASSERT_EQUAL( s, s.AfterLast('!') );
-    CPPUNIT_ASSERT_EQUAL( L"\u00e7a=l\u00e0", s.AfterLast(';') );
+    CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", s.AfterLast(';') );
 }
 
