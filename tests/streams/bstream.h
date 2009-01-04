@@ -203,8 +203,8 @@ protected:
         // Try to Seek in the stream...
         // Note: streams not supporting this should register this test
         //       with CPPUNIT_TEST_FAIL instead of CPPUNIT_TEST.
-        CPPUNIT_ASSERT_EQUAL(wxFileOffset(2), stream_in.SeekI(2, wxFromStart));
-        CPPUNIT_ASSERT_EQUAL(wxFileOffset(4), stream_in.SeekI(2, wxFromCurrent));
+        CPPUNIT_ASSERT_EQUAL(2, stream_in.SeekI(2, wxFromStart));
+        CPPUNIT_ASSERT_EQUAL(4, stream_in.SeekI(2, wxFromCurrent));
         // Not sure the following line is correct, so test it differently.
         //CPPUNIT_ASSERT_EQUAL(stream_in.GetSize()-2, stream_in.SeekI(-2, wxFromEnd));
         CPPUNIT_ASSERT(stream_in.SeekI(-2, wxFromEnd) != wxInvalidOffset);
@@ -275,7 +275,7 @@ protected:
 
         if (stream_in.Ungetch('a'))
         {
-            CPPUNIT_ASSERT_EQUAL('a', stream_in.GetC());
+            CPPUNIT_ASSERT_EQUAL(int('a'), stream_in.GetC());
         }
     }
 
