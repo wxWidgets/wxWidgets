@@ -110,10 +110,6 @@ public:
     bool HasPixbuf() const;
     GdkPixbuf *GetPixbuf() const;
 
-    // Basically, this corresponds to Win32 StretchBlt()
-    wxBitmap Rescale(int clipx, int clipy, int clipwidth, int clipheight,
-                     int width, int height) const;
-
     // raw bitmap access support functions
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);
