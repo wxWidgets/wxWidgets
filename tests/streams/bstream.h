@@ -375,7 +375,7 @@ protected:
             const char *buf = "1234567890";
             (void)stream_out.Write(buf, 10);
 
-            off_t pos = stream_out.SeekO(5, wxFromStart);
+            wxFileOffset pos = stream_out.SeekO(5, wxFromStart);
             CPPUNIT_ASSERT_EQUAL(pos, stream_out.TellO());
             (void)stream_out.PutC('1');
             CPPUNIT_ASSERT_EQUAL(6, stream_out.TellO());
