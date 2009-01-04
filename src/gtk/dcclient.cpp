@@ -443,25 +443,33 @@ bool wxWindowDCImpl::DoFloodFill(wxCoord x, wxCoord y,
 
 bool wxWindowDCImpl::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
 {
-#if wxUSE_IMAGE
-    // Generic (and therefore rather inefficient) method.
-    // Could be improved.
-    wxMemoryDC memdc;
-    wxBitmap bitmap(1, 1);
-    memdc.SelectObject(bitmap);
-    memdc.Blit(0, 0, 1, 1, GetOwner(), x1, y1);
-    memdc.SelectObject(wxNullBitmap);
-
-    wxImage image = bitmap.ConvertToImage();
-    col->Set(image.GetRed(0, 0), image.GetGreen(0, 0), image.GetBlue(0, 0));
+    GdkImage* image = NULL;
+    if (m_gdkwindow)
+    {
+        const int x = LogicalToDeviceX(x1);
+        const int y = LogicalToDeviceY(y1);
+        wxRect rect;
+        gdk_drawable_get_size(m_gdkwindow, &rect.width, &rect.height);
+        if (rect.Contains(x, y))
+            image = gdk_drawable_get_image(m_gdkwindow, x, y, 1, 1);
+    }
+    if (image == NULL)
+    {
+        *col = wxColour();
+        return false;
+    }
+    GdkColormap* colormap = gdk_image_get_colormap(image);
+    const unsigned pixel = gdk_image_get_pixel(image, 0, 0);
+    if (colormap == NULL)
+        *col = pixel ? m_textForegroundColour : m_textBackgroundColour;
+    else
+    {
+        GdkColor c;
+        gdk_colormap_query_color(colormap, pixel, &c);
+        col->Set(c.red >> 8, c.green >> 8, c.blue >> 8);
+    }
+    g_object_unref(image);
     return true;
-#else // !wxUSE_IMAGE
-    wxUnusedVar(x1);
-    wxUnusedVar(y1);
-    wxUnusedVar(col);
-
-    return false;
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
 }
 
 void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
