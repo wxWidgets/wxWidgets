@@ -29,6 +29,8 @@
     STREAM_IMPLEMENT_SUB_REGISTRATION_ROUTINE( Name )
 
 
+WX_CPPUNIT_ALLOW_EQUALS_TO_INT(wxFileOffset)
+
 ///////////////////////////////////////////////////////////////////////////////
 // Template class that implements a test for all base stream functions.
 //

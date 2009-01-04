@@ -56,7 +56,6 @@
 #include "wx/afterstd.h"
 
 #include "wx/string.h"
-#include "wx/filefn.h"  // for wxFileOffset
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -106,6 +105,10 @@ assertEquals(const wchar_t *expected,
     assertEquals(wxString(expected), actual, sourceLine, message);
 }
 
+CPPUNIT_NS_END
+
+// define an assertEquals() overload for the given types, this is a helper and
+// shouldn't be used directly because of VC6 complications, see below
 #define WX_CPPUNIT_ASSERT_EQUALS(T1, T2)                                      \
     inline void                                                               \
     assertEquals(T1 expected,                                                 \
@@ -122,28 +125,34 @@ assertEquals(const wchar_t *expected,
         }                                                                     \
     }
 
-// and another to be able to specify (usually literal) ints as expected values
-// for functions returning size_t/short/long/wxFileOffset
-WX_CPPUNIT_ASSERT_EQUALS(int, long)
-WX_CPPUNIT_ASSERT_EQUALS(int, short)
-WX_CPPUNIT_ASSERT_EQUALS(int, size_t)
-WX_CPPUNIT_ASSERT_EQUALS(int, wxFileOffset)
+// this macro allows us to specify (usually literal) ints as expected values
+// for functions returning integral types different from "int"
+//
+// FIXME-VC6: due to incorrect resolution of overloaded/template functions in
+//            this compiler (it basically doesn't use the template version at
+//            all if any overloaded function matches partially even if none of
+//            them matches fully) we also need to provide extra overloads
 
-// special section with VC6 workarounds: due to incorrect resolution of
-// overloaded/template functions in this compiler (it basically doesn't use the
-// template version at all if any overloaded function matches partially even if
-// none of them matches fully) we also need
 #ifdef __VISUALC6__
+    #define WX_CPPUNIT_ALLOW_EQUALS_TO_INT(T) \
+        CPPUNIT_NS_BEGIN \
+            WX_CPPUNIT_ASSERT_EQUALS(int, T) \
+            WX_CPPUNIT_ASSERT_EQUALS(T, T) \
+        CPPUNIT_NS_END
 
-WX_CPPUNIT_ASSERT_EQUALS(int, int)
-WX_CPPUNIT_ASSERT_EQUALS(long, long)
-WX_CPPUNIT_ASSERT_EQUALS(short, short)
-WX_CPPUNIT_ASSERT_EQUALS(size_t, size_t)
-WX_CPPUNIT_ASSERT_EQUALS(wxFileOffset, wxFileOffset)
+    CPPUNIT_NS_BEGIN
+        WX_CPPUNIT_ASSERT_EQUALS(int, int)
+    CPPUNIT_NS_END
+#else // !VC6
+    #define WX_CPPUNIT_ALLOW_EQUALS_TO_INT(T) \
+        CPPUNIT_NS_BEGIN \
+            WX_CPPUNIT_ASSERT_EQUALS(int, T) \
+        CPPUNIT_NS_END
+#endif // VC6/!VC6
 
-#endif // VC6
-
-CPPUNIT_NS_END
+WX_CPPUNIT_ALLOW_EQUALS_TO_INT(long)
+WX_CPPUNIT_ALLOW_EQUALS_TO_INT(short)
+WX_CPPUNIT_ALLOW_EQUALS_TO_INT(size_t)
 
 // Use this macro to compare a wxArrayString with the pipe-separated elements
 // of the given string

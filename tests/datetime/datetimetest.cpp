@@ -32,6 +32,8 @@ static std::ostream& operator<<(std::ostream& ostr, const wxDateTime& dt)
     return ostr;
 }
 
+WX_CPPUNIT_ALLOW_EQUALS_TO_INT(wxDateTime::wxDateTime_t)
+
 // to test Today() meaningfully we must be able to change the system date which
 // is not usually the case, but if we're under Win32 we can try it -- define
 // the macro below to do it
