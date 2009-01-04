@@ -447,7 +447,22 @@ ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow , con
 {
 #if TARGET_API_MAC_OSX
     if ( UMAGetSystemVersion() >= 0x1030 )
-        return FindControlUnderMouse( location , window , outPart ) ;
+    {
+        HIPoint pt = CGPointMake(location.h, location.v);
+        HIViewRef contentView = NULL ;
+        HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID, &contentView );
+        HIViewConvertPoint( &pt, contentView, NULL );
+        HIViewRef control = NULL;
+        if ( HIViewGetSubviewHit( HIViewGetRoot( window ), &pt, true, &control ) == noErr )
+        {
+            if ( control != NULL )
+            {
+                if ( HIViewConvertPoint( &pt, NULL, control ) == noErr )
+                    HIViewGetPartHit(control, &pt, outPart);
+            }
+        }
+        return control ;
+    }
 #endif
 
     ControlRef rootControl = NULL ;
@@ -495,7 +510,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         {
             currentMouseWindow = wxApp::s_captureWindow ;
         }
-        else if ( (IsWindowActive(window) && windowPart == inContent) )
+        else if ( IsWindowActive(window) && (windowPart == inContent||windowPart == inStructure) )
         {
             ControlPartCode part ;
             control = wxMacFindControlUnderMouse( toplevelWindow , windowMouseLocation , window , &part ) ;
@@ -522,7 +537,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 }
 #endif
             }
-
+            
             // disabled windows must not get any input messages
             if ( currentMouseWindow && !currentMouseWindow->MacIsReallyEnabled() )
                 currentMouseWindow = NULL;
@@ -620,17 +635,12 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                     currentMouseWindow->SetFocus();
             }
 
-            ControlPartCode dummyPart ;
+
+#ifndef __WXMAC_OSX__
             // if built-in find control is finding the wrong control (ie static box instead of overlaid
             // button, we cannot let the standard handler do its job, but must handle manually
-
-            if ( ( cEvent.GetKind() == kEventMouseDown )
-#ifdef __WXMAC_OSX__
-                &&
-                (FindControlUnderMouse(windowMouseLocation , window , &dummyPart) !=
-                wxMacFindControlUnderMouse( toplevelWindow , windowMouseLocation , window , &dummyPart ) )
-#endif
-                )
+            // this only can happen < 10.3
+            if ( cEvent.GetKind() == kEventMouseDown )
             {
                 if ( currentMouseWindow->MacIsReallyEnabled() )
                 {
@@ -651,6 +661,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 
                 result = noErr ;
             }
+#endif
         }
 
         if ( cEvent.GetKind() == kEventMouseUp && wxApp::s_captureWindow )
@@ -1298,7 +1309,7 @@ void  wxTopLevelWindowMac::DoMacCreateRealWindow(
     SetWindowBounds(  (WindowRef) m_macWindow , kWindowStructureRgn , &theBoundsRect ) ;
 
     wxAssociateWinWithMacWindow( (WindowRef) m_macWindow , this ) ;
-    UMASetWTitle( (WindowRef) m_macWindow , title , m_font.GetEncoding() ) ;
+    UMASetWTitle( (WindowRef) m_macWindow , title , GetFont().GetEncoding() ) ;
     m_peer = new wxMacControl(this , true /*isRootControl*/) ;
 
     // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of
@@ -1403,7 +1414,7 @@ void wxTopLevelWindowMac::SetTitle(const wxString& title)
 void wxTopLevelWindowMac::SetLabel(const wxString& title)
 {
     wxWindow::SetLabel( title ) ;
-    UMASetWTitle( (WindowRef)m_macWindow , title , m_font.GetEncoding() ) ;
+    UMASetWTitle( (WindowRef)m_macWindow , title , GetFont().GetEncoding() ) ;
 }
 
 wxString wxTopLevelWindowMac::GetTitle() const
