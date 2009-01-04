@@ -985,11 +985,12 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                 {
                     const wxPGProperty* child = Item(curChild);
                     wxVariant variant(child->GetValue());
-                    variant.SetName(child->GetBaseName());
+                    wxString childName = child->GetBaseName();
 
                 #ifdef __WXDEBUG__
                     if ( debug_print )
-                        wxLogDebug(wxT("token = '%s', child = %s"),token.c_str(),child->GetLabel().c_str());
+                        wxLogDebug(wxT("token = '%s', child = %s"),
+                                   token.c_str(), childName.c_str());
                 #endif
 
                     // Add only if editable or setting programmatically
@@ -998,8 +999,18 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     {
                         if ( len > 0 )
                         {
-                            if ( child->StringToValue(variant, token, propagatedFlags|wxPG_COMPOSITE_FRAGMENT) )
+                            if ( child->StringToValue(variant, token,
+                                 propagatedFlags|wxPG_COMPOSITE_FRAGMENT) )
                             {
+                                // We really need to set the variant's name
+                                // *after* child->StringToValue() has been
+                                // called, since variant's value may be set by
+                                // assigning another variant into it, which
+                                // then usually causes name to be copied (ie.
+                                // usually cleared) as well. wxBoolProperty
+                                // being case in point with its use of
+                                // wxPGVariant_Bool macro as an optimization.
+                                variant.SetName(childName);
                                 list.Append(variant);
 
                                 changed = true;
@@ -1009,6 +1020,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                         {
                             // Empty, becomes unspecified
                             variant.MakeNull();
+                            variant.SetName(childName);
                             list.Append(variant);
                             changed = true;
                         }
