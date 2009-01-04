@@ -1007,7 +1007,7 @@ ScaleMask(GdkPixmap* mask, int x, int y, int w, int h, int dst_w, int dst_h, dou
 // Make a new mask from part of a mask and a clip region.
 // Return new mask, unref old one.
 static GdkPixmap*
-ClipMask(GdkPixmap* mask, const GdkRegion* clipRegion, int x, int y, int dst_x, int dst_y, int w, int h)
+ClipMask(GdkPixmap* mask, GdkRegion* clipRegion, int x, int y, int dst_x, int dst_y, int w, int h)
 {
     GdkGCValues gcValues;
     gcValues.foreground.pixel = 0;
@@ -1068,7 +1068,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
     if (m_window && m_window->GetLayoutDirection() == wxLayout_RightToLeft)
         xx -= ww;
 
-    const GdkRegion* const clipRegion = m_currentClippingRegion.GetRegion();
+    GdkRegion* const clipRegion = m_currentClippingRegion.GetRegion();
     // determine clip region overlap
     int overlap = wxInRegion;
     if (clipRegion)
@@ -1233,7 +1233,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
     const int dst_w = LogicalToDeviceXRel(width);
     const int dst_h = LogicalToDeviceYRel(height);
 
-    const GdkRegion* const clipRegion = m_currentClippingRegion.GetRegion();
+    GdkRegion* const clipRegion = m_currentClippingRegion.GetRegion();
     // determine dest clip region overlap
     int overlap = wxInRegion;
     if (clipRegion)
