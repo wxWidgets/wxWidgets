@@ -1660,6 +1660,10 @@ void FormMain::PopulateWithExamples ()
                                             wxPG_LABEL,
                                             300000) );
 
+    pg->AppendIn(carProp, new wxBoolProperty(wxT("Convertible"),
+                                             wxPG_LABEL,
+                                             false) );
+
     // Displayed value of "Car" property is now very close to this:
     // "Lamborghini Diablo SV; 5707 [300; 3.9; 8.6] 300000"
 
