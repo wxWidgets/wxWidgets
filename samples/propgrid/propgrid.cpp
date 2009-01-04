@@ -3047,6 +3047,7 @@ void FormMain::OnMisc ( wxCommandEvent& event )
         if ( prop )
         {
             m_pPropGridManager->SetPropertyValueUnspecified(prop);
+            prop->RefreshEditor();
         }
     }
 }
