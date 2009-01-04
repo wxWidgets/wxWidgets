@@ -126,25 +126,7 @@ public:
 
 private:
     void DrawingSetup(GdkGC*& gc, bool& originChanged);
-
-    // return true if the rectangle specified by the parameters is entirely
-    // outside of the current clipping region
-    bool IsOutsideOfClippingRegion(int x, int y, int w, int h);
-
-    // remove the current clipping mask and set the clipping region
-    void RemoveClipMask(GdkGC *gc);
-
-    // return the mask equal to the intersection of the original one with the
-    // clipping region
-    GdkBitmap *GetClippedMask(GdkBitmap *mask, int w, int h,
-                              int x, int y,
-                              int xsrcMask, int ysrcMask);
-
-    void DoDrawMonoBitmap(const wxBitmap& bitmap,
-                          int bmp_w, int bmp_h,
-                          int xsrc, int ysrc,
-                          int xdest, int ydest,
-                          int width, int height);
+    GdkPixmap* MonoToColor(GdkPixmap* monoPixmap, int x, int y, int w, int h) const;
 
     DECLARE_ABSTRACT_CLASS(wxWindowDCImpl)
 };
