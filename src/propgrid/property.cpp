@@ -972,6 +972,11 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
 
     for ( ;; )
     {
+        // How many units we iterate string forward at the end of loop?
+        // We need to keep track of this or risk going to negative
+        // with it-- operation.
+        unsigned int strPosIncrement = 1;
+
         if ( tokenStart != 0xFFFFFF )
         {
             // Token is running
@@ -1077,22 +1082,22 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     if ( (argFlags & wxPG_PROGRAMMATIC_VALUE) ||
                          !child->HasFlag(wxPG_PROP_DISABLED|wxPG_PROP_READONLY) )
                     {
-                        bool stvRes = child->StringToValue( variant, token, propagatedFlags );
+                        wxString childName = child->GetBaseName();
+
+                        bool stvRes = child->StringToValue( variant, token,
+                                                            propagatedFlags );
                         if ( stvRes || (variant != oldChildValue) )
                         {
-                            if ( stvRes )
-                                changed = true;
+                            variant.SetName(childName);
+                            list.Append(variant);
+
+                            changed = true;
                         }
                         else
                         {
-                            // Failed, becomes unspecified
-                            variant.MakeNull();
-                            changed = true;
+                            // No changes...
                         }
                     }
-
-                    variant.SetName(child->GetBaseName());
-                    list.Append(variant);
 
                     curChild++;
                     if ( curChild >= iMax )
@@ -1107,10 +1112,7 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     tokenStart = pos;
 
                     if ( a == delimeter )
-                    {
-                        pos--;
-                        --it;
-                    }
+                        strPosIncrement -= 1;
                 }
             }
         }
@@ -1118,7 +1120,8 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
         if ( a == 0 )
             break;
 
-        ++it;
+        it += strPosIncrement;
+
         if ( it != text.end() )
         {
             a = *it;
@@ -1127,7 +1130,8 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
         {
             a = 0;
         }
-        pos++;
+
+        pos += strPosIncrement;
     }
 
     if ( changed )
