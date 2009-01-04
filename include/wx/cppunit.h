@@ -56,6 +56,7 @@
 #include "wx/afterstd.h"
 
 #include "wx/string.h"
+#include "wx/filefn.h"  // for wxFileOffset
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,7 +123,8 @@ assertEquals(const wchar_t *expected,
     }
 
 // and another to be able to specify (usually literal) ints as expected values
-// for functions returning size_t
+// for functions returning size_t/long/wxFileOffset
+WX_CPPUNIT_ASSERT_EQUALS(int, long)
 WX_CPPUNIT_ASSERT_EQUALS(int, size_t)
 WX_CPPUNIT_ASSERT_EQUALS(int, wxFileOffset)
 
@@ -133,6 +135,7 @@ WX_CPPUNIT_ASSERT_EQUALS(int, wxFileOffset)
 #ifdef __VISUALC6__
 
 WX_CPPUNIT_ASSERT_EQUALS(int, int)
+WX_CPPUNIT_ASSERT_EQUALS(long, long)
 WX_CPPUNIT_ASSERT_EQUALS(size_t, size_t)
 WX_CPPUNIT_ASSERT_EQUALS(wxFileOffset, wxFileOffset)
 
