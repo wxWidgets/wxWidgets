@@ -161,7 +161,7 @@ void MyDialog::OnAbout(wxCommandEvent& WXUNUSED(event))
 #if defined(__WXMSW__) && wxUSE_TASKBARICON_BALLOONS
     m_taskBarIcon->ShowBalloon(title, message, 15000, wxICON_INFORMATION);
 #else // !__WXMSW__
-    wxMessageBox(message, title, wxICON_INFORMATION, this);
+    wxMessageBox(message, title, wxICON_INFORMATION|wxOK, this);
 #endif // __WXMSW__/!__WXMSW__
 }
 
