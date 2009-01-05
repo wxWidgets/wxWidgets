@@ -6,7 +6,7 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/** @ingroup group_funcmacro_version */
+/** @addtogroup group_funcmacro_version */
 //@{
 
 /**

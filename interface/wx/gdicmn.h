@@ -791,7 +791,7 @@ wxSize wxDefaultSize;
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_gdi */
+/** @addtogroup group_funcmacro_gdi */
 //@{
 
 /**
@@ -843,7 +843,7 @@ void wxSetCursor(const wxCursor& cursor);
 
 //@}
 
-/** @ingroup group_funcmacro_gdi */
+/** @addtogroup group_funcmacro_gdi */
 //@{
 /**
     Returns the dimensions of the work area on the display. On Windows this
@@ -857,7 +857,7 @@ void wxClientDisplayRect(int* x, int* y, int* width, int* height);
 wxRect wxGetClientDisplayRect();
 //@}
 
-/** @ingroup group_funcmacro_gdi */
+/** @addtogroup group_funcmacro_gdi */
 //@{
 /**
     Returns the display resolution in pixels per inch.
@@ -872,7 +872,7 @@ wxRect wxGetClientDisplayRect();
 wxSize wxGetDisplayPPI();
 //@}
 
-/** @ingroup group_funcmacro_gdi */
+/** @addtogroup group_funcmacro_gdi */
 //@{
 /**
     Returns the display size in pixels.
@@ -886,7 +886,7 @@ void wxDisplaySize(int* width, int* height);
 wxSize wxGetDisplaySize();
 //@}
 
-/** @ingroup group_funcmacro_gdi */
+/** @addtogroup group_funcmacro_gdi */
 //@{
 /**
     Returns the display size in millimeters.

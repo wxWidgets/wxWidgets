@@ -38,7 +38,7 @@ public:
     void Dismiss();
 };
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 /**
     Returns a scope guard object which will call the specified function with
@@ -55,7 +55,7 @@ wxScopeGuard wxMakeGuard(F func, P1 p1, ..., PN pN);
 
 //@}
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 /**
     Ensure that the global @a function with a few (up to some
@@ -83,7 +83,7 @@ wxScopeGuard wxMakeGuard(F func, P1 p1, ..., PN pN);
 #define wxON_BLOCK_EXIT3(function, p1, p2, p3)
 //@}
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 /**
     This family of macros is similar to wxON_BLOCK_EXIT(), but calls a method
@@ -98,7 +98,7 @@ wxScopeGuard wxMakeGuard(F func, P1 p1, ..., PN pN);
 #define wxON_BLOCK_EXIT_OBJ3(object, method, p1, p2, p3)
 //@}
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 /**
     This family of macros is similar to wxON_BLOCK_OBJ(), but calls a method
@@ -113,7 +113,7 @@ wxScopeGuard wxMakeGuard(F func, P1 p1, ..., PN pN);
 #define wxON_BLOCK_EXIT_THIS3(method, p1, p2, p3)
 //@}
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 /**
     This macro sets a variable to the specified value on scope exit.

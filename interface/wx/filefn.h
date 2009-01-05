@@ -98,7 +98,7 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_file */
+/** @addtogroup group_funcmacro_file */
 //@{
 
 /**
@@ -431,7 +431,7 @@ enum wxFileKind
 
 //@}
 
-/** @ingroup group_funcmacro_file */
+/** @addtogroup group_funcmacro_file */
 //@{
 /**
     Returns the type of an open file. Possible return values are enumerations
@@ -443,7 +443,7 @@ wxFileKind wxGetFileKind(int fd);
 wxFileKind wxGetFileKind(FILE* fp);
 //@}
 
-/** @ingroup group_funcmacro_file */
+/** @addtogroup group_funcmacro_file */
 //@{
 /**
     @warning This function is obsolete, please use wxFileName::SplitPath()
@@ -458,7 +458,7 @@ wxString wxFileNameFromPath(const wxString& path);
 char* wxFileNameFromPath(char* path);
 //@}
 
-/** @ingroup group_funcmacro_file */
+/** @addtogroup group_funcmacro_file */
 //@{
 /**
     @warning This function is obsolete, please use

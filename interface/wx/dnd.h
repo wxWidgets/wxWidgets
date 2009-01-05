@@ -391,7 +391,7 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_gdi */
+/** @addtogroup group_funcmacro_gdi */
 //@{
 
 /**

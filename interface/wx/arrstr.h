@@ -327,7 +327,7 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_string */
+/** @addtogroup group_funcmacro_string */
 //@{
 
 /**

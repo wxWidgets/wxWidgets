@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 /**
     This macro returns the concatenation of the arguments passed. Unlike when
@@ -22,7 +22,7 @@
 #define wxCONCAT5(x1, x2, x3, x4, x5)
 //@}
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 
 /**

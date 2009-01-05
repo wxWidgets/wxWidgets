@@ -167,7 +167,7 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 
 /**

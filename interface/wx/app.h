@@ -710,7 +710,7 @@ public:
 // ============================================================================
 
 
-/** @ingroup group_funcmacro_rtti */
+/** @addtogroup group_funcmacro_rtti */
 //@{
 
 /**
@@ -758,7 +758,7 @@ wxApp *wxTheApp;
 
 
 
-/** @ingroup group_funcmacro_appinitterm */
+/** @addtogroup group_funcmacro_appinitterm */
 //@{
 
 /**
@@ -900,7 +900,7 @@ int wxEntry(HINSTANCE hInstance,
 
 
 
-/** @ingroup group_funcmacro_procctrl */
+/** @addtogroup group_funcmacro_procctrl */
 //@{
 
 /**

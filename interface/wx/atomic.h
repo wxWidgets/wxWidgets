@@ -11,7 +11,7 @@
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_atomic */
+/** @addtogroup group_funcmacro_atomic */
 //@{
 
 /**

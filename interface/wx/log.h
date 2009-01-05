@@ -967,7 +967,7 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 
 /**
@@ -1013,7 +1013,7 @@ const wxChar* wxSysErrorMsg(unsigned long errCode = 0);
 
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     For all normal, informational messages. They also appear in a message box
@@ -1025,7 +1025,7 @@ void wxLogMessage(const char* formatString, ... );
 void wxVLogMessage(const char* formatString, va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     For verbose output. Normally, it is suppressed, but might be activated if
@@ -1038,7 +1038,7 @@ void wxLogVerbose(const char* formatString, ... );
 void wxVLogVerbose(const char* formatString, va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     For warnings - they are also normally shown to the user, but don't
@@ -1050,7 +1050,7 @@ void wxLogWarning(const char* formatString, ... );
 void wxVLogWarning(const char* formatString, va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     Like wxLogError(), but also terminates the program with the exit code 3.
@@ -1063,7 +1063,7 @@ void wxLogFatalError(const char* formatString, ... );
 void wxVLogFatalError(const char* formatString, va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     The functions to use for error messages, i.e. the messages that must be
@@ -1076,7 +1076,7 @@ void wxLogError(const char* formatString, ... );
 void wxVLogError(const char* formatString, va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     Like wxLogDebug(), trace functions only do something in debug builds and
@@ -1095,7 +1095,7 @@ void wxLogTrace(const char* formatString, ... );
 void wxVLogTrace(const char* formatString, va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     Like wxLogDebug(), trace functions only do something in debug builds and
@@ -1138,7 +1138,7 @@ void wxVLogTrace(const char* mask,
                   va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     Like wxLogDebug(), trace functions only do something in debug builds and
@@ -1170,7 +1170,7 @@ void wxLogTrace(wxTraceMask mask, const char* formatString, ... );
 void wxVLogTrace(wxTraceMask mask, const char* formatString, va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     The right functions for debug output. They only do something in debug mode
@@ -1183,7 +1183,7 @@ void wxLogDebug(const char* formatString, ... );
 void wxVLogDebug(const char* formatString, va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     Messages logged by this function will appear in the statusbar of the
@@ -1200,7 +1200,7 @@ void wxLogStatus(const char* formatString, ... );
 void wxVLogStatus(const char* formatString, va_list argPtr);
 //@}
 
-/** @ingroup group_funcmacro_log */
+/** @addtogroup group_funcmacro_log */
 //@{
 /**
     Mostly used by wxWidgets itself, but might be handy for logging errors

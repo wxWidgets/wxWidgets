@@ -547,7 +547,7 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_rtti */
+/** @addtogroup group_funcmacro_rtti */
 //@{
 
 /**
@@ -803,7 +803,7 @@ wxObject *wxCreateDynamicObject(const wxString& className);
 
 //@}
 
-/** @ingroup group_funcmacro_debug */
+/** @addtogroup group_funcmacro_debug */
 //@{
 
 /**

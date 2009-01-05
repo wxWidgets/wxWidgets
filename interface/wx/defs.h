@@ -180,7 +180,7 @@ enum wxPaperSize
 };
 
 
-/** @ingroup group_funcmacro_byteorder */
+/** @addtogroup group_funcmacro_byteorder */
 //@{
 
 /**
@@ -197,7 +197,7 @@ enum wxPaperSize
 
 //@}
 
-/** @ingroup group_funcmacro_byteorder */
+/** @addtogroup group_funcmacro_byteorder */
 //@{
 
 /**
@@ -218,7 +218,7 @@ enum wxPaperSize
 
 //@}
 
-/** @ingroup group_funcmacro_byteorder */
+/** @addtogroup group_funcmacro_byteorder */
 //@{
 
 /**
@@ -241,7 +241,7 @@ enum wxPaperSize
 
 
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 
 /**

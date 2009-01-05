@@ -6,7 +6,7 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/** @ingroup group_funcmacro_dialog */
+/** @addtogroup group_funcmacro_dialog */
 //@{
 
 /**

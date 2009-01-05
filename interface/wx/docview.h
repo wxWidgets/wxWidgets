@@ -1503,7 +1503,7 @@ public:
 // Global functions/macros
 // ============================================================================
 
-/** @ingroup group_funcmacro_file */
+/** @addtogroup group_funcmacro_file */
 //@{
 
 /**

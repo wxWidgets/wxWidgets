@@ -6,7 +6,7 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/** @ingroup group_funcmacro_debug */
+/** @addtogroup group_funcmacro_debug */
 //@{
 
 /**
@@ -243,7 +243,7 @@ void wxTrap();
 
 
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 
 /**

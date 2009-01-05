@@ -41,7 +41,7 @@ public:
 
 
 
-/** @ingroup group_funcmacro_appinitterm */
+/** @addtogroup group_funcmacro_appinitterm */
 //@{
 
 /**

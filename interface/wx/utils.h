@@ -93,7 +93,7 @@ public:
 // ============================================================================
 
 
-/** @ingroup group_funcmacro_dialog */
+/** @addtogroup group_funcmacro_dialog */
 //@{
 
 /**
@@ -154,7 +154,7 @@ void wxInfoMessageBox(wxWindow parent = NULL);
 
 
 
-/** @ingroup group_funcmacro_env */
+/** @addtogroup group_funcmacro_env */
 //@{
 
 /**
@@ -205,7 +205,7 @@ bool wxUnsetEnv(const wxString& var);
 
 
 
-/** @ingroup group_funcmacro_misc */
+/** @addtogroup group_funcmacro_misc */
 //@{
 
 /**
@@ -448,7 +448,7 @@ wxString wxStripMenuCodes(const wxString& str, int flags = wxStrip_All);
 
 
 
-/** @ingroup group_funcmacro_networkuseros */
+/** @addtogroup group_funcmacro_networkuseros */
 //@{
 
 /**
@@ -645,7 +645,7 @@ bool wxIsPlatformLittleEndian();
 
 
 
-/** @ingroup group_funcmacro_procctrl */
+/** @addtogroup group_funcmacro_procctrl */
 //@{
 
 /**
@@ -730,7 +730,7 @@ long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
 
 //@}
 
-/** @ingroup group_funcmacro_procctrl */
+/** @addtogroup group_funcmacro_procctrl */
 //@{
 /**
     This is an overloaded version of wxExecute(const wxString&,int,wxProcess*),
@@ -762,7 +762,7 @@ long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
                 wxProcess* callback = NULL);
 //@}
 
-/** @ingroup group_funcmacro_procctrl */
+/** @addtogroup group_funcmacro_procctrl */
 //@{
 
 /**
@@ -919,7 +919,7 @@ bool wxShutdown(int flags = wxSHUTDOWN_POWEROFF);
 
 
 
-/** @ingroup group_funcmacro_time */
+/** @addtogroup group_funcmacro_time */
 //@{
 
 /**
