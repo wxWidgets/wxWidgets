@@ -3,7 +3,7 @@
   <navindex>
     <tab type="mainpage" visible="yes" title=""/>
     <tab type="pages" visible="yes" title=""/>
-    <tab type="modules" visible="yes" title=""/>
+    <tab type="modules" visible="yes" title="Categories"/>
     <tab type="namespaces" visible="yes" title="">
       <tab type="namespaces" visible="yes" title=""/>
       <tab type="namespacemembers" visible="yes" title=""/>
@@ -24,11 +24,11 @@
 
   <!-- Layout definition for a class page -->
   <class>
-    <briefdescription visible="yes"/>
+    <briefdescription visible="no"/>
     <includes visible="$SHOW_INCLUDE_FILES"/>
     <inheritancegraph visible="$CLASS_GRAPH"/>
     <collaborationgraph visible="$COLLABORATION_GRAPH"/>
-    <allmemberslink visible="yes"/>
+    <detaileddescription title=""/>
     <memberdecl>
       <membergroups visible="yes"/>
       <nestedclasses visible="yes" title=""/>
@@ -61,7 +61,7 @@
       <friends title=""/>
       <related title="" subtitle=""/>
     </memberdecl>
-    <detaileddescription title=""/>
+    <allmemberslink visible="yes"/>
     <memberdef>
       <typedefs title=""/>
       <enums title=""/>
@@ -79,6 +79,7 @@
   <!-- Layout definition for a namespace page -->
   <namespace>
     <briefdescription visible="yes"/>
+    <detaileddescription title=""/>
     <memberdecl>
       <nestednamespaces visible="yes" title=""/>
       <classes visible="yes" title=""/>
@@ -88,7 +89,6 @@
       <functions title=""/>
       <variables title=""/>
     </memberdecl>
-    <detaileddescription title=""/>
     <memberdef>
       <typedefs title=""/>
       <enums title=""/>
@@ -105,6 +105,7 @@
     <includegraph visible="$INCLUDE_GRAPH"/>
     <includedbygraph visible="$INCLUDED_BY_GRAPH"/>
     <sourcelink visible="yes"/>
+    <detaileddescription title=""/>
     <memberdecl>
       <classes visible="yes" title=""/>
       <namespaces visible="yes" title=""/>
@@ -114,7 +115,6 @@
       <functions title=""/>
       <variables title=""/>
     </memberdecl>
-    <detaileddescription title=""/>
     <memberdef>
       <defines title=""/>
       <typedefs title=""/>
@@ -129,6 +129,7 @@
   <group>
     <briefdescription visible="yes"/>
     <groupgraph visible="$GROUP_GRAPHS"/>
+    <detaileddescription title=""/>
     <memberdecl>
       <classes visible="yes" title=""/>
       <namespaces visible="yes" title=""/>
@@ -149,7 +150,6 @@
       <properties title=""/>
       <friends title=""/>
     </memberdecl>
-    <detaileddescription title=""/>
     <memberdef>
       <pagedocs/>
       <defines title=""/>
@@ -173,10 +173,10 @@
   <directory>
     <briefdescription visible="yes"/>
     <directorygraph visible="yes"/>
+    <detaileddescription title=""/>
     <memberdecl>
       <dirs visible="yes"/>
       <files visible="yes"/>
     </memberdecl>
-    <detaileddescription title=""/>
   </directory>
 </doxygenlayout>

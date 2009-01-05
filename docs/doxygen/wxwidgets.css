@@ -26,6 +26,8 @@ H1 {
 }
 H2 {
 	font-size: 120%;
+    padding-top: 1em;
+    border-top: 3px solid #AAA;
 }
 H3 {
 	font-size: 100%;
@@ -132,14 +134,8 @@ DL.el {
 PRE.fragment {
 	border: 1px solid #CCCCCC;
 	background-color: #f5f5f5;
-	margin-top: 4px;
-	margin-bottom: 4px;
-	margin-left: 2px;
-	margin-right: 8px;
-	padding-left: 6px;
-	padding-right: 6px;
-	padding-top: 4px;
-	padding-bottom: 4px;
+	margin: 4px 8px 4px 2px;
+	padding: 4px 6px;
 }
 DIV.ah {
 	background-color: black;
@@ -169,27 +165,15 @@ BODY {
 TD.indexkey {
 	background-color: #e8eef2;
 	font-weight: bold;
-	padding-right  : 10px;
-	padding-top    : 2px;
-	padding-left   : 10px;
-	padding-bottom : 2px;
-	margin-left    : 0px;
-	margin-right   : 0px;
-	margin-top     : 2px;
-	margin-bottom  : 2px;
+	padding: 2px 10px;
+	margin: 2px 0px;
 	border: 1px solid #CCCCCC;
 }
 TD.indexvalue {
 	background-color: #e8eef2;
 	font-style: italic;
-	padding-right  : 10px;
-	padding-top    : 2px;
-	padding-left   : 10px;
-	padding-bottom : 2px;
-	margin-left    : 0px;
-	margin-right   : 0px;
-	margin-top     : 2px;
-	margin-bottom  : 2px;
+	padding: 2px 10px;
+	margin: 2px 0px;
 	border: 1px solid #CCCCCC;
 }
 TR.memlist {
@@ -215,133 +199,32 @@ SPAN.vhdlchar      { color: #000000 }
 SPAN.vhdlkeyword   { color: #700070 }
 SPAN.vhdllogic     { color: #ff0000 }
 
-.mdescLeft {
+/* Doxygen Member Description Style 1.5.7 */
+
+.mdescLeft, .mdescRight,
+.memItemLeft, .memItemRight,
+.memTemplItemLeft, .memTemplItemRight, .memTemplParams {
+	background-color: #FAFAFA;
+	border: none;
+	margin: 4px;
+	padding: 1px 0 0 8px;
+}
+
+.mdescLeft, .mdescRight {
 	padding: 0px 8px 4px 8px;
-	font-size: 90%;
-	font-style: italic;
-	background-color: #FAFAFA;
-	border-top: 1px none #E0E0E0;
-	border-right: 1px none #E0E0E0;
-	border-bottom: 1px none #E0E0E0;
-	border-left: 1px none #E0E0E0;
-	margin: 0px;
+	color: #555;
 }
-.mdescRight {
-	padding: 0px 8px 4px 8px;
-	font-size: 90%;
-	font-style: italic;
-	background-color: #FAFAFA;
-	border-top: 1px none #E0E0E0;
-	border-right: 1px none #E0E0E0;
-	border-bottom: 1px none #E0E0E0;
-	border-left: 1px none #E0E0E0;
-	margin: 0px;
+
+.memItemLeft, .memItemRight, .memTemplParams {
+	border-top: 1px solid #ccc;
 }
-.memItemLeft {
-	padding: 1px 0px 0px 8px;
-	margin: 4px;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-	border-top-color: #E0E0E0;
-	border-right-color: #E0E0E0;
-	border-bottom-color: #E0E0E0;
-	border-left-color: #E0E0E0;
-	border-top-style: solid;
-	border-right-style: none;
-	border-bottom-style: none;
-	border-left-style: none;
-	background-color: #FAFAFA;
-	font-size: 90%;
-}
-.memItemRight {
-	padding: 1px 8px 0px 8px;
-	margin: 4px;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-	border-top-color: #E0E0E0;
-	border-right-color: #E0E0E0;
-	border-bottom-color: #E0E0E0;
-	border-left-color: #E0E0E0;
-	border-top-style: solid;
-	border-right-style: none;
-	border-bottom-style: none;
-	border-left-style: none;
-	background-color: #FAFAFA;
-	font-size: 90%;
-}
-.memTemplItemLeft {
-	padding: 1px 0px 0px 8px;
-	margin: 4px;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-	border-top-color: #E0E0E0;
-	border-right-color: #E0E0E0;
-	border-bottom-color: #E0E0E0;
-	border-left-color: #E0E0E0;
-	border-top-style: none;
-	border-right-style: none;
-	border-bottom-style: none;
-	border-left-style: none;
-	background-color: #FAFAFA;
-	font-size: 90%;
-}
-.memTemplItemRight {
-	padding: 1px 8px 0px 8px;
-	margin: 4px;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-	border-top-color: #E0E0E0;
-	border-right-color: #E0E0E0;
-	border-bottom-color: #E0E0E0;
-	border-left-color: #E0E0E0;
-	border-top-style: none;
-	border-right-style: none;
-	border-bottom-style: none;
-	border-left-style: none;
-	background-color: #FAFAFA;
-	font-size: 90%;
-}
+
 .memTemplParams {
-	padding: 1px 0px 0px 8px;
-	margin: 4px;
-	border-top-width: 1px;
-	border-right-width: 1px;
-	border-bottom-width: 1px;
-	border-left-width: 1px;
-	border-top-color: #E0E0E0;
-	border-right-color: #E0E0E0;
-	border-bottom-color: #E0E0E0;
-	border-left-color: #E0E0E0;
-	border-top-style: solid;
-	border-right-style: none;
-	border-bottom-style: none;
-	border-left-style: none;
 	color: #606060;
-	background-color: #FAFAFA;
-	font-size: 90%;
 }
-.search {
-	color: #003399;
-	font-weight: bold;
-}
-FORM.search {
-	margin-bottom: 0px;
-	margin-top: 0px;
-}
-INPUT.search {
-	font-size: 75%;
-	color: #000080;
-	font-weight: normal;
-	background-color: #e8eef2;
-}
+
+/*******************************************/
+
 TD.tiny {
 	font-size: 75%;
 }
@@ -361,18 +244,25 @@ TH.dirtab {
 	font-weight: bold;
 }
 HR {
-	height: 1px;
-	border: none;
-	border-top: 1px solid black;
+/*
+	height: 3px;
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+*/
+	height: 0px;
+	margin: 0;
+	border: 0px;
 }
 
 /* Style for detailed member documentation */
+
 .memtemplate {
 	font-size: 80%;
 	color: #606060;
 	font-weight: normal;
 	margin-left: 3px;
 }
+
 .memnav {
 	background-color: #e8eef2;
 	border: 1px solid #84b0c7;
@@ -381,30 +271,45 @@ HR {
 	margin-right: 15px;
 	padding: 2px;
 }
+
 .memitem {
-	padding: 4px;
-	background-color: #eef3f5;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #dedeee;
-	-moz-border-radius: 8px 8px 8px 8px;
+	padding: 0;
 }
+
 .memname {
 	white-space: nowrap;
 	font-weight: bold;
+	padding: 2px 2px;
 }
-.memdoc{
-	padding-left: 10px;
+
+.memproto, .memdoc {
+	border: 1px solid #84b0c7;	
 }
+
 .memproto {
+	padding: 0;
 	background-color: #d5e1e8;
-	width: 100%;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #84b0c7;
 	font-weight: bold;
-	-moz-border-radius: 8px 8px 8px 8px;
+	-webkit-border-top-left-radius: 8px;
+	-webkit-border-top-right-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+	-moz-border-radius-topright: 8px;
 }
+
+.memdoc {
+	padding: 5px 8px;
+	background-color: #eef3f5;
+	border-top-width: 0;
+	-webkit-border-bottom-left-radius: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	-moz-border-radius-bottomright: 8px;
+}
+
+.memdoc p, .memdoc dl, .memdoc ul {
+	margin: 6px 0;
+}
+
 .paramkey {
 	text-align: right;
 }
@@ -413,12 +318,16 @@ HR {
 }
 .paramname {
 	color: #602020;
-	font-style: italic;
 	white-space: nowrap;
 }
+.paramname em {
+	font-style: normal;
+}
+
 /* End Styling for detailed member documentation */
 
 /* for the tree view */
+
 .ftvtree {
 	font-family: sans-serif;
 	margin:0.5em;
@@ -447,12 +356,49 @@ HR {
 	vertical-align: -30%;
 }
 
+/* these are for tree view when not used as main index */
+
+.directory-alt {
+	font-size: 100%;
+	font-weight: bold;
+}
+
+.directory-alt h3 {
+	margin: 0px;
+	margin-top: 1em;
+	font-size: 11pt;
+}
+
+.directory-alt > h3 {
+	margin-top: 0;
+}
+
+.directory-alt p {
+	margin: 0px;
+	white-space: nowrap;
+}
+
+.directory-alt div {
+	display: none;
+	margin: 0px;
+}
+
+.directory-alt img {
+	vertical-align: -30%;
+}
+
 
 
 /*
   wxWidgets docs specific styles
   ==============================
 */
+
+H2 > A.anchor {
+	text-decoration: none;
+	background-color: none;
+	color: black;
+}
 
 IMG.logo {
 	float: right;
@@ -510,23 +456,15 @@ DIV.eventHandler SPAN {
 	font-family: monospace, fixed;
 }
 
-A[HREF="modules.html"] SPAN:before {
-	content: "Categories / ";
-}
-
 /* Doxygen defaults the top navigation tabs to a small, bold font,
    so we reset it here to a larger, normal font. */
 DIV.navigation A SPAN {
-	font-size: 120%;
+	font-size: 100%;
 	font-weight: normal;
 }
 
 LI {
 	line-height: 115%;
-}
-
-DIV.tags LI {
-	line-height: 100%;
 }
 
 CODE {
