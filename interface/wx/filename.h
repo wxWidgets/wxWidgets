@@ -889,7 +889,7 @@ public:
 
         @param flags
             The kind of normalization to do with the file name. It can be
-            any or-combination of the wxPathNormalize enumeration values.
+            any or-combination of the ::wxPathNormalize enumeration values.
         @param cwd
             If not empty, this directory will be used instead of current
             working directory in normalization (see @c wxPATH_NORM_ABSOLUTE).

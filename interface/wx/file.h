@@ -365,7 +365,7 @@ public:
         @param mode
             The mode in which to open the file.
         @param access
-            An OR-combination of wxPosixPermissions enumeration values.
+            An OR-combination of ::wxPosixPermissions enumeration values.
     */
     bool Open(const wxString& filename, wxFile::OpenMode mode = wxFile::read,
               int access = wxS_DEFAULT);
