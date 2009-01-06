@@ -124,6 +124,27 @@ WXDLLIMPEXP_BASE const wxChar *wxGetInstallPrefix();
 // Return path to wxWin data (/usr/share/wx/%{version}) (Unices)
 WXDLLIMPEXP_BASE wxString wxGetDataDir();
 
+#if wxUSE_GUI
+
+// Get the state of a key (true if pressed, false if not)
+// This is generally most useful getting the state of
+// the modifier or toggle keys.
+WXDLLIMPEXP_CORE bool wxGetKeyState(wxKeyCode key);
+
+// Don't synthesize KeyUp events holding down a key and producing
+// KeyDown events with autorepeat. On by default and always on
+// in wxMSW.
+WXDLLIMPEXP_CORE bool wxSetDetectableAutoRepeat( bool flag );
+
+// Returns the current state of the mouse position, buttons and modifers
+WXDLLIMPEXP_CORE wxMouseState wxGetMouseState();
+
+#endif // wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// wxPlatform
+// ----------------------------------------------------------------------------
+
 /*
  * Class to make it easier to specify platform-dependent values
  *
@@ -205,24 +226,6 @@ private:
 
 /// Function for testing current platform
 inline bool wxPlatformIs(int platform) { return wxPlatform::Is(platform); }
-
-#if wxUSE_GUI
-
-// Get the state of a key (true if pressed, false if not)
-// This is generally most useful getting the state of
-// the modifier or toggle keys.
-WXDLLIMPEXP_CORE bool wxGetKeyState(wxKeyCode key);
-
-
-// Don't synthesize KeyUp events holding down a key and producing
-// KeyDown events with autorepeat. On by default and always on
-// in wxMSW.
-WXDLLIMPEXP_CORE bool wxSetDetectableAutoRepeat( bool flag );
-
-// Returns the current state of the mouse position, buttons and modifers
-WXDLLIMPEXP_CORE wxMouseState wxGetMouseState();
-
-#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // Window ID management
@@ -397,8 +400,10 @@ WXDLLIMPEXP_BASE void wxMilliSleep(unsigned long milliseconds);
 // Sleep for a given amount of microseconds
 WXDLLIMPEXP_BASE void wxMicroSleep(unsigned long microseconds);
 
+#if WXWIN_COMPATIBILITY_2_6
 // Sleep for a given amount of milliseconds (old, bad name), use wxMilliSleep
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxUsleep(unsigned long milliseconds) );
+#endif
 
 // Get the process id of the current process
 WXDLLIMPEXP_BASE unsigned long wxGetProcessId();
