@@ -30,7 +30,6 @@
            Hides the "Show Hidden Files" checkbox (Generic only)
     @endStyleTable
 
-
     @beginEventTable{wxFileCtrlEvent}
     @event{EVT_FILECTRL_FILEACTIVATED(id, func)}
         The user activated a file(by double-clicking or pressing Enter)
@@ -40,10 +39,11 @@
         The current folder of the file control has been changed
     @endEventTable
 
-    @nativeimpl{wxgtk}
-
     @library{wxbase}
     @category{miscwnd}
+    @appearance{filectrl.png}
+
+    @nativeimpl{wxgtk}
 
     @see wxGenericDirCtrl
 */
