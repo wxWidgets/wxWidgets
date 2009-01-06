@@ -87,12 +87,12 @@ void wxSVGFileDC::Init (wxString f, int Width, int Height, float dpi)
 
     m_signX = m_signY = 1;
 
-    m_userScaleX = m_userScaleY =
+    m_userScaleX = m_userScaleY = 1.0 ;
         m_deviceOriginX = m_deviceOriginY = 0;
 
     m_OriginX = m_OriginY = 0;
     m_logicalOriginX = m_logicalOriginY = 0;
-    m_logicalScaleX = m_logicalScaleY = 0 ;
+    m_logicalScaleX = m_logicalScaleY = 1.0 ;
     m_scaleX = m_scaleY = 1.0 ;
 
     m_logicalFunction = wxCOPY;
