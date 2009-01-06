@@ -73,7 +73,11 @@
 // Setting wxRICHTEXT_USE_OWN_CARET to 1 implements a non-flashing
 // cursor reliably without using wxClientDC in case there
 // are platform-specific problems with the generic caret.
+#if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
+#define wxRICHTEXT_USE_OWN_CARET 1
+#else
 #define wxRICHTEXT_USE_OWN_CARET 0
+#endif
 
 // Switch off for binary compatibility, on for faster drawing
 #define wxRICHTEXT_USE_OPTIMIZED_LINE_DRAWING 0
