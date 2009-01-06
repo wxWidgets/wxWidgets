@@ -4014,7 +4014,16 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
         m_frame->ReleaseMouse();
 
         // get rid of the hint rectangle
+
+        // On Mac we use a wxClientDC since when compiling and running on Leopard,
+        // we can get the dreaded _SetDstBlits32BGRA crash (but not in the AUI sample).
+        // This only helps in non-CG mode - there is zero resize feeedback in CG mode
+        // at present.
+#ifdef __WXMAC__
+        wxClientDC dc(m_frame);
+#else
         wxScreenDC dc;
+#endif
         DrawResizeHint(dc, m_action_hintrect);
 
         // resize the dock or the pane
@@ -4286,10 +4295,20 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                  else
                 pos.x = wxMax(0, event.m_x - m_action_offset.x);
 
-            wxRect rect(m_frame->ClientToScreen(pos),
-                        m_action_part->rect.GetSize());
+          // On Mac we use a wxClientDC since when compiling and running on Leopard,
+          // we can get the dreaded _SetDstBlits32BGRA crash (but not in the AUI sample).
+          // This only helps in non-CG mode - there is zero resize feeedback in CG mode
+          // at present.
+#ifdef __WXMAC__
+            wxRect rect(pos,
+                    m_action_part->rect.GetSize());
 
+            wxClientDC dc(m_frame);
+#else
+            wxRect rect(m_frame->ClientToScreen(pos),
+                    m_action_part->rect.GetSize());
             wxScreenDC dc;
+#endif
             if (!m_action_hintrect.IsEmpty())
                 DrawResizeHint(dc, m_action_hintrect);
             DrawResizeHint(dc, rect);
