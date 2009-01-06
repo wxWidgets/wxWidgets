@@ -49,7 +49,7 @@ bool wxStaticText::Create( wxWindow *parent,
         return false;
 
     Rect bounds = wxMacGetBoundsForControl( this, pos, size );
-    wxMacCFStringHolder str( m_label, m_font.GetEncoding() );
+    wxMacCFStringHolder str( m_label, GetFont().GetEncoding() );
 
     m_peer = new wxMacControl( this );
     OSStatus err = CreateStaticTextControl(
@@ -94,7 +94,7 @@ wxSize wxStaticText::DoGetBestSize() const
         verify_noerr( err );
 
         SInt16 baseline;
-        wxMacCFStringHolder str( m_label,  m_font.GetEncoding() );
+        wxMacCFStringHolder str( m_label,  GetFont().GetEncoding() );
 
 #ifndef __LP64__
         if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
@@ -139,7 +139,7 @@ void wxStaticText::SetLabel( const wxString& st )
 {
     m_label =  st;
 
-    wxMacCFStringHolder str( GetLabelText(m_label), m_font.GetEncoding() );
+    wxMacCFStringHolder str( GetLabelText(m_label), GetFont().GetEncoding() );
     CFStringRef ref = str;
     OSStatus err = m_peer->SetData<CFStringRef>(kControlEntireControl, kControlStaticTextCFStringTag, ref );
     verify_noerr( err );

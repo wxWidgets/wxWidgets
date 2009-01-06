@@ -87,7 +87,7 @@ int wxDirDialog::ShowModal()
     options.optionFlags &= ~kNavAllowMultipleFiles;
     if (err == noErr)
     {
-        wxMacCFStringHolder message(m_message, m_font.GetEncoding());
+        wxMacCFStringHolder message(m_message, GetFont().GetEncoding());
         options.message = message;
         err = NavCreateChooseFolderDialog(&options, sStandardNavEventFilter , NULL,  this , &dialog);
         if (err == noErr)

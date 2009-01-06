@@ -132,7 +132,7 @@ int wxChoice::DoAppend( const wxString& item )
 #endif
 
     m_datas.Insert( NULL , index );
-    UMAInsertMenuItem( MAC_WXHMENU( m_macPopUpMenuHandle ), item, m_font.GetEncoding(), index );
+    UMAInsertMenuItem( MAC_WXHMENU( m_macPopUpMenuHandle ), item, GetFont().GetEncoding(), index );
     DoSetItemClientData( index, NULL );
     m_peer->SetMaximum( GetCount() );
 
@@ -147,7 +147,7 @@ int wxChoice::DoInsert( const wxString& item, unsigned int pos )
     if (pos == GetCount())
         return DoAppend( item );
 
-    UMAInsertMenuItem( MAC_WXHMENU( m_macPopUpMenuHandle ), item, m_font.GetEncoding(), pos );
+    UMAInsertMenuItem( MAC_WXHMENU( m_macPopUpMenuHandle ), item, GetFont().GetEncoding(), pos );
     m_strings.Insert( item, pos );
     m_datas.Insert( NULL, pos );
     DoSetItemClientData( pos, NULL );
@@ -338,7 +338,7 @@ wxSize wxChoice::DoGetBestSize() const
             Point bounds = { 0, 0 } ;
             SInt16 baseline ;
 
-            ::GetThemeTextDimensions( wxMacCFStringHolder( str , m_font.GetEncoding() ) ,
+            ::GetThemeTextDimensions( wxMacCFStringHolder( str , GetFont().GetEncoding() ) ,
                 kThemeCurrentPortFont,
                 kThemeStateActive,
                 false,

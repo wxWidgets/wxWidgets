@@ -279,7 +279,7 @@ wxSize wxListBox::DoGetBestSize() const
 
             // NB: what if m_font.Ok() == false ???
             ::GetThemeTextDimensions(
-                wxMacCFStringHolder( str, m_font.GetEncoding() ),
+                wxMacCFStringHolder( str, GetFont().GetEncoding() ),
                 kThemeCurrentPortFont,
                 kThemeStateActive,
                 false,
