@@ -111,6 +111,7 @@ ALIASES += header{1}="Include file:\n \verbatim #include <\1> \endverbatim"
 ALIASES += true="<span class='literal'>true</span>"
 ALIASES += false="<span class='literal'>false</span>"
 ALIASES += NULL="<span class='literal'>NULL</span>"
+ALIASES += NUL="<span class='literal'>NUL</span>"
 
 # NOTE: these are important as you can't write in the docs
 #       just #ifdef since the # character is used by Doxygen

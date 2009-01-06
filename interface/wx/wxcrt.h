@@ -91,7 +91,7 @@ wxArrayString wxStringTokenize(const wxString& string,
 
     This function copies the source string @a src to the destination buffer @a
     dst of size @a n without overflowing the buffer and ensuring that it is
-    always @NULL-terminated.
+    always @NUL-terminated.
 
     Example of use:
     @code
@@ -121,7 +121,7 @@ wxArrayString wxStringTokenize(const wxString& string,
     @param dst
         Destination buffer of size (greater or) equal to @a n.
     @param src
-        @NULL-terminated source string.
+        @NUL-terminated source string.
     @param n
         The size of the destination buffer.
     @return
