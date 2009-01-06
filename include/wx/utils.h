@@ -400,7 +400,7 @@ WXDLLIMPEXP_BASE void wxMilliSleep(unsigned long milliseconds);
 // Sleep for a given amount of microseconds
 WXDLLIMPEXP_BASE void wxMicroSleep(unsigned long microseconds);
 
-#if WXWIN_COMPATIBILITY_2_6
+#if WXWIN_COMPATIBILITY_2_8
 // Sleep for a given amount of milliseconds (old, bad name), use wxMilliSleep
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxUsleep(unsigned long milliseconds) );
 #endif

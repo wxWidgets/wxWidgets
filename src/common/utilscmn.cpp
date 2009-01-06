@@ -190,7 +190,7 @@ wxString wxNow()
 #endif
 }
 
-#if WXWIN_COMPATIBILITY_2_6
+#if WXWIN_COMPATIBILITY_2_8
 void wxUsleep(unsigned long milliseconds)
 {
     wxMilliSleep(milliseconds);
