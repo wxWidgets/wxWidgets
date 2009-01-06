@@ -190,10 +190,12 @@ wxString wxNow()
 #endif
 }
 
+#if WXWIN_COMPATIBILITY_2_6
 void wxUsleep(unsigned long milliseconds)
 {
     wxMilliSleep(milliseconds);
 }
+#endif
 
 const wxChar *wxGetInstallPrefix()
 {
