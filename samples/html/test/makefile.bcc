@@ -243,7 +243,7 @@ $(OBJS)\test.exe: $(TEST_OBJECTS)  $(OBJS)\test_test.res
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (f.html fft.html imagemap.htm imagemap.png pic.png pic2.bmp tables.htm test.htm listtest.htm i18n.gif 8859_2.htm cp1250.htm regres.htm foo.png subsup.html) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (imagemap.png pic.png pic2.bmp i18n.gif imagemap.htm tables.htm test.htm listtest.htm 8859_2.htm cp1250.htm regres.htm foo.png subsup.html) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\test_test.obj: .\test.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) .\test.cpp
