@@ -193,7 +193,9 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
     SInt16 key = entry->GetKeyCode() ;
     if ( key )
     {
-        bool explicitCommandKey = (entry->GetFlags() & wxACCEL_CTRL);
+        bool explicitCommandKey = (entry->GetFlags() & wxACCEL_CMD);
+        if ( !explicitCommandKey )
+            modifiers |= kMenuNoCommandModifier ;
 
         if (entry->GetFlags() & wxACCEL_ALT)
             modifiers |= kMenuOptionModifier ;
@@ -201,12 +203,14 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
         if (entry->GetFlags() & wxACCEL_SHIFT)
             modifiers |= kMenuShiftModifier ;
 
+        if (entry->GetFlags() & wxACCEL_CTRL)
+            modifiers |= kMenuControlModifier ;
+
+
         SInt16 glyph = 0 ;
         SInt16 macKey = key ;
         if ( key >= WXK_F1 && key <= WXK_F15 )
         {
-            if ( !explicitCommandKey )
-                modifiers |= kMenuNoCommandModifier ;
 
             // for some reasons this must be 0 right now
             // everything else leads to just the first function key item
@@ -303,11 +307,6 @@ void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEn
                     macKey = toupper( key ) ;
                     break ;
             }
-
-            // we now allow non command key shortcuts
-            // remove in case this gives problems
-            if ( !explicitCommandKey )
-                modifiers |= kMenuNoCommandModifier ;
         }
 
         // 1d and 1e have special meaning to SetItemCmd, so
