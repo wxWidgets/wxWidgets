@@ -5905,7 +5905,7 @@ wxRichTextFileHandler *wxRichTextBuffer::FindHandlerFilenameOrType(const wxStrin
     else if (!filename.IsEmpty())
     {
         wxString path, file, ext;
-        wxSplitPath(filename, & path, & file, & ext);
+        wxFileName::SplitPath(filename, & path, & file, & ext);
         return FindHandler(ext, imageType);
     }
     else
@@ -7303,7 +7303,7 @@ bool wxRichTextFileHandler::SaveFile(wxRichTextBuffer *buffer, const wxString& f
 bool wxRichTextFileHandler::CanHandle(const wxString& filename) const
 {
     wxString path, file, ext;
-    wxSplitPath(filename, & path, & file, & ext);
+    wxFileName::SplitPath(filename, & path, & file, & ext);
 
     return (ext.Lower() == GetExtension());
 }
@@ -7424,12 +7424,10 @@ bool wxRichTextImageBlock::MakeImageBlock(const wxString& filename, wxBitmapType
 
     if ((imageType != wxBITMAP_TYPE_JPEG) && convertToJPEG)
     {
-        wxString tempFile;
-        bool success = wxGetTempFileName(_("image"), tempFile) ;
+        wxString tempFile =
+            wxFileName::CreateTempFileName(_("image"));
 
-        wxASSERT(success);
-
-        wxUnusedVar(success);
+        wxASSERT(!tempFile.IsEmpty());
 
         image.SaveFile(tempFile, wxBITMAP_TYPE_JPEG);
         filenameToRead = tempFile;
@@ -7464,11 +7462,8 @@ bool wxRichTextImageBlock::MakeImageBlock(wxImage& image, wxBitmapType imageType
     if (imageType == wxBITMAP_TYPE_INVALID)
         return false; // Could not determine image type
 
-    wxString tempFile;
-    bool success = wxGetTempFileName(_("image"), tempFile) ;
-
-    wxASSERT(success);
-    wxUnusedVar(success);
+    wxString tempFile = wxFileName::CreateTempFileName(_("image")) ;
+    wxASSERT(!tempFile.IsEmpty());
 
     if (!image.SaveFile(tempFile, m_imageType))
     {
@@ -7535,9 +7530,8 @@ bool wxRichTextImageBlock::Load(wxImage& image)
     wxMemoryInputStream mstream(m_data, m_dataSize);
     bool success = image.LoadFile(mstream, GetImageType());
 #else
-    wxString tempFile;
-    bool success = wxGetTempFileName(_("image"), tempFile) ;
-    wxASSERT(success);
+    wxString tempFile = wxFileName::CreateTempFileName(_("image"));
+    wxASSERT(!tempFile.IsEmpty());
 
     if (!WriteBlock(tempFile, m_data, m_dataSize))
     {

@@ -26,7 +26,7 @@
     #include "wx/timer.h"
 #endif // !PCH
 
-#include "wx/filefn.h"
+#include "wx/filename.h"
 #include "wx/ffile.h"
 #include "wx/process.h"
 #include "wx/crt.h"
@@ -673,7 +673,7 @@ wxDialUpManagerImpl::CheckIfconfig()
         wxASSERT_MSG( m_IfconfigPath.length(),
                       _T("can't use ifconfig if it wasn't found") );
 
-        wxString tmpfile = wxGetTempFileName( wxT("_wxdialuptest") );
+        wxString tmpfile = wxFileName::CreateTempFileName( wxT("_wxdialuptest") );
         wxString cmd = wxT("/bin/sh -c \'");
         cmd << m_IfconfigPath;
 #if defined(__AIX__) || \

@@ -21,7 +21,7 @@
 #include "wx/event.h"
 #include "wx/net.h"
 #include "wx/timer.h"
-#include "wx/filefn.h"
+#include "wx/filename.h"
 #include "wx/utils.h"
 #include "wx/log.h"
 #include "wx/file.h"
@@ -323,7 +323,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    {
       wxASSERT(m_IfconfigPath.length());
       
-      wxString tmpfile = wxGetTempFileName("_wxdialuptest");
+      wxString tmpfile = wxFileName::CreateTempFileName("_wxdialuptest");
       wxString cmd = "/bin/sh -c \'";
       cmd << m_IfconfigPath << " >" << tmpfile <<  '\'';
       /* I tried to add an option to wxExecute() to not close stdout,

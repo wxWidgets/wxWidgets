@@ -30,6 +30,7 @@
 #endif
 
 #include "wx/metafile.h"
+#include "wx/filename.h"
 
 #if wxUSE_METAFILE && !defined(wxMETAFILE_IS_ENH)
 
@@ -392,9 +393,11 @@ bool wxMakeMetafilePlaceable(const wxString& filename, int x1, int y1, int x2, i
     FILE *fd = wxFopen(filename.fn_str(), _T("rb"));
     if (!fd) return false;
 
-    wxChar tempFileBuf[256];
-    wxGetTempFileName(wxT("mf"), tempFileBuf);
-    FILE *fHandle = wxFopen(wxFNCONV(tempFileBuf), _T("wb"));
+    wxString tempFileBuf = wxFileName::CreateTempFileName(wxT("mf"));
+    if (tempFileBuf.empty())
+        return false;
+
+    FILE *fHandle = wxFopen(tempFileBuf.fn_str(), _T("wb"));
     if (!fHandle)
         return false;
     fwrite((void *)&header, sizeof(unsigned char), sizeof(mfPLACEABLEHEADER), fHandle);
