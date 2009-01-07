@@ -84,6 +84,11 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
     style &= ~wxBORDER_MASK;
     style |= wxBORDER_NONE;
 
+#if defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS
+    // CoreGraphics can't paint sash feedback
+    style |= wxSP_LIVE_UPDATE;
+#endif
+
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
@@ -91,7 +96,7 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
         m_lastSize.x = size.x;
     if (size.y >= 0)
         m_lastSize.y = size.y;
-    
+
     m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
 
     // FIXME: with this line the background is not erased at all under GTK1,
