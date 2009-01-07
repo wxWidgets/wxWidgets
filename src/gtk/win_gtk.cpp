@@ -47,8 +47,6 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
         widget->allocation.x != alloc->x ||
         widget->allocation.y != alloc->y;
 
-    widget->allocation = *alloc;
-
     wxPizza* pizza = WX_PIZZA(widget);
     int border_x, border_y;
     pizza->get_border_widths(border_x, border_y);
@@ -73,16 +71,23 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
             // one window
             gdk_window_move_resize(widget->window,
                 alloc->x + border_x, alloc->y + border_y, w, h);
-                
-            if ((border_x > 0) || (border_y > 0))
+
+            if (is_resize && (border_x || border_y))
             {
-                // Otherwise we get can redraw artefacts from
-                // the border.
-                GtkWidget *parent = gtk_widget_get_parent( widget );
-                gtk_widget_queue_draw( parent );
+                // old and new border areas need to be invalidated,
+                // otherwise they will not be erased/redrawn properly
+                const GtkAllocation& a1 = widget->allocation;
+                const GtkAllocation& a2 = *alloc;
+                const GdkRectangle r1 = { a1.x, a1.y, a1.width, a1.height };
+                const GdkRectangle r2 = { a2.x, a2.y, a2.width, a2.height };
+                gdk_window_invalidate_rect(widget->parent->window, &r1, false);
+                gdk_window_invalidate_rect(widget->parent->window, &r2, false);
             }
         }
     }
+
+    widget->allocation = *alloc;
+
     // adjust child positions
     for (const GList* list = pizza->m_fixed.children; list; list = list->next)
     {
