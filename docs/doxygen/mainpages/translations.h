@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 // Name:        translations.h
 // Purpose:     List of wxWidgets available translations
 // Author:      wxWidgets team
@@ -19,17 +19,17 @@ automatically if the translations to the current language are available.
 
 You may find here the list of all existing translations with the addresses of
 the official translators whom you should contact if you would like to submit
-any corrections to the translations for your language. 
+any corrections to the translations for your language.
 
-Also, please see @ref page_translations_howtohelp if you would like to translate 
-wxWidgets to your language if it is not mentioned here (or to help with one which 
+Also, please see @ref page_translations_howtohelp if you would like to translate
+wxWidgets to your language if it is not mentioned here (or to help with one which
 already is - it is quite helpful to have several translators for one language at
 least for proof reading).
 
 @li @ref page_translations_avail
 @li @ref page_translations_howtohelp
 
-<hr> 
+<hr>
 
 
 @section page_translations_avail Available translations
@@ -346,25 +346,25 @@ to foil spam robots, remove one <tt>\@</tt> from them.
 </tr>
 
 </table>
-<br/>
+<br>
 
 
 @section page_translations_howtohelp How to help
 
 wxWidgets uses the standard GNU gettext tools for i18n so if you are already
 familiar with them you shouldn't have any problems with working on wxWidgets
-translations. 
+translations.
 
 Here are the the steps you should follow:
 
 -# Get the latest version of the file <tt>locale/wxstd.pot</tt> from the
-   wxWidgets source tree: if you're using 
+   wxWidgets source tree: if you're using
    <a href="http://www.wxwidgets.org/develop/svn.htm">Subversion</a>
    or the <a href="http://wxwindows.sourceforge.net/snapshots/">daily snapshots</a>
-   you should already have it. 
-   Otherwise you can always retrieve it directly from the cvs repository via the 
+   you should already have it.
+   Otherwise you can always retrieve it directly from the cvs repository via the
    <a href="http://svn.wxwidgets.org/viewvc/wx/wxWidgets/trunk/locale/wxstd.pot?view=co">Web interface</a>.
--# Rename it to <tt>XY.po</tt> where <tt>"XY"</tt> is the 2 letter 
+-# Rename it to <tt>XY.po</tt> where <tt>"XY"</tt> is the 2 letter
    <a href="http://lcweb.loc.gov/standards/iso639-2/englangn.html">ISO 639-1 language code</a>
    for your language.
 -# Translate the strings in this file using either your favourite text
@@ -375,7 +375,7 @@ Here are the the steps you should follow:
    please note that you <i>must</i> use the <tt>-v</tt> option. In
    particular, please fill the header fields because msgfmt doesn't
    accept the default values for them.
--# Send the finished translation to <a href="mailto:vadim@wxwidgets.org">Vadim Zeitlin</a> 
+-# Send the finished translation to <a href="mailto:vadim@wxwidgets.org">Vadim Zeitlin</a>
    and it will be added to the next wxWidgets release or snapshot.
 
 In addition, please consider subscribing to the very low volume
