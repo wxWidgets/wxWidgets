@@ -47,6 +47,7 @@ enum wxAuiManagerOption
     wxAUI_MGR_RECTANGLE_HINT           = 1 << 5,
     wxAUI_MGR_HINT_FADE                = 1 << 6,
     wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
+    wxAUI_MGR_LIVE_RESIZE              = 1 << 8,
 
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
@@ -560,6 +561,8 @@ protected:
                               wxArrayInt& positions,
                               wxArrayInt& sizes);
 
+    /// Ends a resize action, or for live update, resizes the sash
+    bool DoEndResizeAction(wxMouseEvent& event);
 
 public:
 
@@ -615,6 +618,7 @@ protected:
     wxAuiDockUIPart* m_hover_button;// button uipart being hovered over
     wxRect m_last_hint;          // last hint rectangle
     wxPoint m_last_mouse_move;   // last mouse move position (see OnMotion)
+    int  m_currentDragItem;
     bool m_skipping;
     bool m_has_maximized;
 

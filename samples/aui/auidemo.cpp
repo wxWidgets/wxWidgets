@@ -84,6 +84,7 @@ class MyFrame : public wxFrame
         ID_NoGradient,
         ID_VerticalGradient,
         ID_HorizontalGradient,
+        ID_LiveUpdate,
         ID_Settings,
         ID_CustomizeToolbar,
         ID_DropDownToolbarItem,
@@ -591,6 +592,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_HintFade, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NoVenetianFade, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentDrag, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_LiveUpdate, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NotebookTabFixedWidth, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookNoCloseButton, MyFrame::OnNotebookFlag)
@@ -637,6 +639,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_HintFade, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NoVenetianFade, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentDrag, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_LiveUpdate, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NoGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_VerticalGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_HorizontalGradient, MyFrame::OnUpdateUI)
@@ -699,6 +702,7 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->AppendCheckItem(ID_NoVenetianFade, _("Disable Venetian Blinds Hint Fade-in"));
     options_menu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
     options_menu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
+    options_menu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
     options_menu->AppendSeparator();
     options_menu->AppendRadioItem(ID_NoGradient, _("No Caption Gradient"));
     options_menu->AppendRadioItem(ID_VerticalGradient, _("Vertical Caption Gradient"));
@@ -1078,6 +1082,7 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         case ID_TransparentHint: flag = wxAUI_MGR_TRANSPARENT_HINT; break;
         case ID_VenetianBlindsHint: flag = wxAUI_MGR_VENETIAN_BLINDS_HINT; break;
         case ID_RectangleHint: flag = wxAUI_MGR_RECTANGLE_HINT; break;
+        case ID_LiveUpdate: flag = wxAUI_MGR_LIVE_RESIZE; break;
     }
 
     if (flag)
@@ -1190,6 +1195,9 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_TransparentHint:
             event.Check((flags & wxAUI_MGR_TRANSPARENT_HINT) != 0);
+            break;
+        case ID_LiveUpdate:
+            event.Check((flags & wxAUI_MGR_LIVE_RESIZE) != 0);
             break;
         case ID_VenetianBlindsHint:
             event.Check((flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) != 0);
