@@ -84,6 +84,11 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
     style &= ~wxBORDER_MASK;
     style |= wxBORDER_NONE;
 
+#ifdef __WXMAC__
+    // CoreGraphics can't paint sash feedback
+    style |= wxSP_LIVE_UPDATE;
+#endif
+
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return false;
 
@@ -91,7 +96,7 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
         m_lastSize.x = size.x;
     if (size.y >= 0)
         m_lastSize.y = size.y;
-    
+
     m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
 
     // FIXME: with this line the background is not erased at all under GTK1,
@@ -213,7 +218,7 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     // following the mouse movement while it drags the sash, without it we only
     // draw the sash at the new position but only resize the windows when the
     // dragging is finished
-#if defined( __WXMAC__ ) 
+#if defined( __WXMAC__ )
     // FIXME : this should be usable also with no live update, but then this
     // currently is not visible
     bool isLive = true;
