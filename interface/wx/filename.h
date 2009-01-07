@@ -7,7 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-/** The various values for the path format: this mainly affects the path
+/**
+    The various values for the path format: this mainly affects the path
     separator but also whether or not the path has the drive part
     (as under Windows).
 
@@ -28,19 +29,22 @@ enum wxPathFormat
 };
 
 
-/** The kind of normalization to do with the file name: these values can be
+/**
+    The kind of normalization to do with the file name: these values can be
     or'd together to perform several operations at once.
     See wxFileName::Normalize() for more info.
 */
 enum wxPathNormalize
 {
-    wxPATH_NORM_ENV_VARS = 0x0001,  //!< replace env vars with their values.
-    wxPATH_NORM_DOTS     = 0x0002,  //!< squeeze all .. and . and prepend cwd.
-    wxPATH_NORM_TILDE    = 0x0004,  //!< Unix only: replace ~ and ~user.
-    wxPATH_NORM_CASE     = 0x0008,  //!< if case insensitive => tolower.
-    wxPATH_NORM_ABSOLUTE = 0x0010,  //!< make the path absolute.
-    wxPATH_NORM_LONG =     0x0020,  //!< make the path the long form.
-    wxPATH_NORM_SHORTCUT = 0x0040,  //!< resolve the shortcut, if it is a shortcut.
+    wxPATH_NORM_ENV_VARS = 0x0001,  //!< Replace environment variables with their values.
+    wxPATH_NORM_DOTS     = 0x0002,  //!< Squeeze all @c ".." and @c "." and prepend the current working directory.
+    wxPATH_NORM_TILDE    = 0x0004,  //!< Replace @c "~" and @c "~user" (Unix only).
+    wxPATH_NORM_CASE     = 0x0008,  //!< If the platform is case insensitive, make lowercase the path.
+    wxPATH_NORM_ABSOLUTE = 0x0010,  //!< Make the path absolute.
+    wxPATH_NORM_LONG =     0x0020,  //!< Expand the path to the "long" form (Windows only).
+    wxPATH_NORM_SHORTCUT = 0x0040,  //!< Resolve the shortcut, if it is a shortcut (Windows only).
+
+    //! A value indicating all normalization flags except for @c wxPATH_NORM_CASE.
     wxPATH_NORM_ALL      = 0x00ff & ~wxPATH_NORM_CASE
 };
 
@@ -538,7 +542,7 @@ public:
 
         The possible flags values are:
 
-        - @b wxPATH_GET_VOLUME
+        - @b wxPATH_GET_VOLUME:
         Return the path with the volume (does nothing for the filename formats
         without volumes), otherwise the path without volume part is returned.
 
