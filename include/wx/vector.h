@@ -13,6 +13,7 @@
 #define _WX_VECTOR_H_
 
 #include "wx/defs.h"
+#include "wx/dataobj.h"
 
 #if wxUSE_STL
 
