@@ -26,6 +26,7 @@
         u_char  sun_family;     /* AF_UNIX */
         char    sun_path[108];  /* path name (gag) */
     };
+    #include <in.h>
 #else // generic Unix
     #include <sys/types.h>
     #include <sys/socket.h>
