@@ -193,7 +193,7 @@ void wxFileData::ReadData()
     m_type |= (fileAttribs & FILE_ATTRIBUTE_DIRECTORY) != 0 ? is_dir : 0;
 
     wxString p, f, ext;
-    wxSplitPath(m_filePath, & p, & f, & ext);
+    wxFileName::SplitPath(m_filePath, & p, & f, & ext);
     if (wxStricmp(ext, wxT("exe")) == 0)
         m_type |= is_exe;
 
@@ -1295,7 +1295,7 @@ void wxGenericFileCtrl::OnSelected( wxListEvent &event )
 
         return;
     }
-    
+
 
     m_ignoreChanges = true;
     m_text->SetValue( filename );
@@ -1428,7 +1428,7 @@ bool wxGenericFileCtrl::SetPath( const wxString& path )
         return false;
 
     wxString ext;
-    wxSplitPath( path, &m_dir, &m_fileName, &ext );
+    wxFileName::SplitPath( path, &m_dir, &m_fileName, &ext );
     if ( !ext.empty() )
     {
         m_fileName += wxT( "." );

@@ -112,7 +112,7 @@ bool wxWinHelpController::Quit(void)
 wxString wxWinHelpController::GetValidFilename(const wxString& file) const
 {
     wxString path, name, ext;
-    wxSplitPath(file, & path, & name, & ext);
+    wxFileName::SplitPath(file, & path, & name, & ext);
 
     wxString fullName;
     if (path.empty())

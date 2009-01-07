@@ -167,7 +167,7 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
 void wxFileDialog::SetPath(const wxString& path)
 {
     wxString ext;
-    wxSplitPath(path, &m_dir, &m_fileName, &ext);
+    wxFileName::SplitPath(path, &m_dir, &m_fileName, &ext);
     if ( !ext.empty() )
         m_fileName << _T('.') << ext;
 }

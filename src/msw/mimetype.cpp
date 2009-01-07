@@ -733,7 +733,7 @@ bool wxFileTypeImpl::SetMimeType(const wxString& mimeTypeOrig)
     {
         // make up a default value for it
         wxString cmd;
-        wxSplitPath(GetCommand(_T("open")), NULL, &cmd, NULL);
+        wxFileName::SplitPath(GetCommand(_T("open")), NULL, &cmd, NULL);
         mimeType << _T("application/x-") << cmd;
     }
     else

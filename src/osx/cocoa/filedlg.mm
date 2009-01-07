@@ -55,7 +55,7 @@ NSArray* GetTypesFromFilter( const wxString filter )
     {
         wxArrayString names ;
         wxArrayString extensions;
-    
+
         wxString filter2(filter) ;
         int filterIndex = 0;
         bool isName = true ;
@@ -109,22 +109,22 @@ NSArray* GetTypesFromFilter( const wxString filter )
             if (extension.length() && (extension.GetChar(0) == '.'))
                 extension = extension.Mid( 1 );
 
-            if ( extension.IsEmpty() )  
+            if ( extension.IsEmpty() )
             {
                 if ( types != nil )
                     [types release];
                 return nil;
             }
-            
-            
+
+
             if ( types == nil )
                 types = [[NSMutableArray alloc] init];
-                
+
             wxCFStringRef cfext(extension);
             [types addObject: (NSString*)cfext.AsNSString()  ];
-#if 0 
+#if 0
             wxUint32 fileType, creator;
-                
+
             // extension -> mactypes
 #endif
         }
@@ -135,17 +135,17 @@ NSArray* GetTypesFromFilter( const wxString filter )
 int wxFileDialog::ShowModal()
 {
     int result = wxID_CANCEL;
-    
+
     NSSavePanel *panel = nil;
-    
+
     wxCFStringRef cf( m_message );
- 
+
     wxCFStringRef dir( m_path );
     wxCFStringRef file( m_fileName );
-    
+
     m_path = wxEmptyString;
     m_fileNames.Clear();
-    
+
     if (HasFlag(wxFD_SAVE))
     {
         NSSavePanel* sPanel = [NSSavePanel savePanel];
@@ -153,7 +153,7 @@ int wxFileDialog::ShowModal()
         [sPanel setCanCreateDirectories:YES];
         [sPanel setMessage:cf.AsNSString()];
         [sPanel setTreatsFilePackagesAsDirectories:NO];
-        
+
         if ( HasFlag(wxFD_OVERWRITE_PROMPT) )
         {
         }
@@ -162,7 +162,7 @@ int wxFileDialog::ShowModal()
         {
             panel = sPanel;
             result = wxID_OK;
-            
+
             wxCFStringRef filename( [[sPanel filename] retain] );
 
             m_path = filename.AsString();
@@ -179,7 +179,7 @@ int wxFileDialog::ShowModal()
         [oPanel setResolvesAliases:YES];
         [oPanel setCanChooseFiles:YES];
         [oPanel setMessage:cf.AsNSString()];
-    
+
         if ( [oPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() types:types] == NSOKButton )
         {
             panel = oPanel;
@@ -202,7 +202,7 @@ int wxFileDialog::ShowModal()
         if ( types != nil )
             [types release];
     }
-    
+
     return result;
 }
 
@@ -335,7 +335,7 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
 void wxFileDialog::SetPath(const wxString& path)
 {
     wxString ext;
-    wxSplitPath(path, &m_dir, &m_fileName, &ext);
+    wxFileName::SplitPath(path, &m_dir, &m_fileName, &ext);
     if ( !ext.empty() )
         m_fileName << _T('.') << ext;
 }

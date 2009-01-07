@@ -53,7 +53,7 @@ wxRichTextHTMLHandler::wxRichTextHTMLHandler(const wxString& name, const wxStrin
 bool wxRichTextHTMLHandler::CanHandle(const wxString& filename) const
 {
     wxString path, file, ext;
-    wxSplitPath(filename, & path, & file, & ext);
+    wxFileName::SplitPath(filename, & path, & file, & ext);
 
     return (ext.Lower() == wxT("html") || ext.Lower() == wxT("htm"));
 }

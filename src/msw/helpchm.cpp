@@ -219,7 +219,7 @@ bool wxCHMHelpController::Quit()
 wxString wxCHMHelpController::GetValidFilename() const
 {
     wxString path, name, ext;
-    wxSplitPath(m_helpFile, &path, &name, &ext);
+    wxFileName::SplitPath(m_helpFile, &path, &name, &ext);
 
     wxString fullName;
     if (path.IsEmpty())

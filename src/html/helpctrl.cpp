@@ -157,7 +157,7 @@ wxHtmlHelpFrame* wxHtmlHelpController::CreateHelpFrame(wxHtmlHelpData *data)
     wxHtmlHelpFrame* frame = new wxHtmlHelpFrame(data);
     frame->SetController(this);
     frame->Create(m_parentWindow, -1, wxEmptyString, m_FrameStyle, m_Config, m_ConfigRoot);
-    frame->SetTitleFormat(m_titleFormat);    
+    frame->SetTitleFormat(m_titleFormat);
     m_helpFrame = frame;
     return frame;
 }
@@ -166,7 +166,7 @@ wxHtmlHelpDialog* wxHtmlHelpController::CreateHelpDialog(wxHtmlHelpData *data)
 {
     wxHtmlHelpDialog* dialog = new wxHtmlHelpDialog(data);
     dialog->SetController(this);
-    dialog->SetTitleFormat(m_titleFormat);    
+    dialog->SetTitleFormat(m_titleFormat);
     dialog->Create(m_parentWindow, -1, wxEmptyString, m_FrameStyle);
     m_helpDialog = dialog;
     return dialog;
@@ -240,7 +240,7 @@ void wxHtmlHelpController::UseConfig(wxConfigBase *config, const wxString& rootp
 bool wxHtmlHelpController::Initialize(const wxString& file)
 {
     wxString dir, filename, ext;
-    wxSplitPath(file, & dir, & filename, & ext);
+    wxFileName::SplitPath(file, & dir, & filename, & ext);
 
     if (!dir.empty())
         dir = dir + wxFILE_SEP_PATH;

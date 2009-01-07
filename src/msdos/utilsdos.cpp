@@ -200,7 +200,7 @@ const wxChar* wxGetHomeDir(wxString *home)
 #endif
             // it needs to be a full path to be usable
             if ( prog.compare(1, 2, _T(":\\")) == 0 )
-                wxSplitPath(prog, &strDir, NULL, NULL);
+                wxFileName::SplitPath(prog, &strDir, NULL, NULL);
         }
         if ( strDir.empty() )
         {

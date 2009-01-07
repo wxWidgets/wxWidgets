@@ -80,6 +80,7 @@ license is as follows:
 #include "wx/imagxpm.h"
 #include "wx/wfstream.h"
 #include "wx/xpmdecod.h"
+#include "wx/filename.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxXPMHandler,wxImageHandler)
 
@@ -123,8 +124,8 @@ bool wxXPMHandler::SaveFile(wxImage * image,
     wxString sName;
     if ( image->HasOption(wxIMAGE_OPTION_FILENAME) )
     {
-        wxSplitPath(image->GetOption(wxIMAGE_OPTION_FILENAME),
-                    NULL, &sName, NULL);
+        wxFileName::SplitPath(image->GetOption(wxIMAGE_OPTION_FILENAME),
+                              NULL, &sName, NULL);
         sName << wxT("_xpm");
     }
 

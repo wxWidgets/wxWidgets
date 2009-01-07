@@ -273,7 +273,7 @@ int XmlResApp::OnRun()
               wxCMD_LINE_VAL_STRING,
               wxCMD_LINE_PARAM_MULTIPLE | wxCMD_LINE_OPTION_MANDATORY },
 
-        wxCMD_LINE_DESC_END 
+        wxCMD_LINE_DESC_END
     };
 
     wxCmdLineParser parser(cmdLineDesc, argc, argv);
@@ -416,7 +416,7 @@ wxArrayString XmlResApp::PrepareTempFiles()
         }
 
         wxString name, ext, path;
-        wxSplitPath(parFiles[i], &path, &name, &ext);
+        wxFileName::SplitPath(parFiles[i], &path, &name, &ext);
 
         FindFilesInXML(doc.GetRoot(), flist, path);
         if (flagH)

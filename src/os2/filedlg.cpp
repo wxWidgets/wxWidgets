@@ -248,11 +248,11 @@ int wxFileDialog::ShowModal()
             int                     nIdx = wxStrlen(zFileNameBuffer) - 1;
             wxString                sExt;
 
-            wxSplitPath( zFileNameBuffer
-                        ,&m_path
-                        ,&m_fileName
-                        ,&sExt
-                       );
+            wxFileName::SplitPath( zFileNameBuffer
+                                    ,&m_path
+                                    ,&m_fileName
+                                    ,&sExt
+                                  );
             if (zFileNameBuffer[nIdx] == wxT('.') || sExt.empty())
             {
                 zFileNameBuffer[nIdx] = wxT('\0');

@@ -1373,7 +1373,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                                    wxString* arguments)
 {
     wxString path, file, ext;
-    wxSplitPath(shortcutPath, & path, & file, & ext);
+    wxFileName::SplitPath(shortcutPath, & path, & file, & ext);
 
     HRESULT hres;
     IShellLink* psl;

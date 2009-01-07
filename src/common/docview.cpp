@@ -323,7 +323,7 @@ bool wxDocument::SaveAs()
 
     wxString fileName(tmp);
     wxString path, name, ext;
-    wxSplitPath(fileName, & path, & name, & ext);
+    wxFileName::SplitPath(fileName, & path, & name, & ext);
 
     if (ext.empty())
     {

@@ -304,7 +304,7 @@ public:
     virtual wxDirTraverseResult OnDir(const wxString& dirname)
     {
         wxString path, name, ext;
-        wxSplitPath(dirname, &path, &name, &ext);
+        wxFileName::SplitPath(dirname, &path, &name, &ext);
 
         if ( !ext.empty() )
             name << _T('.') << ext;
