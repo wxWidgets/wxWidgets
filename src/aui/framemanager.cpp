@@ -4019,7 +4019,7 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
         // we can get the dreaded _SetDstBlits32BGRA crash (but not in the AUI sample).
         // This only helps in non-CG mode - there is zero resize feeedback in CG mode
         // at present.
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !wxMAC_USE_CORE_GRAPHICS
         wxClientDC dc(m_frame);
 #else
         wxScreenDC dc;
@@ -4299,7 +4299,7 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
           // we can get the dreaded _SetDstBlits32BGRA crash (but not in the AUI sample).
           // This only helps in non-CG mode - there is zero resize feeedback in CG mode
           // at present.
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !wxMAC_USE_CORE_GRAPHICS
             wxRect rect(pos,
                     m_action_part->rect.GetSize());
 
