@@ -405,8 +405,6 @@ protected:
                     m_ownsImageListState;
 
   long              m_baseStyle;  // Basic Windows style flags, for recreation purposes
-  wxStringList      m_stringPool; // Pool of 3 strings to satisfy Windows callback
-                                  // requirements
   int               m_colCount;   // Windows doesn't have GetColumnCount so must
                                   // keep track of inserted/deleted columns
 
