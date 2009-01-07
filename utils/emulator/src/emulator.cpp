@@ -35,6 +35,7 @@
 #include "wx/cmdline.h"
 #include "wx/image.h"
 #include "wx/file.h"
+#include "wx/filename.h"
 
 #ifdef __WXX11__
 #include "wx/x11/reparent.h"
@@ -519,7 +520,7 @@ wxBitmapType wxDetermineImageType(const wxString& filename)
 {
     wxString path, name, ext;
 
-    wxSplitPath(filename, & path, & name, & ext);
+    wxFileName::SplitPath(filename, & path, & name, & ext);
 
     ext.MakeLower();
     if (ext == _T("jpg") || ext == _T("jpeg"))
