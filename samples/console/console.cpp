@@ -23,6 +23,7 @@
 
 #include "wx/string.h"
 #include "wx/file.h"
+#include "wx/filename.h"
 #include "wx/app.h"
 #include "wx/log.h"
 #include "wx/apptrait.h"
