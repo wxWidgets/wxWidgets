@@ -711,11 +711,11 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
 
         // Make sure children of composite parent get updated as well
-        // Original string value: "Lamborghini Diablo SV; 5707; [300; 3.9; 8.6] 300000"
+        // Original string value: "Lamborghini Diablo SV; 5707; [300; 3.9; 8.6] 300000; Not Convertible"
 
         //
         // This updates children as well
-        wxString nvs = "Lamborghini Diablo XYZ; 5707; [100; 3.9; 8.6] 3000002";
+        wxString nvs = "Lamborghini Diablo XYZ; 5707; [100; 3.9; 8.6] 3000002; Convertible";
         pgman->SetPropertyValue("Car", nvs);
 
         if ( pgman->GetPropertyValueAsString("Car.Model") != "Lamborghini Diablo XYZ" )
@@ -733,6 +733,12 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         if ( pgman->GetPropertyValueAsInt("Car.Price ($)") != 3000002 )
         {
             wxLogDebug("Did not match: Car.Price ($)=%s", pgman->GetPropertyValueAsString("Car.Price ($)").c_str());
+            RT_FAILURE();
+        }
+
+        if ( !pgman->GetPropertyValueAsBool("Car.Convertible") )
+        {
+            wxLogDebug("Did not match: Car.Convertible=%s", pgman->GetPropertyValueAsString("Car.Convertible").c_str());
             RT_FAILURE();
         }
     }
