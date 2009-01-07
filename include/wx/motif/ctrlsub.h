@@ -18,7 +18,7 @@
 // wxControlWithItems
 // ----------------------------------------------------------------------------
 
-class wxControlWithItems : public wxControlWithItemsGeneric
+class WXDLLIMPEXP_CORE wxControlWithItems : public wxControlWithItemsGeneric
 {
 public:
     wxControlWithItems() { }
