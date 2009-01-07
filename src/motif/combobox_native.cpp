@@ -203,7 +203,7 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter & items,
         wxXmString str( items[i].c_str() );
         XmComboBoxAddItem((Widget) m_mainWidget, str(),
                           GetMotifPosition(pos), False);
-        m_noStrings ++;
+
         InsertNewItemClientData(pos, clientData, i, type);
     }
 
@@ -221,7 +221,7 @@ void wxComboBox::DoDeleteOneItem(unsigned int n)
 #endif
 
     wxControlWithItems::DoDeleteOneItem(n);
-    m_noStrings--;
+    m_stringArray.RemoveAt(size_t(n));
 
     AdjustDropDownListSize();
 }
@@ -231,13 +231,14 @@ void wxComboBox::Clear()
 #ifdef LESSTIF_VERSION
     XmListDeleteAllItems (GetXmList(this));
 #else
-    while(m_noStrings > 0)
+    size_t n = m_stringArray.GetCount();
+    while(n > 0)
     {
-        XmComboBoxDeletePos((Widget) m_mainWidget, m_noStrings--);
+        XmComboBoxDeletePos((Widget) m_mainWidget, n--);
     }
 #endif
 
-    m_noStrings = 0;
+    m_stringArray.Clear();
     AdjustDropDownListSize();
 
     wxTextEntry::Clear();

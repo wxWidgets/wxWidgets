@@ -99,19 +99,18 @@ public:
 
     // implementation, for wxChoiceCallback
     const wxWidgetArray& GetWidgets() const { return m_widgetArray; }
-    const wxStringList&  GetStrings() const { return m_stringList; }
+    const wxArrayString&  GetStrings() const { return m_stringArray; }
 protected:
     // minimum size for the text ctrl
     wxSize GetItemsSize() const;
     // common part of all contructors
     void Init();
 
-    unsigned int  m_noStrings;
     WXWidget      m_menuWidget;
     WXWidget      m_buttonWidget;
     wxWidgetArray m_widgetArray;
     WXWidget      m_formWidget;
-    wxStringList  m_stringList;
+    wxArrayString m_stringArray;
 
     virtual void DoSetSize(int x, int y,
         int width, int height,

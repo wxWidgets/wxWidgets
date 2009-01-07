@@ -177,12 +177,7 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
 void wxComboBox::DoDeleteOneItem(unsigned int n)
 {
     XmComboBoxDeletePos((Widget) m_mainWidget, n+1);
-    wxStringList::Node *node = m_stringList.Item(n);
-    if (node)
-    {
-        delete[] node->GetData();
-        delete node;
-    }
+    m_stringArray.RemoveAt(n);
     wxControlWithItems::DoDeleteOneItem(n);
     m_noStrings--;
 }
@@ -212,11 +207,7 @@ int wxComboBox::GetSelection (void) const
 
 wxString wxComboBox::GetString(unsigned int n) const
 {
-    wxStringList::Node *node = m_stringList.Item(n);
-    if (node)
-        return wxString(node->GetData ());
-    else
-        return wxEmptyString;
+    return m_stringArray[n];
 }
 
 int wxComboBox::FindString(const wxString& s, bool WXUNUSED(bCase)) const
