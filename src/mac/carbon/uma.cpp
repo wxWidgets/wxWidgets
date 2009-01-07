@@ -187,7 +187,12 @@ void UMAInsertSubMenuItem( MenuRef menu , const wxString& title, wxFontEncoding 
 void UMASetMenuItemShortcut( MenuRef menu , MenuItemIndex item , wxAcceleratorEntry *entry )
 {
     if ( !entry )
+    {
+        SetMenuItemModifiers( menu, item , kMenuNoModifiers ); 
+        SetMenuItemKeyGlyph( menu, item , kMenuNullGlyph );        
+        SetItemCmd( menu, item , 0 ); 
         return ;
+    }
 
     UInt8 modifiers = 0 ;
     SInt16 key = entry->GetKeyCode() ;
