@@ -713,16 +713,12 @@ inline struct _XDisplay *wxGetX11Display()
 #define wx_YIELD_DECLARED
 
 // Yield to other apps/messages
-WXDLLIMPEXP_BASE bool wxYield();
+WXDLLIMPEXP_CORE bool wxYield();
 
 #endif // wx_YIELD_DECLARED
 
 // Like wxYield, but fails silently if the yield is recursive.
-WXDLLIMPEXP_BASE bool wxYieldIfNeeded();
-
-// ----------------------------------------------------------------------------
-// Error message functions used by wxWidgets (deprecated, use wxLog)
-// ----------------------------------------------------------------------------
+WXDLLIMPEXP_CORE bool wxYieldIfNeeded();
 
 #endif
     // _WX_UTILSH__
