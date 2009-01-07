@@ -36,6 +36,7 @@
 #include "wx/dynlib.h"
 #include "wx/dynload.h"
 #include "wx/scopeguard.h"
+#include "wx/filename.h"
 
 #include "wx/confbase.h"        // for wxExpandEnvVars()
 
