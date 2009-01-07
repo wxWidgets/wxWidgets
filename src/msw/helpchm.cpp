@@ -18,7 +18,7 @@
 
 #if wxUSE_HELP && wxUSE_MS_HTML_HELP
 
-#include "wx/filefn.h"
+#include "wx/filename.h"
 #include "wx/msw/helpchm.h"
 
 #include "wx/dynload.h"

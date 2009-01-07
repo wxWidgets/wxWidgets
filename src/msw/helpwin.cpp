@@ -21,7 +21,7 @@
 #ifndef WX_PRECOMP
 #endif
 
-#include "wx/filefn.h"
+#include "wx/filename.h"
 #include "wx/msw/helpwin.h"
 
 #include <time.h>
