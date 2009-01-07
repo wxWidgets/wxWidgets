@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 2 December 2008                                                     *
+# Date : 7 January 2009                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -123,3 +123,4 @@ taskbarx11.obj : taskbarx11.cpp
 displayx11.obj : displayx11.cpp
 timerunx.obj : timerunx.cpp
 evtloopunix.obj : evtloopunix.cpp
+	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn evtloopunix.cpp
