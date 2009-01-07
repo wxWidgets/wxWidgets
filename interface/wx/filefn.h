@@ -177,15 +177,21 @@ int wxParseCommonDialogsFilter(const wxString& wildCard,
     Converts a DOS to a Unix filename by replacing backslashes with forward
     slashes.
 
+    @deprecated
+        Construct a wxFileName with wxPATH_DOS and then use
+        wxFileName::GetFullPath(wxPATH_UNIX) instead.
+
     @header{wx/filefn.h}
 */
 void wxDos2UnixFilename(wxChar* s);
 
 /**
-    @warning This function is deprecated, use wxFileName instead.
-
     Converts a Unix to a DOS filename by replacing forward slashes with
     backslashes.
+
+    @deprecated
+        Construct a wxFileName with wxPATH_UNIX and then use
+        wxFileName::GetFullPath(wxPATH_DOS) instead.
 
     @header{wx/filefn.h}
 */
@@ -199,8 +205,8 @@ void wxUnix2DosFilename(wxChar* s);
 bool wxDirExists(const wxString& dirname);
 
 /**
-    @warning This function is obsolete, please use wxFileName::SplitPath()
-             instead.
+    @deprecated
+        This function is obsolete, please use wxFileName::SplitPath() instead.
 
     This function splits a full file name into components: the path (including
     possible disk/drive specification under Windows), the base name, and the
@@ -283,7 +289,7 @@ bool wxMatchWild(const wxString& pattern,
                   bool dot_special);
 
 /**
-    @warning This function is deprecated, use wxGetCwd() instead.
+    @deprecated This function is deprecated, use wxGetCwd() instead.
 
     Copies the current working directory into the buffer if supplied, or copies
     the working directory into new storage (which you must delete yourself) if
@@ -446,8 +452,8 @@ wxFileKind wxGetFileKind(FILE* fp);
 /** @addtogroup group_funcmacro_file */
 //@{
 /**
-    @warning This function is obsolete, please use wxFileName::SplitPath()
-             instead.
+    @deprecated
+        This function is obsolete, please use wxFileName::SplitPath() instead.
 
     Returns the filename for a full path. The second form returns a pointer to
     temporary storage that should not be deallocated.
@@ -461,8 +467,8 @@ char* wxFileNameFromPath(char* path);
 /** @addtogroup group_funcmacro_file */
 //@{
 /**
-    @warning This function is obsolete, please use
-             wxFileName::CreateTempFileName() instead.
+    @deprecated
+        This function is obsolete, please use wxFileName::CreateTempFileName() instead.
 
     @header{wx/filefn.h}
 */

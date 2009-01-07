@@ -112,7 +112,7 @@ wxWindow *wxFindSuitableParent()
 wxString FindExtension(const wxString& path)
 {
     wxString ext;
-    wxSplitPath(path, NULL, NULL, &ext);
+    wxFileName::SplitPath(path, NULL, NULL, &ext);
 
     // VZ: extensions are considered not case sensitive - is this really a good
     //     idea?

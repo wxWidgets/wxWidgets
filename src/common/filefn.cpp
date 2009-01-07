@@ -104,8 +104,9 @@
 // private globals
 // ----------------------------------------------------------------------------
 
-// MT-FIXME: get rid of this horror and all code using it
+#if WXWIN_COMPATIBILITY_2_8
 static wxChar wxFileFunctionsBuffer[4*_MAXPATHLEN];
+#endif
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 //
@@ -360,6 +361,7 @@ wxIsAbsolutePath (const wxString& filename)
     return false ;
 }
 
+#if WXWIN_COMPATIBILITY_2_8
 /*
  * Strip off any extension (dot something) from end of file,
  * IF one exists. Inserts zero into buffer.
@@ -755,6 +757,8 @@ wxContractPath (const wxString& filename,
   return dest;
 }
 
+#endif // #if WXWIN_COMPATIBILITY_2_8
+
 // Return just the filename, not the path (basename)
 wxChar *wxFileNameFromPath (wxChar *path)
 {
@@ -949,12 +953,15 @@ void wxMacFilename2FSSpec( const wxString& path , FSSpec *spec )
     OSStatus err = noErr;
     FSRef fsRef;
     wxMacPathToFSRef( path , &fsRef );
-	err = FSGetCatalogInfo(&fsRef, kFSCatInfoNone, NULL, NULL, spec, NULL);
+    err = FSGetCatalogInfo(&fsRef, kFSCatInfoNone, NULL, NULL, spec, NULL);
     verify_noerr( err );
 }
 #endif
 
 #endif // __WXMAC__
+
+
+#if WXWIN_COMPATIBILITY_2_8
 
 template<typename T>
 static void wxDoDos2UnixFilename(T *s)
@@ -997,6 +1004,8 @@ wxDoUnix2DosFilename(T *WXUNUSED(s) )
 
 void wxUnix2DosFilename(char *s) { wxDoUnix2DosFilename(s); }
 void wxUnix2DosFilename(wchar_t *s) { wxDoUnix2DosFilename(s); }
+
+#endif // #if WXWIN_COMPATIBILITY_2_8
 
 // Concatenate two files to form third
 bool
@@ -1365,6 +1374,8 @@ bool wxDirExists(const wxString& pathName)
 #endif // __WIN32__/!__WIN32__
 }
 
+#if WXWIN_COMPATIBILITY_2_8
+
 // Get a temporary filename, opening and closing the file.
 wxChar *wxGetTempFileName(const wxString& prefix, wxChar *buf)
 {
@@ -1399,6 +1410,8 @@ bool wxGetTempFileName(const wxString& prefix, wxString& buf)
 #endif // wxUSE_FILE/!wxUSE_FILE
 }
 
+#endif // #if WXWIN_COMPATIBILITY_2_8
+
 // Get first file name matching given wild card.
 
 static wxDir *gs_dir = NULL;
@@ -1406,7 +1419,7 @@ static wxString gs_dirPath;
 
 wxString wxFindFirstFile(const wxString& spec, int flags)
 {
-    wxSplitPath(spec, &gs_dirPath, NULL, NULL);
+    wxFileName::SplitPath(spec, &gs_dirPath, NULL, NULL);
     if ( gs_dirPath.empty() )
         gs_dirPath = wxT(".");
     if ( !wxEndsWithPathSeparator(gs_dirPath ) )
@@ -1705,6 +1718,7 @@ bool wxFindFileInPath(wxString *pStr, const wxString& szPath, const wxString& sz
     return false;
 }
 
+#if WXWIN_COMPATIBILITY_2_8
 void WXDLLIMPEXP_BASE wxSplitPath(const wxString& fileName,
                              wxString *pstrPath,
                              wxString *pstrName,
@@ -1712,6 +1726,7 @@ void WXDLLIMPEXP_BASE wxSplitPath(const wxString& fileName,
 {
     wxFileName::SplitPath(fileName, pstrPath, pstrName, pstrExt);
 }
+#endif  // #if WXWIN_COMPATIBILITY_2_8
 
 #if wxUSE_DATETIME
 

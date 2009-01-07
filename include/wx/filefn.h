@@ -543,41 +543,49 @@ WXDLLIMPEXP_BASE wxString wxFileNameFromPath(const wxString& path);
 // Get directory
 WXDLLIMPEXP_BASE wxString wxPathOnly(const wxString& path);
 
-WXDLLIMPEXP_BASE void wxDos2UnixFilename(char *s);
-WXDLLIMPEXP_BASE void wxDos2UnixFilename(wchar_t *s);
+// all deprecated functions below are deprecated in favour of wxFileName's methods
+#if WXWIN_COMPATIBILITY_2_8
 
-WXDLLIMPEXP_BASE void wxUnix2DosFilename(char *s);
-WXDLLIMPEXP_BASE void wxUnix2DosFilename(wchar_t *s);
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxDos2UnixFilename(char *s) );
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxDos2UnixFilename(wchar_t *s) );
+
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxUnix2DosFilename(char *s) );
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxUnix2DosFilename(wchar_t *s) );
 
 // Strip the extension, in situ
-WXDLLIMPEXP_BASE void wxStripExtension(char *buffer);
-WXDLLIMPEXP_BASE void wxStripExtension(wchar_t *buffer);
-WXDLLIMPEXP_BASE void wxStripExtension(wxString& buffer);
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(char *buffer) );
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(wchar_t *buffer) );
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(wxString& buffer) );
+    // DEPRECATED: construct a wxFileName, use ClearExt() and then GetFullPath()
 
 // Get a temporary filename
-WXDLLIMPEXP_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = (wxChar *) NULL);
-WXDLLIMPEXP_BASE bool wxGetTempFileName(const wxString& prefix, wxString& buf);
+wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = (wxChar *) NULL) );
+wxDEPRECATED( WXDLLIMPEXP_BASE bool wxGetTempFileName(const wxString& prefix, wxString& buf) );
 
 // Expand file name (~/ and ${OPENWINHOME}/ stuff)
-WXDLLIMPEXP_BASE char* wxExpandPath(char *dest, const wxString& path);
-WXDLLIMPEXP_BASE wchar_t* wxExpandPath(wchar_t *dest, const wxString& path);
-// FIXME-UTF8: add some wxString version
+wxDEPRECATED( WXDLLIMPEXP_BASE char* wxExpandPath(char *dest, const wxString& path) );
+wxDEPRECATED( WXDLLIMPEXP_BASE wchar_t* wxExpandPath(wchar_t *dest, const wxString& path) );
+    // DEPRECATED: use wxFileName::Normalize(wxPATH_NORM_ENV_VARS)
 
 // Contract w.r.t environment (</usr/openwin/lib, OPENWHOME> -> ${OPENWINHOME}/lib)
 // and make (if under the home tree) relative to home
 // [caller must copy-- volatile]
+wxDEPRECATED(
 WXDLLIMPEXP_BASE wxChar* wxContractPath(const wxString& filename,
                                    const wxString& envname = wxEmptyString,
-                                   const wxString& user = wxEmptyString);
+                                   const wxString& user = wxEmptyString) );
+    // DEPRECATED: use wxFileName::ReplaceEnvVariable and wxFileName::ReplaceHomeDir
 
 // Destructive removal of /./ and /../ stuff
-// FIXME-UTF8: deprecate these two (and similar)
-WXDLLIMPEXP_BASE char* wxRealPath(char *path);
-WXDLLIMPEXP_BASE wchar_t* wxRealPath(wchar_t *path);
-WXDLLIMPEXP_BASE wxString wxRealPath(const wxString& path);
+wxDEPRECATED( WXDLLIMPEXP_BASE char* wxRealPath(char *path) );
+wxDEPRECATED( WXDLLIMPEXP_BASE wchar_t* wxRealPath(wchar_t *path) );
+wxDEPRECATED( WXDLLIMPEXP_BASE wxString wxRealPath(const wxString& path) );
+    // DEPRECATED: use wxFileName::Normalize instead
 
 // Allocate a copy of the full absolute path
-WXDLLIMPEXP_BASE wxChar* wxCopyAbsolutePath(const wxString& path);
+wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* wxCopyAbsolutePath(const wxString& path) );
+    // DEPRECATED: use wxFileName::MakeAbsolute instead
+#endif
 
 // Get first file name matching given wild card.
 // Flags are reserved for future use.
@@ -708,12 +716,14 @@ inline bool wxIsPathSeparator(wxChar c)
 // does the string ends with path separator?
 WXDLLIMPEXP_BASE bool wxEndsWithPathSeparator(const wxString& filename);
 
+#if WXWIN_COMPATIBILITY_2_8
 // split the full path into path (including drive for DOS), name and extension
 // (understands both '/' and '\\')
-WXDLLIMPEXP_BASE void wxSplitPath(const wxString& fileName,
-                             wxString *pstrPath,
-                             wxString *pstrName,
-                             wxString *pstrExt);
+wxDEPRECATED( WXDLLIMPEXP_BASE void wxSplitPath(const wxString& fileName,
+                                                wxString *pstrPath,
+                                                wxString *pstrName,
+                                                wxString *pstrExt) );
+#endif
 
 // find a file in a list of directories, returns false if not found
 WXDLLIMPEXP_BASE bool wxFindFileInPath(wxString *pStr, const wxString& szPath, const wxString& szFile);
