@@ -32,7 +32,7 @@
 #include "wx/prntbase.h"
 #include "wx/generic/prntdlgg.h"
 #include "wx/paper.h"
-#include "wx/filefn.h"
+#include "wx/filename.h"
 #include "wx/stdpaths.h"
 
 #ifdef __WXMSW__
@@ -1708,7 +1708,7 @@ bool wxPostScriptDCImpl::StartDoc( const wxString& WXUNUSED(message) )
     {
         if (m_printData.GetFilename() == wxEmptyString)
         {
-            wxString filename = wxGetTempFileName( wxT("ps") );
+            wxString filename = wxFileName::CreateTempFileName( wxT("ps") );
             m_printData.SetFilename(filename);
         }
 
