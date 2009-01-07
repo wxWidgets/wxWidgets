@@ -353,6 +353,25 @@ public:
                            wxString* arguments = NULL);
 #endif
 
+#ifndef __WXWINCE__
+        // if the path contains the value of the environment variable named envname
+        // then this function replaces it with the string obtained from
+        //    wxString::Format(replacementFmtString, value_of_envname_variable)
+        //
+        // Example:
+        //    wxFileName fn("/usr/openwin/lib/someFile");
+        //    fn.ReplaceEnvVariable("OPENWINHOME");
+        //         // now fn.GetFullPath() == "$OPENWINHOME/lib/someFile"
+    bool ReplaceEnvVariable(const wxString& envname,
+                            const wxString& replacementFmtString = "$%s",
+                            wxPathFormat format = wxPATH_NATIVE);
+#endif
+
+        // replaces, if present in the path, the home directory for the given user
+        // (see wxGetHomeDir) with a tilde
+    bool ReplaceHomeDir(wxPathFormat format = wxPATH_NATIVE);
+
+
     // Comparison
 
         // compares with the rules of the given platforms format

@@ -36,7 +36,12 @@ enum wxPathFormat
 */
 enum wxPathNormalize
 {
-    wxPATH_NORM_ENV_VARS = 0x0001,  //!< Replace environment variables with their values.
+    //! Replace environment variables with their values.
+    //! wxFileName understands both Unix and Windows (but only under Windows) environment
+    //! variables expansion: i.e. @c "$var", @c "$(var)" and @c "${var}" are always understood
+    //! and in addition under Windows @c "%var%" is also.
+    wxPATH_NORM_ENV_VARS = 0x0001,
+
     wxPATH_NORM_DOTS     = 0x0002,  //!< Squeeze all @c ".." and @c "." and prepend the current working directory.
     wxPATH_NORM_TILDE    = 0x0004,  //!< Replace @c "~" and @c "~user" (Unix only).
     wxPATH_NORM_CASE     = 0x0008,  //!< If the platform is case insensitive, make lowercase the path.
@@ -923,6 +928,53 @@ public:
         Removes last directory component from the path.
     */
     void RemoveLastDir();
+
+    /**
+        If the path contains the value of the environment variable named @a envname
+        then this function replaces it with the string obtained from
+        wxString::Format(replacementFmtString, value_of_envname_variable).
+
+        This function is useful to make the path shorter or to make it dependent
+        from a certain environment variable.
+        Normalize() with @c wxPATH_NORM_ENV_VARS can perform the opposite of this
+        function (depending on the value of @a replacementFmtString).
+
+        The name and extension of this filename are not modified.
+
+        Example:
+        @code
+            wxFileName fn("/usr/openwin/lib/someFile");
+            fn.ReplaceEnvVariable("OPENWINHOME");
+                    // now fn.GetFullPath() == "$OPENWINHOME/lib/someFile"
+        @endcode
+
+        @since 2.9.0
+
+        @return @true if the operation was successful (which doesn't mean
+                that something was actually replaced, just that ::wxGetEnv
+                didn't fail).
+    */
+    bool ReplaceEnvVariable(const wxString& envname,
+                            const wxString& replacementFmtString = "$%s",
+                            wxPathFormat format = wxPATH_NATIVE);
+
+    /**
+        Replaces, if present in the path, the home directory for the given user
+        (see ::wxGetHomeDir) with a tilde (~).
+
+        Normalize() with @c wxPATH_NORM_TILDE performs the opposite of this
+        function.
+
+        The name and extension of this filename are not modified.
+
+        @since 2.9.0
+
+        @return @true if the operation was successful (which doesn't mean
+                that something was actually replaced, just that ::wxGetHomeDir
+                didn't fail).
+    */
+    bool ReplaceHomeDir(wxPathFormat format = wxPATH_NATIVE);
+
 
     /**
         Deletes the specified directory from the file system.

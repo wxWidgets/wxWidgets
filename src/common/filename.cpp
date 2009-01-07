@@ -1152,7 +1152,6 @@ bool wxFileName::Normalize(int flags,
         }
     }
 
-
     // the existing path components
     wxArrayString dirs = GetDirs();
 
@@ -1298,6 +1297,49 @@ bool wxFileName::Normalize(int flags,
             m_dirs[i].MakeLower();
         }
     }
+
+    return true;
+}
+
+#ifndef __WXWINCE__
+bool wxFileName::ReplaceEnvVariable(const wxString& envname,
+                                    const wxString& replacementFmtString,
+                                    wxPathFormat format)
+{
+    // look into stringForm for the contents of the given environment variable
+    wxString val;
+    if (envname.empty() ||
+        !wxGetEnv(envname, &val))
+        return false;
+    if (val.empty())
+        return false;
+
+    wxString stringForm = GetPath(wxPATH_GET_VOLUME, format);
+        // do not touch the file name and the extension
+
+    wxString replacement = wxString::Format(replacementFmtString, envname);
+    stringForm.Replace(val, replacement);
+
+    // Now assign ourselves the modified path:
+    Assign(stringForm, GetFullName(), format);
+
+    return true;
+}
+#endif
+
+bool wxFileName::ReplaceHomeDir(wxPathFormat format)
+{
+    wxString homedir = wxGetHomeDir();
+    if (homedir.empty())
+        return false;
+
+    wxString stringForm = GetPath(wxPATH_GET_VOLUME, format);
+        // do not touch the file name and the extension
+
+    stringForm.Replace(homedir, "~");
+
+    // Now assign ourselves the modified path:
+    Assign(stringForm, GetFullName(), format);
 
     return true;
 }

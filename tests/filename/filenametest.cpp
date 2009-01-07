@@ -120,8 +120,11 @@ private:
         CPPUNIT_TEST( TestComparison );
         CPPUNIT_TEST( TestSplit );
         CPPUNIT_TEST( TestSetPath );
+#if WXWIN_COMPATIBILITY_2_8
         CPPUNIT_TEST( TestStrip );
+#endif
         CPPUNIT_TEST( TestNormalize );
+        CPPUNIT_TEST( TestReplace );
 #ifdef __WINDOWS__
         CPPUNIT_TEST( TestShortLongPath );
 #endif // __WINDOWS__
@@ -131,8 +134,11 @@ private:
     void TestComparison();
     void TestSplit();
     void TestSetPath();
+#if WXWIN_COMPATIBILITY_2_8
     void TestStrip();
+#endif
     void TestNormalize();
+    void TestReplace();
 #ifdef __WINDOWS__
     void TestShortLongPath();
 #endif // __WINDOWS__
@@ -375,6 +381,80 @@ void FileNameTestCase::TestNormalize()
     }
 }
 
+void FileNameTestCase::TestReplace()
+{
+    static const struct FileNameTest
+    {
+        const char *original;
+        const char *env_contents;
+        const char *replace_fmtstring;
+        const char *expected;
+        wxPathFormat fmt;
+    } tests[] =
+    {
+        { "/usr/a/strange path/lib/someFile.ext", "/usr/a/strange path", "$%s", "$TEST_VAR/lib/someFile.ext", wxPATH_UNIX },
+        { "/usr/a/path/lib/someFile.ext", "/usr/a/path", "$%s", "$TEST_VAR/lib/someFile.ext", wxPATH_UNIX },
+        { "/usr/a/path/lib/someFile", "/usr/a/path/", "$%s", "$TEST_VARlib/someFile", wxPATH_UNIX },
+        { "/usr/a/path/lib/", "/usr/a/path/", "$(%s)", "$(TEST_VAR)lib/", wxPATH_UNIX },
+        { "/usr/a/path/lib/", "/usr/a/path/", "${{%s}}", "${{TEST_VAR}}lib/", wxPATH_UNIX },
+        { "/usr/a/path/lib/", "/usr/a/path/", "%s", "TEST_VARlib/", wxPATH_UNIX },
+        { "/usr/a/path/lib/", "/usr/a/path/", "%s//", "TEST_VAR/lib/", wxPATH_UNIX },
+            // note: empty directory components are automatically removed by wxFileName thus
+            //       using // in the replace format string has no effect
+
+        { "/usr/../a/path/lib/", "/usr/a/path/", "%s", "/usr/../a/path/lib/", wxPATH_UNIX },
+        { "/usr/a/path/usr/usr", "/usr", "%s", "TEST_VAR/a/pathTEST_VAR/usr", wxPATH_UNIX },
+        { "/usr/a/path/usr/usr", "/usr", "$%s", "$TEST_VAR/a/path$TEST_VAR/usr", wxPATH_UNIX },
+        { "/a/b/c/d", "a/", "%s", "/TEST_VARb/c/d", wxPATH_UNIX },
+
+        { "C:\\A\\Strange Path\\lib\\someFile", "C:\\A\\Strange Path", "%%%s%%", "%TEST_VAR%\\lib\\someFile", wxPATH_WIN },
+        { "C:\\A\\Path\\lib\\someFile", "C:\\A\\Path", "%%%s%%", "%TEST_VAR%\\lib\\someFile", wxPATH_WIN },
+        { "C:\\A\\Path\\lib\\someFile", "C:\\A\\Path", "$(%s)", "$(TEST_VAR)\\lib\\someFile", wxPATH_WIN }
+    };
+
+    for ( size_t i = 0; i < WXSIZEOF(tests); i++ )
+    {
+        const FileNameTest& fnt = tests[i];
+        wxFileName fn(fnt.original, fnt.fmt);
+
+        // set the environment variable
+        wxSetEnv(_T("TEST_VAR"), fnt.env_contents);
+
+        // be sure this ReplaceEnvVariable does not fail
+        WX_ASSERT_MESSAGE
+        (
+            ("#%d: ReplaceEnvVariable(%s) failed", (int)i, fnt.replace_fmtstring),
+            fn.ReplaceEnvVariable("TEST_VAR", fnt.replace_fmtstring, fnt.fmt)
+        );
+
+        // compare result with expected string
+        wxString expected(fnt.expected);
+        WX_ASSERT_EQUAL_MESSAGE
+        (
+            ("array element #%d", (int)i),
+            expected, fn.GetFullPath(fnt.fmt)
+        );
+    }
+
+    // now test ReplaceHomeDir
+
+    wxFileName fn = wxFileName::DirName(wxGetHomeDir());
+    fn.AppendDir("test1");
+    fn.AppendDir("test2");
+    fn.AppendDir("test3");
+    fn.SetName("some file");
+
+    WX_ASSERT_MESSAGE
+    (
+        ("ReplaceHomeDir(%s) failed", fn.GetFullPath()),
+        fn.ReplaceHomeDir()
+    );
+
+    CPPUNIT_ASSERT_EQUAL( wxString(_T("~/test1/test2/test3/some file")),
+                          fn.GetFullPath(wxPATH_UNIX) );
+}
+
+#if WXWIN_COMPATIBILITY_2_8
 wxString wxTestStripExtension(wxString szFile)
 {
     wxStripExtension(szFile);
@@ -392,6 +472,7 @@ void FileNameTestCase::TestStrip()
     CPPUNIT_ASSERT_EQUAL( wxString(_T("good")), wxTestStripExtension(_T("good.wav")) );
     CPPUNIT_ASSERT_EQUAL( wxString(_T("good.wav")), wxTestStripExtension(_T("good.wav.wav")) );
 }
+#endif
 
 #ifdef __WINDOWS__
 
