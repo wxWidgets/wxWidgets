@@ -902,6 +902,26 @@ public:
     void SetValidationFailureBehavior( int vfbFlags );
 
     /**
+        Sorts all properties.
+
+        @see SortChildren, wxPropertyGrid::SetSortFunction
+    */
+    void Sort();
+
+    /**
+        Sorts children of a property.
+
+        @param id
+            Name or pointer to a property.
+
+        @param recursively
+            If @true, then children are sorted recursively.
+
+        @see Sort, wxPropertyGrid::SetSortFunction
+    */
+    void SortChildren( wxPGPropArg id, bool recursively = false );
+
+    /**
         Returns editor pointer of editor with given name;
     */
     static wxPGEditor* GetEditorByName( const wxString& editorName );

@@ -306,6 +306,15 @@ wxArrayPGProperty GetPropertiesInRandomOrder( wxPropertyGridInterface* props, in
     return arr;
 }
 
+// Callback for testing property sorting
+int MyPropertySortFunction(wxPropertyGrid* WXUNUSED(propGrid),
+                           wxPGProperty* p1,
+                           wxPGProperty* p2)
+{
+    // Reverse alphabetical order
+    return p2->GetLabel().CmpNoCase( p1->GetBaseName() );
+}
+
 bool FormMain::RunTests( bool fullTest, bool interactive )
 {
     wxString t;
@@ -933,6 +942,51 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         pgman->AppendIn(origParent, p);
         pgman->Refresh();
         pgman->Update();
+    }
+
+    {
+        RT_START_TEST(SortFunction)
+
+        wxPGProperty* p;
+
+        // Make sure indexes are as supposed
+
+        p = pgman->GetProperty(wxT("User Name"));
+        if ( p->GetIndexInParent() != 3 )
+            RT_FAILURE();
+
+        p = pgman->GetProperty(wxT("User Id"));
+        if ( p->GetIndexInParent() != 2 )
+            RT_FAILURE();
+
+        p = pgman->GetProperty(wxT("User Home"));
+        if ( p->GetIndexInParent() != 1 )
+            RT_FAILURE();
+
+        p = pgman->GetProperty(wxT("Operating System"));
+        if ( p->GetIndexInParent() != 0 )
+            RT_FAILURE();
+
+        pgman->GetGrid()->SetSortFunction(MyPropertySortFunction);
+
+        pgman->GetGrid()->SortChildren(wxT("Environment"));
+
+        // Make sure indexes have been reversed
+        p = pgman->GetProperty(wxT("User Name"));
+        if ( p->GetIndexInParent() != 0 )
+            RT_FAILURE();
+
+        p = pgman->GetProperty(wxT("User Id"));
+        if ( p->GetIndexInParent() != 1 )
+            RT_FAILURE();
+
+        p = pgman->GetProperty(wxT("User Home"));
+        if ( p->GetIndexInParent() != 2 )
+            RT_FAILURE();
+
+        p = pgman->GetProperty(wxT("Operating System"));
+        if ( p->GetIndexInParent() != 3 )
+            RT_FAILURE();
     }
 
     {

@@ -301,6 +301,29 @@ class wxPGValidationInfo;
 #define wxPG_DEFAULT_IMAGE_SIZE             wxSize(-1, -1)
 
 
+/** This callback function is used for sorting properties.
+
+    Call wxPropertyGrid::SetSortFunction() to set it.
+
+    Sort function should return a value greater than 0 if position of p1 is
+    after p2. So, for instance, when comparing property names, you can use
+    following implementation:
+
+        @code
+            int MyPropertySortFunction(wxPropertyGrid* propGrid,
+                                       wxPGProperty* p1,
+                                       wxPGProperty* p2)
+            {
+                return p1->GetBaseName().compare( p2->GetBaseName() );
+            }
+        @endcode
+*/
+typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
+                                wxPGProperty* p1,
+                                wxPGProperty* p2);
+
+
+
 typedef wxString wxPGCachedString;
 
 /** @}

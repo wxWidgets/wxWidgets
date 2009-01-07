@@ -602,54 +602,82 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
 #if wxUSE_STL
 #include <algorithm>
 
-static bool wxPG_SortFunc(wxPGProperty *p1, wxPGProperty *p2)
+static bool wxPG_SortFunc_ByFunction(wxPGProperty *p1, wxPGProperty *p2)
 {
-    return p1->GetLabel() < p2->GetLabel();
+    wxPropertyGrid* pg = p1->GetGrid();
+    wxPGSortCallback sortFunction = pg->GetSortFunction();
+    return sortFunction(pg, p1, p2) < 0;
+}
+
+static bool wxPG_SortFunc_ByLabel(wxPGProperty *p1, wxPGProperty *p2)
+{
+    return p1->GetLabel().CmpNoCase( p2->GetLabel() ) < 0;
 }
 
 #else
 
-static int wxPG_SortFunc(wxPGProperty **p1, wxPGProperty **p2)
+static int wxPG_SortFunc_ByFunction(wxPGProperty **pp1, wxPGProperty **pp2)
 {
-    wxPGProperty *pp1 = *p1;
-    wxPGProperty *pp2 = *p2;
-    return pp1->GetLabel().compare( pp2->GetLabel() );
+    wxPGProperty *p1 = *pp1;
+    wxPGProperty *p2 = *pp2;
+    wxPropertyGrid* pg = p1->GetGrid();
+    wxPGSortCallback sortFunction = pg->GetSortFunction();
+    return sortFunction(pg, p1, p2);
+}
+
+static int wxPG_SortFunc_ByLabel(wxPGProperty **pp1, wxPGProperty **pp2)
+{
+    wxPGProperty *p1 = *pp1;
+    wxPGProperty *p2 = *pp2;
+    return p1->GetLabel().CmpNoCase( p2->GetLabel() );
 }
 
 #endif
 
-void wxPropertyGridPageState::SortChildren( wxPGProperty* p )
+void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
+                                              bool recursively )
 {
     if ( !p )
-        p = (wxPGProperty*)m_properties;
+        p = m_properties;
 
     if ( !p->GetChildCount() )
         return;
 
-    wxPGProperty* pwc = (wxPGProperty*)p;
-
     // Can only sort items with children
-    if ( pwc->GetChildCount() < 1 )
+    if ( p->GetChildCount() < 1 )
         return;
 
 #if wxUSE_STL
-    std::sort(pwc->m_children.begin(), pwc->m_children.end(), wxPG_SortFunc);
+    if ( GetGrid()->GetSortFunction() )
+        std::sort(p->m_children.begin(), p->m_children.end(),
+                  wxPG_SortFunc_ByFunction);
+    else
+        std::sort(p->m_children.begin(), p->m_children.end(),
+                  wxPG_SortFunc_ByLabel);
 #else
-    pwc->m_children.Sort( wxPG_SortFunc );
+    if ( GetGrid()->GetSortFunction() )
+        p->m_children.Sort( wxPG_SortFunc_ByFunction );
+    else
+        p->m_children.Sort( wxPG_SortFunc_ByLabel );
 #endif
 
     // Fix indexes
-    pwc->FixIndicesOfChildren();
+    p->FixIndicesOfChildren();
 
+    if ( recursively && !p->HasFlag(wxPG_PROP_AGGREGATE) )
+    {
+        for ( unsigned int i=0; i<p->GetChildCount(); i++ )
+            DoSortChildren(p->Item(i));
+    }
 }
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridPageState::Sort()
+void wxPropertyGridPageState::DoSort()
 {
-    SortChildren( m_properties );
+    DoSortChildren( m_properties, true );
 
-    // Sort categories as well
+    // Sort categories as well (but we need not do it recursively)
     if ( !IsInNonCatMode() )
     {
         size_t i;
@@ -657,7 +685,7 @@ void wxPropertyGridPageState::Sort()
         {
             wxPGProperty* p = m_properties->Item(i);
             if ( p->IsCategory() )
-                SortChildren( p );
+                DoSortChildren( p );
         }
     }
 }

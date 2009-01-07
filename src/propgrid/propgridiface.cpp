@@ -762,6 +762,25 @@ bool wxPropertyGridInterface::Expand( wxPGPropArg id )
 
 // -----------------------------------------------------------------------
 
+void wxPropertyGridInterface::Sort()
+{
+    wxPropertyGrid* pg = GetPropertyGrid();
+
+    pg->ClearSelection(false);
+
+    unsigned int pageIndex = 0;
+
+    for (;;)
+    {
+        wxPropertyGridPageState* page = GetPageState(pageIndex);
+        if ( !page ) break;
+        page->DoSort();
+        pageIndex++;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void wxPropertyGridInterface::SetPropertyLabel( wxPGPropArg id, const wxString& newproplabel )
 {
     wxPG_PROP_ARG_CALL_PROLOG()

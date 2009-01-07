@@ -462,6 +462,7 @@ void wxPropertyGrid::Init1()
     m_eventObject = this;
     m_curFocused = (wxWindow*) NULL;
     m_tlwHandler = NULL;
+    m_sortFunction = NULL;
     m_inDoPropertyChanged = 0;
     m_inCommitChangesFromEditor = 0;
     m_inDoSelectProperty = 0;
@@ -2288,24 +2289,6 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
     }
     else
         m_pState->m_itemsAdded = 1;
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::SortChildren( wxPGPropArg id )
-{
-    wxPG_PROP_ARG_CALL_PROLOG()
-
-    m_pState->SortChildren( p );
-}
-
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::Sort()
-{
-    ClearSelection(false);  // This must be before state clear
-
-    m_pState->Sort();
 }
 
 // -----------------------------------------------------------------------

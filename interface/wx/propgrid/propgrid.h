@@ -271,6 +271,27 @@ enum wxPG_KEYBOARD_ACTIONS
 /** @}
 */
 
+/** This callback function is used for sorting properties.
+
+    Call wxPropertyGrid::SetSortFunction() to set it.
+
+    Sort function should return a value greater than 0 if position of p1 is
+    after p2. So, for instance, when comparing property names, you can use
+    following implementation:
+
+        @code
+            int MyPropertySortFunction(wxPropertyGrid* propGrid,
+                                       wxPGProperty* p1,
+                                       wxPGProperty* p2)
+            {
+                return p1->GetBaseName().compare( p2->GetBaseName() );
+            }
+        @endcode
+*/
+typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
+                                wxPGProperty* p1,
+                                wxPGProperty* p2);
+
 // -----------------------------------------------------------------------
 
 /**
@@ -622,6 +643,13 @@ public:
     wxColour GetSelectionForegroundColour() const;
 
     /**
+        Returns the property sort function (default is @NULL).
+
+        @see SetSortFunction
+    */
+    wxPGSortCallback GetSortFunction() const;
+
+    /**
         Returns current splitter x position.
     */
     int GetSplitterPosition() const;
@@ -772,6 +800,33 @@ public:
     */
     void SetSelectionTextColour(const wxColour& col);
 
+
+    /**
+        Sets the property sorting function.
+
+        @param sortFunction
+            The sorting function to be used. It should return a value greater
+            than 0 if position of p1 is after p2. So, for instance, when
+            comparing property names, you can use following implementation:
+
+            @code
+                int MyPropertySortFunction(wxPropertyGrid* propGrid,
+                                           wxPGProperty* p1,
+                                           wxPGProperty* p2)
+                {
+                    return p1->GetBaseName().compare( p2->GetBaseName() );
+                }
+            @endcode
+
+        @remarks
+            Default property sort function sorts properties by their labels
+            (case-insensitively).
+
+        @see GetSortFunction, wxPropertyGridInterface::Sort,
+             wxPropertyGridInterface::SortChildren
+    */
+    void SetSortFunction( wxPGSortCallback sortFunction );
+
     /**
         Sets x coordinate of the splitter.
 
@@ -801,24 +856,6 @@ public:
         Shows an brief error message that is related to a property.
     */
     void ShowPropertyError( wxPGPropArg id, const wxString& msg );
-
-    /**
-        Sorts all items at all levels (except private children).
-
-        @remarks This functions deselects selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
-                selection is cleared even if editor had invalid value.
-    */
-    void Sort();
-
-    /**
-        Sorts children of a property.
-
-        @remarks This functions deselects selected property, if any. Validation
-                failure option wxPG_VFB_STAY_IN_PROPERTY is not respected, ie.
-                selection is cleared even if editor had invalid value.
-    */
-    void SortChildren( wxPGPropArg id );
 };
 
 

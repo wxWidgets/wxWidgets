@@ -1226,6 +1226,30 @@ public:
     */
     void SetValidationFailureBehavior( int vfbFlags );
 
+    /**
+        Sorts all properties.
+
+        @see SortChildren, wxPropertyGrid::SetSortFunction
+    */
+    void Sort();
+
+    /**
+        Sorts children of a property.
+
+        @param id
+            Name or pointer to a property.
+
+        @param recursively
+            If @true, then children are sorted recursively.
+
+        @see Sort, wxPropertyGrid::SetSortFunction
+    */
+    void SortChildren( wxPGPropArg id, bool recursively = false )
+    {
+        wxPG_PROP_ARG_CALL_PROLOG()
+        m_pState->DoSortChildren(p, recursively);
+    }
+
 #ifdef SWIG
     %pythoncode {
         def MapType(class_,factory):

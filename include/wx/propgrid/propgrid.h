@@ -1008,6 +1008,45 @@ public:
         m_iFlags |= wxPG_FL_SPLITTER_PRE_SET;
     }
 
+    /**
+        Sets the property sorting function.
+
+        @param sortFunction
+            The sorting function to be used. It should return a value greater
+            than 0 if position of p1 is after p2. So, for instance, when
+            comparing property names, you can use following implementation:
+
+            @code
+                int MyPropertySortFunction(wxPropertyGrid* propGrid,
+                                           wxPGProperty* p1,
+                                           wxPGProperty* p2)
+                {
+                    return p1->GetBaseName().compare( p2->GetBaseName() );
+                }
+            @endcode
+
+        @remarks
+            Default property sort function sorts properties by their labels
+            (case-insensitively).
+
+        @see GetSortFunction, wxPropertyGridInterface::Sort,
+             wxPropertyGridInterface::SortChildren
+    */
+    void SetSortFunction( wxPGSortCallback sortFunction )
+    {
+        m_sortFunction = sortFunction;
+    }
+
+    /**
+        Returns the property sort function (default is @NULL).
+
+        @see SetSortFunction
+    */
+    wxPGSortCallback GetSortFunction() const
+    {
+        return m_sortFunction;
+    }
+
     /** Set virtual width for this particular page. Width -1 indicates that the
         virtual width should be disabled. */
     void SetVirtualWidth( int width );
@@ -1040,13 +1079,6 @@ public:
         wxPG_PROP_ARG_CALL_PROLOG()
         DoShowPropertyError(p, msg);
     }
-
-    /** Sorts all items at all levels (except sub-properties). */
-    void Sort();
-
-    /** Sorts children of a category.
-    */
-    void SortChildren( wxPGPropArg id );
 
     /////////////////////////////////////////////////////////////////
     //
@@ -1576,6 +1608,9 @@ protected:
 
     // Top level parent
     wxWindow*           m_tlp;
+
+    // Sort function
+    wxPGSortCallback    m_sortFunction;
 
     // y coordinate of property that mouse hovering
     int                 m_propHoverY;

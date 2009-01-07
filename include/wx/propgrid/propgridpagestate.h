@@ -613,8 +613,8 @@ public:
     /** Set virtual width for this particular page. */
     void SetVirtualWidth( int width );
 
-    void SortChildren( wxPGProperty* p );
-    void Sort();
+    void DoSortChildren( wxPGProperty* p, bool recursively = false );
+    void DoSort();
 
     void SetSelection( wxPGProperty* p ) { m_selected = p; }
 
