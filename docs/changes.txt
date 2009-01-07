@@ -121,6 +121,8 @@ All (GUI):
 - Fixed wxHTML's line breaks handling in <pre> blocks broken in 2.8.8 (#10120).
 - wxHTML: don't include extra whitespace in table cells.
 - Implemented wxWindow::DragAcceptFiles() on all platforms.
+- Added wxAUI_MGR_LIVE_RESIZE flag to wxAuiManager and made it the default on
+  wxMac with CoreGraphics where sash drawing isn't implemented.
 
 All (Unix):
 

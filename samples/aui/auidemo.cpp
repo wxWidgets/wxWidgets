@@ -84,6 +84,7 @@ class MyFrame : public wxFrame
         ID_NoGradient,
         ID_VerticalGradient,
         ID_HorizontalGradient,
+        ID_LiveUpdate,
         ID_Settings,
         ID_CustomizeToolbar,
         ID_DropDownToolbarItem,
@@ -101,9 +102,9 @@ class MyFrame : public wxFrame
         ID_NotebookArtSimple,
         ID_NotebookAlignTop,
         ID_NotebookAlignBottom,
-        
+
         ID_SampleItem,
-        
+
         ID_FirstPerspective = ID_CreatePerspective+1000
     };
 
@@ -588,6 +589,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_HintFade, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NoVenetianFade, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentDrag, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_LiveUpdate, MyFrame::OnManagerFlag)
     EVT_MENU(ID_AllowActivePane, MyFrame::OnManagerFlag)
     EVT_MENU(ID_NotebookTabFixedWidth, MyFrame::OnNotebookFlag)
     EVT_MENU(ID_NotebookNoCloseButton, MyFrame::OnNotebookFlag)
@@ -634,6 +636,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(ID_HintFade, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NoVenetianFade, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_TransparentDrag, MyFrame::OnUpdateUI)
+    EVT_UPDATE_UI(ID_LiveUpdate, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_NoGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_VerticalGradient, MyFrame::OnUpdateUI)
     EVT_UPDATE_UI(ID_HorizontalGradient, MyFrame::OnUpdateUI)
@@ -696,6 +699,7 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->AppendCheckItem(ID_NoVenetianFade, _("Disable Venetian Blinds Hint Fade-in"));
     options_menu->AppendCheckItem(ID_TransparentDrag, _("Transparent Drag"));
     options_menu->AppendCheckItem(ID_AllowActivePane, _("Allow Active Pane"));
+    options_menu->AppendCheckItem(ID_LiveUpdate, _("Live Resize Update"));
     options_menu->AppendSeparator();
     options_menu->AppendRadioItem(ID_NoGradient, _("No Caption Gradient"));
     options_menu->AppendRadioItem(ID_VerticalGradient, _("Vertical Caption Gradient"));
@@ -753,7 +757,7 @@ MyFrame::MyFrame(wxWindow* parent,
 
 
     // prepare a few custom overflow elements for the toolbars' overflow buttons
-    
+
     wxAuiToolBarItemArray prepend_items;
     wxAuiToolBarItemArray append_items;
     wxAuiToolBarItem item;
@@ -816,7 +820,7 @@ MyFrame::MyFrame(wxWindow* parent,
 
 
     wxAuiToolBar* tb4 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                         wxAUI_TB_DEFAULT_STYLE | 
+                                         wxAUI_TB_DEFAULT_STYLE |
                                          wxAUI_TB_OVERFLOW |
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
@@ -1075,6 +1079,7 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         case ID_TransparentHint: flag = wxAUI_MGR_TRANSPARENT_HINT; break;
         case ID_VenetianBlindsHint: flag = wxAUI_MGR_VENETIAN_BLINDS_HINT; break;
         case ID_RectangleHint: flag = wxAUI_MGR_RECTANGLE_HINT; break;
+        case ID_LiveUpdate: flag = wxAUI_MGR_LIVE_RESIZE; break;
     }
 
     if (flag)
@@ -1187,6 +1192,9 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
             break;
         case ID_TransparentHint:
             event.Check((flags & wxAUI_MGR_TRANSPARENT_HINT) != 0);
+            break;
+        case ID_LiveUpdate:
+            event.Check((flags & wxAUI_MGR_LIVE_RESIZE) != 0);
             break;
         case ID_VenetianBlindsHint:
             event.Check((flags & wxAUI_MGR_VENETIAN_BLINDS_HINT) != 0);
@@ -1394,35 +1402,35 @@ void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
     if (evt.IsDropDownClicked())
     {
         wxAuiToolBar* tb = static_cast<wxAuiToolBar*>(evt.GetEventObject());
-        
+
         tb->SetToolSticky(evt.GetId(), true);
-        
+
         // create the popup menu
         wxMenu menuPopup;
-        
+
         wxBitmap bmp = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
-        
+
         wxMenuItem* m1 =  new wxMenuItem(&menuPopup, 101, _("Drop Down Item 1"));
         m1->SetBitmap(bmp);
         menuPopup.Append(m1);
-        
+
         wxMenuItem* m2 =  new wxMenuItem(&menuPopup, 101, _("Drop Down Item 2"));
         m2->SetBitmap(bmp);
         menuPopup.Append(m2);
-        
+
         wxMenuItem* m3 =  new wxMenuItem(&menuPopup, 101, _("Drop Down Item 3"));
         m3->SetBitmap(bmp);
         menuPopup.Append(m3);
-        
+
         wxMenuItem* m4 =  new wxMenuItem(&menuPopup, 101, _("Drop Down Item 4"));
         m4->SetBitmap(bmp);
         menuPopup.Append(m4);
-        
+
         // line up our menu with the button
         wxRect rect = tb->GetToolRect(evt.GetId());
         wxPoint pt = tb->ClientToScreen(rect.GetBottomLeft());
         pt = ScreenToClient(pt);
-        
+
 
         PopupMenu(&menuPopup, pt);
 
