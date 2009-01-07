@@ -78,8 +78,8 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
                 // otherwise they will not be erased/redrawn properly
                 const GtkAllocation& a1 = widget->allocation;
                 const GtkAllocation& a2 = *alloc;
-                const GdkRectangle r1 = { a1.x, a1.y, a1.width, a1.height };
-                const GdkRectangle r2 = { a2.x, a2.y, a2.width, a2.height };
+                GdkRectangle r1 = { a1.x, a1.y, a1.width, a1.height };
+                GdkRectangle r2 = { a2.x, a2.y, a2.width, a2.height };
                 gdk_window_invalidate_rect(widget->parent->window, &r1, false);
                 gdk_window_invalidate_rect(widget->parent->window, &r2, false);
             }
