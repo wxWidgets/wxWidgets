@@ -294,9 +294,10 @@ wxString wxPathList::FindAbsoluteValidPath (const wxString& file) const
 }
 
 // ----------------------------------------------------------------------------
-// miscellaneous global functions (TOFIX!)
+// miscellaneous global functions
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_8
 static inline wxChar* MYcopystring(const wxString& s)
 {
     wxChar* copy = new wxChar[s.length() + 1];
@@ -309,6 +310,7 @@ static inline CharType* MYcopystring(const CharType* s)
     CharType* copy = new CharType[wxStrlen(s) + 1];
     return wxStrcpy(copy, s);
 }
+#endif
 
 
 bool
