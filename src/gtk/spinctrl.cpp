@@ -52,7 +52,7 @@ gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrlGTKBase* win)
     {
         wxSpinEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, win->GetId());
         event.SetEventObject( win );
-        event.SetPosition((int)(win->m_value + 0.5)); // FIXME should be SetValue
+        event.SetPosition( wxRound(win->m_value) ); // FIXME should be SetValue
         event.SetString(GTK_ENTRY(spinbutton)->text);
         win->HandleWindowEvent( event );
     }
@@ -206,7 +206,7 @@ void wxSpinCtrlGTKBase::DoSetValue( double value )
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
     if (wxIsKindOf(this, wxSpinCtrl))
-        value = int(value + 0.5);
+        value = wxRound( value );
 
     GtkDisableEvents();
     gtk_spin_button_set_value( GTK_SPIN_BUTTON(m_widget), value);
