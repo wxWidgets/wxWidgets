@@ -1314,7 +1314,7 @@ public:
 
     virtual void * GetNativeContext();
 
-    bool SetLogicalFunction( int function );
+    bool SetLogicalFunction( wxRasterOperationMode function );
     //
     // transformation
     //
