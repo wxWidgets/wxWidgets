@@ -197,7 +197,7 @@ public:
 
         @return @true on success, @false if something went wrong.
     */
-    virtual bool AnyAddress() = 0;
+    bool AnyAddress();
 
     /**
         Internally, this is the same as setting the IP address to @b INADDR_BROADCAST.
@@ -243,7 +243,7 @@ public:
 
         @return @true on success, @false if something went wrong.
     */
-    virtual bool LocalHost() = 0;
+    bool LocalHost();
 
     /**
         Set the port to that corresponding to the specified service.

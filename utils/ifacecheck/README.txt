@@ -6,12 +6,12 @@
 
  This utility compares the wxWidgets real interface contained in the "include"
  hierarchy with the wxWidgets interface used for documentation purposes and
- kept in the @c interface hierarchy.
+ kept in the "interface" hierarchy.
 
  Ifacecheck warns about incoherences (mainly wrong prototype signatures) and
  can even correct them automatically. It uses the XML outputs of the gccxml utility
  (see http://www.gccxml.org) and of the Doxygen utility (see http://www.doxygen.org)
- to do the comparisons.
+ to do the comparison.
 
  It's explicitely designed for wxWidgets documentation needs and is probably of little
  use for anything else than wxWidgets docs reviewing.

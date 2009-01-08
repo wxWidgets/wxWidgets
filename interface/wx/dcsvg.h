@@ -378,7 +378,7 @@ public:
 
         @see SetMapMode()
     */
-    int GetMapMode() const;
+    wxMappingMode GetMapMode() const;
 
     //@{
     /**
@@ -606,7 +606,7 @@ public:
         - wxMM_LOMETRIC - Each logical unit is 1/10 of a mm.
         - wxMM_TEXT     - Each logical unit is 1 pixel.
     */
-    void SetMapMode(int mode);
+    void SetMapMode(wxMappingMode mode);
 
     /**
         Not implemented.

@@ -325,7 +325,7 @@ public:
             @true if a column was shown or hidden or @false if nothing was
             done, e.g. because the menu was cancelled.
      */
-    int ShowColumnsMenu(const wxPoint& pt, const wxString& title = wxString());
+    bool ShowColumnsMenu(const wxPoint& pt, const wxString& title = wxString());
 
     /**
         Helper function appending the checkable items corresponding to all the
@@ -554,14 +554,14 @@ public:
 
         @see AppendColumn()
      */
-    void InsertColumn(const wxHeaderColumn& col, unsigned int idx);
+    void InsertColumn(const wxHeaderColumnSimple& col, unsigned int idx);
 
     /**
         Append the column to the end of the control.
 
         @see InsertColumn()
      */
-    void AppendColumn(const wxHeaderColumn& col);
+    void AppendColumn(const wxHeaderColumnSimple& col);
 
     /**
         Delete the column at the given position.
@@ -612,7 +612,7 @@ public:
             ascending or descending sort order respectively, if @c -1 remove
             the currently shown sort indicator.
      */
-    virtual void ShowSortIndicator(unsigned int idx, int sortOrder);
+    void ShowSortIndicator(unsigned int idx, bool ascending = true);
 
     /**
         Remove the sort indicator from the given column.
@@ -622,7 +622,7 @@ public:
         @param idx
             The column to remove sort indicator for.
      */
-    void RemoveSortIndicator(unsigned int idx);
+    void RemoveSortIndicator();
 
 protected:
     /**

@@ -347,7 +347,7 @@ public:
         When using wxSTREAM_FILEEXT for the second parameter, the first parameter
         can be a complete filename rather than just an extension.
     */
-    bool CanHandle(const wxChar* protocol,
+    bool CanHandle(const wxString& protocol,
                    wxStreamProtocolType type = wxSTREAM_PROTOCOL) const;
 
     /**
@@ -366,7 +366,7 @@ public:
         translating meta-data. The initial default, set by the constructor,
         is wxConvLocal.
     */
-    wxMBConv GetConv() const;
+    wxMBConv& GetConv() const;
 
     /**
         Sets the wxMBConv object that the created streams will use when
@@ -400,8 +400,8 @@ public:
         Calls the static GetInternalName() function for the archive entry type,
         for example wxZipEntry::GetInternalName.
     */
-    wxString GetInternalName(const wxString& name,
-                             wxPathFormat format = wxPATH_NATIVE) const;
+    virtual wxString GetInternalName(const wxString& name,
+                                     wxPathFormat format = wxPATH_NATIVE) const = 0;
 
     /**
         Returns the wxFileSystem protocol supported by this factory.
@@ -424,7 +424,7 @@ public:
             list << *p << _T("\n");
         @endcode
     */
-    const wxChar* const* GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL) const;
+    virtual const wxChar** GetProtocols(wxStreamProtocolType type = wxSTREAM_PROTOCOL) const = 0;
 
     /**
         Create a new wxArchiveEntry object of the appropriate type.
@@ -499,7 +499,7 @@ public:
     /**
         This method must be overridden in your derived class.
     */
-    void OnEntryUpdated(class wxArchiveEntry& entry);
+    virtual void OnEntryUpdated(wxArchiveEntry& entry) = 0;
 };
 
 

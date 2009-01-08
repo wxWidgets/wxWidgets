@@ -285,7 +285,7 @@ public:
         This method is used to specify wxAuiManager's settings flags. @a flags
         specifies options which allow the frame management behavior to be modified.
     */
-    void SetFlags(int flags);
+    void SetFlags(unsigned int flags);
 
     /**
         Called to specify the frame or window which is to be managed by wxAuiManager.
@@ -731,7 +731,7 @@ public:
         SetFlag() turns the property given by flag on or off with the option_state
         parameter.
     */
-    wxAuiPaneInfo& SetFlag(unsigned int flag, bool option_state);
+    wxAuiPaneInfo& SetFlag(int flag, bool option_state);
 
     /**
         Show() indicates that a pane should be shown.

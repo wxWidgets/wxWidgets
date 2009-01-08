@@ -225,7 +225,7 @@ public:
         If the user-defined wxEVT_GRID_CELL_CHANGING event handler doesn't veto
         this change, ApplyEdit() will be called next.
     */
-    virtual bool EndEdit(int row, int col, wxGrid* grid) = 0;
+    virtual bool EndEdit(const wxString& oldval, wxString* newval) = 0;
 
     /**
         Effectively save the changes in the grid.
