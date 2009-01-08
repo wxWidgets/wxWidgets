@@ -68,7 +68,7 @@ public:
                      const wxString& dir = wxDirDialogDefaultFolderStr,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long style = wxDIRCTRL_3D_INTERNAL|wxBORDER_SUNKEN,
+                     long style = wxDIRCTRL_3D_INTERNAL,
                      const wxString& filter = wxEmptyString,
                      int defaultFilter = 0,
                      const wxString& name = wxTreeCtrlNameStr);

@@ -91,13 +91,13 @@ public:
     /**
         Constructor. See Create() for more info.
     */
-    wxHyperLink(wxWindow* parent, wxWindowID id,
-                const wxString& label,
-                const wxString& url,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxHL_DEFAULT_STYLE,
-                const wxString& name = "hyperlink");
+    wxHyperLinkCtrl(wxWindow* parent, wxWindowID id,
+                    const wxString& label,
+                    const wxString& url,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxHL_DEFAULT_STYLE,
+                    const wxString& name = wxHyperlinkCtrlNameStr);
 
     /**
         Creates the hyperlink control.

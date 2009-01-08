@@ -513,7 +513,7 @@ public:
     /**
         Sets the brush for filling paths.
     */
-    void SetBrush(const wxGraphicsBrush& brush);
+    virtual void SetBrush(const wxGraphicsBrush& brush);
 
     /**
         Sets the font for drawing text.
@@ -522,16 +522,16 @@ public:
     /**
         Sets the font for drawing text.
     */
-    void SetFont(const wxGraphicsFont& font);
+    virtual void SetFont(const wxGraphicsFont& font);
 
     /**
         Sets the pen used for stroking.
     */
-    void SetPen(const wxGraphicsPen& pen);
+    void SetPen(const wxPen& pen);
     /**
         Sets the pen used for stroking.
     */
-    void SetPen(const wxPen& pen);
+    virtual void SetPen(const wxGraphicsPen& pen);
 
     /**
         Sets the current transformation matrix of this context
@@ -547,13 +547,13 @@ public:
         Stroke disconnected lines from begin to end points, fastest method
         available for this purpose.
     */
-    void StrokeLines(size_t n, const wxPoint2DDouble* beginPoints,
-                     const wxPoint2DDouble* endPoints);
+    virtual void StrokeLines(size_t n, const wxPoint2DDouble* beginPoints,
+                             const wxPoint2DDouble* endPoints);
     /**
         Stroke disconnected lines from begin to end points, fastest method
         available for this purpose.
     */
-    void StrokeLines(size_t n, const wxPoint2DDouble* points);
+    virtual void StrokeLines(size_t n, const wxPoint2DDouble* points);
 
     /**
         Strokes along a path with the current pen.

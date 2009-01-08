@@ -428,7 +428,7 @@ public:
     /**
         The constructor is not normally used by the user code.
     */
-    wxHyperlinkEvent(int id, const wxHtmlLinkInfo& linkinfo);
+    wxHtmlLinkEvent(int id, const wxHtmlLinkInfo& linkinfo);
 
     /**
         Returns the wxHtmlLinkInfo which contains info about the cell clicked

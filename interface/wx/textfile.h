@@ -106,7 +106,7 @@ public:
 
         It will fail if the file already exists, Open() should be used in this case.
     */
-    bool Create() const;
+    bool Create();
 
     /**
         Creates the file with the given name.
@@ -114,7 +114,7 @@ public:
 
         It will fail if the file already exists, Open() should be used in this case.
     */
-    bool Create(const wxString& strFile) const;
+    bool Create(const wxString& strFile);
 
     /**
         Returns @true if the current line is the last one.

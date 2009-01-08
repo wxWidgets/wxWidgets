@@ -181,7 +181,7 @@ public:
         in the provided array.
         @a fillStyle parameter may have values @c wxWINDING_RULE or @c wxODDEVEN_RULE.
     */
-    wxRegion(size_t n, const wxPoint* points, int fillStyle = wxODDEVEN_RULE);
+    wxRegion(size_t n, const wxPoint* points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
     /**
         Constructs a region using a bitmap. See Union() for more details.
     */

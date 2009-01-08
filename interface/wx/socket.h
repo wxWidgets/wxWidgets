@@ -6,6 +6,98 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    @class wxIPaddress
+
+    wxIPaddress is an abstract base class for all internet protocol address
+    objects. Currently, only wxIPV4address is implemented. An experimental
+    implementation for IPV6, wxIPV6address, is being developed.
+
+    @library{wxbase}
+    @category{net}
+*/
+class wxIPaddress : public wxSockAddress
+{
+public:
+    /**
+        Internally, this is the same as setting the IP address to @b INADDR_ANY.
+
+        On IPV4 implementations, 0.0.0.0
+
+        On IPV6 implementations, ::
+
+        @return @true on success, @false if something went wrong.
+    */
+    bool AnyAddress();
+
+    /**
+        Internally, this is the same as setting the IP address to @b INADDR_BROADCAST.
+
+        On IPV4 implementations, 255.255.255.255
+
+        @return @true on success, @false if something went wrong.
+    */
+    virtual bool BroadcastAddress() = 0;
+
+    /**
+        Set the address to hostname, which can be a host name or an IP-style address
+        in a format dependent on implementation.
+
+        @return @true on success, @false if something goes wrong (invalid
+                hostname or invalid IP address).
+    */
+    bool Hostname(const wxString& hostname);
+
+    /**
+        Returns the hostname which matches the IP address.
+    */
+    wxString Hostname() const;
+
+    /**
+        Returns a wxString containing the IP address.
+    */
+    virtual wxString IPAddress() const = 0;
+
+    /**
+        Determines if current address is set to localhost.
+
+        @return @true if address is localhost, @false if internet address.
+    */
+    virtual bool IsLocalHost() const = 0;
+
+    /**
+        Set address to localhost.
+
+        On IPV4 implementations, 127.0.0.1
+
+        On IPV6 implementations, ::1
+
+        @return @true on success, @false if something went wrong.
+    */
+    bool LocalHost();
+
+    /**
+        Set the port to that corresponding to the specified service.
+
+        @return @true on success, @false if something goes wrong (invalid @a service).
+    */
+    bool Service(const wxString& service);
+
+    /**
+        Set the port to that corresponding to the specified service.
+
+        @return @true on success, @false if something goes wrong (invalid @a service).
+    */
+    bool Service(unsigned short service);
+
+    /**
+        Returns the current service.
+    */
+    unsigned short Service() const;
+};
+
+
 /**
     @class wxIPV4address
 
@@ -70,12 +162,12 @@ public:
 
         @return @true on success, @false if something goes wrong (invalid @a service).
     */
-    bool Service(unsigned short service) = 0;
+    bool Service(unsigned short service);
 
     /**
         Returns the current service.
     */
-    unsigned short Service() const = 0;
+    unsigned short Service() const;
 };
 
 
@@ -172,99 +264,6 @@ public:
     */
     bool WaitForAccept(long seconds = -1, long millisecond = 0);
 };
-
-
-
-/**
-    @class wxIPaddress
-
-    wxIPaddress is an abstract base class for all internet protocol address
-    objects. Currently, only wxIPV4address is implemented. An experimental
-    implementation for IPV6, wxIPV6address, is being developed.
-
-    @library{wxbase}
-    @category{net}
-*/
-class wxIPaddress : public wxSockAddress
-{
-public:
-    /**
-        Internally, this is the same as setting the IP address to @b INADDR_ANY.
-
-        On IPV4 implementations, 0.0.0.0
-
-        On IPV6 implementations, ::
-
-        @return @true on success, @false if something went wrong.
-    */
-    bool AnyAddress();
-
-    /**
-        Internally, this is the same as setting the IP address to @b INADDR_BROADCAST.
-
-        On IPV4 implementations, 255.255.255.255
-
-        @return @true on success, @false if something went wrong.
-    */
-    virtual bool BroadcastAddress() = 0;
-
-    /**
-        Set the address to hostname, which can be a host name or an IP-style address
-        in a format dependent on implementation.
-
-        @return @true on success, @false if something goes wrong (invalid
-                hostname or invalid IP address).
-    */
-    virtual bool Hostname(const wxString& hostname) = 0;
-
-    /**
-        Returns the hostname which matches the IP address.
-    */
-    virtual wxString Hostname() const = 0;
-
-    /**
-        Returns a wxString containing the IP address.
-    */
-    virtual wxString IPAddress() const = 0;
-
-    /**
-        Determines if current address is set to localhost.
-
-        @return @true if address is localhost, @false if internet address.
-    */
-    virtual bool IsLocalHost() const = 0;
-
-    /**
-        Set address to localhost.
-
-        On IPV4 implementations, 127.0.0.1
-
-        On IPV6 implementations, ::1
-
-        @return @true on success, @false if something went wrong.
-    */
-    bool LocalHost();
-
-    /**
-        Set the port to that corresponding to the specified service.
-
-        @return @true on success, @false if something goes wrong (invalid @a service).
-    */
-    virtual bool Service(const wxString& service) = 0;
-
-    /**
-        Set the port to that corresponding to the specified service.
-
-        @return @true on success, @false if something goes wrong (invalid @a service).
-    */
-    virtual bool Service(unsigned short service) = 0;
-
-    /**
-        Returns the current service.
-    */
-    virtual unsigned short Service() const = 0;
-};
-
 
 
 /**

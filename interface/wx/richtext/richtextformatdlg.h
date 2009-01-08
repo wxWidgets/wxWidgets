@@ -135,6 +135,10 @@ public:
             The pages to show.
         @param parent
             The dialog's parent.
+        @param title
+            The dialog's title.
+        @param id
+            The dialog's ID.
         @param pos
             The dialog's position.
         @param sz
@@ -142,10 +146,9 @@ public:
         @param style
             The dialog's window style.
     */
-    wxRichTextFormattingDialog(long flags, wxWindow* parent,
-                               const wxPoint& pos = wxDefaultPosition,
-                               const wxSize& sz = wxDefaultSize,
-                               long style = wxDEFAULT_DIALOG_STYLE);
+    wxRichTextFormattingDialog(long flags, wxWindow* parent, const wxString& title = "Formatting",
+                               wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+                               const wxSize& sz = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
 
     /**
         Destructor.

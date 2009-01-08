@@ -111,13 +111,6 @@ public:
                            const wxString& path = wxEmptyString);
 
     /**
-        Sets the frame's title format.
-
-        @a format must contain exactly one "%s" (it will be replaced by the page title).
-    */
-    void SetTitleFormat(const wxString& format);
-
-    /**
         Associates a wxConfig object with the help window. It is recommended that you
         use wxHtmlHelpController::UseConfig instead.
     */

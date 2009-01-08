@@ -160,7 +160,7 @@ public:
     wxToolBar(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
-              long style = wxTB_HORIZONTAL | wxBORDER_NONE,
+              long style = wxTB_HORIZONTAL,
               const wxString& name = wxToolBarNameStr);
 
     /**

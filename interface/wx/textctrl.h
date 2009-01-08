@@ -1044,7 +1044,7 @@ public:
         @see Create(), wxValidator
     */
     wxTextCtrl(wxWindow* parent, wxWindowID id,
-               const wxString& value = "",
+               const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,

@@ -301,11 +301,6 @@ public:
     /**
         Does nothing.
     */
-    void EndDrawing();
-
-    /**
-        Does nothing.
-    */
     void EndPage();
 
     /**
@@ -505,7 +500,7 @@ public:
         Returns @true if the DC is ok to use. @false values arise from being
         unable to write the file.
     */
-    bool Ok();
+    bool IsOk();
 
     /**
         Resets the bounding box. After a call to this function, the bounding

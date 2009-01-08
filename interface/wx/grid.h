@@ -480,7 +480,7 @@ public:
     /**
         Default constructor.
     */
-    wxGridCellAttr();
+    wxGridCellAttr(wxGridCellAttr* attrDefault = NULL);
     /**
         Constructor specifying some of the often used attributes.
     */
@@ -3434,8 +3434,7 @@ public:
     */
     wxGridEvent(int id, wxEventType type, wxObject* obj,
                 int row = -1, int col = -1, int x = -1, int y = -1,
-                bool sel = true, bool control = false, bool shift = false,
-                bool alt = false, bool meta = false);
+                bool sel = true, const wxKeyboardState& kbd = wxKeyboardState());
 
     /**
         Returns @true if the Alt key was down at the time of the event.
@@ -3516,8 +3515,7 @@ public:
     */
     wxGridSizeEvent(int id, wxEventType type, wxObject* obj,
                     int rowOrCol = -1, int x = -1, int y = -1,
-                    bool control = false, bool shift = false,
-                    bool alt = false, bool meta = false);
+                    const wxKeyboardState& kbd = wxKeyboardState());
 
     /**
         Returns @true if the Alt key was down at the time of the event.
@@ -3581,9 +3579,7 @@ public:
                            wxObject* obj,
                            const wxGridCellCoords& topLeft,
                            const wxGridCellCoords& bottomRight,
-                           bool sel = true, bool control = false,
-                           bool shift = false, bool alt = false,
-                           bool meta = false);
+                           bool sel = true, const wxKeyboardState& kbd = wxKeyboardState());
 
     /**
         Returns @true if the Alt key was down at the time of the event.
