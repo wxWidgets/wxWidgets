@@ -15,6 +15,7 @@
 #include "wx/textctrl.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
