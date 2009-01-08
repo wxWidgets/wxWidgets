@@ -1548,6 +1548,38 @@ gtk_window_motion_notify_callback( GtkWidget * WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 static gboolean
+window_scroll_event_hscrollbar(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
+{
+    if (gdk_event->direction != GDK_SCROLL_LEFT &&
+        gdk_event->direction != GDK_SCROLL_RIGHT)
+    {
+        return false;
+    }
+
+    wxMouseEvent event(wxEVT_MOUSEWHEEL);
+    InitMouseEvent(win, event, gdk_event);
+
+    GtkRange *range = win->m_scrollBar[wxWindow::ScrollDir_Horz];
+    if (!range) return FALSE;
+
+    if (range && GTK_WIDGET_VISIBLE (range))
+    {
+        GtkAdjustment *adj = range->adjustment;
+        gdouble delta = adj->step_increment * 3;
+        if (gdk_event->direction == GDK_SCROLL_LEFT)
+            delta = -delta;
+
+        gdouble new_value = CLAMP (adj->value + delta, adj->lower, adj->upper - adj->page_size);
+      
+        gtk_adjustment_set_value (adj, new_value);
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+static gboolean
 window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 {
     if (gdk_event->direction != GDK_SCROLL_UP &&
@@ -1567,7 +1599,27 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
     else
         event.m_wheelRotation = -120;
 
-    return win->GTKProcessEvent(event);
+    if (win->GTKProcessEvent(event))
+      return TRUE;
+      
+    GtkRange *range = win->m_scrollBar[wxWindow::ScrollDir_Vert];
+    if (!range) return FALSE;
+
+    if (range && GTK_WIDGET_VISIBLE (range))
+    {
+        GtkAdjustment *adj = range->adjustment;
+        gdouble delta = adj->step_increment * 3;
+        if (gdk_event->direction == GDK_SCROLL_UP)
+          delta = -delta;
+
+        gdouble new_value = CLAMP (adj->value + delta, adj->lower, adj->upper - adj->page_size);
+      
+        gtk_adjustment_set_value (adj, new_value);
+
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -1707,7 +1759,7 @@ gtk_scrollbar_value_changed(GtkRange* range, wxWindow* win)
 
         // find the scrollbar which generated the event
         wxWindowGTK::ScrollDir dir = win->ScrollDirFromRange(range);
-
+        
         // generate the corresponding wx event
         const int orient = wxWindow::OrientFromScrollDir(dir);
         wxScrollWinEvent event(eventType, win->GetScrollPos(orient), orient);
@@ -2356,8 +2408,16 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
                       G_CALLBACK (gtk_window_button_release_callback), this);
     g_signal_connect (widget, "motion_notify_event",
                       G_CALLBACK (gtk_window_motion_notify_callback), this);
+                      
     g_signal_connect (widget, "scroll_event",
                       G_CALLBACK (window_scroll_event), this);
+    if (m_scrollBar[ScrollDir_Horz])
+        g_signal_connect (m_scrollBar[ScrollDir_Horz], "scroll_event",
+                      G_CALLBACK (window_scroll_event_hscrollbar), this);
+    if (m_scrollBar[ScrollDir_Vert])
+        g_signal_connect (m_scrollBar[ScrollDir_Vert], "scroll_event",
+                      G_CALLBACK (window_scroll_event), this);
+                      
     g_signal_connect (widget, "popup_menu",
                      G_CALLBACK (wxgtk_window_popup_menu_callback), this);
     g_signal_connect (widget, "enter_notify_event",
@@ -4097,7 +4157,7 @@ void wxWindowGTK::SetScrollbar(int orient,
 
     GtkAdjustment * const adj = sb->adjustment;
     adj->step_increment = 1;
-    adj->page_increment =
+    adj->page_increment = 
     adj->page_size = thumbVisible;
     adj->value = pos;
 
@@ -4216,7 +4276,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
-
+    
     m_clipPaintRegion = true;
 
     WX_PIZZA(m_wxwindow)->scroll(dx, dy);
