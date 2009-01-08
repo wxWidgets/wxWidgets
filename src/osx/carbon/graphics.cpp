@@ -1145,7 +1145,7 @@ public :
     // gets the bounding box enclosing all points (possibly including control points)
     virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *y) const;
 
-    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const;
+    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const;
 private :
     CGMutablePathRef m_path;
 };

@@ -65,7 +65,7 @@ wxRegion::wxRegion(const wxRect& rect)
 {
 }
 
-wxRegion::wxRegion(size_t n, const wxPoint *points, int fillStyle)
+wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
 {
 }
 

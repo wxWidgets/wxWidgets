@@ -21,7 +21,7 @@ public:
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
     wxRegion( WXHRGN hRegion );
-    wxRegion(size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
+    wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
     wxRegion();
     wxRegion(const wxBitmap& bmp)
     {

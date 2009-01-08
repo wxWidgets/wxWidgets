@@ -23,7 +23,7 @@ public:
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
     wxRegion(const MGLRegion& region);
-    wxRegion(size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
+    wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
     wxRegion(const wxBitmap& bmp)
     {
         Union(bmp);

@@ -28,7 +28,7 @@ public:
             );
     wxRegion(const wxRect& rRect);
     wxRegion(WXHRGN hRegion, WXHDC hPS); // Hangs on to this region
-    wxRegion(size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
+    wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
     wxRegion( const wxBitmap& bmp)
     {
         Union(bmp);

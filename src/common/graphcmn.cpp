@@ -257,7 +257,7 @@ wxRect2DDouble wxGraphicsPath::GetBox() const
     return wxRect2DDouble( x,y,w,h );
 }
 
-bool wxGraphicsPath::Contains( const wxPoint2DDouble& c, int fillStyle ) const
+bool wxGraphicsPath::Contains( const wxPoint2DDouble& c, wxPolygonFillMode fillStyle ) const
 {
     return Contains( c.m_x, c.m_y, fillStyle);
 }
@@ -383,7 +383,7 @@ void wxGraphicsPath::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) 
     GetPathData()->GetBox(x,y,w,h);
 }
 
-bool wxGraphicsPath::Contains( wxDouble x, wxDouble y, int fillStyle ) const
+bool wxGraphicsPath::Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle ) const
 {
     return GetPathData()->Contains(x,y,fillStyle);
 }
@@ -607,7 +607,7 @@ void wxGraphicsContext::SetFont( const wxFont& font, const wxColour& colour )
         SetFont( wxNullGraphicsFont );
 }
 
-void wxGraphicsContext::DrawPath( const wxGraphicsPath& path, int fillStyle )
+void wxGraphicsContext::DrawPath( const wxGraphicsPath& path, wxPolygonFillMode fillStyle )
 {
     FillPath( path , fillStyle );
     StrokePath( path );
@@ -722,7 +722,7 @@ void wxGraphicsContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
     StrokePath( path );
 }
 
-void wxGraphicsContext::DrawLines( size_t n, const wxPoint2DDouble *points, int fillStyle)
+void wxGraphicsContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode fillStyle)
 {
     wxASSERT(n > 1);
     wxGraphicsPath path = CreatePath();

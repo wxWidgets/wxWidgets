@@ -165,7 +165,7 @@ public :
     // gets the bounding box enclosing all points (possibly including control points)
     virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const;
 
-    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxWINDING_RULE) const;
+    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxWINDING_RULE) const;
 
 private :
     cairo_t* m_pathContext;
@@ -348,7 +348,7 @@ public:
     virtual bool SetLogicalFunction( wxRasterOperationMode function );
 
     virtual void StrokePath( const wxGraphicsPath& p );
-    virtual void FillPath( const wxGraphicsPath& p , int fillStyle = wxWINDING_RULE );
+    virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE );
 
     virtual void Translate( wxDouble dx , wxDouble dy );
     virtual void Scale( wxDouble xScale , wxDouble yScale );
@@ -879,7 +879,7 @@ void wxCairoPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h)
     }
 }
 
-bool wxCairoPathData::Contains( wxDouble x, wxDouble y, int WXUNUSED(fillStyle) ) const
+bool wxCairoPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillMode WXUNUSED(fillStyle) ) const
 {
     return cairo_in_stroke( m_pathContext, x, y) != 0;
 }
@@ -1223,7 +1223,7 @@ void wxCairoContext::StrokePath( const wxGraphicsPath& path )
     }
 }
 
-void wxCairoContext::FillPath( const wxGraphicsPath& path , int fillStyle )
+void wxCairoContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode fillStyle )
 {
     if ( !m_brush.IsNull() )
     {

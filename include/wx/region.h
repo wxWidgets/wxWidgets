@@ -67,7 +67,7 @@ public:
     wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
-    wxRegion(size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE);
+    wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
     wxRegion(const wxBitmap& bmp);
     wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance = 0);
 #endif // 0

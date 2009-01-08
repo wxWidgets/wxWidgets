@@ -256,8 +256,8 @@ public:
     virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h)const;
     wxRect2DDouble GetBox()const;
 
-    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE)const;
-    bool Contains( const wxPoint2DDouble& c, int fillStyle = wxODDEVEN_RULE)const;
+    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE)const;
+    bool Contains( const wxPoint2DDouble& c, wxPolygonFillMode fillStyle = wxODDEVEN_RULE)const;
 
     const wxGraphicsPathData* GetPathData() const
     { return (const wxGraphicsPathData*) GetRefData(); }
@@ -419,10 +419,10 @@ public:
     virtual void StrokePath( const wxGraphicsPath& path ) = 0;
 
     // fills a path with the current brush
-    virtual void FillPath( const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE ) = 0;
+    virtual void FillPath( const wxGraphicsPath& path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) = 0;
 
     // draws a path by first filling and then stroking
-    virtual void DrawPath( const wxGraphicsPath& path, int fillStyle = wxODDEVEN_RULE );
+    virtual void DrawPath( const wxGraphicsPath& path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
     //
     // text
@@ -474,7 +474,7 @@ public:
     virtual void StrokeLines( size_t n, const wxPoint2DDouble *beginPoints, const wxPoint2DDouble *endPoints);
 
     // draws a polygon
-    virtual void DrawLines( size_t n, const wxPoint2DDouble *points, int fillStyle = wxODDEVEN_RULE );
+    virtual void DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
     // draws a polygon
     virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h);

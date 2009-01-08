@@ -15,7 +15,7 @@
 #if wxUSE_GRAPHICS_CONTEXT
 
 #include "wx/graphics.h"
- 
+
 class WXDLLIMPEXP_CORE wxGraphicsObjectRefData : public wxObjectRefData
 {
     public :
@@ -23,7 +23,7 @@ class WXDLLIMPEXP_CORE wxGraphicsObjectRefData : public wxObjectRefData
     wxGraphicsObjectRefData( const wxGraphicsObjectRefData* data );
     wxGraphicsRenderer* GetRenderer() const ;
     virtual wxGraphicsObjectRefData* Clone() const ;
-    
+
     protected :
     wxGraphicsRenderer* m_renderer;
 } ;
@@ -31,7 +31,7 @@ class WXDLLIMPEXP_CORE wxGraphicsObjectRefData : public wxObjectRefData
 class WXDLLIMPEXP_CORE wxGraphicsMatrixData : public wxGraphicsObjectRefData
 {
 public :
-    wxGraphicsMatrixData( wxGraphicsRenderer* renderer) : 
+    wxGraphicsMatrixData( wxGraphicsRenderer* renderer) :
        wxGraphicsObjectRefData(renderer) {}
 
        virtual ~wxGraphicsMatrixData() {}
@@ -40,13 +40,13 @@ public :
        virtual void Concat( const wxGraphicsMatrixData *t ) = 0;
 
        // sets the matrix to the respective values
-       virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+       virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
            wxDouble tx=0.0, wxDouble ty=0.0) = 0;
 
        // gets the component valuess of the matrix
        virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
                         wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const = 0;
-       
+
        // makes this the inverse matrix
        virtual void Invert() = 0;
 
@@ -67,7 +67,7 @@ public :
        virtual void Scale( wxDouble xScale , wxDouble yScale ) = 0;
 
        // add the rotation to this matrix (radians)
-       virtual void Rotate( wxDouble angle ) = 0;  
+       virtual void Rotate( wxDouble angle ) = 0;
 
        //
        // apply the transforms
@@ -96,7 +96,7 @@ public :
     // begins a new subpath at (x,y)
     virtual void MoveToPoint( wxDouble x, wxDouble y ) = 0;
 
-    // adds a straight line from the current point to (x,y) 
+    // adds a straight line from the current point to (x,y)
     virtual void AddLineToPoint( wxDouble x, wxDouble y ) = 0;
 
     // adds a cubic Bezier curve from the current point, using two control points and an end point
@@ -115,14 +115,14 @@ public :
     virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) = 0;
 
     //
-    // These are convenience functions which - if not available natively will be assembled 
+    // These are convenience functions which - if not available natively will be assembled
     // using the primitives from above
     //
 
     // adds a quadratic Bezier curve from the current point, using a control point and an end point
     virtual void AddQuadCurveToPoint( wxDouble cx, wxDouble cy, wxDouble x, wxDouble y );
 
-    // appends a rectangle as a new closed subpath 
+    // appends a rectangle as a new closed subpath
     virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
 
     // appends an ellipsis as a new closed subpath fitting the passed rectangle
@@ -149,7 +149,7 @@ public :
     // gets the bounding box enclosing all points (possibly including control points)
     virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const=0;
 
-    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const=0;
+    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const=0;
 };
 
 #endif

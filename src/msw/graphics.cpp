@@ -145,7 +145,7 @@ public :
     // gets the bounding box enclosing all points (possibly including control points)
     virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const;
 
-    virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const;
+    virtual bool Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxODDEVEN_RULE) const;
 
 private :
     GraphicsPath* m_path;
@@ -296,13 +296,13 @@ public:
     virtual void * GetNativeContext();
 
     virtual void StrokePath( const wxGraphicsPath& p );
-    virtual void FillPath( const wxGraphicsPath& p , int fillStyle = wxODDEVEN_RULE );
+    virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
 	// stroke lines connecting each of the points
     virtual void StrokeLines( size_t n, const wxPoint2DDouble *points);
 
     // draws a polygon
-    virtual void DrawLines( size_t n, const wxPoint2DDouble *points, int fillStyle = wxODDEVEN_RULE );
+    virtual void DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
     virtual void Translate( wxDouble dx , wxDouble dy );
     virtual void Scale( wxDouble xScale , wxDouble yScale );
@@ -878,7 +878,7 @@ void wxGDIPlusPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *
     *h = bounds.Height;
 }
 
-bool wxGDIPlusPathData::Contains( wxDouble x, wxDouble y, int fillStyle ) const
+bool wxGDIPlusPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle ) const
 {
     m_path->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
     return m_path->IsVisible( (FLOAT) x,(FLOAT) y) == TRUE ;
@@ -1125,7 +1125,7 @@ void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
 	}
 }
 
-void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, int WXUNUSED(fillStyle) )
+void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode WXUNUSED(fillStyle) )
 {
     wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
 	Point *cpoints = new Point[n];
@@ -1151,7 +1151,7 @@ void wxGDIPlusContext::StrokePath( const wxGraphicsPath& path )
     }
 }
 
-void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , int fillStyle )
+void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode fillStyle )
 {
     if ( !m_brush.IsNull() )
     {
