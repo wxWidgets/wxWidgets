@@ -425,7 +425,7 @@ void wxWrapSizer::CalcMinFromMinor(int totMinor)
             wxSizerItem *item = node->GetData();
             if ( item->IsShown() )
             {
-                sz = item->GetMinSize();
+                sz = item->GetMinSizeWithBorder();
                 if ( line->m_width+SizeInMajorDir(sz)>lineSize )
                 {
                     line = new wxWrapLine;
@@ -458,7 +458,7 @@ void wxWrapSizer::CalcMinFromMinor(int totMinor)
                 // Take what is not used on this line, see how much extension we get
                 // by adding first item on next line.
                 int size = lineSize-lines[ix]->m_width; // Left over at end of this line
-                int extSize = GetSizeInMajorDir(lines[ix+1]->m_first->GetMinSize()) - size;
+                int extSize = GetSizeInMajorDir(lines[ix+1]->m_first->GetMinSizeWithBorder()) - size;
                 if ( (extSize>=tailSize && (extSize<bestExtSize || bestExtSize<tailSize)) ||
                     (extSize>bestExtSize && bestExtSize<tailSize) )
                     bestExtSize = extSize;
@@ -527,7 +527,7 @@ void wxWrapSizer::RecalcSizes()
         if ( !item->IsShown() )
             continue;
 
-        wxSize minItemSize = item->GetMinSize();
+        wxSize minItemSize = item->GetMinSizeWithBorder();
         const int itemMajor = SizeInMajorDir(minItemSize);
         const int itemMinor = SizeInMinorDir(minItemSize);
         if ( itemMajor > 0 && itemMajor < m_minItemMajor )

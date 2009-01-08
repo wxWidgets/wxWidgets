@@ -73,7 +73,7 @@ END_EVENT_TABLE()
 // Define my frame constructor
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, _T("wxWidgets Layout Demo"),
-                 wxDefaultPosition, wxDefaultSize,
+                 wxPoint(30,30), wxDefaultSize,
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
   // Make a menubar
@@ -85,7 +85,7 @@ MyFrame::MyFrame()
   file_menu->Append(LAYOUT_TEST_GB_SIZER, _T("Test &gridbag sizer...\tF4"));
   file_menu->Append(LAYOUT_TEST_SET_MINIMAL, _T("Test Set&ItemMinSize...\tF5"));
   file_menu->Append(LAYOUT_TEST_NESTED, _T("Test nested sizer in a wxPanel...\tF6"));
-  file_menu->Append(LAYOUT_TEST_WRAP, _T("Test wrap sizers...\tF6"));
+  file_menu->Append(LAYOUT_TEST_WRAP, _T("Test wrap sizers...\tF7"));
 
   file_menu->AppendSeparator();
   file_menu->Append(LAYOUT_QUIT, _T("E&xit"), _T("Quit program"));
@@ -118,6 +118,12 @@ MyFrame::MyFrame()
   topsizer->Add(
     new wxStaticText( p, wxID_ANY, _T("An explanation (wxALIGN_RIGHT).") ),
     wxSizerFlags().Align(wxALIGN_RIGHT).Border(wxALL & ~wxBOTTOM, 5));
+  topsizer->Add(
+    new wxStaticText( p, wxID_ANY, _T("An explanation (wxALIGN_LEFT).") ),
+    wxSizerFlags().Align(wxALIGN_LEFT).Border(wxALL & ~wxBOTTOM, 5));
+  topsizer->Add(
+    new wxStaticText( p, wxID_ANY, _T("An explanation (wxALIGN_CENTRE_HORIZONTAL).") ),
+    wxSizerFlags().Align(wxALIGN_CENTRE_HORIZONTAL).Border(wxALL & ~wxBOTTOM, 5));
 
   // 2) top: create wxTextCtrl with minimum size (100x60)
   topsizer->Add(
@@ -129,7 +135,7 @@ MyFrame::MyFrame()
     new wxStaticBox(p, wxID_ANY, _T("A wxStaticBoxSizer")), wxVERTICAL );
   statsizer->Add(
     new wxStaticText(p, wxID_ANY, _T("And some TEXT inside it")),
-    wxSizerFlags().Center().Border(wxALL, 30));
+    wxSizerFlags().Border(wxALL, 30));
   topsizer->Add(
     statsizer,
     wxSizerFlags(1).Expand().Border(wxALL, 10));
@@ -671,7 +677,7 @@ MyNestedSizerFrame::MyNestedSizerFrame(const wxString &title, int x, int y )
 
 
 MyWrapSizerFrame::MyWrapSizerFrame(const wxString &title, int x, int y )
-    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y) )
+    : wxFrame( NULL, wxID_ANY, title, wxPoint(x, y), wxSize(200,-1) )
 {
     wxMenu *menu = new wxMenu;
 
@@ -684,12 +690,25 @@ MyWrapSizerFrame::MyWrapSizerFrame(const wxString &title, int x, int y )
 
     wxBoxSizer *root = new wxBoxSizer( wxVERTICAL );
 
+#if 0
+    wxSizer *row = new wxWrapSizer;
+    int i;
+    for (i = 0; i < 4; i++)
+       row->Add( new wxButton( this, -1, "Hello" ), 0, wxALL, 10 );
+    root->Add( row, 0, wxGROW );
+ 
+    row = new wxWrapSizer;
+    for (i = 0; i < 4; i++)
+       row->Add( new wxButton( this, -1, "Hello" ) );
+    root->Add( row, 0, wxGROW );
+ 
+#else
     // A number of checkboxes inside a wrap sizer 
     wxSizer *ps_mid = new wxStaticBoxSizer( wxVERTICAL, this, "Wrapping check-boxes" );
     wxSizer *ps_mid_wrap = new wxWrapSizer(wxHORIZONTAL);
     ps_mid->Add( ps_mid_wrap, 100, wxEXPAND );
     for( int ix=0; ix<6; ix++ )
-            ps_mid_wrap->Add( new wxCheckBox(this,wxID_ANY,wxString::Format("Option %d",ix+1)), 0, wxALIGN_CENTRE|wxALIGN_CENTER_VERTICAL, 5 );
+            ps_mid_wrap->Add( new wxCheckBox(this,wxID_ANY,wxString::Format("Option %d",ix+1)), 0, wxALIGN_CENTRE|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
     root->Add( ps_mid, 0, wxEXPAND | wxALL, 5 );
 
     // A shaped item inside a box sizer
@@ -701,6 +720,7 @@ MyWrapSizerFrame::MyWrapSizerFrame(const wxString &title, int x, int y )
     ps_bottom_box->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), 100, 0, 5 );
     
     root->Add( ps_bottom, 1, wxEXPAND | wxALL, 5 );
+#endif
         
     // Set sizer for window
     SetSizerAndFit( root );
