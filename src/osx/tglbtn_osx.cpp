@@ -115,6 +115,9 @@ bool wxBitmapToggleButton::Create(wxWindow *parent, wxWindowID id,
     
     m_bitmap = label;
     
+    m_marginX =
+    m_marginY = wxDEFAULT_BUTTON_MARGIN;
+    
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
         
@@ -129,8 +132,12 @@ wxSize wxBitmapToggleButton::DoGetBestSize() const
 {
     if (!m_bitmap.IsOk())
        return wxSize(20,20);
-       
-    return wxSize ( m_bitmap.GetWidth()+6, m_bitmap.GetHeight()+6 ) ;
+
+    wxSize best;
+    best.x = m_bitmap.GetWidth() + 2 * m_marginX;
+    best.y = m_bitmap.GetHeight() + 2 * m_marginY;
+
+    return best;
 }
 
 void wxBitmapToggleButton::SetValue(bool val)
