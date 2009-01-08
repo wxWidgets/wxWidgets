@@ -356,7 +356,7 @@ public:
     virtual void * GetNativeContext() = 0;
 
     // returns the current logical function
-    virtual wxRasterModeOperation GetLogicalFunction() const { return m_logicalFunction; }
+    virtual wxRasterOperationMode GetLogicalFunction() const { return m_logicalFunction; }
 
     // sets the current logical function, returns true if it supported
     virtual bool SetLogicalFunction(wxRasterOperationMode function);
