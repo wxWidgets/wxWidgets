@@ -1256,7 +1256,7 @@ void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wx
     *h = bounds.size.height;
 }
 
-bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, int fillStyle) const
+bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillMode fillStyle) const
 {
     return CGPathContainsPoint( m_path, NULL, CGPointMake((CGFloat) x,(CGFloat) y), fillStyle == wxODDEVEN_RULE );
 }
@@ -1344,10 +1344,10 @@ public:
     virtual void StrokePath( const wxGraphicsPath &path );
 
     // fills a path with the current brush
-    virtual void FillPath( const wxGraphicsPath &path, int fillStyle = wxODDEVEN_RULE );
+    virtual void FillPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
     // draws a path by first filling and then stroking
-    virtual void DrawPath( const wxGraphicsPath &path, int fillStyle = wxODDEVEN_RULE );
+    virtual void DrawPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
     virtual bool ShouldOffset() const
     {
@@ -1732,7 +1732,7 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     CGContextStrokePath( m_cgContext );
 }
 
-void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , int fillStyle )
+void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonFillMode fillStyle )
 {
     if ( !m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
@@ -1781,7 +1781,7 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , int fillSt
     CGContextDrawPath( m_cgContext , mode );
 }
 
-void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , int fillStyle )
+void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonFillMode fillStyle )
 {
     if ( m_brush.IsNull() )
         return;
