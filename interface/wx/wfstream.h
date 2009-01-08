@@ -23,6 +23,8 @@ class wxTempFileOutputStream : public wxOutputStream
 public:
     /**
         Associates wxTempFileOutputStream with the file to be replaced and opens it.
+
+        @warning
         You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
 
         Call Commit() or wxOutputStream::Close() to replace the old file and close
@@ -69,7 +71,10 @@ class wxFFileOutputStream : public wxOutputStream
 {
 public:
     /**
-        Initializes a file stream in write-only mode using the file descriptor @e fp.
+        Open the given file @a filename with mode @a mode.
+
+        @warning
+        You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
     wxFFileOutputStream(const wxString& filename,
                         const wxString& mode = "wb");
@@ -116,7 +121,10 @@ class wxFileOutputStream : public wxOutputStream
 {
 public:
     /**
-        Creates a new file with ofilename name and initializes the stream in write-only mode.
+        Creates a new file with @a ofileName name and initializes the stream in write-only mode.
+        
+        @warning
+        You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
     wxFileOutputStream(const wxString& ofileName);
 
@@ -162,7 +170,10 @@ class wxFileInputStream : public wxInputStream
 {
 public:
     /**
-        Opens the specified file using its ifilename name in read-only mode.
+        Opens the specified file using its @a ifileName name in read-only mode.
+        
+        @warning
+        You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
     wxFileInputStream(const wxString& ifileName);
 
@@ -208,7 +219,10 @@ class wxFFileInputStream : public wxInputStream
 {
 public:
     /**
-        Opens the specified file using its filename name using the specified mode.
+        Opens the specified file using its @a filename name using the specified @a mode.
+
+        @warning
+        You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
     wxFFileInputStream(const wxString& filename,
                        const wxString& mode = "rb");
@@ -250,8 +264,11 @@ class wxFFileStream : public wxFFileOutputStream
 {
 public:
     /**
-        Initializes a new file stream in read-write mode using the specified
-        @a iofilename name.
+        Initializes a new file stream in the given @a mode using the specified
+        @a iofileName name.
+        
+        @warning
+        You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
     wxFFileStream(const wxString& iofileName, const wxString& mode = "w+b");
 };
@@ -273,7 +290,10 @@ class wxFileStream : public wxFileOutputStream
 public:
     /**
         Initializes a new file stream in read-write mode using the specified
-        @a iofilename name.
+        @a iofileName name.
+        
+        @warning
+        You should use wxStreamBase::IsOk() to verify if the constructor succeeded.
     */
     wxFileStream(const wxString& iofileName);
 };

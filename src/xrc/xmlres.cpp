@@ -497,7 +497,7 @@ bool wxXmlResource::UpdateResources()
                 delete rec->Doc;
                 rec->Doc = new wxXmlDocument;
             }
-            if (!stream || !rec->Doc->Load(*stream, encoding))
+            if (!stream || !stream->IsOk() || !rec->Doc->Load(*stream, encoding))
             {
                 wxLogError(_("Cannot load resources from file '%s'."),
                            rec->File);

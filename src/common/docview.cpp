@@ -609,7 +609,7 @@ bool wxDocument::DoOpenDocument(const wxString& file)
     if ( !store )
 #else
     wxFileInputStream store(file);
-    if (store.GetLastError() != wxSTREAM_NO_ERROR)
+    if (store.GetLastError() != wxSTREAM_NO_ERROR || !store.IsOk())
 #endif
     {
         wxLogError(_("File \"%s\" could not be opened for reading."), file);

@@ -238,6 +238,8 @@ wxAnimationCtrl::~wxAnimationCtrl()
 bool wxAnimationCtrl::LoadFile(const wxString &filename, wxAnimationType type)
 {
     wxFileInputStream fis(filename);
+    if (!fis.IsOk())
+        return false;
     return Load(fis, type);
 }
 

@@ -1386,10 +1386,10 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
 #elif wxUSE_STREAMS
     wxXPMDecoder decoder;
     wxFileInputStream stream(name);
-    if (stream.Ok())
+    if (stream.IsOk())
     {
         wxImage image(decoder.ReadFile(stream));
-        return image.Ok() && bitmap->CreateFromImage(image);
+        return image.IsOk() && bitmap->CreateFromImage(image);
     }
 
     return false;

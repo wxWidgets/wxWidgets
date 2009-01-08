@@ -717,6 +717,9 @@ bool wxChmInputStream::CreateFileStream(const wxString& pattern)
     {
         // Open a filestream to extracted file
         fin = new wxFileInputStream(tmpfile);
+        if (!fin->IsOk())
+            return false;
+
         m_size = fin->GetSize();
         m_content = (char *) malloc(m_size+1);
         fin->Read(m_content, m_size);

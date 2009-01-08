@@ -138,7 +138,6 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
                 m_refData = handler->Clone();
                 return M_ANIMDATA->Load(stream);
             }
-
         }
 
         wxLogWarning( _("No handler found for animation type.") );
@@ -309,6 +308,8 @@ wxAnimationCtrl::~wxAnimationCtrl()
 bool wxAnimationCtrl::LoadFile(const wxString& filename, wxAnimationType type)
 {
     wxFileInputStream fis(filename);
+    if (!fis.Ok())
+        return false;
     return Load(fis, type);
 }
 
