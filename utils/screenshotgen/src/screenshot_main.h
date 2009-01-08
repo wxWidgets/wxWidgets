@@ -11,19 +11,10 @@
 
 #include "guiframe.h"
 
-// when defined to 1, wxAui for the main frame
-#define SCREENSHOTGEN_USE_AUI       0
-
-
 class CtrlMaskOut;
 
 
-class ScreenshotFrame
-#if SCREENSHOTGEN_USE_AUI
-    : public AuiGUIFrame
-#else
-    : public GUIFrame
-#endif
+class ScreenshotFrame : public GUIFrame
 {
 public:
     ScreenshotFrame(wxFrame *frame);
@@ -41,13 +32,8 @@ protected:      // event handlers
     virtual void OnEndCaptureRect( wxCommandEvent& event );
     virtual void OnCaptureAllControls( wxCommandEvent& event );
 
-#if SCREENSHOTGEN_USE_AUI
-    virtual void OnNotebookPageChanged( wxAuiNotebookEvent& event );
-    virtual void OnNotebookPageChanging( wxAuiNotebookEvent& event );
-#else
     virtual void OnNotebookPageChanged( wxNotebookEvent& event );
     virtual void OnNotebookPageChanging( wxNotebookEvent& event );
-#endif
 
 private:
     // Helper functions

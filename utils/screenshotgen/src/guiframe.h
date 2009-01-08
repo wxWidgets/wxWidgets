@@ -30,7 +30,7 @@
 #include "customcombo.h"
 
 
-class GUIFrame : public wxFrame 
+class GUIFrame : public wxFrame
 {
 public:
 
@@ -53,7 +53,11 @@ protected:
     wxMenuItem* m_menuCapRect;
     wxMenuItem* m_menuEndCapRect;
     wxMenu* helpMenu;
+
+    wxStatusBar* statusBar;
+
     wxNotebook* m_notebook1;
+
     wxPanel* m_panel1;
     wxButton* m_button1;
     wxStaticText* m_staticText1;
@@ -71,6 +75,7 @@ protected:
     wxSpinCtrl* m_spinCtrl1;
     wxSpinButton* m_spinBtn1;
     wxScrollBar* m_scrollBar1;
+
     wxPanel* m_panel2;
     wxCheckListBox* m_checkList1;
     wxListBox* m_listBox1;
@@ -81,30 +86,28 @@ protected:
     wxAnimationCtrl * m_animationCtrl1;
     wxCollapsiblePane *m_collPane1;
     wxCollapsiblePane *m_collPane2;
+
     wxPanel* m_panel3;
     wxTextCtrl* m_textCtrl1;
-
     wxTextCtrl* m_textCtrl2;
     wxRichTextCtrl* m_richText1;
+
     wxPanel* m_panel4;
     wxColourPickerCtrl* m_colourPicker1;
     wxFontPickerCtrl* m_fontPicker1;
     wxFilePickerCtrl* m_filePicker1;
-
     wxCalendarCtrl* m_calendar1;
     wxDatePickerCtrl* m_datePicker1;
     wxGenericDirCtrl* m_genericDirCtrl1;
     wxDirPickerCtrl* m_dirPicker1;
+
     wxPanel* m_panel5;
     wxChoice* m_choice1;
     wxComboBox* m_comboBox1;
-
     wxBitmapComboBox * m_bmpComboBox1;
     PenStyleComboBox * m_ownerDrawnComboBox1;
-
     wxComboCtrl * m_comboCtrl1;
     wxComboCtrl * m_comboCtrl2;
-    wxStatusBar* statusBar;
 
     // Virtual event handlers, overide them in your derived class
     virtual void OnClose( wxCloseEvent& event ){ event.Skip(); }
@@ -117,6 +120,14 @@ protected:
     virtual void OnAbout( wxCommandEvent& event ){ event.Skip(); }
     virtual void OnNotebookPageChanged( wxNotebookEvent& event ){ event.Skip(); }
     virtual void OnNotebookPageChanging( wxNotebookEvent& event ){ event.Skip(); }
+
+private:
+    void AddMenuBar();
+    void AddPanel_1();
+    void AddPanel_2();
+    void AddPanel_3();
+    void AddPanel_4();
+    void AddPanel_5();
 };
 
 #endif //_GUIFRAME_H_
