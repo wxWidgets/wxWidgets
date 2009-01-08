@@ -247,10 +247,10 @@ public:
     }
 
     // accessors
-    int GetValue(wxSPINCTRL_GETVALUE_FIX) const { return int(DoGetValue() + 0.5); }
-    int GetMin() const       { return int(m_min + 0.5); }
-    int GetMax() const       { return int(m_max + 0.5); }
-    int GetIncrement() const { return int(m_increment + 0.5); }
+    int GetValue(wxSPINCTRL_GETVALUE_FIX) const { return wxRound( DoGetValue() ); }
+    int GetMin() const       { return wxRound( m_min ); }
+    int GetMax() const       { return wxRound( m_max ); }
+    int GetIncrement() const { return wxRound( m_increment ); }
 
     // operations
     void SetValue(const wxString& value)    { wxSpinCtrlGenericBase::SetValue(value); } // visibility problem w/ gcc

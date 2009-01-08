@@ -121,10 +121,10 @@ public:
     }
 
     // accessors
-    int GetValue() const     { return int(DoGetValue() + 0.5); }
-    int GetMin() const       { return int(DoGetMin() + 0.5); }
-    int GetMax() const       { return int(DoGetMax() + 0.5); }
-    int GetIncrement() const { return int(DoGetIncrement() + 0.5); }
+    int GetValue() const     { return wxRound( DoGetValue() ); }
+    int GetMin() const       { return wxRound( DoGetMin() ); }
+    int GetMax() const       { return wxRound( DoGetMax() ); }
+    int GetIncrement() const { return wxRound( DoGetIncrement() ); }
 
     // operations
     void SetValue(const wxString& value)    { wxSpinCtrlGTKBase::SetValue(value); } // visibility problem w/ gcc
