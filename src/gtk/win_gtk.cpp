@@ -339,10 +339,11 @@ extern "C" {
 static void scroll_adjust(GtkWidget* widget, void* data)
 {
     const AdjustData* p = static_cast<AdjustData*>(data);
+    widget->allocation.x += p->dx;
+    widget->allocation.y += p->dy;
+    
     if (widget->window == p->window)
     {
-        widget->allocation.x += p->dx;
-        widget->allocation.y += p->dy;
         // GtkFrame requires a queue_resize, otherwise parts of
         // the frame newly exposed by the scroll are not drawn.
         // To be safe, do it for all widgets.
