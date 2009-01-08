@@ -107,11 +107,11 @@ public:
             setting the @c no-maskblt option to 1.
         @param xsrcMask
             Source x position on the mask. If both xsrcMask and ysrcMask are
-            -1, xsrc and ysrc will be assumed for the mask source position.
+            @c -1, xsrc and ysrc will be assumed for the mask source position.
             Currently only implemented on Windows.
         @param ysrcMask
             Source y position on the mask. If both xsrcMask and ysrcMask are
-            -1, xsrc and ysrc will be assumed for the mask source position.
+            @c -1, xsrc and ysrc will be assumed for the mask source position.
             Currently only implemented on Windows.
 
         @remarks There is partial support for Blit() in wxPostScriptDC, under X.
@@ -120,7 +120,7 @@ public:
     */
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width,
               wxCoord height, wxDC* source, wxCoord xsrc, wxCoord ysrc,
-              int logicalFunc = wxCOPY, bool useMask = false,
+              wxRasterOperationMode logicalFunc = wxCOPY, bool useMask = false,
               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
     /**
@@ -325,7 +325,8 @@ public:
         for filling the shape. Using a transparent brush suppresses filling.
     */
     void DrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0,
-                     wxCoord yoffset = 0, int fill_style = wxODDEVEN_RULE);
+                     wxCoord yoffset = 0,
+                     wxPolygonFillMode fill_style = wxODDEVEN_RULE);
     /**
         This method draws a filled polygon using a list of wxPoints, adding the
         optional offset coordinate. The first and last points are automatically
@@ -346,7 +347,7 @@ public:
     */
     void DrawPolygon(const wxPointList* points,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
-                     int fill_style = wxODDEVEN_RULE);
+                     wxPolygonFillMode fill_style = wxODDEVEN_RULE);
 
     /**
         Draws two or more filled polygons using an array of @a points, adding
@@ -377,7 +378,7 @@ public:
     */
     void DrawPolyPolygon(int n, int count[], wxPoint points[],
                          wxCoord xoffset = 0, wxCoord yoffset = 0,
-                         int fill_style = wxODDEVEN_RULE);
+                         wxPolygonFillMode fill_style = wxODDEVEN_RULE);
 
     /**
         Draws a rectangle with the given top left corner, and with the given
@@ -469,7 +470,7 @@ public:
               exactly. However the function will still return @true.
     */
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& colour,
-                   int style = wxFLOOD_SURFACE);
+                   wxFloodFillStyle style = wxFLOOD_SURFACE);
 
     /**
         Gets the brush used for painting the background.
@@ -542,14 +543,14 @@ public:
 
         @see SetLogicalFunction()
     */
-    int GetLogicalFunction() const;
+    wxRasterOperationMode GetLogicalFunction() const;
 
     /**
         Gets the mapping mode for the device context.
 
         @see SetMapMode()
     */
-    int GetMapMode() const;
+    wxMappingMode GetMapMode() const;
 
     /**
         Gets the dimensions of the string using the currently selected font.
@@ -930,7 +931,7 @@ public:
         operation. wxINVERT is commonly used for drawing rubber bands or moving
         outlines, since drawing twice reverts to the original colour.
     */
-    void SetLogicalFunction(int function);
+    void SetLogicalFunction(wxRasterOperationMode function);
 
     /**
         The mapping mode of the device context defines the unit of measurement
@@ -954,7 +955,7 @@ public:
         - wxMM_LOMETRIC: Each logical unit is 1/10 of a mm.
         - wxMM_TEXT: Each logical unit is 1 device pixel.
     */
-    void SetMapMode(int mode);
+    void SetMapMode(wxMappingMode mode);
 
     /**
         If this is a window DC or memory DC, assigns the given palette to the
@@ -1082,7 +1083,7 @@ public:
                      wxCoord dstWidth, wxCoord dstHeight,
                      wxDC* source, wxCoord xsrc, wxCoord ysrc,
                      wxCoord srcWidth, wxCoord srcHeight,
-                     int logicalFunc = wxCOPY,
+                     wxRasterOperationMode logicalFunc = wxCOPY,
                      bool useMask = false,
                      wxCoord xsrcMask = wxDefaultCoord,
                      wxCoord ysrcMask = wxDefaultCoord);

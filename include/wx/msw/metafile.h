@@ -86,7 +86,7 @@ public:
     virtual ~wxMetafileDCImpl();
 
     virtual wxMetafile *Close();
-    virtual void SetMapMode(int mode);
+    virtual void SetMapMode(wxMappingMode mode);
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
                                  wxCoord *descent = NULL,
@@ -125,9 +125,9 @@ public:
         : wxDC(new wxMetafileDCImpl( this, file, xext, yext, xorg, yorg ))
         { }
 
-    wxMetafile *GetMetafile() const 
+    wxMetafile *GetMetafile() const
        { return ((wxMetafileDCImpl*)m_pimpl)->GetMetaFile(); }
-       
+
     wxMetafile *Close()
        { return ((wxMetafileDCImpl*)m_pimpl)->Close(); }
 

@@ -234,7 +234,7 @@ public:
     void SetFont( const wxFont& font );
     void SetPen( const wxPen& pen );
     void SetBrush( const wxBrush& brush );
-    void SetLogicalFunction( int function );
+    void SetLogicalFunction( wxRasterOperationMode function );
     void SetBackground( const wxBrush& brush );
     void DestroyClippingRegion();
     bool StartDoc(const wxString& message);
@@ -255,7 +255,8 @@ public:
     virtual wxRect GetPaperRect() const;
 
 protected:
-    bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style=wxFLOOD_SURFACE );
+    bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, 
+                     wxFloodFillStyle style=wxFLOOD_SURFACE );
     void DoGradientFillConcentric(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, const wxPoint& circleCenter);
     void DoGradientFillLinear(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, wxDirection nDirection = wxEAST);
     bool DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const;
@@ -265,8 +266,8 @@ protected:
     void DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea);
     void DoDrawPoint(wxCoord x, wxCoord y);
     void DoDrawLines(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0);
-    void DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, int fillStyle=wxODDEVEN_RULE);
-    void DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, int fillStyle=wxODDEVEN_RULE);
+    void DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, wxPolygonFillMode fillStyle=wxODDEVEN_RULE);
+    void DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0, wxPolygonFillMode fillStyle=wxODDEVEN_RULE);
     void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     void DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20.0);
     void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
@@ -274,7 +275,8 @@ protected:
     void DoDrawSpline(const wxPointList *points);
 #endif
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-            wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
+            wxDC *source, wxCoord xsrc, wxCoord ysrc, 
+            wxRasterOperationMode rop = wxCOPY, bool useMask = false,
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
     void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );
     void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask = false  );

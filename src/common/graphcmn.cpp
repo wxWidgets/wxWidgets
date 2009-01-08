@@ -589,7 +589,7 @@ void wxGraphicsContext::SetFont( const wxGraphicsFont& font )
     m_font = font;
 }
 
-bool wxGraphicsContext::SetLogicalFunction( int function )
+bool wxGraphicsContext::SetLogicalFunction( wxRasterOperationMode function )
 {
     if ( function == wxCOPY )
     {

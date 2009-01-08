@@ -80,14 +80,14 @@ public:
     virtual wxSize GetPPI() const;
 
 
-    virtual void SetMapMode(int mode);
+    virtual void SetMapMode(wxMappingMode mode);
     virtual void SetUserScale(double x, double y);
     virtual void SetLogicalScale(double x, double y);
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
-    virtual void SetLogicalFunction(int function);
+    virtual void SetLogicalFunction(wxRasterOperationMode function);
 
     // implementation from now on
     // --------------------------
@@ -173,7 +173,7 @@ public:
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
-                             int style = wxFLOOD_SURFACE);
+                             wxFloodFillStyle style = wxFLOOD_SURFACE);
 
     virtual void DoGradientFillLinear(const wxRect& rect,
                                       const wxColour& initialColour,
@@ -215,14 +215,15 @@ public:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
+                        wxRasterOperationMode rop = wxCOPY, bool useMask = false, 
+                        wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
     virtual bool DoStretchBlit(wxCoord xdest, wxCoord ydest,
                                wxCoord dstWidth, wxCoord dstHeight,
                                wxDC *source,
                                wxCoord xsrc, wxCoord ysrc,
                                wxCoord srcWidth, wxCoord srcHeight,
-                               int rop = wxCOPY, bool useMask = false,
+                               wxRasterOperationMode rop = wxCOPY, bool useMask = false,
                                wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
@@ -237,10 +238,10 @@ public:
                              wxCoord xoffset, wxCoord yoffset);
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
-                               int fillStyle = wxODDEVEN_RULE);
+                               wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
     virtual void DoDrawPolyPolygon(int n, int count[], wxPoint points[],
                                    wxCoord xoffset, wxCoord yoffset,
-                                   int fillStyle = wxODDEVEN_RULE);
+                                   wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const
     {
         return subrect == NULL ? GetSelectedBitmap()

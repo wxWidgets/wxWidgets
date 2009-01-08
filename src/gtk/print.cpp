@@ -1173,7 +1173,7 @@ void* wxGtkPrinterDCImpl::GetCairoContext() const
 bool wxGtkPrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x1),
                                wxCoord WXUNUSED(y1),
                                const wxColour& WXUNUSED(col),
-                               int WXUNUSED(style))
+                               wxFloodFillStyle WXUNUSED(style))
 {
     // We can't access the given coord as a Cairo context is scalable, ie a
     // coord doesn't mean anything in this context.
@@ -1427,7 +1427,9 @@ void wxGtkPrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset, w
     cairo_stroke ( m_cairo);
 }
 
-void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[], 
+                                       wxCoord xoffset, wxCoord yoffset, 
+                                       wxPolygonFillMode fillStyle)
 {
     if (n==0) return;
 
@@ -1461,7 +1463,9 @@ void wxGtkPrinterDCImpl::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset,
     cairo_restore(m_cairo);
 }
 
-void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxGtkPrinterDCImpl::DoDrawPolyPolygon(int n, int count[], wxPoint points[],
+                                           wxCoord xoffset, wxCoord yoffset, 
+                                           wxPolygonFillMode fillStyle)
 {
     wxDCImpl::DoDrawPolyPolygon( n, count, points, xoffset, yoffset, fillStyle );
 }
@@ -1620,7 +1624,7 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
 bool wxGtkPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                           wxCoord width, wxCoord height,
                           wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                          int rop, bool useMask,
+                          wxRasterOperationMode rop, bool useMask,
                           wxCoord WXUNUSED_UNLESS_DEBUG(xsrcMask),
                           wxCoord WXUNUSED_UNLESS_DEBUG(ysrcMask))
 {
@@ -1987,7 +1991,7 @@ void wxGtkPrinterDCImpl::SetBrush( const wxBrush& brush )
     }
 }
 
-void wxGtkPrinterDCImpl::SetLogicalFunction( int function )
+void wxGtkPrinterDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 {
     if (function == wxCLEAR)
         cairo_set_operator (m_cairo, CAIRO_OPERATOR_CLEAR);

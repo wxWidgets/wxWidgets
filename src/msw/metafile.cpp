@@ -275,7 +275,7 @@ wxMetafile *wxMetafileDCImpl::Close()
     return NULL;
 }
 
-void wxMetafileDCImpl::SetMapMode(int mode)
+void wxMetafileDCImpl::SetMapMode(wxMappingMode mode)
 {
     m_mappingMode = mode;
 

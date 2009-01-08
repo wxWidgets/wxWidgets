@@ -705,7 +705,7 @@ void wxMSWDCImpl::Clear()
 bool wxMSWDCImpl::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
                        wxCoord WXUNUSED_IN_WINCE(y),
                        const wxColour& WXUNUSED_IN_WINCE(col),
-                       int WXUNUSED_IN_WINCE(style))
+                       wxFloodFillStyle WXUNUSED_IN_WINCE(style))
 {
 #ifdef __WXWINCE__
     return false;
@@ -888,7 +888,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
                          wxPoint points[],
                          wxCoord xoffset,
                          wxCoord yoffset,
-                         int WXUNUSED_IN_WINCE(fillStyle))
+                         wxPolygonFillMode WXUNUSED_IN_WINCE(fillStyle))
 {
     WXMICROWIN_CHECK_HDC
 
@@ -937,7 +937,7 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
                         wxPoint points[],
                         wxCoord xoffset,
                         wxCoord yoffset,
-                        int fillStyle)
+                        wxPolygonFillMode fillStyle)
 {
 #ifdef __WXWINCE__
     wxDCImpl::DoDrawPolyPolygon(n, count, points, xoffset, yoffset, fillStyle);
@@ -1708,7 +1708,7 @@ void wxMSWDCImpl::SetBackgroundMode(int mode)
     // and m_backgroundMode is used there
 }
 
-void wxMSWDCImpl::SetLogicalFunction(int function)
+void wxMSWDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -1742,10 +1742,6 @@ void wxMSWDCImpl::SetRop(WXHDC dc)
         case wxNAND:         rop = R2_NOTMASKPEN;    break;
         case wxOR:           rop = R2_MERGEPEN;      break;
         case wxSET:          rop = R2_WHITE;         break;
-
-        default:
-           wxFAIL_MSG( wxT("unsupported logical function") );
-           return;
     }
 
     SetROP2(GetHdc(), rop);
@@ -1936,7 +1932,7 @@ void wxMSWDCImpl::RealizeScaleAndOrigin()
 #endif
 }
 
-void wxMSWDCImpl::SetMapMode(int mode)
+void wxMSWDCImpl::SetMapMode(wxMappingMode mode)
 {
     WXMICROWIN_CHECK_HDC
 
@@ -2063,7 +2059,7 @@ bool wxMSWDCImpl::DoBlit(wxCoord dstX, wxCoord dstY,
                   wxCoord dstWidth, wxCoord dstHeight,
                   wxDC *source,
                   wxCoord srcX, wxCoord srcY,
-                  int rop, bool useMask,
+                  wxRasterOperationMode rop, bool useMask,
                   wxCoord srcMaskX, wxCoord srcMaskY)
 {
     return DoStretchBlit(dstX, dstY, dstWidth, dstHeight, source, srcX, srcY, dstWidth, dstHeight, rop, useMask, srcMaskX, srcMaskY);
@@ -2074,7 +2070,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                          wxDC *source,
                          wxCoord xsrc, wxCoord ysrc,
                          wxCoord srcWidth, wxCoord srcHeight,
-                         int rop, bool useMask,
+                         wxRasterOperationMode rop, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask)
 {
     wxCHECK_MSG( source, false, _T("wxMSWDCImpl::Blit(): NULL wxDC pointer") );

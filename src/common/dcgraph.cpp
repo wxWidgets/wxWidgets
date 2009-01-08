@@ -336,7 +336,7 @@ void wxGCDCImpl::SetTextBackground( const wxColour &col )
     m_textBackgroundColour = col;
 }
 
-void wxGCDCImpl::SetMapMode( int mode )
+void wxGCDCImpl::SetMapMode( wxMappingMode mode )
 {
     switch (mode)
     {
@@ -450,7 +450,7 @@ void wxGCDCImpl::SetBackground( const wxBrush &brush )
         return;
 }
 
-void wxGCDCImpl::SetLogicalFunction( int function )
+void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 {
     if (m_logicalFunction == function)
         return;
@@ -463,7 +463,8 @@ void wxGCDCImpl::SetLogicalFunction( int function )
 }
 
 bool wxGCDCImpl::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
-                         const wxColour& WXUNUSED(col), int WXUNUSED(style))
+                             const wxColour& WXUNUSED(col), 
+                             wxFloodFillStyle WXUNUSED(style))
 {
     return false;
 }
@@ -674,8 +675,8 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
 #endif // wxUSE_SPLINES
 
 void wxGCDCImpl::DoDrawPolygon( int n, wxPoint points[],
-                            wxCoord xoffset, wxCoord yoffset,
-                            int fillStyle )
+                                wxCoord xoffset, wxCoord yoffset,
+                                wxPolygonFillMode fillStyle )
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::DoDrawPolygon - invalid DC") );
 
@@ -706,7 +707,7 @@ void wxGCDCImpl::DoDrawPolyPolygon(int n,
                                wxPoint points[],
                                wxCoord xoffset,
                                wxCoord yoffset,
-                               int fillStyle)
+                               wxPolygonFillMode fillStyle)
 {
     wxASSERT(n > 1);
     wxGraphicsPath path = m_graphicContext->CreatePath();
@@ -801,7 +802,8 @@ bool wxGCDCImpl::CanDrawBitmap() const
 
 bool wxGCDCImpl::DoBlit(
     wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-    wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask,
+    wxDC *source, wxCoord xsrc, wxCoord ysrc, 
+    wxRasterOperationMode logical_func , bool useMask,
     wxCoord xsrcMask, wxCoord ysrcMask )
 {
     return DoStretchBlit( xdest, ydest, width, height,
@@ -812,7 +814,7 @@ bool wxGCDCImpl::DoBlit(
 bool wxGCDCImpl::DoStretchBlit(
     wxCoord xdest, wxCoord ydest, wxCoord dstWidth, wxCoord dstHeight,
     wxDC *source, wxCoord xsrc, wxCoord ysrc, wxCoord srcWidth, wxCoord srcHeight,
-    int logical_func , bool useMask,
+    wxRasterOperationMode logical_func , bool useMask,
     wxCoord xsrcMask, wxCoord ysrcMask )
 {
     wxCHECK_MSG( IsOk(), false, wxT("wxGCDC(cg)::DoStretchBlit - invalid DC") );

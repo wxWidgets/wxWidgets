@@ -129,7 +129,7 @@ wxMetafile *wxMetafileDC::Close()
     return NULL;
 }
 
-void wxMetafileDC::SetMapMode(int mode)
+void wxMetafileDC::SetMapMode(wxMappingMode mode)
 {
 }
 

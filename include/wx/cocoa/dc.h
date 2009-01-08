@@ -69,7 +69,7 @@ protected:
 // Blitting
     virtual bool CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
         wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
-        int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask);
+        wxRasterOperationMode logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask);
 //-------------------------------------------------------------------------
 // Implementation
 //-------------------------------------------------------------------------
@@ -107,14 +107,14 @@ public:
     virtual int GetDepth() const;
     virtual wxSize GetPPI() const;
 
-    virtual void SetMapMode(int mode);
+    virtual void SetMapMode(wxMappingMode mode);
     virtual void SetUserScale(double x, double y);
 
     virtual void SetLogicalScale(double x, double y);
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-    virtual void SetLogicalFunction(int function);
+    virtual void SetLogicalFunction(wxRasterOperationMode function);
 
     virtual void SetTextForeground(const wxColour& colour) ;
     virtual void SetTextBackground(const wxColour& colour) ;
@@ -122,7 +122,7 @@ public:
     virtual void ComputeScaleAndOrigin();
 protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
-                             int style = wxFLOOD_SURFACE);
+                             wxFloodFillStyle style = wxFLOOD_SURFACE);
 
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
 
@@ -169,7 +169,7 @@ protected:
                              wxCoord xoffset, wxCoord yoffset);
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
-                               int fillStyle = wxODDEVEN_RULE);
+                               wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 };
 
 #endif // __WX_COCOA_DC_H__

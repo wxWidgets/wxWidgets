@@ -309,7 +309,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
 
     m_window = window;
 
-    if (m_window && m_window->m_wxwindow && 
+    if (m_window && m_window->m_wxwindow &&
         (m_window->GetLayoutDirection() == wxLayout_RightToLeft))
     {
         // reverse sense
@@ -351,7 +351,7 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
     }
 
     if (!done)
-    {    
+    {
         if (m_isScreenDC)
         {
             m_penGC = wxGetPoolGC( m_gdkwindow, wxPEN_SCREEN );
@@ -424,11 +424,11 @@ void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 }
 
 bool wxWindowDCImpl::DoFloodFill(wxCoord x, wxCoord y,
-                             const wxColour& col, int style)
+                                 const wxColour& col, wxFloodFillStyle style)
 {
 #if wxUSE_IMAGE
     extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
-                              const wxColour & col, int style);
+                              const wxColour & col, wxFloodFillStyle style);
 
     return wxDoFloodFill( GetOwner(), x, y, col, style);
 #else
@@ -475,7 +475,7 @@ bool wxWindowDCImpl::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
 void wxWindowDCImpl::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
-    
+
     if (m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT)
     {
         if (m_gdkwindow)
@@ -698,7 +698,9 @@ void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCo
         delete[] gpts;
 }
 
-void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int WXUNUSED(fillStyle) )
+void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[],
+                                    wxCoord xoffset, wxCoord yoffset,
+                                    wxPolygonFillMode WXUNUSED(fillStyle) )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
@@ -1158,7 +1160,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
                          wxCoord width, wxCoord height,
                          wxDC *source,
                          wxCoord xsrc, wxCoord ysrc,
-                         int logical_func,
+                         wxRasterOperationMode logical_func,
                          bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask )
 {
@@ -1299,7 +1301,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
         src_y = 0;
     }
 
-    const int logical_func_save = m_logicalFunction;
+    const wxRasterOperationMode logical_func_save = m_logicalFunction;
     SetLogicalFunction(logical_func);
     if (memDC == NULL)
         gdk_gc_set_subwindow(use_gc, GDK_INCLUDE_INFERIORS);
@@ -1437,9 +1439,9 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         x_rtl -= w;
 
     const GdkColor* bg_col = NULL;
-    if (m_backgroundMode == wxBRUSHSTYLE_SOLID) 
+    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
         bg_col = m_textBackgroundColour.GetColor();
- 
+
     gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x_rtl, y, m_layout, NULL, bg_col);
 
     if (isScaled)
@@ -1460,7 +1462,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     CalcBoundingBox(x, y);
 }
 
-// TODO: When GTK2.6 is required, merge DoDrawText and DoDrawRotatedText to 
+// TODO: When GTK2.6 is required, merge DoDrawText and DoDrawRotatedText to
 // avoid code duplication
 void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, double angle )
 {
@@ -1506,7 +1508,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
         pango_layout_get_pixel_size(m_layout, &w, &h);
 
         const GdkColor* bg_col = NULL;
-        if (m_backgroundMode == wxBRUSHSTYLE_SOLID) 
+        if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
             bg_col = m_textBackgroundColour.GetColor();
 
         // rotate the text
@@ -1515,13 +1517,13 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
         pango_context_set_matrix (m_context, &matrix);
         pango_layout_context_changed (m_layout);
 
-        // To be compatible with MSW, the rotation axis must be in the old 
+        // To be compatible with MSW, the rotation axis must be in the old
         // top-left corner.
-        // Calculate the vertices of the rotated rectangle containing the text, 
+        // Calculate the vertices of the rotated rectangle containing the text,
         // relative to the old top-left vertex.
-        // We could use the matrix for this, but it's simpler with trignonometry. 
+        // We could use the matrix for this, but it's simpler with trignonometry.
         double rad = DegToRad(angle);
-        // the rectangle vertices are counted clockwise with the first one 
+        // the rectangle vertices are counted clockwise with the first one
         // being at (0, 0)
         double x2 = w * cos(rad);
         double y2 = -w * sin(rad);   // y axis points to the bottom, hence minus
@@ -1535,7 +1537,7 @@ void wxWindowDCImpl::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord
                 minX = (wxCoord)(dmin(dmin(0, x2), dmin(x3, x4)) - 0.5),
                 minY = (wxCoord)(dmin(dmin(0, y2), dmin(y3, y4)) - 0.5);
 
-        gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x+minX, y+minY, 
+        gdk_draw_layout_with_colors(m_gdkwindow, m_textGC, x+minX, y+minY,
                                     m_layout, NULL, bg_col);
 
         if (m_font.GetUnderlined())
@@ -2048,7 +2050,7 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
     }
 }
 
-void wxWindowDCImpl::SetLogicalFunction( int function )
+void wxWindowDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
@@ -2078,9 +2080,6 @@ void wxWindowDCImpl::SetLogicalFunction( int function )
         case wxNO_OP:        mode = GDK_NOOP;          break;
         case wxSRC_INVERT:   mode = GDK_COPY_INVERT;   break;
         case wxNOR:          mode = GDK_NOR;           break;
-        default:
-           wxFAIL_MSG( wxT("unsupported logical function") );
-           mode = GDK_COPY;
     }
 
     m_logicalFunction = function;
@@ -2154,7 +2153,7 @@ void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, w
     rect.width = XLOG2DEVREL(width);
     rect.height = YLOG2DEVREL(height);
 
-    if (m_window && m_window->m_wxwindow && 
+    if (m_window && m_window->m_wxwindow &&
         (m_window->GetLayoutDirection() == wxLayout_RightToLeft))
     {
         rect.x -= rect.width;
@@ -2246,7 +2245,7 @@ void wxWindowDCImpl::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     m_signX = (xLeftRight ?  1 : -1);
     m_signY = (yBottomUp  ? -1 :  1);
 
-    if (m_window && m_window->m_wxwindow && 
+    if (m_window && m_window->m_wxwindow &&
         (m_window->GetLayoutDirection() == wxLayout_RightToLeft))
         m_signX = -m_signX;
 
@@ -2303,7 +2302,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
     SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
     wxSize size = win->GetClientSize();
     DoSetClippingRegion(0, 0, size.x, size.y);
-#endif 
+#endif
     // __WXUNIVERSAL__
 }
 
@@ -2369,7 +2368,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *win )
         gdk_gc_set_clip_region( m_textGC, region );
         gdk_gc_set_clip_region( m_bgGC, region );
     }
-#endif 
+#endif
 }
 
 // ----------------------------------------------------------------------------

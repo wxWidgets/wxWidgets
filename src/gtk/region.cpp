@@ -90,7 +90,8 @@ wxRegion::wxRegion( GdkRegion *region )
     M_REGIONDATA->m_region = gdk_region_copy( region );
 }
 
-wxRegion::wxRegion( size_t n, const wxPoint *points, int fillStyle )
+wxRegion::wxRegion( size_t n, const wxPoint *points, 
+                    wxPolygonFillMode fillStyle )
 {
     GdkPoint *gdkpoints = new GdkPoint[n];
     for ( size_t i = 0 ; i < n ; i++ )

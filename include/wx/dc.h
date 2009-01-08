@@ -42,6 +42,83 @@ class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 class WXDLLIMPEXP_FWD_CORE wxPrinterDC;
 class WXDLLIMPEXP_FWD_CORE wxPrintData;
 
+//  Logical ops
+enum wxRasterOperationMode
+{
+    wxCLEAR,       // 0
+    wxXOR,         // src XOR dst
+    wxINVERT,      // NOT dst
+    wxOR_REVERSE,  // src OR (NOT dst)
+    wxAND_REVERSE, // src AND (NOT dst)
+    wxCOPY,        // src
+    wxAND,         // src AND dst
+    wxAND_INVERT,  // (NOT src) AND dst
+    wxNO_OP,       // dst
+    wxNOR,         // (NOT src) AND (NOT dst)
+    wxEQUIV,       // (NOT src) XOR dst
+    wxSRC_INVERT,  // (NOT src)
+    wxOR_INVERT,   // (NOT src) OR dst
+    wxNAND,        // (NOT src) OR (NOT dst)
+    wxOR,          // src OR dst
+    wxSET          // 1
+#ifdef WXWIN_COMPATIBILITY_2_8
+    ,wxROP_BLACK = wxCLEAR,
+    wxBLIT_BLACKNESS = wxCLEAR,
+    wxROP_XORPEN = wxXOR,
+    wxBLIT_SRCINVERT = wxXOR,
+    wxROP_NOT = wxINVERT,
+    wxBLIT_DSTINVERT = wxINVERT,
+    wxROP_MERGEPENNOT = wxOR_REVERSE,
+    wxBLIT_00DD0228 = wxOR_REVERSE,
+    wxROP_MASKPENNOT = wxAND_REVERSE,
+    wxBLIT_SRCERASE = wxAND_REVERSE,
+    wxROP_COPYPEN = wxCOPY,
+    wxBLIT_SRCCOPY = wxCOPY,
+    wxROP_MASKPEN = wxAND,
+    wxBLIT_SRCAND = wxAND,
+    wxROP_MASKNOTPEN = wxAND_INVERT,
+    wxBLIT_00220326 = wxAND_INVERT,
+    wxROP_NOP = wxNO_OP,
+    wxBLIT_00AA0029 = wxNO_OP,
+    wxROP_NOTMERGEPEN = wxNOR,
+    wxBLIT_NOTSRCERASE = wxNOR,
+    wxROP_NOTXORPEN = wxEQUIV,
+    wxBLIT_00990066 = wxEQUIV,
+    wxROP_NOTCOPYPEN = wxSRC_INVERT,
+    wxBLIT_NOTSCRCOPY = wxSRC_INVERT,
+    wxROP_MERGENOTPEN = wxOR_INVERT,
+    wxBLIT_MERGEPAINT = wxOR_INVERT,
+    wxROP_NOTMASKPEN = wxNAND,
+    wxBLIT_007700E6 = wxNAND,
+    wxROP_MERGEPEN = wxOR,
+    wxBLIT_SRCPAINT = wxOR,
+    wxROP_WHITE = wxSET,
+    wxBLIT_WHITENESS = wxSET
+#endif //WXWIN_COMPATIBILITY_2_8
+};
+
+//  Flood styles
+enum wxFloodFillStyle
+{
+    wxFLOOD_SURFACE = 1,
+    wxFLOOD_BORDER
+};
+
+//  Mapping modes (same values as used by Windows, don't change)
+enum wxMappingMode
+{
+    wxMM_TEXT = 1,
+    wxMM_LOMETRIC,
+    wxMM_HIMETRIC,
+    wxMM_LOENGLISH,
+    wxMM_HIENGLISH,
+    wxMM_TWIPS,
+    wxMM_ISOTROPIC,
+    wxMM_ANISOTROPIC,
+    wxMM_POINTS,
+    wxMM_METRIC
+};
+
 //-----------------------------------------------------------------------------
 // wxDrawObject helper class
 //-----------------------------------------------------------------------------
@@ -292,8 +369,9 @@ public:
 
     // logical functions
 
-    virtual void SetLogicalFunction(int function) = 0;
-    virtual int GetLogicalFunction() const { return m_logicalFunction; }
+    virtual void SetLogicalFunction(wxRasterOperationMode function) = 0;
+    virtual wxRasterOperationMode GetLogicalFunction() const 
+                                      { return m_logicalFunction; }
 
     // text measurement
 
@@ -350,8 +428,8 @@ public:
     virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
     virtual wxCoord LogicalToDeviceYRel(wxCoord y) const;
 
-    virtual void SetMapMode(int mode);
-    virtual int GetMapMode() const { return m_mappingMode; }
+    virtual void SetMapMode(wxMappingMode mode);
+    virtual wxMappingMode GetMapMode() const { return m_mappingMode; }
 
     virtual void SetUserScale(double x, double y);
     virtual void GetUserScale(double *x, double *y) const
@@ -392,7 +470,7 @@ public:
     // the actual drawing API
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
-                             int style = wxFLOOD_SURFACE) = 0;
+                             wxFloodFillStyle style = wxFLOOD_SURFACE) = 0;
 
     virtual void DoGradientFillLinear(const wxRect& rect,
                                       const wxColour& initialColour,
@@ -438,7 +516,7 @@ public:
                         wxCoord width, wxCoord height,
                         wxDC *source,
                         wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY,
+                        wxRasterOperationMode rop = wxCOPY,
                         bool useMask = false,
                         wxCoord xsrcMask = wxDefaultCoord,
                         wxCoord ysrcMask = wxDefaultCoord) = 0;
@@ -448,7 +526,7 @@ public:
                                wxDC *source,
                                wxCoord xsrc, wxCoord ysrc,
                                wxCoord srcWidth, wxCoord srcHeight,
-                               int rop = wxCOPY,
+                               wxRasterOperationMode rop = wxCOPY,
                                bool useMask = false,
                                wxCoord xsrcMask = wxDefaultCoord,
                                wxCoord ysrcMask = wxDefaultCoord);
@@ -463,14 +541,14 @@ public:
                            wxCoord xoffset, wxCoord yoffset );
 
     virtual void DoDrawPolygon(int n, wxPoint points[],
-                               wxCoord xoffset, wxCoord yoffset,
-                               int fillStyle = wxODDEVEN_RULE) = 0;
+                           wxCoord xoffset, wxCoord yoffset,
+                           wxPolygonFillMode fillStyle = wxODDEVEN_RULE) = 0;
     virtual void DoDrawPolyPolygon(int n, int count[], wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
-                               int fillStyle);
+                               wxPolygonFillMode fillStyle);
     void DrawPolygon(const wxPointList *list,
                      wxCoord xoffset, wxCoord yoffset,
-                     int fillStyle );
+                     wxPolygonFillMode fillStyle );
 
 
 #if wxUSE_SPLINES
@@ -602,9 +680,9 @@ protected:
     wxCoord m_minX, m_minY, m_maxX, m_maxY;
     wxCoord m_clipX1, m_clipY1, m_clipX2, m_clipY2;
 
-    int m_logicalFunction;
+    wxRasterOperationMode m_logicalFunction;
     int m_backgroundMode;
-    int m_mappingMode;
+    wxMappingMode m_mappingMode;
 
     wxPen             m_pen;
     wxBrush           m_brush;
@@ -749,9 +827,9 @@ public:
 
     // logical functions
 
-    void SetLogicalFunction(int function)
+    void SetLogicalFunction(wxRasterOperationMode function)
         { m_pimpl->SetLogicalFunction(function); }
-    int GetLogicalFunction() const
+    wxRasterOperationMode GetLogicalFunction() const
         { return m_pimpl->GetLogicalFunction(); }
 
     // text measurement
@@ -848,9 +926,9 @@ public:
     wxCoord LogicalToDeviceYRel(wxCoord y) const
         { return m_pimpl->LogicalToDeviceYRel(y); }
 
-    void SetMapMode(int mode)
+    void SetMapMode(wxMappingMode mode)
         { m_pimpl->SetMapMode(mode); }
-    int GetMapMode() const
+    wxMappingMode GetMapMode() const
         { return m_pimpl->GetMapMode(); }
 
     void SetUserScale(double x, double y)
@@ -898,10 +976,10 @@ public:
     // the actual drawing API
 
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& col,
-                   int style = wxFLOOD_SURFACE)
+                   wxFloodFillStyle style = wxFLOOD_SURFACE)
         { return m_pimpl->DoFloodFill(x, y, col, style); }
     bool FloodFill(const wxPoint& pt, const wxColour& col,
-                   int style = wxFLOOD_SURFACE)
+                   wxFloodFillStyle style = wxFLOOD_SURFACE)
         { return m_pimpl->DoFloodFill(pt.x, pt.y, col, style); }
 
     // fill the area specified by rect with a radial gradient, starting from
@@ -978,20 +1056,20 @@ public:
 
     void DrawPolygon(int n, wxPoint points[],
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
-                     int fillStyle = wxODDEVEN_RULE)
+                     wxPolygonFillMode fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DoDrawPolygon(n, points, xoffset, yoffset, fillStyle); }
     void DrawPolygon(const wxPointList *list,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
-                     int fillStyle = wxODDEVEN_RULE)
+                     wxPolygonFillMode fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DrawPolygon( list, xoffset, yoffset, fillStyle ); }
     void DrawPolyPolygon(int n, int count[], wxPoint points[],
                          wxCoord xoffset = 0, wxCoord yoffset = 0,
-                         int fillStyle = wxODDEVEN_RULE)
+                         wxPolygonFillMode fillStyle = wxODDEVEN_RULE)
         { m_pimpl->DoDrawPolyPolygon(n, count, points, xoffset, yoffset, fillStyle); }
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( void DrawPolygon(const wxList *list,
                      wxCoord xoffset = 0, wxCoord yoffset = 0,
-                     int fillStyle = wxODDEVEN_RULE) );
+                     wxPolygonFillMode fillStyle = wxODDEVEN_RULE) );
 #endif  // WXWIN_COMPATIBILITY_2_8
 
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
@@ -1062,14 +1140,16 @@ public:
 
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
-              int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord)
+              wxRasterOperationMode rop = wxCOPY, bool useMask = false, 
+              wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord)
     {
         return m_pimpl->DoBlit(xdest, ydest, width, height,
                       source, xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
     }
     bool Blit(const wxPoint& destPt, const wxSize& sz,
               wxDC *source, const wxPoint& srcPt,
-              int rop = wxCOPY, bool useMask = false, const wxPoint& srcPtMask = wxDefaultPosition)
+              wxRasterOperationMode rop = wxCOPY, bool useMask = false, 
+              const wxPoint& srcPtMask = wxDefaultPosition)
     {
         return m_pimpl->DoBlit(destPt.x, destPt.y, sz.x, sz.y,
                       source, srcPt.x, srcPt.y, rop, useMask, srcPtMask.x, srcPtMask.y);
@@ -1080,7 +1160,7 @@ public:
                      wxDC *source,
                      wxCoord srcX, wxCoord srcY,
                      wxCoord srcWidth, wxCoord srcHeight,
-                     int rop = wxCOPY, bool useMask = false,
+                     wxRasterOperationMode rop = wxCOPY, bool useMask = false,
                      wxCoord srcMaskX = wxDefaultCoord, wxCoord srcMaskY = wxDefaultCoord)
     {
         return m_pimpl->DoStretchBlit(dstX, dstY, dstWidth, dstHeight,
@@ -1088,7 +1168,8 @@ public:
     }
     bool StretchBlit(const wxPoint& dstPt, const wxSize& dstSize,
                      wxDC *source, const wxPoint& srcPt, const wxSize& srcSize,
-                     int rop = wxCOPY, bool useMask = false, const wxPoint& srcMaskPt = wxDefaultPosition)
+                     wxRasterOperationMode rop = wxCOPY, bool useMask = false, 
+                     const wxPoint& srcMaskPt = wxDefaultPosition)
     {
         return m_pimpl->DoStretchBlit(dstPt.x, dstPt.y, dstSize.x, dstSize.y,
                       source, srcPt.x, srcPt.y, srcSize.x, srcSize.y, rop, useMask, srcMaskPt.x, srcMaskPt.y);

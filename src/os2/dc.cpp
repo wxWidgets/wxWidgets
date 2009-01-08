@@ -540,7 +540,7 @@ bool wxPMDCImpl::DoFloodFill(
   wxCoord                           vX
 , wxCoord                           vY
 , const wxColour&                   rCol
-, int                               nStyle
+, wxFloodFillStyle                  nStyle
 )
 {
     POINTL                          vPtlPos;
@@ -839,7 +839,7 @@ void wxPMDCImpl::DoDrawPolygon( int n,
                           wxPoint vPoints[],
                           wxCoord vXoffset,
                           wxCoord vYoffset,
-                          int nFillStyle )
+                          wxPolygonFillMode nFillStyle )
 {
     ULONG     ulCount = 1;    // Number of polygons.
     POLYGON   vPlgn;          // polygon.
@@ -2017,7 +2017,7 @@ void wxPMDCImpl::SetBackgroundMode(int nMode)
     m_backgroundMode = nMode;
 } // end of wxPMDCImpl::SetBackgroundMode
 
-void wxPMDCImpl::SetLogicalFunction(int nFunction)
+void wxPMDCImpl::SetLogicalFunction(wxRasterOperationMode nFunction)
 {
     m_logicalFunction = nFunction;
     SetRop((WXHDC)m_hDC);
@@ -2165,7 +2165,7 @@ void wxPMDCImpl::DoGetTextExtent(
 			    ,wxICON_INFORMATION
 			    );
     }
-	
+
     bRc = ::GpiQueryTextBox( m_hPS
                             ,l
                             ,rsString.char_str()
@@ -2211,7 +2211,7 @@ void wxPMDCImpl::DoGetTextExtent(
 }
 
 void wxPMDCImpl::SetMapMode(
-  int                               nMode
+  wxMappingMode                     nMode
 )
 {
     int                             nPixelWidth = 0;
@@ -2285,7 +2285,7 @@ void wxPMDCImpl::SetMapMode(
         ::GpiSetPS(m_hPS, &vSize, ulOptions);
     }
     ComputeScaleAndOrigin();
-    
+
 }; // end of wxPMDCImpl::SetMapMode
 
 void wxPMDCImpl::SetUserScale( double dX,
@@ -2357,7 +2357,7 @@ bool wxPMDCImpl::DoBlit( wxCoord vXdest,
                    wxDC*   pSource,
                    wxCoord vXsrc,
                    wxCoord vYsrc,
-                   int     nRop,
+                   wxRasterOperationMode     nRop,
                    bool    bUseMask,
                    wxCoord WXUNUSED(vXsrcMask),
                    wxCoord WXUNUSED(vYsrcMask) )

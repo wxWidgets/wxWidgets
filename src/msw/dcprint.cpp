@@ -422,7 +422,7 @@ bool wxPrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                          wxCoord width, wxCoord height,
                          wxDC *source,
                          wxCoord WXUNUSED(xsrc), wxCoord WXUNUSED(ysrc),
-                         int WXUNUSED(rop), bool useMask,
+                         wxRasterOperationMode WXUNUSED(rop), bool useMask,
                          wxCoord WXUNUSED(xsrcMask), wxCoord WXUNUSED(ysrcMask))
 {
     wxDCImpl *impl = source->GetImpl();

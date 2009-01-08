@@ -277,7 +277,7 @@ bool wxPrinterDCImpl::DoBlit( wxCoord WXUNUSED(vXdest),
                               wxDC* WXUNUSED(pSource),
                               wxCoord WXUNUSED(vXsrc),
                               wxCoord WXUNUSED(vYsrc),
-                              int WXUNUSED(nRop),
+                              wxRasterOperationMode WXUNUSED(nRop),
                               bool WXUNUSED(bUseMask),
                               wxCoord WXUNUSED(xsrcMask),
                               wxCoord WXUNUSED(ysrcMask) )

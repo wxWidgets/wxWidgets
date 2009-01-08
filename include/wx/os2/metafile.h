@@ -82,7 +82,7 @@ public:
     virtual ~wxMetafileDCImpl();
 
     virtual wxMetafile *Close();
-    virtual void SetMapMode(int mode);
+    virtual void SetMapMode(wxMappingMode mode);
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,
                                  wxCoord *descent = NULL,

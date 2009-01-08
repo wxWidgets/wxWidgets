@@ -1574,7 +1574,7 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
 
 // TODO test whether the private CGContextSetCompositeOperation works under 10.3 (using NSCompositingModes)
 
-bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
+bool wxMacCoreGraphicsContext::SetLogicalFunction( wxRasterOperationMode function )
 {
     if (m_logicalFunction == function)
         return true;

@@ -79,15 +79,15 @@ public:
         wxFAIL_MSG(wxT("wxSVGFILEDC::GetClippingBox not implemented"));
     }
 
-    virtual void SetLogicalFunction(int WXUNUSED(function))
+    virtual void SetLogicalFunction(wxRasterOperationMode WXUNUSED(function))
     {
         wxFAIL_MSG(wxT("wxSVGFILEDC::SetLogicalFunction Call not implemented"));
     }
 
-    virtual int GetLogicalFunction() const
+    virtual wxRasterOperationMode GetLogicalFunction() const
     {
         wxFAIL_MSG(wxT("wxSVGFILEDC::GetLogicalFunction() not implemented"));
-        return -1;
+        return wxCOPY;
     }
 
     virtual void SetBackground( const wxBrush &brush );
@@ -104,7 +104,7 @@ private:
    }
 
    virtual bool DoBlit(wxCoord, wxCoord, wxCoord, wxCoord, wxDC *,
-                       wxCoord, wxCoord, int = wxCOPY,
+                       wxCoord, wxCoord, wxRasterOperationMode = wxCOPY,
                        bool = 0, int = -1, int = -1);
 
    virtual void DoCrossHair(wxCoord, wxCoord)
@@ -132,7 +132,9 @@ private:
 
    virtual void DoDrawPoint(wxCoord, wxCoord);
 
-   virtual void DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle);
+   virtual void DoDrawPolygon(int n, wxPoint points[], 
+                              wxCoord xoffset, wxCoord yoffset,
+                              wxPolygonFillMode fillStyle);
 
    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 
@@ -147,7 +149,7 @@ private:
 
    virtual bool DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
                             const wxColour& WXUNUSED(col),
-                            int WXUNUSED(style) = wxFLOOD_SURFACE)
+                            wxFloodFillStyle WXUNUSED(style) = wxFLOOD_SURFACE)
    {
        wxFAIL_MSG(wxT("wxSVGFILEDC::DoFloodFill Call not implemented"));
        return false;

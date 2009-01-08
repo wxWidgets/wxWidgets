@@ -356,10 +356,10 @@ public:
     virtual void * GetNativeContext() = 0;
 
     // returns the current logical function
-    virtual int GetLogicalFunction() const { return m_logicalFunction; }
+    virtual wxRasterModeOperation GetLogicalFunction() const { return m_logicalFunction; }
 
     // sets the current logical function, returns true if it supported
-    virtual bool SetLogicalFunction(int function);
+    virtual bool SetLogicalFunction(wxRasterOperationMode function);
 
     // returns the size of the graphics context in device coordinates
     virtual void GetSize( wxDouble* width, wxDouble* height);
@@ -495,7 +495,7 @@ protected:
     wxGraphicsPen m_pen;
     wxGraphicsBrush m_brush;
     wxGraphicsFont m_font;
-    int m_logicalFunction;
+    wxRasterOperationMode m_logicalFunction;
 
 private:
     // implementations of overloaded public functions: we use different names

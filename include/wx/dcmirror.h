@@ -53,7 +53,7 @@ public:
     virtual int GetDepth() const { return m_dc.GetDepth(); }
     virtual wxSize GetPPI() const { return m_dc.GetPPI(); }
     virtual bool IsOk() const { return m_dc.IsOk(); }
-    virtual void SetMapMode(int mode) { m_dc.SetMapMode(mode); }
+    virtual void SetMapMode(wxMappingMode mode) { m_dc.SetMapMode(mode); }
     virtual void SetUserScale(double x, double y)
         { m_dc.SetUserScale(GetX(x, y), GetY(x, y)); }
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y)
@@ -63,7 +63,7 @@ public:
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp)
         { m_dc.SetAxisOrientation(GetX(xLeftRight, yBottomUp),
                                   GetY(xLeftRight, yBottomUp)); }
-    virtual void SetLogicalFunction(int function)
+    virtual void SetLogicalFunction(wxRasterOperationMode function)
         { m_dc.SetLogicalFunction(function); }
 
 protected:
@@ -102,7 +102,7 @@ protected:
 
     // wxDCBase functions
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
-                             int style = wxFLOOD_SURFACE)
+                             wxFloodFillStyle style = wxFLOOD_SURFACE)
     {
         return m_dc.DoFloodFill(GetX(x, y), GetY(x, y), col, style);
     }
@@ -202,7 +202,8 @@ protected:
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord w, wxCoord h,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = false,
+                        wxRasterOperationMode rop = wxCOPY, 
+                        bool useMask = false,
                         wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord)
     {
         return m_dc.DoBlit(GetX(xdest, ydest), GetY(xdest, ydest),
@@ -235,7 +236,7 @@ protected:
 
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
-                               int fillStyle = wxODDEVEN_RULE)
+                               wxPolygonFillMode fillStyle = wxODDEVEN_RULE)
     {
         Mirror(n, points);
 

@@ -111,7 +111,7 @@ public:
 
     int         m_backgroundMode;
     int         m_textureBackground;
-    int         m_mapMode;
+    wxMappingMode m_mapMode;
     double      m_xUserScale;
     double      m_yUserScale;
     int         m_xLogicalOrigin;
@@ -802,7 +802,7 @@ void MyCanvas::DrawText(wxDC& dc)
 static const struct
 {
     const wxChar *name;
-    int           rop;
+    wxRasterOperationMode rop;
 } rasterOperations[] =
 {
     { wxT("wxAND"),          wxAND           },

@@ -413,7 +413,7 @@ void wxDCImpl::ComputeScaleAndOrigin()
     m_scaleY = m_logicalScaleY * m_userScaleY;
 }
 
-void wxDCImpl::SetMapMode( int mode )
+void wxDCImpl::SetMapMode( wxMappingMode mode )
 {
     switch (mode)
     {
@@ -650,7 +650,7 @@ wxDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                         wxDC *source,
                         wxCoord xsrc, wxCoord ysrc,
                         wxCoord srcWidth, wxCoord srcHeight,
-                        int rop,
+                        wxRasterOperationMode rop,
                         bool useMask,
                         wxCoord xsrcMask,
                         wxCoord ysrcMask)
@@ -696,7 +696,7 @@ void wxDCImpl::DrawLines(const wxPointList *list, wxCoord xoffset, wxCoord yoffs
 
 void wxDCImpl::DrawPolygon(const wxPointList *list,
                            wxCoord xoffset, wxCoord yoffset,
-                           int fillStyle)
+                           wxPolygonFillMode fillStyle)
 {
     int n = list->GetCount();
     wxPoint *points = new wxPoint[n];
@@ -719,7 +719,7 @@ wxDCImpl::DoDrawPolyPolygon(int n,
                             int count[],
                             wxPoint points[],
                             wxCoord xoffset, wxCoord yoffset,
-                            int fillStyle)
+                            wxPolygonFillMode fillStyle)
 {
     if ( n == 1 )
     {

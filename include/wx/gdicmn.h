@@ -85,6 +85,13 @@ enum wxBitmapType
     wxBITMAP_TYPE_ANY = 50
 };
 
+//  Polygon filling mode
+enum wxPolygonFillMode
+{
+    wxODDEVEN_RULE = 1,
+    wxWINDING_RULE
+};
+
 // Standard cursors
 enum wxStockCursor
 {

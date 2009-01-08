@@ -86,13 +86,13 @@ public:
     virtual int GetDepth() const;
     virtual wxSize GetPPI() const;
 
-    virtual void SetLogicalFunction(int function);
+    virtual void SetLogicalFunction(wxRasterOperationMode function);
 
     // implementation from now on
     // --------------------------
 
     virtual void ComputeScaleAndOrigin();
-    
+
     wxCoord XDEV2LOG(wxCoord x) const       { return DeviceToLogicalX(x); }
     wxCoord XDEV2LOGREL(wxCoord x) const    { return DeviceToLogicalXRel(x); }
     wxCoord YDEV2LOG(wxCoord y) const       { return DeviceToLogicalY(y); }
@@ -107,7 +107,7 @@ public:
 
 protected:
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
-                             int style = wxFLOOD_SURFACE);
+                             wxFloodFillStyle style = wxFLOOD_SURFACE);
 
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
 
@@ -138,7 +138,8 @@ protected:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+                        wxRasterOperationMode rop = wxCOPY, bool useMask = false,
+                        wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height);
@@ -151,7 +152,7 @@ protected:
                              wxCoord xoffset, wxCoord yoffset);
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
-                               int fillStyle = wxODDEVEN_RULE);
+                               wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 
     // implementation from now on:
 

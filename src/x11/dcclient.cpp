@@ -351,10 +351,10 @@ void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
 }
 
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
-                          const wxColour & col, int style);
+                          const wxColour & col, wxFloodFillStyle style);
 
 bool wxWindowDCImpl::DoFloodFill(wxCoord x, wxCoord y,
-                             const wxColour& col, int style)
+                                 const wxColour& col, wxFloodFillStyle style)
 {
     return wxDoFloodFill(GetOwner(), x, y, col, style);
 }
@@ -643,7 +643,7 @@ void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCo
 
 void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[],
                                 wxCoord xoffset, wxCoord yoffset,
-                                int WXUNUSED(fillStyle) )
+                                wxPolygonFillMode WXUNUSED(fillStyle) )
 {
     wxCHECK_RET( IsOk(), wxT("invalid window dc") );
 
@@ -1291,7 +1291,8 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
   // wxUSE_NANOX/!wxUSE_NANOX
 
 bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-                         wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func, bool useMask,
+                         wxDC *source, wxCoord xsrc, wxCoord ysrc, 
+                         wxRasterOperationMode logical_func, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask )
 {
    /* this is the nth try to get this utterly useless function to
@@ -1385,7 +1386,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoor
             return true;
     }
 
-    int old_logical_func = m_logicalFunction;
+    wxRasterOperationMode old_logical_func = m_logicalFunction;
     SetLogicalFunction( logical_func );
 
     if (use_bitmap_method)
@@ -2044,7 +2045,7 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
     }
 }
 
-void wxWindowDCImpl::SetLogicalFunction( int function )
+void wxWindowDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 

@@ -2148,41 +2148,6 @@ enum wxDeprecatedGUIConstants
 };
 #endif
 
-/*  Logical ops */
-typedef enum
-{
-    wxCLEAR,        wxROP_BLACK = wxCLEAR,             wxBLIT_BLACKNESS = wxCLEAR,        /*  0 */
-    wxXOR,          wxROP_XORPEN = wxXOR,              wxBLIT_SRCINVERT = wxXOR,          /*  src XOR dst */
-    wxINVERT,       wxROP_NOT = wxINVERT,              wxBLIT_DSTINVERT = wxINVERT,       /*  NOT dst */
-    wxOR_REVERSE,   wxROP_MERGEPENNOT = wxOR_REVERSE,  wxBLIT_00DD0228 = wxOR_REVERSE,    /*  src OR (NOT dst) */
-    wxAND_REVERSE,  wxROP_MASKPENNOT = wxAND_REVERSE,  wxBLIT_SRCERASE = wxAND_REVERSE,   /*  src AND (NOT dst) */
-    wxCOPY,         wxROP_COPYPEN = wxCOPY,            wxBLIT_SRCCOPY = wxCOPY,           /*  src */
-    wxAND,          wxROP_MASKPEN = wxAND,             wxBLIT_SRCAND = wxAND,             /*  src AND dst */
-    wxAND_INVERT,   wxROP_MASKNOTPEN = wxAND_INVERT,   wxBLIT_00220326 = wxAND_INVERT,    /*  (NOT src) AND dst */
-    wxNO_OP,        wxROP_NOP = wxNO_OP,               wxBLIT_00AA0029 = wxNO_OP,         /*  dst */
-    wxNOR,          wxROP_NOTMERGEPEN = wxNOR,         wxBLIT_NOTSRCERASE = wxNOR,        /*  (NOT src) AND (NOT dst) */
-    wxEQUIV,        wxROP_NOTXORPEN = wxEQUIV,         wxBLIT_00990066 = wxEQUIV,         /*  (NOT src) XOR dst */
-    wxSRC_INVERT,   wxROP_NOTCOPYPEN = wxSRC_INVERT,   wxBLIT_NOTSCRCOPY = wxSRC_INVERT,  /*  (NOT src) */
-    wxOR_INVERT,    wxROP_MERGENOTPEN = wxOR_INVERT,   wxBLIT_MERGEPAINT = wxOR_INVERT,   /*  (NOT src) OR dst */
-    wxNAND,         wxROP_NOTMASKPEN = wxNAND,         wxBLIT_007700E6 = wxNAND,          /*  (NOT src) OR (NOT dst) */
-    wxOR,           wxROP_MERGEPEN = wxOR,             wxBLIT_SRCPAINT = wxOR,            /*  src OR dst */
-    wxSET,          wxROP_WHITE = wxSET,               wxBLIT_WHITENESS = wxSET           /*  1 */
-} form_ops_t;
-
-/*  Flood styles */
-enum
-{
-    wxFLOOD_SURFACE = 1,
-    wxFLOOD_BORDER
-};
-
-/*  Polygon filling mode */
-enum
-{
-    wxODDEVEN_RULE = 1,
-    wxWINDING_RULE
-};
-
 /*  ToolPanel in wxFrame (VZ: unused?) */
 enum
 {
@@ -2378,21 +2343,6 @@ enum wxKeyModifier
     wxMOD_CMD       = wxMOD_CONTROL,
 #endif
     wxMOD_ALL       = 0xffff
-};
-
-/*  Mapping modes (same values as used by Windows, don't change) */
-enum
-{
-    wxMM_TEXT = 1,
-    wxMM_LOMETRIC,
-    wxMM_HIMETRIC,
-    wxMM_LOENGLISH,
-    wxMM_HIENGLISH,
-    wxMM_TWIPS,
-    wxMM_ISOTROPIC,
-    wxMM_ANISOTROPIC,
-    wxMM_POINTS,
-    wxMM_METRIC
 };
 
 /* Shortcut for easier dialog-unit-to-pixel conversion */

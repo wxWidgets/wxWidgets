@@ -35,7 +35,8 @@ public:
         InitRect(rect.x, rect.y, rect.width, rect.height);
     }
 
-    wxRegion( size_t n, const wxPoint *points, int fillStyle = wxODDEVEN_RULE );
+    wxRegion( size_t n, const wxPoint *points, 
+              wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
 #if wxUSE_IMAGE
     wxRegion( const wxBitmap& bmp)

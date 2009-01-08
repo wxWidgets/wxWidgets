@@ -1050,7 +1050,7 @@ bool
 wxGnomePrinterDCImpl::DoFloodFill(wxCoord WXUNUSED(x1),
                             wxCoord WXUNUSED(y1),
                             const wxColour& WXUNUSED(col),
-                            int WXUNUSED(style))
+                            wxFloodFillStyle WXUNUSED(style))
 {
     return false;
 }
@@ -1208,7 +1208,7 @@ void wxGnomePrinterDCImpl::DoDrawLines(int n, wxPoint points[], wxCoord xoffset,
 
 void wxGnomePrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
                                    wxCoord xoffset, wxCoord yoffset,
-                                   int WXUNUSED(fillStyle))
+                                   wxPolygonFillMode WXUNUSED(fillStyle))
 {
     if (n==0) return;
 
@@ -1254,7 +1254,7 @@ void wxGnomePrinterDCImpl::DoDrawPolygon(int n, wxPoint points[],
     }
 }
 
-void wxGnomePrinterDCImpl::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxGnomePrinterDCImpl::DoDrawPolyPolygon(int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
 {
 #if wxUSE_NEW_DC
     wxDCImpl::DoDrawPolyPolygon( n, count, points, xoffset, yoffset, fillStyle );
@@ -1508,7 +1508,7 @@ wxGnomePrinterDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                       wxCoord width, wxCoord height,
                       wxDC *source,
                       wxCoord xsrc, wxCoord ysrc,
-                      int rop,
+                      wxRasterOperationMode rop,
                       bool WXUNUSED(useMask),
                       wxCoord WXUNUSED(xsrcMask), wxCoord WXUNUSED(ysrcMask))
 {
@@ -1802,7 +1802,7 @@ void wxGnomePrinterDCImpl::SetBrush( const wxBrush& brush )
     }
 }
 
-void wxGnomePrinterDCImpl::SetLogicalFunction(int WXUNUSED(function))
+void wxGnomePrinterDCImpl::SetLogicalFunction(wxRasterOperationMode WXUNUSED(function))
 {
 }
 

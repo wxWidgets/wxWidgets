@@ -38,7 +38,7 @@ public:
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
-    virtual bool DoFloodFill( wxCoord x, wxCoord y, const wxColour& col, int style=wxFLOOD_SURFACE );
+    virtual bool DoFloodFill( wxCoord x, wxCoord y, const wxColour& col, wxFloodFillStyle style=wxFLOOD_SURFACE );
     virtual bool DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const;
 
     virtual void DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 );
@@ -53,7 +53,7 @@ protected:
                              wxCoord xoffset, wxCoord yoffset);
     virtual void DoDrawPolygon(int n, wxPoint points[],
                                wxCoord xoffset, wxCoord yoffset,
-                               int fillStyle = wxODDEVEN_RULE);
+                               wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 
     virtual void DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height );
     virtual void DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius = 20.0 );
@@ -65,7 +65,8 @@ protected:
 
     virtual bool DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                          wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                         int logical_func = wxCOPY, bool useMask = false, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1 );
+                         wxRasterOperationMode logical_func = wxCOPY, bool useMask = false,
+                         wxCoord xsrcMask = -1, wxCoord ysrcMask = -1 );
 
     virtual void DoDrawText( const wxString &text, wxCoord x, wxCoord y );
     virtual void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
@@ -86,7 +87,7 @@ public:
     virtual void SetPen( const wxPen &pen );
     virtual void SetBrush( const wxBrush &brush );
     virtual void SetBackground( const wxBrush &brush );
-    virtual void SetLogicalFunction( int function );
+    virtual void SetLogicalFunction( wxRasterOperationMode function );
     virtual void SetTextForeground( const wxColour &col );
     virtual void SetTextBackground( const wxColour &col );
     virtual void SetBackgroundMode( int mode );

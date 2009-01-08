@@ -362,7 +362,7 @@ void wxCocoaDCImpl::DoDrawPoint( int x, int y )
 {
 };
 
-void wxCocoaDCImpl::DoDrawPolygon( int, wxPoint *, int, int, int)
+void wxCocoaDCImpl::DoDrawPolygon( int, wxPoint *, int, int, wxPolygonFillMode)
 {
 };
 
@@ -499,7 +499,7 @@ void wxCocoaDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool
     [context restoreGraphicsState];
 }
 
-bool wxCocoaDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
+bool wxCocoaDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, wxFloodFillStyle style)
 {
     return false;
 }
@@ -509,7 +509,7 @@ void wxCocoaDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 }
 
 
-bool wxCocoaDCImpl::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height, wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop, bool useMask , wxCoord xsrcMask, wxCoord ysrcMask)
+bool wxCocoaDCImpl::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height, wxDC *source, wxCoord xsrc, wxCoord ysrc, wxRasterOperationMode rop, bool useMask , wxCoord xsrcMask, wxCoord ysrcMask)
 {
     if(!CocoaTakeFocus()) return false;
     if(!source) return false;
@@ -579,12 +579,12 @@ void wxCocoaDCImpl::SetPalette(const wxPalette&)
 {
 }
 
-void wxCocoaDCImpl::SetLogicalFunction(int)
+void wxCocoaDCImpl::SetLogicalFunction(wxRasterOperationMode)
 {
 }
 
 
-void wxCocoaDCImpl::SetMapMode( int mode )
+void wxCocoaDCImpl::SetMapMode( wxMappingMode mode )
 {
   switch (mode)
   {

@@ -239,7 +239,7 @@ void wxPalmDCImpl::Clear()
 bool wxPalmDCImpl::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
                        wxCoord WXUNUSED_IN_WINCE(y),
                        const wxColour& WXUNUSED_IN_WINCE(col),
-                       int WXUNUSED_IN_WINCE(style))
+                       wxFloodFillStyle WXUNUSED_IN_WINCE(style))
 {
     return false;
 }
@@ -278,7 +278,7 @@ void wxPalmDCImpl::DoDrawPolygon(int n,
                          wxPoint points[],
                          wxCoord xoffset,
                          wxCoord yoffset,
-                         int WXUNUSED_IN_WINCE(fillStyle))
+                         wxPolygonFillMode WXUNUSED_IN_WINCE(fillStyle))
 {
 }
 
@@ -288,7 +288,7 @@ wxPalmDCImpl::DoDrawPolyPolygon(int n,
                         wxPoint points[],
                         wxCoord xoffset,
                         wxCoord yoffset,
-                        int fillStyle)
+                        wxPolygonFillMode fillStyle)
 {
 }
 
@@ -384,7 +384,7 @@ void wxPalmDCImpl::SetBackgroundMode(int mode)
 {
 }
 
-void wxPalmDCImpl::SetLogicalFunction(int function)
+void wxPalmDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
 }
 
@@ -443,7 +443,7 @@ void wxPalmDCImpl::RealizeScaleAndOrigin()
 {
 }
 
-void wxPalmDCImpl::SetMapMode(int mode)
+void wxPalmDCImpl::SetMapMode(wxMappingMode mode)
 {
 }
 
@@ -472,7 +472,7 @@ bool wxPalmDCImpl::DoBlit(wxCoord dstX, wxCoord dstY,
                   wxCoord dstWidth, wxCoord dstHeight,
                   wxDC *source,
                   wxCoord srcX, wxCoord srcY,
-                  int rop, bool useMask,
+                  wxRasterOperationMode rop, bool useMask,
                   wxCoord srcMaskX, wxCoord srcMaskY)
 {
     return false;
@@ -483,7 +483,7 @@ bool wxPalmDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                          wxDC *source,
                          wxCoord xsrc, wxCoord ysrc,
                          wxCoord srcWidth, wxCoord srcHeight,
-                         int rop, bool useMask,
+                         wxRasterOperationMode rop, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask)
 {
     return false;

@@ -48,7 +48,7 @@ protected:
                         ,wxDC*   pSource
                         ,wxCoord vXsrc
                         ,wxCoord vYsrc
-                        ,int     nRop = wxCOPY
+                        ,wxRasterOperationMode     nRop = wxCOPY
                         ,bool    bUseMask = FALSE
                         ,wxCoord vXsrcMask = -1
                         ,wxCoord vYsrcMask = -1

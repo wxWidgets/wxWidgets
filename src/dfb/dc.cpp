@@ -148,10 +148,10 @@ void wxDFBDCImpl::Clear()
 }
 
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
-                          const wxColour & col, int style);
+                          const wxColour & col, wxFloodFillStyle style);
 
 bool wxDFBDCImpl::DoFloodFill(wxCoord x, wxCoord y,
-                       const wxColour& col, int style)
+                       const wxColour& col, wxFloodFillStyle style)
 {
     return wxDoFloodFill(GetOwner(), x, y, col, style);
 }
@@ -241,7 +241,7 @@ void wxDFBDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 
 void wxDFBDCImpl::DoDrawPolygon(int WXUNUSED(n), wxPoint WXUNUSED(points)[],
                                 wxCoord WXUNUSED(xoffset), wxCoord WXUNUSED(yoffset),
-                                int WXUNUSED(fillStyle))
+                                wxPolygonFillMode WXUNUSED(fillStyle))
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
@@ -441,7 +441,7 @@ void wxDFBDCImpl::SetBackgroundMode(int mode)
     m_backgroundMode = mode;
 }
 
-void wxDFBDCImpl::SetLogicalFunction(int function)
+void wxDFBDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
@@ -583,7 +583,7 @@ wxSize wxDFBDCImpl::GetPPI() const
 bool wxDFBDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                          wxCoord width, wxCoord height,
                          wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                         int rop, bool useMask,
+                         wxRasterOperationMode rop, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask)
 {
     wxCHECK_MSG( IsOk(), false, "invalid dc" );

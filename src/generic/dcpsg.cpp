@@ -406,7 +406,7 @@ void wxPostScriptDCImpl::Clear()
     //    wxFAIL_MSG( wxT("wxPostScriptDCImpl::Clear not implemented.") );
 }
 
-bool wxPostScriptDCImpl::DoFloodFill (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
+bool wxPostScriptDCImpl::DoFloodFill (wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour &WXUNUSED(col), wxFloodFillStyle WXUNUSED(style))
 {
     wxFAIL_MSG( wxT("wxPostScriptDCImpl::FloodFill not implemented.") );
     return false;
@@ -598,7 +598,7 @@ void wxPostScriptDCImpl::DoDrawPoint (wxCoord x, wxCoord y)
     CalcBoundingBox( x, y );
 }
 
-void wxPostScriptDCImpl::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxPostScriptDCImpl::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -668,7 +668,7 @@ void wxPostScriptDCImpl::DoDrawPolygon (int n, wxPoint points[], wxCoord xoffset
     }
 }
 
-void wxPostScriptDCImpl::DoDrawPolyPolygon (int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, int fillStyle)
+void wxPostScriptDCImpl::DoDrawPolyPolygon (int n, int count[], wxPoint points[], wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle)
 {
     wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
 
@@ -1507,7 +1507,7 @@ void wxPostScriptDCImpl::SetBackground (const wxBrush& brush)
     m_backgroundBrush = brush;
 }
 
-void wxPostScriptDCImpl::SetLogicalFunction (int WXUNUSED(function))
+void wxPostScriptDCImpl::SetLogicalFunction(wxRasterOperationMode WXUNUSED(function))
 {
     wxFAIL_MSG( wxT("wxPostScriptDCImpl::SetLogicalFunction not implemented.") );
 }
@@ -1935,7 +1935,8 @@ bool wxPostScriptDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
                            wxCoord fwidth, wxCoord fheight,
                            wxDC *source,
                            wxCoord xsrc, wxCoord ysrc,
-                           int rop, bool WXUNUSED(useMask), wxCoord WXUNUSED(xsrcMask), wxCoord WXUNUSED(ysrcMask) )
+                           wxRasterOperationMode rop, 
+                           bool WXUNUSED(useMask), wxCoord WXUNUSED(xsrcMask), wxCoord WXUNUSED(ysrcMask) )
 {
     wxCHECK_MSG( m_ok, false, wxT("invalid postscript dc") );
 

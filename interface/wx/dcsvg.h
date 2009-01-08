@@ -56,7 +56,7 @@ public:
         @see wxDC::Blit()
     */
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-              wxDC* source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY,
+              wxDC* source, wxCoord xsrc, wxCoord ysrc, wxRasterOperationMode rop = wxCOPY,
               bool useMask = false, wxCoord xsrcMask = wxDefaultCoord,
               wxCoord ysrcMask = wxDefaultCoord);
 
@@ -230,9 +230,11 @@ public:
         The programmer is responsible for deleting the list of points.
     */
     void DrawPolygon(int n, wxPoint points[], wxCoord xoffset = 0,
-                     wxCoord yoffset = 0, int fill_style = wxODDEVEN_RULE);
+                     wxCoord yoffset = 0,
+                     wxPolygonFillMode fill_style = wxODDEVEN_RULE);
     void DrawPolygon(wxList* points, wxCoord xoffset = 0,
-                     wxCoord yoffset = 0, int fill_style = wxODDEVEN_RULE);
+                     wxCoord yoffset = 0,
+                     wxPolygonFillMode fill_style = wxODDEVEN_RULE);
     //@}
 
     /**
@@ -310,7 +312,7 @@ public:
         Not implemented.
     */
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& colour,
-                   int style = wxFLOOD_SURFACE);
+                   wxFloodFillStyle style = wxFLOOD_SURFACE);
 
     //@{
     /**
@@ -369,7 +371,7 @@ public:
 
         @see SetLogicalFunction()
     */
-    int GetLogicalFunction() const;
+    wxRasterOperationMode GetLogicalFunction() const;
 
     /**
         Gets the mapping mode for the device context.
@@ -576,9 +578,9 @@ public:
 
     /**
         Does the same as wxDC::SetLogicalFunction(), except that only wxCOPY is
-        avalaible. Trying to set one of the othe values will fail.
+        available. Trying to set one of the other values will fail.
     */
-    void SetLogicalFunction(int function);
+    void SetLogicalFunction(wxRasterOperationMode function);
 
     /**
         The mapping mode of the device context defines the unit of measurement

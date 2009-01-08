@@ -42,7 +42,8 @@ protected:
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord width, wxCoord height,
                         wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = FALSE, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
+                        wxRasterOperationMode rop = wxCOPY, bool useMask = FALSE,
+                        wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
     // init the dc
     void Init();

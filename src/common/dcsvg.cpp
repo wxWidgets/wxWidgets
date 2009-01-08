@@ -289,7 +289,9 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     CalcBoundingBox(x + width, y + height);
 }
 
-void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[], wxCoord xoffset, wxCoord yoffset,int fillStyle)
+void wxSVGFileDCImpl::DoDrawPolygon(int n, wxPoint points[],
+                                    wxCoord xoffset, wxCoord yoffset,
+                                    wxPolygonFillMode fillStyle)
 {
     if (m_graphics_changed) NewGraphics ();
     wxString s, sTmp;
@@ -589,7 +591,7 @@ void wxSVGFileDCImpl::SetFont(const wxFont& font)
 // export a bitmap as a raster image in png
 bool wxSVGFileDCImpl::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                         wxDC* source, wxCoord xsrc, wxCoord ysrc,
-                        int logicalFunc /*= wxCOPY*/, bool useMask /*= false*/,
+                        wxRasterOperationMode logicalFunc /*= wxCOPY*/, bool useMask /*= false*/,
                         wxCoord /*xsrcMask = -1*/, wxCoord /*ysrcMask = -1*/)
 {
     if (logicalFunc != wxCOPY)

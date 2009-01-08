@@ -345,7 +345,7 @@ public:
 
     virtual void * GetNativeContext();
 
-    virtual bool SetLogicalFunction( int function );
+    virtual bool SetLogicalFunction( wxRasterOperationMode function );
 
     virtual void StrokePath( const wxGraphicsPath& p );
     virtual void FillPath( const wxGraphicsPath& p , int fillStyle = wxWINDING_RULE );
@@ -532,7 +532,7 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
         }
         break;
     default :
-        if ( m_pen.GetStyle() >= wxPENSTYLE_FIRST_HATCH 
+        if ( m_pen.GetStyle() >= wxPENSTYLE_FIRST_HATCH
             && m_pen.GetStyle() <= wxPENSTYLE_LAST_HATCH )
         {
             /*
@@ -1525,7 +1525,7 @@ void * wxCairoContext::GetNativeContext()
 // Cairo doesn't support bitwise logical function (a.k.a. ROP, raster output
 // mode). Cairo supports Porter-Duff compositing operators, but they are quite
 // different, although in some cases have similar names.
-bool wxCairoContext::SetLogicalFunction( int function )
+bool wxCairoContext::SetLogicalFunction( wxRasterOperationMode function )
 {
     if (m_logicalFunction == function)
         return true;

@@ -45,7 +45,7 @@ protected:
 // Blitting
     virtual bool CocoaDoBlitOnFocusedDC(wxCoord xdest, wxCoord ydest,
         wxCoord width, wxCoord height, wxCoord xsrc, wxCoord ysrc,
-        int logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask);
+        wxRasterOperationMode logicalFunc, bool useMask, wxCoord xsrcMask, wxCoord ysrcMask);
 
 private:
     void Init();

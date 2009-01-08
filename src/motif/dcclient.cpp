@@ -222,10 +222,10 @@ wxWindowDCImpl::~wxWindowDCImpl()
 }
 
 extern bool wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
-                          const wxColour & col, int style);
+                          const wxColour & col, wxFloodFillStyle style);
 
 bool wxWindowDCImpl::DoFloodFill(wxCoord x, wxCoord y,
-                             const wxColour& col, int style)
+                             const wxColour& col, wxFloodFillStyle style)
 {
     return wxDoFloodFill(GetOwner(), x, y, col, style);
 }
@@ -471,7 +471,7 @@ void wxWindowDCImpl::DoDrawLines( int n, wxPoint points[], wxCoord xoffset, wxCo
 }
 
 void wxWindowDCImpl::DoDrawPolygon( int n, wxPoint points[],
-                                wxCoord xoffset, wxCoord yoffset, int fillStyle )
+                                wxCoord xoffset, wxCoord yoffset, wxPolygonFillMode fillStyle )
 {
     wxCHECK_RET( IsOk(), "invalid dc" );
 
@@ -790,7 +790,7 @@ bool wxWindowDCImpl::CanDrawBitmap() const
 bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
                          wxCoord width, wxCoord height,
                          wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                         int rop, bool useMask,
+                         wxRasterOperationMode rop, bool useMask,
                          wxCoord xsrcMask, wxCoord ysrcMask )
 {
     wxCHECK_MSG( IsOk(), false, "invalid dc" );
@@ -1930,7 +1930,7 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
                         m_backgroundPixel);
 }
 
-void wxWindowDCImpl::SetLogicalFunction( int function )
+void wxWindowDCImpl::SetLogicalFunction( wxRasterOperationMode function )
 {
     wxCHECK_RET( IsOk(), "invalid dc" );
 

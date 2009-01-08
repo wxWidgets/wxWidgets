@@ -149,7 +149,7 @@ public:
     virtual void    SetAxisOrientation( bool bXLeftRight
                                        ,bool bYBottomUp
                                       );
-    virtual void    SetLogicalFunction(int nFunction);
+    virtual void    SetLogicalFunction(wxRasterOperationMode nFunction);
 
     // implementation from now on
     // --------------------------
@@ -227,10 +227,10 @@ public:
                                     ,wxCoord*        pExternalLeading = NULL
                                     ,const wxFont*   pTheFont = NULL
                                    ) const;
-    virtual bool DoFloodFill( wxCoord         vX
-                             ,wxCoord         vY
-                             ,const wxColour& rCol
-                             ,int             nStyle = wxFLOOD_SURFACE
+    virtual bool DoFloodFill( wxCoord          vX
+                             ,wxCoord          vY
+                             ,const wxColour&  rCol
+                             ,wxFloodFillStyle nStyle = wxFLOOD_SURFACE
                             );
 
     virtual bool DoGetPixel( wxCoord   vX
@@ -315,7 +315,7 @@ public:
                         ,wxDC*   pSource
                         ,wxCoord vXsrc
                         ,wxCoord vYsrc
-                        ,int     nRop = wxCOPY
+                        ,wxRasterOperationMode     nRop = wxCOPY
                         ,bool    bUseMask = FALSE
                         ,wxCoord vXsrcMask = -1
                         ,wxCoord vYsrcMask = -1
@@ -344,7 +344,7 @@ public:
                                ,wxPoint vaPoints[]
                                ,wxCoord vXoffset
                                ,wxCoord vYoffset
-                               ,int     nFillStyle = wxODDEVEN_RULE
+                               ,wxPolygonFillMode     nFillStyle = wxODDEVEN_RULE
                               );
 
 #if wxUSE_PALETTE

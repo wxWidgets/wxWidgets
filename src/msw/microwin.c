@@ -89,12 +89,12 @@ BOOL IsIconic(HWND hWnd)
     return FALSE;
 }
 
-int SetMapMode(HDC hDC, int mode)
+int SetMapMode(HDC hDC, wxMappingMode mode)
 {
     return MM_TEXT;
 }
 
-int GetMapMode(HDC hDC)
+wxMappingMode GetMapMode(HDC hDC)
 {
     return MM_TEXT;
 }
@@ -163,7 +163,7 @@ BOOL GetClipBox(HDC hdc, RECT* rect)
     rect->right = mwrect.right;
     rect->bottom = mwrect.bottom;
 
-    return TRUE;    
+    return TRUE;
 }
 
 BOOL DrawIconEx(HDC hdc, int x, int y, HICON hIcon, int w, int h, UINT istepIfAniCur, HBRUSH hbrFlickerFreeDraw, UINT diFlags)
@@ -218,7 +218,7 @@ BOOL MaskBlt(HDC hdc, int x, int y, int w, int h,
               HDC hDCSource, int xSrc, int ySrc, HBITMAP hBitmapMask, int xMask, int yMask, DWORD rop)
 {
     /* TODO */
-    return FALSE;  
+    return FALSE;
 }
 
 UINT RealizePalette(HDC hDC)
