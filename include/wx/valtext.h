@@ -20,22 +20,26 @@ class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
 #include "wx/validate.h"
 
-#define wxFILTER_NONE           0x0000
-#define wxFILTER_ASCII          0x0001
-#define wxFILTER_ALPHA          0x0002
-#define wxFILTER_ALPHANUMERIC   0x0004
-#define wxFILTER_NUMERIC        0x0008
-#define wxFILTER_INCLUDE_LIST   0x0010
-#define wxFILTER_EXCLUDE_LIST   0x0020
-#define wxFILTER_INCLUDE_CHAR_LIST 0x0040
-#define wxFILTER_EXCLUDE_CHAR_LIST 0x0080
+enum wxTextValidatorStyle
+{
+    wxFILTER_NONE,
+    wxFILTER_ASCII,
+    wxFILTER_ALPHA,
+    wxFILTER_ALPHANUMERIC,
+    wxFILTER_NUMERIC,
+    wxFILTER_INCLUDE_LIST,
+    wxFILTER_EXCLUDE_LIST,
+    wxFILTER_INCLUDE_CHAR_LIST,
+    wxFILTER_EXCLUDE_CHAR_LIST
+};
 
 class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
 {
-DECLARE_DYNAMIC_CLASS(wxTextValidator)
 public:
-
-    wxTextValidator(long style = wxFILTER_NONE, wxString *val = 0);
+    wxTextValidator(wxTextValidatorStyle style = wxFILTER_NONE, wxString *val = NULL);
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED_CONSTRUCTOR( wxTextValidator(long style, wxString *val) );
+#endif
     wxTextValidator(const wxTextValidator& val);
 
     virtual ~wxTextValidator(){}
@@ -58,8 +62,11 @@ public:
     virtual bool TransferFromWindow();
 
     // ACCESSORS
-    inline long GetStyle() const { return m_validatorStyle; }
-    inline void SetStyle(long style) { m_validatorStyle = style; }
+    inline wxTextValidatorStyle GetStyle() const { return m_validatorStyle; }
+    inline void SetStyle(wxTextValidatorStyle style) { m_validatorStyle = style; }
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( void SetStyle(long style) );
+#endif
 
     wxTextEntry *GetTextEntry();
 
@@ -75,15 +82,15 @@ public:
     // Filter keystrokes
     void OnChar(wxKeyEvent& event);
 
-DECLARE_EVENT_TABLE()
-
 protected:
-    long            m_validatorStyle;
-    wxString *      m_stringValue;
-    wxArrayString   m_includes;
-    wxArrayString   m_excludes;
+    wxTextValidatorStyle m_validatorStyle;
+    wxString *           m_stringValue;
+    wxArrayString        m_includes;
+    wxArrayString        m_excludes;
 
 private:
+    DECLARE_DYNAMIC_CLASS(wxTextValidator)
+    DECLARE_EVENT_TABLE()
 // Cannot use
 //  DECLARE_NO_COPY_CLASS(wxTextValidator)
 // because copy constructor is explicitly declared above;

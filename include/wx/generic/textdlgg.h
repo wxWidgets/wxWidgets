@@ -49,7 +49,10 @@ public:
 
 #if wxUSE_VALIDATORS
     void SetTextValidator( const wxTextValidator& validator );
-    void SetTextValidator( long style = wxFILTER_NONE );
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( void SetTextValidator( long style ) );
+#endif
+    void SetTextValidator( wxTextValidatorStyle style = wxFILTER_NONE );
     wxTextValidator* GetTextValidator() { return (wxTextValidator*)m_textctrl->GetValidator(); }
 #endif
   // wxUSE_VALIDATORS

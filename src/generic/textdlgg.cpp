@@ -151,7 +151,15 @@ void wxTextEntryDialog::SetValue(const wxString& val)
 }
 
 #if wxUSE_VALIDATORS
+
+#if WXWIN_COMPATIBILITY_2_8
 void wxTextEntryDialog::SetTextValidator( long style )
+{
+    SetTextValidator((wxTextValidatorStyle)style);
+}
+#endif
+
+void wxTextEntryDialog::SetTextValidator( wxTextValidatorStyle style )
 {
     wxTextValidator validator( style, &m_value );
     m_textctrl->SetValidator( validator );
