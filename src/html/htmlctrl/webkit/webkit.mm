@@ -293,8 +293,11 @@ DEFINE_EVENT_TYPE( wxEVT_WEBKIT_STATE_CHANGED )
 wxWebKitStateChangedEvent::wxWebKitStateChangedEvent( wxWindow* win )
 {
     SetEventType( wxEVT_WEBKIT_STATE_CHANGED);
-    SetEventObject( win );
-    SetId(win->GetId());
+    if ( win )
+    {
+        SetEventObject( win );
+        SetId(win->GetId());
+    }
 }
 
 IMPLEMENT_DYNAMIC_CLASS( wxWebKitBeforeLoadEvent, wxCommandEvent )
@@ -305,8 +308,11 @@ wxWebKitBeforeLoadEvent::wxWebKitBeforeLoadEvent( wxWindow* win )
 {
     m_cancelled = false;
     SetEventType( wxEVT_WEBKIT_BEFORE_LOAD);
-    SetEventObject( win );
-    SetId(win->GetId());
+    if ( win )
+    {
+        SetEventObject( win );
+        SetId(win->GetId());
+    }
 }
 
 
@@ -317,8 +323,11 @@ DEFINE_EVENT_TYPE( wxEVT_WEBKIT_NEW_WINDOW )
 wxWebKitNewWindowEvent::wxWebKitNewWindowEvent( wxWindow* win )
 {
     SetEventType( wxEVT_WEBKIT_NEW_WINDOW);
-    SetEventObject( win );
-    SetId(win->GetId());
+    if ( win )
+    {
+        SetEventObject( win );
+        SetId(win->GetId());
+    }
 }
 
 
