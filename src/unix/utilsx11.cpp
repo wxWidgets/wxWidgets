@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/iconbndl.h"
+#include "wx/apptrait.h"
 
 #ifdef __VMS
 #pragma message disable nosimpint
