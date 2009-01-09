@@ -2407,6 +2407,8 @@ static void TestSocketClient()
 
 #define FTP_ANONYMOUS
 
+static wxFTP *ftp;
+
 #ifdef FTP_ANONYMOUS
     static const wxChar *directory = _T("/pub");
     static const wxChar *filename = _T("welcome.msg");
@@ -2419,8 +2421,12 @@ static bool TestFtpConnect()
 {
     wxPuts(_T("*** Testing FTP connect ***"));
 
+    // wxFTP cannot be a static variable as its ctor needs to access
+    // wxWidgets internals after it has been initialized
+    ftp = new wxFTP;
+
 #ifdef FTP_ANONYMOUS
-    static const wxChar *hostname = _T("ftp.wxwidgets.org");
+    static const wxChar *hostname = _T("ftp->wxwidgets.org");
 
     wxPrintf(_T("--- Attempting to connect to %s:21 anonymously...\n"), hostname);
 #else // !FTP_ANONYMOUS
@@ -2429,18 +2435,18 @@ static bool TestFtpConnect()
     wxChar user[256];
     wxFgets(user, WXSIZEOF(user), stdin);
     user[wxStrlen(user) - 1] = '\0'; // chop off '\n'
-    ftp.SetUser(user);
+    ftp->SetUser(user);
 
     wxChar password[256];
     wxPrintf(_T("Password for %s: "), password);
     wxFgets(password, WXSIZEOF(password), stdin);
     password[wxStrlen(password) - 1] = '\0'; // chop off '\n'
-    ftp.SetPassword(password);
+    ftp->SetPassword(password);
 
     wxPrintf(_T("--- Attempting to connect to %s:21 as %s...\n"), hostname, user);
 #endif // FTP_ANONYMOUS/!FTP_ANONYMOUS
 
-    if ( !ftp.Connect(hostname) )
+    if ( !ftp->Connect(hostname) )
     {
         wxPrintf(_T("ERROR: failed to connect to %s\n"), hostname);
 
@@ -2449,8 +2455,8 @@ static bool TestFtpConnect()
     else
     {
         wxPrintf(_T("--- Connected to %s, current directory is '%s'\n"),
-                 hostname, ftp.Pwd().c_str());
-        ftp.Close();
+                 hostname, ftp->Pwd().c_str());
+        ftp->Close();
     }
 
     return true;
@@ -2499,22 +2505,22 @@ static void TestFtpList()
     wxPuts(_T("*** Testing wxFTP file listing ***\n"));
 
     // test CWD
-    if ( !ftp.ChDir(directory) )
+    if ( !ftp->ChDir(directory) )
     {
         wxPrintf(_T("ERROR: failed to cd to %s\n"), directory);
     }
 
-    wxPrintf(_T("Current directory is '%s'\n"), ftp.Pwd().c_str());
+    wxPrintf(_T("Current directory is '%s'\n"), ftp->Pwd().c_str());
 
     // test NLIST and LIST
     wxArrayString files;
-    if ( !ftp.GetFilesList(files) )
+    if ( !ftp->GetFilesList(files) )
     {
         wxPuts(_T("ERROR: failed to get NLIST of files"));
     }
     else
     {
-        wxPrintf(_T("Brief list of files under '%s':\n"), ftp.Pwd().c_str());
+        wxPrintf(_T("Brief list of files under '%s':\n"), ftp->Pwd().c_str());
         size_t count = files.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
@@ -2523,13 +2529,13 @@ static void TestFtpList()
         wxPuts(_T("End of the file list"));
     }
 
-    if ( !ftp.GetDirList(files) )
+    if ( !ftp->GetDirList(files) )
     {
         wxPuts(_T("ERROR: failed to get LIST of files"));
     }
     else
     {
-        wxPrintf(_T("Detailed list of files under '%s':\n"), ftp.Pwd().c_str());
+        wxPrintf(_T("Detailed list of files under '%s':\n"), ftp->Pwd().c_str());
         size_t count = files.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
@@ -2538,12 +2544,12 @@ static void TestFtpList()
         wxPuts(_T("End of the file list"));
     }
 
-    if ( !ftp.ChDir(_T("..")) )
+    if ( !ftp->ChDir(_T("..")) )
     {
         wxPuts(_T("ERROR: failed to cd to .."));
     }
 
-    wxPrintf(_T("Current directory is '%s'\n"), ftp.Pwd().c_str());
+    wxPrintf(_T("Current directory is '%s'\n"), ftp->Pwd().c_str());
 }
 
 static void TestFtpDownload()
@@ -2551,7 +2557,7 @@ static void TestFtpDownload()
     wxPuts(_T("*** Testing wxFTP download ***\n"));
 
     // test RETR
-    wxInputStream *in = ftp.GetInputStream(filename);
+    wxInputStream *in = ftp->GetInputStream(filename);
     if ( !in )
     {
         wxPrintf(_T("ERROR: couldn't get input stream for %s\n"), filename);
@@ -2581,16 +2587,16 @@ static void TestFtpFileSize()
 {
     wxPuts(_T("*** Testing FTP SIZE command ***"));
 
-    if ( !ftp.ChDir(directory) )
+    if ( !ftp->ChDir(directory) )
     {
         wxPrintf(_T("ERROR: failed to cd to %s\n"), directory);
     }
 
-    wxPrintf(_T("Current directory is '%s'\n"), ftp.Pwd().c_str());
+    wxPrintf(_T("Current directory is '%s'\n"), ftp->Pwd().c_str());
 
-    if ( ftp.FileExists(filename) )
+    if ( ftp->FileExists(filename) )
     {
-        int size = ftp.GetFileSize(filename);
+        int size = ftp->GetFileSize(filename);
         if ( size == -1 )
             wxPrintf(_T("ERROR: couldn't get size of '%s'\n"), filename);
         else
@@ -2606,23 +2612,23 @@ static void TestFtpMisc()
 {
     wxPuts(_T("*** Testing miscellaneous wxFTP functions ***"));
 
-    if ( ftp.SendCommand(_T("STAT")) != '2' )
+    if ( ftp->SendCommand(_T("STAT")) != '2' )
     {
         wxPuts(_T("ERROR: STAT failed"));
     }
     else
     {
-        wxPrintf(_T("STAT returned:\n\n%s\n"), ftp.GetLastResult().c_str());
+        wxPrintf(_T("STAT returned:\n\n%s\n"), ftp->GetLastResult().c_str());
     }
 
-    if ( ftp.SendCommand(_T("HELP SITE")) != '2' )
+    if ( ftp->SendCommand(_T("HELP SITE")) != '2' )
     {
         wxPuts(_T("ERROR: HELP SITE failed"));
     }
     else
     {
         wxPrintf(_T("The list of site-specific commands:\n\n%s\n"),
-               ftp.GetLastResult().c_str());
+               ftp->GetLastResult().c_str());
     }
 }
 
@@ -2651,14 +2657,14 @@ static void TestFtpInteractive()
                 wildcard = buf + 5;
 
             wxArrayString files;
-            if ( !ftp.GetList(files, wildcard, start == _T("LIST")) )
+            if ( !ftp->GetList(files, wildcard, start == _T("LIST")) )
             {
                 wxPrintf(_T("ERROR: failed to get %s of files\n"), start.c_str());
             }
             else
             {
                 wxPrintf(_T("--- %s of '%s' under '%s':\n"),
-                       start.c_str(), wildcard.c_str(), ftp.Pwd().c_str());
+                       start.c_str(), wildcard.c_str(), ftp->Pwd().c_str());
                 size_t count = files.GetCount();
                 for ( size_t n = 0; n < count; n++ )
                 {
@@ -2669,14 +2675,14 @@ static void TestFtpInteractive()
         }
         else // !list
         {
-            wxChar ch = ftp.SendCommand(buf);
+            wxChar ch = ftp->SendCommand(buf);
             wxPrintf(_T("Command %s"), ch ? _T("succeeded") : _T("failed"));
             if ( ch )
             {
                 wxPrintf(_T(" (return code %c)"), ch);
             }
 
-            wxPrintf(_T(", server reply:\n%s\n\n"), ftp.GetLastResult().c_str());
+            wxPrintf(_T(", server reply:\n%s\n\n"), ftp->GetLastResult().c_str());
         }
     }
 
@@ -2690,7 +2696,7 @@ static void TestFtpUpload()
     // upload a file
     static const wxChar *file1 = _T("test1");
     static const wxChar *file2 = _T("test2");
-    wxOutputStream *out = ftp.GetOutputStream(file1);
+    wxOutputStream *out = ftp->GetOutputStream(file1);
     if ( out )
     {
         wxPrintf(_T("--- Uploading to %s ---\n"), file1);
@@ -2699,17 +2705,17 @@ static void TestFtpUpload()
     }
 
     // send a command to check the remote file
-    if ( ftp.SendCommand(wxString(_T("STAT ")) + file1) != '2' )
+    if ( ftp->SendCommand(wxString(_T("STAT ")) + file1) != '2' )
     {
         wxPrintf(_T("ERROR: STAT %s failed\n"), file1);
     }
     else
     {
         wxPrintf(_T("STAT %s returned:\n\n%s\n"),
-               file1, ftp.GetLastResult().c_str());
+               file1, ftp->GetLastResult().c_str());
     }
 
-    out = ftp.GetOutputStream(file2);
+    out = ftp->GetOutputStream(file2);
     if ( out )
     {
         wxPrintf(_T("--- Uploading to %s ---\n"), file1);
