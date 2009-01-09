@@ -501,16 +501,20 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
 {
     if ( toggle )
     {
-        int w = m_bmpNormal.GetWidth();
-        int h = m_bmpNormal.GetHeight();
+        int w = m_bmpNormal.GetWidth() + 6;
+        int h = m_bmpNormal.GetHeight() + 6;
         wxBitmap bmp( w, h );
         wxMemoryDC dc;
 
         dc.SelectObject( bmp );
-        dc.SetPen( wxPen(*wxBLACK) );
-        dc.SetBrush( wxBrush( *wxLIGHT_GREY ));
-        dc.DrawRectangle( 0, 0, w, h );
-        dc.DrawBitmap( m_bmpNormal, 0, 0, true );
+        wxColour mid_grey_75   = wxColour(128, 128, 128, 196);
+        wxColour light_grey_75 = wxColour(196, 196, 196, 196);
+        dc.GradientFillLinear( wxRect(1, 1, w - 1, h-1),
+                               light_grey_75, mid_grey_75, wxNORTH);
+        wxColour black_50 = wxColour(0, 0, 0, 127);
+        dc.SetPen( wxPen(black_50) );
+        dc.DrawRoundedRectangle( 0, 0, w, h, 1.5 );
+        dc.DrawBitmap( m_bmpNormal, 3, 3, true );
         dc.SelectObject( wxNullBitmap );
         ControlButtonContentInfo info;
         wxMacCreateBitmapButton( &info, bmp );
