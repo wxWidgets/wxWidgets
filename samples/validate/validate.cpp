@@ -176,8 +176,9 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                     const wxPoint& pos, const wxSize& size, const long WXUNUSED(style) ) :
     wxDialog(parent, VALIDATE_DIALOG_ID, title, pos, size, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 {
-    // Sizers automatically ensure a workable layout.
-    wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
+    // setup the flex grid sizer
+    // -------------------------
+
     wxFlexGridSizer *flexgridsizer = new wxFlexGridSizer(2, 2, 5, 5);
 
     // Create and add controls to sizers. Note that a member variable
@@ -188,8 +189,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // Pointers to some of these controls are saved in member variables
     // so that we can use them elsewhere, like this one.
     text = new wxTextCtrl(this, VALIDATE_TEXT, wxEmptyString,
-        wxPoint(10, 10), wxSize(120, wxDefaultCoord), 0,
-        wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
+                          wxPoint(10, 10), wxSize(120, wxDefaultCoord), 0,
+                          wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
     flexgridsizer->Add(text);
 
     // This wxCheckBox* doesn't need to be assigned to any pointer
@@ -197,36 +198,44 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // We don't need any such pointer to query its state, which
     // can be gotten directly from g_data.
     flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"),
-        wxPoint(130, 10), wxSize(120, wxDefaultCoord), 0,
-        wxGenericValidator(&g_data.m_checkbox_state)));
+                        wxPoint(130, 10), wxSize(120, wxDefaultCoord), 0,
+                        wxGenericValidator(&g_data.m_checkbox_state)));
 
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
-        wxPoint(10, 30), wxSize(120, wxDefaultCoord),
-        3, g_listbox_choices, wxLB_MULTIPLE,
-        wxGenericValidator(&g_data.m_listbox_choices)));
+                        wxPoint(10, 30), wxSize(120, wxDefaultCoord),
+                        3, g_listbox_choices, wxLB_MULTIPLE,
+                        wxGenericValidator(&g_data.m_listbox_choices)));
 
     combobox = new wxComboBox((wxWindow*)this, VALIDATE_COMBO, wxEmptyString,
-        wxPoint(130, 30), wxSize(120, wxDefaultCoord),
-        3, g_combobox_choices, 0L,
-        wxGenericValidator(&g_data.m_combobox_choice));
+                                wxPoint(130, 30), wxSize(120, wxDefaultCoord),
+                                3, g_combobox_choices, 0L,
+                                wxGenericValidator(&g_data.m_combobox_choice));
     flexgridsizer->Add(combobox);
+
+
+    // setup the button sizer
+    // ----------------------
+    
+    wxStdDialogButtonSizer *btn = new wxStdDialogButtonSizer();
+    btn->AddButton(new wxButton(this, wxID_OK));
+    btn->AddButton(new wxButton(this, wxID_CANCEL));
+    btn->Realize();
+
+
+    // setup the main sizer
+    // --------------------
+    
+    wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
     mainsizer->Add(flexgridsizer, 1, wxGROW | wxALL, 10);
 
     mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, wxT("Pick a color"),
-        wxPoint(10, 100), wxDefaultSize,
-        3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
-        wxGenericValidator(&g_data.m_radiobox_choice)),
-        0, wxGROW | wxALL, 10);
+                                    wxPoint(10, 100), wxDefaultSize,
+                                    3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
+                                    wxGenericValidator(&g_data.m_radiobox_choice)),
+                                    0, wxGROW | wxALL, 10);
 
-    wxGridSizer *gridsizer = new wxGridSizer(2, 2, 5, 5);
-
-    wxButton *ok_button = new wxButton(this, wxID_OK, wxT("OK"), wxPoint(250, 70), wxSize(80, 30));
-    ok_button->SetDefault();
-    gridsizer->Add(ok_button);
-    gridsizer->Add(new wxButton(this, wxID_CANCEL, wxT("Cancel"), wxPoint(250, 100), wxSize(80, 30)));
-
-    mainsizer->Add(gridsizer, 0, wxGROW | wxALL, 10);
+    mainsizer->Add(btn, 0, wxGROW | wxALL, 10);
 
     SetSizer(mainsizer);
     mainsizer->SetSizeHints(this);
