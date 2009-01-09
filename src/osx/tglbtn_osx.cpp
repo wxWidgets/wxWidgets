@@ -24,7 +24,7 @@
 
 #include "wx/tglbtn.h"
 #include "wx/osx/private.h"
-// Button
+#include "wx/osx/bmpbuttn.h"	// for wxDEFAULT_BUTTON_MARGIN
 
 // ----------------------------------------------------------------------------
 // macros
