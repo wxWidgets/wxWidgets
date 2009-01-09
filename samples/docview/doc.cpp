@@ -171,42 +171,48 @@ DocumentIstream& DoodleSegment::LoadObject(DocumentIstream& istream)
 }
 
 // ----------------------------------------------------------------------------
+// wxTextDocument: wxDocument and wxTextCtrl married
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxTextDocument, wxDocument)
+
+// Since text windows have their own method for saving to/loading from files,
+// we override DoSave/OpenDocument instead of Save/LoadObject
+bool wxTextDocument::DoSaveDocument(const wxString& filename)
+{
+    return GetTextCtrl()->SaveFile(filename);
+}
+
+bool wxTextDocument::DoOpenDocument(const wxString& filename)
+{
+    return GetTextCtrl()->LoadFile(filename);
+}
+
+bool wxTextDocument::IsModified() const
+{
+    wxTextCtrl* wnd = GetTextCtrl();
+    return wxDocument::IsModified() || (wnd && wnd->IsModified());
+}
+
+void wxTextDocument::Modify(bool modified)
+{
+    wxDocument::Modify(modified);
+
+    wxTextCtrl* wnd = GetTextCtrl();
+    if (wnd && !modified)
+    {
+        wnd->DiscardEdits();
+    }
+}
+
+// ----------------------------------------------------------------------------
 // TextEditDocument implementation
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditDocument, wxDocument)
 
-// Since text windows have their own method for saving to/loading from files,
-// we override DoSave/OpenDocument instead of Save/LoadObject
-bool TextEditDocument::DoSaveDocument(const wxString& filename)
+wxTextCtrl* TextEditDocument::GetTextCtrl() const
 {
-    return GetFirstView()->GetText()->SaveFile(filename);
+    wxView* view = GetFirstView();
+    return view ? wxStaticCast(view, TextEditView)->GetText() : NULL;
 }
-
-bool TextEditDocument::DoOpenDocument(const wxString& filename)
-{
-    return GetFirstView()->GetText()->LoadFile(filename);
-}
-
-bool TextEditDocument::IsModified() const
-{
-    TextEditView* view = GetFirstView();
-    return wxDocument::IsModified() || (view && view->GetText()->IsModified());
-}
-
-void TextEditDocument::Modify(bool modified)
-{
-    TextEditView* view = GetFirstView();
-
-    wxDocument::Modify(modified);
-
-    if ( !modified && view && view->GetText() )
-        view->GetText()->DiscardEdits();
-}
-
-TextEditView* TextEditDocument::GetFirstView() const
-{
-    wxView* view = wxDocument::GetFirstView();
-    return view ? wxStaticCast(view, TextEditView) : NULL;
-}
-

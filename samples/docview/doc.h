@@ -157,20 +157,35 @@ public:
 
 
 // ----------------------------------------------------------------------------
-// A simple text document class
+// wxTextDocument: wxDocument and wxTextCtrl married
 // ----------------------------------------------------------------------------
 
-class TextEditView;
-class TextEditDocument : public wxDocument
+class wxTextDocument : public wxDocument
 {
 public:
-    TextEditDocument() : wxDocument() { }
-    TextEditView *GetFirstView() const;
+    wxTextDocument() : wxDocument() { }
+    virtual wxTextCtrl* GetTextCtrl() const = 0;
 
-    virtual bool DoSaveDocument(const wxString& filename);
-    virtual bool DoOpenDocument(const wxString& filename);
     virtual bool IsModified() const;
     virtual void Modify(bool mod);
+
+protected:
+    virtual bool DoSaveDocument(const wxString& filename);
+    virtual bool DoOpenDocument(const wxString& filename);
+
+    DECLARE_NO_COPY_CLASS(wxTextDocument)
+    DECLARE_CLASS(wxTextDocument)
+};
+
+// ----------------------------------------------------------------------------
+// A very simple text document class
+// ----------------------------------------------------------------------------
+
+class TextEditDocument : public wxTextDocument
+{
+public:
+    TextEditDocument() : wxTextDocument() { }
+    virtual wxTextCtrl* GetTextCtrl() const;
 
     DECLARE_NO_COPY_CLASS(TextEditDocument)
     DECLARE_DYNAMIC_CLASS(TextEditDocument)
