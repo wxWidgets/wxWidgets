@@ -291,9 +291,11 @@ public:
     virtual void Apply( wxGraphicsContext* context );
 #ifdef __WXGTK__
     const PangoFontDescription* GetFont() const { return m_font; }
+    bool GetUnderlined() const { return m_underlined; }
 #endif
 private :
     double m_size;
+    bool m_underlined;
     double m_red;
     double m_green;
     double m_blue;
@@ -703,6 +705,7 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
     m_blue = col.Blue()/255.0;
     m_alpha = col.Alpha()/255.0;
     m_size = font.GetPointSize();
+    m_underlined = font.GetUnderlined();
 
 #ifdef __WXMAC__
     m_font = cairo_atsui_font_face_create_for_atsu_font_id( font.MacGetATSUFontID() );
@@ -1409,8 +1412,19 @@ void wxCairoContext::DoDrawText(const wxString& str, wxDouble x, wxDouble y)
     size_t datalen = strlen(data);
 
     PangoLayout *layout = pango_cairo_create_layout (m_context);
-    pango_layout_set_font_description( layout, ((wxCairoFontData*)m_font.GetRefData())->GetFont());
+    wxCairoFontData* font_data = (wxCairoFontData*) m_font.GetRefData();
+    pango_layout_set_font_description( layout, font_data->GetFont());
     pango_layout_set_text(layout, data, datalen);
+    
+    if (font_data->GetUnderlined()) 
+    {
+        PangoAttrList *attrs = pango_attr_list_new();
+        PangoAttribute *attr = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
+        pango_attr_list_insert(attrs, attr);
+        pango_layout_set_attributes(layout, attrs);
+        pango_attr_list_unref(attrs);
+    }
+
     cairo_move_to(m_context, x, y);
     pango_cairo_show_layout (m_context, layout);
 
