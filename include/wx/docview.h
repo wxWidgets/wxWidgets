@@ -107,6 +107,10 @@ public:
     // modified to false)
     virtual bool OnSaveModified();
 
+    // if you override, remember to call the default 
+    // implementation (wxDocument::OnChangeFilename)
+    virtual void OnChangeFilename(bool notifyViews);
+
     // Called by framework if created automatically by the default document
     // manager: gives document a chance to initialise and (usually) create a
     // view

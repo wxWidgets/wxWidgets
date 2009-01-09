@@ -310,7 +310,7 @@ bool wxDocument::SaveAs()
     if (defaultDir.IsEmpty())
         defaultDir = wxPathOnly(GetFilename());
 
-    wxString tmp = wxFileSelector(_("Save As"),
+    wxString fileName = wxFileSelector(_("Save As"),
             defaultDir,
             wxFileNameFromPath(GetFilename()),
             docTemplate->GetDefaultExtension(),
@@ -318,12 +318,11 @@ bool wxDocument::SaveAs()
             wxFD_SAVE | wxFD_OVERWRITE_PROMPT,
             GetDocumentWindow());
 
-    if (tmp.empty())
+    if (fileName.empty())
         return false;
 
-    wxString fileName(tmp);
-    wxString path, name, ext;
-    wxFileName::SplitPath(fileName, & path, & name, & ext);
+    wxString ext;
+    wxFileName::SplitPath(fileName, NULL, NULL, &ext);
 
     if (ext.empty())
     {
@@ -331,21 +330,12 @@ bool wxDocument::SaveAs()
         fileName += docTemplate->GetDefaultExtension();
     }
 
-    SetFilename(fileName);
-    SetTitle(wxFileNameFromPath(fileName));
-
-    // Notify the views that the filename has changed
-    wxList::compatibility_iterator node = m_documentViews.GetFirst();
-    while (node)
-    {
-        wxView *view = (wxView *)node->GetData();
-        view->OnChangeFilename();
-        node = node->GetNext();
-    }
-
     // Files that were not saved correctly are not added to the FileHistory.
-    if (!OnSaveDocument(m_documentFile))
+    if (!OnSaveDocument(fileName))
         return false;
+
+    SetTitle(wxFileNameFromPath(fileName));
+    SetFilename(fileName, true);    // will call OnChangeFileName automatically
 
    // A file that doesn't use the default extension of its document template cannot be opened
    // via the FileHistory, so we do not add it.
@@ -485,8 +475,8 @@ bool wxDocument::OnSaveModified()
                      GetUserReadableName()
                     ),
                     wxTheApp->GetAppDisplayName(),
-                    wxYES_NO | wxCANCEL | wxICON_QUESTION,
-                    GetDocumentWindow()
+                    wxYES_NO | wxCANCEL | wxICON_QUESTION | wxCENTRE,
+                    wxFindSuitableParent()
                  ) )
         {
             case wxNO:
@@ -566,6 +556,11 @@ void wxDocument::NotifyClosing()
 void wxDocument::SetFilename(const wxString& filename, bool notifyViews)
 {
     m_documentFile = filename;
+    OnChangeFilename(notifyViews);
+}
+
+void wxDocument::OnChangeFilename(bool notifyViews)
+{
     if ( notifyViews )
     {
         // Notify the views that the filename has changed
@@ -1509,7 +1504,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
             else
                 msgTitle = wxString(_("File error"));
 
-            (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
+            (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION | wxCENTRE,
                 parent);
 
             path = wxEmptyString;
@@ -1531,7 +1526,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
             // can only happen if the application changes the allowed templates in runtime.
             (void)wxMessageBox(_("Sorry, the format for this file is unknown."),
                                 _("Open File"),
-                                wxOK | wxICON_EXCLAMATION, wxFindSuitableParent());
+                                wxOK | wxICON_EXCLAMATION | wxCENTRE, wxFindSuitableParent());
         }
     }
     else

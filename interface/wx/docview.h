@@ -740,8 +740,7 @@ public:
 
     /**
         Called when the filename has changed. The default implementation
-        constructs a suitable title and sets the title of the view frame (if
-        any).
+        constructs a suitable title and sets the title of the view frame (if any).
     */
     virtual void OnChangeFilename();
 
@@ -1296,10 +1295,18 @@ public:
     /**
         Sets the filename for this document. Usually called by the framework.
 
-        If @a notifyViews is @true, wxView::OnChangeFilename() is called for
-        all views.
+        Calls OnChangeFilename() which in turn calls wxView::OnChangeFilename() for
+        all views if @a notifyViews is @true,
     */
     void SetFilename(const wxString& filename, bool notifyViews = false);
+
+    /**
+        If @a notifyViews is @true, wxView::OnChangeFilename() is called for
+        all views.
+
+        @since 2.9.0
+    */
+    virtual void OnChangeFilename(bool notifyViews);
 
     /**
         Sets the title for this document. The document title is used for an
