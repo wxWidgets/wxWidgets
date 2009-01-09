@@ -20,7 +20,6 @@
 
 #include "wx/aboutdlg.h"
 #include "wx/dir.h"
-#include "wx/filesys.h"
 
 #include "screenshot_main.h"
 #include "ctrlmaskout.h"
@@ -137,14 +136,15 @@ void ScreenshotFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void ScreenshotFrame::OnSeeScreenshots(wxCommandEvent& WXUNUSED(event))
 {
-    wxString defaultDir = m_maskout->GetDefaultDirectory();
+    wxFileName defaultDir = wxFileName::DirName(m_maskout->GetDefaultDirectory());
+    defaultDir.MakeAbsolute();
 
     // Check if defaultDir already existed
-    if (!wxDirExists(defaultDir))
-        wxMkdir(defaultDir);
+    if (!defaultDir.DirExists())
+        defaultDir.Mkdir();
 
     // Use the native file browser to open defaultDir
-    wxLaunchDefaultBrowser(wxFileSystem::FileNameToURL(defaultDir));
+    wxLaunchDefaultBrowser(defaultDir.GetFullPath());
 }
 
 void ScreenshotFrame::OnAbout(wxCommandEvent& WXUNUSED(event))

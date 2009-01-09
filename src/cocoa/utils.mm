@@ -109,7 +109,7 @@ void wxBell()
 }
 
 // Private helper method for wxLaunchDefaultBrowser
-bool wxCocoaLaunchDefaultBrowser(const wxString& url, int flags)
+bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
 {
     // NOTE: We ignore the flags
     return [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:wxNSStringWithWxString(url)]] != NO;

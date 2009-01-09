@@ -54,7 +54,7 @@
 #include "wx/config.h"
 
 #if defined(__WXWINCE__) && wxUSE_DATETIME
-#include "wx/datetime.h"
+    #include "wx/datetime.h"
 #endif
 
 #include <ctype.h>
@@ -77,14 +77,14 @@
 
 #ifndef __WXPALMOS5__
 #ifndef __WXWINCE__
-#include <time.h>
+    #include <time.h>
 #else
-#include "wx/msw/wince/time.h"
+    #include "wx/msw/wince/time.h"
 #endif
 #endif // ! __WXPALMOS5__
 
 #ifdef __WXMAC__
-#include "wx/osx/private.h"
+    #include "wx/osx/private.h"
 #endif
 
 #ifndef __WXPALMOS5__
@@ -96,8 +96,7 @@
 
 #if defined(__WXMSW__)
     #include "wx/msw/private.h"
-    #include "wx/msw/registry.h"
-    #include <shellapi.h> // needed for SHELLEXECUTEINFO
+    #include "wx/filesys.h"
 #endif
 
 #if wxUSE_GUI && defined(__WXGTK__)
@@ -935,220 +934,26 @@ void wxQsort(void *const pbase, size_t total_elems,
 #if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
-// Launch document with default app
-// ----------------------------------------------------------------------------
-
-bool wxLaunchDefaultApplication(const wxString& document, int flags)
-{
-    wxUnusedVar(flags);
-
-#ifdef __WXMAC__
-    static const char * const OPEN_CMD = "/usr/bin/open";
-    if ( wxFileExists(OPEN_CMD) &&
-            wxExecute(wxString(OPEN_CMD) + " " + document) )
-        return true;
-#elif defined(__UNIX__)
-    // Our best best is to use xdg-open from freedesktop.org cross-desktop
-    // compatibility suite xdg-utils
-    // (see http://portland.freedesktop.org/wiki/) -- this is installed on
-    // most modern distributions and may be tweaked by them to handle
-    // distribution specifics.
-    wxString path, xdg_open;
-    if ( wxGetEnv("PATH", &path) &&
-         wxFindFileInPath(&xdg_open, path, "xdg-open") )
-    {
-        if ( wxExecute(xdg_open + " " + document) )
-            return true;
-    }
-#elif defined(__WXMSW__)
-    WinStruct<SHELLEXECUTEINFO> sei;
-    sei.lpFile = document.wx_str();
-    sei.lpVerb = _T("open");
-#ifdef __WXWINCE__
-    sei.nShow = SW_SHOWNORMAL; // SW_SHOWDEFAULT not defined under CE (#10216)
-#else
-    sei.nShow = SW_SHOWDEFAULT;
-#endif
-
-    // avoid Windows message box in case of error for consistency with
-    // wxLaunchDefaultBrowser() even if don't show the error ourselves in this
-    // function
-    sei.fMask = SEE_MASK_FLAG_NO_UI;
-
-    if ( ::ShellExecuteEx(&sei) )
-        return true;
-#endif
-
-    return false;
-}
-
-// ----------------------------------------------------------------------------
 // Launch default browser
 // ----------------------------------------------------------------------------
 
-#ifdef __WXCOCOA__
-// Private method in Objective-C++ source file.
-bool wxCocoaLaunchDefaultBrowser(const wxString& url, int flags);
-#endif
-
-static bool DoLaunchDefaultBrowser(const wxString& urlOrig, int flags)
-{
-    wxUnusedVar(flags);
-
-    // set the scheme of url to http if it does not have one
-    // RR: This doesn't work if the url is just a local path
-    wxString url(urlOrig);
-    wxURI uri(url);
-    if ( !uri.HasScheme() )
-    {
-        if (wxFileExists(urlOrig))
-            url.Prepend( wxT("file://") );
-        else
-            url.Prepend(wxT("http://"));
-    }
-
-
 #if defined(__WXMSW__)
 
-#if wxUSE_IPC
-    if ( flags & wxBROWSER_NEW_WINDOW )
-    {
-        // ShellExecuteEx() opens the URL in an existing window by default so
-        // we can't use it if we need a new window
-        wxRegKey key(wxRegKey::HKCR, uri.GetScheme() + _T("\\shell\\open"));
-        if ( !key.Exists() )
-        {
-            // try default browser, it must be registered at least for http URLs
-            key.SetName(wxRegKey::HKCR, _T("http\\shell\\open"));
-        }
+// implemented in a port-specific utils source file:
+bool wxDoLaunchDefaultBrowser(const wxString& url, const wxString& scheme, int flags);
 
-        if ( key.Exists() )
-        {
-            wxRegKey keyDDE(key, wxT("DDEExec"));
-            if ( keyDDE.Exists() )
-            {
-                // we only know the syntax of WWW_OpenURL DDE request for IE,
-                // optimistically assume that all other browsers are compatible
-                // with it
-                static const wxChar *TOPIC_OPEN_URL = wxT("WWW_OpenURL");
-                wxString ddeCmd;
-                wxRegKey keyTopic(keyDDE, wxT("topic"));
-                bool ok = keyTopic.Exists() &&
-                            keyTopic.QueryDefaultValue() == TOPIC_OPEN_URL;
-                if ( ok )
-                {
-                    ddeCmd = keyDDE.QueryDefaultValue();
-                    ok = !ddeCmd.empty();
-                }
+#elif defined(__UNIX__) || defined(__WXCOCOA__) || \
+      (defined(__WXMAC__) && !defined(__WXOSX_IPHONE__))
 
-                if ( ok )
-                {
-                    // for WWW_OpenURL, the index of the window to open the URL
-                    // in is -1 (meaning "current") by default, replace it with
-                    // 0 which means "new" (see KB article 160957)
-                    ok = ddeCmd.Replace(wxT("-1"), wxT("0"),
-                                        false /* only first occurrence */) == 1;
-                }
+// implemented in a port-specific utils source file:
+bool wxDoLaunchDefaultBrowser(const wxString& url, int flags);
 
-                if ( ok )
-                {
-                    // and also replace the parameters: the topic should
-                    // contain a placeholder for the URL
-                    ok = ddeCmd.Replace(wxT("%1"), url, false) == 1;
-                }
-
-                if ( ok )
-                {
-                    // try to send it the DDE request now but ignore the errors
-                    wxLogNull noLog;
-
-                    const wxString ddeServer = wxRegKey(keyDDE, wxT("application"));
-                    if ( wxExecuteDDE(ddeServer, TOPIC_OPEN_URL, ddeCmd) )
-                        return true;
-
-                    // this is not necessarily an error: maybe browser is
-                    // simply not running, but no matter, in any case we're
-                    // going to launch it using ShellExecuteEx() below now and
-                    // we shouldn't try to open a new window if we open a new
-                    // browser anyhow
-                }
-            }
-        }
-    }
-#endif // wxUSE_IPC
-
-    WinStruct<SHELLEXECUTEINFO> sei;
-    sei.lpFile = url.c_str();
-    sei.lpVerb = _T("open");
-    sei.nShow = SW_SHOWNORMAL;
-    sei.fMask = SEE_MASK_FLAG_NO_UI; // we give error message ourselves
-
-    if ( ::ShellExecuteEx(&sei) )
-        return true;
-#elif defined(__WXCOCOA__)
-    // NOTE: We need to call the real implementation from src/cocoa/utils.mm
-    // because the code must use Objective-C features.
-    return wxCocoaLaunchDefaultBrowser(url, flags);
-#elif defined(__WXMAC__) && !defined(__WXOSX_IPHONE__)
-    wxCFRef< CFURLRef > curl( CFURLCreateWithString( kCFAllocatorDefault,
-            wxCFStringRef( url ), NULL ) );
-    OSStatus err = LSOpenCFURLRef( curl , NULL );
-
-    if (err == noErr)
-    {
-        return true;
-    }
-    else
-    {
-        wxLogDebug(wxT("Browser Launch error %d"), (int) err);
-        return false;
-    }
 #else
-    // (non-Mac, non-MSW)
 
-#ifdef __UNIX__
-
-    // Our best best is to use xdg-open from freedesktop.org cross-desktop
-    // compatibility suite xdg-utils
-    // (see http://portland.freedesktop.org/wiki/) -- this is installed on
-    // most modern distributions and may be tweaked by them to handle
-    // distribution specifics. Only if that fails, try to find the right
-    // browser ourselves.
-    wxString path, xdg_open;
-    if ( wxGetEnv("PATH", &path) &&
-         wxFindFileInPath(&xdg_open, path, "xdg-open") )
-    {
-        if ( wxExecute(xdg_open + " " + url) )
-            return true;
-    }
-
-    wxString desktop = wxTheApp->GetTraits()->GetDesktopEnvironment();
-
-    // GNOME and KDE desktops have some applications which should be always installed
-    // together with their main parts, which give us the
-    if (desktop == wxT("GNOME"))
-    {
-        wxArrayString errors;
-        wxArrayString output;
-
-        // gconf will tell us the path of the application to use as browser
-        long res = wxExecute( wxT("gconftool-2 --get /desktop/gnome/applications/browser/exec"),
-                              output, errors, wxEXEC_NODISABLE );
-        if (res >= 0 && errors.GetCount() == 0)
-        {
-            wxString cmd = output[0];
-            cmd << _T(' ') << url;
-            if (wxExecute(cmd))
-                return true;
-        }
-    }
-    else if (desktop == wxT("KDE"))
-    {
-        // kfmclient directly opens the given URL
-        if (wxExecute(wxT("kfmclient openURL ") + url))
-            return true;
-    }
-#endif
+// a "generic" implementation:
+bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
+{
+    // on other platforms try to use mime types or wxExecute...
 
     bool ok = false;
     wxString cmd;
@@ -1168,8 +973,7 @@ static bool DoLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     if ( !ok || cmd.empty() )
     {
         // fallback to checking for the BROWSER environment variable
-        cmd = wxGetenv(wxT("BROWSER"));
-        if ( !cmd.empty() )
+        if ( !wxGetEnv(wxT("BROWSER"), &cmd) || cmd.empty() )
             cmd << _T(' ') << url;
     }
 
@@ -1180,7 +984,82 @@ static bool DoLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     // no file type for HTML extension
     wxLogError(_("No default application configured for HTML files."));
 
-#endif // !wxUSE_MIMETYPE && !__WXMSW__
+    return false;
+}
+#endif
+
+static bool DoLaunchDefaultBrowserHelper(const wxString& urlOrig, int flags)
+{
+    // NOTE: we don't have to care about the wxBROWSER_NOBUSYCURSOR flag
+    //       as it was already handled by wxLaunchDefaultBrowser
+
+    wxUnusedVar(flags);
+
+    wxString url(urlOrig), scheme;
+    wxURI uri(url);
+
+    // this check is useful to avoid that wxURI recognizes as scheme parts of
+    // the filename, in case urlOrig is a local filename
+    // (e.g. "C:\\test.txt" when parsed by wxURI reports a scheme == "C")
+    bool hasValidScheme = uri.HasScheme() && 
+            (uri.GetScheme() == "http" || uri.GetScheme() == "file");
+
+#if defined(__WXMSW__)
+
+    // NOTE: when testing wxMSW's wxLaunchDefaultBrowser all possible forms
+    //       of the URL/flags should be tested; e.g.:
+    //
+    // for (int i=0; i<2; i++)
+    // {
+    //   wxLaunchDefaultBrowser("C:\\test.txt", i==0 ? 0 : wxBROWSER_NEW_WINDOW);
+    //   wxLaunchDefaultBrowser("wxwidgets.org", i==0 ? 0 : wxBROWSER_NEW_WINDOW);
+    //   wxLaunchDefaultBrowser("file:/C%3A/test.txt", i==0 ? 0 : wxBROWSER_NEW_WINDOW);
+    //   wxLaunchDefaultBrowser("http://wxwidgets.org", i==0 ? 0 : wxBROWSER_NEW_WINDOW);
+    // }
+    // (assuming you have a C:\test.txt file)
+
+    if ( !hasValidScheme )
+    {
+        if (wxFileExists(urlOrig) || wxDirExists(urlOrig))
+        {
+            scheme = "file";
+            // do not prepend the file scheme to the URL as ShellExecuteEx() doesn't like it
+        }
+        else
+        {
+            url.Prepend(wxS("http://"));
+            scheme = "http";
+        }
+    }
+    else if ( hasValidScheme )
+    {
+        scheme = uri.GetScheme();
+
+        if ( uri.GetScheme() == "file" )
+        {
+            // ShellExecuteEx() doesn't like the "file" scheme when opening local files; 
+            // remove it
+            url = wxFileSystem::URLToFileName(url).GetFullPath();
+        }
+    }
+
+    if (wxDoLaunchDefaultBrowser(url, scheme, flags))
+        return true;
+    //else: call wxLogSysError
+#else
+    if ( !hasValidScheme )
+    {
+        // set the scheme of url to "http" or "file" if it does not have one
+        if (wxFileExists(urlOrig) || wxDirExists(urlOrig))
+            url.Prepend(wxS("file://"));
+        else
+            url.Prepend(wxS("http://"));
+    }
+
+    if (wxDoLaunchDefaultBrowser(url, flags))
+        return true;
+    //else: call wxLogSysError
+#endif
 
     wxLogSysError(_("Failed to open URL \"%s\" in default browser."),
                   url.c_str());
@@ -1190,17 +1069,21 @@ static bool DoLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 
 bool wxLaunchDefaultBrowser(const wxString& url, int flags)
 {
+    // NOTE: as documented, "url" may be both a real well-formed URL
+    //       and a local file name
+
     if ( flags & wxBROWSER_NOBUSYCURSOR )
-        return DoLaunchDefaultBrowser(url, flags);
+        return DoLaunchDefaultBrowserHelper(url, flags);
 
     wxBusyCursor bc;
-    return DoLaunchDefaultBrowser(url, flags);
+    return DoLaunchDefaultBrowserHelper(url, flags);
 }
 
 // ----------------------------------------------------------------------------
 // Menu accelerators related functions
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_6
 wxChar *wxStripMenuCodes(const wxChar *in, wxChar *out)
 {
 #if wxUSE_MENUS
@@ -1222,6 +1105,7 @@ wxChar *wxStripMenuCodes(const wxChar *in, wxChar *out)
 
     return out;
 }
+#endif
 
 wxString wxStripMenuCodes(const wxString& in, int flags)
 {
