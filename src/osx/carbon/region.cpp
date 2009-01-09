@@ -96,7 +96,7 @@ wxRegion::wxRegion(const wxRect& rect)
     m_refData = new wxRegionRefData(rect.x , rect.y , rect.width , rect.height);
 }
 
-wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
+wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode WXUNUSED(fillStyle))
 {
     wxUnusedVar(n);
     wxUnusedVar(points);
