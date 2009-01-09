@@ -350,6 +350,9 @@ bool wxNonOwnedWindow::SetBackgroundStyle(wxBackgroundStyle style)
 
 void wxNonOwnedWindow::DoMoveWindow(int x, int y, int width, int height)
 {
+    if ( m_nowpeer == NULL )
+        return;
+
     m_cachedClippedRectValid = false ;
 
     m_nowpeer->MoveWindow(x, y, width, height);
@@ -358,6 +361,9 @@ void wxNonOwnedWindow::DoMoveWindow(int x, int y, int width, int height)
 
 void wxNonOwnedWindow::DoGetPosition( int *x, int *y ) const
 {
+    if ( m_nowpeer == NULL )
+        return;
+
     int x1,y1 ;
     m_nowpeer->GetPosition(x1, y1);
 
@@ -369,6 +375,9 @@ void wxNonOwnedWindow::DoGetPosition( int *x, int *y ) const
 
 void wxNonOwnedWindow::DoGetSize( int *width, int *height ) const
 {
+    if ( m_nowpeer == NULL )
+        return;
+        
     int w,h;
     
     m_nowpeer->GetSize(w, h);
@@ -381,6 +390,9 @@ void wxNonOwnedWindow::DoGetSize( int *width, int *height ) const
 
 void wxNonOwnedWindow::DoGetClientSize( int *width, int *height ) const
 {
+    if ( m_nowpeer == NULL )
+        return;
+
     int left, top, w, h;
     m_nowpeer->GetContentArea(left, top, w, h);
 
