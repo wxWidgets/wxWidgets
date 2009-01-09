@@ -61,7 +61,7 @@ enum wxRasterOperationMode
     wxNAND,        // (NOT src) OR (NOT dst)
     wxOR,          // src OR dst
     wxSET          // 1
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     ,wxROP_BLACK = wxCLEAR,
     wxBLIT_BLACKNESS = wxCLEAR,
     wxROP_XORPEN = wxXOR,
