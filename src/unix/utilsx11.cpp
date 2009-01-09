@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/unix/utilsx11.cpp
-// Purpose:     Miscellaneous X11 functions
+// Purpose:     Miscellaneous X11 functions (for wxCore)
 // Author:      Mattia Barbon, Vaclav Slavik, Robert Roebling
 // Modified by:
 // Created:     25.03.02
@@ -846,6 +846,82 @@ bool wxGetKeyState(wxKeyCode key)
     char key_vector[32];
     XQueryKeymap(pDisplay, key_vector);
     return key_vector[keyCode >> 3] & (1 << (keyCode & 7));
+}
+
+// ----------------------------------------------------------------------------
+// Launch document with default app
+// ----------------------------------------------------------------------------
+
+bool wxLaunchDefaultApplication(const wxString& document, int flags)
+{
+    wxUnusedVar(flags);
+
+    // Our best best is to use xdg-open from freedesktop.org cross-desktop
+    // compatibility suite xdg-utils
+    // (see http://portland.freedesktop.org/wiki/) -- this is installed on
+    // most modern distributions and may be tweaked by them to handle
+    // distribution specifics.
+    wxString path, xdg_open;
+    if ( wxGetEnv("PATH", &path) &&
+         wxFindFileInPath(&xdg_open, path, "xdg-open") )
+    {
+        if ( wxExecute(xdg_open + " " + document) )
+            return true;
+    }
+
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// Launch default browser
+// ----------------------------------------------------------------------------
+
+bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
+{
+    wxUnusedVar(flags);
+
+    // Our best best is to use xdg-open from freedesktop.org cross-desktop
+    // compatibility suite xdg-utils
+    // (see http://portland.freedesktop.org/wiki/) -- this is installed on
+    // most modern distributions and may be tweaked by them to handle
+    // distribution specifics. Only if that fails, try to find the right
+    // browser ourselves.
+    wxString path, xdg_open;
+    if ( wxGetEnv("PATH", &path) &&
+         wxFindFileInPath(&xdg_open, path, "xdg-open") )
+    {
+        if ( wxExecute(xdg_open + " " + url) )
+            return true;
+    }
+
+    wxString desktop = wxTheApp->GetTraits()->GetDesktopEnvironment();
+
+    // GNOME and KDE desktops have some applications which should be always installed
+    // together with their main parts, which give us the
+    if (desktop == wxT("GNOME"))
+    {
+        wxArrayString errors;
+        wxArrayString output;
+
+        // gconf will tell us the path of the application to use as browser
+        long res = wxExecute( wxT("gconftool-2 --get /desktop/gnome/applications/browser/exec"),
+                              output, errors, wxEXEC_NODISABLE );
+        if (res >= 0 && errors.GetCount() == 0)
+        {
+            wxString cmd = output[0];
+            cmd << _T(' ') << url;
+            if (wxExecute(cmd))
+                return true;
+        }
+    }
+    else if (desktop == wxT("KDE"))
+    {
+        // kfmclient directly opens the given URL
+        if (wxExecute(wxT("kfmclient openURL ") + url))
+            return true;
+    }
+
+    return false;
 }
 
 #endif // __WXX11__ || __WXGTK__ || __WXMOTIF__

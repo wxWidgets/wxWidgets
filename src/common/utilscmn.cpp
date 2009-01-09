@@ -942,7 +942,7 @@ void wxQsort(void *const pbase, size_t total_elems,
 // implemented in a port-specific utils source file:
 bool wxDoLaunchDefaultBrowser(const wxString& url, const wxString& scheme, int flags);
 
-#elif defined(__UNIX__) || defined(__WXCOCOA__) || \
+#elif defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || \
       (defined(__WXMAC__) && !defined(__WXOSX_IPHONE__))
 
 // implemented in a port-specific utils source file:
