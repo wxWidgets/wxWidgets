@@ -195,12 +195,14 @@ bool wxImage::Create( int width, int height, bool clear )
         return false;
     }
 
-    if (clear)
-        memset(M_IMGDATA->m_data, 0, width*height*3);
-
     M_IMGDATA->m_width = width;
     M_IMGDATA->m_height = height;
     M_IMGDATA->m_ok = true;
+
+    if (clear)
+    {
+        Clear();
+    }
 
     return true;
 }
@@ -244,6 +246,11 @@ bool wxImage::Create( int width, int height, unsigned char* data, unsigned char*
 void wxImage::Destroy()
 {
     UnRef();
+}
+
+void wxImage::Clear(unsigned char value)
+{
+    memset(M_IMGDATA->m_data, value, M_IMGDATA->m_width*M_IMGDATA->m_height*3);
 }
 
 wxObjectRefData* wxImage::CreateRefData() const

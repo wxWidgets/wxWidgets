@@ -566,11 +566,19 @@ public:
         @param height
             The height of the image in pixels.
         @param clear
-            If @true, initialize the image data with zeros.
+            If @true, initialize the image data with zeroes.
 
         @return @true if the call succeeded, @false otherwise.
     */
     bool Create(int width, int height, bool clear = true);
+
+    /**
+        Initialize the image data with zeroes (the default) or with the
+        byte value given as @a value.
+
+        @since 2.9.0
+    */
+    void Clear(unsigned char value = 0);
 
     /**
         Destroys the image data.

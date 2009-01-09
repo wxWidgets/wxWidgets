@@ -240,6 +240,9 @@ public:
     bool Create( char** xpmData ) { return Create(const_cast<const char* const*>(xpmData)); }
 #endif
     void Destroy();
+   
+    // initialize the image data with zeroes
+    void Clear(unsigned char value = 0);
 
     // creates an identical copy of the image (the = operator
     // just raises the ref count)

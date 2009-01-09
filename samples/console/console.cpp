@@ -50,7 +50,7 @@
 
 // what to test (in alphabetic order)? Define TEST_ALL to 0 to do a single
 // test, define it to 1 to do all tests.
-#define TEST_ALL 1
+#define TEST_ALL 0
 
 
 #if TEST_ALL
@@ -89,7 +89,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_EXECUTE
+    #define TEST_FTP
 #endif
 
 // some tests are interactive, define this to run them
@@ -2404,8 +2404,6 @@ static void TestSocketClient()
 #ifdef TEST_FTP
 
 #include "wx/protocol/ftp.h"
-
-static wxFTP ftp;
 
 #define FTP_ANONYMOUS
 
