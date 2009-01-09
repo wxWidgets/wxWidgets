@@ -256,10 +256,6 @@ SOURCE=.\autocapture.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ctrlmaskout.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\customcombo.cpp
 # End Source File
 # Begin Source File
@@ -285,10 +281,6 @@ SOURCE=.\screenshotgen.rc
 # Begin Source File
 
 SOURCE=.\autocapture.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ctrlmaskout.h
 # End Source File
 # Begin Source File
 

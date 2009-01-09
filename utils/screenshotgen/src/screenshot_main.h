@@ -11,14 +11,11 @@
 
 #include "guiframe.h"
 
-class CtrlMaskOut;
-
-
 class ScreenshotFrame : public GUIFrame
 {
 public:
     ScreenshotFrame(wxFrame *frame);
-    ~ScreenshotFrame();
+    ~ScreenshotFrame() {}
 
 protected:      // event handlers
 
@@ -28,20 +25,21 @@ protected:      // event handlers
     virtual void OnSeeScreenshots( wxCommandEvent& event);
 
     virtual void OnCaptureFullScreen( wxCommandEvent& event );
-    virtual void OnCaptureRect( wxCommandEvent& event );
-    virtual void OnEndCaptureRect( wxCommandEvent& event );
     virtual void OnCaptureAllControls( wxCommandEvent& event );
 
-    virtual void OnNotebookPageChanged( wxNotebookEvent& event );
-    virtual void OnNotebookPageChanging( wxNotebookEvent& event );
 
 private:
-    // Helper functions
-    void InitFBControls();
 
-    // Data members
-    bool capturingRect;
-    CtrlMaskOut * m_maskout;
+    // Before a config class is written, these two functions are placed here.
+    // It's only a transition and they wil be removed soon
+    wxString GetDefaultDirectory() const { return _T("screenshots"); }
+
+    wxString GetDefaultDirectoryAbsPath() const
+    {
+        wxFileName output = wxFileName::DirName(GetDefaultDirectory());
+        output.MakeAbsolute();
+        return output.GetFullPath();
+    }
 };
 
 #endif // _SCREENSHOT_MAIN_H_

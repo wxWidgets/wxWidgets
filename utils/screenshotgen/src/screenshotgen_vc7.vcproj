@@ -529,9 +529,6 @@
 				RelativePath=".\autocapture.cpp">
 			</File>
 			<File
-				RelativePath=".\ctrlmaskout.cpp">
-			</File>
-			<File
 				RelativePath=".\customcombo.cpp">
 			</File>
 			<File
@@ -550,9 +547,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
 				RelativePath=".\autocapture.h">
-			</File>
-			<File
-				RelativePath=".\ctrlmaskout.h">
 			</File>
 			<File
 				RelativePath=".\customcombo.h">

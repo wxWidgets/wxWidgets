@@ -31,7 +31,6 @@ SCREENSHOTGEN_OBJECTS =  \
 	$(OBJS)\screenshotgen_screenshot_app.o \
 	$(OBJS)\screenshotgen_screenshot_main.o \
 	$(OBJS)\screenshotgen_guiframe.o \
-	$(OBJS)\screenshotgen_ctrlmaskout.o \
 	$(OBJS)\screenshotgen_customcombo.o \
 	$(OBJS)\screenshotgen_autocapture.o \
 	$(OBJS)\screenshotgen_screenshotgen_rc.o
@@ -266,9 +265,6 @@ $(OBJS)\screenshotgen_screenshot_main.o: ./screenshot_main.cpp
 	$(CXX) -c -o $@ $(SCREENSHOTGEN_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\screenshotgen_guiframe.o: ./guiframe.cpp
-	$(CXX) -c -o $@ $(SCREENSHOTGEN_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\screenshotgen_ctrlmaskout.o: ./ctrlmaskout.cpp
 	$(CXX) -c -o $@ $(SCREENSHOTGEN_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\screenshotgen_customcombo.o: ./customcombo.cpp

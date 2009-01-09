@@ -19,7 +19,6 @@
             screenshot_app.cpp
             screenshot_main.cpp
             guiframe.cpp
-            ctrlmaskout.cpp
             customcombo.cpp
             autocapture.cpp
         </sources>
@@ -28,7 +27,6 @@
             screenshot_app.h
             screenshot_main.h
             guiframe.h
-            ctrlmaskout.h
             customcombo.h
             autocapture.h
         </headers>

@@ -60,7 +60,6 @@ SCREENSHOTGEN_OBJECTS =  \
 	screenshotgen_screenshot_app.o \
 	screenshotgen_screenshot_main.o \
 	screenshotgen_guiframe.o \
-	screenshotgen_ctrlmaskout.o \
 	screenshotgen_customcombo.o \
 	screenshotgen_autocapture.o \
 	$(__screenshotgen___win32rc)
@@ -250,9 +249,6 @@ screenshotgen_screenshot_main.o: $(srcdir)/screenshot_main.cpp
 
 screenshotgen_guiframe.o: $(srcdir)/guiframe.cpp
 	$(CXXC) -c -o $@ $(SCREENSHOTGEN_CXXFLAGS) $(srcdir)/guiframe.cpp
-
-screenshotgen_ctrlmaskout.o: $(srcdir)/ctrlmaskout.cpp
-	$(CXXC) -c -o $@ $(SCREENSHOTGEN_CXXFLAGS) $(srcdir)/ctrlmaskout.cpp
 
 screenshotgen_customcombo.o: $(srcdir)/customcombo.cpp
 	$(CXXC) -c -o $@ $(SCREENSHOTGEN_CXXFLAGS) $(srcdir)/customcombo.cpp

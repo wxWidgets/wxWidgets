@@ -20,10 +20,6 @@
 
 #include "guiframe.h"
 
-#include "bitmaps/play.xpm"
-#include "bitmaps/stop.xpm"
-
-
 ///////////////////////////////////////////////////////////////////////////
 
 GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
@@ -49,6 +45,8 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
     //Drop-down Controls
     AddPanel_5();
 
+    m_notebook1->ChangeSelection(0);
+
     bSizer0->Add( m_notebook1, 1, wxEXPAND | wxALL, 0 );
 
     this->SetSizer( bSizer0 );
@@ -58,9 +56,6 @@ GUIFrame::GUIFrame( wxWindow* parent, wxWindowID id, const wxString& title, cons
 
     // Connect Events
     this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( GUIFrame::OnClose ) );
-
-    m_notebook1->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( GUIFrame::OnNotebookPageChanged ), NULL, this );
-    m_notebook1->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( GUIFrame::OnNotebookPageChanging ), NULL, this );
 }
 
 void GUIFrame::AddMenuBar()
@@ -89,13 +84,6 @@ void GUIFrame::AddMenuBar()
     m_menuCapFullScreen = new wxMenuItem( captureMenu, idMenuCapFullScreen, wxString( _("&Full Screen") ) + wxT('\t') + wxT("Ctrl+Alt+F"), _("Takes a screenshot of the entire screen."), wxITEM_NORMAL );
     captureMenu->Append( m_menuCapFullScreen );
 
-    m_menuCapRect = new wxMenuItem( captureMenu, idMenuCapRect, wxString( _("Regions<Begin>") ) + wxT('\t') + wxT("Ctrl+Alt+R"), _("Manually specify rectangular regions for the screenshots."), wxITEM_NORMAL );
-    captureMenu->Append( m_menuCapRect );
-
-    m_menuEndCapRect = new wxMenuItem( captureMenu, idMenuEndCapRect, wxString( _("Regions<End>") ) + wxT('\t') + wxT("Ctrl+Alt+E"), _("Stop manually generating screenshots."), wxITEM_NORMAL );
-    captureMenu->Append( m_menuEndCapRect );
-    m_menuEndCapRect->Enable( false );
-
     wxMenuItem* m_menuCapAll;
     m_menuCapAll = new wxMenuItem( captureMenu, idMenuCapAll, wxString( _("Capture All") ) + wxT('\t') + wxT("Ctrl+Alt+A"), _("Takes screenshots for all controls automatically."), wxITEM_NORMAL );
     captureMenu->Append( m_menuCapAll );
@@ -116,8 +104,6 @@ void GUIFrame::AddMenuBar()
     this->Connect( m_menuSeeScr->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
     this->Connect( m_menuFileQuit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
     this->Connect( m_menuCapFullScreen->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
-    this->Connect( m_menuCapRect->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureRect ) );
-    this->Connect( m_menuEndCapRect->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnEndCaptureRect ) );
     this->Connect( m_menuCapAll->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
     this->Connect( m_menuHelpAbout->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
 }
@@ -147,6 +133,11 @@ void GUIFrame::AddPanel_1()
     m_checkBox2->SetToolTip( _("wxCheckBox") );
     fgSizer1->Add( m_checkBox2, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 20 );
 
+    /*
+        NB: under wxGTK for the radio button "unchecked" to be unchecked, it's
+            important to put the wxRB_GROUP style on the first wxRadioButton
+            (the one "checked") and no flags on the second one.
+    */
     m_radioBtn1 = new wxRadioButton( m_panel1, wxID_ANY, _("Checked"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
     m_radioBtn1->SetValue( true );
     m_radioBtn1->SetToolTip( _("wxRadioButton") );
@@ -196,6 +187,7 @@ void GUIFrame::AddPanel_1()
     fgSizer1->Add( m_spinBtn1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
     m_scrollBar1 = new wxScrollBar( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_HORIZONTAL );
+    m_scrollBar1->SetScrollbar(50, 1, 100, 1);
     m_scrollBar1->SetToolTip( _("wxScrollBar") );
     fgSizer1->Add( m_scrollBar1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
 
@@ -217,6 +209,7 @@ void GUIFrame::AddPanel_2()
     wxString m_checkList1Choices[] = { _("wxCheckListBox"), _("Item1"), _("Item2") };
     int m_checkList1NChoices = sizeof( m_checkList1Choices ) / sizeof( wxString );
     m_checkList1 = new wxCheckListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_checkList1NChoices, m_checkList1Choices, 0 );
+    m_checkList1->Check(0);
     fgSizer2->Add( m_checkList1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
     m_listBox1 = new wxListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
@@ -235,9 +228,20 @@ void GUIFrame::AddPanel_2()
     fgSizer2->Add( m_staticBox1, 1, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 20 );
 
     m_treeCtrl1 = new wxTreeCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER );
+    wxTreeItemId root = m_treeCtrl1->AddRoot(_("wxTreeCtrl"));
+    m_treeCtrl1->AppendItem(root, _("Node1"));
+    wxTreeItemId node2 = m_treeCtrl1->AppendItem(root, _("Node2"));
+    m_treeCtrl1->AppendItem(node2, _("Node3"));
+    m_treeCtrl1->ExpandAll();
     fgSizer2->Add( m_treeCtrl1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
     m_listCtrl1 = new wxListCtrl( m_panel2, wxID_ANY, wxDefaultPosition, wxSize(220,120), wxLC_REPORT|wxSUNKEN_BORDER );
+    m_listCtrl1->InsertColumn(0, "Names");
+    m_listCtrl1->InsertColumn(1, "Values");
+    for(long index = 0; index < 5; index++) {
+        m_listCtrl1->InsertItem( index, wxString::Format(_("Item%d"),index));
+        m_listCtrl1->SetItem(index, 1, wxString::Format("%d", index));
+    }
     m_listCtrl1->SetToolTip( _("wxListCtrl") );
     fgSizer2->Add( m_listCtrl1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxEXPAND, 20 );
 
@@ -305,6 +309,7 @@ void GUIFrame::AddPanel_3()
     bSizer2->Add( m_textCtrl2, 0, wxBOTTOM|wxRIGHT|wxLEFT, 20 );
 
     m_richText1 = new wxRichTextCtrl( m_panel3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), 0|wxVSCROLL|wxHSCROLL|wxNO_BORDER|wxWANTS_CHARS );
+    m_richText1->LoadFile(_T("richtext.xml"));
     m_richText1->SetToolTip( _("wxRichTextCtrl") );
     m_richText1->SetMinSize( wxSize( 200,200 ) );
     bSizer2->Add( m_richText1, 0, wxALL, 20 );
@@ -335,6 +340,12 @@ void GUIFrame::AddPanel_4()
     fgSizer5->Add( m_fontPicker1, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 20 );
 
     m_filePicker1 = new wxFilePickerCtrl( m_panel4, wxID_ANY, wxEmptyString, _("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE, wxDefaultValidator, wxT("_FilePickerCtrl") );
+    #if defined(__WXMSW__)
+         const wxString a_file = "C:\\Windows\\explorer.exe";
+    #else
+         const wxString a_file = "/bin/bash";
+    #endif
+    m_filePicker1->SetPath(a_file);
     m_filePicker1->SetToolTip( _("wxFilePickerCtrl") );
     fgSizer5->Add( m_filePicker1, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 20 );
 
@@ -355,6 +366,12 @@ void GUIFrame::AddPanel_4()
     fgSizer5->Add( m_genericDirCtrl1, 1, wxEXPAND|wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
     m_dirPicker1 = new wxDirPickerCtrl( m_panel4, wxID_ANY, wxEmptyString, _("Select a folder"), wxDefaultPosition, wxDefaultSize, wxDIRP_DEFAULT_STYLE, wxDefaultValidator, wxT("_DirPickerCtrl") );
+    #if defined(__WXMSW__)
+        const wxString a_dir = "C:\\Windows";
+    #else
+        const wxString a_dir = "/home";
+    #endif
+    m_dirPicker1->SetPath(a_dir);
     m_dirPicker1->SetToolTip( _("wxDirPickerCtrl") );
     fgSizer5->Add( m_dirPicker1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
@@ -386,6 +403,11 @@ void GUIFrame::AddPanel_5()
     m_comboBox1->Append( _("Item2") );
     m_comboBox1->Append( _("Item3") );
     m_comboBox1->Append( _("Item4") );
+    m_comboBox1->Select(0);
+    // To look better under gtk
+    #ifdef __WXGTK__
+    m_comboBox1->Delete(4);
+    #endif
     fgSizer4->Add( m_comboBox1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 20 );
 
     fgSizer4->Add( 0, 120, 1, wxEXPAND, 5 );
@@ -466,10 +488,6 @@ GUIFrame::~GUIFrame()
     this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnSeeScreenshots ) );
     this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnQuit ) );
     this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureFullScreen ) );
-    this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureRect ) );
-    this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnEndCaptureRect ) );
     this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnCaptureAllControls ) );
     this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GUIFrame::OnAbout ) );
-    m_notebook1->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( GUIFrame::OnNotebookPageChanged ), NULL, this );
-    m_notebook1->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( GUIFrame::OnNotebookPageChanging ), NULL, this );
 }

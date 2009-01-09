@@ -764,10 +764,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ctrlmaskout.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\customcombo.cpp"
 				>
 			</File>
@@ -791,10 +787,6 @@
 			>
 			<File
 				RelativePath=".\autocapture.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ctrlmaskout.h"
 				>
 			</File>
 			<File

@@ -42,16 +42,12 @@ protected:
     enum
     {
         idMenuCapFullScreen = 1000,
-        idMenuCapRect,
-        idMenuEndCapRect,
-        idMenuCapAll,
+        idMenuCapAll
     };
 
     wxMenuBar* mbar;
     wxMenu* fileMenu;
     wxMenu* captureMenu;
-    wxMenuItem* m_menuCapRect;
-    wxMenuItem* m_menuEndCapRect;
     wxMenu* helpMenu;
 
     wxStatusBar* statusBar;
@@ -114,12 +110,8 @@ protected:
     virtual void OnSeeScreenshots( wxCommandEvent& event ){ event.Skip(); }
     virtual void OnQuit( wxCommandEvent& event ){ event.Skip(); }
     virtual void OnCaptureFullScreen( wxCommandEvent& event ){ event.Skip(); }
-    virtual void OnCaptureRect( wxCommandEvent& event ){ event.Skip(); }
-    virtual void OnEndCaptureRect( wxCommandEvent& event ){ event.Skip(); }
     virtual void OnCaptureAllControls( wxCommandEvent& event ){ event.Skip(); }
     virtual void OnAbout( wxCommandEvent& event ){ event.Skip(); }
-    virtual void OnNotebookPageChanged( wxNotebookEvent& event ){ event.Skip(); }
-    virtual void OnNotebookPageChanging( wxNotebookEvent& event ){ event.Skip(); }
 
 private:
     void AddMenuBar();
