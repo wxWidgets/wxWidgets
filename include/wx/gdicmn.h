@@ -128,14 +128,6 @@ enum wxStockCursor
 #ifdef __WXMAC__
     wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow
 #endif
-#ifdef __WXMAC__
-    wxCURSOR_OPEN_HAND, 
-    wxCURSOR_CLOSED_HAND, 
-#else
-    // TODO CS supply openhand and closedhand cursors
-    wxCURSOR_OPEN_HAND = wxCURSOR_HAND, 
-    wxCURSOR_CLOSED_HAND = wxCURSOR_HAND,     
-#endif
 #ifdef __X__
     // Not yet implemented for Windows
     wxCURSOR_CROSS_REVERSE,
@@ -143,14 +135,23 @@ enum wxStockCursor
     wxCURSOR_BASED_ARROW_UP,
     wxCURSOR_BASED_ARROW_DOWN,
 #endif // X11
-
     wxCURSOR_ARROWWAIT,
+#ifdef __WXMAC__
+    wxCURSOR_OPEN_HAND, 
+    wxCURSOR_CLOSED_HAND, 
+#endif
 
     wxCURSOR_MAX
 };
 
 #ifndef __WXGTK__
     #define wxCURSOR_DEFAULT wxCURSOR_ARROW
+#endif
+
+#ifndef __WXMAC__
+    // TODO CS supply openhand and closedhand cursors
+    #define wxCURSOR_OPEN_HAND wxCURSOR_HAND, 
+    #define wxCURSOR_CLOSED_HAND wxCURSOR_HAND,     
 #endif
 
 // ---------------------------------------------------------------------------
