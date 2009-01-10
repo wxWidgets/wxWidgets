@@ -19,6 +19,7 @@ public:
  
     void OnAction(wxCommandEvent& event); 
     void OnPropertyGridChange(wxPropertyGridEvent& event); 
+    void OnPropertyGridChanging(wxPropertyGridEvent& event); 
 
 private:
     wxPropertyGrid* m_pg;
@@ -28,6 +29,7 @@ private:
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_HIGHEST+1, MyFrame::OnAction)
     EVT_PG_CHANGED( -1, MyFrame::OnPropertyGridChange )
+    EVT_PG_CHANGING( -1, MyFrame::OnPropertyGridChanging )
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxWindow* parent)
@@ -56,9 +58,17 @@ void MyFrame::OnPropertyGridChange(wxPropertyGridEvent &event)
     wxPGProperty* p = event.GetProperty();
 
     if ( p )
-        wxLogDebug("OnPropertyGridChange(%s)", p->GetName().c_str());
+        wxLogDebug("OnPropertyGridChange(%s, value=%s)", 
+                   p->GetName().c_str(), p->GetValueAsString().c_str());
     else
         wxLogDebug("OnPropertyGridChange(NULL)");
+}
+
+void MyFrame::OnPropertyGridChanging(wxPropertyGridEvent &event)
+{
+    wxPGProperty* p = event.GetProperty();
+
+    wxLogDebug("OnPropertyGridChanging(%s)", p->GetName().c_str());
 }
 
 void MyFrame::OnAction(wxCommandEvent &) 
