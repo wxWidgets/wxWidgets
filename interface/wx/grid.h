@@ -3251,7 +3251,7 @@ protected:
         GetGridColHeader() to access it if you need wxHeaderCtrl-specific
         functionality.
      */
-    wxWindow *GetGridWindow() const;
+    wxWindow *GetGridColLabelWindow() const;
 
     /**
         Return the window in the top left grid corner.
