@@ -29,12 +29,12 @@ public:
 
         @see SetResolution()
     */
-    static int GetResolution() const;
+    virtual int GetResolution() const;
 
     /**
         Set resolution (in pixels per inch) that will be used in PostScript
         output. Default is 720ppi.
     */
-    static void SetResolution(int ppi);
+    virtual wxRect GetPaperRect() const;
 };
 

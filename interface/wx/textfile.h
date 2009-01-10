@@ -145,7 +145,7 @@ public:
         compiling with the Apple Developer Tools) and @c wxTextFileType_Mac under
         Mac OS (including Mac OS X when compiling with CodeWarrior).
     */
-    static const char* GetEOL(wxTextFileType type = typeDefault) const;
+    static const char* GetEOL(wxTextFileType type = typeDefault);
 
     /**
         This method together with GetNextLine() allows more "iterator-like"

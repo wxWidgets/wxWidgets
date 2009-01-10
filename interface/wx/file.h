@@ -102,6 +102,8 @@ class wxTempFile
 public:
     /**
         Associates wxTempFile with the file to be replaced and opens it.
+
+        @warning
         You should use IsOpened() to verify that the constructor succeeded.
     */
     wxTempFile(const wxString& strName);
@@ -248,6 +250,9 @@ public:
             The filename.
         @param mode
             The mode in which to open the file.
+
+        @warning
+        You should use IsOpened() to verify that the constructor succeeded.
     */
     wxFile(const wxString& filename,
            wxFile::OpenMode mode = wxFile::read);

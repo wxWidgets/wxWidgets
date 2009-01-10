@@ -488,26 +488,6 @@ public:
     */
     int CmpNoCase(const wxString& s) const;
 
-
-    //@{
-    /**
-        Comparison operators
-    */
-    bool operator ==(const wxString& x, const wxString& y);
-    bool operator ==(const wxString& x, wxUniChar ch);
-    bool operator !=(const wxString& x, const wxString& y);
-    bool operator !=(const wxString& x, wxUniChar ch);
-    bool operator(const wxString& x, const wxString& y);
-    bool operator(const wxString& x, wxUniChar ch);
-    bool operator =(const wxString& x, const wxString& y);
-    bool operator =(const wxString& x, wxUniChar ch);
-    bool operator(const wxString& x, const wxString& y);
-    bool operator(const wxString& x, wxUniChar ch);
-    bool operator =(const wxString& x, const wxString& y);
-    bool operator =(const wxString& x, wxUniChar ch);
-    //@}
-
-
     /**
         Returns @true if target appears anywhere in wxString; else @false.
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
@@ -1119,8 +1099,6 @@ public:
     wxString& operator<<(const char* psz);
     wxString& operator<<(const wchar_t* pwz);
     wxString& operator<<(const wxCStrData& psz);
-    wxString& operator<<(const char* psz);
-    wxString& operator<<(wxUniCharRef ch);
     wxString& operator<<(char ch);
     wxString& operator<<(unsigned char ch);
     wxString& operator<<(wchar_t ch);
@@ -1367,6 +1345,57 @@ public:
         void swap(wxString& str);
     //@}
 };
+
+/** @addtogroup group_string_operators */
+//@{
+/**
+    Comparison operators for wxString.
+*/
+inline bool operator==(const wxString& s1, const wxString& s2);
+inline bool operator!=(const wxString& s1, const wxString& s2);
+inline bool operator< (const wxString& s1, const wxString& s2);
+inline bool operator> (const wxString& s1, const wxString& s2);
+inline bool operator<=(const wxString& s1, const wxString& s2);
+inline bool operator>=(const wxString& s1, const wxString& s2);
+inline bool operator==(const wxString& s1, const wxCStrData& s2);
+inline bool operator==(const wxCStrData& s1, const wxString& s2);
+inline bool operator!=(const wxString& s1, const wxCStrData& s2);
+inline bool operator!=(const wxCStrData& s1, const wxString& s2);
+inline bool operator==(const wxString& s1, const wxWCharBuffer& s2);
+inline bool operator==(const wxWCharBuffer& s1, const wxString& s2);
+inline bool operator!=(const wxString& s1, const wxWCharBuffer& s2);
+inline bool operator!=(const wxWCharBuffer& s1, const wxString& s2);
+inline bool operator==(const wxString& s1, const wxCharBuffer& s2);
+inline bool operator==(const wxCharBuffer& s1, const wxString& s2);
+inline bool operator!=(const wxString& s1, const wxCharBuffer& s2);
+inline bool operator!=(const wxCharBuffer& s1, const wxString& s2);
+inline wxString operator+(const wxString& string, const wxWCharBuffer& buf)
+inline wxString operator+(const wxWCharBuffer& buf, const wxString& string)
+inline wxString operator+(const wxString& string, const wxCharBuffer& buf)
+inline wxString operator+(const wxCharBuffer& buf, const wxString& string)
+
+/**
+    Comparison operators with wxUniChar or wxUniCharRef.
+*/
+inline bool operator==(const wxUniChar& c, const wxString& s);
+inline bool operator==(const wxUniCharRef& c, const wxString& s);
+inline bool operator==(char c, const wxString& s);
+inline bool operator==(wchar_t c, const wxString& s);
+inline bool operator==(int c, const wxString& s);
+inline bool operator==(const wxString& s, const wxUniChar& c);
+inline bool operator==(const wxString& s, const wxUniCharRef& c);
+inline bool operator==(const wxString& s, char c);
+inline bool operator==(const wxString& s, wchar_t c);
+inline bool operator!=(const wxUniChar& c, const wxString& s);
+inline bool operator!=(const wxUniCharRef& c, const wxString& s);
+inline bool operator!=(char c, const wxString& s);
+inline bool operator!=(wchar_t c, const wxString& s);
+inline bool operator!=(int c, const wxString& s);
+inline bool operator!=(const wxString& s, const wxUniChar& c);
+inline bool operator!=(const wxString& s, const wxUniCharRef& c);
+inline bool operator!=(const wxString& s, char c);
+inline bool operator!=(const wxString& s, wchar_t c);
+//@}
 
 /**
     The global wxString instance of an empty string.

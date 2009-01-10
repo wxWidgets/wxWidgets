@@ -284,15 +284,14 @@ public:
         Creates the HTML listbox for two-step construction.
         See wxSimpleHtmlListBox() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n,
-                const wxString choices[] = NULL,
+                int n = 0, const wxString choices[] = NULL,
                 long style = wxHLB_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxSimpleHtmlListBoxNameStr);
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos,
                 const wxSize& size,
                 const wxArrayString& choices,

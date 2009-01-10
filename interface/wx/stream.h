@@ -561,7 +561,7 @@ public:
         GetFirst()/GetNext() return a pointer to a factory or @NULL if no more
         are available. They do not give away ownership of the factory.
     */
-    static const wxFilterClassFactory* GetFirst() const;
+    static const wxFilterClassFactory* GetFirst();
     const wxFilterClassFactory* GetNext() const;
     //@}
 

@@ -321,7 +321,7 @@ public:
         an empty string otherwise.
     */
     static void UseStringValues(const wxString& valueTrue = "1",
-                                const wxString& valueFalse = wxEmptyString) const;
+                                const wxString& valueFalse = wxEmptyString);
 };
 
 /**

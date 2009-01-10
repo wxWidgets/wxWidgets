@@ -64,7 +64,7 @@ public:
         Returns @true if a sound is played at the moment.
         This method is currently not implemented under Windows.
     */
-    static bool IsPlaying() const;
+    static bool IsPlaying();
 
     //@{
     /**

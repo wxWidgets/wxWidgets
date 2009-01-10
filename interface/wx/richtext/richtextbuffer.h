@@ -361,7 +361,6 @@ public:
     */
     virtual void Clear();
 
-    //@{
     /**
         Clears the list style from the given range, clearing list-related attributes
         and applying any named paragraph style associated with each paragraph.
@@ -373,9 +372,6 @@ public:
     */
     bool ClearListStyle(const wxRichTextRange& range,
                         int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-    bool ClearListStyle(const wxRichTextRange& range,
-                        int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-    //@}
 
     /**
         Clears the style stack.

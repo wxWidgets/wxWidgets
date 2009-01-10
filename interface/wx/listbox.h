@@ -129,21 +129,20 @@ public:
         Creates the listbox for two-step construction.
         See wxListBox() for further details.
     */
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                int n,
-                const wxString choices[] = NULL,
+                int n = 0, const wxString choices[] = NULL,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "listBox");
-    bool Create(wxWindow* parent, wxWindowID id,
+                const wxString& name = wxListBoxNameStr);
+    bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos,
                 const wxSize& size,
                 const wxArrayString& choices,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "listBox");
+                const wxString& name = wxListBoxNameStr);
     //@}
 
     /**

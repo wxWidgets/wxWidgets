@@ -513,7 +513,7 @@ public:
         as an argument to this function and in this case the result of
         GetSystemLanguage() is used.
     */
-    static wxLanguageInfo* GetLanguageInfo(int lang) const;
+    static const wxLanguageInfo* GetLanguageInfo(int lang);
 
     /**
         Returns English name of the given language or empty string if this
@@ -521,7 +521,7 @@ public:
 
         See GetLanguageInfo() for a remark about special meaning of @c wxLANGUAGE_DEFAULT.
     */
-    static wxString GetLanguageName(int lang) const;
+    static wxString GetLanguageName(int lang);
 
     /**
         Returns the locale name as passed to the constructor or Init().
@@ -592,7 +592,7 @@ public:
         Returns wxFontEncoding() value or @c wxFONTENCODING_SYSTEM if it
         couldn't be determined.
     */
-    static wxFontEncoding GetSystemEncoding() const;
+    static wxFontEncoding GetSystemEncoding();
 
     /**
         Tries to detect the name of the user's default font encoding.
@@ -602,14 +602,14 @@ public:
         Returns a user-readable string value or an empty string if it couldn't be
         determined.
     */
-    static wxString GetSystemEncodingName() const;
+    static wxString GetSystemEncodingName();
 
     /**
         Tries to detect the user's default language setting.
         Returns the ::wxLanguage value or @b wxLANGUAGE_UNKNOWN if the language-guessing
         algorithm failed.
     */
-    static int GetSystemLanguage() const;
+    static int GetSystemLanguage();
 
     /**
         Initializes the wxLocale instance.

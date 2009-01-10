@@ -181,7 +181,7 @@ public:
     /**
         Returns the name for the given wxArchitecture enumeration value.
     */
-    static wxString GetArchName(wxArchitecture arch) const;
+    static wxString GetArchName(wxArchitecture arch);
 
     /**
         Returns the name for the architecture of this wxPlatformInfo instance.
@@ -198,7 +198,7 @@ public:
         @c wxENDIAN_INVALID if the given string is not a valid endianness
         string (i.e. does not contain nor little nor big strings).
     */
-    static wxEndianness GetEndianness(const wxString& end) const;
+    static wxEndianness GetEndianness(const wxString& end);
 
     /**
         Returns the endianness ID of this wxPlatformInfo instance.
@@ -208,7 +208,7 @@ public:
     /**
         Returns name for the given wxEndianness enumeration value.
     */
-    static wxString GetEndiannessName(wxEndianness end) const;
+    static wxString GetEndiannessName(wxEndianness end);
 
     /**
         Returns the name for the endianness of this wxPlatformInfo instance.
@@ -236,7 +236,7 @@ public:
         enumeration value: @c Unix for @c wxOS_UNIX, @c Macintosh for @c wxOS_MAC,
         @c Windows for @c wxOS_WINDOWS, @c DOS for @c wxOS_DOS, @c OS/2 for @c wxOS_OS2.
     */
-    static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os) const;
+    static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os);
 
     /**
         Returns the operating system family name of the OS associated with this
@@ -248,7 +248,7 @@ public:
         Converts the given string to a wxOperatingSystemId enum value or to @c
         wxOS_UNKNOWN if the given string is not a valid operating system name.
     */
-    static wxOperatingSystemId GetOperatingSystemId(const wxString& name) const;
+    static wxOperatingSystemId GetOperatingSystemId(const wxString& name);
 
     /**
         Returns the operating system ID of this wxPlatformInfo instance.
@@ -261,7 +261,7 @@ public:
         This can be a long name (e.g. <tt>Microsoft Windows NT</tt>);
         use GetOperatingSystemFamilyName() to retrieve a short, generic name.
     */
-    static wxString GetOperatingSystemIdName(wxOperatingSystemId os) const;
+    static wxString GetOperatingSystemIdName(wxOperatingSystemId os);
 
     /**
         Returns the operating system name of the OS associated with this wxPlatformInfo
@@ -275,7 +275,7 @@ public:
         if the given string does not match any of the wxWidgets canonical name ports
         ("wxGTK", "wxMSW", etc) nor any of the short wxWidgets name ports ("gtk", "msw", etc).
     */
-    static wxPortId GetPortId(const wxString& portname) const;
+    static wxPortId GetPortId(const wxString& portname);
 
     /**
         Returns the wxWidgets port ID associated with this wxPlatformInfo instance.
@@ -289,7 +289,7 @@ public:
 
         The returned string always starts with the "wx" prefix and is a mixed-case string.
     */
-    static wxString GetPortIdName(wxPortId port, bool usingUniversal) const;
+    static wxString GetPortIdName(wxPortId port, bool usingUniversal);
 
     /**
         Returns the name of the wxWidgets port ID associated with this wxPlatformInfo
@@ -305,7 +305,7 @@ public:
         The returned string does not start with the "wx" prefix and is always lower case.
     */
     static wxString GetPortIdShortName(wxPortId port,
-                                       bool usingUniversal) const;
+                                       bool usingUniversal);
 
     /**
         Returns the short name of the wxWidgets port ID associated with this

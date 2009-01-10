@@ -401,9 +401,9 @@ public:
         Allows the application to send an event when something changes in
         an accessible object.
     */
-    virtual static void NotifyEvent(int eventType, wxWindow* window,
-                                    wxAccObject objectType,
-                                    int objectType);
+    static void NotifyEvent(int eventType, wxWindow* window,
+                            wxAccObject objectType,
+                            int objectType);
 
     /**
         Selects the object or child. See wxAccSelectionFlags for a list
