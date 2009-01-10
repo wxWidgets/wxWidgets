@@ -189,7 +189,6 @@ public :
 
     virtual ~wxMenuCarbonImpl();
         
-
     virtual void InsertOrAppend(wxMenuItem *pItem, size_t pos) 
     {
         // MacOS counts menu items from 1 and inserts after, therefore having the
@@ -258,6 +257,24 @@ public :
     }
 
     WXHMENU GetHMenu() { return m_osxMenu; }
+
+    virtual void PopUp( wxWindow *WXUNUSED(win), int x, int y )
+    {
+        long menuResult = ::PopUpMenuSelect(m_osxMenu, y, x, 0) ;
+        if ( HiWord(menuResult) != 0 )
+        {
+            MenuCommand macid;
+            GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &macid );
+            int id = wxMacCommandToId( macid );
+            wxMenuItem* item = NULL ;
+            wxMenu* realmenu ;
+            item = m_peer->FindItem( id, &realmenu ) ;
+            if ( item )
+            {
+                m_peer->HandleCommandProcess(item, NULL );
+            }
+        }
+    }
 
     static wxMenuImpl* Create( wxMenu* peer, const wxString& title );
     static wxMenuImpl* CreateRootMenu( wxMenu* peer );

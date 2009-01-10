@@ -748,30 +748,8 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     {
         ClientToScreen( &x , &y ) ;
     }
-#ifdef __WXOSX_CARBON__
-    long menuResult = ::PopUpMenuSelect((MenuHandle) menu->GetHMenu() , y, x, 0) ;
-    if ( HiWord(menuResult) != 0 )
-    {
-        MenuCommand macid;
-        GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &macid );
-        int id = wxMacCommandToId( macid );
-        wxMenuItem* item = NULL ;
-        wxMenu* realmenu ;
-        item = menu->FindItem( id, &realmenu ) ;
-        if ( item )
-        {
-            if (item->IsCheckable())
-                item->Check( !item->IsChecked() ) ;
-
-            menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
-        }
-    }
-
-#else
+    menu->GetPeer()->PopUp(this, x, y);
     menu->SetInvokingWindow( NULL );
-    return false;
-#endif
-
     return true;
 #else
     // actually this shouldn't be called, because universal is having its own implementation

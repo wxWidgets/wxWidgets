@@ -152,6 +152,8 @@ public :
     
     wxMenu* GetWXPeer() { return m_peer ; }
 
+    virtual void PopUp( wxWindow *win, int x, int y ) = 0;
+
     static wxMenuImpl* Create( wxMenu* peer, const wxString& title );
     static wxMenuImpl* CreateRootMenu( wxMenu* peer );
 protected :
