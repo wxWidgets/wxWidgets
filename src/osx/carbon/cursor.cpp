@@ -647,6 +647,14 @@ void wxCursor::InitFromStock(wxStockCursor cursor_type)
         M_CURSORDATA->m_hCursor = wxGetStockCursor(kwxCursorRoller);
         break;
 
+    case wxCURSOR_OPEN_HAND:
+        M_CURSORDATA->m_themeCursor = kThemeOpenHandCursor;
+        break;
+
+    case wxCURSOR_CLOSED_HAND:
+        M_CURSORDATA->m_themeCursor = kThemeClosedHandCursor;
+        break;
+        
     case wxCURSOR_CHAR:
     case wxCURSOR_ARROW:
     case wxCURSOR_LEFT_BUTTON:

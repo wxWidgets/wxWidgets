@@ -224,7 +224,7 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
     case wxCURSOR_HAND:
         cursor = [[NSCursor pointingHandCursor] retain];
         break;
-
+        
     case wxCURSOR_BULLSEYE:
         cursor = wxGetStockCursor(kwxCursorBullseye);
         break;
@@ -267,6 +267,14 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
 
     case wxCURSOR_SPRAYCAN:
         cursor = wxGetStockCursor(kwxCursorRoller);
+        break;
+
+    case wxCURSOR_OPEN_HAND:
+        cursor = [[NSCursor openHandCursor] retain];
+        break;
+
+    case wxCURSOR_CLOSED_HAND:
+        cursor = [[NSCursor closedHandCursor] retain];
         break;
 
     case wxCURSOR_CHAR:
