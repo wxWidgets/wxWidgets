@@ -1227,11 +1227,17 @@ public:
     void SetValidationFailureBehavior( int vfbFlags );
 
     /**
-        Sorts all properties.
+        Sorts all properties recursively.
+
+        @param flags
+            This can contain any of the following options:
+              wxPG_SORT_TOP_LEVEL_ONLY: Only sort categories and their
+                immediate children. Sorting done by wxPG_AUTO_SORT option
+                uses this.
 
         @see SortChildren, wxPropertyGrid::SetSortFunction
     */
-    void Sort();
+    void Sort( int flags = 0 );
 
     /**
         Sorts children of a property.
@@ -1239,15 +1245,16 @@ public:
         @param id
             Name or pointer to a property.
 
-        @param recursively
-            If @true, then children are sorted recursively.
+        @param flags
+            This can contain any of the following options:
+              wxPG_RECURSE: Sorts recursively.
 
         @see Sort, wxPropertyGrid::SetSortFunction
     */
-    void SortChildren( wxPGPropArg id, bool recursively = false )
+    void SortChildren( wxPGPropArg id, int flags = 0 )
     {
         wxPG_PROP_ARG_CALL_PROLOG()
-        m_pState->DoSortChildren(p, recursively);
+        m_pState->DoSortChildren(p, flags);
     }
 
 #ifdef SWIG

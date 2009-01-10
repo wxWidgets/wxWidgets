@@ -635,16 +635,21 @@ static int wxPG_SortFunc_ByLabel(wxPGProperty **pp1, wxPGProperty **pp2)
 #endif
 
 void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
-                                              bool recursively )
+                                              int flags )
 {
     if ( !p )
         p = m_properties;
 
+    // Can only sort items with children
     if ( !p->GetChildCount() )
         return;
 
-    // Can only sort items with children
-    if ( p->GetChildCount() < 1 )
+    // Never sort children of aggregate properties
+    if ( p->HasFlag(wxPG_PROP_AGGREGATE) )
+        return;
+
+    if ( (flags & wxPG_SORT_TOP_LEVEL_ONLY)
+         && !p->IsCategory() && !p->IsRoot() )
         return;
 
 #if wxUSE_STL
@@ -661,33 +666,50 @@ void wxPropertyGridPageState::DoSortChildren( wxPGProperty* p,
         p->m_children.Sort( wxPG_SortFunc_ByLabel );
 #endif
 
-    // Fix indexes
+    // Fix indices
     p->FixIndicesOfChildren();
 
-    if ( recursively && !p->HasFlag(wxPG_PROP_AGGREGATE) )
+    if ( flags & wxPG_RECURSE )
     {
+        // Apply sort recursively
         for ( unsigned int i=0; i<p->GetChildCount(); i++ )
-            DoSortChildren(p->Item(i));
+            DoSortChildren(p->Item(i), flags);
     }
 }
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridPageState::DoSort()
+void wxPropertyGridPageState::DoSort( int flags )
 {
-    DoSortChildren( m_properties, true );
+    DoSortChildren( m_properties, flags | wxPG_RECURSE );
 
     // Sort categories as well (but we need not do it recursively)
-    if ( !IsInNonCatMode() )
+    if ( IsInNonCatMode() )
     {
         size_t i;
-        for ( i=0;i<m_properties->GetChildCount();i++)
+        for ( i=0;i<m_regularArray.GetChildCount();i++)
         {
-            wxPGProperty* p = m_properties->Item(i);
+            wxPGProperty* p = m_regularArray.Item(i);
             if ( p->IsCategory() )
-                DoSortChildren( p );
+                DoSortChildren( p, 0 );
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+bool wxPropertyGridPageState::PrepareAfterItemsAdded()
+{
+    if ( !m_itemsAdded ) return false;
+
+    wxPropertyGrid* pg = GetGrid();
+
+    m_itemsAdded = 0;
+
+    if ( pg->HasFlag(wxPG_AUTO_SORT) )
+        DoSort(wxPG_SORT_TOP_LEVEL_ONLY);
+
+    return true;
 }
 
 // -----------------------------------------------------------------------

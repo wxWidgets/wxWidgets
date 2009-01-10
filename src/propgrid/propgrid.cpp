@@ -1180,7 +1180,7 @@ void wxPropertyGrid::PrepareAfterItemsAdded()
     m_pState->m_itemsAdded = 0;
 
     if ( m_windowStyle & wxPG_AUTO_SORT )
-        Sort();
+        Sort(wxPG_SORT_TOP_LEVEL_ONLY);
 
     RecalculateVirtualSize();
 }
@@ -2277,8 +2277,7 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
     else if ( !m_frozen )
     {
         // Refresh, if not frozen.
-        if ( m_pState->m_itemsAdded )
-            PrepareAfterItemsAdded();
+        m_pState->PrepareAfterItemsAdded();
 
         // Reselect
         if ( m_pState->m_selected )

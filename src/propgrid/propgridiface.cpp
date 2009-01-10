@@ -762,7 +762,7 @@ bool wxPropertyGridInterface::Expand( wxPGPropArg id )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridInterface::Sort()
+void wxPropertyGridInterface::Sort( int flags )
 {
     wxPropertyGrid* pg = GetPropertyGrid();
 
@@ -774,7 +774,7 @@ void wxPropertyGridInterface::Sort()
     {
         wxPropertyGridPageState* page = GetPageState(pageIndex);
         if ( !page ) break;
-        page->DoSort();
+        page->DoSort(flags);
         pageIndex++;
     }
 }

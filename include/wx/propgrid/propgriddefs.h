@@ -387,7 +387,12 @@ wxPG_INC_ATTRIBUTES               = 0x00000040,
 wxPG_RECURSE_STARTS               = 0x00000080,
 
 /** Force value change. */
-wxPG_FORCE                        = 0x00000100
+wxPG_FORCE                        = 0x00000100,
+
+/** Only sort categories and their immediate children.
+    Sorting done by wxPG_AUTO_SORT option uses this.
+*/
+wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
 
 };
 
