@@ -91,7 +91,8 @@
     if ( menuimpl )
     {
         wxMenu* wxpeer = (wxMenu*) menuimpl->GetWXPeer();
-        wxpeer->HandleMenuOpened();
+        if ( wxpeer )
+            wxpeer->HandleMenuOpened();
     }
 }
 
@@ -102,7 +103,8 @@
     if ( menuimpl )
     {
         wxMenu* wxpeer = (wxMenu*) menuimpl->GetWXPeer();
-        wxpeer->HandleMenuClosed();
+        if ( wxpeer )
+            wxpeer->HandleMenuClosed();
     }
 }
 
