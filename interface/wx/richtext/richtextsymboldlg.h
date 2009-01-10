@@ -42,7 +42,7 @@
         ctrl-GetStyle(ctrl->GetInsertionPoint(), attr);
 
         wxString currentFontName;
-        if (attr.HasFont() && attr.GetFont().Ok())
+        if (attr.HasFont() && attr.GetFont().IsOk())
             currentFontName = attr.GetFont().GetFaceName();
 
         // Don't set the initial font in the dialog (so the user is choosing

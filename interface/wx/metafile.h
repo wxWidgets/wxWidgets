@@ -94,7 +94,7 @@ public:
     /**
         Returns @true if the metafile is valid.
     */
-    bool Ok();
+    bool IsOk();
 
     /**
         Plays the metafile into the given device context, returning
@@ -114,7 +114,7 @@ public:
 
         @code
         wxMetafileDC dc;
-        if (dc.Ok())
+        if (dc.IsOk())
         {
             Draw(dc, false);
             wxMetafile *mf = dc.Close();

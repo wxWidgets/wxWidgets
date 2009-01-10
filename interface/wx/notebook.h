@@ -73,7 +73,7 @@
     overall theme, use:
     @code
     wxColour col = notebook->GetThemeBackgroundColour();
-    if (col.Ok())
+    if (col.IsOk())
     {
         page->SetBackgroundColour(col);
     }
