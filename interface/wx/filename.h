@@ -384,6 +384,7 @@ public:
     */
     void ClearExt();
 
+    //@{
     /**
         Returns a temporary file name starting with the given @e prefix.
         If the @a prefix is an absolute path, the temporary file is created in this
@@ -408,6 +409,9 @@ public:
     */
     static wxString CreateTempFileName(const wxString& prefix,
                                        wxFile* fileTemp = NULL);
+    static wxString CreateTempFileName(const wxString& prefix,
+                                       wxFFile* fileTemp = NULL);
+    //@}
 
     /**
         Returns @true if the directory with this name exists.
@@ -617,7 +621,7 @@ public:
         not be read (because e.g. the file is locked by another process) the returned
         value is ::wxInvalidSize.
     */
-    const static wxULongLong GetSize(const wxString& filename);
+    static wxULongLong GetSize(const wxString& filename);
 
     /**
         Returns the directory used for temporary files.
@@ -1066,18 +1070,19 @@ public:
         trailing dot, but empty. If you need to cope with such cases, you should use
         @a hasExt instead of relying on testing whether @a ext is empty or not.
     */
-    static void SplitPath(const wxString& fullpath, wxString* volume,
+    static void SplitPath(const wxString& fullpath,
+                          wxString* volume,
                           wxString* path,
                           wxString* name,
                           wxString* ext,
-                          bool hasExt = NULL,
+                          bool* hasExt = NULL,
                           wxPathFormat format = wxPATH_NATIVE);
     static void SplitPath(const wxString& fullpath,
                           wxString* volume,
                           wxString* path,
                           wxString* name,
                           wxString* ext,
-                          wxPathFormat format = wxPATH_NATIVE);
+                          wxPathFormat format);
     static void SplitPath(const wxString& fullpath,
                           wxString* path,
                           wxString* name,

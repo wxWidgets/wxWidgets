@@ -1665,7 +1665,7 @@ public:
         See wxGridTableBase::CanGetValueAs() and the @ref overview_grid for
         more information.
     */
-    const wxString& GetCellValue(const wxGridCellCoords& coords) const;
+    wxString GetCellValue(const wxGridCellCoords& coords) const;
 
     /**
         Returns a pointer to the current default grid cell editor.
@@ -2770,7 +2770,7 @@ public:
 
         @see BlockToDeviceRect()
     */
-    const wxRect CellToRect(const wxGridCellCoords& coords) const;
+    wxRect CellToRect(const wxGridCellCoords& coords) const;
 
     /**
         Returns the column at the given pixel position.
@@ -3098,44 +3098,6 @@ public:
 
     //@}
 
-protected:
-    /**
-        Returns @true if this grid has support for cell attributes.
-
-        The grid supports attributes if it has the associated table which, in
-        turn, has attributes support, i.e. wxGridTableBase::CanHaveAttributes()
-        returns @true.
-    */
-    bool CanHaveAttributes() const;
-
-    /**
-        Get the minimal width of the given column/row.
-
-        The value returned by this function may be different than that returned
-        by GetColMinimalAcceptableWidth() if SetColMinimalWidth() had been
-        called for this column.
-    */
-    int GetColMinimalWidth(int col) const;
-
-    /**
-        Returns the coordinate of the right border specified column.
-    */
-    int GetColRight(int col) const;
-
-    /**
-        Returns the coordinate of the left border specified column.
-    */
-    int GetColLeft(int col) const;
-
-    /**
-        Returns the minimal size for the given column.
-
-        The value returned by this function may be different than that returned
-        by GetRowMinimalAcceptableHeight() if SetRowMinimalHeight() had been
-        called for this row.
-    */
-    int GetRowMinimalHeight(int col) const;
-
 
     /**
         @name Sorting support.
@@ -3207,6 +3169,7 @@ protected:
     void UnsetSortingColumn();
     //@}
 
+
     /**
         @name Accessors for component windows.
 
@@ -3271,6 +3234,44 @@ protected:
     wxHeaderCtrl *GetGridColHeader() const;
 
     //@}
+
+protected:
+    /**
+        Returns @true if this grid has support for cell attributes.
+
+        The grid supports attributes if it has the associated table which, in
+        turn, has attributes support, i.e. wxGridTableBase::CanHaveAttributes()
+        returns @true.
+    */
+    bool CanHaveAttributes() const;
+
+    /**
+        Get the minimal width of the given column/row.
+
+        The value returned by this function may be different than that returned
+        by GetColMinimalAcceptableWidth() if SetColMinimalWidth() had been
+        called for this column.
+    */
+    int GetColMinimalWidth(int col) const;
+
+    /**
+        Returns the coordinate of the right border specified column.
+    */
+    int GetColRight(int col) const;
+
+    /**
+        Returns the coordinate of the left border specified column.
+    */
+    int GetColLeft(int col) const;
+
+    /**
+        Returns the minimal size for the given column.
+
+        The value returned by this function may be different than that returned
+        by GetRowMinimalAcceptableHeight() if SetRowMinimalHeight() had been
+        called for this row.
+    */
+    int GetRowMinimalHeight(int col) const;
 };
 
 

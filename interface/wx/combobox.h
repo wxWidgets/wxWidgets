@@ -106,7 +106,7 @@ public:
                const wxString choices[] = NULL,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = "comboBox");
+               const wxString& name = wxComboBoxNameStr);
     /**
         Constructor, creating and showing a combobox.
 
@@ -144,7 +144,7 @@ public:
                const wxArrayString& choices,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = "comboBox");
+               const wxString& name = wxComboBoxNameStr);
     //@}
 
     /**

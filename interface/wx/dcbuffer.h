@@ -87,7 +87,7 @@ public:
             window is buffered, or wxBUFFER_VIRTUAL_AREA to indicate that the
             buffer bitmap covers the virtual area.
     */
-    wxBufferedDC(wxDC* dc, wxBitmap& buffer,
+    wxBufferedDC(wxDC* dc, wxBitmap& buffer = wxNullBitmap,
                  int style = wxBUFFER_CLIENT_AREA);
     //@}
 
@@ -104,7 +104,7 @@ public:
     */
     void Init(wxDC* dc, const wxSize& area,
               int style = wxBUFFER_CLIENT_AREA);
-    void Init(wxDC* dc, wxBitmap& buffer,
+    void Init(wxDC* dc, wxBitmap& buffer = wxNullBitmap,
               int style = wxBUFFER_CLIENT_AREA);
     //@}
 };

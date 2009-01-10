@@ -742,13 +742,13 @@ public:
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
                                        int width = -1,
-                                       wxAlignment align = wxALIGN_CENTER,
+                                       wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendDateColumn(const wxBitmap& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
                                        int width = -1,
-                                       wxAlignment align = wxALIGN_CENTER,
+                                       wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
@@ -765,13 +765,13 @@ public:
                                            unsigned int model_column,
                                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                            int width = -1,
-                                           wxAlignment align = wxALIGN_LEFT,
+                                           wxAlignment align = wxALIGN_NOT,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendIconTextColumn(const wxBitmap& label,
                                            unsigned int model_column,
                                            wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                            int width = -1,
-                                           wxAlignment align = wxALIGN_LEFT,
+                                           wxAlignment align = wxALIGN_NOT,
                                            int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
@@ -809,13 +809,13 @@ public:
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                        int width = -1,
-                                       wxAlignment align = wxALIGN_LEFT,
+                                       wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn* AppendTextColumn(const wxBitmap& label,
                                        unsigned int model_column,
                                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                                        int width = -1,
-                                       wxAlignment align = wxALIGN_LEFT,
+                                       wxAlignment align = wxALIGN_NOT,
                                        int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
@@ -1558,13 +1558,13 @@ public:
                      wxDataViewRenderer* renderer,
                      unsigned int model_column,
                      int width = wxDVC_DEFAULT_WIDTH,
-                     wxAlignment align = wxALIGN_CENTRE,
+                     wxAlignment align = wxALIGN_CENTER,
                      int flags = wxDATAVIEW_COL_RESIZABLE);
     wxDataViewColumn(const wxBitmap& bitmap,
                      wxDataViewRenderer* renderer,
                      unsigned int model_column,
                      int width = wxDVC_DEFAULT_WIDTH,
-                     wxAlignment align = wxALIGN_CENTRE,
+                     wxAlignment align = wxALIGN_CENTER,
                      int flags = wxDATAVIEW_COL_RESIZABLE);
     //@}
 
@@ -1706,7 +1706,7 @@ public:
     /**
         Returns the store.
     */
-    wxDataViewTreeStore* GetStore() const;
+    wxDataViewTreeStore* GetStore();
     const wxDataViewTreeStore* GetStore() const;
     //@}
 

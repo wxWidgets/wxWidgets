@@ -247,7 +247,7 @@ public:
         @param items
             Array of strings to insert.
     */
-    void Append(const wxArrayString& items);
+    int Append(const wxArrayString& items);
 
     /**
         Appends several items at once into the control.
@@ -261,7 +261,7 @@ public:
             Array of client data pointers of the same size as @a items to
             associate with the new items.
     */
-    void Append(const wxArrayString& items, void **clientData);
+    int Append(const wxArrayString& items, void **clientData);
 
     /**
         Appends several items at once into the control.
@@ -275,7 +275,7 @@ public:
             Array of client data pointers of the same size as @a items to
             associate with the new items.
     */
-    void Append(const wxArrayString& items, wxClientData **clientData);
+    int Append(const wxArrayString& items, wxClientData **clientData);
 
     /**
         Appends several items at once into the control.
@@ -288,7 +288,7 @@ public:
         @param items
             Array of strings of size @a n.
     */
-    void Append(unsigned int n, const wxString* items);
+    int Append(unsigned int n, const wxString* items);
 
     /**
         Appends several items at once into the control.
@@ -304,8 +304,8 @@ public:
             Array of client data pointers of size @a n to associate with the
             new items.
     */
-    void Append(unsigned int n, const wxString* items,
-                void** clientData);
+    int Append(unsigned int n, const wxString* items,
+               void** clientData);
 
     /**
         Appends several items at once into the control.
@@ -321,7 +321,7 @@ public:
             Array of client data pointers of size @a n to associate with the
             new items.
     */
-    void Append(unsigned int n, const wxString* items,
+    int Append(unsigned int n, const wxString* items,
                 wxClientData** clientData);
     //@}
 
@@ -463,7 +463,7 @@ public:
         @param pos
             Position to insert the items before, zero based.
     */
-    void Insert(const wxArrayString& items, unsigned int pos);
+    int Insert(const wxArrayString& items, unsigned int pos);
 
     /**
         Inserts several items at once into the control.
@@ -479,7 +479,7 @@ public:
             Array of client data pointers of the same size as @a items to
             associate with the new items.
     */
-    void Insert(const wxArrayString& items, unsigned int pos,
+    int Insert(const wxArrayString& items, unsigned int pos,
                 void **clientData);
 
     /**
@@ -496,7 +496,7 @@ public:
             Array of client data pointers of the same size as @a items to
             associate with the new items.
     */
-    void Insert(const wxArrayString& items, unsigned int pos,
+    int Insert(const wxArrayString& items, unsigned int pos,
                 wxClientData **clientData);
 
     /**
@@ -512,7 +512,7 @@ public:
         @param pos
             Position to insert the items before, zero based.
     */
-    void Insert(unsigned int n, const wxString* items,
+    int Insert(unsigned int n, const wxString* items,
                 unsigned int pos);
 
     /**
@@ -531,7 +531,7 @@ public:
             Array of client data pointers of size @a n to associate with the
             new items.
     */
-    void Insert(unsigned int n, const wxString* items,
+    int Insert(unsigned int n, const wxString* items,
                 unsigned int pos,
                 void** clientData);
 
@@ -551,7 +551,7 @@ public:
             Array of client data pointers of size @a n to associate with the
             new items.
     */
-    void Insert(unsigned int n, const wxString* items,
+    int Insert(unsigned int n, const wxString* items,
                 unsigned int pos,
                 wxClientData** clientData);
     //@}

@@ -147,7 +147,7 @@ public:
         @see SetBitmapFocus()
     */
     const wxBitmap& GetBitmapFocus() const;
-    wxBitmap&  GetBitmapFocus();
+    wxBitmap& GetBitmapFocus();
     //@}
 
     //@{
@@ -156,8 +156,8 @@ public:
 
         @see SetBitmapHover()
     */
-    const wxBitmap& GetBitmapHover();
-    wxBitmap&  GetBitmapHover();
+    const wxBitmap& GetBitmapHover() const;
+    wxBitmap& GetBitmapHover();
     //@}
 
     //@{
@@ -168,8 +168,8 @@ public:
 
         @see SetBitmapLabel()
     */
-    const wxBitmap& GetBitmapLabel();
-    wxBitmap&  GetBitmapLabel();
+    const wxBitmap& GetBitmapLabel() const;
+    wxBitmap& GetBitmapLabel();
     //@}
 
     /**

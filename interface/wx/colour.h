@@ -164,15 +164,12 @@ public:
     */
     bool operator !=(const wxColour& colour) const;
 
-    //@{
     /**
         Assignment operator, using a colour name to be found in the colour database.
 
         @see wxColourDatabase
     */
     wxColour& operator=(const wxColour& colour);
-    wxColour& operator=(const wxColour& colour);
-    //@}
 
     /**
         Tests the equality of two colours by comparing individual red, green, blue

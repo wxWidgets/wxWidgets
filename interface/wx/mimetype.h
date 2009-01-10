@@ -340,8 +340,8 @@ public:
         indicate that an error occurred (typically meaning that there is no standard way
         to open this kind of files).
     */
-    bool GetOpenCommand(wxString* command, MessageParameters& params);
-    wxString GetOpenCommand(const wxString& filename);
+    bool GetOpenCommand(wxString* command, const MessageParameters& params);
+    wxString GetOpenCommand(const wxString& filename) const;
     //@}
 
     /**

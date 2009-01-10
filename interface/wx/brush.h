@@ -173,7 +173,7 @@ public:
 
         @see GetColour()
     */
-    virtual void SetColour(wxColour& colour);
+    virtual void SetColour(const wxColour& colour);
     virtual void SetColour(unsigned char red, unsigned char green, unsigned char blue);
     //@}
 

@@ -384,6 +384,32 @@ public:
     virtual wxString FindNext();
 
     /**
+        Returns the MIME type based on @b extension of @a location.
+        (While wxFSFile::GetMimeType() returns real MIME type - either
+         extension-based or queried from HTTP.)
+
+        Example:
+        @code
+        GetMimeTypeFromExt("index.htm") == "text/html"
+        @endcode
+    */
+    static wxString GetMimeTypeFromExt(const wxString& location);
+
+    /**
+        Opens the file and returns wxFSFile pointer or @NULL if failed.
+        Must be overridden in derived handlers.
+
+        @param fs
+            Parent FS (the FS from that OpenFile was called).
+            See the ZIP handler for details of how to use it.
+        @param location
+            The absolute location of file.
+    */
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) = 0;
+
+protected:
+
+    /**
         Returns the anchor if present in the location.
         See wxFSFile::GetAnchor for details.
 
@@ -407,18 +433,6 @@ public:
     static wxString GetLeftLocation(const wxString& location);
 
     /**
-        Returns the MIME type based on @b extension of @a location.
-        (While wxFSFile::GetMimeType() returns real MIME type - either
-         extension-based or queried from HTTP.)
-
-        Example:
-        @code
-        GetMimeTypeFromExt("index.htm") == "text/html"
-        @endcode
-    */
-    static wxString GetMimeTypeFromExt(const wxString& location);
-
-    /**
         Returns the protocol string extracted from @a location.
 
         Example:
@@ -437,17 +451,5 @@ public:
         @endcode
     */
     static wxString GetRightLocation(const wxString& location);
-
-    /**
-        Opens the file and returns wxFSFile pointer or @NULL if failed.
-        Must be overridden in derived handlers.
-
-        @param fs
-            Parent FS (the FS from that OpenFile was called).
-            See the ZIP handler for details of how to use it.
-        @param location
-            The absolute location of file.
-    */
-    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) = 0;
 };
 

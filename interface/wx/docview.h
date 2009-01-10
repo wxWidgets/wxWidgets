@@ -1134,7 +1134,7 @@ public:
 
         @see GetFirstView()
     */
-    wxList& GetViews() const;
+    wxList& GetViews();
     const wxList& GetViews() const;
     //@}
 

@@ -510,15 +510,12 @@ public:
     */
     bool IsNumbered(int level) const;
 
-    //@{
     /**
         Sets the style for the given level. @a level is a number between 0 and 9.
         The first and most flexible form uses a wxTextAttr object, while the second
         form is for convenient setting of the most commonly-used attributes.
     */
     void SetLevelAttributes(int level, const wxTextAttr& attr);
-    void SetLevelAttributes(int i, const wxTextAttr& attr);
-    //@}
 };
 
 

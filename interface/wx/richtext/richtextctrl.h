@@ -1363,7 +1363,6 @@ public:
     bool SetStyle(long start, long end, const wxTextAttr& style);
     //@}
 
-    //@{
     /**
         Sets the attributes for the given range, passing flags to determine how the
         attributes are set.
@@ -1394,10 +1393,6 @@ public:
     virtual bool SetStyleEx(const wxRichTextRange& range,
                     const wxTextAttr& style,
                     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-    virtual bool SetStyleEx(const wxRichTextRange& range,
-                    const wxTextAttr& style,
-                    int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-    //@}
 
     /**
         Sets the style sheet associated with the control.

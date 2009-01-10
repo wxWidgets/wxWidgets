@@ -504,7 +504,7 @@ enum wxStreamProtocolType
     @code
         factory = wxFilterClassFactory::Find(filename, wxSTREAM_FILEEXT);
         if (factory)
-            stream = factory-NewStream(new wxFFileInputStream(filename));
+            stream = factory->NewStream(new wxFFileInputStream(filename));
     @endcode
 
     wxFilterClassFactory::Find can also search for a factory by MIME type,
@@ -595,10 +595,10 @@ public:
         If the parent stream is passed as a pointer then the new filter stream
         takes ownership of it. If it is passed by reference then it does not.
     */
-    wxFilterInputStream*  NewStream(wxInputStream& stream) const;
-    wxFilterOutputStream* NewStream(wxOutputStream& stream) const;
-    wxFilterInputStream*  NewStream(wxInputStream* stream) const;
-    wxFilterOutputStream* NewStream(wxOutputStream* stream) const;
+    virtual wxFilterInputStream*  NewStream(wxInputStream& stream) const = 0;
+    virtual wxFilterOutputStream* NewStream(wxOutputStream& stream) const = 0;
+    virtual wxFilterInputStream*  NewStream(wxInputStream* stream) const = 0;
+    virtual wxFilterOutputStream* NewStream(wxOutputStream* stream) const = 0;
     //@}
 
     /**

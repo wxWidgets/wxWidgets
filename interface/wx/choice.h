@@ -73,13 +73,13 @@ public:
 
         @endWxPythonOnly
     */
-    wxChoice(wxWindow* parent, wxWindowID id,
-             const wxPoint& pos,
-             const wxSize& size, int n,
-             const wxString choices[],
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = "choice");
+    wxChoice( wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr );
 
     /**
         Constructor, creating and showing a choice.
@@ -111,13 +111,13 @@ public:
 
         @endWxPythonOnly
     */
-    wxChoice(wxWindow* parent, wxWindowID id,
-             const wxPoint& pos,
-             const wxSize& size,
-             const wxArrayString& choices,
-             long style = 0,
-             const wxValidator& validator = wxDefaultValidator,
-             const wxString& name = "choice");
+    wxChoice( wxWindow *parent, wxWindowID id,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr );
     //@}
 
     /**
@@ -129,25 +129,26 @@ public:
     /**
         Creates the choice for two-step construction. See wxChoice().
     */
-    bool Create(wxWindow* parent, wxWindowID id, const wxPoint& pos,
-                const wxSize& size, int n,
-                const wxString choices[],
-                long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "choice");
-    bool Create(wxWindow* parent, wxWindowID id,
-                const wxPoint& pos,
-                const wxSize& size,
-                const wxArrayString& choices,
-                long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "choice");
+    bool Create( wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr );
+    bool Create( wxWindow *parent, wxWindowID id,
+            const wxPoint& pos,
+            const wxSize& size,
+            const wxArrayString& choices,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr );
     //@}
 
     /**
         Gets the number of columns in this choice item.
 
-        @remarks This is implemented for GTK and Motif only and always 
+        @remarks This is implemented for GTK and Motif only and always
                  returns 1 for the other platforms.
     */
     virtual int GetColumns() const;
@@ -172,7 +173,7 @@ public:
         @param n
             Number of columns.
 
-        @remarks This is implemented for GTK and Motif only and doesn’t do 
+        @remarks This is implemented for GTK and Motif only and doesn’t do
                  anything under other platforms.
     */
     virtual void SetColumns(int n = 1);

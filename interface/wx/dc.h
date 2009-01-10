@@ -267,10 +267,10 @@ public:
         character with the given index if it is != -1 and return the bounding
         rectangle if required.
     */
-    virtual void DrawLabel(const wxString& text, const wxBitmap& image,
-                           const wxRect& rect,
-                           int alignment = wxALIGN_LEFT | wxALIGN_TOP,
-                           int indexAccel = -1, wxRect* rectBounding = NULL);
+    void DrawLabel(const wxString& text, const wxBitmap& image,
+                   const wxRect& rect,
+                   int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                   int indexAccel = -1, wxRect* rectBounding = NULL);
     void DrawLabel(const wxString& text, const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                    int indexAccel = -1);
@@ -1132,7 +1132,7 @@ public:
     */
     wxDCClipper(wxDC& dc, const wxRegion& r);
     wxDCClipper(wxDC& dc, const wxRect& rect);
-    wxDCClipper(wxDC& dc, int x, int y, int w, int h);
+    wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h);
     //@}
 
     /**

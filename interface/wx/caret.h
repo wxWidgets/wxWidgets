@@ -62,7 +62,7 @@ public:
         Get the caret position (in pixels).
     */
     void GetPosition(int* x, int* y) const;
-    const wxPoint GetPosition() const;
+    wxPoint GetPosition() const;
     //@}
 
     //@{
@@ -70,7 +70,7 @@ public:
         Get the caret size.
     */
     void GetSize(int* width, int* height) const;
-    const wxSize  GetSize() const;
+    wxSize GetSize() const;
     //@}
 
     /**

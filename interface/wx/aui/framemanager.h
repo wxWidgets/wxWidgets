@@ -203,8 +203,8 @@ public:
         interface. If the lookup failed (meaning the pane could not be found in the
         manager), a call to the returned wxAuiPaneInfo's IsOk() method will return @false.
     */
-    wxAuiPaneInfo GetPane(wxWindow* window);
-    wxAuiPaneInfo GetPane(const wxString& name);
+    wxAuiPaneInfo& GetPane(wxWindow* window);
+    wxAuiPaneInfo& GetPane(const wxString& name);
     //@}
 
     /**
@@ -366,8 +366,8 @@ public:
         BestSize() sets the ideal size for the pane. The docking manager will attempt
         to use this size as much as possible when docking or floating the pane.
     */
-    wxAuiPaneInfo BestSize(const wxSize& size);
-    wxAuiPaneInfo BestSize(int x, int y);
+    wxAuiPaneInfo& BestSize(const wxSize& size);
+    wxAuiPaneInfo& BestSize(int x, int y);
     //@}
 
     /**
@@ -479,16 +479,16 @@ public:
     /**
         FloatingPosition() sets the position of the floating pane.
     */
-    wxAuiPaneInfo FloatingPosition(const wxPoint& pos);
-    wxAuiPaneInfo FloatingPosition(int x, int y);
+    wxAuiPaneInfo& FloatingPosition(const wxPoint& pos);
+    wxAuiPaneInfo& FloatingPosition(int x, int y);
     //@}
 
     //@{
     /**
         FloatingSize() sets the size of the floating pane.
     */
-    wxAuiPaneInfo FloatingSize(const wxSize& size);
-    wxAuiPaneInfo FloatingSize(int x, int y);
+    wxAuiPaneInfo& FloatingSize(const wxSize& size);
+    wxAuiPaneInfo& FloatingSize(int x, int y);
     //@}
 
     /**
@@ -649,8 +649,8 @@ public:
     /**
         MaxSize() sets the maximum size of the pane.
     */
-    wxAuiPaneInfo MaxSize(const wxSize& size);
-    wxAuiPaneInfo MaxSize(int x, int y);
+    wxAuiPaneInfo& MaxSize(const wxSize& size);
+    wxAuiPaneInfo& MaxSize(int x, int y);
     //@}
 
     /**
@@ -663,8 +663,8 @@ public:
         MinSize() sets the minimum size of the pane. Please note that this is only
         partially supported as of this writing.
     */
-    wxAuiPaneInfo MinSize(const wxSize& size);
-    wxAuiPaneInfo MinSize(int x, int y);
+    wxAuiPaneInfo& MinSize(const wxSize& size);
+    wxAuiPaneInfo& MinSize(int x, int y);
     //@}
 
     /**

@@ -248,13 +248,13 @@ public:
         This constructor is named "wxDateTimeFromTimeT" in wxPython.
         @endWxPythonOnly
     */
-    wxDateTime& wxDateTime(time_t timet);
+    wxDateTime(time_t timet);
     /**
         Same as Set().
 
         @beginWxPythonOnly Unsupported. @endWxPythonOnly
     */
-    wxDateTime& wxDateTime(const struct tm& tm);
+    wxDateTime(const struct tm& tm);
     /**
         Same as Set().
 
@@ -262,7 +262,7 @@ public:
         This constructor is named "wxDateTimeFromJDN" in wxPython.
         @endWxPythonOnly
     */
-    wxDateTime& wxDateTime(double jdn);
+    wxDateTime(double jdn);
     /**
         Same as Set().
 
@@ -270,8 +270,8 @@ public:
         This constructor is named "wxDateTimeFromHMS" in wxPython.
         @endWxPythonOnly
     */
-    wxDateTime& wxDateTime(wxDateTime_t hour, wxDateTime_t minute = 0,
-                           wxDateTime_t second = 0, wxDateTime_t millisec = 0);
+    wxDateTime(wxDateTime_t hour, wxDateTime_t minute = 0,
+               wxDateTime_t second = 0, wxDateTime_t millisec = 0);
     /**
         Same as Set().
 
@@ -1388,7 +1388,7 @@ public:
         Returns the current time broken down using the buffer whose adress is
         passed to the function with @a tm to store the result.
     */
-    static struct tm* GetTmNow(struct tm *tm);
+    static tm* GetTmNow(struct tm *tm);
 
     /**
         Returns the current time broken down. Note that this function returns a
@@ -1397,7 +1397,7 @@ public:
         your code might be used in a multi-threaded application, you really
         should use GetTmNow(struct tm *) instead.
     */
-    static struct tm* GetTmNow();
+    static tm* GetTmNow();
 
     /**
         Gets the full (default) or abbreviated (specify @c Name_Abbr) name of

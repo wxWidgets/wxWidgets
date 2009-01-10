@@ -27,8 +27,8 @@ public:
         You may connect to a non-default port by specifying it explicitly using
         the second overload.
      */
-    bool Connect(const wxString& host);
-    bool Connect(const wxString& host, unsigned short port);
+    virtual bool Connect(const wxString& host);
+    virtual bool Connect(const wxString& host, unsigned short port);
     //@}
 
     /**

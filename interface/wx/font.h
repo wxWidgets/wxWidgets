@@ -310,7 +310,7 @@ public:
         @remarks If the desired font does not exist, the closest match will be
                  chosen. Under Windows, only scalable TrueType fonts are used.
     */
-    wxFont(int pointSize, wxFontFamily family, int style,
+    wxFont(int pointSize, wxFontFamily family, wxFontStyle style,
            wxFontWeight weight,
            bool underline = false,
            const wxString& faceName = wxEmptyString,
@@ -360,7 +360,7 @@ public:
                  chosen. Under Windows, only scalable TrueType fonts are used.
     */
     wxFont(const wxSize& pixelSize, wxFontFamily family,
-           int style, wxFontWeight weight,
+           wxFontStyle style, wxFontWeight weight,
            bool underline = false,
            const wxString& faceName = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
@@ -473,7 +473,7 @@ public:
         Using @c New() is currently the only way to directly create a font with
         the given size in pixels on platforms other than wxMSW.
     */
-    static wxFont* New(int pointSize, wxFontFamily family, int style,
+    static wxFont* New(int pointSize, wxFontFamily family, wxFontStyle style,
                        wxFontWeight weight,
                        bool underline = false,
                        const wxString& faceName = wxEmptyString,
@@ -484,7 +484,7 @@ public:
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     static wxFont* New(const wxSize& pixelSize,
                        wxFontFamily family,
-                       int style,
+                       wxFontStyle style,
                        wxFontWeight weight,
                        bool underline = false,
                        const wxString& faceName = wxEmptyString,
