@@ -1495,18 +1495,23 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
             wxXmlNode *subchild = child->GetChildren();
             while (subchild)
             {
-                wxString kind = subchild->GetAttribute("kind");
-
-                // parse only public&protected functions:
-                if (subchild->GetName() == "sectiondef" &&
-                    (kind == "public-func" || kind == "protected-func"))
+                // NOTE: when documenting functions using the //@{ and //@}
+                //       tags to create function groups, doxygen puts the
+                //       contained methods into a "user-defined" section
+                //       so we _must_ use the "prot" attribute to distinguish
+                //       public/protected methods from private ones and cannot
+                //       rely on the kind="public" attribute of <sectiondef>
+                if (subchild->GetName() == "sectiondef")
                 {
-
                     wxXmlNode *membernode = subchild->GetChildren();
                     while (membernode)
                     {
+                        const wxString& accessSpec = membernode->GetAttribute("prot");
+
+                        // parse only public&protected functions:
                         if (membernode->GetName() == "memberdef" &&
-                            membernode->GetAttribute("kind") == "function")
+                            membernode->GetAttribute("kind") == "function" &&
+                            (accessSpec == "public" || accessSpec == "protected"))
                         {
 
                             wxMethod m;
@@ -1516,11 +1521,11 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
                                 return false;
                             }
 
-                            if (kind == "public-func")
+                            if (accessSpec == "public")
                                 m.SetAccessSpecifier(wxMAS_PUBLIC);
-                            else if (kind == "protected-func")
+                            else if (accessSpec == "protected")
                                 m.SetAccessSpecifier(wxMAS_PROTECTED);
-                            else if (kind == "private-func")
+                            else if (accessSpec == "private")
                                 m.SetAccessSpecifier(wxMAS_PRIVATE);
 
                             if (absoluteFile.IsEmpty())

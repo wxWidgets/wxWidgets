@@ -156,15 +156,11 @@ int IfaceCheckApp::OnRun()
             // in any case set basic std preprocessor #defines:
             m_doxyInterface.AddPreprocessorValue("NULL", "0");
 
-            //g_bLogEnabled = false;
-
             // parse the two XML files which contain the real and the doxygen interfaces
             // for wxWidgets API:
             if (!m_gccInterface.Parse(parser.GetParam(0)) ||
                 !m_doxyInterface.Parse(parser.GetParam(1)))
                 return 1;
-
-//            g_bLogEnabled = true;
 
             if (parser.Found(DUMP_SWITCH))
             {
