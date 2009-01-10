@@ -134,6 +134,8 @@ void wxCheckListBox::SetValueCallback( unsigned int n, wxListWidgetColumn* col ,
 
 void wxCheckListBox::OnItemInserted(unsigned int pos)
 {
+    wxListBox::OnItemInserted(pos);
+
     m_checks.Insert(false, pos );
 }
 
@@ -146,6 +148,8 @@ void wxCheckListBox::DoDeleteOneItem(unsigned int n)
 
 void wxCheckListBox::DoClear()
 {
+    wxListBox::DoClear();
+
     m_checks.Empty();
 }
 
