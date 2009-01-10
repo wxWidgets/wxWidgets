@@ -36,6 +36,11 @@ class wxFileSystem : public wxObject
 public:
     /**
         Constructor.
+
+        The initial current path of this object will be empty
+        (i.e. GetPath() == wxEmptyString) which means that e.g. OpenFile()
+        or FindFirst() functions will use current working directory as
+        current path (see also wxGetCwd).
     */
     wxFileSystem();
 
@@ -172,7 +177,7 @@ public:
     @class wxFSFile
 
     This class represents a single file opened by wxFileSystem.
-    It provides more information than wxWindow's input stream
+    It provides more informations than wxWidgets' input streams
     (stream, filename, mime type, anchor).
 
     @note Any pointer returned by a method of wxFSFile is valid only as long as
@@ -182,7 +187,7 @@ public:
           ten identical pointers.
 
     @library{wxbase}
-    @category{vfs}
+    @category{vfs,file}
 
     @see wxFileSystemHandler, wxFileSystem, @ref overview_fs
 */

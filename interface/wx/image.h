@@ -1446,6 +1446,12 @@ public:
     wxImage& operator=(const wxImage& image);
 };
 
+/**
+    An instance of an empty image without an alpha channel.
+*/
+wxImage wxNullImage;
+
+
 // ============================================================================
 // Global functions/macros
 // ============================================================================

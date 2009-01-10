@@ -31,6 +31,9 @@ enum wxXmlResourceFlags
     The class holds XML resources from one or more .xml files, binary files or zip
     archive files.
 
+    Note that this is a singleton class and you'll never allocate/deallocate it.
+    Just use the static wxXmlResource::Get() getter.
+
     @see @ref overview_xrc, @ref overview_xrcformat
 
     @library{wxxrc}
@@ -166,7 +169,14 @@ public:
 
     /**
         Loads resources from XML files that match given filemask.
-        This method understands VFS (see filesys.h).
+
+        Example:
+        @code
+            if (!wxXmlResource::Get()->Load("rc/*.xrc"))
+                wxLogError("Couldn't load resources!");
+        @endcode
+
+        This method understands VFS (see wxFileSystem::FindFirst).
     */
     bool Load(const wxString& filemask);
 
@@ -189,7 +199,7 @@ public:
 
         @code
           MyDialog dlg;
-          wxTheXmlResource->LoadDialog(&dlg, mainFrame, "my_dialog");
+          wxXmlResource::Get()->LoadDialog(&dlg, mainFrame, "my_dialog");
           dlg.ShowModal();
         @endcode
     */

@@ -205,7 +205,7 @@ public:
 
         wxHtmlHelpController ignores this call.
     */
-    virtual bool LoadFile(const wxString& file = "");
+    virtual bool LoadFile(const wxString& file = wxEmptyString);
 
     /**
         Overrideable member called when this application's viewer is quit by the user.
