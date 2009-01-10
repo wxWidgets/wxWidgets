@@ -21,6 +21,7 @@
 #include "wx/nonownedwnd.h"
 
 #include "wx/mac/private.h"
+#include "wx/mac/carbon/uma.h"
 #include "wx/settings.h"
 #include "wx/frame.h"
 
