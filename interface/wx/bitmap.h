@@ -436,7 +436,7 @@ public:
 
         @see wxBitmapHandler
     */
-    static wxList GetHandlers();
+    static wxList& GetHandlers();
 
     /**
         Gets the height of the bitmap in pixels.

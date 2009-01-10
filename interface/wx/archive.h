@@ -358,7 +358,7 @@ public:
         When using wxSTREAM_FILEEXT for the second parameter, the first parameter
         can be a complete filename rather than just an extension.
     */
-    static const wxArchiveClassFactory* Find(const wxChar* protocol,
+    static const wxArchiveClassFactory* Find(const wxString& protocol,
             wxStreamProtocolType type = wxSTREAM_PROTOCOL);
 
     /**

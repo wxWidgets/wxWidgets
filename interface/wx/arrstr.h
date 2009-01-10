@@ -142,8 +142,7 @@ public:
 
         If @a nIndex is equal to GetCount() this function behaves as Add().
     */
-    void Insert(const wxString& str, size_t nIndex,
-                size_t copies = 1);
+    void Insert(wxString lItem, size_t nIndex, size_t copies = 1);
 
     /**
         Returns @true if the array is empty, @false otherwise. This function returns the

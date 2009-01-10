@@ -657,7 +657,7 @@ public:
         Do not destroy a socket using the delete operator directly;
         use Destroy() instead. Also, do not create socket objects in the stack.
     */
-    ~wxSocketBase();
+    virtual ~wxSocketBase();
 
     /**
         Destroys the socket safely.
@@ -723,14 +723,14 @@ public:
 
         @return @true if no error happened, @false otherwise.
     */
-    bool GetLocal(wxSockAddress& addr) const;
+    virtual bool GetLocal(wxSockAddress& addr) const;
 
     /**
         Return the peer address field of the socket.
 
         @return @true if no error happened, @false otherwise.
     */
-    bool GetPeer(wxSockAddress& addr) const;
+    virtual bool GetPeer(wxSockAddress& addr) const;
 
     /**
         Return the socket timeout in seconds.
@@ -752,7 +752,7 @@ public:
         complete immediately without blocking (unless the @b wxSOCKET_WAITALL flag
         is set, in which case the operation might still block).
     */
-    bool IsData() const;
+    bool IsData();
 
     /**
         Returns @true if the socket is not connected.
@@ -837,7 +837,7 @@ public:
         The application must therefore be prepared to handle socket event messages even
         after calling Close().
     */
-    void Close();
+    virtual bool Close();
 
     /**
         Shuts down the writing end of the socket.
@@ -1002,7 +1002,7 @@ public:
         be called for client sockets, if it is, @b bind() is called before @b
         connect().
     */
-    bool SetLocal(const wxIPV4address& local);
+    virtual bool SetLocal(const wxIPV4address& local);
 
     /**
         Set the default socket timeout in seconds.
@@ -1011,7 +1011,7 @@ public:
         functions if you don't specify a wait interval. Initially, the default
         timeout is 10 minutes.
     */
-    void SetTimeout(int seconds);
+    void SetTimeout(long seconds);
 
     /**
         Put the specified data into the input queue.

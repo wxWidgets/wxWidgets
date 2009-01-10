@@ -452,7 +452,7 @@ public:
 
         @see SetListStyle(), PromoteList(), NumberList().
     */
-    bool ClearListStyle(const wxRichTextRange& range,
+    virtual bool ClearListStyle(const wxRichTextRange& range,
                         int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /**
@@ -1391,10 +1391,10 @@ public:
         - wxRICHTEXT_SETSTYLE_REMOVE: removes the specified style. Only the style flags
           are used in this operation.
     */
-    bool SetStyleEx(const wxRichTextRange& range,
+    virtual bool SetStyleEx(const wxRichTextRange& range,
                     const wxTextAttr& style,
                     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
-    bool SetStyleEx(long start, long end,
+    virtual bool SetStyleEx(const wxRichTextRange& range,
                     const wxTextAttr& style,
                     int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
     //@}

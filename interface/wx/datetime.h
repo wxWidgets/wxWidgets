@@ -350,7 +350,7 @@ public:
     /**
         Sets the day without changing other date components.
     */
-    wxDateTime& SetDay(short unsigned int);
+    wxDateTime& SetDay(unsigned short day);
 
     /**
         Sets the date from the date and time in DOS format.
@@ -360,17 +360,17 @@ public:
     /**
         Sets the hour without changing other date components.
     */
-    wxDateTime& SetHour(short unsigned int);
+    wxDateTime& SetHour(unsigned short hour);
 
     /**
         Sets the millisecond without changing other date components.
     */
-    wxDateTime& SetMillisecond(short unsigned int);
+    wxDateTime& SetMillisecond(unsigned short millisecond);
 
     /**
         Sets the minute without changing other date components.
     */
-    wxDateTime& SetMinute(short unsigned int);
+    wxDateTime& SetMinute(unsigned short minute);
 
     /**
         Sets the month without changing other date components.
@@ -380,7 +380,7 @@ public:
     /**
         Sets the second without changing other date components.
     */
-    wxDateTime& SetSecond(short unsigned int);
+    wxDateTime& SetSecond(unsigned short second);
 
     /**
         Sets the date and time of to the current values. Same as assigning the
@@ -746,7 +746,7 @@ public:
 
         @see ParseFormat()
     */
-    wxString Format(const wxChar* format = wxDefaultDateTimeFormat,
+    wxString Format(const wxString& format = wxDefaultDateTimeFormat,
                     const TimeZone& tz = Local) const;
 
     /**
@@ -1104,8 +1104,7 @@ public:
 
         @return The reference to the modified object itself.
     */
-    wxDateTime SetToLastMonthDay(Month month = Inv_Month,
-                                 int year = Inv_Year);
+    wxDateTime& SetToLastMonthDay(Month month = Inv_Month, int year = Inv_Year);
 
     /**
         The effect of calling this function is the same as of calling
@@ -1155,7 +1154,7 @@ public:
 
         @return The reference to the modified object itself.
     */
-    wxDateTime SetToWeekDayInSameWeek(WeekDay weekday,
+    wxDateTime& SetToWeekDayInSameWeek(WeekDay weekday,
                                       WeekFlags flags = Monday_First);
 
     /**
@@ -1251,13 +1250,13 @@ public:
     /**
         Same as FromTimezone() but modifies the object in place.
     */
-    wxDateTime MakeFromTimezone(const TimeZone& tz, bool noDST = false);
+    wxDateTime& MakeFromTimezone(const TimeZone& tz, bool noDST = false);
 
     /**
         Modifies the object in place to represent the date in another time
         zone. If @a noDST is @true, no DST adjustments will be made.
     */
-    wxDateTime MakeTimezone(const TimeZone& tz, bool noDST = false);
+    wxDateTime& MakeTimezone(const TimeZone& tz, bool noDST = false);
 
     /**
         This is the same as calling MakeTimezone() with the argument @c GMT0.
@@ -1819,12 +1818,12 @@ public:
     /**
         Returns the timespan for one day.
     */
-    static wxTimespan Day();
+    static wxTimeSpan Day();
 
     /**
         Returns the timespan for the given number of days.
     */
-    static wxTimespan Days(long days);
+    static wxTimeSpan Days(long days);
 
     /**
         Returns the string containing the formatted representation of the time
@@ -1892,12 +1891,12 @@ public:
     /**
         Returns the timespan for one hour.
     */
-    static wxTimespan Hour();
+    static wxTimeSpan Hour();
 
     /**
         Returns the timespan for the given number of hours.
     */
-    static wxTimespan Hours(long hours);
+    static wxTimeSpan Hours(long hours);
 
     /**
         Returns @true if two timespans are equal.
@@ -1936,22 +1935,22 @@ public:
     /**
         Returns the timespan for one millisecond.
     */
-    static wxTimespan Millisecond();
+    static wxTimeSpan Millisecond();
 
     /**
         Returns the timespan for the given number of milliseconds.
     */
-    static wxTimespan Milliseconds(long ms);
+    static wxTimeSpan Milliseconds(wxLongLong ms);
 
     /**
         Returns the timespan for one minute.
     */
-    static wxTimespan Minute();
+    static wxTimeSpan Minute();
 
     /**
         Returns the timespan for the given number of minutes.
     */
-    static wxTimespan Minutes(long min);
+    static wxTimeSpan Minutes(long min);
 
     /**
         Returns the product of this time span by @a n.
@@ -1983,12 +1982,12 @@ public:
     /**
         Returns the timespan for one second.
     */
-    static wxTimespan Second();
+    static wxTimeSpan Second();
 
     /**
         Returns the timespan for the given number of seconds.
     */
-    static wxTimespan Seconds(long sec);
+    static wxTimeSpan Seconds(wxLongLong sec);
 
     /**
         Returns the difference of two time spans.
@@ -2005,12 +2004,12 @@ public:
     /**
         Returns the timespan for one week.
     */
-    static wxTimespan Week();
+    static wxTimeSpan Week();
 
     /**
         Returns the timespan for the given number of weeks.
     */
-    static wxTimespan Weeks(long weeks);
+    static wxTimeSpan Weeks(long weeks);
 
     /**
         Adds the given wxTimeSpan to this wxTimeSpan and returns the result.

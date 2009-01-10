@@ -271,7 +271,7 @@ public:
         function.
     */
     static wxString ExpandCommand(const wxString& command,
-                                  MessageParameters& params);
+                                  const MessageParameters& params);
 
     /**
         If the function returns @true, the string pointed to by @a desc is filled

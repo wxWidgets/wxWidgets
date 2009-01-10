@@ -82,7 +82,7 @@ public:
     /**
         Returns the image index for the given page.
     */
-    virtual int GetPageImage(size_t nPage) const;
+    virtual int GetPageImage(size_t nPage) const = 0;
 
     /**
         Sets the image list for the page control.
@@ -96,7 +96,7 @@ public:
         Sets the image index for the given page. @a image is an index into
         the image list which was set with SetImageList().
     */
-    virtual bool SetPageImage(size_t page, int image);
+    virtual bool SetPageImage(size_t page, int image) = 0;
 
     //@}
 
@@ -155,7 +155,7 @@ public:
 
         @see GetSelection()
     */
-    virtual int SetSelection(size_t page);
+    virtual int SetSelection(size_t page) = 0;
 
     /**
         Cycles through the tabs.
@@ -170,7 +170,7 @@ public:
         This is the only difference with SetSelection().
         See @ref overview_eventhandling_prog for more infomation.
     */
-    virtual int ChangeSelection(size_t page);
+    virtual int ChangeSelection(size_t page) = 0;
 
     //@}
 
@@ -238,10 +238,8 @@ public:
 
         @see InsertPage()
     */
-    bool AddPage(wxWindow* page,
-                 const wxString& text,
-                 bool select = false,
-                 int imageId = wxNOT_FOUND);
+    virtual bool AddPage(wxWindow* page, const wxString& text,
+                         bool select = false, int imageId = wxNOT_FOUND);
 
     /**
         Deletes all pages.
@@ -252,7 +250,7 @@ public:
         Deletes the specified page, and the associated window.
         The call to this function generates the page changing events.
     */
-    bool DeletePage(size_t page);
+    virtual bool DeletePage(size_t page);
 
     /**
         Inserts a new page at the specified position.
@@ -283,17 +281,17 @@ public:
     /**
         Deletes the specified page, without deleting the associated window.
     */
-    bool RemovePage(size_t page);
+    virtual bool RemovePage(size_t page);
 
     /**
         Returns the number of pages in the control.
     */
-    size_t GetPageCount() const;
+    virtual size_t GetPageCount() const;
 
     /**
         Returns the window at the given page position.
     */
-    wxWindow* GetPage(size_t page);
+    wxWindow* GetPage(size_t page) const;
 
     //@}
 

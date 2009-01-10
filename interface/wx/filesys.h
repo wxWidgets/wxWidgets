@@ -59,7 +59,7 @@ public:
               handlers are deleted in wxFileSystem's destructor so that you
               don't have to care about it.
     */
-    static void AddHandler(wxFileSystemHandler handler);
+    static void AddHandler(wxFileSystemHandler* handler);
 
     /**
         Sets the current location. @a location parameter passed to OpenFile() is

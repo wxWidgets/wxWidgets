@@ -702,7 +702,7 @@ public:
 
         @see wxImageHandler
     */
-    static wxList GetHandlers();
+    static wxList& GetHandlers();
 
     /**
         Gets the height of the image in pixels.

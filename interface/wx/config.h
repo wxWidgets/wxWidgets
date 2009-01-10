@@ -348,14 +348,14 @@ public:
     /**
         Retrieve the current path (always as absolute path).
     */
-    const wxString GetPath() const;
+    virtual const wxString& GetPath() const = 0;
 
     /**
         Set current path: if the first character is '/', it is the absolute
         path, otherwise it is a relative path. '..' is supported. If @a strPath
         doesn't exist it is created.
     */
-    void SetPath(const wxString& strPath);
+    virtual void SetPath(const wxString& strPath) = 0;
 
     //@}
 
@@ -375,7 +375,7 @@ public:
         continue flag, the value string, and the index for the next call.
         @endWxPythonOnly
     */
-    bool GetFirstEntry(wxString& str, long& index) const;
+    virtual bool GetFirstEntry(wxString& str, long& index) const = 0;
 
     /**
         Gets the first group.
@@ -385,7 +385,7 @@ public:
         continue flag, the value string, and the index for the next call.
         @endWxPythonOnly
     */
-    bool GetFirstGroup(wxString& str, long& index) const;
+    virtual bool GetFirstGroup(wxString& str, long& index) const = 0;
 
     /**
         Gets the next entry.
@@ -395,7 +395,7 @@ public:
         continue flag, the value string, and the index for the next call.
         @endWxPythonOnly
     */
-    bool GetNextEntry(wxString& str, long& index) const;
+    virtual bool GetNextEntry(wxString& str, long& index) const = 0;
 
     /**
         Gets the next group.
@@ -405,18 +405,18 @@ public:
         continue flag, the value string, and the index for the next call.
         @endWxPythonOnly
     */
-    bool GetNextGroup(wxString& str, long& index) const;
+    virtual bool GetNextGroup(wxString& str, long& index) const = 0;
 
     /**
         Get number of entries in the current group.
     */
-    uint GetNumberOfEntries(bool bRecursive = false) const;
+    virtual size_t GetNumberOfEntries(bool bRecursive = false) const = 0;
 
     /**
         Get number of entries/subgroups in the current group, with or without
         its subgroups.
     */
-    uint GetNumberOfGroups(bool bRecursive = false) const;
+    virtual size_t GetNumberOfGroups(bool bRecursive = false) const = 0;
 
     //@}
 
@@ -438,7 +438,7 @@ public:
     /**
         @return @true if either a group or an entry with a given name exists.
     */
-    bool Exists(wxString& strName) const;
+    bool Exists(const wxString& strName) const;
 
     /**
         Returns the type of the given entry or @e Unknown if the entry doesn't
@@ -447,17 +447,17 @@ public:
         about type mismatch otherwise: e.g., an attempt to read a string value
         from an integer key with wxRegConfig will fail.
     */
-    wxConfigBase::EntryType GetEntryType(const wxString& name) const;
+    virtual wxConfigBase::EntryType GetEntryType(const wxString& name) const;
 
     /**
         @return @true if the entry by this name exists.
     */
-    bool HasEntry(wxString& strName) const;
+    virtual bool HasEntry(const wxString& strName) const = 0;
 
     /**
         @return @true if the group by this name exists.
     */
-    bool HasGroup(const wxString& strName) const;
+    virtual bool HasGroup(const wxString& strName) const = 0;
 
     //@}
 
@@ -491,7 +491,7 @@ public:
         Permanently writes all changes (otherwise, they're only written from
         object's destructor).
     */
-    bool Flush(bool bCurrentOnly = false);
+    virtual bool Flush(bool bCurrentOnly = false) = 0;
 
     /**
         Read a string from the key, returning @true if the value was read. If
@@ -567,13 +567,13 @@ public:
         Reads a bool value from the key and returns it. @a defaultVal is
         returned if the key is not found.
     */
-    long ReadBool(const wxString& key, bool defaultVal) const;
+    bool ReadBool(const wxString& key, bool defaultVal) const;
 
     /**
         Reads a double value from the key and returns it. @a defaultVal is
         returned if the key is not found.
     */
-    long ReadDouble(const wxString& key, double defaultVal) const;
+    double ReadDouble(const wxString& key, double defaultVal) const;
 
     /**
         Reads a long value from the key and returns it. @a defaultVal is
@@ -639,7 +639,8 @@ public:
         @return @false if @a oldName doesn't exist or if @a newName already
                 exists.
     */
-    bool RenameEntry(const wxString& oldName, const wxString& newName);
+    virtual bool RenameEntry(const wxString& oldName,
+                             const wxString& newName) = 0;
 
     /**
         Renames a subgroup of the current group. The subgroup names (both the
@@ -649,7 +650,8 @@ public:
         @return @false if @a oldName doesn't exist or if @a newName already
                 exists.
     */
-    bool RenameGroup(const wxString& oldName, const wxString& newName);
+    virtual bool RenameGroup(const wxString& oldName,
+                             const wxString& newName) = 0;
 
     //@}
 
@@ -667,14 +669,14 @@ public:
         Delete the whole underlying object (disk file, registry key, ...).
         Primarly for use by uninstallation routine.
     */
-    bool DeleteAll();
+    virtual bool DeleteAll() = 0;
 
     /**
         Deletes the specified entry and the group it belongs to if it was the
         last key in it and the second parameter is @true.
     */
-    bool DeleteEntry(const wxString& key,
-                     bool bDeleteGroupIfEmpty = true);
+    virtual bool DeleteEntry(const wxString& key,
+                             bool bDeleteGroupIfEmpty = true) = 0;
 
     /**
         Delete the group (with all subgroups). If the current path is under the
@@ -682,7 +684,7 @@ public:
         component. E.g. if the current path is @c "/A/B/C/D" and the group @c C
         is deleted, the path becomes @c "/A/B".
     */
-    bool DeleteGroup(const wxString& key);
+    virtual bool DeleteGroup(const wxString& key) = 0;
 
     //@}
 

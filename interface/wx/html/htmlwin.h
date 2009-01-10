@@ -74,7 +74,7 @@ public:
         - @c image/* MIME types
         - Plain Text filter (this filter is used if no other filter matches)
     */
-    static void AddFilter(wxHtmlFilter filter);
+    static void AddFilter(wxHtmlFilter* filter);
 
     /**
         Appends HTML fragment to currently displayed text and refreshes the window.

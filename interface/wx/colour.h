@@ -170,8 +170,8 @@ public:
 
         @see wxColourDatabase
     */
-    wxColour operator =(const wxColour& colour);
-    wxColour operator =(const wxString& colourName);
+    wxColour& operator=(const wxColour& colour);
+    wxColour& operator=(const wxColour& colour);
     //@}
 
     /**

@@ -472,7 +472,7 @@ public:
 
         @see GetLanguageInfo()
     */
-    static wxLanguageInfo* FindLanguageInfo(const wxString& locale);
+    static const wxLanguageInfo* FindLanguageInfo(const wxString& locale);
 
     /**
         Returns the canonical form of current locale name. Canonical form is the

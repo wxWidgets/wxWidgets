@@ -51,7 +51,7 @@ public:
     /**
         Returns reference to the unique global standard paths object.
     */
-    static wxStandardPathsBase Get();
+    static wxStandardPathsBase& Get();
 
     /**
         Return the directory containing the system config files.

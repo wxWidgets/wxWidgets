@@ -214,7 +214,7 @@ public:
         The extra field is used to store platform or application specific
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
-    char* GetExtra() const;
+    const char* GetExtra() const;
     size_t GetExtraLen() const;
     void SetExtra(const char* extra, size_t len);
     //@}
@@ -226,7 +226,7 @@ public:
         The extra field is used to store platform or application specific
         data. See Pkware's document 'appnote.txt' for information on its format.
     */
-    char* GetLocalExtra() const;
+    const char* GetLocalExtra() const;
     size_t GetLocalExtraLen() const;
     void SetLocalExtra(const char* extra, size_t len);
     //@}

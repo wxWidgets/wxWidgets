@@ -763,7 +763,7 @@ public:
     /**
         Returns the current timestamp format string.
     */
-    static const wxString GetTimestamp();
+    static const wxString& GetTimestamp();
 
     /**
         Returns the current trace mask, see Customization() section for details.
@@ -775,7 +775,7 @@ public:
 
         @see AddTraceMask().
     */
-    static const wxArrayString GetTraceMasks();
+    static const wxArrayString& GetTraceMasks();
 
     /**
         Returns whether the verbose mode is currently active.
@@ -793,7 +793,7 @@ public:
         Forwards the message at specified level to the @e DoLog() function of the
         active log target if there is any, does nothing otherwise.
     */
-    static void OnLog(wxLogLevel level, const wxString& message);
+    static void OnLog(wxLogLevel level, const wxString& szString, time_t t);
 
     /**
         Remove the @a mask from the list of allowed masks for

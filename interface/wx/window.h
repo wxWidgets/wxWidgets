@@ -657,7 +657,7 @@ public:
 
         @see FindWindow()
     */
-    static wxWindow* FindWindowById(long id, wxWindow* parent = NULL);
+    static wxWindow* FindWindowById(long id, const wxWindow* parent = 0);
 
     /**
         Find a window by its label.
@@ -671,7 +671,7 @@ public:
         @see FindWindow()
     */
     static wxWindow* FindWindowByLabel(const wxString& label,
-                                       wxWindow* parent = NULL);
+                                       const wxWindow* parent = 0);
 
     /**
         Find a window by its name (as given in a window constructor or Create()
@@ -687,7 +687,7 @@ public:
         @see FindWindow()
     */
     static wxWindow* FindWindowByName(const wxString& name,
-                                      wxWindow* parent = NULL);
+                                      const wxWindow* parent = 0);
 
     /**
         Sizes the window so that it fits around its subwindows.

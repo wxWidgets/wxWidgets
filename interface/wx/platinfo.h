@@ -169,7 +169,7 @@ public:
         Returns the global wxPlatformInfo object, initialized with the values
         for the currently running platform.
     */
-    static const wxPlatformInfo Get();
+    static const wxPlatformInfo& Get();
 
     /**
         Converts the given string to a wxArchitecture enum value or to

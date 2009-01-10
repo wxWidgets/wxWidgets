@@ -370,7 +370,7 @@ public:
 
         @see SetListStyle(), PromoteList(), NumberList()
     */
-    bool ClearListStyle(const wxRichTextRange& range,
+    virtual bool ClearListStyle(const wxRichTextRange& range,
                         int flags = wxRICHTEXT_SETSTYLE_WITH_UNDO);
 
     /**

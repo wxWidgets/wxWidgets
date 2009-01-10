@@ -202,7 +202,7 @@ public:
 
         @see Exists(), wxKill(), @ref page_samples_exec "Exec sample"
     */
-    static wxKillError Kill(int pid, wxSignal signal = wxSIGNONE,
+    static wxKillError Kill(int pid, wxSignal sig = wxSIGTERM,
                             int flags = wxKILL_NOCHILDREN);
 
     /**

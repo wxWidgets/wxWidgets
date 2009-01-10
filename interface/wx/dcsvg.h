@@ -316,7 +316,7 @@ public:
         @see SetBackground()
     */
     wxBrush GetBackground() const;
-    const wxBrush GetBackground() const;
+    const wxBrush& GetBackground() const;
     //@}
 
     /**
@@ -333,7 +333,7 @@ public:
         @see SetBrush()
     */
     wxBrush GetBrush() const;
-    const wxBrush GetBrush() const;
+    const wxBrush& GetBrush() const;
     //@}
 
     /**
@@ -358,7 +358,7 @@ public:
         @see SetFont()
     */
     wxFont GetFont() const;
-    const wxFont GetFont() const;
+    const wxFont& GetFont() const;
     //@}
 
     /**
@@ -382,7 +382,7 @@ public:
         @see SetPen()
     */
     wxPen GetPen() const;
-    const wxPen GetPen() const;
+    const wxPen& GetPen() const;
     //@}
 
     /**
@@ -402,7 +402,7 @@ public:
 
         @see SetTextBackground()
     */
-    wxColour GetTextBackground() const;
+    const wxColour& GetTextBackground() const;
     const wxColour& GetTextBackground() const;
     //@}
 
@@ -440,7 +440,7 @@ public:
         @see SetTextForeground()
     */
     wxColour GetTextForeground() const;
-    const wxColour GetTextForeground() const;
+    const wxColour& GetTextForeground() const;
     //@}
 
     /**
@@ -500,7 +500,7 @@ public:
         Returns @true if the DC is ok to use. @false values arise from being
         unable to write the file.
     */
-    bool IsOk();
+    bool IsOk() const;
 
     /**
         Resets the bounding box. After a call to this function, the bounding

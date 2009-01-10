@@ -354,7 +354,7 @@ public:
     /**
         Finds the wxClassInfo object for a class with the given @a name.
     */
-    static wxClassInfo* FindClass(wxChar* name);
+    static wxClassInfo* FindClass(const wxString& className);
 
     /**
         Returns the name of the first base class (@NULL if none).

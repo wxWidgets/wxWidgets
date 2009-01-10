@@ -63,7 +63,7 @@ public:
     /**
         Returns the number of connected displays.
     */
-    static unsigned GetCount();
+    static unsigned int GetCount();
 
     /**
         Returns the current video mode that this display is in.

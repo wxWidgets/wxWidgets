@@ -40,7 +40,7 @@ public:
 
         @see IsEmpty()
     */
-    virtual unsigned int GetCount() const;
+    virtual unsigned int GetCount() const = 0;
 
     /**
         Returns @true if the control is empty or @false if it has some items.
@@ -58,7 +58,7 @@ public:
         @return The label of the item or an empty string if the position was
                 invalid.
     */
-    virtual wxString GetString(unsigned int n) const;
+    virtual wxString GetString(unsigned int n) const = 0;
 
     /**
         Returns the array of the labels of all items in the control.
@@ -73,7 +73,7 @@ public:
         @param string
             The label to set.
     */
-    virtual void SetString(unsigned int n, const wxString& string);
+    virtual void SetString(unsigned int n, const wxString& string) = 0;
 
     /**
         Finds an item whose label matches the given string.
@@ -106,7 +106,7 @@ public:
 
         @see SetString(), SetStringSelection()
     */
-    virtual void SetSelection(int n);
+    virtual void SetSelection(int n) = 0;
 
     /**
         Returns the index of the selected item or @c wxNOT_FOUND if no item is
@@ -120,7 +120,7 @@ public:
 
         @see SetSelection(), GetStringSelection()
     */
-    virtual int GetSelection() const;
+    virtual int GetSelection() const = 0;
 
     /**
         Selects the item with the specified string in the control. This doesn't

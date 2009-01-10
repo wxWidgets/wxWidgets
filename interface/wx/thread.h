@@ -984,7 +984,7 @@ public:
         Returns the platform specific thread ID of the current thread as a long.
         This can be used to uniquely identify threads, even if they are not wxThreads.
     */
-    static unsigned long GetCurrentId();
+    static wxThreadIdType GetCurrentId();
 
     /**
         Gets the thread identifier: this is a platform dependent number that uniquely

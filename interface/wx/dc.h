@@ -44,7 +44,8 @@
     @library{wxcore}
     @category{dc,gdi}
 
-    @see @ref overview_dc, wxGraphicsContext
+    @see @ref overview_dc, wxGraphicsContext, wxDCFontChanger, wxDCTextColourChanger,
+         wxDCPenChanger, wxDCBrushChanger, wxDCClipper
 
     @todo Precise definition of default/initial state.
     @todo Pixelwise definition of operations (e.g. last point of a line not
@@ -651,7 +652,7 @@ public:
         @endWxPythonOnly
     */
     void GetSize(wxCoord* width, wxCoord* height) const;
-    const wxSize GetSize() const;
+    wxSize GetSize() const;
     //@}
 
     //@{
@@ -659,7 +660,7 @@ public:
         Returns the horizontal and vertical resolution in millimetres.
     */
     void GetSizeMM(wxCoord* width, wxCoord* height) const;
-    const wxSize GetSizeMM() const;
+    wxSize GetSizeMM() const;
     //@}
 
     /**
@@ -700,7 +701,7 @@ public:
                        wxCoord* descent = NULL,
                        wxCoord* externalLeading = NULL,
                        const wxFont* font = NULL) const;
-    const wxSize  GetTextExtent(const wxString& string) const;
+    wxSize GetTextExtent(const wxString& string) const;
     //@}
 
     /**
@@ -1117,7 +1118,8 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @see wxDC::SetClippingRegion()
+    @see wxDC::SetClippingRegion(), wxDCFontChanger, wxDCTextColourChanger, wxDCPenChanger,
+         wxDCBrushChanger
 */
 class wxDCClipper
 {
@@ -1149,7 +1151,8 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @see wxDC::SetBrush()
+    @see wxDC::SetBrush(), wxDCFontChanger, wxDCTextColourChanger, wxDCPenChanger,
+         wxDCClipper
 */
 class wxDCBrushChanger
 {
@@ -1180,7 +1183,8 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @see wxDC::SetPen()
+    @see wxDC::SetPen(), wxDCFontChanger, wxDCTextColourChanger, wxDCBrushChanger,
+         wxDCClipper
 */
 class wxDCPenChanger
 {
@@ -1213,7 +1217,8 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @see wxDC::SetTextForeground()
+    @see wxDC::SetTextForeground(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
+         wxDCClipper
 */
 class wxDCTextColourChanger
 {
@@ -1247,7 +1252,8 @@ public:
     @library{wxcore}
     @category{gdi}
 
-    @see wxDC::SetFont()
+    @see wxDC::SetFont(), wxDCTextColourChanger, wxDCPenChanger, wxDCBrushChanger,
+         wxDCClipper
 */
 class wxDCFontChanger
 {

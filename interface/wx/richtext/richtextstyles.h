@@ -517,10 +517,7 @@ public:
         form is for convenient setting of the most commonly-used attributes.
     */
     void SetLevelAttributes(int level, const wxTextAttr& attr);
-    void SetLevelAttributes(int level, int leftIndent,
-                            int leftSubIndent,
-                            int bulletStyle,
-                            const wxString& bulletSymbol = wxEmptyString);
+    void SetLevelAttributes(int i, const wxTextAttr& attr);
     //@}
 };
 

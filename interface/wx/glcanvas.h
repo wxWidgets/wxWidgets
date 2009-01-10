@@ -243,7 +243,7 @@ public:
 
         @return @true if attributes are supported.
     */
-    static bool IsDisplaySupported(const int* attribList = NULL);
+    static bool IsDisplaySupported(const int* attribList);
 
     /**
         Returns true if the extension with given name is supported

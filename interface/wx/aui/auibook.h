@@ -248,8 +248,8 @@ public:
         The @a direction argument specifies where the pane should go, it should be one
         of the following: wxTOP, wxBOTTOM, wxLEFT, or wxRIGHT.
     */
-    void SetUniformBitmapSize(const wxSize& size);
-    void Split(size_t page, int direction);
+    virtual void SetUniformBitmapSize(const wxSize& size);
+    virtual void Split(size_t page, int direction);
     //@}
 
     /**

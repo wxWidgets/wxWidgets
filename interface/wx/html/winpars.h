@@ -90,7 +90,7 @@ public:
     /**
         Adds module() to the list of wxHtmlWinParser tag handler.
     */
-    static void AddModule(wxHtmlTagsModule module);
+    static void AddModule(wxHtmlTagsModule* module);
 
     /**
         Closes the container, sets actual container to the parent one

@@ -98,7 +98,7 @@ public:
     /**
         Returns the validator style.
     */
-    long GetStyle() const;
+    wxTextValidatorStyle GetStyle() const;
 
     /**
         Receives character input from the window and filters it according to

@@ -400,8 +400,8 @@ public:
         right, bottom) are subtracted from the layout.
         This is the same thing as calling Direction(wxAUI_DOCK_CENTRE).
     */
-    wxAuiPaneInfo Centre();
-    wxAuiPaneInfo Center();
+    wxAuiPaneInfo& Centre();
+    wxAuiPaneInfo& Center();
     //@}
 
     //@{
@@ -411,8 +411,8 @@ public:
         This function provides an easy way of preparing a pane to be displayed in
         the center dock position.
     */
-    wxAuiPaneInfo CentrePane();
-    wxAuiPaneInfo CenterPane();
+    wxAuiPaneInfo& CentrePane();
+    wxAuiPaneInfo& CenterPane();
     //@}
 
     /**

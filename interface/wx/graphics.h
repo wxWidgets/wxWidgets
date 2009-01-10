@@ -378,13 +378,13 @@ public:
         Draws a polygon.
     */
     virtual void DrawLines(size_t n, const wxPoint2DDouble* points,
-                           int fillStyle = wxODDEVEN_RULE);
+                           wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 
     /**
         Draws the path by first filling and then stroking.
     */
     virtual void DrawPath(const wxGraphicsPath& path,
-                          int fillStyle = wxODDEVEN_RULE);
+                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 
     /**
         Draws a rectangle.
@@ -451,7 +451,7 @@ public:
         Fills the path with the current brush.
     */
     virtual void FillPath(const wxGraphicsPath& path,
-                          int fillStyle = wxODDEVEN_RULE) = 0;
+                          wxPolygonFillMode fillStyle = wxODDEVEN_RULE) = 0;
 
     /**
         Returns the native context (CGContextRef for Core Graphics, Graphics

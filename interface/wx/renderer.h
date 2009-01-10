@@ -409,7 +409,7 @@ public:
     /**
         Return the currently used renderer.
     */
-    static wxRendererNative Get();
+    static wxRendererNative& Get();
 
     /**
         Return the default (native) implementation for this platform -- this is also
@@ -417,14 +417,14 @@ public:
         Set() in which case the return value of this
         method may be different from the return value of Get().
     */
-    static wxRendererNative GetDefault();
+    static wxRendererNative& GetDefault();
 
     /**
         Return the generic implementation of the renderer. Under some platforms, this
         is the default renderer implementation, others have platform-specific default
         renderer which can be retrieved by calling GetDefault().
     */
-    static wxRendererNative GetGeneric();
+    static wxRendererNative& GetGeneric();
 
     /**
         Returns the size of a check box.

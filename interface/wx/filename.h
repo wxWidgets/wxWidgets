@@ -330,7 +330,7 @@ public:
 
         @see GetCwd()
     */
-    static void AssignCwd(const wxString& volume = wxEmptyString);
+    void AssignCwd(const wxString& volume = wxEmptyString);
 
     /**
         Sets this file name object to the given directory name.

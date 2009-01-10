@@ -539,7 +539,7 @@ public:
 
         @see FormatV(), Printf()
     */
-    static wxString Format(const wxChar format, ...);
+    static wxString Format(const wxString& format, ...);
 
     /**
         This static function returns the string containing the result of calling
@@ -547,7 +547,7 @@ public:
 
         @see Format(), PrintfV()
     */
-    static wxString FormatV(const wxChar format, va_list argptr);
+    static wxString FormatV(const wxString& format, va_list argptr);
 
     /**
         Returns the number of occurrences of @e ch in the string.
