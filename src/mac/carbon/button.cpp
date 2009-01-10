@@ -157,7 +157,7 @@ wxSize wxButton::DoGetBestSize() const
         verify_noerr( err );
 
         SInt16 baseline;
-        wxMacCFStringHolder str( m_label,  m_font.GetEncoding() );
+        wxMacCFStringHolder str( m_label,  GetFont().GetEncoding() );
 
 #ifndef __LP64__
         if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )

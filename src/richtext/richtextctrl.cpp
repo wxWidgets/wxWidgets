@@ -266,14 +266,16 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     GetBuffer().AddEventHandler(this);
 
     // Accelerators
-    wxAcceleratorEntry entries[4];
+    wxAcceleratorEntry entries[6];
 
     entries[0].Set(wxACCEL_CMD,   (int) 'C',       wxID_COPY);
     entries[1].Set(wxACCEL_CMD,   (int) 'X',       wxID_CUT);
     entries[2].Set(wxACCEL_CMD,   (int) 'V',       wxID_PASTE);
     entries[3].Set(wxACCEL_CMD,   (int) 'A',       wxID_SELECTALL);
+    entries[4].Set(wxACCEL_CMD,   (int) 'Z',       wxID_UNDO);
+    entries[5].Set(wxACCEL_CMD,   (int) 'Y',       wxID_REDO);
 
-    wxAcceleratorTable accel(4, entries);
+    wxAcceleratorTable accel(6, entries);
     SetAcceleratorTable(accel);
 
     return true;
@@ -760,13 +762,12 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
             long newPos = m_caretPosition;
 
-            DeleteSelectedContent(& newPos);
+            bool processed = DeleteSelectedContent(& newPos);
 
             // Submit range in character positions, which are greater than caret positions,
             // so subtract 1 for deleted character and add 1 for conversion to character position.
             if (newPos > -1)
             {
-                bool processed = false;
                 if (event.CmdDown())
                 {
                     long pos = wxRichTextCtrl::FindNextWordPosition(-1);
@@ -865,13 +866,12 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         long newPos = m_caretPosition;
 
-        DeleteSelectedContent(& newPos);
+        bool processed = DeleteSelectedContent(& newPos);
 
         // Submit range in character positions, which are greater than caret positions,
         // so subtract 1 for deleted character and add 1 for conversion to character position.
         if (newPos > -1)
         {
-            bool processed = false;
             if (event.CmdDown())
             {
                 long pos = wxRichTextCtrl::FindNextWordPosition(-1);
@@ -915,12 +915,11 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         long newPos = m_caretPosition;
 
-        DeleteSelectedContent(& newPos);
+        bool processed = DeleteSelectedContent(& newPos);
 
         // Submit range in character positions, which are greater than caret positions,
         if (newPos < GetBuffer().GetRange().GetEnd()+1)
         {
-            bool processed = false;
             if (event.CmdDown())
             {
                 long pos = wxRichTextCtrl::FindNextWordPosition(1);

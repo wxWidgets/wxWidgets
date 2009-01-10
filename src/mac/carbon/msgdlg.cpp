@@ -59,13 +59,13 @@ int wxMessageDialog::ShowModal()
         CFStringRef alternateButtonTitle = NULL;
         CFStringRef otherButtonTitle = NULL;
 
-        wxMacCFStringHolder cfTitle( m_caption, m_font.GetEncoding() );
-        wxMacCFStringHolder cfText( m_message, m_font.GetEncoding() );
+        wxMacCFStringHolder cfTitle( m_caption, GetFont().GetEncoding() );
+        wxMacCFStringHolder cfText( m_message, GetFont().GetEncoding() );
 
-        wxMacCFStringHolder cfNoString( _("No"), m_font.GetEncoding() );
-        wxMacCFStringHolder cfYesString( _("Yes"), m_font.GetEncoding() );
-        wxMacCFStringHolder cfOKString( _("OK") , m_font.GetEncoding()) ;
-        wxMacCFStringHolder cfCancelString( _("Cancel"), m_font.GetEncoding() );
+        wxMacCFStringHolder cfNoString( _("No"), GetFont().GetEncoding() );
+        wxMacCFStringHolder cfYesString( _("Yes"), GetFont().GetEncoding() );
+        wxMacCFStringHolder cfOKString( _("OK") , GetFont().GetEncoding()) ;
+        wxMacCFStringHolder cfCancelString( _("Cancel"), GetFont().GetEncoding() );
 
         int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
 
@@ -117,11 +117,11 @@ int wxMessageDialog::ShowModal()
         short result;
 
         AlertStdCFStringAlertParamRec param;
-        wxMacCFStringHolder cfNoString( _("No"), m_font.GetEncoding() );
-        wxMacCFStringHolder cfYesString( _("Yes"), m_font.GetEncoding() );
+        wxMacCFStringHolder cfNoString( _("No"), GetFont().GetEncoding() );
+        wxMacCFStringHolder cfYesString( _("Yes"), GetFont().GetEncoding() );
 
-        wxMacCFStringHolder cfTitle( m_caption, m_font.GetEncoding() );
-        wxMacCFStringHolder cfText( m_message, m_font.GetEncoding() );
+        wxMacCFStringHolder cfTitle( m_caption, GetFont().GetEncoding() );
+        wxMacCFStringHolder cfText( m_message, GetFont().GetEncoding() );
 
         param.movable = true;
         param.flags = 0;

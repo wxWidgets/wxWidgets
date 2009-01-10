@@ -122,6 +122,10 @@ public:
 
     // Add new provider to the bottom of providers stack (i.e. the provider
     // will be queried as the last one).
+#if wxABI_VERSION >= 20810
+    static void PushBack(wxArtProvider *provider);
+#endif
+    // same as PushBack()
     static void Insert(wxArtProvider *provider);
 
     // Remove latest added provider and delete it.

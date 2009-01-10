@@ -91,7 +91,7 @@ void  wxSTCDropTarget::OnLeave() {
 #define param2 -1 // wxWindow's 2nd param is ID
 #endif
 
-#include <wx/dcbuffer.h>
+#include "wx/dcbuffer.h"
 
 class wxSTCCallTip : public wxSTCCallTipBase {
 public:

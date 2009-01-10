@@ -354,6 +354,13 @@ gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
                         wxTopLevelWindow *win )
 {
     win->SetIconizeState(false);
+    // it is possible for m_isShown to be false here, see bug #9909
+    if (win->wxWindowBase::Show(true))
+    {
+        wxShowEvent eventShow(win->GetId(), true);
+        eventShow.SetEventObject(win);
+        win->GetEventHandler()->ProcessEvent(eventShow);
+    }
     return false;
 }
 }

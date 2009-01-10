@@ -194,6 +194,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 #ifdef __WXGTK20__
     // Draw grip first
     if (HasFlag( wxST_SIZEGRIP ))

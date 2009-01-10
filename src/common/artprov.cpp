@@ -139,6 +139,11 @@ wxArtProvider::~wxArtProvider()
     sm_providers->Append(provider);
 }
 
+/*static*/ void wxArtProvider::PushBack(wxArtProvider *provider)
+{
+    Insert(provider);
+}
+
 /*static*/ bool wxArtProvider::Pop()
 {
     wxCHECK_MSG( sm_providers, false, _T("no wxArtProvider exists") );

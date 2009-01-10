@@ -242,11 +242,11 @@ wxInputStream *wxURL::GetInputStream()
         size_t dwPasswordPos = m_userinfo.find(':');
 
         if (dwPasswordPos == wxString::npos)
-            m_protocol->SetUser(m_userinfo);
+            m_protocol->SetUser(Unescape(m_userinfo));
         else
         {
-            m_protocol->SetUser(m_userinfo(0, dwPasswordPos));
-            m_protocol->SetPassword(m_userinfo(dwPasswordPos+1, m_userinfo.length() + 1));
+            m_protocol->SetUser(Unescape(m_userinfo(0, dwPasswordPos)));
+            m_protocol->SetPassword(Unescape(m_userinfo(dwPasswordPos+1, m_userinfo.length() + 1)));
         }
     }
 

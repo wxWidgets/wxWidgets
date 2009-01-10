@@ -1045,9 +1045,6 @@ void wxWindowMac::Init()
     m_macIsUserPane = true;
     m_clipChildren = false ;
     m_cachedClippedRectValid = false ;
-
-    // we need a valid font for the encodings
-    wxWindowBase::SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 }
 
 wxWindowMac::~wxWindowMac()
@@ -1293,6 +1290,18 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
     wxFont font ;
     font.MacCreateThemeFont( themeFont ) ;
     SetFont( font ) ;
+}
+
+wxVisualAttributes wxWindowMac::GetDefaultAttributes() const
+{
+    if ( !m_peer )
+        return wxWindowBase::GetDefaultAttributes();
+    wxVisualAttributes attrs;
+    attrs.font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    attrs.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attrs.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW); //white
+
+    return attrs;
 }
 
 void wxWindowMac::MacUpdateControlFont()
@@ -2417,8 +2426,12 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
                            int *descent, int *externalLeading, const wxFont *theFont ) const
 {
     const wxFont *fontToUse = theFont;
+    wxFont tempFont;
     if ( !fontToUse )
-        fontToUse = &m_font;
+    {
+        tempFont = GetFont();
+        fontToUse = &tempFont;
+    }
 
     wxClientDC dc( (wxWindow*)this ) ;
     long lx,ly,ld,le ;

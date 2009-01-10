@@ -22,6 +22,7 @@
 #include "wx/svg/dcsvg.h"
 
 #include "wx/image.h"
+#include "wx/filename.h"
 
 #define wxSVG_DEBUG FALSE
 // or TRUE to see the calls being executed
@@ -86,12 +87,12 @@ void wxSVGFileDC::Init (wxString f, int Width, int Height, float dpi)
 
     m_signX = m_signY = 1;
 
-    m_userScaleX = m_userScaleY =
+    m_userScaleX = m_userScaleY = 1.0 ;
         m_deviceOriginX = m_deviceOriginY = 0;
 
     m_OriginX = m_OriginY = 0;
     m_logicalOriginX = m_logicalOriginY = 0;
-    m_logicalScaleX = m_logicalScaleY = 0 ;
+    m_logicalScaleX = m_logicalScaleY = 1.0 ;
     m_scaleX = m_scaleY = 1.0 ;
 
     m_logicalFunction = wxCOPY;
@@ -122,9 +123,11 @@ void wxSVGFileDC::Init (wxString f, int Width, int Height, float dpi)
         write(s);
         s = wxT("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ") + newline ;
         write(s);
-        s = wxT("\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\"> ")+ newline ;
+        s = wxT("\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\"> ") + newline ;
         write(s);
-        s.Printf ( wxT("<svg width=\"%.2gcm\" height=\"%.2gcm\" viewBox=\"0 0 %d %d \"> \n"), float(Width)/dpi*2.54, float(Height)/dpi*2.54, Width, Height );
+        s =  wxT("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ") + newline;
+        write(s);
+        s.Printf( wxT("    width=\"%.2gcm\" height=\"%.2gcm\" viewBox=\"0 0 %d %d \"> \n"), float(Width)/dpi*2.54, float(Height)/dpi*2.54, Width, Height );
         write(s);
         s = wxT("<title>SVG Picture created as ") + wxFileNameFromPath(f) + wxT(" </title>") + newline ;
         write(s);
@@ -766,7 +769,10 @@ void wxSVGFileDC::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoord y 
 //save it
     bool bPNG_OK = myBitmap.SaveFile(sPNG,wxBITMAP_TYPE_PNG);
 
-// refrence the bitmap from the SVG doc
+// reference the bitmap from the SVG doc
+// only use filename & ext
+    sPNG = sPNG.AfterLast(wxFileName::GetPathSeparator());
+
     int w = myBitmap.GetWidth();
     int h = myBitmap.GetHeight();
     sTmp.Printf ( wxT(" <image x=\"%d\" y=\"%d\" width=\"%dpx\" height=\"%dpx\" "), x,y,w,h );

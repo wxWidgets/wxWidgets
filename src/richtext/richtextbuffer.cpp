@@ -3834,6 +3834,8 @@ static int wxRichTextGetRangeWidth(const wxRichTextParagraph& para, const wxRich
     return w;
 }
 
+static wxDC* g_globalDC = NULL;
+
 /// Lay the item out
 bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 {
@@ -4099,7 +4101,9 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
     ClearUnusedLines(lineCount);
 
     // Apply styles to wrapped lines
+    g_globalDC = & dc;
     ApplyParagraphStyle(attr, rect);
+    g_globalDC = NULL;
 
     SetCachedSize(wxSize(maxWidth, currentPosition.y + spaceBeforePara + spaceAfterPara));
 
@@ -4169,12 +4173,14 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttrEx& attr, const wx
         // centering, right-justification
         if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
         {
-            pos.x = (rect.GetWidth() - size.x)/2 + pos.x;
+            int rightIndent = ConvertTenthsMMToPixels(* g_globalDC, attr.GetRightIndent());
+            pos.x = (rect.GetWidth() - (pos.x - rect.x) - rightIndent - size.x)/2 + pos.x;
             line->SetPosition(pos);
         }
         else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
         {
-            pos.x = pos.x + rect.GetWidth() - size.x;
+            int rightIndent = ConvertTenthsMMToPixels(* g_globalDC, attr.GetRightIndent());
+            pos.x = rect.x + rect.GetWidth() - size.x - rightIndent;
             line->SetPosition(pos);
         }
 
@@ -4759,7 +4765,7 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
             widthBefore = 0;
 
         size_t i;
-        for (i = (size_t) range.GetStart(); i < (size_t) range.GetEnd(); i++)
+        for (i = (size_t) range.GetStart(); i <= (size_t) range.GetEnd(); i++)
         {
             int widthFromStartOfThisRange = g_GlobalPartialTextExtents[i - GetRange().GetStart()] - widthBefore;
 

@@ -47,7 +47,8 @@ struct wxSystemObjects
              m_colMenuItemHighlight,
              m_colTooltip,
              m_colTooltipText,
-             m_colMenubarBg;
+             m_colMenubarBg,
+             m_colListBoxText;
 
     wxFont m_fontSystem;
 };
@@ -68,6 +69,7 @@ void wxClearGtkSystemObjects()
     gs_objects.m_colTooltipText = wxColour();
     gs_objects.m_colMenubarBg = wxColour();
     gs_objects.m_fontSystem = wxNullFont;
+    gs_objects.m_colListBoxText = wxColour();
 }
 
 // ----------------------------------------------------------------------------
@@ -89,7 +91,8 @@ enum wxGtkColourType
 {
     wxGTK_FG,
     wxGTK_BG,
-    wxGTK_BASE
+    wxGTK_BASE,
+    wxGTK_TEXT
 };
 
 // wxSystemSettings::GetColour() helper: get the colours from a GTK+
@@ -151,6 +154,10 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
 
             case wxGTK_BASE:
                 gdkColor = def->base[state];
+                break;
+
+            case wxGTK_TEXT:
+                gdkColor = def->text[state];
                 break;
         }
     }
@@ -280,6 +287,24 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
                 }
             }
             color = gs_objects.m_colListBox;
+            break;
+
+        case wxSYS_COLOUR_LISTBOXTEXT:
+            if (!gs_objects.m_colListBoxText.Ok())
+            {
+                if ( GetColourFromGTKWidget(gdkColor,
+                                            wxGTK_LIST,
+                                            GTK_STATE_NORMAL,
+                                            wxGTK_TEXT) )
+                {
+                    gs_objects.m_colListBoxText = wxColour(gdkColor);
+                }
+                else
+                {
+                    gs_objects.m_colListBoxText = GetColour(wxSYS_COLOUR_WINDOWTEXT);
+                }
+            }
+            color = gs_objects.m_colListBoxText;
             break;
 
         case wxSYS_COLOUR_MENUTEXT:

@@ -89,14 +89,7 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
     m_maxY = wxCoord(rPage.bottom - rPage.top);
 
     PMResolution res;
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
-    PMPrinter printer;
-    PMSessionGetCurrentPrinter(native->m_macPrintSession, &printer);
-    m_err = PMPrinterGetOutputResolution( printer, native->m_macPrintSettings, &res) ;
-    if ( m_err )
-        // fallback to the old API if there was an error
-#endif
-        m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
+    m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
     
     m_ppi = wxSize(int(res.hRes), int(res.vRes));
 }
@@ -152,14 +145,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& WXUNUSED
     m_maxY = wxCoord(rPage.bottom - rPage.top);
 
     PMResolution res;
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
-    PMPrinter printer;
-    PMSessionGetCurrentPrinter(native->m_macPrintSession, &printer);
-    m_err = PMPrinterGetOutputResolution( printer, native->m_macPrintSettings, &res) ;
-    if ( m_err )
-        // fallback to the old API if there was an error
-#endif
-        m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
+    m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
     
     m_ppi = wxSize(int(res.hRes), int(res.vRes));
     return true ;

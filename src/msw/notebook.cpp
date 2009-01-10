@@ -656,16 +656,18 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
         tabSize.y = rect.bottom - rect.top;
     }
 
+    const int rows = GetRowCount();
+
     // add an extra margin in both directions
     const int MARGIN = 8;
     if ( IsVertical() )
     {
         sizeTotal.x += MARGIN;
-        sizeTotal.y += tabSize.y + MARGIN;
+        sizeTotal.y += tabSize.y * rows + MARGIN;
     }
     else // horizontal layout
     {
-        sizeTotal.x += tabSize.x + MARGIN;
+        sizeTotal.x += tabSize.x * rows + MARGIN;
         sizeTotal.y += MARGIN;
     }
 
@@ -1027,6 +1029,10 @@ void wxNotebook::OnSize(wxSizeEvent& event)
                     MAKELPARAM(rc.right, rc.bottom));
             s_isInOnSize = false;
         }
+
+        // The best size depends on the number of rows of tabs, which can
+        // change when the notepad is resized.
+        InvalidateBestSize();
     }
 
 #if wxUSE_UXTHEME

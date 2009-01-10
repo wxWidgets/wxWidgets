@@ -43,9 +43,10 @@
 
 #ifdef __WXGTK__
     #include <gtk/gtk.h>
-#endif
-#ifdef __WXX11__
-#include "wx/x11/private.h"
+#elif defined(__WXMSW__)
+    #include "wx/msw/private.h"
+#elif defined(__WXX11__)
+    #include "wx/x11/private.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
@@ -260,8 +261,16 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 
     m_child->PushEventHandler(m_handlerPopup);
 
-    m_focus = winFocus ? winFocus : this;
-    m_focus->SetFocus();
+#if defined(__WXMSW__)
+    // Focusing on child of popup window does not work on MSW unless WS_POPUP
+    // style is set. We do not even want to try to set the focus, as it may
+    // provoke errors on some Windows versions (Vista and later).
+    if ( ::GetWindowLong(GetHwnd(), GWL_STYLE) & WS_POPUP )
+#endif
+    {
+        m_focus = winFocus ? winFocus : this;
+        m_focus->SetFocus();
+    }
 
 #if defined( __WXMSW__ ) || defined( __WXMAC__ )
     // MSW doesn't allow to set focus to the popup window, but we need to

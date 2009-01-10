@@ -288,9 +288,9 @@ for the same events for the middle and the right buttons respectively.
 
 \constfunc{void}{GetPosition}{\param{long*}{ x}, \param{long*}{ y}}
 
-Sets *x and *y to the position at which the event occurred.
+Sets *x and *y to the position at which the event occurred on the window.
 
-Returns the physical mouse position in pixels.
+Returns the physical mouse position on the window in pixels.
 
 Note that if the mouse event has been artificially generated from a special
 keyboard combination (e.g. under Windows when the ``menu'' key is pressed), the
@@ -301,9 +301,9 @@ returned position is \texttt{wxDefaultPosition}.
 
 \constfunc{wxPoint}{GetLogicalPosition}{\param{const wxDC\&}{ dc}}
 
-Returns the logical mouse position in pixels (i.e. translated according to the
-translation set for the DC, which usually indicates that the window has been scrolled).
-
+Returns the logical mouse position on the window in pixels (i.e. translated
+according to the translation set for the DC, which usually indicates that the
+window has been scrolled).
 
 
 \membersection{wxMouseEvent::GetLinesPerAction}\label{wxmouseeventgetlinesperaction}
@@ -339,14 +339,14 @@ should occur for each delta.
 
 \constfunc{long}{GetX}{\void}
 
-Returns X coordinate of the physical mouse event position.
+Returns the X coordinate of the physical mouse event position on the window.
 
 
 \membersection{wxMouseEvent::GetY}\label{wxmouseeventgety}
 
 \func{long}{GetY}{\void}
 
-Returns Y coordinate of the physical mouse event position.
+Returns the Y coordinate of the physical mouse event position on the window.
 
 
 \membersection{wxMouseEvent::IsButton}\label{wxmouseeventisbutton}

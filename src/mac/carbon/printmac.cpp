@@ -180,15 +180,10 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
     PMResolution res;
     PMPrinter printer;
     PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
-    PMPrinterGetOutputResolution( printer,  
-        (PMPrintSettings) m_macPrintSettings,  &res) ;
-    // TODO transfer ? into page format ?
-#else
     PMTag tag = kPMMaxSquareResolution;
     PMPrinterGetPrinterResolution(printer, tag, &res);
     PMSetResolution((PMPageFormat) m_macPageFormat, &res);
-#endif
+
     // after setting the new resolution the format has to be updated, otherwise the page rect remains 
     // at the 'old' scaling
     PMSessionValidatePageFormat((PMPrintSession) m_macPrintSession,
@@ -345,7 +340,7 @@ void wxMacCarbonPrintData::TransferTo( wxPrintDialogData* data )
         data->SetAllPages( true ) ;
         // This means all pages, more or less
         data->SetFromPage(1);
-        data->SetToPage(32000);
+        data->SetToPage(9999);
     }
     else
     {
@@ -424,13 +419,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     PMResolution res;
     wxMacCarbonPrintData* nativeData = (wxMacCarbonPrintData*)
           (m_printDialogData.GetPrintData().GetNativeData());
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5 
-    PMPrinter printer;
-    PMSessionGetCurrentPrinter(nativeData->m_macPrintSession, &printer);
-    PMPrinterGetOutputResolution( printer, nativeData->m_macPrintSettings, &res) ;
-#else
     PMGetResolution((PMPageFormat) (nativeData->m_macPageFormat), &res);
-#endif
     printout->SetPPIPrinter(int(res.hRes), int(res.vRes));
 
     // Set printout parameters

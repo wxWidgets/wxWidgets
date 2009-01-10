@@ -74,6 +74,7 @@ public:
     virtual bool SetFont( const wxFont &font );
     virtual bool SetBackgroundColour( const wxColour &colour );
     virtual bool SetForegroundColour( const wxColour &colour );
+    virtual wxVisualAttributes GetDefaultAttributes() const;
 
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;

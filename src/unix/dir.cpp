@@ -225,9 +225,6 @@ bool wxDir::Open(const wxString& dirname)
 
     if ( !M_DIR->IsOk() )
     {
-        wxLogSysError(_("Can not enumerate files in directory '%s'"),
-                      dirname.c_str());
-
         delete M_DIR;
         m_data = NULL;
 

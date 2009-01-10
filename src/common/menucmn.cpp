@@ -194,7 +194,11 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
     {
         if ( (label[n] == '+') || (label[n] == '-') )
         {
+            // differentiate between a ctrl that will be translated to cmd on mac
+            // and an explicit xctrl that will not be translated and remains a ctrl
             if ( CompareAccelString(current, wxTRANSLATE("ctrl")) )
+                accelFlags |= wxACCEL_CMD;
+            else if ( CompareAccelString(current, wxTRANSLATE("xctrl")) )
                 accelFlags |= wxACCEL_CTRL;
             else if ( CompareAccelString(current, wxTRANSLATE("alt")) )
                 accelFlags |= wxACCEL_ALT;
@@ -312,8 +316,12 @@ wxString wxAcceleratorEntry::ToString() const
     int flags = GetFlags();
     if ( flags & wxACCEL_ALT )
         text += _("Alt-");
-    if ( flags & wxACCEL_CTRL )
+    if ( flags & wxACCEL_CMD )
         text += _("Ctrl-");
+#ifdef __WXMAC__
+    if ( flags & wxACCEL_CTRL )
+        text += _("XCtrl-");
+#endif
     if ( flags & wxACCEL_SHIFT )
         text += _("Shift-");
 

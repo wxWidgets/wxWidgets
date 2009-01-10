@@ -356,6 +356,87 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     }
 }
 
+
+ControlRef wxMacFindSubControl( wxNonOwnedWindow* toplevelWindow, const Point& location , ControlRef superControl , ControlPartCode *outPart )
+{
+    if ( superControl )
+    {
+        UInt16 childrenCount = 0 ;
+        ControlHandle sibling ;
+        Rect r ;
+        OSStatus err = CountSubControls( superControl , &childrenCount ) ;
+        if ( err == errControlIsNotEmbedder )
+            return NULL ;
+
+        wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") ) ;
+
+        for ( UInt16 i = childrenCount ; i >=1  ; --i )
+        {
+            err = GetIndexedSubControl( superControl , i , & sibling ) ;
+            if ( err == errControlIsNotEmbedder )
+                return NULL ;
+
+            wxASSERT_MSG( err == noErr , wxT("Unexpected error when accessing subcontrols") ) ;
+            if ( IsControlVisible( sibling ) )
+            {
+                UMAGetControlBoundsInWindowCoords( sibling , &r ) ;
+                if ( MacPtInRect( location , &r ) )
+                {
+                    ControlHandle child = wxMacFindSubControl( toplevelWindow , location , sibling , outPart ) ;
+                    if ( child )
+                    {
+                        return child ;
+                    }
+                    else
+                    {
+                        Point testLocation = location ;
+
+                        if ( toplevelWindow )
+                        {
+                            testLocation.h -= r.left ;
+                            testLocation.v -= r.top ;
+                        }
+
+                        *outPart = TestControl( sibling , testLocation ) ;
+
+                        return sibling ;
+                    }
+                }
+            }
+        }
+    }
+
+    return NULL ;
+}
+
+ControlRef wxMacFindControlUnderMouse( wxNonOwnedWindow* toplevelWindow , const Point& location , WindowRef window , ControlPartCode *outPart )
+{
+#if TARGET_API_MAC_OSX
+    if ( UMAGetSystemVersion() >= 0x1030 )
+    {
+        HIPoint pt = CGPointMake(location.h, location.v);
+        HIViewRef contentView = NULL ;
+        HIViewFindByID( HIViewGetRoot( window ), kHIViewWindowContentID, &contentView );
+        HIViewConvertPoint( &pt, contentView, NULL );
+        HIViewRef control = NULL;
+        if ( HIViewGetSubviewHit( HIViewGetRoot( window ), &pt, true, &control ) == noErr )
+        {
+            if ( control != NULL )
+            {
+                if ( HIViewConvertPoint( &pt, NULL, control ) == noErr )
+                    HIViewGetPartHit(control, &pt, outPart);
+            }
+        }
+        return control ;
+    }
+#endif
+
+    ControlRef rootControl = NULL ;
+    verify_noerr( GetRootControl( window , &rootControl ) ) ;
+
+    return wxMacFindSubControl( toplevelWindow , location , rootControl , outPart ) ;
+}
+
 #define NEW_CAPTURE_HANDLING 1
 
 pascal OSStatus
@@ -398,10 +479,10 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
         {
             currentMouseWindow = wxApp::s_captureWindow ;
         }
-        else if ( (IsWindowActive(window) && windowPart == inContent) )
+        else if ( (IsWindowActive(window) && windowPart == inContent||windowPart == inStructure) )
         {
             ControlPartCode part ;
-            control = FindControlUnderMouse( windowMouseLocation , window , &part ) ;
+            control = wxMacFindControlUnderMouse( toplevelWindow , windowMouseLocation , window , &part ) ;
             // if there is no control below the mouse position, send the event to the toplevel window itself
             if ( control == 0 )
             {
