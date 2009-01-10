@@ -112,12 +112,12 @@ class NoTransErr
 {
 public:
     NoTransErr() { ms_suppressCount++; }
-   ~NoTransErr() { ms_suppressCount--;  }
+    ~NoTransErr() { ms_suppressCount--;  }
 
-   static bool Suppress() { return ms_suppressCount > 0; }
+    static bool Suppress() { return ms_suppressCount > 0; }
 
 private:
-   static size_t ms_suppressCount;
+    static size_t ms_suppressCount;
 };
 
 size_t NoTransErr::ms_suppressCount = 0;
@@ -128,7 +128,7 @@ class NoTransErr
 {
 public:
     NoTransErr() { }
-   ~NoTransErr() { }
+~NoTransErr() { }
 };
 
 #endif // Debug/!Debug
@@ -505,7 +505,7 @@ private:
 wxDEFINE_SCOPED_PTR_TYPE(wxPluralFormsCalculator)
 
 void wxPluralFormsCalculator::init(wxPluralFormsToken::Number nplurals,
-                                   wxPluralFormsNode* plural)
+                                wxPluralFormsNode* plural)
 {
     m_nplurals = nplurals;
     m_plural.reset(plural);
@@ -877,16 +877,16 @@ class wxMsgCatalogFile
 public:
     // ctor & dtor
     wxMsgCatalogFile();
-   ~wxMsgCatalogFile();
+    ~wxMsgCatalogFile();
 
     // load the catalog from disk (szDirPrefix corresponds to language)
     bool Load(const wxString& szDirPrefix, const wxString& szName,
-              wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
+            wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
 
     // fills the hash with string-translation pairs
     void FillHash(wxMessagesHash& hash,
-                  const wxString& msgIdCharset,
-                  bool convertEncoding) const;
+                const wxString& msgIdCharset,
+                bool convertEncoding) const;
 
     // return the charset of the strings in this catalog or empty string if
     // none/unknown
@@ -898,20 +898,20 @@ private:
     // an entry in the string table
     struct wxMsgTableEntry
     {
-      size_t32   nLen;           // length of the string
-      size_t32   ofsString;      // pointer to the string
+        size_t32   nLen;           // length of the string
+        size_t32   ofsString;      // pointer to the string
     };
 
     // header of a .mo file
     struct wxMsgCatalogHeader
     {
-      size_t32  magic,          // offset +00:  magic id
-                revision,       //        +04:  revision
-                numStrings;     //        +08:  number of strings in the file
-      size_t32  ofsOrigTable,   //        +0C:  start of original string table
-                ofsTransTable;  //        +10:  start of translated string table
-      size_t32  nHashSize,      //        +14:  hash table size
-                ofsHashTable;   //        +18:  offset of hash table start
+        size_t32  magic,          // offset +00:  magic id
+                  revision,       //        +04:  revision
+                  numStrings;     //        +08:  number of strings in the file
+        size_t32  ofsOrigTable,   //        +0C:  start of original string table
+                  ofsTransTable;  //        +10:  start of translated string table
+        size_t32  nHashSize,      //        +14:  hash table size
+                  ofsHashTable;   //        +18:  offset of hash table start
     };
 
     // all data is stored here
@@ -928,8 +928,8 @@ private:
     // swap the 2 halves of 32 bit integer if needed
     size_t32 Swap(size_t32 ui) const
     {
-          return m_bSwapped ? (ui << 24) | ((ui & 0xff00) << 8) |
-                              ((ui >> 8) & 0xff00) | (ui >> 24)
+        return m_bSwapped ? (ui << 24) | ((ui & 0xff00) << 8) |
+                            ((ui >> 8) & 0xff00) | (ui >> 24)
                             : ui;
     }
 
@@ -977,7 +977,7 @@ public:
 
     // load the catalog from disk (szDirPrefix corresponds to language)
     bool Load(const wxString& dirPrefix, const wxString& name,
-              const wxString& msgIdCharset, bool bConvertEncoding = false);
+            const wxString& msgIdCharset, bool bConvertEncoding = false);
 
     // get name of the catalog
     wxString GetName() const { return m_name; }
@@ -1027,7 +1027,7 @@ static wxString wxGetANSICodePageForLocale(LCID lcid)
 
     wxChar buffer[16];
     if ( ::GetLocaleInfo(lcid, LOCALE_IDEFAULTANSICODEPAGE,
-                         buffer, WXSIZEOF(buffer)) > 0 )
+                        buffer, WXSIZEOF(buffer)) > 0 )
     {
         if ( buffer[0] != _T('0') || buffer[1] != _T('\0') )
             cp = buffer;
@@ -1058,7 +1058,7 @@ wxString wxLanguageInfo::GetLocaleName() const
 
     locale << buffer;
     if ( ::GetLocaleInfo(lcid, LOCALE_SENGCOUNTRY,
-                         buffer, WXSIZEOF(buffer)) > 0 )
+                        buffer, WXSIZEOF(buffer)) > 0 )
     {
         locale << _T('_') << buffer;
     }
@@ -1107,8 +1107,8 @@ wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
     wxString searchPath;
     searchPath.reserve(4*pathPrefix.length());
     searchPath << pathPrefix << wxFILE_SEP_PATH << "LC_MESSAGES" << wxPATH_SEP
-               << prefix << wxFILE_SEP_PATH << wxPATH_SEP
-               << pathPrefix;
+            << prefix << wxFILE_SEP_PATH << wxPATH_SEP
+            << pathPrefix;
 
     return searchPath;
 }
@@ -1120,7 +1120,7 @@ static wxString GetFullSearchPath(const wxString& lang)
     wxArrayString paths;
     paths.reserve(gs_searchPrefixes.size() + 1);
     size_t n,
-           count = gs_searchPrefixes.size();
+        count = gs_searchPrefixes.size();
     for ( n = 0; n < count; n++ )
     {
         paths.Add(GetMsgCatalogSubdirs(gs_searchPrefixes[n], lang));
@@ -1180,180 +1180,180 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
     wxCHECK_MSG( szDirPrefix.length() >= LEN_LANG, false,
                     "invalid language specification" );
 
-  wxString searchPath;
+    wxString searchPath;
 
 #if wxUSE_FONTMAP
-  // first look for the catalog for this language and the current locale:
-  // notice that we don't use the system name for the locale as this would
-  // force us to install catalogs in different locations depending on the
-  // system but always use the canonical name
-  wxFontEncoding encSys = wxLocale::GetSystemEncoding();
-  if ( encSys != wxFONTENCODING_SYSTEM )
-  {
-    wxString fullname(szDirPrefix);
-    fullname << wxS('.') << wxFontMapperBase::GetEncodingName(encSys);
-    searchPath << GetFullSearchPath(fullname) << wxPATH_SEP;
-  }
+    // first look for the catalog for this language and the current locale:
+    // notice that we don't use the system name for the locale as this would
+    // force us to install catalogs in different locations depending on the
+    // system but always use the canonical name
+    wxFontEncoding encSys = wxLocale::GetSystemEncoding();
+    if ( encSys != wxFONTENCODING_SYSTEM )
+    {
+        wxString fullname(szDirPrefix);
+        fullname << wxS('.') << wxFontMapperBase::GetEncodingName(encSys);
+        searchPath << GetFullSearchPath(fullname) << wxPATH_SEP;
+    }
 #endif // wxUSE_FONTMAP
 
 
-  searchPath += GetFullSearchPath(szDirPrefix);
-  if ( szDirPrefix[LEN_LANG] == wxS('_') )
-  {
-      // also add just base locale name: for things like "fr_BE" (Belgium
-      // French) we should use fall back on plain "fr" if no Belgium-specific
-      // message catalogs exist
-      searchPath << wxPATH_SEP
-                 << GetFullSearchPath(ExtractLang(szDirPrefix));
-  }
+    searchPath += GetFullSearchPath(szDirPrefix);
+    if ( szDirPrefix[LEN_LANG] == wxS('_') )
+    {
+        // also add just base locale name: for things like "fr_BE" (Belgium
+        // French) we should use fall back on plain "fr" if no Belgium-specific
+        // message catalogs exist
+        searchPath << wxPATH_SEP
+                    << GetFullSearchPath(ExtractLang(szDirPrefix));
+    }
 
-  // don't give translation errors here because the wxstd catalog might
-  // not yet be loaded (and it's normal)
-  //
-  // (we're using an object because we have several return paths)
+    // don't give translation errors here because the wxstd catalog might
+    // not yet be loaded (and it's normal)
+    //
+    // (we're using an object because we have several return paths)
 
-  NoTransErr noTransErr;
-  wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
-               szName, searchPath.c_str());
-  wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in \"%s\""),
-             szName, searchPath.c_str());
+    NoTransErr noTransErr;
+    wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
+                szName, searchPath.c_str());
+    wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in \"%s\""),
+                szName, searchPath.c_str());
 
-  wxFileName fn(szName);
-  fn.SetExt(wxS("mo"));
+    wxFileName fn(szName);
+    fn.SetExt(wxS("mo"));
 
-  wxString strFullName;
+    wxString strFullName;
 #if wxUSE_FILESYSTEM
-  wxFileSystem fileSys;
-  if ( !fileSys.FindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
+    wxFileSystem fileSys;
+    if ( !fileSys.FindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
 #else // !wxUSE_FILESYSTEM
-  if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
+    if ( !wxFindFileInPath(&strFullName, searchPath, fn.GetFullPath()) )
 #endif // wxUSE_FILESYSTEM/!wxUSE_FILESYSTEM
-  {
-    wxLogVerbose(_("catalog file for domain '%s' not found."), szName);
-    wxLogTrace(TRACE_I18N, wxS("Catalog \"%s.mo\" not found"), szName);
-    return false;
-  }
+    {
+        wxLogVerbose(_("catalog file for domain '%s' not found."), szName);
+        wxLogTrace(TRACE_I18N, wxS("Catalog \"%s.mo\" not found"), szName);
+        return false;
+    }
 
-  // open file and read its data
-  wxLogVerbose(_("using catalog '%s' from '%s'."), szName, strFullName.c_str());
-  wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName.c_str());
+    // open file and read its data
+    wxLogVerbose(_("using catalog '%s' from '%s'."), szName, strFullName.c_str());
+    wxLogTrace(TRACE_I18N, wxS("Using catalog \"%s\"."), strFullName.c_str());
 
 #if wxUSE_FILESYSTEM
-  wxFSFile * const fileMsg = fileSys.OpenFile(strFullName);
-  if ( !fileMsg )
-    return false;
+    wxFSFile * const fileMsg = fileSys.OpenFile(strFullName);
+    if ( !fileMsg )
+        return false;
 
-  wxInputStream *fileStream = fileMsg->GetStream();
-  m_data.SetDataLen(0);
+    wxInputStream *fileStream = fileMsg->GetStream();
+    m_data.SetDataLen(0);
 
-  static const size_t chunkSize = 4096;
-  while ( !fileStream->Eof() ) {
-    fileStream->Read(m_data.GetAppendBuf(chunkSize), chunkSize);
-    m_data.UngetAppendBuf(fileStream->LastRead());
-  }
+    static const size_t chunkSize = 4096;
+    while ( !fileStream->Eof() ) {
+        fileStream->Read(m_data.GetAppendBuf(chunkSize), chunkSize);
+        m_data.UngetAppendBuf(fileStream->LastRead());
+    }
 
-  delete fileMsg;
+    delete fileMsg;
 #else // !wxUSE_FILESYSTEM
-  wxFile fileMsg(strFullName);
-  if ( !fileMsg.IsOpened() )
-    return false;
+    wxFile fileMsg(strFullName);
+    if ( !fileMsg.IsOpened() )
+        return false;
 
-  // get the file size (assume it is less than 4Gb...)
-  wxFileOffset lenFile = fileMsg.Length();
-  if ( lenFile == wxInvalidOffset )
-    return false;
+    // get the file size (assume it is less than 4Gb...)
+    wxFileOffset lenFile = fileMsg.Length();
+    if ( lenFile == wxInvalidOffset )
+        return false;
 
-  size_t nSize = wx_truncate_cast(size_t, lenFile);
-  wxASSERT_MSG( nSize == lenFile + size_t(0), wxS("message catalog bigger than 4GB?") );
+    size_t nSize = wx_truncate_cast(size_t, lenFile);
+    wxASSERT_MSG( nSize == lenFile + size_t(0), wxS("message catalog bigger than 4GB?") );
 
-  // read the whole file in memory
-  if ( fileMsg.Read(m_data.GetWriteBuf(nSize), nSize) != lenFile )
-    return false;
+    // read the whole file in memory
+    if ( fileMsg.Read(m_data.GetWriteBuf(nSize), nSize) != lenFile )
+        return false;
 
-  m_data.UngetWriteBuf(nSize);
+    m_data.UngetWriteBuf(nSize);
 #endif // wxUSE_FILESYSTEM/!wxUSE_FILESYSTEM
 
 
-  // examine header
-  bool bValid = m_data.GetDataLen() > sizeof(wxMsgCatalogHeader);
+    // examine header
+    bool bValid = m_data.GetDataLen() > sizeof(wxMsgCatalogHeader);
 
-  const wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)m_data.GetData();
-  if ( bValid ) {
-    // we'll have to swap all the integers if it's true
-    m_bSwapped = pHeader->magic == MSGCATALOG_MAGIC_SW;
+    const wxMsgCatalogHeader *pHeader = (wxMsgCatalogHeader *)m_data.GetData();
+    if ( bValid ) {
+        // we'll have to swap all the integers if it's true
+        m_bSwapped = pHeader->magic == MSGCATALOG_MAGIC_SW;
 
-    // check the magic number
-    bValid = m_bSwapped || pHeader->magic == MSGCATALOG_MAGIC;
-  }
+        // check the magic number
+        bValid = m_bSwapped || pHeader->magic == MSGCATALOG_MAGIC;
+    }
 
-  if ( !bValid ) {
-    // it's either too short or has incorrect magic number
-    wxLogWarning(_("'%s' is not a valid message catalog."), strFullName.c_str());
+    if ( !bValid ) {
+        // it's either too short or has incorrect magic number
+        wxLogWarning(_("'%s' is not a valid message catalog."), strFullName.c_str());
 
-    return false;
-  }
+        return false;
+    }
 
-  // initialize
-  m_numStrings  = Swap(pHeader->numStrings);
-  m_pOrigTable  = (wxMsgTableEntry *)(StringData() +
-                   Swap(pHeader->ofsOrigTable));
-  m_pTransTable = (wxMsgTableEntry *)(StringData() +
-                   Swap(pHeader->ofsTransTable));
+    // initialize
+    m_numStrings  = Swap(pHeader->numStrings);
+    m_pOrigTable  = (wxMsgTableEntry *)(StringData() +
+                    Swap(pHeader->ofsOrigTable));
+    m_pTransTable = (wxMsgTableEntry *)(StringData() +
+                    Swap(pHeader->ofsTransTable));
 
-  // now parse catalog's header and try to extract catalog charset and
-  // plural forms formula from it:
+    // now parse catalog's header and try to extract catalog charset and
+    // plural forms formula from it:
 
-  const char* headerData = StringAtOfs(m_pOrigTable, 0);
-  if (headerData && headerData[0] == 0)
-  {
-      // Extract the charset:
-      wxString header = wxString::FromAscii(StringAtOfs(m_pTransTable, 0));
-      int begin = header.Find(wxS("Content-Type: text/plain; charset="));
-      if (begin != wxNOT_FOUND)
-      {
-          begin += 34; //strlen("Content-Type: text/plain; charset=")
-          size_t end = header.find('\n', begin);
-          if (end != size_t(-1))
-          {
-              m_charset.assign(header, begin, end - begin);
-              if (m_charset == wxS("CHARSET"))
-              {
-                  // "CHARSET" is not valid charset, but lazy translator
-                  m_charset.Clear();
-              }
-          }
-      }
-      // else: incorrectly filled Content-Type header
+    const char* headerData = StringAtOfs(m_pOrigTable, 0);
+    if (headerData && headerData[0] == 0)
+    {
+        // Extract the charset:
+        wxString header = wxString::FromAscii(StringAtOfs(m_pTransTable, 0));
+        int begin = header.Find(wxS("Content-Type: text/plain; charset="));
+        if (begin != wxNOT_FOUND)
+        {
+            begin += 34; //strlen("Content-Type: text/plain; charset=")
+            size_t end = header.find('\n', begin);
+            if (end != size_t(-1))
+            {
+                m_charset.assign(header, begin, end - begin);
+                if (m_charset == wxS("CHARSET"))
+                {
+                    // "CHARSET" is not valid charset, but lazy translator
+                    m_charset.Clear();
+                }
+            }
+        }
+        // else: incorrectly filled Content-Type header
 
-      // Extract plural forms:
-      begin = header.Find(wxS("Plural-Forms:"));
-      if (begin != wxNOT_FOUND)
-      {
-          begin += 13;
-          size_t end = header.find('\n', begin);
-          if (end != size_t(-1))
-          {
-              wxString pfs(header, begin, end - begin);
-              wxPluralFormsCalculator* pCalculator = wxPluralFormsCalculator
-                  ::make(pfs.ToAscii());
-              if (pCalculator != 0)
-              {
-                  rPluralFormsCalculator.reset(pCalculator);
-              }
-              else
-              {
-                   wxLogVerbose(_("Cannot parse Plural-Forms:'%s'"), pfs.c_str());
-              }
-          }
-      }
-      if (rPluralFormsCalculator.get() == NULL)
-      {
-          rPluralFormsCalculator.reset(wxPluralFormsCalculator::make());
-      }
-  }
+        // Extract plural forms:
+        begin = header.Find(wxS("Plural-Forms:"));
+        if (begin != wxNOT_FOUND)
+        {
+            begin += 13;
+            size_t end = header.find('\n', begin);
+            if (end != size_t(-1))
+            {
+                wxString pfs(header, begin, end - begin);
+                wxPluralFormsCalculator* pCalculator = wxPluralFormsCalculator
+                    ::make(pfs.ToAscii());
+                if (pCalculator != 0)
+                {
+                    rPluralFormsCalculator.reset(pCalculator);
+                }
+                else
+                {
+                    wxLogVerbose(_("Cannot parse Plural-Forms:'%s'"), pfs.c_str());
+                }
+            }
+        }
+        if (rPluralFormsCalculator.get() == NULL)
+        {
+            rPluralFormsCalculator.reset(wxPluralFormsCalculator::make());
+        }
+    }
 
-  // everything is fine
-  return true;
+    // everything is fine
+    return true;
 }
 
 void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
@@ -1380,7 +1380,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 #if wxUSE_WCHAR_T
     // conversion to use to convert catalog strings to the GUI encoding
     wxMBConv *inputConv,
-             *inputConvPtr = NULL; // same as inputConv but safely deleteable
+            *inputConvPtr = NULL; // same as inputConv but safely deleteable
     if ( convertEncoding && !m_charset.empty() )
     {
         inputConvPtr =
@@ -1406,7 +1406,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 
 #elif wxUSE_FONTMAP
     wxASSERT_MSG( msgIdCharset.empty(),
-                  wxS("non-ASCII msgid languages only supported if wxUSE_WCHAR_T=1") );
+                wxS("non-ASCII msgid languages only supported if wxUSE_WCHAR_T=1") );
 
     wxEncodingConverter converter;
     if ( convertEncoding )
@@ -1607,13 +1607,13 @@ wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 
 void wxLocale::DoCommonInit()
 {
-  m_pszOldLocale = NULL;
+    m_pszOldLocale = NULL;
 
-  m_pOldLocale = wxSetLocale(this);
+    m_pOldLocale = wxSetLocale(this);
 
-  m_pMsgCat = NULL;
-  m_language = wxLANGUAGE_UNKNOWN;
-  m_initialized = false;
+    m_pMsgCat = NULL;
+    m_language = wxLANGUAGE_UNKNOWN;
+    m_initialized = false;
 }
 
 // NB: this function has (desired) side effect of changing current locale
@@ -1623,68 +1623,68 @@ bool wxLocale::Init(const wxString& name,
                     bool            bLoadDefault,
                     bool            bConvertEncoding)
 {
-  wxASSERT_MSG( !m_initialized,
-                wxS("you can't call wxLocale::Init more than once") );
+    wxASSERT_MSG( !m_initialized,
+                    wxS("you can't call wxLocale::Init more than once") );
 
-  m_initialized = true;
-  m_strLocale = name;
-  m_strShort = shortName;
-  m_bConvertEncoding = bConvertEncoding;
-  m_language = wxLANGUAGE_UNKNOWN;
+    m_initialized = true;
+    m_strLocale = name;
+    m_strShort = shortName;
+    m_bConvertEncoding = bConvertEncoding;
+    m_language = wxLANGUAGE_UNKNOWN;
 
-  // change current locale (default: same as long name)
-  wxString szLocale(locale);
-  if ( szLocale.empty() )
-  {
-    // the argument to setlocale()
-    szLocale = shortName;
-
-    wxCHECK_MSG( !szLocale.empty(), false,
-                 wxS("no locale to set in wxLocale::Init()") );
-  }
-
-  const char *oldLocale = wxSetlocale(LC_ALL, szLocale);
-  if ( oldLocale )
-      m_pszOldLocale = wxStrdup(oldLocale);
-  else
-      m_pszOldLocale = NULL;
-
-  if ( m_pszOldLocale == NULL )
-    wxLogError(_("locale '%s' can not be set."), szLocale);
-
-  // the short name will be used to look for catalog files as well,
-  // so we need something here
-  if ( m_strShort.empty() ) {
-    // FIXME I don't know how these 2 letter abbreviations are formed,
-    //       this wild guess is surely wrong
-    if ( !szLocale.empty() )
+    // change current locale (default: same as long name)
+    wxString szLocale(locale);
+    if ( szLocale.empty() )
     {
-        m_strShort += (wxChar)wxTolower(szLocale[0]);
-        if ( szLocale.length() > 1 )
-            m_strShort += (wxChar)wxTolower(szLocale[1]);
+        // the argument to setlocale()
+        szLocale = shortName;
+
+        wxCHECK_MSG( !szLocale.empty(), false,
+                    wxS("no locale to set in wxLocale::Init()") );
     }
-  }
 
-  // load the default catalog with wxWidgets standard messages
-  m_pMsgCat = NULL;
-  bool bOk = true;
-  if ( bLoadDefault )
-  {
-    bOk = AddCatalog(wxS("wxstd"));
+    const char *oldLocale = wxSetlocale(LC_ALL, szLocale);
+    if ( oldLocale )
+        m_pszOldLocale = wxStrdup(oldLocale);
+    else
+        m_pszOldLocale = NULL;
 
-    // there may be a catalog with toolkit specific overrides, it is not
-    // an error if this does not exist
-    if ( bOk )
+    if ( m_pszOldLocale == NULL )
+        wxLogError(_("locale '%s' can not be set."), szLocale);
+
+    // the short name will be used to look for catalog files as well,
+    // so we need something here
+    if ( m_strShort.empty() ) {
+        // FIXME I don't know how these 2 letter abbreviations are formed,
+        //       this wild guess is surely wrong
+        if ( !szLocale.empty() )
+        {
+            m_strShort += (wxChar)wxTolower(szLocale[0]);
+            if ( szLocale.length() > 1 )
+                m_strShort += (wxChar)wxTolower(szLocale[1]);
+        }
+    }
+
+    // load the default catalog with wxWidgets standard messages
+    m_pMsgCat = NULL;
+    bool bOk = true;
+    if ( bLoadDefault )
     {
-      wxString port(wxPlatformInfo::Get().GetPortIdName());
-      if ( !port.empty() )
-      {
-        AddCatalog(port.BeforeFirst(wxS('/')).MakeLower());
-      }
-    }
-  }
+        bOk = AddCatalog(wxS("wxstd"));
 
-  return bOk;
+        // there may be a catalog with toolkit specific overrides, it is not
+        // an error if this does not exist
+        if ( bOk )
+        {
+            wxString port(wxPlatformInfo::Get().GetPortIdName());
+            if ( !port.empty() )
+            {
+                AddCatalog(port.BeforeFirst(wxS('/')).MakeLower());
+            }
+        }
+    }
+
+    return bOk;
 }
 
 
@@ -1743,7 +1743,7 @@ bool wxLocale::Init(int language, int flags)
     // We failed to detect system language, so we will use English:
     if (lang == wxLANGUAGE_UNKNOWN)
     {
-       return false;
+        return false;
     }
 
     const wxLanguageInfo *info = GetLanguageInfo(lang);
@@ -1919,8 +1919,8 @@ bool wxLocale::Init(int language, int flags)
     }
 
     if ( !Init(name, canonical, retloc,
-               (flags & wxLOCALE_LOAD_DEFAULT) != 0,
-               (flags & wxLOCALE_CONV_ENCODING) != 0) )
+            (flags & wxLOCALE_LOAD_DEFAULT) != 0,
+            (flags & wxLOCALE_CONV_ENCODING) != 0) )
     {
         ret = false;
     }
@@ -1949,7 +1949,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
 
     // init i to avoid compiler warning
     size_t i = 0,
-           count = ms_languagesDB->GetCount();
+        count = ms_languagesDB->GetCount();
 
 #if defined(__UNIX__)
     // first get the string identifying the language from the environment
@@ -2020,7 +2020,7 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
     // do we have just the language (or sublang too)?
     bool justLang = langFull.length() == LEN_LANG;
     if ( justLang ||
-         (langFull.length() == LEN_FULL && langFull[LEN_LANG] == wxS('_')) )
+        (langFull.length() == LEN_FULL && langFull[LEN_LANG] == wxS('_')) )
     {
         // 0. Make sure the lang is according to latest ISO 639
         //    (this is necessary because glibc uses iw and in instead
@@ -2428,10 +2428,10 @@ const wxString& wxLocale::GetString(const wxString& origString,
             NoTransErr noTransErr;
 
             wxLogTrace(TRACE_I18N,
-                       wxS("string \"%s\"[%ld] not found in %slocale '%s'."),
-                       origString, (long)n,
-                       wxString::Format(wxS("domain '%s' "), domain).c_str(),
-                       m_strLocale.c_str());
+                    wxS("string \"%s\"[%ld] not found in %slocale '%s'."),
+                    origString, (long)n,
+                    wxString::Format(wxS("domain '%s' "), domain).c_str(),
+                    m_strLocale.c_str());
         }
 #endif // __WXDEBUG__
 
@@ -2460,7 +2460,7 @@ const wxString& wxLocale::GetUntranslatedString(const wxString& str)
 }
 
 wxString wxLocale::GetHeaderValue(const wxString& header,
-                                  const wxString& domain) const
+                                const wxString& domain) const
 {
     if ( header.empty() )
         return wxEmptyString;
@@ -2490,11 +2490,11 @@ wxString wxLocale::GetHeaderValue(const wxString& header,
     }
 
     if ( !trans || trans->empty() )
-      return wxEmptyString;
+        return wxEmptyString;
 
     size_t found = trans->find(header);
     if ( found == wxString::npos )
-      return wxEmptyString;
+        return wxEmptyString;
 
     found += header.length() + 2 /* ': ' */;
 
@@ -2502,7 +2502,7 @@ wxString wxLocale::GetHeaderValue(const wxString& header,
 
     size_t endLine = trans->find(wxS('\n'), found);
     size_t len = (endLine == wxString::npos) ?
-                 wxString::npos : (endLine - found);
+                wxString::npos : (endLine - found);
 
     return trans->substr(found, len);
 }
@@ -2516,7 +2516,7 @@ wxMsgCatalog *wxLocale::FindCatalog(const wxString& domain) const
     for ( pMsgCat = m_pMsgCat; pMsgCat != NULL; pMsgCat = pMsgCat->m_pNext )
     {
         if ( pMsgCat->GetName() == domain )
-          return pMsgCat;
+            return pMsgCat;
     }
 
     return NULL;
@@ -2558,7 +2558,7 @@ bool wxLocale::IsAvailable(int lang)
 // check if the given catalog is loaded
 bool wxLocale::IsLoaded(const wxString& szDomain) const
 {
-  return FindCatalog(szDomain) != NULL;
+    return FindCatalog(szDomain) != NULL;
 }
 
 // add a catalog to our linked list
@@ -2569,8 +2569,8 @@ bool wxLocale::AddCatalog(const wxString& szDomain)
 
 // add a catalog to our linked list
 bool wxLocale::AddCatalog(const wxString& szDomain,
-                          wxLanguage      msgIdLanguage,
-                          const wxString& msgIdCharset)
+                        wxLanguage      msgIdLanguage,
+                        const wxString& msgIdCharset)
 
 {
     wxCHECK_MSG( IsOk(), false, "must initialize catalog first" );
@@ -2604,7 +2604,7 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
     // permitted to use en_US strings from sources even if m_language is en_GB:
     const wxLanguageInfo *msgIdLangInfo = GetLanguageInfo(msgIdLanguage);
     if ( msgIdLangInfo &&
-          ExtractLang(msgIdLangInfo->CanonicalName) == ExtractLang(m_strShort) )
+        ExtractLang(msgIdLangInfo->CanonicalName) == ExtractLang(m_strShort) )
     {
         return true;
     }
@@ -2674,10 +2674,10 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
     if ( wxGetLocale() )
     {
         userLocaleRefRaw = CFLocaleCreate
-                           (
+                        (
                                 kCFAllocatorDefault,
                                 wxCFStringRef(wxGetLocale()->GetCanonicalName())
-                           );
+                        );
     }
     else // no current locale, use the default one
     {
@@ -2758,14 +2758,14 @@ static wxLocale *g_pLocale = NULL;
 
 wxLocale *wxGetLocale()
 {
-  return g_pLocale;
+    return g_pLocale;
 }
 
 wxLocale *wxSetLocale(wxLocale *pLocale)
 {
-  wxLocale *pOld = g_pLocale;
-  g_pLocale = pLocale;
-  return pOld;
+    wxLocale *pOld = g_pLocale;
+    g_pLocale = pLocale;
+    return pOld;
 }
 
 
@@ -3301,241 +3301,241 @@ IMPLEMENT_DYNAMIC_CLASS(wxLocaleModule, wxModule)
 
 void wxLocale::InitLanguagesDB()
 {
-   wxLanguageInfo info;
-   wxStringTokenizer tkn;
+    wxLanguageInfo info;
+    wxStringTokenizer tkn;
 
-   LNG(wxLANGUAGE_ABKHAZIAN,                  "ab"   , 0              , 0                                 , wxLayout_LeftToRight, "Abkhazian")
-   LNG(wxLANGUAGE_AFAR,                       "aa"   , 0              , 0                                 , wxLayout_LeftToRight, "Afar")
-   LNG(wxLANGUAGE_AFRIKAANS,                  "af_ZA", LANG_AFRIKAANS , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Afrikaans")
-   LNG(wxLANGUAGE_ALBANIAN,                   "sq_AL", LANG_ALBANIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Albanian")
-   LNG(wxLANGUAGE_AMHARIC,                    "am"   , 0              , 0                                 , wxLayout_LeftToRight, "Amharic")
-   LNG(wxLANGUAGE_ARABIC,                     "ar"   , LANG_ARABIC    , SUBLANG_DEFAULT                   , wxLayout_RightToLeft, "Arabic")
-   LNG(wxLANGUAGE_ARABIC_ALGERIA,             "ar_DZ", LANG_ARABIC    , SUBLANG_ARABIC_ALGERIA            , wxLayout_RightToLeft, "Arabic (Algeria)")
-   LNG(wxLANGUAGE_ARABIC_BAHRAIN,             "ar_BH", LANG_ARABIC    , SUBLANG_ARABIC_BAHRAIN            , wxLayout_RightToLeft, "Arabic (Bahrain)")
-   LNG(wxLANGUAGE_ARABIC_EGYPT,               "ar_EG", LANG_ARABIC    , SUBLANG_ARABIC_EGYPT              , wxLayout_RightToLeft, "Arabic (Egypt)")
-   LNG(wxLANGUAGE_ARABIC_IRAQ,                "ar_IQ", LANG_ARABIC    , SUBLANG_ARABIC_IRAQ               , wxLayout_RightToLeft, "Arabic (Iraq)")
-   LNG(wxLANGUAGE_ARABIC_JORDAN,              "ar_JO", LANG_ARABIC    , SUBLANG_ARABIC_JORDAN             , wxLayout_RightToLeft, "Arabic (Jordan)")
-   LNG(wxLANGUAGE_ARABIC_KUWAIT,              "ar_KW", LANG_ARABIC    , SUBLANG_ARABIC_KUWAIT             , wxLayout_RightToLeft, "Arabic (Kuwait)")
-   LNG(wxLANGUAGE_ARABIC_LEBANON,             "ar_LB", LANG_ARABIC    , SUBLANG_ARABIC_LEBANON            , wxLayout_RightToLeft, "Arabic (Lebanon)")
-   LNG(wxLANGUAGE_ARABIC_LIBYA,               "ar_LY", LANG_ARABIC    , SUBLANG_ARABIC_LIBYA              , wxLayout_RightToLeft, "Arabic (Libya)")
-   LNG(wxLANGUAGE_ARABIC_MOROCCO,             "ar_MA", LANG_ARABIC    , SUBLANG_ARABIC_MOROCCO            , wxLayout_RightToLeft, "Arabic (Morocco)")
-   LNG(wxLANGUAGE_ARABIC_OMAN,                "ar_OM", LANG_ARABIC    , SUBLANG_ARABIC_OMAN               , wxLayout_RightToLeft, "Arabic (Oman)")
-   LNG(wxLANGUAGE_ARABIC_QATAR,               "ar_QA", LANG_ARABIC    , SUBLANG_ARABIC_QATAR              , wxLayout_RightToLeft, "Arabic (Qatar)")
-   LNG(wxLANGUAGE_ARABIC_SAUDI_ARABIA,        "ar_SA", LANG_ARABIC    , SUBLANG_ARABIC_SAUDI_ARABIA       , wxLayout_RightToLeft, "Arabic (Saudi Arabia)")
-   LNG(wxLANGUAGE_ARABIC_SUDAN,               "ar_SD", 0              , 0                                 , wxLayout_RightToLeft, "Arabic (Sudan)")
-   LNG(wxLANGUAGE_ARABIC_SYRIA,               "ar_SY", LANG_ARABIC    , SUBLANG_ARABIC_SYRIA              , wxLayout_RightToLeft, "Arabic (Syria)")
-   LNG(wxLANGUAGE_ARABIC_TUNISIA,             "ar_TN", LANG_ARABIC    , SUBLANG_ARABIC_TUNISIA            , wxLayout_RightToLeft, "Arabic (Tunisia)")
-   LNG(wxLANGUAGE_ARABIC_UAE,                 "ar_AE", LANG_ARABIC    , SUBLANG_ARABIC_UAE                , wxLayout_RightToLeft, "Arabic (Uae)")
-   LNG(wxLANGUAGE_ARABIC_YEMEN,               "ar_YE", LANG_ARABIC    , SUBLANG_ARABIC_YEMEN              , wxLayout_RightToLeft, "Arabic (Yemen)")
-   LNG(wxLANGUAGE_ARMENIAN,                   "hy"   , LANG_ARMENIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Armenian")
-   LNG(wxLANGUAGE_ASSAMESE,                   "as"   , LANG_ASSAMESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Assamese")
-   LNG(wxLANGUAGE_AYMARA,                     "ay"   , 0              , 0                                 , wxLayout_LeftToRight, "Aymara")
-   LNG(wxLANGUAGE_AZERI,                      "az"   , LANG_AZERI     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Azeri")
-   LNG(wxLANGUAGE_AZERI_CYRILLIC,             "az"   , LANG_AZERI     , SUBLANG_AZERI_CYRILLIC            , wxLayout_LeftToRight, "Azeri (Cyrillic)")
-   LNG(wxLANGUAGE_AZERI_LATIN,                "az"   , LANG_AZERI     , SUBLANG_AZERI_LATIN               , wxLayout_LeftToRight, "Azeri (Latin)")
-   LNG(wxLANGUAGE_BASHKIR,                    "ba"   , 0              , 0                                 , wxLayout_LeftToRight, "Bashkir")
-   LNG(wxLANGUAGE_BASQUE,                     "eu_ES", LANG_BASQUE    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Basque")
-   LNG(wxLANGUAGE_BELARUSIAN,                 "be_BY", LANG_BELARUSIAN, SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Belarusian")
-   LNG(wxLANGUAGE_BENGALI,                    "bn"   , LANG_BENGALI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Bengali")
-   LNG(wxLANGUAGE_BHUTANI,                    "dz"   , 0              , 0                                 , wxLayout_LeftToRight, "Bhutani")
-   LNG(wxLANGUAGE_BIHARI,                     "bh"   , 0              , 0                                 , wxLayout_LeftToRight, "Bihari")
-   LNG(wxLANGUAGE_BISLAMA,                    "bi"   , 0              , 0                                 , wxLayout_LeftToRight, "Bislama")
-   LNG(wxLANGUAGE_BRETON,                     "br"   , 0              , 0                                 , wxLayout_LeftToRight, "Breton")
-   LNG(wxLANGUAGE_BULGARIAN,                  "bg_BG", LANG_BULGARIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Bulgarian")
-   LNG(wxLANGUAGE_BURMESE,                    "my"   , 0              , 0                                 , wxLayout_LeftToRight, "Burmese")
-   LNG(wxLANGUAGE_CAMBODIAN,                  "km"   , 0              , 0                                 , wxLayout_LeftToRight, "Cambodian")
-   LNG(wxLANGUAGE_CATALAN,                    "ca_ES", LANG_CATALAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Catalan")
-   LNG(wxLANGUAGE_CHINESE,                    "zh_TW", LANG_CHINESE   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Chinese")
-   LNG(wxLANGUAGE_CHINESE_SIMPLIFIED,         "zh_CN", LANG_CHINESE   , SUBLANG_CHINESE_SIMPLIFIED        , wxLayout_LeftToRight, "Chinese (Simplified)")
-   LNG(wxLANGUAGE_CHINESE_TRADITIONAL,        "zh_TW", LANG_CHINESE   , SUBLANG_CHINESE_TRADITIONAL       , wxLayout_LeftToRight, "Chinese (Traditional)")
-   LNG(wxLANGUAGE_CHINESE_HONGKONG,           "zh_HK", LANG_CHINESE   , SUBLANG_CHINESE_HONGKONG          , wxLayout_LeftToRight, "Chinese (Hongkong)")
-   LNG(wxLANGUAGE_CHINESE_MACAU,              "zh_MO", LANG_CHINESE   , SUBLANG_CHINESE_MACAU             , wxLayout_LeftToRight, "Chinese (Macau)")
-   LNG(wxLANGUAGE_CHINESE_SINGAPORE,          "zh_SG", LANG_CHINESE   , SUBLANG_CHINESE_SINGAPORE         , wxLayout_LeftToRight, "Chinese (Singapore)")
-   LNG(wxLANGUAGE_CHINESE_TAIWAN,             "zh_TW", LANG_CHINESE   , SUBLANG_CHINESE_TRADITIONAL       , wxLayout_LeftToRight, "Chinese (Taiwan)")
-   LNG(wxLANGUAGE_CORSICAN,                   "co"   , 0              , 0                                 , wxLayout_LeftToRight, "Corsican")
-   LNG(wxLANGUAGE_CROATIAN,                   "hr_HR", LANG_CROATIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Croatian")
-   LNG(wxLANGUAGE_CZECH,                      "cs_CZ", LANG_CZECH     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Czech")
-   LNG(wxLANGUAGE_DANISH,                     "da_DK", LANG_DANISH    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Danish")
-   LNG(wxLANGUAGE_DUTCH,                      "nl_NL", LANG_DUTCH     , SUBLANG_DUTCH                     , wxLayout_LeftToRight, "Dutch")
-   LNG(wxLANGUAGE_DUTCH_BELGIAN,              "nl_BE", LANG_DUTCH     , SUBLANG_DUTCH_BELGIAN             , wxLayout_LeftToRight, "Dutch (Belgian)")
-   LNG(wxLANGUAGE_ENGLISH,                    "en_GB", LANG_ENGLISH   , SUBLANG_ENGLISH_UK                , wxLayout_LeftToRight, "English")
-   LNG(wxLANGUAGE_ENGLISH_UK,                 "en_GB", LANG_ENGLISH   , SUBLANG_ENGLISH_UK                , wxLayout_LeftToRight, "English (U.K.)")
-   LNG(wxLANGUAGE_ENGLISH_US,                 "en_US", LANG_ENGLISH   , SUBLANG_ENGLISH_US                , wxLayout_LeftToRight, "English (U.S.)")
-   LNG(wxLANGUAGE_ENGLISH_AUSTRALIA,          "en_AU", LANG_ENGLISH   , SUBLANG_ENGLISH_AUS               , wxLayout_LeftToRight, "English (Australia)")
-   LNG(wxLANGUAGE_ENGLISH_BELIZE,             "en_BZ", LANG_ENGLISH   , SUBLANG_ENGLISH_BELIZE            , wxLayout_LeftToRight, "English (Belize)")
-   LNG(wxLANGUAGE_ENGLISH_BOTSWANA,           "en_BW", 0              , 0                                 , wxLayout_LeftToRight, "English (Botswana)")
-   LNG(wxLANGUAGE_ENGLISH_CANADA,             "en_CA", LANG_ENGLISH   , SUBLANG_ENGLISH_CAN               , wxLayout_LeftToRight, "English (Canada)")
-   LNG(wxLANGUAGE_ENGLISH_CARIBBEAN,          "en_CB", LANG_ENGLISH   , SUBLANG_ENGLISH_CARIBBEAN         , wxLayout_LeftToRight, "English (Caribbean)")
-   LNG(wxLANGUAGE_ENGLISH_DENMARK,            "en_DK", 0              , 0                                 , wxLayout_LeftToRight, "English (Denmark)")
-   LNG(wxLANGUAGE_ENGLISH_EIRE,               "en_IE", LANG_ENGLISH   , SUBLANG_ENGLISH_EIRE              , wxLayout_LeftToRight, "English (Eire)")
-   LNG(wxLANGUAGE_ENGLISH_JAMAICA,            "en_JM", LANG_ENGLISH   , SUBLANG_ENGLISH_JAMAICA           , wxLayout_LeftToRight, "English (Jamaica)")
-   LNG(wxLANGUAGE_ENGLISH_NEW_ZEALAND,        "en_NZ", LANG_ENGLISH   , SUBLANG_ENGLISH_NZ                , wxLayout_LeftToRight, "English (New Zealand)")
-   LNG(wxLANGUAGE_ENGLISH_PHILIPPINES,        "en_PH", LANG_ENGLISH   , SUBLANG_ENGLISH_PHILIPPINES       , wxLayout_LeftToRight, "English (Philippines)")
-   LNG(wxLANGUAGE_ENGLISH_SOUTH_AFRICA,       "en_ZA", LANG_ENGLISH   , SUBLANG_ENGLISH_SOUTH_AFRICA      , wxLayout_LeftToRight, "English (South Africa)")
-   LNG(wxLANGUAGE_ENGLISH_TRINIDAD,           "en_TT", LANG_ENGLISH   , SUBLANG_ENGLISH_TRINIDAD          , wxLayout_LeftToRight, "English (Trinidad)")
-   LNG(wxLANGUAGE_ENGLISH_ZIMBABWE,           "en_ZW", LANG_ENGLISH   , SUBLANG_ENGLISH_ZIMBABWE          , wxLayout_LeftToRight, "English (Zimbabwe)")
-   LNG(wxLANGUAGE_ESPERANTO,                  "eo"   , 0              , 0                                 , wxLayout_LeftToRight, "Esperanto")
-   LNG(wxLANGUAGE_ESTONIAN,                   "et_EE", LANG_ESTONIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Estonian")
-   LNG(wxLANGUAGE_FAEROESE,                   "fo_FO", LANG_FAEROESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Faeroese")
-   LNG(wxLANGUAGE_FARSI,                      "fa_IR", LANG_FARSI     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Farsi")
-   LNG(wxLANGUAGE_FIJI,                       "fj"   , 0              , 0                                 , wxLayout_LeftToRight, "Fiji")
-   LNG(wxLANGUAGE_FINNISH,                    "fi_FI", LANG_FINNISH   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Finnish")
-   LNG(wxLANGUAGE_FRENCH,                     "fr_FR", LANG_FRENCH    , SUBLANG_FRENCH                    , wxLayout_LeftToRight, "French")
-   LNG(wxLANGUAGE_FRENCH_BELGIAN,             "fr_BE", LANG_FRENCH    , SUBLANG_FRENCH_BELGIAN            , wxLayout_LeftToRight, "French (Belgian)")
-   LNG(wxLANGUAGE_FRENCH_CANADIAN,            "fr_CA", LANG_FRENCH    , SUBLANG_FRENCH_CANADIAN           , wxLayout_LeftToRight, "French (Canadian)")
-   LNG(wxLANGUAGE_FRENCH_LUXEMBOURG,          "fr_LU", LANG_FRENCH    , SUBLANG_FRENCH_LUXEMBOURG         , wxLayout_LeftToRight, "French (Luxembourg)")
-   LNG(wxLANGUAGE_FRENCH_MONACO,              "fr_MC", LANG_FRENCH    , SUBLANG_FRENCH_MONACO             , wxLayout_LeftToRight, "French (Monaco)")
-   LNG(wxLANGUAGE_FRENCH_SWISS,               "fr_CH", LANG_FRENCH    , SUBLANG_FRENCH_SWISS              , wxLayout_LeftToRight, "French (Swiss)")
-   LNG(wxLANGUAGE_FRISIAN,                    "fy"   , 0              , 0                                 , wxLayout_LeftToRight, "Frisian")
-   LNG(wxLANGUAGE_GALICIAN,                   "gl_ES", 0              , 0                                 , wxLayout_LeftToRight, "Galician")
-   LNG(wxLANGUAGE_GEORGIAN,                   "ka_GE", LANG_GEORGIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Georgian")
-   LNG(wxLANGUAGE_GERMAN,                     "de_DE", LANG_GERMAN    , SUBLANG_GERMAN                    , wxLayout_LeftToRight, "German")
-   LNG(wxLANGUAGE_GERMAN_AUSTRIAN,            "de_AT", LANG_GERMAN    , SUBLANG_GERMAN_AUSTRIAN           , wxLayout_LeftToRight, "German (Austrian)")
-   LNG(wxLANGUAGE_GERMAN_BELGIUM,             "de_BE", 0              , 0                                 , wxLayout_LeftToRight, "German (Belgium)")
-   LNG(wxLANGUAGE_GERMAN_LIECHTENSTEIN,       "de_LI", LANG_GERMAN    , SUBLANG_GERMAN_LIECHTENSTEIN      , wxLayout_LeftToRight, "German (Liechtenstein)")
-   LNG(wxLANGUAGE_GERMAN_LUXEMBOURG,          "de_LU", LANG_GERMAN    , SUBLANG_GERMAN_LUXEMBOURG         , wxLayout_LeftToRight, "German (Luxembourg)")
-   LNG(wxLANGUAGE_GERMAN_SWISS,               "de_CH", LANG_GERMAN    , SUBLANG_GERMAN_SWISS              , wxLayout_LeftToRight, "German (Swiss)")
-   LNG(wxLANGUAGE_GREEK,                      "el_GR", LANG_GREEK     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Greek")
-   LNG(wxLANGUAGE_GREENLANDIC,                "kl_GL", 0              , 0                                 , wxLayout_LeftToRight, "Greenlandic")
-   LNG(wxLANGUAGE_GUARANI,                    "gn"   , 0              , 0                                 , wxLayout_LeftToRight, "Guarani")
-   LNG(wxLANGUAGE_GUJARATI,                   "gu"   , LANG_GUJARATI  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Gujarati")
-   LNG(wxLANGUAGE_HAUSA,                      "ha"   , 0              , 0                                 , wxLayout_LeftToRight, "Hausa")
-   LNG(wxLANGUAGE_HEBREW,                     "he_IL", LANG_HEBREW    , SUBLANG_DEFAULT                   , wxLayout_RightToLeft, "Hebrew")
-   LNG(wxLANGUAGE_HINDI,                      "hi_IN", LANG_HINDI     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Hindi")
-   LNG(wxLANGUAGE_HUNGARIAN,                  "hu_HU", LANG_HUNGARIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Hungarian")
-   LNG(wxLANGUAGE_ICELANDIC,                  "is_IS", LANG_ICELANDIC , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Icelandic")
-   LNG(wxLANGUAGE_INDONESIAN,                 "id_ID", LANG_INDONESIAN, SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Indonesian")
-   LNG(wxLANGUAGE_INTERLINGUA,                "ia"   , 0              , 0                                 , wxLayout_LeftToRight, "Interlingua")
-   LNG(wxLANGUAGE_INTERLINGUE,                "ie"   , 0              , 0                                 , wxLayout_LeftToRight, "Interlingue")
-   LNG(wxLANGUAGE_INUKTITUT,                  "iu"   , 0              , 0                                 , wxLayout_LeftToRight, "Inuktitut")
-   LNG(wxLANGUAGE_INUPIAK,                    "ik"   , 0              , 0                                 , wxLayout_LeftToRight, "Inupiak")
-   LNG(wxLANGUAGE_IRISH,                      "ga_IE", 0              , 0                                 , wxLayout_LeftToRight, "Irish")
-   LNG(wxLANGUAGE_ITALIAN,                    "it_IT", LANG_ITALIAN   , SUBLANG_ITALIAN                   , wxLayout_LeftToRight, "Italian")
-   LNG(wxLANGUAGE_ITALIAN_SWISS,              "it_CH", LANG_ITALIAN   , SUBLANG_ITALIAN_SWISS             , wxLayout_LeftToRight, "Italian (Swiss)")
-   LNG(wxLANGUAGE_JAPANESE,                   "ja_JP", LANG_JAPANESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Japanese")
-   LNG(wxLANGUAGE_JAVANESE,                   "jw"   , 0              , 0                                 , wxLayout_LeftToRight, "Javanese")
-   LNG(wxLANGUAGE_KANNADA,                    "kn"   , LANG_KANNADA   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kannada")
-   LNG(wxLANGUAGE_KASHMIRI,                   "ks"   , LANG_KASHMIRI  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kashmiri")
-   LNG(wxLANGUAGE_KASHMIRI_INDIA,             "ks_IN", LANG_KASHMIRI  , SUBLANG_KASHMIRI_INDIA            , wxLayout_LeftToRight, "Kashmiri (India)")
-   LNG(wxLANGUAGE_KAZAKH,                     "kk"   , LANG_KAZAK     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kazakh")
-   LNG(wxLANGUAGE_KERNEWEK,                   "kw_GB", 0              , 0                                 , wxLayout_LeftToRight, "Kernewek")
-   LNG(wxLANGUAGE_KINYARWANDA,                "rw"   , 0              , 0                                 , wxLayout_LeftToRight, "Kinyarwanda")
-   LNG(wxLANGUAGE_KIRGHIZ,                    "ky"   , 0              , 0                                 , wxLayout_LeftToRight, "Kirghiz")
-   LNG(wxLANGUAGE_KIRUNDI,                    "rn"   , 0              , 0                                 , wxLayout_LeftToRight, "Kirundi")
-   LNG(wxLANGUAGE_KONKANI,                    ""     , LANG_KONKANI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Konkani")
-   LNG(wxLANGUAGE_KOREAN,                     "ko_KR", LANG_KOREAN    , SUBLANG_KOREAN                    , wxLayout_LeftToRight, "Korean")
-   LNG(wxLANGUAGE_KURDISH,                    "ku_TR", 0              , 0                                 , wxLayout_LeftToRight, "Kurdish")
-   LNG(wxLANGUAGE_LAOTHIAN,                   "lo"   , 0              , 0                                 , wxLayout_LeftToRight, "Laothian")
-   LNG(wxLANGUAGE_LATIN,                      "la"   , 0              , 0                                 , wxLayout_LeftToRight, "Latin")
-   LNG(wxLANGUAGE_LATVIAN,                    "lv_LV", LANG_LATVIAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Latvian")
-   LNG(wxLANGUAGE_LINGALA,                    "ln"   , 0              , 0                                 , wxLayout_LeftToRight, "Lingala")
-   LNG(wxLANGUAGE_LITHUANIAN,                 "lt_LT", LANG_LITHUANIAN, SUBLANG_LITHUANIAN                , wxLayout_LeftToRight, "Lithuanian")
-   LNG(wxLANGUAGE_MACEDONIAN,                 "mk_MK", LANG_MACEDONIAN, SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Macedonian")
-   LNG(wxLANGUAGE_MALAGASY,                   "mg"   , 0              , 0                                 , wxLayout_LeftToRight, "Malagasy")
-   LNG(wxLANGUAGE_MALAY,                      "ms_MY", LANG_MALAY     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Malay")
-   LNG(wxLANGUAGE_MALAYALAM,                  "ml"   , LANG_MALAYALAM , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Malayalam")
-   LNG(wxLANGUAGE_MALAY_BRUNEI_DARUSSALAM,    "ms_BN", LANG_MALAY     , SUBLANG_MALAY_BRUNEI_DARUSSALAM   , wxLayout_LeftToRight, "Malay (Brunei Darussalam)")
-   LNG(wxLANGUAGE_MALAY_MALAYSIA,             "ms_MY", LANG_MALAY     , SUBLANG_MALAY_MALAYSIA            , wxLayout_LeftToRight, "Malay (Malaysia)")
-   LNG(wxLANGUAGE_MALTESE,                    "mt_MT", 0              , 0                                 , wxLayout_LeftToRight, "Maltese")
-   LNG(wxLANGUAGE_MANIPURI,                   ""     , LANG_MANIPURI  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Manipuri")
-   LNG(wxLANGUAGE_MAORI,                      "mi"   , 0              , 0                                 , wxLayout_LeftToRight, "Maori")
-   LNG(wxLANGUAGE_MARATHI,                    "mr_IN", LANG_MARATHI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Marathi")
-   LNG(wxLANGUAGE_MOLDAVIAN,                  "mo"   , 0              , 0                                 , wxLayout_LeftToRight, "Moldavian")
-   LNG(wxLANGUAGE_MONGOLIAN,                  "mn"   , 0              , 0                                 , wxLayout_LeftToRight, "Mongolian")
-   LNG(wxLANGUAGE_NAURU,                      "na"   , 0              , 0                                 , wxLayout_LeftToRight, "Nauru")
-   LNG(wxLANGUAGE_NEPALI,                     "ne_NP", LANG_NEPALI    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Nepali")
-   LNG(wxLANGUAGE_NEPALI_INDIA,               "ne_IN", LANG_NEPALI    , SUBLANG_NEPALI_INDIA              , wxLayout_LeftToRight, "Nepali (India)")
-   LNG(wxLANGUAGE_NORWEGIAN_BOKMAL,           "nb_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_BOKMAL          , wxLayout_LeftToRight, "Norwegian (Bokmal)")
-   LNG(wxLANGUAGE_NORWEGIAN_NYNORSK,          "nn_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_NYNORSK         , wxLayout_LeftToRight, "Norwegian (Nynorsk)")
-   LNG(wxLANGUAGE_OCCITAN,                    "oc"   , 0              , 0                                 , wxLayout_LeftToRight, "Occitan")
-   LNG(wxLANGUAGE_ORIYA,                      "or"   , LANG_ORIYA     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Oriya")
-   LNG(wxLANGUAGE_OROMO,                      "om"   , 0              , 0                                 , wxLayout_LeftToRight, "(Afan) Oromo")
-   LNG(wxLANGUAGE_PASHTO,                     "ps"   , 0              , 0                                 , wxLayout_LeftToRight, "Pashto, Pushto")
-   LNG(wxLANGUAGE_POLISH,                     "pl_PL", LANG_POLISH    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Polish")
-   LNG(wxLANGUAGE_PORTUGUESE,                 "pt_PT", LANG_PORTUGUESE, SUBLANG_PORTUGUESE                , wxLayout_LeftToRight, "Portuguese")
-   LNG(wxLANGUAGE_PORTUGUESE_BRAZILIAN,       "pt_BR", LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN      , wxLayout_LeftToRight, "Portuguese (Brazilian)")
-   LNG(wxLANGUAGE_PUNJABI,                    "pa"   , LANG_PUNJABI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Punjabi")
-   LNG(wxLANGUAGE_QUECHUA,                    "qu"   , 0              , 0                                 , wxLayout_LeftToRight, "Quechua")
-   LNG(wxLANGUAGE_RHAETO_ROMANCE,             "rm"   , 0              , 0                                 , wxLayout_LeftToRight, "Rhaeto-Romance")
-   LNG(wxLANGUAGE_ROMANIAN,                   "ro_RO", LANG_ROMANIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Romanian")
-   LNG(wxLANGUAGE_RUSSIAN,                    "ru_RU", LANG_RUSSIAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Russian")
-   LNG(wxLANGUAGE_RUSSIAN_UKRAINE,            "ru_UA", 0              , 0                                 , wxLayout_LeftToRight, "Russian (Ukraine)")
-   LNG(wxLANGUAGE_SAMI,                       "se_NO", LANG_SAMI      , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Northern Sami")
-   LNG(wxLANGUAGE_SAMOAN,                     "sm"   , 0              , 0                                 , wxLayout_LeftToRight, "Samoan")
-   LNG(wxLANGUAGE_SANGHO,                     "sg"   , 0              , 0                                 , wxLayout_LeftToRight, "Sangho")
-   LNG(wxLANGUAGE_SANSKRIT,                   "sa"   , LANG_SANSKRIT  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Sanskrit")
-   LNG(wxLANGUAGE_SCOTS_GAELIC,               "gd"   , 0              , 0                                 , wxLayout_LeftToRight, "Scots Gaelic")
-   LNG(wxLANGUAGE_SERBIAN,                    "sr_RS", LANG_SERBIAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Serbian")
-   LNG(wxLANGUAGE_SERBIAN_CYRILLIC,           "sr_RS", LANG_SERBIAN   , SUBLANG_SERBIAN_CYRILLIC          , wxLayout_LeftToRight, "Serbian (Cyrillic)")
-   LNG(wxLANGUAGE_SERBIAN_LATIN,              "sr_RS@latin", LANG_SERBIAN   , SUBLANG_SERBIAN_LATIN             , wxLayout_LeftToRight, "Serbian (Latin)")
-   LNG(wxLANGUAGE_SERBIAN_CYRILLIC,           "sr_YU", LANG_SERBIAN   , SUBLANG_SERBIAN_CYRILLIC          , wxLayout_LeftToRight, "Serbian (Cyrillic)")
-   LNG(wxLANGUAGE_SERBIAN_LATIN,              "sr_YU@latin", LANG_SERBIAN   , SUBLANG_SERBIAN_LATIN             , wxLayout_LeftToRight, "Serbian (Latin)")
-   LNG(wxLANGUAGE_SERBO_CROATIAN,             "sh"   , 0              , 0                                 , wxLayout_LeftToRight, "Serbo-Croatian")
-   LNG(wxLANGUAGE_SESOTHO,                    "st"   , 0              , 0                                 , wxLayout_LeftToRight, "Sesotho")
-   LNG(wxLANGUAGE_SETSWANA,                   "tn"   , 0              , 0                                 , wxLayout_LeftToRight, "Setswana")
-   LNG(wxLANGUAGE_SHONA,                      "sn"   , 0              , 0                                 , wxLayout_LeftToRight, "Shona")
-   LNG(wxLANGUAGE_SINDHI,                     "sd"   , LANG_SINDHI    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Sindhi")
-   LNG(wxLANGUAGE_SINHALESE,                  "si"   , 0              , 0                                 , wxLayout_LeftToRight, "Sinhalese")
-   LNG(wxLANGUAGE_SISWATI,                    "ss"   , 0              , 0                                 , wxLayout_LeftToRight, "Siswati")
-   LNG(wxLANGUAGE_SLOVAK,                     "sk_SK", LANG_SLOVAK    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Slovak")
-   LNG(wxLANGUAGE_SLOVENIAN,                  "sl_SI", LANG_SLOVENIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Slovenian")
-   LNG(wxLANGUAGE_SOMALI,                     "so"   , 0              , 0                                 , wxLayout_LeftToRight, "Somali")
-   LNG(wxLANGUAGE_SPANISH,                    "es_ES", LANG_SPANISH   , SUBLANG_SPANISH                   , wxLayout_LeftToRight, "Spanish")
-   LNG(wxLANGUAGE_SPANISH_ARGENTINA,          "es_AR", LANG_SPANISH   , SUBLANG_SPANISH_ARGENTINA         , wxLayout_LeftToRight, "Spanish (Argentina)")
-   LNG(wxLANGUAGE_SPANISH_BOLIVIA,            "es_BO", LANG_SPANISH   , SUBLANG_SPANISH_BOLIVIA           , wxLayout_LeftToRight, "Spanish (Bolivia)")
-   LNG(wxLANGUAGE_SPANISH_CHILE,              "es_CL", LANG_SPANISH   , SUBLANG_SPANISH_CHILE             , wxLayout_LeftToRight, "Spanish (Chile)")
-   LNG(wxLANGUAGE_SPANISH_COLOMBIA,           "es_CO", LANG_SPANISH   , SUBLANG_SPANISH_COLOMBIA          , wxLayout_LeftToRight, "Spanish (Colombia)")
-   LNG(wxLANGUAGE_SPANISH_COSTA_RICA,         "es_CR", LANG_SPANISH   , SUBLANG_SPANISH_COSTA_RICA        , wxLayout_LeftToRight, "Spanish (Costa Rica)")
-   LNG(wxLANGUAGE_SPANISH_DOMINICAN_REPUBLIC, "es_DO", LANG_SPANISH   , SUBLANG_SPANISH_DOMINICAN_REPUBLIC, wxLayout_LeftToRight, "Spanish (Dominican republic)")
-   LNG(wxLANGUAGE_SPANISH_ECUADOR,            "es_EC", LANG_SPANISH   , SUBLANG_SPANISH_ECUADOR           , wxLayout_LeftToRight, "Spanish (Ecuador)")
-   LNG(wxLANGUAGE_SPANISH_EL_SALVADOR,        "es_SV", LANG_SPANISH   , SUBLANG_SPANISH_EL_SALVADOR       , wxLayout_LeftToRight, "Spanish (El Salvador)")
-   LNG(wxLANGUAGE_SPANISH_GUATEMALA,          "es_GT", LANG_SPANISH   , SUBLANG_SPANISH_GUATEMALA         , wxLayout_LeftToRight, "Spanish (Guatemala)")
-   LNG(wxLANGUAGE_SPANISH_HONDURAS,           "es_HN", LANG_SPANISH   , SUBLANG_SPANISH_HONDURAS          , wxLayout_LeftToRight, "Spanish (Honduras)")
-   LNG(wxLANGUAGE_SPANISH_MEXICAN,            "es_MX", LANG_SPANISH   , SUBLANG_SPANISH_MEXICAN           , wxLayout_LeftToRight, "Spanish (Mexican)")
-   LNG(wxLANGUAGE_SPANISH_MODERN,             "es_ES", LANG_SPANISH   , SUBLANG_SPANISH_MODERN            , wxLayout_LeftToRight, "Spanish (Modern)")
-   LNG(wxLANGUAGE_SPANISH_NICARAGUA,          "es_NI", LANG_SPANISH   , SUBLANG_SPANISH_NICARAGUA         , wxLayout_LeftToRight, "Spanish (Nicaragua)")
-   LNG(wxLANGUAGE_SPANISH_PANAMA,             "es_PA", LANG_SPANISH   , SUBLANG_SPANISH_PANAMA            , wxLayout_LeftToRight, "Spanish (Panama)")
-   LNG(wxLANGUAGE_SPANISH_PARAGUAY,           "es_PY", LANG_SPANISH   , SUBLANG_SPANISH_PARAGUAY          , wxLayout_LeftToRight, "Spanish (Paraguay)")
-   LNG(wxLANGUAGE_SPANISH_PERU,               "es_PE", LANG_SPANISH   , SUBLANG_SPANISH_PERU              , wxLayout_LeftToRight, "Spanish (Peru)")
-   LNG(wxLANGUAGE_SPANISH_PUERTO_RICO,        "es_PR", LANG_SPANISH   , SUBLANG_SPANISH_PUERTO_RICO       , wxLayout_LeftToRight, "Spanish (Puerto Rico)")
-   LNG(wxLANGUAGE_SPANISH_URUGUAY,            "es_UY", LANG_SPANISH   , SUBLANG_SPANISH_URUGUAY           , wxLayout_LeftToRight, "Spanish (Uruguay)")
-   LNG(wxLANGUAGE_SPANISH_US,                 "es_US", 0              , 0                                 , wxLayout_LeftToRight, "Spanish (U.S.)")
-   LNG(wxLANGUAGE_SPANISH_VENEZUELA,          "es_VE", LANG_SPANISH   , SUBLANG_SPANISH_VENEZUELA         , wxLayout_LeftToRight, "Spanish (Venezuela)")
-   LNG(wxLANGUAGE_SUNDANESE,                  "su"   , 0              , 0                                 , wxLayout_LeftToRight, "Sundanese")
-   LNG(wxLANGUAGE_SWAHILI,                    "sw_KE", LANG_SWAHILI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Swahili")
-   LNG(wxLANGUAGE_SWEDISH,                    "sv_SE", LANG_SWEDISH   , SUBLANG_SWEDISH                   , wxLayout_LeftToRight, "Swedish")
-   LNG(wxLANGUAGE_SWEDISH_FINLAND,            "sv_FI", LANG_SWEDISH   , SUBLANG_SWEDISH_FINLAND           , wxLayout_LeftToRight, "Swedish (Finland)")
-   LNG(wxLANGUAGE_TAGALOG,                    "tl_PH", 0              , 0                                 , wxLayout_LeftToRight, "Tagalog")
-   LNG(wxLANGUAGE_TAJIK,                      "tg"   , 0              , 0                                 , wxLayout_LeftToRight, "Tajik")
-   LNG(wxLANGUAGE_TAMIL,                      "ta"   , LANG_TAMIL     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Tamil")
-   LNG(wxLANGUAGE_TATAR,                      "tt"   , LANG_TATAR     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Tatar")
-   LNG(wxLANGUAGE_TELUGU,                     "te"   , LANG_TELUGU    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Telugu")
-   LNG(wxLANGUAGE_THAI,                       "th_TH", LANG_THAI      , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Thai")
-   LNG(wxLANGUAGE_TIBETAN,                    "bo"   , 0              , 0                                 , wxLayout_LeftToRight, "Tibetan")
-   LNG(wxLANGUAGE_TIGRINYA,                   "ti"   , 0              , 0                                 , wxLayout_LeftToRight, "Tigrinya")
-   LNG(wxLANGUAGE_TONGA,                      "to"   , 0              , 0                                 , wxLayout_LeftToRight, "Tonga")
-   LNG(wxLANGUAGE_TSONGA,                     "ts"   , 0              , 0                                 , wxLayout_LeftToRight, "Tsonga")
-   LNG(wxLANGUAGE_TURKISH,                    "tr_TR", LANG_TURKISH   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Turkish")
-   LNG(wxLANGUAGE_TURKMEN,                    "tk"   , 0              , 0                                 , wxLayout_LeftToRight, "Turkmen")
-   LNG(wxLANGUAGE_TWI,                        "tw"   , 0              , 0                                 , wxLayout_LeftToRight, "Twi")
-   LNG(wxLANGUAGE_UIGHUR,                     "ug"   , 0              , 0                                 , wxLayout_LeftToRight, "Uighur")
-   LNG(wxLANGUAGE_UKRAINIAN,                  "uk_UA", LANG_UKRAINIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Ukrainian")
-   LNG(wxLANGUAGE_URDU,                       "ur"   , LANG_URDU      , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Urdu")
-   LNG(wxLANGUAGE_URDU_INDIA,                 "ur_IN", LANG_URDU      , SUBLANG_URDU_INDIA                , wxLayout_LeftToRight, "Urdu (India)")
-   LNG(wxLANGUAGE_URDU_PAKISTAN,              "ur_PK", LANG_URDU      , SUBLANG_URDU_PAKISTAN             , wxLayout_LeftToRight, "Urdu (Pakistan)")
-   LNG(wxLANGUAGE_UZBEK,                      "uz"   , LANG_UZBEK     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Uzbek")
-   LNG(wxLANGUAGE_UZBEK_CYRILLIC,             "uz"   , LANG_UZBEK     , SUBLANG_UZBEK_CYRILLIC            , wxLayout_LeftToRight, "Uzbek (Cyrillic)")
-   LNG(wxLANGUAGE_UZBEK_LATIN,                "uz"   , LANG_UZBEK     , SUBLANG_UZBEK_LATIN               , wxLayout_LeftToRight, "Uzbek (Latin)")
-   LNG(wxLANGUAGE_VALENCIAN,                  "ca_ES@valencia", 0     , 0                                 , wxLayout_LeftToRight, "Valencian (Souternhern Catalan)")
-   LNG(wxLANGUAGE_VIETNAMESE,                 "vi_VN", LANG_VIETNAMESE, SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Vietnamese")
-   LNG(wxLANGUAGE_VOLAPUK,                    "vo"   , 0              , 0                                 , wxLayout_LeftToRight, "Volapuk")
-   LNG(wxLANGUAGE_WELSH,                      "cy"   , 0              , 0                                 , wxLayout_LeftToRight, "Welsh")
-   LNG(wxLANGUAGE_WOLOF,                      "wo"   , 0              , 0                                 , wxLayout_LeftToRight, "Wolof")
-   LNG(wxLANGUAGE_XHOSA,                      "xh"   , 0              , 0                                 , wxLayout_LeftToRight, "Xhosa")
-   LNG(wxLANGUAGE_YIDDISH,                    "yi"   , 0              , 0                                 , wxLayout_LeftToRight, "Yiddish")
-   LNG(wxLANGUAGE_YORUBA,                     "yo"   , 0              , 0                                 , wxLayout_LeftToRight, "Yoruba")
-   LNG(wxLANGUAGE_ZHUANG,                     "za"   , 0              , 0                                 , wxLayout_LeftToRight, "Zhuang")
-   LNG(wxLANGUAGE_ZULU,                       "zu"   , 0              , 0                                 , wxLayout_LeftToRight, "Zulu")
+    LNG(wxLANGUAGE_ABKHAZIAN,                  "ab"   , 0              , 0                                 , wxLayout_LeftToRight, "Abkhazian")
+    LNG(wxLANGUAGE_AFAR,                       "aa"   , 0              , 0                                 , wxLayout_LeftToRight, "Afar")
+    LNG(wxLANGUAGE_AFRIKAANS,                  "af_ZA", LANG_AFRIKAANS , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Afrikaans")
+    LNG(wxLANGUAGE_ALBANIAN,                   "sq_AL", LANG_ALBANIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Albanian")
+    LNG(wxLANGUAGE_AMHARIC,                    "am"   , 0              , 0                                 , wxLayout_LeftToRight, "Amharic")
+    LNG(wxLANGUAGE_ARABIC,                     "ar"   , LANG_ARABIC    , SUBLANG_DEFAULT                   , wxLayout_RightToLeft, "Arabic")
+    LNG(wxLANGUAGE_ARABIC_ALGERIA,             "ar_DZ", LANG_ARABIC    , SUBLANG_ARABIC_ALGERIA            , wxLayout_RightToLeft, "Arabic (Algeria)")
+    LNG(wxLANGUAGE_ARABIC_BAHRAIN,             "ar_BH", LANG_ARABIC    , SUBLANG_ARABIC_BAHRAIN            , wxLayout_RightToLeft, "Arabic (Bahrain)")
+    LNG(wxLANGUAGE_ARABIC_EGYPT,               "ar_EG", LANG_ARABIC    , SUBLANG_ARABIC_EGYPT              , wxLayout_RightToLeft, "Arabic (Egypt)")
+    LNG(wxLANGUAGE_ARABIC_IRAQ,                "ar_IQ", LANG_ARABIC    , SUBLANG_ARABIC_IRAQ               , wxLayout_RightToLeft, "Arabic (Iraq)")
+    LNG(wxLANGUAGE_ARABIC_JORDAN,              "ar_JO", LANG_ARABIC    , SUBLANG_ARABIC_JORDAN             , wxLayout_RightToLeft, "Arabic (Jordan)")
+    LNG(wxLANGUAGE_ARABIC_KUWAIT,              "ar_KW", LANG_ARABIC    , SUBLANG_ARABIC_KUWAIT             , wxLayout_RightToLeft, "Arabic (Kuwait)")
+    LNG(wxLANGUAGE_ARABIC_LEBANON,             "ar_LB", LANG_ARABIC    , SUBLANG_ARABIC_LEBANON            , wxLayout_RightToLeft, "Arabic (Lebanon)")
+    LNG(wxLANGUAGE_ARABIC_LIBYA,               "ar_LY", LANG_ARABIC    , SUBLANG_ARABIC_LIBYA              , wxLayout_RightToLeft, "Arabic (Libya)")
+    LNG(wxLANGUAGE_ARABIC_MOROCCO,             "ar_MA", LANG_ARABIC    , SUBLANG_ARABIC_MOROCCO            , wxLayout_RightToLeft, "Arabic (Morocco)")
+    LNG(wxLANGUAGE_ARABIC_OMAN,                "ar_OM", LANG_ARABIC    , SUBLANG_ARABIC_OMAN               , wxLayout_RightToLeft, "Arabic (Oman)")
+    LNG(wxLANGUAGE_ARABIC_QATAR,               "ar_QA", LANG_ARABIC    , SUBLANG_ARABIC_QATAR              , wxLayout_RightToLeft, "Arabic (Qatar)")
+    LNG(wxLANGUAGE_ARABIC_SAUDI_ARABIA,        "ar_SA", LANG_ARABIC    , SUBLANG_ARABIC_SAUDI_ARABIA       , wxLayout_RightToLeft, "Arabic (Saudi Arabia)")
+    LNG(wxLANGUAGE_ARABIC_SUDAN,               "ar_SD", 0              , 0                                 , wxLayout_RightToLeft, "Arabic (Sudan)")
+    LNG(wxLANGUAGE_ARABIC_SYRIA,               "ar_SY", LANG_ARABIC    , SUBLANG_ARABIC_SYRIA              , wxLayout_RightToLeft, "Arabic (Syria)")
+    LNG(wxLANGUAGE_ARABIC_TUNISIA,             "ar_TN", LANG_ARABIC    , SUBLANG_ARABIC_TUNISIA            , wxLayout_RightToLeft, "Arabic (Tunisia)")
+    LNG(wxLANGUAGE_ARABIC_UAE,                 "ar_AE", LANG_ARABIC    , SUBLANG_ARABIC_UAE                , wxLayout_RightToLeft, "Arabic (Uae)")
+    LNG(wxLANGUAGE_ARABIC_YEMEN,               "ar_YE", LANG_ARABIC    , SUBLANG_ARABIC_YEMEN              , wxLayout_RightToLeft, "Arabic (Yemen)")
+    LNG(wxLANGUAGE_ARMENIAN,                   "hy"   , LANG_ARMENIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Armenian")
+    LNG(wxLANGUAGE_ASSAMESE,                   "as"   , LANG_ASSAMESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Assamese")
+    LNG(wxLANGUAGE_AYMARA,                     "ay"   , 0              , 0                                 , wxLayout_LeftToRight, "Aymara")
+    LNG(wxLANGUAGE_AZERI,                      "az"   , LANG_AZERI     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Azeri")
+    LNG(wxLANGUAGE_AZERI_CYRILLIC,             "az"   , LANG_AZERI     , SUBLANG_AZERI_CYRILLIC            , wxLayout_LeftToRight, "Azeri (Cyrillic)")
+    LNG(wxLANGUAGE_AZERI_LATIN,                "az"   , LANG_AZERI     , SUBLANG_AZERI_LATIN               , wxLayout_LeftToRight, "Azeri (Latin)")
+    LNG(wxLANGUAGE_BASHKIR,                    "ba"   , 0              , 0                                 , wxLayout_LeftToRight, "Bashkir")
+    LNG(wxLANGUAGE_BASQUE,                     "eu_ES", LANG_BASQUE    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Basque")
+    LNG(wxLANGUAGE_BELARUSIAN,                 "be_BY", LANG_BELARUSIAN, SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Belarusian")
+    LNG(wxLANGUAGE_BENGALI,                    "bn"   , LANG_BENGALI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Bengali")
+    LNG(wxLANGUAGE_BHUTANI,                    "dz"   , 0              , 0                                 , wxLayout_LeftToRight, "Bhutani")
+    LNG(wxLANGUAGE_BIHARI,                     "bh"   , 0              , 0                                 , wxLayout_LeftToRight, "Bihari")
+    LNG(wxLANGUAGE_BISLAMA,                    "bi"   , 0              , 0                                 , wxLayout_LeftToRight, "Bislama")
+    LNG(wxLANGUAGE_BRETON,                     "br"   , 0              , 0                                 , wxLayout_LeftToRight, "Breton")
+    LNG(wxLANGUAGE_BULGARIAN,                  "bg_BG", LANG_BULGARIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Bulgarian")
+    LNG(wxLANGUAGE_BURMESE,                    "my"   , 0              , 0                                 , wxLayout_LeftToRight, "Burmese")
+    LNG(wxLANGUAGE_CAMBODIAN,                  "km"   , 0              , 0                                 , wxLayout_LeftToRight, "Cambodian")
+    LNG(wxLANGUAGE_CATALAN,                    "ca_ES", LANG_CATALAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Catalan")
+    LNG(wxLANGUAGE_CHINESE,                    "zh_TW", LANG_CHINESE   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Chinese")
+    LNG(wxLANGUAGE_CHINESE_SIMPLIFIED,         "zh_CN", LANG_CHINESE   , SUBLANG_CHINESE_SIMPLIFIED        , wxLayout_LeftToRight, "Chinese (Simplified)")
+    LNG(wxLANGUAGE_CHINESE_TRADITIONAL,        "zh_TW", LANG_CHINESE   , SUBLANG_CHINESE_TRADITIONAL       , wxLayout_LeftToRight, "Chinese (Traditional)")
+    LNG(wxLANGUAGE_CHINESE_HONGKONG,           "zh_HK", LANG_CHINESE   , SUBLANG_CHINESE_HONGKONG          , wxLayout_LeftToRight, "Chinese (Hongkong)")
+    LNG(wxLANGUAGE_CHINESE_MACAU,              "zh_MO", LANG_CHINESE   , SUBLANG_CHINESE_MACAU             , wxLayout_LeftToRight, "Chinese (Macau)")
+    LNG(wxLANGUAGE_CHINESE_SINGAPORE,          "zh_SG", LANG_CHINESE   , SUBLANG_CHINESE_SINGAPORE         , wxLayout_LeftToRight, "Chinese (Singapore)")
+    LNG(wxLANGUAGE_CHINESE_TAIWAN,             "zh_TW", LANG_CHINESE   , SUBLANG_CHINESE_TRADITIONAL       , wxLayout_LeftToRight, "Chinese (Taiwan)")
+    LNG(wxLANGUAGE_CORSICAN,                   "co"   , 0              , 0                                 , wxLayout_LeftToRight, "Corsican")
+    LNG(wxLANGUAGE_CROATIAN,                   "hr_HR", LANG_CROATIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Croatian")
+    LNG(wxLANGUAGE_CZECH,                      "cs_CZ", LANG_CZECH     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Czech")
+    LNG(wxLANGUAGE_DANISH,                     "da_DK", LANG_DANISH    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Danish")
+    LNG(wxLANGUAGE_DUTCH,                      "nl_NL", LANG_DUTCH     , SUBLANG_DUTCH                     , wxLayout_LeftToRight, "Dutch")
+    LNG(wxLANGUAGE_DUTCH_BELGIAN,              "nl_BE", LANG_DUTCH     , SUBLANG_DUTCH_BELGIAN             , wxLayout_LeftToRight, "Dutch (Belgian)")
+    LNG(wxLANGUAGE_ENGLISH,                    "en_GB", LANG_ENGLISH   , SUBLANG_ENGLISH_UK                , wxLayout_LeftToRight, "English")
+    LNG(wxLANGUAGE_ENGLISH_UK,                 "en_GB", LANG_ENGLISH   , SUBLANG_ENGLISH_UK                , wxLayout_LeftToRight, "English (U.K.)")
+    LNG(wxLANGUAGE_ENGLISH_US,                 "en_US", LANG_ENGLISH   , SUBLANG_ENGLISH_US                , wxLayout_LeftToRight, "English (U.S.)")
+    LNG(wxLANGUAGE_ENGLISH_AUSTRALIA,          "en_AU", LANG_ENGLISH   , SUBLANG_ENGLISH_AUS               , wxLayout_LeftToRight, "English (Australia)")
+    LNG(wxLANGUAGE_ENGLISH_BELIZE,             "en_BZ", LANG_ENGLISH   , SUBLANG_ENGLISH_BELIZE            , wxLayout_LeftToRight, "English (Belize)")
+    LNG(wxLANGUAGE_ENGLISH_BOTSWANA,           "en_BW", 0              , 0                                 , wxLayout_LeftToRight, "English (Botswana)")
+    LNG(wxLANGUAGE_ENGLISH_CANADA,             "en_CA", LANG_ENGLISH   , SUBLANG_ENGLISH_CAN               , wxLayout_LeftToRight, "English (Canada)")
+    LNG(wxLANGUAGE_ENGLISH_CARIBBEAN,          "en_CB", LANG_ENGLISH   , SUBLANG_ENGLISH_CARIBBEAN         , wxLayout_LeftToRight, "English (Caribbean)")
+    LNG(wxLANGUAGE_ENGLISH_DENMARK,            "en_DK", 0              , 0                                 , wxLayout_LeftToRight, "English (Denmark)")
+    LNG(wxLANGUAGE_ENGLISH_EIRE,               "en_IE", LANG_ENGLISH   , SUBLANG_ENGLISH_EIRE              , wxLayout_LeftToRight, "English (Eire)")
+    LNG(wxLANGUAGE_ENGLISH_JAMAICA,            "en_JM", LANG_ENGLISH   , SUBLANG_ENGLISH_JAMAICA           , wxLayout_LeftToRight, "English (Jamaica)")
+    LNG(wxLANGUAGE_ENGLISH_NEW_ZEALAND,        "en_NZ", LANG_ENGLISH   , SUBLANG_ENGLISH_NZ                , wxLayout_LeftToRight, "English (New Zealand)")
+    LNG(wxLANGUAGE_ENGLISH_PHILIPPINES,        "en_PH", LANG_ENGLISH   , SUBLANG_ENGLISH_PHILIPPINES       , wxLayout_LeftToRight, "English (Philippines)")
+    LNG(wxLANGUAGE_ENGLISH_SOUTH_AFRICA,       "en_ZA", LANG_ENGLISH   , SUBLANG_ENGLISH_SOUTH_AFRICA      , wxLayout_LeftToRight, "English (South Africa)")
+    LNG(wxLANGUAGE_ENGLISH_TRINIDAD,           "en_TT", LANG_ENGLISH   , SUBLANG_ENGLISH_TRINIDAD          , wxLayout_LeftToRight, "English (Trinidad)")
+    LNG(wxLANGUAGE_ENGLISH_ZIMBABWE,           "en_ZW", LANG_ENGLISH   , SUBLANG_ENGLISH_ZIMBABWE          , wxLayout_LeftToRight, "English (Zimbabwe)")
+    LNG(wxLANGUAGE_ESPERANTO,                  "eo"   , 0              , 0                                 , wxLayout_LeftToRight, "Esperanto")
+    LNG(wxLANGUAGE_ESTONIAN,                   "et_EE", LANG_ESTONIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Estonian")
+    LNG(wxLANGUAGE_FAEROESE,                   "fo_FO", LANG_FAEROESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Faeroese")
+    LNG(wxLANGUAGE_FARSI,                      "fa_IR", LANG_FARSI     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Farsi")
+    LNG(wxLANGUAGE_FIJI,                       "fj"   , 0              , 0                                 , wxLayout_LeftToRight, "Fiji")
+    LNG(wxLANGUAGE_FINNISH,                    "fi_FI", LANG_FINNISH   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Finnish")
+    LNG(wxLANGUAGE_FRENCH,                     "fr_FR", LANG_FRENCH    , SUBLANG_FRENCH                    , wxLayout_LeftToRight, "French")
+    LNG(wxLANGUAGE_FRENCH_BELGIAN,             "fr_BE", LANG_FRENCH    , SUBLANG_FRENCH_BELGIAN            , wxLayout_LeftToRight, "French (Belgian)")
+    LNG(wxLANGUAGE_FRENCH_CANADIAN,            "fr_CA", LANG_FRENCH    , SUBLANG_FRENCH_CANADIAN           , wxLayout_LeftToRight, "French (Canadian)")
+    LNG(wxLANGUAGE_FRENCH_LUXEMBOURG,          "fr_LU", LANG_FRENCH    , SUBLANG_FRENCH_LUXEMBOURG         , wxLayout_LeftToRight, "French (Luxembourg)")
+    LNG(wxLANGUAGE_FRENCH_MONACO,              "fr_MC", LANG_FRENCH    , SUBLANG_FRENCH_MONACO             , wxLayout_LeftToRight, "French (Monaco)")
+    LNG(wxLANGUAGE_FRENCH_SWISS,               "fr_CH", LANG_FRENCH    , SUBLANG_FRENCH_SWISS              , wxLayout_LeftToRight, "French (Swiss)")
+    LNG(wxLANGUAGE_FRISIAN,                    "fy"   , 0              , 0                                 , wxLayout_LeftToRight, "Frisian")
+    LNG(wxLANGUAGE_GALICIAN,                   "gl_ES", 0              , 0                                 , wxLayout_LeftToRight, "Galician")
+    LNG(wxLANGUAGE_GEORGIAN,                   "ka_GE", LANG_GEORGIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Georgian")
+    LNG(wxLANGUAGE_GERMAN,                     "de_DE", LANG_GERMAN    , SUBLANG_GERMAN                    , wxLayout_LeftToRight, "German")
+    LNG(wxLANGUAGE_GERMAN_AUSTRIAN,            "de_AT", LANG_GERMAN    , SUBLANG_GERMAN_AUSTRIAN           , wxLayout_LeftToRight, "German (Austrian)")
+    LNG(wxLANGUAGE_GERMAN_BELGIUM,             "de_BE", 0              , 0                                 , wxLayout_LeftToRight, "German (Belgium)")
+    LNG(wxLANGUAGE_GERMAN_LIECHTENSTEIN,       "de_LI", LANG_GERMAN    , SUBLANG_GERMAN_LIECHTENSTEIN      , wxLayout_LeftToRight, "German (Liechtenstein)")
+    LNG(wxLANGUAGE_GERMAN_LUXEMBOURG,          "de_LU", LANG_GERMAN    , SUBLANG_GERMAN_LUXEMBOURG         , wxLayout_LeftToRight, "German (Luxembourg)")
+    LNG(wxLANGUAGE_GERMAN_SWISS,               "de_CH", LANG_GERMAN    , SUBLANG_GERMAN_SWISS              , wxLayout_LeftToRight, "German (Swiss)")
+    LNG(wxLANGUAGE_GREEK,                      "el_GR", LANG_GREEK     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Greek")
+    LNG(wxLANGUAGE_GREENLANDIC,                "kl_GL", 0              , 0                                 , wxLayout_LeftToRight, "Greenlandic")
+    LNG(wxLANGUAGE_GUARANI,                    "gn"   , 0              , 0                                 , wxLayout_LeftToRight, "Guarani")
+    LNG(wxLANGUAGE_GUJARATI,                   "gu"   , LANG_GUJARATI  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Gujarati")
+    LNG(wxLANGUAGE_HAUSA,                      "ha"   , 0              , 0                                 , wxLayout_LeftToRight, "Hausa")
+    LNG(wxLANGUAGE_HEBREW,                     "he_IL", LANG_HEBREW    , SUBLANG_DEFAULT                   , wxLayout_RightToLeft, "Hebrew")
+    LNG(wxLANGUAGE_HINDI,                      "hi_IN", LANG_HINDI     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Hindi")
+    LNG(wxLANGUAGE_HUNGARIAN,                  "hu_HU", LANG_HUNGARIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Hungarian")
+    LNG(wxLANGUAGE_ICELANDIC,                  "is_IS", LANG_ICELANDIC , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Icelandic")
+    LNG(wxLANGUAGE_INDONESIAN,                 "id_ID", LANG_INDONESIAN, SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Indonesian")
+    LNG(wxLANGUAGE_INTERLINGUA,                "ia"   , 0              , 0                                 , wxLayout_LeftToRight, "Interlingua")
+    LNG(wxLANGUAGE_INTERLINGUE,                "ie"   , 0              , 0                                 , wxLayout_LeftToRight, "Interlingue")
+    LNG(wxLANGUAGE_INUKTITUT,                  "iu"   , 0              , 0                                 , wxLayout_LeftToRight, "Inuktitut")
+    LNG(wxLANGUAGE_INUPIAK,                    "ik"   , 0              , 0                                 , wxLayout_LeftToRight, "Inupiak")
+    LNG(wxLANGUAGE_IRISH,                      "ga_IE", 0              , 0                                 , wxLayout_LeftToRight, "Irish")
+    LNG(wxLANGUAGE_ITALIAN,                    "it_IT", LANG_ITALIAN   , SUBLANG_ITALIAN                   , wxLayout_LeftToRight, "Italian")
+    LNG(wxLANGUAGE_ITALIAN_SWISS,              "it_CH", LANG_ITALIAN   , SUBLANG_ITALIAN_SWISS             , wxLayout_LeftToRight, "Italian (Swiss)")
+    LNG(wxLANGUAGE_JAPANESE,                   "ja_JP", LANG_JAPANESE  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Japanese")
+    LNG(wxLANGUAGE_JAVANESE,                   "jw"   , 0              , 0                                 , wxLayout_LeftToRight, "Javanese")
+    LNG(wxLANGUAGE_KANNADA,                    "kn"   , LANG_KANNADA   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kannada")
+    LNG(wxLANGUAGE_KASHMIRI,                   "ks"   , LANG_KASHMIRI  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kashmiri")
+    LNG(wxLANGUAGE_KASHMIRI_INDIA,             "ks_IN", LANG_KASHMIRI  , SUBLANG_KASHMIRI_INDIA            , wxLayout_LeftToRight, "Kashmiri (India)")
+    LNG(wxLANGUAGE_KAZAKH,                     "kk"   , LANG_KAZAK     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Kazakh")
+    LNG(wxLANGUAGE_KERNEWEK,                   "kw_GB", 0              , 0                                 , wxLayout_LeftToRight, "Kernewek")
+    LNG(wxLANGUAGE_KINYARWANDA,                "rw"   , 0              , 0                                 , wxLayout_LeftToRight, "Kinyarwanda")
+    LNG(wxLANGUAGE_KIRGHIZ,                    "ky"   , 0              , 0                                 , wxLayout_LeftToRight, "Kirghiz")
+    LNG(wxLANGUAGE_KIRUNDI,                    "rn"   , 0              , 0                                 , wxLayout_LeftToRight, "Kirundi")
+    LNG(wxLANGUAGE_KONKANI,                    ""     , LANG_KONKANI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Konkani")
+    LNG(wxLANGUAGE_KOREAN,                     "ko_KR", LANG_KOREAN    , SUBLANG_KOREAN                    , wxLayout_LeftToRight, "Korean")
+    LNG(wxLANGUAGE_KURDISH,                    "ku_TR", 0              , 0                                 , wxLayout_LeftToRight, "Kurdish")
+    LNG(wxLANGUAGE_LAOTHIAN,                   "lo"   , 0              , 0                                 , wxLayout_LeftToRight, "Laothian")
+    LNG(wxLANGUAGE_LATIN,                      "la"   , 0              , 0                                 , wxLayout_LeftToRight, "Latin")
+    LNG(wxLANGUAGE_LATVIAN,                    "lv_LV", LANG_LATVIAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Latvian")
+    LNG(wxLANGUAGE_LINGALA,                    "ln"   , 0              , 0                                 , wxLayout_LeftToRight, "Lingala")
+    LNG(wxLANGUAGE_LITHUANIAN,                 "lt_LT", LANG_LITHUANIAN, SUBLANG_LITHUANIAN                , wxLayout_LeftToRight, "Lithuanian")
+    LNG(wxLANGUAGE_MACEDONIAN,                 "mk_MK", LANG_MACEDONIAN, SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Macedonian")
+    LNG(wxLANGUAGE_MALAGASY,                   "mg"   , 0              , 0                                 , wxLayout_LeftToRight, "Malagasy")
+    LNG(wxLANGUAGE_MALAY,                      "ms_MY", LANG_MALAY     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Malay")
+    LNG(wxLANGUAGE_MALAYALAM,                  "ml"   , LANG_MALAYALAM , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Malayalam")
+    LNG(wxLANGUAGE_MALAY_BRUNEI_DARUSSALAM,    "ms_BN", LANG_MALAY     , SUBLANG_MALAY_BRUNEI_DARUSSALAM   , wxLayout_LeftToRight, "Malay (Brunei Darussalam)")
+    LNG(wxLANGUAGE_MALAY_MALAYSIA,             "ms_MY", LANG_MALAY     , SUBLANG_MALAY_MALAYSIA            , wxLayout_LeftToRight, "Malay (Malaysia)")
+    LNG(wxLANGUAGE_MALTESE,                    "mt_MT", 0              , 0                                 , wxLayout_LeftToRight, "Maltese")
+    LNG(wxLANGUAGE_MANIPURI,                   ""     , LANG_MANIPURI  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Manipuri")
+    LNG(wxLANGUAGE_MAORI,                      "mi"   , 0              , 0                                 , wxLayout_LeftToRight, "Maori")
+    LNG(wxLANGUAGE_MARATHI,                    "mr_IN", LANG_MARATHI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Marathi")
+    LNG(wxLANGUAGE_MOLDAVIAN,                  "mo"   , 0              , 0                                 , wxLayout_LeftToRight, "Moldavian")
+    LNG(wxLANGUAGE_MONGOLIAN,                  "mn"   , 0              , 0                                 , wxLayout_LeftToRight, "Mongolian")
+    LNG(wxLANGUAGE_NAURU,                      "na"   , 0              , 0                                 , wxLayout_LeftToRight, "Nauru")
+    LNG(wxLANGUAGE_NEPALI,                     "ne_NP", LANG_NEPALI    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Nepali")
+    LNG(wxLANGUAGE_NEPALI_INDIA,               "ne_IN", LANG_NEPALI    , SUBLANG_NEPALI_INDIA              , wxLayout_LeftToRight, "Nepali (India)")
+    LNG(wxLANGUAGE_NORWEGIAN_BOKMAL,           "nb_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_BOKMAL          , wxLayout_LeftToRight, "Norwegian (Bokmal)")
+    LNG(wxLANGUAGE_NORWEGIAN_NYNORSK,          "nn_NO", LANG_NORWEGIAN , SUBLANG_NORWEGIAN_NYNORSK         , wxLayout_LeftToRight, "Norwegian (Nynorsk)")
+    LNG(wxLANGUAGE_OCCITAN,                    "oc"   , 0              , 0                                 , wxLayout_LeftToRight, "Occitan")
+    LNG(wxLANGUAGE_ORIYA,                      "or"   , LANG_ORIYA     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Oriya")
+    LNG(wxLANGUAGE_OROMO,                      "om"   , 0              , 0                                 , wxLayout_LeftToRight, "(Afan) Oromo")
+    LNG(wxLANGUAGE_PASHTO,                     "ps"   , 0              , 0                                 , wxLayout_LeftToRight, "Pashto, Pushto")
+    LNG(wxLANGUAGE_POLISH,                     "pl_PL", LANG_POLISH    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Polish")
+    LNG(wxLANGUAGE_PORTUGUESE,                 "pt_PT", LANG_PORTUGUESE, SUBLANG_PORTUGUESE                , wxLayout_LeftToRight, "Portuguese")
+    LNG(wxLANGUAGE_PORTUGUESE_BRAZILIAN,       "pt_BR", LANG_PORTUGUESE, SUBLANG_PORTUGUESE_BRAZILIAN      , wxLayout_LeftToRight, "Portuguese (Brazilian)")
+    LNG(wxLANGUAGE_PUNJABI,                    "pa"   , LANG_PUNJABI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Punjabi")
+    LNG(wxLANGUAGE_QUECHUA,                    "qu"   , 0              , 0                                 , wxLayout_LeftToRight, "Quechua")
+    LNG(wxLANGUAGE_RHAETO_ROMANCE,             "rm"   , 0              , 0                                 , wxLayout_LeftToRight, "Rhaeto-Romance")
+    LNG(wxLANGUAGE_ROMANIAN,                   "ro_RO", LANG_ROMANIAN  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Romanian")
+    LNG(wxLANGUAGE_RUSSIAN,                    "ru_RU", LANG_RUSSIAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Russian")
+    LNG(wxLANGUAGE_RUSSIAN_UKRAINE,            "ru_UA", 0              , 0                                 , wxLayout_LeftToRight, "Russian (Ukraine)")
+    LNG(wxLANGUAGE_SAMI,                       "se_NO", LANG_SAMI      , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Northern Sami")
+    LNG(wxLANGUAGE_SAMOAN,                     "sm"   , 0              , 0                                 , wxLayout_LeftToRight, "Samoan")
+    LNG(wxLANGUAGE_SANGHO,                     "sg"   , 0              , 0                                 , wxLayout_LeftToRight, "Sangho")
+    LNG(wxLANGUAGE_SANSKRIT,                   "sa"   , LANG_SANSKRIT  , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Sanskrit")
+    LNG(wxLANGUAGE_SCOTS_GAELIC,               "gd"   , 0              , 0                                 , wxLayout_LeftToRight, "Scots Gaelic")
+    LNG(wxLANGUAGE_SERBIAN,                    "sr_RS", LANG_SERBIAN   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Serbian")
+    LNG(wxLANGUAGE_SERBIAN_CYRILLIC,           "sr_RS", LANG_SERBIAN   , SUBLANG_SERBIAN_CYRILLIC          , wxLayout_LeftToRight, "Serbian (Cyrillic)")
+    LNG(wxLANGUAGE_SERBIAN_LATIN,              "sr_RS@latin", LANG_SERBIAN   , SUBLANG_SERBIAN_LATIN             , wxLayout_LeftToRight, "Serbian (Latin)")
+    LNG(wxLANGUAGE_SERBIAN_CYRILLIC,           "sr_YU", LANG_SERBIAN   , SUBLANG_SERBIAN_CYRILLIC          , wxLayout_LeftToRight, "Serbian (Cyrillic)")
+    LNG(wxLANGUAGE_SERBIAN_LATIN,              "sr_YU@latin", LANG_SERBIAN   , SUBLANG_SERBIAN_LATIN             , wxLayout_LeftToRight, "Serbian (Latin)")
+    LNG(wxLANGUAGE_SERBO_CROATIAN,             "sh"   , 0              , 0                                 , wxLayout_LeftToRight, "Serbo-Croatian")
+    LNG(wxLANGUAGE_SESOTHO,                    "st"   , 0              , 0                                 , wxLayout_LeftToRight, "Sesotho")
+    LNG(wxLANGUAGE_SETSWANA,                   "tn"   , 0              , 0                                 , wxLayout_LeftToRight, "Setswana")
+    LNG(wxLANGUAGE_SHONA,                      "sn"   , 0              , 0                                 , wxLayout_LeftToRight, "Shona")
+    LNG(wxLANGUAGE_SINDHI,                     "sd"   , LANG_SINDHI    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Sindhi")
+    LNG(wxLANGUAGE_SINHALESE,                  "si"   , 0              , 0                                 , wxLayout_LeftToRight, "Sinhalese")
+    LNG(wxLANGUAGE_SISWATI,                    "ss"   , 0              , 0                                 , wxLayout_LeftToRight, "Siswati")
+    LNG(wxLANGUAGE_SLOVAK,                     "sk_SK", LANG_SLOVAK    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Slovak")
+    LNG(wxLANGUAGE_SLOVENIAN,                  "sl_SI", LANG_SLOVENIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Slovenian")
+    LNG(wxLANGUAGE_SOMALI,                     "so"   , 0              , 0                                 , wxLayout_LeftToRight, "Somali")
+    LNG(wxLANGUAGE_SPANISH,                    "es_ES", LANG_SPANISH   , SUBLANG_SPANISH                   , wxLayout_LeftToRight, "Spanish")
+    LNG(wxLANGUAGE_SPANISH_ARGENTINA,          "es_AR", LANG_SPANISH   , SUBLANG_SPANISH_ARGENTINA         , wxLayout_LeftToRight, "Spanish (Argentina)")
+    LNG(wxLANGUAGE_SPANISH_BOLIVIA,            "es_BO", LANG_SPANISH   , SUBLANG_SPANISH_BOLIVIA           , wxLayout_LeftToRight, "Spanish (Bolivia)")
+    LNG(wxLANGUAGE_SPANISH_CHILE,              "es_CL", LANG_SPANISH   , SUBLANG_SPANISH_CHILE             , wxLayout_LeftToRight, "Spanish (Chile)")
+    LNG(wxLANGUAGE_SPANISH_COLOMBIA,           "es_CO", LANG_SPANISH   , SUBLANG_SPANISH_COLOMBIA          , wxLayout_LeftToRight, "Spanish (Colombia)")
+    LNG(wxLANGUAGE_SPANISH_COSTA_RICA,         "es_CR", LANG_SPANISH   , SUBLANG_SPANISH_COSTA_RICA        , wxLayout_LeftToRight, "Spanish (Costa Rica)")
+    LNG(wxLANGUAGE_SPANISH_DOMINICAN_REPUBLIC, "es_DO", LANG_SPANISH   , SUBLANG_SPANISH_DOMINICAN_REPUBLIC, wxLayout_LeftToRight, "Spanish (Dominican republic)")
+    LNG(wxLANGUAGE_SPANISH_ECUADOR,            "es_EC", LANG_SPANISH   , SUBLANG_SPANISH_ECUADOR           , wxLayout_LeftToRight, "Spanish (Ecuador)")
+    LNG(wxLANGUAGE_SPANISH_EL_SALVADOR,        "es_SV", LANG_SPANISH   , SUBLANG_SPANISH_EL_SALVADOR       , wxLayout_LeftToRight, "Spanish (El Salvador)")
+    LNG(wxLANGUAGE_SPANISH_GUATEMALA,          "es_GT", LANG_SPANISH   , SUBLANG_SPANISH_GUATEMALA         , wxLayout_LeftToRight, "Spanish (Guatemala)")
+    LNG(wxLANGUAGE_SPANISH_HONDURAS,           "es_HN", LANG_SPANISH   , SUBLANG_SPANISH_HONDURAS          , wxLayout_LeftToRight, "Spanish (Honduras)")
+    LNG(wxLANGUAGE_SPANISH_MEXICAN,            "es_MX", LANG_SPANISH   , SUBLANG_SPANISH_MEXICAN           , wxLayout_LeftToRight, "Spanish (Mexican)")
+    LNG(wxLANGUAGE_SPANISH_MODERN,             "es_ES", LANG_SPANISH   , SUBLANG_SPANISH_MODERN            , wxLayout_LeftToRight, "Spanish (Modern)")
+    LNG(wxLANGUAGE_SPANISH_NICARAGUA,          "es_NI", LANG_SPANISH   , SUBLANG_SPANISH_NICARAGUA         , wxLayout_LeftToRight, "Spanish (Nicaragua)")
+    LNG(wxLANGUAGE_SPANISH_PANAMA,             "es_PA", LANG_SPANISH   , SUBLANG_SPANISH_PANAMA            , wxLayout_LeftToRight, "Spanish (Panama)")
+    LNG(wxLANGUAGE_SPANISH_PARAGUAY,           "es_PY", LANG_SPANISH   , SUBLANG_SPANISH_PARAGUAY          , wxLayout_LeftToRight, "Spanish (Paraguay)")
+    LNG(wxLANGUAGE_SPANISH_PERU,               "es_PE", LANG_SPANISH   , SUBLANG_SPANISH_PERU              , wxLayout_LeftToRight, "Spanish (Peru)")
+    LNG(wxLANGUAGE_SPANISH_PUERTO_RICO,        "es_PR", LANG_SPANISH   , SUBLANG_SPANISH_PUERTO_RICO       , wxLayout_LeftToRight, "Spanish (Puerto Rico)")
+    LNG(wxLANGUAGE_SPANISH_URUGUAY,            "es_UY", LANG_SPANISH   , SUBLANG_SPANISH_URUGUAY           , wxLayout_LeftToRight, "Spanish (Uruguay)")
+    LNG(wxLANGUAGE_SPANISH_US,                 "es_US", 0              , 0                                 , wxLayout_LeftToRight, "Spanish (U.S.)")
+    LNG(wxLANGUAGE_SPANISH_VENEZUELA,          "es_VE", LANG_SPANISH   , SUBLANG_SPANISH_VENEZUELA         , wxLayout_LeftToRight, "Spanish (Venezuela)")
+    LNG(wxLANGUAGE_SUNDANESE,                  "su"   , 0              , 0                                 , wxLayout_LeftToRight, "Sundanese")
+    LNG(wxLANGUAGE_SWAHILI,                    "sw_KE", LANG_SWAHILI   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Swahili")
+    LNG(wxLANGUAGE_SWEDISH,                    "sv_SE", LANG_SWEDISH   , SUBLANG_SWEDISH                   , wxLayout_LeftToRight, "Swedish")
+    LNG(wxLANGUAGE_SWEDISH_FINLAND,            "sv_FI", LANG_SWEDISH   , SUBLANG_SWEDISH_FINLAND           , wxLayout_LeftToRight, "Swedish (Finland)")
+    LNG(wxLANGUAGE_TAGALOG,                    "tl_PH", 0              , 0                                 , wxLayout_LeftToRight, "Tagalog")
+    LNG(wxLANGUAGE_TAJIK,                      "tg"   , 0              , 0                                 , wxLayout_LeftToRight, "Tajik")
+    LNG(wxLANGUAGE_TAMIL,                      "ta"   , LANG_TAMIL     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Tamil")
+    LNG(wxLANGUAGE_TATAR,                      "tt"   , LANG_TATAR     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Tatar")
+    LNG(wxLANGUAGE_TELUGU,                     "te"   , LANG_TELUGU    , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Telugu")
+    LNG(wxLANGUAGE_THAI,                       "th_TH", LANG_THAI      , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Thai")
+    LNG(wxLANGUAGE_TIBETAN,                    "bo"   , 0              , 0                                 , wxLayout_LeftToRight, "Tibetan")
+    LNG(wxLANGUAGE_TIGRINYA,                   "ti"   , 0              , 0                                 , wxLayout_LeftToRight, "Tigrinya")
+    LNG(wxLANGUAGE_TONGA,                      "to"   , 0              , 0                                 , wxLayout_LeftToRight, "Tonga")
+    LNG(wxLANGUAGE_TSONGA,                     "ts"   , 0              , 0                                 , wxLayout_LeftToRight, "Tsonga")
+    LNG(wxLANGUAGE_TURKISH,                    "tr_TR", LANG_TURKISH   , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Turkish")
+    LNG(wxLANGUAGE_TURKMEN,                    "tk"   , 0              , 0                                 , wxLayout_LeftToRight, "Turkmen")
+    LNG(wxLANGUAGE_TWI,                        "tw"   , 0              , 0                                 , wxLayout_LeftToRight, "Twi")
+    LNG(wxLANGUAGE_UIGHUR,                     "ug"   , 0              , 0                                 , wxLayout_LeftToRight, "Uighur")
+    LNG(wxLANGUAGE_UKRAINIAN,                  "uk_UA", LANG_UKRAINIAN , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Ukrainian")
+    LNG(wxLANGUAGE_URDU,                       "ur"   , LANG_URDU      , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Urdu")
+    LNG(wxLANGUAGE_URDU_INDIA,                 "ur_IN", LANG_URDU      , SUBLANG_URDU_INDIA                , wxLayout_LeftToRight, "Urdu (India)")
+    LNG(wxLANGUAGE_URDU_PAKISTAN,              "ur_PK", LANG_URDU      , SUBLANG_URDU_PAKISTAN             , wxLayout_LeftToRight, "Urdu (Pakistan)")
+    LNG(wxLANGUAGE_UZBEK,                      "uz"   , LANG_UZBEK     , SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Uzbek")
+    LNG(wxLANGUAGE_UZBEK_CYRILLIC,             "uz"   , LANG_UZBEK     , SUBLANG_UZBEK_CYRILLIC            , wxLayout_LeftToRight, "Uzbek (Cyrillic)")
+    LNG(wxLANGUAGE_UZBEK_LATIN,                "uz"   , LANG_UZBEK     , SUBLANG_UZBEK_LATIN               , wxLayout_LeftToRight, "Uzbek (Latin)")
+    LNG(wxLANGUAGE_VALENCIAN,                  "ca_ES@valencia", 0     , 0                                 , wxLayout_LeftToRight, "Valencian (Souternhern Catalan)")
+    LNG(wxLANGUAGE_VIETNAMESE,                 "vi_VN", LANG_VIETNAMESE, SUBLANG_DEFAULT                   , wxLayout_LeftToRight, "Vietnamese")
+    LNG(wxLANGUAGE_VOLAPUK,                    "vo"   , 0              , 0                                 , wxLayout_LeftToRight, "Volapuk")
+    LNG(wxLANGUAGE_WELSH,                      "cy"   , 0              , 0                                 , wxLayout_LeftToRight, "Welsh")
+    LNG(wxLANGUAGE_WOLOF,                      "wo"   , 0              , 0                                 , wxLayout_LeftToRight, "Wolof")
+    LNG(wxLANGUAGE_XHOSA,                      "xh"   , 0              , 0                                 , wxLayout_LeftToRight, "Xhosa")
+    LNG(wxLANGUAGE_YIDDISH,                    "yi"   , 0              , 0                                 , wxLayout_LeftToRight, "Yiddish")
+    LNG(wxLANGUAGE_YORUBA,                     "yo"   , 0              , 0                                 , wxLayout_LeftToRight, "Yoruba")
+    LNG(wxLANGUAGE_ZHUANG,                     "za"   , 0              , 0                                 , wxLayout_LeftToRight, "Zhuang")
+    LNG(wxLANGUAGE_ZULU,                       "zu"   , 0              , 0                                 , wxLayout_LeftToRight, "Zulu")
 }
 #undef LNG
 
