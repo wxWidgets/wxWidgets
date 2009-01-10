@@ -39,7 +39,7 @@ public:
         Constructor.
         If no filename is passed, the metafile is created in memory.
     */
-    wxMetafileDC(const wxString& filename = "");
+    wxMetafileDC(const wxString& filename = wxEmptyString);
 
     /**
         Destructor.
@@ -82,7 +82,7 @@ public:
         If a filename is given, the Windows disk metafile is read in.
         Check whether this was performed successfully by using the IsOk() member.
     */
-    wxMetafile(const wxString& filename = "");
+    wxMetafile(const wxString& filename = wxEmptyString);
 
     /**
         Destructor.

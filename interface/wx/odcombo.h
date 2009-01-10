@@ -97,7 +97,7 @@ public:
         @see Create(), wxValidator
     */
     wxOwnerDrawnComboBox(wxWindow* parent, wxWindowID id,
-                         const wxString& value = "",
+                         const wxString& value = wxEmptyString,
                          const wxPoint& pos = wxDefaultPosition,
                          const wxSize& size = wxDefaultSize,
                          int n = 0,
@@ -153,7 +153,7 @@ public:
         @remarks Derived classes should call or replace this function.
     */
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxString& value = "",
+                const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 int n, const wxString choices[],

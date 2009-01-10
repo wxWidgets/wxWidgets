@@ -56,7 +56,7 @@ public:
         Return array of strings containing all encodings found by
         EnumerateEncodings().
     */
-    static wxArrayString GetEncodings(const wxString& facename = "");
+    static wxArrayString GetEncodings(const wxString& facename = wxEmptyString);
 
     /**
         Return array of strings containing all facenames found by

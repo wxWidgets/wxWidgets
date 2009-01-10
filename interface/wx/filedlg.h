@@ -14,9 +14,10 @@
     It pops up a file selector box (native for Windows and GTK2.4+).
 
     The path and filename are distinct elements of a full file pathname.
-    If path is "", the current directory will be used. If filename is "", no default
-    filename will be supplied. The wildcard determines what files are displayed in the
-    file selector, and file extension supplies a type extension for the required filename.
+    If path is wxEmptyString, the current directory will be used.
+    If filename is wxEmptyString, no default filename will be supplied.
+    The wildcard determines what files are displayed in the file selector,
+    and file extension supplies a type extension for the required filename.
 
     @remarks
     All implementations of the wxFileDialog provide a wildcard filter. Typing a filename
@@ -272,9 +273,9 @@ public:
     @header{wx/filedlg.h}
 */
 wxString wxFileSelector(const wxString& message,
-                        const wxString& default_path = "",
-                        const wxString& default_filename = "",
-                        const wxString& default_extension = "",
+                        const wxString& default_path = wxEmptyString,
+                        const wxString& default_filename = wxEmptyString,
+                        const wxString& default_extension = wxEmptyString,
                         const wxString& wildcard = ".",
                         int flags = 0,
                         wxWindow* parent = NULL,

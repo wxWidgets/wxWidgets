@@ -99,7 +99,7 @@ public:
         @see Create(), wxValidator
     */
     wxComboBox(wxWindow* parent, wxWindowID id,
-               const wxString& value = "",
+               const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int n = 0,

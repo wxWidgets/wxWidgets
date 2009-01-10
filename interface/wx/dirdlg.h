@@ -134,7 +134,7 @@ public:
     @header{wx/dirdlg.h}
 */
 wxString wxDirSelector(const wxString& message = wxDirSelectorPromptStr,
-                       const wxString& default_path = "",
+                       const wxString& default_path = wxEmptyString,
                        long style = 0,
                        const wxPoint& pos = wxDefaultPosition,
                        wxWindow* parent = NULL);

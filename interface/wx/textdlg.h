@@ -133,7 +133,7 @@ public:
 */
 wxString wxGetTextFromUser(const wxString& message,
                            const wxString& caption = "Input text",
-                           const wxString& default_value = "",
+                           const wxString& default_value = wxEmptyString,
                            wxWindow* parent = NULL,
                            int x = wxDefaultCoord,
                            int y = wxDefaultCoord,
@@ -148,7 +148,7 @@ wxString wxGetTextFromUser(const wxString& message,
 */
 wxString wxGetPasswordFromUser(const wxString& message,
                                const wxString& caption = "Input text",
-                               const wxString& default_value = "",
+                               const wxString& default_value = wxEmptyString,
                                wxWindow* parent = NULL,
                                int x = wxDefaultCoord,
                                int y = wxDefaultCoord,

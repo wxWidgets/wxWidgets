@@ -313,7 +313,7 @@ public:
     wxFont(int pointSize, wxFontFamily family, int style,
            wxFontWeight weight,
            bool underline = false,
-           const wxString& faceName = "",
+           const wxString& faceName = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     /**
@@ -362,7 +362,7 @@ public:
     wxFont(const wxSize& pixelSize, wxFontFamily family,
            int style, wxFontWeight weight,
            bool underline = false,
-           const wxString& faceName = "",
+           const wxString& faceName = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     //@}
 
@@ -476,23 +476,23 @@ public:
     static wxFont* New(int pointSize, wxFontFamily family, int style,
                        wxFontWeight weight,
                        bool underline = false,
-                       const wxString& faceName = "",
+                       const wxString& faceName = wxEmptyString,
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     static wxFont* New(int pointSize, wxFontFamily family,
                        int flags = wxFONTFLAG_DEFAULT,
-                       const wxString& faceName = "",
+                       const wxString& faceName = wxEmptyString,
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     static wxFont* New(const wxSize& pixelSize,
                        wxFontFamily family,
                        int style,
                        wxFontWeight weight,
                        bool underline = false,
-                       const wxString& faceName = "",
+                       const wxString& faceName = wxEmptyString,
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     static wxFont* New(const wxSize& pixelSize,
                        wxFontFamily family,
                        int flags = wxFONTFLAG_DEFAULT,
-                       const wxString& faceName = "",
+                       const wxString& faceName = wxEmptyString,
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     //@}
 

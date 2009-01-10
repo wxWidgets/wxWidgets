@@ -538,7 +538,7 @@ wxString wxGetFullHostName();
 
     @header{wx/utils.h}
 */
-wxString wxGetUserHome(const wxString& user = "");
+wxString wxGetUserHome(const wxString& user = wxEmptyString);
 
 /**
     This function returns the "user id" also known as "login name" under Unix
