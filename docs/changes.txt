@@ -114,6 +114,8 @@ All (GUI):
 - Fixed inability to select no superscript and no subscript in wxRichTextCtrl's
   formatting dialog.
 - Fixed centering and right-justification when combined with left indentation.
+- Fixed lack of right margin when centering or right-justifying in a wxRTC.
+- Fixed wrong wxRTC descent when wrapping lines with different font sizes.
 - Fixed wrapping problem for long lines.
 - Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
 - Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after

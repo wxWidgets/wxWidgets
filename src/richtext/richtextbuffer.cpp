@@ -4004,6 +4004,10 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
             wxSize actualSize;
             wxRichTextRange actualRange(lastCompletedEndPos+1, wrapPosition);
 
+            /// Use previous descent, not the wrapping descent we just found, since this may be too big
+            /// for the fragment we're about to add.
+            childDescent = maxDescent;
+
 #if wxRICHTEXT_USE_PARTIAL_TEXT_EXTENTS
             // Get height only, then the width using the partial extents
             GetRangeSize(actualRange, actualSize, childDescent, dc, wxRICHTEXT_UNFORMATTED|wxRICHTEXT_HEIGHT_ONLY);
@@ -4175,12 +4179,16 @@ void wxRichTextParagraph::ApplyParagraphStyle(const wxTextAttrEx& attr, const wx
         {
             int rightIndent = ConvertTenthsMMToPixels(* g_globalDC, attr.GetRightIndent());
             pos.x = (rect.GetWidth() - (pos.x - rect.x) - rightIndent - size.x)/2 + pos.x;
+            // Lines are relative to the paragraph position
+            pos.x -= GetPosition().x;
             line->SetPosition(pos);
         }
         else if (attr.HasAlignment() && GetAttributes().GetAlignment() == wxTEXT_ALIGNMENT_RIGHT)
         {
             int rightIndent = ConvertTenthsMMToPixels(* g_globalDC, attr.GetRightIndent());
             pos.x = rect.x + rect.GetWidth() - size.x - rightIndent;
+            // Lines are relative to the paragraph position
+            pos.x -= GetPosition().x;
             line->SetPosition(pos);
         }
 
