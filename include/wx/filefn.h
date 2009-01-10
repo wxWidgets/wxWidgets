@@ -559,12 +559,12 @@ wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(wxString& buffer) );
     // DEPRECATED: construct a wxFileName, use ClearExt() and then GetFullPath()
 
 // Get a temporary filename
-wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = (wxChar *) NULL) );
-wxDEPRECATED( WXDLLIMPEXP_BASE bool wxGetTempFileName(const wxString& prefix, wxString& buf) );
+wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = (wxChar *) NULL) );
+wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE bool wxGetTempFileName(const wxString& prefix, wxString& buf) );
 
 // Expand file name (~/ and ${OPENWINHOME}/ stuff)
-wxDEPRECATED( WXDLLIMPEXP_BASE char* wxExpandPath(char *dest, const wxString& path) );
-wxDEPRECATED( WXDLLIMPEXP_BASE wchar_t* wxExpandPath(wchar_t *dest, const wxString& path) );
+wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE char* wxExpandPath(char *dest, const wxString& path) );
+wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wchar_t* wxExpandPath(wchar_t *dest, const wxString& path) );
     // DEPRECATED: use wxFileName::Normalize(wxPATH_NORM_ENV_VARS)
 
 // Contract w.r.t environment (</usr/openwin/lib, OPENWHOME> -> ${OPENWINHOME}/lib)
@@ -577,9 +577,9 @@ WXDLLIMPEXP_BASE wxChar* wxContractPath(const wxString& filename,
     // DEPRECATED: use wxFileName::ReplaceEnvVariable and wxFileName::ReplaceHomeDir
 
 // Destructive removal of /./ and /../ stuff
-wxDEPRECATED( WXDLLIMPEXP_BASE char* wxRealPath(char *path) );
-wxDEPRECATED( WXDLLIMPEXP_BASE wchar_t* wxRealPath(wchar_t *path) );
-wxDEPRECATED( WXDLLIMPEXP_BASE wxString wxRealPath(const wxString& path) );
+wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE char* wxRealPath(char *path) );
+wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wchar_t* wxRealPath(wchar_t *path) );
+wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wxString wxRealPath(const wxString& path) );
     // DEPRECATED: use wxFileName::Normalize instead
 
 // Allocate a copy of the full absolute path
