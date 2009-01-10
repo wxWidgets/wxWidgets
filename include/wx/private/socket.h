@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/private/socket.h
-// Purpose:     wxSocketImpl nd related declarations
+// Purpose:     wxSocketImpl and related declarations
 // Authors:     Guilhem Lavaux, Vadim Zeitlin
 // Created:     April 1997
 // RCS-ID:      $Id$
