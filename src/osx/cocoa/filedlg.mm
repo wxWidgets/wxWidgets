@@ -140,7 +140,7 @@ int wxFileDialog::ShowModal()
 
     wxCFStringRef cf( m_message );
 
-    wxCFStringRef dir( m_path );
+    wxCFStringRef dir( m_dir );
     wxCFStringRef file( m_fileName );
 
     m_path = wxEmptyString;
