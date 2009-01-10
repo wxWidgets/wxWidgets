@@ -169,12 +169,12 @@ void wxChoice::DoClear()
 // ----------------------------------------------------------------------------
 int wxChoice::GetSelection() const
 {
-    return m_peer->GetValue() -1;
+    return m_peer->GetValue();
 }
 
 void wxChoice::SetSelection( int n )
 {
-    m_peer->SetValue( n ) ;
+    m_peer->SetValue( n );
 }
 
 // ----------------------------------------------------------------------------

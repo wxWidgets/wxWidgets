@@ -36,7 +36,7 @@ public :
         wxMacControl::SetValue( v + 1 );
     }
     
-    wxInt32 GetValue()
+    wxInt32 GetValue() const
     {
         return wxMacControl::GetValue() - 1;
     }
