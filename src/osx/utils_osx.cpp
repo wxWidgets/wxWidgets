@@ -87,6 +87,49 @@ void wxDisplaySize(int *width, int *height)
     if ( height )
         *height = (int)bounds.size.height;
 }
+
+#if wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// Launch document with default app
+// ----------------------------------------------------------------------------
+
+bool wxLaunchDefaultApplication(const wxString& document, int flags)
+{
+    wxUnusedVar(flags);
+
+    static const char * const OPEN_CMD = "/usr/bin/open";
+    if ( wxFileExists(OPEN_CMD) &&
+            wxExecute(wxString(OPEN_CMD) + " " + document) )
+        return true;
+
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// Launch default browser
+// ----------------------------------------------------------------------------
+
+bool wxDoLaunchDefaultBrowser(const wxString& url, int flags)
+{
+    wxUnusedVar(flags);
+    wxCFRef< CFURLRef > curl( CFURLCreateWithString( kCFAllocatorDefault,
+                              wxCFStringRef( url ), NULL ) );
+    OSStatus err = LSOpenCFURLRef( curl , NULL );
+
+    if (err == noErr)
+    {
+        return true;
+    }
+    else
+    {
+        wxLogDebug(wxT("Browser Launch error %d"), (int) err);
+        return false;
+    }
+}
+
+#endif // wxUSE_GUI
+
 #endif
 
 void wxDisplaySizeMM(int *width, int *height)
