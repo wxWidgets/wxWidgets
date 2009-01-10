@@ -22,8 +22,13 @@ BEGIN_EVENT_TABLE(wxSlider, wxControl)
 END_EVENT_TABLE()
 
  // The dimensions of the different styles of sliders (from Aqua document)
-#define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 24
-#define wxSLIDER_DIMENSIONACROSS_ARROW 18
+#ifdef wxOSX_USE_COCOA
+    #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 25
+    #define wxSLIDER_DIMENSIONACROSS_ARROW 21
+#else
+    #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 24
+    #define wxSLIDER_DIMENSIONACROSS_ARROW 18
+#endif
 
 // Distance between slider and text
 #define wxSLIDER_BORDERTEXT 5
