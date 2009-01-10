@@ -79,7 +79,7 @@ wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
 
 bool      wxApp::sm_isEmbedded = false; // Normally we're not a plugin
 
-#if wxOSX_USE_COCOA_OR_CARBON
+#if wxOSX_CARBON
 
 //----------------------------------------------------------------------
 // Core Apple Event Support

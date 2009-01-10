@@ -59,9 +59,98 @@ void wxMacWakeUp()
  
 #if wxUSE_GUI
 
+@interface wxNSAppController : NSObject
+{
+}
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender;
+- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
+- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender;
+- (BOOL)application:(NSApplication *)sender printFile:(NSString *)filename;
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
+- (void)handleGetURLEvent:(NSAppleEventDescriptor *)event
+    withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
+@end
+
+@implementation wxNSAppController
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+{
+    // let wx do this, not cocoa
+    return NO;
+}
+
+- (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
+{
+    wxCFStringRef cf(wxCFRetain(filename));
+    wxTheApp->MacOpenFile(cf.AsString()) ;
+    return YES;
+}
+
+- (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender;
+{
+    wxTheApp->MacNewFile() ;
+    return NO;
+}
+
+- (BOOL)application:(NSApplication *)sender printFile:(NSString *)filename
+{
+    wxCFStringRef cf(wxCFRetain(filename));
+    wxTheApp->MacPrintFile(cf.AsString()) ;
+    return YES;
+}
+
+/* 
+    Allowable return values are:
+        NSTerminateNow - it is ok to proceed with termination
+        NSTerminateCancel - the application should not be terminated
+        NSTerminateLater - it may be ok to proceed with termination later.  The application must call -replyToApplicationShouldTerminate: with YES or NO once the answer is known
+            this return value is for delegates who need to provide document modal alerts (sheets) in order to decide whether to quit.
+*/
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
+{
+    wxWindow* win = wxTheApp->GetTopWindow() ;
+    if ( win )
+    {
+        wxCommandEvent exitEvent(wxEVT_COMMAND_MENU_SELECTED, wxApp::s_macExitMenuItemId);
+        if (!win->ProcessEvent(exitEvent))
+            win->Close(true) ;
+    }
+    else
+    {
+         wxTheApp->ExitMainLoop() ;
+    }
+    return NSTerminateCancel;
+}
+
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
+{
+    wxTheApp->MacReopenApp() ;
+    return NO;
+}
+
+- (void)handleGetURLEvent:(NSAppleEventDescriptor *)event
+    withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+    NSString* url = [[event descriptorAtIndex:1] stringValue];
+    wxCFStringRef cf(wxCFRetain(url));
+    wxTheApp->MacOpenURL(cf.AsString()) ;
+}
+@end
+
 bool wxApp::DoInitGui()
 {
     [NSApplication sharedApplication];
+
+    if (!sm_isEmbedded)
+    {
+        wxNSAppController* controller = [[wxNSAppController alloc] init];
+        [[NSApplication sharedApplication] setDelegate:controller];
+        
+        NSAppleEventManager *appleEventManager = [NSAppleEventManager sharedAppleEventManager];
+        [appleEventManager setEventHandler:controller andSelector:@selector(handleGetURLEvent:withReplyEvent:)
+            forEventClass:kInternetEventClass andEventID:kAEGetURL];
+    }
     [NSApp finishLaunching];
     return true;
 }
