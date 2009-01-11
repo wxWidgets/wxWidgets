@@ -123,7 +123,7 @@ public:
     // UI helpers
     // ----------
 
-#if wxUSE_MENU
+#if wxUSE_MENUS
     // show the popup menu containing all columns with check marks for the ones
     // which are currently shown and return true if something was done using it
     // (in this case UpdateColumnVisibility() will have been called) or false
@@ -143,7 +143,7 @@ public:
     // the ids of the items corresponding to the columns are consecutive and
     // start from idColumnsBase
     void AddColumnsItems(wxMenu& menu, int idColumnsBase = 0);
-#endif // wxUSE_MENU
+#endif // wxUSE_MENUS
 
     // show the columns customization dialog and return true if something was
     // changed using it (in which case UpdateColumnVisibility() and/or
@@ -225,9 +225,9 @@ private:
 
     // event handlers
     void OnSeparatorDClick(wxHeaderCtrlEvent& event);
-#if wxUSE_MENU
+#if wxUSE_MENUS
     void OnRClick(wxHeaderCtrlEvent& event);
-#endif // wxUSE_MENU
+#endif // wxUSE_MENUS
 
     DECLARE_EVENT_TABLE()
 };

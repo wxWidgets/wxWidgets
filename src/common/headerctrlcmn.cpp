@@ -73,9 +73,9 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxHeaderCtrlNameStr[] = "wxHeaderCtrl";
 
 BEGIN_EVENT_TABLE(wxHeaderCtrlBase, wxControl)
     EVT_HEADER_SEPARATOR_DCLICK(wxID_ANY, wxHeaderCtrlBase::OnSeparatorDClick)
-#if wxUSE_MENU
+#if wxUSE_MENUS
     EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxHeaderCtrlBase::OnRClick)
-#endif // wxUSE_MENU
+#endif // wxUSE_MENUS
 END_EVENT_TABLE()
 
 void wxHeaderCtrlBase::ScrollWindow(int dx,
@@ -120,7 +120,7 @@ void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
         UpdateColumn(col);
 }
 
-#if wxUSE_MENU
+#if wxUSE_MENUS
 
 void wxHeaderCtrlBase::OnRClick(wxHeaderCtrlEvent& event)
 {
@@ -133,7 +133,7 @@ void wxHeaderCtrlBase::OnRClick(wxHeaderCtrlEvent& event)
     ShowColumnsMenu(ScreenToClient(wxGetMousePosition()));
 }
 
-#endif // wxUSE_MENU
+#endif // wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // wxHeaderCtrlBase column reordering
@@ -271,7 +271,7 @@ wxHeaderCtrlBase::DoResizeColumnIndices(wxArrayInt& colIndices, unsigned int cou
 // wxHeaderCtrl extra UI
 // ----------------------------------------------------------------------------
 
-#if wxUSE_MENU
+#if wxUSE_MENUS
 
 void wxHeaderCtrlBase::AddColumnsItems(wxMenu& menu, int idColumnsBase)
 {
@@ -320,7 +320,7 @@ bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
     return true;
 }
 
-#endif // wxUSE_MENU
+#endif // wxUSE_MENUS
 
 bool wxHeaderCtrlBase::ShowCustomizeDialog()
 {
