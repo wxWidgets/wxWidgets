@@ -1369,10 +1369,6 @@ inline bool operator==(const wxString& s1, const wxCharBuffer& s2);
 inline bool operator==(const wxCharBuffer& s1, const wxString& s2);
 inline bool operator!=(const wxString& s1, const wxCharBuffer& s2);
 inline bool operator!=(const wxCharBuffer& s1, const wxString& s2);
-inline wxString operator+(const wxString& string, const wxWCharBuffer& buf)
-inline wxString operator+(const wxWCharBuffer& buf, const wxString& string)
-inline wxString operator+(const wxString& string, const wxCharBuffer& buf)
-inline wxString operator+(const wxCharBuffer& buf, const wxString& string)
 
 /**
     Comparison operators with wxUniChar or wxUniCharRef.
