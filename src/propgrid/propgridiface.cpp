@@ -498,18 +498,6 @@ bool wxPropertyGridInterface::ExpandAll( bool doExpand )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridInterface::SetPropertyValueUnspecified( wxPGPropArg id )
-{
-    wxPG_PROP_ARG_CALL_PROLOG()
-    wxPropertyGrid* propGrid = p->GetGridIfDisplayed();
-    if ( propGrid )
-        propGrid->DoSetPropertyValueUnspecified(p);
-    else
-        p->GetParentState()->DoSetPropertyValueUnspecified(p);
-}
-
-// -----------------------------------------------------------------------
-
 void wxPropertyGridInterface::ClearModifiedStatus()
 {
     unsigned int pageIndex = 0;

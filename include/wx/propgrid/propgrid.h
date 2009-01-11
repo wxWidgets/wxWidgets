@@ -1748,8 +1748,6 @@ protected:
                      const wxRect* clip_rect,
                      bool isBuffered ) const;
 
-    void DoSetPropertyValueUnspecified( wxPGProperty* p );
-
     /** Draws an expand/collapse (ie. +/-) button.
     */
     virtual void DrawExpanderButton( wxDC& dc, const wxRect& rect,

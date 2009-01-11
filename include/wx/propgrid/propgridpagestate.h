@@ -606,8 +606,6 @@ public:
     void DoSetPropertyValues( const wxVariantList& list,
                               wxPGProperty* default_category );
 
-    void DoSetPropertyValueUnspecified( wxPGProperty* p );
-
     void SetSplitterLeft( bool subProps = false );
 
     /** Set virtual width for this particular page. */

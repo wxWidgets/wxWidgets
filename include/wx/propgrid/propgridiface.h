@@ -1030,7 +1030,12 @@ public:
         If it has children (it may be category), then the same thing is done to
         them.
     */
-    void SetPropertyValueUnspecified( wxPGPropArg id );
+    void SetPropertyValueUnspecified( wxPGPropArg id )
+    {
+        wxPG_PROP_ARG_CALL_PROLOG()
+        wxVariant nullVariant;
+        SetPropVal(p, nullVariant);
+    }
 
 #ifndef SWIG
     /** Sets various property values from a list of wxVariants. If property with

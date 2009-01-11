@@ -1209,33 +1209,6 @@ bool wxPropertyGridPageState::DoSetPropertyValueWxObjectPtr( wxPGProperty* p, wx
 }
 
 // -----------------------------------------------------------------------
-
-void wxPropertyGridPageState::DoSetPropertyValueUnspecified( wxPGProperty* p )
-{
-    wxCHECK_RET( p, wxT("invalid property id") );
-
-    if ( !p->IsValueUnspecified() )
-    {
-        // Value should be set first - editor class methods may need it
-        p->m_value.MakeNull();
-
-        wxASSERT( m_pPropGrid );
-
-        if ( m_pPropGrid->GetState() == this )
-        {
-            if ( m_pPropGrid->m_selected == p && m_pPropGrid->m_wndEditor )
-            {
-                p->GetEditorClass()->SetValueToUnspecified(p, m_pPropGrid->GetEditorControl());
-            }
-        }
-
-        unsigned int i;
-        for ( i = 0; i < p->GetChildCount(); i++ )
-            DoSetPropertyValueUnspecified( p->Item(i) );
-    }
-}
-
-// -----------------------------------------------------------------------
 // wxPropertyGridPageState property operations
 // -----------------------------------------------------------------------
 

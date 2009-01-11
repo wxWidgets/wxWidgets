@@ -1186,24 +1186,6 @@ void wxPropertyGrid::PrepareAfterItemsAdded()
 }
 
 // -----------------------------------------------------------------------
-// wxPropertyGrid property value setting and getting
-// -----------------------------------------------------------------------
-
-void wxPropertyGrid::DoSetPropertyValueUnspecified( wxPGProperty* p )
-{
-    m_pState->DoSetPropertyValueUnspecified(p);
-    DrawItemAndChildren(p);
-
-    wxPGProperty* parent = p->GetParent();
-    while ( parent &&
-            (parent->GetFlags() & wxPG_PROP_PARENTAL_FLAGS) == wxPG_PROP_MISC_PARENT )
-    {
-        DrawItem(parent);
-        parent = parent->GetParent();
-    }
-}
-
-// -----------------------------------------------------------------------
 // wxPropertyGrid property operations
 // -----------------------------------------------------------------------
 
@@ -3635,7 +3617,12 @@ void wxPropertyGrid::RefreshEditor()
             wnd->SetFont(GetFont());
     }
 
-    p->GetEditorClass()->UpdateControl(p, wnd);
+    const wxPGEditor* editorClass = p->GetEditorClass();
+
+    editorClass->UpdateControl(p, wnd);
+
+    if ( p->IsValueUnspecified() )
+        editorClass ->SetValueToUnspecified(p, wnd);
 }
 
 // -----------------------------------------------------------------------

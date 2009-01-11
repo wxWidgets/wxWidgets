@@ -1285,9 +1285,6 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
         {
             m_value = value;
             OnSetValue();
-
-            if ( !(flags & wxPG_SETVAL_FROM_PARENT) )
-                UpdateParentValues();
         }
 
         if ( flags & wxPG_SETVAL_BY_USER )
@@ -1316,6 +1313,9 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                 Item(i)->SetValue(value, NULL, flags|wxPG_SETVAL_FROM_PARENT);
         }
     }
+
+    if ( !(flags & wxPG_SETVAL_FROM_PARENT) )
+        UpdateParentValues();
 
     //
     // Update editor control
