@@ -6,7 +6,7 @@
 # Author: Francesco Montorsi
 
 
-rm missing_semicolons
+rm missing_semicolons 2>/dev/null
 
 # the preprocessor will remove comments and all #preprocessor #stuff;
 # we then remove the empty lines
