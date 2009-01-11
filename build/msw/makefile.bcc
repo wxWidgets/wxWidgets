@@ -2013,6 +2013,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_grid.obj \
 	$(OBJS)\monodll_gridctrl.obj \
+	$(OBJS)\monodll_grideditors.obj \
 	$(OBJS)\monodll_gridsel.obj \
 	$(OBJS)\monodll_helpext.obj \
 	$(OBJS)\monodll_hyperlinkg.obj \
@@ -2051,6 +2052,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_grid.obj \
 	$(OBJS)\monodll_gridctrl.obj \
+	$(OBJS)\monodll_grideditors.obj \
 	$(OBJS)\monodll_gridsel.obj \
 	$(OBJS)\monodll_helpext.obj \
 	$(OBJS)\monodll_hyperlinkg.obj \
@@ -2688,6 +2690,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_grid.obj \
 	$(OBJS)\monolib_gridctrl.obj \
+	$(OBJS)\monolib_grideditors.obj \
 	$(OBJS)\monolib_gridsel.obj \
 	$(OBJS)\monolib_helpext.obj \
 	$(OBJS)\monolib_hyperlinkg.obj \
@@ -2726,6 +2729,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_grid.obj \
 	$(OBJS)\monolib_gridctrl.obj \
+	$(OBJS)\monolib_grideditors.obj \
 	$(OBJS)\monolib_gridsel.obj \
 	$(OBJS)\monolib_helpext.obj \
 	$(OBJS)\monolib_hyperlinkg.obj \
@@ -3757,6 +3761,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_editlbox.obj \
 	$(OBJS)\advdll_grid.obj \
 	$(OBJS)\advdll_gridctrl.obj \
+	$(OBJS)\advdll_grideditors.obj \
 	$(OBJS)\advdll_gridsel.obj \
 	$(OBJS)\advdll_helpext.obj \
 	$(OBJS)\advdll_hyperlinkg.obj \
@@ -3795,6 +3800,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_editlbox.obj \
 	$(OBJS)\advdll_grid.obj \
 	$(OBJS)\advdll_gridctrl.obj \
+	$(OBJS)\advdll_grideditors.obj \
 	$(OBJS)\advdll_gridsel.obj \
 	$(OBJS)\advdll_helpext.obj \
 	$(OBJS)\advdll_hyperlinkg.obj \
@@ -3834,6 +3840,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_editlbox.obj \
 	$(OBJS)\advlib_grid.obj \
 	$(OBJS)\advlib_gridctrl.obj \
+	$(OBJS)\advlib_grideditors.obj \
 	$(OBJS)\advlib_gridsel.obj \
 	$(OBJS)\advlib_helpext.obj \
 	$(OBJS)\advlib_hyperlinkg.obj \
@@ -3872,6 +3879,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_editlbox.obj \
 	$(OBJS)\advlib_grid.obj \
 	$(OBJS)\advlib_gridctrl.obj \
+	$(OBJS)\advlib_grideditors.obj \
 	$(OBJS)\advlib_gridsel.obj \
 	$(OBJS)\advlib_helpext.obj \
 	$(OBJS)\advlib_hyperlinkg.obj \
@@ -7474,6 +7482,11 @@ $(OBJS)\monodll_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_grideditors.obj: ..\..\src\generic\grideditors.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\grideditors.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_gridsel.obj: ..\..\src\generic\gridsel.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\gridsel.cpp
 !endif
@@ -9676,6 +9689,11 @@ $(OBJS)\monolib_grid.obj: ..\..\src\generic\grid.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_grideditors.obj: ..\..\src\generic\grideditors.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\grideditors.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13257,6 +13275,9 @@ $(OBJS)\advdll_grid.obj: ..\..\src\generic\grid.cpp
 $(OBJS)\advdll_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
 
+$(OBJS)\advdll_grideditors.obj: ..\..\src\generic\grideditors.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\grideditors.cpp
+
 $(OBJS)\advdll_gridsel.obj: ..\..\src\generic\gridsel.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\gridsel.cpp
 
@@ -13369,6 +13390,9 @@ $(OBJS)\advlib_grid.obj: ..\..\src\generic\grid.cpp
 
 $(OBJS)\advlib_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
+
+$(OBJS)\advlib_grideditors.obj: ..\..\src\generic\grideditors.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\grideditors.cpp
 
 $(OBJS)\advlib_gridsel.obj: ..\..\src\generic\gridsel.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\gridsel.cpp

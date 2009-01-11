@@ -5295,6 +5295,10 @@ SOURCE=..\..\include\wx\generic\gridctrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\grideditors.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\gridsel.h
 # End Source File
 # Begin Source File

@@ -985,6 +985,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\generic\grideditors.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\generic\gridsel.cpp"
 				>
 			</File>
@@ -1317,6 +1321,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\generic\gridctrl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\generic\grideditors.h"
 				>
 			</File>
 			<File

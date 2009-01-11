@@ -712,6 +712,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_editlbox.obj &
 	$(OBJS)\monodll_grid.obj &
 	$(OBJS)\monodll_gridctrl.obj &
+	$(OBJS)\monodll_grideditors.obj &
 	$(OBJS)\monodll_gridsel.obj &
 	$(OBJS)\monodll_helpext.obj &
 	$(OBJS)\monodll_hyperlinkg.obj &
@@ -750,6 +751,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_editlbox.obj &
 	$(OBJS)\monodll_grid.obj &
 	$(OBJS)\monodll_gridctrl.obj &
+	$(OBJS)\monodll_grideditors.obj &
 	$(OBJS)\monodll_gridsel.obj &
 	$(OBJS)\monodll_helpext.obj &
 	$(OBJS)\monodll_hyperlinkg.obj &
@@ -1398,6 +1400,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_editlbox.obj &
 	$(OBJS)\monolib_grid.obj &
 	$(OBJS)\monolib_gridctrl.obj &
+	$(OBJS)\monolib_grideditors.obj &
 	$(OBJS)\monolib_gridsel.obj &
 	$(OBJS)\monolib_helpext.obj &
 	$(OBJS)\monolib_hyperlinkg.obj &
@@ -1436,6 +1439,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_editlbox.obj &
 	$(OBJS)\monolib_grid.obj &
 	$(OBJS)\monolib_gridctrl.obj &
+	$(OBJS)\monolib_grideditors.obj &
 	$(OBJS)\monolib_gridsel.obj &
 	$(OBJS)\monolib_helpext.obj &
 	$(OBJS)\monolib_hyperlinkg.obj &
@@ -2511,6 +2515,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_editlbox.obj &
 	$(OBJS)\advdll_grid.obj &
 	$(OBJS)\advdll_gridctrl.obj &
+	$(OBJS)\advdll_grideditors.obj &
 	$(OBJS)\advdll_gridsel.obj &
 	$(OBJS)\advdll_helpext.obj &
 	$(OBJS)\advdll_hyperlinkg.obj &
@@ -2549,6 +2554,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_editlbox.obj &
 	$(OBJS)\advdll_grid.obj &
 	$(OBJS)\advdll_gridctrl.obj &
+	$(OBJS)\advdll_grideditors.obj &
 	$(OBJS)\advdll_gridsel.obj &
 	$(OBJS)\advdll_helpext.obj &
 	$(OBJS)\advdll_hyperlinkg.obj &
@@ -2594,6 +2600,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_editlbox.obj &
 	$(OBJS)\advlib_grid.obj &
 	$(OBJS)\advlib_gridctrl.obj &
+	$(OBJS)\advlib_grideditors.obj &
 	$(OBJS)\advlib_gridsel.obj &
 	$(OBJS)\advlib_helpext.obj &
 	$(OBJS)\advlib_hyperlinkg.obj &
@@ -2632,6 +2639,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_editlbox.obj &
 	$(OBJS)\advlib_grid.obj &
 	$(OBJS)\advlib_gridctrl.obj &
+	$(OBJS)\advlib_grideditors.obj &
 	$(OBJS)\advlib_gridsel.obj &
 	$(OBJS)\advlib_helpext.obj &
 	$(OBJS)\advlib_hyperlinkg.obj &
@@ -7983,6 +7991,11 @@ $(OBJS)\monodll_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_grideditors.obj :  .AUTODEPEND ..\..\src\generic\grideditors.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -10298,6 +10311,11 @@ $(OBJS)\monolib_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_grideditors.obj :  .AUTODEPEND ..\..\src\generic\grideditors.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -14106,6 +14124,9 @@ $(OBJS)\advdll_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
 $(OBJS)\advdll_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
+$(OBJS)\advdll_grideditors.obj :  .AUTODEPEND ..\..\src\generic\grideditors.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
 $(OBJS)\advdll_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -14217,6 +14238,9 @@ $(OBJS)\advlib_grid.obj :  .AUTODEPEND ..\..\src\generic\grid.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_gridctrl.obj :  .AUTODEPEND ..\..\src\generic\gridctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_grideditors.obj :  .AUTODEPEND ..\..\src\generic\grideditors.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_gridsel.obj :  .AUTODEPEND ..\..\src\generic\gridsel.cpp

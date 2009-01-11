@@ -19,6 +19,131 @@
 #define wxGRID_VALUE_CHOICEINT    _T("choiceint")
 #define wxGRID_VALUE_DATETIME     _T("datetime")
 
+
+// the default renderer for the cells containing string data
+class WXDLLIMPEXP_ADV wxGridCellStringRenderer : public wxGridCellRenderer
+{
+public:
+    // draw the string
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected);
+
+    // return the string extent
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col);
+
+    virtual wxGridCellRenderer *Clone() const
+        { return new wxGridCellStringRenderer; }
+
+protected:
+    // set the text colours before drawing
+    void SetTextColoursAndFont(const wxGrid& grid,
+                               const wxGridCellAttr& attr,
+                               wxDC& dc,
+                               bool isSelected);
+
+    // calc the string extent for given string/font
+    wxSize DoGetBestSize(const wxGridCellAttr& attr,
+                         wxDC& dc,
+                         const wxString& text);
+};
+
+// the default renderer for the cells containing numeric (long) data
+class WXDLLIMPEXP_ADV wxGridCellNumberRenderer : public wxGridCellStringRenderer
+{
+public:
+    // draw the string right aligned
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected);
+
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col);
+
+    virtual wxGridCellRenderer *Clone() const
+        { return new wxGridCellNumberRenderer; }
+
+protected:
+    wxString GetString(const wxGrid& grid, int row, int col);
+};
+
+class WXDLLIMPEXP_ADV wxGridCellFloatRenderer : public wxGridCellStringRenderer
+{
+public:
+    wxGridCellFloatRenderer(int width = -1, int precision = -1);
+
+    // get/change formatting parameters
+    int GetWidth() const { return m_width; }
+    void SetWidth(int width) { m_width = width; m_format.clear(); }
+    int GetPrecision() const { return m_precision; }
+    void SetPrecision(int precision) { m_precision = precision; m_format.clear(); }
+
+    // draw the string right aligned with given width/precision
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected);
+
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col);
+
+    // parameters string format is "width[,precision]"
+    virtual void SetParameters(const wxString& params);
+
+    virtual wxGridCellRenderer *Clone() const;
+
+protected:
+    wxString GetString(const wxGrid& grid, int row, int col);
+
+private:
+    // formatting parameters
+    int m_width,
+        m_precision;
+
+    wxString m_format;
+};
+
+// renderer for boolean fields
+class WXDLLIMPEXP_ADV wxGridCellBoolRenderer : public wxGridCellRenderer
+{
+public:
+    // draw a check mark or nothing
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected);
+
+    // return the checkmark size
+    virtual wxSize GetBestSize(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               int row, int col);
+
+    virtual wxGridCellRenderer *Clone() const
+        { return new wxGridCellBoolRenderer; }
+
+private:
+    static wxSize ms_sizeCheckMark;
+};
+
+
 #if wxUSE_DATETIME
 
 #include "wx/datetime.h"
@@ -89,42 +214,6 @@ protected:
     wxArrayString m_choices;
 };
 
-
-#if wxUSE_COMBOBOX
-
-class WXDLLIMPEXP_ADV wxGridCellEnumEditor : public wxGridCellChoiceEditor
-{
-public:
-    wxGridCellEnumEditor( const wxString& choices = wxEmptyString );
-    virtual ~wxGridCellEnumEditor() {}
-
-    virtual wxGridCellEditor*  Clone() const;
-
-    virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(const wxString& oldval, wxString *newval);
-    virtual void ApplyEdit(int row, int col, wxGrid* grid);
-
-private:
-    long m_index;
-
-    DECLARE_NO_COPY_CLASS(wxGridCellEnumEditor)
-};
-
-#endif // wxUSE_COMBOBOX
-
-class WXDLLIMPEXP_ADV wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
-{
-public:
-    wxGridCellAutoWrapStringEditor() : wxGridCellTextEditor() { }
-    virtual void Create(wxWindow* parent,
-                        wxWindowID id,
-                        wxEvtHandler* evtHandler);
-
-    virtual wxGridCellEditor *Clone() const
-        { return new wxGridCellAutoWrapStringEditor; }
-
-    DECLARE_NO_COPY_CLASS(wxGridCellAutoWrapStringEditor)
-};
 
 class WXDLLIMPEXP_ADV wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer
 {

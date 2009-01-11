@@ -4325,6 +4325,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\generic\grideditors.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\generic\gridsel.h"
 				>
 			</File>

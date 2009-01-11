@@ -540,6 +540,10 @@ SOURCE=..\..\src\generic\gridctrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\grideditors.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\gridsel.cpp
 # End Source File
 # Begin Source File
@@ -886,6 +890,10 @@ SOURCE=..\..\include\wx\generic\grid.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\gridctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\generic\grideditors.h
 # End Source File
 # Begin Source File
 

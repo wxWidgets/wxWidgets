@@ -2872,6 +2872,7 @@ src/osx/iphone/window.mm
     src/generic/editlbox.cpp
     src/generic/grid.cpp
     src/generic/gridctrl.cpp
+    src/generic/grideditors.cpp
     src/generic/gridsel.cpp
     src/generic/helpext.cpp
     src/generic/hyperlinkg.cpp
@@ -2902,6 +2903,7 @@ src/osx/iphone/window.mm
     wx/generic/dataview.h
     wx/generic/grid.h
     wx/generic/gridctrl.h
+    wx/generic/grideditors.h
     wx/generic/gridsel.h
     wx/generic/helpext.h
     wx/generic/hyperlink.h
