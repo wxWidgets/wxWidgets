@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/gtk/dcclient.cpp
-// Purpose:
+// Purpose:     wxWindowDCImpl implementation
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Robert Roebling, Chris Breeze
@@ -276,7 +276,8 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
     if ( !widget )
     {
         window = window->GetParent();
-        widget = window->m_wxwindow;
+        if (window)
+            widget = window->m_wxwindow;
     }
 
     wxASSERT_MSG( widget, wxT("DC needs a widget") );
