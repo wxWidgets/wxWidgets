@@ -635,14 +635,6 @@
 #   endif
 #endif /* !defined(wxUSE_HELP) */
 
-#ifndef wxUSE_HEADERCTRL
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_HEADERCTRL must be defined."
-#   else
-#       define wxUSE_HEADERCTRL 0
-#   endif
-#endif /* !defined(wxUSE_HEADERCTRL) */
-
 #ifndef wxUSE_HYPERLINKCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_HYPERLINKCTRL must be defined."
@@ -1444,6 +1436,17 @@
 #       endif
 #   endif
 #endif /* !wxUSE_HEADERCTRL */
+
+#if wxUSE_REARRANGECTRL
+#   if !wxUSE_CHECKLISTBOX
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxRearrangeCtrl requires wxCheckListBox"
+#       else
+#           undef wxUSE_REARRANGECTRL
+#           define wxUSE_REARRANGECTRL 0
+#       endif
+#   endif
+#endif /* wxUSE_REARRANGECTRL */
 
 /* don't attempt to use native status bar on the platforms not having it */
 #ifndef wxUSE_NATIVE_STATUSBAR
