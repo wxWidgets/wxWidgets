@@ -71,7 +71,9 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxHeaderCtrlNameStr[] = "wxHeaderCtrl";
 
 BEGIN_EVENT_TABLE(wxHeaderCtrlBase, wxControl)
     EVT_HEADER_SEPARATOR_DCLICK(wxID_ANY, wxHeaderCtrlBase::OnSeparatorDClick)
+#if wxUSE_MENU
     EVT_HEADER_RIGHT_CLICK(wxID_ANY, wxHeaderCtrlBase::OnRClick)
+#endif // wxUSE_MENU
 END_EVENT_TABLE()
 
 void wxHeaderCtrlBase::ScrollWindow(int dx,
@@ -116,6 +118,8 @@ void wxHeaderCtrlBase::OnSeparatorDClick(wxHeaderCtrlEvent& event)
         UpdateColumn(col);
 }
 
+#if wxUSE_MENU
+
 void wxHeaderCtrlBase::OnRClick(wxHeaderCtrlEvent& event)
 {
     if ( !HasFlag(wxHD_ALLOW_HIDE) )
@@ -126,6 +130,8 @@ void wxHeaderCtrlBase::OnRClick(wxHeaderCtrlEvent& event)
 
     ShowColumnsMenu(ScreenToClient(wxGetMousePosition()));
 }
+
+#endif // wxUSE_MENU
 
 // ----------------------------------------------------------------------------
 // wxHeaderCtrlBase column reordering
@@ -263,6 +269,8 @@ wxHeaderCtrlBase::DoResizeColumnIndices(wxArrayInt& colIndices, unsigned int cou
 // wxHeaderCtrl extra UI
 // ----------------------------------------------------------------------------
 
+#if wxUSE_MENU
+
 void wxHeaderCtrlBase::AddColumnsItems(wxMenu& menu, int idColumnsBase)
 {
     const unsigned count = GetColumnCount();
@@ -309,6 +317,8 @@ bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
 
     return true;
 }
+
+#endif // wxUSE_MENU
 
 bool wxHeaderCtrlBase::ShowCustomizeDialog()
 {
