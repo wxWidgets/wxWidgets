@@ -2426,7 +2426,7 @@ static bool TestFtpConnect()
     ftp = new wxFTP;
 
 #ifdef FTP_ANONYMOUS
-    static const wxChar *hostname = _T("ftp->wxwidgets.org");
+    static const wxChar *hostname = _T("ftp.wxwidgets.org");
 
     wxPrintf(_T("--- Attempting to connect to %s:21 anonymously...\n"), hostname);
 #else // !FTP_ANONYMOUS
