@@ -43,7 +43,7 @@ public:
             instance! It is recommended to use the default value (UTF-8).
     */
     wxDataOutputStream(wxOutputStream& stream,
-                       const wxMBConv& conv = wxConvAuto());
+                       const wxMBConv& conv = wxConvUTF8);
 
     /**
         Destroys the wxDataOutputStream object.
@@ -190,7 +190,7 @@ public:
             instance!
     */
     wxDataInputStream(wxInputStream& stream,
-                      const wxMBConv& conv = wxConvAuto());
+                      const wxMBConv& conv = wxConvUTF8 );
 
     /**
         Destroys the wxDataInputStream object.

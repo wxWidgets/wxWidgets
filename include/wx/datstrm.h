@@ -22,7 +22,7 @@ class WXDLLIMPEXP_BASE wxDataInputStream
 {
 public:
 #if wxUSE_UNICODE
-    wxDataInputStream(wxInputStream& s, const wxMBConv& conv = wxConvAuto());
+    wxDataInputStream(wxInputStream& s, const wxMBConv& conv = wxConvUTF8 );
 #else
     wxDataInputStream(wxInputStream& s);
 #endif
@@ -98,7 +98,7 @@ class WXDLLIMPEXP_BASE wxDataOutputStream
 {
 public:
 #if wxUSE_UNICODE
-    wxDataOutputStream(wxOutputStream& s, const wxMBConv& conv = wxConvAuto());
+    wxDataOutputStream(wxOutputStream& s, const wxMBConv& conv = wxConvUTF8 );
 #else
     wxDataOutputStream(wxOutputStream& s);
 #endif
