@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_HEADERCTRL
+
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
 #endif // WX_PRECOMP
@@ -485,3 +487,5 @@ const wxEventType wxEVT_COMMAND_HEADER_BEGIN_REORDER = wxNewEventType();
 const wxEventType wxEVT_COMMAND_HEADER_END_REORDER = wxNewEventType();
 
 const wxEventType wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED = wxNewEventType();
+
+#endif // wxUSE_HEADERCTRL

@@ -817,6 +817,7 @@ if test "$wxUSE_CONTROLS" = "no"; then
     DEFAULT_wxUSE_FONTPICKERCTRL=no
     DEFAULT_wxUSE_GAUGE=no
     DEFAULT_wxUSE_GRID=no
+    DEFAULT_wxUSE_HEADERCTRL=no
     DEFAULT_wxUSE_HYPERLINKCTRL=no
     DEFAULT_wxUSE_IMAGLIST=no
     DEFAULT_wxUSE_LISTBOOK=no
@@ -875,6 +876,7 @@ WX_ARG_FEATURE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl clas
 WX_ARG_FEATURE(fontpicker,  [  --enable-fontpicker     use wxFontPickerCtrl class], wxUSE_FONTPICKERCTRL)
 WX_ARG_FEATURE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_FEATURE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
+WX_ARG_FEATURE(headerctrl,  [  --enable-headerctrl     use wxHeaderCtrl class], wxUSE_HEADERCTRL)
 WX_ARG_FEATURE(hyperlink,   [  --enable-hyperlink      use wxHyperlinkCtrl class], wxUSE_HYPERLINKCTRL)
 WX_ARG_FEATURE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
 WX_ARG_FEATURE(listbook,    [  --enable-listbook       use wxListbook class], wxUSE_LISTBOOK)
@@ -6602,6 +6604,11 @@ if test "$wxUSE_GRID" = "yes"; then
   AC_DEFINE(wxUSE_GRID)
   USES_CONTROLS=1
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS grid"
+fi
+
+if test "$wxUSE_HEADERCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_HEADERCTRL)
+  USES_CONTROLS=1
 fi
 
 if test "$wxUSE_HYPERLINKCTRL" = "yes"; then

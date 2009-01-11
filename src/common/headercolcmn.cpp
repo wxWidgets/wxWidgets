@@ -23,8 +23,7 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif // WX_PRECOMP
+#if wxUSE_HEADERCTRL
 
 #include "wx/headercol.h"
 
@@ -91,4 +90,5 @@ void wxSettableHeaderColumn::ToggleFlag(int flag)
     SetFlags(flags);
 }
 
+#endif // wxUSE_HEADERCTRL
 

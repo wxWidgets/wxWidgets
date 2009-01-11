@@ -13,6 +13,8 @@
 
 #include "wx/control.h"
 
+#if wxUSE_HEADERCTRL
+
 #include "wx/dynarray.h"
 #include "wx/vector.h"
 
@@ -460,5 +462,7 @@ typedef void (wxEvtHandler::*wxHeaderCtrlEventFunction)(wxHeaderCtrlEvent&);
 #define EVT_HEADER_END_REORDER(id, fn) wx__DECLARE_HEADER_EVT(END_REORDER, id, fn)
 
 #define EVT_HEADER_DRAGGING_CANCELLED(id, fn) wx__DECLARE_HEADER_EVT(DRAGGING_CANCELLED, id, fn)
+
+#endif // wxUSE_HEADERCTRL
 
 #endif // _WX_HEADERCTRL_H_

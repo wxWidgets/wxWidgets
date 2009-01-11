@@ -13,6 +13,8 @@
 
 #include "wx/bitmap.h"
 
+#if wxUSE_HEADERCTRL
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -268,5 +270,8 @@ private:
     bool m_sort,
          m_sortAscending;
 };
+
+#endif // wxUSE_HEADERCTRL
+
 #endif // _WX_HEADERCOL_H_
 

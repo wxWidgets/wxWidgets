@@ -692,6 +692,7 @@
 #define wxUSE_FILEPICKERCTRL 1  // wxFilePickerCtrl
 #define wxUSE_FONTPICKERCTRL 1  // wxFontPickerCtrl
 #define wxUSE_GAUGE         1   // wxGauge
+#define wxUSE_HEADERCTRL    1   // wxHeaderCtrl
 #define wxUSE_HYPERLINKCTRL 1   // wxHyperlinkCtrl
 #define wxUSE_LISTBOX       1   // wxListBox
 #define wxUSE_LISTCTRL      1   // wxListCtrl

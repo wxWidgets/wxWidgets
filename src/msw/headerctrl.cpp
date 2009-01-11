@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_HEADERCTRL
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
 #endif // WX_PRECOMP
@@ -660,3 +662,5 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 }
 
 #endif // wxHAS_GENERIC_HEADERCTRL
+
+#endif // wxUSE_HEADERCTRL

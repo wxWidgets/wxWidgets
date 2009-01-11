@@ -341,6 +341,7 @@
 #define wxUSE_FILEPICKERCTRL 0
 #define wxUSE_FONTPICKERCTRL 0
 #define wxUSE_GAUGE         0
+#define wxUSE_HEADERCTRL    0
 #define wxUSE_HYPERLINKCTRL 0
 #define wxUSE_LISTBOX       0
 #define wxUSE_LISTCTRL      0

@@ -619,6 +619,14 @@
 #   endif
 #endif /* !defined(wxUSE_GRID) */
 
+#ifndef wxUSE_HEADERCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_HEADERCTRL must be defined."
+#   else
+#       define wxUSE_HEADERCTRL 0
+#   endif
+#endif /* !defined(wxUSE_HEADERCTRL) */
+
 #ifndef wxUSE_HELP
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_HELP must be defined."
@@ -626,6 +634,14 @@
 #       define wxUSE_HELP 0
 #   endif
 #endif /* !defined(wxUSE_HELP) */
+
+#ifndef wxUSE_HEADERCTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_HEADERCTRL must be defined."
+#   else
+#       define wxUSE_HEADERCTRL 0
+#   endif
+#endif /* !defined(wxUSE_HEADERCTRL) */
 
 #ifndef wxUSE_HYPERLINKCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -1305,11 +1321,13 @@
     wxUSE_CHOICE || \
     wxUSE_GAUGE || \
     wxUSE_GRID || \
+    wxUSE_HEADERCTRL || \
     wxUSE_LISTBOX || \
     wxUSE_LISTCTRL || \
     wxUSE_NOTEBOOK || \
     wxUSE_RADIOBOX || \
     wxUSE_RADIOBTN || \
+    wxUSE_REARRANGECTRL || \
     wxUSE_SCROLLBAR || \
     wxUSE_SLIDER || \
     wxUSE_SPINBTN || \
@@ -1407,12 +1425,25 @@
 
 #if !wxUSE_ODCOMBOBOX
 #   if wxUSE_BITMAPCOMBOBOX
-#       error "wxBitmapComboBox requires wxOwnerDrawnComboBox"
-#   else
-#       undef wxUSE_BITMAPCOMBOBOX
-#       define wxUSE_BITMAPCOMBOBOX 0
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxBitmapComboBox requires wxOwnerDrawnComboBox"
+#       else
+#           undef wxUSE_BITMAPCOMBOBOX
+#           define wxUSE_BITMAPCOMBOBOX 0
+#       endif
 #   endif
 #endif /* !wxUSE_ODCOMBOBOX */
+
+#if !wxUSE_HEADERCTRL
+#   if wxUSE_DATAVIEWCTRL || wxUSE_GRID
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxDataViewCtrl and wxGrid require wxHeaderCtrl"
+#       else
+#           undef wxUSE_HEADERCTRL
+#           define wxUSE_HEADERCTRL 1
+#       endif
+#   endif
+#endif /* !wxUSE_HEADERCTRL */
 
 /* don't attempt to use native status bar on the platforms not having it */
 #ifndef wxUSE_NATIVE_STATUSBAR

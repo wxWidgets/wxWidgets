@@ -23,8 +23,7 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#endif // WX_PRECOMP
+#if wxUSE_HEADERCTRL
 
 #include "wx/headerctrl.h"
 
@@ -714,3 +713,5 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
 }
 
 #endif // wxHAS_GENERIC_HEADERCTRL
+
+#endif // wxUSE_HEADERCTRL
