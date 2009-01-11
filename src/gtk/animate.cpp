@@ -127,6 +127,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     g_signal_connect(loader, "area-updated", G_CALLBACK(gdk_pixbuf_area_updated), this);
 
     guchar buf[2048];
+    bool data_written = false;
     while (stream.IsOk())
     {
         // read a chunk of data
@@ -135,10 +136,21 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
         // fetch all data into the loader
         if (!gdk_pixbuf_loader_write(loader, buf, stream.LastRead(), &error))
         {
-            gdk_pixbuf_loader_close(loader, &error);
             wxLogDebug(wxT("Could not write to the loader: %s"), error->message);
+
+            // gdk_pixbuf_loader_close wants the GError == NULL; reset it:
+            error = NULL;
+            gdk_pixbuf_loader_close(loader, &error);
             return false;
         }
+
+        data_written = true;
+    }
+
+    if (!data_written)
+    {
+        wxLogDebug("Could not read data from the stream...");
+        return false;
     }
 
     // load complete
@@ -149,7 +161,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     }
 
     // wait until we get the last area_updated signal
-    return true;
+    return data_written;
 }
 
 wxImage wxAnimation::GetFrame(unsigned int WXUNUSED(frame)) const
