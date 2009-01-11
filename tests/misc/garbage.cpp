@@ -92,12 +92,14 @@ void GarbageTestCase::LoadGarbage()
 
 void GarbageTestCase::DoLoadFile(const wxString& fullname)
 {
+    int type;
+
     // test wxImage
     wxImage img;
     CPPUNIT_ASSERT( img.LoadFile(fullname) == false );
         // test with the default wxBITMAP_TYPE_ANY
 
-    for (int type = wxBITMAP_TYPE_BMP; type < wxBITMAP_TYPE_ANY; type++)
+    for (type = wxBITMAP_TYPE_BMP; type < wxBITMAP_TYPE_ANY; type++)
         CPPUNIT_ASSERT( img.LoadFile(fullname, (wxBitmapType)type) == false );
             // test with all other possible wxBITMAP_TYPE_* flags
 
@@ -106,7 +108,7 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
     CPPUNIT_ASSERT( bmp.LoadFile(fullname) == false );
         // test with the default wxBITMAP_TYPE_ANY
 
-    for (int type = wxBITMAP_TYPE_BMP; type < wxBITMAP_TYPE_ANY; type++)
+    for (type = wxBITMAP_TYPE_BMP; type < wxBITMAP_TYPE_ANY; type++)
         CPPUNIT_ASSERT( bmp.LoadFile(fullname, (wxBitmapType)type) == false );
             // test with all other possible wxBITMAP_TYPE_* flags
 
@@ -115,7 +117,7 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
     CPPUNIT_ASSERT( icon.LoadFile(fullname) == false );
         // test with the default wxICON_DEFAULT_TYPE
 
-    for (int type = wxBITMAP_TYPE_BMP; type < wxBITMAP_TYPE_ANY; type++)
+    for (type = wxBITMAP_TYPE_BMP; type < wxBITMAP_TYPE_ANY; type++)
         CPPUNIT_ASSERT( icon.LoadFile(fullname, (wxBitmapType)type) == false );
             // test with all other possible wxBITMAP_TYPE_* flags
 
@@ -125,7 +127,7 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
     CPPUNIT_ASSERT( anim.LoadFile(fullname) == false );
         // test with the default wxANIMATION_TYPE_ANY
 
-    for (int type = wxANIMATION_TYPE_INVALID+1; type < wxANIMATION_TYPE_ANY; type++)
+    for (type = wxANIMATION_TYPE_INVALID+1; type < wxANIMATION_TYPE_ANY; type++)
         CPPUNIT_ASSERT( anim.LoadFile(fullname, (wxAnimationType)type) == false );
             // test with all other possible wxANIMATION_TYPE_* flags
 
@@ -152,6 +154,8 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
 
 void GarbageTestCase::DoLoadStream(wxInputStream& stream)
 {
+    int type;
+
     // NOTE: not all classes tested by DoLoadFile() supports loading
     //       from an input stream!
 
@@ -160,7 +164,7 @@ void GarbageTestCase::DoLoadStream(wxInputStream& stream)
     CPPUNIT_ASSERT( img.LoadFile(stream) == false );
         // test with the default wxBITMAP_TYPE_ANY
 
-    for (int type = wxBITMAP_TYPE_INVALID+1; type < wxBITMAP_TYPE_ANY; type++)
+    for (type = wxBITMAP_TYPE_INVALID+1; type < wxBITMAP_TYPE_ANY; type++)
         CPPUNIT_ASSERT( img.LoadFile(stream, (wxBitmapType)type) == false );
             // test with all other possible wxBITMAP_TYPE_* flags
 
@@ -170,7 +174,7 @@ void GarbageTestCase::DoLoadStream(wxInputStream& stream)
     CPPUNIT_ASSERT( anim.Load(stream) == false );
         // test with the default wxANIMATION_TYPE_ANY
 
-    for (int type = wxANIMATION_TYPE_INVALID+1; type < wxANIMATION_TYPE_ANY; type++)
+    for (type = wxANIMATION_TYPE_INVALID+1; type < wxANIMATION_TYPE_ANY; type++)
         CPPUNIT_ASSERT( anim.Load(stream, (wxAnimationType)type) == false );
             // test with all other possible wxANIMATION_TYPE_* flags
 /*
