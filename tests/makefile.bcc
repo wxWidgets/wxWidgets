@@ -119,6 +119,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_htmlwindow.obj \
 	$(OBJS)\test_gui_guifuncs.obj \
 	$(OBJS)\test_gui_selstoretest.obj \
+	$(OBJS)\test_gui_garbage.obj \
 	$(OBJS)\test_gui_socket.obj \
 	$(OBJS)\test_gui_clientsize.obj \
 	$(OBJS)\test_gui_setsize.obj
@@ -168,10 +169,6 @@ EXTRALIBS_FOR_BASE =
 !if "$(MONOLITHIC)" == "1"
 EXTRALIBS_FOR_BASE =  
 !endif
-!if "$(MONOLITHIC)" == "0"
-__WXLIB_XML_p = \
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
-!endif
 !if "$(USE_GUI)" == "1"
 __test_gui___depname = $(OBJS)\test_gui.exe
 !endif
@@ -208,6 +205,18 @@ __GFXCTX_DEFINE_p_3 = -dwxUSE_GRAPHICS_CONTEXT=1
 !if "$(SHARED)" == "1"
 __DLLFLAG_p_3 = -dWXUSINGDLL
 !endif
+!if "$(MONOLITHIC)" == "0" && "$(USE_MEDIA)" == "1"
+__WXLIB_MEDIA_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_XRC_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_ADV_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib
+!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_HTML_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
@@ -228,6 +237,10 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_NET_p = \
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_XML_p = \
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
 !endif
 !if "$(BUILD)" == "debug"
 __OPTIMIZEFLAG = -Od
@@ -359,7 +372,7 @@ $(OBJS)\test.exe: $(OBJS)\test_dummy.obj  $(TEST_OBJECTS)
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS)  $(OBJS)\test_gui_sample.res
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) $(CPPUNIT_LIBS) -ap $(LDFLAGS) @&&|
-	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_1).lib,, $(OBJS)\test_gui_sample.res
+	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_1).lib,, $(OBJS)\test_gui_sample.res
 |
 !endif
 
@@ -603,6 +616,9 @@ $(OBJS)\test_gui_guifuncs.obj: .\misc\guifuncs.cpp
 
 $(OBJS)\test_gui_selstoretest.obj: .\misc\selstoretest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\misc\selstoretest.cpp
+
+$(OBJS)\test_gui_garbage.obj: .\misc\garbage.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\misc\garbage.cpp
 
 $(OBJS)\test_gui_socket.obj: .\net\socket.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\net\socket.cpp

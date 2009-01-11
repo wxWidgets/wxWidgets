@@ -69,14 +69,26 @@ EXTRALIBS_FOR_BASE =
 !ifeq MONOLITHIC 1
 EXTRALIBS_FOR_BASE =  
 !endif
-__WXLIB_XML_p =
-!ifeq MONOLITHIC 0
-__WXLIB_XML_p = &
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
-!endif
 __test_gui___depname =
 !ifeq USE_GUI 1
 __test_gui___depname = $(OBJS)\test_gui.exe
+!endif
+__WXLIB_MEDIA_p =
+!ifeq MONOLITHIC 0
+!ifeq USE_MEDIA 1
+__WXLIB_MEDIA_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib
+!endif
+!endif
+__WXLIB_XRC_p =
+!ifeq MONOLITHIC 0
+__WXLIB_XRC_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.lib
+!endif
+__WXLIB_ADV_p =
+!ifeq MONOLITHIC 0
+__WXLIB_ADV_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib
 !endif
 __WXLIB_HTML_p =
 !ifeq MONOLITHIC 0
@@ -104,6 +116,11 @@ __WXLIB_NET_p =
 !ifeq MONOLITHIC 0
 __WXLIB_NET_p = &
 	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
+!endif
+__WXLIB_XML_p =
+!ifeq MONOLITHIC 0
+__WXLIB_XML_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
 !endif
 __DEBUGINFO =
 !ifeq BUILD debug
@@ -329,6 +346,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_htmlwindow.obj &
 	$(OBJS)\test_gui_guifuncs.obj &
 	$(OBJS)\test_gui_selstoretest.obj &
+	$(OBJS)\test_gui_garbage.obj &
 	$(OBJS)\test_gui_socket.obj &
 	$(OBJS)\test_gui_clientsize.obj &
 	$(OBJS)\test_gui_setsize.obj
@@ -382,7 +400,7 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	@%append $(OBJS)\test_gui.lbc option caseexact
 	@%append $(OBJS)\test_gui.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_' $(LDFLAGS)
 	@for %i in ($(TEST_GUI_OBJECTS)) do @%append $(OBJS)\test_gui.lbc file %i
-	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\test_gui.lbc library %i
+	@for %i in ( $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\test_gui.lbc library %i
 	@%append $(OBJS)\test_gui.lbc option resource=$(OBJS)\test_gui_sample.res
 	@for %i in () do @%append $(OBJS)\test_gui.lbc option stack=%i
 	wlink @$(OBJS)\test_gui.lbc
@@ -634,6 +652,9 @@ $(OBJS)\test_gui_guifuncs.obj :  .AUTODEPEND .\misc\guifuncs.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_selstoretest.obj :  .AUTODEPEND .\misc\selstoretest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_garbage.obj :  .AUTODEPEND .\misc\garbage.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_socket.obj :  .AUTODEPEND .\net\socket.cpp
