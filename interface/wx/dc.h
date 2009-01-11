@@ -6,6 +6,77 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    Logical raster operations which can be used with wxDC::SetLogicalFunction
+    and some other wxDC functions (e.g. wxDC::Blit and wxDC::StretchBlit).
+
+    The description of the values below refer to how a generic @e src source pixel
+    and the corresponding @e dst destination pixel gets combined together to produce
+    the final pixel. E.g. @c wxCLEAR and @c wxSET completely ignore the source
+    and the destination pixel and always put zeroes or ones in the final surface.
+*/
+enum wxRasterOperationMode
+{
+    wxCLEAR,       //!< 0
+    wxXOR,         //!< @e src XOR @e dst
+    wxINVERT,      //!< NOT @e dst
+    wxOR_REVERSE,  //!< @e src OR (NOT @e dst)
+    wxAND_REVERSE, //!< @e src AND (NOT @e dst)
+    wxCOPY,        //!< @e src
+    wxAND,         //!< @e src AND @e dst
+    wxAND_INVERT,  //!< (NOT @e src) AND @e dst
+    wxNO_OP,       //!< @e dst
+    wxNOR,         //!< (NOT @e src) AND (NOT @e dst)
+    wxEQUIV,       //!< (NOT @e src) XOR @e dst
+    wxSRC_INVERT,  //!< (NOT @e src)
+    wxOR_INVERT,   //!< (NOT @e src) OR @e dst
+    wxNAND,        //!< (NOT @e src) OR (NOT @e dst)
+    wxOR,          //!< @e src OR @e dst
+    wxSET          //!< 1
+};
+
+/**
+    Flood styles used by wxDC::FloodFill.
+*/
+enum wxFloodFillStyle
+{
+    /** The flooding occurs until a colour other than the given colour is encountered. */
+    wxFLOOD_SURFACE = 1,
+
+    /** The area to be flooded is bounded by the given colour. */
+    wxFLOOD_BORDER
+};
+
+/**
+    The mapping mode which can be used with wxDC::SetMapMode.
+*/
+enum wxMappingMode
+{
+    /** Each logical unit is 1 device pixel. */
+    wxMM_TEXT = 1,
+
+    wxMM_LOMETRIC,
+    wxMM_HIMETRIC,
+
+    /** Each logical unit is 1/10 of a mm. */
+    wxMM_LOENGLISH,
+
+    wxMM_HIENGLISH,
+
+    /** Each logical unit is 1/20 of a point, or 1/1440 of an inch. */
+    wxMM_TWIPS,
+
+    wxMM_ISOTROPIC,
+    wxMM_ANISOTROPIC,
+
+    /** Each logical unit is a point, or 1/72 of an inch. */
+    wxMM_POINTS,
+
+    /** Each logical unit is 1 mm. */
+    wxMM_METRIC
+};
+
 /**
     @class wxDC
 
@@ -899,46 +970,27 @@ public:
     void SetLayoutDirection(wxLayoutDirection dir);
 
     /**
-        Sets the current logical function for the device context. This
-        determines how a source pixel (from a pen or brush colour, or source
-        device context if using Blit()) combines with a destination pixel in
+        Sets the current logical function for the device context.
+        It determines how a @e source pixel (from a pen or brush colour, or source
+        device context if using Blit()) combines with a @e destination pixel in
         the current device context.
         Text drawing is not affected by this function.
 
-        The possible values and their meaning in terms of source and
-        destination pixel values are as follows:
+        See ::wxRasterOperationMode enumeration values for more info.
 
-        @verbatim
-        wxAND           src AND dst
-        wxAND_INVERT    (NOT src) AND dst
-        wxAND_REVERSE   src AND (NOT dst)
-        wxCLEAR         0
-        wxCOPY          src
-        wxEQUIV         (NOT src) XOR dst
-        wxINVERT        NOT dst
-        wxNAND          (NOT src) OR (NOT dst)
-        wxNOR           (NOT src) AND (NOT dst)
-        wxNO_OP         dst
-        wxOR            src OR dst
-        wxOR_INVERT     (NOT src) OR dst
-        wxOR_REVERSE    src OR (NOT dst)
-        wxSET           1
-        wxSRC_INVERT    NOT src
-        wxXOR           src XOR dst
-        @endverbatim
-
-        The default is wxCOPY, which simply draws with the current colour. The
-        others combine the current colour and the background using a logical
-        operation. wxINVERT is commonly used for drawing rubber bands or moving
+        The default is @c wxCOPY, which simply draws with the current colour.
+        The others combine the current colour and the background using a logical
+        operation. @c wxINVERT is commonly used for drawing rubber bands or moving
         outlines, since drawing twice reverts to the original colour.
     */
     void SetLogicalFunction(wxRasterOperationMode function);
 
     /**
         The mapping mode of the device context defines the unit of measurement
-        used to convert logical units to device units. Note that in X, text
-        drawing isn't handled consistently with the mapping mode; a font is
-        always specified in point size. However, setting the user scale (see
+        used to convert logical units to device units.
+
+        Note that in X, text drawing isn't handled consistently with the mapping mode;
+        a font is always specified in point size. However, setting the user scale (see
         SetUserScale()) scales the text appropriately. In Windows, scalable
         TrueType fonts are always used; in X, results depend on availability of
         fonts, but usually a reasonable match is found.
@@ -947,14 +999,6 @@ public:
 
         Drawing to a Windows printer device context uses the current mapping
         mode, but mapping mode is currently ignored for PostScript output.
-
-        The mapping mode can be one of the following:
-        - wxMM_TWIPS: Each logical unit is 1/20 of a point, or 1/1440 of an
-          inch.
-        - wxMM_POINTS: Each logical unit is a point, or 1/72 of an inch.
-        - wxMM_METRIC: Each logical unit is 1 mm.
-        - wxMM_LOMETRIC: Each logical unit is 1/10 of a mm.
-        - wxMM_TEXT: Each logical unit is 1 device pixel.
     */
     void SetMapMode(wxMappingMode mode);
 
