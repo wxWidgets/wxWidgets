@@ -1198,7 +1198,7 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
 
 
     searchPath += GetFullSearchPath(szDirPrefix);
-    if ( szDirPrefix[LEN_LANG] == wxS('_') )
+    if ( szDirPrefix.length() > LEN_LANG && szDirPrefix[LEN_LANG] == wxS('_') )
     {
         // also add just base locale name: for things like "fr_BE" (Belgium
         // French) we should use fall back on plain "fr" if no Belgium-specific
