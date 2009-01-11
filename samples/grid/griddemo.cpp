@@ -35,6 +35,7 @@
 #include "wx/grid.h"
 #include "wx/headerctrl.h"
 #include "wx/generic/gridctrl.h"
+#include "wx/generic/grideditors.h"
 
 #include "griddemo.h"
 
