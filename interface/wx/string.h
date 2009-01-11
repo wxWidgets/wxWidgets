@@ -1139,7 +1139,7 @@ public:
     //@{
     /**
         Assignment: the effect of each operation is the same as for the corresponding
-        constructor (see @ref wxString() "wxString constructors").
+        constructor (see wxString constructors).
     */
     wxString operator =(const wxString& str);
     wxString operator =(wxUniChar c);

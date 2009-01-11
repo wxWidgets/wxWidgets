@@ -607,20 +607,18 @@ public:
 
         @param idx
             The column to set the sort indicator for.
+            If @c -1 is given, then the currently shown sort indicator
+            will be removed.
         @param sortOrder
             If @true or @false show the sort indicator corresponding to
-            ascending or descending sort order respectively, if @c -1 remove
-            the currently shown sort indicator.
+            ascending or descending sort order respectively.
      */
-    void ShowSortIndicator(unsigned int idx, bool ascending = true);
+    void ShowSortIndicator(unsigned int idx, bool sortOrder = true);
 
     /**
-        Remove the sort indicator from the given column.
+        Remove the sort indicator from the column being used as sort key.
 
-        This is the same as calling ShowSortIndicator() with @c -1 argument.
-
-        @param idx
-            The column to remove sort indicator for.
+        @see ShowSortIndicator
      */
     void RemoveSortIndicator();
 
