@@ -2,7 +2,7 @@
 // Name:        dcgraph.h
 // Purpose:     interface of wxGCDC
 // Author:      wxWidgets team
-// RCS-ID:      $Id: $
+// RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -24,17 +24,17 @@ public:
        Constructs a wxGCDC from a wxWindowDC.
     */
     wxGCDC( const wxWindowDC& dc );
-    
+
     /**
        Constructs a wxGCDC from a wxMemoryDC.
     */
     wxGCDC( const wxMemoryDC& dc );
-    
+
     /**
        Constructs a wxGCDC from a wxPrinterDC.
     */
     wxGCDC( const wxPrinterDC& dc );
- 
+
     /**
        Retrieves associated wxGraphicsContext
     */
