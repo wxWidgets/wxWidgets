@@ -9,6 +9,57 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// IMPORTANT NOTE FOR WXWIDGETS USERS:
+// If you're a wxWidgets user and you're looking at this file to learn how to
+// structure a wxWidgets console application, then you don't have much to learn.
+// This application is used more for testing rather than as sample but
+// basically the following simple block is enough for you to start your
+// own console application:
+
+/*
+    int main(int argc, char **argv)
+    {
+        wxApp::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, "program");
+
+        wxInitializer initializer;
+        if ( !initializer )
+        {
+            fprintf(stderr, "Failed to initialize the wxWidgets library, aborting.");
+            return -1;
+        }
+
+        static const wxCmdLineEntryDesc cmdLineDesc[] =
+        {
+            { wxCMD_LINE_SWITCH, "h", "help", "show this help message",
+                wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+            // ... your other command line options here...
+
+            { wxCMD_LINE_NONE }
+        };
+
+        wxCmdLineParser parser(cmdLineDesc, argc, wxArgv);
+        switch ( parser.Parse() )
+        {
+            case -1:
+                wxLogMessage(_T("Help was given, terminating."));
+                break;
+
+            case 0:
+                // everything is ok; proceed
+                break;
+
+            default:
+                wxLogMessage(_T("Syntax error detected, aborting."));
+                break;
+        }
+
+        // do something useful here
+
+        return 0;
+    }
+*/
+
+
 // ============================================================================
 // declarations
 // ============================================================================
