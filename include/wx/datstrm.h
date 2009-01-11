@@ -78,6 +78,11 @@ public:
     wxDataInputStream& operator>>(float& f);
 
     void BigEndianOrdered(bool be_order) { m_be_order = be_order; }
+    
+#if wxUSE_UNICODE
+    void SetConv( const wxMBConv &conv );
+    wxMBConv *GetConv() const { return m_conv; }
+#endif
 
 protected:
     wxInputStream *m_input;
@@ -151,6 +156,11 @@ public:
     wxDataOutputStream& operator<<(float f);
 
     void BigEndianOrdered(bool be_order) { m_be_order = be_order; }
+
+#if wxUSE_UNICODE
+    void SetConv( const wxMBConv &conv );
+    wxMBConv *GetConv() const { return m_conv; }
+#endif
 
 protected:
     wxOutputStream *m_output;

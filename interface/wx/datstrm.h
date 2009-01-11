@@ -57,7 +57,18 @@ public:
         order.
     */
     void BigEndianOrdered(bool be_order);
+    
+    /**
+       Returns the current text conversion class used for
+       writing strings.
+    */
+    wxMBConv *GetConv() const;
 
+    /** 
+       Sets the text conversion class used for writing strings.
+    */
+    void SetConv( const wxMBConv &conv );
+    
     /**
         Writes the single byte @a i8 to the stream.
     */
@@ -193,6 +204,13 @@ public:
     */
     void BigEndianOrdered(bool be_order);
 
+    
+    /**
+       Returns the current text conversion class used for
+       reading strings.
+    */
+    wxMBConv *GetConv() const;
+    
     /**
         Reads a single byte from the stream.
     */
@@ -260,5 +278,10 @@ public:
         @see wxDataOutputStream::WriteString()
     */
     wxString ReadString();
+
+    /** 
+       Sets the text conversion class used for reading strings.
+    */
+    void SetConv( const wxMBConv &conv );
 };
 

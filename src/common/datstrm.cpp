@@ -45,6 +45,14 @@ wxDataInputStream::~wxDataInputStream()
 #endif // wxUSE_UNICODE
 }
 
+#if wxUSE_UNICODE
+void wxDataInputStream::SetConv( const wxMBConv &conv )
+{
+    delete m_conv;
+    m_conv = conv.Clone();
+}
+#endif
+
 #if wxHAS_INT64
 wxUint64 wxDataInputStream::Read64()
 {
@@ -472,6 +480,14 @@ wxDataOutputStream::~wxDataOutputStream()
     delete m_conv;
 #endif // wxUSE_UNICODE
 }
+
+#if wxUSE_UNICODE
+void wxDataOutputStream::SetConv( const wxMBConv &conv )
+{
+    delete m_conv;
+    m_conv = conv.Clone();
+}
+#endif
 
 #if wxHAS_INT64
 void wxDataOutputStream::Write64(wxUint64 i)
