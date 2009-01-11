@@ -4,7 +4,7 @@
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     03/02/99
-// RCS-ID:      $Id:
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@
 
 #include "wx/osx/private.h"
 
-// implementation exposed, so that search control can pull it 
+// implementation exposed, so that search control can pull it
 
 class wxMacUnicodeTextControl : public wxMacControl, public wxTextWidgetImpl
 {
