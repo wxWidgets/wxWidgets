@@ -832,6 +832,14 @@
 #   endif
 #endif /* !defined(wxUSE_RADIOBTN) */
 
+#ifndef wxUSE_REARRANGECTRL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_REARRANGECTRL must be defined."
+#   else
+#       define wxUSE_REARRANGECTRL 0
+#   endif
+#endif /* !defined(wxUSE_REARRANGECTRL) */
+
 #ifndef wxUSE_SASH
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SASH must be defined."
