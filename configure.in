@@ -789,123 +789,71 @@ dnl don't set DEFAULT_wxUSE_XXX below if the option is not specified
 DEFAULT_wxUSE_CONTROLS=none
 WX_ARG_DISABLE(controls,    [  --disable-controls      disable compilation of all standard controls], wxUSE_CONTROLS)
 
-dnl even with --enable-controls, some may be disabled by giving
-dnl --disable-<control> later on the command line - but by default all will be
-dnl used (and vice versa)
-if test "$wxUSE_CONTROLS" = "yes"; then
-  DEFAULT_wxUSE_ACCEL=yes
-  DEFAULT_wxUSE_ANIMATIONCTRL=yes
-  DEFAULT_wxUSE_BMPBUTTON=yes
-  DEFAULT_wxUSE_BUTTON=yes
-  DEFAULT_wxUSE_CALCTRL=yes
-  DEFAULT_wxUSE_CARET=yes
-  DEFAULT_wxUSE_COMBOBOX=yes
-  DEFAULT_wxUSE_CHECKBOX=yes
-  DEFAULT_wxUSE_CHECKLISTBOX=yes
-  DEFAULT_wxUSE_CHOICE=yes
-  DEFAULT_wxUSE_CHOICEBOOK=yes
-  DEFAULT_wxUSE_COLLPANE=yes
-  DEFAULT_wxUSE_COLOURPICKERCTRL=yes
-  DEFAULT_wxUSE_COMBOBOX=yes
-  DEFAULT_wxUSE_DATEPICKCTRL=yes
-  DEFAULT_wxUSE_DISPLAY=yes
-  DEFAULT_wxUSE_DETECT_SM=yes
-  DEFAULT_wxUSE_DIRPICKERCTRL=yes
-  DEFAULT_wxUSE_FILECTRL=yes
-  DEFAULT_wxUSE_FILEPICKERCTRL=yes
-  DEFAULT_wxUSE_FONTPICKERCTRL=yes
-  DEFAULT_wxUSE_GAUGE=yes
-  DEFAULT_wxUSE_GRID=yes
-  DEFAULT_wxUSE_HYPERLINKCTRL=yes
-  DEFAULT_wxUSE_DATAVIEWCTRL=yes
-  DEFAULT_wxUSE_IMAGLIST=yes
-  DEFAULT_wxUSE_LISTBOOK=yes
-  DEFAULT_wxUSE_LISTBOX=yes
-  DEFAULT_wxUSE_LISTCTRL=yes
-  DEFAULT_wxUSE_NOTEBOOK=yes
-  DEFAULT_wxUSE_RADIOBOX=yes
-  DEFAULT_wxUSE_RADIOBTN=yes
-  DEFAULT_wxUSE_SASH=yes
-  DEFAULT_wxUSE_SCROLLBAR=yes
-  DEFAULT_wxUSE_SEARCHCTRL=yes
-  DEFAULT_wxUSE_SLIDER=yes
-  DEFAULT_wxUSE_SPINBTN=yes
-  DEFAULT_wxUSE_SPINCTRL=yes
-  DEFAULT_wxUSE_SPLITTER=yes
-  DEFAULT_wxUSE_STATBMP=yes
-  DEFAULT_wxUSE_STATBOX=yes
-  DEFAULT_wxUSE_STATLINE=yes
-  DEFAULT_wxUSE_STATUSBAR=yes
-  DEFAULT_wxUSE_TOGGLEBTN=yes
-  DEFAULT_wxUSE_TOOLBAR=yes
-  DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
-  DEFAULT_wxUSE_TOOLTIPS=yes
-  DEFAULT_wxUSE_TREEBOOK=yes
-  DEFAULT_wxUSE_TOOLBOOK=yes
-  DEFAULT_wxUSE_TREECTRL=yes
-  DEFAULT_wxUSE_POPUPWIN=yes
-  DEFAULT_wxUSE_TIPWINDOW=yes
-elif test "$wxUSE_CONTROLS" = "no"; then
-  DEFAULT_wxUSE_ACCEL=no
-  DEFAULT_wxUSE_ANIMATIONCTRL=no
-  DEFAULT_wxUSE_BMPBUTTON=no
-  DEFAULT_wxUSE_BUTTON=no
-  DEFAULT_wxUSE_CALCTRL=no
-  DEFAULT_wxUSE_CARET=no
-  DEFAULT_wxUSE_COLLPANE=no
-  DEFAULT_wxUSE_COMBOBOX=no
-  DEFAULT_wxUSE_CHECKBOX=no
-  DEFAULT_wxUSE_CHECKLISTBOX=no
-  DEFAULT_wxUSE_CHOICE=no
-  DEFAULT_wxUSE_CHOICEBOOK=no
-  DEFAULT_wxUSE_COLOURPICKERCTRL=no
-  DEFAULT_wxUSE_COMBOBOX=no
-  DEFAULT_wxUSE_DATEPICKCTRL=no
-  DEFAULT_wxUSE_DISPLAY=no
-  DEFAULT_wxUSE_DETECT_SM=no
-  DEFAULT_wxUSE_DIRPICKERCTRL=no
-  DEFAULT_wxUSE_FILECTRL=no
-  DEFAULT_wxUSE_FILEPICKERCTRL=no
-  DEFAULT_wxUSE_FONTPICKERCTRL=no
-  DEFAULT_wxUSE_GAUGE=no
-  DEFAULT_wxUSE_GRID=no
-  DEFAULT_wxUSE_HYPERLINKCTRL=no
-  DEFAULT_wxUSE_DATAVIEWCTRL=no
-  DEFAULT_wxUSE_IMAGLIST=no
-  DEFAULT_wxUSE_LISTBOOK=no
-  DEFAULT_wxUSE_LISTBOX=no
-  DEFAULT_wxUSE_LISTCTRL=no
-  DEFAULT_wxUSE_NOTEBOOK=no
-  DEFAULT_wxUSE_RADIOBOX=no
-  DEFAULT_wxUSE_RADIOBTN=no
-  DEFAULT_wxUSE_REARRANGECTRL=no
-  DEFAULT_wxUSE_SASH=no
-  DEFAULT_wxUSE_SCROLLBAR=no
-  DEFAULT_wxUSE_SEARCHCTRL=no
-  DEFAULT_wxUSE_SLIDER=no
-  DEFAULT_wxUSE_SPINBTN=no
-  DEFAULT_wxUSE_SPINCTRL=no
-  DEFAULT_wxUSE_SPLITTER=no
-  DEFAULT_wxUSE_STATBMP=no
-  DEFAULT_wxUSE_STATBOX=no
-  DEFAULT_wxUSE_STATLINE=no
-  DEFAULT_wxUSE_STATUSBAR=no
-  DEFAULT_wxUSE_TOGGLEBTN=no
-  DEFAULT_wxUSE_TOOLBAR=no
-  DEFAULT_wxUSE_TOOLBAR_NATIVE=no
-  DEFAULT_wxUSE_TOOLTIPS=no
-  DEFAULT_wxUSE_TREEBOOK=no
-  DEFAULT_wxUSE_TOOLBOOK=no
-  DEFAULT_wxUSE_TREECTRL=no
-  DEFAULT_wxUSE_POPUPWIN=no
-  DEFAULT_wxUSE_TIPWINDOW=no
+dnl even with --disable-controls, some may be enabled by an explicit
+dnl --enable-<control> later on the command line -- but by default all will be
+dnl disabled
+if test "$wxUSE_CONTROLS" = "no"; then
+    DEFAULT_wxUSE_ACCEL=no
+    DEFAULT_wxUSE_ANIMATIONCTRL=no
+    DEFAULT_wxUSE_BMPBUTTON=no
+    DEFAULT_wxUSE_BUTTON=no
+    DEFAULT_wxUSE_CALCTRL=no
+    DEFAULT_wxUSE_CARET=no
+    DEFAULT_wxUSE_CHECKBOX=no
+    DEFAULT_wxUSE_CHECKLISTBOX=no
+    DEFAULT_wxUSE_CHOICE=no
+    DEFAULT_wxUSE_CHOICEBOOK=no
+    DEFAULT_wxUSE_COLLPANE=no
+    DEFAULT_wxUSE_COLOURPICKERCTRL=no
+    DEFAULT_wxUSE_COMBOBOX=no
+    DEFAULT_wxUSE_COMBOBOX=no
+    DEFAULT_wxUSE_DATAVIEWCTRL=no
+    DEFAULT_wxUSE_DATEPICKCTRL=no
+    DEFAULT_wxUSE_DETECT_SM=no
+    DEFAULT_wxUSE_DIRPICKERCTRL=no
+    DEFAULT_wxUSE_DISPLAY=no
+    DEFAULT_wxUSE_FILECTRL=no
+    DEFAULT_wxUSE_FILEPICKERCTRL=no
+    DEFAULT_wxUSE_FONTPICKERCTRL=no
+    DEFAULT_wxUSE_GAUGE=no
+    DEFAULT_wxUSE_GRID=no
+    DEFAULT_wxUSE_HYPERLINKCTRL=no
+    DEFAULT_wxUSE_IMAGLIST=no
+    DEFAULT_wxUSE_LISTBOOK=no
+    DEFAULT_wxUSE_LISTBOX=no
+    DEFAULT_wxUSE_LISTCTRL=no
+    DEFAULT_wxUSE_NOTEBOOK=no
+    DEFAULT_wxUSE_POPUPWIN=no
+    DEFAULT_wxUSE_RADIOBOX=no
+    DEFAULT_wxUSE_RADIOBTN=no
+    DEFAULT_wxUSE_REARRANGECTRL=no
+    DEFAULT_wxUSE_SASH=no
+    DEFAULT_wxUSE_SCROLLBAR=no
+    DEFAULT_wxUSE_SEARCHCTRL=no
+    DEFAULT_wxUSE_SLIDER=no
+    DEFAULT_wxUSE_SPINBTN=no
+    DEFAULT_wxUSE_SPINCTRL=no
+    DEFAULT_wxUSE_SPLITTER=no
+    DEFAULT_wxUSE_STATBMP=no
+    DEFAULT_wxUSE_STATBOX=no
+    DEFAULT_wxUSE_STATLINE=no
+    DEFAULT_wxUSE_STATUSBAR=no
+    DEFAULT_wxUSE_TIPWINDOW=no
+    DEFAULT_wxUSE_TOGGLEBTN=no
+    DEFAULT_wxUSE_TOOLBAR=no
+    DEFAULT_wxUSE_TOOLBAR_NATIVE=no
+    DEFAULT_wxUSE_TOOLBOOK=no
+    DEFAULT_wxUSE_TOOLTIPS=no
+    DEFAULT_wxUSE_TREEBOOK=no
+    DEFAULT_wxUSE_TREECTRL=no
 fi
 
+dnl please keep the settings below in alphabetical order
 WX_ARG_FEATURE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
 WX_ARG_FEATURE(animatectrl, [  --enable-animatectrl    use wxAnimationCtrl class], wxUSE_ANIMATIONCTRL)
-WX_ARG_FEATURE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
 WX_ARG_FEATURE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
 WX_ARG_FEATURE(bmpcombobox, [  --enable-bmpcombobox    use wxBitmapComboBox class], wxUSE_BITMAPCOMBOBOX)
+WX_ARG_FEATURE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
 WX_ARG_FEATURE(calendar,    [  --enable-calendar       use wxCalendarCtrl class], wxUSE_CALCTRL)
 WX_ARG_FEATURE(caret,       [  --enable-caret          use wxCaret class], wxUSE_CARET)
 WX_ARG_FEATURE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
@@ -916,17 +864,17 @@ WX_ARG_FEATURE(collpane,    [  --enable-collpane       use wxCollapsiblePane cla
 WX_ARG_FEATURE(colourpicker,[  --enable-colourpicker   use wxColourPickerCtrl class], wxUSE_COLOURPICKERCTRL)
 WX_ARG_FEATURE(combobox,    [  --enable-combobox       use wxComboBox class], wxUSE_COMBOBOX)
 WX_ARG_FEATURE(comboctrl,   [  --enable-comboctrl      use wxComboCtrl class], wxUSE_COMBOCTRL)
+WX_ARG_FEATURE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
 WX_ARG_FEATURE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class], wxUSE_DATEPICKCTRL)
+WX_ARG_FEATURE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
 WX_ARG_FEATURE(dirpicker,   [  --enable-dirpicker      use wxDirPickerCtrl class], wxUSE_DIRPICKERCTRL)
 WX_ARG_FEATURE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
-WX_ARG_FEATURE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
 WX_ARG_FEATURE(editablebox, [  --enable-editablebox    use wxEditableListBox class], wxUSE_EDITABLELISTBOX)
-WX_ARG_FEATURE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl class], wxUSE_FILEPICKERCTRL)
 WX_ARG_FEATURE(filectrl,    [  --enable-filectrl       use wxFileCtrl class], wxUSE_FILECTRL)
+WX_ARG_FEATURE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl class], wxUSE_FILEPICKERCTRL)
 WX_ARG_FEATURE(fontpicker,  [  --enable-fontpicker     use wxFontPickerCtrl class], wxUSE_FONTPICKERCTRL)
 WX_ARG_FEATURE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_FEATURE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
-WX_ARG_FEATURE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
 WX_ARG_FEATURE(hyperlink,   [  --enable-hyperlink      use wxHyperlinkCtrl class], wxUSE_HYPERLINKCTRL)
 WX_ARG_FEATURE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
 WX_ARG_FEATURE(listbook,    [  --enable-listbook       use wxListbook class], wxUSE_LISTBOOK)
@@ -935,6 +883,7 @@ WX_ARG_FEATURE(listctrl,    [  --enable-listctrl       use wxListCtrl class], wx
 WX_ARG_FEATURE(notebook,    [  --enable-notebook       use wxNotebook class], wxUSE_NOTEBOOK)
 WX_ARG_FEATURE(notifmsg,    [  --enable-notifmsg       use wxNotificationMessage class], wxUSE_NOTIFICATION_MESSAGE)
 WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox class], wxUSE_ODCOMBOBOX)
+WX_ARG_FEATURE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
 WX_ARG_FEATURE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_FEATURE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
 WX_ARG_FEATURE(rearrangectrl,[  --enable-rearrangectrl  use wxRearrangeList/Ctrl/Dialog], wxUSE_REARRANGECTRL)
@@ -951,15 +900,14 @@ WX_ARG_FEATURE(statline,    [  --enable-statline       use wxStaticLine class], 
 WX_ARG_FEATURE(stattext,    [  --enable-stattext       use wxStaticText class], wxUSE_STATTEXT)
 WX_ARG_FEATURE(statusbar,   [  --enable-statusbar      use wxStatusBar class], wxUSE_STATUSBAR)
 WX_ARG_FEATURE(taskbaricon, [  --enable-taskbaricon    use wxTaskBarIcon class], wxUSE_TASKBARICON)
+WX_ARG_FEATURE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
 WX_ARG_FEATURE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxUSE_TEXTCTRL)
+WX_ARG_FEATURE(tipwindow,   [  --enable-tipwindow      use wxTipWindow class], wxUSE_TIPWINDOW)
 WX_ARG_FEATURE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
 WX_ARG_FEATURE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
-WX_ARG_FEATURE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
-WX_ARG_FEATURE(treebook,    [  --enable-treebook       use wxTreebook class], wxUSE_TREEBOOK)
 WX_ARG_FEATURE(toolbook,    [  --enable-toolbook       use wxToolbook class], wxUSE_TOOLBOOK)
+WX_ARG_FEATURE(treebook,    [  --enable-treebook       use wxTreebook class], wxUSE_TREEBOOK)
 WX_ARG_FEATURE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
-WX_ARG_FEATURE(tipwindow,   [  --enable-tipwindow      use wxTipWindow class], wxUSE_TIPWINDOW)
-WX_ARG_FEATURE(popupwin,    [  --enable-popupwin       use wxPopUpWindow class], wxUSE_POPUPWIN)
 
 dnl ---------------------------------------------------------------------------
 dnl common dialogs

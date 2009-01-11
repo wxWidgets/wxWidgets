@@ -1781,9 +1781,9 @@ Optional Features:
   --disable-controls      disable compilation of all standard controls
   --enable-accel          use accelerators
   --enable-animatectrl    use wxAnimationCtrl class
-  --enable-button         use wxButton class
   --enable-bmpbutton      use wxBitmapButton class
   --enable-bmpcombobox    use wxBitmapComboBox class
+  --enable-button         use wxButton class
   --enable-calendar       use wxCalendarCtrl class
   --enable-caret          use wxCaret class
   --enable-checkbox       use wxCheckBox class
@@ -1794,17 +1794,17 @@ Optional Features:
   --enable-colourpicker   use wxColourPickerCtrl class
   --enable-combobox       use wxComboBox class
   --enable-comboctrl      use wxComboCtrl class
+  --enable-dataviewctrl   use wxDataViewCtrl class
   --enable-datepick       use wxDatePickerCtrl class
+  --enable-detect_sm      use code to detect X11 session manager
   --enable-dirpicker      use wxDirPickerCtrl class
   --enable-display        use wxDisplay class
-  --enable-detect_sm      use code to detect X11 session manager
   --enable-editablebox    use wxEditableListBox class
-  --enable-filepicker     use wxFilePickerCtrl class
   --enable-filectrl       use wxFileCtrl class
+  --enable-filepicker     use wxFilePickerCtrl class
   --enable-fontpicker     use wxFontPickerCtrl class
   --enable-gauge          use wxGauge class
   --enable-grid           use wxGrid class
-  --enable-dataviewctrl   use wxDataViewCtrl class
   --enable-hyperlink      use wxHyperlinkCtrl class
   --enable-imaglist       use wxImageList class
   --enable-listbook       use wxListbook class
@@ -1813,6 +1813,7 @@ Optional Features:
   --enable-notebook       use wxNotebook class
   --enable-notifmsg       use wxNotificationMessage class
   --enable-odcombobox     use wxOwnerDrawnComboBox class
+  --enable-popupwin       use wxPopUpWindow class
   --enable-radiobox       use wxRadioBox class
   --enable-radiobtn       use wxRadioButton class
   --enable-rearrangectrl  use wxRearrangeList/Ctrl/Dialog
@@ -1829,15 +1830,14 @@ Optional Features:
   --enable-stattext       use wxStaticText class
   --enable-statusbar      use wxStatusBar class
   --enable-taskbaricon    use wxTaskBarIcon class
+  --enable-tbarnative     use native wxToolBar class
   --enable-textctrl       use wxTextCtrl class
+  --enable-tipwindow      use wxTipWindow class
   --enable-togglebtn      use wxToggleButton class
   --enable-toolbar        use wxToolBar class
-  --enable-tbarnative     use native wxToolBar class
-  --enable-treebook       use wxTreebook class
   --enable-toolbook       use wxToolbook class
+  --enable-treebook       use wxTreebook class
   --enable-treectrl       use wxTreeCtrl class
-  --enable-tipwindow      use wxTipWindow class
-  --enable-popupwin       use wxPopUpWindow class
   --enable-commondlg      use all common dialogs
   --enable-aboutdlg       use wxAboutBox
   --enable-choicedlg      use wxChoiceDialog
@@ -9415,113 +9415,60 @@ fi
 echo "${ECHO_T}$result" >&6; }
 
 
-if test "$wxUSE_CONTROLS" = "yes"; then
-  DEFAULT_wxUSE_ACCEL=yes
-  DEFAULT_wxUSE_ANIMATIONCTRL=yes
-  DEFAULT_wxUSE_BMPBUTTON=yes
-  DEFAULT_wxUSE_BUTTON=yes
-  DEFAULT_wxUSE_CALCTRL=yes
-  DEFAULT_wxUSE_CARET=yes
-  DEFAULT_wxUSE_COMBOBOX=yes
-  DEFAULT_wxUSE_CHECKBOX=yes
-  DEFAULT_wxUSE_CHECKLISTBOX=yes
-  DEFAULT_wxUSE_CHOICE=yes
-  DEFAULT_wxUSE_CHOICEBOOK=yes
-  DEFAULT_wxUSE_COLLPANE=yes
-  DEFAULT_wxUSE_COLOURPICKERCTRL=yes
-  DEFAULT_wxUSE_COMBOBOX=yes
-  DEFAULT_wxUSE_DATEPICKCTRL=yes
-  DEFAULT_wxUSE_DISPLAY=yes
-  DEFAULT_wxUSE_DETECT_SM=yes
-  DEFAULT_wxUSE_DIRPICKERCTRL=yes
-  DEFAULT_wxUSE_FILECTRL=yes
-  DEFAULT_wxUSE_FILEPICKERCTRL=yes
-  DEFAULT_wxUSE_FONTPICKERCTRL=yes
-  DEFAULT_wxUSE_GAUGE=yes
-  DEFAULT_wxUSE_GRID=yes
-  DEFAULT_wxUSE_HYPERLINKCTRL=yes
-  DEFAULT_wxUSE_DATAVIEWCTRL=yes
-  DEFAULT_wxUSE_IMAGLIST=yes
-  DEFAULT_wxUSE_LISTBOOK=yes
-  DEFAULT_wxUSE_LISTBOX=yes
-  DEFAULT_wxUSE_LISTCTRL=yes
-  DEFAULT_wxUSE_NOTEBOOK=yes
-  DEFAULT_wxUSE_RADIOBOX=yes
-  DEFAULT_wxUSE_RADIOBTN=yes
-  DEFAULT_wxUSE_SASH=yes
-  DEFAULT_wxUSE_SCROLLBAR=yes
-  DEFAULT_wxUSE_SEARCHCTRL=yes
-  DEFAULT_wxUSE_SLIDER=yes
-  DEFAULT_wxUSE_SPINBTN=yes
-  DEFAULT_wxUSE_SPINCTRL=yes
-  DEFAULT_wxUSE_SPLITTER=yes
-  DEFAULT_wxUSE_STATBMP=yes
-  DEFAULT_wxUSE_STATBOX=yes
-  DEFAULT_wxUSE_STATLINE=yes
-  DEFAULT_wxUSE_STATUSBAR=yes
-  DEFAULT_wxUSE_TOGGLEBTN=yes
-  DEFAULT_wxUSE_TOOLBAR=yes
-  DEFAULT_wxUSE_TOOLBAR_NATIVE=yes
-  DEFAULT_wxUSE_TOOLTIPS=yes
-  DEFAULT_wxUSE_TREEBOOK=yes
-  DEFAULT_wxUSE_TOOLBOOK=yes
-  DEFAULT_wxUSE_TREECTRL=yes
-  DEFAULT_wxUSE_POPUPWIN=yes
-  DEFAULT_wxUSE_TIPWINDOW=yes
-elif test "$wxUSE_CONTROLS" = "no"; then
-  DEFAULT_wxUSE_ACCEL=no
-  DEFAULT_wxUSE_ANIMATIONCTRL=no
-  DEFAULT_wxUSE_BMPBUTTON=no
-  DEFAULT_wxUSE_BUTTON=no
-  DEFAULT_wxUSE_CALCTRL=no
-  DEFAULT_wxUSE_CARET=no
-  DEFAULT_wxUSE_COLLPANE=no
-  DEFAULT_wxUSE_COMBOBOX=no
-  DEFAULT_wxUSE_CHECKBOX=no
-  DEFAULT_wxUSE_CHECKLISTBOX=no
-  DEFAULT_wxUSE_CHOICE=no
-  DEFAULT_wxUSE_CHOICEBOOK=no
-  DEFAULT_wxUSE_COLOURPICKERCTRL=no
-  DEFAULT_wxUSE_COMBOBOX=no
-  DEFAULT_wxUSE_DATEPICKCTRL=no
-  DEFAULT_wxUSE_DISPLAY=no
-  DEFAULT_wxUSE_DETECT_SM=no
-  DEFAULT_wxUSE_DIRPICKERCTRL=no
-  DEFAULT_wxUSE_FILECTRL=no
-  DEFAULT_wxUSE_FILEPICKERCTRL=no
-  DEFAULT_wxUSE_FONTPICKERCTRL=no
-  DEFAULT_wxUSE_GAUGE=no
-  DEFAULT_wxUSE_GRID=no
-  DEFAULT_wxUSE_HYPERLINKCTRL=no
-  DEFAULT_wxUSE_DATAVIEWCTRL=no
-  DEFAULT_wxUSE_IMAGLIST=no
-  DEFAULT_wxUSE_LISTBOOK=no
-  DEFAULT_wxUSE_LISTBOX=no
-  DEFAULT_wxUSE_LISTCTRL=no
-  DEFAULT_wxUSE_NOTEBOOK=no
-  DEFAULT_wxUSE_RADIOBOX=no
-  DEFAULT_wxUSE_RADIOBTN=no
-  DEFAULT_wxUSE_REARRANGECTRL=no
-  DEFAULT_wxUSE_SASH=no
-  DEFAULT_wxUSE_SCROLLBAR=no
-  DEFAULT_wxUSE_SEARCHCTRL=no
-  DEFAULT_wxUSE_SLIDER=no
-  DEFAULT_wxUSE_SPINBTN=no
-  DEFAULT_wxUSE_SPINCTRL=no
-  DEFAULT_wxUSE_SPLITTER=no
-  DEFAULT_wxUSE_STATBMP=no
-  DEFAULT_wxUSE_STATBOX=no
-  DEFAULT_wxUSE_STATLINE=no
-  DEFAULT_wxUSE_STATUSBAR=no
-  DEFAULT_wxUSE_TOGGLEBTN=no
-  DEFAULT_wxUSE_TOOLBAR=no
-  DEFAULT_wxUSE_TOOLBAR_NATIVE=no
-  DEFAULT_wxUSE_TOOLTIPS=no
-  DEFAULT_wxUSE_TREEBOOK=no
-  DEFAULT_wxUSE_TOOLBOOK=no
-  DEFAULT_wxUSE_TREECTRL=no
-  DEFAULT_wxUSE_POPUPWIN=no
-  DEFAULT_wxUSE_TIPWINDOW=no
+if test "$wxUSE_CONTROLS" = "no"; then
+    DEFAULT_wxUSE_ACCEL=no
+    DEFAULT_wxUSE_ANIMATIONCTRL=no
+    DEFAULT_wxUSE_BMPBUTTON=no
+    DEFAULT_wxUSE_BUTTON=no
+    DEFAULT_wxUSE_CALCTRL=no
+    DEFAULT_wxUSE_CARET=no
+    DEFAULT_wxUSE_CHECKBOX=no
+    DEFAULT_wxUSE_CHECKLISTBOX=no
+    DEFAULT_wxUSE_CHOICE=no
+    DEFAULT_wxUSE_CHOICEBOOK=no
+    DEFAULT_wxUSE_COLLPANE=no
+    DEFAULT_wxUSE_COLOURPICKERCTRL=no
+    DEFAULT_wxUSE_COMBOBOX=no
+    DEFAULT_wxUSE_COMBOBOX=no
+    DEFAULT_wxUSE_DATAVIEWCTRL=no
+    DEFAULT_wxUSE_DATEPICKCTRL=no
+    DEFAULT_wxUSE_DETECT_SM=no
+    DEFAULT_wxUSE_DIRPICKERCTRL=no
+    DEFAULT_wxUSE_DISPLAY=no
+    DEFAULT_wxUSE_FILECTRL=no
+    DEFAULT_wxUSE_FILEPICKERCTRL=no
+    DEFAULT_wxUSE_FONTPICKERCTRL=no
+    DEFAULT_wxUSE_GAUGE=no
+    DEFAULT_wxUSE_GRID=no
+    DEFAULT_wxUSE_HYPERLINKCTRL=no
+    DEFAULT_wxUSE_IMAGLIST=no
+    DEFAULT_wxUSE_LISTBOOK=no
+    DEFAULT_wxUSE_LISTBOX=no
+    DEFAULT_wxUSE_LISTCTRL=no
+    DEFAULT_wxUSE_NOTEBOOK=no
+    DEFAULT_wxUSE_POPUPWIN=no
+    DEFAULT_wxUSE_RADIOBOX=no
+    DEFAULT_wxUSE_RADIOBTN=no
+    DEFAULT_wxUSE_REARRANGECTRL=no
+    DEFAULT_wxUSE_SASH=no
+    DEFAULT_wxUSE_SCROLLBAR=no
+    DEFAULT_wxUSE_SEARCHCTRL=no
+    DEFAULT_wxUSE_SLIDER=no
+    DEFAULT_wxUSE_SPINBTN=no
+    DEFAULT_wxUSE_SPINCTRL=no
+    DEFAULT_wxUSE_SPLITTER=no
+    DEFAULT_wxUSE_STATBMP=no
+    DEFAULT_wxUSE_STATBOX=no
+    DEFAULT_wxUSE_STATLINE=no
+    DEFAULT_wxUSE_STATUSBAR=no
+    DEFAULT_wxUSE_TIPWINDOW=no
+    DEFAULT_wxUSE_TOGGLEBTN=no
+    DEFAULT_wxUSE_TOOLBAR=no
+    DEFAULT_wxUSE_TOOLBAR_NATIVE=no
+    DEFAULT_wxUSE_TOOLBOOK=no
+    DEFAULT_wxUSE_TOOLTIPS=no
+    DEFAULT_wxUSE_TREEBOOK=no
+    DEFAULT_wxUSE_TREECTRL=no
 fi
 
 
@@ -9623,50 +9570,6 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-button" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-button... $ECHO_C" >&6; }
-          # Check whether --enable-button was given.
-if test "${enable_button+set}" = set; then
-  enableval=$enable_button;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_button='wxUSE_BUTTON=yes'
-                          else
-                            wx_cv_use_button='wxUSE_BUTTON=no'
-                          fi
-
-else
-
-                          wx_cv_use_button='wxUSE_BUTTON=${'DEFAULT_wxUSE_BUTTON":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_button"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_BUTTON = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_BUTTON
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
           { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-bmpbutton" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-bmpbutton... $ECHO_C" >&6; }
           # Check whether --enable-bmpbutton was given.
@@ -9739,6 +9642,50 @@ fi
             fi
           else
             result=$wxUSE_BITMAPCOMBOBOX
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-button" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-button... $ECHO_C" >&6; }
+          # Check whether --enable-button was given.
+if test "${enable_button+set}" = set; then
+  enableval=$enable_button;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_button='wxUSE_BUTTON=yes'
+                          else
+                            wx_cv_use_button='wxUSE_BUTTON=no'
+                          fi
+
+else
+
+                          wx_cv_use_button='wxUSE_BUTTON=${'DEFAULT_wxUSE_BUTTON":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_button"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_BUTTON = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_BUTTON
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -10195,6 +10142,50 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dataviewctrl" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-dataviewctrl... $ECHO_C" >&6; }
+          # Check whether --enable-dataviewctrl was given.
+if test "${enable_dataviewctrl+set}" = set; then
+  enableval=$enable_dataviewctrl;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_dataviewctrl='wxUSE_DATAVIEWCTRL=yes'
+                          else
+                            wx_cv_use_dataviewctrl='wxUSE_DATAVIEWCTRL=no'
+                          fi
+
+else
+
+                          wx_cv_use_dataviewctrl='wxUSE_DATAVIEWCTRL=${'DEFAULT_wxUSE_DATAVIEWCTRL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_dataviewctrl"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_DATAVIEWCTRL = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_DATAVIEWCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
           { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-datepick" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-datepick... $ECHO_C" >&6; }
           # Check whether --enable-datepick was given.
@@ -10223,6 +10214,50 @@ fi
             fi
           else
             result=$wxUSE_DATEPICKCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-detect_sm" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-detect_sm... $ECHO_C" >&6; }
+          # Check whether --enable-detect_sm was given.
+if test "${enable_detect_sm+set}" = set; then
+  enableval=$enable_detect_sm;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_detect_sm='wxUSE_DETECT_SM=yes'
+                          else
+                            wx_cv_use_detect_sm='wxUSE_DETECT_SM=no'
+                          fi
+
+else
+
+                          wx_cv_use_detect_sm='wxUSE_DETECT_SM=${'DEFAULT_wxUSE_DETECT_SM":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_detect_sm"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_DETECT_SM = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_DETECT_SM
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -10327,50 +10362,6 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-detect_sm" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-detect_sm... $ECHO_C" >&6; }
-          # Check whether --enable-detect_sm was given.
-if test "${enable_detect_sm+set}" = set; then
-  enableval=$enable_detect_sm;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_detect_sm='wxUSE_DETECT_SM=yes'
-                          else
-                            wx_cv_use_detect_sm='wxUSE_DETECT_SM=no'
-                          fi
-
-else
-
-                          wx_cv_use_detect_sm='wxUSE_DETECT_SM=${'DEFAULT_wxUSE_DETECT_SM":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_detect_sm"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_DETECT_SM = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_DETECT_SM
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
           { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-editablebox" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-editablebox... $ECHO_C" >&6; }
           # Check whether --enable-editablebox was given.
@@ -10415,50 +10406,6 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-filepicker" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-filepicker... $ECHO_C" >&6; }
-          # Check whether --enable-filepicker was given.
-if test "${enable_filepicker+set}" = set; then
-  enableval=$enable_filepicker;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_filepicker='wxUSE_FILEPICKERCTRL=yes'
-                          else
-                            wx_cv_use_filepicker='wxUSE_FILEPICKERCTRL=no'
-                          fi
-
-else
-
-                          wx_cv_use_filepicker='wxUSE_FILEPICKERCTRL=${'DEFAULT_wxUSE_FILEPICKERCTRL":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_filepicker"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_FILEPICKERCTRL = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_FILEPICKERCTRL
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
           { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-filectrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-filectrl... $ECHO_C" >&6; }
           # Check whether --enable-filectrl was given.
@@ -10487,6 +10434,50 @@ fi
             fi
           else
             result=$wxUSE_FILECTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-filepicker" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-filepicker... $ECHO_C" >&6; }
+          # Check whether --enable-filepicker was given.
+if test "${enable_filepicker+set}" = set; then
+  enableval=$enable_filepicker;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_filepicker='wxUSE_FILEPICKERCTRL=yes'
+                          else
+                            wx_cv_use_filepicker='wxUSE_FILEPICKERCTRL=no'
+                          fi
+
+else
+
+                          wx_cv_use_filepicker='wxUSE_FILEPICKERCTRL=${'DEFAULT_wxUSE_FILEPICKERCTRL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_filepicker"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_FILEPICKERCTRL = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_FILEPICKERCTRL
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -10619,50 +10610,6 @@ fi
             fi
           else
             result=$wxUSE_GRID
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-dataviewctrl" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-dataviewctrl... $ECHO_C" >&6; }
-          # Check whether --enable-dataviewctrl was given.
-if test "${enable_dataviewctrl+set}" = set; then
-  enableval=$enable_dataviewctrl;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_dataviewctrl='wxUSE_DATAVIEWCTRL=yes'
-                          else
-                            wx_cv_use_dataviewctrl='wxUSE_DATAVIEWCTRL=no'
-                          fi
-
-else
-
-                          wx_cv_use_dataviewctrl='wxUSE_DATAVIEWCTRL=${'DEFAULT_wxUSE_DATAVIEWCTRL":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_dataviewctrl"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_DATAVIEWCTRL = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_DATAVIEWCTRL
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -11015,6 +10962,50 @@ fi
             fi
           else
             result=$wxUSE_ODCOMBOBOX
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-popupwin" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-popupwin... $ECHO_C" >&6; }
+          # Check whether --enable-popupwin was given.
+if test "${enable_popupwin+set}" = set; then
+  enableval=$enable_popupwin;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_popupwin='wxUSE_POPUPWIN=yes'
+                          else
+                            wx_cv_use_popupwin='wxUSE_POPUPWIN=no'
+                          fi
+
+else
+
+                          wx_cv_use_popupwin='wxUSE_POPUPWIN=${'DEFAULT_wxUSE_POPUPWIN":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_popupwin"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_POPUPWIN = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_POPUPWIN
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -11735,6 +11726,50 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tbarnative" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-tbarnative... $ECHO_C" >&6; }
+          # Check whether --enable-tbarnative was given.
+if test "${enable_tbarnative+set}" = set; then
+  enableval=$enable_tbarnative;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_tbarnative='wxUSE_TOOLBAR_NATIVE=yes'
+                          else
+                            wx_cv_use_tbarnative='wxUSE_TOOLBAR_NATIVE=no'
+                          fi
+
+else
+
+                          wx_cv_use_tbarnative='wxUSE_TOOLBAR_NATIVE=${'DEFAULT_wxUSE_TOOLBAR_NATIVE":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_tbarnative"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_TOOLBAR_NATIVE = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_TOOLBAR_NATIVE
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
           { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-textctrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-textctrl... $ECHO_C" >&6; }
           # Check whether --enable-textctrl was given.
@@ -11763,6 +11798,50 @@ fi
             fi
           else
             result=$wxUSE_TEXTCTRL
+          fi
+
+          { echo "$as_me:$LINENO: result: $result" >&5
+echo "${ECHO_T}$result" >&6; }
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tipwindow" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-tipwindow... $ECHO_C" >&6; }
+          # Check whether --enable-tipwindow was given.
+if test "${enable_tipwindow+set}" = set; then
+  enableval=$enable_tipwindow;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_tipwindow='wxUSE_TIPWINDOW=yes'
+                          else
+                            wx_cv_use_tipwindow='wxUSE_TIPWINDOW=no'
+                          fi
+
+else
+
+                          wx_cv_use_tipwindow='wxUSE_TIPWINDOW=${'DEFAULT_wxUSE_TIPWINDOW":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_tipwindow"
+
+          if test x"$enablestring" = xdisable; then
+            if test $wxUSE_TIPWINDOW = yes; then
+              result=no
+            else
+              result=yes
+            fi
+          else
+            result=$wxUSE_TIPWINDOW
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -11867,34 +11946,34 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tbarnative" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-tbarnative... $ECHO_C" >&6; }
-          # Check whether --enable-tbarnative was given.
-if test "${enable_tbarnative+set}" = set; then
-  enableval=$enable_tbarnative;
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-toolbook" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-toolbook... $ECHO_C" >&6; }
+          # Check whether --enable-toolbook was given.
+if test "${enable_toolbook+set}" = set; then
+  enableval=$enable_toolbook;
                           if test "$enableval" = yes; then
-                            wx_cv_use_tbarnative='wxUSE_TOOLBAR_NATIVE=yes'
+                            wx_cv_use_toolbook='wxUSE_TOOLBOOK=yes'
                           else
-                            wx_cv_use_tbarnative='wxUSE_TOOLBAR_NATIVE=no'
+                            wx_cv_use_toolbook='wxUSE_TOOLBOOK=no'
                           fi
 
 else
 
-                          wx_cv_use_tbarnative='wxUSE_TOOLBAR_NATIVE=${'DEFAULT_wxUSE_TOOLBAR_NATIVE":-$defaultval}"
+                          wx_cv_use_toolbook='wxUSE_TOOLBOOK=${'DEFAULT_wxUSE_TOOLBOOK":-$defaultval}"
 
 fi
 
 
-          eval "$wx_cv_use_tbarnative"
+          eval "$wx_cv_use_toolbook"
 
           if test x"$enablestring" = xdisable; then
-            if test $wxUSE_TOOLBAR_NATIVE = yes; then
+            if test $wxUSE_TOOLBOOK = yes; then
               result=no
             else
               result=yes
             fi
           else
-            result=$wxUSE_TOOLBAR_NATIVE
+            result=$wxUSE_TOOLBOOK
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
@@ -11955,50 +12034,6 @@ echo "${ECHO_T}$result" >&6; }
               fi
           fi
 
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-toolbook" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-toolbook... $ECHO_C" >&6; }
-          # Check whether --enable-toolbook was given.
-if test "${enable_toolbook+set}" = set; then
-  enableval=$enable_toolbook;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_toolbook='wxUSE_TOOLBOOK=yes'
-                          else
-                            wx_cv_use_toolbook='wxUSE_TOOLBOOK=no'
-                          fi
-
-else
-
-                          wx_cv_use_toolbook='wxUSE_TOOLBOOK=${'DEFAULT_wxUSE_TOOLBOOK":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_toolbook"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_TOOLBOOK = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_TOOLBOOK
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
           { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-treectrl" >&5
 echo $ECHO_N "checking for --${enablestring:-enable}-treectrl... $ECHO_C" >&6; }
           # Check whether --enable-treectrl was given.
@@ -12027,94 +12062,6 @@ fi
             fi
           else
             result=$wxUSE_TREECTRL
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-tipwindow" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-tipwindow... $ECHO_C" >&6; }
-          # Check whether --enable-tipwindow was given.
-if test "${enable_tipwindow+set}" = set; then
-  enableval=$enable_tipwindow;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_tipwindow='wxUSE_TIPWINDOW=yes'
-                          else
-                            wx_cv_use_tipwindow='wxUSE_TIPWINDOW=no'
-                          fi
-
-else
-
-                          wx_cv_use_tipwindow='wxUSE_TIPWINDOW=${'DEFAULT_wxUSE_TIPWINDOW":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_tipwindow"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_TIPWINDOW = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_TIPWINDOW
-          fi
-
-          { echo "$as_me:$LINENO: result: $result" >&5
-echo "${ECHO_T}$result" >&6; }
-
-
-          enablestring=
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$enablestring" = xdisable; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-popupwin" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-popupwin... $ECHO_C" >&6; }
-          # Check whether --enable-popupwin was given.
-if test "${enable_popupwin+set}" = set; then
-  enableval=$enable_popupwin;
-                          if test "$enableval" = yes; then
-                            wx_cv_use_popupwin='wxUSE_POPUPWIN=yes'
-                          else
-                            wx_cv_use_popupwin='wxUSE_POPUPWIN=no'
-                          fi
-
-else
-
-                          wx_cv_use_popupwin='wxUSE_POPUPWIN=${'DEFAULT_wxUSE_POPUPWIN":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_popupwin"
-
-          if test x"$enablestring" = xdisable; then
-            if test $wxUSE_POPUPWIN = yes; then
-              result=no
-            else
-              result=yes
-            fi
-          else
-            result=$wxUSE_POPUPWIN
           fi
 
           { echo "$as_me:$LINENO: result: $result" >&5
