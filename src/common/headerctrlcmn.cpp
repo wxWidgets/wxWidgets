@@ -322,6 +322,7 @@ bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
 
 bool wxHeaderCtrlBase::ShowCustomizeDialog()
 {
+#if wxUSE_REARRANGECTRL
     // prepare the data for showing the dialog
     wxArrayInt order = GetColumnsOrder();
 
@@ -348,29 +349,32 @@ bool wxHeaderCtrlBase::ShowCustomizeDialog()
 
     // do show it
     wxHeaderColumnsRearrangeDialog dlg(this, order, titles);
-    if ( dlg.ShowModal() != wxID_OK )
-        return false;
-
-    // and apply the changes
-    order = dlg.GetOrder();
-    for ( pos = 0; pos < count; pos++ )
+    if ( dlg.ShowModal() == wxID_OK )
     {
-        int& idx = order[pos];
-        const bool show = idx >= 0;
-        if ( !show )
+        // and apply the changes
+        order = dlg.GetOrder();
+        for ( pos = 0; pos < count; pos++ )
         {
-            // make all indices positive for passing them to SetColumnsOrder()
-            idx = ~idx;
+            int& idx = order[pos];
+            const bool show = idx >= 0;
+            if ( !show )
+            {
+                // make all indices positive for passing them to SetColumnsOrder()
+                idx = ~idx;
+            }
+
+            if ( show != GetColumn(idx).IsShown() )
+                UpdateColumnVisibility(idx, show);
         }
 
-        if ( show != GetColumn(idx).IsShown() )
-            UpdateColumnVisibility(idx, show);
+        UpdateColumnsOrder(order);
+        SetColumnsOrder(order);
+
+        return true;
     }
+#endif // wxUSE_REARRANGECTRL
 
-    UpdateColumnsOrder(order);
-    SetColumnsOrder(order);
-
-    return true;
+    return false;
 }
 
 // ============================================================================

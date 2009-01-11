@@ -878,6 +878,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_NOTEBOOK=no
   DEFAULT_wxUSE_RADIOBOX=no
   DEFAULT_wxUSE_RADIOBTN=no
+  DEFAULT_wxUSE_REARRANGECTRL=no
   DEFAULT_wxUSE_SASH=no
   DEFAULT_wxUSE_SCROLLBAR=no
   DEFAULT_wxUSE_SEARCHCTRL=no
@@ -936,6 +937,7 @@ WX_ARG_FEATURE(notifmsg,    [  --enable-notifmsg       use wxNotificationMessage
 WX_ARG_FEATURE(odcombobox,  [  --enable-odcombobox     use wxOwnerDrawnComboBox class], wxUSE_ODCOMBOBOX)
 WX_ARG_FEATURE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxUSE_RADIOBOX)
 WX_ARG_FEATURE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
+WX_ARG_FEATURE(rearrangectrl,[  --enable-rearrangectrl  use wxRearrangeList/Ctrl/Dialog], wxUSE_REARRANGECTRL)
 WX_ARG_FEATURE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
 WX_ARG_FEATURE(scrollbar,   [  --enable-scrollbar      use wxScrollBar class and scrollable windows], wxUSE_SCROLLBAR)
 WX_ARG_FEATURE(searchctrl,  [  --enable-searchctrl     use wxSearchCtrl class], wxUSE_SEARCHCTRL)
@@ -6724,6 +6726,10 @@ fi
 if test "$wxUSE_RADIOBTN" = "yes"; then
     AC_DEFINE(wxUSE_RADIOBTN)
     USES_CONTROLS=1
+fi
+
+if test "$wxUSE_REARRANGECTRL" = "yes"; then
+    AC_DEFINE(wxUSE_REARRANGECTRL)
 fi
 
 if test "$wxUSE_SASH" = "yes"; then

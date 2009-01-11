@@ -823,6 +823,15 @@
 // Recommended setting: 1 but can be safely set to 0
 #define wxUSE_BITMAPCOMBOBOX 1
 
+// wxRearrangeCtrl is a wxCheckListBox with two buttons allowing to move items
+// up and down in it. It is also used as part of wxRearrangeDialog.
+//
+// Default is 1.
+//
+// Recommended setting: 1 but can be safely set to 0 (currently used only by
+// wxHeaderCtrl)
+#define wxUSE_REARRANGECTRL 1
+
 // ----------------------------------------------------------------------------
 // Miscellaneous GUI stuff
 // ----------------------------------------------------------------------------

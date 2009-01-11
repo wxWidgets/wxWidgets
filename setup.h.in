@@ -388,6 +388,8 @@
 
 #define wxUSE_BITMAPCOMBOBOX 0
 
+#define wxUSE_REARRANGECTRL 0
+
 
 #define wxUSE_ACCEL 0
 

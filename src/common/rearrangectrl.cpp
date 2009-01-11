@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_REARRANGECTRL
+
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/stattext.h"
@@ -294,3 +296,5 @@ wxArrayInt wxRearrangeDialog::GetOrder() const
 
     return m_ctrl->GetList()->GetCurrentOrder();
 }
+
+#endif // wxUSE_REARRANGECTRL

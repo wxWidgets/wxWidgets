@@ -12,6 +12,9 @@
 #define _WX_REARRANGECTRL_H_
 
 #include "wx/checklst.h"
+
+#if wxUSE_REARRANGECTRL
+
 #include "wx/panel.h"
 #include "wx/dialog.h"
 
@@ -223,6 +226,8 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxRearrangeDialog)
 };
+
+#endif // wxUSE_REARRANGECTRL
 
 #endif // _WX_REARRANGECTRL_H_
 
