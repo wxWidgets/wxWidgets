@@ -105,10 +105,10 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
         extern const expdecl wxEventType name;
 
     #define wxDEFINE_EVENT_REFERENCE( name, type, value ) \
-        const wxEventType &name( value );
+        const wxEventType& name = value;
 
     #define wxDECLARE_EXPORTED_EVENT_REFERENCE( expdecl, name, type ) \
-        extern const expdecl wxEventType &name;
+        extern const expdecl wxEventType& name;
 
     #define wxDECLARE_LOCAL_EVENT( name, type ) \
         wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
