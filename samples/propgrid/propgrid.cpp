@@ -1593,11 +1593,13 @@ void FormMain::PopulateWithExamples ()
 
 #if wxUSE_DATEPICKCTRL
     pg->SetPropertyAttribute( wxT("DateProperty"), wxPG_DATE_PICKER_STYLE,
-                              (long)(wxDP_DROPDOWN | wxDP_SHOWCENTURY) );
+                              (long)(wxDP_DROPDOWN |
+                                     wxDP_SHOWCENTURY |
+                                     wxDP_ALLOWNONE) );
 
     pg->SetPropertyHelpString( wxT("DateProperty"),
-        wxT("Attribute wxPG_DATE_PICKER_STYLE has been set to (long)(wxDP_DROPDOWN | wxDP_SHOWCENTURY).")
-        wxT("Also note that wxPG_ALLOW_WXADV needs to be defined inorder to use wxDatePickerCtrl.") );
+        wxT("Attribute wxPG_DATE_PICKER_STYLE has been set to (long)")
+        wxT("(wxDP_DROPDOWN | wxDP_SHOWCENTURY | wxDP_ALLOWNONE).") );
 #endif
 
 #endif

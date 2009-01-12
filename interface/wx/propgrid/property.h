@@ -115,7 +115,8 @@
 #define wxPG_DATE_FORMAT                    wxS("DateFormat")
 
 /** Sets wxDatePickerCtrl window style used with wxDateProperty. Default
-    is wxDP_DEFAULT | wxDP_SHOWCENTURY.
+    is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE will enable
+    better unspecified value support in the editor.
 */
 #define wxPG_DATE_PICKER_STYLE              wxS("PickerStyle")
 
@@ -310,6 +311,7 @@
     string wxDateTime::Format uses (altough default is recommended as it is
     locale-dependant), and wxPG_DATE_PICKER_STYLE allows changing window
     style given to DatePickerCtrl (default is wxDP_DEFAULT|wxDP_SHOWCENTURY).
+    Using wxDP_ALLOWNONE will enable better unspecified value support.
 
     @subsection wxEditEnumProperty
 

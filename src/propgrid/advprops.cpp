@@ -457,7 +457,7 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
                  NULL,
                  wxT("DatePickerCtrl editor can only be used with wxDateProperty or derivative.") );
 
-    wxDateProperty* prop = (wxDateProperty*) property;
+    wxDateProperty* prop = wxDynamicCast(property, wxDateProperty);
 
     // Use two stage creation to allow cleaner display on wxMSW
     wxDatePickerCtrl* ctrl = new wxDatePickerCtrl();
@@ -490,14 +490,18 @@ wxPGWindowList wxPGDatePickerCtrlEditor::CreateControls( wxPropertyGrid* propgri
 }
 
 // Copies value from property to control
-void wxPGDatePickerCtrlEditor::UpdateControl( wxPGProperty* property, wxWindow* wnd ) const
+void wxPGDatePickerCtrlEditor::UpdateControl( wxPGProperty* property,
+                                              wxWindow* wnd ) const
 {
     wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
     wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
 
-    // We assume that property's data type is 'int' (or something similar),
-    // thus allowing us to get raw, unchecked value via DoGetValue.
-    ctrl->SetValue( property->GetValue().GetDateTime() );
+    wxDateTime dateValue(wxInvalidDateTime);
+    wxVariant v(property->GetValue());
+    if ( v.GetType() == wxT("datetime") )
+        dateValue = v.GetDateTime();
+
+    ctrl->SetValue( dateValue );
 }
 
 // Control's events are redirected here
@@ -522,11 +526,20 @@ bool wxPGDatePickerCtrlEditor::GetValueFromControl( wxVariant& variant, wxPGProp
     return true;
 }
 
-void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* WXUNUSED(property), wxWindow* WXUNUSED(wnd) ) const
+void wxPGDatePickerCtrlEditor::SetValueToUnspecified( wxPGProperty* property,
+                                                      wxWindow* wnd ) const
 {
-    // TODO?
-    //wxDateProperty* prop = (wxDateProperty*) property;
-    //ctrl->SetValue(?);
+    wxDatePickerCtrl* ctrl = (wxDatePickerCtrl*) wnd;
+    wxASSERT( ctrl && ctrl->IsKindOf(CLASSINFO(wxDatePickerCtrl)) );
+
+    wxDateProperty* prop = wxDynamicCast(property, wxDateProperty);
+
+    if ( prop )
+    {
+        int datePickerStyle = prop->GetDatePickerStyle();
+        if ( datePickerStyle & wxDP_ALLOWNONE )
+            ctrl->SetValue(wxInvalidDateTime);
+    }
 }
 
 #endif // wxUSE_DATEPICKCTRL
@@ -2064,6 +2077,17 @@ wxDateProperty::wxDateProperty( const wxString& label,
 
 wxDateProperty::~wxDateProperty()
 {
+}
+
+void wxDateProperty::OnSetValue()
+{
+    //
+    // Convert invalid dates to unspecified value
+    if ( m_value.GetType() == wxT("datetime") )
+    {
+        if ( !m_value.GetDateTime().IsValid() )
+            m_value.MakeNull();
+    }
 }
 
 bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
