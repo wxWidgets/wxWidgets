@@ -1162,6 +1162,10 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
                     (subItem >= 0 && subItem < GetColumnCount()),
                  false, _T("invalid sub item index") );
 
+    // use wxCHECK_MSG against "item" too, for coherency with the generic implementation:
+    wxCHECK_MSG( item >= 0 && item < GetItemCount(), false,
+                 _T("invalid item in GetSubItemRect") );
+
     int codeWin;
     if ( code == wxLIST_RECT_BOUNDS )
         codeWin = LVIR_BOUNDS;

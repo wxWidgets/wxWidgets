@@ -159,7 +159,7 @@ void ListCtrlTestCase::ItemRect()
 
     // do test
     wxRect r;
-    //CPPUNIT_ASSERT( !m_list->GetItemRect(1, r) );   this asserts as item #1 does not exist
+    WX_ASSERT_FAILS_WITH_ASSERT( m_list->GetItemRect(1, r) );
     CPPUNIT_ASSERT( m_list->GetItemRect(0, r) );
     CPPUNIT_ASSERT_EQUAL( 150, r.GetWidth() );
 
