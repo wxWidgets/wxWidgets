@@ -107,6 +107,9 @@ wxSocketError wxSocketImplUnix::GetLastError() const
 void wxSocketImplUnix::DoEnableEvents(int flags, bool enable)
 {
     wxSocketManager * const manager = wxSocketManager::Get();
+    if (!manager)
+        return;
+
     if ( enable )
     {
         if ( flags & wxSOCKET_INPUT_FLAG )

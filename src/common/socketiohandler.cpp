@@ -24,6 +24,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/private/socket.h"
+#include "wx/link.h"
 
 // ============================================================================
 // implementation
@@ -110,5 +111,9 @@ static struct ManagerSetter
         wxAppTraits::SetDefaultSocketManager(&s_manager);
     }
 } gs_managerSetter;
+
+
+// see the relative linker macro in socket.cpp
+wxFORCE_LINK_THIS_MODULE( socketiohandler );
 
 #endif // wxUSE_SOCKETS

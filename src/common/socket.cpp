@@ -42,6 +42,7 @@
 #include "wx/stopwatch.h"
 #include "wx/thread.h"
 #include "wx/evtloop.h"
+#include "wx/link.h"
 
 #include "wx/private/fd.h"
 #include "wx/private/socket.h"
@@ -769,7 +770,8 @@ void wxSocketBase::Init()
     {
         // this Initialize() will be undone by wxSocketModule::OnExit(), all
         // the other calls to it should be matched by a call to Shutdown()
-        Initialize();
+        if (!Initialize())
+            wxLogError("Cannot initialize wxSocketBase");
     }
 }
 
@@ -1987,5 +1989,10 @@ private:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
+
+// NOTE: we need to force linking against socketiohandler.cpp otherwise in
+//       static builds of wxWidgets the ManagerSetter::ManagerSetter ctor
+//       contained there wouldn't be ever called
+wxFORCE_LINK_MODULE( socketiohandler )
 
 #endif // wxUSE_SOCKETS
