@@ -199,9 +199,12 @@ class WXDLLIMPEXP_BASE wxEventFunctor
 public:
     virtual ~wxEventFunctor();
 
+    // this operator is used to actually invoke the event handler
     virtual void operator()(wxEvtHandler *, wxEvent &) = 0;
 
-    virtual bool operator==(const wxEventFunctor& other) const = 0;
+    // this function tests whether this functor is matched, for the purpose of
+    // finding it in an event table in Disconnect(), by the given func
+    virtual bool Matches(const wxEventFunctor& func) const = 0;
 
     virtual wxEvtHandler *GetHandler() const { return NULL; }
 
@@ -225,13 +228,12 @@ public:
         (realHandler->*m_method)(event);
     }
 
-    virtual bool operator==(const wxEventFunctor& other) const
+    virtual bool Matches(const wxEventFunctor& other) const
     {
         wxEvtHandler * const handler = other.GetHandler();
-        const wxObjectEventFunction method = other.GetMethod();
 
         return (m_handler == handler || !handler) &&
-               (m_method == method || !method);
+               (m_method == other.GetMethod());
     }
 
     virtual wxEvtHandler *GetHandler() const { return m_handler; }
@@ -241,6 +243,24 @@ private:
     wxEvtHandler *m_handler;
     wxObjectEventFunction m_method;
 };
+
+// Create a functor for the legacy events: handler can be NULL 
+
+inline wxObjectEventFunctor *
+wxNewEventFunctor(wxEventType WXUNUSED(evtType),
+                  wxObjectEventFunction method,
+                  wxEvtHandler *handler)
+{
+    return new wxObjectEventFunctor(method, handler);
+}
+
+inline wxObjectEventFunctor
+wxConstructEventFunctor(wxEventType WXUNUSED(evtType),
+                        wxObjectEventFunction method,
+                        wxEvtHandler *handler)
+{
+    return wxObjectEventFunctor(method, handler);
+}
 
 #if !wxEVENTS_COMPATIBILITY_2_8
 
@@ -262,7 +282,7 @@ public:
         ( *m_handler )( dynamic_cast< typename EventType::CorrespondingEvent & >( event ));
     }
 
-    virtual bool operator == ( const wxEventFunctor &right ) const
+    virtual bool Matches( const wxEventFunctor &right ) const
     {
         wxEventFunctorFunction const &other = dynamic_cast< wxEventFunctorFunction const & >( right );
 
@@ -307,7 +327,7 @@ public:
         ( realHandler->*m_method )( dynamic_cast< typename EventType::CorrespondingEvent & >( event ));
     }
 
-    virtual bool operator == ( const wxEventFunctor &right ) const
+    virtual bool Matches( const wxEventFunctor &right ) const
     {
         wxEventFunctorMethod const &other = dynamic_cast< wxEventFunctorMethod const & >( right );
 
@@ -355,7 +375,7 @@ public:
         m_functor( dynamic_cast< typename EventType::CorrespondingEvent & >( event ));
     }
 
-    virtual bool operator == ( const wxEventFunctor &right ) const
+    virtual bool Matches( const wxEventFunctor &right ) const
     {
         wxEventFunctorAdapter const &other = dynamic_cast< wxEventFunctorAdapter const & >( right );
 
@@ -365,28 +385,6 @@ public:
 private:
     Functor m_functor;
 };
-
-#endif // wxEVENTS_COMPATIBILITY_2_8
-
-// Create a functor for the legacy events:
-
-inline wxObjectEventFunctor *
-wxNewEventFunctor(wxEventType WXUNUSED(evtType),
-                  wxObjectEventFunction method,
-                  wxEvtHandler *handler = NULL)
-{
-    return new wxObjectEventFunctor(method, handler);
-}
-
-inline wxObjectEventFunctor
-wxConstructEventFunctor(wxEventType WXUNUSED(evtType),
-                        wxObjectEventFunction method,
-                        wxEvtHandler *handler = NULL)
-{
-    return wxObjectEventFunctor(method, handler);
-}
-
-#if !wxEVENTS_COMPATIBILITY_2_8
 
 //
 // Create functors for the templatized events (needed in wxEvtHandler::Connect):
@@ -1495,7 +1493,7 @@ private:
 class WXDLLIMPEXP_CORE wxEraseEvent : public wxEvent
 {
 public:
-    wxEraseEvent(int Id = 0, wxDC *dc = (wxDC *) NULL)
+    wxEraseEvent(int Id = 0, wxDC *dc = NULL)
         : wxEvent(Id, wxEVT_ERASE_BACKGROUND),
           m_dc(dc)
         { }
@@ -1890,7 +1888,7 @@ public:
 
     wxDropFilesEvent(wxEventType type = wxEVT_NULL,
                      int noFiles = 0,
-                     wxString *files = (wxString *) NULL)
+                     wxString *files = NULL)
         : wxEvent(0, type),
           m_noFiles(noFiles),
           m_pos(),
@@ -2123,7 +2121,7 @@ class WXDLLIMPEXP_CORE wxPaletteChangedEvent : public wxEvent
 public:
     wxPaletteChangedEvent(wxWindowID winid = 0)
         : wxEvent(winid, wxEVT_PALETTE_CHANGED),
-          m_changedWindow((wxWindow *) NULL)
+          m_changedWindow(NULL)
         { }
 
     wxPaletteChangedEvent(const wxPaletteChangedEvent& event)
@@ -2184,7 +2182,7 @@ public:
     wxNavigationKeyEvent()
         : wxEvent(0, wxEVT_NAVIGATION_KEY),
           m_flags(IsForward | FromTab),    // defaults are for TAB
-          m_focus((wxWindow *)NULL)
+          m_focus(NULL)
         {
             m_propagationLevel = wxEVENT_PROPAGATE_NONE;
         }
@@ -2695,8 +2693,8 @@ public:
                  int lastId,
                  wxEventType eventType,
                  wxObjectEventFunction func,
-                 wxObject *userData = (wxObject *) NULL,
-                 wxEvtHandler *eventSink = (wxEvtHandler *) NULL)
+                 wxObject *userData = NULL,
+                 wxEvtHandler *eventSink = NULL)
     {
         wxObjectEventFunctor *functor = wxNewEventFunctor( eventType, func, eventSink );
 
@@ -2707,23 +2705,23 @@ public:
     void Connect(int winid,
                  wxEventType eventType,
                  wxObjectEventFunction func,
-                 wxObject *userData = (wxObject *) NULL,
-                 wxEvtHandler *eventSink = (wxEvtHandler *) NULL)
+                 wxObject *userData = NULL,
+                 wxEvtHandler *eventSink = NULL)
         { Connect(winid, wxID_ANY, eventType, func, userData, eventSink); }
 
     // Even more convenient: without id (same as using id of wxID_ANY)
     void Connect(wxEventType eventType,
                  wxObjectEventFunction func,
-                 wxObject *userData = (wxObject *) NULL,
-                 wxEvtHandler *eventSink = (wxEvtHandler *) NULL)
+                 wxObject *userData = NULL,
+                 wxEvtHandler *eventSink = NULL)
         { Connect(wxID_ANY, wxID_ANY, eventType, func, userData, eventSink); }
 
     bool Disconnect(int winid,
                     int lastId,
                     wxEventType eventType,
                     wxObjectEventFunction func = NULL,
-                    wxObject *userData = (wxObject *) NULL,
-                    wxEvtHandler *eventSink = (wxEvtHandler *) NULL)
+                    wxObject *userData = NULL,
+                    wxEvtHandler *eventSink = NULL)
     {
         wxObjectEventFunctor functor = wxConstructEventFunctor( eventType, func, eventSink );
 
@@ -2733,14 +2731,14 @@ public:
     bool Disconnect(int winid = wxID_ANY,
                     wxEventType eventType = wxEVT_NULL,
                     wxObjectEventFunction func = NULL,
-                    wxObject *userData = (wxObject *) NULL,
-                    wxEvtHandler *eventSink = (wxEvtHandler *) NULL)
+                    wxObject *userData = NULL,
+                    wxEvtHandler *eventSink = NULL)
         { return Disconnect(winid, wxID_ANY, eventType, func, userData, eventSink); }
 
     bool Disconnect(wxEventType eventType,
                     wxObjectEventFunction func,
-                    wxObject *userData = (wxObject *) NULL,
-                    wxEvtHandler *eventSink = (wxEvtHandler *) NULL)
+                    wxObject *userData = NULL,
+                    wxEvtHandler *eventSink = NULL)
         { return Disconnect(wxID_ANY, eventType, func, userData, eventSink); }
 
 
@@ -3059,14 +3057,15 @@ public:
     // implementation from now on
     // --------------------------
 
-    // check if the given event table entry matches this event and call the
-    // handler if it does
+    // check if the given event table entry matches this event by id (the check
+    // for the event type should be done by caller) and call the handler if it
+    // does
     //
     // return true if the event was processed, false otherwise (no match or the
     // handler decided to skip the event)
-    static bool ProcessEventIfMatches(const wxEventTableEntryBase& tableEntry,
-                                      wxEvtHandler *handler,
-                                      wxEvent& event);
+    static bool ProcessEventIfMatchesId(const wxEventTableEntryBase& tableEntry,
+                                        wxEvtHandler *handler,
+                                        wxEvent& event);
 
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
     bool SearchDynamicEventTable( wxEvent& event );

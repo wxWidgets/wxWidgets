@@ -895,11 +895,9 @@ bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
         const size_t count = eventEntryTable.GetCount();
         for (size_t n = 0; n < count; n++)
         {
-            if ( wxEvtHandler::
-                    ProcessEventIfMatches(*eventEntryTable[n], self, event) )
-            {
+            const wxEventTableEntry& entry = *eventEntryTable[n];
+            if ( wxEvtHandler::ProcessEventIfMatchesId(entry, self, event) )
                 return true;
-            }
         }
     }
 
@@ -1198,9 +1196,9 @@ void wxEvtHandler::ProcessPendingEvents()
  * Event table stuff
  */
 /* static */ bool
-wxEvtHandler::ProcessEventIfMatches(const wxEventTableEntryBase& entry,
-                                    wxEvtHandler *handler,
-                                    wxEvent& event)
+wxEvtHandler::ProcessEventIfMatchesId(const wxEventTableEntryBase& entry,
+                                      wxEvtHandler *handler,
+                                      wxEvent& event)
 {
     int tableId1 = entry.m_id,
         tableId2 = entry.m_lastId;
@@ -1358,7 +1356,7 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
         const wxEventTableEntry& entry = table.entries[i];
         if ( eventType == entry.m_eventType )
         {
-            if ( ProcessEventIfMatches(entry, this, event) )
+            if ( ProcessEventIfMatchesId(entry, this, event) )
                 return true;
         }
     }
@@ -1419,7 +1417,7 @@ wxEvtHandler::Unsubscribe(int id,
         if ((entry->m_id == id) &&
             ((entry->m_lastId == lastId) || (lastId == wxID_ANY)) &&
             ((entry->m_eventType == eventType) || (eventType == wxEVT_NULL)) &&
-            (*entry->m_fn == func) &&
+            entry->m_fn->Matches(func) &&
             ((entry->m_callbackUserData == userData) || !userData))
         {
             delete entry->m_callbackUserData;
@@ -1446,10 +1444,12 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
         // call Disconnect() invalidating the current node
         node = node->GetNext();
 
-        if ((event.GetEventType() == entry->m_eventType) && (entry->m_fn != 0))
+        if ( event.GetEventType() == entry->m_eventType )
         {
-            wxEvtHandler *handler = entry->m_fn->GetHandler() ? entry->m_fn->GetHandler() : this;
-            if ( ProcessEventIfMatches(*entry, handler, event) )
+            wxEvtHandler *handler = entry->m_fn->GetHandler();
+            if ( !handler )
+               handler = this;
+            if ( ProcessEventIfMatchesId(*entry, handler, event) )
                 return true;
         }
     }
