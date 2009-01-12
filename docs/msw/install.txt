@@ -8,7 +8,7 @@ These installation notes can be found in docs/msw/install.txt
 in your wxWidgets distribution.
 
 IMPORTANT NOTE: If you experience problems installing, please
-re-read this instructions and other related files (changes.txt,
+re-read these instructions and other related files (changes.txt,
 readme.txt, FAQ) carefully before posting to wx-users list.
 
 If you are sure that you found a bug, please report it at
@@ -62,7 +62,7 @@ Cygwin/Mingw32 to quickly locate the instructions for your compiler.
 
 All makefiles and project are located in build\msw directory.
 
-Where compiled files are stored
+Where Compiled Files are Stored
 -------------------------------
 
 After successful compilation you'll find the libraries in a subdirectory
@@ -75,12 +75,12 @@ A couple of examples:
   lib\wat_dll                   Watcom C++ DLLs
 
 Names of compiled wxWidgets libraries follow this scheme: libraries that don't
-depend on GUI components begin with "wxbase" followed by version number and
-letters indicating if the library is compiled as Unicode ('u') and/or debug
-build ('d'). Last component of them name is name of wxWidgets component
-(unless you built the library as single monolithic library; look for
-"Configuring the build" below). This is a typical set of release ANSI build
-libraries (release versions on left, debug on right side):
+depend on GUI components begin with "wxbase" followed by a version number and,
+optionally, letters indicating Unicode compilation ('u') and a debug build ('d').
+The last component is the name of the wxWidgets component (unless you build the
+library as single monolithic library; look for "Configuring the Build" below).
+This is a typical set of release ANSI build libraries (release versions on
+left, debug on right side):
 
   wxbase29.lib              wxbase29d.lib
   wxbase29_net.lib          wxbase29d_net.lib
@@ -98,9 +98,9 @@ Their Unicode debug counterparts in wxUniversal build would be
   wxmswuniv29ud_html.lib
   wxmswuniv29ud_adv.lib
 
-These directories also contain subdirectory with wx/setup.h header. This
-subdirectory is named after port, Unicode, wxUniv and debug settings and
-you must add it to include paths when compiling your application. Some
+These directories also contain a subdirectory with the wx/setup.h header. This
+subdirectory is named after the port, Unicode, wxUniv and debug settings and
+you must add it to the include paths when compiling your application. Some
 examples:
 
   lib\vc_lib\msw\wx\setup.h          VC++ static, wxMSW
@@ -108,15 +108,15 @@ examples:
   lib\vc_lib\mswunivd\wx\setup.h     VC++ static, wxUniversal, debug
 
 Below are compiler specific notes followed by customizing instructions that
-apply to all compilers (search for "Configuring the build").
+apply to all compilers (search for "Configuring the Build").
 
-Microsoft Visual C++ compilation
+Microsoft Visual C++ Compilation
 ----------------------------------------------------------------
 
-You may wish to visit http://wiki.wxwindows.org/wiki.pl?MSVC for a more
-informal and more detailed description of the process summarized below.
+You may wish to visit http://wiki.wxwidgets.org/Microsoft_Visual_C%2B%2B_Guide
+for a more informal and detailed description of the process summarized below.
 
-Please note that the VC++ 6.0 project files will work for VC++ .NET also.
+Please note that the VC++ 6.0 project files will work for VC++ .NET as well.
 
 VC++ 5.0 can also be used, providing Service Pack 3 is applied. Without it
 you will have trouble with internal compiler errors. It is available for
@@ -132,7 +132,7 @@ Using project files (VC++ 6 and later):
    Normally you'll use a static linking ANSI configuration.
    Choose the Win32 Debug or Win32 Release configuration (or any other that
    suits your needs) and use Batch Build to compile _all_ projects. If you
-   know you won't need some of the libraries (i.e. html part), you don't have
+   know you won't need some of the libraries (e.g. the HTML part), you don't have
    to compile it.  It will also produce similar variations on jpeg.lib,
    png.lib, tiff.lib, zlib.lib, and regex.lib.
 
@@ -144,7 +144,7 @@ Using project files (VC++ 6 and later):
    Alternatively, use the special wx_dll.dsw project which adds the
    dependencies to force the correct order (but, because of this, doesn't work
    for the static libraries) or simply redo the build several times until all
-   DLLs are linked correctly. Pleae notice that it's normal that dbgrid project
+   DLLs are linked correctly. Please notice that it's normal that dbgrid project
    doesn't build if wxUSE_ODBC is set to 0 (default).
 3. Open a sample project file, choose a configuration such as
    Win32 Debug using Build | Set Active Configuration..., and compile.
@@ -162,7 +162,7 @@ Using makefiles:
   'nmake -f makefile.vc'
 
    to make the wxWidgets core library as release DLL.
-   See "Configuring the build" for instruction how to build debug or static
+   See "Configuring the Build" for instruction how to build debug or static
    libraries.
 
 2. Change directory to samples and type 'nmake -f makefile.vc'
@@ -195,9 +195,9 @@ the project. After this, delete everything (including PCH) and recompile.
 
 Note (4): to create your own IDE files, copy .dsp and .dsw
 files from an existing wxWidgets sample and adapt them, or
-visit http://wiki.wxwindows.org/wiki.pl?MSVC.
+visit http://wiki.wxwidgets.org/Microsoft_Visual_C%2B%2B_Guide.
 
-Microsoft Visual C++ compilation for 64-bit Windows
+Microsoft Visual C++ Compilation for 64-bit Windows
 ----------------------------------------------------------------
 
 Visual Studio 2005 includes 64-bit compilers, though they are not installed by
@@ -272,7 +272,7 @@ If you receive this error add bufferoverflowu.lib to link, e.g.:
 
 See http://support.microsoft.com/?id=894573 for more information.
 
-Borland C++ compilation
+Borland C++ Compilation
 ----------------------------------------------------------------
 
 The minimum version required is 5.5 (last version supported by BC++ 5.0 was
@@ -313,7 +313,6 @@ debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
 Using the Debugger and IDE in BDS or Turbo Explorer
 ---------------------------------------------------
 
-
 Doubleclick / open samples\minimal\borland.bdsproj. The current version
 is to be used with a dynamic build of wxWidgets-made by running
 make -f Makefile.bcc -DBUILD=debug -DSHARED=1
@@ -322,7 +321,7 @@ directory in your PATH. The debugger tracks your source and also
 traces into the wxWidgets sources.
 
 To use this to debug other samples, copy the borland_ide.cpp
-and borland.bdsproj files, then replace all occurences of
+and borland.bdsproj files, then replace all occurrences of
 "minimal" with the name of the new project files
 
 Compilation succeeds with CBuilderX personal edition and CBuilder6, but
@@ -332,9 +331,7 @@ Compiling using the IDE files for Borland C++ 5.0 and using CBuilder IDE
 (v1-v6): not supported
 
 
-
 ** REMEMBER **
-
 In all of your wxWidgets applications, your source code should include
 the following preprocessor directive:
 
@@ -345,13 +342,13 @@ the following preprocessor directive:
 (check the samples -- e.g., \wx2\samples\minimal\minimal.cpp -- for
 more details)
 
-Borland 16 Bit compilation for Windows 3.1
+Borland 16 Bit Compilation for Windows 3.1
 ----------------------------------------------------------------
 
 The last version of wxWidgets to support 16-bit compilation with Borland was
 2.2.7 - Please download and read the instructions in that release
 
-Watcom C++ 10.6/11 and OpenWatcom compilation
+Watcom C++ 10.6/11 and OpenWatcom Compilation
 ----------------------------------------------------------------
 
 1. Change directory to build\msw. Type 'wmake -f makefile.wat' to
@@ -382,7 +379,7 @@ Note (5): wxUSE_STD_STRING is disabled in wx/string.h for Watcom as this
           for __WATCOM__).
 
 
-Metrowerks CodeWarrior compilation
+Metrowerks CodeWarrior Compilation
 ----------------------------------------------------------------
 
 ** NOTE: We don't use Metrowerks compiler any more and so depend on
@@ -404,9 +401,9 @@ Metrowerks CodeWarrior compilation
          and runtime libs.
 
 3. The project file to build the Win32 wxWidgets libraries relies on the
-   Batch File Runner plug-in.  This plug-in is not installed as part of
-   a normal CW7 installation.  However, you can find this plug-in on the
-   CodeWarrior Reference CD, in the Thrill Seekers folder; it's call the
+   Batch File Runner plug-in. This plug-in is not installed as part of
+   a normal CW7 installation. However, you can find this plug-in on the
+   CodeWarrior Reference CD, in the Thrill Seekers folder; it's called the
    "Batch File Post Linker".
 
 4. If you choose not to install the Batch File Runner plug-in, then you
@@ -435,8 +432,8 @@ Metrowerks CodeWarrior compilation
        - wx_x86.lib             ANSI Release (static)
        - wx_x86_d.lib           ANSI Debug (static)
 
-8. Sorry, I haven't had time yet to create and test unicode or DLL versions.
-   Volunteers for this are welcome (as neither DLLs nor unicode builds are
+8. Sorry, I haven't had time yet to create and test Unicode or DLL versions.
+   Volunteers for this are welcome (as neither DLLs nor Unicode builds are
    big priorities for me ;).
 
 9. CodeWarrior Pro7 project files (in XML format) are also provided for some
@@ -452,7 +449,7 @@ Metrowerks CodeWarrior compilation
          griddemo.cpp.  Build and run....
 
 
-Cygwin/MinGW compilation
+Cygwin/MinGW Compilation
 ----------------------------------------------------------------
 
 wxWidgets supports Cygwin (formerly GnuWin32) betas and
@@ -481,7 +478,7 @@ the instructions with either of these packages.
 If using MinGW, you can download the add-on MSYS package to
 provide Unix-like tools that you'll need to build wxWidgets using configure.
 
-Using makefiles directly
+Using makefiles Directly
 ----------------------------------------------------------------
 
 NOTE: The makefile.gcc makefiles are for compilation under MinGW using
@@ -605,10 +602,10 @@ OLD VERSIONS:
   from e.g. the MinGW distribution, to a directory in your path.
 
 
-Symantec & DigitalMars C++ compilation
+Symantec & DigitalMars C++ Compilation
 ----------------------------------------------------------------
 
-The DigitalMars compiler is a free succssor to the Symantec compiler
+The DigitalMars compiler is a free successor to the Symantec compiler
 and can be downloaded from http://www.digitalmars.com/
 
 1. You need to download and unzip in turn (later packages will overwrite
@@ -640,17 +637,17 @@ and remove the check for Digital Mars in it (search for __DMC__).
 
 16-bit compilation is no longer supported.
 
-Configuring the build
+Configuring the Build
 ================================================================
 
-So far the instructions only explained how to build release DLLs of wxWidgets
+So far the instructions only explain how to build release DLLs of wxWidgets
 and did not cover any configuration. It is possible to change many aspects of
 the build, including debug/release and ANSI/Unicode settings. All makefiles in
 build\msw directory use same options (with a few exceptions documented below)
 and the only difference between them is in object files and library directory
 names and in make invocation command.
 
-Changing the settings
+Changing the Settings
 ----------------------------------------------------------------
 
 There are two ways to modify the settings: either by passing the values as
@@ -693,7 +690,7 @@ Cygwin using configure:
 Brief explanation of options and possible values is in every
 build\msw\config.* file; more detailed description follows.
 
-Basic options
+Basic Options
 ----------------------------------------------------------------
 
 BUILD=release
@@ -718,7 +715,7 @@ WXUNIV=1
   Build wxUniversal instead of native wxMSW (see
   http://www.wxwidgets.org/wxuniv.htm for more information).
 
-Advanced options
+Advanced Options
 ----------------------------------------------------------------
 
 MONOLITHIC=1
@@ -804,11 +801,11 @@ COMPILER_PREFIX=<string>
   If you build with multiple versions of the same compiler, you can put
   their outputs into directories like "vc6_lib", "vc8_lib" etc. instead of
   "vc_lib" by setting this variable to e.g. "vc6". This is merely a
-  convenience variable, you can achieve the same effect (but different dir
-  names) with the CFG option.
+  convenience variable, you can achieve the same effect (but different 
+  directory names) with the CFG option.
 
 
-Compiler specific options
+Compiler-Specific Options
 ----------------------------------------------------------------
 
 * MinGW
@@ -830,7 +827,7 @@ DEBUG_RUNTIME_LIBS=1
   customers and still have usable .pdb files with debug information) and this
   setting makes it possible.
 
-Fine-tuning the compiler
+Fine-tuning the Compiler
 ----------------------------------------------------------------
 
 All makefiles have variables that you can use to specify additional options
@@ -838,21 +835,21 @@ passed to the compiler or linker. You won't need this in most cases, but if you
 do, simply add desired flags to CFLAGS (for C compiler), CXXFLAGS (for C++
 compiler), CPPFLAGS (for both C and C++ compiler) and LDFLAGS (the linker).
 
-Object and library directories
+Object and Library Directories
 ----------------------------------------------------------------
 
-All object files produced during library build are stored in a directory under
-build\msw. It's name is derived from build settings and CFG variable and from
-compiler name. Examples of directory names:
+All object files produced during a library build are stored in a directory under
+build\msw. Its name is derived from the build settings and CFG variable and from
+the compiler name. Examples of directory names:
 
   build\msw\bcc_msw            SHARED=0
   build\msw\bcc_mswdll         SHARED=1
   build\msw\bcc_mswunivd       SHARED=0, WXUNIV=1, BUILD=debug
   build\msw\vc_mswunivd        ditto, with Visual C++
 
-Libraries and DLLs are copied into subdirectory of lib directory with
-name derived from compiler and static/DLL setting and setup.h into directory
-with name that contains other settings:
+Libraries and DLLs are copied into a subdirectory of the lib directory with a
+name derived from the compiler and a static/DLL setting and setup.h into a
+directory with a name that contains other settings:
 
   lib\bcc_msw
   lib\bcc_lib\msw\wx\setup.h
@@ -883,8 +880,8 @@ and libraries in
   etc.
 
 By now it is clear what CFG is for: builds with different CFG settings don't
-share any files and they use different setup.h files. This allows you to e.g.
-have two static debug builds, one with wxUSE_SOCKETS=0 and one with sockets
+share any files and they use different setup.h files. For example, this allows
+you to have two static debug builds, one with wxUSE_SOCKETS=0 and one with sockets
 enabled (without CFG, both of them would be put into same directory and there
 would be conflicts between the files).
 
