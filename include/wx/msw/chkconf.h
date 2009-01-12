@@ -401,9 +401,9 @@
 #   define wxUSE_POSTSCRIPT 1
 #endif
 
-/* VC6 can't handle the templates for the 'type safe events': */
+/* VC6 and 7 currently can't handle template Connect() overloads: */
 #if !wxEVENTS_COMPATIBILITY_2_8
-#   if wxVISUALC_VERSION && !wxCHECK_VISUALC_VERSION(8)
+#   if defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(8)
 #       undef wxEVENTS_COMPATIBILITY_2_8
 #       define wxEVENTS_COMPATIBILITY_2_8 1
 #   endif
