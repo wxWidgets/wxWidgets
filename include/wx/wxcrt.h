@@ -181,6 +181,17 @@ inline size_t wxStrlen(const wxWCharBuffer& s) { return wxStrlen(s.data()); }
 inline size_t wxStrlen(const wxString& s) { return s.length(); }
 inline size_t wxStrlen(const wxCStrData& s) { return s.AsString().length(); }
 
+// this is a function new in 2.9 so we don't care about backwards compatibility and
+// so don't need to support wchar_t/char overloads
+#if defined(wxCRT_StrnlenA) && defined(wxCRT_StrnlenW)
+inline size_t wxStrnlen(const char *str, size_t maxlen) { return wxCRT_StrnlenA(str, maxlen); }
+inline size_t wxStrnlen(const wchar_t *str, size_t maxlen) { return wxCRT_StrnlenW(str, maxlen); }
+#else
+// use unsafer wxStrlen:
+inline size_t wxStrnlen(const char *str, size_t maxlen) { return wxCRT_StrlenA(str); wxUnusedVar(maxlen); }
+inline size_t wxStrnlen(const wchar_t *str, size_t maxlen) { return wxCRT_StrlenW(str); wxUnusedVar(maxlen); }
+#endif
+
 // NB: these are defined in wxcrtbase.h, see the comment there
 // inline char* wxStrdup(const char *s) { return wxStrdupA(s); }
 // inline wchar_t* wxStrdup(const wchar_t *s) { return wxStrdupW(s); }
@@ -231,7 +242,7 @@ inline char *wxStrncpy(char *dest, const wchar_t *src, size_t n)
 inline wchar_t *wxStrncpy(wchar_t *dest, const char *src, size_t n)
     { return wxCRT_StrncpyW(dest, wxConvLibc.cMB2WC(src), n); }
 
-// this is a new function so we don't care about backwards compatibility and
+// this is a function new in 2.9 so we don't care about backwards compatibility and
 // so don't need to support wchar_t/char overloads
 inline size_t wxStrlcpy(char *dest, const char *src, size_t n)
 {

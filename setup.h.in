@@ -918,6 +918,9 @@
 /* Define if you have wcsdup function  */
 #undef HAVE_WCSDUP
 
+/* Define if you have strnlen() function */
+#undef HAVE_STRNLEN
+
 /* Define if you have wcstoull() and wcstoll() */
 #undef HAVE_WCSTOULL
 
