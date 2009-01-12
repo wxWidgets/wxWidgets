@@ -222,7 +222,7 @@ public:
                         bool ascending);
 
     /**
-        Oberride this to indicate that the item has special font attributes.
+        Override this to indicate that the item has special font attributes.
         This only affects the wxDataViewTextRendererText renderer.
 
         @see wxDataViewItemAttr.
@@ -407,7 +407,7 @@ public:
                 unsigned int column, bool ascending);
 
     /**
-        Oberride this to indicate that the row has special font attributes.
+        Override this to indicate that the row has special font attributes.
         This only affects the wxDataViewTextRendererText() renderer.
 
         @see wxDataViewItemAttr.
