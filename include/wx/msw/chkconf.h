@@ -401,9 +401,15 @@
 #   define wxUSE_POSTSCRIPT 1
 #endif
 
-/* VC6 and 7 currently can't handle template Connect() overloads: */
+/*
+   Currently MSVC can't build the library with new-style events:
+    - VC6 simply doesn't have good enough templates support
+    - VC7 always seems to choos the Connect() overload using Functor, even when
+    the argument is a class method
+    - VC9 compiles the code fine but fails at linking stage in DLL build
+ */
 #if !wxEVENTS_COMPATIBILITY_2_8
-#   if defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(8)
+#   if defined(__VISUALC__)
 #       undef wxEVENTS_COMPATIBILITY_2_8
 #       define wxEVENTS_COMPATIBILITY_2_8 1
 #   endif
