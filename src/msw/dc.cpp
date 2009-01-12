@@ -1722,7 +1722,7 @@ void wxMSWDCImpl::SetRop(WXHDC dc)
     if ( !dc || m_logicalFunction < 0 )
         return;
 
-    int rop;
+    int rop wxDUMMY_INITIALIZE(0);
 
     switch (m_logicalFunction)
     {
