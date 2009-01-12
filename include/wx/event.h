@@ -2503,7 +2503,7 @@ struct WXDLLIMPEXP_BASE wxEventTableEntryBase
 
     ~wxEventTableEntryBase()
     {
-        wxDELETE( m_fn );
+        delete m_fn;
     }
 
     // the range of ids for this entry: if m_lastId == wxID_ANY, the range
