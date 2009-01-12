@@ -101,7 +101,7 @@ WX_DECLARE_LIST(EventWorker, EList);
 //and list of two type worker classes that serve clients
 class Server : public wxApp
 {
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 public:
     Server() : m_maxConnections(-1) {}
     ~Server() {}
@@ -198,7 +198,7 @@ private:
     void DoWrite();
     void DoRead();
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 };
 
 /******************* Implementation ******************/

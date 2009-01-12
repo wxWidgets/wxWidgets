@@ -57,10 +57,12 @@
 // this should cover all the current Unix systems (Windows never sends any
 // signals anyhow) but if we find one that has neither we should explicitly
 // ignore SIGPIPE for it
+// OpenVMS has neither MSG_NOSIGNAL nor SO_NOSIGPIPE. However the socket sample
+// seems to work. Not sure if problems will show up on OpenVMS using sockets.
 #ifdef MSG_NOSIGNAL
     #define wxSOCKET_MSG_NOSIGNAL MSG_NOSIGNAL
 #else // MSG_NOSIGNAL not available (BSD including OS X)
-    #if defined(__UNIX__) && !defined(SO_NOSIGPIPE)
+    #if defined(__UNIX__) && !defined(SO_NOSIGPIPE) && !defined( __VMS )
         #error "Writing to socket could generate unhandled SIGPIPE."
         #error "Please post information about your system to wx-dev."
     #endif

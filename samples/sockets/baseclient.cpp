@@ -72,7 +72,7 @@ WX_DECLARE_LIST(ThreadWorker, TList);
 WX_DECLARE_LIST(EventWorker, EList);
 
 class Client : public wxApp {
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 public:
     void RemoveEventWorker(EventWorker* p_worker);
 private:
@@ -141,7 +141,7 @@ private:
 
 class EventWorker : public wxEvtHandler
 {
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 public:
     EventWorker(const wxString& p_host, char* p_buf, int p_size);
     void Run();
