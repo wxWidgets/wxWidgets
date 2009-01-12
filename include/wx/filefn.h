@@ -549,8 +549,10 @@ WXDLLIMPEXP_BASE wxString wxPathOnly(const wxString& path);
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxDos2UnixFilename(char *s) );
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxDos2UnixFilename(wchar_t *s) );
 
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxUnix2DosFilename(char *s) );
-wxDEPRECATED( WXDLLIMPEXP_BASE void wxUnix2DosFilename(wchar_t *s) );
+wxDEPRECATED_BUT_USED_INTERNALLY(
+    WXDLLIMPEXP_BASE void wxUnix2DosFilename(char *s) );
+wxDEPRECATED_BUT_USED_INTERNALLY(
+    WXDLLIMPEXP_BASE void wxUnix2DosFilename(wchar_t *s) );
 
 // Strip the extension, in situ
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(char *buffer) );
