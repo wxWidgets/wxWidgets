@@ -272,7 +272,7 @@ wxListBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
     attr.colFg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     attr.colBg = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX );
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_ATSU_TEXT
     attr.font.MacCreateFromThemeFont(kThemeViewsFont);
 #else
     attr.font.MacCreateFromUIFont(kCTFontViewsFontType);

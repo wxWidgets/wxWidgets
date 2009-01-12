@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////
-// File:        src/cocoa/taskbar.mm
+// File:        src/osx/cocoa/taskbar.mm
 // Purpose:     Implements wxTaskBarIcon class
 // Author:      David Elliott
 // Modified by:
@@ -21,21 +21,7 @@
 
 #include "wx/taskbar.h"
 
-#import <AppKit/NSApplication.h>
-#import <AppKit/NSImage.h>
-#import <AppKit/NSMenu.h>
-#import <AppKit/NSMenuItem.h>
-#import <AppKit/NSStatusBar.h>
-#import <AppKit/NSStatusItem.h>
-#import <AppKit/NSView.h>
-#import <Foundation/NSArray.h>
-#import <Foundation/NSEnumerator.h>
-
-#import <AppKit/NSEvent.h>
-#import <AppKit/NSWindow.h>
-#import <AppKit/NSGraphicsContext.h>
-
-#include "wx/cocoa/autorelease.h"
+#include "wx/osx/private.h"
 
 // A category for methods that are only present in Panther's SDK
 @interface NSStatusItem(wxNSStatusItemPrePantherCompatibility)
@@ -247,7 +233,7 @@ WX_NSMenu wxTaskBarIconDockImpl::CocoaDoGetDockNSMenu()
 
 bool wxTaskBarIconDockImpl::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
-    wxAutoNSAutoreleasePool pool;
+    wxMacAutoreleasePool pool;
     m_originalDockIcon = [[[NSApplication sharedApplication] applicationIconImage] retain];
     //[[NSApplication sharedApplication] setApplicationIconImage:icon.GetNSImage()];
     return true;
@@ -282,7 +268,7 @@ wxTaskBarIconCustomStatusItemImpl::~wxTaskBarIconCustomStatusItemImpl()
 
 bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxString& tooltip)
 {
-    wxAutoNSAutoreleasePool pool;
+    wxMacAutoreleasePool pool;
     if(!m_cocoaNSStatusItem)
     {
         m_cocoaNSStatusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];

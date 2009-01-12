@@ -35,7 +35,6 @@
 
 #include "wx/osx/private.h"
 
-
 WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext )
 {
     WXGLContext context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext: shareContext];
@@ -78,9 +77,9 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
     {
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFAMinimumPolicy,
-        NSOpenGLPFAColorSize,8,
-        NSOpenGLPFAAlphaSize,0,
-        NSOpenGLPFADepthSize,8,
+        NSOpenGLPFAColorSize,(NSOpenGLPixelFormatAttribute)8,
+        NSOpenGLPFAAlphaSize,(NSOpenGLPixelFormatAttribute)0,
+        NSOpenGLPFADepthSize,(NSOpenGLPixelFormatAttribute)8,
         (NSOpenGLPixelFormatAttribute)nil
     };
 
@@ -122,12 +121,12 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
 
                 case WX_GL_AUX_BUFFERS:
                     data[p++] = NSOpenGLPFAAuxBuffers;
-                    data[p++] = attribList[arg++];
+                    data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
 
                 case WX_GL_MIN_RED:
                     data[p++] = NSOpenGLPFAColorSize;
-                    data[p++] = attribList[arg++];
+                    data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
 
                 case WX_GL_MIN_GREEN:
@@ -142,22 +141,22 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
 
                 case WX_GL_MIN_ALPHA:
                     data[p++] = NSOpenGLPFAAlphaSize;
-                    data[p++] = attribList[arg++];
+                    data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
 
                 case WX_GL_DEPTH_SIZE:
                     data[p++] = NSOpenGLPFADepthSize;
-                    data[p++] = attribList[arg++];
+                    data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
 
                 case WX_GL_STENCIL_SIZE:
                     data[p++] = NSOpenGLPFAStencilSize;
-                    data[p++] = attribList[arg++];
+                    data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
 
                 case WX_GL_MIN_ACCUM_RED:
                     data[p++] = NSOpenGLPFAAccumSize;
-                    data[p++] = attribList[arg++];
+                    data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
 
                 case WX_GL_MIN_ACCUM_GREEN:
@@ -185,7 +184,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
                     }
 
                     data[p++] = NSOpenGLPFASampleBuffers;
-                    if ( (data[p++] = attribList[arg++]) == true )
+                    if ( (data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++]) == true )
                     {
                         // don't use software fallback
                         data[p++] = NSOpenGLPFANoRecovery;
@@ -202,7 +201,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
                     }
 
                     data[p++] = NSOpenGLPFASamples;
-                    data[p++] = attribList[arg++];
+                    data[p++] = (NSOpenGLPixelFormatAttribute) attribList[arg++];
                     break;
             }
         }
@@ -212,7 +211,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList)
         attribs = data;
     }
 
-    return [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
+    return [[NSOpenGLPixelFormat alloc] initWithAttributes:(NSOpenGLPixelFormatAttribute*) attribs];
 }
 
 bool wxGLContext::SetCurrent(const wxGLCanvas& win) const

@@ -305,10 +305,43 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
         return;
 
     m_peer->SetControlSize( variant );
+#if wxOSX_USE_CARBON
+    ControlSize size ;
+
+    // we will get that from the settings later
+    // and make this NORMAL later, but first
+    // we have a few calculations that we must fix
+
+    switch ( variant )
+    {
+        case wxWINDOW_VARIANT_NORMAL :
+            size = kControlSizeNormal;
+            break ;
+
+        case wxWINDOW_VARIANT_SMALL :
+            size = kControlSizeSmall;
+            break ;
+
+        case wxWINDOW_VARIANT_MINI :
+            // not always defined in the headers
+            size = 3 ;
+            break ;
+
+        case wxWINDOW_VARIANT_LARGE :
+            size = kControlSizeLarge;
+            break ;
+
+        default:
+            wxFAIL_MSG(_T("unexpected window variant"));
+            break ;
+    }
+    m_peer->SetData<ControlSize>(kControlEntireControl, kControlSizeTag, &size ) ;
+#endif
+
 #if wxOSX_USE_COCOA_OR_CARBON
     wxFont font ;
 
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_ATSU_TEXT
     ControlSize size ;
     ThemeFontID themeFont = kThemeSystemFont ;
 
@@ -344,7 +377,6 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
             break ;
     }
 
-    m_peer->SetData<ControlSize>(kControlEntireControl, kControlSizeTag, &size ) ;
     font.MacCreateFromThemeFont( themeFont ) ;
 #else
     CTFontUIFontType themeFont = kCTFontSystemFontType ;

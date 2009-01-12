@@ -989,7 +989,7 @@ void wxGenericTreeCtrl::Init()
     m_lastOnSame = false;
 
 #if defined( __WXMAC__ )
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_ATSU_TEXT
     m_normalFont.MacCreateFromThemeFont( kThemeViewsFont ) ;
 #else
     m_normalFont.MacCreateFromUIFont( kCTFontViewsFontType ) ;

@@ -257,7 +257,7 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
         PMSetOrientation( (PMPageFormat) m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
             kPMLandscape : kPMPortrait , false ) ;
     
-#if wxOSX_USE_CARBON
+#if 1 // wxOSX_USE_CARBON
     PMTag tag = kPMMaxSquareResolution;
     PMPrinterGetPrinterResolution(printer, tag, &res);
     PMSetResolution((PMPageFormat) m_macPageFormat, &res);
@@ -502,7 +502,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     PMResolution res;
     wxMacCarbonPrintData* nativeData = (wxMacCarbonPrintData*)
           (m_printDialogData.GetPrintData().GetNativeData());
-#if wxOSX_USE_CARBON
+#if 1 // wxOSX_USE_CARBON
     PMGetResolution((PMPageFormat) (nativeData->m_macPageFormat), &res);
 #else 
     PMPrinter printer;

@@ -63,7 +63,7 @@ public:
 
     bool Create(const wxNativeFontInfo& info);
 
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_ATSU_TEXT
     bool MacCreateFromThemeFont( wxUint16 themeFontID ) ;
 #endif
 #if wxOSX_USE_CORE_TEXT

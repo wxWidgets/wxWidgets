@@ -20,6 +20,11 @@
 
 #include <ApplicationServices/ApplicationServices.h>
 
+#if wxOSX_USE_ATSU_TEXT
+    // we need theming and atsu
+    #include <Carbon/Carbon.h>
+#endif
+
 #ifdef __OBJC__
 
     #import <Cocoa/Cocoa.h>

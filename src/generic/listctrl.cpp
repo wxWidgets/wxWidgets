@@ -5060,7 +5060,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL )
     {
         wxFont font;
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_ATSU_TEXT
         font.MacCreateFromThemeFont( kThemeViewsFont );
 #else
         font.MacCreateFromUIFont( kCTFontViewsFontType );
@@ -5077,7 +5077,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
         if (m_headerWin)
         {
             wxFont font;
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_ATSU_TEXT
             font.MacCreateFromThemeFont( kThemeSmallSystemFont );
 #else
         font.MacCreateFromUIFont( kCTFontSystemFontType );

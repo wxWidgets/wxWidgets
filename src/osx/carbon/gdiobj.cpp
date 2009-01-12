@@ -64,7 +64,7 @@ const wxFont* wxStockGDIMac::GetFont(Item item)
 #if wxOSX_USE_COCOA_OR_CARBON
         case FONT_NORMAL:
             font = new wxFont;
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_ATSU_TEXT
             font->MacCreateFromThemeFont(kThemeSystemFont);
 #else
             font->MacCreateFromUIFont(kCTFontSystemFontType);
@@ -72,7 +72,7 @@ const wxFont* wxStockGDIMac::GetFont(Item item)
             break;
         case FONT_SMALL:
             font = new wxFont;
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_ATSU_TEXT
             font->MacCreateFromThemeFont(kThemeSmallSystemFont);
 #else
             font->MacCreateFromUIFont(kCTFontSmallSystemFontType);
