@@ -1,123 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dataview.h
-// Purpose:     interface of wxDataViewIconText
+// Purpose:     interface of wxDataView* classes
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
-
-/**
-    @class wxDataViewIconText
-
-    wxDataViewIconText is used by wxDataViewIconTextRenderer for data transfer.
-    This class can be converted to and from a wxVariant.
-
-    @library{wxadv}
-    @category{dvc}
-*/
-class wxDataViewIconText : public wxObject
-{
-public:
-    //@{
-    /**
-        Constructor.
-    */
-    wxDataViewIconText(const wxString& text = wxEmptyString,
-                       const wxIcon& icon = wxNullIcon);
-    wxDataViewIconText(const wxDataViewIconText& other);
-    //@}
-
-    /**
-        Gets the icon.
-    */
-    const wxIcon& GetIcon() const;
-
-    /**
-        Gets the text.
-    */
-    wxString GetText() const;
-
-    /**
-        Set the icon.
-    */
-    void SetIcon(const wxIcon& icon);
-
-    /**
-        Set the text.
-    */
-    void SetText(const wxString& text);
-};
-
-
-
-/**
-    @class wxDataViewEvent
-
-    This is the event class for the wxDataViewCtrl notifications.
-
-    @library{wxadv}
-    @category{events,dvc}
-*/
-class wxDataViewEvent : public wxNotifyEvent
-{
-public:
-    //@{
-    /**
-        Constructor. Typically used by wxWidgets internals only.
-    */
-    wxDataViewEvent(wxEventType commandType = wxEVT_NULL,
-                    int winid = 0);
-    wxDataViewEvent(const wxDataViewEvent& event);
-    //@}
-
-    /**
-        Returns the position of the column in the control or -1
-        if no column field was set by the event emitter.
-    */
-    int GetColumn() const;
-
-    /**
-        Returns a pointer to the wxDataViewColumn from which
-        the event was emitted or @NULL.
-    */
-    wxDataViewColumn* GetDataViewColumn() const;
-
-    /**
-        Returns the wxDataViewModel associated with the event.
-    */
-    wxDataViewModel* GetModel() const;
-
-    /**
-        Returns a the position of a context menu event in screen coordinates.
-    */
-    wxPoint GetPosition() const;
-
-    /**
-        Returns a reference to a value.
-    */
-    const wxVariant& GetValue() const;
-
-    /**
-        Sets the column index associated with this event.
-    */
-    void SetColumn(int col);
-
-    /**
-        For wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only.
-    */
-    void SetDataViewColumn(wxDataViewColumn* col);
-
-    /**
-        Sets the dataview model associated with this event.
-    */
-    void SetModel(wxDataViewModel* model);
-
-    /**
-        Sets the value associated with this event.
-    */
-    void SetValue(const wxVariant& value);
-};
-
 
 
 /**
@@ -602,7 +489,7 @@ public:
 
     A wxDataViewItem is used to represent a (visible) item in the control.
 
-    Unlike wxListCtrl wxDataViewCtrl doesn't get its data from the user through
+    Unlike wxListCtrl, wxDataViewCtrl doesn't get its data from the user through
     virtual functions or by setting it directly. Instead you need to write your own
     wxDataViewModel and associate it with this control.
     Then you need to add a number of wxDataViewColumn to this control to define
@@ -611,7 +498,7 @@ public:
 
     A number of standard renderers for rendering text, dates, images, toggle,
     a progress bar etc. are provided. Additionally, the user can write custom
-    renderes deriving from wxDataViewCustomRenderer for displaying anything.
+    renderers deriving from wxDataViewCustomRenderer for displaying anything.
 
     All data transfer from the control to the model and the user code is done
     through wxVariant which can be extended to support more data formats as necessary.
@@ -1921,5 +1808,118 @@ public:
         Sets the icon for the item.
     */
     void SetItemIcon(const wxDataViewItem& item, const wxIcon& icon);
+};
+
+
+/**
+    @class wxDataViewIconText
+
+    wxDataViewIconText is used by wxDataViewIconTextRenderer for data transfer.
+    This class can be converted to and from a wxVariant.
+
+    @library{wxadv}
+    @category{dvc}
+*/
+class wxDataViewIconText : public wxObject
+{
+public:
+    //@{
+    /**
+        Constructor.
+    */
+    wxDataViewIconText(const wxString& text = wxEmptyString,
+                       const wxIcon& icon = wxNullIcon);
+    wxDataViewIconText(const wxDataViewIconText& other);
+    //@}
+
+    /**
+        Gets the icon.
+    */
+    const wxIcon& GetIcon() const;
+
+    /**
+        Gets the text.
+    */
+    wxString GetText() const;
+
+    /**
+        Set the icon.
+    */
+    void SetIcon(const wxIcon& icon);
+
+    /**
+        Set the text.
+    */
+    void SetText(const wxString& text);
+};
+
+
+
+/**
+    @class wxDataViewEvent
+
+    This is the event class for the wxDataViewCtrl notifications.
+
+    @library{wxadv}
+    @category{events,dvc}
+*/
+class wxDataViewEvent : public wxNotifyEvent
+{
+public:
+    //@{
+    /**
+        Constructor. Typically used by wxWidgets internals only.
+    */
+    wxDataViewEvent(wxEventType commandType = wxEVT_NULL,
+                    int winid = 0);
+    wxDataViewEvent(const wxDataViewEvent& event);
+    //@}
+
+    /**
+        Returns the position of the column in the control or -1
+        if no column field was set by the event emitter.
+    */
+    int GetColumn() const;
+
+    /**
+        Returns a pointer to the wxDataViewColumn from which
+        the event was emitted or @NULL.
+    */
+    wxDataViewColumn* GetDataViewColumn() const;
+
+    /**
+        Returns the wxDataViewModel associated with the event.
+    */
+    wxDataViewModel* GetModel() const;
+
+    /**
+        Returns a the position of a context menu event in screen coordinates.
+    */
+    wxPoint GetPosition() const;
+
+    /**
+        Returns a reference to a value.
+    */
+    const wxVariant& GetValue() const;
+
+    /**
+        Sets the column index associated with this event.
+    */
+    void SetColumn(int col);
+
+    /**
+        For wxEVT_DATAVIEW_COLUMN_HEADER_CLICKED only.
+    */
+    void SetDataViewColumn(wxDataViewColumn* col);
+
+    /**
+        Sets the dataview model associated with this event.
+    */
+    void SetModel(wxDataViewModel* model);
+
+    /**
+        Sets the value associated with this event.
+    */
+    void SetValue(const wxVariant& value);
 };
 
