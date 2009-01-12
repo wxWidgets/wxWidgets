@@ -244,12 +244,13 @@ private:
     wxObjectEventFunction m_method;
 };
 
-// Create a functor for the legacy events: handler can be NULL 
+// Create a functor for the legacy events: handler can be NULL and its default
+// value is used by the event table macros
 
 inline wxObjectEventFunctor *
 wxNewEventFunctor(wxEventType WXUNUSED(evtType),
                   wxObjectEventFunction method,
-                  wxEvtHandler *handler)
+                  wxEvtHandler *handler = NULL)
 {
     return new wxObjectEventFunctor(method, handler);
 }
