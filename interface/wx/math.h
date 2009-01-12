@@ -43,5 +43,23 @@ wxFloat64 wxConvertFromIeeeExtended(const wxInt8 *bytes);
 */
 void wxConvertToIeeeExtended(wxFloat64 num, wxInt8 *bytes);
 
+/**
+    Small wrapper around round().
+*/
+int wxRound(double x);
+
+/** 
+   Returns true if both double values are identical. This is
+   only reliable if both values have been assigned the same
+   value.
+*/
+bool wxIsSameDouble(double x, double y);
+
+/**
+   Return true of @a x is exactly zero. This is only reliable
+   if it has been assigned 0.
+*/
+bool wxIsNullDouble(double x);
+
 //@}
 
