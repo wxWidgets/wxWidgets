@@ -203,9 +203,9 @@ typedef void (wxEvtHandler::*wxWebKitNewWindowEventFunction)(wxWebKitNewWindowEv
 #define wxWebKitNewWindowEventHandler( func ) \
     wxEVENT_HANDLER_CAST( wxWebKitNewWindowEventFunction, func )
 
-wxDECLARE_EVENT( wxEVT_WEBKIT_STATE_CHANGED, wxWebKitStateChangedEvent )
-wxDECLARE_EVENT( wxEVT_WEBKIT_BEFORE_LOAD, wxWebKitBeforeLoadEvent )
-wxDECLARE_EVENT( wxEVT_WEBKIT_NEW_WINDOW, wxWebKitNewWindowEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WEBKIT_STATE_CHANGED, wxWebKitStateChangedEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WEBKIT_BEFORE_LOAD, wxWebKitBeforeLoadEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WEBKIT_NEW_WINDOW, wxWebKitNewWindowEvent )
 
 #define EVT_WEBKIT_STATE_CHANGED(func) \
             DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_STATE_CHANGED, \
