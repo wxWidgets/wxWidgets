@@ -62,7 +62,7 @@ public:
 
     // ask if data in correct format is available
     virtual bool IsSupportedAsync( wxEvtHandler *sink );
-    
+
     // fill data with data on the clipboard (if available)
     virtual bool GetData( wxDataObject& data ) = 0;
 
@@ -105,17 +105,11 @@ public:
 class WXDLLIMPEXP_CORE wxClipboardEvent : public wxEvent
 {
 public:
-    wxClipboardEvent(wxEventType commandType = wxEVT_NULL)
-        : wxEvent(0,commandType)
-        { }
+    wxClipboardEvent(wxEventType evtType = wxEVT_NULL);
+    wxClipboardEvent(const wxClipboardEvent& event);
 
-    wxClipboardEvent(const wxClipboardEvent& event)
-        : wxEvent(event),
-          m_formats(event.m_formats)
-        { }
-
-    bool SupportsFormat( const wxDataFormat &format ) const;
-    void AddFormat( const wxDataFormat &format );
+    bool SupportsFormat(const wxDataFormat& format) const;
+    void AddFormat(const wxDataFormat& format);
 
     virtual wxEvent *Clone() const { return new wxClipboardEvent(*this); }
 

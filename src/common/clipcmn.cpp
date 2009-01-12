@@ -41,15 +41,30 @@ IMPLEMENT_DYNAMIC_CLASS(wxClipboardEvent,wxEvent)
 
 DEFINE_EVENT_TYPE(wxEVT_CLIPBOARD_CHANGED)
 
+// notice that ctors are defined here and not inline to avoid having to include
+// wx/dataobj.h from wx/clipbrd.h
+wxClipboardEvent::wxClipboardEvent(wxEventType evtType)
+    : wxEvent(0, evtType)
+{
+}
+
+wxClipboardEvent::wxClipboardEvent(const wxClipboardEvent& event)
+    : wxEvent(event),
+      m_formats(event.m_formats)
+{
+}
+
 bool wxClipboardEvent::SupportsFormat( const wxDataFormat &format ) const
-{ 
+{
 #ifdef __WXGTK20__
-    // GTK has an asynchronnous API which reports
-    // the supported formats one by one. 
-    // We may have to add X11 and Motif later.
-    wxVector<wxDataFormat>::size_type n;
-    for (n = 0; n < m_formats.size(); n++)
-        { if (m_formats[n] == format) return true; }
+    // GTK has an asynchronous API which reports the supported formats one by
+    // one. We may have to add X11 and Motif later.
+    for (wxVector<wxDataFormat>::size_type n = 0; n < m_formats.size(); n++)
+    {
+        if (m_formats[n] == format)
+            return true;
+    }
+
     return false;
 #else
     // All other ports just query the clipboard directly
@@ -57,10 +72,10 @@ bool wxClipboardEvent::SupportsFormat( const wxDataFormat &format ) const
     wxClipboard* clipboard = (wxClipboard*) GetEventObject();
     return clipboard->IsSupported( format );
 #endif
-}     
-        
-void wxClipboardEvent::AddFormat( const wxDataFormat &format ) 
-{ 
+}
+
+void wxClipboardEvent::AddFormat(const wxDataFormat& format)
+{
     m_formats.push_back( format );
 }
 
@@ -85,9 +100,9 @@ bool wxClipboardBase::IsSupportedAsync( wxEvtHandler *sink )
     // This method is overridden uner GTK.
     wxClipboardEvent *event = new wxClipboardEvent(wxEVT_CLIPBOARD_CHANGED);
     event->SetEventObject( this );
-    
+
     sink->QueueEvent( event );
-    
+
     return true;
 }
 
