@@ -1898,15 +1898,15 @@ inline bool wxPGProperty::SetMaxLength( int maxLen )
 
 #ifndef SWIG
 
-extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_SELECTED;
-extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_CHANGING;
-extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_CHANGED;
-extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_HIGHLIGHTED;
-extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_RIGHT_CLICK;
-extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_PAGE_CHANGED;
-extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_ITEM_COLLAPSED;
-extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_ITEM_EXPANDED;
-extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_DOUBLE_CLICK;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID, wxEVT_PG_SELECTED, wxPropertyGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID, wxEVT_PG_CHANGING, wxPropertyGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID, wxEVT_PG_CHANGED, wxPropertyGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID, wxEVT_PG_HIGHLIGHTED, wxPropertyGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID, wxEVT_PG_RIGHT_CLICK, wxPropertyGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID, wxEVT_PG_PAGE_CHANGED, wxPropertyGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID, wxEVT_PG_ITEM_COLLAPSED, wxPropertyGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID, wxEVT_PG_ITEM_EXPANDED, wxPropertyGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID, wxEVT_PG_DOUBLE_CLICK, wxPropertyGridEvent )
 
 #else
     enum {
@@ -1930,18 +1930,18 @@ extern WXDLLIMPEXP_PROPGRID const wxEventType wxEVT_PG_DOUBLE_CLICK;
 #ifndef SWIG
 typedef void (wxEvtHandler::*wxPropertyGridEventFunction)(wxPropertyGridEvent&);
 
-#define EVT_PG_SELECTED(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_PG_CHANGING(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_PG_CHANGED(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_PG_HIGHLIGHTED(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_HIGHLIGHTED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_PG_RIGHT_CLICK(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_PG_DOUBLE_CLICK(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_DOUBLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_PG_PAGE_CHANGED(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_PAGE_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_PG_ITEM_COLLAPSED(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_COLLAPSED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_PG_ITEM_EXPANDED(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxPropertyGridEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_PG_SELECTED(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_SELECTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), (wxObject *) NULL ),
+#define EVT_PG_CHANGING(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGING, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), (wxObject *) NULL ),
+#define EVT_PG_CHANGED(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), (wxObject *) NULL ),
+#define EVT_PG_HIGHLIGHTED(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_HIGHLIGHTED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), (wxObject *) NULL ),
+#define EVT_PG_RIGHT_CLICK(id, fn)           DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_RIGHT_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), (wxObject *) NULL ),
+#define EVT_PG_DOUBLE_CLICK(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_DOUBLE_CLICK, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), (wxObject *) NULL ),
+#define EVT_PG_PAGE_CHANGED(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_PAGE_CHANGED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), (wxObject *) NULL ),
+#define EVT_PG_ITEM_COLLAPSED(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_COLLAPSED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), (wxObject *) NULL ),
+#define EVT_PG_ITEM_EXPANDED(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_PG_ITEM_EXPANDED, id, -1, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn ), (wxObject *) NULL ),
 
-#define wxPropertyGridEventHandler(A) \
-    ((wxObjectEventFunction)(wxEventFunction)(wxPropertyGridEventFunction)&A)
+#define wxPropertyGridEventHandler(fn) \
+    wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, fn )
 
 #endif
 

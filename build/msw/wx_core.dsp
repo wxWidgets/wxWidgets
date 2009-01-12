@@ -602,6 +602,14 @@ SOURCE=..\..\src\common\sizer.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\spinbuttcmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\spinctrlcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\srchcmn.cpp
 # End Source File
 # Begin Source File

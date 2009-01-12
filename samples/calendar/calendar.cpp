@@ -705,7 +705,7 @@ wxCalendarCtrlBase *MyPanel::DoCreateCalendar(const wxDateTime& dt, long style)
     calendar->Connect(wxEVT_RIGHT_DOWN,
                       wxMouseEventHandler(MyFrame::OnCalRClick),
                       NULL,
-                      wxGetTopLevelParent(this));
+                      ( MyFrame * )wxGetTopLevelParent(this));
 
     return calendar;
 }

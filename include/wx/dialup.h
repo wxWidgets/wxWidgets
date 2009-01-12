@@ -152,8 +152,10 @@ public:
 // wxDialUpManager events
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_DIALUP_CONNECTED;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_DIALUP_DISCONNECTED;
+class WXDLLIMPEXP_FWD_CORE wxDialUpEvent;
+
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIALUP_CONNECTED, wxDialUpEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent )
 
 // the event class for the dialup events
 class WXDLLIMPEXP_CORE wxDialUpEvent : public wxEvent
@@ -185,7 +187,7 @@ private:
 typedef void (wxEvtHandler::*wxDialUpEventFunction)(wxDialUpEvent&);
 
 #define wxDialUpEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxDialUpEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxDialUpEventFunction, func)
 
 // macros to catch dialup events
 #define EVT_DIALUP_CONNECTED(func) \

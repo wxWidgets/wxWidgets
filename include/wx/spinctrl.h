@@ -18,6 +18,12 @@
 
 #include "wx/spinbutt.h"        // should make wxSpinEvent visible to the app
 
+// Events
+class WXDLLIMPEXP_FWD_CORE wxSpinDoubleEvent;
+
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxSpinDoubleEvent)
+
 // ----------------------------------------------------------------------------
 // A spin ctrl is a text control with a spin button which is usually used to
 // prompt the user for a numeric input.
@@ -89,7 +95,7 @@ private:
 typedef void (wxEvtHandler::*wxSpinDoubleEventFunction)(wxSpinDoubleEvent&);
 
 #define wxSpinDoubleEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxSpinDoubleEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxSpinDoubleEventFunction, func)
 
 // macros for handling spinctrl events
 

@@ -390,7 +390,7 @@ private:
 typedef void (wxEvtHandler::*wxSplitterEventFunction)(wxSplitterEvent&);
 
 #define wxSplitterEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxSplitterEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxSplitterEventFunction, func)
 
 #define wx__DECLARE_SPLITTEREVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_SPLITTER_ ## evt, id, wxSplitterEventHandler(fn))

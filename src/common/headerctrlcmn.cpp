@@ -469,23 +469,23 @@ wxHeaderCtrlSimple::UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
 
 IMPLEMENT_DYNAMIC_CLASS(wxHeaderCtrlEvent, wxNotifyEvent)
 
-const wxEventType wxEVT_COMMAND_HEADER_CLICK = wxNewEventType();
-const wxEventType wxEVT_COMMAND_HEADER_RIGHT_CLICK = wxNewEventType();
-const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_CLICK = wxNewEventType();
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_CLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_RIGHT_CLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_MIDDLE_CLICK, wxHeaderCtrlEvent);
 
-const wxEventType wxEVT_COMMAND_HEADER_DCLICK = wxNewEventType();
-const wxEventType wxEVT_COMMAND_HEADER_RIGHT_DCLICK = wxNewEventType();
-const wxEventType wxEVT_COMMAND_HEADER_MIDDLE_DCLICK = wxNewEventType();
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_DCLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_RIGHT_DCLICK, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_MIDDLE_DCLICK, wxHeaderCtrlEvent);
 
-const wxEventType wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK = wxNewEventType();
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_SEPARATOR_DCLICK, wxHeaderCtrlEvent);
 
-const wxEventType wxEVT_COMMAND_HEADER_BEGIN_RESIZE = wxNewEventType();
-const wxEventType wxEVT_COMMAND_HEADER_RESIZING = wxNewEventType();
-const wxEventType wxEVT_COMMAND_HEADER_END_RESIZE = wxNewEventType();
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_BEGIN_RESIZE, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_RESIZING, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_END_RESIZE, wxHeaderCtrlEvent);
 
-const wxEventType wxEVT_COMMAND_HEADER_BEGIN_REORDER = wxNewEventType();
-const wxEventType wxEVT_COMMAND_HEADER_END_REORDER = wxNewEventType();
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_BEGIN_REORDER, wxHeaderCtrlEvent);
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_END_REORDER, wxHeaderCtrlEvent);
 
-const wxEventType wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED = wxNewEventType();
+wxDEFINE_EVENT( wxEVT_COMMAND_HEADER_DRAGGING_CANCELLED, wxHeaderCtrlEvent);
 
 #endif // wxUSE_HEADERCTRL

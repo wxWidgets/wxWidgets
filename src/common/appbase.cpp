@@ -416,6 +416,20 @@ wxAppConsoleBase::HandleEvent(wxEvtHandler *handler,
     (handler->*func)(event);
 }
 
+void wxAppConsoleBase::CallEventHandler(wxEvtHandler *handler,
+                                        wxEventFunctor& functor,
+                                        wxEvent& event) const
+{
+    // If the functor holds a method then, for backward compatibility, call
+    // HandleEvent():
+    wxEventFunction eventFunction = functor.GetMethod();
+
+    if ( eventFunction )
+        HandleEvent(handler, eventFunction, event);
+    else
+        functor(handler, event);
+}
+
 void wxAppConsoleBase::OnUnhandledException()
 {
 #ifdef __WXDEBUG__

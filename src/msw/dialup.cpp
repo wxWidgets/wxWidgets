@@ -41,8 +41,8 @@
 
 #include "wx/dynlib.h"
 
-DEFINE_EVENT_TYPE(wxEVT_DIALUP_CONNECTED)
-DEFINE_EVENT_TYPE(wxEVT_DIALUP_DISCONNECTED)
+wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent )
+wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent )
 
 // Doesn't yet compile under VC++ 4, BC++, Watcom C++,
 // Wine: no wininet.h

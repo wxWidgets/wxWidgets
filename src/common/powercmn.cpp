@@ -34,10 +34,10 @@
 // ============================================================================
 
 #ifdef wxHAS_POWER_EVENTS
-    DEFINE_EVENT_TYPE(wxEVT_POWER_SUSPENDING)
-    DEFINE_EVENT_TYPE(wxEVT_POWER_SUSPENDED)
-    DEFINE_EVENT_TYPE(wxEVT_POWER_SUSPEND_CANCEL)
-    DEFINE_EVENT_TYPE(wxEVT_POWER_RESUME)
+    wxDEFINE_EVENT( wxEVT_POWER_SUSPENDING, wxPowerEvent )
+    wxDEFINE_EVENT( wxEVT_POWER_SUSPENDED, wxPowerEvent )
+    wxDEFINE_EVENT( wxEVT_POWER_SUSPEND_CANCEL, wxPowerEvent )
+    wxDEFINE_EVENT( wxEVT_POWER_RESUME, wxPowerEvent )
 
     IMPLEMENT_DYNAMIC_CLASS(wxPowerEvent, wxEvent)
 #endif

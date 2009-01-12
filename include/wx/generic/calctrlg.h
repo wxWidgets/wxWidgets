@@ -18,6 +18,7 @@
 class WXDLLIMPEXP_FWD_CORE wxComboBox;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
 class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
+class WXDLLIMPEXP_FWD_CORE wxSpinEvent;
 
 // ----------------------------------------------------------------------------
 // wxGenericCalendarCtrl
@@ -181,7 +182,9 @@ private:
     void OnDClick(wxMouseEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnMonthChange(wxCommandEvent& event);
-    void OnYearChange(wxCommandEvent& event);
+
+    void HandleYearChange(wxCommandEvent& event);
+    void OnYearChange(wxSpinEvent& event);
     void OnYearTextChange(wxCommandEvent& event);
 
     // (re)calc m_widthCol and m_heightRow

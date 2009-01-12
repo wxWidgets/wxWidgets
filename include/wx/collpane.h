@@ -51,7 +51,9 @@ public:
 // event types and macros
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_COLLPANE_CHANGED;
+class WXDLLIMPEXP_FWD_CORE wxCollapsiblePaneEvent;
+
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_COLLPANE_CHANGED, wxCollapsiblePaneEvent )
 
 class WXDLLIMPEXP_CORE wxCollapsiblePaneEvent : public wxCommandEvent
 {
@@ -84,7 +86,7 @@ private:
 typedef void (wxEvtHandler::*wxCollapsiblePaneEventFunction)(wxCollapsiblePaneEvent&);
 
 #define wxCollapsiblePaneEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCollapsiblePaneEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxCollapsiblePaneEventFunction, func)
 
 #define EVT_COLLAPSIBLEPANE_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_COLLPANE_CHANGED, id, wxCollapsiblePaneEventHandler(fn))

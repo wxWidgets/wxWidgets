@@ -401,4 +401,12 @@
 #   define wxUSE_POSTSCRIPT 1
 #endif
 
+/* VC6 can't handle the templates for the 'type safe events': */
+#if !wxEVENTS_COMPATIBILITY_2_8
+#   ifdef __VISUALC6__
+#       undef wxEVENTS_COMPATIBILITY_2_8
+#       define wxEVENTS_COMPATIBILITY_2_8 1
+#   endif
+#endif
+
 #endif /* _WX_MSW_CHKCONF_H_ */

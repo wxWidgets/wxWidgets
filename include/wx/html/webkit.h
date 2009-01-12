@@ -194,32 +194,38 @@ typedef void (wxEvtHandler::*wxWebKitStateChangedEventFunction)(wxWebKitStateCha
 typedef void (wxEvtHandler::*wxWebKitBeforeLoadEventFunction)(wxWebKitBeforeLoadEvent&);
 typedef void (wxEvtHandler::*wxWebKitNewWindowEventFunction)(wxWebKitNewWindowEvent&);
 
-extern const wxEventType wxEVT_WEBKIT_BEFORE_LOAD;
-extern const wxEventType wxEVT_WEBKIT_STATE_CHANGED;
-extern const wxEventType wxEVT_WEBKIT_NEW_WINDOW;
+#define wxWebKitStateChangedEventHandler( func ) \
+    wxEVENT_HANDLER_CAST( wxWebKitStateChangedEventFunction, func )
+
+#define wxWebKitBeforeLoadEventHandler( func ) \
+    wxEVENT_HANDLER_CAST( wxWebKitBeforeLoadEventFunction, func )
+
+#define wxWebKitNewWindowEventHandler( func ) \
+    wxEVENT_HANDLER_CAST( wxWebKitNewWindowEventFunction, func )
+
+wxDECLARE_EVENT( wxEVT_WEBKIT_STATE_CHANGED, wxWebKitStateChangedEvent )
+wxDECLARE_EVENT( wxEVT_WEBKIT_BEFORE_LOAD, wxWebKitBeforeLoadEvent )
+wxDECLARE_EVENT( wxEVT_WEBKIT_NEW_WINDOW, wxWebKitNewWindowEvent )
 
 #define EVT_WEBKIT_STATE_CHANGED(func) \
             DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_STATE_CHANGED, \
                             wxID_ANY, \
                             wxID_ANY, \
-                            (wxObjectEventFunction)   \
-                            (wxWebKitStateChangedEventFunction) & func, \
+                            wxWebKitStateChangedEventHandler( func ), \
                             (wxObject *) NULL ),
 
 #define EVT_WEBKIT_BEFORE_LOAD(func) \
             DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_BEFORE_LOAD, \
                             wxID_ANY, \
                             wxID_ANY, \
-                            (wxObjectEventFunction)   \
-                            (wxWebKitBeforeLoadEventFunction) & func, \
+                            wxWebKitBeforeLoadEventHandler( func ), \
                             (wxObject *) NULL ),
 
 #define EVT_WEBKIT_NEW_WINDOW(func)                              \
             DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_NEW_WINDOW, \
                             wxID_ANY, \
                             wxID_ANY, \
-                            (wxObjectEventFunction)   \
-                            (wxWebKitNewWindowEventFunction) & func, \
+                            wxWebKitNewWindowEventFunction( func ), \
                             (wxObject *) NULL ),
 #endif // wxUSE_WEBKIT
 

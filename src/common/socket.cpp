@@ -78,6 +78,9 @@ WX_CHECK_BUILD_OPTIONS("wxNet")
 // macros and constants
 // --------------------------------------------------------------------------
 
+// event
+wxDEFINE_EVENT(wxEVT_SOCKET, wxSocketEvent);
+
 // discard buffer
 #define MAX_DISCARD_SIZE (10 * 1024)
 

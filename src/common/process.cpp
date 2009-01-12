@@ -30,7 +30,7 @@
 // event tables and such
 // ----------------------------------------------------------------------------
 
-DEFINE_EVENT_TYPE(wxEVT_END_PROCESS)
+wxDEFINE_EVENT( wxEVT_END_PROCESS, wxProcessEvent )
 
 IMPLEMENT_DYNAMIC_CLASS(wxProcess, wxEvtHandler)
 IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)

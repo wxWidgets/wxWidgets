@@ -20,7 +20,7 @@
 #include "wx/event.h"
 #include "wx/control.h"     // base class
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TOGGLEBUTTON_CLICKED;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent )
 
 // ----------------------------------------------------------------------------
 // wxToggleButtonBase

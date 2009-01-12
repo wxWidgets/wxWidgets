@@ -688,6 +688,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/rgncmn.cpp
     src/common/settcmn.cpp
     src/common/sizer.cpp
+    src/common/spinbuttcmn.cpp
+    src/common/spinctrlcmn.cpp
     src/common/srchcmn.cpp
     src/common/statbar.cpp
     src/common/stattextcmn.cpp

@@ -49,10 +49,10 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextUrlEvent, wxCommandEvent)
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_ENTER)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_URL)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_MAXLEN)
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_URL, wxTextUrlEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_MAXLEN, wxCommandEvent )
 
 IMPLEMENT_ABSTRACT_CLASS(wxTextCtrlBase, wxControl)
 
@@ -994,6 +994,6 @@ bool wxTextCtrlBase::SendTextUpdatedEvent(wxWindow *win)
 // define this one even if !wxUSE_TEXTCTRL because it is also used by other
 // controls (wxComboBox and wxSpinCtrl)
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_UPDATED)
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent )
 
 #endif // wxUSE_TEXTCTRL/!wxUSE_TEXTCTRL

@@ -327,25 +327,25 @@ public:
 
 
 //Our events
-extern WXDLLIMPEXP_MEDIA const wxEventType wxEVT_MEDIA_FINISHED;
-extern WXDLLIMPEXP_MEDIA const wxEventType wxEVT_MEDIA_STOP;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_FINISHED, wxMediaEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_STOP, wxMediaEvent )
 
 //Function type(s) our events need
 typedef void (wxEvtHandler::*wxMediaEventFunction)(wxMediaEvent&);
 
 #define wxMediaEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxMediaEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxMediaEventFunction, func)
 
 //Macro for usage with message maps
 #define EVT_MEDIA_FINISHED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_FINISHED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 #define EVT_MEDIA_STOP(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_STOP, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 
-extern WXDLLIMPEXP_MEDIA const wxEventType wxEVT_MEDIA_LOADED;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_LOADED, wxMediaEvent )
 #define EVT_MEDIA_LOADED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_LOADED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 
-extern WXDLLIMPEXP_MEDIA const wxEventType wxEVT_MEDIA_STATECHANGED;
-extern WXDLLIMPEXP_MEDIA const wxEventType wxEVT_MEDIA_PLAY;
-extern WXDLLIMPEXP_MEDIA const wxEventType wxEVT_MEDIA_PAUSE;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_STATECHANGED, wxMediaEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_PLAY, wxMediaEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_MEDIA, wxEVT_MEDIA_PAUSE, wxMediaEvent )
 #define EVT_MEDIA_STATECHANGED(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_STATECHANGED, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 #define EVT_MEDIA_PLAY(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_PLAY, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),
 #define EVT_MEDIA_PAUSE(winid, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_MEDIA_PAUSE, winid, wxID_ANY, wxMediaEventHandler(fn), (wxObject *) NULL ),

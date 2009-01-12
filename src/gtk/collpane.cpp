@@ -31,7 +31,7 @@
 
 const char wxCollapsiblePaneNameStr[] = "collapsiblePane";
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_COLLPANE_CHANGED)
+wxDEFINE_EVENT( wxEVT_COMMAND_COLLPANE_CHANGED, wxCollapsiblePaneEvent )
 
 IMPLEMENT_DYNAMIC_CLASS(wxCollapsiblePaneEvent, wxCommandEvent)
 

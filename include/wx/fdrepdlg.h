@@ -165,16 +165,16 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxFindDialogEvent)
 };
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_FIND;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_FIND_NEXT;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_FIND_REPLACE;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_FIND_REPLACE_ALL;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_FIND_CLOSE;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FIND, wxFindDialogEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FIND_NEXT, wxFindDialogEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FIND_REPLACE, wxFindDialogEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FIND_REPLACE_ALL, wxFindDialogEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FIND_CLOSE, wxFindDialogEvent )
 
 typedef void (wxEvtHandler::*wxFindDialogEventFunction)(wxFindDialogEvent&);
 
 #define wxFindDialogEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxFindDialogEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxFindDialogEventFunction, func)
 
 #define EVT_FIND(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_FIND, id, wxFindDialogEventHandler(fn))

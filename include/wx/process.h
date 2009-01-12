@@ -130,7 +130,9 @@ protected:
 // wxProcess events
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_BASE const wxEventType wxEVT_END_PROCESS;
+class WXDLLIMPEXP_FWD_BASE wxProcessEvent;
+
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_END_PROCESS, wxProcessEvent )
 
 class WXDLLIMPEXP_BASE wxProcessEvent : public wxEvent
 {
@@ -162,7 +164,7 @@ public:
 typedef void (wxEvtHandler::*wxProcessEventFunction)(wxProcessEvent&);
 
 #define wxProcessEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxProcessEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxProcessEventFunction, func)
 
 #define EVT_END_PROCESS(id, func) \
    wx__DECLARE_EVT1(wxEVT_END_PROCESS, id, wxProcessEventHandler(func))

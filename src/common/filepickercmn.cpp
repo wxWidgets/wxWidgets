@@ -44,8 +44,8 @@ const char wxDirPickerWidgetNameStr[] = "dirpickerwidget";
 const char wxFilePickerWidgetLabel[] = wxTRANSLATE("Browse");
 const char wxDirPickerWidgetLabel[] = wxTRANSLATE("Browse");
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_FILEPICKER_CHANGED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_DIRPICKER_CHANGED)
+wxDEFINE_EVENT( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_DIRPICKER_CHANGED,  wxFileDirPickerEvent )
 IMPLEMENT_DYNAMIC_CLASS(wxFileDirPickerEvent, wxCommandEvent)
 
 // ----------------------------------------------------------------------------
@@ -91,9 +91,7 @@ bool wxFileDirPickerCtrlBase::CreateBase(wxWindow *parent,
     // complete sizer creation
     wxPickerBase::PostCreation();
 
-    m_picker->Connect(GetEventType(),
-            wxFileDirPickerEventHandler(wxFileDirPickerCtrlBase::OnFileDirChange),
-            NULL, this);
+    DoConnect( m_picker, this );
 
     // default's wxPickerBase textctrl limit is too small for this control:
     // make it bigger

@@ -35,8 +35,8 @@
 // implementation
 // ============================================================================
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
+wxDEFINE_EVENT( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxBookCtrlEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxBookCtrlEvent )
 
 // ----------------------------------------------------------------------------
 // geometry

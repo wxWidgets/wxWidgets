@@ -48,6 +48,17 @@
 // Recommended setting: 0 (please update your code)
 #define WXWIN_COMPATIBILITY_2_8 1
 
+// Use the 2.8-compatible events and Connect(): this is set to 0 by default as
+// the new events bring significant benefits in compile-time safety and
+// flexibility but can be disabled to somewhat reduce the compilation time and,
+// especially, to still allow building if the compiler template support is too
+// bad to compile the new code.
+//
+// Default is 0 for all compilers except VC6 currently.
+//
+// Recommended setting: 0 (please upgrade your compiler instead of changing it)
+#define wxEVENTS_COMPATIBILITY_2_8 0
+
 // MSW-only: Set to 0 for accurate dialog units, else 1 for old behaviour when
 // default system font is used for wxWindow::GetCharWidth/Height() instead of
 // the current font.

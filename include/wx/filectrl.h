@@ -31,10 +31,6 @@ enum
 #define wxFC_DEFAULT_STYLE wxFC_OPEN
 extern WXDLLIMPEXP_DATA_CORE(const char) wxFileCtrlNameStr[]; // in filectrlcmn.cpp
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_FILECTRL_SELECTIONCHANGED;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_FILECTRL_FILEACTIVATED;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_FILECTRL_FOLDERCHANGED;
-
 class WXDLLIMPEXP_CORE wxFileCtrlBase
 {
 public:
@@ -119,8 +115,12 @@ protected:
 
 typedef void ( wxEvtHandler::*wxFileCtrlEventFunction )( wxFileCtrlEvent& );
 
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_FILECTRL_SELECTIONCHANGED, wxFileCtrlEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_FILECTRL_FILEACTIVATED, wxFileCtrlEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_FILECTRL_FOLDERCHANGED, wxFileCtrlEvent )
+
 #define wxFileCtrlEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxFileCtrlEventFunction, &func)
+    wxEVENT_HANDLER_CAST( wxFileCtrlEventFunction, func )
 
 #define EVT_FILECTRL_FILEACTIVATED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_FILECTRL_FILEACTIVATED, id, wxFileCtrlEventHandler(fn))

@@ -347,7 +347,7 @@ void wxGenericCalendarCtrl::CreateYearSpinCtrl()
                         NULL, this);
 
     m_spinYear->Connect(m_spinYear->GetId(), wxEVT_COMMAND_SPINCTRL_UPDATED,
-                        wxCommandEventHandler(wxGenericCalendarCtrl::OnYearChange),
+                        wxSpinEventHandler(wxGenericCalendarCtrl::OnYearChange),
                         NULL, this);
 }
 
@@ -1607,7 +1607,7 @@ void wxGenericCalendarCtrl::OnMonthChange(wxCommandEvent& event)
     SetDateAndNotify(target);
 }
 
-void wxGenericCalendarCtrl::OnYearChange(wxCommandEvent& event)
+void wxGenericCalendarCtrl::HandleYearChange(wxCommandEvent& event)
 {
     int year = (int)event.GetInt();
     if ( year == INT_MIN )
@@ -1637,10 +1637,15 @@ void wxGenericCalendarCtrl::OnYearChange(wxCommandEvent& event)
     }
 }
 
+void wxGenericCalendarCtrl::OnYearChange(wxSpinEvent& event)
+{
+    HandleYearChange( event );
+}
+
 void wxGenericCalendarCtrl::OnYearTextChange(wxCommandEvent& event)
 {
     SetUserChangedYear();
-    OnYearChange(event);
+    HandleYearChange(event);
 }
 
 // Responds to colour changes, and passes event on to children.

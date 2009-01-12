@@ -719,10 +719,12 @@ protected:
 // wxTextCtrl events
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TEXT_UPDATED;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TEXT_ENTER;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TEXT_URL;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_TEXT_MAXLEN;
+class WXDLLIMPEXP_FWD_CORE wxTextUrlEvent;
+
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TEXT_UPDATED, wxCommandEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TEXT_ENTER, wxCommandEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TEXT_URL, wxTextUrlEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TEXT_MAXLEN, wxCommandEvent)
 
 class WXDLLIMPEXP_CORE wxTextUrlEvent : public wxCommandEvent
 {
@@ -769,7 +771,7 @@ typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 
 #define wxTextEventHandler(func) wxCommandEventHandler(func)
 #define wxTextUrlEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTextUrlEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxTextUrlEventFunction, func)
 
 #define wx__DECLARE_TEXTEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_TEXT_ ## evt, id, wxTextEventHandler(fn))

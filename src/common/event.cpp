@@ -115,7 +115,7 @@ wxEventHashTable &wxEvtHandler::GetEventHashTable() const
 wxEventHashTable wxEvtHandler::sm_eventHashTable(wxEvtHandler::sm_eventTable);
 
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
-    { DECLARE_EVENT_TABLE_ENTRY(wxEVT_NULL, 0, 0, (wxObjectEventFunction)NULL, NULL) };
+    { DECLARE_EVENT_TABLE_TERMINATOR() };
 
 
 // wxUSE_MEMORY_TRACING considers memory freed from the static objects dtors
@@ -159,167 +159,146 @@ const wxEventType wxEVT_FIRST = 10000;
 const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 
 DEFINE_EVENT_TYPE(wxEVT_NULL)
-DEFINE_EVENT_TYPE(wxEVT_IDLE)
-DEFINE_EVENT_TYPE(wxEVT_SOCKET)
-DEFINE_EVENT_TYPE(wxEVT_TIMER)
+wxDEFINE_EVENT( wxEVT_IDLE, wxIdleEvent )
 
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_BUTTON_CLICKED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_CHECKBOX_CLICKED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_CHOICE_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_CHECKLISTBOX_TOGGLED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_MENU_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_SLIDER_UPDATED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_RADIOBOX_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_RADIOBUTTON_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_SCROLLBAR_UPDATED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_VLBOX_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_COMBOBOX_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOOL_RCLICKED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOOL_ENTER)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPINCTRL_UPDATED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED)
+wxDEFINE_EVENT( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_MENU_SELECTED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_SLIDER_UPDATED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_SCROLLBAR_UPDATED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_VLBOX_SELECTED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TOOL_RCLICKED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TOOL_ENTER, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_SPINCTRL_UPDATED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, wxCommandEvent )
 
 // Mouse event types
-DEFINE_EVENT_TYPE(wxEVT_LEFT_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_LEFT_UP)
-DEFINE_EVENT_TYPE(wxEVT_MIDDLE_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_MIDDLE_UP)
-DEFINE_EVENT_TYPE(wxEVT_RIGHT_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_RIGHT_UP)
-DEFINE_EVENT_TYPE(wxEVT_MOTION)
-DEFINE_EVENT_TYPE(wxEVT_ENTER_WINDOW)
-DEFINE_EVENT_TYPE(wxEVT_LEAVE_WINDOW)
-DEFINE_EVENT_TYPE(wxEVT_LEFT_DCLICK)
-DEFINE_EVENT_TYPE(wxEVT_MIDDLE_DCLICK)
-DEFINE_EVENT_TYPE(wxEVT_RIGHT_DCLICK)
-DEFINE_EVENT_TYPE(wxEVT_SET_FOCUS)
-DEFINE_EVENT_TYPE(wxEVT_KILL_FOCUS)
-DEFINE_EVENT_TYPE(wxEVT_CHILD_FOCUS)
-DEFINE_EVENT_TYPE(wxEVT_MOUSEWHEEL)
-DEFINE_EVENT_TYPE(wxEVT_AUX1_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_AUX1_UP)
-DEFINE_EVENT_TYPE(wxEVT_AUX1_DCLICK)
-DEFINE_EVENT_TYPE(wxEVT_AUX2_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_AUX2_UP)
-DEFINE_EVENT_TYPE(wxEVT_AUX2_DCLICK)
-
-// Non-client mouse events
-DEFINE_EVENT_TYPE(wxEVT_NC_LEFT_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_NC_LEFT_UP)
-DEFINE_EVENT_TYPE(wxEVT_NC_MIDDLE_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_NC_MIDDLE_UP)
-DEFINE_EVENT_TYPE(wxEVT_NC_RIGHT_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_NC_RIGHT_UP)
-DEFINE_EVENT_TYPE(wxEVT_NC_MOTION)
-DEFINE_EVENT_TYPE(wxEVT_NC_ENTER_WINDOW)
-DEFINE_EVENT_TYPE(wxEVT_NC_LEAVE_WINDOW)
-DEFINE_EVENT_TYPE(wxEVT_NC_LEFT_DCLICK)
-DEFINE_EVENT_TYPE(wxEVT_NC_MIDDLE_DCLICK)
-DEFINE_EVENT_TYPE(wxEVT_NC_RIGHT_DCLICK)
+wxDEFINE_EVENT( wxEVT_LEFT_DOWN, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_LEFT_UP, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_MIDDLE_DOWN, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_MIDDLE_UP, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_RIGHT_DOWN, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_RIGHT_UP, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_MOTION, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_ENTER_WINDOW, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_LEAVE_WINDOW, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_LEFT_DCLICK, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_MIDDLE_DCLICK, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_RIGHT_DCLICK, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_SET_FOCUS, wxFocusEvent )
+wxDEFINE_EVENT( wxEVT_KILL_FOCUS, wxFocusEvent )
+wxDEFINE_EVENT( wxEVT_CHILD_FOCUS, wxChildFocusEvent )
+wxDEFINE_EVENT( wxEVT_MOUSEWHEEL, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_AUX1_DOWN, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_AUX1_UP, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_AUX1_DCLICK, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_AUX2_DOWN, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_AUX2_UP, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_AUX2_DCLICK, wxMouseEvent )
 
 // Character input event type
-DEFINE_EVENT_TYPE(wxEVT_CHAR)
-DEFINE_EVENT_TYPE(wxEVT_CHAR_HOOK)
-DEFINE_EVENT_TYPE(wxEVT_NAVIGATION_KEY)
-DEFINE_EVENT_TYPE(wxEVT_KEY_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_KEY_UP)
+wxDEFINE_EVENT( wxEVT_CHAR, wxKeyEvent )
+wxDEFINE_EVENT( wxEVT_CHAR_HOOK, wxKeyEvent )
+wxDEFINE_EVENT( wxEVT_NAVIGATION_KEY, wxNavigationKeyEvent )
+wxDEFINE_EVENT( wxEVT_KEY_DOWN, wxKeyEvent )
+wxDEFINE_EVENT( wxEVT_KEY_UP, wxKeyEvent )
 #if wxUSE_HOTKEY
-DEFINE_EVENT_TYPE(wxEVT_HOTKEY)
+wxDEFINE_EVENT( wxEVT_HOTKEY, wxKeyEvent )
 #endif
 
 // Set cursor event
-DEFINE_EVENT_TYPE(wxEVT_SET_CURSOR)
+wxDEFINE_EVENT( wxEVT_SET_CURSOR, wxSetCursorEvent )
 
 // wxScrollbar and wxSlider event identifiers
-DEFINE_EVENT_TYPE(wxEVT_SCROLL_TOP)
-DEFINE_EVENT_TYPE(wxEVT_SCROLL_BOTTOM)
-DEFINE_EVENT_TYPE(wxEVT_SCROLL_LINEUP)
-DEFINE_EVENT_TYPE(wxEVT_SCROLL_LINEDOWN)
-DEFINE_EVENT_TYPE(wxEVT_SCROLL_PAGEUP)
-DEFINE_EVENT_TYPE(wxEVT_SCROLL_PAGEDOWN)
-DEFINE_EVENT_TYPE(wxEVT_SCROLL_THUMBTRACK)
-DEFINE_EVENT_TYPE(wxEVT_SCROLL_THUMBRELEASE)
-DEFINE_EVENT_TYPE(wxEVT_SCROLL_CHANGED)
+wxDEFINE_EVENT( wxEVT_SCROLL_TOP, wxScrollEvent )
+wxDEFINE_EVENT( wxEVT_SCROLL_BOTTOM, wxScrollEvent )
+wxDEFINE_EVENT( wxEVT_SCROLL_LINEUP, wxScrollEvent )
+wxDEFINE_EVENT( wxEVT_SCROLL_LINEDOWN, wxScrollEvent )
+wxDEFINE_EVENT( wxEVT_SCROLL_PAGEUP, wxScrollEvent )
+wxDEFINE_EVENT( wxEVT_SCROLL_PAGEDOWN, wxScrollEvent )
+wxDEFINE_EVENT( wxEVT_SCROLL_THUMBTRACK, wxScrollEvent )
+wxDEFINE_EVENT( wxEVT_SCROLL_THUMBRELEASE, wxScrollEvent )
+wxDEFINE_EVENT( wxEVT_SCROLL_CHANGED, wxScrollEvent )
 
 // Scroll events from wxWindow
-DEFINE_EVENT_TYPE(wxEVT_SCROLLWIN_TOP)
-DEFINE_EVENT_TYPE(wxEVT_SCROLLWIN_BOTTOM)
-DEFINE_EVENT_TYPE(wxEVT_SCROLLWIN_LINEUP)
-DEFINE_EVENT_TYPE(wxEVT_SCROLLWIN_LINEDOWN)
-DEFINE_EVENT_TYPE(wxEVT_SCROLLWIN_PAGEUP)
-DEFINE_EVENT_TYPE(wxEVT_SCROLLWIN_PAGEDOWN)
-DEFINE_EVENT_TYPE(wxEVT_SCROLLWIN_THUMBTRACK)
-DEFINE_EVENT_TYPE(wxEVT_SCROLLWIN_THUMBRELEASE)
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_TOP, wxScrollWinEvent )
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_BOTTOM, wxScrollWinEvent )
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_LINEUP, wxScrollWinEvent )
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_LINEDOWN, wxScrollWinEvent )
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEvent )
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent )
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent )
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent )
 
 // System events
-DEFINE_EVENT_TYPE(wxEVT_SIZE)
-DEFINE_EVENT_TYPE(wxEVT_SIZING)
-DEFINE_EVENT_TYPE(wxEVT_MOVE)
-DEFINE_EVENT_TYPE(wxEVT_MOVING)
-DEFINE_EVENT_TYPE(wxEVT_MOVE_START)
-DEFINE_EVENT_TYPE(wxEVT_MOVE_END)
-DEFINE_EVENT_TYPE(wxEVT_CLOSE_WINDOW)
-DEFINE_EVENT_TYPE(wxEVT_END_SESSION)
-DEFINE_EVENT_TYPE(wxEVT_QUERY_END_SESSION)
-DEFINE_EVENT_TYPE(wxEVT_HIBERNATE)
-DEFINE_EVENT_TYPE(wxEVT_ACTIVATE_APP)
-DEFINE_EVENT_TYPE(wxEVT_ACTIVATE)
-DEFINE_EVENT_TYPE(wxEVT_CREATE)
-DEFINE_EVENT_TYPE(wxEVT_DESTROY)
-DEFINE_EVENT_TYPE(wxEVT_SHOW)
-DEFINE_EVENT_TYPE(wxEVT_ICONIZE)
-DEFINE_EVENT_TYPE(wxEVT_MAXIMIZE)
-DEFINE_EVENT_TYPE(wxEVT_MOUSE_CAPTURE_CHANGED)
-DEFINE_EVENT_TYPE(wxEVT_MOUSE_CAPTURE_LOST)
-DEFINE_EVENT_TYPE(wxEVT_PAINT)
-DEFINE_EVENT_TYPE(wxEVT_ERASE_BACKGROUND)
-DEFINE_EVENT_TYPE(wxEVT_NC_PAINT)
-DEFINE_EVENT_TYPE(wxEVT_PAINT_ICON)
-DEFINE_EVENT_TYPE(wxEVT_MENU_OPEN)
-DEFINE_EVENT_TYPE(wxEVT_MENU_CLOSE)
-DEFINE_EVENT_TYPE(wxEVT_MENU_HIGHLIGHT)
-DEFINE_EVENT_TYPE(wxEVT_CONTEXT_MENU)
-DEFINE_EVENT_TYPE(wxEVT_SYS_COLOUR_CHANGED)
-DEFINE_EVENT_TYPE(wxEVT_DISPLAY_CHANGED)
-DEFINE_EVENT_TYPE(wxEVT_SETTING_CHANGED)
-DEFINE_EVENT_TYPE(wxEVT_QUERY_NEW_PALETTE)
-DEFINE_EVENT_TYPE(wxEVT_PALETTE_CHANGED)
-DEFINE_EVENT_TYPE(wxEVT_JOY_BUTTON_DOWN)
-DEFINE_EVENT_TYPE(wxEVT_JOY_BUTTON_UP)
-DEFINE_EVENT_TYPE(wxEVT_JOY_MOVE)
-DEFINE_EVENT_TYPE(wxEVT_JOY_ZMOVE)
-DEFINE_EVENT_TYPE(wxEVT_DROP_FILES)
-DEFINE_EVENT_TYPE(wxEVT_DRAW_ITEM)
-DEFINE_EVENT_TYPE(wxEVT_MEASURE_ITEM)
-DEFINE_EVENT_TYPE(wxEVT_COMPARE_ITEM)
-DEFINE_EVENT_TYPE(wxEVT_INIT_DIALOG)
-DEFINE_EVENT_TYPE(wxEVT_UPDATE_UI)
+wxDEFINE_EVENT( wxEVT_SIZE, wxSizeEvent )
+wxDEFINE_EVENT( wxEVT_SIZING, wxSizeEvent )
+wxDEFINE_EVENT( wxEVT_MOVE, wxMoveEvent )
+wxDEFINE_EVENT( wxEVT_MOVING, wxMoveEvent )
+wxDEFINE_EVENT( wxEVT_MOVE_START, wxMoveEvent )
+wxDEFINE_EVENT( wxEVT_MOVE_END, wxMoveEvent )
+wxDEFINE_EVENT( wxEVT_CLOSE_WINDOW, wxCloseEvent )
+wxDEFINE_EVENT( wxEVT_END_SESSION, wxCloseEvent )
+wxDEFINE_EVENT( wxEVT_QUERY_END_SESSION, wxCloseEvent )
+wxDEFINE_EVENT( wxEVT_HIBERNATE, wxActivateEvent )
+wxDEFINE_EVENT( wxEVT_ACTIVATE_APP, wxActivateEvent )
+wxDEFINE_EVENT( wxEVT_ACTIVATE, wxActivateEvent )
+wxDEFINE_EVENT( wxEVT_CREATE, wxWindowCreateEvent )
+wxDEFINE_EVENT( wxEVT_DESTROY, wxWindowDestroyEvent )
+wxDEFINE_EVENT( wxEVT_SHOW, wxShowEvent )
+wxDEFINE_EVENT( wxEVT_ICONIZE, wxIconizeEvent )
+wxDEFINE_EVENT( wxEVT_MAXIMIZE, wxMaximizeEvent )
+wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_CHANGED, wxMouseCaptureChangedEvent )
+wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEvent )
+wxDEFINE_EVENT( wxEVT_PAINT, wxPaintEvent )
+wxDEFINE_EVENT( wxEVT_ERASE_BACKGROUND, wxEraseEvent )
+wxDEFINE_EVENT( wxEVT_NC_PAINT, wxNcPaintEvent )
+wxDEFINE_EVENT( wxEVT_MENU_OPEN, wxMenuEvent )
+wxDEFINE_EVENT( wxEVT_MENU_CLOSE, wxMenuEvent )
+wxDEFINE_EVENT( wxEVT_MENU_HIGHLIGHT, wxMenuEvent )
+wxDEFINE_EVENT( wxEVT_CONTEXT_MENU, wxContextMenuEvent )
+wxDEFINE_EVENT( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEvent )
+wxDEFINE_EVENT( wxEVT_DISPLAY_CHANGED, wxDisplayChangedEvent )
+wxDEFINE_EVENT( wxEVT_QUERY_NEW_PALETTE, wxQueryNewPaletteEvent )
+wxDEFINE_EVENT( wxEVT_PALETTE_CHANGED, wxPaletteChangedEvent )
+wxDEFINE_EVENT( wxEVT_JOY_BUTTON_DOWN, wxJoystickEvent )
+wxDEFINE_EVENT( wxEVT_JOY_BUTTON_UP, wxJoystickEvent )
+wxDEFINE_EVENT( wxEVT_JOY_MOVE, wxJoystickEvent )
+wxDEFINE_EVENT( wxEVT_JOY_ZMOVE, wxJoystickEvent )
+wxDEFINE_EVENT( wxEVT_DROP_FILES, wxDropFilesEvent )
+wxDEFINE_EVENT( wxEVT_INIT_DIALOG, wxInitDialogEvent )
+wxDEFINE_EVENT( wxEVT_UPDATE_UI, wxUpdateUIEvent )
 
 // Clipboard events
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_COPY)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_CUT)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_TEXT_PASTE)
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_COPY, wxClipboardTextEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_CUT, wxClipboardTextEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_PASTE, wxClipboardTextEvent )
 
 // Generic command events
 // Note: a click is a higher-level event than button down/up
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LEFT_CLICK)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_LEFT_DCLICK)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_RIGHT_CLICK)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_RIGHT_DCLICK)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_SET_FOCUS)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_KILL_FOCUS)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_ENTER)
+wxDEFINE_EVENT( wxEVT_COMMAND_LEFT_CLICK, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_LEFT_DCLICK, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_RIGHT_CLICK, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_RIGHT_DCLICK, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_SET_FOCUS, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_KILL_FOCUS, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_ENTER, wxCommandEvent )
 
 // Help events
-DEFINE_EVENT_TYPE(wxEVT_HELP)
-DEFINE_EVENT_TYPE(wxEVT_DETAILED_HELP)
+wxDEFINE_EVENT( wxEVT_HELP, wxHelpEvent )
+wxDEFINE_EVENT( wxEVT_DETAILED_HELP, wxHelpEvent )
 
 #endif // wxUSE_GUI
 
@@ -342,6 +321,13 @@ int wxNewEventType()
 
     return s_lastUsedEventType++;
 }
+// ----------------------------------------------------------------------------
+// wxEventFunctor
+// ----------------------------------------------------------------------------
+
+wxEventFunctor::~wxEventFunctor()
+{
+}
 
 // ----------------------------------------------------------------------------
 // wxEvent
@@ -359,11 +345,11 @@ int wxNewEventType()
 wxEvent::wxEvent(int theId, wxEventType commandType )
 {
     m_eventType = commandType;
-    m_eventObject = (wxObject *) NULL;
+    m_eventObject = NULL;
     m_timeStamp = 0;
     m_id = theId;
     m_skipped = false;
-    m_callbackUserData = (wxObject *) NULL;
+    m_callbackUserData = NULL;
     m_isCommandEvent = false;
     m_propagationLevel = wxEVENT_PROPAGATE_NONE;
 }
@@ -414,8 +400,8 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
 wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
               : wxEvent(theId, commandType)
 {
-    m_clientData = (char *) NULL;
-    m_clientObject = (wxClientData *) NULL;
+    m_clientData = NULL;
+    m_clientObject = NULL;
     m_extraLong = 0;
     m_commandInt = 0;
     m_isCommandEvent = true;
@@ -1035,11 +1021,11 @@ void wxEventHashTable::GrowEventTypeTable()
 
 wxEvtHandler::wxEvtHandler()
 {
-    m_nextHandler = (wxEvtHandler *) NULL;
-    m_previousHandler = (wxEvtHandler *) NULL;
+    m_nextHandler = NULL;
+    m_previousHandler = NULL;
     m_enabled = true;
-    m_dynamicEvents = (wxList *) NULL;
-    m_pendingEvents = (wxList *) NULL;
+    m_dynamicEvents = NULL;
+    m_pendingEvents = NULL;
 
     // no client data (yet)
     m_clientData = NULL;
@@ -1065,8 +1051,8 @@ wxEvtHandler::~wxEvtHandler()
             wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)*it;
 
             // Remove ourselves from sink destructor notifications
-            // (this has usually been been done, in wxTrackable destructor)
-            wxEvtHandler *eventSink = entry->m_eventSink;
+            // (this has usually been done, in wxTrackable destructor)
+            wxEvtHandler *eventSink = entry->m_fn->GetHandler();
             if ( eventSink )
             {
                 wxEventConnectionRef * const
@@ -1078,8 +1064,7 @@ wxEvtHandler::~wxEvtHandler()
                 }
             }
 
-            if (entry->m_callbackUserData)
-                delete entry->m_callbackUserData;
+            delete entry->m_callbackUserData;
             delete entry;
         }
         delete m_dynamicEvents;
@@ -1238,13 +1223,12 @@ wxEvtHandler::ProcessEventIfMatches(const wxEventTableEntryBase& entry,
             // call the handler via wxApp method which allows the user to catch
             // any exceptions which may be thrown by any handler in the program
             // in one place
-            wxTheApp->HandleEvent(handler, (wxEventFunction)entry.m_fn, event);
+            wxTheApp->CallEventHandler(handler, *entry.m_fn, event);
         }
         else
 #endif // wxUSE_EXCEPTIONS
         {
-            // no need for an extra virtual function call
-            (handler->*((wxEventFunction) (entry.m_fn)))(event);
+            (*entry.m_fn)(handler, event);
         }
 
         if (!event.GetSkipped())
@@ -1382,14 +1366,13 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
     return false;
 }
 
-void wxEvtHandler::Connect( int id, int lastId,
+void wxEvtHandler::Subscribe( int id, int lastId,
                             wxEventType eventType,
-                            wxObjectEventFunction func,
-                            wxObject *userData,
-                            wxEvtHandler* eventSink )
+                            wxEventFunctor *func,
+                            wxObject *userData )
 {
     wxDynamicEventTableEntry *entry =
-        new wxDynamicEventTableEntry(eventType, id, lastId, func, userData, eventSink);
+        new wxDynamicEventTableEntry(eventType, id, lastId, func, userData);
 
     if (!m_dynamicEvents)
         m_dynamicEvents = new wxList;
@@ -1398,6 +1381,7 @@ void wxEvtHandler::Connect( int id, int lastId,
     m_dynamicEvents->Insert( (wxObject*) entry );
 
     // Make sure we get to know when a sink is destroyed
+    wxEvtHandler *eventSink = func->GetHandler();
     if ( eventSink && eventSink != this )
     {
         wxEventConnectionRef *evtConnRef = FindRefInTrackerList(eventSink);
@@ -1408,15 +1392,18 @@ void wxEvtHandler::Connect( int id, int lastId,
     }
 }
 
-bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
-                  wxObjectEventFunction func,
-                  wxObject *userData,
-                  wxEvtHandler* eventSink )
+bool
+wxEvtHandler::Unsubscribe(int id,
+                          int lastId,
+                          wxEventType eventType,
+                          const wxEventFunctor& func,
+                          wxObject *userData)
 {
     if (!m_dynamicEvents)
         return false;
 
     // Remove connection from tracker node (wxEventConnectionRef)
+    wxEvtHandler *eventSink = func.GetHandler();
     if ( eventSink && eventSink != this )
     {
         wxEventConnectionRef *evtConnRef = FindRefInTrackerList(eventSink);
@@ -1432,12 +1419,10 @@ bool wxEvtHandler::Disconnect( int id, int lastId, wxEventType eventType,
         if ((entry->m_id == id) &&
             ((entry->m_lastId == lastId) || (lastId == wxID_ANY)) &&
             ((entry->m_eventType == eventType) || (eventType == wxEVT_NULL)) &&
-            ((entry->m_fn == func) || (func == (wxObjectEventFunction)NULL)) &&
-            ((entry->m_eventSink == eventSink) || (eventSink == (wxEvtHandler*)NULL)) &&
-            ((entry->m_callbackUserData == userData) || (userData == (wxObject*)NULL)))
+            (*entry->m_fn == func) &&
+            ((entry->m_callbackUserData == userData) || !userData))
         {
-            if (entry->m_callbackUserData)
-                delete entry->m_callbackUserData;
+            delete entry->m_callbackUserData;
             m_dynamicEvents->Erase( node );
             delete entry;
             return true;
@@ -1463,8 +1448,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 
         if ((event.GetEventType() == entry->m_eventType) && (entry->m_fn != 0))
         {
-            wxEvtHandler *handler = entry->m_eventSink ? entry->m_eventSink
-                                                       : this;
+            wxEvtHandler *handler = entry->m_fn->GetHandler() ? entry->m_fn->GetHandler() : this;
             if ( ProcessEventIfMatches(*entry, handler, event) )
                 return true;
         }
@@ -1543,10 +1527,9 @@ void wxEvtHandler::OnSinkDestroyed( wxEvtHandler *sink )
         wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
         node_nxt = node->GetNext();
 
-        if ( entry->m_eventSink==sink )
+        if ( entry->m_fn->GetHandler() == sink )
         {
-            if (entry->m_callbackUserData)
-                delete entry->m_callbackUserData;
+            delete entry->m_callbackUserData;
             m_dynamicEvents->Erase( node );
             delete entry;
         }
@@ -1575,8 +1558,8 @@ wxWindow* wxFindFocusDescendant(wxWindow* ancestor)
         else
             win = win->GetParent();
     }
-    if (win == (wxWindow*) NULL)
-        focusWin = (wxWindow*) NULL;
+    if (win == NULL)
+        focusWin = NULL;
 
     return focusWin;
 }
@@ -1616,3 +1599,4 @@ bool wxEventBlocker::ProcessEvent(wxEvent& event)
 }
 
 #endif // wxUSE_GUI
+

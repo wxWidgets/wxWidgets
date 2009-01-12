@@ -360,20 +360,20 @@ protected:
 // calendar event types and macros for handling them
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_SEL_CHANGED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_PAGE_CHANGED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_SEL_CHANGED, wxCalendarEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_PAGE_CHANGED, wxCalendarEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_DOUBLECLICKED, wxCalendarEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_WEEKDAY_CLICKED, wxCalendarEvent )
 
 // deprecated events
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_DAY_CHANGED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_MONTH_CHANGED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALENDAR_YEAR_CHANGED;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_DAY_CHANGED, wxCalendarEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_MONTH_CHANGED, wxCalendarEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_YEAR_CHANGED, wxCalendarEvent )
 
 typedef void (wxEvtHandler::*wxCalendarEventFunction)(wxCalendarEvent&);
 
 #define wxCalendarEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxCalendarEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxCalendarEventFunction, func)
 
 #define wx__DECLARE_CALEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_CALENDAR_ ## evt, id, wxCalendarEventHandler(fn))

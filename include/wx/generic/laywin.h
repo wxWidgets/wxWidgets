@@ -21,8 +21,11 @@
 
 #include "wx/event.h"
 
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_QUERY_LAYOUT_INFO;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_CALCULATE_LAYOUT;
+class WXDLLIMPEXP_FWD_ADV wxQueryLayoutInfoEvent;
+class WXDLLIMPEXP_FWD_ADV wxCalculateLayoutEvent;
+
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_QUERY_LAYOUT_INFO, wxQueryLayoutInfoEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALCULATE_LAYOUT,  wxCalculateLayoutEvent )
 
 enum wxLayoutOrientation
 {
@@ -100,8 +103,11 @@ private:
 
 typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEvent&);
 
+#define wxQueryLayoutInfoEventHandler( func ) \
+    wxEVENT_HANDLER_CAST( wxQueryLayoutInfoEventFunction, func )
+
 #define EVT_QUERY_LAYOUT_INFO(func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_LAYOUT_INFO, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxQueryLayoutInfoEventFunction, & func ), NULL ),
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_LAYOUT_INFO, wxID_ANY, wxID_ANY, wxQueryLayoutInfoEventHandler( func ), NULL ),
 
 /*
  * This event is used to take a bite out of the available client area.
@@ -137,8 +143,10 @@ private:
 
 typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEvent&);
 
+#define wxCalculateLayoutEventHandler( func ) wxEVENT_HANDLER_CAST(wxCalculateLayoutEventFunction, func)
+
 #define EVT_CALCULATE_LAYOUT(func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_CALCULATE_LAYOUT, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCalculateLayoutEventFunction, & func ), NULL ),
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_CALCULATE_LAYOUT, wxID_ANY, wxID_ANY, wxCalculateLayoutEventHandler( func ), NULL ),
 
 #if wxUSE_SASH
 

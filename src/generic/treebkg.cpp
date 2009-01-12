@@ -47,10 +47,10 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxTreebook, wxBookCtrlBase)
 
-const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING = wxNewEventType();
-const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED = wxNewEventType();
-const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED = wxNewEventType();
-const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED = wxNewEventType();
+wxDEFINE_EVENT( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGING,  wxBookCtrlEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED,   wxBookCtrlEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED, wxBookCtrlEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED,  wxBookCtrlEvent )
 
 BEGIN_EVENT_TABLE(wxTreebook, wxBookCtrlBase)
     EVT_TREE_SEL_CHANGED   (wxID_ANY, wxTreebook::OnTreeSelectionChange)

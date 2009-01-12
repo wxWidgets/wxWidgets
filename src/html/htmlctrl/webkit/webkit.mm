@@ -288,7 +288,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebKitCtrlEventHandler )
 
 IMPLEMENT_DYNAMIC_CLASS( wxWebKitStateChangedEvent, wxCommandEvent )
 
-DEFINE_EVENT_TYPE( wxEVT_WEBKIT_STATE_CHANGED )
+wxDEFINE_EVENT( wxEVT_WEBKIT_STATE_CHANGED, wxWebKitStateChangedEvent )
 
 wxWebKitStateChangedEvent::wxWebKitStateChangedEvent( wxWindow* win )
 {
@@ -302,7 +302,7 @@ wxWebKitStateChangedEvent::wxWebKitStateChangedEvent( wxWindow* win )
 
 IMPLEMENT_DYNAMIC_CLASS( wxWebKitBeforeLoadEvent, wxCommandEvent )
 
-DEFINE_EVENT_TYPE( wxEVT_WEBKIT_BEFORE_LOAD )
+wxDEFINE_EVENT( wxEVT_WEBKIT_BEFORE_LOAD, wxWebKitBeforeLoadEvent )
 
 wxWebKitBeforeLoadEvent::wxWebKitBeforeLoadEvent( wxWindow* win )
 {
@@ -318,7 +318,7 @@ wxWebKitBeforeLoadEvent::wxWebKitBeforeLoadEvent( wxWindow* win )
 
 IMPLEMENT_DYNAMIC_CLASS( wxWebKitNewWindowEvent, wxCommandEvent )
 
-DEFINE_EVENT_TYPE( wxEVT_WEBKIT_NEW_WINDOW )
+wxDEFINE_EVENT( wxEVT_WEBKIT_NEW_WINDOW, wxWebKitNewWindowEvent )
 
 wxWebKitNewWindowEvent::wxWebKitNewWindowEvent( wxWindow* win )
 {

@@ -38,8 +38,8 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxSearchCtrlNameStr[];
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN;
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, wxCommandEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEvent)
 
 // ----------------------------------------------------------------------------
 // a search ctrl is a text control with a search button and a cancel button

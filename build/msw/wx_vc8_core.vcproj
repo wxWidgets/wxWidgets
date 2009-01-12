@@ -1147,6 +1147,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\spinbuttcmn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\common\spinctrlcmn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\srchcmn.cpp"
 				>
 			</File>

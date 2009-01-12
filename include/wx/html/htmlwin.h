@@ -551,10 +551,11 @@ private:
     DECLARE_NO_COPY_CLASS(wxHtmlWindow)
 };
 
+class WXDLLIMPEXP_FWD_HTML wxHtmlCellEvent;
 
-extern WXDLLIMPEXP_HTML const wxEventType wxEVT_COMMAND_HTML_CELL_CLICKED;
-extern WXDLLIMPEXP_HTML const wxEventType wxEVT_COMMAND_HTML_CELL_HOVER;
-extern WXDLLIMPEXP_HTML const wxEventType wxEVT_COMMAND_HTML_LINK_CLICKED;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_HTML, wxEVT_COMMAND_HTML_CELL_CLICKED, wxHtmlCellEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_HTML, wxEVT_COMMAND_HTML_CELL_HOVER, wxHtmlCellEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_HTML, wxEVT_COMMAND_HTML_LINK_CLICKED, wxHtmlLinkEvent )
 
 
 /*!
@@ -628,9 +629,9 @@ typedef void (wxEvtHandler::*wxHtmlCellEventFunction)(wxHtmlCellEvent&);
 typedef void (wxEvtHandler::*wxHtmlLinkEventFunction)(wxHtmlLinkEvent&);
 
 #define wxHtmlCellEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxHtmlCellEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxHtmlCellEventFunction, func)
 #define wxHtmlLinkEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxHtmlLinkEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxHtmlLinkEventFunction, func)
 
 #define EVT_HTML_CELL_CLICKED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_HTML_CELL_CLICKED, id, wxHtmlCellEventHandler(fn))

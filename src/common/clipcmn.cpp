@@ -39,7 +39,7 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboardEvent,wxEvent)
 
-DEFINE_EVENT_TYPE(wxEVT_CLIPBOARD_CHANGED)
+wxDEFINE_EVENT( wxEVT_CLIPBOARD_CHANGED, wxClipboardEvent )
 
 // notice that ctors are defined here and not inline to avoid having to include
 // wx/dataobj.h from wx/clipbrd.h

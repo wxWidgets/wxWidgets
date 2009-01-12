@@ -45,14 +45,14 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 IMPLEMENT_CLASS(wxMediaCtrl, wxControl)
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_STATECHANGED)
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_PLAY)
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_PAUSE)
+wxDEFINE_EVENT( wxEVT_MEDIA_STATECHANGED, wxMediaEvent )
+wxDEFINE_EVENT( wxEVT_MEDIA_PLAY, wxMediaEvent )
+wxDEFINE_EVENT( wxEVT_MEDIA_PAUSE, wxMediaEvent )
 IMPLEMENT_CLASS(wxMediaBackend, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent)
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED)
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_LOADED)
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP)
+wxDEFINE_EVENT( wxEVT_MEDIA_FINISHED, wxMediaEvent )
+wxDEFINE_EVENT( wxEVT_MEDIA_LOADED, wxMediaEvent )
+wxDEFINE_EVENT( wxEVT_MEDIA_STOP, wxMediaEvent )
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //

@@ -265,6 +265,9 @@ Major new features in this release
 
 - Event loops, timers and sockets can now be used in wxBase, without GUI.
 
+- Events can now be connected to any functor, not necessarily a method of
+  wxEvtHandler-derived class. The compile-time safety was also improved.
+
 - Documentation for wxWidgets has been converted from LaTex to C++ headers
   with Doxygen comments and significantly improved in the process (screenshots
   of various controls were added, more identifiers are now linked to their

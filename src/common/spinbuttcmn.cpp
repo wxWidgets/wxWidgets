@@ -1,11 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/srchcmn.cpp
-// Purpose:     common (to all ports) bits of wxSearchCtrl
-// Author:      Robin Dunn
-// Modified by:
-// Created:     19-Dec-2006
-// RCS-ID:      $Id$
-// Copyright:   (c) wxWidgets team
+// Name:        src/common/spinbuttcmn.cpp
+// Purpose:     define wxSpinButton event types
+// Author:      Peter Most
+// Created:     01.11.08
+// RCS-ID:      $Id:$
+// Copyright:   (c) 2008-2009 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -24,19 +23,9 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_SEARCHCTRL
+#include "wx/spinbutt.h"
 
-#include "wx/srchctrl.h"
+wxDEFINE_EVENT_REFERENCE( wxEVT_SPIN_UP,   wxSpinEvent, wxEVT_SCROLL_LINEUP )
+wxDEFINE_EVENT_REFERENCE( wxEVT_SPIN_DOWN, wxSpinEvent, wxEVT_SCROLL_LINEDOWN )
+wxDEFINE_EVENT_REFERENCE( wxEVT_SPIN,      wxSpinEvent, wxEVT_SCROLL_THUMBTRACK )
 
-#ifndef WX_PRECOMP
-#endif
-
-// ----------------------------------------------------------------------------
-
-const char wxSearchCtrlNameStr[] = "searchCtrl";
-
-wxDEFINE_EVENT(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, wxCommandEvent);
-wxDEFINE_EVENT(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, wxCommandEvent);
-
-
-#endif // wxUSE_SEARCHCTRL

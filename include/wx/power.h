@@ -73,16 +73,15 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPowerEvent)
 };
 
-extern WXDLLIMPEXP_BASE const wxEventType wxEVT_POWER_SUSPENDING;
-extern WXDLLIMPEXP_BASE const wxEventType wxEVT_POWER_SUSPENDED;
-extern WXDLLIMPEXP_BASE const wxEventType wxEVT_POWER_SUSPEND_CANCEL;
-extern WXDLLIMPEXP_BASE const wxEventType wxEVT_POWER_RESUME;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDING, wxPowerEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPENDED, wxPowerEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_SUSPEND_CANCEL, wxPowerEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_POWER_RESUME, wxPowerEvent )
 
 typedef void (wxEvtHandler::*wxPowerEventFunction)(wxPowerEvent&);
 
 #define wxPowerEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction) \
-        wxStaticCastEvent(wxPowerEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxPowerEventFunction, func)
 
 #define EVT_POWER_SUSPENDING(func) \
     wx__DECLARE_EVT0(wxEVT_POWER_SUSPENDING, wxPowerEventHandler(func))

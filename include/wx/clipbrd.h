@@ -120,12 +120,12 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxClipboardEvent)
 };
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_CLIPBOARD_CHANGED;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_CLIPBOARD_CHANGED, wxClipboardEvent )
 
 typedef void (wxEvtHandler::*wxClipboardEventFunction)(wxClipboardEvent&);
 
 #define wxClipboardEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxClipboardEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxClipboardEventFunction, func)
 
 #define EVT_CLIPBOARD_CHANGED(func) wx__DECLARE_EVT0(wxEVT_CLIPBOARD_CHANGED, wxClipboardEventHandler(func))
 

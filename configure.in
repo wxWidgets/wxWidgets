@@ -663,6 +663,13 @@ WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary  create Mac 
 WX_ARG_ENABLE(compat26,      [  --enable-compat26       enable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6)
 WX_ARG_DISABLE(compat28,     [  --disable-compat28      disable wxWidgets 2.8 compatibility], WXWIN_COMPATIBILITY_2_8)
 
+dnl currently we don't provide a switch for disabling it as it shouldn't be
+dnl necessary to do it unless the compiler doesn't support the new events and
+dnl this should be tested for by configure itself (but also isn't done yet
+dnl because there are no known examples of such compilers among the currently
+dnl supported ones)
+AC_DEFINE(wxEVENTS_COMPATIBILITY_2_8, 0)
+
 WX_ARG_DISABLE(rpath,        [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
 WX_ARG_ENABLE(objc_uniquifying,[  --enable-objc_uniquifying enable Objective-C class name uniquifying], wxUSE_OBJC_UNIQUIFYING)

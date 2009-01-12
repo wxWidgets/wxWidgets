@@ -33,6 +33,10 @@
 #define wxTIMER_ONE_SHOT true
 
 class WXDLLIMPEXP_FWD_BASE wxTimerImpl;
+class WXDLLIMPEXP_FWD_BASE wxTimerEvent;
+
+// timer event type
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_BASE, wxEVT_TIMER, wxTimerEvent)
 
 // the interface of wxTimer class
 class WXDLLIMPEXP_BASE wxTimer : public wxEvtHandler
@@ -178,7 +182,7 @@ private:
 typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);
 
 #define wxTimerEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxTimerEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxTimerEventFunction, func)
 
 #define EVT_TIMER(timerid, func) \
     wx__DECLARE_EVT1(wxEVT_TIMER, timerid, wxTimerEventHandler(func))

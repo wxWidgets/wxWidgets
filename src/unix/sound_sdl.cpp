@@ -46,19 +46,17 @@ public:
 typedef void (wxEvtHandler::*wxSoundBackendSDLNotificationFunction)
              (wxSoundBackendSDLNotification&);
 
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_LOCAL_EVENT_TYPE(wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, -1)
-END_DECLARE_EVENT_TYPES()
+wxDECLARE_LOCAL_EVENT( wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, wxSoundBackendSDLNotification )
 
 #define EVT_SOUND_BACKEND_SDL_NOTIFICATON(func) \
     DECLARE_EVENT_TABLE_ENTRY(wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, \
                               -1,                       \
                               -1,                       \
-                              (wxObjectEventFunction)  wxStaticCastEvent( wxSoundBackendSDLNotificationFunction, & func ), \
+                              wxEVENT_HANDLER_CAST( wxSoundBackendSDLNotificationFunction, func ), \
                               (wxObject *) NULL ),
 
 IMPLEMENT_DYNAMIC_CLASS(wxSoundBackendSDLNotification, wxEvtHandler)
-DEFINE_EVENT_TYPE(wxEVT_SOUND_BACKEND_SDL_NOTIFICATION)
+wxDEFINE_EVENT( wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, wxSoundBackendSDLNotification )
 
 wxSoundBackendSDLNotification::wxSoundBackendSDLNotification()
 {

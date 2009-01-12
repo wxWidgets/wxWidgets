@@ -805,17 +805,17 @@ public:
 
 #ifndef SWIG
 
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_AUI_PANE_BUTTON;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_AUI_PANE_CLOSE;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_AUI_PANE_MAXIMIZE;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_AUI_PANE_RESTORE;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_AUI_RENDER;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_AUI_FIND_MANAGER;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_BUTTON, wxAuiManagerEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_CLOSE, wxAuiManagerEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_MAXIMIZE, wxAuiManagerEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_PANE_RESTORE, wxAuiManagerEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_RENDER, wxAuiManagerEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_AUI, wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent )
 
 typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
 
 #define wxAuiManagerEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxAuiManagerEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxAuiManagerEventFunction, func)
 
 #define EVT_AUI_PANE_BUTTON(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_PANE_BUTTON, wxAuiManagerEventHandler(func))

@@ -43,7 +43,7 @@
 // ============================================================================
 
 IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_HYPERLINK)
+wxDEFINE_EVENT( wxEVT_COMMAND_HYPERLINK, wxHyperlinkEvent )
 
 const char wxHyperlinkCtrlNameStr[] = "hyperlink";
 

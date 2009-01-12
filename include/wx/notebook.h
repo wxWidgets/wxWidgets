@@ -118,8 +118,8 @@ protected:
 typedef wxBookCtrlEventFunction wxNotebookEventFunction;
 #define wxNotebookEventHandler(func) wxBookCtrlEventHandler(func)
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED;
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxBookCtrlEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxBookCtrlEvent )
 
 #define EVT_NOTEBOOK_PAGE_CHANGED(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, winid, wxBookCtrlEventHandler(fn))

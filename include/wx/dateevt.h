@@ -47,12 +47,12 @@ private:
 // event types and macros for handling them
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_DATE_CHANGED;
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_ADV, wxEVT_DATE_CHANGED, wxDateEvent)
 
 typedef void (wxEvtHandler::*wxDateEventFunction)(wxDateEvent&);
 
 #define wxDateEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxDateEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxDateEventFunction, func)
 
 #define EVT_DATE_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_DATE_CHANGED, id, wxDateEventHandler(fn))

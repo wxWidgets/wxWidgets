@@ -203,7 +203,9 @@ private:
     DECLARE_NO_COPY_CLASS(wxSashWindow)
 };
 
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_SASH_DRAGGED;
+class WXDLLIMPEXP_FWD_ADV wxSashEvent;
+
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_SASH_DRAGGED, wxSashEvent )
 
 enum wxSashDragStatus
 {
@@ -253,7 +255,7 @@ private:
 typedef void (wxEvtHandler::*wxSashEventFunction)(wxSashEvent&);
 
 #define wxSashEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxSashEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxSashEventFunction, func)
 
 #define EVT_SASH_DRAGGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_SASH_DRAGGED, id, wxSashEventHandler(fn))

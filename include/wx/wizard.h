@@ -285,16 +285,16 @@ private:
 // macros for handling wxWizardEvents
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_WIZARD_PAGE_CHANGED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_WIZARD_PAGE_CHANGING;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_WIZARD_CANCEL;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_WIZARD_HELP;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_WIZARD_FINISHED;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_PAGE_CHANGED, wxWizardEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_PAGE_CHANGING, wxWizardEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_CANCEL, wxWizardEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_HELP, wxWizardEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_WIZARD_FINISHED, wxWizardEvent )
 
 typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 
 #define wxWizardEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxWizardEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxWizardEventFunction, func)
 
 #define wx__DECLARE_WIZARDEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_WIZARD_ ## evt, id, wxWizardEventHandler(fn))

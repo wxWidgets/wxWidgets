@@ -41,6 +41,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxTimerEvent, wxEvent)
 
+wxDEFINE_EVENT(wxEVT_TIMER, wxTimerEvent);
+
 // ============================================================================
 // wxTimerBase implementation
 // ============================================================================

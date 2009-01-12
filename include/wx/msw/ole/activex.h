@@ -209,12 +209,15 @@ public:
     {   return m_dispid;    }
 };
 
-#define wxACTIVEX_ID    14001
-DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_MEDIA, wxEVT_ACTIVEX, wxACTIVEX_ID)
+// #define wxACTIVEX_ID    14001
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_MEDIA, wxEVT_ACTIVEX, wxActiveXEvent )
+
 typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
-#define EVT_ACTIVEX(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_ACTIVEX, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxActiveXEventFunction) & fn, (wxObject *) NULL ),
+
 #define wxActiveXEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxActiveXEventFunction, &func)
+    wxEVENT_HANDLER_CAST( wxActiveXEventFunction, func )
+
+#define EVT_ACTIVEX(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_ACTIVEX, id, -1, wxActiveXEventHandler( fn ), (wxObject *) NULL ),
 
 #endif // wxUSE_ACTIVEX
 

@@ -382,7 +382,7 @@ private:
 typedef void (wxEvtHandler::*wxBookCtrlEventFunction)(wxBookCtrlEvent&);
 
 #define wxBookCtrlEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxBookCtrlEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxBookCtrlEventFunction, func)
 
 // obsolete name, defined for compatibility only
 #define wxBookCtrlBaseEvent wxBookCtrlEvent

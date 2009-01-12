@@ -607,16 +607,16 @@ protected:
     void OnChildFocusNotebook(wxChildFocusEvent& evt);
     void OnRender(wxAuiManagerEvent& evt);
     void OnSize(wxSizeEvent& evt);
-    void OnTabClicked(wxCommandEvent& evt);
-    void OnTabBeginDrag(wxCommandEvent& evt);
-    void OnTabDragMotion(wxCommandEvent& evt);
-    void OnTabEndDrag(wxCommandEvent& evt);
-    void OnTabButton(wxCommandEvent& evt);
-    void OnTabMiddleDown(wxCommandEvent& evt);
-    void OnTabMiddleUp(wxCommandEvent& evt);
-    void OnTabRightDown(wxCommandEvent& evt);
-    void OnTabRightUp(wxCommandEvent& evt);
-    void OnTabBgDClick(wxCommandEvent& evt);
+    void OnTabClicked(wxAuiNotebookEvent& evt);
+    void OnTabBeginDrag(wxAuiNotebookEvent& evt);
+    void OnTabDragMotion(wxAuiNotebookEvent& evt);
+    void OnTabEndDrag(wxAuiNotebookEvent& evt);
+    void OnTabButton(wxAuiNotebookEvent& evt);
+    void OnTabMiddleDown(wxAuiNotebookEvent& evt);
+    void OnTabMiddleUp(wxAuiNotebookEvent& evt);
+    void OnTabRightDown(wxAuiNotebookEvent& evt);
+    void OnTabRightUp(wxAuiNotebookEvent& evt);
+    void OnTabBgDClick(wxAuiNotebookEvent& evt);
     void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
 
     // set selection to the given window (which must be non-NULL and be one of
@@ -660,26 +660,26 @@ protected:
 
 #ifndef SWIG
 
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_BUTTON;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_END_DRAG;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE;
-extern WXDLLIMPEXP_AUI const wxEventType wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK;
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSED, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_BUTTON, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_DRAG_DONE, wxAuiNotebookEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, wxAuiNotebookEvent)
 
 typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 
 #define wxAuiNotebookEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxAuiNotebookEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxAuiNotebookEventFunction, func)
 
 #define EVT_AUINOTEBOOK_PAGE_CLOSE(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, winid, wxAuiNotebookEventHandler(fn))

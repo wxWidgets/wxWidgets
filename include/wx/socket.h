@@ -93,6 +93,9 @@ enum wxSocketType
 };
 
 
+// event
+class WXDLLIMPEXP_FWD_NET wxSocketEvent;
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_SOCKET, wxSocketEvent)
 
 // --------------------------------------------------------------------------
 // wxSocketBase
@@ -391,7 +394,7 @@ public:
 typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
 
 #define wxSocketEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxSocketEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxSocketEventFunction, func)
 
 #define EVT_SOCKET(id, func) \
     wx__DECLARE_EVT1(wxEVT_SOCKET, id, wxSocketEventHandler(func))

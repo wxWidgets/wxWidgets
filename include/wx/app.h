@@ -221,6 +221,16 @@ public:
     virtual int FilterEvent(wxEvent& event);
 
 #if wxUSE_EXCEPTIONS
+    // execute the functor to handle the given event
+    //
+    // this is a generalization of HandleEvent() below and the base class
+    // implementation of CallEventHandler() still calls HandleEvent() for
+    // compatibility for functors which are just wxEventFunctions (i.e. methods
+    // of wxEvtHandler)
+    virtual void CallEventHandler(wxEvtHandler *handler,
+                                  wxEventFunctor& functor,
+                                  wxEvent& event) const;
+
     // call the specified handler on the given object with the given event
     //
     // this method only exists to allow catching the exceptions thrown by any

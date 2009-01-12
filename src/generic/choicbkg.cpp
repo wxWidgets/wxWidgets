@@ -49,8 +49,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoicebook, wxBookCtrlBase)
 
-const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING = wxNewEventType();
-const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED = wxNewEventType();
+wxDEFINE_EVENT( wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, wxBookCtrlEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,  wxBookCtrlEvent )
 
 BEGIN_EVENT_TABLE(wxChoicebook, wxBookCtrlBase)
     EVT_CHOICE(wxID_ANY, wxChoicebook::OnChoiceSelected)

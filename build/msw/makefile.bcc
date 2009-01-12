@@ -1713,6 +1713,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_rgncmn.obj \
 	$(OBJS)\monodll_settcmn.obj \
 	$(OBJS)\monodll_sizer.obj \
+	$(OBJS)\monodll_spinbuttcmn.obj \
+	$(OBJS)\monodll_spinctrlcmn.obj \
 	$(OBJS)\monodll_srchcmn.obj \
 	$(OBJS)\monodll_statbar.obj \
 	$(OBJS)\monodll_stattextcmn.obj \
@@ -1950,6 +1952,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_rgncmn.obj \
 	$(OBJS)\monodll_settcmn.obj \
 	$(OBJS)\monodll_sizer.obj \
+	$(OBJS)\monodll_spinbuttcmn.obj \
+	$(OBJS)\monodll_spinctrlcmn.obj \
 	$(OBJS)\monodll_srchcmn.obj \
 	$(OBJS)\monodll_statbar.obj \
 	$(OBJS)\monodll_stattextcmn.obj \
@@ -2390,6 +2394,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_rgncmn.obj \
 	$(OBJS)\monolib_settcmn.obj \
 	$(OBJS)\monolib_sizer.obj \
+	$(OBJS)\monolib_spinbuttcmn.obj \
+	$(OBJS)\monolib_spinctrlcmn.obj \
 	$(OBJS)\monolib_srchcmn.obj \
 	$(OBJS)\monolib_statbar.obj \
 	$(OBJS)\monolib_stattextcmn.obj \
@@ -2627,6 +2633,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_rgncmn.obj \
 	$(OBJS)\monolib_settcmn.obj \
 	$(OBJS)\monolib_sizer.obj \
+	$(OBJS)\monolib_spinbuttcmn.obj \
+	$(OBJS)\monolib_spinctrlcmn.obj \
 	$(OBJS)\monolib_srchcmn.obj \
 	$(OBJS)\monolib_statbar.obj \
 	$(OBJS)\monolib_stattextcmn.obj \
@@ -2972,6 +2980,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_rgncmn.obj \
 	$(OBJS)\coredll_settcmn.obj \
 	$(OBJS)\coredll_sizer.obj \
+	$(OBJS)\coredll_spinbuttcmn.obj \
+	$(OBJS)\coredll_spinctrlcmn.obj \
 	$(OBJS)\coredll_srchcmn.obj \
 	$(OBJS)\coredll_statbar.obj \
 	$(OBJS)\coredll_stattextcmn.obj \
@@ -3209,6 +3219,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_rgncmn.obj \
 	$(OBJS)\coredll_settcmn.obj \
 	$(OBJS)\coredll_sizer.obj \
+	$(OBJS)\coredll_spinbuttcmn.obj \
+	$(OBJS)\coredll_spinctrlcmn.obj \
 	$(OBJS)\coredll_srchcmn.obj \
 	$(OBJS)\coredll_statbar.obj \
 	$(OBJS)\coredll_stattextcmn.obj \
@@ -3451,6 +3463,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_rgncmn.obj \
 	$(OBJS)\corelib_settcmn.obj \
 	$(OBJS)\corelib_sizer.obj \
+	$(OBJS)\corelib_spinbuttcmn.obj \
+	$(OBJS)\corelib_spinctrlcmn.obj \
 	$(OBJS)\corelib_srchcmn.obj \
 	$(OBJS)\corelib_statbar.obj \
 	$(OBJS)\corelib_stattextcmn.obj \
@@ -3688,6 +3702,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_rgncmn.obj \
 	$(OBJS)\corelib_settcmn.obj \
 	$(OBJS)\corelib_sizer.obj \
+	$(OBJS)\corelib_spinbuttcmn.obj \
+	$(OBJS)\corelib_spinctrlcmn.obj \
 	$(OBJS)\corelib_srchcmn.obj \
 	$(OBJS)\corelib_statbar.obj \
 	$(OBJS)\corelib_stattextcmn.obj \
@@ -7182,6 +7198,16 @@ $(OBJS)\monodll_sizer.obj: ..\..\src\common\sizer.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_spinbuttcmn.obj: ..\..\src\common\spinbuttcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\spinbuttcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_spinctrlcmn.obj: ..\..\src\common\spinctrlcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\spinctrlcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_srchcmn.obj: ..\..\src\common\srchcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\srchcmn.cpp
 !endif
@@ -9389,6 +9415,16 @@ $(OBJS)\monolib_settcmn.obj: ..\..\src\common\settcmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_sizer.obj: ..\..\src\common\sizer.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\sizer.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_spinbuttcmn.obj: ..\..\src\common\spinbuttcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\spinbuttcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_spinctrlcmn.obj: ..\..\src\common\spinctrlcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\spinctrlcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -11623,6 +11659,16 @@ $(OBJS)\coredll_sizer.obj: ..\..\src\common\sizer.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_spinbuttcmn.obj: ..\..\src\common\spinbuttcmn.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\spinbuttcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_spinctrlcmn.obj: ..\..\src\common\spinctrlcmn.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\spinctrlcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_srchcmn.obj: ..\..\src\common\srchcmn.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\srchcmn.cpp
 !endif
@@ -12981,6 +13027,16 @@ $(OBJS)\corelib_settcmn.obj: ..\..\src\common\settcmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_sizer.obj: ..\..\src\common\sizer.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\common\sizer.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_spinbuttcmn.obj: ..\..\src\common\spinbuttcmn.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\common\spinbuttcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_spinctrlcmn.obj: ..\..\src\common\spinctrlcmn.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\common\spinctrlcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

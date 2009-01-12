@@ -408,6 +408,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_rgncmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
 	$(OBJS)\monodll_sizer.obj &
+	$(OBJS)\monodll_spinbuttcmn.obj &
+	$(OBJS)\monodll_spinctrlcmn.obj &
 	$(OBJS)\monodll_srchcmn.obj &
 	$(OBJS)\monodll_statbar.obj &
 	$(OBJS)\monodll_stattextcmn.obj &
@@ -647,6 +649,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_rgncmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
 	$(OBJS)\monodll_sizer.obj &
+	$(OBJS)\monodll_spinbuttcmn.obj &
+	$(OBJS)\monodll_spinctrlcmn.obj &
 	$(OBJS)\monodll_srchcmn.obj &
 	$(OBJS)\monodll_statbar.obj &
 	$(OBJS)\monodll_stattextcmn.obj &
@@ -1096,6 +1100,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_rgncmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
 	$(OBJS)\monolib_sizer.obj &
+	$(OBJS)\monolib_spinbuttcmn.obj &
+	$(OBJS)\monolib_spinctrlcmn.obj &
 	$(OBJS)\monolib_srchcmn.obj &
 	$(OBJS)\monolib_statbar.obj &
 	$(OBJS)\monolib_stattextcmn.obj &
@@ -1335,6 +1341,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_rgncmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
 	$(OBJS)\monolib_sizer.obj &
+	$(OBJS)\monolib_spinbuttcmn.obj &
+	$(OBJS)\monolib_spinctrlcmn.obj &
 	$(OBJS)\monolib_srchcmn.obj &
 	$(OBJS)\monolib_statbar.obj &
 	$(OBJS)\monolib_stattextcmn.obj &
@@ -1705,6 +1713,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_rgncmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
 	$(OBJS)\coredll_sizer.obj &
+	$(OBJS)\coredll_spinbuttcmn.obj &
+	$(OBJS)\coredll_spinctrlcmn.obj &
 	$(OBJS)\coredll_srchcmn.obj &
 	$(OBJS)\coredll_statbar.obj &
 	$(OBJS)\coredll_stattextcmn.obj &
@@ -1944,6 +1954,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_rgncmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
 	$(OBJS)\coredll_sizer.obj &
+	$(OBJS)\coredll_spinbuttcmn.obj &
+	$(OBJS)\coredll_spinctrlcmn.obj &
 	$(OBJS)\coredll_srchcmn.obj &
 	$(OBJS)\coredll_statbar.obj &
 	$(OBJS)\coredll_stattextcmn.obj &
@@ -2194,6 +2206,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_rgncmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
 	$(OBJS)\corelib_sizer.obj &
+	$(OBJS)\corelib_spinbuttcmn.obj &
+	$(OBJS)\corelib_spinctrlcmn.obj &
 	$(OBJS)\corelib_srchcmn.obj &
 	$(OBJS)\corelib_statbar.obj &
 	$(OBJS)\corelib_stattextcmn.obj &
@@ -2433,6 +2447,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_rgncmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
 	$(OBJS)\corelib_sizer.obj &
+	$(OBJS)\corelib_spinbuttcmn.obj &
+	$(OBJS)\corelib_spinctrlcmn.obj &
 	$(OBJS)\corelib_srchcmn.obj &
 	$(OBJS)\corelib_statbar.obj &
 	$(OBJS)\corelib_stattextcmn.obj &
@@ -7691,6 +7707,16 @@ $(OBJS)\monodll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_spinbuttcmn.obj :  .AUTODEPEND ..\..\src\common\spinbuttcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_spinctrlcmn.obj :  .AUTODEPEND ..\..\src\common\spinctrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -10011,6 +10037,16 @@ $(OBJS)\monolib_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_spinbuttcmn.obj :  .AUTODEPEND ..\..\src\common\spinbuttcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_spinctrlcmn.obj :  .AUTODEPEND ..\..\src\common\spinctrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -12360,6 +12396,16 @@ $(OBJS)\coredll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_spinbuttcmn.obj :  .AUTODEPEND ..\..\src\common\spinbuttcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_spinctrlcmn.obj :  .AUTODEPEND ..\..\src\common\spinctrlcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -13829,6 +13875,16 @@ $(OBJS)\corelib_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_spinbuttcmn.obj :  .AUTODEPEND ..\..\src\common\spinbuttcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_spinctrlcmn.obj :  .AUTODEPEND ..\..\src\common\spinctrlcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

@@ -2304,26 +2304,26 @@ private:
 };
 
 
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_LEFT_CLICK;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_RIGHT_CLICK;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_LEFT_DCLICK;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_RIGHT_DCLICK;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_LABEL_LEFT_CLICK;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_LABEL_RIGHT_CLICK;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_LABEL_LEFT_DCLICK;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_ROW_SIZE;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_COL_SIZE;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_RANGE_SELECT;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_CHANGING;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_CHANGED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_SELECT_CELL;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_EDITOR_SHOWN;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_EDITOR_HIDDEN;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_EDITOR_CREATED;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_CELL_BEGIN_DRAG;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_COL_MOVE;
-extern WXDLLIMPEXP_ADV const wxEventType wxEVT_GRID_COL_SORT;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_LEFT_CLICK, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_RIGHT_DCLICK, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_LABEL_RIGHT_CLICK, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_LABEL_LEFT_DCLICK, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_LABEL_RIGHT_DCLICK, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_ROW_SIZE, wxGridSizeEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_COL_SIZE, wxGridSizeEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_RANGE_SELECT, wxGridRangeSelectEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_CHANGING, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_CHANGED, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_SELECT_CELL, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_EDITOR_SHOWN, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_EDITOR_HIDDEN, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_EDITOR_CREATED, wxGridEditorCreatedEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_BEGIN_DRAG, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_COL_MOVE, wxGridEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_GRID_COL_SORT, wxGridEvent )
 
 typedef void (wxEvtHandler::*wxGridEventFunction)(wxGridEvent&);
 typedef void (wxEvtHandler::*wxGridSizeEventFunction)(wxGridSizeEvent&);
@@ -2331,16 +2331,16 @@ typedef void (wxEvtHandler::*wxGridRangeSelectEventFunction)(wxGridRangeSelectEv
 typedef void (wxEvtHandler::*wxGridEditorCreatedEventFunction)(wxGridEditorCreatedEvent&);
 
 #define wxGridEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxGridEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxGridEventFunction, func)
 
 #define wxGridSizeEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxGridSizeEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxGridSizeEventFunction, func)
 
 #define wxGridRangeSelectEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxGridRangeSelectEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxGridRangeSelectEventFunction, func)
 
 #define wxGridEditorCreatedEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxGridEditorCreatedEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxGridEditorCreatedEventFunction, func)
 
 #define wx__DECLARE_GRIDEVT(evt, id, fn) \
     wx__DECLARE_EVT1(wxEVT_GRID_ ## evt, id, wxGridEventHandler(fn))

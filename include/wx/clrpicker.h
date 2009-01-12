@@ -160,7 +160,7 @@ private:
 // wxColourPickerEvent: used by wxColourPickerCtrl only
 // ----------------------------------------------------------------------------
 
-extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_COLOURPICKER_CHANGED;
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_COLOURPICKER_CHANGED, wxColourPickerEvent )
 
 class WXDLLIMPEXP_CORE wxColourPickerEvent : public wxCommandEvent
 {
@@ -193,7 +193,7 @@ private:
 typedef void (wxEvtHandler::*wxColourPickerEventFunction)(wxColourPickerEvent&);
 
 #define wxColourPickerEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxColourPickerEventFunction, &func)
+    wxEVENT_HANDLER_CAST(wxColourPickerEventFunction, func)
 
 #define EVT_COLOURPICKER_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_COLOURPICKER_CHANGED, id, wxColourPickerEventHandler(fn))

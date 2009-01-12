@@ -43,7 +43,7 @@ WX_DECLARE_AUTOOLE(wxAutoITypeInfo, ITypeInfo)
 WX_DECLARE_AUTOOLE(wxAutoIConnectionPoint, IConnectionPoint)
 WX_DECLARE_AUTOOLE(wxAutoIConnectionPointContainer, IConnectionPointContainer)
 
-DEFINE_EVENT_TYPE(wxEVT_ACTIVEX)
+wxDEFINE_EVENT( wxEVT_ACTIVEX, wxActiveXEvent )
 
 // Ole class helpers (sort of MFC-like) from wxActiveX
 #define DECLARE_OLE_UNKNOWN(cls)\

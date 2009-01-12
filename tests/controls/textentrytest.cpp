@@ -36,7 +36,7 @@ void TextEntryTestCase::SetValue()
     CPPUNIT_ASSERT_EQUAL( "bye", entry->GetValue() );
 }
 
-void TextEntryTestCase::TextChangeEvents()
+namespace
 {
     class TextTestEventHandler : public wxEvtHandler
     {
@@ -55,7 +55,12 @@ void TextEntryTestCase::TextChangeEvents()
 
     private:
         int m_events;
-    } handler;
+    };
+}
+
+void TextEntryTestCase::TextChangeEvents()
+{
+    TextTestEventHandler handler;
 
     GetTestWindow()->Connect
                      (

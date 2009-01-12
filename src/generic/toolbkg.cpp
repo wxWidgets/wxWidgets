@@ -45,8 +45,8 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolbook, wxBookCtrlBase)
 
-const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING = wxNewEventType();
-const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED = wxNewEventType();
+wxDEFINE_EVENT( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING, wxBookCtrlEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED,  wxBookCtrlEvent )
 
 BEGIN_EVENT_TABLE(wxToolbook, wxBookCtrlBase)
     EVT_SIZE(wxToolbook::OnSize)
