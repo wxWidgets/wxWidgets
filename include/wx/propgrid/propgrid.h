@@ -1294,12 +1294,8 @@ public:
         To add your own validation failure behavior, override
         wxPropertyGrid::DoOnValidationFailure().
     */
-    bool OnValidationFailure( wxPGProperty* property, wxVariant& invalidValue )
-    {
-        bool res = DoOnValidationFailure(property, invalidValue);
-        property->SetFlag(wxPG_PROP_INVALID_VALUE);
-        return res;
-    }
+    bool OnValidationFailure( wxPGProperty* property,
+                              wxVariant& invalidValue );
 
     /** Called to indicate property and editor has valid value now.
     */

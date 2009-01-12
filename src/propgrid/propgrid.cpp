@@ -2602,6 +2602,29 @@ void wxPropertyGrid::DoShowPropertyError( wxPGProperty* WXUNUSED(property), cons
 
 // -----------------------------------------------------------------------
 
+bool wxPropertyGrid::OnValidationFailure( wxPGProperty* property,
+                                          wxVariant& invalidValue )
+{
+    wxWindow* editor = GetEditorControl();
+
+    // First call property's handler
+    property->OnValidationFailure(invalidValue);
+
+    bool res = DoOnValidationFailure(property, invalidValue);
+
+    //
+    // For non-wxTextCtrl editors, we do need to revert the value
+    if ( !editor->IsKindOf(CLASSINFO(wxTextCtrl)) &&
+         property == m_selected )
+    {
+        property->GetEditorClass()->UpdateControl(property, editor);
+    }
+
+    property->SetFlag(wxPG_PROP_INVALID_VALUE);
+
+    return res;
+}
+
 bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& WXUNUSED(invalidValue) )
 {
     int vfb = m_validationInfo.m_failureBehavior;

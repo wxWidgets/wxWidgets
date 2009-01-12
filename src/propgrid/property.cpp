@@ -652,6 +652,10 @@ void wxPGProperty::RefreshChildren ()
 {
 }
 
+void wxPGProperty::OnValidationFailure( wxVariant& WXUNUSED(pendingValue) )
+{
+}
+
 void wxPGProperty::GetDisplayInfo( unsigned int column,
                                    int choiceIndex,
                                    int flags,

@@ -428,6 +428,8 @@ public:
     // this take advantage of it.
     virtual int GetChoiceSelection() const { return m_index; }
 
+    virtual void OnValidationFailure( wxVariant& pendingValue );
+
 protected:
 
     int GetIndex() const;
@@ -447,6 +449,7 @@ private:
 
     // Relies on ValidateValue being called always before OnSetValue
     static int              ms_nextIndex;
+    static int              ms_prevIndex;
 };
 
 // -----------------------------------------------------------------------

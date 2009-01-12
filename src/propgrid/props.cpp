@@ -963,6 +963,7 @@ wxEnumProperty::~wxEnumProperty ()
 }
 
 int wxEnumProperty::ms_nextIndex = -2;
+int wxEnumProperty::ms_prevIndex = -1;
 
 void wxEnumProperty::OnSetValue()
 {
@@ -1113,8 +1114,17 @@ bool wxEnumProperty::ValueFromInt_( wxVariant& variant, int intVal, int argFlags
     return false;
 }
 
+void
+wxEnumProperty::OnValidationFailure( wxVariant& WXUNUSED(pendingValue) )
+{
+    // Revert index
+    m_index = ms_prevIndex;
+    ResetNextIndex();
+}
+
 void wxEnumProperty::SetIndex( int index )
 {
+    ms_prevIndex = m_index;
     ms_nextIndex = -2;
     m_index = index;
 }

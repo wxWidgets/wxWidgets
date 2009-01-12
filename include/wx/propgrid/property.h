@@ -1423,6 +1423,15 @@ public:
     */
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
 
+    /**
+        Called whenever validation has failed with given pending value.
+
+        @remarks If you implement this in your custom property class, please
+                 remember to call the baser implementation as well, since they
+                 may use it to revert property into pre-change state.
+    */
+    virtual void OnValidationFailure( wxVariant& pendingValue );
+
     /** Append a new choice to property's list of choices.
     */
     int AddChoice( const wxString& label, int value = wxPG_INVALID_VALUE )
