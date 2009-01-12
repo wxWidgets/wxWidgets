@@ -1252,6 +1252,7 @@ bool wxTextCtrl::Enable( bool enable )
     }
 
     gtk_widget_set_sensitive( m_text, enable );
+    SetCursor(enable ? wxCursor(wxCURSOR_IBEAM) : wxCursor());
 
     return true;
 }
