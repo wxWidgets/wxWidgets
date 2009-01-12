@@ -89,13 +89,7 @@ protected:
     wxArrayString        m_excludes;
 
 private:
-// Cannot use
-//  DECLARE_NO_COPY_CLASS(wxTextValidator)
-// because copy constructor is explicitly declared above;
-// but no copy assignment operator is defined, so declare
-// it private to prevent the compiler from defining it:
-    wxTextValidator& operator=(const wxTextValidator&);
-
+    DECLARE_NO_ASSIGN_CLASS(wxTextValidator)
     DECLARE_DYNAMIC_CLASS(wxTextValidator)
     DECLARE_EVENT_TABLE()
 };
