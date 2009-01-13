@@ -1990,9 +1990,11 @@ private:
 
 IMPLEMENT_DYNAMIC_CLASS(wxSocketModule, wxModule)
 
+#if defined(wxUSE_SELECT_DISPATCHER) && wxUSE_SELECT_DISPATCHER
 // NOTE: we need to force linking against socketiohandler.cpp otherwise in
 //       static builds of wxWidgets the ManagerSetter::ManagerSetter ctor
 //       contained there wouldn't be ever called
 wxFORCE_LINK_MODULE( socketiohandler )
+#endif
 
 #endif // wxUSE_SOCKETS
