@@ -611,9 +611,9 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
                     // instead of its children (wxToolBarTools)
                     ControlRef parent ;
                     GetSuperControl(control, &parent );
-                    wxWindow *wxParent = (wxWindow*) wxFindWindowFromWXWidget((WXWidget) parent ) ;
-                    if ( wxParent && wxParent->IsKindOf( CLASSINFO( wxToolBar ) ) )
-                        currentMouseWindow = wxParent ;
+                    wxWindow *wxparent = (wxWindow*) wxFindWindowFromWXWidget((WXWidget) parent ) ;
+                    if ( wxparent && wxparent->IsKindOf( CLASSINFO( wxToolBar ) ) )
+                        currentMouseWindow = wxparent ;
 #endif
                 }
 #endif
@@ -733,7 +733,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
 
         wxWindow* cursorTarget = currentMouseWindow ;
         wxPoint cursorPoint( wxevent.m_x , wxevent.m_y ) ;
-
+        
         extern wxCursor gGlobalCursor;
 
         if (!gGlobalCursor.IsOk())
@@ -749,6 +749,17 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
     }
     else // currentMouseWindow == NULL
     {
+        if (toplevelWindow && !control)
+        {
+           extern wxCursor gGlobalCursor;
+           if (!gGlobalCursor.IsOk())
+           {
+                // update cursor when over toolbar and titlebar etc.
+                wxPoint cursorPoint( wxevent.m_x , wxevent.m_y ) ;
+                toplevelWindow->MacSetupCursor( cursorPoint );
+           }
+        }
+    
         // don't mess with controls we don't know about
         // for some reason returning eventNotHandledErr does not lead to the correct behaviour
         // so we try sending them the correct control directly
