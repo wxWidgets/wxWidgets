@@ -59,6 +59,8 @@ class wxListWidgetCocoaImpl;
 
 - (void)setImplementation: (wxListWidgetCocoaImpl *) theImplementation;
 - (wxListWidgetCocoaImpl*) implementation;
+- (void)clickedAction: (id) sender;
+- (void)doubleClickedAction: (id) sender;
 
 @end
 
@@ -282,6 +284,47 @@ protected:
     return impl;
 }
 
+- (id) init
+{
+    [super init];
+    impl = NULL;
+    [self setTarget: self];
+    [self setAction: @selector(clickedAction:)];
+    [self setDoubleAction: @selector(doubleClickedAction:)];
+    return self;
+}
+
+- (void) clickedAction: (id) sender
+{
+    if ( impl )
+    {
+        wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
+        wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+
+        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
+
+        int sel = [self clickedRow];
+        if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
+           return;
+           
+        list->HandleLineEvent( sel, false );
+    }
+}
+
+- (void) doubleClickedAction: (id) sender
+{
+    if ( impl )
+    {
+        wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
+        wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+
+        int sel = [self clickedRow];
+        if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
+           return;
+
+        list->HandleLineEvent( sel, true );
+    }
+}
 
 @end
 
@@ -428,17 +471,27 @@ void wxListWidgetCocoaImpl::ListSetSelection( unsigned int n, bool select, bool 
 
 int wxListWidgetCocoaImpl::ListGetSelection() const 
 {
-    return 0;
+    return [m_tableView selectedRow];
 }
 
 int wxListWidgetCocoaImpl::ListGetSelections( wxArrayInt& aSelections ) const 
 {
-    return 0;
+    aSelections.Empty();
+
+    int count = ListGetCount();
+
+    for ( int i = 0; i < count; ++i)
+    {
+        if ([m_tableView isRowSelected:count])
+        aSelections.Add(i);
+    }
+
+    return aSelections.Count();
 }
 
 bool wxListWidgetCocoaImpl::ListIsSelected( unsigned int n ) const 
 {
-    return false;
+    return [m_tableView isRowSelected:n];
 }
 
 // display

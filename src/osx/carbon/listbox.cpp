@@ -250,16 +250,7 @@ void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
     if (message == kDataBrowserItemDoubleClicked)
     {
         unsigned int n = owner->GetLineFromItem( this );
-        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, list->GetId() );
-        event.SetEventObject( list );
-        if ( list->HasClientObjectData() )
-            event.SetClientObject( list->GetClientObject(n) );
-        else if ( list->HasClientUntypedData() )
-            event.SetClientData( list->GetClientData(n) );
-        event.SetString( list->GetString(n) );
-        event.SetInt( n );
-        event.SetExtraLong( 1 );
-        list->HandleWindowEvent(event);
+        list->HandleLineEvent( n, true );
         return;
     }
 }
@@ -374,15 +365,7 @@ void wxMacDataBrowserListControl::ItemNotification(
         int sel = list->GetSelection();
         if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
            return;
-        event.SetEventObject( list );
-        if ( list->HasClientObjectData() )
-            event.SetClientObject( list->GetClientObject( sel ) );
-        else if ( list->HasClientUntypedData() )
-            event.SetClientData( list->GetClientData( sel ) );
-        event.SetString( list->GetString( sel ) );
-        event.SetInt( sel );
-        event.SetExtraLong( 1 );
-        list->HandleWindowEvent(event);
+        list->HandleLineEvent( sel, false );
         return;
     }
     

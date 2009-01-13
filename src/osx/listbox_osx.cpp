@@ -370,4 +370,23 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     GetListPeer()->UpdateLine(n);
 }
 
+//
+// common event handling
+//
+
+void wxListBox::HandleLineEvent( unsigned int n, bool doubleClick )
+{
+    wxCommandEvent event( doubleClick ? wxEVT_COMMAND_LISTBOX_DOUBLECLICKED : 
+        wxEVT_COMMAND_LISTBOX_SELECTED, GetId() );
+    event.SetEventObject( this );
+    if ( HasClientObjectData() )
+        event.SetClientObject( GetClientObject(n) );
+    else if ( HasClientUntypedData() )
+        event.SetClientData( GetClientData(n) );
+    event.SetString( GetString(n) );
+    event.SetInt( n );
+    event.SetExtraLong( 1 );
+    HandleWindowEvent(event);
+}
+
 #endif // wxUSE_LISTBOX
