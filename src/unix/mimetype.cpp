@@ -527,7 +527,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
 #ifdef __VMS
     // XDG tables are never installed on OpenVMS
     return;
-#endif
+#else
 
     // Read MIME type - extension associations
     LoadXDGGlobs( "/usr/share/mime/globs" );
@@ -626,6 +626,7 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
             }
         }
     }
+#endif
 }
 
 // clear data so you can read another group of WM files
