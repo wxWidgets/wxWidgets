@@ -342,7 +342,6 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
     wxFont font ;
 
 #if wxOSX_USE_ATSU_TEXT
-    ControlSize size ;
     ThemeFontID themeFont = kThemeSystemFont ;
 
     // we will get that from the settings later
@@ -352,23 +351,19 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
     switch ( variant )
     {
         case wxWINDOW_VARIANT_NORMAL :
-            size = kControlSizeNormal;
             themeFont = kThemeSystemFont ;
             break ;
 
         case wxWINDOW_VARIANT_SMALL :
-            size = kControlSizeSmall;
             themeFont = kThemeSmallSystemFont ;
             break ;
 
         case wxWINDOW_VARIANT_MINI :
             // not always defined in the headers
-            size = 3 ;
             themeFont = 109 ;
             break ;
 
         case wxWINDOW_VARIANT_LARGE :
-            size = kControlSizeLarge;
             themeFont = kThemeSystemFont ;
             break ;
 
