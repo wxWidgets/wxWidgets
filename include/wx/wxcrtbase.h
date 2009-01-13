@@ -225,6 +225,9 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 /* Not all compilers have strnlen(); e.g. MSVC 6.x and 7.x don't have it */
 #if wxCHECK_VISUALC_VERSION(8) || defined(HAVE_STRNLEN)
     #define wxCRT_StrnlenA  strnlen
+#endif
+
+#if wxCHECK_VISUALC_VERSION(8) || defined(HAVE_WCSNLEN)
     #define wxCRT_StrnlenW  wcsnlen
 #endif
 

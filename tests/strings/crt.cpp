@@ -4,7 +4,7 @@
 // Author:      Vaclav Slavik
 // Created:     2004-06-03
 // RCS-ID:      $Id$
-// Copyright:   (c) 2004 Vaclav Slavik 
+// Copyright:   (c) 2004 Vaclav Slavik
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -48,6 +48,7 @@ private:
         CPPUNIT_TEST( Strspn );
         CPPUNIT_TEST( Strcspn );
         CPPUNIT_TEST( Strpbrk );
+        CPPUNIT_TEST( Strnlen );
     CPPUNIT_TEST_SUITE_END();
 
     void SetGetEnv();
@@ -55,6 +56,7 @@ private:
     void Strspn();
     void Strcspn();
     void Strpbrk();
+    void Strnlen();
 
     DECLARE_NO_COPY_CLASS(CrtTestCase)
 };
@@ -208,4 +210,43 @@ void CrtTestCase::Strpbrk()
     CPPUNIT_ASSERT_EQUAL( (char *)NULL, wxStrpbrk(strWX, "xyz") );
     CPPUNIT_ASSERT_EQUAL( (wchar_t *)NULL, wxStrpbrk(strWX.c_str(), L"xyz") );
 }
+
+void CrtTestCase::Strnlen()
+{
+    // the following calls should not segfault/crash because when passing 0
+    // as maxlen, no bytes at all should be read from the given buffer
+    // (which is NULL in this case!)
+    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen((const char*)NULL, 0) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen((const wchar_t*)NULL, 0) );
+
+    // other misc tests for wxStrnlen(const char*, size_t)
+
+    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen("", 0) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen("", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen("1234", 0) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)2, wxStrnlen("1234", 2) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)4, wxStrnlen("1234", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)7, wxStrnlen("1234567", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)8, wxStrnlen("12345678", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)8, wxStrnlen("123456789", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)9, wxStrnlen("123456789", 12) );
+
+    // other misc tests for wxStrnlen(const wchar_t*, size_t)
+
+    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen(L"", 0) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen(L"", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen(L"1234", 0) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)2, wxStrnlen(L"1234", 2) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)4, wxStrnlen(L"1234", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)7, wxStrnlen(L"1234567", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)8, wxStrnlen(L"12345678", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)8, wxStrnlen(L"123456789", 8) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)9, wxStrnlen(L"123456789", 12) );
+
+    // wxStrlen() is only for NULL-terminated strings:
+    CPPUNIT_ASSERT_EQUAL(  (size_t)4, wxStrnlen("1234" "\0" "78", 12) );
+    CPPUNIT_ASSERT_EQUAL(  (size_t)4, wxStrnlen(L"1234" L"\0" L"5678", 12) );
+}
+
+
 

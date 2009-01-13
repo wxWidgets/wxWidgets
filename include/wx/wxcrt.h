@@ -182,14 +182,33 @@ inline size_t wxStrlen(const wxString& s) { return s.length(); }
 inline size_t wxStrlen(const wxCStrData& s) { return s.AsString().length(); }
 
 // this is a function new in 2.9 so we don't care about backwards compatibility and
-// so don't need to support wchar_t/char overloads
-#if defined(wxCRT_StrnlenA) && defined(wxCRT_StrnlenW)
+// so don't need to support wxCharBuffer/wxWCharBuffer overloads
+#if defined(wxCRT_StrnlenA)
 inline size_t wxStrnlen(const char *str, size_t maxlen) { return wxCRT_StrnlenA(str, maxlen); }
+#else
+inline size_t wxStrnlen(const char *str, size_t maxlen)
+{
+    size_t n;
+    for ( n = 0; n < maxlen; n++ )
+        if ( !str[n] )
+            break;
+
+    return n;
+}
+#endif
+
+#if defined(wxCRT_StrnlenW)
 inline size_t wxStrnlen(const wchar_t *str, size_t maxlen) { return wxCRT_StrnlenW(str, maxlen); }
 #else
-// use unsafer wxStrlen:
-inline size_t wxStrnlen(const char *str, size_t maxlen) { return wxCRT_StrlenA(str); wxUnusedVar(maxlen); }
-inline size_t wxStrnlen(const wchar_t *str, size_t maxlen) { return wxCRT_StrlenW(str); wxUnusedVar(maxlen); }
+inline size_t wxStrnlen(const wchar_t *str, size_t maxlen)
+{
+    size_t n;
+    for ( n = 0; n < maxlen; n++ )
+        if ( !str[n] )
+            break;
+
+    return n;
+}
 #endif
 
 // NB: these are defined in wxcrtbase.h, see the comment there
