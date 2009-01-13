@@ -313,7 +313,7 @@ public:
 
         @return Upon successful completion, it returns the new offset as
                 measured in bytes from the beginning of the stream.
-                Otherwise, it returns wxInvalidOffset.
+                Otherwise, it returns ::wxInvalidOffset.
     */
     virtual wxFileOffset Seek(wxFileOffset pos, wxSeekMode mode);
 
@@ -370,7 +370,7 @@ public:
         the stream.
 
         @return Returns the current position in the stream if possible,
-                wxInvalidOffset in the other case.
+                ::wxInvalidOffset in the other case.
     */
     virtual wxFileOffset Tell() const;
 
@@ -449,7 +449,7 @@ public:
         @param mode
             One of wxFromStart, wxFromEnd, wxFromCurrent.
 
-        @return The new stream position or wxInvalidOffset on error.
+        @return The new stream position or ::wxInvalidOffset on error.
     */
     virtual wxFileOffset SeekO(wxFileOffset pos, wxSeekMode mode = wxFromStart);
 
@@ -844,7 +844,7 @@ public:
         @param mode
             One of wxFromStart, wxFromEnd, wxFromCurrent.
 
-        @return The new stream position or wxInvalidOffset on error.
+        @return The new stream position or ::wxInvalidOffset on error.
     */
     virtual wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart);
 
@@ -923,7 +923,7 @@ public:
     /**
         Returns the length of the stream in bytes. If the length cannot be
         determined (this is always the case for socket streams for example),
-        returns @c wxInvalidOffset.
+        returns ::wxInvalidOffset.
 
         @since 2.5.4
     */

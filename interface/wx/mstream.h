@@ -117,7 +117,7 @@ public:
         data from the given input stream @a stream.
 
         The @a len argument specifies the amount of data to read from the
-        @a stream. Setting it to @e wxInvalidOffset means that the @a stream
+        @a stream. Setting it to ::wxInvalidOffset means that the @a stream
         is to be read entirely (i.e. till the EOF is reached).
     */
     wxMemoryInputStream(wxInputStream& stream,

@@ -137,7 +137,7 @@ public:
     /**
         Returns the length of the file.
 
-        This method may return wxInvalidOffset if the length couldn't be
+        This method may return ::wxInvalidOffset if the length couldn't be
         determined or 0 even for non-empty files if the file is not seekable.
 
         In general, the only way to determine if the file for which this function
@@ -162,7 +162,7 @@ public:
                       wxSeekMode mode = wxFromStart);
 
     /**
-        Returns the current position or wxInvalidOffset if file is not opened or
+        Returns the current position or ::wxInvalidOffset if file is not opened or
         if another error occurred.
     */
     wxFileOffset Tell() const;
@@ -383,7 +383,7 @@ public:
         @param count
            Bytes to read
 
-        @return The number of bytes read, or the symbol wxInvalidOffset.
+        @return The number of bytes read, or the symbol ::wxInvalidOffset.
     */
     ssize_t Read(void* buffer, size_t count);
 
@@ -395,7 +395,7 @@ public:
         @param mode
             One of wxFromStart, wxFromEnd, wxFromCurrent.
 
-        @return The actual offset position achieved, or wxInvalidOffset on
+        @return The actual offset position achieved, or ::wxInvalidOffset on
                 failure.
     */
     wxFileOffset Seek(wxFileOffset ofs,
@@ -409,13 +409,13 @@ public:
         @param ofs
             Number of bytes before the end of the file.
 
-        @return The actual offset position achieved, or wxInvalidOffset on
+        @return The actual offset position achieved, or ::wxInvalidOffset on
                 failure.
     */
     wxFileOffset SeekEnd(wxFileOffset ofs = 0);
 
     /**
-        Returns the current position or wxInvalidOffset if file is not opened or
+        Returns the current position or ::wxInvalidOffset if file is not opened or
         if another error occurred.
     */
     wxFileOffset Tell() const;
