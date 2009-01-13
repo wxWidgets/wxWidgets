@@ -30,15 +30,15 @@ class WXDLLIMPEXP_FWD_CORE wxImage;
     wxAnimationDecoders always load an input stream using some optimized format
     to store it which is format-depedent. This allows to store a (possibly big)
     animation using a format which is a good compromise between required memory
-    and time required to blit in on the screen.
+    and time required to blit it on the screen.
 
- 2) wxAnimationDecoders contain the animation data in some internal var.
+ 2) wxAnimationDecoders contain the animation data in some internal variable.
     That's why they derive from wxObjectRefData: they are data which can be shared.
 
  3) wxAnimationDecoders can be used by a wxImageHandler to retrieve a frame
     in wxImage format; the viceversa cannot be done.
 
- 4) wxAnimationDecoders are decoders only, thus do not support save features.
+ 4) wxAnimationDecoders are decoders only, thus they do not support save features.
 
  5) wxAnimationDecoders are directly used by wxAnimation (generic implementation)
     as wxObjectRefData while they need to be 'wrapped' by a wxImageHandler for
@@ -61,11 +61,11 @@ enum wxAnimationDisposal
     // Do not dispose. The graphic is to be left in place.
     wxANIM_DONOTREMOVE = 0,
 
-    // Restore to background color. The area used by the graphic must be 
+    // Restore to background color. The area used by the graphic must be
     // restored to the background color.
     wxANIM_TOBACKGROUND = 1,
 
-    // Restore to previous. The decoder is required to restore the area 
+    // Restore to previous. The decoder is required to restore the area
     // overwritten by the graphic with what was there prior to rendering the graphic.
     wxANIM_TOPREVIOUS = 2
 };
