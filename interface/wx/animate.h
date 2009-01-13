@@ -203,7 +203,7 @@ public:
         @param name
             The name of the file to load.
         @param type
-            See LoadFile for more info.
+            See LoadFile() for more info.
     */
     wxAnimation(const wxString& name,
                 wxAnimationType type = wxANIMATION_TYPE_ANY);
@@ -245,11 +245,10 @@ public:
 
         @param stream
             The stream to use to load the animation.
+            Under wxGTK may be any kind of stream; under other platforms
+            this must be a seekable stream.
         @param type
-            One of the following values:
-             @li wxANIMATION_TYPE_GIF: loads an animated GIF file;
-             @li wxANIMATION_TYPE_ANI: load an ANI file;
-             @li wxANIMATION_TYPE_ANY: tries to autodetect the filetype.
+            One of the ::wxAnimationType enumeration values.
 
         @return @true if the operation succeeded, @false otherwise.
     */
@@ -262,7 +261,7 @@ public:
         @param name
             A filename.
         @param type
-            One of the wxAnimationType values; wxANIMATION_TYPE_ANY
+            One of the ::wxAnimationType values; wxANIMATION_TYPE_ANY
             means that the function should try to autodetect the filetype.
 
         @return @true if the operation succeeded, @false otherwise.
