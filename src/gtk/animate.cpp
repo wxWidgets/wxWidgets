@@ -116,7 +116,8 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     else
         loader = gdk_pixbuf_loader_new();
 
-    if (!loader)
+    if (!loader ||
+        error != NULL)  // even if the loader was allocated, an error could have happened
     {
         wxLogDebug(wxT("Could not create the loader for '%s' animation type: %s"),
                    anim_type, error->message);
@@ -131,16 +132,20 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     while (stream.IsOk())
     {
         // read a chunk of data
-        stream.Read(buf, sizeof(buf));
+        if (!stream.Read(buf, sizeof(buf)))
+        {
+            // gdk_pixbuf_loader_close wants the GError == NULL
+            gdk_pixbuf_loader_close(loader, NULL);
+            return false;
+        }
 
         // fetch all data into the loader
         if (!gdk_pixbuf_loader_write(loader, buf, stream.LastRead(), &error))
         {
             wxLogDebug(wxT("Could not write to the loader: %s"), error->message);
 
-            // gdk_pixbuf_loader_close wants the GError == NULL; reset it:
-            error = NULL;
-            gdk_pixbuf_loader_close(loader, &error);
+            // gdk_pixbuf_loader_close wants the GError == NULL
+            gdk_pixbuf_loader_close(loader, NULL);
             return false;
         }
 
