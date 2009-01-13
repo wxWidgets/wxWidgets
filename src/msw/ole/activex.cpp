@@ -829,6 +829,10 @@ wxActiveXContainer::~wxActiveXContainer()
         m_oleObject->Close(OLECLOSE_NOSAVE);
         m_oleObject->SetClientSite(NULL);
     }
+
+    // m_clientSite uses m_frameSite so destroy it first
+    m_clientSite.Free();
+    delete m_frameSite;
 }
 
 // VZ: we might want to really report an error instead of just asserting here
@@ -855,13 +859,13 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
     CHECK_HR(hret);
 
     // FrameSite
-    FrameSite *frame = new FrameSite(m_realparent, this);
+    m_frameSite = new FrameSite(m_realparent, this);
     // oleClientSite
     hret = m_clientSite.QueryInterface(
-        IID_IOleClientSite, (IDispatch *) frame);
+        IID_IOleClientSite, (IDispatch *) m_frameSite);
     CHECK_HR(hret);
     // adviseSink
-    wxAutoIAdviseSink adviseSink(IID_IAdviseSink, (IDispatch *) frame);
+    wxAutoIAdviseSink adviseSink(IID_IAdviseSink, (IDispatch *) m_frameSite);
     wxASSERT(adviseSink.Ok());
 
     // Get Dispatch interface
@@ -951,7 +955,7 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
                 CHECK_HR(hret);
 
                 IDispatch* disp;
-                frame->QueryInterface(IID_IDispatch, (void**)&disp);
+                m_frameSite->QueryInterface(IID_IDispatch, (void**)&disp);
                 hret = cp->Advise(new wxActiveXEvents(this, ta->guid),
                                   &adviseCookie);
                 CHECK_HR(hret);

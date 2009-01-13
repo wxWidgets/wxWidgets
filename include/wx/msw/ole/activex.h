@@ -155,6 +155,7 @@ protected:
     friend class FrameSite;
     friend class wxActiveXEvents;
 
+    FrameSite *m_frameSite;
     wxAutoIDispatch            m_Dispatch;
     wxAutoIOleClientSite      m_clientSite;
     wxAutoIUnknown         m_ActiveX;
