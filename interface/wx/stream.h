@@ -80,6 +80,23 @@ public:
     */
     virtual bool IsSeekable() const;
 
+    /**
+        Returns the opposite of IsOk().
+        You can use this function to test the validity of the stream as if
+        it was a pointer:
+
+        @code
+            bool DoSomething(wxInputStream& stream)
+            {
+                wxInt32 data;
+                if (!stream.Read(&data, 4))
+                    return false;
+                ...
+            }
+        @endcode
+    */
+    bool operator!() const;
+
 protected:
 
     /**
