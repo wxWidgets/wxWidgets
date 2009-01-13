@@ -6,95 +6,103 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
 /**
-    @class wxCountingOutputStream
-
-    wxCountingOutputStream is a specialized output stream which does not write any
-    data anywhere, instead it counts how many bytes would get written if this were a
-    normal stream. This can sometimes be useful or required if some data gets
-    serialized to a stream or compressed by using stream compression and thus the
-    final size of the stream cannot be known other than pretending to write the stream.
-    One case where the resulting size would have to be known is if the data has
-    to be written to a piece of memory and the memory has to be allocated before
-    writing to it (which is probably always the case when writing to a memory stream).
-
-    @library{wxbase}
-    @category{streams}
+    These enumeration values are returned by various functions in the context
+    of wxStream classes.
 */
-class wxCountingOutputStream : public wxOutputStream
+enum wxStreamError
 {
-public:
-    /**
-        Creates a wxCountingOutputStream object.
-    */
-    wxCountingOutputStream();
-
-    /**
-        Destructor.
-    */
-    virtual ~wxCountingOutputStream();
-
-    /**
-        Returns the current size of the stream.
-    */
-    size_t GetSize() const;
+    wxSTREAM_NO_ERROR = 0,      //!< No error occurred.
+    wxSTREAM_EOF,               //!< EOF reached in Read() or similar.
+    wxSTREAM_WRITE_ERROR,       //!< generic write error on the last write call.
+    wxSTREAM_READ_ERROR         //!< generic read error on the last read call.
 };
 
-
-
 /**
-    @class wxBufferedInputStream
+    @class wxStreamBase
 
-    This stream acts as a cache. It caches the bytes read from the specified
-    input stream (see wxFilterInputStream).
-    It uses wxStreamBuffer and sets the default in-buffer size to 1024 bytes.
-    This class may not be used without some other stream to read the data
-    from (such as a file stream or a memory stream).
+    This class is the base class of most stream related classes in wxWidgets.
+    It must not be used directly.
 
     @library{wxbase}
     @category{streams}
 
-    @see wxStreamBuffer, wxInputStream, wxBufferedOutputStream
+    @see wxStreamBuffer
 */
-class wxBufferedInputStream : public wxFilterInputStream
+class wxStreamBase
 {
 public:
     /**
-        Constructor using the provided buffer or default.
-
-        @param stream
-            The associated low-level stream.
-        @param buffer
-            The buffer to use if non-@NULL. Notice that the ownership of this
-            buffer is taken by the stream, i.e. it will delete it. If this
-            parameter is @NULL a default 1KB buffer is used.
+        Creates a dummy stream object. It doesn't do anything.
     */
-    wxBufferedInputStream(wxInputStream& stream,
-                          wxStreamBuffer *buffer = NULL);
-
-    /**
-        Constructor allowing to specify the size of the buffer.
-
-        This is just a more convenient alternative to creating a wxStreamBuffer
-        of the given size and using the other overloaded constructor of this
-        class.
-
-        @param stream
-            The associated low-level stream.
-        @param bufsize
-            The size of the buffer, in bytes.
-
-        @since 2.9.0
-     */
-    wxBufferedInputStream(wxInputStream& stream, size_t bufsize);
+    wxStreamBase();
 
     /**
         Destructor.
     */
-    virtual ~wxBufferedInputStream();
+    virtual ~wxStreamBase();
+
+    /**
+        This function returns the last error.
+    */
+    wxStreamError GetLastError() const;
+
+    /**
+        Returns the length of the stream in bytes. If the length cannot be
+        determined (this is always the case for socket streams for example),
+        returns ::wxInvalidOffset.
+
+        @since 2.5.4
+    */
+    virtual wxFileOffset GetLength() const;
+
+    /**
+        This function returns the size of the stream.
+        For example, for a file it is the size of the file.
+
+        @warning
+        There are streams which do not have size by definition, such as socket
+        streams. In that cases, GetSize() returns 0 so you should always test its
+        return value.
+    */
+    virtual size_t GetSize() const;
+
+    /**
+        Returns @true if no error occurred on the stream.
+
+        @see GetLastError()
+    */
+    virtual bool IsOk() const;
+
+    /**
+        Returns @true if the streams supports seeking to arbitrary offsets.
+    */
+    virtual bool IsSeekable() const;
+
+protected:
+
+    /**
+        Internal function.
+        It is called when the stream needs to change the current position.
+
+        @param pos
+            Offset to seek to.
+        @param mode
+            One of the ::wxSeekMode enumeration values.
+
+        @return The new stream position or ::wxInvalidOffset on error.
+    */
+    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
+
+    /**
+        Internal function.
+        It is called when the stream needs to know the real position.
+
+        @return The current stream position.
+    */
+    virtual wxFileOffset OnSysTell() const;
 };
-
-
 
 /**
     @class wxStreamBuffer
@@ -400,6 +408,11 @@ public:
     @class wxOutputStream
 
     wxOutputStream is an abstract base class which may not be used directly.
+    It is the base class of all streams which provide a Write() function,
+    i.e. which can be used to output data (e.g. to a file, to a socket, etc).
+
+    If you want to create your own output stream, you'll need to derive from this
+    class and implement the protected OnSysWrite() function only.
 
     @library{wxbase}
     @category{streams}
@@ -477,7 +490,244 @@ public:
         by one of the two streams.
     */
     wxOutputStream& Write(wxInputStream& stream_in);
+
+protected:
+    /**
+        Internal function. It is called when the stream wants to write data of the
+        specified size @a bufsize into the given @a buffer.
+
+        It should return the size that was actually wrote (which maybe zero if
+        @a bufsize is zero or if an error occurred; in this last case the internal
+        variable @c m_lasterror should be appropriately set).
+    */
+    size_t OnSysWrite(const void* buffer, size_t bufsize);
 };
+
+
+/**
+    @class wxInputStream
+
+    wxInputStream is an abstract base class which may not be used directly.
+    It is the base class of all streams which provide a Read() function,
+    i.e. which can be used to read data from a source (e.g. a file, a socket, etc).
+
+    If you want to create your own input stream, you'll need to derive from this
+    class and implement the protected OnSysRead() function only.
+
+    @library{wxbase}
+    @category{streams}
+*/
+class wxInputStream : public wxStreamBase
+{
+public:
+    /**
+        Creates a dummy input stream.
+    */
+    wxInputStream();
+
+    /**
+        Destructor.
+    */
+    virtual ~wxInputStream();
+
+    /**
+        Returns @true if some data is available in the stream right now, so that
+        calling Read() wouldn't block.
+    */
+    virtual bool CanRead() const;
+
+    /**
+        Returns @true after an attempt has been made to read past the end of the
+        stream.
+    */
+    virtual bool Eof() const;
+
+    /**
+        Returns the first character in the input queue and removes it,
+        blocking until it appears if necessary.
+
+        On success returns a value between 0 - 255; on end of file returns @c wxEOF.
+    */
+    int GetC();
+
+    /**
+        Returns the last number of bytes read.
+    */
+    virtual size_t LastRead() const;
+
+    /**
+        Returns the first character in the input queue without removing it.
+    */
+    virtual char Peek();
+
+    /**
+        Reads the specified amount of bytes and stores the data in buffer.
+        To check if the call was successfull you must use LastRead() to check
+        if this call did actually read @a size bytes (if it didn't, GetLastError()
+        should return a meaningful value).
+
+        @warning
+        The buffer absolutely needs to have at least the specified size.
+
+        @return This function returns a reference on the current object, so the
+                user can test any states of the stream right away.
+    */
+    virtual wxInputStream& Read(void* buffer, size_t size);
+
+    /**
+        Reads data from the input queue and stores it in the specified output stream.
+        The data is read until an error is raised by one of the two streams.
+
+        @return This function returns a reference on the current object, so the
+                user can test any states of the stream right away.
+    */
+    wxInputStream& Read(wxOutputStream& stream_out);
+
+    /**
+        Changes the stream current position.
+
+        @param pos
+            Offset to seek to.
+        @param mode
+            One of wxFromStart, wxFromEnd, wxFromCurrent.
+
+        @return The new stream position or ::wxInvalidOffset on error.
+    */
+    virtual wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart);
+
+    /**
+        Returns the current stream position.
+    */
+    virtual wxFileOffset TellI() const;
+
+    /**
+        This function is only useful in read mode.
+        It is the manager of the "Write-Back" buffer. This buffer acts like a
+        temporary buffer where data which has to be read during the next read IO
+        call are put. This is useful when you get a big block of data which you
+        didn't want to read: you can replace them at the top of the input queue
+        by this way.
+
+        Be very careful about this call in connection with calling SeekI() on
+        the same stream. Any call to SeekI() will invalidate any previous call
+        to this method (otherwise you could SeekI() to one position, "unread" a
+        few bytes there, SeekI() to another position and data would be either
+        lost or corrupted).
+
+        @return Returns the amount of bytes saved in the Write-Back buffer.
+    */
+    size_t Ungetch(const void* buffer, size_t size);
+
+    /**
+        This function acts like the previous one except that it takes only one
+        character: it is sometimes shorter to use than the generic function.
+    */
+    bool Ungetch(char c);
+
+protected:
+
+    /**
+        Internal function. It is called when the stream wants to read data of the
+        specified size @a bufsize and wants it to be placed inside @a buffer.
+
+        It should return the size that was actually read or zero if EOF has been
+        reached or an error occurred (in this last case the internal @c m_lasterror
+        variable should be set accordingly as well).
+    */
+    size_t OnSysRead(void* buffer, size_t bufsize);
+};
+
+
+
+
+/**
+    @class wxCountingOutputStream
+
+    wxCountingOutputStream is a specialized output stream which does not write any
+    data anywhere, instead it counts how many bytes would get written if this were a
+    normal stream. This can sometimes be useful or required if some data gets
+    serialized to a stream or compressed by using stream compression and thus the
+    final size of the stream cannot be known other than pretending to write the stream.
+    One case where the resulting size would have to be known is if the data has
+    to be written to a piece of memory and the memory has to be allocated before
+    writing to it (which is probably always the case when writing to a memory stream).
+
+    @library{wxbase}
+    @category{streams}
+*/
+class wxCountingOutputStream : public wxOutputStream
+{
+public:
+    /**
+        Creates a wxCountingOutputStream object.
+    */
+    wxCountingOutputStream();
+
+    /**
+        Destructor.
+    */
+    virtual ~wxCountingOutputStream();
+
+    /**
+        Returns the current size of the stream.
+    */
+    size_t GetSize() const;
+};
+
+
+/**
+    @class wxBufferedInputStream
+
+    This stream acts as a cache. It caches the bytes read from the specified
+    input stream (see wxFilterInputStream).
+    It uses wxStreamBuffer and sets the default in-buffer size to 1024 bytes.
+    This class may not be used without some other stream to read the data
+    from (such as a file stream or a memory stream).
+
+    @library{wxbase}
+    @category{streams}
+
+    @see wxStreamBuffer, wxInputStream, wxBufferedOutputStream
+*/
+class wxBufferedInputStream : public wxFilterInputStream
+{
+public:
+    /**
+        Constructor using the provided buffer or default.
+
+        @param stream
+            The associated low-level stream.
+        @param buffer
+            The buffer to use if non-@NULL. Notice that the ownership of this
+            buffer is taken by the stream, i.e. it will delete it. If this
+            parameter is @NULL a default 1KB buffer is used.
+    */
+    wxBufferedInputStream(wxInputStream& stream,
+                          wxStreamBuffer *buffer = NULL);
+
+    /**
+        Constructor allowing to specify the size of the buffer.
+
+        This is just a more convenient alternative to creating a wxStreamBuffer
+        of the given size and using the other overloaded constructor of this
+        class.
+
+        @param stream
+            The associated low-level stream.
+        @param bufsize
+            The size of the buffer, in bytes.
+
+        @since 2.9.0
+     */
+    wxBufferedInputStream(wxInputStream& stream, size_t bufsize);
+
+    /**
+        Destructor.
+    */
+    virtual ~wxBufferedInputStream();
+};
+
+
 
 
 /**
@@ -490,7 +740,6 @@ enum wxStreamProtocolType
     wxSTREAM_ENCODING,  //!< The HTTP Content-Encodings the stream handles.
     wxSTREAM_FILEEXT    //!< File extensions the stream handles.
 };
-
 
 /**
     @class wxFilterClassFactory
@@ -763,219 +1012,4 @@ public:
     virtual void Sync();
 };
 
-
-
-/**
-    @class wxInputStream
-
-    wxInputStream is an abstract base class which may not be used directly.
-
-    @library{wxbase}
-    @category{streams}
-*/
-class wxInputStream : public wxStreamBase
-{
-public:
-    /**
-        Creates a dummy input stream.
-    */
-    wxInputStream();
-
-    /**
-        Destructor.
-    */
-    virtual ~wxInputStream();
-
-    /**
-        Returns @true if some data is available in the stream right now, so that
-        calling Read() wouldn't block.
-    */
-    virtual bool CanRead() const;
-
-    /**
-        Returns @true after an attempt has been made to read past the end of the
-        stream.
-    */
-    virtual bool Eof() const;
-
-    /**
-        Returns the first character in the input queue and removes it,
-        blocking until it appears if necessary.
-
-        On success returns a value between 0 - 255; on end of file returns @c wxEOF.
-    */
-    int GetC();
-
-    /**
-        Returns the last number of bytes read.
-    */
-    virtual size_t LastRead() const;
-
-    /**
-        Returns the first character in the input queue without removing it.
-    */
-    virtual char Peek();
-
-    /**
-        Reads the specified amount of bytes and stores the data in buffer.
-
-        @warning
-        The buffer absolutely needs to have at least the specified size.
-
-        @return This function returns a reference on the current object, so the
-                user can test any states of the stream right away.
-    */
-    virtual wxInputStream& Read(void* buffer, size_t size);
-
-    /**
-        Reads data from the input queue and stores it in the specified output stream.
-        The data is read until an error is raised by one of the two streams.
-
-        @return This function returns a reference on the current object, so the
-                user can test any states of the stream right away.
-    */
-    wxInputStream& Read(wxOutputStream& stream_out);
-
-    /**
-        Changes the stream current position.
-
-        @param pos
-            Offset to seek to.
-        @param mode
-            One of wxFromStart, wxFromEnd, wxFromCurrent.
-
-        @return The new stream position or ::wxInvalidOffset on error.
-    */
-    virtual wxFileOffset SeekI(wxFileOffset pos, wxSeekMode mode = wxFromStart);
-
-    /**
-        Returns the current stream position.
-    */
-    virtual wxFileOffset TellI() const;
-
-    /**
-        This function is only useful in read mode.
-        It is the manager of the "Write-Back" buffer. This buffer acts like a
-        temporary buffer where data which has to be read during the next read IO
-        call are put. This is useful when you get a big block of data which you
-        didn't want to read: you can replace them at the top of the input queue
-        by this way.
-
-        Be very careful about this call in connection with calling SeekI() on
-        the same stream. Any call to SeekI() will invalidate any previous call
-        to this method (otherwise you could SeekI() to one position, "unread" a
-        few bytes there, SeekI() to another position and data would be either
-        lost or corrupted).
-
-        @return Returns the amount of bytes saved in the Write-Back buffer.
-    */
-    size_t Ungetch(const void* buffer, size_t size);
-
-    /**
-        This function acts like the previous one except that it takes only one
-        character: it is sometimes shorter to use than the generic function.
-    */
-    bool Ungetch(char c);
-};
-
-
-/**
-    These enumeration values are returned by various functions in the context
-    of wxStream classes.
-*/
-enum wxStreamError
-{
-    wxSTREAM_NO_ERROR = 0,      //!< No error occurred.
-    wxSTREAM_EOF,               //!< EOF reached in Read() or similar.
-    wxSTREAM_WRITE_ERROR,       //!< generic write error on the last write call.
-    wxSTREAM_READ_ERROR         //!< generic read error on the last read call.
-};
-
-/**
-    @class wxStreamBase
-
-    This class is the base class of most stream related classes in wxWidgets.
-    It must not be used directly.
-
-    @library{wxbase}
-    @category{streams}
-
-    @see wxStreamBuffer
-*/
-class wxStreamBase
-{
-public:
-    /**
-        Creates a dummy stream object. It doesn't do anything.
-    */
-    wxStreamBase();
-
-    /**
-        Destructor.
-    */
-    virtual ~wxStreamBase();
-
-    /**
-        This function returns the last error.
-    */
-    wxStreamError GetLastError() const;
-
-    /**
-        Returns the length of the stream in bytes. If the length cannot be
-        determined (this is always the case for socket streams for example),
-        returns ::wxInvalidOffset.
-
-        @since 2.5.4
-    */
-    virtual wxFileOffset GetLength() const;
-
-    /**
-        This function returns the size of the stream.
-        For example, for a file it is the size of the file.
-
-        @warning
-        There are streams which do not have size by definition, such as socket
-        streams. In that cases, GetSize returns 0 so you should always test its
-        return value.
-    */
-    virtual size_t GetSize() const;
-
-    /**
-        Returns @true if no error occurred on the stream.
-
-        @see GetLastError()
-    */
-    virtual bool IsOk() const;
-
-    /**
-        Returns @true if the streams supports seeking to arbitrary offsets.
-    */
-    virtual bool IsSeekable() const;
-
-    /**
-        Internal function. It is called when the stream wants to read data of the
-        specified size. It should return the size that was actually read.
-    */
-    size_t OnSysRead(void* buffer, size_t bufsize);
-
-    /**
-        See OnSysRead().
-    */
-    size_t OnSysWrite(const void* buffer, size_t bufsize);
-
-
-protected:
-
-    /**
-        Internal function.
-        It is called when the stream needs to change the current position.
-    */
-    virtual wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
-
-    /**
-        Internal function.
-        It is called when the stream needs to know the real position.
-    */
-    virtual wxFileOffset OnSysTell() const;
-};
 
