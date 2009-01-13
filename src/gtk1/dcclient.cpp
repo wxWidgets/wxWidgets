@@ -1219,7 +1219,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
             return true;
     }
 
-    int old_logical_func = m_logicalFunction;
+    wxRasterOperationMode old_logical_func = m_logicalFunction;
     SetLogicalFunction( logical_func );
 
     if (use_bitmap_method)
