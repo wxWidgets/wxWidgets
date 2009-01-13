@@ -754,7 +754,7 @@ bool wxFont::MacCreateFromCTFontDescriptor( const void * ctFontDescriptor , int 
 
 #endif
 
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_ATSU_TEXT
 bool wxFont::MacCreateFromThemeFont(wxUint16 themeFontID)
 {
 #if wxOSX_USE_CORE_TEXT
@@ -763,7 +763,6 @@ bool wxFont::MacCreateFromThemeFont(wxUint16 themeFontID)
         return MacCreateFromUIFont(HIThemeGetUIFontType(themeFontID));
     }
 #endif
-#if wxOSX_USE_ATSU_TEXT
     {
         UnRef();
 
@@ -775,7 +774,6 @@ bool wxFont::MacCreateFromThemeFont(wxUint16 themeFontID)
         RealizeResource();
         return true;
     }
-#endif
     return false;
 }
 #endif
