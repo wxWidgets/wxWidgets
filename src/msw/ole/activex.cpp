@@ -1017,9 +1017,6 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         m_oleObject->SetClientSite(m_clientSite);
 
 
-    RECT posRect;
-    ::GetClientRect((HWND)m_realparent->GetHWND(), &posRect);
-
     m_oleObjectHWND = 0;
 
     if (m_oleInPlaceObject.Ok())
@@ -1032,9 +1029,14 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
 
     if (! (dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME))
     {
+        RECT posRect;
+        wxCopyRectToRECT(m_realparent->GetClientSize(), posRect);
+
         if (posRect.right > 0 && posRect.bottom > 0 &&
             m_oleInPlaceObject.Ok())
-                m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
+        {
+            m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
+        }
 
         hret = m_oleObject->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL,
             m_clientSite, 0, (HWND)m_realparent->GetHWND(), &posRect);
