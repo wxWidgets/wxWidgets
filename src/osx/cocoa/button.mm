@@ -142,12 +142,12 @@ wxSize wxButton::GetDefaultSize()
     }
 }
 
-- (void)setImplementation: (wxWidgetImpl *) theImplementation
+- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
 {
     impl = theImplementation;
 }
 
-- (wxWidgetImpl*) implementation
+- (wxWidgetCocoaImpl*) implementation
 {
     return impl;
 }

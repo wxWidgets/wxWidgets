@@ -26,58 +26,8 @@
 #endif
 
 #ifdef __OBJC__
-
     #import <Cocoa/Cocoa.h>
-
-    #if wxUSE_GUI
-
-    extern NSRect wxToNSRect( NSView* parent, const wxRect& r );
-    extern wxRect wxFromNSRect( NSView* parent, const NSRect& rect );
-    extern NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );
-    extern wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p );
-    
-    // used for many wxControls
-    
-    @interface wxNSButton : NSButton
-    {
-        wxWidgetImpl* impl;
-    }
-
-    - (void)setImplementation: (wxWidgetImpl *) theImplementation;
-    - (wxWidgetImpl*) implementation;
-    - (BOOL) isFlipped;
-    - (void) clickedAction: (id) sender;
-
-    @end
-
-    @interface wxNSBox : NSBox
-    {
-        wxWidgetImpl* impl;
-    }
-
-    - (void)setImplementation: (wxWidgetImpl *) theImplementation;
-    - (wxWidgetImpl*) implementation;
-    - (BOOL) isFlipped;
-
-    @end
-
-    @interface wxNSTextField : NSTextField
-    {
-        wxWidgetImpl* impl;
-    }
-
-    - (void)setImplementation: (wxWidgetImpl *) theImplementation;
-    - (wxWidgetImpl*) implementation;
-    - (BOOL) isFlipped;
-
-    @end
-
-    NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
-        bool adjustForOrigin = true );
-        
-    #endif // wxUSE_GUI
-
-#endif // __OBJC__
+#endif
 
 //
 // shared between Cocoa and Carbon
@@ -166,6 +116,9 @@ public :
     void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
 
     void                InstallEventHandler( WXWidget control = NULL );
+    
+    virtual void        DoHandleMouseEvent(NSEvent *event); 
+
 protected:
     WXWidget m_osxView;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)
@@ -229,6 +182,94 @@ protected :
     void *              m_macFullScreenData ;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl)
 };    
+
+#ifdef __OBJC__
+
+    extern NSRect wxToNSRect( NSView* parent, const wxRect& r );
+    extern wxRect wxFromNSRect( NSView* parent, const NSRect& rect );
+    extern NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );
+    extern wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p );
+    
+    // used for many wxControls
+    
+    @interface wxNSButton : NSButton
+    {
+        wxWidgetCocoaImpl* impl;
+    }
+
+    - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
+    - (wxWidgetCocoaImpl*) implementation;
+    - (BOOL) isFlipped;
+    - (void) clickedAction: (id) sender;
+
+    @end
+
+    @interface wxNSBox : NSBox
+    {
+        wxWidgetCocoaImpl* impl;
+    }
+
+    - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
+    - (wxWidgetCocoaImpl*) implementation;
+    - (BOOL) isFlipped;
+
+    @end
+
+    @interface wxNSTextField : NSTextField
+    {
+        wxWidgetCocoaImpl* impl;
+    }
+
+    - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
+    - (wxWidgetCocoaImpl*) implementation;
+    - (BOOL) isFlipped;
+
+    @end
+
+    NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
+        bool adjustForOrigin = true );
+        
+    // common code snippets for cocoa implementations
+    // later to be done using injection in method table
+        
+    #define WXCOCOAIMPL_COMMON_MOUSE_INTERFACE -(void)mouseDown:(NSEvent *)event ;\
+        -(void)rightMouseDown:(NSEvent *)event ;\
+        -(void)otherMouseDown:(NSEvent *)event ;\
+        -(void)mouseUp:(NSEvent *)event ;\
+        -(void)rightMouseUp:(NSEvent *)event ;\
+        -(void)otherMouseUp:(NSEvent *)event ;\
+        -(void)handleMouseEvent:(NSEvent *)event;
+
+    #define WXCOCOAIMPL_COMMON_MOUSE_IMPLEMENTATION -(void)mouseDown:(NSEvent *)event \
+        {\
+            [self handleMouseEvent:event];\
+        }\
+        -(void)rightMouseDown:(NSEvent *)event\
+        {\
+            [self handleMouseEvent:event];\
+        }\
+        -(void)otherMouseDown:(NSEvent *)event\
+        {\
+            [self handleMouseEvent:event];\
+        }\
+        -(void)mouseUp:(NSEvent *)event\
+        {\
+            [self handleMouseEvent:event];\
+        }\
+        -(void)rightMouseUp:(NSEvent *)event\
+        {\
+            [self handleMouseEvent:event];\
+        }\
+        -(void)otherMouseUp:(NSEvent *)event\
+        {\
+            [self handleMouseEvent:event];\
+        }\
+        -(void)handleMouseEvent:(NSEvent *)event\
+        {\
+            impl->DoHandleMouseEvent(event);\
+        }
+        
+#endif // __OBJC__
 
 // NSCursor
 

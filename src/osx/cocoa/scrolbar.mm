@@ -23,11 +23,11 @@
 
 @interface wxNSScroller : NSScroller
 {
-    wxWidgetImpl* impl;
+    wxWidgetCocoaImpl* impl;
 }
 
-- (void)setImplementation: (wxWidgetImpl *) theImplementation;
-- (wxWidgetImpl*) implementation;
+- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
+- (wxWidgetCocoaImpl*) implementation;
 - (BOOL) isFlipped;
  - (void) clickedAction: (id) sender;
 
@@ -54,12 +54,12 @@
     }
 }
 
-- (void)setImplementation: (wxWidgetImpl *) theImplementation
+- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
 {
     impl = theImplementation;
 }
 
-- (wxWidgetImpl*) implementation
+- (wxWidgetCocoaImpl*) implementation
 {
     return impl ;
 }

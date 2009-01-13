@@ -33,8 +33,20 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
+
+    // trying to get as close as possible to flags
+    if ( style & wxBORDER_NONE )
+    {
+        [v setBezelStyle:NSShadowlessSquareBezelStyle];
+    }
+    else
+    {
+        if ( style & wxBU_AUTODRAW )
+            [v setBezelStyle:NSShadowlessSquareBezelStyle];
+        else
+            [v setBezelStyle:NSRegularSquareBezelStyle];
+    }
     
-    [v setBezelStyle:NSRegularSquareBezelStyle];
     [v setImage:bitmap.GetNSImage() ];
     [v setButtonType:NSMomentaryPushInButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );

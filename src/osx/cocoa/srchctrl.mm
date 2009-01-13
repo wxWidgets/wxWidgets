@@ -31,7 +31,7 @@
 
 @interface wxNSSearchField : NSSearchField
 {
-    wxWidgetImpl* impl;
+    wxWidgetCocoaImpl* impl;
 }
 
 @end
@@ -47,12 +47,12 @@
     return self;
 }
 
-- (void)setImplementation: (wxWidgetImpl *) theImplementation
+- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
 {
     impl = theImplementation;
 }
 
-- (wxWidgetImpl*) implementation
+- (wxWidgetCocoaImpl*) implementation
 {
     return impl;
 }

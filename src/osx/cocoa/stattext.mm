@@ -29,53 +29,35 @@
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-    Point bounds;
-#if wxOSX_USE_CARBON
-    Rect bestsize = { 0 , 0 , 0 , 0 } ;
+Point bounds;
 
-    // try the built-in best size if available
-    Boolean former = m_peer->GetData<Boolean>( kControlStaticTextIsMultilineTag);
-    m_peer->SetData( kControlStaticTextIsMultilineTag, (Boolean)0 );
-    m_peer->GetBestRect( &bestsize ) ;
-    m_peer->SetData( kControlStaticTextIsMultilineTag, former );
-    if ( !EmptyRect( &bestsize ) )
+#if wxOSX_USE_ATSU_TEXT
+    OSStatus err = noErr;
+    wxCFStringRef str( m_label,  GetFont().GetEncoding() );
+
+    SInt16 baseline;
+    if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
     {
-        bounds.h = bestsize.right - bestsize.left ;
-        bounds.v = bestsize.bottom - bestsize.top ;
+        err = GetThemeTextDimensions(
+            (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
+            m_font.MacGetThemeFontID(), kThemeStateActive, false, &bounds, &baseline );
+        verify_noerr( err );
     }
     else
 #endif
     {
-#if wxOSX_USE_CARBON
-        ControlFontStyleRec controlFont;
-        OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
-        verify_noerr( err );
-
-        wxCFStringRef str( m_label,  GetFont().GetEncoding() );
-
-#if wxOSX_USE_ATSU_TEXT
-        SInt16 baseline;
-        if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
-        {
-            err = GetThemeTextDimensions(
-                (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
-                m_font.MacGetThemeFontID(), kThemeStateActive, false, &bounds, &baseline );
-            verify_noerr( err );
-        }
-        else
-#endif
-#endif
-        {
-            wxClientDC dc(const_cast<wxStaticText*>(this));
-            wxCoord width, height ;
-            dc.GetTextExtent( m_label , &width, &height);
-            bounds.h = width;
-            bounds.v = height;
-        }
-
-        if ( m_label.empty() )
-            bounds.h = 0;
+        wxClientDC dc(const_cast<wxStaticText*>(this));
+        wxCoord width, height ;
+        dc.GetTextExtent( m_label , &width, &height);
+        // Some labels seem to have their last characters
+        // stripped out.  Adding 4 pixels seems to be enough to fix this.
+        bounds.h = width+4;
+        bounds.v = height;
     }
+
+    if ( m_label.empty() )
+        bounds.h = 0;
+
     bounds.h += MacGetLeftBorderSize() + MacGetRightBorderSize();
     bounds.v += MacGetTopBorderSize() + MacGetBottomBorderSize();
 

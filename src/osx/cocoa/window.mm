@@ -32,26 +32,20 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 @interface wxNSView : NSView
 {
-    wxWidgetImpl* impl;
+    wxWidgetCocoaImpl* impl;
 }
 
 - (void)drawRect: (NSRect) rect;
 
--(void)mouseDown:(NSEvent *)event ;
--(void)rightMouseDown:(NSEvent *)event ;
--(void)otherMouseDown:(NSEvent *)event ;
--(void)mouseUp:(NSEvent *)event ;
--(void)rightMouseUp:(NSEvent *)event ;
--(void)otherMouseUp:(NSEvent *)event ;
--(void)handleMouseEvent:(NSEvent *)event;
+WXCOCOAIMPL_COMMON_MOUSE_INTERFACE
 
 - (void)keyDown:(NSEvent *)event;
 - (void)keyUp:(NSEvent *)event;
 - (void)flagsChanged:(NSEvent *)event;
 - (void)handleKeyEvent:(NSEvent *)event;
 
-- (void)setImplementation: (wxWidgetImpl *) theImplementation;
-- (wxWidgetImpl*) implementation;
+- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
+- (wxWidgetCocoaImpl*) implementation;
 - (BOOL) isFlipped;
 - (BOOL) becomeFirstResponder;
 - (BOOL) resignFirstResponder;
@@ -348,47 +342,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     }
 }
 
--(void)mouseDown:(NSEvent *)event 
-{
-    [self handleMouseEvent:event];
-}
-
--(void)rightMouseDown:(NSEvent *)event 
-{
-    [self handleMouseEvent:event];
-}
-
--(void)otherMouseDown:(NSEvent *)event 
-{
-    [self handleMouseEvent:event];
-}
-
--(void)mouseUp:(NSEvent *)event 
-{
-    [self handleMouseEvent:event];
-}
-
--(void)rightMouseUp:(NSEvent *)event 
-{
-    [self handleMouseEvent:event];
-}
-
--(void)otherMouseUp:(NSEvent *)event 
-{
-    [self handleMouseEvent:event];
-}
-
--(void)handleMouseEvent:(NSEvent *)event 
-{ 
-    NSPoint clickLocation; 
-    clickLocation = [self convertPoint:[event locationInWindow] fromView:nil]; 
-    wxPoint pt = wxFromNSPoint( self, clickLocation );
-    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-    SetupMouseEvent( wxevent , event ) ;
-    wxevent.m_x = pt.x;
-    wxevent.m_y = pt.y;
-    impl->GetWXPeer()->HandleWindowEvent(wxevent);
-}
+WXCOCOAIMPL_COMMON_MOUSE_IMPLEMENTATION
 
 - (void)keyDown:(NSEvent *)event
 {
@@ -413,12 +367,12 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 }
 
 
-- (void)setImplementation: (wxWidgetImpl *) theImplementation
+- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
 {
     impl = theImplementation;
 }
 
-- (wxWidgetImpl*) implementation
+- (wxWidgetCocoaImpl*) implementation
 {
     return impl;
 }
@@ -721,6 +675,19 @@ void wxWidgetCocoaImpl::SetFont(wxFont const&, wxColour const&, long, bool)
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 {
 }
+
+void wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
+{
+    NSPoint clickLocation; 
+    clickLocation = [m_osxView convertPoint:[event locationInWindow] fromView:nil]; 
+    wxPoint pt = wxFromNSPoint( m_osxView, clickLocation );
+    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+    SetupMouseEvent( wxevent , event ) ;
+    wxevent.m_x = pt.x;
+    wxevent.m_y = pt.y;
+    GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
 
 //
 // Factory methods
