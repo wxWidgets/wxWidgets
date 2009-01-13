@@ -234,7 +234,8 @@ bool wxIFFDecoder::CanRead()
     if ( !m_f->Read(buf, WXSIZEOF(buf)) )
         return false;
 
-    m_f->SeekI(-(wxFileOffset)WXSIZEOF(buf), wxFromCurrent);
+    if ( m_f->SeekI(-(wxFileOffset)WXSIZEOF(buf), wxFromCurrent) == wxInvalidOffset )
+        return false;
 
     return (memcmp(buf, "FORM", 4) == 0) && (memcmp(buf+8, "ILBM", 4) == 0);
 }
@@ -248,13 +249,13 @@ typedef unsigned char byte;
 #define IFFDEBUG 0
 
 /*************************************************************************
-  void decomprle(source, destination, source length, buffer size)
+void decomprle(source, destination, source length, buffer size)
 
-  Decompress run-length encoded data from source to destination. Terminates
-  when source is decoded completely or destination buffer is full.
+Decompress run-length encoded data from source to destination. Terminates
+when source is decoded completely or destination buffer is full.
 
-  The decruncher is as optimized as I could make it, without risking
-  safety in case of corrupt BODY chunks.
+The decruncher is as optimized as I could make it, without risking
+safety in case of corrupt BODY chunks.
 **************************************************************************/
 
 static void decomprle(const byte *sptr, byte *dptr, long slen, long dlen)
@@ -329,20 +330,27 @@ int wxIFFDecoder::ReadIFF()
 
     m_image = new IFFImage();
     if (m_image == 0) {
-    Destroy();
-    return wxIFF_MEMERR;
+        Destroy();
+        return wxIFF_MEMERR;
     }
 
     // compute file length
     wxFileOffset currentPos = m_f->TellI();
-    m_f->SeekI(0, wxFromEnd);
+    if (m_f->SeekI(0, wxFromEnd) == wxInvalidOffset) {
+        Destroy();
+        return wxIFF_MEMERR;
+    }
+
     long filesize = m_f->TellI();
-    m_f->SeekI(currentPos, wxFromStart);
+    if (m_f->SeekI(currentPos, wxFromStart) == wxInvalidOffset) {
+        Destroy();
+        return wxIFF_MEMERR;
+    }
 
     // allocate memory for complete file
     if ((databuf = new byte[filesize]) == 0) {
-    Destroy();
-    return wxIFF_MEMERR;
+        Destroy();
+        return wxIFF_MEMERR;
     }
 
     m_f->Read(databuf, filesize);
@@ -353,22 +361,22 @@ int wxIFFDecoder::ReadIFF()
 
     // check for minmal size
     if (dataptr + 12 > dataend) {
-    Destroy();
-    return wxIFF_INVFORMAT;
+        Destroy();
+        return wxIFF_INVFORMAT;
     }
 
     // check if we really got an IFF file
     if (strncmp((char *)dataptr, "FORM", 4) != 0) {
-    Destroy();
-    return wxIFF_INVFORMAT;
+        Destroy();
+        return wxIFF_INVFORMAT;
     }
 
     dataptr = dataptr + 8;                  // skip ID and length of FORM
 
     // check if the IFF file is an ILBM (picture) file
     if (strncmp((char *) dataptr, "ILBM", 4) != 0) {
-    Destroy();
-    return wxIFF_INVFORMAT;
+        Destroy();
+        return wxIFF_INVFORMAT;
     }
 
     wxLogTrace(_T("iff"), _T("IFF ILBM file recognized"));
@@ -388,7 +396,7 @@ int wxIFFDecoder::ReadIFF()
     // get chunk length and make even
     long chunkLen = (iff_getlong(dataptr + 4) + 1) & 0xfffffffe;
     if (chunkLen < 0) {     // format error?
-         break;
+        break;
     }
     bool truncated = (dataptr + 8 + chunkLen > dataend);
 
@@ -586,36 +594,36 @@ int wxIFFDecoder::ReadIFF()
                 int c = (col & 0x0f);
                 switch (col & 0x30) {
                 case 0x00: if (c >= 0 && c < colors) {
-                           rval = pal[3*c + 0];
-                           gval = pal[3*c + 1];
-                           bval = pal[3*c + 2];
-                       }
-                       break;
+                        rval = pal[3*c + 0];
+                        gval = pal[3*c + 1];
+                        bval = pal[3*c + 2];
+                    }
+                    break;
 
                 case 0x10: bval = c * 17;
-                       break;
+                    break;
 
                 case 0x20: rval = c * 17;
-                       break;
+                    break;
 
                 case 0x30: gval = c * 17;
-                       break;
+                    break;
                 }
             } else if (fmt == ILBM_HAM8) {
                 int c = (col & 0x3f);
                 switch(col & 0xc0) {
                 case 0x00: if (c >= 0 && c < colors) {
-                           rval = pal[3*c + 0];
-                           gval = pal[3*c + 1];
-                           bval = pal[3*c + 2];
-                       }
-                       break;
+                        rval = pal[3*c + 0];
+                        gval = pal[3*c + 1];
+                        bval = pal[3*c + 2];
+                    }
+                    break;
 
                 case 0x40: bval = (bval & 3) | (c << 2);
-                       break;
+                    break;
 
                 case 0x80: rval = (rval & 3) | (c << 2);
-                       break;
+                    break;
 
                 case 0xc0: gval = (rval & 3) | (c << 2);
                 }

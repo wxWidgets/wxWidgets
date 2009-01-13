@@ -487,15 +487,29 @@ size_t wxChmInputStream::OnSysRead(void *buffer, size_t bufsize)
     m_lasterror = wxSTREAM_NO_ERROR;
 
     // If the rest to read from the stream is less
-    // than the buffer size, than only read the rest
+    // than the buffer size, then only read the rest
     if ( m_pos + bufsize > m_size )
         bufsize = m_size - m_pos;
 
-    m_contentStream->SeekI(m_pos);
-    m_contentStream->Read(buffer, bufsize);
-    m_pos +=bufsize;
-    m_contentStream->SeekI(m_pos);
-    return bufsize;
+    if (m_contentStream->SeekI(m_pos) == wxInvalidOffset)
+    {
+        m_lasterror = wxSTREAM_EOF;
+        return 0;
+    }
+
+    size_t read = m_contentStream->Read(buffer, bufsize).LastRead();
+    m_pos += read;
+
+    if (m_contentStream->SeekI(m_pos) == wxInvalidOffset)
+    {
+        m_lasterror = wxSTREAM_READ_ERROR;
+        return 0;
+    }
+
+    if (read != bufsize)
+        m_lasterror = m_contentStream->GetLastError();
+
+    return read;
 }
 
 

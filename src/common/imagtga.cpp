@@ -211,7 +211,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
     }
 
     // Seek from the offset we got from the TGA header.
-    stream.SeekI(offset, wxFromStart);
+    if (stream.SeekI(offset, wxFromStart) == wxInvalidOffset)
+        return wxTGA_INVFORMAT;
 
     // Load a palette if we have one.
     if (colorType == wxTGA_MAPPED)

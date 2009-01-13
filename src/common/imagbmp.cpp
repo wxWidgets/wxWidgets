@@ -640,7 +640,11 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
      * Reading the image data
      */
     if ( IsBmp )
-        stream.SeekI(bmpOffset); // else icon, just carry on
+    {
+        if (stream.SeekI(bmpOffset) == wxInvalidOffset)
+            return false;
+        //else: icon, just carry on
+    }
 
     unsigned char *data = ptr;
 
@@ -1255,7 +1259,8 @@ bool wxICOHandler::SaveFile(wxImage *image,
 bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
 {
-    stream.SeekI(0);
+    if (stream.SeekI(0) == wxInvalidOffset)
+        return false;
     return DoLoadFile(image, stream, verbose, index);
 }
 
@@ -1315,7 +1320,8 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     {
         // seek to selected icon:
         pCurrentEntry = pIconDirEntry + iSel;
-        stream.SeekI(iPos + wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset), wxFromStart);
+        if (stream.SeekI(iPos + wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset), wxFromStart) == wxInvalidOffset)
+            return false;
         bResult = LoadDib(image, stream, true, IsBmp);
         bool bIsCursorType = (this->GetType() == wxBITMAP_TYPE_CUR) || (this->GetType() == wxBITMAP_TYPE_ANI);
         if ( bResult && bIsCursorType && nType == 2 )
@@ -1333,16 +1339,20 @@ int wxICOHandler::GetImageCount(wxInputStream& stream)
 {
     ICONDIR IconDir;
     wxFileOffset iPos = stream.TellI();
-    stream.SeekI(0);
-    stream.Read(&IconDir, sizeof(IconDir));
+    if (stream.SeekI(0) == wxInvalidOffset)
+        return 0;
+    if (stream.Read(&IconDir, sizeof(IconDir)).LastRead() != sizeof(IconDir))
+        return 0;
     wxUint16 nIcons = wxUINT16_SWAP_ON_BE(IconDir.idCount);
-    stream.SeekI(iPos);
+    if (stream.SeekI(iPos) == wxInvalidOffset)
+        return 0;
     return (int)nIcons;
 }
 
 bool wxICOHandler::DoCanRead(wxInputStream& stream)
 {
-    stream.SeekI(0);
+    if (stream.SeekI(0) == wxInvalidOffset)
+        return false;
     unsigned char hdr[4];
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
         return false;
@@ -1364,7 +1374,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxCURHandler, wxICOHandler)
 
 bool wxCURHandler::DoCanRead(wxInputStream& stream)
 {
-    stream.SeekI(0);
+    if (stream.SeekI(0) == wxInvalidOffset)
+        return false;
     unsigned char hdr[4];
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
         return false;

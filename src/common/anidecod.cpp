@@ -127,7 +127,8 @@ bool wxANIDecoder::CanRead(wxInputStream& stream) const
     wxInt32 anih32;
     memcpy( &anih32, "anih", 4 );
 
-    stream.SeekI(0);
+    if ( stream.SeekI(0) == wxInvalidOffset )
+        return false;
     if ( !stream.Read(&FCC1, 4) )
         return false;
 
@@ -154,7 +155,8 @@ bool wxANIDecoder::CanRead(wxInputStream& stream) const
         }
         else
         {
-            stream.SeekI(stream.TellI() + datalen);
+            if ( stream.SeekI(stream.TellI() + datalen) == wxInvalidOffset )
+                return false;
         }
 
         // try to read next data chunk:
@@ -220,8 +222,10 @@ bool wxANIDecoder::Load( wxInputStream& stream )
     wxInt32 seq32;
     memcpy( &seq32, "seq ", 4 );
 
-    stream.SeekI(0);
-    stream.Read(&FCC1, 4);
+    if ( stream.SeekI(0) == wxInvalidOffset)
+        return false;
+    if ( !stream.Read(&FCC1, 4) )
+        return false;
     if ( FCC1 != riff32 )
         return false;
 
@@ -309,11 +313,13 @@ bool wxANIDecoder::Load( wxInputStream& stream )
         }
         else
         {
-            stream.SeekI(stream.TellI() + datalen);
+            if ( stream.SeekI(stream.TellI() + datalen) == wxInvalidOffset )
+                return false;
         }
 
         // try to read next data chunk:
-        stream.Read(&FCC1, 4);
+        if ( !stream.Read(&FCC1, 4) )
+            return false;
     }
 
     if (m_nFrames==0)

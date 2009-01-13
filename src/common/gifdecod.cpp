@@ -580,7 +580,8 @@ bool wxGIFDecoder::CanRead(wxInputStream &stream) const
     if ( !stream.Read(buf, WXSIZEOF(buf)) )
         return false;
 
-    stream.SeekI(-(wxFileOffset)WXSIZEOF(buf), wxFromCurrent);
+    if (stream.SeekI(-(wxFileOffset)WXSIZEOF(buf), wxFromCurrent) == wxInvalidOffset)
+        return false;       // this happens e.g. for non-seekable streams
 
     return memcmp(buf, "GIF", WXSIZEOF(buf)) == 0;
 }
@@ -720,12 +721,12 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             {
                 while ((i = (unsigned char)stream.GetC()) != 0)
                 {
-                    if (stream.Eof() || (stream.LastRead() == 0))
+                    if (stream.Eof() || (stream.LastRead() == 0) ||
+                        stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
                     {
                         done = true;
                         break;
                     }
-                    stream.SeekI(i, wxFromCurrent);
                 }
             }
         }
@@ -834,12 +835,12 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             // skip all data
             while ((i = (unsigned char)stream.GetC()) != 0)
             {
-                if (stream.Eof() || (stream.LastRead() == 0))
+                if (stream.Eof() || (stream.LastRead() == 0) ||
+                    stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
                 {
                     Destroy();
                     return wxGIF_INVFORMAT;
                 }
-                stream.SeekI(i, wxFromCurrent);
             }
         }
         else if (type == 0x2C)
@@ -858,7 +859,11 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             {
                 unsigned int local_ncolors = 2 << (buf[8] & 0x07);
                 wxFileOffset numBytes = 3 * local_ncolors;
-                stream.SeekI(numBytes, wxFromCurrent);
+                if (stream.SeekI(numBytes, wxFromCurrent) == wxInvalidOffset)
+                {
+                    Destroy();
+                    return wxGIF_INVFORMAT;
+                }
             }
 
             // initial code size
@@ -872,12 +877,12 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             // skip all data
             while ((i = (unsigned char)stream.GetC()) != 0)
             {
-                if (stream.Eof() || (stream.LastRead() == 0))
+                if (stream.Eof() || (stream.LastRead() == 0) ||
+                    stream.SeekI(i, wxFromCurrent) == wxInvalidOffset)
                 {
                     Destroy();
                     return wxGIF_INVFORMAT;
                 }
-                stream.SeekI(i, wxFromCurrent);
             }
         }
         else if ((type != 0x3B) && (type != 00)) // testing

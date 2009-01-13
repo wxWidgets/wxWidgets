@@ -122,7 +122,8 @@ bool wxXPMDecoder::CanRead(wxInputStream& stream)
     if ( !stream.Read(buf, WXSIZEOF(buf)) )
         return false;
 
-    stream.SeekI(-(wxFileOffset)WXSIZEOF(buf), wxFromCurrent);
+    if (stream.SeekI(-(wxFileOffset)WXSIZEOF(buf), wxFromCurrent) == wxInvalidOffset)
+        return false;
 
     return memcmp(buf, "/* XPM */", WXSIZEOF(buf)) == 0;
 }
