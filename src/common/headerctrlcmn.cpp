@@ -45,6 +45,8 @@ const unsigned int wxNO_COLUMN = static_cast<unsigned>(-1);
 // wxHeaderColumnsRearrangeDialog: dialog for customizing our columns
 // ----------------------------------------------------------------------------
 
+#if wxUSE_REARRANGECTRL
+
 class wxHeaderColumnsRearrangeDialog : public wxRearrangeDialog
 {
 public:
@@ -62,6 +64,8 @@ public:
     {
     }
 };
+
+#endif // wxUSE_REARRANGECTRL
 
 } // anonymous namespace
 
