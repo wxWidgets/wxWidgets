@@ -990,8 +990,8 @@ typedef pid_t GPid;
 /* Define if you have usleep() */
 #define HAVE_USLEEP 1
 
-/* Define if you have wcslen function  */
-#define HAVE_WCSLEN 1
+/* Define if you have wcslen and wcsnlen function */
+#undef HAVE_WCSLEN
 
 /* Define if you have wcsdup function  */
 #undef HAVE_WCSDUP
