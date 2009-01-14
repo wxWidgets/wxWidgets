@@ -236,10 +236,12 @@ bool wxANIDecoder::Load( wxInputStream& stream )
     m_info.Clear();
 
     // we have a riff file:
-    while ( stream.IsOk() )
+    while ( !stream.Eof() )
     {
         // we always have a data size:
-        stream.Read(&datalen, 4);
+        if (!stream.Read(&datalen, 4))
+            return false;
+
         datalen = wxINT32_SWAP_ON_BE(datalen);
 
         //data should be padded to make even number of bytes
@@ -248,7 +250,8 @@ bool wxANIDecoder::Load( wxInputStream& stream )
         // now either data or a FCC:
         if ( (FCC1 == riff32) || (FCC1 == list32) )
         {
-            stream.Read(&FCC2, 4);
+            if (!stream.Read(&FCC2, 4))
+                return false;
         }
         else if ( FCC1 == anih32 )
         {
@@ -259,7 +262,8 @@ bool wxANIDecoder::Load( wxInputStream& stream )
                 return false;       // already parsed an ani header?
 
             struct wxANIHeader header;
-            stream.Read(&header, sizeof(wxANIHeader));
+            if (!stream.Read(&header, sizeof(wxANIHeader)))
+                return false;
             header.AdjustEndianness();
 
             // we should have a global frame size
@@ -284,7 +288,8 @@ bool wxANIDecoder::Load( wxInputStream& stream )
             wxASSERT(m_info.GetCount() == m_nFrames);
             for (unsigned int i=0; i<m_nFrames; i++)
             {
-                stream.Read(&FCC2, 4);
+                if (!stream.Read(&FCC2, 4))
+                    return false;
                 m_info[i].m_delay = wxINT32_SWAP_ON_BE(FCC2) * 1000 / 60;
             }
         }
@@ -297,7 +302,8 @@ bool wxANIDecoder::Load( wxInputStream& stream )
             wxASSERT(m_info.GetCount() == m_nFrames);
             for (unsigned int i=0; i<m_nFrames; i++)
             {
-                stream.Read(&FCC2, 4);
+                if (!stream.Read(&FCC2, 4))
+                    return false;
                 m_info[i].m_imageIndex = wxINT32_SWAP_ON_BE(FCC2);
             }
         }
@@ -318,8 +324,13 @@ bool wxANIDecoder::Load( wxInputStream& stream )
         }
 
         // try to read next data chunk:
-        if ( !stream.Read(&FCC1, 4) )
+        if ( !stream.Read(&FCC1, 4) && !stream.Eof())
+        {
+            // we didn't reach the EOF! An other kind of error has occurred...
             return false;
+        }
+        //else: proceed with the parsing of the next header block or
+        //      exiting this loop (if stream.Eof() == true)
     }
 
     if (m_nFrames==0)
