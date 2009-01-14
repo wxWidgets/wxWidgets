@@ -18,6 +18,8 @@
 
 class WXDLLIMPEXP_FWD_BASE wxStackFrame;
 
+#define wxSTACKWALKER_MAX_DEPTH       (200)
+
 // ----------------------------------------------------------------------------
 // wxStackFrame: a single stack level
 // ----------------------------------------------------------------------------
@@ -130,13 +132,13 @@ public:
     // number of them (this can be useful when Walk() is called from some known
     // location and you don't want to see the first few frames anyhow; also
     // notice that Walk() frame itself is not included if skip >= 1)
-    virtual void Walk(size_t skip = 1, size_t maxDepth = 200) = 0;
+    virtual void Walk(size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) = 0;
 
 #if wxUSE_ON_FATAL_EXCEPTION
     // enumerate stack frames from the location of uncaught exception
     //
     // this version can only be called from wxApp::OnFatalException()
-    virtual void WalkFromException(size_t maxDepth = 200) = 0;
+    virtual void WalkFromException(size_t maxDepth = wxSTACKWALKER_MAX_DEPTH) = 0;
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
 protected:
