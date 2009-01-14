@@ -94,6 +94,11 @@ typedef int wxEventType;
 // generate a new unique event type
 extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
+// FIXME: currently the new events code is disabled because it creates too
+//        many problems, it should be reenabled a.s.a.p. or removed
+#undef wxEVENTS_COMPATIBILITY_2_8
+#define wxEVENTS_COMPATIBILITY_2_8 1
+
 // macros to create an event type depending on whether type safe events are
 // enabled.
 
