@@ -21,19 +21,6 @@
 
 #include "wx/osx/private.h"
 
-@interface wxNSMenuItem : NSMenuItem
-{
-   wxMenuItemImpl* impl;
-}
-
-- (void) setImplementation:(wxMenuItemImpl*) item;
-- (wxMenuItemImpl*) implementation;
-
-- (void) clickedAction: (id) sender;
-- (BOOL)validateMenuItem:(NSMenuItem *) menuItem;
-
-@end 
-
 @implementation wxNSMenuItem
 
 - (id) init

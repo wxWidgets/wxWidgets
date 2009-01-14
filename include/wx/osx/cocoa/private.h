@@ -118,11 +118,14 @@ public :
     void                InstallEventHandler( WXWidget control = NULL );
     
     virtual bool        DoHandleMouseEvent(NSEvent *event); 
+    virtual bool        DoHandleKeyEvent(NSEvent *event); 
 
 protected:
     WXWidget m_osxView;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)
 };
+
+DECLARE_WXCOCOA_OBJC_CLASS( wxNSWindow );
 
 class wxNonOwnedWindowCocoaImpl : public wxNonOwnedWindowImpl
 {
@@ -178,7 +181,7 @@ public :
     
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
 protected :
-    WX_NSWindow          m_macWindow;
+    WX_wxNSWindow         m_macWindow;
     void *              m_macFullScreenData ;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl)
 };    
@@ -202,6 +205,9 @@ protected :
         -(void)mouseUp:(NSEvent *)event ;\
         -(void)rightMouseUp:(NSEvent *)event ;\
         -(void)otherMouseUp:(NSEvent *)event ;\
+        - (void)keyDown:(NSEvent *)event;\
+        - (void)keyUp:(NSEvent *)event;\
+        - (void)flagsChanged:(NSEvent *)event;\
 
     #define WXCOCOAIMPL_COMMON_MOUSE_IMPLEMENTATION -(void)mouseDown:(NSEvent *)event \
         {\
@@ -232,6 +238,21 @@ protected :
         {\
             if ( !impl->DoHandleMouseEvent(event) )\
                 [super otherMouseUp:event];\
+        }\
+        -(void)keyDown:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleKeyEvent(event) )\
+                [super keyDown:event];\
+        }\
+        -(void)keyUp:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleKeyEvent(event) )\
+                [super keyUp:event];\
+        }\
+        -(void)flagsChanged:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleKeyEvent(event) )\
+                [super flagsChanged:event];\
         }
         
     #define WXCOCOAIMPL_COMMON_MEMBERS wxWidgetCocoaImpl* impl;
@@ -286,6 +307,28 @@ protected :
     
     @end
 
+    @interface wxNSMenu : NSMenu
+    {
+       wxMenuImpl* impl;
+    }
+
+    - (void) setImplementation:(wxMenuImpl*) item;
+    - (wxMenuImpl*) implementation;
+
+    @end 
+
+    @interface wxNSMenuItem : NSMenuItem
+    {
+       wxMenuItemImpl* impl;
+    }
+
+    - (void) setImplementation:(wxMenuItemImpl*) item;
+    - (wxMenuItemImpl*) implementation;
+
+    - (void)clickedAction:(id)sender;
+    - (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
+
+    @end 
 
 #endif // __OBJC__
 

@@ -18,20 +18,7 @@
 
 @implementation wxNSBox
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (BOOL) isFlipped
-{
-    return NO;
-}
+WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 @end
 

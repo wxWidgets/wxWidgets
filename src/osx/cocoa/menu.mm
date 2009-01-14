@@ -34,18 +34,6 @@
 // ----------------------
 #include <string.h>
 
-@class wxNSMenuItem;
-
-@interface wxNSMenu : NSMenu
-{
-   wxMenuImpl* impl;
-}
-
-- (void) setImplementation:(wxMenuImpl*) item;
-- (wxMenuImpl*) implementation;
-
-@end 
-
 @implementation wxNSMenu
 
 - (id) init
@@ -127,6 +115,10 @@
 }
 
 @end
+
+@interface NSApplication(MissingAppleMenuCall) 
+- (void)setAppleMenu:(NSMenu *)menu; 
+@end 
 
 class wxMenuCocoaImpl : public wxMenuImpl 
 {

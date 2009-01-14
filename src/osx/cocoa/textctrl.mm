@@ -53,12 +53,64 @@
 
 WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
+- (id)initWithFrame:(NSRect)frame
+{
+    [super initWithFrame:frame];
+    impl = NULL;
+    [self setDelegate: self];
+    [self setTarget: self];
+//    [self setAction: @selector(enterAction:)];
+    return self;
+}
+
 // use our common calls
 - (void) setTitle:(NSString *) title
 {
     [self setStringValue: title];
 }
+/*
+- (void)controlTextDidChange:(NSNotification *)aNotification
+{
+    if ( impl )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer ) {
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
+            event.SetEventObject( wxpeer );
+            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+            wxpeer->HandleWindowEvent( event );
+        }
+    }
+}
 
+- (void)controlTextDidEndEditing:(NSNotification *)aNotification
+{
+    if ( impl )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer ) {
+            wxFocusEvent event(wxEVT_KILL_FOCUS, wxpeer->GetId());
+            event.SetEventObject( wxpeer );
+            event.SetWindow( wxpeer );
+            wxpeer->HandleWindowEvent( event );
+        }
+    }
+}
+
+- (void) enterAction: (id) sender
+{
+    if ( impl )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) ) {
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
+            event.SetEventObject( wxpeer );
+            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+            wxpeer->HandleWindowEvent( event );
+        }
+    }
+}
+*/
 @end
 
 wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)

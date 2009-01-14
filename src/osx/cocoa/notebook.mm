@@ -62,7 +62,7 @@ WXCOCOAIMPL_COMMON_INTERFACE
     wxWidgetCocoaImpl* viewimpl = [view implementation];
     if ( viewimpl )
     {
-        wxNotebook* wxpeer = (wxNotebook*) viewimpl->GetWXPeer();
+        // wxNotebook* wxpeer = (wxNotebook*) viewimpl->GetWXPeer();
     }
     return YES;
 }

@@ -41,8 +41,8 @@ class wxListWidgetCocoaImpl;
         objectValueForTableColumn:(NSTableColumn *)aTableColumn 
         row:(NSInteger)rowIndex;
 
-- (id)tableView:(NSTableView *)aTableView 
-        setObjectValue:(NSTableColumn *)aTableColumn 
+- (void)tableView:(NSTableView *)aTableView 
+        setObjectValue:(id)value forTableColumn:(NSTableColumn *)aTableColumn 
         row:(NSInteger)rowIndex;
         
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;

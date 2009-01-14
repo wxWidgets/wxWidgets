@@ -37,11 +37,6 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (void)drawRect: (NSRect) rect;
 
-- (void)keyDown:(NSEvent *)event;
-- (void)keyUp:(NSEvent *)event;
-- (void)flagsChanged:(NSEvent *)event;
-- (void)handleKeyEvent:(NSEvent *)event;
-
 WXCOCOAIMPL_COMMON_INTERFACE
 
 - (BOOL) becomeFirstResponder;
@@ -49,6 +44,26 @@ WXCOCOAIMPL_COMMON_INTERFACE
 - (BOOL) canBecomeKeyView;
 
 @end // wxNSView
+
+@interface NSView(PossibleMethods) 
+- (void)setImplementation:(wxWidgetCocoaImpl *)theImplementation;
+- (void)setTitle:(NSString *)aString;
+- (void)setStringValue:(NSString *)aString;
+- (void)setIntValue:(int)anInt;
+- (void)setFloatValue:(float)aFloat;
+- (void)setDoubleValue:(double)aDouble;
+
+- (void)setMinValue:(double)aDouble;
+- (void)setMaxValue:(double)aDouble;
+
+- (void)sizeToFit;
+
+- (BOOL)isEnabled;
+- (void)setEnabled:(BOOL)flag;
+
+- (void)setImage:(NSImage *)image;
+- (void)setControlSize:(NSControlSize)size;
+@end 
 
 long wxOSXTranslateCocoaKey(unsigned short code, int unichar )
 {
@@ -155,7 +170,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     // these parameters are not given for all events
     UInt32 button = [nsEvent buttonNumber];
     UInt32 clickCount = [nsEvent clickCount];
-    UInt32 mouseChord = 0; // TODO does this exist for cocoa
 
     wxevent.m_x = screenMouseLocation.x;
     wxevent.m_y = screenMouseLocation.y;
@@ -166,6 +180,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     wxevent.m_clickCount = clickCount;
     wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
 /*
+    UInt32 mouseChord = 0; // TODO does this exist for cocoa
     // a control click is interpreted as a right click
     bool thisButtonIsFakeRight = false ;
     if ( button == kEventMouseButtonPrimary && (modifiers & controlKey) )
@@ -340,28 +355,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 }
 
 WXCOCOAIMPL_COMMON_IMPLEMENTATION
-
-- (void)keyDown:(NSEvent *)event
-{
-    [self handleKeyEvent:event];
-}
-
-- (void)keyUp:(NSEvent *)event
-{
-    [self handleKeyEvent:event];
-}
-
-- (void)flagsChanged:(NSEvent *)event
-{
-    [self handleKeyEvent:event];
-}
-
-- (void)handleKeyEvent:(NSEvent *)event
-{
-    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
-    SetupKeyEvent( wxevent, event );
-    impl->GetWXPeer()->HandleWindowEvent(wxevent);
-}
 
 - (BOOL) becomeFirstResponder
 {
@@ -655,6 +648,13 @@ void wxWidgetCocoaImpl::SetFont(wxFont const&, wxColour const&, long, bool)
 
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 {
+}
+
+bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
+{
+    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+    SetupKeyEvent( wxevent, event );
+    return GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
 bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
