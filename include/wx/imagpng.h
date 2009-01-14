@@ -22,6 +22,11 @@
 
 #define wxIMAGE_OPTION_PNG_FORMAT    wxT("PngFormat")
 #define wxIMAGE_OPTION_PNG_BITDEPTH  wxT("PngBitDepth")
+#define wxIMAGE_OPTION_PNG_FILTER    wxT("PngF")
+#define wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL       wxT("PngZL")
+#define wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL   wxT("PngZM")
+#define wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY    wxT("PngZS")
+#define wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE wxT("PngZB")
 
 enum
 {

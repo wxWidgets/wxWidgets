@@ -783,16 +783,16 @@ public:
         Gets a user-defined string-valued option.
 
         Currently the only defined string option is
-        @li wxIMAGE_OPTION_FILENAME: The name of the file from which the image
+        @li @c wxIMAGE_OPTION_FILENAME: The name of the file from which the image
             was loaded.
-
-        @see SetOption(), GetOptionInt(), HasOption()
 
         @param name
             The name of the option, case-insensitive.
         @return
             The value of the option or an empty string if not found. Use
             HasOption() if an empty string can be a valid option value.
+
+        @see SetOption(), GetOptionInt(), HasOption()
     */
     wxString GetOption(const wxString& name) const;
 
@@ -804,7 +804,7 @@ public:
         Use HasOption() is 0 is a possibly valid value for the option.
 
         Generic options:
-        @li wxIMAGE_OPTION_MAX_WIDTH and wxIMAGE_OPTION_MAX_HEIGHT: If either
+        @li @c wxIMAGE_OPTION_MAX_WIDTH and @c wxIMAGE_OPTION_MAX_HEIGHT: If either
             of these options is specified, the loaded image will be scaled down
             (preserving its aspect ratio) so that its width is less than the
             max width given if it is not 0 @em and its height is less than the
@@ -817,18 +817,18 @@ public:
             handler, this is still what happens however). These options must be
             set before calling LoadFile() to have any effect.
 
-        @li wxIMAGE_OPTION_QUALITY: JPEG quality used when saving. This is an
+        @li @c wxIMAGE_OPTION_QUALITY: JPEG quality used when saving. This is an
             integer in 0..100 range with 0 meaning very poor and 100 excellent
             (but very badly compressed). This option is currently ignored for
             the other formats.
 
-        @li wxIMAGE_OPTION_RESOLUTIONUNIT: The value of this option determines
+        @li @c wxIMAGE_OPTION_RESOLUTIONUNIT: The value of this option determines
             whether the resolution of the image is specified in centimetres or
             inches, see wxImageResolution enum elements.
 
-        @li wxIMAGE_OPTION_RESOLUTION, wxIMAGE_OPTION_RESOLUTIONX and
-            wxIMAGE_OPTION_RESOLUTIONY: These options define the resolution of
-            the image in the units corresponding to wxIMAGE_OPTION_RESOLUTIONUNIT
+        @li @c wxIMAGE_OPTION_RESOLUTION, @c wxIMAGE_OPTION_RESOLUTIONX and
+            @c wxIMAGE_OPTION_RESOLUTIONY: These options define the resolution of
+            the image in the units corresponding to @c wxIMAGE_OPTION_RESOLUTIONUNIT
             options value. The first option can be set before saving the image
             to set both horizontal and vertical resolution to the same value.
             The X and Y options are set by the image handlers if they support
@@ -837,17 +837,36 @@ public:
             after loading the image.
 
         Options specific to wxPNGHandler:
-        @li wxIMAGE_OPTION_PNG_FORMAT: Format for saving a PNG file, see
+        @li @c wxIMAGE_OPTION_PNG_FORMAT: Format for saving a PNG file, see
             wxImagePNGType for the supported values.
-        @li wxIMAGE_OPTION_PNG_BITDEPTH: Bit depth for every channel (R/G/B/A).
-
-        @see SetOption(), GetOption()
+        @li @c wxIMAGE_OPTION_PNG_BITDEPTH: Bit depth for every channel (R/G/B/A).
+        @li @c wxIMAGE_OPTION_PNG_FILTER: Filter for saving a PNG file, see libpng
+            (http://www.libpng.org/pub/png/libpng-1.2.5-manual.html) for possible values
+            (e.g. PNG_FILTER_NONE, PNG_FILTER_SUB, PNG_FILTER_UP, etc).
+        @li @c wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL: Compression level (0..9) for
+            saving a PNG file. An high value creates smaller-but-slower PNG file.
+            Note that unlike other formats (e.g. JPEG) the PNG format is always
+            lossless and thus this compression level doesn't tradeoff the image
+            quality.
+        @li @c wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL: Compression memory usage
+            level (1..9) for saving a PNG file. An high value means the saving
+            process consumes more memory, but may create smaller PNG file.
+        @li @c wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY: Possible values are 0 for
+            default strategy, 1 for filter, and 2 for Huffman-only.
+            You can use OptiPNG (http://optipng.sourceforge.net/) to get a suitable
+            value for your application.
+        @li @c wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE: Internal buffer size
+            (in bytes) for saving a PNG file. Ideally this should be as big as
+            the resulting PNG file. Use this option if your application produces
+            images with small size variation.
 
         @param name
             The name of the option, case-insensitive.
         @return
-            The value of the option or 0 if not found. Use HasOption() if 0
-            can be a valid option value.
+            The value of the option or 0 if not found.
+            Use HasOption() if 0 can be a valid option value.
+
+        @see SetOption(), GetOption()
     */
     int GetOptionInt(const wxString& name) const;
 
@@ -922,6 +941,9 @@ public:
     /**
         Returns @true if the given option is present.
         The function is case-insensitive to @a name.
+
+        The lists of the currently supported options are in GetOption() and
+        GetOptionInt() function docs.
 
         @see SetOption(), GetOption(), GetOptionInt()
     */
@@ -1372,6 +1394,9 @@ public:
 
         For example, when saving as a JPEG file, the option @b quality is
         used, which is a number between 0 and 100 (0 is terrible, 100 is very good).
+
+        The lists of the currently supported options are in GetOption() and
+        GetOptionInt() function docs.
 
         @see GetOption(), GetOptionInt(), HasOption()
     */

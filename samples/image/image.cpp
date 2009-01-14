@@ -268,6 +268,43 @@ public:
             {
                 image.SetOption(wxIMAGE_OPTION_PNG_FORMAT, pngvalues[sel]);
                 image.SetOption(wxIMAGE_OPTION_PNG_BITDEPTH, sel % 2 ? 16 : 8);
+
+                // these values are taken from OptiPNG with -o3 switch
+                const wxString compressionChoices[] =
+                {
+                    _T("compression = 9, memory = 8, strategy = 0, filter = 0"),
+                    _T("compression = 9, memory = 9, strategy = 0, filter = 0"),
+                    _T("compression = 9, memory = 8, strategy = 1, filter = 0"),
+                    _T("compression = 9, memory = 9, strategy = 1, filter = 0"),
+                    _T("compression = 1, memory = 8, strategy = 2, filter = 0"),
+                    _T("compression = 1, memory = 9, strategy = 2, filter = 0"),
+                    _T("compression = 9, memory = 8, strategy = 0, filter = 5"),
+                    _T("compression = 9, memory = 9, strategy = 0, filter = 5"),
+                    _T("compression = 9, memory = 8, strategy = 1, filter = 5"),
+                    _T("compression = 9, memory = 9, strategy = 1, filter = 5"),
+                    _T("compression = 1, memory = 8, strategy = 2, filter = 5"),
+                    _T("compression = 1, memory = 9, strategy = 2, filter = 5"),
+                };
+
+                int sel = wxGetSingleChoiceIndex(_T("Select compression option (Cancel to use default)\n"),
+                                                 _T("PNG Compression Options"),
+                                                 WXSIZEOF(compressionChoices),
+                                                 compressionChoices,
+                                                 this);
+                if (sel != -1)
+                {
+                    const int zc[] = {9, 9, 9, 9, 1, 1, 9, 9, 9, 9, 1, 1};
+                    const int zm[] = {8, 9, 8, 9, 8, 9, 8, 9, 8, 9, 8, 9};
+                    const int zs[] = {0, 0, 1, 1, 2, 2, 0, 0, 1, 1, 2, 2};
+                    const int f[]  = {0x08, 0x08, 0x08, 0x08, 0x08, 0x08,
+                                      0xF8, 0xF8, 0xF8, 0xF8, 0xF8, 0xF8};
+
+                    image.SetOption(wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL      , zc[sel]);
+                    image.SetOption(wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL  , zm[sel]);
+                    image.SetOption(wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY   , zs[sel]);
+                    image.SetOption(wxIMAGE_OPTION_PNG_FILTER                 , f[sel]);
+                    image.SetOption(wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE, 1048576); // 1 MB
+                }
             }
         }
         else if ( extension == _T("cur") )

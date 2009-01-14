@@ -710,6 +710,21 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                                   : PNG_COLOR_TYPE_GRAY;
     }
 
+    if (image->HasOption(wxIMAGE_OPTION_PNG_FILTER))
+        png_set_filter( png_ptr, PNG_FILTER_TYPE_BASE, image->GetOptionInt(wxIMAGE_OPTION_PNG_FILTER) );
+
+    if (image->HasOption(wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL))
+        png_set_compression_level( png_ptr, image->GetOptionInt(wxIMAGE_OPTION_PNG_COMPRESSION_LEVEL) );
+
+    if (image->HasOption(wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL))
+        png_set_compression_mem_level( png_ptr, image->GetOptionInt(wxIMAGE_OPTION_PNG_COMPRESSION_MEM_LEVEL) );
+
+    if (image->HasOption(wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY))
+        png_set_compression_strategy( png_ptr, image->GetOptionInt(wxIMAGE_OPTION_PNG_COMPRESSION_STRATEGY) );
+
+    if (image->HasOption(wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE))
+        png_set_compression_buffer_size( png_ptr, image->GetOptionInt(wxIMAGE_OPTION_PNG_COMPRESSION_BUFFER_SIZE) );
+
     png_set_IHDR( png_ptr, info_ptr, image->GetWidth(), image->GetHeight(),
                   iBitDepth, iPngColorType,
                   PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE,
