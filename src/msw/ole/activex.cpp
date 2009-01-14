@@ -833,6 +833,9 @@ wxActiveXContainer::~wxActiveXContainer()
     // m_clientSite uses m_frameSite so destroy it first
     m_clientSite.Free();
     delete m_frameSite;
+
+    // our window doesn't belong to us, don't destroy it
+    m_hWnd = NULL;
 }
 
 // VZ: we might want to really report an error instead of just asserting here
