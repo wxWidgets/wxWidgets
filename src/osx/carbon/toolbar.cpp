@@ -1108,10 +1108,18 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
             bResult = true;
 
             SetWindowToolbar( tlw, (HIToolbarRef) m_macToolbar );
+            
+            // ShowHideWindowToolbar will make the wxFrame grow
+            // which we don't want in this case
+            wxSize sz = GetParent()->GetSize();
             ShowHideWindowToolbar( tlw, true, false );
+            // Restore the orginal size
+            GetParent()->SetSize( sz );
+            
             ChangeWindowAttributes( tlw, kWindowToolbarButtonAttribute, 0 );
+            
             SetAutomaticControlDragTrackingEnabledForWindow( tlw, true );
-
+    
             m_peer->Move(0,0,0,0 );
             SetSize( wxSIZE_AUTO_WIDTH, 0 );
             m_peer->SetVisibility( false );
@@ -1145,6 +1153,8 @@ bool wxToolBar::Realize()
 {
     if (m_tools.GetCount() == 0)
         return false;
+    
+    wxSize tlw_sz = GetParent()->GetSize();
 
     int maxWidth = 0;
     int maxHeight = 0;
@@ -1353,6 +1363,9 @@ bool wxToolBar::Realize()
         node = node->GetNext();
     }
 
+    if (m_macUsesNativeToolbar)
+        GetParent()->SetSize( tlw_sz );
+    
     if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
     {
         // if not set yet, only one row
