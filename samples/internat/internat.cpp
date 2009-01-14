@@ -97,6 +97,7 @@ static const wxLanguage langIds[] =
 {
     wxLANGUAGE_DEFAULT,
     wxLANGUAGE_FRENCH,
+    wxLANGUAGE_ITALIAN,
     wxLANGUAGE_GERMAN,
     wxLANGUAGE_RUSSIAN,
     wxLANGUAGE_BULGARIAN,
@@ -121,6 +122,7 @@ const wxString langNames[] =
 {
     _T("System default"),
     _T("French"),
+    _T("Italian"),
     _T("German"),
     _T("Russian"),
     _T("Bulgarian"),
