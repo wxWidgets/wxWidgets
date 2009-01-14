@@ -54,15 +54,12 @@ void ScreenshotFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void ScreenshotFrame::OnSeeScreenshots(wxCommandEvent& WXUNUSED(event))
 {
-    wxFileName defaultDir = wxFileName::DirName(GetDefaultDirectory());
-    defaultDir.MakeAbsolute();
+    wxString defaultDir = AutoCaptureMechanism::GetDefaultDirectoryAbsPath();
 
-    // Check if defaultDir already existed
-    if (!defaultDir.DirExists())
-        defaultDir.Mkdir();
-
-    // Use the native file browser to open defaultDir
-    wxLaunchDefaultBrowser(defaultDir.GetFullPath());
+    if (wxFileName::DirExists(defaultDir))
+        wxLaunchDefaultBrowser(defaultDir);
+    else
+        wxMessageBox(_("There isn't any screenshots yet."));
 }
 
 void ScreenshotFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -85,20 +82,18 @@ void ScreenshotFrame::OnCaptureFullScreen(wxCommandEvent& WXUNUSED(event))
     wxCoord screenWidth, screenHeight;
     dcScreen.GetSize(&screenWidth, &screenHeight);
 
-    const wxString fullscreen_filename = GetDefaultDirectoryAbsPath() + _T("fullscreen.png");
-
     wxBitmap fullscreen = AutoCaptureMechanism::Capture(0, 0, screenWidth, screenHeight);
 
-    fullscreen.SaveFile(fullscreen_filename, wxBITMAP_TYPE_PNG);
+    AutoCaptureMechanism::Save(fullscreen, _T("fullscreen"));
 
     wxMessageBox(_("A screenshot of the entire screen was saved as:\n\n  ")
-                + fullscreen_filename,
+                + AutoCaptureMechanism::GetDefaultDirectoryAbsPath() + _T("fullscreen.png"),
                  _("Full screen capture"), wxICON_INFORMATION|wxOK, this);
 }
 
 void ScreenshotFrame::OnCaptureAllControls(wxCommandEvent& WXUNUSED(event))
 {
-    wxString dir = GetDefaultDirectoryAbsPath();
+    wxString dir = AutoCaptureMechanism::GetDefaultDirectoryAbsPath();
 
     // check if there are other screenshots taken before
     if (wxFileName::DirExists(dir))

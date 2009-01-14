@@ -26,20 +26,6 @@ protected:      // event handlers
 
     virtual void OnCaptureFullScreen( wxCommandEvent& event );
     virtual void OnCaptureAllControls( wxCommandEvent& event );
-
-
-private:
-
-    // Before a config class is written, these two functions are placed here.
-    // It's only a transition and they wil be removed soon
-    wxString GetDefaultDirectory() const { return _T("screenshots"); }
-
-    wxString GetDefaultDirectoryAbsPath() const
-    {
-        wxFileName output = wxFileName::DirName(GetDefaultDirectory());
-        output.MakeAbsolute();
-        return output.GetFullPath();
-    }
 };
 
 #endif // _SCREENSHOT_MAIN_H_

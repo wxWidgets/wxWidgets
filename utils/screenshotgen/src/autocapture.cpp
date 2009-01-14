@@ -32,6 +32,9 @@
 // ----------------------------------------------------------------------------
 
 /* static */
+wxString AutoCaptureMechanism::default_dir = _T("screenshots");
+
+/* static */
 void AutoCaptureMechanism::Delay(int seconds)
 {
 	// TODO: Switch this to use wxTimer.
@@ -72,6 +75,8 @@ wxBitmap AutoCaptureMechanism::Capture(int x, int y, int width, int height, int 
     system("rm /tmp/wx_screen_capture.png");
 
 #else // Under other paltforms, take a real screenshot
+
+    wxUnusedVar(delay);
 
     // Create a DC for the whole screen area
     wxScreenDC dcScreen;
@@ -114,6 +119,23 @@ wxBitmap AutoCaptureMechanism::Capture(wxRect rect, int delay)
     return Capture(origin.x, origin.y, rect.GetWidth(), rect.GetHeight(), delay);
 }
 
+/* static */
+void AutoCaptureMechanism::Save(wxBitmap screenshot, wxString fileName)
+{
+    // make sure default_dir exists
+    if (!wxDirExists(default_dir))
+        wxMkdir(default_dir);
+
+    wxFileName fullFileName(default_dir, fileName + ".png");
+
+    // do not overwrite already existing files with this name
+    while (fullFileName.FileExists())
+        fullFileName.SetName(fullFileName.GetName() + "_");
+
+    // save the screenshot as a PNG
+    screenshot.SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
+}
+
 void AutoCaptureMechanism::CaptureAll()
 {
     // start from the first page
@@ -133,10 +155,25 @@ void AutoCaptureMechanism::CaptureAll()
             continue;
         }
 
+//        // create the screenshot
+//        wxBitmap screenshot = Capture(ctrl);
+//        if (ctrl.flag & AJ_Union)
+//            screenshot = Union(screenshot, Capture(*(++it)));
+//
+//        // and save it
+//        Save(screenshot, ctrl.name);
         // create the screenshot
         wxBitmap screenshot = Capture(ctrl);
-        if (ctrl.flag & AJ_Union)
-            screenshot = Union(screenshot, Capture(*(++it)));
+
+        if(ctrl.flag & AJ_Union)
+        {
+            do
+            {
+                ctrl = *(++it);
+                screenshot = Union(screenshot, Capture(ctrl));
+            }
+            while(!(ctrl.flag & AJ_UnionEnd));
+        }
 
         // and save it
         Save(screenshot, ctrl.name);
@@ -209,14 +246,8 @@ wxBitmap AutoCaptureMechanism::Union(wxBitmap pic1, wxBitmap pic2)
 
     wxBitmap result(w, h, -1);
 
-    wxMemoryDC dstDC;
-    dstDC.SelectObject(result);
-
-    dstDC.DrawBitmap(pic1, 0, 0, false);
-    dstDC.DrawBitmap(pic2, 0, h1 + gap_between, false);
-
-    dstDC.SelectObject(wxNullBitmap);
-
+#if 0
+    //Mask the bitmap "result"
     wxMemoryDC maskDC;
     wxBitmap mask(w, h, 1);
     maskDC.SelectObject(mask);
@@ -231,24 +262,20 @@ wxBitmap AutoCaptureMechanism::Union(wxBitmap pic1, wxBitmap pic2)
     maskDC.SelectObject(wxNullBitmap);
 
     result.SetMask(new wxMask(mask));
+#endif
+
+    wxMemoryDC dstDC;
+    dstDC.SelectObject(result);
+
+    dstDC.SetPen(*wxTRANSPARENT_PEN);
+    dstDC.SetBrush(*wxWHITE_BRUSH);
+    dstDC.DrawRectangle(-1, -1, w + 1, h + 1);
+    dstDC.DrawBitmap(pic1, 0, 0, false);
+    dstDC.DrawBitmap(pic2, 0, h1 + gap_between, false);
+
+    dstDC.SelectObject(wxNullBitmap);
 
     return result;
-}
-
-void AutoCaptureMechanism::Save(wxBitmap screenshot, wxString fileName)
-{
-    // make sure m_dir exists
-    if (!wxDirExists(m_dir))
-        wxMkdir(m_dir);
-
-    wxFileName fullFileName(m_dir, fileName + ".png");
-
-    // do not overwrite already existing files with this name
-    while (fullFileName.FileExists())
-        fullFileName.SetName(fullFileName.GetName() + "_");
-
-    // save the screenshot as a PNG
-    screenshot.SaveFile(fullFileName.GetFullPath(), wxBITMAP_TYPE_PNG);
 }
 
 wxRect AutoCaptureMechanism::GetRect(wxWindow* ctrl, int flag)
@@ -272,7 +299,7 @@ wxRect AutoCaptureMechanism::GetRect(wxWindow* ctrl, int flag)
             +---------+-----------+---------+
            */
 
-            m_grid = new wxFlexGridSizer(3, 3, m_border, m_border);
+            m_grid = new wxFlexGridSizer(3, 3, m_margin, m_margin);
 
             wxStaticText* l[4];
 
@@ -302,12 +329,12 @@ wxRect AutoCaptureMechanism::GetRect(wxWindow* ctrl, int flag)
         }
         else  // Actually it won't get here working with the current guiframe.h/guiframe.cpp
         {
-            return ctrl->GetScreenRect().Inflate(m_border);
+            return ctrl->GetScreenRect().Inflate(m_margin);
         }
     }
     else
     {
-       return ctrl->GetScreenRect().Inflate(m_border);
+       return ctrl->GetScreenRect().Inflate(m_margin);
     }
 }
 
