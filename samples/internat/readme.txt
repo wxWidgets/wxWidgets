@@ -44,7 +44,7 @@ A. First of all, you will need the GNU gettext tools (see the next question).
 
    # generate the .po file for the program itself
    # see `xgettext --help' for options, "-C" is important!
-   xgettext -C -n -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -o internat.po ../internat.cpp
+   xgettext -C -n -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -k_T -o internat.po ../internat.cpp
    
    # .po file for wxWidgets might be generated in the same way. An already 
    # generated wxstd.pot as well as translations for some languages can be 
