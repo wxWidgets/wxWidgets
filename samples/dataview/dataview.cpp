@@ -331,7 +331,7 @@ public:
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
 
         // "MyMusic" also has no parent
-        if (node == m_root)
+        if (node == m_root || node == NULL)
             return wxDataViewItem(0);
 
         return wxDataViewItem( (void*) node->GetParent() );
@@ -409,7 +409,7 @@ public:
             memcpy( dest, buffer, strlen(buffer)+1 );
             return true;
         }
-    
+
     wxDataViewItem GetNinthItem()
     {
        return wxDataViewItem( m_ninth );
@@ -819,7 +819,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     SetMenuBar(menu_bar);
     CreateStatusBar();
-    
+
     wxPanel *panel = new wxPanel( this, -1 );
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
@@ -1026,7 +1026,7 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item: %s"), title );
-    
+
     if (m_musicCtrl->IsExpanded( event.GetItem() ))
     wxLogMessage(wxT("Item: %s is expanded"), title );
 }
