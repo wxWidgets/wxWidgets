@@ -188,7 +188,7 @@ public:
     wxIPCSocketStreams(wxSocketBase& sock)
         : m_socketStream(sock),
 #ifdef USE_BUFFER
-          m_bufferedOut(m_socketStream, 1500),
+          m_bufferedOut(m_socketStream, 1488),
 #else
           m_bufferedOut(m_socketStream),
 #endif
