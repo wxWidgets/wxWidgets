@@ -2423,7 +2423,10 @@ bool wxDataViewMainWindow::IsExpanded( unsigned int row ) const
        return false;
        
     if (!node->HasChildren())
+    {
+       delete node;
        return false;
+    }
     
     return node->IsOpen();
 }
