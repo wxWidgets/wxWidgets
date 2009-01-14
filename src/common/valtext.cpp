@@ -170,6 +170,10 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     switch (m_validatorStyle)
     {
+    case wxFILTER_NONE:
+        // nothing to do...
+        break;
+
     case wxFILTER_INCLUDE_LIST:
         if ( m_includes.Index(val) == wxNOT_FOUND )
             errormsg = _("'%s' is invalid");
