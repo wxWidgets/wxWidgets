@@ -1070,7 +1070,9 @@ void wxDocManager::OnRedo(wxCommandEvent& event)
 
 void wxDocManager::OnUpdateFileOpen(wxUpdateUIEvent& event)
 {
-    event.Enable( true );
+    // CreateDocument() (which is called from OnFileOpen) may succeed
+    // only when there is at least a template:
+    event.Enable( GetTemplates().GetCount()>0 );
 }
 
 void wxDocManager::OnUpdateDisableIfNoDoc(wxUpdateUIEvent& event)
@@ -1080,7 +1082,9 @@ void wxDocManager::OnUpdateDisableIfNoDoc(wxUpdateUIEvent& event)
 
 void wxDocManager::OnUpdateFileNew(wxUpdateUIEvent& event)
 {
-    event.Enable( true );
+    // CreateDocument() (which is called from OnFileNew) may succeed
+    // only when there is at least a template:
+    event.Enable( GetTemplates().GetCount()>0 );
 }
 
 void wxDocManager::OnUpdateFileSave(wxUpdateUIEvent& event)
