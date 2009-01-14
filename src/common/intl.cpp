@@ -2573,7 +2573,7 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
                         const wxString& msgIdCharset)
 
 {
-    wxCHECK_MSG( IsOk(), false, "must initialize catalog first" );
+    wxCHECK_MSG( !m_strShort.empty(), false, "must initialize catalog first" );
 
 
     // It is OK to not load catalog if the msgid language and m_language match,
