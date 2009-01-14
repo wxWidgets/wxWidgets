@@ -19,12 +19,10 @@
 
 @interface wxNSProgressIndicator : NSProgressIndicator
 {
-    wxWidgetCocoaImpl* impl;
+    WXCOCOAIMPL_COMMON_MEMBERS
 }
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
-- (wxWidgetImpl*) implementation;
-- (BOOL) isFlipped;
+WXCOCOAIMPL_COMMON_INTERFACE
 
 @end
 
@@ -37,20 +35,7 @@
     return self;
 }
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
-}
+WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 @end
 

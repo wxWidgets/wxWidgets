@@ -229,14 +229,13 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 
 @interface wxNSCustomOpenGLView : NSView
 {
-    wxWidgetCocoaImpl* impl;
+    WXCOCOAIMPL_COMMON_MEMBERS
     NSOpenGLContext* context;
 }
 
 - (id)initWithFrame:(NSRect)frame;
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
-- (wxWidgetCocoaImpl*) implementation;
-- (BOOL) isFlipped;
+
+WXCOCOAIMPL_COMMON_INTERFACE
 
 @end
 
@@ -249,20 +248,7 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     return self;
 }
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
-}
+WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 - (BOOL)isOpaque
 {

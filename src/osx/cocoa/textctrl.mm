@@ -51,20 +51,7 @@
 
 @implementation wxNSTextField
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
-}
+WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 // use our common calls
 - (void) setTitle:(NSString *) title

@@ -41,12 +41,10 @@
 
 @interface wxNSTabView : NSTabView
 {
-    wxWidgetCocoaImpl* impl;
+    WXCOCOAIMPL_COMMON_MEMBERS
 }
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
-- (wxWidgetCocoaImpl*) implementation;
-- (BOOL) isFlipped;
+WXCOCOAIMPL_COMMON_INTERFACE
 
 @end
 
@@ -85,20 +83,7 @@
 
 @implementation wxNSTabView
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
-}
+WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 @end
 

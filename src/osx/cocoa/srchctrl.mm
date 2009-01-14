@@ -31,8 +31,10 @@
 
 @interface wxNSSearchField : NSSearchField
 {
-    wxWidgetCocoaImpl* impl;
+    WXCOCOAIMPL_COMMON_MEMBERS
 }
+
+WXCOCOAIMPL_COMMON_INTERFACE
 
 @end
 
@@ -47,20 +49,7 @@
     return self;
 }
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
-}
+WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 // use our common calls
 - (void) setTitle:(NSString *) title

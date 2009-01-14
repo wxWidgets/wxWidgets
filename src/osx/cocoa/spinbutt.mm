@@ -18,12 +18,11 @@
 
 @interface wxNSStepper : NSStepper
 {
-    wxWidgetCocoaImpl* impl;
+    WXCOCOAIMPL_COMMON_MEMBERS
 }
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
-- (wxWidgetCocoaImpl*) implementation;
-- (BOOL) isFlipped;
+WXCOCOAIMPL_COMMON_INTERFACE
+
  - (void) clickedAction: (id) sender;
 
 @end
@@ -49,20 +48,7 @@
     }
 }
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
-}
+WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 @end
 

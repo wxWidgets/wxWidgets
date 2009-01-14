@@ -32,21 +32,18 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 @interface wxNSView : NSView
 {
-    wxWidgetCocoaImpl* impl;
+    WXCOCOAIMPL_COMMON_MEMBERS
 }
 
 - (void)drawRect: (NSRect) rect;
-
-WXCOCOAIMPL_COMMON_MOUSE_INTERFACE
 
 - (void)keyDown:(NSEvent *)event;
 - (void)keyUp:(NSEvent *)event;
 - (void)flagsChanged:(NSEvent *)event;
 - (void)handleKeyEvent:(NSEvent *)event;
 
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
-- (wxWidgetCocoaImpl*) implementation;
-- (BOOL) isFlipped;
+WXCOCOAIMPL_COMMON_INTERFACE
+
 - (BOOL) becomeFirstResponder;
 - (BOOL) resignFirstResponder;
 - (BOOL) canBecomeKeyView;
@@ -342,7 +339,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     }
 }
 
-WXCOCOAIMPL_COMMON_MOUSE_IMPLEMENTATION
+WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 - (void)keyDown:(NSEvent *)event
 {
@@ -364,22 +361,6 @@ WXCOCOAIMPL_COMMON_MOUSE_IMPLEMENTATION
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event );
     impl->GetWXPeer()->HandleWindowEvent(wxevent);
-}
-
-
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
 }
 
 - (BOOL) becomeFirstResponder
@@ -676,7 +657,7 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 {
 }
 
-void wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
+bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
 {
     NSPoint clickLocation; 
     clickLocation = [m_osxView convertPoint:[event locationInWindow] fromView:nil]; 
@@ -685,7 +666,8 @@ void wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     SetupMouseEvent( wxevent , event ) ;
     wxevent.m_x = pt.x;
     wxevent.m_y = pt.y;
-    GetWXPeer()->HandleWindowEvent(wxevent);
+
+    return GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
 

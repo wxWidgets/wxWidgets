@@ -132,6 +132,8 @@ wxSize wxButton::GetDefaultSize()
     return self;
 }
 
+WXCOCOAIMPL_COMMON_IMPLEMENTATION
+
 - (void) clickedAction: (id) sender
 {
     if ( impl )
@@ -140,21 +142,6 @@ wxSize wxButton::GetDefaultSize()
         if ( wxpeer )
             wxpeer->HandleClicked(0);
     }
-}
-
-- (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation
-{
-    impl = theImplementation;
-}
-
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (BOOL) isFlipped
-{
-    return YES;
 }
 
 - (int) intValue

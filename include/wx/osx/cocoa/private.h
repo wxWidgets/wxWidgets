@@ -117,7 +117,7 @@ public :
 
     void                InstallEventHandler( WXWidget control = NULL );
     
-    virtual void        DoHandleMouseEvent(NSEvent *event); 
+    virtual bool        DoHandleMouseEvent(NSEvent *event); 
 
 protected:
     WXWidget m_osxView;
@@ -190,42 +190,6 @@ protected :
     extern NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );
     extern wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p );
     
-    // used for many wxControls
-    
-    @interface wxNSButton : NSButton
-    {
-        wxWidgetCocoaImpl* impl;
-    }
-
-    - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
-    - (wxWidgetCocoaImpl*) implementation;
-    - (BOOL) isFlipped;
-    - (void) clickedAction: (id) sender;
-
-    @end
-
-    @interface wxNSBox : NSBox
-    {
-        wxWidgetCocoaImpl* impl;
-    }
-
-    - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
-    - (wxWidgetCocoaImpl*) implementation;
-    - (BOOL) isFlipped;
-
-    @end
-
-    @interface wxNSTextField : NSTextField
-    {
-        wxWidgetCocoaImpl* impl;
-    }
-
-    - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;
-    - (wxWidgetCocoaImpl*) implementation;
-    - (BOOL) isFlipped;
-
-    @end
-
     NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
         bool adjustForOrigin = true );
         
@@ -238,37 +202,91 @@ protected :
         -(void)mouseUp:(NSEvent *)event ;\
         -(void)rightMouseUp:(NSEvent *)event ;\
         -(void)otherMouseUp:(NSEvent *)event ;\
-        -(void)handleMouseEvent:(NSEvent *)event;
 
     #define WXCOCOAIMPL_COMMON_MOUSE_IMPLEMENTATION -(void)mouseDown:(NSEvent *)event \
         {\
-            [self handleMouseEvent:event];\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super mouseDown:event];\
         }\
         -(void)rightMouseDown:(NSEvent *)event\
         {\
-            [self handleMouseEvent:event];\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super rightMouseDown:event];\
         }\
         -(void)otherMouseDown:(NSEvent *)event\
         {\
-            [self handleMouseEvent:event];\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super otherMouseDown:event];\
         }\
         -(void)mouseUp:(NSEvent *)event\
         {\
-            [self handleMouseEvent:event];\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super mouseUp:event];\
         }\
         -(void)rightMouseUp:(NSEvent *)event\
         {\
-            [self handleMouseEvent:event];\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super rightMouseUp:event];\
         }\
         -(void)otherMouseUp:(NSEvent *)event\
         {\
-            [self handleMouseEvent:event];\
-        }\
-        -(void)handleMouseEvent:(NSEvent *)event\
-        {\
-            impl->DoHandleMouseEvent(event);\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super otherMouseUp:event];\
         }
         
+    #define WXCOCOAIMPL_COMMON_MEMBERS wxWidgetCocoaImpl* impl;
+    
+    #define WXCOCOAIMPL_COMMON_INTERFACE \
+        - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;\
+        - (wxWidgetCocoaImpl*) implementation;\
+        - (BOOL) isFlipped;\
+        WXCOCOAIMPL_COMMON_MOUSE_INTERFACE
+
+    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION WXCOCOAIMPL_COMMON_MOUSE_IMPLEMENTATION \
+        - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation\
+        {\
+            impl = theImplementation;\
+        }\
+        - (wxWidgetCocoaImpl*) implementation\
+        {\
+            return impl;\
+        }\
+        - (BOOL) isFlipped\
+        {\
+            return YES;\
+        }\
+
+    // used for many wxControls
+    
+    @interface wxNSButton : NSButton
+    {
+        WXCOCOAIMPL_COMMON_MEMBERS
+    }
+
+    WXCOCOAIMPL_COMMON_INTERFACE
+    - (void) clickedAction: (id) sender;
+
+    @end
+
+    @interface wxNSBox : NSBox
+    {
+        WXCOCOAIMPL_COMMON_MEMBERS
+    }
+
+    WXCOCOAIMPL_COMMON_INTERFACE
+
+    @end
+
+    @interface wxNSTextField : NSTextField
+    {
+       WXCOCOAIMPL_COMMON_MEMBERS
+    }
+
+    WXCOCOAIMPL_COMMON_INTERFACE
+    
+    @end
+
+
 #endif // __OBJC__
 
 // NSCursor
