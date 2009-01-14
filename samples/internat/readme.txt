@@ -1,9 +1,9 @@
-This is the README file for the internationalization sample for wxWindows 2.0.
+This is the README file for the internationalization sample for wxWidgets.
 
 Q. What does this stupid program do?
 A. It demonstrates how to translate all program messages to a foreign language.
-   In any program using wxWindows there is going to be 3 kinds of messages: the
-   messages from the program itself, the messages from the wxWindows library and
+   In any program using wxWidgets there is going to be 3 kinds of messages: the
+   messages from the program itself, the messages from the wxWidgets library and
    the messages from the system (e.g. system error messages). This program
    translates the first 2 kinds of messages but the system messages will be only
    translated if your system supports it.
@@ -46,7 +46,7 @@ A. First of all, you will need the GNU gettext tools (see the next question).
    # see `xgettext --help' for options, "-C" is important!
    xgettext -C -n -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -o internat.po ../internat.cpp
    
-   # .po file for wxWindows might be generated in the same way. An already 
+   # .po file for wxWidgets might be generated in the same way. An already 
    # generated wxstd.pot as well as translations for some languages can be 
    # found in the locale directory.
    cp ../../locale/<language>.po ./wxstd.pot
@@ -71,7 +71,7 @@ A. For Unix, you should be able to get the source distribution of any GNU mirror
    (see www.gnu.org for a start). gettext() version 0.10 is buggy, try to get at
    least version strictly greater than 0.10. gettext RPMs can be downloaded from
    the standard locations for Linux. For Windows, you can get the precompiled
-   binaries from wxWindows web page.
+   binaries from wxWidgets web page.
 
 Q. What's i18n?
 A. Count the number of letters in the word "internationalization".
@@ -81,6 +81,6 @@ Q. Where to send comments,
                  flames,
                  money?
 A. To Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>,
-      wxWindows list <wxwin-developers@wx.dent.med.uni-muenchen.de>,
+      wxWidgets list <wx-dev@lists.wxwidgets.org>,
       /dev/null (platform-dependent),
-      wxWindows dev team Swiss bank account.
+      wxWidgets dev team Swiss bank account.
