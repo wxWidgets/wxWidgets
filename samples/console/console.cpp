@@ -101,7 +101,7 @@
 
 // what to test (in alphabetic order)? Define TEST_ALL to 0 to do a single
 // test, define it to 1 to do all tests.
-#define TEST_ALL 0
+#define TEST_ALL 1
 
 
 #if TEST_ALL
@@ -115,7 +115,7 @@
     #define TEST_FILECONF
     #define TEST_FILENAME
     #define TEST_FILETIME
- //   #define TEST_FTP  --FIXME! (RN)
+    #define TEST_FTP
     #define TEST_INFO_FUNCTIONS
     #define TEST_LOCALE
     #define TEST_LOG
@@ -1683,7 +1683,7 @@ static void TestPathList()
 // regular expressions
 // ----------------------------------------------------------------------------
 
-#ifdef TEST_REGEX
+#if defined TEST_REGEX && TEST_INTERACTIVE
 
 #include "wx/regex.h"
 
@@ -2472,10 +2472,6 @@ static bool TestFtpConnect()
 {
     wxPuts(_T("*** Testing FTP connect ***"));
 
-    // wxFTP cannot be a static variable as its ctor needs to access
-    // wxWidgets internals after it has been initialized
-    ftp = new wxFTP;
-
 #ifdef FTP_ANONYMOUS
     static const wxChar *hostname = _T("ftp.wxwidgets.org");
 
@@ -2511,44 +2507,6 @@ static bool TestFtpConnect()
     }
 
     return true;
-}
-
-// test (fixed?) wxFTP bug with wu-ftpd >= 2.6.0?
-static void TestFtpWuFtpd()
-{
-    wxFTP ftp;
-    static const wxChar *hostname = _T("ftp.eudora.com");
-    if ( !ftp.Connect(hostname) )
-    {
-        wxPrintf(_T("ERROR: failed to connect to %s\n"), hostname);
-    }
-    else
-    {
-        static const wxChar *filename = _T("eudora/pubs/draft-gellens-submit-09.txt");
-        wxInputStream *in = ftp.GetInputStream(filename);
-        if ( !in )
-        {
-            wxPrintf(_T("ERROR: couldn't get input stream for %s\n"), filename);
-        }
-        else
-        {
-            size_t size = in->GetSize();
-            wxPrintf(_T("Reading file %s (%u bytes)..."), filename, size);
-
-            wxChar *data = new wxChar[size];
-            if ( !in->Read(data, size) )
-            {
-                wxPuts(_T("ERROR: read error"));
-            }
-            else
-            {
-                wxPrintf(_T("Successfully retrieved the file.\n"));
-            }
-
-            delete [] data;
-            delete in;
-        }
-    }
 }
 
 static void TestFtpList()
@@ -2683,6 +2641,8 @@ static void TestFtpMisc()
     }
 }
 
+#if TEST_INTERACTIVE
+
 static void TestFtpInteractive()
 {
     wxPuts(_T("\n*** Interactive wxFTP test ***"));
@@ -2740,6 +2700,8 @@ static void TestFtpInteractive()
     wxPuts(_T("\n*** done ***"));
 }
 
+#endif // TEST_INTERACTIVE
+
 static void TestFtpUpload()
 {
     wxPuts(_T("*** Testing wxFTP uploading ***\n"));
@@ -2795,11 +2757,11 @@ public:
     {
     }
 
-    virtual void Walk(size_t skip = 1)
+    virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH)
     {
         wxPuts(_T("Stack dump:"));
 
-        wxStackWalker::Walk(skip);
+        wxStackWalker::Walk(skip, maxdepth);
     }
 
 protected:
@@ -2908,9 +2870,10 @@ static void TestFileStream()
     {
         wxFileInputStream fsIn(filename);
         wxPrintf(_T("File stream size: %u\n"), fsIn.GetSize());
-        while ( !fsIn.Eof() )
+        int c;
+        while ( (c=fsIn.GetC()) != wxEOF  )
         {
-            wxPutchar(fsIn.GetC());
+            wxPutchar(c);
         }
     }
 
@@ -2945,9 +2908,10 @@ static void TestMemoryStream()
 
     wxMemoryInputStream memInpStream(buf, len);
     wxPrintf(_T("Memory stream size: %u\n"), memInpStream.GetSize());
-    while ( !memInpStream.Eof() )
+    int c;
+    while ( (c=memInpStream.GetC()) != wxEOF )
     {
-        wxPutchar(memInpStream.GetC());
+        wxPutchar(c);
     }
 
     wxPuts(_T("\n*** wxMemoryInputStream test done ***"));
@@ -3504,9 +3468,10 @@ static void TestZipStreamRead()
     wxPrintf(_T("Archive size: %u\n"), istr.GetSize());
 
     wxPrintf(_T("Dumping the file '%s':\n"), filename.c_str());
-    while ( !istr.Eof() )
+    int c;
+    while ( (c=istr.GetC()) != wxEOF )
     {
-        wxPutchar(istr.GetC());
+        wxPutchar(c);
         fflush(stdout);
     }
 
@@ -4183,39 +4148,6 @@ static void TestThreadConditions()
     wxThread::Sleep(500);
 }
 
-#include "wx/utils.h"
-
-class MyExecThread : public wxThread
-{
-public:
-    MyExecThread(const wxString& command) : wxThread(wxTHREAD_JOINABLE),
-                                            m_command(command)
-    {
-        Create();
-    }
-
-    virtual ExitCode Entry()
-    {
-        return (ExitCode)wxExecute(m_command, wxEXEC_SYNC);
-    }
-
-private:
-    wxString m_command;
-};
-
-static void TestThreadExec()
-{
-    wxPuts(_T("*** Testing wxExecute interaction with threads ***\n"));
-
-    MyExecThread thread(_T("true"));
-    thread.Run();
-
-    wxPrintf(_T("Main program exit code: %ld.\n"),
-             wxExecute(_T("false"), wxEXEC_SYNC));
-
-    wxPrintf(_T("Thread exit code: %ld.\n"), (long)thread.Wait());
-}
-
 // semaphore tests
 #include "wx/datetime.h"
 
@@ -4467,6 +4399,11 @@ int main(int argc, char **argv)
 
 #ifdef TEST_FTP
     wxLog::AddTraceMask(FTP_TRACE_MASK);
+
+    // wxFTP cannot be a static variable as its ctor needs to access
+    // wxWidgets internals after it has been initialized
+    ftp = new wxFTP;
+
     if ( TestFtpConnect() )
     {
         #if TEST_ALL
@@ -4478,14 +4415,12 @@ int main(int argc, char **argv)
         #endif // TEST_ALL
 
         #if TEST_INTERACTIVE
-            TestFtpInteractive();
+            //TestFtpInteractive();
         #endif
     }
     //else: connecting to the FTP server failed
 
-    #if 0
-        TestFtpWuFtpd();
-    #endif
+    delete ftp;
 #endif // TEST_FTP
 
 #ifdef TEST_MIME
@@ -4562,7 +4497,6 @@ int main(int argc, char **argv)
         TestThreadSuspend();
         TestThreadDelete();
         TestThreadConditions();
-        TestThreadExec();
         TestSemaphore();
     #endif
 #endif // TEST_THREADS
