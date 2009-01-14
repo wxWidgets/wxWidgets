@@ -57,7 +57,8 @@ WX_CONFIG_FLAGS = $(WX_CONFIG_DEBUG_FLAG) $(WX_CONFIG_UNICODE_FLAG) \
 IMAGE_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS) \
 	$(CXXFLAGS)
 IMAGE_OBJECTS =  \
-	image_image.o
+	image_image.o \
+	image_canvas.o
 
 ### Conditionally set variables: ###
 
@@ -101,6 +102,9 @@ image: $(IMAGE_OBJECTS)
 	$(CXX) -o $@ $(IMAGE_OBJECTS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base` $(LDFLAGS)
 
 image_image.o: ./image.cpp
+	$(CXX) -c -o $@ $(IMAGE_CXXFLAGS) $(CPPDEPS) $<
+
+image_canvas.o: ./canvas.cpp
 	$(CXX) -c -o $@ $(IMAGE_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean

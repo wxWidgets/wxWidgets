@@ -50,6 +50,7 @@ IMAGE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 IMAGE_OBJECTS =  \
 	$(__image_os2_lib_res) \
 	image_image.o \
+	image_canvas.o \
 	$(__image___win32rc)
 
 ### Conditionally set variables: ###
@@ -189,6 +190,9 @@ data:
 
 image_image.o: $(srcdir)/image.cpp
 	$(CXXC) -c -o $@ $(IMAGE_CXXFLAGS) $(srcdir)/image.cpp
+
+image_canvas.o: $(srcdir)/canvas.cpp
+	$(CXXC) -c -o $@ $(IMAGE_CXXFLAGS) $(srcdir)/canvas.cpp
 
 image_image_rc.o: $(srcdir)/image.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include

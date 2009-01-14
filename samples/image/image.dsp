@@ -252,6 +252,10 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\canvas.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\image.cpp
 # End Source File
 # Begin Source File

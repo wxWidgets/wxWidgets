@@ -227,7 +227,8 @@ IMAGE_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	-i=.\..\..\samples -dNOPCH $(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) &
 	$(CXXFLAGS)
 IMAGE_OBJECTS =  &
-	$(OBJS)\image_image.obj
+	$(OBJS)\image_image.obj &
+	$(OBJS)\image_canvas.obj
 
 
 all : $(OBJS)
@@ -263,6 +264,9 @@ data : .SYMBOLIC
 	for %f in (horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm horse_ag.pnm horse_rg.pnm horse.tif horse.tga horse.xpm horse.cur horse.ico horse3.ani smile.xbm toucan.png cmyk.jpg) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\image_image.obj :  .AUTODEPEND .\image.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(IMAGE_CXXFLAGS) $<
+
+$(OBJS)\image_canvas.obj :  .AUTODEPEND .\canvas.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(IMAGE_CXXFLAGS) $<
 
 $(OBJS)\image_image.res :  .AUTODEPEND .\image.rc

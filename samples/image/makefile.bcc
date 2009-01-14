@@ -35,7 +35,8 @@ IMAGE_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include -I. $(__DLLFLAG_p) \
 	-I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 IMAGE_OBJECTS =  \
-	$(OBJS)\image_image.obj
+	$(OBJS)\image_image.obj \
+	$(OBJS)\image_canvas.obj
 
 ### Conditionally set variables: ###
 
@@ -239,6 +240,9 @@ data:
 
 $(OBJS)\image_image.obj: .\image.cpp
 	$(CXX) -q -c -P -o$@ $(IMAGE_CXXFLAGS) .\image.cpp
+
+$(OBJS)\image_canvas.obj: .\canvas.cpp
+	$(CXX) -q -c -P -o$@ $(IMAGE_CXXFLAGS) .\canvas.cpp
 
 $(OBJS)\image_image.res: .\image.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\include -i. $(__DLLFLAG_p_1) -i.\..\..\samples -dNOPCH .\image.rc
