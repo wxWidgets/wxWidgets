@@ -7,6 +7,11 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    This is the default value of the wxStackWalker::Walk function.
+*/
+#define wxSTACKWALKER_MAX_DEPTH   (200)
+
+/**
     @class wxStackWalker
 
     wxStackWalker allows an application to enumerate, or walk, the stack frames
@@ -62,16 +67,18 @@ public:
         notice that Walk() frame itself is not included if skip = 1).
 
         Up to @a maxDepth frames are walked from the innermost to the outermost one.
+        It defaults to ::wxSTACKWALKER_MAX_DEPTH.
     */
-    virtual void Walk(size_t skip = 1, size_t maxDepth = 200);
+    virtual void Walk(size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH);
 
     /**
         Enumerate stack frames from the location of uncaught exception.
         This method can only be called from wxApp::OnFatalException().
 
         Up to @a maxDepth frames are walked from the innermost to the outermost one.
+        It defaults to ::wxSTACKWALKER_MAX_DEPTH.
     */
-    virtual void WalkFromException(size_t maxDepth = 200);
+    virtual void WalkFromException(size_t maxDepth = wxSTACKWALKER_MAX_DEPTH);
 
 protected:
     /**

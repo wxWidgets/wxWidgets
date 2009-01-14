@@ -90,15 +90,15 @@ public:
     // only
     wxStackWalker(const char * WXUNUSED(argv0) = NULL) { }
 
-    virtual void Walk(size_t skip = 1, size_t maxDepth = 200);
+    virtual void Walk(size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH);
 #if wxUSE_ON_FATAL_EXCEPTION
-    virtual void WalkFromException(size_t maxDepth = 200);
+    virtual void WalkFromException(size_t maxDepth = wxSTACKWALKER_MAX_DEPTH);
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
 
     // enumerate stack frames from the given context
-    void WalkFrom(const _CONTEXT *ctx, size_t skip = 1, size_t maxDepth = 200);
-    void WalkFrom(const _EXCEPTION_POINTERS *ep, size_t skip = 1, size_t maxDepth = 200);
+    void WalkFrom(const _CONTEXT *ctx, size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH);
+    void WalkFrom(const _EXCEPTION_POINTERS *ep, size_t skip = 1, size_t maxDepth = wxSTACKWALKER_MAX_DEPTH);
 };
 
 #endif // _WX_MSW_STACKWALK_H_
