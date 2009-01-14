@@ -210,7 +210,7 @@ public:
         accepted, it will wait for the next incoming connection to
         arrive.
 
-        @warning: This method will block the GUI.
+        @warning This method will block the GUI.
 
         If @a wait is @false, it will try to accept a pending connection
         if there is one, but it will always return immediately without blocking
@@ -296,7 +296,7 @@ public:
         If @a wait is @true, Connect() will wait until the connection
         completes.
 
-        @warning: This method will block the GUI.
+        @warning This method will block the GUI.
 
         If @a wait is @false, Connect() will try to establish the connection
         and return immediately, without blocking the GUI. When used this way,
