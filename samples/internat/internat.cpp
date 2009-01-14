@@ -234,7 +234,8 @@ bool MyApp::OnInit()
     wxLocale::AddCatalogLookupPathPrefix(wxT("."));
 
     // Initialize the catalogs we'll be using
-    m_locale.AddCatalog(wxT("internat"));
+    if (!m_locale.AddCatalog(wxT("internat")))
+        wxLogError(_("Couldn't find/load the 'internat' catalog."));
 
     // this catalog is installed in standard location on Linux systems and
     // shows that you may make use of the standard message catalogs as well

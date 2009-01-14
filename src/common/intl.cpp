@@ -868,6 +868,9 @@ wxPluralFormsCalculator* wxPluralFormsCalculator::make(const char* s)
 // wxMsgCatalogFile corresponds to one disk-file message catalog.
 //
 // This is a "low-level" class and is used only by wxMsgCatalog
+// NOTE: for the documentation of the binary catalog (.MO) files refer to
+//       the GNU gettext manual: 
+//       http://www.gnu.org/software/autoconf/manual/gettext/MO-Files.html
 // ----------------------------------------------------------------------------
 
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxString, wxMessagesHash);
@@ -881,12 +884,12 @@ public:
 
     // load the catalog from disk (szDirPrefix corresponds to language)
     bool Load(const wxString& szDirPrefix, const wxString& szName,
-            wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
+              wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
 
     // fills the hash with string-translation pairs
-    void FillHash(wxMessagesHash& hash,
-                const wxString& msgIdCharset,
-                bool convertEncoding) const;
+    bool FillHash(wxMessagesHash& hash,
+                  const wxString& msgIdCharset,
+                  bool convertEncoding) const;
 
     // return the charset of the strings in this catalog or empty string if
     // none/unknown
@@ -1356,7 +1359,7 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
     return true;
 }
 
-void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
+bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
                                 const wxString& msgIdCharset,
                                 bool convertEncoding) const
 {
@@ -1444,6 +1447,8 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
     for (size_t32 i = 0; i < m_numStrings; i++)
     {
         const char *data = StringAtOfs(m_pOrigTable, i);
+        if (!data)
+            return false; // may happen for invalid MO files
 
         wxString msgid;
 #if wxUSE_UNICODE
@@ -1458,6 +1463,9 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 #endif // wxUSE_UNICODE
 
         data = StringAtOfs(m_pTransTable, i);
+        if (!data)
+            return false; // may happen for invalid MO files
+
         size_t length = Swap(m_pTransTable[i].nLen);
         size_t offset = 0;
         size_t index = 0;
@@ -1488,7 +1496,12 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
             }
 
             // skip this string
-            offset += strlen(str) + 1;
+            // IMPORTANT: accesses to the 'data' pointer are valid only for 
+            //            the first 'length+1' bytes (GNU specs says that the
+            //            final NUL is not counted in length); using wxStrnlen() 
+            //            we make sure we don't access memory beyond the valid range
+            //            (which otherwise may happen for invalid MO files):
+            offset += wxStrnlen(str, length - offset) + 1;
             ++index;
         }
     }
@@ -1497,6 +1510,8 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
     delete sourceConv;
     delete inputConvPtr;
 #endif // wxUSE_WCHAR_T
+
+    return true;
 }
 
 
@@ -1531,7 +1546,8 @@ bool wxMsgCatalog::Load(const wxString& dirPrefix, const wxString& name,
     if ( !file.Load(dirPrefix, name, m_pluralFormsCalculator) )
         return false;
 
-    file.FillHash(m_messages, msgIdCharset, bConvertEncoding);
+    if ( !file.FillHash(m_messages, msgIdCharset, bConvertEncoding) )
+        return false;
 
 #if !wxUSE_UNICODE
     // we should use a conversion compatible with the message catalog encoding
