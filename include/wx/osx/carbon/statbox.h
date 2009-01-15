@@ -46,6 +46,9 @@ class WXDLLIMPEXP_CORE wxStaticBox: public wxControl
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
     
     virtual bool AcceptsFocus() const { return false; }
+
+    // protect native font of box
+    virtual bool SetFont( const wxFont &font );
 };
 
 #endif

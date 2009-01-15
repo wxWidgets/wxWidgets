@@ -65,5 +65,14 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     *borderOther = other;
 }
 
+bool wxStaticBox::SetFont(const wxFont& font)
+{
+    bool retval = wxWindowBase::SetFont( font );
+
+    // dont' update the native control, it has its own small font
+
+    return retval;
+}
+
 #endif // wxUSE_STATBOX
 

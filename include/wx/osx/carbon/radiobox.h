@@ -76,6 +76,8 @@ public:
     virtual wxString GetLabel() const;
     virtual void SetLabel(const wxString& label) ;
 
+    // protect native font of box
+    virtual bool SetFont( const wxFont &font );
 // Other external functions
     void Command(wxCommandEvent& event);
     void SetFocus();

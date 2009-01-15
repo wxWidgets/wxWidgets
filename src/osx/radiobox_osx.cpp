@@ -516,4 +516,13 @@ wxSize wxRadioBox::DoGetBestSize() const
     return wxSize( totWidth, totHeight );
 }
 
+bool wxRadioBox::SetFont(const wxFont& font)
+{
+    bool retval = wxWindowBase::SetFont( font );
+
+    // dont' update the native control, it has its own small font
+
+    return retval;
+}
+
 #endif // wxUSE_RADIOBOX
