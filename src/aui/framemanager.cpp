@@ -574,6 +574,7 @@ END_EVENT_TABLE()
 wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
 {
     m_action = actionNone;
+    m_action_window = NULL;
     m_last_mouse_move = wxPoint();
     m_hover_button = NULL;
     m_art = new wxAuiDefaultDockArt;
