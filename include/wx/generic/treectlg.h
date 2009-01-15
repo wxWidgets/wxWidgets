@@ -257,7 +257,12 @@ protected:
     wxCursor             m_oldCursor;  // cursor is changed while dragging
     wxGenericTreeItem   *m_oldSelection;
     wxGenericTreeItem   *m_underMouse; // for visual effects
+    
+    enum { NoEffect, BorderEffect, AboveEffect, BelowEffect } m_dndEffect;
+    wxGenericTreeItem   *m_dndEffectItem; 
+    
     wxTreeTextCtrl      *m_textCtrl;
+    
 
     wxTimer             *m_renameTimer;
 

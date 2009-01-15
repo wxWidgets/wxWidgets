@@ -985,6 +985,9 @@ void wxGenericTreeCtrl::Init()
     m_findTimer = NULL;
 
     m_dropEffectAboveItem = false;
+    
+    m_dndEffect = NoEffect;
+    m_dndEffectItem = NULL;
 
     m_lastOnSame = false;
 
@@ -2639,6 +2642,40 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     // restore normal font
     dc.SetFont( m_normalFont );
+    
+    if (item == m_dndEffectItem)
+    {
+        dc.SetPen( *wxBLACK_PEN );
+        // DnD visual effects
+        switch (m_dndEffect)
+        {
+            case BorderEffect:
+            {
+                dc.SetBrush(*wxTRANSPARENT_BRUSH);
+                int w = item->GetWidth() + 2;
+                int h = total_h + 2;
+                dc.DrawRectangle( item->GetX() - 1, item->GetY() - 1, w, h);
+                break;
+            }
+            case AboveEffect:
+            {
+                int x = item->GetX(),
+                    y = item->GetY();
+                dc.DrawLine( x, y, x + item->GetWidth(), y);
+                break;
+            }
+            case BelowEffect:
+            {
+                int x = item->GetX(),
+                    y = item->GetY();
+                y += total_h - 1;
+                dc.DrawLine( x, y, x + item->GetWidth(), y);
+                break;
+            }
+            case NoEffect:
+                break;
+        }
+    }
 }
 
 void
@@ -2860,7 +2897,7 @@ void wxGenericTreeCtrl::DrawDropEffect(wxGenericTreeItem *item)
             DrawLine(item, !m_dropEffectAboveItem );
         }
 
-        SetCursor(wxCURSOR_BULLSEYE);
+        SetCursor(*wxSTANDARD_CURSOR);
     }
     else
     {
@@ -2875,15 +2912,20 @@ void wxGenericTreeCtrl::DrawBorder(const wxTreeItemId &item)
 
     wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
 
-    wxClientDC dc(this);
-    PrepareDC( dc );
-    dc.SetLogicalFunction(wxINVERT);
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
-
-    int w = i->GetWidth() + 2;
-    int h = GetLineHeight(i) + 2;
-
-    dc.DrawRectangle( i->GetX() - 1, i->GetY() - 1, w, h);
+    if (m_dndEffect == NoEffect)
+    {
+        m_dndEffect = BorderEffect;
+        m_dndEffectItem = i;
+    }
+    else
+    {
+        m_dndEffect = NoEffect;
+        m_dndEffectItem = NULL;
+    }
+        
+    wxRect rect( i->GetX()-1, i->GetY()-1, i->GetWidth()+2, GetLineHeight(i)+2 );
+    CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+    RefreshRect( rect );
 }
 
 void wxGenericTreeCtrl::DrawLine(const wxTreeItemId &item, bool below)
@@ -2892,18 +2934,23 @@ void wxGenericTreeCtrl::DrawLine(const wxTreeItemId &item, bool below)
 
     wxGenericTreeItem *i = (wxGenericTreeItem*) item.m_pItem;
 
-    wxClientDC dc(this);
-    PrepareDC( dc );
-    dc.SetLogicalFunction(wxINVERT);
-
-    int x = i->GetX(),
-        y = i->GetY();
-    if ( below )
+    if (m_dndEffect == NoEffect)
     {
-        y += GetLineHeight(i) - 1;
+        if (below)
+            m_dndEffect = BelowEffect;
+        else
+            m_dndEffect = AboveEffect;
+        m_dndEffectItem = i;
     }
-
-    dc.DrawLine( x, y, x + i->GetWidth(), y);
+    else
+    {
+        m_dndEffect = NoEffect;
+        m_dndEffectItem = NULL;
+    }
+        
+    wxRect rect( i->GetX()-1, i->GetY()-1, i->GetWidth()+2, GetLineHeight(i)+2 );
+    CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+    RefreshRect( rect );
 }
 
 // -----------------------------------------------------------------------------
