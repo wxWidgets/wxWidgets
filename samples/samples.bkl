@@ -86,6 +86,7 @@
     <subproject id="wizard" template="sub"/>
     <subproject id="wrapsizer" template="sub"/>
     <!-- These samples don't always build so don't build them by default -->
+    <subproject id="flash" template="optsub"/>
     <subproject id="mfc" template="optsub"/>
     <subproject id="memcheck" template="optsub"/>
 

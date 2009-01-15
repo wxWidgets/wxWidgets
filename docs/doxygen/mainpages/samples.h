@@ -78,6 +78,7 @@ TODO: Organize them in a more human-readable way.
 @li @sample{event}
 @li @sample{except}
 @li @sample{exec}
+@li @sample{flash}
 @li @sample{font}
 </td><td>
 @li @sample{grid}
@@ -406,6 +407,23 @@ wxProcess::Kill() and test for their existence with
 wxProcess::Exists().
 
 @sampledir{exec}
+
+@section page_samples_flash Flash Sample
+
+The flash sample demonstrates embedding of Adobe Flash into a wxWidgets
+program. Currently it only works under Windows as it uses the Flash ActiveX
+control to achieve this but we hope to be able to extend it to also work under
+other platforms in the future. The sample also currently requires Microsoft
+Visual C++ compiler as it uses COM support extensions specific to this
+compiler.
+
+The sample comes with 2 Flash files (SWF), showing a simple Flash animation
+which can be controlled using the "Play", "Stop" and "Back"/"Forward" buttons
+in the sample as well as a Flash form which shows how Flash and wxWidgets
+program can exchange data: calling "GetText" function without arguments returns
+the text of the text control defined inside Flash and calling "SetText" with an
+argument sets the control contents to the given string. Finally clicking on the
+button generates an event which is caught by the C++ program.
 
 @section page_samples_font Font Sample
 
