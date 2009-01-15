@@ -12,7 +12,8 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-#include "wx/nonownedwnd.h"
+    #include "wx/nonownedwnd.h"
+    #include "wx/log.h"
 #endif
 
 #ifdef __WXMAC__
