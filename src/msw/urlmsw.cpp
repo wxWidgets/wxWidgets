@@ -173,7 +173,7 @@ size_t wxWinINetInputStream::OnSysRead(void *buffer, size_t bufsize)
             );
 
             wxLogError(wxT("Read failed with error %d: %s"),
-                       iError, errorString);
+                       iError, errorString.c_str());
         }
     }
 
