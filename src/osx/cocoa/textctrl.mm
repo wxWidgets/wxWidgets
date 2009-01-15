@@ -149,6 +149,7 @@ bool wxNSTextFieldControl::CanPaste() const
 
 void wxNSTextFieldControl::SetEditable(bool editable) 
 {
+    [(wxNSTextField*) m_osxView setEditable:editable];
 }
 
 void wxNSTextFieldControl::GetSelection( long* from, long* to) const 

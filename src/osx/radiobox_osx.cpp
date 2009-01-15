@@ -399,7 +399,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     {
         GetTextExtent(GetString(i), &eachWidth[i], &eachHeight[i] );
         eachWidth[i] = (int)(eachWidth[i] + RADIO_SIZE);
-        eachHeight[i] = (int)((3 * eachHeight[i]) / 2);
+        eachHeight[i] = (int) eachHeight[i];
 
         if (maxWidth < eachWidth[i])
             maxWidth = eachWidth[i];
@@ -407,11 +407,11 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             maxHeight = eachHeight[i];
     }
 
-    totHeight = GetRowCount() * maxHeight;
+    totHeight = GetRowCount() * maxHeight + (GetRowCount() - 1) * maxHeight / 2;
     totWidth  = GetColumnCount() * (maxWidth + charWidth);
 
     wxSize sz = DoGetSizeFromClientSize( wxSize( totWidth, totHeight ) ) ;
-
+    
     // change the width / height only when specified
     if ( width == wxDefaultCoord )
     {
@@ -434,8 +434,8 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     // arrange radio buttons
     int x_start, y_start;
 
-    x_start = 0;
-    y_start = 0;
+    x_start = ( width - sz.x ) / 2;
+    y_start = ( height - sz.y ) / 2;
 
     x_offset = x_start;
     y_offset = y_start;
@@ -454,7 +454,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             else
             {
                 x_offset = x_start;
-                y_offset += maxHeight ; //+ charHeight / 2
+                y_offset += 3 * maxHeight / 2 ; //+ charHeight / 2
             }
         }
 
@@ -462,7 +462,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         current = current->NextInCycle();
 
         if (m_windowStyle & wxRA_SPECIFY_ROWS)
-            y_offset += maxHeight ; // + charHeight / 2
+            y_offset += 3 * maxHeight / 2 ; // + charHeight / 2
         else
             x_offset += maxWidth + charWidth;
     }
@@ -489,19 +489,23 @@ wxSize wxRadioBox::DoGetBestSize() const
     {
         GetTextExtent(GetString(i), &eachWidth, &eachHeight, NULL, NULL, &font );
         eachWidth  = (int)(eachWidth + RADIO_SIZE);
-        eachHeight = (int)((3 * eachHeight) / 2);
+        eachHeight = (int)eachHeight;
         if (maxWidth < eachWidth)
             maxWidth = eachWidth;
         if (maxHeight < eachHeight)
             maxHeight = eachHeight;
     }
 
-    totHeight = GetRowCount() * maxHeight;
+    totHeight = GetRowCount() * maxHeight + (GetRowCount() - 1) * maxHeight / 2;
     totWidth  = GetColumnCount() * (maxWidth + charWidth);
 
     wxSize sz = DoGetSizeFromClientSize( wxSize( totWidth, totHeight ) );
     totWidth = sz.x;
     totHeight = sz.y;
+    
+    // optimum size is an additional 5 pt border to all sides
+    totWidth += 10;
+    totHeight += 10;
 
     // handle radio box title as well
     GetTextExtent( GetLabel(), &eachWidth, NULL );

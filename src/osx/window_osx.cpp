@@ -674,8 +674,8 @@ wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
     m_peer->GetContentArea( left, top, innerwidth, innerheight );
     m_peer->GetSize( outerwidth, outerheight );
     
-    sizeTotal.x += left + (outerwidth-innerwidth);
-    sizeTotal.y += top + (outerheight-innerheight);
+    sizeTotal.x += outerwidth-innerwidth;
+    sizeTotal.y += outerheight-innerheight;
     
     sizeTotal.x += MacGetLeftBorderSize() + MacGetRightBorderSize() ;
     sizeTotal.y += MacGetTopBorderSize() + MacGetBottomBorderSize() ;

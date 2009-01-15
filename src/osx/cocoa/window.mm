@@ -19,6 +19,10 @@
 #include "wx/osx/private.h"
 #endif
 
+#if wxUSE_CARET
+    #include "wx/caret.h"
+#endif
+
 NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
 {
     int x, y, w, h ;
@@ -39,8 +43,6 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 WXCOCOAIMPL_COMMON_INTERFACE
 
-- (BOOL) becomeFirstResponder;
-- (BOOL) resignFirstResponder;
 - (BOOL) canBecomeKeyView;
 
 @end // wxNSView
@@ -63,6 +65,8 @@ WXCOCOAIMPL_COMMON_INTERFACE
 
 - (void)setImage:(NSImage *)image;
 - (void)setControlSize:(NSControlSize)size;
+
+- (id)contentView;
 @end 
 
 long wxOSXTranslateCocoaKey(unsigned short code, int unichar )
@@ -356,24 +360,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 
 WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
-- (BOOL) becomeFirstResponder
-{
-    BOOL r = [super becomeFirstResponder];
-    if ( r )
-    {
-    }
-    return r;
-}
-
-- (BOOL) resignFirstResponder
-{
-    BOOL r = [super resignFirstResponder];
-    if ( r )
-    {
-    }
-    return r;
-}
-
 - (BOOL) canBecomeKeyView
 {
     return YES;
@@ -434,6 +420,15 @@ void wxWidgetCocoaImpl::ScrollRect( const wxRect *rect, int dx, int dy )
 
 void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
 {
+    wxWindowMac* parent = GetWXPeer()->GetParent();
+    // under Cocoa we might have a contentView in the wxParent to which we have to 
+    // adjust the coordinates
+    if (parent)
+    {
+        wxPoint pt(parent->GetClientAreaOrigin());
+        x -= pt.x;
+        y -= pt.y;
+    }
     NSRect r = wxToNSRect( [m_osxView superview], wxRect(x,y,width, height) );
     [m_osxView setFrame:r];
 }
@@ -454,8 +449,27 @@ void wxWidgetCocoaImpl::GetSize( int &width, int &height ) const
 
 void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &height ) const
 {
-    left = top = 0;
-    GetSize( width, height );
+    if ( [m_osxView respondsToSelector:@selector(contentView) ] )
+    {
+        NSView* cv = [m_osxView contentView];
+     
+        NSRect bounds = [m_osxView bounds];
+        NSRect rect = [cv frame];
+        
+        int y = rect.origin.y;
+        int x = rect.origin.x;
+        if ( ![ m_osxView isFlipped ] )
+            y = bounds.size.height - (rect.origin.y + rect.size.height);
+        left = x;
+        top = y;
+        width = rect.size.width;
+        height = rect.size.height;
+    }
+    else
+    {
+        left = top = 0;
+        GetSize( width, height );
+    }
 }
 
 void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
@@ -668,6 +682,48 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     wxevent.m_y = pt.y;
 
     return GetWXPeer()->HandleWindowEvent(wxevent);
+}
+
+void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus)
+{
+    wxWindow* thisWindow = GetWXPeer();
+    if ( thisWindow->MacGetTopLevelWindow() && NeedsFocusRect() )
+    {
+        thisWindow->MacInvalidateBorders();
+    }
+
+    if ( receivedFocus )
+    {
+        wxLogTrace(_T("Focus"), _T("focus set(%p)"), static_cast<void*>(thisWindow));
+        wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
+        thisWindow->HandleWindowEvent(eventFocus);
+
+#if wxUSE_CARET
+        if ( thisWindow->GetCaret() )
+            thisWindow->GetCaret()->OnSetFocus();
+#endif
+
+        wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
+        event.SetEventObject(thisWindow);
+        // TODO how to find out the targetFocusWindow ?
+        // event.SetWindow(targetFocusWindow);
+        thisWindow->HandleWindowEvent(event) ;
+    }
+    else // !receivedFocuss
+    {
+#if wxUSE_CARET
+        if ( thisWindow->GetCaret() )
+            thisWindow->GetCaret()->OnKillFocus();
+#endif
+
+        wxLogTrace(_T("Focus"), _T("focus lost(%p)"), static_cast<void*>(thisWindow));
+                    
+        wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
+        event.SetEventObject(thisWindow);
+        // TODO how to find out the targetFocusWindow ?
+        // event.SetWindow(targetFocusWindow);
+        thisWindow->HandleWindowEvent(event) ;
+    }
 }
 
 

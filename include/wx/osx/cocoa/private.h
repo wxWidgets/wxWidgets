@@ -119,6 +119,7 @@ public :
     
     virtual bool        DoHandleMouseEvent(NSEvent *event); 
     virtual bool        DoHandleKeyEvent(NSEvent *event); 
+    virtual void        DoNotifyFocusEvent(bool receivedFocus); 
 
 protected:
     WXWidget m_osxView;
@@ -199,7 +200,7 @@ protected :
     // common code snippets for cocoa implementations
     // later to be done using injection in method table
         
-    #define WXCOCOAIMPL_COMMON_MOUSE_INTERFACE -(void)mouseDown:(NSEvent *)event ;\
+    #define WXCOCOAIMPL_COMMON_EVENTS_INTERFACE -(void)mouseDown:(NSEvent *)event ;\
         -(void)rightMouseDown:(NSEvent *)event ;\
         -(void)otherMouseDown:(NSEvent *)event ;\
         -(void)mouseUp:(NSEvent *)event ;\
@@ -208,8 +209,10 @@ protected :
         - (void)keyDown:(NSEvent *)event;\
         - (void)keyUp:(NSEvent *)event;\
         - (void)flagsChanged:(NSEvent *)event;\
+        - (BOOL) becomeFirstResponder;\
+        - (BOOL) resignFirstResponder;
 
-    #define WXCOCOAIMPL_COMMON_MOUSE_IMPLEMENTATION -(void)mouseDown:(NSEvent *)event \
+    #define WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION -(void)mouseDown:(NSEvent *)event \
         {\
             if ( !impl->DoHandleMouseEvent(event) )\
                 [super mouseDown:event];\
@@ -253,6 +256,20 @@ protected :
         {\
             if ( !impl->DoHandleKeyEvent(event) )\
                 [super flagsChanged:event];\
+        }\
+        - (BOOL) becomeFirstResponder\
+        {\
+            BOOL r = [super becomeFirstResponder];\
+            if ( r )\
+                impl->DoNotifyFocusEvent( true );\
+            return r;\
+        }\
+        - (BOOL) resignFirstResponder\
+        {\
+            BOOL r = [super resignFirstResponder];\
+            if ( r )\
+                impl->DoNotifyFocusEvent( false );\
+            return r;\
         }
         
     #define WXCOCOAIMPL_COMMON_MEMBERS wxWidgetCocoaImpl* impl;
@@ -261,9 +278,9 @@ protected :
         - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;\
         - (wxWidgetCocoaImpl*) implementation;\
         - (BOOL) isFlipped;\
-        WXCOCOAIMPL_COMMON_MOUSE_INTERFACE
+        WXCOCOAIMPL_COMMON_EVENTS_INTERFACE
 
-    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION WXCOCOAIMPL_COMMON_MOUSE_IMPLEMENTATION \
+    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION \
         - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation\
         {\
             impl = theImplementation;\
@@ -275,6 +292,20 @@ protected :
         - (BOOL) isFlipped\
         {\
             return YES;\
+        }\
+
+     #define WXCOCOAIMPL_COMMON_IMPLEMENTATION_NOT_FLIPPED WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION \
+        - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation\
+        {\
+            impl = theImplementation;\
+        }\
+        - (wxWidgetCocoaImpl*) implementation\
+        {\
+            return impl;\
+        }\
+        - (BOOL) isFlipped\
+        {\
+            return NO;\
         }\
 
     // used for many wxControls
