@@ -256,6 +256,9 @@ clean:
 	cd wrapsizer
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
+	cd flash
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd "$(MAKEDIR)"
 	cd mfc
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
 	cd "$(MAKEDIR)"
@@ -620,6 +623,11 @@ sub_wizard:
 
 sub_wrapsizer: 
 	cd wrapsizer
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
+	cd "$(MAKEDIR)"
+
+sub_flash: 
+	cd flash
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd "$(MAKEDIR)"
 

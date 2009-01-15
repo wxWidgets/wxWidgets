@@ -112,6 +112,7 @@ clean:
 	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wizard -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C flash -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) clean
 
@@ -331,6 +332,9 @@ wizard:
 wrapsizer: 
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) all
 
+flash: 
+	$(MAKE) -C flash -f makefile.gcc $(MAKEARGS) all
+
 mfc: 
 	$(MAKE) -C mfc -f makefile.gcc $(MAKEARGS) all
 
@@ -343,7 +347,7 @@ memcheck:
 	keyboard layout listctrl mdi mediaplayer menu minimal mobile nativdlg notebook \
 	oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest \
 	scroll shaped sockets sound splash splitter statbar stc taskbar text thread toolbar \
-	treectrl typetest validate vscroll widgets wizard wrapsizer mfc memcheck
+	treectrl typetest validate vscroll widgets wizard wrapsizer flash mfc memcheck
 
 
 SHELL := $(COMSPEC)

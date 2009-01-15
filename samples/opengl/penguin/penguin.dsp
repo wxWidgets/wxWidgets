@@ -57,8 +57,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv29u_gl.lib opengl32.lib glu32.lib wxmswuniv29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivudll\penguin.exe" /debug /pdb:"vc_mswunivudll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv29u_gl.lib opengl32.lib glu32.lib wxmswuniv29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivudll\penguin.exe" /debug /pdb:"vc_mswunivudll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv29u_gl.lib opengl32.lib glu32.lib wxmswuniv29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivudll\penguin.exe" /debug /pdb:"vc_mswunivudll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv29u_gl.lib opengl32.lib glu32.lib wxmswuniv29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivudll\penguin.exe" /debug /pdb:"vc_mswunivudll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "penguin - Win32 DLL Universal Debug"
 
@@ -82,8 +82,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv29ud_gl.lib opengl32.lib glu32.lib wxmswuniv29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\penguin.exe" /debug /pdb:"vc_mswunivuddll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmswuniv29ud_gl.lib opengl32.lib glu32.lib wxmswuniv29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\penguin.exe" /debug /pdb:"vc_mswunivuddll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv29ud_gl.lib opengl32.lib glu32.lib wxmswuniv29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivuddll\penguin.exe" /debug /pdb:"vc_mswunivuddll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmswuniv29ud_gl.lib opengl32.lib glu32.lib wxmswuniv29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivuddll\penguin.exe" /debug /pdb:"vc_mswunivuddll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "penguin - Win32 DLL Release"
 
@@ -107,8 +107,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29u_gl.lib opengl32.lib glu32.lib wxmsw29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswudll\penguin.exe" /debug /pdb:"vc_mswudll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw29u_gl.lib opengl32.lib glu32.lib wxmsw29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswudll\penguin.exe" /debug /pdb:"vc_mswudll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw29u_gl.lib opengl32.lib glu32.lib wxmsw29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\penguin.exe" /debug /pdb:"vc_mswudll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw29u_gl.lib opengl32.lib glu32.lib wxmsw29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\penguin.exe" /debug /pdb:"vc_mswudll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "penguin - Win32 DLL Debug"
 
@@ -132,8 +132,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29ud_gl.lib opengl32.lib glu32.lib wxmsw29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuddll\penguin.exe" /debug /pdb:"vc_mswuddll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
-# ADD LINK32 wxmsw29ud_gl.lib opengl32.lib glu32.lib wxmsw29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuddll\penguin.exe" /debug /pdb:"vc_mswuddll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD BASE LINK32 wxmsw29ud_gl.lib opengl32.lib glu32.lib wxmsw29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\penguin.exe" /debug /pdb:"vc_mswuddll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
+# ADD LINK32 wxmsw29ud_gl.lib opengl32.lib glu32.lib wxmsw29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\penguin.exe" /debug /pdb:"vc_mswuddll\penguin.pdb" /libpath:".\..\..\..\lib\vc_dll" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "penguin - Win32 Universal Release"
 
@@ -157,8 +157,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv29u_gl.lib opengl32.lib glu32.lib wxmswuniv29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivu\penguin.exe" /debug /pdb:"vc_mswunivu\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv29u_gl.lib opengl32.lib glu32.lib wxmswuniv29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivu\penguin.exe" /debug /pdb:"vc_mswunivu\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv29u_gl.lib opengl32.lib glu32.lib wxmswuniv29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivu\penguin.exe" /debug /pdb:"vc_mswunivu\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv29u_gl.lib opengl32.lib glu32.lib wxmswuniv29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivu\penguin.exe" /debug /pdb:"vc_mswunivu\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "penguin - Win32 Universal Debug"
 
@@ -182,8 +182,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmswuniv29ud_gl.lib opengl32.lib glu32.lib wxmswuniv29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivud\penguin.exe" /debug /pdb:"vc_mswunivud\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmswuniv29ud_gl.lib opengl32.lib glu32.lib wxmswuniv29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivud\penguin.exe" /debug /pdb:"vc_mswunivud\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmswuniv29ud_gl.lib opengl32.lib glu32.lib wxmswuniv29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivud\penguin.exe" /debug /pdb:"vc_mswunivud\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmswuniv29ud_gl.lib opengl32.lib glu32.lib wxmswuniv29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivud\penguin.exe" /debug /pdb:"vc_mswunivud\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "penguin - Win32 Release"
 
@@ -207,8 +207,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29u_gl.lib opengl32.lib glu32.lib wxmsw29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswu\penguin.exe" /debug /pdb:"vc_mswu\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw29u_gl.lib opengl32.lib glu32.lib wxmsw29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswu\penguin.exe" /debug /pdb:"vc_mswu\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw29u_gl.lib opengl32.lib glu32.lib wxmsw29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\penguin.exe" /debug /pdb:"vc_mswu\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw29u_gl.lib opengl32.lib glu32.lib wxmsw29u_core.lib wxbase29u.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\penguin.exe" /debug /pdb:"vc_mswu\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ELSEIF  "$(CFG)" == "penguin - Win32 Debug"
 
@@ -232,8 +232,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxmsw29ud_gl.lib opengl32.lib glu32.lib wxmsw29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswud\penguin.exe" /debug /pdb:"vc_mswud\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
-# ADD LINK32 wxmsw29ud_gl.lib opengl32.lib glu32.lib wxmsw29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswud\penguin.exe" /debug /pdb:"vc_mswud\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD BASE LINK32 wxmsw29ud_gl.lib opengl32.lib glu32.lib wxmsw29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\penguin.exe" /debug /pdb:"vc_mswud\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
+# ADD LINK32 wxmsw29ud_gl.lib opengl32.lib glu32.lib wxmsw29ud_core.lib wxbase29ud.lib wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\penguin.exe" /debug /pdb:"vc_mswud\penguin.pdb" /libpath:".\..\..\..\lib\vc_lib" /subsystem:windows
 
 !ENDIF
 

@@ -263,7 +263,7 @@ $(OBJS)\debugrpt.exe :  $(DEBUGRPT_OBJECTS) $(OBJS)\debugrpt_sample.res
 	@%append $(OBJS)\debugrpt.lbc option caseexact
 	@%append $(OBJS)\debugrpt.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(LDFLAGS)
 	@for %i in ($(DEBUGRPT_OBJECTS)) do @%append $(OBJS)\debugrpt.lbc file %i
-	@for %i in ( $(__WXLIB_QA_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_XML_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\debugrpt.lbc library %i
+	@for %i in ( $(__WXLIB_QA_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_XML_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\debugrpt.lbc library %i
 	@%append $(OBJS)\debugrpt.lbc option resource=$(OBJS)\debugrpt_sample.res
 	@for %i in () do @%append $(OBJS)\debugrpt.lbc option stack=%i
 	wlink @$(OBJS)\debugrpt.lbc

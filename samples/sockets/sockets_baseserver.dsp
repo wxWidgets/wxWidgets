@@ -54,8 +54,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivudll\baseserver.exe" /debug /pdb:"vc_mswunivudll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
-# ADD LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivudll\baseserver.exe" /debug /pdb:"vc_mswunivudll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
+# ADD BASE LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivudll\baseserver.exe" /debug /pdb:"vc_mswunivudll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
+# ADD LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivudll\baseserver.exe" /debug /pdb:"vc_mswunivudll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "baseserver - Win32 DLL Universal Debug"
 
@@ -77,8 +77,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\baseserver.exe" /debug /pdb:"vc_mswunivuddll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
-# ADD LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivuddll\baseserver.exe" /debug /pdb:"vc_mswunivuddll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
+# ADD BASE LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivuddll\baseserver.exe" /debug /pdb:"vc_mswunivuddll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
+# ADD LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivuddll\baseserver.exe" /debug /pdb:"vc_mswunivuddll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "baseserver - Win32 DLL Release"
 
@@ -100,8 +100,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswudll\baseserver.exe" /debug /pdb:"vc_mswudll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
-# ADD LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswudll\baseserver.exe" /debug /pdb:"vc_mswudll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
+# ADD BASE LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\baseserver.exe" /debug /pdb:"vc_mswudll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
+# ADD LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswudll\baseserver.exe" /debug /pdb:"vc_mswudll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "baseserver - Win32 DLL Debug"
 
@@ -123,8 +123,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuddll\baseserver.exe" /debug /pdb:"vc_mswuddll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
-# ADD LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswuddll\baseserver.exe" /debug /pdb:"vc_mswuddll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
+# ADD BASE LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\baseserver.exe" /debug /pdb:"vc_mswuddll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
+# ADD LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswuddll\baseserver.exe" /debug /pdb:"vc_mswuddll\baseserver.pdb" /libpath:".\..\..\lib\vc_dll" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "baseserver - Win32 Universal Release"
 
@@ -146,8 +146,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivu\baseserver.exe" /debug /pdb:"vc_mswunivu\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
-# ADD LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivu\baseserver.exe" /debug /pdb:"vc_mswunivu\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
+# ADD BASE LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivu\baseserver.exe" /debug /pdb:"vc_mswunivu\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
+# ADD LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivu\baseserver.exe" /debug /pdb:"vc_mswunivu\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "baseserver - Win32 Universal Debug"
 
@@ -169,8 +169,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivud\baseserver.exe" /debug /pdb:"vc_mswunivud\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
-# ADD LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswunivud\baseserver.exe" /debug /pdb:"vc_mswunivud\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
+# ADD BASE LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivud\baseserver.exe" /debug /pdb:"vc_mswunivud\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
+# ADD LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswunivud\baseserver.exe" /debug /pdb:"vc_mswunivud\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "baseserver - Win32 Release"
 
@@ -192,8 +192,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswu\baseserver.exe" /debug /pdb:"vc_mswu\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
-# ADD LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswu\baseserver.exe" /debug /pdb:"vc_mswu\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
+# ADD BASE LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\baseserver.exe" /debug /pdb:"vc_mswu\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
+# ADD LINK32 wxbase29u_net.lib wxbase29u.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswu\baseserver.exe" /debug /pdb:"vc_mswu\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
 
 !ELSEIF  "$(CFG)" == "baseserver - Win32 Debug"
 
@@ -215,8 +215,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswud\baseserver.exe" /debug /pdb:"vc_mswud\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
-# ADD LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib /nologo /machine:i386 /out:"vc_mswud\baseserver.exe" /debug /pdb:"vc_mswud\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
+# ADD BASE LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\baseserver.exe" /debug /pdb:"vc_mswud\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
+# ADD LINK32 wxbase29ud_net.lib wxbase29ud.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib /nologo /machine:i386 /out:"vc_mswud\baseserver.exe" /debug /pdb:"vc_mswud\baseserver.pdb" /libpath:".\..\..\lib\vc_lib" /subsystem:console
 
 !ENDIF
 

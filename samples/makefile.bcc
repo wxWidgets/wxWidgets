@@ -338,6 +338,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>wrapsizer.bat
 	call wrapsizer.bat
 	@del wrapsizer.bat
+	@echo cd flash >flash.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>flash.bat
+	call flash.bat
+	@del flash.bat
 	@echo cd mfc >mfc.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>mfc.bat
 	call mfc.bat
@@ -778,6 +782,12 @@ wrapsizer:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>wrapsizer.bat
 	call wrapsizer.bat
 	@del wrapsizer.bat
+
+flash: 
+	@echo cd flash >flash.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>flash.bat
+	call flash.bat
+	@del flash.bat
 
 mfc: 
 	@echo cd mfc >mfc.bat
