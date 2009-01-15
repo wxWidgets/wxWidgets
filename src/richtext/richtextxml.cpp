@@ -971,8 +971,8 @@ wxString wxRichTextXMLHandler::CreateStyle(const wxTextAttr& attr, bool isPara)
     if (attr.HasFontSize())
         str << wxT(" fontsize=\"") << attr.GetFontSize() << wxT("\"");
 
-    //if (attr.HasFontFamily())
-    //    str << wxT(" fontfamily=\"") << attr.GetFont().GetFamily() << wxT("\"");
+    if (attr.HasFontFamily())
+        str << wxT(" fontfamily=\"") << attr.GetFont().GetFamily() << wxT("\"");
 
     if (attr.HasFontItalic())
         str << wxT(" fontstyle=\"") << attr.GetFontStyle() << wxT("\"");
@@ -1131,7 +1131,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPa
 {
     wxString fontFacename;
     int fontSize = 12;
-    // int fontFamily = wxDEFAULT;
+    int fontFamily = wxFONTFAMILY_DEFAULT;
     int fontWeight = wxNORMAL;
     int fontStyle = wxNORMAL;
     bool fontUnderlined = false;
@@ -1146,11 +1146,13 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPa
             wxRichTextFixFaceName(fontFacename);
     }
 
-
     wxString value;
-    //value = node->GetAttribute(wxT("fontfamily"), wxEmptyString);
-    //if (!value.empty())
-    //    fontFamily = wxAtoi(value);
+    value = node->GetAttribute(wxT("fontfamily"), wxEmptyString);
+    if (!value.empty())
+    {
+        fontFamily = wxAtoi(value);
+        attr.SetFontFamily(fontFamily);
+    }
 
     value = node->GetAttribute(wxT("fontstyle"), wxEmptyString);
     if (!value.empty())

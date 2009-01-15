@@ -38,9 +38,10 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_FONT_ITALIC          = 0x00000020,
     wxTEXT_ATTR_FONT_UNDERLINE       = 0x00000040,
     wxTEXT_ATTR_FONT_ENCODING        = 0x02000000,
+    wxTEXT_ATTR_FONT_FAMILY          = 0x04000000,
     wxTEXT_ATTR_FONT = \
         ( wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT | \
-            wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_ENCODING ),
+            wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_ENCODING | wxTEXT_ATTR_FONT_FAMILY ),
 
     wxTEXT_ATTR_ALIGNMENT            = 0x00000080,
     wxTEXT_ATTR_LEFT_INDENT          = 0x00000100,
@@ -67,7 +68,7 @@ enum wxTextAttrFlags
     */
 
     wxTEXT_ATTR_CHARACTER = \
-        (wxTEXT_ATTR_FONT|wxTEXT_ATTR_FONT_ENCODING|wxTEXT_ATTR_EFFECTS| \
+        (wxTEXT_ATTR_FONT|wxTEXT_ATTR_EFFECTS| \
             wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_URL),
 
     wxTEXT_ATTR_PARAGRAPH = \
@@ -296,6 +297,11 @@ public:
     const wxString& GetFontFaceName() const;
 
     /**
+        Returns the font family.
+    */
+    int GetFontFamily() const;
+
+    /**
         Returns the font size in points.
     */
     int GetFontSize() const;
@@ -450,6 +456,11 @@ public:
         Returns @true if the attribute object specifies a font face name.
     */
     bool HasFontFaceName() const;
+
+    /**
+        Returns @true if the attribute object specifies a font family.
+    */
+    bool HasFontFamily() const;
 
     /**
         Returns @true if the attribute object specifies italic style.
@@ -641,9 +652,14 @@ public:
     void SetFontEncoding(wxFontEncoding encoding);
 
     /**
-        Sets the paragraph alignment.
+        Sets the font face name.
     */
     void SetFontFaceName(const wxString& faceName);
+
+    /**
+        Sets the font family.
+    */
+    void SetFontFamily(int family);
 
     /**
         Sets the font size in points.

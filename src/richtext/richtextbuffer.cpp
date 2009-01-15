@@ -66,6 +66,7 @@ inline void wxCheckSetFont(wxDC& dc, const wxFont& font)
             font1.GetStyle() == font.GetStyle() &&
             font1.GetWeight() == font.GetWeight() &&
             font1.GetUnderlined() == font.GetUnderlined() &&
+            font1.GetFamily() == font.GetFamily() &&
             font1.GetFaceName() == font.GetFaceName())
             return;
     }
@@ -1985,6 +1986,23 @@ bool wxRichTextParagraphLayoutBox::CollectStyle(wxTextAttr& currentStyle, const 
             else
             {
                 currentStyle.SetFontStyle(style.GetFontStyle());
+            }
+        }
+
+        if (style.HasFontFamily() && !wxHasStyle(multipleStyleAttributes|absentStyleAttributes, wxTEXT_ATTR_FONT_FAMILY))
+        {
+            if (currentStyle.HasFontFamily())
+            {
+                if (currentStyle.GetFontFamily() != style.GetFontFamily())
+                {
+                    // Clash of style - mark as such
+                    multipleStyleAttributes |= wxTEXT_ATTR_FONT_FAMILY;
+                    currentStyle.SetFlags(currentStyle.GetFlags() & ~wxTEXT_ATTR_FONT_FAMILY);
+                }
+            }
+            else
+            {
+                currentStyle.SetFontFamily(style.GetFontFamily());
             }
         }
 

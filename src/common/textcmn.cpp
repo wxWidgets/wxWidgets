@@ -89,6 +89,7 @@ void wxTextAttr::Init()
     m_fontWeight = wxNORMAL;
     m_fontUnderlined = false;
     m_fontEncoding = wxFONTENCODING_DEFAULT;
+    m_fontFamily = wxFONTFAMILY_DEFAULT;
 
     m_paragraphSpacingAfter = 0;
     m_paragraphSpacingBefore = 0;
@@ -118,6 +119,7 @@ void wxTextAttr::Copy(const wxTextAttr& attr)
     m_fontUnderlined = attr.m_fontUnderlined;
     m_fontFaceName = attr.m_fontFaceName;
     m_fontEncoding = attr.m_fontEncoding;
+    m_fontFamily = attr.m_fontFamily;
     m_textEffects = attr.m_textEffects;
     m_textEffectFlags = attr.m_textEffectFlags;
 
@@ -181,6 +183,7 @@ bool wxTextAttr::operator== (const wxTextAttr& attr) const
             GetFontUnderlined() == attr.GetFontUnderlined() &&
             GetFontFaceName() == attr.GetFontFaceName() &&
             GetFontEncoding() == attr.GetFontEncoding() &&
+            GetFontFamily() == attr.GetFontFamily() &&
 
             GetURL() == attr.GetURL();
 }
@@ -216,6 +219,10 @@ bool wxTextAttr::EqPartial(const wxTextAttr& attr, int flags) const
 
     if ((flags & wxTEXT_ATTR_FONT_ENCODING) &&
         GetFontEncoding() != attr.GetFontEncoding())
+        return false;
+
+    if ((flags & wxTEXT_ATTR_FONT_FAMILY) &&
+        GetFontFamily() != attr.GetFontFamily())
         return false;
 
     if ((flags & wxTEXT_ATTR_URL) && GetURL() != attr.GetURL())
@@ -326,7 +333,11 @@ wxFont wxTextAttr::GetFont() const
     if (HasFontEncoding())
         encoding = GetFontEncoding();
 
-    wxFont font(fontSize, wxDEFAULT, fontStyle, fontWeight, underlined, fontFaceName, encoding);
+    int fontFamily = wxFONTFAMILY_DEFAULT;
+    if (HasFontFamily())
+        fontFamily = GetFontFamily();
+
+    wxFont font(fontSize, fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
 #ifdef __WXMAC__
     font.SetNoAntiAliasing(true);
 #endif
@@ -356,6 +367,9 @@ bool wxTextAttr::GetFontAttributes(const wxFont& font, int flags)
 
     if (flags & wxTEXT_ATTR_FONT_ENCODING)
         m_fontEncoding = font.GetEncoding();
+
+    if (flags & wxTEXT_ATTR_FONT_FAMILY)
+        m_fontFamily = font.GetFamily();
 
     m_flags |= flags;
 
@@ -412,6 +426,12 @@ bool wxTextAttr::Apply(const wxTextAttr& style, const wxTextAttr* compareWith)
     {
         if (!(compareWith && compareWith->HasFontEncoding() && compareWith->GetFontEncoding() == style.GetFontEncoding()))
             destStyle.SetFontEncoding(style.GetFontEncoding());
+    }
+
+    if (style.HasFontFamily())
+    {
+        if (!(compareWith && compareWith->HasFontFamily() && compareWith->GetFontFamily() == style.GetFontFamily()))
+            destStyle.SetFontFamily(style.GetFontFamily());
     }
 
     if (style.GetTextColour().Ok() && style.HasTextColour())

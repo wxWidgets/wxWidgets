@@ -171,9 +171,10 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_FONT_ITALIC          = 0x00000020,
     wxTEXT_ATTR_FONT_UNDERLINE       = 0x00000040,
     wxTEXT_ATTR_FONT_ENCODING        = 0x02000000,
+    wxTEXT_ATTR_FONT_FAMILY          = 0x04000000,
     wxTEXT_ATTR_FONT = \
         ( wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT | \
-            wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_ENCODING ),
+            wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_ENCODING | wxTEXT_ATTR_FONT_FAMILY ),
 
     wxTEXT_ATTR_ALIGNMENT            = 0x00000080,
     wxTEXT_ATTR_LEFT_INDENT          = 0x00000100,
@@ -200,7 +201,7 @@ enum wxTextAttrFlags
     */
 
     wxTEXT_ATTR_CHARACTER = \
-        (wxTEXT_ATTR_FONT|wxTEXT_ATTR_FONT_ENCODING|wxTEXT_ATTR_EFFECTS| \
+        (wxTEXT_ATTR_FONT|wxTEXT_ATTR_EFFECTS| \
             wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_URL),
 
     wxTEXT_ATTR_PARAGRAPH = \
@@ -311,6 +312,7 @@ public:
     void SetFontFaceName(const wxString& faceName) { m_fontFaceName = faceName; m_flags |= wxTEXT_ATTR_FONT_FACE; }
     void SetFontUnderlined(bool underlined) { m_fontUnderlined = underlined; m_flags |= wxTEXT_ATTR_FONT_UNDERLINE; }
     void SetFontEncoding(wxFontEncoding encoding) { m_fontEncoding = encoding; m_flags |= wxTEXT_ATTR_FONT_ENCODING; }
+    void SetFontFamily(int family) { m_fontFamily = family; m_flags |= wxTEXT_ATTR_FONT_FAMILY; }
 
     // Set font
     void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT) { GetFontAttributes(font, flags); }
@@ -349,6 +351,7 @@ public:
     bool GetFontUnderlined() const { return m_fontUnderlined; }
     const wxString& GetFontFaceName() const { return m_fontFaceName; }
     wxFontEncoding GetFontEncoding() const { return m_fontEncoding; }
+    int GetFontFamily() const { return m_fontFamily; }
 
     wxFont GetFont() const;
 
@@ -383,6 +386,7 @@ public:
     bool HasFontUnderlined() const { return HasFlag(wxTEXT_ATTR_FONT_UNDERLINE); }
     bool HasFontFaceName() const { return HasFlag(wxTEXT_ATTR_FONT_FACE); }
     bool HasFontEncoding() const { return HasFlag(wxTEXT_ATTR_FONT_ENCODING); }
+    bool HasFontFamily() const { return HasFlag(wxTEXT_ATTR_FONT_FAMILY); }
     bool HasFont() const { return HasFlag(wxTEXT_ATTR_FONT); }
 
     bool HasParagraphSpacingAfter() const { return HasFlag(wxTEXT_ATTR_PARA_SPACING_AFTER); }
@@ -487,6 +491,7 @@ private:
     int                 m_fontSize;
     int                 m_fontStyle;
     int                 m_fontWeight;
+    int                 m_fontFamily;
     bool                m_fontUnderlined;
     wxString            m_fontFaceName;
 
