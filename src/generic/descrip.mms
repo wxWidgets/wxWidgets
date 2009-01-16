@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 13 January 2009                                                     *
+# Date : 16 January 2009                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -92,7 +92,7 @@ OBJECTS = \
 		filepickerg.obj,\
 		bmpcboxg.obj,\
 		filectrlg.obj,srchctlg.obj,notifmsgg.obj,headerctrlg.obj,\
-		grideditors.obj
+		grideditors.obj,vlbox.obj,vscroll.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -172,16 +172,16 @@ OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
 .ifdef __WXX11__
 OBJECTS0=accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
 	listbkg.obj,mdig.obj,spinctlg.obj,splash.obj,timer.obj,\
-	vlbox.obj,vscroll.obj,combog.obj,icon.obj,collpaneg.obj,animateg.obj,\
+	combog.obj,icon.obj,collpaneg.obj,animateg.obj,\
 	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj,stattextg.obj
 .else
 .ifdef __WXGTK__
-OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,vlbox.obj,\
-	vscroll.obj,combog.obj,icon.obj,collpaneg.obj,animateg.obj,\
+OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,\
+	combog.obj,icon.obj,collpaneg.obj,animateg.obj,\
 	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj
 .else
-OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,vlbox.obj,\
-	vscroll.obj,combog.obj,icon.obj
+OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,\
+	combog.obj,icon.obj
 .endif
 .endif
 .endif
