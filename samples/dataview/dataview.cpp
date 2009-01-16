@@ -331,7 +331,7 @@ public:
         MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
 
         // "MyMusic" also has no parent
-        if (node == m_root || node == NULL)
+        if (node == m_root)
             return wxDataViewItem(0);
 
         return wxDataViewItem( (void*) node->GetParent() );
@@ -409,7 +409,7 @@ public:
             memcpy( dest, buffer, strlen(buffer)+1 );
             return true;
         }
-
+    
     wxDataViewItem GetNinthItem()
     {
        return wxDataViewItem( m_ninth );
@@ -819,7 +819,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     SetMenuBar(menu_bar);
     CreateStatusBar();
-
+    
     wxPanel *panel = new wxPanel( this, -1 );
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
@@ -921,24 +921,26 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     bottom_sizer->Add( m_log, 1, wxGROW );
 
-#if 1
-    // wxDataViewTreeStore
-
-    wxDataViewCtrl *treectrl = new wxDataViewCtrl( panel, -1,
-        wxDefaultPosition, wxSize(100,200), wxDV_NO_HEADER );
-
-    wxDataViewTreeStore *store = new wxDataViewTreeStore;
-    wxDataViewItem parent = store->AppendContainer( wxDataViewItem(0),wxT("Root 1"), wxIcon(small1_xpm) );
-    wxDataViewItem child = store->AppendItem( parent,wxT("Child 1"), wxIcon(small1_xpm) );
-    child = store->AppendItem( parent,wxT("Child 2"), wxIcon(small1_xpm) );
-    child = store->AppendItem( parent,wxT("Child 3, very long, long, long, long"), wxIcon(small1_xpm) );
-    treectrl->AssociateModel( store );
-    store->DecRef();
-
-    treectrl->AppendIconTextColumn( wxT("no label"), 0, wxDATAVIEW_CELL_INERT, -1, (wxAlignment) 0,
-        wxDATAVIEW_COL_RESIZABLE );
-
-    bottom_sizer->Add( treectrl, 1 );
+    // wxDataViewListCtrl
+    
+    wxDataViewListCtrl *listctrl = new wxDataViewListCtrl( panel, -1,
+        wxDefaultPosition, wxSize(100,200) );
+        
+    listctrl->AppendToggleCol( wxT("Toggle") );
+    listctrl->AppendTextCol( wxT("Text") );
+    
+    wxVector<wxVariant> data;
+    data.push_back( true );
+    data.push_back( "row 1" );
+    listctrl->AppendItem( data );
+    
+    data.clear();
+    data.push_back( false );
+    data.push_back( "row 3" );
+    listctrl->AppendItem( data );
+    
+    bottom_sizer->Add( listctrl, 1 );
+    
 
     // wxDataViewTreeCtrl
 
@@ -948,13 +950,12 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     ilist->Add( wxIcon(small1_xpm) );
     treectrl2->SetImageList( ilist );
 
-    parent = treectrl2->AppendContainer( wxDataViewItem(0),wxT("Root 1"), 0 );
-    child = treectrl2->AppendItem( parent,wxT("Child 1"), 0 );
-    child = treectrl2->AppendItem( parent,wxT("Child 2"), 0 );
-    child = treectrl2->AppendItem( parent,wxT("Child 3, very long, long, long, long"), 0 );
+    wxDataViewItem parent2 = treectrl2->AppendContainer( wxDataViewItem(0),wxT("Root 1"), 0 );
+    wxDataViewItem child2 = treectrl2->AppendItem( parent2, wxT("Child 1"), 0 );
+    child2 = treectrl2->AppendItem( parent2, wxT("Child 2"), 0 );
+    child2 = treectrl2->AppendItem( parent2, wxT("Child 3, very long, long, long, long"), 0 );
 
     bottom_sizer->Add( treectrl2, 1 );
-#endif
 
     // main sizer
 
@@ -1026,7 +1027,7 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item: %s"), title );
-
+    
     if (m_musicCtrl->IsExpanded( event.GetItem() ))
     wxLogMessage(wxT("Item: %s is expanded"), title );
 }

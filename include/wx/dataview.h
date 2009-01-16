@@ -959,11 +959,6 @@ public:
     void DeleteItem( unsigned pos );
     void DeleteAllItems();
 
-    void SetStringValue( const wxString &value, unsigned int row, unsigned int col )
-        { SetValueByRow( value, row, col ); }
-    wxString GetStringValue( unsigned int row, unsigned int col )
-        { wxVariant value; GetValueByRow( value, row, col ); return value.GetString(); }
-
     // override base virtuals
 
     virtual unsigned int GetColumnCount() const;
@@ -982,6 +977,75 @@ public:
     wxArrayString                      m_cols;
 };
 
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewListCtrl: public wxDataViewCtrl
+{
+public:
+    wxDataViewListCtrl();
+    wxDataViewListCtrl( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = wxDV_ROW_LINES,
+           const wxValidator& validator = wxDefaultValidator );
+    ~wxDataViewListCtrl();
+
+    bool Create( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = wxDV_ROW_LINES,
+           const wxValidator& validator = wxDefaultValidator );
+
+    wxDataViewListStore *GetStore()
+        { return (wxDataViewListStore*) GetModel(); }
+    const wxDataViewListStore *GetStore() const
+        { return (const wxDataViewListStore*) GetModel(); }
+
+    void AppendCol( wxDataViewColumn *column, const wxString &varianttype );
+    void PrependCol( wxDataViewColumn *column, const wxString &varianttype );
+    void InsertCol( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
+                    
+    wxDataViewColumn *AppendTextCol( const wxString &label, 
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *AppendToggleCol( const wxString &label, 
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *AppendProgressCol( const wxString &label, 
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn *AppendIconTextCol( const wxString &label, 
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+
+    void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL )
+        { GetStore()->AppendItem( values, data ); }
+    void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL )
+        { GetStore()->PrependItem( values, data ); }
+    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL )
+        { GetStore()->InsertItem( row, values, data ); }
+    void DeleteItem( unsigned row )
+        { GetStore()->DeleteItem( row ); }
+    void DeleteAllItems()
+        { GetStore()->DeleteAllItems(); }
+
+    void SetValue( const wxVariant &value, unsigned int row, unsigned int col )
+        { GetStore()->SetValueByRow( value, row, col ); }
+
+    void SetTextValue( const wxString &value, unsigned int row, unsigned int col )
+        { GetStore()->SetValueByRow( value, row, col ); }
+    wxString GetTextValue( unsigned int row, unsigned int col ) const
+        { wxVariant value; GetStore()->GetValueByRow( value, row, col ); return value.GetString(); }
+
+    void SetToggleValue( bool value, unsigned int row, unsigned int col )
+        { GetStore()->SetValueByRow( value, row, col ); }
+    bool GetToggleValue( unsigned int row, unsigned int col ) const
+        { wxVariant value; GetStore()->GetValueByRow( value, row, col ); return value.GetBool(); }
+
+    void OnSize( wxSizeEvent &event );
+
+private:
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewListCtrl)
+};
 
 //-----------------------------------------------------------------------------
 // wxDataViewTreeStore
@@ -1126,6 +1190,8 @@ public:
 public:
     wxDataViewTreeStoreNode *m_root;
 };
+
+//-----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_ADV wxDataViewTreeCtrl: public wxDataViewCtrl
 {

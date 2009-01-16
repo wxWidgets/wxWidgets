@@ -1459,6 +1459,94 @@ bool wxDataViewListStore::SetValueByRow( const wxVariant &value, unsigned int ro
 }
 
 //-----------------------------------------------------------------------------
+// wxDataViewListCtrl
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxDataViewListCtrl,wxDataViewCtrl)
+
+BEGIN_EVENT_TABLE(wxDataViewListCtrl,wxDataViewCtrl)
+   EVT_SIZE( wxDataViewListCtrl::OnSize )
+END_EVENT_TABLE()
+
+wxDataViewListCtrl::wxDataViewListCtrl()
+{
+}
+
+wxDataViewListCtrl::wxDataViewListCtrl( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos, const wxSize& size, long style,
+           const wxValidator& validator )
+{
+    Create( parent, id, pos, size, style, validator );
+
+    wxDataViewListStore *store = new wxDataViewListStore;
+    AssociateModel( store );
+    store->DecRef();
+}
+
+wxDataViewListCtrl::~wxDataViewListCtrl()
+{
+}
+
+
+bool wxDataViewListCtrl::Create( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos, const wxSize& size, long style,
+           const wxValidator& validator )
+{
+    return wxDataViewCtrl::Create( parent, id, pos, size, style, validator );
+}
+
+void wxDataViewListCtrl::AppendCol( wxDataViewColumn *column, const wxString &varianttype )
+{
+    GetStore()->AppendColumn( varianttype );
+    AppendColumn( column );
+}
+
+void wxDataViewListCtrl::PrependCol( wxDataViewColumn *column, const wxString &varianttype )
+{
+    GetStore()->PrependColumn( varianttype );
+    PrependColumn( column );
+}
+
+void wxDataViewListCtrl::InsertCol( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype )
+{
+    GetStore()->InsertColumn( pos, varianttype );
+    InsertColumn( pos, column );
+}
+                    
+wxDataViewColumn *wxDataViewListCtrl::AppendTextCol( const wxString &label, 
+          wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    GetStore()->AppendColumn( wxT("string") );
+    return AppendTextColumn( label, GetStore()->GetColumnCount()-1, mode, width, align, flags );
+}
+
+wxDataViewColumn *wxDataViewListCtrl::AppendToggleCol( const wxString &label, 
+          wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    GetStore()->AppendColumn( wxT("bool") );
+    return AppendToggleColumn( label, GetStore()->GetColumnCount()-1, mode, width, align, flags );
+}
+
+wxDataViewColumn *wxDataViewListCtrl::AppendProgressCol( const wxString &label, 
+          wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    GetStore()->AppendColumn( wxT("long") );
+    return AppendProgressColumn( label, GetStore()->GetColumnCount()-1, mode, width, align, flags );
+}
+
+wxDataViewColumn *wxDataViewListCtrl::AppendIconTextCol( const wxString &label, 
+          wxDataViewCellMode mode, int width, wxAlignment align, int flags )
+{
+    GetStore()->AppendColumn( wxT("wxDataViewIconText") );
+    return AppendIconTextColumn( label, GetStore()->GetColumnCount()-1, mode, width, align, flags );
+}
+
+void wxDataViewListCtrl::OnSize( wxSizeEvent &event )
+{
+    event.Skip( true );
+}
+
+//-----------------------------------------------------------------------------
 // wxDataViewTreeStore
 //-----------------------------------------------------------------------------
 
