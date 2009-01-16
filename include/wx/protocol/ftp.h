@@ -2,7 +2,7 @@
 // Name:        ftp.h
 // Purpose:     FTP protocol
 // Author:      Vadim Zeitlin
-// Modified by: Mark Johnson, wxWindows@mj10777.de 
+// Modified by: Mark Johnson, wxWindows@mj10777.de
 //              20000917 : RmDir, GetLastResult, GetList
 // Created:     07/07/1997
 // RCS-ID:      $Id$
@@ -42,7 +42,7 @@ public:
     bool Connect(const wxString& host);
 
     // disconnect
-    virtual bool Close();
+    virtual bool Close();       // does NOT set m_lastError
 
     // Parameters set up
 
@@ -81,7 +81,7 @@ public:
 
     // Get the size of a file in the current dir.
     // this function tries its best to deliver the size in bytes using BINARY
-    // (the SIZE command reports different sizes depending on whether 
+    // (the SIZE command reports different sizes depending on whether
     // type is set to ASCII or BINARY)
     // returns -1 if file is non-existant or size could not be found
     int GetFileSize(const wxString& fileName);
@@ -119,6 +119,11 @@ public:
                  bool details = false);
 
 protected:
+    // just change access from public to protected for this wxSocketBase function:
+    // use SetDefaultTimeout instead which also sets our m_uiDefaultTimeout var
+    virtual void SetTimeout(long seconds)
+        { wxSocketBase::SetTimeout(seconds); }
+
     // this executes a simple ftp command with the given argument and returns
     // true if it its return code starts with '2'
     bool DoSimpleCommand(const wxChar *command,
