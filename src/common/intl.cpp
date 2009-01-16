@@ -1307,52 +1307,56 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
     // plural forms formula from it:
 
     const char* headerData = StringAtOfs(m_pOrigTable, 0);
-    if (headerData && headerData[0] == 0)
+    if ( headerData && headerData[0] == '\0' )
     {
         // Extract the charset:
-        wxString header = wxString::FromAscii(StringAtOfs(m_pTransTable, 0));
-        int begin = header.Find(wxS("Content-Type: text/plain; charset="));
-        if (begin != wxNOT_FOUND)
+        const char * const header = StringAtOfs(m_pTransTable, 0);
+        const char *
+            cset = strstr(header, "Content-Type: text/plain; charset=");
+        if ( cset )
         {
-            begin += 34; //strlen("Content-Type: text/plain; charset=")
-            size_t end = header.find('\n', begin);
-            if (end != size_t(-1))
+            cset += 34; // strlen("Content-Type: text/plain; charset=")
+
+            const char * const csetEnd = strchr(cset, '\n');
+            if ( csetEnd )
             {
-                m_charset.assign(header, begin, end - begin);
-                if (m_charset == wxS("CHARSET"))
+                m_charset = wxString(cset, csetEnd - cset);
+                if ( m_charset == wxS("CHARSET") )
                 {
                     // "CHARSET" is not valid charset, but lazy translator
-                    m_charset.Clear();
+                    m_charset.empty();
                 }
             }
         }
         // else: incorrectly filled Content-Type header
 
         // Extract plural forms:
-        begin = header.Find(wxS("Plural-Forms:"));
-        if (begin != wxNOT_FOUND)
+        const char * plurals = strstr(header, "Plural-Forms:");
+        if ( plurals )
         {
-            begin += 13;
-            size_t end = header.find('\n', begin);
-            if (end != size_t(-1))
+            plurals += 13; // strlen("Plural-Forms:")
+            const char * const pluralsEnd = strchr(plurals, '\n');
+            if ( pluralsEnd )
             {
-                wxString pfs(header, begin, end - begin);
-                wxPluralFormsCalculator* pCalculator = wxPluralFormsCalculator
-                    ::make(pfs.ToAscii());
-                if (pCalculator != 0)
+                const size_t pluralsLen = pluralsEnd - plurals;
+                wxCharBuffer buf(pluralsLen);
+                strncpy(buf.data(), plurals, pluralsLen);
+                wxPluralFormsCalculator * const
+                    pCalculator = wxPluralFormsCalculator::make(buf);
+                if ( pCalculator )
                 {
                     rPluralFormsCalculator.reset(pCalculator);
                 }
                 else
                 {
-                    wxLogVerbose(_("Cannot parse Plural-Forms:'%s'"), pfs.c_str());
+                    wxLogVerbose(_("Failed to parse Plural-Forms: '%s'"),
+                                 buf.data());
                 }
             }
         }
-        if (rPluralFormsCalculator.get() == NULL)
-        {
+
+        if ( !rPluralFormsCalculator.get() )
             rPluralFormsCalculator.reset(wxPluralFormsCalculator::make());
-        }
     }
 
     // everything is fine
