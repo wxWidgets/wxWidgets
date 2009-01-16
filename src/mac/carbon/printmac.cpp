@@ -52,124 +52,33 @@ wxMacCarbonPrintData::wxMacCarbonPrintData()
     m_macPrintSettings = kPMNoPrintSettings;
     m_macPrintSession = kPMNoReference ;
     m_macPaper = kPMNoData;
-    ValidateOrCreate() ;
+    
+    if ( PMCreateSession( &m_macPrintSession ) == noErr )
+    {
+        if ( PMCreatePageFormat(&m_macPageFormat) == noErr )
+        {
+            PMSessionDefaultPageFormat(m_macPrintSession,
+                    m_macPageFormat);
+            PMGetPageFormatPaper(m_macPageFormat, &m_macPaper);
+        }
+        
+        if ( PMCreatePrintSettings(&m_macPrintSettings) == noErr )
+        {
+            PMSessionDefaultPrintSettings(m_macPrintSession,
+                m_macPrintSettings);
+        }
+    }
 }
 
 wxMacCarbonPrintData::~wxMacCarbonPrintData()
 {
-    if (m_macPageFormat != kPMNoPageFormat)
-    {
-        (void)PMRelease(m_macPageFormat);
-        m_macPageFormat = kPMNoPageFormat;
-    }
-
-    if (m_macPrintSettings != kPMNoPrintSettings)
-    {
-        (void)PMRelease(m_macPrintSettings);
-        m_macPrintSettings = kPMNoPrintSettings;
-    }
-
-    if ( m_macPrintSession != kPMNoReference )
-    {
-        (void)PMRelease(m_macPrintSession);
-        m_macPrintSession = kPMNoReference;
-    }
-    
-    if ( m_macPaper != kPMNoData )
-    {
-        (void)PMRelease(m_macPaper);
-        m_macPaper = kPMNoData;
-    }
-}
-
-void wxMacCarbonPrintData::EnsureValidSession() 
-{
-    if ( m_macPrintSession == kPMNoReference )
-    {
-        PMCreateSession( &m_macPrintSession ) ;
-    }
-    wxASSERT( m_macPrintSession != kPMNoReference );
-}
-
-
-void wxMacCarbonPrintData::ValidateOrCreate()
-{
-    EnsureValidSession();
-
-    OSStatus err = noErr;
-    //  Set up a valid PageFormat object.
-    if ( m_macPageFormat == kPMNoPageFormat)
-    {
-        if ( m_macPaper != kPMNoData )
-        {
-            err = PMCreatePageFormatWithPMPaper(&m_macPageFormat, m_macPaper);
-            if ( (err == noErr) && ( m_macPageFormat != kPMNoPageFormat))
-            {
-                err = PMSessionValidatePageFormat(m_macPrintSession,
-                    m_macPageFormat,
-                    kPMDontWantBoolean);
-            }
-        }
-        else
-        {
-            err = PMCreatePageFormat(&m_macPageFormat);
-            //  Note that PMPageFormat is not session-specific, but calling
-            //  PMSessionDefaultPageFormat assigns values specific to the printer
-            //  associated with the current printing session.
-            if ( (err == noErr) && ( m_macPageFormat != kPMNoPageFormat))
-            {
-                err = PMSessionDefaultPageFormat(m_macPrintSession,
-                    m_macPageFormat);
-            }
-        }
-
-    }
-    else
-    {
-        err = PMSessionValidatePageFormat(m_macPrintSession,
-            m_macPageFormat,
-            kPMDontWantBoolean);
-    }
-    // make sure our m_macPaper is corresponding to what is used
-    if ( err == noErr )
-    {
-        PMPaper currentPaper = kPMNoData;
-        PMGetPageFormatPaper(m_macPageFormat, &currentPaper);
-        if( currentPaper != m_macPaper )
-        {
-            PMRelease(m_macPaper);
-            m_macPaper = currentPaper;
-            PMRetain(m_macPaper);
-        }
-    }
-    
-    //  Set up a valid PrintSettings object.
-    if ( m_macPrintSettings == kPMNoPrintSettings)
-    {
-        err = PMCreatePrintSettings(&m_macPrintSettings);
-
-        //  Note that PMPrintSettings is not session-specific, but calling
-        //  PMSessionDefaultPrintSettings assigns values specific to the printer
-        //  associated with the current printing session.
-        if ((err == noErr) &&
-            ( m_macPrintSettings != kPMNoPrintSettings))
-        {
-            err = PMSessionDefaultPrintSettings(m_macPrintSession,
-                m_macPrintSettings);
-        }
-    }
-    else
-    {
-        err = PMSessionValidatePrintSettings(m_macPrintSession,
-            m_macPrintSettings,
-            kPMDontWantBoolean);
-    }
+    (void)PMRelease(m_macPageFormat);
+    (void)PMRelease(m_macPrintSettings);
+    (void)PMRelease(m_macPrintSession);
 }
 
 bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
 {
-    EnsureValidSession();
-
     PMPrinter printer;
     PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
 
@@ -222,17 +131,16 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
                 }
                 if ( bestPaper != kPMNoData )
                 {
-                    PMRelease(m_macPaper);
-                    m_macPaper = bestPaper;
-                    PMRetain(m_macPaper);
-                    PMRelease(m_macPageFormat);
-                    m_macPageFormat = kPMNoPageFormat;
+                    PMPageFormat pageFormat;
+                    PMCreatePageFormatWithPMPaper(&pageFormat, bestPaper);
+                    PMCopyPageFormat( pageFormat, m_macPageFormat );
+                    PMRelease(pageFormat);
+                    PMGetPageFormatPaper(m_macPageFormat, &m_macPaper);
                 }
             }
         }
     }
 
-    ValidateOrCreate() ;
     PMSetCopies( m_macPrintSettings , data.GetNoCopies() , false ) ;
     if ( data.IsOrientationReversed() )
         PMSetOrientation( m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
@@ -276,8 +184,9 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
     // after setting the new resolution the format has to be updated, otherwise the page rect remains 
     // at the 'old' scaling
     PMSessionValidatePageFormat(m_macPrintSession,
-            m_macPageFormat,
-            kPMDontWantBoolean) ;
+        m_macPageFormat, kPMDontWantBoolean);
+    PMSessionValidatePrintSettings(m_macPrintSession,
+        m_macPrintSettings, kPMDontWantBoolean);
 
     return true ;
 }
