@@ -165,8 +165,8 @@ bool wxCHMHelpController::DisplayContextPopup(int contextId)
     popup.idString = contextId ;
 
     GetCursorPos(& popup.pt);
-    popup.clrForeground = (COLORREF)-1;
-    popup.clrBackground = (COLORREF)-1;
+    popup.clrForeground = ::GetSysColor(COLOR_INFOTEXT);
+    popup.clrBackground = ::GetSysColor(COLOR_INFOBK);;
     popup.rcMargins.top = popup.rcMargins.left = popup.rcMargins.right = popup.rcMargins.bottom = -1;
     popup.pszFont = NULL;
     popup.pszText = NULL;

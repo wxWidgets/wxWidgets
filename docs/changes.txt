@@ -143,6 +143,7 @@ wxMSW:
 - Correct coordinates of wxDropFilesEvent (Dmitriy Maksimov).
 - Fix handling of abandoned mutexes in wxMutex (David Heffernan).
 - Avoid warnings about deprecated localtime with MSVC8/9 (Chris Stankevitz).
+- Fixed invisible CHM tooltip text bug when window text colour is black.
 
 wxMSW/CE:
 
