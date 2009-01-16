@@ -376,7 +376,7 @@ public:
                    const wxString& title = wxT("Print Preview"),
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
-                   long style = wxDEFAULT_FRAME_STYLE,
+                   long style = wxDEFAULT_FRAME_STYLE | wxFRAME_FLOAT_ON_PARENT,
                    const wxString& name = wxFrameNameStr);
     virtual ~wxPreviewFrame();
 
