@@ -233,31 +233,39 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 
 /* define wxCRT_StricmpA/W and wxCRT_StrnicmpA/W for various compilers */
 
-/* note that we definitely are going to need our own version for widechar
- * versions */
-#if !defined(wxCRT_StricmpA)
-    #if defined(__BORLANDC__) || defined(__WATCOMC__) || \
-            defined(__VISAGECPP__) || \
-            defined(__EMX__) || defined(__DJGPP__)
-        #define wxCRT_StricmpA stricmp
-        #define wxCRT_StrnicmpA strnicmp
-    #elif defined(__WXPALMOS__)
-        /* FIXME: There is no equivalent to strnicmp in the Palm OS API.  This
-         * quick hack should do until one can be written.
-         */
-        #define wxCRT_StricmpA StrCaselessCompare
-        #define wxCRT_StrnicmpA StrNCaselessCompare
-    #elif defined(__SYMANTEC__) || defined(__VISUALC__) || \
-            (defined(__MWERKS__) && defined(__INTEL__))
-        #define wxCRT_StricmpA _stricmp
-        #define wxCRT_StrnicmpA _strnicmp
-    #elif defined(__UNIX__) || defined(__GNUWIN32__)
-        #define wxCRT_StricmpA strcasecmp
-        #define wxCRT_StrnicmpA strncasecmp
-    /* #else -- use wxWidgets implementation */
+#if defined(__BORLANDC__) || defined(__WATCOMC__) || \
+        defined(__VISAGECPP__) || \
+        defined(__EMX__) || defined(__DJGPP__)
+    #define wxCRT_StricmpA stricmp
+    #define wxCRT_StrnicmpA strnicmp
+#elif defined(__WXPALMOS__)
+    /* FIXME: There is no equivalent to strnicmp in the Palm OS API.  This
+     * quick hack should do until one can be written.
+     */
+    #define wxCRT_StricmpA StrCaselessCompare
+    #define wxCRT_StrnicmpA StrNCaselessCompare
+#elif defined(__SYMANTEC__) || defined(__VISUALC__) || \
+        (defined(__MWERKS__) && defined(__INTEL__))
+    #define wxCRT_StricmpA _stricmp
+    #define wxCRT_StrnicmpA _strnicmp
+#elif defined(__UNIX__) || defined(__GNUWIN32__)
+    #define wxCRT_StricmpA strcasecmp
+    #define wxCRT_StrnicmpA strncasecmp
+/* #else -- use wxWidgets implementation */
+#endif
+
+#ifdef __VISUALC__
+    #define wxCRT_StricmpW _wcsicmp
+    #define wxCRT_StrnicmpW _wcsnicmp
+#elif defined(__UNIX__)
+    #ifdef HAVE_WCSCASECMP
+        #define wxCRT_StricmpW wcscasecmp
     #endif
-#endif /* !defined(wxCRT_StricmpA) */
-/* FIXME-UTF8: use wcs(n)casecmp if available for *W versions */
+    #ifdef HAVE_WCSNCASECMP
+        #define wxCRT_StrnicmpW wcsncasecmp
+    #endif
+/* #else -- use wxWidgets implementation */
+#endif
 
 #ifdef HAVE_STRTOK_R
     #define  wxCRT_StrtokA(str, sep, last)    strtok_r(str, sep, last)

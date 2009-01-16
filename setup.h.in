@@ -912,6 +912,12 @@
 /* Define if you have usleep() */
 #undef HAVE_USLEEP
 
+/* Define if you have wcscasecmp() function  */
+#undef HAVE_WCSCASECMP
+
+/* Define if you have wcsncasecmp() function  */
+#undef HAVE_WCSNCASECMP
+
 /* Define if you have wcslen function  */
 #undef HAVE_WCSLEN
 

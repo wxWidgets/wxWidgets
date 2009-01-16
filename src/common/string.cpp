@@ -1115,6 +1115,7 @@ size_t wxString::find_last_not_of(const wxOtherCharType* sz, size_t nStart,
 
 int wxString::CmpNoCase(const wxString& s) const
 {
+#if wxUSE_UNICODE_UTF8
     // FIXME-UTF8: use wxUniChar::ToLower/ToUpper once added
 
     const_iterator i1 = begin();
@@ -1138,6 +1139,9 @@ int wxString::CmpNoCase(const wxString& s) const
     else if ( len1 > len2 )
         return 1;
     return 0;
+#else // wxUSE_UNICODE_WCHAR or ANSI
+    return wxStricmp(m_impl.c_str(), s.m_impl.c_str());
+#endif
 }
 
 
