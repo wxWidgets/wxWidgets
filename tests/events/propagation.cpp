@@ -21,6 +21,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/event.h"
+#include "wx/window.h"
 #include "wx/scopeguard.h"
 
 namespace
