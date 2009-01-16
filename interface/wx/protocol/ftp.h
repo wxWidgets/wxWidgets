@@ -46,19 +46,19 @@ enum TransferMode
             return;
         }
 
-        ftp.ChDir("/pub/2.8.9);
+        ftp.ChDir("/pub/2.8.9");
         wxInputStream *i = ftp.GetInputStream("wxWidgets-2.8.9.tar.bz2");
         if ( !in )
         {
-            wxLogError("Coudln't get file");
+            wxLogError("Couldn't get the file");
         }
         else
         {
-            size_t size = in-GetSize();
+            size_t size = in->GetSize();
             char *data = new char[size];
             if ( !in->Read(data, size) )
             {
-                wxLogError("Read error");
+                wxLogError("Read error: %d", ftp.GetError());
             }
             else
             {
