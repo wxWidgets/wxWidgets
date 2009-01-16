@@ -53,8 +53,6 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         return false;
     PreCreation();
 
-    m_noStrings = n;
-
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
     Widget buttonWidget = XtVaCreateManagedWidget(name.c_str(),
@@ -72,7 +70,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     {
         wxXmString str( choices[i] );
         XmComboBoxAddItem(buttonWidget, str(), 0);
-        m_stringList.Add(choices[i]);
+        m_stringArray.Add(choices[i]);
     }
 
     m_mainWidget = (Widget) buttonWidget;
@@ -165,9 +163,7 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
     {
         wxXmString str( items[i].c_str() );
         XmComboBoxAddItem((Widget) m_mainWidget, str(), GetMotifPosition(pos));
-        wxChar* copy = wxStrcpy(new wxChar[items[i].length() + 1], items[i].c_str());
-        m_stringList.Insert(pos, copy);
-        m_noStrings ++;
+        m_stringArray.Insert(items[i], pos);
         InsertNewItemClientData(pos, clientData, i, type);
     }
 
@@ -179,16 +175,14 @@ void wxComboBox::DoDeleteOneItem(unsigned int n)
     XmComboBoxDeletePos((Widget) m_mainWidget, n+1);
     m_stringArray.RemoveAt(n);
     wxControlWithItems::DoDeleteOneItem(n);
-    m_noStrings--;
 }
 
 void wxComboBox::Clear()
 {
     XmComboBoxDeleteAllItems((Widget) m_mainWidget);
-    m_stringList.Clear();
+    m_stringArray.Clear();
 
     wxControlWithItems::DoClear();
-    m_noStrings = 0;
 }
 
 void wxComboBox::SetSelection (int n)
