@@ -456,18 +456,18 @@ int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
 void wxDataViewIndexListModel::GetValue( wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col ) const
 {
-    GetValue( variant, GetRow(item), col );
+    GetValueByRow( variant, GetRow(item), col );
 }
 
 bool wxDataViewIndexListModel::SetValue( const wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col )
 {
-    return SetValue( variant, GetRow(item), col );
+    return SetValueByRow( variant, GetRow(item), col );
 }
 
 bool wxDataViewIndexListModel::GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr )
 {
-    return GetAttr( GetRow(item), col, attr );
+    return GetAttrByRow( GetRow(item), col, attr );
 }
 
 wxDataViewItem wxDataViewIndexListModel::GetParent( const wxDataViewItem & WXUNUSED(item) ) const
@@ -603,18 +603,18 @@ int wxDataViewVirtualListModel::Compare(const wxDataViewItem& item1,
 void wxDataViewVirtualListModel::GetValue( wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col ) const
 {
-    GetValue( variant, GetRow(item), col );
+    GetValueByRow( variant, GetRow(item), col );
 }
 
 bool wxDataViewVirtualListModel::SetValue( const wxVariant &variant,
                            const wxDataViewItem &item, unsigned int col )
 {
-    return SetValue( variant, GetRow(item), col );
+    return SetValueByRow( variant, GetRow(item), col );
 }
 
 bool wxDataViewVirtualListModel::GetAttr( const wxDataViewItem &item, unsigned int col, wxDataViewItemAttr &attr )
 {
-    return GetAttr( GetRow(item), col, attr );
+    return GetAttrByRow( GetRow(item), col, attr );
 }
 
 wxDataViewItem wxDataViewVirtualListModel::GetParent( const wxDataViewItem & WXUNUSED(item) ) const
@@ -1353,6 +1353,110 @@ bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
 }
 
 #endif
+
+//-----------------------------------------------------------------------------
+// wxDataViewListStore
+//-----------------------------------------------------------------------------
+
+wxDataViewListStore::wxDataViewListStore()
+{
+}
+
+wxDataViewListStore::~wxDataViewListStore()
+{
+    wxVector<wxDataViewListStoreLine*>::iterator it;
+    for (it = m_data.begin(); it != m_data.end(); ++it)
+    {
+        wxDataViewListStoreLine* line = *it;
+        delete line;
+    }
+}
+
+void wxDataViewListStore::PrependColumn( const wxString &varianttype )
+{
+    m_cols.Insert( varianttype, 0 );
+}
+
+void wxDataViewListStore::InsertColumn( unsigned int pos, const wxString &varianttype )
+{
+    m_cols.Insert( varianttype, pos );
+}
+
+void wxDataViewListStore::AppendColumn( const wxString &varianttype )
+{
+    m_cols.Add( varianttype );
+}
+
+unsigned int wxDataViewListStore::GetColumnCount() const
+{
+    return m_cols.GetCount();
+}
+
+wxString wxDataViewListStore::GetColumnType( unsigned int pos ) const
+{
+    return m_cols[pos];
+}
+    
+void wxDataViewListStore::AppendItem( const wxVector<wxVariant> &values, wxClientData *data )
+{
+    wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
+    line->m_values = values;
+    m_data.push_back( line );
+    
+    RowAppended();
+}
+
+void wxDataViewListStore::PrependItem( const wxVector<wxVariant> &values, wxClientData *data )
+{
+    wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
+    line->m_values = values;
+    m_data.insert( m_data.begin(), line );
+    
+    RowPrepended();
+}
+
+void wxDataViewListStore::InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data )
+{
+    wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
+    line->m_values = values;
+    m_data.insert( m_data.begin()+row, line );
+    
+    RowInserted( row );
+}
+
+void wxDataViewListStore::DeleteItem( unsigned row )
+{
+    wxVector<wxDataViewListStoreLine*>::iterator it = m_data.begin() + row;
+    m_data.erase( it );
+    
+    RowDeleted( row );
+}
+
+void wxDataViewListStore::DeleteAllItems()
+{
+    wxVector<wxDataViewListStoreLine*>::iterator it;
+    for (it = m_data.begin(); it != m_data.end(); ++it)
+    {
+        wxDataViewListStoreLine* line = *it;
+        delete line;
+    }
+    
+    Reset( 0 );
+}
+
+void wxDataViewListStore::GetValueByRow( wxVariant &value, unsigned int row, unsigned int col ) const
+{
+    wxDataViewListStoreLine *line = m_data[row];
+    value = line->m_values[col];
+}
+
+bool wxDataViewListStore::SetValueByRow( const wxVariant &value, unsigned int row, unsigned int col )
+{
+    wxDataViewListStoreLine *line = m_data[row];
+    line->m_values[col] = value;
+    
+    return true;
+}
 
 //-----------------------------------------------------------------------------
 // wxDataViewTreeStore

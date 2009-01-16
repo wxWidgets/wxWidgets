@@ -24,6 +24,7 @@
 #include "wx/icon.h"
 #include "wx/imaglist.h"
 #include "wx/weakref.h"
+#include "wx/vector.h"
 
 #if !(defined(__WXGTK20__) || defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
 // #if !(defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
@@ -242,13 +243,13 @@ public:
     wxDataViewIndexListModel( unsigned int initial_size = 0 );
     ~wxDataViewIndexListModel();
 
-    virtual void GetValue( wxVariant &variant,
+    virtual void GetValueByRow( wxVariant &variant,
                            unsigned int row, unsigned int col ) const = 0;
 
-    virtual bool SetValue( const wxVariant &variant,
+    virtual bool SetValueByRow( const wxVariant &variant,
                            unsigned int row, unsigned int col ) = 0;
 
-    virtual bool GetAttr( unsigned int WXUNUSED(row), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
+    virtual bool GetAttrByRow( unsigned int WXUNUSED(row), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
         { return false; }
 
     void RowPrepended();
@@ -307,13 +308,13 @@ public:
     wxDataViewVirtualListModel( unsigned int initial_size = 0 );
     ~wxDataViewVirtualListModel();
 
-    virtual void GetValue( wxVariant &variant,
+    virtual void GetValueByRow( wxVariant &variant,
                            unsigned int row, unsigned int col ) const = 0;
 
-    virtual bool SetValue( const wxVariant &variant,
+    virtual bool SetValueByRow( const wxVariant &variant,
                            unsigned int row, unsigned int col ) = 0;
 
-    virtual bool GetAttr( unsigned int WXUNUSED(row), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
+    virtual bool GetAttrByRow( unsigned int WXUNUSED(row), unsigned int WXUNUSED(col), wxDataViewItemAttr &WXUNUSED(attr) )
         { return false; }
 
     void RowPrepended();
@@ -906,6 +907,81 @@ private:
 };
 
 #endif
+
+//-----------------------------------------------------------------------------
+// wxDataViewListStore
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewListStoreLine
+{
+public:
+    wxDataViewListStoreLine( wxClientData *data = NULL )
+    {
+        m_data = data;
+    }
+    virtual ~wxDataViewListStoreLine()
+    {
+        delete m_data;
+    }
+
+    void SetData( wxClientData *data )
+        { if (m_data) delete m_data; m_data = data; }
+    wxClientData *GetData() const
+        { return m_data; }
+        
+    wxVector<wxVariant>  m_values;
+    
+private:
+    wxClientData    *m_data;
+};
+
+
+class WXDLLIMPEXP_ADV wxDataViewListStore: public wxDataViewIndexListModel
+{
+public:
+    wxDataViewListStore();
+    ~wxDataViewListStore();
+
+    void PrependColumn( const wxString &varianttype );
+    void InsertColumn( unsigned int pos, const wxString &varianttype );
+    void AppendColumn( const wxString &varianttype );
+    
+    void PrependStringColumn()                    
+        { PrependColumn( wxT("string") ); }
+    void InsertStringColumn( unsigned int pos )   
+        { InsertColumn( pos, wxT("string") ); }
+    void AppendStringColumn()                     
+        { AppendColumn( wxT("string") ); }
+    
+    void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void DeleteItem( unsigned pos );
+    void DeleteAllItems();
+
+    void SetStringValue( const wxString &value, unsigned int row, unsigned int col )
+        { SetValueByRow( value, row, col ); }
+    wxString GetStringValue( unsigned int row, unsigned int col )
+        { wxVariant value; GetValueByRow( value, row, col ); return value.GetString(); }
+
+    // override base virtuals
+
+    virtual unsigned int GetColumnCount() const;
+
+    virtual wxString GetColumnType( unsigned int col ) const;
+
+    virtual void GetValueByRow( wxVariant &value,
+                           unsigned int row, unsigned int col ) const;
+
+    virtual bool SetValueByRow( const wxVariant &value,
+                           unsigned int row, unsigned int col );
+
+    
+public:
+    wxVector<wxDataViewListStoreLine*> m_data;
+    wxArrayString                      m_cols;
+};
+
 
 //-----------------------------------------------------------------------------
 // wxDataViewTreeStore

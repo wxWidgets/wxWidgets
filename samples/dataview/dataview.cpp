@@ -530,7 +530,7 @@ public:
         return m_array.GetCount();
     }
 
-    virtual void GetValue( wxVariant &variant,
+    virtual void GetValueByRow( wxVariant &variant,
                            unsigned int row, unsigned int col ) const
     {
         if (col==0)
@@ -560,7 +560,7 @@ public:
         }
     }
 
-    virtual bool GetAttr( unsigned int row, unsigned int col, wxDataViewItemAttr &attr )
+    virtual bool GetAttrByRow( unsigned int row, unsigned int col, wxDataViewItemAttr &attr )
     {
         if (col != 2)
             return false;
@@ -574,7 +574,7 @@ public:
         return true;
     }
 
-    virtual bool SetValue( const wxVariant &variant,
+    virtual bool SetValueByRow( const wxVariant &variant,
                            unsigned int row, unsigned int col )
     {
         if (col == 0)

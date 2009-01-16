@@ -299,7 +299,7 @@ public:
 
         @see wxDataViewItemAttr.
     */
-    virtual bool GetAttr(unsigned int row, unsigned int col,
+    virtual bool GetAttrByRow(unsigned int row, unsigned int col,
                          wxDataViewItemAttr& attr);
 
     /**
@@ -315,7 +315,7 @@ public:
     /**
         Override this to allow getting values from the model.
     */
-    virtual void GetValue(wxVariant& variant, unsigned int row,
+    virtual void GetValueByRow(wxVariant& variant, unsigned int row,
                           unsigned int col) const = 0;
 
     /**
@@ -365,7 +365,7 @@ public:
     /**
         Called in order to set a value in the model.
     */
-    virtual bool SetValue(const wxVariant& variant, unsigned int row,
+    virtual bool SetValueByRow(const wxVariant& variant, unsigned int row,
                           unsigned int col) = 0;
 };
 
@@ -1673,9 +1673,9 @@ public:
     wxDataViewTreeStore is a specialised wxDataViewModel for displaying simple
     trees very much like wxTreeCtrl does and it offers a similar API.
 
-    This class actually stores the entire tree (therefore its name) and implements
-    all virtual methods from the base class so it can be used directly without
-    having to derive any class from it.
+    This class actually stores the entire tree and the values (therefore its name) 
+    and implements all virtual methods from the base class so it can be used directly
+    without having to derive any class from it.
     This comes at the price of much reduced flexibility.
 
     @library{wxadv}
