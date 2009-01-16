@@ -611,6 +611,21 @@ const wchar_t* wxFormatString::AsWChar()
 }
 #endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 
+wxString wxFormatString::InputAsString() const
+{
+    if ( m_str )
+        return *m_str;
+    if ( m_cstr )
+        return m_cstr->AsString();
+    if ( m_wchar )
+        return wxString(m_wchar);
+    if ( m_char )
+        return wxString(m_char);
+
+    wxFAIL_MSG( "invalid wxFormatString - not initialized?" );
+    return wxString();
+}
+
 // ----------------------------------------------------------------------------
 // wxFormatString::GetArgumentType()
 // ----------------------------------------------------------------------------

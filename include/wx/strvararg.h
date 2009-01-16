@@ -154,11 +154,15 @@ public:
     // n-th variadic argument desired representation
     ArgumentType GetArgumentType(unsigned n) const;
 
+    // returns the value passed to ctor, only converted to wxString, similarly
+    // to other InputAsXXX() methods
+    wxString InputAsString() const;
+
 #if !wxUSE_UNICODE_WCHAR
     operator const char*() const
         { return const_cast<wxFormatString*>(this)->AsChar(); }
 private:
-    // InputAsChar() returns the value converted passed to ctor, only converted
+    // InputAsChar() returns the value passed to ctor, only converted
     // to char, while AsChar() takes the the string returned by InputAsChar()
     // and does format string conversion on it as well (and similarly for
     // ..AsWChar() below)

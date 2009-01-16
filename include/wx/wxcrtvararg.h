@@ -281,10 +281,20 @@
     #define wxCRT_FprintfNative wxCRT_FprintfA
 #endif
 
-WX_DEFINE_VARARG_FUNC(int, wxPrintf, 1, (const wxFormatString&),
-                      wxCRT_PrintfNative, wxCRT_PrintfA)
-WX_DEFINE_VARARG_FUNC(int, wxFprintf, 2, (FILE*, const wxFormatString&),
-                      wxCRT_FprintfNative, wxCRT_FprintfA)
+
+WX_DEFINE_VARARG_FUNC_SANS_N0(int, wxPrintf, 1, (const wxFormatString&),
+                              wxCRT_PrintfNative, wxCRT_PrintfA)
+inline int wxPrintf(const wxFormatString& s)
+{
+    return wxPrintf("%s", s.InputAsString());
+}
+
+WX_DEFINE_VARARG_FUNC_SANS_N0(int, wxFprintf, 2, (FILE*, const wxFormatString&),
+                              wxCRT_FprintfNative, wxCRT_FprintfA)
+inline int wxFprintf(FILE *f, const wxFormatString& s)
+{
+    return wxFprintf(f, "%s", s.InputAsString());
+}
 
 // va_list versions of printf functions simply forward to the respective
 // CRT function; note that they assume that va_list was created using
@@ -426,10 +436,6 @@ wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr);
     }
 
 #define WX_DEFINE_SCANFUNC(name, numfixed, fixed, impl, passfixed)            \
-    inline int name(_WX_SCANFUNC_EXTRACT_ARGS(numfixed, fixed))               \
-    {                                                                         \
-        return impl(_WX_SCANFUNC_EXTRACT_ARGS(numfixed, passfixed));          \
-    }                                                                         \
     _WX_VARARG_ITER(_WX_VARARG_MAX_ARGS,                                      \
                     _WX_DEFINE_SCANFUNC,                                      \
                     dummy1, name, impl, passfixed, numfixed, fixed)
