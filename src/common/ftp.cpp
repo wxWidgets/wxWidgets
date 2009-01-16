@@ -185,6 +185,47 @@ bool wxFTP::Close()
 // low level methods
 // ============================================================================
 
+wxSocketBase *wxFTP::AcceptIfActive(wxSocketBase *sock)
+{
+    if ( m_bPassive )
+        return sock;
+
+    // now wait for a connection from server
+    wxSocketServer *sockSrv = (wxSocketServer *)sock;
+    if ( !sockSrv->WaitForAccept() )
+    {
+        m_lastError = wxPROTO_CONNERR;
+        wxLogError(_("Timeout while waiting for FTP server to connect, try passive mode."));
+        delete sock;
+        sock = NULL;
+    }
+    else
+    {
+        sock = sockSrv->Accept(true);
+        delete sockSrv;
+    }
+
+    return sock;
+}
+
+bool wxFTP::Abort()
+{
+    if ( !m_streaming )
+        return true;
+
+    m_streaming = false;
+    if ( !CheckCommand(wxT("ABOR"), '4') )
+        return false;
+
+    return CheckResult('2');
+}
+
+void wxFTP::SetDefaultTimeout(wxUint32 Value)
+{
+    m_uiDefaultTimeout = Value;
+    SetTimeout(Value); // sets it for this socket
+}
+
 // ----------------------------------------------------------------------------
 // Send command to FTP server
 // ----------------------------------------------------------------------------
@@ -224,7 +265,7 @@ char wxFTP::SendCommand(const wxString& command)
 }
 
 // ----------------------------------------------------------------------------
-// Recieve servers reply
+// Receive servers reply
 // ----------------------------------------------------------------------------
 
 char wxFTP::GetResult()
@@ -494,99 +535,8 @@ bool wxFTP::RmFile(const wxString& path)
 }
 
 // ----------------------------------------------------------------------------
-// wxFTP download and upload
+// wxFTP port methods
 // ----------------------------------------------------------------------------
-
-class wxInputFTPStream : public wxSocketInputStream
-{
-public:
-    wxInputFTPStream(wxFTP *ftp, wxSocketBase *sock)
-        : wxSocketInputStream(*sock)
-    {
-        m_ftp = ftp;
-        // socket timeout automatically set in GetPort function
-    }
-
-    virtual ~wxInputFTPStream()
-    {
-        delete m_i_socket;   // keep at top
-
-        // when checking the result, the stream will
-        // almost always show an error, even if the file was
-        // properly transfered, thus, lets just grab the result
-
-        // we are looking for "226 transfer completed"
-        char code = m_ftp->GetResult();
-        if ('2' == code)
-        {
-            // it was a good transfer.
-            // we're done!
-             m_ftp->m_streaming = false;
-            return;
-        }
-        // did we timeout?
-        if (0 == code)
-        {
-            // the connection is probably toast. issue an abort, and
-            // then a close. there won't be any more waiting
-            // for this connection
-            m_ftp->Abort();
-            m_ftp->Close();
-            return;
-        }
-        // There was a problem with the transfer and the server
-        // has acknowledged it.  If we issue an "ABORT" now, the user
-        // would get the "226" for the abort and think the xfer was
-        // complete, thus, don't do anything here, just return
-    }
-
-    wxFTP *m_ftp;
-
-    DECLARE_NO_COPY_CLASS(wxInputFTPStream)
-};
-
-class wxOutputFTPStream : public wxSocketOutputStream
-{
-public:
-    wxOutputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
-        : wxSocketOutputStream(*sock), m_ftp(ftp_clt)
-    {
-    }
-
-    virtual ~wxOutputFTPStream(void)
-    {
-        if ( IsOk() )
-        {
-            // close data connection first, this will generate "transfer
-            // completed" reply
-            delete m_o_socket;
-
-            // read this reply
-            m_ftp->GetResult(); // save result so user can get to it
-
-            m_ftp->m_streaming = false;
-        }
-        else
-        {
-            // abort data connection first
-            m_ftp->Abort();
-
-            // and close it after
-            delete m_o_socket;
-        }
-    }
-
-    wxFTP *m_ftp;
-
-    DECLARE_NO_COPY_CLASS(wxOutputFTPStream)
-};
-
-void wxFTP::SetDefaultTimeout(wxUint32 Value)
-{
-    m_uiDefaultTimeout = Value;
-    SetTimeout(Value); // sets it for this socket
-}
-
 
 wxSocketBase *wxFTP::GetPort()
 {
@@ -614,29 +564,6 @@ wxSocketBase *wxFTP::GetPort()
     socket->SetTimeout(m_uiDefaultTimeout);
 
     return socket;
-}
-
-wxSocketBase *wxFTP::AcceptIfActive(wxSocketBase *sock)
-{
-    if ( m_bPassive )
-        return sock;
-
-    // now wait for a connection from server
-    wxSocketServer *sockSrv = (wxSocketServer *)sock;
-    if ( !sockSrv->WaitForAccept() )
-    {
-        m_lastError = wxPROTO_CONNERR;
-        wxLogError(_("Timeout while waiting for FTP server to connect, try passive mode."));
-        delete sock;
-        sock = NULL;
-    }
-    else
-    {
-        sock = sockSrv->Accept(true);
-        delete sockSrv;
-    }
-
-    return sock;
 }
 
 wxString wxFTP::GetPortCmdArgument(const wxIPV4address& addrLocal,
@@ -742,17 +669,94 @@ wxSocketBase *wxFTP::GetPassivePort()
     return client;
 }
 
-bool wxFTP::Abort()
+
+// ----------------------------------------------------------------------------
+// wxFTP download and upload
+// ----------------------------------------------------------------------------
+
+class wxInputFTPStream : public wxSocketInputStream
 {
-    if ( !m_streaming )
-        return true;
+public:
+    wxInputFTPStream(wxFTP *ftp, wxSocketBase *sock)
+        : wxSocketInputStream(*sock)
+    {
+        m_ftp = ftp;
+        // socket timeout automatically set in GetPort function
+    }
 
-    m_streaming = false;
-    if ( !CheckCommand(wxT("ABOR"), '4') )
-        return false;
+    virtual ~wxInputFTPStream()
+    {
+        delete m_i_socket;   // keep at top
 
-    return CheckResult('2');
-}
+        // when checking the result, the stream will
+        // almost always show an error, even if the file was
+        // properly transfered, thus, lets just grab the result
+
+        // we are looking for "226 transfer completed"
+        char code = m_ftp->GetResult();
+        if ('2' == code)
+        {
+            // it was a good transfer.
+            // we're done!
+             m_ftp->m_streaming = false;
+            return;
+        }
+        // did we timeout?
+        if (0 == code)
+        {
+            // the connection is probably toast. issue an abort, and
+            // then a close. there won't be any more waiting
+            // for this connection
+            m_ftp->Abort();
+            m_ftp->Close();
+            return;
+        }
+        // There was a problem with the transfer and the server
+        // has acknowledged it.  If we issue an "ABORT" now, the user
+        // would get the "226" for the abort and think the xfer was
+        // complete, thus, don't do anything here, just return
+    }
+
+    wxFTP *m_ftp;
+
+    DECLARE_NO_COPY_CLASS(wxInputFTPStream)
+};
+
+class wxOutputFTPStream : public wxSocketOutputStream
+{
+public:
+    wxOutputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
+        : wxSocketOutputStream(*sock), m_ftp(ftp_clt)
+    {
+    }
+
+    virtual ~wxOutputFTPStream(void)
+    {
+        if ( IsOk() )
+        {
+            // close data connection first, this will generate "transfer
+            // completed" reply
+            delete m_o_socket;
+
+            // read this reply
+            m_ftp->GetResult(); // save result so user can get to it
+
+            m_ftp->m_streaming = false;
+        }
+        else
+        {
+            // abort data connection first
+            m_ftp->Abort();
+
+            // and close it after
+            delete m_o_socket;
+        }
+    }
+
+    wxFTP *m_ftp;
+
+    DECLARE_NO_COPY_CLASS(wxOutputFTPStream)
+};
 
 wxInputStream *wxFTP::GetInputStream(const wxString& path)
 {
