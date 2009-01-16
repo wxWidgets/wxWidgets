@@ -33,6 +33,8 @@
 #include "wx/msw/dc.h"
 
 #include "wx/msw/ole/activex.h"
+#include "wx/msw/private.h" // for wxCopyRectToRECT
+
 // autointerfaces that we only use here
 WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceSite, IOleInPlaceSite)
 WX_DECLARE_AUTOOLE(wxAutoIOleDocument, IOleDocument)
