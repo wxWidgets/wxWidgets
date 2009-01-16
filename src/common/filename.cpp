@@ -161,7 +161,7 @@ public:
         Write
     };
 
-    wxFileHandle(const wxString& filename, OpenMode mode)
+    wxFileHandle(const wxString& filename, OpenMode mode, int flags = 0)
     {
         m_hFile = ::CreateFile
                     (
@@ -172,7 +172,7 @@ public:
                      FILE_SHARE_WRITE,              // (allow everything)
                      NULL,                          // no secutity attr
                      OPEN_EXISTING,                 // creation disposition
-                     0,                             // no flags
+                     flags,                         // flags
                      NULL                           // no template file
                     );
 
@@ -2209,32 +2209,44 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtCreate)
 {
 #if defined(__WIN32__)
+    FILETIME ftAccess, ftCreate, ftWrite;
+
+    if ( dtCreate )
+        ConvertWxToFileTime(&ftCreate, *dtCreate);
+    if ( dtAccess )
+        ConvertWxToFileTime(&ftAccess, *dtAccess);
+    if ( dtMod )
+        ConvertWxToFileTime(&ftWrite, *dtMod);
+
+    wxString path;
+    int flags;
     if ( IsDir() )
     {
-        // VZ: please let me know how to do this if you can
-        wxFAIL_MSG( _T("SetTimes() not implemented for the directories") );
+        if ( wxGetOsVersion() == wxOS_WINDOWS_9X )
+        {
+            wxLogError(_("Setting directory access times is not supported "
+                         "under this OS version"));
+            return false;
+        }
+
+        path = GetPath();
+        flags = FILE_FLAG_BACKUP_SEMANTICS;
     }
     else // file
     {
-        wxFileHandle fh(GetFullPath(), wxFileHandle::Write);
-        if ( fh.IsOk() )
+        path = GetFullPath();
+        flags = 0;
+    }
+
+    wxFileHandle fh(path, wxFileHandle::Write, flags);
+    if ( fh.IsOk() )
+    {
+        if ( ::SetFileTime(fh,
+                           dtCreate ? &ftCreate : NULL,
+                           dtAccess ? &ftAccess : NULL,
+                           dtMod ? &ftWrite : NULL) )
         {
-            FILETIME ftAccess, ftCreate, ftWrite;
-
-            if ( dtCreate )
-                ConvertWxToFileTime(&ftCreate, *dtCreate);
-            if ( dtAccess )
-                ConvertWxToFileTime(&ftAccess, *dtAccess);
-            if ( dtMod )
-                ConvertWxToFileTime(&ftWrite, *dtMod);
-
-            if ( ::SetFileTime(fh,
-                               dtCreate ? &ftCreate : NULL,
-                               dtAccess ? &ftAccess : NULL,
-                               dtMod ? &ftWrite : NULL) )
-            {
-                return true;
-            }
+            return true;
         }
     }
 #elif defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
