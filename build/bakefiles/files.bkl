@@ -1656,6 +1656,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/nativewin.cpp
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
+    src/msw/ole/activex.cpp
     src/msw/ownerdrw.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
@@ -1728,6 +1729,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/msvcrt.h
     wx/msw/notebook.h
     wx/msw/ole/access.h
+    wx/msw/ole/activex.h
     wx/msw/ole/dataform.h
     wx/msw/ole/dataobj.h
     wx/msw/ole/dataobj2.h
@@ -3114,10 +3116,8 @@ src/osx/iphone/window.mm
     src/msw/mediactrl_am.cpp
     src/msw/mediactrl_wmp10.cpp
     src/msw/mediactrl_qt.cpp
-    src/msw/ole/activex.cpp
 </set>
 <set var="MEDIA_MSW_HDR" hints="files">
-    wx/msw/ole/activex.h
 </set>
 <!-- not built on WindowsCE: -->
 <set var="MEDIA_MSW_DESKTOP_SRC" hints="files">

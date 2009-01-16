@@ -2758,6 +2758,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/msvcrt.h \
 	wx/msw/notebook.h \
 	wx/msw/ole/access.h \
+	wx/msw/ole/activex.h \
 	wx/msw/ole/dataform.h \
 	wx/msw/ole/dataobj.h \
 	wx/msw/ole/dataobj2.h \
@@ -3291,6 +3292,7 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/msvcrt.h \
 	wx/msw/notebook.h \
 	wx/msw/ole/access.h \
+	wx/msw/ole/activex.h \
 	wx/msw/ole/dataform.h \
 	wx/msw/ole/dataobj.h \
 	wx/msw/ole/dataobj2.h \
@@ -3525,10 +3527,10 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_MOTIF@MEDIA_PLATFORM_HDR = 
-@COND_TOOLKIT_MSW@MEDIA_PLATFORM_HDR = wx/msw/ole/activex.h 
+@COND_TOOLKIT_MSW@MEDIA_PLATFORM_HDR =  
 @COND_TOOLKIT_OSX_CARBON@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_PM@MEDIA_PLATFORM_HDR = 
-@COND_TOOLKIT_WINCE@MEDIA_PLATFORM_HDR = wx/msw/ole/activex.h
+@COND_TOOLKIT_WINCE@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_X11@MEDIA_PLATFORM_HDR = 
 @COND_USE_GUI_1_WXUNIV_0@GUI_CORE_HEADERS = $(GUI_HDR)
 COND_USE_GUI_1_WXUNIV_1_GUI_CORE_HEADERS =  \
@@ -5081,6 +5083,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_nativewin.o \
 	monodll_msw_notebook.o \
 	monodll_access.o \
+	monodll_activex.o \
 	monodll_msw_ownerdrw.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
@@ -5313,6 +5316,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_nativewin.o \
 	monodll_msw_notebook.o \
 	monodll_access.o \
+	monodll_activex.o \
 	monodll_msw_ownerdrw.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
@@ -5724,22 +5728,16 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS =  \
 @COND_TOOLKIT_COCOA@	monodll_cocoa_mediactrl.o
 @COND_TOOLKIT_GTK@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o 
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o
-COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS =  \
-	monodll_mediactrl_am.o \
-	monodll_mediactrl_wmp10.o \
-	monodll_mediactrl_qt.o \
-	monodll_activex.o
-@COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS)
+@COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_MSW@	monodll_mediactrl_am.o monodll_mediactrl_wmp10.o \
+@COND_TOOLKIT_MSW@	monodll_mediactrl_qt.o
 @COND_TOOLKIT_OSX_CARBON@__MEDIA_PLATFORM_SRC_OBJECTS \
 @COND_TOOLKIT_OSX_CARBON@	= monodll_carbon_mediactrl.o
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS = 
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS = 
-COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS =  \
-	monodll_mediactrl_am.o \
-	monodll_mediactrl_wmp10.o \
-	monodll_mediactrl_qt.o \
-	monodll_activex.o
-@COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS)
+@COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS = \
+@COND_TOOLKIT_WINCE@	monodll_mediactrl_am.o monodll_mediactrl_wmp10.o \
+@COND_TOOLKIT_WINCE@	monodll_mediactrl_qt.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS = monodll_unix_mediactrl.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
@@ -6897,6 +6895,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_nativewin.o \
 	monolib_msw_notebook.o \
 	monolib_access.o \
+	monolib_activex.o \
 	monolib_msw_ownerdrw.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
@@ -7129,6 +7128,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_nativewin.o \
 	monolib_msw_notebook.o \
 	monolib_access.o \
+	monolib_activex.o \
 	monolib_msw_ownerdrw.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
@@ -7542,22 +7542,16 @@ COND_TOOLKIT_WINCE___ADVANCED_PLATFORM_NATIVE_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_GTK@	monolib_unix_mediactrl.o
 @COND_TOOLKIT_MOTIF@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MOTIF@	monolib_unix_mediactrl.o
-COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_1 =  \
-	monolib_mediactrl_am.o \
-	monolib_mediactrl_wmp10.o \
-	monolib_mediactrl_qt.o \
-	monolib_activex.o
-@COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_1)
+@COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_MSW@	monolib_mediactrl_am.o monolib_mediactrl_wmp10.o \
+@COND_TOOLKIT_MSW@	monolib_mediactrl_qt.o
 @COND_TOOLKIT_OSX_CARBON@__MEDIA_PLATFORM_SRC_OBJECTS_1 \
 @COND_TOOLKIT_OSX_CARBON@	= monolib_carbon_mediactrl.o
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_1 = 
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS_1 = 
-COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS_1 =  \
-	monolib_mediactrl_am.o \
-	monolib_mediactrl_wmp10.o \
-	monolib_mediactrl_qt.o \
-	monolib_activex.o
-@COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS_1)
+@COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_1 = \
+@COND_TOOLKIT_WINCE@	monolib_mediactrl_am.o monolib_mediactrl_wmp10.o \
+@COND_TOOLKIT_WINCE@	monolib_mediactrl_qt.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_1 = monolib_unix_mediactrl.o
 @COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
@@ -8860,6 +8854,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_nativewin.o \
 	coredll_msw_notebook.o \
 	coredll_access.o \
+	coredll_activex.o \
 	coredll_msw_ownerdrw.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
@@ -9092,6 +9087,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_nativewin.o \
 	coredll_msw_notebook.o \
 	coredll_access.o \
+	coredll_activex.o \
 	coredll_msw_ownerdrw.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
@@ -10369,6 +10365,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_nativewin.o \
 	corelib_msw_notebook.o \
 	corelib_access.o \
+	corelib_activex.o \
 	corelib_msw_ownerdrw.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
@@ -10601,6 +10598,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_nativewin.o \
 	corelib_msw_notebook.o \
 	corelib_access.o \
+	corelib_activex.o \
 	corelib_msw_ownerdrw.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
@@ -11219,19 +11217,15 @@ COND_USE_SOSYMLINKS_1___mediadll___so_symlinks_uninst_cmd = rm -f \
 COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
 	mediadll_mediactrl_am.o \
 	mediadll_mediactrl_wmp10.o \
-	mediadll_mediactrl_qt.o \
-	mediadll_activex.o
+	mediadll_mediactrl_qt.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_2)
 @COND_TOOLKIT_OSX_CARBON@__MEDIA_PLATFORM_SRC_OBJECTS_2 \
 @COND_TOOLKIT_OSX_CARBON@	= mediadll_carbon_mediactrl.o
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_2 = 
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS_2 = 
-COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS_2 =  \
-	mediadll_mediactrl_am.o \
-	mediadll_mediactrl_wmp10.o \
-	mediadll_mediactrl_qt.o \
-	mediadll_activex.o
-@COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS_2)
+@COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
+@COND_TOOLKIT_WINCE@	mediadll_mediactrl_am.o mediadll_mediactrl_wmp10.o \
+@COND_TOOLKIT_WINCE@	mediadll_mediactrl_qt.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_X11@	mediadll_unix_mediactrl.o
 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname = \
@@ -11255,19 +11249,15 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_MEDIA_1___medialib___depname = \
 COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
 	medialib_mediactrl_am.o \
 	medialib_mediactrl_wmp10.o \
-	medialib_mediactrl_qt.o \
-	medialib_activex.o
+	medialib_mediactrl_qt.o
 @COND_TOOLKIT_MSW@__MEDIA_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___MEDIA_PLATFORM_SRC_OBJECTS_3)
 @COND_TOOLKIT_OSX_CARBON@__MEDIA_PLATFORM_SRC_OBJECTS_3 \
 @COND_TOOLKIT_OSX_CARBON@	= medialib_carbon_mediactrl.o
 @COND_TOOLKIT_OSX_COCOA@__MEDIA_PLATFORM_SRC_OBJECTS_3 = 
 @COND_TOOLKIT_PM@__MEDIA_PLATFORM_SRC_OBJECTS_3 = 
-COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS_3 =  \
-	medialib_mediactrl_am.o \
-	medialib_mediactrl_wmp10.o \
-	medialib_mediactrl_qt.o \
-	medialib_activex.o
-@COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___MEDIA_PLATFORM_SRC_OBJECTS_3)
+@COND_TOOLKIT_WINCE@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
+@COND_TOOLKIT_WINCE@	medialib_mediactrl_am.o medialib_mediactrl_wmp10.o \
+@COND_TOOLKIT_WINCE@	medialib_mediactrl_qt.o
 @COND_TOOLKIT_X11@__MEDIA_PLATFORM_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_X11@	medialib_unix_mediactrl.o
 @COND_SHARED_1@____wxmedia_namedll_DEP = $(__mediadll___depname)
@@ -17773,6 +17763,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_access.o: $(srcdir)/src/msw/ole/access.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
 
@@ -18753,12 +18749,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monodll_mediactrl_qt.o: $(srcdir)/src/msw/mediactrl_qt.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_qt.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
@@ -22438,6 +22428,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_access.o: $(srcdir)/src/msw/ole/access.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
 
@@ -23418,12 +23414,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1@monolib_mediactrl_qt.o: $(srcdir)/src/msw/mediactrl_qt.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_qt.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
@@ -27289,6 +27279,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_access.o: $(srcdir)/src/msw/ole/access.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
 
@@ -30781,6 +30777,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_access.o: $(srcdir)/src/msw/ole/access.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
 
@@ -32104,12 +32106,6 @@ mediadll_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MEDIADLL_ODEP)
 @COND_TOOLKIT_WINCE@mediadll_mediactrl_qt.o: $(srcdir)/src/msw/mediactrl_qt.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/mediactrl_qt.cpp
 
-@COND_TOOLKIT_MSW@mediadll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIADLL_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE@mediadll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIADLL_ODEP)
-@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
 @COND_TOOLKIT_MOTIF@mediadll_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp
 
@@ -32145,12 +32141,6 @@ medialib_cocoa_mediactrl.o: $(srcdir)/src/cocoa/mediactrl.mm $(MEDIALIB_ODEP)
 
 @COND_TOOLKIT_WINCE@medialib_mediactrl_qt.o: $(srcdir)/src/msw/mediactrl_qt.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/mediactrl_qt.cpp
-
-@COND_TOOLKIT_MSW@medialib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIALIB_ODEP)
-@COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE@medialib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MEDIALIB_ODEP)
-@COND_TOOLKIT_WINCE@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MOTIF@medialib_unix_mediactrl.o: $(srcdir)/src/unix/mediactrl.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $(srcdir)/src/unix/mediactrl.cpp

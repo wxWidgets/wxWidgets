@@ -258,10 +258,6 @@ SOURCE=..\..\src\common\mediactrlcmn.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\msw\ole\activex.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\msw\mediactrl_am.cpp
 # End Source File
 # Begin Source File
@@ -457,10 +453,6 @@ InputPath=..\..\include\wx\msw\setup.h
 # Begin Group "MSW Headers"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\msw\ole\activex.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\genrcdefs.h

@@ -140,7 +140,7 @@ WX_DECLARE_AUTOOLE(wxAutoIOleInPlaceActiveObject, IOleInPlaceActiveObject)
 WX_DECLARE_AUTOOLE(wxAutoIOleDocumentView, IOleDocumentView)
 WX_DECLARE_AUTOOLE(wxAutoIViewObject, IViewObject)
 
-class wxActiveXContainer : public wxWindow
+class WXDLLIMPEXP_CORE wxActiveXContainer : public wxWindow
 {
 public:
     wxActiveXContainer(wxWindow * parent, REFIID iid, IUnknown* pUnk);
@@ -174,7 +174,7 @@ protected:
 
 
 // Events
-class wxActiveXEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxActiveXEvent : public wxCommandEvent
 {
 private:
     friend class wxActiveXEvents;
@@ -211,7 +211,7 @@ public:
 };
 
 // #define wxACTIVEX_ID    14001
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_MEDIA, wxEVT_ACTIVEX, wxActiveXEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_ACTIVEX, wxActiveXEvent )
 
 typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
 

@@ -104,7 +104,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_mediactrl_am.obj &
 	$(OBJS)\monodll_mediactrl_wmp10.obj &
 	$(OBJS)\monodll_mediactrl_qt.obj &
-	$(OBJS)\monodll_activex.obj &
 	$(OBJS)\monodll_helpbest.obj &
 	$(OBJS)\monodll_helpctrl.obj &
 	$(OBJS)\monodll_helpdata.obj &
@@ -303,6 +302,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_nativewin.obj &
 	$(OBJS)\monodll_notebook.obj &
 	$(OBJS)\monodll_access.obj &
+	$(OBJS)\monodll_activex.obj &
 	$(OBJS)\monodll_ownerdrw.obj &
 	$(OBJS)\monodll_radiobox.obj &
 	$(OBJS)\monodll_radiobut.obj &
@@ -796,7 +796,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_mediactrl_am.obj &
 	$(OBJS)\monolib_mediactrl_wmp10.obj &
 	$(OBJS)\monolib_mediactrl_qt.obj &
-	$(OBJS)\monolib_activex.obj &
 	$(OBJS)\monolib_helpbest.obj &
 	$(OBJS)\monolib_helpctrl.obj &
 	$(OBJS)\monolib_helpdata.obj &
@@ -995,6 +994,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_nativewin.obj &
 	$(OBJS)\monolib_notebook.obj &
 	$(OBJS)\monolib_access.obj &
+	$(OBJS)\monolib_activex.obj &
 	$(OBJS)\monolib_ownerdrw.obj &
 	$(OBJS)\monolib_radiobox.obj &
 	$(OBJS)\monolib_radiobut.obj &
@@ -1608,6 +1608,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_nativewin.obj &
 	$(OBJS)\coredll_notebook.obj &
 	$(OBJS)\coredll_access.obj &
+	$(OBJS)\coredll_activex.obj &
 	$(OBJS)\coredll_ownerdrw.obj &
 	$(OBJS)\coredll_radiobox.obj &
 	$(OBJS)\coredll_radiobut.obj &
@@ -2101,6 +2102,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_nativewin.obj &
 	$(OBJS)\corelib_notebook.obj &
 	$(OBJS)\corelib_access.obj &
+	$(OBJS)\corelib_activex.obj &
 	$(OBJS)\corelib_ownerdrw.obj &
 	$(OBJS)\corelib_radiobox.obj &
 	$(OBJS)\corelib_radiobut.obj &
@@ -4018,8 +4020,7 @@ MEDIADLL_OBJECTS =  &
 	$(OBJS)\mediadll_mediactrlcmn.obj &
 	$(OBJS)\mediadll_mediactrl_am.obj &
 	$(OBJS)\mediadll_mediactrl_wmp10.obj &
-	$(OBJS)\mediadll_mediactrl_qt.obj &
-	$(OBJS)\mediadll_activex.obj
+	$(OBJS)\mediadll_mediactrl_qt.obj
 MEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -4033,8 +4034,7 @@ MEDIALIB_OBJECTS =  &
 	$(OBJS)\medialib_mediactrlcmn.obj &
 	$(OBJS)\medialib_mediactrl_am.obj &
 	$(OBJS)\medialib_mediactrl_wmp10.obj &
-	$(OBJS)\medialib_mediactrl_qt.obj &
-	$(OBJS)\medialib_activex.obj
+	$(OBJS)\medialib_mediactrl_qt.obj
 HTMLDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -6180,6 +6180,9 @@ $(OBJS)\monodll_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 $(OBJS)\monodll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6283,9 +6286,6 @@ $(OBJS)\monodll_mediactrl_wmp10.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_wmp10
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mediactrl_qt.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_qt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_helpbest.obj :  .AUTODEPEND ..\..\src\msw\helpbest.cpp
@@ -8514,6 +8514,9 @@ $(OBJS)\monolib_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 $(OBJS)\monolib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -8617,9 +8620,6 @@ $(OBJS)\monolib_mediactrl_wmp10.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_wmp10
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mediactrl_qt.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_qt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_helpbest.obj :  .AUTODEPEND ..\..\src\msw\helpbest.cpp
@@ -11232,6 +11232,9 @@ $(OBJS)\coredll_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 $(OBJS)\coredll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
+$(OBJS)\coredll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
 $(OBJS)\coredll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -12713,6 +12716,9 @@ $(OBJS)\corelib_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+$(OBJS)\corelib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
 $(OBJS)\corelib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
@@ -14376,9 +14382,6 @@ $(OBJS)\mediadll_mediactrl_wmp10.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_wmp1
 $(OBJS)\mediadll_mediactrl_qt.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_qt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mediadll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIADLL_CXXFLAGS) $<
-
 $(OBJS)\medialib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
@@ -14392,9 +14395,6 @@ $(OBJS)\medialib_mediactrl_wmp10.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_wmp1
 	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\medialib_mediactrl_qt.obj :  .AUTODEPEND ..\..\src\msw\mediactrl_qt.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
-
-$(OBJS)\medialib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MEDIALIB_CXXFLAGS) $<
 
 $(OBJS)\htmldll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp

@@ -9,37 +9,35 @@
 /**
     @class wxActiveXEvent
 
-    An event class for handling activex events passed from wxActiveXContainer.
+    An event class for handling ActiveX events passed from wxActiveXContainer.
 
     ActiveX events are basically a function call with the parameters passed
     through an array of wxVariants along with a return value that is a wxVariant
     itself. What type the parameters or return value are depends on the context
     (i.e. what the .idl specifies).
 
-    Note that unlike the third party wxActiveX function names are not supported.
-
     @beginEventTable{wxActiveXEvent}
     @event{EVT_ACTIVEX(func)}
-        Sent when the activex control hosted by wxActiveXContainer recieves an
-        activex event.
+        Sent when the ActiveX control hosted by wxActiveXContainer recieves an
+        ActiveX event.
     @endEventTable
 
     @onlyfor{wxmsw}
 
-    @library{wxbase}
+    @library{wxcore}
     @category{events}
 */
 class wxActiveXEvent : public wxCommandEvent
 {
 public:
     /**
-        Returns the dispatch id of this activex event.
+        Returns the dispatch id of this ActiveX event.
         This is the numeric value from the .idl file specified by the id().
     */
     DISPID GetDispatchId(int idx) const;
 
     /**
-        Obtains the number of parameters passed through the activex event.
+        Obtains the number of parameters passed through the ActiveX event.
     */
     size_t ParamCount() const;
 
@@ -64,19 +62,19 @@ public:
 /**
     @class wxActiveXContainer
 
-    wxActiveXContainer is a host for an activex control on Windows (and as such
+    wxActiveXContainer is a host for an ActiveX control on Windows (and as such
     is a platform-specific class).
 
-    Note that the HWND that the class contains is the actual HWND of the activeX
+    Note that the HWND that the class contains is the actual HWND of the ActiveX
     control so using dynamic events and connecting to wxEVT_SIZE, for example,
-    will recieve the actual size message sent to the control.
+    will receive the actual size message sent to the control.
 
     It is somewhat similar to the ATL class CAxWindow in operation.
 
-    The size of the activex control's content is generally gauranteed to be that
+    The size of the ActiveX control's content is generally guaranteed to be that
     of the client size of the parent of this wxActiveXContainer.
 
-    You can also process activeX events through wxActiveXEvent.
+    You can also process ActiveX events through wxActiveXEvent.
 
 
     @section activexcontainer_example Example
@@ -264,20 +262,20 @@ public:
     @library{wxbase}
     @category{misc,ipc}
 
-    @see wxActiveXEvent
+    @see wxActiveXEvent, @ref page_samples_flash Flash sample
 */
 class wxActiveXContainer : public wxControl
 {
 public:
     /**
-        Creates this activex container.
+        Creates this ActiveX container.
 
         @param parent
             parent of this control. Must not be @NULL.
         @param iid
-            COM IID of pUnk to query. Must be a valid interface to an activex control.
+            COM IID of pUnk to query. Must be a valid interface to an ActiveX control.
         @param pUnk
-            Interface of activex control.
+            Interface of ActiveX control.
     */
     wxActiveXContainer(wxWindow* parent, REFIID iid, IUnknown* pUnk);
 };

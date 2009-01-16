@@ -915,8 +915,7 @@ MEDIADLL_OBJECTS =  \
 	$(OBJS)\mediadll_mediactrlcmn.o \
 	$(OBJS)\mediadll_mediactrl_am.o \
 	$(OBJS)\mediadll_mediactrl_wmp10.o \
-	$(OBJS)\mediadll_mediactrl_qt.o \
-	$(OBJS)\mediadll_activex.o
+	$(OBJS)\mediadll_mediactrl_qt.o
 MEDIALIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -930,8 +929,7 @@ MEDIALIB_OBJECTS =  \
 	$(OBJS)\medialib_mediactrlcmn.o \
 	$(OBJS)\medialib_mediactrl_am.o \
 	$(OBJS)\medialib_mediactrl_wmp10.o \
-	$(OBJS)\medialib_mediactrl_qt.o \
-	$(OBJS)\medialib_activex.o
+	$(OBJS)\medialib_mediactrl_qt.o
 HTMLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1428,7 +1426,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_mediactrl_am.o \
 	$(OBJS)\monodll_mediactrl_wmp10.o \
 	$(OBJS)\monodll_mediactrl_qt.o \
-	$(OBJS)\monodll_activex.o \
 	$(OBJS)\monodll_helpbest.o \
 	$(OBJS)\monodll_helpctrl.o \
 	$(OBJS)\monodll_helpdata.o \
@@ -1626,6 +1623,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_nativewin.o \
 	$(OBJS)\monodll_notebook.o \
 	$(OBJS)\monodll_access.o \
+	$(OBJS)\monodll_activex.o \
 	$(OBJS)\monodll_ownerdrw.o \
 	$(OBJS)\monodll_radiobox.o \
 	$(OBJS)\monodll_radiobut.o \
@@ -2115,7 +2113,6 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_mediactrl_am.o \
 	$(OBJS)\monolib_mediactrl_wmp10.o \
 	$(OBJS)\monolib_mediactrl_qt.o \
-	$(OBJS)\monolib_activex.o \
 	$(OBJS)\monolib_helpbest.o \
 	$(OBJS)\monolib_helpctrl.o \
 	$(OBJS)\monolib_helpdata.o \
@@ -2313,6 +2310,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_nativewin.o \
 	$(OBJS)\monolib_notebook.o \
 	$(OBJS)\monolib_access.o \
+	$(OBJS)\monolib_activex.o \
 	$(OBJS)\monolib_ownerdrw.o \
 	$(OBJS)\monolib_radiobox.o \
 	$(OBJS)\monolib_radiobut.o \
@@ -2915,6 +2913,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_nativewin.o \
 	$(OBJS)\coredll_notebook.o \
 	$(OBJS)\coredll_access.o \
+	$(OBJS)\coredll_activex.o \
 	$(OBJS)\coredll_ownerdrw.o \
 	$(OBJS)\coredll_radiobox.o \
 	$(OBJS)\coredll_radiobut.o \
@@ -3406,6 +3405,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_nativewin.o \
 	$(OBJS)\corelib_notebook.o \
 	$(OBJS)\corelib_access.o \
+	$(OBJS)\corelib_activex.o \
 	$(OBJS)\corelib_ownerdrw.o \
 	$(OBJS)\corelib_radiobox.o \
 	$(OBJS)\corelib_radiobut.o \
@@ -5935,6 +5935,9 @@ $(OBJS)\monodll_nativewin.o: ../../src/msw/nativewin.cpp
 $(OBJS)\monodll_access.o: ../../src/msw/ole/access.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_activex.o: ../../src/msw/ole/activex.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -6038,9 +6041,6 @@ $(OBJS)\monodll_mediactrl_wmp10.o: ../../src/msw/mediactrl_wmp10.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_mediactrl_qt.o: ../../src/msw/mediactrl_qt.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monodll_activex.o: ../../src/msw/ole/activex.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_helpbest.o: ../../src/msw/helpbest.cpp
@@ -8269,6 +8269,9 @@ $(OBJS)\monolib_nativewin.o: ../../src/msw/nativewin.cpp
 $(OBJS)\monolib_access.o: ../../src/msw/ole/access.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_activex.o: ../../src/msw/ole/activex.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -8372,9 +8375,6 @@ $(OBJS)\monolib_mediactrl_wmp10.o: ../../src/msw/mediactrl_wmp10.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_mediactrl_qt.o: ../../src/msw/mediactrl_qt.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\monolib_activex.o: ../../src/msw/ole/activex.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_helpbest.o: ../../src/msw/helpbest.cpp
@@ -10987,6 +10987,9 @@ $(OBJS)\coredll_nativewin.o: ../../src/msw/nativewin.cpp
 $(OBJS)\coredll_access.o: ../../src/msw/ole/access.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\coredll_activex.o: ../../src/msw/ole/activex.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\coredll_ownerdrw.o: ../../src/msw/ownerdrw.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -12468,6 +12471,9 @@ $(OBJS)\corelib_nativewin.o: ../../src/msw/nativewin.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_access.o: ../../src/msw/ole/access.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\corelib_activex.o: ../../src/msw/ole/activex.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_ownerdrw.o: ../../src/msw/ownerdrw.cpp
@@ -14131,9 +14137,6 @@ $(OBJS)\mediadll_mediactrl_wmp10.o: ../../src/msw/mediactrl_wmp10.cpp
 $(OBJS)\mediadll_mediactrl_qt.o: ../../src/msw/mediactrl_qt.cpp
 	$(CXX) -c -o $@ $(MEDIADLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\mediadll_activex.o: ../../src/msw/ole/activex.cpp
-	$(CXX) -c -o $@ $(MEDIADLL_CXXFLAGS) $(CPPDEPS) $<
-
 $(OBJS)\medialib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MEDIALIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14147,9 +14150,6 @@ $(OBJS)\medialib_mediactrl_wmp10.o: ../../src/msw/mediactrl_wmp10.cpp
 	$(CXX) -c -o $@ $(MEDIALIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\medialib_mediactrl_qt.o: ../../src/msw/mediactrl_qt.cpp
-	$(CXX) -c -o $@ $(MEDIALIB_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\medialib_activex.o: ../../src/msw/ole/activex.cpp
 	$(CXX) -c -o $@ $(MEDIALIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\htmldll_dummy.o: ../../src/common/dummy.cpp

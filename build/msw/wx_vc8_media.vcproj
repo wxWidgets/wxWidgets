@@ -804,10 +804,6 @@
 			UniqueIdentifier="{D030D8C2-53EE-5B96-8F89-D78157B06140}"
 			>
 			<File
-				RelativePath="..\..\src\msw\ole\activex.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\msw\mediactrl_am.cpp"
 				>
 			</File>
@@ -969,10 +965,6 @@
 			Name="MSW Headers"
 			UniqueIdentifier="{5AFFF20E-29F9-512B-B80A-7DC45976CDAC}"
 			>
-			<File
-				RelativePath="..\..\include\wx\msw\ole\activex.h"
-				>
-			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\genrcdefs.h"
 				>
