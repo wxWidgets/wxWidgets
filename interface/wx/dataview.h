@@ -58,7 +58,8 @@
     to the data in the list model.
 
     Currently wxWidgets provides the following models apart from the base model:
-    wxDataViewIndexListModel, wxDataViewVirtualListModel, wxDataViewTreeStore.
+    wxDataViewIndexListModel, wxDataViewVirtualListModel, wxDataViewTreeStore,
+    wxDataViewListStore.
 
     Note that wxDataViewModel is reference counted, derives from wxObjectRefData
     and cannot be deleted directly as it can be shared by several wxDataViewCtrls.
@@ -1666,17 +1667,137 @@ public:
 };
 
 
+/**
+    @class wxDataViewListStore
+
+    wxDataViewListStore is a specialised wxDataViewModel for storing
+    a simple table of data. Since it derives from wxDataViewIndexListModel
+    its data is be accessed by row (i.e. by index) instead of only
+    by wxDataViewItem.
+
+    This class actually stores the values (therefore its name) 
+    and implements all virtual methods from the base classes so it can be
+    used directly without having to derive any class from it, but it is 
+    mostly used from within wxDataViewListCtrl.
+
+    @library{wxadv}
+    @category{dvc}
+*/
+
+class wxDataViewListStore: public wxDataViewIndexListModel
+{
+public:
+    /**
+       Constructor
+    */
+    wxDataViewListStore();
+    
+    /**
+       Destructor
+    */
+    ~wxDataViewListStore();
+
+    /**
+      Prepends a data column. 
+      
+      @a variantype indicates the type of values store in the column.
+      
+      This does not automatically fill in any (default) values in 
+      rows which exist in the store already.
+    */
+    void PrependColumn( const wxString &varianttype );
+
+    /**
+      Inserts a data column before @a pos.
+      
+      @a variantype indicates the type of values store in the column.
+      
+      This does not automatically fill in any (default) values in 
+      rows which exist in the store already.
+    */
+    void InsertColumn( unsigned int pos, const wxString &varianttype );
+
+    /**
+      Apppends a data column. 
+      
+      @a variantype indicates the type of values store in the column.
+      
+      This does not automatically fill in any (default) values in 
+      rows which exist in the store already.
+    */
+    void AppendColumn( const wxString &varianttype );
+    
+    /**
+        Appends an item (=row) and fills it with @a values.
+        
+        The values must match the values specifies in the column
+        in number and type. No (default) values are filled in
+        automatically.
+    */
+    void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    
+    /**
+        Prepends an item (=row) and fills it with @a values.
+        
+        The values must match the values specifies in the column
+        in number and type. No (default) values are filled in
+        automatically.
+    */
+    void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    
+    /**
+        Inserts an item (=row) and fills it with @a values.
+        
+        The values must match the values specifies in the column
+        in number and type. No (default) values are filled in
+        automatically.
+    */
+    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    
+    /**
+        Delete the item (=row) at position @a pos.
+    */
+    void DeleteItem( unsigned pos );
+    
+    /**
+        Delete all item (=all rows) in the store.
+    */
+    void DeleteAllItems();
+
+    /**
+        Overriden from wxDataViewModel
+    */
+    virtual unsigned int GetColumnCount() const;
+
+    /**
+        Overriden from wxDataViewModel
+    */
+    virtual wxString GetColumnType( unsigned int col ) const;
+
+    /**
+        Overriden from wxDataViewIndexListModel
+    */
+    virtual void GetValueByRow( wxVariant &value,
+                           unsigned int row, unsigned int col ) const;
+
+    /**
+        Overriden from wxDataViewIndexListModel
+    */
+    virtual bool SetValueByRow( const wxVariant &value,
+                           unsigned int row, unsigned int col );
+};
+
 
 /**
     @class wxDataViewTreeStore
 
-    wxDataViewTreeStore is a specialised wxDataViewModel for displaying simple
+    wxDataViewTreeStore is a specialised wxDataViewModel for stroing simple
     trees very much like wxTreeCtrl does and it offers a similar API.
 
     This class actually stores the entire tree and the values (therefore its name) 
     and implements all virtual methods from the base class so it can be used directly
-    without having to derive any class from it.
-    This comes at the price of much reduced flexibility.
+    without having to derive any class from it, but it is mostly used from within
+    wxDataViewTreeCtrl.
 
     @library{wxadv}
     @category{dvc}

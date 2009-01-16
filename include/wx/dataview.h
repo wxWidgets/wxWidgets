@@ -946,13 +946,6 @@ public:
     void InsertColumn( unsigned int pos, const wxString &varianttype );
     void AppendColumn( const wxString &varianttype );
     
-    void PrependStringColumn()                    
-        { PrependColumn( wxT("string") ); }
-    void InsertStringColumn( unsigned int pos )   
-        { InsertColumn( pos, wxT("string") ); }
-    void AppendStringColumn()                     
-        { AppendColumn( wxT("string") ); }
-    
     void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
     void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
     void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
