@@ -197,6 +197,18 @@
     - WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_INT()
 
 
+    @section array_predef Predefined array types
+
+    wxWidgets defines the following dynamic array types:
+    - wxArrayShort
+    - wxArrayInt
+    - wxArrayDouble
+    - wxArrayLong
+    - wxArrayPtrVoid
+
+    To use them you don't need any macro; you just need to include @c dynarray.h.
+
+
     @library{wxbase}
     @category{containers}
 
