@@ -498,7 +498,7 @@ protected:
     wxGraphicsFont m_font;
     wxRasterOperationMode m_logicalFunction;
 
-private:
+protected:
     // implementations of overloaded public functions: we use different names
     // for them to avoid the virtual function hiding problems in the derived
     // classes

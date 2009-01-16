@@ -2010,7 +2010,7 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         // default implementation takes care of rotation and calls non rotated DrawText afterwards
-        wxGraphicsContext::DrawText( str, x, y, angle );
+        wxGraphicsContext::DoDrawRotatedText( str, x, y, angle );
         return;
     }
 #endif
