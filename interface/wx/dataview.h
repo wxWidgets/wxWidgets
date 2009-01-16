@@ -1490,6 +1490,24 @@ public:
     The purpose of this class is to offer a simple way to display and
     edit a small table of data without having to write your own wxDataViewModel.
 
+    @code
+       wxDataViewListCtrl *listctrl = new wxDataViewListCtrl( parent, -1 );
+        
+       listctrl->AppendToggleCol( "Toggle" );
+       listctrl->AppendTextCol( "Text" );
+    
+       wxVector<wxVariant> data;
+       data.push_back( true );
+       data.push_back( "row 1" );
+       listctrl->AppendItem( data );
+    
+       data.clear();
+       data.push_back( false );
+       data.push_back( "row 3" );
+       listctrl->AppendItem( data );
+    @endcode
+
+
     @library{wxadv}
     @category{ctrl,dvc}
 */
