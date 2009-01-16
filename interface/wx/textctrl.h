@@ -7,9 +7,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-
 /**
-    The following values can be passed to wxTextAttr::SetAlignment to determine paragraph alignment.
+    One of the following values can be passed to wxTextAttr::SetAlignment to determine paragraph alignment.
 */
 enum wxTextAttrAlignment
 {
@@ -32,6 +31,7 @@ enum wxTextAttrFlags
 {
     wxTEXT_ATTR_TEXT_COLOUR          = 0x00000001,
     wxTEXT_ATTR_BACKGROUND_COLOUR    = 0x00000002,
+
     wxTEXT_ATTR_FONT_FACE            = 0x00000004,
     wxTEXT_ATTR_FONT_SIZE            = 0x00000008,
     wxTEXT_ATTR_FONT_WEIGHT          = 0x00000010,
@@ -39,6 +39,10 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_FONT_UNDERLINE       = 0x00000040,
     wxTEXT_ATTR_FONT_ENCODING        = 0x02000000,
     wxTEXT_ATTR_FONT_FAMILY          = 0x04000000,
+
+    /**
+        Defined as the combination of all @c wxTEXT_ATTR_FONT_* values above.
+    */
     wxTEXT_ATTR_FONT = \
         ( wxTEXT_ATTR_FONT_FACE | wxTEXT_ATTR_FONT_SIZE | wxTEXT_ATTR_FONT_WEIGHT | \
             wxTEXT_ATTR_FONT_ITALIC | wxTEXT_ATTR_FONT_UNDERLINE | wxTEXT_ATTR_FONT_ENCODING | wxTEXT_ATTR_FONT_FAMILY ),
@@ -47,41 +51,55 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_LEFT_INDENT          = 0x00000100,
     wxTEXT_ATTR_RIGHT_INDENT         = 0x00000200,
     wxTEXT_ATTR_TABS                 = 0x00000400,
-
     wxTEXT_ATTR_PARA_SPACING_AFTER   = 0x00000800,
     wxTEXT_ATTR_PARA_SPACING_BEFORE  = 0x00001000,
     wxTEXT_ATTR_LINE_SPACING         = 0x00002000,
     wxTEXT_ATTR_CHARACTER_STYLE_NAME = 0x00004000,
     wxTEXT_ATTR_PARAGRAPH_STYLE_NAME = 0x00008000,
     wxTEXT_ATTR_LIST_STYLE_NAME      = 0x00010000,
+
     wxTEXT_ATTR_BULLET_STYLE         = 0x00020000,
     wxTEXT_ATTR_BULLET_NUMBER        = 0x00040000,
     wxTEXT_ATTR_BULLET_TEXT          = 0x00080000,
     wxTEXT_ATTR_BULLET_NAME          = 0x00100000,
+
+    /**
+        Defined as the combination of all @c wxTEXT_ATTR_BULLET_* values above.
+    */
+    wxTEXT_ATTR_BULLET = \
+        ( wxTEXT_ATTR_BULLET_STYLE | wxTEXT_ATTR_BULLET_NUMBER | wxTEXT_ATTR_BULLET_TEXT | \
+          wxTEXT_ATTR_BULLET_NAME ),
+
     wxTEXT_ATTR_URL                  = 0x00200000,
     wxTEXT_ATTR_PAGE_BREAK           = 0x00400000,
     wxTEXT_ATTR_EFFECTS              = 0x00800000,
     wxTEXT_ATTR_OUTLINE_LEVEL        = 0x01000000,
 
     /**
-        Character and paragraph combined styles
+        Combines the styles @c wxTEXT_ATTR_FONT, @c wxTEXT_ATTR_EFFECTS, @c wxTEXT_ATTR_BACKGROUND_COLOUR,
+        @c wxTEXT_ATTR_TEXT_COLOUR, @c wxTEXT_ATTR_CHARACTER_STYLE_NAME, @c wxTEXT_ATTR_URL.
     */
 
     wxTEXT_ATTR_CHARACTER = \
         (wxTEXT_ATTR_FONT|wxTEXT_ATTR_EFFECTS| \
             wxTEXT_ATTR_BACKGROUND_COLOUR|wxTEXT_ATTR_TEXT_COLOUR|wxTEXT_ATTR_CHARACTER_STYLE_NAME|wxTEXT_ATTR_URL),
 
+    /**
+        Combines all the styles regarding text paragraphs.
+    */
     wxTEXT_ATTR_PARAGRAPH = \
         (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
             wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
-            wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|\
-            wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL),
+            wxTEXT_ATTR_BULLET|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL),
 
+    /**
+        Combines all previous values.
+    */
     wxTEXT_ATTR_ALL = (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 };
 
 /**
-    Styles for wxTextAttr::SetBulletStyle
+    Styles for wxTextAttr::SetBulletStyle. They can be combined together as a bitlist.
 */
 enum wxTextAttrBulletStyle
 {
@@ -107,7 +125,7 @@ enum wxTextAttrBulletStyle
 };
 
 /**
-    Styles for wxTextAttr::SetTextEffects().
+    Styles for wxTextAttr::SetTextEffects(). They can be combined together as a bitlist.
 
     Of these, only wxTEXT_ATTR_EFFECT_CAPITALS and wxTEXT_ATTR_EFFECT_STRIKETHROUGH are implemented.
 */
@@ -127,7 +145,7 @@ enum wxTextAttrEffects
 };
 
 /**
-    Line spacing values; see wxTextAttr::SetLineSpacing().
+    Convenience line spacing values; see wxTextAttr::SetLineSpacing().
 */
 enum wxTextAttrLineSpacing
 {
@@ -206,6 +224,27 @@ public:
         Creates a font from the font attributes.
     */
     wxFont CreateFont() const;
+
+    /**
+        Copies all defined/valid properties from overlay to current object.
+    */
+    void Merge(const wxTextAttr& overlay);
+
+    /**
+        Creates a new @c wxTextAttr which is a merge of @a base and @a overlay.
+
+        Properties defined in @a overlay take precedence over those in @a base.
+        Properties undefined/invalid in both are undefined in the result.
+    */
+    static wxTextAttr Merge(const wxTextAttr& base,
+                            const wxTextAttr& overlay);
+
+
+    /**
+        @name GetXXX functions
+     */
+
+    //@{
 
     /**
         Returns the alignment flags.
@@ -299,7 +338,7 @@ public:
     /**
         Returns the font family.
     */
-    int GetFontFamily() const;
+    wxFontFamily GetFontFamily() const;
 
     /**
         Returns the font size in points.
@@ -309,7 +348,7 @@ public:
     /**
         Returns the font style.
     */
-    int GetFontStyle() const;
+    wxFontStyle GetFontStyle() const;
 
     /**
         Returns @true if the font is underlined.
@@ -319,7 +358,7 @@ public:
     /**
         Returns the font weight.
     */
-    int GetFontWeight() const;
+    wxFontWeight GetFontWeight() const;
 
     /**
         Returns the left indent in tenths of a millimetre.
@@ -399,6 +438,16 @@ public:
         when the content is clicked.
     */
     const wxString& GetURL() const;
+
+    //@}
+
+
+
+    /**
+        @name HasXXX and IsXXX functions
+     */
+
+    //@{
 
     /**
         Returns @true if the attribute object specifies alignment.
@@ -568,19 +617,14 @@ public:
     */
     bool IsParagraphStyle() const;
 
-    /**
-        Copies all defined/valid properties from overlay to current object.
-    */
-    void Merge(const wxTextAttr& overlay);
+    //@}
+
 
     /**
-        Creates a new @c wxTextAttr which is a merge of @a base and @a overlay.
+        @name SetXXX functions
+     */
 
-        Properties defined in @a overlay take precedence over those in @a base.
-        Properties undefined/invalid in both are undefined in the result.
-    */
-    static wxTextAttr Merge(const wxTextAttr& base,
-                            const wxTextAttr& overlay);
+    //@{
 
     /**
         Sets the paragraph alignment. See ::wxTextAttrAlignment enumeration values.
@@ -659,7 +703,7 @@ public:
     /**
         Sets the font family.
     */
-    void SetFontFamily(int family);
+    void SetFontFamily(wxFontFamily family);
 
     /**
         Sets the font size in points.
@@ -669,7 +713,7 @@ public:
     /**
         Sets the font style (normal, italic or slanted).
     */
-    void SetFontStyle(int fontStyle);
+    void SetFontStyle(wxFontStyle fontStyle);
 
     /**
         Sets the font underlining.
@@ -679,7 +723,7 @@ public:
     /**
         Sets the font weight.
     */
-    void SetFontWeight(int fontWeight);
+    void SetFontWeight(wxFontWeight fontWeight);
 
     /**
         Sets the left indent and left subindent in tenths of a millimetre.
@@ -787,6 +831,9 @@ public:
         generates a wxTextUrlEvent when the content is clicked.
     */
     void SetURL(const wxString& url);
+
+    //@}
+
 
     /**
         Assignment from a wxTextAttr object.

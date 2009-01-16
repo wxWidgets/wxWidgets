@@ -314,11 +314,11 @@ bool wxRichTextFontPage::TransferDataFromWindow()
 
     if (m_styleCtrl->GetSelection() != wxNOT_FOUND)
     {
-        int style;
+        wxFontStyle style;
         if (m_styleCtrl->GetStringSelection() == _("Italic"))
-            style = wxITALIC;
+            style = wxFONTSTYLE_ITALIC;
         else
-            style = wxNORMAL;
+            style = wxFONTSTYLE_NORMAL;
 
         attr->SetFontStyle(style);
     }
@@ -327,11 +327,11 @@ bool wxRichTextFontPage::TransferDataFromWindow()
 
     if (m_weightCtrl->GetSelection() != wxNOT_FOUND)
     {
-        int weight;
+        wxFontWeight weight;
         if (m_weightCtrl->GetStringSelection() == _("Bold"))
-            weight = wxBOLD;
+            weight = wxFONTWEIGHT_BOLD;
         else
-            weight = wxNORMAL;
+            weight = wxFONTWEIGHT_NORMAL;
 
         attr->SetFontWeight(weight);
     }

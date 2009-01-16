@@ -5686,7 +5686,7 @@ void wxRichTextBuffer::ClearStyleStack()
 bool wxRichTextBuffer::BeginBold()
 {
     wxTextAttr attr;
-    attr.SetFontWeight(wxBOLD);
+    attr.SetFontWeight(wxFONTWEIGHT_BOLD);
 
     return BeginStyle(attr);
 }
@@ -5695,7 +5695,7 @@ bool wxRichTextBuffer::BeginBold()
 bool wxRichTextBuffer::BeginItalic()
 {
     wxTextAttr attr;
-    attr.SetFontStyle(wxITALIC);
+    attr.SetFontStyle(wxFONTSTYLE_ITALIC);
 
     return BeginStyle(attr);
 }

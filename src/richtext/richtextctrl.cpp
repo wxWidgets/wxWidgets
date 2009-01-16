@@ -2997,7 +2997,7 @@ bool wxRichTextCtrl::IsSelectionBold()
         wxTextAttr attr;
         wxRichTextRange range = GetSelectionRange();
         attr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
-        attr.SetFontWeight(wxBOLD);
+        attr.SetFontWeight(wxFONTWEIGHT_BOLD);
 
         return HasCharacterAttributes(range, attr);
     }
@@ -3013,7 +3013,7 @@ bool wxRichTextCtrl::IsSelectionBold()
         {
             if (IsDefaultStyleShowing())
                 wxRichTextApplyStyle(attr, GetDefaultStyleEx());
-            return attr.GetFontWeight() == wxBOLD;
+            return attr.GetFontWeight() == wxFONTWEIGHT_BOLD;
         }
     }
     return false;
@@ -3027,7 +3027,7 @@ bool wxRichTextCtrl::IsSelectionItalics()
         wxRichTextRange range = GetSelectionRange();
         wxTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_ITALIC);
-        attr.SetFontStyle(wxITALIC);
+        attr.SetFontStyle(wxFONTSTYLE_ITALIC);
 
         return HasCharacterAttributes(range, attr);
     }
@@ -3043,7 +3043,7 @@ bool wxRichTextCtrl::IsSelectionItalics()
         {
             if (IsDefaultStyleShowing())
                 wxRichTextApplyStyle(attr, GetDefaultStyleEx());
-            return attr.GetFontStyle() == wxITALIC;
+            return attr.GetFontStyle() == wxFONTSTYLE_ITALIC;
         }
     }
     return false;
@@ -3084,7 +3084,7 @@ bool wxRichTextCtrl::ApplyBoldToSelection()
 {
     wxTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
-    attr.SetFontWeight(IsSelectionBold() ? wxNORMAL : wxBOLD);
+    attr.SetFontWeight(IsSelectionBold() ? wxFONTWEIGHT_NORMAL : wxFONTWEIGHT_BOLD);
 
     if (HasSelection())
         return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);
@@ -3102,7 +3102,7 @@ bool wxRichTextCtrl::ApplyItalicToSelection()
 {
     wxTextAttr attr;
     attr.SetFlags(wxTEXT_ATTR_FONT_ITALIC);
-    attr.SetFontStyle(IsSelectionItalics() ? wxNORMAL : wxITALIC);
+    attr.SetFontStyle(IsSelectionItalics() ? wxFONTSTYLE_NORMAL : wxFONTSTYLE_ITALIC);
 
     if (HasSelection())
         return SetStyleEx(GetSelectionRange(), attr, wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_OPTIMIZE|wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY);

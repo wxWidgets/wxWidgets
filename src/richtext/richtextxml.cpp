@@ -1131,9 +1131,9 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPa
 {
     wxString fontFacename;
     int fontSize = 12;
-    int fontFamily = wxFONTFAMILY_DEFAULT;
-    int fontWeight = wxNORMAL;
-    int fontStyle = wxNORMAL;
+    wxFontFamily fontFamily = wxFONTFAMILY_DEFAULT;
+    wxFontWeight fontWeight = wxFONTWEIGHT_NORMAL;
+    wxFontStyle fontStyle = wxFONTSTYLE_NORMAL;
     bool fontUnderlined = false;
 
     // int fontFlags = 0;
@@ -1150,14 +1150,14 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPa
     value = node->GetAttribute(wxT("fontfamily"), wxEmptyString);
     if (!value.empty())
     {
-        fontFamily = wxAtoi(value);
+        fontFamily = (wxFontFamily)wxAtoi(value);
         attr.SetFontFamily(fontFamily);
     }
 
     value = node->GetAttribute(wxT("fontstyle"), wxEmptyString);
     if (!value.empty())
     {
-        fontStyle = wxAtoi(value);
+        fontStyle = (wxFontStyle)wxAtoi(value);
         attr.SetFontStyle(fontStyle);
     }
 
@@ -1171,7 +1171,7 @@ bool wxRichTextXMLHandler::GetStyle(wxTextAttr& attr, wxXmlNode* node, bool isPa
     value = node->GetAttribute(wxT("fontweight"), wxEmptyString);
     if (!value.empty())
     {
-        fontWeight = wxAtoi(value);
+        fontWeight = (wxFontWeight)wxAtoi(value);
         attr.SetFontWeight(fontWeight);
     }
 

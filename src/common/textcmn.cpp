@@ -85,8 +85,8 @@ void wxTextAttr::Init()
     m_rightIndent = 0;
 
     m_fontSize = 12;
-    m_fontStyle = wxNORMAL;
-    m_fontWeight = wxNORMAL;
+    m_fontStyle = wxFONTSTYLE_NORMAL;
+    m_fontWeight = wxFONTWEIGHT_NORMAL;
     m_fontUnderlined = false;
     m_fontEncoding = wxFONTENCODING_DEFAULT;
     m_fontFamily = wxFONTFAMILY_DEFAULT;

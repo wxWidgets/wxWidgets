@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/textctrl.h
-// Purpose:     wxTextCtrlBase class - the interface of wxTextCtrl
+// Purpose:     wxTextAttr and wxTextCtrlBase class - the interface of wxTextCtrl
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     13.07.99
@@ -165,6 +165,7 @@ enum wxTextAttrFlags
 {
     wxTEXT_ATTR_TEXT_COLOUR          = 0x00000001,
     wxTEXT_ATTR_BACKGROUND_COLOUR    = 0x00000002,
+
     wxTEXT_ATTR_FONT_FACE            = 0x00000004,
     wxTEXT_ATTR_FONT_SIZE            = 0x00000008,
     wxTEXT_ATTR_FONT_WEIGHT          = 0x00000010,
@@ -180,17 +181,23 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_LEFT_INDENT          = 0x00000100,
     wxTEXT_ATTR_RIGHT_INDENT         = 0x00000200,
     wxTEXT_ATTR_TABS                 = 0x00000400,
-
     wxTEXT_ATTR_PARA_SPACING_AFTER   = 0x00000800,
     wxTEXT_ATTR_PARA_SPACING_BEFORE  = 0x00001000,
     wxTEXT_ATTR_LINE_SPACING         = 0x00002000,
     wxTEXT_ATTR_CHARACTER_STYLE_NAME = 0x00004000,
     wxTEXT_ATTR_PARAGRAPH_STYLE_NAME = 0x00008000,
     wxTEXT_ATTR_LIST_STYLE_NAME      = 0x00010000,
+
     wxTEXT_ATTR_BULLET_STYLE         = 0x00020000,
     wxTEXT_ATTR_BULLET_NUMBER        = 0x00040000,
     wxTEXT_ATTR_BULLET_TEXT          = 0x00080000,
     wxTEXT_ATTR_BULLET_NAME          = 0x00100000,
+
+    wxTEXT_ATTR_BULLET = \
+        ( wxTEXT_ATTR_BULLET_STYLE | wxTEXT_ATTR_BULLET_NUMBER | wxTEXT_ATTR_BULLET_TEXT | \
+          wxTEXT_ATTR_BULLET_NAME ),
+
+
     wxTEXT_ATTR_URL                  = 0x00200000,
     wxTEXT_ATTR_PAGE_BREAK           = 0x00400000,
     wxTEXT_ATTR_EFFECTS              = 0x00800000,
@@ -207,8 +214,7 @@ enum wxTextAttrFlags
     wxTEXT_ATTR_PARAGRAPH = \
         (wxTEXT_ATTR_ALIGNMENT|wxTEXT_ATTR_LEFT_INDENT|wxTEXT_ATTR_RIGHT_INDENT|wxTEXT_ATTR_TABS|\
             wxTEXT_ATTR_PARA_SPACING_BEFORE|wxTEXT_ATTR_PARA_SPACING_AFTER|wxTEXT_ATTR_LINE_SPACING|\
-            wxTEXT_ATTR_BULLET_STYLE|wxTEXT_ATTR_BULLET_NUMBER|wxTEXT_ATTR_BULLET_TEXT|wxTEXT_ATTR_BULLET_NAME|\
-            wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL),
+            wxTEXT_ATTR_BULLET|wxTEXT_ATTR_PARAGRAPH_STYLE_NAME|wxTEXT_ATTR_LIST_STYLE_NAME|wxTEXT_ATTR_OUTLINE_LEVEL),
 
     wxTEXT_ATTR_ALL = (wxTEXT_ATTR_CHARACTER|wxTEXT_ATTR_PARAGRAPH)
 };
@@ -307,12 +313,12 @@ public:
     void SetRightIndent(int indent) { m_rightIndent = indent; m_flags |= wxTEXT_ATTR_RIGHT_INDENT; }
 
     void SetFontSize(int pointSize) { m_fontSize = pointSize; m_flags |= wxTEXT_ATTR_FONT_SIZE; }
-    void SetFontStyle(int fontStyle) { m_fontStyle = fontStyle; m_flags |= wxTEXT_ATTR_FONT_ITALIC; }
-    void SetFontWeight(int fontWeight) { m_fontWeight = fontWeight; m_flags |= wxTEXT_ATTR_FONT_WEIGHT; }
+    void SetFontStyle(wxFontStyle fontStyle) { m_fontStyle = fontStyle; m_flags |= wxTEXT_ATTR_FONT_ITALIC; }
+    void SetFontWeight(wxFontWeight fontWeight) { m_fontWeight = fontWeight; m_flags |= wxTEXT_ATTR_FONT_WEIGHT; }
     void SetFontFaceName(const wxString& faceName) { m_fontFaceName = faceName; m_flags |= wxTEXT_ATTR_FONT_FACE; }
     void SetFontUnderlined(bool underlined) { m_fontUnderlined = underlined; m_flags |= wxTEXT_ATTR_FONT_UNDERLINE; }
     void SetFontEncoding(wxFontEncoding encoding) { m_fontEncoding = encoding; m_flags |= wxTEXT_ATTR_FONT_ENCODING; }
-    void SetFontFamily(int family) { m_fontFamily = family; m_flags |= wxTEXT_ATTR_FONT_FAMILY; }
+    void SetFontFamily(wxFontFamily family) { m_fontFamily = family; m_flags |= wxTEXT_ATTR_FONT_FAMILY; }
 
     // Set font
     void SetFont(const wxFont& font, int flags = wxTEXT_ATTR_FONT) { GetFontAttributes(font, flags); }
@@ -346,12 +352,12 @@ public:
     long GetFlags() const { return m_flags; }
 
     int GetFontSize() const { return m_fontSize; }
-    int GetFontStyle() const { return m_fontStyle; }
-    int GetFontWeight() const { return m_fontWeight; }
+    wxFontStyle GetFontStyle() const { return m_fontStyle; }
+    wxFontWeight GetFontWeight() const { return m_fontWeight; }
     bool GetFontUnderlined() const { return m_fontUnderlined; }
     const wxString& GetFontFaceName() const { return m_fontFaceName; }
     wxFontEncoding GetFontEncoding() const { return m_fontEncoding; }
-    int GetFontFamily() const { return m_fontFamily; }
+    wxFontFamily GetFontFamily() const { return m_fontFamily; }
 
     wxFont GetFont() const;
 
@@ -361,7 +367,6 @@ public:
     int GetParagraphSpacingAfter() const { return m_paragraphSpacingAfter; }
     int GetParagraphSpacingBefore() const { return m_paragraphSpacingBefore; }
 
-    // TODO: should return the relative wxTextAttr* enumeration values
     int GetLineSpacing() const { return m_lineSpacing; }
     int GetBulletStyle() const { return m_bulletStyle; }
     int GetBulletNumber() const { return m_bulletNumber; }
@@ -489,9 +494,9 @@ private:
     wxColour            m_colText,
                         m_colBack;
     int                 m_fontSize;
-    int                 m_fontStyle;
-    int                 m_fontWeight;
-    int                 m_fontFamily;
+    wxFontStyle         m_fontStyle;
+    wxFontWeight        m_fontWeight;
+    wxFontFamily        m_fontFamily;
     bool                m_fontUnderlined;
     wxString            m_fontFaceName;
 
