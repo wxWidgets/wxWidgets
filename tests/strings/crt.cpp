@@ -213,12 +213,6 @@ void CrtTestCase::Strpbrk()
 
 void CrtTestCase::Strnlen()
 {
-    // the following calls should not segfault/crash because when passing 0
-    // as maxlen, no bytes at all should be read from the given buffer
-    // (which is NULL in this case!)
-    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen((const char*)NULL, 0) );
-    CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen((const wchar_t*)NULL, 0) );
-
     // other misc tests for wxStrnlen(const char*, size_t)
 
     CPPUNIT_ASSERT_EQUAL(  (size_t)0, wxStrnlen("", 0) );
