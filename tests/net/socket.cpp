@@ -179,7 +179,7 @@ void SocketTestCase::ReadNormal()
     sock->Read(bufSmall, WXSIZEOF(bufSmall));
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), sock->LastCount() );
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastCount() );
 
 
     char bufBig[102400];
@@ -199,7 +199,7 @@ void SocketTestCase::ReadBlock()
     sock->Read(bufSmall, WXSIZEOF(bufSmall));
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), sock->LastCount() );
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(bufSmall), (size_t)sock->LastCount() );
 
 
     char bufBig[102400];
@@ -235,7 +235,7 @@ void SocketTestCase::ReadWaitall()
     sock->Read(buf, WXSIZEOF(buf));
 
     CPPUNIT_ASSERT_EQUAL( wxSOCKET_NOERROR, sock->LastError() );
-    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(buf), sock->LastCount() );
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(buf), (size_t)sock->LastCount() );
 }
 
 void SocketTestCase::UrlTest()
