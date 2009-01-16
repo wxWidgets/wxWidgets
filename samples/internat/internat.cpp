@@ -233,11 +233,16 @@ bool MyApp::OnInit()
     // in the default locations, but when the program is not installed the
     // catalogs are in the build directory where we wouldn't find them by
     // default
-    wxLocale::AddCatalogLookupPathPrefix(wxT("."));
+    wxLocale::AddCatalogLookupPathPrefix(".");
 
     // Initialize the catalogs we'll be using
-    if (!m_locale.AddCatalog(wxT("internat")))
+    if (!m_locale.AddCatalog("internat"))
         wxLogError(_("Couldn't find/load the 'internat' catalog."));
+
+    // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
+    // a localized error message:
+    m_locale.AddCatalog("wxstd.mo");
+        // NOTE: it's not an error if we couldn't find it!
 
     // this catalog is installed in standard location on Linux systems and
     // shows that you may make use of the standard message catalogs as well
@@ -322,7 +327,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageDialog dlg(
                         this,
                         wxString(_("I18n sample\n(c) 1998, 1999 Vadim Zeitlin and Julian Smart"))
-                                 + wxT("\n\n")
+                                 + "\n\n"
                                  + localeInfo,
                                  _("About Internat"),
                         wxOK | wxICON_INFORMATION
@@ -373,7 +378,12 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
         // catalog as by default xgettext won't do it; it only knows of _(),
         // not of wxTRANSLATE(). As internat's readme.txt says you should thus
         // call xgettext with -kwxTRANSLATE.
-        str = wxTRANSLATE("Bad luck! try again...");
+        str = wxGetTranslation(wxTRANSLATE("Bad luck! try again..."));
+
+        // note also that if we want 'str' to contain a localized string
+        // we need to use wxGetTranslation explicitely as wxTRANSLATE just
+        // tells xgettext to extract the string but has no effect on the
+        // runtime of the program!
     }
 
     wxMessageBox(str, _("Result"), wxOK | wxICON_INFORMATION);
@@ -409,15 +419,22 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
     // open a bogus file -- the error message should be also translated if
-    // you've got wxstd.mo somewhere in the search path
-    wxFile file(wxT("NOTEXIST.ING"));
+    // you've got wxstd.mo somewhere in the search path (see MyApp::OnInit)
+    wxFile file("NOTEXIST.ING");
 }
 
 void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
-    const wxString title = _("Testing _() (gettext)");
+    const wxString& title = _("Testing _() (gettext)");
+
+    // NOTE: using the wxTRANSLATE() macro here we won't show a localized
+    //       string in the text entry dialog; we'll simply show the un-translated
+    //       string; however if the user press "ok" without altering the text,
+    //       since the "default value" string has been extracted by xgettext
+    //       the wxGetTranslation call later will manage to return a localized
+    //       string
     wxTextEntryDialog d(this, _("Please enter text to translate"),
-        title, wxTRANSLATE("default value"));
+                        title, wxTRANSLATE("default value"));
 
     if (d.ShowModal() == wxID_OK)
     {
@@ -431,7 +448,7 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 {
-    const wxString title = _("Testing _N() (ngettext)");
+    const wxString& title = _("Testing _N() (ngettext)");
     wxTextEntryDialog d(this,
         _("Please enter range for plural forms of \"n files deleted\" phrase"),
         title, "0-10");
