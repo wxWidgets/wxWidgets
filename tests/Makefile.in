@@ -130,6 +130,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_listctrltest.o \
 	test_gui_textctrltest.o \
 	test_gui_textentrytest.o \
+	test_gui_propagation.o \
 	test_gui_rawbmp.o \
 	test_gui_htmlwindow.o \
 	test_gui_guifuncs.o \
@@ -564,6 +565,9 @@ test_gui_textctrltest.o: $(srcdir)/controls/textctrltest.cpp $(TEST_GUI_ODEP)
 
 test_gui_textentrytest.o: $(srcdir)/controls/textentrytest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/textentrytest.cpp
+
+test_gui_propagation.o: $(srcdir)/events/propagation.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/propagation.cpp
 
 test_gui_rawbmp.o: $(srcdir)/image/rawbmp.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/image/rawbmp.cpp

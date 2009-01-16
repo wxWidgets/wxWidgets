@@ -628,6 +628,9 @@
 				RelativePath=".\geometry\point.cpp">
 			</File>
 			<File
+				RelativePath=".\events\propagation.cpp">
+			</File>
+			<File
 				RelativePath=".\image\rawbmp.cpp">
 			</File>
 			<File

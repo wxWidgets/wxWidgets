@@ -92,6 +92,13 @@ public:
     virtual int  OnRun();
     virtual int  OnExit();
 
+    // used by events propagation test
+    virtual int FilterEvent(wxEvent& event);
+    virtual bool ProcessEvent(wxEvent& event);
+
+    void SetFilterEventFunc(FilterEventFunc f) { m_filterEventFunc = f; }
+    void SetProcessEventFunc(ProcessEventFunc f) { m_processEventFunc = f; }
+
 #ifdef __WXDEBUG__
     virtual void OnAssertFailure(const wxChar *,
                                  int,
@@ -112,6 +119,10 @@ private:
     bool m_detail;
     bool m_timing;
     vector<string> m_registries;
+
+    // event handling hooks
+    FilterEventFunc m_filterEventFunc;
+    ProcessEventFunc m_processEventFunc;
 };
 
 IMPLEMENT_APP_CONSOLE(TestApp)
@@ -120,6 +131,8 @@ TestApp::TestApp()
   : m_list(false),
     m_longlist(false)
 {
+    m_filterEventFunc = NULL;
+    m_processEventFunc = NULL;
 }
 
 // Init
@@ -183,6 +196,33 @@ bool TestApp::OnCmdLineParsed(wxCmdLineParser& parser)
     m_detail = !m_timing && parser.Found(_T("detail"));
 
     return TestAppBase::OnCmdLineParsed(parser);
+}
+
+// Event handling
+int TestApp::FilterEvent(wxEvent& event)
+{
+    if ( m_filterEventFunc )
+        return (*m_filterEventFunc)(event);
+
+    return TestAppBase::FilterEvent(event);
+}
+
+bool TestApp::ProcessEvent(wxEvent& event)
+{
+    if ( m_processEventFunc )
+        return (*m_processEventFunc)(event);
+
+    return TestAppBase::ProcessEvent(event);
+}
+
+extern void SetFilterEventFunc(FilterEventFunc func)
+{
+    wxGetApp().SetFilterEventFunc(func);
+}
+
+extern void SetProcessEventFunc(ProcessEventFunc func)
+{
+    wxGetApp().SetProcessEventFunc(func);
 }
 
 // Run

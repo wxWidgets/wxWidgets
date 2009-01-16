@@ -27,3 +27,10 @@ class TestAssertFailure { };
     #define WX_ASSERT_FAILS_WITH_ASSERT(cond) CPPUNIT_ASSERT(!(cond))
 #endif
 
+// these functions can be used to hook into wxApp event processing and are
+// currently used by the events propagation test
+typedef int (*FilterEventFunc)(wxEvent&);
+typedef bool (*ProcessEventFunc)(wxEvent&);
+
+extern void SetFilterEventFunc(FilterEventFunc func);
+extern void SetProcessEventFunc(ProcessEventFunc func);

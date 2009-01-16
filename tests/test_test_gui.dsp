@@ -277,6 +277,10 @@ SOURCE=.\geometry\point.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\events\propagation.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\image\rawbmp.cpp
 # End Source File
 # Begin Source File
