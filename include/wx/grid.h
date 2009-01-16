@@ -14,5 +14,8 @@
 
 #include "wx/generic/grid.h"
 
-#endif
-    // _WX_GRID_H_BASE_
+// this used to be included from the above header but isn't any more, still do
+// it from here for compatibility
+#include "wx/generic/grideditors.h"
+
+#endif // _WX_GRID_H_BASE_
