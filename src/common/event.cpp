@@ -352,6 +352,7 @@ wxEvent::wxEvent(int theId, wxEventType commandType )
     m_callbackUserData = NULL;
     m_isCommandEvent = false;
     m_propagationLevel = wxEVENT_PROPAGATE_NONE;
+    m_wasProcessed = false;
 }
 
 wxEvent::wxEvent(const wxEvent& src)
@@ -364,6 +365,7 @@ wxEvent::wxEvent(const wxEvent& src)
     , m_propagationLevel(src.m_propagationLevel)
     , m_skipped(src.m_skipped)
     , m_isCommandEvent(src.m_isCommandEvent)
+    , m_wasProcessed(false)
 {
 }
 
@@ -379,6 +381,8 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
     m_propagationLevel = src.m_propagationLevel;
     m_skipped = src.m_skipped;
     m_isCommandEvent = src.m_isCommandEvent;
+
+    // don't change m_wasProcessed
 
     return *this;
 }
@@ -1263,21 +1267,34 @@ bool wxEvtHandler::TryParent(wxEvent& event)
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
     // allow the application to hook into event processing
-    if ( wxTheApp )
+    //
+    // note that we should only do it if we're the first event handler called
+    // to avoid calling FilterEvent() multiple times as the event goes through
+    // the event handler chain and possibly upwards the window hierarchy
+    if ( !event.WasProcessed() )
     {
-        int rc = wxTheApp->FilterEvent(event);
-        if ( rc != -1 )
+        if ( wxTheApp )
         {
-            wxASSERT_MSG( rc == 1 || rc == 0,
-                          _T("unexpected wxApp::FilterEvent return value") );
+            int rc = wxTheApp->FilterEvent(event);
+            if ( rc != -1 )
+            {
+                wxASSERT_MSG( rc == 1 || rc == 0,
+                              "unexpected wxApp::FilterEvent return value" );
 
-            return rc != 0;
+                return rc != 0;
+            }
+            //else: proceed normally
         }
-        //else: proceed normally
     }
 
     if ( ProcessEventHere(event) )
         return true;
+
+    // pass the event to the next handler, notice that we shouldn't call
+    // TryParent() even if it doesn't handle the event as the last handler in
+    // the chain will do it
+    if ( GetNextHandler() )
+        return GetNextHandler()->ProcessEvent(event);
 
     // propagate the event upwards the window chain and/or to the application
     // object if it wasn't processed at this level
@@ -1286,25 +1303,21 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 
 bool wxEvtHandler::ProcessEventHere(wxEvent& event)
 {
-    // An event handler can be enabled or disabled
-    if ( GetEvtHandlerEnabled() )
-    {
-        // if we have a validator, it has higher priority than our own event
-        // table
-        if ( TryValidator(event) )
-            return true;
+    // If the event handler is disabled it doesn't process any events
+    if ( !GetEvtHandlerEnabled() )
+        return false;
 
-        // Handle per-instance dynamic event tables first
-        if ( m_dynamicEvents && SearchDynamicEventTable(event) )
-            return true;
+    // If we have a validator, it has higher priority than our own event
+    // handlers
+    if ( TryValidator(event) )
+        return true;
 
-        // Then static per-class event tables
-        if ( GetEventHashTable().HandleEvent(event, this) )
-            return true;
-    }
+    // Handle per-instance dynamic event tables first
+    if ( m_dynamicEvents && SearchDynamicEventTable(event) )
+        return true;
 
-    // Try going down the event handler chain
-    if ( GetNextHandler() && GetNextHandler()->ProcessEventHere(event) )
+    // Then static per-class event tables
+    if ( GetEventHashTable().HandleEvent(event, this) )
         return true;
 
     // We don't have a handler for this event.

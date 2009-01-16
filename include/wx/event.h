@@ -718,7 +718,7 @@ public:
     void Skip(bool skip = true) { m_skipped = skip; }
     bool GetSkipped() const { return m_skipped; }
 
-    // this function is used to create a copy of the event polymorphically and
+    // This function is used to create a copy of the event polymorphically and
     // all derived classes must implement it because otherwise wxPostEvent()
     // for them wouldn't work (it needs to do a copy of the event)
     virtual wxEvent *Clone() const = 0;
@@ -747,6 +747,20 @@ public:
         m_propagationLevel = propagationLevel;
     }
 
+
+    // This is for internal use only and is only called by
+    // wxEvtHandler::ProcessEvent() to check whether it's the first time this
+    // event is being processed
+    bool WasProcessed()
+    {
+        if ( m_wasProcessed )
+            return true;
+
+        m_wasProcessed = true;
+
+        return false;
+    }
+
 protected:
     wxObject*         m_eventObject;
     wxEventType       m_eventType;
@@ -767,6 +781,12 @@ protected:
 
     bool              m_skipped;
     bool              m_isCommandEvent;
+
+    // initially false but becomes true as soon as WasProcessed() is called for
+    // the first time, as this is done only by ProcessEvent() it explains the
+    // variable name: it becomes true after ProcessEvent() was called at least
+    // once for this event
+    bool m_wasProcessed;
 
 protected:
     wxEvent(const wxEvent&);            // for implementing Clone()
@@ -3081,12 +3101,7 @@ public:
     void OnSinkDestroyed( wxEvtHandler *sink );
 
 
-    // The method processing the event in this event handler (or rather in this
-    // event handler chain as it also tries the next handler and so on), i.e.
-    // it returns true if we processed this event or false if we didn't but
-    // does not call TryParent() in the latter case. It also doesn't call
-    // wxApp::FilterEvent() before processing it, this is supposed to be done
-    // by the public ProcessEvent() only once for every event we handle.
+    // The method tries to process the event in this event handler.
     //
     // It is meant to be called from ProcessEvent() only and is not virtual,
     // additional event handlers can be hooked into the normal event processing
