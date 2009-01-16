@@ -19,7 +19,7 @@ A. Your system doesn't have the translation in the language you use, sorry.
 Q. Why the message when I enter '9' is not translated?
 A. This is on purpose: the corresponding string wasn't enclosed in _() macro and
    so didn't get into the message catalog when it was created using xgettext.
-   
+
 Q. Why the message when I enter '17' is only partly translated?
 A. This will only work under some versions of Linux, don't worry if the second
    half of the sentence is not translated.
@@ -36,7 +36,7 @@ Q. How to do translations to other language?
 A. First of all, you will need the GNU gettext tools (see the next question).
    After you've probably installed them, type the following (example is for Unix
    and you should do exactly the same under Windows).
-   
+
    # all translations forgiven language should be in a separate directory.
    # Please use the standard abbreviation for the language names!
    mkdir <language>
@@ -44,10 +44,10 @@ A. First of all, you will need the GNU gettext tools (see the next question).
 
    # generate the .po file for the program itself
    # see `xgettext --help' for options, "-C" is important!
-   xgettext -C -n -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -k_T -o internat.po ../internat.cpp
-   
-   # .po file for wxWidgets might be generated in the same way. An already 
-   # generated wxstd.pot as well as translations for some languages can be 
+   xgettext -C -n -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -o internat.po ../internat.cpp
+
+   # .po file for wxWidgets might be generated in the same way. An already
+   # generated wxstd.pot as well as translations for some languages can be
    # found in the locale directory.
    cp ../../locale/<language>.po ./wxstd.pot
    - or -
@@ -64,7 +64,7 @@ A. First of all, you will need the GNU gettext tools (see the next question).
 
    # run the sample to test it
    cd ..
-   ./internat <language> 
+   ./internat <language>
 
 Q. How to get the gettext tools?
 A. For Unix, you should be able to get the source distribution of any GNU mirror

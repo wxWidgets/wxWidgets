@@ -120,24 +120,24 @@ static const wxLanguage langIds[] =
 // shown before we set the locale anyhow
 const wxString langNames[] =
 {
-    _T("System default"),
-    _T("French"),
-    _T("Italian"),
-    _T("German"),
-    _T("Russian"),
-    _T("Bulgarian"),
-    _T("Czech"),
-    _T("Polish"),
-    _T("Swedish"),
+    "System default",
+    "French",
+    "Italian",
+    "German",
+    "Russian",
+    "Bulgarian",
+    "Czech",
+    "Polish",
+    "Swedish",
 #if wxUSE_UNICODE || defined(__WXMOTIF__)
-    _T("Japanese"),
+    "Japanese",
 #endif
 #if wxUSE_UNICODE
-    _T("Georgian"),
-    _T("English"),
-    _T("English (U.S.)"),
-    _T("Arabic"),
-    _T("Arabic (Egypt)")
+    "Georgian",
+    "English",
+    "English (U.S.)",
+    "Arabic",
+    "Arabic (Egypt)"
 #endif
 };
 
@@ -246,7 +246,7 @@ bool MyApp::OnInit()
 #ifdef __LINUX__
     {
         wxLogNull noLog;
-        m_locale.AddCatalog(_T("fileutils"));
+        m_locale.AddCatalog("fileutils");
     }
 #endif
 
@@ -370,9 +370,10 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     {
         // this is a more implicit way to write _() but note that if you use it
         // you must ensure that the strings get extracted in the message
-        // catalog as by default xgettext won't do it (it only knows of _(),
-        // not wxGetTranslation())
-        str = wxGetTranslation(_T("Bad luck! try again..."));
+        // catalog as by default xgettext won't do it; it only knows of _(),
+        // not of wxTRANSLATE(). As internat's readme.txt says you should thus
+        // call xgettext with -kwxTRANSLATE.
+        str = wxTRANSLATE("Bad luck! try again...");
     }
 
     wxMessageBox(str, _("Result"), wxOK | wxICON_INFORMATION);
@@ -417,12 +418,13 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
     const wxString title = _("Testing _() (gettext)");
     wxTextEntryDialog d(this, _("Please enter text to translate"),
         title, wxTRANSLATE("default value"));
+
     if (d.ShowModal() == wxID_OK)
     {
         wxString v = d.GetValue();
         wxString s(title);
-        s << _T("\n") << v << _T(" -> ")
-            << wxGetTranslation(v.c_str()) << _T("\n");
+        s << "\n" << v << " -> "
+            << wxGetTranslation(v.c_str()) << "\n";
         wxMessageBox(s);
     }
 }
@@ -432,18 +434,19 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
     const wxString title = _("Testing _N() (ngettext)");
     wxTextEntryDialog d(this,
         _("Please enter range for plural forms of \"n files deleted\" phrase"),
-        title, _T("0-10"));
+        title, "0-10");
+
     if (d.ShowModal() == wxID_OK)
     {
         int first, last;
-        wxSscanf(d.GetValue(), _T("%d-%d"), &first, &last);
+        wxSscanf(d.GetValue(), "%d-%d", &first, &last);
         wxString s(title);
-        s << _T("\n");
+        s << "\n";
         for (int n = first; n <= last; ++n)
         {
-            s << n << _T(" ") <<
+            s << n << " " <<
                 wxPLURAL("file deleted", "files deleted", n) <<
-                _T("\n");
+                "\n";
         }
         wxMessageBox(s);
     }
@@ -457,11 +460,12 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
         wxTRANSLATE("line 2"),
         wxTRANSLATE("line 3"),
     };
+
     wxString s(_("Testing wxTRANSLATE() (gettext_noop)"));
-    s << _T("\n");
+    s << "\n";
     for (size_t i = 0; i < WXSIZEOF(lines); ++i)
     {
-        s << lines[i] << _T(" -> ") << wxGetTranslation(lines[i]) << _T("\n");
+        s << lines[i] << " -> " << wxGetTranslation(lines[i]) << "\n";
     }
     wxMessageBox(s);
 }
