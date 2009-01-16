@@ -46,8 +46,10 @@ public :
     virtual void            TransferTo( wxPrintDialogData * ) ;
 private :
     virtual void            ValidateOrCreate() ;
+    virtual void            EnsureValidSession() ;
 public :
     PMPrintSession          m_macPrintSession ;
+    PMPaper                 m_macPaper ;
     PMPageFormat            m_macPageFormat ;
     PMPrintSettings         m_macPrintSettings ;
 private:
