@@ -155,6 +155,7 @@ Controls that are not static can have wxValidator associated with them.
 @li wxComboCtrl: A combobox with application defined popup
 @li wxDataViewCtrl: A control to display tabular or tree like data
 @li wxDataViewTreeCtrl: A specialized wxDataViewCtrl with a wxTreeCtrl-like API
+@li wxDataViewListCtrl: A specialized wxDataViewCtrl for displaying and editing simple tables.
 @li wxEditableListBox: A listbox with editable items.
 @li wxFileCtrl: A control for selecting a file. Useful for custom file dialogs.
 @li wxGauge: A control to represent a varying quantity, such as time remaining
