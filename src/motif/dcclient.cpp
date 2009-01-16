@@ -879,7 +879,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
     if (m_pixmap && sourcePixmap)
     {
         /* MATTHEW: [9] */
-        int orig = m_logicalFunction;
+        wxRasterOperationMode orig = m_logicalFunction;
 
         SetLogicalFunction (rop);
 

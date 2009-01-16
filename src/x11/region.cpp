@@ -84,7 +84,7 @@ void wxRegion::InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     XUnionRectWithRegion( &rect, M_REGIONDATA->m_region, M_REGIONDATA->m_region );
 }
 
-wxRegion::wxRegion( size_t WXUNUSED(n), const wxPoint *WXUNUSED(points), int WXUNUSED(fillStyle) )
+wxRegion::wxRegion( size_t WXUNUSED(n), const wxPoint *WXUNUSED(points), wxPolygonFillMode WXUNUSED(fillStyle) )
 {
 #if 0
     XPoint *xpoints = new XPoint[n];
