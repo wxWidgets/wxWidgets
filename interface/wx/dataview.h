@@ -485,8 +485,12 @@ public:
 
     wxDataViewCtrl is a control to display data either in a tree like fashion or
     in a tabular form or both.
+    
     If you only need to display a simple tree structure with an API more like the
     older wxTreeCtrl class, then the specialized wxDataViewTreeCtrl can be used.
+    Likewise, if you only want to display simple table structure you can use 
+    the specialized wxDataViewListCtrl class. Both wxDataViewTreeCtrl and
+    wxDataViewListCtrl can be used without defining  your own wxDataViewModel.
 
     A wxDataViewItem is used to represent a (visible) item in the control.
 
@@ -1475,6 +1479,170 @@ public:
     wxDataViewRenderer* GetRenderer() const;
 };
 
+
+
+/**
+    @class wxDataViewListCtrl
+
+    This class is a wxDataViewCtrl which internally uses a wxDataViewListStore
+    and forwards most of its API to that class.
+
+    The purpose of this class is to offer a simple way to display and
+    edit a small table of data without having to write your own wxDataViewModel.
+
+    @library{wxadv}
+    @category{ctrl,dvc}
+*/
+
+class wxDataViewListCtrl: public wxDataViewCtrl
+{
+    /**
+        Default ctor.
+    */
+    wxDataViewListCtrl();
+    
+    /**
+        Constructor. Calls Create().
+    */
+    wxDataViewListCtrl( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = wxDV_ROW_LINES,
+           const wxValidator& validator = wxDefaultValidator );
+           
+    /**
+        Destructor. Deletes the image list if any.
+    */
+    ~wxDataViewListCtrl();
+
+    /**
+        Creates the control and a wxDataViewListStore as its internal model.
+    */
+    bool Create( wxWindow *parent, wxWindowID id,
+           const wxPoint& pos = wxDefaultPosition,
+           const wxSize& size = wxDefaultSize, long style = wxDV_ROW_LINES,
+           const wxValidator& validator = wxDefaultValidator );
+
+    //@{
+    /**
+        Returns the store.
+    */
+    wxDataViewListStore *GetStore();
+    const wxDataViewListStore *GetStore() const;
+    //@}
+
+    /**
+        Appends a column to the control and additonally appends a
+        column to the store with the type @a varianttype.
+    */
+    void AppendCol( wxDataViewColumn *column, const wxString &varianttype );
+    
+    /**
+        Prepends a column to the control and additonally prepends a
+        column to the store with the type @a varianttype.
+    */
+    void PrependCol( wxDataViewColumn *column, const wxString &varianttype );
+    
+    /**
+        Inserts a column to the control and additonally inserts a
+        column to the store with the type @a varianttype.
+    */
+    void InsertCol( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
+                    
+    /**
+        Inserts a text column to the control and the store.
+    */
+    wxDataViewColumn *AppendTextCol( const wxString &label, 
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+                    
+    /**
+        Inserts a toggle column to the control and the store.
+    */
+    wxDataViewColumn *AppendToggleCol( const wxString &label, 
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+                    
+    /**
+        Inserts a progress column to the control and the store.
+    */
+    wxDataViewColumn *AppendProgressCol( const wxString &label, 
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+                    
+    /**
+        Inserts a icon and text column to the control and the store.
+    */
+    wxDataViewColumn *AppendIconTextCol( const wxString &label, 
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+
+    /**
+        Appends an item (=row) to the control and store.
+    */
+    void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+
+    /**
+        Prepends an item (=row) to the control and store.
+    */
+    void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
+
+    /**
+        Inserts an item (=row) to the control and store.
+    */
+    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    
+    /**
+        Delete the row at position @a row.
+    */
+    void DeleteItem( unsigned row );
+    
+    /**
+        Delete all items (= all rows).
+    */
+    void DeleteAllItems();
+    
+    /**
+         Sets the value in the store and update the control.
+    */
+    void SetValue( const wxVariant &value, unsigned int row, unsigned int col );
+    
+    /**
+         Returns the value from the store.
+    */
+    void GetValue( wxVariant &value, unsigned int row, unsigned int col );
+    
+    /**
+         Sets the value in the store and update the control. 
+         
+         This method assumes that the a string is stored in respective
+         column.
+    */
+    void SetTextValue( const wxString &value, unsigned int row, unsigned int col );
+    
+    /**
+         Returns the value from the store.
+         
+         This method assumes that the a string is stored in respective
+         column.
+    */
+    wxString GetTextValue( unsigned int row, unsigned int col ) const;
+    
+    /**
+         Sets the value in the store and update the control. 
+         
+         This method assumes that the a boolean value is stored in
+         respective column.
+    */
+    void SetToggleValue( bool value, unsigned int row, unsigned int col );
+    
+    /**
+         Returns the value from the store.
+         
+         This method assumes that the a boolean value is stored in
+         respective column.
+    */
+    bool GetToggleValue( unsigned int row, unsigned int col ) const;
+};
 
 
 /**

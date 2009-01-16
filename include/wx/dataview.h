@@ -1021,15 +1021,20 @@ public:
         { GetStore()->DeleteAllItems(); }
 
     void SetValue( const wxVariant &value, unsigned int row, unsigned int col )
-        { GetStore()->SetValueByRow( value, row, col ); }
+        { GetStore()->SetValueByRow( value, row, col ); 
+          GetStore()->RowValueChanged( row, col); }
+    void GetValue( wxVariant &value, unsigned int row, unsigned int col )
+        { GetStore()->GetValueByRow( value, row, col ); }
 
     void SetTextValue( const wxString &value, unsigned int row, unsigned int col )
-        { GetStore()->SetValueByRow( value, row, col ); }
+        { GetStore()->SetValueByRow( value, row, col );
+          GetStore()->RowValueChanged( row, col); }
     wxString GetTextValue( unsigned int row, unsigned int col ) const
         { wxVariant value; GetStore()->GetValueByRow( value, row, col ); return value.GetString(); }
 
     void SetToggleValue( bool value, unsigned int row, unsigned int col )
-        { GetStore()->SetValueByRow( value, row, col ); }
+        { GetStore()->SetValueByRow( value, row, col );
+          GetStore()->RowValueChanged( row, col); }
     bool GetToggleValue( unsigned int row, unsigned int col ) const
         { wxVariant value; GetStore()->GetValueByRow( value, row, col ); return value.GetBool(); }
 
