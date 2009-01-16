@@ -34,6 +34,11 @@
 #include "wx/sckstrm.h"
 #include "wx/thread.h"
 
+
+// ----------------------------------------------------------------------------
+// wxHTTP
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxHTTP, wxProtocol)
 IMPLEMENT_PROTOCOL(wxHTTP, wxT("http"), wxT("80"), true)
 
@@ -58,10 +63,10 @@ wxHTTP::~wxHTTP()
 
 void wxHTTP::ClearHeaders()
 {
-  m_headers.clear();
+    m_headers.clear();
 }
 
-wxString wxHTTP::GetContentType()
+wxString wxHTTP::GetContentType() const
 {
     return GetHeader(wxT("Content-Type"));
 }
@@ -177,8 +182,8 @@ bool wxHTTP::ParseHeaders()
 
     for ( ;; )
     {
-        m_perr = ReadLine(this, line);
-        if (m_perr != wxPROTO_NOERR)
+        m_lastError = ReadLine(this, line);
+        if (m_lastError != wxPROTO_NOERR)
             return false;
 
         if (line.length() == 0)
@@ -205,7 +210,7 @@ bool wxHTTP::Connect(const wxString& host, unsigned short port)
     if (!addr->Hostname(host)) {
         delete m_addr;
         m_addr = NULL;
-        m_perr = wxPROTO_NETERR;
+        m_lastError = wxPROTO_NETERR;
         return false;
     }
 
@@ -216,6 +221,7 @@ bool wxHTTP::Connect(const wxString& host, unsigned short port)
 
     SetHeader(wxT("Host"), host);
 
+    m_lastError = wxPROTO_NOERR;
     return true;
 }
 
@@ -232,6 +238,7 @@ bool wxHTTP::Connect(const wxSockAddress& addr, bool WXUNUSED(wait))
     if (ipv4addr)
         SetHeader(wxT("Host"), ipv4addr->OrigHostname());
 
+    m_lastError = wxPROTO_NOERR;
     return true;
 }
 
@@ -286,8 +293,8 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     }
 
     wxString tmp_str;
-    m_perr = ReadLine(this, tmp_str);
-    if (m_perr != wxPROTO_NOERR) {
+    m_lastError = ReadLine(this, tmp_str);
+    if (m_lastError != wxPROTO_NOERR) {
         RestoreState();
         return false;
     }
@@ -295,6 +302,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
     if (!tmp_str.Contains(wxT("HTTP/"))) {
         // TODO: support HTTP v0.9 which can have no header.
         // FIXME: tmp_str is not put back in the in-queue of the socket.
+        m_lastError = wxPROTO_NOERR;
         SetHeader(wxT("Content-Length"), wxT("-1"));
         SetHeader(wxT("Content-Type"), wxT("none/none"));
         RestoreState();
@@ -325,15 +333,25 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
             break;
 
         default:
-            m_perr = wxPROTO_NOFILE;
+            m_lastError = wxPROTO_NOFILE;
             RestoreState();
             return false;
     }
 
+    m_lastError = wxPROTO_NOERR;
     ret_value = ParseHeaders();
     RestoreState();
     return ret_value;
 }
+
+bool wxHTTP::Abort(void)
+{
+    return wxSocketClient::Close();
+}
+
+// ----------------------------------------------------------------------------
+// wxHTTPStream and wxHTTP::GetInputStream
+// ----------------------------------------------------------------------------
 
 class wxHTTPStream : public wxSocketInputStream
 {
@@ -369,15 +387,10 @@ size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)
         // which is equivalent to getting a READ_ERROR, for clients however this
         // must be translated into EOF, as it is the expected way of signalling
         // end end of the content
-        m_lasterror = wxSTREAM_EOF ;
+        m_lasterror = wxSTREAM_EOF;
     }
 
     return ret;
-}
-
-bool wxHTTP::Abort(void)
-{
-    return wxSocketClient::Close();
 }
 
 wxInputStream *wxHTTP::GetInputStream(const wxString& path)
@@ -386,7 +399,7 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
 
     wxString new_path;
 
-    m_perr = wxPROTO_CONNERR;
+    m_lastError = wxPROTO_CONNERR;  // all following returns share this type of error
     if (!m_addr)
         return NULL;
 
@@ -417,6 +430,8 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
     Notify(false);
     SetFlags(wxSOCKET_BLOCK | wxSOCKET_WAITALL);
 
+    // no error; reset m_lastError
+    m_lastError = wxPROTO_NOERR;
     return inp_stream;
 }
 

@@ -12,7 +12,7 @@
     This is a simple, type-safe, and reasonably efficient hash map class,
     whose interface is a subset of the interface of STL containers.
     In particular, the interface is modeled after std::map, and the various,
-    non-standard, std::hash_map.
+    non-standard, std::hash_map (http://www.cppreference.com/wiki/stl/map/start).
 
     Example:
     @code
@@ -73,11 +73,11 @@
     @endcode
     The HASH_T and KEY_EQ_T are the types used for the hashing function and
     key comparison. wxWidgets provides three predefined hashing functions:
-    wxIntegerHash for integer types ( int, long, short, and their unsigned counterparts ),
-    wxStringHash for strings ( wxString, wxChar*, char* ), and wxPointerHash for
+    @c wxIntegerHash for integer types ( int, long, short, and their unsigned counterparts ),
+    @c wxStringHash for strings ( wxString, wxChar*, char* ), and @c wxPointerHash for
     any kind of pointer.
-    Similarly three equality predicates: wxIntegerEqual, wxStringEqual,
-    wxPointerEqual are provided.
+    Similarly three equality predicates: @c wxIntegerEqual, @c wxStringEqual,
+    @c wxPointerEqual are provided.
     Using this you could declare a hash map mapping int values to wxString like this:
 
     @code
@@ -149,6 +149,13 @@
 
     Hash maps provide forward only iterators, this means that you can't use --it,
     it + 3, it1 - it2.
+
+
+    @section hashmap_predef Predefined hashmap types
+
+    wxWidgets defines the following hashmap types:
+    - wxLongToLongHashMap (uses long both for keys and values)
+    - wxStringToStringHashMap (uses wxString both for keys and values)
 
 
     @library{wxbase}

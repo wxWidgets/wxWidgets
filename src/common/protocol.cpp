@@ -28,15 +28,9 @@
 
 #include <stdlib.h>
 
-/////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------
 // wxProtoInfo
-/////////////////////////////////////////////////////////////////
-
-/*
- * --------------------------------------------------------------
- * --------- wxProtoInfo CONSTRUCTOR ----------------------------
- * --------------------------------------------------------------
- */
+// ----------------------------------------------------------------------------
 
 wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
                          const bool need_host1, wxClassInfo *info)
@@ -53,9 +47,10 @@ wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
 #endif
 }
 
-/////////////////////////////////////////////////////////////////
-// wxProtocol ///////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////
+
+// ----------------------------------------------------------------------------
+// wxProtocol
+// ----------------------------------------------------------------------------
 
 #if wxUSE_SOCKETS
 IMPLEMENT_ABSTRACT_CLASS(wxProtocol, wxSocketClient)
@@ -68,6 +63,8 @@ wxProtocol::wxProtocol()
  : wxSocketClient()
 #endif
 {
+    m_lastError = wxPROTO_NOERR;
+    SetDefaultTimeout(60);      // default timeout is 60 seconds
 }
 
 #if wxUSE_SOCKETS
@@ -89,6 +86,15 @@ bool wxProtocol::Reconnect()
 
     return true;
 }
+
+void wxProtocol::SetDefaultTimeout(wxUint32 Value)
+{
+    m_uiDefaultTimeout = Value;
+#if wxUSE_SOCKETS
+    wxSocketBase::SetTimeout(Value); // sets it for this socket
+#endif
+}
+
 
 // ----------------------------------------------------------------------------
 // Read a line from socket

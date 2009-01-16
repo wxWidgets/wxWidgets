@@ -11,6 +11,8 @@
 
     wxHTTP can be used to establish a connection to an HTTP server.
 
+    wxHTTP can thus be used to create a (basic) HTTP @b client.
+
     @library{wxnet}
     @category{net}
 
@@ -19,6 +21,16 @@
 class wxHTTP : public wxProtocol
 {
 public:
+    /**
+        Default constructor.
+    */
+    wxHTTP();
+
+    /**
+        Destructor will close the connection if connected.
+    */
+    virtual ~wxHTTP();
+
     //@{
     /**
         Connect to the HTTP server.
@@ -32,7 +44,7 @@ public:
     //@}
 
     /**
-        Returns the data attached with a field whose name is specified by @e header.
+        Returns the data attached with a field whose name is specified by @a header.
         If the field doesn't exist, it will return an empty string and not a @NULL string.
 
         @note
@@ -71,12 +83,12 @@ public:
 
         Please refer to RFC 2616 for the list of responses.
     */
-    int GetResponse();
+    int GetResponse() const;
 
     /**
         It sets data of a field to be sent during the next request to the HTTP server.
 
-        The field name is specified by @a header and the content by @e h_data.
+        The field name is specified by @a header and the content by @a h_data.
         This is a low level function and it assumes that you know what you are doing.
     */
     void SetHeader(const wxString& header, const wxString& h_data);

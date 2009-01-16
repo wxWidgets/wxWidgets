@@ -28,6 +28,10 @@ enum wxProtocolError
 
     Represents a protocol for use with wxURL.
 
+    Note that you may want to change the default time-out for HTTP/FTP connections
+    and network operations (using SetDefaultTimeout()) since the default time-out
+    value is quite long (60 seconds).
+
     @library{wxnet}
     @category{net}
 
@@ -49,15 +53,16 @@ public:
 
     /**
         Returns the type of the content of the last opened stream. It is a mime-type.
+        May be an empty string if the content-type is unknown.
     */
-    virtual wxString GetContentType();
+    virtual wxString GetContentType() const;
 
     /**
         Returns the last occurred error.
 
         @see wxProtocolError
     */
-    virtual wxProtocolError GetError() = 0;
+    virtual wxProtocolError GetError() const;
 
     /**
         Creates a new input stream on the specified path.
@@ -85,13 +90,22 @@ public:
     bool Reconnect();
 
     /**
-        Sets the authentication password. It is mainly useful when FTP is used.
+        Sets the authentication password.
     */
     virtual void SetPassword(const wxString& user);
 
     /**
-        Sets the authentication user. It is mainly useful when FTP is used.
+        Sets the authentication user.
     */
     virtual void SetUser(const wxString& user);
+
+    /**
+        Sets a new default timeout for the network operations.
+
+        The default timeout is 60 seconds.
+
+        @see wxSocketBase::SetTimeout
+    */
+    void SetDefaultTimeout(wxUint32 Value);
 };
 

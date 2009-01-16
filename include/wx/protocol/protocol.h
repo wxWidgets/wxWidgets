@@ -58,8 +58,8 @@ public:
 
 #if wxUSE_SOCKETS
     bool Reconnect();
-    virtual bool Connect( const wxString& WXUNUSED(host) ) { return FALSE; }
-    virtual bool Connect( const wxSockAddress& addr, bool WXUNUSED(wait) = TRUE)
+    virtual bool Connect( const wxString& WXUNUSED(host) ) { return false; }
+    virtual bool Connect( const wxSockAddress& addr, bool WXUNUSED(wait) = true)
         { return wxSocketClient::Connect(addr); }
 
     // read a '\r\n' terminated line from the given socket and put it in
@@ -73,10 +73,31 @@ public:
 
     virtual bool Abort() = 0;
     virtual wxInputStream *GetInputStream(const wxString& path) = 0;
-    virtual wxProtocolError GetError() = 0;
-    virtual wxString GetContentType() { return wxEmptyString; }
-    virtual void SetUser(const wxString& WXUNUSED(user)) {}
-    virtual void SetPassword(const wxString& WXUNUSED(passwd) ) {}
+    virtual wxString GetContentType() const = 0;
+
+    // the error code
+    virtual wxProtocolError GetError() const { return m_lastError; }
+
+    void SetUser(const wxString& user) { m_username = user; }
+    void SetPassword(const wxString& passwd) { m_password = passwd; }
+
+    virtual void SetDefaultTimeout(wxUint32 Value);
+
+    // override wxSocketBase::SetTimeout function to avoid that the internal
+    // m_uiDefaultTimeout goes out-of-sync:
+    virtual void SetTimeout(long seconds)
+        { SetDefaultTimeout(seconds); }
+
+
+protected:
+    // the timeout associated with the protocol:
+    wxUint32        m_uiDefaultTimeout;
+
+    wxString        m_username;
+    wxString        m_password;
+
+    // this must be always updated by the derived classes!
+    wxProtocolError m_lastError;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxProtocol)

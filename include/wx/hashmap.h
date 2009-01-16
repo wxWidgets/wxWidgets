@@ -745,5 +745,8 @@ public: \
 WX_DECLARE_HASH_MAP_WITH_DECL( long, long, wxIntegerHash, wxIntegerEqual,
                                wxLongToLongHashMap, class WXDLLIMPEXP_BASE );
 
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxString, wxStringToStringHashMap,
+                                      class WXDLLIMPEXP_BASE );
+
 
 #endif // _WX_HASHMAP_H_

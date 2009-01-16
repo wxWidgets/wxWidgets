@@ -35,31 +35,27 @@ public:
     virtual ~wxFTP();
 
     // Connecting and disconnecting
-    void SetUser(const wxString& user) { m_user = user; }
-    void SetPassword(const wxString& passwd) { m_passwd = passwd; }
-
     bool Connect(const wxSockAddress& addr, bool wait = true);
     bool Connect(const wxString& host);
 
     // disconnect
-    virtual bool Close();       // does NOT set m_lastError
+    virtual bool Close();
 
     // Parameters set up
 
     // set transfer mode now
     void SetPassive(bool pasv) { m_bPassive = pasv; }
-    void SetDefaultTimeout(wxUint32 Value);
     bool SetBinary() { return SetTransferMode(BINARY); }
     bool SetAscii() { return SetTransferMode(ASCII); }
     bool SetTransferMode(TransferMode mode);
 
     // Generic FTP interface
 
-    // the error code
-    virtual wxProtocolError GetError() { return m_lastError; }
+    // FTP doesn't know the MIME type of the last downloaded/uploaded file
+    virtual wxString GetContentType() const { return wxEmptyString; }
 
     // the last FTP server reply
-    const wxString& GetLastResult() { return m_lastResult; }
+    const wxString& GetLastResult() const { return m_lastResult; }
 
     // send any FTP command (should be full FTP command line but without
     // trailing "\r\n") and return its return code
@@ -68,6 +64,7 @@ public:
     // check that the command returned the given code
     bool CheckCommand(const wxString& command, char expectedReturn)
     {
+        // SendCommand() does updates m_lastError
         return SendCommand(command) == expectedReturn;
     }
 
@@ -119,11 +116,6 @@ public:
                  bool details = false);
 
 protected:
-    // just change access from public to protected for this wxSocketBase function:
-    // use SetDefaultTimeout instead which also sets our m_uiDefaultTimeout var
-    virtual void SetTimeout(long seconds)
-        { wxSocketBase::SetTimeout(seconds); }
-
     // this executes a simple ftp command with the given argument and returns
     // true if it its return code starts with '2'
     bool DoSimpleCommand(const wxChar *command,
@@ -150,29 +142,26 @@ protected:
     wxSocketBase *AcceptIfActive(wxSocketBase *sock);
 
 
-    wxString m_user,
-             m_passwd;
+    // internal variables:
 
-    wxString m_lastResult;
-    wxProtocolError m_lastError;
+    wxString        m_lastResult;
 
     // true if there is an FTP transfer going on
-    bool m_streaming;
+    bool            m_streaming;
 
     // although this should be set to ASCII by default according to STD9,
     // we will use BINARY transfer mode by default for backwards compatibility
-    TransferMode m_currentTransfermode;
-
-    friend class wxInputFTPStream;
-    friend class wxOutputFTPStream;
+    TransferMode    m_currentTransfermode;
 
     bool            m_bPassive;
-    wxUint32        m_uiDefaultTimeout;
 
     // following is true when  a read or write times out, we then assume
     // the connection is dead and abort. we avoid additional delays this way
     bool            m_bEncounteredError;
 
+
+    friend class wxInputFTPStream;
+    friend class wxOutputFTPStream;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxFTP)
     DECLARE_PROTOCOL(wxFTP)

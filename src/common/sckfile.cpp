@@ -25,13 +25,17 @@
 #include "wx/wfstream.h"
 #include "wx/protocol/file.h"
 
+
+// ----------------------------------------------------------------------------
+// wxFileProto
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxFileProto, wxProtocol)
 IMPLEMENT_PROTOCOL(wxFileProto, wxT("file"), NULL, false)
 
 wxFileProto::wxFileProto()
            : wxProtocol()
 {
-    m_error = wxPROTO_NOERR;
 }
 
 wxFileProto::~wxFileProto()
@@ -43,12 +47,11 @@ wxInputStream *wxFileProto::GetInputStream(const wxString& path)
     wxFileInputStream *retval = new wxFileInputStream(wxURI::Unescape(path));
     if ( retval->Ok() )
     {
-        m_error = wxPROTO_NOERR;
-
+        m_lastError = wxPROTO_NOERR;
         return retval;
     }
 
-    m_error = wxPROTO_NOFILE;
+    m_lastError = wxPROTO_NOFILE;
     delete retval;
 
     return NULL;

@@ -18,71 +18,64 @@
 #include "wx/hashmap.h"
 #include "wx/protocol/protocol.h"
 
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxString, wxStringToStringHashMap,
-                                      class WXDLLIMPEXP_NET );
-
 class WXDLLIMPEXP_NET wxHTTP : public wxProtocol
 {
 public:
-  wxHTTP();
-  virtual ~wxHTTP();
+    wxHTTP();
+    virtual ~wxHTTP();
 
-  virtual bool Connect(const wxString& host, unsigned short port);
-  virtual bool Connect(const wxString& host) { return Connect(host, 0); }
-  virtual bool Connect(const wxSockAddress& addr, bool wait);
-  bool Abort();
-  wxInputStream *GetInputStream(const wxString& path);
-  inline wxProtocolError GetError() { return m_perr; }
-  wxString GetContentType();
+    virtual bool Connect(const wxString& host, unsigned short port);
+    virtual bool Connect(const wxString& host) { return Connect(host, 0); }
+    virtual bool Connect(const wxSockAddress& addr, bool wait);
+    bool Abort();
 
-  void SetHeader(const wxString& header, const wxString& h_data);
-  wxString GetHeader(const wxString& header) const;
-  void SetPostBuffer(const wxString& post_buf);
+    wxInputStream *GetInputStream(const wxString& path);
 
-  void SetProxyMode(bool on);
+    wxString GetContentType() const;
+    wxString GetHeader(const wxString& header) const;
+    int GetResponse() const { return m_http_response; }
 
-  int GetResponse() { return m_http_response; }
-
-  virtual void SetUser(const wxString& user) { m_username = user; }
-  virtual void SetPassword(const wxString& passwd ) { m_password = passwd; }
+    void SetHeader(const wxString& header, const wxString& h_data);
+    void SetPostBuffer(const wxString& post_buf);
+    void SetProxyMode(bool on);
 
 protected:
-  enum wxHTTP_Req
-  {
-    wxHTTP_GET,
-    wxHTTP_POST,
-    wxHTTP_HEAD
-  };
+    enum wxHTTP_Req
+    {
+        wxHTTP_GET,
+        wxHTTP_POST,
+        wxHTTP_HEAD
+    };
 
-  typedef wxStringToStringHashMap::iterator wxHeaderIterator;
-  typedef wxStringToStringHashMap::const_iterator wxHeaderConstIterator;
+    typedef wxStringToStringHashMap::iterator wxHeaderIterator;
+    typedef wxStringToStringHashMap::const_iterator wxHeaderConstIterator;
 
-  bool BuildRequest(const wxString& path, wxHTTP_Req req);
-  void SendHeaders();
-  bool ParseHeaders();
+    bool BuildRequest(const wxString& path, wxHTTP_Req req);
+    void SendHeaders();
+    bool ParseHeaders();
 
-  wxString GenerateAuthString(const wxString& user, const wxString& pass) const;
+    wxString GenerateAuthString(const wxString& user, const wxString& pass) const;
 
-  // find the header in m_headers
-  wxHeaderIterator FindHeader(const wxString& header);
-  wxHeaderConstIterator FindHeader(const wxString& header) const;
+    // find the header in m_headers
+    wxHeaderIterator FindHeader(const wxString& header);
+    wxHeaderConstIterator FindHeader(const wxString& header) const;
 
-  // deletes the header value strings
-  void ClearHeaders();
+    // deletes the header value strings
+    void ClearHeaders();
 
-  wxProtocolError m_perr;
-  wxStringToStringHashMap m_headers;
-  bool m_read,
-       m_proxy_mode;
-  wxSockAddress *m_addr;
-  wxString m_post_buf;
-  int m_http_response;
-  wxString m_username;
-  wxString m_password;
 
-  DECLARE_DYNAMIC_CLASS(wxHTTP)
-  DECLARE_PROTOCOL(wxHTTP)
-  DECLARE_NO_COPY_CLASS(wxHTTP)
+    // internal variables:
+
+    wxStringToStringHashMap m_headers;
+    bool m_read,
+         m_proxy_mode;
+    wxSockAddress *m_addr;
+    wxString m_post_buf;
+    int m_http_response;
+
+    DECLARE_DYNAMIC_CLASS(wxHTTP)
+    DECLARE_PROTOCOL(wxHTTP)
+    DECLARE_NO_COPY_CLASS(wxHTTP)
 };
 
 #endif // wxUSE_PROTOCOL_HTTP
