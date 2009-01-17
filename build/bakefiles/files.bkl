@@ -2172,6 +2172,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/notebook_osx.cpp
     src/osx/palette.cpp
     src/osx/pen.cpp
+    src/osx/printdlg_osx.cpp
     src/osx/radiobox_osx.cpp
     src/osx/radiobut_osx.cpp
     src/osx/scrolbar_osx.cpp
@@ -2243,7 +2244,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/metafile.cpp
     src/osx/carbon/overlay.cpp
     src/osx/carbon/popupwin.cpp
-    src/osx/carbon/printdlg.cpp
     src/osx/carbon/renderer.cpp
     src/osx/carbon/settings.cpp
     src/osx/carbon/statbrma.cpp
@@ -2273,6 +2273,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/msgdlg.cpp
     src/osx/carbon/nonownedwnd.cpp
     src/osx/carbon/notebmac.cpp
+    src/osx/carbon/printdlg.cpp
     src/osx/carbon/radiobut.cpp
     src/osx/carbon/region.cpp
     src/osx/carbon/scrolbar.cpp
@@ -2388,82 +2389,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- core files -->
     wx/osx/core/colour.h
     <!-- carbon files -->
-    wx/osx/carbon/accel.h
-    wx/osx/carbon/app.h
-    wx/osx/carbon/bitmap.h
-    wx/osx/carbon/bmpbuttn.h
-    wx/osx/carbon/button.h
-    wx/osx/carbon/checkbox.h
-    wx/osx/carbon/checklst.h
     wx/osx/carbon/chkconf.h
-    wx/osx/carbon/choice.h
-    wx/osx/carbon/clipbrd.h
-    wx/osx/carbon/colordlg.h
-    wx/osx/carbon/combobox.h
-    wx/osx/carbon/control.h
-    wx/osx/carbon/cursor.h
-    wx/osx/carbon/dataform.h
-    wx/osx/carbon/dataobj.h
-    wx/osx/carbon/dataobj2.h
-    wx/osx/carbon/dc.h
-    wx/osx/carbon/dcclient.h
-    wx/osx/carbon/dcmemory.h
-    wx/osx/carbon/dcprint.h
-    wx/osx/carbon/dcscreen.h
-    wx/osx/carbon/dialog.h
-    wx/osx/carbon/dirdlg.h
-    wx/osx/carbon/dnd.h
     wx/osx/carbon/evtloop.h
-    wx/osx/carbon/filedlg.h
-    wx/osx/carbon/font.h
-    wx/osx/carbon/fontdlg.h
-    wx/osx/carbon/frame.h
-    wx/osx/carbon/gauge.h
-    wx/osx/carbon/helpxxxx.h
-    wx/osx/carbon/icon.h
-    wx/osx/carbon/imaglist.h
-    wx/osx/carbon/listbox.h
-    wx/osx/carbon/listctrl.h
-    wx/osx/carbon/mdi.h
-    wx/osx/carbon/menu.h
-    wx/osx/carbon/menuitem.h
-    wx/osx/carbon/metafile.h
-    wx/osx/carbon/mimetype.h
-    wx/osx/carbon/minifram.h
-    wx/osx/carbon/msgdlg.h
-    wx/osx/carbon/nonownedwnd.h
-    wx/osx/carbon/notebook.h
-    wx/osx/carbon/palette.h
-    wx/osx/carbon/popupwin.h
-    wx/osx/carbon/pnghand.h
-    wx/osx/carbon/pngread.h
-    wx/osx/carbon/printdlg.h
-    wx/osx/carbon/printmac.h
     wx/osx/carbon/private.h
     wx/osx/carbon/private/mactext.h
     wx/osx/carbon/private/overlay.h
     wx/osx/carbon/private/print.h
-    wx/osx/carbon/radiobox.h
-    wx/osx/carbon/radiobut.h
     wx/osx/carbon/region.h
-    wx/osx/carbon/scrolbar.h
-    wx/osx/carbon/slider.h
-    wx/osx/carbon/spinbutt.h
-    wx/osx/carbon/spinctrl.h
-    wx/osx/carbon/srchctrl.h
     wx/osx/carbon/statbmp.h
-    wx/osx/carbon/statbox.h
-    wx/osx/carbon/statline.h
-    wx/osx/carbon/stattext.h
-    wx/osx/carbon/statusbr.h
-    wx/osx/carbon/textctrl.h
-    wx/osx/carbon/tglbtn.h
-    wx/osx/carbon/toolbar.h
-    wx/osx/carbon/tooltip.h
-    wx/osx/carbon/toplevel.h
-    wx/osx/carbon/treectrl.h
     wx/osx/carbon/uma.h
-    wx/osx/carbon/window.h
     <!-- Generic implementations used by wxMac: -->
     wx/generic/caret.h
     wx/generic/clrpickerg.h
@@ -2500,6 +2434,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/nonownedwnd.mm
     src/osx/cocoa/notebook.mm
     src/osx/cocoa/radiobut.mm
+    src/osx/cocoa/printdlg.mm
     src/osx/cocoa/scrolbar.mm
     src/osx/cocoa/slider.mm
     src/osx/cocoa/spinbutt.mm
