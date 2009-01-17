@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/private/print.h
-// Purpose:     private implementation for printing on MacOS
+// Name:        wx/osx/carbon/private/print.h
+// Purpose:     private implementation for printing on OS X
 // Author:      Stefan Csomor
 // Modified by:
 // Created:     03/02/99
@@ -14,32 +14,71 @@
 
 #include "wx/cmndata.h"
 #include "wx/print.h"
+
+// for PrintingManager
 #include "ApplicationServices/ApplicationServices.h"
 
-class WXDLLIMPEXP_CORE wxMacCarbonPrintData : public wxPrintNativeDataBase
+class WXDLLIMPEXP_CORE wxOSXPrintData : public wxPrintNativeDataBase
 {
-public :
-                            wxMacCarbonPrintData() ;
-    virtual                 ~wxMacCarbonPrintData() ;
+public:
+                            wxOSXPrintData();
+    virtual                 ~wxOSXPrintData();
 
     virtual bool            TransferTo( wxPrintData &data );
     virtual bool            TransferFrom( const wxPrintData &data );
 
     virtual bool            IsOk() const ;
 
-    virtual void            TransferFrom( wxPageSetupDialogData * )  ;
-    virtual void            TransferTo( wxPageSetupDialogData * ) ;
+    virtual void            TransferFrom( wxPageSetupDialogData * );
+    virtual void            TransferTo( wxPageSetupDialogData * );
 
-    virtual void            TransferFrom( wxPrintDialogData * )  ;
-    virtual void            TransferTo( wxPrintDialogData * ) ;
-private :
-    virtual void            ValidateOrCreate() ;
-public :
+    virtual void            TransferFrom( wxPrintDialogData * );
+    virtual void            TransferTo( wxPrintDialogData * );
+    
+    PMPrintSession          GetPrintSession() { return m_macPrintSession; } 
+    PMPageFormat            GetPageFormat() { return m_macPageFormat; } 
+    PMPrintSettings         GetPrintSettings() { return m_macPrintSettings; } 
+protected :
+    virtual void            UpdateFromPMState();
+    virtual void            UpdateToPMState();
+
     PMPrintSession          m_macPrintSession ;
     PMPageFormat            m_macPageFormat ;
     PMPrintSettings         m_macPrintSettings ;
+    PMPaper                 m_macPaper;
 private:
-    DECLARE_DYNAMIC_CLASS(wxMacCarbonPrintData)
+    DECLARE_DYNAMIC_CLASS(wxOSXPrintData)
 } ;
+
+WXDLLIMPEXP_CORE wxPrintNativeDataBase* wxOSXCreatePrintData();
+
+#if wxOSX_USE_CARBON
+class WXDLLIMPEXP_CORE wxOSXCarbonPrintData : public wxOSXPrintData
+{
+public:
+                            wxOSXCarbonPrintData();
+    virtual                 ~wxOSXCarbonPrintData();
+private:
+    DECLARE_DYNAMIC_CLASS(wxOSXCarbonPrintData)
+} ;
+#endif
+
+#if wxOSX_USE_COCOA
+class WXDLLIMPEXP_CORE wxOSXCocoaPrintData : public wxOSXPrintData
+{
+public:
+                            wxOSXCocoaPrintData();
+    virtual                 ~wxOSXCocoaPrintData();
+
+    WX_NSPrintInfo          GetNSPrintInfo() { return m_macPrintInfo; }
+protected:
+    virtual void            UpdateFromPMState();
+    virtual void            UpdateToPMState();
+
+    WX_NSPrintInfo          m_macPrintInfo;
+private:
+    DECLARE_DYNAMIC_CLASS(wxOSXCocoaPrintData)
+} ;
+#endif
 
 #endif // _WX_MAC_PRIVATE_PRINT_H_

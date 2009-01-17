@@ -73,10 +73,10 @@ private :
 wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
 {
     m_err = noErr ;
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) data->GetNativeData() ;
+    wxOSXPrintData *native = (wxOSXPrintData*) data->GetNativeData() ;
 
     PMRect rPage;
-    m_err = PMGetAdjustedPageRect(native->m_macPageFormat, &rPage);
+    m_err = PMGetAdjustedPageRect(native->GetPageFormat(), &rPage);
     if ( m_err != noErr )
         return;
 
@@ -89,10 +89,10 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
     if ( PMPrinterGetOutputResolution != NULL )
     {
         PMPrinter printer;
-        m_err = PMSessionGetCurrentPrinter(native->m_macPrintSession, &printer);
+        m_err = PMSessionGetCurrentPrinter(native->GetPrintSession(), &printer);
         if ( m_err == noErr )
         {
-            m_err = PMPrinterGetOutputResolution( printer, native->m_macPrintSettings, &res) ;
+            m_err = PMPrinterGetOutputResolution( printer, native->GetPrintSettings(), &res) ;
             if ( m_err == -9589 /* kPMKeyNotFound */ )
             {
                 m_err = noErr ;
@@ -104,7 +104,7 @@ wxMacCarbonPrinterDC::wxMacCarbonPrinterDC( wxPrintData* data )
 #endif
     {
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-        m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
+        m_err = PMGetResolution((PMPageFormat) (native->GetPageFormat()), &res);
 #endif
     }
 
@@ -126,21 +126,21 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
         return false ;
 
     wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) impl->GetPrintData().GetNativeData() ;
+    wxOSXPrintData *native = (wxOSXPrintData*) impl->GetPrintData().GetNativeData() ;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     if ( PMPrintSettingsSetJobName != NULL )
-        PMPrintSettingsSetJobName(native->m_macPrintSettings, wxCFStringRef(message));
+        PMPrintSettingsSetJobName(native->GetPrintSettings(), wxCFStringRef(message));
 #endif
 
-    m_err = PMSessionBeginCGDocumentNoDialog(native->m_macPrintSession,
-              native->m_macPrintSettings,
-              native->m_macPageFormat);
+    m_err = PMSessionBeginCGDocumentNoDialog(native->GetPrintSession(),
+              native->GetPrintSettings(),
+              native->GetPageFormat());
     if ( m_err != noErr )
         return false;
 
     PMRect rPage;
-    m_err = PMGetAdjustedPageRect(native->m_macPageFormat, &rPage);
+    m_err = PMGetAdjustedPageRect(native->GetPageFormat(), &rPage);
     if ( m_err != noErr )
         return false ;
 
@@ -152,10 +152,10 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
     if ( PMPrinterGetOutputResolution != NULL )
     {
         PMPrinter printer;
-        m_err = PMSessionGetCurrentPrinter(native->m_macPrintSession, &printer);
+        m_err = PMSessionGetCurrentPrinter(native->GetPrintSession(), &printer);
         if ( m_err == noErr )
         {
-            m_err = PMPrinterGetOutputResolution( printer, native->m_macPrintSettings, &res) ;
+            m_err = PMPrinterGetOutputResolution( printer, native->GetPrintSettings(), &res) ;
             if ( m_err == -9589 /* kPMKeyNotFound */ )
             {
                 m_err = noErr ;
@@ -167,7 +167,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
 #endif
     {
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
-       m_err = PMGetResolution((PMPageFormat) (native->m_macPageFormat), &res);
+       m_err = PMGetResolution((PMPageFormat) (native->GetPageFormat()), &res);
 #endif
     }
 
@@ -181,9 +181,9 @@ void wxMacCarbonPrinterDC::EndDoc( wxPrinterDC* dc )
         return ;
 
     wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) impl->GetPrintData().GetNativeData() ;
+    wxOSXPrintData *native = (wxOSXPrintData*) impl->GetPrintData().GetNativeData() ;
 
-    m_err = PMSessionEndDocumentNoDialog(native->m_macPrintSession);
+    m_err = PMSessionEndDocumentNoDialog(native->GetPrintSession());
 }
 
 void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
@@ -192,34 +192,34 @@ void wxMacCarbonPrinterDC::StartPage( wxPrinterDC* dc )
         return ;
 
     wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) impl->GetPrintData().GetNativeData() ;
+    wxOSXPrintData *native = (wxOSXPrintData*) impl->GetPrintData().GetNativeData() ;
 
-    m_err = PMSessionBeginPageNoDialog(native->m_macPrintSession,
-                 native->m_macPageFormat,
+    m_err = PMSessionBeginPageNoDialog(native->GetPrintSession(),
+                 native->GetPageFormat(),
                  nil);
 
     CGContextRef pageContext;
 
     if ( m_err == noErr )
     {
-        m_err = PMSessionGetCGGraphicsContext(native->m_macPrintSession,
+        m_err = PMSessionGetCGGraphicsContext(native->GetPrintSession(),
                                             &pageContext );
     }
 
     if ( m_err != noErr )
     {
-        PMSessionEndPageNoDialog(native->m_macPrintSession);
-        PMSessionEndDocumentNoDialog(native->m_macPrintSession);
+        PMSessionEndPageNoDialog(native->GetPrintSession());
+        PMSessionEndDocumentNoDialog(native->GetPrintSession());
     }
     else
     {
         PMRect rPage;
 
-        m_err = PMGetAdjustedPageRect(native->m_macPageFormat, &rPage);
+        m_err = PMGetAdjustedPageRect(native->GetPageFormat(), &rPage);
         if ( !m_err )
         {
             PMRect paperRect ;
-            PMGetAdjustedPaperRect( native->m_macPageFormat , &paperRect ) ;
+            PMGetAdjustedPaperRect( native->GetPageFormat() , &paperRect ) ;
             // make sure (0,0) is at the upper left of the printable area (wx conventions)
             // Core Graphics initially has the lower left of the paper as 0,0
             CGContextTranslateCTM( pageContext , (CGFloat) -paperRect.left , (CGFloat) paperRect.bottom ) ;
@@ -237,12 +237,12 @@ void wxMacCarbonPrinterDC::EndPage( wxPrinterDC* dc )
         return ;
 
     wxPrinterDCImpl *impl = (wxPrinterDCImpl*) dc->GetImpl();
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) impl->GetPrintData().GetNativeData() ;
+    wxOSXPrintData *native = (wxOSXPrintData*) impl->GetPrintData().GetNativeData() ;
 
-    m_err = PMSessionEndPageNoDialog(native->m_macPrintSession);
+    m_err = PMSessionEndPageNoDialog(native->GetPrintSession());
     if ( m_err != noErr )
     {
-        PMSessionEndDocumentNoDialog(native->m_macPrintSession);
+        PMSessionEndDocumentNoDialog(native->GetPrintSession());
     }
     // the cg context we got when starting the page isn't valid anymore, so replace it
     impl->SetGraphicsContext( wxGraphicsContext::Create() );
@@ -349,10 +349,10 @@ wxRect wxPrinterDCImpl::GetPaperRect() const
     wxCoord w, h;
     GetOwner()->GetSize(&w, &h);
     wxRect pageRect(0, 0, w, h);
-    wxMacCarbonPrintData *native = (wxMacCarbonPrintData*) m_printData.GetNativeData() ;
+    wxOSXPrintData *native = (wxOSXPrintData*) m_printData.GetNativeData() ;
     OSStatus err = noErr ;
     PMRect rPaper;
-    err = PMGetAdjustedPaperRect(native->m_macPageFormat, &rPaper);
+    err = PMGetAdjustedPaperRect(native->GetPageFormat(), &rPaper);
     if ( err != noErr )
         return pageRect;
     return wxRect(wxCoord(rPaper.left), wxCoord(rPaper.top),

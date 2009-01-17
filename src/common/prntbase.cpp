@@ -261,7 +261,7 @@ wxPrintNativeDataBase *wxNativePrintFactory::CreatePrintNativeData()
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     return new wxWindowsPrintNativeData;
 #elif defined(__WXMAC__)
-    return new wxMacCarbonPrintData;
+    return wxOSXCreatePrintData();
 #else
     return new wxPostScriptPrintNativeData;
 #endif

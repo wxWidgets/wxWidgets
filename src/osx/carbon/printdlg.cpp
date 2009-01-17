@@ -77,21 +77,19 @@ wxMacPrintDialog::~wxMacPrintDialog()
     }
 }
 
+#if wxOSX_USE_CARBON
 int wxMacPrintDialog::ShowModal()
 {
     m_printDialogData.GetPrintData().ConvertToNative();
-    ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferFrom( &m_printDialogData );
+    ((wxOSXPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferFrom( &m_printDialogData );
 
     int result = wxID_CANCEL;
     
-#if wxOSX_USE_CARBON
     OSErr err = noErr;
     Boolean accepted;
-    err = PMSessionPrintDialog(
-        ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->m_macPrintSession,
-        ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->m_macPrintSettings,
-        ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->m_macPageFormat,
-        &accepted );
+    wxOSXPrintData* nativeData = (wxOSXPrintData*)m_printDialogData.GetPrintData().GetNativeData();
+    err = PMSessionPrintDialog(nativeData->GetPrintSession(), nativeData->GetPrintSettings(),
+        nativeData->GetPageFormat(), &accepted );
 
     if ((err == noErr) && !accepted)
     {
@@ -116,13 +114,11 @@ int wxMacPrintDialog::ShowModal()
     if (result == wxID_OK)
     {
         m_printDialogData.GetPrintData().ConvertFromNative();
-        ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferTo( &m_printDialogData );
+        ((wxOSXPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferTo( &m_printDialogData );
     }
-#else
-    // TODO use NSPrintPanel
-#endif
     return result;
 }
+#endif
 
 wxDC *wxMacPrintDialog::GetPrintDC()
 {
@@ -156,19 +152,18 @@ wxPageSetupData& wxMacPageSetupDialog::GetPageSetupDialogData()
     return m_pageSetupData;
 }
 
+#if wxOSX_USE_CARBON
 int wxMacPageSetupDialog::ShowModal()
 {
     m_pageSetupData.GetPrintData().ConvertToNative();
-    ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferFrom( &m_pageSetupData );
+    wxOSXPrintData* nativeData = (wxOSXPrintData*)m_pageSetupData.GetPrintData().GetNativeData();
+    nativeData->TransferFrom( &m_pageSetupData );
 
     int result = wxID_CANCEL;
-#if wxOSX_USE_CARBON
     OSErr err = noErr;
     Boolean accepted;
 
-    err = PMSessionPageSetupDialog(
-        ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->m_macPrintSession,
-        ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->m_macPageFormat,
+    err = PMSessionPageSetupDialog( nativeData->GetPrintSession(), nativeData->GetPageFormat(),
         &accepted );
 
     if ((err == noErr) && !accepted)
@@ -197,14 +192,11 @@ int wxMacPageSetupDialog::ShowModal()
     {
         m_pageSetupData.GetPrintData().ConvertFromNative();
         m_pageSetupData.SetPaperSize( m_pageSetupData.GetPrintData().GetPaperSize() );
-        ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferTo( &m_pageSetupData );
+        nativeData->TransferTo( &m_pageSetupData );
     }
-#else
-    // TODO
-#endif
     return result;
 }
-
+#endif
 
 IMPLEMENT_CLASS(wxMacPageMarginsDialog, wxDialog)
 
