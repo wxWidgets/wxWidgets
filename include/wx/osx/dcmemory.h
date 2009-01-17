@@ -12,7 +12,7 @@
 #ifndef _WX_DCMEMORY_H_
 #define _WX_DCMEMORY_H_
 
-#include "wx/osx/carbon/dcclient.h"
+#include "wx/osx/dcclient.h"
 
 class WXDLLIMPEXP_CORE wxMemoryDCImpl: public wxPaintDCImpl
 {

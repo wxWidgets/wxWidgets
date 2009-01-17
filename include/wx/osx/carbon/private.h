@@ -28,9 +28,9 @@ typedef SInt32 SRefCon;
 #include "wx/osx/uma.h"
 
 #include "wx/listbox.h"
-#include "wx/osx/carbon/dc.h"
-#include "wx/osx/carbon/dcclient.h"
-#include "wx/osx/carbon/dcmemory.h"
+#include "wx/osx/dc.h"
+#include "wx/osx/dcclient.h"
+#include "wx/osx/dcmemory.h"
 
 // app.h
 

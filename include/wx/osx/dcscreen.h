@@ -13,7 +13,7 @@
 #define _WX_DCSCREEN_H_
 
 #include "wx/dcclient.h"
-#include "wx/osx/carbon/dcclient.h"
+#include "wx/osx/dcclient.h"
 
 class WXDLLIMPEXP_CORE wxScreenDCImpl: public wxWindowDCImpl
 {
