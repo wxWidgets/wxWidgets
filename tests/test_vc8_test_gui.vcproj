@@ -955,6 +955,10 @@
 				RelativePath=".\controls\textentrytest.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\controls\treectrltest.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

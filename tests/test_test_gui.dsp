@@ -319,6 +319,10 @@ SOURCE=.\controls\textctrltest.cpp
 
 SOURCE=.\controls\textentrytest.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\controls\treectrltest.cpp
+# End Source File
 # End Group
 # End Target
 # End Project

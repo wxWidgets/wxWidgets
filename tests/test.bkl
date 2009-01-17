@@ -112,6 +112,7 @@
             controls/listctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
+            controls/treectrltest.cpp
             events/propagation.cpp
             image/rawbmp.cpp
             html/htmlwindow.cpp
