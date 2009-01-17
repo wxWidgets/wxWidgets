@@ -20,6 +20,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/utils.h"
 #include "wx/gtk/private.h"
 
 // ============================================================================
@@ -375,6 +376,25 @@ void wxControl::OnInternalIdle()
 
     if ( wxUpdateUIEvent::CanUpdate(this) && IsShownOnScreen() )
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+}
+
+// Fix sensitivity due to bug in GTK+ < 2.14
+void wxGtkFixSensitivity(wxWindow* ctrl)
+{
+#ifdef __WXGTK24__
+    // Work around a GTK+ bug whereby button is insensitive after being
+    // enabled
+    if (gtk_check_version(2,14,0))
+    {
+        wxPoint pt = wxGetMousePosition();
+        wxRect rect(ctrl->ClientToScreen(wxPoint(0, 0)), ctrl->GetSize());
+        if (rect.Contains(pt))
+        {
+            ctrl->Hide();
+            ctrl->Show();
+        }
+    }
+#endif
 }
 
 #endif // wxUSE_CONTROLS

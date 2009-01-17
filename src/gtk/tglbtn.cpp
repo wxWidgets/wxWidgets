@@ -145,10 +145,15 @@ void wxToggleBitmapButton::OnSetBitmap()
 
 bool wxToggleBitmapButton::Enable(bool enable /*=true*/)
 {
+    bool isEnabled = IsEnabled();
+
     if (!wxControl::Enable(enable))
         return false;
 
     gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
+
+    if (!isEnabled && enable)
+        wxGtkFixSensitivity(this);
 
     return true;
 }
@@ -269,10 +274,15 @@ void wxToggleButton::SetLabel(const wxString& label)
 
 bool wxToggleButton::Enable(bool enable /*=true*/)
 {
+    bool isEnabled = IsEnabled();
+
     if (!wxControl::Enable(enable))
         return false;
 
     gtk_widget_set_sensitive(GTK_BIN(m_widget)->child, enable);
+
+    if (!isEnabled && enable)
+        wxGtkFixSensitivity(this);
 
     return true;
 }

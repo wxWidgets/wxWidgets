@@ -154,6 +154,8 @@ wxGTK:
 - Fixed printing to use fonts sizes adjustment consistent with wxMSW.
 - Make colours used by list, tree and status bar controls more consistent with
   the system theme settings (Tim Kosse).
+- Worked around bug in GTK+ < 2.14 where enabling some controls such
+  as wxButton didn't re-enable sensitivity until the mouse was moved.
 
 2.8.9
 -----
