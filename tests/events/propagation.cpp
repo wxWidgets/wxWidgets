@@ -198,10 +198,10 @@ void EventPropagationTestCase::WindowWithHandler()
 
     TestEvtHandler h1('1');
     child->PushEventHandler(&h1);
-    wxON_BLOCK_EXIT_OBJ0( *child, wxWindow::PopEventHandler );
+    wxON_BLOCK_EXIT_OBJ1( *child, wxWindow::PopEventHandler, false );
     TestEvtHandler h2('2');
     child->PushEventHandler(&h2);
-    wxON_BLOCK_EXIT_OBJ0( *child, wxWindow::PopEventHandler );
+    wxON_BLOCK_EXIT_OBJ1( *child, wxWindow::PopEventHandler, false );
 
     child->HandleWindowEvent(event);
     CPPUNIT_ASSERT_EQUAL( "oa2o1cpA", g_str );
