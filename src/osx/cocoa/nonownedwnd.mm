@@ -22,7 +22,7 @@ NSRect wxToNSRect( NSView* parent, const wxRect& r )
     NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
     int y = r.y;
     int x = r.x ;
-    if ( parent != NULL && ![ parent isFlipped ] )
+    if ( parent == NULL || ![ parent isFlipped ] )
         y = frame.size.height - ( r.y + r.height );
     return NSMakeRect(x, y, r.width , r.height);
 }
@@ -32,7 +32,7 @@ wxRect wxFromNSRect( NSView* parent, const NSRect& rect )
     NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
     int y = rect.origin.y;
     int x = rect.origin.x;
-    if ( parent != NULL && ![ parent isFlipped ] )
+    if ( parent == NULL || ![ parent isFlipped ] )
         y = frame.size.height - (rect.origin.y + rect.size.height);
     return wxRect( x, y, rect.size.width, rect.size.height );
 }
@@ -42,7 +42,7 @@ NSPoint wxToNSPoint( NSView* parent, const wxPoint& p )
     NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
     int x = p.x ;
     int y = p.y;
-    if ( parent != NULL && ![ parent isFlipped ] )
+    if ( parent == NULL || ![ parent isFlipped ] )
         y = frame.size.height - ( p.y );
     return NSMakePoint(x, y);
 }
@@ -52,7 +52,7 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
     NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
     int x = p.x;
     int y = p.y;
-    if ( parent != NULL && ![ parent isFlipped ] )
+    if ( parent == NULL || ![ parent isFlipped ] )
         y = frame.size.height - ( p.y );
     return wxPoint( x, y);
 }
