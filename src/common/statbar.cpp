@@ -41,7 +41,7 @@ const char wxStatusBarNameStr[] = "statusBar";
 
 IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxWindow)
 
-#include <wx/arrimpl.cpp> // This is a magic incantation which must be done!
+#include "wx/arrimpl.cpp" // This is a magic incantation which must be done!
 WX_DEFINE_OBJARRAY(wxStatusBarPaneArray);
 
 
