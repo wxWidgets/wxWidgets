@@ -27,7 +27,7 @@
 
 #include "wx/osx/private.h"
 #include "wx/osx/private/print.h"
-#include "wx/osx/carbon/dcprint.h"
+#include "wx/osx/dcprint.h"
 #include "wx/graphics.h"
 
 IMPLEMENT_ABSTRACT_CLASS(wxPrinterDCImpl, wxGCDCImpl)
