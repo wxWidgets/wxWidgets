@@ -225,5 +225,6 @@ tests/streams/*.cpp
 tests/streams/*.h
 
 tests/strings/*.cpp
+tests/textfile/*.cpp
 
 tests/uris/*.cpp
