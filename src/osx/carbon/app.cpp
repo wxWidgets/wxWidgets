@@ -1439,11 +1439,11 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
         return false ;
     wxKeyEvent event(wxEVT_CHAR) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
-    long keyval = event.m_keyCode ;
 
     bool handled = false ;
 
 #if wxOSX_USE_CARBON
+    long keyval = event.m_keyCode ;
     wxNonOwnedWindow *tlw = focus->MacGetTopLevelWindow() ;
 
     if (tlw)
