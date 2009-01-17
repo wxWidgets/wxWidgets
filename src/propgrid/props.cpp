@@ -1054,7 +1054,7 @@ bool wxEnumProperty::ValueFromString_( wxVariant& value, const wxString& text, i
         setAsNextIndex = -1;
         value = text;
     }
-    else if ( m_index != useIndex )
+    else if ( useIndex != GetIndex() )
     {
         if ( useIndex != -1 )
         {
@@ -1095,7 +1095,7 @@ bool wxEnumProperty::ValueFromInt_( wxVariant& variant, int intVal, int argFlags
     }
     else
     {
-        if ( m_index != intVal )
+        if ( intVal != GetIndex() )
         {
             ms_nextIndex = intVal;
         }
@@ -1131,8 +1131,12 @@ void wxEnumProperty::SetIndex( int index )
 
 int wxEnumProperty::GetIndex() const
 {
+    if ( m_value.IsNull() )
+        return -1;
+
     if ( ms_nextIndex != -2 )
         return ms_nextIndex;
+
     return m_index;
 }
 
