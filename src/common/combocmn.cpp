@@ -1637,7 +1637,7 @@ void wxComboCtrlBase::HandleNormalMouseEvent( wxMouseEvent& event )
     {
         // relay (some) mouse events to the popup
         if ( evtType == wxEVT_MOUSEWHEEL )
-            m_popup->AddPendingEvent(event);
+            m_popup->GetEventHandler()->AddPendingEvent(event);
     }
     else if ( evtType )
         event.Skip();
