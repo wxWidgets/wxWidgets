@@ -41,12 +41,6 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                    int xPos, int yPos,
                                    bool noRefresh)
 {
-    int xs, ys;
-    GetViewStart(& xs, & ys);
-
-    int old_x = m_xScrollPixelsPerLine * xs;
-    int old_y = m_yScrollPixelsPerLine * ys;
-
     m_xScrollPixelsPerLine = pixelsPerUnitX;
     m_yScrollPixelsPerLine = pixelsPerUnitY;
 
@@ -63,6 +57,13 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
     int h = noUnitsY * pixelsPerUnitY;
     m_targetWindow->SetVirtualSize( w ? w : wxDefaultCoord,
                                     h ? h : wxDefaultCoord);
+
+    // Query view start after m_targetWindow->SetVirtualSize(...) since
+    // that call can change the current=old scrolling position!
+    int xs, ys;
+    GetViewStart(& xs, & ys);
+    int old_x = m_xScrollPixelsPerLine * xs;
+    int old_y = m_yScrollPixelsPerLine * ys;
 
     // If the target is not the same as the window with the scrollbars,
     // then we need to update the scrollbars here, since they won't have
@@ -110,7 +111,7 @@ void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
 
     GtkAdjustment* adj = range->adjustment;
     adj->step_increment = 1;
-    adj->page_increment =
+    adj->page_increment = 
     adj->page_size = page_size;
     gtk_range_set_range(range, 0, upper);
 
