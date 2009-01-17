@@ -28,7 +28,11 @@ int Scintilla_LinkLexers();
 #if defined(_MSC_VER) && _MSC_VER >= 1300
 #include <BaseTsd.h>
 #endif
-#ifdef MAXULONG_PTR
+#if defined(__MINGW64__)
+#include <stdint.h>
+typedef uint64_t uptr_t;
+typedef int64_t sptr_t;
+#elif defined(MAXULONG_PTR)
 typedef ULONG_PTR uptr_t;
 typedef LONG_PTR sptr_t;
 #else
