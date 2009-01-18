@@ -1511,7 +1511,6 @@ public:
     @library{wxadv}
     @category{ctrl,dvc}
 */
-
 class wxDataViewListCtrl: public wxDataViewCtrl
 {
     /**
