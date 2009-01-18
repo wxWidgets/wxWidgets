@@ -117,9 +117,8 @@
 extern void wxSetKeyboardHook(bool doIt);
 #endif
 
-namespace
-{
-
+// because of mingw32 4.3 bug this struct can't be inside the namespace below:
+// see http://article.gmane.org/gmane.comp.lib.wxwidgets.devel/110282
 struct ClassRegInfo
 {
     // the base name of the class: this is used to construct the unique name in
@@ -130,6 +129,9 @@ struct ClassRegInfo
     wxString regname,
              regnameNR;
 };
+
+namespace
+{
 
 wxVector<ClassRegInfo> gs_regClassesInfo;
 
