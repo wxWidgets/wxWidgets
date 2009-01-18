@@ -100,6 +100,10 @@ public :
     void                PerformClick();
     void                SetLabel(const wxString& title, wxFontEncoding encoding);
 
+    void                SetCursor( const wxCursor & cursor );
+    void                CaptureMouse();
+    void                ReleaseMouse();
+
     wxInt32             GetValue() const;
     void                SetValue( wxInt32 v );
     void                SetBitmap( const wxBitmap& bitmap );
@@ -201,11 +205,18 @@ protected :
     // later to be done using injection in method table
         
     #define WXCOCOAIMPL_COMMON_EVENTS_INTERFACE -(void)mouseDown:(NSEvent *)event ;\
-        -(void)rightMouseDown:(NSEvent *)event ;\
-        -(void)otherMouseDown:(NSEvent *)event ;\
-        -(void)mouseUp:(NSEvent *)event ;\
-        -(void)rightMouseUp:(NSEvent *)event ;\
-        -(void)otherMouseUp:(NSEvent *)event ;\
+        - (void)rightMouseDown:(NSEvent *)event ;\
+        - (void)otherMouseDown:(NSEvent *)event ;\
+        - (void)mouseUp:(NSEvent *)event ;\
+        - (void)rightMouseUp:(NSEvent *)event ;\
+        - (void)otherMouseUp:(NSEvent *)event ;\
+        - (void)mouseMoved:(NSEvent *)event;\
+        - (void)mouseDragged:(NSEvent *)event;\
+        - (void)rightMouseDragged:(NSEvent *)event;\
+        - (void)otherMouseDragged:(NSEvent *)event;\
+        - (void)scrollWheel:(NSEvent *)theEvent;\
+        - (void)mouseEntered:(NSEvent *)event;\
+        - (void)mouseExited:(NSEvent *)event;\
         - (void)keyDown:(NSEvent *)event;\
         - (void)keyUp:(NSEvent *)event;\
         - (void)flagsChanged:(NSEvent *)event;\
@@ -241,6 +252,41 @@ protected :
         {\
             if ( !impl->DoHandleMouseEvent(event) )\
                 [super otherMouseUp:event];\
+        }\
+        -(void)mouseMoved:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super mouseMoved:event];\
+        }\
+        -(void)mouseDragged:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super mouseDragged:event];\
+        }\
+        -(void)rightMouseDragged:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super rightMouseDragged:event];\
+        }\
+        -(void)otherMouseDragged:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super otherMouseDragged:event];\
+        }\
+        -(void)scrollWheel:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super scrollWheel:event];\
+        }\
+        -(void)mouseEntered:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super mouseEntered:event];\
+        }\
+        -(void)mouseExited:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super mouseExited:event];\
         }\
         -(void)keyDown:(NSEvent *)event\
         {\

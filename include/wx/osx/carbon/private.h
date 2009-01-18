@@ -329,6 +329,10 @@ public :
     void                PerformClick();
     void                SetLabel( const wxString& title, wxFontEncoding encoding );
 
+    void                SetCursor( const wxCursor & cursor );
+    void                CaptureMouse();
+    void                ReleaseMouse();
+
     wxInt32             GetValue() const;
     void                SetValue( wxInt32 v );
     void                SetBitmap( const wxBitmap& bitmap );

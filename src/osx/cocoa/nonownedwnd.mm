@@ -426,7 +426,8 @@ bool wxNonOwnedWindowCocoaImpl::CanSetTransparent()
 void wxNonOwnedWindowCocoaImpl::MoveWindow(int x, int y, int width, int height)
 {
     NSRect r = wxToNSRect( NULL, wxRect(x,y,width, height) );
-    [m_macWindow setFrame:r display:YES];
+    // do not trigger refreshes upon invisible and possible partly created objects
+    [m_macWindow setFrame:r display:GetWXPeer()->IsShownOnScreen()];
 }
 
 void wxNonOwnedWindowCocoaImpl::GetPosition( int &x, int &y ) const
@@ -534,24 +535,23 @@ void wxNonOwnedWindowCocoaImpl::RequestUserAttention(int WXUNUSED(flags))
 void wxNonOwnedWindowCocoaImpl::ScreenToWindow( int *x, int *y )
 {
     wxPoint p((x ? *x : 0), (y ? *y : 0) );
-    /*
     NSPoint nspt = wxToNSPoint( NULL, p );
-    
-    nspt = [[m_macWindow contentView] convertPoint:p toV:nil];
-    p = wxFromNSPoint( 
-    */
+    nspt = [m_macWindow convertScreenToBase:nspt];
+    nspt = [[m_macWindow contentView] convertPoint:nspt fromView:nil];
+    p = wxFromNSPoint([m_macWindow contentView], nspt);
     if ( x )
-        *x = p.x;
+        *x = p.x; 
     if ( y )
         *y = p.y;
 }
 
 void wxNonOwnedWindowCocoaImpl::WindowToScreen( int *x, int *y )
 {
-    wxPoint p(  (x ? *x : 0), (y ? *y : 0) );
-    /*
-    p = [m_macWindow convertPoint:p toWindow:nil];
-    */
+    wxPoint p((x ? *x : 0), (y ? *y : 0) );
+    NSPoint nspt = wxToNSPoint( [m_macWindow contentView], p );
+    nspt = [[m_macWindow contentView] convertPoint:nspt toView:nil];
+    nspt = [m_macWindow convertBaseToScreen:nspt];
+    p = wxFromNSPoint( NULL, nspt);
     if ( x )
         *x = p.x;
     if ( y )

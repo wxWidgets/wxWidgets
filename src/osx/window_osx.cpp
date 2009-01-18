@@ -459,6 +459,11 @@ void wxWindowMac::SetFocus()
 void wxWindowMac::DoCaptureMouse()
 {
     wxApp::s_captureWindow = (wxWindow*) this ;
+#ifdef wxOSX_USE_COCOA
+    // TODO do we really need this ?
+    m_peer->SetFocus() ;
+#endif
+    m_peer->CaptureMouse() ;
 }
 
 wxWindow * wxWindowBase::GetCapture()
@@ -469,6 +474,8 @@ wxWindow * wxWindowBase::GetCapture()
 void wxWindowMac::DoReleaseMouse()
 {
     wxApp::s_captureWindow = NULL ;
+
+    m_peer->ReleaseMouse() ;
 }
 
 #if wxUSE_DRAG_AND_DROP
@@ -723,37 +730,8 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
     wxASSERT_MSG( m_cursor.Ok(),
         wxT("cursor must be valid after call to the base version"));
 
-    wxWindowMac *mouseWin = 0 ;
-#if wxOSX_USE_CARBON
-    {
-        wxNonOwnedWindow *tlw = MacGetTopLevelWindow() ;
-        WindowRef window = (WindowRef) ( tlw ? tlw->GetWXWindow() : 0 ) ;
-
-        ControlPartCode part ;
-        ControlRef control ;
-        Point pt ;
- #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
-        HIPoint hiPoint ;
-        HIGetMousePosition(kHICoordSpaceWindow, window, &hiPoint);
-        pt.h = hiPoint.x;
-        pt.v = hiPoint.y;
- #else
-        GetGlobalMouse( &pt );
-        int x = pt.h;
-        int y = pt.v;
-        ScreenToClient(&x, &y);
-        pt.h = x;
-        pt.v = y;
-#endif
-        control = FindControlUnderMouse( pt , window , &part ) ;
-        if ( control )
-            mouseWin = wxFindWindowFromWXWidget( (WXWidget) control ) ;
-
-    }
-#endif
-
-    if ( mouseWin == this && !wxIsBusy() )
-        m_cursor.MacInstall() ;
+    if ( GetPeer() != NULL )
+        GetPeer()->SetCursor( m_cursor );
 
     return true ;
 }

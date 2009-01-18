@@ -177,6 +177,10 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 void wxGetMousePosition( int* x, int* y )
 {
     wxPoint pt = wxFromNSPoint(NULL, [NSEvent mouseLocation]);
+    if ( x )
+        *x = pt.x;
+    if ( y )
+        *y = pt.y;
 };
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
@@ -266,7 +270,5 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 }
 
 #endif // wxUSE_GUI
-
-
 
 #endif // wxOSX_USE_COCOA

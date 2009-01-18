@@ -220,6 +220,10 @@ public :
     virtual void        PerformClick() = 0;
     virtual void        SetLabel( const wxString& title, wxFontEncoding encoding ) = 0;
 
+    virtual void        SetCursor( const wxCursor & cursor ) = 0;
+    virtual void        CaptureMouse() = 0;
+    virtual void        ReleaseMouse() = 0;
+
     virtual wxInt32     GetValue() const = 0;
     virtual void        SetValue( wxInt32 v ) = 0;
     virtual void        SetBitmap( const wxBitmap& bitmap ) = 0;

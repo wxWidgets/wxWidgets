@@ -41,6 +41,8 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 }
 
 - (void)drawRect: (NSRect) rect;
+// TODO should the be moved to COMMON ?
+- (void)resetCursorRects;
 
 WXCOCOAIMPL_COMMON_INTERFACE
 
@@ -167,6 +169,9 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent )
     }
 }
 
+UInt32 g_lastButton = 0 ;
+bool g_lastButtonWasFakeRight = false ;
+
 void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 {
     UInt32 modifiers = [nsEvent modifierFlags] ;
@@ -184,34 +189,56 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     wxevent.m_metaDown = modifiers & NSCommandKeyMask;
     wxevent.m_clickCount = clickCount;
     wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
-/*
-    UInt32 mouseChord = 0; // TODO does this exist for cocoa
+
+    UInt32 mouseChord = 0; 
+    int eventType = [nsEvent type];
+
+    switch (eventType)
+    {
+        case NSLeftMouseDown :
+        case NSLeftMouseDragged :
+            mouseChord = 1U;
+            break;
+        case NSRightMouseDown :
+        case NSRightMouseDragged :
+            mouseChord = 2U;
+            break;
+        case NSOtherMouseDown :
+        case NSOtherMouseDragged :
+            mouseChord = 4U;
+            break;
+    }
+
     // a control click is interpreted as a right click
     bool thisButtonIsFakeRight = false ;
-    if ( button == kEventMouseButtonPrimary && (modifiers & controlKey) )
+    if ( button == 0 && (modifiers & NSControlKeyMask) )
     {
-        button = kEventMouseButtonSecondary ;
+        button = 1 ;
         thisButtonIsFakeRight = true ;
     }
 
     // otherwise we report double clicks by connecting a left click with a ctrl-left click
     if ( clickCount > 1 && button != g_lastButton )
         clickCount = 1 ;
+
     // we must make sure that our synthetic 'right' button corresponds in
     // mouse down, moved and mouse up, and does not deliver a right down and left up
-
-    if ( cEvent.GetKind() == kEventMouseDown )
+    switch (eventType)
     {
-        g_lastButton = button ;
-        g_lastButtonWasFakeRight = thisButtonIsFakeRight ;
-    }
+        case NSLeftMouseDown :
+        case NSRightMouseDown :
+        case NSOtherMouseDown :
+            g_lastButton = button ;
+            g_lastButtonWasFakeRight = thisButtonIsFakeRight ;
+            break;
+     }
 
     if ( button == 0 )
     {
         g_lastButton = 0 ;
         g_lastButtonWasFakeRight = false ;
     }
-    else if ( g_lastButton == kEventMouseButtonSecondary && g_lastButtonWasFakeRight )
+    else if ( g_lastButton == 1 && g_lastButtonWasFakeRight )
         button = g_lastButton ;
 
     // Adjust the chord mask to remove the primary button and add the
@@ -228,9 +255,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     if(mouseChord & 4U)
                 wxevent.m_middleDown = true ;
 
-*/
     // translate into wx types
-    int eventType = [nsEvent type];
     switch (eventType)
     {
         case NSLeftMouseDown :
@@ -359,6 +384,15 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     }
 }
 
+- (void) resetCursorRects
+{
+    [super resetCursorRects];
+    wxWindow* wxpeer = impl->GetWXPeer();
+    NSCursor *cursor = (NSCursor*)wxpeer->GetCursor().GetHCURSOR();
+    [self addCursorRect: [self bounds]
+          cursor: cursor];
+}
+
 WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 - (BOOL) canBecomeKeyView
@@ -417,6 +451,18 @@ void wxWidgetCocoaImpl::Lower()
 
 void wxWidgetCocoaImpl::ScrollRect( const wxRect *rect, int dx, int dy )
 {
+#if 1
+    SetNeedsDisplay() ;
+#else
+    // We should do something like this, but it wasn't working in 10.4.
+    if (GetNeedsDisplay() )
+    {
+        SetNeedsDisplay() ;
+    }
+    NSRect r = wxToNSRect( [m_osxView superview], *rect );
+    NSSize offset = NSMakeSize((float)dx, (float)dy);
+    [m_osxView scrollRect:r by:offset];
+#endif
 }
 
 void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
@@ -727,6 +773,28 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus)
     }
 }
 
+void wxWidgetCocoaImpl::SetCursor(const wxCursor& cursor)
+{
+    NSPoint location = [NSEvent mouseLocation];
+    location = [[m_osxView window] convertScreenToBase:location];
+    NSPoint locationInView = [m_osxView convertPoint:location fromView:nil];
+
+    if( NSMouseInRect(locationInView, [m_osxView bounds], YES) )
+    {
+        [(NSCursor*)cursor.GetHCURSOR() set];
+    }
+    [[m_osxView window] invalidateCursorRectsForView:m_osxView];
+}
+
+void wxWidgetCocoaImpl::CaptureMouse()
+{
+    [[m_osxView window] disableCursorRects];
+}
+
+void wxWidgetCocoaImpl::ReleaseMouse()
+{
+    [[m_osxView window] enableCursorRects];
+}
 
 //
 // Factory methods

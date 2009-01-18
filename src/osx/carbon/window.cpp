@@ -1038,6 +1038,47 @@ bool wxMacControl::HasFocus() const
     return control == m_controlRef;
 }
 
+void wxMacControl::SetCursor(const wxCursor& cursor)
+{
+    wxWindowMac *mouseWin = 0 ;
+    WindowRef window = GetControlOwner( m_controlRef ) ;
+
+    wxNonOwnedWindow* tlwwx = wxNonOwnedWindow::GetFromWXWindow( (WXWindow) window ) ;
+    if ( tlwwx != NULL )
+    {
+        ControlPartCode part ;
+        ControlRef control ;
+        Point pt ;
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
+        HIPoint hiPoint ;
+        HIGetMousePosition(kHICoordSpaceWindow, window, &hiPoint);
+        pt.h = hiPoint.x;
+        pt.v = hiPoint.y;
+#else
+        GetGlobalMouse( &pt );
+        int x = pt.h;
+        int y = pt.v;
+        tlwwx->ScreenToClient(&x, &y);
+        pt.h = x;
+        pt.v = y;
+#endif
+        control = FindControlUnderMouse( pt , window , &part ) ;
+        if ( control )
+            mouseWin = wxFindWindowFromWXWidget( (WXWidget) control ) ;
+    }
+
+    if ( mouseWin == tlwwx && !wxIsBusy() )
+        cursor.MacInstall() ;
+}
+
+void wxMacControl::CaptureMouse()
+{
+}
+
+void wxMacControl::ReleaseMouse()
+{
+}
+
 //
 // subclass specifics
 //

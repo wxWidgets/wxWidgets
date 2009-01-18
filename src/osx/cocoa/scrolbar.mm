@@ -62,11 +62,12 @@ class wxOSXScrollBarCocoaImpl : public wxWidgetCocoaImpl
 public :
     wxOSXScrollBarCocoaImpl( wxWindowMac* peer, WXWidget w) : wxWidgetCocoaImpl( peer, w )
     {
+        m_maximum = 1;
     }
     
     void SetMaximum(wxInt32 v)
     {
-        m_maximum = v;
+        m_maximum = (v == 0) ? 1 : v;
     }
     
     void    SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) 
@@ -102,5 +103,6 @@ wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer,
 
     wxWidgetCocoaImpl* c = new wxOSXScrollBarCocoaImpl( wxpeer, v );
     [v setImplementation:c];
+    [v setEnabled:YES];
     return c;
 }
