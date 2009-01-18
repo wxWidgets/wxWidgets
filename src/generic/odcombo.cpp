@@ -257,14 +257,23 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
     int comboStyle = m_combo->GetWindowStyle();
 
     // this is the character equivalent of the code
-    wxChar keychar=0;
-    if ((keycode >= WXK_SPACE) && (keycode <=255) && (keycode != WXK_DELETE) && wxIsprint(keycode))
+    wxChar keychar = 0;
+    if ( keycode < WXK_START )
     {
-        keychar = (wxChar)keycode;
-    }
-    else if (unicode>0)
-    {
-        keychar = unicode;
+#if wxUSE_UNICODE
+        if ( unicode > 0 )
+        {
+            if ( wxIsprint(unicode) )
+                keychar = unicode;
+        }
+        else
+#else
+        wxUnusedVar(unicode);
+#endif
+        if ( wxIsprint(keycode) )
+        {
+            keychar = (wxChar) keycode;
+        }
     }
 
     if ( keycode == WXK_DOWN || keycode == WXK_RIGHT )
@@ -287,7 +296,7 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar unicode
         value-=10;
         StopPartialCompletion();
     }
-    else if ( comboStyle & wxCB_READONLY )
+    else if ( keychar && (comboStyle & wxCB_READONLY) )
     {
         // Try partial completion
 
