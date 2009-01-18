@@ -26,6 +26,7 @@
 #if wxUSE_HEADERCTRL
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
@@ -72,6 +73,16 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
 
     if ( !MSWCreateControl(WC_HEADER, _T(""), pos, size) )
         return false;
+
+    // special hack for margins when using comctl32.dll v6 or later: the
+    // default margin is too big and results in label truncation when the
+    // column width is just about right to show it together with the sort
+    // indicator, so reduce it to a smaller value (in principle we could even
+    // use 0 here but this starts to look ugly)
+    if ( wxApp::GetComCtl32Version() >= 600 )
+    {
+        Header_SetBitmapMargin(GetHwnd(), ::GetSystemMetrics(SM_CXEDGE));
+    }
 
     return true;
 }
@@ -287,7 +298,7 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
 
     if ( col.GetAlignment() != wxALIGN_NOT )
     {
-        hdi.mask |= HDI_FORMAT;
+        hdi.mask |= HDI_FORMAT | HDF_LEFT;
         switch ( col.GetAlignment() )
         {
             case wxALIGN_LEFT:
