@@ -101,6 +101,7 @@ src/png/scripts/*.def
 include/wx/wx_setup.vms
 include/wx/common/*.h
 include/wx/generic/*.h
+include/wx/generic/private/*.h
 include/wx/generic/*.xpm
 include/wx/html/*.h
 include/wx/richtext/*.h
