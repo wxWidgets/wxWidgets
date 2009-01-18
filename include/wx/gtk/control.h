@@ -103,6 +103,6 @@ private:
 };
 
 // Fix sensitivity due to bug in GTK+ < 2.14
-void wxGtkFixSensitivity(wxWindow* ctrl);
+void WXDLLEXPORT wxGtkFixSensitivity(wxWindow* ctrl);
 
 #endif // _WX_GTK_CONTROL_H_

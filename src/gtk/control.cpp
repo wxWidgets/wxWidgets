@@ -22,6 +22,7 @@
 #include "wx/fontutil.h"
 #include "wx/utils.h"
 #include "wx/gtk/private.h"
+#include "wx/sysopt.h"
 
 // ============================================================================
 // wxControl implementation
@@ -384,7 +385,11 @@ void wxGtkFixSensitivity(wxWindow* ctrl)
 #ifdef __WXGTK24__
     // Work around a GTK+ bug whereby button is insensitive after being
     // enabled
-    if (gtk_check_version(2,14,0))
+    if (gtk_check_version(2,14,0)
+#if wxUSE_SYSTEM_OPTIONS
+        && (wxSystemOptions::GetOptionInt(wxT("gtk.control.disable-sensitivity-fix")) != 1)
+#endif
+        )
     {
         wxPoint pt = wxGetMousePosition();
         wxRect rect(ctrl->ClientToScreen(wxPoint(0, 0)), ctrl->GetSize());
