@@ -46873,7 +46873,7 @@ fi
         if test "$wxUSE_GSTREAMER" = "yes"; then
                                     case "${host}" in
                 *-*-solaris2* )
-                    if "$GCC" = yes; then
+                    if test "$GCC" = yes; then
                         GST_CFLAGS=`echo $GST_CFLAGS | sed 's/-mt//'`
                         GST_LIBS=`echo $GST_LIBS | sed 's/-mt//'`
                     fi
