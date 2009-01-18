@@ -184,11 +184,11 @@ public:
     // ctor initializes all the streams on top of the given socket
     //
     // note that we use a bigger than default buffer size which matches the
-    // typical Ethernet MTU
+    // typical Ethernet MTU (minus TCP header overhead)
     wxIPCSocketStreams(wxSocketBase& sock)
         : m_socketStream(sock),
 #ifdef USE_BUFFER
-          m_bufferedOut(m_socketStream, 1488),
+          m_bufferedOut(m_socketStream, 1448),
 #else
           m_bufferedOut(m_socketStream),
 #endif
