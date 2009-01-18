@@ -1914,7 +1914,8 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
             unsigned int ci;
             int cellX = x + 1;
-            int nextCellWidth = state->m_colWidths[0];
+            int nextCellWidth = state->m_colWidths[0] -
+                                (greyDepthX - m_marginWidth);
             wxRect cellRect(greyDepthX+1, y, 0, rowHeight-1);
             int textXAdd = textMarginHere - greyDepthX;
 
