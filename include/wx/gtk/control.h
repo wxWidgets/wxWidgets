@@ -94,6 +94,9 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return false; }
 
+    // Fix sensitivity due to bug in GTK+ < 2.14
+    void GTKFixSensitivity(bool onlyIfUnderMouse = true);
+
 private:
     DECLARE_DYNAMIC_CLASS(wxControl)
 };

@@ -175,6 +175,20 @@ void wxSpinButton::OnSize( wxSizeEvent &WXUNUSED(event) )
     gtk_widget_set_size_request( m_widget, m_width, m_height );
 }
 
+bool wxSpinButton::Enable( bool enable )
+{
+    bool isEnabled = IsEnabled();
+
+    if ( !wxControl::Enable( enable ) )
+        return false;
+
+    // Work around lack of visual update when enabling
+    if (!isEnabled && enable)
+        GTKFixSensitivity(false /* fix even if not under mouse */);
+
+    return true;
+}
+
 void wxSpinButton::GtkDisableEvents() const
 {
     g_signal_handlers_block_by_func(m_widget,

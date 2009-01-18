@@ -45,6 +45,8 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
+    virtual bool Enable( bool enable = true );
+
     // implementation
     void OnSize( wxSizeEvent &event );
 

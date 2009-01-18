@@ -428,6 +428,8 @@ void wxRadioBox::SetString(unsigned int item, const wxString& label)
 
 bool wxRadioBox::Enable( bool enable )
 {
+    bool isEnabled = IsEnabled();
+
     if ( !wxControl::Enable( enable ) )
         return false;
 
@@ -440,6 +442,11 @@ bool wxRadioBox::Enable( bool enable )
         gtk_widget_set_sensitive( GTK_WIDGET(button), enable );
         gtk_widget_set_sensitive( GTK_WIDGET(label), enable );
         node = node->GetNext();
+    }
+
+    if (!isEnabled && enable)
+    {
+        GTKFixSensitivity();
     }
 
     return true;

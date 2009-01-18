@@ -21,6 +21,8 @@
 
 #include "wx/fontutil.h"
 #include "wx/gtk/private.h"
+#include "wx/utils.h"
+#include "wx/sysopt.h"
 
 #include "wx/gtk/private/mnemonics.h"
 
@@ -89,6 +91,30 @@ void wxControl::PostCreation(const wxSize& size)
 
     ApplyWidgetStyle();
     SetInitialSize(size);
+}
+
+// ----------------------------------------------------------------------------
+// Work around a GTK+ bug whereby button is insensitive after being
+// enabled
+// ----------------------------------------------------------------------------
+
+// Fix sensitivity due to bug in GTK+ < 2.14
+void wxControl::GTKFixSensitivity(bool onlyIfUnderMouse)
+{
+    if (gtk_check_version(2,14,0)
+#if wxUSE_SYSTEM_OPTIONS
+        && (wxSystemOptions::GetOptionInt(wxT("gtk.control.disable-sensitivity-fix")) != 1)
+#endif
+        )
+    {
+        wxPoint pt = wxGetMousePosition();
+        wxRect rect(ClientToScreen(wxPoint(0, 0)), GetSize());
+        if (!onlyIfUnderMouse || rect.Contains(pt))
+        {
+            Hide();
+            Show();
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
