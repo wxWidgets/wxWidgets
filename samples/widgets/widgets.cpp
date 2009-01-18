@@ -809,6 +809,8 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
 void WidgetsFrame::OnEnable(wxCommandEvent& event)
 {
     CurrentPage()->GetWidget()->Enable(event.IsChecked());
+    if (CurrentPage()->GetWidget2())
+        CurrentPage()->GetWidget2()->Enable(event.IsChecked());
 }
 
 void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
