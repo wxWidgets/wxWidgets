@@ -94,19 +94,19 @@ enum
     @code
     wxString text;
     ...
-    wxRegEx reEmail = wxT("([^@]+)@([[:alnum:].-_].)+([[:alnum:]]+)");
+    wxRegEx reEmail = "([^@]+)@([[:alnum:].-_].)+([[:alnum:]]+)";
     if ( reEmail.Matches(text) )
     {
         wxString text = reEmail.GetMatch(email);
         wxString username = reEmail.GetMatch(email, 1);
-        if ( reEmail.GetMatch(email, 3) == wxT("com") ) // .com TLD?
+        if ( reEmail.GetMatch(email, 3) == "com" ) // .com TLD?
         {
             ...
         }
     }
 
     // or we could do this to hide the email address
-    size_t count = reEmail.ReplaceAll(text, wxT("HIDDEN@\\2\\3"));
+    size_t count = reEmail.ReplaceAll(text, "HIDDEN@\\2\\3");
     printf("text now contains %u hidden addresses", count);
     @endcode
 */

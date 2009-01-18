@@ -281,7 +281,7 @@ public:
 
         @code
         frame = new MyParentFrame;
-        frame->Create(parent, myParentFrameId, wxT("My Parent Frame"));
+        frame->Create(parent, myParentFrameId, "My Parent Frame");
         @endcode
 
         @remarks

@@ -511,7 +511,7 @@ public:
         Loads the XML document from given stream using the given encoding. See Load().
     */
     wxXmlDocument(wxInputStream& stream,
-                  const wxString& encoding = wxT("UTF-8"));
+                  const wxString& encoding = "UTF-8");
 
     /**
         Virtual destructor. Frees the document root node.
@@ -579,14 +579,14 @@ public:
         Returns true on success, false otherwise.
     */
     virtual bool Load(const wxString& filename,
-                      const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
+                      const wxString& encoding = "UTF-8", int flags = wxXMLDOC_NONE);
 
     /**
         Like Load(const wxString&, const wxString&, int) but takes the data from
         given input stream.
     */
     virtual bool Load(wxInputStream& stream,
-                      const wxString& encoding = wxT("UTF-8"), int flags = wxXMLDOC_NONE);
+                      const wxString& encoding = "UTF-8", int flags = wxXMLDOC_NONE);
 
     /**
         Saves XML tree creating a file named with given string.

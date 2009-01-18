@@ -49,7 +49,7 @@
         // 'normal text', i.e. the current font) but do tell the dialog
         // what 'normal text' is.
 
-        wxSymbolPickerDialog dlg(wxT("*"), wxEmptyString, currentFontName, this);
+        wxSymbolPickerDialog dlg("*", wxEmptyString, currentFontName, this);
 
         if (dlg.ShowModal() == wxID_OK)
         {

@@ -158,9 +158,9 @@ public:
 
         virtual bool Load(const wxString& fileName)
         {
-            if(m_PDF.CallMethod(wxT("LoadFile"), fileName).GetBool())
+            if(m_PDF.CallMethod("LoadFile", fileName).GetBool())
             {
-                m_PDF.CallMethod(wxT("setCurrentPage"), wxVariant((long)0));
+                m_PDF.CallMethod("setCurrentPage", wxVariant((long)0));
                 NotifyMovieLoaded(); // initial refresh
                 wxSizeEvent event;
                 m_pAX->OnSize(event);
@@ -171,7 +171,7 @@ public:
         }
         virtual bool Load(const wxURI& location)
         {
-            return m_PDF.CallMethod(wxT("LoadFile"), location.BuildUnescapedURI()).GetBool();
+            return m_PDF.CallMethod("LoadFile", location.BuildUnescapedURI()).GetBool();
         }
         virtual bool Load(const wxURI& WXUNUSED(location),
                         const wxURI& WXUNUSED(proxy))
@@ -186,7 +186,7 @@ public:
 
         virtual bool SetPosition(wxLongLong where)
         {
-            m_PDF.CallMethod(wxT("setCurrentPage"), wxVariant((long)where.GetValue()));
+            m_PDF.CallMethod("setCurrentPage", wxVariant((long)where.GetValue()));
             return true;
         }
         virtual wxLongLong GetPosition()
@@ -229,13 +229,13 @@ public:
         {
             if(flags)
             {
-                m_PDF.CallMethod(wxT("setShowToolbar"), true);
-                m_PDF.CallMethod(wxT("setShowScrollbars"), true);
+                m_PDF.CallMethod("setShowToolbar", true);
+                m_PDF.CallMethod("setShowScrollbars", true);
             }
             else
             {
-                m_PDF.CallMethod(wxT("setShowToolbar"), false);
-                m_PDF.CallMethod(wxT("setShowScrollbars"), false);
+                m_PDF.CallMethod("setShowToolbar", false);
+                m_PDF.CallMethod("setShowScrollbars", false);
             }
 
             return true;
@@ -251,9 +251,9 @@ public:
     Put this in one of your existant source files and then create a wxMediaCtrl with
 
     //[this] is the parent window, "myfile.pdf" is the PDF file to open
-    wxMediaCtrl* mymediactrl = new wxMediaCtrl(this, wxT("myfile.pdf"), wxID_ANY,
+    wxMediaCtrl* mymediactrl = new wxMediaCtrl(this, "myfile.pdf", wxID_ANY,
                                             wxDefaultPosition, wxSize(300,300),
-                                            0, wxT("wxPDFMediaBackend"));
+                                            0, "wxPDFMediaBackend");
     @endcode
 
 
@@ -262,7 +262,7 @@ public:
     @library{wxbase}
     @category{misc,ipc}
 
-    @see wxActiveXEvent, @ref page_samples_flash Flash sample
+    @see wxActiveXEvent, @ref page_samples_flash
 */
 class wxActiveXContainer : public wxControl
 {

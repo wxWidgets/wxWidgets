@@ -60,8 +60,8 @@ public:
     /**
         Constructor.
     */
-    wxRichTextHTMLHandler(const wxString& name = wxT("HTML"),
-                          const wxString& ext = wxT("html"),
+    wxRichTextHTMLHandler(const wxString& name = "HTML",
+                          const wxString& ext = "html",
                           int type = wxRICHTEXT_TYPE_HTML);
 
     /**

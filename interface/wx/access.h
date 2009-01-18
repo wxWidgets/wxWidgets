@@ -357,9 +357,9 @@ public:
 
         Acceptable values are:
         @li a null variant (IsNull() returns @true)
-        @li a list variant (GetType() == wxT("list"))
+        @li a list variant (GetType() == "list")
         @li an integer representing the selected child element,
-            or 0 if this object is selected (GetType() == wxT("long"))
+            or 0 if this object is selected (GetType() == "long")
         @li a "void*" pointer to a wxAccessible child object
     */
     virtual wxAccStatus GetSelections(wxVariant* selections);

@@ -35,8 +35,8 @@ public:
     /**
         Constructor.
     */
-    wxRichTextXMLHandler(const wxString& name = wxT("XML"),
-                         const wxString& ext = wxT("xml"),
+    wxRichTextXMLHandler(const wxString& name = "XML",
+                         const wxString& ext = "xml",
                          int type = wxRICHTEXT_TYPE_XML);
 
     /**

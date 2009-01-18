@@ -469,7 +469,7 @@ public:
     could use it like this:
 
     @code
-    wxChar *name = wxT("rawfile.doc");
+    wxChar *name = "rawfile.doc";
     FILE *fil = fopen(wxFNCONV(name), "r");
     @endcode
 

@@ -73,7 +73,7 @@ public:
         helpMenu->Append(wxID_ABOUT);
 
         // use the stock label and the stock accelerator but not the stock help string:
-        helpMenu->Append(wxID_ABOUT, wxEmptyString, wxT("My custom help string"));
+        helpMenu->Append(wxID_ABOUT, wxEmptyString, "My custom help string");
 
         // use all stock properties except for the bitmap:
         wxMenuItem *mymenu = new wxMenuItem(helpMenu, wxID_ABOUT);

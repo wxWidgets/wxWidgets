@@ -70,8 +70,8 @@ enum wxAuiManagerOption
     @code
     wxTextCtrl* text1 = new wxTextCtrl(this, -1);
     wxTextCtrl* text2 = new wxTextCtrl(this, -1);
-    m_mgr.AddPane(text1, wxLEFT, wxT("Pane Caption"));
-    m_mgr.AddPane(text2, wxBOTTOM, wxT("Pane Caption"));
+    m_mgr.AddPane(text1, wxLEFT, "Pane Caption");
+    m_mgr.AddPane(text2, wxBOTTOM, "Pane Caption");
     m_mgr.Update();
     @endcode
 

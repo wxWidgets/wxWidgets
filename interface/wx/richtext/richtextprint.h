@@ -194,7 +194,7 @@ public:
     /**
         Constructor.
     */
-    wxRichTextPrintout(const wxString& title = wxT("Printout"));
+    wxRichTextPrintout(const wxString& title = "Printout");
 
     /**
         Calculates scaling and text, header and footer rectangles.
@@ -272,7 +272,7 @@ public:
         Optionally pass a title to be used in the preview frame and printing wait
         dialog, and also a parent window for these windows.
     */
-    wxRichTextPrinting(const wxString& name = wxT("Printing"),
+    wxRichTextPrinting(const wxString& name = "Printing",
                        wxWindow* parentWindow = NULL);
 
     /**

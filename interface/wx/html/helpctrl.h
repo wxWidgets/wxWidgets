@@ -240,7 +240,7 @@ protected:
     @code
         // The help can be browsed during the lifetime of this object; when the
         // user quits the help, program execution will continue.
-        wxHtmlModalHelp help(parent, wxT("help"), wxT("My topic"));
+        wxHtmlModalHelp help(parent, "help", "My topic");
     @endcode
 
     @library{wxhtml}

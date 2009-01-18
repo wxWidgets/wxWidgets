@@ -65,7 +65,7 @@ public:
     Usage sample:
 
     @code
-    wxCollapsiblePane *collpane = new wxCollapsiblePane(this, wxID_ANY, wxT("Details:"));
+    wxCollapsiblePane *collpane = new wxCollapsiblePane(this, wxID_ANY, "Details:");
 
     // add the pane with a zero proportion value to the 'sz' sizer which contains it
     sz->Add(collpane, 0, wxGROW|wxALL, 5);
@@ -73,7 +73,7 @@ public:
     // now add a test label in the collapsible pane using a sizer to layout it:
     wxWindow *win = collpane->GetPane();
     wxSizer *paneSz = new wxBoxSizer(wxVERTICAL);
-    paneSz->Add(new wxStaticText(win, wxID_ANY, wxT("test!")), 1, wxGROW|wxALL, 2);
+    paneSz->Add(new wxStaticText(win, wxID_ANY, "test!"), 1, wxGROW|wxALL, 2);
     win->SetSizer(paneSz);
     paneSz->SetSizeHints(win);
     @endcode

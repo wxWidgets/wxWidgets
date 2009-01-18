@@ -65,7 +65,7 @@
 
     To disable themed pages globally:
     @code
-    wxSystemOptions::SetOption(wxT("msw.notebook.themed-background"), 0);
+    wxSystemOptions::SetOption("msw.notebook.themed-background", 0);
     @endcode
 
     Set the value to 1 to enable it again.

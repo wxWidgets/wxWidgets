@@ -170,19 +170,19 @@ public:
 
         wxPropertyGridPage* page;
 
-        page = pgMan->AddPage(wxT("First Page"));
+        page = pgMan->AddPage("First Page");
 
-        page->Append( new wxPropertyCategory(wxT("Category A1")) );
+        page->Append( new wxPropertyCategory("Category A1") );
 
-        page->Append( new wxIntProperty(wxT("Number"),wxPG_LABEL,1) );
+        page->Append( new wxIntProperty("Number",wxPG_LABEL,1) );
 
-        page->Append( new wxColourProperty(wxT("Colour"),wxPG_LABEL,*wxWHITE) );
+        page->Append( new wxColourProperty("Colour",wxPG_LABEL,*wxWHITE) );
 
-        page = pgMan->AddPage(wxT("Second Page"));
+        page = pgMan->AddPage("Second Page");
 
-        page->Append( wxT("Text"),wxPG_LABEL,wxT("(no text)") );
+        page->Append( "Text",wxPG_LABEL,"(no text)" );
 
-        page->Append( new wxFontProperty(wxT("Font"),wxPG_LABEL) );
+        page->Append( new wxFontProperty("Font",wxPG_LABEL) );
     @endcode
 
     @section propgridmanager_window_styles_ Window Styles

@@ -381,7 +381,7 @@ protected:
     /**
         Creates an animation (see wxAnimation) from the filename specified in @a param.
     */
-    wxAnimation GetAnimation(const wxString& param = wxT("animation"));
+    wxAnimation GetAnimation(const wxString& param = "animation");
 
     /**
         Gets a bitmap.
@@ -457,7 +457,7 @@ protected:
     /**
         Gets the position (may be in dialog units).
     */
-    wxPoint GetPosition(const wxString& param = wxT("pos"));
+    wxPoint GetPosition(const wxString& param = "pos");
 
     /**
         Gets the size (may be in dialog units).
@@ -468,7 +468,7 @@ protected:
         Gets style flags from text in form "flag | flag2| flag3 |..."
         Only understands flags added with AddStyle().
     */
-    int GetStyle(const wxString& param = wxT("style"), int defaults = 0);
+    int GetStyle(const wxString& param = "style", int defaults = 0);
 
     /**
         Gets text from param and does some conversions:

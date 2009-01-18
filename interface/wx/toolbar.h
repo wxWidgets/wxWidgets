@@ -36,12 +36,12 @@
     bitmaps will inadvertently be mapped to system colours.
     To do this, set the msw.remap system option before creating the toolbar:
     @code
-    wxSystemOptions::SetOption(wxT("msw.remap"), 0);
+    wxSystemOptions::SetOption("msw.remap", 0);
     @endcode
     If you wish to use 32-bit images (which include an alpha channel for
     transparency) use:
     @code
-    wxSystemOptions::SetOption(wxT("msw.remap"), 2);
+    wxSystemOptions::SetOption("msw.remap", 2);
     @endcode
     Then colour remapping is switched off, and a transparent background
     used. But only use this option under Windows XP with true colour:
