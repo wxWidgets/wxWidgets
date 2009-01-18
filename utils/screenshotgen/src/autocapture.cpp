@@ -18,7 +18,8 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/filename.h"
+#include <ctime>
+#include <wx/notebook.h>
 
 #include "autocapture.h"
 
@@ -33,6 +34,14 @@
 
 /* static */
 wxString AutoCaptureMechanism::default_dir = _T("screenshots");
+
+/* static */
+wxString AutoCaptureMechanism::GetDefaultDirectoryAbsPath()
+{
+    wxFileName output = wxFileName::DirName(GetDefaultDirectory());
+    output.MakeAbsolute();
+    return output.GetFullPath();
+}
 
 /* static */
 void AutoCaptureMechanism::Delay(int seconds)
@@ -76,7 +85,7 @@ wxBitmap AutoCaptureMechanism::Capture(int x, int y, int width, int height, int 
 
 #else // Under other paltforms, take a real screenshot
 
-    wxUnusedVar(delay);
+    if(delay) Delay(delay);
 
     // Create a DC for the whole screen area
     wxScreenDC dcScreen;
@@ -155,24 +164,19 @@ void AutoCaptureMechanism::CaptureAll()
             continue;
         }
 
-//        // create the screenshot
-//        wxBitmap screenshot = Capture(ctrl);
-//        if (ctrl.flag & AJ_Union)
-//            screenshot = Union(screenshot, Capture(*(++it)));
-//
-//        // and save it
-//        Save(screenshot, ctrl.name);
         // create the screenshot
         wxBitmap screenshot = Capture(ctrl);
 
         if(ctrl.flag & AJ_Union)
         {
+            // union screenshots until AJ_UnionEnd
             do
             {
-                ctrl = *(++it);
-                screenshot = Union(screenshot, Capture(ctrl));
+                ++it;
+                it->name = ctrl.name; //preserving the name
+                screenshot = Union(screenshot, Capture(*it));
             }
-            while(!(ctrl.flag & AJ_UnionEnd));
+            while(!(it->flag & AJ_UnionEnd));
         }
 
         // and save it
@@ -182,7 +186,9 @@ void AutoCaptureMechanism::CaptureAll()
 
 wxBitmap AutoCaptureMechanism::Capture(Control& ctrl)
 {
-    if (ctrl.name == wxT(""))  // no manual specification for the control name
+    // no manual specification for the control name
+    // or name adjustment is disabled globally
+    if (ctrl.name == _T("") || m_flag & AJ_DisableNameAdjust)
     {
         // Get its name from wxRTTI
         ctrl.name = ctrl.ctrl->GetClassInfo()->GetClassName();
@@ -190,31 +196,29 @@ wxBitmap AutoCaptureMechanism::Capture(Control& ctrl)
 
     int choice = wxNO;
 
-    // for drop-down controls we need the help of the user
-    if (ctrl.flag & AJ_Dropdown)
+    wxRect rect = GetRect(ctrl.ctrl, ctrl.flag);
+
+    if (ctrl.flag & AJ_Dropdown && !(m_flag & AJ_DisableDropdown))
     {
+        // for drop-down controls we need the help of the user
         wxString caption = _("Drop-down screenshot...");
         wxString msg =
-            wxString::Format(_("Do you wish to capture the drop-down list of '%s' ?\n\nIf you click YES you must drop-down the list of '%s' in 3 seconds after closing this message box.\nIf you click NO the screenshot for this control won't contain its drop-down list."),
+            wxString::Format(_("Do you wish to capture the drop-down list of '%s' ?\n\n If YES, please drop down the list of '%s' in 5 seconds after closing this message box.\n If NO, the screenshot for this control won't contain its drop-down list."),
                              ctrl.name, ctrl.name);
 
         choice = wxMessageBox(msg, caption, wxYES_NO, m_notebook);
 
-        #ifndef __WXMAC__  //not __WXMAC__
-        if (choice == wxYES)  Delay(3);
-        #endif
-    }
+        if (choice == wxYES)
+        {
+            //A little hint
+            ctrl.ctrl->SetCursor(wxCursor(wxCURSOR_HAND));
 
-    wxRect rect = GetRect(ctrl.ctrl, ctrl.flag);
-
-    // Do some rect adjust so it can include the dropdown list;
-    // currently this only works well under MSW; not adjusted for Linux and Mac OS
-    if (ctrl.flag & AJ_Dropdown && choice == wxYES)
-    {
-//          #ifdef __WXMSW__
-        int h = rect.GetHeight();
-        rect.SetHeight(h * 4);
-//          #endif
+            // Do some rect adjust so it can include the dropdown list
+            // This adjust isn't pretty, but it works fine on all three paltforms.
+            // Looking forward to a better solution
+            int h = rect.GetHeight();
+            rect.SetHeight(h * 4);
+        }
     }
 
     // cut off "wx" and change the name into lowercase.
@@ -223,7 +227,9 @@ wxBitmap AutoCaptureMechanism::Capture(Control& ctrl)
     ctrl.name.MakeLower();
 
     // take the screenshot
-    wxBitmap screenshot = Capture(rect);
+    wxBitmap screenshot = Capture(rect, (choice == wxYES)?5:0);
+
+    if (choice == wxYES) ctrl.ctrl->SetCursor(wxNullCursor);
 
     if (ctrl.flag & AJ_RegionAdjust)
         PutBack(ctrl.ctrl);
@@ -246,24 +252,6 @@ wxBitmap AutoCaptureMechanism::Union(wxBitmap pic1, wxBitmap pic2)
 
     wxBitmap result(w, h, -1);
 
-#if 0
-    //Mask the bitmap "result"
-    wxMemoryDC maskDC;
-    wxBitmap mask(w, h, 1);
-    maskDC.SelectObject(mask);
-
-    maskDC.SetPen(*wxTRANSPARENT_PEN);
-    maskDC.SetBrush(*wxBLACK_BRUSH);
-    maskDC.DrawRectangle(0, 0, w + 1, h + 1);
-
-    maskDC.SetBrush(*wxWHITE_BRUSH);
-    maskDC.DrawRectangle(0, 0, w1, h1);
-    maskDC.DrawRectangle(0, h1 + gap_between, w2, h2);
-    maskDC.SelectObject(wxNullBitmap);
-
-    result.SetMask(new wxMask(mask));
-#endif
-
     wxMemoryDC dstDC;
     dstDC.SelectObject(result);
 
@@ -280,57 +268,55 @@ wxBitmap AutoCaptureMechanism::Union(wxBitmap pic1, wxBitmap pic2)
 
 wxRect AutoCaptureMechanism::GetRect(wxWindow* ctrl, int flag)
 {
-    if (flag & AJ_RegionAdjust)
+    if( !(m_flag & AJ_DisableRegionAdjust) && (flag & AJ_RegionAdjust)
+        || (m_flag & AJ_AlwaysRegionAdjust) )
     {
         wxWindow * parent = ctrl->GetParent();
         wxSizer * sizer = parent->GetSizer();
 
-        if (sizer)
-        {
-            sizer->Detach(ctrl);
+        //The assertion won't fail if controls are still managed by wxSizer, and it's unlikely to
+        //change in the future.
+        wxASSERT_MSG(sizer,
+        "The GUI that AutoCaptureMechanism working with doesn't manage controls with wxSizer");
 
-            /*
-            +---------+-----------+---------+
-            |    0    |   label   |    1    |
-            +---------+-----------+---------+
-            |  label  |    ctrl   |  label  |
-            +---------+-----------+---------+
-            |    2    |   label   |    3    |
-            +---------+-----------+---------+
-           */
+        sizer->Detach(ctrl);
 
-            m_grid = new wxFlexGridSizer(3, 3, m_margin, m_margin);
+        /*
+        +---------+-----------+---------+
+        |    0    |   label   |    1    |
+        +---------+-----------+---------+
+        |  label  |    ctrl   |  label  |
+        +---------+-----------+---------+
+        |    2    |   label   |    3    |
+        +---------+-----------+---------+
+       */
 
-            wxStaticText* l[4];
+        m_grid = new wxFlexGridSizer(3, 3, m_margin, m_margin);
 
-            for (int i = 0; i < 4; ++i)
-                l[i] = new wxStaticText(parent, wxID_ANY, wxT(" "));
+        wxStaticText* l[4];
 
-            m_grid->Add(l[0]);
-            m_grid->Add(new wxStaticText(parent, wxID_ANY, wxT(" ")));
-            m_grid->Add(l[1]);
-            m_grid->Add(new wxStaticText(parent, wxID_ANY, wxT(" ")));
-            m_grid->Add(ctrl);
-            m_grid->Add(new wxStaticText(parent, wxID_ANY, wxT(" ")));
-            m_grid->Add(l[2]);
-            m_grid->Add(new wxStaticText(parent, wxID_ANY, wxT(" ")));
-            m_grid->Add(l[3]);
+        for (int i = 0; i < 4; ++i)
+            l[i] = new wxStaticText(parent, wxID_ANY, _T(" "));
 
-            sizer->Add(m_grid);
-            parent->SetSizer(sizer);
-            parent->Layout();
+        m_grid->Add(l[0]);
+        m_grid->Add(new wxStaticText(parent, wxID_ANY, _T(" ")));
+        m_grid->Add(l[1]);
+        m_grid->Add(new wxStaticText(parent, wxID_ANY, _T(" ")));
+        m_grid->Add(ctrl, 1, wxEXPAND);
+        m_grid->Add(new wxStaticText(parent, wxID_ANY, _T(" ")));
+        m_grid->Add(l[2]);
+        m_grid->Add(new wxStaticText(parent, wxID_ANY, _T(" ")));
+        m_grid->Add(l[3]);
 
-            parent->Refresh();
-            wxYield();
+        sizer->Add(m_grid);
+        parent->SetSizer(sizer);
+        parent->Layout();
 
-            return wxRect(l[0]->GetScreenRect().GetBottomRight(),
-                    l[3]->GetScreenRect().GetTopLeft());
+        parent->Refresh();
+        wxYield();
 
-        }
-        else  // Actually it won't get here working with the current guiframe.h/guiframe.cpp
-        {
-            return ctrl->GetScreenRect().Inflate(m_margin);
-        }
+        return wxRect(l[0]->GetScreenRect().GetBottomRight(),
+                l[3]->GetScreenRect().GetTopLeft());
     }
     else
     {
@@ -340,6 +326,8 @@ wxRect AutoCaptureMechanism::GetRect(wxWindow* ctrl, int flag)
 
 void AutoCaptureMechanism::PutBack(wxWindow * ctrl)
 {
+    if(!m_grid) return;
+
     m_grid->Detach(ctrl);
 
     wxSizerItemList children = m_grid->GetChildren();
@@ -351,8 +339,16 @@ void AutoCaptureMechanism::PutBack(wxWindow * ctrl)
     }
 
     wxSizer * sizer = ctrl->GetParent()->GetSizer();
+
+    //The assertion won't fail if controls are still managed by wxSizer, and it's unlikely to
+    //change in the future.
+    wxASSERT_MSG(sizer,
+    "The GUI that AutoCaptureMechanism working with doesn't manage controls with wxSizer");
+
     sizer->Detach(m_grid);
     delete m_grid;
+    m_grid = NULL;
+
     sizer->Add(ctrl);
 }
 

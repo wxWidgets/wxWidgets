@@ -10,9 +10,9 @@
 #define _AUTOCAPTURE_H_
 
 #include <vector>
-#include <ctime>
+#include "wx/filename.h"
 
-#include <wx/notebook.h>
+class wxNotebook;
 
 /**
     GlobalAdjustFlags works with AutoCaptureMechanism's constructor, to disbale/enable
@@ -38,6 +38,9 @@ enum GlobalAdjustFlags
 
     /**
         Enable region adjustment for all controls.
+
+        If AJ_DisableRegionAdjust and AJ_AlwaysRegionAdjust are both specified, current
+        implemetation will ignore AJ_DisableRegionAdjust.
     */
     AJ_AlwaysRegionAdjust =  1 << 1,
 
@@ -97,15 +100,14 @@ enum AdjustFlags
     AJ_TurnPage = 1 << 2,
 
     /**
-        This flag provides a functionality to union screenshots of different controls into
-        one image.
-
-        It's especially useful to demonstrate different modes/states of a control,
-        e.g. the single-line/multi-line modes of a wxTextCtrl.
+        This flag provides a functionality to union screenshots of different modes/states of
+        a control into one image. e.g. the single-line/multi-line modes of a wxTextCtrl.
 
         For a series of controls to be unioned, you should specify AJ_Union for the first,
         and AJ_UnionEnd for the last. For the controls between them, you can either specify
         AJ_Union or not.
+
+        The filename of the generated screenshot is the name of the first control in the series.
     */
     AJ_Union = 1 << 3,
 
@@ -309,12 +311,7 @@ public:
     /**
         Get the absolute path of the default directory where the screenshots will be generated.
     */
-    static wxString GetDefaultDirectoryAbsPath()
-    {
-        wxFileName output = wxFileName::DirName(GetDefaultDirectory());
-        output.MakeAbsolute();
-        return output.GetFullPath();
-    }
+    static wxString GetDefaultDirectoryAbsPath();
 
 private:
 
@@ -389,6 +386,9 @@ private:
     */
     static wxBitmap Union(wxBitmap pic1, wxBitmap pic2);
 
+    /*
+        Delay a few seconds without blocking GUI.
+    */
     static void Delay(int seconds);
 
     /*
