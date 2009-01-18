@@ -253,7 +253,7 @@ private:
 // value is used by the event table macros
 
 inline wxObjectEventFunctor *
-wxNewEventFunctor(wxEventType WXUNUSED(evtType),
+wxNewEventFunctor(const wxEventType& WXUNUSED(evtType),
                   wxObjectEventFunction method,
                   wxEvtHandler *handler = NULL)
 {
@@ -261,7 +261,7 @@ wxNewEventFunctor(wxEventType WXUNUSED(evtType),
 }
 
 inline wxObjectEventFunctor
-wxConstructEventFunctor(wxEventType WXUNUSED(evtType),
+wxConstructEventFunctor(const wxEventType& WXUNUSED(evtType),
                         wxObjectEventFunction method,
                         wxEvtHandler *handler)
 {
