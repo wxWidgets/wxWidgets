@@ -6,6 +6,23 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+
+/**
+    No id matches this one when compared to it.
+*/
+int wxID_NONE = -3;
+
+/**
+    Id for a separator line in the menu (invalid for normal item).
+*/
+int wxID_SEPARATOR = -2;
+
+/**
+    Any id: means that we don't care about the id, whether when installing
+    an event handler or when creating a new window.
+*/
+int wxID_ANY = -1;
+
 /**
     Item kinds for use with wxMenu, wxMenuItem, and wxToolBar.
 
