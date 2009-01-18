@@ -39,6 +39,15 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 
+#ifndef HDM_SETBITMAPMARGIN
+    #define HDM_SETBITMAPMARGIN 0x1234
+#endif
+
+#ifndef Header_SetBitmapMargin
+    #define Header_SetBitmapMargin(hwnd, margin) \
+            ::SendMessage((hwnd), HDM_SETBITMAPMARGIN, (WPARAM)(margin), 0)
+#endif
+
 // from src/msw/listctrl.cpp
 extern int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 
