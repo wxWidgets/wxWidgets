@@ -284,6 +284,12 @@ public:
     */
     virtual ~wxEvtHandler();
 
+
+    /**
+        @name Event queuing and processing
+    */
+    //@{
+
     /**
         Queue event for a later processing.
 
@@ -353,6 +359,101 @@ public:
             Event to add to the pending events queue.
     */
     virtual void AddPendingEvent(const wxEvent& event);
+
+    /**
+        Processes an event, searching event tables and calling zero or more suitable
+        event handler function(s).
+
+        Normally, your application would not call this function: it is called in the
+        wxWidgets implementation to dispatch incoming user interface events to the
+        framework (and application).
+
+        However, you might need to call it if implementing new functionality
+        (such as a new control) where you define new event types, as opposed to
+        allowing the user to override virtual functions.
+
+        An instance where you might actually override the ProcessEvent() function is where
+        you want to direct event processing to event handlers not normally noticed by
+        wxWidgets. For example, in the document/view architecture, documents and views
+        are potential event handlers. When an event reaches a frame, ProcessEvent() will
+        need to be called on the associated document and view in case event handler functions
+        are associated with these objects. The property classes library (wxProperty) also
+        overrides ProcessEvent() for similar reasons.
+
+        The normal order of event table searching is as follows:
+        -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
+            the function skips to step (6).
+        -# If the object is a wxWindow, ProcessEvent() is recursively called on the
+            window's wxValidator. If this returns @true, the function exits.
+        -# SearchEventTable() is called for this event handler. If this fails, the base
+            class table is tried, and so on until no more tables exist or an appropriate
+            function was found, in which case the function exits.
+        -# The search is applied down the entire chain of event handlers (usually the
+            chain has a length of one). If this succeeds, the function exits.
+        -# If the object is a wxWindow and the event is a wxCommandEvent, ProcessEvent()
+            is recursively applied to the parent window's event handler.
+            If this returns true, the function exits.
+        -# Finally, ProcessEvent() is called on the wxApp object.
+
+        @param event
+            Event to process.
+
+        @return @true if a suitable event handler function was found and
+                 executed, and the function did not call wxEvent::Skip.
+
+        @see SearchEventTable()
+    */
+    virtual bool ProcessEvent(wxEvent& event);
+
+    /**
+        Processes an event by calling ProcessEvent() and handles any exceptions
+        that occur in the process.
+        If an exception is thrown in event handler, wxApp::OnExceptionInMainLoop is called.
+
+        @param event
+            Event to process.
+
+        @return @true if the event was processed, @false if no handler was found
+                 or an exception was thrown.
+
+        @see wxWindow::HandleWindowEvent
+    */
+    bool SafelyProcessEvent(wxEvent& event);
+
+    /**
+        Searches the event table, executing an event handler function if an appropriate
+        one is found.
+
+        @param table
+            Event table to be searched.
+        @param event
+            Event to be matched against an event table entry.
+
+        @return @true if a suitable event handler function was found and
+                 executed, and the function did not call wxEvent::Skip.
+
+        @remarks This function looks through the object's event table and tries
+                 to find an entry that will match the event.
+                 An entry will match if:
+                 @li The event type matches, and
+                 @li the identifier or identifier range matches, or the event table
+                     entry's identifier is zero.
+
+                 If a suitable function is called but calls wxEvent::Skip, this
+                 function will fail, and searching will continue.
+
+        @see ProcessEvent()
+    */
+    virtual bool SearchEventTable(wxEventTable& table,
+                                  wxEvent& event);
+
+    //@}
+
+
+    /**
+        @name Connecting and disconnecting
+    */
+    //@{
 
     /**
         Connects the given function dynamically with the event handler, id and event type.
@@ -467,6 +568,13 @@ public:
                     wxObjectEventFunction function = NULL,
                     wxObject* userData = NULL,
                     wxEvtHandler* eventSink = NULL);
+    //@}
+
+
+    /**
+        @name User-supplied data
+    */
+    //@{
 
     /**
         Returns user-supplied client data.
@@ -485,6 +593,36 @@ public:
         @see SetClientObject(), wxClientData
     */
     wxClientData* GetClientObject() const;
+
+    /**
+        Sets user-supplied client data.
+
+        @param data
+            Data to be associated with the event handler.
+
+        @remarks Normally, any extra data the programmer wishes to associate
+                 with the object should be made available by deriving a new
+                 class with new data members. You must not call this method
+                 and SetClientObject on the same class - only one of them.
+
+        @see GetClientData()
+    */
+    void SetClientData(void* data);
+
+    /**
+        Set the client data object. Any previous object will be deleted.
+
+        @see GetClientObject(), wxClientData
+    */
+    void SetClientObject(wxClientData* data);
+
+    //@}
+
+
+    /**
+        @name Event handler chain
+    */
+    //@{
 
     /**
         Returns @true if the event handler is enabled, @false otherwise.
@@ -508,115 +646,6 @@ public:
              wxWindow::PushEventHandler, wxWindow::PopEventHandler
     */
     wxEvtHandler* GetPreviousHandler() const;
-
-    /**
-        Processes an event, searching event tables and calling zero or more suitable
-        event handler function(s).
-
-        Normally, your application would not call this function: it is called in the
-        wxWidgets implementation to dispatch incoming user interface events to the
-        framework (and application).
-
-        However, you might need to call it if implementing new functionality
-        (such as a new control) where you define new event types, as opposed to
-        allowing the user to override virtual functions.
-
-        An instance where you might actually override the ProcessEvent() function is where
-        you want to direct event processing to event handlers not normally noticed by
-        wxWidgets. For example, in the document/view architecture, documents and views
-        are potential event handlers. When an event reaches a frame, ProcessEvent() will
-        need to be called on the associated document and view in case event handler functions
-        are associated with these objects. The property classes library (wxProperty) also
-        overrides ProcessEvent() for similar reasons.
-
-        The normal order of event table searching is as follows:
-        -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
-            the function skips to step (6).
-        -# If the object is a wxWindow, ProcessEvent() is recursively called on the
-            window's wxValidator. If this returns @true, the function exits.
-        -# SearchEventTable() is called for this event handler. If this fails, the base
-            class table is tried, and so on until no more tables exist or an appropriate
-            function was found, in which case the function exits.
-        -# The search is applied down the entire chain of event handlers (usually the
-            chain has a length of one). If this succeeds, the function exits.
-        -# If the object is a wxWindow and the event is a wxCommandEvent, ProcessEvent()
-            is recursively applied to the parent window's event handler.
-            If this returns true, the function exits.
-        -# Finally, ProcessEvent() is called on the wxApp object.
-
-        @param event
-            Event to process.
-
-        @return @true if a suitable event handler function was found and
-                 executed, and the function did not call wxEvent::Skip.
-
-        @see SearchEventTable()
-    */
-    virtual bool ProcessEvent(wxEvent& event);
-
-    /**
-        Processes an event by calling ProcessEvent() and handles any exceptions
-        that occur in the process.
-        If an exception is thrown in event handler, wxApp::OnExceptionInMainLoop is called.
-
-        @param event
-            Event to process.
-
-        @return @true if the event was processed, @false if no handler was found
-                 or an exception was thrown.
-
-        @see wxWindow::HandleWindowEvent
-    */
-    bool SafelyProcessEvent(wxEvent& event);
-
-    /**
-        Searches the event table, executing an event handler function if an appropriate
-        one is found.
-
-        @param table
-            Event table to be searched.
-        @param event
-            Event to be matched against an event table entry.
-
-        @return @true if a suitable event handler function was found and
-                 executed, and the function did not call wxEvent::Skip.
-
-        @remarks This function looks through the object's event table and tries
-                 to find an entry that will match the event.
-                 An entry will match if:
-                 @li The event type matches, and
-                 @li the identifier or identifier range matches, or the event table
-                     entry's identifier is zero.
-
-                 If a suitable function is called but calls wxEvent::Skip, this
-                 function will fail, and searching will continue.
-
-        @see ProcessEvent()
-    */
-    virtual bool SearchEventTable(wxEventTable& table,
-                                  wxEvent& event);
-
-    /**
-        Sets user-supplied client data.
-
-        @param data
-            Data to be associated with the event handler.
-
-        @remarks Normally, any extra data the programmer wishes to associate
-                 with the object should be made available by deriving a new
-                 class with new data members. You must not call this method
-                 and SetClientObject on the same class - only one of them.
-
-        @see GetClientData()
-    */
-    void SetClientData(void* data);
-
-    /**
-        Set the client data object. Any previous object will be deleted.
-
-        @see GetClientObject(), wxClientData
-    */
-    void SetClientObject(wxClientData* data);
 
     /**
         Enables or disables the event handler.
@@ -650,6 +679,8 @@ public:
             Event handler to be set as the previous handler.
     */
     void SetPreviousHandler(wxEvtHandler* handler);
+
+    //@}
 };
 
 
