@@ -755,8 +755,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
            if (!gGlobalCursor.IsOk())
            {
                 // update cursor when over toolbar and titlebar etc.
-                wxPoint cursorPoint( wxevent.m_x , wxevent.m_y ) ;
-                toplevelWindow->MacSetupCursor( cursorPoint );
+                wxSTANDARD_CURSOR->MacInstall() ;
            }
         }
     
