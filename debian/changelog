@@ -1,3 +1,10 @@
+wxwidgets2.8 (2.8.9.2-0) unstable; urgency=low
+
+  * Many minor bugfixes and enhancements.
+  * removed the wx-addons package
+
+ -- Robin Dunn <robin@alldunn.com>  Thu, 15 Jan 2009 11:18:33 -0800
+
 wxwidgets2.8 (2.8.9.1-0) unstable; urgency=low
 
   * Fixed Python 2.4 compatibility problem.

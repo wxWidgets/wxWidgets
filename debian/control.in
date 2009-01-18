@@ -237,19 +237,6 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython version selector
  .
  This package provides the wxPython version selector.
 
-Package: python-wxaddons
-Architecture: all
-Section: python
-Conflicts: python-wxgtk2.6 (<< 2.6.4.0)
-Depends: ${python:Depends}, python-wxgtk=V=U
-XB-Python-Version: ${python:Versions}
-Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython add-on packages base)
- wxWidgets (formerly known as wxWindows) is a class library for C++ providing
- GUI components and other facilities on several popular platforms (and some
- unpopular ones as well).  For more information see http://wxwidgets.org
- .
- This package provides a base Python package for 3rd party add-ons.
-
 Package: python-wxtools
 Architecture: all
 Section: python
