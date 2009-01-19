@@ -34,6 +34,7 @@ ctags --totals --c++-kinds=+px --language-force=c++ \
 	include/wx/private/*.h \
 	include/wx/aui/*.h \
 	include/wx/generic/*.h \
+	include/wx/generic/private/*.h \
 	include/wx/$1/*.h \
 	include/wx/$1/private/*.h \
 	include/wx/html/*.h \
