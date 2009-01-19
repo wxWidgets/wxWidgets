@@ -420,9 +420,9 @@ class WXDLLIMPEXP_BASE wxNodeBase
 friend class wxListBase;
 public:
     // ctor
-    wxNodeBase(wxListBase *list = (wxListBase *)NULL,
-               wxNodeBase *previous = (wxNodeBase *)NULL,
-               wxNodeBase *next = (wxNodeBase *)NULL,
+    wxNodeBase(wxListBase *list = NULL,
+               wxNodeBase *previous = NULL,
+               wxNodeBase *next = NULL,
                void *data = NULL,
                const wxListKey& key = wxDefaultListKey);
 
@@ -559,7 +559,7 @@ protected:
     {
         wxNodeBase *node = Item(n);
 
-        return node ? node->GetData() : (wxNodeBase *)NULL;
+        return node ? node->GetData() : NULL;
     }
 
     // operations
@@ -569,7 +569,8 @@ protected:
         // append to beginning of list
     wxNodeBase *Append(void *object);
         // insert a new item at the beginning of the list
-    wxNodeBase *Insert(void *object) { return Insert( (wxNodeBase*)NULL, object); }
+    wxNodeBase *Insert(void *object)
+        { return Insert(static_cast<wxNodeBase *>(NULL), object); }
         // insert a new item at the given position
     wxNodeBase *Insert(size_t pos, void *object)
         { return pos == GetCount() ? Append(object)
@@ -673,10 +674,10 @@ private:
     classexp nodetype : public wxNodeBase                                   \
     {                                                                       \
     public:                                                                 \
-        nodetype(wxListBase *list = (wxListBase *)NULL,                     \
-                 nodetype *previous = (nodetype *)NULL,                     \
-                 nodetype *next = (nodetype *)NULL,                         \
-                 T *data = (T *)NULL,                                       \
+        nodetype(wxListBase *list = NULL,                                   \
+                 nodetype *previous = NULL,                                 \
+                 nodetype *next = NULL,                                     \
+                 T *data = NULL,                                            \
                  const wxListKey& key = wxDefaultListKey)                   \
             : wxNodeBase(list, previous, next, data, key) { }               \
                                                                             \
@@ -733,13 +734,14 @@ private:
         T *operator[](size_t index) const                                   \
         {                                                                   \
             nodetype *node = Item(index);                                   \
-            return node ? (T*)(node->GetData()) : (T*)NULL;                 \
+            return node ? (T*)(node->GetData()) : NULL;                     \
         }                                                                   \
                                                                             \
         nodetype *Append(Tbase *object)                                     \
             { return (nodetype *)wxListBase::Append(object); }              \
         nodetype *Insert(Tbase *object)                                     \
-            { return (nodetype *)Insert((nodetype*)NULL, object); }         \
+            { return (nodetype *)Insert(static_cast<nodetype *>(NULL),      \
+                                        object); }                          \
         nodetype *Insert(size_t pos, Tbase *object)                         \
             { return (nodetype *)wxListBase::Insert(pos, object); }         \
         nodetype *Insert(nodetype *prev, Tbase *object)                     \
