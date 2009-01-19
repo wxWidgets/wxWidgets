@@ -62,7 +62,7 @@
 #define IS_16_PIX_HATCH(s) ((s)!=wxCROSSDIAG_HATCH && (s)!=wxHORIZONTAL_HATCH && (s)!=wxVERTICAL_HATCH)
 
 static Pixmap  hatches[num_hatches];
-static Pixmap *hatch_bitmap = (Pixmap *) NULL;
+static Pixmap *hatch_bitmap = NULL;
 
 //-----------------------------------------------------------------------------
 // constants
@@ -222,19 +222,19 @@ wxWindowDCImpl::~wxWindowDCImpl()
 
 void wxWindowDCImpl::Init()
 {
-    m_display = (WXDisplay *) NULL;
-    m_penGC = (WXGC *) NULL;
-    m_brushGC = (WXGC *) NULL;
-    m_textGC = (WXGC *) NULL;
-    m_bgGC = (WXGC *) NULL;
-    m_cmap = (WXColormap *) NULL;
+    m_display = NULL;
+    m_penGC = NULL;
+    m_brushGC = NULL;
+    m_textGC = NULL;
+    m_bgGC = NULL;
+    m_cmap = NULL;
     m_isMemDC = false;
     m_isScreenDC = false;
-    m_x11window = (WXWindow*) NULL;
+    m_x11window = NULL;
 
 #if wxUSE_UNICODE
     m_context = wxTheApp->GetPangoContext();
-    m_fontdesc = (PangoFontDescription *)NULL;
+    m_fontdesc = NULL;
 #endif
 }
 
@@ -1913,7 +1913,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         default:
         {
             lineStyle = LineSolid;
-            req_dash = (wxX11Dash*)NULL;
+            req_dash = NULL;
             req_nb_dash = 0;
             break;
         }

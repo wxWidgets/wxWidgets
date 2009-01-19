@@ -175,8 +175,8 @@ gtk_window_button_press_callback(GtkWidget* widget, GdkEventButton* gdk_event, w
                           GDK_POINTER_MOTION_HINT_MASK  |
                           GDK_BUTTON_MOTION_MASK        |
                           GDK_BUTTON1_MOTION_MASK),
-                      (GdkWindow *) NULL,
-                      (GdkCursor *) NULL,
+                      NULL,
+                      NULL,
                       (unsigned int) GDK_CURRENT_TIME );
 
     win->m_diffX = x;

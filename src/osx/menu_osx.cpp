@@ -501,7 +501,7 @@ void wxMenuBar::Init()
 {
     m_eventHandler = this;
     m_menuBarFrame = NULL;
-    m_invokingWindow = (wxWindow*) NULL;
+    m_invokingWindow = NULL;
     m_rootMenu = new wxMenu();
     wxMenu* applemenu = new wxMenu();
     applemenu->SetAllowRearrange(false);
@@ -890,7 +890,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 
 static void wxMenubarUnsetInvokingWindow( wxMenu *menu )
 {
-    menu->SetInvokingWindow( (wxWindow*) NULL );
+    menu->SetInvokingWindow( NULL );
     wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
 
     while (node)
@@ -921,7 +921,7 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
 
 void wxMenuBar::UnsetInvokingWindow()
 {
-    m_invokingWindow = (wxWindow*) NULL;
+    m_invokingWindow = NULL;
     wxMenu *menu;
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
 

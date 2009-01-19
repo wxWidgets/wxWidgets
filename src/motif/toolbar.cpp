@@ -127,7 +127,7 @@ protected:
 // globals
 // ----------------------------------------------------------------------------
 
-static wxToolBarTimer* wxTheToolBarTimer = (wxToolBarTimer*) NULL;
+static wxToolBarTimer* wxTheToolBarTimer = NULL;
 
 Widget wxToolBarTimer::help_popup = (Widget) 0;
 Widget wxToolBarTimer::buttonWidget = (Widget) 0;
@@ -480,7 +480,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
 {
     wxFAIL_MSG( _T("TODO") );
 
-    return (wxToolBarToolBase *)NULL;
+    return NULL;
 }
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
@@ -652,7 +652,7 @@ wxToolBarToolBase *wxToolBar::FindToolByWidget(WXWidget w) const
         node = node->GetNext();
     }
 
-    return (wxToolBarToolBase *)NULL;
+    return NULL;
 }
 
 static void wxToolButtonCallback(Widget w,

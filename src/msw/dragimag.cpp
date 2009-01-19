@@ -92,7 +92,7 @@ void wxDragImage::Init()
 #if !wxUSE_SIMPLER_DRAGIMAGE
     m_hCursorImageList = 0;
 #endif
-    m_window = (wxWindow*) NULL;
+    m_window = NULL;
     m_fullScreen = false;
 }
 
@@ -388,7 +388,7 @@ bool wxDragImage::EndDrag()
     ::ShowCursor(TRUE);
 #endif
 
-    m_window = (wxWindow*) NULL;
+    m_window = NULL;
 
     return true;
 }

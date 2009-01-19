@@ -482,7 +482,7 @@ wxString wxRealPath(const wxString& path)
 wxChar *wxCopyAbsolutePath(const wxString& filename)
 {
     if (filename.empty())
-        return (wxChar *) NULL;
+        return NULL;
 
     if (! wxIsAbsolutePath(wxExpandPath(wxFileFunctionsBuffer, filename)))
     {
@@ -715,7 +715,7 @@ wxContractPath (const wxString& filename,
   static wxChar dest[_MAXPATHLEN];
 
   if (filename.empty())
-    return (wxChar *) NULL;
+    return NULL;
 
   wxStrcpy (dest, filename);
 #ifdef __WXMSW__
@@ -828,7 +828,7 @@ wxPathOnly (wxChar *path)
         }
 #endif
     }
-    return (wxChar *) NULL;
+    return NULL;
 }
 
 // Return just the directory, or NULL if no directory

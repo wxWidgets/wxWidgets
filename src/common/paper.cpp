@@ -79,7 +79,7 @@ WX_DECLARE_LIST(wxPrintPaperType, wxPrintPaperTypeList);
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxPrintPaperTypeList)
 
-wxPrintPaperDatabase* wxThePrintPaperDatabase = (wxPrintPaperDatabase*) NULL;
+wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
 
 wxPrintPaperDatabase::wxPrintPaperDatabase()
 {

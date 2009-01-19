@@ -72,9 +72,9 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData);
 
 void wxDialog::Init()
 {
-    m_pOldFocus = (wxWindow *)NULL;
+    m_pOldFocus = NULL;
     m_isShown = false;
-    m_pWindowDisabler = (wxWindowDisabler *)NULL;
+    m_pWindowDisabler = NULL;
     m_modalData = NULL;
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 } // end of wxDialog::Init

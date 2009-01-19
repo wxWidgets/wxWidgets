@@ -40,19 +40,19 @@ public:
 wxAcceleratorRefData::wxAcceleratorRefData()
 {
     m_count = 0;
-    m_entries = (wxAcceleratorEntry*) NULL;
+    m_entries = NULL;
 }
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
 {
     delete[] m_entries;
-    m_entries = (wxAcceleratorEntry*) NULL;
+    m_entries = NULL;
     m_count = 0;
 }
 
 wxAcceleratorTable::wxAcceleratorTable()
 {
-    m_refData = (wxAcceleratorRefData*) NULL;
+    m_refData = NULL;
 }
 
 wxAcceleratorTable::~wxAcceleratorTable()
@@ -82,7 +82,7 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
 
 bool wxAcceleratorTable::IsOk() const
 {
-    return (m_refData != (wxAcceleratorRefData*) NULL);
+    return (m_refData != NULL);
 }
 
 int wxAcceleratorTable::GetCount() const

@@ -101,8 +101,8 @@ public:
     virtual void     GetTextExtent( const wxString& rString
                                    ,int*            pX
                                    ,int*            pY
-                                   ,int*            pDescent = (int *)NULL
-                                   ,int*            pExternalLeading = (int *)NULL
+                                   ,int*            pDescent = NULL
+                                   ,int*            pExternalLeading = NULL
                                    ,const wxFont*   pTheFont = (const wxFont *)NULL
                                   ) const;
 #if wxUSE_MENUS_NATIVE
@@ -127,7 +127,7 @@ public:
     virtual int      GetScrollRange(int nOrient) const;
     virtual void     ScrollWindow( int           nDx
                                   ,int           nDy
-                                  ,const wxRect* pRect = (wxRect *)NULL
+                                  ,const wxRect* pRect = NULL
                                  );
 
     inline HWND                   GetScrollBarHorz(void) const {return m_hWndScrollBarHorz;}

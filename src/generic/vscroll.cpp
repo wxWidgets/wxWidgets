@@ -155,7 +155,7 @@ wxVarScrollHelperBase::wxVarScrollHelperBase(wxWindow *win)
     m_unitFirst = 0;
 
     m_win =
-    m_targetWindow = (wxWindow *)NULL;
+    m_targetWindow = NULL;
 
     m_physicalScrolling = true;
     m_handler = NULL;

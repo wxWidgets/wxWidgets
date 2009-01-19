@@ -24,7 +24,7 @@ public:
         m_armPixmap = (WXPixmap)NULL;
         m_insensPixmap = (WXPixmap)NULL;
         m_image = (WXImage)NULL;
-        m_display = (WXDisplay*)NULL;
+        m_display = NULL;
         SetColoursChanged();
     }
 

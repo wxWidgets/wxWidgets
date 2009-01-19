@@ -85,7 +85,7 @@
 bool   g_mainThreadLocked = false;
 gint   g_pendingTag = 0;
 
-static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
+static GtkWidget *gs_RootWindow = NULL;
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -453,8 +453,8 @@ wxApp::wxApp()
     m_colorCube = (unsigned char*) NULL;
 
     // this is NULL for a "regular" wxApp, but is set (and freed) by a wxGLApp
-    m_glVisualInfo = (void *) NULL;
-    m_glFBCInfo = (void *) NULL;
+    m_glVisualInfo = NULL;
+    m_glFBCInfo = NULL;
 }
 
 wxApp::~wxApp()

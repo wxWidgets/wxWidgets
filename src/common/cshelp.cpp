@@ -303,7 +303,7 @@ void wxContextHelpButton::OnContextHelp(wxCommandEvent& WXUNUSED(event))
 // wxHelpProvider
 // ----------------------------------------------------------------------------
 
-wxHelpProvider *wxHelpProvider::ms_helpProvider = (wxHelpProvider *)NULL;
+wxHelpProvider *wxHelpProvider::ms_helpProvider = NULL;
 
 // trivial implementation of some methods which we don't want to make pure
 // virtual for convenience

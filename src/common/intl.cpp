@@ -2200,7 +2200,7 @@ wxString wxLocale::GetSystemEncodingName()
         // the environment variables (in most cases this won't work, but I was
         // out of ideas)
         char *lang = getenv( "LC_ALL");
-        char *dot = lang ? strchr(lang, '.') : (char *)NULL;
+        char *dot = lang ? strchr(lang, '.') : NULL;
         if (!dot)
         {
             lang = getenv( "LC_CTYPE" );

@@ -129,7 +129,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
         }
     }
 
-    return (wxFSFile*) NULL; // incorrect URL
+    return NULL; // incorrect URL
 #endif
 }
 

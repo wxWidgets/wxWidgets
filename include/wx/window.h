@@ -1037,8 +1037,8 @@ public:
         // font
     virtual void GetTextExtent(const wxString& string,
                                int *x, int *y,
-                               int *descent = (int *) NULL,
-                               int *externalLeading = (int *) NULL,
+                               int *descent = NULL,
+                               int *externalLeading = NULL,
                                const wxFont *theFont = (const wxFont *) NULL)
                                const = 0;
 
@@ -1141,7 +1141,7 @@ public:
 
         // scroll window to the specified position
     virtual void ScrollWindow( int dx, int dy,
-                               const wxRect* rect = (wxRect *) NULL ) = 0;
+                               const wxRect* rect = NULL ) = 0;
 
         // scrolls window by line/page: note that not all controls support this
         //
@@ -1791,7 +1791,7 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
 
 inline wxWindow *wxWindowBase::GetGrandParent() const
 {
-    return m_parent ? m_parent->GetParent() : (wxWindow *)NULL;
+    return m_parent ? m_parent->GetParent() : NULL;
 }
 
 // ----------------------------------------------------------------------------

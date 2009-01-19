@@ -117,7 +117,7 @@ public:
                             wxBorder border,
                             const wxRect& rect,
                             int flags = 0,
-                            wxRect *rectIn = (wxRect *)NULL) = 0;
+                            wxRect *rectIn = NULL) = 0;
 
     // draw text control border (I hate to have a separate method for this but
     // it is needed to accommodate GTK+)
@@ -125,13 +125,13 @@ public:
                                 wxBorder border,
                                 const wxRect& rect,
                                 int flags = 0,
-                                wxRect *rectIn = (wxRect *)NULL) = 0;
+                                wxRect *rectIn = NULL) = 0;
 
     // draw push button border and return the rectangle left for the label
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
-                                  wxRect *rectIn = (wxRect *)NULL) = 0;
+                                  wxRect *rectIn = NULL) = 0;
 
     // draw a horizontal line
     virtual void DrawHorizontalLine(wxDC& dc,
@@ -534,18 +534,18 @@ public:
                             wxBorder border,
                             const wxRect& rect,
                             int flags = 0,
-                            wxRect *rectIn = (wxRect *)NULL)
+                            wxRect *rectIn = NULL)
         { m_renderer->DrawBorder(dc, border, rect, flags, rectIn); }
     virtual void DrawTextBorder(wxDC& dc,
                                 wxBorder border,
                                 const wxRect& rect,
                                 int flags = 0,
-                                wxRect *rectIn = (wxRect *)NULL)
+                                wxRect *rectIn = NULL)
         { m_renderer->DrawTextBorder(dc, border, rect, flags, rectIn); }
     virtual void DrawButtonBorder(wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
-                                  wxRect *rectIn = (wxRect *)NULL)
+                                  wxRect *rectIn = NULL)
         { m_renderer->DrawButtonBorder(dc, rect, flags, rectIn); }
     virtual void DrawFrame(wxDC& dc,
                            const wxString& label,

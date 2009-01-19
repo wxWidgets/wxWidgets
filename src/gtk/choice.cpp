@@ -42,7 +42,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
 
 void wxChoice::Init()
 {
-    m_strings = (wxSortedArrayString *)NULL;
+    m_strings = NULL;
     m_stringCellIndex = 0;
 }
 

@@ -20,10 +20,10 @@ class WXDLLIMPEXP_CORE wxColourDialog : public wxDialog
 public:
     wxColourDialog() {}
     wxColourDialog(wxWindow *parent,
-                   wxColourData *data = (wxColourData *)NULL);
+                   wxColourData *data = NULL);
     virtual ~wxColourDialog() {}
 
-    bool Create(wxWindow *parent, wxColourData *data = (wxColourData *)NULL);
+    bool Create(wxWindow *parent, wxColourData *data = NULL);
 
     wxColourData &GetColourData() { return m_data; }
 

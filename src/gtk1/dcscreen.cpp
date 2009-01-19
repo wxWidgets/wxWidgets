@@ -25,7 +25,7 @@
 // global data initialization
 //-----------------------------------------------------------------------------
 
-GdkWindow *wxScreenDCImpl::sm_overlayWindow  = (GdkWindow*) NULL;
+GdkWindow *wxScreenDCImpl::sm_overlayWindow  = NULL;
 int wxScreenDCImpl::sm_overlayWindowX = 0;
 int wxScreenDCImpl::sm_overlayWindowY = 0;
 

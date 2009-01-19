@@ -71,7 +71,7 @@ WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
 
 wxAppBase::wxAppBase()
 {
-    m_topWindow = (wxWindow *)NULL;
+    m_topWindow = NULL;
 
     m_useBestVisual = false;
     m_forceTrueColour = false;

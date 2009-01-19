@@ -112,7 +112,7 @@ static int GetPageId(wxTabView *tabview, wxNotebookPage *page)
 // common part of all ctors
 void wxNotebook::Init()
 {
-    m_tabView = (wxNotebookTabView*) NULL;
+    m_tabView = NULL;
     m_nSelection = -1;
 }
 

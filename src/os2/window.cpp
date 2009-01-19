@@ -545,7 +545,7 @@ void wxWindowOS2::DoReleaseMouse()
 /* static */ wxWindow* wxWindowBase::GetCapture()
 {
     HWND hwnd = ::WinQueryCapture(HWND_DESKTOP);
-    return hwnd ? wxFindWinFromHandle((WXHWND)hwnd) : (wxWindow *)NULL;
+    return hwnd ? wxFindWinFromHandle((WXHWND)hwnd) : NULL;
 } // end of wxWindowBase::GetCapture
 
 bool wxWindowOS2::SetFont( const wxFont& rFont )

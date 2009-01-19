@@ -937,7 +937,7 @@ void wxScrollHelperBase::StopAutoScrolling()
     if ( m_timerAutoScroll )
     {
         delete m_timerAutoScroll;
-        m_timerAutoScroll = (wxTimer *)NULL;
+        m_timerAutoScroll = NULL;
     }
 #endif
 }

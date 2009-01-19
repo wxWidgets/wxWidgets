@@ -48,7 +48,7 @@ class WXDLLIMPEXP_FWD_CORE wxDropSource;
 class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
 {
 public:
-    wxDropTarget(wxDataObject *dataObject = (wxDataObject*) NULL );
+    wxDropTarget(wxDataObject *dataObject = NULL );
 
     virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool OnDrop(wxCoord x, wxCoord y);
@@ -82,7 +82,7 @@ class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
     // constructor. set data later with SetData()
-    wxDropSource( wxWindow *win = (wxWindow *)NULL,
+    wxDropSource( wxWindow *win = NULL,
                   const wxIcon &copy = wxNullIcon,
                   const wxIcon &move = wxNullIcon,
                   const wxIcon &none = wxNullIcon);

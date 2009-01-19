@@ -557,7 +557,7 @@ wxWindow *wxWindowBase::DoFindFocus()
     // currently active.
     // (2) The widget with the focus may not be in the widget table
     // depending on which widgets I put in the table
-    wxWindow *winFocus = (wxWindow *)NULL;
+    wxWindow *winFocus = NULL;
     for ( wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
           node;
           node = node->GetNext() )
@@ -1864,7 +1864,7 @@ WXDisplay *wxWindow::GetXDisplay() const
     if ( wMain )
         return (WXDisplay*) XtDisplay(wMain);
     else
-        return (WXDisplay*) NULL;
+        return NULL;
 }
 
 WXWidget wxWindow::GetMainWidget() const

@@ -153,7 +153,7 @@ wxWindowMac::~wxWindowMac()
         if ( frame )
         {
             if ( frame->GetLastFocus() == this )
-                frame->SetLastFocus((wxWindow*)NULL);
+                frame->SetLastFocus(NULL);
             break;
         }
     }

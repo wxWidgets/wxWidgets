@@ -119,7 +119,7 @@ public:
 
     // Removes the specified (or second) window from the view
     // Doesn't actually delete the window.
-    bool Unsplit(wxWindow *toRemove = (wxWindow *) NULL);
+    bool Unsplit(wxWindow *toRemove = NULL);
 
     // Replaces one of the windows with another one (neither old nor new
     // parameter should be NULL)
@@ -316,7 +316,7 @@ class WXDLLIMPEXP_CORE wxSplitterEvent : public wxNotifyEvent
 {
 public:
     wxSplitterEvent(wxEventType type = wxEVT_NULL,
-                    wxSplitterWindow *splitter = (wxSplitterWindow *)NULL)
+                    wxSplitterWindow *splitter = NULL)
         : wxNotifyEvent(type)
     {
         SetEventObject(splitter);

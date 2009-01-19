@@ -168,7 +168,7 @@ int wxFileDialog::ShowModal()
 
     if (m_backgroundColour.Ok())
     {
-        wxComputeColours (dpy, & m_backgroundColour, (wxColour*) NULL);
+        wxComputeColours (dpy, & m_backgroundColour, NULL);
 
         XtSetArg(args[ac], XmNbackground, g_itemColors[wxBACK_INDEX].pixel); ac++;
         XtSetArg(args[ac], XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel); ac++;

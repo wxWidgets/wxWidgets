@@ -464,7 +464,7 @@ bool wxFont::GetNoAntiAliasing() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
 
     return &(M_FONTDATA->m_nativeFontInfo);
 }

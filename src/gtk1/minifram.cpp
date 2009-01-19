@@ -192,8 +192,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
                           GDK_POINTER_MOTION_HINT_MASK  |
                           GDK_BUTTON_MOTION_MASK        |
                           GDK_BUTTON1_MOTION_MASK),
-                      (GdkWindow *) NULL,
-                      (GdkCursor *) NULL,
+                      NULL,
+                      NULL,
                       (unsigned int) GDK_CURRENT_TIME );
 
     win->m_diffX = (int)gdk_event->x;
@@ -350,7 +350,7 @@ bool wxMiniFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title
     if ((style & wxSYSTEM_MENU) &&
         ((style & wxCAPTION) || (style & wxTINY_CAPTION_HORIZ) || (style & wxTINY_CAPTION_VERT)))
     {
-        GdkBitmap *mask = (GdkBitmap*) NULL;
+        GdkBitmap *mask = NULL;
         GdkPixmap *pixmap = gdk_pixmap_create_from_xpm_d
                             (
                                 wxGetRootWindow()->window,
@@ -401,7 +401,7 @@ void wxMiniFrame::SetTitle( const wxString &title )
 {
     wxFrame::SetTitle( title );
 
-    gtk_widget_draw( m_mainWidget, (GdkRectangle*) NULL );
+    gtk_widget_draw( m_mainWidget, NULL );
 }
 
 #endif // wxUSE_MINIFRAME

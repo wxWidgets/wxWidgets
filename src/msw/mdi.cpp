@@ -1136,7 +1136,7 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
     wxActivateEvent event(wxEVT_ACTIVATE, activated, m_windowId);
     event.SetEventObject( this );
 
-    ResetWindowStyle((void *)NULL);
+    ResetWindowStyle(NULL);
 
     return HandleWindowEvent(event);
 }

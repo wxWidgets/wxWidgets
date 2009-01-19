@@ -979,7 +979,7 @@ wxToolBarToolBase* wxToolBar::FindToolForPosition(
         }
         node = node->GetNext();
     }
-    return (wxToolBarToolBase *)NULL;
+    return NULL;
 } // end of wxToolBar::FindToolForPosition
 
 // ----------------------------------------------------------------------------

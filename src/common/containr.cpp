@@ -398,7 +398,7 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
     {
         // just to be sure it's not used (normally this is not necessary, but
         // doesn't hurt neither)
-        m_winLastFocused = (wxWindow *)NULL;
+        m_winLastFocused = NULL;
 
         // start from first or last depending on where we're going
         node = forward ? children.GetFirst() : children.GetLast();
@@ -662,7 +662,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         else
         {
             // it doesn't count as such any more
-            *childLastFocused = (wxWindow *)NULL;
+            *childLastFocused = NULL;
         }
     }
 

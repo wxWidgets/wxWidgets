@@ -108,7 +108,7 @@ inline bool wxFontDialogBase::Create(wxWindow *parent, const wxFontData *data)
 
 // get the font from user and return it, returns wxNullFont if the dialog was
 // cancelled
-WXDLLIMPEXP_CORE wxFont wxGetFontFromUser(wxWindow *parent = (wxWindow *)NULL,
+WXDLLIMPEXP_CORE wxFont wxGetFontFromUser(wxWindow *parent = NULL,
                                           const wxFont& fontInit = wxNullFont,
                                           const wxString& caption = wxEmptyString);
 

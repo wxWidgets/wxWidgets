@@ -43,7 +43,7 @@ class wxCursorRefData: public wxObjectRefData
 
 wxCursorRefData::wxCursorRefData()
 {
-    m_cursor = (MGLCursor*) NULL;
+    m_cursor = NULL;
 }
 
 wxCursorRefData::~wxCursorRefData()

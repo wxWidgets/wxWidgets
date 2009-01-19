@@ -1175,13 +1175,13 @@ wxBitmap wxBitmap::GetSubBitmapOfHDC( const wxRect& rect, WXHDC hdc ) const
 wxPalette* wxBitmap::GetPalette() const
 {
     return GetBitmapData() ? &GetBitmapData()->m_bitmapPalette
-                           : (wxPalette *) NULL;
+                           : NULL;
 }
 #endif
 
 wxMask *wxBitmap::GetMask() const
 {
-    return GetBitmapData() ? GetBitmapData()->GetMask() : (wxMask *) NULL;
+    return GetBitmapData() ? GetBitmapData()->GetMask() : NULL;
 }
 
 wxBitmap wxBitmap::GetMaskBitmap() const
@@ -1197,7 +1197,7 @@ wxBitmap wxBitmap::GetMaskBitmap() const
 
 wxDC *wxBitmap::GetSelectedInto() const
 {
-    return GetBitmapData() ? GetBitmapData()->m_selectedInto : (wxDC *) NULL;
+    return GetBitmapData() ? GetBitmapData()->m_selectedInto : NULL;
 }
 
 #endif

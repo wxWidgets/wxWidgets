@@ -200,7 +200,7 @@ bool wxListBox::IsSelected(int N) const
 
 void *wxListBox::DoGetItemClientData(unsigned int n) const
 {
-    return (void *)NULL;
+    return NULL;
 }
 
 void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)

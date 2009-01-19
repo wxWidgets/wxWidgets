@@ -106,7 +106,7 @@ public:
     virtual void OnExit()
     {
         delete gs_globalCursor;
-        gs_globalCursor = (wxCursor *)NULL;
+        gs_globalCursor = NULL;
     }
 };
 

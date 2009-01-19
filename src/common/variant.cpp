@@ -63,12 +63,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxVariant, wxObject)
 
 wxVariant::wxVariant()
 {
-    m_data = (wxVariantData*) NULL;
+    m_data = NULL;
 }
 
 bool wxVariant::IsNull() const
 {
-     return (m_data == (wxVariantData*) NULL);
+     return (m_data == NULL);
 }
 
 void wxVariant::MakeNull()
@@ -84,7 +84,7 @@ void wxVariant::Clear()
 wxVariant::wxVariant(const wxVariant& variant)
     : wxObject()
 {
-    m_data = (wxVariantData*) NULL;
+    m_data = NULL;
 
     if (!variant.IsNull())
         Ref(variant);

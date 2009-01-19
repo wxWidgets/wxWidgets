@@ -287,7 +287,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
         GTK_PIZZA(win->m_wxwindow)->bin_window,
         GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
-        (GdkRectangle*) NULL,
+        NULL,
         win->m_wxwindow,
         (char *)"paned", // const_cast
         isVert ? position : size.x - 2*SASH_SIZE,

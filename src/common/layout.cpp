@@ -75,7 +75,7 @@ wxIndividualLayoutConstraint::wxIndividualLayoutConstraint()
     percent = 0;
     otherEdge = wxTop;
     done = false;
-    otherWin = (wxWindowBase *) NULL;
+    otherWin = NULL;
 }
 
 void wxIndividualLayoutConstraint::Set(wxRelationship rel, wxWindowBase *otherW, wxEdge otherE, int val, int marg)
@@ -158,7 +158,7 @@ bool wxIndividualLayoutConstraint::ResetIfWin(wxWindowBase *otherW)
         value = 0;
         percent = 0;
         otherEdge = wxTop;
-        otherWin = (wxWindowBase *) NULL;
+        otherWin = NULL;
         return true;
     }
 

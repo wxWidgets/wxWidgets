@@ -127,7 +127,7 @@ void wxDirData::Close()
 
 bool wxDirData::Read(wxString *filename)
 {
-    //dirent *de = (dirent *)NULL;    // just to silence compiler warnings
+    //dirent *de = NULL;    // just to silence compiler warnings
     int ret;
     char tmpbuf[300];
     bool matches = false;

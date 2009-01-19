@@ -66,7 +66,7 @@
 #  define wxTEMPLATED_MEMBER_CALL( method , type ) method<type>()
 #  define wxTEMPLATED_MEMBER_FIX( type )
 #else
-#  define wxTEMPLATED_MEMBER_CALL( method , type ) method((type*)NULL)
+#  define wxTEMPLATED_MEMBER_CALL( method , type ) method(NULL)
 #  define wxTEMPLATED_MEMBER_FIX( type ) type* =NULL
 #endif
 
@@ -622,7 +622,7 @@ public:
     virtual wxxVariantData* Clone() const { return new wxxVariantDataT<T>( Get() ) ; }
 
     // returns the type info of the contentc
-    virtual const wxTypeInfo* GetTypeInfo() const { return wxGetTypeInfo( (T*) NULL ) ; }
+    virtual const wxTypeInfo* GetTypeInfo() const { return wxGetTypeInfo( NULL ) ; }
 
 private:
     T m_data;
@@ -1965,15 +1965,15 @@ private :
 #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename ) \
     _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , "" , NULL ) \
     _TYPEINFO_CLASSES(name, NULL , NULL) \
-    const wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
-    const wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
+    const wxPropertyInfo *name::GetPropertiesStatic() { return NULL ; } \
+    const wxHandlerInfo *name::GetHandlersStatic() { return NULL ; } \
     wxCONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS( name , basename ) \
     _IMPLEMENT_DYNAMIC_CLASS( name , basename , "" , NULL ) \
      _TYPEINFO_CLASSES(name, NULL , NULL) \
-   wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
-    wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
+   wxPropertyInfo *name::GetPropertiesStatic() { return NULL ; } \
+    wxHandlerInfo *name::GetHandlersStatic() { return NULL ; } \
     wxCONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS_XTI( name , basename , unit ) \
@@ -2032,8 +2032,8 @@ private :
 #define IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2) \
     _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , "", NULL) \
     _TYPEINFO_CLASSES(name, NULL , NULL) \
-    wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
-    wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
+    wxPropertyInfo *name::GetPropertiesStatic() { return NULL ; } \
+    wxHandlerInfo *name::GetHandlersStatic() { return NULL ; } \
     wxCONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS2_XTI( name , basename , basename2, unit) \
@@ -2061,8 +2061,8 @@ private :
 
 #define IMPLEMENT_ABSTRACT_CLASS( name , basename ) \
     _IMPLEMENT_ABSTRACT_CLASS( name , basename ) \
-    wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
-    wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; }
+    wxHandlerInfo *name::GetHandlersStatic() { return NULL ; } \
+    wxPropertyInfo *name::GetPropertiesStatic() { return NULL ; }
 
 // Multiple inheritance with two base classes
 

@@ -36,7 +36,7 @@ public:
     virtual bool SetData(size_t len, const void *buf);
 
 protected:
-    void Init() { m_pngData = (void *)NULL; m_pngSize = 0; }
+    void Init() { m_pngData = NULL; m_pngSize = 0; }
     void Clear() { free(m_pngData); }
     void ClearAll() { Clear(); Init(); }
 

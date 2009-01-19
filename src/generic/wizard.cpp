@@ -289,7 +289,7 @@ wxSize wxWizardSizer::SiblingSize(wxSizerItem *child)
 void wxWizard::Init()
 {
     m_posWizard = wxDefaultPosition;
-    m_page = (wxWizardPage *)NULL;
+    m_page = NULL;
     m_btnPrev = m_btnNext = NULL;
     m_statbmp = NULL;
     m_sizerBmpAndPage = NULL;

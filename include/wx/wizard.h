@@ -126,16 +126,16 @@ public:
 
     // ctor takes the previous and next pages
     wxWizardPageSimple(wxWizard *parent,
-                       wxWizardPage *prev = (wxWizardPage *)NULL,
-                       wxWizardPage *next = (wxWizardPage *)NULL,
+                       wxWizardPage *prev = NULL,
+                       wxWizardPage *next = NULL,
                        const wxBitmap& bitmap = wxNullBitmap)
     {
         Create(parent, prev, next, bitmap);
     }
 
     bool Create(wxWizard *parent = NULL, // let it be default ctor too
-                wxWizardPage *prev = (wxWizardPage *)NULL,
-                wxWizardPage *next = (wxWizardPage *)NULL,
+                wxWizardPage *prev = NULL,
+                wxWizardPage *next = NULL,
                 const wxBitmap& bitmap = wxNullBitmap)
     {
         m_prev = prev;

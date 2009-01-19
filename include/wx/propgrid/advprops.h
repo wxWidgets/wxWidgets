@@ -145,7 +145,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 #endif
 
 #ifndef SWIG
-    #define wxPG_EMPTY_CPV          (*((wxColourPropertyValue*)NULL))
+    #define wxPG_EMPTY_CPV          (*(NULL))
     #define wxPG_NORMAL_FONT        (*wxNORMAL_FONT)
 #else
     #define wxPG_EMPTY_CPV          wxCPV_wxPG_EMPTY

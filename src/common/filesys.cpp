@@ -244,7 +244,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     wxString fullpath = ms_root + fn.GetFullPath();
 
     if (!wxFileExists(fullpath))
-        return (wxFSFile*) NULL;
+        return NULL;
 
     // we need to check whether we can really read from this file, otherwise
     // wxFSFile is not going to work
@@ -258,7 +258,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     if ( !is->Ok() )
     {
         delete is;
-        return (wxFSFile*) NULL;
+        return NULL;
     }
 
     return new wxFSFile(is,

@@ -241,7 +241,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     unsigned int num_of_cols = GetColumnCount();
     unsigned int num_of_rows = GetRowCount();
 
-    GtkRadioButton *rbtn = (GtkRadioButton*) NULL;
+    GtkRadioButton *rbtn = NULL;
 
     GtkWidget *table = gtk_table_new( num_of_rows, num_of_cols, FALSE );
     gtk_table_set_col_spacings( GTK_TABLE(table), 1 );
@@ -250,7 +250,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     gtk_container_add( GTK_CONTAINER(m_widget), table );
 
     wxString label;
-    GSList *radio_button_group = (GSList *) NULL;
+    GSList *radio_button_group = NULL;
     for (unsigned int i = 0; i < (unsigned int)n; i++)
     {
         if ( i != 0 )

@@ -1756,8 +1756,8 @@ wxImageFileProperty::wxImageFileProperty( const wxString& label, const wxString&
 {
     SetAttribute( wxPG_FILE_WILDCARD, wxPGGetDefaultImageWildcard() );
 
-    m_pImage = (wxImage*) NULL;
-    m_pBitmap = (wxBitmap*) NULL;
+    m_pImage = NULL;
+    m_pBitmap = NULL;
 }
 
 wxImageFileProperty::~wxImageFileProperty()

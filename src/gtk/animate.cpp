@@ -360,7 +360,7 @@ void wxAnimationCtrl::DisplayStaticImage()
     if (m_bmpStaticReal.IsOk())
     {
         // show inactive bitmap
-        GdkBitmap *mask = (GdkBitmap *) NULL;
+        GdkBitmap *mask = NULL;
         if (m_bmpStaticReal.GetMask())
             mask = m_bmpStaticReal.GetMask()->GetBitmap();
 

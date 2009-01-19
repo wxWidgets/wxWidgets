@@ -48,7 +48,7 @@
 // global data
 //-----------------------------------------------------------------------------
 
-static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
+static GtkWidget *gs_RootWindow = NULL;
 
 //-----------------------------------------------------------------------------
 // wxYield

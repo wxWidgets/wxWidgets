@@ -61,8 +61,8 @@ public:
     wxGtkNotebookPage()
     {
         m_image = -1;
-        m_page = (GtkNotebookPage *) NULL;
-        m_box = (GtkWidget *) NULL;
+        m_page = NULL;
+        m_box = NULL;
     }
 
     wxString           m_text;
@@ -291,7 +291,7 @@ void wxNotebook::Init()
     m_padding = 0;
     m_inSwitchPage = false;
 
-    m_imageList = (wxImageList *) NULL;
+    m_imageList = NULL;
     m_selection = -1;
     m_themeEnabled = true;
 }
@@ -408,9 +408,9 @@ int wxNotebook::GetPageImage( size_t page ) const
 
 wxGtkNotebookPage* wxNotebook::GetNotebookPage( int page ) const
 {
-    wxCHECK_MSG( m_widget != NULL, (wxGtkNotebookPage*) NULL, wxT("invalid notebook") );
+    wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid notebook") );
 
-    wxCHECK_MSG( page < (int)m_pagesData.GetCount(), (wxGtkNotebookPage*) NULL, wxT("invalid notebook index") );
+    wxCHECK_MSG( page < (int)m_pagesData.GetCount(), NULL, wxT("invalid notebook index") );
 
     return m_pagesData.Item(page)->GetData();
 }
@@ -485,7 +485,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     if (image == -1 && nb_page->m_image == -1)
         return true; /* Case 1): Nothing to do. */
 
-    GtkWidget *pixmapwid = (GtkWidget*) NULL;
+    GtkWidget *pixmapwid = NULL;
 
     if (nb_page->m_image != -1)
     {
@@ -521,7 +521,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     /* Construct the new pixmap */
     const wxBitmap *bmp = m_imageList->GetBitmapPtr(image);
     GdkPixmap *pixmap = bmp->GetPixmap();
-    GdkBitmap *mask = (GdkBitmap*) NULL;
+    GdkBitmap *mask = NULL;
     if ( bmp->GetMask() )
     {
         mask = bmp->GetMask()->GetBitmap();
@@ -689,7 +689,7 @@ bool wxNotebook::InsertPage( size_t position,
 
         const wxBitmap *bmp = m_imageList->GetBitmapPtr(imageId);
         GdkPixmap *pixmap = bmp->GetPixmap();
-        GdkBitmap *mask = (GdkBitmap*) NULL;
+        GdkBitmap *mask = NULL;
         if ( bmp->GetMask() )
         {
             mask = bmp->GetMask()->GetBitmap();

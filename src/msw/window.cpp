@@ -6226,7 +6226,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
     // For a radiobutton, we get the radiobox from GWL_USERDATA (which is set
     // by code in msw/radiobox.cpp), for all the others we just search up the
     // window hierarchy
-    wxWindow *win = (wxWindow *)NULL;
+    wxWindow *win = NULL;
     if ( hwnd )
     {
         win = wxFindWinFromHandle(hwnd);

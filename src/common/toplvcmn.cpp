@@ -377,7 +377,7 @@ void wxTopLevelWindowBase::DoLayout()
     else
     {
         // do we have _exactly_ one child?
-        wxWindow *child = (wxWindow *)NULL;
+        wxWindow *child = NULL;
         for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
               node;
               node = node->GetNext() )

@@ -99,7 +99,7 @@ public:
     virtual int GetScrollThumb( int orient ) const;
     virtual int GetScrollRange( int orient ) const;
     virtual void ScrollWindow( int dx, int dy,
-                               const wxRect* rect = (wxRect *) NULL );
+                               const wxRect* rect = NULL );
     virtual void AlwaysShowScrollbars(bool horz = true, bool vert = true);
     virtual bool IsScrollbarAlwaysShown(int orient) const
     {

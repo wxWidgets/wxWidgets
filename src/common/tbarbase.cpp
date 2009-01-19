@@ -177,7 +177,7 @@ wxToolBarToolBase *wxToolBarBase::InsertTool(size_t pos,
                                              const wxString& longHelp,
                                              wxObject *clientData)
 {
-    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
+    wxCHECK_MSG( pos <= GetToolsCount(), NULL,
                  _T("invalid position in wxToolBar::InsertTool()") );
 
     wxToolBarToolBase *tool = CreateTool(id, label, bitmap, bmpDisabled, kind,
@@ -201,7 +201,7 @@ wxToolBarToolBase *wxToolBarBase::AddTool(wxToolBarToolBase *tool)
 wxToolBarToolBase *
 wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool)
 {
-    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
+    wxCHECK_MSG( pos <= GetToolsCount(), NULL,
                  _T("invalid position in wxToolBar::InsertTool()") );
 
     if ( !tool || !DoInsertTool(pos, tool) )
@@ -226,13 +226,13 @@ wxToolBarBase::InsertControl(size_t pos,
                              wxControl *control,
                              const wxString& label)
 {
-    wxCHECK_MSG( control, (wxToolBarToolBase *)NULL,
+    wxCHECK_MSG( control, NULL,
                  _T("toolbar: can't insert NULL control") );
 
-    wxCHECK_MSG( control->GetParent() == this, (wxToolBarToolBase *)NULL,
+    wxCHECK_MSG( control->GetParent() == this, NULL,
                  _T("control must have toolbar as parent") );
 
-    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
+    wxCHECK_MSG( pos <= GetToolsCount(), NULL,
                  _T("invalid position in wxToolBar::InsertControl()") );
 
     wxToolBarToolBase *tool = CreateTool(control, label);
@@ -280,13 +280,13 @@ wxToolBarToolBase *wxToolBarBase::AddSeparator()
 
 wxToolBarToolBase *wxToolBarBase::InsertSeparator(size_t pos)
 {
-    wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
+    wxCHECK_MSG( pos <= GetToolsCount(), NULL,
                  _T("invalid position in wxToolBar::InsertSeparator()") );
 
     wxToolBarToolBase *tool = CreateTool(wxID_SEPARATOR,
                                          wxEmptyString,
                                          wxNullBitmap, wxNullBitmap,
-                                         wxITEM_SEPARATOR, (wxObject *)NULL,
+                                         wxITEM_SEPARATOR, NULL,
                                          wxEmptyString, wxEmptyString);
 
     if ( !tool || !DoInsertTool(pos, tool) )
@@ -376,7 +376,7 @@ bool wxToolBarBase::DeleteTool(int id)
 
 wxToolBarToolBase *wxToolBarBase::FindById(int id) const
 {
-    wxToolBarToolBase *tool = (wxToolBarToolBase *)NULL;
+    wxToolBarToolBase *tool = NULL;
 
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;
@@ -527,7 +527,7 @@ wxObject *wxToolBarBase::GetToolClientData(int id) const
 {
     wxToolBarToolBase *tool = FindById(id);
 
-    return tool ? tool->GetClientData() : (wxObject *)NULL;
+    return tool ? tool->GetClientData() : NULL;
 }
 
 void wxToolBarBase::SetToolClientData(int id, wxObject *clientData)

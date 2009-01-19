@@ -221,9 +221,9 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
     choices[0] = _("All");
     choices[1] = _("Pages");
 
-    m_fromText = (wxTextCtrl*)NULL;
-    m_toText = (wxTextCtrl*)NULL;
-    m_rangeRadioBox = (wxRadioBox *)NULL;
+    m_fromText = NULL;
+    m_toText = NULL;
+    m_rangeRadioBox = NULL;
 
     if (m_printDialogData.GetFromPage() != 0)
     {

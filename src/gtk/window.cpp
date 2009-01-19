@@ -205,7 +205,7 @@ extern wxCursor   g_globalCursor;
 
 // mouse capture state: the window which has it and if the mouse is currently
 // inside it
-static wxWindowGTK  *g_captureWindow = (wxWindowGTK*) NULL;
+static wxWindowGTK  *g_captureWindow = NULL;
 static bool g_captureWindowHasMouse = false;
 
 // The window that currently has focus:
@@ -220,7 +220,7 @@ static wxWindowGTK *gs_deferredFocusOut = NULL;
 
 // global variables because GTK+ DnD want to have the
 // mouse event that caused it
-GdkEvent    *g_lastMouseEvent = (GdkEvent*) NULL;
+GdkEvent    *g_lastMouseEvent = NULL;
 int          g_lastButtonNumber = 0;
 
 //-----------------------------------------------------------------------------
@@ -1182,7 +1182,7 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
         }
         else
         {
-            if ((child->m_wxwindow == (GtkWidget*) NULL) &&
+            if ((child->m_wxwindow == NULL) &&
                 (child->m_x <= xx) &&
                 (child->m_y <= yy) &&
                 (child->m_x+child->m_width  >= xx) &&
@@ -2029,9 +2029,9 @@ wxMouseState wxGetMouseState()
 void wxWindowGTK::Init()
 {
     // GTK specific
-    m_widget = (GtkWidget *) NULL;
-    m_wxwindow = (GtkWidget *) NULL;
-    m_focusWidget = (GtkWidget *) NULL;
+    m_widget = NULL;
+    m_wxwindow = NULL;
+    m_focusWidget = NULL;
 
     // position/size
     m_x = 0;
@@ -2119,7 +2119,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
         m_widget = m_wxwindow;
     else
     {
-        m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
+        m_widget = gtk_scrolled_window_new( NULL, NULL );
 
         GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
 
@@ -2718,7 +2718,7 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
 
     if (m_x == -1 && m_y == -1)
     {
-        GdkWindow *source = (GdkWindow *) NULL;
+        GdkWindow *source = NULL;
         if (m_wxwindow)
             source = m_wxwindow->window;
         else
@@ -2748,7 +2748,7 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
 
     if (!m_widget->window) return;
 
-    GdkWindow *source = (GdkWindow *) NULL;
+    GdkWindow *source = NULL;
     if (m_wxwindow)
         source = m_wxwindow->window;
     else
@@ -2785,7 +2785,7 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
 
     if (!m_widget->window) return;
 
-    GdkWindow *source = (GdkWindow *) NULL;
+    GdkWindow *source = NULL;
     if (m_wxwindow)
         source = m_wxwindow->window;
     else
@@ -3470,7 +3470,7 @@ void wxWindowGTK::WarpPointer( int x, int y )
     // We provide this function ourselves as it is
     // missing in GDK (top of this file).
 
-    GdkWindow *window = (GdkWindow*) NULL;
+    GdkWindow *window = NULL;
     if (m_wxwindow)
         window = m_wxwindow->window;
     else
@@ -3998,8 +3998,8 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
     menu->m_popupShown = true;
     gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
-                  (GtkWidget *) NULL,           // parent menu shell
-                  (GtkWidget *) NULL,           // parent menu item
+                  NULL,           // parent menu shell
+                  NULL,           // parent menu item
                   posfunc,                      // function to position it
                   userdata,                     // client data
                   0,                            // button used to activate it
@@ -4074,7 +4074,7 @@ void wxWindowGTK::DoCaptureMouse()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
-    GdkWindow *window = (GdkWindow*) NULL;
+    GdkWindow *window = NULL;
     if (m_wxwindow)
         window = m_wxwindow->window;
     else
@@ -4092,7 +4092,7 @@ void wxWindowGTK::DoCaptureMouse()
                           GDK_BUTTON_RELEASE_MASK |
                           GDK_POINTER_MOTION_HINT_MASK |
                           GDK_POINTER_MOTION_MASK),
-                      (GdkWindow *) NULL,
+                      NULL,
                       cursor->GetCursor(),
                       (guint32)GDK_CURRENT_TIME );
     g_captureWindow = this;
@@ -4105,9 +4105,9 @@ void wxWindowGTK::DoReleaseMouse()
 
     wxCHECK_RET( g_captureWindow, wxT("can't release mouse - not captured") );
 
-    g_captureWindow = (wxWindowGTK*) NULL;
+    g_captureWindow = NULL;
 
-    GdkWindow *window = (GdkWindow*) NULL;
+    GdkWindow *window = NULL;
     if (m_wxwindow)
         window = m_wxwindow->window;
     else

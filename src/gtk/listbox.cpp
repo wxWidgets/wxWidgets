@@ -330,7 +330,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 
 void wxListBox::Init()
 {
-    m_treeview = (GtkTreeView*) NULL;
+    m_treeview = NULL;
 #if wxUSE_CHECKLISTBOX
     m_hasCheckBoxes = false;
 #endif // wxUSE_CHECKLISTBOX
@@ -361,7 +361,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         return false;
     }
 
-    m_widget = gtk_scrolled_window_new( (GtkAdjustment*) NULL, (GtkAdjustment*) NULL );
+    m_widget = gtk_scrolled_window_new( NULL, NULL );
     g_object_ref(m_widget);
     if (style & wxLB_ALWAYS_SB)
     {
@@ -923,7 +923,7 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
 void wxListBox::ApplyToolTip( GtkTooltips *tips, const gchar *tip )
 {
     // RN: Is this needed anymore?
-    gtk_tooltips_set_tip( tips, GTK_WIDGET( m_treeview ), tip, (gchar*) NULL );
+    gtk_tooltips_set_tip( tips, GTK_WIDGET( m_treeview ), tip, NULL );
 }
 #endif // wxUSE_TOOLTIPS
 

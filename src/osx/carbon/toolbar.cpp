@@ -1506,7 +1506,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
         node = node->GetNext();
     }
 
-    return (wxToolBarToolBase*)NULL;
+    return NULL;
 }
 
 wxString wxToolBar::MacGetToolTipString( wxPoint &pt )

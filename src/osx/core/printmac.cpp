@@ -562,7 +562,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
 wxDC* wxMacPrinter::PrintDialog(wxWindow *parent)
 {
-    wxDC* dc = (wxDC*) NULL;
+    wxDC* dc = NULL;
 
     wxPrintDialog dialog(parent, & m_printDialogData);
     int ret = dialog.ShowModal();

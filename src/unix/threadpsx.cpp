@@ -128,11 +128,11 @@ static pthread_key_t gs_keySelf;
 static size_t gs_nThreadsBeingDeleted = 0;
 
 // a mutex to protect gs_nThreadsBeingDeleted
-static wxMutex *gs_mutexDeleteThread = (wxMutex *)NULL;
+static wxMutex *gs_mutexDeleteThread = NULL;
 
 // and a condition variable which will be signaled when all
 // gs_nThreadsBeingDeleted will have been deleted
-static wxCondition *gs_condAllDeleted = (wxCondition *)NULL;
+static wxCondition *gs_condAllDeleted = NULL;
 
 // this mutex must be acquired before any call to a GUI function
 // (it's not inside #if wxUSE_GUI because this file is compiled as part

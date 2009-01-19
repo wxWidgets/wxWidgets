@@ -37,7 +37,7 @@ public:
         { Free(); }
 
     // display the picture stored in the metafile on the given DC
-    bool Play(wxDC *dc, wxRect *rectBound = (wxRect *)NULL);
+    bool Play(wxDC *dc, wxRect *rectBound = NULL);
 
     // accessors
     virtual bool IsOk() const { return m_hMF != 0; }

@@ -68,7 +68,7 @@ wxPenRefData::wxPenRefData()
     m_style = wxPENSTYLE_SOLID;
     m_joinStyle = wxJOIN_ROUND;
     m_capStyle = wxCAP_ROUND;
-    m_dash = (wxDash*) NULL;
+    m_dash = NULL;
     m_countDashes = 0;
 
     int x, y, c;

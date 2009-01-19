@@ -63,17 +63,17 @@ public:
         const wxPalette& palette = wxNullPalette);
 
     wxGLCanvas(wxWindow *parent,
-        const wxGLContext *shared = (wxGLContext *) NULL,
+        const wxGLContext *shared = NULL,
         wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = 0,
         const wxString& name = wxGLCanvasName,
-        int *attribList = (int *) NULL,
+        int *attribList = NULL,
         const wxPalette& palette = wxNullPalette);
 
     wxGLCanvas(wxWindow *parent,
-        const wxGLCanvas *shared = (wxGLCanvas *)NULL,
+        const wxGLCanvas *shared = NULL,
         wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
@@ -110,7 +110,7 @@ public:
 
     inline WXHDC GetHDC() const { return m_hDC; }
 
-    void SetupPixelFormat(int *attribList = (int *) NULL);
+    void SetupPixelFormat(int *attribList = NULL);
 
     void SetupPalette(const wxPalette& palette);
 

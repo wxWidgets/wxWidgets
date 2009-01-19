@@ -125,7 +125,7 @@ public:
         if (bitmap.Ok())
         {
             GdkBitmap *mask = bitmap.GetMask() ? bitmap.GetMask()->GetBitmap()
-                                               : (GdkBitmap *)NULL;
+                                               : NULL;
             gtk_pixmap_set( GTK_PIXMAP(m_pixmap), bitmap.GetPixmap(), mask );
         }
     }
@@ -230,7 +230,7 @@ static void wxInsertChildInToolBar( wxToolBar* WXUNUSED(parent),
 void wxToolBarTool::Init()
 {
     m_item =
-    m_pixmap = (GtkWidget *)NULL;
+    m_pixmap = NULL;
 }
 
 wxToolBarToolBase *wxToolBar::CreateTool(int id,
@@ -258,7 +258,7 @@ wxToolBar::CreateTool(wxControl *control, const wxString& label)
 
 void wxToolBar::Init()
 {
-    m_toolbar = (GtkToolbar *)NULL;
+    m_toolbar = NULL;
     m_blockEvent = false;
     m_defaultWidth = 32;
     m_defaultHeight = 32;
@@ -366,11 +366,11 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             wxCHECK_MSG( bitmap.GetPixmap() != NULL, false,
                          wxT("wxToolBar::Add needs a wxBitmap") );
 
-            GtkWidget *tool_pixmap = (GtkWidget *)NULL;
+            GtkWidget *tool_pixmap = NULL;
 
             GdkPixmap *pixmap = bitmap.GetPixmap();
 
-            GdkBitmap *mask = (GdkBitmap *)NULL;
+            GdkBitmap *mask = NULL;
             if ( bitmap.GetMask() )
                 mask = bitmap.GetMask()->GetBitmap();
 
@@ -556,7 +556,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
     // VZ: GTK+ doesn't seem to have such thing
     wxFAIL_MSG( _T("wxToolBar::FindToolForPosition() not implemented") );
 
-    return (wxToolBarToolBase *)NULL;
+    return NULL;
 }
 
 void wxToolBar::SetMargins( int x, int y )

@@ -298,16 +298,16 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
 void wxPropertyGridManager::Init1()
 {
 
-    //m_pPropGrid = (wxPropertyGrid*) NULL;
+    //m_pPropGrid = NULL;
     m_pPropGrid = CreatePropertyGrid();
 
 #if wxUSE_TOOLBAR
-    m_pToolbar = (wxToolBar*) NULL;
+    m_pToolbar = NULL;
 #endif
-    m_pTxtHelpCaption = (wxStaticText*) NULL;
-    m_pTxtHelpContent = (wxStaticText*) NULL;
+    m_pTxtHelpCaption = NULL;
+    m_pTxtHelpContent = NULL;
 
-    m_emptyPage = (wxPropertyGridPage*) NULL;
+    m_emptyPage = NULL;
 
     m_selPage = -1;
 
@@ -1263,7 +1263,7 @@ void wxPropertyGridManager::RecreateControls()
         // No toolbar.
         if ( m_pToolbar )
             m_pToolbar->Destroy();
-        m_pToolbar = (wxToolBar*) NULL;
+        m_pToolbar = NULL;
     }
 #endif
 
@@ -1304,12 +1304,12 @@ void wxPropertyGridManager::RecreateControls()
         if ( m_pTxtHelpCaption )
             m_pTxtHelpCaption->Destroy();
 
-        m_pTxtHelpCaption = (wxStaticText*) NULL;
+        m_pTxtHelpCaption = NULL;
 
         if ( m_pTxtHelpContent )
             m_pTxtHelpContent->Destroy();
 
-        m_pTxtHelpContent = (wxStaticText*) NULL;
+        m_pTxtHelpContent = NULL;
     }
 
     int width, height;
@@ -1414,7 +1414,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
             {
 
                 // Event dispatching must be last.
-                m_pPropGrid->SendEvent(  wxEVT_PG_PAGE_CHANGED, (wxPGProperty*) NULL );
+                m_pPropGrid->SendEvent(  wxEVT_PG_PAGE_CHANGED, NULL );
 
             }
             else

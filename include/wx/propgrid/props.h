@@ -41,7 +41,7 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(NAME, T, EDITOR)
 //
 // These macros help creating DoGetValidator
 #define WX_PG_DOGETVALIDATOR_ENTRY() \
-    static wxValidator* s_ptr = (wxValidator*) NULL; \
+    static wxValidator* s_ptr = NULL; \
     if ( s_ptr ) return s_ptr;
 
 // Common function exit
@@ -850,7 +850,7 @@ WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAME, \
                                                     DELIMCHAR, \
                                                     CUSTBUTTXT) \
 wxValidator* PROPNAME::DoGetValidator () const \
-{ return (wxValidator*) NULL; }
+{ return NULL; }
 
 
 // -----------------------------------------------------------------------
@@ -907,7 +907,7 @@ public:
     */
     virtual wxValidator* GetTextCtrlValidator() const
     {
-        return (wxValidator*) NULL;
+        return NULL;
     }
 
     // Returns true if array was actually modified

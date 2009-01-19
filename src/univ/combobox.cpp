@@ -205,7 +205,7 @@ wxSize wxComboListBox::GetAdjustedSize(int minWidth,
 
 void wxComboBox::Init()
 {
-    m_lbox = (wxListBox *)NULL;
+    m_lbox = NULL;
 }
 
 wxComboBox::wxComboBox(wxWindow *parent,

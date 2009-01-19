@@ -77,7 +77,7 @@ wxPaletteRefData::wxPaletteRefData()
 
 wxPaletteRefData::~wxPaletteRefData()
 {
-    Display *display = (Display*) NULL;
+    Display *display = NULL;
 
     wxList::compatibility_iterator node, next;
 

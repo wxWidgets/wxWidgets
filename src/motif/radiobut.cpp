@@ -91,7 +91,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
     else
     {
         /* search backward for last group start */
-        wxRadioButton *chief = (wxRadioButton*) NULL;
+        wxRadioButton *chief = NULL;
         wxWindowList::compatibility_iterator node = parent->GetChildren().GetLast();
         while (node)
         {

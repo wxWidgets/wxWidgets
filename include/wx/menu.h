@@ -267,7 +267,7 @@ public:
     // Updates the UI for a menu and all submenus recursively. source is the
     // object that has the update event handlers defined for it. If NULL, the
     // menu or associated window will be used.
-    void UpdateUI(wxEvtHandler* source = (wxEvtHandler*)NULL);
+    void UpdateUI(wxEvtHandler* source = NULL);
 
     // get the menu bar this menu is attached to (may be NULL, always NULL for
     // popup menus).  Traverse up the menu hierarchy to find it.

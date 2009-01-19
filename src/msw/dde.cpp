@@ -418,7 +418,7 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& WXUNUSED(host),
 
     if ( !hszServer )
     {
-        return (wxConnectionBase*) NULL;
+        return NULL;
     }
 
 
@@ -427,7 +427,7 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& WXUNUSED(host),
     if ( !hszTopic )
     {
         DDEFreeString(hszServer);
-        return (wxConnectionBase*) NULL;
+        return NULL;
     }
 
 
@@ -457,7 +457,7 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& WXUNUSED(host),
         }
     }
 
-    return (wxConnectionBase*) NULL;
+    return NULL;
 }
 
 wxConnectionBase *wxDDEClient::OnMakeConnection()

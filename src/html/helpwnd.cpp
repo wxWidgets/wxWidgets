@@ -297,7 +297,7 @@ void wxHtmlHelpWindow::Init(wxHtmlHelpData* data)
     m_PagesHash = NULL;
     m_UpdateContents = true;
     m_toolBar = NULL;
-    m_helpController = (wxHtmlHelpController*) NULL;
+    m_helpController = NULL;
 }
 
 // Create: builds the GUI components.

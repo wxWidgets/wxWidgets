@@ -447,7 +447,7 @@ bool wxAuiMDIChildFrame::Create(wxAuiMDIParentFrame* parent,
                                 const wxString& name)
 {
     wxAuiMDIClientWindow* pClientWindow = parent->GetClientWindow();
-    wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), wxT("Missing MDI client window."));
+    wxASSERT_MSG((pClientWindow != NULL), wxT("Missing MDI client window."));
 
     // see comment in constructor
     if (style & wxMINIMIZE)

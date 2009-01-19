@@ -1700,7 +1700,7 @@ END_EVENT_TABLE()
 
 void wxListHeaderWindow::Init()
 {
-    m_currentCursor = (wxCursor *) NULL;
+    m_currentCursor = NULL;
     m_isDragging = false;
     m_dirty = false;
 }
@@ -1709,8 +1709,8 @@ wxListHeaderWindow::wxListHeaderWindow()
 {
     Init();
 
-    m_owner = (wxListMainWindow *) NULL;
-    m_resizeCursor = (wxCursor *) NULL;
+    m_owner = NULL;
+    m_resizeCursor = NULL;
 }
 
 wxListHeaderWindow::wxListHeaderWindow( wxWindow *win,
@@ -2277,8 +2277,8 @@ void wxListMainWindow::Init()
     m_headerWidth =
     m_lineHeight = 0;
 
-    m_small_image_list = (wxImageList *) NULL;
-    m_normal_image_list = (wxImageList *) NULL;
+    m_small_image_list = NULL;
+    m_normal_image_list = NULL;
 
     m_small_spacing = 30;
     m_normal_spacing = 40;
@@ -2302,7 +2302,7 @@ wxListMainWindow::wxListMainWindow()
     Init();
 
     m_highlightBrush =
-    m_highlightUnfocusedBrush = (wxBrush *) NULL;
+    m_highlightUnfocusedBrush = NULL;
 }
 
 wxListMainWindow::wxListMainWindow( wxWindow *parent,
@@ -4958,16 +4958,16 @@ END_EVENT_TABLE()
 
 wxGenericListCtrl::wxGenericListCtrl()
 {
-    m_imageListNormal = (wxImageList *) NULL;
-    m_imageListSmall = (wxImageList *) NULL;
-    m_imageListState = (wxImageList *) NULL;
+    m_imageListNormal = NULL;
+    m_imageListSmall = NULL;
+    m_imageListState = NULL;
 
     m_ownsImageListNormal =
     m_ownsImageListSmall =
     m_ownsImageListState = false;
 
-    m_mainWin = (wxListMainWindow*) NULL;
-    m_headerWin = (wxListHeaderWindow*) NULL;
+    m_mainWin = NULL;
+    m_headerWin = NULL;
     m_headerHeight = 0;
 }
 
@@ -5030,13 +5030,13 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 {
     m_imageListNormal =
     m_imageListSmall =
-    m_imageListState = (wxImageList *) NULL;
+    m_imageListState = NULL;
     m_ownsImageListNormal =
     m_ownsImageListSmall =
     m_ownsImageListState = false;
 
-    m_mainWin = (wxListMainWindow*) NULL;
-    m_headerWin = (wxListHeaderWindow*) NULL;
+    m_mainWin = NULL;
+    m_headerWin = NULL;
 
     m_headerHeight = 0;
 
@@ -5446,7 +5446,7 @@ wxImageList *wxGenericListCtrl::GetImageList(int which) const
     else if (which == wxIMAGE_LIST_STATE)
         return m_imageListState;
 
-    return (wxImageList *) NULL;
+    return NULL;
 }
 
 void wxGenericListCtrl::SetImageList( wxImageList *imageList, int which )

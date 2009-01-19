@@ -24,7 +24,7 @@
 // global data
 //-----------------------------------------------------------------------------
 
-static GtkTooltips *ss_tooltips = (GtkTooltips*) NULL;
+static GtkTooltips *ss_tooltips = NULL;
 
 //-----------------------------------------------------------------------------
 // wxToolTip
@@ -35,7 +35,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxToolTip, wxObject)
 wxToolTip::wxToolTip( const wxString &tip )
 {
     m_text = tip;
-    m_window = (wxWindow*) NULL;
+    m_window = NULL;
 }
 
 void wxToolTip::SetTip( const wxString &tip )
@@ -56,7 +56,7 @@ void wxToolTip::Apply( wxWindow *win )
     m_window = win;
 
     if (m_text.empty())
-        m_window->ApplyToolTip( ss_tooltips, (wxChar*) NULL );
+        m_window->ApplyToolTip( ss_tooltips, NULL );
     else
         m_window->ApplyToolTip( ss_tooltips, m_text );
 }

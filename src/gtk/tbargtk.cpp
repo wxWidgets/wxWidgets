@@ -345,7 +345,7 @@ wxToolBar::CreateTool(wxControl *control, const wxString& label)
 
 void wxToolBar::Init()
 {
-    m_toolbar = (GtkToolbar *)NULL;
+    m_toolbar = NULL;
     m_tooltips = NULL;
 }
 
@@ -648,7 +648,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
     // VZ: GTK+ doesn't seem to have such thing
     wxFAIL_MSG( _T("wxToolBar::FindToolForPosition() not implemented") );
 
-    return (wxToolBarToolBase *)NULL;
+    return NULL;
 }
 
 void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )

@@ -167,7 +167,7 @@ protected:
     // the common initialization
     void Init()
     {
-        m_window = (wxWindowBase *)NULL;
+        m_window = NULL;
         m_x = m_y = 0;
         m_width = m_height = 0;
         m_countVisible = 0;

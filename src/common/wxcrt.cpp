@@ -99,9 +99,9 @@ WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n)
   // support it (the only currently known example being Metrowerks, see
   // wx/crt.h) we don't use its mbstowcs() at all
 #ifdef HAVE_WCSRTOMBS
-  return mbsrtowcs((wchar_t *) NULL, &psz, 0, &mbstate);
+  return mbsrtowcs(NULL, &psz, 0, &mbstate);
 #else
-  return wxMbstowcs((wchar_t *) NULL, psz, 0);
+  return wxMbstowcs(NULL, psz, 0);
 #endif
 }
 
@@ -126,9 +126,9 @@ WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
   }
 
 #ifdef HAVE_WCSRTOMBS
-  return wcsrtombs((char *) NULL, &pwz, 0, &mbstate);
+  return wcsrtombs(NULL, &pwz, 0, &mbstate);
 #else
-  return wxWcstombs((char *) NULL, pwz, 0);
+  return wxWcstombs(NULL, pwz, 0);
 #endif
 }
 #endif // wxUSE_WCHAR_T
@@ -911,7 +911,7 @@ WXDLLIMPEXP_BASE wchar_t* wxCRT_GetenvW(const wchar_t *name)
     // NB: buffer returned by getenv() is allowed to be overwritten next
     //     time getenv() is called, so it is OK to use static string
     //     buffer to hold the data.
-    static wxWCharBuffer value((wchar_t*)NULL);
+    static wxWCharBuffer value;
     value = wxConvLibc.cMB2WC(getenv(wxConvLibc.cWC2MB(name)));
     return value.data();
 }
@@ -1115,15 +1115,15 @@ static T *wxCRT_DoStrtok(T *psz, const T *delim, T **save_ptr)
     psz += wxStrspn(psz, delim);
     if (!*psz)
     {
-        *save_ptr = (T *)NULL;
-        return (T *)NULL;
+        *save_ptr = NULL;
+        return NULL;
     }
 
     T *ret = psz;
     psz = wxStrpbrk(psz, delim);
     if (!psz)
     {
-        *save_ptr = (T*)NULL;
+        *save_ptr = NULL;
     }
     else
     {

@@ -74,7 +74,7 @@ void wxBitmapCache::SetBitmap( const wxBitmap& bitmap )
         {
             XmUninstallImage( (XImage*)m_image );
             XtFree( (char*)(XImage*)m_image );
-            m_image = (WXImage*)NULL;
+            m_image = NULL;
         }
     }
 }
@@ -263,7 +263,7 @@ XCreateInsensitivePixmap( Display *display, Pixmap pixmap )
     stipple = XCreateBitmapFromData( display, pixmap, stipple_data, 16, 16 );
     if ( 0 != stipple )
     {
-        gc = XCreateGC( display, pixmap, (XtGCMask)0, (XGCValues*)NULL );
+        gc = XCreateGC( display, pixmap, (XtGCMask)0, NULL );
         if ( NULL != gc )
         {
             /* Create an identical copy of the argument pixmap.

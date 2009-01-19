@@ -41,26 +41,26 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask,wxObject)
 
 wxMask::wxMask()
 {
-    m_bitmap = (GdkBitmap *) NULL;
+    m_bitmap = NULL;
 }
 
 wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
 {
-    m_bitmap = (GdkBitmap *) NULL;
+    m_bitmap = NULL;
     Create( bitmap, colour );
 }
 
 #if wxUSE_PALETTE
 wxMask::wxMask( const wxBitmap& bitmap, int paletteIndex )
 {
-    m_bitmap = (GdkBitmap *) NULL;
+    m_bitmap = NULL;
     Create( bitmap, paletteIndex );
 }
 #endif // wxUSE_PALETTE
 
 wxMask::wxMask( const wxBitmap& bitmap )
 {
-    m_bitmap = (GdkBitmap *) NULL;
+    m_bitmap = NULL;
     Create( bitmap );
 }
 
@@ -76,7 +76,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
     if (m_bitmap)
     {
         g_object_unref (m_bitmap);
-        m_bitmap = (GdkBitmap*) NULL;
+        m_bitmap = NULL;
     }
 
     const int w = bitmap.GetWidth();
@@ -155,7 +155,7 @@ bool wxMask::Create( const wxBitmap& bitmap )
     if (m_bitmap)
     {
         g_object_unref (m_bitmap);
-        m_bitmap = (GdkBitmap*) NULL;
+        m_bitmap = NULL;
     }
 
     if (!bitmap.IsOk()) return false;
@@ -203,14 +203,14 @@ public:
 
 wxBitmapRefData::wxBitmapRefData()
 {
-    m_pixmap = (GdkPixmap *) NULL;
-    m_pixbuf = (GdkPixbuf *) NULL;
-    m_mask = (wxMask *) NULL;
+    m_pixmap = NULL;
+    m_pixbuf = NULL;
+    m_mask = NULL;
     m_width = 0;
     m_height = 0;
     m_bpp = 0;
 #if wxUSE_PALETTE
-    m_palette = (wxPalette *) NULL;
+    m_palette = NULL;
 #endif // wxUSE_PALETTE
 }
 
@@ -574,7 +574,7 @@ int wxBitmap::GetDepth() const
 
 wxMask *wxBitmap::GetMask() const
 {
-    wxCHECK_MSG( IsOk(), (wxMask *) NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_mask;
 }
@@ -660,7 +660,7 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
 
     if (type == wxBITMAP_TYPE_XPM)
     {
-        GdkBitmap *mask = (GdkBitmap*) NULL;
+        GdkBitmap *mask = NULL;
         SetPixmap(gdk_pixmap_create_from_xpm(wxGetRootWindow()->window, &mask, NULL, name.fn_str()));
         if (!M_BMPDATA)
             return false;   // do not set the mask
@@ -734,7 +734,7 @@ void wxBitmap::SetPixmap( GdkPixmap *pixmap )
 
 GdkPixmap *wxBitmap::GetPixmap() const
 {
-    wxCHECK_MSG( IsOk(), (GdkPixmap *) NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") );
 
     // create the pixmap on the fly if we use Pixbuf representation:
     if (M_BMPDATA->m_pixmap == NULL)

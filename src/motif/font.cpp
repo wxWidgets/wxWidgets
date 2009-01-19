@@ -492,7 +492,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
 
     if(M_FONTDATA->m_nativeFontInfo.GetXFontName().empty())
         GetInternalFont();
@@ -510,7 +510,7 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
 {
     if ( !Ok() )
-        return (wxXFont *)NULL;
+        return NULL;
 
     long intScale = long(scale * 100.0 + 0.5); // key for wxXFont
     int pointSize = (M_FONTDATA->m_pointSize * 10 * intScale) / 100;
@@ -541,7 +541,7 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     {
         wxFAIL_MSG( wxT("Could not allocate even a default font -- something is wrong.") );
 
-        return (wxXFont*) NULL;
+        return NULL;
     }
 
     wxXFont* f = new wxXFont;

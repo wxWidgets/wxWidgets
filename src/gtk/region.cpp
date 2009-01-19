@@ -328,7 +328,7 @@ wxRegionContain wxRegion::DoContainsRect(const wxRect& r) const
 GdkRegion *wxRegion::GetRegion() const
 {
     if (!m_refData)
-        return (GdkRegion*) NULL;
+        return NULL;
 
     return M_REGIONDATA->m_region;
 }

@@ -39,7 +39,7 @@ public:
 
 wxCursorRefData::wxCursorRefData()
 {
-    m_cursor = (GdkCursor *) NULL;
+    m_cursor = NULL;
 }
 
 wxCursorRefData::~wxCursorRefData()

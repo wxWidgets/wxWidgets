@@ -92,7 +92,7 @@ private:
 
 wxRegion::wxRegion()
 {
-    m_refData = (wxRegionRefData *)NULL;
+    m_refData = NULL;
 }
 
 wxRegion::wxRegion(WXHRGN hRegion)

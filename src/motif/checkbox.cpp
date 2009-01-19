@@ -144,7 +144,7 @@ void wxCheckBox::ChangeBackgroundColour()
         return;
 
     wxComputeColours (XtDisplay((Widget) m_mainWidget), & m_backgroundColour,
-        (wxColour*) NULL);
+        NULL);
 
     XtVaSetValues ((Widget) m_mainWidget,
         XmNbackground, g_itemColors[wxBACK_INDEX].pixel,

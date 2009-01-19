@@ -125,7 +125,7 @@ END_EVENT_TABLE()
 wxWindowBase::wxWindowBase()
 {
     // no window yet, no parent nor children
-    m_parent = (wxWindow *)NULL;
+    m_parent = NULL;
     m_windowId = wxID_ANY;
 
     // no constraints on the minimal window size
@@ -146,7 +146,7 @@ wxWindowBase::wxWindowBase()
 
 #if wxUSE_VALIDATORS
     // no validator
-    m_windowValidator = (wxValidator *) NULL;
+    m_windowValidator = NULL;
 #endif // wxUSE_VALIDATORS
 
     // the colours/fonts are default for now, so leave m_font,
@@ -166,24 +166,24 @@ wxWindowBase::wxWindowBase()
 
 #if wxUSE_CONSTRAINTS
     // no constraints whatsoever
-    m_constraints = (wxLayoutConstraints *) NULL;
-    m_constraintsInvolvedIn = (wxWindowList *) NULL;
+    m_constraints = NULL;
+    m_constraintsInvolvedIn = NULL;
 #endif // wxUSE_CONSTRAINTS
 
-    m_windowSizer = (wxSizer *) NULL;
-    m_containingSizer = (wxSizer *) NULL;
+    m_windowSizer = NULL;
+    m_containingSizer = NULL;
     m_autoLayout = false;
 
 #if wxUSE_DRAG_AND_DROP
-    m_dropTarget = (wxDropTarget *)NULL;
+    m_dropTarget = NULL;
 #endif // wxUSE_DRAG_AND_DROP
 
 #if wxUSE_TOOLTIPS
-    m_tooltip = (wxToolTip *)NULL;
+    m_tooltip = NULL;
 #endif // wxUSE_TOOLTIPS
 
 #if wxUSE_CARET
-    m_caret = (wxCaret *)NULL;
+    m_caret = NULL;
 #endif // wxUSE_CARET
 
 #if wxUSE_PALETTE
@@ -196,7 +196,7 @@ wxWindowBase::wxWindowBase()
 
     m_virtualSize = wxDefaultSize;
 
-    m_scrollHelper = (wxScrollHelper *) NULL;
+    m_scrollHelper = NULL;
 
     m_windowVariant = wxWINDOW_VARIANT_NORMAL;
 #if wxUSE_SYSTEM_OPTIONS
@@ -1100,16 +1100,16 @@ wxEvtHandler *wxWindowBase::PopEventHandler(bool deleteHandler)
     if ( handlerA )
     {
         wxEvtHandler *handlerB = handlerA->GetNextHandler();
-        handlerA->SetNextHandler((wxEvtHandler *)NULL);
+        handlerA->SetNextHandler(NULL);
 
         if ( handlerB )
-            handlerB->SetPreviousHandler((wxEvtHandler *)NULL);
+            handlerB->SetPreviousHandler(NULL);
         SetEventHandler(handlerB);
 
         if ( deleteHandler )
         {
             delete handlerA;
-            handlerA = (wxEvtHandler *)NULL;
+            handlerA = NULL;
         }
     }
 
@@ -1441,7 +1441,7 @@ wxWindow *wxWindowBase::FindWindow(long id) const
     if ( id == m_windowId )
         return (wxWindow *)this;
 
-    wxWindowBase *res = (wxWindow *)NULL;
+    wxWindowBase *res = NULL;
     wxWindowList::compatibility_iterator node;
     for ( node = m_children.GetFirst(); node && !res; node = node->GetNext() )
     {
@@ -1457,7 +1457,7 @@ wxWindow *wxWindowBase::FindWindow(const wxString& name) const
     if ( name == m_windowName )
         return (wxWindow *)this;
 
-    wxWindowBase *res = (wxWindow *)NULL;
+    wxWindowBase *res = NULL;
     wxWindowList::compatibility_iterator node;
     for ( node = m_children.GetFirst(); node && !res; node = node->GetNext() )
     {
@@ -1810,7 +1810,7 @@ void wxWindowBase::SetToolTip( const wxString &tip )
     }
 
     // setting empty tooltip text does not remove the tooltip any more - use
-    // SetToolTip((wxToolTip *)NULL) for this
+    // SetToolTip(NULL) for this
 }
 
 void wxWindowBase::DoSetToolTip(wxToolTip *tooltip)
@@ -1934,7 +1934,7 @@ void wxWindowBase::DeleteRelatedConstraints()
         }
 
         delete m_constraintsInvolvedIn;
-        m_constraintsInvolvedIn = (wxWindowList *) NULL;
+        m_constraintsInvolvedIn = NULL;
     }
 }
 

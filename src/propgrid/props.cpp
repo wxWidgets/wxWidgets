@@ -632,7 +632,7 @@ wxString wxFloatProperty::ValueToString( wxVariant& value,
                                        value,
                                        m_precision,
                                        !(argFlags & wxPG_FULL_VALUE),
-                                       (wxString*) NULL);
+                                       NULL);
     }
     return text;
 }
@@ -1266,7 +1266,7 @@ void wxFlagsProperty::Init()
 wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     const wxChar** labels, const long* values, long value ) : wxPGProperty(label,name)
 {
-    m_oldChoicesData = (wxPGChoicesData*) NULL;
+    m_oldChoicesData = NULL;
 
     if ( labels )
     {
@@ -1286,7 +1286,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
         const wxArrayString& labels, const wxArrayInt& values, int value )
     : wxPGProperty(label,name)
 {
-    m_oldChoicesData = (wxPGChoicesData*) NULL;
+    m_oldChoicesData = NULL;
 
     if ( &labels && labels.size() )
     {
@@ -1306,7 +1306,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     wxPGChoices& choices, long value )
     : wxPGProperty(label,name)
 {
-    m_oldChoicesData = (wxPGChoicesData*) NULL;
+    m_oldChoicesData = NULL;
 
     if ( choices.IsOk() )
     {
@@ -2132,7 +2132,7 @@ bool wxArrayEditorDialog::Create( wxWindow *parent,
 
     // Manipulator buttons
     wxBoxSizer* colsizer = new wxBoxSizer( wxVERTICAL );
-    m_butCustom = (wxButton*) NULL;
+    m_butCustom = NULL;
     if ( m_custBtText )
     {
         m_butCustom = new wxButton(this,28,::wxGetTranslation(m_custBtText));
@@ -2342,7 +2342,7 @@ wxPGArrayStringEditorDialog::wxPGArrayStringEditorDialog()
 
 void wxPGArrayStringEditorDialog::Init()
 {
-    m_pCallingClass = (wxArrayStringProperty*) NULL;
+    m_pCallingClass = NULL;
 }
 
 void wxPGArrayStringEditorDialog::OnCustomEditClick(wxCommandEvent& )

@@ -233,7 +233,7 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
     // If has children, and limited editing is specified, then don't create.
     if ( (property->GetFlags() & wxPG_PROP_NOEDITOR) &&
          property->GetChildCount() )
-        return (wxWindow*) NULL;
+        return NULL;
 
     if ( !property->IsValueUnspecified() )
         text = property->GetValueAsString(property->HasFlag(wxPG_PROP_READONLY) ?
@@ -244,7 +244,7 @@ wxPGWindowList wxPGTextCtrlEditor::CreateControls( wxPropertyGrid* propGrid,
          property->IsKindOf(CLASSINFO(wxStringProperty)) )
         flags |= wxTE_PASSWORD;
 
-    wxWindow* wnd = propGrid->GenerateEditorTextCtrl(pos,sz,text,(wxWindow*)NULL,flags,
+    wxWindow* wnd = propGrid->GenerateEditorTextCtrl(pos,sz,text,NULL,flags,
                                                      property->GetMaxLength());
 
     return wnd;
@@ -503,7 +503,7 @@ public:
     wxPGComboBox()
         : wxOwnerDrawnComboBox()
     {
-        m_dclickProcessor = (wxPGDoubleClickProcessor*) NULL;
+        m_dclickProcessor = NULL;
         m_sizeEventCalled = false;
     }
 
@@ -1051,8 +1051,8 @@ bool wxPGComboBoxEditor::OnEvent( wxPropertyGrid* propGrid,
                                   wxWindow* ctrl,
                                   wxEvent& event ) const
 {
-    wxOwnerDrawnComboBox* cb = (wxOwnerDrawnComboBox*) NULL;
-    wxWindow* textCtrl = (wxWindow*) NULL;
+    wxOwnerDrawnComboBox* cb = NULL;
+    wxWindow* textCtrl = NULL;
 
     if ( ctrl )
     {
@@ -1312,7 +1312,7 @@ wxSimpleCheckBox::~wxSimpleCheckBox()
     ms_doubleBuffer = NULL;
 }
 
-wxBitmap* wxSimpleCheckBox::ms_doubleBuffer = (wxBitmap*) NULL;
+wxBitmap* wxSimpleCheckBox::ms_doubleBuffer = NULL;
 
 void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
@@ -1772,7 +1772,7 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrlAndButton( const wxPoint& pos,
         // There is button Show in GenerateEditorTextCtrl as well
         but->Show();
     #endif
-        return (wxWindow*) NULL;
+        return NULL;
     }
 
     wxString text;

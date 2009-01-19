@@ -199,7 +199,7 @@ void wxChoice::DoSetItemClientData(unsigned int n, void* clientData)
 
 void* wxChoice::DoGetItemClientData(unsigned int n) const
 {
-    return (void *)NULL;
+    return NULL;
 }
 
 // ----------------------------------------------------------------------------

@@ -53,7 +53,7 @@ wxDECLARE_LOCAL_EVENT( wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, wxSoundBackendSDLNo
                               -1,                       \
                               -1,                       \
                               wxEVENT_HANDLER_CAST( wxSoundBackendSDLNotificationFunction, func ), \
-                              (wxObject *) NULL ),
+                              NULL ),
 
 IMPLEMENT_DYNAMIC_CLASS(wxSoundBackendSDLNotification, wxEvtHandler)
 wxDEFINE_EVENT( wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, wxSoundBackendSDLNotification )

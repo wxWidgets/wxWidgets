@@ -243,7 +243,7 @@ int wxAppConsoleBase::OnExit()
 #if wxUSE_CONFIG
     // delete the config object if any (don't use Get() here, but Set()
     // because Get() could create a new config object)
-    delete wxConfigBase::Set((wxConfigBase *) NULL);
+    delete wxConfigBase::Set(NULL);
 #endif // wxUSE_CONFIG
 
     return 0;

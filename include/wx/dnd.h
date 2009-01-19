@@ -63,7 +63,7 @@ public:
         : m_cursorCopy(cursorCopy),
           m_cursorMove(cursorMove),
           m_cursorStop(cursorStop)
-        { m_data = (wxDataObject *)NULL; }
+        { m_data = NULL; }
     virtual ~wxDropSourceBase() { }
 
     // set the data which is transfered by drag and drop
@@ -135,7 +135,7 @@ public:
     // ctor takes a pointer to heap-allocated wxDataObject which will be owned
     // by wxDropTarget and deleted by it automatically. If you don't give it
     // here, you can use SetDataObject() later.
-    wxDropTargetBase(wxDataObject *dataObject = (wxDataObject*)NULL)
+    wxDropTargetBase(wxDataObject *dataObject = NULL)
         { m_dataObject = dataObject; m_defaultAction = wxDragNone; }
     // dtor deletes our data object
     virtual ~wxDropTargetBase()

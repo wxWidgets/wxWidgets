@@ -122,7 +122,7 @@ const wxBitmap *wxGenericImageList::GetBitmapPtr( int index ) const
 {
     wxList::compatibility_iterator node = m_images.Item( index );
 
-    wxCHECK_MSG( node, (wxBitmap *) NULL, wxT("wrong index in image list") );
+    wxCHECK_MSG( node, NULL, wxT("wrong index in image list") );
 
     return (wxBitmap*)node->GetData();
 }

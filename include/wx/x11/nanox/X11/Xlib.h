@@ -114,8 +114,8 @@ typedef struct {
 #define XFreeCursor(d, c) GrDestroyCursor(c)
 #define XFreeGC(d, gc) GrDestroyGC(gc)
 #define XSetBackground(d, gc, c) GrSetGCBackground(gc, c)
-#define DefaultVisual(d, s) ((Visual*) NULL)
-#define DefaultColormap(d, s) DefaultColormapOfScreen((Screen*) NULL)
+#define DefaultVisual(d, s) (NULL)
+#define DefaultColormap(d, s) DefaultColormapOfScreen(NULL)
 #define DefaultScreenOfDisplay(d) 0
 #define XSetFillStyle(d, gc, s) wxNoop()
 #define XSetLineAttributes(d, gc, a, b, c, e) wxNoop()

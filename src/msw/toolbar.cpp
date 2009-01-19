@@ -1422,7 +1422,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
     //      TB_HITTEST returns m_nButtons ( not -1 )
     if ( index < 0 || (size_t)index >= m_nButtons )
         // it's a separator or there is no tool at all there
-        return (wxToolBarToolBase *)NULL;
+        return NULL;
 
     // when TB_SETBUTTONINFO is available (both during compile- and run-time),
     // we don't use the dummy separators hack

@@ -162,9 +162,9 @@ public:
                                          long WXUNUSED(style) = 1,
                                          wxWindowID WXUNUSED(winid) = 1,
                                          const wxString& WXUNUSED(name) = wxEmptyString)
-      { return (wxStatusBar*)NULL; }
+      { return NULL; }
 
-    virtual wxStatusBar *GetStatusBar() const { return (wxStatusBar*)NULL; }
+    virtual wxStatusBar *GetStatusBar() const { return NULL; }
     virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number)=0 ) {}
     virtual void SetStatusWidths( int WXUNUSED(n), const int WXUNUSED(widths_field)[] ) {}
 #endif
@@ -174,8 +174,8 @@ public:
     virtual wxToolBar* CreateToolBar(long WXUNUSED(style),
                                      wxWindowID WXUNUSED(winid),
                                      const wxString& WXUNUSED(name))
-        { return (wxToolBar*)NULL; }
-    virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
+        { return NULL; }
+    virtual wxToolBar *GetToolBar() const { return NULL; }
 #endif
 
 

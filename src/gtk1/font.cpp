@@ -609,7 +609,7 @@ bool wxFont::GetNoAntiAliasing() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
 
     if ( !M_FONTDATA->HasNativeFont() )
     {
@@ -710,7 +710,7 @@ void wxFont::SetNoAntiAliasing( bool no )
 // get internal representation of font
 // ----------------------------------------------------------------------------
 
-static GdkFont *g_systemDefaultGuiFont = (GdkFont*) NULL;
+static GdkFont *g_systemDefaultGuiFont = NULL;
 
 // this is also used from tbargtk.cpp and tooltip.cpp, hence extern
 extern GdkFont *GtkGetDefaultGuiFont()
@@ -742,7 +742,7 @@ extern GdkFont *GtkGetDefaultGuiFont()
 
 GdkFont *wxFont::GetInternalFont( float scale ) const
 {
-    GdkFont *font = (GdkFont *) NULL;
+    GdkFont *font = NULL;
 
     wxCHECK_MSG( Ok(), font, wxT("invalid font") );
 

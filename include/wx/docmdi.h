@@ -84,7 +84,7 @@ public:
     inline wxView *GetView(void) const { return m_childView; }
     inline void SetDocument(wxDocument *doc) { m_childDocument = doc; }
     inline void SetView(wxView *view) { m_childView = view; }
-    bool Destroy() { m_childView = (wxView *)NULL; return wxMDIChildFrame::Destroy(); }
+    bool Destroy() { m_childView = NULL; return wxMDIChildFrame::Destroy(); }
 
 protected:
     void Init();

@@ -80,7 +80,7 @@ int wxPrintDialog::ShowModal()
 
 wxDC *wxPrintDialog::GetPrintDC()
 {
-    return (wxDC*) NULL;
+    return NULL;
 }
 
 // ---------------------------------------------------------------------------

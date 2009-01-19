@@ -313,7 +313,7 @@ wxPostScriptDCImpl::wxPostScriptDCImpl( wxPrinterDC *owner, const wxPrintData& d
 
 void wxPostScriptDCImpl::Init()
 {
-    m_pstream = (FILE*) NULL;
+    m_pstream = NULL;
 
     m_currentRed = 0;
     m_currentGreen = 0;
@@ -333,7 +333,7 @@ wxPostScriptDCImpl::~wxPostScriptDCImpl ()
     if (m_pstream)
     {
         fclose( m_pstream );
-        m_pstream = (FILE*) NULL;
+        m_pstream = NULL;
     }
 }
 
@@ -1798,7 +1798,7 @@ void wxPostScriptDCImpl::EndDoc ()
 
     if ( m_pstream ) {
         fclose( m_pstream );
-        m_pstream = (FILE *) NULL;
+        m_pstream = NULL;
     }
 
 #if 0

@@ -258,7 +258,7 @@ wxBitmapRefData::wxBitmapRefData()
     m_width = 0;
     m_height = 0;
     m_bpp = 0;
-    m_palette = (wxPalette *) NULL;
+    m_palette = NULL;
 }
 
 wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
@@ -598,7 +598,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         // Create mask if necessary
         const bool hasMask = image.HasMask();
 
-        XImage *mask_image = (XImage*) NULL;
+        XImage *mask_image = NULL;
         if ( hasMask )
         {
             mask_image = XCreateImage( xdisplay, xvisual, 1, ZPixmap, 0, 0, width, height, 32, 0 );
@@ -959,7 +959,7 @@ int wxBitmap::GetDepth() const
 
 wxMask *wxBitmap::GetMask() const
 {
-    wxCHECK_MSG( Ok(), (wxMask *) NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_mask;
 }
@@ -1086,7 +1086,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 
 wxPalette *wxBitmap::GetPalette() const
 {
-    if (!Ok()) return (wxPalette *) NULL;
+    if (!Ok()) return NULL;
 
     return M_BMPDATA->m_palette;
 }
@@ -1150,7 +1150,7 @@ WXPixmap wxBitmap::GetDrawable() const
 
 WXDisplay *wxBitmap::GetDisplay() const
 {
-    wxCHECK_MSG( Ok(), (WXDisplay*) NULL, wxT("invalid bitmap") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
 
     return M_BMPDATA->m_display;
 }
@@ -1565,7 +1565,7 @@ bool wxXBMDataHandler::Create( wxBitmap *bitmap, const void* bits,
     int xscreen = DefaultScreen( xdisplay );
     Window xroot = RootWindow( xdisplay, xscreen );
 
-    M_BMPHANDLERDATA->m_mask = (wxMask *) NULL;
+    M_BMPHANDLERDATA->m_mask = NULL;
     M_BMPHANDLERDATA->m_bitmap =
         XCreateBitmapFromData(xdisplay, xroot,
                               (char *) bits, width, height );

@@ -538,7 +538,7 @@ wxPNGHandler::LoadFile(wxImage *image,
         goto error;
 
     png_read_info( png_ptr, info_ptr );
-    png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, (int*) NULL, (int*) NULL );
+    png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, NULL, NULL );
 
     if (color_type == PNG_COLOR_TYPE_PALETTE)
         png_set_expand( png_ptr );

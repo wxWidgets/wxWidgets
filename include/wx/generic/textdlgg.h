@@ -97,7 +97,7 @@ WXDLLIMPEXP_CORE wxString
     wxGetTextFromUser(const wxString& message,
                     const wxString& caption = wxGetTextFromUserPromptStr,
                     const wxString& default_value = wxEmptyString,
-                    wxWindow *parent = (wxWindow *) NULL,
+                    wxWindow *parent = NULL,
                     wxCoord x = wxDefaultCoord,
                     wxCoord y = wxDefaultCoord,
                     bool centre = true);
@@ -106,7 +106,7 @@ WXDLLIMPEXP_CORE wxString
     wxGetPasswordFromUser(const wxString& message,
                         const wxString& caption = wxGetPasswordFromUserPromptStr,
                         const wxString& default_value = wxEmptyString,
-                        wxWindow *parent = (wxWindow *) NULL,
+                        wxWindow *parent = NULL,
                         wxCoord x = wxDefaultCoord,
                         wxCoord y = wxDefaultCoord,
                         bool centre = true);

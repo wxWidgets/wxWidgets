@@ -561,7 +561,7 @@ wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(wxString& buffer) );
     // DEPRECATED: construct a wxFileName, use ClearExt() and then GetFullPath()
 
 // Get a temporary filename
-wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = (wxChar *) NULL) );
+wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = NULL) );
 wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE bool wxGetTempFileName(const wxString& prefix, wxString& buf) );
 
 // Expand file name (~/ and ${OPENWINHOME}/ stuff)
@@ -623,7 +623,7 @@ WXDLLIMPEXP_BASE bool wxRenameFile(const wxString& file1, const wxString& file2,
 // copies into buf.
 // IMPORTANT NOTE getcwd is know not to work under some releases
 // of Win32s 1.3, according to MS release notes!
-wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* wxGetWorkingDirectory(wxChar *buf = (wxChar *) NULL, int sz = 1000) );
+wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* wxGetWorkingDirectory(wxChar *buf = NULL, int sz = 1000) );
 // new and preferred version of wxGetWorkingDirectory
 // NB: can't have the same name because of overloading ambiguity
 #endif // WXWIN_COMPATIBILITY_2_6

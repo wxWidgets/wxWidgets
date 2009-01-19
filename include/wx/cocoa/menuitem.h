@@ -31,12 +31,12 @@ public:
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
-    wxMenuItemCocoa(wxMenu *parentMenu = (wxMenu *)NULL,
+    wxMenuItemCocoa(wxMenu *parentMenu = NULL,
                int id = wxID_SEPARATOR,
                const wxString& name = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu *subMenu = (wxMenu *)NULL);
+               wxMenu *subMenu = NULL);
     virtual ~wxMenuItemCocoa();
 
 // ------------------------------------------------------------------------

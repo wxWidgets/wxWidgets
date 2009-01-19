@@ -95,7 +95,7 @@ void wxFrameBase::DeleteAllBars()
     if ( m_frameMenuBar )
     {
         delete m_frameMenuBar;
-        m_frameMenuBar = (wxMenuBar *) NULL;
+        m_frameMenuBar = NULL;
     }
 #endif // wxUSE_MENUS
 
@@ -103,7 +103,7 @@ void wxFrameBase::DeleteAllBars()
     if ( m_frameStatusBar )
     {
         delete m_frameStatusBar;
-        m_frameStatusBar = (wxStatusBar *) NULL;
+        m_frameStatusBar = NULL;
     }
 #endif // wxUSE_STATUSBAR
 
@@ -111,7 +111,7 @@ void wxFrameBase::DeleteAllBars()
     if ( m_frameToolBar )
     {
         delete m_frameToolBar;
-        m_frameToolBar = (wxToolBar *) NULL;
+        m_frameToolBar = NULL;
     }
 #endif // wxUSE_TOOLBAR
 }
@@ -293,7 +293,7 @@ wxStatusBar* wxFrameBase::CreateStatusBar(int number,
 {
     // the main status bar can only be created once (or else it should be
     // deleted before calling CreateStatusBar() again)
-    wxCHECK_MSG( !m_frameStatusBar, (wxStatusBar *)NULL,
+    wxCHECK_MSG( !m_frameStatusBar, NULL,
                  wxT("recreating status bar in wxFrame") );
 
     SetStatusBar(OnCreateStatusBar(number, style, id, name));
@@ -448,7 +448,7 @@ wxToolBar* wxFrameBase::CreateToolBar(long style,
 {
     // the main toolbar can't be recreated (unless it was explicitly deleted
     // before)
-    wxCHECK_MSG( !m_frameToolBar, (wxToolBar *)NULL,
+    wxCHECK_MSG( !m_frameToolBar, NULL,
                  wxT("recreating toolbar in wxFrame") );
 
     if ( style == -1 )

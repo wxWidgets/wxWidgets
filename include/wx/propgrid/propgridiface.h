@@ -76,7 +76,7 @@ public:
     /** This constructor is required for NULL. */
     wxPGPropArgCls( int )
     {
-        m_ptr.property = (wxPGProperty*) NULL;
+        m_ptr.property = NULL;
         m_flags = IsProperty;
     }
     wxPGProperty* GetPtr( wxPropertyGridInterface* iface ) const;

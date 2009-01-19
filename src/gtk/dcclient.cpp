@@ -216,7 +216,7 @@ static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
     // The realloc failed.  Fall through to error.
     wxFAIL_MSG( wxT("No GC available") );
 
-    return (GdkGC*) NULL;
+    return NULL;
 }
 
 static void wxFreePoolGC( GdkGC *gc )
@@ -242,16 +242,16 @@ IMPLEMENT_ABSTRACT_CLASS(wxWindowDCImpl, wxGTKDCImpl)
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner ) :
    wxGTKDCImpl( owner )
 {
-    m_gdkwindow = (GdkWindow*) NULL;
-    m_penGC = (GdkGC *) NULL;
-    m_brushGC = (GdkGC *) NULL;
-    m_textGC = (GdkGC *) NULL;
-    m_bgGC = (GdkGC *) NULL;
-    m_cmap = (GdkColormap *) NULL;
+    m_gdkwindow = NULL;
+    m_penGC = NULL;
+    m_brushGC = NULL;
+    m_textGC = NULL;
+    m_bgGC = NULL;
+    m_cmap = NULL;
     m_isScreenDC = false;
-    m_context = (PangoContext *)NULL;
-    m_layout = (PangoLayout *)NULL;
-    m_fontdesc = (PangoFontDescription *)NULL;
+    m_context = NULL;
+    m_layout = NULL;
+    m_fontdesc = NULL;
 }
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
@@ -259,12 +259,12 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
 {
     wxASSERT_MSG( window, wxT("DC needs a window") );
 
-    m_gdkwindow = (GdkWindow*) NULL;
-    m_penGC = (GdkGC *) NULL;
-    m_brushGC = (GdkGC *) NULL;
-    m_textGC = (GdkGC *) NULL;
-    m_bgGC = (GdkGC *) NULL;
-    m_cmap = (GdkColormap *) NULL;
+    m_gdkwindow = NULL;
+    m_penGC = NULL;
+    m_brushGC = NULL;
+    m_textGC = NULL;
+    m_bgGC = NULL;
+    m_cmap = NULL;
     m_isScreenDC = false;
     m_font = window->GetFont();
 
@@ -411,10 +411,10 @@ void wxWindowDCImpl::SetUpDC( bool isMemDC )
     gdk_gc_set_function( m_penGC, GDK_COPY );
 
     /* clipping */
-    gdk_gc_set_clip_rectangle( m_penGC, (GdkRectangle *) NULL );
-    gdk_gc_set_clip_rectangle( m_brushGC, (GdkRectangle *) NULL );
-    gdk_gc_set_clip_rectangle( m_textGC, (GdkRectangle *) NULL );
-    gdk_gc_set_clip_rectangle( m_bgGC, (GdkRectangle *) NULL );
+    gdk_gc_set_clip_rectangle( m_penGC, NULL );
+    gdk_gc_set_clip_rectangle( m_brushGC, NULL );
+    gdk_gc_set_clip_rectangle( m_textGC, NULL );
+    gdk_gc_set_clip_rectangle( m_bgGC, NULL );
 }
 
 void wxWindowDCImpl::DoGetSize( int* width, int* height ) const
@@ -1905,7 +1905,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         case wxPENSTYLE_SOLID:
         default:
             lineStyle = GDK_LINE_SOLID;
-            req_dash = (wxGTKDash*)NULL;
+            req_dash = NULL;
             req_nb_dash = 0;
             break;
     }
@@ -2224,13 +2224,13 @@ void wxWindowDCImpl::DestroyClippingRegion()
 void wxWindowDCImpl::Destroy()
 {
     if (m_penGC) wxFreePoolGC( m_penGC );
-    m_penGC = (GdkGC*) NULL;
+    m_penGC = NULL;
     if (m_brushGC) wxFreePoolGC( m_brushGC );
-    m_brushGC = (GdkGC*) NULL;
+    m_brushGC = NULL;
     if (m_textGC) wxFreePoolGC( m_textGC );
-    m_textGC = (GdkGC*) NULL;
+    m_textGC = NULL;
     if (m_bgGC) wxFreePoolGC( m_bgGC );
-    m_bgGC = (GdkGC*) NULL;
+    m_bgGC = NULL;
 }
 
 void wxWindowDCImpl::SetDeviceOrigin( wxCoord x, wxCoord y )

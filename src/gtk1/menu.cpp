@@ -181,10 +181,10 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     // the parent window is known after wxFrame::SetMenu()
     m_needParent = false;
     m_style = style;
-    m_invokingWindow = (wxWindow*) NULL;
+    m_invokingWindow = NULL;
 
-    if (!PreCreation( (wxWindow*) NULL, wxDefaultPosition, wxDefaultSize ) ||
-        !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("menubar") ))
+    if (!PreCreation( NULL, wxDefaultPosition, wxDefaultSize ) ||
+        !CreateBase( NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("menubar") ))
     {
         wxFAIL_MSG( wxT("wxMenuBar creation failed") );
         return;
@@ -243,7 +243,7 @@ wxMenuBar::~wxMenuBar()
 
 static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
-    menu->SetInvokingWindow( (wxWindow*) NULL );
+    menu->SetInvokingWindow( NULL );
 
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
@@ -308,7 +308,7 @@ void wxMenuBar::SetInvokingWindow( wxWindow *win )
 
 void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 {
-    m_invokingWindow = (wxWindow*) NULL;
+    m_invokingWindow = NULL;
     wxWindow *top_frame = win;
     while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
         top_frame = top_frame->GetParent();
@@ -410,7 +410,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     wxMenu *menuOld = Remove(pos);
     if ( menuOld && !Insert(pos, menu, title) )
     {
-        return (wxMenu*) NULL;
+        return NULL;
     }
 
     // either Insert() succeeded or Remove() failed and menuOld is NULL
@@ -421,7 +421,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
     if ( !menu )
-        return (wxMenu*) NULL;
+        return NULL;
 
     gtk_menu_item_remove_submenu( GTK_MENU_ITEM(menu->m_owner) );
     gtk_container_remove(GTK_CONTAINER(m_menubar), menu->m_owner);
@@ -510,7 +510,7 @@ wxMenuItem* wxMenuBar::FindItem( int id, wxMenu **menuForItem ) const
 
     if ( menuForItem )
     {
-        *menuForItem = result ? result->GetMenu() : (wxMenu *)NULL;
+        *menuForItem = result ? result->GetMenu() : NULL;
     }
 
     return result;
@@ -740,8 +740,8 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 
 void wxMenuItem::Init()
 {
-    m_labelWidget = (GtkWidget *) NULL;
-    m_menuItem = (GtkWidget *) NULL;
+    m_labelWidget = NULL;
+    m_menuItem = NULL;
 
     DoSetText(m_text);
 }
@@ -872,7 +872,7 @@ wxAcceleratorEntry *wxMenuItem::GetAccel() const
     if ( !GetHotKey() )
     {
         // nothing
-        return (wxAcceleratorEntry *)NULL;
+        return NULL;
     }
 
     // accelerator parsing code looks for them after a TAB, so insert a dummy
@@ -938,7 +938,7 @@ void wxMenu::Init()
     //     our back by GTK+ e.g. when it is removed from menubar:
     gtk_widget_ref(m_menu);
 
-    m_owner = (GtkWidget*) NULL;
+    m_owner = NULL;
 
     // Tearoffs are entries, just like separators. So if we want this
     // menu to be a tear-off one, we just append a tearoff entry
@@ -1151,7 +1151,7 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
     if ( !wxMenuBase::DoRemove(item) )
-        return (wxMenuItem *)NULL;
+        return NULL;
 
     // TODO: this code doesn't delete the item factory item and this seems
     //       impossible as of GTK 1.2.6.
@@ -1535,8 +1535,8 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     gtk_menu_popup(
                   GTK_MENU(menu->m_menu),
-                  (GtkWidget *) NULL,           // parent menu shell
-                  (GtkWidget *) NULL,           // parent menu item
+                  NULL,           // parent menu shell
+                  NULL,           // parent menu item
                   posfunc,                      // function to position it
                   userdata,                     // client data
                   0,                            // button used to activate it

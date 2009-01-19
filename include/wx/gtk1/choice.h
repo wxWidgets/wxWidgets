@@ -29,7 +29,7 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr )
     {
-        m_strings = (wxSortedArrayString *)NULL;
+        m_strings = NULL;
 
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
@@ -41,7 +41,7 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr )
     {
-        m_strings = (wxSortedArrayString *)NULL;
+        m_strings = NULL;
 
         Create(parent, id, pos, size, choices, style, validator, name);
     }
@@ -49,7 +49,7 @@ public:
     bool Create( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            int n = 0, const wxString choices[] = (wxString *) NULL,
+            int n = 0, const wxString choices[] = NULL,
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );

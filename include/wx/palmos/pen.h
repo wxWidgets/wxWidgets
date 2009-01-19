@@ -111,13 +111,13 @@ public:
     wxPenCap GetCap() const { return (M_PENDATA ? M_PENDATA->m_cap : 0); };
     int GetDashes(wxDash **ptr) const
     {
-        *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*) NULL);
+        *ptr = (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : NULL);
         return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
     }
-    wxDash* GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : (wxDash*)NULL); };
+    wxDash* GetDash() const { return (M_PENDATA ? (wxDash*)M_PENDATA->m_dash : NULL); };
     inline int GetDashCount() const { return (M_PENDATA ? M_PENDATA->m_nbDash : 0); };
 
-    inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };
+    inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : NULL); };
 
     // Internal
     bool RealizeResource();

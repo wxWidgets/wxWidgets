@@ -145,7 +145,7 @@ public:
     void SetNavigationType(int navType) { m_navType = navType; }
     int GetNavigationType() { return m_navType; }
 
-    wxWebKitBeforeLoadEvent( wxWindow* win = (wxWindow*) NULL );
+    wxWebKitBeforeLoadEvent( wxWindow* win = NULL );
     wxEvent *Clone(void) const { return new wxWebKitBeforeLoadEvent(*this); }
 
 protected:
@@ -164,7 +164,7 @@ public:
     wxString GetURL() { return m_url; }
     void SetURL(const wxString& url) { m_url = url; }
 
-    wxWebKitStateChangedEvent( wxWindow* win = (wxWindow*) NULL );
+    wxWebKitStateChangedEvent( wxWindow* win = NULL );
     wxEvent *Clone(void) const { return new wxWebKitStateChangedEvent(*this); }
 
 protected:
@@ -212,21 +212,21 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_WEBKIT_NEW_WINDOW, wxWebKitNew
                             wxID_ANY, \
                             wxID_ANY, \
                             wxWebKitStateChangedEventHandler( func ), \
-                            (wxObject *) NULL ),
+                            NULL ),
 
 #define EVT_WEBKIT_BEFORE_LOAD(func) \
             DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_BEFORE_LOAD, \
                             wxID_ANY, \
                             wxID_ANY, \
                             wxWebKitBeforeLoadEventHandler( func ), \
-                            (wxObject *) NULL ),
+                            NULL ),
 
 #define EVT_WEBKIT_NEW_WINDOW(func)                              \
             DECLARE_EVENT_TABLE_ENTRY( wxEVT_WEBKIT_NEW_WINDOW, \
                             wxID_ANY, \
                             wxID_ANY, \
                             wxWebKitNewWindowEventFunction( func ), \
-                            (wxObject *) NULL ),
+                            NULL ),
 #endif // wxUSE_WEBKIT
 
 #endif

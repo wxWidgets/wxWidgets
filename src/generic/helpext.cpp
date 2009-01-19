@@ -155,7 +155,7 @@ void wxExtHelpController::DeleteList()
         }
 
         delete m_MapList;
-        m_MapList = (wxList*) NULL;
+        m_MapList = NULL;
     }
 }
 

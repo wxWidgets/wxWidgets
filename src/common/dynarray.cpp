@@ -87,7 +87,7 @@ name::name()                                                                \
 {                                                                           \
   m_nSize  =                                                                \
   m_nCount = 0;                                                             \
-  m_pItems = (T *)NULL;                                                     \
+  m_pItems = NULL;                                                     \
 }                                                                           \
                                                                             \
 /* copy ctor */                                                             \
@@ -107,7 +107,7 @@ name::name(const name& src)                                                 \
       }                                                                     \
   }                                                                         \
   else                                                                      \
-    m_pItems = (T *) NULL;                                                  \
+    m_pItems = NULL;                                                  \
 }                                                                           \
                                                                             \
 /* assignment operator */                                                   \
@@ -129,7 +129,7 @@ name& name::operator=(const name& src)                                      \
       }                                                                     \
   }                                                                         \
   else                                                                      \
-    m_pItems = (T *) NULL;                                                  \
+    m_pItems = NULL;                                                  \
                                                                             \
   return *this;                                                             \
 }                                                                           \

@@ -69,13 +69,13 @@ void wxGenericDragImage::Init()
 {
     m_isDirty = false;
     m_isShown = false;
-    m_windowDC = (wxDC*) NULL;
-    m_window = (wxWindow*) NULL;
+    m_windowDC = NULL;
+    m_window = NULL;
     m_fullScreen = false;
 #ifdef wxHAS_NATIVE_OVERLAY
     m_dcOverlay = NULL;
 #else
-    m_pBackingBitmap = (wxBitmap*) NULL;
+    m_pBackingBitmap = NULL;
 #endif
 }
 
@@ -359,7 +359,7 @@ bool wxGenericDragImage::EndDrag()
         m_windowDC->DestroyClippingRegion();
 #endif
         delete m_windowDC;
-        m_windowDC = (wxDC*) NULL;
+        m_windowDC = NULL;
     }
 
 #ifndef wxHAS_NATIVE_OVERLAY
@@ -373,7 +373,7 @@ bool wxGenericDragImage::EndDrag()
 // is non-NULL, or in screen coordinates if NULL.
 bool wxGenericDragImage::Move(const wxPoint& pt)
 {
-    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), wxT("No window DC in wxGenericDragImage::Move()") );
+    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Move()") );
 
     wxPoint pt2(pt);
     if (m_fullScreen)
@@ -397,7 +397,7 @@ bool wxGenericDragImage::Move(const wxPoint& pt)
 
 bool wxGenericDragImage::Show()
 {
-    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), wxT("No window DC in wxGenericDragImage::Show()") );
+    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Show()") );
 
     // Show at the current position
 
@@ -435,7 +435,7 @@ bool wxGenericDragImage::UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& des
 
 bool wxGenericDragImage::Hide()
 {
-    wxASSERT_MSG( (m_windowDC != (wxDC*) NULL), wxT("No window DC in wxGenericDragImage::Hide()") );
+    wxASSERT_MSG( (m_windowDC != NULL), wxT("No window DC in wxGenericDragImage::Hide()") );
 
     // Repair the old position
 

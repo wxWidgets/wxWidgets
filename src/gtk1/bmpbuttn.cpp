@@ -206,7 +206,7 @@ void wxBitmapButton::OnSetBitmap()
     if (!the_one.Ok()) the_one = m_bmpNormal;
     if (!the_one.Ok()) return;
 
-    GdkBitmap *mask = (GdkBitmap *) NULL;
+    GdkBitmap *mask = NULL;
     if (the_one.GetMask()) mask = the_one.GetMask()->GetBitmap();
 
     GtkWidget *child = BUTTON_CHILD(m_widget);

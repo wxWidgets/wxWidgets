@@ -286,7 +286,7 @@ public:
     // Rotates the image about the given point, 'angle' radians.
     // Returns the rotated image, leaving this image intact.
     wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
-                   bool interpolating = true, wxPoint * offset_after_rotation = (wxPoint*) NULL) const;
+                   bool interpolating = true, wxPoint * offset_after_rotation = NULL) const;
 
     wxImage Rotate90( bool clockwise = true ) const;
     wxImage Mirror( bool horizontally = true ) const;

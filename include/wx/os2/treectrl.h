@@ -448,7 +448,7 @@ public:
     //
     // returns NULL for OS/2 in ALL cases
     //
-    wxTextCtrl* GetEditControl(void) const {return (wxTextCtrl*)NULL;}
+    wxTextCtrl* GetEditControl(void) const {return NULL;}
 
     //
     // End editing and accept or discard the changes to item label

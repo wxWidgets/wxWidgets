@@ -82,7 +82,7 @@ public:
         wxPoint *WXUNUSED(pos) = NULL,
         bool *WXUNUSED(newFrameEachTime) = NULL)
     {
-        return (wxFrame*) NULL; // does nothing by default
+        return NULL; // does nothing by default
     }
 
     virtual bool Quit() = 0;

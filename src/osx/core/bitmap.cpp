@@ -1384,7 +1384,7 @@ int wxBitmap::GetDepth() const
 
 wxMask *wxBitmap::GetMask() const
 {
-   wxCHECK_MSG( Ok(), (wxMask *) NULL, wxT("invalid bitmap") );
+   wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
 
    return M_BITMAPDATA->m_bitmapMask;
 }

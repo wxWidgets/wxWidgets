@@ -542,7 +542,7 @@ void wxDoChangeBackgroundColour(WXWidget widget, const wxColour& backgroundColou
         return;
 
     wxComputeColours (XtDisplay((Widget) widget), & backgroundColour,
-        (wxColour*) NULL);
+        NULL);
 
     XtVaSetValues ((Widget) widget,
         XmNbackground, g_itemColors[wxBACK_INDEX].pixel,

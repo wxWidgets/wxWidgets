@@ -51,7 +51,7 @@ public:
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
-                          const wxPalette *palette = (wxPalette *) NULL) const;
+                          const wxPalette *palette = NULL) const;
     virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
 
 #if wxUSE_PALETTE

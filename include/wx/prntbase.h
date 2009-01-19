@@ -169,7 +169,7 @@ private:
 class WXDLLIMPEXP_CORE wxPrinterBase: public wxObject
 {
 public:
-    wxPrinterBase(wxPrintDialogData *data = (wxPrintDialogData *) NULL);
+    wxPrinterBase(wxPrintDialogData *data = NULL);
     virtual ~wxPrinterBase();
 
     virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
@@ -209,7 +209,7 @@ private:
 class WXDLLIMPEXP_CORE wxPrinter: public wxPrinterBase
 {
 public:
-    wxPrinter(wxPrintDialogData *data = (wxPrintDialogData *) NULL);
+    wxPrinter(wxPrintDialogData *data = NULL);
     virtual ~wxPrinter();
 
     virtual wxWindow *CreateAbortWindow(wxWindow *parent, wxPrintout *printout);
@@ -497,8 +497,8 @@ class WXDLLIMPEXP_CORE wxPrintPreviewBase: public wxObject
 {
 public:
     wxPrintPreviewBase(wxPrintout *printout,
-                       wxPrintout *printoutForPrinting = (wxPrintout *) NULL,
-                       wxPrintDialogData *data = (wxPrintDialogData *) NULL);
+                       wxPrintout *printoutForPrinting = NULL,
+                       wxPrintDialogData *data = NULL);
     wxPrintPreviewBase(wxPrintout *printout,
                        wxPrintout *printoutForPrinting,
                        wxPrintData *data);
@@ -608,8 +608,8 @@ class WXDLLIMPEXP_CORE wxPrintPreview: public wxPrintPreviewBase
 {
 public:
     wxPrintPreview(wxPrintout *printout,
-                   wxPrintout *printoutForPrinting = (wxPrintout *) NULL,
-                   wxPrintDialogData *data = (wxPrintDialogData *) NULL);
+                   wxPrintout *printoutForPrinting = NULL,
+                   wxPrintDialogData *data = NULL);
     wxPrintPreview(wxPrintout *printout,
                    wxPrintout *printoutForPrinting,
                    wxPrintData *data);

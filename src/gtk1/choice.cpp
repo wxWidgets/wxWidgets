@@ -90,7 +90,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
 
 wxChoice::wxChoice()
 {
-    m_strings = (wxSortedArrayString *)NULL;
+    m_strings = NULL;
 }
 
 bool wxChoice::Create( wxWindow *parent, wxWindowID id,
@@ -282,7 +282,7 @@ int wxChoice::FindString( const wxString &string, bool bCase ) const
     while (child)
     {
         GtkBin *bin = GTK_BIN( child->data );
-        GtkLabel *label = (GtkLabel *) NULL;
+        GtkLabel *label = NULL;
         if (bin->child)
             label = GTK_LABEL(bin->child);
         if (!label)
@@ -322,7 +322,7 @@ void wxChoice::SetString(unsigned int n, const wxString& str )
         GtkBin *bin = GTK_BIN( child->data );
         if (count == n)
         {
-            GtkLabel *label = (GtkLabel *) NULL;
+            GtkLabel *label = NULL;
             if (bin->child)
                 label = GTK_LABEL(bin->child);
             if (!label)
@@ -351,7 +351,7 @@ wxString wxChoice::GetString(unsigned int n) const
         GtkBin *bin = GTK_BIN( child->data );
         if (count == n)
         {
-            GtkLabel *label = (GtkLabel *) NULL;
+            GtkLabel *label = NULL;
             if (bin->child)
                 label = GTK_LABEL(bin->child);
             if (!label)
@@ -424,7 +424,7 @@ void wxChoice::DoApplyWidgetStyle(GtkRcStyle *style)
         gtk_widget_modify_style( GTK_WIDGET( child->data ), style );
 
         GtkBin *bin = GTK_BIN( child->data );
-        GtkWidget *label = (GtkWidget *) NULL;
+        GtkWidget *label = NULL;
         if (bin->child)
             label = bin->child;
         if (!label)
@@ -453,11 +453,11 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, unsigned int pos, const wxString& it
         if ( index )
         {
             m_clientList.Insert( m_clientList.Item(index - 1),
-                                 (wxObject*) NULL );
+                                 NULL );
         }
         else
         {
-            m_clientList.Insert( (wxObject*) NULL );
+            m_clientList.Insert( NULL );
         }
     }
     else
@@ -469,13 +469,13 @@ int wxChoice::GtkAddHelper(GtkWidget *menu, unsigned int pos, const wxString& it
         if (pos == m_clientList.GetCount())
         {
             gtk_menu_append( GTK_MENU(menu), menu_item );
-            m_clientList.Append( (wxObject*) NULL );
+            m_clientList.Append( NULL );
             index = m_clientList.GetCount() - 1;
         }
         else
         {
             gtk_menu_insert( GTK_MENU(menu), menu_item, pos );
-            m_clientList.Insert( pos, (wxObject*) NULL );
+            m_clientList.Insert( pos, NULL );
             index = pos;
         }
     }

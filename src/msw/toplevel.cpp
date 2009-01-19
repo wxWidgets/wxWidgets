@@ -128,7 +128,7 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsMaximized = false;
     m_fsIsShowing = false;
 
-    m_winLastFocused = (wxWindow *)NULL;
+    m_winLastFocused = NULL;
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     m_MenuBarHWND = 0;

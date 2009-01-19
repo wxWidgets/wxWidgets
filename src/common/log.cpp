@@ -969,7 +969,7 @@ unsigned int    wxLog::ms_prevCounter = 0;
 time_t          wxLog::ms_prevTimeStamp= 0;
 wxLogLevel      wxLog::ms_prevLevel;
 
-wxLog          *wxLog::ms_pLogger      = (wxLog *)NULL;
+wxLog          *wxLog::ms_pLogger      = NULL;
 bool            wxLog::ms_doLog        = true;
 bool            wxLog::ms_bAutoCreate  = true;
 bool            wxLog::ms_bVerbose     = false;

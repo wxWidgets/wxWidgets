@@ -309,20 +309,20 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 #if wxUSE_PALETTE
 wxPalette* wxBitmap::GetPalette() const
 {
-    return (wxPalette *) NULL;
+    return NULL;
 }
 #endif
 
 wxMask *wxBitmap::GetMask() const
 {
-    return (wxMask *) NULL;
+    return NULL;
 }
 
 #ifdef __WXDEBUG__
 
 wxDC *wxBitmap::GetSelectedInto() const
 {
-    return (wxDC *) NULL;
+    return NULL;
 }
 
 #endif

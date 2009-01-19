@@ -129,7 +129,7 @@ void wxWindow::Init()
 {
 #if wxUSE_SCROLLBAR
     m_scrollbarVert =
-    m_scrollbarHorz = (wxScrollBar *)NULL;
+    m_scrollbarHorz = NULL;
 #endif // wxUSE_SCROLLBAR
 
     m_isCurrent = false;

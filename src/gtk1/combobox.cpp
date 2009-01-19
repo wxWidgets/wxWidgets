@@ -247,8 +247,8 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     {
         GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( choices[i] ) );
 
-        m_clientDataList.Append( (wxObject*)NULL );
-        m_clientObjectList.Append( (wxObject*)NULL );
+        m_clientDataList.Append( NULL );
+        m_clientObjectList.Append( NULL );
 
         gtk_container_add( GTK_CONTAINER(list), list_item );
 
@@ -365,9 +365,9 @@ int wxComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
         gtk_widget_show( list_item );
 
         if ( m_clientDataList.GetCount() < GetCount() )
-            m_clientDataList.Insert( pos, (wxObject*) NULL );
+            m_clientDataList.Insert( pos, NULL );
         if ( m_clientObjectList.GetCount() < GetCount() )
-            m_clientObjectList.Insert( pos, (wxObject*) NULL );
+            m_clientObjectList.Insert( pos, NULL );
 
         AssignNewItemClientData(pos, clientData, i, type);
     }
@@ -435,7 +435,7 @@ void wxComboBox::DoDeleteOneItem(unsigned int n)
 
     DisableEvents();
 
-    GList *list = g_list_append( (GList*) NULL, child->data );
+    GList *list = g_list_append( NULL, child->data );
     gtk_list_remove_items( listbox, list );
     g_list_free( list );
 

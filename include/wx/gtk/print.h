@@ -288,9 +288,9 @@ protected:
         wxFAIL_MSG( "not implemented" );
     }
     void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
-                     wxCoord *descent = (wxCoord *) NULL,
-                     wxCoord *externalLeading = (wxCoord *) NULL,
-                     const wxFont *theFont = (wxFont *) NULL ) const;
+                     wxCoord *descent = NULL,
+                     wxCoord *externalLeading = NULL,
+                     const wxFont *theFont = NULL ) const;
     void DoGetSize(int* width, int* height) const;
     void DoGetSizeMM(int *width, int *height) const;
 
@@ -327,8 +327,8 @@ class WXDLLIMPEXP_CORE wxGtkPrintPreview : public wxPrintPreviewBase
 {
 public:
     wxGtkPrintPreview(wxPrintout *printout,
-                             wxPrintout *printoutForPrinting = (wxPrintout *) NULL,
-                             wxPrintDialogData *data = (wxPrintDialogData *) NULL);
+                             wxPrintout *printoutForPrinting = NULL,
+                             wxPrintDialogData *data = NULL);
     wxGtkPrintPreview(wxPrintout *printout,
                              wxPrintout *printoutForPrinting,
                              wxPrintData *data);

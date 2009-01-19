@@ -72,7 +72,7 @@ void wxMenu::Init()
     m_popupShell = (WXWidget) NULL;
     m_buttonWidget = (WXWidget) NULL;
     m_menuId = 0;
-    m_topLevelMenu  = (wxMenu*) NULL;
+    m_topLevelMenu  = NULL;
     m_ownedByMenuBar = false;
 
     if ( !m_title.empty() )
@@ -383,7 +383,7 @@ bool wxMenuBar::DestroyMenuBar()
 {
     if (!m_mainWidget)
     {
-        SetMenuBarFrame((wxFrame*) NULL);
+        SetMenuBarFrame(NULL);
         return false;
     }
 
@@ -400,7 +400,7 @@ bool wxMenuBar::DestroyMenuBar()
     XtDestroyWidget((Widget) m_mainWidget);
     m_mainWidget = (WXWidget) 0;
 
-    SetMenuBarFrame((wxFrame*) NULL);
+    SetMenuBarFrame(NULL);
 
     return true;
 }
@@ -529,7 +529,7 @@ void wxMenu::DestroyMenu (bool full)
           node = node->GetNext() )
     {
         wxMenuItem *item = node->GetData();
-        item->SetMenuBar((wxMenuBar*) NULL);
+        item->SetMenuBar(NULL);
 
         item->DestroyItem(full);
     }
@@ -555,7 +555,7 @@ WXWidget wxMenu::FindMenuItem (int id, wxMenuItem ** it) const
     if (id == m_menuId)
     {
         if (it)
-            *it = (wxMenuItem*) NULL;
+            *it = NULL;
         return m_buttonWidget;
     }
 
@@ -582,7 +582,7 @@ WXWidget wxMenu::FindMenuItem (int id, wxMenuItem ** it) const
     }
 
     if (it)
-        *it = (wxMenuItem*) NULL;
+        *it = NULL;
     return (WXWidget) NULL;
 }
 

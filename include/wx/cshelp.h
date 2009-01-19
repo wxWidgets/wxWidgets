@@ -217,7 +217,7 @@ class WXDLLIMPEXP_CORE wxHelpControllerHelpProvider : public wxSimpleHelpProvide
 public:
     // Note that it doesn't own the help controller. The help controller
     // should be deleted separately.
-    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = (wxHelpControllerBase*) NULL);
+    wxHelpControllerHelpProvider(wxHelpControllerBase* hc = NULL);
 
     // implement wxHelpProvider methods
 

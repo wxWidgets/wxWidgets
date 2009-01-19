@@ -81,7 +81,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     // Simply pass the pointer on to the help window
     m_Data = data;
     m_HtmlHelpWin = NULL;
-    m_helpController = (wxHtmlHelpController*) NULL;
+    m_helpController = NULL;
 }
 
 void wxHtmlHelpFrame::SetController(wxHtmlHelpController* controller)

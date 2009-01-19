@@ -39,12 +39,12 @@ class WXDLLIMPEXP_CORE wxMenuItemBase : public wxObject
 {
 public:
     // creation
-    static wxMenuItem *New(wxMenu *parentMenu = (wxMenu *)NULL,
+    static wxMenuItem *New(wxMenu *parentMenu = NULL,
                            int itemid = wxID_SEPARATOR,
                            const wxString& text = wxEmptyString,
                            const wxString& help = wxEmptyString,
                            wxItemKind kind = wxITEM_NORMAL,
-                           wxMenu *subMenu = (wxMenu *)NULL);
+                           wxMenu *subMenu = NULL);
 
     // destruction: wxMenuItem will delete its submenu
     virtual ~wxMenuItemBase();
@@ -138,7 +138,7 @@ public:
                            const wxString& text,
                            const wxString& help,
                            bool isCheckable,
-                           wxMenu *subMenu = (wxMenu *)NULL)
+                           wxMenu *subMenu = NULL)
     {
         return New(parentMenu, itemid, text, help,
                    isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu);
@@ -155,12 +155,12 @@ protected:
     bool          m_isEnabled;      // is enabled?
 
     // this ctor is for the derived classes only, we're never created directly
-    wxMenuItemBase(wxMenu *parentMenu = (wxMenu *)NULL,
+    wxMenuItemBase(wxMenu *parentMenu = NULL,
                    int itemid = wxID_SEPARATOR,
                    const wxString& text = wxEmptyString,
                    const wxString& help = wxEmptyString,
                    wxItemKind kind = wxITEM_NORMAL,
-                   wxMenu *subMenu = (wxMenu *)NULL);
+                   wxMenu *subMenu = NULL);
 
 private:
     // and, if we have one ctor, compiler won't generate a default copy one, so

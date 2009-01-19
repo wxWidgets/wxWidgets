@@ -119,7 +119,7 @@ void wxDisplaySizeMM( int *width, int *height )
 
 void wxGetMousePosition( int* x, int* y )
 {
-    gdk_window_get_pointer( (GdkWindow*) NULL, x, y, (GdkModifierType*) NULL );
+    gdk_window_get_pointer( NULL, x, y, NULL );
 }
 
 bool wxColourDisplay()

@@ -62,7 +62,7 @@ protected:
 class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:
-    wxDropTarget(wxDataObject* pDataObject = (wxDataObject*)NULL);
+    wxDropTarget(wxDataObject* pDataObject = NULL);
     virtual ~wxDropTarget();
 
     //

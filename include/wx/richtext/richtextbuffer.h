@@ -1905,7 +1905,7 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBufferDataObject: public wxDataObjectSimple
 public:
     // ctor doesn't copy the pointer, so it shouldn't go away while this object
     // is alive
-    wxRichTextBufferDataObject(wxRichTextBuffer* richTextBuffer = (wxRichTextBuffer*) NULL);
+    wxRichTextBufferDataObject(wxRichTextBuffer* richTextBuffer = NULL);
     virtual ~wxRichTextBufferDataObject();
 
     // after a call to this function, the buffer is owned by the caller and it

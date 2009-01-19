@@ -148,12 +148,12 @@ bool wxMenuBase::ms_locked = true;
 
 void wxMenuBase::Init(long style)
 {
-    m_menuBar = (wxMenuBar *)NULL;
-    m_menuParent = (wxMenu *)NULL;
+    m_menuBar = NULL;
+    m_menuParent = NULL;
 
-    m_invokingWindow = (wxWindow *)NULL;
+    m_invokingWindow = NULL;
     m_style = style;
-    m_clientData = (void *)NULL;
+    m_clientData = NULL;
     m_eventHandler = this;
 }
 
@@ -240,11 +240,11 @@ wxMenuItem *wxMenuBase::DoRemove(wxMenuItem *item)
     m_items.Erase(node);
 
     // item isn't attached to anything any more
-    item->SetMenu((wxMenu *)NULL);
+    item->SetMenu(NULL);
     wxMenu *submenu = item->GetSubMenu();
     if ( submenu )
     {
-        submenu->SetParent((wxMenu *)NULL);
+        submenu->SetParent(NULL);
         if ( submenu->IsAttached() )
             submenu->Detach();
     }
@@ -265,7 +265,7 @@ bool wxMenuBase::DoDelete(wxMenuItem *item)
     wxCHECK_MSG( item2, false, wxT("failed to delete menu item") );
 
     // don't delete the submenu
-    item2->SetSubMenu((wxMenu *)NULL);
+    item2->SetSubMenu(NULL);
 
     delete item2;
 
@@ -356,7 +356,7 @@ wxMenuItem *wxMenuBase::FindItem(int itemId, wxMenu **itemMenu) const
 // non recursive search
 wxMenuItem *wxMenuBase::FindChildItem(int id, size_t *ppos) const
 {
-    wxMenuItem *item = (wxMenuItem *)NULL;
+    wxMenuItem *item = NULL;
     wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
 
     size_t pos;

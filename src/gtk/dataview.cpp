@@ -2621,7 +2621,7 @@ void wxDataViewColumn::SetBitmap( const wxBitmap &bitmap )
     {
         GtkImage *gtk_image = GTK_IMAGE(m_image);
 
-        GdkBitmap *mask = (GdkBitmap *) NULL;
+        GdkBitmap *mask = NULL;
         if (bitmap.GetMask())
             mask = bitmap.GetMask()->GetBitmap();
 

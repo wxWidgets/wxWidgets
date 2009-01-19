@@ -59,8 +59,8 @@ int wxOpenModalDialogsCount = 0;
 
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
-static wxTopLevelWindowGTK *g_activeFrame = (wxTopLevelWindowGTK*) NULL;
-static wxTopLevelWindowGTK *g_lastActiveFrame = (wxTopLevelWindowGTK*) NULL;
+static wxTopLevelWindowGTK *g_activeFrame = NULL;
+static wxTopLevelWindowGTK *g_lastActiveFrame = NULL;
 
 // if we detect that the app has got/lost the focus, we set this variable to
 // either TRUE or FALSE and an activate event will be sent during the next
@@ -434,7 +434,7 @@ static gboolean property_notify_event(
 
 void wxTopLevelWindowGTK::Init()
 {
-    m_mainWidget = (GtkWidget*) NULL;
+    m_mainWidget = NULL;
     m_isIconized = false;
     m_fsIsShowing = false;
     m_themeEnabled = true;

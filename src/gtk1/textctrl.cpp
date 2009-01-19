@@ -223,7 +223,7 @@ void wxTextCtrl::Init()
     m_modified = false;
     SetUpdateFont(false);
     m_text =
-    m_vScrollbar = (GtkWidget *)NULL;
+    m_vScrollbar = NULL;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -271,7 +271,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if (multi_line)
     {
         // create our control ...
-        m_text = gtk_text_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
+        m_text = gtk_text_new( NULL, NULL );
 
         // ... and put into the upper left hand corner of the table
         bool bHasHScrollbar = false;
@@ -1246,7 +1246,7 @@ void wxTextCtrl::OnInternalIdle()
 
     if (cursor.Ok())
     {
-        GdkWindow *window = (GdkWindow*) NULL;
+        GdkWindow *window = NULL;
         if (HasFlag(wxTE_MULTILINE))
             window = GTK_TEXT(m_text)->text_area;
         else

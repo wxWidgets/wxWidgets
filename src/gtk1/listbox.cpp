@@ -134,7 +134,7 @@ static gint gtk_listitem_focus_out_callback( GtkWidget *WXUNUSED(widget),
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    g_focusWindow = (wxWindowGTK *)NULL;
+    g_focusWindow = NULL;
 
     // don't send the window a kill focus event if it thinks that it doesn't
     // have focus already
@@ -460,7 +460,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 
 wxListBox::wxListBox()
 {
-    m_list = (GtkList *) NULL;
+    m_list = NULL;
 #if wxUSE_CHECKLISTBOX
     m_hasCheckBoxes = false;
 #endif // wxUSE_CHECKLISTBOX
@@ -496,7 +496,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
         return false;
     }
 
-    m_widget = gtk_scrolled_window_new( (GtkAdjustment*) NULL, (GtkAdjustment*) NULL );
+    m_widget = gtk_scrolled_window_new( NULL, NULL );
     if (style & wxLB_ALWAYS_SB)
     {
       gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(m_widget),
@@ -548,7 +548,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     }
     else
     {
-        m_strings = (wxSortedArrayString *)NULL;
+        m_strings = NULL;
     }
 
     Append(n, choices);
@@ -722,7 +722,7 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
 
     wxCHECK_RET( child, wxT("wrong listbox index") );
 
-    GList *list = g_list_append( (GList*) NULL, child->data );
+    GList *list = g_list_append( NULL, child->data );
     gtk_list_remove_items( m_list, list );
     g_list_free( list );
 
@@ -994,7 +994,7 @@ void wxListBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
     GList *child = m_list->children;
     while (child)
     {
-        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), wxConvCurrent->cWX2MB(tip), (gchar*) NULL );
+        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), wxConvCurrent->cWX2MB(tip), NULL );
         child = child->next;
     }
 }

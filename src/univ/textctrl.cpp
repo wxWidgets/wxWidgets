@@ -4314,7 +4314,7 @@ void wxTextCtrl::CreateCaret()
     else
     {
         // read only controls don't have the caret
-        caret = (wxCaret *)NULL;
+        caret = NULL;
     }
 
     // SetCaret() will delete the old caret if any
@@ -4433,7 +4433,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
 
     // the command this action corresponds to or NULL if this action doesn't
     // change text at all or can't be undone
-    wxTextCtrlCommand *command = (wxTextCtrlCommand *)NULL;
+    wxTextCtrlCommand *command = NULL;
 
     wxString action;
     bool del = false,
@@ -4789,7 +4789,7 @@ wxInputHandler *wxTextCtrl::GetStdInputHandler(wxInputHandler *handlerDef)
 wxStdTextCtrlInputHandler::wxStdTextCtrlInputHandler(wxInputHandler *inphand)
                          : wxStdInputHandler(inphand)
 {
-    m_winCapture = (wxTextCtrl *)NULL;
+    m_winCapture = NULL;
 }
 
 /* static */
@@ -4966,7 +4966,7 @@ bool wxStdTextCtrlInputHandler::HandleMouse(wxInputConsumer *consumer,
             m_winCapture->ShowCaret();
 
             m_winCapture->ReleaseMouse();
-            m_winCapture = (wxTextCtrl *)NULL;
+            m_winCapture = NULL;
         }
     }
 

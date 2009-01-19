@@ -35,7 +35,7 @@ public:
         m_color.green = 0;
         m_color.blue = 0;
         m_color.pixel = 0;
-        m_colormap = (GdkColormap *) NULL;
+        m_colormap = NULL;
         m_hasPixel = false;
     }
 
@@ -178,7 +178,7 @@ void wxColour::InitRGBA(unsigned char red, unsigned char green, unsigned char bl
     M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
     M_COLDATA->m_color.pixel = 0;
 
-    M_COLDATA->m_colormap = (GdkColormap*) NULL;
+    M_COLDATA->m_colormap = NULL;
     M_COLDATA->m_hasPixel = false;
 }
 
@@ -219,7 +219,7 @@ int wxColour::GetPixel() const
 
 GdkColor *wxColour::GetColor() const
 {
-    wxCHECK_MSG( Ok(), (GdkColor *) NULL, wxT("invalid colour") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid colour") );
 
     return &M_COLDATA->m_color;
 }

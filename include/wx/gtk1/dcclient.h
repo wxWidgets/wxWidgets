@@ -73,9 +73,9 @@ protected:
                                    double angle);
     virtual void DoGetTextExtent( const wxString &string,
                                 wxCoord *width, wxCoord *height,
-                                wxCoord *descent = (wxCoord *) NULL,
-                                wxCoord *externalLeading = (wxCoord *) NULL,
-                                const wxFont *theFont = (wxFont *) NULL) const;
+                                wxCoord *descent = NULL,
+                                wxCoord *externalLeading = NULL,
+                                const wxFont *theFont = NULL) const;
 
 public:
     virtual wxCoord GetCharWidth() const;

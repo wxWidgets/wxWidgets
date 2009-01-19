@@ -141,7 +141,7 @@ int wxNodeBase::IndexOf() const
 void wxListBase::Init(wxKeyType keyType)
 {
   m_nodeFirst =
-  m_nodeLast = (wxNodeBase *) NULL;
+  m_nodeLast = NULL;
   m_count = 0;
   m_destroy = false;
   m_keyType = keyType;
@@ -165,7 +165,7 @@ void wxListBase::DoCopy(const wxListBase& list)
     m_destroy = list.m_destroy;
     m_keyType = list.m_keyType;
     m_nodeFirst =
-    m_nodeLast = (wxNodeBase *) NULL;
+    m_nodeLast = NULL;
 
     switch (m_keyType)
     {
@@ -236,12 +236,12 @@ wxNodeBase *wxListBase::AppendCommon(wxNodeBase *node)
 wxNodeBase *wxListBase::Append(void *object)
 {
     // all objects in a keyed list should have a key
-    wxCHECK_MSG( m_keyType == wxKEY_NONE, (wxNodeBase *)NULL,
+    wxCHECK_MSG( m_keyType == wxKEY_NONE, NULL,
                  wxT("need a key for the object to append") );
 
     // we use wxDefaultListKey even though it is the default parameter value
     // because gcc under Mac OS X seems to miscompile this call otherwise
-    wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object,
+    wxNodeBase *node = CreateNode(m_nodeLast, NULL, object,
                                   wxDefaultListKey);
 
     return AppendCommon(node);
@@ -251,10 +251,10 @@ wxNodeBase *wxListBase::Append(long key, void *object)
 {
     wxCHECK_MSG( (m_keyType == wxKEY_INTEGER) ||
                  (m_keyType == wxKEY_NONE && m_count == 0),
-                 (wxNodeBase *)NULL,
+                 NULL,
                  wxT("can't append object with numeric key to this list") );
 
-    wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object, key);
+    wxNodeBase *node = CreateNode(m_nodeLast, NULL, object, key);
     return AppendCommon(node);
 }
 
@@ -262,20 +262,20 @@ wxNodeBase *wxListBase::Append (const wxString& key, void *object)
 {
     wxCHECK_MSG( (m_keyType == wxKEY_STRING) ||
                  (m_keyType == wxKEY_NONE && m_count == 0),
-                 (wxNodeBase *)NULL,
+                 NULL,
                  wxT("can't append object with string key to this list") );
 
-    wxNodeBase *node = CreateNode(m_nodeLast, (wxNodeBase *)NULL, object, key);
+    wxNodeBase *node = CreateNode(m_nodeLast, NULL, object, key);
     return AppendCommon(node);
 }
 
 wxNodeBase *wxListBase::Insert(wxNodeBase *position, void *object)
 {
     // all objects in a keyed list should have a key
-    wxCHECK_MSG( m_keyType == wxKEY_NONE, (wxNodeBase *)NULL,
+    wxCHECK_MSG( m_keyType == wxKEY_NONE, NULL,
                  wxT("need a key for the object to insert") );
 
-    wxCHECK_MSG( !position || position->m_list == this, (wxNodeBase *)NULL,
+    wxCHECK_MSG( !position || position->m_list == this, NULL,
                  wxT("can't insert before a node from another list") );
 
     // previous and next node for the node being inserted
@@ -288,7 +288,7 @@ wxNodeBase *wxListBase::Insert(wxNodeBase *position, void *object)
     else
     {
         // inserting in the beginning of the list
-        prev = (wxNodeBase *)NULL;
+        prev = NULL;
         next = m_nodeFirst;
     }
 
@@ -321,7 +321,7 @@ wxNodeBase *wxListBase::Item(size_t n) const
 
     wxFAIL_MSG( wxT("invalid index in wxListBase::Item") );
 
-    return (wxNodeBase *)NULL;
+    return NULL;
 }
 
 wxNodeBase *wxListBase::Find(const wxListKey& key) const
@@ -338,7 +338,7 @@ wxNodeBase *wxListBase::Find(const wxListKey& key) const
     }
 
     // not found
-    return (wxNodeBase *)NULL;
+    return NULL;
 }
 
 wxNodeBase *wxListBase::Find(const void *object) const
@@ -350,7 +350,7 @@ wxNodeBase *wxListBase::Find(const void *object) const
     }
 
     // not found
-    return (wxNodeBase *)NULL;
+    return NULL;
 }
 
 int wxListBase::IndexOf(void *object) const
@@ -437,7 +437,7 @@ void wxListBase::Clear()
     }
 
     m_nodeFirst =
-    m_nodeLast = (wxNodeBase *)NULL;
+    m_nodeLast = NULL;
 
     m_count = 0;
 }
@@ -458,7 +458,7 @@ void *wxListBase::FirstThat(wxListIterateFunction F)
             return current->GetData();
     }
 
-    return (wxNodeBase *)NULL;
+    return NULL;
 }
 
 void *wxListBase::LastThat(wxListIterateFunction F)
@@ -469,7 +469,7 @@ void *wxListBase::LastThat(wxListIterateFunction F)
             return current->GetData();
     }
 
-    return (wxNodeBase *)NULL;
+    return NULL;
 }
 
 // (stefan.hammes@urz.uni-heidelberg.de)

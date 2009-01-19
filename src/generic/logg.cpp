@@ -235,7 +235,7 @@ void wxVLogStatus(wxFrame *pFrame, const wxString& format, va_list argptr)
 #else
     wxLog::OnLog(wxLOG_Status, msg, time(NULL));
 #endif
-    gs_pFrame = (wxFrame *) NULL;
+    gs_pFrame = NULL;
   }
 }
 
@@ -793,7 +793,7 @@ bool wxLogWindow::OnFrameClose(wxFrame * WXUNUSED(frame))
 
 void wxLogWindow::OnFrameDelete(wxFrame * WXUNUSED(frame))
 {
-    m_pLogFrame = (wxLogFrame *)NULL;
+    m_pLogFrame = NULL;
 }
 
 wxLogWindow::~wxLogWindow()

@@ -605,7 +605,7 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
 
     m_parent = parent;
 
-    m_attr = (wxTreeItemAttr *)NULL;
+    m_attr = NULL;
     m_ownsAttr = false;
 
     // We don't know the height here yet.
@@ -758,7 +758,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
         }
 
         // if children are expanded, fall through to evaluate them
-        if (m_isCollapsed) return (wxGenericTreeItem*) NULL;
+        if (m_isCollapsed) return NULL;
     }
 
     // evaluate children
@@ -773,7 +773,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
             return res;
     }
 
-    return (wxGenericTreeItem*) NULL;
+    return NULL;
 }
 
 int wxGenericTreeItem::GetCurrentImage() const
@@ -945,7 +945,7 @@ void wxGenericTreeCtrl::Init()
     m_current =
     m_key_current =
     m_anchor =
-    m_select_me = (wxGenericTreeItem *) NULL;
+    m_select_me = NULL;
     m_hasFocus = false;
     m_dirty = false;
 
@@ -1685,7 +1685,7 @@ wxTreeItemId wxGenericTreeCtrl::AddRoot(const wxString& text,
 
     m_dirty = true;     // do this first so stuff below doesn't cause flicker
 
-    m_anchor = new wxGenericTreeItem((wxGenericTreeItem *)NULL, text,
+    m_anchor = new wxGenericTreeItem(NULL, text,
                                    image, selImage, data);
     if ( data != NULL )
     {
@@ -3595,7 +3595,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         {
             m_oldSelection->SetHilight(true);
             RefreshLine(m_oldSelection);
-            m_oldSelection = (wxGenericTreeItem *)NULL;
+            m_oldSelection = NULL;
         }
 
         // generate the drag end event
@@ -3606,7 +3606,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         (void)GetEventHandler()->ProcessEvent(eventEndDrag);
 
         m_isDragging = false;
-        m_dropTarget = (wxGenericTreeItem *)NULL;
+        m_dropTarget = NULL;
 
         SetCursor(m_oldCursor);
 

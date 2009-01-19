@@ -508,7 +508,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menuBar)
     }
 
     // Currently can't set it twice
-    //    wxASSERT_MSG( (m_frameMenuBar == (wxMenuBar*) NULL), "Cannot set the menubar more than once");
+    //    wxASSERT_MSG( (m_frameMenuBar == NULL), "Cannot set the menubar more than once");
 
     if (m_frameMenuBar)
     {

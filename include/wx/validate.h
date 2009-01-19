@@ -44,7 +44,7 @@ public:
     // Another possibility is to always pass a pointer to a new validator
     // (so the calling code can use a copy constructor of the relevant class).
     virtual wxObject *Clone() const
-        { return (wxValidator *)NULL; }
+        { return NULL; }
     bool Copy(const wxValidator& val)
         { m_validatorWindow = val.m_validatorWindow; return true; }
 
@@ -87,7 +87,7 @@ extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
     // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
     // everywhere
     class WXDLLIMPEXP_FWD_CORE wxValidator;
-    #define wxDefaultValidator (*((wxValidator *)NULL))
+    #define wxDefaultValidator (*(NULL))
 
     // this macro allows to avoid warnings about unused parameters when
     // wxUSE_VALIDATORS == 0

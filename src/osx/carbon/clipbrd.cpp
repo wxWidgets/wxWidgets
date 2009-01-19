@@ -142,7 +142,7 @@ void wxClipboard::Close()
     if (m_data)
     {
         delete m_data;
-        m_data = (wxDataObject*) NULL;
+        m_data = NULL;
     }
 }
 

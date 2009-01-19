@@ -576,7 +576,7 @@ void wxDebugContext::TraverseList (PmSFV func, wxMemStruct *from)
 bool wxDebugContext::PrintList (void)
 {
 #ifdef __WXDEBUG__
-  TraverseList ((PmSFV)&wxMemStruct::PrintNode, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
+  TraverseList ((PmSFV)&wxMemStruct::PrintNode, (checkPoint ? checkPoint->m_next : NULL));
 
   return true;
 #else
@@ -602,7 +602,7 @@ bool wxDebugContext::Dump(void)
     }
   }
 
-  TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
+  TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : NULL));
 
   OutputDumpLine(wxEmptyString);
   OutputDumpLine(wxEmptyString);
@@ -667,7 +667,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
 
   wxDebugStatsStruct *list = NULL;
 
-  wxMemStruct *from = (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL );
+  wxMemStruct *from = (checkPoint ? checkPoint->m_next : NULL );
   if (!from)
     from = wxDebugContext::GetHead ();
 
@@ -800,7 +800,7 @@ int wxDebugContext::Check(bool checkAll)
 {
   int nFailures = 0;
 
-  wxMemStruct *from = (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL );
+  wxMemStruct *from = (checkPoint ? checkPoint->m_next : NULL );
   if (!from || checkAll)
     from = wxDebugContext::GetHead ();
 

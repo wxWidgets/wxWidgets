@@ -207,19 +207,19 @@ static GdkGC *g_eraseGC = NULL;
 
 // mouse capture state: the window which has it and if the mouse is currently
 // inside it
-static wxWindowGTK  *g_captureWindow = (wxWindowGTK*) NULL;
+static wxWindowGTK  *g_captureWindow = NULL;
 static bool g_captureWindowHasMouse = false;
 
-wxWindowGTK  *g_focusWindow = (wxWindowGTK*) NULL;
+wxWindowGTK  *g_focusWindow = NULL;
 
 // the last window which had the focus - this is normally never NULL (except
 // if we never had focus at all) as even when g_focusWindow is NULL it still
 // keeps its previous value
-wxWindowGTK *g_focusWindowLast = (wxWindowGTK*) NULL;
+wxWindowGTK *g_focusWindowLast = NULL;
 
 // If a window get the focus set but has not been realized
 // yet, defer setting the focus to idle time.
-wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
+wxWindowGTK *g_delayedFocus = NULL;
 
 // hack: we need something to pass to gtk_menu_popup, so we store the time of
 // the last click here (extern: used from gtk/menu.cpp)
@@ -227,7 +227,7 @@ guint32 wxGtkTimeLastClick = 0;
 
 // global variables because GTK+ DnD want to have the
 // mouse event that caused it
-GdkEvent *g_lastMouseEvent = (GdkEvent*) NULL;
+GdkEvent *g_lastMouseEvent = NULL;
 int g_lastButtonNumber = 0;
 
 extern bool g_mainThreadLocked;
@@ -294,7 +294,7 @@ wxWindow *wxFindFocusedChild(wxWindowGTK *win)
 {
     wxWindow *winFocus = wxWindowGTK::FindFocus();
     if ( !winFocus )
-        return (wxWindow *)NULL;
+        return NULL;
 
     if ( winFocus == win )
         return (wxWindow *)win;
@@ -308,7 +308,7 @@ wxWindow *wxFindFocusedChild(wxWindowGTK *win)
             return child;
     }
 
-    return (wxWindow *)NULL;
+    return NULL;
 }
 
 static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
@@ -611,7 +611,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
         GdkRectangle child_area;
         if (gtk_widget_intersect (child->widget, rect, &child_area))
         {
-            gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
+            gtk_widget_draw (child->widget, &child_area /* NULL*/ );
         }
     }
 #endif
@@ -1433,7 +1433,7 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
         }
         else
         {
-            if ((child->m_wxwindow == (GtkWidget*) NULL) &&
+            if ((child->m_wxwindow == NULL) &&
                 (child->m_x <= xx) &&
                 (child->m_y <= yy) &&
                 (child->m_x+child->m_width  >= xx) &&
@@ -1879,7 +1879,7 @@ static gint gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget),
     if ( winFocus )
         win = winFocus;
 
-    g_focusWindow = (wxWindowGTK *)NULL;
+    g_focusWindow = NULL;
 
 #ifdef HAVE_XIM
     if (win->m_ic)
@@ -2424,9 +2424,9 @@ wxMouseState wxGetMouseState()
 void wxWindowGTK::Init()
 {
     // GTK specific
-    m_widget = (GtkWidget *) NULL;
-    m_wxwindow = (GtkWidget *) NULL;
-    m_focusWidget = (GtkWidget *) NULL;
+    m_widget = NULL;
+    m_wxwindow = NULL;
+    m_focusWidget = NULL;
 
     // position/size
     m_x = 0;
@@ -2445,8 +2445,8 @@ void wxWindowGTK::Init()
     m_hasScrolling = false;
     m_isScrolling = false;
 
-    m_hAdjust = (GtkAdjustment*) NULL;
-    m_vAdjust = (GtkAdjustment*) NULL;
+    m_hAdjust = NULL;
+    m_vAdjust = NULL;
     m_oldHorizontalPos =
     m_oldVerticalPos = 0.0;
     m_oldClientWidth =
@@ -2466,8 +2466,8 @@ void wxWindowGTK::Init()
     m_cursor = *wxSTANDARD_CURSOR;
 
 #ifdef HAVE_XIM
-    m_ic = (GdkIC*) NULL;
-    m_icattr = (GdkICAttr*) NULL;
+    m_ic = NULL;
+    m_icattr = NULL;
 #endif
 }
 
@@ -2509,7 +2509,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
     m_insertCallback = wxInsertChildInWindow;
 
-    m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
+    m_widget = gtk_scrolled_window_new( NULL, NULL );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
     GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
@@ -2642,13 +2642,13 @@ wxWindowGTK::~wxWindowGTK()
     if (m_wxwindow)
     {
         gtk_widget_destroy( m_wxwindow );
-        m_wxwindow = (GtkWidget*) NULL;
+        m_wxwindow = NULL;
     }
 
     if (m_widget)
     {
         gtk_widget_destroy( m_widget );
-        m_widget = (GtkWidget*) NULL;
+        m_widget = NULL;
     }
 }
 
@@ -3138,7 +3138,7 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
 
     if (!m_widget->window) return;
 
-    GdkWindow *source = (GdkWindow *) NULL;
+    GdkWindow *source = NULL;
     if (m_wxwindow)
         source = GTK_PIZZA(m_wxwindow)->bin_window;
     else
@@ -3167,7 +3167,7 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
 
     if (!m_widget->window) return;
 
-    GdkWindow *source = (GdkWindow *) NULL;
+    GdkWindow *source = NULL;
     if (m_wxwindow)
         source = GTK_PIZZA(m_wxwindow)->bin_window;
     else
@@ -3431,7 +3431,7 @@ void wxWindowGTK::WarpPointer( int x, int y )
     // We provide this function ourselves as it is
     // missing in GDK (top of this file).
 
-    GdkWindow *window = (GdkWindow*) NULL;
+    GdkWindow *window = NULL;
     if (m_wxwindow)
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else
@@ -3505,7 +3505,7 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
         }
         else
         {
-            gtk_widget_draw( m_widget, (GdkRectangle*) NULL );
+            gtk_widget_draw( m_widget, NULL );
         }
     }
 }
@@ -3695,7 +3695,7 @@ void wxWindowGTK::DoSetToolTip( wxToolTip *tip )
 void wxWindowGTK::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
 {
     wxString tmp( tip );
-    gtk_tooltips_set_tip( tips, GetConnectWidget(), wxGTK_CONV(tmp), (gchar*) NULL );
+    gtk_tooltips_set_tip( tips, GetConnectWidget(), wxGTK_CONV(tmp), NULL );
 }
 #endif // wxUSE_TOOLTIPS
 
@@ -3829,7 +3829,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 
     if (style == wxBG_STYLE_CUSTOM)
     {
-        GdkWindow *window = (GdkWindow*) NULL;
+        GdkWindow *window = NULL;
         if (m_wxwindow)
             window = GTK_PIZZA(m_wxwindow)->bin_window;
         else
@@ -3913,7 +3913,7 @@ void wxWindowGTK::DoCaptureMouse()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
 
-    GdkWindow *window = (GdkWindow*) NULL;
+    GdkWindow *window = NULL;
     if (m_wxwindow)
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else
@@ -3931,7 +3931,7 @@ void wxWindowGTK::DoCaptureMouse()
                           GDK_BUTTON_RELEASE_MASK |
                           GDK_POINTER_MOTION_HINT_MASK |
                           GDK_POINTER_MOTION_MASK),
-                      (GdkWindow *) NULL,
+                      NULL,
                       cursor->GetCursor(),
                       (guint32)GDK_CURRENT_TIME );
     g_captureWindow = this;
@@ -3944,9 +3944,9 @@ void wxWindowGTK::DoReleaseMouse()
 
     wxCHECK_RET( g_captureWindow, wxT("can't release mouse - not captured") );
 
-    g_captureWindow = (wxWindowGTK*) NULL;
+    g_captureWindow = NULL;
 
-    GdkWindow *window = (GdkWindow*) NULL;
+    GdkWindow *window = NULL;
     if (m_wxwindow)
         window = GTK_PIZZA(m_wxwindow)->bin_window;
     else

@@ -109,7 +109,7 @@ wxDataObjectComposite::GetObject(const wxDataFormat& format) const
         node = node->GetNext();
     }
 
-    return (wxDataObjectSimple *)NULL;
+    return NULL;
 }
 
 void wxDataObjectComposite::Add(wxDataObjectSimple *dataObject, bool preferred)
@@ -449,7 +449,7 @@ void wxCustomDataObject::Free()
 {
     delete [] (char*)m_data;
     m_size = 0;
-    m_data = (void*)NULL;
+    m_data = NULL;
 }
 
 size_t wxCustomDataObject::GetDataSize() const

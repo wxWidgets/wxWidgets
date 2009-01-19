@@ -214,7 +214,7 @@ wxString CLASSNAME::GetName() const \
 { \
     return wxS(#EDITOR); \
 } \
-wxPGEditor* wxPGEditor_##EDITOR = (wxPGEditor*) NULL;
+wxPGEditor* wxPGEditor_##EDITOR = NULL;
 
 
 //
@@ -434,7 +434,7 @@ public:
 // Editor class registeration macro (mostly for internal use)
 
 #define wxPGRegisterEditorClass(EDITOR) \
-    if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
+    if ( wxPGEditor_##EDITOR == NULL ) \
     { \
         wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( \
                 new wxPG##EDITOR##Editor ); \

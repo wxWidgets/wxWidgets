@@ -58,7 +58,7 @@ public:
                ,const wxString& rsText
                ,const wxString& rsHelp
                ,bool            bIsCheckable
-               ,wxMenu*         pSubMenu = (wxMenu *)NULL
+               ,wxMenu*         pSubMenu = NULL
               );
     virtual ~wxMenuItem();
 

@@ -60,13 +60,13 @@ public:
     // ctors & dtor
     // ------------
 
-    wxToolBarToolBase(wxToolBarBase *tbar = (wxToolBarBase *)NULL,
+    wxToolBarToolBase(wxToolBarBase *tbar = NULL,
                       int toolid = wxID_SEPARATOR,
                       const wxString& label = wxEmptyString,
                       const wxBitmap& bmpNormal = wxNullBitmap,
                       const wxBitmap& bmpDisabled = wxNullBitmap,
                       wxItemKind kind = wxITEM_NORMAL,
-                      wxObject *clientData = (wxObject *) NULL,
+                      wxObject *clientData = NULL,
                       const wxString& shortHelpString = wxEmptyString,
                       const wxString& longHelpString = wxEmptyString)
         : m_label(label),
@@ -197,7 +197,7 @@ public:
     }
 
     // add tool to/remove it from a toolbar
-    virtual void Detach() { m_tbar = (wxToolBarBase *)NULL; }
+    virtual void Detach() { m_tbar = NULL; }
     virtual void Attach(wxToolBarBase *tbar) { m_tbar = tbar; }
 
     // these methods are only for tools of wxITEM_DROPDOWN kind (but even such

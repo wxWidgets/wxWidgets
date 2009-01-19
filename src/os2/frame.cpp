@@ -499,7 +499,7 @@ bool wxFrame::ShowFullScreen( bool bShow, long lStyle )
         if ((lStyle & wxFULLSCREEN_NOSTATUSBAR) && pTheStatusBar)
         {
             m_nFsStatusBarFields = pTheStatusBar->GetFieldsCount();
-            SetStatusBar((wxStatusBar*) NULL);
+            SetStatusBar(NULL);
             delete pTheStatusBar;
         }
         else

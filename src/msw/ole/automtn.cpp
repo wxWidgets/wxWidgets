@@ -159,7 +159,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
     {
         namedArgCount = 1;
         dispIds[1] = DISPID_PROPERTYPUT;
-        vReturnPtr = (VARIANTARG*) NULL;
+        vReturnPtr = NULL;
     }
 
     // Convert the wxVariants to VARIANTARGs
@@ -220,7 +220,7 @@ bool wxAutomationObject::Invoke(const wxString& member, int action,
             // Mustn't release the dispatch pointer
             if (vReturn.vt == VT_DISPATCH)
             {
-                vReturn.pdispVal = (IDispatch*) NULL;
+                vReturn.pdispVal = NULL;
             }
             ReleaseVariant(& vReturn);
         }
@@ -440,7 +440,7 @@ WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, i
         }
     }
 
-    return (WXIDISPATCH*) NULL;
+    return NULL;
 }
 
 // Uses DISPATCH_PROPERTYGET
@@ -458,7 +458,7 @@ WXIDISPATCH* wxAutomationObject::GetDispatchProperty(const wxString& property, i
         }
     }
 
-    return (WXIDISPATCH*) NULL;
+    return NULL;
 }
 
 

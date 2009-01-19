@@ -219,7 +219,7 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
             wxLogTrace(TRACE_CLIPBOARD, wxT("wxClipboard will get cleared" ));
 
             delete wxTheClipboard->m_data;
-            wxTheClipboard->m_data = (wxDataObject*) NULL;
+            wxTheClipboard->m_data = NULL;
         }
     }
 
@@ -313,8 +313,8 @@ wxClipboard::wxClipboard()
     m_ownsClipboard = false;
     m_ownsPrimarySelection = false;
 
-    m_data = (wxDataObject*) NULL;
-    m_receivedData = (wxDataObject*) NULL;
+    m_data = NULL;
+    m_receivedData = NULL;
 
     /* we use m_targetsWidget to query what formats are available */
 
@@ -371,7 +371,7 @@ void wxClipboard::Clear()
         {
             m_waiting = true;
 
-            gtk_selection_owner_set( (GtkWidget*) NULL, g_clipboardAtom,
+            gtk_selection_owner_set( NULL, g_clipboardAtom,
                                      (guint32) GDK_CURRENT_TIME );
 
             while (m_waiting) gtk_main_iteration();
@@ -381,7 +381,7 @@ void wxClipboard::Clear()
         {
             m_waiting = true;
 
-            gtk_selection_owner_set( (GtkWidget*) NULL, GDK_SELECTION_PRIMARY,
+            gtk_selection_owner_set( NULL, GDK_SELECTION_PRIMARY,
                                      (guint32) GDK_CURRENT_TIME );
 
             while (m_waiting) gtk_main_iteration();
@@ -390,7 +390,7 @@ void wxClipboard::Clear()
         if (m_data)
         {
             delete m_data;
-            m_data = (wxDataObject*) NULL;
+            m_data = NULL;
         }
 
 #if wxUSE_THREADS

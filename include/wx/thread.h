@@ -506,7 +506,7 @@ public:
         // does it!
         //
         // will fill the rc pointer with the thread exit code if it's !NULL
-    wxThreadError Delete(ExitCode *rc = (ExitCode *)NULL);
+    wxThreadError Delete(ExitCode *rc = NULL);
 
         // waits for a joinable thread to finish and returns its exit code
         //

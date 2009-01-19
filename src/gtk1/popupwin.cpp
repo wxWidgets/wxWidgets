@@ -328,7 +328,7 @@ void wxPopupWindow::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int 
     geom.max_width = m_width;
     geom.max_height = m_height;
     gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
-                                   (GtkWidget*) NULL,
+                                   NULL,
                                    &geom,
                                    (GdkWindowHints) flag );
 

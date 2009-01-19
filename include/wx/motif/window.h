@@ -73,8 +73,8 @@ public:
     virtual int GetCharWidth() const;
     virtual void GetTextExtent(const wxString& string,
         int *x, int *y,
-        int *descent = (int *) NULL,
-        int *externalLeading = (int *) NULL,
+        int *descent = NULL,
+        int *externalLeading = NULL,
         const wxFont *theFont = (const wxFont *) NULL)
         const;
 
@@ -85,7 +85,7 @@ public:
     virtual int GetScrollThumb( int orient ) const;
     virtual int GetScrollRange( int orient ) const;
     virtual void ScrollWindow( int dx, int dy,
-        const wxRect* rect = (wxRect *) NULL );
+        const wxRect* rect = NULL );
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );

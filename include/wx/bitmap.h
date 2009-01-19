@@ -174,7 +174,7 @@ public:
     virtual wxBitmap GetSubBitmap(const wxRect& rect) const = 0;
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
-                          const wxPalette *palette = (wxPalette *)NULL) const = 0;
+                          const wxPalette *palette = NULL) const = 0;
     virtual bool LoadFile(const wxString &name, wxBitmapType type) = 0;
 
     /*

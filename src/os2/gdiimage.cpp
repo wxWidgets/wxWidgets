@@ -287,7 +287,7 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
             return pHandler;
         pNode = pNode->GetNext();
     }
-    return((wxGDIImageHandler*)NULL);
+    return(NULL);
 }
 
 wxGDIImageHandler* wxGDIImage::FindHandler(
@@ -307,7 +307,7 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
         }
         pNode = pNode->GetNext();
     }
-    return((wxGDIImageHandler*)NULL);
+    return(NULL);
 }
 
 wxGDIImageHandler* wxGDIImage::FindHandler(
@@ -324,7 +324,7 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
             return pHandler;
         pNode = pNode->GetNext();
     }
-    return((wxGDIImageHandler*)NULL);
+    return(NULL);
 }
 
 void wxGDIImage::CleanUpHandlers()

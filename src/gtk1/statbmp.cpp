@@ -74,7 +74,7 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
 
     if (m_bitmap.Ok())
     {
-        GdkBitmap *mask = (GdkBitmap *) NULL;
+        GdkBitmap *mask = NULL;
         if (m_bitmap.GetMask())
             mask = m_bitmap.GetMask()->GetBitmap();
 

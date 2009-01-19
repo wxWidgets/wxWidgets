@@ -55,7 +55,7 @@ public:
 
 
     // ctors
-    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int nId = wxID_ANY)
+    wxProcess(wxEvtHandler *parent = NULL, int nId = wxID_ANY)
         { Init(parent, nId, wxPROCESS_DEFAULT); }
 
     wxProcess(int flags) { Init(NULL, wxID_ANY, flags); }

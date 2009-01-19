@@ -31,12 +31,12 @@ class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
 {
 public:
     // ctor & dtor
-    wxMenuItem(wxMenu *parentMenu = (wxMenu *)NULL,
+    wxMenuItem(wxMenu *parentMenu = NULL,
                int id = wxID_SEPARATOR,
                const wxString& name = wxEmptyString,
                const wxString& help = wxEmptyString,
                wxItemKind kind = wxITEM_NORMAL,
-               wxMenu *subMenu = (wxMenu *)NULL);
+               wxMenu *subMenu = NULL);
     virtual ~wxMenuItem();
 
     // override base class virtuals
@@ -62,7 +62,7 @@ public:
                const wxString& text,
                const wxString& help,
                bool isCheckable,
-               wxMenu *subMenu = (wxMenu *)NULL);
+               wxMenu *subMenu = NULL);
 
 private:
     // common part of all ctors

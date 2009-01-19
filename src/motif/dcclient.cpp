@@ -141,11 +141,11 @@ void wxWindowDCImpl::Init()
     m_currentPenWidth = 1;
     m_currentPenJoin = -1;
     m_currentPenDashCount = -1;
-    m_currentPenDash = (wxX11Dash*) NULL;
+    m_currentPenDash = NULL;
     m_currentStyle = -1;
     m_currentFill = -1;
     m_colour = wxColourDisplay();
-    m_display = (WXDisplay*) NULL;
+    m_display = NULL;
     m_pixmap = (WXPixmap) 0;
     m_autoSetting = 0;
     m_ok = false;
@@ -161,7 +161,7 @@ wxWindowDCImpl::wxWindowDCImpl(wxDC *owner)
 wxWindowDCImpl::wxWindowDCImpl(wxDC *owner, wxWindow *window)
               : wxMotifDCImpl(owner)
 {
-    wxASSERT_MSG( (window != (wxWindow*) NULL), "You must pass a valid wxWindow to wxWindowDCImpl/wxClientDCImpl/wxPaintDCImpl constructor." );
+    wxASSERT_MSG( (window != NULL), "You must pass a valid wxWindow to wxWindowDCImpl/wxClientDCImpl/wxPaintDCImpl constructor." );
 
     Init();
 
@@ -836,7 +836,7 @@ bool wxWindowDCImpl::DoBlit( wxCoord xdest, wxCoord ydest,
 
     // Do bitmap scaling if necessary
 
-    wxBitmap *scaledBitmap = (wxBitmap*) NULL;
+    wxBitmap *scaledBitmap = NULL;
     Pixmap sourcePixmap = (Pixmap) NULL;
     double scaleX, scaleY;
     GetUserScale(& scaleX, & scaleY);
@@ -1584,7 +1584,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
         case wxTRANSPARENT:
         default:
             style = LineSolid;
-            req_dash = (wxX11Dash*)NULL;
+            req_dash = NULL;
             req_nb_dash = 0;
         }
 

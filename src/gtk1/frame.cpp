@@ -385,7 +385,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
         geom.max_width = maxWidth;
         geom.max_height = maxHeight;
         gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
-                                       (GtkWidget*) NULL,
+                                       NULL,
                                        &geom,
                                        (GdkWindowHints) flag );
 
@@ -486,7 +486,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
         gtk_pizza_set_size( GTK_PIZZA(m_wxwindow),
                             m_frameStatusBar->m_widget,
                             xx, yy, ww, hh );
-        gtk_widget_draw( m_frameStatusBar->m_widget, (GdkRectangle*) NULL );
+        gtk_widget_draw( m_frameStatusBar->m_widget, NULL );
     }
 #endif // wxUSE_STATUSBAR
 

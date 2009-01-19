@@ -136,7 +136,7 @@ void wxToggleBitmapButton::OnSetBitmap()
 {
     if (!m_bitmap.Ok()) return;
 
-    GdkBitmap *mask = (GdkBitmap *) NULL;
+    GdkBitmap *mask = NULL;
     if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
 
     GtkWidget *child = BUTTON_CHILD(m_widget);

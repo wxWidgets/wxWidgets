@@ -97,8 +97,8 @@ END_EVENT_TABLE()
 
 void wxDocMDIChildFrame::Init()
 {
-    m_childDocument = (wxDocument*)  NULL;
-    m_childView = (wxView*) NULL;
+    m_childDocument = NULL;
+    m_childView = NULL;
 }
 
 wxDocMDIChildFrame::wxDocMDIChildFrame()
@@ -130,7 +130,7 @@ bool wxDocMDIChildFrame::Create(wxDocument *doc, wxView *view, wxMDIParentFrame 
 
 wxDocMDIChildFrame::~wxDocMDIChildFrame(void)
 {
-    m_childView = (wxView *) NULL;
+    m_childView = NULL;
 }
 
 bool wxDocMDIChildFrame::TryValidator(wxEvent& event)
@@ -160,8 +160,8 @@ void wxDocMDIChildFrame::OnCloseWindow(wxCloseEvent& event)
     {
       m_childView->Activate(false);
       delete m_childView;
-      m_childView = (wxView *) NULL;
-      m_childDocument = (wxDocument *) NULL;
+      m_childView = NULL;
+      m_childDocument = NULL;
 
       this->Destroy();
     }

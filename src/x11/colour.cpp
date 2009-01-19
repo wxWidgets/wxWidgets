@@ -34,7 +34,7 @@ public:
         m_color.green = 0;
         m_color.blue = 0;
         m_color.pixel = 0;
-        m_colormap = (WXColormap *) NULL;
+        m_colormap = NULL;
         m_hasPixel = false;
     }
 
@@ -240,7 +240,7 @@ unsigned long wxColour::GetPixel() const
 
 WXColor *wxColour::GetColor() const
 {
-    wxCHECK_MSG( Ok(), (WXColor *) NULL, wxT("invalid colour") );
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid colour") );
 
     return (WXColor*) &M_COLDATA->m_color;
 }

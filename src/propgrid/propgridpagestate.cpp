@@ -201,12 +201,12 @@ void wxPropertyGridIteratorBase::Next( bool iterateChildren )
 
 wxPropertyGridPageState::wxPropertyGridPageState()
 {
-    m_pPropGrid = (wxPropertyGrid*) NULL;
+    m_pPropGrid = NULL;
     m_regularArray.SetParentState(this);
     m_properties = &m_regularArray;
-    m_abcArray = (wxPGRootProperty*) NULL;
-    m_currentCategory = (wxPropertyCategory*) NULL;
-    m_selected = (wxPGProperty*) NULL;
+    m_abcArray = NULL;
+    m_currentCategory = NULL;
+    m_selected = NULL;
     m_width = 0;
     m_virtualHeight = 0;
     m_lastCaptionBottomnest = 1;
@@ -274,14 +274,14 @@ void wxPropertyGridPageState::DoClear()
 
     m_dictName.clear();
 
-    m_currentCategory = (wxPropertyCategory*) NULL;
+    m_currentCategory = NULL;
     m_lastCaptionBottomnest = 1;
     m_itemsAdded = 0;
 
     m_virtualHeight = 0;
     m_vhCalcPending = 0;
 
-    m_selected = (wxPGProperty*) NULL;
+    m_selected = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -369,7 +369,7 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
 wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
 {
     if ( !m_properties->GetChildCount() )
-        return (wxPGProperty*) NULL;
+        return NULL;
 
     wxPG_ITERATOR_CREATE_MASKS(flags, int itemExMask, int parentExMask)
 
@@ -403,7 +403,7 @@ wxPropertyCategory* wxPropertyGridPageState::GetPropertyCategory( const wxPGProp
             return (wxPropertyCategory*)parent;
     } while ( grandparent );
 
-    return (wxPropertyCategory*) NULL;
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -443,7 +443,7 @@ wxPGProperty* wxPropertyGridPageState::BaseGetPropertyByName( const wxString& na
     it = m_dictName.find(name);
     if ( it != m_dictName.end() )
         return (wxPGProperty*) it->second;
-    return (wxPGProperty*) NULL;
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -490,7 +490,7 @@ void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
 #define ITEM_ITERATION_INIT(startparent, startindex, state) \
     parent = startparent; \
     i = (unsigned int)startindex; \
-    if ( parent == (wxPGProperty*) NULL ) \
+    if ( parent == NULL ) \
     { \
         parent = state->m_properties; \
         i = 0; \
@@ -720,7 +720,7 @@ wxPGProperty* wxPropertyGridPageState::DoGetItemAtY( int y ) const
 {
     // Outside?
     if ( y < 0 )
-        return (wxPGProperty*) NULL;
+        return NULL;
 
     unsigned int a = 0;
     return m_properties->GetItemAtY(y, GetGrid()->m_lineHeight, &a);
@@ -1431,7 +1431,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
                     if ( wxStrcmp(current->GetType(), wxS("list")) == 0 )
                     {
                         DoSetPropertyValues( current->GetList(),
-                                p->IsCategory()?p:((wxPGProperty*)NULL)
+                                p->IsCategory()?p:(NULL)
                             );
                     }
                     else
@@ -1543,7 +1543,7 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
 
     // This will allow better behavior.
     if ( scheduledParent == m_properties )
-        scheduledParent = (wxPGProperty*) NULL;
+        scheduledParent = NULL;
 
     if ( scheduledParent && !scheduledParent->IsCategory() )
     {
@@ -1621,7 +1621,7 @@ wxPGProperty* wxPropertyGridPageState::DoAppend( wxPGProperty* property )
 {
     wxPropertyCategory* cur_cat = m_currentCategory;
     if ( property->IsCategory() )
-        cur_cat = (wxPropertyCategory*) NULL;
+        cur_cat = NULL;
 
     return DoInsert( cur_cat, -1, property );
 }
@@ -1742,7 +1742,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         if ( item->IsCategory() )
         {
             if ( pwc == m_currentCategory )
-                m_currentCategory = (wxPropertyCategory*) NULL;
+                m_currentCategory = NULL;
         }
 
         item->DeleteChildren();

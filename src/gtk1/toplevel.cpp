@@ -66,8 +66,8 @@ extern wxWindowGTK     *g_delayedFocus;
 
 // the frame that is currently active (i.e. its child has focus). It is
 // used to generate wxActivateEvents
-static wxTopLevelWindowGTK *g_activeFrame = (wxTopLevelWindowGTK*) NULL;
-static wxTopLevelWindowGTK *g_lastActiveFrame = (wxTopLevelWindowGTK*) NULL;
+static wxTopLevelWindowGTK *g_activeFrame = NULL;
+static wxTopLevelWindowGTK *g_lastActiveFrame = NULL;
 
 // if we detect that the app has got/lost the focus, we set this variable to
 // either TRUE or FALSE and an activate event will be sent during the next
@@ -455,7 +455,7 @@ void wxTopLevelWindowGTK::Init()
     m_sizeSet = false;
     m_miniEdge = 0;
     m_miniTitle = 0;
-    m_mainWidget = (GtkWidget*) NULL;
+    m_mainWidget = NULL;
     m_insertInClientArea = true;
     m_isIconized = false;
     m_fsIsShowing = false;
@@ -990,7 +990,7 @@ void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
                             : maxHeight ;
 
         gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
-                                       (GtkWidget*) NULL,
+                                       NULL,
                                        &geom,
                                        (GdkWindowHints) flag );
 
@@ -1103,10 +1103,10 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
     if (icon.Ok())
     {
         wxMask *mask = icon.GetMask();
-        GdkBitmap *bm = (GdkBitmap *) NULL;
+        GdkBitmap *bm = NULL;
         if (mask) bm = mask->GetBitmap();
 
-        gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
+        gdk_window_set_icon( m_widget->window, NULL, icon.GetPixmap(), bm );
     }
 
     wxSetIconsX11( (WXDisplay*)GDK_WINDOW_XDISPLAY( window ),

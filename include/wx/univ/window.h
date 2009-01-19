@@ -102,7 +102,7 @@ public:
     virtual int GetScrollThumb(int orient) const;
     virtual int GetScrollRange(int orient) const;
     virtual void ScrollWindow(int dx, int dy,
-                              const wxRect* rect = (wxRect *) NULL);
+                              const wxRect* rect = NULL);
 
     // take into account the borders here
     virtual wxPoint GetClientAreaOrigin() const;

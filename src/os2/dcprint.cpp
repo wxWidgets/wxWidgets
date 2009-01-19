@@ -215,14 +215,14 @@ WXHDC WXDLLEXPORT wxGetPrinterDC( const wxPrintData& WXUNUSED(rPrintDataConst) )
     wxPrintData printData = printDataConst;
     printData.ConvertToNative();
 
-    wxChar* driverName = (wxChar*) NULL;
+    wxChar* driverName = NULL;
 
     wxString devNameStr = printData.GetPrinterName();
     wxChar* deviceName;
-    wxChar* portName = (wxChar*) NULL; // Obsolete in WIN32
+    wxChar* portName = NULL; // Obsolete in WIN32
 
     if (devNameStr.empty())
-        deviceName = (wxChar*) NULL;
+        deviceName = NULL;
     else
         deviceName = WXSTRINGCAST devNameStr;
 

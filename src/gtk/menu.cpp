@@ -122,7 +122,7 @@ wxMenuBar::~wxMenuBar()
 static void
 wxMenubarUnsetInvokingWindow(wxMenu* menu, wxWindow* win, GtkWindow* tlw = NULL)
 {
-    menu->SetInvokingWindow( (wxWindow*) NULL );
+    menu->SetInvokingWindow( NULL );
 
     // support for native hot keys
     if (menu->m_accel)
@@ -226,7 +226,7 @@ void wxMenuBar::Attach(wxFrame *frame)
 
 void wxMenuBar::UnsetInvokingWindow( wxWindow *win )
 {
-    m_invokingWindow = (wxWindow*) NULL;
+    m_invokingWindow = NULL;
 
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
     while (node)
@@ -316,7 +316,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
     wxMenu *menuOld = Remove(pos);
     if ( menuOld && !Insert(pos, menu, title) )
     {
-        return (wxMenu*) NULL;
+        return NULL;
     }
 
     // either Insert() succeeded or Remove() failed and menuOld is NULL
@@ -327,7 +327,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 {
     wxMenu *menu = wxMenuBarBase::Remove(pos);
     if ( !menu )
-        return (wxMenu*) NULL;
+        return NULL;
 
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu->m_owner), NULL);
     gtk_container_remove(GTK_CONTAINER(m_menubar), menu->m_owner);
@@ -410,7 +410,7 @@ wxMenuItem* wxMenuBar::FindItem( int id, wxMenu **menuForItem ) const
 
     if ( menuForItem )
     {
-        *menuForItem = result ? result->GetMenu() : (wxMenu *)NULL;
+        *menuForItem = result ? result->GetMenu() : NULL;
     }
 
     return result;
@@ -718,7 +718,7 @@ void wxMenu::Init()
     g_object_ref(m_menu);
     gtk_object_sink(GTK_OBJECT(m_menu));
 
-    m_owner = (GtkWidget*) NULL;
+    m_owner = NULL;
 
     // Tearoffs are entries, just like separators. So if we want this
     // menu to be a tear-off one, we just append a tearoff entry

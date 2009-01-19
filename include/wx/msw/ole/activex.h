@@ -220,7 +220,7 @@ typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
 #define wxActiveXEventHandler(func) \
     wxEVENT_HANDLER_CAST( wxActiveXEventFunction, func )
 
-#define EVT_ACTIVEX(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_ACTIVEX, id, -1, wxActiveXEventHandler( fn ), (wxObject *) NULL ),
+#define EVT_ACTIVEX(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_ACTIVEX, id, -1, wxActiveXEventHandler( fn ), NULL ),
 
 #endif // wxUSE_ACTIVEX
 

@@ -176,7 +176,7 @@ static void target_drag_leave( GtkWidget *WXUNUSED(widget),
     drop_target->m_firstMotion = true;
 
     /* after this, invalidate the drop_target's GdkDragContext */
-    drop_target->SetDragContext( (GdkDragContext*) NULL );
+    drop_target->SetDragContext( NULL );
 }
 }
 
@@ -278,7 +278,7 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     }
 
     /* after this, invalidate the drop_target's GdkDragContext */
-    drop_target->SetDragContext( (GdkDragContext*) NULL );
+    drop_target->SetDragContext( NULL );
 
     /* this has to be done because GDK has no "drag_enter" event */
     drop_target->m_firstMotion = false;
@@ -376,10 +376,10 @@ static gboolean target_drag_drop( GtkWidget *widget,
     }
 
     /* after this, invalidate the drop_target's GdkDragContext */
-    drop_target->SetDragContext( (GdkDragContext*) NULL );
+    drop_target->SetDragContext( NULL );
 
     /* after this, invalidate the drop_target's drag widget */
-    drop_target->SetDragWidget( (GtkWidget*) NULL );
+    drop_target->SetDragWidget( NULL );
 
     /* this has to be done because GDK has no "drag_enter" event */
     drop_target->m_firstMotion = true;
@@ -444,7 +444,7 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
     }
 
     /* after this, invalidate the drop_target's drag data */
-    drop_target->SetDragData( (GtkSelectionData*) NULL );
+    drop_target->SetDragData( NULL );
 }
 }
 
@@ -456,9 +456,9 @@ wxDropTarget::wxDropTarget( wxDataObject *data )
             : wxDropTargetBase( data )
 {
     m_firstMotion = true;
-    m_dragContext = (GdkDragContext*) NULL;
-    m_dragWidget = (GtkWidget*) NULL;
-    m_dragData = (GtkSelectionData*) NULL;
+    m_dragContext = NULL;
+    m_dragWidget = NULL;
+    m_dragData = NULL;
     m_dragTime = 0;
 }
 
@@ -575,7 +575,7 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 
     gtk_drag_dest_set( widget,
                        (GtkDestDefaults) 0,         /* no default behaviour */
-                       (GtkTargetEntry*) NULL,      /* we don't supply any formats here */
+                       NULL,      /* we don't supply any formats here */
                        0,                           /* number of targets = 0 */
                        (GdkDragAction) 0 );         /* we don't supply any actions here */
 
@@ -710,7 +710,7 @@ wxDropSource::wxDropSource(wxWindow *win,
 {
     m_waiting = true;
 
-    m_iconWindow = (GtkWidget*) NULL;
+    m_iconWindow = NULL;
 
     m_window = win;
     m_widget = win->m_widget;
@@ -731,7 +731,7 @@ wxDropSource::wxDropSource(wxDataObject& data,
 
     SetData( data );
 
-    m_iconWindow = (GtkWidget*) NULL;
+    m_iconWindow = NULL;
 
     m_window = win;
     m_widget = win->m_widget;
@@ -777,7 +777,7 @@ void wxDropSource::PrepareIcon( int action, GdkDragContext *context )
     if ( icon->GetMask() )
         mask = icon->GetMask()->GetBitmap();
     else
-        mask = (GdkBitmap *)NULL;
+        mask = NULL;
 
     GdkPixmap *pixmap = icon->GetPixmap();
 
@@ -829,7 +829,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     m_waiting = true;
 
-    GtkTargetList *target_list = gtk_target_list_new( (GtkTargetEntry*) NULL, 0 );
+    GtkTargetList *target_list = gtk_target_list_new( NULL, 0 );
 
     wxDataFormat *array = new wxDataFormat[ m_data->GetFormatCount() ];
     m_data->GetAllFormats( array );

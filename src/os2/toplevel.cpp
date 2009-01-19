@@ -150,7 +150,7 @@ void wxTopLevelWindowOS2::Init()
     m_hFrame    = NULLHANDLE;
     memset(&m_vSwp, 0, sizeof(SWP));
     memset(&m_vSwpClient, 0, sizeof(SWP));
-    m_pWinLastFocused = (wxWindow *)NULL;
+    m_pWinLastFocused = NULL;
 } // end of wxTopLevelWindowIOS2::Init
 
 void wxTopLevelWindowOS2::OnActivate(

@@ -378,7 +378,7 @@ class WXDLLIMPEXP_BASE wxLogStderr : public wxLog
 {
 public:
     // redirect log output to a FILE
-    wxLogStderr(FILE *fp = (FILE *) NULL);
+    wxLogStderr(FILE *fp = NULL);
 
 protected:
     // implement sink function

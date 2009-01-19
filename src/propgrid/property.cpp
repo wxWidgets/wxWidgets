@@ -402,16 +402,16 @@ void wxPGProperty::Init()
     m_arrIndex = 0xFFFF;
     m_parent = NULL;
 
-    m_parentState = (wxPropertyGridPageState*) NULL;
+    m_parentState = NULL;
 
     m_clientData = NULL;
     m_clientObject = NULL;
 
-    m_customEditor = (wxPGEditor*) NULL;
+    m_customEditor = NULL;
 #if wxUSE_VALIDATORS
-    m_validator = (wxValidator*) NULL;
+    m_validator = NULL;
 #endif
-    m_valueBitmap = (wxBitmap*) NULL;
+    m_valueBitmap = NULL;
 
     m_maxLen = 0; // infinite maximum length
 
@@ -1715,7 +1715,7 @@ void wxPGProperty::SetFlagsFromString( const wxString& str )
 
 wxValidator* wxPGProperty::DoGetValidator() const
 {
-    return (wxValidator*) NULL;
+    return NULL;
 }
 
 int wxPGProperty::InsertChoice( const wxString& label, int index, int value )
@@ -2135,7 +2135,7 @@ wxPGProperty* wxPGProperty::GetPropertyByName( const wxString& name ) const
     // Does it have point, then?
     int pos = name.Find(wxS('.'));
     if ( pos <= 0 )
-        return (wxPGProperty*) NULL;
+        return NULL;
 
     wxPGProperty* p = GetPropertyByName(name. substr(0,pos));
 
@@ -2404,7 +2404,7 @@ void wxPGProperty::SubPropsChanged( int oldSelInd )
         child->InitAfterAdded(state, grid);
     }
 
-    wxPGProperty* sel = (wxPGProperty*) NULL;
+    wxPGProperty* sel = NULL;
     if ( oldSelInd >= (int)m_children.size() )
         oldSelInd = (int)m_children.size() - 1;
 

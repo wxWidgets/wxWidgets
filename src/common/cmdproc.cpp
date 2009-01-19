@@ -57,7 +57,7 @@ wxCommandProcessor::wxCommandProcessor(int maxCommands)
 {
     m_maxNoCommands = maxCommands;
 #if wxUSE_MENUS
-    m_commandEditMenu = (wxMenu *) NULL;
+    m_commandEditMenu = NULL;
 #endif // wxUSE_MENUS
     m_undoAccelerator = wxT("\tCtrl+Z");
     m_redoAccelerator = wxT("\tCtrl+Y");
@@ -164,7 +164,7 @@ bool wxCommandProcessor::Undo()
 
 bool wxCommandProcessor::Redo()
 {
-    wxCommand *redoCommand = (wxCommand *) NULL;
+    wxCommand *redoCommand = NULL;
     wxList::compatibility_iterator redoNode
 #if !wxUSE_STL
         = NULL          // just to avoid warnings

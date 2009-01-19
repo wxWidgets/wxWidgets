@@ -39,8 +39,8 @@
 // implementation
 // ============================================================================
 
-wxThemeInfo *wxTheme::ms_allThemes = (wxThemeInfo *)NULL;
-wxTheme *wxTheme::ms_theme = (wxTheme *)NULL;
+wxThemeInfo *wxTheme::ms_allThemes = NULL;
+wxTheme *wxTheme::ms_theme = NULL;
 
 // ----------------------------------------------------------------------------
 // "dynamic" theme creation
@@ -70,7 +70,7 @@ wxThemeInfo::wxThemeInfo(Constructor c,
         info = info->next;
     }
 
-    return (wxTheme *)NULL;
+    return NULL;
 }
 
 // ----------------------------------------------------------------------------

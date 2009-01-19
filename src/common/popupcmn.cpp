@@ -185,7 +185,7 @@ void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
 void wxPopupTransientWindow::Init()
 {
     m_child =
-    m_focus = (wxWindow *)NULL;
+    m_focus = NULL;
 
     m_handlerFocus = NULL;
     m_handlerPopup = NULL;
@@ -330,8 +330,8 @@ bool wxPopupTransientWindow::Show( bool show )
                              GDK_BUTTON_RELEASE_MASK |
                              GDK_POINTER_MOTION_HINT_MASK |
                              GDK_POINTER_MOTION_MASK),
-                          (GdkWindow *) NULL,
-                          (GdkCursor *) NULL,
+                          NULL,
+                          NULL,
                           (guint32)GDK_CURRENT_TIME );
     }
 #endif

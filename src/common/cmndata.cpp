@@ -504,7 +504,7 @@ void wxPageSetupDialogData::SetPrintData(const wxPrintData& printData)
 // paper id
 void wxPageSetupDialogData::CalculateIdFromPaperSize()
 {
-    wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL),
+    wxASSERT_MSG( (wxThePrintPaperDatabase != NULL),
                   wxT("wxThePrintPaperDatabase should not be NULL. Do not create global print dialog data objects.") );
 
     wxSize sz = GetPaperSize();
@@ -519,7 +519,7 @@ void wxPageSetupDialogData::CalculateIdFromPaperSize()
 // Use paper id in wxPrintData to set this object's paper size
 void wxPageSetupDialogData::CalculatePaperSizeFromId()
 {
-    wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL),
+    wxASSERT_MSG( (wxThePrintPaperDatabase != NULL),
                   wxT("wxThePrintPaperDatabase should not be NULL. Do not create global print dialog data objects.") );
 
     wxSize sz = wxThePrintPaperDatabase->GetSize(m_printData.GetPaperId());

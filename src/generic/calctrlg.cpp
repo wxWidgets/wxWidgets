@@ -1060,7 +1060,7 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
                 unsigned int day = date.GetDay();
                 wxString dayStr = wxString::Format(_T("%u"), day);
                 wxCoord width;
-                dc.GetTextExtent(dayStr, &width, (wxCoord *)NULL);
+                dc.GetTextExtent(dayStr, &width, NULL);
 
                 bool changedColours = false,
                      changedFont = false;

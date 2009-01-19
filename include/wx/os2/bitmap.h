@@ -184,12 +184,12 @@ public:
     void SetQuality(int nQ);
 
     wxPalette* GetPalette() const
-      { return (GetBitmapData() ? (& GetBitmapData()->m_vBitmapPalette) : (wxPalette*) NULL); }
+      { return (GetBitmapData() ? (& GetBitmapData()->m_vBitmapPalette) : NULL); }
 
     void       SetPalette(const wxPalette& rPalette);
 
     inline wxMask* GetMask() const
-      { return (GetBitmapData() ? GetBitmapData()->m_pBitmapMask : (wxMask*) NULL); }
+      { return (GetBitmapData() ? GetBitmapData()->m_pBitmapMask : NULL); }
 
     void SetMask(wxMask* pMask) ;
 
@@ -205,7 +205,7 @@ public:
       { if (GetBitmapData()) GetBitmapData()->m_pSelectedInto = pDc; }
 
     inline wxDC* GetSelectedInto() const
-      { return (GetBitmapData() ? GetBitmapData()->m_pSelectedInto : (wxDC*) NULL); }
+      { return (GetBitmapData() ? GetBitmapData()->m_pSelectedInto : NULL); }
 
     inline bool IsMono(void) const { return m_bIsMono; }
 

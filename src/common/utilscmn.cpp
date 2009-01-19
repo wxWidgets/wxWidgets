@@ -182,7 +182,7 @@ wxString wxNow()
     return wxEmptyString;
 #endif
 #else
-    time_t now = time((time_t *) NULL);
+    time_t now = time(NULL);
     char *date = ctime(&now);
     date[24] = '\0';
     return wxString::FromAscii(date);

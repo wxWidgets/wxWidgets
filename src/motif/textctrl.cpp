@@ -90,7 +90,7 @@ static void wxTextWindowActivateProc(Widget w, XtPointer clientData, XmAnyCallba
 // Text item
 wxTextCtrl::wxTextCtrl()
 {
-    m_tempCallbackStruct = (void*) NULL;
+    m_tempCallbackStruct = NULL;
     m_modified = false;
     m_processedDefault = false;
 }
@@ -108,7 +108,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
         return false;
     PreCreation();
 
-    m_tempCallbackStruct = (void*) NULL;
+    m_tempCallbackStruct = NULL;
     m_modified = false;
     m_processedDefault = false;
 

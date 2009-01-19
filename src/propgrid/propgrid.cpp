@@ -154,7 +154,7 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(wxPGGlobalVarsClassManager, wxModule)
 
 
-wxPGGlobalVarsClass* wxPGGlobalVars = (wxPGGlobalVarsClass*) NULL;
+wxPGGlobalVarsClass* wxPGGlobalVars = NULL;
 
 
 wxPGGlobalVarsClass::wxPGGlobalVarsClass()
@@ -164,7 +164,7 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     m_boolChoices.Add(_("False"));
     m_boolChoices.Add(_("True"));
 
-    m_fontFamilyChoices = (wxPGChoices*) NULL;
+    m_fontFamilyChoices = NULL;
 
     m_defaultRenderer = new wxPGDefaultRenderer();
 
@@ -454,13 +454,13 @@ void wxPropertyGrid::Init1()
         wxPropertyGrid::RegisterDefaultEditors();
 
     m_iFlags = 0;
-    m_pState = (wxPropertyGridPageState*) NULL;
-    m_wndEditor = m_wndEditor2 = (wxWindow*) NULL;
-    m_selected = (wxPGProperty*) NULL;
+    m_pState = NULL;
+    m_wndEditor = m_wndEditor2 = NULL;
+    m_selected = NULL;
     m_selColumn = -1;
-    m_propHover = (wxPGProperty*) NULL;
+    m_propHover = NULL;
     m_eventObject = this;
-    m_curFocused = (wxWindow*) NULL;
+    m_curFocused = NULL;
     m_tlwHandler = NULL;
     m_sortFunction = NULL;
     m_inDoPropertyChanged = 0;
@@ -488,7 +488,7 @@ void wxPropertyGrid::Init1()
     m_canvas = NULL;
 
 #if wxPG_DOUBLE_BUFFER
-    m_doubleBuffer = (wxBitmap*) NULL;
+    m_doubleBuffer = NULL;
 #endif
 
 #ifndef wxPG_ICON_WIDTH
@@ -643,7 +643,7 @@ wxPropertyGrid::~wxPropertyGrid()
         delete m_doubleBuffer;
 #endif
 
-    //m_selected = (wxPGProperty*) NULL;
+    //m_selected = NULL;
 
     if ( m_iFlags & wxPG_FL_CREATEDSTATE )
         delete m_pState;
@@ -728,7 +728,7 @@ void wxPropertyGrid::SetWindowStyleFlag( long style )
             //
             // Tooltips disabled
             //
-            m_canvas->SetToolTip( (wxToolTip*) NULL );
+            m_canvas->SetToolTip( NULL );
         }
     #endif
     }
@@ -1404,7 +1404,7 @@ wxPGProperty* wxPropertyGrid::DoGetItemAtY( int y ) const
 {
     // Outside?
     if ( y < 0 )
-        return (wxPGProperty*) NULL;
+        return NULL;
 
     unsigned int a = 0;
     return m_pState->m_properties->GetItemAtY(y, m_lineHeight, &a);
@@ -2018,7 +2018,7 @@ wxRect wxPropertyGrid::GetPropertyRect( const wxPGProperty* p1, const wxPGProper
 
     if ( m_width < 10 || m_height < 10 ||
          !m_pState->m_properties->GetChildCount() ||
-         p1 == (wxPGProperty*) NULL )
+         p1 == NULL )
         return wxRect(0,0,0,0);
 
     int vy = 0;
@@ -2249,7 +2249,7 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
         pNewState->OnClientWidthChange( pgWidth, pgWidth - pNewState->m_width );
     }
 
-    m_propHover = (wxPGProperty*) NULL;
+    m_propHover = NULL;
 
     // If necessary, convert state to correct mode.
     if ( orig_mode != new_state_mode )
@@ -3222,7 +3222,7 @@ void wxPropertyGrid::FreeEditors()
         m_wndEditor2->PopEventHandler(true);
         m_wndEditor2->Hide();
         wxPendingDelete.Append( m_wndEditor2 );
-        m_wndEditor2 = (wxWindow*) NULL;
+        m_wndEditor2 = NULL;
     }
 
     if ( m_wndEditor )
@@ -3230,7 +3230,7 @@ void wxPropertyGrid::FreeEditors()
         m_wndEditor->PopEventHandler(true);
         m_wndEditor->Hide();
         wxPendingDelete.Append( m_wndEditor );
-        m_wndEditor = (wxWindow*) NULL;
+        m_wndEditor = NULL;
     }
 }
 
@@ -3284,7 +3284,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         FreeEditors();
 
         // Prevent any further selection measures in this call
-        p = (wxPGProperty*) NULL;
+        p = NULL;
     }
     else
     {
@@ -3335,8 +3335,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
             FreeEditors();
             m_selColumn = -1;
 
-            m_selected = (wxPGProperty*) NULL;
-            m_pState->m_selected = (wxPGProperty*) NULL;
+            m_selected = NULL;
+            m_pState->m_selected = NULL;
 
             // We need to always fully refresh the grid here
             Refresh(false);
@@ -3361,7 +3361,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
             if ( p != prev )
                 m_iFlags &= ~(wxPG_FL_VALIDATION_FAILED);
 
-            wxASSERT( m_wndEditor == (wxWindow*) NULL );
+            wxASSERT( m_wndEditor == NULL );
 
             //
             // Only create editor for non-disabled non-caption
@@ -3560,7 +3560,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 
     if ( !(GetExtraStyle() & wxPG_EX_HELP_AS_TOOLTIPS) )
     {
-        wxStatusBar* statusbar = (wxStatusBar*) NULL;
+        wxStatusBar* statusbar = NULL;
         if ( !(m_iFlags & wxPG_FL_NOSTATUSBARHELP) )
         {
             wxFrame* frame = wxDynamicCast(::wxGetTopLevelParent(this),wxFrame);
@@ -3655,7 +3655,7 @@ void wxPropertyGrid::RefreshEditor()
 // (i.e. two-arg function calls create smaller code size).
 bool wxPropertyGrid::DoClearSelection()
 {
-    return DoSelectProperty((wxPGProperty*)NULL);
+    return DoSelectProperty(NULL);
 }
 
 // -----------------------------------------------------------------------
@@ -4461,7 +4461,7 @@ bool wxPropertyGrid::OnMouseCommon( wxMouseEvent& event, int* px, int* py )
     wxRect r;
     if ( wnd )
         r = wnd->GetRect();
-    if ( wnd == (wxWindow*) NULL || m_dragStatus ||
+    if ( wnd == NULL || m_dragStatus ||
          (
            ux <= (splitterX + wxPG_SPLITTERX_DETECTMARGIN2) ||
            ux >= (r.x+r.width) ||
@@ -5108,7 +5108,7 @@ wxPGEditor* wxPropertyGrid::RegisterEditorClass( wxPGEditor* editorClass,
 
 // Use this in RegisterDefaultEditors.
 #define wxPGRegisterDefaultEditorClass(EDITOR) \
-    if ( wxPGEditor_##EDITOR == (wxPGEditor*) NULL ) \
+    if ( wxPGEditor_##EDITOR == NULL ) \
     { \
         wxPGEditor_##EDITOR = wxPropertyGrid::RegisterEditorClass( \
             new wxPG##EDITOR##Editor, true ); \

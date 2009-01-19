@@ -31,7 +31,7 @@ class WXDLLIMPEXP_CORE wxTabControl: public wxObject
 {
 DECLARE_DYNAMIC_CLASS(wxTabControl)
 public:
-    wxTabControl(wxTabView *v = (wxTabView *) NULL);
+    wxTabControl(wxTabView *v = NULL);
     virtual ~wxTabControl(void);
 
     virtual void OnDraw(wxDC& dc, bool lastInRow);
@@ -108,7 +108,7 @@ public:
   inline wxWindow* GetWindow(void) const { return m_window; }
 
   // Automatically positions tabs
-  wxTabControl *AddTab(int id, const wxString& label, wxTabControl *existingTab = (wxTabControl *) NULL);
+  wxTabControl *AddTab(int id, const wxString& label, wxTabControl *existingTab = NULL);
 
   // Remove the tab without deleting the window
   bool RemoveTab(int id);

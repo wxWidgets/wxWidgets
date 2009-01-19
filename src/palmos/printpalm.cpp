@@ -79,7 +79,7 @@ bool wxPalmPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
 wxDC* wxPalmPrinter::PrintDialog(wxWindow *parent)
 {
-    wxDC* dc = (wxDC*) NULL;
+    wxDC* dc = NULL;
 
     return dc;
 }

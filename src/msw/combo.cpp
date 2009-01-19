@@ -398,7 +398,7 @@ wxComboCtrl::PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const
     selRect.x += wcp + focusSpacingX;
     selRect.width -= wcp + (focusSpacingX*2);
 
-    //wxUxThemeEngine* theme = (wxUxThemeEngine*) NULL;
+    //wxUxThemeEngine* theme = NULL;
     //if ( hTheme )
     //    theme = wxUxThemeEngine::GetIfActive();
 
@@ -831,7 +831,7 @@ bool wxComboCtrl::AnimateShow( const wxRect& rect, int flags )
         m_animTimer.SetOwner( this, wxID_ANY );
         m_animTimer.Start( COMBOBOX_ANIMATION_RESOLUTION, wxTIMER_CONTINUOUS );
 
-        OnTimerEvent(*((wxTimerEvent*)NULL));  // Event is never used, so we can give NULL
+        OnTimerEvent(*(NULL));  // Event is never used, so we can give NULL
 
         return false;
     }

@@ -651,7 +651,7 @@ class WXDLLIMPEXP_CORE wxComboPopup
 public:
     wxComboPopup()
     {
-        m_combo = (wxComboCtrlBase*) NULL;
+        m_combo = NULL;
         m_iFlags = 0;
     }
 
