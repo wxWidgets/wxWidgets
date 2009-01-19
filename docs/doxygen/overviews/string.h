@@ -56,7 +56,7 @@ see the @ref overview_unicode_encodings paragraph.
 For simplicity of implementation, wxString when <tt>wxUSE_UNICODE_WCHAR==1</tt>
 (e.g. on Windows) uses <em>per code unit indexing</em> instead of
 <em>per code point indexing</em> and doesn't know anything about surrogate pairs;
-in other words it always considers code points to be composed by 1 code point,
+in other words it always considers code points to be composed by 1 code unit,
 while this is really true only for characters in the @e BMP (Basic Multilingual Plane).
 Thus when iterating over a UTF-16 string stored in a wxString under Windows, the user
 code has to take care of <em>surrogate pairs</em> himself.
@@ -66,7 +66,9 @@ such as for drawing strings on screen.)
 @remarks
 Note that while the behaviour of wxString when <tt>wxUSE_UNICODE_WCHAR==1</tt>
 resembles UCS-2 encoding, it's not completely correct to refer to wxString as
-UCS-2 encoded since you can encode characters outside the @e BMP in a wxString.
+UCS-2 encoded since you can encode code points outside the @e BMP in a wxString
+as two code units (i.e. as a surrogate pair; as already mentioned however wxString
+will "see" them as two different code points)
 
 When instead <tt>wxUSE_UNICODE_UTF8==1</tt> (e.g. on Linux and Mac OS X)
 wxString handles UTF8 multi-bytes sequences just fine also for characters outside
