@@ -266,19 +266,6 @@ switched off by default) since it is a notoriously unportable feature.
 wxWidgets does not use C++ run-time type information since wxWidgets provides
 its own run-time type information system, implemented using macros.
 
-@subsection page_multiplatform_cpp_null Type of NULL
-
-Some compilers (e.g. the native IRIX cc) define @NULL to be 0L so that no
-conversion to pointers is allowed. Because of that, all these occurrences of
-@NULL in the GTK+ port use an explicit conversion such as
-
-@code
-wxWindow *my_window = (wxWindow*) NULL;
-@endcode
-
-It is recommended to adhere to this in all code using wxWidgets as this make
-the code (a bit) more portable.
-
 @subsection page_multiplatform_cpp_precompiledheaders Precompiled Headers
 
 Some compilers, such as Borland C++ and Microsoft C++, support precompiled
