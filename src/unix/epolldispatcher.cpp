@@ -194,7 +194,7 @@ wxEpollDispatcher::DoPoll(epoll_event *events, int numEvents, int timeout) const
 bool wxEpollDispatcher::HasPending() const
 {
     epoll_event event;
-    return DoPoll(&event, 1, 0) == 1;
+    return DoPoll(&event, 1, 0) >= 1;
 }
 
 int wxEpollDispatcher::Dispatch(int timeout)
