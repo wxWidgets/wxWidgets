@@ -896,6 +896,11 @@ const wxDataViewModel* wxDataViewCtrlBase::GetModel() const
     return m_model;
 }
 
+bool wxDataViewCtrlBase::EnableDragSource( const wxDataFormat &WXUNUSED(format) )
+{
+    return false;
+}
+
 void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
 {
     if (!m_model) return;
@@ -1230,6 +1235,9 @@ wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEven
 wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEvent )
 wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent )
 
+wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_DRAGGABLE, wxDataViewEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_GET_DRAG_DATA_SIZE, wxDataViewEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_GET_DRAG_DATA, wxDataViewEvent )
 
 // -------------------------------------
 // wxDataViewSpinRenderer

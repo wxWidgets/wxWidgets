@@ -378,38 +378,6 @@ public:
         return count;
     }
 
-    // DnD
-
-    virtual bool IsDraggable( const wxDataViewItem &item )
-        {
-            // only drag items
-            return (!IsContainer(item));
-        }
-
-    virtual size_t GetDragDataSize( const wxDataViewItem &item, const wxDataFormat &WXUNUSED(format) )
-        {
-            wxPrintf( "GetDragDataSize\n" );
-
-            MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-            wxString data;
-            data += node->m_title; data += wxT(" ");
-            data += node->m_artist;
-            return strlen( data.utf8_str() ) + 1;
-        }
-    virtual bool GetDragData( const wxDataViewItem &item, const wxDataFormat &WXUNUSED(format),
-                              void* dest, size_t WXUNUSED(size) )
-        {
-            wxPrintf( "GetDragData\n" );
-
-            MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-            wxString data;
-            data += node->m_title; data += wxT(" ");
-            data += node->m_artist;
-            wxCharBuffer buffer( data.utf8_str() );
-            memcpy( dest, buffer, strlen(buffer)+1 );
-            return true;
-        }
-    
     wxDataViewItem GetNinthItem()
     {
        return wxDataViewItem( m_ninth );
@@ -700,6 +668,11 @@ public:
     void OnRightClick( wxMouseEvent &event );
     void OnGoto( wxCommandEvent &event);
     void OnAddMany( wxCommandEvent &event);
+    
+    // DnD
+    void OnDraggable( wxDataViewEvent &event );
+    void OnGetDragDataSize( wxDataViewEvent &event );
+    void OnGetDragData( wxDataViewEvent &event );
 
 private:
     wxDataViewCtrl* m_musicCtrl;
@@ -795,6 +768,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
 
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
+    
+    EVT_DATAVIEW_ITEM_DRAGGABLE( ID_MUSIC_CTRL, MyFrame::OnDraggable )
+    EVT_DATAVIEW_ITEM_GET_DRAG_DATA_SIZE( ID_MUSIC_CTRL, MyFrame::OnGetDragDataSize )
+    EVT_DATAVIEW_ITEM_GET_DRAG_DATA( ID_MUSIC_CTRL, MyFrame::OnGetDragData )
 
     EVT_RIGHT_UP(MyFrame::OnRightClick)
 END_EVENT_TABLE()
@@ -833,6 +810,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );
+    
+    m_musicCtrl->EnableDragSource( wxDF_TEXT );
 
     wxDataViewTextRenderer *tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_INERT );
     wxDataViewColumn *column0 = new wxDataViewColumn( wxT("title"), tr, 0, 200, wxALIGN_LEFT,
@@ -1175,9 +1154,47 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
     wxAboutDialogInfo info;
     info.SetName(_("DataView sample"));
-    info.SetDescription(_("This sample demonstrates the dataview control handling"));
-    info.SetCopyright(_T("(C) 2007 Robert Roebling"));
+    info.SetDescription(_("This sample demonstrates wxDataViewCtrl"));
+    info.SetCopyright(_T("(C) 2007-2009 Robert Roebling"));
 
     wxAboutBox(info);
 }
 
+void MyFrame::OnDraggable( wxDataViewEvent &event )
+{
+    // only allow drags for item, not containers
+    event.SetDraggable( !m_music_model->IsContainer( event.GetItem() ) );
+}
+
+void MyFrame::OnGetDragDataSize( wxDataViewEvent &event )
+{
+    if (event.GetDataFormat() == wxDF_TEXT)
+    {
+        wxDataViewItem item( event.GetItem() );
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+        
+        wxTextDataObject obj;
+        obj.SetText( node->m_artist );
+        size_t size = obj.GetDataSize( wxDF_TEXT );
+        event.SetDragDataSize( size );
+        return;
+    }
+    
+    event.Skip();
+}
+
+void MyFrame::OnGetDragData( wxDataViewEvent &event )
+{
+    if (event.GetDataFormat() == wxDF_TEXT)
+    {
+        wxDataViewItem item( event.GetItem() );
+        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+        
+        wxTextDataObject obj;
+        obj.SetText( node->m_artist );
+        obj.GetDataHere( wxDF_TEXT, event.GetDragDataBuffer() );
+        return;
+    }
+    
+    event.Skip();
+}

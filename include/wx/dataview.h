@@ -193,15 +193,6 @@ public:
         { return false; }
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const = 0;
 
-    // define DnD capabilities
-    virtual bool IsDraggable( const wxDataViewItem &WXUNUSED(item) )
-        { return false; }
-    virtual size_t GetDragDataSize( const wxDataViewItem &WXUNUSED(item), const wxDataFormat &WXUNUSED(format) )
-        { return 0; }
-    virtual bool GetDragData( const wxDataViewItem &WXUNUSED(item), const wxDataFormat &WXUNUSED(format),
-                              void* WXUNUSED(data), size_t WXUNUSED(size) )
-        { return FALSE; }
-
     // delegated notifiers
     virtual bool ItemAdded( const wxDataViewItem &parent, const wxDataViewItem &item );
     virtual bool ItemsAdded( const wxDataViewItem &parent, const wxDataViewItemArray &items );
@@ -722,6 +713,8 @@ public:
                                 const wxDataViewColumn *column = NULL ) = 0;
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
+    
+    virtual bool EnableDragSource( const wxDataFormat &format );
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;
@@ -750,7 +743,9 @@ public:
         m_model(NULL),
         m_value(wxNullVariant),
         m_column(NULL),
-        m_pos(-1,-1)
+        m_pos(-1,-1),
+        m_isDraggable(false),
+        m_dragDataSize(-1)
         { }
 
     wxDataViewEvent(const wxDataViewEvent& event)
@@ -760,7 +755,9 @@ public:
         m_model(event.m_model),
         m_value(event.m_value),
         m_column(event.m_column),
-        m_pos(m_pos)
+        m_pos(m_pos),
+        m_isDraggable(event.m_isDraggable),
+        m_dragDataSize(event.m_dragDataSize)
         { }
 
     wxDataViewItem GetItem() const { return m_item; }
@@ -783,6 +780,16 @@ public:
     wxPoint GetPosition() const { return m_pos; }
     void SetPosition( int x, int y ) { m_pos.x = x; m_pos.y = y; }
 
+    // For Drag operations
+    bool IsDraggable() const { return m_isDraggable; }
+    void SetDraggable( bool can_drag = true ) { m_isDraggable = can_drag; }
+    int GetDragDataSize() const { return m_dragDataSize; }
+    void SetDragDataSize( int size ) { m_dragDataSize = size; }
+    void* GetDragDataBuffer() const { return m_dragDataBuffer; }
+    void SetDragDataBuffer( void *buffer ) { m_dragDataBuffer = buffer; }
+    wxDataFormat GetDataFormat() const { return m_dataFormat; }
+    void SetDataFormat( const wxDataFormat &format ) { m_dataFormat = format; }
+
     virtual wxEvent *Clone() const { return new wxDataViewEvent(*this); }
 
 protected:
@@ -792,6 +799,11 @@ protected:
     wxVariant           m_value;
     wxDataViewColumn   *m_column;
     wxPoint             m_pos;
+    
+    bool                m_isDraggable;
+    int                 m_dragDataSize;
+    void               *m_dragDataBuffer;
+    wxDataFormat        m_dataFormat;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent)
@@ -814,6 +826,10 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEvent )
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEvent )
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent )
+
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_DRAGGABLE, wxDataViewEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_GET_DRAG_DATA_SIZE, wxDataViewEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_GET_DRAG_DATA, wxDataViewEvent )
 
 typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 
@@ -841,6 +857,9 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_COLUMN_SORTED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_SORTED, id, fn)
 #define EVT_DATAVIEW_COLUMN_REORDERED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_REORDERED, id, fn)
 
+#define EVT_DATAVIEW_ITEM_DRAGGABLE(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_DRAGGABLE, id, fn)
+#define EVT_DATAVIEW_ITEM_GET_DRAG_DATA_SIZE(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_GET_DRAG_DATA_SIZE, id, fn)
+#define EVT_DATAVIEW_ITEM_GET_DRAG_DATA(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_GET_DRAG_DATA, id, fn)
 
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     // this symbol doesn't follow the convention for wxUSE_XXX symbols which
