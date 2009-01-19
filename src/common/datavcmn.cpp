@@ -1803,18 +1803,7 @@ void wxDataViewTreeStore::DeleteChildren( const wxDataViewItem& item )
     wxDataViewTreeStoreContainerNode *node = FindContainerNode( item );
     if (!node) return;
 
-    wxDataViewItemArray array;
-    wxDataViewTreeStoreNodeList::iterator iter;
-    for (iter = node->GetChildren().begin(); iter != node->GetChildren().end(); iter++)
-    {
-        wxDataViewTreeStoreNode* child = *iter;
-        array.Add( child->GetItem() );
-    }
-
     node->GetChildren().clear();
-
-    // notify control
-    ItemsDeleted( item, array );
 }
 
 void wxDataViewTreeStore::DeleteAllItems()
@@ -2134,7 +2123,21 @@ void wxDataViewTreeCtrl::DeleteItem( const wxDataViewItem& item )
 
 void wxDataViewTreeCtrl::DeleteChildren( const wxDataViewItem& item )
 { 
-    GetStore()->DeleteChildren(item);
+    wxDataViewTreeStoreContainerNode *node = GetStore()->FindContainerNode( item );
+    if (!node) return;
+
+    wxDataViewItemArray array;
+    wxDataViewTreeStoreNodeList::iterator iter;
+    for (iter = node->GetChildren().begin(); iter != node->GetChildren().end(); iter++)
+    {
+        wxDataViewTreeStoreNode* child = *iter;
+        array.Add( child->GetItem() );
+    }
+
+    GetStore()->DeleteChildren( item );
+
+    // notify control
+    GetStore()->ItemsDeleted( item, array );
 }
 
 void  wxDataViewTreeCtrl::DeleteAllItems()
