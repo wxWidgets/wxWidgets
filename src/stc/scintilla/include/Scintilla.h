@@ -25,14 +25,10 @@ int Scintilla_LinkLexers();
 // Here should be placed typedefs for uptr_t, an unsigned integer type large enough to
 // hold a pointer and sptr_t, a signed integer large enough to hold a pointer.
 // May need to be changed for 64 bit platforms.
-#if defined(_MSC_VER) && _MSC_VER >= 1300
+#ifdef _WIN32
 #include <BaseTsd.h>
 #endif
-#if defined(__MINGW64__)
-#include <stdint.h>
-typedef uint64_t uptr_t;
-typedef int64_t sptr_t;
-#elif defined(MAXULONG_PTR)
+#ifdef MAXULONG_PTR
 typedef ULONG_PTR uptr_t;
 typedef LONG_PTR sptr_t;
 #else
