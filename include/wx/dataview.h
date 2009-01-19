@@ -992,20 +992,25 @@ public:
     const wxDataViewListStore *GetStore() const
         { return (const wxDataViewListStore*) GetModel(); }
 
-    void AppendCol( wxDataViewColumn *column, const wxString &varianttype );
-    void PrependCol( wxDataViewColumn *column, const wxString &varianttype );
-    void InsertCol( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
+    bool AppendColumn( wxDataViewColumn *column, const wxString &varianttype );
+    bool PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
+    bool InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
                     
-    wxDataViewColumn *AppendTextCol( const wxString &label, 
+    // overridden from base class
+    virtual bool PrependColumn( wxDataViewColumn *col );
+    virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
+    virtual bool AppendColumn( wxDataViewColumn *col );
+
+    wxDataViewColumn *AppendTextColumn( const wxString &label, 
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumn *AppendToggleCol( const wxString &label, 
+    wxDataViewColumn *AppendToggleColumn( const wxString &label, 
           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, 
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumn *AppendProgressCol( const wxString &label, 
+    wxDataViewColumn *AppendProgressColumn( const wxString &label, 
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumn *AppendIconTextCol( const wxString &label, 
+    wxDataViewColumn *AppendIconTextColumn( const wxString &label, 
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
 

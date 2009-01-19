@@ -1493,8 +1493,8 @@ public:
     @code
        wxDataViewListCtrl *listctrl = new wxDataViewListCtrl( parent, -1 );
         
-       listctrl->AppendToggleCol( "Toggle" );
-       listctrl->AppendTextCol( "Text" );
+       listctrl->AppendToggleColumn( "Toggle" );
+       listctrl->AppendTextColumn( "Text" );
     
        wxVector<wxVariant> data;
        data.push_back( true );
@@ -1552,45 +1552,69 @@ public:
         Appends a column to the control and additonally appends a
         column to the store with the type @a varianttype.
     */
-    void AppendCol( wxDataViewColumn *column, const wxString &varianttype );
+    void AppendColumn( wxDataViewColumn *column, const wxString &varianttype );
     
     /**
         Prepends a column to the control and additonally prepends a
         column to the store with the type @a varianttype.
     */
-    void PrependCol( wxDataViewColumn *column, const wxString &varianttype );
+    void PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
     
     /**
         Inserts a column to the control and additonally inserts a
         column to the store with the type @a varianttype.
     */
-    void InsertCol( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
+    void InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
+                    
+    /**
+        Overridden from wxDataViewCtrl
+        
+        Appends a column to the control and additonally appends a
+        column to the store with the type string.
+    */
+    virtual void AppendColumn( wxDataViewColumn *column );
+    
+    /**
+        Overridden from wxDataViewCtrl
+        
+        Prepends a column to the control and additonally prepends a
+        column to the store with the type string.
+    */
+    virtual void PrependColumn( wxDataViewColumn *column );
+    
+    /**
+        Overridden from wxDataViewCtrl
+        
+        Inserts a column to the control and additonally inserts a
+        column to the store with the type string.
+    */
+    virtual void InsertColumn( unsigned int pos, wxDataViewColumn *column );
                     
     /**
         Inserts a text column to the control and the store.
     */
-    wxDataViewColumn *AppendTextCol( const wxString &label, 
+    wxDataViewColumn *AppendTextColumn( const wxString &label, 
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
                     
     /**
         Inserts a toggle column to the control and the store.
     */
-    wxDataViewColumn *AppendToggleCol( const wxString &label, 
+    wxDataViewColumn *AppendToggleColumn( const wxString &label, 
           wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, 
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
                     
     /**
         Inserts a progress column to the control and the store.
     */
-    wxDataViewColumn *AppendProgressCol( const wxString &label, 
+    wxDataViewColumn *AppendProgressColumn( const wxString &label, 
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
                     
     /**
         Inserts a icon and text column to the control and the store.
     */
-    wxDataViewColumn *AppendIconTextCol( const wxString &label, 
+    wxDataViewColumn *AppendIconTextColumn( const wxString &label, 
           wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
 

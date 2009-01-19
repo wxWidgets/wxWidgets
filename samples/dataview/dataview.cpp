@@ -926,8 +926,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     wxDataViewListCtrl *listctrl = new wxDataViewListCtrl( panel, -1,
         wxDefaultPosition, wxSize(100,200) );
         
-    listctrl->AppendToggleCol( wxT("Toggle") );
-    listctrl->AppendTextCol( wxT("Text") );
+    listctrl->AppendToggleColumn( wxT("Toggle") );
+    listctrl->AppendTextColumn( wxT("Text") );
     
     wxVector<wxVariant> data;
     data.push_back( true );

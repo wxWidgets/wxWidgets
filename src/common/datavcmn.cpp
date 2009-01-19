@@ -946,7 +946,6 @@ wxDataViewColumn *
 wxDataViewCtrlBase::AppendToggleColumn( const wxString &label, unsigned int model_column,
                             wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
-
     wxDataViewColumn *ret = new wxDataViewColumn( label,
         new wxDataViewToggleRenderer( wxT("bool"), mode ),
         model_column, width, align, flags );
@@ -1495,50 +1494,93 @@ bool wxDataViewListCtrl::Create( wxWindow *parent, wxWindowID id,
     return wxDataViewCtrl::Create( parent, id, pos, size, style, validator );
 }
 
-void wxDataViewListCtrl::AppendCol( wxDataViewColumn *column, const wxString &varianttype )
+bool wxDataViewListCtrl::AppendColumn( wxDataViewColumn *column, const wxString &varianttype )
 {
     GetStore()->AppendColumn( varianttype );
-    AppendColumn( column );
+    return wxDataViewCtrl::AppendColumn( column );
 }
 
-void wxDataViewListCtrl::PrependCol( wxDataViewColumn *column, const wxString &varianttype )
+bool wxDataViewListCtrl::PrependColumn( wxDataViewColumn *column, const wxString &varianttype )
 {
     GetStore()->PrependColumn( varianttype );
-    PrependColumn( column );
+    return wxDataViewCtrl::PrependColumn( column );
 }
 
-void wxDataViewListCtrl::InsertCol( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype )
+bool wxDataViewListCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype )
 {
     GetStore()->InsertColumn( pos, varianttype );
-    InsertColumn( pos, column );
+    return wxDataViewCtrl::InsertColumn( pos, column );
+}
+
+bool wxDataViewListCtrl::PrependColumn( wxDataViewColumn *col )
+{
+    return PrependColumn( col, "string" );
+}
+
+bool wxDataViewListCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
+{
+    return InsertColumn( pos, col, "string" );
+}
+
+bool wxDataViewListCtrl::AppendColumn( wxDataViewColumn *col )
+{
+    return AppendColumn( col, "string" );
 }
                     
-wxDataViewColumn *wxDataViewListCtrl::AppendTextCol( const wxString &label, 
+wxDataViewColumn *wxDataViewListCtrl::AppendTextColumn( const wxString &label, 
           wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     GetStore()->AppendColumn( wxT("string") );
-    return AppendTextColumn( label, GetStore()->GetColumnCount()-1, mode, width, align, flags );
+    
+    wxDataViewColumn *ret = new wxDataViewColumn( label,
+        new wxDataViewTextRenderer( wxT("string"), mode ),
+        GetStore()->GetColumnCount()-1, width, align, flags );
+        
+    wxDataViewCtrl::AppendColumn( ret );
+    
+    return ret;
 }
 
-wxDataViewColumn *wxDataViewListCtrl::AppendToggleCol( const wxString &label, 
+wxDataViewColumn *wxDataViewListCtrl::AppendToggleColumn( const wxString &label, 
           wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     GetStore()->AppendColumn( wxT("bool") );
-    return AppendToggleColumn( label, GetStore()->GetColumnCount()-1, mode, width, align, flags );
+    
+    wxDataViewColumn *ret = new wxDataViewColumn( label,
+        new wxDataViewToggleRenderer( wxT("bool"), mode ),
+        GetStore()->GetColumnCount()-1, width, align, flags );
+        
+    wxDataViewCtrl::AppendColumn( ret );
+    
+    return ret;
 }
 
-wxDataViewColumn *wxDataViewListCtrl::AppendProgressCol( const wxString &label, 
+wxDataViewColumn *wxDataViewListCtrl::AppendProgressColumn( const wxString &label, 
           wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     GetStore()->AppendColumn( wxT("long") );
-    return AppendProgressColumn( label, GetStore()->GetColumnCount()-1, mode, width, align, flags );
+    
+    wxDataViewColumn *ret = new wxDataViewColumn( label,
+        new wxDataViewProgressRenderer( wxEmptyString, wxT("long"), mode ),
+        GetStore()->GetColumnCount()-1, width, align, flags );
+        
+    wxDataViewCtrl::AppendColumn( ret );
+    
+    return ret;
 }
 
-wxDataViewColumn *wxDataViewListCtrl::AppendIconTextCol( const wxString &label, 
+wxDataViewColumn *wxDataViewListCtrl::AppendIconTextColumn( const wxString &label, 
           wxDataViewCellMode mode, int width, wxAlignment align, int flags )
 {
     GetStore()->AppendColumn( wxT("wxDataViewIconText") );
-    return AppendIconTextColumn( label, GetStore()->GetColumnCount()-1, mode, width, align, flags );
+    
+    wxDataViewColumn *ret = new wxDataViewColumn( label,
+        new wxDataViewIconTextRenderer( wxT("wxDataViewIconText"), mode ),
+        GetStore()->GetColumnCount()-1, width, align, flags );
+        
+    wxDataViewCtrl::AppendColumn( ret );
+    
+    return ret;
 }
 
 void wxDataViewListCtrl::OnSize( wxSizeEvent &event )
