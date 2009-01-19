@@ -3,7 +3,7 @@
 // Purpose:     define wxSpinButton event types
 // Author:      Peter Most
 // Created:     01.11.08
-// RCS-ID:      $Id:$
+// RCS-ID:      $Id$
 // Copyright:   (c) 2008-2009 wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
