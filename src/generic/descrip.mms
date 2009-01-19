@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 16 January 2009                                                     *
+# Date : 19 January 2009                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -187,18 +187,23 @@ OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,\
 .endif
 
 all : $(SOURCES)
-	$(MMS)$(MMSQUALIFIERS) $(OBJECTS),$(OBJECTS0)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS0)
 .ifdef __WXMOTIF__
-	library/crea [--.lib]libwx_motif.olb $(OBJECTS),$(OBJECTS0)
+	library/crea [--.lib]libwx_motif.olb $(OBJECTS)
+	library [--.lib]libwx_motif.olb $(OBJECTS0)
 .else
 .ifdef __WXGTK__
-	library/crea [--.lib]libwx_gtk.olb $(OBJECTS),$(OBJECTS0)
+	library/crea [--.lib]libwx_gtk.olb $(OBJECTS)
+	library [--.lib]libwx_gtk.olb $(OBJECTS0)
 .else
 .ifdef __WXGTK2__
-	library/crea [--.lib]libwx_gtk2.olb $(OBJECTS),$(OBJECTS0)
+	library/crea [--.lib]libwx_gtk2.olb $(OBJECTS)
+	library [--.lib]libwx_gtk2.olb $(OBJECTS0)
 .else
 .ifdef __WXX11__
-	library/crea [--.lib]libwx_x11_univ.olb $(OBJECTS),$(OBJECTS0)
+	library/crea [--.lib]libwx_x11_univ.olb $(OBJECTS)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS0)
 .endif
 .endif
 .endif

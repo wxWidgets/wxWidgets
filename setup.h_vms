@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 13 January 2009                                                    *
+ * Date : 19 January 2009                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -989,6 +989,12 @@ typedef pid_t GPid;
 
 /* Define if you have usleep() */
 #define HAVE_USLEEP 1
+
+/* Define if you have wcscasecmp() function  */
+#undef HAVE_WCSCASECMP
+
+/* Define if you have wcsncasecmp() function  */
+#undef HAVE_WCSNCASECMP
 
 /* Define if you have wcslen function */
 #define HAVE_WCSLEN 1
