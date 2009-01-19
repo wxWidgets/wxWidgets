@@ -1605,9 +1605,6 @@ wxDataViewItem wxDataViewTreeStore::AppendItem( const wxDataViewItem& parent,
         new wxDataViewTreeStoreNode( parent_node, text, icon, data );
     parent_node->GetChildren().Append( node );
 
-    // notify control
-    ItemAdded( parent, node->GetItem() );
-
     return node->GetItem();
 }
 
@@ -1621,20 +1618,28 @@ wxDataViewItem wxDataViewTreeStore::PrependItem( const wxDataViewItem& parent,
         new wxDataViewTreeStoreNode( parent_node, text, icon, data );
     parent_node->GetChildren().Insert( node );
 
-    // notify control
-    ItemAdded( parent, node->GetItem() );
-
     return node->GetItem();
 }
 
 wxDataViewItem
-wxDataViewTreeStore::InsertItem(const wxDataViewItem& WXUNUSED(parent),
-                                const wxDataViewItem& WXUNUSED(previous),
-                                const wxString& WXUNUSED(text),
-                                const wxIcon& WXUNUSED(icon),
-                                wxClientData * WXUNUSED(data))
+wxDataViewTreeStore::InsertItem(const wxDataViewItem& parent,
+                                const wxDataViewItem& previous,
+                                const wxString& text,
+                                const wxIcon& icon,
+                                wxClientData *data)
 {
-    return wxDataViewItem(0);
+    wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
+    if (!parent_node) return wxDataViewItem(0);
+
+    wxDataViewTreeStoreNode *previous_node = FindNode( previous );
+    int pos = parent_node->GetChildren().IndexOf( previous_node );
+    if (pos == wxNOT_FOUND) return wxDataViewItem(0);
+
+    wxDataViewTreeStoreNode *node =
+        new wxDataViewTreeStoreNode( parent_node, text, icon, data );
+    parent_node->GetChildren().Insert( (size_t) pos, node );
+
+    return node->GetItem();
 }
 
 wxDataViewItem wxDataViewTreeStore::PrependContainer( const wxDataViewItem& parent,
@@ -1647,9 +1652,6 @@ wxDataViewItem wxDataViewTreeStore::PrependContainer( const wxDataViewItem& pare
     wxDataViewTreeStoreContainerNode *node =
         new wxDataViewTreeStoreContainerNode( parent_node, text, icon, expanded, data );
     parent_node->GetChildren().Insert( node );
-
-    // notify control
-    ItemAdded( parent, node->GetItem() );
 
     return node->GetItem();
 }
@@ -1668,21 +1670,29 @@ wxDataViewTreeStore::AppendContainer(const wxDataViewItem& parent,
         new wxDataViewTreeStoreContainerNode( parent_node, text, icon, expanded, data );
     parent_node->GetChildren().Append( node );
 
-    // notify control
-    ItemAdded( parent, node->GetItem() );
-
     return node->GetItem();
 }
 
 wxDataViewItem
-wxDataViewTreeStore::InsertContainer(const wxDataViewItem& WXUNUSED(parent),
-                                     const wxDataViewItem& WXUNUSED(previous),
-                                     const wxString& WXUNUSED(text),
-                                     const wxIcon& WXUNUSED(icon),
-                                     const wxIcon& WXUNUSED(expanded),
-                                     wxClientData * WXUNUSED(data))
+wxDataViewTreeStore::InsertContainer(const wxDataViewItem& parent,
+                                     const wxDataViewItem& previous,
+                                     const wxString& text,
+                                     const wxIcon& icon,
+                                     const wxIcon& expanded,
+                                     wxClientData * data)
 {
-    return wxDataViewItem(0);
+    wxDataViewTreeStoreContainerNode *parent_node = FindContainerNode( parent );
+    if (!parent_node) return wxDataViewItem(0);
+    
+    wxDataViewTreeStoreNode *previous_node = FindNode( previous );
+    int pos = parent_node->GetChildren().IndexOf( previous_node );
+    if (pos == wxNOT_FOUND) return wxDataViewItem(0);
+    
+    wxDataViewTreeStoreContainerNode *node =
+        new wxDataViewTreeStoreContainerNode( parent_node, text, icon, expanded, data );
+    parent_node->GetChildren().Insert( (size_t) pos, node );
+
+    return node->GetItem();
 }
 
 wxDataViewItem wxDataViewTreeStore::GetNthChild( const wxDataViewItem& parent, unsigned int pos ) const
@@ -1715,9 +1725,6 @@ void wxDataViewTreeStore::SetItemText( const wxDataViewItem& item, const wxStrin
     if (!node) return;
 
     node->SetText( text );
-
-    // notify control
-    ValueChanged( item, 0 );
 }
 
 wxString wxDataViewTreeStore::GetItemText( const wxDataViewItem& item ) const
@@ -1734,9 +1741,6 @@ void wxDataViewTreeStore::SetItemIcon( const wxDataViewItem& item, const wxIcon 
     if (!node) return;
 
     node->SetIcon( icon );
-
-    // notify control
-    ValueChanged( item, 0 );
 }
 
 const wxIcon &wxDataViewTreeStore::GetItemIcon( const wxDataViewItem& item ) const
@@ -1753,9 +1757,6 @@ void wxDataViewTreeStore::SetItemExpandedIcon( const wxDataViewItem& item, const
     if (!node) return;
 
     node->SetExpandedIcon( icon );
-
-    // notify control
-    ValueChanged( item, 0 );
 }
 
 const wxIcon &wxDataViewTreeStore::GetItemExpandedIcon( const wxDataViewItem& item ) const
@@ -1772,9 +1773,6 @@ void wxDataViewTreeStore::SetItemData( const wxDataViewItem& item, wxClientData 
     if (!node) return;
 
     node->SetData( data );
-
-    // notify control? only sensible when sorting on client data
-    // ValueChanged( item, 0 );
 }
 
 wxClientData *wxDataViewTreeStore::GetItemData( const wxDataViewItem& item ) const
@@ -1798,9 +1796,6 @@ void wxDataViewTreeStore::DeleteItem( const wxDataViewItem& item )
     if (!node) return;
 
     parent_node->GetChildren().DeleteObject( node );
-
-    // notify control
-    ItemDeleted( parent_item, item );
 }
 
 void wxDataViewTreeStore::DeleteChildren( const wxDataViewItem& item )
@@ -2014,7 +2009,11 @@ wxDataViewItem wxDataViewTreeCtrl::AppendItem( const wxDataViewItem& parent,
     if (m_imageList && (iconIndex != -1))
         icon = m_imageList->GetIcon( iconIndex );
 
-    return GetStore()->AppendItem( parent, text, icon, data );
+    wxDataViewItem res = GetStore()->AppendItem( parent, text, icon, data );
+    
+    GetStore()->ItemAdded( parent, res );
+    
+    return res;
 }
 
 wxDataViewItem wxDataViewTreeCtrl::PrependItem( const wxDataViewItem& parent,
@@ -2024,7 +2023,11 @@ wxDataViewItem wxDataViewTreeCtrl::PrependItem( const wxDataViewItem& parent,
     if (m_imageList && (iconIndex != -1))
         icon = m_imageList->GetIcon( iconIndex );
 
-    return GetStore()->PrependItem( parent, text, icon, data );
+    wxDataViewItem res = GetStore()->PrependItem( parent, text, icon, data );
+    
+    GetStore()->ItemAdded( parent, res );
+    
+    return res;
 }
 
 wxDataViewItem wxDataViewTreeCtrl::InsertItem( const wxDataViewItem& parent, const wxDataViewItem& previous,
@@ -2034,7 +2037,11 @@ wxDataViewItem wxDataViewTreeCtrl::InsertItem( const wxDataViewItem& parent, con
     if (m_imageList && (iconIndex != -1))
         icon = m_imageList->GetIcon( iconIndex );
 
-    return GetStore()->InsertItem( parent, previous, text, icon, data );
+    wxDataViewItem res = GetStore()->InsertItem( parent, previous, text, icon, data );
+    
+    GetStore()->ItemAdded( parent, res );
+    
+    return res;
 }
 
 wxDataViewItem wxDataViewTreeCtrl::PrependContainer( const wxDataViewItem& parent,
@@ -2048,7 +2055,11 @@ wxDataViewItem wxDataViewTreeCtrl::PrependContainer( const wxDataViewItem& paren
     if (m_imageList && (expandedIndex != -1))
         expanded = m_imageList->GetIcon( expandedIndex );
 
-    return GetStore()->PrependContainer( parent, text, icon, expanded, data );
+    wxDataViewItem res = GetStore()->PrependContainer( parent, text, icon, expanded, data );
+    
+    GetStore()->ItemAdded( parent, res );
+    
+    return res;
 }
 
 wxDataViewItem wxDataViewTreeCtrl::AppendContainer( const wxDataViewItem& parent,
@@ -2062,7 +2073,11 @@ wxDataViewItem wxDataViewTreeCtrl::AppendContainer( const wxDataViewItem& parent
     if (m_imageList && (expandedIndex != -1))
         expanded = m_imageList->GetIcon( expandedIndex );
 
-    return GetStore()->AppendContainer( parent, text, icon, expanded, data );
+    wxDataViewItem res = GetStore()->AppendContainer( parent, text, icon, expanded, data );
+    
+    GetStore()->ItemAdded( parent, res );
+    
+    return res;
 }
 
 wxDataViewItem wxDataViewTreeCtrl::InsertContainer( const wxDataViewItem& parent, const wxDataViewItem& previous,
@@ -2076,7 +2091,57 @@ wxDataViewItem wxDataViewTreeCtrl::InsertContainer( const wxDataViewItem& parent
     if (m_imageList && (expandedIndex != -1))
         expanded = m_imageList->GetIcon( expandedIndex );
 
-    return GetStore()->InsertContainer( parent, previous, text, icon, expanded, data );
+    wxDataViewItem res = GetStore()->InsertContainer( parent, previous, text, icon, expanded, data );
+    
+    GetStore()->ItemAdded( parent, res );
+    
+    return res;
+}
+
+void wxDataViewTreeCtrl::SetItemText( const wxDataViewItem& item, const wxString &text )
+{ 
+    GetStore()->SetItemText(item,text);
+    
+    // notify control
+    GetStore()->ValueChanged( item, 0 );
+}
+
+void wxDataViewTreeCtrl::SetItemIcon( const wxDataViewItem& item, const wxIcon &icon )
+{ 
+    GetStore()->SetItemIcon(item,icon);
+    
+    // notify control
+    GetStore()->ValueChanged( item, 0 );
+}
+
+void wxDataViewTreeCtrl::SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon )
+{ 
+    GetStore()->SetItemExpandedIcon(item,icon);
+    
+    // notify control
+    GetStore()->ValueChanged( item, 0 );
+}
+
+void wxDataViewTreeCtrl::DeleteItem( const wxDataViewItem& item )
+{ 
+    wxDataViewItem parent_item = GetStore()->GetParent( item );
+
+    GetStore()->DeleteItem(item);
+    
+    // notify control
+    GetStore()->ItemDeleted( parent_item, item );
+}
+
+void wxDataViewTreeCtrl::DeleteChildren( const wxDataViewItem& item )
+{ 
+    GetStore()->DeleteChildren(item);
+}
+
+void  wxDataViewTreeCtrl::DeleteAllItems()
+{ 
+    GetStore()->DeleteAllItems();
+    
+    GetStore()->Cleared();
 }
 
 void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
@@ -2087,6 +2152,7 @@ void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
     if (!container) return;
 
     container->SetExpanded( true );
+    
     GetStore()->ItemChanged( event.GetItem() );
 }
 
@@ -2098,6 +2164,7 @@ void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
     if (!container) return;
 
     container->SetExpanded( false );
+    
     GetStore()->ItemChanged( event.GetItem() );
 }
 

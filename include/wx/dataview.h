@@ -1236,16 +1236,13 @@ public:
     int GetChildCount( const wxDataViewItem& parent ) const
         { return GetStore()->GetChildCount(parent); }
 
-    void SetItemText( const wxDataViewItem& item, const wxString &text )
-        { GetStore()->SetItemText(item,text); }
+    void SetItemText( const wxDataViewItem& item, const wxString &text );
     wxString GetItemText( const wxDataViewItem& item ) const
         { return GetStore()->GetItemText(item); }
-    void SetItemIcon( const wxDataViewItem& item, const wxIcon &icon )
-        { GetStore()->SetItemIcon(item,icon); }
+    void SetItemIcon( const wxDataViewItem& item, const wxIcon &icon );
     const wxIcon &GetItemIcon( const wxDataViewItem& item ) const
         { return GetStore()->GetItemIcon(item); }
-    void SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon )
-        { GetStore()->SetItemExpandedIcon(item,icon); }
+    void SetItemExpandedIcon( const wxDataViewItem& item, const wxIcon &icon );
     const wxIcon &GetItemExpandedIcon( const wxDataViewItem& item ) const
         { return GetStore()->GetItemExpandedIcon(item); }
     void SetItemData( const wxDataViewItem& item, wxClientData *data )
@@ -1253,12 +1250,9 @@ public:
     wxClientData *GetItemData( const wxDataViewItem& item ) const
         { return GetStore()->GetItemData(item); }
 
-    void DeleteItem( const wxDataViewItem& item )
-        { GetStore()->DeleteItem(item); }
-    void DeleteChildren( const wxDataViewItem& item )
-        { GetStore()->DeleteChildren(item); }
-    void DeleteAllItems()
-        { GetStore()->DeleteAllItems(); }
+    void DeleteItem( const wxDataViewItem& item );
+    void DeleteChildren( const wxDataViewItem& item );
+    void DeleteAllItems();
 
     void OnExpanded( wxDataViewEvent &event );
     void OnCollapsed( wxDataViewEvent &event );
