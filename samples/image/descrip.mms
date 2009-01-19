@@ -1,8 +1,8 @@
 #*****************************************************************************
 #                                                                            *
 # Make file for VMS                                                          *
-# Author : J.Jansen (joukj@hrem.stm.tudelft.nl)                              *
-# Date : 10 November 1999                                                     *
+# Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
+# Date : 19 January 2009                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -35,13 +35,14 @@ all :
 .endif
 
 .ifdef __WXMOTIF__
-image.exe : image.obj
-	cxxlink image,[--.lib]vms/opt
+image.exe : image.obj,canvas.obj
+	cxxlink image,canvas,[--.lib]vms/opt
 .else
 .ifdef __WXGTK__
-image_gtk.exe : image.obj
-	cxxlink/exec=image_gtk.exe image,[--.lib]vms_gtk/opt
+image_gtk.exe : image.obj,canvas.obj
+	cxxlink/exec=image_gtk.exe image,canvas,[--.lib]vms_gtk/opt
 .endif
 .endif
 
 image.obj : image.cpp
+canvas.obj : canvas.cpp
