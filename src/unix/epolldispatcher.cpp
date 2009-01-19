@@ -194,6 +194,10 @@ wxEpollDispatcher::DoPoll(epoll_event *events, int numEvents, int timeout) const
 bool wxEpollDispatcher::HasPending() const
 {
     epoll_event event;
+
+    // NB: it's not really clear if epoll_wait() can return a number greater
+    //     than the number of events passed to it but just in case it can, use
+    //     >= instead of == here, see #10397
     return DoPoll(&event, 1, 0) >= 1;
 }
 
