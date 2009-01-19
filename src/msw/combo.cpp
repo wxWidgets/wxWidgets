@@ -763,7 +763,7 @@ static wxUint32 GetUserPreferencesMask()
 #endif
 
 #if wxUSE_COMBOCTRL_POPUP_ANIMATION
-void wxComboCtrl::OnTimerEvent( wxTimerEvent& WXUNUSED(event) )
+void wxComboCtrl::DoTimerEvent()
 {
     bool stopTimer = false;
 
@@ -831,7 +831,7 @@ bool wxComboCtrl::AnimateShow( const wxRect& rect, int flags )
         m_animTimer.SetOwner( this, wxID_ANY );
         m_animTimer.Start( COMBOBOX_ANIMATION_RESOLUTION, wxTIMER_CONTINUOUS );
 
-        OnTimerEvent(*(NULL));  // Event is never used, so we can give NULL
+        DoTimerEvent();
 
         return false;
     }

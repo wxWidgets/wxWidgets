@@ -73,10 +73,13 @@ public:
     static int GetFeatures() { return wxComboCtrlFeatures::All; }
 
 #if wxUSE_COMBOCTRL_POPUP_ANIMATION
-    void OnTimerEvent( wxTimerEvent& event );
+    void OnTimerEvent(wxTimerEvent& WXUNUSED(event)) { DoTimerEvent(); }
+
 protected:
+    void DoTimerEvent();
+
     virtual bool AnimateShow( const wxRect& rect, int flags );
-#endif
+#endif // wxUSE_COMBOCTRL_POPUP_ANIMATION
 
 protected:
 
