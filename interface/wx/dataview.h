@@ -1513,6 +1513,7 @@ public:
 */
 class wxDataViewListCtrl: public wxDataViewCtrl
 {
+public:
     /**
         Default ctor.
     */
@@ -1699,7 +1700,7 @@ public:
     virtual ~wxDataViewTreeCtrl();
 
     /**
-        @todo docme
+        Appends a container to the given @a parent.
     */
     wxDataViewItem AppendContainer(const wxDataViewItem& parent,
                                    const wxString& text,
@@ -1708,7 +1709,7 @@ public:
                                    wxClientData* data = NULL);
 
     /**
-        @todo docme
+        Appends an item to the given @a parent.
     */
     wxDataViewItem AppendItem(const wxDataViewItem& parent,
                               const wxString& text,
