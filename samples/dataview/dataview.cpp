@@ -1195,10 +1195,16 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
         
     // only allow drags for item, not containers
     if (m_music_model->IsContainer( item ) )
+    {
         event.Veto();
+        return;
+    }
     
     if (event.GetDataFormat() != wxDF_TEXT)
+    {
         event.Veto();
+        return;
+    }
         
     wxTextDataObject obj;
     obj.SetData( wxDF_TEXT, event.GetDataSize(), event.GetDataBuffer() );
