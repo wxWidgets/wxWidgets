@@ -1193,7 +1193,7 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
 {
     wxDataViewItem item( event.GetItem() );
         
-    // only allow drags for item, not containers
+    // only allow drops for item, not containers
     if (m_music_model->IsContainer( item ) )
     {
         event.Veto();
