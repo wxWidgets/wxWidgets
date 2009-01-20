@@ -2256,7 +2256,7 @@ public:
         Set wxDataObject for Drag'n'drop data transfer.
     */
     void SetDataObject( wxDataObject *obj );
-    
+            
     /**
         Gets associated wxDataObject for Drag'n'drop data transfer.
     */
