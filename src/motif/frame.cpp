@@ -253,7 +253,7 @@ bool wxFrame::XmDoCreateTLW(wxWindow* WXUNUSED(parent),
 
 wxFrame::~wxFrame()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
     if (m_clientArea)
     {

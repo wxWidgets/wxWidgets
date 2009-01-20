@@ -350,8 +350,6 @@ wxWindowX11::~wxWindowX11()
     if (g_captureWindow == this)
         g_captureWindow = NULL;
 
-    m_isBeingDeleted = true;
-
     DestroyChildren();
 
     if (m_clientWindow != m_mainWindow)

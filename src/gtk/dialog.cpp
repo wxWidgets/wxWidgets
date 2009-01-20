@@ -85,8 +85,6 @@ bool wxDialog::Show( bool show )
 
 wxDialog::~wxDialog()
 {
-    m_isBeingDeleted = true;
-
     // if the dialog is modal, this will end its event loop
     if ( IsModal() )
         EndModal(wxID_CANCEL);

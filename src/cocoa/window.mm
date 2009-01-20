@@ -943,7 +943,6 @@ void wxWindowCocoa::Init()
     m_cocoaNSView = NULL;
     m_cocoaHider = NULL;
     m_wxCocoaScrollView = NULL;
-    m_isBeingDeleted = false;
     m_isInPaint = false;
     m_visibleTrackingRectManager = NULL;
 }

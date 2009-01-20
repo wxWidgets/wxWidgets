@@ -209,7 +209,9 @@ wxWindowBase::wxWindowBase()
     // Whether we're using the current theme for this window (wxGTK only for now)
     m_themeEnabled = false;
 
-    // VZ: this one shouldn't exist...
+    // This is set to true by SendDestroyEvent() which should be called by the
+    // most derived class to ensure that the destruction event is sent as soon
+    // as possible to allow its handlers to still see the undestroyed window
     m_isBeingDeleted = false;
 
     m_freezeCount = 0;
@@ -387,6 +389,16 @@ bool wxWindowBase::IsBeingDeleted() const
 
 void wxWindowBase::SendDestroyEvent()
 {
+    if ( m_isBeingDeleted )
+    {
+        // we could have been already called from a more derived class dtor,
+        // e.g. ~wxTLW calls us and so does ~wxWindow and the latter call
+        // should be simply ignored
+        return;
+    }
+
+    m_isBeingDeleted = true;
+
     wxWindowDestroyEvent event;
     event.SetEventObject(this);
     event.SetId(GetId());

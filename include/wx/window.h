@@ -1402,7 +1402,8 @@ protected:
     void SatisfyConstraints();
 #endif // wxUSE_CONSTRAINTS
 
-    // Send the wxWindowDestroyEvent
+    // Send the wxWindowDestroyEvent if not done yet and sets m_isBeingDeleted
+    // to true
     void SendDestroyEvent();
 
     // returns the main window of composite control; this is the window

@@ -334,7 +334,7 @@ void wxWindowOS2::Init()
 //
 wxWindowOS2::~wxWindowOS2()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
     for (wxWindow* pWin = GetParent(); pWin; pWin = pWin->GetParent())
     {

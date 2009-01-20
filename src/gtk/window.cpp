@@ -2040,9 +2040,8 @@ void wxWindowGTK::Init()
     m_height = 0;
 
     m_hasVMT = false;
-    m_isBeingDeleted = false;
 
-    m_showOnIdle= false;
+    m_showOnIdle = false;
 
     m_noExpose = false;
     m_nativeSizeEvent = false;
@@ -2210,7 +2209,6 @@ wxWindowGTK::~wxWindowGTK()
     if ( gs_deferredFocusOut == this )
         gs_deferredFocusOut = NULL;
 
-    m_isBeingDeleted = true;
     m_hasVMT = false;
 
     // destroy children before destroying this window itself

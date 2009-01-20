@@ -345,10 +345,10 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 // Destructor
 wxWindow::~wxWindow()
 {
+    SendDestroyEvent();
+
     if (g_captureWindow == this)
         g_captureWindow = NULL;
-
-    m_isBeingDeleted = true;
 
     // Motif-specific actions first
     WXWidget wMain = GetMainWidget();

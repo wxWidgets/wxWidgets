@@ -60,11 +60,6 @@ bool wxControl::Create( wxWindow*           pParent,
     return bRval;
 } // end of wxControl::Create
 
-wxControl::~wxControl()
-{
-    m_isBeingDeleted = true;
-}
-
 bool wxControl::OS2CreateControl( const wxChar* zClassname,
                                   const wxString& rsLabel,
                                   const wxPoint& rPos,

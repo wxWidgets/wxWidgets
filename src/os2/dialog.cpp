@@ -147,7 +147,7 @@ void wxDialog::SetModal(bool WXUNUSED(bFlag))
 
 wxDialog::~wxDialog()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
     // this will also reenable all the other windows for a modal dialog
     Show(false);

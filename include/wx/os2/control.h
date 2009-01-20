@@ -32,7 +32,6 @@ public:
     {
         Create( pParent, vId, rPos, rSize, lStyle, rValidator, rsName );
     }
-    virtual ~wxControl();
 
     bool Create( wxWindow*          pParent
                 ,wxWindowID         vId

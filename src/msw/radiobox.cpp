@@ -254,7 +254,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
 wxRadioBox::~wxRadioBox()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
     delete m_radioButtons;
     if ( m_dummyHwnd )

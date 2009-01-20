@@ -599,6 +599,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
 
 wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
 {
+    SendDestroyEvent();
+
 #if defined(__SMARTPHONE__) || defined(__POCKETPC__)
     SHACTIVATEINFO* info = (SHACTIVATEINFO*) m_activateInfo;
     delete info;

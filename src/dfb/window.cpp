@@ -88,8 +88,6 @@ wxWindowDFB::~wxWindowDFB()
 {
     SendDestroyEvent();
 
-    m_isBeingDeleted = true;
-
     if ( gs_mouseCapture == this )
         ReleaseMouse();
 

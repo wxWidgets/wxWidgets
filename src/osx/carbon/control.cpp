@@ -63,11 +63,6 @@ bool wxControl::Create( wxWindow *parent,
     return rval;
 }
 
-wxControl::~wxControl()
-{
-    m_isBeingDeleted = true;
-}
-
 bool wxControl::ProcessCommand( wxCommandEvent &event )
 {
     // Tries:

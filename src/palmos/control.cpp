@@ -77,8 +77,9 @@ void wxControl::Init()
 
 wxControl::~wxControl()
 {
+    SendDestroyEvent();
+
     SetLabel(wxEmptyString);
-    m_isBeingDeleted = true;
 
     DestroyChildren();
 

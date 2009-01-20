@@ -518,7 +518,6 @@ bool wxWindowMSW::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 void wxWindowMSW::Init()
 {
     // MSW specific
-    m_isBeingDeleted = false;
     m_oldWndProc = NULL;
     m_mouseInWindow = false;
     m_lastKeydownProcessed = false;
@@ -540,7 +539,7 @@ void wxWindowMSW::Init()
 // Destructor
 wxWindowMSW::~wxWindowMSW()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
 #ifndef __WXUNIVERSAL__
     // VS: make sure there's no wxFrame with last focus set to us:
@@ -3949,8 +3948,6 @@ bool wxWindowMSW::HandleCreate(WXLPCREATESTRUCT WXUNUSED_IN_WINCE(cs),
 
 bool wxWindowMSW::HandleDestroy()
 {
-    SendDestroyEvent();
-
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP
     if ( m_dropTarget != NULL )

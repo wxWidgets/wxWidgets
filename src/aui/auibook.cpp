@@ -2898,7 +2898,7 @@ void wxAuiNotebook::InitNotebook(long style)
 wxAuiNotebook::~wxAuiNotebook()
 {
     // Indicate we're deleting pages
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
     while ( GetPageCount() > 0 )
         DeletePage(0);

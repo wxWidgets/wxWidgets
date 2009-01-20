@@ -665,7 +665,7 @@ wxTopLevelWindowGTK::~wxTopLevelWindowGTK()
         RemoveGrab();
     }
 
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
     // it may also be GtkScrolledWindow in the case of an MDI child
     if (GTK_IS_WINDOW(m_widget))

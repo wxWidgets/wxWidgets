@@ -153,7 +153,7 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
 
 wxNonOwnedWindow::~wxNonOwnedWindow()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
     // destroy all children before we destroy the underlying DirectFB window,
     // so that if any of them does something with the TLW, it will still work:

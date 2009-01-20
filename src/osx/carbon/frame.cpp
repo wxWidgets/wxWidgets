@@ -61,7 +61,8 @@ bool wxFrame::Create(wxWindow *parent,
 
 wxFrame::~wxFrame()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
+
     DeleteAllBars();
 }
 
@@ -362,7 +363,7 @@ void wxFrame::PositionToolBar()
     int cw, ch;
 
     GetSize( &cw , &ch ) ;
-            
+
     int statusX = 0 ;
     int statusY = 0 ;
 

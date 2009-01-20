@@ -141,8 +141,6 @@ wxWindowMac::~wxWindowMac()
 {
     SendDestroyEvent();
 
-    m_isBeingDeleted = true;
-
     MacInvalidateBorders() ;
 
 #ifndef __WXUNIVERSAL__

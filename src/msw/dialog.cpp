@@ -192,8 +192,6 @@ bool wxDialog::Create(wxWindow *parent,
 
 wxDialog::~wxDialog()
 {
-    m_isBeingDeleted = true;
-
     // this will also reenable all the other windows for a modal dialog
     Show(false);
 

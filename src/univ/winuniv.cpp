@@ -224,7 +224,7 @@ bool wxWindow::Create(wxWindow *parent,
 
 wxWindow::~wxWindow()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
 #if wxUSE_SCROLLBAR
     // clear pointers to scrollbar before deleting the children: they are

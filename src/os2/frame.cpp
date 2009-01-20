@@ -127,7 +127,8 @@ bool wxFrame::Create( wxWindow*       pParent,
 
 wxFrame::~wxFrame()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
+
     DeleteAllBars();
 } // end of wxFrame::~wxFrame
 

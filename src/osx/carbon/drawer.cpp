@@ -4,7 +4,7 @@
 //              Drawer windows appear under their parent window and
 //              behave like a drawer, opening and closing to reveal
 //              content that does not need to be visible at all times.
-// Author:      Jason Bagley 
+// Author:      Jason Bagley
 // Modified by: Ryan Norton (To make it work :), plus bug fixes)
 // Created:     2004-30-01
 // RCS-ID:      $Id$
@@ -40,17 +40,17 @@ wxDrawerWindow::wxDrawerWindow()
 }
 
 wxDrawerWindow::~wxDrawerWindow()
-{ 
-    m_isBeingDeleted = TRUE;
-    this->Show(FALSE);
+{
+    SendDestroyEvent();
+    Show(FALSE);
 }
-    
+
 bool wxDrawerWindow::Create(wxWindow *parent,
  wxWindowID id, const wxString& title,
  wxSize size, wxDirection edge, const wxString& name)
 {
     wxASSERT_MSG(NULL != parent, wxT("wxDrawerWindows must be attached to a parent window."));
-       
+
     // Constrain the drawer size to the parent window.
     const wxSize parentSize(parent->GetClientSize());
     if (wxLEFT == edge || wxRIGHT == edge)
@@ -63,25 +63,25 @@ bool wxDrawerWindow::Create(wxWindow *parent,
         if (size.GetWidth() > parentSize.GetWidth())
             size.SetWidth(parentSize.GetWidth() - (kLeadingOffset + kTrailingOffset));
     }
-    
-    // Create the drawer window. 
+
+    // Create the drawer window.
     const wxPoint pos(0, 0);
     const wxSize dummySize(0,0);
     const long style = wxFRAME_DRAWER;
-    
+
     bool success  = wxNonOwnedWindow::Create(parent, id, pos, size, style, name);
     if (success)
     {
         // this->MacCreateRealWindow(pos, size, style, name);
         success = (GetWXWindow() != NULL);
     }
-    
+
     if (success)
     {
         // Use drawer brush.
         SetBackgroundColour( wxColour( wxMacCreateCGColorFromHITheme( kThemeBrushDrawerBackground ) ) );
         ::SetThemeWindowBackground((WindowRef)GetWXWindow(), kThemeBrushDrawerBackground, false);
-         
+
         // Leading and trailing offset are gaps from parent window edges
         // to where the drawer starts.
         ::SetDrawerOffsets((WindowRef)GetWXWindow() , kLeadingOffset, kTrailingOffset);
@@ -90,7 +90,7 @@ bool wxDrawerWindow::Create(wxWindow *parent,
         // Is there a better way to get the parent's WindowRef?
         wxTopLevelWindow* tlwParent = wxDynamicCast(parent, wxTopLevelWindow);
         if (NULL != tlwParent)
-        { 
+        {
             OSStatus status = ::SetDrawerParent((WindowRef) GetWXWindow(),
             (WindowRef)tlwParent->GetWXWindow());
             success = (noErr == status);
@@ -98,7 +98,7 @@ bool wxDrawerWindow::Create(wxWindow *parent,
         else
             success = false;
     }
-    
+
     return success && SetPreferredEdge(edge);
 }
 
@@ -152,15 +152,15 @@ OptionBits DirectionToWindowEdge(wxDirection direction)
         case wxTOP:
         edge = kWindowEdgeTop;
         break;
-        
+
         case wxBOTTOM:
         edge = kWindowEdgeBottom;
         break;
-        
+
         case wxRIGHT:
         edge = kWindowEdgeRight;
         break;
-        
+
         case wxLEFT:
         default:
         edge = kWindowEdgeLeft;
@@ -177,23 +177,23 @@ wxDirection WindowEdgeToDirection(OptionBits edge)
         case kWindowEdgeTop:
         direction = wxTOP;
         break;
-        
+
         case kWindowEdgeBottom:
         direction = wxBOTTOM;
         break;
-        
+
         case kWindowEdgeRight:
         direction = wxRIGHT;
         break;
-        
+
         case kWindowEdgeDefault: // store current preferred and return that here?
         case kWindowEdgeLeft:
         default:
         direction = wxLEFT;
         break;
     }
-    
+
     return direction;
 }
 
-#endif // defined( __WXMAC__ ) 
+#endif // defined( __WXMAC__ )

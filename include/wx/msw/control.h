@@ -35,7 +35,6 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxControlNameStr);
 
-    virtual ~wxControl();
 
     // Simulates an event
     virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }

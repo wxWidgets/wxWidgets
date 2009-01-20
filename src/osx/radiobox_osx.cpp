@@ -52,7 +52,7 @@ wxRadioBox::wxRadioBox()
 
 wxRadioBox::~wxRadioBox()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
     wxRadioButton *next, *current;
 
@@ -411,7 +411,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     totWidth  = GetColumnCount() * (maxWidth + charWidth);
 
     wxSize sz = DoGetSizeFromClientSize( wxSize( totWidth, totHeight ) ) ;
-    
+
     // change the width / height only when specified
     if ( width == wxDefaultCoord )
     {
@@ -502,7 +502,7 @@ wxSize wxRadioBox::DoGetBestSize() const
     wxSize sz = DoGetSizeFromClientSize( wxSize( totWidth, totHeight ) );
     totWidth = sz.x;
     totHeight = sz.y;
-    
+
     // optimum size is an additional 5 pt border to all sides
     totWidth += 10;
     totHeight += 10;

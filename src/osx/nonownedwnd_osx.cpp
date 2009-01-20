@@ -151,7 +151,7 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
 
 wxNonOwnedWindow::~wxNonOwnedWindow()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
     
     wxRemoveWXWindowAssociation( this ) ;
     

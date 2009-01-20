@@ -76,7 +76,7 @@ wxRadioBox::wxRadioBox()
 
 wxRadioBox::~wxRadioBox()
 {
-    m_isBeingDeleted = true;
+    SendDestroyEvent();
 
     if (m_hWnd)
         wxRemoveHandleAssociation(this);
