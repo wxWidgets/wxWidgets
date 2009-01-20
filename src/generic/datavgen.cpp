@@ -46,6 +46,7 @@
 #include "wx/listimpl.cpp"
 #include "wx/imaglist.h"
 #include "wx/headerctrl.h"
+#include "wx/dnd.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -3023,8 +3024,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             if (!obj)
                 return;
         
-            wxPrintf( "success\n" );
-            // m_dragDataObject = obj;
+            wxDropSource drag( m_owner );
+            drag.SetData( *obj );
+            // wxImage image( 80, 20 );
+            // wxBitmap bitmap( image );
+            wxDragResult res = drag.DoDragDrop();
+            delete obj;
         }
         return;
     }
