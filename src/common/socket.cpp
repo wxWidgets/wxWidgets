@@ -1328,6 +1328,20 @@ wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
         eventLoop = NULL;
     }
 
+    // Make sure the events we're interested in are enabled before waiting for
+    // them: this is really necessary here as otherwise this could happen:
+    //  1. DoRead(wxSOCKET_WAITALL) is called
+    //  2. There is nothing to read so DoWait(wxSOCKET_INPUT_FLAG) is called
+    //  3. Some, but not all data appears, wxSocketImplUnix::OnReadWaiting()
+    //     is called and wxSOCKET_INPUT_FLAG events are disabled in it
+    //  4. Because of wxSOCKET_WAITALL we call DoWait() again but the events
+    //     are still disabled and we block forever
+    //
+    // More elegant solution would be nice but for now simply re-enabling the
+    // events here will do
+    m_impl->ReenableEvents(flags & (wxSOCKET_INPUT_FLAG | wxSOCKET_OUTPUT_FLAG));
+
+
     // Wait until we receive the event we're waiting for or the timeout expires
     // (but note that we always execute the loop at least once, even if timeout
     // is 0 as this is used for polling)
