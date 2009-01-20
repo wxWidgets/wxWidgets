@@ -114,6 +114,8 @@ public :
     bool                ButtonClickDidStateChange() { return true ;}
     void                SetMinimum( wxInt32 v );
     void                SetMaximum( wxInt32 v );
+    wxInt32             GetMinimum() const;
+    wxInt32             GetMaximum() const;
     void                PulseGauge();
     void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
 
@@ -219,16 +221,14 @@ protected :
         - (void)mouseExited:(NSEvent *)event;\
         - (void)keyDown:(NSEvent *)event;\
         - (void)keyUp:(NSEvent *)event;\
+        - (BOOL)performKeyEquivalent:(NSEvent *)event;\
         - (void)flagsChanged:(NSEvent *)event;\
-        - (BOOL) becomeFirstResponder;\
-        - (BOOL) resignFirstResponder;
+        - (BOOL)becomeFirstResponder;\
+        - (BOOL)resignFirstResponder;\
+        - (void)resetCursorRects;
 
-    #define WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION -(void)mouseDown:(NSEvent *)event \
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super mouseDown:event];\
-        }\
-        -(void)rightMouseDown:(NSEvent *)event\
+
+    #define WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION_NO_MOUSEDOWN        -(void)rightMouseDown:(NSEvent *)event\
         {\
             if ( !impl->DoHandleMouseEvent(event) )\
                 [super rightMouseDown:event];\
@@ -288,6 +288,12 @@ protected :
             if ( !impl->DoHandleMouseEvent(event) )\
                 [super mouseExited:event];\
         }\
+        -(BOOL)performKeyEquivalent:(NSEvent *)event\
+        {\
+            if ( !impl->DoHandleKeyEvent(event) )\
+                return [super performKeyEquivalent:event];\
+            return YES;\
+        }\
         -(void)keyDown:(NSEvent *)event\
         {\
             if ( !impl->DoHandleKeyEvent(event) )\
@@ -316,8 +322,31 @@ protected :
             if ( r )\
                 impl->DoNotifyFocusEvent( false );\
             return r;\
+        }\
+        - (void) resetCursorRects\
+        {\
+            if ( impl )\
+            {\
+                wxWindow* wxpeer = impl->GetWXPeer();\
+                if ( wxpeer )\
+                {\
+                    NSCursor *cursor = (NSCursor*)wxpeer->GetCursor().GetHCURSOR();\
+                    if (cursor == NULL)\
+                        [super resetCursorRects];\
+                    else\
+                        [self addCursorRect: [self bounds]\
+                            cursor: cursor];\
+                }\
+            }\
         }
-        
+
+    #define WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION -(void)mouseDown:(NSEvent *)event \
+        {\
+            if ( !impl->DoHandleMouseEvent(event) )\
+                [super mouseDown:event];\
+        }\
+        WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION_NO_MOUSEDOWN
+
     #define WXCOCOAIMPL_COMMON_MEMBERS wxWidgetCocoaImpl* impl;
     
     #define WXCOCOAIMPL_COMMON_INTERFACE \
@@ -326,8 +355,7 @@ protected :
         - (BOOL) isFlipped;\
         WXCOCOAIMPL_COMMON_EVENTS_INTERFACE
 
-    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION \
-        - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation\
+    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION_BASE - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation\
         {\
             impl = theImplementation;\
         }\
@@ -335,24 +363,28 @@ protected :
         {\
             return impl;\
         }\
+
+    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION \
+        WXCOCOAIMPL_COMMON_IMPLEMENTATION_BASE \
         - (BOOL) isFlipped\
         {\
             return YES;\
-        }\
+        }
+
+    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION_NO_MOUSEDOWN WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION_NO_MOUSEDOWN \
+        WXCOCOAIMPL_COMMON_IMPLEMENTATION_BASE \
+        - (BOOL) isFlipped\
+        {\
+            return YES;\
+        }
+
 
      #define WXCOCOAIMPL_COMMON_IMPLEMENTATION_NOT_FLIPPED WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION \
-        - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation\
-        {\
-            impl = theImplementation;\
-        }\
-        - (wxWidgetCocoaImpl*) implementation\
-        {\
-            return impl;\
-        }\
+        WXCOCOAIMPL_COMMON_IMPLEMENTATION_BASE \
         - (BOOL) isFlipped\
         {\
             return NO;\
-        }\
+        }
 
     // used for many wxControls
     

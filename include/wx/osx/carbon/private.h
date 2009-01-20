@@ -365,7 +365,8 @@ public :
 
     virtual OSStatus SendHICommand( UInt32 commandID , OptionBits inOptions = 0 );
 
-    virtual SInt32 GetMaximum() const;
+    virtual wxInt32 GetMaximum() const;
+    virtual wxInt32 GetMinimum() const;
  
     virtual void SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum );
     virtual void SetRange( SInt32 minimum , SInt32 maximum );

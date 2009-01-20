@@ -459,10 +459,6 @@ void wxWindowMac::SetFocus()
 void wxWindowMac::DoCaptureMouse()
 {
     wxApp::s_captureWindow = (wxWindow*) this ;
-#ifdef wxOSX_USE_COCOA
-    // TODO do we really need this ?
-    m_peer->SetFocus() ;
-#endif
     m_peer->CaptureMouse() ;
 }
 
@@ -2214,9 +2210,7 @@ void wxWindowMac::OnPaint( wxPaintEvent & WXUNUSED(event) )
 #endif
 }
 
-void wxWindowMac::MacHandleControlClick(WXWidget WXUNUSED(control),
-                                        wxInt16 WXUNUSED(controlpart),
-                                        bool WXUNUSED(mouseStillDown))
+void wxWindowMac::TriggerScrollEvent( wxEventType WXUNUSED(scrollEvent) )
 {
 }
 
@@ -2302,6 +2296,47 @@ bool wxWindowMac::IsShownOnScreen() const
         return m_peer->IsVisible();
     }
     return wxWindowBase::IsShownOnScreen();
+}
+
+bool wxWindowMac::HandleKeyEvent( wxKeyEvent& event )
+{
+    bool handled = HandleWindowEvent( event ) ;
+    if ( handled && event.GetSkipped() )
+        handled = false ;
+
+#if wxUSE_ACCEL
+    if ( !handled && event.GetEventType() == wxEVT_KEY_DOWN)
+    {
+        wxWindow *ancestor = this;
+        while (ancestor)
+        {
+            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
+            if (command != -1)
+            {
+                wxEvtHandler * const handler = ancestor->GetEventHandler();
+
+                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                handled = handler->ProcessEvent( command_event );
+
+                if ( !handled )
+                {
+                    // accelerators can also be used with buttons, try them too
+                    command_event.SetEventType(wxEVT_COMMAND_BUTTON_CLICKED);
+                    handled = handler->ProcessEvent( command_event );
+                }
+
+                break;
+            }
+
+            if (ancestor->IsTopLevel())
+                break;
+
+            ancestor = ancestor->GetParent();
+        }
+    }
+#endif // wxUSE_ACCEL
+
+    return handled ;
 }
 
 //

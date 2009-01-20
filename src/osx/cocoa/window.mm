@@ -41,8 +41,6 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 }
 
 - (void)drawRect: (NSRect) rect;
-// TODO should the be moved to COMMON ?
-- (void)resetCursorRects;
 
 WXCOCOAIMPL_COMMON_INTERFACE
 
@@ -58,6 +56,8 @@ WXCOCOAIMPL_COMMON_INTERFACE
 - (void)setFloatValue:(float)aFloat;
 - (void)setDoubleValue:(double)aDouble;
 
+- (double)minValue;
+- (double)maxValue;
 - (void)setMinValue:(double)aDouble;
 - (void)setMaxValue:(double)aDouble;
 
@@ -72,9 +72,9 @@ WXCOCOAIMPL_COMMON_INTERFACE
 - (id)contentView;
 @end 
 
-long wxOSXTranslateCocoaKey(unsigned short code, int unichar )
+long wxOSXTranslateCocoaKey( int unichar )
 {
-    long retval = code;
+    long retval = unichar;
     switch( unichar )
     {
         case NSUpArrowFunctionKey :
@@ -131,25 +131,8 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent )
     wxevent.m_controlDown = modifiers & NSControlKeyMask;
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
     wxevent.m_metaDown = modifiers & NSCommandKeyMask;
-
-    wxString chars;
-    if ( eventType != NSFlagsChanged )
-    {
-        NSString* nschars = [nsEvent characters];
-        if ( nschars )
-        {
-            wxCFStringRef cfchars((CFStringRef)[nschars retain]);
-            chars = cfchars.AsString();
-        }
-    }
     
-    int unichar = chars.Length() > 0 ? chars[0] : 0;
-    
-#if wxUSE_UNICODE
-    wxevent.m_uniChar = unichar;
-#endif
-    wxevent.m_keyCode = wxOSXTranslateCocoaKey( [nsEvent keyCode], unichar ) ;
-//    wxevent.m_rawCode = keymessage;
+    wxevent.m_rawCode = [nsEvent keyCode];
     wxevent.m_rawFlags = modifiers;
     
     wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
@@ -167,6 +150,27 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent )
         default :
             break ;
     }
+
+    wxString chars;
+    if ( eventType != NSFlagsChanged )
+    {
+        NSString* nschars = [nsEvent characters];
+        if ( nschars )
+        {
+            wxCFStringRef cfchars((CFStringRef)[nschars retain]);
+            chars = cfchars.AsString();
+        }
+    }
+    
+    int unichar = chars.Length() > 0 ? chars[0] : 0;
+    long keyval = wxOSXTranslateCocoaKey(unichar) ;
+    if ( keyval == unichar && ( wxevent.GetEventType() == wxEVT_KEY_UP || wxevent.GetEventType() == wxEVT_KEY_DOWN ) )
+        keyval = wxToupper( keyval ) ;
+
+#if wxUSE_UNICODE
+    wxevent.m_uniChar = unichar;
+#endif
+    wxevent.m_keyCode = keyval;
 }
 
 UInt32 g_lastButton = 0 ;
@@ -382,15 +386,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
                 
         CGContextRestoreGState( context );
     }
-}
-
-- (void) resetCursorRects
-{
-    [super resetCursorRects];
-    wxWindow* wxpeer = impl->GetWXPeer();
-    NSCursor *cursor = (NSCursor*)wxpeer->GetCursor().GetHCURSOR();
-    [self addCursorRect: [self bounds]
-          cursor: cursor];
 }
 
 WXCOCOAIMPL_COMMON_IMPLEMENTATION
@@ -623,6 +618,24 @@ void wxWidgetCocoaImpl::SetMaximum( wxInt32 v )
     }
 }
 
+wxInt32 wxWidgetCocoaImpl::GetMinimum() const 
+{
+    if (  [m_osxView respondsToSelector:@selector(getMinValue:)] )
+    {
+        return [m_osxView minValue];
+    }
+    return 0;
+}
+
+wxInt32 wxWidgetCocoaImpl::GetMaximum() const 
+{
+    if (  [m_osxView respondsToSelector:@selector(getMaxValue:)] )
+    {
+        return [m_osxView maxValue];
+    }
+    return 0;
+}
+
 void wxWidgetCocoaImpl::SetBitmap( const wxBitmap& bitmap )
 {
     if (  [m_osxView respondsToSelector:@selector(setImage:)] )
@@ -715,7 +728,8 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 {
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event );
-    return GetWXPeer()->HandleWindowEvent(wxevent);
+
+    return GetWXPeer()->HandleKeyEvent(wxevent);
 }
 
 bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)

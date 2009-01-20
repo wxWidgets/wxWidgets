@@ -38,8 +38,29 @@ WXCOCOAIMPL_COMMON_INTERFACE
     return self;
 }
 
+WXCOCOAIMPL_COMMON_IMPLEMENTATION_NO_MOUSEDOWN
+
+// we will have a mouseDown, then in the native 
+// implementation of mouseDown the tracking code
+// is calling clickedAction, therefore we wire this
+// to thumbtrack and only after super mouseDown 
+// returns we will call the thumbrelease
+
 - (void) clickedAction: (id) sender
 {
+    if ( impl )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer )
+            wxpeer->TriggerScrollEvent(wxEVT_SCROLL_THUMBTRACK);
+    }
+}
+
+-(void)mouseDown:(NSEvent *)event 
+{
+    if ( !impl->DoHandleMouseEvent(event) )
+        [super mouseDown:event];
+
     if ( impl )
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
@@ -47,8 +68,6 @@ WXCOCOAIMPL_COMMON_INTERFACE
             wxpeer->HandleClicked(0);
     }
 }
-
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 @end
 

@@ -23,7 +23,7 @@ END_EVENT_TABLE()
 
  // The dimensions of the different styles of sliders (from Aqua document)
 #ifdef wxOSX_USE_COCOA
-    #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 25
+    #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 28
     #define wxSLIDER_DIMENSIONACROSS_ARROW 21
 #else
     #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 24
@@ -277,9 +277,7 @@ void wxSlider::Command(wxCommandEvent &event)
     ProcessCommand(event);
 }
 
-void wxSlider::MacHandleControlClick(WXWidget WXUNUSED(control),
-                                     wxInt16 WXUNUSED(controlpart),
-                                     bool WXUNUSED(mouseStillDown))
+void wxSlider::TriggerScrollEvent( wxEventType scrollEvent)
 {
     // Whatever the native value is, we may need to invert it for calling
     // SetValue and putting the possibly inverted value in the event
@@ -287,7 +285,7 @@ void wxSlider::MacHandleControlClick(WXWidget WXUNUSED(control),
 
     SetValue( value );
 
-    wxScrollEvent event( wxEVT_SCROLL_THUMBTRACK, m_windowId );
+    wxScrollEvent event( scrollEvent, m_windowId );
     event.SetPosition( value );
     event.SetEventObject( this );
     HandleWindowEvent( event );
@@ -300,23 +298,8 @@ void wxSlider::MacHandleControlClick(WXWidget WXUNUSED(control),
 
 bool wxSlider::HandleClicked( double timestampsec )
 {
-    // Whatever the native value is, we may need to invert it for calling
-    // SetValue and putting the possibly inverted value in the event
-    int value = ValueInvertOrNot( m_peer->GetValue() ) ;
-
-    SetValue( value ) ;
-
-    wxScrollEvent event( wxEVT_SCROLL_THUMBRELEASE, m_windowId );
-    event.SetPosition( value );
-    event.SetEventObject( this );
-    HandleWindowEvent( event );
-
-    wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, m_windowId );
-    cevent.SetInt( value );
-    cevent.SetEventObject( this );
-
-    HandleWindowEvent( cevent );
-
+    TriggerScrollEvent(wxEVT_SCROLL_THUMBRELEASE);
+ 
     return true;
 }
 

@@ -233,6 +233,8 @@ public :
     virtual void        Enable( bool enable ) = 0;
     virtual void        SetMinimum( wxInt32 v ) = 0;
     virtual void        SetMaximum( wxInt32 v ) = 0;
+    virtual wxInt32     GetMinimum() const = 0;
+    virtual wxInt32     GetMaximum() const = 0;
     virtual void        PulseGauge() = 0;
     virtual void        SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) = 0;
 

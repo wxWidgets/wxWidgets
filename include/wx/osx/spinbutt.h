@@ -58,9 +58,8 @@ public:
 
     // implementation
     
-#if wxOSX_USE_CARBON
-    virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
-#endif
+    virtual void TriggerScrollEvent( wxEventType scrollEvent ) ;
+
     // osx specific event handling common for all osx-ports
     
     virtual bool HandleClicked( double timestampsec );

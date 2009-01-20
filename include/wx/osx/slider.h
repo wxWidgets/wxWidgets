@@ -77,8 +77,8 @@ public:
     void Command(wxCommandEvent& event);
     // osx specific event handling common for all osx-ports
     
-    virtual bool        HandleClicked( double timestampsec );
-    void MacHandleControlClick(WXWidget control, wxInt16 controlpart, bool mouseStillDown);
+    virtual bool HandleClicked( double timestampsec );
+    virtual void TriggerScrollEvent( wxEventType scrollEvent ) ;
 
 protected:
     virtual wxSize DoGetBestSize() const;

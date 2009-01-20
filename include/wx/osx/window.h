@@ -162,7 +162,7 @@ public:
     wxWindowMac *FindItem(long id) const;
     wxWindowMac *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
-    virtual void        MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
+    virtual void        TriggerScrollEvent( wxEventType scrollEvent ) ;
     virtual bool        MacDoRedraw( void* updatergn , long time ) ;
 
     // this should not be overriden in classes above wxWindowMac
@@ -252,6 +252,7 @@ public:
     // osx specific event handling common for all osx-ports
     
     virtual bool        HandleClicked( double timestampsec );
+    virtual bool        HandleKeyEvent( wxKeyEvent& event );
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;

@@ -1377,47 +1377,10 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     if ( !focus )
         return false ;
 
-    bool handled;
     wxKeyEvent event(wxEVT_KEY_DOWN) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
 
-    handled = focus->HandleWindowEvent( event ) ;
-    if ( handled && event.GetSkipped() )
-        handled = false ;
-
-#if wxUSE_ACCEL
-    if ( !handled )
-    {
-        wxWindow *ancestor = focus;
-        while (ancestor)
-        {
-            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
-            if (command != -1)
-            {
-                wxEvtHandler * const handler = ancestor->GetEventHandler();
-
-                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
-                handled = handler->ProcessEvent( command_event );
-
-                if ( !handled )
-                {
-                    // accelerators can also be used with buttons, try them too
-                    command_event.SetEventType(wxEVT_COMMAND_BUTTON_CLICKED);
-                    handled = handler->ProcessEvent( command_event );
-                }
-
-                break;
-            }
-
-            if (ancestor->IsTopLevel())
-                break;
-
-            ancestor = ancestor->GetParent();
-        }
-    }
-#endif // wxUSE_ACCEL
-
-    return handled ;
+    return focus->HandleKeyEvent(event);
 }
 
 bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
@@ -1428,9 +1391,8 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     bool handled;
     wxKeyEvent event( wxEVT_KEY_UP ) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
-    handled = focus->HandleWindowEvent( event ) ;
 
-    return handled ;
+    return focus->HandleKeyEvent(event) ;
 }
 
 bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )

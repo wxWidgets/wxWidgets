@@ -19,6 +19,7 @@
 @interface wxNSStepper : NSStepper
 {
     WXCOCOAIMPL_COMMON_MEMBERS
+    int formerValue;
 }
 
 WXCOCOAIMPL_COMMON_INTERFACE
@@ -33,6 +34,7 @@ WXCOCOAIMPL_COMMON_INTERFACE
 {
     [super initWithFrame:frame];
     impl = NULL;
+    formerValue = 0;
     [self setTarget: self];
     [self setAction: @selector(clickedAction:)];
     return self;
@@ -44,11 +46,38 @@ WXCOCOAIMPL_COMMON_INTERFACE
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
         if ( wxpeer )
-            wxpeer->HandleClicked(0);
+        {
+            // because wx expects to be able to veto 
+            // a change we must revert the value change
+            // and expose it
+            int currentValue = [self intValue];
+            [self setIntValue:formerValue];
+            int inc = currentValue-formerValue;
+            
+            // adjust for wrap arounds
+            if ( inc > 1 )
+                inc = -1;
+            else if (inc < -1 )
+                inc = 1;
+                
+            if ( inc == 1 )
+                wxpeer->TriggerScrollEvent(wxEVT_SCROLL_LINEUP);
+            else if ( inc == -1 )
+                wxpeer->TriggerScrollEvent(wxEVT_SCROLL_LINEDOWN);
+
+            formerValue = [self intValue];
+        }
     }
 }
 
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
+-(void)mouseDown:(NSEvent *)event 
+{
+    formerValue = [self intValue];
+    if ( !impl->DoHandleMouseEvent(event) )
+        [super mouseDown:event];
+}
+
+WXCOCOAIMPL_COMMON_IMPLEMENTATION_NO_MOUSEDOWN
 
 @end
 

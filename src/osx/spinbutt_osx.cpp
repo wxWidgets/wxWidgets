@@ -81,18 +81,76 @@ void wxSpinButton::SendThumbTrackEvent()
 
 bool wxSpinButton::HandleClicked( double timestampsec )
 {
-#if wxOSX_USE_CARBON
-    // these have been handled by the live action proc already
-#else
-    SendThumbTrackEvent() ;
-#endif
-
+    // all events have already been processed
     return true;
 }
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
     return wxSize( 16, 24 );
+}
+
+void wxSpinButton::TriggerScrollEvent(wxEventType scrollEvent)
+{
+    int inc = 0;
+
+    if ( scrollEvent == wxEVT_SCROLL_LINEUP )    
+    {
+        inc = 1;
+    }
+    else if ( scrollEvent == wxEVT_SCROLL_LINEDOWN )
+    {
+        inc = -1;
+    }
+    
+    // trigger scroll events
+    
+    int oldValue = GetValue() ;
+
+    int newValue = oldValue + inc;
+
+    if (newValue < m_min)
+    {
+        if ( m_windowStyle & wxSP_WRAP )
+            newValue = m_max;
+        else
+            newValue = m_min;
+    }
+
+    if (newValue > m_max)
+    {
+        if ( m_windowStyle & wxSP_WRAP )
+            newValue = m_min;
+        else
+            newValue = m_max;
+    }
+
+    if ( newValue - oldValue == -1 )
+        scrollEvent = wxEVT_SCROLL_LINEDOWN;
+    else if ( newValue - oldValue == 1 )
+        scrollEvent = wxEVT_SCROLL_LINEUP;
+    else
+        scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+
+    // Do not send an event if the value has not actually changed
+    // (Also works for wxSpinCtrl)
+    if ( newValue == oldValue )
+        return;
+
+    if ( scrollEvent != wxEVT_SCROLL_THUMBTRACK )
+    {
+        wxSpinEvent event( scrollEvent, m_windowId );
+
+        event.SetPosition( newValue );
+        event.SetEventObject( this );
+        if ((HandleWindowEvent( event )) && !event.IsAllowed())
+            newValue = oldValue;
+    }
+
+    m_peer->SetValue( newValue );
+
+    // always send a thumbtrack event
+    SendThumbTrackEvent() ;
 }
 
 #endif // wxUSE_SPINBTN

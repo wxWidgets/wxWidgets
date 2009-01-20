@@ -770,7 +770,35 @@ pascal void wxMacLiveScrollbarActionProc( ControlRef control , ControlPartCode p
     {
         wxWindow*  wx = wxFindWindowFromWXWidget(  (WXWidget) control ) ;
         if ( wx )
-            wx->MacHandleControlClick( (WXWidget) control , partCode , true /* stillDown */ ) ;
+        {   
+            wxEventType scrollEvent = wxEVT_NULL;
+            switch ( partCode )
+            {
+            case kControlUpButtonPart:
+                scrollEvent = wxEVT_SCROLL_LINEUP;
+                break;
+
+            case kControlDownButtonPart:
+                scrollEvent = wxEVT_SCROLL_LINEDOWN;
+                break;
+
+            case kControlPageUpPart:
+                scrollEvent = wxEVT_SCROLL_PAGEUP;
+                break;
+
+            case kControlPageDownPart:
+                scrollEvent = wxEVT_SCROLL_PAGEDOWN;
+                break;
+
+            case kControlIndicatorPart:
+                scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+                // when this is called as a live proc, mouse is always still down
+                // so no need for thumbrelease
+                // scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
+                break;
+            }
+            wx->TriggerScrollEvent(scrollEvent) ;
+        }
     }
 }
 wxMAC_DEFINE_PROC_GETTER( ControlActionUPP , wxMacLiveScrollbarActionProc ) ;
@@ -1132,17 +1160,15 @@ wxInt32 wxMacControl::GetValue() const
     return ::GetControl32BitValue( m_controlRef );
 }
 
-SInt32 wxMacControl::GetMaximum() const
+wxInt32 wxMacControl::GetMaximum() const
 {
     return ::GetControl32BitMaximum( m_controlRef );
 }
 
-/*
 wxInt32 wxMacControl::GetMinimum() const
 {
     return ::GetControl32BitMinimum( m_controlRef );
 }
-*/
 
 void wxMacControl::SetValue( wxInt32 v )
 {

@@ -124,3 +124,54 @@ wxSize wxScrollBar::DoGetBestSize() const
     CacheBestSize(best);
     return best;
 }
+
+void wxScrollBar::TriggerScrollEvent( wxEventType scrollEvent )
+{
+    int position = m_peer->GetValue();
+    int minPos = 0 ;
+    int maxPos = m_peer->GetMaximum();
+    int nScrollInc = 0;
+
+    if ( scrollEvent == wxEVT_SCROLL_LINEUP )
+    {
+        nScrollInc = -1;
+    }
+    else if ( scrollEvent == wxEVT_SCROLL_LINEDOWN )
+    {
+        nScrollInc = 1;
+    }
+    else if ( scrollEvent == wxEVT_SCROLL_PAGEUP )
+    {
+        nScrollInc = -m_pageSize;
+    }
+    else if ( scrollEvent == wxEVT_SCROLL_PAGEDOWN )
+    {
+        nScrollInc = m_pageSize;
+    }
+
+    int new_pos = position + nScrollInc;
+
+    if (new_pos < minPos)
+        new_pos = minPos;
+    else if (new_pos > maxPos)
+        new_pos = maxPos;
+
+    if ( nScrollInc )
+        SetThumbPosition( new_pos );
+
+    wxScrollEvent event( scrollEvent, m_windowId );
+    if ( m_windowStyle & wxHORIZONTAL )
+        event.SetOrientation( wxHORIZONTAL );
+    else
+        event.SetOrientation( wxVERTICAL );
+
+    event.SetPosition( new_pos );
+    event.SetEventObject( this );
+
+    wxWindow* window = GetParent();
+    if (window && window->MacIsWindowScrollbar( this ))
+        // this is hardcoded
+        window->MacOnScroll( event );
+    else
+        HandleWindowEvent( event );
+}

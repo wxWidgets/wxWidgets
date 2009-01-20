@@ -43,17 +43,62 @@ WXCOCOAIMPL_COMMON_INTERFACE
     return self;
 }
 
+WXCOCOAIMPL_COMMON_IMPLEMENTATION_NO_MOUSEDOWN
+
+// we will have a mouseDown, then in the native 
+// implementation of mouseDown the tracking code
+// is calling clickedAction, therefore we wire this
+// to thumbtrack and only after super mouseDown 
+// returns we will call the thumbrelease
+
 - (void) clickedAction: (id) sender
 {
     if ( impl )
     {
+        wxEventType scrollEvent = wxEVT_NULL;
+        switch ([self hitPart]) 
+        {
+        case NSScrollerIncrementLine:
+            scrollEvent = wxEVT_SCROLL_LINEDOWN;
+            break;
+        case NSScrollerIncrementPage:
+            scrollEvent = wxEVT_SCROLL_PAGEDOWN;
+            break;
+        case NSScrollerDecrementLine:
+            scrollEvent = wxEVT_SCROLL_LINEUP;
+            break;
+        case NSScrollerDecrementPage:
+            scrollEvent = wxEVT_SCROLL_PAGEUP;
+            break;
+        case NSScrollerKnob:
+        case NSScrollerKnobSlot:
+            scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+            break;
+        case NSScrollerNoPart:
+        default:
+            return;
+        }
+
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
         if ( wxpeer )
-            wxpeer->HandleClicked(0);
+            wxpeer->TriggerScrollEvent(scrollEvent);
     }
 }
 
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
+-(void)mouseDown:(NSEvent *)event 
+{
+    if ( !impl->DoHandleMouseEvent(event) )
+        [super mouseDown:event];
+
+    // send a release event in case we've been tracking the thumb
+    NSScrollerPart hit = [self hitPart];
+    if ( impl && (hit == NSScrollerKnob || hit == NSScrollerKnobSlot) )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer )
+            wxpeer->TriggerScrollEvent(wxEVT_SCROLL_THUMBRELEASE);
+    }
+}
 
 @end
 
@@ -85,6 +130,11 @@ public :
     wxInt32 GetValue() const
     {
         return [(wxNSScroller*) m_osxView floatValue] * m_maximum;
+    }
+    
+    wxInt32 GetMaximum() const
+    {
+        return m_maximum;
     }
 protected:
     wxInt32 m_maximum;
