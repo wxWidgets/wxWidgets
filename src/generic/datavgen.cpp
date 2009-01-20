@@ -484,6 +484,20 @@ public:
     void Expand( unsigned int row ) { OnExpanding( row ); }
     void Collapse( unsigned int row ) { OnCollapsing( row ); }
     bool IsExpanded( unsigned int row ) const;
+
+    bool EnableDragSource( const wxDataFormat &format )
+    {
+        m_dragFormat = format;
+        m_dragEnabled = format != wxDF_INVALID;
+        return true;
+    }
+    bool EnableDropTarget( const wxDataFormat &format )
+    {
+        m_dropFormat = format;
+        m_dropEnabled = format != wxDF_INVALID;
+        return true;
+    }
+
 private:
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row ) const;
     //We did not need this temporarily
@@ -513,6 +527,12 @@ private:
 
     int                         m_dragCount;
     wxPoint                     m_dragStart;
+    
+    bool                        m_dragEnabled;
+    wxDataFormat                m_dragFormat;
+    
+    bool                        m_dropEnabled;
+    wxDataFormat                m_dropFormat;
 
     // for double click logic
     unsigned int m_lineLastClicked,
@@ -1176,6 +1196,9 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_lineLastClicked = (unsigned int) -1;
     m_lineBeforeLastClicked = (unsigned int) -1;
     m_lineSelectSingleOnUp = (unsigned int) -1;
+
+    m_dragEnabled = false;
+    m_dropEnabled = false;
 
     m_hasFocus = false;
 
@@ -2977,7 +3000,27 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
         if (event.LeftIsDown())
         {
+            m_owner->CalcUnscrolledPosition( m_dragStart.x, m_dragStart.y, &m_dragStart.x, &m_dragStart.y );
+            unsigned int drag_item_row = GetLineAt( m_dragStart.y );
+            wxDataViewItem item = GetItemByRow( drag_item_row );
+
             // Notify cell about drag
+            wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
+            event.SetEventObject( m_owner );
+            event.SetItem( item );
+            event.SetModel( model );
+            if (!m_owner->HandleWindowEvent( event ))
+                return;
+        
+            if (!event.IsAllowed())
+                return;
+        
+            wxDataObject *obj = event.GetDataObject();
+            if (!obj)
+                return;
+        
+            wxPrintf( "success\n" );
+            // m_dragDataObject = obj;
         }
         return;
     }
@@ -3361,6 +3404,16 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
     m_clientArea->UpdateDisplay();
 
     return true;
+}
+
+bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
+{
+    return m_clientArea->EnableDragSource( format );
+}
+
+bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
+{
+    return m_clientArea->EnableDropTarget( format );
 }
 
 bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )

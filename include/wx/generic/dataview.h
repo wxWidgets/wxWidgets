@@ -449,6 +449,9 @@ public:
     virtual bool IsExpanded( const wxDataViewItem & item ) const;
 
     virtual void SetFocus();
+    
+    virtual bool EnableDragSource( const wxDataFormat &format );
+    virtual bool EnableDropTarget( const wxDataFormat &format );
 
 protected:
     virtual int GetSelections( wxArrayInt & sel ) const;
