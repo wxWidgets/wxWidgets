@@ -670,6 +670,8 @@ public:
     void OnAddMany( wxCommandEvent &event);
     
     void OnBeginDrag( wxDataViewEvent &event );
+    void OnDropPossible( wxDataViewEvent &event );
+    void OnDrop( wxDataViewEvent &event );
 
 private:
     wxDataViewCtrl* m_musicCtrl;
@@ -767,6 +769,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
     
     EVT_DATAVIEW_ITEM_BEGIN_DRAG( ID_MUSIC_CTRL, MyFrame::OnBeginDrag )
+    EVT_DATAVIEW_ITEM_DROP_POSSIBLE( ID_MUSIC_CTRL, MyFrame::OnDropPossible )
+    EVT_DATAVIEW_ITEM_DROP( ID_MUSIC_CTRL, MyFrame::OnDrop )
 
     EVT_RIGHT_UP(MyFrame::OnRightClick)
 END_EVENT_TABLE()
@@ -807,6 +811,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_musicCtrl->AssociateModel( m_music_model.get() );
     
     m_musicCtrl->EnableDragSource( wxDF_TEXT );
+    m_musicCtrl->EnableDropTarget( wxDF_TEXT );
 
     wxDataViewTextRenderer *tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_INERT );
     wxDataViewColumn *column0 = new wxDataViewColumn( wxT("title"), tr, 0, 200, wxALIGN_LEFT,
@@ -1171,3 +1176,33 @@ void MyFrame::OnBeginDrag( wxDataViewEvent &event )
     obj->SetText( node->m_title );
     event.SetDataObject( obj );
 }
+
+void MyFrame::OnDropPossible( wxDataViewEvent &event )
+{
+    wxDataViewItem item( event.GetItem() );
+        
+    // only allow drags for item, not containers
+    if (m_music_model->IsContainer( item ) )
+        event.Veto();
+    
+    if (event.GetDataFormat() != wxDF_TEXT)
+        event.Veto();
+}
+
+void MyFrame::OnDrop( wxDataViewEvent &event )
+{
+    wxDataViewItem item( event.GetItem() );
+        
+    // only allow drags for item, not containers
+    if (m_music_model->IsContainer( item ) )
+        event.Veto();
+    
+    if (event.GetDataFormat() != wxDF_TEXT)
+        event.Veto();
+        
+    wxTextDataObject obj;
+    obj.SetData( wxDF_TEXT, event.GetDataSize(), event.GetDataBuffer() );
+    
+    wxLogMessage(wxT("Text dropped: %s"), obj.GetText() );
+}
+

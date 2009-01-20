@@ -556,6 +556,10 @@ public:
            Process a wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
            Process a wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG event.
+    @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE event.
+    @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_DROP event.
     @endEventTable
 
     @library{wxadv}
@@ -765,6 +769,16 @@ public:
     */
     virtual bool DeleteColumn(wxDataViewColumn* column);
 
+    /**
+       Enable drag operations using the given @a format.
+    */
+    virtual bool EnableDragSource( const wxDataFormat &format );
+    
+    /**
+       Enable drop operations using the given @a format.
+    */
+    virtual bool EnableDropTarget( const wxDataFormat &format );
+    
     /**
         Call this to ensure that the given item is visible.
     */
@@ -2253,13 +2267,44 @@ public:
     void SetValue(const wxVariant& value);
     
     /**
-        Set wxDataObject for Drag'n'drop data transfer.
+        Set wxDataObject for data transfer within a drag operation.
     */
     void SetDataObject( wxDataObject *obj );
             
     /**
-        Gets associated wxDataObject for Drag'n'drop data transfer.
+        Used internally. Gets associated wxDataObject for data transfer
+        within a drag operation.
     */
-    wxDataObject *GetDataObject();
+    wxDataObject *GetDataObject() const;
+    
+    /**
+        Used internally. Sets the wxDataFormat during a drop operation.
+    */
+    void SetDataFormat( const wxDataFormat &format );
+    
+    /**
+        Gets the wxDataFormat during a drop operation.
+    */
+    wxDataFormat GetDataFormat() const;
+    
+    /**
+        Used internally. Sets the data size for a drop data transfer.
+    */
+    void SetDataSize( size_t size );
+    
+    /**
+        Gets the data size for a drop data transfer.
+    */
+    size_t GetDataSize() const;
+    
+    /**
+        Used internally. Sets the data buffer for a drop data transfer.
+    */
+    void SetDataBuffer( void* buf );
+    
+    /**
+        Gets the data buffer for a drop data transfer.
+    */
+    void *GetDataBuffer() const;
 };
 

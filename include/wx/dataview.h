@@ -715,6 +715,7 @@ public:
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
     
     virtual bool EnableDragSource( const wxDataFormat &format );
+    virtual bool EnableDropTarget( const wxDataFormat &format );
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;
@@ -744,7 +745,9 @@ public:
         m_value(wxNullVariant),
         m_column(NULL),
         m_pos(-1,-1),
-        m_dataObject(NULL)
+        m_dataObject(NULL),
+        m_dataBuffer(NULL),
+        m_dataSize(0)
         { }
 
     wxDataViewEvent(const wxDataViewEvent& event)
@@ -755,7 +758,10 @@ public:
         m_value(event.m_value),
         m_column(event.m_column),
         m_pos(m_pos),
-        m_dataObject(event.m_dataObject)
+        m_dataObject(event.m_dataObject),
+        m_dataFormat(event.m_dataFormat),
+        m_dataBuffer(event.m_dataBuffer),
+        m_dataSize(event.m_dataSize)
         { }
 
     wxDataViewItem GetItem() const { return m_item; }
@@ -778,9 +784,17 @@ public:
     wxPoint GetPosition() const { return m_pos; }
     void SetPosition( int x, int y ) { m_pos.x = x; m_pos.y = y; }
 
-    // For DnD operations
+    // For drag operations
     void SetDataObject( wxDataObject *obj ) { m_dataObject = obj; }
-    wxDataObject *GetDataObject() { return m_dataObject; }
+    wxDataObject *GetDataObject() const { return m_dataObject; }
+    
+    // For drop operations
+    void SetDataFormat( const wxDataFormat &format ) { m_dataFormat = format; }
+    wxDataFormat GetDataFormat() const { return m_dataFormat; }
+    void SetDataSize( size_t size ) { m_dataSize = size; }
+    size_t GetDataSize() const { return m_dataSize; }
+    void SetDataBuffer( void* buf ) { m_dataBuffer = buf;}
+    void *GetDataBuffer() const { return m_dataBuffer; }
 
     virtual wxEvent *Clone() const { return new wxDataViewEvent(*this); }
 
@@ -791,7 +805,12 @@ protected:
     wxVariant           m_value;
     wxDataViewColumn   *m_column;
     wxPoint             m_pos;
+    
     wxDataObject       *m_dataObject;
+    
+    wxDataFormat        m_dataFormat;
+    void*               m_dataBuffer;
+    size_t              m_dataSize;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent)
@@ -816,6 +835,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED,
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent )
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEvent )
 
 typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 
@@ -844,6 +865,8 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_COLUMN_REORDERED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_REORDERED, id, fn)
 
 #define EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_BEGIN_DRAG, id, fn)
+#define EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_DROP_POSSIBLE, id, fn)
+#define EVT_DATAVIEW_ITEM_DROP(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_DROP, id, fn)
 
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     // this symbol doesn't follow the convention for wxUSE_XXX symbols which

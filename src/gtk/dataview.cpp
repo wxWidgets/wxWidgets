@@ -76,6 +76,7 @@ public:
     // dnd iface
    
     bool EnableDragSource( const wxDataFormat &format );
+    bool EnableDropTarget( const wxDataFormat &format );
     
     gboolean row_draggable( GtkTreeDragSource *drag_source, GtkTreePath *path );
     gboolean drag_data_delete( GtkTreeDragSource *drag_source, GtkTreePath* path );
@@ -127,9 +128,13 @@ private:
     GtkSortType           m_sort_order;
     wxDataViewColumn     *m_dataview_sort_column;
     int                   m_sort_column;
+    
     GtkTargetEntry        m_dragSourceTargetEntry;
     wxCharBuffer          m_dragSourceTargetEntryTarget;
     wxDataObject         *m_dragDataObject;
+    
+    GtkTargetEntry        m_dropTargetTargetEntry;
+    wxCharBuffer          m_dropTargetTargetEntryTarget;
     wxDataObject         *m_dropDataObject;
 };
 
@@ -2941,6 +2946,21 @@ bool wxDataViewCtrlInternal::EnableDragSource( const wxDataFormat &format )
     return true;
 }
 
+bool wxDataViewCtrlInternal::EnableDropTarget( const wxDataFormat &format )
+{
+    wxGtkString atom_str( gdk_atom_name( format  ) );
+    m_dropTargetTargetEntryTarget = wxCharBuffer( atom_str );
+    
+    m_dropTargetTargetEntry.target =  m_dragSourceTargetEntryTarget.data();
+    m_dropTargetTargetEntry.flags = 0;
+    m_dropTargetTargetEntry.info = static_cast<guint>(-1);
+    
+    gtk_tree_view_enable_model_drag_dest( GTK_TREE_VIEW(m_owner->GtkGetTreeView() ),
+       &m_dropTargetTargetEntry, 1, (GdkDragAction) GDK_ACTION_COPY );
+       
+    return true;
+}
+
 gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag_source),
     GtkTreePath *path )
 {
@@ -2951,6 +2971,7 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     wxDataViewItem item( (void*) iter.user_data );
 
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
+    event.SetEventObject( m_owner );
     event.SetItem( item );
     event.SetModel( m_wx_model );
     if (!m_owner->HandleWindowEvent( event ))
@@ -3007,18 +3028,50 @@ gboolean wxDataViewCtrlInternal::drag_data_get( GtkTreeDragSource *WXUNUSED(drag
 
 gboolean
 wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
-                                           GtkTreePath *WXUNUSED(dest),
-                                           GtkSelectionData *WXUNUSED(selection_data))
+                                           GtkTreePath *path,
+                                           GtkSelectionData *selection_data)
 {
-    return FALSE;
+    GtkTreeIter iter;
+    if (!get_iter( &iter, path )) return FALSE;
+    wxDataViewItem item( (void*) iter.user_data );
+    
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetItem( item );
+    event.SetModel( m_wx_model );
+    event.SetDataFormat( selection_data->target );
+    event.SetDataSize( selection_data->length );
+    event.SetDataBuffer( selection_data->data );
+    if (!m_owner->HandleWindowEvent( event ))
+        return FALSE;
+        
+    if (!event.IsAllowed())
+        return FALSE;
+
+    return TRUE;
 }
 
 gboolean
 wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
-                                          GtkTreePath *WXUNUSED(dest_path),
-                                          GtkSelectionData *WXUNUSED(selection_data))
+                                          GtkTreePath *path,
+                                          GtkSelectionData *selection_data)
 {
-    return FALSE;
+    GtkTreeIter iter;
+    if (!get_iter( &iter, path )) return FALSE;
+    wxDataViewItem item( (void*) iter.user_data );
+    
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetItem( item );
+    event.SetModel( m_wx_model );
+    event.SetDataFormat( selection_data->target );
+    if (!m_owner->HandleWindowEvent( event ))
+        return FALSE;
+        
+    if (!event.IsAllowed())
+        return FALSE;
+    
+    return TRUE;
 }
 
 // notifications from wxDataViewModel
@@ -3908,6 +3961,11 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
 bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
 {
     return m_internal->EnableDragSource( format );
+}
+
+bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
+{
+    return m_internal->EnableDropTarget( format );
 }
 
 bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )

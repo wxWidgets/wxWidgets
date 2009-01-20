@@ -901,6 +901,11 @@ bool wxDataViewCtrlBase::EnableDragSource( const wxDataFormat &WXUNUSED(format) 
     return false;
 }
 
+bool wxDataViewCtrlBase::EnableDropTarget( const wxDataFormat &WXUNUSED(format) )
+{
+    return false;
+}
+
 void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
 {
     if (!m_model) return;
@@ -1236,6 +1241,8 @@ wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEvent )
 wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent )
 
 wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, wxDataViewEvent )
 
 // -------------------------------------
 // wxDataViewSpinRenderer
