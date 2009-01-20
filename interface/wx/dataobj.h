@@ -547,6 +547,7 @@ public:
     {
         Get  = 0x01,    // format is supported by GetDataHere()
         Set  = 0x02     // format is supported by SetData()
+        Both = 0x03     // format is supported by both (unused currently)
     };
     @endcode
 
@@ -641,6 +642,14 @@ public:
 class wxDataObject
 {
 public:
+    enum Direction
+    {
+        /** Format is supported by GetDataHere() */
+        Get  = 0x01,
+        /** Format is supported by SetData() */
+        Set  = 0x02,
+    };
+
     /**
         Constructor.
     */
@@ -690,5 +699,10 @@ public:
         @return @true on success, @false on failure.
     */
     virtual bool SetData(const wxDataFormat& format, size_t len, const void* buf);
+
+    /**
+       Returns true if this format is supported.
+    */
+    bool IsSupported(const wxDataFormat& format, Direction dir = Get) const;
 };
 
