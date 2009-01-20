@@ -554,6 +554,8 @@ public:
            Process a wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
            Process a wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
+    @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
+           Process a wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG event.
     @endEventTable
 
     @library{wxadv}
@@ -2197,14 +2199,11 @@ public:
 class wxDataViewEvent : public wxNotifyEvent
 {
 public:
-    //@{
     /**
         Constructor. Typically used by wxWidgets internals only.
     */
     wxDataViewEvent(wxEventType commandType = wxEVT_NULL,
                     int winid = 0);
-    wxDataViewEvent(const wxDataViewEvent& event);
-    //@}
 
     /**
         Returns the position of the column in the control or -1
@@ -2252,5 +2251,15 @@ public:
         Sets the value associated with this event.
     */
     void SetValue(const wxVariant& value);
+    
+    /**
+        Set wxDataObject for Drag'n'drop data transfer.
+    */
+    void SetDataObject( wxDataObject *obj );
+    
+    /**
+        Gets associated wxDataObject for Drag'n'drop data transfer.
+    */
+    wxDataObject *GetDataObject();
 };
 

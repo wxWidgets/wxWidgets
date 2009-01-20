@@ -669,10 +669,7 @@ public:
     void OnGoto( wxCommandEvent &event);
     void OnAddMany( wxCommandEvent &event);
     
-    // DnD
-    void OnDraggable( wxDataViewEvent &event );
-    void OnGetDragDataSize( wxDataViewEvent &event );
-    void OnGetDragData( wxDataViewEvent &event );
+    void OnBeginDrag( wxDataViewEvent &event );
 
 private:
     wxDataViewCtrl* m_musicCtrl;
@@ -769,9 +766,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
     
-    EVT_DATAVIEW_ITEM_DRAGGABLE( ID_MUSIC_CTRL, MyFrame::OnDraggable )
-    EVT_DATAVIEW_ITEM_GET_DRAG_DATA_SIZE( ID_MUSIC_CTRL, MyFrame::OnGetDragDataSize )
-    EVT_DATAVIEW_ITEM_GET_DRAG_DATA( ID_MUSIC_CTRL, MyFrame::OnGetDragData )
+    EVT_DATAVIEW_ITEM_BEGIN_DRAG( ID_MUSIC_CTRL, MyFrame::OnBeginDrag )
 
     EVT_RIGHT_UP(MyFrame::OnRightClick)
 END_EVENT_TABLE()
@@ -1160,41 +1155,19 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
     wxAboutBox(info);
 }
 
-void MyFrame::OnDraggable( wxDataViewEvent &event )
+void MyFrame::OnBeginDrag( wxDataViewEvent &event )
 {
+    wxDataViewItem item( event.GetItem() );
+        
     // only allow drags for item, not containers
-    event.SetDraggable( !m_music_model->IsContainer( event.GetItem() ) );
-}
-
-void MyFrame::OnGetDragDataSize( wxDataViewEvent &event )
-{
-    if (event.GetDataFormat() == wxDF_TEXT)
+    if (m_music_model->IsContainer( item ) )
     {
-        wxDataViewItem item( event.GetItem() );
-        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-        
-        wxTextDataObject obj;
-        obj.SetText( node->m_artist );
-        size_t size = obj.GetDataSize( wxDF_TEXT );
-        event.SetDragDataSize( size );
+        event.Veto();
         return;
     }
     
-    event.Skip();
-}
-
-void MyFrame::OnGetDragData( wxDataViewEvent &event )
-{
-    if (event.GetDataFormat() == wxDF_TEXT)
-    {
-        wxDataViewItem item( event.GetItem() );
-        MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
-        
-        wxTextDataObject obj;
-        obj.SetText( node->m_artist );
-        obj.GetDataHere( wxDF_TEXT, event.GetDragDataBuffer() );
-        return;
-    }
-    
-    event.Skip();
+    MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
+    wxTextDataObject *obj = new wxTextDataObject;
+    obj->SetText( node->m_title );
+    event.SetDataObject( obj );
 }

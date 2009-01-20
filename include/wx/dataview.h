@@ -744,8 +744,7 @@ public:
         m_value(wxNullVariant),
         m_column(NULL),
         m_pos(-1,-1),
-        m_isDraggable(false),
-        m_dragDataSize(-1)
+        m_dataObject(NULL)
         { }
 
     wxDataViewEvent(const wxDataViewEvent& event)
@@ -756,8 +755,7 @@ public:
         m_value(event.m_value),
         m_column(event.m_column),
         m_pos(m_pos),
-        m_isDraggable(event.m_isDraggable),
-        m_dragDataSize(event.m_dragDataSize)
+        m_dataObject(event.m_dataObject)
         { }
 
     wxDataViewItem GetItem() const { return m_item; }
@@ -780,15 +778,9 @@ public:
     wxPoint GetPosition() const { return m_pos; }
     void SetPosition( int x, int y ) { m_pos.x = x; m_pos.y = y; }
 
-    // For Drag operations
-    bool IsDraggable() const { return m_isDraggable; }
-    void SetDraggable( bool can_drag = true ) { m_isDraggable = can_drag; }
-    int GetDragDataSize() const { return m_dragDataSize; }
-    void SetDragDataSize( int size ) { m_dragDataSize = size; }
-    void* GetDragDataBuffer() const { return m_dragDataBuffer; }
-    void SetDragDataBuffer( void *buffer ) { m_dragDataBuffer = buffer; }
-    wxDataFormat GetDataFormat() const { return m_dataFormat; }
-    void SetDataFormat( const wxDataFormat &format ) { m_dataFormat = format; }
+    // For DnD operations
+    void SetDataObject( wxDataObject *obj ) { m_dataObject = obj; }
+    wxDataObject *GetDataObject() { return m_dataObject; }
 
     virtual wxEvent *Clone() const { return new wxDataViewEvent(*this); }
 
@@ -799,11 +791,7 @@ protected:
     wxVariant           m_value;
     wxDataViewColumn   *m_column;
     wxPoint             m_pos;
-    
-    bool                m_isDraggable;
-    int                 m_dragDataSize;
-    void               *m_dragDataBuffer;
-    wxDataFormat        m_dataFormat;
+    wxDataObject       *m_dataObject;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent)
@@ -827,9 +815,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED, wxDataViewEvent )
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent )
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_DRAGGABLE, wxDataViewEvent )
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_GET_DRAG_DATA_SIZE, wxDataViewEvent )
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_GET_DRAG_DATA, wxDataViewEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent )
 
 typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 
@@ -857,9 +843,7 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_COLUMN_SORTED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_SORTED, id, fn)
 #define EVT_DATAVIEW_COLUMN_REORDERED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_REORDERED, id, fn)
 
-#define EVT_DATAVIEW_ITEM_DRAGGABLE(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_DRAGGABLE, id, fn)
-#define EVT_DATAVIEW_ITEM_GET_DRAG_DATA_SIZE(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_GET_DRAG_DATA_SIZE, id, fn)
-#define EVT_DATAVIEW_ITEM_GET_DRAG_DATA(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_GET_DRAG_DATA, id, fn)
+#define EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, fn) wx__DECLARE_DATAVIEWEVT(ITEM_BEGIN_DRAG, id, fn)
 
 #ifdef wxHAS_GENERIC_DATAVIEWCTRL
     // this symbol doesn't follow the convention for wxUSE_XXX symbols which

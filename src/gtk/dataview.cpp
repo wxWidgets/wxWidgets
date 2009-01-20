@@ -129,6 +129,8 @@ private:
     int                   m_sort_column;
     GtkTargetEntry        m_dragSourceTargetEntry;
     wxCharBuffer          m_dragSourceTargetEntryTarget;
+    wxDataObject         *m_dragDataObject;
+    wxDataObject         *m_dropDataObject;
 };
 
 
@@ -2877,6 +2879,9 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner,
     m_sort_order = GTK_SORT_ASCENDING;
     m_sort_column = -1;
     m_dataview_sort_column = NULL;
+    
+    m_dragDataObject = NULL;
+    m_dropDataObject = NULL;
 
     if (!m_wx_model->IsVirtualListModel())
         InitTree();
@@ -2885,6 +2890,9 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner,
 wxDataViewCtrlInternal::~wxDataViewCtrlInternal()
 {
     g_object_unref( m_gtk_model );
+    
+    delete m_dragDataObject;
+    delete m_dropDataObject;
 }
 
 void wxDataViewCtrlInternal::InitTree()
@@ -2936,16 +2944,28 @@ bool wxDataViewCtrlInternal::EnableDragSource( const wxDataFormat &format )
 gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag_source),
     GtkTreePath *path )
 {
+    delete m_dragDataObject;
+    
     GtkTreeIter iter;
     if (!get_iter( &iter, path )) return FALSE;
     wxDataViewItem item( (void*) iter.user_data );
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DRAGGABLE, m_owner->GetId() );
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG, m_owner->GetId() );
     event.SetItem( item );
     event.SetModel( m_wx_model );
-    m_owner->HandleWindowEvent( event );
+    if (!m_owner->HandleWindowEvent( event ))
+        return FALSE;
+        
+    if (!event.IsAllowed())
+        return FALSE;
+        
+    wxDataObject *obj = event.GetDataObject();
+    if (!obj)
+        return FALSE;
     
-    return event.IsDraggable();
+    m_dragDataObject = obj;
+    
+    return TRUE;
 }
 
 gboolean
@@ -2962,27 +2982,25 @@ gboolean wxDataViewCtrlInternal::drag_data_get( GtkTreeDragSource *WXUNUSED(drag
     if (!get_iter( &iter, path )) return FALSE;
     wxDataViewItem item( (void*) iter.user_data );
 
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_GET_DRAG_DATA_SIZE, m_owner->GetId() );
-    event.SetItem( item );
-    event.SetModel( m_wx_model );
-    event.SetDataFormat( selection_data->target );
-    m_owner->HandleWindowEvent( event );
-    if (event.GetDragDataSize() < 1) return FALSE;
-    size_t size = (size_t) event.GetDragDataSize();
+    if (!m_dragDataObject->IsSupported( selection_data->target ))
+        return FALSE;
 
-    void *data = malloc( size );
-
-    event.SetEventType( wxEVT_COMMAND_DATAVIEW_ITEM_GET_DRAG_DATA );
-    event.SetDragDataBuffer( data );
+    size_t size = m_dragDataObject->GetDataSize( selection_data->target );
+    if (size == 0)
+        return FALSE;
+       
+    void *buf = malloc( size );
+    
     gboolean res = FALSE;
-    if (m_owner->HandleWindowEvent( event ))
+    if (m_dragDataObject->GetDataHere( selection_data->target, buf ))
     {
-        gtk_selection_data_set( selection_data, selection_data->target,
-            8, (const guchar*) data, size );
         res = TRUE;
+    
+        gtk_selection_data_set( selection_data, selection_data->target,
+            8, (const guchar*) buf, size );
     }
 
-    free( data );
+    free( buf );
 
     return res;
 }
