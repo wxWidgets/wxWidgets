@@ -2542,6 +2542,9 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
     wxDataViewModel * model = GetOwner()->GetModel();
     if( model == NULL )
         return NULL;
+        
+    if (!item.IsOk())
+        return m_root;
 
     //Compose the a parent-chain of the finding item
     ItemList list;
@@ -2743,6 +2746,7 @@ static void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wx
 
     wxDataViewItemArray children;
     unsigned int num = model->GetChildren( item, children);
+    
     unsigned int index = 0;
     while( index < num )
     {
