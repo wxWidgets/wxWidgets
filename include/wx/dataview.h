@@ -16,22 +16,21 @@
 
 #if wxUSE_DATAVIEWCTRL
 
-#include "wx/control.h"
 #include "wx/textctrl.h"
 #include "wx/headercol.h"
 #include "wx/variant.h"
 #include "wx/dynarray.h"
 #include "wx/icon.h"
-#include "wx/imaglist.h"
 #include "wx/weakref.h"
 #include "wx/vector.h"
+#include "wx/dataobj.h"
+
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 
 #if !(defined(__WXGTK20__) || defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
 // #if !(defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_DATAVIEWCTRL
 #endif
-
-class WXDLLIMPEXP_FWD_CORE wxDataFormat;
 
 // ----------------------------------------------------------------------------
 // wxDataViewCtrl flags
@@ -713,7 +712,7 @@ public:
                                 const wxDataViewColumn *column = NULL ) = 0;
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
-    
+
     virtual bool EnableDragSource( const wxDataFormat &format );
     virtual bool EnableDropTarget( const wxDataFormat &format );
 
@@ -787,7 +786,7 @@ public:
     // For drag operations
     void SetDataObject( wxDataObject *obj ) { m_dataObject = obj; }
     wxDataObject *GetDataObject() const { return m_dataObject; }
-    
+
     // For drop operations
     void SetDataFormat( const wxDataFormat &format ) { m_dataFormat = format; }
     wxDataFormat GetDataFormat() const { return m_dataFormat; }
@@ -805,9 +804,9 @@ protected:
     wxVariant           m_value;
     wxDataViewColumn   *m_column;
     wxPoint             m_pos;
-    
+
     wxDataObject       *m_dataObject;
-    
+
     wxDataFormat        m_dataFormat;
     void*               m_dataBuffer;
     size_t              m_dataSize;
@@ -954,9 +953,9 @@ public:
         { if (m_data) delete m_data; m_data = data; }
     wxClientData *GetData() const
         { return m_data; }
-        
+
     wxVector<wxVariant>  m_values;
-    
+
 private:
     wxClientData    *m_data;
 };
@@ -971,7 +970,7 @@ public:
     void PrependColumn( const wxString &varianttype );
     void InsertColumn( unsigned int pos, const wxString &varianttype );
     void AppendColumn( const wxString &varianttype );
-    
+
     void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
     void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
     void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
@@ -990,7 +989,7 @@ public:
     virtual bool SetValueByRow( const wxVariant &value,
                            unsigned int row, unsigned int col );
 
-    
+
 public:
     wxVector<wxDataViewListStoreLine*> m_data;
     wxArrayString                      m_cols;
@@ -1021,7 +1020,7 @@ public:
     bool AppendColumn( wxDataViewColumn *column, const wxString &varianttype );
     bool PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
     bool InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
-                    
+
     // overridden from base class
     virtual bool PrependColumn( wxDataViewColumn *col );
     virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );

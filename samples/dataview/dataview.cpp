@@ -20,14 +20,14 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/dataview.h"
 #include "wx/datetime.h"
 #include "wx/splitter.h"
 #include "wx/aboutdlg.h"
 #include "wx/choicdlg.h"
 #include "wx/numdlg.h"
-#include "wx/dataview.h"
 #include "wx/spinctrl.h"
-#include "wx/menu.h"
+#include "wx/imaglist.h"
 
 #ifndef __WXMSW__
     #include "../sample.xpm"
@@ -64,9 +64,6 @@ static const char *small1_xpm[] = {
 "                "
 };
 
-
-#define DEFAULT_ALIGN                   wxALIGN_LEFT
-#define DATAVIEW_DEFAULT_STYLE          (wxDV_MULTIPLE|wxDV_HORIZ_RULES|wxDV_VERT_RULES)
 
 // -------------------------------------
 // MyMusicModel
@@ -668,7 +665,7 @@ public:
     void OnRightClick( wxMouseEvent &event );
     void OnGoto( wxCommandEvent &event);
     void OnAddMany( wxCommandEvent &event);
-    
+
     void OnBeginDrag( wxDataViewEvent &event );
     void OnDropPossible( wxDataViewEvent &event );
     void OnDrop( wxDataViewEvent &event );
@@ -767,7 +764,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_COLUMN_SORTED(ID_MUSIC_CTRL, MyFrame::OnSorted)
 
     EVT_DATAVIEW_ITEM_CONTEXT_MENU(ID_MUSIC_CTRL, MyFrame::OnContextMenu)
-    
+
     EVT_DATAVIEW_ITEM_BEGIN_DRAG( ID_MUSIC_CTRL, MyFrame::OnBeginDrag )
     EVT_DATAVIEW_ITEM_DROP_POSSIBLE( ID_MUSIC_CTRL, MyFrame::OnDropPossible )
     EVT_DATAVIEW_ITEM_DROP( ID_MUSIC_CTRL, MyFrame::OnDrop )
@@ -795,7 +792,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     SetMenuBar(menu_bar);
     CreateStatusBar();
-    
+
     wxPanel *panel = new wxPanel( this, -1 );
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
@@ -809,7 +806,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );
-    
+
     m_musicCtrl->EnableDragSource( wxDF_TEXT );
     m_musicCtrl->EnableDropTarget( wxDF_TEXT );
 
@@ -901,25 +898,25 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     bottom_sizer->Add( m_log, 1, wxGROW );
 
     // wxDataViewListCtrl
-    
+
     wxDataViewListCtrl *listctrl = new wxDataViewListCtrl( panel, -1,
         wxDefaultPosition, wxSize(100,200) );
-        
+
     listctrl->AppendToggleColumn( wxT("Toggle") );
     listctrl->AppendTextColumn( wxT("Text") );
-    
+
     wxVector<wxVariant> data;
     data.push_back( true );
     data.push_back( "row 1" );
     listctrl->AppendItem( data );
-    
+
     data.clear();
     data.push_back( false );
     data.push_back( "row 3" );
     listctrl->AppendItem( data );
-    
+
     bottom_sizer->Add( listctrl, 1 );
-    
+
 
     // wxDataViewTreeCtrl
 
@@ -930,9 +927,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     treectrl2->SetImageList( ilist );
 
     wxDataViewItem parent2 = treectrl2->AppendContainer( wxDataViewItem(0),wxT("Root 1"), 0 );
-    wxDataViewItem child2 = treectrl2->AppendItem( parent2, wxT("Child 1"), 0 );
-    child2 = treectrl2->AppendItem( parent2, wxT("Child 2"), 0 );
-    child2 = treectrl2->AppendItem( parent2, wxT("Child 3, very long, long, long, long"), 0 );
+    treectrl2->AppendItem( parent2, wxT("Child 1"), 0 );
+    treectrl2->AppendItem( parent2, wxT("Child 2"), 0 );
+    treectrl2->AppendItem( parent2, wxT("Child 3, very long, long, long, long"), 0 );
 
     bottom_sizer->Add( treectrl2, 1 );
 
@@ -1006,9 +1003,9 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
 
     wxString title = m_music_model->GetTitle( event.GetItem() );
     wxLogMessage(wxT("wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item: %s"), title );
-    
+
     if (m_musicCtrl->IsExpanded( event.GetItem() ))
-    wxLogMessage(wxT("Item: %s is expanded"), title );
+        wxLogMessage(wxT("Item: %s is expanded"), title );
 }
 
 void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
@@ -1163,14 +1160,14 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnBeginDrag( wxDataViewEvent &event )
 {
     wxDataViewItem item( event.GetItem() );
-        
+
     // only allow drags for item, not containers
     if (m_music_model->IsContainer( item ) )
     {
         event.Veto();
         return;
     }
-    
+
     MyMusicModelNode *node = (MyMusicModelNode*) item.GetID();
     wxTextDataObject *obj = new wxTextDataObject;
     obj->SetText( node->m_title );
@@ -1180,11 +1177,11 @@ void MyFrame::OnBeginDrag( wxDataViewEvent &event )
 void MyFrame::OnDropPossible( wxDataViewEvent &event )
 {
     wxDataViewItem item( event.GetItem() );
-        
+
     // only allow drags for item, not containers
     if (m_music_model->IsContainer( item ) )
         event.Veto();
-    
+
     if (event.GetDataFormat() != wxDF_TEXT)
         event.Veto();
 }
@@ -1192,23 +1189,23 @@ void MyFrame::OnDropPossible( wxDataViewEvent &event )
 void MyFrame::OnDrop( wxDataViewEvent &event )
 {
     wxDataViewItem item( event.GetItem() );
-        
+
     // only allow drops for item, not containers
     if (m_music_model->IsContainer( item ) )
     {
         event.Veto();
         return;
     }
-    
+
     if (event.GetDataFormat() != wxDF_TEXT)
     {
         event.Veto();
         return;
     }
-        
+
     wxTextDataObject obj;
     obj.SetData( wxDF_TEXT, event.GetDataSize(), event.GetDataBuffer() );
-    
+
     wxLogMessage(wxT("Text dropped: %s"), obj.GetText() );
 }
 

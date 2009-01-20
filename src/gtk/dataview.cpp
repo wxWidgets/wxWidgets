@@ -20,10 +20,7 @@
     #include "wx/log.h"
     #include "wx/dcclient.h"
     #include "wx/sizer.h"
-    #include "wx/icon.h"
-    #include "wx/list.h"
     #include "wx/settings.h"
-    #include "wx/dataobj.h"
     #include "wx/crt.h"
 #endif
 
@@ -39,9 +36,7 @@
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-class wxDataViewCtrlInternal;
-
-wxDataViewCtrlInternal *g_internal = NULL;
+static wxDataViewCtrlInternal *gs_internal = NULL;
 
 class wxGtkTreeModelNode;
 
@@ -56,7 +51,7 @@ typedef struct _GtkWxTreeModel       GtkWxTreeModel;
 WX_DECLARE_LIST(wxDataViewItem, ItemList);
 WX_DEFINE_LIST(ItemList)
 
-class wxDataViewCtrlInternal
+class WXDLLIMPEXP_ADV wxDataViewCtrlInternal
 {
 public:
     wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataViewModel *wx_model, GtkWxTreeModel *gtk_model );
@@ -74,10 +69,10 @@ public:
     gboolean iter_parent( GtkTreeIter *iter, GtkTreeIter *child );
 
     // dnd iface
-   
+
     bool EnableDragSource( const wxDataFormat &format );
     bool EnableDropTarget( const wxDataFormat &format );
-    
+
     gboolean row_draggable( GtkTreeDragSource *drag_source, GtkTreePath *path );
     gboolean drag_data_delete( GtkTreeDragSource *drag_source, GtkTreePath* path );
     gboolean drag_data_get( GtkTreeDragSource *drag_source, GtkTreePath *path,
@@ -128,11 +123,11 @@ private:
     GtkSortType           m_sort_order;
     wxDataViewColumn     *m_dataview_sort_column;
     int                   m_sort_column;
-    
+
     GtkTargetEntry        m_dragSourceTargetEntry;
     wxCharBuffer          m_dragSourceTargetEntryTarget;
     wxDataObject         *m_dragDataObject;
-    
+
     GtkTargetEntry        m_dropTargetTargetEntry;
     wxCharBuffer          m_dropTargetTargetEntryTarget;
     wxDataObject         *m_dropDataObject;
@@ -143,10 +138,11 @@ private:
 // wxGtkTreeModelNode
 //-----------------------------------------------------------------------------
 
+static
 int LINKAGEMODE wxGtkTreeModelChildCmp( void** id1, void** id2 )
 {
-    int ret = g_internal->GetDataViewModel()->Compare( *id1, *id2,
-        g_internal->GetSortColumn(), (g_internal->GetSortOrder() == GTK_SORT_ASCENDING) );
+    int ret = gs_internal->GetDataViewModel()->Compare( *id1, *id2,
+        gs_internal->GetSortColumn(), (gs_internal->GetSortOrder() == GTK_SORT_ASCENDING) );
 
     return ret;
 }
@@ -186,7 +182,7 @@ public:
 
             if (m_internal->IsSorted() || m_internal->GetDataViewModel()->HasDefaultCompare())
             {
-                g_internal = m_internal;
+                gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
                 return m_children.Index( id );
             }
@@ -200,7 +196,7 @@ public:
 
             if (m_internal->IsSorted() || m_internal->GetDataViewModel()->HasDefaultCompare())
             {
-                g_internal = m_internal;
+                gs_internal = m_internal;
                 m_children.Sort( &wxGtkTreeModelChildCmp );
                 return m_children.Index( id );
             }
@@ -2836,7 +2832,7 @@ void wxGtkTreeModelNode::Resort()
     wxGtkTreeModelChildren temp;
     WX_APPEND_ARRAY( temp, m_children );
 
-    g_internal = m_internal;
+    gs_internal = m_internal;
     m_children.Sort( &wxGtkTreeModelChildCmp );
 
     gint *new_order = new gint[child_count];
@@ -2884,7 +2880,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner,
     m_sort_order = GTK_SORT_ASCENDING;
     m_sort_column = -1;
     m_dataview_sort_column = NULL;
-    
+
     m_dragDataObject = NULL;
     m_dropDataObject = NULL;
 
@@ -2895,7 +2891,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner,
 wxDataViewCtrlInternal::~wxDataViewCtrlInternal()
 {
     g_object_unref( m_gtk_model );
-    
+
     delete m_dragDataObject;
     delete m_dropDataObject;
 }
@@ -2935,14 +2931,14 @@ bool wxDataViewCtrlInternal::EnableDragSource( const wxDataFormat &format )
 {
     wxGtkString atom_str( gdk_atom_name( format  ) );
     m_dragSourceTargetEntryTarget = wxCharBuffer( atom_str );
-    
+
     m_dragSourceTargetEntry.target =  m_dragSourceTargetEntryTarget.data();
     m_dragSourceTargetEntry.flags = 0;
     m_dragSourceTargetEntry.info = static_cast<guint>(-1);
-    
+
     gtk_tree_view_enable_model_drag_source( GTK_TREE_VIEW(m_owner->GtkGetTreeView() ),
        GDK_BUTTON1_MASK, &m_dragSourceTargetEntry, 1, (GdkDragAction) GDK_ACTION_COPY );
-       
+
     return true;
 }
 
@@ -2950,14 +2946,14 @@ bool wxDataViewCtrlInternal::EnableDropTarget( const wxDataFormat &format )
 {
     wxGtkString atom_str( gdk_atom_name( format  ) );
     m_dropTargetTargetEntryTarget = wxCharBuffer( atom_str );
-    
+
     m_dropTargetTargetEntry.target =  m_dragSourceTargetEntryTarget.data();
     m_dropTargetTargetEntry.flags = 0;
     m_dropTargetTargetEntry.info = static_cast<guint>(-1);
-    
+
     gtk_tree_view_enable_model_drag_dest( GTK_TREE_VIEW(m_owner->GtkGetTreeView() ),
        &m_dropTargetTargetEntry, 1, (GdkDragAction) GDK_ACTION_COPY );
-       
+
     return true;
 }
 
@@ -2965,7 +2961,7 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     GtkTreePath *path )
 {
     delete m_dragDataObject;
-    
+
     GtkTreeIter iter;
     if (!get_iter( &iter, path )) return FALSE;
     wxDataViewItem item( (void*) iter.user_data );
@@ -2976,16 +2972,16 @@ gboolean wxDataViewCtrlInternal::row_draggable( GtkTreeDragSource *WXUNUSED(drag
     event.SetModel( m_wx_model );
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
-        
+
     if (!event.IsAllowed())
         return FALSE;
-        
+
     wxDataObject *obj = event.GetDataObject();
     if (!obj)
         return FALSE;
-    
+
     m_dragDataObject = obj;
-    
+
     return TRUE;
 }
 
@@ -3009,14 +3005,14 @@ gboolean wxDataViewCtrlInternal::drag_data_get( GtkTreeDragSource *WXUNUSED(drag
     size_t size = m_dragDataObject->GetDataSize( selection_data->target );
     if (size == 0)
         return FALSE;
-       
+
     void *buf = malloc( size );
-    
+
     gboolean res = FALSE;
     if (m_dragDataObject->GetDataHere( selection_data->target, buf ))
     {
         res = TRUE;
-    
+
         gtk_selection_data_set( selection_data, selection_data->target,
             8, (const guchar*) buf, size );
     }
@@ -3034,7 +3030,7 @@ wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
     GtkTreeIter iter;
     if (!get_iter( &iter, path )) return FALSE;
     wxDataViewItem item( (void*) iter.user_data );
-    
+
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
@@ -3044,7 +3040,7 @@ wxDataViewCtrlInternal::drag_data_received(GtkTreeDragDest *WXUNUSED(drag_dest),
     event.SetDataBuffer( selection_data->data );
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
-        
+
     if (!event.IsAllowed())
         return FALSE;
 
@@ -3059,7 +3055,7 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
     GtkTreeIter iter;
     if (!get_iter( &iter, path )) return FALSE;
     wxDataViewItem item( (void*) iter.user_data );
-    
+
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
@@ -3067,10 +3063,10 @@ wxDataViewCtrlInternal::row_drop_possible(GtkTreeDragDest *WXUNUSED(drag_dest),
     event.SetDataFormat( selection_data->target );
     if (!m_owner->HandleWindowEvent( event ))
         return FALSE;
-        
+
     if (!event.IsAllowed())
         return FALSE;
-    
+
     return TRUE;
 }
 
@@ -4126,7 +4122,7 @@ bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
     GtkTreePath *path = m_internal->get_path( &iter );
     bool res = gtk_tree_view_row_expanded( GTK_TREE_VIEW(m_treeview), path );
     gtk_tree_path_free( path );
-    
+
     return res;
 }
 
