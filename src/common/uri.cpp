@@ -169,7 +169,7 @@ wxString wxURI::GetPassword() const
       size_t posColon = m_userinfo.find(':');
 
       if ( posColon == wxString::npos )
-          return "";
+          return wxT("");
 
       return m_userinfo(posColon + 1, wxString::npos);
 }
