@@ -266,7 +266,7 @@ public:
     /**
         This function sets the space between border of window and HTML contents.
         See image:
-        @image html border.png
+        @image html htmlwin_border.png
 
         @param b
             indentation from borders in pixels

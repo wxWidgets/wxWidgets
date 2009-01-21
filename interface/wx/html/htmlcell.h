@@ -171,7 +171,7 @@ public:
     /**
         Returns descent value of the cell (m_Descent member).
         See explanation:
-        @image html descent.png
+        @image html htmlcell_descent.png
     */
     int GetDescent() const;
 
@@ -395,7 +395,7 @@ public:
             - wxHTML_ALIGN_CENTER: cells are centered on line
             - wxHTML_ALIGN_TOP: cells are under the line
 
-        @image html alignv.png
+        @image html htmlcontcell_alignv.png
     */
     void SetAlignVer(int al);
 
@@ -417,7 +417,7 @@ public:
     /**
         Sets the indentation (free space between borders of container and subcells).
 
-        @image html indent.png
+        @image html htmlcontcell_indent.png
 
         @param i
             Indentation value.

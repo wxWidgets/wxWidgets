@@ -36,7 +36,7 @@ and ports.
 @section page_port_wxgtk wxGTK
 
 @htmlonly
-<img src="gtk_logo.png" alt="GTK logo" title="GTK logo" class="logo">
+<img src="logo_gtk.png" alt="GTK logo" title="GTK logo" class="logo">
 @endhtmlonly
 
 wxGTK is a port of wxWidgets using the GTK+ library.
@@ -76,7 +76,7 @@ in the distribution.
 @section page_port_wxmac wxMac
 
 @htmlonly
-<img src="osxleopard_logo.png" alt="Mac OS X (Leopard) logo"
+<img src="logo_osxleopard.png" alt="Mac OS X (Leopard) logo"
     title="Mac OS X (Leopard) logo" class="logo">
 @endhtmlonly
 
@@ -98,7 +98,7 @@ in the distribution.
 @section page_port_wxcocoa wxCocoa
 
 @htmlonly
-<img src="osxleopard_logo.png" alt="Mac OS X (Leopard) logo"
+<img src="logo_osxleopard.png" alt="Mac OS X (Leopard) logo"
     title="Mac OS X (Leopard) logo" class="logo">
 @endhtmlonly
 
@@ -152,7 +152,7 @@ in the distribution.
 @section page_port_wxx11 wxX11
 
 @htmlonly
-<img src="x11_logo.png" alt="X.org logo" title="X.org logo" class="logo">
+<img src="logo_x11.png" alt="X.org logo" title="X.org logo" class="logo">
 @endhtmlonly
 
 wxX11 is a port of wxWidgets using X11 (The X Window System)
@@ -176,7 +176,7 @@ wxWidgets for embedded applications on the wxWidgets web site.
 @section page_port_wxmotif wxMotif
 
 @htmlonly
-<img src="motif_logo.png" alt="Motif logo" title="Motif logo" class="logo">
+<img src="logo_motif.png" alt="Motif logo" title="Motif logo" class="logo">
 @endhtmlonly
 
 wxMotif is a port of wxWidgets for X11 systems using Motif libraries.
@@ -192,7 +192,7 @@ in the distribution.
 @section page_port_wxmsw wxMSW
 
 @htmlonly
-<img src="win_logo.png" alt="Windows logo" title="Windows logo" class="logo">
+<img src="logo_win.png" alt="Windows logo" title="Windows logo" class="logo">
 @endhtmlonly
 
 wxMSW is a port of wxWidgets for the Windows platforms
