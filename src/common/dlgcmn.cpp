@@ -480,7 +480,17 @@ void wxDialogBase::OnSysColourChanged(wxSysColourChangedEvent& event)
 bool wxDialogBase::DoLayoutAdaptation()
 {
     if (GetLayoutAdapter())
-        return GetLayoutAdapter()->DoLayoutAdaptation((wxDialog*) this);
+    {
+        wxWindow* focusWindow = wxFindFocusDescendant(this); // from event.h
+        if (GetLayoutAdapter()->DoLayoutAdaptation((wxDialog*) this))
+        {
+            if (focusWindow)
+                focusWindow->SetFocus();
+            return true;
+        }
+        else
+            return false;
+    }
     else
         return false;
 }
