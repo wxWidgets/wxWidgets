@@ -274,12 +274,14 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
         STOCKITEM(wxID_COPY,                wxACCEL_CTRL,'C')
         STOCKITEM(wxID_CUT,                 wxACCEL_CTRL,'X')
         STOCKITEM(wxID_FIND,                wxACCEL_CTRL,'F')
-        STOCKITEM(wxID_REPLACE,             wxACCEL_CTRL,'R')
         STOCKITEM(wxID_HELP,                wxACCEL_CTRL,'H')
         STOCKITEM(wxID_NEW,                 wxACCEL_CTRL,'N')
         STOCKITEM(wxID_OPEN,                wxACCEL_CTRL,'O')
         STOCKITEM(wxID_PASTE,               wxACCEL_CTRL,'V')
+        STOCKITEM(wxID_REDO,                wxACCEL_CTRL | wxACCEL_SHIFT,'Z')
+        STOCKITEM(wxID_REPLACE,             wxACCEL_CTRL,'R')
         STOCKITEM(wxID_SAVE,                wxACCEL_CTRL,'S')
+        STOCKITEM(wxID_UNDO,                wxACCEL_CTRL,'Z')
 
         default:
             // set the wxAcceleratorEntry to return into an invalid state:
