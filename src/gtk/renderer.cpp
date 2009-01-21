@@ -36,7 +36,6 @@
 #include "wx/dcgraph.h"
 #include "wx/gtk/dc.h"
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/win_gtk.h"
 
 #include <gtk/gtk.h>
 
@@ -142,7 +141,7 @@ static GdkWindow* wxGetGdkWindowForDC(wxWindow* win, wxDC& dc)
     
 #if wxUSE_GRAPHICS_CONTEXT
     if ( dc.IsKindOf( CLASSINFO(wxGCDC) ) )
-        gdk_window = WX_PIZZA(win->m_wxwindow)->m_backing_window;   
+        gdk_window = win->GTKGetDrawingWindow();
     else
 #endif
     {
