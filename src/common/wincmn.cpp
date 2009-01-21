@@ -407,6 +407,8 @@ void wxWindowBase::SendDestroyEvent()
 
 bool wxWindowBase::Destroy()
 {
+    SendDestroyEvent();
+
     delete this;
 
     return true;
@@ -435,11 +437,11 @@ bool wxWindowBase::DestroyChildren()
 
         wxWindow *child = node->GetData();
 
-        // note that we really want to call delete and not ->Destroy() here
-        // because we want to delete the child immediately, before we are
-        // deleted, and delayed deletion would result in problems as our (top
-        // level) child could outlive its parent
-        delete child;
+        // note that we really want to delete it immediately so don't call the
+        // possible overridden Destroy() version which might not delete the
+        // child immediately resulting in problems with our (top level) child
+        // outliving its parent
+        child->wxWindowBase::Destroy();
 
         wxASSERT_MSG( !GetChildren().Find(child),
                       wxT("child didn't remove itself using RemoveChild()") );

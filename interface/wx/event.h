@@ -1061,6 +1061,9 @@ public:
         Constructor.
     */
     wxWindowCreateEvent(wxWindow* win = NULL);
+
+    /// Retutn the window being created.
+    wxWindow *GetWindow() const;
 };
 
 
@@ -2749,17 +2752,23 @@ public:
 /**
     @class wxWindowDestroyEvent
 
-    This event is sent from the wxWindow destructor wxWindow::~wxWindow() when a
-    window is destroyed.
+    This event is sent as early as possible during the window destruction
+    process.
 
-    When a class derived from wxWindow is destroyed its destructor will have
-    already run by the time this event is sent. Therefore this event will not
-    usually be received at all.
+    For the top level windows, as early as possible means that this is done by
+    wxFrame or wxDialog destructor, i.e. after the destructor of the derived
+    class was executed and so any methods specific to the derived class can't
+    be called any more from this event handler. If you need to do this, you
+    must call wxWindow::SendDestroyEvent() from your derived class destructor.
 
-    To receive this event wxEvtHandler::Connect() must be used (using an event
-    table macro will not work). Since it is received after the destructor has run,
-    an object should not handle its own wxWindowDestroyEvent, but it can be used
-    to get notification of the destruction of another window.
+    For the child windows, this event is generated just before deleting the
+    window from wxWindow::Destroy() (which is also called when the parent
+    window is deleted) or from the window destructor if operator @c delete was
+    used directly (which is not recommended for this very reason).
+
+    It is usually pointless to handle this event in the window itself but it ca
+    be very useful to receive notifications about the window destruction in the
+    parent window or in any other object interested in this window.
 
     @library{wxcore}
     @category{events}
@@ -2773,6 +2782,9 @@ public:
         Constructor.
     */
     wxWindowDestroyEvent(wxWindow* win = NULL);
+
+    /// Retutn the window being destroyed.
+    wxWindow *GetWindow() const;
 };
 
 

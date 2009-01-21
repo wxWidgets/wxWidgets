@@ -2815,6 +2815,15 @@ protected:
         @deprecated @todo provide deprecation description
     */
     virtual void SetInitialBestSize(const wxSize& size);
+
+    /**
+        Generate wxWindowDestroyEvent for this window.
+
+        This is called by the window itself when it is being destroyed and
+        usually there is no need to call it but see wxWindowDestroyEvent for
+        explanations of when you might want to do it.
+     */
+    void SendDestroyEvent();
 };
 
 
