@@ -26,6 +26,9 @@
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 
+#if wxUSE_SPINCTRL
+
 wxDEFINE_EVENT(wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEvent)
 wxDEFINE_EVENT(wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxSpinDoubleEvent)
 
+#endif // wxUSE_SPINCTRL
