@@ -47,6 +47,7 @@ private:
         CPPUNIT_TEST( IPv6 );
         CPPUNIT_TEST( Server );
         CPPUNIT_TEST( Paths );
+        CPPUNIT_TEST( UserAndPass );
         CPPUNIT_TEST( NormalResolving );
         CPPUNIT_TEST( ComplexResolving );
         CPPUNIT_TEST( ReallyComplexResolving );
@@ -68,6 +69,7 @@ private:
     void IPv6();
     void Server();
     void Paths();
+    void UserAndPass();
     void NormalResolving();
     void ComplexResolving();
     void ReallyComplexResolving();
@@ -110,6 +112,9 @@ URITestCase::URITestCase()
 
 #define URI_ASSERT_PATH_EQUAL(uri, expected) \
     URI_ASSERT_PART_EQUAL((uri), (expected), GetPath())
+
+#define URI_ASSERT_USER_EQUAL(uri, expected) \
+    URI_ASSERT_PART_EQUAL((uri), (expected), GetUser())
 
 void URITestCase::IPv4()
 {
@@ -190,6 +195,13 @@ void URITestCase::Paths()
 
     URI_ASSERT_PART_EQUAL("path/john/../../../joe",
                           "../joe", BuildURI());
+}
+
+void URITestCase::UserAndPass()
+{
+    URI_ASSERT_USER_EQUAL("http://user:pass@host/path/", "user");
+    URI_ASSERT_USER_EQUAL("http://user@host/path/", "user");
+    URI_ASSERT_USER_EQUAL("http://host/path/", "");
 }
 
 #define URI_TEST_RESOLVE_IMPL(string, eq, strict) \
