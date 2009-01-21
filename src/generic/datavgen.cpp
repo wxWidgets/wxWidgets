@@ -34,6 +34,7 @@
     #include "wx/settings.h"
     #include "wx/msgdlg.h"
     #include "wx/dcscreen.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/stockitem.h"
@@ -416,6 +417,7 @@ public:
     wxDataViewCtrl *GetOwner() { return m_owner; }
     const wxDataViewCtrl *GetOwner() const { return m_owner; }
 
+    wxBitmap CreateItemBitmap( unsigned int row, int &indent );
     void OnPaint( wxPaintEvent &event );
     void OnArrowChar(unsigned int newCurrent, const wxKeyEvent& event);
     void OnChar( wxKeyEvent &event );
@@ -1138,6 +1140,83 @@ wxDataViewIconTextRenderer::GetValueFromEditorCtrl(wxControl* WXUNUSED(editor),
 // wxDataViewDropTarget
 //-----------------------------------------------------------------------------
 
+class wxBitmapCanvas: public wxWindow
+{
+public:
+    wxBitmapCanvas( wxWindow *parent, const wxBitmap &bitmap, const wxSize &size ) :
+       wxWindow( parent, wxID_ANY, wxPoint(0,0), size )
+    {
+        m_bitmap = bitmap;
+        Connect( wxEVT_PAINT, wxPaintEventHandler(wxBitmapCanvas::OnPaint) );
+    }
+    
+    void OnPaint( wxPaintEvent &WXUNUSED(event) )
+    {
+        wxPaintDC dc(this);
+        dc.DrawBitmap( m_bitmap, 0, 0);
+    }
+    
+    wxBitmap m_bitmap;
+};
+
+class wxDataViewDropSource: public wxDropSource
+{
+public:
+    wxDataViewDropSource( wxDataViewMainWindow *win, unsigned int row ) :
+         wxDropSource( win )
+    {
+        m_win = win;
+        m_row = row;
+        m_hint = NULL;
+    }
+    
+    ~wxDataViewDropSource()
+    {
+        delete m_hint;
+    }
+    
+    virtual bool GiveFeedback( wxDragResult WXUNUSED(effect) )
+    {
+        wxPoint pos = wxGetMousePosition();
+        
+        if (!m_hint)
+        {
+            int liney = m_win->GetLineStart( m_row );
+            int linex = 0;
+            m_win->GetOwner()->CalcUnscrolledPosition( 0, liney, NULL, &liney );
+            m_win->ClientToScreen( &linex, &liney );
+            m_dist_x = pos.x - linex;
+            m_dist_y = pos.y - liney;
+        
+            int indent = 0;
+            wxBitmap ib = m_win->CreateItemBitmap( m_row, indent );
+            m_dist_x -= indent;
+            m_hint = new wxFrame( m_win->GetParent(), wxID_ANY, wxEmptyString, 
+                                         wxPoint(pos.x - m_dist_x, pos.y + 5 ),
+                                         ib.GetSize(),
+                                         wxFRAME_TOOL_WINDOW |
+                                         wxFRAME_FLOAT_ON_PARENT |
+                                         wxFRAME_NO_TASKBAR |
+                                         wxNO_BORDER );
+            new wxBitmapCanvas( m_hint, ib, ib.GetSize() );
+            m_hint->Show();
+        }
+        else
+        {
+            m_hint->Move( pos.x - m_dist_x, pos.y + 5  );
+            m_hint->SetTransparent( 128 );
+        }
+        
+        return false;
+    }
+     
+    wxDataViewMainWindow   *m_win;
+    unsigned int            m_row;
+    wxFrame                *m_hint;
+    int m_dist_x,m_dist_y;
+};
+
+
 class wxDataViewDropTarget: public wxDropTarget
 {
 public:
@@ -1410,6 +1489,111 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
 void wxDataViewMainWindow::OnLeave()
 {
     RemoveDropHint();
+}
+
+wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
+{
+    int height = GetLineHeight( row );
+    int width = 0;
+    unsigned int cols = GetOwner()->GetColumnCount();
+    unsigned int col;
+    for (col = 0; col < cols; col++)
+    {
+        wxDataViewColumn *column = GetOwner()->GetColumnAt(col);
+        if (column->IsHidden())
+            continue;      // skip it!
+        width += column->GetWidth();
+    }
+
+    indent = 0;
+    if (!IsVirtualList())
+    {
+        wxDataViewTreeNode *node = GetTreeNodeByRow(row);
+        indent = GetOwner()->GetIndent() * node->GetIndentLevel();
+        indent = indent + m_lineHeight;  //try to use the m_lineHeight as the expander space
+    }
+    width -= indent;
+
+    wxBitmap bitmap( width, height );
+    wxMemoryDC dc( bitmap );
+    dc.SetFont( GetFont() );
+    dc.SetPen( *wxBLACK_PEN );
+    dc.SetBrush( *wxWHITE_BRUSH );
+    dc.DrawRectangle( 0,0,width,height );
+    
+    wxDataViewModel *model = m_owner->GetModel();
+    
+    wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
+    if (!expander)
+    {
+        // TODO-RTL: last column for RTL support
+        expander = GetOwner()->GetColumnAt( 0 );
+        GetOwner()->SetExpanderColumn(expander);
+    }
+    
+    
+    int x = 0;
+    for (col = 0; col < cols; col++)
+    {
+        wxDataViewColumn *column = GetOwner()->GetColumnAt( col );
+        wxDataViewRenderer *cell = column->GetRenderer();
+
+        if (column->IsHidden())
+            continue;       // skip it!
+
+        width = column->GetWidth();
+        
+        if (column == expander)
+            width -= indent;
+        
+        wxVariant value;
+        wxDataViewItem item = GetItemByRow( row );
+        model->GetValue( value, item, column->GetModelColumn());
+        cell->SetValue( value );
+
+        if (cell->GetWantsAttr())
+        {
+                wxDataViewItemAttr attr;
+                bool ret = model->GetAttr( item, column->GetModelColumn(), attr );
+                if (ret)
+                    cell->SetAttr( attr );
+                cell->SetHasAttr( ret );
+        }
+
+        wxSize size = cell->GetSize();
+        size.x = wxMin( 2*PADDING_RIGHTLEFT + size.x, width );
+        size.y = height;
+        wxRect item_rect(x, 0, size.x, size.y);
+        
+        int align = cell->CalculateAlignment();
+        // horizontal alignment:
+        item_rect.x = x;
+        if (align & wxALIGN_CENTER_HORIZONTAL)
+            item_rect.x = x + (width / 2) - (size.x / 2);
+        else if (align & wxALIGN_RIGHT)
+            item_rect.x = x + width - size.x;
+        //else: wxALIGN_LEFT is the default
+
+        // vertical alignment:
+        item_rect.y = 0;
+        if (align & wxALIGN_CENTER_VERTICAL)
+            item_rect.y = (height / 2) - (size.y / 2);
+        else if (align & wxALIGN_BOTTOM)
+            item_rect.y = height - size.y;
+        //else: wxALIGN_TOP is the default
+
+        // add padding
+        item_rect.x += PADDING_RIGHTLEFT;
+        item_rect.width = size.x - 2 * PADDING_RIGHTLEFT;
+
+        //dc.SetClippingRegion( item_rect );
+        cell->Render( item_rect, &dc, 0 );
+        //dc.DestroyClippingRegion();
+        
+        x += width;
+    }
+    
+    return bitmap;
 }
 
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -3217,11 +3401,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             if (!obj)
                 return;
         
-            wxDropSource drag( m_owner );
+            wxDataViewDropSource drag( this, drag_item_row );
             drag.SetData( *obj );
-            // wxImage image( 80, 20 );
-            // wxBitmap bitmap( image );
-            wxDragResult res = drag.DoDragDrop();
+            /* wxDragResult res = */ drag.DoDragDrop();
             delete obj;
         }
         return;
