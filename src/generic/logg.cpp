@@ -341,7 +341,7 @@ wxLogGui::DoShowMultipleLogMessages(const wxArrayString& messages,
     // start from the most recent message
     wxString message;
     const size_t nMsgCount = messages.size();
-    str.reserve(nMsgCount*100);
+    message.reserve(nMsgCount*100);
     for ( size_t n = nMsgCount; n > 0; n-- ) {
         message << m_aMessages[n - 1] << wxT("\n");
     }
