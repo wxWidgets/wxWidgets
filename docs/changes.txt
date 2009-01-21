@@ -104,19 +104,21 @@ All:
 
 All (GUI):
 
-- Fixed wxRichTextCtrl input that uses Alt on Mac OS X, for example
-  Polish Pro input.
+- wxRTC: fixed input that uses Alt on Mac OS X, for example Polish Pro input.
   Also fixed a bug whereby e.g. Croatian keys didn't work, by moving more code
   to key down handler.
-- Fixed a problem with HTML list generation for wxRichTextCtrl.
-- wxRichTextCtrl no longer deletes a character when content is selected
-  before pressing Delete.
-- Fixed inability to select no superscript and no subscript in wxRichTextCtrl's
+- wxRTC: fixed a problem with HTML list generation.
+- wxRTC: no longer deletes a character when content is selected before
+  pressing Delete.
+- wxRTC: fixed inability to select no superscript and no subscript in
   formatting dialog.
-- Fixed centering and right-justification when combined with left indentation.
-- Fixed lack of right margin when centering or right-justifying in a wxRTC.
-- Fixed wrong wxRTC descent when wrapping lines with different font sizes.
-- Fixed wrapping problem for long lines.
+- wxRTC: fixed centering and right-justification when combined with left
+  indentation.
+- wxRTC: fixed lack of right margin when centering or right-justifying.
+- wxRTC: fixed wrong descent when wrapping lines with different font sizes.
+- wxRTC: fixed wrapping problem for long lines.
+- wxRTC: all buffer margins now respected.
+- wxRTC: Added wxRE_CENTRE_CARET to centre the caret line vertically.
 - Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
 - Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after
   single-cell paragraphs.
