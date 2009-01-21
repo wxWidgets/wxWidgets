@@ -2947,7 +2947,7 @@ bool wxDataViewCtrlInternal::EnableDropTarget( const wxDataFormat &format )
     wxGtkString atom_str( gdk_atom_name( format  ) );
     m_dropTargetTargetEntryTarget = wxCharBuffer( atom_str );
 
-    m_dropTargetTargetEntry.target =  m_dragSourceTargetEntryTarget.data();
+    m_dropTargetTargetEntry.target =  m_dropTargetTargetEntryTarget.data();
     m_dropTargetTargetEntry.flags = 0;
     m_dropTargetTargetEntry.info = static_cast<guint>(-1);
 
