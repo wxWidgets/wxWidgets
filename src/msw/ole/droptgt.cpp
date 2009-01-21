@@ -192,13 +192,16 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
     }
 #endif // 0
 
-    if ( !m_pTarget->IsAcceptedData(pIDataSource) ) {
+    if ( !m_pTarget->MSWIsAcceptedData(pIDataSource) ) {
         // we don't accept this kind of data
         *pdwEffect = DROPEFFECT_NONE;
 
         return S_OK;
     }
 
+    // for use in OnEnter and OnDrag calls
+    m_pTarget->MSWSetDataSource(pIDataSource);
+    
     // get hold of the data object
     m_pIDataObject = pIDataSource;
     m_pIDataObject->AddRef();
@@ -308,7 +311,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
     // first ask the drop target if it wants data
     if ( m_pTarget->OnDrop(pt.x, pt.y) ) {
         // it does, so give it the data source
-        m_pTarget->SetDataSource(pIDataSource);
+        m_pTarget->MSWSetDataSource(pIDataSource);
 
         // and now it has the data
         wxDragResult rc = ConvertDragEffectToResult(
@@ -432,7 +435,7 @@ bool wxDropTarget::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 // copy the data from the data source to the target data object
 bool wxDropTarget::GetData()
 {
-    wxDataFormat format = GetSupportedFormat(m_pIDataSource);
+    wxDataFormat format = MSWGetSupportedFormat(m_pIDataSource);
     if ( format == wxDF_INVALID ) {
         // this is strange because IsAcceptedData() succeeded previously!
         wxFAIL_MSG(wxT("strange - did supported formats list change?"));
@@ -474,15 +477,15 @@ bool wxDropTarget::GetData()
 // ----------------------------------------------------------------------------
 
 // we need a data source, so wxIDropTarget gives it to us using this function
-void wxDropTarget::SetDataSource(IDataObject *pIDataSource)
+void wxDropTarget::MSWSetDataSource(IDataObject *pIDataSource)
 {
     m_pIDataSource = pIDataSource;
 }
 
 // determine if we accept data of this type
-bool wxDropTarget::IsAcceptedData(IDataObject *pIDataSource) const
+bool wxDropTarget::MSWIsAcceptedData(IDataObject *pIDataSource) const
 {
-    return GetSupportedFormat(pIDataSource) != wxDF_INVALID;
+    return MSWGetSupportedFormat(pIDataSource) != wxDF_INVALID;
 }
 
 // ----------------------------------------------------------------------------
@@ -491,10 +494,10 @@ bool wxDropTarget::IsAcceptedData(IDataObject *pIDataSource) const
 
 wxDataFormat wxDropTarget::GetMatchingPair()
 {
-    return GetSupportedFormat( m_pIDataSource );
+    return MSWGetSupportedFormat( m_pIDataSource );
 }
 
-wxDataFormat wxDropTarget::GetSupportedFormat(IDataObject *pIDataSource) const
+wxDataFormat wxDropTarget::MSWGetSupportedFormat(IDataObject *pIDataSource) const
 {
     // this strucutre describes a data of any type (first field will be
     // changing) being passed through global memory block.

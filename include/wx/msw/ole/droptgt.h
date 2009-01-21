@@ -54,15 +54,15 @@ public:
     // -------------------------------
 
     // do we accept this kind of data?
-    bool IsAcceptedData(IDataObject *pIDataSource) const;
+    bool MSWIsAcceptedData(IDataObject *pIDataSource) const;
 
     // give us the data source from IDropTarget::Drop() - this is later used by
     // GetData() when it's called from inside OnData()
-    void SetDataSource(IDataObject *pIDataSource);
+    void MSWSetDataSource(IDataObject *pIDataSource);
 
 private:
     // helper used by IsAcceptedData() and GetData()
-    wxDataFormat GetSupportedFormat(IDataObject *pIDataSource) const;
+    wxDataFormat MSWGetSupportedFormat(IDataObject *pIDataSource) const;
 
     wxIDropTarget *m_pIDropTarget; // the pointer to our COM interface
     IDataObject   *m_pIDataSource; // the pointer to the source data object
