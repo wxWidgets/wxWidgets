@@ -489,6 +489,7 @@ public:
     bool EnableDragSource( const wxDataFormat &format );
     bool EnableDropTarget( const wxDataFormat &format );
 
+    void RemoveDropHint();
     wxDragResult OnDragOver( wxDataFormat format, wxCoord x, wxCoord y, wxDragResult def );
     bool OnDrop( wxDataFormat format, wxCoord x, wxCoord y );
     wxDragResult OnData( wxDataFormat format, wxCoord x, wxCoord y, wxDragResult def );
@@ -529,6 +530,8 @@ private:
     
     bool                        m_dropEnabled;
     wxDataFormat                m_dropFormat;
+    bool                        m_dropHint;
+    unsigned int                m_dropHintLine;
 
     // for double click logic
     unsigned int m_lineLastClicked,
@@ -1240,6 +1243,8 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     m_dragEnabled = false;
     m_dropEnabled = false;
+    m_dropHint = false;
+    m_dropHintLine = (unsigned int) -1;
 
     m_hasFocus = false;
 
@@ -1286,6 +1291,16 @@ bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
     return true;
 }
 
+void wxDataViewMainWindow::RemoveDropHint()
+{
+    if (m_dropHint)
+    {
+            m_dropHint = false;
+            RefreshRow( m_dropHintLine );
+            m_dropHintLine = (unsigned int) -1;
+    }
+}
+
 wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x, wxCoord y, wxDragResult def )
 {
     int xx = x;
@@ -1294,7 +1309,10 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x, w
     unsigned int row = GetLineAt( yy );
 
     if ((row >= GetRowCount()) || (yy > GetEndOfLastCol()))
+    {   
+        RemoveDropHint();
         return wxDragNone;
+    }
 
     wxDataViewItem item = GetItemByRow( row );
     
@@ -1306,16 +1324,31 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x, w
     event.SetModel( model );
     event.SetDataFormat( format );
     if (!m_owner->HandleWindowEvent( event ))
+    {
+        RemoveDropHint();
         return wxDragNone;
+    }
 
     if (!event.IsAllowed())
+    {
+        RemoveDropHint();
         return wxDragNone;
+    }
+
+    
+    if (m_dropHint && (row != m_dropHintLine))
+        RefreshRow( m_dropHintLine );
+    m_dropHint = true;
+    m_dropHintLine = row;
+    RefreshRow( row );
     
     return def;
 }
 
 bool wxDataViewMainWindow::OnDrop( wxDataFormat format, wxCoord x, wxCoord y )
 {
+    RemoveDropHint();
+
     int xx = x;
     int yy = y;
     m_owner->CalcUnscrolledPosition( xx, yy, &xx, &yy );
@@ -1338,7 +1371,7 @@ bool wxDataViewMainWindow::OnDrop( wxDataFormat format, wxCoord x, wxCoord y )
 
     if (!event.IsAllowed())
         return false;
-    
+
     return true;
 }
 
@@ -1376,6 +1409,7 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
 
 void wxDataViewMainWindow::OnLeave()
 {
+    RemoveDropHint();
 }
 
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -1494,6 +1528,14 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                     flags
                                 );
         }
+    }
+    
+    if (m_dropHint)
+    { 
+        wxRect rect( x_start, GetLineStart( m_dropHintLine ), x_last, GetLineHeight( m_dropHintLine ) );
+        dc.SetPen( *wxBLACK_PEN );
+        dc.SetBrush( *wxTRANSPARENT_BRUSH );
+        dc.DrawRectangle( rect );
     }
 
     wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
