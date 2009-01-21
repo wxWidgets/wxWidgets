@@ -27,6 +27,7 @@
 #endif
 
 #include "wx/spinctrl.h"
+#include "wx/choice.h"
 #include "wx/imaglist.h"
 
 const char wxDataViewCtrlNameStr[] = "dataviewCtrl";
