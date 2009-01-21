@@ -1105,11 +1105,10 @@ gtk_wx_cell_renderer_render (GtkCellRenderer      *renderer,
         wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
         wxWindowDC* dc = (wxWindowDC*) cell->GetDC();
         wxWindowDCImpl *impl = (wxWindowDCImpl *) dc->GetImpl();
-        if (impl->m_gdkwindow == NULL)
-        {
-            impl->m_gdkwindow = window;
-            impl->SetUpDC();
-        }
+        // Reinitilise GDK window everytime as drawing can also
+        // be done into DnD drop window.
+        impl->m_gdkwindow = window;
+        impl->SetUpDC();
 
         int state = 0;
         if (flags & GTK_CELL_RENDERER_SELECTED)
