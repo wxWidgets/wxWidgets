@@ -127,13 +127,17 @@ typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
 #define wxSpinEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxSpinEventFunction, func)
 
-// macros for handling spin events
+// macros for handling spin events: notice that we must use the real values of
+// the event type constants and not their references (wxEVT_SPIN[_UP/DOWN])
+// here as otherwise the event tables could end up with non-initialized
+// (because of undefined initialization order of the globals defined in
+// different translation units) references in them
 #define EVT_SPIN_UP(winid, func) \
-    wx__DECLARE_EVT1(wxEVT_SPIN_UP, winid, wxSpinEventHandler(func))
+    wx__DECLARE_EVT1(wxEVT_SCROLL_LINEUP, winid, wxSpinEventHandler(func))
 #define EVT_SPIN_DOWN(winid, func) \
-    wx__DECLARE_EVT1(wxEVT_SPIN_DOWN, winid, wxSpinEventHandler(func))
+    wx__DECLARE_EVT1(wxEVT_SCROLL_LINEDOWN, winid, wxSpinEventHandler(func))
 #define EVT_SPIN(winid, func) \
-    wx__DECLARE_EVT1(wxEVT_SPIN, winid, wxSpinEventHandler(func))
+    wx__DECLARE_EVT1(wxEVT_SCROLL_THUMBTRACK, winid, wxSpinEventHandler(func))
 
 #endif // wxUSE_SPINBTN
 
