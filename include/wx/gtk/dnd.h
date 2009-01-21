@@ -36,9 +36,11 @@ public:
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool GetData();
 
+    // Can only be called during OnXXX methods.
+    wxDataFormat GetMatchingPair();
 
     // implementation
-  
+    
     GdkAtom GtkGetMatchingPair();
 
     void GtkRegisterWidget( GtkWidget *widget );

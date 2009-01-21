@@ -47,6 +47,9 @@ public:
     virtual bool OnDrop(wxCoord x, wxCoord y);
     virtual bool GetData();
 
+    // Can only be called during OnXXX methods.
+    wxDataFormat GetMatchingPair();
+
     // implementation only from now on
     // -------------------------------
 

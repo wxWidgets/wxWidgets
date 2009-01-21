@@ -489,6 +489,11 @@ bool wxDropTarget::IsAcceptedData(IDataObject *pIDataSource) const
 // helper functions
 // ----------------------------------------------------------------------------
 
+wxDataFormat wxDropTarget::GetMatchingPair()
+{
+    return GetSupportedFormat( m_pIDataSource );
+}
+
 wxDataFormat wxDropTarget::GetSupportedFormat(IDataObject *pIDataSource) const
 {
     // this strucutre describes a data of any type (first field will be

@@ -497,6 +497,12 @@ wxDragResult wxDropTarget::OnData( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
     return GetData() ? def : wxDragNone;
 }
 
+
+wxDataFormat wxDropTarget::GetMatchingPair()
+{
+    return wxDataFormat( GtkGetMatchingPair() );
+}
+
 GdkAtom wxDropTarget::GtkGetMatchingPair()
 {
     if (!m_dataObject)
