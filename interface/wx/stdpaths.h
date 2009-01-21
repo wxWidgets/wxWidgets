@@ -54,6 +54,23 @@ public:
     static wxStandardPathsBase& Get();
 
     /**
+        Return the directory for the document files used by this application.
+
+        If the application-specific directory doesn't exist, this function
+        returns GetDocumentsDir().
+
+        Example return values:
+        - Unix: @c ~/appname
+        - Windows: @c "C:\Documents and Settings\username\My Documents\appname"
+        - Mac: @c ~/Documents/appname
+
+        @since 2.9.0
+
+        @see GetAppDocumentsDir()
+     */
+    virtual wxString GetAppDocumentsDir() const;
+
+    /**
         Return the directory containing the system config files.
         Example return values:
         - Unix: @c /etc
@@ -78,12 +95,15 @@ public:
 
     /**
         Return the directory containing the current user's documents.
+
         Example return values:
         - Unix: @c ~ (the home directory)
         - Windows: @c "C:\Documents and Settings\username\My Documents"
         - Mac: @c ~/Documents
 
         @since 2.7.0
+
+        @see GetAppDocumentsDir()
     */
     virtual wxString GetDocumentsDir() const;
 

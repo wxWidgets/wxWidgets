@@ -106,6 +106,14 @@ wxString wxStandardPathsBase::GetDocumentsDir() const
     return wxFileName::GetHomeDir();
 }
 
+wxString wxStandardPathsBase::GetAppDocumentsDir() const
+{
+    const wxString docsDir = GetDocumentsDir();
+    wxString appDocsDir = AppendAppInfo(docsDir);
+
+    return wxDirExists(appDocsDir) ? appDocsDir : docsDir;
+}
+
 // return the temporary directory for the current user
 wxString wxStandardPathsBase::GetTempDir() const
 {
@@ -113,7 +121,9 @@ wxString wxStandardPathsBase::GetTempDir() const
 }
 
 /* static */
-wxString wxStandardPathsBase::AppendPathComponent(const wxString& dir, const wxString& component)
+wxString
+wxStandardPathsBase::AppendPathComponent(const wxString& dir,
+                                         const wxString& component)
 {
     wxString subdir(dir);
 

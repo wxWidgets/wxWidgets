@@ -436,7 +436,7 @@ public:
     virtual void FileHistoryAddFilesToMenu();
     virtual void FileHistoryAddFilesToMenu(wxMenu* menu);
 
-    wxString GetLastDirectory() const { return m_lastDirectory; }
+    wxString GetLastDirectory() const;
     void SetLastDirectory(const wxString& dir) { m_lastDirectory = dir; }
 
     // Get the current document manager

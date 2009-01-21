@@ -131,6 +131,11 @@ public:
     // $HOME under Unix and ~/Documents under Mac
     virtual wxString GetDocumentsDir() const;
 
+    // return the directory for the documents files used by this application:
+    // it's a subdirectory of GetDocumentsDir() constructed using the
+    // application name/vendor if it exists or just GetDocumentsDir() otherwise
+    virtual wxString GetAppDocumentsDir() const;
+
     // return the temporary directory for the current user
     virtual wxString GetTempDir() const;
 
@@ -151,8 +156,8 @@ public:
 
 
 protected:
-    // append the path component, with a leading path seperator if a
-    // path seperator or dot (.) is not already at the end of dir
+    // append the path component, with a leading path separator if a
+    // path separator or dot (.) is not already at the end of dir
     static wxString AppendPathComponent(const wxString& dir, const wxString& component);
 
     // append application information determined by m_usedAppInfo to dir

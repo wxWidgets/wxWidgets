@@ -56,6 +56,7 @@
 #include "wx/cmdproc.h"
 #include "wx/tokenzr.h"
 #include "wx/filename.h"
+#include "wx/stdpaths.h"
 #include "wx/vector.h"
 #include "wx/ptr_scpd.h"
 
@@ -307,8 +308,12 @@ bool wxDocument::SaveAs()
     wxString filter = docTemplate->GetFileFilter() ;
 #endif
     wxString defaultDir = docTemplate->GetDirectory();
-    if (defaultDir.IsEmpty())
+    if ( defaultDir.empty() )
+    {
         defaultDir = wxPathOnly(GetFilename());
+        if ( defaultDir.empty() )
+            defaultDir = GetDocumentManager()->GetLastDirectory();
+    }
 
     wxString fileName = wxFileSelector(_("Save As"),
             defaultDir,
@@ -938,6 +943,19 @@ bool wxDocManager::Initialize()
     return true;
 }
 
+wxString wxDocManager::GetLastDirectory() const
+{
+    // use the system-dependent default location for the document files if
+    // we're being opened for the first time
+    if ( m_lastDirectory.empty() )
+    {
+        wxDocManager * const self = const_cast<wxDocManager *>(this);
+        self->m_lastDirectory = wxStandardPaths::Get().GetAppDocumentsDir();
+    }
+
+    return m_lastDirectory;
+}
+
 wxFileHistory *wxDocManager::OnCreateFileHistory()
 {
     return new wxFileHistory;
@@ -1490,7 +1508,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     wxWindow* parent = wxFindSuitableParent();
 
     wxString pathTmp = wxFileSelectorEx(_("Open File"),
-                                        m_lastDirectory,
+                                        GetLastDirectory(),
                                         wxEmptyString,
                                         &FilterIndex,
                                         descrBuf,
@@ -1514,7 +1532,8 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
             path = wxEmptyString;
             return NULL;
         }
-        m_lastDirectory = wxPathOnly(pathTmp);
+
+        SetLastDirectory(wxPathOnly(pathTmp));
 
         path = pathTmp;
 

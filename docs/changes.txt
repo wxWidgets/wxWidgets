@@ -328,6 +328,7 @@ All:
 - Added wxSHUTDOWN_LOGOFF and wxSHUTDOWN_FORCE wxShutdown() flags (troelsk).
 - Added wxSocket::ShutdownOutput().
 - Handle exceptions thrown from overridden wxView::OnCreate() gracefully.
+- Added wxStandardPaths::GetAppDocumentsDir().
 
 All (Unix):
 
