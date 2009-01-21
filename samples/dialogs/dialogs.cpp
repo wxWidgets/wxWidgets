@@ -148,7 +148,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_MULTI_CHOICE,                  MyFrame::MultiChoice)
 #endif // wxUSE_CHOICEDLG
 
+#if wxUSE_REARRANGECTRL
     EVT_MENU(DIALOGS_REARRANGE,                     MyFrame::Rearrange)
+#endif // wxUSE_REARRANGECTRL
 
 #if wxUSE_FILEDLG
     EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
@@ -174,7 +176,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_MODELESS,                      MyFrame::ModelessDlg)
     EVT_MENU(DIALOGS_CENTRE_SCREEN,                 MyFrame::DlgCenteredScreen)
     EVT_MENU(DIALOGS_CENTRE_PARENT,                 MyFrame::DlgCenteredParent)
+#if wxUSE_MINIFRAME
     EVT_MENU(DIALOGS_MINIFRAME,                     MyFrame::MiniFrame)
+#endif // wxUSE_MINIFRAME
     EVT_MENU(DIALOGS_ONTOP,                         MyFrame::DlgOnTop)
 
 #if wxUSE_STARTUP_TIPS
@@ -299,7 +303,9 @@ bool MyApp::OnInit()
         choices_menu->Append(DIALOGS_MULTI_CHOICE,  _T("M&ultiple choice\tCtrl-U"));
     #endif // wxUSE_CHOICEDLG
 
+    #if wxUSE_REARRANGECTRL
         choices_menu->Append(DIALOGS_REARRANGE,  _T("&Rearrange dialog\tCtrl-R"));
+    #endif // wxUSE_REARRANGECTRL
 
     #if USE_COLOURDLG_GENERIC || USE_FONTDLG_GENERIC
         choices_menu->AppendSeparator();
@@ -417,7 +423,9 @@ bool MyApp::OnInit()
     dialogs_menu->AppendCheckItem(DIALOGS_MODELESS, _T("Mode&less dialog\tCtrl-Z"));
     dialogs_menu->Append(DIALOGS_CENTRE_SCREEN, _T("Centered on &screen\tShift-Ctrl-1"));
     dialogs_menu->Append(DIALOGS_CENTRE_PARENT, _T("Centered on &parent\tShift-Ctrl-2"));
+#if wxUSE_MINIFRAME
     dialogs_menu->Append(DIALOGS_MINIFRAME, _T("&Mini frame"));
+#endif // wxUSE_MINIFRAME
     dialogs_menu->Append(DIALOGS_ONTOP, _T("Dialog staying on &top"));
     menuDlg->Append(wxID_ANY, _T("&Generic dialogs"), dialogs_menu);
 
@@ -823,6 +831,7 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
 }
 #endif // wxUSE_CHOICEDLG
 
+#if wxUSE_REARRANGECTRL
 // custom rearrange dialog: it adds the possibility to rename an item to the
 // base class functionality
 class MyRearrangeDialog : public wxRearrangeDialog
@@ -1047,6 +1056,7 @@ void MyFrame::Rearrange(wxCommandEvent& WXUNUSED(event))
 
     wxLogMessage("The columns order now is:%s", columns);
 }
+#endif // wxUSE_REARRANGECTRL
 
 #if wxUSE_FILEDLG
 
@@ -1394,6 +1404,7 @@ void MyFrame::DlgCenteredParent(wxCommandEvent& WXUNUSED(event))
     dlg.ShowModal();
 }
 
+#if wxUSE_MINIFRAME
 void MyFrame::MiniFrame(wxCommandEvent& WXUNUSED(event))
 {
     wxFrame *frame = new wxMiniFrame(this, wxID_ANY, _T("Mini frame"),
@@ -1411,6 +1422,7 @@ void MyFrame::MiniFrame(wxCommandEvent& WXUNUSED(event))
     frame->CentreOnParent();
     frame->Show();
 }
+#endif // wxUSE_MINIFRAME
 
 void MyFrame::DlgOnTop(wxCommandEvent& WXUNUSED(event))
 {
@@ -1536,12 +1548,14 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
 
     wxFlexGridSizer *grid_sizer = new wxFlexGridSizer( 2, 5, 5 );
 
+#if wxUSE_LISTBOX
     wxListBox *listbox = new wxListBox( this, ID_LISTBOX );
     listbox->Append( "String 1" );
     listbox->Append( "String 2" );
     listbox->Append( "String 3" );
     listbox->Append( "String 4" );
     grid_sizer->Add( listbox );
+#endif // wxUSE_LISTBOX
 
     grid_sizer->Add( new wxCheckBox( this, ID_CATCH_LISTBOX_DCLICK, "Catch DoubleClick from wxListBox" ), 0, wxALIGN_CENTRE_VERTICAL );
 
