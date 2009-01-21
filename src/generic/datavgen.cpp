@@ -486,18 +486,13 @@ public:
     void Collapse( unsigned int row ) { OnCollapsing( row ); }
     bool IsExpanded( unsigned int row ) const;
 
-    bool EnableDragSource( const wxDataFormat &format )
-    {
-        m_dragFormat = format;
-        m_dragEnabled = format != wxDF_INVALID;
-        return true;
-    }
-    bool EnableDropTarget( const wxDataFormat &format )
-    {
-        m_dropFormat = format;
-        m_dropEnabled = format != wxDF_INVALID;
-        return true;
-    }
+    bool EnableDragSource( const wxDataFormat &format );
+    bool EnableDropTarget( const wxDataFormat &format );
+
+    wxDragResult OnDragOver( wxDataFormat format, wxCoord x, wxCoord y, wxDragResult def );
+    bool OnDrop( wxDataFormat format, wxCoord x, wxCoord y );
+    wxDragResult OnData( wxDataFormat format, wxCoord x, wxCoord y, wxDragResult def );
+    void OnLeave();
 
 private:
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row ) const;
@@ -1137,6 +1132,51 @@ wxDataViewIconTextRenderer::GetValueFromEditorCtrl(wxControl* WXUNUSED(editor),
 }
 
 //-----------------------------------------------------------------------------
+// wxDataViewDropTarget
+//-----------------------------------------------------------------------------
+
+class wxDataViewDropTarget: public wxDropTarget
+{
+public:
+    wxDataViewDropTarget( wxDataObject *obj, wxDataViewMainWindow *win ) :
+        wxDropTarget( obj )
+    {
+        m_win = win;
+    }
+
+    virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
+        {   
+           wxDataFormat format = GetMatchingPair();
+           if (format == wxDF_INVALID)
+              return wxDragNone;
+           return m_win->OnDragOver( format, x, y, def); 
+        }
+        
+    virtual bool OnDrop( wxCoord x, wxCoord y )
+        { 
+           wxDataFormat format = GetMatchingPair();
+           if (format == wxDF_INVALID)
+              return false;
+           return m_win->OnDrop( format, x, y ); 
+        }
+        
+    virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def )
+        { 
+           wxDataFormat format = GetMatchingPair();
+           if (format == wxDF_INVALID)
+              return wxDragNone;
+           if (!GetData())
+              return wxDragNone;
+           return m_win->OnData( format, x, y, def );
+        }
+        
+    virtual void OnLeave()
+        { m_win->OnLeave(); }
+
+    wxDataViewMainWindow   *m_win;
+};
+
+//-----------------------------------------------------------------------------
 // wxDataViewRenameTimer
 //-----------------------------------------------------------------------------
 
@@ -1225,6 +1265,117 @@ wxDataViewMainWindow::~wxDataViewMainWindow()
 {
     DestroyTree();
     delete m_renameTimer;
+}
+
+bool wxDataViewMainWindow::EnableDragSource( const wxDataFormat &format )
+{
+    m_dragFormat = format;
+    m_dragEnabled = format != wxDF_INVALID;
+    
+    return true;
+}
+    
+bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
+{
+    m_dropFormat = format;
+    m_dropEnabled = format != wxDF_INVALID;
+    
+    if (m_dropEnabled)
+        SetDropTarget( new wxDataViewDropTarget( new wxCustomDataObject( format ), this ) );
+    
+    return true;
+}
+
+wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x, wxCoord y, wxDragResult def )
+{
+    int xx = x;
+    int yy = y;
+    m_owner->CalcUnscrolledPosition( xx, yy, &xx, &yy );
+    unsigned int row = GetLineAt( yy );
+
+    if ((row >= GetRowCount()) || (yy > GetEndOfLastCol()))
+        return wxDragNone;
+
+    wxDataViewItem item = GetItemByRow( row );
+    
+    wxDataViewModel *model = GetOwner()->GetModel();
+    
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetItem( item );
+    event.SetModel( model );
+    event.SetDataFormat( format );
+    if (!m_owner->HandleWindowEvent( event ))
+        return wxDragNone;
+
+    if (!event.IsAllowed())
+        return wxDragNone;
+    
+    return def;
+}
+
+bool wxDataViewMainWindow::OnDrop( wxDataFormat format, wxCoord x, wxCoord y )
+{
+    int xx = x;
+    int yy = y;
+    m_owner->CalcUnscrolledPosition( xx, yy, &xx, &yy );
+    unsigned int row = GetLineAt( yy );
+
+    if ((row >= GetRowCount()) || (yy > GetEndOfLastCol()))
+        return false;
+
+    wxDataViewItem item = GetItemByRow( row );
+    
+    wxDataViewModel *model = GetOwner()->GetModel();
+    
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetItem( item );
+    event.SetModel( model );
+    event.SetDataFormat( format );
+    if (!m_owner->HandleWindowEvent( event ))
+        return false;
+
+    if (!event.IsAllowed())
+        return false;
+    
+    return true;
+}
+
+wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoord y, wxDragResult def )
+{
+    int xx = x;
+    int yy = y;
+    m_owner->CalcUnscrolledPosition( xx, yy, &xx, &yy );
+    unsigned int row = GetLineAt( yy );
+
+    if ((row >= GetRowCount()) || (yy > GetEndOfLastCol()))
+        return wxDragNone;
+
+    wxDataViewItem item = GetItemByRow( row );
+    
+    wxDataViewModel *model = GetOwner()->GetModel();
+    
+    wxCustomDataObject *obj = (wxCustomDataObject *) GetDropTarget()->GetDataObject();
+
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, m_owner->GetId() );
+    event.SetEventObject( m_owner );
+    event.SetItem( item );
+    event.SetModel( model );
+    event.SetDataFormat( format );
+    event.SetDataSize( obj->GetSize() );
+    event.SetDataBuffer( obj->GetData() );
+    if (!m_owner->HandleWindowEvent( event ))
+        return wxDragNone;
+
+    if (!event.IsAllowed())
+        return wxDragNone;
+
+    return def;
+}
+
+void wxDataViewMainWindow::OnLeave()
+{
 }
 
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
