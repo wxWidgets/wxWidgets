@@ -4022,12 +4022,12 @@ void wxWindowGTK::SetDropTarget( wxDropTarget *dropTarget )
 
     GtkWidget *dnd_widget = GetConnectWidget();
 
-    if (m_dropTarget) m_dropTarget->UnregisterWidget( dnd_widget );
+    if (m_dropTarget) m_dropTarget->GtkUnregisterWidget( dnd_widget );
 
     if (m_dropTarget) delete m_dropTarget;
     m_dropTarget = dropTarget;
 
-    if (m_dropTarget) m_dropTarget->RegisterWidget( dnd_widget );
+    if (m_dropTarget) m_dropTarget->GtkRegisterWidget( dnd_widget );
 }
 
 #endif // wxUSE_DRAG_AND_DROP

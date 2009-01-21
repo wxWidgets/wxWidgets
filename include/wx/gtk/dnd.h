@@ -36,12 +36,13 @@ public:
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool GetData();
 
-  // implementation
 
-    GdkAtom GetMatchingPair();
+    // implementation
+  
+    GdkAtom GtkGetMatchingPair();
 
-    void RegisterWidget( GtkWidget *widget );
-    void UnregisterWidget( GtkWidget *widget );
+    void GtkRegisterWidget( GtkWidget *widget );
+    void GtkUnregisterWidget( GtkWidget *widget );
 
     GdkDragContext     *m_dragContext;
     GtkWidget          *m_dragWidget;
@@ -49,10 +50,10 @@ public:
     guint               m_dragTime;
     bool                m_firstMotion;     // gdk has no "gdk_drag_enter" event
 
-    void SetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
-    void SetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
-    void SetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
-    void SetDragTime( guint time ) { m_dragTime = time; }
+    void GtkSetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
+    void GtkSetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
+    void GtkSetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
+    void GtkSetDragTime( guint time ) { m_dragTime = time; }
 };
 
 //-------------------------------------------------------------------------
