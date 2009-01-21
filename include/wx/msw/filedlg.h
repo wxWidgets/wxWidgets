@@ -32,6 +32,10 @@ public:
     virtual void SetPath(const wxString& path);
     virtual void GetPaths(wxArrayString& paths) const;
     virtual void GetFilenames(wxArrayString& files) const;
+#ifndef __WXWINCE__
+    virtual bool SupportsExtraControl() const { return true; }
+#endif // __WXWINCE__
+    void MSWOnInitDialogHook(WXHWND hwnd);
 
     virtual int ShowModal();
 

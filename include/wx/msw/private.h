@@ -605,12 +605,23 @@ private:
 class GlobalPtr
 {
 public:
+    // default ctor, call Init() later
+    GlobalPtr()
+    {
+        m_hGlobal = NULL;
+    }
+
     // allocates a block of given size
-    GlobalPtr(size_t size, unsigned flags = GMEM_MOVEABLE)
+    void Init(size_t size, unsigned flags = GMEM_MOVEABLE)
     {
         m_hGlobal = ::GlobalAlloc(flags, size);
         if ( !m_hGlobal )
             wxLogLastError(_T("GlobalAlloc"));
+    }
+
+    GlobalPtr(size_t size, unsigned flags = GMEM_MOVEABLE)
+    {
+        Init(size, flags);
     }
 
     ~GlobalPtr()

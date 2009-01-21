@@ -86,6 +86,14 @@ wxFileDialogHookFunction(HWND      hDlg,
 {
     switch ( iMsg )
     {
+        case WM_INITDIALOG:
+            {
+                OPENFILENAME* ofn = reinterpret_cast<OPENFILENAME *>(lParam);
+                reinterpret_cast<wxFileDialog *>(ofn->lCustData)
+                    ->MSWOnInitDialogHook((WXHWND)hDlg);
+            }
+            break;
+
         case WM_NOTIFY:
             {
                 OFNOTIFY *pNotifyCode = reinterpret_cast<OFNOTIFY *>(lParam);
@@ -360,6 +368,15 @@ static bool ShowCommFileDialog(OPENFILENAME *of, long style)
     return true;
 }
 
+void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
+{
+   SetHWND(hwnd);
+
+   CreateExtraControl();
+
+   SetHWND(NULL);
+}
+
 int wxFileDialog::ShowModal()
 {
     HWND hWnd = 0;
@@ -385,7 +402,7 @@ int wxFileDialog::ShowModal()
         in the upper left of the frame, it does not center
         automatically.
     */
-    if (m_bMovedWindow) // we need these flags.
+    if (m_bMovedWindow || HasExtraControlCreator()) // we need these flags.
     {
         msw_flags |= OFN_EXPLORER|OFN_ENABLEHOOK;
 #ifndef __WXWINCE__
@@ -420,6 +437,37 @@ int wxFileDialog::ShowModal()
     of.lpstrTitle        = m_message.wx_str();
     of.lpstrFileTitle    = titleBuffer;
     of.nMaxFileTitle     = wxMAXFILE + 1 + wxMAXEXT;
+
+#ifndef __WXWINCE__
+    GlobalPtr hgbl;
+    if ( HasExtraControlCreator() )
+    {
+        msw_flags |= OFN_ENABLETEMPLATEHANDLE;
+
+        hgbl.Init(256, GMEM_ZEROINIT);
+        GlobalPtrLock hgblLock(hgbl);
+        LPDLGTEMPLATE lpdt = static_cast<LPDLGTEMPLATE>(hgblLock.Get());
+
+        // Define a dialog box.
+
+        lpdt->style = DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS;
+        lpdt->cdit = 0;         // Number of controls
+        lpdt->x = 0;
+        lpdt->y = 0;
+
+        wxSize extra_size = GetExtraControlSize();
+        // setting cx doesn't change the width of the dialog
+        lpdt->cx = extra_size.GetWidth();
+        // Dividing by 2 gives expected height on WinXP and Wine.
+        // I don't know why (MW).
+        lpdt->cy = extra_size.GetHeight() / 2;
+
+        // after the DLGTEMPLATE there are 3 additional WORDs for dialog menu,
+        // class and title, all three set to zeros.
+
+        of.hInstance = (HINSTANCE)lpdt;
+    }
+#endif // __WXWINCE__
 
     // Convert forward slashes to backslashes (file selector doesn't like
     // forward slashes) and also squeeze multiple consecutive slashes into one

@@ -120,8 +120,6 @@ public:
     // create the window containing the extra controls we want to show in it
     typedef wxWindow *(*ExtraControlCreatorFunction)(wxWindow*);
 
-    // extra controls are currently supported in GTK and generic versions
-    // only currently
     virtual bool SupportsExtraControl() const { return false; }
 
     bool SetExtraControlCreator(ExtraControlCreatorFunction WXUNUSED(c));
@@ -155,6 +153,11 @@ protected:
 
     // returns true if control is created (if it already exists returns false)
     bool CreateExtraControl();
+    // return true if SetExtraControlCreator() was called
+    bool HasExtraControlCreator() const
+        { return m_extraControlCreator != NULL; }
+    // get the size of the extra control by creating and deleting it
+    wxSize GetExtraControlSize();
 
 private:
     ExtraControlCreatorFunction m_extraControlCreator;
