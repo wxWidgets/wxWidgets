@@ -257,7 +257,7 @@ wxString wxStandardPaths::GetAppDir()
     {
         lastdir = fn.GetDirs().Last();
         lastdir.MakeLower();
-        if ( lastdir.Matches(_T("debug*")) || lastdir.Matches(_T("vc_msw*")) )
+        if ( lastdir.Matches(_T("debug*")) || lastdir.Matches(_T("vc*msw*")) )
             fn.RemoveLastDir();
     }
 #endif // __WXDEBUG__
