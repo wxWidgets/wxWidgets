@@ -245,9 +245,11 @@ public:
     int GetWidth() const;
 
     /**
+        Layouts the cell.
+
         This method performs two actions:
         -# adjusts the cell's width according to the fact that maximal possible
-           width is @e w. (this has sense when working with horizontal lines, tables etc.)
+           width is @e w (this has sense when working with horizontal lines, tables etc.)
         -# prepares layout (=fill-in m_PosX, m_PosY (and sometimes m_Height) members)
            based on actual width @e w
 
