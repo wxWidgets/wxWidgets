@@ -138,39 +138,40 @@ public:
 
     /**
         Copy the entire contents of the key recursively to another location
-        using the name.
+        using the name. Returns @true if successful.
     */
     bool Copy(const wxString& szNewName);
     /**
         Copy the entire contents of the key recursively to another location
-        using the key.
+        using the key. Returns @true if successful.
     */
     bool Copy(wxRegKey& keyDst);
     
     /**
         Copy the value to another key, possibly changing its name. By default
-        it will remain the same.
+        it will remain the same. Returns @true if successful.
     */
     bool CopyValue(const wxString& szValue, wxRegKey& keyDst,    
                   const wxString& szNewName = wxEmptyString);
     /**
-        Creates the key. Will fail if the key already exists and @a bOkIfExists is
-        @false.
+        Creates the key. Will fail if the key already exists and @a bOkIfExists
+        is @false. Returns @true if successful.
     */
     bool Create(bool bOkIfExists = true);
 
     /**
-        Deletes the subkey with all of its subkeys/values recursively.
+        Deletes the subkey with all its subkeys and values recursively.
     */
     void DeleteKey(const wxString& szKey);
 
     /**
-        Deletes this key and all of its subkeys and values recursively.
+        Deletes this key and all its subkeys and values recursively.
     */
     void DeleteSelf();
 
     /**
-        Deletes the named value.
+        Deletes the named value or use an empty string argument to remove the 
+        default value of the key.
     */
     void DeleteValue(const wxString& szKey);
 
@@ -183,26 +184,27 @@ public:
         Write the contents of this key and all its subkeys to the given file.
         (The file will not be overwritten; it's an error if it already exists.)
         Note that we export the key in REGEDIT4 format, not RegSaveKey() binary
-        format nor the newer REGEDIT5.
+        format nor the newer REGEDIT5. Returns @true if successful.
     */
     bool Export(const wxString& filename) const;
     /**
         Write the contents of this key and all its subkeys to the opened stream.
+        Returns @true if successful.
     */
     bool Export(wxOutputStream& ostr) const;
     
     /**
-        Gets the first key.
+        Gets the first key. Returns @true if successful.
     */
     bool GetFirstKey(wxString& strKeyName, long& lIndex);
 
     /**
-        Gets the first value of this key.
+        Gets the first value of this key. Returns @true if successful.
     */
     bool GetFirstValue(wxString& strValueName, long& lIndex);
 
     /**
-        Gets information about the key.
+        Gets information about the key. Returns @true if successful.
 
         @param pnSubKeys
             The number of subkeys.
@@ -222,12 +224,12 @@ public:
     wxString GetName(bool bShortPrefix = true) const;
 
     /**
-        Gets the next key.
+        Gets the next key. Returns @true if successful.
     */
     bool GetNextKey(wxString& strKeyName, long& lIndex) const;
 
     /**
-        Gets the next key value for this key.
+        Gets the next key value for this key. Returns @true if successful.
     */
     bool GetNextValue(wxString& strValueName, long& lIndex) const;
 
@@ -262,7 +264,7 @@ public:
     bool IsEmpty() const;
 
     /**
-        Returns true if the value contains a number.
+        Returns @true if the value contains a number.
     */
     bool IsNumericValue(const wxString& szValue) const;
 
@@ -272,11 +274,16 @@ public:
     bool IsOpened() const;
 
     /**
-        Explicitly opens the key. This method also allows the key to be opened in
-        read-only mode by passing wxRegKey::Read instead of default
-        wxRegKey::Write parameter.
+        Explicitly opens the key. This method also allows the key to be opened
+        in read-only mode by passing wxRegKey::Read instead of default
+        wxRegKey::Write parameter. Returns @true if successful.
     */
     bool Open(AccessMode mode = Write);
+
+    /**
+        Assignment operator to set the default value of the key.
+    */
+    wxRegKey& operator=(const wxString& strValue);
 
     /**
         Return the default value of the key.
@@ -284,32 +291,32 @@ public:
     wxString QueryDefaultValue() const;
 
     /**
-        Retrieves the raw string value.
+        Retrieves the raw string value. Returns @true if successful.
     */
     bool QueryRawValue(const wxString& szValue, wxString& strValue) const;
 
     /**
-        Retrieves the raw or expanded string value.
+        Retrieves the raw or expanded string value. Returns @true if successful.
     */
     bool QueryValue(const wxString& szValue, wxString& strValue, bool raw) const;
 
     /**
-        Retrieves the numeric value.
+        Retrieves the numeric value. Returns @true if successful.
     */
     bool QueryValue(const wxString& szValue, long* plValue) const;
 
     /**
-        Retrieves the binary structure.
+        Retrieves the binary structure. Returns @true if successful.
     */
     bool QueryValue(const wxString& szValue, wxMemoryBuffer& buf) const;
 
     /**
-        Renames the key.
+        Renames the key. Returns @true if successful.
     */
     bool Rename(const wxString& szNewName);
 
     /**
-        Renames a value.
+        Renames a value. Returns @true if successful.
     */
     bool RenameValue(const wxString& szValueOld,
                      const wxString& szValueNew);
@@ -339,18 +346,18 @@ public:
     void SetName(const wxRegKey& keyParent, const wxString& strKey);
     
     /**
-        Sets the given @a szValue which must be numeric.
-        If the value doesn't exist, it is created.
+        Sets the given @a szValue which must be numeric. If the value doesn't
+        exist, it is created. Returns @true if successful.
     */
     bool SetValue(const wxString& szValue, long lValue);
     /**
-        Sets the given @a szValue which must be string.
-        If the value doesn't exist, it is created.
+        Sets the given @a szValue which must be string. If the value doesn't
+        exist, it is created. Returns @true if successful.
     */
     bool SetValue(const wxString& szValue, const wxString& strValue);
     /**
-        Sets the given @a szValue which must be binary.
-        If the value doesn't exist, it is created.
+        Sets the given @a szValue which must be binary. If the value doesn't 
+        exist, it is created. Returns @true if successful.
     */
     bool SetValue(const wxString& szValue, const wxMemoryBuffer& buf);
 };
