@@ -159,22 +159,19 @@ bool wxURI::IsEscape(const wxChar*& uri)
 // ---------------------------------------------------------------------------
 wxString wxURI::GetUser() const
 {
-      size_t dwPasswordPos = m_userinfo.find(':');
-
-      if (dwPasswordPos == wxString::npos)
-          dwPasswordPos = 0;
-          
-      return m_userinfo(0, dwPasswordPos);
+    // if there is no colon at all, find() returns npos and this method returns
+    // the entire string which is correct as it means that password was omitted
+    return m_userinfo(0, m_userinfo.find(':'));
 }
 
 wxString wxURI::GetPassword() const
 {
-      size_t dwPasswordPos = m_userinfo.find(':');
+      size_t posColon = m_userinfo.find(':');
 
-      if (dwPasswordPos == wxString::npos)
-          return wxT("");
-      else
-          return m_userinfo(dwPasswordPos+1, m_userinfo.length() + 1);    
+      if ( posColon == wxString::npos )
+          return "";
+
+      return m_userinfo(posColon + 1, wxString::npos);
 }
 
 // ---------------------------------------------------------------------------

@@ -101,6 +101,7 @@ All:
 - Corrected Serbian locale name (Cody Precord).
 - Fix wxURL::GetInputStream() for URLs with special characters in credentials
   (Robert Wruck).
+- Fix wxURI::GetUser() for URIs without password.
 
 All (GUI):
 
