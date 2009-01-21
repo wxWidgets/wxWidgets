@@ -159,6 +159,16 @@ public:
 
     For more information, see the @ref overview_richtextctrl.
 
+    @beginStyleTable
+    @style{wxRE_CENTRE_CARET}
+           The control will try to keep the caret line centred vertically while editing.
+           wxRE_CENTER_CARET is a synonym for this style.
+    @style{wxRE_MULTILINE}
+           The control will be multiline (mandatory).
+    @style{wxRE_READONLY}
+           The control will not be editable.
+    @endStyleTable
+
     @library{wxrichtext}
     @category{richtext}
     @appearance{richtextctrl.png}
