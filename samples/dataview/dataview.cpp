@@ -807,8 +807,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_music_model = new MyMusicModel;
     m_musicCtrl->AssociateModel( m_music_model.get() );
 
-    m_musicCtrl->EnableDragSource( wxDF_TEXT );
-    m_musicCtrl->EnableDropTarget( wxDF_TEXT );
+    m_musicCtrl->EnableDragSource( wxDF_UNICODETEXT );
+    m_musicCtrl->EnableDropTarget( wxDF_UNICODETEXT );
 
     wxDataViewTextRenderer *tr = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_INERT );
     wxDataViewColumn *column0 = new wxDataViewColumn( wxT("title"), tr, 0, 200, wxALIGN_LEFT,
@@ -1182,7 +1182,7 @@ void MyFrame::OnDropPossible( wxDataViewEvent &event )
     if (m_music_model->IsContainer( item ) )
         event.Veto();
 
-    if (event.GetDataFormat() != wxDF_TEXT)
+    if (event.GetDataFormat() != wxDF_UNICODETEXT)
         event.Veto();
 }
 
@@ -1197,7 +1197,7 @@ void MyFrame::OnDrop( wxDataViewEvent &event )
         return;
     }
 
-    if (event.GetDataFormat() != wxDF_TEXT)
+    if (event.GetDataFormat() != wxDF_UNICODETEXT)
     {
         event.Veto();
         return;
