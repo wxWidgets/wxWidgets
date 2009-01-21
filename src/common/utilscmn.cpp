@@ -1037,9 +1037,13 @@ static bool DoLaunchDefaultBrowserHelper(const wxString& urlOrig, int flags)
 
         if ( uri.GetScheme() == "file" )
         {
+            // TODO: extract URLToFileName() to some always compiled in
+            //       function
+#if wxUSE_FILESYSTEM
             // ShellExecuteEx() doesn't like the "file" scheme when opening local files; 
             // remove it
             url = wxFileSystem::URLToFileName(url).GetFullPath();
+#endif // wxUSE_FILESYSTEM
         }
     }
 
