@@ -430,6 +430,14 @@ fi
 
 WX_ARG_DISABLE(all-features,[  --disable-all-features  disable all optional features to build minimal library], wxUSE_ALL_FEATURES)
 
+if test "$wxUSE_ALL_FEATURES" = "no"; then
+    dnl this is a bit ugly but currently we have no choice but to manually
+    dnl reset all the options with default value of auto if all features are to
+    dnl be disabled because we can't have an option with default value of
+    dnl "auto-or-no-if-wxUSE_ALL_FEATURES-is-disabled"
+    DEFAULT_wxUSE_MEDIACTRL=no
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl port selection
 dnl ---------------------------------------------------------------------------
