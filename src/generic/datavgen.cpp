@@ -3691,8 +3691,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size,
            long style, const wxValidator& validator )
 {
-    if ( (style & wxBORDER_MASK) == 0)
-        style |= wxBORDER_SUNKEN;
+//    if ( (style & wxBORDER_MASK) == 0)
+//        style |= wxBORDER_SUNKEN;
 
     Init();
 
@@ -3722,6 +3722,11 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     SetSizer( sizer );
 
     return true;
+}
+
+wxBorder wxDataViewCtrl::GetDefaultBorder() const
+{
+    return wxBORDER_THEME;
 }
 
 #ifdef __WXMSW__

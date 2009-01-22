@@ -453,6 +453,8 @@ public:
     virtual bool EnableDragSource( const wxDataFormat &format );
     virtual bool EnableDropTarget( const wxDataFormat &format );
 
+    virtual wxBorder GetDefaultBorder() const;
+
 protected:
     virtual int GetSelections( wxArrayInt & sel ) const;
     virtual void SetSelections( const wxArrayInt & sel );
