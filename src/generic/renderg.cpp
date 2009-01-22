@@ -349,6 +349,9 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
         dc.GetTextExtent( label, &tw, &th, &td);
         labelWidth += tw;
         y = rect.y + wxMax(0, (rect.height - (th+td)) / 2);
+#ifdef __WXGTK__
+        y += 2; // No idea why.
+#endif
 
         // truncate and add an ellipsis (...) if the text is too wide.
         int targetWidth = rect.width - arrowSpace - bmpWidth - 2*margin;

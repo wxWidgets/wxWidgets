@@ -554,7 +554,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         if (i == count-1)
         {
             colWidth = wxMax( colWidth, vw - xpos );
-            state |= wxCONTROL_EXPANDED;
+            state |= wxCONTROL_DIRTY;
         }
 #endif
 

@@ -54,6 +54,9 @@ public:
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL);
 
+    virtual int GetHeaderButtonHeight(wxWindow *win);
+
+
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
@@ -173,7 +176,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     GtkWidget *button = wxGTKPrivate::GetHeaderButtonWidget();
     if (flags & wxCONTROL_SPECIAL)
         button = wxGTKPrivate::GetHeaderButtonWidgetFirst();
-    if (flags & wxCONTROL_EXPANDED)
+    if (flags & wxCONTROL_DIRTY)
         button = wxGTKPrivate::GetHeaderButtonWidgetLast();
 
     GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
@@ -204,9 +207,20 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         "button",
         dc.LogicalToDeviceX(rect.x) - x_diff, rect.y, rect.width, rect.height
     );
-
+ 
     return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
+
+int wxRendererGTK::GetHeaderButtonHeight(wxWindow *WXUNUSED(win))
+{
+    GtkWidget *button = wxGTKPrivate::GetHeaderButtonWidget();
+    
+    GtkRequisition req;
+    GTK_WIDGET_GET_CLASS(button)->size_request(button, &req);
+    
+    return req.height;
+}
+
 
 // draw a ">" or "v" button
 void
