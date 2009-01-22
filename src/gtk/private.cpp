@@ -116,12 +116,9 @@ GtkWidget *GetEntryWidget()
 static GtkWidget *s_first_button = NULL;
 static GtkWidget *s_other_button = NULL;
 static GtkWidget *s_last_button = NULL;
-    
-GtkWidget *GetHeaderButtonWidgetFirst()
-{
 
-    if ( !s_first_button )
-    {
+static void CreateHeaderButtona()
+{
         // Get the dummy tree widget, give it a column, and then use the
         // widget in the column header for the rendering code.
         GtkWidget* treewidget = GetTreeWidget();
@@ -137,31 +134,28 @@ GtkWidget *GetHeaderButtonWidgetFirst()
         column = gtk_tree_view_column_new();
         gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
         s_last_button = column->button;
-    }
+}
+    
+GtkWidget *GetHeaderButtonWidgetFirst()
+{
+    if (!s_first_button)
+      CreateHeaderButtons();
 
     return s_first_button;
 }
 
+GtkWidget *GetHeaderButtonWidgetLast()
+{
+    if (!s_last_button)
+      CreateHeaderButtons();
+
+    return s_last_button;
+}
+
 GtkWidget *GetHeaderButtonWidget()
 {
-    if ( !s_other_button )
-    {
-        // Get the dummy tree widget, give it a column, and then use the
-        // widget in the column header for the rendering code.
-        GtkWidget* treewidget = GetTreeWidget();
-        
-        GtkTreeViewColumn *column = gtk_tree_view_column_new();
-        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
-        s_first_button = column->button;
-        
-        column = gtk_tree_view_column_new();
-        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
-        s_other_button = column->button;
-        
-        column = gtk_tree_view_column_new();
-        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
-        s_last_button = column->button;
-    }
+    if (!s_other_button)
+      CreateHeaderButtons();
 
     return s_other_button;
 }

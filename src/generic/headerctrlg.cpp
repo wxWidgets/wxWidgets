@@ -133,11 +133,14 @@ void wxHeaderCtrl::DoScrollHorz(int dx)
 
 wxSize wxHeaderCtrl::DoGetBestSize() const
 {
+    wxWindow *win = GetParent();
+    int height = wxRendererNative::Get().GetHeaderButtonHeight( win );
+
     // the vertical size is rather arbitrary but it looks better if we leave
     // some space around the text
     const wxSize size(IsEmpty() ? wxHeaderCtrlBase::DoGetBestSize().x
                                 : GetColEnd(GetColumnCount() - 1),
-                      (7*GetCharHeight())/4);
+                                height ); // (7*GetCharHeight())/4);
     CacheBestSize(size);
     return size;
 }
@@ -492,6 +495,11 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     int w, h;
     GetClientSize(&w, &h);
+    
+#ifdef __WXGTK__
+    int vw;
+    GetVirtualSize(&vw, NULL);
+#endif
 
     wxAutoBufferedPaintDC dc(this);
 
@@ -510,7 +518,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         if ( col.IsHidden() )
             continue;
 
-        const int colWidth = col.GetWidth();
+        int colWidth = col.GetWidth();
 
         wxHeaderSortIconType sortArrow;
         if ( col.IsSortKey() )
@@ -533,11 +541,22 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         {
             state = wxCONTROL_DISABLED;
         }
+        
+        if (i == 0)
+           state |= wxCONTROL_SPECIAL;
 
         wxHeaderButtonParams params;
         params.m_labelText = col.GetTitle();
         params.m_labelBitmap = col.GetBitmap();
         params.m_labelAlignment = col.GetAlignment();
+        
+#ifdef __WXGTK__
+        if (i == count-1)
+        {
+            colWidth = wxMax( colWidth, vw - xpos );
+            state |= wxCONTROL_EXPANDED;
+        }
+#endif
 
         wxRendererNative::Get().DrawHeaderButton
                                 (

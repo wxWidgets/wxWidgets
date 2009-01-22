@@ -173,6 +173,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     GtkWidget *button = wxGTKPrivate::GetHeaderButtonWidget();
     if (flags & wxCONTROL_SPECIAL)
         button = wxGTKPrivate::GetHeaderButtonWidgetFirst();
+    if (flags & wxCONTROL_EXPANDED)
+        button = wxGTKPrivate::GetHeaderButtonWidgetLast();
 
     GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
     wxASSERT_MSG( gdk_window,
