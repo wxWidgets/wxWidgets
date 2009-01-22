@@ -3219,16 +3219,18 @@ void wxPropertyGrid::FreeEditors()
     // Do not free editors immediately if processing events
     if ( m_wndEditor2 )
     {
-        m_wndEditor2->PopEventHandler(true);
+        wxEvtHandler* handler = m_wndEditor2->PopEventHandler(false);
         m_wndEditor2->Hide();
+        wxPendingDelete.Append( handler );
         wxPendingDelete.Append( m_wndEditor2 );
         m_wndEditor2 = NULL;
     }
 
     if ( m_wndEditor )
     {
-        m_wndEditor->PopEventHandler(true);
+        wxEvtHandler* handler = m_wndEditor->PopEventHandler(false);
         m_wndEditor->Hide();
+        wxPendingDelete.Append( handler );
         wxPendingDelete.Append( m_wndEditor );
         m_wndEditor = NULL;
     }
