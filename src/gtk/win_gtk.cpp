@@ -374,15 +374,25 @@ void wxPizza::scroll(int dx, int dy)
 void wxPizza::get_border_widths(int& x, int& y)
 {
     x = y = 0;
+    if (m_border_style == 0)
+        return;
+        
 #ifndef __WXUNIVERSAL__
     if (m_border_style & wxBORDER_SIMPLE)
         x = y = 1;
-    else if (m_border_style)
+    else if (m_is_scrollable || (m_border_style & wxBORDER_THEME))
+    {
+        GtkWidget *style_widget = wxGTKPrivate::GetTreeWidget();
+            
+        if (style_widget->style)
+        {
+            x = style_widget->style->xthickness;
+            y = style_widget->style->ythickness;
+        }
+    }
+    else 
     {
         GtkWidget *style_widget = wxGTKPrivate::GetEntryWidget();
-        
-        if (m_is_scrollable)
-            style_widget = wxGTKPrivate::GetTreeWidget();
             
         if (style_widget->style)
         {
