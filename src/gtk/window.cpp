@@ -2122,8 +2122,11 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
         GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
 
+        // We should accept the native look
+#if 0   
         GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(m_widget) );
         scroll_class->scrollbar_spacing = 0;
+#endif
 
         // There is a conflict with default bindings at GTK+
         // level between scrolled windows and notebooks both of which want to use
