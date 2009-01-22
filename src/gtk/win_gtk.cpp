@@ -379,11 +379,15 @@ void wxPizza::get_border_widths(int& x, int& y)
         x = y = 1;
     else if (m_border_style)
     {
-        GtkWidget *entry_widget = wxGTKPrivate::GetEntryWidget();
-        if (entry_widget->style)
+        GtkWidget *style_widget = wxGTKPrivate::GetEntryWidget();
+        
+        if (m_is_scrollable)
+            style_widget = wxGTKPrivate::GetTreeWidget();
+            
+        if (style_widget->style)
         {
-            x = entry_widget->style->xthickness;
-            y = entry_widget->style->ythickness;
+            x = style_widget->style->xthickness;
+            y = style_widget->style->ythickness;
         }
     }
 #endif
