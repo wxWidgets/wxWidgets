@@ -497,8 +497,8 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     GetClientSize(&w, &h);
     
 #ifdef __WXGTK__
-    int vw;
-    GetVirtualSize(&vw, NULL);
+//    int vw;
+//    GetVirtualSize(&vw, NULL);
 #endif
 
     wxAutoBufferedPaintDC dc(this);
@@ -553,7 +553,7 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #ifdef __WXGTK__
         if (i == count-1)
         {
-            colWidth = wxMax( colWidth, vw - xpos );
+//            colWidth = wxMax( colWidth, vw - xpos );
             state |= wxCONTROL_DIRTY;
         }
 #endif
