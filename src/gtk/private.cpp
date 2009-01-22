@@ -113,21 +113,48 @@ GtkWidget *GetEntryWidget()
 // This one just gets the button used by the column header. Although it's
 // still a gtk_button the themes will typically differentiate and draw them
 // differently if the button is in a treeview.
-GtkWidget *GetHeaderButtonWidget()
+static GtkWidget *s_first_button = NULL;
+static GtkWidget *s_other_button = NULL;
+    
+GtkWidget *GetHeaderButtonWidgetFirst()
 {
-    static GtkWidget *s_button = NULL;
 
-    if ( !s_button )
+    if ( !s_first_button )
     {
         // Get the dummy tree widget, give it a column, and then use the
         // widget in the column header for the rendering code.
         GtkWidget* treewidget = GetTreeWidget();
+        
         GtkTreeViewColumn *column = gtk_tree_view_column_new();
         gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
-        s_button = column->button;
+        s_first_button = column->button;
+        
+        column = gtk_tree_view_column_new();
+        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+        s_other_button = column->button;
     }
 
-    return s_button;
+    return s_first_button;
+}
+
+GtkWidget *GetHeaderButtonWidget()
+{
+    if ( !s_other_button )
+    {
+        // Get the dummy tree widget, give it a column, and then use the
+        // widget in the column header for the rendering code.
+        GtkWidget* treewidget = GetTreeWidget();
+        
+        GtkTreeViewColumn *column = gtk_tree_view_column_new();
+        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+        s_first_button = column->button;
+        
+        column = gtk_tree_view_column_new();
+        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+        s_other_button = column->button;
+    }
+
+    return s_other_button;
 }
 
 GtkWidget * GetRadioButtonWidget()
