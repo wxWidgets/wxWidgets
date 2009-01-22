@@ -324,13 +324,42 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
 
     const int margin = 5;   // number of pixels to reserve on either side of the label
     int bmpWidth = 0;
-    int txtEnd = 0;
 
     if ( params && params->m_labelBitmap.Ok() )
         bmpWidth = params->m_labelBitmap.GetWidth() + 2;
 
     labelWidth += bmpWidth + 2*margin;
 
+    // draw the bitmap if there is one
+    if ( params && params->m_labelBitmap.Ok() )
+    {
+        int w, h, x, y;
+        w = params->m_labelBitmap.GetWidth();
+        h = params->m_labelBitmap.GetHeight();
+
+        x = margin + rect.x;
+        y = rect.y + wxMax(1, (rect.height - h) / 2);
+ 
+        if (params->m_labelText.empty())
+        {
+            // use the alignment flags
+            switch (params->m_labelAlignment)
+            {
+                default:
+                case wxALIGN_LEFT:
+                    x = rect.x + margin;
+                    break;
+                case wxALIGN_CENTER:
+                    x = rect.x + wxMax(1, (rect.width - arrowSpace - w)/2);
+                    break;
+                case wxALIGN_RIGHT:
+                    x = rect.x + wxMax(1, rect.width - arrowSpace - margin - w);
+                    break;
+            }
+        }
+        dc.DrawBitmap(params->m_labelBitmap, x, y, true);
+    }
+    
     // Draw a label if one is given
     if ( params && !params->m_labelText.empty() )
     {
@@ -381,42 +410,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
                 break;
         }
 
-        dc.DrawText(label, x, y);
-        txtEnd = x + tw + 2;
-    }
-
-    // draw the bitmap if there is one
-    if ( params && params->m_labelBitmap.Ok() )
-    {
-        int w, h, x, y;
-        w = params->m_labelBitmap.GetWidth();
-        h = params->m_labelBitmap.GetHeight();
-
-        y = rect.y + wxMax(1, (rect.height - h) / 2);
-
-        // if there is a text label, then put the bitmap at the end of the label
-        if ( txtEnd != 0 )
-        {
-            x = txtEnd;
-        }
-        // otherwise use the alignment flags
-        else
-        {
-            switch (params->m_labelAlignment)
-            {
-                default:
-                case wxALIGN_LEFT:
-                    x = rect.x + margin;
-                    break;
-                case wxALIGN_CENTER:
-                    x = rect.x + wxMax(1, (rect.width - arrowSpace - w)/2);
-                    break;
-                case wxALIGN_RIGHT:
-                    x = rect.x + wxMax(1, rect.width - arrowSpace - margin - w);
-                    break;
-            }
-        }
-        dc.DrawBitmap(params->m_labelBitmap, x, y, true);
+        dc.DrawText(label, x + bmpWidth, y);
     }
     return labelWidth;
 }
