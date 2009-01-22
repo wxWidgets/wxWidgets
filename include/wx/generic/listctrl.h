@@ -35,22 +35,31 @@ class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 // wxListCtrl
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxControl
+class WXDLLIMPEXP_CORE wxGenericListCtrl: public wxControl,
+                                          public wxScrollHelper
 {
 public:
 
-    wxGenericListCtrl();
+    wxGenericListCtrl() : wxScrollHelper(this)
+    {
+        Init();
+    }
+    
     wxGenericListCtrl( wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
                 const wxPoint &pos = wxDefaultPosition,
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxListCtrlNameStr)
+                const wxString &name = wxListCtrlNameStr) 
+            : wxScrollHelper(this)
     {
         Create(parent, winid, pos, size, style, validator, name);
     }
+    
     virtual ~wxGenericListCtrl();
+    
+    void Init();
 
     bool Create( wxWindow *parent,
                  wxWindowID winid = wxID_ANY,
@@ -169,7 +178,6 @@ public:
     // -------------------------------
 
     void OnInternalIdle( );
-    void OnSize( wxSizeEvent &event );
 
     // We have to hand down a few functions
     virtual void Refresh(bool eraseBackground = true,
@@ -181,9 +189,6 @@ public:
     virtual wxColour GetForegroundColour() const;
     virtual bool SetFont( const wxFont &font );
     virtual bool SetCursor( const wxCursor &cursor );
-
-    virtual int GetScrollPos(int orient) const;
-    virtual void SetScrollPos(int orient, int pos, bool refresh = true); 
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
@@ -233,16 +238,21 @@ protected:
     // it calls our OnGetXXX() functions
     friend class WXDLLIMPEXP_FWD_CORE wxListMainWindow;
 
+    virtual wxBorder GetDefaultBorder() const;
+
 private:
-    // create the header window
-    void CreateHeaderWindow();
+    void CreateOrDestroyHeaderWindowAsNeeded();
+    void OnScroll( wxScrollWinEvent& event );
+    void OnSize( wxSizeEvent &event );
+    virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size);
 
-    // calculate and set height of the header
-    void CalculateAndSetHeaderHeight();
+    // we need to return a special WM_GETDLGCODE value to process just the
+    // arrows but let the other navigation characters through
+#ifdef __WXMSW__
+    virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+#endif // __WXMSW__
 
-    // reposition the header and the main window in the report view depending
-    // on whether it should be shown or not
-    void ResizeReportView(bool showHeader);
+    WX_FORWARD_TO_SCROLL_HELPER()
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGenericListCtrl)
