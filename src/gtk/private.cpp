@@ -117,7 +117,7 @@ static GtkWidget *s_first_button = NULL;
 static GtkWidget *s_other_button = NULL;
 static GtkWidget *s_last_button = NULL;
 
-static void CreateHeaderButtona()
+static void CreateHeaderButtons()
 {
         // Get the dummy tree widget, give it a column, and then use the
         // widget in the column header for the rendering code.
