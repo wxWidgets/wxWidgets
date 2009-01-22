@@ -792,7 +792,7 @@ public:
 
         // replace the event handler (allows to completely subclass the
         // window)
-    void SetEventHandler( wxEvtHandler *handler ) { m_eventHandler = handler; }
+    void SetEventHandler( wxEvtHandler *handler );
 
         // push/pop event handler: allows to chain a custom event handler to
         // alreasy existing ones
@@ -806,12 +806,16 @@ public:
         // be there)
     bool RemoveEventHandler(wxEvtHandler *handler);
 
-    // Process an event by calling GetEventHandler()->ProcessEvent() and
-    // handling any exceptions thrown by event handlers. It's mostly useful
-    // when processing wx events when called from C code (e.g. in GTK+
-    // callback) when the exception wouldn't correctly propagate to
-    // wxEventLoop.
+        // Process an event by calling GetEventHandler()->ProcessEvent() and
+        // handling any exceptions thrown by event handlers. It's mostly useful
+        // when processing wx events when called from C code (e.g. in GTK+
+        // callback) when the exception wouldn't correctly propagate to
+        // wxEventLoop.
     bool HandleWindowEvent(wxEvent& event) const;
+
+        // disable wxEvtHandler double-linked list mechanism:
+    virtual void SetNextHandler(wxEvtHandler *handler);
+    virtual void SetPreviousHandler(wxEvtHandler *handler);
 
     // validators
     // ----------

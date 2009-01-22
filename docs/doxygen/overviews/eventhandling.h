@@ -184,7 +184,7 @@ in the previous section. However the similarities end here and both the syntax
 and the possibilities of handling events in this way are rather different.
 
 Let us start by looking at the syntax: the first obvious difference is that you
-need not use @c DECLARE_EVENT_TABLE() nor @c BEGIN_EVENT_TABLE and the
+need not use DECLARE_EVENT_TABLE() nor BEGIN_EVENT_TABLE() and the
 associated macros. Instead, in any place in your code, but usually in
 the code of the class defining the handler itself (and definitely not in the
 global scope as with the event tables), call its Connect() method like this:
@@ -331,10 +331,20 @@ doesn't count as having handled the event and the search continues):
     <li value="5">
     The event is passed to the next event handler, if any, in the event handler
     chain, i.e., the steps (1) to (4) are done for it. This chain can be formed
-    using wxEvtHandler::SetNextHandler() or wxWindow::PushEventHandler() but
-    usually there is no next event handler and chaining event handlers using
-    these functions is much less useful now that Connect() exists so this step
-    will almost never do anything.
+    using wxEvtHandler::SetNextHandler():
+        @image html overview_eventhandling_chain.png
+    (referring to the image, if @c A->ProcessEvent is called and it doesn't handle
+     the event, @c B->ProcessEvent will be called and so on...).
+    In the case of wxWindow you can build a stack (implemented using wxEvtHandler
+    double-linked list) using wxWindow::PushEventHandler():
+        @image html overview_eventhandling_winstack.png
+    (referring to the image, if @c W->ProcessEvent is called, it immediately calls
+     @c A->ProcessEvent; if nor @c A nor @c B handle the event, then the wxWindow
+     itself is used - i.e. the dynamically connected event handlers and static
+     event table entries of wxWindow are looked as the last possibility, after
+     all pushed event handlers were tested).
+    Note however that usually there are no wxEvtHandler chains nor wxWindows stacks
+    so this step will usually do anything.
     </li>
 
     <li value="6">
@@ -349,7 +359,7 @@ doesn't count as having handled the event and the search continues):
 
     <li value="7">
     Finally, i.e., if the event is still not processed, the wxApp object itself
-    gets a last chance to process it.
+    (which derives from wxEvtHandler) gets a last chance to process it.
     </li>
 </ol>
 

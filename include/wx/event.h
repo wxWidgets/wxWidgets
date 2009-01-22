@@ -2668,13 +2668,26 @@ public:
     wxEvtHandler();
     virtual ~wxEvtHandler();
 
+
+    // Event handler chain
+    // -------------------
+
     wxEvtHandler *GetNextHandler() const { return m_nextHandler; }
     wxEvtHandler *GetPreviousHandler() const { return m_previousHandler; }
-    void SetNextHandler(wxEvtHandler *handler) { m_nextHandler = handler; }
-    void SetPreviousHandler(wxEvtHandler *handler) { m_previousHandler = handler; }
+    virtual void SetNextHandler(wxEvtHandler *handler) { m_nextHandler = handler; }
+    virtual void SetPreviousHandler(wxEvtHandler *handler) { m_previousHandler = handler; }
 
     void SetEvtHandlerEnabled(bool enabled) { m_enabled = enabled; }
     bool GetEvtHandlerEnabled() const { return m_enabled; }
+
+    void Unlink();
+    bool IsUnlinked() const;
+
+
+
+    // Event queuing and processing
+    // ----------------------------
+
 
     // Process an event right now: this can only be called from the main
     // thread, use QueueEvent() for scheduling the events for
@@ -2686,6 +2699,7 @@ public:
     // when called from C code (e.g. in GTK+ callback) when the exception
     // wouldn't correctly propagate to wxEventLoop.
     bool SafelyProcessEvent(wxEvent& event);
+        // NOTE: uses ProcessEvent()
 
     // Schedule the given event to be processed later. It takes ownership of
     // the event pointer, i.e. it will be deleted later. This is safe to call
@@ -2708,10 +2722,16 @@ public:
     }
 
     void ProcessPendingEvents();
+        // NOTE: uses ProcessEvent()
 
 #if wxUSE_THREADS
     bool ProcessThreadEvent(const wxEvent& event);
+        // NOTE: uses AddPendingEvent()
 #endif
+
+
+    // Connecting and disconnecting
+    // ----------------------------
 
     // Dynamic association of a member function handler with the event handler,
     // winid and event type

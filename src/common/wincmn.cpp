@@ -1096,73 +1096,121 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
 // event handler stuff
 // ----------------------------------------------------------------------------
 
-void wxWindowBase::PushEventHandler(wxEvtHandler *handler)
+void wxWindowBase::SetEventHandler(wxEvtHandler *handler)
 {
+    wxCHECK_RET(handler != NULL, "SetEventHandler(NULL) called");
+
+    m_eventHandler = handler;
+}
+
+void wxWindowBase::SetNextHandler(wxEvtHandler *WXUNUSED(handler))
+{
+    // disable wxEvtHandler chain mechanism for wxWindows:
+    // wxWindow uses its own stack mechanism which doesn't mix well with wxEvtHandler's one
+
+    wxFAIL_MSG("wxWindow cannot be part of a wxEvtHandler chain");
+}
+void wxWindowBase::SetPreviousHandler(wxEvtHandler *WXUNUSED(handler))
+{
+    // we can't simply wxFAIL here as in SetNextHandler: in fact the last
+    // handler of our stack when is destroyed will be Unlink()ed and thus
+    // will call this function to update the pointer of this window...
+
+    //wxFAIL_MSG("wxWindow cannot be part of a wxEvtHandler chain");
+}
+
+void wxWindowBase::PushEventHandler(wxEvtHandler *handlerToPush)
+{
+    wxCHECK_RET( handlerToPush != NULL, "PushEventHandler(NULL) called" );
+
+    // the new handler is going to be part of the wxWindow stack of event handlers:
+    // it can't be part also of an event handler double-linked chain:
+    wxASSERT_MSG(handlerToPush->IsUnlinked(),
+        "The handler being pushed in the wxWindow stack shouldn't be part of "
+        "a wxEvtHandler chain; call Unlink() on it first");
+
     wxEvtHandler *handlerOld = GetEventHandler();
+    wxCHECK_RET( handlerOld, "an old event handler is NULL?" );
 
-    handler->SetNextHandler(handlerOld);
+    // now use wxEvtHandler double-linked list to implement a stack:
+    handlerToPush->SetNextHandler(handlerOld);
 
-    if ( handlerOld )
-        GetEventHandler()->SetPreviousHandler(handler);
+    if (handlerOld != this)
+        handlerOld->SetPreviousHandler(handlerToPush);
 
-    SetEventHandler(handler);
+    SetEventHandler(handlerToPush);
+
+#ifdef __WXDEBUG__
+    // final checks of the operations done above:
+    wxASSERT_MSG( handlerToPush->GetPreviousHandler() == NULL,
+        "the first handler of the wxWindow stack should have no previous handlers set" );
+    wxASSERT_MSG( handlerToPush->GetNextHandler() != NULL,
+        "the first handler of the wxWindow stack should have non-NULL next handler" );
+
+    wxEvtHandler* pLast = handlerToPush;
+    while (pLast && pLast != this)
+        pLast = pLast->GetNextHandler();
+    wxASSERT_MSG( pLast->GetNextHandler() == NULL,
+        "the last handler of the wxWindow stack should have this window as next handler" );
+#endif
 }
 
 wxEvtHandler *wxWindowBase::PopEventHandler(bool deleteHandler)
 {
-    wxEvtHandler *handlerA = GetEventHandler();
-    if ( handlerA )
+    // we need to pop the wxWindow stack, i.e. we need to remove the first handler
+
+    wxEvtHandler *firstHandler = GetEventHandler();
+    wxCHECK_MSG( firstHandler != NULL, NULL, "wxWindow cannot have a NULL event handler" );
+    wxCHECK_MSG( firstHandler != this, NULL, "cannot pop the wxWindow itself" );
+    wxCHECK_MSG( firstHandler->GetPreviousHandler() == NULL, NULL,
+        "the first handler of the wxWindow stack should have no previous handlers set" );
+
+    wxEvtHandler *secondHandler = firstHandler->GetNextHandler();
+    wxCHECK_MSG( secondHandler != NULL, NULL,
+        "the first handler of the wxWindow stack should have non-NULL next handler" );
+
+    firstHandler->SetNextHandler(NULL);
+    secondHandler->SetPreviousHandler(NULL);
+
+    // now firstHandler is completely unlinked; set secondHandler as the new window event handler
+    SetEventHandler(secondHandler);
+
+    if ( deleteHandler )
     {
-        wxEvtHandler *handlerB = handlerA->GetNextHandler();
-        handlerA->SetNextHandler(NULL);
-
-        if ( handlerB )
-            handlerB->SetPreviousHandler(NULL);
-        SetEventHandler(handlerB);
-
-        if ( deleteHandler )
-        {
-            delete handlerA;
-            handlerA = NULL;
-        }
+        delete firstHandler;
+        firstHandler = NULL;
     }
 
-    return handlerA;
+    return firstHandler;
 }
 
-bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
+bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handlerToRemove)
 {
-    wxCHECK_MSG( handler, false, _T("RemoveEventHandler(NULL) called") );
+    wxCHECK_MSG( handlerToRemove != NULL, false, "RemoveEventHandler(NULL) called" );
+    wxCHECK_MSG( handlerToRemove != this, false, "Cannot remove the window itself" );
 
-    wxEvtHandler *handlerPrev = NULL,
-                 *handlerCur = GetEventHandler();
-    while ( handlerCur )
+    if (handlerToRemove == GetEventHandler())
+    {
+        // removing the first event handler is equivalent to "popping" the stack
+        PopEventHandler(false);
+        return true;
+    }
+
+    // NOTE: the wxWindow event handler list is always terminated with "this" handler
+    wxEvtHandler *handlerCur = GetEventHandler()->GetNextHandler();
+    while ( handlerCur != this )
     {
         wxEvtHandler *handlerNext = handlerCur->GetNextHandler();
 
-        if ( handlerCur == handler )
+        if ( handlerCur == handlerToRemove )
         {
-            if ( handlerPrev )
-            {
-                handlerPrev->SetNextHandler(handlerNext);
-            }
-            else
-            {
-                SetEventHandler(handlerNext);
-            }
+            handlerCur->Unlink();
 
-            if ( handlerNext )
-            {
-                handlerNext->SetPreviousHandler ( handlerPrev );
-            }
-
-            handler->SetNextHandler(NULL);
-            handler->SetPreviousHandler(NULL);
-
+            wxASSERT_MSG( handlerCur != GetEventHandler(),
+                        "the case Remove == Pop should was already handled" );
             return true;
         }
 
-        handlerPrev = handlerCur;
         handlerCur = handlerNext;
     }
 
@@ -1173,6 +1221,7 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
 
 bool wxWindowBase::HandleWindowEvent(wxEvent& event) const
 {
+    // SafelyProcessEvent() will handle exceptions nicely
     return GetEventHandler()->SafelyProcessEvent(event);
 }
 

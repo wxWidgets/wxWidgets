@@ -1656,6 +1656,9 @@ public:
 
     /**
         @name Event-handling functions
+
+        wxWindow allows you to build a (sort of) stack of event handlers which
+        can be used to override the window's own event handling.
     */
     //@{
 
@@ -1669,9 +1672,8 @@ public:
     wxEvtHandler* GetEventHandler() const;
 
     /**
-        This function will generate the appropriate call to
-        Navigate() if the key event is one normally used for
-        keyboard navigation and return @true in this case.
+        This function will generate the appropriate call to Navigate() if the key
+        event is one normally used for keyboard navigation and return @true in this case.
 
         @return Returns @true if the key pressed was for navigation and was
                 handled, @false otherwise.
@@ -1691,44 +1693,62 @@ public:
     /**
         Removes and returns the top-most event handler on the event handler stack.
 
-        @param deleteHandler
-            If this is @true, the handler will be deleted after it is removed.
-            The default value is @false.
+        E.g. in the case of:
+            @image html overview_eventhandling_winstack.png
+        when calling @c W->PopEventHandler(), the event handler @c A will be
+        removed and @c B will be the first handler of the stack.
 
-        @see SetEventHandler(), GetEventHandler(),
-             PushEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
+        Note that it's an error to call this function when no event handlers
+        were pushed on this window (i.e. when the window itself is its only
+        event handler).
+
+        @param deleteHandler
+            If this is @true, the handler will be deleted after it is removed
+            (and the returned value will be @NULL).
+
+        @see @ref overview_eventhandling_processing
     */
     wxEvtHandler* PopEventHandler(bool deleteHandler = false);
 
     /**
         Pushes this event handler onto the event stack for the window.
 
+        An event handler is an object that is capable of processing the events sent
+        to a window. By default, the window is its own event handler, but an application
+        may wish to substitute another, for example to allow central implementation
+        of event-handling for a variety of different window classes.
+
+        wxWindow::PushEventHandler allows an application to set up a @e stack
+        of event handlers, where an event not handled by one event handler is
+        handed to the next one in the chain.
+
+        E.g. if you have two event handlers @c A and @c B and a wxWindow instance
+        @c W and you call:
+        @code
+            W->PushEventHandler(A);
+            W->PushEventHandler(B);
+        @endcode
+        you will end up with the following situation:
+            @image html overview_eventhandling_winstack.png
+
+        Note that you can use wxWindow::PopEventHandler to remove the event handler.
+
         @param handler
             Specifies the handler to be pushed.
+            It must not be part of a wxEvtHandler chain; an assert will fail
+            if it's not unlinked (see wxEvtHandler::IsUnlinked).
 
-        @remarks An event handler is an object that is capable of processing the
-                 events sent to a window. By default, the window is its
-                 own event handler, but an application may wish to
-                 substitute another, for example to allow central
-                 implementation of event-handling for a variety of
-                 different window classes.
-                 wxWindow::PushEventHandler allows an application to set up a
-                 chain of event handlers, where an event not handled by one event
-                 handler is handed to the next one in the chain.
-                 Use wxWindow::PopEventHandler to remove the event handler.
-
-        @see SetEventHandler(), GetEventHandler(),
-             PopEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
+        @see @ref overview_eventhandling_processing
     */
     void PushEventHandler(wxEvtHandler* handler);
 
     /**
-        Find the given @a handler in the windows event handler chain and remove
-        (but not delete) it from it.
+        Find the given @a handler in the windows event handler stack and unlinks
+        (but not delete) it. See wxEvtHandler::Unlink() for more info.
 
         @param handler
             The event handler to remove, must be non-@NULL and
-            must be present in this windows event handlers chain
+            must be present in this windows event handlers stack.
 
         @return Returns @true if it was found and @false otherwise (this also
                 results in an assert failure so this function should
@@ -1741,25 +1761,39 @@ public:
     /**
         Sets the event handler for this window.
 
+        Note that if you use this function you may want to use as the "next" handler
+        of @a handler the window itself; in this way when @a handler doesn't process
+        an event, the window itself will have a chance to do it.
+
         @param handler
-            Specifies the handler to be set.
+            Specifies the handler to be set. Cannot be @NULL.
 
-        @remarks An event handler is an object that is capable of processing the
-                 events sent to a window. By default, the window is its
-                 own event handler, but an application may wish to
-                 substitute another, for example to allow central
-                 implementation of event-handling for a variety of
-                 different window classes.
-                 It is usually better to use wxWindow::PushEventHandler since
-                 this sets up a chain of event handlers, where an event not
-                handled by one event handler is handed to the next one in the chain.
-
-        @see GetEventHandler(), PushEventHandler(),
-             PopEventHandler(), wxEvtHandler::ProcessEvent, wxEvtHandler
+        @see @ref overview_eventhandling_processing
     */
     void SetEventHandler(wxEvtHandler* handler);
 
+    /**
+        wxWindows cannot be used to form event handler chains; this function
+        thus will assert when called.
+
+        Note that instead you can use PushEventHandler() or SetEventHandler() to
+        implement a stack of event handlers to override wxWindow's own
+        event handling mechanism.
+    */
+    virtual void SetNextHandler(wxEvtHandler* handler);
+
+    /**
+        wxWindows cannot be used to form event handler chains; this function
+        thus will assert when called.
+
+        Note that instead you can use PushEventHandler() or SetEventHandler() to
+        implement a stack of event handlers to override wxWindow's own
+        event handling mechanism.
+    */
+    virtual void SetPreviousHandler(wxEvtHandler* handler);
+
     //@}
+
 
 
     /**

@@ -283,7 +283,7 @@ HR {
 }
 
 .memproto, .memdoc {
-	border: 1px solid #84b0c7;	
+	border: 1px solid #84b0c7;
 }
 
 .memproto {
@@ -398,6 +398,10 @@ H2 > A.anchor {
 	text-decoration: none;
 	background-color: none;
 	color: black;
+}
+
+IMG {
+    margin: 20px;
 }
 
 IMG.logo {

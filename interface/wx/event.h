@@ -258,7 +258,7 @@ public:
     wxWindow is (and therefore all window classes are) derived from this class.
 
     When events are received, wxEvtHandler invokes the method listed in the
-    event table using itself as the object.  When using multiple inheritance
+    event table using itself as the object. When using multiple inheritance
     <b>it is imperative that the wxEvtHandler(-derived) class is the first
     class inherited</b> such that the @c this pointer for the overall object
     will be identical to the @c this pointer of the wxEvtHandler portion.
@@ -279,8 +279,8 @@ public:
     /**
         Destructor.
 
-        If the handler is part of a chain, the destructor will unlink itself and
-        restore the previous and next handlers so that they point to each other.
+        If the handler is part of a chain, the destructor will unlink itself
+        (see Unlink()).
     */
     virtual ~wxEvtHandler();
 
@@ -382,17 +382,23 @@ public:
 
         The normal order of event table searching is as follows:
         -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
-            the function skips to step (6).
+           the function skips to step (6).
         -# If the object is a wxWindow, ProcessEvent() is recursively called on the
-            window's wxValidator. If this returns @true, the function exits.
+           window's wxValidator. If this returns @true, the function exits.
         -# SearchEventTable() is called for this event handler. If this fails, the base
-            class table is tried, and so on until no more tables exist or an appropriate
-            function was found, in which case the function exits.
+           class table is tried, and so on until no more tables exist or an appropriate
+           function was found, in which case the function exits.
         -# The search is applied down the entire chain of event handlers (usually the
-            chain has a length of one). If this succeeds, the function exits.
+           chain has a length of one). This chain can be formed using wxEvtHandler::SetNextHandler():
+              @image html overview_eventhandling_chain.png
+           (referring to the image, if @c A->ProcessEvent is called and it doesn't handle
+            the event, @c B->ProcessEvent will be called and so on...).
+           Note that in the case of wxWindow you can build a stack of event handlers
+           (see wxWindow::PushEventHandler() for more info).
+           If any of the handlers of the chain return @true, the function exits.
         -# If the object is a wxWindow and the event is a wxCommandEvent, ProcessEvent()
-            is recursively applied to the parent window's event handler.
-            If this returns true, the function exits.
+           is recursively applied to the parent window's event handler.
+           If this returns @true, the function exits.
         -# Finally, ProcessEvent() is called on the wxApp object.
 
         @param event
@@ -620,7 +626,10 @@ public:
 
 
     /**
-        @name Event handler chain
+        @name Event handler chaining
+
+        wxEvtHandler can be arranged in a double-linked list of handlers
+        which is automatically iterated by ProcessEvent() if needed.
     */
     //@{
 
@@ -664,21 +673,60 @@ public:
     /**
         Sets the pointer to the next handler.
 
-        @param handler
-            Event handler to be set as the next handler.
+        @remarks
+        See ProcessEvent() for more info about how the chains of event handlers
+        are internally used.
+        Also remember that wxEvtHandler uses double-linked lists and thus if you
+        use this function, you should also call SetPreviousHandler() on the
+        argument passed to this function:
+        @code
+            handlerA->SetNextHandler(handlerB);
+            handlerB->SetPreviousHandler(handlerA);
+        @endcode
 
-        @see GetNextHandler(), SetPreviousHandler(), GetPreviousHandler(),
-             wxWindow::PushEventHandler, wxWindow::PopEventHandler
+        @param handler
+            The event handler to be set as the next handler.
+            Cannot be @NULL.
+
+        @see @ref overview_eventhandling_processing
     */
-    void SetNextHandler(wxEvtHandler* handler);
+    virtual void SetNextHandler(wxEvtHandler* handler);
 
     /**
         Sets the pointer to the previous handler.
+        All remarks about SetNextHandler() apply to this function as well.
 
         @param handler
-            Event handler to be set as the previous handler.
+            The event handler to be set as the previous handler.
+            Cannot be @NULL.
+
+        @see @ref overview_eventhandling_processing
     */
-    void SetPreviousHandler(wxEvtHandler* handler);
+    virtual void SetPreviousHandler(wxEvtHandler* handler);
+
+    /**
+        Unlinks this event handler from the chain it's part of (if any);
+        then links the "previous" event handler to the "next" one
+        (so that the chain won't be interrupted).
+
+        E.g. if before calling Unlink() you have the following chain:
+            @image html evthandler_unlink_before.png
+        then after calling @c B->Unlink() you'll have:
+            @image html evthandler_unlink_after.png
+
+        @since 2.9.0
+    */
+    void Unlink();
+
+    /**
+        Returns @true if the next and the previous handler pointers of this
+        event handler instance are @NULL.
+
+        @since 2.9.0
+
+        @see SetPreviousHandler(), SetNextHandler()
+    */
+    bool IsUnlinked() const;
 
     //@}
 };

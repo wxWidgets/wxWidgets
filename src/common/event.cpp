@@ -1036,12 +1036,7 @@ wxEvtHandler::wxEvtHandler()
 
 wxEvtHandler::~wxEvtHandler()
 {
-    // Takes itself out of the list of handlers
-    if (m_previousHandler)
-        m_previousHandler->m_nextHandler = m_nextHandler;
-
-    if (m_nextHandler)
-        m_nextHandler->m_previousHandler = m_previousHandler;
+    Unlink();
 
     if (m_dynamicEvents)
     {
@@ -1101,6 +1096,26 @@ wxEvtHandler::~wxEvtHandler()
     // we only delete object data, not untyped
     if ( m_clientDataType == wxClientData_Object )
         delete m_clientObject;
+}
+
+void wxEvtHandler::Unlink()
+{
+    // this event handler must take itself out of the chain of handlers:
+
+    if (m_previousHandler)
+        m_previousHandler->SetNextHandler(m_nextHandler);
+
+    if (m_nextHandler)
+        m_nextHandler->SetPreviousHandler(m_previousHandler);
+
+    m_nextHandler = NULL;
+    m_previousHandler = NULL;
+}
+
+bool wxEvtHandler::IsUnlinked() const
+{
+    return m_previousHandler == NULL &&
+           m_nextHandler == NULL;
 }
 
 #if wxUSE_THREADS
