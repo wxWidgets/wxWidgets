@@ -23,6 +23,7 @@ WX_DECLARE_LIST_WITH_DECL(wxAnimationDecoder, wxAnimationDecoderList, class WXDL
 class WXDLLIMPEXP_ADV wxAnimation : public wxAnimationBase
 {
 public:
+    wxAnimation() {}
     wxAnimation(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY)
         { LoadFile(name, type); }
     virtual bool IsOk() const
