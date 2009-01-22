@@ -3,13 +3,13 @@
 0. Purpose
 ----------
 
-This is a broad technote covering all aspects of binary compatibility with 
+This is a broad technote covering all aspects of binary compatibility with
 wxWidgets.
 
 1. Releases
 -----------
 
-General overview of releases can be found in tn0012.txt, but for 
+General overview of releases can be found in tn0012.txt, but for
 completeness the wxWidgets release version number is as follows:
 
 2.6.2
@@ -37,12 +37,12 @@ also section (4).
 -------------------------------------------------
 
 If its still up, the KDE guide is a good reference:
-http://developer.kde.org/documentation/other/binarycompatibility.html
+http://techbase.kde.org/Policies/Binary_Compatibility_Issues_With_C++
 
 The changes that are NOT binary compatible:
 - Adding a virtual function
 - Changing the name of a any function or variable
-- Changing the signature of a virtual function (adding a parameter, 
+- Changing the signature of a virtual function (adding a parameter,
 even a default one)
 - Changing the order of the virtual functions in a class
 ["switching" them, etc.]
@@ -63,6 +63,7 @@ even a default one)
 
 - Adding a new class
 - Adding a new non-virtual method to an existing class
+- Adding a new constructor to an existing class
 - Overriding the implementation of an existing virtual function
 [this is considered to be backwards binary compatible until we find a
  counter example; currently it's known to work with Apple gcc at least]
@@ -113,7 +114,7 @@ bool    ShowPlayerControls(
 //helpers for the wxPython people
 bool LoadURI(const wxString& fileName)
 {   return Load(wxURI(fileName));       }
-bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy)     
+bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy)
 {   return Load(wxURI(fileName), wxURI(proxy));       }
 #endif
 
@@ -139,7 +140,7 @@ wxShadowObject resides in include/wx/clntdata.h.
 
 To use wxShadowObject, you first call AddMethod or AddField with
 the first parameter being the name of the field and/or method
-you want, and the second parameter being the value of the 
+you want, and the second parameter being the value of the
 field and/or method.
 
 In the case of fields this is a void*, and in the case of method
@@ -150,15 +151,15 @@ After you add a field, you can set it via SetField with the same
 parameters as AddField, the second parameter being the value to set
 the field to.  You can get the field after you call AddField
 via GetField, with the parameters as the other two field functions,
-only in the case the second parameter is the fallback 
-value for the field in the case of it not being found in the 
-hash map.  
+only in the case the second parameter is the fallback
+value for the field in the case of it not being found in the
+hash map.
 
 You can call a method after you add it via InvokeMethod, which
 returns a bool indicating whether or not the method was found
 in the hash map, and has 4 parameters.  The first parameter is
 the name of the method you wish to call, the second is the first
-parameter passed to the wxShadowObjectMethod, the third is the 
+parameter passed to the wxShadowObjectMethod, the third is the
 second parameter passed to that wxShadowObjectMethod, and the
 fourth is the return value of the wxShadowObjectMethod.
 
@@ -183,7 +184,7 @@ The file has the layout as follows:
 Where X is the current Release as mentioned earlier, i.e. 2.  This
 is following by an opening bracket "{", followed by "global:",
 followed by patterns matching added symbols, then followed by "}", and then
-the file is either followed by earlier Releases or ended by 
+the file is either followed by earlier Releases or ended by
 a @WX_VERSION_TAG@ block without the period or Release.
 
 The patterns used to specify added symbols are globbing patters and can
