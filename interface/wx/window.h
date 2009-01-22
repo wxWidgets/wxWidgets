@@ -452,7 +452,7 @@ public:
 
 
     /**
-        @name Scrolling and scrollbars
+        @name Scrolling and scrollbars functions
     */
     //@{
 
@@ -641,7 +641,7 @@ public:
 
 
     /**
-        @name Sizing
+        @name Sizing functions
 
         See also the protected functions DoGetBestSize() and SetInitialBestSize().
     */
@@ -836,17 +836,6 @@ public:
         and y components of the result respectively.
     */
     virtual wxSize GetWindowBorderSize() const;
-
-    /**
-        Return the sizer that this window is a member of, if any, otherwise @NULL.
-    */
-    wxSizer* GetContainingSizer() const;
-
-    /**
-        Return the sizer associated with the window by a previous call to
-        SetSizer() or @NULL.
-    */
-    wxSizer* GetSizer() const;
 
     /**
         Resets the cached best size value so it will be recalculated the next time it
@@ -1069,34 +1058,6 @@ public:
                        const wxSize& incSize=wxDefaultSize);
 
     /**
-        Sets the window to have the given layout sizer.
-        The window will then own the object, and will take care of its deletion.
-        If an existing layout constraints object is already owned by the
-        window, it will be deleted if the deleteOld parameter is @true.
-
-        Note that this function will also call SetAutoLayout() implicitly with @true
-        parameter if the @a sizer is non-@NULL and @false otherwise.
-
-        @param sizer
-            The sizer to set. Pass @NULL to disassociate and conditionally delete
-            the window's sizer. See below.
-        @param deleteOld
-            If @true (the default), this will delete any pre-existing sizer.
-            Pass @false if you wish to handle deleting the old sizer yourself.
-
-        @remarks SetSizer enables and disables Layout automatically.
-    */
-    void SetSizer(wxSizer* sizer, bool deleteOld = true);
-
-    /**
-        This method calls SetSizer() and then wxSizer::SetSizeHints which sets the initial
-        window size to the size needed to accommodate all sizer elements and sets the
-        size hints which, if this window is a top level one, prevent the user from
-        resizing it to be less than this minimial size.
-    */
-    void SetSizerAndFit(wxSizer* sizer, bool deleteOld = true);
-
-    /**
         Sets the virtual size of the window in pixels.
     */
     void SetVirtualSize(int width, int height);
@@ -1110,7 +1071,7 @@ public:
 
 
     /**
-        @name Positioning
+        @name Positioning functions
     */
     //@{
 
@@ -1253,7 +1214,7 @@ public:
 
 
     /**
-        @name Coordinate conversion
+        @name Coordinate conversion functions
     */
     //@{
 
@@ -1802,7 +1763,7 @@ public:
 
 
     /**
-        @name Window styles
+        @name Window styles functions
     */
     //@{
 
@@ -1858,11 +1819,26 @@ public:
     */
     void SetWindowStyle(long style);
 
+    /**
+        Turns the given @a flag on if it's currently turned off and vice versa.
+        This function cannot be used if the value of the flag is 0 (which is often
+        the case for default flags).
+
+        Also, please notice that not all styles can be changed after the control
+        creation.
+
+        @return Returns @true if the style was turned on by this function, @false
+                 if it was switched off.
+
+        @see SetWindowStyleFlag(), HasFlag()
+    */
+    bool ToggleWindowStyle(int flag);
+
     //@}
 
 
     /**
-        @name Tab order
+        @name Tab order functions
     */
     //@{
 
@@ -1920,7 +1896,7 @@ public:
 
 
     /**
-        @name Z-order
+        @name Z order functions
     */
     //@{
 
@@ -1948,7 +1924,7 @@ public:
 
 
     /**
-        @name Show/hide, enable/disable functions
+        @name Window status functions
     */
     //@{
 
@@ -2081,11 +2057,837 @@ public:
     //@}
 
 
+    /**
+        @name Context-sensitive help functions
+    */
+    //@{
+
+    /**
+        Gets the help text to be used as context-sensitive help for this window.
+        Note that the text is actually stored by the current wxHelpProvider
+        implementation, and not in the window object itself.
+
+        @see SetHelpText(), GetHelpTextAtPoint(), wxHelpProvider
+    */
+    wxString GetHelpText() const;
+
+    /**
+        Sets the help text to be used as context-sensitive help for this window.
+        Note that the text is actually stored by the current wxHelpProvider
+        implementation, and not in the window object itself.
+
+        @see GetHelpText(), wxHelpProvider::AddHelp()
+    */
+    void SetHelpText(const wxString& helpText);
+
+    /**
+        Gets the help text to be used as context-sensitive help for this window.
+        This method should be overridden if the help message depends on the position
+        inside the window, otherwise GetHelpText() can be used.
+
+        @param point
+            Coordinates of the mouse at the moment of help event emission.
+        @param origin
+            Help event origin, see also wxHelpEvent::GetOrigin.
+    */
+    virtual wxString GetHelpTextAtPoint(const wxPoint& point,
+                                        wxHelpEvent::Origin origin) const;
+
+    /**
+        Get the associated tooltip or @NULL if none.
+    */
+    wxToolTip* GetToolTip() const;
+
+    /**
+        Attach a tooltip to the window.
+
+        wxToolTip pointer can be @NULL in the overload taking the pointer,
+        meaning to unset any existing tooltips, however UnsetToolTip() provides
+        a more readable alternative to this operation.
+
+        Notice that these methods are always available, even if wxWidgets was
+        compiled with @c wxUSE_TOOLTIPS set to 0, but don't do anything in this
+        case.
+
+        @see GetToolTip(), wxToolTip
+    */
+    void SetToolTip(const wxString& tip);
+
+    /**
+        @overload
+    */
+    void SetToolTip(wxToolTip* tip);
+
+    /**
+        Unset any existing tooltip.
+
+        @since 2.9.0
+
+        @see SetToolTip()
+     */
+    void UnsetToolTip();
+
+    //@}
+
+
+    /**
+        @name Popup/context menu functions
+    */
+    //@{
+
+    /**
+        This function shows a popup menu at the given position in this window and
+        returns the selected id.
+
+        It can be more convenient than the general purpose PopupMenu() function
+        for simple menus proposing a choice in a list of strings to the user.
+
+        Notice that to avoid unexpected conflicts between the (usually
+        consecutive range of) ids used by the menu passed to this function and
+        the existing EVT_UPDATE_UI() handlers, this function temporarily
+        disables UI updates for the window, so you need to manually disable
+        (or toggle or ...) any items which should be disabled in the menu
+        before showing it.
+
+        The parameter @a menu is the menu to show.
+        The parameter @a pos (or the parameters @a x and @a y) is the
+        position at which to show the menu in client coordinates.
+
+        @return
+             The selected menu item id or @c wxID_NONE if none selected or an
+             error occurred.
+
+        @since 2.9.0
+    */
+    int GetPopupMenuSelectionFromUser(wxMenu& menu, const wxPoint& pos);
+
+    /**
+        @overload
+    */
+    int GetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y);
+
+    /**
+        Pops up the given menu at the specified coordinates, relative to this
+        window, and returns control when the user has dismissed the menu.
+
+        If a menu item is selected, the corresponding menu event is generated and will be
+        processed as usually. If the coordinates are not specified, current mouse
+        cursor position is used.
+
+        @a menu is the menu to pop up.
+
+        The position where the menu will appear can be specified either as a
+        wxPoint @a pos or by two integers (@a x and @a y).
+
+        @remarks Just before the menu is popped up, wxMenu::UpdateUI is called to
+                 ensure that the menu items are in the correct state.
+                 The menu does not get deleted by the window.
+                 It is recommended to not explicitly specify coordinates when
+                 calling PopupMenu in response to mouse click, because some of
+                 the ports (namely, wxGTK) can do a better job of positioning
+                 the menu in that case.
+
+        @see wxMenu
+    */
+    bool PopupMenu(wxMenu* menu,
+                   const wxPoint& pos = wxDefaultPosition);
+
+    /**
+        @overload
+    */
+    bool PopupMenu(wxMenu* menu, int x, int y);
+
+    //@}
+
+
+    /**
+        Validator functions
+    */
+    //@{
+
+    /**
+        Returns a pointer to the current validator for the window, or @NULL if
+        there is none.
+    */
+    virtual wxValidator* GetValidator();
+
+    /**
+        Deletes the current validator (if any) and sets the window validator, having
+        called wxValidator::Clone to create a new validator of this type.
+    */
+    virtual void SetValidator(const wxValidator& validator);
+
+    /**
+        Transfers values from child controls to data areas specified by their
+        validators. Returns @false if a transfer failed.
+
+        If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
+        the method will also call TransferDataFromWindow() of all child windows.
+
+        @see TransferDataToWindow(), wxValidator, Validate()
+    */
+    virtual bool TransferDataFromWindow();
+
+    /**
+        Transfers values to child controls from data areas specified by their
+        validators.
+
+        If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
+        the method will also call TransferDataToWindow() of all child windows.
+
+        @return Returns @false if a transfer failed.
+
+        @see TransferDataFromWindow(), wxValidator, Validate()
+    */
+    virtual bool TransferDataToWindow();
+
+    /**
+        Validates the current values of the child controls using their validators.
+        If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
+        the method will also call Validate() of all child windows.
+
+        @return Returns @false if any of the validations failed.
+
+        @see TransferDataFromWindow(), TransferDataToWindow(),
+             wxValidator
+    */
+    virtual bool Validate();
+
+    //@}
+
+
+    /**
+        @name wxWindow properties functions
+    */
+    //@{
+
+    /**
+        Returns the identifier of the window.
+
+        @remarks Each window has an integer identifier. If the application
+                 has not provided one (or the default wxID_ANY) an unique
+                 identifier with a negative value will be generated.
+
+        @see SetId(), @ref overview_windowids
+    */
+    wxWindowID GetId() const;
+
+    /**
+        Generic way of getting a label from any window, for
+        identification purposes.
+
+        @remarks The interpretation of this function differs from class to class.
+                 For frames and dialogs, the value returned is the
+                 title. For buttons or static text controls, it is the
+                 button text. This function can be useful for
+                 meta-programs (such as testing tools or special-needs
+                 access programs) which need to identify windows by name.
+    */
+    virtual wxString GetLabel() const;
+
+    /**
+        Returns the window's name.
+
+        @remarks This name is not guaranteed to be unique; it is up to the
+                 programmer to supply an appropriate name in the window
+                 constructor or via SetName().
+
+        @see SetName()
+    */
+    virtual wxString GetName() const;
+
+    /**
+        Returns the value previously passed to SetWindowVariant().
+    */
+    wxWindowVariant GetWindowVariant() const;
+
+    /**
+        Sets the identifier of the window.
+
+        @remarks Each window has an integer identifier. If the application has
+                 not provided one, an identifier will be generated.
+                 Normally, the identifier should be provided on creation
+                 and should not be modified subsequently.
+
+        @see GetId(), @ref overview_windowids
+    */
+    void SetId(wxWindowID winid);
+
+    /**
+        Sets the window's label.
+
+        @param label
+            The window label.
+
+        @see GetLabel()
+    */
+    virtual void SetLabel(const wxString& label);
+
+    /**
+        Sets the window's name.
+
+        @param name
+            A name to set for the window.
+
+        @see GetName()
+    */
+    virtual void SetName(const wxString& name);
+
+    /**
+        This function can be called under all platforms but only does anything under
+        Mac OS X 10.3+ currently. Under this system, each of the standard control can
+        exist in several sizes which correspond to the elements of wxWindowVariant enum.
+
+        By default the controls use the normal size, of course, but this function can
+        be used to change this.
+    */
+    void SetWindowVariant(wxWindowVariant variant);
+
+
+    /**
+        Gets the accelerator table for this window. See wxAcceleratorTable.
+    */
+    wxAcceleratorTable* GetAcceleratorTable();
+
+    /**
+        Returns the accessible object for this window, if any.
+        See also wxAccessible.
+    */
+    wxAccessible* GetAccessible();
+
+    /**
+        Sets the accelerator table for this window. See wxAcceleratorTable.
+    */
+    virtual void SetAcceleratorTable(const wxAcceleratorTable& accel);
+
+    /**
+        Sets the accessible for this window. Any existing accessible for this window
+        will be deleted first, if not identical to @e accessible.
+        See also wxAccessible.
+    */
+    void SetAccessible(wxAccessible* accessible);
+
+    //@}
+
+
+    /**
+        @name Window deletion functions
+    */
+    //@{
+
+    /**
+        This function simply generates a wxCloseEvent whose handler usually tries
+        to close the window. It doesn't close the window itself, however.
+
+        @param force
+            @false if the window's close handler should be able to veto the destruction
+            of this window, @true if it cannot.
+
+        @remarks Close calls the close handler for the window, providing an
+                 opportunity for the window to choose whether to destroy
+                 the window. Usually it is only used with the top level
+                 windows (wxFrame and wxDialog classes) as the others
+                 are not supposed to have any special OnClose() logic.
+                The close handler should check whether the window is being deleted
+                forcibly, using wxCloseEvent::CanVeto, in which case it should
+                destroy the window using wxWindow::Destroy.
+                Note that calling Close does not guarantee that the window will
+                be destroyed; but it provides a way to simulate a manual close
+                of a window, which may or may not be implemented by destroying
+                the window. The default implementation of wxDialog::OnCloseWindow
+                does not necessarily delete the dialog, since it will simply
+                simulate an wxID_CANCEL event which is handled by the appropriate
+                button event handler and may do anything at all.
+                To guarantee that the window will be destroyed, call
+                wxWindow::Destroy instead
+
+        @see @ref overview_windowdeletion "Window Deletion Overview",
+             Destroy(), wxCloseEvent
+    */
+    bool Close(bool force = false);
+
+    /**
+        Destroys the window safely. Use this function instead of the delete operator,
+        since different window classes can be destroyed differently. Frames and dialogs
+        are not destroyed immediately when this function is called -- they are added
+        to a list of windows to be deleted on idle time, when all the window's events
+        have been processed. This prevents problems with events being sent to
+        non-existent windows.
+
+        @return @true if the window has either been successfully deleted, or it
+                 has been added to the list of windows pending real deletion.
+    */
+    virtual bool Destroy();
+
+    /**
+        Returns true if this window is in process of being destroyed.
+
+        The top level windows are not deleted immediately but are rather
+        scheduled for later destruction to give them time to process any
+        pending messages, see Destroy() description.
+
+        This function returns @true if this window, or one of its parent
+        windows, is scheduled for destruction and can be useful to avoid
+        manipulating it as it's usually useless to do something with a window
+        which is on the point of disappearing anyhow.
+     */
+    bool IsBeingDeleted() const;
+
+    //@}
+
+
+
+    /**
+        @name Drag and drop functions
+    */
+    //@{
+
+    /**
+        Returns the associated drop target, which may be @NULL.
+
+        @see SetDropTarget(), @ref overview_dnd
+    */
+    virtual wxDropTarget* GetDropTarget() const;
+
+    /**
+        Associates a drop target with this window.
+        If the window already has a drop target, it is deleted.
+
+        @see GetDropTarget(), @ref overview_dnd
+    */
+    virtual void SetDropTarget(wxDropTarget* target);
+
+    /**
+        Enables or disables eligibility for drop file events (OnDropFiles).
+
+        @param accept
+            If @true, the window is eligible for drop file events.
+            If @false, the window will not accept drop file events.
+
+        @remarks Windows only until version 2.8.9, available on all platforms
+                 since 2.8.10. Cannot be used together with SetDropTarget() on
+                 non-Windows platforms.
+
+        @see SetDropTarget()
+    */
+    virtual void DragAcceptFiles(bool accept);
+
+    //@}
+
+
+    /**
+        @name Constraints, sizers and window layouting functions
+    */
+    //@{
+
+    /**
+        Return the sizer that this window is a member of, if any, otherwise @NULL.
+    */
+    wxSizer* GetContainingSizer() const;
+
+    /**
+        Return the sizer associated with the window by a previous call to
+        SetSizer() or @NULL.
+    */
+    wxSizer* GetSizer() const;
+
+    /**
+        Sets the window to have the given layout sizer.
+        The window will then own the object, and will take care of its deletion.
+        If an existing layout constraints object is already owned by the
+        window, it will be deleted if the deleteOld parameter is @true.
+
+        Note that this function will also call SetAutoLayout() implicitly with @true
+        parameter if the @a sizer is non-@NULL and @false otherwise.
+
+        @param sizer
+            The sizer to set. Pass @NULL to disassociate and conditionally delete
+            the window's sizer. See below.
+        @param deleteOld
+            If @true (the default), this will delete any pre-existing sizer.
+            Pass @false if you wish to handle deleting the old sizer yourself.
+
+        @remarks SetSizer enables and disables Layout automatically.
+    */
+    void SetSizer(wxSizer* sizer, bool deleteOld = true);
+
+    /**
+        This method calls SetSizer() and then wxSizer::SetSizeHints which sets the initial
+        window size to the size needed to accommodate all sizer elements and sets the
+        size hints which, if this window is a top level one, prevent the user from
+        resizing it to be less than this minimial size.
+    */
+    void SetSizerAndFit(wxSizer* sizer, bool deleteOld = true);
+
+    /**
+        Returns a pointer to the window's layout constraints, or @NULL if there are none.
+    */
+    wxLayoutConstraints* GetConstraints() const;
+
+    /**
+        Sets the window to have the given layout constraints. The window
+        will then own the object, and will take care of its deletion.
+        If an existing layout constraints object is already owned by the
+        window, it will be deleted.
+
+        @param constraints
+            The constraints to set. Pass @NULL to disassociate and delete the window's
+            constraints.
+
+        @remarks You must call SetAutoLayout() to tell a window to use
+                 the constraints automatically in OnSize; otherwise, you
+                 must override OnSize and call Layout() explicitly. When
+                 setting both a wxLayoutConstraints and a wxSizer, only
+                 the sizer will have effect.
+    */
+    void SetConstraints(wxLayoutConstraints* constraints);
+
+
+    /**
+        Invokes the constraint-based layout algorithm or the sizer-based algorithm
+        for this window.
+
+        This function does not get called automatically when the window is resized
+        because lots of windows deriving from wxWindow does not need this functionality.
+        If you want to have Layout() called automatically, you should derive
+        from wxPanel (see wxPanel::Layout).
+
+        @see @ref overview_windowsizing
+    */
+    virtual bool Layout();
+
+    /**
+        Determines whether the Layout() function will be called automatically
+        when the window is resized. Please note that this only happens for the
+        windows usually used to contain children, namely wxPanel and wxTopLevelWindow
+        (and the classes deriving from them).
+
+        This method is called implicitly by SetSizer() but if you use SetConstraints()
+        you should call it manually or otherwise the window layout won't be correctly
+        updated when its size changes.
+
+        @param autoLayout
+            Set this to @true if you wish the Layout() function to be
+            called automatically when the window is resized
+            (really happens only if you derive from wxPanel or wxTopLevelWindow).
+
+        @see SetConstraints()
+    */
+    void SetAutoLayout(bool autoLayout);
+
+    //@}
+
+
+
+    /**
+        @name Mouse functions
+    */
+    //@{
+
+    /**
+        Directs all mouse input to this window.
+        Call ReleaseMouse() to release the capture.
+
+        Note that wxWidgets maintains the stack of windows having captured the mouse
+        and when the mouse is released the capture returns to the window which had had
+        captured it previously and it is only really released if there were no previous
+        window. In particular, this means that you must release the mouse as many times
+        as you capture it, unless the window receives the wxMouseCaptureLostEvent event.
+
+        Any application which captures the mouse in the beginning of some operation
+        must handle wxMouseCaptureLostEvent and cancel this operation when it receives
+        the event. The event handler must not recapture mouse.
+
+        @see ReleaseMouse(), wxMouseCaptureLostEvent
+    */
+    void CaptureMouse();
+
+    /**
+        Returns the caret() associated with the window.
+    */
+    wxCaret* GetCaret() const;
+
+    /**
+        Return the cursor associated with this window.
+
+        @see SetCursor()
+    */
+    const wxCursor& GetCursor() const;
+
+    /**
+        Returns @true if this window has the current mouse capture.
+
+        @see CaptureMouse(), ReleaseMouse(), wxMouseCaptureLostEvent,
+             wxMouseCaptureChangedEvent
+    */
+    virtual bool HasCapture() const;
+
+    /**
+        Releases mouse input captured with CaptureMouse().
+
+        @see CaptureMouse(), HasCapture(), ReleaseMouse(),
+             wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent
+    */
+    void ReleaseMouse();
+
+    /**
+        Sets the caret() associated with the window.
+    */
+    void SetCaret(wxCaret* caret);
+
+    /**
+        Sets the window's cursor. Notice that the window cursor also sets it for the
+        children of the window implicitly.
+
+        The @a cursor may be @c wxNullCursor in which case the window cursor will
+        be reset back to default.
+
+        @param cursor
+            Specifies the cursor that the window should normally display.
+
+        @see ::wxSetCursor, wxCursor
+    */
+    virtual bool SetCursor(const wxCursor& cursor);
+
+    /**
+        Moves the pointer to the given position on the window.
+
+        @note This function is not supported under Mac because Apple Human
+              Interface Guidelines forbid moving the mouse cursor programmatically.
+
+        @param x
+            The new x position for the cursor.
+        @param y
+            The new y position for the cursor.
+    */
+    virtual void WarpPointer(int x, int y);
+
+    //@}
+
+
+
+
+    /**
+        @name Miscellaneous functions
+    */
+    //@{
+
+    /**
+        Does the window-specific updating after processing the update event.
+        This function is called by UpdateWindowUI() in order to check return
+        values in the wxUpdateUIEvent and act appropriately.
+        For example, to allow frame and dialog title updating, wxWidgets
+        implements this function as follows:
+
+        @code
+        // do the window-specific processing after processing the update event
+        void wxTopLevelWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
+        {
+            if ( event.GetSetEnabled() )
+                Enable(event.GetEnabled());
+
+            if ( event.GetSetText() )
+            {
+                if ( event.GetText() != GetTitle() )
+                    SetTitle(event.GetText());
+            }
+        }
+        @endcode
+    */
+    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
+
+    /**
+        Returns the platform-specific handle of the physical window.
+        Cast it to an appropriate handle, such as @b HWND for Windows,
+        @b Widget for Motif, @b GtkWidget for GTK or @b WinHandle for PalmOS.
+    */
+    virtual WXWidget GetHandle() const;
+
+    /**
+        This method should be overridden to return @true if this window has
+        multiple pages. All standard class with multiple pages such as
+        wxNotebook, wxListbook and wxTreebook already override it to return @true
+        and user-defined classes with similar behaviour should do it as well to
+        allow the library to handle such windows appropriately.
+    */
+    virtual bool HasMultiplePages() const;
+
+    /**
+        This function is (or should be, in case of custom controls) called during
+        window creation to intelligently set up the window visual attributes, that is
+        the font and the foreground and background colours.
+
+        By "intelligently" the following is meant: by default, all windows use their
+        own @ref GetClassDefaultAttributes() default attributes.
+        However if some of the parents attributes are explicitly (that is, using
+        SetFont() and not wxWindow::SetOwnFont) changed and if the corresponding
+        attribute hadn't been explicitly set for this window itself, then this
+        window takes the same value as used by the parent.
+        In addition, if the window overrides ShouldInheritColours() to return @false,
+        the colours will not be changed no matter what and only the font might.
+
+        This rather complicated logic is necessary in order to accommodate the
+        different usage scenarios. The most common one is when all default attributes
+        are used and in this case, nothing should be inherited as in modern GUIs
+        different controls use different fonts (and colours) than their siblings so
+        they can't inherit the same value from the parent. However it was also deemed
+        desirable to allow to simply change the attributes of all children at once by
+        just changing the font or colour of their common parent, hence in this case we
+        do inherit the parents attributes.
+    */
+    virtual void InheritAttributes();
+
+    /**
+        Sends an @c wxEVT_INIT_DIALOG event, whose handler usually transfers data
+        to the dialog via validators.
+    */
+    virtual void InitDialog();
+
+    /**
+        Returns @true if the window contents is double-buffered by the system, i.e. if
+        any drawing done on the window is really done on a temporary backing surface
+        and transferred to the screen all at once later.
+
+        @see wxBufferedDC
+    */
+    virtual bool IsDoubleBuffered() const;
+
+    /**
+        Returns @true if the window is retained, @false otherwise.
+
+        @remarks Retained windows are only available on X platforms.
+    */
+    virtual bool IsRetained() const;
+
+    /**
+        Returns @true if this window is intrinsically enabled, @false otherwise,
+        i.e. if @ref Enable() Enable(@false) had been called. This method is
+        mostly used for wxWidgets itself, user code should normally use
+        IsEnabled() instead.
+    */
+    bool IsThisEnabled() const;
+
+    /**
+        Returns @true if the given window is a top-level one. Currently all frames and
+        dialogs are considered to be top-level windows (even if they have a parent
+        window).
+    */
+    virtual bool IsTopLevel() const;
+
+    /**
+        Disables all other windows in the application so that
+        the user can only interact with this window.
+
+        @param modal
+            If @true, this call disables all other windows in the application so that
+            the user can only interact with this window. If @false, the effect is
+            reversed.
+    */
+    virtual void MakeModal(bool modal = true);
+
+    /**
+        This virtual function is normally only used internally, but
+        sometimes an application may need it to implement functionality
+        that should not be disabled by an application defining an OnIdle
+        handler in a derived class.
+
+        This function may be used to do delayed painting, for example,
+        and most implementations call UpdateWindowUI()
+        in order to send update events to the window in idle time.
+    */
+    virtual void OnInternalIdle();
+
+    /**
+        Registers a system wide hotkey. Every time the user presses the hotkey
+        registered here, this window will receive a hotkey event.
+
+        It will receive the event even if the application is in the background
+        and does not have the input focus because the user is working with some
+        other application.
+
+        @param hotkeyId
+            Numeric identifier of the hotkey. For applications this must be between 0
+            and 0xBFFF. If this function is called from a shared DLL, it must be a
+            system wide unique identifier between 0xC000 and 0xFFFF.
+            This is a MSW specific detail.
+        @param modifiers
+            A bitwise combination of wxMOD_SHIFT, wxMOD_CONTROL, wxMOD_ALT
+            or wxMOD_WIN specifying the modifier keys that have to be pressed along
+            with the key.
+        @param virtualKeyCode
+            The virtual key code of the hotkey.
+
+        @return @true if the hotkey was registered successfully. @false if some
+                 other application already registered a hotkey with this
+                 modifier/virtualKeyCode combination.
+
+        @remarks Use EVT_HOTKEY(hotkeyId, fnc) in the event table to capture the
+                 event. This function is currently only implemented
+                 under Windows. It is used in the Windows CE port for
+                 detecting hardware button presses.
+
+        @see UnregisterHotKey()
+    */
+    virtual bool RegisterHotKey(int hotkeyId, int modifiers,
+                                int virtualKeyCode);
+
+    /**
+        Unregisters a system wide hotkey.
+
+        @param hotkeyId
+            Numeric identifier of the hotkey. Must be the same id that was passed to
+            RegisterHotKey().
+
+        @return @true if the hotkey was unregistered successfully, @false if the
+                id was invalid.
+
+        @remarks This function is currently only implemented under MSW.
+
+        @see RegisterHotKey()
+    */
+    virtual bool UnregisterHotKey(int hotkeyId);
+
+    /**
+        This function sends one or more wxUpdateUIEvent to the window.
+        The particular implementation depends on the window; for example a
+        wxToolBar will send an update UI event for each toolbar button,
+        and a wxFrame will send an update UI event for each menubar menu item.
+
+        You can call this function from your application to ensure that your
+        UI is up-to-date at this point (as far as your wxUpdateUIEvent handlers
+        are concerned). This may be necessary if you have called
+        wxUpdateUIEvent::SetMode() or wxUpdateUIEvent::SetUpdateInterval() to limit
+        the overhead that wxWidgets incurs by sending update UI events in idle time.
+        @a flags should be a bitlist of one or more of the wxUpdateUI enumeration.
+
+        If you are calling this function from an OnInternalIdle or OnIdle
+        function, make sure you pass the wxUPDATE_UI_FROMIDLE flag, since
+        this tells the window to only update the UI elements that need
+        to be updated in idle time. Some windows update their elements
+        only when necessary, for example when a menu is about to be shown.
+        The following is an example of how to call UpdateWindowUI from
+        an idle function.
+
+        @code
+        void MyWindow::OnInternalIdle()
+        {
+            if (wxUpdateUIEvent::CanUpdate(this))
+                UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
+        }
+        @endcode
+
+        @see wxUpdateUIEvent, DoUpdateWindowUI(), OnInternalIdle()
+    */
+    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
+
+    //@}
+
+
     // NOTE: static functions must have their own group or Doxygen will screw
     //       up the ordering of the member groups
 
     /**
-        @name Static functions
+        @name Miscellaneous static functions
     */
     //@{
 
@@ -2210,753 +3012,6 @@ public:
     //@}
 
 
-    /**
-        @name Tooltip functions
-    */
-    //@{
-
-    /**
-        Get the associated tooltip or @NULL if none.
-    */
-    wxToolTip* GetToolTip() const;
-
-    /**
-        Attach a tooltip to the window.
-
-        wxToolTip pointer can be @NULL in the overload taking the pointer,
-        meaning to unset any existing tooltips, however UnsetToolTip() provides
-        a more readable alternative to this operation.
-
-        Notice that these methods are always available, even if wxWidgets was
-        compiled with @c wxUSE_TOOLTIPS set to 0, but don't do anything in this
-        case.
-
-        @see GetToolTip(), wxToolTip
-    */
-    void SetToolTip(const wxString& tip);
-
-    /**
-        @overload
-    */
-    void SetToolTip(wxToolTip* tip);
-
-    /**
-        Unset any existing tooltip.
-
-        @since 2.9.0
-
-        @see SetToolTip()
-     */
-    void UnsetToolTip();
-
-    //@}
-
-
-    /**
-        @name Popup/context menu functions
-    */
-    //@{
-
-    /**
-        This function shows a popup menu at the given position in this window and
-        returns the selected id.
-
-        It can be more convenient than the general purpose PopupMenu() function
-        for simple menus proposing a choice in a list of strings to the user.
-
-        Notice that to avoid unexpected conflicts between the (usually
-        consecutive range of) ids used by the menu passed to this function and
-        the existing EVT_UPDATE_UI() handlers, this function temporarily
-        disables UI updates for the window, so you need to manually disable
-        (or toggle or ...) any items which should be disabled in the menu
-        before showing it.
-
-        The parameter @a menu is the menu to show.
-        The parameter @a pos (or the parameters @a x and @a y) is the
-        position at which to show the menu in client coordinates.
-
-        @return
-             The selected menu item id or @c wxID_NONE if none selected or an
-             error occurred.
-
-        @since 2.9.0
-    */
-    int GetPopupMenuSelectionFromUser(wxMenu& menu, const wxPoint& pos);
-
-    /**
-        @overload
-    */
-    int GetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y);
-
-    /**
-        Pops up the given menu at the specified coordinates, relative to this
-        window, and returns control when the user has dismissed the menu.
-
-        If a menu item is selected, the corresponding menu event is generated and will be
-        processed as usually. If the coordinates are not specified, current mouse
-        cursor position is used.
-
-        @a menu is the menu to pop up.
-
-        The position where the menu will appear can be specified either as a
-        wxPoint @a pos or by two integers (@a x and @a y).
-
-        @remarks Just before the menu is popped up, wxMenu::UpdateUI is called to
-                 ensure that the menu items are in the correct state.
-                 The menu does not get deleted by the window.
-                 It is recommended to not explicitly specify coordinates when
-                 calling PopupMenu in response to mouse click, because some of
-                 the ports (namely, wxGTK) can do a better job of positioning
-                 the menu in that case.
-
-        @see wxMenu
-    */
-    bool PopupMenu(wxMenu* menu,
-                   const wxPoint& pos = wxDefaultPosition);
-
-    /**
-        @overload
-    */
-    bool PopupMenu(wxMenu* menu, int x, int y);
-
-    //@}
-
-
-
-    /**
-        @name Miscellaneous functions
-    */
-    //@{
-
-    /**
-        Directs all mouse input to this window.
-        Call ReleaseMouse() to release the capture.
-
-        Note that wxWidgets maintains the stack of windows having captured the mouse
-        and when the mouse is released the capture returns to the window which had had
-        captured it previously and it is only really released if there were no previous
-        window. In particular, this means that you must release the mouse as many times
-        as you capture it, unless the window receives the wxMouseCaptureLostEvent event.
-
-        Any application which captures the mouse in the beginning of some operation
-        must handle wxMouseCaptureLostEvent and cancel this operation when it receives
-        the event. The event handler must not recapture mouse.
-
-        @see ReleaseMouse(), wxMouseCaptureLostEvent
-    */
-    void CaptureMouse();
-
-    /**
-        This function simply generates a wxCloseEvent whose handler usually tries
-        to close the window. It doesn't close the window itself, however.
-
-        @param force
-            @false if the window's close handler should be able to veto the destruction
-            of this window, @true if it cannot.
-
-        @remarks Close calls the close handler for the window, providing an
-                 opportunity for the window to choose whether to destroy
-                 the window. Usually it is only used with the top level
-                 windows (wxFrame and wxDialog classes) as the others
-                 are not supposed to have any special OnClose() logic.
-                The close handler should check whether the window is being deleted
-                forcibly, using wxCloseEvent::CanVeto, in which case it should
-                destroy the window using wxWindow::Destroy.
-                Note that calling Close does not guarantee that the window will
-                be destroyed; but it provides a way to simulate a manual close
-                of a window, which may or may not be implemented by destroying
-                the window. The default implementation of wxDialog::OnCloseWindow
-                does not necessarily delete the dialog, since it will simply
-                simulate an wxID_CANCEL event which is handled by the appropriate
-                button event handler and may do anything at all.
-                To guarantee that the window will be destroyed, call
-                wxWindow::Destroy instead
-
-        @see @ref overview_windowdeletion "Window Deletion Overview",
-             Destroy(), wxCloseEvent
-    */
-    bool Close(bool force = false);
-
-    /**
-        Destroys the window safely. Use this function instead of the delete operator,
-        since different window classes can be destroyed differently. Frames and dialogs
-        are not destroyed immediately when this function is called -- they are added
-        to a list of windows to be deleted on idle time, when all the window's events
-        have been processed. This prevents problems with events being sent to
-        non-existent windows.
-
-        @return @true if the window has either been successfully deleted, or it
-                 has been added to the list of windows pending real deletion.
-    */
-    virtual bool Destroy();
-
-    /**
-        Returns true if this window is in process of being destroyed.
-
-        The top level windows are not deleted immediately but are rather
-        scheduled for later destruction to give them time to process any
-        pending messages, see Destroy() description.
-
-        This function returns @true if this window, or one of its parent
-        windows, is scheduled for destruction and can be useful to avoid
-        manipulating it as it's usually useless to do something with a window
-        which is on the point of disappearing anyhow.
-     */
-    bool IsBeingDeleted() const;
-
-    /**
-        Does the window-specific updating after processing the update event.
-        This function is called by UpdateWindowUI() in order to check return
-        values in the wxUpdateUIEvent and act appropriately.
-        For example, to allow frame and dialog title updating, wxWidgets
-        implements this function as follows:
-
-        @code
-        // do the window-specific processing after processing the update event
-        void wxTopLevelWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
-        {
-            if ( event.GetSetEnabled() )
-                Enable(event.GetEnabled());
-
-            if ( event.GetSetText() )
-            {
-                if ( event.GetText() != GetTitle() )
-                    SetTitle(event.GetText());
-            }
-        }
-        @endcode
-    */
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
-
-    /**
-        Enables or disables eligibility for drop file events (OnDropFiles).
-
-        @param accept
-            If @true, the window is eligible for drop file events.
-            If @false, the window will not accept drop file events.
-
-        @remarks Windows only until version 2.8.9, available on all platforms
-                 since 2.8.10. Cannot be used together with SetDropTarget() on
-                 non-Windows platforms.
-
-        @see SetDropTarget()
-    */
-    virtual void DragAcceptFiles(bool accept);
-
-    /**
-        Gets the accelerator table for this window. See wxAcceleratorTable.
-    */
-    wxAcceleratorTable* GetAcceleratorTable();
-
-    /**
-        Returns the accessible object for this window, if any.
-        See also wxAccessible.
-    */
-    wxAccessible* GetAccessible();
-
-    /**
-        Returns the caret() associated with the window.
-    */
-    wxCaret* GetCaret() const;
-
-    /**
-        Returns a pointer to the window's layout constraints, or @NULL if there are none.
-    */
-    wxLayoutConstraints* GetConstraints() const;
-
-    /**
-        Return the cursor associated with this window.
-
-        @see SetCursor()
-    */
-    const wxCursor& GetCursor() const;
-
-    /**
-        Returns the associated drop target, which may be @NULL.
-
-        @see SetDropTarget(), @ref overview_dnd
-    */
-    virtual wxDropTarget* GetDropTarget() const;
-
-    /**
-        Returns the platform-specific handle of the physical window.
-        Cast it to an appropriate handle, such as @b HWND for Windows,
-        @b Widget for Motif, @b GtkWidget for GTK or @b WinHandle for PalmOS.
-    */
-    virtual WXWidget GetHandle() const;
-
-    /**
-        Gets the help text to be used as context-sensitive help for this window.
-        Note that the text is actually stored by the current wxHelpProvider
-        implementation, and not in the window object itself.
-
-        @see SetHelpText(), GetHelpTextAtPoint(), wxHelpProvider
-    */
-    wxString GetHelpText() const;
-
-    /**
-        Gets the help text to be used as context-sensitive help for this window.
-        This method should be overridden if the help message depends on the position
-        inside the window, otherwise GetHelpText() can be used.
-
-        @param point
-            Coordinates of the mouse at the moment of help event emission.
-        @param origin
-            Help event origin, see also wxHelpEvent::GetOrigin.
-    */
-    virtual wxString GetHelpTextAtPoint(const wxPoint& point,
-                                        wxHelpEvent::Origin origin) const;
-
-    /**
-        Returns the identifier of the window.
-
-        @remarks Each window has an integer identifier. If the application
-                 has not provided one (or the default wxID_ANY) an unique
-                 identifier with a negative value will be generated.
-
-        @see SetId(), @ref overview_windowids
-    */
-    wxWindowID GetId() const;
-
-    /**
-        Generic way of getting a label from any window, for
-        identification purposes.
-
-        @remarks The interpretation of this function differs from class to class.
-                 For frames and dialogs, the value returned is the
-                 title. For buttons or static text controls, it is the
-                 button text. This function can be useful for
-                 meta-programs (such as testing tools or special-needs
-                 access programs) which need to identify windows by name.
-    */
-    virtual wxString GetLabel() const;
-
-    /**
-        Returns the window's name.
-
-        @remarks This name is not guaranteed to be unique; it is up to the
-                 programmer to supply an appropriate name in the window
-                 constructor or via SetName().
-
-        @see SetName()
-    */
-    virtual wxString GetName() const;
-
-    /**
-        Returns a pointer to the current validator for the window, or @NULL if
-        there is none.
-    */
-    virtual wxValidator* GetValidator();
-
-    /**
-        Returns the value previously passed to SetWindowVariant().
-    */
-    wxWindowVariant GetWindowVariant() const;
-
-    /**
-        Returns @true if this window has the current mouse capture.
-
-        @see CaptureMouse(), ReleaseMouse(), wxMouseCaptureLostEvent,
-             wxMouseCaptureChangedEvent
-    */
-    virtual bool HasCapture() const;
-
-    /**
-        This method should be overridden to return @true if this window has
-        multiple pages. All standard class with multiple pages such as
-        wxNotebook, wxListbook and wxTreebook already override it to return @true
-        and user-defined classes with similar behaviour should do it as well to
-        allow the library to handle such windows appropriately.
-    */
-    virtual bool HasMultiplePages() const;
-
-    /**
-        This function is (or should be, in case of custom controls) called during
-        window creation to intelligently set up the window visual attributes, that is
-        the font and the foreground and background colours.
-
-        By "intelligently" the following is meant: by default, all windows use their
-        own @ref GetClassDefaultAttributes() default attributes.
-        However if some of the parents attributes are explicitly (that is, using
-        SetFont() and not wxWindow::SetOwnFont) changed and if the corresponding
-        attribute hadn't been explicitly set for this window itself, then this
-        window takes the same value as used by the parent.
-        In addition, if the window overrides ShouldInheritColours() to return @false,
-        the colours will not be changed no matter what and only the font might.
-
-        This rather complicated logic is necessary in order to accommodate the
-        different usage scenarios. The most common one is when all default attributes
-        are used and in this case, nothing should be inherited as in modern GUIs
-        different controls use different fonts (and colours) than their siblings so
-        they can't inherit the same value from the parent. However it was also deemed
-        desirable to allow to simply change the attributes of all children at once by
-        just changing the font or colour of their common parent, hence in this case we
-        do inherit the parents attributes.
-    */
-    virtual void InheritAttributes();
-
-    /**
-        Sends an @c wxEVT_INIT_DIALOG event, whose handler usually transfers data
-        to the dialog via validators.
-    */
-    virtual void InitDialog();
-
-    /**
-        Returns @true if the window contents is double-buffered by the system, i.e. if
-        any drawing done on the window is really done on a temporary backing surface
-        and transferred to the screen all at once later.
-
-        @see wxBufferedDC
-    */
-    virtual bool IsDoubleBuffered() const;
-
-    /**
-        Returns @true if the window is retained, @false otherwise.
-
-        @remarks Retained windows are only available on X platforms.
-    */
-    virtual bool IsRetained() const;
-
-    /**
-        Returns @true if this window is intrinsically enabled, @false otherwise,
-        i.e. if @ref Enable() Enable(@false) had been called. This method is
-        mostly used for wxWidgets itself, user code should normally use
-        IsEnabled() instead.
-    */
-    bool IsThisEnabled() const;
-
-    /**
-        Returns @true if the given window is a top-level one. Currently all frames and
-        dialogs are considered to be top-level windows (even if they have a parent
-        window).
-    */
-    virtual bool IsTopLevel() const;
-
-    /**
-        Invokes the constraint-based layout algorithm or the sizer-based algorithm
-        for this window.
-
-        This function does not get called automatically when the window is resized
-        because lots of windows deriving from wxWindow does not need this functionality.
-        If you want to have Layout() called automatically, you should derive
-        from wxPanel (see wxPanel::Layout).
-
-        @see @ref overview_windowsizing
-    */
-    virtual bool Layout();
-
-    /**
-        Disables all other windows in the application so that
-        the user can only interact with this window.
-
-        @param modal
-            If @true, this call disables all other windows in the application so that
-            the user can only interact with this window. If @false, the effect is
-            reversed.
-    */
-    virtual void MakeModal(bool modal = true);
-
-    /**
-        This virtual function is normally only used internally, but
-        sometimes an application may need it to implement functionality
-        that should not be disabled by an application defining an OnIdle
-        handler in a derived class.
-
-        This function may be used to do delayed painting, for example,
-        and most implementations call UpdateWindowUI()
-        in order to send update events to the window in idle time.
-    */
-    virtual void OnInternalIdle();
-
-    /**
-        Registers a system wide hotkey. Every time the user presses the hotkey
-        registered here, this window will receive a hotkey event.
-
-        It will receive the event even if the application is in the background
-        and does not have the input focus because the user is working with some
-        other application.
-
-        @param hotkeyId
-            Numeric identifier of the hotkey. For applications this must be between 0
-            and 0xBFFF. If this function is called from a shared DLL, it must be a
-            system wide unique identifier between 0xC000 and 0xFFFF.
-            This is a MSW specific detail.
-        @param modifiers
-            A bitwise combination of wxMOD_SHIFT, wxMOD_CONTROL, wxMOD_ALT
-            or wxMOD_WIN specifying the modifier keys that have to be pressed along
-            with the key.
-        @param virtualKeyCode
-            The virtual key code of the hotkey.
-
-        @return @true if the hotkey was registered successfully. @false if some
-                 other application already registered a hotkey with this
-                 modifier/virtualKeyCode combination.
-
-        @remarks Use EVT_HOTKEY(hotkeyId, fnc) in the event table to capture the
-                 event. This function is currently only implemented
-                 under Windows. It is used in the Windows CE port for
-                 detecting hardware button presses.
-
-        @see UnregisterHotKey()
-    */
-    virtual bool RegisterHotKey(int hotkeyId, int modifiers,
-                                int virtualKeyCode);
-
-    /**
-        Releases mouse input captured with CaptureMouse().
-
-        @see CaptureMouse(), HasCapture(), ReleaseMouse(),
-             wxMouseCaptureLostEvent, wxMouseCaptureChangedEvent
-    */
-    void ReleaseMouse();
-
-    /**
-        Sets the accelerator table for this window. See wxAcceleratorTable.
-    */
-    virtual void SetAcceleratorTable(const wxAcceleratorTable& accel);
-
-    /**
-        Sets the accessible for this window. Any existing accessible for this window
-        will be deleted first, if not identical to @e accessible.
-        See also wxAccessible.
-    */
-    void SetAccessible(wxAccessible* accessible);
-
-    /**
-        Determines whether the Layout() function will be called automatically
-        when the window is resized. Please note that this only happens for the
-        windows usually used to contain children, namely wxPanel and wxTopLevelWindow
-        (and the classes deriving from them).
-
-        This method is called implicitly by SetSizer() but if you use SetConstraints()
-        you should call it manually or otherwise the window layout won't be correctly
-        updated when its size changes.
-
-        @param autoLayout
-            Set this to @true if you wish the Layout() function to be
-            called automatically when the window is resized
-            (really happens only if you derive from wxPanel or wxTopLevelWindow).
-
-        @see SetConstraints()
-    */
-    void SetAutoLayout(bool autoLayout);
-
-    /**
-        Sets the caret() associated with the window.
-    */
-    void SetCaret(wxCaret* caret);
-
-    /**
-        Sets the window to have the given layout constraints. The window
-        will then own the object, and will take care of its deletion.
-        If an existing layout constraints object is already owned by the
-        window, it will be deleted.
-
-        @param constraints
-            The constraints to set. Pass @NULL to disassociate and delete the window's
-            constraints.
-
-        @remarks You must call SetAutoLayout() to tell a window to use
-                 the constraints automatically in OnSize; otherwise, you
-                 must override OnSize and call Layout() explicitly. When
-                 setting both a wxLayoutConstraints and a wxSizer, only
-                 the sizer will have effect.
-    */
-    void SetConstraints(wxLayoutConstraints* constraints);
-
-    /**
-        Sets the window's cursor. Notice that the window cursor also sets it for the
-        children of the window implicitly.
-
-        The @a cursor may be @c wxNullCursor in which case the window cursor will
-        be reset back to default.
-
-        @param cursor
-            Specifies the cursor that the window should normally display.
-
-        @see ::wxSetCursor, wxCursor
-    */
-    virtual bool SetCursor(const wxCursor& cursor);
-
-    /**
-        Associates a drop target with this window.
-        If the window already has a drop target, it is deleted.
-
-        @see GetDropTarget(), @ref overview_dnd
-    */
-    virtual void SetDropTarget(wxDropTarget* target);
-
-    /**
-        Sets the help text to be used as context-sensitive help for this window.
-        Note that the text is actually stored by the current wxHelpProvider
-        implementation, and not in the window object itself.
-
-        @see GetHelpText(), wxHelpProvider::AddHelp()
-    */
-    void SetHelpText(const wxString& helpText);
-
-    /**
-        Sets the identifier of the window.
-
-        @remarks Each window has an integer identifier. If the application has
-                 not provided one, an identifier will be generated.
-                 Normally, the identifier should be provided on creation
-                 and should not be modified subsequently.
-
-        @see GetId(), @ref overview_windowids
-    */
-    void SetId(wxWindowID winid);
-
-    /**
-        Sets the window's label.
-
-        @param label
-            The window label.
-
-        @see GetLabel()
-    */
-    virtual void SetLabel(const wxString& label);
-
-    /**
-        Sets the window's name.
-
-        @param name
-            A name to set for the window.
-
-        @see GetName()
-    */
-    virtual void SetName(const wxString& name);
-
-    /**
-        Deletes the current validator (if any) and sets the window validator, having
-        called wxValidator::Clone to create a new validator of this type.
-    */
-    virtual void SetValidator(const wxValidator& validator);
-
-    /**
-        This function can be called under all platforms but only does anything under
-        Mac OS X 10.3+ currently. Under this system, each of the standard control can
-        exist in several sizes which correspond to the elements of wxWindowVariant enum.
-
-        By default the controls use the normal size, of course, but this function can
-        be used to change this.
-    */
-    void SetWindowVariant(wxWindowVariant variant);
-
-    /**
-        Turns the given @a flag on if it's currently turned off and vice versa.
-        This function cannot be used if the value of the flag is 0 (which is often
-        the case for default flags).
-
-        Also, please notice that not all styles can be changed after the control
-        creation.
-
-        @return Returns @true if the style was turned on by this function, @false
-                 if it was switched off.
-
-        @see SetWindowStyleFlag(), HasFlag()
-    */
-    bool ToggleWindowStyle(int flag);
-
-    /**
-        Transfers values from child controls to data areas specified by their
-        validators. Returns @false if a transfer failed.
-
-        If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
-        the method will also call TransferDataFromWindow() of all child windows.
-
-        @see TransferDataToWindow(), wxValidator, Validate()
-    */
-    virtual bool TransferDataFromWindow();
-
-    /**
-        Transfers values to child controls from data areas specified by their
-        validators.
-
-        If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
-        the method will also call TransferDataToWindow() of all child windows.
-
-        @return Returns @false if a transfer failed.
-
-        @see TransferDataFromWindow(), wxValidator, Validate()
-    */
-    virtual bool TransferDataToWindow();
-
-    /**
-        Unregisters a system wide hotkey.
-
-        @param hotkeyId
-            Numeric identifier of the hotkey. Must be the same id that was passed to
-            RegisterHotKey().
-
-        @return @true if the hotkey was unregistered successfully, @false if the
-                id was invalid.
-
-        @remarks This function is currently only implemented under MSW.
-
-        @see RegisterHotKey()
-    */
-    virtual bool UnregisterHotKey(int hotkeyId);
-
-    /**
-        This function sends one or more wxUpdateUIEvent to the window.
-        The particular implementation depends on the window; for example a
-        wxToolBar will send an update UI event for each toolbar button,
-        and a wxFrame will send an update UI event for each menubar menu item.
-
-        You can call this function from your application to ensure that your
-        UI is up-to-date at this point (as far as your wxUpdateUIEvent handlers
-        are concerned). This may be necessary if you have called
-        wxUpdateUIEvent::SetMode() or wxUpdateUIEvent::SetUpdateInterval() to limit
-        the overhead that wxWidgets incurs by sending update UI events in idle time.
-        @a flags should be a bitlist of one or more of the wxUpdateUI enumeration.
-
-        If you are calling this function from an OnInternalIdle or OnIdle
-        function, make sure you pass the wxUPDATE_UI_FROMIDLE flag, since
-        this tells the window to only update the UI elements that need
-        to be updated in idle time. Some windows update their elements
-        only when necessary, for example when a menu is about to be shown.
-        The following is an example of how to call UpdateWindowUI from
-        an idle function.
-
-        @code
-        void MyWindow::OnInternalIdle()
-        {
-            if (wxUpdateUIEvent::CanUpdate(this))
-                UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
-        }
-        @endcode
-
-        @see wxUpdateUIEvent, DoUpdateWindowUI(), OnInternalIdle()
-    */
-    virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE);
-
-    /**
-        Validates the current values of the child controls using their validators.
-        If the window has @c wxWS_EX_VALIDATE_RECURSIVELY extra style flag set,
-        the method will also call Validate() of all child windows.
-
-        @return Returns @false if any of the validations failed.
-
-        @see TransferDataFromWindow(), TransferDataToWindow(),
-             wxValidator
-    */
-    virtual bool Validate();
-
-    /**
-        Moves the pointer to the given position on the window.
-
-        @note This function is not supported under Mac because Apple Human
-              Interface Guidelines forbid moving the mouse cursor programmatically.
-
-        @param x
-            The new x position for the cursor.
-        @param y
-            The new y position for the cursor.
-    */
-    virtual void WarpPointer(int x, int y);
-
-    //@}
 
 protected:
 
