@@ -12,7 +12,7 @@
 # With each new release a section should be added containing any new symbols,
 # for example:
 #
-#   # public symbols added in release 2.6.2 (please keep in alphabetical order):
+#   # public symbols added in release @WX_VERSION_TAG@.2 (please keep in alphabetical order):
 #   @WX_VERSION_TAG@.2 {
 #           *wxChoice*GetCurrentSelection*;
 #   };
