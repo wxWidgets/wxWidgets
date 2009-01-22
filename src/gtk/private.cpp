@@ -115,6 +115,7 @@ GtkWidget *GetEntryWidget()
 // differently if the button is in a treeview.
 static GtkWidget *s_first_button = NULL;
 static GtkWidget *s_other_button = NULL;
+static GtkWidget *s_last_button = NULL;
     
 GtkWidget *GetHeaderButtonWidgetFirst()
 {
@@ -132,6 +133,10 @@ GtkWidget *GetHeaderButtonWidgetFirst()
         column = gtk_tree_view_column_new();
         gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
         s_other_button = column->button;
+        
+        column = gtk_tree_view_column_new();
+        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+        s_last_button = column->button;
     }
 
     return s_first_button;
@@ -152,6 +157,10 @@ GtkWidget *GetHeaderButtonWidget()
         column = gtk_tree_view_column_new();
         gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
         s_other_button = column->button;
+        
+        column = gtk_tree_view_column_new();
+        gtk_tree_view_append_column(GTK_TREE_VIEW(treewidget), column);
+        s_last_button = column->button;
     }
 
     return s_other_button;
