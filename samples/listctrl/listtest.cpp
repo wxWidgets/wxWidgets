@@ -425,7 +425,7 @@ void MyFrame::RecreateList(long flags, bool withText)
         m_listCtrl = new MyListCtrl(m_panel, LIST_CTRL,
                                     wxDefaultPosition, wxDefaultSize,
                                     flags |
-                                    wxSUNKEN_BORDER | wxLC_EDIT_LABELS);
+                                    wxBORDER_THEME | wxLC_EDIT_LABELS);
 
         switch ( flags & wxLC_MASK_TYPE )
         {
