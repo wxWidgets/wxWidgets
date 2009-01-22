@@ -121,6 +121,7 @@ GtkWidget *GetButtonWidget();
 GtkWidget *GetCheckButtonWidget();
 GtkWidget *GetComboBoxWidget();
 GtkWidget *GetEntryWidget();
+GtkWidget *GetHeaderButtonWidgetFirst();
 GtkWidget *GetHeaderButtonWidget();
 GtkWidget *GetRadioButtonWidget();
 GtkWidget *GetSplitterWidget();
