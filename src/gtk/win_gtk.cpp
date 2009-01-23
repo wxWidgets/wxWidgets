@@ -259,13 +259,6 @@ static void class_init(void* g_class, void*)
             G_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
     parent_class = GTK_WIDGET_CLASS(g_type_class_peek_parent(g_class));
-
-    gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("row-ending-details",
-								 "Row Ending details",
-								 "Enable extended row background theming",
-								 FALSE,
-								 G_PARAM_READABLE));
 }
 
 } // extern "C"

@@ -575,8 +575,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
                          // Using "treeview-middle" would fix the warning, but the right
                          // edge of the focus rect is not getting erased properly either.
                          // Better to not specify this detail unless the drawing is fixed.
-                         // RR: I added that to the Pizza widget class.
-                         "treeview",
+                         "",
                          dc.LogicalToDeviceX(rect.x),
                          dc.LogicalToDeviceY(rect.y),
                          rect.width,
