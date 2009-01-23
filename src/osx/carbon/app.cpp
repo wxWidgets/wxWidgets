@@ -1388,7 +1388,6 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     if ( !focus )
         return false ;
 
-    bool handled;
     wxKeyEvent event( wxEVT_KEY_UP ) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
 
