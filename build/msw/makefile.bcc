@@ -1701,7 +1701,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_nbkbase.obj \
 	$(OBJS)\monodll_overlaycmn.obj \
 	$(OBJS)\monodll_paper.obj \
-	$(OBJS)\monodll_persist.obj \
 	$(OBJS)\monodll_pickerbase.obj \
 	$(OBJS)\monodll_popupcmn.obj \
 	$(OBJS)\monodll_prntbase.obj \
@@ -1940,7 +1939,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_nbkbase.obj \
 	$(OBJS)\monodll_overlaycmn.obj \
 	$(OBJS)\monodll_paper.obj \
-	$(OBJS)\monodll_persist.obj \
 	$(OBJS)\monodll_pickerbase.obj \
 	$(OBJS)\monodll_popupcmn.obj \
 	$(OBJS)\monodll_prntbase.obj \
@@ -2382,7 +2380,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_nbkbase.obj \
 	$(OBJS)\monolib_overlaycmn.obj \
 	$(OBJS)\monolib_paper.obj \
-	$(OBJS)\monolib_persist.obj \
 	$(OBJS)\monolib_pickerbase.obj \
 	$(OBJS)\monolib_popupcmn.obj \
 	$(OBJS)\monolib_prntbase.obj \
@@ -2621,7 +2618,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_nbkbase.obj \
 	$(OBJS)\monolib_overlaycmn.obj \
 	$(OBJS)\monolib_paper.obj \
-	$(OBJS)\monolib_persist.obj \
 	$(OBJS)\monolib_pickerbase.obj \
 	$(OBJS)\monolib_popupcmn.obj \
 	$(OBJS)\monolib_prntbase.obj \
@@ -2969,7 +2965,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_nbkbase.obj \
 	$(OBJS)\coredll_overlaycmn.obj \
 	$(OBJS)\coredll_paper.obj \
-	$(OBJS)\coredll_persist.obj \
 	$(OBJS)\coredll_pickerbase.obj \
 	$(OBJS)\coredll_popupcmn.obj \
 	$(OBJS)\coredll_prntbase.obj \
@@ -3208,7 +3203,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_nbkbase.obj \
 	$(OBJS)\coredll_overlaycmn.obj \
 	$(OBJS)\coredll_paper.obj \
-	$(OBJS)\coredll_persist.obj \
 	$(OBJS)\coredll_pickerbase.obj \
 	$(OBJS)\coredll_popupcmn.obj \
 	$(OBJS)\coredll_prntbase.obj \
@@ -3453,7 +3447,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_nbkbase.obj \
 	$(OBJS)\corelib_overlaycmn.obj \
 	$(OBJS)\corelib_paper.obj \
-	$(OBJS)\corelib_persist.obj \
 	$(OBJS)\corelib_pickerbase.obj \
 	$(OBJS)\corelib_popupcmn.obj \
 	$(OBJS)\corelib_prntbase.obj \
@@ -3692,7 +3685,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_nbkbase.obj \
 	$(OBJS)\corelib_overlaycmn.obj \
 	$(OBJS)\corelib_paper.obj \
-	$(OBJS)\corelib_persist.obj \
 	$(OBJS)\corelib_pickerbase.obj \
 	$(OBJS)\corelib_popupcmn.obj \
 	$(OBJS)\corelib_prntbase.obj \
@@ -7148,11 +7140,6 @@ $(OBJS)\monodll_paper.obj: ..\..\src\common\paper.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_persist.obj: ..\..\src\common\persist.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\persist.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_pickerbase.obj: ..\..\src\common\pickerbase.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\pickerbase.cpp
 !endif
@@ -9365,11 +9352,6 @@ $(OBJS)\monolib_overlaycmn.obj: ..\..\src\common\overlaycmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_paper.obj: ..\..\src\common\paper.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\paper.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_persist.obj: ..\..\src\common\persist.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\persist.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -11612,11 +11594,6 @@ $(OBJS)\coredll_paper.obj: ..\..\src\common\paper.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_persist.obj: ..\..\src\common\persist.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\persist.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_pickerbase.obj: ..\..\src\common\pickerbase.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\common\pickerbase.cpp
 !endif
@@ -12983,11 +12960,6 @@ $(OBJS)\corelib_overlaycmn.obj: ..\..\src\common\overlaycmn.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_paper.obj: ..\..\src\common\paper.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\common\paper.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_persist.obj: ..\..\src\common\persist.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\common\persist.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"

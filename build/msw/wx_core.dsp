@@ -562,10 +562,6 @@ SOURCE=..\..\src\common\paper.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\persist.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\pickerbase.cpp
 # End Source File
 # Begin Source File
@@ -5746,10 +5742,6 @@ SOURCE=..\..\include\wx\bmpcbox.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\persist\bookctrl.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\bookctrl.h
 # End Source File
 # Begin Source File
@@ -5831,10 +5823,6 @@ SOURCE=..\..\include\wx\combo.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\combobox.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\persist\common.h
 # End Source File
 # Begin Source File
 
@@ -6515,10 +6503,6 @@ SOURCE=..\..\include\wx\tooltip.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\toplevel.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\persist\toplevel.h
 # End Source File
 # Begin Source File
 

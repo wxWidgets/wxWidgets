@@ -1107,10 +1107,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\common\persist.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\common\pickerbase.cpp"
 				>
 			</File>
@@ -4768,10 +4764,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\persist\bookctrl.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\bookctrl.h"
 				>
 			</File>
@@ -4853,10 +4845,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\combobox.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\persist\common.h"
 				>
 			</File>
 			<File
@@ -5537,10 +5525,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\toplevel.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\include\wx\persist\toplevel.h"
 				>
 			</File>
 			<File
