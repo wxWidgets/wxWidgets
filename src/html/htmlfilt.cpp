@@ -153,15 +153,19 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     }
     else
     {
-        wxString tmpdoc;
-        ReadString(tmpdoc, s, wxConvISO8859_1);
+        size_t size = s->GetSize();
+        wxCharBuffer buf( size+1 );
+        s->Read( buf.data(), size );
+        *(buf.data() + size) = 0;
+        wxString tmpdoc( buf, wxConvISO8859_1);
+        
         wxString charset = wxHtmlParser::ExtractCharsetInformation(tmpdoc);
         if (charset.empty())
             doc = tmpdoc;
         else
         {
             wxCSConv conv(charset);
-            doc = wxString(tmpdoc.mb_str(wxConvISO8859_1), conv);
+            doc = wxString( buf, conv );
         }
     }
 #else // !wxUSE_UNICODE
