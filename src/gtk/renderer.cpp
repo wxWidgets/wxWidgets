@@ -525,6 +525,8 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
                                      const wxRect& rect,
                                      int flags )
 {
+    GtkWidget *tree = wxGTKPrivate::GetTreeWidget();
+    
     GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
@@ -533,14 +535,15 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
     if (win->GetLayoutDirection() == wxLayout_RightToLeft)
         x_diff = rect.width;
 
-    GtkStateType state;
+    GtkStateType state = GTK_STATE_NORMAL;
+    
     if (flags & wxCONTROL_SELECTED)
     {
         // the wxCONTROL_FOCUSED state is deduced
         // directly from the m_wxwindow by GTK+
         state = GTK_STATE_SELECTED;
 
-        gtk_paint_flat_box( win->m_widget->style,
+        gtk_paint_flat_box( tree->style, // win->m_widget->style,
                         gdk_window,
                         state,
                         GTK_SHADOW_NONE,
@@ -559,7 +562,10 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
 
     if ((flags & wxCONTROL_CURRENT) && (flags & wxCONTROL_FOCUSED))
     {
-        gtk_paint_focus( win->m_widget->style,
+        if (flags & wxCONTROL_SELECTED)
+            state = GTK_STATE_SELECTED;
+            
+        gtk_paint_focus( tree->style,
                          gdk_window,
                          state,
                          NULL,
@@ -569,7 +575,8 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
                          // Using "treeview-middle" would fix the warning, but the right
                          // edge of the focus rect is not getting erased properly either.
                          // Better to not specify this detail unless the drawing is fixed.
-                         NULL,
+                         // RR: I added that to the Pizza widget class.
+                         "treeview",
                          dc.LogicalToDeviceX(rect.x),
                          dc.LogicalToDeviceY(rect.y),
                          rect.width,
