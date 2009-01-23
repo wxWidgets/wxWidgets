@@ -449,9 +449,11 @@ public:
     virtual bool IsExpanded( const wxDataViewItem & item ) const;
 
     virtual void SetFocus();
-    
+
+#if wxUSE_DRAG_AND_DROP
     virtual bool EnableDragSource( const wxDataFormat &format );
     virtual bool EnableDropTarget( const wxDataFormat &format );
+#endif // wxUSE_DRAG_AND_DROP
 
     virtual wxBorder GetDefaultBorder() const;
 

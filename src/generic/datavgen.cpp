@@ -417,7 +417,9 @@ public:
     wxDataViewCtrl *GetOwner() { return m_owner; }
     const wxDataViewCtrl *GetOwner() const { return m_owner; }
 
+#if wxUSE_DRAG_AND_DROP
     wxBitmap CreateItemBitmap( unsigned int row, int &indent );
+#endif // wxUSE_DRAG_AND_DROP
     void OnPaint( wxPaintEvent &event );
     void OnArrowChar(unsigned int newCurrent, const wxKeyEvent& event);
     void OnChar( wxKeyEvent &event );
@@ -488,6 +490,7 @@ public:
     void Collapse( unsigned int row ) { OnCollapsing( row ); }
     bool IsExpanded( unsigned int row ) const;
 
+#if wxUSE_DRAG_AND_DROP
     bool EnableDragSource( const wxDataFormat &format );
     bool EnableDropTarget( const wxDataFormat &format );
 
@@ -496,6 +499,7 @@ public:
     bool OnDrop( wxDataFormat format, wxCoord x, wxCoord y );
     wxDragResult OnData( wxDataFormat format, wxCoord x, wxCoord y, wxDragResult def );
     void OnLeave();
+#endif // wxUSE_DRAG_AND_DROP
 
 private:
     wxDataViewTreeNode * GetTreeNodeByRow( unsigned int row ) const;
@@ -524,16 +528,18 @@ private:
 
     bool                        m_hasFocus;
 
+#if wxUSE_DRAG_AND_DROP
     int                         m_dragCount;
     wxPoint                     m_dragStart;
-    
+
     bool                        m_dragEnabled;
     wxDataFormat                m_dragFormat;
-    
+
     bool                        m_dropEnabled;
     wxDataFormat                m_dropFormat;
     bool                        m_dropHint;
     unsigned int                m_dropHintLine;
+#endif // wxUSE_DRAG_AND_DROP
 
     // for double click logic
     unsigned int m_lineLastClicked,
@@ -1140,6 +1146,8 @@ wxDataViewIconTextRenderer::GetValueFromEditorCtrl(wxControl* WXUNUSED(editor),
 // wxDataViewDropTarget
 //-----------------------------------------------------------------------------
 
+#if wxUSE_DRAG_AND_DROP
+
 class wxBitmapCanvas: public wxWindow
 {
 public:
@@ -1149,13 +1157,13 @@ public:
         m_bitmap = bitmap;
         Connect( wxEVT_PAINT, wxPaintEventHandler(wxBitmapCanvas::OnPaint) );
     }
-    
+
     void OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         wxPaintDC dc(this);
         dc.DrawBitmap( m_bitmap, 0, 0);
     }
-    
+
     wxBitmap m_bitmap;
 };
 
@@ -1169,16 +1177,16 @@ public:
         m_row = row;
         m_hint = NULL;
     }
-    
+
     ~wxDataViewDropSource()
     {
         delete m_hint;
     }
-    
+
     virtual bool GiveFeedback( wxDragResult WXUNUSED(effect) )
     {
         wxPoint pos = wxGetMousePosition();
-        
+
         if (!m_hint)
         {
             int liney = m_win->GetLineStart( m_row );
@@ -1187,11 +1195,11 @@ public:
             m_win->ClientToScreen( &linex, &liney );
             m_dist_x = pos.x - linex;
             m_dist_y = pos.y - liney;
-        
+
             int indent = 0;
             wxBitmap ib = m_win->CreateItemBitmap( m_row, indent );
             m_dist_x -= indent;
-            m_hint = new wxFrame( m_win->GetParent(), wxID_ANY, wxEmptyString, 
+            m_hint = new wxFrame( m_win->GetParent(), wxID_ANY, wxEmptyString,
                                          wxPoint(pos.x - m_dist_x, pos.y + 5 ),
                                          ib.GetSize(),
                                          wxFRAME_TOOL_WINDOW |
@@ -1206,10 +1214,10 @@ public:
             m_hint->Move( pos.x - m_dist_x, pos.y + 5  );
             m_hint->SetTransparent( 128 );
         }
-        
+
         return false;
     }
-     
+
     wxDataViewMainWindow   *m_win;
     unsigned int            m_row;
     wxFrame                *m_hint;
@@ -1227,23 +1235,23 @@ public:
     }
 
     virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
-        {   
+        {
            wxDataFormat format = GetMatchingPair();
            if (format == wxDF_INVALID)
               return wxDragNone;
-           return m_win->OnDragOver( format, x, y, def); 
+           return m_win->OnDragOver( format, x, y, def);
         }
-        
+
     virtual bool OnDrop( wxCoord x, wxCoord y )
-        { 
+        {
            wxDataFormat format = GetMatchingPair();
            if (format == wxDF_INVALID)
               return false;
-           return m_win->OnDrop( format, x, y ); 
+           return m_win->OnDrop( format, x, y );
         }
-        
+
     virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def )
-        { 
+        {
            wxDataFormat format = GetMatchingPair();
            if (format == wxDF_INVALID)
               return wxDragNone;
@@ -1251,12 +1259,14 @@ public:
               return wxDragNone;
            return m_win->OnData( format, x, y, def );
         }
-        
+
     virtual void OnLeave()
         { m_win->OnLeave(); }
 
     wxDataViewMainWindow   *m_win;
 };
+
+#endif // wxUSE_DRAG_AND_DROP
 
 //-----------------------------------------------------------------------------
 // wxDataViewRenameTimer
@@ -1314,16 +1324,19 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     m_lineHeight = wxMax( 17, GetCharHeight() + 2 ); // 17 = mini icon height + 1
 
+#if wxUSE_DRAG_AND_DROP
     m_dragCount = 0;
     m_dragStart = wxPoint(0,0);
-    m_lineLastClicked = (unsigned int) -1;
-    m_lineBeforeLastClicked = (unsigned int) -1;
-    m_lineSelectSingleOnUp = (unsigned int) -1;
 
     m_dragEnabled = false;
     m_dropEnabled = false;
     m_dropHint = false;
     m_dropHintLine = (unsigned int) -1;
+#endif // wxUSE_DRAG_AND_DROP
+
+    m_lineLastClicked = (unsigned int) -1;
+    m_lineBeforeLastClicked = (unsigned int) -1;
+    m_lineSelectSingleOnUp = (unsigned int) -1;
 
     m_hasFocus = false;
 
@@ -1351,22 +1364,24 @@ wxDataViewMainWindow::~wxDataViewMainWindow()
     delete m_renameTimer;
 }
 
+
+#if wxUSE_DRAG_AND_DROP
 bool wxDataViewMainWindow::EnableDragSource( const wxDataFormat &format )
 {
     m_dragFormat = format;
     m_dragEnabled = format != wxDF_INVALID;
-    
+
     return true;
 }
-    
+
 bool wxDataViewMainWindow::EnableDropTarget( const wxDataFormat &format )
 {
     m_dropFormat = format;
     m_dropEnabled = format != wxDF_INVALID;
-    
+
     if (m_dropEnabled)
         SetDropTarget( new wxDataViewDropTarget( new wxCustomDataObject( format ), this ) );
-    
+
     return true;
 }
 
@@ -1388,15 +1403,15 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x, w
     unsigned int row = GetLineAt( yy );
 
     if ((row >= GetRowCount()) || (yy > GetEndOfLastCol()))
-    {   
+    {
         RemoveDropHint();
         return wxDragNone;
     }
 
     wxDataViewItem item = GetItemByRow( row );
-    
+
     wxDataViewModel *model = GetOwner()->GetModel();
-    
+
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
@@ -1414,13 +1429,13 @@ wxDragResult wxDataViewMainWindow::OnDragOver( wxDataFormat format, wxCoord x, w
         return wxDragNone;
     }
 
-    
+
     if (m_dropHint && (row != m_dropHintLine))
         RefreshRow( m_dropHintLine );
     m_dropHint = true;
     m_dropHintLine = row;
     RefreshRow( row );
-    
+
     return def;
 }
 
@@ -1437,9 +1452,9 @@ bool wxDataViewMainWindow::OnDrop( wxDataFormat format, wxCoord x, wxCoord y )
         return false;
 
     wxDataViewItem item = GetItemByRow( row );
-    
+
     wxDataViewModel *model = GetOwner()->GetModel();
-    
+
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE, m_owner->GetId() );
     event.SetEventObject( m_owner );
     event.SetItem( item );
@@ -1465,9 +1480,9 @@ wxDragResult wxDataViewMainWindow::OnData( wxDataFormat format, wxCoord x, wxCoo
         return wxDragNone;
 
     wxDataViewItem item = GetItemByRow( row );
-    
+
     wxDataViewModel *model = GetOwner()->GetModel();
-    
+
     wxCustomDataObject *obj = (wxCustomDataObject *) GetDropTarget()->GetDataObject();
 
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_DROP, m_owner->GetId() );
@@ -1520,9 +1535,9 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
     dc.SetPen( *wxBLACK_PEN );
     dc.SetBrush( *wxWHITE_BRUSH );
     dc.DrawRectangle( 0,0,width,height );
-    
+
     wxDataViewModel *model = m_owner->GetModel();
-    
+
     wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
     if (!expander)
     {
@@ -1530,8 +1545,8 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
         expander = GetOwner()->GetColumnAt( 0 );
         GetOwner()->SetExpanderColumn(expander);
     }
-    
-    
+
+
     int x = 0;
     for (col = 0; col < cols; col++)
     {
@@ -1542,10 +1557,10 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
             continue;       // skip it!
 
         width = column->GetWidth();
-        
+
         if (column == expander)
             width -= indent;
-        
+
         wxVariant value;
         wxDataViewItem item = GetItemByRow( row );
         model->GetValue( value, item, column->GetModelColumn());
@@ -1564,7 +1579,7 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
         size.x = wxMin( 2*PADDING_RIGHTLEFT + size.x, width );
         size.y = height;
         wxRect item_rect(x, 0, size.x, size.y);
-        
+
         int align = cell->CalculateAlignment();
         // horizontal alignment:
         item_rect.x = x;
@@ -1589,12 +1604,15 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
         //dc.SetClippingRegion( item_rect );
         cell->Render( item_rect, &dc, 0 );
         //dc.DestroyClippingRegion();
-        
+
         x += width;
     }
-    
+
     return bitmap;
 }
+
+#endif // wxUSE_DRAG_AND_DROP
+
 
 void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
@@ -1713,14 +1731,17 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                                 );
         }
     }
-    
+
+#if wxUSE_DRAG_AND_DROP
     if (m_dropHint)
-    { 
-        wxRect rect( x_start, GetLineStart( m_dropHintLine ), x_last, GetLineHeight( m_dropHintLine ) );
+    {
+        wxRect rect( x_start, GetLineStart( m_dropHintLine ),
+                     x_last, GetLineHeight( m_dropHintLine ) );
         dc.SetPen( *wxBLACK_PEN );
         dc.SetBrush( *wxTRANSPARENT_BRUSH );
         dc.DrawRectangle( rect );
     }
+#endif // wxUSE_DRAG_AND_DROP
 
     wxDataViewColumn *expander = GetOwner()->GetExpanderColumn();
     if (!expander)
@@ -2818,17 +2839,17 @@ bool wxDataViewMainWindow::IsExpanded( unsigned int row ) const
 {
     if (IsVirtualList())
        return false;
-       
+
     wxDataViewTreeNode * node = GetTreeNodeByRow(row);
     if (!node)
        return false;
-       
+
     if (!node->HasChildren())
     {
        delete node;
        return false;
     }
-    
+
     return node->IsOpen();
 }
 
@@ -2920,7 +2941,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item
     wxDataViewModel * model = GetOwner()->GetModel();
     if( model == NULL )
         return NULL;
-        
+
     if (!item.IsOk())
         return m_root;
 
@@ -3124,7 +3145,7 @@ static void BuildTreeHelper( wxDataViewModel * model,  wxDataViewItem & item, wx
 
     wxDataViewItemArray children;
     unsigned int num = model->GetChildren( item, children);
-    
+
     unsigned int index = 0;
     while( index < num )
     {
@@ -3365,6 +3386,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     wxDataViewModel *model = GetOwner()->GetModel();
 
+#if wxUSE_DRAG_AND_DROP
     if (event.Dragging())
     {
         if (m_dragCount == 0)
@@ -3393,14 +3415,14 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             event.SetModel( model );
             if (!m_owner->HandleWindowEvent( event ))
                 return;
-        
+
             if (!event.IsAllowed())
                 return;
-        
+
             wxDataObject *obj = event.GetDataObject();
             if (!obj)
                 return;
-        
+
             wxDataViewDropSource drag( this, drag_item_row );
             drag.SetData( *obj );
             /* wxDragResult res = */ drag.DoDragDrop();
@@ -3412,6 +3434,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     {
         m_dragCount = 0;
     }
+#endif // wxUSE_DRAG_AND_DROP
 
     bool forceClick = false;
 
@@ -3795,6 +3818,8 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewModel *model )
     return true;
 }
 
+#if wxUSE_DRAG_AND_DROP
+
 bool wxDataViewCtrl::EnableDragSource( const wxDataFormat &format )
 {
     return m_clientArea->EnableDragSource( format );
@@ -3804,6 +3829,8 @@ bool wxDataViewCtrl::EnableDropTarget( const wxDataFormat &format )
 {
     return m_clientArea->EnableDropTarget( format );
 }
+
+#endif // wxUSE_DRAG_AND_DROP
 
 bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
 {
@@ -3982,20 +4009,20 @@ void wxDataViewCtrl::SetSelections( const wxDataViewItemArray & sel )
             if (parent != last_parent)
                 ExpandAncestors(item);
         }
-        
+
         last_parent = parent;
         int row = m_clientArea->GetRowByItem( item );
         if( row >= 0 )
             selection.Add( static_cast<unsigned int>(row) );
     }
-    
+
     m_clientArea->SetSelections( selection );
 }
 
 void wxDataViewCtrl::Select( const wxDataViewItem & item )
 {
     ExpandAncestors( item );
-    
+
     int row = m_clientArea->GetRowByItem( item );
     if( row >= 0 )
     {
@@ -4120,7 +4147,7 @@ void wxDataViewCtrl::EnsureVisible( int row, int column )
 void wxDataViewCtrl::EnsureVisible( const wxDataViewItem & item, const wxDataViewColumn * column )
 {
     ExpandAncestors( item );
-  
+
     m_clientArea->RecalculateDisplay();
 
     int row = m_clientArea->GetRowByItem(item);
