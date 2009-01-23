@@ -1051,12 +1051,12 @@ bool wxDataViewCtrl::AssociateModel(wxDataViewModel* model)
 
 bool wxDataViewCtrl::AppendColumn(wxDataViewColumn* columnPtr)
 {
-   return InsertColumn( kDataBrowserListViewAppendColumn, columnPtr );
+   return wxDataViewCtrl::InsertColumn( GetColumnCount(), columnPtr );
 }
 
 bool wxDataViewCtrl::PrependColumn(wxDataViewColumn* columnPtr)
 {
-   return InsertColumn( 0, columnPtr );
+   return wxDataViewCtrl::InsertColumn( 0, columnPtr );
 }
 
 bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
@@ -1083,7 +1083,7 @@ bool wxDataViewCtrl::InsertColumn(unsigned int pos, wxDataViewColumn* columnPtr)
  // full column variable initialization:
   columnPtr->SetPropertyID(NewPropertyID);
  // add column to wxWidget's internal structure:
-  wxCHECK_MSG(this->wxDataViewCtrlBase::AppendColumn(columnPtr) &&
+  wxCHECK_MSG(this->wxDataViewCtrlBase::InsertColumn(pos,columnPtr) &&
               m_ColumnPointers.insert(ColumnPointerHashMapType::value_type(NewPropertyID,columnPtr)).second,false,_("Could not add column to internal structures."));
  // create a column description and add column to the native control:
   wxCHECK_MSG(::InitializeColumnDescription(columnDescription,columnPtr,NewPropertyID,title),                 false,_("Column description could not be initialized."));
