@@ -678,7 +678,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/nbkbase.cpp
     src/common/overlaycmn.cpp
     src/common/paper.cpp
-    src/common/persist.cpp
     src/common/pickerbase.cpp
     src/common/popupcmn.cpp
     src/common/prntbase.cpp
@@ -812,9 +811,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/palette.h
     wx/panel.h
     wx/pen.h
-    wx/persist/bookctrl.h
-    wx/persist/common.h
-    wx/persist/toplevel.h
     wx/position.h
     wx/radiobox.h
     wx/radiobut.h
