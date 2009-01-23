@@ -148,6 +148,9 @@ private:
     bool m_grabbed;
 
     bool m_updateDecorSize;
+    
+public:
+    bool m_resizeQueued;
 };
 
 #endif // _WX_GTK_TOPLEVEL_H_
