@@ -268,7 +268,8 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
        wxArrayString exts;
        exts.Add( ext );
 
-       AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, true );
+       if (mime.Find( "application" ) != 0)
+           AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, true );
     }
 }
 
