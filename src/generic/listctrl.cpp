@@ -79,7 +79,12 @@ static const int EXTRA_WIDTH = 6;
 #else
 static const int EXTRA_WIDTH = 4;
 #endif
+
+#ifdef __WXGTK__
+static const int EXTRA_HEIGHT = 6;
+#else
 static const int EXTRA_HEIGHT = 4;
+#endif
 
 // margin between the window and the items
 static const int EXTRA_BORDER_X = 2;
