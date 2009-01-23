@@ -652,7 +652,7 @@ bool wxComboBox::CanRedo() const
         return false;
 }
 
-bool wxComboBox::HandleClicked( double timestampsec )
+bool wxComboBox::OSXHandleClicked( double timestampsec )
 {
 /*
     For consistency with other platforms, clicking in the text area does not constitute a selection
