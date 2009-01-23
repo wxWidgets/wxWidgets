@@ -62,7 +62,7 @@ public:
 
     // osx specific event handling common for all osx-ports
     
-    virtual bool HandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked( double timestampsec );
 
 protected:
     void         SendThumbTrackEvent() ;

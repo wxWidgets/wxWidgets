@@ -50,7 +50,7 @@ public:
 
     // osx specific event handling common for all osx-ports
     
-    virtual bool        HandleClicked( double timestampsec );
+    virtual bool        OSXHandleClicked( double timestampsec );
 
 protected:
     virtual wxSize DoGetBestSize() const ;
@@ -87,7 +87,7 @@ public:
 
     // osx specific event handling common for all osx-ports
     
-    virtual bool        HandleClicked( double timestampsec );
+    virtual bool        OSXHandleClicked( double timestampsec );
 
 protected:
     virtual wxSize DoGetBestSize() const ;

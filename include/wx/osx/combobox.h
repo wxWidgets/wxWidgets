@@ -127,7 +127,7 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
 
     // osx specific event handling common for all osx-ports
     
-    virtual bool        HandleClicked( double timestampsec );
+    virtual bool        OSXHandleClicked( double timestampsec );
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
 

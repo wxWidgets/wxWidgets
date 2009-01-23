@@ -49,7 +49,7 @@ public:
     // implementation only from now on
     void Command(wxCommandEvent& event);
     virtual void TriggerScrollEvent( wxEventType scrollEvent ) ;
-    virtual bool HandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked( double timestampsec );
 protected:
     virtual wxSize DoGetBestSize() const;
 

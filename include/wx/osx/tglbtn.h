@@ -44,7 +44,7 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const ;
 
-    virtual bool HandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked( double timestampsec );
 
     virtual void Command(wxCommandEvent& event);
 
@@ -91,7 +91,7 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const ;
 
-    virtual bool HandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked( double timestampsec );
 
     virtual void Command(wxCommandEvent& event);
 
