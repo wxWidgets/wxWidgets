@@ -5083,6 +5083,10 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     if ( !wxControl::Create( parent, id, pos, size, style|wxVSCROLL|wxHSCROLL, validator, name ) )
         return false;
 
+#ifdef __WXGTK__
+    style &= ~wxBORDER_MASK;
+    style |= wxBORDER_THEME;
+#endif    
 
     m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0, 0), size, style );
 
