@@ -108,12 +108,7 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc)
             child_alloc.height = req.height;
             if (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL)
                 child_alloc.x = w - child_alloc.x - child_alloc.width;
-                
-            if ((child_alloc.x != child_old_alloc.x) ||
-                (child_alloc.y != child_old_alloc.y) ||
-                (child_alloc.width != child_old_alloc.width) ||
-                (child_alloc.height != child_old_alloc.height))
-                gtk_widget_size_allocate(child->widget, &child_alloc);
+            gtk_widget_size_allocate(child->widget, &child_alloc);
         }
     }
 }
