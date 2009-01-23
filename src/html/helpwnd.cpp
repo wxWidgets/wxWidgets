@@ -342,6 +342,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
                                            wxTB_DOCKABLE | wxTB_NODIVIDER |
                                            (helpStyle & wxHF_FLAT_TOOLBAR ? wxTB_FLAT : 0));
         toolBar->SetMargins( 2, 2 );
+        toolBar->SetToolBitmapSize( wxSize(22,22) );
         AddToolbarButtons(toolBar, helpStyle);
         toolBar->Realize();
         topWindowSizer->Add(toolBar, 0, wxEXPAND);
@@ -437,7 +438,7 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
 
         m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
                                        wxDefaultPosition, wxDefaultSize,
-#ifdef __WXGTK20__
+#if defined(__WXGTK20__) || defined(__WXMAC__)
                                        wxSUNKEN_BORDER |
                                        wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT |
                                        wxTR_NO_LINES
