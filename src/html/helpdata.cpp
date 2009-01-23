@@ -701,15 +701,29 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
 wxString wxHtmlHelpData::FindPageByName(const wxString& x)
 {
-    int cnt;
     int i;
-    wxFileSystem fsys;
-    wxFSFile *f;
 
-    // 1. try to open given file:
-    cnt = m_bookRecords.GetCount();
-    for (i = 0; i < cnt; i++)
+    bool has_non_ascii = false;
+    wxString::const_iterator it;
+    for (it = x.begin(); it != x.end(); ++it)
     {
+        wxUniChar ch = *it;
+        if (!ch.IsAscii())
+        {
+            has_non_ascii = true;
+            break;
+        }
+    }
+    
+    int cnt = m_bookRecords.GetCount();
+    
+    if (!has_non_ascii)
+    {
+      wxFileSystem fsys;
+      wxFSFile *f;
+      // 1. try to open given file:
+      for (i = 0; i < cnt; i++)
+      {
         f = fsys.OpenFile(m_bookRecords[i].GetFullPath(x));
         if (f)
         {
@@ -717,6 +731,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
             delete f;
             return url;
         }
+      }
     }
 
 
