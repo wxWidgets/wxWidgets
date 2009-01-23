@@ -80,7 +80,7 @@ void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
     m_peer->SetValue( val ) ;
 }
 
-bool wxCheckBox::HandleClicked( double timestampsec ) 
+bool wxCheckBox::OSXHandleClicked( double timestampsec ) 
 {
     bool sendEvent = true;
     wxCheckBoxState newState = Get3StateValue();

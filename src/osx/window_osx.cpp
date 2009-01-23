@@ -2222,7 +2222,7 @@ Rect wxMacGetBoundsForControl( wxWindowMac* window , const wxPoint& pos , const 
     return bounds ;
 }
 
-bool wxWindowMac::HandleClicked( double timestampsec )
+bool wxWindowMac::OSXHandleClicked( double timestampsec )
 {
     return false;
 }
@@ -2230,7 +2230,7 @@ bool wxWindowMac::HandleClicked( double timestampsec )
 wxInt32 wxWindowMac::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF event )
 {
 #if wxOSX_USE_COCOA_OR_CARBON
-    if ( HandleClicked( GetEventTime((EventRef)event) ) )
+    if ( OSXHandleClicked( GetEventTime((EventRef)event) ) )
         return noErr;
         
     return eventNotHandledErr ;
@@ -2296,7 +2296,7 @@ bool wxWindowMac::IsShownOnScreen() const
     return wxWindowBase::IsShownOnScreen();
 }
 
-bool wxWindowMac::HandleKeyEvent( wxKeyEvent& event )
+bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 {
     bool handled = HandleWindowEvent( event ) ;
     if ( handled && event.GetSkipped() )

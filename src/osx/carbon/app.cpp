@@ -1380,7 +1380,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     wxKeyEvent event(wxEVT_KEY_DOWN) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
 
-    return focus->HandleKeyEvent(event);
+    return focus->OSXHandleKeyEvent(event);
 }
 
 bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )
@@ -1392,7 +1392,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     wxKeyEvent event( wxEVT_KEY_UP ) ;
     MacCreateKeyEvent( event, focus , keymessage , modifiers , when , wherex , wherey , uniChar ) ;
 
-    return focus->HandleKeyEvent(event) ;
+    return focus->OSXHandleKeyEvent(event) ;
 }
 
 bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar )

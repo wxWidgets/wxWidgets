@@ -251,8 +251,8 @@ public:
 
     // osx specific event handling common for all osx-ports
     
-    virtual bool        HandleClicked( double timestampsec );
-    virtual bool        HandleKeyEvent( wxKeyEvent& event );
+    virtual bool        OSXHandleClicked( double timestampsec );
+    virtual bool        OSXHandleKeyEvent( wxKeyEvent& event );
 protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;

@@ -510,7 +510,7 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     m_peer->SetValue( m_nSelection + 1 ) ;
 }
 
-bool wxNotebook::HandleClicked( double timestampsec )
+bool wxNotebook::OSXHandleClicked( double timestampsec )
 {
     bool status = false ;
 

@@ -89,7 +89,7 @@ void wxToggleButton::Command(wxCommandEvent & event)
    ProcessCommand(event);
 }
 
-bool wxToggleButton::HandleClicked( double timestampsec ) 
+bool wxToggleButton::OSXHandleClicked( double timestampsec ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
     event.SetInt(GetValue());
@@ -156,7 +156,7 @@ void wxBitmapToggleButton::Command(wxCommandEvent & event)
    ProcessCommand(event);
 }
 
-bool wxBitmapToggleButton::HandleClicked( double timestampsec ) 
+bool wxBitmapToggleButton::OSXHandleClicked( double timestampsec ) 
 {
     wxCommandEvent event(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, m_windowId);
     event.SetInt(GetValue());

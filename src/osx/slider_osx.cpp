@@ -296,7 +296,7 @@ void wxSlider::TriggerScrollEvent( wxEventType scrollEvent)
     HandleWindowEvent( cevent );
 }
 
-bool wxSlider::HandleClicked( double timestampsec )
+bool wxSlider::OSXHandleClicked( double timestampsec )
 {
     TriggerScrollEvent(wxEVT_SCROLL_THUMBRELEASE);
  

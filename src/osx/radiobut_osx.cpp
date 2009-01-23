@@ -106,7 +106,7 @@ void wxRadioButton::Command(wxCommandEvent& event)
     ProcessCommand( event );
 }
 
-bool wxRadioButton::HandleClicked( double timestampsec )
+bool wxRadioButton::OSXHandleClicked( double timestampsec )
 {
     if ( !m_peer->ButtonClickDidStateChange() )
     {

@@ -776,7 +776,7 @@ bool wxComboBox::CanRedo() const
 #endif
 }
 
-bool wxComboBox::HandleClicked( double timestampsec )
+bool wxComboBox::OSXHandleClicked( double timestampsec )
 {
     wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_SELECTED, m_windowId );
     event.SetInt(GetSelection());

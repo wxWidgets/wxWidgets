@@ -79,7 +79,7 @@ void wxSpinButton::SendThumbTrackEvent()
     HandleWindowEvent( event );
 }
 
-bool wxSpinButton::HandleClicked( double timestampsec )
+bool wxSpinButton::OSXHandleClicked( double timestampsec )
 {
     // all events have already been processed
     return true;
