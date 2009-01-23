@@ -485,6 +485,7 @@ wxMSW:
   preview inaccuracies on Windows; on other platforms, native preview
   should be used.
 - Implement wxFileName::SetTimes() for directories (Steve Lamerton).
+- Added wxToolTip::SetMaxWidth() and improved default wrapping (Joachim Hönig).
 
 wxX11:
 
