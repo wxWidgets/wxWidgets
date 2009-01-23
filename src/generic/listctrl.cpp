@@ -3479,11 +3479,21 @@ void wxListMainWindow::OnChar( wxKeyEvent &event )
         parent->GetEventHandler()->ProcessEvent( le );
     }
 
-    // propagate the char event upwards
-    wxKeyEvent ke(event);
-    ke.SetEventObject( parent );
-    if (parent->GetEventHandler()->ProcessEvent( ke ))
-        return;
+    if ( (event.GetKeyCode() != WXK_UP) &&
+         (event.GetKeyCode() != WXK_DOWN) &&
+         (event.GetKeyCode() != WXK_RIGHT) &&
+         (event.GetKeyCode() != WXK_LEFT) &&
+         (event.GetKeyCode() != WXK_PAGEUP) &&
+         (event.GetKeyCode() != WXK_PAGEDOWN) &&
+         (event.GetKeyCode() != WXK_END) &&
+         (event.GetKeyCode() != WXK_HOME) )
+    {
+        // propagate the char event upwards
+        wxKeyEvent ke(event);
+        ke.SetEventObject( parent );
+        if (parent->GetEventHandler()->ProcessEvent( ke ))
+            return;
+    }
 
     if ( HandleAsNavigationKey(event) )
         return;
