@@ -38,6 +38,7 @@
         #include "wx/window.h"
         #include "wx/control.h"
         #include "wx/dc.h"
+        #include "wx/spinbutt.h"
         #include "wx/textctrl.h"
         #include "wx/validate.h"
     #endif // wxUSE_GUI
@@ -231,6 +232,21 @@ wxDEFINE_EVENT( wxEVT_SCROLL_PAGEDOWN, wxScrollEvent )
 wxDEFINE_EVENT( wxEVT_SCROLL_THUMBTRACK, wxScrollEvent )
 wxDEFINE_EVENT( wxEVT_SCROLL_THUMBRELEASE, wxScrollEvent )
 wxDEFINE_EVENT( wxEVT_SCROLL_CHANGED, wxScrollEvent )
+
+// Due to a bug in older wx versions, wxSpinEvents were being sent with type of
+// wxEVT_SCROLL_LINEUP, wxEVT_SCROLL_LINEDOWN and wxEVT_SCROLL_THUMBTRACK. But
+// with the type-safe events in place, these event types are associated with
+// wxScrollEvent. To allow handling of spin events, new event types have been
+// defined in spinbutt.h/spinnbuttcmn.cpp. To maintain backward compatibility
+// the spin event types are being initialized with the scroll event types.
+
+#if wxUSE_SPINBTN
+
+wxDEFINE_EVENT_ALIAS( wxEVT_SPIN_UP,   wxSpinEvent, wxEVT_SCROLL_LINEUP )
+wxDEFINE_EVENT_ALIAS( wxEVT_SPIN_DOWN, wxSpinEvent, wxEVT_SCROLL_LINEDOWN )
+wxDEFINE_EVENT_ALIAS( wxEVT_SPIN,      wxSpinEvent, wxEVT_SCROLL_THUMBTRACK )
+
+#endif // wxUSE_SPINBTN
 
 // Scroll events from wxWindow
 wxDEFINE_EVENT( wxEVT_SCROLLWIN_TOP, wxScrollWinEvent )

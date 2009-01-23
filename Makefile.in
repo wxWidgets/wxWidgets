@@ -3529,6 +3529,9 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/palette.h \
 	wx/panel.h \
 	wx/pen.h \
+	wx/persist/bookctrl.h \
+	wx/persist/common.h \
+	wx/persist/toplevel.h \
 	wx/position.h \
 	wx/radiobox.h \
 	wx/radiobut.h \
@@ -4100,6 +4103,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_nbkbase.o \
 	monodll_overlaycmn.o \
 	monodll_paper.o \
+	monodll_persist.o \
 	monodll_pickerbase.o \
 	monodll_popupcmn.o \
 	monodll_prntbase.o \
@@ -4110,7 +4114,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_rgncmn.o \
 	monodll_settcmn.o \
 	monodll_sizer.o \
-	monodll_spinbuttcmn.o \
 	monodll_spinctrlcmn.o \
 	monodll_srchcmn.o \
 	monodll_statbar.o \
@@ -4292,6 +4295,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_nbkbase.o \
 	monodll_overlaycmn.o \
 	monodll_paper.o \
+	monodll_persist.o \
 	monodll_pickerbase.o \
 	monodll_popupcmn.o \
 	monodll_prntbase.o \
@@ -4302,7 +4306,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_rgncmn.o \
 	monodll_settcmn.o \
 	monodll_sizer.o \
-	monodll_spinbuttcmn.o \
 	monodll_spinctrlcmn.o \
 	monodll_srchcmn.o \
 	monodll_statbar.o \
@@ -5914,6 +5917,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_nbkbase.o \
 	monolib_overlaycmn.o \
 	monolib_paper.o \
+	monolib_persist.o \
 	monolib_pickerbase.o \
 	monolib_popupcmn.o \
 	monolib_prntbase.o \
@@ -5924,7 +5928,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_rgncmn.o \
 	monolib_settcmn.o \
 	monolib_sizer.o \
-	monolib_spinbuttcmn.o \
 	monolib_spinctrlcmn.o \
 	monolib_srchcmn.o \
 	monolib_statbar.o \
@@ -6106,6 +6109,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_nbkbase.o \
 	monolib_overlaycmn.o \
 	monolib_paper.o \
+	monolib_persist.o \
 	monolib_pickerbase.o \
 	monolib_popupcmn.o \
 	monolib_prntbase.o \
@@ -6116,7 +6120,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_rgncmn.o \
 	monolib_settcmn.o \
 	monolib_sizer.o \
-	monolib_spinbuttcmn.o \
 	monolib_spinctrlcmn.o \
 	monolib_srchcmn.o \
 	monolib_statbar.o \
@@ -7875,6 +7878,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_nbkbase.o \
 	coredll_overlaycmn.o \
 	coredll_paper.o \
+	coredll_persist.o \
 	coredll_pickerbase.o \
 	coredll_popupcmn.o \
 	coredll_prntbase.o \
@@ -7885,7 +7889,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_rgncmn.o \
 	coredll_settcmn.o \
 	coredll_sizer.o \
-	coredll_spinbuttcmn.o \
 	coredll_spinctrlcmn.o \
 	coredll_srchcmn.o \
 	coredll_statbar.o \
@@ -8067,6 +8070,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_nbkbase.o \
 	coredll_overlaycmn.o \
 	coredll_paper.o \
+	coredll_persist.o \
 	coredll_pickerbase.o \
 	coredll_popupcmn.o \
 	coredll_prntbase.o \
@@ -8077,7 +8081,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_rgncmn.o \
 	coredll_settcmn.o \
 	coredll_sizer.o \
-	coredll_spinbuttcmn.o \
 	coredll_spinctrlcmn.o \
 	coredll_srchcmn.o \
 	coredll_statbar.o \
@@ -9388,6 +9391,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_nbkbase.o \
 	corelib_overlaycmn.o \
 	corelib_paper.o \
+	corelib_persist.o \
 	corelib_pickerbase.o \
 	corelib_popupcmn.o \
 	corelib_prntbase.o \
@@ -9398,7 +9402,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_rgncmn.o \
 	corelib_settcmn.o \
 	corelib_sizer.o \
-	corelib_spinbuttcmn.o \
 	corelib_spinctrlcmn.o \
 	corelib_srchcmn.o \
 	corelib_statbar.o \
@@ -9580,6 +9583,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_nbkbase.o \
 	corelib_overlaycmn.o \
 	corelib_paper.o \
+	corelib_persist.o \
 	corelib_pickerbase.o \
 	corelib_popupcmn.o \
 	corelib_prntbase.o \
@@ -9590,7 +9594,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_rgncmn.o \
 	corelib_settcmn.o \
 	corelib_sizer.o \
-	corelib_spinbuttcmn.o \
 	corelib_spinctrlcmn.o \
 	corelib_srchcmn.o \
 	corelib_statbar.o \
@@ -18150,6 +18153,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_paper.o: $(srcdir)/src/common/paper.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
+@COND_USE_GUI_1@monodll_persist.o: $(srcdir)/src/common/persist.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/persist.cpp
+
 @COND_USE_GUI_1@monodll_pickerbase.o: $(srcdir)/src/common/pickerbase.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/pickerbase.cpp
 
@@ -18179,9 +18185,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_sizer.o: $(srcdir)/src/common/sizer.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
-
-@COND_USE_GUI_1@monodll_spinbuttcmn.o: $(srcdir)/src/common/spinbuttcmn.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/spinbuttcmn.cpp
 
 @COND_USE_GUI_1@monodll_spinctrlcmn.o: $(srcdir)/src/common/spinctrlcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/spinctrlcmn.cpp
@@ -22821,6 +22824,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_paper.o: $(srcdir)/src/common/paper.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
+@COND_USE_GUI_1@monolib_persist.o: $(srcdir)/src/common/persist.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/persist.cpp
+
 @COND_USE_GUI_1@monolib_pickerbase.o: $(srcdir)/src/common/pickerbase.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/pickerbase.cpp
 
@@ -22850,9 +22856,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_sizer.o: $(srcdir)/src/common/sizer.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
-
-@COND_USE_GUI_1@monolib_spinbuttcmn.o: $(srcdir)/src/common/spinbuttcmn.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/spinbuttcmn.cpp
 
 @COND_USE_GUI_1@monolib_spinctrlcmn.o: $(srcdir)/src/common/spinctrlcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/spinctrlcmn.cpp
@@ -27678,6 +27681,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_paper.o: $(srcdir)/src/common/paper.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
+@COND_USE_GUI_1@coredll_persist.o: $(srcdir)/src/common/persist.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/persist.cpp
+
 @COND_USE_GUI_1@coredll_pickerbase.o: $(srcdir)/src/common/pickerbase.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/pickerbase.cpp
 
@@ -27707,9 +27713,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_sizer.o: $(srcdir)/src/common/sizer.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
-
-@COND_USE_GUI_1@coredll_spinbuttcmn.o: $(srcdir)/src/common/spinbuttcmn.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/spinbuttcmn.cpp
 
 @COND_USE_GUI_1@coredll_spinctrlcmn.o: $(srcdir)/src/common/spinctrlcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/spinctrlcmn.cpp
@@ -31182,6 +31185,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_paper.o: $(srcdir)/src/common/paper.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/paper.cpp
 
+@COND_USE_GUI_1@corelib_persist.o: $(srcdir)/src/common/persist.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/persist.cpp
+
 @COND_USE_GUI_1@corelib_pickerbase.o: $(srcdir)/src/common/pickerbase.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/pickerbase.cpp
 
@@ -31211,9 +31217,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_sizer.o: $(srcdir)/src/common/sizer.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
-
-@COND_USE_GUI_1@corelib_spinbuttcmn.o: $(srcdir)/src/common/spinbuttcmn.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/spinbuttcmn.cpp
 
 @COND_USE_GUI_1@corelib_spinctrlcmn.o: $(srcdir)/src/common/spinctrlcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/spinctrlcmn.cpp

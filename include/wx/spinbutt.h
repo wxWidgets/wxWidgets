@@ -25,11 +25,6 @@
 
 #define wxSPIN_BUTTON_NAME _T("wxSpinButton")
 
-class WXDLLIMPEXP_FWD_CORE wxSpinEvent;
-wxDECLARE_EXPORTED_EVENT_REFERENCE( WXDLLIMPEXP_CORE, wxEVT_SPIN_UP,   wxSpinEvent )
-wxDECLARE_EXPORTED_EVENT_REFERENCE( WXDLLIMPEXP_CORE, wxEVT_SPIN_DOWN, wxSpinEvent )
-wxDECLARE_EXPORTED_EVENT_REFERENCE( WXDLLIMPEXP_CORE, wxEVT_SPIN,      wxSpinEvent )
-
 // ----------------------------------------------------------------------------
 //  The wxSpinButton is like a small scrollbar than is often placed next
 //  to a text control.
@@ -133,11 +128,11 @@ typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
 // (because of undefined initialization order of the globals defined in
 // different translation units) references in them
 #define EVT_SPIN_UP(winid, func) \
-    wx__DECLARE_EVT1(wxEVT_SCROLL_LINEUP, winid, wxSpinEventHandler(func))
+    wx__DECLARE_EVT1(wxEVT_SPIN_UP, winid, wxSpinEventHandler(func))
 #define EVT_SPIN_DOWN(winid, func) \
-    wx__DECLARE_EVT1(wxEVT_SCROLL_LINEDOWN, winid, wxSpinEventHandler(func))
+    wx__DECLARE_EVT1(wxEVT_SPIN_DOWN, winid, wxSpinEventHandler(func))
 #define EVT_SPIN(winid, func) \
-    wx__DECLARE_EVT1(wxEVT_SCROLL_THUMBTRACK, winid, wxSpinEventHandler(func))
+    wx__DECLARE_EVT1(wxEVT_SPIN, winid, wxSpinEventHandler(func))
 
 #endif // wxUSE_SPINBTN
 

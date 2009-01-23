@@ -398,6 +398,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_nbkbase.obj &
 	$(OBJS)\monodll_overlaycmn.obj &
 	$(OBJS)\monodll_paper.obj &
+	$(OBJS)\monodll_persist.obj &
 	$(OBJS)\monodll_pickerbase.obj &
 	$(OBJS)\monodll_popupcmn.obj &
 	$(OBJS)\monodll_prntbase.obj &
@@ -408,7 +409,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_rgncmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
 	$(OBJS)\monodll_sizer.obj &
-	$(OBJS)\monodll_spinbuttcmn.obj &
 	$(OBJS)\monodll_spinctrlcmn.obj &
 	$(OBJS)\monodll_srchcmn.obj &
 	$(OBJS)\monodll_statbar.obj &
@@ -639,6 +639,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_nbkbase.obj &
 	$(OBJS)\monodll_overlaycmn.obj &
 	$(OBJS)\monodll_paper.obj &
+	$(OBJS)\monodll_persist.obj &
 	$(OBJS)\monodll_pickerbase.obj &
 	$(OBJS)\monodll_popupcmn.obj &
 	$(OBJS)\monodll_prntbase.obj &
@@ -649,7 +650,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_rgncmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
 	$(OBJS)\monodll_sizer.obj &
-	$(OBJS)\monodll_spinbuttcmn.obj &
 	$(OBJS)\monodll_spinctrlcmn.obj &
 	$(OBJS)\monodll_srchcmn.obj &
 	$(OBJS)\monodll_statbar.obj &
@@ -1090,6 +1090,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_nbkbase.obj &
 	$(OBJS)\monolib_overlaycmn.obj &
 	$(OBJS)\monolib_paper.obj &
+	$(OBJS)\monolib_persist.obj &
 	$(OBJS)\monolib_pickerbase.obj &
 	$(OBJS)\monolib_popupcmn.obj &
 	$(OBJS)\monolib_prntbase.obj &
@@ -1100,7 +1101,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_rgncmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
 	$(OBJS)\monolib_sizer.obj &
-	$(OBJS)\monolib_spinbuttcmn.obj &
 	$(OBJS)\monolib_spinctrlcmn.obj &
 	$(OBJS)\monolib_srchcmn.obj &
 	$(OBJS)\monolib_statbar.obj &
@@ -1331,6 +1331,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_nbkbase.obj &
 	$(OBJS)\monolib_overlaycmn.obj &
 	$(OBJS)\monolib_paper.obj &
+	$(OBJS)\monolib_persist.obj &
 	$(OBJS)\monolib_pickerbase.obj &
 	$(OBJS)\monolib_popupcmn.obj &
 	$(OBJS)\monolib_prntbase.obj &
@@ -1341,7 +1342,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_rgncmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
 	$(OBJS)\monolib_sizer.obj &
-	$(OBJS)\monolib_spinbuttcmn.obj &
 	$(OBJS)\monolib_spinctrlcmn.obj &
 	$(OBJS)\monolib_srchcmn.obj &
 	$(OBJS)\monolib_statbar.obj &
@@ -1704,6 +1704,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_nbkbase.obj &
 	$(OBJS)\coredll_overlaycmn.obj &
 	$(OBJS)\coredll_paper.obj &
+	$(OBJS)\coredll_persist.obj &
 	$(OBJS)\coredll_pickerbase.obj &
 	$(OBJS)\coredll_popupcmn.obj &
 	$(OBJS)\coredll_prntbase.obj &
@@ -1714,7 +1715,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_rgncmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
 	$(OBJS)\coredll_sizer.obj &
-	$(OBJS)\coredll_spinbuttcmn.obj &
 	$(OBJS)\coredll_spinctrlcmn.obj &
 	$(OBJS)\coredll_srchcmn.obj &
 	$(OBJS)\coredll_statbar.obj &
@@ -1945,6 +1945,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_nbkbase.obj &
 	$(OBJS)\coredll_overlaycmn.obj &
 	$(OBJS)\coredll_paper.obj &
+	$(OBJS)\coredll_persist.obj &
 	$(OBJS)\coredll_pickerbase.obj &
 	$(OBJS)\coredll_popupcmn.obj &
 	$(OBJS)\coredll_prntbase.obj &
@@ -1955,7 +1956,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_rgncmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
 	$(OBJS)\coredll_sizer.obj &
-	$(OBJS)\coredll_spinbuttcmn.obj &
 	$(OBJS)\coredll_spinctrlcmn.obj &
 	$(OBJS)\coredll_srchcmn.obj &
 	$(OBJS)\coredll_statbar.obj &
@@ -2198,6 +2198,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_nbkbase.obj &
 	$(OBJS)\corelib_overlaycmn.obj &
 	$(OBJS)\corelib_paper.obj &
+	$(OBJS)\corelib_persist.obj &
 	$(OBJS)\corelib_pickerbase.obj &
 	$(OBJS)\corelib_popupcmn.obj &
 	$(OBJS)\corelib_prntbase.obj &
@@ -2208,7 +2209,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_rgncmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
 	$(OBJS)\corelib_sizer.obj &
-	$(OBJS)\corelib_spinbuttcmn.obj &
 	$(OBJS)\corelib_spinctrlcmn.obj &
 	$(OBJS)\corelib_srchcmn.obj &
 	$(OBJS)\corelib_statbar.obj &
@@ -2439,6 +2439,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_nbkbase.obj &
 	$(OBJS)\corelib_overlaycmn.obj &
 	$(OBJS)\corelib_paper.obj &
+	$(OBJS)\corelib_persist.obj &
 	$(OBJS)\corelib_pickerbase.obj &
 	$(OBJS)\corelib_popupcmn.obj &
 	$(OBJS)\corelib_prntbase.obj &
@@ -2449,7 +2450,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_rgncmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
 	$(OBJS)\corelib_sizer.obj &
-	$(OBJS)\corelib_spinbuttcmn.obj &
 	$(OBJS)\corelib_spinctrlcmn.obj &
 	$(OBJS)\corelib_srchcmn.obj &
 	$(OBJS)\corelib_statbar.obj &
@@ -7657,6 +7657,11 @@ $(OBJS)\monodll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_persist.obj :  .AUTODEPEND ..\..\src\common\persist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_pickerbase.obj :  .AUTODEPEND ..\..\src\common\pickerbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7703,11 +7708,6 @@ $(OBJS)\monodll_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_spinbuttcmn.obj :  .AUTODEPEND ..\..\src\common\spinbuttcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -9991,6 +9991,11 @@ $(OBJS)\monolib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_persist.obj :  .AUTODEPEND ..\..\src\common\persist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_pickerbase.obj :  .AUTODEPEND ..\..\src\common\pickerbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10037,11 +10042,6 @@ $(OBJS)\monolib_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_spinbuttcmn.obj :  .AUTODEPEND ..\..\src\common\spinbuttcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -12349,6 +12349,11 @@ $(OBJS)\coredll_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_persist.obj :  .AUTODEPEND ..\..\src\common\persist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_pickerbase.obj :  .AUTODEPEND ..\..\src\common\pickerbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12395,11 +12400,6 @@ $(OBJS)\coredll_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\coredll_spinbuttcmn.obj :  .AUTODEPEND ..\..\src\common\spinbuttcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -13835,6 +13835,11 @@ $(OBJS)\corelib_paper.obj :  .AUTODEPEND ..\..\src\common\paper.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_persist.obj :  .AUTODEPEND ..\..\src\common\persist.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_pickerbase.obj :  .AUTODEPEND ..\..\src\common\pickerbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -13881,11 +13886,6 @@ $(OBJS)\corelib_settcmn.obj :  .AUTODEPEND ..\..\src\common\settcmn.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\corelib_spinbuttcmn.obj :  .AUTODEPEND ..\..\src\common\spinbuttcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

@@ -109,11 +109,11 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
     #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
         extern const expdecl wxEventType name;
 
-    #define wxDEFINE_EVENT_REFERENCE( name, type, value ) \
-        const wxEventType& name = value;
+    #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
+        const wxEventType name = value;
 
-    #define wxDECLARE_EXPORTED_EVENT_REFERENCE( expdecl, name, type ) \
-        extern const expdecl wxEventType& name;
+    #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
+        extern const expdecl wxEventType name;
 
     #define wxDECLARE_LOCAL_EVENT( name, type ) \
         wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
@@ -127,11 +127,11 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
     #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
         extern const expdecl wxTypedEventType< type > name;
 
-    #define wxDEFINE_EVENT_REFERENCE( name, type, value ) \
-        const wxTypedEventTypeReference< type > name( value );
+    #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
+        const wxTypedEventType< type > name( value );
 
-    #define wxDECLARE_EXPORTED_EVENT_REFERENCE( expdecl, name, type ) \
-        extern const expdecl wxTypedEventTypeReference< type > name;
+    #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
+        extern const expdecl wxTypedEventType< type > name;
 
     #define wxDECLARE_LOCAL_EVENT( name, type ) \
         wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
@@ -157,30 +157,6 @@ public:
 
 private:
     wxEventType m_type;
-};
-
-// Due to a bug in older wx versions wxSpinEvents were being sent with type of
-// wxEVT_SCROLL_LINEUP, wxEVT_SCROLL_LINEDOWN and wxEVT_SCROLL_THUMBTRACK. But
-// with the type-safe events in place, these event types are associated with
-// wxScrollEvent. To allow handling of spin events, new event types have been
-// defined in spinbutt.h/spinnbuttcmn.cpp. To maintain backward compatibility
-// the spin event types are being initialized with the scroll event types. But
-// this presents as with the same static initialization order problem we also
-// have for the static event tables. So we use the same solution and the
-// template definition below holds a reference to a wxEventType.
-template <typename Event>
-class WXDLLIMPEXP_BASE wxTypedEventTypeReference
-{
-public:
-    typedef Event CorrespondingEvent;
-
-    wxTypedEventTypeReference(const wxEventType& type) : m_type(type) { }
-
-    // used for static event tables
-    operator const wxEventType&() const { return m_type; }
-
-private:
-    const wxEventType &m_type;
 };
 
 #endif // !wxEVENTS_COMPATIBILITY_2_8
@@ -495,6 +471,7 @@ class WXDLLIMPEXP_FWD_CORE wxKeyEvent;
 class WXDLLIMPEXP_FWD_CORE wxNavigationKeyEvent;
 class WXDLLIMPEXP_FWD_CORE wxSetCursorEvent;
 class WXDLLIMPEXP_FWD_CORE wxScrollEvent;
+class WXDLLIMPEXP_FWD_CORE wxSpinEvent;
 class WXDLLIMPEXP_FWD_CORE wxScrollWinEvent;
 class WXDLLIMPEXP_FWD_CORE wxSizeEvent;
 class WXDLLIMPEXP_FWD_CORE wxMoveEvent;
@@ -591,6 +568,21 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLL_PAGEDOWN, wxScrollEvent)
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLL_THUMBTRACK, wxScrollEvent)
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLL_THUMBRELEASE, wxScrollEvent)
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLL_CHANGED, wxScrollEvent)
+
+// Due to a bug in older wx versions, wxSpinEvents were being sent with type of
+// wxEVT_SCROLL_LINEUP, wxEVT_SCROLL_LINEDOWN and wxEVT_SCROLL_THUMBTRACK. But
+// with the type-safe events in place, these event types are associated with
+// wxScrollEvent. To allow handling of spin events, new event types have been
+// defined in spinbutt.h/spinnbuttcmn.cpp. To maintain backward compatibility
+// the spin event types are being initialized with the scroll event types.
+
+#if wxUSE_SPINBTN
+
+wxDECLARE_EXPORTED_EVENT_ALIAS( WXDLLIMPEXP_CORE, wxEVT_SPIN_UP,   wxSpinEvent )
+wxDECLARE_EXPORTED_EVENT_ALIAS( WXDLLIMPEXP_CORE, wxEVT_SPIN_DOWN, wxSpinEvent )
+wxDECLARE_EXPORTED_EVENT_ALIAS( WXDLLIMPEXP_CORE, wxEVT_SPIN,      wxSpinEvent )
+
+#endif
 
     // Scroll events from wxWindow
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SCROLLWIN_TOP, wxScrollWinEvent)
