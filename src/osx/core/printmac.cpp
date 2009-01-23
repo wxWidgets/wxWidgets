@@ -216,12 +216,14 @@ bool wxOSXPrintData::TransferFrom( const wxPrintData &data )
         PMSetOrientation(  m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
             kPMLandscape : kPMPortrait , false ) ;
     
+#ifndef __LP64__
     // PMQualityMode not accessible via API
     // TODO: use our quality property to determine optimal resolution
     PMResolution res;
     PMTag tag = kPMMaxSquareResolution;
     PMPrinterGetPrinterResolution(printer, tag, &res);
     PMSetResolution( m_macPageFormat, &res);
+#endif
 
     // after setting the new resolution the format has to be updated, otherwise the page rect remains 
     // at the 'old' scaling
@@ -477,12 +479,13 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
 
     // on the mac we have always pixels as addressing mode with 72 dpi
     printout->SetPPIScreen(72, 72);
+#ifndef __LP64__
     PMResolution res;
     wxOSXPrintData* nativeData = (wxOSXPrintData*)
           (m_printDialogData.GetPrintData().GetNativeData());
     PMGetResolution( (nativeData->GetPageFormat()), &res);
     printout->SetPPIPrinter(int(res.hRes), int(res.vRes));
-
+#endif
     // Set printout parameters
     printout->SetDC(dc);
 
