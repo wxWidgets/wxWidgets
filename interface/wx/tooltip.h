@@ -60,6 +60,21 @@ public:
     static void SetDelay(long msecs);
 
     /**
+        Set tooltip maximal width in pixels.
+
+        By default, tooltips are wrapped at a suitably chosen width. You can
+        pass -1 as @a width to disable wrapping them completely, 0 to restore
+        the default behaviour or an arbitrary positive value to wrap them at
+        the given width.
+
+        Notice that this function does not change the width of the tooltips
+        created before calling it.
+
+        @note Currently this function is wxMSW-only.
+    */
+    static void SetMaxWidth(int width) { ms_maxWidth = width; }
+
+    /**
         Set the delay between subsequent tooltips to appear.
 
         @note May not be supported on all platforms (eg. wxCocoa, GTK, Palmos).

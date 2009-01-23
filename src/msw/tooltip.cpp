@@ -61,6 +61,9 @@
 // the tooltip parent window
 WXHWND wxToolTip::ms_hwndTT = (WXHWND)NULL;
 
+// new tooltip maximum width, default value is set on first call to wxToolTip::Add()
+int wxToolTip::ms_maxWidth = 0;
+
 #if wxUSE_TTM_WINDOWFROMPOINT
 
 // the tooltip window proc
@@ -215,6 +218,13 @@ void wxToolTip::SetReshow(long milliseconds)
                             TTDT_RESHOW, milliseconds);
 }
 
+void wxToolTip::SetMaxWidth(int width)
+{
+    wxASSERT_MSG( width == -1 || width >= 0, _T("invalid width value") );
+
+    ms_maxWidth = width;
+}
+
 // ---------------------------------------------------------------------------
 // implementation helpers
 // ---------------------------------------------------------------------------
@@ -323,76 +333,82 @@ void wxToolTip::Add(WXHWND hWnd)
     }
     else
     {
-        // check for multiline toopltip
-        int index = m_text.Find(_T('\n'));
-
-        if ( index != wxNOT_FOUND )
-        {
 #ifdef TTM_SETMAXTIPWIDTH
-            if ( wxApp::GetComCtl32Version() >= 470 )
-            {
-                // use TTM_SETMAXTIPWIDTH to make tooltip multiline using the
-                // extent of its first line as max value
-                HFONT hfont = (HFONT)
-                    SendTooltipMessage(GetToolTipCtrl(), WM_GETFONT, 0);
+        if ( wxApp::GetComCtl32Version() >= 470 )
+        {
+            // use TTM_SETMAXTIPWIDTH to make tooltip multiline using the
+            // extent of its first line as max value
+            HFONT hfont = (HFONT)
+                SendTooltipMessage(GetToolTipCtrl(), WM_GETFONT, 0);
 
+            if ( !hfont )
+            {
+                hfont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
                 if ( !hfont )
                 {
-                    hfont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
-                    if ( !hfont )
-                    {
-                        wxLogLastError(wxT("GetStockObject(DEFAULT_GUI_FONT)"));
-                    }
-                }
-
-                MemoryHDC hdc;
-                if ( !hdc )
-                {
-                    wxLogLastError(wxT("CreateCompatibleDC(NULL)"));
-                }
-
-                if ( !SelectObject(hdc, hfont) )
-                {
-                    wxLogLastError(wxT("SelectObject(hfont)"));
-                }
-
-                // find the width of the widest line
-                int max = 0;
-                wxStringTokenizer tokenizer(m_text, _T("\n"));
-                wxString token = tokenizer.GetNextToken();
-                while (token.length())
-                {
-                    SIZE sz;
-                    if ( !::GetTextExtentPoint32(hdc, token.wx_str(), token.length(), &sz) )
-                    {
-                        wxLogLastError(wxT("GetTextExtentPoint32"));
-                    }
-                    if ( sz.cx > max )
-                        max = sz.cx;
-
-                    token = tokenizer.GetNextToken();
-                }
-
-                // only set a new width if it is bigger than the current setting
-                if ( max > SendTooltipMessage(GetToolTipCtrl(),
-                                              TTM_GETMAXTIPWIDTH, 0) )
-                {
-                    SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
-                                       wxUIntToPtr(max));
+                    wxLogLastError(wxT("GetStockObject(DEFAULT_GUI_FONT)"));
                 }
             }
-            else
-#endif // comctl32.dll >= 4.70
-            {
-                // replace the '\n's with spaces because otherwise they appear as
-                // unprintable characters in the tooltip string
-                m_text.Replace(_T("\n"), _T(" "));
-                ti.lpszText = (wxChar *)m_text.wx_str(); // const_cast
 
-                if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
+            MemoryHDC hdc;
+            if ( !hdc )
+            {
+                wxLogLastError(wxT("CreateCompatibleDC(NULL)"));
+            }
+
+            if ( !SelectObject(hdc, hfont) )
+            {
+                wxLogLastError(wxT("SelectObject(hfont)"));
+            }
+
+            // find the width of the widest line
+            int maxWidth = 0;
+            wxStringTokenizer tokenizer(m_text, _T("\n"));
+            while ( tokenizer.HasMoreTokens() )
+            {
+                const wxString token = tokenizer.GetNextToken();
+
+                SIZE sz;
+                if ( !::GetTextExtentPoint32(hdc, token.wx_str(),
+                                             token.length(), &sz) )
                 {
-                    wxLogDebug(_T("Failed to create the tooltip '%s'"), m_text.c_str());
+                    wxLogLastError(wxT("GetTextExtentPoint32"));
                 }
+
+                if ( sz.cx > maxWidth )
+                    maxWidth = sz.cx;
+            }
+
+            // limit size to ms_maxWidth, if set
+            if ( ms_maxWidth == 0 )
+            {
+                // this is more or less arbitrary but seems to work well
+                static const int DEFAULT_MAX_WIDTH = 400;
+
+                ms_maxWidth = wxGetClientDisplayRect().width / 2;
+
+                if ( ms_maxWidth > DEFAULT_MAX_WIDTH )
+                    ms_maxWidth = DEFAULT_MAX_WIDTH;
+            }
+
+            if ( ms_maxWidth != -1 && maxWidth > ms_maxWidth )
+                maxWidth = ms_maxWidth;
+
+            // only set a new width if it is bigger than the current setting
+            SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
+                               wxUIntToPtr(maxWidth));
+        }
+        else
+#endif // TTM_SETMAXTIPWIDTH
+        {
+            // replace the '\n's with spaces because otherwise they appear as
+            // unprintable characters in the tooltip string
+            m_text.Replace(_T("\n"), _T(" "));
+            ti.lpszText = (wxChar *)m_text.wx_str(); // const_cast
+
+            if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, &ti) )
+            {
+                wxLogDebug(_T("Failed to create the tooltip '%s'"), m_text.c_str());
             }
         }
     }
