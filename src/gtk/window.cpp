@@ -2095,6 +2095,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 {
     // Get default border
     wxBorder border = GetBorder(style);
+    
     style &= ~wxBORDER_MASK;
     style |= border;
 
@@ -2104,6 +2105,12 @@ bool wxWindowGTK::Create( wxWindow *parent,
         wxFAIL_MSG( wxT("wxWindowGTK creation failed") );
         return false;
     }
+
+        // We should accept the native look
+#if 0
+        GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(m_widget) );
+        scroll_class->scrollbar_spacing = 0;
+#endif
 
 
     m_wxwindow = wxPizza::New(m_windowStyle);
@@ -2121,12 +2128,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
         m_widget = gtk_scrolled_window_new( NULL, NULL );
 
         GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
-
-        // We should accept the native look
-#if 0   
-        GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(m_widget) );
-        scroll_class->scrollbar_spacing = 0;
-#endif
 
         // There is a conflict with default bindings at GTK+
         // level between scrolled windows and notebooks both of which want to use
@@ -2680,12 +2681,15 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
                             continue;
                 }
 
+                GtkScrolledWindowClass *scroll_class = 
+                    GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(m_widget) );
+
                 GtkRequisition req;
                 gtk_widget_size_request(GTK_WIDGET(range), &req);
                 if (i == ScrollDir_Horz)
-                    h -= req.height;
+                    h -= req.height + scroll_class->scrollbar_spacing;
                 else
-                    w -= req.width;
+                    w -= req.width + scroll_class->scrollbar_spacing;
             }
         }
 
