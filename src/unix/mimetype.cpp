@@ -268,6 +268,10 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
        wxArrayString exts;
        exts.Add( ext );
 
+       // The glob files have two kinds of associations: those, which
+       // link an extension to a file type (text/html) and those
+       // which link it to an application type (application/x-mozilla).
+       // We need the former.
        if (mime.Find( "application" ) != 0)
            AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, true );
     }
