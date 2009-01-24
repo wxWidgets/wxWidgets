@@ -11,6 +11,7 @@
 #ifndef _WX_GENERIC_LISTCTRL_H_
 #define _WX_GENERIC_LISTCTRL_H_
 
+#include "wx/scrolwin.h"
 #include "wx/textctrl.h"
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
