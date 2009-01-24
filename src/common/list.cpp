@@ -701,9 +701,13 @@ bool wxStringList::Member(const wxChar *s) const
 }
 
 #ifdef __WXWINCE__
-extern "C" int __cdecl
+extern "C"
+{
+static int __cdecl
 #else
-extern "C" int LINKAGEMODE
+extern "C"
+{
+static int LINKAGEMODE
 #endif
 
 wx_comparestrings(const void *arg1, const void *arg2)
@@ -713,6 +717,8 @@ wx_comparestrings(const void *arg1, const void *arg2)
 
   return wxStrcmp (*s1, *s2);
 }
+
+}   // end of extern "C" (required because of GCC Bug c++/33078
 
 // Sort a list of strings - deallocates old nodes, allocates new
 void wxStringList::Sort()

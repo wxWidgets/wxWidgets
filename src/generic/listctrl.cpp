@@ -435,7 +435,7 @@ public:
     bool m_sendSetColumnWidth;
     int m_colToSend;
     int m_widthToSend;
-    
+
     virtual void OnInternalIdle();
 
 private:
@@ -1798,7 +1798,7 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
 void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxGenericListCtrl *parent = m_owner->GetListCtrl();
-    
+
     wxPaintDC dc( this );
 
     AdjustDC( dc );
@@ -1936,7 +1936,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 void wxListHeaderWindow::OnInternalIdle()
 {
     wxWindow::OnInternalIdle();
-    
+
     if (m_sendSetColumnWidth)
     {
         m_owner->SetColumnWidth( m_colToSend, m_widthToSend );
@@ -1980,7 +1980,7 @@ void wxListHeaderWindow::DrawCurrent()
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 {
     wxGenericListCtrl *parent = m_owner->GetListCtrl();
-    
+
     // we want to work with logical coords
     int x;
     parent->CalcUnscrolledPosition(event.GetX(), 0, &x, NULL);
@@ -3791,7 +3791,7 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
 
     wxCHECK_RET( InReportView(),
                  _T("SetColumnWidth() can only be called in report mode.") );
-                 
+
     m_dirty = true;
 
     wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
@@ -4889,8 +4889,8 @@ int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
 // sorting
 // ----------------------------------------------------------------------------
 
-wxListCtrlCompare list_ctrl_compare_func_2;
-long              list_ctrl_compare_data;
+static wxListCtrlCompare list_ctrl_compare_func_2;
+static long              list_ctrl_compare_data;
 
 int LINKAGEMODE list_ctrl_compare_func_1( wxListLineData **arg1, wxListLineData **arg2 )
 {
@@ -4924,7 +4924,7 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
     wxPrintf( "wxListMainWindow::OnScroll\n" );
-    
+
     // HandleOnScroll( event );
 
     // update our idea of which lines are shown when we redraw the window the
@@ -5030,7 +5030,7 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
 {
     bool needs_header = HasHeader();
     bool has_header = (m_headerWin != NULL);
-    
+
     if (needs_header == has_header)
         return;
 
@@ -5043,7 +5043,7 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
                         wxSize(GetClientSize().x, m_headerHeight),
                         wxTAB_TRAVERSAL
                       );
-                      
+
 #if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
         wxFont font;
 #if wxOSX_USE_ATSU_TEXT
@@ -5053,15 +5053,15 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
 #endif
         m_headerWin->SetFont( font );
 #endif
-        
+
         GetSizer()->Prepend( m_headerWin, 0, wxGROW );
     }
     else
     {
         GetSizer()->Detach( m_headerWin );
-    
+
         delete m_headerWin;
-        
+
         m_headerWin = NULL;
     }
 }
@@ -5086,16 +5086,16 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
 #ifdef __WXGTK__
     style &= ~wxBORDER_MASK;
     style |= wxBORDER_THEME;
-#endif    
+#endif
 
     m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0, 0), size, style );
 
     SetTargetWindow( m_mainWin );
-    
+
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( m_mainWin, 1, wxGROW );
     SetSizer( sizer );
-    
+
     CreateOrDestroyHeaderWindowAsNeeded();
 
     SetInitialSize(size);
@@ -5193,7 +5193,7 @@ void wxGenericListCtrl::SetWindowStyleFlag( long flag )
         // m_mainWin->DeleteEverything();  wxMSW doesn't do that
 
         CreateOrDestroyHeaderWindowAsNeeded();
-    
+
         GetSizer()->Layout();
     }
 
@@ -5540,7 +5540,7 @@ bool wxGenericListCtrl::DeleteColumn( int col )
 
     // if we don't have the header any longer, we need to relayout the window
     // if ( !GetColumnCount() )
-    
+
     return true;
 }
 
@@ -5688,7 +5688,7 @@ void wxGenericListCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
     Layout();
 
     m_mainWin->RecalculatePositions();
-    
+
     AdjustScrollbars();
 }
 

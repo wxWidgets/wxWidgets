@@ -148,19 +148,19 @@ struct wxPNGInfoStruct
 extern "C"
 {
 
-void PNGLINKAGEMODE wx_PNG_stream_reader( png_structp png_ptr, png_bytep data,
-                                          png_size_t length )
+static void PNGLINKAGEMODE wx_PNG_stream_reader( png_structp png_ptr, png_bytep data,
+                                                 png_size_t length )
 {
     WX_PNG_INFO(png_ptr)->stream.in->Read(data, length);
 }
 
-void PNGLINKAGEMODE wx_PNG_stream_writer( png_structp png_ptr, png_bytep data,
-                                          png_size_t length )
+static void PNGLINKAGEMODE wx_PNG_stream_writer( png_structp png_ptr, png_bytep data,
+                                                 png_size_t length )
 {
     WX_PNG_INFO(png_ptr)->stream.out->Write(data, length);
 }
 
-void
+static void
 PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 {
     wxPNGInfoStruct *info = png_ptr ? WX_PNG_INFO(png_ptr) : NULL;
@@ -170,7 +170,7 @@ PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 
 // from pngerror.c
 // so that the libpng doesn't send anything on stderr
-void
+static void
 PNGLINKAGEMODE wx_png_error(png_structp png_ptr, png_const_charp message)
 {
     wx_png_warning(NULL, message);

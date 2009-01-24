@@ -140,7 +140,7 @@ static wxFileOffset QuietSeek(wxInputStream& stream, wxFileOffset pos)
 /////////////////////////////////////////////////////////////////////////////
 // Class factory
 
-wxZipClassFactory g_wxZipClassFactory;
+static wxZipClassFactory g_wxZipClassFactory;
 
 wxZipClassFactory::wxZipClassFactory()
 {
@@ -2318,7 +2318,7 @@ bool wxZipOutputStream::Close()
 
     m_lasterror = m_parent_o_stream->GetLastError();
     m_endrecWritten = true;
-    
+
     if (!wxFilterOutputStream::Close() || !IsOk())
         return false;
     m_lasterror = wxSTREAM_EOF;

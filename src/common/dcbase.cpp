@@ -788,7 +788,7 @@ void wx_spline_push(double x1, double y1, double x2, double y2, double x3, doubl
 static bool wx_spline_add_point(double x, double y);
 static void wx_spline_draw_point_array(wxDC *dc);
 
-wxPointList wx_spline_point_list;
+static wxPointList wx_spline_point_list;
 
 #define                half(z1, z2)        ((z1+z2)/2.0)
 #define                THRESHOLD        5
