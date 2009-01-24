@@ -267,13 +267,8 @@ void wxMimeTypesManagerImpl::LoadXDGGlobs(const wxString& filename)
        ext.Remove( 0, 2 );
        wxArrayString exts;
        exts.Add( ext );
-
-       // The glob files have two kinds of associations: those, which
-       // link an extension to a file type (text/html) and those
-       // which link it to an application type (application/x-mozilla).
-       // We need the former.
-       if (mime.Find( "application" ) != 0)
-           AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, true );
+       
+       AddToMimeData(mime, wxEmptyString, NULL, exts, wxEmptyString, true );
     }
 }
 
@@ -723,16 +718,35 @@ int wxMimeTypesManagerImpl::AddToMimeData(const wxString& strType,
     int nIndex = m_aTypes.Index(mimeType);
     if ( nIndex == wxNOT_FOUND )
     {
-        // new file type
-        m_aTypes.Add(mimeType);
-        m_aIcons.Add(strIcon);
-        m_aEntries.Add(entry ? entry : new wxMimeTypeCommands);
+        // We put MIME types containing  "application" at the end, so that
+        // if the MIME type for the extention "htm" is searched for, it will
+        // rather find "text/html" than "application/x-mozilla-bookmarks".
+        if (mimeType.Find( "application" ) == 0)
+        {
+           // new file type
+           m_aTypes.Add(mimeType);
+           m_aIcons.Add(strIcon);
+           m_aEntries.Add(entry ? entry : new wxMimeTypeCommands);
 
-        // change nIndex so we can use it below to add the extensions
-        m_aExtensions.Add(wxEmptyString);
-        nIndex = m_aExtensions.size() - 1;
+           // change nIndex so we can use it below to add the extensions
+           m_aExtensions.Add(wxEmptyString);
+           nIndex = m_aExtensions.size() - 1;
 
-        m_aDescriptions.Add(strDesc);
+           m_aDescriptions.Add(strDesc);
+        }
+        else
+        {
+           // new file type
+           m_aTypes.Insert(mimeType,0);
+           m_aIcons.Insert(strIcon,0);
+           m_aEntries.Insert(entry ? entry : new wxMimeTypeCommands,0);
+
+           // change nIndex so we can use it below to add the extensions
+           m_aExtensions.Insert(wxEmptyString,0);
+           nIndex = 0;
+
+           m_aDescriptions.Insert(strDesc,0);
+        }
     }
     else // yes, we already have it
     {
@@ -830,7 +844,7 @@ wxFileType * wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ex
                 // found
                 wxFileType *fileType = new wxFileType;
                 fileType->m_impl->Init(this, n);
-
+                
                 return fileType;
             }
         }
