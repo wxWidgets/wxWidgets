@@ -43,6 +43,7 @@
     #include "wx/dcscreen.h"
     #include "wx/math.h"
     #include "wx/settings.h"
+    #include "wx/sizer.h"
 #endif
 
 #include "wx/imaglist.h"
