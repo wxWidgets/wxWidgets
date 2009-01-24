@@ -143,11 +143,15 @@ wxSize wxChoicebook::CalcSizeFromPage(const wxSize& sizePage) const
     wxSize size = sizePage;
     if ( IsVertical() )
     {
+        if ( sizeChoice.x > sizePage.x )
+            size.x = sizeChoice.x;
         size.y += sizeChoice.y + GetInternalBorder();
     }
     else // left/right aligned
     {
         size.x += sizeChoice.x + GetInternalBorder();
+        if ( sizeChoice.y > sizePage.y )
+            size.y = sizeChoice.y;
     }
 
     return size;
