@@ -122,7 +122,7 @@ public:
 
     virtual bool SupportsExtraControl() const { return false; }
 
-    bool SetExtraControlCreator(ExtraControlCreatorFunction WXUNUSED(c));
+    bool SetExtraControlCreator(ExtraControlCreatorFunction creator);
     wxWindow *GetExtraControl() const { return m_extraControl; }
 
     // Utility functions

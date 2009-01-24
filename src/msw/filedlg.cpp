@@ -86,6 +86,7 @@ wxFileDialogHookFunction(HWND      hDlg,
 {
     switch ( iMsg )
     {
+#ifndef __WXWINCE__
         case WM_INITDIALOG:
             {
                 OPENFILENAME* ofn = reinterpret_cast<OPENFILENAME *>(lParam);
@@ -93,6 +94,7 @@ wxFileDialogHookFunction(HWND      hDlg,
                     ->MSWOnInitDialogHook((WXHWND)hDlg);
             }
             break;
+#endif // __WXWINCE__
 
         case WM_NOTIFY:
             {
@@ -368,6 +370,7 @@ static bool ShowCommFileDialog(OPENFILENAME *of, long style)
     return true;
 }
 
+#ifndef __WXWINCE__
 void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 {
    SetHWND(hwnd);
@@ -376,6 +379,7 @@ void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 
    SetHWND(NULL);
 }
+#endif // __WXWINCE__
 
 int wxFileDialog::ShowModal()
 {

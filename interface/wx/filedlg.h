@@ -11,8 +11,6 @@
 
     This class represents the file chooser dialog.
 
-    It pops up a file selector box (native for Windows and GTK2.4+).
-
     The path and filename are distinct elements of a full file pathname.
     If path is wxEmptyString, the current directory will be used.
     If filename is wxEmptyString, no default filename will be supplied.
@@ -55,7 +53,7 @@
            file(s) chosen by the user are.
     @style{wxFD_PREVIEW}
            Show the preview of the selected files (currently only supported by
-           wxGTK using GTK+ 2.4 or later).
+           wxGTK).
     @endStyleTable
 
     @library{wxcore}
@@ -113,6 +111,8 @@ public:
     /**
         If functions SetExtraControlCreator() and ShowModal() were called,
         returns the extra window. Otherwise returns @NULL.
+
+        @since 2.9.0
     */
     wxWindow* GetExtraControl() const;
 
@@ -174,6 +174,13 @@ public:
     virtual void SetDirectory(const wxString& directory);
 
     /**
+        The type of function used as an argument for SetExtraControlCreator().
+
+        @since 2.9.0
+    */
+    typedef wxWindow *(*ExtraControlCreatorFunction)(wxWindow*);
+
+    /**
         Customize file dialog by adding extra window, which is typically placed
         below the list of files and above the buttons.
 
@@ -182,9 +189,11 @@ public:
         The @c creator function should take pointer to parent window (file dialog)
         and should return a window allocated with operator new.
 
-        Supported platforms: wxGTK, wxUniv.
+        Supported platforms: wxGTK, wxMSW, wxUniv.
+
+        @since 2.9.0
     */
-    bool SetExtraControlCreator(ExtraControlCreatorFunction);
+    bool SetExtraControlCreator(ExtraControlCreatorFunction creator);
 
     /**
         Sets the default filename.

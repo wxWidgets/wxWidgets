@@ -34,8 +34,8 @@ public:
     virtual void GetFilenames(wxArrayString& files) const;
 #ifndef __WXWINCE__
     virtual bool SupportsExtraControl() const { return true; }
-#endif // __WXWINCE__
     void MSWOnInitDialogHook(WXHWND hwnd);
+#endif // __WXWINCE__
 
     virtual int ShowModal();
 

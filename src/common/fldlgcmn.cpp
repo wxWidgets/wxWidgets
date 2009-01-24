@@ -151,12 +151,12 @@ wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
     return filePath + ext;
 }
 
-bool wxFileDialogBase::SetExtraControlCreator(ExtraControlCreatorFunction c)
+bool wxFileDialogBase::SetExtraControlCreator(ExtraControlCreatorFunction creator)
 {
     wxCHECK_MSG( !m_extraControlCreator, false,
                  "wxFileDialog::SetExtraControl() called second time" );
 
-    m_extraControlCreator = c;
+    m_extraControlCreator = creator;
     return SupportsExtraControl();
 }
 
