@@ -257,11 +257,11 @@ gdk_window_warp_pointer (GdkWindow      *window,
 // "size_request" of m_widget
 //-----------------------------------------------------------------------------
 
-// make it extern because wxStaticText needs to disconnect this one
 extern "C" {
-void wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
-                                        GtkRequisition *requisition,
-                                        wxWindow * win)
+static void
+wxgtk_window_size_request_callback(GtkWidget * WXUNUSED(widget),
+                                   GtkRequisition *requisition,
+                                   wxWindow * win)
 {
     int w, h;
     win->GetSize( &w, &h );
@@ -2095,7 +2095,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 {
     // Get default border
     wxBorder border = GetBorder(style);
-    
+
     style &= ~wxBORDER_MASK;
     style |= border;
 
@@ -2681,7 +2681,7 @@ void wxWindowGTK::DoGetClientSize( int *width, int *height ) const
                             continue;
                 }
 
-                GtkScrolledWindowClass *scroll_class = 
+                GtkScrolledWindowClass *scroll_class =
                     GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(m_widget) );
 
                 GtkRequisition req;
