@@ -39,6 +39,7 @@
 #endif
 
 #include "wx/clipbrd.h"
+#include "wx/wupdlock.h"
 #include "wx/msw/private.h"
 
 #if wxUSE_TOOLTIPS
@@ -233,7 +234,22 @@ WXLRESULT wxComboBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 
                 long fromOld, toOld;
                 GetSelection(&fromOld, &toOld);
+
+                // if an editable combobox has a not empty text not from the
+                // list, it tries to autocomplete it from the list when it is
+                // resized, but we don't want this to happen as it doesn't seem
+                // to make any sense, so we forcefully restore the old text
+                wxString textOld;
+                if ( !HasFlag(wxCB_READONLY) && GetCurrentSelection() == -1 )
+                    textOld = GetValue();
+
+                // eliminate flickering during following hacks
+                wxWindowUpdateLocker lock(this);
+
                 WXLRESULT result = wxChoice::MSWWindowProc(nMsg, wParam, lParam);
+
+                if ( !textOld.empty() && GetValue() != textOld )
+                    SetLabel(textOld);
 
                 long fromNew, toNew;
                 GetSelection(&fromNew, &toNew);
