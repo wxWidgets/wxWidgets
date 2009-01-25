@@ -828,12 +828,12 @@ protected:
     //       or HandleWindowEvent().
     //       The same holds for all other wxEvtHandler functions.
 
-    wxEvtHandler::ProcessEvent;
-    wxEvtHandler::ProcessThreadEvent;
-    wxEvtHandler::SafelyProcessEvent;
-    wxEvtHandler::ProcessPendingEvents;
-    wxEvtHandler::AddPendingEvent;
-    wxEvtHandler::QueueEvent;
+    using wxEvtHandler::ProcessEvent;
+    using wxEvtHandler::ProcessThreadEvent;
+    using wxEvtHandler::SafelyProcessEvent;
+    using wxEvtHandler::ProcessPendingEvents;
+    using wxEvtHandler::AddPendingEvent;
+    using wxEvtHandler::QueueEvent;
 
 public:
 
