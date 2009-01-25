@@ -211,8 +211,11 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     int x = (int)event.GetX(),
         y = (int)event.GetY();
 
-    if (GetWindowStyle() & wxSP_NOSASH)
+    if ( GetWindowStyle() & wxSP_NOSASH )
+    {
+        event.Skip();
         return;
+    }
 
     // with wxSP_LIVE_UPDATE style the splitter windows are always resized
     // following the mouse movement while it drags the sash, without it we only
@@ -395,6 +398,10 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     else if ( event.LeftDClick() && m_windowTwo )
     {
         OnDoubleClickSash(x, y);
+    }
+    else
+    {
+        event.Skip();
     }
 }
 
