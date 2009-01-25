@@ -432,24 +432,24 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     wxRect rect;
     m_owner->GetBoundingRect(m_itemEdited, rect, true);
 
-    // corrects possition and size for better apperance
+    // corrects position and size for better appearance
 #ifdef __WXMSW__
     rect.x -= 5;
     rect.width += 10;
-#elif __WXGTK__
+#elif defined(__WXGTK__)
     rect.x -= 5;
     rect.y -= 2;
     rect.width  += 8;
     rect.height += 4;
-#elif __WXMAC__
-    wxSize bs = DoGetBestSize();
-    // edit control height
-    if ( rect.height > bs.y - 8 )
-        int diff = rect.height - ( bs.y - 8 );
+#elif defined(__WXMAC__)
+    int bestHeight = GetBestSize().y - 8;
+    if ( rect.height > bestHeight )
+    {
+        int diff = rect.height - bestHeight;
         rect.height -= diff;
         rect.y += diff / 2;
-     }
-#endif
+    }
+#endif // platforms
 
     (void)Create(m_owner, wxID_ANY, m_startValue,
                  rect.GetPosition(), rect.GetSize());
@@ -966,7 +966,7 @@ void wxGenericTreeCtrl::Init()
     m_findTimer = NULL;
 
     m_dropEffectAboveItem = false;
-    
+
     m_dndEffect = NoEffect;
     m_dndEffectItem = NULL;
 
@@ -2625,7 +2625,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     // restore normal font
     dc.SetFont( m_normalFont );
-    
+
     if (item == m_dndEffectItem)
     {
         dc.SetPen( *wxBLACK_PEN );
@@ -2905,7 +2905,7 @@ void wxGenericTreeCtrl::DrawBorder(const wxTreeItemId &item)
         m_dndEffect = NoEffect;
         m_dndEffectItem = NULL;
     }
-        
+
     wxRect rect( i->GetX()-1, i->GetY()-1, i->GetWidth()+2, GetLineHeight(i)+2 );
     CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
     RefreshRect( rect );
@@ -2930,7 +2930,7 @@ void wxGenericTreeCtrl::DrawLine(const wxTreeItemId &item, bool below)
         m_dndEffect = NoEffect;
         m_dndEffectItem = NULL;
     }
-        
+
     wxRect rect( i->GetX()-1, i->GetY()-1, i->GetWidth()+2, GetLineHeight(i)+2 );
     CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
     RefreshRect( rect );
