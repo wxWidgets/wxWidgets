@@ -586,6 +586,10 @@ SOURCE=..\..\include\wx\xrc\xh_combo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_comboctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_datectrl.h
 # End Source File
 # Begin Source File
@@ -811,6 +815,10 @@ SOURCE=..\..\src\xrc\xh_collpane.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_combo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_comboctrl.cpp
 # End Source File
 # Begin Source File
 

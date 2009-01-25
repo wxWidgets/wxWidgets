@@ -143,6 +143,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_clrpicker.obj &
 	$(OBJS)\monodll_xh_collpane.obj &
 	$(OBJS)\monodll_xh_combo.obj &
+	$(OBJS)\monodll_xh_comboctrl.obj &
 	$(OBJS)\monodll_xh_datectrl.obj &
 	$(OBJS)\monodll_xh_dirpicker.obj &
 	$(OBJS)\monodll_xh_dlg.obj &
@@ -833,6 +834,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_clrpicker.obj &
 	$(OBJS)\monolib_xh_collpane.obj &
 	$(OBJS)\monolib_xh_combo.obj &
+	$(OBJS)\monolib_xh_comboctrl.obj &
 	$(OBJS)\monolib_xh_datectrl.obj &
 	$(OBJS)\monolib_xh_dirpicker.obj &
 	$(OBJS)\monolib_xh_dlg.obj &
@@ -4170,6 +4172,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_clrpicker.obj &
 	$(OBJS)\xrcdll_xh_collpane.obj &
 	$(OBJS)\xrcdll_xh_combo.obj &
+	$(OBJS)\xrcdll_xh_comboctrl.obj &
 	$(OBJS)\xrcdll_xh_datectrl.obj &
 	$(OBJS)\xrcdll_xh_dirpicker.obj &
 	$(OBJS)\xrcdll_xh_dlg.obj &
@@ -4238,6 +4241,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_clrpicker.obj &
 	$(OBJS)\xrclib_xh_collpane.obj &
 	$(OBJS)\xrclib_xh_combo.obj &
+	$(OBJS)\xrclib_xh_comboctrl.obj &
 	$(OBJS)\xrclib_xh_datectrl.obj &
 	$(OBJS)\xrclib_xh_dirpicker.obj &
 	$(OBJS)\xrclib_xh_dlg.obj &
@@ -6395,6 +6399,9 @@ $(OBJS)\monodll_xh_collpane.obj :  .AUTODEPEND ..\..\src\xrc\xh_collpane.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_combo.obj :  .AUTODEPEND ..\..\src\xrc\xh_combo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_comboctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_comboctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_datectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_datectrl.cpp
@@ -8724,6 +8731,9 @@ $(OBJS)\monolib_xh_collpane.obj :  .AUTODEPEND ..\..\src\xrc\xh_collpane.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_combo.obj :  .AUTODEPEND ..\..\src\xrc\xh_combo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_comboctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_comboctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_datectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_datectrl.cpp
@@ -14609,6 +14619,9 @@ $(OBJS)\xrcdll_xh_collpane.obj :  .AUTODEPEND ..\..\src\xrc\xh_collpane.cpp
 $(OBJS)\xrcdll_xh_combo.obj :  .AUTODEPEND ..\..\src\xrc\xh_combo.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
+$(OBJS)\xrcdll_xh_comboctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_comboctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
 $(OBJS)\xrcdll_xh_datectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_datectrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
@@ -14784,6 +14797,9 @@ $(OBJS)\xrclib_xh_collpane.obj :  .AUTODEPEND ..\..\src\xrc\xh_collpane.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_combo.obj :  .AUTODEPEND ..\..\src\xrc\xh_combo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_comboctrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_comboctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_datectrl.obj :  .AUTODEPEND ..\..\src\xrc\xh_datectrl.cpp

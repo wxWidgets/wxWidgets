@@ -1552,6 +1552,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_clrpicker.o \
 	xrcdll_xh_collpane.o \
 	xrcdll_xh_combo.o \
+	xrcdll_xh_comboctrl.o \
 	xrcdll_xh_datectrl.o \
 	xrcdll_xh_dirpicker.o \
 	xrcdll_xh_dlg.o \
@@ -1617,6 +1618,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_clrpicker.o \
 	xrclib_xh_collpane.o \
 	xrclib_xh_combo.o \
+	xrclib_xh_comboctrl.o \
 	xrclib_xh_datectrl.o \
 	xrclib_xh_dirpicker.o \
 	xrclib_xh_dlg.o \
@@ -3694,6 +3696,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_clrpicker.h \
 	wx/xrc/xh_collpane.h \
 	wx/xrc/xh_combo.h \
+	wx/xrc/xh_comboctrl.h \
 	wx/xrc/xh_datectrl.h \
 	wx/xrc/xh_dirpicker.h \
 	wx/xrc/xh_dlg.h \
@@ -3949,6 +3952,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_clrpicker.o \
 	monodll_xh_collpane.o \
 	monodll_xh_combo.o \
+	monodll_xh_comboctrl.o \
 	monodll_xh_datectrl.o \
 	monodll_xh_dirpicker.o \
 	monodll_xh_dlg.o \
@@ -5761,6 +5765,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_clrpicker.o \
 	monolib_xh_collpane.o \
 	monolib_xh_combo.o \
+	monolib_xh_comboctrl.o \
 	monolib_xh_datectrl.o \
 	monolib_xh_dirpicker.o \
 	monolib_xh_dlg.o \
@@ -15697,6 +15702,9 @@ monodll_xh_collpane.o: $(srcdir)/src/xrc/xh_collpane.cpp $(MONODLL_ODEP)
 monodll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
 
+monodll_xh_comboctrl.o: $(srcdir)/src/xrc/xh_comboctrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_comboctrl.cpp
+
 monodll_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
 
@@ -20364,6 +20372,9 @@ monolib_xh_collpane.o: $(srcdir)/src/xrc/xh_collpane.cpp $(MONOLIB_ODEP)
 
 monolib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
+
+monolib_xh_comboctrl.o: $(srcdir)/src/xrc/xh_comboctrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_comboctrl.cpp
 
 monolib_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
@@ -32260,6 +32271,9 @@ xrcdll_xh_collpane.o: $(srcdir)/src/xrc/xh_collpane.cpp $(XRCDLL_ODEP)
 xrcdll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
 
+xrcdll_xh_comboctrl.o: $(srcdir)/src/xrc/xh_comboctrl.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_comboctrl.cpp
+
 xrcdll_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
 
@@ -32433,6 +32447,9 @@ xrclib_xh_collpane.o: $(srcdir)/src/xrc/xh_collpane.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_combo.cpp
+
+xrclib_xh_comboctrl.o: $(srcdir)/src/xrc/xh_comboctrl.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_comboctrl.cpp
 
 xrclib_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp

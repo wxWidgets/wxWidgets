@@ -6626,6 +6626,10 @@ SOURCE=..\..\include\wx\xrc\xh_combo.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_comboctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_datectrl.h
 # End Source File
 # Begin Source File

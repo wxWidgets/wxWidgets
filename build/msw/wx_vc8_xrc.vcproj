@@ -1103,6 +1103,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_comboctrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_datectrl.h"
 				>
 			</File>
@@ -1330,6 +1334,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_combo.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_comboctrl.cpp"
 				>
 			</File>
 			<File

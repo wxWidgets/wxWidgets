@@ -3181,6 +3181,7 @@ src/osx/iphone/window.mm
     src/xrc/xh_clrpicker.cpp
     src/xrc/xh_collpane.cpp
     src/xrc/xh_combo.cpp
+    src/xrc/xh_comboctrl.cpp
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
@@ -3244,6 +3245,7 @@ src/osx/iphone/window.mm
     wx/xrc/xh_clrpicker.h
     wx/xrc/xh_collpane.h
     wx/xrc/xh_combo.h
+    wx/xrc/xh_comboctrl.h
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h
