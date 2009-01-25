@@ -1,14 +1,14 @@
 # makefile for libpng on Solaris 9 (beta) with Forte cc
 # Updated by Chad Schrock for Solaris 9
 # Contributed by William L. Sebok, based on makefile.linux
-# Copyright (C) 2002, 2006 Glenn Randers-Pehrson
+# Copyright (C) 2002, 2006, 2008 Glenn Randers-Pehrson
 # Copyright (C) 1998-2001 Greg Roelofs
 # Copyright (C) 1996-1997 Andreas Dilger
 # For conditions of distribution and use, see copyright notice in png.h
 
 # Library name:
 PNGMAJ = 0
-PNGMIN = 1.2.20
+PNGMIN = 1.2.34
 PNGVER = $(PNGMAJ).$(PNGMIN)
 LIBNAME = libpng12
 
@@ -47,7 +47,7 @@ ZLIBINC=/usr/include
 #WARNMORE=-Wwrite-strings -Wpointer-arith -Wshadow \
 	-Wmissing-declarations -Wtraditional -Wcast-align \
 	-Wstrict-prototypes -Wmissing-prototypes #-Wconversion
-#CFLAGS=-I$(ZLIBINC) -Wall -O3 $(WARNMORE) -g -DPNG_DEBUG=5 -DPNG_NO_MMX_CODE
+#CFLAGS=-I$(ZLIBINC) -W -Wall -O3 $(WARNMORE) -g -DPNG_DEBUG=5 -DPNG_NO_MMX_CODE
 CFLAGS=-I$(ZLIBINC) -O3 -DPNG_NO_MMX_CODE
 LDFLAGS=-L. -R. -L$(ZLIBLIB) -R$(ZLIBLIB) -lpng12 -lz -lm
 
@@ -89,7 +89,11 @@ libpng.a: $(OBJS)
 	$(RANLIB) $@
 
 libpng.pc:
-	cat scripts/libpng.pc.in | sed -e s\!@PREFIX@!$(prefix)! > libpng.pc
+	cat scripts/libpng.pc.in | sed -e s!@prefix@!$(prefix)! \
+	-e s!@exec_prefix@!$(exec_prefix)! \
+	-e s!@libdir@!$(LIBPATH)! \
+	-e s!@includedir@!$(INCPATH)! \
+	-e s!-lpng12!-lpng12\ -lz\ -lm! > libpng.pc
 
 libpng-config:
 	( cat scripts/libpng-config-head.in; \

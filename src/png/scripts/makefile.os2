@@ -12,7 +12,7 @@ ZLIBINC=../zlib
 WARNMORE=-Wwrite-strings -Wpointer-arith -Wshadow \
 	-Wmissing-declarations -Wtraditional -Wcast-align \
 	-Wstrict-prototypes -Wmissing-prototypes #-Wconversion
-CFLAGS=-I$(ZLIBINC) -Wall -O6 -funroll-loops -malign-loops=2 \
+CFLAGS=-I$(ZLIBINC) -W -Wall -O6 -funroll-loops -malign-loops=2 \
 	-malign-functions=2 #$(WARNMORE) -g -DPNG_DEBUG=5
 LDFLAGS=-L. -L$(ZLIBLIB) -lpng -lzdll -Zcrtdll
 AR=emxomfar

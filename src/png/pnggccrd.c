@@ -2,8 +2,10 @@
 
 /* This code snippet is for use by configure's compilation test. */
 
-#if defined(PNG_ASSEMBLER_CODE_SUPPORTED) && \
+#if (!defined _MSC_VER) && \
+    defined(PNG_ASSEMBLER_CODE_SUPPORTED) && \
     defined(PNG_MMX_CODE_SUPPORTED)
+
 int PNGAPI png_dummy_mmx_support(void);
 
 static int _mmx_supported = 2; // 0: no MMX; 1: MMX supported; 2: not tested

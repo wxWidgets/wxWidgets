@@ -18,14 +18,14 @@
 void /* PRIVATE */
 png_do_write_transformations(png_structp png_ptr)
 {
-   png_debug(1, "in png_do_write_transformations\n");
+   png_debug(1, "in png_do_write_transformations");
 
    if (png_ptr == NULL)
       return;
 
 #if defined(PNG_WRITE_USER_TRANSFORM_SUPPORTED)
    if (png_ptr->transformations & PNG_USER_TRANSFORM)
-      if(png_ptr->write_user_transform_fn != NULL)
+      if (png_ptr->write_user_transform_fn != NULL)
         (*(png_ptr->write_user_transform_fn)) /* user write transform function */
           (png_ptr,                    /* png_ptr */
            &(png_ptr->row_info),       /* row_info:     */
@@ -86,7 +86,7 @@ png_do_write_transformations(png_structp png_ptr)
 void /* PRIVATE */
 png_do_pack(png_row_infop row_info, png_bytep row, png_uint_32 bit_depth)
 {
-   png_debug(1, "in png_do_pack\n");
+   png_debug(1, "in png_do_pack");
    if (row_info->bit_depth == 8 &&
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
        row != NULL && row_info != NULL &&
@@ -212,7 +212,7 @@ png_do_pack(png_row_infop row_info, png_bytep row, png_uint_32 bit_depth)
 void /* PRIVATE */
 png_do_shift(png_row_infop row_info, png_bytep row, png_color_8p bit_depth)
 {
-   png_debug(1, "in png_do_shift\n");
+   png_debug(1, "in png_do_shift");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
    if (row != NULL && row_info != NULL &&
 #else
@@ -336,7 +336,7 @@ png_do_shift(png_row_infop row_info, png_bytep row, png_color_8p bit_depth)
 void /* PRIVATE */
 png_do_write_swap_alpha(png_row_infop row_info, png_bytep row)
 {
-   png_debug(1, "in png_do_write_swap_alpha\n");
+   png_debug(1, "in png_do_write_swap_alpha");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
    if (row != NULL && row_info != NULL)
 #endif
@@ -424,7 +424,7 @@ png_do_write_swap_alpha(png_row_infop row_info, png_bytep row)
 void /* PRIVATE */
 png_do_write_invert_alpha(png_row_infop row_info, png_bytep row)
 {
-   png_debug(1, "in png_do_write_invert_alpha\n");
+   png_debug(1, "in png_do_write_invert_alpha");
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
    if (row != NULL && row_info != NULL)
 #endif
@@ -514,7 +514,7 @@ png_do_write_invert_alpha(png_row_infop row_info, png_bytep row)
 void /* PRIVATE */
 png_do_write_intrapixel(png_row_infop row_info, png_bytep row)
 {
-   png_debug(1, "in png_do_write_intrapixel\n");
+   png_debug(1, "in png_do_write_intrapixel");
    if (
 #if defined(PNG_USELESS_TESTS_SUPPORTED)
        row != NULL && row_info != NULL &&
@@ -558,8 +558,8 @@ png_do_write_intrapixel(png_row_infop row_info, png_bytep row)
             png_uint_32 s0   = (*(rp  ) << 8) | *(rp+1);
             png_uint_32 s1   = (*(rp+2) << 8) | *(rp+3);
             png_uint_32 s2   = (*(rp+4) << 8) | *(rp+5);
-            png_uint_32 red  = (png_uint_32)((s0-s1) & 0xffffL);
-            png_uint_32 blue = (png_uint_32)((s2-s1) & 0xffffL);
+            png_uint_32 red  = (png_uint_32)((s0 - s1) & 0xffffL);
+            png_uint_32 blue = (png_uint_32)((s2 - s1) & 0xffffL);
             *(rp  ) = (png_byte)((red >> 8) & 0xff);
             *(rp+1) = (png_byte)(red & 0xff);
             *(rp+4) = (png_byte)((blue >> 8) & 0xff);

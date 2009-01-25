@@ -1,13 +1,13 @@
    Y2K compliance in libpng:
    =========================
 
-      September 8, 2007
+      December 18, 2008
 
       Since the PNG Development group is an ad-hoc body, we can't make
       an official declaration.
 
       This is your unofficial assurance that libpng from version 0.71 and
-      upward through 1.2.20 are Y2K compliant.  It is my belief that earlier
+      upward through 1.2.34 are Y2K compliant.  It is my belief that earlier
       versions were also Y2K compliant.
 
       Libpng only has three year fields.  One is a 2-byte unsigned integer

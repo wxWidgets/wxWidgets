@@ -1,4 +1,5 @@
 # makefile for libpng using gcc (generic, static library)
+# Copyright (C) 2008 Glenn Randers-Pehrson
 # Copyright (C) 2000 Cosmin Truta
 # Copyright (C) 1995 Guy Eric Schalnat, Group 42, Inc.
 # For conditions of distribution and use, see copyright notice in png.h
@@ -18,8 +19,8 @@ CDEBUG = -g -DPNG_DEBUG=5
 LDDEBUG =
 CRELEASE = -O2
 LDRELEASE = -s
-#CFLAGS = -Wall $(CDEBUG)
-CFLAGS = -Wall $(CRELEASE)
+#CFLAGS = -W -Wall $(CDEBUG)
+CFLAGS = -W -Wall $(CRELEASE)
 #LDFLAGS = $(LDDEBUG)
 LDFLAGS = $(LDRELEASE)
 LIBS = -lz -lm

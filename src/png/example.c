@@ -2,9 +2,9 @@
 #if 0 /* in case someone actually tries to compile this */
 
 /* example.c - an example of using libpng
- * Last changed in libpng 1.2.1 December 7, 2001.
+ * Last changed in libpng 1.2.33 [December 18, 2008]
  * This file has been placed in the public domain by the authors.
- * Maintained 1998-2007 Glenn Randers-Pehrson
+ * Maintained 1998-2008 Glenn Randers-Pehrson
  * Maintained 1996, 1997 Andreas Dilger)
  * Written 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  */
@@ -204,7 +204,7 @@ void read_png(FILE *fp, unsigned int sig_read)  /* file is already open */
 
    /* Expand grayscale images to the full 8 bits from 1, 2, or 4 bits/pixel */
    if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
-      png_set_gray_1_2_4_to_8(png_ptr);
+      png_set_expand_gray_1_2_4_to_8(png_ptr);
 
    /* Expand paletted or RGB images with transparency to full alpha channels
     * so the data will be available as RGBA quartets.
@@ -505,7 +505,7 @@ row_callback(png_structp png_ptr, png_bytep new_row,
  * shown below:
  */
    /* Check if row_num is in bounds. */
-   if((row_num >= 0) && (row_num < height))
+   if ((row_num >= 0) && (row_num < height))
    {
      /* Get pointer to corresponding row in our
       * PNG read buffer.
@@ -515,7 +515,7 @@ row_callback(png_structp png_ptr, png_bytep new_row,
      /* If both rows are allocated then copy the new row
       * data to the corresponding row data.
       */
-     if((old_row != NULL) && (new_row != NULL))
+     if ((old_row != NULL) && (new_row != NULL))
      png_progressive_combine_row(png_ptr, old_row, new_row);
    }
 /*
@@ -608,7 +608,7 @@ void write_png(char *file_name /* , ... other image information ... */)
    /* set up the output control if you are using standard C streams */
    png_init_io(png_ptr, fp);
 #else no_streams /* I/O initialization method 2 */
-   /* If you are using replacement read functions, instead of calling
+   /* If you are using replacement write functions, instead of calling
     * png_init_io() here you would call */
    png_set_write_fn(png_ptr, (void *)user_io_ptr, user_write_fn,
       user_IO_flush_function);
@@ -637,7 +637,7 @@ void write_png(char *file_name /* , ... other image information ... */)
 
    /* set the palette if there is one.  REQUIRED for indexed-color images */
    palette = (png_colorp)png_malloc(png_ptr, PNG_MAX_PALETTE_LENGTH
-             * png_sizeof (png_color));
+             * png_sizeof(png_color));
    /* ... set palette colors ... */
    png_set_PLTE(png_ptr, info_ptr, palette, PNG_MAX_PALETTE_LENGTH);
    /* You must not free palette here, because png_set_PLTE only makes a link to
@@ -793,13 +793,13 @@ void write_png(char *file_name /* , ... other image information ... */)
       allocated it with malloc() instead of png_malloc(), use free() instead
       of png_free(). */
    png_free(png_ptr, palette);
-   palette=NULL;
+   palette = NULL;
 
    /* Similarly, if you png_malloced any data that you passed in with
       png_set_something(), such as a hist or trans array, free it here,
       when you can be sure that libpng is through with it. */
    png_free(png_ptr, trans);
-   trans=NULL;
+   trans = NULL;
 
    /* clean up after the write, and free any memory allocated */
    png_destroy_write_struct(&png_ptr, &info_ptr);

@@ -50,7 +50,7 @@ CFG=libpng - Win32 DLL Release
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W3 /O2 /D "WIN32" /D "NDEBUG" /FD /c
 # SUBTRACT BASE CPP /YX /Yc /Yu
-# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "NDEBUG" /D "PNG_BUILD_DLL" /D "PNG_NO_MMX_CODE" /D "ZLIB_DLL" /D "_CRT_SECURE_NO_WARNINGS /FD /c
+# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "NDEBUG" /D "PNG_BUILD_DLL" /D "PNG_NO_MMX_CODE" /D "ZLIB_DLL" /D "_CRT_SECURE_NO_WARNINGS" /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -81,7 +81,7 @@ LINK32=link.exe
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W3 /Gm /ZI /Od /D "WIN32" /D "_DEBUG" /FD /GZ /c
 # SUBTRACT BASE CPP /YX /Yc /Yu
-# ADD CPP /nologo /MDd /W3 /Gm /ZI /Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_NO_MMX_CODE" /D PNG_DEBUG=1 /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "_CRT_SECURE_NO_WARNINGS /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /ZI /Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_NO_MMX_CODE" /D PNG_DEBUG=1 /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "_CRT_SECURE_NO_WARNINGS" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -112,7 +112,7 @@ LINK32=link.exe
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W3 /O2 /D "WIN32" /D "NDEBUG" /FD /c
 # SUBTRACT BASE CPP /YX /Yc /Yu
-# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "NDEBUG" /D "PNG_USE_PNGVCRD" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS /FD /c
+# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "NDEBUG" /D "PNG_USE_PNGVCRD" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS" /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -143,7 +143,7 @@ LINK32=link.exe
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W3 /Gm /ZI /Od /D "WIN32" /D "_DEBUG" /FD /GZ /c
 # SUBTRACT BASE CPP /YX /Yc /Yu
-# ADD CPP /nologo /MDd /W3 /Gm /ZI /Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D PNG_DEBUG=1 /D "PNG_USE_PNGVCRD" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /ZI /Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D PNG_DEBUG=1 /D "PNG_USE_PNGVCRD" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -174,7 +174,7 @@ LINK32=link.exe
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W3 /O2 /D "WIN32" /D "NDEBUG" /FD /c
 # SUBTRACT BASE CPP /YX /Yc /Yu
-# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "NDEBUG" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D PNGAPI=__stdcall /D "PNG_NO_MODULEDEF" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS /FD /c
+# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "NDEBUG" /D "PNG_BUILD_DLL" /D "ZLIB_DLL" /D PNGAPI=__stdcall /D "PNG_NO_MODULEDEF" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS" /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -210,7 +210,7 @@ PostBuild_Cmds=echo    Deleting $(targetname) import library and export file (No
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W3 /O2 /D "WIN32" /D "NDEBUG" /FD /c
 # SUBTRACT BASE CPP /YX /Yc /Yu
-# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "PNG_NO_MMX_CODE" /D "WIN32" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS /FD /c
+# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "PNG_NO_MMX_CODE" /D "WIN32" /D "NDEBUG" /D "_CRT_SECURE_NO_WARNINGS" /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 RSC=rc.exe
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -237,7 +237,7 @@ LIB32=link.exe -lib
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W3 /Gm /ZI /Od /D "WIN32" /D "_DEBUG" /FD /GZ /c
 # SUBTRACT BASE CPP /YX /Yc /Yu
-# ADD CPP /nologo /MDd /W3 /Gm /ZI /Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_NO_MMX_CODE" /D PNG_DEBUG=1 /D "_CRT_SECURE_NO_WARNINGS /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /ZI /Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D "PNG_NO_MMX_CODE" /D PNG_DEBUG=1 /D "_CRT_SECURE_NO_WARNINGS" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 RSC=rc.exe
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -264,7 +264,7 @@ LIB32=link.exe -lib
 CPP=cl.exe
 # ADD BASE CPP /nologo /MD /W3 /O2 /D "WIN32" /D "NDEBUG" /FD /c
 # SUBTRACT BASE CPP /YX /Yc /Yu
-# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "NDEBUG" /D "PNG_USE_PNGVCRD" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS /FD /c
+# ADD CPP /nologo /MD /W3 /O2 /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "NDEBUG" /D "PNG_USE_PNGVCRD" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS" /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 RSC=rc.exe
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -291,7 +291,7 @@ LIB32=link.exe -lib
 CPP=cl.exe
 # ADD BASE CPP /nologo /MDd /W3 /Gm /ZI /Od /D "WIN32" /D "_DEBUG" /FD /GZ /c
 # SUBTRACT BASE CPP /YX /Yc /Yu
-# ADD CPP /nologo /MDd /W3 /Gm /ZI /Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D PNG_DEBUG=1 /D "PNG_USE_PNGVCRD" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /ZI /Od /I "..\.." /I "..\..\..\zlib" /D "WIN32" /D "_DEBUG" /D "DEBUG" /D PNG_DEBUG=1 /D "PNG_USE_PNGVCRD" /D "PNG_LIBPNG_SPECIALBUILD" /D "_CRT_SECURE_NO_WARNINGS" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 RSC=rc.exe
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -362,39 +362,6 @@ SOURCE=..\..\pngset.c
 # Begin Source File
 
 SOURCE=..\..\pngtrans.c
-# End Source File
-# Begin Source File
-
-!IF  "$(CFG)" == "libpng - Win32 DLL Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "libpng - Win32 DLL Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "libpng - Win32 DLL ASM Release"
-
-!ELSEIF  "$(CFG)" == "libpng - Win32 DLL ASM Debug"
-
-!ELSEIF  "$(CFG)" == "libpng - Win32 DLL VB"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "libpng - Win32 LIB Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "libpng - Win32 LIB Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "libpng - Win32 LIB ASM Release"
-
-!ELSEIF  "$(CFG)" == "libpng - Win32 LIB ASM Debug"
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 

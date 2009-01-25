@@ -4,7 +4,7 @@
 #   statically linked and one dynamically linked.
 #
 # Built from makefile.cygwin
-# Copyright (C) 2002, 2006 Soren Anderson, Charles Wilson,
+# Copyright (C) 2002, 2006, 2008 Soren Anderson, Charles Wilson,
 #    and Glenn Randers-Pehrson, based on makefile for linux-elf w/mmx by:
 # Copyright (C) 1998-2000, 2007 Greg Roelofs
 # Copyright (C) 1996, 1997 Andreas Dilger
@@ -60,21 +60,21 @@ WARNMORE=-Wwrite-strings -Wpointer-arith -Wshadow \
 
 ### if you don't need thread safety, but want the asm accel
 #CFLAGS= $(strip $(MINGW_CCFLAGS) -DPNG_THREAD_UNSAFE_OK \
-#	$(addprefix -I,$(ZLIBINC)) -Wall -O $(ALIGN) -funroll-loops \
+#	$(addprefix -I,$(ZLIBINC)) -W -Wall -O $(ALIGN) -funroll-loops \
 #	-fomit-frame-pointer)  # $(WARNMORE) -g -DPNG_DEBUG=5
 ### if you need thread safety and want (minimal) asm accel
 #CFLAGS= $(strip $(MINGW_CCFLAGS) $(addprefix -I,$(ZLIBINC)) \
-#	-Wall -O $(ALIGN) -funroll-loops \
+#	-W -Wall -O $(ALIGN) -funroll-loops \
 #	-fomit-frame-pointer)  # $(WARNMORE) -g -DPNG_DEBUG=5
 ### Normal (non-asm) compilation
 CFLAGS= $(strip $(MINGW_CCFLAGS) $(addprefix -I,$(ZLIBINC)) \
-        -Wall -O3 $(ALIGN) -funroll-loops -DPNG_NO_MMX_CODE \
+        -W -Wall -O3 $(ALIGN) -funroll-loops -DPNG_NO_MMX_CODE \
 	-fomit-frame-pointer) # $(WARNMORE) -g -DPNG_DEBUG=5
 
 LIBNAME = libpng12
 PNGMAJ = 0
 MINGDLL = 12
-PNGMIN = 1.2.20
+PNGMIN = 1.2.34
 PNGVER = $(PNGMAJ).$(PNGMIN)
 
 SHAREDLIB=libpng$(MINGDLL).dll
@@ -130,8 +130,12 @@ buildsetup-tell:
 libpng.pc: scripts/libpng.pc.in
 	@echo -e Making pkg-config file for this libpng installation..'\n' \
            using PREFIX=\"$(prefix)\"'\n'
-	cat $(S)/scripts/libpng.pc.in | sed -e s\!@PREFIX@!$(prefix)! | \
-	   sed -e s/-lm// > libpng.pc
+	cat scripts/libpng.pc.in | sed -e s!@prefix@!$(prefix)! \
+	-e s!@exec_prefix@!$(exec_prefix)! \
+	-e s!@libdir@!$(LIBPATH)! \
+	-e s!@includedir@!$(INCPATH)! \
+	-e s!@includedir@!$(INCPATH)! \
+	-e s!-lpng12!-lpng12\ -lz\ -lm! > libpng.pc
 
 libpng-config: scripts/libpng-config-head.in scripts/libpng-config-body.in
 	@echo -e Making $(LIBNAME) libpng-config file for this libpng \

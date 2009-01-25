@@ -1,6 +1,6 @@
 # makefile for libpng on BeOS x86 ELF with gcc
 # modified from makefile.linux by Sander Stoks
-# Copyright (C) 2002, 2006 Glenn Randers-Pehrson
+# Copyright (C) 2002, 2006, 2008 Glenn Randers-Pehrson
 # Copyright (C) 1999 Greg Roelofs
 # Copyright (C) 1996, 1997 Andreas Dilger
 # For conditions of distribution and use, see copyright notice in png.h
@@ -8,7 +8,7 @@
 # Library name:
 LIBNAME=libpng12
 PNGMAJ = 0
-PNGMIN = 1.2.20
+PNGMIN = 1.2.34
 PNGVER = $(PNGMAJ).$(PNGMIN)
 
 # Shared library names:
@@ -41,7 +41,7 @@ WARNMORE=-Wwrite-strings -Wpointer-arith -Wshadow \
 
 # On BeOS, -O1 is actually better than -O3.  This is a known bug but it's
 # still here in R4.5
-CFLAGS=-I$(ZLIBINC) -Wall -O1 -funroll-loops \
+CFLAGS=-I$(ZLIBINC) -W -Wall -O1 -funroll-loops \
 	$(ALIGN) # $(WARNMORE) -g -DPNG_DEBUG=5
 # LDFLAGS=-L. -Wl,-rpath,. -L$(ZLIBLIB) -Wl,-rpath,$(ZLIBLIB) -lpng -lz
 LDFLAGS=-L. -Wl,-soname=$(LIBSOMAJ) -L$(ZLIBLIB) -lz
@@ -84,7 +84,11 @@ libpng.a: $(OBJS)
 	$(RANLIB) $@
 
 libpng.pc:
-	cat scripts/libpng.pc.in | sed -e s\!@PREFIX@!$(prefix)! > libpng.pc
+	cat scripts/libpng.pc.in | sed -e s!@prefix@!$(prefix)! \
+	-e s!@exec_prefix@!$(exec_prefix)! \
+	-e s!@libdir@!$(LIBPATH)! \
+	-e s!@includedir@!$(INCPATH)! \
+	-e s!-lpng12!-lpng12\ -lz\ -lm! > libpng.pc
 
 libpng-config:
 	( cat scripts/libpng-config-head.in; \

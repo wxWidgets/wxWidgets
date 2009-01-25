@@ -1,6 +1,6 @@
 # makefile for libpng.a and libpng12.so on Linux ELF with gcc using MMX
 # assembler code
-# Copyright 2002, 2006 Greg Roelofs and Glenn Randers-Pehrson
+# Copyright 2002, 2006, 2008 Greg Roelofs and Glenn Randers-Pehrson
 # Copyright 1998-2001 Greg Roelofs
 # Copyright 1996-1997 Andreas Dilger
 # For conditions of distribution and use, see copyright notice in png.h
@@ -14,7 +14,7 @@
 # Library name:
 LIBNAME = libpng12
 PNGMAJ = 0
-PNGMIN = 1.2.20
+PNGMIN = 1.2.34
 PNGVER = $(PNGMAJ).$(PNGMIN)
 
 # Shared library names:
@@ -58,15 +58,15 @@ WARNMORE=-Wwrite-strings -Wpointer-arith -Wshadow \
 
 # Remove -DPNG_THREAD_UNSAFE_OK if you need thread safety
 ### for generic gcc:
-CFLAGS=-DPNG_THREAD_UNSAFE_OK -I$(ZLIBINC) -Wall -O \
+CFLAGS=-DPNG_THREAD_UNSAFE_OK -I$(ZLIBINC) -W -Wall -O \
 	$(ALIGN) -funroll-loops \
 	-fomit-frame-pointer  # $(WARNMORE) -g -DPNG_DEBUG=5
 ### for gcc 2.95.2 on 686:
-#CFLAGS=-DPNG_THREAD_UNSAFE_OK -I$(ZLIBINC) -Wall -O \
+#CFLAGS=-DPNG_THREAD_UNSAFE_OK -I$(ZLIBINC) -W -Wall -O \
 #	-mcpu=i686 -malign-double -ffast-math -fstrict-aliasing \
 #	$(ALIGN) -funroll-loops -funroll-all-loops -fomit-frame-pointer 
 ### for gcc 2.7.2.3 on 486 and up:
-#CFLAGS=-DPNG_THREAD_UNSAFE_OK -I$(ZLIBINC) -Wall -O \
+#CFLAGS=-DPNG_THREAD_UNSAFE_OK -I$(ZLIBINC) -W -Wall -O \
 #	-m486 -malign-double -ffast-math \
 #	$(ALIGN) -funroll-loops -funroll-all-loops -fomit-frame-pointer 
 
@@ -112,7 +112,11 @@ libpng.a: $(OBJS)
 	$(RANLIB) $@
 
 libpng.pc:
-	cat scripts/libpng.pc.in | sed -e s\!@PREFIX@!$(prefix)! > libpng.pc
+	cat scripts/libpng.pc.in | sed -e s!@prefix@!$(prefix)! \
+	-e s!@exec_prefix@!$(exec_prefix)! \
+	-e s!@libdir@!$(LIBPATH)! \
+	-e s!@includedir@!$(INCPATH)! \
+	-e s!-lpng12!-lpng12\ -lz\ -lm! > libpng.pc
 
 libpng-config:
 	( cat scripts/libpng-config-head.in; \
