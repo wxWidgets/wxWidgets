@@ -83,6 +83,7 @@
 #include "wx/tokenzr.h"
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/dynlib.h"
+#include "wx/dir.h"
 
 #if defined(__WIN32__) && defined(__MINGW32__)
     #include "wx/msw/gccpriv.h"
@@ -1123,14 +1124,83 @@ bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
     return ::wxMkdir( dir, perm );
 }
 
-bool wxFileName::Rmdir()
+bool wxFileName::Rmdir(int flags)
 {
-    return wxFileName::Rmdir( GetPath() );
+    return wxFileName::Rmdir( GetPath(), flags );
 }
 
-bool wxFileName::Rmdir( const wxString &dir )
+bool wxFileName::Rmdir(const wxString& dir, int flags)
 {
-    return ::wxRmdir( dir );
+#ifdef __WXMSW__
+    if ( flags & wxPATH_RMDIR_RECURSIVE )
+    {
+        // SHFileOperation needs double null termination string
+        // but without separator at the end of the path
+        wxString path(dir);
+        if ( path.Last() == wxFILE_SEP_PATH )
+            path.RemoveLast();
+        path += _T('\0');
+
+        SHFILEOPSTRUCT fileop;
+        wxZeroMemory(fileop);
+        fileop.wFunc = FO_DELETE;
+        fileop.pFrom = path.fn_str();
+        fileop.fFlags = FOF_SILENT | FOF_NOCONFIRMATION;
+    #ifndef __WXWINCE__
+        // FOF_NOERRORUI is not defined in WinCE
+        fileop.fFlags |= FOF_NOERRORUI;
+    #endif
+
+        int ret = SHFileOperation(&fileop);
+        if ( ret != 0 )
+        {
+            // SHFileOperation may return non-Win32 error codes, so the error
+            // message can be incorrect
+            wxLogApiError(_T("SHFileOperation"), ret);
+            return false;
+        }
+
+        return true;
+    }
+    else if ( flags & wxPATH_RMDIR_FULL )
+#else // !__WXMSW__
+    if ( flags != 0 )   // wxPATH_RMDIR_FULL or wxPATH_RMDIR_RECURSIVE
+#endif // !__WXMSW__
+    {
+        wxString path(dir);
+        if ( path.Last() != wxFILE_SEP_PATH )
+            path += wxFILE_SEP_PATH;
+
+        wxDir d(path);
+
+        if ( !d.IsOpened() )
+            return false;
+
+        wxString filename;
+
+        // first delete all subdirectories
+        bool cont = d.GetFirst(&filename, "", wxDIR_DIRS | wxDIR_HIDDEN);
+        while ( cont )
+        {
+            wxFileName::Rmdir(path + filename, flags);
+            cont = d.GetNext(&filename);
+        }
+
+#ifndef __WXMSW__
+        if ( flags & wxPATH_RMDIR_RECURSIVE )
+        {
+            // delete all files too
+            cont = d.GetFirst(&filename, "", wxDIR_FILES | wxDIR_HIDDEN);
+            while ( cont )
+            {
+                ::wxRemoveFile(path + filename);
+                cont = d.GetNext(&filename);
+            }
+        }
+#endif // !__WXMSW__
+    }
+
+    return ::wxRmdir(dir);
 }
 
 // ----------------------------------------------------------------------------

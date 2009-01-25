@@ -54,6 +54,24 @@ enum wxPathNormalize
 };
 
 /**
+    Flags for wxFileName::Rmdir().
+ */
+enum
+{
+    /// Delete the specified directory and its subdirectories if they are empty.
+    wxPATH_RMDIR_FULL = 1,
+
+    /**
+      Delete the specified directory and all the files and subdirectories in it
+      recursively.
+
+      This flag is obviously @b dangerous and should be used with care and
+      after asking the user for confirmation.
+     */
+    wxPATH_RMDIR_RECURSIVE = 2
+};
+
+/**
     The return value of wxFileName::GetSize() in case of error.
 */
 wxULongLong wxInvalidSize;
@@ -982,13 +1000,31 @@ public:
 
     /**
         Deletes the specified directory from the file system.
+
+        @param flags
+            Can contain one of wxPATH_RMDIR_FULL or wxPATH_RMDIR_RECURSIVE. By
+            default contains neither so the directory will not be removed
+            unless it is empty.
+
+        @return Returns @true if the directory was successfully deleted, @false
+                otherwise.
     */
-    bool Rmdir();
+    bool Rmdir(int flags = 0);
 
     /**
         Deletes the specified directory from the file system.
+
+        @param dir
+            The directory to delete
+        @param flags
+            Can contain one of wxPATH_RMDIR_FULL or wxPATH_RMDIR_RECURSIVE. By
+            default contains neither so the directory will not be removed
+            unless it is empty.
+
+        @return Returns @true if the directory was successfully deleted, @false
+                otherwise.
     */
-    static bool Rmdir(const wxString& dir);
+    static bool Rmdir(const wxString& dir, int flags = 0);
 
     /**
         Compares the filename using the rules of this platform.
@@ -1140,4 +1176,3 @@ public:
     */
     wxFileName& operator=(const wxString& filename);
 };
-

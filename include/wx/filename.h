@@ -87,10 +87,17 @@ enum
     wxPATH_GET_SEPARATOR = 0x0002   // terminate the path with the separator
 };
 
-// MkDir flags
+// Mkdir flags
 enum
 {
     wxPATH_MKDIR_FULL    = 0x0001   // create directories recursively
+};
+
+// Rmdir flags
+enum
+{
+    wxPATH_RMDIR_FULL       = 0x0001,  // delete with subdirectories if empty
+    wxPATH_RMDIR_RECURSIVE  = 0x0002   // delete all recursively (dangerous!)
 };
 
 #if wxUSE_LONGLONG
@@ -309,11 +316,12 @@ public:
 #endif // wxUSE_FFILE
 
     // directory creation and removal.
-    bool Mkdir( int perm = wxS_DIR_DEFAULT, int flags = 0);
-    static bool Mkdir( const wxString &dir, int perm = wxS_DIR_DEFAULT, int flags = 0 );
+    bool Mkdir(int perm = wxS_DIR_DEFAULT, int flags = 0);
+    static bool Mkdir(const wxString &dir, int perm = wxS_DIR_DEFAULT,
+                      int flags = 0);
 
-    bool Rmdir();
-    static bool Rmdir( const wxString &dir );
+    bool Rmdir(int flags = 0);
+    static bool Rmdir(const wxString &dir, int flags = 0);
 
     // operations on the path
 
