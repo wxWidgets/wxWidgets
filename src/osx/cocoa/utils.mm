@@ -56,7 +56,7 @@ void wxMacWakeUp()
 }
 
 #endif // wxUSE_BASE
- 
+
 #if wxUSE_GUI
 
 @interface wxNSAppController : NSObject
@@ -100,7 +100,7 @@ void wxMacWakeUp()
     return YES;
 }
 
-/* 
+/*
     Allowable return values are:
         NSTerminateNow - it is ok to proceed with termination
         NSTerminateCancel - the application should not be terminated
@@ -113,7 +113,7 @@ void wxMacWakeUp()
     if ( win )
     {
         wxCommandEvent exitEvent(wxEVT_COMMAND_MENU_SELECTED, wxApp::s_macExitMenuItemId);
-        if (!win->ProcessEvent(exitEvent))
+        if (!win->GetEventHandler()->ProcessEvent(exitEvent))
             win->Close(true) ;
     }
     else
@@ -146,7 +146,7 @@ bool wxApp::DoInitGui()
     {
         wxNSAppController* controller = [[wxNSAppController alloc] init];
         [[NSApplication sharedApplication] setDelegate:controller];
-        
+
         NSAppleEventManager *appleEventManager = [NSAppleEventManager sharedAppleEventManager];
         [appleEventManager setEventHandler:controller andSelector:@selector(handleGetURLEvent:withReplyEvent:)
             forEventClass:kInternetEventClass andEventID:kAEGetURL];
@@ -171,7 +171,7 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
         *width = r.GetWidth();
     if ( height )
         *height = r.GetHeight();
-    
+
 }
 
 void wxGetMousePosition( int* x, int* y )
@@ -240,23 +240,23 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     // call this method when a Blit is performed with it as a source.
     if (!m_window)
         return wxNullBitmap;
-        
+
     wxSize sz = m_window->GetSize();
-    
+
     int left = subrect != NULL ? subrect->x : 0 ;
     int top = subrect != NULL ? subrect->y : 0 ;
     int width = subrect != NULL ? subrect->width : sz.x;
     int height = subrect !=  NULL ? subrect->height : sz.y ;
-    
+
     NSRect rect = NSMakeRect(left, top, width, height );
     NSView* view = (NSView*) m_window->GetHandle();
     [view lockFocus];
-    // we use this method as other methods force a repaint, and this method can be 
+    // we use this method as other methods force a repaint, and this method can be
     // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
     NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]] retain];
     [view unlockFocus];
-    
-    CGImageRef cgImageRef = (CGImageRef)[rep CGImage]; 
+
+    CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
 
     wxBitmap bitmap(CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
     CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
@@ -265,7 +265,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     CGImageRelease(cgImageRef);
     cgImageRef = NULL;
     [rep release];
-        
+
     return bitmap;
 }
 

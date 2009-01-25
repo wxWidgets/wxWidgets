@@ -513,13 +513,13 @@ bool wxMediaBackendCommonBase::SendStopEvent()
 {
     wxMediaEvent theEvent(wxEVT_MEDIA_STOP, m_ctrl->GetId());
 
-    return !m_ctrl->ProcessEvent(theEvent) || theEvent.IsAllowed();
+    return !m_ctrl->GetEventHandler()->ProcessEvent(theEvent) || theEvent.IsAllowed();
 }
 
 void wxMediaBackendCommonBase::QueueEvent(wxEventType evtType)
 {
     wxMediaEvent theEvent(evtType, m_ctrl->GetId());
-    m_ctrl->AddPendingEvent(theEvent);
+    m_ctrl->GetEventHandler()->AddPendingEvent(theEvent);
 }
 
 void wxMediaBackendCommonBase::QueuePlayEvent()

@@ -253,7 +253,7 @@ short wxApp::MacHandleAEQuit(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
     if ( win )
     {
         wxCommandEvent exitEvent(wxEVT_COMMAND_MENU_SELECTED, s_macExitMenuItemId);
-        if (!win->ProcessEvent(exitEvent))
+        if (!win->GetEventHandler()->ProcessEvent(exitEvent))
             win->Close(true) ;
     }
     else
