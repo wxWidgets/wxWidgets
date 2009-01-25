@@ -358,7 +358,8 @@ public:
     void DrawInReportMode( wxDC *dc,
                            const wxRect& rect,
                            const wxRect& rectHL,
-                           bool highlighted );
+                           bool highlighted,
+                           bool current );
 
 private:
     // set the line to contain num items (only can be > 1 in report mode)
@@ -1537,7 +1538,8 @@ void wxListLineData::Draw( wxDC *dc )
 void wxListLineData::DrawInReportMode( wxDC *dc,
                                        const wxRect& rect,
                                        const wxRect& rectHL,
-                                       bool highlighted )
+                                       bool highlighted,
+                                       bool current )
 {
     // TODO: later we should support setting different attributes for
     //       different columns - to do it, just add "col" argument to
@@ -1555,6 +1557,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
             int flags = wxCONTROL_SELECTED;
             if (m_owner->HasFocus())
                 flags |= wxCONTROL_FOCUSED;
+            if (current)
+               flags |= wxCONTROL_CURRENT;
             wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
         }
         else
@@ -2807,7 +2811,8 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             GetLine(line)->DrawInReportMode( &dc,
                                              rectLine,
                                              GetLineHighlightRect(line),
-                                             IsHighlighted(line) );
+                                             IsHighlighted(line),       
+                                             line == m_current );
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -2867,21 +2872,17 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
     }
 
-#ifndef __WXMAC__
+#if !defined( __WXMAC__) && !defined(__WXGTK20__)
     // Don't draw rect outline under Mac at all.
+    // Draw it elsewhere under GTK.
     if ( HasCurrent() )
     {
         if ( m_hasFocus )
         {
             wxRect rect( GetLineHighlightRect( m_current ) );
-#ifndef __WXGTK20__
             dc.SetPen( *wxBLACK_PEN );
             dc.SetBrush( *wxTRANSPARENT_BRUSH );
             dc.DrawRectangle( rect );
-#else
-            wxRendererNative::Get().DrawItemSelectionRect( this, dc, rect, wxCONTROL_CURRENT|wxCONTROL_FOCUSED );
-
-#endif
         }
     }
 #endif
