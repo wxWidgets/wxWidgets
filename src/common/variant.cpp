@@ -1182,7 +1182,11 @@ void wxVariant::operator= (void* value)
 
 void* wxVariant::GetVoidPtr() const
 {
-    wxASSERT( (GetType() == wxT("void*")) );
+    // handling this specially is convenient when working with COM, see #9873
+    if ( IsNull() )
+        return NULL;
+
+    wxASSERT( GetType() == wxT("void*") );
 
     return (void*) ((wxVariantDataVoidPtr*) m_data)->GetValue();
 }

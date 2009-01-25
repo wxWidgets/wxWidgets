@@ -321,6 +321,9 @@ public:
 
     /**
         Gets the void pointer value.
+
+        Notice that this method can be used for null objects (i.e. those for
+        which IsNull() returns @true) and will return @NULL for them.
     */
     void* GetVoidPtr() const;
 
