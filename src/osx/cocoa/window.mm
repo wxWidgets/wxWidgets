@@ -729,7 +729,7 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event );
 
-    return GetWXPeer()->HandleKeyEvent(wxevent);
+    return GetWXPeer()->OSXHandleKeyEvent(wxevent);
 }
 
 bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
