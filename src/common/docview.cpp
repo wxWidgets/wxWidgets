@@ -476,7 +476,7 @@ bool wxDocument::OnSaveModified()
                  (
                     wxString::Format
                     (
-                     _("Do you want to save changes to document %s?"),
+                     _("Do you want to save changes to %s?"),
                      GetUserReadableName()
                     ),
                     wxTheApp->GetAppDisplayName(),
