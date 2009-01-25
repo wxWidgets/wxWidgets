@@ -54,6 +54,12 @@ public:
     */
     virtual ~wxAppConsole();
 
+
+    /**
+        @name Event-handling
+    */
+    //@{
+
     /**
         Dispatches the next event in the windowing system event queue.
         Blocks until an event appears if there are none currently
@@ -68,7 +74,7 @@ public:
 
         @return @false if the event loop should stop and @true otherwise.
 
-        @see Pending()
+        @see Pending(), wxEventLoopBase
     */
     virtual bool Dispatch();
 
@@ -90,70 +96,6 @@ public:
     */
     virtual int FilterEvent(wxEvent& event);
 
-    /**
-        Returns the user-readable application name.
-
-        The difference between this string and the one returned by GetAppName()
-        is that this one is meant to be shown to the user and so should be used
-        for the window titles, page headers and so on while the other one
-        should be only used internally, e.g. for the file names or
-        configuration file keys. By default, returns the application name as
-        returned by GetAppName() capitalized using wxString::Capitalize().
-
-        @since 2.9.0
-    */
-    wxString GetAppDisplayName() const;
-
-    /**
-        Returns the application name.
-
-        @remarks wxWidgets sets this to a reasonable default before calling
-                 OnInit(), but the application can reset it at will.
-
-        @see GetAppDisplayName()
-    */
-    wxString GetAppName() const;
-
-    /**
-        Gets the class name of the application. The class name may be used in a
-        platform specific manner to refer to the application.
-
-        @see SetClassName()
-    */
-    wxString GetClassName() const;
-
-    /**
-        Returns the one and only global application object.
-        Usually wxTheApp is used instead.
-
-        @see SetInstance()
-    */
-    static wxAppConsole* GetInstance();
-
-    /**
-        Returns a pointer to the wxAppTraits object for the application.
-        If you want to customize the wxAppTraits object, you must override the
-        CreateTraits() function.
-    */
-    wxAppTraits* GetTraits();
-
-    /**
-        Returns the user-readable vendor name. The difference between this string
-        and the one returned by GetVendorName() is that this one is meant to be shown
-        to the user and so should be used for the window titles, page headers and so on
-        while the other one should be only used internally, e.g. for the file names or
-        configuration file keys.
-
-        By default, returns the same string as GetVendorName().
-
-        @since 2.9.0
-    */
-    const wxString& GetVendorDisplayName() const;
-
-    /**
-        Returns the application's vendor name.
-    */
-    const wxString& GetVendorName() const;
 
     /**
         This function simply invokes the given method @a func of the specified
@@ -167,19 +109,9 @@ public:
                              wxEvent& event) const;
 
     /**
-        Returns @true if the main event loop is currently running, i.e. if the
-        application is inside OnRun().
-
-        This can be useful to test whether events can be dispatched. For example,
-        if this function returns @false, non-blocking sockets cannot be used because
-        the events from them would never be processed.
-    */
-    static bool IsMainLoopRunning();
-
-    /**
         Returns @true if called from inside Yield().
     */
-    bool IsYielding() const;
+    virtual bool IsYielding() const;
 
     /**
         Process all pending events; it is necessary to call this function to
@@ -189,6 +121,86 @@ public:
         no main loop, it may be also called directly.
     */
     virtual void ProcessPendingEvents();
+
+    /**
+        Called by wxWidgets on creation of the application. Override this if you wish
+        to provide your own (environment-dependent) main loop.
+
+        @return 0 under X, and the wParam of the WM_QUIT message under Windows.
+    */
+    virtual int MainLoop();
+
+    /**
+        Returns @true if unprocessed events are in the window system event queue.
+
+        @see Dispatch()
+    */
+    virtual bool Pending();
+
+    /**
+        Yields control to pending messages in the windowing system.
+
+        This can be useful, for example, when a time-consuming process writes to a
+        text window. Without an occasional yield, the text window will not be updated
+        properly, and on systems with cooperative multitasking, such as Windows 3.1
+        other processes will not respond.
+
+        Caution should be exercised, however, since yielding may allow the
+        user to perform actions which are not compatible with the current task.
+        Disabling menu items or whole menus during processing can avoid unwanted
+        reentrance of code: see ::wxSafeYield for a better function.
+        You can avoid unwanted reentrancies also using IsYielding().
+
+        Note that Yield() will not flush the message logs. This is intentional as
+        calling Yield() is usually done to quickly update the screen and popping up
+        a message box dialog may be undesirable. If you do wish to flush the log
+        messages immediately (otherwise it will be done during the next idle loop
+        iteration), call wxLog::FlushActive.
+
+        Calling Yield() recursively is normally an error and an assert failure is
+        raised in debug build if such situation is detected. However if the
+        @a onlyIfNeeded parameter is @true, the method will just silently
+        return @false instead.
+    */
+    virtual bool Yield(bool onlyIfNeeded = false);
+
+    //@}
+
+
+    /**
+        Allows external code to modify global ::wxTheApp, but you should really
+        know what you're doing if you call it.
+
+        @param app
+            Replacement for the global application object.
+
+        @see GetInstance()
+    */
+    static void SetInstance(wxAppConsole* app);
+
+    /**
+        Returns the one and only global application object.
+        Usually wxTheApp is used instead.
+
+        @see SetInstance()
+    */
+    static wxAppConsole* GetInstance();
+
+    /**
+        Returns @true if the main event loop is currently running, i.e. if the
+        application is inside OnRun().
+
+        This can be useful to test whether events can be dispatched. For example,
+        if this function returns @false, non-blocking sockets cannot be used because
+        the events from them would never be processed.
+    */
+    static bool IsMainLoopRunning();
+
+
+    /**
+        @name Mac-specific functions
+    */
+    //@{
 
     /**
         Called in response of an "open-application" Apple event.
@@ -230,13 +242,13 @@ public:
     */
     virtual void MacReopenApp();
 
-    /**
-        Called by wxWidgets on creation of the application. Override this if you wish
-        to provide your own (environment-dependent) main loop.
+    //@}
 
-        @return 0 under X, and the wParam of the WM_QUIT message under Windows.
+
+    /**
+        @name Callbacks for application-wide "events"
     */
-    virtual int MainLoop();
+    //@{
 
     /**
         This function is called when an assert failure occurs, i.e. the condition
@@ -394,12 +406,70 @@ public:
     */
     virtual void OnUnhandledException();
 
-    /**
-        Returns @true if unprocessed events are in the window system event queue.
+    //@}
 
-        @see Dispatch()
+
+    /**
+        @name Application informations
     */
-    virtual bool Pending();
+    //@{
+
+    /**
+        Returns the user-readable application name.
+
+        The difference between this string and the one returned by GetAppName()
+        is that this one is meant to be shown to the user and so should be used
+        for the window titles, page headers and so on while the other one
+        should be only used internally, e.g. for the file names or
+        configuration file keys. By default, returns the application name as
+        returned by GetAppName() capitalized using wxString::Capitalize().
+
+        @since 2.9.0
+    */
+    wxString GetAppDisplayName() const;
+
+    /**
+        Returns the application name.
+
+        @remarks wxWidgets sets this to a reasonable default before calling
+                 OnInit(), but the application can reset it at will.
+
+        @see GetAppDisplayName()
+    */
+    wxString GetAppName() const;
+
+    /**
+        Gets the class name of the application. The class name may be used in a
+        platform specific manner to refer to the application.
+
+        @see SetClassName()
+    */
+    wxString GetClassName() const;
+
+    /**
+        Returns a pointer to the wxAppTraits object for the application.
+        If you want to customize the wxAppTraits object, you must override the
+        CreateTraits() function.
+    */
+    wxAppTraits* GetTraits();
+
+    /**
+        Returns the user-readable vendor name. The difference between this string
+        and the one returned by GetVendorName() is that this one is meant to be shown
+        to the user and so should be used for the window titles, page headers and so on
+        while the other one should be only used internally, e.g. for the file names or
+        configuration file keys.
+
+        By default, returns the same string as GetVendorName().
+
+        @since 2.9.0
+    */
+    const wxString& GetVendorDisplayName() const;
+
+    /**
+        Returns the application's vendor name.
+    */
+    const wxString& GetVendorName() const;
 
     /**
         Set the application name to be used in the user-visible places such as
@@ -434,17 +504,6 @@ public:
     void SetClassName(const wxString& name);
 
     /**
-        Allows external code to modify global ::wxTheApp, but you should really
-        know what you're doing if you call it.
-
-        @param app
-            Replacement for the global application object.
-
-        @see GetInstance()
-    */
-    static void SetInstance(wxAppConsole* app);
-
-    /**
         Set the vendor name to be used in the user-visible places.
         See GetVendorDisplayName() for more about the differences between the
         display name and name.
@@ -459,32 +518,8 @@ public:
     */
     void SetVendorName(const wxString& name);
 
-    /**
-        Yields control to pending messages in the windowing system.
+    //@}
 
-        This can be useful, for example, when a time-consuming process writes to a
-        text window. Without an occasional yield, the text window will not be updated
-        properly, and on systems with cooperative multitasking, such as Windows 3.1
-        other processes will not respond.
-
-        Caution should be exercised, however, since yielding may allow the
-        user to perform actions which are not compatible with the current task.
-        Disabling menu items or whole menus during processing can avoid unwanted
-        reentrance of code: see ::wxSafeYield for a better function.
-        You can avoid unwanted reentrancies also using IsYielding().
-
-        Note that Yield() will not flush the message logs. This is intentional as
-        calling Yield() is usually done to quickly update the screen and popping up
-        a message box dialog may be undesirable. If you do wish to flush the log
-        messages immediately (otherwise it will be done during the next idle loop
-        iteration), call wxLog::FlushActive.
-
-        Calling Yield() recursively is normally an error and an assert failure is
-        raised in debug build if such situation is detected. However if the
-        @a onlyIfNeeded parameter is @true, the method will just silently
-        return @false instead.
-    */
-    virtual bool Yield(bool onlyIfNeeded = false);
 
     /**
         Number of command line arguments (after environment-specific processing).
@@ -642,17 +677,6 @@ public:
         @see GetExitOnFrameDelete(), @ref overview_app_shutdown
     */
     void SetExitOnFrameDelete(bool flag);
-
-    /**
-        Allows external code to modify global ::wxTheApp, but you should really
-        know what you're doing if you call it.
-
-        @param app
-            Replacement for the global application object.
-
-        @see GetInstance()
-    */
-    static void SetInstance(wxAppConsole* app);
 
     /**
         Allows runtime switching of the UI environment theme.
