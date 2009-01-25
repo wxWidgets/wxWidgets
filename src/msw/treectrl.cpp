@@ -734,10 +734,6 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     if ( !MSWCreateControl(WC_TREEVIEW, wstyle, pos, size) )
         return false;
 
-    // this significantly reduces flicker when refreshing the control, for some
-    // reason the native control itself doesn't avoid background repainting
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-
 #if wxUSE_COMCTL32_SAFELY
     wxWindow::SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
     wxWindow::SetForegroundColour(wxWindow::GetParent()->GetForegroundColour());

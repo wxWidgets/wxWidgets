@@ -4722,20 +4722,20 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 
 void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 {
-    if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
-    {
-        // don't skip the event here, custom background means that the app
-        // is drawing it itself in its OnPaint(), so don't draw it at all
-        // now to avoid flicker
-        return;
-    }
-
     // standard non top level controls (i.e. except the dialogs) always erase
     // their background themselves in HandleCtlColor() or have some control-
     // specific ways to set the colours (common controls)
     if ( IsOfStandardClass() && !IsTopLevel() )
     {
         event.Skip();
+        return;
+    }
+
+    if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
+    {
+        // don't skip the event here, custom background means that the app
+        // is drawing it itself in its OnPaint(), so don't draw it at all
+        // now to avoid flicker
         return;
     }
 
