@@ -123,6 +123,13 @@ public:
     void SetAlternateStates(bool show) { m_alternateStates = show; }
     bool AlternateStates() const { return m_alternateStates; }
 
+    void ResetBrokenStateImages()
+    {
+        const size_t count = GetStateImageList()->GetImageCount();
+        int state = count > 0 ? count - 1 : wxTREE_ITEMSTATE_NONE;
+        DoResetBrokenStateImages(GetRootItem(), 0, state);
+    }
+
 protected:
     virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
 
@@ -138,6 +145,9 @@ private:
                              size_t nChildren,
                              size_t depth,
                              size_t folder);
+
+    void DoResetBrokenStateImages(const wxTreeItemId& idParent,
+                                  wxTreeItemIdValue cookie, int state);
 
     void LogEvent(const wxChar *name, const wxTreeEvent& event);
 

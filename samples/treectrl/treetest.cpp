@@ -680,6 +680,11 @@ void MyFrame::OnToggleAlternateStates(wxCommandEvent& WXUNUSED(event))
 
     m_treeCtrl->SetAlternateStates(!alternateStates);
     m_treeCtrl->CreateStateImageList();
+
+    // normal states < alternate states
+    // so we must reset broken states
+    if ( alternateStates )
+        m_treeCtrl->ResetBrokenStateImages();
 }
 
 void MyFrame::OnToggleButtons(wxCommandEvent& WXUNUSED(event))
@@ -1150,6 +1155,29 @@ void MyTreeCtrl::DoToggleState(const wxTreeItemId& item)
         // we have only 2 checkbox states, so next state will be reversed
         SetItemState(item, wxTREE_ITEMSTATE_NEXT);
     }
+}
+
+void MyTreeCtrl::DoResetBrokenStateImages(const wxTreeItemId& idParent,
+                                          wxTreeItemIdValue cookie, int state)
+{
+    wxTreeItemId id;
+
+    if ( !cookie )
+        id = GetFirstChild(idParent, cookie);
+    else
+        id = GetNextChild(idParent, cookie);
+
+    if ( !id.IsOk() )
+        return;
+
+    int curState = GetItemState(id);
+    if ( curState != wxTREE_ITEMSTATE_NONE && curState > state )
+        SetItemState(id, state);
+
+    if (ItemHasChildren(id))
+        DoResetBrokenStateImages(id, 0, state);
+
+    DoResetBrokenStateImages(idParent, cookie, state);
 }
 
 void MyTreeCtrl::LogEvent(const wxChar *name, const wxTreeEvent& event)
