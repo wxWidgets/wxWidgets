@@ -153,7 +153,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
         wxSysColourChangedEvent event2;
 
         event2.SetEventObject( m_frameStatusBar );
-        m_frameStatusBar->ProcessEvent(event2);
+        m_frameStatusBar->GetEventHandler()->ProcessEvent(event2);
     }
 #endif // wxUSE_STATUSBAR
 
