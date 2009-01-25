@@ -140,7 +140,7 @@ WXCOCOAIMPL_COMMON_IMPLEMENTATION
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
         if ( wxpeer )
-            wxpeer->HandleClicked(0);
+            wxpeer->OSXHandleClicked(0);
     }
 }
 

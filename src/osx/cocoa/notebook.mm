@@ -75,7 +75,7 @@ WXCOCOAIMPL_COMMON_INTERFACE
     if ( viewimpl )
     {
         wxNotebook* wxpeer = (wxNotebook*) viewimpl->GetWXPeer();
-        wxpeer->HandleClicked(0);
+        wxpeer->OSXHandleClicked(0);
     }
 }
 
