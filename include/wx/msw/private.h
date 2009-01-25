@@ -306,6 +306,22 @@ extern HICON wxBitmapToHICON(const wxBitmap& bmp);
 extern
 HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
 
+
+#if wxUSE_OWNER_DRAWN
+
+// Draw the bitmap in specified state (this is used by owner drawn controls)
+enum wxDSBStates
+{
+    wxDSB_NORMAL = 0,
+    wxDSB_SELECTED,
+    wxDSB_DISABLED
+};
+
+extern
+BOOL wxDrawStateBitmap(HDC hDC, HBITMAP hBitmap, int x, int y, UINT uState);
+
+#endif // wxUSE_OWNER_DRAWN
+
 // get (x, y) from DWORD - notice that HI/LOWORD can *not* be used because they
 // will fail on system with multiple monitors where the coords may be negative
 //

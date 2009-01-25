@@ -532,4 +532,50 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 }
 
 
+// ----------------------------------------------------------------------------
+// global helper functions implemented here
+// ----------------------------------------------------------------------------
+
+BOOL wxDrawStateBitmap(HDC hDC, HBITMAP hBitmap, int x, int y, UINT uState)
+{
+    // determine size of bitmap image
+    BITMAP bmp;
+    if ( !::GetObject(hBitmap, sizeof(BITMAP), &bmp) )
+        return FALSE;
+
+    BOOL result;
+
+    switch ( uState )
+    {
+        case wxDSB_NORMAL:
+        case wxDSB_SELECTED:
+            {
+                // uses image list functions to draw
+                //  - normal bitmap with support transparency
+                //    (image list internally create mask etc.)
+                //  - blend bitmap with the background colour
+                //    (like default selected items)
+                HIMAGELIST hIml = ::ImageList_Create(bmp.bmWidth, bmp.bmHeight,
+                                                     ILC_COLOR32 | ILC_MASK, 1, 1);
+                ::ImageList_Add(hIml, hBitmap, NULL);
+                UINT fStyle = uState == wxDSB_SELECTED ? ILD_SELECTED : ILD_NORMAL;
+                result = ::ImageList_Draw(hIml, 0, hDC, x, y, fStyle);
+                ::ImageList_Destroy(hIml);
+            }
+            break;
+
+        case wxDSB_DISABLED:
+            result = ::DrawState(hDC, NULL, NULL, (LPARAM)hBitmap, 0, x, y,
+                                 bmp.bmWidth, bmp.bmHeight,
+                                 DST_BITMAP | DSS_DISABLED);
+            break;
+
+        default:
+            wxFAIL_MSG( _T("DrawStateBitmap: unknown wxDSBStates value") );
+            result = FALSE;
+    }
+
+    return result;
+}
+
 #endif // wxUSE_OWNER_DRAWN
