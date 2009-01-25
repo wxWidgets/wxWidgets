@@ -174,6 +174,27 @@ protected:
     void CreateActiveX(REFIID, IUnknown*);
 };
 
+///\brief Store native event parameters.
+///\detail Store OLE 'Invoke' parameters for event handlers that need to access them.
+/// These are the exact values for the event as they are passed to the wxActiveXContainer.
+struct wxActiveXEventNativeMSW
+{
+    DISPID  dispIdMember;
+    REFIID  riid;
+    LCID    lcid;
+    WORD    wFlags;
+    DISPPARAMS  *pDispParams;
+    VARIANT     *pVarResult;
+    EXCEPINFO   *pExcepInfo;
+    unsigned int *puArgErr;
+
+    wxActiveXEventNativeMSW
+        (DISPID a_dispIdMember, REFIID a_riid, LCID a_lcid, WORD a_wFlags, DISPPARAMS  *a_pDispParams,
+        VARIANT *a_pVarResult, EXCEPINFO *a_pExcepInfo, unsigned int *a_puArgErr)
+        :dispIdMember(a_dispIdMember), riid(a_riid), lcid(a_lcid), wFlags(a_wFlags), pDispParams(a_pDispParams),
+        pVarResult(a_pVarResult), pExcepInfo(a_pExcepInfo), puArgErr(a_puArgErr)
+    { }
+};
 
 // Events
 class WXDLLIMPEXP_CORE wxActiveXEvent : public wxCommandEvent
@@ -187,29 +208,27 @@ public:
     virtual wxEvent *Clone() const
     { return new wxActiveXEvent(*this); }
 
-    size_t ParamCount() const
-    {   return m_params.GetCount();  }
+    size_t ParamCount() const;
 
     wxString ParamType(size_t idx) const
     {
-        wxASSERT(idx < m_params.GetCount());
+        wxASSERT(idx < ParamCount());
         return m_params[idx].GetType();
     }
 
     wxString ParamName(size_t idx) const
     {
-        wxASSERT(idx < m_params.GetCount());
+        wxASSERT(idx < ParamCount());
         return m_params[idx].GetName();
     }
 
-    wxVariant& operator[] (size_t idx)
-    {
-        wxASSERT(idx < ParamCount());
-        return m_params[idx];
-    }
+    wxVariant& operator[] (size_t idx);
 
     DISPID GetDispatchId() const
     {   return m_dispid;    }
+
+    wxActiveXEventNativeMSW *GetNativeParameters() const
+    {   return (wxActiveXEventNativeMSW*)GetClientData(); }
 };
 
 // #define wxACTIVEX_ID    14001

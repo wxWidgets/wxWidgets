@@ -22,6 +22,15 @@
         ActiveX event.
     @endEventTable
 
+    ActiveX event parameters can get extremely complex and may be beyond the
+    abilities of wxVariant. If 'operator[]' fails, prints an error messages or
+    crashes the application, event handlers should use GetNativeParameters()
+    instead to obtain the original event information.
+    Calls to operator[] and GetNativeParmeters() can be mixed. It is valid
+    to handle some parameters of an event with operator[] and others directly
+    through GetNativeParameters(). It is \b not valid however to manipulate
+    the same parameter using both approaches at the same time.
+
     @onlyfor{wxmsw}
 
     @library{wxcore}
@@ -55,6 +64,16 @@ public:
         Obtains the actual parameter value specified by idx.
     */
     wxVariant operator[](size_t idx);
+
+    /**
+        Obtain the original MSW parameters for the event.
+        Event handlers can use this information to handle complex event parameters
+        that are beyond the scope of wxVariant.
+        The information returned here is the information passed to the original
+        'Invoke' method call.
+        \return a pointer to a struct containing the original MSW event parameters
+    */
+    wxActiveXEventNativeMSW *GetNativeParameters() const;
 };
 
 

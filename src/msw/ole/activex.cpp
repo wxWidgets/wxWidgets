@@ -694,6 +694,14 @@ private:
     friend bool wxActiveXEventsInterface(wxActiveXEvents *self, REFIID iid, void **_interface, const char *&desc);
 
 public:
+
+    // a pointer to this static variable is used as an 'invalid_entry_marker'
+    // wxVariants containing a void* to this variables are 'empty' in the sense
+    // that the actual ActiveX OLE parameter has not been converted and inserted
+    // into m_params.
+    static const int ptr_invalid_entry_marker = 0;
+    static wxVariant g_invalid_entry_marker;
+
     wxActiveXEvents(wxActiveXContainer *ax) : m_activeX(ax), m_haveCustomId(false) {}
     wxActiveXEvents(wxActiveXContainer *ax, REFIID iid) : m_activeX(ax), m_customId(iid), m_haveCustomId(true) {}
     virtual ~wxActiveXEvents()
@@ -717,11 +725,11 @@ public:
     }
 
 
-    STDMETHODIMP Invoke(DISPID dispIdMember, REFIID WXUNUSED(riid),
-                        LCID WXUNUSED(lcid),
+    STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid,
+                        LCID lcid,
                           WORD wFlags, DISPPARAMS * pDispParams,
-                          VARIANT * WXUNUSED(pVarResult), EXCEPINFO * WXUNUSED(pExcepInfo),
-                          unsigned int * WXUNUSED(puArgErr))
+                          VARIANT * pVarResult, EXCEPINFO * pExcepInfo,
+                          unsigned int * puArgErr)
     {
         if (wFlags & (DISPATCH_PROPERTYGET | DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
             return E_NOTIMPL;
@@ -733,31 +741,37 @@ public:
         // Dispatch Event
         wxActiveXEvent  event;
         event.SetEventType(wxEVT_ACTIVEX);
+        // Create an empty list of Variants
+        // Note that the event parameters use lazy evaluation
+        // They are not actually created until wxActiveXEvent::operator[] is called
         event.m_params.NullList();
         event.m_dispid = dispIdMember;
 
-        // arguments
-        if (pDispParams)
-        {
-            for (DWORD i = pDispParams->cArgs; i > 0; i--)
-            {
-                VARIANTARG& va = pDispParams->rgvarg[i-1];
-                wxVariant vx;
+        // save the native (MSW) event parameters for event handlers that need to access them
+        // this can be done on the stack since wxActiveXEvent is also allocated on the stack
+        wxActiveXEventNativeMSW eventParameters(dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, puArgErr);
+        event.SetClientData(&eventParameters);
 
-//                        vx.SetName(px.name);
-                wxConvertOleToVariant(va, vx);
-                event.m_params.Append(vx);
-            }
-        }
+        // The event parameters are not copied to event.m_params until they are actually
+        // referenced in wxActiveXEvent::operator[]
+        // This increases performance and avoids error messages and/or crashes
+        // when the event has parameters that are not (yet or never) supported
+        // by wxConvertOleToVariant
 
         // process the events from the activex method
-           m_activeX->ProcessEvent(event);
+        m_activeX->ProcessEvent(event);
         for (DWORD i = 0; i < pDispParams->cArgs; i++)
         {
-            VARIANTARG& va = pDispParams->rgvarg[i];
-            wxVariant& vx =
-                event.m_params[pDispParams->cArgs - i - 1];
-            wxConvertVariantToOle(vx, va);
+            size_t params_index = pDispParams->cArgs - i - 1;
+            if (params_index < event.m_params.GetCount()) {
+                wxVariant &vx = event.m_params[params_index];
+                // copy the result back to pDispParams only if the event has been accessed
+                //  i.e.  if vx != g_invalid_entry_marker
+                if (!vx.IsType(wxActiveXEvents::g_invalid_entry_marker.GetType()) || vx!=g_invalid_entry_marker) {
+                    VARIANTARG& va = pDispParams->rgvarg[i];
+                    wxConvertVariantToOle(vx, va);
+                }
+            }
         }
 
         if(event.GetSkipped())
@@ -766,6 +780,46 @@ public:
         return S_OK;
     }
 };
+
+wxVariant wxActiveXEvents::g_invalid_entry_marker((void*)&wxActiveXEvents::ptr_invalid_entry_marker);
+
+size_t wxActiveXEvent::ParamCount() const
+{
+    wxActiveXEventNativeMSW *native=GetNativeParameters();
+    // 'native' will always be != if the event has been created
+    // for an actual active X event.
+    // But it may be zero if the event has been created by wx program code.
+    if (native)
+        return native->pDispParams ? native->pDispParams->cArgs : 0;
+
+    return m_params.GetCount();
+}
+
+wxVariant &wxActiveXEvent::operator [](size_t idx)
+{
+    wxASSERT(idx < ParamCount());
+    wxActiveXEventNativeMSW *native=GetNativeParameters();
+    // 'native' will always be != if the event has been created
+    // for an actual active X event.
+    // But it may be zero if the event has been created by wx program code.
+    if (native) {
+        while (m_params.GetCount()<=idx) {
+            m_params.Append(wxActiveXEvents::g_invalid_entry_marker);
+        }
+        wxVariant &vx(m_params[idx]);
+        if (vx.IsType(wxActiveXEvents::g_invalid_entry_marker.GetType()) && vx==wxActiveXEvents::g_invalid_entry_marker) {
+            // copy the _real_ parameter into this one
+            // NOTE: m_params stores the parameters in *reverse* order.
+            // Whyever, but this was the case in the original implementation of
+            // wxActiveXEvents::Invoke
+            // Keep this convention.
+            VARIANTARG& va = native->pDispParams->rgvarg[ native->pDispParams->cArgs - idx - 1 ];
+            wxConvertOleToVariant(va, vx);
+        }
+        return vx;
+    }
+    return m_params[idx];
+}
 
 bool wxActiveXEventsInterface(wxActiveXEvents *self, REFIID iid, void **_interface, const char *&desc)
 {
