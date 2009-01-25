@@ -96,13 +96,14 @@ wxBEGIN_FLAGS( wxCalendarCtrlStyle )
     wxFLAGS_MEMBER(wxCAL_NO_MONTH_CHANGE)
     wxFLAGS_MEMBER(wxCAL_SEQUENTIAL_MONTH_SELECTION)
     wxFLAGS_MEMBER(wxCAL_SHOW_SURROUNDING_WEEKS)
+    wxFLAGS_MEMBER(wxCAL_SHOW_WEEK_NUMBERS)
 
 wxEND_FLAGS( wxCalendarCtrlStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxGenericCalendarCtrl, wxControl,"wx/calctrl.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxGenericCalendarCtrl)
-    wxEVENT_RANGE_PROPERTY( Updated , wxEVT_CALENDAR_SEL_CHANGED , wxEVT_CALENDAR_WEEKDAY_CLICKED , wxCalendarEvent )
+    wxEVENT_RANGE_PROPERTY( Updated , wxEVT_CALENDAR_SEL_CHANGED , wxEVT_CALENDAR_WEEK_CLICKED , wxCalendarEvent )
     wxHIDE_PROPERTY( Children )
     wxPROPERTY( Date,wxDateTime, SetDate , GetDate, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
     wxPROPERTY_FLAGS( WindowStyle , wxCalendarCtrlStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
@@ -190,7 +191,8 @@ void wxGenericCalendarCtrl::Init()
     m_userChangedYear = false;
 
     m_widthCol =
-    m_heightRow = 0;
+    m_heightRow =
+    m_calendarWeekWidth = 0;
 
     wxDateTime::WeekDay wd;
     for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
@@ -772,7 +774,7 @@ size_t wxGenericCalendarCtrl::GetWeek(const wxDateTime& date) const
 
 // this is a composite control and it must arrange its parts each time its
 // size or position changes: the combobox and spinctrl are along the top of
-// the available area and the calendar takes up therest of the space
+// the available area and the calendar takes up the rest of the space
 
 // the static controls are supposed to be always smaller than combo/spin so we
 // always use the latter for size calculations and position the static to take
@@ -787,8 +789,8 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
     // calc the size of the calendar
     const_cast<wxGenericCalendarCtrl *>(this)->RecalcGeometry();
 
-    wxCoord width = 7*m_widthCol,
-            height = 7*m_heightRow + m_rowOffset;
+    wxCoord width = 7*m_widthCol + m_calendarWeekWidth,
+            height = 7*m_heightRow + m_rowOffset + VERT_MARGIN;
 
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
@@ -813,7 +815,7 @@ wxSize wxGenericCalendarCtrl::DoGetBestSize() const
     }
 
     CacheBestSize(best);
-    
+
     return best;
 }
 
@@ -855,7 +857,7 @@ void wxGenericCalendarCtrl::DoGetSize(int *width, int *height) const
 {
 #ifdef __WXMAC__
     wxControl::DoGetSize( width, height );
-    
+
     if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) && m_staticMonth && height )
     {
         wxSize sizeCombo = m_comboMonth->GetEffectiveMinSize();
@@ -900,6 +902,9 @@ void wxGenericCalendarCtrl::RecalcGeometry()
         }
     }
 
+    m_calendarWeekWidth = HasFlag( wxCAL_SHOW_WEEK_NUMBERS )
+        ? dc.GetTextExtent( wxString::Format( wxT( "%d" ), 42 )).GetWidth() + 4 : 0;
+
     // leave some margins
     m_widthCol += 2;
     m_heightRow += 2;
@@ -926,7 +931,7 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #endif
 
     wxCoord y = 0;
-    wxCoord x0 = wxMax( (GetSize().x - m_widthCol*7) /2 , 0 );
+    wxCoord x0 = m_calendarWeekWidth;
 
     if ( HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
@@ -1029,6 +1034,24 @@ void wxGenericCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     //dc.SetFont(*wxNORMAL_FONT);
 
     y += m_heightRow;
+
+    // draw column with calendar week nr
+    if ( HasFlag( wxCAL_SHOW_WEEK_NUMBERS ) && IsExposed( 0, y, m_calendarWeekWidth, m_heightRow * 6 ))
+    {
+        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetBrush(wxBrush(m_colHeaderBg, wxSOLID));
+        dc.SetPen(wxPen(m_colHeaderBg, 1, wxSOLID));
+        dc.DrawRectangle( 0, y, m_calendarWeekWidth, m_heightRow * 6 );
+        wxDateTime date = GetStartDate();
+        for ( size_t i = 0; i < 6; ++i )
+        {
+            const int weekNr = date.GetWeekOfYear();
+            wxString text = wxString::Format( wxT( "%d" ), weekNr );
+            dc.DrawText( text, m_calendarWeekWidth - dc.GetTextExtent( text ).GetWidth() - 2, y + m_heightRow * i );
+            date += wxDateSpan::Week();
+        }
+    }
+
     wxDateTime date = GetStartDate();
 
 #if DEBUG_PAINT
@@ -1211,9 +1234,9 @@ void wxGenericCalendarCtrl::RefreshDate(const wxDateTime& date)
     wxRect rect;
 
     // always refresh the whole row at once because our OnPaint() will draw
-    // the whole row anyhow - and this allows the small optimisation in
+    // the whole row anyhow - and this allows the small optimization in
     // OnClick() below to work
-    rect.x = wxMax( (GetSize().x - m_widthCol*7) /2 , 0 );
+    rect.x = m_calendarWeekWidth;
 
     rect.y = (m_heightRow * GetWeek(date)) + m_rowOffset;
 
@@ -1279,7 +1302,7 @@ void wxGenericCalendarCtrl::HighlightRange(wxPaintDC* pDC, const wxDateTime& fro
             {
                 int numpoints;
                 wxPoint corners[8]; // potentially 8 corners in polygon
-                wxCoord x0 = wxMax( (GetSize().x - m_widthCol*7) /2 , 0 );
+                wxCoord x0 = m_calendarWeekWidth;
 
                 if ( fw == tw )
                 {
@@ -1452,7 +1475,14 @@ void wxGenericCalendarCtrl::OnClick(wxMouseEvent& event)
                 // GenerateAllChangeEvents() here, we know which event to send
                 GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
             }
-            break;
+        break;
+
+        case wxCAL_HITTEST_WEEK:
+        {
+            wxCalendarEvent send( this, date, wxEVT_CALENDAR_WEEK_CLICKED );
+            HandleWindowEvent( send );
+        }
+        break;
 
         case wxCAL_HITTEST_HEADER:
             {
@@ -1490,7 +1520,7 @@ wxCalendarHitTestResult wxGenericCalendarCtrl::HitTest(const wxPoint& pos,
     RecalcGeometry();
 
     // the position where the calendar really begins
-    wxCoord x0 = wxMax((GetSize().x - m_widthCol*7)/2, 0);
+    wxCoord x0 = m_calendarWeekWidth;
 
     if ( HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
@@ -1531,12 +1561,28 @@ wxCalendarHitTestResult wxGenericCalendarCtrl::HitTest(const wxPoint& pos,
 
             return wxCAL_HITTEST_INCMONTH;
         }
-
     }
+
+    if ( pos.x - x0 < 0 )
+        if ( pos.x >= 0 && pos.y > m_rowOffset + m_heightRow && pos.y <= m_rowOffset + m_heightRow * 7 )
+        {
+            if ( date )
+            {
+                *date = GetStartDate();
+                *date += wxDateSpan::Week() * (( pos.y - m_rowOffset ) / m_heightRow - 1 );
+            }
+            if ( wd )
+                *wd = ( GetWindowStyle() & wxCAL_MONDAY_FIRST ) ? wxDateTime::Mon : wxDateTime::Sun;
+            return wxCAL_HITTEST_WEEK;
+        }
+        else    // early exit -> the rest of the function checks for clicks on days
+            return wxCAL_HITTEST_NOWHERE;
 
     // header: week days
     int wday = (pos.x - x0) / m_widthCol;
-    if ( pos.y < (m_heightRow + m_rowOffset) )
+    if ( wday > 6 )
+        return wxCAL_HITTEST_NOWHERE;
+    if ( pos.y < (m_heightRow + m_rowOffset))
     {
         if ( pos.y > m_rowOffset )
         {

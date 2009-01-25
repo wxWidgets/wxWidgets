@@ -282,7 +282,8 @@ private:
     // the width and height of one column/row in the calendar
     wxCoord m_widthCol,
             m_heightRow,
-            m_rowOffset;
+            m_rowOffset,
+            m_calendarWeekWidth;
 
     wxRect m_leftArrowRect,
            m_rightArrowRect;

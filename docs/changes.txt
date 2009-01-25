@@ -353,6 +353,7 @@ All (GUI):
 - Also added wxCANCEL_DEFAULT to wxMessageDialog.
 - Allow copying text in the log dialogs.
 - Added multisample (anti-aliasing) support to wxGLCanvas (Olivier Playez).
+- Added wxCAL_SHOW_WEEK_NUMBERS wxCalendarCtrl style (Sören Meyer-Eppler).
 - Initialize wx{Client,Paint,Window}DC with fonts/colours of its window.
 - Added wxNativeContainerWindow to allow embedding wx into native windows.
 - Added custom controls support to wxFileDialog (Diaa Sami and Marcin Wojdyr).

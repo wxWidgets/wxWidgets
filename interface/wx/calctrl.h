@@ -182,7 +182,11 @@ enum wxCalendarHitTestResult
 {
     wxCAL_HITTEST_NOWHERE,  ///< Hit outside of anything.
     wxCAL_HITTEST_HEADER,   ///< Hit on the header (weekdays).
-    wxCAL_HITTEST_DAY       ///< Hit on a day in the calendar.
+    wxCAL_HITTEST_DAY,      ///< Hit on a day in the calendar.
+    wxCAL_HITTEST_INCMONTH, ///< Hit on next month arrow (in alternate month selector mode).
+    wxCAL_HITTEST_DECMONTH, ///< Hit on previous month arrow (in alternate month selector mode).
+    wxCAL_HITTEST_SURROUNDING_WEEK, ///< Hit on surrounding week of previous/next month (if shown).
+    wxCAL_HITTEST_WEEK      ///< Hit on week of the year number (if shown).
 };
 
 /**
@@ -242,6 +246,8 @@ enum wxCalendarHitTestResult
            The selected month (and/or year) changed.
     @event{EVT_CALENDAR_WEEKDAY_CLICKED(id, func)}
            User clicked on the week day header (only generic).
+    @event{EVT_CALENDAR_WEEK_CLICKED(id, func)}
+           User clicked on the week of the year number (only generic).
     @endEventTable
 
     @note Changing the selected date will trigger an EVT_CALENDAR_DAY, MONTH or

@@ -81,6 +81,7 @@ public:
 
     void OnCalendar(wxCalendarEvent& event);
     void OnCalendarWeekDayClick(wxCalendarEvent& event);
+    void OnCalendarWeekClick(wxCalendarEvent& event);
     void OnCalendarChange(wxCalendarEvent& event);
     void OnCalMonthChange(wxCalendarEvent& event);
 
@@ -285,6 +286,7 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
     EVT_CALENDAR_PAGE_CHANGED(Calendar_CalCtrl, MyPanel::OnCalMonthChange)
     EVT_CALENDAR_SEL_CHANGED(Calendar_CalCtrl, MyPanel::OnCalendarChange)
     EVT_CALENDAR_WEEKDAY_CLICKED(Calendar_CalCtrl, MyPanel::OnCalendarWeekDayClick)
+    EVT_CALENDAR_WEEK_CLICKED(Calendar_CalCtrl,  MyPanel::OnCalendarWeekClick)
 END_EVENT_TABLE()
 
 #if wxUSE_DATEPICKCTRL
@@ -321,7 +323,7 @@ bool MyApp::OnInit()
 #ifndef __WXWINCE__
                                  ,wxPoint(50, 50), wxSize(450, 340)
 #endif
-								 );
+                                 );
 
     frame->Show(true);
 
@@ -684,6 +686,11 @@ void MyPanel::OnCalendarWeekDayClick(wxCalendarEvent& event)
                  wxDateTime::GetWeekDayName(event.GetWeekDay()).c_str());
 }
 
+void MyPanel::OnCalendarWeekClick(wxCalendarEvent& event)
+{
+    wxLogMessage(wxT("Clicked on week %d"), event.GetDate().GetWeekOfYear());
+}
+
 wxCalendarCtrlBase *MyPanel::DoCreateCalendar(const wxDateTime& dt, long style)
 {
     wxCalendarCtrlBase *calendar;
@@ -729,7 +736,7 @@ void MyPanel::ToggleCalStyle(bool on, int flag)
     else
         style &= ~flag;
 
-    if ( flag == wxCAL_SEQUENTIAL_MONTH_SELECTION 
+    if ( flag == wxCAL_SEQUENTIAL_MONTH_SELECTION
         || flag == wxCAL_SHOW_WEEK_NUMBERS)
     {
         // changing this style requires recreating the control

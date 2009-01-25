@@ -30,7 +30,7 @@ enum
     // show Sunday as the first day of the week (default)
     wxCAL_SUNDAY_FIRST               = 0x0000,
 
-    // show Monder as the first day of the week
+    // show Monday as the first day of the week
     wxCAL_MONDAY_FIRST               = 0x0001,
 
     // highlight holidays
@@ -66,7 +66,8 @@ enum wxCalendarHitTestResult
     wxCAL_HITTEST_DAY,          // on a day in the calendar
     wxCAL_HITTEST_INCMONTH,
     wxCAL_HITTEST_DECMONTH,
-    wxCAL_HITTEST_SURROUNDING_WEEK
+    wxCAL_HITTEST_SURROUNDING_WEEK,
+    wxCAL_HITTEST_WEEK
 };
 
 // border types for a date
@@ -364,6 +365,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_SEL_CHANGED, wxCalenda
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_PAGE_CHANGED, wxCalendarEvent )
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_DOUBLECLICKED, wxCalendarEvent )
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_WEEKDAY_CLICKED, wxCalendarEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_WEEK_CLICKED, wxCalendarEvent )
 
 // deprecated events
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_CALENDAR_DAY_CHANGED, wxCalendarEvent )
@@ -382,6 +384,7 @@ typedef void (wxEvtHandler::*wxCalendarEventFunction)(wxCalendarEvent&);
 #define EVT_CALENDAR_SEL_CHANGED(id, fn) wx__DECLARE_CALEVT(SEL_CHANGED, id, fn)
 #define EVT_CALENDAR_PAGE_CHANGED(id, fn) wx__DECLARE_CALEVT(PAGE_CHANGED, id, fn)
 #define EVT_CALENDAR_WEEKDAY_CLICKED(id, fn) wx__DECLARE_CALEVT(WEEKDAY_CLICKED, id, fn)
+#define EVT_CALENDAR_WEEK_CLICKED(id, fn) wx__DECLARE_CALEVT(WEEK_CLICKED, id, fn)
 
 // deprecated events
 #define EVT_CALENDAR_DAY(id, fn) wx__DECLARE_CALEVT(DAY_CHANGED, id, fn)
