@@ -4924,10 +4924,6 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-    wxPrintf( "wxListMainWindow::OnScroll\n" );
-
-    // HandleOnScroll( event );
-
     // update our idea of which lines are shown when we redraw the window the
     // next time
     ResetVisibleLinesRange();
