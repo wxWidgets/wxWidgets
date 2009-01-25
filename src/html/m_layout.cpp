@@ -82,15 +82,6 @@ private:
     DECLARE_NO_COPY_CLASS(wxHtmlPageBreakCell)
 };
 
-// Comparison routine for bsearch into an int* array of pagebreaks.
-extern "C"
-{
-    static int wxCMPFUNC_CONV wxInteger_compare(void const* i0, void const* i1)
-    {
-        return *(int*)i0 - *(int*)i1;
-    }
-}
-
 bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, wxArrayInt& known_pagebreaks) const
 {
     // When we are counting pages, 'known_pagebreaks' is non-NULL.
@@ -119,11 +110,7 @@ bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, wxArrayInt& known_page
 
 
     // Search the array of pagebreaks to see whether we've already set
-    // a pagebreak here. The standard bsearch() function is appropriate
-    // because the array of pagebreaks through known_pagebreaks[number_of_pages]
-    // is known to be sorted in strictly increasing order. '1 + number_of_pages'
-    // is used as a bsearch() argument because the array contains a leading
-    // zero plus one element for each page.
+    // a pagebreak here.
     int where = known_pagebreaks.Index( total_height);
     // Add a pagebreak only if there isn't one already set here.
     if( wxNOT_FOUND != where)
