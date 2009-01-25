@@ -479,12 +479,12 @@ int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
 
 int wxListBox::DoListHitTest(const wxPoint& point) const
 {
-    LRESULT lRes =  ::SendMessage(GetHwnd(), LB_ITEMFROMPOINT,
-                                  0L, MAKELONG(point.x, point.y));
+    LRESULT lRes = ::SendMessage(GetHwnd(), LB_ITEMFROMPOINT,
+                                 0, MAKELPARAM(point.x, point.y));
 
     // non zero high-order word means that this item is outside of the client
     // area, IOW the point is outside of the listbox
-    return HIWORD(lRes) ? wxNOT_FOUND : lRes;
+    return HIWORD(lRes) ? wxNOT_FOUND : LOWORD(lRes);
 }
 
 void wxListBox::SetString(unsigned int n, const wxString& s)
@@ -640,13 +640,18 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     }
 
     wxEventType evtType;
+    int n;
     if ( param == LBN_SELCHANGE )
     {
         evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
+        n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
+
+        // NB: conveniently enough, LB_ERR is the same as wxNOT_FOUND
     }
     else if ( param == LBN_DBLCLK )
     {
         evtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
+        n = HitTest(ScreenToClient(wxGetMousePosition()));
     }
     else
     {
@@ -654,25 +659,19 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
         return false;
     }
 
-    wxCommandEvent event(evtType, m_windowId);
-    event.SetEventObject( this );
-
     // retrieve the affected item
-    int n = SendMessage(GetHwnd(), LB_GETCARETINDEX, 0, 0);
-    if ( n != LB_ERR )
-    {
-        if ( HasClientObjectData() )
-            event.SetClientObject( GetClientObject(n) );
-        else if ( HasClientUntypedData() )
-            event.SetClientData( GetClientData(n) );
-
-        event.SetString(GetString(n));
-    }
-    else
-    {
+    if ( n == wxNOT_FOUND )
         return false;
-    }
 
+    wxCommandEvent event(evtType, m_windowId);
+    event.SetEventObject(this);
+
+    if ( HasClientObjectData() )
+        event.SetClientObject( GetClientObject(n) );
+    else if ( HasClientUntypedData() )
+        event.SetClientData( GetClientData(n) );
+
+    event.SetString(GetString(n));
     event.SetInt(n);
 
     return HandleWindowEvent(event);
