@@ -119,14 +119,15 @@ enum wxMappingMode
     wxMM_METRIC
 };
 
+#if WXWIN_COMPATIBILITY_2_8
+
 //-----------------------------------------------------------------------------
 // wxDrawObject helper class
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDrawObject
+class WXDLLIMPEXP_CORE wxDEPRECATED_BUT_USED_INTERNALLY(wxDrawObject)
 {
 public:
-
     wxDrawObject()
         : m_isBBoxValid(false)
         , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
@@ -179,6 +180,8 @@ protected:
     //for boundingbox calculation
     wxCoord m_minX, m_minY, m_maxX, m_maxY;
 };
+
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
 //-----------------------------------------------------------------------------
@@ -963,15 +966,6 @@ public:
         { m_pimpl->SetDeviceLocalOrigin( x, y ); }
 
 
-    // draw generic object
-
-    void DrawObject(wxDrawObject* drawobject)
-    {
-        drawobject->Draw(*this);
-        CalcBoundingBox(drawobject->MinX(),drawobject->MinY());
-        CalcBoundingBox(drawobject->MaxX(),drawobject->MaxY());
-    }
-
     // -----------------------------------------------
     // the actual drawing API
 
@@ -1203,6 +1197,12 @@ public:
     wxDEPRECATED( void GetDeviceOrigin(long *x, long *y) const );
     wxDEPRECATED( void GetClippingBox(long *x, long *y, long *w, long *h) const );
 
+    void DrawObject(wxDrawObject* drawobject)
+    {
+        drawobject->Draw(*this);
+        CalcBoundingBox(drawobject->MinX(),drawobject->MinY());
+        CalcBoundingBox(drawobject->MaxX(),drawobject->MaxY());
+    }
 #endif  // WXWIN_COMPATIBILITY_2_8
 
 #ifdef __WXMSW__
