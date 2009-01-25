@@ -519,18 +519,48 @@ public:
     */
     unsigned long ComputeHistogram(wxImageHistogram& histogram) const;
 
+    //@{
     /**
         If the image has alpha channel, this method converts it to mask.
 
-        All pixels with alpha value less than @a threshold are replaced with mask
-        colour and the alpha channel is removed. Mask colour is chosen automatically
-        using FindFirstUnusedColour().
-
-        If the image image doesn't have alpha channel, ConvertAlphaToMask() does nothing.
+        If the image has an alpha channel, all pixels with alpha value less
+        than @a threshold are replaced with the mask colour and the alpha
+        channel is removed. Otherwise nothing is done.
+        
+        The mask colour is chosen automatically using
+        FindFirstUnusedColour() by this function, see the overload below if you
+        this is not appropriate.
 
         @return @false if FindFirstUnusedColour returns @false, @true otherwise.
     */
     bool ConvertAlphaToMask(unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
+
+    /**
+        If the image has alpha channel, this method converts it to mask using
+        the specified colour as the mask colour.
+
+        If the image has an alpha channel, all pixels with alpha value less
+        than @a threshold are replaced with the mask colour and the alpha
+        channel is removed. Otherwise nothing is done.
+
+        @since 2.9.0
+
+        @param mr
+            The red component of the mask colour.
+        @param mg
+            The green component of the mask colour.
+        @param mb
+            The blue component of the mask colour.
+        @param threshold
+            Pixels with alpha channel values below the given threshold are
+            considered to be transparent, i.e. the corresponding mask pixels
+            are set. Pixels with the alpha values above the threshold are
+            considered to be opaque.
+
+     */
+    void ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb, 
+                            unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
+    //@}
 
     /**
         Returns a greyscale version of the image.

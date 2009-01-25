@@ -322,9 +322,13 @@ public:
     bool SetMaskFromImage(const wxImage & mask,
                           unsigned char mr, unsigned char mg, unsigned char mb);
 
-    // converts image's alpha channel to mask, if it has any, does nothing
-    // otherwise:
+    // converts image's alpha channel to mask (choosing mask colour
+    // automatically or using the specified colour for the mask), if it has
+    // any, does nothing otherwise:
     bool ConvertAlphaToMask(unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
+    void ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
+                            unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
+
 
     // This method converts an image where the original alpha
     // information is only available as a shades of a colour
