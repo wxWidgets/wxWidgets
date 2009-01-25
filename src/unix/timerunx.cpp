@@ -31,6 +31,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/longlong.h"
+#include "wx/vector.h"
 
 #include <sys/time.h>
 #include <signal.h>
@@ -139,13 +140,12 @@ bool wxTimerScheduler::NotifyExpired()
     if ( m_timers.empty() )
       return false;
 
-    bool notified = false;
-
     const wxUsecClock_t now = wxGetLocalTimeUsec();
 
-    wxTimerList::iterator cur,
-                          next;
-    for ( cur = m_timers.begin(); cur != m_timers.end(); cur = next )
+    typedef wxVector<wxUnixTimerImpl *> TimerImpls;
+    TimerImpls toNotify;
+    for ( wxTimerList::iterator next,
+            cur = m_timers.begin(); cur != m_timers.end(); cur = next )
     {
         wxTimerSchedule * const s = *cur;
         if ( s->m_expiration > now )
@@ -182,12 +182,25 @@ bool wxTimerScheduler::NotifyExpired()
             DoAddTimer(s);
         }
 
-        // and finally notify the timer
-        timer->Notify();
-        notified = true;
+        // we can't notify the timer from this loop as the timer event handler
+        // could modify m_timers (for example, but not only, by stopping this
+        // timer) which would render our iterators invalid, so do it after the
+        // loop end
+        toNotify.push_back(timer);
     }
 
-    return notified;
+    if ( toNotify.empty() )
+        return false;
+
+    for ( TimerImpls::const_iterator i = toNotify.begin(),
+                                     end = toNotify.end();
+          i != end;
+          ++i )
+    {
+        (*i)->Notify();
+    }
+
+    return true;
 }
 
 // ============================================================================
