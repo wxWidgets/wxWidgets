@@ -328,7 +328,7 @@ void MyFrame::DoSize()
     wxCoord y = (2*size.y)/3;
     m_listCtrl->SetSize(0, 0, size.x-320, y);
     if (m_simpleListCtrl) m_simpleListCtrl->SetSize(size.x-320+1, 0, 320-1, y);
-    m_logWindow->SetSize(0, y + 1, size.x, size.y - y);
+    m_logWindow->SetSize(0, y + 1, size.x, size.y - y -1);
 }
 
 bool MyFrame::CheckNonVirtual() const
