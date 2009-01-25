@@ -91,8 +91,10 @@ public:
     // event.GetExtraLong())
     void Command(wxCommandEvent& event);
 
-    // returns the item number at a point or wxNOT_FOUND
+    // return the index of the item at this position or wxNOT_FOUND
     int HitTest(const wxPoint& point) const { return DoListHitTest(point); }
+    int HitTest(int x, int y) const { return DoListHitTest(wxPoint(x, y)); }
+
 
     // For generating events in multiple and extended mode
     wxArrayInt m_oldSelections;

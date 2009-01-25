@@ -508,20 +508,6 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
     }
 }
 
-int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
-{
-    int nItem = (int)::SendMessage
-                             (
-                              (HWND)GetHWND(),
-                              LB_ITEMFROMPOINT,
-                              0,
-                              MAKELPARAM(x, y)
-                             );
-
-    return nItem >= (int)m_noItems ? wxNOT_FOUND : nItem;
-}
-
-
 wxSize wxCheckListBox::DoGetBestSize() const
 {
     wxSize best = wxListBox::DoGetBestSize();
@@ -530,4 +516,4 @@ wxSize wxCheckListBox::DoGetBestSize() const
     return best;
 }
 
-#endif
+#endif // wxUSE_CHECKLISTBOX

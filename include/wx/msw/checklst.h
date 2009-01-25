@@ -64,10 +64,6 @@ public:
   virtual bool IsChecked(unsigned int uiIndex) const;
   virtual void Check(unsigned int uiIndex, bool bCheck = true);
 
-  // return the index of the item at this position or wxNOT_FOUND
-  int HitTest(const wxPoint& pt) const { return DoHitTestItem(pt.x, pt.y); }
-  int HitTest(wxCoord x, wxCoord y) const { return DoHitTestItem(x, y); }
-
   // accessors
   size_t GetItemHeight() const { return m_nItemHeight; }
 
@@ -77,9 +73,6 @@ public:
   virtual bool          MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
 
 protected:
-  // this can't be called DoHitTest() because wxWindow already has this method
-  int DoHitTestItem(wxCoord x, wxCoord y) const;
-
   // pressing space or clicking the check box toggles the item
   void OnKeyDown(wxKeyEvent& event);
   void OnLeftClick(wxMouseEvent& event);
