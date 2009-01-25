@@ -76,7 +76,8 @@ public:
                             const wxString& text,
                             bool bSelect = false,
                             int imageId = -1);
-    virtual int SetSelection(size_t n) { return DoSetSelection(n, SetSelection_SendEvent); }
+    virtual int SetSelection(size_t n)
+        { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) { return DoSetSelection(n); }
     virtual void SetImageList(wxImageList *imageList);
 
@@ -86,6 +87,8 @@ public:
     wxChoice* GetChoiceCtrl() const { return (wxChoice*)m_bookctrl; }
 
 protected:
+    virtual void DoSetWindowVariant(wxWindowVariant variant);
+
     virtual wxWindow *DoRemovePage(size_t page);
 
     // get the size which the choice control should have

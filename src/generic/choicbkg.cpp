@@ -189,8 +189,15 @@ bool wxChoicebook::SetPageImage(size_t WXUNUSED(n), int WXUNUSED(imageId))
 }
 
 // ----------------------------------------------------------------------------
-// image list stuff
+// miscellaneous other stuff
 // ----------------------------------------------------------------------------
+
+void wxChoicebook::DoSetWindowVariant(wxWindowVariant variant)
+{
+    wxCHECK_RET( m_bookctrl, "can't be called before control creation" );
+
+    m_bookctrl->SetWindowVariant(variant);
+}
 
 void wxChoicebook::SetImageList(wxImageList *imageList)
 {
