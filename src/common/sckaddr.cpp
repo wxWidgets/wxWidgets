@@ -121,15 +121,29 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
 #endif
 
 // the _r functions need the extra buffer parameter but unfortunately its type
-// differs between different systems
+// differs between different systems and for the systems which use opaque
+// structs for it (at least AIX and OpenBSD) it must be zero-filled before
+// being passed to the system functions
 #ifdef HAVE_FUNC_GETHOSTBYNAME_R_3
-    typedef hostent_data wxGethostBuf;
+    struct wxGethostBuf : hostent_data
+    {
+        wxGethostBuf()
+        {
+            memset(this, 0, sizeof(hostent_data));
+        }
+    };
 #else
     typedef char wxGethostBuf[1024];
 #endif
 
 #ifdef HAVE_FUNC_GETSERVBYNAME_R_3
-    typedef servent_data wxGetservBuf;
+    struct wxGetservBuf : servent_data
+    {
+        wxGethostBuf()
+        {
+            memset(this, 0, sizeof(servent_data));
+        }
+    };
 #else
     typedef char wxGetservBuf[1024];
 #endif
