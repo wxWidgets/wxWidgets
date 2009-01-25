@@ -429,45 +429,32 @@ wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
     m_owner = owner;
     m_aboutToFinish = false;
 
-    int w = m_itemEdited->GetWidth(),
-        h = m_itemEdited->GetHeight();
+    wxRect rect;
+    m_owner->GetBoundingRect(m_itemEdited, rect, true);
 
-    int x, y;
-    m_owner->CalcScrolledPosition(item->GetX(), item->GetY(), &x, &y);
-
-    int image_h = 0,
-        image_w = 0;
-
-    int image = item->GetCurrentImage();
-    if ( image != NO_IMAGE )
-    {
-        if ( m_owner->m_imageListNormal )
-        {
-            m_owner->m_imageListNormal->GetSize( image, image_w, image_h );
-            image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
-        }
-        else
-        {
-            wxFAIL_MSG(_T("you must create an image list to use images!"));
-        }
-    }
-
-    // FIXME: what are all these hardcoded 4, 8 and 11s really?
-    x += image_w;
-    w -= image_w + 4;
-#ifdef __WXMAC__
-    wxSize bs = DoGetBestSize() ;
+    // corrects possition and size for better apperance
+#ifdef __WXMSW__
+    rect.x -= 5;
+    rect.width += 10;
+#elif __WXGTK__
+    rect.x -= 5;
+    rect.y -= 2;
+    rect.width  += 8;
+    rect.height += 4;
+#elif __WXMAC__
+    wxSize bs = DoGetBestSize();
     // edit control height
-    if ( h > bs.y - 8 )
-    {
-        int diff = h - ( bs.y - 8 ) ;
-        h -= diff ;
-        y += diff / 2 ;
-    }
+    if ( rect.height > bs.y - 8 )
+        int diff = rect.height - ( bs.y - 8 );
+        rect.height -= diff;
+        rect.y += diff / 2;
+     }
 #endif
 
     (void)Create(m_owner, wxID_ANY, m_startValue,
-                 wxPoint(x - 4, y - 4), wxSize(w + 11, h + 8));
+                 rect.GetPosition(), rect.GetSize());
+
+    SetSelection(-1, -1);
 }
 
 void wxTreeTextCtrl::EndEdit(bool discardChanges)
