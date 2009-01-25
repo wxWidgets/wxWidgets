@@ -2821,14 +2821,22 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
             break;
 
         case CDDS_ITEMPREPAINT:
+            // get a message for each subitem
+            return CDRF_NOTIFYITEMDRAW;
+
+        case CDDS_SUBITEM | CDDS_ITEMPREPAINT:
             const int item = nmcd.dwItemSpec;
+            const int column = pLVCD->iSubItem;
 
             // we get this message with item == 0 for an empty control, we
             // must ignore it as calling OnGetItemAttr() would be wrong
             if ( item < 0 || item >= GetItemCount() )
                 break;
+            // same for columns
+            if ( column < 0 || column >= GetColumnCount() )
+                break;
 
-            return HandleItemPrepaint(this, pLVCD, DoGetItemAttr(item));
+            return HandleItemPrepaint(this, pLVCD, DoGetItemColumnAttr(item, column));
     }
 
     return CDRF_DODEFAULT;
@@ -2990,9 +2998,9 @@ wxListItemAttr *wxListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) cons
     return NULL;
 }
 
-wxListItemAttr *wxListCtrl::DoGetItemAttr(long item) const
+wxListItemAttr *wxListCtrl::DoGetItemColumnAttr(long item, long column) const
 {
-    return IsVirtual() ? OnGetItemAttr(item)
+    return IsVirtual() ? OnGetItemColumnAttr(item, column)
                        : wxGetInternalDataAttr(this, item);
 }
 

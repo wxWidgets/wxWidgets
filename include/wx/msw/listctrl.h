@@ -402,7 +402,7 @@ protected:
 
     // get the item attribute, either by quering it for virtual control, or by
     // returning the one previously set using setter methods for a normal one
-    wxListItemAttr *DoGetItemAttr(long item) const;
+    wxListItemAttr *DoGetItemColumnAttr(long item, long column) const;
 
 
     wxTextCtrl*       m_textCtrl;        // The control used for editing a label
@@ -441,6 +441,12 @@ protected:
 
     // return the attribute for the item (may return NULL if none)
     virtual wxListItemAttr *OnGetItemAttr(long item) const;
+
+    // return the attribute for the given item and column (may return NULL if none)
+    virtual wxListItemAttr *OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
+    {
+        return OnGetItemAttr(item);
+    }
 
 private:
     // process NM_CUSTOMDRAW notification message

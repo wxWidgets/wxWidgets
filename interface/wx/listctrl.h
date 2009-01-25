@@ -873,9 +873,27 @@ protected:
 
         The base class version always returns @NULL.
 
-        @see OnGetItemImage(), OnGetItemColumnImage(), OnGetItemText()
+        @see OnGetItemImage(), OnGetItemColumnImage(), OnGetItemText(),
+             OnGetItemColumnAttr()
     */
     virtual wxListItemAttr* OnGetItemAttr(long item) const;
+
+     /**
+        This function may be overridden in the derived class for a control with
+        @c wxLC_VIRTUAL style.
+
+        It should return the attribute for the for the specified @a item and @a
+        column or @NULL to use the default appearance parameters.
+
+        The base class version returns @c OnGetItemAttr(item).
+
+        @note Currently this function is only called under wxMSW, the other
+            ports only support OnGetItemAttr()
+
+        @see OnGetItemAttr(), OnGetItemText(),
+             OnGetItemImage(), OnGetItemColumnImage(),
+    */
+    virtual wxListItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
     /**
         Overload this function in the derived class for a control with
@@ -885,7 +903,8 @@ protected:
         The base class version always calls OnGetItemImage() for the first column, else
         it returns -1.
 
-        @see OnGetItemText(), OnGetItemImage(), OnGetItemAttr()
+        @see OnGetItemText(), OnGetItemImage(), OnGetItemAttr(),
+             OnGetItemColumnAttr()
     */
     virtual int OnGetItemColumnImage(long item, long column) const;
 
