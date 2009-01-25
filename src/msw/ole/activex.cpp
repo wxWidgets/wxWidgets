@@ -699,8 +699,7 @@ public:
     // wxVariants containing a void* to this variables are 'empty' in the sense
     // that the actual ActiveX OLE parameter has not been converted and inserted
     // into m_params.
-    static const int ptr_invalid_entry_marker = 0;
-    static wxVariant g_invalid_entry_marker;
+    static wxVariant ms_invalidEntryMarker;
 
     wxActiveXEvents(wxActiveXContainer *ax) : m_activeX(ax), m_haveCustomId(false) {}
     wxActiveXEvents(wxActiveXContainer *ax, REFIID iid) : m_activeX(ax), m_customId(iid), m_haveCustomId(true) {}
@@ -766,8 +765,8 @@ public:
             if (params_index < event.m_params.GetCount()) {
                 wxVariant &vx = event.m_params[params_index];
                 // copy the result back to pDispParams only if the event has been accessed
-                //  i.e.  if vx != g_invalid_entry_marker
-                if (!vx.IsType(wxActiveXEvents::g_invalid_entry_marker.GetType()) || vx!=g_invalid_entry_marker) {
+                //  i.e.  if vx != ms_invalidEntryMarker
+                if (!vx.IsType(wxActiveXEvents::ms_invalidEntryMarker.GetType()) || vx!=ms_invalidEntryMarker) {
                     VARIANTARG& va = pDispParams->rgvarg[i];
                     wxConvertVariantToOle(vx, va);
                 }
@@ -781,7 +780,13 @@ public:
     }
 };
 
-wxVariant wxActiveXEvents::g_invalid_entry_marker((void*)&wxActiveXEvents::ptr_invalid_entry_marker);
+namespace
+{
+// just a unique global variable
+const int invalid_entry_marker = 0;
+}
+
+wxVariant wxActiveXEvents::ms_invalidEntryMarker((void*)&invalid_entry_marker);
 
 size_t wxActiveXEvent::ParamCount() const
 {
@@ -802,12 +807,17 @@ wxVariant &wxActiveXEvent::operator [](size_t idx)
     // 'native' will always be != if the event has been created
     // for an actual active X event.
     // But it may be zero if the event has been created by wx program code.
-    if (native) {
-        while (m_params.GetCount()<=idx) {
-            m_params.Append(wxActiveXEvents::g_invalid_entry_marker);
+    if (native)
+    {
+        while ( m_params.GetCount()<=idx )
+        {
+            m_params.Append(wxActiveXEvents::ms_invalidEntryMarker);
         }
-        wxVariant &vx(m_params[idx]);
-        if (vx.IsType(wxActiveXEvents::g_invalid_entry_marker.GetType()) && vx==wxActiveXEvents::g_invalid_entry_marker) {
+
+        wxVariant& vx = m_params[idx];
+        if ( vx.IsType(wxActiveXEvents::ms_invalidEntryMarker.GetType()) &&
+                vx == wxActiveXEvents::ms_invalidEntryMarker)
+        {
             // copy the _real_ parameter into this one
             // NOTE: m_params stores the parameters in *reverse* order.
             // Whyever, but this was the case in the original implementation of
@@ -825,7 +835,6 @@ bool wxActiveXEventsInterface(wxActiveXEvents *self, REFIID iid, void **_interfa
 {
     if (self->m_haveCustomId && IsEqualIID(iid, self->m_customId))
     {
-//        WXOLE_TRACE("Found Custom Dispatch Interface");
         *_interface = (IUnknown *) (IDispatch *) self;
         desc = "Custom Dispatch Interface";
         return true;
