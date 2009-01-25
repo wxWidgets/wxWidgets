@@ -2260,7 +2260,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
             e.SetEventObject(this);
             e.SetToolId(-1);
             e.SetClickPoint(wxPoint(evt.GetX(), evt.GetY()));
-            bool processed = ProcessEvent(e);
+            bool processed = GetEventHandler()->ProcessEvent(e);
 
             if (processed)
             {
@@ -2297,7 +2297,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
                 {
                     wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, res);
                     e.SetEventObject(this);
-                    GetParent()->ProcessEvent(e);
+                    GetParent()->GetEventHandler()->ProcessEvent(e);
                 }
             }
 
@@ -2338,7 +2338,7 @@ void wxAuiToolBar::OnLeftDown(wxMouseEvent& evt)
 
         e.SetClickPoint(evt.GetPosition());
         e.SetItemRect(rect);
-        ProcessEvent(e);
+        GetEventHandler()->ProcessEvent(e);
         DoIdleUpdate();
     }
 }
@@ -2384,14 +2384,14 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
                 wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
                 e.SetEventObject(this);
-                ProcessEvent(e);
+                GetEventHandler()->ProcessEvent(e);
                 DoIdleUpdate();
             }
             else
             {
                 wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
                 e.SetEventObject(this);
-                ProcessEvent(e);
+                GetEventHandler()->ProcessEvent(e);
                 DoIdleUpdate();
             }
         }
@@ -2454,7 +2454,7 @@ void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
             e.SetEventObject(this);
             e.SetToolId(m_action_item->id);
             e.SetClickPoint(m_action_pos);
-            ProcessEvent(e);
+            GetEventHandler()->ProcessEvent(e);
             DoIdleUpdate();
         }
     }
@@ -2465,7 +2465,7 @@ void wxAuiToolBar::OnRightUp(wxMouseEvent& evt)
         e.SetEventObject(this);
         e.SetToolId(-1);
         e.SetClickPoint(m_action_pos);
-        ProcessEvent(e);
+        GetEventHandler()->ProcessEvent(e);
         DoIdleUpdate();
     }
 
@@ -2525,7 +2525,7 @@ void wxAuiToolBar::OnMiddleUp(wxMouseEvent& evt)
             e.SetEventObject(this);
             e.SetToolId(m_action_item->id);
             e.SetClickPoint(m_action_pos);
-            ProcessEvent(e);
+            GetEventHandler()->ProcessEvent(e);
             DoIdleUpdate();
         }
     }
@@ -2550,7 +2550,7 @@ void wxAuiToolBar::OnMotion(wxMouseEvent& evt)
         wxAuiToolBarEvent e(wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG, GetId());
         e.SetEventObject(this);
         e.SetToolId(m_action_item->id);
-        ProcessEvent(e);
+        GetEventHandler()->ProcessEvent(e);
         DoIdleUpdate();
         return;
     }

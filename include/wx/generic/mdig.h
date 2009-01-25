@@ -78,8 +78,6 @@ public:
     virtual void SetMenuBar(wxMenuBar *pMenuBar);
 #endif // wxUSE_MENUS
 
-    virtual bool ProcessEvent(wxEvent& event);
-
     virtual wxGenericMDIClientWindow *OnCreateGenericClient();
 
 
@@ -111,6 +109,8 @@ private:
 
     void OnWindowMenu(wxCommandEvent& event);
 #endif // wxUSE_MENUS
+
+    virtual bool ProcessEvent(wxEvent& event);
 
     void OnClose(wxCloseEvent& event);
 

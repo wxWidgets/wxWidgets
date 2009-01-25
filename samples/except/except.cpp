@@ -123,6 +123,8 @@ public:
     void OnHandleCrash(wxCommandEvent& event);
 #endif
 
+protected:
+
     // 1st-level exception handling: we overload ProcessEvent() to be able to
     // catch exceptions which occur in MyFrame methods here
     virtual bool ProcessEvent(wxEvent& event);

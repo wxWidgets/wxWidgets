@@ -461,7 +461,7 @@ void wxComboPopupWindowEvtHandler::OnKeyEvent( wxKeyEvent& event )
     wxWindowList children = m_combo->GetPopupWindow()->GetChildren();
     wxWindowList::iterator node = children.begin();
     wxWindow* child = (wxWindow*)*node;
-    child->AddPendingEvent(event);
+    child->GetEventHandler()->AddPendingEvent(event);
 }
 
 #if USES_WXDIALOG
@@ -1177,7 +1177,7 @@ bool wxComboCtrlBase::Enable(bool enable)
         m_btn->Enable(enable);
     if ( m_text )
         m_text->Enable(enable);
-        
+
     Refresh();
 
     return true;
@@ -1648,7 +1648,7 @@ void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
     if ( IsPopupShown() )
     {
         // pass it to the popped up control
-        GetPopupControl()->GetControl()->AddPendingEvent(event);
+        GetPopupControl()->GetControl()->GetEventHandler()->AddPendingEvent(event);
     }
     else // no popup
     {

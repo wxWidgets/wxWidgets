@@ -772,7 +772,7 @@ wxAuiManager* wxAuiManager::GetManager(wxWindow* window)
     wxAuiManagerEvent evt(wxEVT_AUI_FIND_MANAGER);
     evt.SetManager(NULL);
     evt.ResumePropagation(wxEVENT_PROPAGATE_MAX);
-    if (!window->ProcessEvent(evt))
+    if (!window->GetEventHandler()->ProcessEvent(evt))
         return NULL;
 
     return evt.GetManager();
@@ -933,7 +933,7 @@ void wxAuiManager::ProcessMgrEvent(wxAuiManagerEvent& event)
     // first, give the owner frame a chance to override
     if (m_frame)
     {
-        if (m_frame->ProcessEvent(event))
+        if (m_frame->GetEventHandler()->ProcessEvent(event))
             return;
     }
 

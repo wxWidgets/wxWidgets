@@ -102,7 +102,7 @@ void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
     jwx_event.SetEventObject(m_catchwin);
 
     if (m_catchwin)
-        m_catchwin->AddPendingEvent(jwx_event);
+        m_catchwin->GetEventHandler()->AddPendingEvent(jwx_event);
 }
 
 void* wxJoystickThread::Entry()

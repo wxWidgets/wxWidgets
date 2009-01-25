@@ -457,7 +457,7 @@ void AppFrame::OnPrint (wxCommandEvent &WXUNUSED(event)) {
 
 // edit events
 void AppFrame::OnEdit (wxCommandEvent &event) {
-    if (m_edit) m_edit->ProcessEvent (event);
+    if (m_edit) m_edit->GetEventHandler()->ProcessEvent (event);
 }
 
 // private functions

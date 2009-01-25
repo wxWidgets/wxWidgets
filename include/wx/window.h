@@ -817,6 +817,26 @@ public:
     virtual void SetNextHandler(wxEvtHandler *handler);
     virtual void SetPreviousHandler(wxEvtHandler *handler);
 
+protected:
+
+    // NOTE: we change the access specifier of the following wxEvtHandler functions
+    //       so that the user won't be able to call them directly.
+    //       Calling wxWindow::ProcessEvent in fact only works when there are NO
+    //       event handlers pushed on the window.
+    //       To ensure correct operation, instead of wxWindow::ProcessEvent
+    //       you must always call wxWindow::GetEventHandler()->ProcessEvent()
+    //       or HandleWindowEvent().
+    //       The same holds for all other wxEvtHandler functions.
+
+    wxEvtHandler::ProcessEvent;
+    wxEvtHandler::ProcessThreadEvent;
+    wxEvtHandler::SafelyProcessEvent;
+    wxEvtHandler::ProcessPendingEvents;
+    wxEvtHandler::AddPendingEvent;
+    wxEvtHandler::QueueEvent;
+
+public:
+
     // validators
     // ----------
 

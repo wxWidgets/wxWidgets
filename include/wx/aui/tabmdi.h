@@ -61,7 +61,7 @@ public:
     void SetArtProvider(wxAuiTabArt* provider);
     wxAuiTabArt* GetArtProvider();
     wxAuiNotebook* GetNotebook() const;
-    
+
 #if wxUSE_MENUS
     wxMenu* GetWindowMenu() const { return m_pWindowMenu; }
     void SetWindowMenu(wxMenu* pMenu);
@@ -70,8 +70,6 @@ public:
 #endif // wxUSE_MENUS
 
     void SetChildMenuBar(wxAuiMDIChildFrame *pChild);
-
-    virtual bool ProcessEvent(wxEvent& event);
 
     wxAuiMDIChildFrame *GetActiveChild() const;
     void SetActiveChild(wxAuiMDIChildFrame* pChildFrame);
@@ -104,6 +102,8 @@ protected:
 
     void DoHandleMenu(wxCommandEvent &event);
 #endif // wxUSE_MENUS
+
+    virtual bool ProcessEvent(wxEvent& event);
 
     virtual void DoGetClientSize(int *width, int *height) const;
 
@@ -147,7 +147,7 @@ public:
 
     virtual void SetIcons(const wxIconBundle& icons);
     virtual const wxIconBundle& GetIcons() const;
-    
+
     virtual void SetIcon(const wxIcon& icon);
     virtual const wxIcon& GetIcon() const;
 
@@ -196,7 +196,7 @@ public:
 
     void SetMDIParentFrame(wxAuiMDIParentFrame* parent);
     wxAuiMDIParentFrame* GetMDIParentFrame() const;
-    
+
 protected:
     void Init();
     virtual void DoSetSize(int x, int y, int width, int height, int size_flags);

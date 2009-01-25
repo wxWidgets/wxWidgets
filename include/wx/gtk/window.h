@@ -166,7 +166,7 @@ public:
     // override this if some events should never be consumed by wxWidgets but
     // but have to be left for the native control
     //
-    // base version just does GetEventHandler()->ProcessEvent()
+    // base version just calls HandleWindowEvent()
     virtual bool GTKProcessEvent(wxEvent& event) const;
 
     // Map GTK widget direction of the given widget to/from wxLayoutDirection
@@ -178,7 +178,7 @@ public:
     // there is also the exception of wxMenuBar)
     virtual bool GTKNeedsParent() const { return !IsTopLevel(); }
 
-    // This is called when capture is taken from the window. It will 
+    // This is called when capture is taken from the window. It will
     // fire off capture lost events.
     void GTKReleaseMouseAndNotify();
 
@@ -256,7 +256,7 @@ public:
 
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
-    
+
     void GTKDisableFocusOutEvent();
     void GTKEnableFocusOutEvent();
 

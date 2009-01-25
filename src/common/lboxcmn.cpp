@@ -201,7 +201,7 @@ void wxListBoxBase::CalcAndSendEvent()
 void wxListBoxBase::Command(wxCommandEvent& event)
 {
     SetSelection(event.GetInt(), event.GetExtraLong() != 0);
-    (void)ProcessEvent(event);
+    (void)GetEventHandler()->ProcessEvent(event);
 }
 
 // ----------------------------------------------------------------------------

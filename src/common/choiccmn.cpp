@@ -49,7 +49,7 @@ wxChoiceBase::~wxChoiceBase()
 void wxChoiceBase::Command(wxCommandEvent& event)
 {
     SetSelection(event.GetInt());
-    (void)ProcessEvent(event);
+    (void)GetEventHandler()->ProcessEvent(event);
 }
 
 #endif // wxUSE_CHOICE

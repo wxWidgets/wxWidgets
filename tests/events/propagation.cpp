@@ -184,7 +184,7 @@ void EventPropagationTestCase::WindowWithoutHandler()
 
     TestWindow * const child = new TestWindow(parent, 'c');
 
-    child->ProcessEvent(event);
+    child->GetEventHandler()->ProcessEvent(event);
     CPPUNIT_ASSERT_EQUAL( "acpA", g_str );
 }
 

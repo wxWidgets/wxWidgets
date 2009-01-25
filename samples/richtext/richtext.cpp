@@ -181,6 +181,8 @@ public:
     void OnPreview(wxCommandEvent& event);
     void OnPageSetup(wxCommandEvent& event);
 
+protected:
+
     // Forward command events to the current rich text control, if any
     bool ProcessEvent(wxEvent& event);
 
@@ -958,7 +960,7 @@ bool MyFrame::ProcessEvent(wxEvent& event)
             s_id = event.GetId();
 
             wxWindow* focusWin = wxFindFocusDescendant(this);
-            if (focusWin && focusWin->ProcessEvent(event))
+            if (focusWin && focusWin->GetEventHandler()->ProcessEvent(event))
             {
                 //s_command = NULL;
                 s_eventType = 0;
