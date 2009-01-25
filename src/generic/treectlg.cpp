@@ -853,33 +853,27 @@ wxGenericTreeItem::DoCalculateSize(wxGenericTreeCtrl* control,
 
     int text_h = m_heightText + 2;
 
-    int image_h = 0;
-    int image_w = 0;
+    int image_h = 0, image_w = 0;
     int image = GetCurrentImage();
-    if ( image != NO_IMAGE )
+    if ( image != NO_IMAGE && control->m_imageListNormal )
     {
-        if ( control->m_imageListNormal )
-        {
-            control->m_imageListNormal->GetSize( image, image_w, image_h );
-            image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
-        }
+        control->m_imageListNormal->GetSize(image, image_w, image_h);
+        image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
     }
 
     int state_h = 0, state_w = 0;
     int state = GetState();
-    if ( state != wxTREE_ITEMSTATE_NONE )
+    if ( state != wxTREE_ITEMSTATE_NONE && control->m_imageListState )
     {
-        if ( control->m_imageListState )
-        {
-            control->m_imageListState->GetSize( state, state_w, state_h );
-            if ( image != NO_IMAGE )
-                state_w += MARGIN_BETWEEN_STATE_AND_IMAGE;
-            else
-                state_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
-        }
+        control->m_imageListState->GetSize(state, state_w, state_h);
+        if ( image_w != 0 )
+            state_w += MARGIN_BETWEEN_STATE_AND_IMAGE;
+        else
+            state_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
     }
 
-    m_height = (image_h > text_h) ? image_h : text_h;
+    int img_h = wxMax(state_h, image_h);
+    m_height = wxMax(img_h, text_h);
 
     if (m_height < 30)
         m_height += 2;            // at least 2 pixels
@@ -2474,7 +2468,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         if ( m_imageListNormal )
         {
-            m_imageListNormal->GetSize( image, image_w, image_h );
+            m_imageListNormal->GetSize(image, image_w, image_h);
             image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
         }
         else
@@ -2489,8 +2483,8 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     {
         if ( m_imageListState )
         {
-            m_imageListState->GetSize( state, state_w, state_h );
-            if ( image != NO_IMAGE )
+            m_imageListState->GetSize(state, state_w, state_h);
+            if ( image_w != 0 )
                 state_w += MARGIN_BETWEEN_STATE_AND_IMAGE;
             else
                 state_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
@@ -2587,8 +2581,10 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         // except for custom item backgrounds, works for both kinds of theme.
         else if (drawItemBackground)
         {
-            wxRect rect( item->GetX()-2, item->GetY()+offset,
-                         item->GetWidth()+2, total_h-offset );
+            wxRect rect( item->GetX() + state_w + image_w - 2,
+                         item->GetY() + offset,
+                         item->GetWidth() - state_w - image_w + 2,
+                         total_h - offset );
             if ( hasBgColour )
             {
                 dc.DrawRectangle( rect );
@@ -3336,15 +3332,28 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
 
     if ( textOnly )
     {
-        rect.x = i->GetX();
-        rect.width = i->GetWidth();
-
-        if ( m_imageListNormal )
+        int image_h = 0, image_w = 0;
+        int image = ((wxGenericTreeItem*) item.m_pItem)->GetCurrentImage();
+        if ( image != NO_IMAGE && m_imageListNormal )
         {
-            int image_w, image_h;
-            m_imageListNormal->GetSize( 0, image_w, image_h );
-            rect.width += image_w + MARGIN_BETWEEN_IMAGE_AND_TEXT;
+            m_imageListNormal->GetSize( image, image_w, image_h );
+            image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
         }
+
+        int state_h = 0, state_w = 0;
+        int state = ((wxGenericTreeItem*) item.m_pItem)->GetState();
+        if ( state != wxTREE_ITEMSTATE_NONE && m_imageListState )
+        {
+            m_imageListState->GetSize( state, state_w, state_h );
+            if ( image_w != 0 )
+                state_w += MARGIN_BETWEEN_STATE_AND_IMAGE;
+            else
+                state_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
+        }
+
+        rect.x = i->GetX() + state_w + image_w;
+        rect.width = i->GetWidth() - state_w - image_w;
+
     }
     else // the entire line
     {
