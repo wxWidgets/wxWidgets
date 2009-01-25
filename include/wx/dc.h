@@ -125,10 +125,10 @@ enum wxMappingMode
 // wxDrawObject helper class
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDEPRECATED_BUT_USED_INTERNALLY(wxDrawObject)
+class WXDLLIMPEXP_CORE wxDrawObject
 {
 public:
-    wxDrawObject()
+    wxDEPRECATED_CONSTRUCTOR(wxDrawObject)()
         : m_isBBoxValid(false)
         , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
     { }
@@ -1197,12 +1197,7 @@ public:
     wxDEPRECATED( void GetDeviceOrigin(long *x, long *y) const );
     wxDEPRECATED( void GetClippingBox(long *x, long *y, long *w, long *h) const );
 
-    void DrawObject(wxDrawObject* drawobject)
-    {
-        drawobject->Draw(*this);
-        CalcBoundingBox(drawobject->MinX(),drawobject->MinY());
-        CalcBoundingBox(drawobject->MaxX(),drawobject->MaxY());
-    }
+    wxDEPRECATED( void DrawObject(wxDrawObject* drawobject) );
 #endif  // WXWIN_COMPATIBILITY_2_8
 
 #ifdef __WXMSW__
