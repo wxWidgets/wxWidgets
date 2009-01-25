@@ -82,6 +82,16 @@ public:
     bool CreateInstance(const wxString& classId) const;
 
     /**
+        Checks if the object is in a valid state.
+
+        Returns @true if the object was successfully initialized or @false if
+        it has no valid IDispatch pointer.
+
+        @see GetDispatchPtr()
+     */
+    bool IsOk() const;
+
+    /**
         Gets the IDispatch pointer.
     */
     IDispatch* GetDispatchPtr() const;

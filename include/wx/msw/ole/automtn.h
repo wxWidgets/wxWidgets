@@ -38,8 +38,9 @@ public:
     virtual ~wxAutomationObject();
 
     // Set/get dispatch pointer
-    inline void SetDispatchPtr(WXIDISPATCH* dispatchPtr) { m_dispatchPtr = dispatchPtr; }
-    inline WXIDISPATCH* GetDispatchPtr() const { return m_dispatchPtr; }
+    void SetDispatchPtr(WXIDISPATCH* dispatchPtr) { m_dispatchPtr = dispatchPtr; }
+    WXIDISPATCH* GetDispatchPtr() const { return m_dispatchPtr; }
+    bool IsOk() const { return m_dispatchPtr != NULL; }
 
     // Get a dispatch pointer from the current object associated
     // with a class id, such as "Excel.Application"
