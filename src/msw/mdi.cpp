@@ -258,6 +258,8 @@ int wxMDIParentFrame::GetChildFramesCount() const
     return count;
 }
 
+#if wxUSE_MENUS
+
 void wxMDIParentFrame::AddMDIChild(wxMDIChildFrame * WXUNUSED(child))
 {
     switch ( GetChildFramesCount() )
@@ -300,8 +302,6 @@ void wxMDIParentFrame::RemoveMDIChild(wxMDIChildFrame * WXUNUSED(child))
             break;
     }
 }
-
-#if wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // wxMDIParentFrame window menu handling

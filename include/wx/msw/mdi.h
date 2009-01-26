@@ -74,11 +74,13 @@ public:
     // MDI helpers
     // -----------
 
+#if wxUSE_MENUS
     // called by wxMDIChildFrame after it was successfully created
     virtual void AddMDIChild(wxMDIChildFrame *child);
 
     // called by wxMDIChildFrame just before it is destroyed
     virtual void RemoveMDIChild(wxMDIChildFrame *child);
+#endif // wxUSE_MENUS
 
     // handlers
     // --------
