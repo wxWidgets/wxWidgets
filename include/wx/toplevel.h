@@ -171,10 +171,12 @@ public:
     // enable/disable close button [x]
     virtual bool EnableCloseButton(bool WXUNUSED(enable) ) { return false; } 
 
+#ifndef __WXMAC__
     // Set the shape of the window to the given region.
     // Returns true if the platform supports this feature (and the
     // operation is successful.)
     virtual bool SetShape(const wxRegion& WXUNUSED(region)) { return false; }
+#endif
 
     // Attracts the users attention to this window if the application is
     // inactive (should be called when a background event occurs)
