@@ -2,10 +2,11 @@
 // Name:        src/msw/mdi.cpp
 // Purpose:     MDI classes for wxMSW
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Vadim Zeitlin on 2008-11-04 to use the base classes
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) 1998 Julian Smart
+//              (c) 2008-2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -249,21 +250,44 @@ int wxMDIParentFrame::GetChildFramesCount() const
 
 void wxMDIParentFrame::AddMDIChild(wxMDIChildFrame * WXUNUSED(child))
 {
-    if ( GetChildFramesCount() == 1 )
+    switch ( GetChildFramesCount() )
     {
-        // first MDI child added, we need to insert the window menu now if we
-        // have it
-        AddWindowMenu();
+        case 1:
+            // first MDI child was just added, we need to insert the window
+            // menu now if we have it
+            AddWindowMenu();
+
+            // and disable the items which can't be used until we have more
+            // than one child
+            UpdateWindowMenu(false);
+            break;
+
+        case 2:
+            // second MDI child was added, enable the menu items which were
+            // disabled because they didn't make sense for a single window
+            UpdateWindowMenu(true);
+            break;
     }
 }
 
 void wxMDIParentFrame::RemoveMDIChild(wxMDIChildFrame * WXUNUSED(child))
 {
-    if ( GetChildFramesCount() == 1 )
+    switch ( GetChildFramesCount() )
     {
-        // last MDI child is being removed, remove the now unnecessary window
-        // menu too
-        RemoveWindowMenu();
+        case 1:
+            // last MDI child is being removed, remove the now unnecessary
+            // window menu too
+            RemoveWindowMenu();
+
+            // there is no need to call UpdateWindowMenu(true) here so this is
+            // not quite symmetric to AddMDIChild() above
+            break;
+
+        case 2:
+            // only one MDI child is going to remain, disable the menu commands
+            // which don't make sense for a single child window
+            UpdateWindowMenu(false);
+            break;
     }
 }
 
@@ -281,6 +305,15 @@ void wxMDIParentFrame::RemoveWindowMenu()
 {
     if ( m_windowMenu )
         MDIRemoveWindowMenu(GetClientWindow(), m_hMenu);
+}
+
+void wxMDIParentFrame::UpdateWindowMenu(bool enable)
+{
+    if ( m_windowMenu )
+    {
+        m_windowMenu->Enable(IDM_WINDOWNEXT, enable);
+        m_windowMenu->Enable(IDM_WINDOWPREV, enable);
+    }
 }
 
 #if wxUSE_MENUS_NATIVE
