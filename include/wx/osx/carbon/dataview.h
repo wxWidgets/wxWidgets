@@ -578,6 +578,7 @@ protected:
 
  // event handling:
   void OnSize(wxSizeEvent &event);
+  void OnMouse(wxMouseEvent &event);
 
 private:
  // type definitions:
