@@ -126,7 +126,7 @@
 
     @see wxGrid, wxListCtrl, wxDataViewCtrl
 */
-class wxHeaderCtrl
+class wxHeaderCtrl : public wxControl
 {
 public:
     /**
