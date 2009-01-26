@@ -222,13 +222,9 @@ size_allocate(GtkWidget*, GtkAllocation* alloc, wxTopLevelWindowGTK* win)
 
         if (!win->IsIconized())
         {
-#if 1
-            win->m_resizeQueued = true;
-#else
             wxSizeEvent event(size, win->GetId());
             event.SetEventObject(win);
             win->HandleWindowEvent(event);
-#endif
         }
         // else the window is currently unmapped, don't generate size events
     }
@@ -449,8 +445,6 @@ void wxTopLevelWindowGTK::Init()
     m_updateDecorSize = true;
 
     m_urgency_hint = -2;
-    
-    m_resizeQueued = false;
 }
 
 bool wxTopLevelWindowGTK::Create( wxWindow *parent,
@@ -1094,15 +1088,6 @@ void wxTopLevelWindowGTK::OnInternalIdle()
         g_sendActivateEvent = -1;
 
         wxTheApp->SetActive(activate, (wxWindow *)g_lastActiveFrame);
-    }
-    
-    if (m_resizeQueued)
-    {
-        wxSize size( m_width, m_height );
-        wxSizeEvent event(size, GetId());
-        event.SetEventObject(this);
-        HandleWindowEvent(event);
-        m_resizeQueued = false;
     }
 }
 
