@@ -653,6 +653,11 @@ bool wxTopLevelWindowMSW::Show(bool show)
 
             m_maximizeOnShow = false;
         }
+        else if ( m_iconized )
+        {
+            // iconize and show
+            nShowCmd = SW_MINIMIZE;
+        }
         else // just show
         {
             // we shouldn't use SW_SHOW which also activates the window for
@@ -736,7 +741,17 @@ bool wxTopLevelWindowMSW::IsMaximized() const
 
 void wxTopLevelWindowMSW::Iconize(bool iconize)
 {
-    DoShowWindow(iconize ? SW_MINIMIZE : SW_RESTORE);
+    if ( IsShown() )
+    {
+        // change the window state immediately
+        DoShowWindow(iconize ? SW_MINIMIZE : SW_RESTORE);
+    }
+    else // hidden
+    {
+        // iconizing the window shouldn't show it so just remember that we need
+        // to become iconized when shown later
+        m_iconized = true;
+    }
 }
 
 bool wxTopLevelWindowMSW::IsIconized() const
@@ -744,6 +759,9 @@ bool wxTopLevelWindowMSW::IsIconized() const
 #ifdef __WXWINCE__
     return false;
 #else
+    if ( !IsShown() )
+        return m_iconized;
+
     // don't use m_iconized, it may be briefly out of sync with the real state
     // as it's only modified when we receive a WM_SIZE and we could be called
     // from an event handler from one of the messages we receive before it,
