@@ -146,6 +146,9 @@ protected:
     wxToolBarToolBase *m_pInTool;
 
 private:
+    // makes sure tool bitmap size is sufficient for all tools
+    void AdjustToolBitmapSize();
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)
     DECLARE_NO_COPY_CLASS(wxToolBar)
