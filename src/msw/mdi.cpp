@@ -234,6 +234,16 @@ wxMDIParentFrame::~wxMDIParentFrame()
 // wxMDIParentFrame child management
 // ----------------------------------------------------------------------------
 
+wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
+{
+    HWND hWnd = (HWND)::SendMessage(GetWinHwnd(GetClientWindow()),
+                                    WM_MDIGETACTIVE, 0, 0L);
+    if ( hWnd == 0 )
+        return NULL;
+
+    return (wxMDIChildFrame *)wxFindWinFromHandle(hWnd);
+}
+
 int wxMDIParentFrame::GetChildFramesCount() const
 {
     int count = 0;
@@ -290,6 +300,8 @@ void wxMDIParentFrame::RemoveMDIChild(wxMDIChildFrame * WXUNUSED(child))
             break;
     }
 }
+
+#if wxUSE_MENUS
 
 // ----------------------------------------------------------------------------
 // wxMDIParentFrame window menu handling
@@ -349,6 +361,10 @@ void wxMDIParentFrame::SetWindowMenu(wxMenu* menu)
     AddWindowMenu();
 }
 
+// ----------------------------------------------------------------------------
+// wxMDIParentFrame other menu-related stuff
+// ----------------------------------------------------------------------------
+
 void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
 {
     wxMDIChildFrame *child = GetActiveChild();
@@ -388,6 +404,25 @@ const wxMenuItem *wxMDIParentFrame::FindItemInMenuBar(int menuId) const
     return item;
 }
 
+WXHMENU wxMDIParentFrame::MSWGetActiveMenu() const
+{
+    wxMDIChildFrame * const child  = GetActiveChild();
+    if ( child )
+    {
+        const WXHMENU hmenu = child->MSWGetActiveMenu();
+        if ( hmenu )
+            return hmenu;
+    }
+
+    return wxFrame::MSWGetActiveMenu();
+}
+
+#endif // wxUSE_MENUS
+
+// ----------------------------------------------------------------------------
+// wxMDIParentFrame event handling
+// ----------------------------------------------------------------------------
+
 void wxMDIParentFrame::UpdateClientSize()
 {
     if ( GetClientWindow() )
@@ -412,17 +447,6 @@ void wxMDIParentFrame::OnIconized(wxIconizeEvent& event)
 
     if ( !event.IsIconized() )
         UpdateClientSize();
-}
-
-// Returns the active MDI child window
-wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
-{
-    HWND hWnd = (HWND)::SendMessage(GetWinHwnd(GetClientWindow()),
-                                    WM_MDIGETACTIVE, 0, 0L);
-    if ( hWnd == 0 )
-        return NULL;
-
-    return (wxMDIChildFrame *)wxFindWinFromHandle(hWnd);
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -1118,7 +1142,7 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
 {
     wxMDIParentFrame * const parent = GetMDIParent();
 
-    HMENU menuToSet = 0;
+    WXHMENU hMenuToSet = 0;
 
     bool activated;
 
@@ -1127,12 +1151,12 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
         activated = true;
         parent->m_currentChild = this;
 
-        HMENU child_menu = (HMENU)GetWinMenu();
-        if ( child_menu )
+        WXHMENU hMenuChild = m_hMenu;
+        if ( hMenuChild )
         {
             parent->m_parentFrameActive = false;
 
-            menuToSet = child_menu;
+            hMenuToSet = hMenuChild;
         }
     }
     else if ( m_hWnd == hwndDeact )
@@ -1143,15 +1167,15 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
         activated = false;
         parent->m_currentChild = NULL;
 
-        HMENU parent_menu = (HMENU)parent->GetWinMenu();
+        WXHMENU hMenuParent = parent->m_hMenu;
 
         // activate the the parent menu only when there is no other child
         // that has been activated
-        if ( parent_menu && !hwndAct )
+        if ( hMenuParent && !hwndAct )
         {
             parent->m_parentFrameActive = true;
 
-            menuToSet = parent_menu;
+            hMenuToSet = hMenuParent;
         }
     }
     else
@@ -1160,10 +1184,10 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
         return false;
     }
 
-    if ( menuToSet )
+    if ( hMenuToSet )
     {
         MDISetMenu(parent->GetClientWindow(),
-                   menuToSet, GetMDIWindowMenu(parent));
+                   (HMENU)hMenuToSet, GetMDIWindowMenu(parent));
     }
 
     wxActivateEvent event(wxEVT_ACTIVATE, activated, m_windowId);

@@ -63,7 +63,11 @@ public:
     virtual void SetWindowMenu(wxMenu* menu);
 
     virtual void DoMenuUpdates(wxMenu* menu = NULL);
+
+    // return the active child menu, if any
+    virtual WXHMENU MSWGetActiveMenu() const;
 #endif // wxUSE_MENUS
+
 
     // implementation only from now on
 
@@ -94,8 +98,10 @@ public:
     virtual WXLRESULT MSWDefWindowProc(WXUINT, WXWPARAM, WXLPARAM);
     virtual bool MSWTranslateMessage(WXMSG* msg);
 
+#if wxUSE_MENUS
     // override wxFrameBase function to also look in the active child menu bar
     virtual const wxMenuItem *FindItemInMenuBar(int menuId) const;
+#endif // wxUSE_MENUS
 
 protected:
 #if wxUSE_MENUS_NATIVE
@@ -112,12 +118,19 @@ protected:
     bool m_parentFrameActive;
 
 private:
+#if wxUSE_MENUS
     // add/remove window menu if we have it (i.e. m_windowMenu != NULL)
     void AddWindowMenu();
     void RemoveWindowMenu();
 
+    // update the window menu (if we have it) to enable or disable the commands
+    // which only make sense when we have more than one child
+    void UpdateWindowMenu(bool enable);
+#endif // wxUSE_MENUS
+
     // return the number of child frames we currently have (maybe 0)
     int GetChildFramesCount() const;
+
 
     friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
 

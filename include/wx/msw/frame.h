@@ -75,10 +75,6 @@ public:
         { return m_useNativeStatusBar; }
 #endif // wxUSE_STATUSBAR
 
-#if wxUSE_MENUS
-    WXHMENU GetWinMenu() const { return m_hMenu; }
-#endif // wxUSE_MENUS
-
     // event handlers
     bool HandleSize(int x, int y, WXUINT flag);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
@@ -106,6 +102,12 @@ public:
     virtual WXLRESULT MSWWindowProc(WXUINT message,
                                     WXWPARAM wParam,
                                     WXLPARAM lParam);
+
+#if wxUSE_MENUS
+    // get the currently active menu: this is the same as the frame menu for
+    // normal frames but is overridden by wxMDIParentFrame
+    virtual WXHMENU MSWGetActiveMenu() const { return m_hMenu; }
+#endif // wxUSE_MENUS
 
 protected:
     // common part of all ctors

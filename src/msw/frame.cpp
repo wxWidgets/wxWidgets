@@ -580,24 +580,9 @@ bool wxFrame::ShowFullScreen(bool show, long style)
 #if wxUSE_MENUS
         if (m_fsStyle & wxFULLSCREEN_NOMENUBAR)
         {
-            WXHMENU menu = m_hMenu;
-
-#if wxUSE_MDI_ARCHITECTURE
-            wxMDIParentFrame *frame = wxDynamicCast(this, wxMDIParentFrame);
-            if (frame)
-            {
-                wxMDIChildFrame *child = frame->GetActiveChild();
-                if (child)
-                {
-                    menu = child->GetWinMenu();
-                }
-            }
-#endif // wxUSE_MDI_ARCHITECTURE
-
-            if (menu)
-            {
-                ::SetMenu(GetHwnd(), (HMENU)menu);
-            }
+            const WXHMENU hmenu = MSWGetActiveMenu();
+            if ( hmenu )
+                ::SetMenu(GetHwnd(), (HMENU)hmenu);
         }
 #endif // wxUSE_MENUS
 
