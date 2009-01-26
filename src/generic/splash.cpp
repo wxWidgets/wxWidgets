@@ -29,14 +29,14 @@
     #include "wx/dcclient.h"
 #endif
 
-/*
- * wxSplashScreen
- */
 
-#define wxSPLASH_TIMER_ID 9999
+// ----------------------------------------------------------------------------
+// wxSplashScreen
+// ----------------------------------------------------------------------------
+
+#define wxSPLASH_TIMER_ID       9999
 
 IMPLEMENT_DYNAMIC_CLASS(wxSplashScreen, wxFrame)
-
 BEGIN_EVENT_TABLE(wxSplashScreen, wxFrame)
     EVT_TIMER(wxSPLASH_TIMER_ID, wxSplashScreen::OnNotify)
     EVT_CLOSE(wxSplashScreen::OnCloseWindow)
@@ -47,8 +47,10 @@ END_EVENT_TABLE()
  * slightly too small.
  */
 
-wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
-    wxFrame(parent, id, wxEmptyString, wxPoint(0,0), wxSize(100, 100), style)
+wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds,
+                               wxWindow* parent, wxWindowID id, const wxPoint& pos,
+                               const wxSize& size, long style)
+    : wxFrame(parent, id, wxEmptyString, wxPoint(0,0), wxSize(100, 100), style)
 {
     // At least for GTK+ 2.0, this hint is not available.
 #if defined(__WXGTK20__)
@@ -81,6 +83,8 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
     m_window->SetFocus();
 #if defined( __WXMSW__ ) || defined(__WXMAC__)
     Update(); // Without this, you see a blank screen for an instant
+#elif defined(__WXGTK20__)
+    // we don't need to do anything at least on wxGTK with GTK+ 2.12.9
 #else
     wxYieldIfNeeded(); // Should eliminate this
 #endif
@@ -102,9 +106,9 @@ void wxSplashScreen::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     this->Destroy();
 }
 
-/*
- * wxSplashScreenWindow
- */
+// ----------------------------------------------------------------------------
+// wxSplashScreenWindow
+// ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxSplashScreenWindow, wxWindow)
 #ifdef __WXGTK__
@@ -115,8 +119,10 @@ BEGIN_EVENT_TABLE(wxSplashScreenWindow, wxWindow)
     EVT_MOUSE_EVENTS(wxSplashScreenWindow::OnMouseEvent)
 END_EVENT_TABLE()
 
-wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
-    wxWindow(parent, id, pos, size, style)
+wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* parent,
+                                           wxWindowID id, const wxPoint& pos,
+                                           const wxSize& size, long style)
+    : wxWindow(parent, id, pos, size, style)
 {
     m_bitmap = bitmap;
 
@@ -128,7 +134,6 @@ wxSplashScreenWindow::wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* par
         SetPalette(* bitmap.GetPalette());
     }
 #endif
-
 }
 
 // VZ: why don't we do it under wxGTK?
@@ -170,20 +175,15 @@ void wxSplashScreenWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxSplashScreenWindow::OnEraseBackground(wxEraseEvent& event)
 {
-    if (event.GetDC())
+    if (event.GetDC() && m_bitmap.Ok())
     {
-        if (m_bitmap.Ok())
-        {
-            wxDrawSplashBitmap(* event.GetDC(), m_bitmap, 0, 0);
-        }
+        wxDrawSplashBitmap(* event.GetDC(), m_bitmap, 0, 0);
     }
     else
     {
         wxClientDC dc(this);
         if (m_bitmap.Ok())
-        {
             wxDrawSplashBitmap(dc, m_bitmap, 0, 0);
-        }
     }
 }
 
@@ -191,6 +191,8 @@ void wxSplashScreenWindow::OnMouseEvent(wxMouseEvent& event)
 {
     if (event.LeftDown() || event.RightDown())
         GetParent()->Close(true);
+    else
+        event.Skip();
 }
 
 void wxSplashScreenWindow::OnChar(wxKeyEvent& WXUNUSED(event))
