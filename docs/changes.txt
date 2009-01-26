@@ -147,6 +147,9 @@ wxMSW:
 - Fix handling of abandoned mutexes in wxMutex (David Heffernan).
 - Avoid warnings about deprecated localtime with MSVC8/9 (Chris Stankevitz).
 - Fixed invisible CHM tooltip text bug when window text colour is black.
+- Automatically adjust toolbar's tool size if the provided bitmaps
+  don't fit into the default size.
+
 
 wxMSW/CE:
 
