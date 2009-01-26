@@ -29,6 +29,7 @@
     #include "wx/settings.h"
     #include "wx/menuitem.h"
     #include "wx/module.h"
+    #include "wx/msw/wrapcctl.h"
 #endif
 
 #include "wx/ownerdrw.h"
