@@ -43,6 +43,7 @@
     #include "wx/stattext.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/sysopt.h"
 #include "wx/dcclient.h"
 
@@ -95,10 +96,6 @@
 #ifndef TB_GETMAXSIZE
     #define TB_GETMAXSIZE           (WM_USER + 83)
 #endif
-
-// these values correspond to those used by comctl32.dll
-#define DEFAULTBITMAPX   16
-#define DEFAULTBITMAPY   15
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -284,8 +281,9 @@ void wxToolBar::Init()
 
     m_nButtons = 0;
 
-    m_defaultWidth = DEFAULTBITMAPX;
-    m_defaultHeight = DEFAULTBITMAPY;
+    const wxSize size = wxArtProvider::GetNativeSizeHint(wxART_TOOLBAR);
+    m_defaultWidth = size.x;
+    m_defaultHeight = size.y;
 
     m_pInTool = NULL;
 }

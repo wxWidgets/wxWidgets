@@ -487,6 +487,8 @@ wxMSW:
   should be used.
 - Implement wxFileName::SetTimes() for directories (Steve Lamerton).
 - Added wxToolTip::SetMaxWidth() and improved default wrapping (Joachim Hönig).
+- Changed default toolbar bitmaps size from obsolete 16x15 to 24x24 used
+  by modern apps.
 
 wxX11:
 
