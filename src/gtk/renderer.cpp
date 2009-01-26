@@ -157,6 +157,11 @@ static GdkWindow* wxGetGdkWindowForDC(wxWindow* win, wxDC& dc)
         gdk_window = dc.GetGDKWindow();
 #endif
     }
+
+#if !wxUSE_GRAPHICS_CONTEXT
+    wxUnusedVar(win);
+#endif
+
     return gdk_window;
 }
 
