@@ -470,6 +470,14 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
 
     if ( window )
     {
+        // we need to handle click activation manually now
+        if ( !IsWindowActive(window) ) 
+        {
+            EventMouseButton button = 0 ;
+            cEvent.GetParameter<EventMouseButton>( kEventParamMouseButton, typeMouseButton , &button ) ;
+            if (button == kEventMouseButtonPrimary)
+                ::ActivateWindow(window, true);
+        }
         wxMacGlobalToLocal( window,  &windowMouseLocation ) ;
 
         if ( wxApp::s_captureWindow
@@ -511,7 +519,7 @@ wxMacTopLevelMouseEventHandler(EventHandlerCallRef WXUNUSED(handler),
             // disabled windows must not get any input messages
             if ( currentMouseWindow && !currentMouseWindow->MacIsReallyEnabled() )
                 currentMouseWindow = NULL;
-        }
+        } 
     }
 
     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
@@ -1283,14 +1291,14 @@ void wxNonOwnedWindow::ShowNoActivate( bool show )
 
     if (show) { 
         if ( plainTransition )
-           ::ShowWindow( (WindowRef)m_macWindow );
+           ::ShowHide( (WindowRef)m_macWindow, true );
         else
            ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowShowTransitionAction, NULL );
     } 
     else 
     {
         if ( plainTransition )
-           ::HideWindow( (WindowRef)m_macWindow );
+           ::ShowHide( (WindowRef)m_macWindow, false );
         else
            ::TransitionWindow( (WindowRef)m_macWindow, kWindowZoomTransitionEffect, kWindowHideTransitionAction, NULL );
     }
@@ -1313,6 +1321,7 @@ bool wxNonOwnedWindow::Show(bool show)
     ShowNoActivate(show);
     if (show)
     {
+        ::ActivateWindow( (WindowRef)m_macWindow, true ) ;
         ::SelectWindow( (WindowRef)m_macWindow ) ;
     }
 
