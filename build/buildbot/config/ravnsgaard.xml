@@ -39,8 +39,9 @@
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
             <configure options="--with-gtk --enable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
-            <compile-all/>
-            <run-tests/>
+            <compile-all utils="false"/>
+            <!-- <run-tests/> -->
+            cd tests &amp;&amp; ./test --timing
         </steps>
     </build>
 
@@ -51,7 +52,7 @@
         <steps>
             <checkout branch="{$STABLE_BRANCH}"/>
             <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat24"/>
-            <compile-all/>
+            <compile-all utils="false"/>
             <run-tests/>
         </steps>
     </build>
