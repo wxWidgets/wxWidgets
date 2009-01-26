@@ -413,6 +413,10 @@ IMG.appearance {
 	margin: 20px;
 }
 
+.dynheader IMG {
+    margin: 0px;
+}
+
 TABLE.appearance {
 	width: 100%;
 	text-align: center;
