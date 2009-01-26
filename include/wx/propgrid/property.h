@@ -737,6 +737,11 @@ private:
     Helper class for managing choices of wxPropertyGrid properties.
     Each entry can have label, value, bitmap, text colour, and background
     colour.
+ 
+    wxPGChoices uses reference counting, similar to other wxWidgets classes.
+    This means that assignment operator and copy constructor only copy the
+    reference and not the actual data. Use Copy() member function to create a
+    real copy.
 
     @remarks If you do not specify value for entry, index is used.
 
@@ -754,7 +759,10 @@ public:
         Init();
     }
 
-    /** Copy constructor. */
+    /**
+        Copy constructor, uses reference counting. To create a real copy,
+        use Copy() member function instead.
+    */
     wxPGChoices( const wxPGChoices& a )
     {
         if ( a.m_data != wxPGChoicesEmptyData )
@@ -853,6 +861,10 @@ public:
     wxPGChoiceEntry& AddAsSorted( const wxString& label,
                                   int value = wxPG_INVALID_VALUE );
 
+    /**
+        Assigns choices data, using reference counting. To create a real copy,
+        use Copy() member function instead.
+    */
     void Assign( const wxPGChoices& a )
     {
         AssignData(a.m_data);
@@ -865,6 +877,17 @@ public:
     {
         if ( m_data != wxPGChoicesEmptyData )
             m_data->Clear();
+    }
+
+    /**
+        Returns a real copy of the choices.
+    */
+    wxPGChoices Copy() const
+    {
+        wxPGChoices dst;
+        dst.EnsureData();
+        dst.m_data->CopyDataFrom(m_data);
+        return dst;
     }
 
     void EnsureData()

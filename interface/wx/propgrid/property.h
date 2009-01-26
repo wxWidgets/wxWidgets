@@ -1425,7 +1425,15 @@ public:
     @class wxPGChoices
 
     Helper class for managing choices of wxPropertyGrid properties.
-    Each entry can have label, value, bitmap, text colour, and background colour.
+    Each entry can have label, value, bitmap, text colour, and background
+    colour.
+ 
+    wxPGChoices uses reference counting, similar to other wxWidgets classes.
+    This means that assignment operator and copy constructor only copy the
+    reference and not the actual data. Use Copy() member function to create a
+    real copy.
+
+    @remarks If you do not specify value for entry, index is used.
 
     @library{wxpropgrid}
     @category{propgrid}
@@ -1440,7 +1448,10 @@ public:
     */
     wxPGChoices();
 
-    /** Copy constructor. */
+    /**
+        Copy constructor, uses reference counting. To create a real copy,
+        use Copy() member function instead.
+    */
     wxPGChoices( const wxPGChoices& a );
 
     /** Constructor. */
@@ -1481,7 +1492,8 @@ public:
     wxPGChoiceEntry& AddAsSorted( const wxString& label, int value = wxPG_INVALID_VALUE );
 
     /**
-        Assigns data from another set of choices.
+        Assigns choices data, using reference counting. To create a real copy,
+        use Copy() member function instead.
     */
     void Assign( const wxPGChoices& a );
 
@@ -1494,6 +1506,11 @@ public:
         Deletes all items.
     */
     void Clear();
+
+    /**
+        Returns a real copy of the choices.
+    */
+    wxPGChoices Copy() const;
 
     /**
         Returns labe of item.
