@@ -66,6 +66,7 @@ IMPLEMENT_APP(MyApp)
 BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
+    EVT_MENU(MDI_FULLSCREEN, MyFrame::OnFullScreen)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
 
     EVT_CLOSE(MyFrame::OnClose)
@@ -135,6 +136,7 @@ MyFrame::MyFrame()
     wxMenu *file_menu = new wxMenu;
 
     file_menu->Append(wxID_NEW, "&New window\tCtrl-N", "Create a new child window");
+    file_menu->AppendCheckItem(MDI_FULLSCREEN, "Show &fullscreen\tCtrl-F");
     file_menu->Append(wxID_EXIT, "&Exit\tAlt-X", "Quit the program");
 
     wxMenu *help_menu = new wxMenu;
@@ -227,6 +229,11 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     // create and show another child frame
     MyChild *subframe = new MyChild(this);
     subframe->Show(true);
+}
+
+void MyFrame::OnFullScreen(wxCommandEvent& event)
+{
+    ShowFullScreen(event.IsChecked());
 }
 
 void MyFrame::OnSize(wxSizeEvent& event)
@@ -379,6 +386,7 @@ MyChild::MyChild(wxMDIParentFrame *parent)
 
     file_menu->Append(wxID_NEW, "&New window\tCtrl-N");
     file_menu->Append(wxID_CLOSE, "&Close child\tCtrl-W", "Close this window");
+    file_menu->AppendCheckItem(MDI_FULLSCREEN, "Show &fullscreen\tCtrl-F");
     file_menu->Append(wxID_EXIT, "&Exit\tAlt-X", "Quit the program");
 
     wxMenu *option_menu = new wxMenu;

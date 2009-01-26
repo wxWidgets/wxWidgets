@@ -51,6 +51,7 @@ private:
     void OnSize(wxSizeEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
+    void OnFullScreen(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnClose(wxCloseEvent& event);
 
@@ -95,6 +96,7 @@ private:
 // menu items ids
 enum
 {
+    MDI_FULLSCREEN,
     MDI_REFRESH,
     MDI_CHANGE_TITLE,
     MDI_CHANGE_POSITION,
