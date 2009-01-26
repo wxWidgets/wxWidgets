@@ -29,7 +29,16 @@
             <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
             <compile-all/>
             <!-- <run-tests/> -->
-            cd tests &amp;&amp; ./test --timing
+            <test>
+                <description>running tests with timing</description>
+                <descriptionDone>run tests</descriptionDone>
+                <warnOnFailure/>
+                <command>
+                    <normalize-space>
+                    cd tests &amp;&amp; ./test --timing
+                    </normalize-space>
+                </command>
+            </test>
         </steps>
     </build>
 
