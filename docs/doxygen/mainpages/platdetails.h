@@ -54,10 +54,10 @@ You will need GTK+ 2.6 or higher which is available from:
 http://www.gtk.org
 
 The newer version of GTK+ you use, the more native widgets and
-features will be utilized. We have gone to a great extent to
-allow compiling wxWidgets applications with a latest version of
+features will be utilized. We have gone to great lengths to
+allow compiling wxWidgets applications with the latest version of
 GTK+, with the resulting binary working on systems even with a
-much lower version of GTK+. You will have to ensure that the
+much earlier version of GTK+. You will have to ensure that the
 application is launched with lazy symbol binding for that.
 
 In order to configure wxWidgets to compile wxGTK you will
@@ -103,7 +103,7 @@ in the distribution.
 @endhtmlonly
 
 wxCocoa is another port of wxWidgets for the Macintosh OS
-platform. But in contrast to wxMac, it uses the Cocoa API.
+platform. In contrast to wxMac, it uses the Cocoa API.
 Much work has gone into this port and many controls are
 functional, but the port has not reached the maturity
 of the wxMac port yet. It should be possible to use wxCocoa
@@ -195,14 +195,12 @@ in the distribution.
 <img src="logo_win.png" alt="Windows logo" title="Windows logo" class="logo">
 @endhtmlonly
 
-wxMSW is a port of wxWidgets for the Windows platforms
-including Windows 95, 98, ME, 2000, NT, XP in ANSI and
-Unicode mode (for Windows 95 through the MSLU extension
-library). wxMSW ensures native look and feel for XP
-as well when using wxWidgets version 2.3.3 or higher.
-wxMSW can be compile with a great variety of compilers
-including MS VC++, Borland 5.5, MinGW32, Cygwin and
-Watcom as well as cross-compilation with a Linux hosted
+wxMSW is a port of wxWidgets for the Windows platforms including Windows 95,
+98, ME, 2000, NT, XP and Vista in ANSI and Unicode modes (for Windows 9x and
+ME through the MSLU extension library). wxMSW ensures native look and feel for
+XP when using wxWidgets version 2.3.3 or higher.wxMSW can be compiled with a
+great variety of compilers including Microsoft Studio VC++, Borland 5.5,
+MinGW32, Cygwin and Watcom as well as cross-compilation with a Linux-hosted
 MinGW32 tool chain.
 
 For further information, please see the files in docs/msw
@@ -217,7 +215,7 @@ separate the client area's scrollbars from the border.
 
 If you don't specify a border style for a wxTextCtrl in rich edit mode, wxWidgets now gives
 the control themed borders automatically, where previously they would take the Windows 95-style
-sunken border. Other native controls such as wxTextCtrl in non-rich edit mode, and wxComboBox,
+sunken border. Other native controls such as wxTextCtrl in non-rich edit mode, and wxComboBox
 already paint themed borders where appropriate. To use themed borders on other windows, such
 as wxPanel, pass the @c wxBORDER_THEME style, or (apart from wxPanel) pass no border style.
 
@@ -422,7 +420,7 @@ or with transparency (for example, using XPMs).
 @li Adding controls to wxToolMenuBar is not supported. However, wxToolBar supports
 controls.
 
-Unlike in all other ports, a wxDialog has a wxToolBar, automatically created
+Unlike in all other ports, a wxDialog has a wxToolBar automatically created
 for you. You may either leave it blank, or access it with wxDialog::GetToolBar()
 and add buttons, then calling wxToolBar::Realize(). You cannot set or recreate
 the toolbar.
@@ -569,7 +567,7 @@ Also change the Linker/Input/Additional Dependencies property to something like
     commctrl.lib winsock.lib wininet.lib</tt>
 (since the library names in the wxWidgets workspace were changed by VS 2005).
 
-Alternately, you could could edit all the names to be identical to the original eVC++
+Alternately, you could edit all the names to be identical to the original eVC++
 names, but this will probably be more fiddly.
 
 @subsubsection page_port_wxmsw_wince_issues Remaining issues
