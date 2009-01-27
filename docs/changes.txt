@@ -260,8 +260,9 @@ Major new features in this release
 - wxWidgets may now use either wchar_t (UTF-16/32) or UTF-8 internally,
   depending on what is optimal for the target platform.
 
-- New propgrid library containing wxPropertyGrid and related classes, many
-  enhancements to wxDataViewCtrl.
+- New propgrid library containing wxPropertyGrid and related classes.
+
+- Many enhancements to wxDataViewCtrl.
 
 - Event loops, timers and sockets can now be used in wxBase, without GUI.
 
@@ -312,7 +313,7 @@ All:
   Linnakangas).
 - wxVariant::Unshare allows exclusive allocation of data that must be shared,
   if the wxVariantData::Clone function is implemented.
-- Added wxWeakRef<T>, wxScopedPtr<T>, wxSharedPtr<T> class templates
+- Added wxWeakRef<T>, wxScopedPtr<T>, wxScopedArray<T>, wxSharedPtr<T> templates.
 - Added wxVector<T> class templates
 - Added wxON_BLOCK_EXIT_SET() and wxON_BLOCK_EXIT_NULL() to wx/scopeguard.h.
 - Added wxEvtHandler::QueueEvent() replacing AddPendingEvent() and
@@ -328,6 +329,7 @@ All:
 - Added wxSHUTDOWN_LOGOFF and wxSHUTDOWN_FORCE wxShutdown() flags (troelsk).
 - Added wxSocket::ShutdownOutput().
 - Handle exceptions thrown from overridden wxView::OnCreate() gracefully.
+- Added wxPATH_RMDIR_FULL/RECURSIVE wxFileName::Rmdir() flags (Marcin Malich).
 - Added wxStandardPaths::GetAppDocumentsDir().
 
 All (Unix):

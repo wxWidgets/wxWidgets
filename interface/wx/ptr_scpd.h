@@ -291,7 +291,10 @@ public:
 /**
 
     A scoped pointer template class.
+
     It is the template version of the old-style @ref wxScopedPtr "scoped pointer macros".
+
+    Notice that objects of this class intentionally cannot be copied.
 
     @library{wxbase}
     @category{smartpointers}
@@ -303,12 +306,15 @@ class wxScopedPtr<T>
 {
 public:
     /**
-        Constructor.
+        Constructor takes ownership of the pointer.
+
+        @param ptr
+            Pointer allocated with @c new or @NULL.
     */
     wxScopedPtr(T* ptr = NULL);
 
     /**
-        Destructor.
+        Destructor deletes the pointer.
     */
     ~wxScopedPtr();
 
@@ -319,7 +325,7 @@ public:
 
     /**
         Conversion to a boolean expression (in a variant which is not
-        convertable to anything but a boolean expression).
+        convertible to anything but a boolean expression).
 
         If this class contains a valid pointer it will return @true, if it contains
         a @NULL pointer it will return @false.
@@ -362,3 +368,76 @@ public:
     void swap(wxScopedPtr<T>& ot);
 };
 
+/**
+    A scoped array template class.
+
+    This class is similar to boost scoped_array class:
+    http://www.boost.org/doc/libs/1_37_0/libs/smart_ptr/scoped_array.htm
+
+    Notice that objects of this class intentionally cannot be copied.
+
+    @library{wxbase}
+    @category{smartpointers}
+ */
+template <class T>
+class wxScopedArray
+{
+public:
+    /// The type of the array elements.
+    typedef T element_type;
+
+    /**
+        Constructor takes ownership of the given array.
+
+        If @a array is @NULL, reset() must presumably be called later.
+
+        @param array
+            An array allocated using @c new[] or @NULL.
+     */
+    explicit wxScopedArray(T * array = NULL);
+
+    /// Destructor destroy the array.
+    ~wxScopedArray();
+
+    /**
+        Conversion to a boolean expression (in a variant which is not
+        convertible to anything but a boolean expression).
+
+        If this class contains a valid array it will return @true, if it contains
+        a @NULL pointer it will return @false.
+    */
+    operator unspecified_bool_type() const;
+
+    /**
+        Change the array pointer stored.
+
+        The previously stored array is deleted.
+
+        @param array
+            An array allocated using @c new[] or @NULL.
+     */
+    void reset(T *array = NULL);
+
+    /**
+        Return the n-th element of the array.
+
+        Must not be called if the array has no valid pointer.
+     */
+    T& operator[](size_t n) const;
+
+    /**
+        Return the array pointer.
+
+        The returned pointer may be @NULL. It must not be deleted by the
+        caller, call @c reset(NULL) instead.
+     */
+    T *get() const { return m_array; }
+
+    /// Swaps the contents of this array with another one.
+    void swap(wxScopedArray &other)
+    {
+        T * const tmp = other.m_array;
+        other.m_array = m_array;
+        m_array = tmp;
+    }
+};

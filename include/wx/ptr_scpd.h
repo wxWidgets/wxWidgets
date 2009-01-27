@@ -2,10 +2,11 @@
 // Name:        wx/ptr_scpd.h
 // Purpose:     scoped smart pointer class
 // Author:      Jesse Lovelace <jllovela@eos.ncsu.edu>
-// Modified by:
+// Modified by: Vadim Zeitlin to add template wxScopedArray
 // Created:     06/01/02
 // RCS-ID:      $Id$
 // Copyright:   (c) Jesse Lovelace and original Boost authors (see below)
+//              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -31,30 +32,19 @@
 #include "wx/defs.h"
 
 // ----------------------------------------------------------------------------
-// wxScopedPtr: A scoped pointer 
+// wxScopedPtr: A scoped pointer
 // ----------------------------------------------------------------------------
 
-template <class T> 
+template <class T>
 class wxScopedPtr
-{                                   
-private:                            
-    T * m_ptr;                      
-                                    
-    wxScopedPtr(wxScopedPtr const &);             
-    wxScopedPtr & operator=(wxScopedPtr const &); 
-                                    
-public:                             
+{
+public:
     typedef T element_type;
-    
-    wxEXPLICIT wxScopedPtr(T * ptr = NULL) 
-    : m_ptr(ptr) { }                
-                                    
-    ~wxScopedPtr()
-    {
-       if (m_ptr)
-           delete m_ptr;
-    }
-                                    
+
+    wxEXPLICIT wxScopedPtr(T * ptr = NULL) : m_ptr(ptr) { }
+
+    ~wxScopedPtr() { delete m_ptr; }
+
     // test for pointer validity: defining conversion to unspecified_bool_type
     // and not more obvious bool to avoid implicit conversions to integer types
     typedef T *(wxScopedPtr<T>::*unspecified_bool_type)() const;
@@ -63,45 +53,98 @@ public:
         return m_ptr ? &wxScopedPtr<T>::get : NULL;
     }
 
-    void reset(T * ptr = NULL)      
-    {                               
-        if (m_ptr != ptr)           
-        {                           
-            delete m_ptr;           
-            m_ptr = ptr;            
-        }                           
-    }                               
-                                    
-    T *release()                    
-    {                               
-        T *ptr = m_ptr;             
-        m_ptr = NULL;               
-        return ptr;                 
-    }                               
-                                    
-    T & operator*() const           
-    {                               
-        wxASSERT(m_ptr != NULL);    
-        return *m_ptr;              
-    }                               
-                                    
-    T * operator->() const          
-    {                               
-        wxASSERT(m_ptr != NULL);    
-        return m_ptr;               
-    }                               
-                                    
-    T * get() const                 
-    {                               
-        return m_ptr;               
-    }                               
-                                    
-    void swap(wxScopedPtr & ot)            
-    {                               
-        T * tmp = ot.m_ptr;         
-        ot.m_ptr = m_ptr;           
-        m_ptr = tmp;                
-    }                               
+    void reset(T * ptr = NULL)
+    {
+        if ( ptr != m_ptr )
+        {
+            delete m_ptr;
+            m_ptr = ptr;
+        }
+    }
+
+    T *release()
+    {
+        T *ptr = m_ptr;
+        m_ptr = NULL;
+        return ptr;
+    }
+
+    T & operator*() const
+    {
+        wxASSERT(m_ptr != NULL);
+        return *m_ptr;
+    }
+
+    T * operator->() const
+    {
+        wxASSERT(m_ptr != NULL);
+        return m_ptr;
+    }
+
+    T * get() const
+    {
+        return m_ptr;
+    }
+
+    void swap(wxScopedPtr& other)
+    {
+        T * const tmp = other.m_ptr;
+        other.m_ptr = m_ptr;
+        m_ptr = tmp;
+    }
+
+private:
+    T * m_ptr;
+
+    DECLARE_NO_COPY_TEMPLATE_CLASS(wxScopedPtr, T)
+};
+
+// ----------------------------------------------------------------------------
+// wxScopedArray: A scoped array
+// ----------------------------------------------------------------------------
+
+template <class T>
+class wxScopedArray
+{
+public:
+    typedef T element_type;
+
+    wxEXPLICIT wxScopedArray(T * array = NULL) : m_array(array) { }
+
+    ~wxScopedArray() { delete [] m_array; }
+
+    // test for pointer validity: defining conversion to unspecified_bool_type
+    // and not more obvious bool to avoid implicit conversions to integer types
+    typedef T *(wxScopedArray<T>::*unspecified_bool_type)() const;
+    operator unspecified_bool_type() const
+    {
+        return m_array ? &wxScopedArray<T>::get : NULL;
+    }
+
+    void reset(T *array = NULL)
+    {
+        if ( array != m_array )
+        {
+            delete m_array;
+            m_array = array;
+        }
+    }
+
+    T& operator[](size_t n) const { return m_array[n]; }
+
+    T *get() const { return m_array; }
+
+    void swap(wxScopedArray &other)
+    {
+        T * const tmp = other.m_array;
+        other.m_array = m_array;
+        m_array = tmp;
+    }
+
+private:
+    T *m_array;
+
+    DECLARE_NO_COPY_TEMPLATE_CLASS(wxScopedArray, T)
 };
 
 // ----------------------------------------------------------------------------
