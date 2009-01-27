@@ -46,6 +46,11 @@
 
 #include "listtest.h"
 
+
+// ----------------------------------------------------------------------------
+// Constants and globals
+// ----------------------------------------------------------------------------
+
 const wxChar *SMALL_VIRTUAL_VIEW_ITEMS[][2] =
 {
     { _T("Cat"), _T("meow") },
@@ -60,6 +65,52 @@ const wxChar *SMALL_VIRTUAL_VIEW_ITEMS[][2] =
     { _T("Sheep"), _T("baaah") },
 };
 
+// number of items in list/report view
+static const int NUM_ITEMS = 10;
+
+// number of items in icon/small icon view
+static const int NUM_ICONS = 9;
+
+int wxCALLBACK MyCompareFunction(long item1, long item2, long WXUNUSED(sortData))
+{
+    // inverse the order
+    if (item1 < item2)
+        return -1;
+    if (item1 > item2)
+        return 1;
+
+    return 0;
+}
+
+
+// ----------------------------------------------------------------------------
+// MyApp
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_APP(MyApp)
+
+// `Main program' equivalent, creating windows and returning main app frame
+bool MyApp::OnInit()
+{
+  if ( !wxApp::OnInit() )
+      return false;
+
+  // Create the main frame window
+  MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"));
+
+  // Show the frame
+  frame->Show(true);
+
+  SetTopWindow(frame);
+
+  return true;
+}
+
+
+
+// ----------------------------------------------------------------------------
+// MyFrame
+// ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_SIZE(MyFrame::OnSize)
@@ -103,71 +154,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
 END_EVENT_TABLE()
-
-BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
-    EVT_LIST_BEGIN_DRAG(LIST_CTRL, MyListCtrl::OnBeginDrag)
-    EVT_LIST_BEGIN_RDRAG(LIST_CTRL, MyListCtrl::OnBeginRDrag)
-    EVT_LIST_BEGIN_LABEL_EDIT(LIST_CTRL, MyListCtrl::OnBeginLabelEdit)
-    EVT_LIST_END_LABEL_EDIT(LIST_CTRL, MyListCtrl::OnEndLabelEdit)
-    EVT_LIST_DELETE_ITEM(LIST_CTRL, MyListCtrl::OnDeleteItem)
-    EVT_LIST_DELETE_ALL_ITEMS(LIST_CTRL, MyListCtrl::OnDeleteAllItems)
-    EVT_LIST_ITEM_SELECTED(LIST_CTRL, MyListCtrl::OnSelected)
-    EVT_LIST_ITEM_DESELECTED(LIST_CTRL, MyListCtrl::OnDeselected)
-    EVT_LIST_KEY_DOWN(LIST_CTRL, MyListCtrl::OnListKeyDown)
-    EVT_LIST_ITEM_ACTIVATED(LIST_CTRL, MyListCtrl::OnActivated)
-    EVT_LIST_ITEM_FOCUSED(LIST_CTRL, MyListCtrl::OnFocused)
-
-    EVT_LIST_COL_CLICK(LIST_CTRL, MyListCtrl::OnColClick)
-    EVT_LIST_COL_RIGHT_CLICK(LIST_CTRL, MyListCtrl::OnColRightClick)
-    EVT_LIST_COL_BEGIN_DRAG(LIST_CTRL, MyListCtrl::OnColBeginDrag)
-    EVT_LIST_COL_DRAGGING(LIST_CTRL, MyListCtrl::OnColDragging)
-    EVT_LIST_COL_END_DRAG(LIST_CTRL, MyListCtrl::OnColEndDrag)
-
-    EVT_LIST_CACHE_HINT(LIST_CTRL, MyListCtrl::OnCacheHint)
-
-#if USE_CONTEXT_MENU
-    EVT_CONTEXT_MENU(MyListCtrl::OnContextMenu)
-#endif
-    EVT_CHAR(MyListCtrl::OnChar)
-
-    EVT_RIGHT_DOWN(MyListCtrl::OnRightClick)
-END_EVENT_TABLE()
-
-IMPLEMENT_APP(MyApp)
-
-// number of items in list/report view
-static const int NUM_ITEMS = 10;
-
-// number of items in icon/small icon view
-static const int NUM_ICONS = 9;
-
-int wxCALLBACK MyCompareFunction(long item1, long item2, long WXUNUSED(sortData))
-{
-    // inverse the order
-    if (item1 < item2)
-        return -1;
-    if (item1 > item2)
-        return 1;
-
-    return 0;
-}
-
-// `Main program' equivalent, creating windows and returning main app frame
-bool MyApp::OnInit()
-{
-  if ( !wxApp::OnInit() )
-      return false;
-
-  // Create the main frame window
-  MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"));
-
-  // Show the frame
-  frame->Show(true);
-
-  SetTopWindow(frame);
-
-  return true;
-}
 
 // My frame constructor
 MyFrame::MyFrame(const wxChar *title)
@@ -279,15 +265,15 @@ MyFrame::MyFrame(const wxChar *title)
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logWindow));
 
     RecreateList(wxLC_REPORT | wxLC_SINGLE_SEL);
-    
+
     // Also add a simple list to the sample
-   
-    m_simpleListCtrl = new wxListCtrl( m_panel, -1, wxDefaultPosition, wxDefaultSize, 
+
+    m_simpleListCtrl = new wxListCtrl( m_panel, -1, wxDefaultPosition, wxDefaultSize,
                                        wxLC_REPORT | wxLC_SINGLE_SEL );
     m_simpleListCtrl->InsertColumn(0, "Column 1", wxLIST_FORMAT_LEFT, 80);
     m_simpleListCtrl->InsertColumn(1, "Column 2", wxLIST_FORMAT_LEFT, 100);
     m_simpleListCtrl->InsertColumn(2, "Column 3", wxLIST_FORMAT_LEFT, 100);
-    
+
     for ( int i = 0; i < NUM_ITEMS; i++ )
     {
         wxString buf;
@@ -298,7 +284,7 @@ MyFrame::MyFrame(const wxChar *title)
         buf.Printf(_T("Col 2, item %d"), i);
         m_simpleListCtrl->SetItem(tmp, 2, buf);
     }
-    
+
 #if wxUSE_STATUSBAR
     CreateStatusBar();
 #endif // wxUSE_STATUSBAR
@@ -836,7 +822,39 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
                                             sw.Time()));
 }
 
+
+// ----------------------------------------------------------------------------
 // MyListCtrl
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(MyListCtrl, wxListCtrl)
+    EVT_LIST_BEGIN_DRAG(LIST_CTRL, MyListCtrl::OnBeginDrag)
+    EVT_LIST_BEGIN_RDRAG(LIST_CTRL, MyListCtrl::OnBeginRDrag)
+    EVT_LIST_BEGIN_LABEL_EDIT(LIST_CTRL, MyListCtrl::OnBeginLabelEdit)
+    EVT_LIST_END_LABEL_EDIT(LIST_CTRL, MyListCtrl::OnEndLabelEdit)
+    EVT_LIST_DELETE_ITEM(LIST_CTRL, MyListCtrl::OnDeleteItem)
+    EVT_LIST_DELETE_ALL_ITEMS(LIST_CTRL, MyListCtrl::OnDeleteAllItems)
+    EVT_LIST_ITEM_SELECTED(LIST_CTRL, MyListCtrl::OnSelected)
+    EVT_LIST_ITEM_DESELECTED(LIST_CTRL, MyListCtrl::OnDeselected)
+    EVT_LIST_KEY_DOWN(LIST_CTRL, MyListCtrl::OnListKeyDown)
+    EVT_LIST_ITEM_ACTIVATED(LIST_CTRL, MyListCtrl::OnActivated)
+    EVT_LIST_ITEM_FOCUSED(LIST_CTRL, MyListCtrl::OnFocused)
+
+    EVT_LIST_COL_CLICK(LIST_CTRL, MyListCtrl::OnColClick)
+    EVT_LIST_COL_RIGHT_CLICK(LIST_CTRL, MyListCtrl::OnColRightClick)
+    EVT_LIST_COL_BEGIN_DRAG(LIST_CTRL, MyListCtrl::OnColBeginDrag)
+    EVT_LIST_COL_DRAGGING(LIST_CTRL, MyListCtrl::OnColDragging)
+    EVT_LIST_COL_END_DRAG(LIST_CTRL, MyListCtrl::OnColEndDrag)
+
+    EVT_LIST_CACHE_HINT(LIST_CTRL, MyListCtrl::OnCacheHint)
+
+#if USE_CONTEXT_MENU
+    EVT_CONTEXT_MENU(MyListCtrl::OnContextMenu)
+#endif
+    EVT_CHAR(MyListCtrl::OnChar)
+
+    EVT_RIGHT_DOWN(MyListCtrl::OnRightClick)
+END_EVENT_TABLE()
 
 void MyListCtrl::OnCacheHint(wxListEvent& event)
 {
@@ -947,8 +965,8 @@ void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
 {
     wxLogMessage( wxT("OnEndLabelEdit: %s"),
         (
-            event.IsEditCancelled() ? 
-            wxString("[cancelled]") : 
+            event.IsEditCancelled() ?
+            wxString("[cancelled]") :
             event.m_item.m_text
         ).c_str()
     );
