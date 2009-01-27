@@ -4188,8 +4188,11 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
         wxGenericListCtrl* lc = GetListCtrl();
         wxCHECK_RET( lc, _T("no listctrl window?") );
 
-        lc->m_headerWin->Refresh();
-        lc->m_headerWin->Update();
+        if (lc->m_headerWin) // when we use wxLC_NO_HEADER, m_headerWin==NULL
+        {
+            lc->m_headerWin->Refresh();
+            lc->m_headerWin->Update();
+        }
     }
 }
 
@@ -4871,15 +4874,14 @@ long wxGenericListCtrl::InsertItem( long index, const wxString &label, int image
 
 long wxGenericListCtrl::InsertColumn( long col, wxListItem &item )
 {
-    wxCHECK_MSG( m_headerWin, -1, _T("can't add column in non report mode") );
+    wxCHECK_MSG( InReportView(), -1, _T("can't add column in non report mode") );
 
     m_mainWin->InsertColumn( col, item );
 
-    // if we hadn't had a header before but have one now
-    // then we need to relayout the window
-    // if ( GetColumnCount() == 1 && m_mainWin->HasHeader() )
-
-    m_headerWin->Refresh();
+    // NOTE: if wxLC_NO_HEADER was given, then we are in report view mode but
+    //       still have m_headerWin==NULL
+    if (m_headerWin)
+        m_headerWin->Refresh();
 
     return 0;
 }
