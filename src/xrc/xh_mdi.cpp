@@ -18,12 +18,12 @@
 #if wxUSE_XRC && wxUSE_MDI
 
 #include "wx/xrc/xh_mdi.h"
+#include "wx/mdi.h"
 
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/dialog.h" // to get wxDEFAULT_DIALOG_STYLE
-    #include "wx/mdi.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxMdiXmlHandler, wxXmlResourceHandler)

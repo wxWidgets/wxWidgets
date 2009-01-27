@@ -30,6 +30,7 @@
 #include "wx/aui/floatpane.h"
 #include "wx/aui/tabmdi.h"
 #include "wx/aui/auibar.h"
+#include "wx/mdi.h"
 
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
@@ -38,7 +39,6 @@
     #include "wx/dcclient.h"
     #include "wx/dcscreen.h"
     #include "wx/toolbar.h"
-    #include "wx/mdi.h"
     #include "wx/image.h"
 #endif
 
