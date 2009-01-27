@@ -890,8 +890,9 @@ bool wxFrame::HandleSize(int WXUNUSED(x), int WXUNUSED(y), WXUINT id)
     return false;
 }
 
-bool wxFrame::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
+bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
+#if wxUSE_MENUS
     // we only need to handle the menu and accelerator commands from the items
     // of our menu bar, base wxWindow class already handles the rest
     if ( !control && (cmd == 0 /* menu */ || cmd == 1 /* accel */) )
@@ -900,24 +901,23 @@ bool wxFrame::HandleCommand(WXWORD id_, WXWORD cmd, WXHWND control)
         if ( !wxCurrentPopupMenu )
 #endif // wxUSE_MENUS_NATIVE
         {
-            wxMenuBar * const mbar = GetMenuBar();
-            if ( mbar )
-            {
-                // sign extend to int from short before comparing with the
-                // other int ids
-                const int id = (signed short)id_;
-
-                wxMenuItem * const mitem = mbar->FindItem(id);
-                if ( mitem )
-                    return ProcessCommand(mitem);
-            }
+            wxMenuItem * const mitem = MSWFindMenuBarItem(id);
+            if ( mitem )
+                return ProcessCommand(mitem);
         }
     }
+#endif // wxUSE_MENUS
 
-    return wxFrameBase::HandleCommand(id_, cmd, control);;
+    return wxFrameBase::HandleCommand(id, cmd, control);;
 }
 
 #if wxUSE_MENUS
+
+wxMenuItem *wxFrame::MSWFindMenuBarItem(WXWORD id)
+{
+    wxMenuBar * const mbar = GetMenuBar();
+    return mbar ? mbar->FindItem((signed short)id) : NULL;
+}
 
 bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 {

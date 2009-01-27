@@ -15,6 +15,8 @@
 
 #include "wx/frame.h"
 
+class WXDLLIMPEXP_FWD_CORE wxAcceleratorTable;
+
 // ---------------------------------------------------------------------------
 // wxMDIParentFrame
 // ---------------------------------------------------------------------------
@@ -22,7 +24,7 @@
 class WXDLLIMPEXP_CORE wxMDIParentFrame : public wxMDIParentFrameBase
 {
 public:
-    wxMDIParentFrame();
+    wxMDIParentFrame() { }
     wxMDIParentFrame(wxWindow *parent,
                      wxWindowID id,
                      const wxString& title,
@@ -103,6 +105,7 @@ public:
 #if wxUSE_MENUS
     // override wxFrameBase function to also look in the active child menu bar
     virtual const wxMenuItem *FindItemInMenuBar(int menuId) const;
+    virtual wxMenuItem *MSWFindMenuBarItem(WXWORD id);
 #endif // wxUSE_MENUS
 
 protected:
@@ -115,12 +118,13 @@ protected:
     // set the size of the MDI client window to match the frame size
     void UpdateClientSize();
 
-
-    // true if MDI Frame is intercepting commands, not child
-    bool m_parentFrameActive;
-
 private:
 #if wxUSE_MENUS
+    // "Window" menu commands event handlers
+    void OnMDICommand(wxCommandEvent& event);
+    void OnMDIChild(wxCommandEvent& event);
+
+
     // add/remove window menu if we have it (i.e. m_windowMenu != NULL)
     void AddWindowMenu();
     void RemoveWindowMenu();
@@ -128,6 +132,10 @@ private:
     // update the window menu (if we have it) to enable or disable the commands
     // which only make sense when we have more than one child
     void UpdateWindowMenu(bool enable);
+
+#if wxUSE_ACCEL
+    wxAcceleratorTable *m_accelWindowMenu;
+#endif // wxUSE_ACCEL
 #endif // wxUSE_MENUS
 
     // return the number of child frames we currently have (maybe 0)
@@ -187,7 +195,6 @@ public:
     // Handlers
     bool HandleMDIActivate(long bActivate, WXHWND, WXHWND);
     bool HandleWindowPosChanging(void *lpPos);
-    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
     bool HandleGetMinMaxInfo(void *mmInfo);
 
     virtual WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);

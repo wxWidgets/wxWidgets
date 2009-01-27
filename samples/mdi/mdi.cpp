@@ -69,6 +69,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
     EVT_MENU(MDI_FULLSCREEN, MyFrame::OnFullScreen)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
 
+    EVT_MENU(wxID_CLOSE_ALL, MyFrame::OnCloseAll)
+
     EVT_CLOSE(MyFrame::OnClose)
 END_EVENT_TABLE()
 
@@ -150,12 +152,33 @@ MyFrame::MyFrame()
     // Associate the menu bar with the frame
     SetMenuBar(menu_bar);
 
-#if 0
-    // Experimental: change the window menu
-    wxMenu* windowMenu = new wxMenu;
-    windowMenu->Append(5000, "My menu item!");
-    frame->SetWindowMenu(windowMenu);
-#endif
+
+    // This shows that the standard window menu may be customized:
+    wxMenu * const windowMenu = GetWindowMenu();
+    if ( windowMenu )
+    {
+        // we can change the labels of standard items (which also means we can
+        // set up accelerators for them as they're part of the label)
+        windowMenu->SetLabel(wxID_MDI_WINDOW_TILE_HORZ,
+                             "&Tile horizontally\tCtrl-Shift-H");
+        windowMenu->SetLabel(wxID_MDI_WINDOW_TILE_VERT,
+                             "&Tile vertically\tCtrl-Shift-V");
+
+        // we can also change the help string
+        windowMenu->SetHelpString(wxID_MDI_WINDOW_CASCADE,
+                                  "Arrange windows in cascade");
+
+        // we can remove some items
+        windowMenu->Delete(wxID_MDI_WINDOW_ARRANGE_ICONS);
+
+        // and we can add completely custom commands -- but then we must handle
+        // them ourselves, see OnCloseAll()
+        windowMenu->AppendSeparator();
+        windowMenu->Append(wxID_CLOSE_ALL, "&Close all windows\tCtrl-Shift-C",
+                           "Close all open windows");
+
+        SetWindowMenu(windowMenu);
+    }
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
@@ -234,6 +257,17 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnFullScreen(wxCommandEvent& event)
 {
     ShowFullScreen(event.IsChecked());
+}
+
+void MyFrame::OnCloseAll(wxCommandEvent& WXUNUSED(event))
+{
+    for ( wxWindowList::const_iterator i = GetChildren().begin();
+          i != GetChildren().end();
+          ++i )
+    {
+        if ( wxDynamicCast(*i, wxMDIChildFrame) )
+            (*i)->Close();
+    }
 }
 
 void MyFrame::OnSize(wxSizeEvent& event)

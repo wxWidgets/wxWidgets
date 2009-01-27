@@ -107,6 +107,9 @@ public:
     // get the currently active menu: this is the same as the frame menu for
     // normal frames but is overridden by wxMDIParentFrame
     virtual WXHMENU MSWGetActiveMenu() const { return m_hMenu; }
+
+    // find the item in our menu bar: this is again a hook for MDI frames
+    virtual wxMenuItem *MSWFindMenuBarItem(WXWORD id);
 #endif // wxUSE_MENUS
 
 protected:

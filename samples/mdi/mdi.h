@@ -53,6 +53,8 @@ private:
     void OnNewWindow(wxCommandEvent& event);
     void OnFullScreen(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
+    void OnCloseAll(wxCommandEvent& event);
+
     void OnClose(wxCloseEvent& event);
 
     wxTextCtrl *m_textWindow;

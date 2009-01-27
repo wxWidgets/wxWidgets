@@ -310,6 +310,17 @@ public:
         window style but this function also allows to do it by passing @NULL
         pointer as @a menu.
 
+        The menu may include the items with the following standard identifiers
+        (but may use arbitrary text and help strings and bitmaps for them):
+            - @c wxID_MDI_WINDOW_CASCADE
+            - @c wxID_MDI_WINDOW_TILE_HORZ
+            - @c wxID_MDI_WINDOW_TILE_VERT
+            - @c wxID_MDI_WINDOW_ARRANGE_ICONS
+            - @c wxID_MDI_WINDOW_PREV
+            - @c wxID_MDI_WINDOW_NEXT
+        All of which are handled by wxMDIParentFrame itself. If any other
+        commands are used in the menu, the derived frame should handle them.
+
         This function is currently not available under OS X.
 
         @param menu

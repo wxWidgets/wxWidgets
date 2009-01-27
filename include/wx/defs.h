@@ -2002,6 +2002,16 @@ enum
     wxID_ICONIZE_FRAME,
     wxID_RESTORE_FRAME,
 
+    /* MDI window menu ids */
+    wxID_MDI_WINDOW_FIRST = 5230,
+    wxID_MDI_WINDOW_CASCADE = wxID_MDI_WINDOW_FIRST,
+    wxID_MDI_WINDOW_TILE_HORZ,
+    wxID_MDI_WINDOW_TILE_VERT,
+    wxID_MDI_WINDOW_ARRANGE_ICONS,
+    wxID_MDI_WINDOW_PREV,
+    wxID_MDI_WINDOW_NEXT,
+    wxID_MDI_WINDOW_LAST = wxID_MDI_WINDOW_NEXT,
+
     /*  IDs used by generic file dialog (13 consecutive starting from this value) */
     wxID_FILEDLGG = 5900,
 
