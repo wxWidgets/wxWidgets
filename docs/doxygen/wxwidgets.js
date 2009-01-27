@@ -66,14 +66,15 @@ window.onload = function myinitDynSections()
       header.style.cursor='pointer';
       header.onclick=mychangeDisplayState;
       header.id='dynheader'+sectionCounter;
-      button.src='closed.gif';
       section.id='dynsection'+sectionCounter;
 
       var display = getCookie( 'sectionDiv.style.display' );
-      if ( display == '' ){
+      if ( display == '' || display == 'block' ){
         section.style.display='block'; // default
+        button.src='open.gif';
       }else{
-        section.style.display=display;
+        section.style.display='none';
+        button.src='closed.gif';
       }
       setCookie( 'sectionDiv.style.display', section.style.display );
 
