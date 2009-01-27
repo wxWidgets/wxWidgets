@@ -20,11 +20,6 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxDropTarget;
 #endif
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-
 //-----------------------------------------------------------------------------
 // internal classes
 //-----------------------------------------------------------------------------
@@ -45,21 +40,21 @@ public:
     {
         Init();
     }
-    
+
     wxGenericListCtrl( wxWindow *parent,
                 wxWindowID winid = wxID_ANY,
                 const wxPoint &pos = wxDefaultPosition,
                 const wxSize &size = wxDefaultSize,
                 long style = wxLC_ICON,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = wxListCtrlNameStr) 
+                const wxString &name = wxListCtrlNameStr)
             : wxScrollHelper(this)
     {
         Create(parent, winid, pos, size, style, validator, name);
     }
-    
+
     virtual ~wxGenericListCtrl();
-    
+
     void Init();
 
     bool Create( wxWindow *parent,
@@ -281,7 +276,7 @@ public:
     : wxGenericListCtrl(parent, winid, pos, size, style, validator, name)
     {
     }
-    
+
 };
 #endif // !__WXMSW__ || __WXUNIVERSAL__
 
