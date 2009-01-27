@@ -4216,7 +4216,7 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
         size_t count = GetItemCount();
         if ( count )
         {
-            m_lineFrom = GetScrollPos(wxVERTICAL);
+            m_lineFrom = GetListCtrl()->GetScrollPos(wxVERTICAL);
 
             // this may happen if SetScrollbars() hadn't been called yet
             if ( m_lineFrom >= count )
