@@ -88,8 +88,11 @@ public:
     // menu can be NULL to disable the window menu completely
     virtual void SetWindowMenu(wxMenu *menu)
     {
-        delete m_windowMenu;
-        m_windowMenu = menu;
+        if ( menu != m_windowMenu )
+        {
+            delete m_windowMenu;
+            m_windowMenu = menu;
+        }
     }
 #endif // wxUSE_MENUS
 
