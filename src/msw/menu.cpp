@@ -39,6 +39,8 @@
     #include "wx/ownerdrw.h"
 #endif
 
+#include "wx/ptr_scpd.h"
+
 #include "wx/msw/private.h"
 #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
 
@@ -712,6 +714,15 @@ size_t wxMenu::CopyAccels(wxAcceleratorEntry *accels) const
     }
 
     return count;
+}
+
+wxAcceleratorTable *wxMenu::CreateAccelTable() const
+{
+    const size_t count = m_accels.size();
+    wxScopedArray<wxAcceleratorEntry> accels(new wxAcceleratorEntry[count]);
+    CopyAccels(accels.get());
+
+    return new wxAcceleratorTable(count, accels.get());
 }
 
 #endif // wxUSE_ACCEL

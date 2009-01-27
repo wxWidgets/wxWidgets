@@ -75,8 +75,8 @@ public:
 
 #if wxUSE_ACCEL
     // called by wxMenuBar to build its accel table from the accels of all menus
-    bool HasAccels() const { return !m_accels.IsEmpty(); }
-    size_t GetAccelCount() const { return m_accels.GetCount(); }
+    bool HasAccels() const { return !m_accels.empty(); }
+    size_t GetAccelCount() const { return m_accels.size(); }
     size_t CopyAccels(wxAcceleratorEntry *accels) const;
 
     // called by wxMenuItem when its accels changes
@@ -84,6 +84,11 @@ public:
 
     // helper used by wxMenu itself (returns the index in m_accels)
     int FindAccel(int id) const;
+
+    // used only by wxMDIParentFrame currently but could be useful elsewhere:
+    // returns a new accelerator table with accelerators for just this menu
+    // (shouldn't be called if we don't have any accelerators)
+    wxAcceleratorTable *CreateAccelTable() const;
 #endif // wxUSE_ACCEL
 
 protected:
