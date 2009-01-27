@@ -371,7 +371,7 @@ cd tests &amp;&amp;
 <xsl:template name="run-tests-unix">
 <normalize-space>
 cd tests &amp;&amp;
-./test &amp;&amp;
+./test --timing &amp;&amp;
 if [ -n "$DISPLAY" -a -x test_gui ]; then ./test_gui; fi
 </normalize-space>
 </xsl:template>
