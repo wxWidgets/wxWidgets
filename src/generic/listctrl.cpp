@@ -24,7 +24,6 @@
 #if wxUSE_LISTCTRL
 
 #include "wx/listctrl.h"
-#include "wx/generic/private/listctrl.h"
 
 #if ((!defined(__WXMSW__) && !(defined(__WXMAC__) && wxOSX_USE_CARBON)) || defined(__WXUNIVERSAL__))
     // if we have a native version, its implementation file does all this
@@ -49,6 +48,7 @@
 
 #include "wx/imaglist.h"
 #include "wx/renderer.h"
+#include "wx/generic/private/listctrl.h"
 
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
