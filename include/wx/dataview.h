@@ -713,8 +713,12 @@ public:
     virtual void HitTest( const wxPoint & point, wxDataViewItem &item, wxDataViewColumn* &column ) const = 0;
     virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const = 0;
 
-    virtual bool EnableDragSource( const wxDataFormat &format );
-    virtual bool EnableDropTarget( const wxDataFormat &format );
+#if wxUSE_DRAG_AND_DROP
+    virtual bool EnableDragSource(const wxDataFormat& WXUNUSED(format))
+        { return false; }
+    virtual bool EnableDropTarget(const wxDataFormat& WXUNUSED(format))
+        { return false; }
+#endif // wxUSE_DRAG_AND_DROP
 
 protected:
     virtual void DoSetExpanderColumn() = 0 ;
@@ -1026,17 +1030,17 @@ public:
     virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
     virtual bool AppendColumn( wxDataViewColumn *col );
 
-    wxDataViewColumn *AppendTextColumn( const wxString &label, 
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+    wxDataViewColumn *AppendTextColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumn *AppendToggleColumn( const wxString &label, 
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, 
+    wxDataViewColumn *AppendToggleColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumn *AppendProgressColumn( const wxString &label, 
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+    wxDataViewColumn *AppendProgressColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumn *AppendIconTextColumn( const wxString &label, 
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+    wxDataViewColumn *AppendIconTextColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
 
     void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL )
@@ -1051,7 +1055,7 @@ public:
         { GetStore()->DeleteAllItems(); }
 
     void SetValue( const wxVariant &value, unsigned int row, unsigned int col )
-        { GetStore()->SetValueByRow( value, row, col ); 
+        { GetStore()->SetValueByRow( value, row, col );
           GetStore()->RowValueChanged( row, col); }
     void GetValue( wxVariant &value, unsigned int row, unsigned int col )
         { GetStore()->GetValueByRow( value, row, col ); }

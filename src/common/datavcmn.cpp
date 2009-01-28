@@ -894,16 +894,6 @@ const wxDataViewModel* wxDataViewCtrlBase::GetModel() const
     return m_model;
 }
 
-bool wxDataViewCtrlBase::EnableDragSource( const wxDataFormat &WXUNUSED(format) )
-{
-    return false;
-}
-
-bool wxDataViewCtrlBase::EnableDropTarget( const wxDataFormat &WXUNUSED(format) )
-{
-    return false;
-}
-
 void wxDataViewCtrlBase::ExpandAncestors( const wxDataViewItem & item )
 {
     if (!m_model) return;
