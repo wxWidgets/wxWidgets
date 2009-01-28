@@ -45,10 +45,10 @@ public:
         Constructor.
 
         @param flags
-            A combination of the wxAcceleratorEntryFlags values, which
+            A combination of the ::wxAcceleratorEntryFlags values, which
             indicates which modifier keys are held down.
         @param keyCode
-            The keycode to be detected. See @ref page_keycodes for a full list of keycodes.
+            The keycode to be detected. See ::wxKeyCode for a full list of keycodes.
         @param cmd
             The menu or control command identifier (ID).
         @param item
@@ -86,10 +86,10 @@ public:
         Sets the accelerator entry parameters.
 
         @param flags
-            A combination of the wxAcceleratorEntryFlags values, which
+            A combination of the ::wxAcceleratorEntryFlags values, which
             indicates which modifier keys are held down.
         @param keyCode
-            The keycode to be detected. See @ref page_keycodes for a full list of keycodes.
+            The keycode to be detected. See ::wxKeyCode for a full list of keycodes.
         @param cmd
             The menu or control command identifier (ID).
         @param item
@@ -104,6 +104,7 @@ public:
 
     /**
         Returns a wxString for this accelerator.
+
         This function formats it using the @c "flags-keycode" format
         where @c flags maybe a hyphen-separed list of @c "shift|alt|ctrl".
     */

@@ -15,10 +15,11 @@
     information about the modifier keys which were pressed when the event
     occurred.
 
-    This class is implemented entirely inline in @<wx/keystate.h@> and thus has
+    This class is implemented entirely inline in @<wx/kbdstate.h@> and thus has
     no linking requirements.
 
     @category{misc}
+    @nolibrary
 
     @see wxKeyEvent, wxMouseState
  */
@@ -41,9 +42,9 @@ public:
         The return value is a combination of @c wxMOD_ALT, @c wxMOD_CONTROL,
         @c wxMOD_SHIFT and @c wxMOD_META bit masks. Additionally, @c wxMOD_NONE
         is defined as 0, i.e. corresponds to no modifiers (see HasModifiers())
-        and @c wxMOD_CMD is either @c wxMOD_CONTROL (MSW and Unix) or @c
-        wxMOD_META (Mac), see CmdDown(). See @ref page_keymodifiers for the
-        full list of modifiers.
+        and @c wxMOD_CMD is either @c wxMOD_CONTROL (MSW and Unix) or
+        @c wxMOD_META (Mac), see CmdDown().
+        See ::wxKeyModifier for the full list of modifiers.
 
         Notice that this function is easier to use correctly than, for example,
         ControlDown() because when using the latter you also have to remember to

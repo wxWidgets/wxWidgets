@@ -171,7 +171,6 @@ public:
     */
     virtual int GetSelections(wxArrayInt& selections) const;
 
-    //@{
     /**
         Returns the item located at @a point, or @c wxNOT_FOUND if there
         is no item located at @a point.
@@ -187,8 +186,11 @@ public:
         @since 2.7.0
     */
     int HitTest(const wxPoint& point) const;
+
+    /**
+        @overload
+    */
     int HitTest(int x, int y) const;
-    //@}
 
     /**
         Insert the given number of strings before the specified position.

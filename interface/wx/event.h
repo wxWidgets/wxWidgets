@@ -748,7 +748,7 @@ public:
     Both key events provide untranslated key codes while the char event carries
     the translated one. The untranslated code for alphanumeric keys is always
     an upper case value. For the other keys it is one of @c WXK_XXX values
-    from the @ref page_keycodes.
+    from the ::wxKeyCode enumeration.
     The translated key is, in general, the character the user expects to appear
     as the result of the key combination when typing the text into a text entry
     zone, for example.
@@ -818,7 +818,7 @@ public:
     /**
         Returns the virtual key code. ASCII events return normal ASCII values,
         while non-ASCII events return values such as @b WXK_LEFT for the left cursor
-        key. See @ref page_keycodes for a full list of the virtual key codes.
+        key. See ::wxKeyCode for a full list of the virtual key codes.
 
         Note that in Unicode build, the returned value is meaningful only if the
         user entered a character that can be represented in current locale's default
