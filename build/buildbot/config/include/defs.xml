@@ -356,6 +356,39 @@
 </xsl:template>
 
 <!--
+    run-tests-with-timing - build step to run the test suites with extra timing
+    option.
+
+    Usage: as <test>
+
+    Typically just:
+        <run-tests-with-timing/>
+-->
+<xsl:template name="run-tests-with-timing">
+    <xsl:param name="content"/>
+    <xsl:param name="msw"><is-msw/></xsl:param>
+    <test>
+        <defaults content="{$content}">
+            <description>running tests with timing</description>
+            <descriptionDone>run tests with timing</descriptionDone>
+            <warnOnFailure/>
+        </defaults>
+        <copy-with-defaults content="{$content}">
+            <command>
+                <xsl:choose>
+                    <xsl:when test="$msw = 'true'">
+                        <run-tests-with-timing-win/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <run-tests-with-timing-unix/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </command>
+        </copy-with-defaults>
+    </test>
+</xsl:template>
+
+<!--
     We need to add something to the wxWidgets sources to run the tests with a
     simple command so that these aren't necessary.
 -->
@@ -371,7 +404,24 @@ cd tests &amp;&amp;
 <xsl:template name="run-tests-unix">
 <normalize-space>
 cd tests &amp;&amp;
-./test --timing &amp;&amp;
+./test &amp;&amp;
+if [ -n "$DISPLAY" -a -x test_gui ]; then ./test_gui; fi
+</normalize-space>
+</xsl:template>
+
+<xsl:template name="run-tests-with-timing-win">
+<normalize-space>
+cd tests &amp;&amp;
+(for /d %x in (..\lib\*_dll) do @PATH=%x;%PATH%) &amp;&amp;
+(for /d %x in (*) do @if exist %x\test.exe %x\test -t) &amp;&amp;
+(for /d %x in (*) do @if exist %x\test_gui.exe %x\test_gui -t)
+</normalize-space>
+</xsl:template>
+
+<xsl:template name="run-tests-with-timing-unix">
+<normalize-space>
+cd tests &amp;&amp;
+./test -t &amp;&amp;
 if [ -n "$DISPLAY" -a -x test_gui ]; then ./test_gui; fi
 </normalize-space>
 </xsl:template>

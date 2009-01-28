@@ -28,7 +28,7 @@
             <checkout/>
             <configure options="--with-gtk --disable-debug --enable-stl --enable-std_iostreams --enable-std_string --disable-compat28"/>
             <compile-all/>
-            <run-tests/>
+            <run-tests-with-timing/>
         </steps>
     </build>
 
