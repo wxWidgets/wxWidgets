@@ -8,675 +8,6 @@
 
 
 /**
-    A generic orientation value.
-*/
-enum wxOrientation
-{
-    /* don't change the values of these elements, they are used elsewhere */
-    wxHORIZONTAL              = 0x0004,
-    wxVERTICAL                = 0x0008,
-
-    wxBOTH                    = wxVERTICAL | wxHORIZONTAL,
-
-    /*  a mask to extract orientation from the combination of flags */
-    wxORIENTATION_MASK        = wxBOTH
-};
-
-
-/**
-    @class wxStdDialogButtonSizer
-
-    This class creates button layouts which conform to the standard button spacing
-    and ordering defined by the platform or toolkit's user interface guidelines
-    (if such things exist). By using this class, you can ensure that all your
-    standard dialogs look correct on all major platforms. Currently it conforms to
-    the Windows, GTK+ and Mac OS X human interface guidelines.
-
-    When there aren't interface guidelines defined for a particular platform or
-    toolkit, wxStdDialogButtonSizer reverts to the Windows implementation.
-
-    To use this class, first add buttons to the sizer by calling
-    wxStdDialogButtonSizer::AddButton (or wxStdDialogButtonSizer::SetAffirmativeButton,
-    wxStdDialogButtonSizer::SetNegativeButton or wxStdDialogButtonSizer::SetCancelButton)
-    and then call Realize in order to create the actual button layout used.
-    Other than these special operations, this sizer works like any other sizer.
-
-    If you add a button with wxID_SAVE, on Mac OS X the button will be renamed to
-    "Save" and the wxID_NO button will be renamed to "Don't Save" in accordance
-    with the Mac OS X Human Interface Guidelines.
-
-    @library{wxcore}
-    @category{winlayout}
-
-    @see wxSizer, @ref overview_sizer, wxDialog::CreateButtonSizer
-*/
-class wxStdDialogButtonSizer : public wxBoxSizer
-{
-public:
-    /**
-        Constructor for a wxStdDialogButtonSizer.
-    */
-    wxStdDialogButtonSizer();
-
-    /**
-        Adds a button to the wxStdDialogButtonSizer. The @a button must have
-        one of the following identifiers:
-         - wxID_OK
-         - wxID_YES
-         - wxID_SAVE
-         - wxID_APPLY
-         - wxID_CLOSE
-         - wxID_NO
-         - wxID_CANCEL
-         - wxID_HELP
-         - wxID_CONTEXT_HELP
-    */
-    void AddButton(wxButton* button);
-
-    /**
-        Rearranges the buttons and applies proper spacing between buttons to make
-        them match the platform or toolkit's interface guidelines.
-    */
-    void Realize();
-
-    /**
-        Sets the affirmative button for the sizer.
-
-        This allows you to use identifiers other than the standard identifiers
-        outlined above.
-    */
-    void SetAffirmativeButton(wxButton* button);
-
-    /**
-        Sets the cancel button for the sizer.
-
-        This allows you to use identifiers other than the standard identifiers
-        outlined above.
-    */
-    void SetCancelButton(wxButton* button);
-
-    /**
-        Sets the negative button for the sizer.
-
-        This allows you to use identifiers other than the standard identifiers
-        outlined above.
-    */
-    void SetNegativeButton(wxButton* button);
-};
-
-
-
-/**
-    @class wxSizerItem
-
-    The wxSizerItem class is used to track the position, size and other
-    attributes of each item managed by a wxSizer.
-
-    It is not usually necessary to use this class because the sizer elements can
-    also be identified by their positions or window or sizer pointers but sometimes
-    it may be more convenient to use it directly.
-
-    @library{wxcore}
-    @category{winlayout}
-*/
-class wxSizerItem : public wxObject
-{
-public:
-    /**
-        Construct a sizer item for tracking a spacer.
-    */
-    wxSizerItem(int width, int height, int proportion, int flag,
-                int border, wxObject* userData);
-
-    //@{
-    /**
-        Construct a sizer item for tracking a window.
-    */
-    wxSizerItem(wxWindow* window, const wxSizerFlags& flags);
-    wxSizerItem(wxWindow* window, int proportion, int flag,
-                int border,
-                wxObject* userData);
-    //@}
-
-    //@{
-    /**
-        Construct a sizer item for tracking a subsizer.
-    */
-    wxSizerItem(wxSizer* window, const wxSizerFlags& flags);
-    wxSizerItem(wxSizer* sizer, int proportion, int flag,
-                int border,
-                wxObject* userData);
-    //@}
-
-    /**
-        Deletes the user data and subsizer, if any.
-    */
-    virtual ~wxSizerItem();
-
-    /**
-        Calculates the minimum desired size for the item, including any space
-        needed by borders.
-    */
-    virtual wxSize CalcMin();
-
-    /**
-        Destroy the window or the windows in a subsizer, depending on the type
-        of item.
-    */
-    virtual void DeleteWindows();
-
-    /**
-        Enable deleting the SizerItem without destroying the contained sizer.
-    */
-    void DetachSizer();
-
-    /**
-        Return the border attribute.
-    */
-    int GetBorder() const;
-
-    /**
-        Return the flags attribute.
-
-        See @ref wxsizer_flags "wxSizer flags list" for details.
-    */
-    int GetFlag() const;
-
-    /**
-        Return the numeric id of wxSizerItem, or @c wxID_NONE if the id has
-        not been set.
-    */
-    int GetId() const;
-
-    /**
-        Get the minimum size needed for the item.
-    */
-    wxSize GetMinSize() const;
-
-    /**
-        Sets the minimum size to be allocated for this item.
-
-        If this item is a window, the @a size is also passed to
-        wxWindow::SetMinSize().
-     */
-    void SetMinSize(const wxSize& size);
-
-    /**
-        @overload
-     */
-    void SetMinSize(int x, int y);
-
-    /**
-        What is the current position of the item, as set in the last Layout.
-    */
-    wxPoint GetPosition() const;
-
-    /**
-        Get the proportion item attribute.
-    */
-    int GetProportion() const;
-
-    /**
-        Get the ration item attribute.
-    */
-    float GetRatio() const;
-
-    /**
-        Get the rectangle of the item on the parent window, excluding borders.
-    */
-    virtual wxRect GetRect();
-
-    /**
-        Get the current size of the item, as set in the last Layout.
-    */
-    virtual wxSize GetSize() const;
-
-    /**
-        If this item is tracking a sizer, return it.  @NULL otherwise.
-    */
-    wxSizer* GetSizer() const;
-
-    /**
-        If this item is tracking a spacer, return its size.
-    */
-    wxSize GetSpacer() const;
-
-    /**
-        Get the userData item attribute.
-    */
-    wxObject* GetUserData() const;
-
-    /**
-        If this item is tracking a window then return it. @NULL otherwise.
-    */
-    wxWindow* GetWindow() const;
-
-    /**
-        Returns @true if this item is a window or a spacer and it is shown or
-        if this item is a sizer and not all of its elements are hidden.
-
-        In other words, for sizer items, all of the child elements must be
-        hidden for the sizer itself to be considered hidden.
-
-        As an exception, if the @c wxRESERVE_SPACE_EVEN_IF_HIDDEN flag was
-        used for this sizer item, then IsShown() always returns @true for it
-        (see wxSizerFlags::ReserveSpaceEvenIfHidden()).
-    */
-    bool IsShown() const;
-
-    /**
-        Is this item a sizer?
-    */
-    bool IsSizer() const;
-
-    /**
-        Is this item a spacer?
-    */
-    bool IsSpacer() const;
-
-    /**
-        Is this item a window?
-    */
-    bool IsWindow() const;
-
-    /**
-        Set the border item attribute.
-    */
-    void SetBorder(int border);
-
-    /**
-        Set the position and size of the space allocated to the sizer, and
-        adjust the position and size of the item to be within that space
-        taking alignment and borders into account.
-    */
-    virtual void SetDimension(const wxPoint& pos, const wxSize& size);
-
-    /**
-        Set the flag item attribute.
-    */
-    void SetFlag(int flag);
-
-    /**
-        Sets the numeric id of the wxSizerItem to @e id.
-    */
-    void SetId(int id);
-
-    /**
-        @todo docme.
-    */
-    void SetInitSize(int x, int y);
-
-    /**
-        Set the proportion item attribute.
-    */
-    void SetProportion(int proportion);
-
-    //@{
-    /**
-        Set the ratio item attribute.
-    */
-    void SetRatio(int width, int height);
-    void SetRatio(wxSize size);
-    void SetRatio(float ratio);
-    //@}
-
-    /**
-        Set the sizer tracked by this item.
-        @deprecated @todo provide deprecation description
-    */
-    void SetSizer(wxSizer* sizer);
-
-    /**
-        Set the size of the spacer tracked by this item.
-        @deprecated @todo provide deprecation description
-    */
-    void SetSpacer(const wxSize& size);
-
-    /**
-        Set the window to be tracked by this item.
-        @deprecated @todo provide deprecation description
-    */
-    void SetWindow(wxWindow* window);
-
-    /**
-        Set the show item attribute, which sizers use to determine if the item
-        is to be made part of the layout or not. If the item is tracking a
-        window then it is shown or hidden as needed.
-    */
-    void Show(bool show);
-};
-
-
-
-/**
-    @class wxSizerFlags
-
-    Container for sizer items flags providing readable names for them.
-
-    Normally, when you add an item to a sizer via wxSizer::Add, you have to
-    specify a lot of flags and parameters which can be unwieldy. This is where
-    wxSizerFlags comes in: it allows you to specify all parameters using the
-    named methods instead. For example, instead of
-
-    @code
-    sizer->Add(ctrl, 0, wxEXPAND | wxALL, 10);
-    @endcode
-
-    you can now write
-
-    @code
-    sizer->Add(ctrl, wxSizerFlags().Expand().Border(wxALL, 10));
-    @endcode
-
-    This is more readable and also allows you to create wxSizerFlags objects which
-    can be reused for several sizer items.
-
-    @code
-    wxSizerFlags flagsExpand(1);
-        flagsExpand.Expand().Border(wxALL, 10);
-
-        sizer->Add(ctrl1, flagsExpand);
-        sizer->Add(ctrl2, flagsExpand);
-    @endcode
-
-    Note that by specification, all methods of wxSizerFlags return the wxSizerFlags
-    object itself to allowing chaining multiple methods calls like in the examples
-    above.
-
-    @library{wxcore}
-    @category{winlayout}
-
-    @see wxSizer
-*/
-class wxSizerFlags
-{
-public:
-    /**
-        Creates the wxSizer with the proportion specified by @a proportion.
-    */
-    wxSizerFlags(int proportion = 0);
-
-    /**
-        Sets the alignment of this wxSizerFlags to @a align.
-
-        This method replaces the previously set alignment with the specified one.
-
-        @param alignment
-            Combination of @c wxALIGN_XXX bit masks.
-
-        @see Top(), Left(), Right(), Bottom(), Centre()
-    */
-    wxSizerFlags& Align(int alignment);
-
-    /**
-        Sets the wxSizerFlags to have a border of a number of pixels specified
-        by @a borderinpixels with the directions specified by @a direction.
-    */
-    wxSizerFlags& Border(int direction, int borderinpixels);
-
-    /**
-        Sets the wxSizerFlags to have a border with size as returned by
-        GetDefaultBorder().
-
-        @param direction
-            Direction(s) to apply the border in.
-    */
-    wxSizerFlags& Border(int direction = wxALL);
-
-    /**
-        Aligns the object to the bottom, similar for @c Align(wxALIGN_BOTTOM).
-
-        Unlike Align(), this method doesn't change the horizontal alignment of
-        the item.
-    */
-    wxSizerFlags& Bottom();
-
-    /**
-        Sets the object of the wxSizerFlags to center itself in the area it is
-        given.
-    */
-    wxSizerFlags& Center();
-
-    /**
-        Center() for people with the other dialect of English.
-    */
-    wxSizerFlags& Centre();
-
-    /**
-        Sets the border in the given @a direction having twice the default
-        border size.
-    */
-    wxSizerFlags& DoubleBorder(int direction = wxALL);
-
-    /**
-        Sets the border in left and right directions having twice the default
-        border size.
-    */
-    wxSizerFlags& DoubleHorzBorder();
-
-    /**
-        Sets the object of the wxSizerFlags to expand to fill as much area as
-        it can.
-    */
-    wxSizerFlags& Expand();
-
-    /**
-        Set the @c wxFIXED_MINSIZE flag which indicates that the initial size
-        of the window should be also set as its minimal size.
-    */
-    wxSizerFlags& FixedMinSize();
-
-    /**
-        Set the @c wxRESERVE_SPACE_EVEN_IF_HIDDEN flag. Normally wxSizers
-        don't allocate space for hidden windows or other items. This flag
-        overrides this behavior so that sufficient space is allocated for the
-        window even if it isn't visible. This makes it possible to dynamically
-        show and hide controls without resizing parent dialog, for example.
-
-        @since 2.8.8
-    */
-    wxSizerFlags& ReserveSpaceEvenIfHidden();
-
-    /**
-        Returns the border used by default in Border() method.
-    */
-    static int GetDefaultBorder();
-
-    /**
-        Aligns the object to the left, similar for @c Align(wxALIGN_LEFT).
-
-        Unlike Align(), this method doesn't change the vertical alignment of
-        the item.
-    */
-    wxSizerFlags& Left();
-
-    /**
-        Sets the proportion of this wxSizerFlags to @e proportion
-    */
-    wxSizerFlags& Proportion(int proportion);
-
-    /**
-        Aligns the object to the right, similar for @c Align(wxALIGN_RIGHT).
-
-        Unlike Align(), this method doesn't change the vertical alignment of
-        the item.
-    */
-    wxSizerFlags& Right();
-
-    /**
-        Set the @c wx_SHAPED flag which indicates that the elements should
-        always keep the fixed width to height ratio equal to its original value.
-    */
-    wxSizerFlags& Shaped();
-
-    /**
-        Aligns the object to the top, similar for @c Align(wxALIGN_TOP).
-
-        Unlike Align(), this method doesn't change the horizontal alignment of
-        the item.
-    */
-    wxSizerFlags& Top();
-
-    /**
-        Sets the border in the given @a direction having thrice the default
-        border size.
-    */
-    wxSizerFlags& TripleBorder(int direction = wxALL);
-};
-
-
-
-/**
-    @class wxFlexGridSizer
-
-    A flex grid sizer is a sizer which lays out its children in a two-dimensional
-    table with all table fields in one row having the same height and all fields
-    in one column having the same width, but all rows or all columns are not
-    necessarily the same height or width as in the wxGridSizer.
-
-    Since wxWidgets 2.5.0, wxFlexGridSizer can also size items equally in one
-    direction but unequally ("flexibly") in the other. If the sizer is only
-    flexible in one direction (this can be changed using wxFlexGridSizer::SetFlexibleDirection),
-    it needs to be decided how the sizer should grow in the other ("non-flexible")
-    direction in order to fill the available space.
-    The wxFlexGridSizer::SetNonFlexibleGrowMode() method serves this purpose.
-
-    @library{wxcore}
-    @category{winlayout}
-
-    @see wxSizer, @ref overview_sizer
-*/
-class wxFlexGridSizer : public wxGridSizer
-{
-public:
-    //@{
-    /**
-        Constructor for a wxFlexGridSizer.
-
-        @a rows and @a cols determine the number of columns and rows in the sizer -
-        if either of the parameters is zero, it will be calculated to form the
-        total number of children in the sizer, thus making the sizer grow
-        dynamically.
-
-        @a vgap and @a hgap define extra space between all children.
-    */
-    wxFlexGridSizer(int rows, int cols, int vgap, int hgap);
-    wxFlexGridSizer(int cols, int vgap = 0, int hgap = 0);
-    //@}
-
-    /**
-        Specifies that column @a idx (starting from zero) should be grown if
-        there is extra space available to the sizer.
-
-        The @a proportion parameter has the same meaning as the stretch factor
-        for the sizers() except that if all proportions are 0, then all columns
-        are resized equally (instead of not being resized at all).
-
-        Notice that the row must not be already growable, if you need to change
-        the proportion you must call RemoveGrowableCol() first and then make it
-        growable (with a different proportion) again. You can use IsColGrowable()
-        to check whether a column is already growable.
-    */
-    void AddGrowableCol(size_t idx, int proportion = 0);
-
-    /**
-        Specifies that row idx (starting from zero) should be grown if there
-        is extra space available to the sizer.
-
-        This is identical to AddGrowableCol() except that it works with rows
-        and not columns.
-    */
-    void AddGrowableRow(size_t idx, int proportion = 0);
-
-    /**
-        Returns a wxOrientation value that specifies whether the sizer flexibly
-        resizes its columns, rows, or both (default).
-
-        @return
-            One of the following values:
-            - wxVERTICAL: Rows are flexibly sized.
-            - wxHORIZONTAL: Columns are flexibly sized.
-            - wxBOTH: Both rows and columns are flexibly sized (this is the default value).
-
-        @see SetFlexibleDirection()
-    */
-    int GetFlexibleDirection() const;
-
-    /**
-        Returns the value that specifies how the sizer grows in the "non-flexible"
-        direction if there is one.
-
-        The behaviour of the elements in the flexible direction (i.e. both rows
-        and columns by default, or rows only if GetFlexibleDirection() is @c
-        wxVERTICAL or columns only if it is @c wxHORIZONTAL) is always governed
-        by their proportion as specified in the call to AddGrowableRow() or
-        AddGrowableCol(). What happens in the other direction depends on the
-        value of returned by this function as described below.
-
-        @return
-            One of the following values:
-            - wxFLEX_GROWMODE_NONE: Sizer doesn't grow its elements at all in
-              the non-flexible direction.
-            - wxFLEX_GROWMODE_SPECIFIED: Sizer honors growable columns/rows set
-              with AddGrowableCol() and AddGrowableRow() in the non-flexible
-              direction as well. In this case equal sizing applies to minimum
-              sizes of columns or rows (this is the default value).
-            - wxFLEX_GROWMODE_ALL: Sizer equally stretches all columns or rows in
-              the non-flexible direction, independently of the proportions
-              applied in the flexible direction.
-
-        @see SetFlexibleDirection(), SetNonFlexibleGrowMode()
-    */
-    wxFlexSizerGrowMode GetNonFlexibleGrowMode() const;
-
-    /**
-        Returns @true if column @a idx is growable.
-
-        @since 2.9.0
-    */
-    bool IsColGrowable(size_t idx);
-
-    /**
-        Returns @true if row @a idx is growable.
-
-        @since 2.9.0
-    */
-    bool IsRowGrowable(size_t idx);
-
-    /**
-        Specifies that column idx is no longer growable.
-    */
-    void RemoveGrowableCol(size_t idx);
-
-    /**
-        Specifies that row idx is no longer growable.
-    */
-    void RemoveGrowableRow(size_t idx);
-
-    /**
-        Specifies whether the sizer should flexibly resize its columns, rows, or both.
-
-        Argument @a direction can be @c wxVERTICAL, @c wxHORIZONTAL or @c wxBOTH
-        (which is the default value). Any other value is ignored.
-        See GetFlexibleDirection() for the explanation of these values.
-        Note that this method does not trigger relayout.
-    */
-    void SetFlexibleDirection(int direction);
-
-    /**
-        Specifies how the sizer should grow in the non-flexible direction if
-        there is one (so SetFlexibleDirection() must have been called previously).
-
-        Argument @a mode can be one of those documented in GetNonFlexibleGrowMode(),
-        please see there for their explanation.
-        Note that this method does not trigger relayout.
-    */
-    void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode);
-};
-
-
-
-/**
     @class wxSizer
 
     wxSizer is the abstract base class used for laying out subwindows in a window.
@@ -724,8 +55,7 @@ public:
     capabilities for the various virtual methods.
     @endWxPythonOnly
 
-    @anchor wxsizer_flags
-    @par wxSizer flags
+    @section wxsizer_flags wxSizer flags
 
     The "flag" argument accepted by wxSizeItem constructors and other
     functions, e.g. wxSizer::Add(), is OR-combination of the following flags.
@@ -755,14 +85,13 @@ public:
              to calculate the layout. This allows layouts to adjust when an
              item changes and its best size becomes different. If you would
              rather have a window item stay the size it started with then use
-             wxFIXED_MINSIZE.}
+             @c wxFIXED_MINSIZE.}
     @itemdef{wxRESERVE_SPACE_EVEN_IF_HIDDEN,
              Normally wxSizers don't allocate space for hidden windows or other
              items. This flag overrides this behavior so that sufficient space
              is allocated for the window even if it isn't visible. This makes
              it possible to dynamically show and hide controls without resizing
-             parent dialog, for example. (Available since 2.8.8.)
-             }
+             parent dialog, for example. (Available since 2.8.8.)}
     @itemdef{wxALIGN_CENTER<br>
              wxALIGN_CENTRE<br>
              wxALIGN_LEFT<br>
@@ -773,7 +102,7 @@ public:
              wxALIGN_CENTRE_VERTICAL<br>
              wxALIGN_CENTER_HORIZONTAL<br>
              wxALIGN_CENTRE_HORIZONTAL,
-             The wxALIGN flags allow you to specify the alignment of the item
+             The @c wxALIGN_* flags allow you to specify the alignment of the item
              within the space allotted to it by the sizer, adjusted for the
              border if any.}
     @endDefList
@@ -1562,6 +891,657 @@ public:
     bool Show(size_t index, bool show = true);
 };
 
+
+/**
+    @class wxStdDialogButtonSizer
+
+    This class creates button layouts which conform to the standard button spacing
+    and ordering defined by the platform or toolkit's user interface guidelines
+    (if such things exist). By using this class, you can ensure that all your
+    standard dialogs look correct on all major platforms. Currently it conforms to
+    the Windows, GTK+ and Mac OS X human interface guidelines.
+
+    When there aren't interface guidelines defined for a particular platform or
+    toolkit, wxStdDialogButtonSizer reverts to the Windows implementation.
+
+    To use this class, first add buttons to the sizer by calling
+    wxStdDialogButtonSizer::AddButton (or wxStdDialogButtonSizer::SetAffirmativeButton,
+    wxStdDialogButtonSizer::SetNegativeButton or wxStdDialogButtonSizer::SetCancelButton)
+    and then call Realize in order to create the actual button layout used.
+    Other than these special operations, this sizer works like any other sizer.
+
+    If you add a button with wxID_SAVE, on Mac OS X the button will be renamed to
+    "Save" and the wxID_NO button will be renamed to "Don't Save" in accordance
+    with the Mac OS X Human Interface Guidelines.
+
+    @library{wxcore}
+    @category{winlayout}
+
+    @see wxSizer, @ref overview_sizer, wxDialog::CreateButtonSizer
+*/
+class wxStdDialogButtonSizer : public wxBoxSizer
+{
+public:
+    /**
+        Constructor for a wxStdDialogButtonSizer.
+    */
+    wxStdDialogButtonSizer();
+
+    /**
+        Adds a button to the wxStdDialogButtonSizer. The @a button must have
+        one of the following identifiers:
+         - wxID_OK
+         - wxID_YES
+         - wxID_SAVE
+         - wxID_APPLY
+         - wxID_CLOSE
+         - wxID_NO
+         - wxID_CANCEL
+         - wxID_HELP
+         - wxID_CONTEXT_HELP
+    */
+    void AddButton(wxButton* button);
+
+    /**
+        Rearranges the buttons and applies proper spacing between buttons to make
+        them match the platform or toolkit's interface guidelines.
+    */
+    void Realize();
+
+    /**
+        Sets the affirmative button for the sizer.
+
+        This allows you to use identifiers other than the standard identifiers
+        outlined above.
+    */
+    void SetAffirmativeButton(wxButton* button);
+
+    /**
+        Sets the cancel button for the sizer.
+
+        This allows you to use identifiers other than the standard identifiers
+        outlined above.
+    */
+    void SetCancelButton(wxButton* button);
+
+    /**
+        Sets the negative button for the sizer.
+
+        This allows you to use identifiers other than the standard identifiers
+        outlined above.
+    */
+    void SetNegativeButton(wxButton* button);
+};
+
+
+
+/**
+    @class wxSizerItem
+
+    The wxSizerItem class is used to track the position, size and other
+    attributes of each item managed by a wxSizer.
+
+    It is not usually necessary to use this class because the sizer elements can
+    also be identified by their positions or window or sizer pointers but sometimes
+    it may be more convenient to use it directly.
+
+    @library{wxcore}
+    @category{winlayout}
+*/
+class wxSizerItem : public wxObject
+{
+public:
+    /**
+        Construct a sizer item for tracking a spacer.
+    */
+    wxSizerItem(int width, int height, int proportion, int flag,
+                int border, wxObject* userData);
+
+    //@{
+    /**
+        Construct a sizer item for tracking a window.
+    */
+    wxSizerItem(wxWindow* window, const wxSizerFlags& flags);
+    wxSizerItem(wxWindow* window, int proportion, int flag,
+                int border,
+                wxObject* userData);
+    //@}
+
+    //@{
+    /**
+        Construct a sizer item for tracking a subsizer.
+    */
+    wxSizerItem(wxSizer* window, const wxSizerFlags& flags);
+    wxSizerItem(wxSizer* sizer, int proportion, int flag,
+                int border,
+                wxObject* userData);
+    //@}
+
+    /**
+        Deletes the user data and subsizer, if any.
+    */
+    virtual ~wxSizerItem();
+
+    /**
+        Calculates the minimum desired size for the item, including any space
+        needed by borders.
+    */
+    virtual wxSize CalcMin();
+
+    /**
+        Destroy the window or the windows in a subsizer, depending on the type
+        of item.
+    */
+    virtual void DeleteWindows();
+
+    /**
+        Enable deleting the SizerItem without destroying the contained sizer.
+    */
+    void DetachSizer();
+
+    /**
+        Return the border attribute.
+    */
+    int GetBorder() const;
+
+    /**
+        Return the flags attribute.
+
+        See @ref wxsizer_flags "wxSizer flags list" for details.
+    */
+    int GetFlag() const;
+
+    /**
+        Return the numeric id of wxSizerItem, or @c wxID_NONE if the id has
+        not been set.
+    */
+    int GetId() const;
+
+    /**
+        Get the minimum size needed for the item.
+    */
+    wxSize GetMinSize() const;
+
+    /**
+        Sets the minimum size to be allocated for this item.
+
+        If this item is a window, the @a size is also passed to
+        wxWindow::SetMinSize().
+     */
+    void SetMinSize(const wxSize& size);
+
+    /**
+        @overload
+     */
+    void SetMinSize(int x, int y);
+
+    /**
+        What is the current position of the item, as set in the last Layout.
+    */
+    wxPoint GetPosition() const;
+
+    /**
+        Get the proportion item attribute.
+    */
+    int GetProportion() const;
+
+    /**
+        Get the ration item attribute.
+    */
+    float GetRatio() const;
+
+    /**
+        Get the rectangle of the item on the parent window, excluding borders.
+    */
+    virtual wxRect GetRect();
+
+    /**
+        Get the current size of the item, as set in the last Layout.
+    */
+    virtual wxSize GetSize() const;
+
+    /**
+        If this item is tracking a sizer, return it.  @NULL otherwise.
+    */
+    wxSizer* GetSizer() const;
+
+    /**
+        If this item is tracking a spacer, return its size.
+    */
+    wxSize GetSpacer() const;
+
+    /**
+        Get the userData item attribute.
+    */
+    wxObject* GetUserData() const;
+
+    /**
+        If this item is tracking a window then return it. @NULL otherwise.
+    */
+    wxWindow* GetWindow() const;
+
+    /**
+        Returns @true if this item is a window or a spacer and it is shown or
+        if this item is a sizer and not all of its elements are hidden.
+
+        In other words, for sizer items, all of the child elements must be
+        hidden for the sizer itself to be considered hidden.
+
+        As an exception, if the @c wxRESERVE_SPACE_EVEN_IF_HIDDEN flag was
+        used for this sizer item, then IsShown() always returns @true for it
+        (see wxSizerFlags::ReserveSpaceEvenIfHidden()).
+    */
+    bool IsShown() const;
+
+    /**
+        Is this item a sizer?
+    */
+    bool IsSizer() const;
+
+    /**
+        Is this item a spacer?
+    */
+    bool IsSpacer() const;
+
+    /**
+        Is this item a window?
+    */
+    bool IsWindow() const;
+
+    /**
+        Set the border item attribute.
+    */
+    void SetBorder(int border);
+
+    /**
+        Set the position and size of the space allocated to the sizer, and
+        adjust the position and size of the item to be within that space
+        taking alignment and borders into account.
+    */
+    virtual void SetDimension(const wxPoint& pos, const wxSize& size);
+
+    /**
+        Set the flag item attribute.
+    */
+    void SetFlag(int flag);
+
+    /**
+        Sets the numeric id of the wxSizerItem to @e id.
+    */
+    void SetId(int id);
+
+    /**
+        @todo docme.
+    */
+    void SetInitSize(int x, int y);
+
+    /**
+        Set the proportion item attribute.
+    */
+    void SetProportion(int proportion);
+
+    //@{
+    /**
+        Set the ratio item attribute.
+    */
+    void SetRatio(int width, int height);
+    void SetRatio(wxSize size);
+    void SetRatio(float ratio);
+    //@}
+
+    /**
+        Set the sizer tracked by this item.
+        @deprecated @todo provide deprecation description
+    */
+    void SetSizer(wxSizer* sizer);
+
+    /**
+        Set the size of the spacer tracked by this item.
+        @deprecated @todo provide deprecation description
+    */
+    void SetSpacer(const wxSize& size);
+
+    /**
+        Set the window to be tracked by this item.
+        @deprecated @todo provide deprecation description
+    */
+    void SetWindow(wxWindow* window);
+
+    /**
+        Set the show item attribute, which sizers use to determine if the item
+        is to be made part of the layout or not. If the item is tracking a
+        window then it is shown or hidden as needed.
+    */
+    void Show(bool show);
+};
+
+
+
+/**
+    @class wxSizerFlags
+
+    Container for sizer items flags providing readable names for them.
+
+    Normally, when you add an item to a sizer via wxSizer::Add, you have to
+    specify a lot of flags and parameters which can be unwieldy. This is where
+    wxSizerFlags comes in: it allows you to specify all parameters using the
+    named methods instead. For example, instead of
+
+    @code
+    sizer->Add(ctrl, 0, wxEXPAND | wxALL, 10);
+    @endcode
+
+    you can now write
+
+    @code
+    sizer->Add(ctrl, wxSizerFlags().Expand().Border(wxALL, 10));
+    @endcode
+
+    This is more readable and also allows you to create wxSizerFlags objects which
+    can be reused for several sizer items.
+
+    @code
+    wxSizerFlags flagsExpand(1);
+        flagsExpand.Expand().Border(wxALL, 10);
+
+        sizer->Add(ctrl1, flagsExpand);
+        sizer->Add(ctrl2, flagsExpand);
+    @endcode
+
+    Note that by specification, all methods of wxSizerFlags return the wxSizerFlags
+    object itself to allowing chaining multiple methods calls like in the examples
+    above.
+
+    @library{wxcore}
+    @category{winlayout}
+
+    @see wxSizer
+*/
+class wxSizerFlags
+{
+public:
+    /**
+        Creates the wxSizer with the proportion specified by @a proportion.
+    */
+    wxSizerFlags(int proportion = 0);
+
+    /**
+        Sets the alignment of this wxSizerFlags to @a align.
+
+        This method replaces the previously set alignment with the specified one.
+
+        @param alignment
+            Combination of @c wxALIGN_XXX bit masks.
+
+        @see Top(), Left(), Right(), Bottom(), Centre()
+    */
+    wxSizerFlags& Align(int alignment);
+
+    /**
+        Sets the wxSizerFlags to have a border of a number of pixels specified
+        by @a borderinpixels with the directions specified by @a direction.
+    */
+    wxSizerFlags& Border(int direction, int borderinpixels);
+
+    /**
+        Sets the wxSizerFlags to have a border with size as returned by
+        GetDefaultBorder().
+
+        @param direction
+            Direction(s) to apply the border in.
+    */
+    wxSizerFlags& Border(int direction = wxALL);
+
+    /**
+        Aligns the object to the bottom, similar for @c Align(wxALIGN_BOTTOM).
+
+        Unlike Align(), this method doesn't change the horizontal alignment of
+        the item.
+    */
+    wxSizerFlags& Bottom();
+
+    /**
+        Sets the object of the wxSizerFlags to center itself in the area it is
+        given.
+    */
+    wxSizerFlags& Center();
+
+    /**
+        Center() for people with the other dialect of English.
+    */
+    wxSizerFlags& Centre();
+
+    /**
+        Sets the border in the given @a direction having twice the default
+        border size.
+    */
+    wxSizerFlags& DoubleBorder(int direction = wxALL);
+
+    /**
+        Sets the border in left and right directions having twice the default
+        border size.
+    */
+    wxSizerFlags& DoubleHorzBorder();
+
+    /**
+        Sets the object of the wxSizerFlags to expand to fill as much area as
+        it can.
+    */
+    wxSizerFlags& Expand();
+
+    /**
+        Set the @c wxFIXED_MINSIZE flag which indicates that the initial size
+        of the window should be also set as its minimal size.
+    */
+    wxSizerFlags& FixedMinSize();
+
+    /**
+        Set the @c wxRESERVE_SPACE_EVEN_IF_HIDDEN flag. Normally wxSizers
+        don't allocate space for hidden windows or other items. This flag
+        overrides this behavior so that sufficient space is allocated for the
+        window even if it isn't visible. This makes it possible to dynamically
+        show and hide controls without resizing parent dialog, for example.
+
+        @since 2.8.8
+    */
+    wxSizerFlags& ReserveSpaceEvenIfHidden();
+
+    /**
+        Returns the border used by default in Border() method.
+    */
+    static int GetDefaultBorder();
+
+    /**
+        Aligns the object to the left, similar for @c Align(wxALIGN_LEFT).
+
+        Unlike Align(), this method doesn't change the vertical alignment of
+        the item.
+    */
+    wxSizerFlags& Left();
+
+    /**
+        Sets the proportion of this wxSizerFlags to @e proportion
+    */
+    wxSizerFlags& Proportion(int proportion);
+
+    /**
+        Aligns the object to the right, similar for @c Align(wxALIGN_RIGHT).
+
+        Unlike Align(), this method doesn't change the vertical alignment of
+        the item.
+    */
+    wxSizerFlags& Right();
+
+    /**
+        Set the @c wx_SHAPED flag which indicates that the elements should
+        always keep the fixed width to height ratio equal to its original value.
+    */
+    wxSizerFlags& Shaped();
+
+    /**
+        Aligns the object to the top, similar for @c Align(wxALIGN_TOP).
+
+        Unlike Align(), this method doesn't change the horizontal alignment of
+        the item.
+    */
+    wxSizerFlags& Top();
+
+    /**
+        Sets the border in the given @a direction having thrice the default
+        border size.
+    */
+    wxSizerFlags& TripleBorder(int direction = wxALL);
+};
+
+
+
+/**
+    @class wxFlexGridSizer
+
+    A flex grid sizer is a sizer which lays out its children in a two-dimensional
+    table with all table fields in one row having the same height and all fields
+    in one column having the same width, but all rows or all columns are not
+    necessarily the same height or width as in the wxGridSizer.
+
+    Since wxWidgets 2.5.0, wxFlexGridSizer can also size items equally in one
+    direction but unequally ("flexibly") in the other. If the sizer is only
+    flexible in one direction (this can be changed using wxFlexGridSizer::SetFlexibleDirection),
+    it needs to be decided how the sizer should grow in the other ("non-flexible")
+    direction in order to fill the available space.
+    The wxFlexGridSizer::SetNonFlexibleGrowMode() method serves this purpose.
+
+    @library{wxcore}
+    @category{winlayout}
+
+    @see wxSizer, @ref overview_sizer
+*/
+class wxFlexGridSizer : public wxGridSizer
+{
+public:
+    //@{
+    /**
+        Constructor for a wxFlexGridSizer.
+
+        @a rows and @a cols determine the number of columns and rows in the sizer -
+        if either of the parameters is zero, it will be calculated to form the
+        total number of children in the sizer, thus making the sizer grow
+        dynamically.
+
+        @a vgap and @a hgap define extra space between all children.
+    */
+    wxFlexGridSizer(int rows, int cols, int vgap, int hgap);
+    wxFlexGridSizer(int cols, int vgap = 0, int hgap = 0);
+    //@}
+
+    /**
+        Specifies that column @a idx (starting from zero) should be grown if
+        there is extra space available to the sizer.
+
+        The @a proportion parameter has the same meaning as the stretch factor
+        for the sizers() except that if all proportions are 0, then all columns
+        are resized equally (instead of not being resized at all).
+
+        Notice that the row must not be already growable, if you need to change
+        the proportion you must call RemoveGrowableCol() first and then make it
+        growable (with a different proportion) again. You can use IsColGrowable()
+        to check whether a column is already growable.
+    */
+    void AddGrowableCol(size_t idx, int proportion = 0);
+
+    /**
+        Specifies that row idx (starting from zero) should be grown if there
+        is extra space available to the sizer.
+
+        This is identical to AddGrowableCol() except that it works with rows
+        and not columns.
+    */
+    void AddGrowableRow(size_t idx, int proportion = 0);
+
+    /**
+        Returns a wxOrientation value that specifies whether the sizer flexibly
+        resizes its columns, rows, or both (default).
+
+        @return
+            One of the following values:
+            - wxVERTICAL: Rows are flexibly sized.
+            - wxHORIZONTAL: Columns are flexibly sized.
+            - wxBOTH: Both rows and columns are flexibly sized (this is the default value).
+
+        @see SetFlexibleDirection()
+    */
+    int GetFlexibleDirection() const;
+
+    /**
+        Returns the value that specifies how the sizer grows in the "non-flexible"
+        direction if there is one.
+
+        The behaviour of the elements in the flexible direction (i.e. both rows
+        and columns by default, or rows only if GetFlexibleDirection() is @c
+        wxVERTICAL or columns only if it is @c wxHORIZONTAL) is always governed
+        by their proportion as specified in the call to AddGrowableRow() or
+        AddGrowableCol(). What happens in the other direction depends on the
+        value of returned by this function as described below.
+
+        @return
+            One of the following values:
+            - wxFLEX_GROWMODE_NONE: Sizer doesn't grow its elements at all in
+              the non-flexible direction.
+            - wxFLEX_GROWMODE_SPECIFIED: Sizer honors growable columns/rows set
+              with AddGrowableCol() and AddGrowableRow() in the non-flexible
+              direction as well. In this case equal sizing applies to minimum
+              sizes of columns or rows (this is the default value).
+            - wxFLEX_GROWMODE_ALL: Sizer equally stretches all columns or rows in
+              the non-flexible direction, independently of the proportions
+              applied in the flexible direction.
+
+        @see SetFlexibleDirection(), SetNonFlexibleGrowMode()
+    */
+    wxFlexSizerGrowMode GetNonFlexibleGrowMode() const;
+
+    /**
+        Returns @true if column @a idx is growable.
+
+        @since 2.9.0
+    */
+    bool IsColGrowable(size_t idx);
+
+    /**
+        Returns @true if row @a idx is growable.
+
+        @since 2.9.0
+    */
+    bool IsRowGrowable(size_t idx);
+
+    /**
+        Specifies that column idx is no longer growable.
+    */
+    void RemoveGrowableCol(size_t idx);
+
+    /**
+        Specifies that row idx is no longer growable.
+    */
+    void RemoveGrowableRow(size_t idx);
+
+    /**
+        Specifies whether the sizer should flexibly resize its columns, rows, or both.
+
+        Argument @a direction can be @c wxVERTICAL, @c wxHORIZONTAL or @c wxBOTH
+        (which is the default value). Any other value is ignored.
+        See GetFlexibleDirection() for the explanation of these values.
+        Note that this method does not trigger relayout.
+    */
+    void SetFlexibleDirection(int direction);
+
+    /**
+        Specifies how the sizer should grow in the non-flexible direction if
+        there is one (so SetFlexibleDirection() must have been called previously).
+
+        Argument @a mode can be one of those documented in GetNonFlexibleGrowMode(),
+        please see there for their explanation.
+        Note that this method does not trigger relayout.
+    */
+    void SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode);
+};
 
 
 /**
