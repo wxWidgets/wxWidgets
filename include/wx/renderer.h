@@ -254,19 +254,34 @@ public:
     // draw the focus rectangle around the label contained in the given rect
     //
     // only wxCONTROL_SELECTED makes sense in flags here
-    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0) = 0;
+    virtual void DrawFocusRect(wxWindow* win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) = 0;
 
     // Draw a native wxChoice
-    virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+    virtual void DrawChoice(wxWindow* win,
+                            wxDC& dc,
+                            const wxRect& rect,
+                            int flags = 0) = 0;
 
     // Draw a native wxComboBox
-    virtual void DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+    virtual void DrawComboBox(wxWindow* win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0) = 0;
 
     // Draw a native wxTextCtrl frame
-    virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+    virtual void DrawTextCtrl(wxWindow* win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0) = 0;
 
     // Draw a native wxRadioButton (just the graphical portion)
-    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+    virtual void DrawOptionButton(wxWindow* win,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int flags = 0) = 0;
 
     // geometry functions
     // ------------------
@@ -386,7 +401,7 @@ public:
     virtual void DrawCheckBox(wxWindow *win,
                               wxDC& dc,
                               const wxRect& rect,
-                              int flags = 0 )
+                              int flags = 0)
         { m_rendererNative.DrawCheckBox( win, dc, rect, flags ); }
 
     virtual wxSize GetCheckBoxSize(wxWindow *win)
@@ -395,29 +410,44 @@ public:
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
-                                int flags = 0 )
+                                int flags = 0)
         { m_rendererNative.DrawPushButton( win, dc, rect, flags ); }
 
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
-                                       int flags = 0 )
+                                       int flags = 0)
         { m_rendererNative.DrawItemSelectionRect( win, dc, rect, flags ); }
 
-    virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0)
+    virtual void DrawFocusRect(wxWindow* win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0)
         { m_rendererNative.DrawFocusRect( win, dc, rect, flags ); }
 
-    virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0)
+    virtual void DrawChoice(wxWindow* win,
+                            wxDC& dc,
+                            const wxRect& rect,
+                            int flags = 0)
         { m_rendererNative.DrawChoice( win, dc, rect, flags); }
 
-    virtual void DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0)
+    virtual void DrawComboBox(wxWindow* win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0)
         { m_rendererNative.DrawComboBox( win, dc, rect, flags); }
 
-    virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0)
+    virtual void DrawTextCtrl(wxWindow* win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0)
         { m_rendererNative.DrawTextCtrl( win, dc, rect, flags); }
 
-    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0)
-        { m_rendererNative.DrawRadioButton( win, dc, rect, flags); }
+    virtual void DrawOptionButton(wxWindow* win,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int flags = 0)
+        { m_rendererNative.DrawOptionButton( win, dc, rect, flags); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }

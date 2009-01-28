@@ -100,7 +100,7 @@ public:
 
     virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
 
-    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+    virtual void DrawOptionButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
 
 private:
     void DrawMacThemeButton(wxWindow *win,
@@ -351,7 +351,7 @@ wxRendererMac::DrawMacThemeButton(wxWindow *win,
         drawInfo.adornment = adornment;
         if (flags & wxCONTROL_FOCUSED)
             drawInfo.adornment |= kThemeAdornmentFocus;
-        
+
         HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
     }
 }
@@ -366,7 +366,7 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
         flags |= wxCONTROL_SELECTED;
 
     int kind;
-    
+
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
         (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
         kind = kThemeCheckBoxSmall;
@@ -469,7 +469,7 @@ void wxRendererMac::DrawChoice(wxWindow* win, wxDC& dc,
                            const wxRect& rect, int flags)
 {
     int kind;
-    
+
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
         (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
         kind = kThemePopupButtonSmall;
@@ -487,7 +487,7 @@ void wxRendererMac::DrawComboBox(wxWindow* win, wxDC& dc,
                              const wxRect& rect, int flags)
 {
     int kind;
-    
+
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
         (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
         kind = kThemeComboBoxSmall;
@@ -500,11 +500,11 @@ void wxRendererMac::DrawComboBox(wxWindow* win, wxDC& dc,
     DrawMacThemeButton(win, dc, rect, flags, kind, kThemeAdornmentNone);
 }
 
-void wxRendererMac::DrawRadioButton(wxWindow* win, wxDC& dc,
+void wxRendererMac::DrawOptionButton(wxWindow* win, wxDC& dc,
                                 const wxRect& rect, int flags)
 {
     int kind;
-    
+
     if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL ||
         (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
         kind = kThemeRadioButtonSmall;
@@ -532,7 +532,7 @@ void wxRendererMac::DrawTextCtrl(wxWindow* win, wxDC& dc,
     dc.SetBrush( *wxWHITE_BRUSH );
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.DrawRectangle(rect);
-    
+
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     HIRect hiRect = CGRectMake( x, y, w, h );

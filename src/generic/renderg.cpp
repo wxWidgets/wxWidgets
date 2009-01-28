@@ -118,7 +118,7 @@ public:
 
     virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
 
-    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+    virtual void DrawOptionButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
@@ -339,7 +339,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
 
         x = margin + rect.x;
         y = rect.y + wxMax(1, (rect.height - h) / 2);
- 
+
         if (params->m_labelText.empty())
         {
             // use the alignment flags
@@ -359,7 +359,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
         }
         dc.DrawBitmap(params->m_labelBitmap, x, y, true);
     }
-    
+
     // Draw a label if one is given
     if ( params && !params->m_labelText.empty() )
     {
@@ -743,7 +743,7 @@ void wxRendererGeneric::DrawComboBox(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc)
     // FIXME: Implement
 }
 
-void wxRendererGeneric::DrawRadioButton(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
+void wxRendererGeneric::DrawOptionButton(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
                            const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
 {
     // FIXME: Implement

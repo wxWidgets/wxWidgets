@@ -99,24 +99,24 @@ public:
                                        const wxRect& rect,
                                        int flags = 0);
 
-    virtual void DrawChoice(wxWindow* win, 
-                            wxDC& dc, 
-                            const wxRect& rect, 
+    virtual void DrawChoice(wxWindow* win,
+                            wxDC& dc,
+                            const wxRect& rect,
                             int flags=0);
 
-    virtual void DrawComboBox(wxWindow* win, 
-                                wxDC& dc, 
-                                const wxRect& rect, 
+    virtual void DrawComboBox(wxWindow* win,
+                                wxDC& dc,
+                                const wxRect& rect,
                                 int flags=0);
 
-    virtual void DrawTextCtrl(wxWindow* win, 
-                                wxDC& dc, 
-                                const wxRect& rect, 
+    virtual void DrawTextCtrl(wxWindow* win,
+                                wxDC& dc,
+                                const wxRect& rect,
                                 int flags=0);
 
-    virtual void DrawRadioButton(wxWindow* win, 
-                                wxDC& dc, 
-                                const wxRect& rect, 
+    virtual void DrawOptionButton(wxWindow* win,
+                                wxDC& dc,
+                                const wxRect& rect,
                                 int flags=0);
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
@@ -141,7 +141,7 @@ wxRendererNative& wxRendererNative::GetDefault()
 static GdkWindow* wxGetGdkWindowForDC(wxWindow* win, wxDC& dc)
 {
     GdkWindow* gdk_window = NULL;
-    
+
 #if wxUSE_GRAPHICS_CONTEXT
     if ( dc.IsKindOf( CLASSINFO(wxGCDC) ) )
         gdk_window = win->GTKGetDrawingWindow();
@@ -212,17 +212,17 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         "button",
         dc.LogicalToDeviceX(rect.x) - x_diff, rect.y, rect.width, rect.height
     );
- 
+
     return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
 
 int wxRendererGTK::GetHeaderButtonHeight(wxWindow *WXUNUSED(win))
 {
     GtkWidget *button = wxGTKPrivate::GetHeaderButtonWidget();
-    
+
     GtkRequisition req;
     GTK_WIDGET_GET_CLASS(button)->size_request(button, &req);
-    
+
     return req.height;
 }
 
@@ -517,9 +517,9 @@ wxRendererGTK::DrawPushButton(wxWindow* win,
         NULL,
         button,
         "button",
-        dc.LogicalToDeviceX(rect.x), 
-        dc.LogicalToDeviceY(rect.y), 
-        rect.width, 
+        dc.LogicalToDeviceX(rect.x),
+        dc.LogicalToDeviceY(rect.y),
+        rect.width,
         rect.height
     );
 }
@@ -531,7 +531,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
                                      int flags )
 {
     GtkWidget *tree = wxGTKPrivate::GetTreeWidget();
-    
+
     GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
@@ -541,7 +541,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
         x_diff = rect.width;
 
     GtkStateType state = GTK_STATE_NORMAL;
-    
+
     if (flags & wxCONTROL_SELECTED)
     {
         // the wxCONTROL_FOCUSED state is deduced
@@ -569,7 +569,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
     {
         if (flags & wxCONTROL_SELECTED)
             state = GTK_STATE_SELECTED;
-            
+
         gtk_paint_focus( tree->style,
                          gdk_window,
                          state,
@@ -622,7 +622,7 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
     GtkStateType state = GTK_STATE_NORMAL;
     if ( flags & wxCONTROL_DISABLED )
         state = GTK_STATE_INSENSITIVE;
-       
+
     if (flags & wxCONTROL_CURRENT )
         GTK_WIDGET_SET_FLAGS( entry, GTK_HAS_FOCUS );
     else
@@ -630,7 +630,7 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
 
     gtk_paint_shadow
     (
-        entry->style, 
+        entry->style,
         gdk_window,
         state,
         GTK_SHADOW_OUT,
@@ -640,7 +640,7 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
         dc.LogicalToDeviceX(rect.x),
         dc.LogicalToDeviceY(rect.y),
         rect.width,
-        rect.height 
+        rect.height
   );
 }
 
@@ -654,7 +654,7 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
     GtkStateType state = GTK_STATE_NORMAL;
     if ( flags & wxCONTROL_DISABLED )
        state = GTK_STATE_INSENSITIVE;
-       
+
     if (flags & wxCONTROL_CURRENT )
         GTK_WIDGET_SET_FLAGS( combo, GTK_HAS_FOCUS );
     else
@@ -662,7 +662,7 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
 
     gtk_paint_shadow
     (
-        combo->style, 
+        combo->style,
         gdk_window,
         state,
         GTK_SHADOW_OUT,
@@ -672,7 +672,7 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
         dc.LogicalToDeviceX(rect.x),
         dc.LogicalToDeviceY(rect.y),
         rect.width,
-        rect.height 
+        rect.height
     );
 
     wxRect r = rect;
@@ -684,7 +684,7 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
 
     gtk_paint_arrow
     (
-        combo->style, 
+        combo->style,
         gdk_window,
         state,
         GTK_SHADOW_OUT,
@@ -705,7 +705,7 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
 
     gtk_paint_box
     (
-        combo->style, 
+        combo->style,
         gdk_window,
         state,
         GTK_SHADOW_ETCHED_OUT,
@@ -726,20 +726,20 @@ void wxRendererGTK::DrawChoice(wxWindow* win, wxDC& dc,
     DrawComboBox( win, dc, rect, flags );
 }
 
-    
+
 // Draw a themed radio button
-void wxRendererGTK::DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+void wxRendererGTK::DrawOptionButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
     GtkWidget *button = wxGTKPrivate::GetRadioButtonWidget();
 
     GdkWindow* gdk_window = wxGetGdkWindowForDC(win, dc);
-    
+
     GtkShadowType shadow_type = GTK_SHADOW_OUT;
     if ( flags & wxCONTROL_CHECKED )
         shadow_type = GTK_SHADOW_IN;
     else if ( flags & wxCONTROL_UNDETERMINED )
         shadow_type = GTK_SHADOW_ETCHED_IN;
-        
+
     GtkStateType state = GTK_STATE_NORMAL;
     if ( flags & wxCONTROL_DISABLED )
         state = GTK_STATE_INSENSITIVE;
@@ -759,8 +759,8 @@ void wxRendererGTK::DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect,
         NULL,
         button,
         "radiobutton",
-        dc.LogicalToDeviceX(rect.x), 
-        dc.LogicalToDeviceY(rect.y), 
+        dc.LogicalToDeviceX(rect.x),
+        dc.LogicalToDeviceY(rect.y),
         rect.width, rect.height
     );
 }
