@@ -104,8 +104,8 @@ public:
 
 #if wxUSE_MENUS
     // override wxFrameBase function to also look in the active child menu bar
-    virtual const wxMenuItem *FindItemInMenuBar(int menuId) const;
-    virtual wxMenuItem *MSWFindMenuBarItem(WXWORD id);
+    // and the "Window" menu
+    virtual wxMenuItem *FindItemInMenuBar(int menuId) const;
 #endif // wxUSE_MENUS
 
 protected:

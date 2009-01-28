@@ -83,7 +83,7 @@ public:
     // find the item by id in the frame menu bar: this is an internal function
     // and exists mainly in order to be overridden in the MDI parent frame
     // which also looks at its active child menu bar
-    virtual const wxMenuItem *FindItemInMenuBar(int menuId) const;
+    virtual wxMenuItem *FindItemInMenuBar(int menuId) const;
 
     // generate menu command corresponding to the given menu item
     //

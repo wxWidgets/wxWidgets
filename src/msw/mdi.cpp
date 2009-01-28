@@ -406,13 +406,16 @@ void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
     }
 }
 
-const wxMenuItem *wxMDIParentFrame::FindItemInMenuBar(int menuId) const
+wxMenuItem *wxMDIParentFrame::FindItemInMenuBar(int menuId) const
 {
-    const wxMenuItem *item = wxFrame::FindItemInMenuBar(menuId);
+    wxMenuItem *item = wxFrame::FindItemInMenuBar(menuId);
     if ( !item && GetActiveChild() )
     {
         item = GetActiveChild()->FindItemInMenuBar(menuId);
     }
+
+    if ( !item && m_windowMenu )
+        item = m_windowMenu->FindItem(menuId);
 
     return item;
 }
@@ -681,15 +684,6 @@ void wxMDIParentFrame::OnMDICommand(wxCommandEvent& event)
     }
 
     ::SendMessage(GetWinHwnd(GetClientWindow()), msg, wParam, lParam);
-}
-
-wxMenuItem *wxMDIParentFrame::MSWFindMenuBarItem(WXWORD id)
-{
-    wxMenuItem *mitem = wxFrame::MSWFindMenuBarItem(id);
-    if ( !mitem && m_windowMenu )
-        mitem = m_windowMenu->FindItem((signed short)id);
-
-    return mitem;
 }
 
 #endif // wxUSE_MENUS

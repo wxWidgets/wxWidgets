@@ -901,7 +901,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
         if ( !wxCurrentPopupMenu )
 #endif // wxUSE_MENUS_NATIVE
         {
-            wxMenuItem * const mitem = MSWFindMenuBarItem(id);
+            wxMenuItem * const mitem = FindItemInMenuBar((signed short)id);
             if ( mitem )
                 return ProcessCommand(mitem);
         }
@@ -912,12 +912,6 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 }
 
 #if wxUSE_MENUS
-
-wxMenuItem *wxFrame::MSWFindMenuBarItem(WXWORD id)
-{
-    wxMenuBar * const mbar = GetMenuBar();
-    return mbar ? mbar->FindItem((signed short)id) : NULL;
-}
 
 bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 {

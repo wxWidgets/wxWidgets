@@ -551,7 +551,7 @@ void wxFrameBase::SetMenuBar(wxMenuBar *menubar)
     this->AttachMenuBar(menubar);
 }
 
-const wxMenuItem *wxFrameBase::FindItemInMenuBar(int menuId) const
+wxMenuItem *wxFrameBase::FindItemInMenuBar(int menuId) const
 {
     const wxMenuBar * const menuBar = GetMenuBar();
 
