@@ -1839,7 +1839,7 @@ enum wxKeyType
 /*  ---------------------------------------------------------------------------- */
 
 /*  Standard menu IDs */
-enum
+enum wxStandardID
 {
     /*
        These ids delimit the range used by automatically-generated ids

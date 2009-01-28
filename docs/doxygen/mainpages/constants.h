@@ -13,8 +13,6 @@
 
 This chapter describes the constants defined by wxWidgets.
 
-@li @subpage page_keycodes
-@li @subpage page_keymodifiers
 @li @subpage page_stdevtid
 @li @subpage page_stockitems
 @li @subpage page_cppconst

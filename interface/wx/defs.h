@@ -8,20 +8,338 @@
 
 
 /**
-    No id matches this one when compared to it.
+    Generic flags.
 */
-int wxID_NONE = -3;
+enum wxGeometryCentre
+{
+    wxCENTRE                  = 0x0001,
+    wxCENTER                  = wxCENTRE
+};
+
 
 /**
-    Id for a separator line in the menu (invalid for normal item).
+    A generic orientation value.
 */
-int wxID_SEPARATOR = -2;
+enum wxOrientation
+{
+    wxHORIZONTAL              = 0x0004,
+    wxVERTICAL                = 0x0008,
+
+    /**
+        A mask value to indicate both vertical and horizontal orientations.
+    */
+    wxBOTH                    = wxVERTICAL | wxHORIZONTAL,
+
+    /// A synonim for @c wxBOTH.
+    wxORIENTATION_MASK        = wxBOTH
+};
 
 /**
-    Any id: means that we don't care about the id, whether when installing
-    an event handler or when creating a new window.
+    A generic direction value.
 */
-int wxID_ANY = -1;
+enum wxDirection
+{
+    wxLEFT                    = 0x0010,
+    wxRIGHT                   = 0x0020,
+    wxUP                      = 0x0040,
+    wxDOWN                    = 0x0080,
+
+    wxTOP                     = wxUP,
+    wxBOTTOM                  = wxDOWN,
+
+    wxNORTH                   = wxUP,
+    wxSOUTH                   = wxDOWN,
+    wxWEST                    = wxLEFT,
+    wxEAST                    = wxRIGHT,
+
+    wxALL                     = (wxUP | wxDOWN | wxRIGHT | wxLEFT),
+
+    /** A mask to extract direction from the combination of flags. */
+    wxDIRECTION_MASK           = wxALL
+};
+
+/**
+    Generic alignment values. Can be combined together.
+*/
+enum wxAlignment
+{
+    wxALIGN_NOT               = 0x0000,
+    wxALIGN_CENTER_HORIZONTAL = 0x0100,
+    wxALIGN_CENTRE_HORIZONTAL = wxALIGN_CENTER_HORIZONTAL,
+    wxALIGN_LEFT              = wxALIGN_NOT,
+    wxALIGN_TOP               = wxALIGN_NOT,
+    wxALIGN_RIGHT             = 0x0200,
+    wxALIGN_BOTTOM            = 0x0400,
+    wxALIGN_CENTER_VERTICAL   = 0x0800,
+    wxALIGN_CENTRE_VERTICAL   = wxALIGN_CENTER_VERTICAL,
+
+    wxALIGN_CENTER            = (wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL),
+    wxALIGN_CENTRE            = wxALIGN_CENTER,
+
+    /** A mask to extract alignment from the combination of flags. */
+    wxALIGN_MASK              = 0x0f00
+};
+
+/**
+    Miscellaneous flags for wxSizer items.
+*/
+enum wxSizerFlagBits
+{
+    wxFIXED_MINSIZE                = 0x8000,
+    wxRESERVE_SPACE_EVEN_IF_HIDDEN = 0x0002,
+
+    /*  a mask to extract wxSizerFlagBits from combination of flags */
+    wxSIZER_FLAG_BITS_MASK         = 0x8002
+};
+
+/**
+    Generic stretch values.
+*/
+enum wxStretch
+{
+    wxSTRETCH_NOT             = 0x0000,
+    wxSHRINK                  = 0x1000,
+    wxGROW                    = 0x2000,
+    wxEXPAND                  = wxGROW,
+    wxSHAPED                  = 0x4000,
+    wxTILE                    = wxSHAPED | wxFIXED_MINSIZE,
+
+    /*  a mask to extract stretch from the combination of flags */
+    wxSTRETCH_MASK            = 0x7000 /* sans wxTILE */
+};
+
+/**
+    Border flags for wxWindow.
+*/
+enum wxBorder
+{
+    /**
+        This is different from wxBORDER_NONE as by default the controls do have
+        a border.
+    */
+    wxBORDER_DEFAULT = 0,
+
+    wxBORDER_NONE   = 0x00200000,
+    wxBORDER_STATIC = 0x01000000,
+    wxBORDER_SIMPLE = 0x02000000,
+    wxBORDER_RAISED = 0x04000000,
+    wxBORDER_SUNKEN = 0x08000000,
+    wxBORDER_DOUBLE = 0x10000000, /* deprecated */
+    wxBORDER_THEME  = wxBORDER_DOUBLE,
+
+    /*  a mask to extract border style from the combination of flags */
+    wxBORDER_MASK   = 0x1f200000
+};
+
+
+/**
+    Background styles. See wxWindow::SetBackgroundStyle().
+*/
+enum wxBackgroundStyle
+{
+    /// Use the default background, as determined by
+    /// the system or the current theme.
+    wxBG_STYLE_SYSTEM,
+
+    /// Use a solid colour for the background, this style is set automatically if you call
+    /// SetBackgroundColour() so you only need to set it explicitly if you had
+    /// changed the background style to something else before.
+    wxBG_STYLE_COLOUR,
+
+    /// Don't draw the background at all, it's supposed that it is drawn by
+    /// the user-defined erase background event handler.
+    /// This style should be used to avoid flicker when the background is entirely
+    /// custom-drawn.
+    wxBG_STYLE_CUSTOM,
+
+    /// The background is (partially) transparent,this style is automatically set if you call
+    /// SetTransparent() which is used to set the transparency level.
+    wxBG_STYLE_TRANSPARENT
+};
+
+
+/**
+    Standard menu IDs.
+*/
+enum wxStandardID
+{
+    /**
+       This id delimits the lower bound of the range used by automatically-generated ids
+       (i.e. those used when wxID_ANY is specified during construction).
+     */
+    wxID_AUTO_LOWEST,
+
+    /**
+       This id delimits the upper bound of the range used by automatically-generated ids
+       (i.e. those used when wxID_ANY is specified during construction).
+     */
+    wxID_AUTO_HIGHEST,
+
+    /**
+        No id matches this one when compared to it.
+    */
+    wxID_NONE = -3,
+
+    /**
+        Id for a separator line in the menu (invalid for normal item).
+    */
+    wxID_SEPARATOR = -2,
+
+    /**
+        Any id: means that we don't care about the id, whether when installing
+        an event handler or when creating a new window.
+    */
+    wxID_ANY = -1,
+
+    wxID_LOWEST = 4999,
+
+    wxID_OPEN,
+    wxID_CLOSE,
+    wxID_NEW,
+    wxID_SAVE,
+    wxID_SAVEAS,
+    wxID_REVERT,
+    wxID_EXIT,
+    wxID_UNDO,
+    wxID_REDO,
+    wxID_HELP,
+    wxID_PRINT,
+    wxID_PRINT_SETUP,
+    wxID_PAGE_SETUP,
+    wxID_PREVIEW,
+    wxID_ABOUT,
+    wxID_HELP_CONTENTS,
+    wxID_HELP_INDEX,
+    wxID_HELP_SEARCH,
+    wxID_HELP_COMMANDS,
+    wxID_HELP_PROCEDURES,
+    wxID_HELP_CONTEXT,
+    wxID_CLOSE_ALL,
+    wxID_PREFERENCES,
+
+    wxID_EDIT = 5030,
+    wxID_CUT,
+    wxID_COPY,
+    wxID_PASTE,
+    wxID_CLEAR,
+    wxID_FIND,
+    wxID_DUPLICATE,
+    wxID_SELECTALL,
+    wxID_DELETE,
+    wxID_REPLACE,
+    wxID_REPLACE_ALL,
+    wxID_PROPERTIES,
+
+    wxID_VIEW_DETAILS,
+    wxID_VIEW_LARGEICONS,
+    wxID_VIEW_SMALLICONS,
+    wxID_VIEW_LIST,
+    wxID_VIEW_SORTDATE,
+    wxID_VIEW_SORTNAME,
+    wxID_VIEW_SORTSIZE,
+    wxID_VIEW_SORTTYPE,
+
+    wxID_FILE = 5050,
+    wxID_FILE1,
+    wxID_FILE2,
+    wxID_FILE3,
+    wxID_FILE4,
+    wxID_FILE5,
+    wxID_FILE6,
+    wxID_FILE7,
+    wxID_FILE8,
+    wxID_FILE9,
+
+    /** Standard button and menu IDs */
+    wxID_OK = 5100,
+    wxID_CANCEL,
+    wxID_APPLY,
+    wxID_YES,
+    wxID_NO,
+    wxID_STATIC,
+    wxID_FORWARD,
+    wxID_BACKWARD,
+    wxID_DEFAULT,
+    wxID_MORE,
+    wxID_SETUP,
+    wxID_RESET,
+    wxID_CONTEXT_HELP,
+    wxID_YESTOALL,
+    wxID_NOTOALL,
+    wxID_ABORT,
+    wxID_RETRY,
+    wxID_IGNORE,
+    wxID_ADD,
+    wxID_REMOVE,
+
+    wxID_UP,
+    wxID_DOWN,
+    wxID_HOME,
+    wxID_REFRESH,
+    wxID_STOP,
+    wxID_INDEX,
+
+    wxID_BOLD,
+    wxID_ITALIC,
+    wxID_JUSTIFY_CENTER,
+    wxID_JUSTIFY_FILL,
+    wxID_JUSTIFY_RIGHT,
+    wxID_JUSTIFY_LEFT,
+    wxID_UNDERLINE,
+    wxID_INDENT,
+    wxID_UNINDENT,
+    wxID_ZOOM_100,
+    wxID_ZOOM_FIT,
+    wxID_ZOOM_IN,
+    wxID_ZOOM_OUT,
+    wxID_UNDELETE,
+    wxID_REVERT_TO_SAVED,
+    wxID_CDROM,
+    wxID_CONVERT,
+    wxID_EXECUTE,
+    wxID_FLOPPY,
+    wxID_HARDDISK,
+    wxID_BOTTOM,
+    wxID_FIRST,
+    wxID_LAST,
+    wxID_TOP,
+    wxID_INFO,
+    wxID_JUMP_TO,
+    wxID_NETWORK,
+    wxID_SELECT_COLOR,
+    wxID_SELECT_FONT,
+    wxID_SORT_ASCENDING,
+    wxID_SORT_DESCENDING,
+    wxID_SPELL_CHECK,
+    wxID_STRIKETHROUGH,
+
+    /** System menu IDs (used by wxUniv): */
+    wxID_SYSTEM_MENU = 5200,
+    wxID_CLOSE_FRAME,
+    wxID_MOVE_FRAME,
+    wxID_RESIZE_FRAME,
+    wxID_MAXIMIZE_FRAME,
+    wxID_ICONIZE_FRAME,
+    wxID_RESTORE_FRAME,
+
+    /** MDI window menu ids */
+    wxID_MDI_WINDOW_FIRST = 5230,
+    wxID_MDI_WINDOW_CASCADE = wxID_MDI_WINDOW_FIRST,
+    wxID_MDI_WINDOW_TILE_HORZ,
+    wxID_MDI_WINDOW_TILE_VERT,
+    wxID_MDI_WINDOW_ARRANGE_ICONS,
+    wxID_MDI_WINDOW_PREV,
+    wxID_MDI_WINDOW_NEXT,
+    wxID_MDI_WINDOW_LAST = wxID_MDI_WINDOW_NEXT,
+
+    /** IDs used by generic file dialog (13 consecutive starting from this value) */
+    wxID_FILEDLGG = 5900,
+
+    /** IDs used by generic file ctrl (4 consecutive starting from this value) */
+    wxID_FILECTRL = 5950,
+
+    wxID_HIGHEST = 5999
+};
 
 /**
     Item kinds for use with wxMenu, wxMenuItem, and wxToolBar.
@@ -65,6 +383,225 @@ enum wxItemKind
     wxITEM_MAX
 };
 
+/**
+    Generic hit test results.
+*/
+enum wxHitTest
+{
+    wxHT_NOWHERE,
+
+    /*  scrollbar */
+    wxHT_SCROLLBAR_FIRST = wxHT_NOWHERE,
+    wxHT_SCROLLBAR_ARROW_LINE_1,    /**< left or upper arrow to scroll by line */
+    wxHT_SCROLLBAR_ARROW_LINE_2,    /**< right or down */
+    wxHT_SCROLLBAR_ARROW_PAGE_1,    /**< left or upper arrow to scroll by page */
+    wxHT_SCROLLBAR_ARROW_PAGE_2,    /**< right or down */
+    wxHT_SCROLLBAR_THUMB,           /**< on the thumb */
+    wxHT_SCROLLBAR_BAR_1,           /**< bar to the left/above the thumb */
+    wxHT_SCROLLBAR_BAR_2,           /**< bar to the right/below the thumb */
+    wxHT_SCROLLBAR_LAST,
+
+    /*  window */
+    wxHT_WINDOW_OUTSIDE,            /**< not in this window at all */
+    wxHT_WINDOW_INSIDE,             /**< in the client area */
+    wxHT_WINDOW_VERT_SCROLLBAR,     /**< on the vertical scrollbar */
+    wxHT_WINDOW_HORZ_SCROLLBAR,     /**< on the horizontal scrollbar */
+    wxHT_WINDOW_CORNER,             /**< on the corner between 2 scrollbars */
+
+    wxHT_MAX
+};
+
+/**
+    Data format IDs used by wxDataFormat.
+*/
+enum wxDataFormatId
+{
+    wxDF_INVALID =          0,
+    wxDF_TEXT =             1,  /* CF_TEXT */
+    wxDF_BITMAP =           2,  /* CF_BITMAP */
+    wxDF_METAFILE =         3,  /* CF_METAFILEPICT */
+    wxDF_SYLK =             4,
+    wxDF_DIF =              5,
+    wxDF_TIFF =             6,
+    wxDF_OEMTEXT =          7,  /* CF_OEMTEXT */
+    wxDF_DIB =              8,  /* CF_DIB */
+    wxDF_PALETTE =          9,
+    wxDF_PENDATA =          10,
+    wxDF_RIFF =             11,
+    wxDF_WAVE =             12,
+    wxDF_UNICODETEXT =      13,
+    wxDF_ENHMETAFILE =      14,
+    wxDF_FILENAME =         15, /* CF_HDROP */
+    wxDF_LOCALE =           16,
+    wxDF_PRIVATE =          20,
+    wxDF_HTML =             30, /* Note: does not correspond to CF_ constant */
+    wxDF_MAX
+};
+
+/**
+    Virtual keycodes
+*/
+enum wxKeyCode
+{
+    WXK_BACK    =    8,
+    WXK_TAB     =    9,
+    WXK_RETURN  =    13,
+    WXK_ESCAPE  =    27,
+    WXK_SPACE   =    32,
+    WXK_DELETE  =    127,
+
+    /**
+        These are, by design, not compatible with unicode characters.
+        If you want to get a unicode character from a key event, use
+        wxKeyEvent::GetUnicodeKey instead.
+    */
+    WXK_START   = 300,
+    WXK_LBUTTON,
+    WXK_RBUTTON,
+    WXK_CANCEL,
+    WXK_MBUTTON,
+    WXK_CLEAR,
+    WXK_SHIFT,
+    WXK_ALT,
+    WXK_CONTROL,
+    WXK_MENU,
+    WXK_PAUSE,
+    WXK_CAPITAL,
+    WXK_END,
+    WXK_HOME,
+    WXK_LEFT,
+    WXK_UP,
+    WXK_RIGHT,
+    WXK_DOWN,
+    WXK_SELECT,
+    WXK_PRINT,
+    WXK_EXECUTE,
+    WXK_SNAPSHOT,
+    WXK_INSERT,
+    WXK_HELP,
+    WXK_NUMPAD0,
+    WXK_NUMPAD1,
+    WXK_NUMPAD2,
+    WXK_NUMPAD3,
+    WXK_NUMPAD4,
+    WXK_NUMPAD5,
+    WXK_NUMPAD6,
+    WXK_NUMPAD7,
+    WXK_NUMPAD8,
+    WXK_NUMPAD9,
+    WXK_MULTIPLY,
+    WXK_ADD,
+    WXK_SEPARATOR,
+    WXK_SUBTRACT,
+    WXK_DECIMAL,
+    WXK_DIVIDE,
+    WXK_F1,
+    WXK_F2,
+    WXK_F3,
+    WXK_F4,
+    WXK_F5,
+    WXK_F6,
+    WXK_F7,
+    WXK_F8,
+    WXK_F9,
+    WXK_F10,
+    WXK_F11,
+    WXK_F12,
+    WXK_F13,
+    WXK_F14,
+    WXK_F15,
+    WXK_F16,
+    WXK_F17,
+    WXK_F18,
+    WXK_F19,
+    WXK_F20,
+    WXK_F21,
+    WXK_F22,
+    WXK_F23,
+    WXK_F24,
+    WXK_NUMLOCK,
+    WXK_SCROLL,
+    WXK_PAGEUP,
+    WXK_PAGEDOWN,
+
+    WXK_NUMPAD_SPACE,
+    WXK_NUMPAD_TAB,
+    WXK_NUMPAD_ENTER,
+    WXK_NUMPAD_F1,
+    WXK_NUMPAD_F2,
+    WXK_NUMPAD_F3,
+    WXK_NUMPAD_F4,
+    WXK_NUMPAD_HOME,
+    WXK_NUMPAD_LEFT,
+    WXK_NUMPAD_UP,
+    WXK_NUMPAD_RIGHT,
+    WXK_NUMPAD_DOWN,
+    WXK_NUMPAD_PAGEUP,
+    WXK_NUMPAD_PAGEDOWN,
+    WXK_NUMPAD_END,
+    WXK_NUMPAD_BEGIN,
+    WXK_NUMPAD_INSERT,
+    WXK_NUMPAD_DELETE,
+    WXK_NUMPAD_EQUAL,
+    WXK_NUMPAD_MULTIPLY,
+    WXK_NUMPAD_ADD,
+    WXK_NUMPAD_SEPARATOR,
+    WXK_NUMPAD_SUBTRACT,
+    WXK_NUMPAD_DECIMAL,
+    WXK_NUMPAD_DIVIDE,
+
+    /** The following key codes are only generated under Windows currently */
+    WXK_WINDOWS_LEFT,
+    WXK_WINDOWS_RIGHT,
+    WXK_WINDOWS_MENU ,
+    WXK_COMMAND,
+
+    /** Hardware-specific buttons */
+    WXK_SPECIAL1 = 193,
+    WXK_SPECIAL2,
+    WXK_SPECIAL3,
+    WXK_SPECIAL4,
+    WXK_SPECIAL5,
+    WXK_SPECIAL6,
+    WXK_SPECIAL7,
+    WXK_SPECIAL8,
+    WXK_SPECIAL9,
+    WXK_SPECIAL10,
+    WXK_SPECIAL11,
+    WXK_SPECIAL12,
+    WXK_SPECIAL13,
+    WXK_SPECIAL14,
+    WXK_SPECIAL15,
+    WXK_SPECIAL16,
+    WXK_SPECIAL17,
+    WXK_SPECIAL18,
+    WXK_SPECIAL19,
+    WXK_SPECIAL20
+};
+
+/**
+    This enum contains bit mask constants used in wxKeyEvent.
+*/
+enum wxKeyModifier
+{
+    wxMOD_NONE      = 0x0000,
+    wxMOD_ALT       = 0x0001,
+    wxMOD_CONTROL   = 0x0002,
+    wxMOD_ALTGR     = wxMOD_ALT | wxMOD_CONTROL,
+    wxMOD_SHIFT     = 0x0004,
+    wxMOD_META      = 0x0008,
+    wxMOD_WIN       = wxMOD_META,
+
+    /**
+        Notice that @c wxMOD_CMD should be used instead of @c wxMOD_CONTROL
+        in portable code to account for the fact that although
+        @c Control modifier exists under Mac OS, it is not used for the same
+        purpose as under Windows or Unix there while the special Mac-specific
+        @c Command modifier is used in exactly the same way.
+    */
+    wxMOD_CMD       = wxMOD_META,
+    wxMOD_ALL       = 0xffff
+};
 
 /**
     Paper size types for use with the printing framework.
@@ -195,6 +732,41 @@ enum wxPaperSize
     wxPAPER_PENV_9_ROTATED,     ///< PRC Envelope #9 Rotated 324 x 229 mm
     wxPAPER_PENV_10_ROTATED     ///< PRC Envelope #10 Rotated 458 x 324 m
 };
+
+
+/**
+    Duplex printing modes.
+*/
+enum wxDuplexMode
+{
+    wxDUPLEX_SIMPLEX, /**< Non-duplex */
+    wxDUPLEX_HORIZONTAL,
+    wxDUPLEX_VERTICAL
+};
+
+/**
+    Print mode (currently PostScript only).
+*/
+enum wxPrintMode
+{
+    wxPRINT_MODE_NONE =    0,
+    wxPRINT_MODE_PREVIEW = 1,   /**< Preview in external application */
+    wxPRINT_MODE_FILE =    2,   /**< Print to file */
+    wxPRINT_MODE_PRINTER = 3,   /**< Send to printer */
+    wxPRINT_MODE_STREAM =  4    /**< Send postscript data into a stream */
+};
+
+/**
+    Flags which can be used in wxWindow::UpdateWindowUI().
+*/
+enum wxUpdateUI
+{
+    wxUPDATE_UI_NONE,
+    wxUPDATE_UI_RECURSE,
+    wxUPDATE_UI_FROMIDLE  /**<  Invoked from On(Internal)Idle */
+};
+
+
 
 
 /** @addtogroup group_funcmacro_byteorder */

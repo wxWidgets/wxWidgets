@@ -8,32 +8,6 @@
 
 
 /**
-    Background styles. See wxWindow::SetBackgroundStyle().
-*/
-enum wxBackgroundStyle
-{
-    /// Use the default background, as determined by
-    /// the system or the current theme.
-    wxBG_STYLE_SYSTEM,
-
-    /// Use a solid colour for the background, this style is set automatically if you call
-    /// SetBackgroundColour() so you only need to set it explicitly if you had
-    /// changed the background style to something else before.
-    wxBG_STYLE_COLOUR,
-
-    /// Don't draw the background at all, it's supposed that it is drawn by
-    /// the user-defined erase background event handler.
-    /// This style should be used to avoid flicker when the background is entirely
-    /// custom-drawn.
-    wxBG_STYLE_CUSTOM,
-
-    /// The background is (partially) transparent,this style is automatically set if you call
-    /// SetTransparent() which is used to set the transparency level.
-    wxBG_STYLE_TRANSPARENT
-};
-
-
-/**
     Valid values for wxWindow::ShowWithEffect() and wxWindow::HideWithEffect().
 */
 enum wxShowEffect
@@ -80,17 +54,6 @@ enum wxWindowVariant
     wxWINDOW_VARIANT_MINI,    //!< Mini size (about 33 % smaller than normal)
     wxWINDOW_VARIANT_LARGE,   //!< Large size (about 25 % larger than normal)
     wxWINDOW_VARIANT_MAX
-};
-
-
-/**
-    Flags which can be used in wxWindow::UpdateWindowUI().
-*/
-enum wxUpdateUI
-{
-    wxUPDATE_UI_NONE,
-    wxUPDATE_UI_RECURSE,
-    wxUPDATE_UI_FROMIDLE  /**<  Invoked from On(Internal)Idle */
 };
 
 
@@ -2892,7 +2855,7 @@ public:
         are concerned). This may be necessary if you have called
         wxUpdateUIEvent::SetMode() or wxUpdateUIEvent::SetUpdateInterval() to limit
         the overhead that wxWidgets incurs by sending update UI events in idle time.
-        @a flags should be a bitlist of one or more of the wxUpdateUI enumeration.
+        @a flags should be a bitlist of one or more of the ::wxUpdateUI enumeration.
 
         If you are calling this function from an OnInternalIdle or OnIdle
         function, make sure you pass the wxUPDATE_UI_FROMIDLE flag, since
