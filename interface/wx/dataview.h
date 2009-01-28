@@ -485,10 +485,10 @@ public:
 
     wxDataViewCtrl is a control to display data either in a tree like fashion or
     in a tabular form or both.
-    
+
     If you only need to display a simple tree structure with an API more like the
     older wxTreeCtrl class, then the specialized wxDataViewTreeCtrl can be used.
-    Likewise, if you only want to display simple table structure you can use 
+    Likewise, if you only want to display simple table structure you can use
     the specialized wxDataViewListCtrl class. Both wxDataViewTreeCtrl and
     wxDataViewListCtrl can be used without defining  your own wxDataViewModel.
 
@@ -773,12 +773,12 @@ public:
        Enable drag operations using the given @a format.
     */
     virtual bool EnableDragSource( const wxDataFormat &format );
-    
+
     /**
        Enable drop operations using the given @a format.
     */
     virtual bool EnableDropTarget( const wxDataFormat &format );
-    
+
     /**
         Call this to ensure that the given item is visible.
     */
@@ -1434,6 +1434,7 @@ public:
 
 /**
     The flags used by wxDataViewColumn.
+    Can be combined together.
 */
 enum wxDataViewColumnFlags
 {
@@ -1458,9 +1459,22 @@ enum wxDataViewColumnFlags
 class wxDataViewColumn : public wxHeaderColumn
 {
 public:
-    //@{
     /**
-        Constructors.
+        Constructs a text column.
+
+        @param title
+            The title of the column.
+        @param renderer
+            The class which will render the contents of this column.
+        @param model_column
+            The index of the model's column which is associated with this object.
+        @param width
+            The width of the column.
+            The @c wxDVC_DEFAULT_WIDTH value is the fixed default value.
+        @param align
+            The alignment of the column title.
+        @param flags
+            One or more flags of the ::wxDataViewColumnFlags enumeration.
     */
     wxDataViewColumn(const wxString& title,
                      wxDataViewRenderer* renderer,
@@ -1468,13 +1482,30 @@ public:
                      int width = wxDVC_DEFAULT_WIDTH,
                      wxAlignment align = wxALIGN_CENTER,
                      int flags = wxDATAVIEW_COL_RESIZABLE);
+
+    /**
+        Constructs a bitmap column.
+
+        @param bitmap
+            The bitmap of the column.
+        @param renderer
+            The class which will render the contents of this column.
+        @param model_column
+            The index of the model's column which is associated with this object.
+        @param width
+            The width of the column.
+            The @c wxDVC_DEFAULT_WIDTH value is the fixed default value.
+        @param align
+            The alignment of the column title.
+        @param flags
+            One or more flags of the ::wxDataViewColumnFlags enumeration.
+    */
     wxDataViewColumn(const wxBitmap& bitmap,
                      wxDataViewRenderer* renderer,
                      unsigned int model_column,
                      int width = wxDVC_DEFAULT_WIDTH,
                      wxAlignment align = wxALIGN_CENTER,
                      int flags = wxDATAVIEW_COL_RESIZABLE);
-    //@}
 
     /**
         Returns the index of the column of the model, which this
@@ -1508,15 +1539,15 @@ public:
 
     @code
        wxDataViewListCtrl *listctrl = new wxDataViewListCtrl( parent, -1 );
-        
+
        listctrl->AppendToggleColumn( "Toggle" );
        listctrl->AppendTextColumn( "Text" );
-    
+
        wxVector<wxVariant> data;
        data.push_back( true );
        data.push_back( "row 1" );
        listctrl->AppendItem( data );
-    
+
        data.clear();
        data.push_back( false );
        data.push_back( "row 3" );
@@ -1534,7 +1565,7 @@ public:
         Default ctor.
     */
     wxDataViewListCtrl();
-    
+
     /**
         Constructor. Calls Create().
     */
@@ -1542,7 +1573,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = wxDV_ROW_LINES,
            const wxValidator& validator = wxDefaultValidator );
-           
+
     /**
         Destructor. Deletes the image list if any.
     */
@@ -1569,69 +1600,69 @@ public:
         column to the store with the type @a varianttype.
     */
     void AppendColumn( wxDataViewColumn *column, const wxString &varianttype );
-    
+
     /**
         Prepends a column to the control and additonally prepends a
         column to the store with the type @a varianttype.
     */
     void PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
-    
+
     /**
         Inserts a column to the control and additonally inserts a
         column to the store with the type @a varianttype.
     */
     void InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
-                    
+
     /**
         Overridden from wxDataViewCtrl
-        
+
         Appends a column to the control and additonally appends a
         column to the store with the type string.
     */
     virtual void AppendColumn( wxDataViewColumn *column );
-    
+
     /**
         Overridden from wxDataViewCtrl
-        
+
         Prepends a column to the control and additonally prepends a
         column to the store with the type string.
     */
     virtual void PrependColumn( wxDataViewColumn *column );
-    
+
     /**
         Overridden from wxDataViewCtrl
-        
+
         Inserts a column to the control and additonally inserts a
         column to the store with the type string.
     */
     virtual void InsertColumn( unsigned int pos, wxDataViewColumn *column );
-                    
+
     /**
         Inserts a text column to the control and the store.
     */
-    wxDataViewColumn *AppendTextColumn( const wxString &label, 
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+    wxDataViewColumn *AppendTextColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-                    
+
     /**
         Inserts a toggle column to the control and the store.
     */
-    wxDataViewColumn *AppendToggleColumn( const wxString &label, 
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, 
+    wxDataViewColumn *AppendToggleColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-                    
+
     /**
         Inserts a progress column to the control and the store.
     */
-    wxDataViewColumn *AppendProgressColumn( const wxString &label, 
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+    wxDataViewColumn *AppendProgressColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-                    
+
     /**
         Inserts a icon and text column to the control and the store.
     */
-    wxDataViewColumn *AppendIconTextColumn( const wxString &label, 
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, 
+    wxDataViewColumn *AppendIconTextColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
           int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
 
     /**
@@ -1648,54 +1679,54 @@ public:
         Inserts an item (=row) to the control and store.
     */
     void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
-    
+
     /**
         Delete the row at position @a row.
     */
     void DeleteItem( unsigned row );
-    
+
     /**
         Delete all items (= all rows).
     */
     void DeleteAllItems();
-    
+
     /**
          Sets the value in the store and update the control.
     */
     void SetValue( const wxVariant &value, unsigned int row, unsigned int col );
-    
+
     /**
          Returns the value from the store.
     */
     void GetValue( wxVariant &value, unsigned int row, unsigned int col );
-    
+
     /**
-         Sets the value in the store and update the control. 
-         
+         Sets the value in the store and update the control.
+
          This method assumes that the a string is stored in respective
          column.
     */
     void SetTextValue( const wxString &value, unsigned int row, unsigned int col );
-    
+
     /**
          Returns the value from the store.
-         
+
          This method assumes that the a string is stored in respective
          column.
     */
     wxString GetTextValue( unsigned int row, unsigned int col ) const;
-    
+
     /**
-         Sets the value in the store and update the control. 
-         
+         Sets the value in the store and update the control.
+
          This method assumes that the a boolean value is stored in
          respective column.
     */
     void SetToggleValue( bool value, unsigned int row, unsigned int col );
-    
+
     /**
          Returns the value from the store.
-         
+
          This method assumes that the a boolean value is stored in
          respective column.
     */
@@ -1901,9 +1932,9 @@ public:
     its data is be accessed by row (i.e. by index) instead of only
     by wxDataViewItem.
 
-    This class actually stores the values (therefore its name) 
+    This class actually stores the values (therefore its name)
     and implements all virtual methods from the base classes so it can be
-    used directly without having to derive any class from it, but it is 
+    used directly without having to derive any class from it, but it is
     mostly used from within wxDataViewListCtrl.
 
     @library{wxadv}
@@ -1914,77 +1945,77 @@ class wxDataViewListStore: public wxDataViewIndexListModel
 {
 public:
     /**
-       Constructor
+        Constructor
     */
     wxDataViewListStore();
-    
+
     /**
-       Destructor
+        Destructor
     */
     ~wxDataViewListStore();
 
     /**
-      Prepends a data column. 
-      
-      @a variantype indicates the type of values store in the column.
-      
-      This does not automatically fill in any (default) values in 
-      rows which exist in the store already.
+        Prepends a data column.
+
+        @a variantype indicates the type of values store in the column.
+
+        This does not automatically fill in any (default) values in
+        rows which exist in the store already.
     */
     void PrependColumn( const wxString &varianttype );
 
     /**
-      Inserts a data column before @a pos.
-      
-      @a variantype indicates the type of values store in the column.
-      
-      This does not automatically fill in any (default) values in 
-      rows which exist in the store already.
+        Inserts a data column before @a pos.
+
+        @a variantype indicates the type of values store in the column.
+
+        This does not automatically fill in any (default) values in
+        rows which exist in the store already.
     */
     void InsertColumn( unsigned int pos, const wxString &varianttype );
 
     /**
-      Apppends a data column. 
-      
-      @a variantype indicates the type of values store in the column.
-      
-      This does not automatically fill in any (default) values in 
-      rows which exist in the store already.
+        Appends a data column.
+
+        @a variantype indicates the type of values store in the column.
+
+        This does not automatically fill in any (default) values in
+        rows which exist in the store already.
     */
     void AppendColumn( const wxString &varianttype );
-    
+
     /**
         Appends an item (=row) and fills it with @a values.
-        
+
         The values must match the values specifies in the column
         in number and type. No (default) values are filled in
         automatically.
     */
     void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
-    
+
     /**
         Prepends an item (=row) and fills it with @a values.
-        
+
         The values must match the values specifies in the column
         in number and type. No (default) values are filled in
         automatically.
     */
     void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
-    
+
     /**
         Inserts an item (=row) and fills it with @a values.
-        
+
         The values must match the values specifies in the column
         in number and type. No (default) values are filled in
         automatically.
     */
     void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
-    
+
     /**
         Delete the item (=row) at position @a pos.
     */
     void DeleteItem( unsigned pos );
-    
+
     /**
         Delete all item (=all rows) in the store.
     */
@@ -2020,7 +2051,7 @@ public:
     wxDataViewTreeStore is a specialised wxDataViewModel for stroing simple
     trees very much like wxTreeCtrl does and it offers a similar API.
 
-    This class actually stores the entire tree and the values (therefore its name) 
+    This class actually stores the entire tree and the values (therefore its name)
     and implements all virtual methods from the base class so it can be used directly
     without having to derive any class from it, but it is mostly used from within
     wxDataViewTreeCtrl.
@@ -2265,43 +2296,43 @@ public:
         Sets the value associated with this event.
     */
     void SetValue(const wxVariant& value);
-    
+
     /**
         Set wxDataObject for data transfer within a drag operation.
     */
     void SetDataObject( wxDataObject *obj );
-            
+
     /**
         Used internally. Gets associated wxDataObject for data transfer
         within a drag operation.
     */
     wxDataObject *GetDataObject() const;
-    
+
     /**
         Used internally. Sets the wxDataFormat during a drop operation.
     */
     void SetDataFormat( const wxDataFormat &format );
-    
+
     /**
         Gets the wxDataFormat during a drop operation.
     */
     wxDataFormat GetDataFormat() const;
-    
+
     /**
         Used internally. Sets the data size for a drop data transfer.
     */
     void SetDataSize( size_t size );
-    
+
     /**
         Gets the data size for a drop data transfer.
     */
     size_t GetDataSize() const;
-    
+
     /**
         Used internally. Sets the data buffer for a drop data transfer.
     */
     void SetDataBuffer( void* buf );
-    
+
     /**
         Gets the data buffer for a drop data transfer.
     */
