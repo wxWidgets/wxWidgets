@@ -406,6 +406,26 @@ public:
     virtual void DrawTreeItemButton(wxWindow* win, wxDC& dc, const wxRect& rect,
                                     int flags = 0) = 0;
 
+    /** 
+        Draw a native wxChoice
+    */
+    virtual void DrawChoice(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+
+    /** 
+        Draw a native wxComboBox
+    */
+    virtual void DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+
+    /** 
+        Draw a native wxTextCtrl frame
+    */
+    virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+
+    /**
+        Draw a native wxRadioButton (just the button image, not the text)
+    */
+    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0) = 0;
+
     /**
         Return the currently used renderer.
     */
