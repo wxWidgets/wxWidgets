@@ -23,6 +23,7 @@
     (and optionally wxListCtrl::OnGetItemImage or wxListCtrl::OnGetItemColumnImage and
     wxListCtrl::OnGetItemAttr) to return the information about the items when the
     control requests it.
+
     Virtual list control can be used as a normal one except that no operations
     which can take time proportional to the number of items in the control happen
     -- this is required to allow having a practically infinite number of items.
@@ -39,19 +40,19 @@
     <b>wxMac Note</b>: Starting with wxWidgets 2.8, wxListCtrl uses a native
     implementation for report mode, and uses a generic implementation for other
     modes. You can use the generic implementation for report mode as well by setting
-    the @c mac.listctrl.always_use_generic system option (see wxSystemOption) to 1.
+    the @c mac.listctrl.always_use_generic system option (see wxSystemOptions) to 1.
 
 
     @beginStyleTable
     @style{wxLC_LIST}
            Multicolumn list view, with optional small icons. Columns are
            computed automatically, i.e. you don't set columns as in
-           wxLC_REPORT. In other words, the list wraps, unlike a wxListBox.
+           @c wxLC_REPORT. In other words, the list wraps, unlike a wxListBox.
     @style{wxLC_REPORT}
            Single or multicolumn report view, with optional header.
     @style{wxLC_VIRTUAL}
            The application provides items text on demand. May only be used
-           with wxLC_REPORT.
+           with @c wxLC_REPORT.
     @style{wxLC_ICON}
            Large icon view, with optional labels.
     @style{wxLC_SMALL_ICON}
