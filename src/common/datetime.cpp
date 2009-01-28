@@ -1273,6 +1273,17 @@ wxDateTime wxDateTime::GetBeginDST(int year, Country country)
                             wxFAIL_MSG( _T("no first Sunday in April?") );
                         }
                     }
+                    else if ( year > 2006 )
+                    // Energy Policy Act of 2005, Pub. L. no. 109-58, 119 Stat 594 (2005).
+                    // Starting in 2007, daylight time begins in the United States on the
+                    // second Sunday in March and ends on the first Sunday in November
+                    {
+                        if ( !dt.SetToWeekDay(Sun, 2, Mar, year) )
+                        {
+                            // weird...
+                            wxFAIL_MSG( _T("no second Sunday in March?") );
+                        }
+                    }
                     else
                     {
                         if ( !dt.SetToWeekDay(Sun, 1, Apr, year) )
@@ -1349,21 +1360,36 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
                     dt.Set(30, Sep, year);
                     break;
 
-                default:
-                    // DST ends at 2 a.m. on the last Sunday of October
-                    if ( !dt.SetToLastWeekDay(Sun, Oct, year) )
+                default: // default for switch (year)
+                    if ( year > 2006 )
+                      // Energy Policy Act of 2005, Pub. L. no. 109-58, 119 Stat 594 (2005).
+                      // Starting in 2007, daylight time begins in the United States on the
+                      // second Sunday in March and ends on the first Sunday in November
                     {
-                        // weirder and weirder...
-                        wxFAIL_MSG( _T("no last Sunday in October?") );
+                        if ( !dt.SetToWeekDay(Sun, 1, Nov, year) )
+                        {
+                            // weird...
+                            wxFAIL_MSG( _T("no first Sunday in November?") );
+                        }
+                    }
+                    else
+                     // pre-2007
+                     // DST ends at 2 a.m. on the last Sunday of October
+                    {
+                        if ( !dt.SetToLastWeekDay(Sun, Oct, year) )
+                        {
+                            // weirder and weirder...
+                            wxFAIL_MSG( _T("no last Sunday in October?") );
+                        }
                     }
 
                     dt += wxTimeSpan::Hours(2);
 
-                    // TODO what about timezone??
+            // TODO: what about timezone??
             }
             break;
 
-        default:
+        default: // default for switch (country)
             // assume October 26th as the end of the DST - totally bogus too
             dt.Set(26, Oct, year);
     }

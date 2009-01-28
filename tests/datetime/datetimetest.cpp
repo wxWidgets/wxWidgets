@@ -536,7 +536,7 @@ for n in range(20):
 void DateTimeTestCase::TestTimeDST()
 {
     // taken from http://www.energy.ca.gov/daylightsaving.html
-    static const Date datesDST[2][2004 - 1900 + 1] =
+    static const Date datesDST[2][2009 - 1990 + 1] =
     {
         {
             { 1, wxDateTime::Apr, 1990, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
@@ -554,6 +554,11 @@ void DateTimeTestCase::TestTimeDST()
             { 7, wxDateTime::Apr, 2002, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
             { 6, wxDateTime::Apr, 2003, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
             { 4, wxDateTime::Apr, 2004, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            { 3, wxDateTime::Apr, 2005, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            { 2, wxDateTime::Apr, 2006, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            {11, wxDateTime::Mar, 2007, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            { 9, wxDateTime::Mar, 2008, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            { 8, wxDateTime::Mar, 2009, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
         },
         {
             { 28, wxDateTime::Oct, 1990, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
@@ -571,20 +576,26 @@ void DateTimeTestCase::TestTimeDST()
             { 27, wxDateTime::Oct, 2002, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
             { 26, wxDateTime::Oct, 2003, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
             { 31, wxDateTime::Oct, 2004, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            { 30, wxDateTime::Oct, 2005, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            { 29, wxDateTime::Oct, 2006, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            {  4, wxDateTime::Nov, 2007, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            {  2, wxDateTime::Nov, 2008, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+            {  1, wxDateTime::Nov, 2009, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0 },
+
         }
     };
 
-    for ( int year = 1990; year < 2005; year++ )
+    for ( size_t n = 0; n < WXSIZEOF(datesDST[0]); n++ )
     {
+        const int year = 1990 + n;
         wxDateTime dtBegin = wxDateTime::GetBeginDST(year, wxDateTime::USA),
                    dtEnd = wxDateTime::GetEndDST(year, wxDateTime::USA);
 
-        size_t n = year - 1990;
         const Date& dBegin = datesDST[0][n];
         const Date& dEnd = datesDST[1][n];
 
-        CPPUNIT_ASSERT( dBegin.SameDay(dtBegin.GetTm()) );
-        CPPUNIT_ASSERT( dEnd.SameDay(dtEnd.GetTm()) );
+        CPPUNIT_ASSERT_EQUAL( dBegin.DT().FormatDate(), dtBegin.FormatDate() );
+        CPPUNIT_ASSERT_EQUAL( dEnd.DT().FormatDate(), dtEnd.FormatDate() );
     }
 }
 
