@@ -3062,10 +3062,9 @@ protected:
      */
     void SendDestroyEvent();
 
-    //@{
     /**
-        These functions are public in wxEvtHandler but protected in wxWindow
-        because for wxWindows you should always use this function on the
+        This function is public in wxEvtHandler but protected in wxWindow
+        because for wxWindows you should always call ProcessEvent() on the
         pointer returned by GetEventHandler() and not on the wxWindow object
         itself.
 
@@ -3076,8 +3075,16 @@ protected:
         wxWindow object (e.g. casting it to wxEvtHandler) but doing that will
         create subtle bugs when windows with event handlers pushed on them are
         involved.
+
+        This holds also for all other wxEvtHandler functions.
     */
     virtual bool ProcessEvent(wxEvent& event);
+
+    //@{
+    /**
+        See ProcessEvent() for more info about why you shouldn't use this function
+        and the reason for making this function protected in wxWindow.
+    */
     bool SafelyProcessEvent(wxEvent& event);
     virtual void QueueEvent(wxEvent *event);
     virtual void AddPendingEvent(const wxEvent& event);
