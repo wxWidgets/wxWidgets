@@ -45,6 +45,8 @@ public:
     MyFrame();
     virtual ~MyFrame();
 
+    static wxMenuBar *CreateMainMenubar();
+
 private:
     void InitToolBar(wxToolBar* toolBar);
 

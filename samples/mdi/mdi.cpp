@@ -135,22 +135,8 @@ MyFrame::MyFrame()
 
     // Make a menubar
 #if wxUSE_MENUS
-    wxMenu *file_menu = new wxMenu;
-
-    file_menu->Append(wxID_NEW, "&New window\tCtrl-N", "Create a new child window");
-    file_menu->AppendCheckItem(MDI_FULLSCREEN, "Show &fullscreen\tCtrl-F");
-    file_menu->Append(wxID_EXIT, "&Exit\tAlt-X", "Quit the program");
-
-    wxMenu *help_menu = new wxMenu;
-    help_menu->Append(wxID_ABOUT, "&About\tF1");
-
-    wxMenuBar *menu_bar = new wxMenuBar;
-
-    menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(help_menu, "&Help");
-
     // Associate the menu bar with the frame
-    SetMenuBar(menu_bar);
+    SetMenuBar(CreateMainMenubar());
 
 
     // This shows that the standard window menu may be customized:
@@ -215,6 +201,27 @@ MyFrame::~MyFrame()
     // the size event handler if it's called during destruction
     Disconnect(wxEVT_SIZE, wxSizeEventHandler(MyFrame::OnSize));
 }
+
+#if wxUSE_MENUS
+/* static */
+wxMenuBar *MyFrame::CreateMainMenubar()
+{
+    wxMenu *menuFile = new wxMenu;
+
+    menuFile->Append(wxID_NEW, "&New window\tCtrl-N", "Create a new child window");
+    menuFile->AppendCheckItem(MDI_FULLSCREEN, "Show &full screen\tCtrl-F");
+    menuFile->Append(wxID_EXIT, "&Exit\tAlt-X", "Quit the program");
+
+    wxMenu *menuHelp = new wxMenu;
+    menuHelp->Append(wxID_ABOUT, "&About\tF1");
+
+    wxMenuBar *mbar = new wxMenuBar;
+    mbar->Append(menuFile, "&File");
+    mbar->Append(menuHelp, "&Help");
+
+    return mbar;
+}
+#endif // wxUSE_MENUS
 
 void MyFrame::OnClose(wxCloseEvent& event)
 {
@@ -412,43 +419,32 @@ MyChild::MyChild(wxMDIParentFrame *parent)
 
     const bool canBeResized = !IsAlwaysMaximized();
 
-    // create our menubar: it will be shown instead of the main frame one when
+    // create our menu bar: it will be shown instead of the main frame one when
     // we're active
 #if wxUSE_MENUS
-    // Make a menubar
-    wxMenu *file_menu = new wxMenu;
+    wxMenuBar *mbar = MyFrame::CreateMainMenubar();
+    mbar->GetMenu(0)->Insert(1, wxID_CLOSE, "&Close child\tCtrl-W",
+                             "Close this window");
 
-    file_menu->Append(wxID_NEW, "&New window\tCtrl-N");
-    file_menu->Append(wxID_CLOSE, "&Close child\tCtrl-W", "Close this window");
-    file_menu->AppendCheckItem(MDI_FULLSCREEN, "Show &fullscreen\tCtrl-F");
-    file_menu->Append(wxID_EXIT, "&Exit\tAlt-X", "Quit the program");
+    wxMenu *menuChild = new wxMenu;
 
-    wxMenu *option_menu = new wxMenu;
-
-    option_menu->Append(MDI_REFRESH, "&Refresh picture");
-    option_menu->Append(MDI_CHANGE_TITLE, "Change &title...\tCtrl-T");
+    menuChild->Append(MDI_REFRESH, "&Refresh picture");
+    menuChild->Append(MDI_CHANGE_TITLE, "Change &title...\tCtrl-T");
     if ( canBeResized )
     {
-        option_menu->AppendSeparator();
-        option_menu->Append(MDI_CHANGE_POSITION, "Move frame\tCtrl-M");
-        option_menu->Append(MDI_CHANGE_SIZE, "Resize frame\tCtrl-S");
+        menuChild->AppendSeparator();
+        menuChild->Append(MDI_CHANGE_POSITION, "Move frame\tCtrl-M");
+        menuChild->Append(MDI_CHANGE_SIZE, "Resize frame\tCtrl-S");
     }
 #if wxUSE_CLIPBOARD
-    option_menu->AppendSeparator();
-    option_menu->Append(wxID_PASTE, "Copy text from clipboard\tCtrl-V");
+    menuChild->AppendSeparator();
+    menuChild->Append(wxID_PASTE, "Copy text from clipboard\tCtrl-V");
 #endif // wxUSE_CLIPBOARD
 
-    wxMenu *help_menu = new wxMenu;
-    help_menu->Append(wxID_ABOUT, "&About");
-
-    wxMenuBar *menu_bar = new wxMenuBar;
-
-    menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(option_menu, "&Child");
-    menu_bar->Append(help_menu, "&Help");
+    mbar->Insert(1, menuChild, "&Child");
 
     // Associate the menu bar with the frame
-    SetMenuBar(menu_bar);
+    SetMenuBar(mbar);
 #endif // wxUSE_MENUS
 
     // this should work for MDI frames as well as for normal ones, provided
