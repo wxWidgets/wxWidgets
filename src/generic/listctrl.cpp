@@ -2577,8 +2577,8 @@ void wxListMainWindow::MoveToItem(size_t item)
 
     const int hLine = GetLineHeight();
 
-    int view_x = SCROLL_UNIT_X * GetScrollPos( wxHORIZONTAL );
-    int view_y = hLine * GetScrollPos( wxVERTICAL );
+    int view_x = SCROLL_UNIT_X * GetListCtrl()->GetScrollPos( wxHORIZONTAL );
+    int view_y = hLine * GetListCtrl()->GetScrollPos( wxVERTICAL );
 
     if ( InReportView() )
     {
