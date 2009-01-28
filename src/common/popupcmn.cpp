@@ -464,7 +464,7 @@ void wxPopupComboWindow::OnDismiss()
 
 void wxPopupComboWindow::OnKeyDown(wxKeyEvent& event)
 {
-    m_combo->ProcessEvent(event);
+    m_combo->ProcessWindowEvent(event);
 }
 
 #endif // wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)

@@ -806,6 +806,13 @@ public:
         // be there)
     bool RemoveEventHandler(wxEvtHandler *handler);
 
+        // Process an event by calling GetEventHandler()->ProcessEvent(): this
+        // is a straightforward replacement for ProcessEvent() itself which
+        // shouldn't be used directly with windows as it doesn't take into
+        // account any event handlers associated with the window
+    bool ProcessWindowEvent(wxEvent& event)
+        { return GetEventHandler()->ProcessEvent(event); }
+
         // Process an event by calling GetEventHandler()->ProcessEvent() and
         // handling any exceptions thrown by event handlers. It's mostly useful
         // when processing wx events when called from C code (e.g. in GTK+

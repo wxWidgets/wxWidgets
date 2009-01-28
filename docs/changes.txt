@@ -119,6 +119,10 @@ Changes in behaviour which may result in compilation errors
   need to review them as wxDC doesn't have any virtual methods any longer and
   uses delegation instead of inheritance to present different behaviours.
 
+- wxWindow::ProcessEvent() has been made protected to prevent wrongly using it
+  instead of correct GetEventHandler()->ProcessEvent(). New ProcessWindowEvent()
+  was added for convenience.
+
 - Return type of wxString::operator[] and wxString::iterator::operator* is no
   longer wxChar (i.e. char or wchar_t), but wxUniChar. This is not a problem
   in vast majority of cases because of conversion operators, but it can break

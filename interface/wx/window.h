@@ -1650,8 +1650,20 @@ public:
         @code
         GetEventHandler()->SafelyProcessEvent(event);
         @endcode
+
+        @see ProcessWindowEvent()
     */
     bool HandleWindowEvent(wxEvent& event) const;
+
+    /**
+        Convenient wrapper for ProcessEvent().
+
+        This is the same as writing @code GetEventHandler()->ProcessEvent(event);
+        @endcode but more convenient. Notice that ProcessEvent() itself can't
+        be called for wxWindow objects as it ignores the event handlers
+        associated with the window, use this function instead.
+    */
+    bool ProcessWindowEvent(wxEvent& event);
 
     /**
         Removes and returns the top-most event handler on the event handler stack.
@@ -3052,14 +3064,18 @@ protected:
 
     //@{
     /**
-        This function is public in wxEvtHandler but is protected in wxWindow because
-        for wxWindows you should always use this function on the pointer returned
-        by GetEventHandler() and not on the wxWindow object itself.
+        These functions are public in wxEvtHandler but protected in wxWindow
+        because for wxWindows you should always use this function on the
+        pointer returned by GetEventHandler() and not on the wxWindow object
+        itself.
+
+        For convenience, a ProcessWindowEvent() method is provided as a synonym
+        for @code GetEventHandler()->ProcessEvent() @endcode.
 
         Note that it's still possible to call these functions directly on the
-        wxWindow object (e.g. downcasting it to wxEvtHandler) but doing that
-        will create subtle bugs when windows with event handlers pushed on them
-        are involved.
+        wxWindow object (e.g. casting it to wxEvtHandler) but doing that will
+        create subtle bugs when windows with event handlers pushed on them are
+        involved.
     */
     virtual bool ProcessEvent(wxEvent& event);
     bool SafelyProcessEvent(wxEvent& event);

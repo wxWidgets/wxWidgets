@@ -185,7 +185,7 @@ void wxComboListBox::OnLeftUp(wxMouseEvent& event)
     wxCommandEvent evt(wxEVT_COMMAND_COMBOBOX_SELECTED,m_combo->GetId());
     evt.SetInt(wxListBox::GetSelection());
     evt.SetEventObject(m_combo);
-    m_combo->ProcessEvent(evt);
+    m_combo->ProcessWindowEvent(evt);
 
     event.Skip();
 }

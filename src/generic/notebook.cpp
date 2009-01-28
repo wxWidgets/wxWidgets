@@ -565,15 +565,17 @@ void wxNotebook::OnSetFocus(wxFocusEvent& event)
 
 void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 {
-    if ( event.IsWindowChange() ) {
+    if ( event.IsWindowChange() )
+    {
         // change pages
         AdvanceSelection(event.GetDirection());
     }
     else {
         // pass to the parent
-        if ( GetParent() ) {
+        if ( GetParent() )
+        {
             event.SetCurrentFocus(this);
-            GetParent()->ProcessEvent(event);
+            GetParent()->ProcessWindowEvent(event);
         }
     }
 }

@@ -372,7 +372,7 @@ bool wxGenericMDIParentFrame::ProcessEvent(wxEvent& event)
             m_childHandler = m_currentChild;
             wxON_BLOCK_EXIT_NULL(m_childHandler);
 
-            if ( m_currentChild->ProcessEvent(event) )
+            if ( m_currentChild->ProcessWindowEvent(event) )
                 return true;
         }
     }
