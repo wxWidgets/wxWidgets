@@ -4832,6 +4832,11 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
     // Except for TAB and ESC, handle child control events in child control
     if ( fromChild )
     {
+        // Only propagate event if it had modifiers
+        if ( !event.HasModifiers() )
+        {
+            event.StopPropagation();
+        }
         event.Skip();
         return;
     }
@@ -4905,6 +4910,19 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 
 void wxPropertyGrid::OnKey( wxKeyEvent &event )
 {
+    // If there was editor open and focused, then this event should not
+    // really be processed here.
+    if ( IsEditorFocused() )
+    {
+        // However, if event had modifiers, it is probably still best
+        // to skip it.
+        if ( event.HasModifiers() )
+            event.Skip();
+        else
+            event.StopPropagation();
+        return;
+    }
+
     HandleKeyEvent(event, false);
 }
 
