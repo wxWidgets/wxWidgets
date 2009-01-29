@@ -281,6 +281,8 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
                                     long style,
                                     const wxString& name )
 {
+    if ( !m_pPropGrid )
+        m_pPropGrid = CreatePropertyGrid();
 
     bool res = wxPanel::Create( parent, id, pos, size,
                                 (style&0xFFFF0000)|wxWANTS_CHARS,
@@ -298,8 +300,7 @@ bool wxPropertyGridManager::Create( wxWindow *parent,
 void wxPropertyGridManager::Init1()
 {
 
-    //m_pPropGrid = NULL;
-    m_pPropGrid = CreatePropertyGrid();
+    m_pPropGrid = NULL;
 
 #if wxUSE_TOOLBAR
     m_pToolbar = NULL;

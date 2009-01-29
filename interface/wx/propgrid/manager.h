@@ -463,8 +463,11 @@ protected:
     //
 
     /**
-        Creates property grid for the manager.
-        Override to use subclassed wxPropertyGrid.
+        Creates property grid for the manager. Reimplement in derived class to
+        use subclassed wxPropertyGrid. However, if you you do this then you
+        must also use the two-step construction (ie. default constructor and
+        Create() instead of constructor with arguments) when creating the
+        manager.
     */
     virtual wxPropertyGrid* CreatePropertyGrid() const;
 };
