@@ -156,8 +156,7 @@ wxDocument::~wxDocument()
 {
     DeleteContents();
 
-    if (m_commandProcessor)
-        delete m_commandProcessor;
+    delete m_commandProcessor;
 
     if (GetDocumentManager())
         GetDocumentManager()->RemoveDocument(this);
@@ -170,10 +169,10 @@ wxDocument::~wxDocument()
 
 bool wxDocument::Close()
 {
-    if (OnSaveModified())
-        return OnCloseDocument();
-    else
+    if ( !OnSaveModified() )
         return false;
+
+    return OnCloseDocument();
 }
 
 bool wxDocument::OnCloseDocument()
@@ -233,9 +232,10 @@ bool wxDocument::DeleteAllViews()
 
 wxView *wxDocument::GetFirstView() const
 {
-    if (m_documentViews.GetCount() == 0)
+    if ( m_documentViews.empty() )
         return NULL;
-    return (wxView *)m_documentViews.GetFirst()->GetData();
+
+    return static_cast<wxView *>(m_documentViews.GetFirst()->GetData());
 }
 
 wxDocManager *wxDocument::GetDocumentManager() const
@@ -276,15 +276,17 @@ bool wxDocument::SaveAs()
     if (!docTemplate)
         return false;
 
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
-    wxString filter = docTemplate->GetDescription() + wxT(" (") + docTemplate->GetFileFilter() + wxT(")|") + docTemplate->GetFileFilter();
+#ifdef wxHAS_MULTIPLE_FILEDLG_FILTERS
+    wxString filter = docTemplate->GetDescription() + wxT(" (") +
+        docTemplate->GetFileFilter() + wxT(")|") +
+        docTemplate->GetFileFilter();
 
     // Now see if there are some other template with identical view and document
     // classes, whose filters may also be used.
-
     if (docTemplate->GetViewClassInfo() && docTemplate->GetDocClassInfo())
     {
-        wxList::compatibility_iterator node = docTemplate->GetDocumentManager()->GetTemplates().GetFirst();
+        wxList::compatibility_iterator
+            node = docTemplate->GetDocumentManager()->GetTemplates().GetFirst();
         while (node)
         {
             wxDocTemplate *t = (wxDocTemplate*) node->GetData();
@@ -297,7 +299,8 @@ bool wxDocument::SaveAs()
                 if ( !filter.empty() )
                     filter << wxT('|');
 
-                filter << t->GetDescription() << wxT(" (") << t->GetFileFilter() << wxT(") |")
+                filter << t->GetDescription()
+                       << wxT(" (") << t->GetFileFilter() << wxT(") |")
                        << t->GetFileFilter();
             }
 
@@ -307,6 +310,7 @@ bool wxDocument::SaveAs()
 #else
     wxString filter = docTemplate->GetFileFilter() ;
 #endif
+
     wxString defaultDir = docTemplate->GetDirectory();
     if ( defaultDir.empty() )
     {
@@ -324,7 +328,7 @@ bool wxDocument::SaveAs()
             GetDocumentWindow());
 
     if (fileName.empty())
-        return false;
+        return false; // cancelled by user
 
     wxString ext;
     wxFileName::SplitPath(fileName, NULL, NULL, &ext);
@@ -342,17 +346,15 @@ bool wxDocument::SaveAs()
     SetTitle(wxFileNameFromPath(fileName));
     SetFilename(fileName, true);    // will call OnChangeFileName automatically
 
-   // A file that doesn't use the default extension of its document template cannot be opened
-   // via the FileHistory, so we do not add it.
+   // A file that doesn't use the default extension of its document template
+   // cannot be opened via the FileHistory, so we do not add it.
    if (docTemplate->FileMatchesTemplate(fileName))
    {
        GetDocumentManager()->AddFileToHistory(fileName);
    }
-   else
-   {
-       // The user will probably not be able to open the file again, so
-       // we could warn about the wrong file-extension here.
-   }
+   //else: the user will probably not be able to open the file again, so we
+   //      could warn about the wrong file-extension here
+
    return true;
 }
 
@@ -455,11 +457,9 @@ wxString wxDocument::DoGetUserReadableName() const
 
 wxWindow *wxDocument::GetDocumentWindow() const
 {
-    wxView *view = GetFirstView();
-    if (view)
-        return view->GetFrame();
-    else
-        return wxTheApp->GetTopWindow();
+    wxView * const view = GetFirstView();
+
+    return view ? view->GetFrame() : wxTheApp->GetTopWindow();
 }
 
 wxCommandProcessor *wxDocument::OnCreateCommandProcessor()
@@ -655,7 +655,9 @@ bool wxView::TryValidator(wxEvent& event)
     return doc && doc->ProcessEventHere(event);
 }
 
-void wxView::OnActivateView(bool WXUNUSED(activate), wxView *WXUNUSED(activeView), wxView *WXUNUSED(deactiveView))
+void wxView::OnActivateView(bool WXUNUSED(activate),
+                            wxView *WXUNUSED(activeView),
+                            wxView *WXUNUSED(deactiveView))
 {
 }
 
@@ -770,12 +772,10 @@ wxDocTemplate::InitDocument(wxDocument* doc, const wxString& path, long flags)
 
     if (doc->OnCreate(path, flags))
         return true;
-    else
-    {
-        if (GetDocumentManager()->GetDocuments().Member(doc))
-            doc->DeleteAllViews();
-        return false;
-    }
+
+    if (GetDocumentManager()->GetDocuments().Member(doc))
+        doc->DeleteAllViews();
+    return false;
 }
 
 wxView *wxDocTemplate::CreateView(wxDocument *doc, long flags)
@@ -814,7 +814,7 @@ wxDocument *wxDocTemplate::DoCreateDocument()
     if (!m_docClassInfo)
         return NULL;
 
-    return (wxDocument *)m_docClassInfo->CreateObject();
+    return static_cast<wxDocument *>(m_docClassInfo->CreateObject());
 }
 
 wxView *wxDocTemplate::DoCreateView()
@@ -822,7 +822,7 @@ wxView *wxDocTemplate::DoCreateView()
     if (!m_viewClassInfo)
         return NULL;
 
-    return (wxView *)m_viewClassInfo->CreateObject();
+    return static_cast<wxView *>(m_viewClassInfo->CreateObject());
 }
 
 // ----------------------------------------------------------------------------
@@ -885,19 +885,18 @@ wxDocManager::~wxDocManager()
 // closes the specified document
 bool wxDocManager::CloseDocument(wxDocument* doc, bool force)
 {
-    if (doc->Close() || force)
-    {
-        // Implicitly deletes the document when
-        // the last view is deleted
-        doc->DeleteAllViews();
+    if ( !doc->Close() && !force )
+        return false;
 
-        // Check we're really deleted
-        if (m_docs.Member(doc))
-            delete doc;
+    // Implicitly deletes the document when
+    // the last view is deleted
+    doc->DeleteAllViews();
 
-        return true;
-    }
-    return false;
+    // Check we're really deleted
+    if (m_docs.Member(doc))
+        delete doc;
+
+    return true;
 }
 
 bool wxDocManager::CloseDocuments(bool force)
@@ -986,7 +985,7 @@ void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-    if ( !CreateDocument( wxEmptyString, 0) )
+    if ( !CreateDocument("") )
     {
         OnOpenFileFailure();
     }
@@ -1045,16 +1044,18 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
     if (printout)
     {
         // Pass two printout objects: for preview, and possible printing.
-        wxPrintPreviewBase *preview = new wxPrintPreview(printout, view->OnCreatePrintout());
+        wxPrintPreviewBase *
+            preview = new wxPrintPreview(printout, view->OnCreatePrintout());
         if ( !preview->Ok() )
         {
             delete preview;
-            wxMessageBox( _("Sorry, print preview needs a printer to be installed.") );
+            wxLogError(_("Print preview creation failed."));
             return;
         }
 
-        wxPreviewFrame *frame = new wxPreviewFrame(preview, (wxFrame *)wxTheApp->GetTopWindow(), _("Print Preview"),
-                wxPoint(100, 100), wxSize(600, 650));
+        wxPreviewFrame *
+            frame = new wxPreviewFrame(preview, wxTheApp->GetTopWindow(),
+                                       _("Print Preview"));
         frame->Centre(wxBOTH);
         frame->Initialize();
         frame->Show(true);
@@ -1064,24 +1065,26 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnUndo(wxCommandEvent& event)
 {
-    wxDocument *doc = GetCurrentDocument();
-    if (!doc)
-        return;
-    if (doc->GetCommandProcessor())
-        doc->GetCommandProcessor()->Undo();
-    else
+    wxCommandProcessor * const cmdproc = GetCurrentCommandProcessor();
+    if ( !cmdproc )
+    {
         event.Skip();
+        return;
+    }
+
+    cmdproc->Undo();
 }
 
 void wxDocManager::OnRedo(wxCommandEvent& event)
 {
-    wxDocument *doc = GetCurrentDocument();
-    if (!doc)
-        return;
-    if (doc->GetCommandProcessor())
-        doc->GetCommandProcessor()->Redo();
-    else
+    wxCommandProcessor * const cmdproc = GetCurrentCommandProcessor();
+    if ( !cmdproc )
+    {
         event.Skip();
+        return;
+    }
+
+    cmdproc->Redo();
 }
 
 // Handlers for UI update commands
@@ -1113,30 +1116,28 @@ void wxDocManager::OnUpdateFileSave(wxUpdateUIEvent& event)
 
 void wxDocManager::OnUpdateUndo(wxUpdateUIEvent& event)
 {
-    wxDocument *doc = GetCurrentDocument();
-    if (!doc)
-        event.Enable(false);
-    else if (!doc->GetCommandProcessor())
-        event.Skip();
-    else
+    wxCommandProcessor * const cmdproc = GetCurrentCommandProcessor();
+    if ( !cmdproc )
     {
-        event.Enable( doc->GetCommandProcessor()->CanUndo() );
-        doc->GetCommandProcessor()->SetMenuStrings();
+        event.Enable(false);
+        return;
     }
+
+    event.Enable(cmdproc->CanUndo());
+    cmdproc->SetMenuStrings();
 }
 
 void wxDocManager::OnUpdateRedo(wxUpdateUIEvent& event)
 {
-    wxDocument *doc = GetCurrentDocument();
-    if (!doc)
-        event.Enable(false);
-    else if (!doc->GetCommandProcessor())
-        event.Skip();
-    else
+    wxCommandProcessor * const cmdproc = GetCurrentCommandProcessor();
+    if ( !cmdproc )
     {
-        event.Enable( doc->GetCommandProcessor()->CanRedo() );
-        doc->GetCommandProcessor()->SetMenuStrings();
+        event.Enable(false);
+        return;
     }
+
+    event.Enable(cmdproc->CanRedo());
+    cmdproc->SetMenuStrings();
 }
 
 wxView *wxDocManager::GetCurrentView() const
@@ -1328,11 +1329,14 @@ bool wxDocManager::FlushDoc(wxDocument *WXUNUSED(doc))
 
 wxDocument *wxDocManager::GetCurrentDocument() const
 {
-    wxView *view = GetCurrentView();
-    if (view)
-        return view->GetDocument();
-    else
-        return NULL;
+    wxView * const view = GetCurrentView();
+    return view ? view->GetDocument() : NULL;
+}
+
+wxCommandProcessor *wxDocManager::GetCurrentCommandProcessor() const
+{
+    wxDocument * const doc = GetCurrentDocument();
+    return doc ? doc->GetCommandProcessor() : NULL;
 }
 
 // Make a default name for a new document
@@ -1480,12 +1484,10 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                                                 long WXUNUSED(flags),
                                                 bool WXUNUSED(save))
 {
-    // We can only have multiple filters in Windows and GTK
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
+#ifdef wxHAS_MULTIPLE_FILEDLG_FILTERS
     wxString descrBuf;
 
-    int i;
-    for (i = 0; i < noTemplates; i++)
+    for (int i = 0; i < noTemplates; i++)
     {
         if (templates[i]->IsVisible())
         {
@@ -1526,8 +1528,10 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
             else
                 msgTitle = wxString(_("File error"));
 
-            (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION | wxCENTRE,
-                parent);
+            wxMessageBox(_("Sorry, could not open this file."),
+                         msgTitle,
+                         wxOK | wxICON_EXCLAMATION | wxCENTRE,
+                         parent);
 
             path = wxEmptyString;
             return NULL;
@@ -1545,16 +1549,18 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
             theTemplate = FindTemplateForPath(path);
         if ( !theTemplate )
         {
-            // Since we do not add files with non-default extensions to the FileHistory this
-            // can only happen if the application changes the allowed templates in runtime.
-            (void)wxMessageBox(_("Sorry, the format for this file is unknown."),
-                                _("Open File"),
-                                wxOK | wxICON_EXCLAMATION | wxCENTRE, wxFindSuitableParent());
+            // Since we do not add files with non-default extensions to the
+            // file history this can only happen if the application changes the
+            // allowed templates in runtime.
+            wxMessageBox(_("Sorry, the format for this file is unknown."),
+                         _("Open File"),
+                         wxOK | wxICON_EXCLAMATION | wxCENTRE,
+                         parent);
         }
     }
     else
     {
-        path = wxEmptyString;
+        path.clear();
     }
 
     return theTemplate;
@@ -1564,7 +1570,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
                                                 int noTemplates, bool sort)
 {
     wxArrayString strings;
-    wxDocTemplate **data = new wxDocTemplate *[noTemplates];
+    wxScopedArray<wxDocTemplate *> data(new wxDocTemplate *[noTemplates]);
     int i;
     int n = 0;
 
@@ -1631,12 +1637,10 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
                             _("Select a document template"),
                             _("Templates"),
                             strings,
-                            (void **)data,
+                            (void **)data.get(),
                             wxFindSuitableParent()
                           );
     }
-
-    delete[] data;
 
     return theTemplate;
 }
@@ -1645,7 +1649,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
                                             int noTemplates, bool sort)
 {
     wxArrayString strings;
-    wxDocTemplate **data = new wxDocTemplate *[noTemplates];
+    wxScopedArray<wxDocTemplate *> data(new wxDocTemplate *[noTemplates]);
     int i;
     int n = 0;
 
@@ -1708,13 +1712,12 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
                             _("Select a document view"),
                             _("Views"),
                             strings,
-                            (void **)data,
+                            (void **)data.get(),
                             wxFindSuitableParent()
                           );
 
     }
 
-    delete[] data;
     return theTemplate;
 }
 
@@ -1806,26 +1809,22 @@ void wxDocChildFrame::OnActivate(wxActivateEvent& event)
 
 void wxDocChildFrame::OnCloseWindow(wxCloseEvent& event)
 {
-    if (m_childView)
+    if ( !m_childView )
+        return;
+
+    // passing false to Close() means to not delete associated window
+    if ( event.CanVeto() && !m_childView->Close(false) )
     {
-        bool ans = event.CanVeto()
-                    ? m_childView->Close(false) // false means don't delete associated window
-                    : true; // Must delete.
-
-        if (ans)
-        {
-            m_childView->Activate(false);
-            delete m_childView;
-            m_childView = NULL;
-            m_childDocument = NULL;
-
-            this->Destroy();
-        }
-        else
-            event.Veto();
-    }
-    else
         event.Veto();
+        return;
+    }
+
+    m_childView->Activate(false);
+    delete m_childView;
+    m_childView = NULL;
+    m_childDocument = NULL;
+
+    Destroy();
 }
 
 // ----------------------------------------------------------------------------
@@ -1919,7 +1918,7 @@ void wxDocParentFrame::OnCloseWindow(wxCloseEvent& event)
 {
     if (m_docManager->Clear(!event.CanVeto()))
     {
-        this->Destroy();
+        Destroy();
     }
     else
         event.Veto();
@@ -1985,7 +1984,8 @@ bool wxDocPrintout::OnBeginDocument(int startPage, int endPage)
     return true;
 }
 
-void wxDocPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
+void wxDocPrintout::GetPageInfo(int *minPage, int *maxPage,
+                                int *selPageFrom, int *selPageTo)
 {
     *minPage = 1;
     *maxPage = 1;

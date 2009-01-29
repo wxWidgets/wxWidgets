@@ -51,7 +51,7 @@ enum
 enum
 {
     wxTEMPLATE_VISIBLE = 1,
-    wxTEMPLATE_INVISIBLE,
+    wxTEMPLATE_INVISIBLE = 2,
     wxDEFAULT_TEMPLATE_FLAGS = wxTEMPLATE_VISIBLE
 };
 
@@ -118,8 +118,10 @@ public:
 
     // By default, creates a base wxCommandProcessor.
     virtual wxCommandProcessor *OnCreateCommandProcessor();
-    virtual wxCommandProcessor *GetCommandProcessor() const { return m_commandProcessor; }
-    virtual void SetCommandProcessor(wxCommandProcessor *proc) { m_commandProcessor = proc; }
+    virtual wxCommandProcessor *GetCommandProcessor() const
+        { return m_commandProcessor; }
+    virtual void SetCommandProcessor(wxCommandProcessor *proc)
+        { m_commandProcessor = proc; }
 
     // Called after a view is added or removed. The default implementation
     // deletes the document if this is there are no more views.
@@ -145,8 +147,10 @@ public:
 
     // Other stuff
     virtual wxDocManager *GetDocumentManager() const;
-    virtual wxDocTemplate *GetDocumentTemplate() const { return m_documentTemplate; }
-    virtual void SetDocumentTemplate(wxDocTemplate *temp) { m_documentTemplate = temp; }
+    virtual wxDocTemplate *GetDocumentTemplate() const
+        { return m_documentTemplate; }
+    virtual void SetDocumentTemplate(wxDocTemplate *temp)
+        { m_documentTemplate = temp; }
 
     // Get the document name to be shown to the user: the title if there is
     // any, otherwise the filename if the document was saved and, finally,
@@ -204,7 +208,9 @@ public:
     wxWindow *GetFrame() const { return m_viewFrame ; }
     void SetFrame(wxWindow *frame) { m_viewFrame = frame; }
 
-    virtual void OnActivateView(bool activate, wxView *activeView, wxView *deactiveView);
+    virtual void OnActivateView(bool activate,
+                                wxView *activeView,
+                                wxView *deactiveView);
     virtual void OnDraw(wxDC *dc) = 0;
     virtual void OnPrint(wxDC *dc, wxObject *info);
     virtual void OnUpdate(wxView *sender, wxObject *hint = NULL);
@@ -278,13 +284,16 @@ public:
 
     // Helper method for CreateDocument; also allows you to do your own document
     // creation
-    virtual bool InitDocument(wxDocument* doc, const wxString& path, long flags = 0);
+    virtual bool InitDocument(wxDocument* doc,
+                              const wxString& path,
+                              long flags = 0);
 
     wxString GetDefaultExtension() const { return m_defaultExt; }
     wxString GetDescription() const { return m_description; }
     wxString GetDirectory() const { return m_directory; }
     wxDocManager *GetDocumentManager() const { return m_documentManager; }
-    void SetDocumentManager(wxDocManager *manager) { m_documentManager = manager; }
+    void SetDocumentManager(wxDocManager *manager)
+        { m_documentManager = manager; }
     wxString GetFileFilter() const { return m_fileFilter; }
     long GetFlags() const { return m_flags; }
     virtual wxString GetViewName() const { return m_viewTypeName; }
@@ -296,7 +305,7 @@ public:
     void SetDefaultExtension(const wxString& ext) { m_defaultExt = ext; }
     void SetFlags(long flags) { m_flags = flags; }
 
-    bool IsVisible() const { return ((m_flags & wxTEMPLATE_VISIBLE) == wxTEMPLATE_VISIBLE); }
+    bool IsVisible() const { return (m_flags & wxTEMPLATE_VISIBLE) != 0; }
 
     wxClassInfo* GetDocClassInfo() const { return m_docClassInfo; }
     wxClassInfo* GetViewClassInfo() const { return m_viewClassInfo; }
@@ -317,9 +326,11 @@ protected:
     wxClassInfo*      m_docClassInfo;
     wxClassInfo*      m_viewClassInfo;
 
-    // Called by CreateDocument and CreateView to create the actual document/view object.
-    // By default uses the ClassInfo provided to the constructor. Override these functions
-    // to provide a different method of creation.
+    // Called by CreateDocument and CreateView to create the actual
+    // document/view object.
+    //
+    // By default uses the ClassInfo provided to the constructor. Override
+    // these functions to provide a different method of creation.
     virtual wxDocument *DoCreateDocument();
     virtual wxView *DoCreateView();
 
@@ -458,6 +469,10 @@ protected:
     // hook the currently active view into event handlers chain here
     virtual bool TryValidator(wxEvent& event);
 
+    // return the command processor for the current document, if any
+    wxCommandProcessor *GetCurrentCommandProcessor() const;
+
+
     int               m_defaultDocumentNameCounter;
     int               m_maxDocsOpen;
     wxList            m_docs;
@@ -573,10 +588,13 @@ class WXDLLIMPEXP_CORE wxDocPrintout : public wxPrintout
 {
 public:
     wxDocPrintout(wxView *view = NULL, const wxString& title = wxT("Printout"));
-    bool OnPrintPage(int page);
-    bool HasPage(int page);
-    bool OnBeginDocument(int startPage, int endPage);
-    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
+
+    // implement wxPrintout methods
+    virtual bool OnPrintPage(int page);
+    virtual bool HasPage(int page);
+    virtual bool OnBeginDocument(int startPage, int endPage);
+    virtual void GetPageInfo(int *minPage, int *maxPage,
+                             int *selPageFrom, int *selPageTo);
 
     virtual wxView *GetView() { return m_printoutView; }
 
@@ -655,16 +673,18 @@ inline size_t wxFileHistory::GetNoHistoryFiles() const
 }
 #endif // WXWIN_COMPATIBILITY_2_6
 
+// For compatibility with existing file formats:
+// converts from/to a stream to/from a temporary file.
 #if wxUSE_STD_IOSTREAM
-// For compatibility with existing file formats:
-// converts from/to a stream to/from a temporary file.
-bool WXDLLIMPEXP_CORE wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream);
-bool WXDLLIMPEXP_CORE wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename);
+bool WXDLLIMPEXP_CORE
+wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream);
+bool WXDLLIMPEXP_CORE
+wxTransferStreamToFile(wxSTD istream& stream, const wxString& filename);
 #else
-// For compatibility with existing file formats:
-// converts from/to a stream to/from a temporary file.
-bool WXDLLIMPEXP_CORE wxTransferFileToStream(const wxString& filename, wxOutputStream& stream);
-bool WXDLLIMPEXP_CORE wxTransferStreamToFile(wxInputStream& stream, const wxString& filename);
+bool WXDLLIMPEXP_CORE
+wxTransferFileToStream(const wxString& filename, wxOutputStream& stream);
+bool WXDLLIMPEXP_CORE
+wxTransferStreamToFile(wxInputStream& stream, const wxString& filename);
 #endif // wxUSE_STD_IOSTREAM
 
 
