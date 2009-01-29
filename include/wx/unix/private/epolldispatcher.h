@@ -19,7 +19,7 @@
 
 struct epoll_event;
 
-class WXDLLIMPEXP_CORE wxEpollDispatcher : public wxFDIODispatcher
+class WXDLLIMPEXP_BASE wxEpollDispatcher : public wxFDIODispatcher
 {
 public:
     // create a new instance of this class, can return NULL if
