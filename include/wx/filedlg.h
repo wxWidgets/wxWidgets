@@ -19,7 +19,8 @@
 #include "wx/dialog.h"
 #include "wx/arrstr.h"
 
-// this symbol is defined for the platforms which support multiple 
+// this symbol is defined for the platforms which support multiple
+// ('|'-separated) filters in the file dialog
 #if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
     #define wxHAS_MULTIPLE_FILEDLG_FILTERS
 #endif
