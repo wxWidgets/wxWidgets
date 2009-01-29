@@ -282,10 +282,11 @@ GType wxPizza::type()
     return type;
 }
 
-GtkWidget* wxPizza::New(long windowStyle)
+GtkWidget* wxPizza::New(long windowStyle,void* owner)
 {
     GtkWidget* widget = GTK_WIDGET(g_object_new(type(), NULL));
     wxPizza* pizza = WX_PIZZA(widget);
+    pizza->m_owner = owner;
     pizza->m_backing_window = NULL;
     pizza->m_scroll_x = 0;
     pizza->m_scroll_y = 0;

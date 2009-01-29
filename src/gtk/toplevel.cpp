@@ -552,7 +552,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     gtk_container_add( GTK_CONTAINER(m_widget), m_mainWidget );
 
     // m_wxwindow is the client area
-    m_wxwindow = wxPizza::New();
+    m_wxwindow = wxPizza::New(0,this);
     gtk_widget_show( m_wxwindow );
     gtk_container_add( GTK_CONTAINER(m_mainWidget), m_wxwindow );
 

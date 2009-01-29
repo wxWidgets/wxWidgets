@@ -133,7 +133,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     g_signal_connect (m_widget, "delete_event",
                       G_CALLBACK (gtk_dialog_delete_callback), this);
 
-    m_wxwindow = wxPizza::New(m_windowStyle);
+    m_wxwindow = wxPizza::New(m_windowStyle, this);
     gtk_widget_show( m_wxwindow );
 
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );

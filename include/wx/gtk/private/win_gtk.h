@@ -21,7 +21,7 @@ struct WXDLLIMPEXP_CORE wxPizza
     enum { BORDER_STYLES =
         wxBORDER_SIMPLE | wxBORDER_RAISED | wxBORDER_SUNKEN | wxBORDER_THEME };
 
-    static GtkWidget* New(long windowStyle = 0);
+    static GtkWidget* New(long windowStyle, void *owner);
     static GType type();
     void move(GtkWidget* widget, int x, int y);
     void scroll(int dx, int dy);
@@ -33,6 +33,7 @@ struct WXDLLIMPEXP_CORE wxPizza
     int m_scroll_y;
     int m_border_style;
     bool m_is_scrollable;
+    void *m_owner;
 };
 
 #endif // _WX_GTK_PIZZA_H_
