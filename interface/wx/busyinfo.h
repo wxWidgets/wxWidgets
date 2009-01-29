@@ -27,13 +27,12 @@
     It works by creating a window in the constructor, and deleting it
     in the destructor.
 
-    You may also want to call wxTheApp-Yield() to refresh the window
+    You may also want to call wxTheApp->Yield() to refresh the window
     periodically (in case it had been obscured by other windows, for
     example) like this:
 
     @code
         wxWindowDisabler disableAll;
-
         wxBusyInfo wait("Please wait, working...");
 
         for (int i = 0; i < 100000; i++)
