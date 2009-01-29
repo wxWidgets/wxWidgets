@@ -19,6 +19,11 @@
 #include "wx/dialog.h"
 #include "wx/arrstr.h"
 
+// this symbol is defined for the platforms which support multiple 
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
+    #define wxHAS_MULTIPLE_FILEDLG_FILTERS
+#endif
+
 //----------------------------------------------------------------------------
 // wxFileDialog data
 //----------------------------------------------------------------------------
