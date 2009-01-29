@@ -732,7 +732,7 @@ bool wxMDIParentFrame::MSWTranslateMessage(WXMSG* msg)
     // but it doesn't check for the (custom) accelerators of the window menu
     // items as it's not part of the menu bar as it's handled by Windows itself
     // so we need to do this explicitly
-    if ( m_accelWindowMenu->Translate(this, msg) )
+    if ( m_accelWindowMenu && m_accelWindowMenu->Translate(this, msg) )
         return true;
 #endif // wxUSE_MENUS && wxUSE_ACCEL
 
