@@ -1018,7 +1018,7 @@ void wxDocManager::OnFileSaveAs(wxCommandEvent& WXUNUSED(event))
 void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_PRINTING_ARCHITECTURE
-    wxView *view = GetCurrentView();
+    wxView *view = GetActiveView();
     if (!view)
         return;
 
@@ -1036,7 +1036,7 @@ void wxDocManager::OnPrint(wxCommandEvent& WXUNUSED(event))
 void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_PRINTING_ARCHITECTURE
-    wxView *view = GetCurrentView();
+    wxView *view = GetActiveView();
     if (!view)
         return;
 
@@ -1140,21 +1140,33 @@ void wxDocManager::OnUpdateRedo(wxUpdateUIEvent& event)
     cmdproc->SetMenuStrings();
 }
 
-wxView *wxDocManager::GetCurrentView() const
+wxView *wxDocManager::GetActiveView() const
 {
-    if (m_currentView)
-        return m_currentView;
-    if (m_docs.GetCount() == 1)
+    wxView *view = GetCurrentView();
+
+    if ( !view && !m_docs.empty() )
     {
-        wxDocument* doc = (wxDocument*) m_docs.GetFirst()->GetData();
-        return doc->GetFirstView();
+        // if we have exactly one document, consider its view to be the current
+        // one
+        //
+        // VZ: I'm not exactly sure why is this needed but this is how this
+        //     code used to behave before the bug #9518 was fixed and it seems
+        //     safer to preserve the old logic
+        wxList::compatibility_iterator node = m_docs.GetFirst();
+        if ( !node->GetNext() )
+        {
+            wxDocument *doc = static_cast<wxDocument *>(node->GetData());
+            view = doc->GetFirstView();
+        }
+        //else: we have more than one document
     }
-    return NULL;
+
+    return view;
 }
 
 bool wxDocManager::TryValidator(wxEvent& event)
 {
-    wxView * const view = GetCurrentView();
+    wxView * const view = GetActiveView();
     return view && view->ProcessEventHere(event);
 }
 
@@ -1329,7 +1341,7 @@ bool wxDocManager::FlushDoc(wxDocument *WXUNUSED(doc))
 
 wxDocument *wxDocManager::GetCurrentDocument() const
 {
-    wxView * const view = GetCurrentView();
+    wxView * const view = GetActiveView();
     return view ? view->GetDocument() : NULL;
 }
 

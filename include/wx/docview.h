@@ -417,7 +417,7 @@ public:
     // Views or windows should inform the document manager
     // when a view is going in or out of focus
     virtual void ActivateView(wxView *view, bool activate = true);
-    virtual wxView *GetCurrentView() const;
+    virtual wxView *GetCurrentView() const { return m_currentView; }
 
     wxList& GetDocuments() { return m_docs; }
     wxList& GetTemplates() { return m_templates; }
@@ -471,6 +471,11 @@ protected:
 
     // return the command processor for the current document, if any
     wxCommandProcessor *GetCurrentCommandProcessor() const;
+
+    // this method tries to find an active view harder than GetCurrentView():
+    // if the latter is NULL, it also checks if we don't have just a single
+    // view and returns it then
+    wxView *GetActiveView() const;
 
 
     int               m_defaultDocumentNameCounter;
