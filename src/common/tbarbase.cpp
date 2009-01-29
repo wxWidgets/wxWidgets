@@ -625,7 +625,7 @@ bool wxToolBarBase::OnLeftClick(int id, bool toggleDown)
     event.SetExtraLong((long)toggleDown);
 
     // Send events to this toolbar instead (and thence up the window hierarchy)
-    GetEventHandler()->ProcessEvent(event);
+    HandleWindowEvent(event);
 
     return true;
 }
