@@ -458,8 +458,8 @@ public:
         // Call these to override what GetBestSize() returns. This
         // method is only virtual because it is overriden in wxTLW
         // as a different API for SetSizeHints().
-    virtual void SetMinSize(const wxSize& minSize) { m_minWidth = minSize.x; m_minHeight = minSize.y; }
-    virtual void SetMaxSize(const wxSize& maxSize) { m_maxWidth = maxSize.x; m_maxHeight = maxSize.y; }
+    virtual void SetMinSize(const wxSize& minSize);
+    virtual void SetMaxSize(const wxSize& maxSize);
 
         // Like Set*Size, but for client, not window, size
     virtual void SetMinClientSize(const wxSize& size)

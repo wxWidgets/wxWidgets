@@ -721,6 +721,18 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
 }
 
 
+void wxWindowBase::SetMinSize(const wxSize& minSize)
+{ 
+    m_minWidth = minSize.x; 
+    m_minHeight = minSize.y; 
+}
+
+void wxWindowBase::SetMaxSize(const wxSize& maxSize)
+{ 
+    m_maxWidth = maxSize.x; 
+    m_maxHeight = maxSize.y;
+}
+
 void wxWindowBase::SetInitialSize(const wxSize& size)
 {
     // Set the min size to the size passed in.  This will usually either be
