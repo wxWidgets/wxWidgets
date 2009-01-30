@@ -92,7 +92,7 @@ void wxConsoleEventLoop::PipeIOHandler::OnReadWaiting()
     {
         const int size = read(GetReadFd(), buf, WXSIZEOF(buf));
 
-        if ( size == 0 || (size == -1 && errno == EAGAIN) )
+        if ( size == 0 || (size == -1 && (errno == EAGAIN || errno == EINTR)) )
         {
             // nothing left in the pipe (EAGAIN is expected for an FD with
             // O_NONBLOCK)
