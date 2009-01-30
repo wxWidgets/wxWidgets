@@ -2007,6 +2007,12 @@ void wxWindowMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
          width == currentW && height == currentH &&
             !(sizeFlags & wxSIZE_FORCE) )
     {
+        if (sizeFlags & wxSIZE_FORCE_EVENT)
+        {
+            wxSizeEvent event( wxSize(width,height), GetId() );
+            event.SetEventObject( this );
+            HandleWindowEvent( event );
+        }
         return;
     }
 

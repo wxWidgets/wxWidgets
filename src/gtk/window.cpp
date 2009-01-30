@@ -2540,6 +2540,12 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
             event.SetEventObject( this );
             HandleWindowEvent( event );
         }
+    } else 
+    if (sizeFlags & wxSIZE_FORCE_EVENT)
+    {
+        wxSizeEvent event( wxSize(m_width,m_height), GetId() );
+        event.SetEventObject( this );
+        HandleWindowEvent( event );
     }
 }
 

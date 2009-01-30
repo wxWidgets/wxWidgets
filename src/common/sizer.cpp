@@ -480,10 +480,11 @@ void wxSizerItem::SetDimension( const wxPoint& pos_, const wxSize& size_ )
             break;
 
         case Item_Window:
+        {
             m_window->SetSize(pos.x, pos.y, size.x, size.y,
-                              wxSIZE_ALLOW_MINUS_ONE);
+                              wxSIZE_ALLOW_MINUS_ONE|wxSIZE_FORCE_EVENT );
             break;
-
+        }
         case Item_Sizer:
             m_sizer->SetDimension(pos, size);
             break;

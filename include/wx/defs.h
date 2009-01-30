@@ -2094,6 +2094,8 @@ enum wxHitTest
 #define wxSIZE_NO_ADJUSTMENTS   0x0008
 /*  Change the window position even if it seems to be already correct */
 #define wxSIZE_FORCE            0x0010
+/*  Emit size event even if size didn't change */
+#define wxSIZE_FORCE_EVENT      0x0020
 
 /*  ---------------------------------------------------------------------------- */
 /*  GDI descriptions */

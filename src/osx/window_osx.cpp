@@ -964,6 +964,13 @@ void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         // TODO: REMOVE
         MacRepositionScrollBars() ; // we might have a real position shift
 
+        if (sizeFlags & wxSIZE_FORCE_EVENT)
+        {
+            wxSizeEvent event( wxSize(width,height), GetId() );
+            event.SetEventObject( this );
+            HandleWindowEvent( event );
+        }
+
         return;
     }
 
