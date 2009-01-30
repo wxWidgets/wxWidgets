@@ -50,8 +50,8 @@ public:
 
     // globally disable restoring or saving the persistent properties (both are
     // enabled by default)
-    bool DisableSaving() { m_doSave = false; }
-    bool DisableRestoring() { m_doRestore = false; }
+    void DisableSaving() { m_doSave = false; }
+    void DisableRestoring() { m_doRestore = false; }
 
 
     // register an object with the manager: when using the first overload,
