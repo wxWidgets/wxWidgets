@@ -7,6 +7,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+// ----------------------------------------------------------------------------
+// enumerations
+// ----------------------------------------------------------------------------
+
 /**
     Generic flags.
 */
@@ -15,7 +19,6 @@ enum wxGeometryCentre
     wxCENTRE                  = 0x0001,
     wxCENTER                  = wxCENTRE
 };
-
 
 /**
     A generic orientation value.
@@ -439,15 +442,21 @@ enum wxDataFormatId
 };
 
 /**
-    Virtual keycodes
+    Virtual keycodes used by wxKeyEvent and some other wxWidgets functions.
+
+    Note that the range @c 33 - @c 126 is reserved for the standard ASCII
+    characters and that the range @c 128 - @c 255 is reserved for the
+    extended ASCII characters (which are not really standard and thus should
+    be avoid in portable apps!).
 */
 enum wxKeyCode
 {
-    WXK_BACK    =    8,
+    WXK_BACK    =    8,     //!< Backspace.
     WXK_TAB     =    9,
     WXK_RETURN  =    13,
     WXK_ESCAPE  =    27,
     WXK_SPACE   =    32,
+
     WXK_DELETE  =    127,
 
     /**
@@ -767,6 +776,82 @@ enum wxUpdateUI
 };
 
 
+
+// ----------------------------------------------------------------------------
+// types
+// ----------------------------------------------------------------------------
+
+/** The type for screen and DC coordinates. */
+typedef int wxCoord;
+
+/** A special value meaning "use default coordinate". */
+wxCoord wxDefaultCoord = -1;
+
+//@{
+/** 8 bit type (the mapping is more complex than a simple @c typedef and is not shown here). */
+typedef signed char wxInt8;
+typedef unsigned char wxUint8;
+typedef wxUint8 wxByte;
+//@}
+
+//@{
+/** 16 bit type (the mapping is more complex than a simple @c typedef and is not shown here). */
+typedef signed short wxInt16;
+typedef unsigned short wxUint16;
+typedef wxUint16 wxWord;
+typedef wxUint16 wxChar16;
+//@}
+
+//@{
+/** 32 bit type (the mapping is more complex than a simple @c typedef and is not shown here). */
+typedef int wxInt32;
+typedef unsigned int wxUint32;
+typedef wxUint32 wxDword;
+typedef wxUint32 wxChar32;
+//@}
+
+//@{
+/** 64 bit type (the mapping is more complex than a simple @c typedef and is not shown here). */
+typedef wxLongLong_t wxInt64;
+typedef wxULongLong_t wxUint64;
+//@}
+
+//@{
+/**
+    Signed and unsigned integral types big enough to contain all of @c long,
+    @c size_t and @c void*.
+    (The mapping is more complex than a simple @c typedef and is not shown here).
+*/
+typedef ssize_t wxIntPtr;
+typedef size_t wxUIntPtr;
+//@}
+
+
+/**
+    32 bit IEEE float ( 1 sign, 8 exponent bits, 23 fraction bits ).
+    (The mapping is more complex than a simple @c typedef and is not shown here).
+*/
+typedef float wxFloat32;
+
+
+/**
+    64 bit IEEE float ( 1 sign, 11 exponent bits, 52 fraction bits ).
+    (The mapping is more complex than a simple @c typedef and is not shown here).
+*/
+typedef double wxFloat64;
+
+/**
+    Native fastest representation that has at least wxFloat64 precision, so use
+    the IEEE types for storage, and this for calculations.
+    (The mapping is more complex than a simple @c typedef and is not shown here).
+*/
+typedef double wxDouble;
+
+
+
+// ----------------------------------------------------------------------------
+// macros
+// ----------------------------------------------------------------------------
 
 
 /** @addtogroup group_funcmacro_byteorder */
