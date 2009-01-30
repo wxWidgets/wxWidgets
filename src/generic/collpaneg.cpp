@@ -160,7 +160,7 @@ wxString wxGenericCollapsiblePane::GetBtnLabel() const
 void wxGenericCollapsiblePane::OnStateChange(const wxSize& sz)
 {
     // minimal size has priority over the best size so set here our min size
-    SetMinSize(sz);
+//    SetMinSize(sz);
     SetSize(sz);
 
     if (this->HasFlag(wxCP_NO_TLW_RESIZE))
