@@ -481,6 +481,11 @@ void wxSizerItem::SetDimension( const wxPoint& pos_, const wxSize& size_ )
 
         case Item_Window:
         {
+            // Use wxSIZE_FORCE_EVENT here since a sizer item might
+            // have changed alignment or some other property which would
+            // not change the size of the window. In such a case, no
+            // wxSizeEvent would normally be generated and thus the
+            // control wouldn't get layed out correctly here.
             m_window->SetSize(pos.x, pos.y, size.x, size.y,
                               wxSIZE_ALLOW_MINUS_ONE|wxSIZE_FORCE_EVENT );
             break;
