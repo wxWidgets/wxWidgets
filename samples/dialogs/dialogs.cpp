@@ -1792,7 +1792,7 @@ void MyFrame::ShowBusyInfo(wxCommandEvent& WXUNUSED(event))
 
     for ( int i = 0; i < 18; i++ )
     {
-        //wxUsleep(100);
+        wxMilliSleep(100);
         wxTheApp->Yield();
     }
 
