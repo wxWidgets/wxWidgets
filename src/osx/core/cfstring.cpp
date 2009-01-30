@@ -608,28 +608,16 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
         wxString str = st ;
         wxMacConvertNewlines13To10( &str ) ;
 #if wxUSE_UNICODE
-#if SIZEOF_WCHAR_T == 2
-        reset( CFStringCreateWithCharacters( kCFAllocatorDefault,
-            (UniChar*)str.wc_str() , str.Len() ) );
+#if wxUSE_UNICODE_WCHAR
+        // native = wchar_t 4 bytes for us
+        reset( CFStringCreateWithBytes( kCFAllocatorDefault,
+            (const UInt8*)str.wc_str() , str.length()*4, kCFStringEncodingUTF32, false /* no BOM */ ) );
+#elif wxUSE_UNICODE_UTF8
+        // native = utf8
+        reset( CFStringCreateWithBytes( kCFAllocatorDefault,
+            (const UInt8*) str.utf8_str() , str.utf8_length() , kCFStringEncodingUTF8, false /* no BOM */ ) );
 #else
-        wxMBConvUTF16 converter ;
-        size_t unicharbytes = converter.FromWChar( NULL , 0 , str.wc_str() , str.Length() ) ;
-        wxASSERT( unicharbytes != wxCONV_FAILED );
-        if ( unicharbytes == wxCONV_FAILED )
-        {
-            // create an empty string
-            reset( wxCFRetain( CFSTR("") ) );
-        }
-        else
-        {
-            // unicharbytes: number of bytes needed for UTF-16 encoded string (without terminating null)
-            // unichars: number of UTF-16 characters (without terminating null)
-            size_t unichars = unicharbytes /  sizeof(UniChar) ;
-            UniChar *unibuf = new UniChar[ unichars ] ;
-            converter.FromWChar( (char*)unibuf , unicharbytes , str.wc_str() , str.Length() ) ;
-            reset( CFStringCreateWithCharacters( kCFAllocatorDefault , unibuf , unichars ) ) ;
-            delete[] unibuf ;
-        }
+    #error "unsupported unicode representation"
 #endif
 #else // not wxUSE_UNICODE
         reset( CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
@@ -644,38 +632,41 @@ wxString wxCFStringRef::AsString(wxFontEncoding WXUNUSED_IN_UNICODE(encoding))
         return wxEmptyString ;
 
     Size cflen = CFStringGetLength( get() )  ;
-    size_t noChars ;
-    wxChar* buf = NULL ;
+    char* buf = NULL ;
 
+    CFStringEncoding cfencoding = 0;
+    wxString result;    
 #if wxUSE_UNICODE
-#if SIZEOF_WCHAR_T == 2
-    buf = new wxChar[ cflen + 1 ] ;
-    CFStringGetCharacters( get() , CFRangeMake( 0 , cflen ) , (UniChar*) buf ) ;
-    noChars = cflen ;
+  #if wxUSE_UNICODE_WCHAR
+    cfencoding = kCFStringEncodingUTF32;
+  #elif wxUSE_UNICODE_UTF8
+    cfencoding = kCFStringEncodingUTF8;
+  #else
+    #error "unsupported unicode representation"
+  #endif
 #else
-    UniChar* unibuf = new UniChar[ cflen + 1 ] ;
-    CFStringGetCharacters( get() , CFRangeMake( 0 , cflen ) , (UniChar*) unibuf ) ;
-    unibuf[cflen] = 0 ;
-    wxMBConvUTF16 converter ;
-    noChars = converter.MB2WC( NULL , (const char*)unibuf , 0 ) ;
-    wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Unable to count the number of characters in this string!") );
-    buf = new wxChar[ noChars + 1 ] ;
-    noChars = converter.MB2WC( buf , (const char*)unibuf , noChars + 1 ) ;
-    wxASSERT_MSG( noChars != wxCONV_FAILED, _T("Conversion of string failed!") );
-    delete[] unibuf ;
-#endif
-#else
-    CFIndex cStrLen ;
-    CFStringGetBytes( get() , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
-        '?' , false , NULL , 0 , &cStrLen ) ;
-    buf = new wxChar[ cStrLen + 1 ] ;
-    CFStringGetBytes( get() , CFRangeMake(0, cflen) , wxMacGetSystemEncFromFontEnc( encoding ) ,
-        '?' , false , (unsigned char*) buf , cStrLen , &cStrLen) ;
-    noChars = cStrLen ;
+    cfencoding = wxMacGetSystemEncFromFontEnc( encoding );
 #endif
 
-    buf[noChars] = 0 ;
-    wxString result(buf) ;
+    CFIndex cStrLen ;
+    CFStringGetBytes( get() , CFRangeMake(0, cflen) , cfencoding ,
+        '?' , false , NULL , 0 , &cStrLen ) ;
+    buf = new char[ cStrLen ] ;
+    CFStringGetBytes( get() , CFRangeMake(0, cflen) , cfencoding,
+        '?' , false , (unsigned char*) buf , cStrLen , &cStrLen) ;
+    
+#if wxUSE_UNICODE
+  #if wxUSE_UNICODE_WCHAR
+    result = wxString( (const wchar_t*) buf , cStrLen/4);
+  #elif wxUSE_UNICODE_UTF8
+    result = wxString::FromUTF8( buf, cStrLen );
+  #else
+    #error "unsupported unicode representation"
+  #endif
+#else
+    wxString result(buf, cStrLen) ;
+#endif
+    
     delete[] buf ;
     wxMacConvertNewlines10To13( &result);
     return result ;
