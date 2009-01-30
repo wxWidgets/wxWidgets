@@ -2,7 +2,7 @@
 // Name:        src/common/valtext.cpp
 // Purpose:     wxTextValidator
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Francesco Montorsi
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -66,7 +66,7 @@ static bool wxIsNumeric(const wxString& val)
     {
         // Allow for "," (French) as well as "." -- in future we should
         // use wxSystemSettings or other to do better localisation
-        if ((!wxIsdigit(val[i])) && (val[i] != wxT('.')) && (val[i] != wxT(',')) && (val[i] != wxT('e')) && 
+        if ((!wxIsdigit(val[i])) && (val[i] != wxT('.')) && (val[i] != wxT(',')) && (val[i] != wxT('e')) &&
             (val[i] != wxT('E')) && (val[i] != wxT('+')) && (val[i] != wxT('-')))
             return false;
     }
@@ -101,12 +101,6 @@ wxTextValidator::wxTextValidator(wxTextValidatorStyle style, wxString *val)
 {
     m_validatorStyle = style;
     m_stringValue = val;
-/*
-    m_refData = new wxVTextRefData;
-
-    M_VTEXTDATA->m_validatorStyle = style;
-    M_VTEXTDATA->m_stringValue = val;
-*/
 }
 
 wxTextValidator::wxTextValidator(const wxTextValidator& val)
@@ -167,7 +161,57 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     // NB: this format string should always contain exactly one '%s'
     wxString errormsg;
+    if (!IsValid(val, &errormsg))
+    {
+        wxASSERT(!errormsg.empty());
 
+        m_validatorWindow->SetFocus();
+
+        wxString buf;
+        buf.Printf(errormsg, val.c_str());
+
+        wxMessageBox(buf, _("Validation conflict"),
+                     wxOK | wxICON_EXCLAMATION, parent);
+
+        return false;
+    }
+
+    return true;
+}
+
+// Called to transfer data to the window
+bool wxTextValidator::TransferToWindow()
+{
+    if ( m_stringValue )
+    {
+        wxTextEntry * const text = GetTextEntry();
+        if ( !text )
+            return false;
+
+        text->SetValue(*m_stringValue);
+    }
+
+    return true;
+}
+
+// Called to transfer data to the window
+bool wxTextValidator::TransferFromWindow()
+{
+    if ( m_stringValue )
+    {
+        wxTextEntry * const text = GetTextEntry();
+        if ( !text )
+            return false;
+
+        *m_stringValue = text->GetValue();
+    }
+
+    return true;
+}
+
+bool wxTextValidator::IsValid(const wxString& val, wxString* pErr) const
+{
+    wxString errormsg;
     switch (m_validatorStyle)
     {
     case wxFILTER_NONE:
@@ -218,109 +262,62 @@ bool wxTextValidator::Validate(wxWindow *parent)
         wxFAIL_MSG("invalid text validator style");
     }
 
-    if ( !errormsg.empty() )
-    {
-        m_validatorWindow->SetFocus();
+    if (pErr)
+        *pErr = errormsg;
 
-        wxString buf;
-        buf.Printf(errormsg, val.c_str());
-
-        wxMessageBox(buf, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, parent);
-
-        return false;
-    }
-
-    return true;
+    return errormsg.empty();
 }
 
-// Called to transfer data to the window
-bool wxTextValidator::TransferToWindow(void)
+bool wxTextValidator::IsInCharIncludes(const wxString& val) const
 {
-    if ( m_stringValue )
-    {
-        wxTextEntry * const text = GetTextEntry();
-        if ( !text )
-            return false;
-
-        text->SetValue(*m_stringValue);
-    }
-
-    return true;
-}
-
-// Called to transfer data to the window
-bool wxTextValidator::TransferFromWindow(void)
-{
-    if ( m_stringValue )
-    {
-        wxTextEntry * const text = GetTextEntry();
-        if ( !text )
-            return false;
-
-        *m_stringValue = text->GetValue();
-    }
-
-    return true;
-}
-
-bool wxTextValidator::IsInCharIncludes(const wxString& val)
-{
-    size_t i;
-    for ( i = 0; i < val.length(); i++)
-    {
+    for (size_t i = 0; i < val.length(); i++)
         if (m_includes.Index((wxString) val[i]) == wxNOT_FOUND)
+            // one character of 'val' is NOT present in m_includes...
             return false;
-    }
+
+    // all characters of 'val' are present in m_includes
     return true;
 }
 
-bool wxTextValidator::IsNotInCharExcludes(const wxString& val)
+bool wxTextValidator::IsNotInCharExcludes(const wxString& val) const
 {
-    size_t i;
-    for ( i = 0; i < val.length(); i++)
-    {
-       if (m_excludes.Index((wxString) val[i]) != wxNOT_FOUND)
+    for (size_t i = 0; i < val.length(); i++)
+        if (m_excludes.Index((wxString) val[i]) != wxNOT_FOUND)
+            // one character of 'val' is present in m_excludes...
             return false;
-    }
+
+    // all characters of 'val' are NOT present in m_excludes
     return true;
 }
 
 void wxTextValidator::OnChar(wxKeyEvent& event)
 {
-/*
-    if ( !M_VTEXTDATA )
-        return;
-*/
-
-    if ( m_validatorWindow )
+    if (!m_validatorWindow)
     {
-        int keyCode = event.GetKeyCode();
-
-        // we don't filter special keys and Delete
-        if (
-             !(keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode > WXK_START) &&
-             (
-              ((m_validatorStyle == wxFILTER_INCLUDE_CHAR_LIST) && !IsInCharIncludes(wxString((wxChar) keyCode, 1))) ||
-              ((m_validatorStyle == wxFILTER_EXCLUDE_CHAR_LIST) && !IsNotInCharExcludes(wxString((wxChar) keyCode, 1))) ||
-              ((m_validatorStyle == wxFILTER_ASCII) && !isascii(keyCode)) ||
-              ((m_validatorStyle == wxFILTER_ALPHA) && !wxIsalpha(keyCode)) ||
-              ((m_validatorStyle == wxFILTER_ALPHANUMERIC) && !wxIsalnum(keyCode)) ||
-              ((m_validatorStyle == wxFILTER_NUMERIC) && !wxIsdigit(keyCode)
-                                && keyCode != wxT('.') && keyCode != wxT(',') && keyCode != wxT('-') && keyCode != wxT('+') 
-                                && keyCode != wxT('e') && keyCode != wxT('E'))
-             )
-           )
-        {
-            if ( !wxValidator::IsSilent() )
-                wxBell();
-
-            // eat message
-            return;
-        }
+        event.Skip();
+        return;
     }
 
-    event.Skip();
+    int keyCode = event.GetKeyCode();
+
+    // we don't filter special keys and delete
+    if (keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode >= WXK_START)
+    {
+        event.Skip();
+        return;
+    }
+
+    wxString str((wxUniChar)keyCode, 1);
+    if (!IsValid(str, NULL))
+    {
+        if ( !wxValidator::IsSilent() )
+            wxBell();
+
+        // eat message
+        return;
+    }
+    else
+        event.Skip();
 }
 
 

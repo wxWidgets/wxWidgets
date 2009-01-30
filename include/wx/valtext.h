@@ -2,7 +2,7 @@
 // Name:        valtext.h
 // Purpose:     wxTextValidator class
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Francesco Montorsi
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
@@ -61,6 +61,9 @@ public:
     // Called to transfer data from the window
     virtual bool TransferFromWindow();
 
+    // Filter keystrokes
+    void OnChar(wxKeyEvent& event);
+
     // ACCESSORS
     inline wxTextValidatorStyle GetStyle() const { return m_validatorStyle; }
     inline void SetStyle(wxTextValidatorStyle style) { m_validatorStyle = style; }
@@ -76,11 +79,16 @@ public:
     void SetExcludes(const wxArrayString& excludes) { m_excludes = excludes; }
     inline wxArrayString& GetExcludes() { return m_excludes; }
 
-    bool IsInCharIncludes(const wxString& val);
-    bool IsNotInCharExcludes(const wxString& val);
+protected:
 
-    // Filter keystrokes
-    void OnChar(wxKeyEvent& event);
+    // returns true if all characters of the given string are present in m_includes
+    bool IsInCharIncludes(const wxString& val) const;
+
+    // returns true if all characters of the given string are NOT present in m_excludes
+    bool IsNotInCharExcludes(const wxString& val) const;
+
+    // returns true if the contents of 'val' are valid for the current validation style
+    bool IsValid(const wxString& val, wxString* errormsg) const;
 
 protected:
     wxTextValidatorStyle m_validatorStyle;
