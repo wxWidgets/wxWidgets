@@ -63,6 +63,7 @@ The following is a basic categorization of them:
 @li @subpage overview_stream
 @li @subpage overview_thread
 @li @subpage overview_config
+@li @subpage overview_persistence
 @li @subpage overview_fs
 @li @subpage overview_resyntax
 @li @subpage overview_archive

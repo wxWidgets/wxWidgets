@@ -280,6 +280,9 @@ Major new features in this release
   welcome (and due to using the simple Doxygen syntax it is now easier than
   ever to submit patches correcting them! :-)
 
+- Support for persistent objects automatically saving and restoring their state
+  was added.
+
 
 2.9.0
 -----

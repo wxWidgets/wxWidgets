@@ -51,6 +51,9 @@
 #include "wx/imaglist.h"
 #include "wx/wupdlock.h"
 
+#include "wx/persist/toplevel.h"
+#include "wx/persist/treebook.h"
+
 #include "widgets.h"
 
 #include "../sample.xpm"
@@ -325,6 +328,8 @@ bool WidgetsApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+    SetVendorName("wxWidgets_Samples");
+
     // the reason for having these ifdef's is that I often run two copies of
     // this sample side by side and it is useful to see which one is which
     wxString title;
@@ -351,10 +356,6 @@ bool WidgetsApp::OnInit()
     wxFrame *frame = new WidgetsFrame(title + _T(" widgets demo"));
     frame->Show();
 
-    //wxLog::AddTraceMask(_T("listbox"));
-    //wxLog::AddTraceMask(_T("scrollbar"));
-    //wxLog::AddTraceMask(_T("focus"));
-
     return true;
 }
 
@@ -365,15 +366,18 @@ bool WidgetsApp::OnInit()
 WidgetsFrame::WidgetsFrame(const wxString& title)
             : wxFrame(NULL, wxID_ANY, title)
 {
+    SetName("Main");
+    const bool sizeSet = wxPersistenceManager::Get().RegisterAndRestore(this);
+
     // set the frame icon
     SetIcon(wxICON(sample));
 
     // init everything
 #if USE_LOG
-    m_lboxLog = (wxListBox *)NULL;
-    m_logTarget = (wxLog *)NULL;
+    m_lboxLog = NULL;
+    m_logTarget = NULL;
 #endif // USE_LOG
-    m_book = (WidgetsBookCtrl *)NULL;
+    m_book = NULL;
 
 #if wxUSE_MENUS
     // create the menubar
@@ -435,13 +439,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     // Uncomment to suppress page theme (draw in solid colour)
     //style |= wxNB_NOPAGETHEME;
 
-    m_book = new WidgetsBookCtrl(m_panel, Widgets_BookCtrl, wxDefaultPosition,
-#ifdef __WXMOTIF__
-        wxSize(500, wxDefaultCoord), // under Motif, height is a function of the width...
-#else
-        wxDefaultSize,
-#endif
-        style);
+    m_book = new WidgetsBookCtrl(m_panel, Widgets_BookCtrl,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 style, "Widgets");
+
     InitBook();
 
 #ifndef __WXHANDHELD__
@@ -482,7 +483,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     m_panel->SetSizer(sizerTop);
 
-    sizerTop->SetSizeHints(this);
+    const wxSize sizeMin = m_panel->GetBestSize();
+    if ( !sizeSet )
+        SetClientSize(sizeMin);
+    SetMinClientSize(sizeMin);
 
 #if USE_LOG && !defined(__WXCOCOA__)
     // wxCocoa's listbox is too flakey to use for logging right now
@@ -613,10 +617,13 @@ void WidgetsFrame::InitBook()
              wxEVT_COMMAND_WIDGETS_PAGE_CHANGED,
              wxWidgetsbookEventHandler(WidgetsFrame::OnPageChanged) );
 
+    const bool pageSet = wxPersistenceManager::Get().RegisterAndRestore(m_book);
+
 #if USE_TREEBOOK
     // for treebook page #0 is empty parent page only so select the first page
     // with some contents
-    m_book->SetSelection(1);
+    if ( !pageSet )
+        m_book->SetSelection(1);
 
     // but ensure that the top of the tree is shown nevertheless
     wxTreeCtrl * const tree = m_book->GetTreeCtrl();
@@ -624,10 +631,13 @@ void WidgetsFrame::InitBook()
     wxTreeItemIdValue cookie;
     tree->EnsureVisible(tree->GetFirstChild(tree->GetRootItem(), cookie));
 #else
-    // for other books set selection twice to force connected event handler
-    // to force lazy creation of initial visible content
-    m_book->SetSelection(1);
-    m_book->SetSelection(0);
+    if ( !pageSet )
+    {
+        // for other books set selection twice to force connected event handler
+        // to force lazy creation of initial visible content
+        m_book->SetSelection(1);
+        m_book->SetSelection(0);
+    }
 #endif // USE_TREEBOOK
 }
 

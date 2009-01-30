@@ -562,6 +562,10 @@ SOURCE=..\..\src\common\paper.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\persist.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\pickerbase.cpp
 # End Source File
 # Begin Source File
@@ -5742,6 +5746,10 @@ SOURCE=..\..\include\wx\bmpcbox.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\persist\bookctrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\bookctrl.h
 # End Source File
 # Begin Source File
@@ -6254,6 +6262,10 @@ SOURCE=..\..\include\wx\pen.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\persist.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\pickerbase.h
 # End Source File
 # Begin Source File
@@ -6506,11 +6518,19 @@ SOURCE=..\..\include\wx\toplevel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\persist\toplevel.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\treebase.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\treebook.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\persist\treebook.h
 # End Source File
 # Begin Source File
 
@@ -6547,6 +6567,10 @@ SOURCE=..\..\include\wx\vscroll.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\window.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\persist\window.h
 # End Source File
 # Begin Source File
 
