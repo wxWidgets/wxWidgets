@@ -1166,8 +1166,8 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 
 
 /*  base floating point types */
-/*  wxFloat32: 32 bit IEEE float ( 1 sign, 8 exponent bits, 23 fraction bits */
-/*  wxFloat64: 64 bit IEEE float ( 1 sign, 11 exponent bits, 52 fraction bits */
+/*  wxFloat32: 32 bit IEEE float ( 1 sign, 8 exponent bits, 23 fraction bits ) */
+/*  wxFloat64: 64 bit IEEE float ( 1 sign, 11 exponent bits, 52 fraction bits ) */
 /*  wxDouble: native fastest representation that has at least wxFloat64 */
 /*            precision, so use the IEEE types for storage, and this for */
 /*            calculations */
@@ -2196,12 +2196,19 @@ enum wxDataFormatId
 /*  Virtual keycodes */
 enum wxKeyCode
 {
-    WXK_BACK    =    8,
+    WXK_BACK    =    8, // backspace
     WXK_TAB     =    9,
     WXK_RETURN  =    13,
     WXK_ESCAPE  =    27,
+
+    /* values from 33 to 126 are reserved for the standard ASCII characters */
+
     WXK_SPACE   =    32,
     WXK_DELETE  =    127,
+
+    /* values from 128 to 255 are reserved for ASCII extended characters
+       (note that there isn't a real widely used standard for the meaning
+       of these values; avoid them in portable apps!) */
 
     /* These are, by design, not compatible with unicode characters.
        If you want to get a unicode character from a key event, use
