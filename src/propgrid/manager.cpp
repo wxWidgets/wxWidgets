@@ -1118,6 +1118,8 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
     if ( m_iFlags & wxPG_FL_INITIALIZED )
     {
         int pgh = propgridBottomY - propgridY;
+        if ( pgh < 0 )
+            pgh = 0;
         m_pPropGrid->SetSize( 0, propgridY, width, pgh );
 
         m_extraHeight = height - pgh;
