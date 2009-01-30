@@ -19,6 +19,7 @@
 #include "wx/evtloop.h"
 #include "wx/apptrait.h"
 #include "wx/unix/execute.h"
+#include "wx/unix/private/timer.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -43,6 +44,11 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop;
+}
+
+wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
+{
+    return new wxUnixTimerImpl(timer);
 }
 
 // ----------------------------------------------------------------------------

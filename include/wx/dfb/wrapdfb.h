@@ -368,39 +368,9 @@ struct wxIDirectFBEventBuffer : public wxDfbWrapper<IDirectFBEventBuffer>
 {
     wxIDirectFBEventBuffer(IDirectFBEventBuffer *s) { Init(s); }
 
-    bool WakeUp()
+    bool CreateFileDescriptor(int *ret_fd)
     {
-        return Check(m_ptr->WakeUp(m_ptr));
-    }
-
-    bool HasEvent()
-    {
-        // returns DFB_OK if there is >=1 event, DFB_BUFFEREMPTY otherwise
-        DFBResult r = m_ptr->HasEvent(m_ptr);
-
-        // NB: Check() also returns true for DFB_BUFFEREMPTY, so we can't just
-        //     return it's return value:
-        Check(r);
-        return (r == DFB_OK);
-    }
-
-    bool WaitForEventWithTimeout(unsigned secs, unsigned millisecs)
-    {
-        DFBResult r = m_ptr->WaitForEventWithTimeout(m_ptr, secs, millisecs);
-
-        // DFB_TIMEOUT is not an error in this function:
-        if ( r == DFB_TIMEOUT )
-        {
-            m_lastResult = DFB_TIMEOUT;
-            return true;
-        }
-
-        return Check(r);
-    }
-
-    bool GetEvent(wxDFBEvent& event)
-    {
-        return Check(m_ptr->GetEvent(m_ptr, &event));
+        return Check(m_ptr->CreateFileDescriptor(m_ptr, ret_fd));
     }
 };
 

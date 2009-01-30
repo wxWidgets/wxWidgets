@@ -1916,7 +1916,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/mask.cpp
-    src/generic/timer.cpp
     src/dfb/app.cpp
     src/dfb/bitmap.cpp
     src/dfb/brush.cpp

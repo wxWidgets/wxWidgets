@@ -4363,7 +4363,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_generic_icon.o \
 	monodll_generic_imaglist.o \
 	monodll_mask.o \
-	monodll_generic_timer.o \
 	monodll_dfb_app.o \
 	monodll_dfb_bitmap.o \
 	monodll_dfb_brush.o \
@@ -5227,7 +5226,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_generic_icon.o \
 	monodll_generic_imaglist.o \
 	monodll_mask.o \
-	monodll_generic_timer.o \
 	monodll_dfb_app.o \
 	monodll_dfb_bitmap.o \
 	monodll_dfb_brush.o \
@@ -6176,7 +6174,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_generic_icon.o \
 	monolib_generic_imaglist.o \
 	monolib_mask.o \
-	monolib_generic_timer.o \
 	monolib_dfb_app.o \
 	monolib_dfb_bitmap.o \
 	monolib_dfb_brush.o \
@@ -7040,7 +7037,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_generic_icon.o \
 	monolib_generic_imaglist.o \
 	monolib_mask.o \
-	monolib_generic_timer.o \
 	monolib_dfb_app.o \
 	monolib_dfb_bitmap.o \
 	monolib_dfb_brush.o \
@@ -8135,7 +8131,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_generic_icon.o \
 	coredll_generic_imaglist.o \
 	coredll_mask.o \
-	coredll_generic_timer.o \
 	coredll_dfb_app.o \
 	coredll_dfb_bitmap.o \
 	coredll_dfb_brush.o \
@@ -8999,7 +8994,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_generic_icon.o \
 	coredll_generic_imaglist.o \
 	coredll_mask.o \
-	coredll_generic_timer.o \
 	coredll_dfb_app.o \
 	coredll_dfb_bitmap.o \
 	coredll_dfb_brush.o \
@@ -9646,7 +9640,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_generic_icon.o \
 	corelib_generic_imaglist.o \
 	corelib_mask.o \
-	corelib_generic_timer.o \
 	corelib_dfb_app.o \
 	corelib_dfb_bitmap.o \
 	corelib_dfb_brush.o \
@@ -10510,7 +10503,6 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_generic_icon.o \
 	corelib_generic_imaglist.o \
 	corelib_mask.o \
-	corelib_generic_timer.o \
 	corelib_dfb_app.o \
 	corelib_dfb_bitmap.o \
 	corelib_dfb_brush.o \
@@ -16944,9 +16936,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_x11_app.o: $(srcdir)/src/x11/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/app.cpp
 
@@ -21614,9 +21603,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_x11_app.o: $(srcdir)/src/x11/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/app.cpp
@@ -26469,9 +26455,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
-@COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_x11_app.o: $(srcdir)/src/x11/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/app.cpp
 
@@ -29969,9 +29952,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_x11_app.o: $(srcdir)/src/x11/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/app.cpp

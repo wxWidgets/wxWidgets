@@ -12,44 +12,35 @@
 #define _WX_DFB_EVTLOOP_H_
 
 #include "wx/dfb/dfbptr.h"
+#include "wx/unix/evtloop.h"
 
 wxDFB_DECLARE_INTERFACE(IDirectFBEventBuffer);
-struct wxDFBEvent;
 
 // ----------------------------------------------------------------------------
 // wxEventLoop
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopManual
+class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxConsoleEventLoop
 {
 public:
     wxGUIEventLoop();
 
-    virtual bool Pending() const;
-    virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout);
-
     // returns DirectFB event buffer used by wx
     static wxIDirectFBEventBufferPtr GetDirectFBEventBuffer();
 
+private:
     // wxYield implementation: iterate the loop as long as there are any
     // pending events
     void Yield();
 
-protected:
-    virtual void WakeUp();
-    virtual void OnNextIteration();
-
-    virtual void HandleDFBEvent(const wxDFBEvent& event);
-
-private:
     static void InitBuffer();
     static void CleanUp();
 
-    friend class wxApp; // calls CleanUp() and WakeUp()
+    friend class wxApp; // calls CleanUp()
 
 private:
     static wxIDirectFBEventBufferPtr ms_buffer;
+    static int ms_bufferFd;
 
     DECLARE_NO_COPY_CLASS(wxGUIEventLoop)
 };

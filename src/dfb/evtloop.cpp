@@ -26,10 +26,10 @@
 #endif
 
 #include "wx/thread.h"
-#include "wx/generic/private/timer.h"
 #include "wx/private/fdiodispatcher.h"
 #include "wx/dfb/private.h"
 #include "wx/nonownedwnd.h"
+#include "wx/buffer.h"
 
 #define TRACE_EVENTS "events"
 
@@ -38,137 +38,79 @@
 // ===========================================================================
 
 //-----------------------------------------------------------------------------
-// wxEventLoop initialization
+// wxDFBEventsHandler
 //-----------------------------------------------------------------------------
 
-wxIDirectFBEventBufferPtr wxGUIEventLoop::ms_buffer;
-
-wxGUIEventLoop::wxGUIEventLoop()
+// This handler is installed to process input on DirectFB's events socket (
+// obtained using CreateFileDescriptor()). When IDirectFBEventBuffer is used
+// in this mode, events are written to the file descriptor and we read them
+// in OnReadWaiting() below.
+class wxDFBEventsHandler : public wxFDIOHandler
 {
-    if ( !ms_buffer )
-        InitBuffer();
-}
+public:
+    wxDFBEventsHandler()
+        : m_fd(-1), m_offset(0)
+    {}
 
-/* static */
-void wxGUIEventLoop::InitBuffer()
-{
-    ms_buffer = wxIDirectFB::Get()->CreateEventBuffer();
-}
+    void SetFD(int fd) { m_fd = fd; }
 
-/* static */
-void wxGUIEventLoop::CleanUp()
-{
-    ms_buffer.Reset();
-}
-
-/* static */
-wxIDirectFBEventBufferPtr wxGUIEventLoop::GetDirectFBEventBuffer()
-{
-    if ( !ms_buffer )
-        InitBuffer();
-
-    return ms_buffer;
-}
-
-//-----------------------------------------------------------------------------
-// events dispatch and loop handling
-//-----------------------------------------------------------------------------
-
-bool wxGUIEventLoop::Pending() const
-{
-    wxCHECK_MSG( ms_buffer, false, "invalid event buffer" );
-
-    return ms_buffer->HasEvent();
-}
-
-bool wxGUIEventLoop::Dispatch()
-{
-    // NB: we don't block indefinitely waiting for an event, but instead
-    //     time out after a brief period in order to make sure that
-    //     OnNextIteration() will be called frequently enough
-    //
-    // TODO: remove this hack, instead use CreateFileDescriptor() to properly
-    //       multiplex GUI and socket input
-    const int TIMEOUT = 100;
-
-    // treat time out (-1 return value) as normal successful return so that
-    // OnNextIteration() is called
-    return !!DispatchTimeout(TIMEOUT);
-}
-
-int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
-{
-    wxCHECK_MSG( ms_buffer, 0, "invalid event buffer" );
-
-    // release the GUI mutex so that other threads have a chance to post
-    // events:
-    wxMutexGuiLeave();
-
-    bool rv = ms_buffer->WaitForEventWithTimeout(0, timeout);
-
-    // and acquire it back before calling any event handlers:
-    wxMutexGuiEnter();
-
-    if ( rv )
+    void Reset()
     {
-        switch ( ms_buffer->GetLastResult() )
-        {
-            case DFB_OK:
-            {
-                wxDFBEvent e;
-                ms_buffer->GetEvent(e);
-                HandleDFBEvent(e);
-                break;
-            }
-
-            case DFB_TIMEOUT:
-                return -1;
-
-            default:
-                // don't terminate the loop due to errors (they were reported
-                // already by ms_buffer)
-                break;
-        }
+        m_fd = -1;
+        m_offset = 0;
     }
 
-    return 1;
-}
+    // implement wxFDIOHandler pure virtual methods
+    virtual void OnReadWaiting();
+    virtual void OnWriteWaiting()
+        { wxFAIL_MSG("OnWriteWaiting shouldn't be called"); }
+    virtual void OnExceptionWaiting()
+        { wxFAIL_MSG("OnExceptionWaiting shouldn't be called"); }
 
-void wxGUIEventLoop::WakeUp()
+private:
+    // DirectFB -> wxWidgets events translation
+    void HandleDFBEvent(const wxDFBEvent& event);
+
+    int m_fd;
+    size_t m_offset;
+    DFBEvent m_event;
+};
+
+void wxDFBEventsHandler::OnReadWaiting()
 {
-    wxCHECK_RET( ms_buffer, "invalid event buffer" );
+    for ( ;; )
+    {
+        int size = read(m_fd,
+                        ((char*)&m_event) + m_offset,
+                        sizeof(m_event) - m_offset);
 
-    ms_buffer->WakeUp();
+        if ( size == 0 || (size == -1 && (errno == EAGAIN || errno == EINTR)) )
+        {
+            // nothing left in the pipe (EAGAIN is expected for an FD with
+            // O_NONBLOCK)
+            break;
+        }
+
+        if ( size == -1 )
+        {
+            wxLogSysError(_("Failed to read event from DirectFB pipe"));
+            break;
+        }
+
+        size += m_offset;
+        m_offset = 0;
+
+        if ( size != sizeof(m_event) )
+        {
+            m_offset = size;
+            break;
+        }
+
+        HandleDFBEvent(m_event);
+    }
 }
 
-void wxGUIEventLoop::OnNextIteration()
-{
-#if wxUSE_TIMER
-    wxGenericTimerImpl::NotifyTimers();
-#endif
-
-#if wxUSE_SOCKETS
-    // handle any pending socket events:
-    wxFDIODispatcher::DispatchPending();
-#endif
-}
-
-void wxGUIEventLoop::Yield()
-{
-    // process all pending events:
-    while ( Pending() )
-        Dispatch();
-
-    // handle timers, sockets etc.
-    OnNextIteration();
-}
-
-
-//-----------------------------------------------------------------------------
-// DirectFB -> wxWidgets events translation
-//-----------------------------------------------------------------------------
-
-void wxGUIEventLoop::HandleDFBEvent(const wxDFBEvent& event)
+void wxDFBEventsHandler::HandleDFBEvent(const wxDFBEvent& event)
 {
     switch ( event.GetClass() )
     {
@@ -191,4 +133,79 @@ void wxGUIEventLoop::HandleDFBEvent(const wxDFBEvent& event)
                        (int)event.GetClass());
         }
     }
+}
+
+//-----------------------------------------------------------------------------
+// wxEventLoop initialization
+//-----------------------------------------------------------------------------
+
+wxIDirectFBEventBufferPtr wxGUIEventLoop::ms_buffer;
+int wxGUIEventLoop::ms_bufferFd;
+static wxDFBEventsHandler gs_DFBEventsHandler;
+
+wxGUIEventLoop::wxGUIEventLoop()
+{
+    // Note that this has to be done here so that the buffer is ready when
+    // an event loop runs; GetDirectFBEventBuffer(), which also calls
+    // InitBuffer(), may be called before or after the first wxGUIEventLoop
+    // instance is created.
+    if ( !ms_buffer )
+        InitBuffer();
+}
+
+/* static */
+void wxGUIEventLoop::InitBuffer()
+{
+    // create DirectFB events buffer:
+    ms_buffer = wxIDirectFB::Get()->CreateEventBuffer();
+
+    // and setup a file descriptor that we can watch for new events:
+
+    ms_buffer->CreateFileDescriptor(&ms_bufferFd);
+    int flags = fcntl(ms_bufferFd, F_GETFL, 0);
+    if ( flags == -1 || fcntl(ms_bufferFd, F_SETFL, flags | O_NONBLOCK) == -1 )
+    {
+        wxLogSysError(_("Failed to switch DirectFB pipe to non-blocking mode"));
+        return;
+    }
+
+    wxFDIODispatcher *dispatcher = wxFDIODispatcher::Get();
+    wxCHECK_RET( dispatcher, "wxDFB requires wxFDIODispatcher" );
+
+    gs_DFBEventsHandler.SetFD(ms_bufferFd);
+    dispatcher->RegisterFD(ms_bufferFd, &gs_DFBEventsHandler, wxFDIO_INPUT);
+}
+
+/* static */
+void wxGUIEventLoop::CleanUp()
+{
+    wxFDIODispatcher *dispatcher = wxFDIODispatcher::Get();
+    wxCHECK_RET( dispatcher, "wxDFB requires wxFDIODispatcher" );
+    dispatcher->UnregisterFD(ms_bufferFd);
+
+    ms_buffer.Reset();
+    gs_DFBEventsHandler.Reset();
+}
+
+/* static */
+wxIDirectFBEventBufferPtr wxGUIEventLoop::GetDirectFBEventBuffer()
+{
+    if ( !ms_buffer )
+        InitBuffer();
+
+    return ms_buffer;
+}
+
+//-----------------------------------------------------------------------------
+// events dispatch and loop handling
+//-----------------------------------------------------------------------------
+
+void wxGUIEventLoop::Yield()
+{
+    // process all pending events:
+    while ( Pending() )
+        Dispatch();
+
+    // handle timers, sockets etc.
+    OnNextIteration();
 }

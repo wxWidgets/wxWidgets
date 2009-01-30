@@ -23,7 +23,9 @@ typedef wxMilliClock_t wxUsecClock_t;
 // wxTimer implementation class for Unix platforms
 // ----------------------------------------------------------------------------
 
-class wxUnixTimerImpl : public wxTimerImpl
+// NB: we have to export at least this symbol from the shared library, because
+//     it's used by wxDFB's wxCore
+class WXDLLIMPEXP_BASE wxUnixTimerImpl : public wxTimerImpl
 {
 public:
     wxUnixTimerImpl(wxTimer *timer);
