@@ -47,6 +47,8 @@
     #include "wx/menu.h"
 #endif //WX_PRECOMP
 
+#include "wx/collpane.h"
+
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
 #endif // wxUSE_DRAG_AND_DROP
@@ -720,6 +722,13 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
     return min;
 }
 
+wxSize wxWindowBase::GetBestSize() const
+{
+    if ((!m_windowSizer) && (m_bestSizeCache.IsFullySpecified()))
+        return m_bestSizeCache;
+        
+    return DoGetBestSize();
+}
 
 void wxWindowBase::SetMinSize(const wxSize& minSize)
 { 

@@ -374,12 +374,8 @@ public:
         // get the size best suited for the window (in fact, minimal
         // acceptable size using which it will still look "nice" in
         // most situations)
-    wxSize GetBestSize() const
-    {
-        if (m_bestSizeCache.IsFullySpecified())
-            return m_bestSizeCache;
-        return DoGetBestSize();
-    }
+    wxSize GetBestSize() const;
+    
     void GetBestSize(int *w, int *h) const
     {
         wxSize s = GetBestSize();
