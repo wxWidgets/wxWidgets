@@ -402,7 +402,7 @@ public:
         // This function will merge the window's best size into the window's
         // minimum size, giving priority to the min size components, and
         // returns the results.
-    wxSize GetEffectiveMinSize() const;
+    virtual wxSize GetEffectiveMinSize() const;
     wxDEPRECATED( wxSize GetBestFittingSize() const );  // replaced by GetEffectiveMinSize
     wxDEPRECATED( wxSize GetAdjustedMinSize() const );  // replaced by GetEffectiveMinSize
 

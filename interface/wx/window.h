@@ -708,10 +708,13 @@ public:
         Merges the window's best size into the min size and returns the result.
         This is the value used by sizers to determine the appropriate
         ammount of space to allocate for the widget.
+        
+        This is the method called by any wxSizer when they query the size
+        of a certain window or control.
 
         @see GetBestSize(), SetInitialSize(), @ref overview_windowsizing
     */
-    wxSize GetEffectiveMinSize() const;
+    virtual wxSize GetEffectiveMinSize() const;
 
     /**
         Returns the maximum size of window's client area.
