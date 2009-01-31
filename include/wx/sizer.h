@@ -758,8 +758,8 @@ private:
 // wxFlexGridSizer
 //---------------------------------------------------------------------------
 
-// the bevaiour for resizing wxFlexGridSizer cells in the "non-flexible"
-// direction
+// values which define the behaviour for resizing wxFlexGridSizer cells in the
+// "non-flexible" direction
 enum wxFlexSizerGrowMode
 {
     // don't resize the cells in non-flexible direction at all

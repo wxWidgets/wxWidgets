@@ -1394,6 +1394,22 @@ public:
 };
 
 
+/**
+    Values which define the behaviour for resizing wxFlexGridSizer cells in the
+    "non-flexible" direction.
+*/
+enum wxFlexSizerGrowMode
+{
+    /// Don't resize the cells in non-flexible direction at all.
+    wxFLEX_GROWMODE_NONE,
+
+    /// Uniformly resize only the specified ones (default).
+    wxFLEX_GROWMODE_SPECIFIED,
+
+    /// Uniformly resize all cells.
+    wxFLEX_GROWMODE_ALL
+};
+
 
 /**
     @class wxFlexGridSizer
