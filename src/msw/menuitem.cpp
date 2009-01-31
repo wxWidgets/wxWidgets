@@ -365,62 +365,43 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     m_parentMenu->UpdateAccel(this);
 #endif // wxUSE_ACCEL
 
-    UINT id = GetMSWId();
-    UINT flagsOld = ::GetMenuState(hMenu, id, MF_BYCOMMAND);
-    if ( flagsOld == 0xFFFFFFFF )
-    {
-        // It's not an error, it means that the menu item doesn't exist
-        //wxLogLastError(wxT("GetMenuState"));
-    }
-    else
-    {
-        if ( IsSubMenu() )
-        {
-            // high byte contains the number of items in a submenu for submenus
-            flagsOld &= 0xFF;
-            flagsOld |= MF_POPUP;
-        }
-
-        LPCTSTR data;
-
 #if wxUSE_OWNER_DRAWN
-        if ( IsOwnerDrawn() )
-        {
-            flagsOld |= MF_OWNERDRAW;
-            data = (LPCTSTR)this;
-        }
-        else
-#endif  //owner drawn
-        {
-            flagsOld |= MF_STRING;
-            data = (wxChar*) m_text.wx_str();
-        }
+    if ( IsOwnerDrawn() )
+    {
+        // we don't need to do anything for owner drawn items, they will redraw
+        // themselves using the new text the next time they're displayed
+        return;
+    }
+#endif // owner drawn
 
-#ifdef __WXWINCE__
-        // FIXME: complete this, applying the old
-        // flags.
-        // However, the WinCE doc for SetMenuItemInfo
-        // says that you can't use it to set the menu
-        // item state; only data, id and type.
-        MENUITEMINFO info;
-        wxZeroMemory(info);
-        info.cbSize = sizeof(info);
+    // update the text of the native menu item
+    const UINT id = GetMSWId();
+
+    WinStruct<MENUITEMINFO> info;
+
+    // surprisingly, calling SetMenuItemInfo() with just MIIM_STRING doesn't
+    // work as it resets the menu bitmap, so we need to first get the old item
+    // state and then modify it
+    const bool isLaterThanWin95 = wxGetWinVersion() > wxWinVersion_95;
+    info.fMask = MIIM_ID | MIIM_SUBMENU | MIIM_CHECKMARKS | MIIM_DATA;
+    if ( isLaterThanWin95 )
+        info.fMask |= MIIM_BITMAP | MIIM_FTYPE;
+    else
         info.fMask = MIIM_TYPE;
-        info.fType = MFT_STRING;
-        info.cch = m_text.length();
-        info.dwTypeData = (LPTSTR) data ;
-        if ( !::SetMenuItemInfo(hMenu, id, FALSE, & info) )
-        {
-            wxLogLastError(wxT("SetMenuItemInfo"));
-        }
-#else
-        if ( ::ModifyMenu(hMenu, id,
-                          MF_BYCOMMAND | flagsOld,
-                          id, data) == (int)0xFFFFFFFF )
-        {
-            wxLogLastError(wxT("ModifyMenu"));
-        }
-#endif
+    if ( !::GetMenuItemInfo(hMenu, id, FALSE, &info) )
+    {
+        wxLogLastError(wxT("GetMenuItemInfo"));
+        return;
+    }
+
+    if ( isLaterThanWin95 )
+        info.fMask |= MIIM_STRING;
+    //else: MIIM_TYPE already specified
+    info.dwTypeData = (LPTSTR)m_text.wx_str();
+    info.cch = m_text.length();
+    if ( !::SetMenuItemInfo(hMenu, id, FALSE, &info) )
+    {
+        wxLogLastError(wxT("SetMenuItemInfo"));
     }
 }
 
