@@ -61,24 +61,6 @@
 // other standard headers
 #include <string.h>
 
-//VC6 needs these defining, though they are in winuser.h
-#ifndef MIIM_BITMAP
-#define MIIM_STRING      0x00000040
-#define MIIM_BITMAP      0x00000080
-#define MIIM_FTYPE       0x00000100
-#define HBMMENU_CALLBACK            ((HBITMAP) -1)
-typedef struct tagMENUINFO
-{
-    DWORD   cbSize;
-    DWORD   fMask;
-    DWORD   dwStyle;
-    UINT    cyMax;
-    HBRUSH  hbrBack;
-    DWORD   dwContextHelpID;
-    DWORD   dwMenuData;
-}   MENUINFO, FAR *LPMENUINFO;
-#endif
-
 #if wxUSE_OWNER_DRAWN
     #include "wx/dynlib.h"
 #endif

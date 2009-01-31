@@ -211,6 +211,28 @@ typedef struct wxtagNMLVCUSTOMDRAW_ {
 #endif // defined __VISUALC__ && __VISUALC__ <= 1100
 
 // ----------------------------------------------------------------------------
+// menu stuff
+// ----------------------------------------------------------------------------
+
+#ifndef MIIM_BITMAP
+    #define MIIM_STRING      0x00000040
+    #define MIIM_BITMAP      0x00000080
+    #define MIIM_FTYPE       0x00000100
+    #define HBMMENU_CALLBACK            ((HBITMAP) -1)
+
+    typedef struct tagMENUINFO
+    {
+        DWORD   cbSize;
+        DWORD   fMask;
+        DWORD   dwStyle;
+        UINT    cyMax;
+        HBRUSH  hbrBack;
+        DWORD   dwContextHelpID;
+        DWORD   dwMenuData;
+    }   MENUINFO, FAR *LPMENUINFO;
+#endif // MIIM_BITMAP &c
+
+// ----------------------------------------------------------------------------
 // definitions related to ListView and Header common controls, needed by
 // msw/listctrl.cpp and msw/headerctrl.cpp
 // ----------------------------------------------------------------------------
