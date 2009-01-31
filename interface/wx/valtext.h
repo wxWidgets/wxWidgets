@@ -15,16 +15,28 @@ enum wxTextValidatorStyle
     /// No filtering takes place.
     wxFILTER_NONE,
 
-    /// Non-ASCII characters are filtered out.
+    /// Non-ASCII characters are filtered out. See wxString::IsAscii.
     wxFILTER_ASCII,
 
     /// Non-alpha characters are filtered out.
+    /// Uses the wxWidgets wrapper for the standard CRT function @c isalpha
+    /// (which is locale-dependent) on all characters of the string.
     wxFILTER_ALPHA,
 
     /// Non-alphanumeric characters are filtered out.
+    /// Uses the wxWidgets wrapper for the standard CRT function @c isalnum
+    /// (which is locale-dependent) on all characters of the string.
     wxFILTER_ALPHANUMERIC,
 
     /// Non-numeric characters are filtered out.
+    /// Uses the wxWidgets wrapper for the standard CRT function @c isdigit
+    /// (which is locale-dependent) on all characters of the string.
+    wxFILTER_SIMPLE_NUMBER,
+
+    /// Non-numeric characters are filtered out.
+    /// Works like @c wxFILTER_SIMPLE_NUMBER but allows also decimal points,
+    /// minus/plus signs and the 'e' or 'E' character to input exponents.
+    /// Note that this is not the same behaviour of wxString::IsNumber().
     wxFILTER_NUMERIC,
 
     /// Use an include list. The validator checks if the user input is on

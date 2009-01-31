@@ -26,6 +26,7 @@ enum wxTextValidatorStyle
     wxFILTER_ASCII,
     wxFILTER_ALPHA,
     wxFILTER_ALPHANUMERIC,
+    wxFILTER_SIMPLE_NUMBER,
     wxFILTER_NUMERIC,
     wxFILTER_INCLUDE_LIST,
     wxFILTER_EXCLUDE_LIST,
@@ -82,13 +83,13 @@ public:
 protected:
 
     // returns true if all characters of the given string are present in m_includes
-    bool IsInCharIncludes(const wxString& val) const;
+    bool ContainsOnlyIncludedCharacters(const wxString& val) const;
 
     // returns true if all characters of the given string are NOT present in m_excludes
-    bool IsNotInCharExcludes(const wxString& val) const;
+    bool ContainsExcludedCharacters(const wxString& val) const;
 
     // returns true if the contents of 'val' are valid for the current validation style
-    bool IsValid(const wxString& val, wxString* errormsg) const;
+    virtual bool IsValid(const wxString& val, wxString* errormsg) const;
 
 protected:
     wxTextValidatorStyle m_validatorStyle;

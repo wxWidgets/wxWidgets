@@ -37,42 +37,18 @@
 // global helpers
 // ----------------------------------------------------------------------------
 
-static bool wxIsAlpha(const wxString& val)
-{
-    int i;
-    for ( i = 0; i < (int)val.length(); i++)
-    {
-        if (!wxIsalpha(val[i]))
-            return false;
-    }
-    return true;
-}
-
-static bool wxIsAlphaNumeric(const wxString& val)
-{
-    int i;
-    for ( i = 0; i < (int)val.length(); i++)
-    {
-        if (!wxIsalnum(val[i]))
-            return false;
-    }
-    return true;
-}
-
 static bool wxIsNumeric(const wxString& val)
 {
-    int i;
-    for ( i = 0; i < (int)val.length(); i++)
+    for ( wxString::const_iterator i = val.begin(); i != val.end(); ++i )
     {
         // Allow for "," (French) as well as "." -- in future we should
         // use wxSystemSettings or other to do better localisation
-        if ((!wxIsdigit(val[i])) && (val[i] != wxT('.')) && (val[i] != wxT(',')) && (val[i] != wxT('e')) &&
-            (val[i] != wxT('E')) && (val[i] != wxT('+')) && (val[i] != wxT('-')))
+        if ((!wxIsdigit(*i)) && (*i != wxT('.')) && (*i != wxT(',')) && (*i != wxT('e')) &&
+            (*i != wxT('E')) && (*i != wxT('+')) && (*i != wxT('-')))
             return false;
     }
     return true;
 }
-
 
 // ----------------------------------------------------------------------------
 // wxTextValidator
@@ -234,13 +210,18 @@ bool wxTextValidator::IsValid(const wxString& val, wxString* pErr) const
         break;
 
     case wxFILTER_ALPHA:
-        if ( !wxIsAlpha(val) )
+        if ( !wxStringCheck<wxIsalpha>(val) )
             errormsg = _("'%s' should only contain alphabetic characters.");
         break;
 
     case wxFILTER_ALPHANUMERIC:
-        if ( !wxIsAlphaNumeric(val) )
+        if ( !wxStringCheck<wxIsalnum>(val) )
             errormsg = _("'%s' should only contain alphabetic or numeric characters.");
+        break;
+
+    case wxFILTER_SIMPLE_NUMBER:
+        if ( !wxStringCheck<wxIsdigit>(val) )
+            errormsg = _("'%s' should be numeric.");
         break;
 
     case wxFILTER_NUMERIC:
@@ -249,12 +230,12 @@ bool wxTextValidator::IsValid(const wxString& val, wxString* pErr) const
         break;
 
     case wxFILTER_INCLUDE_CHAR_LIST:
-        if ( !IsInCharIncludes(val) )
+        if ( !ContainsOnlyIncludedCharacters(val) )
             errormsg = _("'%s' is invalid");
         break;
 
     case wxFILTER_EXCLUDE_CHAR_LIST:
-        if ( !IsNotInCharExcludes(val) )
+        if ( ContainsExcludedCharacters(val) )
             errormsg = _("'%s' is invalid");
         break;
 
@@ -268,7 +249,7 @@ bool wxTextValidator::IsValid(const wxString& val, wxString* pErr) const
     return errormsg.empty();
 }
 
-bool wxTextValidator::IsInCharIncludes(const wxString& val) const
+bool wxTextValidator::ContainsOnlyIncludedCharacters(const wxString& val) const
 {
     for (size_t i = 0; i < val.length(); i++)
         if (m_includes.Index((wxString) val[i]) == wxNOT_FOUND)
@@ -279,7 +260,7 @@ bool wxTextValidator::IsInCharIncludes(const wxString& val) const
     return true;
 }
 
-bool wxTextValidator::IsNotInCharExcludes(const wxString& val) const
+bool wxTextValidator::ContainsExcludedCharacters(const wxString& val) const
 {
     for (size_t i = 0; i < val.length(); i++)
         if (m_excludes.Index((wxString) val[i]) != wxNOT_FOUND)
