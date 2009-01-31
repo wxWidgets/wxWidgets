@@ -400,6 +400,18 @@ H2 > A.anchor {
 	color: black;
 }
 
+H3 > A.anchor {
+    text-decoration: none;
+    background-color: none;
+    color: black;
+}
+
+H4 > A.anchor {
+    text-decoration: none;
+    background-color: none;
+    color: black;
+}
+
 IMG {
     margin: 20px;
 }
