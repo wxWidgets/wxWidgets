@@ -206,6 +206,17 @@ protected :
   virtual Boolean                   DataBrowserHitTestProc (DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Rect const* mouseRect) = 0;
   virtual DataBrowserTrackingResult DataBrowserTrackingProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Point startPt, EventModifiers modifiers) = 0;
 
+//
+// callback functions for drag & drop
+///
+  static pascal Boolean DataBrowserAcceptDragProc (ControlRef browser, DragReference dragRef, DataBrowserItemID itemID);
+  static pascal Boolean DataBrowserAddDragItemProc(ControlRef browser, DragReference dragRef, DataBrowserItemID itemID, ItemReference* itemRef);
+  static pascal Boolean DataBrowserReceiveDragProc(ControlRef browser, DragReference dragRef, DataBrowserItemID itemID);
+
+  virtual Boolean DataBrowserAcceptDragProc (DragReference dragRef, DataBrowserItemID itemID)                         = 0;
+  virtual Boolean DataBrowserAddDragItemProc(DragReference dragRef, DataBrowserItemID itemID, ItemReference* itemRef) = 0;
+  virtual Boolean DataBrowserReceiveDragProc(DragReference dragRef, DataBrowserItemID itemID)                         = 0;
+
 private:
 //
 // wxWidget internal stuff
@@ -273,6 +284,19 @@ protected:
   virtual Boolean                   DataBrowserEditItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, CFStringRef theString, Rect* maxEditTextRect, Boolean* shrinkToFit);
   virtual Boolean                   DataBrowserHitTestProc (DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Rect const* mouseRect);
   virtual DataBrowserTrackingResult DataBrowserTrackingProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, Rect const* theRect, Point startPt, EventModifiers modifiers);
+
+//
+// callback functions for drag & drop (inherited from wxMacDataBrowserTableViewControl)
+//
+  virtual Boolean DataBrowserAcceptDragProc (DragReference dragRef, DataBrowserItemID itemID);
+  virtual Boolean DataBrowserAddDragItemProc(DragReference dragRef, DataBrowserItemID itemID, ItemReference* itemRef);
+  virtual Boolean DataBrowserReceiveDragProc(DragReference dragRef, DataBrowserItemID itemID);
+
+//
+// drag & drop helper methods
+//
+  wxDataFormat           GetDnDDataFormat(wxDataObjectComposite* dataObjects);
+  wxDataObjectComposite* GetDnDDataObjects(DragReference dragRef, ItemReference itemRef) const; // create the data objects from the native dragged object
 
 private:
 };
