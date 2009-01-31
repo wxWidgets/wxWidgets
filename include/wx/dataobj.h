@@ -297,7 +297,7 @@ public:
 
 protected:
     // returns the pointer to the object which supports this format or NULL
-    wxDataObjectSimple *GetObject(const wxDataFormat& format) const;
+    wxDataObjectSimple *GetObject(const wxDataFormat& format, wxDataObjectBase::Direction dir=Get) const;
 
 private:
     // the list of all (simple) data objects whose formats we support
