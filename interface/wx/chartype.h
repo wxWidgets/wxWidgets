@@ -15,16 +15,16 @@
     builds of wxWidgets. This macro simply returns the value passed to it
     without changes in ASCII build. In fact, its definition is:
 
-@code
-#ifdef UNICODE
-#   define wxT(x)  L##x
-#else // !Unicode
-#   define wxT(x)  x
-#endif
-@endcode
+    @code
+    #ifdef UNICODE
+    #   define wxT(x)  L##x
+    #else // !Unicode
+    #   define wxT(x)  x
+    #endif
+    @endcode
 
     Note that since wxWidgets 2.9.0 you shouldn't use wxT() anymore in your
-    program sources if you want to support Unicode.
+    program sources (it was previously required if you wanted to support Unicode).
 
     @see @ref overview_unicode, wxS()
 
@@ -59,6 +59,8 @@
     macro which is _TEXT()).
 
     Don't confuse this macro with _()!
+
+    Note that since wxWidgets 2.9.0 the use of _T() is discouraged just like for wxT().
 
     @header{wx/chartype.h}
 */
