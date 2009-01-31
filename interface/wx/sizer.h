@@ -1410,7 +1410,6 @@ enum wxFlexSizerGrowMode
     wxFLEX_GROWMODE_ALL
 };
 
-
 /**
     @class wxFlexGridSizer
 
@@ -1454,10 +1453,10 @@ public:
         there is extra space available to the sizer.
 
         The @a proportion parameter has the same meaning as the stretch factor
-        for the sizers() except that if all proportions are 0, then all columns
-        are resized equally (instead of not being resized at all).
+        for the sizers (see wxBoxSizer) except that if all proportions are 0,
+        then all columns are resized equally (instead of not being resized at all).
 
-        Notice that the row must not be already growable, if you need to change
+        Notice that the column must not be already growable, if you need to change
         the proportion you must call RemoveGrowableCol() first and then make it
         growable (with a different proportion) again. You can use IsColGrowable()
         to check whether a column is already growable.
@@ -1474,7 +1473,7 @@ public:
     void AddGrowableRow(size_t idx, int proportion = 0);
 
     /**
-        Returns a wxOrientation value that specifies whether the sizer flexibly
+        Returns a ::wxOrientation value that specifies whether the sizer flexibly
         resizes its columns, rows, or both (default).
 
         @return
@@ -1492,8 +1491,8 @@ public:
         direction if there is one.
 
         The behaviour of the elements in the flexible direction (i.e. both rows
-        and columns by default, or rows only if GetFlexibleDirection() is @c
-        wxVERTICAL or columns only if it is @c wxHORIZONTAL) is always governed
+        and columns by default, or rows only if GetFlexibleDirection() is
+        @c wxVERTICAL or columns only if it is @c wxHORIZONTAL) is always governed
         by their proportion as specified in the call to AddGrowableRow() or
         AddGrowableCol(). What happens in the other direction depends on the
         value of returned by this function as described below.
@@ -1529,12 +1528,12 @@ public:
     bool IsRowGrowable(size_t idx);
 
     /**
-        Specifies that column idx is no longer growable.
+        Specifies that the @a idx column index is no longer growable.
     */
     void RemoveGrowableCol(size_t idx);
 
     /**
-        Specifies that row idx is no longer growable.
+        Specifies that the @a idx row index is no longer growable.
     */
     void RemoveGrowableRow(size_t idx);
 
@@ -1543,6 +1542,7 @@ public:
 
         Argument @a direction can be @c wxVERTICAL, @c wxHORIZONTAL or @c wxBOTH
         (which is the default value). Any other value is ignored.
+
         See GetFlexibleDirection() for the explanation of these values.
         Note that this method does not trigger relayout.
     */
