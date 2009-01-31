@@ -13,18 +13,23 @@
 
 #if wxUSE_CONSOLE_EVENTLOOP
 
-#include "wx/private/fdiodispatcher.h"
-#include "wx/unix/pipe.h"
+// ----------------------------------------------------------------------------
+// wxConsoleEventLoop
+// ----------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------
-// wxEventLoop
-// ----------------------------------------------------------------------------
+class wxFDIODispatcher;
+
+namespace wxPrivate
+{
+    class PipeIOHandler;
+};
 
 class WXDLLIMPEXP_BASE wxConsoleEventLoop : public wxEventLoopManual
 {
 public:
     // initialize the event loop, use IsOk() to check if we were successful
     wxConsoleEventLoop();
+    virtual ~wxConsoleEventLoop();
 
     // implement base class pure virtuals
     virtual bool Pending() const;
@@ -39,30 +44,7 @@ protected:
 private:
     // pipe used for wake up messages: when a child thread wants to wake up
     // the event loop in the main thread it writes to this pipe
-    class PipeIOHandler : public wxFDIOHandler
-    {
-    public:
-        // default ctor does nothing, call Create() to really initialize the
-        // object
-        PipeIOHandler() { }
-
-        bool Create();
-
-        // this method can be, and normally is, called from another thread
-        void WakeUp();
-
-        int GetReadFd() { return m_pipe[wxPipe::Read]; }
-
-        // implement wxFDIOHandler pure virtual methods
-        virtual void OnReadWaiting();
-        virtual void OnWriteWaiting() { }
-        virtual void OnExceptionWaiting() { }
-
-    private:
-        wxPipe m_pipe;
-    };
-
-    PipeIOHandler m_wakeupPipe;
+    wxPrivate::PipeIOHandler *m_wakeupPipe;
 
     // either wxSelectDispatcher or wxEpollDispatcher
     wxFDIODispatcher *m_dispatcher;

@@ -72,8 +72,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="BASE_UNIX_AND_DARWIN_HDR" hints="files">
-    wx/private/fdiodispatcher.h
-    wx/private/selectdispatcher.h
     wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h

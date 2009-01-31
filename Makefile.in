@@ -595,8 +595,6 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/meta/if.h \
 	wx/meta/int2type.h \
 	wx/meta/movable.h \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2073,8 +2071,6 @@ COND_TOOLKIT_X11_BASE_OSX_SRC =  \
 	src/osx/core/utilsexc_base.cpp
 @COND_TOOLKIT_X11@BASE_OSX_SRC = $(COND_TOOLKIT_X11_BASE_OSX_SRC)
 COND_TOOLKIT__BASE_OSX_HDR =  \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2095,8 +2091,6 @@ COND_TOOLKIT__BASE_OSX_HDR =  \
 	wx/osx/core/private/strconv_cf.h
 @COND_TOOLKIT_@BASE_OSX_HDR = $(COND_TOOLKIT__BASE_OSX_HDR)
 COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2117,8 +2111,6 @@ COND_TOOLKIT_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/private/strconv_cf.h
 @COND_TOOLKIT_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_COCOA_BASE_OSX_HDR)
 COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2139,8 +2131,6 @@ COND_TOOLKIT_GTK_BASE_OSX_HDR =  \
 	wx/osx/core/private/strconv_cf.h
 @COND_TOOLKIT_GTK@BASE_OSX_HDR = $(COND_TOOLKIT_GTK_BASE_OSX_HDR)
 COND_TOOLKIT_MOTIF_BASE_OSX_HDR =  \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2168,8 +2158,6 @@ COND_TOOLKIT_OSX_CARBON_BASE_OSX_HDR =  \
 	wx/osx/core/private.h \
 	wx/osx/core/stdpaths.h \
 	wx/osx/core/private/strconv_cf.h \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2188,8 +2176,6 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/osx/core/private.h \
 	wx/osx/core/stdpaths.h \
 	wx/osx/core/private/strconv_cf.h \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2201,8 +2187,6 @@ COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR =  \
 	wx/unix/tls.h
 @COND_TOOLKIT_OSX_COCOA@BASE_OSX_HDR = $(COND_TOOLKIT_OSX_COCOA_BASE_OSX_HDR)
 COND_TOOLKIT_X11_BASE_OSX_HDR =  \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2236,8 +2220,6 @@ COND_PLATFORM_OS2_1_BASE_PLATFORM_HDR =  \
 	wx/os2/wxrsc.h
 @COND_PLATFORM_OS2_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_OS2_1_BASE_PLATFORM_HDR)
 COND_PLATFORM_UNIX_1_BASE_PLATFORM_HDR =  \
-	wx/private/fdiodispatcher.h \
-	wx/private/selectdispatcher.h \
 	wx/unix/app.h \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \

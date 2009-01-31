@@ -31,6 +31,7 @@
 #include "wx/evtloop.h"
 #include "wx/thread.h"
 #include "wx/module.h"
+#include "wx/unix/pipe.h"
 #include "wx/unix/private/timer.h"
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/private/selectdispatcher.h"
@@ -41,11 +42,39 @@
 // wxEventLoop::PipeIOHandler implementation
 // ===========================================================================
 
+namespace wxPrivate
+{
+
+// pipe used for wake up messages: when a child thread wants to wake up
+// the event loop in the main thread it writes to this pipe
+class PipeIOHandler : public wxFDIOHandler
+{
+public:
+    // default ctor does nothing, call Create() to really initialize the
+    // object
+    PipeIOHandler() { }
+
+    bool Create();
+
+    // this method can be, and normally is, called from another thread
+    void WakeUp();
+
+    int GetReadFd() { return m_pipe[wxPipe::Read]; }
+
+    // implement wxFDIOHandler pure virtual methods
+    virtual void OnReadWaiting();
+    virtual void OnWriteWaiting() { }
+    virtual void OnExceptionWaiting() { }
+
+private:
+    wxPipe m_pipe;
+};
+
 // ----------------------------------------------------------------------------
 // initialization
 // ----------------------------------------------------------------------------
 
-bool wxConsoleEventLoop::PipeIOHandler::Create()
+bool PipeIOHandler::Create()
 {
     if ( !m_pipe.Create() )
     {
@@ -72,7 +101,7 @@ bool wxConsoleEventLoop::PipeIOHandler::Create()
 // wakeup handling
 // ----------------------------------------------------------------------------
 
-void wxConsoleEventLoop::PipeIOHandler::WakeUp()
+void PipeIOHandler::WakeUp()
 {
     if ( write(m_pipe[wxPipe::Write], "s", 1) != 1 )
     {
@@ -82,7 +111,7 @@ void wxConsoleEventLoop::PipeIOHandler::WakeUp()
     }
 }
 
-void wxConsoleEventLoop::PipeIOHandler::OnReadWaiting()
+void PipeIOHandler::OnReadWaiting()
 {
     // got wakeup from child thread: read all data available in pipe just to
     // make it empty (even though we write one byte at a time from WakeUp(),
@@ -112,6 +141,8 @@ void wxConsoleEventLoop::PipeIOHandler::OnReadWaiting()
     // else needs to be done
 }
 
+} // namespace wxPrivate
+
 // ===========================================================================
 // wxEventLoop implementation
 // ===========================================================================
@@ -122,8 +153,10 @@ void wxConsoleEventLoop::PipeIOHandler::OnReadWaiting()
 
 wxConsoleEventLoop::wxConsoleEventLoop()
 {
-    if ( !m_wakeupPipe.Create() )
+    m_wakeupPipe = new wxPrivate::PipeIOHandler();
+    if ( !m_wakeupPipe->Create() )
     {
+        wxDELETE(m_wakeupPipe);
         m_dispatcher = NULL;
         return;
     }
@@ -134,10 +167,15 @@ wxConsoleEventLoop::wxConsoleEventLoop()
 
     m_dispatcher->RegisterFD
                   (
-                    m_wakeupPipe.GetReadFd(),
-                    &m_wakeupPipe,
+                    m_wakeupPipe->GetReadFd(),
+                    m_wakeupPipe,
                     wxFDIO_INPUT
                   );
+}
+
+wxConsoleEventLoop::~wxConsoleEventLoop()
+{
+    delete m_wakeupPipe;
 }
 
 //-----------------------------------------------------------------------------
@@ -191,7 +229,7 @@ int wxConsoleEventLoop::DispatchTimeout(unsigned long timeout)
 
 void wxConsoleEventLoop::WakeUp()
 {
-    m_wakeupPipe.WakeUp();
+    m_wakeupPipe->WakeUp();
 }
 
 void wxConsoleEventLoop::OnNextIteration()
