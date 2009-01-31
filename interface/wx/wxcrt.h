@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wxcrt.h
-// Purpose:     interface of global functions
+// Purpose:     interface of global CRT wrapper functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -10,8 +10,8 @@
 //@{
 
 /**
-    @return @true if the pointer is either @NULL or points to an empty string,
-             @false otherwise.
+    Returns @true if the pointer @a p is either @NULL or points to an empty string,
+    @false otherwise.
 
     @header{wx/wxcrt.h}
 */
@@ -27,11 +27,26 @@ bool wxIsEmpty(const char* p);
 size_t wxStrlen(const char* p);
 
 /**
+    This is a safe version of standard function @e strlen(): it returns the length
+    of the string s in bytes if this length is smaller than @a maxlen bytes.
+    Otherwise it returns @a maxlen.
+
+    The @a maxlen parameter makes it easier to avoid array indexing errors
+    since you are sure that wxStrnlen() won't read any memory exceeding the
+    @c "*(p+maxlen)" location.
+
+    @since 2.9.0
+
+    @header{wx/wxcrt.h}
+*/
+size_t wxStrnlen(const char* p, size_t maxlen);
+
+/**
     This function complements the standard C function @e stricmp() which
     performs case-insensitive comparison.
 
     @return A negative value, 0, or positive value if @a p1 is less than,
-             equal to or greater than @a p2. The comparison is case-sensitive.
+            equal to or greater than @a p2. The comparison is case-sensitive.
 
     @header{wx/wxcrt.h}
 */
@@ -42,14 +57,14 @@ int wxStrcmp(const char* p1, const char* p2);
     case-sensitive comparison.
 
     @return A negative value, 0, or positive value if @a p1 is less than,
-             equal to or greater than @e p2. The comparison is case-insensitive.
+            equal to or greater than @e p2. The comparison is case-insensitive.
 
     @header{wx/wxcrt.h}
 */
 int wxStricmp(const char* p1, const char* p2);
 
 /**
-    @deprecated Use wxString instead.
+    @deprecated Use wxString::operator== instead.
 
     This macro is defined as:
 
@@ -116,8 +131,6 @@ wxArrayString wxStringTokenize(const wxString& string,
 
     Notice that this function is similar to the OpenBSD strlcpy() function.
 
-    The template parameter @a T can be either @c char or @c wchar_t.
-
     @param dst
         Destination buffer of size (greater or) equal to @a n.
     @param src
@@ -129,12 +142,11 @@ wxArrayString wxStringTokenize(const wxString& string,
         then there was not enough space in the destination buffer and the
         string was truncated.
 
-    @since{2.9.0}
+    @since 2.9.0
 
     @header{wx/wxcrt.h}
  */
-template <typename T>
-size_t wxStrlcpy(T *dst, const T *src, size_t n);
+size_t wxStrlcpy(char *dst, const char *src, size_t n);
 
 /**
     This function replaces the dangerous standard function @e sprintf() and is
@@ -149,7 +161,7 @@ size_t wxStrlcpy(T *dst, const T *src, size_t n);
 
     @header{wx/wxcrt.h}
 */
-int wxSnprintf(wxChar* buf, size_t len, const wxChar* format, ...);
+int wxSnprintf(char* buf, size_t len, const char* format, ...);
 
 /**
     The same as wxSnprintf() but takes a @c va_list argument instead of an
@@ -166,8 +178,7 @@ int wxSnprintf(wxChar* buf, size_t len, const wxChar* format, ...);
 
     @header{wx/wxcrt.h}
 */
-int wxVsnprintf(wxChar* buf, size_t len,
-                const wxChar* format, va_list argPtr);
+int wxVsnprintf(char* buf, size_t len, const char* format, va_list argPtr);
 
 //@}
 
