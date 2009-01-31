@@ -679,6 +679,23 @@ public:
     void Enable(int id, bool enable);
 
     /**
+      Finds the menu item object associated with the given menu item identifier
+      and, optionally, the position of the item in the menu.
+
+      Unlike FindItem(), this function doesn't recurse but only looks at the
+      direct children of this menu.
+
+      @param id
+          The identifier of the menu item to find.
+      @param pos
+          If the pointer is not @NULL, it is filled with the item's position if
+          it was found or @c (size_t)wxNOT_FOUND otherwise.
+      @return
+        Menu item object or @NULL if not found.
+     */
+    wxMenuItem *FindChildItem(int id, size_t *pos = NULL) const;
+
+    /**
         Finds the menu id for a menu item string.
 
         @param itemString
