@@ -55,7 +55,6 @@ listed above you need to
     -# Set a unique name for the window using wxWindow::SetName(): this step is
     important as the name is used in the configuration file and so must be
     unique among all windows of the same class.
-
     -# Call wxPersistenceManager::Register() at any moment after creating the
     window and then wxPersistenceManager::Restore() when the settings may be
     restored (which can't be always done immediately, e.g. often the window
@@ -63,7 +62,6 @@ listed above you need to
     the window creation, as is often the case for wxTopLevelWindow, for
     example, then wxPersistenceManager::RegisterAndRestore() can be used to do
     both at once.
-
     -# If you do not want the settings for the window to be saved (for example
     the changes to the dialog size are usually not saved if the dialog was
     cancelled), you need to call wxPersistenceManager::Unregister() manually.
@@ -93,14 +91,11 @@ support for your custom class @c MyWidget you just need to:
 
     -# Define a new @c MyPersistentWidget class inheriting from
     wxPersistentWindow<MyWidget>.
-
     -# Implement its pure virtual GetKind() method returning a unique string
     identifying all @c MyWidget objects, typically something like @c "widget"
-
     -# Implement its pure virtual Save() and Restore() methods to actually save
     and restore the widget settings using wxPersistentObject::SaveValue() and
     wxPersistentObject::RestoreValue() methods.
-
     -# Define wxCreatePersistentObject() overload taking @c MyWidget * and
     returning a new @c MyPersistentWidget object.
 
