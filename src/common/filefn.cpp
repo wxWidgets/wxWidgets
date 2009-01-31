@@ -116,13 +116,6 @@ static wxChar wxFileFunctionsBuffer[4*_MAXPATHLEN];
 const int wxInvalidOffset = -1;
 #endif
 
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-
-// translate the filenames before passing them to OS functions
-#define OS_FILENAME(s) (s.fn_str())
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -1188,7 +1181,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 #if !defined(__VISAGECPP__) && !defined(__WXMAC__) || defined(__UNIX__)
     // no chmod in VA.  Should be some permission API for HPFS386 partitions
     // however
-    if ( chmod(OS_FILENAME(file2), fbuf.st_mode) != 0 )
+    if ( chmod(file2.fn_str(), fbuf.st_mode) != 0 )
     {
         wxLogSysError(_("Impossible to set permissions for the file '%s'"),
                       file2.c_str());
@@ -1253,7 +1246,7 @@ bool wxRemoveFile(const wxString& file)
     int res = 1;
     // TODO with VFSFileDelete()
 #else
-    int res = unlink(OS_FILENAME(file));
+    int res = unlink(file.fn_str());
 #endif
 
     return res == 0;
@@ -1263,14 +1256,16 @@ bool wxMkdir(const wxString& dir, int perm)
 {
 #if defined(__WXPALMOS__)
     return false;
-#elif defined(__WXMAC__) && !defined(__UNIX__)
-    return (mkdir(dir.fn_str() , 0 ) == 0);
-#else // !Mac
-    const wxChar *dirname = dir.c_str();
+#else
+#if defined(__WXMAC__) && !defined(__UNIX__)
+    if ( mkdir(dir.fn_str(), 0) != 0 )
 
     // assume mkdir() has 2 args on non Windows-OS/2 platforms and on Windows too
     // for the GNU compiler
-#if (!(defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__))) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) || defined(__WINE__) || defined(__WXMICROWIN__)
+#elif (!(defined(__WXMSW__) || defined(__OS2__) || defined(__DOS__))) || \
+      (defined(__GNUWIN32__) && !defined(__MINGW32__)) ||                \
+      defined(__WINE__) || defined(__WXMICROWIN__)
+    const wxChar *dirname = dir.c_str();
   #if defined(MSVCRT)
     wxUnusedVar(perm);
     if ( mkdir(wxFNCONV(dirname)) != 0 )
@@ -1279,8 +1274,9 @@ bool wxMkdir(const wxString& dir, int perm)
   #endif
 #elif defined(__OS2__)
     wxUnusedVar(perm);
-    if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
+    if (::DosCreateDir(dir.c_str(), NULL) != 0) // enhance for EAB's??
 #elif defined(__DOS__)
+    const wxChar *dirname = dir.c_str();
   #if defined(__WATCOMC__)
     (void)perm;
     if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
@@ -1291,36 +1287,43 @@ bool wxMkdir(const wxString& dir, int perm)
   #endif
 #else  // !MSW, !DOS and !OS/2 VAC++
     wxUnusedVar(perm);
-#ifdef __WXWINCE__
-    if ( !CreateDirectory(dirname, NULL) )
-#else
+  #ifdef __WXWINCE__
+    if ( CreateDirectory(dir, NULL) == 0 )
+  #else
     if ( wxMkDir(dir.fn_str()) != 0 )
-#endif
+  #endif
 #endif // !MSW/MSW
     {
-        wxLogSysError(_("Directory '%s' couldn't be created"), dirname);
-
+        wxLogSysError(_("Directory '%s' couldn't be created"), dir);
         return false;
     }
 
     return true;
-#endif // Mac/!Mac
+#endif // PALMOS/!PALMOS
 }
 
 bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 {
 #if defined(__VMS__)
     return false; //to be changed since rmdir exists in VMS7.x
-#elif defined(__OS2__)
-    return (::DosDeleteDir(dir.c_str()) == 0);
-#elif defined(__WXWINCE__)
-    return (RemoveDirectory(dir) != 0);
 #elif defined(__WXPALMOS__)
     // TODO with VFSFileRename()
     return false;
 #else
-    return (wxRmDir(OS_FILENAME(dir)) == 0);
-#endif
+  #if defined(__OS2__)
+    if ( ::DosDeleteDir(dir.c_str()) != 0 )
+  #elif defined(__WXWINCE__)
+    if ( RemoveDirectory(dir) == 0 )
+  #else
+    if ( wxRmDir(dir.fn_str()) != 0 )
+  #endif
+    {
+        wxLogSysError(_("Directory '%s' couldn't be deleted"), dir);
+        return false;
+    }
+
+    return true;
+#endif // PALMOS/!PALMOS
 }
 
 // does the path exists? (may have or not '/' or '\\' at the end)
