@@ -1,4 +1,5 @@
 src/stc/*.cpp
+src/stc/stc.cpp.in
 src/stc/*.h
 src/stc/*.rc
 src/stc/*.def
