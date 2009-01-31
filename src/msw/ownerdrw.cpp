@@ -240,10 +240,6 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
         dc.GetTextExtent(str, &w, &h);
         *pwidth = w;
         *pheight = h;
-
-        // add space at the end of the menu for the submenu expansion arrow
-        // this will also allow offsetting the accel string from the right edge
-        *pwidth += GetMarginWidth() + 16;
     }
     else // don't draw the text, just the bitmap (if any)
     {
@@ -259,11 +255,11 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
         if ( *pheight < adjustedHeight )
             *pheight = adjustedHeight;
 
-        const size_t widthBmp = m_bmpChecked.GetWidth();
+        const int widthBmp = m_bmpChecked.GetWidth();
         if ( IsOwnerDrawn() )
         {
             // widen the margin to fit the bitmap if necessary
-            if ((size_t)GetMarginWidth() < widthBmp)
+            if ( GetMarginWidth() < widthBmp )
                 SetMarginWidth(widthBmp);
         }
         else // we must allocate enough space for the bitmap
@@ -274,6 +270,15 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
     // add a 4-pixel separator, otherwise menus look cluttered
     *pwidth += 4;
+
+    // notice that this adjustment must be done after (possibly) changing the
+    // margin width above
+    if ( IsOwnerDrawn() )
+    {
+        // add space at the end of the menu for the submenu expansion arrow
+        // this will also allow offsetting the accel string from the right edge
+        *pwidth += GetMarginWidth() + 16;
+    }
 
     // make sure that this item is at least as tall as the system menu height
     const size_t heightStd = wxMSWSystemMenuFontModule::GetSystemMenuHeight();
