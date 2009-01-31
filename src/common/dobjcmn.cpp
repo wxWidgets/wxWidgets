@@ -183,14 +183,15 @@ size_t wxDataObjectComposite::GetFormatCount(Direction WXUNUSED(dir)) const
 }
 
 void wxDataObjectComposite::GetAllFormats(wxDataFormat *formats,
-                                          Direction WXUNUSED(dir)) const
+                                          Direction dir) const
 {
-    size_t n = 0;
+    size_t index(0);
     wxSimpleDataObjectList::compatibility_iterator node;
+
     for ( node = m_dataObjects.GetFirst(); node; node = node->GetNext() )
     {
-        // TODO if ( !outputOnlyToo ) && this one counts ...
-        formats[n++] = node->GetData()->GetFormat();
+      node->GetData()->GetAllFormats(formats+index,dir);
+      index += node->GetData()->GetFormatCount(dir);
     }
 }
 
