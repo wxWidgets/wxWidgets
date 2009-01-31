@@ -358,12 +358,17 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     SetAccelString(m_text.AfterFirst(_T('\t')));
 #endif
 
-    HMENU hMenu = GetHMenuOf(m_parentMenu);
-    wxCHECK_RET( hMenu, wxT("menuitem without menu") );
-
 #if wxUSE_ACCEL
-    m_parentMenu->UpdateAccel(this);
+    if ( m_parentMenu )
+        m_parentMenu->UpdateAccel(this);
 #endif // wxUSE_ACCEL
+
+    // the item can be not attached to any menu yet and SetItemLabel() is still
+    // valid to call in this case and should do nothing else
+    const UINT id = GetMSWId();
+    HMENU hMenu = GetHMenuOf(m_parentMenu);
+    if ( !hMenu || ::GetMenuState(hMenu, id, MF_BYCOMMAND) == (UINT)-1 )
+        return;
 
 #if wxUSE_OWNER_DRAWN
     if ( IsOwnerDrawn() )
@@ -375,8 +380,6 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
 #endif // owner drawn
 
     // update the text of the native menu item
-    const UINT id = GetMSWId();
-
     WinStruct<MENUITEMINFO> info;
 
     // surprisingly, calling SetMenuItemInfo() with just MIIM_STRING doesn't
