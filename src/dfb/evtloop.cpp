@@ -31,6 +31,8 @@
 #include "wx/nonownedwnd.h"
 #include "wx/buffer.h"
 
+#include <errno.h>
+
 #define TRACE_EVENTS "events"
 
 // ===========================================================================
