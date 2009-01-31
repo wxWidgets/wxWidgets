@@ -240,6 +240,8 @@ public:
     wxSize& operator-=(const wxSize& sz) { x -= sz.x; y -= sz.y; return *this; }
     wxSize& operator/=(int i) { x /= i; y /= i; return *this; }
     wxSize& operator*=(int i) { x *= i; y *= i; return *this; }
+    wxSize& operator/=(double i) { x /= i; y /= i; return *this; }
+    wxSize& operator*=(double i) { x *= i; y *= i; return *this; }
 
     void IncTo(const wxSize& sz)
         { if ( sz.x > x ) x = sz.x; if ( sz.y > y ) y = sz.y; }
@@ -283,7 +285,6 @@ public:
     int GetY() const { return y; }
 };
 
-
 inline bool operator==(const wxSize& s1, const wxSize& s2)
 {
     return s1.x == s2.x && s1.y == s2.y;
@@ -294,36 +295,40 @@ inline bool operator!=(const wxSize& s1, const wxSize& s2)
     return s1.x != s2.x || s1.y != s2.y;
 }
 
-
 inline wxSize operator+(const wxSize& s1, const wxSize& s2)
 {
     return wxSize(s1.x + s2.x, s1.y + s2.y);
 }
-
 
 inline wxSize operator-(const wxSize& s1, const wxSize& s2)
 {
     return wxSize(s1.x - s2.x, s1.y - s2.y);
 }
 
-
 inline wxSize operator/(const wxSize& s, int i)
 {
     return wxSize(s.x / i, s.y / i);
 }
-
 
 inline wxSize operator*(const wxSize& s, int i)
 {
     return wxSize(s.x * i, s.y * i);
 }
 
-
 inline wxSize operator*(int i, const wxSize& s)
 {
     return wxSize(s.x * i, s.y * i);
 }
 
+inline wxSize operator*(const wxSize& s, double i)
+{
+    return wxSize(s.x * i, s.y * i);
+}
+
+inline wxSize operator*(double i, const wxSize& s)
+{
+    return wxSize(s.x * i, s.y * i);
+}
 
 
 
