@@ -37,6 +37,7 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/dynlib.h"
 #include "wx/msw/private.h"
 
 // Set this to 1 to be _absolutely_ sure that repainting will work for all
@@ -2705,7 +2706,30 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         // delete it (in POSTPAINT notify)
                         if (m_imageListState && m_imageListState->GetImageCount() > 0)
                         {
-                            #define hImageList (HIMAGELIST)m_imageListState->GetHIMAGELIST()
+                            typedef BOOL (*ImageList_Copy_t)
+                                (HIMAGELIST, int, HIMAGELIST, int, UINT);
+                            static ImageList_Copy_t s_pfnImageList_Copy = NULL;
+                            static bool loaded = false;
+
+                            if ( !loaded )
+                            {
+                                wxLoadedDLL dllComCtl32(_T("comctl32.dll"));
+                                if ( dllComCtl32.IsLoaded() )
+                                    wxDL_INIT_FUNC(s_pfn, ImageList_Copy, dllComCtl32);
+                            }
+
+                            if ( !s_pfnImageList_Copy )
+                            {
+                                // this code is broken with ImageList_Copy()
+                                // but I don't care enough about Win95 support
+                                // to write it now -- if anybody does, please
+                                // do it
+                                wxFAIL_MSG("TODO: implement this for Win95");
+                                break;
+                            }
+
+                            const HIMAGELIST
+                                hImageList = GetHimagelistOf(m_imageListState);
 
                             // add temporary image
                             int width, height;
@@ -2719,13 +2743,15 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                             {
                                 // move images to right
                                 for ( int i = index; i > 0; i-- )
-                                    ::ImageList_Copy(hImageList, i, hImageList, i-1, 0);
+                                {
+                                    (*s_pfnImageList_Copy)(hImageList, i,
+                                                           hImageList, i-1,
+                                                           ILCF_MOVE);
+                                }
 
                                 // we must remove the image in POSTPAINT notify
                                 *result |= CDRF_NOTIFYPOSTPAINT;
                             }
-
-                            #undef hImageList
                         }
                         break;
 
