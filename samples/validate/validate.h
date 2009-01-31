@@ -62,7 +62,7 @@ public:
     // These data members are designed for transfer to and from
     // controls, via validators. For instance, a text control's
     // transferred value is a string:
-    wxString m_string;
+    wxString m_string, m_string2;
 
     // Listboxes may permit multiple selections, so their state
     // is transferred to an integer-array class.
@@ -103,6 +103,7 @@ enum
     VALIDATE_TOGGLE_BELL,
 
     VALIDATE_TEXT,
+    VALIDATE_TEXT2,
     VALIDATE_LIST,
     VALIDATE_CHECK,
     VALIDATE_COMBO,

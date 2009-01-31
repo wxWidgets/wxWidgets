@@ -49,12 +49,12 @@ enum wxTextValidatorStyle
 
     /// Use an include list. The validator checks if each input character is
     /// in the list (one character per list element), complaining if not.
-    /// See wxTextValidator::SetIncludes().
+    /// See wxTextValidator::SetCharIncludes().
     wxFILTER_INCLUDE_CHAR_LIST,
 
-    /// Use an include list. The validator checks if each input character is
+    /// Use an exclude list. The validator checks if each input character is
     /// in the list (one character per list element), complaining if it is.
-    /// See wxTextValidator::SetExcludes().
+    /// See wxTextValidator::SetCharExcludes().
     wxFILTER_EXCLUDE_CHAR_LIST
 };
 
@@ -124,9 +124,27 @@ public:
     void SetExcludes(const wxArrayString& stringList);
 
     /**
+        Breaks the given @a chars strings in single characters and sets the
+        internal wxArrayString used to store the "excluded" characters
+        (see SetExcludes()).
+
+        This function is mostly useful when @c wxFILTER_EXCLUDE_CHAR_LIST was used.
+    */
+    void SetCharExcludes(const wxString& chars);
+
+    /**
         Sets the include list (valid values for the user input).
     */
     void SetIncludes(const wxArrayString& stringList);
+
+    /**
+        Breaks the given @a chars strings in single characters and sets the
+        internal wxArrayString used to store the "included" characters
+        (see SetIncludes()).
+
+        This function is mostly useful when @c wxFILTER_INCLUDE_CHAR_LIST was used.
+    */
+    void SetCharIncludes(const wxString& chars);
 
     /**
         Sets the validator style.

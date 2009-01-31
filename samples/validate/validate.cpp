@@ -61,9 +61,9 @@ MyData::MyData()
     // will complain because spaces aren't alpha. Note that validation
     // is performed only when 'OK' is pressed.
     m_string = wxT("Spaces are invalid here");
+    m_string2 = "Valid text";
     m_listbox_choices.Add(0);
 }
-
 
 // ----------------------------------------------------------------------------
 // MyComboBoxValidator
@@ -162,7 +162,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test"), wxT("Demonstrate validators"));
+    file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog..."), wxT("Demonstrate validators"));
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"));
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, wxT("E&xit"));
@@ -203,6 +203,8 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         // when we created the validators.
         m_listbox->Clear();
         m_listbox->Append(wxString(_T("string: ")) + g_data.m_string);
+        m_listbox->Append(wxString(_T("string #2: ")) + g_data.m_string2);
+
         for(unsigned int i = 0; i < g_data.m_listbox_choices.GetCount(); ++i)
         {
             int j = g_data.m_listbox_choices[i];
@@ -234,7 +236,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // setup the flex grid sizer
     // -------------------------
 
-    wxFlexGridSizer *flexgridsizer = new wxFlexGridSizer(2, 2, 5, 5);
+    wxFlexGridSizer *flexgridsizer = new wxFlexGridSizer(3, 2, 5, 5);
 
     // Create and add controls to sizers. Note that a member variable
     // of g_data is bound to each control upon construction. There is
@@ -248,14 +250,13 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                             wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
     flexgridsizer->Add(m_text, 1, wxGROW);
 
-    // This wxCheckBox* doesn't need to be assigned to any pointer
-    // because we don't use it elsewhere--it can be anonymous.
-    // We don't need any such pointer to query its state, which
-    // can be gotten directly from g_data.
-    flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"),
-                        wxPoint(130, 10), wxSize(120, wxDefaultCoord), 0,
-                        wxGenericValidator(&g_data.m_checkbox_state)),
-                       1, wxALIGN_CENTER);
+
+    // Now set a wxTextValidator with an explicit list of characters NOT allowed:
+    wxTextValidator textVal(wxFILTER_EXCLUDE_CHAR_LIST, &g_data.m_string2);
+    textVal.SetCharExcludes("bcwyz");
+    flexgridsizer->Add(new wxTextCtrl(this, VALIDATE_TEXT2, wxEmptyString,
+                        wxDefaultPosition, wxDefaultSize, 0, textVal),
+                       1, wxGROW);
 
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
                         wxPoint(10, 30), wxSize(120, wxDefaultCoord),
@@ -268,6 +269,15 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                 3, g_combobox_choices, 0L,
                                 MyComboBoxValidator(&g_data.m_combobox_choice));
     flexgridsizer->Add(m_combobox, 1, wxALIGN_CENTER);
+
+    // This wxCheckBox* doesn't need to be assigned to any pointer
+    // because we don't use it elsewhere--it can be anonymous.
+    // We don't need any such pointer to query its state, which
+    // can be gotten directly from g_data.
+    flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"),
+                        wxPoint(130, 10), wxSize(120, wxDefaultCoord), 0,
+                        wxGenericValidator(&g_data.m_checkbox_state)),
+                       1, wxALIGN_CENTER);
 
     flexgridsizer->AddGrowableCol(0);
     flexgridsizer->AddGrowableCol(1);

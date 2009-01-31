@@ -251,8 +251,8 @@ bool wxTextValidator::IsValid(const wxString& val, wxString* pErr) const
 
 bool wxTextValidator::ContainsOnlyIncludedCharacters(const wxString& val) const
 {
-    for (size_t i = 0; i < val.length(); i++)
-        if (m_includes.Index((wxString) val[i]) == wxNOT_FOUND)
+    for ( wxString::const_iterator i = val.begin(); i != val.end(); ++i )
+        if (m_includes.Index((wxString) *i) == wxNOT_FOUND)
             // one character of 'val' is NOT present in m_includes...
             return false;
 
@@ -262,13 +262,33 @@ bool wxTextValidator::ContainsOnlyIncludedCharacters(const wxString& val) const
 
 bool wxTextValidator::ContainsExcludedCharacters(const wxString& val) const
 {
-    for (size_t i = 0; i < val.length(); i++)
-        if (m_excludes.Index((wxString) val[i]) != wxNOT_FOUND)
+    for ( wxString::const_iterator i = val.begin(); i != val.end(); ++i )
+        if (m_excludes.Index((wxString) *i) != wxNOT_FOUND)
             // one character of 'val' is present in m_excludes...
-            return false;
+            return true;
 
     // all characters of 'val' are NOT present in m_excludes
-    return true;
+    return false;
+}
+
+void wxTextValidator::SetCharIncludes(const wxString& chars)
+{
+    wxArrayString arr;
+
+    for ( wxString::const_iterator i = chars.begin(); i != chars.end(); ++i )
+        arr.Add(*i);
+
+    SetIncludes(arr);
+}
+
+void wxTextValidator::SetCharExcludes(const wxString& chars)
+{
+    wxArrayString arr;
+
+    for ( wxString::const_iterator i = chars.begin(); i != chars.end(); ++i )
+        arr.Add(*i);
+
+    SetExcludes(arr);
 }
 
 void wxTextValidator::OnChar(wxKeyEvent& event)

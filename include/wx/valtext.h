@@ -74,9 +74,11 @@ public:
 
     wxTextEntry *GetTextEntry();
 
+    void SetCharIncludes(const wxString& chars);
     void SetIncludes(const wxArrayString& includes) { m_includes = includes; }
     inline wxArrayString& GetIncludes() { return m_includes; }
 
+    void SetCharExcludes(const wxString& chars);
     void SetExcludes(const wxArrayString& excludes) { m_excludes = excludes; }
     inline wxArrayString& GetExcludes() { return m_excludes; }
 
