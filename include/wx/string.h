@@ -615,7 +615,7 @@ private:
 
       return wxTLS_VALUE(s_cache);
   }
-  
+
   // this helper struct is used to ensure that GetCache() is called during
   // static initialization time, i.e. before any threads creation, as otherwise
   // the static s_cache construction inside GetCache() wouldn't be MT-safe
@@ -675,7 +675,7 @@ private:
       // a lot of misses in this function...)
       Cache::Element * const cacheBegin = GetCacheBegin();
 #ifndef wxHAS_COMPILER_TLS
-      // during destruction tls calls may return NULL, in this case return NULL 
+      // during destruction tls calls may return NULL, in this case return NULL
       // immediately without accessing anything else
       if ( cacheBegin == NULL )
         return NULL;
@@ -1810,7 +1810,7 @@ public:
     const wchar_t* t_str() const { return wx_str(); }
 #else
     const char* t_str() const { return wx_str(); }
-#endif 
+#endif
 
 
   // overloaded assignment
@@ -4113,5 +4113,20 @@ void wxStringIteratorNode::clear()
     // to do it:
     #include "wx/crt.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// Checks on wxString characters
+// ----------------------------------------------------------------------------
+
+template<bool (T)(const wxUniChar& c)>
+    inline bool wxStringCheck(const wxString& val)
+    {
+        for ( wxString::const_iterator i = val.begin();
+              i != val.end();
+              ++i )
+            if (T(*i) == 0)
+                return false;
+        return true;
+    }
 
 #endif  // _WX_WXSTRING_H_

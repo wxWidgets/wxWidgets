@@ -246,7 +246,8 @@
     @stdobjects
     ::wxEmptyString
 
-    @see @ref overview_string, @ref overview_unicode, wxUString
+    @see @ref overview_string, @ref overview_unicode, wxUString,
+         wxCharBuffer, wxUniChar, wxStringTokenizer, @ref group_funcmacro_string
 */
 class wxString
 {
@@ -1526,3 +1527,37 @@ public:
     */
     wxStringCharType* operator wxStringCharType *();
 };
+
+
+/** @addtogroup group_funcmacro_string */
+//@{
+
+/**
+    Allows to extend a function with the signature:
+    @code bool SomeFunc(const wxUniChar& c) @endcode
+    which operates on a single character, to an entire wxString.
+
+    E.g. if you want to check if an entire string contains only digits,
+    you can do:
+    @code
+        if (wxStringCheck<wxIsdigit>(myString))
+            ... // the entire string contains oly digits!
+        else
+            ... // at least one character of myString is not a digit
+    @endcode
+
+    @return @true if the given function returns a non-zero value for all
+            characters of the @a val string.
+*/
+template<bool (T)(const wxUniChar& c)>
+    inline bool wxStringCheck(const wxString& val)
+    {
+        for ( wxString::const_iterator i = val.begin();
+              i != val.end();
+              ++i )
+            if (T(*i) == 0)
+                return false;
+        return true;
+    }
+
+//@}
