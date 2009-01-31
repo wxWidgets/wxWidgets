@@ -365,6 +365,9 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
 
     // the item can be not attached to any menu yet and SetItemLabel() is still
     // valid to call in this case and should do nothing else
+    if ( !m_parentMenu )
+        return;
+
     const UINT id = GetMSWId();
     HMENU hMenu = GetHMenuOf(m_parentMenu);
     if ( !hMenu || ::GetMenuState(hMenu, id, MF_BYCOMMAND) == (UINT)-1 )
