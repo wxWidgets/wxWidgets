@@ -37,6 +37,10 @@ DataBrowserItemCompareUPP       gDataBrowserTableViewItemCompareUPP       = NULL
 DataBrowserItemDataUPP          gDataBrowserTableViewItemDataUPP          = NULL;
 DataBrowserItemNotificationUPP  gDataBrowserTableViewItemNotificationUPP  = NULL;
 
+DataBrowserAcceptDragUPP  gDataBrowserTableViewAcceptDragUPP  = NULL;
+DataBrowserAddDragItemUPP gDataBrowserTableViewAddDragItemUPP = NULL;
+DataBrowserReceiveDragUPP gDataBrowserTableViewReceiveDragUPP = NULL;
+
 DataBrowserDrawItemUPP gDataBrowserTableViewDrawItemUPP = NULL;
 DataBrowserEditItemUPP gDataBrowserTableViewEditItemUPP = NULL;
 DataBrowserHitTestUPP  gDataBrowserTableViewHitTestUPP  = NULL;
@@ -122,6 +126,30 @@ pascal DataBrowserTrackingResult wxMacDataBrowserTableViewControl::DataBrowserTr
     return kDataBrowserNothingHit; 
 } /* wxMacDataBrowserTableViewControl::DataBrowserTrackingProc(ControlRef, DataBrowserItemID, DataBrowserPropertyID, Rect const*, Point, EventModifiers) */
 
+pascal Boolean wxMacDataBrowserTableViewControl::DataBrowserAcceptDragProc(ControlRef browser, DragReference dragRef, DataBrowserItemID itemID)
+{
+  wxMacDataBrowserTableViewControl* controlPtr(dynamic_cast<wxMacDataBrowserTableViewControl*>(wxMacControl::GetReferenceFromNativeControl(browser)));
+  
+  
+  return ((controlPtr != NULL) && controlPtr->DataBrowserAcceptDragProc(dragRef,itemID));
+} /* wxMacDataBrowserTableViewControl::DataBrowserAcceptDragProc(ControlRef, DragReference, DataBrowserItemID) */
+
+pascal Boolean wxMacDataBrowserTableViewControl::DataBrowserAddDragItemProc(ControlRef browser, DragReference dragRef, DataBrowserItemID itemID, ItemReference* itemRef)
+{
+  wxMacDataBrowserTableViewControl* controlPtr(dynamic_cast<wxMacDataBrowserTableViewControl*>(wxMacControl::GetReferenceFromNativeControl(browser)));
+  
+  
+  return ((controlPtr != NULL) && controlPtr->DataBrowserAddDragItemProc(dragRef,itemID,itemRef));
+} /* wxMacDataBrowserTableViewControl::DataBrowserAddDragItemProc(ControlRef, DragReference, DataBrowserItemID, ItemReference*) */
+
+pascal Boolean wxMacDataBrowserTableViewControl::DataBrowserReceiveDragProc(ControlRef browser, DragReference dragRef, DataBrowserItemID itemID)
+{
+  wxMacDataBrowserTableViewControl* controlPtr(dynamic_cast<wxMacDataBrowserTableViewControl*>(wxMacControl::GetReferenceFromNativeControl(browser)));
+  
+  
+  return ((controlPtr != NULL) && controlPtr->DataBrowserReceiveDragProc(dragRef,itemID));
+} /* wxMacDataBrowserTableViewControl::DataBrowserReceiveDragProc(ControlRef, DragReference, DataBrowserItemID) */
+
 wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* peer, wxPoint const& pos, wxSize const& size, long style)
                                  :wxMacControl(peer)
 {
@@ -144,6 +172,11 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
       NewDataBrowserItemNotificationUPP(wxMacDataBrowserTableViewControl::DataBrowserItemNotificationProc);
 #endif
   }
+ // setup drag and drop callbacks:
+  if (gDataBrowserTableViewAcceptDragUPP  == NULL) gDataBrowserTableViewAcceptDragUPP  = NewDataBrowserAcceptDragUPP (wxMacDataBrowserTableViewControl::DataBrowserAcceptDragProc);
+  if (gDataBrowserTableViewAddDragItemUPP == NULL) gDataBrowserTableViewAddDragItemUPP = NewDataBrowserAddDragItemUPP(wxMacDataBrowserTableViewControl::DataBrowserAddDragItemProc);
+  if (gDataBrowserTableViewReceiveDragUPP == NULL) gDataBrowserTableViewReceiveDragUPP = NewDataBrowserReceiveDragUPP(wxMacDataBrowserTableViewControl::DataBrowserReceiveDragProc);
+
   DataBrowserCallbacks callbacks; // variable definition
 
   InitializeDataBrowserCallbacks(&callbacks,kDataBrowserLatestCallbacks);
@@ -151,6 +184,9 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
   callbacks.u.v1.itemDataCallback          = gDataBrowserTableViewItemDataUPP;
   callbacks.u.v1.itemCompareCallback       = gDataBrowserTableViewItemCompareUPP;
   callbacks.u.v1.itemNotificationCallback  = gDataBrowserTableViewItemNotificationUPP;
+ 	callbacks.u.v1.acceptDragCallback        = gDataBrowserTableViewAcceptDragUPP;
+	callbacks.u.v1.addDragItemCallback       = gDataBrowserTableViewAddDragItemUPP;
+	callbacks.u.v1.receiveDragCallback       = gDataBrowserTableViewReceiveDragUPP;
   this->SetCallbacks(&callbacks);
 
  // setup callbacks for customized items:
@@ -1109,10 +1145,11 @@ DataBrowserTrackingResult wxMacDataViewDataBrowserListViewControl::DataBrowserTr
   wxDataViewItem dataViewCustomRendererItem;
 
 
+  dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
+  wxCHECK_MSG(dataViewCtrlPtr != NULL,            false,_("Pointer to data view control not set correctly."));
+  wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,false,_("Pointer to model not set correctly."));
   dataViewCustomRendererItem = reinterpret_cast<void*>(itemID);
   wxCHECK_MSG(dataViewCustomRendererItem.IsOk(),kDataBrowserNothingHit,_("Invalid data view item"));
-  dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
-  wxCHECK_MSG(dataViewCtrlPtr != NULL,kDataBrowserNothingHit,_("Pointer to data view control not set correctly."));
   dataViewColumnPtr = dataViewCtrlPtr->GetColumnPtr(propertyID);
   wxCHECK_MSG(dataViewColumnPtr != NULL,kDataBrowserNothingHit,_("No column existing."));
   dataViewCustomRendererPtr = dynamic_cast<wxDataViewCustomRenderer*>(dataViewColumnPtr->GetRenderer());
@@ -1126,7 +1163,7 @@ DataBrowserTrackingResult wxMacDataViewDataBrowserListViewControl::DataBrowserTr
     dataViewCtrlPtr->GetCustomRendererPtr()->FinishEditing();
     dataViewCtrlPtr->SetCustomRendererItem(wxDataViewItem());
     dataViewCtrlPtr->SetCustomRendererPtr (NULL);
-  } /* if */
+  }
  // check if renderer has got a valid editor control for editing; if this is the case start editing of the new item:
   if (dataViewCustomRendererPtr->HasEditorCtrl())
   {
@@ -1137,9 +1174,386 @@ DataBrowserTrackingResult wxMacDataViewDataBrowserListViewControl::DataBrowserTr
     dataViewCustomRendererPtr->StartEditing(dataViewCustomRendererItem,wxRectangle);
     dataViewCtrlPtr->SetCustomRendererItem(dataViewCustomRendererItem);
     dataViewCtrlPtr->SetCustomRendererPtr (dataViewCustomRendererPtr);
-  } /* if */
+  }
   return kDataBrowserContentHit;
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserTrackingProc(DataBrowserItemID, DataBrowserPropertyID, Rect const*, Point, EventModifiers) */
+
+Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAcceptDragProc(DragReference dragRef, DataBrowserItemID itemID)
+{
+  UInt16 noOfDraggedItems;
+
+  wxDataViewCtrl* dataViewCtrlPtr;
+
+
+  dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
+  wxCHECK_MSG(dataViewCtrlPtr != NULL,            false,_("Pointer to data view control not set correctly."));
+  wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,false,_("Pointer to model not set correctly."));
+
+ // send a drag possible event for each available item and proceed with it unless the event is vetoed:
+  ::CountDragItems(dragRef,&noOfDraggedItems);
+  for (UInt16 indexDraggedItem=1; indexDraggedItem<=noOfDraggedItems; ++indexDraggedItem)
+  {
+   // collect native information:
+    ItemReference          itemRef;
+    wxDataObjectComposite* dataObjects;
+    wxMemoryBuffer         buffer;
+    
+    ::GetDragItemReferenceNumber(dragRef,indexDraggedItem,&itemRef); // the index begins with 1!
+    dataObjects = this->GetDnDDataObjects(dragRef,itemRef);
+   // create wxWidget's event:
+    wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE,dataViewCtrlPtr->GetId());
+
+    dataViewEvent.SetEventObject(dataViewCtrlPtr);
+    dataViewEvent.SetItem(reinterpret_cast<void*>(itemID)); // this is the item that receives the event
+                                                            // (can be an invalid item ID, this is especially useful if the dataview does not contain any items)
+    dataViewEvent.SetModel(dataViewCtrlPtr->GetModel());
+    dataViewEvent.SetDataObject(dataObjects);
+    dataViewEvent.SetDataFormat(this->GetDnDDataFormat(dataObjects));
+    if (dataViewEvent.GetDataFormat().GetType() != wxDF_INVALID)
+    {
+      dataViewEvent.SetDataSize(dataObjects->GetDataSize(dataViewEvent.GetDataFormat().GetType()));
+      dataObjects->GetDataHere(dataViewEvent.GetDataFormat().GetType(),buffer.GetWriteBuf(dataViewEvent.GetDataSize()));
+      buffer.UngetWriteBuf(dataViewEvent.GetDataSize());
+      dataViewEvent.SetDataBuffer(buffer.GetData());
+    }
+
+   // send event:
+    if (!(dataViewCtrlPtr->HandleWindowEvent(dataViewEvent) && dataViewEvent.IsAllowed()))
+      return false;
+  }
+  return true;
+} /* wxMacDataViewDataBrowserListViewControl::DataBrowserAcceptDragProc(DragReference, DataBrowserItemID) */
+
+Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAddDragItemProc(DragReference dragRef, DataBrowserItemID itemID, ItemReference* itemRef)
+{
+  wxDataViewCtrl* dataViewCtrlPtr;
+  
+  wxDataViewItem dataViewItem;
+
+
+  dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
+  wxCHECK_MSG(dataViewCtrlPtr != NULL,            false,_("Pointer to data view control not set correctly."));
+  wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,false,_("Pointer to model not set correctly."));
+  dataViewItem = reinterpret_cast<void*>(itemID);
+  wxCHECK_MSG(dataViewItem.IsOk(),false,_("Invalid data view item"));
+
+ // send a begin drag event and proceed with dragging unless the event is vetoed:
+  wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG,dataViewCtrlPtr->GetId());
+
+  dataViewEvent.SetEventObject(dataViewCtrlPtr);
+  dataViewEvent.SetItem(dataViewItem);
+  dataViewEvent.SetModel(dataViewCtrlPtr->GetModel());
+ // the dataview event object is also initialized with a default set of data; as it is a set of data and the user should be able to easily complete
+ // the object a wxDataObjectComposite object is used;
+ // currently, the composite object only contains a TAB concatenated string of all data:
+  wxDataObjectComposite* dataObject(new wxDataObjectComposite());
+  wxString               dataString; // contains the TAB concatenated data
+  
+  for (size_t i=0; i<dataViewCtrlPtr->GetColumnCount(); i++)
+  {
+   // variable definition:
+    wxVariant dataValue;
+    
+    dataViewCtrlPtr->GetModel()->GetValue(dataValue,dataViewItem,dataViewCtrlPtr->GetColumn(i)->GetModelColumn());
+    if (i > 0)
+      dataString << wxT('\t');
+    dataString << dataValue.MakeString();
+  }
+  dataObject->Add(new wxTextDataObject(dataString));
+  dataViewEvent.SetDataObject(dataObject);
+ // check if event has not been vetoed:
+  if (dataViewCtrlPtr->HandleWindowEvent(dataViewEvent) && dataViewEvent.IsAllowed())
+  {
+   // for the internal drag & drop functions create two flavors:
+   //  - the data browser's item id;
+   //  - the data contained the dataview event object (if available).
+   // Definition: a flavor is the type dependent representation of identical data.
+   // Example: a number can be represented by its value and by its value converted to a string. In this case the flavor
+   //          of the number's internal representation is typeSInt32 while its string representation has got the flavor 'TEXT'.
+   // Item id is one of the flavors:
+    wxCHECK_MSG(::AddDragItemFlavor(dragRef,*itemRef,typeUInt32,&itemID,sizeof(itemID),0) == noErr,false,_("Unable to handle native drag&drop data"));
+   // if the dataview event object contains data it is used for additional flavors; all natively known flavors are supported:
+    if (dataViewEvent.GetDataObject() != NULL)
+    {
+     // constant definition for abbreviational purposes:
+      size_t const noOfFormats = dataViewEvent.GetDataObject()->GetFormatCount();
+      
+      if (noOfFormats > 0)
+      {
+       // variable definition:
+        wxDataFormat* dataFormats;
+        
+        dataFormats = new wxDataFormat[noOfFormats];
+        dataViewEvent.GetDataObject()->GetAllFormats(dataFormats,wxDataObject::Get);
+        for (size_t i=0; i<noOfFormats; ++i)
+          switch (dataFormats[i].GetType())
+          {
+            case wxDF_INVALID:
+              wxFAIL_MSG(_("Data object has invalid data format"));
+              break;
+            case wxDF_TEXT:
+              {
+               // constant definition for abbreviational purposes:
+                size_t const dataSize = dataViewEvent.GetDataObject()->GetDataSize(wxDF_TEXT);
+               // variable definition and initialization:
+                wxMemoryBuffer dataObject(dataSize);
+                
+                dataViewEvent.GetDataObject()->GetDataHere(wxDF_TEXT,dataObject.GetWriteBuf(dataSize));
+                dataObject.UngetWriteBuf(dataSize);
+                if (::AddDragItemFlavor(dragRef,*itemRef,'TEXT',dataObject.GetData(),dataSize,0) != noErr)
+                  wxFAIL_MSG(_("Adding flavor TEXT failed"));
+              } /* block */
+              break;
+            case wxDF_UNICODETEXT:
+              {
+               // constant definition for abbreviational purposes:
+                size_t const dataSize = dataViewEvent.GetDataObject()->GetDataSize(wxDF_TEXT);
+               // as there is no direct access to the data copy it to a memory buffer:
+                wxMemoryBuffer dataObject(dataSize);
+                
+                dataViewEvent.GetDataObject()->GetDataHere(wxDF_TEXT,dataObject.GetWriteBuf(dataSize));
+                dataObject.UngetWriteBuf(dataSize);
+               // if the data is stored in unicode format the internal representation is utf-8 (not mentioned in the documentation but in the source code);
+               // DnD uses fixed utf-16 representation -> use the OSX functions for a conversion:
+                CFDataRef   osxData  (::CFDataCreateWithBytesNoCopy(kCFAllocatorDefault,reinterpret_cast<UInt8*>(dataObject.GetData()),dataSize,kCFAllocatorNull));
+                CFStringRef osxString(::CFStringCreateFromExternalRepresentation(kCFAllocatorDefault,osxData,kCFStringEncodingUTF8));
+                
+               // the osxString contains now the data and therefore the previously occupied memory can be released and re-used:
+                ::CFRelease(osxData);
+                osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,osxString,kCFStringEncodingUTF16,32);
+                if (::AddDragItemFlavor(dragRef,*itemRef,'utxt',::CFDataGetBytePtr(osxData),::CFDataGetLength(osxData),0) != noErr)
+                  wxFAIL_MSG(_("Adding flavor utxt failed"));
+               // clean up:
+                ::CFRelease(osxData);
+                ::CFRelease(osxString);
+              } /* block */
+              break;
+            case wxDF_BITMAP:
+            case wxDF_METAFILE:
+            case wxDF_SYLK:
+            case wxDF_DIF:
+            case wxDF_TIFF:
+            case wxDF_OEMTEXT:
+            case wxDF_DIB:
+            case wxDF_PALETTE:
+            case wxDF_PENDATA:
+            case wxDF_RIFF:
+            case wxDF_WAVE:
+            case wxDF_ENHMETAFILE:
+            case wxDF_FILENAME:
+            case wxDF_LOCALE:
+            case wxDF_PRIVATE:
+            case wxDF_HTML:
+              break; // not (yet) supported data formats
+            default:
+              wxFAIL_MSG(_("Unknown data format"));
+          }
+        delete[] dataFormats;
+      }
+    }
+    return true;
+  }
+  else
+    return false;
+} /* wxMacDataViewDataBrowserListViewControl::DataBrowserAddDragItemProc(DragReference, DataBrowserItemID, ItemReference*) */
+
+Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserReceiveDragProc(DragReference dragRef, DataBrowserItemID itemID)
+{
+  UInt16 noOfDraggedItems;
+
+  wxDataViewCtrl* dataViewCtrlPtr;
+
+
+  dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
+  wxCHECK_MSG(dataViewCtrlPtr != NULL,            false,_("Pointer to data view control not set correctly."));
+  wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,false,_("Pointer to model not set correctly."));
+
+ // send a drag possible event for each available and item und proceed with it unless the event is vetoed:
+  ::CountDragItems(dragRef,&noOfDraggedItems);
+  for (UInt16 indexDraggedItem=1; indexDraggedItem<=noOfDraggedItems; ++indexDraggedItem)
+  {
+   // collect native information:
+    ItemReference           itemRef;
+     wxDataObjectComposite* dataObjects;
+     wxMemoryBuffer         buffer;
+    
+    ::GetDragItemReferenceNumber(dragRef,indexDraggedItem,&itemRef); // the index begins with 1!
+    dataObjects = this->GetDnDDataObjects(dragRef,itemRef);
+  // create wxWidget's event:
+    wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_DROP,dataViewCtrlPtr->GetId());
+
+    dataViewEvent.SetEventObject(dataViewCtrlPtr);
+    dataViewEvent.SetItem(reinterpret_cast<void*>(itemID)); // this is the item that receives the event
+                                                            // (can be an invalid item ID, this is especially useful if the dataview does not contain any items)
+    dataViewEvent.SetModel(dataViewCtrlPtr->GetModel());
+    dataViewEvent.SetDataObject(dataObjects);
+    dataViewEvent.SetDataFormat(this->GetDnDDataFormat(dataObjects));
+    if (dataViewEvent.GetDataFormat().GetType() != wxDF_INVALID)
+    {
+      dataViewEvent.SetDataSize(dataObjects->GetDataSize(dataViewEvent.GetDataFormat().GetType()));
+      dataObjects->GetDataHere(dataViewEvent.GetDataFormat().GetType(),buffer.GetWriteBuf(dataViewEvent.GetDataSize()));
+      buffer.UngetWriteBuf(dataViewEvent.GetDataSize());
+      dataViewEvent.SetDataBuffer(buffer.GetData());
+    }
+
+   // send event:
+    if (!(dataViewCtrlPtr->HandleWindowEvent(dataViewEvent) && dataViewEvent.IsAllowed()))
+      return false;
+  }
+  return true;
+} /* wxMacDataViewDataBrowserListViewControl::DataBrowserReceiveDragProc(DragReference, DataBrowserItemID) */
+
+//
+// drag & drop helper methods
+//
+wxDataFormat wxMacDataViewDataBrowserListViewControl::GetDnDDataFormat(wxDataObjectComposite* dataObjects)
+{
+  wxDataFormat resultFormat;
+
+
+  if (dataObjects != NULL)
+  {
+    bool compatible(true);
+
+    size_t const noOfFormats = dataObjects->GetFormatCount();
+    size_t       indexFormat;
+
+    wxDataFormat* formats;
+    
+   // get all formats and check afterwards if the formats are compatible; if they are compatible the preferred format is returned otherwise
+   // wxDF_INVALID is returned;
+   // currently compatible types (ordered by priority are):
+   //  - wxDF_UNICODETEXT - wxDF_TEXT
+    formats = new wxDataFormat[noOfFormats];
+    dataObjects->GetAllFormats(formats);
+    indexFormat = 0;
+    while ((indexFormat < noOfFormats) && compatible)
+    {
+      switch (resultFormat.GetType())
+      {
+        case wxDF_INVALID:
+          resultFormat.SetType(formats[indexFormat].GetType()); // first format (should only be reached if indexFormat == 0
+          break;
+        case wxDF_TEXT:
+          if (formats[indexFormat].GetType() == wxDF_UNICODETEXT)
+            resultFormat.SetType(wxDF_UNICODETEXT);
+          else // incompatible
+          {
+            resultFormat.SetType(wxDF_INVALID);
+            compatible = false;
+          }
+          break;
+        case wxDF_UNICODETEXT:
+          if (formats[indexFormat].GetType() != wxDF_TEXT)
+          {
+            resultFormat.SetType(wxDF_INVALID);
+            compatible = false;
+          }
+          break;
+        default:
+          resultFormat.SetType(wxDF_INVALID); // not (yet) supported format
+          compatible = false;
+      }
+      ++indexFormat;
+    } /* while */
+   // clean up:
+    delete[] formats;
+  }
+  return resultFormat;
+} /* wxMacDataViewDataBrowserListViewControl::GetDnDDataFormat(wxDataObjectComposite*) */
+
+wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObjects(DragReference dragRef, ItemReference itemRef) const
+{
+  UInt16 noOfFlavors;
+
+  wxDataObjectComposite* dataObject;
+
+
+  ::CountDragItemFlavors(dragRef,itemRef,&noOfFlavors);
+  if (noOfFlavors > 0)
+  {
+   // as the native drag data can be separated into TEXT and UTXT a pointer to a wxTextDataObject is used to track the existence of 'TEXT' and 'utxt' flavors:
+    wxTextDataObject* textDataObject(NULL);
+
+    dataObject = new wxDataObjectComposite();
+    for (UInt16 indexFlavor=1; indexFlavor<=noOfFlavors; ++indexFlavor)
+    {
+     // variable definition:
+      FlavorType flavorDataObject;
+      
+      if (::GetFlavorType(dragRef,itemRef,indexFlavor,&flavorDataObject) == noErr) // GetFlavorType uses a 1 based index!
+        switch (flavorDataObject)
+        {
+          case 'TEXT':
+            if (textDataObject == NULL) // otherwise a 'utxt' flavor has already been found that gets priority compared to the 'TEXT' flavor
+            {
+             // variable definitions:
+              Size           nativeDataSize;
+              wxMemoryBuffer nativeData;
+              
+              if ((::GetFlavorDataSize(dragRef,itemRef,'TEXT',&nativeDataSize) == noErr) &&
+                  (::GetFlavorData(dragRef,itemRef,'TEXT',nativeData.GetWriteBuf(nativeDataSize),&nativeDataSize,0) == noErr))
+              {
+                nativeData.UngetWriteBuf(nativeDataSize);
+                textDataObject = new wxTextDataObject();
+                if (textDataObject->SetData(nativeData.GetDataLen(),nativeData.GetData()))
+                  dataObject->Add(textDataObject);
+                else
+                {
+                  delete textDataObject;
+                  textDataObject = NULL;
+                }
+              }
+            } /* block */
+            break;
+          case 'utxt':
+            {
+             // variable definition:
+              Size nativeDataSize;
+              
+              if (::GetFlavorDataSize(dragRef,itemRef,'utxt',&nativeDataSize) == noErr)
+              {
+                CFMutableDataRef draggedData;
+                
+                draggedData = ::CFDataCreateMutable(kCFAllocatorDefault,nativeDataSize);
+                ::CFDataSetLength(draggedData,nativeDataSize);
+                if (::GetFlavorData(dragRef,itemRef,'utxt',::CFDataGetMutableBytePtr(draggedData),&nativeDataSize,0) == noErr)
+                {
+                 // convert internally used UTF-16 representation to a UTF-8 representation:
+                  CFDataRef   osxData;
+                  CFStringRef osxString;
+                  
+                  osxString = ::CFStringCreateFromExternalRepresentation(kCFAllocatorDefault,draggedData,kCFStringEncodingUTF16); // BOM character is handled by this function automatically
+                  osxData   = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,osxString,kCFStringEncodingUTF8,32);
+                  if (textDataObject == NULL)
+                  {
+                    textDataObject = new wxTextDataObject();
+                    if (textDataObject->SetData(::CFDataGetLength(osxData),::CFDataGetBytePtr(osxData)))
+                      dataObject->Add(textDataObject);
+                    else
+                    {
+                      delete textDataObject;
+                      textDataObject = NULL;
+                    }
+                  }
+                  else // overwrite data because the 'utxt' flavor has priority over the 'TEXT' flavor
+                    (void) textDataObject->SetData(::CFDataGetLength(osxData),::CFDataGetBytePtr(osxData));
+                 // clean up:
+                  ::CFRelease(osxData);
+                  ::CFRelease(osxString);
+                }
+               // clean up:
+                ::CFRelease(draggedData);
+              }
+            } /* block */
+            break;
+        }
+    }
+  }
+  else
+    dataObject = NULL;
+  return dataObject;
+} /* wxMacDataViewDataBrowserListViewControl::GetDnDDataObjects(DragReference, ItemReference) const */
 
 #endif // wxUSE_GENERICDATAVIEWCTRL
 #endif // wxUSE_DATAVIEWCTRL
