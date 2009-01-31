@@ -912,7 +912,7 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 // TODO: using memcpy() would improve performance a lot for big amounts of text
 
 DWORD CALLBACK
-wxRichEditStreamIn(DWORD dwCookie, BYTE *buf, LONG cb, LONG *pcb)
+wxRichEditStreamIn(DWORD_PTR dwCookie, BYTE *buf, LONG cb, LONG *pcb)
 {
     *pcb = 0;
 
@@ -999,7 +999,7 @@ wxTextCtrl::StreamIn(const wxString& value,
     // finally, stream it in the control
     EDITSTREAM eds;
     wxZeroMemory(eds);
-    eds.dwCookie = (DWORD)&wpc;
+    eds.dwCookie = (DWORD_PTR)&wpc;
     // the cast below is needed for broken (very) old mingw32 headers
     eds.pfnCallback = (EDITSTREAMCALLBACK)wxRichEditStreamIn;
 
