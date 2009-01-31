@@ -383,11 +383,15 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     // work as it resets the menu bitmap, so we need to first get the old item
     // state and then modify it
     const bool isLaterThanWin95 = wxGetWinVersion() > wxWinVersion_95;
-    info.fMask = MIIM_ID | MIIM_SUBMENU | MIIM_CHECKMARKS | MIIM_DATA;
+    info.fMask = MIIM_STATE |
+                 MIIM_ID |
+                 MIIM_SUBMENU |
+                 MIIM_CHECKMARKS |
+                 MIIM_DATA;
     if ( isLaterThanWin95 )
         info.fMask |= MIIM_BITMAP | MIIM_FTYPE;
     else
-        info.fMask = MIIM_TYPE;
+        info.fMask |= MIIM_TYPE;
     if ( !::GetMenuItemInfo(hMenu, id, FALSE, &info) )
     {
         wxLogLastError(wxT("GetMenuItemInfo"));
