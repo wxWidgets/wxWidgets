@@ -147,11 +147,10 @@ public:
 
     /**
         Sets the selection for the given page, returning the previous selection.
-        The call to this function generates the page changing events.
 
-        @deprecated
-        This function is deprecated and should not be used in new code.
-        Please use the ChangeSelection() function instead.
+        Notice that the call to this function generates the page changing
+        events, use the ChangeSelection() function if you don't want these
+        events to be generated.
 
         @see GetSelection()
     */
@@ -166,9 +165,10 @@ public:
     /**
         Changes the selection for the given page, returning the previous selection.
 
-        The call to this function does NOT generate the page changing events.
-        This is the only difference with SetSelection().
-        See @ref overview_eventhandling_prog for more infomation.
+        This function behaves as SetSelection() but does @em not generate the
+        page changing events.
+
+        See @ref overview_eventhandling_prog for more information.
     */
     virtual int ChangeSelection(size_t page) = 0;
 
