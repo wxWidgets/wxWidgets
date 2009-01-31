@@ -79,6 +79,17 @@ public:
 
     /**
         Associates a window with the validator.
+
+        This function is automatically called by wxWidgets when creating a wxWindow-derived
+        class instance which takes a wxValidator reference.
+
+        E.g.
+        @code
+        new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0,
+                       wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
+        @endcode
+        will automatically link the wxTextValidator instance with the wxTextCtrl
+        instance.
     */
     void SetWindow(wxWindow* window);
 
@@ -101,6 +112,9 @@ public:
     /**
         This overridable function is called when the value in the associated
         window must be validated.
+
+        @param parent
+            The parent of the window associated with the validator.
 
         @return @false if the value in the window is not valid; you may pop up
                 an error dialog.
