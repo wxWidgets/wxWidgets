@@ -46,6 +46,7 @@
 #include "wx/artprov.h"
 #include "wx/sysopt.h"
 #include "wx/dcclient.h"
+#include "wx/ptr_scpd.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/dc.h"
@@ -629,10 +630,18 @@ void wxToolBar::CreateDisabledImageList()
     }
 }
 
+void wxToolBar::MSWSetBitmapSize(const wxSize& size)
+{
+    ::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0, MAKELONG(size.x, size.y));
+}
+
 void wxToolBar::AdjustToolBitmapSize()
 {
+    // this is the default bitmap size, we only need to call TB_SETBITMAPSIZE
+    // if we use something different
+    static const wxSize sizeStd(16, 15);
+
     wxSize s(m_defaultWidth, m_defaultHeight);
-    const wxSize orig_s(s);
 
     for ( wxToolBarToolsList::const_iterator i = m_tools.begin();
           i != m_tools.end();
@@ -642,8 +651,8 @@ void wxToolBar::AdjustToolBitmapSize()
         s.IncTo(bmp.GetSize());
     }
 
-    if ( s != orig_s )
-        SetToolBitmapSize(s);
+    if ( s != sizeStd )
+        MSWSetBitmapSize(s);
 }
 
 bool wxToolBar::Realize()
@@ -694,21 +703,11 @@ bool wxToolBar::Realize()
     wxToolBarToolsList::compatibility_iterator node;
     int bitmapId = 0;
 
-    wxSize sizeBmp;
-    if ( HasFlag(wxTB_NOICONS) )
-    {
-        // no icons, don't leave space for them
-        sizeBmp.x =
-        sizeBmp.y = 0;
-    }
-    else // do show icons
+    if ( !HasFlag(wxTB_NOICONS) )
     {
         // if we already have a bitmap, we'll replace the existing one --
         // otherwise we'll install a new one
         HBITMAP oldToolBarBitmap = (HBITMAP)m_hBitmap;
-
-        sizeBmp.x = m_defaultWidth;
-        sizeBmp.y = m_defaultHeight;
 
         const wxCoord totalBitmapWidth  = m_defaultWidth *
                                           wx_truncate_cast(wxCoord, nTools),
@@ -913,18 +912,11 @@ bool wxToolBar::Realize()
         }
     }
 
-    // don't call SetToolBitmapSize() as we don't want to change the values of
-    // m_defaultWidth/Height
-    if ( !::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0,
-                        MAKELONG(sizeBmp.x, sizeBmp.y)) )
-    {
-        wxLogLastError(_T("TB_SETBITMAPSIZE"));
-    }
 
     // Next add the buttons and separators
     // -----------------------------------
 
-    TBBUTTON *buttons = new TBBUTTON[nTools];
+    wxScopedArray<TBBUTTON> buttons(new TBBUTTON[nTools]);
 
     // this array will hold the indices of all controls in the toolbar
     wxArrayInt controlIds;
@@ -1044,12 +1036,11 @@ bool wxToolBar::Realize()
         i++;
     }
 
-    if ( !::SendMessage(GetHwnd(), TB_ADDBUTTONS, (WPARAM)i, (LPARAM)buttons) )
+    if ( !::SendMessage(GetHwnd(), TB_ADDBUTTONS, i, (LPARAM)buttons.get()) )
     {
         wxLogLastError(wxT("TB_ADDBUTTONS"));
     }
 
-    delete [] buttons;
 
     // Deal with the controls finally
     // ------------------------------
@@ -1363,7 +1354,7 @@ void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
     wxToolBarBase::SetToolBitmapSize(size);
 
-    ::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0, MAKELONG(size.x, size.y));
+    MSWSetBitmapSize(size);
 }
 
 void wxToolBar::SetRows(int nRows)

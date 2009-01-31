@@ -88,6 +88,9 @@ protected:
     // create the native toolbar control
     bool MSWCreateToolbar(const wxPoint& pos, const wxSize& size);
 
+    // just a wrapper for TB_SETBITMAPSIZE
+    void MSWSetBitmapSize(const wxSize& size);
+
     // recreate the control completely
     void Recreate();
 
