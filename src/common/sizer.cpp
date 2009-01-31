@@ -486,8 +486,13 @@ void wxSizerItem::SetDimension( const wxPoint& pos_, const wxSize& size_ )
             // not change the size of the window. In such a case, no
             // wxSizeEvent would normally be generated and thus the
             // control wouldn't get layed out correctly here.
+#if 0
             m_window->SetSize(pos.x, pos.y, size.x, size.y,
                               wxSIZE_ALLOW_MINUS_ONE|wxSIZE_FORCE_EVENT );
+#else
+            m_window->SetSize(pos.x, pos.y, size.x, size.y,
+                              wxSIZE_ALLOW_MINUS_ONE );
+#endif
             break;
         }
         case Item_Sizer:

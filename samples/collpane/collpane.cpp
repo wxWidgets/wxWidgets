@@ -56,7 +56,10 @@ enum
     PANE_SETLABEL,
     PANE_SHOWDLG,
     PANE_ABOUT = wxID_ABOUT,
-    PANE_QUIT = wxID_EXIT
+    PANE_QUIT = wxID_EXIT,
+    
+    PANE_BUTTON,
+    PANE_TEXTCTRL
 };
 
 
@@ -94,6 +97,7 @@ public:
 
 private:
     wxCollapsiblePane *m_collPane;
+    wxBoxSizer *m_paneSizer;
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(MyFrame)
@@ -104,10 +108,12 @@ class MyDialog : public wxDialog
 public:
     MyDialog(wxFrame *parent);
     void OnToggleStatus(wxCommandEvent& WXUNUSED(ev));
+    void OnAlignButton(wxCommandEvent& WXUNUSED(ev));
     void OnPaneChanged(wxCollapsiblePaneEvent& event);
 
 private:
     wxCollapsiblePane *m_collPane;
+    wxGridSizer *m_paneSizer;
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(MyDialog)
@@ -185,11 +191,13 @@ MyFrame::MyFrame()
 
     m_collPane = new wxCollapsiblePane(this, -1, wxT("test!"));
     wxWindow *win = m_collPane->GetPane();
-
-    new wxStaticText(win, -1, wxT("Static control with absolute coords"), wxPoint(10,2));
-    new wxStaticText(win, -1, wxT("Yet another one!"), wxPoint(30, 30));
-    new wxTextCtrl(win, -1, wxT("You can place anything you like inside a wxCollapsiblePane"),
-                   wxPoint(5, 60), wxSize(300, -1));
+    
+    m_paneSizer = new wxBoxSizer( wxVERTICAL );
+    m_paneSizer->Add( new wxStaticText(win, -1, wxT("Static text") ), 0, wxALIGN_LEFT );
+    m_paneSizer->Add( new wxStaticText(win, -1, wxT("Yet another one!") ), 0, wxALIGN_LEFT );
+    m_paneSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, wxT("Text control"), wxDefaultPosition, wxSize(80,-1) ), 0, wxALIGN_LEFT );
+    m_paneSizer->Add( new wxButton(win, PANE_BUTTON, wxT("Press to align right") ), 0, wxALIGN_LEFT );
+    win->SetSizer( m_paneSizer );
 }
 
 MyFrame::~MyFrame()
@@ -263,6 +271,7 @@ enum
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
     EVT_BUTTON(PANEDLG_TOGGLESTATUS_BTN, MyDialog::OnToggleStatus)
     EVT_COLLAPSIBLEPANE_CHANGED(wxID_ANY, MyDialog::OnPaneChanged)
+    EVT_BUTTON(PANE_BUTTON, MyDialog::OnAlignButton)
 END_EVENT_TABLE()
 
 MyDialog::MyDialog(wxFrame *parent)
@@ -285,13 +294,16 @@ MyDialog::MyDialog(wxFrame *parent)
 
     // now add test controls in the collapsible pane
     wxWindow *win = m_collPane->GetPane();
-    wxSizer *paneSz = new wxGridSizer(4, 1, 5, 5);
-    paneSz->Add(new wxColourPickerCtrl(win, -1), 1, wxALL|wxALIGN_LEFT, 2);
-    paneSz->Add(new wxFontPickerCtrl(win, -1), 1, wxALL|wxALIGN_LEFT, 2);
-    paneSz->Add(new wxFilePickerCtrl(win, -1), 1, wxALL|wxALIGN_LEFT, 2);
-    paneSz->Add(new wxDirPickerCtrl(win, -1), 1, wxALL|wxALIGN_LEFT, 2);
-    win->SetSizer(paneSz);
-    paneSz->SetSizeHints(win);
+    m_paneSizer = new wxGridSizer(4, 1, 5, 5);
+
+    m_paneSizer->Add( new wxStaticText(win, -1, wxT("Static text") ), 0, wxALIGN_LEFT );
+    m_paneSizer->Add( new wxStaticText(win, -1, wxT("Yet another one!") ), 0, wxALIGN_LEFT );
+    m_paneSizer->Add( new wxTextCtrl(win, PANE_TEXTCTRL, wxT("Text control"), wxDefaultPosition, wxSize(80,-1) ), 0, wxALIGN_LEFT );
+    m_paneSizer->Add( new wxButton(win, PANE_BUTTON, wxT("Press to align right") ), 0, wxALIGN_LEFT );
+    win->SetSizer( m_paneSizer );
+
+    win->SetSizer( m_paneSizer );
+    m_paneSizer->SetSizeHints(win);
 
     SetSizer(sz);
     sz->SetSizeHints(this);
@@ -300,6 +312,14 @@ MyDialog::MyDialog(wxFrame *parent)
 void MyDialog::OnToggleStatus(wxCommandEvent& WXUNUSED(ev))
 {
     m_collPane->Collapse(!m_collPane->IsCollapsed());
+}
+
+void MyDialog::OnAlignButton(wxCommandEvent& WXUNUSED(ev))
+{
+   wxSizerItem *item = m_paneSizer->GetItem( FindWindow(PANE_TEXTCTRL), true );
+   item->SetFlag(  wxALIGN_RIGHT );
+   
+   Layout();
 }
 
 void MyDialog::OnPaneChanged(wxCollapsiblePaneEvent &event)
