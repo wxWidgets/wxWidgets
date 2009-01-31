@@ -46,7 +46,7 @@ wxString g_listbox_choices[] =
     {wxT("one"),  wxT("two"),  wxT("three")};
 
 wxString g_combobox_choices[] =
-    {wxT("yes"), wxT("no"), wxT("maybe")};
+    {wxT("yes"), wxT("no (doesn't validate)"), wxT("maybe (doesn't validate)")};
 
 wxString g_radiobox_choices[] =
     {wxT("green"), wxT("yellow"), wxT("red")};
@@ -59,11 +59,66 @@ MyData::MyData()
 {
     // This string will be passed to an alpha-only validator, which
     // will complain because spaces aren't alpha. Note that validation
-    // is performed only when 'OK' is pressed. It would be nice to
-    // enhance this so that validation would occur when the text
-    // control loses focus.
+    // is performed only when 'OK' is pressed.
     m_string = wxT("Spaces are invalid here");
     m_listbox_choices.Add(0);
+}
+
+
+// ----------------------------------------------------------------------------
+// MyComboBoxValidator
+// ----------------------------------------------------------------------------
+
+bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
+{
+    wxASSERT(GetWindow()->IsKindOf(CLASSINFO(wxComboBox)));
+
+    wxComboBox* cb = (wxComboBox*)GetWindow();
+    if (cb->GetValue() == g_combobox_choices[1] ||
+        cb->GetValue() == g_combobox_choices[2])
+    {
+        // we accept any string != g_combobox_choices[1|2] !
+
+        wxLogError("Invalid combo box text!");
+        return false;
+    }
+
+    if (m_var)
+        *m_var = cb->GetValue();
+
+    return true;
+}
+
+bool MyComboBoxValidator::TransferToWindow()
+{
+    wxASSERT(GetWindow()->IsKindOf(CLASSINFO(wxComboBox)));
+
+    if ( m_var )
+    {
+        wxComboBox* cb = (wxComboBox*)GetWindow();
+        if ( !cb )
+            return false;
+
+        cb->SetValue(*m_var);
+    }
+
+    return true;
+}
+
+bool MyComboBoxValidator::TransferFromWindow()
+{
+    wxASSERT(GetWindow()->IsKindOf(CLASSINFO(wxComboBox)));
+
+    if ( m_var )
+    {
+        wxComboBox* cb = (wxComboBox*)GetWindow();
+        if ( !cb )
+            return false;
+
+        *m_var = cb->GetValue();
+    }
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -113,7 +168,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
     file_menu->Append(wxID_EXIT, wxT("E&xit"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, wxT("File"));
+    menu_bar->Append(file_menu, wxT("&File"));
     SetMenuBar(menu_bar);
 
     // All validators share a common (static) flag that controls
@@ -188,10 +243,10 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     // Pointers to some of these controls are saved in member variables
     // so that we can use them elsewhere, like this one.
-    text = new wxTextCtrl(this, VALIDATE_TEXT, wxEmptyString,
-                          wxPoint(10, 10), wxSize(120, wxDefaultCoord), 0,
-                          wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
-    flexgridsizer->Add(text);
+    m_text = new wxTextCtrl(this, VALIDATE_TEXT, wxEmptyString,
+                            wxDefaultPosition, wxDefaultSize, 0,
+                            wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
+    flexgridsizer->Add(m_text, 1, wxGROW);
 
     // This wxCheckBox* doesn't need to be assigned to any pointer
     // because we don't use it elsewhere--it can be anonymous.
@@ -199,23 +254,29 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // can be gotten directly from g_data.
     flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"),
                         wxPoint(130, 10), wxSize(120, wxDefaultCoord), 0,
-                        wxGenericValidator(&g_data.m_checkbox_state)));
+                        wxGenericValidator(&g_data.m_checkbox_state)),
+                       1, wxALIGN_CENTER);
 
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
                         wxPoint(10, 30), wxSize(120, wxDefaultCoord),
                         3, g_listbox_choices, wxLB_MULTIPLE,
-                        wxGenericValidator(&g_data.m_listbox_choices)));
+                        wxGenericValidator(&g_data.m_listbox_choices)),
+                       1, wxGROW);
 
-    combobox = new wxComboBox((wxWindow*)this, VALIDATE_COMBO, wxEmptyString,
+    m_combobox = new wxComboBox(this, VALIDATE_COMBO, wxEmptyString,
                                 wxPoint(130, 30), wxSize(120, wxDefaultCoord),
                                 3, g_combobox_choices, 0L,
-                                wxGenericValidator(&g_data.m_combobox_choice));
-    flexgridsizer->Add(combobox);
+                                MyComboBoxValidator(&g_data.m_combobox_choice));
+    flexgridsizer->Add(m_combobox, 1, wxALIGN_CENTER);
+
+    flexgridsizer->AddGrowableCol(0);
+    flexgridsizer->AddGrowableCol(1);
+    flexgridsizer->AddGrowableRow(1);
 
 
     // setup the button sizer
     // ----------------------
-    
+
     wxStdDialogButtonSizer *btn = new wxStdDialogButtonSizer();
     btn->AddButton(new wxButton(this, wxID_OK));
     btn->AddButton(new wxButton(this, wxID_CANCEL));
@@ -224,7 +285,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     // setup the main sizer
     // --------------------
-    
+
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
     mainsizer->Add(flexgridsizer, 1, wxGROW | wxALL, 10);
@@ -233,21 +294,26 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                     wxPoint(10, 100), wxDefaultSize,
                                     3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
                                     wxGenericValidator(&g_data.m_radiobox_choice)),
-                                    0, wxGROW | wxALL, 10);
+                   0, wxGROW | wxLEFT|wxBOTTOM|wxRIGHT, 10);
 
     mainsizer->Add(btn, 0, wxGROW | wxALL, 10);
 
     SetSizer(mainsizer);
     mainsizer->SetSizeHints(this);
+
+    // make the dialog a bit bigger than its minimal size:
+    SetSize(GetBestSize()*1.5);
 }
 
 bool MyDialog::TransferDataToWindow()
 {
     bool r = wxDialog::TransferDataToWindow();
+
     // These function calls have to be made here, after the
     // dialog has been created.
-    text->SetFocus();
-    combobox->SetSelection(0);
+    m_text->SetFocus();
+    m_combobox->SetSelection(0);
+
     return r;
 }
 
