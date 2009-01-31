@@ -54,7 +54,7 @@ public:
     value_type GetValue() const;
 
     /**
-        Returns true if the character is an ASCII character.
+        Returns true if the character is an ASCII character (i.e. if its value is less than 128).
     */
     bool IsAscii() const;
 

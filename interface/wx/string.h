@@ -36,7 +36,7 @@
     for important warnings and advices for using it, please read
     the @ref overview_string.
 
-    In wxWidgets 3.0 wxString always stores Unicode strings, so you should
+    Since wxWidgets 3.0 wxString always stores Unicode strings, so you should
     be sure to read also @ref overview_unicode.
 
 
@@ -652,6 +652,8 @@ public:
 
     /**
         Returns @true if the string contains only ASCII characters.
+        See wxUniChar::IsAscii for more details.
+
         This is a wxWidgets 1.xx compatibility function; you should not use it in new
         code.
     */
