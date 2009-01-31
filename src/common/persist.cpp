@@ -107,3 +107,43 @@ bool wxPersistenceManager::Restore(void *obj)
     return it->second->Restore();
 }
 
+namespace
+{
+
+template <typename T>
+inline bool
+DoSaveValue(wxConfigBase *conf, const wxString& key, T value)
+{
+    return conf && conf->Write(key, value);
+}
+
+template <typename T>
+bool
+DoRestoreValue(wxConfigBase *conf, const wxString& key, T *value)
+{
+    return conf && conf->Read(key, value);
+}
+
+} // anonymous namespace
+
+#define wxPERSIST_DEFINE_SAVE_RESTORE_FOR(Type)                               \
+    bool wxPersistenceManager::SaveValue(const wxPersistentObject& who,       \
+                                         const wxString& name,                \
+                                         Type value)                          \
+    {                                                                         \
+        return DoSaveValue(GetConfig(), GetKey(who, name), value);            \
+    }                                                                         \
+                                                                              \
+    bool wxPersistenceManager::RestoreValue(const wxPersistentObject& who,    \
+                                            const wxString& name,             \
+                                            Type *value)                      \
+    {                                                                         \
+        return DoRestoreValue(GetConfig(), GetKey(who, name), value);         \
+    }
+
+wxPERSIST_DEFINE_SAVE_RESTORE_FOR(bool)
+wxPERSIST_DEFINE_SAVE_RESTORE_FOR(int)
+wxPERSIST_DEFINE_SAVE_RESTORE_FOR(long)
+wxPERSIST_DEFINE_SAVE_RESTORE_FOR(wxString)
+
+#undef wxPERSIST_DEFINE_SAVE_RESTORE_FOR  

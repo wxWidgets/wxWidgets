@@ -108,32 +108,25 @@ public:
 
     // methods used by the persistent objects to save and restore the data
     //
-    // currently these methods simply use wxConfig::Get()
-    //
-    // TODO: make this customizable by allowing
-    //          (a) specifying custom wxConfig object to use
-    //          (b) allowing to use something else entirely
-    template <typename T>
-    bool
-    SaveValue(const wxPersistentObject& who, const wxString& name, T value)
-    {
-        wxConfigBase * const conf = GetConfig();
-        if ( !conf )
-            return false;
+    // currently these methods simply use wxConfig::Get() but they may be
+    // overridden in the derived class (once we allow creating custom
+    // persistent managers)
+#define wxPERSIST_DECLARE_SAVE_RESTORE_FOR(Type)                              \
+    virtual bool SaveValue(const wxPersistentObject& who,                     \
+                           const wxString& name,                              \
+                           Type value);                                       \
+                                                                              \
+    virtual bool                                                              \
+    RestoreValue(const wxPersistentObject& who,                               \
+                 const wxString& name,                                        \
+                 Type *value)
 
-        return conf->Write(GetKey(who, name), value);
-    }
+    wxPERSIST_DECLARE_SAVE_RESTORE_FOR(bool);
+    wxPERSIST_DECLARE_SAVE_RESTORE_FOR(int);
+    wxPERSIST_DECLARE_SAVE_RESTORE_FOR(long);
+    wxPERSIST_DECLARE_SAVE_RESTORE_FOR(wxString);
 
-    template <typename T>
-    bool
-    RestoreValue(const wxPersistentObject& who, const wxString& name, T *value)
-    {
-        wxConfigBase * const conf = GetConfig();
-        if ( !conf )
-            return false;
-
-        return conf->Read(GetKey(who, name), value);
-    }
+#undef wxPERSIST_DECLARE_SAVE_RESTORE_FOR
 
 private:
     // ctor is private, use Get()
@@ -143,7 +136,11 @@ private:
         m_doRestore = true;
     }
 
-    // helpers of Save/Restore(), will be customized later
+    // helpers of Save/Restore()
+    //
+    // TODO: make this customizable by allowing
+    //          (a) specifying custom wxConfig object to use
+    //          (b) allowing to use something else entirely
     wxConfigBase *GetConfig() const { return wxConfigBase::Get(); }
     wxString GetKey(const wxPersistentObject& who, const wxString& name) const;
 
