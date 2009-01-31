@@ -569,9 +569,6 @@ public:
 
     bool IsInNonCatMode() const { return (bool)(m_properties == m_abcArray); }
 
-    /** Only inits arrays, doesn't migrate things or such. */
-    void InitNonCatMode ();
-
     void DoLimitPropertyEditing( wxPGProperty* p, bool limit = true )
     {
         p->SetFlagRecursively(wxPG_PROP_NOEDITOR, limit);
@@ -707,6 +704,10 @@ protected:
     unsigned char               m_anyModified;
 
     unsigned char               m_vhCalcPending;
+
+private:
+    /** Only inits arrays, doesn't migrate things or such. */
+    void InitNonCatMode();
 };
 
 #endif // #ifndef SWIG

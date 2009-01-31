@@ -2358,7 +2358,7 @@ public:
 public:
 
     /** Constructor. */
-    wxPGRootProperty();
+    wxPGRootProperty( const wxString& name = wxS("<Root>") );
     virtual ~wxPGRootProperty();
 
     virtual bool StringToValue( wxVariant&, const wxString&, int ) const

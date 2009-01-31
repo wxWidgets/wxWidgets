@@ -231,7 +231,7 @@ void wxPropertyGridPageState::InitNonCatMode()
 {
     if ( !m_abcArray )
     {
-        m_abcArray = new wxPGRootProperty();
+        m_abcArray = new wxPGRootProperty(wxS("<Root_NonCat>"));
         m_abcArray->SetParentState(this);
         m_abcArray->SetFlag(wxPG_PROP_CHILDREN_ARE_COPIES);
     }
@@ -683,17 +683,9 @@ void wxPropertyGridPageState::DoSort( int flags )
 {
     DoSortChildren( m_properties, flags | wxPG_RECURSE );
 
-    // Sort categories as well (but we need not do it recursively)
-    if ( IsInNonCatMode() )
-    {
-        size_t i;
-        for ( i=0;i<m_regularArray.GetChildCount();i++)
-        {
-            wxPGProperty* p = m_regularArray.Item(i);
-            if ( p->IsCategory() )
-                DoSortChildren( p, 0 );
-        }
-    }
+    // We used to sort categories as well here also if in non-categorized
+    // mode, but doing would naturally cause child indices to become
+    // corrupted.
 }
 
 // -----------------------------------------------------------------------
@@ -1644,6 +1636,9 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
     if ( !res )
         return m_currentCategory;
 
+    bool parentIsRoot = parent->IsRoot();
+    bool parentIsCategory = parent->IsCategory();
+
     // Note that item must be added into current mode later.
 
     // If parent is wxParentProperty, just stick it in...
@@ -1656,42 +1651,34 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
     //   1) Add to given category in given index.
     //   2) Add as last item in m_abcArray.
 
-    if ( !parent->IsCategory() && !parent->IsRoot() )
+    if ( m_properties == &m_regularArray )
     {
-        // Parent is wxParentingProperty: Just stick it in...
-        parent->AddChild2( property, index );
+        // We are currently in Categorized mode
+
+        // Only add non-categories to m_abcArray.
+        if ( m_abcArray && !property->IsCategory() &&
+             (parentIsCategory || parentIsRoot) )
+        {
+            m_abcArray->AddChild2( property, -1, false );
+        }
+
+        // Add to current mode.
+        parent->AddChild2( property, index, true );
     }
     else
     {
-        // Parent is Category or Root.
+        // We are currently in Non-categorized/Alphabetic mode
 
-        if ( m_properties == &m_regularArray )
-        {
-            // Categorized mode
+        if ( parentIsCategory )
+            // Parent is category.
+            parent->AddChild2( property, index, false );
+        else if ( parentIsRoot )
+            // Parent is root.
+            m_regularArray.AddChild2( property, -1, false );
 
-            // Only add non-categories to m_abcArray.
-            if ( m_abcArray && !property->IsCategory() )
-                m_abcArray->AddChild2( property, -1, false );
-
-            // Add to current mode.
-            parent->AddChild2( property, index );
-
-        }
-        else
-        {
-            // Non-categorized mode.
-
-            if ( parent != m_properties )
-                // Parent is category.
-                parent->AddChild2( property, index, false );
-            else
-                // Parent is root.
-                m_regularArray.AddChild2( property, -1, false );
-
-            // Add to current mode (no categories).
-            if ( !property->IsCategory() )
-                m_abcArray->AddChild2( property, index );
-        }
+        // Add to current mode
+        if ( !property->IsCategory() )
+            m_abcArray->AddChild2( property, index, true );
     }
 
     // category stuff
@@ -1705,7 +1692,7 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
 
     // Only add name to hashmap if parent is root or category
     if ( property->m_name.length() &&
-        (parent->IsCategory() || parent->IsRoot()) )
+        (parentIsCategory || parentIsRoot) )
         m_dictName[property->m_name] = (void*) property;
 
     VirtualHeightChanged();

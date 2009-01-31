@@ -2430,11 +2430,14 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxPGRootProperty,none,TextCtrl)
 IMPLEMENT_DYNAMIC_CLASS(wxPGRootProperty, wxPGProperty)
 
 
-wxPGRootProperty::wxPGRootProperty()
+wxPGRootProperty::wxPGRootProperty( const wxString& name )
     : wxPGProperty()
 {
 #ifdef __WXDEBUG__
-    m_name = wxS("<root>");
+    m_name = name;
+    m_label = m_name;
+#else
+    wxUnusedVar(name);
 #endif
     SetParentalType(0);
     m_depth = 0;
