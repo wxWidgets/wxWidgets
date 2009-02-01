@@ -18,7 +18,10 @@
     @beginEventTable{wxCommandEvent}
     @event{EVT_CHECKLISTBOX(id, func)}
            Process a wxEVT_COMMAND_CHECKLISTBOX_TOGGLED event, when an item in
-           the check list box is checked or unchecked.
+           the check list box is checked or unchecked. wxCommandEvent::GetInt()
+           will contain the index of the item that was checked or unchecked.
+           wxCommandEvent::IsChecked() is not valid! Use wxCheckListBox::IsChecked()
+           instead.
     @endEventTable
 
     @library{wxcore}

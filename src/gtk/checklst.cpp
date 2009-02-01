@@ -35,6 +35,7 @@ static void gtk_checklist_toggled(GtkCellRendererToggle * WXUNUSED(renderer),
                               listbox->GetId() );
     new_event.SetEventObject( listbox );
     new_event.SetInt( gtk_tree_path_get_indices(path)[0] );
+    new_event.SetString( listbox->GetString( new_event.GetInt() ));
     gtk_tree_path_free(path);
     listbox->Check( new_event.GetInt(), !listbox->IsChecked(new_event.GetInt()));
     listbox->HandleWindowEvent( new_event );
