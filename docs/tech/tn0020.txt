@@ -271,10 +271,15 @@ binary compatibility between those releases.
 You can also break into your debugger or whatever program you want
 to use and check the memory layout of the class.  If it is the same
 then it is binary compatible.
+(In GDB the command x/d will show addresses as pointers to functions if
+possible so you can see if the order of the functions in vtbl doesn't change.)
 
-Also remember to look at http://www.wxwidgets.org/bincompat.html page which
-summarizes the results of testing of all the samples built against old
-libraries headers with the new library binaries under Unix.
+Another way to check for binary compatibility is to build wxWidgets in shared mode
+and use the 'abicheck.sh --generate' script before doing your changes to generate
+the current ABI (if the 'expected_abi' file is not already in the repo).
+Then rebuild wxWidgets with your changes and use 'abicheck.sh' to compare the
+resulting ABI with the expected one.
+Note that the abicheck.sh script is in the "lib" folder.
 
 
 === EOF ===
