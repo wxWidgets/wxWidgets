@@ -155,7 +155,7 @@ private:
     bool m_doSave,
          m_doRestore;
 
-    DECLARE_NO_COPY_CLASS(wxPersistenceManager);
+    DECLARE_NO_COPY_CLASS(wxPersistenceManager)
 };
 
 // ----------------------------------------------------------------------------
