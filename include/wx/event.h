@@ -69,7 +69,8 @@ typedef int wxEventType;
 #define wxEVT_ANY           ((wxEventType)-1)
 
 // this is used to make the event table entry type safe, so that for an event
-// handler only a function with proper parameter list can be given.
+// handler only a function with proper parameter list can be given. See also
+// the wxEVENT_HANDLER_CAST-macro.
 #define wxStaticCastEvent(type, val) static_cast<type>(val)
 
 #define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
@@ -99,33 +100,50 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 #undef wxEVENTS_COMPATIBILITY_2_8
 #define wxEVENTS_COMPATIBILITY_2_8 1
 
-// macros to create an event type depending on whether type safe events are
-// enabled.
+// New macros to create templatized event types:
 
 #if wxEVENTS_COMPATIBILITY_2_8
+
+    // Define/Declare a wxEventType-based event type:
+
     #define wxDEFINE_EVENT( name, type ) \
         const wxEventType name( wxNewEventType() );
 
     #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
         extern const expdecl wxEventType name;
 
+    // Define/Declare a wxEventType-based event type and initialize it with a
+    // predefined event type. (Only used for wxEVT_SPIN_XXX for backward
+    // compatibility)
+ 
     #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
         const wxEventType name = value;
 
     #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
         extern const expdecl wxEventType name;
 
+    // Declare a local (not exported) wxEventType-based event type:
+
     #define wxDECLARE_LOCAL_EVENT( name, type ) \
         wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
+
+    // Try to cast the given event handler to the correct handler type:
 
     #define wxEVENT_HANDLER_CAST( functype, func ) \
         ( wxObjectEventFunction )( wxEventFunction )wxStaticCastEvent( functype, &func )
 #else
+    // Define/Declare a templatized event type with the corresponding event as
+    // a nested typedef:
+ 
     #define wxDEFINE_EVENT( name, type ) \
         const wxTypedEventType< type > name( wxNewEventType() );
 
     #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
         extern const expdecl wxTypedEventType< type > name;
+
+    // Define/Declare a templatized event type and initialize it with a
+    // predefined event type. (Only used for wxEVT_SPIN_XXX for backward
+    // compatibility)
 
     #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
         const wxTypedEventType< type > name( value );
@@ -133,14 +151,19 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
     #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
         extern const expdecl wxTypedEventType< type > name;
 
+    // Declare a local (not exported) templatized event type:
+
     #define wxDECLARE_LOCAL_EVENT( name, type ) \
         wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
+
+    // Don't cast the given event handler so that wxEvtHandler::Connect() sees
+    // the actual type:
 
     #define wxEVENT_HANDLER_CAST( functype, func ) \
         ( &func )
 #endif
 
-// template which associates the correct event object with the event type
+// Template which associates the correct event object with the event type
 
 #if !wxEVENTS_COMPATIBILITY_2_8
 
@@ -152,7 +175,9 @@ public:
 
     wxTypedEventType(wxEventType type) { m_type = type; }
 
-    // used for static event tables
+    // Return a wxEventType reference for the initialization of the static
+    // event tables. See wxEventTableEntry::m_eventType for a more thorough
+    // explanation.
     operator const wxEventType&() const { return m_type; }
 
 private:
@@ -174,13 +199,13 @@ typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 typedef wxEventFunction wxObjectEventFunction;
 
 
-// the functors which will be stored in the static/dynamic tables
+// The event functor which is stored in the static and dynamic event tables:
 class WXDLLIMPEXP_BASE wxEventFunctor
 {
 public:
     virtual ~wxEventFunctor();
 
-    // this operator is used to actually invoke the event handler
+    // Invoke the actual event handler:
     virtual void operator()(wxEvtHandler *, wxEvent &) = 0;
 
     // this function tests whether this functor is matched, for the purpose of
@@ -2778,37 +2803,7 @@ public:
                     wxObject *userData = NULL,
                     wxEvtHandler *eventSink = NULL)
         { return Disconnect(wxID_ANY, eventType, func, userData, eventSink); }
-
-
 #if !wxEVENTS_COMPATIBILITY_2_8
-    //
-    // Connect a function to an event:
-    //
-    template <typename EventType>
-    void Connect(int winid,
-                 int lastId,
-                 const EventType &eventType,
-                 void (*func)(typename EventType::CorrespondingEvent&),
-                 wxObject* userData = NULL)
-    {
-        wxEventFunctorFunction< EventType > *functor = wxNewEventFunctor( eventType, func );
-
-        Subscribe( winid, lastId, eventType, functor, userData );
-    }
-
-    template <typename EventType>
-    void Connect( int winid,
-            const EventType &eventType,
-            void ( *func )( typename EventType::CorrespondingEvent & ),
-            wxObject* userData = NULL )
-        { Connect( winid, wxID_ANY, eventType, func, userData ); }
-
-    template <typename EventType>
-    void Connect( const EventType &eventType,
-            void ( *func )( typename EventType::CorrespondingEvent & ),
-            wxObject* userData = NULL )
-        { Connect( wxID_ANY, wxID_ANY, eventType, func, userData ); }
-
     //
     // Connect a method to an event:
     //
@@ -2899,6 +2894,34 @@ public:
             wxObject *userData = NULL,
             Derived *eventSink = NULL )
         { Connect( sender, wxID_ANY, wxID_ANY, eventType, func, userData, eventSink ); }
+
+    //
+    // Connect a function to an event:
+    //
+    template <typename EventType>
+    void Connect(int winid,
+                 int lastId,
+                 const EventType &eventType,
+                 void (*func)(typename EventType::CorrespondingEvent&),
+                 wxObject* userData = NULL)
+    {
+        wxEventFunctorFunction< EventType > *functor = wxNewEventFunctor( eventType, func );
+
+        Subscribe( winid, lastId, eventType, functor, userData );
+    }
+
+    template <typename EventType>
+    void Connect( int winid,
+            const EventType &eventType,
+            void ( *func )( typename EventType::CorrespondingEvent & ),
+            wxObject* userData = NULL )
+        { Connect( winid, wxID_ANY, eventType, func, userData ); }
+
+    template <typename EventType>
+    void Connect( const EventType &eventType,
+            void ( *func )( typename EventType::CorrespondingEvent & ),
+            wxObject* userData = NULL )
+        { Connect( wxID_ANY, wxID_ANY, eventType, func, userData ); }
 
     //
     // Connect an arbitrary functor to an event:
