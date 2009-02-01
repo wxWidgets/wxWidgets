@@ -74,7 +74,7 @@ enum wxPropertySheetDialogFlags
     wxPROPSHEET_TREEBOOK = 0x0040,
 
     // Shrink dialog to fit current page
-    wxPROPSHEET_SHRINKTOFIT = 0x0100,
+    wxPROPSHEET_SHRINKTOFIT = 0x0100
 };
 
 class WXDLLIMPEXP_ADV wxPropertySheetDialog : public wxDialog

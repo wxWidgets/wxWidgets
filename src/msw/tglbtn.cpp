@@ -65,7 +65,7 @@ BEGIN_EVENT_TABLE(wxBitmapToggleButton,wxToggleButtonBase)
    EVT_MOUSE_EVENTS(wxBitmapToggleButton::OnMouse)
    EVT_CHAR(wxBitmapToggleButton::OnChar)
    EVT_SIZE(wxBitmapToggleButton::OnSize)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 void wxBitmapToggleButton::Init()
 {

@@ -842,6 +842,6 @@ void wxCodeDepersister::SetConnect(int eventSourceObjectID,
 
 #include "wx/arrimpl.cpp"
 
-WX_DEFINE_OBJARRAY(wxxVariantArray);
+WX_DEFINE_OBJARRAY(wxxVariantArray)
 
 #endif // wxUSE_EXTENDED_RTTI
