@@ -159,7 +159,7 @@ void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
     // is there enough space to put the popup below the window (where we put it
     // by default)?
     wxCoord y = ptOrigin.y + size.y;
-    if ( y + sizeSelf.y > sizeScreen.y )
+    if ( y + sizeSelf.y > posScreen.y + sizeScreen.y )
     {
         // check if there is enough space above
         if ( ptOrigin.y > sizeSelf.y )
@@ -183,7 +183,7 @@ void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
         x += size.x;
 
 
-    if ( x + sizeSelf.x > sizeScreen.x )
+    if ( x + sizeSelf.x > posScreen.x + sizeScreen.x )
     {
         // check if there is enough space to the left
         if ( ptOrigin.x > sizeSelf.x )
