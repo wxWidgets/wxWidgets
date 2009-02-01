@@ -3570,13 +3570,16 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
 
 void wxWindowGTK::Update()
 {
-    GtkUpdate();
-
-    // when we call Update() we really want to update the window immediately on
-    // screen, even if it means flushing the entire queue and hence slowing down
-    // everything -- but it should still be done, it's just that Update() should
-    // be called very rarely
-    gdk_flush();
+    if (m_widget)
+    {
+        GdkDisplay* display = gtk_widget_get_display(m_widget);
+        // Flush everything out to the server, and wait for it to finish.
+        // This ensures nothing will overwrite the drawing we are about to do.
+        gdk_display_sync(display);
+        GtkUpdate();
+        // Flush again, but no need to wait for it to finish
+        gdk_display_flush(display);
+    }
 }
 
 void wxWindowGTK::GtkUpdate()
