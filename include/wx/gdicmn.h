@@ -240,8 +240,8 @@ public:
     wxSize& operator-=(const wxSize& sz) { x -= sz.x; y -= sz.y; return *this; }
     wxSize& operator/=(int i) { x /= i; y /= i; return *this; }
     wxSize& operator*=(int i) { x *= i; y *= i; return *this; }
-    wxSize& operator/=(double i) { x /= i; y /= i; return *this; }
-    wxSize& operator*=(double i) { x *= i; y *= i; return *this; }
+    wxSize& operator/=(double i) { x = int(x/i); y = int(y/i); return *this; }
+    wxSize& operator*=(double i) { x = int(x*i); y = int(y*i); return *this; }
 
     void IncTo(const wxSize& sz)
         { if ( sz.x > x ) x = sz.x; if ( sz.y > y ) y = sz.y; }
@@ -322,12 +322,12 @@ inline wxSize operator*(int i, const wxSize& s)
 
 inline wxSize operator*(const wxSize& s, double i)
 {
-    return wxSize(s.x * i, s.y * i);
+    return wxSize(int(s.x * i), int(s.y * i));
 }
 
 inline wxSize operator*(double i, const wxSize& s)
 {
-    return wxSize(s.x * i, s.y * i);
+    return wxSize(int(s.x * i), int(s.y * i));
 }
 
 
