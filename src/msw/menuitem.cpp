@@ -203,12 +203,20 @@ WXWPARAM wxMenuItem::GetMSWId() const
 
 bool wxMenuItem::IsChecked() const
 {
-    // fix that RTTI is always getting the correct state (separators cannot be checked, but the call below
-    // returns true
+    // fix that RTTI is always getting the correct state (separators cannot be
+    // checked, but the Windows call below returns true
     if ( IsSeparator() )
-        return false ;
+        return false;
 
-    int flag = ::GetMenuState(GetHMenuOf(m_parentMenu), GetMSWId(), MF_BYCOMMAND);
+    // the item might not be attached to a menu yet
+    //
+    // TODO: shouldn't we just always call the base class version? It seems
+    //       like it ought to always be in sync
+    if ( !m_parentMenu )
+        return wxMenuItemBase::IsChecked();
+
+    HMENU hmenu = GetHMenuOf(m_parentMenu);
+    int flag = ::GetMenuState(hmenu, GetMSWId(), MF_BYCOMMAND);
 
     return (flag & MF_CHECKED) != 0;
 }
@@ -245,13 +253,17 @@ void wxMenuItem::Enable(bool enable)
     if ( m_isEnabled == enable )
         return;
 
-    long rc = EnableMenuItem(GetHMenuOf(m_parentMenu),
-                             GetMSWId(),
-                             MF_BYCOMMAND |
-                             (enable ? MF_ENABLED : MF_GRAYED));
+    if ( m_parentMenu )
+    {
+        long rc = EnableMenuItem(GetHMenuOf(m_parentMenu),
+                                 GetMSWId(),
+                                 MF_BYCOMMAND |
+                                 (enable ? MF_ENABLED : MF_GRAYED));
 
-    if ( rc == -1 ) {
-        wxLogLastError(wxT("EnableMenuItem"));
+        if ( rc == -1 )
+        {
+            wxLogLastError(wxT("EnableMenuItem"));
+        }
     }
 
     wxMenuItemBase::Enable(enable);
@@ -264,74 +276,78 @@ void wxMenuItem::Check(bool check)
     if ( m_isChecked == check )
         return;
 
-    int flags = check ? MF_CHECKED : MF_UNCHECKED;
-    HMENU hmenu = GetHMenuOf(m_parentMenu);
-
-    if ( GetKind() == wxITEM_RADIO )
+    if ( m_parentMenu )
     {
-        // it doesn't make sense to uncheck a radio item - what would this do?
-        if ( !check )
-            return;
+        int flags = check ? MF_CHECKED : MF_UNCHECKED;
+        HMENU hmenu = GetHMenuOf(m_parentMenu);
 
-        // get the index of this item in the menu
-        const wxMenuItemList& items = m_parentMenu->GetMenuItems();
-        int pos = items.IndexOf(this);
-        wxCHECK_RET( pos != wxNOT_FOUND,
-                     _T("menuitem not found in the menu items list?") );
-
-        // get the radio group range
-        int start,
-            end;
-
-        if ( m_isRadioGroupStart )
+        if ( GetKind() == wxITEM_RADIO )
         {
-            // we already have all information we need
-            start = pos;
-            end = m_radioGroup.end;
-        }
-        else // next radio group item
-        {
-            // get the radio group end from the start item
-            start = m_radioGroup.start;
-            end = items.Item(start)->GetData()->m_radioGroup.end;
-        }
+            // it doesn't make sense to uncheck a radio item -- what would this
+            // do?
+            if ( !check )
+                return;
 
-#ifdef __WIN32__
-        // calling CheckMenuRadioItem() with such parameters hangs my system
-        // (NT4 SP6) and I suspect this could happen to the others as well - so
-        // don't do it!
-        wxCHECK_RET( start != -1 && end != -1,
-                     _T("invalid ::CheckMenuRadioItem() parameter(s)") );
+            // get the index of this item in the menu
+            const wxMenuItemList& items = m_parentMenu->GetMenuItems();
+            int pos = items.IndexOf(this);
+            wxCHECK_RET( pos != wxNOT_FOUND,
+                         _T("menuitem not found in the menu items list?") );
 
-        if ( !::CheckMenuRadioItem(hmenu,
-                                   start,   // the first radio group item
-                                   end,     // the last one
-                                   pos,     // the one to check
-                                   MF_BYPOSITION) )
-        {
-            wxLogLastError(_T("CheckMenuRadioItem"));
-        }
-#endif // __WIN32__
+            // get the radio group range
+            int start,
+                end;
 
-        // also uncheck all the other items in this radio group
-        wxMenuItemList::compatibility_iterator node = items.Item(start);
-        for ( int n = start; n <= end && node; n++ )
-        {
-            if ( n != pos )
+            if ( m_isRadioGroupStart )
             {
-                node->GetData()->m_isChecked = false;
+                // we already have all information we need
+                start = pos;
+                end = m_radioGroup.end;
+            }
+            else // next radio group item
+            {
+                // get the radio group end from the start item
+                start = m_radioGroup.start;
+                end = items.Item(start)->GetData()->m_radioGroup.end;
             }
 
-            node = node->GetNext();
+#ifdef __WIN32__
+            // calling CheckMenuRadioItem() with such parameters hangs my system
+            // (NT4 SP6) and I suspect this could happen to the others as well,
+            // so don't do it!
+            wxCHECK_RET( start != -1 && end != -1,
+                         _T("invalid ::CheckMenuRadioItem() parameter(s)") );
+
+            if ( !::CheckMenuRadioItem(hmenu,
+                                       start,   // the first radio group item
+                                       end,     // the last one
+                                       pos,     // the one to check
+                                       MF_BYPOSITION) )
+            {
+                wxLogLastError(_T("CheckMenuRadioItem"));
+            }
+#endif // __WIN32__
+
+            // also uncheck all the other items in this radio group
+            wxMenuItemList::compatibility_iterator node = items.Item(start);
+            for ( int n = start; n <= end && node; n++ )
+            {
+                if ( n != pos )
+                {
+                    node->GetData()->m_isChecked = false;
+                }
+
+                node = node->GetNext();
+            }
         }
-    }
-    else // check item
-    {
-        if ( ::CheckMenuItem(hmenu,
-                             GetMSWId(),
-                             MF_BYCOMMAND | flags) == (DWORD)-1 )
+        else // check item
         {
-            wxFAIL_MSG( _T("CheckMenuItem() failed, item not in the menu?") );
+            if ( ::CheckMenuItem(hmenu,
+                                 GetMSWId(),
+                                 MF_BYCOMMAND | flags) == (DWORD)-1 )
+            {
+                wxFAIL_MSG(_T("CheckMenuItem() failed, item not in the menu?"));
+            }
         }
     }
 
@@ -358,15 +374,14 @@ void wxMenuItem::SetItemLabel(const wxString& txt)
     SetAccelString(m_text.AfterFirst(_T('\t')));
 #endif
 
-#if wxUSE_ACCEL
-    if ( m_parentMenu )
-        m_parentMenu->UpdateAccel(this);
-#endif // wxUSE_ACCEL
-
     // the item can be not attached to any menu yet and SetItemLabel() is still
     // valid to call in this case and should do nothing else
     if ( !m_parentMenu )
         return;
+
+#if wxUSE_ACCEL
+    m_parentMenu->UpdateAccel(this);
+#endif // wxUSE_ACCEL
 
     const UINT id = GetMSWId();
     HMENU hMenu = GetHMenuOf(m_parentMenu);
