@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/app.h"
+    #include "wx/log.h"
     #if wxUSE_GUI
         #include "wx/toplevel.h"
         #include "wx/font.h"
