@@ -894,7 +894,7 @@ void* wxJoystickThread::Entry()
         wxevent.SetEventObject(pThis->m_catchwin);
 
         if (pThis->m_catchwin)
-            pThis->m_catchwin->AddPendingEvent(wxevent);
+            pThis->m_catchwin->GetEventHandler()->AddPendingEvent(wxevent);
 
         ret = (*m_hid->GetQueue())->getNextEvent(m_hid->GetQueue(),
                     &hidevent, bogustime, 0);
