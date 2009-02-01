@@ -1191,6 +1191,7 @@ void wxPropertyGridManager::RecreateControls()
                                        wxDefaultPosition,wxDefaultSize,
                                        ((GetExtraStyle()&wxPG_EX_NO_FLAT_TOOLBAR)?0:wxTB_FLAT)
                                         /*| wxTB_HORIZONTAL | wxNO_BORDER*/ );
+            m_pToolbar->SetToolBitmapSize(wxSize(16, 15));
 
         #if defined(__WXMSW__)
             // Eliminate toolbar flicker on XP
