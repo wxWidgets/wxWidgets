@@ -71,7 +71,7 @@ public:
 
     // for the generic collapsible pane only:
     wxControl* GetControlWidget() const
-        { return m_pButton; }
+        { return (wxControl*)m_pButton; }
 
     // implementation only, don't use
     void OnStateChange(const wxSize& sizeNew);
