@@ -240,6 +240,12 @@ public:
     wxSize& operator-=(const wxSize& sz) { x -= sz.x; y -= sz.y; return *this; }
     wxSize& operator/=(int i) { x /= i; y /= i; return *this; }
     wxSize& operator*=(int i) { x *= i; y *= i; return *this; }
+    wxSize& operator/=(unsigned int i) { x /= i; y /= i; return *this; }
+    wxSize& operator*=(unsigned int i) { x *= i; y *= i; return *this; }
+    wxSize& operator/=(long i) { x /= i; y /= i; return *this; }
+    wxSize& operator*=(long i) { x *= i; y *= i; return *this; }
+    wxSize& operator/=(unsigned long i) { x /= i; y /= i; return *this; }
+    wxSize& operator*=(unsigned long i) { x *= i; y *= i; return *this; }
     wxSize& operator/=(double i) { x = int(x/i); y = int(y/i); return *this; }
     wxSize& operator*=(double i) { x = int(x*i); y = int(y*i); return *this; }
 
@@ -316,6 +322,51 @@ inline wxSize operator*(const wxSize& s, int i)
 }
 
 inline wxSize operator*(int i, const wxSize& s)
+{
+    return wxSize(s.x * i, s.y * i);
+}
+
+inline wxSize operator/(const wxSize& s, unsigned int i)
+{
+    return wxSize(s.x / i, s.y / i);
+}
+
+inline wxSize operator*(const wxSize& s, unsigned int i)
+{
+    return wxSize(s.x * i, s.y * i);
+}
+
+inline wxSize operator*(unsigned int i, const wxSize& s)
+{
+    return wxSize(s.x * i, s.y * i);
+}
+
+inline wxSize operator/(const wxSize& s, long i)
+{
+    return wxSize(s.x / i, s.y / i);
+}
+
+inline wxSize operator*(const wxSize& s, long i)
+{
+    return wxSize(s.x * i, s.y * i);
+}
+
+inline wxSize operator*(long i, const wxSize& s)
+{
+    return wxSize(s.x * i, s.y * i);
+}
+
+inline wxSize operator/(const wxSize& s, unsigned long i)
+{
+    return wxSize(s.x / i, s.y / i);
+}
+
+inline wxSize operator*(const wxSize& s, unsigned long i)
+{
+    return wxSize(s.x * i, s.y * i);
+}
+
+inline wxSize operator*(unsigned long i, const wxSize& s)
 {
     return wxSize(s.x * i, s.y * i);
 }
