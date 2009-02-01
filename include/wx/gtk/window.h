@@ -129,9 +129,6 @@ public:
     // regularly
     virtual void OnInternalIdle();
 
-    // Internal represention of Update()
-    void GtkUpdate();
-
     // For compatibility across platforms (not in event table)
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
 

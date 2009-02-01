@@ -3537,66 +3537,39 @@ bool wxWindowGTK::ScrollPages(int pages)
 void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
                           const wxRect *rect)
 {
-    if (!m_widget)
-        return;
-    if (!m_widget->window)
-        return;
-
+    GtkWidget* widget;
     if (m_wxwindow)
+        widget = m_wxwindow;
+    else if (m_widget)
+        widget = m_widget;
+    else
+        return;
+
+    if (rect == NULL)
+        gtk_widget_queue_draw(widget);
+    else
     {
-        if (m_wxwindow->window == NULL) return;
+        int x = rect->x;
+        if (GetLayoutDirection() == wxLayout_RightToLeft)
+            x = GetClientSize().x - x - rect->width;
 
-        GdkRectangle gdk_rect,
-                    *p;
-        if (rect)
-        {
-            gdk_rect.x = rect->x;
-            gdk_rect.y = rect->y;
-            gdk_rect.width = rect->width;
-            gdk_rect.height = rect->height;
-            if (GetLayoutDirection() == wxLayout_RightToLeft)
-                gdk_rect.x = GetClientSize().x - gdk_rect.x - gdk_rect.width;
-
-            p = &gdk_rect;
-        }
-        else // invalidate everything
-        {
-            p = NULL;
-        }
-
-        gdk_window_invalidate_rect(m_wxwindow->window, p, true);
+        gtk_widget_queue_draw_area(widget, x, rect->y, rect->width, rect->height);
     }
 }
 
 void wxWindowGTK::Update()
 {
-    if (m_widget)
+    if (m_widget && m_widget->window)
     {
         GdkDisplay* display = gtk_widget_get_display(m_widget);
         // Flush everything out to the server, and wait for it to finish.
         // This ensures nothing will overwrite the drawing we are about to do.
         gdk_display_sync(display);
-        GtkUpdate();
+
+        gdk_window_process_updates(m_widget->window, true);
+
         // Flush again, but no need to wait for it to finish
         gdk_display_flush(display);
-    }
-}
-
-void wxWindowGTK::GtkUpdate()
-{
-    if (m_wxwindow && m_wxwindow->window)
-        gdk_window_process_updates(m_wxwindow->window, false);
-    if (m_widget && m_widget->window && (m_wxwindow != m_widget))
-        gdk_window_process_updates( m_widget->window, FALSE );
-
-    // for consistency with other platforms (and also because it's convenient
-    // to be able to update an entire TLW by calling Update() only once), we
-    // should also update all our children here
-    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        node->GetData()->GtkUpdate();
     }
 }
 
@@ -3604,7 +3577,6 @@ bool wxWindowGTK::DoIsExposed( int x, int y ) const
 {
     return m_updateRegion.Contains(x, y) != wxOutRegion;
 }
-
 
 bool wxWindowGTK::DoIsExposed( int x, int y, int w, int h ) const
 {
