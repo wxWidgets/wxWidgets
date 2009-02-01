@@ -52,127 +52,168 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( EvtHandlerTestCase, "EvtHandlerTestCase" 
 
 const wxEventType EVT_LEGACY = wxNewEventType();
 
+class MyEvent;
+wxDEFINE_EVENT( EVT_MYEVENT, MyEvent )
+
 class MyEvent : public wxEvent
+{
+public:
+    MyEvent() : wxEvent(0, EVT_MYEVENT) { }
+
+    virtual wxEvent *Clone() const { return new MyEvent; }
+};
+
+class AnotherEvent : public wxEvent
 {
 };
 
-wxDEFINE_EVENT( EVT_EVENT, MyEvent )
+namespace
+{
 
-// An arbitrary functor:
+struct Called
+{
+    Called() { Reset(); }
+
+    void Reset()
+    {
+        function =
+        functor =
+        method =
+        smethod = false;
+    }
+
+    bool function,
+         functor,
+         method,
+         smethod;
+} g_called;
+
+void GlobalOnMyEvent(MyEvent&)
+{
+    g_called.function = true;
+}
 
 class MyFunctor
 {
-    public:
-        void operator () ( MyEvent & )
-        { }
+public:
+    void operator()(MyEvent &) { g_called.functor = true; }
 
-        bool operator == ( const MyFunctor & ) const
-        { return ( true ); }
+    bool operator==(const MyFunctor &) const { return true; }
 };
-
 
 class MyHandler : public wxEvtHandler
 {
-    public:
-        void handleMethod( MyEvent & )
-        { }
+public:
+    void OnMyEvent(MyEvent&) { g_called.method = true; }
 
-        static void handleFunction( MyEvent & )
-        { }
+    static void StaticOnMyEvent(MyEvent &) { g_called.smethod = true; }
 
-        void handleEvent( wxEvent & )
-        { }
-
+    void OnEvent(wxEvent &) { }
+    void OnAnotherEvent(AnotherEvent&) { }
 };
+
+} // anonymous namespace
 
 void EvtHandlerTestCase::TestConnectCompilation()
 {
     // Test that connecting the 'legacy' events still compiles:
 
     MyHandler handler;
+    MyEvent e;
 
-    handler.Connect( EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent, NULL, &handler );
-    handler.Connect( 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent, NULL, &handler );
-    handler.Connect( 0, 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent, NULL, &handler );
+    handler.Connect( EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
+    handler.Connect( 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
+    handler.Connect( 0, 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
 
-    handler.Disconnect( EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent, NULL, &handler );
-    handler.Disconnect( 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent, NULL, &handler );
-    handler.Disconnect( 0, 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent, NULL, &handler );
+    handler.Disconnect( EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
+    handler.Disconnect( 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
+    handler.Disconnect( 0, 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent, NULL, &handler );
 
 
 
-    handler.Connect( EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent );
-    handler.Connect( 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent );
-    handler.Connect( 0, 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent );
+    handler.Connect( EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent );
+    handler.Connect( 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent );
+    handler.Connect( 0, 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent );
 
-    handler.Disconnect( EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent );
-    handler.Disconnect( 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent );
-    handler.Disconnect( 0, 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::handleEvent );
+    handler.Disconnect( EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent );
+    handler.Disconnect( 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent );
+    handler.Disconnect( 0, 0, EVT_LEGACY, (wxObjectEventFunction)&MyHandler::OnEvent );
 
     // Call (and therefore instantiate) all Connect() variants to detect template
     // errors:
 
 #if !wxEVENTS_COMPATIBILITY_2_8
+    handler.Connect( EVT_MYEVENT, &MyHandler::StaticOnMyEvent );
+    g_called.Reset();
+    handler.ProcessEvent(e);
+    CPPUNIT_ASSERT( g_called.smethod );
+    handler.Disconnect( EVT_MYEVENT, &MyHandler::StaticOnMyEvent );
 
-    handler.Connect( EVT_EVENT, &MyHandler::handleFunction );
-    handler.Connect( 0, EVT_EVENT, &MyHandler::handleFunction );
-    handler.Connect( 0, 0, EVT_EVENT, &MyHandler::handleFunction );
+    g_called.Reset();
+    handler.ProcessEvent(e);
+    CPPUNIT_ASSERT( !g_called.smethod ); // check that it was disconnected
 
-    handler.Disconnect( EVT_EVENT, &MyHandler::handleFunction );
-    handler.Disconnect( 0, EVT_EVENT, &MyHandler::handleFunction );
-    handler.Disconnect( 0, 0, EVT_EVENT, &MyHandler::handleFunction );
+    handler.Connect( 0, EVT_MYEVENT, &MyHandler::StaticOnMyEvent );
+    handler.Disconnect( 0, EVT_MYEVENT, &MyHandler::StaticOnMyEvent );
 
-
-
-    handler.Connect( EVT_EVENT, &MyHandler::handleMethod );
-    handler.Connect( 0, EVT_EVENT, &MyHandler::handleMethod );
-    handler.Connect( 0, 0, EVT_EVENT, &MyHandler::handleMethod );
-
-    handler.Disconnect( EVT_EVENT, &MyHandler::handleMethod );
-    handler.Disconnect( 0, EVT_EVENT, &MyHandler::handleMethod );
-    handler.Disconnect( 0, 0, EVT_EVENT, &MyHandler::handleMethod );
+    handler.Connect( 0, 0, EVT_MYEVENT, &MyHandler::StaticOnMyEvent );
+    handler.Disconnect( 0, 0, EVT_MYEVENT, &MyHandler::StaticOnMyEvent );
 
 
 
-    handler.Connect( EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
-    handler.Connect( 0, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
-    handler.Connect( 0, 0, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
+    handler.Connect( EVT_MYEVENT, &MyHandler::OnMyEvent );
+    handler.Connect( 0, EVT_MYEVENT, &MyHandler::OnMyEvent );
+    handler.Connect( 0, 0, EVT_MYEVENT, &MyHandler::OnMyEvent );
 
-    handler.Disconnect( EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
-    handler.Disconnect( 0, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
-    handler.Disconnect( 0, 0, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
+    handler.Disconnect( EVT_MYEVENT, &MyHandler::OnMyEvent );
+    handler.Disconnect( 0, EVT_MYEVENT, &MyHandler::OnMyEvent );
+    handler.Disconnect( 0, 0, EVT_MYEVENT, &MyHandler::OnMyEvent );
 
 
 
-    wxEvtHandler::Connect( &handler, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
-    wxEvtHandler::Connect( &handler, 0, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
-    wxEvtHandler::Connect( &handler, 0, 0, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
+    handler.Connect( EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+    handler.Connect( 0, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+    handler.Connect( 0, 0, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
 
-    wxEvtHandler::Disconnect( &handler, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
-    wxEvtHandler::Disconnect( &handler, 0, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
-    wxEvtHandler::Disconnect( &handler, 0, 0, EVT_EVENT, &MyHandler::handleMethod, NULL, &handler );
+    handler.Disconnect( EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+    handler.Disconnect( 0, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+    handler.Disconnect( 0, 0, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+
+
+    wxEvtHandler::Connect( &handler, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+    wxEvtHandler::Connect( &handler, 0, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+    wxEvtHandler::Connect( &handler, 0, 0, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+
+    wxEvtHandler::Disconnect( &handler, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+    wxEvtHandler::Disconnect( &handler, 0, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
+    wxEvtHandler::Disconnect( &handler, 0, 0, EVT_MYEVENT, &MyHandler::OnMyEvent, NULL, &handler );
 
 
 
     MyFunctor functor;
 
-    handler.Connect( EVT_EVENT, functor );
-    handler.Connect( 0, EVT_EVENT, functor );
-    handler.Connect( 0, 0, EVT_EVENT, functor );
+    handler.Connect( EVT_MYEVENT, functor );
+    handler.Connect( 0, EVT_MYEVENT, functor );
+    handler.Connect( 0, 0, EVT_MYEVENT, functor );
 
-    handler.Disconnect( EVT_EVENT, functor );
-    handler.Disconnect( 0, EVT_EVENT, functor );
-    handler.Disconnect( 0, 0, EVT_EVENT, functor );
-#endif
+    handler.Disconnect( EVT_MYEVENT, functor );
+    handler.Disconnect( 0, EVT_MYEVENT, functor );
+    handler.Disconnect( 0, 0, EVT_MYEVENT, functor );
+
+    // these calls shouldn't compile but we unfortunately can't check this
+    // automatically, you need to uncomment them manually and test that
+    // compilation does indeed fail
+    //handler.Connect(EVT_MYEVENT, &MyHandler::OnAnotherEvent, NULL, &handler);
+#endif // !wxEVENTS_COMPATIBILITY_2_8
 }
 
 void EvtHandlerTestCase::TestEventFunctorCompare()
 {
 //#if !wxEVENTS_COMPATIBILITY_2_8
 //    MyHandler handler1;
-//    wxEventFunctor *connectFunctor = wxNewEventFunctor( EVT_EVENT, &MyHandler::handleMethod, &handler1 );
-//    wxEventFunctor *disconnectFunctor = wxNewEventFunctor( EVT_EVENT, &MyHandler::handleMethod, &handler1 );
-//    wxEventFunctor *nullFunctor = wxNewEventFunctor( EVT_EVENT, &MyHandler::handleMethod );
+//    wxEventFunctor *connectFunctor = wxNewEventFunctor( EVT_MYEVENT, &MyHandler::OnMyEvent, &handler1 );
+//    wxEventFunctor *disconnectFunctor = wxNewEventFunctor( EVT_MYEVENT, &MyHandler::OnMyEvent, &handler1 );
+//    wxEventFunctor *nullFunctor = wxNewEventFunctor( EVT_MYEVENT, &MyHandler::OnMyEvent );
 //   
 //    CPPUNIT_ASSERT( connectFunctor->Matches( *disconnectFunctor ));
 //    CPPUNIT_ASSERT( disconnectFunctor->Matches( *connectFunctor ));
