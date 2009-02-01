@@ -200,11 +200,11 @@
     @section array_predef Predefined array types
 
     wxWidgets defines the following dynamic array types:
-    - wxArrayShort
-    - wxArrayInt
-    - wxArrayDouble
-    - wxArrayLong
-    - wxArrayPtrVoid
+    - ::wxArrayShort
+    - ::wxArrayInt
+    - ::wxArrayDouble
+    - ::wxArrayLong
+    - ::wxArrayPtrVoid
 
     To use them you don't need any macro; you just need to include @c dynarray.h.
 
@@ -214,6 +214,7 @@
 
     @see @ref overview_container, wxList<T>, wxVector<T>
 */
+template <typename T>
 class wxArray<T>
 {
 public:
@@ -794,3 +795,13 @@ public:
 */
 #define WX_PREPEND_ARRAY(wxArray_arrayToModify, wxArray_arrayToBePrepended)
 
+//@{
+/**
+    Predefined specialization of wxArray<T> for standard types.
+*/
+typedef wxArray<int> wxArrayInt;
+typedef wxArray<long> wxArrayLong;
+typedef wxArray<short> wxArrayShort;
+typedef wxArray<double> wxArrayDouble;
+typedef wxArray<void*> wxArrayPtrVoid;
+//@}
