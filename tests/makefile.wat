@@ -344,6 +344,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_textentrytest.obj &
 	$(OBJS)\test_gui_treectrltest.obj &
 	$(OBJS)\test_gui_propagation.obj &
+	$(OBJS)\test_gui_evthandler.obj &
 	$(OBJS)\test_gui_rawbmp.obj &
 	$(OBJS)\test_gui_htmlwindow.obj &
 	$(OBJS)\test_gui_guifuncs.obj &
@@ -648,6 +649,9 @@ $(OBJS)\test_gui_treectrltest.obj :  .AUTODEPEND .\controls\treectrltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_propagation.obj :  .AUTODEPEND .\events\propagation.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_evthandler.obj :  .AUTODEPEND .\events\evthandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_rawbmp.obj :  .AUTODEPEND .\image\rawbmp.cpp
