@@ -253,10 +253,6 @@ SOURCE=.\dummy.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\events\evthandler.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\misc\garbage.cpp
 # End Source File
 # Begin Source File

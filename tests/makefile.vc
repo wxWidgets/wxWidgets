@@ -31,6 +31,11 @@ TEST_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
+	$(OBJS)\test_evthandler.obj \
+
+TEST_OBJECTS_ =  \
+	$(OBJS)\test_dummy.obj \
+	$(OBJS)\test_test.obj \
 	$(OBJS)\test_archivetest.obj \
 	$(OBJS)\test_ziptest.obj \
 	$(OBJS)\test_tartest.obj \
@@ -39,6 +44,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_cmdlinetest.obj \
 	$(OBJS)\test_fileconf.obj \
 	$(OBJS)\test_datetimetest.obj \
+	$(OBJS)\test_evthandler.obj \
 	$(OBJS)\test_timertest.obj \
 	$(OBJS)\test_filekind.obj \
 	$(OBJS)\test_filenametest.obj \
@@ -113,7 +119,6 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_textentrytest.obj \
 	$(OBJS)\test_gui_treectrltest.obj \
 	$(OBJS)\test_gui_propagation.obj \
-	$(OBJS)\test_gui_evthandler.obj \
 	$(OBJS)\test_gui_rawbmp.obj \
 	$(OBJS)\test_gui_htmlwindow.obj \
 	$(OBJS)\test_gui_guifuncs.obj \
@@ -507,6 +512,9 @@ $(OBJS)\test_fileconf.obj: .\config\fileconf.cpp
 $(OBJS)\test_datetimetest.obj: .\datetime\datetimetest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\datetime\datetimetest.cpp
 
+$(OBJS)\test_evthandler.obj: .\events\evthandler.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\events\evthandler.cpp
+
 $(OBJS)\test_timertest.obj: .\events\timertest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\events\timertest.cpp
 
@@ -698,9 +706,6 @@ $(OBJS)\test_gui_treectrltest.obj: .\controls\treectrltest.cpp
 
 $(OBJS)\test_gui_propagation.obj: .\events\propagation.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\events\propagation.cpp
-
-$(OBJS)\test_gui_evthandler.obj: .\events\evthandler.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\events\evthandler.cpp
 
 $(OBJS)\test_gui_rawbmp.obj: .\image\rawbmp.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\image\rawbmp.cpp

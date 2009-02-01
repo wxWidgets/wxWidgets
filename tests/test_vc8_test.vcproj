@@ -924,6 +924,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\events\evthandler.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\streams\ffilestream.cpp"
 				>
 			</File>

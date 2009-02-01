@@ -62,6 +62,7 @@ TEST_OBJECTS =  \
 	test_cmdlinetest.o \
 	test_fileconf.o \
 	test_datetimetest.o \
+	test_evthandler.o \
 	test_timertest.o \
 	test_filekind.o \
 	test_filenametest.o \
@@ -132,7 +133,6 @@ TEST_GUI_OBJECTS =  \
 	test_gui_textentrytest.o \
 	test_gui_treectrltest.o \
 	test_gui_propagation.o \
-	test_gui_evthandler.o \
 	test_gui_rawbmp.o \
 	test_gui_htmlwindow.o \
 	test_gui_guifuncs.o \
@@ -385,6 +385,9 @@ test_fileconf.o: $(srcdir)/config/fileconf.cpp $(TEST_ODEP)
 test_datetimetest.o: $(srcdir)/datetime/datetimetest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/datetime/datetimetest.cpp
 
+test_evthandler.o: $(srcdir)/events/evthandler.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/evthandler.cpp
+
 test_timertest.o: $(srcdir)/events/timertest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/timertest.cpp
 
@@ -573,9 +576,6 @@ test_gui_treectrltest.o: $(srcdir)/controls/treectrltest.cpp $(TEST_GUI_ODEP)
 
 test_gui_propagation.o: $(srcdir)/events/propagation.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/propagation.cpp
-
-test_gui_evthandler.o: $(srcdir)/events/evthandler.cpp $(TEST_GUI_ODEP)
-	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/evthandler.cpp
 
 test_gui_rawbmp.o: $(srcdir)/image/rawbmp.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/image/rawbmp.cpp

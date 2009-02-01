@@ -285,6 +285,10 @@ SOURCE=.\weakref\evtconnection.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\events\evthandler.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\ffilestream.cpp
 # End Source File
 # Begin Source File

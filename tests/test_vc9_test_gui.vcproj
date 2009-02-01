@@ -864,10 +864,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\events\evthandler.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\misc\garbage.cpp"
 				>
 			</File>

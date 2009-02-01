@@ -634,6 +634,9 @@
 				RelativePath=".\weakref\evtconnection.cpp">
 			</File>
 			<File
+				RelativePath=".\events\evthandler.cpp">
+			</File>
+			<File
 				RelativePath=".\streams\ffilestream.cpp">
 			</File>
 			<File

@@ -37,6 +37,7 @@
             cmdline/cmdlinetest.cpp
             config/fileconf.cpp
             datetime/datetimetest.cpp
+            events/evthandler.cpp
             events/timertest.cpp
             filekind/filekind.cpp
             filename/filenametest.cpp
@@ -114,7 +115,6 @@
             controls/textentrytest.cpp
             controls/treectrltest.cpp
             events/propagation.cpp
-            events/evthandler.cpp
             image/rawbmp.cpp
             html/htmlwindow.cpp
             misc/guifuncs.cpp
