@@ -404,6 +404,10 @@
 #    ifdef __EMX__
 #        define OS2EMX_PLAIN_CHAR
 #    endif
+#    if defined(__INNOTEK_LIBC__)
+        /* Ensure visibility of strnlen declaration */
+#        define _GNU_SOURCE
+#    endif
 
     /* define __HPUX__ for HP-UX where standard macro is __hpux */
 #    if defined(__hpux) && !defined(__HPUX__)
