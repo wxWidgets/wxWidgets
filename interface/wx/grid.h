@@ -1397,13 +1397,13 @@ public:
 
     /**
         Call this in order to make the column labels use a native look by using
-        wxRenderer::DrawHeaderButton() internally.
+        wxRendererNative::DrawHeaderButton() internally.
 
         There is no equivalent method for drawing row columns as there is not
         native look for that. This option is useful when using wxGrid for
         displaying tables and not as a spread-sheet.
 
-        @see UseNativeHeader()
+        @see UseNativeColHeader()
     */
     void SetUseNativeColLabels(bool native = true);
 
@@ -1425,8 +1425,8 @@ public:
         are using the grid to display tabular data and don't have thousands of
         columns in it.
 
-        Also note that currently @c wxEVT_GRID_LABEL_LEFT_DCLICK and @c
-        wxEVT_GRID_LABEL_RIGHT_DCLICK events are not generated for the column
+        Also note that currently @c wxEVT_GRID_LABEL_LEFT_DCLICK and
+        @c wxEVT_GRID_LABEL_RIGHT_DCLICK events are not generated for the column
         labels if the native columns header is used (but this limitation could
         possibly be lifted in the future).
      */
