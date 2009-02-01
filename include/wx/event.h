@@ -168,7 +168,7 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 #if !wxEVENTS_COMPATIBILITY_2_8
 
 template <typename Event>
-class WXDLLIMPEXP_BASE wxTypedEventType
+class wxTypedEventType
 {
 public:
     typedef Event CorrespondingEvent;
@@ -272,7 +272,7 @@ wxConstructEventFunctor(const wxEventType& WXUNUSED(evtType),
 #if !wxEVENTS_COMPATIBILITY_2_8
 
 template <typename EventType>
-class WXDLLIMPEXP_BASE wxEventFunctorFunction : public wxEventFunctor
+class wxEventFunctorFunction : public wxEventFunctor
 {
 public:
     wxEventFunctorFunction(void (*handler)(typename EventType::CorrespondingEvent &))
@@ -302,7 +302,7 @@ private:
 
 
 template <typename EventType, typename Class, typename Derived>
-class WXDLLIMPEXP_BASE wxEventFunctorMethod : public wxEventFunctor
+class wxEventFunctorMethod : public wxEventFunctor
 {
 public:
     wxEventFunctorMethod( void ( Class::*method )( typename EventType::CorrespondingEvent & ),
@@ -365,7 +365,7 @@ private:
 
 
 template <typename EventType, typename Functor>
-class WXDLLIMPEXP_BASE wxEventFunctorAdapter : public wxEventFunctor
+class wxEventFunctorAdapter : public wxEventFunctor
 {
 public:
     wxEventFunctorAdapter( Functor &functor )
