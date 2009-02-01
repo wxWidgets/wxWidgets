@@ -19,6 +19,12 @@
 #include "wx/fontenc.h"
 #include "wx/osx/core/cfref.h"
 
+#if WORDS_BIGENDIAN
+    #define kCFStringEncodingUTF32Native kCFStringEncodingUTF32BE
+#else
+    #define kCFStringEncodingUTF32Native kCFStringEncodingUTF32LE
+#endif
+
 class WXDLLIMPEXP_FWD_BASE wxString;
 
 WXDLLIMPEXP_BASE void wxMacConvertNewlines13To10( wxString *data ) ;

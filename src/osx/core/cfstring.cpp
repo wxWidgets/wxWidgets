@@ -24,6 +24,7 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+
 void wxMacConvertNewlines13To10( char * data )
 {
     char * buf = data ;
@@ -611,7 +612,7 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
 #if wxUSE_UNICODE_WCHAR
         // native = wchar_t 4 bytes for us
         reset( CFStringCreateWithBytes( kCFAllocatorDefault,
-            (const UInt8*)str.wc_str() , str.length()*4, kCFStringEncodingUTF32, false /* no BOM */ ) );
+            (const UInt8*)str.wc_str() , str.length()*4, kCFStringEncodingUTF32Native, false /* no BOM */ ) );
 #elif wxUSE_UNICODE_UTF8
         // native = utf8
         reset( CFStringCreateWithBytes( kCFAllocatorDefault,
@@ -638,7 +639,7 @@ wxString wxCFStringRef::AsString(wxFontEncoding WXUNUSED_IN_UNICODE(encoding))
     wxString result;    
 #if wxUSE_UNICODE
   #if wxUSE_UNICODE_WCHAR
-    cfencoding = kCFStringEncodingUTF32;
+    cfencoding = kCFStringEncodingUTF32Native;
   #elif wxUSE_UNICODE_UTF8
     cfencoding = kCFStringEncodingUTF8;
   #else
