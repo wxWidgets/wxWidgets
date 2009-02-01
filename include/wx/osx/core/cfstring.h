@@ -19,7 +19,7 @@
 #include "wx/fontenc.h"
 #include "wx/osx/core/cfref.h"
 
-#if WORDS_BIGENDIAN
+#ifdef WORDS_BIGENDIAN
     #define kCFStringEncodingUTF32Native kCFStringEncodingUTF32BE
 #else
     #define kCFStringEncodingUTF32Native kCFStringEncodingUTF32LE
