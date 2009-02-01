@@ -62,10 +62,7 @@ public:
             defined for the objects of this class.
      */
     template <class T>
-    wxPersistentObject *Register(T *obj)
-    {
-        return Register(obj, wxCreatePersistentObject(obj));
-    }
+    wxPersistentObject *Register(T *obj);
 
     /**
         Register an object with the manager.
@@ -117,7 +114,7 @@ public:
         @see SaveAndUnregister()
      */
     void Save(void *obj);
-    
+
     /**
         Restore the object properties previously saved by Save().
 
@@ -233,10 +230,7 @@ protected:
             @true if the value was saved or @false if an error occurred.
      */
     template <typename T>
-    bool SaveValue(const wxString& name, T value) const
-    {
-        return wxPersistenceManager::Get().SaveValue(*this, name, value);
-    }
+    bool SaveValue(const wxString& name, T value) const;
 
     /**
         Restore the value saved by Save().
@@ -251,10 +245,7 @@ protected:
             found or an error occurred.
      */
     template <typename T>
-    bool RestoreValue(const wxString& name, T *value)
-    {
-        return wxPersistenceManager::Get().RestoreValue(*this, name, value);
-    }
+    bool RestoreValue(const wxString& name, T *value);
 };
 
 /**

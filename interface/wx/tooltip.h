@@ -72,7 +72,7 @@ public:
 
         @note Currently this function is wxMSW-only.
     */
-    static void SetMaxWidth(int width) { ms_maxWidth = width; }
+    static void SetMaxWidth(int width);
 
     /**
         Set the delay between subsequent tooltips to appear.

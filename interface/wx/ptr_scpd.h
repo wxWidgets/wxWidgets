@@ -431,13 +431,8 @@ public:
         The returned pointer may be @NULL. It must not be deleted by the
         caller, call @c reset(NULL) instead.
      */
-    T *get() const { return m_array; }
+    T *get() const;
 
     /// Swaps the contents of this array with another one.
-    void swap(wxScopedArray &other)
-    {
-        T * const tmp = other.m_array;
-        other.m_array = m_array;
-        m_array = tmp;
-    }
+    void swap(wxScopedArray &other);
 };
