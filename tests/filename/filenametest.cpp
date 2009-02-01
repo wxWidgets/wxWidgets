@@ -455,11 +455,21 @@ void FileNameTestCase::TestReplace()
 }
 
 #if WXWIN_COMPATIBILITY_2_8
+
+#ifdef __VISUALC__
+    // disable warning about using deprecated wxStripExtension()
+    #pragma warning(disable:4996)
+#endif
+
 wxString wxTestStripExtension(wxString szFile)
 {
     wxStripExtension(szFile);
     return szFile;
 }
+
+#ifdef __VISUALC__
+    #pragma warning(default:4996)
+#endif
 
 void FileNameTestCase::TestStrip()
 {
@@ -472,7 +482,7 @@ void FileNameTestCase::TestStrip()
     CPPUNIT_ASSERT_EQUAL( wxString(_T("good")), wxTestStripExtension(_T("good.wav")) );
     CPPUNIT_ASSERT_EQUAL( wxString(_T("good.wav")), wxTestStripExtension(_T("good.wav.wav")) );
 }
-#endif
+#endif // WXWIN_COMPATIBILITY_2_8
 
 #ifdef __WINDOWS__
 
