@@ -2293,7 +2293,6 @@ void wxListMainWindow::OnRenameCancelled(size_t itemEdit)
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
-
 #ifdef __WXMAC__
     // On wxMac we can't depend on the EVT_KILL_FOCUS event to properly
     // shutdown the edit control when the mouse is clicked elsewhere on the
@@ -2312,7 +2311,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
     if (event.GetEventType() == wxEVT_MOUSEWHEEL)
     {
-        // let the base handle mouse wheel events.
+        // let the base class handle mouse wheel events.
         event.Skip();
         return;
     }
@@ -2323,10 +2322,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         {
             SendNotify( (size_t)-1, wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition() );
 
-            wxContextMenuEvent evtCtx(
-                wxEVT_CONTEXT_MENU,
-                GetParent()->GetId(),
-                ClientToScreen(event.GetPosition()));
+            wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
+                                      GetParent()->GetId(),
+                                      ClientToScreen(event.GetPosition()));
             evtCtx.SetEventObject(GetParent());
             GetParent()->GetEventHandler()->ProcessEvent(evtCtx);
         }
