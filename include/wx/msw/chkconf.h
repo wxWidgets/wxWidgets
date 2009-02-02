@@ -402,14 +402,11 @@
 #endif
 
 /*
-   Currently MSVC can't build the library with new-style events:
-    - VC6 simply doesn't have good enough templates support
-    - VC7 always seems to choos the Connect() overload using Functor, even when
-    the argument is a class method
-    - VC9 compiles the code fine but fails at linking stage in DLL build
+   Currently only recent MSVC compilers can build the new events code under
+   Windows.
  */
 #if !wxEVENTS_COMPATIBILITY_2_8
-#   if defined(__VISUALC__)
+#   if !wxCHECK_VISUALC_VERSION(8)
 #       undef wxEVENTS_COMPATIBILITY_2_8
 #       define wxEVENTS_COMPATIBILITY_2_8 1
 #   endif

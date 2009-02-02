@@ -53,9 +53,11 @@
 // especially, to still allow building if the compiler template support is too
 // bad to compile the new code.
 //
-// Default is 0 for all compilers except VC6 currently.
+// Default is 0 but this is set to 1 automatically in wx/chkconf.h for the
+// compilers which can't build the new code (currently only g++ and MSVC >= 8
+// can)
 //
-// Recommended setting: 0 (please upgrade your compiler instead of changing it)
+// Recommended setting: 0
 #define wxEVENTS_COMPATIBILITY_2_8 0
 
 // MSW-only: Set to 0 for accurate dialog units, else 1 for old behaviour when
