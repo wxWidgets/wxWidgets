@@ -3545,6 +3545,9 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
     else
         return;
 
+    if (!widget->window)
+        return;
+
     if (rect == NULL)
         gtk_widget_queue_draw(widget);
     else
@@ -3553,7 +3556,16 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
         if (GetLayoutDirection() == wxLayout_RightToLeft)
             x = GetClientSize().x - x - rect->width;
 
+#if 0
         gtk_widget_queue_draw_area(widget, x, rect->y, rect->width, rect->height);
+#else
+        GdkRectangle r;
+        r.x = rect->x;
+        r.y = rect->y;
+        r.width = rect->width;
+        r.height = rect->height;
+        gdk_window_invalidate_rect( m_wxwindow->window, NULL, TRUE );
+#endif
     }
 }
 
