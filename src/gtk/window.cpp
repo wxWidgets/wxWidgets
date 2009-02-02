@@ -3564,7 +3564,7 @@ void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
         r.y = rect->y;
         r.width = rect->width;
         r.height = rect->height;
-        gdk_window_invalidate_rect( m_wxwindow->window, NULL, TRUE );
+        gdk_window_invalidate_rect( m_wxwindow->window, &r, TRUE );
 #endif
     }
 }
