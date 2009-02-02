@@ -34,20 +34,9 @@
 // event constants
 // ----------------------------------------------------------------------------
 
-// declare a custom event type
-//
-// note that in wxWin 2.3+ these macros expand simply into the following code:
-//
-//  extern const wxEventType wxEVT_MY_CUSTOM_COMMAND;
-//
-//  const wxEventType wxEVT_MY_CUSTOM_COMMAND = wxNewEventType();
-//
-// and you may use this code directly if you don't care about 2.2 compatibility
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_MY_CUSTOM_COMMAND, 7777)
-END_DECLARE_EVENT_TYPES()
-
-DEFINE_EVENT_TYPE(wxEVT_MY_CUSTOM_COMMAND)
+// define a custom event type (we don't need a separate declaration here but
+// usually you would use a matching wxDECLARE_LOCAL_EVENT in a header)
+wxDEFINE_EVENT(wxEVT_MY_CUSTOM_COMMAND, wxCommandEvent)
 
 // it may also be convenient to define an event table macro for this event type
 #define EVT_MY_CUSTOM_COMMAND(id, fn) \
@@ -313,20 +302,18 @@ void MyFrame::OnConnect(wxCommandEvent& event)
 {
     if ( event.IsChecked() )
     {
-        // disconnect
-        Connect(Event_Dynamic, wxID_ANY, wxEVT_COMMAND_MENU_SELECTED,
-                (wxObjectEventFunction)
-                (wxEventFunction)
-                (wxCommandEventFunction)&MyFrame::OnDynamic);
+        Connect(Event_Dynamic, wxEVT_COMMAND_MENU_SELECTED,
+                wxCommandEventHandler(MyFrame::OnDynamic));
 
 #if wxUSE_STATUSBAR
         SetStatusText(_T("You can now use \"Dynamic\" item in the menu"));
         SetStatusText(_T("Dynamic: on"), Status_Dynamic);
 #endif // wxUSE_STATUSBAR
     }
-    else // connect
+    else // disconnect
     {
-        Disconnect(Event_Dynamic, wxID_ANY, wxEVT_COMMAND_MENU_SELECTED);
+        Disconnect(Event_Dynamic, wxEVT_COMMAND_MENU_SELECTED,
+                   wxCommandEventHandler(MyFrame::OnDynamic));
 
 #if wxUSE_STATUSBAR
         SetStatusText(_T("You can no more use \"Dynamic\" item in the menu"));
