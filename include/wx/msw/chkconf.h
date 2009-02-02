@@ -406,7 +406,7 @@
    Windows.
  */
 #if !wxEVENTS_COMPATIBILITY_2_8
-#   if !wxCHECK_VISUALC_VERSION(8)
+#   if !wxCHECK_VISUALC_VERSION(7)
 #       undef wxEVENTS_COMPATIBILITY_2_8
 #       define wxEVENTS_COMPATIBILITY_2_8 1
 #   endif

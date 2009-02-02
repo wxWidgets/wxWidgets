@@ -1065,7 +1065,7 @@ wxEvtHandler::~wxEvtHandler()
 
             // Remove ourselves from sink destructor notifications
             // (this has usually been done, in wxTrackable destructor)
-            wxEvtHandler *eventSink = entry->m_fn->GetHandler();
+            wxEvtHandler *eventSink = entry->m_fn->GetEvtHandler();
             if ( eventSink )
             {
                 wxEventConnectionRef * const
@@ -1408,10 +1408,11 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
     return false;
 }
 
-void wxEvtHandler::Subscribe( int id, int lastId,
-                            wxEventType eventType,
-                            wxEventFunctor *func,
-                            wxObject *userData )
+void wxEvtHandler::DoConnect(int id,
+                             int lastId,
+                             wxEventType eventType,
+                             wxEventFunctor *func,
+                             wxObject *userData)
 {
     wxDynamicEventTableEntry *entry =
         new wxDynamicEventTableEntry(eventType, id, lastId, func, userData);
@@ -1423,7 +1424,7 @@ void wxEvtHandler::Subscribe( int id, int lastId,
     m_dynamicEvents->Insert( (wxObject*) entry );
 
     // Make sure we get to know when a sink is destroyed
-    wxEvtHandler *eventSink = func->GetHandler();
+    wxEvtHandler *eventSink = func->GetEvtHandler();
     if ( eventSink && eventSink != this )
     {
         wxEventConnectionRef *evtConnRef = FindRefInTrackerList(eventSink);
@@ -1435,17 +1436,17 @@ void wxEvtHandler::Subscribe( int id, int lastId,
 }
 
 bool
-wxEvtHandler::Unsubscribe(int id,
-                          int lastId,
-                          wxEventType eventType,
-                          const wxEventFunctor& func,
-                          wxObject *userData)
+wxEvtHandler::DoDisconnect(int id,
+                           int lastId,
+                           wxEventType eventType,
+                           const wxEventFunctor& func,
+                           wxObject *userData)
 {
     if (!m_dynamicEvents)
         return false;
 
     // Remove connection from tracker node (wxEventConnectionRef)
-    wxEvtHandler *eventSink = func.GetHandler();
+    wxEvtHandler *eventSink = func.GetEvtHandler();
     if ( eventSink && eventSink != this )
     {
         wxEventConnectionRef *evtConnRef = FindRefInTrackerList(eventSink);
@@ -1490,7 +1491,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
 
         if ( event.GetEventType() == entry->m_eventType )
         {
-            wxEvtHandler *handler = entry->m_fn->GetHandler();
+            wxEvtHandler *handler = entry->m_fn->GetEvtHandler();
             if ( !handler )
                handler = this;
             if ( ProcessEventIfMatchesId(*entry, handler, event) )
@@ -1571,7 +1572,7 @@ void wxEvtHandler::OnSinkDestroyed( wxEvtHandler *sink )
         wxDynamicEventTableEntry *entry = (wxDynamicEventTableEntry*)node->GetData();
         node_nxt = node->GetNext();
 
-        if ( entry->m_fn->GetHandler() == sink )
+        if ( entry->m_fn->GetEvtHandler() == sink )
         {
             delete entry->m_callbackUserData;
             m_dynamicEvents->Erase( node );

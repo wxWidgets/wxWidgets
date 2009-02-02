@@ -27,6 +27,10 @@
 #include "wx/thread.h"
 #include "wx/tracker.h"
 
+#if !wxEVENTS_COMPATIBILITY_2_8
+    #include "wx/meta/convertible.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -131,20 +135,20 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
     // a nested typedef:
  
     #define wxDEFINE_EVENT( name, type ) \
-        const wxTypedEventType< type > name( wxNewEventType() );
+        const wxEventTypeTag< type > name( wxNewEventType() );
 
     #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
-        extern const expdecl wxTypedEventType< type > name;
+        extern const expdecl wxEventTypeTag< type > name;
 
     // Define/Declare a templatized event type and initialize it with a
     // predefined event type. (Only used for wxEVT_SPIN_XXX for backward
     // compatibility)
 
     #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
-        const wxTypedEventType< type > name( value );
+        const wxEventTypeTag< type > name( value );
 
     #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
-        extern const expdecl wxTypedEventType< type > name;
+        extern const expdecl wxEventTypeTag< type > name;
 
     // Declare a local (not exported) templatized event type:
 
@@ -162,13 +166,18 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
 #if !wxEVENTS_COMPATIBILITY_2_8
 
-template <typename Event>
-class wxTypedEventType
+// The tag is a type associated to the event type (which is an integer itself,
+// in spite of its name) value. It exists in order to be used as a template
+// parameter and provide a mapping between the event type values and their
+// corresponding wxEvent-derived classes.
+template <typename T>
+class wxEventTypeTag
 {
 public:
-    typedef Event CorrespondingEvent;
+    // The class of wxEvent-derived class carried by the events of this type.
+    typedef T EventClass;
 
-    wxTypedEventType(wxEventType type) { m_type = type; }
+    wxEventTypeTag(wxEventType type) { m_type = type; }
 
     // Return a wxEventType reference for the initialization of the static
     // event tables. See wxEventTableEntry::m_eventType for a more thorough
@@ -201,18 +210,24 @@ public:
     virtual ~wxEventFunctor();
 
     // Invoke the actual event handler:
-    virtual void operator()(wxEvtHandler *, wxEvent &) = 0;
+    virtual void operator()(wxEvtHandler *, wxEvent&) = 0;
 
     // this function tests whether this functor is matched, for the purpose of
     // finding it in an event table in Disconnect(), by the given func
     virtual bool Matches(const wxEventFunctor& func) const = 0;
 
-    virtual wxEvtHandler *GetHandler() const { return NULL; }
+    // these functions are used for functors comparison in Matches()
+    virtual void *GetHandler() const { return GetEvtHandler(); }
+    virtual wxEventFunction GetMethod() const { return NULL; }
 
-    virtual wxObjectEventFunction GetMethod() const { return NULL; }
+    // this one is also used elsewhere in the code and should be overridden to
+    // return non-NULL if we are indeed associated with an wxEvtHandler
+    virtual wxEvtHandler *GetEvtHandler() const { return NULL; }
 };
 
-// A plain method functor
+// A plain method functor: notice that it is used even with the new events as
+// it is reused as a specialization of wxEventFunctorMethod for legacy untyped
+// event types
 class WXDLLIMPEXP_BASE wxObjectEventFunctor : public wxEventFunctor
 {
 public:
@@ -229,21 +244,25 @@ public:
         (realHandler->*m_method)(event);
     }
 
-    virtual bool Matches(const wxEventFunctor& other) const
+    virtual bool Matches(const wxEventFunctor& func) const
     {
-        wxEvtHandler * const handler = other.GetHandler();
+        void * const handler = func.GetHandler();
+        if ( handler && GetHandler() != handler )
+            return false;
 
-        return (m_handler == handler || !handler) &&
-               (m_method == other.GetMethod());
+        const wxEventFunction method = GetMethod();
+        return !method || GetMethod() == method;
     }
 
-    virtual wxEvtHandler *GetHandler() const { return m_handler; }
-    virtual wxObjectEventFunction GetMethod() const { return m_method; }
+    virtual wxEvtHandler *GetEvtHandler() const { return m_handler; }
+    virtual wxEventFunction GetMethod() const { return m_method; }
 
 private:
     wxEvtHandler *m_handler;
     wxObjectEventFunction m_method;
 };
+
+#if wxEVENTS_COMPATIBILITY_2_8
 
 // Create a functor for the legacy events: handler can be NULL and its default
 // value is used by the event table macros
@@ -257,223 +276,233 @@ wxNewEventFunctor(const wxEventType& WXUNUSED(evtType),
 }
 
 inline wxObjectEventFunctor
-wxConstructEventFunctor(const wxEventType& WXUNUSED(evtType),
+wxMakeEventFunctor(const wxEventType& WXUNUSED(evtType),
                         wxObjectEventFunction method,
                         wxEvtHandler *handler)
 {
     return wxObjectEventFunctor(method, handler);
 }
 
-#if !wxEVENTS_COMPATIBILITY_2_8
+#else // !wxEVENTS_COMPATIBILITY_2_8
 
-template <typename EventType>
+// functor forwarding the event to anything callable (function, static method,
+// generalized functor...)
+template <typename EventTag, typename Functor>
 class wxEventFunctorFunction : public wxEventFunctor
 {
 public:
-    wxEventFunctorFunction(void (*handler)(typename EventType::CorrespondingEvent &))
+    typedef typename EventTag::EventClass EventArg;
+
+    wxEventFunctorFunction(Functor handler)
     {
         m_handler = handler;
     }
 
     virtual void operator()(wxEvtHandler *WXUNUSED(handler), wxEvent& event)
     {
-        // Protect against wrong event i.e. wxMouseEvent evt(wxEVT_PAINT):
-        wxASSERT( dynamic_cast< typename EventType::CorrespondingEvent * >( &event ) != NULL );
-
-        // Will throw a std::bad_cast exception in release build:
-        ( *m_handler )( dynamic_cast< typename EventType::CorrespondingEvent & >( event ));
+        m_handler(static_cast<EventArg&>(event));
     }
 
-    virtual bool Matches( const wxEventFunctor &right ) const
+    virtual bool Matches(const wxEventFunctor& WXUNUSED(func)) const
     {
-        wxEventFunctorFunction const &other = dynamic_cast< wxEventFunctorFunction const & >( right );
-
-        return m_handler == other.m_handler || other.m_handler == NULL;
+        // we have no way to compare arbitrary functors so just consider them
+        // to be equal: this means that disconnecting a functor will always
+        // find the last functor connected which in turn implies that it's
+        // probably a bad idea to connect more than one functor if you plan to
+        // disconnect them but this limitation doesn't seem very important in
+        // practice
+        return true;
     }
 
 private:
-    void ( *m_handler )( typename EventType::CorrespondingEvent & );
+    Functor m_handler;
 };
 
+// helper class defining operations different for method functors using an
+// object of wxEvtHandler-derived class as handler and the others
+namespace wxPrivate
+{
 
-template <typename EventType, typename Class, typename Derived>
-class wxEventFunctorMethod : public wxEventFunctor
+template <typename T, typename A, bool> struct HandlerImpl;
+
+// specialization for handlers deriving from wxEvtHandler
+template <typename T, typename A>
+struct HandlerImpl<T, A, true>
+{
+    static bool IsEvtHandler()
+        { return true; }
+    static T *ConvertFromEvtHandler(wxEvtHandler *p)
+        { return static_cast<T *>(p); }
+    static wxEvtHandler *ConvertToEvtHandler(T *p)
+        { return p; }
+    static wxEventFunction ConvertToEvtFunction(void (T::*f)(A&))
+        { return reinterpret_cast<wxEventFunction>(f); }
+};
+
+// specialization for handlers not deriving from wxEvtHandler
+template <typename T, typename A>
+struct HandlerImpl<T, A, false>
+{
+    static bool IsEvtHandler()
+        { return false; }
+    static T *ConvertFromEvtHandler(wxEvtHandler *)
+        { return NULL; }
+    static wxEvtHandler *ConvertToEvtHandler(T *)
+        { return NULL; }
+    static wxEventFunction ConvertToEvtFunction(void (T::*)(A&))
+        { return NULL; }
+};
+
+} // namespace wxPrivate
+
+// functor forwarding the event to a method of the given object
+//
+// notice that the object class may be different from the class in which the
+// method is defined but it must be convertible to this class
+template <typename EventTag, typename Class, typename ObjClass>
+class wxEventFunctorMethod
+    : public wxEventFunctor,
+      private wxPrivate::HandlerImpl
+              <
+                Class,
+                typename EventTag::EventClass,
+                wxConvertibleTo<Class, wxEvtHandler>::value
+              >
 {
 public:
-    wxEventFunctorMethod( void ( Class::*method )( typename EventType::CorrespondingEvent & ),
-            Derived *handler )
+    typedef typename EventTag::EventClass EventArg;
+
+    wxEventFunctorMethod(void (Class::*method)(EventArg&), ObjClass *handler)
     {
+        wxASSERT_MSG( handler || IsEvtHandler(),
+                      "handlers defined in non-wxEvtHandler-derived classes "
+                      "must be connected with a valid sink object" );
+
         m_handler = handler;
         m_method =  method;
     }
 
-    virtual void operator () ( wxEvtHandler *handler, wxEvent &event )
+    virtual void operator()(wxEvtHandler *handler, wxEvent& event)
     {
-        // Compile-time type check 1: This requires Derived to derive from or
-        // be of the same type as Class
-        Class *realHandler = m_handler;
-
-        if( m_handler == NULL )
+        Class * realHandler = m_handler;
+        if ( !realHandler )
         {
-            // Verify that the handler does indeed derive from the class
-            // containing the handler method
-            wxASSERT( dynamic_cast< Class * >( handler) != NULL );
+            realHandler = ConvertFromEvtHandler(handler);
 
-            realHandler = dynamic_cast< Class * >( handler );
+            // this is not supposed to happen but check for it nevertheless
+            wxCHECK_RET( realHandler, "invalid event handler" );
         }
 
-        // Protect against wrong event i.e. wxMouseEvent evt(wxEVT_PAINT):
-        wxASSERT( dynamic_cast< typename EventType::CorrespondingEvent * >( &event ) != NULL );
-
-        // Will throw a std::bad_cast exception in release build:
-        ( realHandler->*m_method )( dynamic_cast< typename EventType::CorrespondingEvent & >( event ));
+        (realHandler->*m_method)(static_cast<EventArg&>(event));
     }
 
-    virtual bool Matches( const wxEventFunctor &right ) const
+    virtual bool Matches(const wxEventFunctor& func) const
     {
-        wxEventFunctorMethod const &other = dynamic_cast< wxEventFunctorMethod const & >( right );
+        void * const handler = func.GetHandler();
+        if ( handler && GetHandler() != handler )
+            return false;
 
-        return (( m_handler == other.m_handler || other.m_handler == NULL ) &&
-                ( m_method == other.m_method || other.m_method == NULL ));
+        const wxEventFunction method = GetMethod();
+        return !method || GetMethod() == method;
     }
 
-    virtual wxEvtHandler *GetHandler() const
+    virtual void *GetHandler() const
     {
-        // This makes sure Derived derives from wxEvtHandler (it is still
-        // possible and even ok if Class does not derive from wxEvtHandler. In
-        // this case Derived would end up using multiple inheritance: class
-        // Derived : public wxEvtHandler, public Class { } where Class contains
-        // the method to call, but wxEvtHandler contains the wxTrackable and
-        // code for weak ref support
         return m_handler;
     }
 
-    virtual wxObjectEventFunction GetMethod() const
+    virtual wxEventFunction GetMethod() const
     {
-        return reinterpret_cast<wxObjectEventFunction>(m_method);
+        return ConvertToEvtFunction(m_method);
+    }
+
+    virtual wxEvtHandler *GetEvtHandler() const
+    {
+        return ConvertToEvtHandler(m_handler);
     }
 
 private:
-    Derived *m_handler;
-    void (Class::*m_method)(typename EventType::CorrespondingEvent&);
+    ObjClass *m_handler;
+    void (Class::*m_method)(EventArg&);
 };
 
-
-template <typename EventType, typename Functor>
-class wxEventFunctorAdapter : public wxEventFunctor
+// partial specialization for legacy event types
+template <typename ObjClass>
+class wxEventFunctorMethod<wxEventType, wxEvtHandler, ObjClass>
+    : public wxObjectEventFunctor
 {
 public:
-    wxEventFunctorAdapter( Functor &functor )
+    wxEventFunctorMethod(wxObjectEventFunction method, ObjClass *handler)
+        : wxObjectEventFunctor(method, handler)
     {
-        m_functor = functor;
     }
-
-    virtual void operator () ( wxEvtHandler *WXUNUSED( handler ), wxEvent &event )
-    {
-        // Protect against wrong event i.e. wxMouseEvent evt(wxEVT_PAINT):
-        wxASSERT( dynamic_cast< typename EventType::CorrespondingEvent * >( &event ) != NULL );
-
-        // Will throw a std::bad_cast exception in release build:
-        m_functor( dynamic_cast< typename EventType::CorrespondingEvent & >( event ));
-    }
-
-    virtual bool Matches( const wxEventFunctor &right ) const
-    {
-        wxEventFunctorAdapter const &other = dynamic_cast< wxEventFunctorAdapter const & >( right );
-
-        return m_functor == other.m_functor;
-    }
-
-private:
-    Functor m_functor;
 };
 
-//
-// Create functors for the templatized events (needed in wxEvtHandler::Connect):
-//
-
-// Create a functor for functions:
-
-template <typename EventType>
-inline wxEventFunctorFunction<EventType> *
-wxNewEventFunctor(const EventType &,
-                  void (*function)(typename EventType::CorrespondingEvent&))
-{
-    return new wxEventFunctorFunction<EventType>(function);
-}
-
-// Create a functor for methods:
-
-template <typename EventType, typename Class>
-inline wxEventFunctorMethod<EventType, Class, Class> *
-wxNewEventFunctor(const EventType &,
-                  void (Class::*method)(typename EventType::CorrespondingEvent&))
-{
-    return new wxEventFunctorMethod<EventType, Class, Class>(method, NULL);
-}
-
-template <typename EventType, typename Class, typename Derived>
-inline wxEventFunctorMethod<EventType, Class, Derived> *
-wxNewEventFunctor(const EventType &,
-                  void (Class::*method)(typename EventType::CorrespondingEvent &),
-                  Derived *handler )
-{
-    return new wxEventFunctorMethod<EventType, Class, Derived>(method, handler);
-}
-
-// Create a functor for arbitrary functors (like boost::function):
-template <typename EventType, typename Functor>
-inline wxEventFunctorAdapter<EventType, Functor> *
-wxNewEventFunctor(const EventType &,
-                  Functor& functor )
-{
-    return new wxEventFunctorAdapter<EventType, Functor>(functor);
-}
 
 //
-// Construct functors for the templatized events (needed in wxEvtHandler::Disconnect):
-//
+// Create functors for the templatized events, either allocated on the heap for
+// wxNewXXX() variants (this is needed in wxEvtHandler::Connect() to store them
+// in dynamic event table) or just by returning them as temporary objects (this
+// is enough for Disconnect() and we allocate unnecessary heap allocation like
+// this)
 
-// Construct a functor for functions:
 
-template <typename EventType>
-inline wxEventFunctorFunction<EventType>
-wxConstructEventFunctor(const EventType &,
-                        void (*function)(typename EventType::CorrespondingEvent&))
+// Create functors wrapping other functors (including functions):
+template <typename EventTag, typename Functor>
+inline wxEventFunctorFunction<EventTag, Functor> *
+wxNewEventFunctor(const EventTag&, Functor func)
 {
-    return wxEventFunctorFunction<EventType>(function);
+    return new wxEventFunctorFunction<EventTag, Functor>(func);
 }
 
-// Construct a functor for methods:
-
-template <typename EventType, typename Class>
-inline wxEventFunctorMethod<EventType, Class, Class>
-wxConstructEventFunctor(const EventType &,
-                        void (Class::*method)(typename EventType::CorrespondingEvent&))
+template <typename EventTag, typename Functor>
+inline wxEventFunctorFunction<EventTag, Functor>
+wxMakeEventFunctor(const EventTag&, Functor func)
 {
-    return wxEventFunctorMethod<EventType, Class, Class>(method, NULL);
+    return wxEventFunctorFunction<EventTag, Functor>(func);
 }
 
-template <typename EventType, typename Class, typename Derived>
-inline wxEventFunctorMethod<EventType, Class, Derived>
-wxConstructEventFunctor(const EventType &,
-                        void (Class::*method)(typename EventType::CorrespondingEvent&),
-                        Derived *handler)
+
+// Create functors for methods:
+template
+  <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+inline wxEventFunctorMethod<EventTag, Class, ObjClass> *
+wxNewEventFunctor(const EventTag&,
+                  void (Class::*method)(EventArg&),
+                  ObjClass *handler)
 {
-    return wxEventFunctorMethod<EventType, Class, Derived>(method, handler);
+    return new wxEventFunctorMethod<EventTag, Class, ObjClass>(method, handler);
 }
 
-// Construct a functor for arbitrary functors (like boost:function):
-
-template <typename EventType, typename Functor>
-inline wxEventFunctorAdapter<EventType, Functor>
-wxConstructEventFunctor(const EventType &,
-                        Functor& functor)
+template
+    <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+inline wxEventFunctorMethod<EventTag, Class, ObjClass>
+wxMakeEventFunctor(const EventTag&,
+                   void (Class::*method)(EventArg&),
+                   ObjClass *handler)
 {
-    return wxEventFunctorAdapter<EventType, Functor>(functor);
+    return wxEventFunctorMethod<EventTag, Class, ObjClass>(method, handler);
+}
+
+// Special case for the wxNewEventFunctor() calls used inside the event table
+// macros: they don't specify the handler so ObjClass can't be deduced
+template <typename EventTag, typename Class, typename EventArg>
+inline wxEventFunctorMethod<EventTag, Class, Class> *
+wxNewEventFunctor(const EventTag&, void (Class::*method)(EventArg&))
+{
+    return new wxEventFunctorMethod<EventTag, Class, Class>(method, NULL);
+}
+
+template
+    <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+inline wxEventFunctorMethod<EventTag, Class, Class>
+wxMakeEventFunctor(const EventTag&, void (Class::*method)(EventArg&))
+{
+    return wxEventFunctorMethod<EventTag, Class, Class>(method, NULL);
 }
 
 #endif // !wxEVENTS_COMPATIBILITY_2_8
+
 
 // many, but not all, standard event types
 
@@ -1016,7 +1045,7 @@ class WXDLLIMPEXP_CORE wxScrollWinEvent : public wxEvent
 public:
     wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
                      int pos = 0, int orient = 0);
-    wxScrollWinEvent(const wxScrollWinEvent & event) : wxEvent(event)
+    wxScrollWinEvent(const wxScrollWinEvent& event) : wxEvent(event)
         {    m_commandInt = event.m_commandInt;
             m_extraLong = event.m_extraLong;    }
 
@@ -1260,7 +1289,7 @@ public:
           m_x(x), m_y(y), m_cursor()
         { }
 
-    wxSetCursorEvent(const wxSetCursorEvent & event)
+    wxSetCursorEvent(const wxSetCursorEvent& event)
         : wxEvent(event),
           m_x(event.m_x),
           m_y(event.m_y),
@@ -1403,7 +1432,7 @@ public:
         : wxEvent(winid, wxEVT_SIZE),
           m_size(sz)
         { }
-    wxSizeEvent(const wxSizeEvent & event)
+    wxSizeEvent(const wxSizeEvent& event)
         : wxEvent(event),
           m_size(event.m_size), m_rect(event.m_rect)
         { }
@@ -1658,7 +1687,7 @@ public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int winid = 0, wxMenu* menu = NULL)
         : wxEvent(winid, type)
         { m_menuId = winid; m_menu = menu; }
-    wxMenuEvent(const wxMenuEvent & event)
+    wxMenuEvent(const wxMenuEvent& event)
         : wxEvent(event)
     { m_menuId = event.m_menuId; m_menu = event.m_menu; }
 
@@ -1696,7 +1725,7 @@ public:
           m_veto(false),      // should be false by default
           m_canVeto(true) {}
 
-    wxCloseEvent(const wxCloseEvent & event)
+    wxCloseEvent(const wxCloseEvent& event)
         : wxEvent(event),
         m_loggingOff(event.m_loggingOff),
         m_veto(event.m_veto),
@@ -1746,7 +1775,7 @@ public:
     wxShowEvent(int winid = 0, bool show = false)
         : wxEvent(winid, wxEVT_SHOW)
         { m_show = show; }
-    wxShowEvent(const wxShowEvent & event)
+    wxShowEvent(const wxShowEvent& event)
         : wxEvent(event)
     { m_show = event.m_show; }
 
@@ -1778,7 +1807,7 @@ public:
     wxIconizeEvent(int winid = 0, bool iconized = true)
         : wxEvent(winid, wxEVT_ICONIZE)
         { m_iconized = iconized; }
-    wxIconizeEvent(const wxIconizeEvent & event)
+    wxIconizeEvent(const wxIconizeEvent& event)
         : wxEvent(event)
     { m_iconized = event.m_iconized; }
 
@@ -1860,7 +1889,7 @@ public:
           m_joyStick(joystick)
     {
     }
-    wxJoystickEvent(const wxJoystickEvent & event)
+    wxJoystickEvent(const wxJoystickEvent& event)
         : wxEvent(event),
           m_pos(event.m_pos),
           m_zPosition(event.m_zPosition),
@@ -1995,7 +2024,7 @@ public:
         m_setText =
         m_setChecked = false;
     }
-    wxUpdateUIEvent(const wxUpdateUIEvent & event)
+    wxUpdateUIEvent(const wxUpdateUIEvent& event)
         : wxCommandEvent(event),
           m_checked(event.m_checked),
           m_enabled(event.m_enabled),
@@ -2191,7 +2220,7 @@ public:
         : wxEvent(winid, wxEVT_QUERY_NEW_PALETTE),
           m_paletteRealized(false)
         { }
-    wxQueryNewPaletteEvent(const wxQueryNewPaletteEvent & event)
+    wxQueryNewPaletteEvent(const wxQueryNewPaletteEvent& event)
         : wxEvent(event),
         m_paletteRealized(event.m_paletteRealized)
     { }
@@ -2337,7 +2366,7 @@ public:
           m_pos(pt),
           m_origin(GuessOrigin(origin))
     { }
-    wxHelpEvent(const wxHelpEvent & event)
+    wxHelpEvent(const wxHelpEvent& event)
         : wxCommandEvent(event),
           m_pos(event.m_pos),
           m_target(event.m_target),
@@ -2395,7 +2424,7 @@ public:
                      wxWindowID winid = 0)
         : wxCommandEvent(type, winid)
     { }
-    wxClipboardTextEvent(const wxClipboardTextEvent & event)
+    wxClipboardTextEvent(const wxClipboardTextEvent& event)
         : wxCommandEvent(event)
     { }
 
@@ -2422,7 +2451,7 @@ public:
         : wxCommandEvent(type, winid),
           m_pos(pt)
     { }
-    wxContextMenuEvent(const wxContextMenuEvent & event)
+    wxContextMenuEvent(const wxContextMenuEvent& event)
         : wxCommandEvent(event),
         m_pos(event.m_pos)
     { }
@@ -2468,7 +2497,7 @@ public:
         : wxEvent(0, wxEVT_IDLE),
           m_requestMore(false)
         { }
-    wxIdleEvent(const wxIdleEvent & event)
+    wxIdleEvent(const wxIdleEvent& event)
         : wxEvent(event),
           m_requestMore(event.m_requestMore)
     { }
@@ -2534,7 +2563,7 @@ struct WXDLLIMPEXP_BASE wxEventTableEntryBase
         // being initialized (a temporary instance is created and then this
         // constructor is called).
 
-        const_cast< wxEventTableEntryBase & >( entry ).m_fn = NULL;
+        const_cast<wxEventTableEntryBase&>( entry ).m_fn = NULL;
     }
 
     ~wxEventTableEntryBase()
@@ -2554,7 +2583,7 @@ struct WXDLLIMPEXP_BASE wxEventTableEntryBase
     wxObject* m_callbackUserData;
 
 private:
-    wxEventTableEntryBase &operator = ( const wxEventTableEntryBase & );
+    DECLARE_NO_ASSIGN_CLASS(wxEventTableEntryBase)
 };
 
 // an entry from a static event table
@@ -2575,7 +2604,7 @@ struct WXDLLIMPEXP_BASE wxEventTableEntry : public wxEventTableEntryBase
     const int& m_eventType;
 
 private:
-    wxEventTableEntry &operator = ( const wxEventTableEntry & );
+    DECLARE_NO_ASSIGN_CLASS(wxEventTableEntry)
 };
 
 // an entry used in dynamic event table managed by wxEvtHandler::Connect()
@@ -2593,7 +2622,7 @@ struct WXDLLIMPEXP_BASE wxDynamicEventTableEntry : public wxEventTableEntryBase
     int m_eventType;
 
 private:
-    wxDynamicEventTableEntry &operator = ( const wxDynamicEventTableEntry & );
+    DECLARE_NO_ASSIGN_CLASS(wxDynamicEventTableEntry)
 };
 
 // ----------------------------------------------------------------------------
@@ -2634,7 +2663,7 @@ public:
 
     // Handle the given event, in other words search the event table hash
     // and call self->ProcessEvent() if a match was found.
-    bool HandleEvent(wxEvent &event, wxEvtHandler *self);
+    bool HandleEvent(wxEvent& event, wxEvtHandler *self);
 
     // Clear table
     void Clear();
@@ -2745,6 +2774,15 @@ public:
     // Connecting and disconnecting
     // ----------------------------
 
+    // These functions are used for old, untyped, event handlers and don't
+    // check that the type of the function passed to them actually matches the
+    // type of the event. They also only allow connecting events to methods of
+    // wxEvtHandler-derived classes.
+    //
+    // The template Connect() methods below are safer and allow connecting
+    // events to arbitrary functions or functors -- but require compiler
+    // support for templates.
+
     // Dynamic association of a member function handler with the event handler,
     // winid and event type
     void Connect(int winid,
@@ -2754,9 +2792,9 @@ public:
                  wxObject *userData = NULL,
                  wxEvtHandler *eventSink = NULL)
     {
-        wxObjectEventFunctor *functor = wxNewEventFunctor( eventType, func, eventSink );
-
-        Subscribe( winid, lastId, eventType, functor, userData );
+        DoConnect(winid, lastId, eventType,
+                  wxNewEventFunctor(eventType, func, eventSink),
+                  userData);
     }
 
     // Convenience function: take just one id
@@ -2781,9 +2819,9 @@ public:
                     wxObject *userData = NULL,
                     wxEvtHandler *eventSink = NULL)
     {
-        wxObjectEventFunctor functor = wxConstructEventFunctor( eventType, func, eventSink );
-
-        return Unsubscribe( winid, lastId, eventType, functor, userData );
+        return DoDisconnect(winid, lastId, eventType,
+                            wxMakeEventFunctor(eventType, func, eventSink),
+                            userData );
     }
 
     bool Disconnect(int winid = wxID_ANY,
@@ -2798,305 +2836,258 @@ public:
                     wxObject *userData = NULL,
                     wxEvtHandler *eventSink = NULL)
         { return Disconnect(wxID_ANY, eventType, func, userData, eventSink); }
+
 #if !wxEVENTS_COMPATIBILITY_2_8
-    //
-    // Connect a method to an event:
-    //
+    // Event handling in functions (including generalized functors):
 
-    template <typename EventType, typename Class>
-    void Connect( int winid,
-            int lastId,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL )
-        {
-            wxEventFunctorMethod< EventType, Class, Class > *functor =
-                wxNewEventFunctor( eventType, func, static_cast< Class * const >( this ));
-
-            Subscribe( winid, lastId, eventType, functor, userData );
-        }
-
-    template <typename EventType, typename Class>
-    void Connect( int winid,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL )
-        { Connect( winid, wxID_ANY, eventType, func, userData ); }
-
-    template <typename EventType, typename Class>
-    void Connect( const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL )
-        { Connect( wxID_ANY, wxID_ANY, eventType, func, userData ); }
-
-    template <typename EventType, typename Class, typename Derived>
-    void Connect( int winid,
-            int lastId,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        {
-            wxEventFunctorMethod< EventType, Class, Derived > *functor =
-                wxNewEventFunctor( eventType, func, eventSink );
-
-            Subscribe( winid, lastId, eventType, functor, userData );
-        }
-
-    template <typename EventType, typename Class, typename Derived>
-    void Connect( int winid,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        { Connect( winid, wxID_ANY, eventType, func, userData, eventSink ); }
-
-    template <typename EventType, typename Class, typename Derived>
-    void Connect( const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        { Connect( wxID_ANY, wxID_ANY, eventType, func, userData, eventSink ); }
-
-    template <typename Sender, typename EventType, typename Class, typename Derived>
-    static void Connect( Sender *sender,
-            int winid,
-            int lastId,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-    {
-        wxEventFunctorMethod< EventType, Class, Derived > *functor =
-            wxNewEventFunctor( eventType, func, eventSink );
-
-        sender->Subscribe( winid, lastId, eventType, functor, userData );
-    }
-
-    template <typename Sender, typename EventType, typename Class, typename Derived>
-    static void Connect( Sender *sender,
-            int winid,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        { Connect( sender, winid, wxID_ANY, eventType, func, userData, eventSink ); }
-
-    template <typename Sender, typename EventType, typename Class, typename Derived>
-    static void Connect( Sender *sender,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        { Connect( sender, wxID_ANY, wxID_ANY, eventType, func, userData, eventSink ); }
-
-    //
-    // Connect a function to an event:
-    //
-    template <typename EventType>
+    template <typename EventTag, typename Functor>
     void Connect(int winid,
                  int lastId,
-                 const EventType &eventType,
-                 void (*func)(typename EventType::CorrespondingEvent&),
-                 wxObject* userData = NULL)
+                 const EventTag& eventType,
+                 Functor func)
     {
-        wxEventFunctorFunction< EventType > *functor = wxNewEventFunctor( eventType, func );
-
-        Subscribe( winid, lastId, eventType, functor, userData );
+        DoConnect(winid, lastId, eventType,
+                  wxNewEventFunctor(eventType, func));
     }
 
-    template <typename EventType>
-    void Connect( int winid,
-            const EventType &eventType,
-            void ( *func )( typename EventType::CorrespondingEvent & ),
-            wxObject* userData = NULL )
-        { Connect( winid, wxID_ANY, eventType, func, userData ); }
+    template <typename EventTag, typename Functor>
+    void Connect(int winid, const EventTag& eventType, Functor func)
+        { Connect(winid, wxID_ANY, eventType, func); }
 
-    template <typename EventType>
-    void Connect( const EventType &eventType,
-            void ( *func )( typename EventType::CorrespondingEvent & ),
-            wxObject* userData = NULL )
-        { Connect( wxID_ANY, wxID_ANY, eventType, func, userData ); }
+    template <typename EventTag, typename Functor>
+    void Connect(const EventTag& eventType, Functor func)
+        { Connect(wxID_ANY, eventType, func); }
 
-    //
-    // Connect an arbitrary functor to an event:
-    //
 
-    template <typename EventType, typename Functor>
-    void Connect( int winid,
-            int lastId,
-            const EventType &eventType,
-            Functor &functor,
-            wxObject* userData = NULL)
+    template <typename EventTag, typename Functor>
+    bool Disconnect(int winid,
+                    int lastId,
+                    const EventTag& eventType,
+                    Functor func)
     {
-        wxEventFunctorAdapter< EventType, Functor > *adapter =
-            wxNewEventFunctor( eventType, functor );
-
-        Subscribe( winid, lastId, eventType, adapter, userData );
-    }
-    template <typename EventType, typename Functor>
-    void Connect( int winid,
-            const EventType &eventType,
-            Functor &functor,
-            wxObject* userData = NULL)
-        { Connect( winid, wxID_ANY, eventType, functor, userData ); }
-
-    template <typename EventType, typename Functor>
-    void Connect( const EventType &eventType,
-            Functor &functor,
-            wxObject* userData = NULL)
-        { Connect( wxID_ANY, wxID_ANY, eventType, functor, userData ); }
-
-    //
-    // Disconnect a function from an event:
-    //
-
-    template <typename EventType>
-    bool Disconnect( int winid,
-        int lastId,
-        const EventType &eventType,
-        void ( *func )( typename EventType::CorrespondingEvent & ),
-        wxObject* userData = NULL )
-    {
-        wxEventFunctorFunction< EventType > functor = wxConstructEventFunctor( eventType, func );
-
-        return Unsubscribe( winid, lastId, eventType, functor, userData );
+        return DoDisconnect(winid, lastId, eventType,
+                           wxMakeEventFunctor(eventType, func));
     }
 
-    template <typename EventType>
-    bool Disconnect( int winid,
-            const EventType &eventType,
-            void ( *func )( typename EventType::CorrespondingEvent & ),
-            wxObject* userData = NULL )
-        { return Disconnect( winid, wxID_ANY, eventType, func, userData ); }
+    template <typename EventTag, typename Functor>
+    bool Disconnect(int winid, const EventTag& eventType, Functor func)
+        { return Disconnect(winid, wxID_ANY, eventType, func); }
 
-    template <typename EventType>
-    bool Disconnect( const EventType &eventType,
-            void ( *func )( typename EventType::CorrespondingEvent & ),
-            wxObject* userData = NULL )
-        { return Disconnect( wxID_ANY, wxID_ANY, eventType, func, userData ); }
+    template <typename EventTag, typename Functor>
+    bool Disconnect(const EventTag& eventType, Functor func)
+        { return Disconnect(wxID_ANY, eventType, func); }
 
+
+
+    // Event handling in class methods: the object handling the event (i.e.
+    // this object itself by default or eventSink if specified) must be
+    // convertible to this class.
     //
-    // Disconnect a method from an event:
-    //
+    // Notice that we need to have separate overloads for the versions with and
+    // without eventSink because in the latter case we must check that this
+    // object itself derives from Class while in the former this is not
+    // necessarily true
 
-    template <typename EventType, typename Class>
-    bool Disconnect( int winid,
-            int lastId,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL )
-        {
-            wxEventFunctorMethod< EventType, Class, Class > functor =
-                wxConstructEventFunctor( eventType, func, static_cast< Class * const >( this ));
+    // Methods connecting/disconnecting event to this object itself
 
-            return Unsubscribe( winid, lastId, eventType, functor, userData );
-        }
-
-    template <typename EventType, typename Class>
-    bool Disconnect( int winid,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL )
-        { return Disconnect( winid, wxID_ANY, eventType, func, userData ); }
-
-    template <typename EventType, typename Class>
-    bool Disconnect( const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL )
-        { return Disconnect( wxID_ANY, wxID_ANY, eventType, func, userData ); }
-
-    template <typename EventType, typename Class, typename Derived>
-    bool Disconnect( int winid,
-            int lastId,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        {
-            wxEventFunctorMethod< EventType, Class, Derived > functor =
-                wxConstructEventFunctor( eventType, func, eventSink );
-
-            return Unsubscribe( winid, lastId, eventType, functor, userData );
-        }
-
-    template <typename EventType, typename Class, typename Derived>
-    bool Disconnect( int winid,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        { return Disconnect( winid, wxID_ANY, eventType, func, userData, eventSink ); }
-
-    template <typename EventType, typename Class, typename Derived>
-    bool Disconnect( const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        { return Disconnect( wxID_ANY, wxID_ANY, eventType, func, userData, eventSink ); }
-
-    template <typename Sender, typename EventType, typename Class, typename Derived>
-    static bool Disconnect( Sender *sender,
-            int winid,
-            int lastId,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
+    template <typename EventTag, typename Class, typename EventArg>
+    void Connect(int winid,
+                 int lastId,
+                 const EventTag& eventType,
+                 void (Class::*func)(EventArg&),
+                 wxObject *userData = NULL)
     {
-        wxEventFunctorMethod< EventType, Class, Derived > functor =
-            wxConstructEventFunctor( eventType, func, eventSink );
-
-        return sender->Unsubscribe( winid, lastId, eventType, functor, userData );
+        DoConnect(winid, lastId, eventType,
+                  wxNewEventFunctor(eventType, func, static_cast<Class *>(this)),
+                  userData);
     }
 
-    template <typename Sender, typename EventType, typename Class, typename Derived>
-    static bool Disconnect( Sender *sender,
-            int winid,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        { return Disconnect( sender, winid, wxID_ANY, eventType, func, userData, eventSink ); }
+    template <typename EventTag, typename Class, typename EventArg>
+    void Connect(int winid,
+                 const EventTag& eventType,
+                 void (Class::*func)(EventArg&),
+                 wxObject *userData = NULL)
+        { Connect(winid, wxID_ANY, eventType, func, userData); }
 
-    template <typename Sender, typename EventType, typename Class, typename Derived>
-    static bool Disconnect( Sender *sender,
-            const EventType &eventType,
-            void ( Class::*func )( typename EventType::CorrespondingEvent & ),
-            wxObject *userData = NULL,
-            Derived *eventSink = NULL )
-        { return Disconnect( sender, wxID_ANY, wxID_ANY, eventType, func, userData, eventSink ); }
+    template <typename EventTag, typename Class, typename EventArg>
+    void Connect(const EventTag& eventType,
+                 void (Class::*func)(EventArg&),
+                 wxObject *userData = NULL)
+        { Connect(wxID_ANY, eventType, func, userData); }
 
-    //
-    // Disconnect an arbitrary functor from an event:
-    //
 
-    template <typename EventType, typename Functor>
-    bool Disconnect( int winid,
-            int lastId,
-            const EventType &eventType,
-            Functor &functor,
-            wxObject* userData = NULL)
+    template <typename EventTag, typename Class, typename EventArg>
+    bool Disconnect(int winid,
+                    int lastId,
+                    const EventTag& eventType,
+                    void (Class::*func)(EventArg&),
+                    wxObject *userData = NULL)
     {
-        wxEventFunctorAdapter< EventType, Functor > adapter =
-            wxConstructEventFunctor( eventType, functor );
-
-        return Unsubscribe( winid, lastId, eventType, adapter, userData );
+        return DoDisconnect(winid, lastId, eventType,
+                            wxMakeEventFunctor(eventType, func,
+                                               static_cast<Class *>(this)),
+                            userData);
     }
 
-    template <typename EventType, typename Functor>
-    bool Disconnect( int winid,
-            const EventType &eventType,
-            Functor &functor,
-            wxObject* userData = NULL)
-        { return Disconnect( winid, wxID_ANY, eventType, functor, userData ); }
+    template <typename EventTag, typename Class, typename EventArg>
+    bool Disconnect(int winid,
+                    const EventTag& eventType,
+                    void (Class::*func)(EventArg&),
+                    wxObject *userData = NULL)
+        { return Disconnect(winid, wxID_ANY, eventType, func, userData); }
 
-    template <typename EventType, typename Functor>
-    bool Disconnect( const EventType &eventType,
-            Functor &functor,
-            wxObject* userData = NULL)
-        { return Disconnect( wxID_ANY, wxID_ANY, eventType, functor, userData ); }
+    template <typename EventTag, typename Class, typename EventArg>
+    bool Disconnect(const EventTag& eventType,
+                    void (Class::*func)(EventArg&),
+                    wxObject *userData = NULL)
+        { return Disconnect(wxID_ANY, eventType, func, userData); }
 
+
+    // Methods connecting/disconnecting event to another object
+
+    template
+      <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    void Connect(int winid,
+                 int lastId,
+                 const EventTag& eventType,
+                 void (Class::*func)(EventArg&),
+                 wxObject *userData,
+                 ObjClass *eventSink)
+    {
+        DoConnect(winid, lastId, eventType,
+                  wxNewEventFunctor(eventType, func, eventSink),
+                  userData);
+    }
+
+    template
+      <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    void Connect(int winid,
+                 const EventTag& eventType,
+                 void (Class::*func)(EventArg&),
+                 wxObject *userData,
+                 ObjClass *eventSink)
+        { Connect(winid, wxID_ANY, eventType, func, userData, eventSink); }
+
+    template
+      <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    void Connect(const EventTag& eventType,
+                 void (Class::*func)(EventArg&),
+                 wxObject *userData,
+                 ObjClass *eventSink)
+        { Connect(wxID_ANY, eventType, func, userData, eventSink); }
+
+
+    template
+      <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    bool Disconnect(int winid,
+                    int lastId,
+                    const EventTag& eventType,
+                    void (Class::*func)(EventArg&),
+                    wxObject *userData,
+                    ObjClass *eventSink)
+    {
+        return DoDisconnect(winid, lastId, eventType,
+                            wxMakeEventFunctor(eventType, func, eventSink),
+                            userData);
+    }
+
+    template
+      <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    bool Disconnect(int winid,
+                    const EventTag& eventType,
+                    void (Class::*func)(EventArg&),
+                    wxObject *userData,
+                    ObjClass *eventSink)
+        { return Disconnect(winid, wxID_ANY, eventType, func,
+                            userData, eventSink); }
+
+    template
+      <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    bool Disconnect(const EventTag& eventType,
+                    void (Class::*func)(EventArg&),
+                    wxObject *userData,
+                    ObjClass *eventSink)
+        { return Disconnect(wxID_ANY, eventType, func, userData, eventSink); }
+
+
+
+    // Static version of Connect() which allows to specify the event source and
+    // event handler in a more symmetric way
+    template <typename ObjSource, typename EventTag,
+              typename Class, typename EventArg, typename ObjClass>
+    static void Connect(ObjSource *eventSrc,
+                        int winid,
+                        int lastId,
+                        const EventTag& eventType,
+                        void (Class::*func)(EventArg&),
+                        wxObject *userData = NULL,
+                        ObjClass *eventSink = NULL)
+    {
+        eventSrc->Connect(winid, lastId, eventType, func, userData, eventSink);
+    }
+
+    template <typename ObjSource, typename EventTag,
+              typename Class, typename EventArg, typename ObjClass>
+    static void Connect(ObjSource *eventSrc,
+                        int winid,
+                        const EventTag& eventType,
+                        void (Class::*func)(EventArg&),
+                        wxObject *userData = NULL,
+                        ObjClass *eventSink = NULL)
+    {
+        Connect(eventSrc, winid, wxID_ANY, eventType, func, userData, eventSink);
+    }
+
+    template <typename ObjSource, typename EventTag,
+              typename Class, typename EventArg, typename ObjClass>
+    static void Connect(ObjSource *eventSrc,
+                        const EventTag& eventType,
+                        void (Class::*func)(EventArg&),
+                        wxObject *userData = NULL,
+                        ObjClass *eventSink = NULL)
+    {
+        Connect(eventSrc, wxID_ANY, eventType, func, userData, eventSink);
+    }
+
+
+    template <typename ObjSource, typename EventTag,
+              typename Class, typename EventArg, typename ObjClass>
+    static bool Disconnect(ObjSource *eventSrc,
+                           int winid,
+                           int lastId,
+                           const EventTag& eventType,
+                           void (Class::*func)(EventArg&),
+                           wxObject *userData = NULL,
+                           ObjClass *eventSink = NULL)
+    {
+        return eventSrc->Disconnect(winid, lastId, eventType, func,
+                                    userData, eventSink);
+    }
+
+    template <typename ObjSource, typename EventTag,
+              typename Class, typename EventArg, typename ObjClass>
+    static bool Disconnect(ObjSource *eventSrc,
+                           int winid,
+                           const EventTag& eventType,
+                           void (Class::*func)(EventArg&),
+                           wxObject *userData = NULL,
+                           ObjClass *eventSink = NULL)
+    {
+        return Disconnect(eventSrc, winid, wxID_ANY, eventType, func,
+                          userData, eventSink);
+    }
+
+    template <typename ObjSource, typename EventTag,
+              typename Class, typename EventArg, typename ObjClass>
+    static bool Disconnect(ObjSource *eventSrc,
+                           const EventTag& eventType,
+                           void (Class::*func)(EventArg&),
+                           wxObject *userData = NULL,
+                           ObjClass *eventSink = NULL)
+    {
+        return Disconnect(eventSrc, wxID_ANY, eventType, func,
+                          userData, eventSink);
+    }
 #endif // !wxEVENTS_COMPATIBILITY_2_8
 
 
@@ -3140,17 +3131,17 @@ public:
 
 
 private:
-    void Subscribe(int winid,
+    void DoConnect(int winid,
                    int lastId,
                    wxEventType eventType,
                    wxEventFunctor *func,
-                   wxObject* userData);
+                   wxObject* userData = NULL);
 
-    bool Unsubscribe(int winid,
-                     int lastId,
-                     wxEventType eventType,
-                     const wxEventFunctor &func,
-                     wxObject *userData);
+    bool DoDisconnect(int winid,
+                      int lastId,
+                      wxEventType eventType,
+                      const wxEventFunctor& func,
+                      wxObject *userData = NULL);
 
     static const wxEventTableEntry sm_eventTableEntries[];
 
