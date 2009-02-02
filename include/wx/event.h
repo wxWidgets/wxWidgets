@@ -374,7 +374,7 @@ public:
 
     wxEventFunctorMethod(void (Class::*method)(EventArg&), ObjClass *handler)
     {
-        wxASSERT_MSG( handler || IsEvtHandler(),
+        wxASSERT_MSG( handler || this->IsEvtHandler(),
                       "handlers defined in non-wxEvtHandler-derived classes "
                       "must be connected with a valid sink object" );
 
@@ -387,7 +387,7 @@ public:
         Class * realHandler = m_handler;
         if ( !realHandler )
         {
-            realHandler = ConvertFromEvtHandler(handler);
+            realHandler = this->ConvertFromEvtHandler(handler);
 
             // this is not supposed to happen but check for it nevertheless
             wxCHECK_RET( realHandler, "invalid event handler" );
@@ -413,12 +413,12 @@ public:
 
     virtual wxEventFunction GetMethod() const
     {
-        return ConvertToEvtFunction(m_method);
+        return this->ConvertToEvtFunction(m_method);
     }
 
     virtual wxEvtHandler *GetEvtHandler() const
     {
-        return ConvertToEvtHandler(m_handler);
+        return this->ConvertToEvtHandler(m_handler);
     }
 
 private:
