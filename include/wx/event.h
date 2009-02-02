@@ -251,7 +251,10 @@ public:
             return false;
 
         const wxEventFunction method = GetMethod();
-        return !method || GetMethod() == method;
+
+        // FIXME-VC6: amazing but true: replacing "method == NULL" here with
+        //            "!method" makes VC6 crash with an ICE in DLL build (only!)
+        return method == NULL || GetMethod() == method;
     }
 
     virtual wxEvtHandler *GetEvtHandler() const { return m_handler; }
@@ -259,7 +262,7 @@ public:
 
 private:
     wxEvtHandler *m_handler;
-    wxObjectEventFunction m_method;
+    wxEventFunction m_method;
 };
 
 #if wxEVENTS_COMPATIBILITY_2_8
