@@ -42,7 +42,7 @@ wxDEFINE_EVENT(wxEVT_MY_CUSTOM_COMMAND, wxCommandEvent)
 #define EVT_MY_CUSTOM_COMMAND(id, fn) \
     DECLARE_EVENT_TABLE_ENTRY( \
         wxEVT_MY_CUSTOM_COMMAND, id, wxID_ANY, \
-        (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxCommandEventFunction, &fn ), \
+        wxCommandEventHandler(fn), \
         (wxObject *) NULL \
     ),
 
