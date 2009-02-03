@@ -71,6 +71,7 @@ public:     // used by GTK callbacks
 private:
     void OnSize(wxSizeEvent&);
     virtual void AddChildGTK(wxWindowGTK* child);
+    GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
     DECLARE_DYNAMIC_CLASS(wxCollapsiblePane)
     DECLARE_EVENT_TABLE()

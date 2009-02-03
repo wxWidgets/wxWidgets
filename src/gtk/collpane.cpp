@@ -200,6 +200,15 @@ wxSize wxCollapsiblePane::DoGetBestSize() const
     return sz;
 }
 
+GdkWindow *wxCollapsiblePane::GTKGetWindow(wxArrayGdkWindows& windows) const
+{
+    GtkWidget *label = gtk_expander_get_label_widget( GTK_EXPANDER(m_widget) );
+    windows.Add( label->window );
+    windows.Add( m_widget->window );
+    
+    return NULL;
+}
+
 void wxCollapsiblePane::Collapse(bool collapse)
 {
     // optimization
