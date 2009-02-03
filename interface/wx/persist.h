@@ -259,6 +259,23 @@ protected:
     framework.
 
     @see @ref persistence_defining
+
+    @header{wx/persist.h}
  */
 template <class T>
 wxPersistentObject *wxCreatePersistentObject(T *obj);
+
+/**
+    A shorter synonym for wxPersistenceManager::RegisterAndRestore().
+
+    This function simply calls wxPersistenceManager::RegisterAndRestore() but
+    using it results in slightly shorter code as it calls
+    wxPersistenceManager::Get() internally.
+
+    For the implementation reasons, this function @em mucst be used instead of
+    the template method when using Microsoft Visual C++ 6 compiler.
+
+    @header{wx/persist.h}
+ */
+template <class T>
+bool wxPersistentRegisterAndRestore(T *obj);

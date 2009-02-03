@@ -367,7 +367,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
             : wxFrame(NULL, wxID_ANY, title)
 {
     SetName("Main");
-    const bool sizeSet = wxPersistenceManager::Get().RegisterAndRestore(this);
+    const bool sizeSet = wxPersistentRegisterAndRestore(this);
 
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -617,7 +617,7 @@ void WidgetsFrame::InitBook()
              wxEVT_COMMAND_WIDGETS_PAGE_CHANGED,
              wxWidgetsbookEventHandler(WidgetsFrame::OnPageChanged) );
 
-    const bool pageSet = wxPersistenceManager::Get().RegisterAndRestore(m_book);
+    const bool pageSet = wxPersistentRegisterAndRestore(m_book);
 
 #if USE_TREEBOOK
     // for treebook page #0 is empty parent page only so select the first page
