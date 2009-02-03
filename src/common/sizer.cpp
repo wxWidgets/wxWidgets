@@ -2248,7 +2248,7 @@ void wxStdDialogButtonSizer::Realize()
         }
 
         // Extra space around and at the right
-        Add(12, 24);
+        Add(12, 40);
 #elif defined(__WXGTK20__)
         Add(0, 0, 0, wxLEFT, 9);
         if (m_buttonHelp)
