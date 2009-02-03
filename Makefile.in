@@ -318,6 +318,7 @@ ALL_BASE_HEADERS =  \
 	wx/buffer.h \
 	wx/build.h \
 	wx/chartype.h \
+	wx/checkeddelete.h \
 	wx/chkconf.h \
 	wx/clntdata.h \
 	wx/cmdargs.h \
@@ -391,7 +392,10 @@ ALL_BASE_HEADERS =  \
 	wx/ptr_shrd.h \
 	wx/recguard.h \
 	wx/regex.h \
+	wx/scopedarray.h \
+	wx/scopedptr.h \
 	wx/scopeguard.h \
+	wx/sharedptr.h \
 	wx/snglinst.h \
 	wx/sstream.h \
 	wx/stack.h \
@@ -471,6 +475,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/buffer.h \
 	wx/build.h \
 	wx/chartype.h \
+	wx/checkeddelete.h \
 	wx/chkconf.h \
 	wx/clntdata.h \
 	wx/cmdargs.h \
@@ -544,7 +549,10 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/ptr_shrd.h \
 	wx/recguard.h \
 	wx/regex.h \
+	wx/scopedarray.h \
+	wx/scopedptr.h \
 	wx/scopeguard.h \
+	wx/sharedptr.h \
 	wx/snglinst.h \
 	wx/sstream.h \
 	wx/stack.h \

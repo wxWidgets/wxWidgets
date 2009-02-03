@@ -33,7 +33,6 @@
 
 #include "wx/tooltip.h"
 #include "wx/except.h"
-#include "wx/ptr_scpd.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"

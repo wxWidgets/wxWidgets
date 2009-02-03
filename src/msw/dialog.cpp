@@ -40,7 +40,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/evtloop.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     #include "wx/msw/wince/resources.h"

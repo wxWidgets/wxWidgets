@@ -217,6 +217,7 @@ wx/beforestd.h
 wx/buffer.h
 wx/build.h
 wx/chartype.h
+wx/checkeddelete.h
 wx/chkconf.h
 wx/clntdata.h
 wx/cmdargs.h
@@ -290,7 +291,10 @@ wx/ptr_scpd.h
 wx/ptr_shrd.h
 wx/recguard.h
 wx/regex.h
+wx/scopedarray.h
+wx/scopedptr.h
 wx/scopeguard.h
+wx/sharedptr.h
 wx/snglinst.h
 wx/sstream.h
 wx/stack.h
@@ -341,8 +345,6 @@ wx/meta/convertible.h
 wx/meta/if.h
 wx/meta/int2type.h
 wx/meta/movable.h
-wx/private/fdiodispatcher.h
-wx/private/selectdispatcher.h
 wx/unix/app.h
 wx/unix/apptbase.h
 wx/unix/apptrait.h

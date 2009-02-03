@@ -47,7 +47,7 @@
 #include "wx/thread.h"
 
 #if wxUSE_BASE
-    #include "wx/ptr_scpd.h"
+    #include "wx/scopedptr.h"
 
     wxDECLARE_SCOPED_PTR(wxEvent, wxEventPtr)
     wxDEFINE_SCOPED_PTR(wxEvent, wxEventPtr)

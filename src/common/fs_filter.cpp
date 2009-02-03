@@ -20,7 +20,7 @@
 #ifndef WX_PRECOMP
 #endif
 
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 
 wxDEFINE_SCOPED_PTR_TYPE(wxFSFile)
 wxDEFINE_SCOPED_PTR_TYPE(wxInputStream)

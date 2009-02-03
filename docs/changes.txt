@@ -320,7 +320,9 @@ All:
   Linnakangas).
 - wxVariant::Unshare allows exclusive allocation of data that must be shared,
   if the wxVariantData::Clone function is implemented.
-- Added wxWeakRef<T>, wxScopedPtr<T>, wxScopedArray<T>, wxSharedPtr<T> templates.
+- Added wxWeakRef<T>, wxScopedPtr<T>, wxScopedArray<T>, wxSharedPtr<T> templates
+  and renamed old wx/ptr_{scpd,shrd}.h headers to wx/scoped{ptr,array}.h and
+  wx/sharedptr.h (but old headers are still provided for compatibility).
 - Added wxVector<T> class templates
 - Added wxON_BLOCK_EXIT_SET() and wxON_BLOCK_EXIT_NULL() to wx/scopeguard.h.
 - Added wxEvtHandler::QueueEvent() replacing AddPendingEvent() and

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        ptr_shrd.h
+// Name:        sharedptr.h
 // Purpose:     interface of wxSharedPtr<T>
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -7,17 +7,16 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    A smart pointer with non-intrusive reference counting.
 
-    A smart pointer with non-intrusive reference counting. It is modeled after
-    @c boost::shared_ptr<> and can be used with STL containers and wxVector<T> -
-    unlike @c std::auto_ptr<> and wxScopedPtr<T>.
+    It is modeled after @c boost::shared_ptr<> and can be used with STL
+    containers and wxVector<T> unlike @c std::auto_ptr<> and wxScopedPtr<T>.
 
     @library{wxbase}
     @category{smartpointers}
 
     @see wxScopedPtr<T>, wxWeakRef<T>, wxObjectDataPtr<T>
 */
-
 template<typename T>
 class wxSharedPtr<T>
 {
@@ -47,7 +46,7 @@ public:
 
     /**
         Conversion to a boolean expression (in a variant which is not
-        convertable to anything but a boolean expression).
+        convertible to anything but a boolean expression).
 
         If this class contains a valid pointer it will return @true, if it contains
         a @NULL pointer it will return @false.

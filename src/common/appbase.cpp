@@ -42,7 +42,7 @@
 #include "wx/evtloop.h"
 #include "wx/filename.h"
 #include "wx/msgout.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 #include "wx/tokenzr.h"
 #include "wx/thread.h"
 

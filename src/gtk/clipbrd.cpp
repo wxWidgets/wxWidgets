@@ -29,13 +29,12 @@
     #include "wx/dataobj.h"
 #endif
 
-#include "wx/ptr_scpd.h"
+#include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
 
 #include "wx/gtk/private.h"
 
-wxDECLARE_SCOPED_ARRAY(wxDataFormat, wxDataFormatArray)
-wxDEFINE_SCOPED_ARRAY(wxDataFormat, wxDataFormatArray)
+typedef wxScopedArray<wxDataFormat> wxDataFormatArray;
 
 // ----------------------------------------------------------------------------
 // data

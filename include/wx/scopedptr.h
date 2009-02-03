@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/ptr_scpd.h
+// Name:        wx/scopedptr.h
 // Purpose:     scoped smart pointer class
 // Author:      Jesse Lovelace <jllovela@eos.ncsu.edu>
-// Modified by: Vadim Zeitlin to add template wxScopedArray
 // Created:     06/01/02
 // RCS-ID:      $Id$
 // Copyright:   (c) Jesse Lovelace and original Boost authors (see below)
@@ -26,10 +25,11 @@
 //  See http://www.boost.org/libs/smart_ptr/scoped_ptr.htm for documentation.
 //
 
-#ifndef __WX_SCOPED_POINTER__
-#define __WX_SCOPED_POINTER__
+#ifndef _WX_SCOPED_PTR_H_
+#define _WX_SCOPED_PTR_H_
 
 #include "wx/defs.h"
+#include "wx/checkeddelete.h"
 
 // ----------------------------------------------------------------------------
 // wxScopedPtr: A scoped pointer
@@ -100,88 +100,8 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// wxScopedArray: A scoped array
-// ----------------------------------------------------------------------------
-
-template <class T>
-class wxScopedArray
-{
-public:
-    typedef T element_type;
-
-    wxEXPLICIT wxScopedArray(T * array = NULL) : m_array(array) { }
-
-    ~wxScopedArray() { delete [] m_array; }
-
-    // test for pointer validity: defining conversion to unspecified_bool_type
-    // and not more obvious bool to avoid implicit conversions to integer types
-    typedef T *(wxScopedArray<T>::*unspecified_bool_type)() const;
-    operator unspecified_bool_type() const
-    {
-        return m_array ? &wxScopedArray<T>::get : NULL;
-    }
-
-    void reset(T *array = NULL)
-    {
-        if ( array != m_array )
-        {
-            delete m_array;
-            m_array = array;
-        }
-    }
-
-    T& operator[](size_t n) const { return m_array[n]; }
-
-    T *get() const { return m_array; }
-
-    void swap(wxScopedArray &other)
-    {
-        T * const tmp = other.m_array;
-        other.m_array = m_array;
-        m_array = tmp;
-    }
-
-private:
-    T *m_array;
-
-    DECLARE_NO_COPY_TEMPLATE_CLASS(wxScopedArray, T)
-};
-
-// ----------------------------------------------------------------------------
 // old macro based implementation
 // ----------------------------------------------------------------------------
-
-/*
-   checked deleters are used to make sure that the type being deleted is really
-   a complete type.: otherwise sizeof() would result in a compile-time error
-
-   do { ... } while ( 0 ) construct is used to have an anonymous scope
-   (otherwise we could have name clashes between different "complete"s) but
-   still force a semicolon after the macro
-*/
-
-#ifdef __WATCOMC__
-    #define wxFOR_ONCE(name)              for(int name=0; name<1; name++)
-    #define wxPRE_NO_WARNING_SCOPE(name)  wxFOR_ONCE(wxMAKE_UNIQUE_NAME(name))
-    #define wxPOST_NO_WARNING_SCOPE(name)
-#else
-    #define wxPRE_NO_WARNING_SCOPE(name)  do
-    #define wxPOST_NO_WARNING_SCOPE(name) while ( wxFalse )
-#endif
-
-#define wxCHECKED_DELETE(ptr)                                                 \
-    wxPRE_NO_WARNING_SCOPE(scope_var1)                                        \
-    {                                                                         \
-        typedef char complete[sizeof(*ptr)];                                  \
-        delete ptr;                                                           \
-    } wxPOST_NO_WARNING_SCOPE(scope_var1)
-
-#define wxCHECKED_DELETE_ARRAY(ptr)                                           \
-    wxPRE_NO_WARNING_SCOPE(scope_var2)                                        \
-    {                                                                         \
-        typedef char complete[sizeof(*ptr)];                                  \
-        delete [] ptr;                                                        \
-    } wxPOST_NO_WARNING_SCOPE(scope_var2)
 
 /* The type being used *must* be complete at the time
    that wxDEFINE_SCOPED_* is called or a compiler error will result.
@@ -257,55 +177,6 @@ name::~name()                       \
     wxDECLARE_SCOPED_PTR(T, T ## Ptr)  \
     wxDEFINE_SCOPED_PTR(T, T ## Ptr)
 
-// the same but for arrays instead of simple pointers
-#define wxDECLARE_SCOPED_ARRAY(T, name)\
-class name                          \
-{                                   \
-private:                            \
-    T * m_ptr;                      \
-    name(name const &);             \
-    name & operator=(name const &); \
-                                    \
-public:                             \
-    wxEXPLICIT name(T * p = NULL) : m_ptr(p) \
-    {}                              \
-                                    \
-    ~name();                        \
-    void reset(T * p = NULL);       \
-                                    \
-    T & operator[](long int i) const\
-    {                               \
-        wxASSERT(m_ptr != NULL);    \
-        wxASSERT(i >= 0);           \
-        return m_ptr[i];            \
-    }                               \
-                                    \
-    T * get() const                 \
-    {                               \
-        return m_ptr;               \
-    }                               \
-                                    \
-    void swap(name & ot)            \
-    {                               \
-        T * tmp = ot.m_ptr;         \
-        ot.m_ptr = m_ptr;           \
-        m_ptr = tmp;                \
-    }                               \
-};
-
-#define wxDEFINE_SCOPED_ARRAY(T, name)  \
-name::~name()                           \
-{                                       \
-    wxCHECKED_DELETE_ARRAY(m_ptr);      \
-}                                       \
-void name::reset(T * p){                \
-    if (m_ptr != p)                     \
-    {                                   \
-       wxCHECKED_DELETE_ARRAY(m_ptr);   \
-       m_ptr = p;                       \
-    }                                   \
-}
-
 // ----------------------------------------------------------------------------
 // "Tied" scoped pointer: same as normal one but also sets the value of
 //                        some other variable to the pointer value
@@ -333,5 +204,5 @@ void name::reset(T * p){                \
         T *m_pOld;                                                            \
     };
 
-#endif // __WX_SCOPED_POINTER__
+#endif // _WX_SCOPED_PTR_H_
 

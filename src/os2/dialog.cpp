@@ -25,7 +25,7 @@
 
 #include "wx/os2/private.h"
 #include "wx/evtloop.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 
 #define wxDIALOG_DEFAULT_X 300
 #define wxDIALOG_DEFAULT_Y 300

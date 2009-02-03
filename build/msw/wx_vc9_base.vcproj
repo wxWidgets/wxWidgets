@@ -1648,6 +1648,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\checkeddelete.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\chkconf.h"
 				>
 			</File>
@@ -1948,7 +1952,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\scopedarray.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\scopedptr.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\scopeguard.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\sharedptr.h"
 				>
 			</File>
 			<File

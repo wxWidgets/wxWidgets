@@ -29,7 +29,7 @@
 #include "wx/datstrm.h"
 #include "wx/zstream.h"
 #include "wx/strconv.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 
 #include "expat.h" // from Expat
 

@@ -34,7 +34,7 @@
 #include "wx/init.h"
 #include "wx/thread.h"
 
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 #include "wx/except.h"
 
 #if defined(__WXMSW__) && defined(__WXDEBUG__)

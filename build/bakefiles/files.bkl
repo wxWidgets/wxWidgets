@@ -399,6 +399,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/buffer.h
     wx/build.h
     wx/chartype.h
+    wx/checkeddelete.h
     wx/chkconf.h
     wx/clntdata.h
     wx/cmdargs.h
@@ -472,7 +473,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/ptr_shrd.h
     wx/recguard.h
     wx/regex.h
+    wx/scopedarray.h
+    wx/scopedptr.h
     wx/scopeguard.h
+    wx/sharedptr.h
     wx/snglinst.h
     wx/sstream.h
     wx/stack.h

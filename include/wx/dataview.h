@@ -791,7 +791,6 @@ public:
     // For drag operations
     void SetDataObject( wxDataObject *obj ) { m_dataObject = obj; }
     wxDataObject *GetDataObject() const { return m_dataObject; }
-#endif // wxUSE_DRAG_AND_DROP
 
     // For drop operations
     void SetDataFormat( const wxDataFormat &format ) { m_dataFormat = format; }
@@ -800,6 +799,7 @@ public:
     size_t GetDataSize() const { return m_dataSize; }
     void SetDataBuffer( void* buf ) { m_dataBuffer = buf;}
     void *GetDataBuffer() const { return m_dataBuffer; }
+#endif // wxUSE_DRAG_AND_DROP
 
     virtual wxEvent *Clone() const { return new wxDataViewEvent(*this); }
 

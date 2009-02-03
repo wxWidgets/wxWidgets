@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/ptr_shrd.h
+// Name:        wx/sharedptr.h
 // Purpose:     Shared pointer based on the counted_ptr<> template, which
 //              is in the public domain
 // Author:      Robert Roebling, Yonat Sharon
@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_SHARED_PTRH__
-#define _WX_SHARED_PTRH__
+#ifndef _WX_SHAREDPTR_H_
+#define _WX_SHAREDPTR_H_
 
 #include "wx/defs.h"
 #include "wx/atomic.h"
@@ -18,25 +18,25 @@
 // wxSharedPtr: A smart pointer with non-intrusive reference counting.
 // ----------------------------------------------------------------------------
 
-template <class T> 
+template <class T>
 class wxSharedPtr
 {
 public:
     typedef T element_type;
 
     wxEXPLICIT wxSharedPtr( T* ptr = NULL )
-        : m_ref(NULL) 
-    { 
-        if (ptr) 
-            m_ref = new reftype(ptr); 
+        : m_ref(NULL)
+    {
+        if (ptr)
+            m_ref = new reftype(ptr);
     }
-        
+
     ~wxSharedPtr()                           { Release(); }
     wxSharedPtr(const wxSharedPtr& tocopy)   { Acquire(tocopy.m_ref); }
-    
+
     wxSharedPtr& operator=( const wxSharedPtr& tocopy )
     {
-        if (this != &tocopy) 
+        if (this != &tocopy)
         {
             Release();
             Acquire(tocopy.m_ref);
@@ -46,11 +46,11 @@ public:
 
     wxSharedPtr& operator=( T* ptr )
     {
-        if (get() != ptr) 
+        if (get() != ptr)
         {
             Release();
-            if (ptr) 
-                m_ref = new reftype(ptr); 
+            if (ptr)
+                m_ref = new reftype(ptr);
         }
         return *this;
     }
@@ -67,56 +67,56 @@ public:
     }
 
     T& operator*() const
-    { 
-        wxASSERT(m_ref != NULL);    
-        wxASSERT(m_ref->m_ptr != NULL);    
+    {
+        wxASSERT(m_ref != NULL);
+        wxASSERT(m_ref->m_ptr != NULL);
         return *(m_ref->m_ptr);
     }
-    
+
     T* operator->() const
-    { 
-        wxASSERT(m_ref != NULL);    
-        wxASSERT(m_ref->m_ptr != NULL);    
+    {
+        wxASSERT(m_ref != NULL);
+        wxASSERT(m_ref->m_ptr != NULL);
         return m_ref->m_ptr;
     }
-    
-    T* get() const    
-    { 
-        return m_ref ? m_ref->m_ptr : NULL; 
+
+    T* get() const
+    {
+        return m_ref ? m_ref->m_ptr : NULL;
     }
-    
+
     void reset( T* ptr = NULL )
     {
         Release();
-        if (ptr) 
-            m_ref = new reftype(ptr); 
+        if (ptr)
+            m_ref = new reftype(ptr);
     }
-    
+
     bool unique()   const    { return (m_ref ? m_ref->m_count == 1 : true); }
     long use_count() const   { return (m_ref ? (long)m_ref->m_count : 0); }
 
 private:
 
-    struct reftype 
+    struct reftype
     {
         reftype( T* ptr = NULL, unsigned count = 1 ) : m_ptr(ptr), m_count(count) {}
         T*          m_ptr;
         wxAtomicInt m_count;
     }* m_ref;
 
-    void Acquire(reftype* ref) 
+    void Acquire(reftype* ref)
     {
         m_ref = ref;
-        if (ref) 
+        if (ref)
             wxAtomicInc( ref->m_count );
     }
 
     void Release()
     {
-        if (m_ref) 
+        if (m_ref)
         {
             wxAtomicDec( m_ref->m_count );
-            if (m_ref->m_count == 0) 
+            if (m_ref->m_count == 0)
             {
                 delete m_ref->m_ptr;
                 delete m_ref;
@@ -138,6 +138,4 @@ bool operator != (wxSharedPtr<T> const &a, wxSharedPtr<U> const &b )
     return a.get() != b.get();
 }
 
-
-
-#endif // _WX_SHARED_PTRH__
+#endif // _WX_SHAREDPTR_H_

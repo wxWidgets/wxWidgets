@@ -34,7 +34,6 @@
 #include "wx/evtloop.h"
 #include "wx/thread.h"
 #include "wx/except.h"
-#include "wx/ptr_scpd.h"
 #include "wx/msw/private.h"
 
 #if wxUSE_GUI

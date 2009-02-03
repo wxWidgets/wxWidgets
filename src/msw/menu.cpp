@@ -39,7 +39,7 @@
     #include "wx/ownerdrw.h"
 #endif
 
-#include "wx/ptr_scpd.h"
+#include "wx/scopedarray.h"
 
 #include "wx/msw/private.h"
 #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"

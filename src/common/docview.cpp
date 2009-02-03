@@ -58,7 +58,8 @@
 #include "wx/filename.h"
 #include "wx/stdpaths.h"
 #include "wx/vector.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedarray.h"
+#include "wx/scopedptr.h"
 
 #if wxUSE_STD_IOSTREAM
     #include "wx/ioswrap.h"

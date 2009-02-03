@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "wx/gifdecod.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 
 

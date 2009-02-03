@@ -33,7 +33,7 @@
 
 #include "wx/evtloop.h"
 #include "wx/tooltip.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 
 #include "wx/os2/private.h"
 #include "wx/os2/private/timer.h"       // for wxTimerProc

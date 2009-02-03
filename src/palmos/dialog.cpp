@@ -36,7 +36,7 @@
 #endif
 
 #include "wx/evtloop.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros

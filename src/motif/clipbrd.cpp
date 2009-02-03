@@ -32,7 +32,9 @@
     #include "wx/dataobj.h"
 #endif
 
-#include "wx/ptr_scpd.h"
+#include "wx/scopedarray.h"
+
+typedef wxScopedArray<wxDataFormat> wxDataFormatScopedArray;
 
 #ifdef __VMS__
 #pragma message disable nosimpint
@@ -232,9 +234,6 @@ bool wxClipboard::SetData( wxDataObject *data )
 
     return AddData( data );
 }
-
-wxDECLARE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray )
-wxDEFINE_SCOPED_ARRAY( wxDataFormat, wxDataFormatScopedArray )
 
 #if wxCHECK_LESSTIF()
 void wxClipboardCallback( Widget xwidget, int* data_id,

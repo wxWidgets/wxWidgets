@@ -28,7 +28,7 @@
 #include "wx/datstrm.h"
 #include "wx/zstream.h"
 #include "wx/mstream.h"
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 #include "wx/wfstream.h"
 #include "zlib.h"
 

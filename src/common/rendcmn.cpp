@@ -32,7 +32,7 @@
 #include "wx/apptrait.h"
 #include "wx/renderer.h"
 
-#include "wx/ptr_scpd.h"
+#include "wx/scopedptr.h"
 
 #if wxUSE_DYNLIB_CLASS
     #include "wx/dynlib.h"

@@ -1071,6 +1071,10 @@ SOURCE=..\..\include\wx\chartype.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\checkeddelete.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\chkconf.h
 # End Source File
 # Begin Source File
@@ -1371,7 +1375,19 @@ SOURCE=..\..\include\wx\regex.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\scopedarray.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\scopedptr.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\scopeguard.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\sharedptr.h
 # End Source File
 # Begin Source File
 
