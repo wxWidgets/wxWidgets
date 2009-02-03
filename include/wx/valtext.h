@@ -22,25 +22,23 @@ class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
 enum wxTextValidatorStyle
 {
-    wxFILTER_NONE,
-    wxFILTER_ASCII,
-    wxFILTER_ALPHA,
-    wxFILTER_ALPHANUMERIC,
-    wxFILTER_SIMPLE_NUMBER,
-    wxFILTER_NUMERIC,
-    wxFILTER_INCLUDE_LIST,
-    wxFILTER_EXCLUDE_LIST,
-    wxFILTER_INCLUDE_CHAR_LIST,
-    wxFILTER_EXCLUDE_CHAR_LIST
+    wxFILTER_NONE = 0x0,
+    wxFILTER_EMPTY = 0x1,
+    wxFILTER_ASCII = 0x2,
+    wxFILTER_ALPHA = 0x4,
+    wxFILTER_ALPHANUMERIC = 0x8,
+    wxFILTER_DIGITS = 0x10,
+    wxFILTER_NUMERIC = 0x20,
+    wxFILTER_INCLUDE_LIST = 0x40,
+    wxFILTER_INCLUDE_CHAR_LIST = 0x80,
+    wxFILTER_EXCLUDE_LIST = 0x100,
+    wxFILTER_EXCLUDE_CHAR_LIST = 0x200
 };
 
 class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
 {
 public:
-    wxTextValidator(wxTextValidatorStyle style = wxFILTER_NONE, wxString *val = NULL);
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_CONSTRUCTOR( wxTextValidator(long style, wxString *val) );
-#endif
+    wxTextValidator(long style = wxFILTER_NONE, wxString *val = NULL);
     wxTextValidator(const wxTextValidator& val);
 
     virtual ~wxTextValidator(){}
@@ -66,11 +64,8 @@ public:
     void OnChar(wxKeyEvent& event);
 
     // ACCESSORS
-    inline wxTextValidatorStyle GetStyle() const { return m_validatorStyle; }
-    inline void SetStyle(wxTextValidatorStyle style) { m_validatorStyle = style; }
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( void SetStyle(long style) );
-#endif
+    inline long GetStyle() const { return m_validatorStyle; }
+    void SetStyle(long style);
 
     wxTextEntry *GetTextEntry();
 
@@ -82,6 +77,9 @@ public:
     void SetExcludes(const wxArrayString& excludes) { m_excludes = excludes; }
     inline wxArrayString& GetExcludes() { return m_excludes; }
 
+    bool HasFlag(wxTextValidatorStyle style) const
+        { return m_validatorStyle & style; }
+
 protected:
 
     // returns true if all characters of the given string are present in m_includes
@@ -90,12 +88,12 @@ protected:
     // returns true if all characters of the given string are NOT present in m_excludes
     bool ContainsExcludedCharacters(const wxString& val) const;
 
-    // returns true if the contents of 'val' are valid for the current validation style
-    virtual bool IsValid(const wxString& val, wxString* errormsg) const;
+    // returns the error message if the contents of 'val' are invalid
+    virtual wxString IsValid(const wxString& val) const;
 
 protected:
-    wxTextValidatorStyle m_validatorStyle;
-    wxString *           m_stringValue;
+    long                 m_validatorStyle;
+    wxString*            m_stringValue;
     wxArrayString        m_includes;
     wxArrayString        m_excludes;
 

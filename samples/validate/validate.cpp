@@ -248,15 +248,18 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     m_text = new wxTextCtrl(this, VALIDATE_TEXT, wxEmptyString,
                             wxDefaultPosition, wxDefaultSize, 0,
                             wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
+    m_text->SetToolTip("uses wxTextValidator with wxFILTER_ALPHA");
     flexgridsizer->Add(m_text, 1, wxGROW);
 
 
     // Now set a wxTextValidator with an explicit list of characters NOT allowed:
-    wxTextValidator textVal(wxFILTER_EXCLUDE_CHAR_LIST, &g_data.m_string2);
+    wxTextValidator textVal(wxFILTER_EMPTY|wxFILTER_EXCLUDE_LIST, &g_data.m_string2);
     textVal.SetCharExcludes("bcwyz");
-    flexgridsizer->Add(new wxTextCtrl(this, VALIDATE_TEXT2, wxEmptyString,
-                        wxDefaultPosition, wxDefaultSize, 0, textVal),
-                       1, wxGROW);
+    wxTextCtrl* txt2 =
+             new wxTextCtrl(this, VALIDATE_TEXT2, wxEmptyString,
+                            wxDefaultPosition, wxDefaultSize, 0, textVal);
+    txt2->SetToolTip("uses wxTextValidator with wxFILTER_EMPTY|");
+    flexgridsizer->Add(txt2, 1, wxGROW);
 
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
                         wxPoint(10, 30), wxSize(120, wxDefaultCoord),
@@ -268,6 +271,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                 wxPoint(130, 30), wxSize(120, wxDefaultCoord),
                                 3, g_combobox_choices, 0L,
                                 MyComboBoxValidator(&g_data.m_combobox_choice));
+    m_combobox->SetToolTip("uses a custom validator (MyComboBoxValidator)");
     flexgridsizer->Add(m_combobox, 1, wxALIGN_CENTER);
 
     // This wxCheckBox* doesn't need to be assigned to any pointer

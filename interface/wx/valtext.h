@@ -9,11 +9,19 @@
 
 /**
     Styles used by wxTextValidator.
+
+    Note that when you specify more styles in wxTextValidator the validation checks
+    are performed in the order in which the styles of this enumeration are defined.
 */
 enum wxTextValidatorStyle
 {
     /// No filtering takes place.
     wxFILTER_NONE,
+
+    /// Empty strings are filtered out.
+    /// If this style is not specified then empty strings are accepted
+    /// only if they pass the other checks (if you use more than one wxTextValidatorStyle).
+    wxFILTER_EMPTY,
 
     /// Non-ASCII characters are filtered out. See wxString::IsAscii.
     wxFILTER_ASCII,
@@ -31,7 +39,7 @@ enum wxTextValidatorStyle
     /// Non-numeric characters are filtered out.
     /// Uses the wxWidgets wrapper for the standard CRT function @c isdigit
     /// (which is locale-dependent) on all characters of the string.
-    wxFILTER_SIMPLE_NUMBER,
+    wxFILTER_DIGITS,
 
     /// Non-numeric characters are filtered out.
     /// Works like @c wxFILTER_SIMPLE_NUMBER but allows also decimal points,
@@ -43,14 +51,14 @@ enum wxTextValidatorStyle
     /// the list, complaining if not. See wxTextValidator::SetIncludes().
     wxFILTER_INCLUDE_LIST,
 
-    /// Use an exclude list. The validator checks if the user input is on
-    /// the list, complaining if it is. See wxTextValidator::SetExcludes().
-    wxFILTER_EXCLUDE_LIST,
-
     /// Use an include list. The validator checks if each input character is
     /// in the list (one character per list element), complaining if not.
     /// See wxTextValidator::SetCharIncludes().
     wxFILTER_INCLUDE_CHAR_LIST,
+
+    /// Use an exclude list. The validator checks if the user input is on
+    /// the list, complaining if it is. See wxTextValidator::SetExcludes().
+    wxFILTER_EXCLUDE_LIST,
 
     /// Use an exclude list. The validator checks if each input character is
     /// in the list (one character per list element), complaining if it is.
@@ -83,14 +91,14 @@ public:
         Constructor taking a style and optional pointer to a wxString variable.
 
         @param style
-            One of the ::wxTextValidatorStyle styles.
+            One or more of the ::wxTextValidatorStyle styles. See SetStyle().
         @param valPtr
             A pointer to a wxString variable that contains the value. This
             variable should have a lifetime equal to or longer than the
             validator lifetime (which is usually determined by the lifetime of
             the window).
     */
-    wxTextValidator(wxTextValidatorStyle style = wxFILTER_NONE, wxString* valPtr = NULL);
+    wxTextValidator(long style = wxFILTER_NONE, wxString* valPtr = NULL);
 
     /**
         Clones the text validator using the copy constructor.
@@ -110,7 +118,7 @@ public:
     /**
         Returns the validator style.
     */
-    wxTextValidatorStyle GetStyle() const;
+    long GetStyle() const;
 
     /**
         Receives character input from the window and filters it according to
@@ -147,9 +155,12 @@ public:
     void SetCharIncludes(const wxString& chars);
 
     /**
-        Sets the validator style.
+        Sets the validator style which must be a combination of one or more
+        of the ::wxTextValidatorStyle values.
+
+        Note that not all possible combinations make sense!
     */
-    void SetStyle(wxTextValidatorStyle style);
+    void SetStyle(long style);
 
     /**
         Transfers the value in the text control to the string.
