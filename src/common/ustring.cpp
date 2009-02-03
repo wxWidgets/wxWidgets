@@ -488,9 +488,6 @@ wxCharBuffer wxUString::utf8_str() const
         }
     }
 
-    wxPrintf( "utf8_str %s len %d\n", result, wxStrlen( result.data() ) );
-    wxPrintf( "utf8_str %s len %d\n", result, wxStrlen( result.data() ) );
-
     return result;
 }
 
