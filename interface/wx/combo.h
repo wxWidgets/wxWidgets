@@ -264,6 +264,7 @@ struct wxComboCtrlFeatures
 
     wxListViewComboPopup* popupCtrl = new wxListViewComboPopup();
 
+    // It is important to call SetPopupControl() as soon as possible
     comboCtrl->SetPopupControl(popupCtrl);
 
     // Populate using wxListView methods
