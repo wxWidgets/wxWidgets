@@ -114,7 +114,7 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
     // Define/Declare a wxEventType-based event type and initialize it with a
     // predefined event type. (Only used for wxEVT_SPIN_XXX for backward
     // compatibility)
- 
+
     #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
         const wxEventType name = value;
 
@@ -133,7 +133,7 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 #else
     // Define/Declare a templatized event type with the corresponding event as
     // a nested typedef:
- 
+
     #define wxDEFINE_EVENT( name, type ) \
         const wxEventTypeTag< type > name( wxNewEventType() );
 
@@ -516,6 +516,7 @@ extern WXDLLIMPEXP_BASE const wxEventType wxEVT_USER_FIRST;
 
     // Need events declared to do this
 class WXDLLIMPEXP_FWD_CORE wxCommandEvent;
+class WXDLLIMPEXP_FWD_CORE wxThreadEvent;
 class WXDLLIMPEXP_FWD_CORE wxMouseEvent;
 class WXDLLIMPEXP_FWD_CORE wxFocusEvent;
 class WXDLLIMPEXP_FWD_CORE wxChildFocusEvent;
@@ -575,7 +576,7 @@ wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, 
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_TOOL_ENTER, wxCommandEvent)
 
     // Thread events
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_THREAD, wxCommandEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_THREAD, wxThreadEvent)
 
     // Mouse event types
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_LEFT_DOWN, wxMouseEvent)

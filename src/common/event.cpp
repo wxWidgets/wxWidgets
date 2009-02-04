@@ -319,7 +319,7 @@ wxDEFINE_EVENT( wxEVT_HELP, wxHelpEvent )
 wxDEFINE_EVENT( wxEVT_DETAILED_HELP, wxHelpEvent )
 
 // Thread event
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_THREAD)
+wxDEFINE_EVENT( wxEVT_COMMAND_THREAD, wxThreadEvent )
 
 #endif // wxUSE_GUI
 
