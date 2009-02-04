@@ -1089,12 +1089,13 @@ bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
             case WM_SYSKEYUP:
             case WM_SYSCHAR:
             case WM_SYSDEADCHAR:
+#ifdef WM_UNICHAR
             case WM_UNICHAR:
+#endif
             case WM_HOTKEY:
             case WM_IME_STARTCOMPOSITION:
             case WM_IME_ENDCOMPOSITION:
             case WM_IME_COMPOSITION:
-            case WM_IME_KEYLAST:
             case WM_COMMAND:
             case WM_SYSCOMMAND:
 
