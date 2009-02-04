@@ -10,13 +10,17 @@
     @class wxGenericValidator
 
     wxGenericValidator performs data transfer (but not validation or filtering)
-    for the following basic controls: wxButton, wxCheckBox, wxListBox,
-    wxStaticText, wxRadioButton, wxRadioBox, wxChoice, wxComboBox, wxGauge,
-    wxSlider, wxScrollBar, wxSpinButton, wxTextCtrl, wxCheckListBox.
+    for many type of controls.
 
-    It checks the type of the window and uses an appropriate type for that
-    window. For example, wxButton and wxTextCtrl transfer data to and from a
-    wxString variable; wxListBox uses a wxArrayInt; wxCheckBox uses a bool.
+    wxGenericValidator supports:
+    - wxButton, wxRadioButton, wxToggleButton, wxBitmapToggleButton, wxSpinButton
+    - wxCheckBox, wxRadioBox, wxComboBox, wxListBox, wxCheckListBox
+    - wxGauge, wxSlider, wxScrollBar, wxChoice, wxStaticText
+    - wxSpinCtrl, wxTextCtrl
+
+    It checks the type of the window and uses an appropriate type for it.
+    For example, wxButton and wxTextCtrl transfer data to and from a
+    wxString variable; wxListBox uses a wxArrayInt; wxCheckBox uses a boolean.
 
     For more information, please see @ref overview_validator.
 
