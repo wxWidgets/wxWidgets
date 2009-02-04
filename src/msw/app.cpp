@@ -1070,92 +1070,93 @@ bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
         wxEventCategory cat;
         switch (msg.message)
         {
-        case WM_NCMOUSEMOVE:
-        case WM_NCLBUTTONDOWN:
-        case WM_NCLBUTTONUP:
-        case WM_NCLBUTTONDBLCLK:
-        case WM_NCRBUTTONDOWN:
-        case WM_NCRBUTTONUP:
-        case WM_NCRBUTTONDBLCLK:
-        case WM_NCMBUTTONDOWN:
-        case WM_NCMBUTTONUP:
-        case WM_NCMBUTTONDBLCLK:
+            case WM_NCMOUSEMOVE:
+            case WM_NCLBUTTONDOWN:
+            case WM_NCLBUTTONUP:
+            case WM_NCLBUTTONDBLCLK:
+            case WM_NCRBUTTONDOWN:
+            case WM_NCRBUTTONUP:
+            case WM_NCRBUTTONDBLCLK:
+            case WM_NCMBUTTONDOWN:
+            case WM_NCMBUTTONUP:
+            case WM_NCMBUTTONDBLCLK:
 
-        case WM_KEYFIRST:
-        //case WM_KEYDOWN:
-        case WM_KEYUP:
-        case WM_CHAR:
-        case WM_DEADCHAR:
-        case WM_SYSKEYDOWN:
-        case WM_SYSKEYUP:
-        case WM_SYSCHAR:
-        case WM_SYSDEADCHAR:
-        case WM_KEYLAST:
-        case WM_HOTKEY:
-        case WM_IME_STARTCOMPOSITION:
-        case WM_IME_ENDCOMPOSITION:
-        case WM_IME_COMPOSITION:
-        //case WM_IME_KEYLAST:
-        case WM_COMMAND:
-        case WM_SYSCOMMAND:
+            case WM_KEYDOWN:
+            case WM_KEYUP:
+            case WM_CHAR:
+            case WM_DEADCHAR:
+            case WM_SYSKEYDOWN:
+            case WM_SYSKEYUP:
+            case WM_SYSCHAR:
+            case WM_SYSDEADCHAR:
+            case WM_UNICHAR:
+            case WM_HOTKEY:
+            case WM_IME_STARTCOMPOSITION:
+            case WM_IME_ENDCOMPOSITION:
+            case WM_IME_COMPOSITION:
+            case WM_IME_KEYLAST:
+            case WM_COMMAND:
+            case WM_SYSCOMMAND:
 
-        case WM_IME_SETCONTEXT:
-        case WM_IME_NOTIFY:
-        case WM_IME_CONTROL:
-        case WM_IME_COMPOSITIONFULL:
-        case WM_IME_SELECT:
-        case WM_IME_CHAR:
-        case WM_IME_KEYDOWN:
-        case WM_IME_KEYUP:
+            case WM_IME_SETCONTEXT:
+            case WM_IME_NOTIFY:
+            case WM_IME_CONTROL:
+            case WM_IME_COMPOSITIONFULL:
+            case WM_IME_SELECT:
+            case WM_IME_CHAR:
+            case WM_IME_KEYDOWN:
+            case WM_IME_KEYUP:
 
-        case WM_MOUSEHOVER:
-        case WM_NCMOUSELEAVE:
-        case WM_MOUSELEAVE:
+            case WM_MOUSEHOVER:
+#ifdef WM_NCMOUSELEAVE
+            case WM_NCMOUSELEAVE:
+#endif
+            case WM_MOUSELEAVE:
 
-        case WM_CUT:
-        case WM_COPY:
-        case WM_PASTE:
-        case WM_CLEAR:
-        case WM_UNDO:
+            case WM_CUT:
+            case WM_COPY:
+            case WM_PASTE:
+            case WM_CLEAR:
+            case WM_UNDO:
 
-        case WM_MOUSEFIRST:
-        //case WM_MOUSEMOVE:
-        case WM_LBUTTONDOWN:
-        case WM_LBUTTONUP:
-        case WM_LBUTTONDBLCLK:
-        case WM_RBUTTONDOWN:
-        case WM_RBUTTONUP:
-        case WM_RBUTTONDBLCLK:
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-        case WM_MBUTTONDBLCLK:
-        case WM_MOUSELAST:
-        case WM_MOUSEWHEEL:
-            cat = wxEVT_CATEGORY_USER_INPUT;
-            break;
+            case WM_MOUSEMOVE:
+            case WM_LBUTTONDOWN:
+            case WM_LBUTTONUP:
+            case WM_LBUTTONDBLCLK:
+            case WM_RBUTTONDOWN:
+            case WM_RBUTTONUP:
+            case WM_RBUTTONDBLCLK:
+            case WM_MBUTTONDOWN:
+            case WM_MBUTTONUP:
+            case WM_MBUTTONDBLCLK:
+            case WM_MOUSEWHEEL:
+                cat = wxEVT_CATEGORY_USER_INPUT;
+                break;
 
-        case WM_TIMER:
-            cat = wxEVT_CATEGORY_TIMER;
-            break;
+            case WM_TIMER:
+                cat = wxEVT_CATEGORY_TIMER;
+                break;
 
-        default:
-            if (msg.message < WM_USER)
-            {
-                // 0;WM_USER-1 is the range of message IDs reserved for use by the system.
+            default:
+                if (msg.message < WM_USER)
+                {
+                    // 0;WM_USER-1 is the range of message IDs reserved for use
+                    // by the system.
 
-                // there are too many of these types of messages to handle them in this switch
-                cat = wxEVT_CATEGORY_UI;
-            }
-            else
-                cat = wxEVT_CATEGORY_UNKNOWN;
+                    // there are too many of these types of messages to handle
+                    // them in this switch
+                    cat = wxEVT_CATEGORY_UI;
+                }
+                else
+                    cat = wxEVT_CATEGORY_UNKNOWN;
         }
 
         // should we process this event now?
         if (cat & eventsToProcess)
         {
-			if ( !wxTheApp->Dispatch() )
-				break;
-		}
+            if ( !wxTheApp->Dispatch() )
+                break;
+        }
         else
         {
             // remove the message and store it
@@ -1171,7 +1172,7 @@ bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
     DWORD id = GetCurrentThreadId();
     for (size_t i=0; i<g_arrMSG.GetCount(); i++)
     {
-        PostThreadMessage(id, g_arrMSG[i].message, 
+        PostThreadMessage(id, g_arrMSG[i].message,
                           g_arrMSG[i].wParam, g_arrMSG[i].lParam);
     }
 
