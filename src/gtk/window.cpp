@@ -4195,7 +4195,7 @@ int wxWindowGTK::GetScrollThumb(int orient) const
     GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
     wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
 
-    return int(sb->adjustment->page_size);
+    return wxRound(sb->adjustment->page_size);
 }
 
 int wxWindowGTK::GetScrollPos( int orient ) const
@@ -4203,7 +4203,7 @@ int wxWindowGTK::GetScrollPos( int orient ) const
     GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
     wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
 
-    return int(sb->adjustment->value + 0.5);
+    return wxRound(sb->adjustment->value);
 }
 
 int wxWindowGTK::GetScrollRange( int orient ) const
@@ -4211,7 +4211,7 @@ int wxWindowGTK::GetScrollRange( int orient ) const
     GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
     wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
 
-    return int(sb->adjustment->upper);
+    return wxRound(sb->adjustment->upper);
 }
 
 // Determine if increment is the same as +/-x, allowing for some small
@@ -4230,14 +4230,14 @@ wxEventType wxWindowGTK::GetScrollEventType(GtkRange* range)
     const int barIndex = range == m_scrollBar[1];
     GtkAdjustment* adj = range->adjustment;
 
-    const int value = int(adj->value + 0.5);
+    const int value = wxRound(adj->value);
 
     // save previous position
     const double oldPos = m_scrollPos[barIndex];
     // update current position
     m_scrollPos[barIndex] = adj->value;
     // If event should be ignored, or integral position has not changed
-    if (!m_hasVMT || g_blockEventsOnDrag || value == int(oldPos + 0.5))
+    if (!m_hasVMT || g_blockEventsOnDrag || value == wxRound(oldPos))
     {
         return wxEVT_NULL;
     }
