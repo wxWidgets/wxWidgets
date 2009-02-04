@@ -41,6 +41,9 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                    int xPos, int yPos,
                                    bool noRefresh)
 {
+    int old_x = m_xScrollPosition * m_xScrollPixelsPerLine;
+    int old_y = m_yScrollPosition * m_yScrollPixelsPerLine;
+
     m_xScrollPixelsPerLine = pixelsPerUnitX;
     m_yScrollPixelsPerLine = pixelsPerUnitY;
 
@@ -49,21 +52,28 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
     m_win->m_scrollBar[wxWindow::ScrollDir_Vert]->adjustment->value =
     m_yScrollPosition = yPos;
 
-    // Setting hints here should arguably be deprecated, but without it
-    // a sizer might override this manual scrollbar setting in old code.
-    // m_targetWindow->SetVirtualSizeHints( noUnitsX * pixelsPerUnitX, noUnitsY * pixelsPerUnitY );
+    // To get everything right, have to call ScrollWindow()
+    // both before and after calling SetVirtualSize()
+    int new_x = m_xScrollPosition * m_xScrollPixelsPerLine;
+    int new_y = m_yScrollPosition * m_yScrollPixelsPerLine;
+    if (!noRefresh)
+    {
+        m_targetWindow->ScrollWindow(old_x - new_x, old_y - new_y);
+        old_x = new_x;
+        old_y = new_y;
+    }
 
     int w = noUnitsX * pixelsPerUnitX;
     int h = noUnitsY * pixelsPerUnitY;
     m_targetWindow->SetVirtualSize( w ? w : wxDefaultCoord,
                                     h ? h : wxDefaultCoord);
 
-    // Query view start after m_targetWindow->SetVirtualSize(...) since
-    // that call can change the current=old scrolling position!
-    int xs, ys;
-    GetViewStart(& xs, & ys);
-    int old_x = m_xScrollPixelsPerLine * xs;
-    int old_y = m_yScrollPixelsPerLine * ys;
+    if (!noRefresh)
+    {
+        new_x = m_xScrollPosition * m_xScrollPixelsPerLine;
+        new_y = m_yScrollPosition * m_yScrollPixelsPerLine;
+        m_targetWindow->ScrollWindow(old_x - new_x, old_y - new_y);
+    }
 
     // If the target is not the same as the window with the scrollbars,
     // then we need to update the scrollbars here, since they won't have
@@ -71,14 +81,6 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
     if (m_targetWindow != m_win)
     {
         AdjustScrollbars();
-    }
-
-    if (!noRefresh)
-    {
-        int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
-        int new_y = m_yScrollPixelsPerLine * m_yScrollPosition;
-
-        m_targetWindow->ScrollWindow( old_x - new_x, old_y - new_y );
     }
 }
 
