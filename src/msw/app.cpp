@@ -1060,6 +1060,13 @@ bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
 
+        if (msg.message == WM_PAINT)
+        {
+            // WM_PAINT messages are the last ones of the queue...
+            break;
+        }
+
+        // choose a wxEventCategory for this Windows message
         wxEventCategory cat;
         switch (msg.message)
         {
@@ -1075,7 +1082,7 @@ bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
         case WM_NCMBUTTONDBLCLK:
 
         case WM_KEYFIRST:
-        case WM_KEYDOWN:
+        //case WM_KEYDOWN:
         case WM_KEYUP:
         case WM_CHAR:
         case WM_DEADCHAR:
@@ -1088,7 +1095,7 @@ bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
         case WM_IME_STARTCOMPOSITION:
         case WM_IME_ENDCOMPOSITION:
         case WM_IME_COMPOSITION:
-        case WM_IME_KEYLAST:
+        //case WM_IME_KEYLAST:
         case WM_COMMAND:
         case WM_SYSCOMMAND:
 
@@ -1112,7 +1119,7 @@ bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
         case WM_UNDO:
 
         case WM_MOUSEFIRST:
-        case WM_MOUSEMOVE:
+        //case WM_MOUSEMOVE:
         case WM_LBUTTONDOWN:
         case WM_LBUTTONUP:
         case WM_LBUTTONDBLCLK:
@@ -1125,24 +1132,34 @@ bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
         case WM_MOUSELAST:
         case WM_MOUSEWHEEL:
             cat = wxEVT_CATEGORY_USER_INPUT;
+            break;
 
         case WM_TIMER:
             cat = wxEVT_CATEGORY_TIMER;
+            break;
 
         default:
-            // there are too many of these types of messages to handle them in this switch
-            cat = wxEVT_CATEGORY_UI;
+            if (msg.message < WM_USER)
+            {
+                // 0;WM_USER-1 is the range of message IDs reserved for use by the system.
+
+                // there are too many of these types of messages to handle them in this switch
+                cat = wxEVT_CATEGORY_UI;
+            }
+            else
+                cat = wxEVT_CATEGORY_UNKNOWN;
         }
 
+        // should we process this event now?
         if (cat & eventsToProcess)
         {
-            if ( !wxTheApp->Dispatch() )
-                break;
-        }
+			if ( !wxTheApp->Dispatch() )
+				break;
+		}
         else
         {
             // remove the message and store it
-            PeekMessage(&msg, (HWND)0, 0, 0, PM_REMOVE)
+            ::GetMessage(&msg, NULL, 0, 0);
             g_arrMSG.Add(msg);
         }
     }
@@ -1154,7 +1171,8 @@ bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
     DWORD id = GetCurrentThreadId();
     for (size_t i=0; i<g_arrMSG.GetCount(); i++)
     {
-        PostThreadMessage(id, g_arrMSG[i].message, g_arrMSG[i].wParam, g_arrMSG[i].lParam);
+        PostThreadMessage(id, g_arrMSG[i].message, 
+                          g_arrMSG[i].wParam, g_arrMSG[i].lParam);
     }
 
     g_arrMSG.Clear();
