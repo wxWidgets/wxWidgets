@@ -1073,17 +1073,18 @@ private:
 class WXDLLIMPEXP_CORE wxThreadEvent : public wxCommandEvent
 {
 public:
-    wxThreadEvent(int id = wxID_ANY)
-        : wxCommandEvent(wxEVT_COMMAND_THREAD, id)
+    wxThreadEvent(wxEventType eventType = wxEVT_COMMAND_THREAD, int id = wxID_ANY)
+        : wxCommandEvent(eventType, id)
         { }
 
     virtual wxEvent *Clone() const
     {
-        // make sure our string member (which uses COW aka refcounting) is not
-        // shared by other string instances:
-        const_cast<wxThreadEvent*>(this)->SetString(GetString().c_str());
+        wxThreadEvent* ev = new wxThreadEvent(*this);
 
-        return new wxThreadEvent(*this);
+        // make sure our string member (which uses COW, aka refcounting) is not
+        // shared by other wxString instances:
+        ev->SetString(GetString().c_str());
+        return ev;
     }
 
     // this is important to avoid that calling wxApp::Yield() thread events

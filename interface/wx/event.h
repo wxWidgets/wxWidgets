@@ -2544,11 +2544,8 @@ class wxThreadEvent : public wxCommandEvent
 public:
     /**
         Constructor.
-
-        Initializes the event type to @c wxEVT_THREAD (but you can change it
-        using wxEvent::SetEventType.
     */
-    wxThreadEvent(int id = wxID_ANY);
+    wxThreadEvent(wxEventType eventType = wxEVT_COMMAND_THREAD, int id = wxID_ANY);
 
     /**
         Clones this event making sure that all internal members which use
@@ -2560,8 +2557,8 @@ public:
     /**
         Returns @c wxEVT_CATEGORY_THREAD.
 
-        This is important to avoid that calling wxApp::Yield() thread events
-        gets processed when this is unwanted:
+        This is important to avoid unwanted processing of thread events
+        when calling wxApp::YieldFor().
     */
     virtual wxEventCategory GetEventCategory() const;
 };

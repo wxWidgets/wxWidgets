@@ -292,7 +292,7 @@ void MyWorkerThread::OnExit()
 {
 }
 
-#define TEST_YIELD_RACE_CONDITION       1
+#define TEST_YIELD_RACE_CONDITION       0
 
 void *MyWorkerThread::Entry()
 {
@@ -300,7 +300,7 @@ void *MyWorkerThread::Entry()
     if ( TestDestroy() )
         return NULL;
 
-    wxThreadEvent event( WORKER_EVENT );
+    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
 
     event.SetInt( 50 );
     wxQueueEvent( m_frame, new wxThreadEvent(event) );
@@ -315,7 +315,7 @@ void *MyWorkerThread::Entry()
             break;
 
         // create any type of command event here
-        wxThreadEvent event( WORKER_EVENT );
+        wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
         event.SetInt( m_count );
 
         // send in a thread-safe way
@@ -324,7 +324,7 @@ void *MyWorkerThread::Entry()
         wxMilliSleep(200);
     }
 
-    wxThreadEvent event( WORKER_EVENT );
+    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
     event.SetInt(-1); // that's all
     wxQueueEvent( m_frame, new wxThreadEvent(event) );
 #endif
