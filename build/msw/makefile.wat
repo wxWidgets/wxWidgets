@@ -730,12 +730,12 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_tipdlg.obj &
 	$(OBJS)\monodll_wizard.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
-	$(OBJS)\monodll_animateg.obj &
 	$(OBJS)\monodll_aboutdlg.obj &
 	$(OBJS)\monodll_notifmsg.obj &
 	$(OBJS)\monodll_sound.obj &
 	$(OBJS)\monodll_taskbar.obj &
 	$(OBJS)\monodll_joystick.obj &
+	$(OBJS)\monodll_animateg.obj &
 	$(OBJS)\monodll_bmpcbox.obj &
 	$(OBJS)\monodll_calctrl.obj &
 	$(OBJS)\monodll_datecontrols.obj &
@@ -769,7 +769,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_tipdlg.obj &
 	$(OBJS)\monodll_wizard.obj &
 	$(OBJS)\monodll_taskbarcmn.obj &
-	$(OBJS)\monodll_animateg.obj &
 	$(OBJS)\monodll_aboutdlg.obj &
 	$(OBJS)\monodll_notifmsg.obj &
 	$(OBJS)\monodll_sound.obj &
@@ -1423,12 +1422,12 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_tipdlg.obj &
 	$(OBJS)\monolib_wizard.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
-	$(OBJS)\monolib_animateg.obj &
 	$(OBJS)\monolib_aboutdlg.obj &
 	$(OBJS)\monolib_notifmsg.obj &
 	$(OBJS)\monolib_sound.obj &
 	$(OBJS)\monolib_taskbar.obj &
 	$(OBJS)\monolib_joystick.obj &
+	$(OBJS)\monolib_animateg.obj &
 	$(OBJS)\monolib_bmpcbox.obj &
 	$(OBJS)\monolib_calctrl.obj &
 	$(OBJS)\monolib_datecontrols.obj &
@@ -1462,7 +1461,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_tipdlg.obj &
 	$(OBJS)\monolib_wizard.obj &
 	$(OBJS)\monolib_taskbarcmn.obj &
-	$(OBJS)\monolib_animateg.obj &
 	$(OBJS)\monolib_aboutdlg.obj &
 	$(OBJS)\monolib_notifmsg.obj &
 	$(OBJS)\monolib_sound.obj &
@@ -2548,12 +2546,12 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_tipdlg.obj &
 	$(OBJS)\advdll_wizard.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
-	$(OBJS)\advdll_animateg.obj &
 	$(OBJS)\advdll_aboutdlg.obj &
 	$(OBJS)\advdll_notifmsg.obj &
 	$(OBJS)\advdll_sound.obj &
 	$(OBJS)\advdll_taskbar.obj &
 	$(OBJS)\advdll_joystick.obj &
+	$(OBJS)\advdll_animateg.obj &
 	$(OBJS)\advdll_bmpcbox.obj &
 	$(OBJS)\advdll_calctrl.obj &
 	$(OBJS)\advdll_datecontrols.obj &
@@ -2587,7 +2585,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\advdll_tipdlg.obj &
 	$(OBJS)\advdll_wizard.obj &
 	$(OBJS)\advdll_taskbarcmn.obj &
-	$(OBJS)\advdll_animateg.obj &
 	$(OBJS)\advdll_aboutdlg.obj &
 	$(OBJS)\advdll_notifmsg.obj &
 	$(OBJS)\advdll_sound.obj &
@@ -2633,12 +2630,12 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_tipdlg.obj &
 	$(OBJS)\advlib_wizard.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
-	$(OBJS)\advlib_animateg.obj &
 	$(OBJS)\advlib_aboutdlg.obj &
 	$(OBJS)\advlib_notifmsg.obj &
 	$(OBJS)\advlib_sound.obj &
 	$(OBJS)\advlib_taskbar.obj &
 	$(OBJS)\advlib_joystick.obj &
+	$(OBJS)\advlib_animateg.obj &
 	$(OBJS)\advlib_bmpcbox.obj &
 	$(OBJS)\advlib_calctrl.obj &
 	$(OBJS)\advlib_datecontrols.obj &
@@ -2672,7 +2669,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\advlib_tipdlg.obj &
 	$(OBJS)\advlib_wizard.obj &
 	$(OBJS)\advlib_taskbarcmn.obj &
-	$(OBJS)\advlib_animateg.obj &
 	$(OBJS)\advlib_aboutdlg.obj &
 	$(OBJS)\advlib_notifmsg.obj &
 	$(OBJS)\advlib_sound.obj &
@@ -8089,18 +8085,6 @@ $(OBJS)\monodll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monodll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monodll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monodll_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -8122,6 +8106,11 @@ $(OBJS)\monodll_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -10426,18 +10415,6 @@ $(OBJS)\monolib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monolib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-!ifeq WXUNIV 1
-$(OBJS)\monolib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monolib_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -10459,6 +10436,11 @@ $(OBJS)\monolib_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -14235,14 +14217,6 @@ $(OBJS)\advdll_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 $(OBJS)\advdll_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
-$(OBJS)\advdll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-
-!ifeq WXUNIV 1
-$(OBJS)\advdll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
-!endif
-
 $(OBJS)\advdll_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
@@ -14256,6 +14230,9 @@ $(OBJS)\advdll_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advdll_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
+
+$(OBJS)\advdll_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVDLL_CXXFLAGS) $<
 
 $(OBJS)\advlib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
@@ -14351,14 +14328,6 @@ $(OBJS)\advlib_wizard.obj :  .AUTODEPEND ..\..\src\generic\wizard.cpp
 $(OBJS)\advlib_taskbarcmn.obj :  .AUTODEPEND ..\..\src\common\taskbarcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
-$(OBJS)\advlib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-
-!ifeq WXUNIV 1
-$(OBJS)\advlib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
-!endif
-
 $(OBJS)\advlib_aboutdlg.obj :  .AUTODEPEND ..\..\src\msw\aboutdlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
@@ -14372,6 +14341,9 @@ $(OBJS)\advlib_taskbar.obj :  .AUTODEPEND ..\..\src\msw\taskbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\advlib_joystick.obj :  .AUTODEPEND ..\..\src\msw\joystick.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
+
+$(OBJS)\advlib_animateg.obj :  .AUTODEPEND ..\..\src\generic\animateg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(ADVLIB_CXXFLAGS) $<
 
 $(OBJS)\mediadll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp

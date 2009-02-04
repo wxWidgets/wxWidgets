@@ -2875,14 +2875,12 @@ src/osx/iphone/window.mm
 
 <set var="ADVANCED_MSW_SRC" hints="files">
     src/common/taskbarcmn.cpp
-    src/generic/animateg.cpp
     src/msw/aboutdlg.cpp
     src/msw/notifmsg.cpp
     src/msw/sound.cpp
     src/msw/taskbar.cpp
 </set>
 <set var="ADVANCED_MSW_HDR" hints="files">
-    wx/generic/animate.h
     wx/msw/notifmsg.h
     wx/msw/sound.h
     wx/msw/taskbar.h
@@ -2890,12 +2888,14 @@ src/osx/iphone/window.mm
 
 <!-- not used with wxUniv -->
 <set var="ADVANCED_MSW_NATIVE_SRC" hints="files">
+    src/generic/animateg.cpp
     src/msw/bmpcbox.cpp
     src/msw/calctrl.cpp
     src/msw/datecontrols.cpp
     src/msw/datectrl.cpp
 </set>
 <set var="ADVANCED_MSW_NATIVE_HDR" hints="files">
+    wx/generic/animate.h
     wx/msw/bmpcbox.h
     wx/msw/calctrl.h
     wx/msw/datecontrols.h

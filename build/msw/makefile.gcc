@@ -2052,12 +2052,12 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
-	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_notifmsg.o \
 	$(OBJS)\monodll_sound.o \
 	$(OBJS)\monodll_taskbar.o \
 	$(OBJS)\monodll_joystick.o \
+	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_bmpcbox.o \
 	$(OBJS)\monodll_calctrl.o \
 	$(OBJS)\monodll_datecontrols.o \
@@ -2091,7 +2091,6 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_tipdlg.o \
 	$(OBJS)\monodll_wizard.o \
 	$(OBJS)\monodll_taskbarcmn.o \
-	$(OBJS)\monodll_animateg.o \
 	$(OBJS)\monodll_aboutdlg.o \
 	$(OBJS)\monodll_notifmsg.o \
 	$(OBJS)\monodll_sound.o \
@@ -2740,12 +2739,12 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
-	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_notifmsg.o \
 	$(OBJS)\monolib_sound.o \
 	$(OBJS)\monolib_taskbar.o \
 	$(OBJS)\monolib_joystick.o \
+	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_bmpcbox.o \
 	$(OBJS)\monolib_calctrl.o \
 	$(OBJS)\monolib_datecontrols.o \
@@ -2779,7 +2778,6 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_tipdlg.o \
 	$(OBJS)\monolib_wizard.o \
 	$(OBJS)\monolib_taskbarcmn.o \
-	$(OBJS)\monolib_animateg.o \
 	$(OBJS)\monolib_aboutdlg.o \
 	$(OBJS)\monolib_notifmsg.o \
 	$(OBJS)\monolib_sound.o \
@@ -3849,12 +3847,12 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
-	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_notifmsg.o \
 	$(OBJS)\advdll_sound.o \
 	$(OBJS)\advdll_taskbar.o \
 	$(OBJS)\advdll_joystick.o \
+	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_bmpcbox.o \
 	$(OBJS)\advdll_calctrl.o \
 	$(OBJS)\advdll_datecontrols.o \
@@ -3888,7 +3886,6 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_tipdlg.o \
 	$(OBJS)\advdll_wizard.o \
 	$(OBJS)\advdll_taskbarcmn.o \
-	$(OBJS)\advdll_animateg.o \
 	$(OBJS)\advdll_aboutdlg.o \
 	$(OBJS)\advdll_notifmsg.o \
 	$(OBJS)\advdll_sound.o \
@@ -3932,12 +3929,12 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
-	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_notifmsg.o \
 	$(OBJS)\advlib_sound.o \
 	$(OBJS)\advlib_taskbar.o \
 	$(OBJS)\advlib_joystick.o \
+	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_bmpcbox.o \
 	$(OBJS)\advlib_calctrl.o \
 	$(OBJS)\advlib_datecontrols.o \
@@ -3971,7 +3968,6 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_tipdlg.o \
 	$(OBJS)\advlib_wizard.o \
 	$(OBJS)\advlib_taskbarcmn.o \
-	$(OBJS)\advlib_animateg.o \
 	$(OBJS)\advlib_aboutdlg.o \
 	$(OBJS)\advlib_notifmsg.o \
 	$(OBJS)\advlib_sound.o \
@@ -7844,18 +7840,6 @@ $(OBJS)\monodll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7877,6 +7861,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_joystick.o: ../../src/msw/joystick.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -10181,18 +10170,6 @@ $(OBJS)\monolib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-ifeq ($(WXUNIV),1)
-$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -10214,6 +10191,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_joystick.o: ../../src/msw/joystick.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -13990,14 +13972,6 @@ $(OBJS)\advdll_wizard.o: ../../src/generic/wizard.cpp
 $(OBJS)\advdll_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advdll_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
-
-ifeq ($(WXUNIV),1)
-$(OBJS)\advdll_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
 $(OBJS)\advdll_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14011,6 +13985,9 @@ $(OBJS)\advdll_taskbar.o: ../../src/msw/taskbar.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advdll_joystick.o: ../../src/msw/joystick.cpp
+	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advdll_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(ADVDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_dummy.o: ../../src/common/dummy.cpp
@@ -14106,14 +14083,6 @@ $(OBJS)\advlib_wizard.o: ../../src/generic/wizard.cpp
 $(OBJS)\advlib_taskbarcmn.o: ../../src/common/taskbarcmn.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\advlib_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
-
-ifeq ($(WXUNIV),1)
-$(OBJS)\advlib_animateg.o: ../../src/generic/animateg.cpp
-	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
 $(OBJS)\advlib_aboutdlg.o: ../../src/msw/aboutdlg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14127,6 +14096,9 @@ $(OBJS)\advlib_taskbar.o: ../../src/msw/taskbar.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\advlib_joystick.o: ../../src/msw/joystick.cpp
+	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\advlib_animateg.o: ../../src/generic/animateg.cpp
 	$(CXX) -c -o $@ $(ADVLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\mediadll_dummy.o: ../../src/common/dummy.cpp
