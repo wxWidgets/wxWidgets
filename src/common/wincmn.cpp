@@ -2539,11 +2539,12 @@ wxWindowBase::DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y)
 
 static void DrawSizers(wxWindowBase *win);
 
-static void DrawBorder(wxWindowBase *win, const wxRect& rect, bool fill = false)
+static void DrawBorder(wxWindowBase *win, const wxRect& rect, bool fill, const wxPen* pen)
 {
     wxClientDC dc((wxWindow *)win);
-    dc.SetPen(*wxRED_PEN);
-    dc.SetBrush(fill ? wxBrush(*wxRED, wxBRUSHSTYLE_CROSSDIAG_HATCH) : *wxTRANSPARENT_BRUSH);
+    dc.SetPen(*pen);
+    dc.SetBrush(fill ? wxBrush(pen->GetColour(), wxBRUSHSTYLE_CROSSDIAG_HATCH) : 
+                       *wxTRANSPARENT_BRUSH);
     dc.DrawRectangle(rect.Deflate(1, 1));
 }
 
@@ -2558,12 +2559,12 @@ static void DrawSizer(wxWindowBase *win, wxSizer *sizer)
         wxSizerItem *item = *i;
         if ( item->IsSizer() )
         {
-            DrawBorder(win, item->GetRect().Deflate(2));
+            DrawBorder(win, item->GetRect().Deflate(2), false, wxRED_PEN);
             DrawSizer(win, item->GetSizer());
         }
         else if ( item->IsSpacer() )
         {
-            DrawBorder(win, item->GetRect().Deflate(2), true);
+            DrawBorder(win, item->GetRect().Deflate(2), true, wxBLUE_PEN);
         }
         else if ( item->IsWindow() )
         {
@@ -2574,10 +2575,11 @@ static void DrawSizer(wxWindowBase *win, wxSizer *sizer)
 
 static void DrawSizers(wxWindowBase *win)
 {
+    DrawBorder(win, win->GetClientSize(), false, wxGREEN_PEN);
+
     wxSizer *sizer = win->GetSizer();
     if ( sizer )
     {
-        DrawBorder(win, win->GetClientSize());
         DrawSizer(win, sizer);
     }
     else // no sizer, still recurse into the children
