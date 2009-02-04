@@ -295,7 +295,7 @@ void wxApp::Exit()
 }
 
 // Yield to other processes
-bool wxApp::Yield(bool onlyIfNeeded)
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
@@ -314,10 +314,13 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 
     m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
 
     // Run the event loop until it is out of events
     while(1)
     {
+        // TODO: implement event filtering using the eventsToProcess mask
+
         wxAutoNSAutoreleasePool pool;
         /*  NOTE: It may be better to use something like
             NSEventTrackingRunLoopMode since we don't necessarily want all

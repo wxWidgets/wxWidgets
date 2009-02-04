@@ -103,7 +103,7 @@ static wxMutex gs_idleTagsMutex;
 // wxYield
 //-----------------------------------------------------------------------------
 
-bool wxApp::Yield(bool onlyIfNeeded)
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
     if ( m_isInsideYield )
     {
@@ -124,6 +124,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 #endif // wxUSE_THREADS
 
     m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
 
     // We need to remove idle callbacks or the loop will
     // never finish.
@@ -135,6 +136,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Suspend();
 #endif
 
+    // TODO: implement event filtering using the eventsToProcess mask
     while (gtk_events_pending())
         gtk_main_iteration();
 

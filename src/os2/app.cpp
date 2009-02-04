@@ -507,7 +507,7 @@ void wxApp::OnQueryEndSession( wxCloseEvent& rEvent )
 //
 // Yield to incoming messages
 //
-bool wxApp::Yield(bool onlyIfNeeded)
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
     if ( m_isInsideYield )
     {
@@ -529,6 +529,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Suspend();
 
     m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
 
     //
     // We want to go back to the main message loop
@@ -537,6 +538,8 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxEventLoopGuarantor dummyLoopIfNeeded;
     while (::WinPeekMsg(vHab, &vMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) && vMsg.msg != WM_QUIT)
     {
+        // TODO: implement event filtering using the eventsToProcess mask
+
 #if wxUSE_THREADS
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS

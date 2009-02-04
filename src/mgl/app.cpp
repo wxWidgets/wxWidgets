@@ -48,7 +48,7 @@ void wxApp::Exit()
 // wxYield
 //-----------------------------------------------------------------------------
 
-bool wxApp::Yield(bool onlyIfNeeded)
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
     if ( m_isInsideYield )
     {
@@ -69,12 +69,15 @@ bool wxApp::Yield(bool onlyIfNeeded)
 #endif // wxUSE_THREADS
 
     m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
 
     wxLog::Suspend();
 
     wxEventLoopBase * const eventLoop = wxEventLoop::GetActive();
     if ( eventLoop )
     {
+        // TODO: implement event filtering using the eventsToProcess mask
+
         while (eventLoop->Pending())
             eventLoop->Dispatch();
     }

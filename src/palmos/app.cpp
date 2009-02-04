@@ -287,7 +287,7 @@ int wxApp::GetComCtl32Version()
 
 // Yield to incoming messages
 
-bool wxApp::Yield(bool onlyIfNeeded)
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
     return true;
 }

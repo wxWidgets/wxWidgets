@@ -401,7 +401,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
                 m_msg->SetLabel(_("Done."));
             }
 
-            wxYieldIfNeeded();
+            wxTheApp->YieldFor(wxEVT_CATEGORY_UI);
 
             (void)ShowModal();
         }
@@ -451,7 +451,7 @@ bool wxProgressDialog::DoAfterUpdate(bool *skip)
 {
     // we have to yield because not only we want to update the display but
     // also to process the clicks on the cancel and skip buttons
-    wxYieldIfNeeded();
+    wxTheApp->YieldFor(wxEVT_CATEGORY_UI|wxEVT_CATEGORY_USER_INPUT);
 
     Update();
 
@@ -670,7 +670,7 @@ void wxProgressDialog::UpdateMessage(const wxString &newmsg)
 
         Fit();   // adapt to the new label size
 
-        wxYieldIfNeeded() ;
+        wxTheApp->YieldFor(wxEVT_CATEGORY_UI);
     }
 }
 

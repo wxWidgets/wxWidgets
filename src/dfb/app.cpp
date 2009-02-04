@@ -163,8 +163,7 @@ void wxApp::WakeUpIdle()
 #endif
 }
 
-
-bool wxApp::Yield(bool onlyIfNeeded)
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
 #if wxUSE_THREADS
     if ( !wxThread::IsMain() )
@@ -182,6 +181,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 
     m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
 
 #if wxUSE_LOG
     wxLog::Suspend();

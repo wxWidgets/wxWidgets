@@ -162,7 +162,26 @@ public:
         @a onlyIfNeeded parameter is @true, the method will just silently
         return @false instead.
     */
-    virtual bool Yield(bool onlyIfNeeded = false);
+    bool Yield(bool onlyIfNeeded = false);
+
+    /**
+        Works like Yield() with @e onlyIfNeeded == @true, except that it allows
+        the caller to specify a mask of the ::wxEventCategory values which
+        indicates which events should be processed and which should instead
+        be "delayed" (i.e. processed by the main loop later).
+
+        Note that this is a safer alternative to Yield() since it ensures that
+        only the events you're interested to are processed; i.e. helps to avoid
+        unwanted reentrancies.
+    */
+    bool YieldFor(long eventsToProcess);
+
+    /**
+        Returns @true if the given event category is allowed inside
+        a YieldFor() call (i.e. compares the given category against the
+        last mask passed to YieldFor()).
+    */
+    virtual bool IsEventAllowedInsideYield(wxEventCategory cat) const;
 
     //@}
 
@@ -180,7 +199,7 @@ public:
 
     /**
         Returns the one and only global application object.
-        Usually wxTheApp is used instead.
+        Usually ::wxTheApp is used instead.
 
         @see SetInstance()
     */
@@ -622,6 +641,25 @@ public:
     virtual bool IsActive() const;
 
     /**
+        This function is similar to wxYield(), except that it disables the user
+        input to all program windows before calling wxAppConsole::Yield and re-enables it
+        again afterwards. If @a win is not @NULL, this window will remain enabled,
+        allowing the implementation of some limited user interaction.
+        Returns the result of the call to wxAppConsole::Yield.
+
+        @see wxSafeYield
+    */
+    virtual bool SafeYield(wxWindow *win, bool onlyIfNeeded);
+
+    /**
+        Works like SafeYield() with @e onlyIfNeeded == @true except that
+        it allows the caller to specify a mask of events to be processed.
+
+        See wxAppConsole::YieldFor for more info.
+    */
+    virtual bool SafeYieldFor(wxWindow *win, long eventsToProcess);
+
+    /**
         Windows-only function for processing a message. This function is called
         from the main message loop, checking for windows that may wish to process it.
 
@@ -857,22 +895,18 @@ void wxUninitialize();
 void wxWakeUpIdle();
 
 /**
-    Calls wxApp::Yield.
+    Calls wxAppConsole::Yield.
 
     @deprecated
     This function is kept only for backwards compatibility. Please use
-    the wxApp::Yield method instead in any new code.
+    the wxAppConsole::Yield method instead in any new code.
 
     @header{wx/app.h}
 */
 bool wxYield();
 
 /**
-    This function is similar to wxYield(), except that it disables the user
-    input to all program windows before calling wxYield() and re-enables it
-    again afterwards. If @a win is not @NULL, this window will remain enabled,
-    allowing the implementation of some limited user interaction.
-    Returns the result of the call to ::wxYield.
+    Calls wxApp::SafeYield.
 
     @header{wx/app.h}
 */

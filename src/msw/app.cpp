@@ -1015,7 +1015,14 @@ int wxApp::GetShell32Version()
 // Yield to incoming messages
 // ----------------------------------------------------------------------------
 
-bool wxApp::Yield(bool onlyIfNeeded)
+WX_DECLARE_OBJARRAY(MSG, wxMSGArray);
+
+#include <wx/arrimpl.cpp>
+WX_DEFINE_OBJARRAY(wxMSGArray);
+
+static wxMSGArray g_arrMSG;
+
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
     if ( m_isInsideYield )
     {
@@ -1029,8 +1036,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     // set the flag and don't forget to reset it before returning
     m_isInsideYield = true;
-    wxON_BLOCK_EXIT_SET(m_isInsideYield, false);
+    m_eventsToProcessInsideYield = eventsToProcess;
 
+    wxON_BLOCK_EXIT_SET(m_isInsideYield, false);
 
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
@@ -1040,7 +1048,6 @@ bool wxApp::Yield(bool onlyIfNeeded)
     // ensure the logs will be flashed again when we exit
     wxON_BLOCK_EXIT0(wxLog::Resume);
 #endif // wxUSE_LOG
-
 
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
@@ -1053,12 +1060,104 @@ bool wxApp::Yield(bool onlyIfNeeded)
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
 
-        if ( !wxTheApp->Dispatch() )
-            break;
+        wxEventCategory cat;
+        switch (msg.message)
+        {
+        case WM_NCMOUSEMOVE:
+        case WM_NCLBUTTONDOWN:
+        case WM_NCLBUTTONUP:
+        case WM_NCLBUTTONDBLCLK:
+        case WM_NCRBUTTONDOWN:
+        case WM_NCRBUTTONUP:
+        case WM_NCRBUTTONDBLCLK:
+        case WM_NCMBUTTONDOWN:
+        case WM_NCMBUTTONUP:
+        case WM_NCMBUTTONDBLCLK:
+
+        case WM_KEYFIRST:
+        case WM_KEYDOWN:
+        case WM_KEYUP:
+        case WM_CHAR:
+        case WM_DEADCHAR:
+        case WM_SYSKEYDOWN:
+        case WM_SYSKEYUP:
+        case WM_SYSCHAR:
+        case WM_SYSDEADCHAR:
+        case WM_KEYLAST:
+        case WM_HOTKEY:
+        case WM_IME_STARTCOMPOSITION:
+        case WM_IME_ENDCOMPOSITION:
+        case WM_IME_COMPOSITION:
+        case WM_IME_KEYLAST:
+        case WM_COMMAND:
+        case WM_SYSCOMMAND:
+
+        case WM_IME_SETCONTEXT:
+        case WM_IME_NOTIFY:
+        case WM_IME_CONTROL:
+        case WM_IME_COMPOSITIONFULL:
+        case WM_IME_SELECT:
+        case WM_IME_CHAR:
+        case WM_IME_KEYDOWN:
+        case WM_IME_KEYUP:
+
+        case WM_MOUSEHOVER:
+        case WM_NCMOUSELEAVE:
+        case WM_MOUSELEAVE:
+
+        case WM_CUT:
+        case WM_COPY:
+        case WM_PASTE:
+        case WM_CLEAR:
+        case WM_UNDO:
+
+        case WM_MOUSEFIRST:
+        case WM_MOUSEMOVE:
+        case WM_LBUTTONDOWN:
+        case WM_LBUTTONUP:
+        case WM_LBUTTONDBLCLK:
+        case WM_RBUTTONDOWN:
+        case WM_RBUTTONUP:
+        case WM_RBUTTONDBLCLK:
+        case WM_MBUTTONDOWN:
+        case WM_MBUTTONUP:
+        case WM_MBUTTONDBLCLK:
+        case WM_MOUSELAST:
+        case WM_MOUSEWHEEL:
+            cat = wxEVT_CATEGORY_USER_INPUT;
+
+        case WM_TIMER:
+            cat = wxEVT_CATEGORY_TIMER;
+
+        default:
+            // there are too many of these types of messages to handle them in this switch
+            cat = wxEVT_CATEGORY_UI;
+        }
+
+        if (cat & eventsToProcess)
+        {
+            if ( !wxTheApp->Dispatch() )
+                break;
+        }
+        else
+        {
+            // remove the message and store it
+            PeekMessage(&msg, (HWND)0, 0, 0, PM_REMOVE)
+            g_arrMSG.Add(msg);
+        }
     }
 
     // if there are pending events, we must process them.
     ProcessPendingEvents();
+
+    // put back unprocessed events in the queue
+    DWORD id = GetCurrentThreadId();
+    for (size_t i=0; i<g_arrMSG.GetCount(); i++)
+    {
+        PostThreadMessage(id, g_arrMSG[i].message, g_arrMSG[i].wParam, g_arrMSG[i].lParam);
+    }
+
+    g_arrMSG.Clear();
 
     return true;
 }

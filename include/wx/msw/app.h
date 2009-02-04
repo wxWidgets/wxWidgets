@@ -33,7 +33,6 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 
-    virtual bool Yield(bool onlyIfNeeded = false);
     virtual void WakeUpIdle();
 
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
@@ -78,6 +77,8 @@ public:
 
 protected:
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
+
+    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
 
 public:
     // unregister any window classes registered by GetRegisteredClassName()

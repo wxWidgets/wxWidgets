@@ -38,7 +38,6 @@ class WXDLLIMPEXP_CORE wxApp: public wxAppBase
     wxApp();
     virtual ~wxApp() {}
 
-    virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
 
     virtual void SetPrintMode(int mode) { m_printMode = mode; }
@@ -67,6 +66,7 @@ public:
     // Implementation
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
+    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
 
     // the installed application event handler
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }
@@ -88,7 +88,7 @@ public:
 private:
     // mac specifics
     virtual bool        DoInitGui();
-    virtual void        DoCleanUp();  
+    virtual void        DoCleanUp();
 
     WXEVENTHANDLERREF     m_macEventHandler ;
     WXEVENTHANDLERCALLREF m_macCurrentEventHandlerCallRef ;

@@ -73,8 +73,8 @@ public:
 
     ~wxClipboardSync()
     {
-        while ( ms_clipboard )
-            gtk_main_iteration();
+        while (ms_clipboard)
+            wxTheApp->YieldFor(wxEVT_CATEGORY_CLIPBOARD);
     }
 
     // this method must be called by GTK+ callbacks to indicate that we got the
@@ -359,10 +359,10 @@ async_targets_selection_received( GtkWidget *WXUNUSED(widget),
 
     if (!clipboard->m_sink)
         return;
-        
+
     wxClipboardEvent *event = new wxClipboardEvent(wxEVT_CLIPBOARD_CHANGED);
     event->SetEventObject( clipboard );
-    
+
     if ( !selection_data || selection_data->length <= 0 )
     {
         clipboard->m_sink->QueueEvent( event );
@@ -404,7 +404,7 @@ async_targets_selection_received( GtkWidget *WXUNUSED(widget),
 
         event->AddFormat( format );
     }
-    
+
     clipboard->m_sink->QueueEvent( event );
     clipboard->m_sink.Release();
 }
@@ -438,7 +438,7 @@ wxClipboard::wxClipboard()
     g_signal_connect (m_targetsWidget, "selection_received",
                       G_CALLBACK (targets_selection_received), this);
 
-    // we use m_targetsWidgetAsync to query what formats asynchronously
+    // we use m_targetsWidgetAsync to query what formats are available asynchronously
     m_targetsWidgetAsync = gtk_window_new( GTK_WINDOW_POPUP );
     gtk_widget_realize( m_targetsWidgetAsync );
 
@@ -525,15 +525,15 @@ bool wxClipboard::IsSupportedAsync(wxEvtHandler *sink)
 {
     if (m_sink.get())
         return false;  // currently busy, come back later
-        
+
     wxCHECK_MSG( sink, false, wxT("no sink given") );
-      
+
     m_sink = sink;
     gtk_selection_convert( m_targetsWidgetAsync,
                            GTKGetClipboardAtom(),
                            g_targetsAtom,
                            (guint32) GDK_CURRENT_TIME );
-                           
+
     return true;
 }
 

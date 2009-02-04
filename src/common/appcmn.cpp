@@ -79,6 +79,7 @@ wxAppBase::wxAppBase()
     m_isActive = true;
 
     m_isInsideYield = false;
+    m_eventsToProcessInsideYield = wxEVT_CATEGORY_ALL;
 
     // We don't want to exit the app if the user code shows a dialog from its
     // OnInit() -- but this is what would happen if we set m_exitOnFrameDelete
@@ -324,6 +325,26 @@ void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
 
     (void)ProcessEvent(event);
 }
+
+bool wxAppBase::IsEventAllowedInsideYield(wxEventCategory cat) const
+{
+    return m_eventsToProcessInsideYield & cat;
+}
+
+bool wxAppBase::SafeYield(wxWindow *win, bool onlyIfNeeded)
+{
+    wxWindowDisabler wd(win);
+
+    return Yield(onlyIfNeeded);
+}
+
+bool wxAppBase::SafeYieldFor(wxWindow *win, long eventsToProcess)
+{
+    wxWindowDisabler wd(win);
+
+    return YieldFor(eventsToProcess);
+}
+
 
 // ----------------------------------------------------------------------------
 // idle handling

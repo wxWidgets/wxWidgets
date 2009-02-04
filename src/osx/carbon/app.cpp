@@ -1119,7 +1119,7 @@ void wxCYield()
 
 // Yield to other processes
 
-bool wxApp::Yield(bool onlyIfNeeded)
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
 #if wxUSE_THREADS
     // Yielding from a non-gui thread needs to bail out, otherwise we end up
@@ -1141,6 +1141,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 
     m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
 
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't

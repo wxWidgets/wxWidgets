@@ -360,6 +360,11 @@ void wxGUIEventLoop::WakeUp()
 
 #else // !wxUSE_GUI
 
+
+// ============================================================================
+// wxConsoleEventLoop implementation
+// ============================================================================
+
 #if wxUSE_CONSOLE_EVENTLOOP
 
 void wxConsoleEventLoop::WakeUp()

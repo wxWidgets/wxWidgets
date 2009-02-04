@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        clipboard.cpp
-// Purpose:     clipbaord wxWidgets sample
+// Purpose:     clipboard wxWidgets sample
 // Author:      Robert Roebling
 // RCS-ID:      $Id: minimal.cpp 53461 2008-05-05 23:30:33Z VZ $
 // Copyright:   (c) Robert Roebling
@@ -9,7 +9,7 @@
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
- 
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -27,7 +27,7 @@
 #endif
 
 
-#define USE_ASYNCHRONOUS_CLIPBOARD_REQUEST 1
+#define USE_ASYNCHRONOUS_CLIPBOARD_REQUEST  0
 
 class MyApp : public wxApp
 {
@@ -94,7 +94,7 @@ bool MyApp::OnInit()
 
     MyFrame *frame = new MyFrame("wxClipboard sample");
     frame->Show(true);
-    
+
     return true;
 }
 
@@ -103,7 +103,7 @@ MyFrame::MyFrame(const wxString& title)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
-    
+
 #if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
     m_request = Idle;
     m_clipboardSupportsText = false;
@@ -129,7 +129,7 @@ MyFrame::MyFrame(const wxString& title)
 #endif // wxUSE_MENUS
 
     wxPanel *panel = new wxPanel( this, -1 );
-    
+
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
     main_sizer->Add( new wxButton( panel, ID_Write, "Get clipboard text" ) );
     m_textctrl = new wxTextCtrl( panel, ID_Text, "", wxDefaultPosition,
@@ -148,7 +148,7 @@ void MyFrame::OnWriteClipboardContents(wxCommandEvent& WXUNUSED(event))
             wxTheClipboard->GetData( data );
             m_textctrl->Clear();
             m_textctrl->SetValue( data.GetText() );
-            
+
         }
         wxTheClipboard->Close();
    }
@@ -175,7 +175,7 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent&event)
         }
         m_request = Waiting;
         event.Enable( m_clipboardSupportsText ); // not yet known, assume last value
-    } 
+    }
     else if (m_request == Waiting)
     {
         event.Enable( m_clipboardSupportsText ); // not yet known, assume last value
@@ -198,6 +198,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
+    wxMessageBox("Clipboard sample", "About clipboard", wxOK|wxICON_INFORMATION, this);
 }
 
 

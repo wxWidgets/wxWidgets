@@ -65,6 +65,7 @@
 
 #if wxUSE_GUI
     IMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxThreadEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxScrollWinEvent, wxEvent)
@@ -147,6 +148,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule)
 // List containing event handlers with pending events (each handler can occur
 // at most once here)
 wxList *wxHandlersWithPendingEvents = NULL;
+wxList *wxHandlersWithPendingDelayedEvents = NULL;
 
 #if wxUSE_THREADS
     // protects wxHandlersWithPendingEvents list
@@ -316,6 +318,9 @@ wxDEFINE_EVENT( wxEVT_COMMAND_ENTER, wxCommandEvent )
 wxDEFINE_EVENT( wxEVT_HELP, wxHelpEvent )
 wxDEFINE_EVENT( wxEVT_DETAILED_HELP, wxHelpEvent )
 
+// Thread event
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_THREAD)
+
 #endif // wxUSE_GUI
 
 #if wxUSE_BASE
@@ -350,15 +355,14 @@ wxEventFunctor::~wxEventFunctor()
 // ----------------------------------------------------------------------------
 
 /*
- * General wxWidgets events, covering
- * all interesting things that might happen (button clicking, resizing,
- * setting text in widgets, etc.).
+ * General wxWidgets events, covering all interesting things that might happen
+ * (button clicking, resizing, setting text in widgets, etc.).
  *
  * For each completely new event type, derive a new event class.
  *
  */
 
-wxEvent::wxEvent(int theId, wxEventType commandType )
+wxEvent::wxEvent(int theId, wxEventType commandType)
 {
     m_eventType = commandType;
     m_eventObject = NULL;
@@ -1103,6 +1107,14 @@ wxEvtHandler::~wxEvtHandler()
         }
         //else: we weren't in this list at all, it's ok
 
+        if ( wxHandlersWithPendingDelayedEvents->DeleteObject(this) )
+        {
+            // check that we were present only once in the list
+            wxASSERT_MSG( !wxHandlersWithPendingDelayedEvents->Find(this),
+                          "Handler occurs twice in wxHandlersWithPendingDelayedEvents list" );
+        }
+        //else: we weren't in this list at all, it's ok
+
 #if wxUSE_THREADS
         if (wxHandlersWithPendingEventsLocker)
             wxLEAVE_CRIT_SECT(*wxHandlersWithPendingEventsLocker);
@@ -1188,6 +1200,10 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
 
 void wxEvtHandler::ProcessPendingEvents()
 {
+    // we need to process only a single pending event in this call because
+    // each call to ProcessEvent() could result in the destruction of this
+    // same event handler (see the comment at the end of this function)
+
     wxENTER_CRIT_SECT( m_pendingEventsLock );
 
     // this method is only called by wxApp if this handler does have
@@ -1196,7 +1212,40 @@ void wxEvtHandler::ProcessPendingEvents()
                  "should have pending events if called" );
 
     wxList::compatibility_iterator node = m_pendingEvents->GetFirst();
-    wxEventPtr event(static_cast<wxEvent *>(node->GetData()));
+    wxEvent* pEvent = static_cast<wxEvent *>(node->GetData());
+
+    // find the first event which can be processed now:
+    if (wxTheApp && wxTheApp->IsYielding())
+    {
+        while (node && pEvent && !wxTheApp->IsEventAllowedInsideYield(pEvent->GetEventCategory()))
+        {
+            node = node->GetNext();
+            pEvent = node ? static_cast<wxEvent *>(node->GetData()) : NULL;
+        }
+
+        if (!node)
+        {
+            // all our events are NOT processable now... signal this:
+#if wxUSE_THREADS
+            if (wxHandlersWithPendingEventsLocker)
+                wxENTER_CRIT_SECT(*wxHandlersWithPendingEventsLocker);
+#endif
+            // move us from the list of handlers with processable pending events
+            // to the list of handlers with pending events which needs to be processed later
+            wxHandlersWithPendingEvents->DeleteObject(this);
+            if ( !wxHandlersWithPendingDelayedEvents->Find(this) )
+                wxHandlersWithPendingDelayedEvents->Append(this);
+#if wxUSE_THREADS
+            if (wxHandlersWithPendingEventsLocker)
+                wxLEAVE_CRIT_SECT(*wxHandlersWithPendingEventsLocker);
+#endif
+            wxLEAVE_CRIT_SECT( m_pendingEventsLock );
+
+            return;
+        }
+    }
+
+    wxEventPtr event(pEvent);
 
     // it's important we remove event from list before processing it, else a
     // nested event loop, for example from a modal dialog, might process the
@@ -1306,6 +1355,27 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     {
         if ( wxTheApp )
         {
+/*
+    CANNOT ENABLE: ProcessEvent() must always immediately process the event!
+
+            if (wxTheApp->IsYielding() &&
+                !wxTheApp->IsEventAllowedInsideYield(event.GetEventCategory()))
+            {
+                wxEvent* queuedEv = event.Clone();
+
+                // queue this event rather than processing it now
+                QueueEvent(queuedEv);
+                    // the wxWakeUpIdle call shouldn't probably be done
+                    // in this context (there's wxYield in the call stack)
+
+                return true;
+                    // it's not completely true that the event was processed;
+                    // but we cannot even say it was skipped or discarded...
+            }
+            //else: either we're not inside a wxYield() call or if we are,
+            //      we can process this event immediately.
+*/
+
             int rc = wxTheApp->FilterEvent(event);
             if ( rc != -1 )
             {

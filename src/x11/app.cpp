@@ -769,7 +769,7 @@ void wxApp::Exit()
 
 // Yield to other processes
 
-bool wxApp::Yield(bool onlyIfNeeded)
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
     // Sometimes only 2 yields seem
     // to do the trick, e.g. in the
@@ -788,6 +788,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         }
 
         m_isInsideYield = true;
+        m_eventsToProcessInsideYield = eventsToProcess;
 
         // Make sure we have an event loop object,
         // or Pending/Dispatch will fail
@@ -797,6 +798,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         // can be tested
         wxTheApp->Dispatch();
 
+        // TODO: implement event filtering using the eventsToProcess mask
         while (wxTheApp && wxTheApp->Pending())
             wxTheApp->Dispatch();
 

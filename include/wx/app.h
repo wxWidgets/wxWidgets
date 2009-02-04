@@ -32,6 +32,7 @@ class WXDLLIMPEXP_FWD_BASE wxMessageOutput;
 
 #if wxUSE_GUI
     struct WXDLLIMPEXP_FWD_CORE wxVideoMode;
+    class WXDLLIMPEXP_FWD_CORE wxWindow;
 #endif
 
 // ----------------------------------------------------------------------------
@@ -254,6 +255,13 @@ public:
     // (already) be dispatched
     static bool IsMainLoopRunning();
 
+    // temporary suspends processing of the pending events
+    virtual void SuspendProcessingOfPendingEvents();
+
+    // resume processing of the pending events previously stopped because of a
+    // call to SuspendProcessingOfPendingEvents()
+    virtual void ResumeProcessingOfPendingEvents();
+
     // process all events in the wxHandlersWithPendingEvents list -- it is necessary
     // to call this function to process posted events. This happens during each
     // event loop iteration in GUI mode but if there is no main loop, it may be
@@ -262,9 +270,6 @@ public:
 
     // check if there are pending events on global pending event list
     bool HasPendingEvents() const;
-
-    // doesn't do anything in this class, just a hook for GUI wxApp
-    virtual bool Yield(bool WXUNUSED(onlyIfNeeded) = false) { return true; }
 
     // make sure that idle events are sent again
     virtual void WakeUpIdle();
@@ -299,6 +304,30 @@ public:
     // well)
     virtual bool OnExceptionInMainLoop();
 #endif // wxUSE_EXCEPTIONS
+
+    // Yield-related hooks
+    // -------------------
+
+        // process all currently pending events right now
+        //
+        // it is an error to call Yield() recursively unless the value of
+        // onlyIfNeeded is true
+        //
+        // WARNING: this function is dangerous as it can lead to unexpected
+        //          reentrancies (i.e. when called from an event handler it
+        //          may result in calling the same event handler again), use
+        //          with _extreme_ care or, better, don't use at all!
+        // NOTE: in wxConsoleBase it doesn't do anything, just a hook for GUI wxApp
+    bool Yield(bool onlyIfNeeded = false)
+        { return DoYield(onlyIfNeeded, wxEVT_CATEGORY_ALL); }
+    bool YieldFor(long eventsToProcess)
+        { return DoYield(true, eventsToProcess); }
+    virtual bool IsYielding() const
+        { return false; }
+    virtual bool IsEventAllowedInsideYield(wxEventCategory WXUNUSED(cat)) const
+        { return true; }
+    // no SafeYield hooks since it uses wxWindow which is not available when wxUSE_GUI=0
+
 
     // debugging support
     // -----------------
@@ -366,6 +395,9 @@ protected:
     // for the first time
     virtual wxAppTraits *CreateTraits();
 
+    // the real yield function hook:
+    virtual bool DoYield(bool WXUNUSED(onlyIfNeeded), long WXUNUSED(eventsToProcess))
+        { return true; }
 
     // function used for dynamic wxApp creation
     static wxAppInitializerFunction ms_appInitFn;
@@ -391,6 +423,15 @@ protected:
     // the main event loop of the application (may be NULL if the loop hasn't
     // been started yet or has already terminated)
     wxEventLoopBase *m_mainLoop;
+
+    // the array of the handlers with pending events which needs to be processed
+    // inside ProcessPendingEvents()
+    // wxEvtHandlerArray m_handlersWithPendingEvents;    FIXME: enable this and remove global lists
+
+    // helper array used by ProcessPendingEvents()
+    // wxEvtHandlerArray m_handlersWithPendingDelayedEvents;    FIXME: enable this and remove global lists
+
+    friend class WXDLLIMPEXP_BASE wxEvtHandler;
 
     // the application object is a singleton anyhow, there is no sense in
     // copying it
@@ -451,22 +492,18 @@ public:
     // the worker functions - usually not used directly by the user code
     // -----------------------------------------------------------------
 
-
-
-        // process all currently pending events right now
-        //
-        // it is an error to call Yield() recursively unless the value of
-        // onlyIfNeeded is true
-        //
-        // WARNING: this function is dangerous as it can lead to unexpected
-        //          reentrancies (i.e. when called from an event handler it
-        //          may result in calling the same event handler again), use
-        //          with _extreme_ care or, better, don't use at all!
-    virtual bool Yield(bool onlyIfNeeded = false) = 0;
+        // safer alternatives to Yield(), using wxWindowDisabler
+    virtual bool SafeYield(wxWindow *win, bool onlyIfNeeded);
+    virtual bool SafeYieldFor(wxWindow *win, long eventsToProcess);
 
         // returns true if the main thread is inside a Yield() call
-    bool IsYielding() const
+    virtual bool IsYielding() const
         { return m_isInsideYield; }
+
+        // returns true if events of the given event category should be immediately
+        // processed inside a wxApp::Yield() call or rather should be queued for
+        // later processing by the main event loop
+    virtual bool IsEventAllowedInsideYield(wxEventCategory cat) const;
 
         // this virtual function is called in the GUI mode when the application
         // becomes idle and normally just sends wxIdleEvent to all interested
@@ -590,7 +627,9 @@ protected:
     // does any of our windows have focus?
     bool m_isActive;
 
+    // Yield() helpers:
     bool m_isInsideYield;
+    long m_eventsToProcessInsideYield;
 
     DECLARE_NO_COPY_CLASS(wxAppBase)
 };
@@ -660,7 +699,7 @@ protected:
 // Force an exit from main loop
 WXDLLIMPEXP_BASE void wxExit();
 
-// avoid redeclaring this function here if it had been already declated by
+// avoid redeclaring this function here if it had been already declared by
 // wx/utils.h, this results in warnings from g++ with -Wredundant-decls
 #ifndef wx_YIELD_DECLARED
 #define wx_YIELD_DECLARED

@@ -75,7 +75,6 @@ public:
 
     virtual bool OnInitGui(void);
 
-    virtual bool Yield(bool onlyIfNeeded = false);
     virtual void WakeUpIdle(void);
 
     virtual void SetPrintMode(int mode) { m_nPrintMode = mode; }
@@ -110,6 +109,8 @@ public:
 
     // Implementation
     static bool  RegisterWindowClasses(HAB vHab);
+
+    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
 
 public:
     int                             m_nCmdShow;

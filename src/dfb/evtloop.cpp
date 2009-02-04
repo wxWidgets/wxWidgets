@@ -204,6 +204,8 @@ wxIDirectFBEventBufferPtr wxGUIEventLoop::GetDirectFBEventBuffer()
 
 void wxGUIEventLoop::Yield()
 {
+    // TODO: implement event filtering using the eventsToProcess mask
+
     // process all pending events:
     while ( Pending() )
         Dispatch();

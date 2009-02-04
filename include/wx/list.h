@@ -1277,4 +1277,15 @@ public:
         (list).clear();                                                      \
     }
 
+// append all element of one list to another one
+#define WX_APPEND_LIST(list, other)                                           \
+    {                                                                         \
+        wxList::compatibility_iterator node = other->GetFirst();              \
+        while ( node )                                                        \
+        {                                                                     \
+            (list)->push_back(node->GetData());                               \
+            node = node->GetNext();                                           \
+        }                                                                     \
+    }
+
 #endif // _WX_LISTH__

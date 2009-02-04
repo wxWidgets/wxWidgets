@@ -172,6 +172,7 @@ public:
 
     // implement the base class pure virtual
     virtual wxEvent *Clone() const { return new wxTimerEvent(*this); }
+    virtual wxEventCategory GetEventCategory() const { return wxEVT_CATEGORY_TIMER; }
 
 private:
     wxTimer* m_timer;

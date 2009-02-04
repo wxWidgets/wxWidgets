@@ -53,7 +53,6 @@ public:
 
     virtual void Exit();
 
-    virtual bool Yield(bool onlyIfNeeded = false);
     virtual void WakeUpIdle(); // implemented in motif/evtloop.cpp
 
     // implementation from now on
@@ -66,6 +65,7 @@ public:
     // Implementation
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
+    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
 
     // Motif-specific
     WXAppContext   GetAppContext() const { return m_appContext; }

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/gtk/app.h
-// Purpose:
+// Purpose:     wxApp definition for wxGTK
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
@@ -40,7 +40,6 @@ public:
     virtual bool OnInitGui();
 
     // override base class (pure) virtuals
-    virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
 
     virtual bool Initialize(int& argc, wxChar **argv);
@@ -78,6 +77,10 @@ public:
     // check for pending events, without interference from our idle source
     bool EventsPending();
     bool DoIdle();
+
+protected:
+
+    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
 
 private:
     // true if we're inside an assert modal dialog

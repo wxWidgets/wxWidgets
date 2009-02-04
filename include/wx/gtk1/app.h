@@ -38,7 +38,6 @@ public:
     virtual bool OnInitGui();
 
     // override base class (pure) virtuals
-    virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
 
     virtual bool Initialize(int& argc, wxChar **argv);
@@ -70,6 +69,8 @@ private:
 #ifdef __WXDEBUG__
     bool m_isInAssert;
 #endif // __WXDEBUG__
+
+    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
 
     DECLARE_DYNAMIC_CLASS(wxApp)
 };

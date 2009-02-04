@@ -105,7 +105,7 @@ private:
     void OnResumeThread(wxCommandEvent& event);
 
     void OnStartWorker(wxCommandEvent& event);
-    void OnWorkerEvent(wxCommandEvent& event);
+    void OnWorkerEvent(wxThreadEvent& event);
     void OnUpdateWorker(wxUpdateUIEvent& event);
 
     void OnExecMain(wxCommandEvent& event);
@@ -169,7 +169,7 @@ enum
 
     THREAD_SHOWCPUS,
 
-    WORKER_EVENT    // this one gets sent from the worker thread
+    WORKER_EVENT = wxID_HIGHEST+1   // this one gets sent from the worker thread
 };
 
 // ----------------------------------------------------------------------------
@@ -292,8 +292,22 @@ void MyWorkerThread::OnExit()
 {
 }
 
+#define TEST_YIELD_RACE_CONDITION       1
+
 void *MyWorkerThread::Entry()
 {
+#if TEST_YIELD_RACE_CONDITION
+    if ( TestDestroy() )
+        return NULL;
+
+    wxThreadEvent event( WORKER_EVENT );
+
+    event.SetInt( 50 );
+    wxQueueEvent( m_frame, new wxThreadEvent(event) );
+
+    event.SetInt(-1);
+    wxQueueEvent( m_frame, new wxThreadEvent(event) );
+#else
     for ( m_count = 0; !m_frame->Cancelled() && (m_count < 100); m_count++ )
     {
         // check if we were asked to exit
@@ -301,18 +315,19 @@ void *MyWorkerThread::Entry()
             break;
 
         // create any type of command event here
-        wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
+        wxThreadEvent event( WORKER_EVENT );
         event.SetInt( m_count );
 
         // send in a thread-safe way
-        wxQueueEvent( m_frame, new wxCommandEvent(event) );
+        wxQueueEvent( m_frame, new wxThreadEvent(event) );
 
         wxMilliSleep(200);
     }
 
-    wxCommandEvent event( wxEVT_COMMAND_MENU_SELECTED, WORKER_EVENT );
+    wxThreadEvent event( WORKER_EVENT );
     event.SetInt(-1); // that's all
-    wxQueueEvent( m_frame, new wxCommandEvent(event) );
+    wxQueueEvent( m_frame, new wxThreadEvent(event) );
+#endif
 
     return NULL;
 }
@@ -360,7 +375,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(THREAD_START_WORKER, MyFrame::OnUpdateWorker)
     EVT_MENU(THREAD_START_WORKER, MyFrame::OnStartWorker)
-    EVT_MENU(WORKER_EVENT, MyFrame::OnWorkerEvent)
+
+    EVT_THREAD(WORKER_EVENT, MyFrame::OnWorkerEvent)
 
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
@@ -442,7 +458,6 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
 
     m_txtctrl = new wxTextCtrl(this, wxID_ANY, _T(""), wxPoint(0, 0), wxSize(0, 0),
                                wxTE_MULTILINE | wxTE_READONLY);
-
 }
 
 MyFrame::~MyFrame()
@@ -758,7 +773,7 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
     thread->Run();
 }
 
-void MyFrame::OnWorkerEvent(wxCommandEvent& event)
+void MyFrame::OnWorkerEvent(wxThreadEvent& event)
 {
     int n = event.GetInt();
     if ( n == -1 )

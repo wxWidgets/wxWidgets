@@ -164,6 +164,7 @@ bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **argv)
 
 #if wxUSE_THREADS
     wxHandlersWithPendingEventsLocker = new wxCriticalSection;
+    wxHandlersWithPendingDelayedEvents = new wxList;
 #endif
 
 #ifndef __WXPALMOS__
@@ -192,6 +193,9 @@ void wxAppConsoleBase::CleanUp()
 
     delete wxHandlersWithPendingEvents;
     wxHandlersWithPendingEvents = NULL;
+
+    delete wxHandlersWithPendingDelayedEvents;
+    wxHandlersWithPendingDelayedEvents = NULL;
 
 #if wxUSE_THREADS
     delete wxHandlersWithPendingEventsLocker;
@@ -336,6 +340,16 @@ bool wxAppConsoleBase::HasPendingEvents() const
     return has;
 }
 
+void wxAppConsoleBase::SuspendProcessingOfPendingEvents()
+{
+    wxENTER_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
+}
+
+void wxAppConsoleBase::ResumeProcessingOfPendingEvents()
+{
+    wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
+}
+
 /* static */
 bool wxAppConsoleBase::IsMainLoopRunning()
 {
@@ -353,6 +367,9 @@ void wxAppConsoleBase::ProcessPendingEvents()
 
     wxENTER_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
 
+    wxCHECK_RET( wxHandlersWithPendingDelayedEvents->IsEmpty(),
+                 "this helper list should be empty" );
+
     if (wxHandlersWithPendingEvents)
     {
         // iterate until the list becomes empty: the handlers remove themselves
@@ -360,7 +377,7 @@ void wxAppConsoleBase::ProcessPendingEvents()
         wxList::compatibility_iterator node = wxHandlersWithPendingEvents->GetFirst();
         while (node)
         {
-            // In ProcessPendingEvents(), new handlers might be add
+            // In ProcessPendingEvents(), new handlers might be added
             // and we can safely leave the critical section here.
             wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
 
@@ -372,6 +389,20 @@ void wxAppConsoleBase::ProcessPendingEvents()
             // restart as the iterators could have been invalidated
             node = wxHandlersWithPendingEvents->GetFirst();
         }
+    }
+
+    // now the wxHandlersWithPendingEvents is surely empty; however some event
+    // handlers may have moved themselves into wxHandlersWithPendingDelayedEvents
+    // because of a selective wxYield call in progress.
+    // Now we need to move them back to wxHandlersWithPendingEvents so the next
+    // call to this function has the chance of processing them:
+    if (!wxHandlersWithPendingDelayedEvents->IsEmpty())
+    {
+        if (!wxHandlersWithPendingEvents)
+            wxHandlersWithPendingEvents = new wxList;
+
+        WX_APPEND_LIST(wxHandlersWithPendingEvents, wxHandlersWithPendingDelayedEvents);
+        wxHandlersWithPendingDelayedEvents->Clear();
     }
 
     wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );

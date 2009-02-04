@@ -470,7 +470,7 @@ void wxApp::SetTopLevelRealizedWidget(WXDisplay* display, WXWidget widget)
 
 // Yield to other processes
 
-bool wxApp::Yield(bool onlyIfNeeded)
+bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
 {
     if ( m_isInsideYield )
     {
@@ -483,9 +483,11 @@ bool wxApp::Yield(bool onlyIfNeeded)
     }
 
     m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
 
     wxEventLoopGuarantor dummyLoopIfNeeded;
     while (wxTheApp && wxTheApp->Pending())
+        // TODO: implement event filtering using the eventsToProcess mask
         wxTheApp->Dispatch();
 
     m_isInsideYield = false;

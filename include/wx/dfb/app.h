@@ -32,13 +32,14 @@ public:
     virtual void CleanUp();
 
     virtual void WakeUpIdle();
-    virtual bool Yield(bool onlyIfNeeded = false);
 
     virtual wxVideoMode GetDisplayMode() const;
     virtual bool SetDisplayMode(const wxVideoMode& mode);
 
 private:
     wxVideoMode m_videoMode;
+
+    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
 
     DECLARE_DYNAMIC_CLASS(wxApp)
 };
