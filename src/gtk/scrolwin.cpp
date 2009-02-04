@@ -39,27 +39,23 @@
 void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                    int noUnitsX, int noUnitsY,
                                    int xPos, int yPos,
-                                   bool noRefresh)
+                                   bool WXUNUSED(noRefresh))
 {
     m_xScrollPixelsPerLine = pixelsPerUnitX;
     m_yScrollPixelsPerLine = pixelsPerUnitY;
-
-    m_win->m_scrollBar[wxWindow::ScrollDir_Horz]->adjustment->value =
-    m_xScrollPosition = xPos;
-    m_win->m_scrollBar[wxWindow::ScrollDir_Vert]->adjustment->value =
-    m_yScrollPosition = yPos;
 
     int w = noUnitsX * pixelsPerUnitX;
     int h = noUnitsY * pixelsPerUnitY;
     m_targetWindow->SetVirtualSize( w ? w : wxDefaultCoord,
                                     h ? h : wxDefaultCoord);
 
-    // Query view start after m_targetWindow->SetVirtualSize(...) since
-    // that call can change the current=old scrolling position!
-    int xs, ys;
-    GetViewStart(& xs, & ys);
-    int old_x = m_xScrollPixelsPerLine * xs;
-    int old_y = m_yScrollPixelsPerLine * ys;
+    GtkRange *sb = m_win->m_scrollBar[wxWindow::ScrollDir_Vert];
+    gtk_range_set_value(sb, yPos);
+    sb = m_win->m_scrollBar[wxWindow::ScrollDir_Horz];
+    gtk_range_set_value(sb, xPos);
+    
+    m_xScrollPosition = wxRound( m_win->m_scrollBar[wxWindow::ScrollDir_Horz]->adjustment->value );
+    m_yScrollPosition = wxRound( m_win->m_scrollBar[wxWindow::ScrollDir_Vert]->adjustment->value );
 
     // If the target is not the same as the window with the scrollbars,
     // then we need to update the scrollbars here, since they won't have
@@ -69,6 +65,7 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
         AdjustScrollbars();
     }
 
+#if 0
     if (!noRefresh)
     {
         int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
@@ -76,6 +73,7 @@ void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
 
         m_targetWindow->ScrollWindow( old_x - new_x, old_y - new_y );
     }
+#endif
 }
 
 void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
