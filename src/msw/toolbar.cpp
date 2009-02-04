@@ -282,9 +282,13 @@ void wxToolBar::Init()
 
     m_nButtons = 0;
 
-    const wxSize size = wxArtProvider::GetNativeSizeHint(wxART_TOOLBAR);
-    m_defaultWidth = size.x;
-    m_defaultHeight = size.y;
+    // even though modern Windows applications typically use 24*24 (or even
+    // 32*32) size for their bitmaps, the native control itself still uses the
+    // old 16*15 default size (see TB_SETBITMAPSIZE documentation in MSDN), so
+    // default to it so that we don't call SetToolBitmapSize() unnecessarily in
+    // AdjustToolBitmapSize()
+    m_defaultWidth = 16;
+    m_defaultHeight = 15;
 
     m_pInTool = NULL;
 }
@@ -630,29 +634,22 @@ void wxToolBar::CreateDisabledImageList()
     }
 }
 
-void wxToolBar::MSWSetBitmapSize(const wxSize& size)
-{
-    ::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0, MAKELONG(size.x, size.y));
-}
-
 void wxToolBar::AdjustToolBitmapSize()
 {
-    // this is the default bitmap size, we only need to call TB_SETBITMAPSIZE
-    // if we use something different
-    static const wxSize sizeStd(16, 15);
+    const wxSize sizeOrig(m_defaultWidth, m_defaultHeight);
 
-    wxSize s(m_defaultWidth, m_defaultHeight);
+    wxSize sizeActual(sizeOrig);
 
     for ( wxToolBarToolsList::const_iterator i = m_tools.begin();
           i != m_tools.end();
           ++i )
     {
         const wxBitmap& bmp = (*i)->GetNormalBitmap();
-        s.IncTo(bmp.GetSize());
+        sizeActual.IncTo(bmp.GetSize());
     }
 
-    if ( s != sizeStd )
-        MSWSetBitmapSize(s);
+    if ( sizeActual != sizeOrig )
+        SetToolBitmapSize(sizeActual);
 }
 
 bool wxToolBar::Realize()
@@ -1354,7 +1351,7 @@ void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
     wxToolBarBase::SetToolBitmapSize(size);
 
-    MSWSetBitmapSize(size);
+    ::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0, MAKELONG(size.x, size.y));
 }
 
 void wxToolBar::SetRows(int nRows)

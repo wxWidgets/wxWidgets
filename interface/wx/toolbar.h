@@ -403,8 +403,15 @@ public:
     wxSize GetMargins() const;
 
     /**
-        Returns the size of bitmap that the toolbar expects to have. The default
-        bitmap size is 16 by 15 pixels.
+        Returns the size of bitmap that the toolbar expects to have.
+
+        The default bitmap size is platform-dependent: for example, it is 16*15
+        for MSW and 24*24 for GTK. This size does @em not necessarily indicate
+        the best size to use for the toolbars on the given platform, for this
+        you should use @c wxArtProvider::GetNativeSizeHint(wxART_TOOLBAR) but
+        in any case, as the bitmap size is deduced automatically from the size
+        of the bitmaps associated with the tools added to the toolbar, it is
+        usually unnecessary to call SetToolBitmapSize() explicitly.
 
         @remarks Note that this is the size of the bitmap you pass to AddTool(),
             and not the eventual size of the tool button.

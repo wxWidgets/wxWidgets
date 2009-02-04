@@ -424,6 +424,8 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         }
     }
 
+    // this call is actually unnecessary as the toolbar will adjust its tools
+    // size to fit the biggest icon used anyhow but it doesn't hurt neither
     toolBar->SetToolBitmapSize(wxSize(w, h));
 
     toolBar->AddTool(wxID_NEW, _T("New"),
