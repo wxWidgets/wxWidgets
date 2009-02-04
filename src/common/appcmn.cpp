@@ -328,7 +328,7 @@ void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
 
 bool wxAppBase::IsEventAllowedInsideYield(wxEventCategory cat) const
 {
-    return m_eventsToProcessInsideYield & cat;
+    return (m_eventsToProcessInsideYield & cat) != 0;
 }
 
 bool wxAppBase::SafeYield(wxWindow *win, bool onlyIfNeeded)
