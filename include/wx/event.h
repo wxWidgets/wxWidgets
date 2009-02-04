@@ -1070,7 +1070,7 @@ private:
 
 // Thread event
 
-class WXDLLIMPEXP_BASE wxThreadEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxThreadEvent : public wxCommandEvent
 {
 public:
     wxThreadEvent(int id = wxID_ANY)
