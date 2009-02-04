@@ -1274,12 +1274,6 @@ public:
     bool SetChoices( wxPGChoices& choices );
 
     /**
-        If property has choices and they are not yet exclusive, new such copy
-        of them will be created.
-    */
-    void SetChoicesExclusive();
-
-    /**
         Sets client data (void*) of a property.
 
         @remarks This untyped client data has to be deleted manually.
@@ -1599,7 +1593,7 @@ public:
     /**
         Creates exclusive copy of current choices.
     */
-    void SetExclusive();
+    void AllocExclusive();
 
     /**
         Returns array of choice labels.

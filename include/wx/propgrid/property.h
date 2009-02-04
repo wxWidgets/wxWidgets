@@ -873,11 +873,7 @@ public:
     void AssignData( wxPGChoicesData* data );
 
     /** Delete all choices. */
-    void Clear()
-    {
-        if ( m_data != wxPGChoicesEmptyData )
-            m_data->Clear();
-    }
+    void Clear();
 
     /**
         Returns a real copy of the choices.
@@ -980,16 +976,7 @@ public:
     }
 
     // Creates exclusive copy of current choices
-    void SetExclusive()
-    {
-        if ( m_data->m_refCount != 1 )
-        {
-            wxPGChoicesData* data = new wxPGChoicesData();
-            data->CopyDataFrom(m_data);
-            Free();
-            m_data = data;
-        }
-    }
+    void AllocExclusive();
 
     // Returns data, increases refcount.
     wxPGChoicesData* GetData()
@@ -1921,14 +1908,6 @@ public:
         by custom cell renderers.
     */
     void SetValueImage( wxBitmap& bmp );
-
-    /** If property has choices and they are not yet exclusive, new such copy
-        of them will be created.
-    */
-    void SetChoicesExclusive()
-    {
-        m_choices.SetExclusive();
-    }
 
     /** Sets selected choice and changes property value.
 

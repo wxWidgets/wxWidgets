@@ -1494,27 +1494,17 @@ void FormMain::PopulateWithExamples ()
                                   240) );
     pg->GetProperty(wxT("EnumProperty 2"))->AddChoice(wxT("Testing Extra"), 360);
 
-    // Add a second time to test that the caching works. Also use
-    // short form of constructor list + SetChoices.
-    prop = new wxEnumProperty(wxT("EnumProperty 3"), wxPG_LABEL);
-    pg->Append( prop );
-    prop->SetChoices(soc);
-    prop->SetValue(360);
-    pg->SetPropertyHelpString(prop,
-        wxT("Should have same choices as EnumProperty 2"));
+    // Here we only display the original 'soc' choices
+    pg->Append( new wxEnumProperty(wxT("EnumProperty 3"),wxPG_LABEL,
+        soc, 240 ) );
 
+    // 'soc' plus one exclusive extra choice "4th only"
     pg->Append( new wxEnumProperty(wxT("EnumProperty 4"),wxPG_LABEL,
         soc, 240 ) );
+    pg->GetProperty(wxT("EnumProperty 4"))->AddChoice(wxT("4th only"), 360);
+
     pg->SetPropertyHelpString(wxT("EnumProperty 4"),
-        wxT("Should have same choices as EnumProperty 2"));
-
-    pg->Append( new wxEnumProperty(wxT("EnumProperty 5"),wxPG_LABEL,
-        soc, 240 ) );
-    pg->GetProperty(wxT("EnumProperty 5"))->SetChoicesExclusive();
-    pg->GetProperty(wxT("EnumProperty 5"))->AddChoice(wxT("5th only"), 360);
-
-    pg->SetPropertyHelpString(wxT("EnumProperty 5"),
-        wxT("Should have one extra item when compared to EnumProperty 4"));
+        wxT("Should have one extra item when compared to EnumProperty 3"));
 
     // Password property example.
     pg->Append( new wxStringProperty(wxT("Password"),wxPG_LABEL, wxT("password")) );

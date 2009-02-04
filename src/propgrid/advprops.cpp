@@ -1423,8 +1423,6 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
     {
         int ival = wxPGVariantToInt(value);
 
-        SetChoicesExclusive(); // Make sure we don't corrupt colour lists of other properties
-
         if ( ival && (m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
         {
             // Show custom choice

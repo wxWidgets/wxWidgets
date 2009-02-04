@@ -2506,6 +2506,270 @@ void wxPropertyCategory::CalculateTextExtent( wxWindow* wnd, const wxFont& font 
 }
 
 // -----------------------------------------------------------------------
+// wxPGChoices
+// -----------------------------------------------------------------------
+
+wxPGChoiceEntry& wxPGChoices::Add( const wxString& label, int value )
+{
+    AllocExclusive();
+
+    wxPGChoiceEntry entry(label, value);
+    return m_data->Insert( -1, entry );
+}
+
+// -----------------------------------------------------------------------
+
+wxPGChoiceEntry& wxPGChoices::Add( const wxString& label, const wxBitmap& bitmap, int value )
+{
+    AllocExclusive();
+
+    wxPGChoiceEntry entry(label, value);
+    entry.SetBitmap(bitmap);
+    return m_data->Insert( -1, entry );
+}
+
+// -----------------------------------------------------------------------
+
+wxPGChoiceEntry& wxPGChoices::Insert( const wxPGChoiceEntry& entry, int index )
+{
+    AllocExclusive();
+
+    return m_data->Insert( index, entry );
+}
+
+// -----------------------------------------------------------------------
+
+wxPGChoiceEntry& wxPGChoices::Insert( const wxString& label, int index, int value )
+{
+    AllocExclusive();
+
+    wxPGChoiceEntry entry(label, value);
+    return m_data->Insert( index, entry );
+}
+
+// -----------------------------------------------------------------------
+
+wxPGChoiceEntry& wxPGChoices::AddAsSorted( const wxString& label, int value )
+{
+    AllocExclusive();
+
+    size_t index = 0;
+
+    while ( index < GetCount() )
+    {
+        int cmpRes = GetLabel(index).Cmp(label);
+        if ( cmpRes > 0 )
+            break;
+        index++;
+    }
+
+    wxPGChoiceEntry entry(label, value);
+    return m_data->Insert( index, entry );
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::Add( const wxChar** labels, const ValArrItem* values )
+{
+    AllocExclusive();
+
+    unsigned int itemcount = 0;
+    const wxChar** p = &labels[0];
+    while ( *p ) { p++; itemcount++; }
+
+    unsigned int i;
+    for ( i = 0; i < itemcount; i++ )
+    {
+        int value = i;
+        if ( values )
+            value = values[i];
+        wxPGChoiceEntry entry(labels[i], value);
+        m_data->Insert( i, entry );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::Add( const wxArrayString& arr, const wxArrayInt& arrint )
+{
+    AllocExclusive();
+
+    unsigned int i;
+    unsigned int itemcount = arr.size();
+
+    for ( i = 0; i < itemcount; i++ )
+    {
+        int value = i;
+        if ( &arrint && arrint.size() )
+            value = arrint[i];
+        wxPGChoiceEntry entry(arr[i], value);
+        m_data->Insert( i, entry );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::RemoveAt(size_t nIndex, size_t count)
+{
+    AllocExclusive();
+
+    wxASSERT( m_data->m_refCount != 0xFFFFFFF );
+    m_data->m_items.erase(m_data->m_items.begin()+nIndex,
+                          m_data->m_items.begin()+nIndex+count);
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::Clear()
+{
+    if ( m_data != wxPGChoicesEmptyData )
+    {
+        AllocExclusive();
+        m_data->Clear();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+int wxPGChoices::Index( const wxString& str ) const
+{
+    if ( IsOk() )
+    {
+        unsigned int i;
+        for ( i=0; i< m_data->GetCount(); i++ )
+        {
+            const wxPGChoiceEntry& entry = m_data->Item(i);
+            if ( entry.HasText() && entry.GetText() == str )
+                return i;
+        }
+    }
+    return -1;
+}
+
+// -----------------------------------------------------------------------
+
+int wxPGChoices::Index( int val ) const
+{
+    if ( IsOk() )
+    {
+        unsigned int i;
+        for ( i=0; i< m_data->GetCount(); i++ )
+        {
+            const wxPGChoiceEntry& entry = m_data->Item(i);
+            if ( entry.GetValue() == val )
+                return i;
+        }
+    }
+    return -1;
+}
+
+// -----------------------------------------------------------------------
+
+wxArrayString wxPGChoices::GetLabels() const
+{
+    wxArrayString arr;
+    unsigned int i;
+
+    if ( this && IsOk() )
+        for ( i=0; i<GetCount(); i++ )
+            arr.push_back(GetLabel(i));
+
+    return arr;
+}
+
+// -----------------------------------------------------------------------
+
+wxArrayInt wxPGChoices::GetValuesForStrings( const wxArrayString& strings ) const
+{
+    wxArrayInt arr;
+
+    if ( IsOk() )
+    {
+        unsigned int i;
+        for ( i=0; i< strings.size(); i++ )
+        {
+            int index = Index(strings[i]);
+            if ( index >= 0 )
+                arr.Add(GetValue(index));
+            else
+                arr.Add(wxPG_INVALID_VALUE);
+        }
+    }
+
+    return arr;
+}
+
+// -----------------------------------------------------------------------
+
+wxArrayInt wxPGChoices::GetIndicesForStrings( const wxArrayString& strings,
+                                              wxArrayString* unmatched ) const
+{
+    wxArrayInt arr;
+
+    if ( IsOk() )
+    {
+        unsigned int i;
+        for ( i=0; i< strings.size(); i++ )
+        {
+            const wxString& str = strings[i];
+            int index = Index(str);
+            if ( index >= 0 )
+                arr.Add(index);
+            else if ( unmatched )
+                unmatched->Add(str);
+        }
+    }
+
+    return arr;
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::AllocExclusive()
+{
+    EnsureData();
+
+    if ( m_data->m_refCount != 1 )
+    {
+        wxPGChoicesData* data = new wxPGChoicesData();
+        data->CopyDataFrom(m_data);
+        Free();
+        m_data = data;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::AssignData( wxPGChoicesData* data )
+{
+    Free();
+
+    if ( data != wxPGChoicesEmptyData )
+    {
+        m_data = data;
+        data->m_refCount++;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::Init()
+{
+    m_data = wxPGChoicesEmptyData;
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::Free()
+{
+    if ( m_data != wxPGChoicesEmptyData )
+    {
+        m_data->DecRef();
+        m_data = wxPGChoicesEmptyData;
+    }
+}
+
+// -----------------------------------------------------------------------
 // wxPGAttributeStorage
 // -----------------------------------------------------------------------
 
