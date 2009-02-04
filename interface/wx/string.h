@@ -1349,10 +1349,11 @@ public:
     //@}
 };
 
-/** @addtogroup group_string_operators */
+
+
 //@{
 /**
-    Comparison operators for wxString.
+    Comparison operator for string types.
 */
 inline bool operator==(const wxString& s1, const wxString& s2);
 inline bool operator!=(const wxString& s1, const wxString& s2);
@@ -1372,9 +1373,11 @@ inline bool operator==(const wxString& s1, const wxCharBuffer& s2);
 inline bool operator==(const wxCharBuffer& s1, const wxString& s2);
 inline bool operator!=(const wxString& s1, const wxCharBuffer& s2);
 inline bool operator!=(const wxCharBuffer& s1, const wxString& s2);
+//@}
 
+//@{
 /**
-    Comparison operators with wxUniChar or wxUniCharRef.
+    Comparison operators char types.
 */
 inline bool operator==(const wxUniChar& c, const wxString& s);
 inline bool operator==(const wxUniCharRef& c, const wxString& s);
@@ -1401,7 +1404,6 @@ inline bool operator!=(const wxString& s, wchar_t c);
     Used extensively in the entire wxWidgets API.
 */
 wxString wxEmptyString;
-
 
 
 
