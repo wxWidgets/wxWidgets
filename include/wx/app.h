@@ -431,7 +431,7 @@ protected:
     // helper array used by ProcessPendingEvents()
     // wxEvtHandlerArray m_handlersWithPendingDelayedEvents;    FIXME: enable this and remove global lists
 
-    friend class WXDLLIMPEXP_BASE wxEvtHandler;
+    friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 
     // the application object is a singleton anyhow, there is no sense in
     // copying it
