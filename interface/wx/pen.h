@@ -158,7 +158,8 @@ public:
             A colour object.
         @param width
             Pen width. Under Windows, the pen width cannot be greater than 1 if
-            the style is @c wxDOT, @c wxLONG_DASH, @c wxSHORT_DASH, @c wxDOT_DASH, or @c wxUSER_DASH.
+            the style is @c wxPENSTYLE_DOT, @c wxPENSTYLE_LONG_DASH, @c wxPENSTYLE_SHORT_DASH,
+            @c wxPENSTYLE_DOT_DASH, or @c wxPENSTYLE_USER_DASH.
         @param style
             The style may be one of the ::wxPenStyle values.
 
@@ -176,7 +177,8 @@ public:
 
         @param width
             Pen width. Under Windows, the pen width cannot be greater than 1 if
-            the style is @c wxDOT, @c wxLONG_DASH, @c wxSHORT_DASH, @c wxDOT_DASH, or @c wxUSER_DASH.
+            the style is @c wxPENSTYLE_DOT, @c wxPENSTYLE_LONG_DASH, @c wxPENSTYLE_SHORT_DASH,
+            @c wxPENSTYLE_DOT_DASH, or @c wxPENSTYLE_USER_DASH.
         @param stipple
             A stipple bitmap.
 
@@ -207,8 +209,8 @@ public:
     virtual ~wxPen();
 
     /**
-        Returns the pen cap style, which may be one of @c wxCAP_ROUND, @c
-        wxCAP_PROJECTING and @c wxCAP_BUTT.
+        Returns the pen cap style, which may be one of @c wxCAP_ROUND,
+        @c wxCAP_PROJECTING and @c wxCAP_BUTT.
 
         The default is @c wxCAP_ROUND.
 
@@ -224,7 +226,7 @@ public:
     virtual wxColour GetColour() const;
 
     /**
-        Gets an array of dashes (defined as char in X, DWORD under Windows).
+        Gets an array of dashes (defined as @c char in X, @c DWORD under Windows).
         @a dashes is a pointer to the internal array. Do not deallocate or store this
         pointer.
 
@@ -235,8 +237,8 @@ public:
     virtual int GetDashes(wxDash** dashes) const;
 
     /**
-        Returns the pen join style, which may be one of @c wxJOIN_BEVEL, @c
-        wxJOIN_ROUND and @c wxJOIN_MITER.
+        Returns the pen join style, which may be one of @c wxJOIN_BEVEL,
+        @c wxJOIN_ROUND and @c wxJOIN_MITER.
 
         The default is @c wxJOIN_ROUND.
 
@@ -289,7 +291,7 @@ public:
     //@}
 
     /**
-        Associates an array of pointers to dashes (defined as char in X, DWORD under
+        Associates an array of pointers to dashes (defined as @c char in X, @c DWORD under
         Windows) with the pen.
 
         The array is not deallocated by wxPen, but neither must it be deallocated by
@@ -355,56 +357,84 @@ public:
 
 /**
     An empty pen.
+    wxPen::IsOk() always returns @false for this object.
 */
 wxPen wxNullPen;
 
 /**
     Red pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxRED_PEN;
 
 /**
+    Blue pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
+*/
+wxPen* wxBLUE_PEN;
+
+/**
     Cyan pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxCYAN_PEN;
 
 /**
     Green pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxGREEN_PEN;
 
 /**
     Black pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxBLACK_PEN;
 
 /**
     White pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxWHITE_PEN;
 
 /**
     Transparent pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxTRANSPARENT_PEN;
 
 /**
     Black dashed pen.
+    Except for the color and for the @c wxPENSTYLE_SHORT_DASH it has all standard attributes
+    (1-pixel width, @c wxCAP_ROUND style, etc...).
 */
 wxPen* wxBLACK_DASHED_PEN;
 
 /**
     Grey pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxGREY_PEN;
 
 /**
     Medium-grey pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxMEDIUM_GREY_PEN;
 
 /**
     Light-grey pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxLIGHT_GREY_PEN;
 

@@ -20,10 +20,12 @@ enum wxBrushStyle
         /**< Transparent (no fill). */
 
     wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE = wxSTIPPLE_MASK_OPAQUE,
-        /**< @todo WHAT's THIS?? */
+        /**< Uses a bitmap as a stipple; the mask is used for blitting monochrome
+             using text foreground and background colors. */
 
     wxBRUSHSTYLE_STIPPLE_MASK = wxSTIPPLE_MASK,
-        /**< @todo WHAT's THIS?? */
+        /**< Uses a bitmap as a stipple; mask is used for masking areas in the
+             stipple bitmap. */
 
     wxBRUSHSTYLE_STIPPLE = wxSTIPPLE,
         /**< Uses a bitmap as a stipple. */
@@ -117,7 +119,7 @@ public:
 
     /**
         Constructs a stippled brush using a bitmap.
-        The brush style will be set to wxBRUSHSTYLE_STIPPLE.
+        The brush style will be set to @c wxBRUSHSTYLE_STIPPLE.
     */
     wxBrush(const wxBitmap& stippleBitmap);
 
@@ -147,7 +149,7 @@ public:
     virtual wxColour GetColour() const;
 
     /**
-        Gets a pointer to the stipple bitmap. If the brush does not have a wxBRUSHSTYLE_STIPPLE
+        Gets a pointer to the stipple bitmap. If the brush does not have a @c wxBRUSHSTYLE_STIPPLE
         style, this bitmap may be non-@NULL but uninitialised (i.e. wxBitmap:IsOk() returns @false).
 
         @see SetStipple()
@@ -191,9 +193,9 @@ public:
         @param bitmap
             The bitmap to use for stippling.
 
-        @remarks The style will be set to wxBRUSHSTYLE_STIPPLE, unless the bitmap
+        @remarks The style will be set to @c wxBRUSHSTYLE_STIPPLE, unless the bitmap
                  has a mask associated to it, in which case the style will be set
-                 to wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE.
+                 to @c wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE.
 
         @see wxBitmap
     */
@@ -224,56 +226,77 @@ public:
 
 /**
     An empty brush.
+    wxBrush::IsOk() always returns @false for this object.
 */
 wxBrush wxNullBrush;
 
 /**
     Blue brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxBLUE_BRUSH;
 
 /**
     Green brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxGREEN_BRUSH;
 
 /**
     White brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxWHITE_BRUSH;
 
 /**
     Black brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxBLACK_BRUSH;
 
 /**
     Grey brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxGREY_BRUSH;
 
 /**
     Medium grey brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxMEDIUM_GREY_BRUSH;
 
 /**
     Light grey brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxLIGHT_GREY_BRUSH;
 
 /**
     Transparent brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxTRANSPARENT_BRUSH;
 
 /**
     Cyan brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxCYAN_BRUSH;
 
 /**
     Red brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxRED_BRUSH;
 
