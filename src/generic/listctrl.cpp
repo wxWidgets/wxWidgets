@@ -56,6 +56,9 @@
     #include <Carbon/Carbon.h>
 #endif
 
+#if defined(__WXMSW__) && !defined(__WXWINCE__) && !defined(__WXUNIVERSAL__)
+    #define "wx/msw/wrapwin.h"
+#endif
 
 // NOTE: If using the wxListBox visual attributes works everywhere then this can
 // be removed, as well as the #else case below.
@@ -803,6 +806,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
 #if ( !defined(__WXGTK20__) && !defined(__WXMAC__) )
     {
         dc->DrawRectangle( rectHL );
+
+        wxUnusedVar(current);
     }
 #else
     {
@@ -4361,24 +4366,22 @@ wxBorder wxGenericListCtrl::GetDefaultBorder() const
     return wxBORDER_THEME;
 }
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && !defined(__WXWINCE__) && !defined(__WXUNIVERSAL__)
 WXLRESULT wxGenericListCtrl::MSWWindowProc(WXUINT nMsg,
                                        WXWPARAM wParam,
                                        WXLPARAM lParam)
 {
     WXLRESULT rc = wxControl::MSWWindowProc(nMsg, wParam, lParam);
 
-#ifndef __WXWINCE__
     // we need to process arrows ourselves for scrolling
     if ( nMsg == WM_GETDLGCODE )
     {
         rc |= DLGC_WANTARROWS;
     }
-#endif
 
     return rc;
 }
-#endif
+#endif // __WXMSW__
 
 wxSize wxGenericListCtrl::GetSizeAvailableForScrollTarget(const wxSize& size)
 {
