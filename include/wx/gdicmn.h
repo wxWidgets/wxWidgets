@@ -782,6 +782,7 @@ public:
         FONT_SWISS,
         PEN_BLACK,
         PEN_BLACKDASHED,
+        PEN_BLUE,
         PEN_CYAN,
         PEN_GREEN,
         PEN_GREY,
@@ -821,6 +822,7 @@ protected:
 
 #define wxBLACK_DASHED_PEN  wxStockGDI::GetPen(wxStockGDI::PEN_BLACKDASHED)
 #define wxBLACK_PEN         wxStockGDI::GetPen(wxStockGDI::PEN_BLACK)
+#define wxBLUE_PEN          wxStockGDI::GetPen(wxStockGDI::PEN_BLUE)
 #define wxCYAN_PEN          wxStockGDI::GetPen(wxStockGDI::PEN_CYAN)
 #define wxGREEN_PEN         wxStockGDI::GetPen(wxStockGDI::PEN_GREEN)
 #define wxGREY_PEN          wxStockGDI::GetPen(wxStockGDI::PEN_GREY)

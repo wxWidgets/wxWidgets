@@ -671,6 +671,9 @@ const wxPen* wxStockGDI::GetPen(Item item)
         case PEN_BLACKDASHED:
             pen = new wxPen(*GetColour(COLOUR_BLACK), 1, wxPENSTYLE_SHORT_DASH);
             break;
+        case PEN_BLUE:
+            pen = new wxPen(*GetColour(COLOUR_BLUE), 1, wxPENSTYLE_SOLID);
+            break;
         case PEN_CYAN:
             pen = new wxPen(*GetColour(COLOUR_CYAN), 1, wxPENSTYLE_SOLID);
             break;

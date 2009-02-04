@@ -82,9 +82,17 @@ enum wxBrushStyle
     @category{gdi}
 
     @stdobjects
-    ::wxNullBrush, ::wxBLUE_BRUSH, ::wxGREEN_BRUSH, ::wxWHITE_BRUSH,
-    ::wxBLACK_BRUSH, ::wxGREY_BRUSH, ::wxMEDIUM_GREY_BRUSH, ::wxLIGHT_GREY_BRUSH,
-    ::wxTRANSPARENT_BRUSH, ::wxCYAN_BRUSH, ::wxRED_BRUSH
+    @li ::wxNullBrush
+    @li ::wxBLACK_BRUSH
+    @li ::wxBLUE_BRUSH
+    @li ::wxCYAN_BRUSH
+    @li ::wxGREEN_BRUSH
+    @li ::wxGREY_BRUSH
+    @li ::wxLIGHT_GREY_BRUSH
+    @li ::wxMEDIUM_GREY_BRUSH
+    @li ::wxRED_BRUSH
+    @li ::wxTRANSPARENT_BRUSH
+    @li ::wxWHITE_BRUSH
 
     @see wxBrushList, wxDC, wxDC::SetBrush
 */
