@@ -78,7 +78,7 @@ public:
     inline wxArrayString& GetExcludes() { return m_excludes; }
 
     bool HasFlag(wxTextValidatorStyle style) const
-        { return m_validatorStyle & style; }
+        { return (m_validatorStyle & style) != 0; }
 
 protected:
 
