@@ -38,6 +38,7 @@
     #include "wx/dcclient.h"
     #include "wx/timer.h"
     #include "wx/settings.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/progdlg.h"
