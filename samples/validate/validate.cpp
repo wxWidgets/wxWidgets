@@ -258,17 +258,17 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     wxTextCtrl* txt2 =
              new wxTextCtrl(this, VALIDATE_TEXT2, wxEmptyString,
                             wxDefaultPosition, wxDefaultSize, 0, textVal);
-    txt2->SetToolTip("uses wxTextValidator with wxFILTER_EMPTY|");
+    txt2->SetToolTip("uses wxTextValidator with wxFILTER_EMPTY|wxFILTER_EXCLUDE_LIST (to exclude 'bcwyz')");
     flexgridsizer->Add(txt2, 1, wxGROW);
 
     flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
-                        wxPoint(10, 30), wxSize(120, wxDefaultCoord),
+                        wxDefaultPosition, wxDefaultSize,
                         3, g_listbox_choices, wxLB_MULTIPLE,
                         wxGenericValidator(&g_data.m_listbox_choices)),
                        1, wxGROW);
 
     m_combobox = new wxComboBox(this, VALIDATE_COMBO, wxEmptyString,
-                                wxPoint(130, 30), wxSize(120, wxDefaultCoord),
+                                wxDefaultPosition, wxDefaultSize,
                                 3, g_combobox_choices, 0L,
                                 MyComboBoxValidator(&g_data.m_combobox_choice));
     m_combobox->SetToolTip("uses a custom validator (MyComboBoxValidator)");
@@ -279,9 +279,9 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // We don't need any such pointer to query its state, which
     // can be gotten directly from g_data.
     flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"),
-                        wxPoint(130, 10), wxSize(120, wxDefaultCoord), 0,
+                        wxDefaultPosition, wxDefaultSize, 0,
                         wxGenericValidator(&g_data.m_checkbox_state)),
-                       1, wxALIGN_CENTER);
+                       1, wxALIGN_CENTER|wxALL, 15);
 
     flexgridsizer->AddGrowableCol(0);
     flexgridsizer->AddGrowableCol(1);
@@ -305,7 +305,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     mainsizer->Add(flexgridsizer, 1, wxGROW | wxALL, 10);
 
     mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, wxT("Pick a color"),
-                                    wxPoint(10, 100), wxDefaultSize,
+                                    wxDefaultPosition, wxDefaultSize,
                                     3, g_radiobox_choices, 1, wxRA_SPECIFY_ROWS,
                                     wxGenericValidator(&g_data.m_radiobox_choice)),
                    0, wxGROW | wxLEFT|wxBOTTOM|wxRIGHT, 10);
