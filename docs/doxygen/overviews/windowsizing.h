@@ -34,13 +34,19 @@ some simple explanations of things.
     wxWindow::DoGetBestSize() that a class needs to override if it wants to calculate
     its own best size based on its content.
 
-@li @b "Min Size": the minimal size of a widget is a size that is normally explicitly set
-    by the programmer either with the wxWindow::SetMinSize() method or with the
+@li @b "Minimal Size": the minimal size of a widget is a size that is normally explicitly
+    set by the programmer either with the wxWindow::SetMinSize() method or with the
     wxWindow::SetSizeHints() method.
-    Most controls will also set the min size to the size given in the control's
+    Most controls will also set the minimal size to the size given in the control's
     constructor if a non-default value is passed.
     Top-level windows such as wxFrame will not allow the user to resize the frame below
     the minimal size.
+
+@li @b "Maximum Size": just like for the minimal size, the maximum size is normally
+    explicitely set by the programmer with the wxWindow::SetMaxSize() method or
+    with wxWindow::SetSizeHints().
+    Top-level windows such as wxFrame will not allow the user to resize the frame above
+    the maximum size.
 
 @li @b "Size": the size of a widget can be explicitly set or fetched with the
     wxWindow::SetSize() or wxWindow::GetSize() methods.
@@ -59,6 +65,13 @@ some simple explanations of things.
     or if the size is not fully specified (such as wxSize(150,-1)) then most controls
     will fill in the missing size components using the best size and will set the
     initial size of the control to the resulting size.
+
+@li @b "Virtual Size": the virtual size is the size of the potentially viewable
+    area of the widget.
+    The virtual size of a widget may be larger than its actual size and in this
+    case scrollbars will appear to the let the user 'explore' the full contents
+    of the widget.
+    See wxScrolled for more info.
 
 
 @section overview_windowsizing_func Functions related to sizing

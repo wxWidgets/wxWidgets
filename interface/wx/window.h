@@ -416,6 +416,9 @@ public:
 
     /**
         @name Scrolling and scrollbars functions
+
+        Note that these methods don't work with native controls which don't use
+        wxWidgets scrolling framework (i.e. don't derive from wxScrolledWindow).
     */
     //@{
 
@@ -437,7 +440,7 @@ public:
     /**
         Returns the built-in scrollbar position.
 
-        @see See SetScrollbar()
+        @see SetScrollbar()
     */
     virtual int GetScrollPos(int orientation) const;
 
@@ -612,6 +615,8 @@ public:
 
     /**
         Sets the cached best size value.
+
+        @see GetBestSize()
     */
     void CacheBestSize(const wxSize& size) const;
 
@@ -684,6 +689,11 @@ public:
         control label is not truncated. For windows containing subwindows (typically
         wxPanel), the size returned by this function will be the same as the size
         the window would have had after calling Fit().
+
+        Note that when you write your own widget you need to overload the
+        DoGetBestSize() function instead of this (non-virtual!) function.
+
+        @see CacheBestSize(), @ref overview_windowsizing
     */
     wxSize GetBestSize() const;
 
@@ -708,7 +718,7 @@ public:
         Merges the window's best size into the min size and returns the result.
         This is the value used by sizers to determine the appropriate
         ammount of space to allocate for the widget.
-        
+
         This is the method called by any wxSizer when they query the size
         of a certain window or control.
 
@@ -723,7 +733,7 @@ public:
         possible size as well as the upper bound on window's size settable using
         SetClientSize().
 
-        @see GetMaxSize()
+        @see GetMaxSize(), @ref overview_windowsizing
     */
     virtual wxSize GetMaxClientSize() const;
 
@@ -733,7 +743,7 @@ public:
         This is an indication to the sizer layout mechanism that this is the maximum
         possible size as well as the upper bound on window's size settable using SetSize().
 
-        @see GetMaxClientSize()
+        @see GetMaxClientSize(), @ref overview_windowsizing
     */
     virtual wxSize GetMaxSize() const;
 
@@ -744,7 +754,7 @@ public:
         It normally just returns the value set by SetMinClientSize(), but it can be
         overridden to do the calculation on demand.
 
-        @see GetMinSize()
+        @see GetMinSize(), @ref overview_windowsizing
     */
     virtual wxSize GetMinClientSize() const;
 
@@ -755,7 +765,7 @@ public:
         This method normally just returns the value set by SetMinSize(), but it
         can be overridden to do the calculation on demand.
 
-        @see GetMinClientSize()
+        @see GetMinClientSize(), @ref overview_windowsizing
     */
     virtual wxSize GetMinSize() const;
 
@@ -771,7 +781,7 @@ public:
         @param height
             Receives the window height.
 
-        @see GetClientSize(), GetVirtualSize()
+        @see GetClientSize(), GetVirtualSize(), @ref overview_windowsizing
     */
     void GetSize(int* width, int* height) const;
 
@@ -784,6 +794,8 @@ public:
         This gets the virtual size of the window in pixels.
         By default it returns the client size of the window, but after a call to
         SetVirtualSize() it will return the size set with that method.
+
+        @see @ref overview_windowsizing
     */
     wxSize GetVirtualSize() const;
 
@@ -806,8 +818,11 @@ public:
     /**
         Resets the cached best size value so it will be recalculated the next time it
         is needed.
+
+        @see CacheBestSize()
     */
     void InvalidateBestSize();
+
     /**
         Posts a size event to the window.
 
@@ -866,6 +881,8 @@ public:
         than SetSize(), since the application need not worry about what dimensions
         the border or title bar have when trying to fit the window around panel
         items, for example.
+
+        @see @ref overview_windowsizing
     */
     virtual void SetClientSize(int width, int height);
 
@@ -902,7 +919,12 @@ public:
         Sets the maximum client size of the window, to indicate to the sizer
         layout mechanism that this is the maximum possible size of its client area.
 
-        @see SetMaxSize()
+        Note that this method is just a shortcut for:
+        @code
+        SetMaxSize(ClientToWindowSize(size));
+        @endcode
+
+        @see SetMaxSize(), @ref overview_windowsizing
     */
     virtual void SetMaxClientSize(const wxSize& size);
 
@@ -910,7 +932,7 @@ public:
         Sets the maximum size of the window, to indicate to the sizer layout mechanism
         that this is the maximum possible size.
 
-        @see SetMaxClientSize()
+        @see SetMaxClientSize(), @ref overview_windowsizing
     */
     virtual void SetMaxSize(const wxSize& size);
 
@@ -926,7 +948,12 @@ public:
         prevent the program from explicitly making the window smaller than the
         specified size.
 
-        @see SetMinSize()
+        Note that this method is just a shortcut for:
+        @code
+        SetMinSize(ClientToWindowSize(size));
+        @endcode
+
+        @see SetMinSize(), @ref overview_windowsizing
     */
     virtual void SetMinClientSize(const wxSize& size);
 
@@ -942,7 +969,7 @@ public:
         SetSize(), it just ensures that it won't become smaller than this size
         during the automatic layout.
 
-        @see SetMinClientSize()
+        @see SetMinClientSize(), @ref overview_windowsizing
     */
     virtual void SetMinSize(const wxSize& size);
 
@@ -987,7 +1014,7 @@ public:
                  should be supplied by wxWidgets, or that the current value of the
                  dimension should be used.
 
-        @see Move()
+        @see Move(), @ref overview_windowsizing
     */
     void SetSize(int x, int y, int width, int height,
                  int sizeFlags = wxSIZE_AUTO);
@@ -998,7 +1025,7 @@ public:
 
         @remarks This form must be used with non-default width and height values.
 
-        @see Move()
+        @see Move(), @ref overview_windowsizing
     */
     virtual void SetSize(const wxRect& rect);
 
@@ -1017,7 +1044,7 @@ public:
         (such as wxDialog or wxFrame) is discouraged.
         Please use SetMinSize() and SetMaxSize() instead.
 
-        @see wxTopLevelWindow::SetSizeHints
+        @see wxTopLevelWindow::SetSizeHints, @ref overview_windowsizing
     */
     void SetSizeHints( const wxSize& minSize,
                        const wxSize& maxSize=wxDefaultSize,
@@ -1025,6 +1052,8 @@ public:
 
     /**
         Sets the virtual size of the window in pixels.
+
+        @see @ref overview_windowsizing
     */
     void SetVirtualSize(int width, int height);
 
