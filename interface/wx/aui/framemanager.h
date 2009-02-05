@@ -8,7 +8,7 @@
 
 
 /**
-    @todo TOWRITE
+    @todo wxAuiPaneInfo dock direction types used with wxAuiManager.
 */
 enum wxAuiManagerDock
 {
@@ -23,7 +23,7 @@ enum wxAuiManagerDock
 
 
 /**
-    @todo TOWRITE
+    @todo wxAuiManager behavior style flags.
 */
 enum wxAuiManagerOption
 {
@@ -47,16 +47,15 @@ enum wxAuiManagerOption
     @class wxAuiManager
 
     wxAuiManager is the central class of the wxAUI class framework.
-    See also @ref overview_aui.
 
     wxAuiManager manages the panes associated with it for a particular wxFrame,
     using a pane's wxAuiPaneInfo information to determine each pane's docking
     and floating behavior.
 
-    wxAuiManager uses wxWidgets' sizer mechanism to plan the layout of each frame.
-    It uses a replaceable dock art class to do all drawing, so all drawing is
-    localized in one area, and may be customized depending on an application's
-    specific needs.
+    wxAuiManager uses wxWidgets' sizer mechanism to plan the layout of each
+    frame. It uses a replaceable dock art class to do all drawing, so all
+    drawing is localized in one area, and may be customized depending on an
+    application's specific needs.
 
     wxAuiManager works as follows: the programmer adds panes to the class,
     or makes changes to existing pane properties (dock position, floating
@@ -86,33 +85,50 @@ enum wxAuiManagerOption
     @section auimanager_layers Layers, Rows and Directions, Positions
 
     Inside wxAUI, the docking layout is figured out by checking several pane
-    parameters. Four of these are important for determining where a pane will end up:
+    parameters. Four of these are important for determining where a pane will
+    end up:
 
-    @li Direction: Each docked pane has a direction, Top, Bottom, Left, Right, or Center.
-        This is fairly self-explanatory. The pane will be placed in the location specified
-        by this variable.
-    @li Position: More than one pane can be placed inside of a dock. Imagine two panes
-        being docked on the left side of a window. One pane can be placed over another.
-        In proportionally managed docks, the pane position indicates its sequential position,
-        starting with zero. So, in our scenario with two panes docked on the left side,
-        the top pane in the dock would have position 0, and the second one would occupy
+    @li Direction: Each docked pane has a direction, Top, Bottom, Left, Right,
+        or Center. This is fairly self-explanatory. The pane will be placed in
+        the location specified by this variable.
+    @li Position: More than one pane can be placed inside of a dock. Imagine
+        two panes being docked on the left side of a window. One pane can be
+        placed over another. In proportionally managed docks, the pane
+        position indicates its sequential position, starting with zero. So, in
+        our scenario with two panes docked on the left side, the top pane in
+        the dock would have position 0, and the second one would occupy
         position 1.
-    @li Row: A row can allow for two docks to be placed next to each other. One of the
-        most common places for this to happen is in the toolbar. Multiple toolbar rows
-        are allowed, the first row being row 0, and the second row 1. Rows can also be
-        used on vertically docked panes.
-    @li Layer: A layer is akin to an onion. Layer 0 is the very center of the managed pane.
-        Thus, if a pane is in layer 0, it will be closest to the center window (also
-        sometimes known as the "content window"). Increasing layers "swallow up" all
-        layers of a lower value. This can look very similar to multiple rows, but is
-        different because all panes in a lower level yield to panes in higher levels.
-        The best way to understand layers is by running the wxAUI sample.
+    @li Row: A row can allow for two docks to be placed next to each other.
+        One of the most common places for this to happen is in the toolbar.
+        Multiple toolbar rows are allowed, the first row being row 0, and the
+        second row 1. Rows can also be used on vertically docked panes.
+    @li Layer: A layer is akin to an onion. Layer 0 is the very center of the
+        managed pane. Thus, if a pane is in layer 0, it will be closest to the
+        center window (also sometimes known as the "content window").
+        Increasing layers "swallow up" all layers of a lower value. This can
+        look very similar to multiple rows, but is different because all panes
+        in a lower level yield to panes in higher levels. The best way to
+        understand layers is by running the wxAUI sample.
 
+
+    @beginEventTable{wxAuiManagerEvent}
+    @event{EVT_AUI_PANE_BUTTON(func)}
+        Triggered when any button is pressed for any docked panes.
+    @event{EVT_AUI_PANE_CLOSE(func)}
+        Triggered when a docked or floating pane is closed.
+    @event{EVT_AUI_PANE_MAXIMIZE(func)}
+        Triggered when a pane is maximized.
+    @event{EVT_AUI_PANE_RESTORE(func)}
+        Triggered when a pane is restored.
+    @event{EVT_AUI_RENDER(func)}
+        This event can be caught to override the default renderer in order to
+        custom draw your wxAuiManager window (not recommended).
+    @endEventTable
 
     @library{wxbase}
     @category{aui}
 
-    @see wxAuiPaneInfo, wxAuiDockArt
+    @see @ref overview_aui, wxAuiNotebook, wxAuiDockArt, wxAuiPaneInfo
 */
 class wxAuiManager : public wxEvtHandler
 {
@@ -766,5 +782,92 @@ public:
         Makes a copy of the wxAuiPaneInfo object.
     */
     wxAuiPaneInfo& operator=(const wxAuiPaneInfo& c);
+};
+
+
+
+/**
+    @class wxAuiManagerEvent
+
+    Event used to indicate various actions taken with wxAuiManager.
+
+    See wxAuiManager for available event types.
+
+    @library{wxaui}
+    @category{events,aui}
+
+    @see wxAuiManager, wxAuiPaneInfo
+*/
+class wxAuiManagerEvent : public wxEvent
+{
+public:
+    /**
+        Constructor.
+    */
+    wxAuiManagerEvent(wxEventType type = wxEVT_NULL);
+
+    /**
+        @return @true if this event can be vetoed.
+
+        @see Veto()
+    */
+    bool CanVeto();
+
+    /**
+        @return The ID of the button that was clicked.
+    */
+    int GetButton();
+
+    /**
+        @todo What is this?
+    */
+    wxDC* GetDC();
+
+    /**
+        @return @true if this event was vetoed.
+
+        @see Veto()
+    */
+    bool GetVeto();
+
+    /**
+        @return The wxAuiManager this event is associated with.
+    */
+    wxAuiManager* GetManager();
+
+    /**
+        @return The pane this event is associated with.
+    */
+    wxAuiPaneInfo* GetPane();
+
+    /**
+        Sets the ID of the button clicked that triggered this event.
+    */
+    void SetButton(int button);
+
+    /**
+        Sets whether or not this event can be vetoed.
+    */
+    void SetCanVeto(bool can_veto);
+
+    /**
+        @todo What is this?
+    */
+    void SetDC(wxDC* pdc);
+
+    /**
+        Sets the wxAuiManager this event is associated with.
+    */
+    void SetManager(wxAuiManager* manager);
+
+    /**
+        Sets the pane this event is associated with.
+    */
+    void SetPane(wxAuiPaneInfo* pane);
+
+    /**
+        Cancels the action indicated by this event if CanVeto() is @true.
+    */
+    void Veto(bool veto = true);
 };
 
