@@ -117,8 +117,15 @@ public:
 
     /**
         Returns the validator style.
+
+        @see HasFlag()
     */
     long GetStyle() const;
+
+    /**
+        Returns @true if the given @a style bit is set in the current style.
+    */
+    bool HasFlag(wxTextValidatorStyle style) const;
 
     /**
         Receives character input from the window and filters it according to
@@ -159,6 +166,10 @@ public:
         of the ::wxTextValidatorStyle values.
 
         Note that not all possible combinations make sense!
+        Also note that the order in which the checks are performed is important,
+        in case you specify more than a single style.
+        wxTextValidator will perform the checks in the same definition order
+        used in the ::wxTextValidatorStyle enumeration.
     */
     void SetStyle(long style);
 
@@ -177,5 +188,25 @@ public:
         depending on the validator style.
     */
     virtual bool Validate(wxWindow* parent);
+
+protected:
+
+    /**
+        Returns @true if all the characters of the given @a val string
+        are present in the include list (set by SetIncludes() or SetCharIncludes()).
+    */
+    bool ContainsOnlyIncludedCharacters(const wxString& val) const;
+
+    /**
+        Returns true if at least one character of the given @a val string
+        is present in the exclude list (set by SetExcludes() or SetCharExcludes()).
+    */
+    bool ContainsExcludedCharacters(const wxString& val) const;
+
+    /**
+        Returns the error message if the contents of @a val are invalid
+        or the empty string if @a val is valid.
+    */
+    virtual wxString IsValid(const wxString& val) const;
 };
 

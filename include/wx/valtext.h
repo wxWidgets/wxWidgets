@@ -85,7 +85,7 @@ protected:
     // returns true if all characters of the given string are present in m_includes
     bool ContainsOnlyIncludedCharacters(const wxString& val) const;
 
-    // returns true if all characters of the given string are NOT present in m_excludes
+    // returns true if at least one character of the given string is present in m_excludes
     bool ContainsExcludedCharacters(const wxString& val) const;
 
     // returns the error message if the contents of 'val' are invalid
