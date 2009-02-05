@@ -863,9 +863,9 @@ enum
     as MFC.
 
     A workaround for some wxWidgets ports is calling wxMutexGUIEnter()
-    before any GUI calls and then calling wxMutexGUILeave() afterwords. However,
-    the recommended way is to simply process the GUI calls in the main thread
-    through an event that is posted by wxQueueEvent().
+    before any GUI calls and then calling wxMutexGUILeave() afterwords.
+    However, the recommended way is to simply process the GUI calls in the main
+    thread through an event that is posted by wxQueueEvent().
     This does not imply that calls to these classes are thread-safe, however,
     as most wxWidgets classes are not thread-safe, including wxString.
 
@@ -1620,6 +1620,8 @@ public:
 */
 bool wxIsMainThread();
 
+
+
 /**
     This function must be called when any thread other than the main GUI thread
     wants to get access to the GUI library. This function will block the
@@ -1645,7 +1647,7 @@ bool wxIsMainThread();
     @endcode
 
     This function is only defined on platforms which support preemptive
-    threads.
+    threads and only works under some ports (wxMSW currently).
 
     @note Under GTK, no creation of top-level windows is allowed in any thread
           but the main one.
