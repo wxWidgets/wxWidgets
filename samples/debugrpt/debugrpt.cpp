@@ -115,7 +115,7 @@ public:
 // ----------------------------------------------------------------------------
 
 // just some functions to get a slightly deeper stack trace
-static void bar(const wxChar *p)
+static void bar(const char *p)
 {
     char *pc = 0;
     *pc = *p;
@@ -131,9 +131,9 @@ void baz(const wxString& s)
 void foo(int n)
 {
     if ( n % 2 )
-        baz(wxT("odd"));
+        baz("odd");
     else
-        bar(wxT("even"));
+        bar("even");
 }
 
 // ----------------------------------------------------------------------------
