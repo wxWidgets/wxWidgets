@@ -38,6 +38,7 @@
     #include "wx/settings.h"
     #include "wx/dialog.h"
     #include "wx/msgdlg.h"
+    #include "wx/msgout.h"
     #include "wx/statusbr.h"
     #include "wx/toolbar.h"
     #include "wx/dcclient.h"
@@ -711,14 +712,14 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
 {
     // merge the best size with the min size, giving priority to the min size
     wxSize min = GetMinSize();
-    
+
     if (min.x == wxDefaultCoord || min.y == wxDefaultCoord)
     {
         wxSize best = GetBestSize();
         if (min.x == wxDefaultCoord) min.x =  best.x;
         if (min.y == wxDefaultCoord) min.y =  best.y;
     }
-    
+
     return min;
 }
 
@@ -726,19 +727,19 @@ wxSize wxWindowBase::GetBestSize() const
 {
     if ((!m_windowSizer) && (m_bestSizeCache.IsFullySpecified()))
         return m_bestSizeCache;
-        
+
     return DoGetBestSize();
 }
 
 void wxWindowBase::SetMinSize(const wxSize& minSize)
-{ 
-    m_minWidth = minSize.x; 
-    m_minHeight = minSize.y; 
+{
+    m_minWidth = minSize.x;
+    m_minHeight = minSize.y;
 }
 
 void wxWindowBase::SetMaxSize(const wxSize& maxSize)
-{ 
-    m_maxWidth = maxSize.x; 
+{
+    m_maxWidth = maxSize.x;
     m_maxHeight = maxSize.y;
 }
 
@@ -2543,7 +2544,7 @@ static void DrawBorder(wxWindowBase *win, const wxRect& rect, bool fill, const w
 {
     wxClientDC dc((wxWindow *)win);
     dc.SetPen(*pen);
-    dc.SetBrush(fill ? wxBrush(pen->GetColour(), wxBRUSHSTYLE_CROSSDIAG_HATCH) : 
+    dc.SetBrush(fill ? wxBrush(pen->GetColour(), wxBRUSHSTYLE_CROSSDIAG_HATCH) :
                        *wxTRANSPARENT_BRUSH);
     dc.DrawRectangle(rect.Deflate(1, 1));
 }
@@ -2570,6 +2571,8 @@ static void DrawSizer(wxWindowBase *win, wxSizer *sizer)
         {
             DrawSizers(item->GetWindow());
         }
+        else
+            wxFAIL_MSG("inconsistent wxSizerItem status!");
     }
 }
 
@@ -2592,6 +2595,26 @@ static void DrawSizers(wxWindowBase *win)
         {
             DrawSizers(*i);
         }
+
+        // show all kind of sizes of this window; see the "window sizing" topic
+        // overview for more info about the various differences:
+        wxSize fullSz = win->GetSize();
+        wxSize clientSz = win->GetClientSize();
+        wxSize bestSz = win->GetBestSize();
+        wxSize minSz = win->GetMinSize();
+        wxSize maxSz = win->GetMaxSize();
+        wxSize virtualSz = win->GetVirtualSize();
+
+        wxMessageOutputDebug dbgout;
+        dbgout.Printf(
+            "%-10s => fullsz=%4d;%-4d  clientsz=%4d;%-4d  bestsz=%4d;%-4d  minsz=%4d;%-4d  maxsz=%4d;%-4d virtualsz=%4d;%-4d\n",
+            (const char*)win->GetName(),
+            fullSz.x, fullSz.y,
+            clientSz.x, clientSz.y,
+            bestSz.x, bestSz.y,
+            minSz.x, minSz.y,
+            maxSz.x, maxSz.y,
+            virtualSz.x, virtualSz.y);
     }
 }
 
