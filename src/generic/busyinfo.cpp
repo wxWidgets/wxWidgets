@@ -43,7 +43,7 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
 #else
                      wxSIMPLE_BORDER
 #endif
-                     | wxFRAME_TOOL_WINDOW)
+                     | wxFRAME_TOOL_WINDOW | wxSTAY_ON_TOP)
 {
     wxPanel *panel = new wxPanel( this );
     wxStaticText *text = new wxStaticText(panel, wxID_ANY, message);
@@ -114,13 +114,7 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
 
 wxBusyInfo::wxBusyInfo(const wxString& message, wxWindow *parent)
 {
-    m_InfoFrame = new wxInfoFrame( parent, message);
-    if ( parent && parent->HasFlag(wxSTAY_ON_TOP) )
-    {
-        // we must have this flag to be in front of our parent if it has it
-        m_InfoFrame->SetWindowStyleFlag(wxSTAY_ON_TOP);
-    }
-
+    m_InfoFrame = new wxInfoFrame(parent, message);
     m_InfoFrame->Show(true);
     m_InfoFrame->Refresh();
     m_InfoFrame->Update();

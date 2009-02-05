@@ -48,6 +48,9 @@
     wxApp::Yield for more details). The simplest way to do it is to use
     wxWindowDisabler class as illustrated in the above example.
 
+    Note that a wxBusyInfo is always built with the @c wxSTAY_ON_TOP window style
+    (see wxFrame window styles for more info).
+
     @library{wxcore}
     @category{cmndlg}
 */
