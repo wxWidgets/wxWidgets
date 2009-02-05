@@ -246,12 +246,12 @@ public:
     //@}
 
     /**
-        Loads a panel. @a panel points to parent window (if any).
+        Loads a panel. @a parent points to the parent window.
     */
     wxPanel* LoadPanel(wxWindow* parent, const wxString& name);
 
     /**
-        Loads a panel. @a panel points to parent window (if any).
+        Loads a panel. @a parent points to the parent window.
         This form is used to finish creation of an already existing instance.
     */
     bool LoadPanel(wxPanel* panel, wxWindow* parent, const wxString& name);
