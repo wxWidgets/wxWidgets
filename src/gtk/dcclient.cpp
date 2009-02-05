@@ -271,16 +271,16 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
     GtkWidget *widget = window->m_wxwindow;
 
     // Some controls don't have m_wxwindow - like wxStaticBox, but the user
-    // code should still be able to create wxClientDCs for them, so we will
-    // use the parent window here then.
+    // code should still be able to create wxClientDCs for them
     if ( !widget )
     {
-        window = window->GetParent();
-        if (window)
-            widget = window->m_wxwindow;
-    }
+        widget = window->m_widget;
 
-    wxASSERT_MSG( widget, wxT("DC needs a widget") );
+        wxCHECK_RET(widget, "DC needs a widget");
+
+        if (GTK_WIDGET_NO_WINDOW(widget))
+            SetDeviceLocalOrigin(widget->allocation.x, widget->allocation.y);
+    }
 
     m_context = window->GtkGetPangoDefaultContext();
     m_layout = pango_layout_new( m_context );
@@ -297,7 +297,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
          return;
     }
 
-    m_cmap = gtk_widget_get_colormap( widget ? widget : window->m_widget );
+    m_cmap = gtk_widget_get_colormap(widget);
 
     SetUpDC();
 
