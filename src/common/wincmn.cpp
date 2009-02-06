@@ -2608,7 +2608,7 @@ static void DrawSizers(wxWindowBase *win)
         wxMessageOutputDebug dbgout;
         dbgout.Printf(
             "%-10s => fullsz=%4d;%-4d  clientsz=%4d;%-4d  bestsz=%4d;%-4d  minsz=%4d;%-4d  maxsz=%4d;%-4d virtualsz=%4d;%-4d\n",
-            (const char*)win->GetName(),
+            win->GetName(),
             fullSz.x, fullSz.y,
             clientSz.x, clientSz.y,
             bestSz.x, bestSz.y,
