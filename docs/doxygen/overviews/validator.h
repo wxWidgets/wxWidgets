@@ -94,8 +94,6 @@ filtering. These handlers will capture events before the control itself does
 For an example implementation, see the @c valtext.h and @c valtext.cpp files in the
 wxWidgets library.
 
-wxwindow::SetExtraStyle( wxWS_EX_VALIDATE_RECURSIVELY )
-
 
 @section overview_validator_dialogs How Validators Interact with Dialogs
 
