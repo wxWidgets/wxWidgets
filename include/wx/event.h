@@ -321,11 +321,32 @@ private:
     Functor m_handler;
 };
 
-// helper class defining operations different for method functors using an
-// object of wxEvtHandler-derived class as handler and the others
 namespace wxPrivate
 {
 
+// helper template defining nested "type" typedef as the event class
+// corresponding to the given event type
+template <typename T> struct EventClassOf;
+
+// the typed events provide the information about the class of the events they
+// carry themselves:
+template <typename T>
+struct EventClassOf< wxEventTypeTag<T> >
+{
+    typedef typename wxEventTypeTag<T>::EventClass type;
+};
+
+// for the old untyped events we don't have information about the exact event
+// class carried by them
+template <>
+struct EventClassOf<wxEventType>
+{
+    typedef wxEvent type;
+};
+
+
+// helper class defining operations different for method functors using an
+// object of wxEvtHandler-derived class as handler and the others
 template <typename T, typename A, bool> struct HandlerImpl;
 
 // specialization for handlers deriving from wxEvtHandler
@@ -339,7 +360,8 @@ struct HandlerImpl<T, A, true>
     static wxEvtHandler *ConvertToEvtHandler(T *p)
         { return p; }
     static wxEventFunction ConvertToEvtFunction(void (T::*f)(A&))
-        { return reinterpret_cast<wxEventFunction>(f); }
+        { return static_cast<wxEventFunction>(
+                    reinterpret_cast<void (T::*)(wxEvent&)>(f)); }
 };
 
 // specialization for handlers not deriving from wxEvtHandler
@@ -362,24 +384,40 @@ struct HandlerImpl<T, A, false>
 //
 // notice that the object class may be different from the class in which the
 // method is defined but it must be convertible to this class
-template <typename EventTag, typename Class, typename ObjClass>
+//
+// also, the type of the handler parameter doesn't need to be exactly the same
+// as EventTag::EventClass but it must be its base class -- this is explicitly
+// allowed to handle different events in the same handler taking wxEvent&, for
+// example
+template
+  <typename EventTag, typename Class, typename EventArg, typename ObjClass>
 class wxEventFunctorMethod
     : public wxEventFunctor,
       private wxPrivate::HandlerImpl
               <
                 Class,
-                typename EventTag::EventClass,
+                EventArg,
                 wxConvertibleTo<Class, wxEvtHandler>::value
               >
 {
+private:
+    static void CheckHandlerArgument(EventArg *) { }
+
 public:
-    typedef typename EventTag::EventClass EventArg;
+    // the event class associated with the given event tag
+    typedef typename wxPrivate::EventClassOf<EventTag>::type EventClass;
+
 
     wxEventFunctorMethod(void (Class::*method)(EventArg&), ObjClass *handler)
     {
         wxASSERT_MSG( handler || this->IsEvtHandler(),
                       "handlers defined in non-wxEvtHandler-derived classes "
                       "must be connected with a valid sink object" );
+
+        // if you get an error here it means that the signature of the handler
+        // you're trying to use is not compatible with (i.e. is not the same as
+        // or a base class of) the real event class used for this event type
+        CheckHandlerArgument(static_cast<EventClass *>(NULL));
 
         m_handler = handler;
         m_method =  method;
@@ -396,6 +434,9 @@ public:
             wxCHECK_RET( realHandler, "invalid event handler" );
         }
 
+        // the real (run-time) type of event is EventClass and we checked in
+        // the ctor that EventClass can be converted to EventArg, so this cast
+        // is always valid
         (realHandler->*m_method)(static_cast<EventArg&>(event));
     }
 
@@ -429,18 +470,6 @@ private:
     void (Class::*m_method)(EventArg&);
 };
 
-// partial specialization for legacy event types
-template <typename ObjClass>
-class wxEventFunctorMethod<wxEventType, wxEvtHandler, ObjClass>
-    : public wxObjectEventFunctor
-{
-public:
-    wxEventFunctorMethod(wxObjectEventFunction method, ObjClass *handler)
-        : wxObjectEventFunctor(method, handler)
-    {
-    }
-};
-
 
 //
 // Create functors for the templatized events, either allocated on the heap for
@@ -469,39 +498,43 @@ wxMakeEventFunctor(const EventTag&, Functor func)
 // Create functors for methods:
 template
   <typename EventTag, typename Class, typename EventArg, typename ObjClass>
-inline wxEventFunctorMethod<EventTag, Class, ObjClass> *
+inline wxEventFunctorMethod<EventTag, Class, EventArg, ObjClass> *
 wxNewEventFunctor(const EventTag&,
                   void (Class::*method)(EventArg&),
                   ObjClass *handler)
 {
-    return new wxEventFunctorMethod<EventTag, Class, ObjClass>(method, handler);
+    return new wxEventFunctorMethod<EventTag, Class, EventArg, ObjClass>(
+                method, handler);
 }
 
 template
     <typename EventTag, typename Class, typename EventArg, typename ObjClass>
-inline wxEventFunctorMethod<EventTag, Class, ObjClass>
+inline wxEventFunctorMethod<EventTag, Class, EventArg, ObjClass>
 wxMakeEventFunctor(const EventTag&,
                    void (Class::*method)(EventArg&),
                    ObjClass *handler)
 {
-    return wxEventFunctorMethod<EventTag, Class, ObjClass>(method, handler);
+    return wxEventFunctorMethod<EventTag, Class, EventArg, ObjClass>(
+                method, handler);
 }
 
 // Special case for the wxNewEventFunctor() calls used inside the event table
 // macros: they don't specify the handler so ObjClass can't be deduced
 template <typename EventTag, typename Class, typename EventArg>
-inline wxEventFunctorMethod<EventTag, Class, Class> *
+inline wxEventFunctorMethod<EventTag, Class, EventArg, Class> *
 wxNewEventFunctor(const EventTag&, void (Class::*method)(EventArg&))
 {
-    return new wxEventFunctorMethod<EventTag, Class, Class>(method, NULL);
+    return new wxEventFunctorMethod<EventTag, Class, EventArg, Class>(
+                    method, NULL);
 }
 
 template
     <typename EventTag, typename Class, typename EventArg, typename ObjClass>
-inline wxEventFunctorMethod<EventTag, Class, Class>
+inline wxEventFunctorMethod<EventTag, Class, EventArg, Class>
 wxMakeEventFunctor(const EventTag&, void (Class::*method)(EventArg&))
 {
-    return wxEventFunctorMethod<EventTag, Class, Class>(method, NULL);
+    return wxEventFunctorMethod<EventTag, Class, EventArg, Class>(
+                method, NULL);
 }
 
 #endif // !wxEVENTS_COMPATIBILITY_2_8
