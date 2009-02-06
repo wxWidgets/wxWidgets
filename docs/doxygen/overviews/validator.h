@@ -12,6 +12,16 @@
 
 Classes: wxValidator, wxTextValidator, wxGenericValidator
 
+@li @ref overview_validator_intro
+@li @ref overview_validator_anatomy
+@li @ref overview_validator_dialogs
+
+
+<hr>
+
+
+@section overview_validator_intro Example
+
 The aim of the validator concept is to make dialogs very much easier to write.
 A validator is an object that can be plugged into a control (such as a
 wxTextCtrl), and mediates between C++ data and the control, transferring the
@@ -23,22 +33,11 @@ You can use a stock validator, such as wxTextValidator (which does text control
 data transfer, validation and filtering) and wxGenericValidator (which does
 data transfer for a range of controls); or you can write your own.
 
-
-@li @ref overview_validator_example
-@li @ref overview_validator_anatomy
-@li @ref overview_validator_dialogs
-
-
-<hr>
-
-
-@section overview_validator_example Example
-
 Here is an example of wxTextValidator usage.
 
 @code
 wxTextCtrl *txt1 = new wxTextCtrl(
-    this, -1, wxT(""), wxPoint(10, 10), wxSize(100, 80), 0,
+    this, -1, wxT(""), wxDefaultPosition, wxDefaultSize, 0,
     wxTextValidator(wxFILTER_ALPHA, &g_data.m_string));
 @endcode
 
@@ -53,11 +52,15 @@ functionality:
 
 The validation and filtering of input is accomplished in two ways. When a
 character is input, wxTextValidator checks the character against the allowed
-filter flag (wxFILTER_ALPHA in this case). If the character is inappropriate,
-it is vetoed (does not appear) and a warning beep sounds. The second type of
-validation is performed when the dialog is about to be dismissed, so if the
-default string contained invalid characters already, a dialog box is shown
+filter flag (@c wxFILTER_ALPHA in this case). If the character is inappropriate,
+it is vetoed (does not appear) and a warning beep sounds (unless
+wxValidator::SetBellOnError(false) has been called).
+The second type of validation is performed when the dialog is about to be dismissed,
+so if the default string contained invalid characters already, a dialog box is shown
 giving the error, and the dialog is not dismissed.
+
+Note that any wxWindow may have a validator; using the @c wxWS_EX_VALIDATE_RECURSIVELY
+style (see wxWindow extended styles) you can also implement recursive validation.
 
 
 @section overview_validator_anatomy Anatomy of a Validator
@@ -86,9 +89,12 @@ are passed by reference to window constructors, and must therefore be cloned
 internally.
 
 You can optionally define event handlers for the validator, to implement
-filtering. These handlers will capture events before the control itself does.
-For an example implementation, see the valtext.h and valtext.cpp files in the
+filtering. These handlers will capture events before the control itself does
+(see @ref overview_eventhandling_processing).
+For an example implementation, see the @c valtext.h and @c valtext.cpp files in the
 wxWidgets library.
+
+wxwindow::SetExtraStyle( wxWS_EX_VALIDATE_RECURSIVELY )
 
 
 @section overview_validator_dialogs How Validators Interact with Dialogs
@@ -99,10 +105,10 @@ right times during dialog initialisation and dismissal.
 When a wxDialog::Show is called (for a modeless dialog) or wxDialog::ShowModal
 is called (for a modal dialog), the function wxWindow::InitDialog is
 automatically called. This in turn sends an initialisation event to the dialog.
-The default handler for the wxEVT_INIT_DIALOG event is defined in the wxWindow
-class to simply call the function wxWindow::TransferDataToWindow. This function
-finds all the validators in the window's children and calls the
-TransferToWindow function for each. Thus, data is transferred from C++
+The default handler for the @c wxEVT_INIT_DIALOG event is defined in the wxWindow
+class to simply call the function wxWindow::TransferDataToWindow.
+This function finds all the validators in the window's children and calls the
+wxValidator::TransferToWindow function for each. Thus, data is transferred from C++
 variables to the dialog just as the dialog is being shown.
 
 @note If you are using a window or panel instead of a dialog, you will need to
@@ -113,9 +119,9 @@ should first call wxWindow::Validate, which returns @false if any of the child
 window validators failed to validate the window data. The button handler should
 return immediately if validation failed. Secondly, the application should call
 wxWindow::TransferDataFromWindow and return if this failed. It is then safe to
-end the dialog by calling EndModal (if modal) or Show (if modeless).
+end the dialog by calling wxDialog::EndModal (if modal) or wxDialog::Show (if modeless).
 
-In fact, wxDialog contains a default command event handler for the wxID_OK
+In fact, wxDialog contains a default command event handler for the @c wxID_OK
 button. It goes like this:
 
 @code

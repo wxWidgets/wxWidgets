@@ -151,16 +151,17 @@ enum wxWindowVariant
 
     @beginExtraStyleTable
     @style{wxWS_EX_VALIDATE_RECURSIVELY}
-           By default, Validate/TransferDataTo/FromWindow() only work on
-           direct children of the window (compatible behaviour). Set this flag
-           to make them recursively descend into all subwindows.
+           By default, wxWindow::Validate(), wxWindow::TransferDataTo() and
+           wxWindow::TransferDataFromWindow() only work on
+           direct children of the window (compatible behaviour).
+           Set this flag to make them recursively descend into all subwindows.
     @style{wxWS_EX_BLOCK_EVENTS}
            wxCommandEvents and the objects of the derived classes are
            forwarded to the parent window and so on recursively by default.
            Using this flag for the given window allows to block this
            propagation at this window, i.e. prevent the events from being
            propagated further upwards. Dialogs have this flag on by default
-           for the reasons explained in the @ref overview_eventhandling "Event Handling Overview".
+           for the reasons explained in the @ref overview_eventhandling.
     @style{wxWS_EX_TRANSIENT}
            Don't use this window as an implicit parent for the other windows:
            this must be used with transient windows as otherwise there is the
@@ -169,16 +170,16 @@ enum wxWindowVariant
     @style{wxWS_EX_CONTEXTHELP}
            Under Windows, puts a query button on the caption. When pressed,
            Windows will go into a context-sensitive help mode and wxWidgets
-           will send a wxEVT_HELP event if the user clicked on an application window.
+           will send a @c wxEVT_HELP event if the user clicked on an application window.
            This style cannot be used (because of the underlying native behaviour)
            together with @c wxMAXIMIZE_BOX or @c wxMINIMIZE_BOX, so these two styles
            are automatically turned off if this one is used.
     @style{wxWS_EX_PROCESS_IDLE}
            This window should always process idle events, even if the mode set
-           by wxIdleEvent::SetMode is wxIDLE_PROCESS_SPECIFIED.
+           by wxIdleEvent::SetMode is @c wxIDLE_PROCESS_SPECIFIED.
     @style{wxWS_EX_PROCESS_UI_UPDATES}
            This window should always process UI update events, even if the
-           mode set by wxUpdateUIEvent::SetMode is wxUPDATE_UI_PROCESS_SPECIFIED.
+           mode set by wxUpdateUIEvent::SetMode is @c wxUPDATE_UI_PROCESS_SPECIFIED.
     @endExtraStyleTable
 
     @library{wxcore}
