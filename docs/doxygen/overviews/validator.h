@@ -20,7 +20,7 @@ Classes: wxValidator, wxTextValidator, wxGenericValidator
 <hr>
 
 
-@section overview_validator_intro Example
+@section overview_validator_intro Validator basic concepts
 
 The aim of the validator concept is to make dialogs very much easier to write.
 A validator is an object that can be plugged into a control (such as a
