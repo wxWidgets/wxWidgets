@@ -36,7 +36,10 @@ public:
     virtual wxEvent *Clone() const { return new MyEvent; }
 };
 
-#define EVT_MYEVENT(func) wx__DECLARE_EVT0(MyEventType, &func)
+typedef void (wxEvtHandler::*MyEventFunction)(MyEvent&);
+#define MyEventHandler(func) wxEVENT_HANDLER_CAST(MyEventFunction, func)
+#define EVT_MYEVENT(func) \
+    wx__DECLARE_EVT0(MyEventType, MyEventHandler(func))
 
 class AnotherEvent : public wxEvent
 {
@@ -123,7 +126,9 @@ BEGIN_EVENT_TABLE(MyClassWithEventTable, wxEvtHandler)
     EVT_IDLE(MyClassWithEventTable::OnIdle)
 
     EVT_MYEVENT(MyClassWithEventTable::OnMyEvent)
+#if !wxEVENTS_COMPATIBILITY_2_8
     EVT_MYEVENT(MyClassWithEventTable::OnEvent)
+#endif
 
     // this shouldn't compile:
     //EVT_MYEVENT(MyClassWithEventTable::OnIdle)
