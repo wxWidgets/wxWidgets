@@ -149,7 +149,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
     wxString errormsg;
     if ( HasFlag(wxFILTER_EMPTY) && val.empty() )
     {
-        errormsg = _("The empty string is not allowed.");
+        errormsg = _("Please enter a non-empty string.");
     }
     else if ( !(errormsg = IsValid(val)).empty() )
     {
