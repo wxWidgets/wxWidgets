@@ -553,7 +553,7 @@ public:
         See also WX_CLEAR_ARRAY() macro which deletes all elements of a wxArray
         (supposed to contain pointers).
     */
-    Remove(T item);
+    void Remove(T item);
 
     /**
         Removes @a count elements starting at @a index from the array. When an
@@ -571,7 +571,7 @@ public:
         See also WX_CLEAR_ARRAY() macro which deletes all elements of a wxArray
         (supposed to contain pointers).
     */
-    RemoveAt(size_t index, size_t count = 1);
+    void RemoveAt(size_t index, size_t count = 1);
 
     //@}
 
@@ -596,6 +596,7 @@ public:
               another, identical, element is in the array.
     */
     int Index(T& item, bool searchFromEnd = false) const;
+
     /**
         This version of Index() is for wxSortedArray only.
 
@@ -604,7 +605,7 @@ public:
         @c wxNOT_FOUND is returned if the element is not found, otherwise the
         index of the element is returned.
     */
-    const int Index(T& item) const;
+    int Index(T& item) const;
 
     /**
         Search for a place to insert @a item into the sorted array (binary
