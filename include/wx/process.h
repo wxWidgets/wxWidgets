@@ -132,7 +132,7 @@ protected:
 
 class WXDLLIMPEXP_FWD_BASE wxProcessEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_END_PROCESS, wxProcessEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_BASE, wxEVT_END_PROCESS, wxProcessEvent );
 
 class WXDLLIMPEXP_BASE wxProcessEvent : public wxEvent
 {

@@ -43,8 +43,8 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
-wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent )
-wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent )
+wxDEFINE_EVENT( wxEVT_DIALUP_CONNECTED, wxDialUpEvent );
+wxDEFINE_EVENT( wxEVT_DIALUP_DISCONNECTED, wxDialUpEvent );
 
 // ----------------------------------------------------------------------------
 // A class which groups functions dealing with connecting to the network from a

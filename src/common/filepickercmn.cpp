@@ -44,8 +44,8 @@ const char wxDirPickerWidgetNameStr[] = "dirpickerwidget";
 const char wxFilePickerWidgetLabel[] = wxTRANSLATE("Browse");
 const char wxDirPickerWidgetLabel[] = wxTRANSLATE("Browse");
 
-wxDEFINE_EVENT( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_DIRPICKER_CHANGED,  wxFileDirPickerEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_DIRPICKER_CHANGED,  wxFileDirPickerEvent );
 IMPLEMENT_DYNAMIC_CLASS(wxFileDirPickerEvent, wxCommandEvent)
 
 // ----------------------------------------------------------------------------

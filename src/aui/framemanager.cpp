@@ -54,12 +54,12 @@ WX_DEFINE_OBJARRAY(wxAuiPaneInfoArray)
 
 wxAuiPaneInfo wxAuiNullPaneInfo;
 wxAuiDockInfo wxAuiNullDockInfo;
-wxDEFINE_EVENT( wxEVT_AUI_PANE_BUTTON, wxAuiManagerEvent )
-wxDEFINE_EVENT( wxEVT_AUI_PANE_CLOSE, wxAuiManagerEvent )
-wxDEFINE_EVENT( wxEVT_AUI_PANE_MAXIMIZE, wxAuiManagerEvent )
-wxDEFINE_EVENT( wxEVT_AUI_PANE_RESTORE, wxAuiManagerEvent )
-wxDEFINE_EVENT( wxEVT_AUI_RENDER, wxAuiManagerEvent )
-wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent )
+wxDEFINE_EVENT( wxEVT_AUI_PANE_BUTTON, wxAuiManagerEvent );
+wxDEFINE_EVENT( wxEVT_AUI_PANE_CLOSE, wxAuiManagerEvent );
+wxDEFINE_EVENT( wxEVT_AUI_PANE_MAXIMIZE, wxAuiManagerEvent );
+wxDEFINE_EVENT( wxEVT_AUI_PANE_RESTORE, wxAuiManagerEvent );
+wxDEFINE_EVENT( wxEVT_AUI_RENDER, wxAuiManagerEvent );
+wxDEFINE_EVENT( wxEVT_AUI_FIND_MANAGER, wxAuiManagerEvent );
 
 #ifdef __WXMAC__
     // a few defines to avoid nameclashes

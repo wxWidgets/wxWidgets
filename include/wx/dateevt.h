@@ -47,7 +47,7 @@ private:
 // event types and macros for handling them
 // ----------------------------------------------------------------------------
 
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_ADV, wxEVT_DATE_CHANGED, wxDateEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_ADV, wxEVT_DATE_CHANGED, wxDateEvent);
 
 typedef void (wxEvtHandler::*wxDateEventFunction)(wxDateEvent&);
 

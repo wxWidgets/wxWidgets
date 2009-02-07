@@ -96,34 +96,34 @@ static wxColour wxColourFromSpec(const wxString& spec) {
 
 //----------------------------------------------------------------------
 
-wxDEFINE_EVENT( wxEVT_STC_CHANGE, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_STYLENEEDED, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_CHARADDED, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_SAVEPOINTREACHED, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_SAVEPOINTLEFT, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_ROMODIFYATTEMPT, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_KEY, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_DOUBLECLICK, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_UPDATEUI, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_MODIFIED, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_MACRORECORD, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_MARGINCLICK, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_NEEDSHOWN, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_PAINTED, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_USERLISTSELECTION, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_URIDROPPED, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_DWELLSTART, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_DWELLEND, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_START_DRAG, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_DRAG_OVER, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_DO_DROP, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_ZOOM, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_CLICK, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_DCLICK, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_CALLTIP_CLICK, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_SELECTION, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_INDICATOR_CLICK, wxStyledTextEvent )
-wxDEFINE_EVENT( wxEVT_STC_INDICATOR_RELEASE, wxStyledTextEvent )
+wxDEFINE_EVENT( wxEVT_STC_CHANGE, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_STYLENEEDED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_CHARADDED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_SAVEPOINTREACHED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_SAVEPOINTLEFT, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_ROMODIFYATTEMPT, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_KEY, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_DOUBLECLICK, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_UPDATEUI, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_MODIFIED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_MACRORECORD, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_MARGINCLICK, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_NEEDSHOWN, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_PAINTED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_USERLISTSELECTION, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_URIDROPPED, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_DWELLSTART, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_DWELLEND, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_START_DRAG, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_DRAG_OVER, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_DO_DROP, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_ZOOM, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_CLICK, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_DCLICK, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_CALLTIP_CLICK, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_SELECTION, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_INDICATOR_CLICK, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_INDICATOR_RELEASE, wxStyledTextEvent );
 
 
 

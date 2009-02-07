@@ -21,8 +21,8 @@
 // Events
 class WXDLLIMPEXP_FWD_CORE wxSpinDoubleEvent;
 
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEvent)
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxSpinDoubleEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxSpinDoubleEvent);
 
 // ----------------------------------------------------------------------------
 // A spin ctrl is a text control with a spin button which is usually used to

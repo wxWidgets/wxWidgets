@@ -48,7 +48,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
 
 // ============================================================================
 // implementation

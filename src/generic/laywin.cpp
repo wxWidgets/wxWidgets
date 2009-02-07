@@ -30,8 +30,8 @@
 IMPLEMENT_DYNAMIC_CLASS(wxQueryLayoutInfoEvent, wxEvent)
 IMPLEMENT_DYNAMIC_CLASS(wxCalculateLayoutEvent, wxEvent)
 
-wxDEFINE_EVENT( wxEVT_QUERY_LAYOUT_INFO, wxQueryLayoutInfoEvent )
-wxDEFINE_EVENT( wxEVT_CALCULATE_LAYOUT, wxCalculateLayoutEvent )
+wxDEFINE_EVENT( wxEVT_QUERY_LAYOUT_INFO, wxQueryLayoutInfoEvent );
+wxDEFINE_EVENT( wxEVT_CALCULATE_LAYOUT, wxCalculateLayoutEvent );
 
 
 // ----------------------------------------------------------------------------

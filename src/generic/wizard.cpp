@@ -81,11 +81,11 @@ private:
 // event tables and such
 // ----------------------------------------------------------------------------
 
-wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_CHANGED, wxWizardEvent )
-wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_CHANGING, wxWizardEvent )
-wxDEFINE_EVENT( wxEVT_WIZARD_CANCEL, wxWizardEvent )
-wxDEFINE_EVENT( wxEVT_WIZARD_FINISHED, wxWizardEvent )
-wxDEFINE_EVENT( wxEVT_WIZARD_HELP, wxWizardEvent )
+wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_CHANGED, wxWizardEvent );
+wxDEFINE_EVENT( wxEVT_WIZARD_PAGE_CHANGING, wxWizardEvent );
+wxDEFINE_EVENT( wxEVT_WIZARD_CANCEL, wxWizardEvent );
+wxDEFINE_EVENT( wxEVT_WIZARD_FINISHED, wxWizardEvent );
+wxDEFINE_EVENT( wxEVT_WIZARD_HELP, wxWizardEvent );
 
 BEGIN_EVENT_TABLE(wxWizard, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxWizard::OnCancel)

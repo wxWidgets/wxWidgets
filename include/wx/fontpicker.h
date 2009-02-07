@@ -180,7 +180,7 @@ private:
 // wxFontPickerEvent: used by wxFontPickerCtrl only
 // ----------------------------------------------------------------------------
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FONTPICKER_CHANGED, wxFontPickerEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_FONTPICKER_CHANGED, wxFontPickerEvent );
 
 class WXDLLIMPEXP_CORE wxFontPickerEvent : public wxCommandEvent
 {

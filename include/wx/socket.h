@@ -95,7 +95,7 @@ enum wxSocketType
 
 // event
 class WXDLLIMPEXP_FWD_NET wxSocketEvent;
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_SOCKET, wxSocketEvent)
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_SOCKET, wxSocketEvent);
 
 // --------------------------------------------------------------------------
 // wxSocketBase

@@ -162,78 +162,78 @@ const wxEventType wxEVT_FIRST = 10000;
 const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 
 DEFINE_EVENT_TYPE(wxEVT_NULL)
-wxDEFINE_EVENT( wxEVT_IDLE, wxIdleEvent )
+wxDEFINE_EVENT( wxEVT_IDLE, wxIdleEvent );
 
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
 
-wxDEFINE_EVENT( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_MENU_SELECTED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_SLIDER_UPDATED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_SCROLLBAR_UPDATED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_VLBOX_SELECTED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_TOOL_RCLICKED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_TOOL_ENTER, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_SPINCTRL_UPDATED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_MENU_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_SLIDER_UPDATED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_SCROLLBAR_UPDATED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_VLBOX_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_TOOL_RCLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_TOOL_ENTER, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_SPINCTRL_UPDATED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_SPINCTRLDOUBLE_UPDATED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, wxCommandEvent );
 
 // Mouse event types
-wxDEFINE_EVENT( wxEVT_LEFT_DOWN, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_LEFT_UP, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_MIDDLE_DOWN, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_MIDDLE_UP, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_RIGHT_DOWN, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_RIGHT_UP, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_MOTION, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_ENTER_WINDOW, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_LEAVE_WINDOW, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_LEFT_DCLICK, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_MIDDLE_DCLICK, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_RIGHT_DCLICK, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_SET_FOCUS, wxFocusEvent )
-wxDEFINE_EVENT( wxEVT_KILL_FOCUS, wxFocusEvent )
-wxDEFINE_EVENT( wxEVT_CHILD_FOCUS, wxChildFocusEvent )
-wxDEFINE_EVENT( wxEVT_MOUSEWHEEL, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_AUX1_DOWN, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_AUX1_UP, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_AUX1_DCLICK, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_AUX2_DOWN, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_AUX2_UP, wxMouseEvent )
-wxDEFINE_EVENT( wxEVT_AUX2_DCLICK, wxMouseEvent )
+wxDEFINE_EVENT( wxEVT_LEFT_DOWN, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_LEFT_UP, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_MIDDLE_DOWN, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_MIDDLE_UP, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_RIGHT_DOWN, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_RIGHT_UP, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_MOTION, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_ENTER_WINDOW, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_LEAVE_WINDOW, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_LEFT_DCLICK, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_MIDDLE_DCLICK, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_RIGHT_DCLICK, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_SET_FOCUS, wxFocusEvent );
+wxDEFINE_EVENT( wxEVT_KILL_FOCUS, wxFocusEvent );
+wxDEFINE_EVENT( wxEVT_CHILD_FOCUS, wxChildFocusEvent );
+wxDEFINE_EVENT( wxEVT_MOUSEWHEEL, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_AUX1_DOWN, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_AUX1_UP, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_AUX1_DCLICK, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_AUX2_DOWN, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_AUX2_UP, wxMouseEvent );
+wxDEFINE_EVENT( wxEVT_AUX2_DCLICK, wxMouseEvent );
 
 // Character input event type
-wxDEFINE_EVENT( wxEVT_CHAR, wxKeyEvent )
-wxDEFINE_EVENT( wxEVT_CHAR_HOOK, wxKeyEvent )
-wxDEFINE_EVENT( wxEVT_NAVIGATION_KEY, wxNavigationKeyEvent )
-wxDEFINE_EVENT( wxEVT_KEY_DOWN, wxKeyEvent )
-wxDEFINE_EVENT( wxEVT_KEY_UP, wxKeyEvent )
+wxDEFINE_EVENT( wxEVT_CHAR, wxKeyEvent );
+wxDEFINE_EVENT( wxEVT_CHAR_HOOK, wxKeyEvent );
+wxDEFINE_EVENT( wxEVT_NAVIGATION_KEY, wxNavigationKeyEvent );
+wxDEFINE_EVENT( wxEVT_KEY_DOWN, wxKeyEvent );
+wxDEFINE_EVENT( wxEVT_KEY_UP, wxKeyEvent );
 #if wxUSE_HOTKEY
-wxDEFINE_EVENT( wxEVT_HOTKEY, wxKeyEvent )
+wxDEFINE_EVENT( wxEVT_HOTKEY, wxKeyEvent );
 #endif
 
 // Set cursor event
-wxDEFINE_EVENT( wxEVT_SET_CURSOR, wxSetCursorEvent )
+wxDEFINE_EVENT( wxEVT_SET_CURSOR, wxSetCursorEvent );
 
 // wxScrollbar and wxSlider event identifiers
-wxDEFINE_EVENT( wxEVT_SCROLL_TOP, wxScrollEvent )
-wxDEFINE_EVENT( wxEVT_SCROLL_BOTTOM, wxScrollEvent )
-wxDEFINE_EVENT( wxEVT_SCROLL_LINEUP, wxScrollEvent )
-wxDEFINE_EVENT( wxEVT_SCROLL_LINEDOWN, wxScrollEvent )
-wxDEFINE_EVENT( wxEVT_SCROLL_PAGEUP, wxScrollEvent )
-wxDEFINE_EVENT( wxEVT_SCROLL_PAGEDOWN, wxScrollEvent )
-wxDEFINE_EVENT( wxEVT_SCROLL_THUMBTRACK, wxScrollEvent )
-wxDEFINE_EVENT( wxEVT_SCROLL_THUMBRELEASE, wxScrollEvent )
-wxDEFINE_EVENT( wxEVT_SCROLL_CHANGED, wxScrollEvent )
+wxDEFINE_EVENT( wxEVT_SCROLL_TOP, wxScrollEvent );
+wxDEFINE_EVENT( wxEVT_SCROLL_BOTTOM, wxScrollEvent );
+wxDEFINE_EVENT( wxEVT_SCROLL_LINEUP, wxScrollEvent );
+wxDEFINE_EVENT( wxEVT_SCROLL_LINEDOWN, wxScrollEvent );
+wxDEFINE_EVENT( wxEVT_SCROLL_PAGEUP, wxScrollEvent );
+wxDEFINE_EVENT( wxEVT_SCROLL_PAGEDOWN, wxScrollEvent );
+wxDEFINE_EVENT( wxEVT_SCROLL_THUMBTRACK, wxScrollEvent );
+wxDEFINE_EVENT( wxEVT_SCROLL_THUMBRELEASE, wxScrollEvent );
+wxDEFINE_EVENT( wxEVT_SCROLL_CHANGED, wxScrollEvent );
 
 // Due to a bug in older wx versions, wxSpinEvents were being sent with type of
 // wxEVT_SCROLL_LINEUP, wxEVT_SCROLL_LINEDOWN and wxEVT_SCROLL_THUMBTRACK. But
@@ -244,82 +244,82 @@ wxDEFINE_EVENT( wxEVT_SCROLL_CHANGED, wxScrollEvent )
 
 #if wxUSE_SPINBTN
 
-wxDEFINE_EVENT_ALIAS( wxEVT_SPIN_UP,   wxSpinEvent, wxEVT_SCROLL_LINEUP )
-wxDEFINE_EVENT_ALIAS( wxEVT_SPIN_DOWN, wxSpinEvent, wxEVT_SCROLL_LINEDOWN )
-wxDEFINE_EVENT_ALIAS( wxEVT_SPIN,      wxSpinEvent, wxEVT_SCROLL_THUMBTRACK )
+wxDEFINE_EVENT_ALIAS( wxEVT_SPIN_UP,   wxSpinEvent, wxEVT_SCROLL_LINEUP );
+wxDEFINE_EVENT_ALIAS( wxEVT_SPIN_DOWN, wxSpinEvent, wxEVT_SCROLL_LINEDOWN );
+wxDEFINE_EVENT_ALIAS( wxEVT_SPIN,      wxSpinEvent, wxEVT_SCROLL_THUMBTRACK );
 
 #endif // wxUSE_SPINBTN
 
 // Scroll events from wxWindow
-wxDEFINE_EVENT( wxEVT_SCROLLWIN_TOP, wxScrollWinEvent )
-wxDEFINE_EVENT( wxEVT_SCROLLWIN_BOTTOM, wxScrollWinEvent )
-wxDEFINE_EVENT( wxEVT_SCROLLWIN_LINEUP, wxScrollWinEvent )
-wxDEFINE_EVENT( wxEVT_SCROLLWIN_LINEDOWN, wxScrollWinEvent )
-wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEvent )
-wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent )
-wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent )
-wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent )
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_TOP, wxScrollWinEvent );
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_BOTTOM, wxScrollWinEvent );
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_LINEUP, wxScrollWinEvent );
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_LINEDOWN, wxScrollWinEvent );
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEUP, wxScrollWinEvent );
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_PAGEDOWN, wxScrollWinEvent );
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBTRACK, wxScrollWinEvent );
+wxDEFINE_EVENT( wxEVT_SCROLLWIN_THUMBRELEASE, wxScrollWinEvent );
 
 // System events
-wxDEFINE_EVENT( wxEVT_SIZE, wxSizeEvent )
-wxDEFINE_EVENT( wxEVT_SIZING, wxSizeEvent )
-wxDEFINE_EVENT( wxEVT_MOVE, wxMoveEvent )
-wxDEFINE_EVENT( wxEVT_MOVING, wxMoveEvent )
-wxDEFINE_EVENT( wxEVT_MOVE_START, wxMoveEvent )
-wxDEFINE_EVENT( wxEVT_MOVE_END, wxMoveEvent )
-wxDEFINE_EVENT( wxEVT_CLOSE_WINDOW, wxCloseEvent )
-wxDEFINE_EVENT( wxEVT_END_SESSION, wxCloseEvent )
-wxDEFINE_EVENT( wxEVT_QUERY_END_SESSION, wxCloseEvent )
-wxDEFINE_EVENT( wxEVT_HIBERNATE, wxActivateEvent )
-wxDEFINE_EVENT( wxEVT_ACTIVATE_APP, wxActivateEvent )
-wxDEFINE_EVENT( wxEVT_ACTIVATE, wxActivateEvent )
-wxDEFINE_EVENT( wxEVT_CREATE, wxWindowCreateEvent )
-wxDEFINE_EVENT( wxEVT_DESTROY, wxWindowDestroyEvent )
-wxDEFINE_EVENT( wxEVT_SHOW, wxShowEvent )
-wxDEFINE_EVENT( wxEVT_ICONIZE, wxIconizeEvent )
-wxDEFINE_EVENT( wxEVT_MAXIMIZE, wxMaximizeEvent )
-wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_CHANGED, wxMouseCaptureChangedEvent )
-wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEvent )
-wxDEFINE_EVENT( wxEVT_PAINT, wxPaintEvent )
-wxDEFINE_EVENT( wxEVT_ERASE_BACKGROUND, wxEraseEvent )
-wxDEFINE_EVENT( wxEVT_NC_PAINT, wxNcPaintEvent )
-wxDEFINE_EVENT( wxEVT_MENU_OPEN, wxMenuEvent )
-wxDEFINE_EVENT( wxEVT_MENU_CLOSE, wxMenuEvent )
-wxDEFINE_EVENT( wxEVT_MENU_HIGHLIGHT, wxMenuEvent )
-wxDEFINE_EVENT( wxEVT_CONTEXT_MENU, wxContextMenuEvent )
-wxDEFINE_EVENT( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEvent )
-wxDEFINE_EVENT( wxEVT_DISPLAY_CHANGED, wxDisplayChangedEvent )
-wxDEFINE_EVENT( wxEVT_QUERY_NEW_PALETTE, wxQueryNewPaletteEvent )
-wxDEFINE_EVENT( wxEVT_PALETTE_CHANGED, wxPaletteChangedEvent )
-wxDEFINE_EVENT( wxEVT_JOY_BUTTON_DOWN, wxJoystickEvent )
-wxDEFINE_EVENT( wxEVT_JOY_BUTTON_UP, wxJoystickEvent )
-wxDEFINE_EVENT( wxEVT_JOY_MOVE, wxJoystickEvent )
-wxDEFINE_EVENT( wxEVT_JOY_ZMOVE, wxJoystickEvent )
-wxDEFINE_EVENT( wxEVT_DROP_FILES, wxDropFilesEvent )
-wxDEFINE_EVENT( wxEVT_INIT_DIALOG, wxInitDialogEvent )
-wxDEFINE_EVENT( wxEVT_UPDATE_UI, wxUpdateUIEvent )
+wxDEFINE_EVENT( wxEVT_SIZE, wxSizeEvent );
+wxDEFINE_EVENT( wxEVT_SIZING, wxSizeEvent );
+wxDEFINE_EVENT( wxEVT_MOVE, wxMoveEvent );
+wxDEFINE_EVENT( wxEVT_MOVING, wxMoveEvent );
+wxDEFINE_EVENT( wxEVT_MOVE_START, wxMoveEvent );
+wxDEFINE_EVENT( wxEVT_MOVE_END, wxMoveEvent );
+wxDEFINE_EVENT( wxEVT_CLOSE_WINDOW, wxCloseEvent );
+wxDEFINE_EVENT( wxEVT_END_SESSION, wxCloseEvent );
+wxDEFINE_EVENT( wxEVT_QUERY_END_SESSION, wxCloseEvent );
+wxDEFINE_EVENT( wxEVT_HIBERNATE, wxActivateEvent );
+wxDEFINE_EVENT( wxEVT_ACTIVATE_APP, wxActivateEvent );
+wxDEFINE_EVENT( wxEVT_ACTIVATE, wxActivateEvent );
+wxDEFINE_EVENT( wxEVT_CREATE, wxWindowCreateEvent );
+wxDEFINE_EVENT( wxEVT_DESTROY, wxWindowDestroyEvent );
+wxDEFINE_EVENT( wxEVT_SHOW, wxShowEvent );
+wxDEFINE_EVENT( wxEVT_ICONIZE, wxIconizeEvent );
+wxDEFINE_EVENT( wxEVT_MAXIMIZE, wxMaximizeEvent );
+wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_CHANGED, wxMouseCaptureChangedEvent );
+wxDEFINE_EVENT( wxEVT_MOUSE_CAPTURE_LOST, wxMouseCaptureLostEvent );
+wxDEFINE_EVENT( wxEVT_PAINT, wxPaintEvent );
+wxDEFINE_EVENT( wxEVT_ERASE_BACKGROUND, wxEraseEvent );
+wxDEFINE_EVENT( wxEVT_NC_PAINT, wxNcPaintEvent );
+wxDEFINE_EVENT( wxEVT_MENU_OPEN, wxMenuEvent );
+wxDEFINE_EVENT( wxEVT_MENU_CLOSE, wxMenuEvent );
+wxDEFINE_EVENT( wxEVT_MENU_HIGHLIGHT, wxMenuEvent );
+wxDEFINE_EVENT( wxEVT_CONTEXT_MENU, wxContextMenuEvent );
+wxDEFINE_EVENT( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEvent );
+wxDEFINE_EVENT( wxEVT_DISPLAY_CHANGED, wxDisplayChangedEvent );
+wxDEFINE_EVENT( wxEVT_QUERY_NEW_PALETTE, wxQueryNewPaletteEvent );
+wxDEFINE_EVENT( wxEVT_PALETTE_CHANGED, wxPaletteChangedEvent );
+wxDEFINE_EVENT( wxEVT_JOY_BUTTON_DOWN, wxJoystickEvent );
+wxDEFINE_EVENT( wxEVT_JOY_BUTTON_UP, wxJoystickEvent );
+wxDEFINE_EVENT( wxEVT_JOY_MOVE, wxJoystickEvent );
+wxDEFINE_EVENT( wxEVT_JOY_ZMOVE, wxJoystickEvent );
+wxDEFINE_EVENT( wxEVT_DROP_FILES, wxDropFilesEvent );
+wxDEFINE_EVENT( wxEVT_INIT_DIALOG, wxInitDialogEvent );
+wxDEFINE_EVENT( wxEVT_UPDATE_UI, wxUpdateUIEvent );
 
 // Clipboard events
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_COPY, wxClipboardTextEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_CUT, wxClipboardTextEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_PASTE, wxClipboardTextEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_COPY, wxClipboardTextEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_CUT, wxClipboardTextEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_TEXT_PASTE, wxClipboardTextEvent );
 
 // Generic command events
 // Note: a click is a higher-level event than button down/up
-wxDEFINE_EVENT( wxEVT_COMMAND_LEFT_CLICK, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_LEFT_DCLICK, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_RIGHT_CLICK, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_RIGHT_DCLICK, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_SET_FOCUS, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_KILL_FOCUS, wxCommandEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_ENTER, wxCommandEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_LEFT_CLICK, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_LEFT_DCLICK, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_RIGHT_CLICK, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_RIGHT_DCLICK, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_SET_FOCUS, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_KILL_FOCUS, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_ENTER, wxCommandEvent );
 
 // Help events
-wxDEFINE_EVENT( wxEVT_HELP, wxHelpEvent )
-wxDEFINE_EVENT( wxEVT_DETAILED_HELP, wxHelpEvent )
+wxDEFINE_EVENT( wxEVT_HELP, wxHelpEvent );
+wxDEFINE_EVENT( wxEVT_DETAILED_HELP, wxHelpEvent );
 
 // Thread event
-wxDEFINE_EVENT( wxEVT_COMMAND_THREAD, wxThreadEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_THREAD, wxThreadEvent );
 
 #endif // wxUSE_GUI
 

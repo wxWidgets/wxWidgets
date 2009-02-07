@@ -37,11 +37,11 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxFindDialogEvent, wxCommandEvent)
 
-wxDEFINE_EVENT( wxEVT_COMMAND_FIND, wxFindDialogEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_FIND_NEXT, wxFindDialogEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_FIND_REPLACE, wxFindDialogEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_FIND_REPLACE_ALL, wxFindDialogEvent )
-wxDEFINE_EVENT( wxEVT_COMMAND_FIND_CLOSE, wxFindDialogEvent )
+wxDEFINE_EVENT( wxEVT_COMMAND_FIND, wxFindDialogEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_FIND_NEXT, wxFindDialogEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_FIND_REPLACE, wxFindDialogEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_FIND_REPLACE_ALL, wxFindDialogEvent );
+wxDEFINE_EVENT( wxEVT_COMMAND_FIND_CLOSE, wxFindDialogEvent );
 
 // ============================================================================
 // implementations

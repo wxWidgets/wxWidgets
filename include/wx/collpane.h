@@ -53,7 +53,7 @@ public:
 
 class WXDLLIMPEXP_FWD_CORE wxCollapsiblePaneEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_COLLPANE_CHANGED, wxCollapsiblePaneEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COMMAND_COLLPANE_CHANGED, wxCollapsiblePaneEvent );
 
 class WXDLLIMPEXP_CORE wxCollapsiblePaneEvent : public wxCommandEvent
 {

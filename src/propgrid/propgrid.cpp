@@ -5287,15 +5287,15 @@ wxPGChoiceEntry& wxPGChoicesData::Insert( int index,
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyGridEvent, wxCommandEvent)
 
 
-wxDEFINE_EVENT( wxEVT_PG_SELECTED, wxPropertyGridEvent )
-wxDEFINE_EVENT( wxEVT_PG_CHANGING, wxPropertyGridEvent )
-wxDEFINE_EVENT( wxEVT_PG_CHANGED, wxPropertyGridEvent )
-wxDEFINE_EVENT( wxEVT_PG_HIGHLIGHTED, wxPropertyGridEvent )
-wxDEFINE_EVENT( wxEVT_PG_RIGHT_CLICK, wxPropertyGridEvent )
-wxDEFINE_EVENT( wxEVT_PG_PAGE_CHANGED, wxPropertyGridEvent )
-wxDEFINE_EVENT( wxEVT_PG_ITEM_EXPANDED, wxPropertyGridEvent )
-wxDEFINE_EVENT( wxEVT_PG_ITEM_COLLAPSED, wxPropertyGridEvent )
-wxDEFINE_EVENT( wxEVT_PG_DOUBLE_CLICK, wxPropertyGridEvent )
+wxDEFINE_EVENT( wxEVT_PG_SELECTED, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_CHANGING, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_CHANGED, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_HIGHLIGHTED, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_RIGHT_CLICK, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_PAGE_CHANGED, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_ITEM_EXPANDED, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_ITEM_COLLAPSED, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_DOUBLE_CLICK, wxPropertyGridEvent );
 
 
 // -----------------------------------------------------------------------

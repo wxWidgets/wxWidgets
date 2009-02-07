@@ -90,7 +90,7 @@ inline void wxHyperlinkCtrlBase::CheckParams(const wxString&, const wxString&, l
 
 class WXDLLIMPEXP_FWD_ADV wxHyperlinkEvent;
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_HYPERLINK, wxHyperlinkEvent )
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_COMMAND_HYPERLINK, wxHyperlinkEvent );
 
 //
 // An event fired when the user clicks on the label in a hyperlink control.
