@@ -981,26 +981,24 @@ bool wxPropertyGridManager::ProcessEvent( wxEvent& event )
 
 // -----------------------------------------------------------------------
 
-void wxPropertyGridManager::RepaintSplitter( wxDC& dc, int new_splittery, int new_width,
-                                             int new_height, bool desc_too )
+void wxPropertyGridManager::RepaintDescBoxDecorations( wxDC& dc,
+                                                       int newSplitterY,
+                                                       int newWidth,
+                                                       int newHeight )
 {
-    int use_hei = new_height;
-
     // Draw background
     wxColour bgcol = GetBackgroundColour();
-    dc.SetBrush( bgcol );
-    dc.SetPen( bgcol );
-    int rect_hei = use_hei-new_splittery;
-    if ( !desc_too )
-        rect_hei = m_splitterHeight;
-    dc.DrawRectangle(0,new_splittery,new_width,rect_hei);
-    dc.SetPen ( wxSystemSettings::GetColour ( wxSYS_COLOUR_3DDKSHADOW ) );
-    int splitter_bottom = new_splittery+m_splitterHeight - 1;
-    int box_height = use_hei-splitter_bottom;
-    if ( box_height > 1 )
-        dc.DrawRectangle(0,splitter_bottom,new_width,box_height);
+    dc.SetBrush(bgcol);
+    dc.SetPen(bgcol);
+    int rectHeight = m_splitterHeight;
+    dc.DrawRectangle(0, newSplitterY, newWidth, rectHeight);
+    dc.SetPen( wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW) );
+    int splitterBottom = newSplitterY + m_splitterHeight - 1;
+    int boxHeight = newHeight - splitterBottom;
+    if ( boxHeight > 1 )
+        dc.DrawRectangle(0, splitterBottom, newWidth, boxHeight);
     else
-        dc.DrawLine(0,splitter_bottom,new_width,splitter_bottom);
+        dc.DrawLine(0, splitterBottom, newWidth, splitterBottom);
 }
 
 // -----------------------------------------------------------------------
@@ -1143,11 +1141,9 @@ void wxPropertyGridManager::OnPaint( wxPaintEvent& WXUNUSED(event) )
     // Update everything inside the box
     wxRect r = GetUpdateRegion().GetBox();
 
-    // Repaint splitter?
-    int r_bottom = r.y + r.height;
-    int splitter_bottom = m_splitterY + m_splitterHeight;
-    if ( r.y < splitter_bottom && r_bottom >= m_splitterY )
-        RepaintSplitter( dc, m_splitterY, m_width, m_height, false );
+    // Repaint splitter and any other description box decorations
+    if ( (r.y + r.height) >= m_splitterY )
+        RepaintDescBoxDecorations( dc, m_splitterY, m_width, m_height );
 }
 
 // -----------------------------------------------------------------------

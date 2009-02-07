@@ -722,11 +722,10 @@ protected:
 
     void UpdateDescriptionBox( int new_splittery, int new_width, int new_height );
 
-    void RepaintSplitter( wxDC& dc,
-                          int new_splittery,
-                          int new_width,
-                          int new_height,
-                          bool desc_too );
+    void RepaintDescBoxDecorations( wxDC& dc,
+                                    int newSplitterY,
+                                    int newWidth,
+                                    int newHeight );
 
     void SetDescribedProperty( wxPGProperty* p );
 
