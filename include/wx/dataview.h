@@ -811,11 +811,13 @@ protected:
     wxDataViewColumn   *m_column;
     wxPoint             m_pos;
 
+#if wxUSE_DRAG_AND_DROP
     wxDataObject       *m_dataObject;
 
     wxDataFormat        m_dataFormat;
     void*               m_dataBuffer;
     size_t              m_dataSize;
+#endif // wxUSE_DRAG_AND_DROP
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent)
