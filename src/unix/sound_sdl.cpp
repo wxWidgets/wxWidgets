@@ -46,7 +46,7 @@ public:
 typedef void (wxEvtHandler::*wxSoundBackendSDLNotificationFunction)
              (wxSoundBackendSDLNotification&);
 
-wxDECLARE_LOCAL_EVENT( wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, wxSoundBackendSDLNotification )
+wxDECLARE_EVENT( wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, wxSoundBackendSDLNotification )
 
 #define EVT_SOUND_BACKEND_SDL_NOTIFICATON(func) \
     DECLARE_EVENT_TABLE_ENTRY(wxEVT_SOUND_BACKEND_SDL_NOTIFICATION, \

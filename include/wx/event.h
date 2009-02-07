@@ -123,7 +123,7 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
     // Declare a local (not exported) wxEventType-based event type:
 
-    #define wxDECLARE_LOCAL_EVENT( name, type ) \
+    #define wxDECLARE__EVENT( name, type ) \
         wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
 
     // Try to cast the given event handler to the correct handler type:
@@ -152,7 +152,7 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
     // Declare a local (not exported) templatized event type:
 
-    #define wxDECLARE_LOCAL_EVENT( name, type ) \
+    #define wxDECLARE__EVENT( name, type ) \
         wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
 
     // Don't cast the given event handler so that wxEvtHandler::Connect() sees
