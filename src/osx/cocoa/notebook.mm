@@ -41,10 +41,7 @@
 
 @interface wxNSTabView : NSTabView
 {
-    WXCOCOAIMPL_COMMON_MEMBERS
 }
-
-WXCOCOAIMPL_COMMON_INTERFACE
 
 @end
 
@@ -59,7 +56,8 @@ WXCOCOAIMPL_COMMON_INTERFACE
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
     wxNSTabView* view = (wxNSTabView*) tabView;
-    wxWidgetCocoaImpl* viewimpl = [view implementation];
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( view );
+
     if ( viewimpl )
     {
         // wxNotebook* wxpeer = (wxNotebook*) viewimpl->GetWXPeer();
@@ -71,7 +69,7 @@ WXCOCOAIMPL_COMMON_INTERFACE
 
 {
     wxNSTabView* view = (wxNSTabView*) tabView;
-    wxWidgetCocoaImpl* viewimpl = [view implementation];
+    wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( view );
     if ( viewimpl )
     {
         wxNotebook* wxpeer = (wxNotebook*) viewimpl->GetWXPeer();
@@ -83,7 +81,15 @@ WXCOCOAIMPL_COMMON_INTERFACE
 
 @implementation wxNSTabView
 
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
 
 @end
 
@@ -244,7 +250,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer,
     wxNSTabView* v = [[wxNSTabView alloc] initWithFrame:r];
     [v setTabViewType:tabstyle];
     wxWidgetCocoaImpl* c = new wxCocoaTabView( wxpeer, v );
-    [v setImplementation:c];
     [v setDelegate: controller];
     return c;
 }

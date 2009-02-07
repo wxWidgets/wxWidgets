@@ -107,17 +107,10 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
         }
     }
 
-#if wxOSX_USE_CARBON
     if ( !supported )
     {
-        PasteboardRef   pasteboard;
-
-        if ( GetDragPasteboard( (DragReference)m_currentDrag, &pasteboard ) == noErr )
-        {
-            supported = m_dataObject->HasDataInPasteboard( pasteboard );
-        }
+        supported = m_dataObject->HasDataInPasteboard( m_currentDragPasteboard );
     }
-#endif
 
     return supported;
 }
@@ -166,17 +159,10 @@ bool wxDropTarget::GetData()
         }
     }
 
-#if wxOSX_USE_CARBON
     if ( !transferred )
     {
-        PasteboardRef   pasteboard;
-
-        if ( GetDragPasteboard(  (DragReference)m_currentDrag, &pasteboard ) == noErr )
-        {
-            transferred = m_dataObject->GetFromPasteboard( pasteboard );
-        }
+        transferred = m_dataObject->GetFromPasteboard( m_currentDragPasteboard );
     }
-#endif
 
     return transferred;
 }
@@ -369,7 +355,8 @@ pascal OSErr wxMacWindowDragTrackingHandler(
     DragAttributes attributes;
 
     GetDragAttributes( theDrag, &attributes );
-
+    PasteboardRef   pasteboard = 0;
+    GetDragPasteboard( theDrag, &pasteboard );
     wxNonOwnedWindow* toplevel = wxNonOwnedWindow::GetFromWXWindow( (WXWindow) theWindow );
 
     bool optionDown = GetCurrentKeyModifiers() & optionKey;
@@ -427,7 +414,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
 #ifndef __LP64__
                             HideDragHilite( theDrag );
 #endif
-                            trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
+                            trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
                             trackingGlobals->m_currentTarget->OnLeave();
                             trackingGlobals->m_currentTarget = NULL;
                             trackingGlobals->m_currentTargetWindow = NULL;
@@ -442,7 +429,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                         {
                             if ( trackingGlobals->m_currentTarget )
                             {
-                                trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
+                                trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
                                 result = trackingGlobals->m_currentTarget->OnEnter( localx, localy, result );
                             }
 
@@ -467,7 +454,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                 {
                     if ( trackingGlobals->m_currentTarget )
                     {
-                        trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
+                        trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
                         result = trackingGlobals->m_currentTarget->OnDragOver( localx, localy, result );
                     }
                 }
@@ -517,7 +504,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
 
             if (trackingGlobals->m_currentTarget)
             {
-                trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
+                trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
                 trackingGlobals->m_currentTarget->OnLeave();
 #ifndef __LP64__
                 HideDragHilite( theDrag );
@@ -545,7 +532,9 @@ pascal OSErr wxMacWindowDragReceiveHandler(
         Point mouse, localMouse;
         int localx, localy;
 
-        trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
+        PasteboardRef   pasteboard = 0;
+        GetDragPasteboard( theDrag, &pasteboard );
+        trackingGlobals->m_currentTarget->SetCurrentDragPasteboard( pasteboard );
         GetDragMouse( theDrag, &mouse, 0L );
         localMouse = mouse;
         localx = localMouse.h;

@@ -455,7 +455,7 @@ public :
 
     virtual OSStatus SetTabEnabled( SInt16 tabNo , bool enable );
 
-    void InstallEventHandler( WXWidget control = NULL );
+    virtual void InstallEventHandler( WXWidget control = NULL );
 protected :
     WXEVENTHANDLERREF    m_macControlEventHandler ;
     ControlRef  m_controlRef;

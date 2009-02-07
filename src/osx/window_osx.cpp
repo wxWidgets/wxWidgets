@@ -85,7 +85,6 @@
 BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
     EVT_NC_PAINT(wxWindowMac::OnNcPaint)
     EVT_ERASE_BACKGROUND(wxWindowMac::OnEraseBackground)
-    EVT_PAINT(wxWindowMac::OnPaint)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
 END_EVENT_TABLE()
 
@@ -1869,7 +1868,19 @@ bool wxWindowMac::MacDoRedraw( void* updatergnr , long time )
             wxPaintEvent event;
             event.SetTimestamp(time);
             event.SetEventObject(this);
-            HandleWindowEvent(event);
+            if ( !HandleWindowEvent(event) )
+            {
+                // for native controls: call their native paint method
+                if ( !MacIsUserPane() || ( IsTopLevel() && GetBackgroundStyle() == wxBG_STYLE_SYSTEM ) )
+                {
+                    if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL
+                        && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
+                        CallNextEventHandler(
+                            (EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() ,
+                            (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
+                }
+            }
+            
             handled = true ;
         }
 
@@ -2198,21 +2209,6 @@ void wxWindowMac::OnMouseEvent( wxMouseEvent &event )
     {
         event.Skip() ;
     }
-}
-
-void wxWindowMac::OnPaint( wxPaintEvent & WXUNUSED(event) )
-{
-#if wxOSX_USE_COCOA_OR_CARBON
-    // for native controls: call their native paint method
-    if ( !MacIsUserPane() || ( IsTopLevel() && GetBackgroundStyle() == wxBG_STYLE_SYSTEM ) )
-    {
-        if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL
-             && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
-            CallNextEventHandler(
-                (EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() ,
-                (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
-    }
-#endif
 }
 
 void wxWindowMac::TriggerScrollEvent( wxEventType WXUNUSED(scrollEvent) )

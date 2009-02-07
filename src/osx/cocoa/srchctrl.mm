@@ -31,25 +31,29 @@
 
 @interface wxNSSearchField : NSSearchField
 {
-    WXCOCOAIMPL_COMMON_MEMBERS
 }
-
-WXCOCOAIMPL_COMMON_INTERFACE
 
 @end
 
 @implementation wxNSSearchField
 
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     [super initWithFrame:frame];
-    impl = NULL;
     [self setTarget: self];
     [self setAction: @selector(searchAction:)];
     return self;
 }
-
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 // use our common calls
 - (void) setTitle:(NSString *) title
@@ -59,6 +63,7 @@ WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 - (void) searchAction: (id) sender
 {
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
         wxSearchCtrl* wxpeer = dynamic_cast<wxSearchCtrl*>( impl->GetWXPeer() );
@@ -168,7 +173,6 @@ wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer,
 
     wxNSSearchFieldControl* c = new wxNSSearchFieldControl( wxpeer, v );
     c->SetStringValue( str );
-    [v setImplementation:c];
     return c;
 }
 

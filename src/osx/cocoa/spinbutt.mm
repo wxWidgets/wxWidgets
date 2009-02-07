@@ -18,68 +18,80 @@
 
 @interface wxNSStepper : NSStepper
 {
-    WXCOCOAIMPL_COMMON_MEMBERS
-    int formerValue;
 }
-
-WXCOCOAIMPL_COMMON_INTERFACE
-
- - (void) clickedAction: (id) sender;
-
 @end
 
 @implementation wxNSStepper
 
-- (id)initWithFrame:(NSRect)frame
++ (void)initialize
 {
-    [super initWithFrame:frame];
-    impl = NULL;
-    formerValue = 0;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
-    return self;
-}
-
-- (void) clickedAction: (id) sender
-{
-    if ( impl )
+    static BOOL initialized = NO;
+    if (!initialized) 
     {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer )
-        {
-            // because wx expects to be able to veto 
-            // a change we must revert the value change
-            // and expose it
-            int currentValue = [self intValue];
-            [self setIntValue:formerValue];
-            int inc = currentValue-formerValue;
-            
-            // adjust for wrap arounds
-            if ( inc > 1 )
-                inc = -1;
-            else if (inc < -1 )
-                inc = 1;
-                
-            if ( inc == 1 )
-                wxpeer->TriggerScrollEvent(wxEVT_SCROLL_LINEUP);
-            else if ( inc == -1 )
-                wxpeer->TriggerScrollEvent(wxEVT_SCROLL_LINEDOWN);
-
-            formerValue = [self intValue];
-        }
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods(self);
     }
 }
 
--(void)mouseDown:(NSEvent *)event 
+@end
+
+class wxSpinButtonCocoaImpl : public wxWidgetCocoaImpl
 {
-    formerValue = [self intValue];
-    if ( !impl->DoHandleMouseEvent(event) )
-        [super mouseDown:event];
+public :
+    wxSpinButtonCocoaImpl(wxWindowMac* peer , WXWidget w) :
+        wxWidgetCocoaImpl(peer, w)
+    {
+        m_formerValue = 0;
+    }
+    
+    ~wxSpinButtonCocoaImpl()
+    {
+    }
+
+    virtual void clickedAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
+private:
+    int m_formerValue;
+};
+
+void wxSpinButtonCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
+{
+    
+    // send a release event in case we've been tracking the thumb
+    if ( strcmp( sel_getName((SEL) _cmd) , "mouseDown:") == 0 )
+    {
+        m_formerValue = [(NSStepper*)m_osxView intValue];
+    }
+
+    wxWidgetCocoaImpl::mouseEvent(event, slf, _cmd);
 }
 
-WXCOCOAIMPL_COMMON_IMPLEMENTATION_NO_MOUSEDOWN
+void wxSpinButtonCocoaImpl::clickedAction( WXWidget slf, void *_cmd, void *sender)
+{
+    wxWindow* wxpeer = (wxWindow*) GetWXPeer();
+    if ( wxpeer )
+    {
+        // because wx expects to be able to veto 
+        // a change we must revert the value change
+        // and expose it
+        int currentValue = [(NSStepper*)m_osxView intValue];
+        [(NSStepper*)m_osxView setIntValue:m_formerValue];
+        int inc = currentValue-m_formerValue;
+        
+        // adjust for wrap arounds
+        if ( inc > 1 )
+            inc = -1;
+        else if (inc < -1 )
+            inc = 1;
+            
+        if ( inc == 1 )
+            wxpeer->TriggerScrollEvent(wxEVT_SCROLL_LINEUP);
+        else if ( inc == -1 )
+            wxpeer->TriggerScrollEvent(wxEVT_SCROLL_LINEDOWN);
 
-@end
+        m_formerValue = [(NSStepper*)m_osxView intValue];
+    }
+}
 
 wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
@@ -102,8 +114,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer,
     if ( style & wxSP_WRAP )
         [v setValueWraps:YES];
     
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
+    wxWidgetCocoaImpl* c = new wxSpinButtonCocoaImpl( wxpeer, v );
     return c;
 }
 

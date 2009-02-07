@@ -210,8 +210,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             CGContextClearRect( cgContext, bounds );
                         }
 
-
-
                         if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                             result = noErr ;
 

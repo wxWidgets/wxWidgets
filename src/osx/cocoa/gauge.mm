@@ -19,23 +19,21 @@
 
 @interface wxNSProgressIndicator : NSProgressIndicator
 {
-    WXCOCOAIMPL_COMMON_MEMBERS
 }
-
-WXCOCOAIMPL_COMMON_INTERFACE
 
 @end
 
 @implementation wxNSProgressIndicator
 
-- (id)initWithFrame:(NSRect)frame
++ (void)initialize
 {
-    [super initWithFrame:frame];
-    impl = NULL;
-    return self;
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
 }
-
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 @end
 
@@ -98,7 +96,6 @@ wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer,
     [v setIndeterminate:FALSE];
     [v setDoubleValue: (double) value];
     wxWidgetCocoaImpl* c = new wxOSXGaugeCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 }
 

@@ -18,7 +18,15 @@
 
 @implementation wxNSBox
 
-WXCOCOAIMPL_COMMON_IMPLEMENTATION_NOT_FLIPPED
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
 
 @end
 
@@ -34,7 +42,7 @@ wxWidgetImplType* wxWidgetImpl::CreateGroupBox( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSBox* v = [[wxNSBox alloc] initWithFrame:r];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
+    c->SetFlipped(false);
     return c;
 }
 

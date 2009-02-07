@@ -23,80 +23,18 @@
 
 @interface wxNSScroller : NSScroller
 {
-    WXCOCOAIMPL_COMMON_MEMBERS
 }
-
-WXCOCOAIMPL_COMMON_INTERFACE
-
- - (void) clickedAction: (id) sender;
-
 @end
 
 @implementation wxNSScroller
 
-- (id)initWithFrame:(NSRect)frame
++ (void)initialize
 {
-    [super initWithFrame:frame];
-    impl = NULL;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
-    return self;
-}
-
-WXCOCOAIMPL_COMMON_IMPLEMENTATION_NO_MOUSEDOWN
-
-// we will have a mouseDown, then in the native 
-// implementation of mouseDown the tracking code
-// is calling clickedAction, therefore we wire this
-// to thumbtrack and only after super mouseDown 
-// returns we will call the thumbrelease
-
-- (void) clickedAction: (id) sender
-{
-    if ( impl )
+    static BOOL initialized = NO;
+    if (!initialized) 
     {
-        wxEventType scrollEvent = wxEVT_NULL;
-        switch ([self hitPart]) 
-        {
-        case NSScrollerIncrementLine:
-            scrollEvent = wxEVT_SCROLL_LINEDOWN;
-            break;
-        case NSScrollerIncrementPage:
-            scrollEvent = wxEVT_SCROLL_PAGEDOWN;
-            break;
-        case NSScrollerDecrementLine:
-            scrollEvent = wxEVT_SCROLL_LINEUP;
-            break;
-        case NSScrollerDecrementPage:
-            scrollEvent = wxEVT_SCROLL_PAGEUP;
-            break;
-        case NSScrollerKnob:
-        case NSScrollerKnobSlot:
-            scrollEvent = wxEVT_SCROLL_THUMBTRACK;
-            break;
-        case NSScrollerNoPart:
-        default:
-            return;
-        }
-
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer )
-            wxpeer->TriggerScrollEvent(scrollEvent);
-    }
-}
-
--(void)mouseDown:(NSEvent *)event 
-{
-    if ( !impl->DoHandleMouseEvent(event) )
-        [super mouseDown:event];
-
-    // send a release event in case we've been tracking the thumb
-    NSScrollerPart hit = [self hitPart];
-    if ( impl && (hit == NSScrollerKnob || hit == NSScrollerKnobSlot) )
-    {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer )
-            wxpeer->TriggerScrollEvent(wxEVT_SCROLL_THUMBRELEASE);
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods(self);
     }
 }
 
@@ -118,7 +56,7 @@ public :
     void    SetScrollThumb( wxInt32 value, wxInt32 thumbSize ) 
     {
         double v = ((double) value)/m_maximum;
-        double t = ((double) thumbSize)/m_maximum;
+        double t = ((double) thumbSize)/(m_maximum+thumbSize);
 #if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
         [(wxNSScroller*) m_osxView setFloatValue:v knobProportion:t];
 #else
@@ -127,18 +65,75 @@ public :
 #endif
     }
     
-    wxInt32 GetValue() const
+    virtual wxInt32 GetValue() const
     {
         return [(wxNSScroller*) m_osxView floatValue] * m_maximum;
     }
     
-    wxInt32 GetMaximum() const
+    virtual wxInt32 GetMaximum() const
     {
         return m_maximum;
     }
+
+    virtual void clickedAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
 protected:
     wxInt32 m_maximum;
 };
+
+// we will have a mouseDown, then in the native 
+// implementation of mouseDown the tracking code
+// is calling clickedAction, therefore we wire this
+// to thumbtrack and only after super mouseDown 
+// returns we will call the thumbrelease
+
+void wxOSXScrollBarCocoaImpl::clickedAction( WXWidget slf, void *_cmd, void *sender)
+{
+    wxEventType scrollEvent = wxEVT_NULL;
+    switch ([(NSScroller*)m_osxView hitPart]) 
+    {
+    case NSScrollerIncrementLine:
+        scrollEvent = wxEVT_SCROLL_LINEDOWN;
+        break;
+    case NSScrollerIncrementPage:
+        scrollEvent = wxEVT_SCROLL_PAGEDOWN;
+        break;
+    case NSScrollerDecrementLine:
+        scrollEvent = wxEVT_SCROLL_LINEUP;
+        break;
+    case NSScrollerDecrementPage:
+        scrollEvent = wxEVT_SCROLL_PAGEUP;
+        break;
+    case NSScrollerKnob:
+    case NSScrollerKnobSlot:
+        scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+        break;
+    case NSScrollerNoPart:
+    default:
+        return;
+    }
+
+    wxWindow* wxpeer = (wxWindow*) GetWXPeer();
+    if ( wxpeer )
+        wxpeer->TriggerScrollEvent(scrollEvent);
+}
+
+void wxOSXScrollBarCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
+{
+    wxWidgetCocoaImpl::mouseEvent(event, slf, _cmd);
+    
+    // send a release event in case we've been tracking the thumb
+    if ( strcmp( sel_getName((SEL) _cmd) , "mouseDown:") == 0 )
+    {
+        NSScrollerPart hit = [(NSScroller*)m_osxView hitPart];
+        if ( (hit == NSScrollerKnob || hit == NSScrollerKnobSlot) )
+        {
+            wxWindow* wxpeer = (wxWindow*) GetWXPeer();
+            if ( wxpeer )
+                wxpeer->OSXHandleClicked(0);
+        }
+    }
+}
 
 wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
@@ -152,7 +147,6 @@ wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer,
     wxNSScroller* v = [[wxNSScroller alloc] initWithFrame:r];
 
     wxWidgetCocoaImpl* c = new wxOSXScrollBarCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     [v setEnabled:YES];
     return c;
 }

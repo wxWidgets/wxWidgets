@@ -51,12 +51,19 @@
 
 @implementation wxNSTextField
 
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
 
 - (id)initWithFrame:(NSRect)frame
 {
     [super initWithFrame:frame];
-    impl = NULL;
     [self setDelegate: self];
     [self setTarget: self];
 //    [self setAction: @selector(enterAction:)];
@@ -190,7 +197,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     //[v setDrawsBackground:NO];
     
     wxWidgetCocoaImpl* c = new wxNSTextFieldControl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 }
 

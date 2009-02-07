@@ -37,6 +37,10 @@
 // implementation
 // ============================================================================
 
+// Open Items:
+// - support for old style MacOS creator / type combos
+// - parameter support for descending into packages as directories (setTreatsFilePackagesAsDirectories)
+
 IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 
 wxFileDialog::wxFileDialog(
@@ -123,8 +127,8 @@ NSArray* GetTypesFromFilter( const wxString filter )
             wxCFStringRef cfext(extension);
             [types addObject: (NSString*)cfext.AsNSString()  ];
 #if 0
+            // add support for classic fileType / creator here
             wxUint32 fileType, creator;
-
             // extension -> mactypes
 #endif
         }
@@ -152,7 +156,10 @@ int wxFileDialog::ShowModal()
         // makes things more convenient:
         [sPanel setCanCreateDirectories:YES];
         [sPanel setMessage:cf.AsNSString()];
+        // if we should be able to descend into pacakges we must somehow
+        // be able to pass this in
         [sPanel setTreatsFilePackagesAsDirectories:NO];
+        [sPanel setCanSelectHiddenExtension:YES];
 
         if ( HasFlag(wxFD_OVERWRITE_PROMPT) )
         {
@@ -205,182 +212,5 @@ int wxFileDialog::ShowModal()
 
     return result;
 }
-
-#if 0
-
-    wxASSERT(CreateBase(parent,wxID_ANY,pos,wxDefaultSize,style,wxDefaultValidator,wxDialogNameStr));
-
-    if ( parent )
-        parent->AddChild(this);
-
-    m_cocoaNSWindow = nil;
-    m_cocoaNSView = nil;
-
-    //Init the wildcard array
-    m_wildcards = [[NSMutableArray alloc] initWithCapacity:0];
-
-    //If the user requests to save - use a NSSavePanel
-    //else use a NSOpenPanel
-    if (HasFlag(wxFD_SAVE))
-    {
-        SetNSPanel([NSSavePanel savePanel]);
-
-        [GetNSSavePanel() setTitle:wxNSStringWithWxString(message)];
-
-        [GetNSSavePanel() setPrompt:@"Save"];
-        [GetNSSavePanel() setTreatsFilePackagesAsDirectories:YES];
-        [GetNSSavePanel() setCanSelectHiddenExtension:YES];
-
-//        Cached as per-app in obj-c
-//        [GetNSSavePanel() setExtensionHidden:YES];
-
-        //
-        // NB:  Note that only Panther supports wildcards
-        // with save dialogs - not that wildcards in save
-        // dialogs are all that useful, anyway :)
-        //
-    }
-    else //m_dialogStyle & wxFD_OPEN
-    {
-        SetNSPanel([NSOpenPanel openPanel]);
-        [m_cocoaNSWindow setTitle:wxNSStringWithWxString(message)];
-
-        [(NSOpenPanel*)m_cocoaNSWindow setAllowsMultipleSelection:(HasFlag(wxFD_MULTIPLE))];
-        [(NSOpenPanel*)m_cocoaNSWindow setResolvesAliases:YES];
-        [(NSOpenPanel*)m_cocoaNSWindow setCanChooseFiles:YES];
-        [(NSOpenPanel*)m_cocoaNSWindow setCanChooseDirectories:NO];
-        [GetNSSavePanel() setPrompt:@"Open"];
-
-        //convert wildcards - open panel only takes file extensions -
-        //no actual wildcards here :)
-        size_t lastwcpos = 0;
-        bool bDescription = true;
-        size_t i;
-        for(i = wildCard.find('|');
-                i != wxString::npos;
-                i = wildCard.find('|', lastwcpos+1))
-        {
-            size_t oldi = i;
-
-            if(!bDescription)
-            {
-                bDescription = !bDescription;
-
-                //work backwards looking for a period
-                while(i != lastwcpos && wildCard[--i] != '.') {}
-
-                if(i == lastwcpos)
-                {
-                    //no extension - can't use this wildcard
-                    lastwcpos = oldi;
-                    continue;
-                }
-
-                [m_wildcards addObject:wxNSStringWithWxString(wildCard.substr(i+1, oldi-i-1))];
-            }
-            else
-                bDescription = !bDescription;
-            lastwcpos = oldi;
-        }
-
-        if (!bDescription)
-        {
-            //get last wildcard
-            size_t oldi = wildCard.length();
-            i = oldi;
-
-            //work backwards looking for a period
-            while(i != lastwcpos && wildCard[--i] != '.') {}
-
-            if(i != lastwcpos)
-                [m_wildcards addObject:wxNSStringWithWxString(wildCard.substr(i+1, oldi-i-1))];
-        }
-
-        if ([m_wildcards count] == 0)
-        {
-            [m_wildcards release];
-            m_wildcards = nil;
-        }
-    }
-}
-
-wxFileDialog::~wxFileDialog()
-{
-    [m_wildcards release];
-}
-
-void wxFileDialog::GetPaths(wxArrayString& paths) const
-{
-    paths.Empty();
-
-    wxString dir(m_dir);
-    if ( m_dir.Last() != _T('\\') )
-        dir += _T('\\');
-
-    size_t count = m_fileNames.GetCount();
-    for ( size_t n = 0; n < count; n++ )
-    {
-        if (wxFileName(m_fileNames[n]).IsAbsolute())
-            paths.Add(m_fileNames[n]);
-        else
-            paths.Add(dir + m_fileNames[n]);
-    }
-}
-
-void wxFileDialog::GetFilenames(wxArrayString& files) const
-{
-    files = m_fileNames;
-}
-
-void wxFileDialog::SetPath(const wxString& path)
-{
-    wxString ext;
-    wxFileName::SplitPath(path, &m_dir, &m_fileName, &ext);
-    if ( !ext.empty() )
-        m_fileName << _T('.') << ext;
-}
-
-int wxFileDialog::ShowModal()
-{
-    wxAutoNSAutoreleasePool thePool;
-
-    m_fileNames.Empty();
-
-    int nResult;
-
-    if (HasFlag(wxFD_SAVE))
-    {
-        nResult = [GetNSSavePanel()
-                    runModalForDirectory:wxNSStringWithWxString(m_dir)
-                    file:wxNSStringWithWxString(m_fileName)];
-
-        if (nResult == NSOKButton)
-        {
-            m_fileNames.Add(wxStringWithNSString([GetNSSavePanel() filename]));
-            m_path = m_fileNames[0];
-        }
-    }
-    else //m_dialogStyle & wxFD_OPEN
-    {
-        nResult = [(NSOpenPanel*)m_cocoaNSWindow
-                    runModalForDirectory:wxNSStringWithWxString(m_dir)
-                    file:wxNSStringWithWxString(m_fileName)
-                    types:m_wildcards];
-
-        if (nResult == NSOKButton)
-        {
-            for(unsigned i = 0; i < [[(NSOpenPanel*)m_cocoaNSWindow filenames] count]; ++i)
-            {
-                m_fileNames.Add(wxStringWithNSString([[(NSOpenPanel*)m_cocoaNSWindow filenames] objectAtIndex:(i)]));
-            }
-
-            m_path = m_fileNames[0];
-        }
-    }
-
-    return nResult == NSOKButton ? wxID_OK : wxID_CANCEL;
-}
-
-#endif
 
 #endif // wxUSE_FILEDLG

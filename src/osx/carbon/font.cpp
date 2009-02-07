@@ -424,7 +424,7 @@ void wxFontRefData::MacFindFont()
                 // QD selection algorithm is the fastest by orders of magnitude on 10.5
                 if ( m_faceName.IsAscii() )
                 {
-                    uint8 qdstyle = 0;
+                    uint8_t qdstyle = 0;
                     if (m_weight == wxFONTWEIGHT_BOLD)
                         qdstyle |= bold;
                     if (m_style == wxFONTSTYLE_ITALIC || m_style == wxFONTSTYLE_SLANT)

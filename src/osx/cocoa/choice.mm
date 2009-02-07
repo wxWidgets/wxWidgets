@@ -24,37 +24,21 @@
 
 @interface wxNSPopUpButton : NSPopUpButton
 {
-    WXCOCOAIMPL_COMMON_MEMBERS
 }
-
-WXCOCOAIMPL_COMMON_INTERFACE
-
-- (void) clickedAction: (id) sender;
 
 @end
 
 @implementation wxNSPopUpButton
 
-- (id)initWithFrame:(NSRect)frame pullsDown:(BOOL) pd
++ (void)initialize
 {
-    [super initWithFrame:frame pullsDown:pd];
-    impl = NULL;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
-    return self;
-}
-
-- (void) clickedAction: (id) sender
-{
-    if ( impl )
+    static BOOL initialized = NO;
+    if (!initialized) 
     {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer )
-            wxpeer->OSXHandleClicked(0);
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
     }
 }
-
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 - (int) intValue
 {
@@ -81,7 +65,6 @@ wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer,
     wxNSPopUpButton* v = [[wxNSPopUpButton alloc] initWithFrame:r pullsDown:NO];
     [v setMenu: menu->GetHMenu()];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 }
 

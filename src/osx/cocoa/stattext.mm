@@ -88,7 +88,6 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
     [v setDrawsBackground:NO];
 
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 /*
     Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );

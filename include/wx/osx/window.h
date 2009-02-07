@@ -138,7 +138,7 @@ public:
 
     // event handlers
     // --------------
-    void OnPaint( wxPaintEvent& event );
+
     void OnNcPaint( wxNcPaintEvent& event );
     void OnEraseBackground(wxEraseEvent& event );
     void OnMouseEvent( wxMouseEvent &event );

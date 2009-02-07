@@ -18,27 +18,38 @@
 
 @interface wxNSSlider : NSSlider
 {
-    WXCOCOAIMPL_COMMON_MEMBERS
 }
-
-WXCOCOAIMPL_COMMON_INTERFACE
-
- - (void) clickedAction: (id) sender;
-
 @end
 
 @implementation wxNSSlider
 
-- (id)initWithFrame:(NSRect)frame
++ (void)initialize
 {
-    [super initWithFrame:frame];
-    impl = NULL;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
-    return self;
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods(self);
+    }
 }
 
-WXCOCOAIMPL_COMMON_IMPLEMENTATION_NO_MOUSEDOWN
+@end
+
+class wxSliderCocoaImpl : public wxWidgetCocoaImpl
+{
+public :
+    wxSliderCocoaImpl(wxWindowMac* peer , WXWidget w) :
+        wxWidgetCocoaImpl(peer, w)
+    {
+    }
+    
+    ~wxSliderCocoaImpl()
+    {
+    }
+
+    virtual void clickedAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
+};
 
 // we will have a mouseDown, then in the native 
 // implementation of mouseDown the tracking code
@@ -46,30 +57,26 @@ WXCOCOAIMPL_COMMON_IMPLEMENTATION_NO_MOUSEDOWN
 // to thumbtrack and only after super mouseDown 
 // returns we will call the thumbrelease
 
-- (void) clickedAction: (id) sender
+void wxSliderCocoaImpl::clickedAction( WXWidget slf, void *_cmd, void *sender)
 {
-    if ( impl )
-    {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer )
-            wxpeer->TriggerScrollEvent(wxEVT_SCROLL_THUMBTRACK);
-    }
+    wxWindow* wxpeer = (wxWindow*) GetWXPeer();
+    if ( wxpeer )
+        wxpeer->TriggerScrollEvent(wxEVT_SCROLL_THUMBTRACK);
 }
 
--(void)mouseDown:(NSEvent *)event 
+void wxSliderCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    if ( !impl->DoHandleMouseEvent(event) )
-        [super mouseDown:event];
-
-    if ( impl )
+    wxWidgetCocoaImpl::mouseEvent(event, slf, _cmd);
+    
+    if ( strcmp( sel_getName((SEL) _cmd) , "mouseDown:") == 0 )
     {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        wxWindow* wxpeer = (wxWindow*) GetWXPeer();
         if ( wxpeer )
             wxpeer->OSXHandleClicked(0);
     }
 }
 
-@end
+
 
 wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
@@ -102,8 +109,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer,
     [v setMinValue: minimum];
     [v setMaxValue: maximum];
     [v setFloatValue: (double) value];
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
+    wxWidgetCocoaImpl* c = new wxSliderCocoaImpl( wxpeer, v );
     return c;
 }
 

@@ -14,6 +14,7 @@
 #if wxUSE_LISTBOX
 
 #include "wx/listbox.h"
+#include "wx/dnd.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -54,13 +55,7 @@ class wxListWidgetCocoaImpl;
 
 @interface wxNSTableView : NSTableView
 {
-    wxListWidgetCocoaImpl* impl;
 }
-
-- (void)setImplementation: (wxListWidgetCocoaImpl *) theImplementation;
-- (wxListWidgetCocoaImpl*) implementation;
-- (void)clickedAction: (id) sender;
-- (void)doubleClickedAction: (id) sender;
 
 @end
 
@@ -147,6 +142,9 @@ public :
     }
     virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) ;
     virtual void            UpdateLineToEnd( unsigned int n);
+
+    virtual void            clickedAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void            doubleClickedAction(void* _cmd);
 protected :
     wxNSTableView*          m_tableView ;
     
@@ -274,55 +272,13 @@ protected:
 
 @implementation wxNSTableView
 
-- (void)setImplementation: (wxListWidgetCocoaImpl *) theImplementation
++ (void)initialize
 {
-    impl = theImplementation;
-}
-
-- (wxListWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (id) init
-{
-    [super init];
-    impl = NULL;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
-    [self setDoubleAction: @selector(doubleClickedAction:)];
-    return self;
-}
-
-- (void) clickedAction: (id) sender
-{
-    if ( impl )
+    static BOOL initialized = NO;
+    if (!initialized) 
     {
-        wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
-        wxCHECK_RET( list != NULL , wxT("Listbox expected"));
-
-        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
-
-        int sel = [self clickedRow];
-        if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
-           return;
-           
-        list->HandleLineEvent( sel, false );
-    }
-}
-
-- (void) doubleClickedAction: (id) sender
-{
-    if ( impl )
-    {
-        wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
-        wxCHECK_RET( list != NULL , wxT("Listbox expected"));
-
-        int sel = [self clickedRow];
-        if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
-           return;
-
-        list->HandleLineEvent( sel, true );
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
     }
 }
 
@@ -335,6 +291,7 @@ protected:
 wxListWidgetCocoaImpl::wxListWidgetCocoaImpl( wxWindowMac* peer, NSScrollView* view, wxNSTableView* tableview, wxNSTableDataSource* data ) :
     wxWidgetCocoaImpl( peer, view ), m_tableView(tableview), m_dataSource(data)
 {
+    InstallEventHandler( tableview );
 }
 
 wxListWidgetCocoaImpl::~wxListWidgetCocoaImpl()
@@ -514,6 +471,31 @@ void wxListWidgetCocoaImpl::UpdateLineToEnd( unsigned int n)
     [m_tableView reloadData];
 }
 
+void wxListWidgetCocoaImpl::clickedAction(WXWidget slf,void* _cmd, void *sender)
+{
+    wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
+    wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+
+    wxCommandEvent event( wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
+
+    int sel = [m_tableView clickedRow];
+    if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
+       return;
+       
+    list->HandleLineEvent( sel, false );
+}
+
+void wxListWidgetCocoaImpl::doubleClickedAction(void* _cmd)
+{
+    wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
+    wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+
+    int sel = [m_tableView clickedRow];
+    if ((sel < 0) || (sel > (int) list->GetCount()))  // OS X can select an item below the last item (why?)
+       return;
+
+    list->HandleLineEvent( sel, true );
+}
 
 // accessing content
 
@@ -555,7 +537,11 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     wxNSTableDataSource* ds = [[ wxNSTableDataSource alloc] init];
     [tableview setDataSource:ds];
     wxListWidgetCocoaImpl* c = new wxListWidgetCocoaImpl( wxpeer, scrollview, tableview, ds );
-    [tableview setImplementation:c];
+
+    // temporary hook for dnd
+    [tableview registerForDraggedTypes:[NSArray arrayWithObjects:
+        NSStringPboardType, NSFilenamesPboardType, NSTIFFPboardType, NSPICTPboardType, NSPDFPboardType, nil]];
+
     [ds setImplementation:c];
     return c;
 }

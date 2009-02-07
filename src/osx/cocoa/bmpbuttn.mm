@@ -50,7 +50,6 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
     [v setImage:bitmap.GetNSImage() ];
     [v setButtonType:NSMomentaryPushInButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 }
 

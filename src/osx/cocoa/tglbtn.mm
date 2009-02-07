@@ -40,7 +40,6 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
     [v setBezelStyle:NSRoundedBezelStyle];    
     [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 }
 
@@ -59,7 +58,6 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer,
     [v setBezelStyle:NSRegularSquareBezelStyle];
     [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 }
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mac/carbon/cursor.h
+// Name:        wx/osx/cursor.h
 // Purpose:     wxCursor class
 // Author:      Stefan Csomor
 // Modified by:

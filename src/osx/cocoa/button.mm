@@ -123,24 +123,13 @@ wxSize wxButton::GetDefaultSize()
 
 @implementation wxNSButton
 
-- (id)initWithFrame:(NSRect)frame
++ (void)initialize
 {
-    [super initWithFrame:frame];
-    impl = NULL;
-    [self setTarget: self];
-    [self setAction: @selector(clickedAction:)];
-    return self;
-}
-
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
-
-- (void) clickedAction: (id) sender
-{
-    if ( impl )
+    static BOOL initialized = NO;
+    if (!initialized) 
     {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer )
-            wxpeer->OSXHandleClicked(0);
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
     }
 }
 
@@ -199,7 +188,6 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     
     [v setButtonType:NSMomentaryPushInButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 /*
     OSStatus err;
@@ -278,6 +266,5 @@ wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer,
     [v setTitle:wxCFStringRef( label).AsNSString()];
     [v setImagePosition:NSImageRight];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 }

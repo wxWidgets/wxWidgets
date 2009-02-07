@@ -57,10 +57,9 @@ class WXDLLIMPEXP_CORE wxDropTarget: public wxDropTargetBase
     virtual bool GetData();
 
     bool CurrentDragHasSupportedFormat() ;
-    void SetCurrentDrag( void* drag ) { m_currentDrag = drag ; }
-    void* GetCurrentDrag() { return m_currentDrag ; }
+    void SetCurrentDragPasteboard( void* dragpasteboard ) { m_currentDragPasteboard = dragpasteboard ; }
   protected :
-    void* m_currentDrag ;
+    void* m_currentDragPasteboard ;
 };
 
 //-------------------------------------------------------------------------
@@ -93,13 +92,12 @@ public:
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 
     wxWindow*     GetWindow() { return m_window ; }
-    void SetCurrentDrag( void* drag ) { m_currentDrag = drag ; }
-    void* GetCurrentDrag() { return m_currentDrag ; }
+    void SetCurrentDragPasteboard( void* dragpasteboard ) { m_currentDragPasteboard = dragpasteboard ; }
     bool MacInstallDefaultCursor(wxDragResult effect) ;
   protected :
 
     wxWindow        *m_window;
-    void* m_currentDrag ;
+    void* m_currentDragPasteboard ;
 };
 
 #endif // wxUSE_DRAG_AND_DROP

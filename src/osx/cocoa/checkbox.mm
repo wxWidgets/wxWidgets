@@ -33,7 +33,6 @@ wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
         [v setAllowsMixedState:YES];
         
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 }
 

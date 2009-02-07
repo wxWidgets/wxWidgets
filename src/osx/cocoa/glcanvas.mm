@@ -229,26 +229,22 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
 
 @interface wxNSCustomOpenGLView : NSView
 {
-    WXCOCOAIMPL_COMMON_MEMBERS
     NSOpenGLContext* context;
 }
-
-- (id)initWithFrame:(NSRect)frame;
-
-WXCOCOAIMPL_COMMON_INTERFACE
 
 @end
 
 @implementation wxNSCustomOpenGLView
 
-- (id)initWithFrame:(NSRect)frame
++ (void)initialize
 {
-    [super initWithFrame:frame];
-    impl = NULL;
-    return self;
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
 }
-
-WXCOCOAIMPL_COMMON_IMPLEMENTATION
 
 - (BOOL)isOpaque
 {
@@ -279,7 +275,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
     m_peer = new wxWidgetCocoaImpl( this, v );
-    [v setImplementation:m_peer];
 
     MacPostControlCreate(pos, size) ;
 */

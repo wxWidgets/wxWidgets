@@ -31,7 +31,6 @@ wxWidgetImplType* wxWidgetImpl::CreateRadioButton( wxWindowMac* wxpeer,
     [v setButtonType:NSRadioButton];    
         
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    [v setImplementation:c];
     return c;
 }
 

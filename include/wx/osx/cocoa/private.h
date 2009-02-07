@@ -127,8 +127,28 @@ public :
     virtual bool        DoHandleKeyEvent(NSEvent *event); 
     virtual void        DoNotifyFocusEvent(bool receivedFocus); 
 
+    void                SetFlipped(bool flipped);
+
+    virtual unsigned int        draggingEntered(void* sender, WXWidget slf, void* _cmd);
+    virtual void                draggingExited(void* sender, WXWidget slf, void* _cmd);
+    virtual unsigned int        draggingUpdated(void* sender, WXWidget slf, void* _cmd);
+    virtual bool                performDragOperation(void* sender, WXWidget slf, void* _cmd);
+    virtual void                mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
+    virtual void                keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
+    virtual bool                performKeyEquivalent(WX_NSEvent event, WXWidget slf, void* _cmd);
+    virtual bool                becomeFirstResponder(WXWidget slf, void* _cmd);
+    virtual bool                resignFirstResponder(WXWidget slf, void* _cmd);
+    virtual void                resetCursorRects(WXWidget slf, void* _cmd);
+    virtual bool                isFlipped(WXWidget slf, void* _cmd);
+    virtual void                drawRect(void* rect, WXWidget slf, void* _cmd);
+    
+    virtual void                clickedAction(WXWidget slf, void* _cmd, void* sender);
+    virtual void                doubleClickedAction(WXWidget slf, void* _cmd, void *sender);
+
 protected:
     WXWidget m_osxView;
+    bool m_isFlipped;
+    
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)
 };
 
@@ -203,217 +223,24 @@ protected :
     NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
         bool adjustForOrigin = true );
         
-    // common code snippets for cocoa implementations
-    // later to be done using injection in method table
-        
-    #define WXCOCOAIMPL_COMMON_EVENTS_INTERFACE -(void)mouseDown:(NSEvent *)event ;\
-        - (void)rightMouseDown:(NSEvent *)event ;\
-        - (void)otherMouseDown:(NSEvent *)event ;\
-        - (void)mouseUp:(NSEvent *)event ;\
-        - (void)rightMouseUp:(NSEvent *)event ;\
-        - (void)otherMouseUp:(NSEvent *)event ;\
-        - (void)mouseMoved:(NSEvent *)event;\
-        - (void)mouseDragged:(NSEvent *)event;\
-        - (void)rightMouseDragged:(NSEvent *)event;\
-        - (void)otherMouseDragged:(NSEvent *)event;\
-        - (void)scrollWheel:(NSEvent *)theEvent;\
-        - (void)mouseEntered:(NSEvent *)event;\
-        - (void)mouseExited:(NSEvent *)event;\
-        - (void)keyDown:(NSEvent *)event;\
-        - (void)keyUp:(NSEvent *)event;\
-        - (BOOL)performKeyEquivalent:(NSEvent *)event;\
-        - (void)flagsChanged:(NSEvent *)event;\
-        - (BOOL)becomeFirstResponder;\
-        - (BOOL)resignFirstResponder;\
-        - (void)resetCursorRects;
-
-
-    #define WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION_NO_MOUSEDOWN        -(void)rightMouseDown:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super rightMouseDown:event];\
-        }\
-        -(void)otherMouseDown:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super otherMouseDown:event];\
-        }\
-        -(void)mouseUp:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super mouseUp:event];\
-        }\
-        -(void)rightMouseUp:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super rightMouseUp:event];\
-        }\
-        -(void)otherMouseUp:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super otherMouseUp:event];\
-        }\
-        -(void)mouseMoved:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super mouseMoved:event];\
-        }\
-        -(void)mouseDragged:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super mouseDragged:event];\
-        }\
-        -(void)rightMouseDragged:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super rightMouseDragged:event];\
-        }\
-        -(void)otherMouseDragged:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super otherMouseDragged:event];\
-        }\
-        -(void)scrollWheel:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super scrollWheel:event];\
-        }\
-        -(void)mouseEntered:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super mouseEntered:event];\
-        }\
-        -(void)mouseExited:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super mouseExited:event];\
-        }\
-        -(BOOL)performKeyEquivalent:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleKeyEvent(event) )\
-                return [super performKeyEquivalent:event];\
-            return YES;\
-        }\
-        -(void)keyDown:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleKeyEvent(event) )\
-                [super keyDown:event];\
-        }\
-        -(void)keyUp:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleKeyEvent(event) )\
-                [super keyUp:event];\
-        }\
-        -(void)flagsChanged:(NSEvent *)event\
-        {\
-            if ( !impl->DoHandleKeyEvent(event) )\
-                [super flagsChanged:event];\
-        }\
-        - (BOOL) becomeFirstResponder\
-        {\
-            BOOL r = [super becomeFirstResponder];\
-            if ( r )\
-                impl->DoNotifyFocusEvent( true );\
-            return r;\
-        }\
-        - (BOOL) resignFirstResponder\
-        {\
-            BOOL r = [super resignFirstResponder];\
-            if ( r )\
-                impl->DoNotifyFocusEvent( false );\
-            return r;\
-        }\
-        - (void) resetCursorRects\
-        {\
-            if ( impl )\
-            {\
-                wxWindow* wxpeer = impl->GetWXPeer();\
-                if ( wxpeer )\
-                {\
-                    NSCursor *cursor = (NSCursor*)wxpeer->GetCursor().GetHCURSOR();\
-                    if (cursor == NULL)\
-                        [super resetCursorRects];\
-                    else\
-                        [self addCursorRect: [self bounds]\
-                            cursor: cursor];\
-                }\
-            }\
-        }
-
-    #define WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION -(void)mouseDown:(NSEvent *)event \
-        {\
-            if ( !impl->DoHandleMouseEvent(event) )\
-                [super mouseDown:event];\
-        }\
-        WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION_NO_MOUSEDOWN
-
-    #define WXCOCOAIMPL_COMMON_MEMBERS wxWidgetCocoaImpl* impl;
-    
-    #define WXCOCOAIMPL_COMMON_INTERFACE \
-        - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation;\
-        - (wxWidgetCocoaImpl*) implementation;\
-        - (BOOL) isFlipped;\
-        WXCOCOAIMPL_COMMON_EVENTS_INTERFACE
-
-    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION_BASE - (void)setImplementation: (wxWidgetCocoaImpl *) theImplementation\
-        {\
-            impl = theImplementation;\
-        }\
-        - (wxWidgetCocoaImpl*) implementation\
-        {\
-            return impl;\
-        }\
-
-    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION \
-        WXCOCOAIMPL_COMMON_IMPLEMENTATION_BASE \
-        - (BOOL) isFlipped\
-        {\
-            return YES;\
-        }
-
-    #define WXCOCOAIMPL_COMMON_IMPLEMENTATION_NO_MOUSEDOWN WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION_NO_MOUSEDOWN \
-        WXCOCOAIMPL_COMMON_IMPLEMENTATION_BASE \
-        - (BOOL) isFlipped\
-        {\
-            return YES;\
-        }
-
-
-     #define WXCOCOAIMPL_COMMON_IMPLEMENTATION_NOT_FLIPPED WXCOCOAIMPL_COMMON_EVENTS_IMPLEMENTATION \
-        WXCOCOAIMPL_COMMON_IMPLEMENTATION_BASE \
-        - (BOOL) isFlipped\
-        {\
-            return NO;\
-        }
-
     // used for many wxControls
     
     @interface wxNSButton : NSButton
     {
-        WXCOCOAIMPL_COMMON_MEMBERS
     }
-
-    WXCOCOAIMPL_COMMON_INTERFACE
-    - (void) clickedAction: (id) sender;
-
+    
     @end
 
     @interface wxNSBox : NSBox
     {
-        WXCOCOAIMPL_COMMON_MEMBERS
     }
-
-    WXCOCOAIMPL_COMMON_INTERFACE
 
     @end
 
     @interface wxNSTextField : NSTextField
     {
-       WXCOCOAIMPL_COMMON_MEMBERS
     }
 
-    WXCOCOAIMPL_COMMON_INTERFACE
-    
     @end
 
     @interface wxNSMenu : NSMenu
@@ -438,6 +265,8 @@ protected :
     - (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 
     @end 
+    
+    void wxOSXCocoaClassAddWXMethods(Class c);
 
 #endif // __OBJC__
 
