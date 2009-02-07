@@ -40,6 +40,10 @@ wxPersistenceManager& wxPersistenceManager::Get()
     return s_manager;
 }
 
+wxPersistenceManager::~wxPersistenceManager()
+{
+}
+
 wxString
 wxPersistenceManager::GetKey(const wxPersistentObject& who,
                              const wxString& name) const

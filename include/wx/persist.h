@@ -77,7 +77,7 @@ public:
     // deletes the associated wxPersistentObject
     void Unregister(void *obj);
 
-    
+
     // save/restore the state of an object
     //
     // these methods do nothing if DisableSaving/Restoring() was called
@@ -135,6 +135,10 @@ private:
         m_doSave =
         m_doRestore = true;
     }
+
+    // trivial but virtual dtor
+    virtual ~wxPersistenceManager();
+
 
     // helpers of Save/Restore()
     //
@@ -230,7 +234,7 @@ inline bool wxPersistentRegisterAndRestore(T *obj)
     wxPersistentObject * const pers = wxCreatePersistentObject(obj);
 
     return wxPersistenceManager::Get().RegisterAndRestore(obj, pers);
-                                            
+
 }
 
 #endif // _WX_PERSIST_H_
