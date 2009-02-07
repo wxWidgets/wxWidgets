@@ -155,6 +155,7 @@ class MyFrame : public wxMDIParentFrame
 
     void OnResetFieldsWidth(wxCommandEvent& event);
     void OnSetStatusFields(wxCommandEvent& event);
+    void OnSetStatusTexts(wxCommandEvent& event);
     void OnRecreateStatusBar(wxCommandEvent& event);
     void OnSetStyleNormal(wxCommandEvent& event);
     void OnSetStyleFlat(wxCommandEvent& event);
@@ -168,6 +169,8 @@ private:
         StatBar_Max
     } m_statbarKind;
 
+
+    void OnUpdateSetStatusTexts(wxUpdateUIEvent& event);
     void OnUpdateResetFieldsWidth(wxUpdateUIEvent& event);
     void OnUpdateSetStatusFields(wxUpdateUIEvent& event);
     void OnUpdateStatusBarToggle(wxUpdateUIEvent& event);
@@ -204,6 +207,7 @@ enum
     // menu items
     StatusBar_Quit = 1,
     StatusBar_SetFields,
+    StatusBar_SetTexts,
     StatusBar_ResetFieldsWidth,
     StatusBar_Recreate,
     StatusBar_About,
@@ -232,6 +236,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif
     EVT_MENU(StatusBar_Quit,  MyFrame::OnQuit)
     EVT_MENU(StatusBar_SetFields, MyFrame::OnSetStatusFields)
+    EVT_MENU(StatusBar_SetTexts, MyFrame::OnSetStatusTexts)
     EVT_MENU(StatusBar_ResetFieldsWidth, MyFrame::OnResetFieldsWidth)
     EVT_MENU(StatusBar_Recreate, MyFrame::OnRecreateStatusBar)
     EVT_MENU(StatusBar_About, MyFrame::OnAbout)
@@ -242,6 +247,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(StatusBar_ResetFieldsWidth, MyFrame::OnUpdateResetFieldsWidth)
     EVT_UPDATE_UI(StatusBar_Toggle, MyFrame::OnUpdateStatusBarToggle)
+    EVT_UPDATE_UI(StatusBar_SetTexts, MyFrame::OnUpdateSetStatusTexts)
     EVT_UPDATE_UI(StatusBar_SetFields, MyFrame::OnUpdateSetStatusFields)
     EVT_UPDATE_UI(StatusBar_SetStyleNormal, MyFrame::OnUpdateSetStyleNormal)
     EVT_UPDATE_UI(StatusBar_SetStyleFlat, MyFrame::OnUpdateSetStyleFlat)
@@ -324,11 +330,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *statbarMenu = new wxMenu;
     statbarMenu->Append(StatusBar_SetFields, _T("&Set field count\tCtrl-C"),
                         _T("Set the number of status bar fields"));
+    statbarMenu->Append(StatusBar_SetTexts, _T("&Set field text\tCtrl-T"),
+                        _T("Set the text to display for each status bar field"));
 
     wxMenu *statbarStyleMenu = new wxMenu;
     statbarStyleMenu->Append(StatusBar_SetStyleNormal, _T("&Normal"), _T("Sets the style of the first field to normal (sunken) look"), true);
     statbarStyleMenu->Append(StatusBar_SetStyleFlat, _T("&Flat"), _T("Sets the style of the first field to flat look"), true);
     statbarStyleMenu->Append(StatusBar_SetStyleRaised, _T("&Raised"), _T("Sets the style of the first field to raised look"), true);
+
     statbarMenu->Append(StatusBar_SetStyle, _T("Field style"), statbarStyleMenu);
 
     statbarMenu->Append(StatusBar_ResetFieldsWidth, _T("Reset field widths"),
@@ -401,6 +410,34 @@ void MyFrame::DoCreateStatusBar(MyFrame::StatBarKind kind)
     m_statbarKind = kind;
 }
 
+
+// ----------------------------------------------------------------------------
+// main frame - event handlers
+// ----------------------------------------------------------------------------
+
+void MyFrame::OnUpdateSetStatusTexts(wxUpdateUIEvent& event)
+{
+    // only allow the settings of the text of status fields for the default
+    // status bar
+    wxStatusBar *sb = GetStatusBar();
+    event.Enable(sb == m_statbarDefault);
+}
+
+void MyFrame::OnSetStatusTexts(wxCommandEvent& WXUNUSED(event))
+{
+    wxStatusBar *sb = GetStatusBar();
+
+    wxString txt;
+    for (int i=0; i<sb->GetFieldsCount(); i++)
+    {
+        txt =
+            wxGetTextFromUser(wxString::Format("Enter the text for the %d-th field:", i+1),
+                              "Input field text", "A dummy test string", this);
+
+        sb->SetStatusText(txt, i);
+    }
+}
+
 void MyFrame::OnUpdateSetStatusFields(wxUpdateUIEvent& event)
 {
     // only allow the settings of the number of status fields for the default
@@ -409,7 +446,6 @@ void MyFrame::OnUpdateSetStatusFields(wxUpdateUIEvent& event)
     event.Enable(sb == m_statbarDefault);
 }
 
-// event handlers
 void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
 {
     wxStatusBar *sb = GetStatusBar();
