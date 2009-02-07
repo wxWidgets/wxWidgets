@@ -266,7 +266,7 @@ protected :
 
     @end 
     
-    void wxOSXCocoaClassAddWXMethods(Class c);
+    void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c);
 
 #endif // __OBJC__
 
