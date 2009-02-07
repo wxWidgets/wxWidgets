@@ -864,7 +864,7 @@ void wxURI::Resolve(const wxURI& base, int flags)
         //                T.path = remove_dot_segments(T.path);
         //             endif;
         //             T.query = R.query;
-        if (m_path[0u] != wxT('/'))
+        if (m_path.empty() || m_path[0u] != wxT('/'))
         {
             //Merge paths
             const wxChar* op = m_path.c_str();
