@@ -30,28 +30,17 @@ The following is a basic categorization of them:
 @li @subpage overview_roughguide
 @li @subpage overview_helloworld
 @li @subpage overview_python
-
-@section page_topics_programming Programming with wxWidgets
-
 @li @subpage overview_changes_since28
-@li @subpage overview_backwardcompat
-@li @subpage overview_rtti
-@li @subpage overview_refcount
+
+@section page_topics_programming Important wxWidgets Topics
+
 @li @subpage overview_app
 @li @subpage overview_unicode
-@li @subpage overview_mbconv
 @li @subpage overview_i18n
-@li @subpage overview_nonenglish
-@li @subpage overview_debugging
-@li @subpage overview_log
 @li @subpage overview_eventhandling
-@li @subpage overview_exceptions
-@li @subpage overview_windowstyles
-@li @subpage overview_windowdeletion
 @li @subpage overview_windowsizing
 @li @subpage overview_windowids
-@li @subpage overview_envvars
-@li @subpage overview_customwidgets
+@li @subpage overview_log
 
 @section page_topics_nongui Non-GUI Classes
 
@@ -104,6 +93,20 @@ The following is a basic categorization of them:
 @li @subpage overview_bookctrl
 @li @subpage overview_tips
 @li @subpage overview_docview
+
+@section page_topics_programming Other wxWidgets Programming Overviews
+
+@li @subpage overview_backwardcompat
+@li @subpage overview_exceptions
+@li @subpage overview_rtti
+@li @subpage overview_refcount
+@li @subpage overview_mbconv
+@li @subpage overview_nonenglish
+@li @subpage overview_debugging
+@li @subpage overview_windowstyles
+@li @subpage overview_windowdeletion
+@li @subpage overview_envvars
+@li @subpage overview_customwidgets
 
 */
 
