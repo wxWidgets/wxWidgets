@@ -161,7 +161,7 @@ enum wxWindowVariant
            Using this flag for the given window allows to block this
            propagation at this window, i.e. prevent the events from being
            propagated further upwards. Dialogs have this flag on by default
-           for the reasons explained in the @ref overview_eventhandling.
+           for the reasons explained in the @ref overview_events.
     @style{wxWS_EX_TRANSIENT}
            Don't use this window as an implicit parent for the other windows:
            this must be used with transient windows as otherwise there is the
@@ -185,7 +185,7 @@ enum wxWindowVariant
     @library{wxcore}
     @category{miscwnd}
 
-    @see @ref overview_eventhandling "Event handling overview",
+    @see @ref overview_events "Event handling overview",
          @ref overview_windowsizing "Window sizing overview"
 */
 class wxWindow : public wxEvtHandler
@@ -1714,7 +1714,7 @@ public:
             If this is @true, the handler will be deleted after it is removed
             (and the returned value will be @NULL).
 
-        @see @ref overview_eventhandling_processing
+        @see @ref overview_events_processing
     */
     wxEvtHandler* PopEventHandler(bool deleteHandler = false);
 
@@ -1746,13 +1746,15 @@ public:
             It must not be part of a wxEvtHandler chain; an assert will fail
             if it's not unlinked (see wxEvtHandler::IsUnlinked).
 
-        @see @ref overview_eventhandling_processing
+        @see @ref overview_events_processing
     */
     void PushEventHandler(wxEvtHandler* handler);
 
     /**
-        Find the given @a handler in the windows event handler stack and unlinks
-        (but not delete) it. See wxEvtHandler::Unlink() for more info.
+        Find the given @a handler in the windows event handler stack and
+        removes (but does not delete) it from the stack.
+
+        See wxEvtHandler::Unlink() for more info.
 
         @param handler
             The event handler to remove, must be non-@NULL and
@@ -1776,7 +1778,7 @@ public:
         @param handler
             Specifies the handler to be set. Cannot be @NULL.
 
-        @see @ref overview_eventhandling_processing
+        @see @ref overview_events_processing
     */
     void SetEventHandler(wxEvtHandler* handler);
 

@@ -27,7 +27,7 @@
     @library{wxcore}
     @category{menus}
 
-    @see wxMenu, @ref overview_eventhandling
+    @see wxMenu, @ref overview_events
 */
 class wxMenuBar : public wxWindow
 {
@@ -427,12 +427,12 @@ public:
       specifying an object whose class has @c EVT_MENU entries;
 
     Note that instead of static @c EVT_MENU macros you can also use dynamic
-    connection; see @ref overview_eventhandling_connect.
+    connection; see @ref overview_events_connect.
 
     @library{wxcore}
     @category{menus}
 
-    @see wxMenuBar, wxWindow::PopupMenu, @ref overview_eventhandling,
+    @see wxMenuBar, wxWindow::PopupMenu, @ref overview_events,
          @ref wxFileHistory "wxFileHistory (most recently used files menu)"
 */
 class wxMenu : public wxEvtHandler

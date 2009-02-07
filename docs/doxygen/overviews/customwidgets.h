@@ -47,7 +47,7 @@ implementations and thus more work.
 
 In both cases you'll want to better explore some hot topics like:
 - @ref overview_windowsizing
-- @ref overview_eventhandling_custom to implement your custom widget's events.
+- @ref overview_events_custom to implement your custom widget's events.
 You will probably need also to gain some familiarity with the wxWidgets sources,
 since you'll need to interface with some undocumented wxWidgets internal mechanisms.
 

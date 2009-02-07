@@ -1213,7 +1213,7 @@ public:
         This functions does not generate the @c wxEVT_COMMAND_TEXT_UPDATED
         event but otherwise is identical to SetValue().
 
-        See @ref overview_eventhandling_prog for more information.
+        See @ref overview_events_prog for more information.
 
         @since 2.7.1
 

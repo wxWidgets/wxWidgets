@@ -37,7 +37,7 @@ The following is a basic categorization of them:
 @li @subpage overview_app
 @li @subpage overview_unicode
 @li @subpage overview_i18n
-@li @subpage overview_eventhandling
+@li @subpage overview_events
 @li @subpage overview_windowsizing
 @li @subpage overview_windowids
 @li @subpage overview_log

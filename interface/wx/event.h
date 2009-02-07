@@ -75,7 +75,7 @@ enum wxEventCategory
     wxEvent used to be a multipurpose event object, and is an abstract base class
     for other event classes (see below).
 
-    For more information about events, see the @ref overview_eventhandling overview.
+    For more information about events, see the @ref overview_events overview.
 
     @beginWxPerlOnly
     In wxPerl custom event classes should be derived from
@@ -285,7 +285,7 @@ protected:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling, wxEvtHandler
+    @see @ref overview_events_processing, wxEvtHandler
 */
 class wxEventBlocker : public wxEvtHandler
 {
@@ -331,7 +331,7 @@ public:
     @library{wxbase}
     @category{events}
 
-    @see @ref overview_eventhandling
+    @see @ref overview_events_processing
 */
 class wxEvtHandler : public wxObject
 {
@@ -538,7 +538,7 @@ public:
         Do make sure to specify the correct @a eventSink when connecting to an
         event of a different object.
 
-        See @ref overview_eventhandling_connect for more detailed explanation
+        See @ref overview_events_connect for more detailed explanation
         of this function and the @ref page_samples_event sample for usage
         examples.
 
@@ -764,7 +764,7 @@ public:
             The event handler to be set as the next handler.
             Cannot be @NULL.
 
-        @see @ref overview_eventhandling_processing
+        @see @ref overview_events_processing
     */
     virtual void SetNextHandler(wxEvtHandler* handler);
 
@@ -776,7 +776,7 @@ public:
             The event handler to be set as the previous handler.
             Cannot be @NULL.
 
-        @see @ref overview_eventhandling_processing
+        @see @ref overview_events_processing
     */
     virtual void SetPreviousHandler(wxEvtHandler* handler);
 
@@ -1095,7 +1095,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxScrollEvent, @ref overview_eventhandling
+    @see wxScrollEvent, @ref overview_events
 */
 class wxScrollWinEvent : public wxEvent
 {
@@ -1146,7 +1146,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling
+    @see @ref overview_events
 */
 class wxSysColourChangedEvent : public wxEvent
 {
@@ -1176,7 +1176,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling, wxWindowDestroyEvent
+    @see @ref overview_events, wxWindowDestroyEvent
 */
 class wxWindowCreateEvent : public wxCommandEvent
 {
@@ -1260,7 +1260,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling
+    @see @ref overview_events
 */
 class wxPaintEvent : public wxEvent
 {
@@ -1288,7 +1288,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling, wxTopLevelWindow::Maximize,
+    @see @ref overview_events, wxTopLevelWindow::Maximize,
          wxTopLevelWindow::IsMaximized
 */
 class wxMaximizeEvent : public wxEvent
@@ -1369,7 +1369,7 @@ enum wxUpdateUIMode
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling
+    @see @ref overview_events
 */
 class wxUpdateUIEvent : public wxCommandEvent
 {
@@ -1994,7 +1994,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling
+    @see @ref overview_events
 */
 class wxDropFilesEvent : public wxEvent
 {
@@ -2236,7 +2236,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling, wxApp::IsActive
+    @see @ref overview_events, wxApp::IsActive
 */
 class wxActivateEvent : public wxEvent
 {
@@ -2280,7 +2280,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxCommandEvent, @ref overview_eventhandling
+    @see wxCommandEvent, @ref overview_events
 */
 class wxContextMenuEvent : public wxCommandEvent
 {
@@ -2339,7 +2339,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling
+    @see @ref overview_events
 */
 class wxEraseEvent : public wxEvent
 {
@@ -2377,7 +2377,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling
+    @see @ref overview_events
 */
 class wxFocusEvent : public wxEvent
 {
@@ -2417,7 +2417,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling
+    @see @ref overview_events
 */
 class wxChildFocusEvent : public wxCommandEvent
 {
@@ -2466,7 +2466,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxMouseCaptureChangedEvent, @ref overview_eventhandling,
+    @see wxMouseCaptureChangedEvent, @ref overview_events,
     wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
 */
 class wxMouseCaptureLostEvent : public wxEvent
@@ -2595,7 +2595,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxContextHelp, wxDialog, @ref overview_eventhandling
+    @see wxContextHelp, wxDialog, @ref overview_events
 */
 class wxHelpEvent : public wxCommandEvent
 {
@@ -2735,7 +2735,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxScrollBar, wxSlider, wxSpinButton, wxScrollWinEvent, @ref overview_eventhandling
+    @see wxScrollBar, wxSlider, wxSpinButton, wxScrollWinEvent, @ref overview_events
 */
 class wxScrollEvent : public wxCommandEvent
 {
@@ -2800,7 +2800,7 @@ enum wxIdleMode
     @library{wxbase}
     @category{events}
 
-    @see @ref overview_eventhandling, wxUpdateUIEvent, wxWindow::OnInternalIdle
+    @see @ref overview_events, wxUpdateUIEvent, wxWindow::OnInternalIdle
 */
 class wxIdleEvent : public wxEvent
 {
@@ -2886,7 +2886,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling
+    @see @ref overview_events
 */
 class wxInitDialogEvent : public wxEvent
 {
@@ -2923,7 +2923,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling, wxWindowCreateEvent
+    @see @ref overview_events, wxWindowCreateEvent
 */
 class wxWindowDestroyEvent : public wxCommandEvent
 {
@@ -3048,7 +3048,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxMouseCaptureLostEvent, @ref overview_eventhandling,
+    @see wxMouseCaptureLostEvent, @ref overview_events,
     wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
 */
 class wxMouseCaptureChangedEvent : public wxEvent
@@ -3210,7 +3210,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxCommandEvent, @ref overview_eventhandling
+    @see wxCommandEvent, @ref overview_events
 */
 class wxMenuEvent : public wxEvent
 {
@@ -3259,7 +3259,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling, wxWindow::Show,
+    @see @ref overview_events, wxWindow::Show,
          wxWindow::IsShown
 */
 
@@ -3307,7 +3307,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_eventhandling, wxTopLevelWindow::Iconize,
+    @see @ref overview_events, wxTopLevelWindow::Iconize,
          wxTopLevelWindow::IsIconized
 */
 class wxIconizeEvent : public wxEvent
@@ -3351,7 +3351,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxPoint, @ref overview_eventhandling
+    @see wxPoint, @ref overview_events
 */
 class wxMoveEvent : public wxEvent
 {
@@ -3393,7 +3393,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxSize, @ref overview_eventhandling
+    @see wxSize, @ref overview_events
 */
 class wxSizeEvent : public wxEvent
 {
@@ -3479,18 +3479,21 @@ public:
 //@{
 
 /**
+    A value uniquely identifying the type of the event.
+
+    The values of this type should only be created using wxNewEventType().
+
+    See the macro DEFINE_EVENT_TYPE() for more info.
+
+    @see @ref overview_events_introduction
+*/
+typedef int wxEventType;
+
+/**
     A special event type usually used to indicate that some wxEvent has yet
     no type assigned.
 */
 wxEventType wxEVT_NULL;
-
-/**
-    Each wxEvent-derived class has an @e event-type associated.
-    See the macro DEFINE_EVENT_TYPE() for more info.
-
-    @see @ref overview_eventhandling_custom
-*/
-typedef int wxEventType;
 
 /**
     Initializes a new event type using wxNewEventType().
@@ -3510,7 +3513,7 @@ wxEventType wxNewEventType();
     and the END_EVENT_TABLE() macros, plus some additional @c EVT_xxx macro
     to capture events.
 
-    @see @ref overview_eventhandling_eventtables
+    @see @ref overview_events_eventtables
 */
 #define DECLARE_EVENT_TABLE()
 
@@ -3520,7 +3523,7 @@ wxEventType wxNewEventType();
 
     Use END_EVENT_TABLE() to terminate the event-declaration block.
 
-    @see @ref overview_eventhandling_eventtables
+    @see @ref overview_events_eventtables
 */
 #define BEGIN_EVENT_TABLE(theClass, baseClass)
 
@@ -3530,7 +3533,7 @@ wxEventType wxNewEventType();
 
     Use BEGIN_EVENT_TABLE() to start the event-declaration block.
 
-    @see @ref overview_eventhandling_eventtables
+    @see @ref overview_events_eventtables
 */
 #define END_EVENT_TABLE()
 

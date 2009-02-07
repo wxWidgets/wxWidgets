@@ -168,7 +168,7 @@ public:
         This function behaves as SetSelection() but does @em not generate the
         page changing events.
 
-        See @ref overview_eventhandling_prog for more information.
+        See @ref overview_events_prog for more information.
     */
     virtual int ChangeSelection(size_t page) = 0;
 
