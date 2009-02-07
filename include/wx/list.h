@@ -1034,7 +1034,9 @@ private:
         }                                                                   \
         iterator erase(const iterator& first, const iterator& last)         \
         {                                                                   \
-            iterator next = last; ++next;                                   \
+            iterator next = last;                                           \
+            if ( next != end() )                                            \
+                ++next;                                                     \
             DeleteNodes(first.m_node, last.m_node);                         \
             return next;                                                    \
         }                                                                   \

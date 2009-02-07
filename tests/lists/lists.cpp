@@ -156,6 +156,11 @@ void ListsTestCase::wxStdListTest()
     list1.insert(list1.end(), (int *)2);
     CPPUNIT_ASSERT_EQUAL( (int *)1, list1.front() );
     CPPUNIT_ASSERT_EQUAL( (int *)2, list1.back() );
+
+    it = list1.begin();
+    it = list1.erase(++it, list1.end());
+    CPPUNIT_ASSERT_EQUAL( 1, list1.size() );
+    CPPUNIT_ASSERT( it == list1.end() );
 }
 
 void ListsTestCase::wxListCtorTest()
