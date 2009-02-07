@@ -734,25 +734,25 @@ wxRendererGeneric::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect
 void wxRendererGeneric::DrawChoice(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
                            const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
 {
-    // FIXME: Implement
+    wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawChoice");
 }
 
 void wxRendererGeneric::DrawComboBox(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
                            const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
 {
-    // FIXME: Implement
+    wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawComboBox");
 }
 
 void wxRendererGeneric::DrawOptionButton(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
                            const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
 {
-    // FIXME: Implement
+    wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawRadioButton");
 }
 
 void wxRendererGeneric::DrawTextCtrl(wxWindow* WXUNUSED(win), wxDC& WXUNUSED(dc),
                            const wxRect& WXUNUSED(rect), int WXUNUSED(flags))
 {
-    // FIXME: Implement
+    wxFAIL_MSG("UNIMPLEMENTED: wxRendererGeneric::DrawTextCtrl");
 }
 
 
