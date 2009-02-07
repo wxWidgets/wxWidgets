@@ -31,13 +31,7 @@ enum wxIPCFormat
   wxIPC_LOCALE =           16,
   wxIPC_UTF8TEXT =         17,
   wxIPC_UTF32TEXT =        18,
-#if SIZEOF_WCHAR_T == 2
-  wxIPC_UNICODETEXT = wxIPC_UTF16TEXT,
-#elif SIZEOF_WCHAR_T == 4
-  wxIPC_UNICODETEXT = wxIPC_UTF32TEXT,
-#else
-#  error "Unknown wchar_t size"
-#endif
+  wxIPC_UNICODETEXT,
   wxIPC_PRIVATE =          20
 };
 

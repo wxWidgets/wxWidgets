@@ -275,28 +275,38 @@ enum wxLayoutDirection
 };
 
 /**
-    wxLanguageInfo: encapsulates ::wxLanguage to OS native lang.desc.
+    Encapsulates ::wxLanguage in a OS native lang.desc.
                     translation information
 */
 struct WXDLLIMPEXP_BASE wxLanguageInfo
 {
-    /// ::wxLanguage id. It should be greater than wxLANGUAGE_USER_DEFINED.
+    /// ::wxLanguage id. It should be greater than @c wxLANGUAGE_USER_DEFINED.
     int Language;
-    wxString CanonicalName;         //!< Canonical name, e.g. fr_FR.
-#ifdef __WXMSW__
-    wxUint32 WinLang,               //!< Win32 language identifiers (LANG_xxxx, SUBLANG_xxxx).
-             WinSublang;
-#endif // __WXMSW__
-    wxString Description;           //!< Human-readable name of the language.
+
+    /// Canonical name of the language, e.g. @c fr_FR.
+    wxString CanonicalName;
+
+    //@{
+    /**
+        Win32 language identifiers (LANG_xxxx, SUBLANG_xxxx).
+
+        @onlyfor{wxmsw}
+    */
+    wxUint32 WinLang, WinSublang;
+    //@}
+
+    /// Human-readable name of the language.
+    wxString Description;
+
+    /// The layout direction used for this language.
     wxLayoutDirection LayoutDirection;
 
-#ifdef __WXMSW__
     /// Return the LCID corresponding to this language.
+    /// @onlyfor{wxmsw}
     wxUint32 GetLCID() const;
-#endif // __WXMSW__
 
     /// Return the locale name corresponding to this language usable with
-    /// setlocale() on the current system
+    /// @c setlocale() on the current system.
     wxString GetLocaleName() const;
 };
 
