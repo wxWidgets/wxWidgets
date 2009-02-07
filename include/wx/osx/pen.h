@@ -49,6 +49,7 @@ public:
     wxPenJoin GetJoin() const;
     wxPenCap GetCap() const;
     int GetDashes(wxDash **ptr) const;
+    int GetDashCount() const;
 
     wxBitmap *GetStipple() const ;
 

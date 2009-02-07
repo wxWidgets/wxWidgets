@@ -205,6 +205,11 @@ int wxPen::GetDashes(wxDash **ptr) const
     return M_PENDATA->m_nbDash;
 }
 
+int wxPen::GetDashCount() const
+{
+    return M_PENDATA->m_nbDash;
+}
+
 wxBitmap *wxPen::GetStipple() const
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid pen") );
