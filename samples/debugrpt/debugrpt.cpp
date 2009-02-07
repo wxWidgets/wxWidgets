@@ -229,7 +229,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, _T("wxWidgets Debug Report Sample"))
+       : wxFrame(NULL, wxID_ANY, _T("wxWidgets Debug Report Sample"),
+                 wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
 {
     m_numLines = 10;
 
