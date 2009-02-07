@@ -201,7 +201,7 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
 
 void wxGenericColourDialog::OnPaint(wxPaintEvent& event)
 {
-#if !defined(__WXMOTIF__) && !defined(__WXPM__) && !defined(__WXCOCOA__)
+#if !defined(__WXMOTIF__) && !defined(__WXPM__) && !defined(__WXCOCOA__) && !defined(__WXOSX__)
     wxDialog::OnPaint(event);
 #else
     wxUnusedVar(event);
