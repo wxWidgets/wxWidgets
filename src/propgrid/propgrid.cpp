@@ -364,6 +364,12 @@ void wxPGCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
     // Update everything inside the box
     wxRect r = GetUpdateRegion().GetBox();
 
+    // FIXME: This is just a workaround for a bug that causes splitters not
+    //        to paint when other windows are being dragged over the grid.
+    wxRect fullRect = GetRect();
+    r.x = fullRect.x;
+    r.width = fullRect.width;
+
     // Repaint this rectangle
     pg->DrawItems( dc, r.y, r.y + r.height, &r );
 
