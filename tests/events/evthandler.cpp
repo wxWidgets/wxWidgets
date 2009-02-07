@@ -26,7 +26,7 @@
 const wxEventType LegacyEventType = wxNewEventType();
 
 class MyEvent;
-wxDEFINE_EVENT( MyEventType, MyEvent )
+wxDEFINE_EVENT(MyEventType, MyEvent);
 
 class MyEvent : public wxEvent
 {

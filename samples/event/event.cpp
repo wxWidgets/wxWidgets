@@ -36,7 +36,7 @@
 
 // define a custom event type (we don't need a separate declaration here but
 // usually you would use a matching wxDECLARE_EVENT in a header)
-wxDEFINE_EVENT(wxEVT_MY_CUSTOM_COMMAND, wxCommandEvent)
+wxDEFINE_EVENT(wxEVT_MY_CUSTOM_COMMAND, wxCommandEvent);
 
 // it may also be convenient to define an event table macro for this event type
 #define EVT_MY_CUSTOM_COMMAND(id, fn) \
