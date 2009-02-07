@@ -1739,9 +1739,7 @@ protected:
     bool DoClearSelection();
 
     int DoDrawItems( wxDC& dc,
-                     const wxPGProperty* first_item,
-                     const wxPGProperty* last_item,
-                     const wxRect* clip_rect,
+                     const wxRect* clipRect,
                      bool isBuffered ) const;
 
     /** Draws an expand/collapse (ie. +/-) button.

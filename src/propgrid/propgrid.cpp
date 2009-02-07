@@ -1562,7 +1562,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         if ( dcPtr )
         {
             dc.SetClippingRegion( *clipRect );
-            paintFinishY = DoDrawItems( *dcPtr, NULL, NULL, clipRect, isBuffered );
+            paintFinishY = DoDrawItems( *dcPtr, clipRect, isBuffered );
         }
 
     #if wxPG_DOUBLE_BUFFER
@@ -1588,30 +1588,17 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 // -----------------------------------------------------------------------
 
 int wxPropertyGrid::DoDrawItems( wxDC& dc,
-                                 const wxPGProperty* firstItem,
-                                 const wxPGProperty* lastItem,
                                  const wxRect* clipRect,
                                  bool isBuffered ) const
 {
-    // TODO: This should somehow be eliminated.
-    wxRect tempClipRect;
-    if ( !clipRect )
-    {
-        wxASSERT(firstItem);
-        wxASSERT(lastItem);
-        tempClipRect = GetPropertyRect(firstItem, lastItem);
-        clipRect = &tempClipRect;
-    }
+    const wxPGProperty* firstItem;
+    const wxPGProperty* lastItem;
 
-    if ( !firstItem )
-        firstItem = DoGetItemAtY(clipRect->y);
+    firstItem = DoGetItemAtY(clipRect->y);
+    lastItem = DoGetItemAtY(clipRect->y+clipRect->height-1);
 
     if ( !lastItem )
-    {
-        lastItem = DoGetItemAtY(clipRect->y+clipRect->height-1);
-        if ( !lastItem )
-            lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
-    }
+        lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
 
     if ( m_frozen || m_height < 1 || firstItem == NULL )
         return clipRect->y;
