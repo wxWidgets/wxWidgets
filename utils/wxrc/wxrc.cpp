@@ -120,9 +120,10 @@ public:
             name == _T("notebookpage") ||
             name == _T("separator") ||
             name == _T("sizeritem") ||
+            name == _T("wxMenu") ||
             name == _T("wxMenuBar") ||
             name == _T("wxMenuItem") ||
-            name == _T("wxStaticBoxSizer") )
+            name.EndsWith(_T("Sizer")) )
         {
             return false;
         }
