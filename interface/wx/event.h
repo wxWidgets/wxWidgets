@@ -3497,13 +3497,124 @@ wxEventType wxEVT_NULL;
 
 /**
     Initializes a new event type using wxNewEventType().
+
+    @deprecated Use wxDEFINE_EVENT() instead
 */
 #define DEFINE_EVENT_TYPE(name)     const wxEventType name = wxNewEventType();
 
 /**
     Generates a new unique event type.
+
+    Usually this function is only used by wxDEFINE_EVENT() and not called
+    directly.
 */
 wxEventType wxNewEventType();
+
+/**
+    Define a new event type associated with the specified event class.
+
+    This macro defines a new unique event type @a name associated with the
+    event class @a cls.
+
+    For example:
+    @code
+    wxDEFINE_EVENT(MY_COMMAND_EVENT, wxCommandEvent);
+
+    class MyCustomEvent : public wxEvent { ... };
+    wxDEFINE_EVENT(MY_CUSTOM_EVENT, MyCustomEvent);
+    @endcode
+
+    @see wxDECLARE_EVENT(), @ref overview_events_custom
+ */
+#define wxDEFINE_EVENT(name, cls) \
+    const wxEventTypeTag< cls > name(wxNewEventType())
+
+/**
+    Declares a custom event type.
+
+    This macro declares a variable called @a name which must be defined
+    elsewhere using wxDEFINE_EVENT().
+
+    The class @a cls must be the wxEvent-derived class associated with the
+    events of this type and its full declaration must be visible from the point
+    of use of this macro.
+ */
+#define wxDECLARE_EVENT(name, cls) \
+        wxDECLARE_EXPORTED_EVENT(wxEMPTY_PARAMETER_VALUE, name, cls)
+
+/**
+    Variant of wxDECLARE_EVENT() used for event types defined inside a shared
+    library.
+
+    This is mostly used by wxWidgets internally, e.g.
+    @code
+    wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEvent)
+    @endcode
+ */
+#define wxDECLARE_EXPORTED_EVENT( expdecl, name, cls ) \
+    extern const expdecl wxEventTypeTag< cls > name;
+
+/**
+    Helper macro for definition of custom event table macros.
+
+    This macro must only be used if wxEVENTS_COMPATIBILITY_2_8 is 1, otherwise
+    it is better and more clear to just use the address of the function
+    directly as this is all this macro does in this case. However it needs to
+    explicitly cast @a func to @a functype, which is the type of wxEvtHandler
+    member function taking the custom event argument when
+    wxEVENTS_COMPATIBILITY_2_8 is 0.
+
+    See wx__DECLARE_EVT0 for an example of use.
+
+    @see @ref overview_events_custom_ownclass
+ */
+#define wxEVENT_HANDLER_CAST(functype, func) (&func)
+
+//@{
+/**
+    These macros are used to define event table macros for handling custom
+    events.
+
+    Example of use:
+    @code
+    class MyEvent : public wxEvent { ... };
+
+    // note that this is not necessary unless using old compilers: for the
+    // reasonably new ones just use &func instead of MyEventHandler(func)
+    typedef void (wxEvtHandler::*MyEventFunction)(MyEvent&);
+    #define MyEventHandler(func) wxEVENT_HANDLER_CAST(MyEventFunction, func)
+
+    wxDEFINE_EVENT(MY_EVENT_TYPE, MyEvent);
+
+    #define EVT_MY(id, func) \
+        wx__DECLARE_EVT1(MY_EVENT_TYPE, id, MyEventHandler(func))
+
+    ...
+
+    BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+        EVT_MY(wxID_ANY, MyFrame::OnMyEvent)
+    END_EVENT_TABLE()
+    @endcode
+
+    @param evt
+        The event type to handle.
+    @param id
+        The identifier of events to handle.
+    @param id1
+        The first identifier of the range.
+    @param id2
+        The second identifier of the range.
+    @param fn
+        The event handler method.
+ */
+#define wx__DECLARE_EVT2(evt, id1, id2, fn) \
+    DECLARE_EVENT_TABLE_ENTRY(evt, id1, id2, fn, NULL),
+#define wx__DECLARE_EVT1(evt, id, fn) \
+    wx__DECLARE_EVT2(evt, id, wxID_ANY, fn)
+#define wx__DECLARE_EVT0(evt, fn) \
+    wx__DECLARE_EVT1(evt, wxID_ANY, fn)
+//@}
+
 
 /**
     Use this macro inside a class declaration to declare a @e static event table

@@ -478,168 +478,150 @@ all events (or any selection of them) to the parent window.
 
 @subsection overview_events_custom_general General approach
 
-Since version 2.2.x of wxWidgets, each event type is identified by an ID
-given to the event type @e at runtime that makes it possible to add
-new event types to the library or application without risking ID clashes
-(two different event types mistakingly getting the same event ID).
-This event type ID is stored in a struct of type <b>const wxEventType</b>.
+As each event is uniquely defined by its event type, defining a custom event
+starts with defining a new event type for it. This is done using
+wxDEFINE_EVENT() macro. As an event type is a variable, it can also be
+declared using wxDECLARE_EVENT() if necessary.
 
-In order to define a new event type, there are principally two choices.
-One is to define an entirely new event class (typically deriving from
-wxEvent or wxCommandEvent).
-
-The other is to use the existing event classes and give them a new event
-type. You'll have to define and declare a new event type either way
-using the following macros:
-
-@code
-// in the header of the source file
-extern const wxEventType wxEVT_YOUR_EVENT_NAME;
-
-// in the implementation
-DEFINE_EVENT_TYPE(wxEVT_YOUR_EVENT_NAME)
-@endcode
-
-See also the @ref page_samples_event for an example of code
-defining and working with the custom event types.
+The next thing to do is to decide whether you need to define a custom event
+class for events of this type or if you can reuse an existing class, typically
+either wxEvent (which doesn't provide any extra information) or wxCommandEvent
+(which contains several extra fields and also propagates upwards by default).
+Both strategies are described in details below. See also the @ref
+page_samples_event for a complete example of code defining and working with the
+custom event types.
 
 
 @subsection overview_events_custom_existing Using Existing Event Classes
 
-If you just want to use a wxCommandEvent with a new event type, use
-one of the generic event table macros listed below, without having to define a
-new event class yourself. This also has the advantage that you won't have to define a
-new wxEvent::Clone() method for posting events between threads etc.
+If you just want to use a wxCommandEvent with a new event type, use one of the
+generic event table macros listed below, without having to define a new event
+class yourself.
 
 Example:
 
 @code
-extern const wxEventType wxEVT_MY_EVENT;
-DEFINE_EVENT_TYPE(wxEVT_MY_EVENT)
+// this is typically in a header: it just declares MY_EVENT event type
+wxDECLARE_EVENT(MY_EVENT, wxCommandEvent);
 
-// user code intercepting the event
+// this is a definition so can't be in a header
+wxDEFINE_EVENT(MY_EVENT, wxCommandEvent);
 
+// example of code handling the event with event tables
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_MENU    (wxID_EXIT, MyFrame::OnExit)
-// ....
-EVT_COMMAND (ID_MY_WINDOW, wxEVT_MY_EVENT, MyFrame::OnMyEvent)
+    EVT_MENU    (wxID_EXIT, MyFrame::OnExit)
+    ...
+    EVT_COMMAND (ID_MY_WINDOW, MY_EVENT, MyFrame::OnMyEvent)
 END_EVENT_TABLE()
 
-void MyFrame::OnMyEvent( wxCommandEvent& event )
+void MyFrame::OnMyEvent(wxCommandEvent& event)
 {
     // do something
     wxString text = event.GetText();
 }
 
+// example of code handling the event with Connect():
+MyFrame::MyFrame()
+{
+    Connect(ID_MY_WINDOW, MY_EVENT, &MyFrame::OnMyEvent);
+}
 
-// user code sending the event
-
+// example of code generating the event
 void MyWindow::SendEvent()
 {
-    wxCommandEvent event( wxEVT_MY_EVENT, GetId() );
-    event.SetEventObject( this );
+    wxCommandEvent event(MY_EVENT, GetId());
+    event.SetEventObject(this);
 
     // Give it some contents
-    event.SetText( wxT("Hallo") );
+    event.SetText("Hello");
 
-    // Send it
-    GetEventHandler()->ProcessEvent( event );
+    // Do send it
+    ProcessWindowEvent(event);
 }
 @endcode
-
-
-@subsection overview_events_custom_generic Generic Event Table Macros
-
-@beginTable
-@row2col{EVT_CUSTOM(event\, id\, func),
-        Allows you to add a custom event table
-        entry by specifying the event identifier (such as wxEVT_SIZE),
-        the window identifier, and a member function to call.}
-@row2col{EVT_CUSTOM_RANGE(event\, id1\, id2\, func),
-        The same as EVT_CUSTOM, but responds to a range of window identifiers.}
-@row2col{EVT_COMMAND(id\, event\, func),
-        The same as EVT_CUSTOM, but expects a member function with a
-        wxCommandEvent argument.}
-@row2col{EVT_COMMAND_RANGE(id1\, id2\, event\, func),
-        The same as EVT_CUSTOM_RANGE, but
-        expects a member function with a wxCommandEvent argument.}
-@row2col{EVT_NOTIFY(event\, id\, func),
-        The same as EVT_CUSTOM, but
-        expects a member function with a wxNotifyEvent argument.}
-@row2col{EVT_NOTIFY_RANGE(event\, id1\, id2\, func),
-        The same as EVT_CUSTOM_RANGE, but
-        expects a member function with a wxNotifyEvent argument.}
-@endTable
 
 
 @subsection overview_events_custom_ownclass Defining Your Own Event Class
 
-Under certain circumstances, you must define your own event
-class e.g., for sending more complex data from one place to another. Apart
-from defining your event class, you will also need to define your own
-event table macro (which is quite long). Watch out to put in enough
-casts to the inherited event function. Here is an example:
+Under certain circumstances, you must define your own event class e.g., for
+sending more complex data from one place to another. Apart from defining your
+event class, you also need to define your own event table macro if you want to
+use event tables for handling events of this type.
+
+Here is an example:
 
 @code
-// code defining event
-
-class wxPlotEvent: public wxNotifyEvent
+// define a new event class
+class MyPlotEvent: public wxEvent
 {
 public:
-    wxPlotEvent( wxEventType commandType = wxEVT_NULL, int id = 0 );
+    MyPlotEvent(wxEventType eventType, int winid, const wxPoint& pos)
+        : wxEvent(winid, eventType),
+          m_pos(pos)
+    {
+    }
 
     // accessors
-    wxPlotCurve *GetCurve()
-        { return m_curve; }
+    wxPoint GetPoint() const { return m_pos; }
 
-    // required for sending with wxPostEvent()
-    virtual wxEvent *Clone() const;
+    // implement the base class pure virtual
+    virtual wxEvent *Clone() const { return new MyPlotEvent(*this); }
 
 private:
-    wxPlotCurve   *m_curve;
+    const wxPoint m_pos;
 };
 
-extern const wxEventType wxEVT_PLOT_ACTION;
-typedef void (wxEvtHandler::*wxPlotEventFunction)(wxPlotEvent&);
-
-#define wxPlotEventHandler(func) \
-    (wxObjectEventFunction)(wxEventFunction)wxStaticCastEvent(wxPlotEventFunction, &func)
-#define EVT_PLOT(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_PLOT_ACTION, id, wxPlotEventHandler(fn))
+// we define a single MY_PLOT_CLICKED event type associated with the class
+// above but typically you are going to have more than one event type, e.g. you
+// could also have MY_PLOT_ZOOMED or MY_PLOT_PANNED &c -- in which case you
+// would just add more similar lines here
+wxDEFINE_EVENT(MY_PLOT_CLICKED, MyPlotEvent);
 
 
-// code implementing the event type and the event class
+// if you want to support old compilers you need to use some ugly macros:
+typedef void (wxEvtHandler::*MyPlotEventFunction)(MyPlotEvent&);
+#define MyPlotEventHandler(func) wxEVENT_HANDLER_CAST(MyPlotEventFunction, func)
 
-DEFINE_EVENT_TYPE( wxEVT_PLOT_ACTION )
+// if your code is only built sing reasonably modern compilers, you could just
+// do this instead:
+#define MyPlotEventHandler(func) (&func)
 
-wxPlotEvent::wxPlotEvent( ... )
-{
-    ...
-}
+// finally define a macro for creating the event table entries for the new
+// event type
+//
+// remember that you don't need this at all if you only use Connect() and that
+// you can replace MyPlotEventHandler(func) with just &func unless you use a
+// really old compiler
+#define MY_EVT_PLOT_CLICK(id, func) \
+    wx__DECLARE_EVT1(MY_PLOT_CLICKED, id, MyPlotEventHandler(func))
 
 
-// user code intercepting the event
-
+// example of code handling the event (you will use one of these methods, not
+// both, of course):
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_PLOT  (ID_MY_WINDOW, MyFrame::OnPlot)
+    EVT_PLOT(ID_MY_WINDOW, MyFrame::OnPlot)
 END_EVENT_TABLE()
 
-void MyFrame::OnPlot( wxPlotEvent &event )
+MyFrame::MyFrame()
 {
-    wxPlotCurve *curve = event.GetCurve();
+    Connect(ID_MY_WINDOW, MY_PLOT_CLICKED, &MyFrame::OnPlot);
+}
+
+void MyFrame::OnPlot(MyPlotEvent& event)
+{
+    ... do something with event.GetPoint() ...
 }
 
 
-// user code sending the event
-
+// example of code generating the event:
 void MyWindow::SendEvent()
 {
-    wxPlotEvent event( wxEVT_PLOT_ACTION, GetId() );
-    event.SetEventObject( this );
-    event.SetCurve( m_curve );
-    GetEventHandler()->ProcessEvent( event );
+    MyPlotEvent event(MY_PLOT_CLICKED, GetId(), wxPoint(...));
+    event.SetEventObject(this);
+    ProcessWindowEvent(event);
 }
 @endcode
+
 
 
 @section overview_events_misc Miscellaneous Notes
@@ -753,6 +735,31 @@ define your own identifiers. Or, you can use identifiers below wxID_LOWEST.
 Finally, you can allocate identifiers dynamically using wxNewId() function too.
 If you use wxNewId() consistently in your application, you can be sure that
 your identifiers don't conflict accidentally.
+
+
+@subsection overview_events_custom_generic Generic Event Table Macros
+
+@beginTable
+@row2col{EVT_CUSTOM(event\, id\, func),
+        Allows you to add a custom event table
+        entry by specifying the event identifier (such as wxEVT_SIZE),
+        the window identifier, and a member function to call.}
+@row2col{EVT_CUSTOM_RANGE(event\, id1\, id2\, func),
+        The same as EVT_CUSTOM, but responds to a range of window identifiers.}
+@row2col{EVT_COMMAND(id\, event\, func),
+        The same as EVT_CUSTOM, but expects a member function with a
+        wxCommandEvent argument.}
+@row2col{EVT_COMMAND_RANGE(id1\, id2\, event\, func),
+        The same as EVT_CUSTOM_RANGE, but
+        expects a member function with a wxCommandEvent argument.}
+@row2col{EVT_NOTIFY(event\, id\, func),
+        The same as EVT_CUSTOM, but
+        expects a member function with a wxNotifyEvent argument.}
+@row2col{EVT_NOTIFY_RANGE(event\, id1\, id2\, func),
+        The same as EVT_CUSTOM_RANGE, but
+        expects a member function with a wxNotifyEvent argument.}
+@endTable
+
 
 
 @subsection overview_events_macros Event Handling Summary
