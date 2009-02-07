@@ -1035,8 +1035,12 @@ private:
         }                                                                   \
         iterator insert(const iterator& it, const_reference v = value_type())\
         {                                                                   \
-            Insert(it.m_node, (const_base_reference)v);                     \
-            return iterator(it.m_node->GetPrevious(), GetLast());           \
+            if ( it == end() )                                              \
+                Append((const_base_reference)v);                            \
+            else                                                            \
+                Insert(it.m_node, (const_base_reference)v);                 \
+            iterator itprev(it);                                            \
+            return itprev--;                                                \
         }                                                                   \
         void insert(const iterator& it, size_type n, const_reference v = value_type())\
         {                                                                   \
