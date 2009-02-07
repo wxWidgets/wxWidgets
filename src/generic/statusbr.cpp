@@ -106,16 +106,16 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 wxSize wxStatusBarGeneric::DoGetBestSize() const
 {
     int width, height;
+    wxCoord y;
 
     // best width is the width of the parent
     GetParent()->GetClientSize(&width, NULL);
 
-    // best height is as calculated above in Create
+    // best height is as calculated above in Create()
     wxClientDC dc((wxWindow*)this);
     dc.SetFont(GetFont());
-    wxCoord y;
-    dc.GetTextExtent(_T("X"), NULL, &y );
-    height = (int)( (11*y)/10 + 2*GetBorderY());
+    dc.GetTextExtent(_T("X"), NULL, &y);
+    height = (int)((11*y)/10 + 2*GetBorderY());
 
     return wxSize(width, height);
 }
@@ -192,6 +192,156 @@ bool wxStatusBarGeneric::ShowsSizeGrip() const
     return tlw && !tlw->IsMaximized() && tlw->HasFlag(wxRESIZE_BORDER);
 }
 
+void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
+{
+    int leftMargin = 2;
+
+    wxRect rect;
+    GetFieldRect(i, rect);
+
+    wxString text(GetStatusText(i));
+
+    wxCoord x = 0, y = 0;
+    dc.GetTextExtent(text, &x, &y);
+
+    int xpos = rect.x + leftMargin;
+    int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5);
+
+#if defined( __WXGTK__ ) || defined(__WXMAC__)
+    xpos++;
+    ypos++;
+#endif
+
+    dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height);
+
+    dc.DrawText(text, xpos, ypos);
+
+    dc.DestroyClippingRegion();
+}
+
+void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
+{
+    wxRect rect;
+    GetFieldRect(i, rect);
+
+    int style = m_panes[i].nStyle;
+    if (style != wxSB_FLAT)
+    {
+        // Draw border
+        // For wxSB_NORMAL:
+        // Have grey background, plus 3-d border -
+        // One black rectangle.
+        // Inside this, left and top sides - dark grey. Bottom and right -
+        // white.
+        // Reverse it for wxSB_RAISED
+
+        dc.SetPen((style == wxSB_RAISED) ? m_mediumShadowPen : m_hilightPen);
+
+#ifndef __WXPM__
+
+        // Right and bottom lines
+        dc.DrawLine(rect.x + rect.width, rect.y,
+                    rect.x + rect.width, rect.y + rect.height);
+        dc.DrawLine(rect.x + rect.width, rect.y + rect.height,
+                    rect.x, rect.y + rect.height);
+
+        dc.SetPen((style == wxSB_RAISED) ? m_hilightPen : m_mediumShadowPen);
+
+        // Left and top lines
+        dc.DrawLine(rect.x, rect.y + rect.height,
+               rect.x, rect.y);
+        dc.DrawLine(rect.x, rect.y,
+            rect.x + rect.width, rect.y);
+#else
+
+        dc.DrawLine(rect.x + rect.width, rect.height + 2,
+                    rect.x, rect.height + 2);
+        dc.DrawLine(rect.x + rect.width, rect.y,
+                    rect.x + rect.width, rect.y + rect.height);
+
+        dc.SetPen((style == wxSB_RAISED) ? m_hilightPen : m_mediumShadowPen);
+        dc.DrawLine(rect.x, rect.y,
+                    rect.x + rect.width, rect.y);
+        dc.DrawLine(rect.x, rect.y + rect.height,
+                   rect.x, rect.y);
+
+#endif
+    }
+
+    DrawFieldText(dc, i);
+}
+
+// Get the position and size of the field's internal bounding rectangle
+bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
+{
+    wxCHECK_MSG( (n >= 0) && ((size_t)n < m_panes.GetCount()), false,
+                 _T("invalid status bar field index") );
+
+    // FIXME: workarounds for OS/2 bugs have nothing to do here (VZ)
+    int width, height;
+#ifdef __WXPM__
+    GetSize(&width, &height);
+#else
+    GetClientSize(&width, &height);
+#endif
+
+    // we cache m_widthsAbs between calls and recompute it if client
+    // width has changed (or when it is initially empty)
+    if ( m_widthsAbs.IsEmpty() || m_lastClientWidth != width )
+    {
+        wxConstCast(this, wxStatusBarGeneric)->m_widthsAbs = CalculateAbsWidths(width);
+
+        // remember last width for which we have recomputed the widths in pixels
+        wxConstCast(this, wxStatusBarGeneric)->m_lastClientWidth = width;
+    }
+
+    rect.x = 0;
+    for ( int i = 0; i < n; i++ )
+        rect.x += m_widthsAbs[i];
+
+    rect.x += m_borderX;
+    rect.y = m_borderY;
+
+    rect.width = m_widthsAbs[n] - 2*m_borderX;
+    rect.height = height - 2*m_borderY;
+
+    return true;
+}
+
+// Initialize colours
+void wxStatusBarGeneric::InitColours()
+{
+#if defined(__WXPM__)
+    m_mediumShadowPen = wxPen(wxColour(127, 127, 127), 1, wxSOLID);
+    m_hilightPen = *wxWHITE_PEN;
+
+    SetBackgroundColour(*wxLIGHT_GREY);
+    SetForegroundColour(*wxBLACK);
+#else // !__WXPM__
+    m_mediumShadowPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW));
+    m_hilightPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT));
+#endif // __WXPM__/!__WXPM__
+}
+
+void wxStatusBarGeneric::SetMinHeight(int height)
+{
+    // check that this min height is not less than minimal height for the
+    // current font
+    wxClientDC dc(this);
+    wxCoord y;
+    dc.GetTextExtent( wxT("X"), NULL, &y );
+
+    if ( height > (11*y)/10 )
+    {
+        SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height + 2*m_borderY);
+    }
+}
+
+
+// ----------------------------------------------------------------------------
+// wxStatusBarGeneric - event handlers
+// ----------------------------------------------------------------------------
+
 void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
@@ -228,148 +378,13 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
     }
 #endif // __WXGTK20__
 
-    if (GetFont().Ok())
+    if (GetFont().IsOk())
         dc.SetFont(GetFont());
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     for (size_t i = 0; i < m_panes.GetCount(); i ++)
         DrawField(dc, i);
-}
-
-void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
-{
-    int leftMargin = 2;
-
-    wxRect rect;
-    GetFieldRect(i, rect);
-
-    wxString text(GetStatusText(i));
-
-    wxCoord x = 0, y = 0;
-
-    dc.GetTextExtent(text, &x, &y);
-
-    int xpos = rect.x + leftMargin;
-    int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5) ;
-
-#if defined( __WXGTK__ ) || defined(__WXMAC__)
-    xpos++;
-    ypos++;
-#endif
-
-    dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height);
-
-    dc.DrawText(text, xpos, ypos);
-
-    dc.DestroyClippingRegion();
-}
-
-void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
-{
-    wxRect rect;
-    GetFieldRect(i, rect);
-
-    int style = m_panes[i].nStyle;
-    if (style != wxSB_FLAT)
-    {
-        // Draw border
-        // For wxSB_NORMAL:
-        // Have grey background, plus 3-d border -
-        // One black rectangle.
-        // Inside this, left and top sides - dark grey. Bottom and right -
-        // white.
-        // Reverse it for wxSB_RAISED
-
-        dc.SetPen((style == wxSB_RAISED) ? m_mediumShadowPen : m_hilightPen);
-
-    #ifndef __WXPM__
-
-        // Right and bottom lines
-        dc.DrawLine(rect.x + rect.width, rect.y,
-                    rect.x + rect.width, rect.y + rect.height);
-        dc.DrawLine(rect.x + rect.width, rect.y + rect.height,
-                    rect.x, rect.y + rect.height);
-
-        dc.SetPen((style == wxSB_RAISED) ? m_hilightPen : m_mediumShadowPen);
-
-        // Left and top lines
-        dc.DrawLine(rect.x, rect.y + rect.height,
-               rect.x, rect.y);
-        dc.DrawLine(rect.x, rect.y,
-            rect.x + rect.width, rect.y);
-    #else
-
-        dc.DrawLine(rect.x + rect.width, rect.height + 2,
-                    rect.x, rect.height + 2);
-        dc.DrawLine(rect.x + rect.width, rect.y,
-                    rect.x + rect.width, rect.y + rect.height);
-
-        dc.SetPen((style == wxSB_RAISED) ? m_hilightPen : m_mediumShadowPen);
-        dc.DrawLine(rect.x, rect.y,
-                    rect.x + rect.width, rect.y);
-        dc.DrawLine(rect.x, rect.y + rect.height,
-                   rect.x, rect.y);
-
-#endif
-    }
-
-    DrawFieldText(dc, i);
-}
-
-  // Get the position and size of the field's internal bounding rectangle
-bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
-{
-    wxCHECK_MSG( (n >= 0) && ((size_t)n < m_panes.GetCount()), false,
-                 _T("invalid status bar field index") );
-
-    // FIXME: workarounds for OS/2 bugs have nothing to do here (VZ)
-    int width, height;
-#ifdef __WXPM__
-    GetSize(&width, &height);
-#else
-    GetClientSize(&width, &height);
-#endif
-
-    // we cache m_widthsAbs between calls and recompute it if client
-    // width has changed (or when it is initially empty)
-    if ( m_widthsAbs.IsEmpty() || (m_lastClientWidth != width) )
-    {
-        wxConstCast(this, wxStatusBarGeneric)->
-            m_widthsAbs = CalculateAbsWidths(width);
-        // remember last width for which we have recomputed the widths in pixels
-        wxConstCast(this, wxStatusBarGeneric)->
-            m_lastClientWidth = width;
-    }
-
-    rect.x = 0;
-    for ( int i = 0; i < n; i++ )
-    {
-        rect.x += m_widthsAbs[i];
-    }
-
-    rect.x += m_borderX;
-    rect.y = m_borderY;
-
-    rect.width = m_widthsAbs[n] - 2*m_borderX;
-    rect.height = height - 2*m_borderY;
-
-    return true;
-}
-
-// Initialize colours
-void wxStatusBarGeneric::InitColours()
-{
-#if defined(__WXPM__)
-    m_mediumShadowPen = wxPen(wxColour(127, 127, 127), 1, wxSOLID);
-    m_hilightPen = *wxWHITE_PEN;
-
-    SetBackgroundColour(*wxLIGHT_GREY);
-    SetForegroundColour(*wxBLACK);
-#else // !__WXPM__
-    m_mediumShadowPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW));
-    m_hilightPen = wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DHILIGHT));
-#endif // __WXPM__/!__WXPM__
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -379,20 +394,6 @@ void wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
 
     // Propagate the event to the non-top-level children
     wxWindow::OnSysColourChanged(event);
-}
-
-void wxStatusBarGeneric::SetMinHeight(int height)
-{
-    // check that this min height is not less than minimal height for the
-    // current font
-    wxClientDC dc(this);
-    wxCoord y;
-    dc.GetTextExtent( wxT("X"), NULL, &y );
-
-    if ( height > (11*y)/10 )
-    {
-        SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height + 2*m_borderY);
-    }
 }
 
 void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
