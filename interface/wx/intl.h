@@ -264,7 +264,8 @@ enum wxLanguage
 
 /**
     This is the layout direction stored in wxLanguageInfo and returned by
-    wxApp::GetLayoutDirection() for RTL (right-to-left) languages support.
+    wxApp::GetLayoutDirection(), wxWindow::GetLayoutDirection(),
+    wxDC::GetLayoutDirection() for RTL (right-to-left) languages support.
 */
 enum wxLayoutDirection
 {

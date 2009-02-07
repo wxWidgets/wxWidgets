@@ -2328,6 +2328,12 @@ public:
     virtual wxString GetLabel() const;
 
     /**
+        Returns the layout direction for this window,
+        Note that @c wxLayout_Default is returned if layout direction is not supported.
+    */
+    virtual wxLayoutDirection GetLayoutDirection() const;
+
+    /**
         Returns the window's name.
 
         @remarks This name is not guaranteed to be unique; it is up to the
@@ -2366,6 +2372,11 @@ public:
     virtual void SetLabel(const wxString& label);
 
     /**
+        Sets the layout direction for this window.
+    */
+    virtual void SetLayoutDirection(wxLayoutDirection dir);
+
+    /**
         Sets the window's name.
 
         @param name
@@ -2384,7 +2395,6 @@ public:
         be used to change this.
     */
     void SetWindowVariant(wxWindowVariant variant);
-
 
     /**
         Gets the accelerator table for this window. See wxAcceleratorTable.
