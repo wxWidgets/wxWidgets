@@ -1019,13 +1019,13 @@ private:
         void insert(const iterator& it, size_type n, const_reference v)     \
         {                                                                   \
             for(size_type i = 0; i < n; ++i)                                \
-                Insert(it.m_node, (const_base_reference)v);                 \
+                insert(it, v);                                              \
         }                                                                   \
         void insert(const iterator& it,                                     \
                     const_iterator first, const const_iterator& last)       \
         {                                                                   \
             for(; first != last; ++first)                                   \
-                Insert(it.m_node, (const_base_reference)*first);            \
+                insert(it, *first);                                         \
         }                                                                   \
         iterator erase(const iterator& it)                                  \
         {                                                                   \
