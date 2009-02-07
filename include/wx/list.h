@@ -1068,10 +1068,11 @@ private:
             { splice(it, l, l.begin(), l.end() ); }                         \
         void splice(const iterator& it, name& l, const iterator& first)     \
         {                                                                   \
-            iterator tmp = first; ++tmp;                                    \
-            if(it == first || it == tmp) return;                            \
-            insert(it, *first);                                             \
-            l.erase(first);                                                 \
+            if ( it != first )                                              \
+            {                                                               \
+                insert(it, *first);                                         \
+                l.erase(first);                                             \
+            }                                                               \
         }                                                                   \
         void remove(const_reference v)                                      \
             { DeleteObject((const_base_reference)v); }                      \
