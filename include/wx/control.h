@@ -24,6 +24,19 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxControlNameStr[];
 
+
+// ----------------------------------------------------------------------------
+// Ellipsize() constants
+// ----------------------------------------------------------------------------
+
+enum wxEllipsizeFlags
+{
+    wxELLIPSIZE_PROCESS_MNEMONICS = 1,
+    wxELLIPSIZE_EXPAND_TAB = 2,
+
+    wxELLIPSIZE_DEFAULT_FLAGS = wxELLIPSIZE_PROCESS_MNEMONICS|wxELLIPSIZE_EXPAND_TAB
+};
+
 enum wxEllipsizeMode
 {
     wxELLIPSIZE_START,
@@ -77,27 +90,6 @@ public:
         SetLabel(EscapeMnemonics(text));
     }
 
-    // static utilities:
-
-    // replaces parts of the string with ellipsis if needed
-    static wxString Ellipsize(const wxString& label, const wxDC& dc,
-                              wxEllipsizeMode mode, int maxWidth);
-
-    // get the string without mnemonic characters ('&')
-    static wxString GetLabelText(const wxString& label);
-
-    // removes the mnemonics characters
-    static wxString RemoveMnemonics(const wxString& str);
-
-    // escapes (by doubling them) the mnemonics
-    static wxString EscapeMnemonics(const wxString& str);
-
-    // return the accel index in the string or -1 if none and puts the modified
-    // string into second parameter if non NULL
-    static int FindAccelIndex(const wxString& label,
-                              wxString *labelOnly = NULL);
-
-
     // controls by default inherit the colours of their parents, if a
     // particular control class doesn't want to do it, it can override
     // ShouldInheritColours() to return false
@@ -115,6 +107,30 @@ public:
     // wxControl-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event);
 
+
+
+    // static utilities
+    // ----------------
+
+    // replaces parts of the (multiline) string with ellipsis if needed
+    static wxString Ellipsize(const wxString& label, const wxDC& dc,
+                              wxEllipsizeMode mode, int maxWidth,
+                              int flags = wxELLIPSIZE_DEFAULT_FLAGS);
+
+    // get the string without mnemonic characters ('&')
+    static wxString GetLabelText(const wxString& label);
+
+    // removes the mnemonics characters
+    static wxString RemoveMnemonics(const wxString& str);
+
+    // escapes (by doubling them) the mnemonics
+    static wxString EscapeMnemonics(const wxString& str);
+
+    // return the accel index in the string or -1 if none and puts the modified
+    // string into second parameter if non NULL
+    static int FindAccelIndex(const wxString& label,
+                              wxString *labelOnly = NULL);
+
 protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const;
@@ -131,6 +147,11 @@ protected:
 
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
+
+    // Ellipsize() helper:
+    static wxString DoEllipsizeSingleLine(const wxString& label, const wxDC& dc,
+                                          wxEllipsizeMode mode, int maxWidth,
+                                          int replacementWidth, int marginWidth);
 
     // this field contains the label in wx format, i.e. with '&' mnemonics
     wxString m_labelOrig;
