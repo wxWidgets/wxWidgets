@@ -32,7 +32,7 @@ LDFLAGS =
 CPP = $(CC) /EP /nologo
 
 # What type of library to build? [0,1]
-SHARED = 1
+SHARED = 0
 
 # Build wxUniversal instead of native port? [0,1]
 WXUNIV = 0
@@ -96,7 +96,7 @@ USE_RICHTEXT = 1
 USE_STC = 1
 
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
-USE_OPENGL = 1
+USE_OPENGL = 0
 
 # Build quality assurance classes library (USE_GUI must be 1)? [0,1]
 USE_QA = 1
@@ -132,11 +132,11 @@ CFG =
 
 # Compiler flags needed to compile test suite in tests directory. If you want
 # to run the tests, set it so that the compiler can find CppUnit headers. 
-CPPUNIT_CFLAGS = -IF:\cppunit\include
+CPPUNIT_CFLAGS = 
 
 # Linker flags needed to link test suite in tests directory. If you want
 # to run the tests, include CppUnit library here. 
-CPPUNIT_LIBS = /LIBPATH:F:\cppunit\lib
+CPPUNIT_LIBS = 
 
 # Version of C runtime library to use. You can change this to
 # static if SHARED=0, but it is highly recommended to not do
