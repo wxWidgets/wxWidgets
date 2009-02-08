@@ -52,6 +52,10 @@
 #endif
 #endif
 
+#if __WXOSX_COCOA__
+#include "wx/osx/private.h"
+#endif
+
 #include <Carbon/Carbon.h>
 
 //quicktime media layer only required for mac emulation on pc
