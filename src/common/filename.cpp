@@ -1261,11 +1261,6 @@ bool wxFileName::Normalize(int flags,
             }
         }
 
-        if ( (flags & wxPATH_NORM_CASE) && !IsCaseSensitive(format) )
-        {
-            dir.MakeLower();
-        }
-
         m_dirs.Add(dir);
     }
 
@@ -1275,25 +1270,11 @@ bool wxFileName::Normalize(int flags,
         wxString filename;
         if (GetShortcutTarget(GetFullPath(format), filename))
         {
-            // Repeat this since we may now have a new path
-            if ( (flags & wxPATH_NORM_CASE) && !IsCaseSensitive(format) )
-            {
-                filename.MakeLower();
-            }
             m_relative = false;
             Assign(filename);
         }
     }
 #endif
-
-    if ( (flags & wxPATH_NORM_CASE) && !IsCaseSensitive(format) )
-    {
-        // VZ: expand env vars here too?
-
-        m_volume.MakeLower();
-        m_name.MakeLower();
-        m_ext.MakeLower();
-    }
 
 #if defined(__WIN32__)
     if ( (flags & wxPATH_NORM_LONG) && (format == wxPATH_DOS) )
@@ -1301,6 +1282,22 @@ bool wxFileName::Normalize(int flags,
         Assign(GetLongPath());
     }
 #endif // Win32
+
+    // Change case  (this should be kept at the end of the function, to ensure
+    // that the path doesn't change any more after we normalize its case)
+    if ( (flags & wxPATH_NORM_CASE) && !IsCaseSensitive(format) )
+    {
+        m_volume.MakeLower();
+        m_name.MakeLower();
+        m_ext.MakeLower();
+
+        // directory entries must be made lower case as well
+        count = m_dirs.GetCount();
+        for ( size_t i = 0; i < count; i++ )
+        {
+            m_dirs[i].MakeLower();
+        }
+    }
 
     return true;
 }
@@ -2250,7 +2247,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
     // not 9x
     bool ok;
     FILETIME ftAccess, ftCreate, ftWrite;
-    if ( IsDir() ) 
+    if ( IsDir() )
     {
         // implemented in msw/dir.cpp
         extern bool wxGetDirectoryTimes(const wxString& dirname,
