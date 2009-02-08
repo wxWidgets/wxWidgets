@@ -174,9 +174,7 @@ private:
     } m_statbarKind;
 
 
-    void OnUpdateSetStatusTexts(wxUpdateUIEvent& event);
-    void OnUpdateResetFieldsWidth(wxUpdateUIEvent& event);
-    void OnUpdateSetStatusFields(wxUpdateUIEvent& event);
+    void OnUpdateForDefaultStatusbar(wxUpdateUIEvent& event);
     void OnUpdateStatusBarToggle(wxUpdateUIEvent& event);
     void OnUpdateSetStyleNormal(wxUpdateUIEvent& event);
     void OnUpdateSetStyleFlat(wxUpdateUIEvent& event);
@@ -210,9 +208,11 @@ enum
 {
     // menu items
     StatusBar_Quit = 1,
+
     StatusBar_SetFields,
     StatusBar_SetTexts,
     StatusBar_ResetFieldsWidth,
+
     StatusBar_Recreate,
     StatusBar_About,
     StatusBar_Toggle,
@@ -249,10 +249,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(StatusBar_SetStyleFlat, MyFrame::OnSetStyleFlat)
     EVT_MENU(StatusBar_SetStyleRaised, MyFrame::OnSetStyleRaised)
 
-    EVT_UPDATE_UI(StatusBar_ResetFieldsWidth, MyFrame::OnUpdateResetFieldsWidth)
+    EVT_UPDATE_UI_RANGE(StatusBar_SetFields, StatusBar_ResetFieldsWidth,
+                        MyFrame::OnUpdateForDefaultStatusbar)
     EVT_UPDATE_UI(StatusBar_Toggle, MyFrame::OnUpdateStatusBarToggle)
-    EVT_UPDATE_UI(StatusBar_SetTexts, MyFrame::OnUpdateSetStatusTexts)
-    EVT_UPDATE_UI(StatusBar_SetFields, MyFrame::OnUpdateSetStatusFields)
     EVT_UPDATE_UI(StatusBar_SetStyleNormal, MyFrame::OnUpdateSetStyleNormal)
     EVT_UPDATE_UI(StatusBar_SetStyleFlat, MyFrame::OnUpdateSetStyleFlat)
     EVT_UPDATE_UI(StatusBar_SetStyleRaised, MyFrame::OnUpdateSetStyleRaised)
@@ -421,10 +420,9 @@ void MyFrame::DoCreateStatusBar(MyFrame::StatBarKind kind)
 // main frame - event handlers
 // ----------------------------------------------------------------------------
 
-void MyFrame::OnUpdateSetStatusTexts(wxUpdateUIEvent& event)
+void MyFrame::OnUpdateForDefaultStatusbar(wxUpdateUIEvent& event)
 {
-    // only allow the settings of the text of status fields for the default
-    // status bar
+    // only allow this feature for the default status bar
     wxStatusBar *sb = GetStatusBar();
     event.Enable(sb == m_statbarDefault);
 }
@@ -442,14 +440,6 @@ void MyFrame::OnSetStatusTexts(wxCommandEvent& WXUNUSED(event))
 
         sb->SetStatusText(txt, i);
     }
-}
-
-void MyFrame::OnUpdateSetStatusFields(wxUpdateUIEvent& event)
-{
-    // only allow the settings of the number of status fields for the default
-    // status bar
-    wxStatusBar *sb = GetStatusBar();
-    event.Enable(sb == m_statbarDefault);
 }
 
 void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
@@ -508,14 +498,6 @@ void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
     {
         wxLogStatus(this, wxT("Cancelled"));
     }
-}
-
-void MyFrame::OnUpdateResetFieldsWidth(wxUpdateUIEvent& event)
-{
-    // only allow the settings of the number of status fields for the default
-    // status bar
-    wxStatusBar *sb = GetStatusBar();
-    event.Enable(sb == m_statbarDefault);
 }
 
 void MyFrame::OnResetFieldsWidth(wxCommandEvent& WXUNUSED(event))
@@ -741,7 +723,11 @@ void MyStatusBar::OnSize(wxSizeEvent& event)
 #endif
 
     wxRect rect;
-    GetFieldRect(Field_Checkbox, rect);
+    if (!GetFieldRect(Field_Checkbox, rect))
+    {
+        event.Skip();
+        return;
+    }
 
 #if wxUSE_CHECKBOX
     m_checkbox->SetSize(rect.x + 2, rect.y + 2, rect.width - 4, rect.height - 4);
