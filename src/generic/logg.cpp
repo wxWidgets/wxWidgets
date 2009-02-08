@@ -127,7 +127,6 @@ public:
 #if CAN_SAVE_FILES
     void OnSave(wxCommandEvent& event);
 #endif // CAN_SAVE_FILES
-    void OnListSelect(wxListEvent& event);
     void OnListItemActivated(wxListEvent& event);
 
 private:
@@ -182,7 +181,6 @@ BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
 #if CAN_SAVE_FILES
     EVT_BUTTON(wxID_SAVE,   wxLogDialog::OnSave)
 #endif // CAN_SAVE_FILES
-    EVT_LIST_ITEM_SELECTED(wxID_ANY, wxLogDialog::OnListSelect)
     EVT_LIST_ITEM_ACTIVATED(wxID_ANY, wxLogDialog::OnListItemActivated)
 END_EVENT_TABLE()
 
@@ -1051,14 +1049,6 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     heightMax /= 10;
 
     m_listctrl->SetSize(wxDefaultCoord, wxMin(height, heightMax));
-}
-
-void wxLogDialog::OnListSelect(wxListEvent& event)
-{
-    // we can't just disable the control because this looks ugly under Windows
-    // (wrong bg colour, no scrolling...), but we still want to disable
-    // selecting items - it makes no sense here
-    m_listctrl->SetItemState(event.GetIndex(), 0, wxLIST_STATE_SELECTED);
 }
 
 void wxLogDialog::OnListItemActivated(wxListEvent& event)
