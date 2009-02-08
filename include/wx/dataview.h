@@ -27,7 +27,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
-#if !(defined(__WXGTK20__) || defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
+#if !(defined(__WXGTK20__) || defined(__WXOSX_CARBON__)) || defined(__WXUNIVERSAL__)
 // #if !(defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_DATAVIEWCTRL
 #endif

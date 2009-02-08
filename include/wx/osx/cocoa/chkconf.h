@@ -44,11 +44,6 @@
  * turning off capabilities that don't work under cocoa yet
  */
 
-#if wxUSE_DATAVIEWCTRL
-#undef wxUSE_DATAVIEWCTRL
-#define wxUSE_DATAVIEWCTRL 0
-#endif
-
 #endif
     /* _WX_MAC_CHKCONF_H_ */
 
