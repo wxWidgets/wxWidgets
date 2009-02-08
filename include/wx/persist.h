@@ -47,6 +47,11 @@ public:
     // accessor to the unique persistence manager object
     static wxPersistenceManager& Get();
 
+    // trivial but virtual dtor
+    //
+    // FIXME-VC6: this only needs to be public because of VC6 bug
+    virtual ~wxPersistenceManager();
+
 
     // globally disable restoring or saving the persistent properties (both are
     // enabled by default)
@@ -135,9 +140,6 @@ private:
         m_doSave =
         m_doRestore = true;
     }
-
-    // trivial but virtual dtor
-    virtual ~wxPersistenceManager();
 
 
     // helpers of Save/Restore()
