@@ -48,6 +48,7 @@
 
 #include "wx/datetime.h"
 #include "wx/numdlg.h"
+#include "wx/fontdlg.h"
 
 #ifndef __WXMSW__
     #include "../sample.xpm"
@@ -160,6 +161,7 @@ class MyFrame : public wxMDIParentFrame
     void OnResetFieldsWidth(wxCommandEvent& event);
     void OnSetStatusFields(wxCommandEvent& event);
     void OnSetStatusTexts(wxCommandEvent& event);
+    void OnSetStatusFont(wxCommandEvent& event);
     void OnRecreateStatusBar(wxCommandEvent& event);
     void OnSetStyleNormal(wxCommandEvent& event);
     void OnSetStyleFlat(wxCommandEvent& event);
@@ -211,6 +213,7 @@ enum
 
     StatusBar_SetFields,
     StatusBar_SetTexts,
+    StatusBar_SetFont,
     StatusBar_ResetFieldsWidth,
 
     StatusBar_Recreate,
@@ -241,6 +244,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(StatusBar_Quit,  MyFrame::OnQuit)
     EVT_MENU(StatusBar_SetFields, MyFrame::OnSetStatusFields)
     EVT_MENU(StatusBar_SetTexts, MyFrame::OnSetStatusTexts)
+    EVT_MENU(StatusBar_SetFont, MyFrame::OnSetStatusFont)
     EVT_MENU(StatusBar_ResetFieldsWidth, MyFrame::OnResetFieldsWidth)
     EVT_MENU(StatusBar_Recreate, MyFrame::OnRecreateStatusBar)
     EVT_MENU(StatusBar_About, MyFrame::OnAbout)
@@ -337,6 +341,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                         _T("Set the number of status bar fields"));
     statbarMenu->Append(StatusBar_SetTexts, _T("&Set field text\tCtrl-T"),
                         _T("Set the text to display for each status bar field"));
+    statbarMenu->Append(StatusBar_SetFont, _T("&Set field font\tCtrl-F"),
+                        _T("Set the font to use for rendering status bar fields"));
 
     wxMenu *statbarStyleMenu = new wxMenu;
     statbarStyleMenu->Append(StatusBar_SetStyleNormal, _T("&Normal"), _T("Sets the style of the first field to normal (sunken) look"), true);
@@ -439,6 +445,18 @@ void MyFrame::OnSetStatusTexts(wxCommandEvent& WXUNUSED(event))
                               "Input field text", "A dummy test string", this);
 
         sb->SetStatusText(txt, i);
+    }
+}
+
+void MyFrame::OnSetStatusFont(wxCommandEvent& WXUNUSED(event))
+{
+    wxStatusBar *sb = GetStatusBar();
+
+    wxFont fnt = wxGetFontFromUser(this, sb->GetFont(), "Choose statusbar font");
+    if (fnt.IsOk())
+    {
+        sb->SetFont(fnt);
+        sb->SetSize(sb->GetBestSize());
     }
 }
 
