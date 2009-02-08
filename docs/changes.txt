@@ -155,6 +155,8 @@ wxMSW:
 - Automatically adjust toolbar's tool size if the provided bitmaps
   don't fit into the default size.
 - Don't generate EVT_LISTBOX_DCLICK events with incorrect indices.
+- Don't reuse the double click handled by activation event handler for toggling
+  the item in wxTreeCtrl.
 
 
 wxMSW/CE:
