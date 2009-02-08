@@ -132,6 +132,7 @@ All (GUI):
   wxMac with CoreGraphics where sash drawing isn't implemented.
 - Use bitmap mask in wxSplashScreen.
 - Translate "(c)" and "(C)" to the real copyright sign in wxAboutBox.
+- Fix painting of highlight border for merged cells in wxGrid (K. Jones).
 
 All (Unix):
 
