@@ -47,7 +47,9 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
             [v setBezelStyle:NSRegularSquareBezelStyle];
     }
     
-    [v setImage:bitmap.GetNSImage() ];
+    if (bitmap.Ok())
+        [v setImage:bitmap.GetNSImage() ];
+    
     [v setButtonType:NSMomentaryPushInButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;
