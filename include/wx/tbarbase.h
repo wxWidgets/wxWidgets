@@ -622,7 +622,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxToolBarBase)
+    wxDECLARE_NO_COPY_CLASS(wxToolBarBase);
 };
 
 // deprecated function for creating the image for disabled buttons, use

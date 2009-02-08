@@ -281,7 +281,7 @@ protected:
     // no friends
     friend class wxGridCellEditorDummyFriend;
 
-    DECLARE_NO_COPY_CLASS(wxGridCellEditor)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellEditor);
 };
 
 
@@ -435,7 +435,7 @@ private:
     wxAttrKind m_attrkind;
 
     // use Clone() instead
-    DECLARE_NO_COPY_CLASS(wxGridCellAttr)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellAttr);
 
     // suppress the stupid gcc warning about the class having private dtor and
     // no friends
@@ -480,7 +480,7 @@ private:
 
     wxGridCellAttrProviderData *m_data;
 
-    DECLARE_NO_COPY_CLASS(wxGridCellAttrProvider)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellAttrProvider);
 };
 
 // ----------------------------------------------------------------------------
@@ -649,7 +649,7 @@ private:
     wxGridCellAttrProvider *m_attrProvider;
 
     DECLARE_ABSTRACT_CLASS(wxGridTableBase)
-    DECLARE_NO_COPY_CLASS(wxGridTableBase)
+    wxDECLARE_NO_COPY_CLASS(wxGridTableBase);
 };
 
 
@@ -694,7 +694,7 @@ private:
     int m_comInt1;
     int m_comInt2;
 
-    DECLARE_NO_COPY_CLASS(wxGridTableMessage)
+    wxDECLARE_NO_COPY_CLASS(wxGridTableMessage);
 };
 
 
@@ -2039,7 +2039,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxGrid)
+    wxDECLARE_NO_COPY_CLASS(wxGrid);
 };
 
 // ----------------------------------------------------------------------------
@@ -2080,7 +2080,7 @@ private:
 
     wxGrid *m_grid;
 
-    DECLARE_NO_COPY_CLASS(wxGridUpdateLocker)
+    wxDECLARE_NO_COPY_CLASS(wxGridUpdateLocker);
 };
 
 // ----------------------------------------------------------------------------

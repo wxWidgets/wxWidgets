@@ -83,7 +83,7 @@ private:
   // current group modified ?
   bool m_modGroup;
 
-  DECLARE_NO_COPY_CLASS(wxPrefConfig)
+  wxDECLARE_NO_COPY_CLASS(wxPrefConfig);
   DECLARE_ABSTRACT_CLASS(wxPrefConfig)
 };
 

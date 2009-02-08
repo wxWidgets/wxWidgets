@@ -396,7 +396,7 @@ private:
     GetConsoleCommandHistory_t m_pfnGetConsoleCommandHistory;
     GetConsoleCommandHistoryLength_t m_pfnGetConsoleCommandHistoryLength;
 
-    DECLARE_NO_COPY_CLASS(wxConsoleStderr)
+    wxDECLARE_NO_COPY_CLASS(wxConsoleStderr);
 };
 
 bool wxConsoleStderr::DoInit()

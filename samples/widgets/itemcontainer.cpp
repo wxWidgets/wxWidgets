@@ -59,7 +59,7 @@ private:
     ItemContainerWidgetsPage *m_tracker;
     int m_value;
 
-    DECLARE_NO_COPY_CLASS(TrackedClientData)
+    wxDECLARE_NO_COPY_CLASS(TrackedClientData);
 };
 
 // ============================================================================

@@ -131,7 +131,7 @@ private:
     WXHWND m_hGripper;
 
     DECLARE_DYNAMIC_CLASS(wxDialog)
-    DECLARE_NO_COPY_CLASS(wxDialog)
+    wxDECLARE_NO_COPY_CLASS(wxDialog);
 };
 
 #endif

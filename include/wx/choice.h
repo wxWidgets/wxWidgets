@@ -59,7 +59,7 @@ public:
     virtual bool IsSorted() const { return HasFlag(wxCB_SORT); }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxChoiceBase)
+    wxDECLARE_NO_COPY_CLASS(wxChoiceBase);
 };
 
 // ----------------------------------------------------------------------------

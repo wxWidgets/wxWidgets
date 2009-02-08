@@ -219,7 +219,7 @@ private:
     COLORREF m_oldColFg,
              m_oldColBg;
 
-    DECLARE_NO_COPY_CLASS(wxTextColoursChanger)
+    wxDECLARE_NO_COPY_CLASS(wxTextColoursChanger);
 };
 
 // background mode
@@ -259,7 +259,7 @@ private:
     const HDC m_hdc;
     int m_oldMode;
 
-    DECLARE_NO_COPY_CLASS(wxBkModeChanger)
+    wxDECLARE_NO_COPY_CLASS(wxBkModeChanger);
 };
 
 // instead of duplicating the same code which sets and then restores text
@@ -275,7 +275,7 @@ public:
     wxBrushAttrsSetter(wxMSWDCImpl& dc);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxBrushAttrsSetter)
+    wxDECLARE_NO_COPY_CLASS(wxBrushAttrsSetter);
 };
 
 // this class saves the old stretch blit mode during its life time
@@ -306,7 +306,7 @@ private:
 
     int m_modeOld;
 
-    DECLARE_NO_COPY_CLASS(StretchBltModeChanger)
+    wxDECLARE_NO_COPY_CLASS(StretchBltModeChanger);
 };
 
 #if wxUSE_DYNLIB_CLASS

@@ -69,7 +69,7 @@ protected:
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)
-    DECLARE_NO_COPY_CLASS(wxToolBar)
+    wxDECLARE_NO_COPY_CLASS(wxToolBar);
 };
 
 #else
@@ -158,7 +158,7 @@ protected:
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolMenuBar)
-    DECLARE_NO_COPY_CLASS(wxToolMenuBar)
+    wxDECLARE_NO_COPY_CLASS(wxToolMenuBar);
 };
 
 #endif

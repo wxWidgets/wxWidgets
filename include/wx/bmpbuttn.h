@@ -89,7 +89,7 @@ protected:
         m_marginY;
 
 
-    DECLARE_NO_COPY_CLASS(wxBitmapButtonBase)
+    wxDECLARE_NO_COPY_CLASS(wxBitmapButtonBase);
 };
 
 #if WXWIN_COMPATIBILITY_2_6

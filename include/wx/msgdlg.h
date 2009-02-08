@@ -186,7 +186,7 @@ protected:
              m_caption;
     long m_dialogStyle;
 
-    DECLARE_NO_COPY_CLASS(wxMessageDialogBase)
+    wxDECLARE_NO_COPY_CLASS(wxMessageDialogBase);
 };
 
 // this is a helper class for native wxMessageDialog implementations which need
@@ -290,7 +290,7 @@ private:
              m_ok,
              m_cancel;
 
-    DECLARE_NO_COPY_CLASS(wxMessageDialogWithCustomLabels)
+    wxDECLARE_NO_COPY_CLASS(wxMessageDialogWithCustomLabels);
 };
 
 #endif // ports needing wxMessageDialogWithCustomLabels

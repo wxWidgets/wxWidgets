@@ -19,7 +19,7 @@
 // ========================================================================
 class wxWindowCocoaScrollView: protected wxCocoaNSView
 {
-    DECLARE_NO_COPY_CLASS(wxWindowCocoaScrollView)
+    wxDECLARE_NO_COPY_CLASS(wxWindowCocoaScrollView);
 public:
     wxWindowCocoaScrollView(wxWindow *owner);
     virtual ~wxWindowCocoaScrollView();

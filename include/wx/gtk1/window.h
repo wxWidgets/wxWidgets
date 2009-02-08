@@ -264,7 +264,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)
-    DECLARE_NO_COPY_CLASS(wxWindowGTK)
+    wxDECLARE_NO_COPY_CLASS(wxWindowGTK);
 };
 
 extern WXDLLIMPEXP_CORE wxWindow *wxFindFocusedChild(wxWindowGTK *win);

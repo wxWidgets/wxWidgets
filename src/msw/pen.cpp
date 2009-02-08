@@ -144,7 +144,7 @@ private:
     wxColour      m_colour;
     HPEN          m_hPen;
 
-    DECLARE_NO_ASSIGN_CLASS(wxPenRefData)
+    wxDECLARE_NO_ASSIGN_CLASS(wxPenRefData);
 };
 
 // ============================================================================

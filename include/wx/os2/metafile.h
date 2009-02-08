@@ -103,7 +103,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxMetafileDCImpl)
-    DECLARE_NO_COPY_CLASS(wxMetafileDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxMetafileDCImpl);
 };
 
 class WXDLLIMPEXP_CORE wxMetafileDC: public wxDC
@@ -136,7 +136,7 @@ public:
 
 private:
     DECLARE_CLASS(wxMetafileDC)
-    DECLARE_NO_COPY_CLASS(wxMetafileDC)
+    wxDECLARE_NO_COPY_CLASS(wxMetafileDC);
 };
 
 /*

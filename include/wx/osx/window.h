@@ -338,7 +338,7 @@ private:
     void DoUpdateScrollbarVisibility();
 
 
-    DECLARE_NO_COPY_CLASS(wxWindowMac)
+    wxDECLARE_NO_COPY_CLASS(wxWindowMac);
     DECLARE_EVENT_TABLE()
 };
 

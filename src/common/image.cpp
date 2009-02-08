@@ -88,7 +88,7 @@ public:
     wxArrayString   m_optionNames;
     wxArrayString   m_optionValues;
 
-    DECLARE_NO_COPY_CLASS(wxImageRefData)
+    wxDECLARE_NO_COPY_CLASS(wxImageRefData);
 };
 
 wxImageRefData::wxImageRefData()

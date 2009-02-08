@@ -67,7 +67,7 @@ private:
     class wxNotifMsgImpl *m_impl;
 
 
-    DECLARE_NO_COPY_CLASS(wxNotificationMessage)
+    wxDECLARE_NO_COPY_CLASS(wxNotificationMessage);
 };
 
 #endif // _WX_MSW_NOTIFMSG_H_

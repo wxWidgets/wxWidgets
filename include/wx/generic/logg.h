@@ -38,7 +38,7 @@ private:
     // the control we use
     wxTextCtrl *m_pTextCtrl;
 
-    DECLARE_NO_COPY_CLASS(wxLogTextCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxLogTextCtrl);
 };
 
 #endif // wxUSE_TEXTCTRL
@@ -147,7 +147,7 @@ protected:
 private:
     wxLogFrame *m_pLogFrame;      // the log frame
 
-    DECLARE_NO_COPY_CLASS(wxLogWindow)
+    wxDECLARE_NO_COPY_CLASS(wxLogWindow);
 };
 
 #endif // wxUSE_LOGWINDOW

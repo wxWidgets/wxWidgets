@@ -256,7 +256,7 @@ protected:
     wxDisplayInfoArray m_displays;
 
 
-    DECLARE_NO_COPY_CLASS(wxDisplayFactoryWin32Base)
+    wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryWin32Base);
 };
 
 // ----------------------------------------------------------------------------
@@ -275,7 +275,7 @@ public:
     virtual bool ChangeMode(const wxVideoMode& mode);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxDisplayImplMultimon)
+    wxDECLARE_NO_COPY_CLASS(wxDisplayImplMultimon);
 };
 
 class wxDisplayFactoryMultimon : public wxDisplayFactoryWin32Base
@@ -327,7 +327,7 @@ struct wxDisplayInfoDirectDraw : wxDisplayInfo
     const GUID m_guid;
 
 
-    DECLARE_NO_COPY_CLASS(wxDisplayInfoDirectDraw)
+    wxDECLARE_NO_COPY_CLASS(wxDisplayInfoDirectDraw);
 };
 
 class wxDisplayImplDirectDraw : public wxDisplayImplWin32Base
@@ -351,7 +351,7 @@ public:
 private:
     IDirectDraw2 *m_pDD2;
 
-    DECLARE_NO_COPY_CLASS(wxDisplayImplDirectDraw)
+    wxDECLARE_NO_COPY_CLASS(wxDisplayImplDirectDraw);
 };
 
 class wxDisplayFactoryDirectDraw : public wxDisplayFactoryWin32Base
@@ -380,7 +380,7 @@ private:
     // dynamically resolved DirectDrawCreate()
     DirectDrawCreate_t m_pfnDirectDrawCreate;
 
-    DECLARE_NO_COPY_CLASS(wxDisplayFactoryDirectDraw)
+    wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryDirectDraw);
 };
 
 #endif // wxUSE_DIRECTDRAW
@@ -944,7 +944,7 @@ private:
     wxArrayVideoModes& m_modes;
     const wxVideoMode& m_modeMatch;
 
-    DECLARE_NO_COPY_CLASS(wxDDVideoModesAdder)
+    wxDECLARE_NO_COPY_CLASS(wxDDVideoModesAdder);
 };
 
 HRESULT WINAPI wxDDEnumModesCallback(LPDDSURFACEDESC lpDDSurfaceDesc,

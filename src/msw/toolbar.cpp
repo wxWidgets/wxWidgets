@@ -214,7 +214,7 @@ private:
     size_t m_nSepCount;
     wxStaticText *m_staticText;
 
-    DECLARE_NO_COPY_CLASS(wxToolBarTool)
+    wxDECLARE_NO_COPY_CLASS(wxToolBarTool);
 };
 
 // ----------------------------------------------------------------------------

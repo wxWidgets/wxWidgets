@@ -120,7 +120,7 @@ protected:
     int m_style;
 
     DECLARE_DYNAMIC_CLASS(wxBestHelpController)
-    DECLARE_NO_COPY_CLASS(wxBestHelpController)
+    wxDECLARE_NO_COPY_CLASS(wxBestHelpController);
 };
 
 #endif // wxUSE_HELP && wxUSE_MS_HTML_HELP && wxUSE_WXHTML_HELP

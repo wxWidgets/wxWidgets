@@ -52,7 +52,7 @@ protected:
 private:
     SIZEL                   m_PageSize;
     DECLARE_CLASS(wxWindowDCImpl)
-    DECLARE_NO_COPY_CLASS(wxWindowDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxWindowDCImpl);
 }; // end of CLASS wxWindowDC
 
 class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
@@ -73,7 +73,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxClientDCImpl)
-    DECLARE_NO_COPY_CLASS(wxClientDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
 }; // end of CLASS wxClientDC
 
 class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
@@ -96,7 +96,7 @@ protected:
     wxPaintDCInfo* FindInCache(size_t* pIndex = NULL) const;
 private:
     DECLARE_CLASS(wxPaintDCImpl)
-    DECLARE_NO_COPY_CLASS(wxPaintDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxPaintDCImpl);
 }; // end of wxPaintDC
 
 #endif

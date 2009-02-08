@@ -52,7 +52,7 @@ public:
     guint16 m_blue;
     wxByte m_alpha;
 
-    DECLARE_NO_COPY_CLASS(wxColourRefData)
+    wxDECLARE_NO_COPY_CLASS(wxColourRefData);
 };
 
 void wxColourRefData::FreeColour()

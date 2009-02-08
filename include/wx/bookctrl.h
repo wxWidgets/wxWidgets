@@ -336,7 +336,7 @@ private:
     unsigned int m_internalBorder;
 
     DECLARE_ABSTRACT_CLASS(wxBookCtrlBase)
-    DECLARE_NO_COPY_CLASS(wxBookCtrlBase)
+    wxDECLARE_NO_COPY_CLASS(wxBookCtrlBase);
     DECLARE_EVENT_TABLE()
 };
 

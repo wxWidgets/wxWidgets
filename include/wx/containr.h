@@ -215,7 +215,7 @@ public:
 
 protected:
 
-    DECLARE_NO_COPY_CLASS(wxControlContainer)
+    wxDECLARE_NO_COPY_CLASS(wxControlContainer);
 };
 
 // ----------------------------------------------------------------------------

@@ -130,7 +130,7 @@ protected:
     }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxCheckBoxBase)
+    wxDECLARE_NO_COPY_CLASS(wxCheckBoxBase);
 };
 
 #if defined(__WXUNIVERSAL__)

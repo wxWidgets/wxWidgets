@@ -121,7 +121,7 @@ protected:
     // the last string we searched for
     wxString m_lastSearch;
 
-    DECLARE_NO_COPY_CLASS(wxFindReplaceDialogBase)
+    wxDECLARE_NO_COPY_CLASS(wxFindReplaceDialogBase);
 };
 
 // include wxFindReplaceDialog declaration

@@ -512,7 +512,7 @@ protected:
                                          wxDouble angle,
                                          const wxGraphicsBrush& backgroundBrush);
 
-    DECLARE_NO_COPY_CLASS(wxGraphicsContext)
+    wxDECLARE_NO_COPY_CLASS(wxGraphicsContext);
     DECLARE_ABSTRACT_CLASS(wxGraphicsContext)
 };
 
@@ -620,7 +620,7 @@ public:
 
 
 private:
-    DECLARE_NO_COPY_CLASS(wxGraphicsRenderer)
+    wxDECLARE_NO_COPY_CLASS(wxGraphicsRenderer);
     DECLARE_ABSTRACT_CLASS(wxGraphicsRenderer)
 };
 

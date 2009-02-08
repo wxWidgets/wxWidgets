@@ -26,7 +26,7 @@ public:
     virtual bool OnInit();
 
 private:
-    DECLARE_NO_COPY_CLASS(MyApp)
+    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 class MyListCtrl: public wxListCtrl
@@ -93,7 +93,7 @@ private:
     long m_updated;
 
 
-    DECLARE_NO_COPY_CLASS(MyListCtrl)
+    wxDECLARE_NO_COPY_CLASS(MyListCtrl);
     DECLARE_EVENT_TABLE()
 };
 
@@ -175,7 +175,7 @@ private:
 
     bool m_smallVirtual;
 
-    DECLARE_NO_COPY_CLASS(MyFrame)
+    wxDECLARE_NO_COPY_CLASS(MyFrame);
     DECLARE_EVENT_TABLE()
 };
 

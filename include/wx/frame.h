@@ -251,7 +251,7 @@ protected:
     DECLARE_EVENT_TABLE()
 #endif // wxUSE_MENUS && wxUSE_STATUSBAR
 
-    DECLARE_NO_COPY_CLASS(wxFrameBase)
+    wxDECLARE_NO_COPY_CLASS(wxFrameBase);
 };
 
 // include the real class declaration

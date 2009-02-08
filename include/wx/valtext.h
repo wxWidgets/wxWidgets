@@ -98,7 +98,7 @@ protected:
     wxArrayString        m_excludes;
 
 private:
-    DECLARE_NO_ASSIGN_CLASS(wxTextValidator)
+    wxDECLARE_NO_ASSIGN_CLASS(wxTextValidator);
     DECLARE_DYNAMIC_CLASS(wxTextValidator)
     DECLARE_EVENT_TABLE()
 };

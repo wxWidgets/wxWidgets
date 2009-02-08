@@ -54,7 +54,7 @@ private:
     wxNotificationMessageDialog *m_dialog;
 
 
-    DECLARE_NO_COPY_CLASS(wxGenericNotificationMessage)
+    wxDECLARE_NO_COPY_CLASS(wxGenericNotificationMessage);
 };
 
 #endif // _WX_GENERIC_NOTIFMSG_H_

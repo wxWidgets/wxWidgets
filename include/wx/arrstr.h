@@ -461,7 +461,7 @@ private:
         const wxArrayString * array;
     } m_data;
 
-    DECLARE_NO_ASSIGN_CLASS(wxArrayStringsAdapter)
+    wxDECLARE_NO_ASSIGN_CLASS(wxArrayStringsAdapter);
 };
 
 #endif // _WX_ARRSTR_H

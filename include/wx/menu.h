@@ -377,7 +377,7 @@ protected:
 
     static bool      ms_locked;
 
-    DECLARE_NO_COPY_CLASS(wxMenuBase)
+    wxDECLARE_NO_COPY_CLASS(wxMenuBase);
 };
 
 // ----------------------------------------------------------------------------
@@ -509,7 +509,7 @@ protected:
     // the frame we are attached to (may be NULL)
     wxFrame *m_menuBarFrame;
 
-    DECLARE_NO_COPY_CLASS(wxMenuBarBase)
+    wxDECLARE_NO_COPY_CLASS(wxMenuBarBase);
 };
 
 // ----------------------------------------------------------------------------

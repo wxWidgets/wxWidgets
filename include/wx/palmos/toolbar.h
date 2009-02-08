@@ -104,7 +104,7 @@ protected:
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)
-    DECLARE_NO_COPY_CLASS(wxToolBar)
+    wxDECLARE_NO_COPY_CLASS(wxToolBar);
 };
 
 #endif // wxUSE_TOOLBAR

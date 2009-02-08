@@ -47,7 +47,7 @@ private:
 
     wxString DoFind();
 
-    DECLARE_NO_COPY_CLASS(wxArchiveFSHandler)
+    wxDECLARE_NO_COPY_CLASS(wxArchiveFSHandler);
     DECLARE_DYNAMIC_CLASS(wxArchiveFSHandler)
 };
 

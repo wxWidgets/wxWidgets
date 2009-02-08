@@ -181,7 +181,7 @@ public:
 private:
     wxQTMediaBackend *m_qtb;
 
-    DECLARE_NO_COPY_CLASS(wxQTMediaEvtHandler)
+    wxDECLARE_NO_COPY_CLASS(wxQTMediaEvtHandler);
 };
 
 //===========================================================================

@@ -81,7 +81,7 @@ public:
 private:
     LPITEMIDLIST m_pidl;
 
-    DECLARE_NO_COPY_CLASS(wxItemIdList)
+    wxDECLARE_NO_COPY_CLASS(wxItemIdList);
 };
 
 // enable autocompleting filenames in the text control with given HWND

@@ -171,7 +171,7 @@ private:
 
     HANDLE m_mutex;
 
-    DECLARE_NO_COPY_CLASS(wxMutexInternal)
+    wxDECLARE_NO_COPY_CLASS(wxMutexInternal);
 };
 
 // all mutexes are recursive under Win32 so we don't use mutexType
@@ -224,7 +224,7 @@ public:
 private:
     HANDLE m_semaphore;
 
-    DECLARE_NO_COPY_CLASS(wxSemaphoreInternal)
+    wxDECLARE_NO_COPY_CLASS(wxSemaphoreInternal);
 };
 
 wxSemaphoreInternal::wxSemaphoreInternal(int initialcount, int maxcount)
@@ -339,7 +339,7 @@ private:
     // reaches 0 we kill the owning wxThread -- and die ourselves with it
     LONG m_nRef;
 
-    DECLARE_NO_COPY_CLASS(wxThreadInternal)
+    wxDECLARE_NO_COPY_CLASS(wxThreadInternal);
 };
 
 // small class which keeps a thread alive during its lifetime

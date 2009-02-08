@@ -573,7 +573,7 @@ private:
 #endif
 
     DECLARE_DYNAMIC_CLASS(wxWindowMSW)
-    DECLARE_NO_COPY_CLASS(wxWindowMSW)
+    wxDECLARE_NO_COPY_CLASS(wxWindowMSW);
     DECLARE_EVENT_TABLE()
 };
 

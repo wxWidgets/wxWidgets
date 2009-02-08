@@ -161,7 +161,7 @@ private:
     bool m_doSave,
          m_doRestore;
 
-    DECLARE_NO_COPY_CLASS(wxPersistenceManager)
+    wxDECLARE_NO_COPY_CLASS(wxPersistenceManager);
 };
 
 // ----------------------------------------------------------------------------
@@ -218,7 +218,7 @@ protected:
 private:
     void * const m_obj;
 
-    DECLARE_NO_COPY_CLASS(wxPersistentObject)
+    wxDECLARE_NO_COPY_CLASS(wxPersistentObject);
 };
 
 // FIXME-VC6: VC6 has troubles with template methods of DLL-exported classes,

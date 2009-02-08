@@ -109,7 +109,7 @@ private:
 
     friend class WXDLLIMPEXP_FWD_ADV wxGrid;
 
-    DECLARE_NO_COPY_CLASS(wxGridSelection)
+    wxDECLARE_NO_COPY_CLASS(wxGridSelection);
 };
 
 #endif  // wxUSE_GRID

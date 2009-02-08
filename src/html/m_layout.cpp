@@ -79,7 +79,7 @@ public:
               wxHtmlRenderingInfo& WXUNUSED(info)) {}
 
 private:
-    DECLARE_NO_COPY_CLASS(wxHtmlPageBreakCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlPageBreakCell);
 };
 
 bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, wxArrayInt& known_pagebreaks) const

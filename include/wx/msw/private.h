@@ -398,7 +398,7 @@ public:
 private:
     HDC m_hdc;
 
-    DECLARE_NO_COPY_CLASS(ScreenHDC)
+    wxDECLARE_NO_COPY_CLASS(ScreenHDC);
 };
 
 // the same as ScreenHDC but for window DCs
@@ -414,7 +414,7 @@ private:
    HWND m_hwnd;
    HDC m_hdc;
 
-   DECLARE_NO_COPY_CLASS(WindowHDC)
+   wxDECLARE_NO_COPY_CLASS(WindowHDC);
 };
 
 // the same as ScreenHDC but for memory DCs: creates the HDC compatible with
@@ -430,7 +430,7 @@ public:
 private:
     HDC m_hdc;
 
-    DECLARE_NO_COPY_CLASS(MemoryHDC)
+    wxDECLARE_NO_COPY_CLASS(MemoryHDC);
 };
 
 // a class which selects a GDI object into a DC in its ctor and deselects in
@@ -462,7 +462,7 @@ private:
     HDC m_hdc;
     HGDIOBJ m_hgdiobj;
 
-    DECLARE_NO_COPY_CLASS(SelectInHDC)
+    wxDECLARE_NO_COPY_CLASS(SelectInHDC);
 };
 
 // a class which cleans up any GDI object
@@ -579,7 +579,7 @@ public:
 private:
     HDC m_hdc;
 
-    DECLARE_NO_COPY_CLASS(HDCClipper)
+    wxDECLARE_NO_COPY_CLASS(HDCClipper);
 };
 
 // set the given map mode for the life time of this object
@@ -610,7 +610,7 @@ private:
         HDC m_hdc;
         int m_modeOld;
 
-        DECLARE_NO_COPY_CLASS(HDCMapModeChanger)
+        wxDECLARE_NO_COPY_CLASS(HDCMapModeChanger);
     };
 
     #define wxCHANGE_HDC_MAP_MODE(hdc, mm) \
@@ -652,7 +652,7 @@ public:
 private:
     HGLOBAL m_hGlobal;
 
-    DECLARE_NO_COPY_CLASS(GlobalPtr)
+    wxDECLARE_NO_COPY_CLASS(GlobalPtr);
 };
 
 // when working with global pointers (which is unfortunately still necessary
@@ -710,7 +710,7 @@ private:
     HGLOBAL m_hGlobal;
     void *m_ptr;
 
-    DECLARE_NO_COPY_CLASS(GlobalPtrLock)
+    wxDECLARE_NO_COPY_CLASS(GlobalPtrLock);
 };
 
 // register the class when it is first needed and unregister it in dtor

@@ -1509,7 +1509,7 @@ private:
     bool m_bLoadEventSent; // Whether or not FinishLoaded was already called
                            // prevents it being called multiple times
 
-    DECLARE_NO_COPY_CLASS(wxAMMediaEvtHandler)
+    wxDECLARE_NO_COPY_CLASS(wxAMMediaEvtHandler);
 };
 
 //===========================================================================

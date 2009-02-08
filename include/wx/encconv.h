@@ -153,7 +153,7 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             bool m_UnicodeInput, m_UnicodeOutput;
             bool m_JustCopy;
 
-    DECLARE_NO_COPY_CLASS(wxEncodingConverter)
+    wxDECLARE_NO_COPY_CLASS(wxEncodingConverter);
 };
 
 #endif  // _WX_ENCCONV_H_

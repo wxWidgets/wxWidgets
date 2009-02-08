@@ -170,7 +170,7 @@ private:
 
     void Init();
     DECLARE_DYNAMIC_CLASS(wxFileDialogBase)
-    DECLARE_NO_COPY_CLASS(wxFileDialogBase)
+    wxDECLARE_NO_COPY_CLASS(wxFileDialogBase);
 };
 
 

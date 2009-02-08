@@ -58,7 +58,7 @@ protected:
 
     wxFontData m_fontData;
 
-    DECLARE_NO_COPY_CLASS(wxFontDialogBase)
+    wxDECLARE_NO_COPY_CLASS(wxFontDialogBase);
 };
 
 #if WXWIN_COMPATIBILITY_2_6

@@ -83,7 +83,7 @@ protected:
     friend class wxStreamBuffer;
 
     DECLARE_ABSTRACT_CLASS(wxStreamBase)
-    DECLARE_NO_COPY_CLASS(wxStreamBase)
+    wxDECLARE_NO_COPY_CLASS(wxStreamBase);
 };
 
 // ----------------------------------------------------------------------------
@@ -218,7 +218,7 @@ protected:
     friend class wxStreamBuffer;
 
     DECLARE_ABSTRACT_CLASS(wxInputStream)
-    DECLARE_NO_COPY_CLASS(wxInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxInputStream);
 };
 
 // ----------------------------------------------------------------------------
@@ -254,7 +254,7 @@ protected:
     friend class wxStreamBuffer;
 
     DECLARE_ABSTRACT_CLASS(wxOutputStream)
-    DECLARE_NO_COPY_CLASS(wxOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxOutputStream);
 };
 
 // ============================================================================
@@ -282,7 +282,7 @@ protected:
     size_t m_currentPos;
 
     DECLARE_DYNAMIC_CLASS(wxCountingOutputStream)
-    DECLARE_NO_COPY_CLASS(wxCountingOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxCountingOutputStream);
 };
 
 // ---------------------------------------------------------------------------
@@ -308,7 +308,7 @@ protected:
     bool m_owns;
 
     DECLARE_ABSTRACT_CLASS(wxFilterInputStream)
-    DECLARE_NO_COPY_CLASS(wxFilterInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxFilterInputStream);
 };
 
 class WXDLLIMPEXP_BASE wxFilterOutputStream : public wxOutputStream
@@ -330,7 +330,7 @@ protected:
     bool m_owns;
 
     DECLARE_ABSTRACT_CLASS(wxFilterOutputStream)
-    DECLARE_NO_COPY_CLASS(wxFilterOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxFilterOutputStream);
 };
 
 enum wxStreamProtocolType
@@ -530,7 +530,7 @@ protected:
          m_flushable;
 
 
-    DECLARE_NO_ASSIGN_CLASS(wxStreamBuffer)
+    wxDECLARE_NO_ASSIGN_CLASS(wxStreamBuffer);
 };
 
 // ---------------------------------------------------------------------------
@@ -579,7 +579,7 @@ protected:
 
     wxStreamBuffer *m_i_streambuf;
 
-    DECLARE_NO_COPY_CLASS(wxBufferedInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxBufferedInputStream);
 };
 
 // ----------------------------------------------------------------------------
@@ -631,7 +631,7 @@ protected:
 
     wxStreamBuffer *m_o_streambuf;
 
-    DECLARE_NO_COPY_CLASS(wxBufferedOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxBufferedOutputStream);
 };
 
 #if WXWIN_COMPATIBILITY_2_6

@@ -250,7 +250,7 @@ private:
 
     struct wxCmdLineParserData *m_data;
 
-    DECLARE_NO_COPY_CLASS(wxCmdLineParser)
+    wxDECLARE_NO_COPY_CLASS(wxCmdLineParser);
 };
 
 #else // !wxUSE_CMDLINE_PARSER

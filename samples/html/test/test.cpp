@@ -60,7 +60,7 @@ private:
 #if wxUSE_CLIPBOARD
     DECLARE_EVENT_TABLE()
 #endif // wxUSE_CLIPBOARD
-    DECLARE_NO_COPY_CLASS(MyHtmlWindow)
+    wxDECLARE_NO_COPY_CLASS(MyHtmlWindow);
 };
 
 // Define a new frame type: this is going to be our main frame

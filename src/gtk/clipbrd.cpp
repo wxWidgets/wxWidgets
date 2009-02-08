@@ -102,7 +102,7 @@ public:
 private:
     static wxClipboard *ms_clipboard;
 
-    DECLARE_NO_COPY_CLASS(wxClipboardSync)
+    wxDECLARE_NO_COPY_CLASS(wxClipboardSync);
 };
 
 wxClipboard *wxClipboardSync::ms_clipboard = NULL;

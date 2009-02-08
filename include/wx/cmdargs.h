@@ -136,7 +136,7 @@ private:
     mutable char **m_argsA;
     mutable wchar_t **m_argsW;
 
-    DECLARE_NO_COPY_CLASS(wxCmdLineArgsArray)
+    wxDECLARE_NO_COPY_CLASS(wxCmdLineArgsArray);
 };
 
 // provide global operator overload for compatibility with the existing code

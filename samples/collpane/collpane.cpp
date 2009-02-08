@@ -78,7 +78,7 @@ public:
 
     virtual bool OnInit();
 
-    DECLARE_NO_COPY_CLASS(MyApp)
+    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 class MyFrame: public wxFrame
@@ -104,7 +104,7 @@ private:
     wxBoxSizer *m_paneSizer;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(MyFrame)
+    wxDECLARE_NO_COPY_CLASS(MyFrame);
 };
 
 class MyDialog : public wxDialog
@@ -120,7 +120,7 @@ private:
     wxGridSizer *m_paneSizer;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(MyDialog)
+    wxDECLARE_NO_COPY_CLASS(MyDialog);
 };
 
 

@@ -963,7 +963,7 @@ private:
     wxEvent& m_event;
     int m_propagationLevelOld;
 
-    DECLARE_NO_COPY_CLASS(wxPropagationDisabler)
+    wxDECLARE_NO_COPY_CLASS(wxPropagationDisabler);
 };
 
 /*
@@ -988,7 +988,7 @@ public:
 private:
     wxEvent& m_event;
 
-    DECLARE_NO_COPY_CLASS(wxPropagateOnce)
+    wxDECLARE_NO_COPY_CLASS(wxPropagateOnce);
 };
 
 
@@ -2723,7 +2723,7 @@ struct WXDLLIMPEXP_BASE wxEventTableEntryBase
     wxObject* m_callbackUserData;
 
 private:
-    DECLARE_NO_ASSIGN_CLASS(wxEventTableEntryBase)
+    wxDECLARE_NO_ASSIGN_CLASS(wxEventTableEntryBase);
 };
 
 // an entry from a static event table
@@ -2744,7 +2744,7 @@ struct WXDLLIMPEXP_BASE wxEventTableEntry : public wxEventTableEntryBase
     const int& m_eventType;
 
 private:
-    DECLARE_NO_ASSIGN_CLASS(wxEventTableEntry)
+    wxDECLARE_NO_ASSIGN_CLASS(wxEventTableEntry);
 };
 
 // an entry used in dynamic event table managed by wxEvtHandler::Connect()
@@ -2762,7 +2762,7 @@ struct WXDLLIMPEXP_BASE wxDynamicEventTableEntry : public wxEventTableEntryBase
     int m_eventType;
 
 private:
-    DECLARE_NO_ASSIGN_CLASS(wxDynamicEventTableEntry)
+    wxDECLARE_NO_ASSIGN_CLASS(wxDynamicEventTableEntry);
 };
 
 // ----------------------------------------------------------------------------
@@ -2835,7 +2835,7 @@ protected:
     wxEventHashTable* m_previous;
     wxEventHashTable* m_next;
 
-    DECLARE_NO_COPY_CLASS(wxEventHashTable)
+    wxDECLARE_NO_COPY_CLASS(wxEventHashTable);
 };
 
 // ----------------------------------------------------------------------------
@@ -3402,7 +3402,7 @@ private:
 
     friend class wxEvtHandler;
 
-    DECLARE_NO_ASSIGN_CLASS(wxEventConnectionRef)
+    wxDECLARE_NO_ASSIGN_CLASS(wxEventConnectionRef);
 };
 
 // Post a message to the given event handler which will be processed during the
@@ -3457,7 +3457,7 @@ protected:
     wxArrayInt m_eventsToBlock;
     wxWindow *m_window;
 
-    DECLARE_NO_COPY_CLASS(wxEventBlocker)
+    wxDECLARE_NO_COPY_CLASS(wxEventBlocker);
 };
 
 typedef void (wxEvtHandler::*wxCommandEventFunction)(wxCommandEvent&);

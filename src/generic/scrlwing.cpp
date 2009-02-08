@@ -86,7 +86,7 @@ private:
 
     bool m_hasDrawnWindow;
 
-    DECLARE_NO_COPY_CLASS(wxScrollHelperEvtHandler)
+    wxDECLARE_NO_COPY_CLASS(wxScrollHelperEvtHandler);
 };
 
 #if wxUSE_TIMER
@@ -112,7 +112,7 @@ private:
     int m_pos,
         m_orient;
 
-    DECLARE_NO_COPY_CLASS(wxAutoScrollTimer)
+    wxDECLARE_NO_COPY_CLASS(wxAutoScrollTimer);
 };
 
 // ============================================================================

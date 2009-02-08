@@ -155,7 +155,7 @@ public:
 
 private:
     DECLARE_CLASS(wxPrintNativeDataBase)
-    DECLARE_NO_COPY_CLASS(wxPrintNativeDataBase)
+    wxDECLARE_NO_COPY_CLASS(wxPrintNativeDataBase);
 };
 
 //----------------------------------------------------------------------------
@@ -199,7 +199,7 @@ public:
 
 private:
     DECLARE_CLASS(wxPrinterBase)
-    DECLARE_NO_COPY_CLASS(wxPrinterBase)
+    wxDECLARE_NO_COPY_CLASS(wxPrinterBase);
 };
 
 //----------------------------------------------------------------------------
@@ -226,7 +226,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxPrinter)
-    DECLARE_NO_COPY_CLASS(wxPrinter)
+    wxDECLARE_NO_COPY_CLASS(wxPrinter);
 };
 
 //----------------------------------------------------------------------------
@@ -318,7 +318,7 @@ private:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxPrintout)
-    DECLARE_NO_COPY_CLASS(wxPrintout)
+    wxDECLARE_NO_COPY_CLASS(wxPrintout);
 };
 
 //----------------------------------------------------------------------------
@@ -357,7 +357,7 @@ private:
 
     DECLARE_CLASS(wxPreviewCanvas)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxPreviewCanvas)
+    wxDECLARE_NO_COPY_CLASS(wxPreviewCanvas);
 };
 
 //----------------------------------------------------------------------------
@@ -398,7 +398,7 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxPreviewFrame)
-    DECLARE_NO_COPY_CLASS(wxPreviewFrame)
+    wxDECLARE_NO_COPY_CLASS(wxPreviewFrame);
 };
 
 //----------------------------------------------------------------------------
@@ -482,7 +482,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxPreviewControlBar)
+    wxDECLARE_NO_COPY_CLASS(wxPreviewControlBar);
 };
 
 //----------------------------------------------------------------------------
@@ -596,7 +596,7 @@ protected:
 private:
     void Init(wxPrintout *printout, wxPrintout *printoutForPrinting);
 
-    DECLARE_NO_COPY_CLASS(wxPrintPreviewBase)
+    wxDECLARE_NO_COPY_CLASS(wxPrintPreviewBase);
     DECLARE_CLASS(wxPrintPreviewBase)
 };
 
@@ -650,7 +650,7 @@ private:
 
 private:
     DECLARE_CLASS(wxPrintPreview)
-    DECLARE_NO_COPY_CLASS(wxPrintPreview)
+    wxDECLARE_NO_COPY_CLASS(wxPrintPreview);
 };
 
 //----------------------------------------------------------------------------
@@ -674,7 +674,7 @@ public:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxPrintAbortDialog)
+    wxDECLARE_NO_COPY_CLASS(wxPrintAbortDialog);
 };
 
 #endif // wxUSE_PRINTING_ARCHITECTURE

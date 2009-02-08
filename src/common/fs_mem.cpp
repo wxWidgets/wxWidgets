@@ -70,7 +70,7 @@ private:
 #endif // wxUSE_DATETIME
     }
 
-    DECLARE_NO_COPY_CLASS(wxMemoryFSFile)
+    wxDECLARE_NO_COPY_CLASS(wxMemoryFSFile);
 };
 
 #if wxUSE_BASE

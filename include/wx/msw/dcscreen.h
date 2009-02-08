@@ -27,7 +27,7 @@ public:
     }
 
     DECLARE_CLASS(wxScreenDCImpl)
-    DECLARE_NO_COPY_CLASS(wxScreenDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxScreenDCImpl);
 };
 
 #endif // _WX_MSW_DCSCREEN_H_

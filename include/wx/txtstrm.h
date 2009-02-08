@@ -93,7 +93,7 @@ protected:
     wxChar NextChar();   // this should be used instead of GetC() because of Unicode issues
     wxChar NextNonSeparators();
 
-    DECLARE_NO_COPY_CLASS(wxTextInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxTextInputStream);
 };
 
 typedef enum
@@ -151,7 +151,7 @@ protected:
     wxMBConv *m_conv;
 #endif
 
-    DECLARE_NO_COPY_CLASS(wxTextOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxTextOutputStream);
 };
 
 #endif

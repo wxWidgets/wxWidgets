@@ -200,7 +200,7 @@ private:
 private:
     DECLARE_DYNAMIC_CLASS(wxSashWindow)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxSashWindow)
+    wxDECLARE_NO_COPY_CLASS(wxSashWindow);
 };
 
 class WXDLLIMPEXP_FWD_ADV wxSashEvent;

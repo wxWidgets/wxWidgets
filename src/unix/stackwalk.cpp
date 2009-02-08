@@ -67,7 +67,7 @@ public:
 private:
     FILE *m_fp;
 
-    DECLARE_NO_COPY_CLASS(wxStdioPipe)
+    wxDECLARE_NO_COPY_CLASS(wxStdioPipe);
 };
 
 // ============================================================================

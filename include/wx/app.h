@@ -435,7 +435,7 @@ protected:
 
     // the application object is a singleton anyhow, there is no sense in
     // copying it
-    DECLARE_NO_COPY_CLASS(wxAppConsoleBase)
+    wxDECLARE_NO_COPY_CLASS(wxAppConsoleBase);
 };
 
 #if defined(__UNIX__)
@@ -631,7 +631,7 @@ protected:
     bool m_isInsideYield;
     long m_eventsToProcessInsideYield;
 
-    DECLARE_NO_COPY_CLASS(wxAppBase)
+    wxDECLARE_NO_COPY_CLASS(wxAppBase);
 };
 
 #if WXWIN_COMPATIBILITY_2_6

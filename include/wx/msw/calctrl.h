@@ -93,7 +93,7 @@ private:
 
 
     DECLARE_DYNAMIC_CLASS(wxCalendarCtrl)
-    DECLARE_NO_COPY_CLASS(wxCalendarCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxCalendarCtrl);
 };
 
 #endif // _WX_MSW_CALCTRL_H_

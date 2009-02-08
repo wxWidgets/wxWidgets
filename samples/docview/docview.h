@@ -80,7 +80,7 @@ private:
     wxMenu *m_menuEdit;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(MyApp)
+    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 DECLARE_APP(MyApp)

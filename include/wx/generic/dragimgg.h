@@ -265,7 +265,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGenericDragImage)
-    DECLARE_NO_COPY_CLASS(wxGenericDragImage)
+    wxDECLARE_NO_COPY_CLASS(wxGenericDragImage);
 };
 
 #endif

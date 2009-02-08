@@ -190,7 +190,7 @@ protected:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxDocument)
-    DECLARE_NO_COPY_CLASS(wxDocument)
+    wxDECLARE_NO_COPY_CLASS(wxDocument);
 };
 
 class WXDLLIMPEXP_CORE wxView: public wxEvtHandler
@@ -251,7 +251,7 @@ protected:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxView)
-    DECLARE_NO_COPY_CLASS(wxView)
+    wxDECLARE_NO_COPY_CLASS(wxView);
 };
 
 // Represents user interface (and other) properties of documents and views
@@ -336,7 +336,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxDocTemplate)
-    DECLARE_NO_COPY_CLASS(wxDocTemplate)
+    wxDECLARE_NO_COPY_CLASS(wxDocTemplate);
 };
 
 // One object of this class may be created in an application, to manage all
@@ -489,7 +489,7 @@ protected:
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxDocManager)
-    DECLARE_NO_COPY_CLASS(wxDocManager)
+    wxDECLARE_NO_COPY_CLASS(wxDocManager);
 };
 
 #if WXWIN_COMPATIBILITY_2_6
@@ -536,7 +536,7 @@ protected:
 private:
     DECLARE_CLASS(wxDocChildFrame)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxDocChildFrame)
+    wxDECLARE_NO_COPY_CLASS(wxDocChildFrame);
 };
 
 // ----------------------------------------------------------------------------
@@ -581,7 +581,7 @@ private:
     typedef wxFrame base_type;
     DECLARE_CLASS(wxDocParentFrame)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxDocParentFrame)
+    wxDECLARE_NO_COPY_CLASS(wxDocParentFrame);
 };
 
 // ----------------------------------------------------------------------------
@@ -608,7 +608,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDocPrintout)
-    DECLARE_NO_COPY_CLASS(wxDocPrintout)
+    wxDECLARE_NO_COPY_CLASS(wxDocPrintout);
 };
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
@@ -668,7 +668,7 @@ private:
     wxWindowID m_idBase;
 
     DECLARE_DYNAMIC_CLASS(wxFileHistory)
-    DECLARE_NO_COPY_CLASS(wxFileHistory)
+    wxDECLARE_NO_COPY_CLASS(wxFileHistory);
 };
 
 #if WXWIN_COMPATIBILITY_2_6

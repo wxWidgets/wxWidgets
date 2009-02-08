@@ -64,7 +64,7 @@ private:
         wxPersistenceManager::Get().SaveAndUnregister(GetWindow());
     }
 
-    DECLARE_NO_COPY_CLASS(wxPersistentWindowBase)
+    wxDECLARE_NO_COPY_CLASS(wxPersistentWindowBase);
 };
 
 template <class T>

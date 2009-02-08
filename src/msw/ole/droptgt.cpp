@@ -82,7 +82,7 @@ protected:
     // get default drop effect for given keyboard flags
     static DWORD GetDropEffect(DWORD flags, wxDragResult defaultAction, DWORD pdwEffect);
 
-    DECLARE_NO_COPY_CLASS(wxIDropTarget)
+    wxDECLARE_NO_COPY_CLASS(wxIDropTarget);
 };
 
 // ----------------------------------------------------------------------------

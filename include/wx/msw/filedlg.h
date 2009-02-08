@@ -63,7 +63,7 @@ private:
     int m_centreDir;        // nothing to do if 0
 
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
-    DECLARE_NO_COPY_CLASS(wxFileDialog)
+    wxDECLARE_NO_COPY_CLASS(wxFileDialog);
 };
 
 #endif // _WX_FILEDLG_H_

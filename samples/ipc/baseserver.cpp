@@ -104,7 +104,7 @@ private:
     // should we notify the client about changes to m_item?
     bool m_advise;
 
-    DECLARE_NO_COPY_CLASS(BenchConnection)
+    wxDECLARE_NO_COPY_CLASS(BenchConnection);
 };
 
 // a simple server accepting connections to IPC_TOPIC and IPC_BENCHMARK_TOPIC

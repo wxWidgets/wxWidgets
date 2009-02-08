@@ -39,7 +39,7 @@ private:
     wxBitmap  m_selected;
     
     DECLARE_CLASS(wxMemoryDCImpl)
-    DECLARE_NO_COPY_CLASS(wxMemoryDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxMemoryDCImpl);
 };
 
 #endif

@@ -76,7 +76,7 @@ private:
     wxPopupTransientWindow *m_popup;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxPopupWindowHandler)
+    wxDECLARE_NO_COPY_CLASS(wxPopupWindowHandler);
 };
 
 class wxPopupFocusHandler : public wxEvtHandler
@@ -92,7 +92,7 @@ private:
     wxPopupTransientWindow *m_popup;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxPopupFocusHandler)
+    wxDECLARE_NO_COPY_CLASS(wxPopupFocusHandler);
 };
 
 // ----------------------------------------------------------------------------

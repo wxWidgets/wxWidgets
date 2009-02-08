@@ -27,7 +27,7 @@ class WXDLLIMPEXP_CORE wxScreenDCImpl: public wxPMDCImpl
 
 private:
     DECLARE_CLASS(wxScreenDCImpl)
-    DECLARE_NO_COPY_CLASS(wxScreenDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxScreenDCImpl);
 }; // end of CLASS wxScreenDC
 
 #endif

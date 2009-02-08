@@ -130,7 +130,7 @@ protected:
     // if true overrides the width info of the wxStatusBarPanes
     bool m_bSameWidthForAllPanes;
 
-    DECLARE_NO_COPY_CLASS(wxStatusBarBase)
+    wxDECLARE_NO_COPY_CLASS(wxStatusBarBase);
 };
 
 // ----------------------------------------------------------------------------

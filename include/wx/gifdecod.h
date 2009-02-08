@@ -102,7 +102,7 @@ private:
     wxGIFErrorCode dgif(wxInputStream& stream,
                         GIFImage *img, int interl, int bits);
 
-    DECLARE_NO_COPY_CLASS(wxGIFDecoder)
+    wxDECLARE_NO_COPY_CLASS(wxGIFDecoder);
 };
 
 #endif // wxUSE_STREAMS && wxUSE_GIF

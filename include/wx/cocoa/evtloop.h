@@ -30,7 +30,7 @@ public:
 protected:
     int m_exitcode;
 
-    DECLARE_NO_COPY_CLASS(wxGUIEventLoop)
+    wxDECLARE_NO_COPY_CLASS(wxGUIEventLoop);
 };
 
 #endif // _WX_COCOA_EVTLOOP_H_

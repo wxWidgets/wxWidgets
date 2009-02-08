@@ -273,7 +273,7 @@ private:
 
     bool m_mirror;
 
-    DECLARE_NO_COPY_CLASS(wxMirrorDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxMirrorDCImpl);
 };
 
 class WXDLLIMPEXP_CORE wxMirrorDC : public wxDC
@@ -294,7 +294,7 @@ public:
 private:
     bool m_mirror;
 
-    DECLARE_NO_COPY_CLASS(wxMirrorDC)
+    wxDECLARE_NO_COPY_CLASS(wxMirrorDC);
 };
 
 #endif // _WX_DCMIRROR_H_

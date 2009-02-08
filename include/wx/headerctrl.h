@@ -361,7 +361,7 @@ private:
     unsigned int m_sortKey;
 
 
-    DECLARE_NO_COPY_CLASS(wxHeaderCtrlSimple)
+    wxDECLARE_NO_COPY_CLASS(wxHeaderCtrlSimple);
 };
 
 // ----------------------------------------------------------------------------

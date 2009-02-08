@@ -736,7 +736,7 @@ protected:
 #endif // __WXMAC__
 
 private:
-    DECLARE_NO_COPY_CLASS(wxVScrolledWindow)
+    wxDECLARE_NO_COPY_CLASS(wxVScrolledWindow);
     DECLARE_ABSTRACT_CLASS(wxVScrolledWindow)
 };
 
@@ -803,7 +803,7 @@ protected:
 #endif // __WXMAC__
 
 private:
-    DECLARE_NO_COPY_CLASS(wxHScrolledWindow)
+    wxDECLARE_NO_COPY_CLASS(wxHScrolledWindow);
     DECLARE_ABSTRACT_CLASS(wxHScrolledWindow)
 };
 
@@ -868,7 +868,7 @@ protected:
 #endif // __WXMAC__
 
 private:
-    DECLARE_NO_COPY_CLASS(wxHVScrolledWindow)
+    wxDECLARE_NO_COPY_CLASS(wxHVScrolledWindow);
     DECLARE_ABSTRACT_CLASS(wxHVScrolledWindow)
 };
 

@@ -812,7 +812,7 @@ protected:
 
     static wxObject* ms_stockObject[ITEMCOUNT];
 
-    DECLARE_NO_COPY_CLASS(wxStockGDI)
+    wxDECLARE_NO_COPY_CLASS(wxStockGDI);
 };
 
 #define wxITALIC_FONT  wxStockGDI::instance().GetFont(wxStockGDI::FONT_ITALIC)

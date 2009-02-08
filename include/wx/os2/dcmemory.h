@@ -37,7 +37,7 @@ protected:
     void Init(void);
 private:
     DECLARE_CLASS(wxMemoryDCImpl)
-    DECLARE_NO_COPY_CLASS(wxMemoryDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxMemoryDCImpl);
 }; // end of CLASS wxMemoryDCImpl
 
 #endif

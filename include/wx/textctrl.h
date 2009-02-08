@@ -597,7 +597,7 @@ protected:
     wxTextAttr m_defaultStyle;
 
 
-    DECLARE_NO_COPY_CLASS(wxTextAreaBase)
+    wxDECLARE_NO_COPY_CLASS(wxTextAreaBase);
 };
 
 // this class defines wxTextCtrl interface, wxTextCtrlBase actually implements
@@ -612,7 +612,7 @@ public:
     wxTextCtrlIface() { }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxTextCtrlIface)
+    wxDECLARE_NO_COPY_CLASS(wxTextCtrlIface);
 };
 
 // ----------------------------------------------------------------------------
@@ -693,7 +693,7 @@ protected:
     virtual bool DoSaveFile(const wxString& file, int fileType);
 
 
-    DECLARE_NO_COPY_CLASS(wxTextCtrlBase)
+    wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     DECLARE_ABSTRACT_CLASS(wxTextCtrlBase)
 };
 

@@ -122,7 +122,7 @@ private:
     bool m_CaseSensitive;
     bool m_WholeWords;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlSearchEngine)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlSearchEngine);
 };
 
 
@@ -157,7 +157,7 @@ private:
     int m_MaxIndex;  // number of files we search
     // For progress bar: 100*curindex/maxindex = % complete
 
-    DECLARE_NO_COPY_CLASS(wxHtmlSearchStatus)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlSearchStatus);
 };
 
 class WXDLLIMPEXP_HTML wxHtmlHelpData : public wxObject
@@ -215,7 +215,7 @@ protected:
     // Writes binary book
     bool SaveCachedBook(wxHtmlBookRecord *book, wxOutputStream *f);
 
-    DECLARE_NO_COPY_CLASS(wxHtmlHelpData)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlHelpData);
 };
 
 #endif

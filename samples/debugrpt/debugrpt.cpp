@@ -169,7 +169,7 @@ private:
     // number of lines drawn in OnPaint()
     int m_numLines;
 
-    DECLARE_NO_COPY_CLASS(MyFrame)
+    wxDECLARE_NO_COPY_CLASS(MyFrame);
     DECLARE_EVENT_TABLE()
 };
 
@@ -204,7 +204,7 @@ public:
 private:
     bool m_uploadReport;
 
-    DECLARE_NO_COPY_CLASS(MyApp)
+    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 IMPLEMENT_APP(MyApp)

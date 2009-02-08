@@ -471,7 +471,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxSizerItem)
-    DECLARE_NO_COPY_CLASS(wxSizerItem)
+    wxDECLARE_NO_COPY_CLASS(wxSizerItem);
 };
 
 WX_DECLARE_EXPORTED_LIST( wxSizerItem, wxSizerItemList );
@@ -838,7 +838,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxFlexGridSizer)
-    DECLARE_NO_COPY_CLASS(wxFlexGridSizer)
+    wxDECLARE_NO_COPY_CLASS(wxFlexGridSizer);
 };
 
 //---------------------------------------------------------------------------
@@ -961,7 +961,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxStaticBoxSizer)
-    DECLARE_NO_COPY_CLASS(wxStaticBoxSizer)
+    wxDECLARE_NO_COPY_CLASS(wxStaticBoxSizer);
 };
 
 #endif // wxUSE_STATBOX
@@ -1009,7 +1009,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxStdDialogButtonSizer)
-    DECLARE_NO_COPY_CLASS(wxStdDialogButtonSizer)
+    wxDECLARE_NO_COPY_CLASS(wxStdDialogButtonSizer);
 };
 
 #endif // wxUSE_BUTTON

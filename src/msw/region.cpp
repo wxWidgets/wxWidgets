@@ -72,7 +72,7 @@ public:
 
 private:
 // Cannot use
-//  DECLARE_NO_COPY_CLASS(wxRegionRefData)
+//  wxDECLARE_NO_COPY_CLASS(wxRegionRefData);
 // because copy constructor is explicitly declared above;
 // but no copy assignment operator is defined, so declare
 // it private to prevent the compiler from defining it:

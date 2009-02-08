@@ -297,7 +297,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxGenericCalendarCtrl)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxGenericCalendarCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxGenericCalendarCtrl);
 };
 
 #endif // _WX_GENERIC_CALCTRLG_H

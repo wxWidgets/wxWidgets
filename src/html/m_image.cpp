@@ -68,7 +68,7 @@ class wxHtmlImageMapAreaCell : public wxHtmlCell
                   wxHtmlRenderingInfo& WXUNUSED(info)) {}
 
 
-    DECLARE_NO_COPY_CLASS(wxHtmlImageMapAreaCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlImageMapAreaCell);
 };
 
 
@@ -246,7 +246,7 @@ class wxHtmlImageMapCell : public wxHtmlCell
                   int WXUNUSED(view_y1), int WXUNUSED(view_y2),
                   wxHtmlRenderingInfo& WXUNUSED(info)) {}
 
-    DECLARE_NO_COPY_CLASS(wxHtmlImageMapCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlImageMapCell);
 };
 
 
@@ -315,7 +315,7 @@ private:
     wxHtmlImageMapCell *m_imageMap;
     wxString            m_mapName;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlImageCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlImageCell);
 };
 
 #if wxUSE_GIF && wxUSE_TIMER
@@ -331,7 +331,7 @@ class wxGIFTimer : public wxTimer
     private:
         wxHtmlImageCell *m_cell;
 
-    DECLARE_NO_COPY_CLASS(wxGIFTimer)
+    wxDECLARE_NO_COPY_CLASS(wxGIFTimer);
 };
 #endif
 

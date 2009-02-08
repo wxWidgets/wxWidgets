@@ -230,7 +230,7 @@ class WXDLLIMPEXP_FWD_CORE wxPoint;
 class WXDLLIMPEXP_FWD_CORE wxRect;
 class WXDLLIMPEXP_CORE wxAccessibleBase : public wxObject
 {
-    DECLARE_NO_COPY_CLASS(wxAccessibleBase)
+    wxDECLARE_NO_COPY_CLASS(wxAccessibleBase);
 
 public:
     wxAccessibleBase(wxWindow* win): m_window(win) {}

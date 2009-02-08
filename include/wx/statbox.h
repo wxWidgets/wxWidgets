@@ -50,7 +50,7 @@ protected:
     // choose the default border for this window
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
-    DECLARE_NO_COPY_CLASS(wxStaticBoxBase)
+    wxDECLARE_NO_COPY_CLASS(wxStaticBoxBase);
 };
 
 #if defined(__WXUNIVERSAL__)

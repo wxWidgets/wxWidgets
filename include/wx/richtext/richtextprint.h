@@ -149,7 +149,7 @@ private:
 
     wxRichTextHeaderFooterData  m_headerFooterData;
 
-    DECLARE_NO_COPY_CLASS(wxRichTextPrintout)
+    wxDECLARE_NO_COPY_CLASS(wxRichTextPrintout);
 };
 
 /*
@@ -238,7 +238,7 @@ private:
     wxRichTextBuffer*           m_richTextBufferPrinting;
     wxRect                      m_previewRect;
 
-    DECLARE_NO_COPY_CLASS(wxRichTextPrinting)
+    wxDECLARE_NO_COPY_CLASS(wxRichTextPrinting);
 };
 
 #endif  // wxUSE_RICHTEXT & wxUSE_PRINTING_ARCHITECTURE

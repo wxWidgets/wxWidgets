@@ -33,7 +33,7 @@ public:
 private:
     wxFrame *m_InfoFrame;
 
-    DECLARE_NO_COPY_CLASS(wxBusyInfo)
+    wxDECLARE_NO_COPY_CLASS(wxBusyInfo);
 };
 
 

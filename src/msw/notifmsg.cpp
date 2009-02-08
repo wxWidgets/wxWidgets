@@ -58,7 +58,7 @@ public:
     virtual bool DoClose() = 0;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxNotifMsgImpl)
+    wxDECLARE_NO_COPY_CLASS(wxNotifMsgImpl);
 };
 
 // implementation which is simply a bridge to wxGenericNotificationMessage
@@ -184,7 +184,7 @@ private:
 
     wxTaskBarIcon * const m_icon;
 
-    DECLARE_NO_COPY_CLASS(wxNotificationIconEvtHandler)
+    wxDECLARE_NO_COPY_CLASS(wxNotificationIconEvtHandler);
 };
 
 // ============================================================================

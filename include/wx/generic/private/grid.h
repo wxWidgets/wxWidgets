@@ -244,7 +244,7 @@ private:
     wxVector<wxGridHeaderColumn> m_columns;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxGridHeaderCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxGridHeaderCtrl);
 };
 
 // common base class for various grid subwindows
@@ -272,7 +272,7 @@ protected:
     wxGrid *m_owner;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxGridSubwindow)
+    wxDECLARE_NO_COPY_CLASS(wxGridSubwindow);
 };
 
 class WXDLLIMPEXP_ADV wxGridRowLabelWindow : public wxGridSubwindow
@@ -290,7 +290,7 @@ private:
     void OnMouseWheel( wxMouseEvent& event );
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxGridRowLabelWindow)
+    wxDECLARE_NO_COPY_CLASS(wxGridRowLabelWindow);
 };
 
 
@@ -309,7 +309,7 @@ private:
     void OnMouseWheel( wxMouseEvent& event );
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxGridColLabelWindow)
+    wxDECLARE_NO_COPY_CLASS(wxGridColLabelWindow);
 };
 
 
@@ -327,7 +327,7 @@ private:
     void OnPaint( wxPaintEvent& event );
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxGridCornerLabelWindow)
+    wxDECLARE_NO_COPY_CLASS(wxGridCornerLabelWindow);
 };
 
 class WXDLLIMPEXP_ADV wxGridWindow : public wxGridSubwindow
@@ -356,7 +356,7 @@ private:
     void OnFocus( wxFocusEvent& );
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxGridWindow)
+    wxDECLARE_NO_COPY_CLASS(wxGridWindow);
 };
 
 // ----------------------------------------------------------------------------
@@ -785,7 +785,7 @@ struct wxGridDataTypeInfo
     wxGridCellRenderer* m_renderer;
     wxGridCellEditor*   m_editor;
 
-    DECLARE_NO_COPY_CLASS(wxGridDataTypeInfo)
+    wxDECLARE_NO_COPY_CLASS(wxGridDataTypeInfo);
 };
 
 

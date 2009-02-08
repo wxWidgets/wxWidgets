@@ -182,7 +182,7 @@ private:
                  );
 
     const wxTreeCtrl*               m_pTree;
-    DECLARE_NO_COPY_CLASS(wxTreeTraversal)
+    wxDECLARE_NO_COPY_CLASS(wxTreeTraversal);
 }; // end of CLASS wxTreeTraversal
 
 //

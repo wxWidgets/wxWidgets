@@ -76,7 +76,7 @@ protected:
 
 private:
     DECLARE_CLASS(wxGenericValidator)
-    DECLARE_NO_ASSIGN_CLASS(wxGenericValidator)
+    wxDECLARE_NO_ASSIGN_CLASS(wxGenericValidator);
 };
 
 #endif // wxUSE_VALIDATORS

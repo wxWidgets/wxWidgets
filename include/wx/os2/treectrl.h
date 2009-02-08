@@ -624,7 +624,7 @@ private:
     friend class wxTreeSortHelper;
 
     DECLARE_DYNAMIC_CLASS(wxTreeCtrl)
-    DECLARE_NO_COPY_CLASS(wxTreeCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxTreeCtrl);
 }; // end of CLASS wxTreeCtrl
 
 #endif // wxUSE_TREECTRL

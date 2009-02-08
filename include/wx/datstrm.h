@@ -91,7 +91,7 @@ protected:
     wxMBConv *m_conv;
 #endif
 
-    DECLARE_NO_COPY_CLASS(wxDataInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxDataInputStream);
 };
 
 class WXDLLIMPEXP_BASE wxDataOutputStream
@@ -169,7 +169,7 @@ protected:
     wxMBConv *m_conv;
 #endif
 
-    DECLARE_NO_COPY_CLASS(wxDataOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxDataOutputStream);
 };
 
 #endif

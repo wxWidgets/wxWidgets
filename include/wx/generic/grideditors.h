@@ -42,7 +42,7 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGridCellEditorEvtHandler)
-    DECLARE_NO_COPY_CLASS(wxGridCellEditorEvtHandler)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellEditorEvtHandler);
 };
 
 
@@ -92,7 +92,7 @@ private:
     size_t   m_maxChars;        // max number of chars allowed
     wxString m_value;
 
-    DECLARE_NO_COPY_CLASS(wxGridCellTextEditor)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellTextEditor);
 };
 
 // the editor for numeric (long) data
@@ -149,7 +149,7 @@ private:
 
     long m_value;
 
-    DECLARE_NO_COPY_CLASS(wxGridCellNumberEditor)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellNumberEditor);
 };
 
 // the editor for floating point numbers (double) data
@@ -185,7 +185,7 @@ private:
         m_precision;
     double m_value;
 
-    DECLARE_NO_COPY_CLASS(wxGridCellFloatEditor)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellFloatEditor);
 };
 
 #endif // wxUSE_TEXTCTRL
@@ -238,7 +238,7 @@ private:
 
     static wxString ms_stringValues[2];
 
-    DECLARE_NO_COPY_CLASS(wxGridCellBoolEditor)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellBoolEditor);
 };
 
 #endif // wxUSE_CHECKBOX
@@ -283,7 +283,7 @@ protected:
     wxArrayString   m_choices;
     bool            m_allowOthers;
 
-    DECLARE_NO_COPY_CLASS(wxGridCellChoiceEditor)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellChoiceEditor);
 };
 
 #endif // wxUSE_COMBOBOX
@@ -305,7 +305,7 @@ public:
 private:
     long m_index;
 
-    DECLARE_NO_COPY_CLASS(wxGridCellEnumEditor)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellEnumEditor);
 };
 
 #endif // wxUSE_COMBOBOX
@@ -321,7 +321,7 @@ public:
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellAutoWrapStringEditor; }
 
-    DECLARE_NO_COPY_CLASS(wxGridCellAutoWrapStringEditor)
+    wxDECLARE_NO_COPY_CLASS(wxGridCellAutoWrapStringEditor);
 };
 
 #endif // wxUSE_GRID

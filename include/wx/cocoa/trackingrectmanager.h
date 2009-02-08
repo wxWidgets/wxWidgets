@@ -18,7 +18,7 @@
 
 class wxCocoaTrackingRectManager
 {
-    DECLARE_NO_COPY_CLASS(wxCocoaTrackingRectManager)
+    wxDECLARE_NO_COPY_CLASS(wxCocoaTrackingRectManager);
 public:
     wxCocoaTrackingRectManager(wxWindow *window);
     void ClearTrackingRect();

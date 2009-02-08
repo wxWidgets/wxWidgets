@@ -155,7 +155,7 @@ private:
     const wxArrayString m_strings;
     unsigned m_index;
 
-    DECLARE_NO_COPY_CLASS(wxIEnumString)
+    wxDECLARE_NO_COPY_CLASS(wxIEnumString);
 };
 
 BEGIN_IID_TABLE(wxIEnumString)

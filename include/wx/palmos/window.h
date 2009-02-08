@@ -270,7 +270,7 @@ private:
     bool HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags);
 
     DECLARE_DYNAMIC_CLASS(wxWindowPalm)
-    DECLARE_NO_COPY_CLASS(wxWindowPalm)
+    wxDECLARE_NO_COPY_CLASS(wxWindowPalm);
     DECLARE_EVENT_TABLE()
 };
 

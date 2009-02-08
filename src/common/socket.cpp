@@ -127,7 +127,7 @@ public:
 public:
     wxSocketState() : wxObject() {}
 
-    DECLARE_NO_COPY_CLASS(wxSocketState)
+    wxDECLARE_NO_COPY_CLASS(wxSocketState);
 };
 
 // wxSocketWaitModeChanger: temporarily change the socket flags affecting its
@@ -163,7 +163,7 @@ private:
     wxSocketBase * const m_socket;
     const int m_oldflags;
 
-    DECLARE_NO_COPY_CLASS(wxSocketWaitModeChanger)
+    wxDECLARE_NO_COPY_CLASS(wxSocketWaitModeChanger);
 };
 
 // wxSocketRead/WriteGuard are instantiated before starting reading
@@ -189,7 +189,7 @@ public:
 private:
     wxSocketBase * const m_socket;
 
-    DECLARE_NO_COPY_CLASS(wxSocketReadGuard)
+    wxDECLARE_NO_COPY_CLASS(wxSocketReadGuard);
 };
 
 class wxSocketWriteGuard
@@ -213,7 +213,7 @@ public:
 private:
     wxSocketBase * const m_socket;
 
-    DECLARE_NO_COPY_CLASS(wxSocketWriteGuard)
+    wxDECLARE_NO_COPY_CLASS(wxSocketWriteGuard);
 };
 
 // ============================================================================

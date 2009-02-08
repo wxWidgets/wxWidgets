@@ -65,7 +65,7 @@ private:
     bool m_ok;
 
 
-    DECLARE_NO_COPY_CLASS(wxFontMapperPathChanger)
+    wxDECLARE_NO_COPY_CLASS(wxFontMapperPathChanger);
 };
 
 #endif // wxUSE_CONFIG

@@ -91,7 +91,7 @@ private:
     wxHtmlContainerCell *m_Cells;
     int m_MaxWidth, m_Width, m_Height;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlDCRenderer)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlDCRenderer);
 };
 
 
@@ -194,7 +194,7 @@ private:
     // list of HTML filters
     static wxList m_Filters;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlPrintout)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlPrintout);
 };
 
 
@@ -284,7 +284,7 @@ private:
     wxString m_Headers[2], m_Footers[2];
     wxWindow *m_ParentWindow;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlEasyPrinting)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlEasyPrinting);
 };
 
 

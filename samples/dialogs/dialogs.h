@@ -228,7 +228,7 @@ private:
                *m_chkCentre;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(TestMessageBoxDialog)
+    wxDECLARE_NO_COPY_CLASS(TestMessageBoxDialog);
 };
 
 class TestDefaultActionDialog: public wxDialog

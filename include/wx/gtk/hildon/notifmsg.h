@@ -52,7 +52,7 @@ private:
     GtkWidget *m_banner;
 
 
-    DECLARE_NO_COPY_CLASS(wxNotificationMessage)
+    wxDECLARE_NO_COPY_CLASS(wxNotificationMessage);
 };
 
 #endif // _WX_GTK_HILDON_NOTIFMSG_H_

@@ -54,7 +54,7 @@ public:
 private:
     pthread_key_t m_key;
 
-    DECLARE_NO_COPY_CLASS(wxTlsKey)
+    wxDECLARE_NO_COPY_CLASS(wxTlsKey);
 };
 
 #endif // _WX_UNIX_TLS_H_

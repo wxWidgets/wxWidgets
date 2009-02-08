@@ -171,7 +171,7 @@ private:
     static size_t ms_maxLength;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxLogDialog)
+    wxDECLARE_NO_COPY_CLASS(wxLogDialog);
 };
 
 BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
@@ -561,7 +561,7 @@ private:
 
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxLogFrame)
+    wxDECLARE_NO_COPY_CLASS(wxLogFrame);
 };
 
 BEGIN_EVENT_TABLE(wxLogFrame, wxFrame)

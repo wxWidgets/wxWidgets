@@ -110,7 +110,7 @@ private:
     wxRect m_rect;
     int m_depth;
 
-    DECLARE_NO_COPY_CLASS(wxDisplayImplX11)
+    wxDECLARE_NO_COPY_CLASS(wxDisplayImplX11);
 };
 
 class wxDisplayFactoryX11 : public wxDisplayFactory
@@ -123,7 +123,7 @@ public:
     virtual int GetFromPoint(const wxPoint& pt);
 
 protected:
-    DECLARE_NO_COPY_CLASS(wxDisplayFactoryX11)
+    wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryX11);
 };
 
 // ============================================================================
@@ -358,7 +358,7 @@ public:
 private:
     void *m_ptr;
 
-    DECLARE_NO_COPY_CLASS(wxX11Ptr)
+    wxDECLARE_NO_COPY_CLASS(wxX11Ptr);
 };
 
 // NB: this function is implemented using X11 and not GDK calls as it's shared

@@ -38,7 +38,7 @@ protected:
     int m_height;
 
     DECLARE_CLASS(wxWindowDCImpl)
-    DECLARE_NO_COPY_CLASS(wxWindowDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxWindowDCImpl);
 };
 
 
@@ -51,7 +51,7 @@ public:
 
 private:
     DECLARE_CLASS(wxClientDCImpl)
-    DECLARE_NO_COPY_CLASS(wxClientDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
 };
 
 
@@ -64,7 +64,7 @@ public:
 
 protected:
     DECLARE_CLASS(wxPaintDCImpl)
-    DECLARE_NO_COPY_CLASS(wxPaintDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxPaintDCImpl);
 };
 
 

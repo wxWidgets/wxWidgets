@@ -299,7 +299,7 @@ protected:
     // a temporary override of m_winDefault, use the latter if NULL
     wxWindowRef m_winTmpDefault;
 
-    DECLARE_NO_COPY_CLASS(wxTopLevelWindowBase)
+    wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowBase);
     DECLARE_EVENT_TABLE()
     WX_DECLARE_CONTROL_CONTAINER();
 };

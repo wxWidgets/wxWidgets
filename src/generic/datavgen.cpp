@@ -193,7 +193,7 @@ private:
     }
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxDataViewHeaderWindow)
+    wxDECLARE_NO_COPY_CLASS(wxDataViewHeaderWindow);
 };
 
 BEGIN_EVENT_TABLE(wxDataViewHeaderWindow, wxHeaderCtrl)

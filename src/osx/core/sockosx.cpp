@@ -156,7 +156,7 @@ private:
     CFSocketRef m_socket;
     CFRunLoopSourceRef m_source;
 
-    DECLARE_NO_COPY_CLASS(wxSocketImplMac)
+    wxDECLARE_NO_COPY_CLASS(wxSocketImplMac);
 };
 
 } // anonymous namespace

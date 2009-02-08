@@ -168,7 +168,7 @@ private:
     friend class wxUxThemeModule;
 #endif // wxUSE_UXTHEME
 
-    DECLARE_NO_COPY_CLASS(wxUxThemeEngine)
+    wxDECLARE_NO_COPY_CLASS(wxUxThemeEngine);
 };
 
 #if wxUSE_UXTHEME
@@ -223,7 +223,7 @@ public:
 private:
     HTHEME m_hTheme;
 
-    DECLARE_NO_COPY_CLASS(wxUxThemeHandle)
+    wxDECLARE_NO_COPY_CLASS(wxUxThemeHandle);
 };
 
 #endif // _WX_UXTHEME_H_

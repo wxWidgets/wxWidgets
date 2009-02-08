@@ -75,7 +75,7 @@ private:
     wxBackingFile m_backer;
     wxFileOffset m_pos;
 
-    DECLARE_NO_COPY_CLASS(wxBackedInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxBackedInputStream);
 };
 
 #endif // wxUSE_FILESYSTEM

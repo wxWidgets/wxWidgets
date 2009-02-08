@@ -343,7 +343,7 @@ private:
     wxMutex& m_mutex;
     wxSemaphore m_semaphore;
 
-    DECLARE_NO_COPY_CLASS(wxConditionInternal)
+    wxDECLARE_NO_COPY_CLASS(wxConditionInternal);
 };
 
 wxConditionInternal::wxConditionInternal( wxMutex& mutex )

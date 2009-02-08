@@ -86,7 +86,7 @@ protected:
                                       const wxString *choices,
                                       long styleLbox);
 
-    DECLARE_NO_COPY_CLASS(wxAnyChoiceDialog)
+    wxDECLARE_NO_COPY_CLASS(wxAnyChoiceDialog);
 };
 
 // ----------------------------------------------------------------------------

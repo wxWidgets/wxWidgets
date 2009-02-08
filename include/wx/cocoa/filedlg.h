@@ -22,7 +22,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSSavePanel);
 class WXDLLIMPEXP_CORE wxFileDialog: public wxFileDialogBase
 {
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
-    DECLARE_NO_COPY_CLASS(wxFileDialog)
+    wxDECLARE_NO_COPY_CLASS(wxFileDialog);
 public:
     wxFileDialog(wxWindow *parent,
                  const wxString& message = wxFileSelectorPromptStr,

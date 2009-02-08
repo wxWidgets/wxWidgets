@@ -340,6 +340,7 @@ All:
 - Handle exceptions thrown from overridden wxView::OnCreate() gracefully.
 - Added wxPATH_RMDIR_FULL/RECURSIVE wxFileName::Rmdir() flags (Marcin Malich).
 - Added wxStandardPaths::GetAppDocumentsDir().
+- Added wx-prefixed versions of DECLARE_NO_{COPY,ASSIGN}_CLASS macros.
 
 All (Unix):
 

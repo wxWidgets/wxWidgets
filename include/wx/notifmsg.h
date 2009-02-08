@@ -124,7 +124,7 @@ private:
 
     int m_flags;
 
-    DECLARE_NO_COPY_CLASS(wxNotificationMessageBase)
+    wxDECLARE_NO_COPY_CLASS(wxNotificationMessageBase);
 };
 
 #if defined(__WXGTK__) && wxUSE_LIBHILDON

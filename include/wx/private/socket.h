@@ -365,7 +365,7 @@ private:
     // socket is shut down
     wxSocketBase *m_wxsocket;
 
-    DECLARE_NO_COPY_CLASS(wxSocketImpl)
+    wxDECLARE_NO_COPY_CLASS(wxSocketImpl);
 };
 
 #if defined(__WXMSW__)

@@ -259,7 +259,7 @@ private:
     wxHtmlHelpMergedIndex *m_mergedIndex;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxHtmlHelpWindow)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlHelpWindow);
 };
 
 /*!

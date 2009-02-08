@@ -897,7 +897,7 @@ public:
 protected:
     virtual void AddText(const wxString& WXUNUSED(txt)) {}
 
-    DECLARE_NO_COPY_CLASS(wxMetaTagParser)
+    wxDECLARE_NO_COPY_CLASS(wxMetaTagParser);
 };
 
 class wxMetaTagHandler : public wxHtmlTagHandler
@@ -910,7 +910,7 @@ public:
 private:
     wxString *m_retval;
 
-    DECLARE_NO_COPY_CLASS(wxMetaTagHandler)
+    wxDECLARE_NO_COPY_CLASS(wxMetaTagHandler);
 };
 
 bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)

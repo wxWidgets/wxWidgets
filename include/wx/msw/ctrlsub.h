@@ -36,7 +36,7 @@ protected:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxControlWithItems)
-    DECLARE_NO_COPY_CLASS(wxControlWithItems)
+    wxDECLARE_NO_COPY_CLASS(wxControlWithItems);
 };
 
 #endif // _WX_MSW_CTRLSUB_H_

@@ -173,7 +173,7 @@ protected:
     virtual bool DoSaveDocument(const wxString& filename);
     virtual bool DoOpenDocument(const wxString& filename);
 
-    DECLARE_NO_COPY_CLASS(wxTextDocument)
+    wxDECLARE_NO_COPY_CLASS(wxTextDocument);
     DECLARE_CLASS(wxTextDocument)
 };
 
@@ -187,7 +187,7 @@ public:
     TextEditDocument() : wxTextDocument() { }
     virtual wxTextCtrl* GetTextCtrl() const;
 
-    DECLARE_NO_COPY_CLASS(TextEditDocument)
+    wxDECLARE_NO_COPY_CLASS(TextEditDocument);
     DECLARE_DYNAMIC_CLASS(TextEditDocument)
 };
 

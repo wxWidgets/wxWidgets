@@ -116,7 +116,7 @@ private:
     // doesn't give us any means to copy a _locale_t object so we reduce the
     // functionality to least common denominator here -- it shouldn't be a
     // problem as copying the locale objects shouldn't be often needed
-    DECLARE_NO_COPY_CLASS(wxXLocale)
+    wxDECLARE_NO_COPY_CLASS(wxXLocale);
 };
 
 #else // !wxHAS_XLOCALE_SUPPORT
@@ -169,7 +169,7 @@ private:
     // although it's not a problem to copy the objects of this class, we use
     // this macro in this implementation for consistency with the xlocale-based
     // one which can't be copied when using MSVC locale API
-    DECLARE_NO_COPY_CLASS(wxXLocale)
+    wxDECLARE_NO_COPY_CLASS(wxXLocale);
 };
 
 #endif // wxHAS_XLOCALE_SUPPORT/!wxHAS_XLOCALE_SUPPORT

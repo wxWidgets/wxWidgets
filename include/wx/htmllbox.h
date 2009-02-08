@@ -185,7 +185,7 @@ private:
 
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxHtmlListBox)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlListBox);
 };
 
 
@@ -317,7 +317,7 @@ protected:
     // not be named m_clientdata as that clashes with the name of an
     // anonymous struct member in wxEvtHandler, which we derive from.
 
-    DECLARE_NO_COPY_CLASS(wxSimpleHtmlListBox)
+    wxDECLARE_NO_COPY_CLASS(wxSimpleHtmlListBox);
 };
 
 #endif // _WX_HTMLLBOX_H_

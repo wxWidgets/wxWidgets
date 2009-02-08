@@ -104,7 +104,7 @@ public:
 
 protected:
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxApp)
+    wxDECLARE_NO_COPY_CLASS(wxApp);
     DECLARE_DYNAMIC_CLASS(wxApp)
 };
 

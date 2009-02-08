@@ -304,7 +304,7 @@ private:
     wxColour m_colBgSel;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxVListBox)
+    wxDECLARE_NO_COPY_CLASS(wxVListBox);
     DECLARE_ABSTRACT_CLASS(wxVListBox)
 };
 

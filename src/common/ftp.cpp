@@ -728,7 +728,7 @@ public:
 
     wxFTP *m_ftp;
 
-    DECLARE_NO_COPY_CLASS(wxInputFTPStream)
+    wxDECLARE_NO_COPY_CLASS(wxInputFTPStream);
 };
 
 class wxOutputFTPStream : public wxSocketOutputStream
@@ -764,7 +764,7 @@ public:
 
     wxFTP *m_ftp;
 
-    DECLARE_NO_COPY_CLASS(wxOutputFTPStream)
+    wxDECLARE_NO_COPY_CLASS(wxOutputFTPStream);
 };
 
 wxInputStream *wxFTP::GetInputStream(const wxString& path)

@@ -3121,22 +3121,30 @@ typedef const void* WXWidget;
 #include "wx/features.h"
 
 /*  --------------------------------------------------------------------------- */
-/*  macro to define a class without copy ctor nor assignment operator */
+/*  macros to define a class without copy ctor nor assignment operator */
 /*  --------------------------------------------------------------------------- */
 
-#define DECLARE_NO_COPY_CLASS(classname)        \
+#define wxDECLARE_NO_COPY_CLASS(classname)      \
     private:                                    \
         classname(const classname&);            \
-        classname& operator=(const classname&);
+        classname& operator=(const classname&)
 
-#define DECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg)  \
-    private:                                            \
-        classname(const classname<arg>&);               \
-        classname& operator=(const classname<arg>&);
+#define wxDECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg)  \
+    private:                                              \
+        classname(const classname<arg>&);                 \
+        classname& operator=(const classname<arg>&)
 
-#define DECLARE_NO_ASSIGN_CLASS(classname)      \
+#define wxDECLARE_NO_ASSIGN_CLASS(classname)    \
     private:                                    \
-        classname& operator=(const classname&);
+        classname& operator=(const classname&)
+
+// deprecated variants _not_ requiring a semicolon after them
+#define DECLARE_NO_COPY_CLASS(classname) \
+    wxDECLARE_NO_COPY_CLASS(classname);
+#define DECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg) \
+    wxDECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg);
+#define DECLARE_NO_ASSIGN_CLASS(classname) \
+    wxDECLARE_NO_ASSIGN_CLASS(classname);
 
 /*  --------------------------------------------------------------------------- */
 /*  If a manifest is being automatically generated, add common controls 6 to it */

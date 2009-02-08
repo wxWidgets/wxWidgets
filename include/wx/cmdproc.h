@@ -137,7 +137,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxCommandProcessor)
-    DECLARE_NO_COPY_CLASS(wxCommandProcessor)
+    wxDECLARE_NO_COPY_CLASS(wxCommandProcessor);
 };
 
 #endif // _WX_CMDPROC_H_

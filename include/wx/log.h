@@ -369,7 +369,7 @@ protected:
 private:
     wxString m_str;
 
-    DECLARE_NO_COPY_CLASS(wxLogBuffer)
+    wxDECLARE_NO_COPY_CLASS(wxLogBuffer);
 };
 
 
@@ -388,7 +388,7 @@ protected:
 
     FILE *m_fp;
 
-    DECLARE_NO_COPY_CLASS(wxLogStderr)
+    wxDECLARE_NO_COPY_CLASS(wxLogStderr);
 };
 
 #if wxUSE_STD_IOSTREAM
@@ -492,7 +492,7 @@ private:
     // do we pass the messages to the old logger?
     bool m_bPassMessages;
 
-    DECLARE_NO_COPY_CLASS(wxLogChain)
+    wxDECLARE_NO_COPY_CLASS(wxLogChain);
 };
 
 // a chain log target which uses itself as the new logger
@@ -505,7 +505,7 @@ public:
     wxLogInterposer();
 
 private:
-    DECLARE_NO_COPY_CLASS(wxLogInterposer)
+    wxDECLARE_NO_COPY_CLASS(wxLogInterposer);
 };
 
 // a temporary interposer which doesn't destroy the old log target
@@ -517,7 +517,7 @@ public:
     wxLogInterposerTemp();
 
 private:
-    DECLARE_NO_COPY_CLASS(wxLogInterposerTemp)
+    wxDECLARE_NO_COPY_CLASS(wxLogInterposerTemp);
 };
 
 #if wxUSE_GUI

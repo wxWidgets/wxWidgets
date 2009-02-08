@@ -70,7 +70,7 @@ private:
     GLfloat m_xrot;
     GLfloat m_yrot;
 
-    DECLARE_NO_COPY_CLASS(TestGLCanvas)
+    wxDECLARE_NO_COPY_CLASS(TestGLCanvas);
     DECLARE_EVENT_TABLE()
 };
 

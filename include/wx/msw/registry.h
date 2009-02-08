@@ -243,7 +243,7 @@ private:
   long        m_dwLastError;    // last error (0 if none)
 
 
-  DECLARE_NO_COPY_CLASS(wxRegKey)
+  wxDECLARE_NO_COPY_CLASS(wxRegKey);
 };
 
 #endif // wxUSE_REGKEY

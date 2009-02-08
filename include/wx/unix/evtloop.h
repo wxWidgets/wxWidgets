@@ -49,7 +49,7 @@ private:
     // either wxSelectDispatcher or wxEpollDispatcher
     wxFDIODispatcher *m_dispatcher;
 
-    DECLARE_NO_COPY_CLASS(wxConsoleEventLoop)
+    wxDECLARE_NO_COPY_CLASS(wxConsoleEventLoop);
 };
 
 #endif // wxUSE_CONSOLE_EVENTLOOP

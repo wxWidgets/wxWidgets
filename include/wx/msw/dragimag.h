@@ -266,7 +266,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDragImage)
-    DECLARE_NO_COPY_CLASS(wxDragImage)
+    wxDECLARE_NO_COPY_CLASS(wxDragImage);
 };
 
 #endif // wxUSE_DRAGIMAGE

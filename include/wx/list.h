@@ -468,7 +468,7 @@ private:
 
     wxListBase  *m_list;        // list we belong to
 
-    DECLARE_NO_COPY_CLASS(wxNodeBase)
+    wxDECLARE_NO_COPY_CLASS(wxNodeBase);
 };
 
 // -----------------------------------------------------------------------------

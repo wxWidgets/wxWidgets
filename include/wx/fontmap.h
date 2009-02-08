@@ -170,7 +170,7 @@ private:
 
     friend class wxFontMapperPathChanger;
 
-    DECLARE_NO_COPY_CLASS(wxFontMapperBase)
+    wxDECLARE_NO_COPY_CLASS(wxFontMapperBase);
 };
 
 // ----------------------------------------------------------------------------
@@ -264,7 +264,7 @@ protected:
     wxWindow *m_windowParent;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxFontMapper)
+    wxDECLARE_NO_COPY_CLASS(wxFontMapper);
 };
 
 #endif // wxUSE_GUI

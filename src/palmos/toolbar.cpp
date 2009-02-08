@@ -129,7 +129,7 @@ public:
 private:
     size_t m_nSepCount;
 
-    DECLARE_NO_COPY_CLASS(wxToolBarTool)
+    wxDECLARE_NO_COPY_CLASS(wxToolBarTool);
 };
 
 

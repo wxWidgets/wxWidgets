@@ -139,7 +139,7 @@ private:
     friend class wxPaintDC;
 
     DECLARE_DYNAMIC_CLASS(wxWindowMGL)
-    DECLARE_NO_COPY_CLASS(wxWindowMGL)
+    wxDECLARE_NO_COPY_CLASS(wxWindowMGL);
     DECLARE_EVENT_TABLE()
 
 public:

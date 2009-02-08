@@ -159,7 +159,7 @@ protected:
 #endif // __WXMSW__
 
 private:
-    DECLARE_NO_COPY_CLASS(wxNativeContainerWindow)
+    wxDECLARE_NO_COPY_CLASS(wxNativeContainerWindow);
 };
 
 #endif // wxHAS_NATIVE_CONTAINER_WINDOW

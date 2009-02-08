@@ -121,7 +121,7 @@ protected:
     wxWindow             *m_winLastFocused;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxTopLevelWindowPalm)
+    wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowPalm);
 };
 
 #endif // _WX_PALMOS_TOPLEVEL_H_

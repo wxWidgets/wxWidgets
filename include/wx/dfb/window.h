@@ -190,7 +190,7 @@ private:
     friend class wxWindowDCImpl; // for PaintOverlays
 
     DECLARE_DYNAMIC_CLASS(wxWindowDFB)
-    DECLARE_NO_COPY_CLASS(wxWindowDFB)
+    wxDECLARE_NO_COPY_CLASS(wxWindowDFB);
     DECLARE_EVENT_TABLE()
 };
 

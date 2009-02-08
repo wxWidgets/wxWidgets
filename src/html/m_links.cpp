@@ -51,7 +51,7 @@ public:
         }
     }
 
-    DECLARE_NO_COPY_CLASS(wxHtmlAnchorCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlAnchorCell);
 };
 
 

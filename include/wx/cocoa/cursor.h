@@ -27,7 +27,7 @@ protected:
     friend class WXDLLIMPEXP_FWD_CORE wxBitmap;
     friend class WXDLLIMPEXP_FWD_CORE wxCursor;
 
-    DECLARE_NO_COPY_CLASS(wxCursorRefData)
+    wxDECLARE_NO_COPY_CLASS(wxCursorRefData);
 };
 
 #define M_CURSORDATA ((wxCursorRefData *)m_refData)

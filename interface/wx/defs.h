@@ -927,9 +927,9 @@ typedef double wxDouble;
     In such case, this macro can be used to disable the automatic assignment
     operator generation.
 
-    @see DECLARE_NO_COPY_CLASS()
+    @see wxDECLARE_NO_COPY_CLASS()
  */
-#define DECLARE_NO_ASSIGN_CLASS(classname)
+#define wxDECLARE_NO_ASSIGN_CLASS(classname)
 
 /**
     This macro can be used in a class declaration to disable the generation of
@@ -954,27 +954,29 @@ typedef double wxDouble;
 
     private:
         // widgets can't be copied
-        DECLARE_NO_COPY_CLASS(FooWidget)
+        wxDECLARE_NO_COPY_CLASS(FooWidget);
     };
     @endcode
 
-    Notice that a semicolon should not be used after this macro and that it
-    changes the access specifier to private internally so it is better to use
-    it at the end of the class declaration.
+    Notice that a semicolon must be used after this macro and that it changes
+    the access specifier to private internally so it is better to use it at the
+    end of the class declaration.
+
+    @see wxDECLARE_NO_ASSIGN_CLASS(), wxDECLARE_NO_COPY_TEMPLATE_CLASS()
  */
-#define DECLARE_NO_COPY_CLASS(classname)
+#define wxDECLARE_NO_COPY_CLASS(classname)
 
 /**
-    Equivalent of DECLARE_NO_COPY_CLASS() for template classes.
+    Analog of wxDECLARE_NO_COPY_CLASS() for template classes.
 
     This macro can be used for template classes (with a single template
-    parameter) for the same purpose as DECLARE_NO_COPY_CLASS() is used with the
+    parameter) for the same purpose as wxDECLARE_NO_COPY_CLASS() is used with the
     non-template classes.
 
     @param classname The name of the template class.
     @param arg The name of the template parameter.
  */
-#define DECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg)
+#define wxDECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg)
 
 /**
     A function which deletes and nulls the pointer.

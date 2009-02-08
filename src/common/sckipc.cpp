@@ -126,7 +126,7 @@ public:
 
 private:
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxTCPEventHandler)
+    wxDECLARE_NO_COPY_CLASS(wxTCPEventHandler);
 };
 
 enum
@@ -161,7 +161,7 @@ private:
     static wxTCPEventHandler *ms_handler;
 
     DECLARE_DYNAMIC_CLASS(wxTCPEventHandlerModule)
-    DECLARE_NO_COPY_CLASS(wxTCPEventHandlerModule)
+    wxDECLARE_NO_COPY_CLASS(wxTCPEventHandlerModule);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxTCPEventHandlerModule, wxModule)
@@ -282,7 +282,7 @@ private:
     wxDataInputStream  m_dataIn;
     wxDataOutputStream m_dataOut;
 
-    DECLARE_NO_COPY_CLASS(wxIPCSocketStreams)
+    wxDECLARE_NO_COPY_CLASS(wxIPCSocketStreams);
 };
 
 namespace
@@ -339,7 +339,7 @@ public:
 private:
     wxIPCSocketStreams& m_streams;
 
-    DECLARE_NO_COPY_CLASS(IPCOutput)
+    wxDECLARE_NO_COPY_CLASS(IPCOutput);
 };
 
 } // anonymous namespace

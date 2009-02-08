@@ -47,7 +47,7 @@ public:
 
     virtual bool IsTopLevel() const { return true; }
 
-    DECLARE_NO_COPY_CLASS(wxPopupWindowBase)
+    wxDECLARE_NO_COPY_CLASS(wxPopupWindowBase);
 };
 
 
@@ -150,7 +150,7 @@ protected:
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxPopupTransientWindow)
-    DECLARE_NO_COPY_CLASS(wxPopupTransientWindow)
+    wxDECLARE_NO_COPY_CLASS(wxPopupTransientWindow);
 };
 
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)

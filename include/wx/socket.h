@@ -271,7 +271,7 @@ private:
     friend class wxSocketReadGuard;
     friend class wxSocketWriteGuard;
 
-    DECLARE_NO_COPY_CLASS(wxSocketBase)
+    wxDECLARE_NO_COPY_CLASS(wxSocketBase);
     DECLARE_CLASS(wxSocketBase)
 };
 
@@ -291,7 +291,7 @@ public:
 
     bool WaitForAccept(long seconds = -1, long milliseconds = 0);
 
-    DECLARE_NO_COPY_CLASS(wxSocketServer)
+    wxDECLARE_NO_COPY_CLASS(wxSocketServer);
     DECLARE_CLASS(wxSocketServer)
 };
 
@@ -330,7 +330,7 @@ private:
     int m_initialRecvBufferSize;
     int m_initialSendBufferSize;
 
-    DECLARE_NO_COPY_CLASS(wxSocketClient)
+    wxDECLARE_NO_COPY_CLASS(wxSocketClient);
     DECLARE_CLASS(wxSocketClient)
 };
 
@@ -359,7 +359,7 @@ public:
      */
 
 private:
-    DECLARE_NO_COPY_CLASS(wxDatagramSocket)
+    wxDECLARE_NO_COPY_CLASS(wxDatagramSocket);
     DECLARE_CLASS(wxDatagramSocket)
 };
 

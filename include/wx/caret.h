@@ -186,7 +186,7 @@ protected:
     int m_countVisible;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxCaretBase)
+    wxDECLARE_NO_COPY_CLASS(wxCaretBase);
 };
 
 // ---------------------------------------------------------------------------
@@ -213,7 +213,7 @@ class WXDLLIMPEXP_CORE wxCaretSuspend
 public:
     wxCaretSuspend(wxWindow *WXUNUSED(win)) {}
 
-    DECLARE_NO_COPY_CLASS(wxCaretSuspend)
+    wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
 };
 
 #else // !wxHAS_CARET_USING_OVERLAYS
@@ -242,7 +242,7 @@ private:
     wxCaret *m_caret;
     bool     m_show;
 
-    DECLARE_NO_COPY_CLASS(wxCaretSuspend)
+    wxDECLARE_NO_COPY_CLASS(wxCaretSuspend);
 };
 
 #endif // wxHAS_CARET_USING_OVERLAYS/!wxHAS_CARET_USING_OVERLAYS

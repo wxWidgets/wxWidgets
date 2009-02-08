@@ -73,7 +73,7 @@ public:
   int           m_dataSize;
   wxIPCFormat   m_dataType;
 
-  DECLARE_NO_COPY_CLASS(wxDDEConnection)
+  wxDECLARE_NO_COPY_CLASS(wxDDEConnection);
   DECLARE_DYNAMIC_CLASS(wxDDEConnection)
 };
 

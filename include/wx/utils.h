@@ -634,7 +634,7 @@ private:
     wxWindowList *m_winDisabled;
     bool m_disabled;
 
-    DECLARE_NO_COPY_CLASS(wxWindowDisabler)
+    wxDECLARE_NO_COPY_CLASS(wxWindowDisabler);
 };
 
 // ----------------------------------------------------------------------------

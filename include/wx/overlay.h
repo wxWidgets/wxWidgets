@@ -63,7 +63,7 @@ private:
     bool m_inDrawing;
 
 
-    DECLARE_NO_COPY_CLASS(wxOverlay)
+    wxDECLARE_NO_COPY_CLASS(wxOverlay);
 };
 
 
@@ -91,7 +91,7 @@ private:
     wxDC* m_dc;
 
 
-    DECLARE_NO_COPY_CLASS(wxDCOverlay)
+    wxDECLARE_NO_COPY_CLASS(wxDCOverlay);
 };
 
 #endif // _WX_OVERLAY_H_

@@ -47,7 +47,7 @@ private:
     // position in the stream in bytes, *not* in chars
     size_t m_pos;
 
-    DECLARE_NO_COPY_CLASS(wxStringInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxStringInputStream);
 };
 
 // ----------------------------------------------------------------------------
@@ -100,7 +100,7 @@ private:
     wxMemoryBuffer m_unconv;
 #endif // wxUSE_UNICODE_WCHAR
 
-    DECLARE_NO_COPY_CLASS(wxStringOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxStringOutputStream);
 };
 
 #endif // wxUSE_STREAMS

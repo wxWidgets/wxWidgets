@@ -77,7 +77,7 @@ struct WXDLLIMPEXP_BASE _wxHashTable_NodeBase
     _wxHashTable_NodeBase* m_next;
 
 // Cannot do this:
-//  DECLARE_NO_COPY_CLASS(_wxHashTable_NodeBase)
+//  wxDECLARE_NO_COPY_CLASS(_wxHashTable_NodeBase);
 // without rewriting the macros, which require a public copy constructor.
 };
 

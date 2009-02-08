@@ -70,7 +70,7 @@ private:
     GlobalPtr m_waveData;
     GlobalPtrLock m_waveDataPtr;
 
-    DECLARE_NO_COPY_CLASS(wxSoundDataMemory)
+    wxDECLARE_NO_COPY_CLASS(wxSoundDataMemory);
 };
 
 // class for sound files and resources
@@ -90,7 +90,7 @@ private:
     const wxString m_name;
     const bool m_isResource;
 
-    DECLARE_NO_COPY_CLASS(wxSoundDataFile)
+    wxDECLARE_NO_COPY_CLASS(wxSoundDataFile);
 };
 
 // ============================================================================

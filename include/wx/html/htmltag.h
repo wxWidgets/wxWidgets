@@ -47,7 +47,7 @@ public:
                   wxString::const_iterator *end2,
                   bool *hasEnding);
 
-    DECLARE_NO_COPY_CLASS(wxHtmlTagsCache)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlTagsCache);
 };
 
 
@@ -154,7 +154,7 @@ private:
     wxHtmlTag *m_FirstChild, *m_LastChild;
     wxHtmlTag *m_Parent;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlTag)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlTag);
 };
 
 

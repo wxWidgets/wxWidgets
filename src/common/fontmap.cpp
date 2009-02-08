@@ -140,7 +140,7 @@ private:
     bool m_flagOld;
     bool& m_flag;
 
-    DECLARE_NO_COPY_CLASS(ReentrancyBlocker)
+    wxDECLARE_NO_COPY_CLASS(ReentrancyBlocker);
 };
 
 // ============================================================================

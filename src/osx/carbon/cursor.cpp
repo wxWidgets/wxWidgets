@@ -66,7 +66,7 @@ protected:
 
     friend class wxCursor;
 
-    DECLARE_NO_ASSIGN_CLASS(wxCursorRefData)
+    wxDECLARE_NO_ASSIGN_CLASS(wxCursorRefData);
 };
 
 #define M_CURSORDATA static_cast<wxCursorRefData*>(m_refData)

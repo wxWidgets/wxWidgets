@@ -62,7 +62,7 @@ private:
     wxWindow *m_window;         // window we're associated with
 
     DECLARE_ABSTRACT_CLASS(wxToolTip)
-    DECLARE_NO_COPY_CLASS(wxToolTip)
+    wxDECLARE_NO_COPY_CLASS(wxToolTip);
 };
 
 #endif // _WX_PALMOS_TOOLTIP_H_

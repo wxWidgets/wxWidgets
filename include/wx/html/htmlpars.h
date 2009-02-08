@@ -191,7 +191,7 @@ protected:
     wxHtmlTagHandlersSet m_HandlersSet;
     wxHtmlTagHandlersHash m_HandlersHash;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlParser)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlParser);
 
     // class for opening files (file system)
     wxFileSystem *m_FS;
@@ -254,7 +254,7 @@ protected:
 
     wxHtmlParser *m_Parser;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlTagHandler)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlTagHandler);
 };
 
 
@@ -292,7 +292,7 @@ protected:
     wxFontEncoding m_encoding;
 #endif
 
-    DECLARE_NO_COPY_CLASS(wxHtmlEntitiesParser)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlEntitiesParser);
 };
 
 

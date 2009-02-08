@@ -307,7 +307,7 @@ protected:
 #endif
 
     DECLARE_CLASS(wxPalmDCImpl)
-    DECLARE_NO_COPY_CLASS(wxPalmDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxPalmDCImpl);
 };
 
 // ----------------------------------------------------------------------------
@@ -348,7 +348,7 @@ private:
     // find it ourselves
     const wxSize m_size;
 
-    DECLARE_NO_COPY_CLASS(wxDCTempImpl)
+    wxDECLARE_NO_COPY_CLASS(wxDCTempImpl);
 };
 
 class WXDLLIMPEXP_CORE wxDCTemp : public wxDC

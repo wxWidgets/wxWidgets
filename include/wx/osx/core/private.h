@@ -43,7 +43,7 @@ wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( const unsigned char * from 
 
 class WXDLLIMPEXP_CORE wxMacCGContextStateSaver
 {
-    DECLARE_NO_COPY_CLASS(wxMacCGContextStateSaver)
+    wxDECLARE_NO_COPY_CLASS(wxMacCGContextStateSaver);
 
 public:
     wxMacCGContextStateSaver( CGContextRef cg )

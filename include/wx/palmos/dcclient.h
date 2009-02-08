@@ -50,7 +50,7 @@ protected:
     void InitDC();
 
     DECLARE_CLASS(wxWindowDCImpl)
-    DECLARE_NO_COPY_CLASS(wxWindowDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxWindowDCImpl);
 };
 
 class WXDLLIMPEXP_CORE wxClientDCImpl : public wxWindowDCImpl
@@ -70,7 +70,7 @@ protected:
     void InitDC();
 
     DECLARE_CLASS(wxClientDCImpl)
-    DECLARE_NO_COPY_CLASS(wxClientDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
 };
 
 class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxClientDCImpl
@@ -93,7 +93,7 @@ protected:
     wxPaintDCInfo *FindInCache(size_t *index = NULL) const;
 
     DECLARE_CLASS(wxPaintDCImpl)
-    DECLARE_NO_COPY_CLASS(wxPaintDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxPaintDCImpl);
 };
 
 #endif

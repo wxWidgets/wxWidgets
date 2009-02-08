@@ -51,7 +51,7 @@ private:
     // the DIB data
     void /* BITMAPINFO */ *m_data;
 
-    DECLARE_NO_COPY_CLASS(wxBitmapDataObject)
+    wxDECLARE_NO_COPY_CLASS(wxBitmapDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ public:
         { return SetData(len, buf); }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxBitmapDataObject2)
+    wxDECLARE_NO_COPY_CLASS(wxBitmapDataObject2);
 };
 
 // ----------------------------------------------------------------------------
@@ -112,7 +112,7 @@ public:
         { return SetData(len, buf); }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxFileDataObject)
+    wxDECLARE_NO_COPY_CLASS(wxFileDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -140,7 +140,7 @@ private:
     // last data object we got data in
     wxDataObjectSimple *m_dataObjectLast;
 
-    DECLARE_NO_COPY_CLASS(wxURLDataObject)
+    wxDECLARE_NO_COPY_CLASS(wxURLDataObject);
 };
 
 #endif // _WX_MSW_OLE_DATAOBJ2_H

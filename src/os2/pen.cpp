@@ -77,7 +77,7 @@ private:
     wxColour                        m_vColour;
     WXHPEN                          m_hPen;// in OS/2 GPI this will be the PS the pen is associated with
 
-    DECLARE_NO_ASSIGN_CLASS(wxPenRefData)
+    wxDECLARE_NO_ASSIGN_CLASS(wxPenRefData);
 };
 
 #define M_PENDATA ((wxPenRefData *)m_refData)

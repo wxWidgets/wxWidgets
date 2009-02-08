@@ -122,7 +122,7 @@ private:
     wxDisplayImpl *m_impl;
 
 
-    DECLARE_NO_COPY_CLASS(wxDisplay)
+    wxDECLARE_NO_COPY_CLASS(wxDisplay);
 };
 
 #endif // _WX_DISPLAY_H_BASE_

@@ -352,7 +352,7 @@ protected:
     wxString m_id;
 
     DECLARE_ABSTRACT_CLASS(wxHtmlCell)
-    DECLARE_NO_COPY_CLASS(wxHtmlCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlCell);
 };
 
 
@@ -395,7 +395,7 @@ protected:
     bool     m_allowLinebreak;
 
     DECLARE_ABSTRACT_CLASS(wxHtmlWordCell)
-    DECLARE_NO_COPY_CLASS(wxHtmlWordCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlWordCell);
 };
 
 
@@ -540,7 +540,7 @@ protected:
 
 
     DECLARE_ABSTRACT_CLASS(wxHtmlContainerCell)
-    DECLARE_NO_COPY_CLASS(wxHtmlContainerCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlContainerCell);
 };
 
 
@@ -564,7 +564,7 @@ protected:
     unsigned m_Flags;
 
     DECLARE_ABSTRACT_CLASS(wxHtmlColourCell)
-    DECLARE_NO_COPY_CLASS(wxHtmlColourCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlColourCell);
 };
 
 
@@ -588,7 +588,7 @@ protected:
     wxFont m_Font;
 
     DECLARE_ABSTRACT_CLASS(wxHtmlFontCell)
-    DECLARE_NO_COPY_CLASS(wxHtmlFontCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlFontCell);
 };
 
 
@@ -624,7 +624,7 @@ protected:
             // width float is used in adjustWidth (it is in percents)
 
     DECLARE_ABSTRACT_CLASS(wxHtmlWidgetCell)
-    DECLARE_NO_COPY_CLASS(wxHtmlWidgetCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlWidgetCell);
 };
 
 

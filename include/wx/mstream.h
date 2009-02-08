@@ -65,7 +65,7 @@ private:
 
     // copy ctor is implemented above: it copies the other stream in this one
     DECLARE_ABSTRACT_CLASS(wxMemoryInputStream)
-    DECLARE_NO_ASSIGN_CLASS(wxMemoryInputStream)
+    wxDECLARE_NO_ASSIGN_CLASS(wxMemoryInputStream);
 };
 
 class WXDLLIMPEXP_BASE wxMemoryOutputStream : public wxOutputStream
@@ -95,7 +95,7 @@ protected:
     wxFileOffset OnSysTell() const;
 
     DECLARE_DYNAMIC_CLASS(wxMemoryOutputStream)
-    DECLARE_NO_COPY_CLASS(wxMemoryOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxMemoryOutputStream);
 };
 
 #if WXWIN_COMPATIBILITY_2_6

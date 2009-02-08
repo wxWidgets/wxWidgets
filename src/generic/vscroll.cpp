@@ -53,7 +53,7 @@ public:
 private:
     wxVarScrollHelperBase *m_scrollHelper;
 
-    DECLARE_NO_COPY_CLASS(wxVarScrollHelperEvtHandler)
+    wxDECLARE_NO_COPY_CLASS(wxVarScrollHelperEvtHandler);
 };
 
 // ============================================================================

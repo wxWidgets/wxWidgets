@@ -31,7 +31,7 @@ public:
     wxInfoFrame(wxWindow *parent, const wxString& message);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxInfoFrame)
+    wxDECLARE_NO_COPY_CLASS(wxInfoFrame);
 };
 
 

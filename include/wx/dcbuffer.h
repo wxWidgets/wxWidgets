@@ -139,7 +139,7 @@ private:
     int m_style;
 
     DECLARE_DYNAMIC_CLASS(wxBufferedDC)
-    DECLARE_NO_COPY_CLASS(wxBufferedDC)
+    wxDECLARE_NO_COPY_CLASS(wxBufferedDC);
 };
 
 
@@ -199,7 +199,7 @@ private:
     wxPaintDC m_paintdc;
 
     DECLARE_ABSTRACT_CLASS(wxBufferedPaintDC)
-    DECLARE_NO_COPY_CLASS(wxBufferedPaintDC)
+    wxDECLARE_NO_COPY_CLASS(wxBufferedPaintDC);
 };
 
 
@@ -241,7 +241,7 @@ private:
                       wxT("and also, if needed, paint the background manually in the paint event handler."));
     }
 
-    DECLARE_NO_COPY_CLASS(wxAutoBufferedPaintDC)
+    wxDECLARE_NO_COPY_CLASS(wxAutoBufferedPaintDC);
 };
 
 #else // !__WXDEBUG__

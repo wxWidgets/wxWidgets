@@ -3057,7 +3057,7 @@ public:
 private:
     wxWindowBase * const m_win;
 
-    DECLARE_NO_COPY_CLASS(DragAcceptFilesTarget)
+    wxDECLARE_NO_COPY_CLASS(DragAcceptFilesTarget);
 };
 
 

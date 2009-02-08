@@ -169,7 +169,7 @@ public:
 private:
     int& m_count;
 
-    DECLARE_NO_COPY_CLASS(UpdatesCountFilter)
+    wxDECLARE_NO_COPY_CLASS(UpdatesCountFilter);
 };
 
 // ----------------------------------------------------------------------------

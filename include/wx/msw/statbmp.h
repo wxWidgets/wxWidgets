@@ -86,7 +86,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
-    DECLARE_NO_COPY_CLASS(wxStaticBitmap)
+    wxDECLARE_NO_COPY_CLASS(wxStaticBitmap);
 };
 
 #endif

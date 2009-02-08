@@ -240,7 +240,7 @@ private:
     // the conversion object we forward to
     wxMBConv *m_conv;
 
-    DECLARE_NO_ASSIGN_CLASS(wxConvBrokenFileNames)
+    wxDECLARE_NO_ASSIGN_CLASS(wxConvBrokenFileNames);
 };
 
 #endif // __UNIX__

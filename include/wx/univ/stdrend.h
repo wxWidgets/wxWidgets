@@ -347,7 +347,7 @@ protected:
     // update m_penXXX objects above
     const wxColourScheme * const m_scheme;
 
-    DECLARE_NO_COPY_CLASS(wxStdRenderer)
+    wxDECLARE_NO_COPY_CLASS(wxStdRenderer);
 };
 
 #endif // _WX_UNIV_STDREND_H_

@@ -139,7 +139,7 @@ protected:
 private:
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxHtmlHelpFrame)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlHelpFrame);
 };
 
 #endif // wxUSE_WXHTML_HELP

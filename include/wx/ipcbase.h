@@ -222,7 +222,7 @@ private:
 protected:
   bool          m_connected;
 
-  DECLARE_NO_ASSIGN_CLASS(wxConnectionBase)
+  wxDECLARE_NO_ASSIGN_CLASS(wxConnectionBase);
   DECLARE_CLASS(wxConnectionBase)
 };
 

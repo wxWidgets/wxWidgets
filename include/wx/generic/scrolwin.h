@@ -46,7 +46,7 @@ private:
     wxScrollbarVisibility m_xVisibility,
                           m_yVisibility;
 
-    DECLARE_NO_COPY_CLASS(wxScrollHelper)
+    wxDECLARE_NO_COPY_CLASS(wxScrollHelper);
 };
 
 #endif // _WX_GENERIC_SCROLLWIN_H_

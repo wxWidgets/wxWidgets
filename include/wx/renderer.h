@@ -458,7 +458,7 @@ public:
 protected:
     wxRendererNative& m_rendererNative;
 
-    DECLARE_NO_COPY_CLASS(wxDelegateRendererNative)
+    wxDECLARE_NO_COPY_CLASS(wxDelegateRendererNative);
 };
 
 // ----------------------------------------------------------------------------

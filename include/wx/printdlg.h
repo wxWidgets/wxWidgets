@@ -43,7 +43,7 @@ public:
     
 private:
     DECLARE_ABSTRACT_CLASS(wxPrintDialogBase)
-    DECLARE_NO_COPY_CLASS(wxPrintDialogBase)
+    wxDECLARE_NO_COPY_CLASS(wxPrintDialogBase);
 };
 
 // ---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ private:
     
 private:
     DECLARE_DYNAMIC_CLASS(wxPrintDialog)
-    DECLARE_NO_COPY_CLASS(wxPrintDialog)
+    wxDECLARE_NO_COPY_CLASS(wxPrintDialog);
 };
 
 // ---------------------------------------------------------------------------
@@ -90,7 +90,7 @@ public:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxPageSetupDialogBase)
-    DECLARE_NO_COPY_CLASS(wxPageSetupDialogBase)
+    wxDECLARE_NO_COPY_CLASS(wxPageSetupDialogBase);
 };
 
 // ---------------------------------------------------------------------------
@@ -113,7 +113,7 @@ private:
     
 private:
     DECLARE_DYNAMIC_CLASS(wxPageSetupDialog)
-    DECLARE_NO_COPY_CLASS(wxPageSetupDialog)
+    wxDECLARE_NO_COPY_CLASS(wxPageSetupDialog);
 };
 
 #endif

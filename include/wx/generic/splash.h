@@ -60,7 +60,7 @@ protected:
 
     DECLARE_DYNAMIC_CLASS(wxSplashScreen)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxSplashScreen)
+    wxDECLARE_NO_COPY_CLASS(wxSplashScreen);
 };
 
 /*
@@ -84,7 +84,7 @@ protected:
     wxBitmap    m_bitmap;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxSplashScreenWindow)
+    wxDECLARE_NO_COPY_CLASS(wxSplashScreenWindow);
 };
 
 

@@ -144,7 +144,7 @@ public:
 private:
     wxHtmlHelpWindow *m_Window;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlHelpHtmlWindow)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlHelpHtmlWindow);
     DECLARE_EVENT_TABLE()
 };
 
@@ -1277,7 +1277,7 @@ public:
     }
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxHtmlHelpWindowOptionsDialog)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlHelpWindowOptionsDialog);
 };
 
 BEGIN_EVENT_TABLE(wxHtmlHelpWindowOptionsDialog, wxDialog)

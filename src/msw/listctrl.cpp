@@ -187,7 +187,7 @@ private:
     LV_ITEM_NATIVE *m_pItem;
     LV_ITEM_NATIVE m_item;
 
-    DECLARE_NO_COPY_CLASS(wxLV_ITEM)
+    wxDECLARE_NO_COPY_CLASS(wxLV_ITEM);
 };
 
 ///////////////////////////////////////////////////////
@@ -235,7 +235,7 @@ public:
            delete attr;
    }
 
-    DECLARE_NO_COPY_CLASS(wxListItemInternalData)
+    wxDECLARE_NO_COPY_CLASS(wxListItemInternalData);
 };
 
 // Get the internal data structure

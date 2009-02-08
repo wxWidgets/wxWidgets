@@ -85,7 +85,7 @@ private:
     void*             m_printDlg;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxWindowsPrintDialog)
+    wxDECLARE_NO_COPY_CLASS(wxWindowsPrintDialog);
     DECLARE_CLASS(wxWindowsPrintDialog)
 };
 

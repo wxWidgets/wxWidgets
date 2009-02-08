@@ -381,7 +381,7 @@ private:
 
     cairo_t* m_context;
 
-    DECLARE_NO_COPY_CLASS(wxCairoContext)
+    wxDECLARE_NO_COPY_CLASS(wxCairoContext);
 };
 
 //-----------------------------------------------------------------------------

@@ -190,7 +190,7 @@ private:
     void Init();
 
     DECLARE_DYNAMIC_CLASS(wxWindowX11)
-    DECLARE_NO_COPY_CLASS(wxWindowX11)
+    wxDECLARE_NO_COPY_CLASS(wxWindowX11);
     DECLARE_EVENT_TABLE()
 };
 

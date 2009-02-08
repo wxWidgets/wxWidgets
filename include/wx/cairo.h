@@ -146,7 +146,7 @@ public:
     wxDL_VOIDMETHOD_DEFINE( pango_cairo_show_layout,
         (cairo_t *cr, PangoLayout *layout), (cr, layout) )
 
-    DECLARE_NO_COPY_CLASS(wxCairoLibrary)
+    wxDECLARE_NO_COPY_CLASS(wxCairoLibrary);
 };
 
 #endif // wxUSE_CAIRO

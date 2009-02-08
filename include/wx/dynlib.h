@@ -375,7 +375,7 @@ protected:
 
     // no copy ctor/assignment operators (or we'd try to unload the library
     // twice)
-    DECLARE_NO_COPY_CLASS(wxDynamicLibrary)
+    wxDECLARE_NO_COPY_CLASS(wxDynamicLibrary);
 };
 
 #ifdef __WXMSW__

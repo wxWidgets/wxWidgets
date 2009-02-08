@@ -45,7 +45,7 @@ protected:
         { return true; }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxMemoryText)
+    wxDECLARE_NO_COPY_CLASS(wxMemoryText);
 };
 
 #endif // wxUSE_TEXTBUFFER

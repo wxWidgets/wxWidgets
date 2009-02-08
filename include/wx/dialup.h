@@ -180,7 +180,7 @@ public:
     virtual wxEvent *Clone() const { return new wxDialUpEvent(*this); }
 
 private:
-    DECLARE_NO_ASSIGN_CLASS(wxDialUpEvent)
+    wxDECLARE_NO_ASSIGN_CLASS(wxDialUpEvent);
 };
 
 // the type of dialup event handler function

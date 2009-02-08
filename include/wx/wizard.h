@@ -244,7 +244,7 @@ public:
     bool Validate() { return true; }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxWizardBase)
+    wxDECLARE_NO_COPY_CLASS(wxWizardBase);
 };
 
 // include the real class declaration

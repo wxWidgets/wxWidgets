@@ -204,7 +204,7 @@ private:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrinter)
-    DECLARE_NO_COPY_CLASS(wxGnomePrinter)
+    wxDECLARE_NO_COPY_CLASS(wxGnomePrinter);
 };
 
 //-----------------------------------------------------------------------------
@@ -313,7 +313,7 @@ private:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrinterDCImpl)
-    DECLARE_NO_COPY_CLASS(wxGnomePrinterDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxGnomePrinterDCImpl);
 };
 
 // ----------------------------------------------------------------------------

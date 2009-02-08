@@ -63,7 +63,7 @@ private:
     // the text we show
     wxTextCtrl *m_text;
 
-    DECLARE_NO_COPY_CLASS(wxDumpPreviewDlg)
+    wxDECLARE_NO_COPY_CLASS(wxDumpPreviewDlg);
 };
 
 wxDumpPreviewDlg::wxDumpPreviewDlg(wxWindow *parent,
@@ -138,7 +138,7 @@ private:
 #endif // wxUSE_FILEDLG
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxDumpOpenExternalDlg)
+    wxDECLARE_NO_COPY_CLASS(wxDumpOpenExternalDlg);
 };
 
 BEGIN_EVENT_TABLE(wxDumpOpenExternalDlg, wxDialog)
@@ -272,7 +272,7 @@ private:
     wxArrayString m_files;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxDebugReportDialog)
+    wxDECLARE_NO_COPY_CLASS(wxDebugReportDialog);
 };
 
 // ============================================================================

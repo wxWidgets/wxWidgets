@@ -2849,7 +2849,7 @@ private:
     // were we initialized successfully?
     bool m_ok;
 
-    DECLARE_NO_COPY_CLASS(wxMBConv_wxwin)
+    wxDECLARE_NO_COPY_CLASS(wxMBConv_wxwin);
 };
 
 // make the constructors available for unit testing

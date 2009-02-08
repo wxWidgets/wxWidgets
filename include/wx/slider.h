@@ -118,7 +118,7 @@ protected:
     }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxSliderBase)
+    wxDECLARE_NO_COPY_CLASS(wxSliderBase);
 };
 
 // ----------------------------------------------------------------------------

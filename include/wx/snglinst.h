@@ -57,7 +57,7 @@ private:
     // the implementation details (platform specific)
     class WXDLLIMPEXP_FWD_BASE wxSingleInstanceCheckerImpl *m_impl;
 
-    DECLARE_NO_COPY_CLASS(wxSingleInstanceChecker)
+    wxDECLARE_NO_COPY_CLASS(wxSingleInstanceChecker);
 };
 
 #endif // wxUSE_SNGLINST_CHECKER

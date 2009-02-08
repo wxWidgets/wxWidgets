@@ -86,7 +86,7 @@ public:
 private:
     wxGenericTreeCtrl *m_owner;
 
-    DECLARE_NO_COPY_CLASS(wxTreeRenameTimer)
+    wxDECLARE_NO_COPY_CLASS(wxTreeRenameTimer);
 };
 
 // control used for in-place edit
@@ -114,7 +114,7 @@ private:
     bool                m_aboutToFinish;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxTreeTextCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxTreeTextCtrl);
 };
 
 // timer used to clear wxGenericTreeCtrl::m_findPrefix if no key was pressed
@@ -132,7 +132,7 @@ public:
 private:
     wxGenericTreeCtrl *m_owner;
 
-    DECLARE_NO_COPY_CLASS(wxTreeFindTimer)
+    wxDECLARE_NO_COPY_CLASS(wxTreeFindTimer);
 };
 
 // a tree item
@@ -355,7 +355,7 @@ private:
     unsigned int        m_isBold      :1; // render the label in bold font
     unsigned int        m_ownsAttr    :1; // delete attribute when done
 
-    DECLARE_NO_COPY_CLASS(wxGenericTreeItem)
+    wxDECLARE_NO_COPY_CLASS(wxGenericTreeItem);
 };
 
 // =============================================================================

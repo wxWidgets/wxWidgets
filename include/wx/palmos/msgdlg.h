@@ -27,7 +27,7 @@ public:
     virtual int ShowModal(void);
 
     DECLARE_DYNAMIC_CLASS(wxMessageDialog)
-    DECLARE_NO_COPY_CLASS(wxMessageDialog)
+    wxDECLARE_NO_COPY_CLASS(wxMessageDialog);
 };
 
 

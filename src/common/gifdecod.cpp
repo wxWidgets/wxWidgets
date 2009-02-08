@@ -51,7 +51,7 @@ public:
     unsigned char *pal;             // palette
     unsigned int ncolours;          // number of colours
 
-    DECLARE_NO_COPY_CLASS(GIFImage)
+    wxDECLARE_NO_COPY_CLASS(GIFImage);
 };
 
 wxDECLARE_SCOPED_PTR(GIFImage, GIFImagePtr)

@@ -43,7 +43,7 @@ private:
     // data of this object
     class wxSoundData *m_data;
 
-    DECLARE_NO_COPY_CLASS(wxSound)
+    wxDECLARE_NO_COPY_CLASS(wxSound);
 };
 
 #endif // wxUSE_SOUND

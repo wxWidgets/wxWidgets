@@ -137,7 +137,7 @@ private:
     bool m_consumedBOM;
 
 
-    DECLARE_NO_ASSIGN_CLASS(wxConvAuto)
+    wxDECLARE_NO_ASSIGN_CLASS(wxConvAuto);
 };
 
 #endif // wxUSE_WCHAR_T

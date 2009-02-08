@@ -25,7 +25,7 @@ WX_DECLARE_LIST(wxCocoaDCImpl, wxCocoaDCStack);
 class WXDLLIMPEXP_CORE wxCocoaDCImpl: public wxDCImpl
 {
     DECLARE_ABSTRACT_CLASS(wxCocoaDCImpl)
-    DECLARE_NO_COPY_CLASS(wxCocoaDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxCocoaDCImpl);
 //-------------------------------------------------------------------------
 // Initialization
 //-------------------------------------------------------------------------

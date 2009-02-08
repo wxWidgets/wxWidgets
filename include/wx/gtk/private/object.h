@@ -29,7 +29,7 @@ private:
 
     // copying could be implemented by using g_object_ref() but for now there
     // is no need for it so don't implement it
-    DECLARE_NO_COPY_CLASS(wxGtkObject)
+    wxDECLARE_NO_COPY_CLASS(wxGtkObject);
 };
 
 #endif // _WX_GTK_PRIVATE_OBJECT_H_

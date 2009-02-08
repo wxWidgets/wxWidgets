@@ -27,7 +27,7 @@ private:
         
 private:
     DECLARE_CLASS(wxScreenDCImpl)
-    DECLARE_NO_COPY_CLASS(wxScreenDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxScreenDCImpl);
 };
 
 #endif

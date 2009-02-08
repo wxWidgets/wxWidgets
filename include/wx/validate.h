@@ -74,7 +74,7 @@ private:
     static bool ms_isSilent;
 
     DECLARE_DYNAMIC_CLASS(wxValidator)
-    DECLARE_NO_COPY_CLASS(wxValidator)
+    wxDECLARE_NO_COPY_CLASS(wxValidator);
 };
 
 extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;

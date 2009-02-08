@@ -81,7 +81,7 @@ private:
     wxCalendarComboPopup* m_popup;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxDatePickerCtrlGeneric)
+    wxDECLARE_NO_COPY_CLASS(wxDatePickerCtrlGeneric);
 };
 
 #endif // _WX_GENERIC_DATECTRL_H_

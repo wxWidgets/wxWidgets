@@ -64,7 +64,7 @@ private:
   DWORD         m_grfInitKeyState;  // button which started the d&d operation
   wxDropSource *m_pDropSource;      // pointer to C++ class we belong to
 
-  DECLARE_NO_COPY_CLASS(wxIDropSource)
+  wxDECLARE_NO_COPY_CLASS(wxIDropSource);
 };
 
 // ============================================================================

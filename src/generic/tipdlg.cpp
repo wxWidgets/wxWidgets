@@ -82,7 +82,7 @@ public:
 private:
     wxTextFile m_textfile;
 
-    DECLARE_NO_COPY_CLASS(wxFileTipProvider)
+    wxDECLARE_NO_COPY_CLASS(wxFileTipProvider);
 };
 #endif // wxUSE_TEXTFILE
 
@@ -129,7 +129,7 @@ private:
     wxCheckBox *m_checkbox;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxTipDialog)
+    wxDECLARE_NO_COPY_CLASS(wxTipDialog);
 };
 
 // ============================================================================

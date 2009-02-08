@@ -548,7 +548,7 @@ private:
     static wxCursor *ms_cursorText;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxHtmlWindow)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlWindow);
 };
 
 class WXDLLIMPEXP_FWD_HTML wxHtmlCellEvent;

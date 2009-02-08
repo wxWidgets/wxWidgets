@@ -429,7 +429,7 @@ private:
     int m_argc;
     char **m_argv;
 
-    DECLARE_NO_COPY_CLASS(ArgsArray)
+    wxDECLARE_NO_COPY_CLASS(ArgsArray);
 };
 
 } // anonymous namespace
@@ -1263,7 +1263,7 @@ public:
 protected:
     const int m_fd;
 
-    DECLARE_NO_COPY_CLASS(wxReadFDIOHandler)
+    wxDECLARE_NO_COPY_CLASS(wxReadFDIOHandler);
 };
 
 // class for monitoring our end of the process detection pipe, simply sets a
@@ -1284,7 +1284,7 @@ public:
 private:
     bool m_terminated;
 
-    DECLARE_NO_COPY_CLASS(wxEndHandler)
+    wxDECLARE_NO_COPY_CLASS(wxEndHandler);
 };
 
 #if HAS_PIPE_INPUT_STREAM
@@ -1313,7 +1313,7 @@ public:
 private:
     wxStreamTempInputBuffer * const m_buf;
 
-    DECLARE_NO_COPY_CLASS(wxRedirectedIOHandler)
+    wxDECLARE_NO_COPY_CLASS(wxRedirectedIOHandler);
 };
 
 #endif // HAS_PIPE_INPUT_STREAM

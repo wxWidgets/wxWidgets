@@ -59,7 +59,7 @@ private:
     void*           m_pIAccessibleStd;  // the pointer to the standard COM interface,
                                         // for default processing
 
-    DECLARE_NO_COPY_CLASS(wxAccessible)
+    wxDECLARE_NO_COPY_CLASS(wxAccessible);
 };
 
 #endif  //wxUSE_ACCESSIBILITY

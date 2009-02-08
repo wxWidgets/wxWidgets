@@ -175,7 +175,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
-    DECLARE_NO_COPY_CLASS(wxRadioBox)
+    wxDECLARE_NO_COPY_CLASS(wxRadioBox);
 };
 
 #endif

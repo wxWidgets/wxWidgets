@@ -54,7 +54,7 @@ public:
 private:
     ULONG* m_slot;
 
-    DECLARE_NO_COPY_CLASS(wxTlsKey)
+    wxDECLARE_NO_COPY_CLASS(wxTlsKey);
 };
 
 #endif // _WX_OS2_TLS_H_

@@ -184,7 +184,7 @@ public:
     wxDL_METHOD_DEFINE( GtkWidget*, gnome_print_job_preview_new,
         (GnomePrintJob *gpm, const guchar *title), (gpm, title), NULL )
 
-    DECLARE_NO_COPY_CLASS(wxGnomePrintLibrary)
+    wxDECLARE_NO_COPY_CLASS(wxGnomePrintLibrary);
 };
 
 wxGnomePrintLibrary::wxGnomePrintLibrary()

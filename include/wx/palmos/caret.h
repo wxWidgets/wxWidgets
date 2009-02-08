@@ -56,7 +56,7 @@ protected:
 private:
     bool m_hasCaret;
 
-    DECLARE_NO_COPY_CLASS(wxCaret)
+    wxDECLARE_NO_COPY_CLASS(wxCaret);
 };
 
 #endif // _WX_CARET_H_

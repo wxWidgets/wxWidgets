@@ -177,7 +177,7 @@ private:
 
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxHeaderCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);
 };
 
 #endif // _WX_GENERIC_HEADERCTRLG_H_

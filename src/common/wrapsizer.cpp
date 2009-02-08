@@ -59,7 +59,7 @@ private:
     wxSizerItem& m_item;
     const int m_propOld;
 
-    DECLARE_NO_COPY_CLASS(wxPropChanger)
+    wxDECLARE_NO_COPY_CLASS(wxPropChanger);
 };
 
 } // anonymous namespace

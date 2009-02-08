@@ -367,7 +367,7 @@ public:
 protected:
     size_t OnSysRead(void *buffer, size_t bufsize);
 
-    DECLARE_NO_COPY_CLASS(wxHTTPStream)
+    wxDECLARE_NO_COPY_CLASS(wxHTTPStream);
 };
 
 size_t wxHTTPStream::OnSysRead(void *buffer, size_t bufsize)

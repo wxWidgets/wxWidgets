@@ -95,7 +95,7 @@ private:
   wxString m_strGroup,    // current group in appname.ini file
            m_strPath;     // the rest of the path (no trailing '_'!)
 
-  DECLARE_NO_COPY_CLASS(wxIniConfig)
+  wxDECLARE_NO_COPY_CLASS(wxIniConfig);
   DECLARE_ABSTRACT_CLASS(wxIniConfig)
 };
 

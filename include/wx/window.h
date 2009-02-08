@@ -1703,7 +1703,7 @@ private:
 
 
     DECLARE_ABSTRACT_CLASS(wxWindowBase)
-    DECLARE_NO_COPY_CLASS(wxWindowBase)
+    wxDECLARE_NO_COPY_CLASS(wxWindowBase);
     DECLARE_EVENT_TABLE()
 };
 

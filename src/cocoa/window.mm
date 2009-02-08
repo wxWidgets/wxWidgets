@@ -152,7 +152,7 @@ namespace { // file namespace
 
 class wxCocoaPrivateScreenCoordinateTransformer
 {
-    DECLARE_NO_COPY_CLASS(wxCocoaPrivateScreenCoordinateTransformer)
+    wxDECLARE_NO_COPY_CLASS(wxCocoaPrivateScreenCoordinateTransformer);
 public:
     wxCocoaPrivateScreenCoordinateTransformer();
     ~wxCocoaPrivateScreenCoordinateTransformer();
@@ -273,7 +273,7 @@ NSPoint wxWindowCocoa::OriginInCocoaScreenCoordinatesForRectInWxDisplayCoordinat
 // ========================================================================
 class wxWindowCocoaHider: protected wxCocoaNSView
 {
-    DECLARE_NO_COPY_CLASS(wxWindowCocoaHider)
+    wxDECLARE_NO_COPY_CLASS(wxWindowCocoaHider);
 public:
     wxWindowCocoaHider(wxWindow *owner);
     virtual ~wxWindowCocoaHider();
@@ -1817,7 +1817,7 @@ static char const * const comparisonresultStrings[] =
 
 class CocoaWindowCompareContext
 {
-    DECLARE_NO_COPY_CLASS(CocoaWindowCompareContext)
+    wxDECLARE_NO_COPY_CLASS(CocoaWindowCompareContext);
 public:
     CocoaWindowCompareContext(); // Not implemented
     CocoaWindowCompareContext(NSView *target, NSArray *subviews)
@@ -2008,7 +2008,7 @@ wxWindow* wxFindWindowAtPointer(wxPoint& pt)
  */
 class wxCocoaMouseMovedEventSynthesizer
 {
-    DECLARE_NO_COPY_CLASS(wxCocoaMouseMovedEventSynthesizer)
+    wxDECLARE_NO_COPY_CLASS(wxCocoaMouseMovedEventSynthesizer);
 public:
     wxCocoaMouseMovedEventSynthesizer()
     {   m_lastScreenMouseLocation = NSZeroPoint;

@@ -237,7 +237,7 @@ private:
     private:
         wxDialUpManagerMSW *m_dialUpManager;
 
-        DECLARE_NO_COPY_CLASS(RasTimer)
+        wxDECLARE_NO_COPY_CLASS(RasTimer);
     } m_timerStatusPolling;
 
     // thread handle for the thread sitting on connection change event
@@ -288,7 +288,7 @@ private:
     // this flag tells us whether a call to RasDial() is in progress
     static wxDialUpManagerMSW *ms_dialer;
 
-    DECLARE_NO_COPY_CLASS(wxDialUpManagerMSW)
+    wxDECLARE_NO_COPY_CLASS(wxDialUpManagerMSW);
 };
 
 // module to destroy helper window created by wxDialUpManagerMSW

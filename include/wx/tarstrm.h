@@ -200,7 +200,7 @@ private:
     wxTarHeaderRecords *m_HeaderRecs;
     wxTarHeaderRecords *m_GlobalHeaderRecs;
 
-    DECLARE_NO_COPY_CLASS(wxTarInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxTarInputStream);
 };
 
 
@@ -283,7 +283,7 @@ private:
     wxString m_badfit;
     bool m_endrecWritten;
 
-    DECLARE_NO_COPY_CLASS(wxTarOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxTarOutputStream);
 };
 
 

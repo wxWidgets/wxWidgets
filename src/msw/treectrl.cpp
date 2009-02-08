@@ -389,7 +389,7 @@ protected:
     // the real client data
     wxTreeItemData *m_data;
 
-    DECLARE_NO_COPY_CLASS(wxTreeItemParam)
+    wxDECLARE_NO_COPY_CLASS(wxTreeItemParam);
 };
 
 // wxVirutalNode is used in place of a single root when 'hidden' root is
@@ -414,7 +414,7 @@ public:
 private:
     wxTreeItemParam *m_param;
 
-    DECLARE_NO_COPY_CLASS(wxVirtualNode)
+    wxDECLARE_NO_COPY_CLASS(wxVirtualNode);
 };
 
 #ifdef __VISUALC__
@@ -459,7 +459,7 @@ private:
 
     const wxTreeCtrl *m_tree;
 
-    DECLARE_NO_COPY_CLASS(wxTreeTraversal)
+    wxDECLARE_NO_COPY_CLASS(wxTreeTraversal);
 };
 
 // internal class for getting the selected items
@@ -499,7 +499,7 @@ public:
 private:
     wxArrayTreeItemIds& m_selections;
 
-    DECLARE_NO_COPY_CLASS(TraverseSelections)
+    wxDECLARE_NO_COPY_CLASS(TraverseSelections);
 };
 
 // internal class for counting tree items
@@ -528,7 +528,7 @@ public:
 private:
     size_t m_count;
 
-    DECLARE_NO_COPY_CLASS(TraverseCounter)
+    wxDECLARE_NO_COPY_CLASS(TraverseCounter);
 };
 
 // ----------------------------------------------------------------------------

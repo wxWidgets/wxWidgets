@@ -146,7 +146,7 @@ private:
     wxCheckListBox *m_pParent;
     size_t          m_nIndex;
 
-    DECLARE_NO_COPY_CLASS(wxCheckListBoxItem)
+    wxDECLARE_NO_COPY_CLASS(wxCheckListBoxItem);
 };
 
 wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)

@@ -65,7 +65,7 @@ public:
     virtual int OnRun() { wxFAIL_MSG( _T("unreachable code") ); return 0; }
     virtual bool DoYield(bool, long) { return true; }
 
-    DECLARE_NO_COPY_CLASS(wxDummyConsoleApp)
+    wxDECLARE_NO_COPY_CLASS(wxDummyConsoleApp);
 };
 
 // we need a special kind of auto pointer to wxApp which not only deletes the
@@ -94,7 +94,7 @@ public:
         wxApp::SetInstance(ptr);
     }
 
-    DECLARE_NO_COPY_CLASS(wxAppPtr)
+    wxDECLARE_NO_COPY_CLASS(wxAppPtr);
 };
 
 // class to ensure that wxAppBase::CleanUp() is called if our Initialize()
@@ -161,7 +161,7 @@ static struct InitData
     wchar_t **argv;
 #endif // wxUSE_UNICODE
 
-    DECLARE_NO_COPY_CLASS(InitData)
+    wxDECLARE_NO_COPY_CLASS(InitData);
 } gs_initData;
 
 // ============================================================================

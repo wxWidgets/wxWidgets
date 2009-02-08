@@ -426,7 +426,7 @@ private:
 
     // the node belongs to a particular iterator instance, it's not copied
     // when a copy of the iterator is made
-    DECLARE_NO_COPY_CLASS(wxStringIteratorNode)
+    wxDECLARE_NO_COPY_CLASS(wxStringIteratorNode);
 };
 #endif // wxUSE_UNICODE_UTF8
 
@@ -3428,7 +3428,7 @@ private:
 
       // copying is disallowed as it would result in more than one pointer into
       // the same linked list
-      DECLARE_NO_COPY_CLASS(wxStringIteratorNodeHead)
+      wxDECLARE_NO_COPY_CLASS(wxStringIteratorNodeHead);
   };
 
   wxStringIteratorNodeHead m_iterators;
@@ -3571,7 +3571,7 @@ private:
     wxString&         m_str;
     wxStringCharType *m_buf;
 
-    DECLARE_NO_COPY_CLASS(wxStringInternalBuffer)
+    wxDECLARE_NO_COPY_CLASS(wxStringInternalBuffer);
 };
 
 class wxStringInternalBufferLength
@@ -3601,7 +3601,7 @@ private:
     size_t            m_len;
     bool              m_lenSet;
 
-    DECLARE_NO_COPY_CLASS(wxStringInternalBufferLength)
+    wxDECLARE_NO_COPY_CLASS(wxStringInternalBufferLength);
 };
 
 #endif // !wxUSE_STL_BASED_WXSTRING
@@ -3681,7 +3681,7 @@ public:
         this->m_str.assign(this->m_buf.data());
     }
 
-    DECLARE_NO_COPY_CLASS(wxStringTypeBuffer)
+    wxDECLARE_NO_COPY_CLASS(wxStringTypeBuffer);
 };
 
 template<typename T>
@@ -3697,7 +3697,7 @@ public:
         this->m_str.assign(this->m_buf.data(), this->m_len);
     }
 
-    DECLARE_NO_COPY_CLASS(wxStringTypeBufferLength)
+    wxDECLARE_NO_COPY_CLASS(wxStringTypeBufferLength);
 };
 
 #if wxUSE_STL_BASED_WXSTRING
@@ -3712,7 +3712,7 @@ public:
     ~wxStringInternalBuffer()
         { m_str.m_impl.assign(m_buf.data()); }
 
-    DECLARE_NO_COPY_CLASS(wxStringInternalBuffer)
+    wxDECLARE_NO_COPY_CLASS(wxStringInternalBuffer);
 };
 
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE(
@@ -3730,7 +3730,7 @@ public:
         m_str.m_impl.assign(m_buf.data(), m_len);
     }
 
-    DECLARE_NO_COPY_CLASS(wxStringInternalBufferLength)
+    wxDECLARE_NO_COPY_CLASS(wxStringInternalBufferLength);
 };
 
 #endif // wxUSE_STL_BASED_WXSTRING
@@ -3780,7 +3780,7 @@ public:
         conv.ToWChar(wbuf, wlen, m_buf);
     }
 
-    DECLARE_NO_COPY_CLASS(wxUTF8StringBuffer)
+    wxDECLARE_NO_COPY_CLASS(wxUTF8StringBuffer);
 };
 
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxStringTypeBufferLengthBase<char> )
@@ -3803,7 +3803,7 @@ public:
         wbuf.SetLength(wlen);
     }
 
-    DECLARE_NO_COPY_CLASS(wxUTF8StringBufferLength)
+    wxDECLARE_NO_COPY_CLASS(wxUTF8StringBufferLength);
 };
 #endif // wxUSE_UNICODE_UTF8/wxUSE_UNICODE_WCHAR
 

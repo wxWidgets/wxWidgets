@@ -46,7 +46,7 @@ class wxCocoaTrackingRectManager;
 class WXDLLIMPEXP_CORE wxWindowCocoa: public wxWindowBase, protected wxCocoaNSView
 {
     DECLARE_DYNAMIC_CLASS(wxWindowCocoa)
-    DECLARE_NO_COPY_CLASS(wxWindowCocoa)
+    wxDECLARE_NO_COPY_CLASS(wxWindowCocoa);
     DECLARE_EVENT_TABLE()
     friend wxWindow *wxWindowBase::GetCapture();
     friend class wxWindowCocoaScrollView;

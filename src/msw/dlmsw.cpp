@@ -65,7 +65,7 @@ private:
     wxDynamicLibrary m_dll;
 
 
-    DECLARE_NO_COPY_CLASS(wxVersionDLL)
+    wxDECLARE_NO_COPY_CLASS(wxVersionDLL);
 };
 
 // class used to create wxDynamicLibraryDetails objects

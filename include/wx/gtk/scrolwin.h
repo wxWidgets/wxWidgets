@@ -71,7 +71,7 @@ private:
                         int *posOld);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxScrollHelper)
+    wxDECLARE_NO_COPY_CLASS(wxScrollHelper);
 };
 
 #endif // _WX_GTK_SCROLLWIN_H_

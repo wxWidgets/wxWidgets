@@ -144,7 +144,7 @@ void* wxMacMPRemoteGUICall( classtype *object , void (classtype::*function)( con
 
 class WXDLLEXPORT wxMacPortSaver
 {
-    DECLARE_NO_COPY_CLASS(wxMacPortSaver)
+    wxDECLARE_NO_COPY_CLASS(wxMacPortSaver);
 
 public:
     wxMacPortSaver( GrafPtr port );
@@ -160,7 +160,7 @@ private :
 
 class WXDLLEXPORT wxMacWindowClipper : public wxMacPortSaver
 {
-    DECLARE_NO_COPY_CLASS(wxMacWindowClipper)
+    wxDECLARE_NO_COPY_CLASS(wxMacWindowClipper);
 
 public:
     wxMacWindowClipper( const wxWindow* win );

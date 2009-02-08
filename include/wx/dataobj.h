@@ -246,7 +246,7 @@ private:
     // the one and only format we support
     wxDataFormat m_format;
 
-    DECLARE_NO_COPY_CLASS(wxDataObjectSimple)
+    wxDECLARE_NO_COPY_CLASS(wxDataObjectSimple);
 };
 
 // ----------------------------------------------------------------------------
@@ -309,7 +309,7 @@ private:
 
     wxDataFormat m_receivedFormat;
 
-    DECLARE_NO_COPY_CLASS(wxDataObjectComposite)
+    wxDECLARE_NO_COPY_CLASS(wxDataObjectComposite);
 };
 
 // ============================================================================
@@ -393,7 +393,7 @@ public:
 private:
     wxString m_text;
 
-    DECLARE_NO_COPY_CLASS(wxTextDataObject)
+    wxDECLARE_NO_COPY_CLASS(wxTextDataObject);
 };
 
 // ----------------------------------------------------------------------------
@@ -418,7 +418,7 @@ public:
 protected:
     wxBitmap m_bitmap;
 
-    DECLARE_NO_COPY_CLASS(wxBitmapDataObjectBase)
+    wxDECLARE_NO_COPY_CLASS(wxBitmapDataObjectBase);
 };
 
 // ----------------------------------------------------------------------------
@@ -440,7 +440,7 @@ public:
 protected:
     wxArrayString m_filenames;
 
-    DECLARE_NO_COPY_CLASS(wxFileDataObjectBase)
+    wxDECLARE_NO_COPY_CLASS(wxFileDataObjectBase);
 };
 
 // ----------------------------------------------------------------------------
@@ -501,7 +501,7 @@ private:
     size_t m_size;
     void  *m_data;
 
-    DECLARE_NO_COPY_CLASS(wxCustomDataObject)
+    wxDECLARE_NO_COPY_CLASS(wxCustomDataObject);
 };
 
 // ----------------------------------------------------------------------------

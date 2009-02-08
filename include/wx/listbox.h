@@ -111,7 +111,7 @@ protected:
         { return wxNOT_FOUND; }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxListBoxBase)
+    wxDECLARE_NO_COPY_CLASS(wxListBoxBase);
 };
 
 // ----------------------------------------------------------------------------

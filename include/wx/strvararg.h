@@ -191,7 +191,7 @@ private:
     const wxString * const m_str;
     const wxCStrData * const m_cstr;
 
-    DECLARE_NO_ASSIGN_CLASS(wxFormatString)
+    wxDECLARE_NO_ASSIGN_CLASS(wxFormatString);
 };
 
 // these two helper classes are used to find wxFormatString argument among fixed

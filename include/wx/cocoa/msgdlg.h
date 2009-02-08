@@ -64,7 +64,7 @@ protected:
     virtual void DoSetCustomLabel(wxString& var, const ButtonLabel& label);
 
     DECLARE_DYNAMIC_CLASS(wxCocoaMessageDialog)
-    DECLARE_NO_COPY_CLASS(wxCocoaMessageDialog)
+    wxDECLARE_NO_COPY_CLASS(wxCocoaMessageDialog);
 };
 
 #endif // _WX_MSGDLG_H_

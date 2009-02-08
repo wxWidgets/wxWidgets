@@ -959,7 +959,7 @@ private:
 
     bool m_bSwapped;   // wrong endianness?
 
-    DECLARE_NO_COPY_CLASS(wxMsgCatalogFile)
+    wxDECLARE_NO_COPY_CLASS(wxMsgCatalogFile);
 };
 
 

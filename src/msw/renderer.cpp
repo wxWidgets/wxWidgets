@@ -218,7 +218,7 @@ public:
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxRendererMSW)
+    wxDECLARE_NO_COPY_CLASS(wxRendererMSW);
 };
 
 // ----------------------------------------------------------------------------
@@ -277,7 +277,7 @@ public:
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 private:
-    DECLARE_NO_COPY_CLASS(wxRendererXP)
+    wxDECLARE_NO_COPY_CLASS(wxRendererXP);
 };
 
 #endif // wxUSE_UXTHEME

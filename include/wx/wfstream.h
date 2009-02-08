@@ -53,7 +53,7 @@ protected:
     wxFile *m_file;
     bool m_file_destroy;
 
-    DECLARE_NO_COPY_CLASS(wxFileInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxFileInputStream);
 };
 
 class WXDLLIMPEXP_BASE wxFileOutputStream : public wxOutputStream
@@ -83,7 +83,7 @@ protected:
     wxFile *m_file;
     bool m_file_destroy;
 
-    DECLARE_NO_COPY_CLASS(wxFileOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxFileOutputStream);
 };
 
 class WXDLLIMPEXP_BASE wxTempFileOutputStream : public wxOutputStream
@@ -108,7 +108,7 @@ protected:
 private:
     wxTempFile *m_file;
 
-    DECLARE_NO_COPY_CLASS(wxTempFileOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxTempFileOutputStream);
 };
 
 class WXDLLIMPEXP_BASE wxFileStream : public wxFileInputStream,
@@ -119,7 +119,7 @@ public:
     virtual bool IsOk() const;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxFileStream)
+    wxDECLARE_NO_COPY_CLASS(wxFileStream);
 };
 
 #endif //wxUSE_FILE
@@ -155,7 +155,7 @@ protected:
     wxFFile *m_file;
     bool m_file_destroy;
 
-    DECLARE_NO_COPY_CLASS(wxFFileInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxFFileInputStream);
 };
 
 class WXDLLIMPEXP_BASE wxFFileOutputStream : public wxOutputStream
@@ -185,7 +185,7 @@ protected:
     wxFFile *m_file;
     bool m_file_destroy;
 
-    DECLARE_NO_COPY_CLASS(wxFFileOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxFFileOutputStream);
 };
 
 class WXDLLIMPEXP_BASE wxFFileStream : public wxFFileInputStream,
@@ -196,7 +196,7 @@ public:
     virtual bool IsOk() const;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxFFileStream)
+    wxDECLARE_NO_COPY_CLASS(wxFFileStream);
 };
 
 #endif //wxUSE_FFILE

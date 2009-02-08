@@ -700,7 +700,7 @@ public:
 private:
     wxWMP10MediaBackend *m_amb;
 
-    DECLARE_NO_COPY_CLASS(wxWMP10MediaEvtHandler)
+    wxDECLARE_NO_COPY_CLASS(wxWMP10MediaEvtHandler);
 };
 #endif
 

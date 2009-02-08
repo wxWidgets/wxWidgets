@@ -214,7 +214,7 @@ public:
 private:
     wxArrayString& m_files;
 
-    DECLARE_NO_COPY_CLASS(wxDirTraverserSimple)
+    wxDECLARE_NO_COPY_CLASS(wxDirTraverserSimple);
 };
 
 /* static */
@@ -266,7 +266,7 @@ public:
 private:
     wxString m_file;
 
-    DECLARE_NO_COPY_CLASS(wxDirTraverserFindFirst)
+    wxDECLARE_NO_COPY_CLASS(wxDirTraverserFindFirst);
 };
 
 /* static */

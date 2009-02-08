@@ -165,7 +165,7 @@ private:
     wxWindowIDRef *m_ids;
 
 
-    DECLARE_NO_COPY_CLASS(wxSubwindows)
+    wxDECLARE_NO_COPY_CLASS(wxSubwindows);
 };
 
 // convenient macro to forward a few methods which are usually propagated to

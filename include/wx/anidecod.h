@@ -68,7 +68,7 @@ private:
     static wxCURHandler sm_handler;
 
 
-    DECLARE_NO_COPY_CLASS(wxANIDecoder)
+    wxDECLARE_NO_COPY_CLASS(wxANIDecoder);
 };
 
 

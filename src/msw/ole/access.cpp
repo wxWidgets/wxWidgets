@@ -87,7 +87,7 @@ private:
     wxVariant m_variant;  // List of further variants
     int       m_nCurrent; // Current enum position
 
-    DECLARE_NO_COPY_CLASS(wxIEnumVARIANT)
+    wxDECLARE_NO_COPY_CLASS(wxIEnumVARIANT);
 };
 
 // ----------------------------------------------------------------------------
@@ -335,7 +335,7 @@ public:
 private:
     wxAccessible *m_pAccessible;      // pointer to C++ class we belong to
 
-    DECLARE_NO_COPY_CLASS(wxIAccessible)
+    wxDECLARE_NO_COPY_CLASS(wxIAccessible);
 };
 
 // ============================================================================

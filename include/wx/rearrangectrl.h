@@ -109,7 +109,7 @@ private:
 
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxRearrangeList)
+    wxDECLARE_NO_COPY_CLASS(wxRearrangeList);
 };
 
 // ----------------------------------------------------------------------------
@@ -166,7 +166,7 @@ private:
 
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxRearrangeCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxRearrangeCtrl);
 };
 
 // ----------------------------------------------------------------------------
@@ -224,7 +224,7 @@ private:
 
     wxRearrangeCtrl *m_ctrl;
 
-    DECLARE_NO_COPY_CLASS(wxRearrangeDialog)
+    wxDECLARE_NO_COPY_CLASS(wxRearrangeDialog);
 };
 
 #endif // wxUSE_REARRANGECTRL

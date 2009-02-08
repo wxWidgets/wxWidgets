@@ -380,7 +380,7 @@ private:
 
 
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)
-    DECLARE_NO_COPY_CLASS(wxWindowGTK)
+    wxDECLARE_NO_COPY_CLASS(wxWindowGTK);
 };
 
 #endif // _WX_GTK_WINDOW_H_

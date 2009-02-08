@@ -206,7 +206,7 @@ private:
 #endif
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW)
+    wxDECLARE_NO_COPY_CLASS(wxTopLevelWindowMSW);
 };
 
 #endif // _WX_MSW_TOPLEVEL_H_

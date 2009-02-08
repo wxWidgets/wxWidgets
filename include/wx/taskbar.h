@@ -53,7 +53,7 @@ private:
     void OnRightButtonDown(wxTaskBarIconEvent& event);
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxTaskBarIconBase)
+    wxDECLARE_NO_COPY_CLASS(wxTaskBarIconBase);
 };
 
 
@@ -89,7 +89,7 @@ public:
     virtual wxEvent *Clone() const { return new wxTaskBarIconEvent(*this); }
 
 private:
-    DECLARE_NO_ASSIGN_CLASS(wxTaskBarIconEvent)
+    wxDECLARE_NO_ASSIGN_CLASS(wxTaskBarIconEvent);
 };
 
 typedef void (wxEvtHandler::*wxTaskBarIconEventFunction)(wxTaskBarIconEvent&);

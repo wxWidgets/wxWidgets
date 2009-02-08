@@ -94,7 +94,7 @@ protected:      // functions required for wxST_ELLIPSIZE_* support
     virtual void DoSetLabel(const wxString& WXUNUSED(str)) { }
 
 private:
-    DECLARE_NO_COPY_CLASS(wxStaticTextBase)
+    wxDECLARE_NO_COPY_CLASS(wxStaticTextBase);
 };
 
 // see wx/generic/stattextg.h for the explanation

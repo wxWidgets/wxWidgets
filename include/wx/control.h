@@ -135,7 +135,7 @@ protected:
     // this field contains the label in wx format, i.e. with '&' mnemonics
     wxString m_labelOrig;
 
-    DECLARE_NO_COPY_CLASS(wxControlBase)
+    wxDECLARE_NO_COPY_CLASS(wxControlBase);
 };
 
 // ----------------------------------------------------------------------------

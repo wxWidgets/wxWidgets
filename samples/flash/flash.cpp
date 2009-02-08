@@ -120,7 +120,7 @@ public:
 private:
     wxString m_swf;
 
-    DECLARE_NO_COPY_CLASS(FlashApp)
+    wxDECLARE_NO_COPY_CLASS(FlashApp);
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -187,7 +187,7 @@ private:
                *m_funcarg;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(FlashFrame)
+    wxDECLARE_NO_COPY_CLASS(FlashFrame);
 };
 
 // ----------------------------------------------------------------------------

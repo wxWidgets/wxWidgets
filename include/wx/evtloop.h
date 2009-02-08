@@ -76,7 +76,7 @@ protected:
     // the pointer to currently active loop
     static wxEventLoopBase *ms_activeLoop;
 
-    DECLARE_NO_COPY_CLASS(wxEventLoopBase)
+    wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };
 
 #if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || defined(__UNIX__)
@@ -166,7 +166,7 @@ protected:
     // the pointer to the port specific implementation class
     wxEventLoopImpl *m_impl;
 
-    DECLARE_NO_COPY_CLASS(wxGUIEventLoop)
+    wxDECLARE_NO_COPY_CLASS(wxGUIEventLoop);
 };
 
 #endif // platforms

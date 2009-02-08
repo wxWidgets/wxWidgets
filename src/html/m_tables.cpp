@@ -119,7 +119,7 @@ private:
     // only once, before first Layout().
     void ComputeMinMaxWidths();
 
-    DECLARE_NO_COPY_CLASS(wxHtmlTableCell)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlTableCell);
 };
 
 

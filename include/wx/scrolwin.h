@@ -290,7 +290,7 @@ protected:
 
     wxScrollHelperEvtHandler *m_handler;
 
-    DECLARE_NO_COPY_CLASS(wxScrollHelperBase)
+    wxDECLARE_NO_COPY_CLASS(wxScrollHelperBase);
 };
 
 // this macro can be used in a wxScrollHelper-derived class to forward wxWindow
@@ -405,7 +405,7 @@ private:
     // VC++ 6 gives warning for the declaration of template member function
     // without definition
 #if !defined(__VISUALC__) || wxCHECK_VISUALC_VERSION(7)
-    DECLARE_NO_COPY_CLASS(wxScrolled)
+    wxDECLARE_NO_COPY_CLASS(wxScrolled);
 #endif
 };
 

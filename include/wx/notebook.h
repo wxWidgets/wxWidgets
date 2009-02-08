@@ -104,7 +104,7 @@ public:
     virtual bool AcceptsFocus() const { return wxControl::AcceptsFocus(); }
 
 protected:
-    DECLARE_NO_COPY_CLASS(wxNotebookBase)
+    wxDECLARE_NO_COPY_CLASS(wxNotebookBase);
 };
 
 // ----------------------------------------------------------------------------

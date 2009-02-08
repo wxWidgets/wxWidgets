@@ -116,7 +116,7 @@ private:
         return true;
     }
 
-    DECLARE_NO_COPY_CLASS(wxControlWithItemsGeneric)
+    wxDECLARE_NO_COPY_CLASS(wxControlWithItemsGeneric);
 };
 
 #endif // _WX_GENERIC_CTRLSUB_H_

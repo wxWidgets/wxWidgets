@@ -100,7 +100,7 @@ private:
     GLData       m_gldata;
     DXFRenderer  m_renderer;
 
-    DECLARE_NO_COPY_CLASS(TestGLCanvas)
+    wxDECLARE_NO_COPY_CLASS(TestGLCanvas);
     DECLARE_EVENT_TABLE()
 };
 

@@ -48,7 +48,7 @@ public:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGtkCalendarCtrl)
-    DECLARE_NO_COPY_CLASS(wxGtkCalendarCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxGtkCalendarCtrl);
 };
 
 #endif // GTK_CALCTRL_H__

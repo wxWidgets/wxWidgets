@@ -89,7 +89,7 @@ protected:
 
     friend class wxDisplayFactory;
 
-    DECLARE_NO_COPY_CLASS(wxDisplayImpl)
+    wxDECLARE_NO_COPY_CLASS(wxDisplayImpl);
 };
 
 // ----------------------------------------------------------------------------

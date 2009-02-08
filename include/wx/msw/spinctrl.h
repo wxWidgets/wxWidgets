@@ -133,7 +133,7 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxSpinCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxSpinCtrl);
 };
 
 #endif // wxUSE_SPINCTRL

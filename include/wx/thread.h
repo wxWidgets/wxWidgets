@@ -161,7 +161,7 @@ protected:
 
     friend class wxConditionInternal;
 
-    DECLARE_NO_COPY_CLASS(wxMutex)
+    wxDECLARE_NO_COPY_CLASS(wxMutex);
 };
 
 // a helper class which locks the mutex in the ctor and unlocks it in the dtor:
@@ -266,7 +266,7 @@ private:
     };
 #endif // Unix&OS2/Win32
 
-    DECLARE_NO_COPY_CLASS(wxCriticalSection)
+    wxDECLARE_NO_COPY_CLASS(wxCriticalSection);
 };
 
 #if wxCRITSECT_IS_MUTEX
@@ -301,7 +301,7 @@ public:
 private:
     wxCriticalSection& m_critsect;
 
-    DECLARE_NO_COPY_CLASS(wxCriticalSectionLocker)
+    wxDECLARE_NO_COPY_CLASS(wxCriticalSectionLocker);
 };
 
 // ----------------------------------------------------------------------------
@@ -364,7 +364,7 @@ public:
 private:
     wxConditionInternal *m_internal;
 
-    DECLARE_NO_COPY_CLASS(wxCondition)
+    wxDECLARE_NO_COPY_CLASS(wxCondition);
 };
 
 #if WXWIN_COMPATIBILITY_2_6
@@ -409,7 +409,7 @@ public:
 private:
     wxSemaphoreInternal *m_internal;
 
-    DECLARE_NO_COPY_CLASS(wxSemaphore)
+    wxDECLARE_NO_COPY_CLASS(wxSemaphore);
 };
 
 // ----------------------------------------------------------------------------

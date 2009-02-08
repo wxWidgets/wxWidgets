@@ -126,7 +126,7 @@ private:
     // the offset of the window used to emulate scrolling it
     int m_scrollOffset;
 
-    DECLARE_NO_COPY_CLASS(wxHeaderCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);
 };
 
 #endif // _WX_MSW_HEADERCTRL_H_

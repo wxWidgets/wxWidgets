@@ -174,7 +174,7 @@ private:
     wxDC            *m_dc;
 
     DECLARE_DYNAMIC_CLASS(wxGtkPrinter)
-    DECLARE_NO_COPY_CLASS(wxGtkPrinter)
+    wxDECLARE_NO_COPY_CLASS(wxGtkPrinter);
 };
 
 //----------------------------------------------------------------------------
@@ -315,7 +315,7 @@ private:
     double                  m_DEV2PS;
 
     DECLARE_DYNAMIC_CLASS(wxGtkPrinterDCImpl)
-    DECLARE_NO_COPY_CLASS(wxGtkPrinterDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxGtkPrinterDCImpl);
 };
 
 // ----------------------------------------------------------------------------

@@ -36,7 +36,7 @@ public:
     void SetGraphicsContext( wxGraphicsContext* ctx );
     
     DECLARE_DYNAMIC_CLASS(wxGCDC)
-    DECLARE_NO_COPY_CLASS(wxGCDC)
+    wxDECLARE_NO_COPY_CLASS(wxGCDC);
 };
 
 
@@ -197,7 +197,7 @@ protected:
     wxGraphicsContext* m_graphicContext;
     
     DECLARE_CLASS(wxGCDCImpl)
-    DECLARE_NO_COPY_CLASS(wxGCDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxGCDCImpl);
 };
 
 #endif // wxUSE_GRAPHICS_CONTEXT

@@ -67,7 +67,7 @@ private:
     wxIDropTarget *m_pIDropTarget; // the pointer to our COM interface
     IDataObject   *m_pIDataSource; // the pointer to the source data object
 
-    DECLARE_NO_COPY_CLASS(wxDropTarget)
+    wxDECLARE_NO_COPY_CLASS(wxDropTarget);
 };
 
 #endif  //wxUSE_DRAG_AND_DROP

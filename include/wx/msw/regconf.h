@@ -106,7 +106,7 @@ private:
   // current path (not '/' terminated)
   wxString  m_strPath;
 
-  DECLARE_NO_COPY_CLASS(wxRegConfig)
+  wxDECLARE_NO_COPY_CLASS(wxRegConfig);
   DECLARE_ABSTRACT_CLASS(wxRegConfig)
 };
 

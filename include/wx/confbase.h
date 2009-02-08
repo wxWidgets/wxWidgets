@@ -437,7 +437,7 @@ private:
                 m_strOldPath;   // saved path
   bool          m_bChanged;     // was the path changed?
 
-  DECLARE_NO_COPY_CLASS(wxConfigPathChanger)
+  wxDECLARE_NO_COPY_CLASS(wxConfigPathChanger);
 };
 
 

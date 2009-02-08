@@ -50,7 +50,7 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
-    DECLARE_NO_COPY_CLASS(wxStaticBitmapBase)
+    wxDECLARE_NO_COPY_CLASS(wxStaticBitmapBase);
 };
 
 #if defined(__WXUNIVERSAL__)

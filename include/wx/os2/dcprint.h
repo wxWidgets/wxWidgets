@@ -60,7 +60,7 @@ protected:
     wxPrintData                     m_printData;
 private:
     DECLARE_CLASS(wxPrinterDCImpl)
-    DECLARE_NO_COPY_CLASS(wxPrinterDCImpl)
+    wxDECLARE_NO_COPY_CLASS(wxPrinterDCImpl);
 }; // end of CLASS wxPrinterDC
 
 // Gets an HDC for the specified printer configuration

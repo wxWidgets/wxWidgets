@@ -31,7 +31,7 @@ protected:
     // the exit code of this event loop
     int m_exitcode;
 
-    DECLARE_NO_COPY_CLASS(wxGUIEventLoop)
+    wxDECLARE_NO_COPY_CLASS(wxGUIEventLoop);
 };
 
 #endif // _WX_GTK_EVTLOOP_H_

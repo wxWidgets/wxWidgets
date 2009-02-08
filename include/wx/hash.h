@@ -150,7 +150,7 @@ protected:
     bool m_deleteContents;
 
 private:
-    DECLARE_NO_COPY_CLASS(wxHashTableBase)
+    wxDECLARE_NO_COPY_CLASS(wxHashTableBase);
 };
 
 // ----------------------------------------------------------------------------

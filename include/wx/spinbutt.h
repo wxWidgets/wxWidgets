@@ -65,7 +65,7 @@ protected:
     int   m_min;
     int   m_max;
 
-    DECLARE_NO_COPY_CLASS(wxSpinButtonBase)
+    wxDECLARE_NO_COPY_CLASS(wxSpinButtonBase);
 };
 
 // ----------------------------------------------------------------------------

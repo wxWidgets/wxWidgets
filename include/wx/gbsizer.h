@@ -156,7 +156,7 @@ protected:
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGBSizerItem)
-    DECLARE_NO_COPY_CLASS(wxGBSizerItem)
+    wxDECLARE_NO_COPY_CLASS(wxGBSizerItem);
 };
 
 
@@ -294,7 +294,7 @@ protected:
 private:
 
     DECLARE_CLASS(wxGridBagSizer)
-    DECLARE_NO_COPY_CLASS(wxGridBagSizer)
+    wxDECLARE_NO_COPY_CLASS(wxGridBagSizer);
 };
 
 //---------------------------------------------------------------------------

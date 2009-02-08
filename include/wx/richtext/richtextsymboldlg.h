@@ -355,7 +355,7 @@ private:
     bool        m_unicodeMode;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxSymbolListCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxSymbolListCtrl);
     DECLARE_ABSTRACT_CLASS(wxSymbolListCtrl)
 };
 

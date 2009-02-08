@@ -224,7 +224,7 @@ private:
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 
-    DECLARE_NO_COPY_CLASS(wxDialogBase)
+    wxDECLARE_NO_COPY_CLASS(wxDialogBase);
     DECLARE_EVENT_TABLE()
 };
 

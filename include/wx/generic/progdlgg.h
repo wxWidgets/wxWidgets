@@ -168,7 +168,7 @@ private:
     class WXDLLIMPEXP_FWD_CORE wxWindowDisabler *m_winDisabler;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxProgressDialog)
+    wxDECLARE_NO_COPY_CLASS(wxProgressDialog);
 };
 
 #endif // wxUSE_PROGRESSDLG

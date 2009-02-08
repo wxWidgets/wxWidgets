@@ -438,7 +438,7 @@ protected:
     bool        m_quickBestSize;
 
 
-    DECLARE_NO_COPY_CLASS(wxTreeCtrlBase)
+    wxDECLARE_NO_COPY_CLASS(wxTreeCtrlBase);
 };
 
 // ----------------------------------------------------------------------------

@@ -90,7 +90,7 @@ private:
     ULONG       m_nCount,   // number of formats we support
                 m_nCurrent; // current enum position
 
-    DECLARE_NO_COPY_CLASS(wxIEnumFORMATETC)
+    wxDECLARE_NO_COPY_CLASS(wxIEnumFORMATETC);
 };
 
 // ----------------------------------------------------------------------------
@@ -126,7 +126,7 @@ private:
 
     bool m_mustDelete;
 
-    DECLARE_NO_COPY_CLASS(wxIDataObject)
+    wxDECLARE_NO_COPY_CLASS(wxIDataObject);
 };
 
 // ============================================================================
@@ -1199,7 +1199,7 @@ public:
         { return GetDataHere(buf); }
 #endif
 
-    DECLARE_NO_COPY_CLASS(CFSTR_SHELLURLDataObject)
+    wxDECLARE_NO_COPY_CLASS(CFSTR_SHELLURLDataObject);
 };
 
 

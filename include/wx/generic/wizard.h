@@ -163,7 +163,7 @@ protected:
 
     DECLARE_DYNAMIC_CLASS(wxWizard)
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(wxWizard)
+    wxDECLARE_NO_COPY_CLASS(wxWizard);
 };
 
 #endif // _WX_GENERIC_WIZARD_H_

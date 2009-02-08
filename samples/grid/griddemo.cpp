@@ -1877,7 +1877,7 @@ private:
     // fla for EVT_IDLE handler
     bool m_shouldUpdateOrder;
 
-    DECLARE_NO_COPY_CLASS(TabularGridFrame)
+    wxDECLARE_NO_COPY_CLASS(TabularGridFrame);
     DECLARE_EVENT_TABLE()
 };
 

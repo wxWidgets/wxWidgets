@@ -980,7 +980,7 @@ private:
     wxTextCtrl *m_text;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(MyRearrangeDialog)
+    wxDECLARE_NO_COPY_CLASS(MyRearrangeDialog);
 };
 
 BEGIN_EVENT_TABLE(MyRearrangeDialog, wxRearrangeDialog)

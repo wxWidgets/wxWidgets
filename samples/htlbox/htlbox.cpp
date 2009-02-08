@@ -95,7 +95,7 @@ public:
     wxTextFile m_file;
 #endif
 
-    DECLARE_NO_COPY_CLASS(MyHtmlListBox)
+    wxDECLARE_NO_COPY_CLASS(MyHtmlListBox);
     DECLARE_DYNAMIC_CLASS(MyHtmlListBox)
 };
 

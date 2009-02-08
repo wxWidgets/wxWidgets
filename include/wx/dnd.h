@@ -115,7 +115,7 @@ protected:
              m_cursorMove,
              m_cursorStop;
 
-    DECLARE_NO_COPY_CLASS(wxDropSourceBase)
+    wxDECLARE_NO_COPY_CLASS(wxDropSourceBase);
 };
 
 // ----------------------------------------------------------------------------
@@ -203,7 +203,7 @@ protected:
     wxDataObject *m_dataObject;
     wxDragResult m_defaultAction;
 
-    DECLARE_NO_COPY_CLASS(wxDropTargetBase)
+    wxDECLARE_NO_COPY_CLASS(wxDropTargetBase);
 };
 
 // ----------------------------------------------------------------------------
@@ -243,7 +243,7 @@ public:
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxTextDropTarget)
+    wxDECLARE_NO_COPY_CLASS(wxTextDropTarget);
 };
 
 // A drop target which accepts files (dragged from File Manager or Explorer)
@@ -259,7 +259,7 @@ public:
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxFileDropTarget)
+    wxDECLARE_NO_COPY_CLASS(wxFileDropTarget);
 };
 
 #endif // wxUSE_DRAG_AND_DROP

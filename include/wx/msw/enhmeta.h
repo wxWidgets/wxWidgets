@@ -129,7 +129,7 @@ public:
 protected:
     wxEnhMetaFile m_metafile;
 
-    DECLARE_NO_COPY_CLASS(wxEnhMetaFileDataObject)
+    wxDECLARE_NO_COPY_CLASS(wxEnhMetaFileDataObject);
 };
 
 
@@ -172,7 +172,7 @@ public:
 protected:
     wxEnhMetaFile m_metafile;
 
-    DECLARE_NO_COPY_CLASS(wxEnhMetaFileSimpleDataObject)
+    wxDECLARE_NO_COPY_CLASS(wxEnhMetaFileSimpleDataObject);
 };
 
 #endif // wxUSE_DRAG_AND_DROP

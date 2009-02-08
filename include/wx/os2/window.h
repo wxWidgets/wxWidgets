@@ -534,7 +534,7 @@ private:
     SWP                             m_vWinSwp;
 
     DECLARE_DYNAMIC_CLASS(wxWindowOS2);
-    DECLARE_NO_COPY_CLASS(wxWindowOS2)
+    wxDECLARE_NO_COPY_CLASS(wxWindowOS2);
     DECLARE_EVENT_TABLE()
 }; // end of wxWindow
 

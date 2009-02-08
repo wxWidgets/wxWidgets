@@ -71,7 +71,7 @@ protected:
 private:
     wxIDropSource *m_pIDropSource;  // the pointer to COM interface
 
-    DECLARE_NO_COPY_CLASS(wxDropSource)
+    wxDECLARE_NO_COPY_CLASS(wxDropSource);
 };
 
 #endif  //wxUSE_DRAG_AND_DROP

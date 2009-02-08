@@ -35,7 +35,7 @@ public:
     virtual bool IsChecked(unsigned int item) const = 0;
     virtual void Check(unsigned int item, bool check = true) = 0;
 
-    DECLARE_NO_COPY_CLASS(wxCheckListBoxBase)
+    wxDECLARE_NO_COPY_CLASS(wxCheckListBoxBase);
 };
 
 #if defined(__WXUNIVERSAL__)

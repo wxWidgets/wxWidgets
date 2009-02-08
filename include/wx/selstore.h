@@ -94,7 +94,7 @@ private:
     // the array of items whose selection state is different from default
     wxSelectedIndices m_itemsSel;
 
-    DECLARE_NO_COPY_CLASS(wxSelectionStore)
+    wxDECLARE_NO_COPY_CLASS(wxSelectionStore);
 };
 
 #endif // _WX_SELSTORE_H_

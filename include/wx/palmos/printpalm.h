@@ -35,7 +35,7 @@ public:
 private:
     WXFARPROC     m_lpAbortProc;
 
-    DECLARE_NO_COPY_CLASS(wxPalmPrinter)
+    wxDECLARE_NO_COPY_CLASS(wxPalmPrinter);
 };
 
 // ---------------------------------------------------------------------------

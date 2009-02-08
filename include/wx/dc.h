@@ -1212,7 +1212,7 @@ protected:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxDC)
-    DECLARE_NO_COPY_CLASS(wxDC)
+    wxDECLARE_NO_COPY_CLASS(wxDC);
 };
 
 // ----------------------------------------------------------------------------
@@ -1248,7 +1248,7 @@ private:
 
     wxColour m_colFgOld;
 
-    DECLARE_NO_COPY_CLASS(wxDCTextColourChanger)
+    wxDECLARE_NO_COPY_CLASS(wxDCTextColourChanger);
 };
 
 // ----------------------------------------------------------------------------
@@ -1275,7 +1275,7 @@ private:
 
     wxPen m_penOld;
 
-    DECLARE_NO_COPY_CLASS(wxDCPenChanger)
+    wxDECLARE_NO_COPY_CLASS(wxDCPenChanger);
 };
 
 // ----------------------------------------------------------------------------
@@ -1302,7 +1302,7 @@ private:
 
     wxBrush m_brushOld;
 
-    DECLARE_NO_COPY_CLASS(wxDCBrushChanger)
+    wxDECLARE_NO_COPY_CLASS(wxDCBrushChanger);
 };
 
 // ----------------------------------------------------------------------------
@@ -1325,7 +1325,7 @@ public:
 private:
     wxDC& m_dc;
 
-    DECLARE_NO_COPY_CLASS(wxDCClipper)
+    wxDECLARE_NO_COPY_CLASS(wxDCClipper);
 };
 
 // ----------------------------------------------------------------------------
@@ -1352,7 +1352,7 @@ private:
 
     wxFont m_fontOld;
 
-    DECLARE_NO_COPY_CLASS(wxDCFontChanger)
+    wxDECLARE_NO_COPY_CLASS(wxDCFontChanger);
 };
 
 

@@ -49,7 +49,7 @@ public:
     wxMenu * CreatePopupMenu()
     { return m_taskBarIcon->CreatePopupMenu(); }
     
-    DECLARE_NO_COPY_CLASS(wxTaskBarIconImpl)
+    wxDECLARE_NO_COPY_CLASS(wxTaskBarIconImpl);
     
 protected:
     wxTaskBarIcon *m_taskBarIcon;

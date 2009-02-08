@@ -199,7 +199,7 @@ private:
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxGenericDirCtrl)
-    DECLARE_NO_COPY_CLASS(wxGenericDirCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxGenericDirCtrl);
 };
 
 //-----------------------------------------------------------------------------
@@ -239,7 +239,7 @@ protected:
 
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxDirFilterListCtrl)
-    DECLARE_NO_COPY_CLASS(wxDirFilterListCtrl)
+    wxDECLARE_NO_COPY_CLASS(wxDirFilterListCtrl);
 };
 
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXPM__)

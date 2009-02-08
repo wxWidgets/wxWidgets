@@ -28,7 +28,7 @@ public:
 private:
     gchar *m_str;
 
-    DECLARE_NO_COPY_CLASS(wxGtkString)
+    wxDECLARE_NO_COPY_CLASS(wxGtkString);
 };
 
 #endif // _WX_GTK_PRIVATE_STRING_H_

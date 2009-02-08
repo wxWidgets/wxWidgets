@@ -85,7 +85,7 @@ public:
 #endif // wxUSE_DISPLAY
 
 
-    DECLARE_NO_COPY_CLASS(wxDisplayImplSingle)
+    wxDECLARE_NO_COPY_CLASS(wxDisplayImplSingle);
 };
 
 // ----------------------------------------------------------------------------

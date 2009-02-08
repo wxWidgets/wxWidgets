@@ -41,7 +41,7 @@ public:
     wxTaskBarIcon *m_parent;
     class wxTaskBarIconWindow *m_menuEventWindow;
 
-    DECLARE_NO_COPY_CLASS(wxTaskBarIconImpl)
+    wxDECLARE_NO_COPY_CLASS(wxTaskBarIconImpl);
 };
 
 //-----------------------------------------------------------------------------

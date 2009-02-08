@@ -348,7 +348,7 @@ private:
     wxString m_Comment;
     bool m_endrecWritten;
 
-    DECLARE_NO_COPY_CLASS(wxZipOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxZipOutputStream);
 };
 
 
@@ -446,7 +446,7 @@ private:
     friend class wxArchiveFSHandler;
 #endif
 
-    DECLARE_NO_COPY_CLASS(wxZipInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxZipInputStream);
 };
 
 

@@ -92,7 +92,7 @@ public:
 private:
     wxMask       *m_bitmapMask;
 
-    DECLARE_NO_COPY_CLASS(wxBitmapRefData)
+    wxDECLARE_NO_COPY_CLASS(wxBitmapRefData);
 };
 
 // ----------------------------------------------------------------------------

@@ -82,7 +82,7 @@ private:
     // just to suppress a gcc warning
     friend class wxRendererPtrDummyFriend;
 
-    DECLARE_NO_COPY_CLASS(wxRendererPtr)
+    wxDECLARE_NO_COPY_CLASS(wxRendererPtr);
 };
 
 // return the global and unique wxRendererPtr

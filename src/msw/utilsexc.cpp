@@ -217,7 +217,7 @@ protected:
 protected:
     HANDLE m_hInput;
 
-    DECLARE_NO_COPY_CLASS(wxPipeInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxPipeInputStream);
 };
 
 class wxPipeOutputStream: public wxOutputStream
@@ -233,7 +233,7 @@ protected:
 protected:
     HANDLE m_hOutput;
 
-    DECLARE_NO_COPY_CLASS(wxPipeOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxPipeOutputStream);
 };
 
 // define this to let wxexec.cpp know that we know what we're doing

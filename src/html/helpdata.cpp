@@ -127,7 +127,7 @@ public:
 protected:
     virtual void AddText(const wxString& WXUNUSED(txt)) {}
 
-    DECLARE_NO_COPY_CLASS(HP_Parser)
+    wxDECLARE_NO_COPY_CLASS(HP_Parser);
 };
 
 
@@ -170,7 +170,7 @@ class HP_TagHandler : public wxHtmlTagHandler
             m_parentItem = NULL;
         }
 
-    DECLARE_NO_COPY_CLASS(HP_TagHandler)
+    wxDECLARE_NO_COPY_CLASS(HP_TagHandler);
 };
 
 

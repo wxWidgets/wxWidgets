@@ -74,7 +74,7 @@ public:
 
     virtual bool OnInit();
 
-    DECLARE_NO_COPY_CLASS(MyApp)
+    wxDECLARE_NO_COPY_CLASS(MyApp);
 };
 
 class MyFrame: public wxFrame
@@ -114,7 +114,7 @@ private:
     wxWindow *m_replacewindow;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(MyFrame)
+    wxDECLARE_NO_COPY_CLASS(MyFrame);
 };
 
 class MySplitterWindow : public wxSplitterWindow
@@ -132,7 +132,7 @@ private:
     wxFrame *m_frame;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_NO_COPY_CLASS(MySplitterWindow)
+    wxDECLARE_NO_COPY_CLASS(MySplitterWindow);
 };
 
 class MyCanvas: public wxScrolledWindow
@@ -146,7 +146,7 @@ public:
 private:
     bool m_mirror;
 
-    DECLARE_NO_COPY_CLASS(MyCanvas)
+    wxDECLARE_NO_COPY_CLASS(MyCanvas);
 };
 
 // ============================================================================

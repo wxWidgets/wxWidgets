@@ -57,7 +57,7 @@ private:
     friend class WXDLLIMPEXP_FWD_CORE wxPen;
 
     // Cannot use
-    //  DECLARE_NO_COPY_CLASS(wxPenRefData)
+    //  wxDECLARE_NO_COPY_CLASS(wxPenRefData);
     // because copy constructor is explicitly declared above;
     // but no copy assignment operator is defined, so declare
     // it private to prevent the compiler from defining it:

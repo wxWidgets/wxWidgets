@@ -100,7 +100,7 @@ protected:
     int m_nDirection;       // can be wxRIGHT or wxLEFT
 #endif
 
-    DECLARE_NO_COPY_CLASS(wxGaugeBase)
+    wxDECLARE_NO_COPY_CLASS(wxGaugeBase);
 };
 
 #if defined(__WXUNIVERSAL__)

@@ -576,7 +576,7 @@ private:
 
     static wxLanguageInfoArray *ms_languagesDB;
 
-    DECLARE_NO_COPY_CLASS(wxLocale)
+    wxDECLARE_NO_COPY_CLASS(wxLocale);
 };
 
 // ----------------------------------------------------------------------------

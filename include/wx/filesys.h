@@ -99,7 +99,7 @@ private:
 #endif // wxUSE_DATETIME
 
     DECLARE_ABSTRACT_CLASS(wxFSFile)
-    DECLARE_NO_COPY_CLASS(wxFSFile)
+    wxDECLARE_NO_COPY_CLASS(wxFSFile);
 };
 
 
@@ -247,7 +247,7 @@ protected:
             // Handlers local to this instance
 
     DECLARE_DYNAMIC_CLASS(wxFileSystem)
-    DECLARE_NO_COPY_CLASS(wxFileSystem)
+    wxDECLARE_NO_COPY_CLASS(wxFileSystem);
 };
 
 

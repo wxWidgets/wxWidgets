@@ -230,7 +230,7 @@ private:
     // expand TABs; only updated while inside <pre>
     int m_posColumn;
 
-    DECLARE_NO_COPY_CLASS(wxHtmlWinParser)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlWinParser);
 };
 
 
@@ -257,7 +257,7 @@ public:
 protected:
     wxHtmlWinParser *m_WParser; // same as m_Parser, but overcasted
 
-    DECLARE_NO_COPY_CLASS(wxHtmlWinTagHandler)
+    wxDECLARE_NO_COPY_CLASS(wxHtmlWinTagHandler);
 };
 
 

@@ -189,7 +189,7 @@ public:
 private:
     wxClipboard *m_clipboard;
 
-    DECLARE_NO_COPY_CLASS(wxClipboardLocker)
+    wxDECLARE_NO_COPY_CLASS(wxClipboardLocker);
 };
 
 #endif // wxUSE_CLIPBOARD

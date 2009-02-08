@@ -437,7 +437,7 @@ protected:
     void InitCommandEventWithItems(wxCommandEvent& event, int n);
 
 private:
-    DECLARE_NO_COPY_CLASS(wxControlWithItemsBase)
+    wxDECLARE_NO_COPY_CLASS(wxControlWithItemsBase);
 };
 
 // define the platform-specific wxControlWithItems class
@@ -453,7 +453,7 @@ private:
 
     private:
         DECLARE_ABSTRACT_CLASS(wxControlWithItems)
-        DECLARE_NO_COPY_CLASS(wxControlWithItems)
+        wxDECLARE_NO_COPY_CLASS(wxControlWithItems);
     };
 #endif
 

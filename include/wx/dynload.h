@@ -94,7 +94,7 @@ private:
     void    RegisterModules();      // Init any wxModules in the lib.
     void    UnregisterModules();    // Cleanup any wxModules we installed.
 
-    DECLARE_NO_COPY_CLASS(wxPluginLibrary)
+    wxDECLARE_NO_COPY_CLASS(wxPluginLibrary);
 };
 
 
@@ -144,7 +144,7 @@ private:
 
     // We could allow this class to be copied if we really
     // wanted to, but not without modification.
-    DECLARE_NO_COPY_CLASS(wxPluginManager)
+    wxDECLARE_NO_COPY_CLASS(wxPluginManager);
 };
 
 

@@ -251,7 +251,7 @@ private:
     wxFileOffset m_pos;
     wxFileOffset m_len;
 
-    DECLARE_NO_COPY_CLASS(wxStoredInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxStoredInputStream);
 };
 
 wxStoredInputStream::wxStoredInputStream(wxInputStream& stream)
@@ -297,7 +297,7 @@ protected:
 
 private:
     wxFileOffset m_pos;
-    DECLARE_NO_COPY_CLASS(wxStoredOutputStream)
+    wxDECLARE_NO_COPY_CLASS(wxStoredOutputStream);
 };
 
 size_t wxStoredOutputStream::OnSysWrite(const void *buffer, size_t size)
@@ -359,7 +359,7 @@ private:
     size_t m_start;
     size_t m_end;
 
-    DECLARE_NO_COPY_CLASS(wxTeeInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxTeeInputStream);
 };
 
 wxTeeInputStream::wxTeeInputStream(wxInputStream& stream)
@@ -455,7 +455,7 @@ private:
     enum { BUFSIZE = 8192 };
     wxCharBuffer m_dummy;
 
-    DECLARE_NO_COPY_CLASS(wxRawInputStream)
+    wxDECLARE_NO_COPY_CLASS(wxRawInputStream);
 };
 
 wxRawInputStream::wxRawInputStream(wxInputStream& stream)

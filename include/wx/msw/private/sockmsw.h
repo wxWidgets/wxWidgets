@@ -61,7 +61,7 @@ private:
 
     friend class wxSocketMSWManager;
 
-    DECLARE_NO_COPY_CLASS(wxSocketImplMSW)
+    wxDECLARE_NO_COPY_CLASS(wxSocketImplMSW);
 };
 
 #endif  /* _WX_MSW_GSOCKMSW_H_ */
