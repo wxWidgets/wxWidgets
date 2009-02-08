@@ -35,7 +35,7 @@
         ../../utils/*/*.bkl
         ../../utils/*/*/*.bkl
         ../../tests/*.bkl
-        ../../tests/benchmarks/bench.bkl
+        ../../tests/*/*.bkl
     </input>
 
     <!-- List of output formats to generate: -->
@@ -126,15 +126,15 @@
 
 
     <!-- Use different names for Visual C++ 200x project files: -->
-    <add-flags files="../../samples/*/*,../../samples/*/*/*,../../demos/*/*,../../utils/*/*,../../utils/*/*/*,../../tests/*"
+    <add-flags files="../../samples/*/*,../../samples/*/*/*,../../demos/*/*,../../utils/*/*,../../utils/*/*/*,../../tests/*,../../tests/*/*"
                formats="msvs2003prj">
         -o$(INPUT_FILE_DIR)/$(INPUT_FILE_BASENAME_NOEXT)_vc7.sln
     </add-flags>
-    <add-flags files="../../samples/*/*,../../samples/*/*/*,../../demos/*/*,../../utils/*/*,../../utils/*/*/*,../../tests/*"
+    <add-flags files="../../samples/*/*,../../samples/*/*/*,../../demos/*/*,../../utils/*/*,../../utils/*/*/*,../../tests/*,../../tests/*/*"
                formats="msvs2005prj">
         -o$(INPUT_FILE_DIR)/$(INPUT_FILE_BASENAME_NOEXT)_vc8.sln
     </add-flags>
-    <add-flags files="../../samples/*/*,../../samples/*/*/*,../../demos/*/*,../../utils/*/*,../../utils/*/*/*,../../tests/*"
+    <add-flags files="../../samples/*/*,../../samples/*/*/*,../../demos/*/*,../../utils/*/*,../../utils/*/*/*,../../tests/*,../../tests/*/*"
                formats="msvs2008prj">
         -o$(INPUT_FILE_DIR)/$(INPUT_FILE_BASENAME_NOEXT)_vc9.sln
     </add-flags>
