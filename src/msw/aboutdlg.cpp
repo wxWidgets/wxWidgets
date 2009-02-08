@@ -53,7 +53,7 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         msg << _T('\n');
 
         if ( info.HasCopyright() )
-            msg << info.GetCopyright() << _T('\n');
+            msg << info.GetCopyrightToDisplay() << _T('\n');
 
         // add everything remaining
         msg << info.GetDescriptionAndCredits();

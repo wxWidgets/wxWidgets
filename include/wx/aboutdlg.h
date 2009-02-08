@@ -128,6 +128,12 @@ public:
     // artists and translators) as a one long multiline string
     wxString GetDescriptionAndCredits() const;
 
+#if wxABI_VERSION >= 20810
+    // returns the copyright with the (C) string substituted by the Unicode
+    // character U+00A9
+    wxString GetCopyrightToDisplay() const;
+#endif // wx 2.8.10+
+
 private:
     wxString m_name,
              m_version,

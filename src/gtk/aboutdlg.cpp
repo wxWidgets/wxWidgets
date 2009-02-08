@@ -50,6 +50,13 @@ public:
 class GtkArray
 {
 public:
+    // Create empty GtkArray
+    GtkArray() : m_strings(0), m_count(0)
+    {
+    }
+
+    // Create GtkArray from wxArrayString. Note that the created object is
+    // only valid as long as 'a' is!
     GtkArray(const wxArrayString& a)
     {
         m_count = a.size();
@@ -105,7 +112,9 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         if ( info.HasVersion() )
             gtk_about_dialog_set_version(dlg, GtkStr(info.GetVersion()));
         if ( info.HasCopyright() )
-            gtk_about_dialog_set_copyright(dlg, GtkStr(info.GetCopyright()));
+            gtk_about_dialog_set_copyright(dlg, GtkStr(info.GetCopyrightToDisplay()));
+        else
+            gtk_about_dialog_set_copyright(dlg, NULL);
         if ( info.HasDescription() )
             gtk_about_dialog_set_comments(dlg, GtkStr(info.GetDescription()));
         if ( info.HasLicence() )

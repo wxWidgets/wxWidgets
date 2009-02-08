@@ -131,6 +131,7 @@ All (GUI):
 - Added wxAUI_MGR_LIVE_RESIZE flag to wxAuiManager and made it the default on
   wxMac with CoreGraphics where sash drawing isn't implemented.
 - Use bitmap mask in wxSplashScreen.
+- Translate "(c)" and "(C)" to the real copyright sign in wxAboutBox.
 
 All (Unix):
 
