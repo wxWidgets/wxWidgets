@@ -102,8 +102,8 @@ wxString wxAboutDialogInfo::GetCopyrightToDisplay() const
 
 #if wxUSE_UNICODE
     const wxString copyrightSign = wxString::FromUTF8("\xc2\xa9");
-    ret.Replace("(c)", copyrightSign);
-    ret.Replace("(C)", copyrightSign);
+    ret.Replace(_T("(c)"), copyrightSign);
+    ret.Replace(_T("(C)"), copyrightSign);
 #endif // wxUSE_UNICODE
 
     return ret;
