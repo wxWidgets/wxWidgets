@@ -21,7 +21,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_TASKBARICON
+#if wxUSE_TASKBARICON && !defined(__WXGTK20__)
 
 #include "wx/taskbar.h"
 
@@ -48,15 +48,6 @@
 // base class that implements toolkit-specific method:
 // ----------------------------------------------------------------------------
 
-#ifdef __WXGTK20__
-    #include <gtk/gtk.h>
-    #if GTK_CHECK_VERSION(2,1,0)
-        #include "wx/gtk/taskbarpriv.h"
-        #define TASKBAR_ICON_AREA_BASE_INCLUDED
-    #endif
-#endif
-
-#ifndef TASKBAR_ICON_AREA_BASE_INCLUDED
     class WXDLLIMPEXP_ADV wxTaskBarIconAreaBase : public wxFrame
     {
     public:
@@ -68,17 +59,14 @@
 
         static bool IsProtocolSupported() { return false; }
     };
-#endif
-
 
 // ----------------------------------------------------------------------------
 // toolkit dependent methods to set properties on helper window:
 // ----------------------------------------------------------------------------
 
 #if defined(__WXGTK__)
-    #include <gdk/gdk.h>
-    #include <gdk/gdkx.h>
     #include <gtk/gtk.h>
+    #include <gdk/gdkx.h>
     #define GetDisplay()        GDK_DISPLAY()
     #define GetXWindow(wxwin)   GDK_WINDOW_XWINDOW((wxwin)->m_widget->window)
 #elif defined(__WXX11__) || defined(__WXMOTIF__)
@@ -126,10 +114,6 @@ END_EVENT_TABLE()
 wxTaskBarIconArea::wxTaskBarIconArea(wxTaskBarIcon *icon, const wxBitmap &bmp)
     : wxTaskBarIconAreaBase(), m_icon(icon), m_bmp(bmp)
 {
-#if defined(__WXGTK20__) && defined(TASKBAR_ICON_AREA_BASE_INCLUDED)
-    m_invokingWindow = icon;
-#endif
-
     // Set initial size to bitmap size (tray manager may and often will
     // change it):
     SetClientSize(wxSize(bmp.GetWidth(), bmp.GetHeight()));

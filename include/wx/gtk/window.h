@@ -316,7 +316,6 @@ protected:
 
 #if wxUSE_MENUS_NATIVE
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
-    virtual void DoPopupMenuUpdateUI(wxMenu* menu);
 #endif // wxUSE_MENUS_NATIVE
 
     virtual void DoCaptureMouse();

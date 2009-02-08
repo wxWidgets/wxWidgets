@@ -3007,6 +3007,7 @@ src/osx/iphone/window.mm
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
     wx/gtk/hildon/notifmsg.h
+    wx/gtk/taskbar.h
 </set>
 
 <set var="ADVANCED_GTK_NATIVE_SRC" hints="files">

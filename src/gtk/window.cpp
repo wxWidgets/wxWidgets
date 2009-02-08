@@ -3962,11 +3962,6 @@ void wxPopupMenuPositionCallback( GtkMenu *menu,
 }
 }
 
-void wxWindowGTK::DoPopupMenuUpdateUI(wxMenu* menu)
-{
-    menu->UpdateUI();
-}
-
 bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 {
     wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
@@ -3975,7 +3970,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     SetInvokingWindow( menu, this );
 
-    DoPopupMenuUpdateUI(menu);
+    menu->UpdateUI();
 
     wxPoint pos;
     gpointer userdata;
