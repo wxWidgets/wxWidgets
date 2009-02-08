@@ -39,6 +39,9 @@
 #include "edit.h"        // Edit module
 #include "prefs.h"       // Prefs
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
 
 //----------------------------------------------------------------------------
 // resources
@@ -300,7 +303,9 @@ END_EVENT_TABLE ()
 
 AppFrame::AppFrame (const wxString &title)
         : wxFrame ((wxFrame *)NULL, wxID_ANY, title, wxDefaultPosition, wxSize(750,550),
-                    wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE) {
+                    wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+{
+    SetIcon(wxICON(sample));
 
     // intitialize important variables
     m_edit = NULL;

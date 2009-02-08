@@ -72,12 +72,12 @@ class wxVectorProperty : public wxPGProperty
 public:
 
     wxVectorProperty( const wxString& label = wxPG_LABEL,
-                      const wxString& name = wxPG_LABEL,
-                      const wxVector3f& value = wxVector3f() );
+                    const wxString& name = wxPG_LABEL,
+                    const wxVector3f& value = wxVector3f() );
     virtual ~wxVectorProperty();
 
     virtual void ChildChanged( wxVariant& thisValue,
-                               int childIndex, wxVariant& childValue ) const;
+                            int childIndex, wxVariant& childValue ) const;
     virtual void RefreshChildren();
 
 protected:
@@ -109,7 +109,7 @@ public:
     virtual ~wxTriangleProperty();
 
     virtual void ChildChanged( wxVariant& thisValue,
-                               int childIndex, wxVariant& childValue ) const;
+                            int childIndex, wxVariant& childValue ) const;
     virtual void RefreshChildren();
 
 protected:
@@ -128,7 +128,7 @@ class FormMain : public wxFrame
 {
 public:
     FormMain(const wxString& title, const wxPoint& pos, const wxSize& size );
-	~FormMain();
+    ~FormMain();
 
     wxPropertyGridManager*  m_pPropGridManager;
     wxPropertyGrid*     m_propGrid;

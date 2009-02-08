@@ -22,6 +22,10 @@
 #include "wx/log.h"
 #include "wx/tglbtn.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // a trivial example
 // ----------------------------------------------------------------------------
@@ -854,6 +858,8 @@ END_EVENT_TABLE()
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "wxWidgets scroll sample")
 {
+    SetIcon(wxICON(sample));
+
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(wxID_ABOUT, "&About..");
     menuFile->AppendSeparator();

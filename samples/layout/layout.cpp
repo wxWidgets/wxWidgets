@@ -34,6 +34,11 @@
 
 #include "layout.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
+
 // ----------------------------------------------------------------------------
 // MyApp
 // ----------------------------------------------------------------------------
@@ -76,113 +81,115 @@ MyFrame::MyFrame()
                  wxPoint(30,30), wxDefaultSize,
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
-  // Make a menubar
-  wxMenu *file_menu = new wxMenu;
+    SetIcon(wxICON(sample));
 
-  file_menu->Append(LAYOUT_TEST_PROPORTIONS, _T("&Proportions demo...\tF1"));
-  file_menu->Append(LAYOUT_TEST_SIZER, _T("Test wx&FlexSizer...\tF2"));
-  file_menu->Append(LAYOUT_TEST_NB_SIZER, _T("Test &notebook sizers...\tF3"));
-  file_menu->Append(LAYOUT_TEST_GB_SIZER, _T("Test &gridbag sizer...\tF4"));
-  file_menu->Append(LAYOUT_TEST_SET_MINIMAL, _T("Test Set&ItemMinSize...\tF5"));
-  file_menu->Append(LAYOUT_TEST_NESTED, _T("Test nested sizer in a wxPanel...\tF6"));
-  file_menu->Append(LAYOUT_TEST_WRAP, _T("Test wrap sizers...\tF7"));
+    // Make a menubar
+    wxMenu *file_menu = new wxMenu;
 
-  file_menu->AppendSeparator();
-  file_menu->Append(LAYOUT_QUIT, _T("E&xit"), _T("Quit program"));
+    file_menu->Append(LAYOUT_TEST_PROPORTIONS, _T("&Proportions demo...\tF1"));
+    file_menu->Append(LAYOUT_TEST_SIZER, _T("Test wx&FlexSizer...\tF2"));
+    file_menu->Append(LAYOUT_TEST_NB_SIZER, _T("Test &notebook sizers...\tF3"));
+    file_menu->Append(LAYOUT_TEST_GB_SIZER, _T("Test &gridbag sizer...\tF4"));
+    file_menu->Append(LAYOUT_TEST_SET_MINIMAL, _T("Test Set&ItemMinSize...\tF5"));
+    file_menu->Append(LAYOUT_TEST_NESTED, _T("Test nested sizer in a wxPanel...\tF6"));
+    file_menu->Append(LAYOUT_TEST_WRAP, _T("Test wrap sizers...\tF7"));
 
-  wxMenu *help_menu = new wxMenu;
-  help_menu->Append(LAYOUT_ABOUT, _T("&About"), _T("About layout demo..."));
+    file_menu->AppendSeparator();
+    file_menu->Append(LAYOUT_QUIT, _T("E&xit"), _T("Quit program"));
 
-  wxMenuBar *menu_bar = new wxMenuBar;
+    wxMenu *help_menu = new wxMenu;
+    help_menu->Append(LAYOUT_ABOUT, _T("&About"), _T("About layout demo..."));
 
-  menu_bar->Append(file_menu, _T("&File"));
-  menu_bar->Append(help_menu, _T("&Help"));
+    wxMenuBar *menu_bar = new wxMenuBar;
 
-  // Associate the menu bar with the frame
-  SetMenuBar(menu_bar);
+    menu_bar->Append(file_menu, _T("&File"));
+    menu_bar->Append(help_menu, _T("&Help"));
+
+    // Associate the menu bar with the frame
+    SetMenuBar(menu_bar);
 
 #if wxUSE_STATUSBAR
-  CreateStatusBar(2);
-  SetStatusText(_T("wxWidgets layout demo"));
+    CreateStatusBar(2);
+    SetStatusText(_T("wxWidgets layout demo"));
 #endif // wxUSE_STATUSBAR
 
-  wxPanel* p = new wxPanel(this, wxID_ANY);
+    wxPanel* p = new wxPanel(this, wxID_ANY);
 
-  // we want to get a dialog that is stretchable because it
-  // has a text ctrl in the middle. at the bottom, we have
-  // two buttons which.
+    // we want to get a dialog that is stretchable because it
+    // has a text ctrl in the middle. at the bottom, we have
+    // two buttons which.
 
-  wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 
-  // 1) top: create wxStaticText with minimum size equal to its default size
-  topsizer->Add(
-    new wxStaticText( p, wxID_ANY, _T("An explanation (wxALIGN_RIGHT).") ),
-    wxSizerFlags().Align(wxALIGN_RIGHT).Border(wxALL & ~wxBOTTOM, 5));
-  topsizer->Add(
-    new wxStaticText( p, wxID_ANY, _T("An explanation (wxALIGN_LEFT).") ),
-    wxSizerFlags().Align(wxALIGN_LEFT).Border(wxALL & ~wxBOTTOM, 5));
-  topsizer->Add(
-    new wxStaticText( p, wxID_ANY, _T("An explanation (wxALIGN_CENTRE_HORIZONTAL).") ),
-    wxSizerFlags().Align(wxALIGN_CENTRE_HORIZONTAL).Border(wxALL & ~wxBOTTOM, 5));
+    // 1) top: create wxStaticText with minimum size equal to its default size
+    topsizer->Add(
+        new wxStaticText( p, wxID_ANY, _T("An explanation (wxALIGN_RIGHT).") ),
+        wxSizerFlags().Align(wxALIGN_RIGHT).Border(wxALL & ~wxBOTTOM, 5));
+    topsizer->Add(
+        new wxStaticText( p, wxID_ANY, _T("An explanation (wxALIGN_LEFT).") ),
+        wxSizerFlags().Align(wxALIGN_LEFT).Border(wxALL & ~wxBOTTOM, 5));
+    topsizer->Add(
+        new wxStaticText( p, wxID_ANY, _T("An explanation (wxALIGN_CENTRE_HORIZONTAL).") ),
+        wxSizerFlags().Align(wxALIGN_CENTRE_HORIZONTAL).Border(wxALL & ~wxBOTTOM, 5));
 
-  // 2) top: create wxTextCtrl with minimum size (100x60)
-  topsizer->Add(
-    new wxTextCtrl( p, wxID_ANY, _T("My text (wxEXPAND)."), wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
-    wxSizerFlags(1).Expand().Border(wxALL, 5));
+    // 2) top: create wxTextCtrl with minimum size (100x60)
+    topsizer->Add(
+        new wxTextCtrl( p, wxID_ANY, _T("My text (wxEXPAND)."), wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
+        wxSizerFlags(1).Expand().Border(wxALL, 5));
 
-  // 2.5) Gratuitous test of wxStaticBoxSizers
-  wxBoxSizer *statsizer = new wxStaticBoxSizer(
-    new wxStaticBox(p, wxID_ANY, _T("A wxStaticBoxSizer")), wxVERTICAL );
-  statsizer->Add(
-    new wxStaticText(p, wxID_ANY, _T("And some TEXT inside it")),
-    wxSizerFlags().Border(wxALL, 30));
-  topsizer->Add(
-    statsizer,
-    wxSizerFlags(1).Expand().Border(wxALL, 10));
+    // 2.5) Gratuitous test of wxStaticBoxSizers
+    wxBoxSizer *statsizer = new wxStaticBoxSizer(
+        new wxStaticBox(p, wxID_ANY, _T("A wxStaticBoxSizer")), wxVERTICAL );
+    statsizer->Add(
+        new wxStaticText(p, wxID_ANY, _T("And some TEXT inside it")),
+        wxSizerFlags().Border(wxALL, 30));
+    topsizer->Add(
+        statsizer,
+        wxSizerFlags(1).Expand().Border(wxALL, 10));
 
     // 2.7) And a test of wxGridSizer
     wxGridSizer *gridsizer = new wxGridSizer(2, 5, 5);
     gridsizer->Add(new wxStaticText(p, wxID_ANY, _T("Label")),
-                   wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
     gridsizer->Add(new wxTextCtrl(p, wxID_ANY, _T("Grid sizer demo")),
-                   wxSizerFlags(1).Align(wxGROW | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags(1).Align(wxGROW | wxALIGN_CENTER_VERTICAL));
     gridsizer->Add(new wxStaticText(p, wxID_ANY, _T("Another label")),
-                   wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
     gridsizer->Add(new wxTextCtrl(p, wxID_ANY, _T("More text")),
-                   wxSizerFlags(1).Align(wxGROW | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags(1).Align(wxGROW | wxALIGN_CENTER_VERTICAL));
     gridsizer->Add(new wxStaticText(p, wxID_ANY, _T("Final label")),
-                   wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags().Align(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL));
     gridsizer->Add(new wxTextCtrl(p, wxID_ANY, _T("And yet more text")),
-                   wxSizerFlags().Align(wxGROW | wxALIGN_CENTER_VERTICAL));
+                wxSizerFlags().Align(wxGROW | wxALIGN_CENTER_VERTICAL));
     topsizer->Add(
         gridsizer,
         wxSizerFlags().Proportion(1).Expand().Border(wxALL, 10));
 
 
 #if wxUSE_STATLINE
-  // 3) middle: create wxStaticLine with minimum size (3x3)
-  topsizer->Add(
-     new wxStaticLine( p, wxID_ANY, wxDefaultPosition, wxSize(3,3), wxHORIZONTAL),
-     wxSizerFlags().Expand());
+    // 3) middle: create wxStaticLine with minimum size (3x3)
+    topsizer->Add(
+        new wxStaticLine( p, wxID_ANY, wxDefaultPosition, wxSize(3,3), wxHORIZONTAL),
+        wxSizerFlags().Expand());
 #endif // wxUSE_STATLINE
 
 
-  // 4) bottom: create two centred wxButtons
-  wxBoxSizer *button_box = new wxBoxSizer( wxHORIZONTAL );
-  button_box->Add(
-     new wxButton( p, wxID_ANY, _T("Two buttons in a box") ),
-     wxSizerFlags().Border(wxALL, 7));
-  button_box->Add(
-     new wxButton( p, wxID_ANY, _T("(wxCENTER)") ),
-     wxSizerFlags().Border(wxALL, 7));
+    // 4) bottom: create two centred wxButtons
+    wxBoxSizer *button_box = new wxBoxSizer( wxHORIZONTAL );
+    button_box->Add(
+        new wxButton( p, wxID_ANY, _T("Two buttons in a box") ),
+        wxSizerFlags().Border(wxALL, 7));
+    button_box->Add(
+        new wxButton( p, wxID_ANY, _T("(wxCENTER)") ),
+        wxSizerFlags().Border(wxALL, 7));
 
-  topsizer->Add(button_box, wxSizerFlags().Center());
+    topsizer->Add(button_box, wxSizerFlags().Center());
 
-  p->SetSizer( topsizer );
+    p->SetSizer( topsizer );
 
-  // don't allow frame to get smaller than what the sizers tell it and also set
-  // the initial size as calculated by the sizers
-  topsizer->SetSizeHints( this );
+    // don't allow frame to get smaller than what the sizers tell it and also set
+    // the initial size as calculated by the sizers
+    topsizer->SetSizeHints( this );
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -653,7 +660,7 @@ MyNestedSizerFrame::MyNestedSizerFrame(const wxString &title, int x, int y )
     main_sizer->Add( new wxStaticText( this, -1, wxT("Hello outside") ), 0, wxALIGN_CENTER );
     main_sizer->Add( new wxStaticText( this, -1, wxT("Hello outside") ), 0, wxALIGN_CENTER );
 
-    wxPanel *panel = new wxPanel( this, -1, wxDefaultPosition, wxDefaultSize, 
+    wxPanel *panel = new wxPanel( this, -1, wxDefaultPosition, wxDefaultSize,
                                   wxTAB_TRAVERSAL | wxSUNKEN_BORDER );
     main_sizer->Add( panel, 0, wxALIGN_CENTER );
     wxBoxSizer *panel_sizer = new wxBoxSizer( wxVERTICAL );
@@ -661,7 +668,7 @@ MyNestedSizerFrame::MyNestedSizerFrame(const wxString &title, int x, int y )
     panel_sizer->Add( new wxStaticText( panel, -1, wxT("Hello inside") ) );
     panel_sizer->Add( new wxStaticText( panel, -1, wxT("Hello inside") ) );
     panel_sizer->Add( new wxStaticText( panel, -1, wxT("Hello inside") ) );
-    
+
     main_sizer->Add( new wxStaticText( this, -1, wxT("Hello outside") ), 0, wxALIGN_CENTER );
 
     m_target = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 80, wxDefaultCoord ) );
@@ -696,14 +703,14 @@ MyWrapSizerFrame::MyWrapSizerFrame(const wxString &title, int x, int y )
     for (i = 0; i < 4; i++)
        row->Add( new wxButton( this, -1, "Hello" ), 0, wxALL, 10 );
     root->Add( row, 0, wxGROW );
- 
+
     row = new wxWrapSizer;
     for (i = 0; i < 4; i++)
        row->Add( new wxButton( this, -1, "Hello" ) );
     root->Add( row, 0, wxGROW );
- 
+
 #else
-    // A number of checkboxes inside a wrap sizer 
+    // A number of checkboxes inside a wrap sizer
     wxSizer *ps_mid = new wxStaticBoxSizer( wxVERTICAL, this, "Wrapping check-boxes" );
     wxSizer *ps_mid_wrap = new wxWrapSizer(wxHORIZONTAL);
     ps_mid->Add( ps_mid_wrap, 100, wxEXPAND );
@@ -718,10 +725,10 @@ MyWrapSizerFrame::MyWrapSizerFrame(const wxString &title, int x, int y )
     ps_bottom_box->Add( new wxListBox(this,wxID_ANY,wxPoint(0,0),wxSize(70,70)), 0, wxEXPAND|wxSHAPED );
     ps_bottom_box->Add( 10,10 );
     ps_bottom_box->Add( new wxCheckBox(this,wxID_ANY,"A much longer option..."), 100, 0, 5 );
-    
+
     root->Add( ps_bottom, 1, wxEXPAND | wxALL, 5 );
 #endif
-        
+
     // Set sizer for window
     SetSizerAndFit( root );
 }

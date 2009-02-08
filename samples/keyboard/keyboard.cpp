@@ -18,6 +18,9 @@
     #include "wx/wx.h"
 #endif
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
 
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
@@ -77,6 +80,8 @@ MyFrame::MyFrame(const wxString& title)
          m_inputWin(NULL),
          m_skip(true)
 {
+    SetIcon(wxICON(sample));
+
     // IDs for menu items
     enum
     {
@@ -121,12 +126,12 @@ MyFrame::MyFrame(const wxString& title)
                "  RawKeyCode RawKeyFlags");
 
 
-    m_logText = new wxTextCtrl(this, wxID_ANY, "", 
+    m_logText = new wxTextCtrl(this, wxID_ANY, "",
                                wxDefaultPosition, wxDefaultSize,
                                wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL);
 
     // set monospace font to have output in nice columns
-    wxFont font(10, wxFONTFAMILY_TELETYPE, 
+    wxFont font(10, wxFONTFAMILY_TELETYPE,
                 wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
     headerText->SetFont(font);
     m_logText->SetFont(font);
@@ -156,14 +161,14 @@ MyFrame::MyFrame(const wxString& title)
     Connect(SkipID, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(MyFrame::OnSkip));
 
-    // connect event handlers for the blue input window 
+    // connect event handlers for the blue input window
     m_inputWin->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyFrame::OnKeyDown),
                         NULL, this);
     m_inputWin->Connect(wxEVT_KEY_UP, wxKeyEventHandler(MyFrame::OnKeyUp),
                         NULL, this);
     m_inputWin->Connect(wxEVT_CHAR, wxKeyEventHandler(MyFrame::OnChar),
                         NULL, this);
-    m_inputWin->Connect(wxEVT_PAINT, 
+    m_inputWin->Connect(wxEVT_PAINT,
                         wxPaintEventHandler(MyFrame::OnPaintInputWin),
                         NULL, this);
 
@@ -192,7 +197,7 @@ void MyFrame::OnPaintInputWin(wxPaintEvent& WXUNUSED(event))
     font.SetPointSize(font.GetPointSize() + 2);
     dc.SetFont(font);
 
-    dc.DrawLabel("Press keys here", 
+    dc.DrawLabel("Press keys here",
                  m_inputWin->GetClientRect(), wxALIGN_CENTER);
 }
 
@@ -203,7 +208,7 @@ const char* GetVirtualKeyCodeName(int keycode)
     switch ( keycode )
     {
 #define WXK_(x) \
-        case WXK_##x: return #x; 
+        case WXK_##x: return #x;
 
         WXK_(BACK)
         WXK_(TAB)
@@ -305,8 +310,8 @@ const char* GetVirtualKeyCodeName(int keycode)
         WXK_(NUMPAD_DECIMAL)
         WXK_(NUMPAD_DIVIDE)
 #undef WXK_
-    default: 
-        return NULL; 
+    default:
+        return NULL;
     }
 }
 
@@ -332,7 +337,7 @@ wxString GetKeyName(const wxKeyEvent &event)
 void MyFrame::LogEvent(const wxString& name, wxKeyEvent& event)
 {
     wxString msg;
-    // event  key_name  KeyCode  modifiers  Unicode  raw_code raw_flags 
+    // event  key_name  KeyCode  modifiers  Unicode  raw_code raw_flags
     msg.Printf("%7s %15s %5d   %c%c%c%c"
 #if wxUSE_UNICODE
                    "%5d (U+%04x)"

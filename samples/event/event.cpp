@@ -30,6 +30,10 @@
     #include "wx/wx.h"
 #endif
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // event constants
 // ----------------------------------------------------------------------------
@@ -214,6 +218,8 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
+    SetIcon(wxICON(sample));
+
     // init members
     m_nPush = 0;
 

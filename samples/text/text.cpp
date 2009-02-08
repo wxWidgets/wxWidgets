@@ -45,6 +45,10 @@
 #include "wx/numdlg.h"
 #include "wx/tokenzr.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 //----------------------------------------------------------------------
 // class definitions
 //----------------------------------------------------------------------
@@ -1369,6 +1373,8 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int h)
        : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h) )
 {
+    SetIcon(wxICON(sample));
+
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR

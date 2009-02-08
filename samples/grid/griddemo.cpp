@@ -39,6 +39,10 @@
 
 #include "griddemo.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -148,6 +152,8 @@ GridFrame::GridFrame()
                    wxDefaultPosition,
                    wxDefaultSize )
 {
+    SetIcon(wxICON(sample));
+
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append( ID_VTABLE, _T("&Virtual table test\tCtrl-V"));
     fileMenu->Append( ID_BUGS_TABLE, _T("&Bugs table test\tCtrl-B"));

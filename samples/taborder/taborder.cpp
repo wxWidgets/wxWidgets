@@ -39,6 +39,11 @@
 
 #include "wx/notebook.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -189,6 +194,8 @@ MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, _T("TabOrder wxWidgets Sample"),
                  wxDefaultPosition, wxSize(700, 450))
 {
+    SetIcon(wxICON(sample));
+
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(TabOrder_About);
     menuFile->AppendSeparator();

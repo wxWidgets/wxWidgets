@@ -67,6 +67,10 @@
 #include "wx/filename.h"    //For wxFileName::GetName()
 #include "wx/config.h"      //for native wxConfig
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // Bail out if the user doesn't want one of the
 // things we need
@@ -481,6 +485,8 @@ void wxMediaPlayerApp::MacOpenFile(const wxString & fileName )
 wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
        : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(600,600))
 {
+    SetIcon(wxICON(sample));
+
     //
     //  Create Menus
     //
@@ -685,7 +691,7 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
     //  Create an initial notebook page so the user has something
     //  to work with without having to go file->open every time :).
     //
-    wxMediaPlayerNotebookPage* page = 
+    wxMediaPlayerNotebookPage* page =
         new wxMediaPlayerNotebookPage(this, m_notebook);
     m_notebook->AddPage(page,
                         wxT(""),
@@ -859,7 +865,7 @@ void wxMediaPlayerFrame::OnShowInterface(wxCommandEvent& event)
         wxMenuItem* pSIItem = GetMenuBar()->FindItem(wxID_SHOWINTERFACE);
         wxASSERT(pSIItem);
         pSIItem->Check(!event.IsChecked());
-        
+
         if(event.IsChecked())
             wxMessageBox(wxT("Could not show player controls"));
         else
@@ -921,11 +927,11 @@ void wxMediaPlayerFrame::DoOpenFile(const wxString& path, bool bNewPage)
             true);
     }
 
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     if(currentpage->m_nLastFileId != -1)
-        currentpage->m_playlist->SetItemState(currentpage->m_nLastFileId, 
+        currentpage->m_playlist->SetItemState(currentpage->m_nLastFileId,
                                               0, wxLIST_STATE_SELECTED);
 
     wxListItem newlistitem;
@@ -959,7 +965,7 @@ void wxMediaPlayerFrame::DoOpenFile(const wxString& path, bool bNewPage)
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     wxListItem listitem;
@@ -986,7 +992,7 @@ void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
     }
     else
     {
-        int nNewId = listitem.GetData() ? listitem.GetId() : 
+        int nNewId = listitem.GetData() ? listitem.GetId() :
                             currentpage->m_playlist->GetItemCount()-1;
         m_notebook->SetPageText(m_notebook->GetSelection(),
                                 wxFileName(path).GetName());
@@ -1023,9 +1029,9 @@ void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
 
         currentpage->m_nLastFileId = nNewId;
         currentpage->m_szFile = path;
-        currentpage->m_playlist->SetItem(currentpage->m_nLastFileId, 
+        currentpage->m_playlist->SetItem(currentpage->m_nLastFileId,
                                          1, wxFileName(path).GetName());
-        currentpage->m_playlist->SetItem(currentpage->m_nLastFileId, 
+        currentpage->m_playlist->SetItem(currentpage->m_nLastFileId,
                                          2, wxT(""));
     }
 }
@@ -1038,7 +1044,7 @@ void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnMediaLoaded(wxMediaEvent& WXUNUSED(evt))
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     if( !currentpage->m_mediactrl->Play() )
@@ -1079,7 +1085,7 @@ void wxMediaPlayerFrame::OnSelectBackend(wxCommandEvent& WXUNUSED(evt))
                                                         ), wxT(""), true);
 
         DoOpenFile(
-            ((wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage())->m_szFile, 
+            ((wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage())->m_szFile,
             false);
     }
 }
@@ -1158,7 +1164,7 @@ void wxMediaPlayerFrame::OnCloseCurrentPage(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     wxListItem listitem;
@@ -1181,7 +1187,7 @@ void wxMediaPlayerFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
         listitem.SetState(listitem.GetState() | wxLIST_STATE_SELECTED);
             currentpage->m_playlist->SetItem(listitem);
             wxASSERT(listitem.GetData());
-            DoPlayFile((*((wxString*) listitem.GetData())));            
+            DoPlayFile((*((wxString*) listitem.GetData())));
     }
     }
     else
@@ -1200,7 +1206,7 @@ void wxMediaPlayerFrame::OnKeyDown(wxKeyEvent& event)
 {
    if(event.GetKeyCode() == WXK_BACK/*DELETE*/)
     {
-        wxMediaPlayerNotebookPage* currentpage = 
+        wxMediaPlayerNotebookPage* currentpage =
             (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
        //delete all selected items
        while(true)
@@ -1235,7 +1241,7 @@ void wxMediaPlayerFrame::OnKeyDown(wxKeyEvent& event)
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnStop(wxCommandEvent& WXUNUSED(evt))
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     if( !currentpage->m_mediactrl->Stop() )
@@ -1255,7 +1261,7 @@ void wxMediaPlayerFrame::OnStop(wxCommandEvent& WXUNUSED(evt))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnChangeSong(wxListEvent& WXUNUSED(evt))
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     wxListItem listitem;
@@ -1274,7 +1280,7 @@ void wxMediaPlayerFrame::OnChangeSong(wxListEvent& WXUNUSED(evt))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnPrev(wxCommandEvent& WXUNUSED(event))
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     if (currentpage->m_playlist->GetItemCount() == 0)
@@ -1291,7 +1297,7 @@ void wxMediaPlayerFrame::OnPrev(wxCommandEvent& WXUNUSED(event))
         currentpage->m_playlist->SetItemState(nSelectedItem, 0, wxLIST_STATE_SELECTED);
     }
 
-    if (nLastSelectedItem == -1) 
+    if (nLastSelectedItem == -1)
     {
         //nothing selected, default to the file before the currently playing one
         if(currentpage->m_nLastFileId == 0)
@@ -1299,7 +1305,7 @@ void wxMediaPlayerFrame::OnPrev(wxCommandEvent& WXUNUSED(event))
     else
             nLastSelectedItem = currentpage->m_nLastFileId - 1;
     }
-    else if (nLastSelectedItem == 0) 
+    else if (nLastSelectedItem == 0)
         nLastSelectedItem = currentpage->m_playlist->GetItemCount() - 1;
     else
         nLastSelectedItem -= 1;
@@ -1327,7 +1333,7 @@ void wxMediaPlayerFrame::OnPrev(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnNext(wxCommandEvent& WXUNUSED(event))
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     if (currentpage->m_playlist->GetItemCount() == 0)
@@ -1349,7 +1355,7 @@ void wxMediaPlayerFrame::OnNext(wxCommandEvent& WXUNUSED(event))
         if(currentpage->m_nLastFileId == currentpage->m_playlist->GetItemCount() - 1)
         nLastSelectedItem = 0;
     else
-            nLastSelectedItem = currentpage->m_nLastFileId + 1;                
+            nLastSelectedItem = currentpage->m_nLastFileId + 1;
     }
     else if (nLastSelectedItem == currentpage->m_playlist->GetItemCount() - 1)
             nLastSelectedItem = 0;
@@ -1379,7 +1385,7 @@ void wxMediaPlayerFrame::OnNext(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnVolumeDown(wxCommandEvent& WXUNUSED(event))
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     double dVolume = currentpage->m_mediactrl->GetVolume();
@@ -1393,7 +1399,7 @@ void wxMediaPlayerFrame::OnVolumeDown(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnVolumeUp(wxCommandEvent& WXUNUSED(event))
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     double dVolume = currentpage->m_mediactrl->GetVolume();
@@ -1419,7 +1425,7 @@ void wxMediaPlayerFrame::OnVolumeUp(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerTimer::Notify()
 {
-    wxMediaPlayerNotebookPage* currentpage = 
+    wxMediaPlayerNotebookPage* currentpage =
         (wxMediaPlayerNotebookPage*) m_frame->m_notebook->GetCurrentPage();
     wxMediaCtrl* currentMediaCtrl = currentpage->m_mediactrl;
 
@@ -1642,7 +1648,7 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_gauge->Create(this, wxID_GAUGE, 0, wxDefaultPosition, wxDefaultSize,
                         wxGA_HORIZONTAL | wxGA_SMOOTH);
     sizer->Add(m_gauge, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND , 5);
-    
+
 
     //
     //  Create the speed/volume sliders

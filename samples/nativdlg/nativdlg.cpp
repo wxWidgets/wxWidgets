@@ -24,9 +24,16 @@
 #error Sorry, this sample is only appropriate under Windows.
 #endif
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 #include <ctype.h>
 #include "nativdlg.h"
 #include "resource.h"
+
+
+
 
 IMPLEMENT_APP(MyApp)
 
@@ -75,7 +82,9 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size):
   wxFrame(parent, id, title, pos, size)
 {
-  panel = NULL;
+    SetIcon(wxICON(sample));
+
+    panel = NULL;
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -104,10 +113,10 @@ END_EVENT_TABLE()
 
 void MyDialog::OnOk(wxCommandEvent& WXUNUSED(event))
 {
-  EndModal(wxID_OK);
+    EndModal(wxID_OK);
 }
 
 void MyDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-  EndModal(wxID_CANCEL);
+    EndModal(wxID_CANCEL);
 }

@@ -49,6 +49,10 @@
 #include "wx/datetime.h"
 #include "wx/numdlg.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 
 // define this for the platforms which don't support wxBitmapButton (such as
 // Motif), else a wxBitmapButton will be used
@@ -312,6 +316,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     : wxFrame((wxWindow *)NULL, wxID_ANY, title, pos, size)
 #endif
 {
+    SetIcon(wxICON(sample));
+
     m_statbarDefault = NULL;
     m_statbarCustom = NULL;
 

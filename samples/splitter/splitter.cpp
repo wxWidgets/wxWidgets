@@ -39,6 +39,10 @@
 #include "wx/splitter.h"
 #include "wx/dcmirror.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -197,6 +201,8 @@ MyFrame::MyFrame()
                  wxDefaultPosition, wxSize(420, 300),
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
+    SetIcon(wxICON(sample));
+
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR

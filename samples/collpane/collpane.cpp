@@ -44,6 +44,10 @@
 #include "wx/fontpicker.h"
 #include "wx/aboutdlg.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -57,7 +61,7 @@ enum
     PANE_SHOWDLG,
     PANE_ABOUT = wxID_ABOUT,
     PANE_QUIT = wxID_EXIT,
-    
+
     PANE_BUTTON,
     PANE_TEXTCTRL
 };
@@ -166,6 +170,8 @@ MyFrame::MyFrame()
                  wxDefaultPosition, wxSize(420, 300),
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
+    SetIcon(wxICON(sample));
+
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR
@@ -191,7 +197,7 @@ MyFrame::MyFrame()
 
     m_collPane = new wxCollapsiblePane(this, -1, wxT("test!"));
     wxWindow *win = m_collPane->GetPane();
-    
+
     m_paneSizer = new wxBoxSizer( wxVERTICAL );
     m_paneSizer->Add( new wxStaticText(win, -1, wxT("Static text") ), 0, wxALIGN_LEFT );
     m_paneSizer->Add( new wxStaticText(win, -1, wxT("Yet another one!") ), 0, wxALIGN_LEFT );
@@ -318,7 +324,7 @@ void MyDialog::OnAlignButton(wxCommandEvent& WXUNUSED(ev))
 {
    wxSizerItem *item = m_paneSizer->GetItem( FindWindow(PANE_TEXTCTRL), true );
    item->SetFlag(  wxALIGN_RIGHT );
-   
+
    Layout();
 }
 

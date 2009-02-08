@@ -46,6 +46,9 @@
 
 #include "canvas.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
 
 // ============================================================================
 // declarations
@@ -575,6 +578,8 @@ MyFrame::MyFrame()
     : wxFrame( (wxFrame *)NULL, wxID_ANY, _T("wxImage sample"),
                 wxPoint(20, 20), wxSize(950, 700) )
 {
+    SetIcon(wxICON(sample));
+
     wxMenuBar *menu_bar = new wxMenuBar();
 
     wxMenu *menuImage = new wxMenu;

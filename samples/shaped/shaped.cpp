@@ -40,6 +40,9 @@
 #include "wx/dcclient.h"
 #include "wx/image.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
 
 // ----------------------------------------------------------------------------
 // constants
@@ -246,6 +249,8 @@ MainFrame::MainFrame()
          : wxFrame(NULL, wxID_ANY, "wxWidgets Shaped Sample",
                    wxDefaultPosition, wxSize(200, 100))
 {
+    SetIcon(wxICON(sample));
+
     wxMenuBar * const mbar = new wxMenuBar;
     wxMenu * const menuFrames = new wxMenu;
     menuFrames->Append(Show_Shaped, "Show &shaped window\tCtrl-S");

@@ -68,6 +68,9 @@
 
 #include <wx/artprov.h>
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
 
 // -----------------------------------------------------------------------
 // wxSampleMultiButtonEditor
@@ -2062,6 +2065,8 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
                (wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|
                 wxTAB_TRAVERSAL|wxCLOSE_BOX|wxNO_FULL_REPAINT_ON_RESIZE) )
 {
+    SetIcon(wxICON(sample));
+
     m_propGrid = NULL;
     m_panel = NULL;
 

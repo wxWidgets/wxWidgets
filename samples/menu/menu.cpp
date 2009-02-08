@@ -59,6 +59,10 @@
 #include "copy.xpm"
 #endif
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // classes
 // ----------------------------------------------------------------------------
@@ -371,6 +375,8 @@ bool MyApp::OnInit()
 MyFrame::MyFrame()
        : wxFrame((wxFrame *)NULL, wxID_ANY, _T("wxWidgets menu sample"))
 {
+    SetIcon(wxICON(sample));
+
 #if USE_LOG_WINDOW
     m_textctrl = NULL;
 #endif

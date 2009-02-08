@@ -36,6 +36,10 @@
 
 #include "wx/dialup.h"
 
+#ifndef __WXMSW__
+    #include "../sample.xpm"
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -220,6 +224,8 @@ void MyApp::OnConnected(wxDialUpEvent& event)
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
+    SetIcon(wxICON(sample));
+
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
