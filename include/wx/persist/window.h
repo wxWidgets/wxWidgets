@@ -60,8 +60,13 @@ private:
     {
         event.Skip();
 
-        // this will delete this object itself
-        wxPersistenceManager::Get().SaveAndUnregister(GetWindow());
+        // only react to the destruction of this object itself, not of any of
+        // its children
+        if ( event.GetEventObject() == GetObject() )
+        {
+            // this will delete this object itself
+            wxPersistenceManager::Get().SaveAndUnregister(GetWindow());
+        }
     }
 
     wxDECLARE_NO_COPY_CLASS(wxPersistentWindowBase);
