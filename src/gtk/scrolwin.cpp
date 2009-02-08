@@ -10,14 +10,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -26,11 +18,8 @@
 #endif
 
 #include "wx/scrolwin.h"
-#include "wx/gtk/private.h"
 
-// ============================================================================
-// implementation
-// ============================================================================
+#include <gtk/gtk.h>
 
 // ----------------------------------------------------------------------------
 // wxScrollHelper implementation
@@ -39,41 +28,12 @@
 void wxScrollHelper::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                    int noUnitsX, int noUnitsY,
                                    int xPos, int yPos,
-                                   bool WXUNUSED(noRefresh))
+                                   bool noRefresh)
 {
-    m_xScrollPixelsPerLine = pixelsPerUnitX;
-    m_yScrollPixelsPerLine = pixelsPerUnitY;
-
-    int w = noUnitsX * pixelsPerUnitX;
-    int h = noUnitsY * pixelsPerUnitY;
-    m_targetWindow->SetVirtualSize( w ? w : wxDefaultCoord,
-                                    h ? h : wxDefaultCoord);
-
-    GtkRange *sb = m_win->m_scrollBar[wxWindow::ScrollDir_Vert];
-    gtk_range_set_value(sb, yPos);
-    sb = m_win->m_scrollBar[wxWindow::ScrollDir_Horz];
-    gtk_range_set_value(sb, xPos);
-    
-    m_xScrollPosition = wxRound( m_win->m_scrollBar[wxWindow::ScrollDir_Horz]->adjustment->value );
-    m_yScrollPosition = wxRound( m_win->m_scrollBar[wxWindow::ScrollDir_Vert]->adjustment->value );
-
-    // If the target is not the same as the window with the scrollbars,
-    // then we need to update the scrollbars here, since they won't have
-    // been updated by SetVirtualSize().
-    if (m_targetWindow != m_win)
-    {
-        AdjustScrollbars();
-    }
-
-#if 0
-    if (!noRefresh)
-    {
-        int new_x = m_xScrollPixelsPerLine * m_xScrollPosition;
-        int new_y = m_yScrollPixelsPerLine * m_yScrollPosition;
-
-        m_targetWindow->ScrollWindow( old_x - new_x, old_y - new_y );
-    }
-#endif
+    m_win->m_scrollBar[wxWindow::ScrollDir_Horz]->adjustment->value = xPos;
+    m_win->m_scrollBar[wxWindow::ScrollDir_Vert]->adjustment->value = yPos;
+    base_type::SetScrollbars(
+        pixelsPerUnitX, pixelsPerUnitY, noUnitsX, noUnitsY, xPos, yPos, noRefresh);
 }
 
 void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
@@ -105,7 +65,7 @@ void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
 
     GtkAdjustment* adj = range->adjustment;
     adj->step_increment = 1;
-    adj->page_increment = 
+    adj->page_increment =
     adj->page_size = page_size;
     gtk_range_set_range(range, 0, upper);
 
@@ -224,4 +184,3 @@ void wxScrollHelper::DoShowScrollbars(wxScrollbarVisibility horz,
                                    GtkPolicyFromWX(horz),
                                    GtkPolicyFromWX(vert));
 }
-

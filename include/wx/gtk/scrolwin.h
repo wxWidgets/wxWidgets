@@ -18,6 +18,7 @@
 
 class WXDLLIMPEXP_CORE wxScrollHelper : public wxScrollHelperBase
 {
+    typedef wxScrollHelperBase base_type;
 public:
     // default ctor doesn't do anything
     wxScrollHelper(wxWindow *win) : wxScrollHelperBase(win) { }
@@ -70,7 +71,6 @@ private:
                         int pixelsPerLine,
                         int *posOld);
 
-private:
     wxDECLARE_NO_COPY_CLASS(wxScrollHelper);
 };
 
