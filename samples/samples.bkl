@@ -53,7 +53,6 @@
     <subproject id="mediaplayer" template="sub"/>
     <subproject id="menu" template="sub"/>
     <subproject id="minimal" template="sub"/>
-    <subproject id="mobile" template="sub"/>
     <subproject id="nativdlg" template="sub"/>
     <subproject id="notebook" template="sub"/>
     <subproject id="oleauto" template="sub"/>
