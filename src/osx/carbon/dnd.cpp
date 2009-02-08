@@ -57,6 +57,12 @@ wxDragResult wxDropTarget::OnDragOver(
     return CurrentDragHasSupportedFormat() ? def : wxDragNone;
 }
 
+wxDataFormat wxDropTarget::GetMatchingPair()
+{
+    wxFAIL_MSG("wxDropTarget::GetMatchingPair() not implemented in src/osx/carbon/dnd.cpp"); 
+    return wxDF_INVALID;
+}
+
 bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
 {
     if (m_dataObject == NULL)
