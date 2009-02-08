@@ -33,7 +33,7 @@ A. Please write them - see the next question. French is chosen by default
    the language name if only 1 argument is given).
 
 Q. How to do translations to other language?
-A. First of all, you will need the GNU gettext tools (see the next question).
+A. First of all, you will need the GNU gettext tools (see the next questions).
    After you've probably installed them, type the following (example is for Unix
    and you should do exactly the same under Windows).
 
@@ -65,6 +65,23 @@ A. First of all, you will need the GNU gettext tools (see the next question).
    # run the sample to test it
    cd ..
    ./internat <language>
+
+Q. How to do update the translation of 'internat' sample for a language?
+A. First of all, you will need the GNU gettext tools (see the next question).
+   After you've probably installed them, type the following (example is for Unix
+   and you should do exactly the same under Windows).
+
+   # enter the directory of an already-existing translations which needs to be updated
+   cd <language>
+
+   # the -j flag tells xgettext to merge and not simply overwrite the output file
+   xgettext -j -C -n -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -o internat.po ../internat.cpp
+
+   # now edit the files and do translate the new strings (this isn't done by gettext)
+   vi internat.po
+
+   # update the message catalog:
+   msgfmt -o internat.mo internat.po
 
 Q. How to get the gettext tools?
 A. For Unix, you should be able to get the source distribution of any GNU mirror
