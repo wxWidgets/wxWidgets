@@ -130,6 +130,7 @@ All (GUI):
 - Implemented wxWindow::DragAcceptFiles() on all platforms.
 - Added wxAUI_MGR_LIVE_RESIZE flag to wxAuiManager and made it the default on
   wxMac with CoreGraphics where sash drawing isn't implemented.
+- Use bitmap mask in wxSplashScreen.
 
 All (Unix):
 
