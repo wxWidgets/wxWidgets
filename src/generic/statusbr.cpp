@@ -24,6 +24,7 @@
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/toplevel.h"
+    #include "wx/control.h"
 #endif
 
 #ifdef __WXGTK20__
@@ -313,7 +314,7 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 void wxStatusBarGeneric::InitColours()
 {
 #if defined(__WXPM__)
-    m_mediumShadowPen = wxPen(wxColour(127, 127, 127), 1, wxSOLID);
+    m_mediumShadowPen = wxPen(wxColour(127, 127, 127));
     m_hilightPen = *wxWHITE_PEN;
 
     SetBackgroundColour(*wxLIGHT_GREY);
