@@ -54,6 +54,7 @@
 
 BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
     EVT_PAINT(wxStatusBarGeneric::OnPaint)
+    EVT_SIZE(wxStatusBarGeneric::OnSize)
     EVT_LEFT_DOWN(wxStatusBarGeneric::OnLeftDown)
     EVT_RIGHT_DOWN(wxStatusBarGeneric::OnRightDown)
     EVT_SYS_COLOUR_CHANGED(wxStatusBarGeneric::OnSysColourChanged)
@@ -89,16 +90,7 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
     SetFont(*wxSMALL_FONT);
 #endif
 
-    wxCoord y;
-    {
-        // Set the height according to the font and the border size
-        wxClientDC dc(this);
-        dc.SetFont(GetFont());
-
-        dc.GetTextExtent(_T("X"), NULL, &y );
-    }
-    int height = (int)( (11*y)/10 + 2*GetBorderY());
-
+    int height = (int)((11*GetCharHeight())/10 + 2*GetBorderY());
     SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height);
 
     SetFieldsCount(1);
@@ -109,16 +101,15 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 wxSize wxStatusBarGeneric::DoGetBestSize() const
 {
     int width, height;
-    wxCoord y;
 
     // best width is the width of the parent
-    GetParent()->GetClientSize(&width, NULL);
+    if (GetParent())
+        GetParent()->GetClientSize(&width, NULL);
+    else
+        width = 80;     // a dummy value
 
     // best height is as calculated above in Create()
-    wxClientDC dc((wxWindow*)this);
-    dc.SetFont(GetFont());
-    dc.GetTextExtent(_T("X"), NULL, &y);
-    height = (int)((11*y)/10 + 2*GetBorderY());
+    height = (int)((11*GetCharHeight())/10 + 2*GetBorderY());
 
     return wxSize(width, height);
 }
@@ -195,13 +186,15 @@ bool wxStatusBarGeneric::ShowsSizeGrip() const
     return tlw && !tlw->IsMaximized() && tlw->HasFlag(wxRESIZE_BORDER);
 }
 
-void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
+void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
 {
-    wxRect rect;
-    GetFieldRect(i, rect);
+    wxString text(GetStatusText(i));
+    if (text.empty())
+        return;     // optimization
 
-    if (rect.GetWidth() <= 0)
-        return;     // happens when the status bar is shrinked in a very small area!
+    int xpos = rect.x + wxFIELD_TEXT_MARGIN,
+        maxWidth = rect.width - 2*wxFIELD_TEXT_MARGIN,
+        ypos = (int) (((rect.height - textHeight) / 2) + rect.y + 0.5);
 
     if (ShowsSizeGrip())
     {
@@ -210,35 +203,27 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
         //       work because the adjustment needs to be done only when drawing
         //       the field text and not also when drawing the background, the
         //       size grip itself, etc
-        if (GetLayoutDirection() == wxLayout_RightToLeft && i == 0)
+        if ((GetLayoutDirection() == wxLayout_RightToLeft && i == 0) ||
+            (GetLayoutDirection() != wxLayout_RightToLeft &&
+                 i == (int)m_panes.GetCount()-1))
         {
-            const wxRect& rc = GetSizeGripRect();
+            const wxRect& gripRc = GetSizeGripRect();
 
-            rect.x += rc.GetRight();
-            rect.width -= rc.GetRight();
-        }
-        else if (GetLayoutDirection() != wxLayout_RightToLeft && i == m_panes.GetCount()-1)
-        {
-            const wxRect& rc = GetSizeGripRect();
+            // NOTE: we don't need any special treatment wrt to the layout direction
+            //       since DrawText() will automatically adjust the origin of the
+            //       text accordingly to the layout in use
 
-            rect.width = rc.x - rect.x;
+            maxWidth -= gripRc.width;
         }
     }
 
     // eventually ellipsize the text so that it fits the field width
-    wxString text(GetStatusText(i));
-
     text = wxControl::Ellipsize(
         text, dc,
         GetLayoutDirection() == wxLayout_RightToLeft ? wxELLIPSIZE_START : wxELLIPSIZE_END,
-        rect.GetWidth() - 2*wxFIELD_TEXT_MARGIN,
+        maxWidth,
         wxELLIPSIZE_EXPAND_TAB);
         // Ellipsize() will do something only if necessary
-
-    // center the text in its field
-    wxSize sz = dc.GetTextExtent(text);
-    int xpos = rect.x + wxFIELD_TEXT_MARGIN;
-    int ypos = (int) (((rect.height - sz.GetHeight()) / 2) + rect.y + 0.5);
 
 #if defined( __WXGTK__ ) || defined(__WXMAC__)
     xpos++;
@@ -249,10 +234,13 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
     dc.DrawText(text, xpos, ypos);
 }
 
-void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
+void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
 {
     wxRect rect;
     GetFieldRect(i, rect);
+
+    if (rect.GetWidth() <= 0)
+        return;     // happens when the status bar is shrinked in a very small area!
 
     int style = m_panes[i].nStyle;
     if (style != wxSB_FLAT)
@@ -294,11 +282,10 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
                     rect.x + rect.width, rect.y);
         dc.DrawLine(rect.x, rect.y + rect.height,
                    rect.x, rect.y);
-
 #endif
     }
 
-    DrawFieldText(dc, i);
+    DrawFieldText(dc, rect, i, textHeight);
 }
 
 // Get the position and size of the field's internal bounding rectangle
@@ -307,36 +294,17 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
     wxCHECK_MSG( (n >= 0) && ((size_t)n < m_panes.GetCount()), false,
                  _T("invalid status bar field index") );
 
-    // FIXME: workarounds for OS/2 bugs have nothing to do here (VZ)
-    int width, height;
-#ifdef __WXPM__
-    GetSize(&width, &height);
-#else
-    GetClientSize(&width, &height);
-#endif
-
-    // we cache m_widthsAbs between calls and recompute it if client
-    // width has changed (or when it is initially empty)
-    if ( m_widthsAbs.IsEmpty() || m_lastClientWidth != width )
-    {
-        // FIXME: why don't we use an OnSize(wxSizeEvent&) event handler to
-        //        update the cache? (FM)
-
-        wxConstCast(this, wxStatusBarGeneric)->m_widthsAbs = CalculateAbsWidths(width);
-
-        // remember last width for which we have recomputed the widths in pixels
-        wxConstCast(this, wxStatusBarGeneric)->m_lastClientWidth = width;
-    }
+    if (m_widthsAbs.IsEmpty())
+        return false;
 
     rect.x = 0;
     for ( int i = 0; i < n; i++ )
         rect.x += m_widthsAbs[i];
-
     rect.x += m_borderX;
-    rect.y = m_borderY;
 
+    rect.y = m_borderY;
     rect.width = m_widthsAbs[n] - 2*m_borderX;
-    rect.height = height - 2*m_borderY;
+    rect.height = m_lastClientHeight - 2*m_borderY;
 
     return true;
 }
@@ -359,15 +327,11 @@ void wxStatusBarGeneric::InitColours()
 void wxStatusBarGeneric::SetMinHeight(int height)
 {
     // check that this min height is not less than minimal height for the
-    // current font
-    wxClientDC dc(this);
-    wxCoord y;
-    dc.GetTextExtent( wxT("X"), NULL, &y );
+    // current font (min height is as calculated above in Create() except for border)
+    int minHeight = (int)((11*GetCharHeight())/10);
 
-    if ( height > (11*y)/10 )
-    {
+    if ( height > minHeight )
         SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height + 2*m_borderY);
-    }
 }
 
 wxRect wxStatusBarGeneric::GetSizeGripRect() const
@@ -411,10 +375,12 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
     if (GetFont().IsOk())
         dc.SetFont(GetFont());
 
-    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
+    // compute char height only once for all panes:
+    int textHeight = dc.GetCharHeight();
 
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     for (size_t i = 0; i < m_panes.GetCount(); i ++)
-        DrawField(dc, i);
+        DrawField(dc, i, textHeight);
 }
 
 // Responds to colour changes, and passes event on to children.
@@ -505,6 +471,20 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
 #else
     event.Skip( true );
 #endif
+}
+
+void wxStatusBarGeneric::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+    // FIXME: workarounds for OS/2 bugs have nothing to do here (VZ)
+    int width;
+#ifdef __WXPM__
+    GetSize(&width, &m_lastClientHeight);
+#else
+    GetClientSize(&width, &m_lastClientHeight);
+#endif
+
+    // recompute the cache of the field widths if the status bar width has changed
+    m_widthsAbs = CalculateAbsWidths(width);
 }
 
 #endif // wxUSE_STATUSBAR

@@ -65,23 +65,26 @@ public:
     virtual int GetBorderY() const { return m_borderY; }
 
 
-protected:
-
-    virtual void DrawFieldText(wxDC& dc, int i);
-    virtual void DrawField(wxDC& dc, int i);
-
-    void SetBorderX(int x);
-    void SetBorderY(int y);
+protected:      // event handlers
 
     void OnPaint(wxPaintEvent& event);
+    void OnSize(wxSizeEvent& event);
 
     void OnLeftDown(wxMouseEvent& event);
     void OnRightDown(wxMouseEvent& event);
 
-    virtual void InitColours();
-
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+protected:
+
+    virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight);
+    virtual void DrawField(wxDC& dc, int i, int textHeight);
+
+    void SetBorderX(int x);
+    void SetBorderY(int y);
+
+    virtual void InitColours();
 
     // true if the status bar shows the size grip: for this it must have
     // wxST_SIZEGRIP style and the window it is attached to must be resizeable
@@ -97,8 +100,8 @@ protected:
     // the array of the currently displayed strings
     wxArrayString     m_statusStrings;
 
-    // the last known width of the client rect (used to rebuild cache)
-    int               m_lastClientWidth;
+    // the last known height of the client rect
+    int               m_lastClientHeight;
 
     // the absolute widths of the status bar panes in pixels
     wxArrayInt        m_widthsAbs;
