@@ -55,7 +55,8 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
     }
     
     wxAcceleratorEntry *entry = wxAcceleratorEntry::Create( m_text ) ;
-    m_peer = wxMenuItemImpl::Create( this, pParentMenu, id, text, entry, strHelp, kind, pSubMenu );
+    // use accessors for ID and Kind because they might have been changed in the base constructor
+    m_peer = wxMenuItemImpl::Create( this, pParentMenu, GetId(), text, entry, strHelp, GetKind(), pSubMenu );
     delete entry;
 }
 

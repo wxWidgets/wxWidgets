@@ -189,6 +189,7 @@ private:
     static wxMenuBar*            s_macCommonMenuBar ;
   
     wxMenu* m_rootMenu;
+    wxMenu* m_appleMenu;
 
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };

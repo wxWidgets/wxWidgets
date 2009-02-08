@@ -503,18 +503,17 @@ void wxMenuBar::Init()
     m_menuBarFrame = NULL;
     m_invokingWindow = NULL;
     m_rootMenu = new wxMenu();
-    wxMenu* applemenu = new wxMenu();
-    applemenu->SetAllowRearrange(false);
-    applemenu->Append( wxApp::s_macAboutMenuItemId, "About..." );
-    applemenu->AppendSeparator();
-    applemenu->Append( wxApp::s_macPreferencesMenuItemId, "Preferences..." );
-    applemenu->AppendSeparator();
-    
-#if ! wxOSX_USE_CARBON
-    applemenu->Append( wxApp::s_macExitMenuItemId, "Quit\tCtrl+Q" );
+    m_appleMenu = new wxMenu();
+    m_appleMenu->SetAllowRearrange(false);
+    m_appleMenu->Append( wxApp::s_macAboutMenuItemId, "About..." );
+    m_appleMenu->AppendSeparator();
+#if !wxOSX_USE_CARBON
+    m_appleMenu->Append( wxApp::s_macPreferencesMenuItemId, "Preferences..." );
+    m_appleMenu->AppendSeparator();
+    m_appleMenu->Append( wxApp::s_macExitMenuItemId, "Quit\tCtrl+Q" );
 #endif
 
-    m_rootMenu->AppendSubMenu(applemenu, "\x14") ;
+    m_rootMenu->AppendSubMenu(m_appleMenu, "\x14") ;
 }
 
 wxMenuBar::wxMenuBar()
@@ -565,6 +564,7 @@ void wxMenuBar::MacInstallMenuBar()
         return ;
         
     m_rootMenu->GetPeer()->MakeRoot();
+    // DisableMenuCommand( NULL , kHICommandPreferences ) ;
 #if 0
 
     MenuBarHandle menubar = NULL ;
@@ -922,6 +922,8 @@ static void wxMenubarSetInvokingWindow( wxMenu *menu, wxWindow *win )
 void wxMenuBar::UnsetInvokingWindow()
 {
     m_invokingWindow = NULL;
+    wxMenubarUnsetInvokingWindow(m_appleMenu);
+
     wxMenu *menu;
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
 
@@ -937,6 +939,8 @@ void wxMenuBar::UnsetInvokingWindow()
 void wxMenuBar::SetInvokingWindow(wxFrame *frame)
 {
     m_invokingWindow = frame;
+    wxMenubarSetInvokingWindow(m_appleMenu, frame);
+    
     wxMenu *menu;
     wxMenuList::compatibility_iterator node = m_menus.GetFirst();
 
