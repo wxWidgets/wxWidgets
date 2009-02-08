@@ -9,6 +9,10 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// NOTE: don't miss the "readme.txt" file which comes with this sample!
+
+
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -258,30 +262,6 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame *frame = new MyFrame(m_locale);
 
-    // Give it an icon
-    frame->SetIcon(wxICON(mondrian));
-
-    // Make a menubar
-    wxMenu *file_menu = new wxMenu;
-    file_menu->Append(INTERNAT_TEST, _("&Test locale availability...\tCtrl-T"));
-    file_menu->AppendSeparator();
-    file_menu->Append(wxID_ABOUT, _("&About..."));
-    file_menu->AppendSeparator();
-    file_menu->Append(wxID_EXIT, _("E&xit"));
-
-    wxMenu *test_menu = new wxMenu;
-    test_menu->Append(wxID_OPEN, _("&Open bogus file"));
-    test_menu->Append(INTERNAT_PLAY, _("&Play a game"));
-    test_menu->AppendSeparator();
-    test_menu->Append(INTERNAT_TEST_1, _("&1 _() (gettext)"));
-    test_menu->Append(INTERNAT_TEST_2, _("&2 _N() (ngettext)"));
-    test_menu->Append(INTERNAT_TEST_3, _("&3 wxTRANSLATE() (gettext_noop)"));
-
-    wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, _("&File"));
-    menu_bar->Append(test_menu, _("&Test"));
-    frame->SetMenuBar(menu_bar);
-
     // Show the frame
     frame->Show(true);
     SetTopWindow(frame);
@@ -300,6 +280,35 @@ MyFrame::MyFrame(wxLocale& locale)
                  _("International wxWidgets App")),
          m_locale(locale)
 {
+    SetIcon(wxICON(mondrian));
+
+    // Make a menubar
+    wxMenu *file_menu = new wxMenu;
+    file_menu->Append(INTERNAT_TEST, _("&Test locale availability...\tCtrl-T"));
+    file_menu->AppendSeparator();
+
+    // since wxID_ABOUT and wxID_EXIT are stock IDs they will automatically get
+    // translated help strings; nice isn't it?
+    file_menu->Append(wxID_ABOUT, _("&About..."));
+    file_menu->AppendSeparator();
+    file_menu->Append(wxID_EXIT, _("E&xit"));
+
+    wxMenu *test_menu = new wxMenu;
+    test_menu->Append(wxID_OPEN, _("&Open bogus file"), _("Shows a wxWidgets localized error message"));
+    test_menu->Append(INTERNAT_PLAY, _("&Play a game"), _("A little game; hint: 17 is a lucky number for many"));
+    test_menu->AppendSeparator();
+    test_menu->Append(INTERNAT_TEST_1, _("&1 _() (gettext)"), _("Tests the _() macro"));
+    test_menu->Append(INTERNAT_TEST_2, _("&2 _N() (ngettext)"), _("Tests the _N() macro"));
+    test_menu->Append(INTERNAT_TEST_3, _("&3 wxTRANSLATE() (gettext_noop)"), _("Tests the wxTRANSLATE() macro"));
+
+    wxMenuBar *menu_bar = new wxMenuBar;
+    menu_bar->Append(file_menu, _("&File"));
+    menu_bar->Append(test_menu, _("&Test"));
+    SetMenuBar(menu_bar);
+
+    // this demonstrates RTL support in wxStatusBar:
+    CreateStatusBar(1);
+
     // this demonstrates RTL layout mirroring for Arabic locales
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->Add(new wxStaticText(this, wxID_ANY, _("First")),
