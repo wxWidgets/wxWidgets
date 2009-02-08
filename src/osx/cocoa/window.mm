@@ -182,12 +182,15 @@ bool g_lastButtonWasFakeRight = false ;
 
 void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 {
+    int eventType = [nsEvent type];
     UInt32 modifiers = [nsEvent modifierFlags] ;
     wxPoint screenMouseLocation = wxFromNSPoint( NULL, [nsEvent locationInWindow]);
 
     // these parameters are not given for all events
     UInt32 button = [nsEvent buttonNumber];
-    UInt32 clickCount = [nsEvent clickCount];
+    UInt32 clickCount = 0;
+    if ( eventType != NSScrollWheel ) 
+        [nsEvent clickCount];
 
     wxevent.m_x = screenMouseLocation.x;
     wxevent.m_y = screenMouseLocation.y;
@@ -199,7 +202,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
 
     UInt32 mouseChord = 0; 
-    int eventType = [nsEvent type];
 
     switch (eventType)
     {
@@ -313,15 +315,17 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
      case NSScrollWheel :
         {
             wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
-            /*
-            EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
-            SInt32 delta = cEvent.GetParameter<SInt32>(kEventParamMouseWheelDelta, typeSInt32) ;
-            */
-            wxevent.m_wheelRotation = 10; // delta;
             wxevent.m_wheelDelta = 1;
             wxevent.m_linesPerAction = 1;
-            if ( 0 /* axis == kEventMouseWheelAxisX*/ )
+            if ( abs([nsEvent deltaX]) > abs([nsEvent deltaY]) )
+            {
                 wxevent.m_wheelAxis = 1;
+                wxevent.m_wheelRotation = [nsEvent deltaX] > 0.0 ? 1 : -1;
+            }
+            else
+            {
+                wxevent.m_wheelRotation = [nsEvent deltaY] > 0.0 ? 1 : -1;
+            }
         }
         break ;
 
