@@ -143,10 +143,6 @@ samples/minifram/minifram.dsp
 samples/minifram/minifram.dsw
 samples/minimal/minimal.dsp
 samples/minimal/minimal.dsw
-samples/mobile/styles/styles.dsp
-samples/mobile/styles/styles.dsw
-samples/mobile/wxedit/wxedit.dsp
-samples/mobile/wxedit/wxedit.dsw
 samples/multimon/multimon.dsp
 samples/multimon/multimon.dsw
 samples/nativdlg/nativdlg.dsp

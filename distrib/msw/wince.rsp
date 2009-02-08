@@ -154,11 +154,6 @@ samples/minimal/minimal.vcw
 samples/minifram/minifram.vcp
 samples/minifram/minifram.vcw
 
-samples/mobile/styles/styles.vcp
-samples/mobile/styles/styles.vcw
-samples/mobile/wxedit/wxedit.vcp
-samples/mobile/wxedit/wxedit.vcw
-
 samples/multimon/multimon.vcp
 samples/multimon/multimon.vcw
 

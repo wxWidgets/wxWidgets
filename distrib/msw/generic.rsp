@@ -885,20 +885,6 @@ samples/minifram/bitmaps/*.bmp
 samples/minifram/bitmaps/*.xpm
 samples/minifram/*.bkl
 
-samples/mobile/styles/*.cpp
-samples/mobile/styles/*.h
-samples/mobile/styles/*.xpm
-samples/mobile/styles/*.jpg
-samples/mobile/styles/*.bkl
-samples/mobile/styles/makefile.*
-samples/mobile/wxedit/*.cpp
-samples/mobile/wxedit/*.h
-samples/mobile/wxedit/*.xpm
-samples/mobile/wxedit/*.bkl
-samples/mobile/wxedit/makefile.*
-samples/mobile/make*
-samples/mobile/*.bkl
-
 samples/multimon/*.h
 samples/multimon/*.cpp
 samples/multimon/*.rc

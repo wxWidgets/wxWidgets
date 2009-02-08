@@ -52,9 +52,6 @@
     <del-formats files="../../samples/html/html_samples.bkl">
         msvc6prj,msevc4prj,msvs2003prj,msvs2005prj,msvs2008prj
     </del-formats>
-    <del-formats files="../../samples/mobile/mobile_samples.bkl">
-        msvc6prj,msevc4prj,msvs2003prj,msvs2005prj,msvs2008prj
-    </del-formats>
     <del-formats files="../../samples/opengl/opengl_samples.bkl">
         msvc6prj,msevc4prj,msvs2003prj,msvs2005prj,msvs2008prj
     </del-formats>

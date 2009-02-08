@@ -63,9 +63,6 @@ samples/menu/Makefile.in
 samples/mfc/Makefile.in
 samples/minifram/Makefile.in
 samples/minimal/Makefile.in
-samples/mobile/Makefile.in
-samples/mobile/styles/Makefile.in
-samples/mobile/wxedit/Makefile.in
 samples/multimon/Makefile.in
 samples/nativdlg/Makefile.in
 samples/notebook/Makefile.in

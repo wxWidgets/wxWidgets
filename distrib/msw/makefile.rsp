@@ -53,9 +53,6 @@ samples/mdi/Makefile.in
 samples/mediaplayer/Makefile.in
 samples/minifram/Makefile.in
 samples/minimal/Makefile.in
-samples/mobile/Makefile.in
-samples/mobile/wxedit/Makefile.in
-samples/mobile/styles/Makefile.in
 samples/multimon/Makefile.in
 samples/notebook/Makefile.in
 samples/nativdlg/Makefile.in

@@ -110,8 +110,6 @@ samples/minifram/*M?.xml
 samples/minifram/*.mcp
 samples/minimal/*M?.xml
 samples/minimal/*.mcp
-samples/mobile/*M?.xml
-samples/mobile/*.mcp
 samples/multimon/*M?.xml
 samples/multimon/*.mcp
 samples/nativdlg/*M?.xml

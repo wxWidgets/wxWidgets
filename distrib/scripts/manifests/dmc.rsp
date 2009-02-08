@@ -128,12 +128,6 @@ samples/minifram/makefile.dmc
 samples/minifram/makefile.dms
 samples/minimal/makefile.dmc
 samples/minimal/makefile.dms
-samples/mobile/makefile.dmc
-samples/mobile/makefile.dms
-samples/mobile/styles/makefile.dmc
-samples/mobile/styles/makefile.dms
-samples/mobile/wxedit/makefile.dmc
-samples/mobile/wxedit/makefile.dms
 samples/multimon/makefile.dmc
 samples/multimon/makefile.dms
 samples/nativdlg/makefile.dmc

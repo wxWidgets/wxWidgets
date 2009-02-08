@@ -91,9 +91,6 @@ samples/menu/makefile.dm?
 samples/mfc/makefile.dm?
 samples/minifram/makefile.dm?
 samples/minimal/makefile.dm?
-samples/mobile/makefile.dm?
-samples/mobile/styles/makefile.dm?
-samples/mobile/wxedit/makefile.dm?
 samples/multimon/makefile.dm?
 samples/nativdlg/makefile.dm?
 samples/notebook/makefile.dm?

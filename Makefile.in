@@ -33434,7 +33434,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
 	# copy files common to all samples in a general way
-	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/mobile $(SAMPDIR)/opengl \
+	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/opengl \
 		    -mindepth 1 -maxdepth 1 -type d -not -name .svn`; do \
 	    t="$(DISTDIR)/samples/`echo $$s | sed 's@$(SAMPDIR)/@@'`"; \
 	    mkdir -p $$t; \
@@ -33497,8 +33497,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	done
 
 	$(CP_P) $(SAMPDIR)/joytest/*.wav $(DISTDIR)/samples/joytest
-
-	$(CP_P) $(SAMPDIR)/mobile/styles/*.jpg $(DISTDIR)/samples/mobile/styles
 
 	$(CP_P) $(SAMPDIR)/opengl/penguin/trackball.c $(DISTDIR)/samples/opengl/penguin
 	$(CP_P) $(SAMPDIR)/opengl/penguin/*.dxf.gz $(DISTDIR)/samples/opengl/penguin
@@ -33724,8 +33722,7 @@ bzip-dist: @GUIDIST@
 	fi
 
 win-dist: MSW_ZIP_TEXT_DIST SAMPLES_DIST DEMOS_DIST UTILS_DIST MISC_DIST INTL_DIST
-# RR: copy VC files common to all samples in a general way
-	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/mobile $(SAMPDIR)/opengl \
+	for s in `find $(SAMPDIR) $(SAMPDIR)/html $(SAMPDIR)/opengl \
 		    -mindepth 1 -maxdepth 1 -type d -not -name CVS`; do \
 	    t="$(DISTDIR)/samples/`echo $$s | sed 's@$(SAMPDIR)/@@'`"; \
 	    $(CP_P) \
