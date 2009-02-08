@@ -288,6 +288,10 @@ SOURCE=.\dirpicker.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\editlbox.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\filectrl.cpp
 # End Source File
 # Begin Source File

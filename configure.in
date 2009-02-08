@@ -6669,7 +6669,6 @@ fi
 if test "$wxUSE_EDITABLELISTBOX" = "yes"; then
     AC_DEFINE(wxUSE_EDITABLELISTBOX)
     USES_CONTROLS=1
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS editlbox"
 fi
 
 if test "$wxUSE_NOTEBOOK" = "yes"; then

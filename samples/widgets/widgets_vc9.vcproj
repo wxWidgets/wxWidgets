@@ -796,6 +796,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\editlbox.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\filectrl.cpp"
 				>
 			</File>

@@ -37,6 +37,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_datepick.o \
 	$(OBJS)\widgets_dirctrl.o \
 	$(OBJS)\widgets_dirpicker.o \
+	$(OBJS)\widgets_editlbox.o \
 	$(OBJS)\widgets_filectrl.o \
 	$(OBJS)\widgets_filepicker.o \
 	$(OBJS)\widgets_fontpicker.o \
@@ -281,6 +282,9 @@ $(OBJS)\widgets_dirctrl.o: ./dirctrl.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_dirpicker.o: ./dirpicker.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\widgets_editlbox.o: ./editlbox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\widgets_filectrl.o: ./filectrl.cpp

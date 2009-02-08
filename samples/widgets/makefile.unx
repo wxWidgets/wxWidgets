@@ -66,6 +66,7 @@ WIDGETS_OBJECTS =  \
 	widgets_datepick.o \
 	widgets_dirctrl.o \
 	widgets_dirpicker.o \
+	widgets_editlbox.o \
 	widgets_filectrl.o \
 	widgets_filepicker.o \
 	widgets_fontpicker.o \
@@ -151,6 +152,9 @@ widgets_dirctrl.o: ./dirctrl.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_dirpicker.o: ./dirpicker.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
+
+widgets_editlbox.o: ./editlbox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $(CPPDEPS) $<
 
 widgets_filectrl.o: ./filectrl.cpp

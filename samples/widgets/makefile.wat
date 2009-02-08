@@ -241,6 +241,7 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_datepick.obj &
 	$(OBJS)\widgets_dirctrl.obj &
 	$(OBJS)\widgets_dirpicker.obj &
+	$(OBJS)\widgets_editlbox.obj &
 	$(OBJS)\widgets_filectrl.obj &
 	$(OBJS)\widgets_filepicker.obj &
 	$(OBJS)\widgets_fontpicker.obj &
@@ -314,6 +315,9 @@ $(OBJS)\widgets_dirctrl.obj :  .AUTODEPEND .\dirctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_dirpicker.obj :  .AUTODEPEND .\dirpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_editlbox.obj :  .AUTODEPEND .\editlbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_filectrl.obj :  .AUTODEPEND .\filectrl.cpp
