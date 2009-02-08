@@ -228,7 +228,7 @@ private:
 
 #if !defined(__WXUNIVERSAL__) && \
     ((defined(__WXGTK__) && defined(__WXGTK20__)) || defined(__WXMSW__) || \
-     (defined(__WXMAC__) && wxOSX_USE_CARBON))
+     (defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON))
   // *some* (partial) native implementation of wxArtProvider exists; this is
   // not the same as wxArtProvider::HasNativeProvider()!
   #define wxHAS_NATIVE_ART_PROVIDER_IMPL

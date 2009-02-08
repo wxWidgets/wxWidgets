@@ -25,7 +25,7 @@
     #include "wx/image.h"
 #endif
 
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_COCOA_OR_CARBON
 
 // ----------------------------------------------------------------------------
 // wxMacArtProvider
@@ -126,4 +126,4 @@ wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
     return wxDefaultSize;
 }
 
-#endif // wxOSX_USE_CARBON
+#endif // wxOSX_USE_COCOA_CARBON
