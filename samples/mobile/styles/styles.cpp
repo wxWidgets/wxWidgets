@@ -17,6 +17,10 @@
 // Include private headers
 #include "styles.h"
 
+#ifndef __WXMSW__
+    #include "../../sample.xpm"
+#endif
+
 //------------------------------------------------------------------------------
 // MyFrame
 //------------------------------------------------------------------------------
@@ -31,6 +35,8 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     const wxPoint &position, const wxSize& size, long style ) :
     wxFrame( parent, id, title, position, size, style )
 {
+    SetIcon(wxICON(sample));
+
     // Create menu and status bar.
     CreateMyMenuBar();
 #if wxUSE_STATUSBAR

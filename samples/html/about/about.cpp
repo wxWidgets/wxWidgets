@@ -1,6 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.cpp
-// Purpose:     wxHtml testing example
+// Name:        about.cpp
+// Purpose:     wxHtml sample: about dialog test
+// Author:      ?
+// Modified by:
+// Created:     ?
+// RCS-ID:      $Id$
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -20,6 +26,11 @@
 #include "wx/imagpng.h"
 #include "wx/wxhtml.h"
 #include "wx/statline.h"
+
+#ifndef __WXMSW__
+    #include "../../sample.xpm"
+#endif
+
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -109,6 +120,8 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title)
 {
+    SetIcon(wxICON(sample));
+
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 

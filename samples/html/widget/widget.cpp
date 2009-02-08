@@ -1,7 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        widget.cpp
-// Purpose:     wxHtml testing example
-//              Demonstrates embedded controls
+// Name:        zip.cpp
+// Purpose:     wxHtml sample: Demonstrates embedded controls
+// Author:      ?
+// Modified by:
+// Created:     ?
+// RCS-ID:      $Id$
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -17,22 +22,16 @@
     #include "wx/wx.h"
 #endif
 
-
 #include "wx/html/htmlwin.h"
-
 #include "../../sample.xpm"
 
 
-/*
 
-
-TAG HANDER FOR 'MYBIND' TAG
-
-
-*/
+// ----------------------------------------------------------------------------
+// TAG HANDER FOR 'MYBIND' TAG
+// ----------------------------------------------------------------------------
 
 #include "wx/html/m_templ.h"
-
 
 TAG_HANDLER_BEGIN(MYBIND, "MYBIND")
 
@@ -182,8 +181,10 @@ wxHtmlWindow *html;
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-: wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
+    : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
 {
+    SetIcon(wxICON(sample));
+
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
     wxMenu *menuNav = new wxMenu;
@@ -201,7 +202,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetMenuBar(menuBar);
 
     SetIcon(wxIcon(sample_xpm));
-    
+
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR

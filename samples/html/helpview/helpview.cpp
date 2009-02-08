@@ -1,9 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpview.cpp
-// Purpose:     wxHtml help browser
+// Name:        printing.cpp
+// Purpose:     wxHtml sample: help browser
+// Author:      ?
+// Modified by:
+// Created:     ?
+// RCS-ID:      $Id$
+// Copyright:   (c) wxWidgets team
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 // Please note: see utils/helpview for a more fully-featured
 // standalone help browser.
-/////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
@@ -24,27 +31,27 @@
 #include "wx/log.h"
 #include "wx/filedlg.h"
 
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
-
 // Define a new application type, each program should derive a class from wxApp
 class MyApp : public wxApp
 {
-    public:
-        // override base class virtuals
-        // ----------------------------
+public:
+    // override base class virtuals
+    // ----------------------------
 
-        // this one is called on application startup and is a good place for the app
-        // initialization (doing it here and not in the ctor allows to have an error
-        // return: if OnInit() returns false, the application terminates)
+    // this one is called on application startup and is a good place for the app
+    // initialization (doing it here and not in the ctor allows to have an error
+    // return: if OnInit() returns false, the application terminates)
 
-        virtual bool OnInit();
-        virtual int OnExit();
+    virtual bool OnInit();
+    virtual int OnExit();
 
-    private:
-        wxHtmlHelpController *help;
+private:
+    wxHtmlHelpController *help;
 };
 
 
@@ -61,7 +68,7 @@ bool MyApp::OnInit()
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
     SetVendorName(wxT("wxWidgets"));
-    SetAppName(wxT("wxHTMLHelp")); 
+    SetAppName(wxT("wxHTMLHelp"));
     wxConfig::Get(); // create an instance
 
     help = new wxHtmlHelpController;
@@ -83,7 +90,6 @@ bool MyApp::OnInit()
 
     return true;
 }
-
 
 int MyApp::OnExit()
 {
