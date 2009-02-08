@@ -76,6 +76,18 @@ enum wxDLFlags
     wxDL_NOSHARE    = 0x00000010,   // load new DLL, don't reuse already loaded
                                     // (only for wxPluginManager)
 
+    wxDL_QUIET      = 0x00000020,   // don't log an error if failed to load
+
+#if wxABI_VERSION >= 20810
+    // this flag is dangerous, for internal use of wxMSW only, don't use at all
+    // and especially don't use directly, use wxLoadedDLL instead if you really
+    // do need it
+    wxDL_GET_LOADED = 0x00000040,   // Win32 only: return handle of already
+                                    // loaded DLL or NULL otherwise; Unload()
+                                    // should not be called so don't forget to
+                                    // Detach() if you use this function
+#endif // wx 2.8.10+
+
     wxDL_DEFAULT    = wxDL_NOW      // default flags correspond to Win32
 };
 
@@ -309,6 +321,28 @@ protected:
     DECLARE_NO_COPY_CLASS(wxDynamicLibrary)
 };
 
+#if defined(__WXMSW__) && wxABI_VERSION >= 20810
+
+// ----------------------------------------------------------------------------
+// wxLoadedDLL is a MSW-only internal helper class allowing to dynamically bind
+// to a DLL already loaded into the project address space
+// ----------------------------------------------------------------------------
+
+class wxLoadedDLL : public wxDynamicLibrary
+{
+public:
+    wxLoadedDLL(const wxString& dllname)
+        : wxDynamicLibrary(dllname, wxDL_GET_LOADED | wxDL_VERBATIM | wxDL_QUIET)
+    {
+    }
+
+    ~wxLoadedDLL()
+    {
+        Detach();
+    }
+};
+
+#endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
 // Interesting defines
