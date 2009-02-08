@@ -254,6 +254,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
     int excessPixels = totalWidth - maxFinalWidth +
                        replacementWidth +
                        marginWidth;     // security margin (NEEDED!)
+    wxASSERT(excessPixels>0);
 
     // remove characters in excess
     size_t initialChar,     // index of first char to erase
@@ -353,7 +354,7 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
 
         // if there is space for the replacement dots, add them
         if (maxFinalWidth > replacementWidth)
-            ret.append(wxELLIPSE_REPLACEMENT);//.insert(initialChar, wxELLIPSE_REPLACEMENT);
+            ret.insert(initialChar, wxELLIPSE_REPLACEMENT);
     }
 
     // if everything was ok, we should have shortened this line
