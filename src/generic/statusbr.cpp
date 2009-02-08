@@ -44,6 +44,9 @@
 // Default status border dimensions
 #define wxTHICK_LINE_BORDER 2
 
+// Margin between the field text and the field rect
+#define wxFIELD_TEXT_MARGIN 2
+
 
 // ----------------------------------------------------------------------------
 // wxStatusBarGeneric
@@ -194,29 +197,56 @@ bool wxStatusBarGeneric::ShowsSizeGrip() const
 
 void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
 {
-    int leftMargin = 2;
-
     wxRect rect;
     GetFieldRect(i, rect);
 
+    if (rect.GetWidth() <= 0)
+        return;     // happens when the status bar is shrinked in a very small area!
+
+    if (ShowsSizeGrip())
+    {
+        // don't write text over the size grip:
+        // NOTE: overloading DoGetClientSize() and GetClientAreaOrigin() wouldn't
+        //       work because the adjustment needs to be done only when drawing
+        //       the field text and not also when drawing the background, the
+        //       size grip itself, etc
+        if (GetLayoutDirection() == wxLayout_RightToLeft && i == 0)
+        {
+            const wxRect& rc = GetSizeGripRect();
+
+            rect.x += rc.GetRight();
+            rect.width -= rc.GetRight();
+        }
+        else if (GetLayoutDirection() != wxLayout_RightToLeft && i == m_panes.GetCount()-1)
+        {
+            const wxRect& rc = GetSizeGripRect();
+
+            rect.width = rc.x - rect.x;
+        }
+    }
+
+    // eventually ellipsize the text so that it fits the field width
     wxString text(GetStatusText(i));
 
-    wxCoord x = 0, y = 0;
-    dc.GetTextExtent(text, &x, &y);
+    text = wxControl::Ellipsize(
+        text, dc,
+        GetLayoutDirection() == wxLayout_RightToLeft ? wxELLIPSIZE_START : wxELLIPSIZE_END,
+        rect.GetWidth() - 2*wxFIELD_TEXT_MARGIN,
+        wxELLIPSIZE_EXPAND_TAB);
+        // Ellipsize() will do something only if necessary
 
-    int xpos = rect.x + leftMargin;
-    int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5);
+    // center the text in its field
+    wxSize sz = dc.GetTextExtent(text);
+    int xpos = rect.x + wxFIELD_TEXT_MARGIN;
+    int ypos = (int) (((rect.height - sz.GetHeight()) / 2) + rect.y + 0.5);
 
 #if defined( __WXGTK__ ) || defined(__WXMAC__)
     xpos++;
     ypos++;
 #endif
 
-    dc.SetClippingRegion(rect.x, rect.y, rect.width, rect.height);
-
+    // draw the text
     dc.DrawText(text, xpos, ypos);
-
-    dc.DestroyClippingRegion();
 }
 
 void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
@@ -289,6 +319,9 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
     // width has changed (or when it is initially empty)
     if ( m_widthsAbs.IsEmpty() || m_lastClientWidth != width )
     {
+        // FIXME: why don't we use an OnSize(wxSizeEvent&) event handler to
+        //        update the cache? (FM)
+
         wxConstCast(this, wxStatusBarGeneric)->m_widthsAbs = CalculateAbsWidths(width);
 
         // remember last width for which we have recomputed the widths in pixels
@@ -337,6 +370,16 @@ void wxStatusBarGeneric::SetMinHeight(int height)
     }
 }
 
+wxRect wxStatusBarGeneric::GetSizeGripRect() const
+{
+    int width, height;
+    wxWindow::DoGetClientSize(&width, &height);
+
+    if (GetLayoutDirection() == wxLayout_RightToLeft)
+        return wxRect(2, 2, height-2, height-4);
+    else
+        return wxRect(width-height-2, 2, height-2, height-4);
+}
 
 // ----------------------------------------------------------------------------
 // wxStatusBarGeneric - event handlers
@@ -350,31 +393,18 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
     // Draw grip first
     if ( ShowsSizeGrip() )
     {
-        int width, height;
-        GetClientSize(&width, &height);
-
-        if (GetLayoutDirection() == wxLayout_RightToLeft)
-        {
-            gtk_paint_resize_grip( m_widget->style,
-                               GTKGetDrawingWindow(),
-                               (GtkStateType) GTK_WIDGET_STATE (m_widget),
-                               NULL,
-                               m_widget,
-                               "statusbar",
-                               GDK_WINDOW_EDGE_SOUTH_WEST,
-                               2, 2, height-2, height-4 );
-        }
-        else
-        {
-            gtk_paint_resize_grip( m_widget->style,
-                               GTKGetDrawingWindow(),
-                               (GtkStateType) GTK_WIDGET_STATE (m_widget),
-                               NULL,
-                               m_widget,
-                               "statusbar",
-                               GDK_WINDOW_EDGE_SOUTH_EAST,
-                               width-height-2, 2, height-2, height-4 );
-        }
+        const wxRect& rc = GetSizeGripRect();
+        GdkWindowEdge edge =
+            GetLayoutDirection() == wxLayout_RightToLeft ? GDK_WINDOW_EDGE_SOUTH_WEST :
+                                                           GDK_WINDOW_EDGE_SOUTH_EAST;
+        gtk_paint_resize_grip( m_widget->style,
+                            GTKGetDrawingWindow(),
+                            (GtkStateType) GTK_WIDGET_STATE (m_widget),
+                            NULL,
+                            m_widget,
+                            "statusbar",
+                            edge,
+                            rc.x, rc.y, rc.width, rc.height );
     }
 #endif // __WXGTK20__
 

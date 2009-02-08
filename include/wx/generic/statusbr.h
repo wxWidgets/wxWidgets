@@ -64,8 +64,8 @@ public:
     virtual int GetBorderX() const { return m_borderX; }
     virtual int GetBorderY() const { return m_borderY; }
 
-    ////////////////////////////////////////////////////////////////////////
-    // Implementation
+
+protected:
 
     virtual void DrawFieldText(wxDC& dc, int i);
     virtual void DrawField(wxDC& dc, int i);
@@ -88,7 +88,9 @@ public:
     // and not maximized
     bool ShowsSizeGrip() const;
 
-protected:
+    // returns the position and the size of the size grip
+    wxRect GetSizeGripRect() const;
+
     // common part of all ctors
     void Init();
 
