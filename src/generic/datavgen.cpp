@@ -1526,6 +1526,9 @@ wxBitmap wxDataViewMainWindow::CreateItemBitmap( unsigned int row, int &indent )
         wxDataViewTreeNode *node = GetTreeNodeByRow(row);
         indent = GetOwner()->GetIndent() * node->GetIndentLevel();
         indent = indent + m_lineHeight;  //try to use the m_lineHeight as the expander space
+
+		if(!node->HasChildren())
+			delete node;
     }
     width -= indent;
 
@@ -1915,9 +1918,23 @@ void wxDataViewMainWindow::OnRenameTimer()
             break;
         xpos += c->GetWidth();
     }
-    wxRect labelRect( xpos,
+
+	// we have to take an expander column into account and compute its indentation
+	// to get the editor at the correct x position where the actual text is
+	int indent = 0;
+	if (!IsVirtualList() && GetOwner()->GetExpanderColumn() == m_currentCol)
+	{
+		wxDataViewTreeNode* node = GetTreeNodeByRow(m_currentRow);
+		indent = GetOwner()->GetIndent() * node->GetIndentLevel();
+		indent = indent + m_lineHeight;
+
+		if(!node->HasChildren())
+			delete node;
+	}
+
+    wxRect labelRect( xpos + indent,
                       GetLineStart( m_currentRow ),
-                      m_currentCol->GetWidth(),
+                      m_currentCol->GetWidth() - indent,
                       GetLineHeight( m_currentRow ) );
 
     GetOwner()->CalcScrolledPosition( labelRect.x, labelRect.y,
@@ -1925,7 +1942,6 @@ void wxDataViewMainWindow::OnRenameTimer()
 
     wxDataViewItem item = GetItemByRow( m_currentRow );
     m_currentCol->GetRenderer()->StartEditing( item, labelRect );
-
 }
 
 //------------------------------------------------------------------
@@ -2878,6 +2894,23 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
                    SortPrepare();
                    ::BuildTreeHelper(GetOwner()->GetModel(), node->GetItem(), node);
                }
+
+               // By expanding the node all row indices that are currently in the selection list
+			   // and are greater than our node have become invalid. So we have to correct that now.
+			   const unsigned rowAdjustment = node->GetSubTreeCount();
+			   for(unsigned i=0; i<m_selection.size(); ++i)
+			   {
+				   const unsigned testRow = m_selection[i];
+				   // all rows above us are not affected, so skip them
+				   if(testRow <= row)
+					   continue;
+
+				   m_selection[i] += rowAdjustment;
+			   }
+
+			   if(m_currentRow > row)
+				   ChangeCurrentRow(m_currentRow + rowAdjustment);
+
                m_count = -1;
                UpdateDisplay();
                //Send the expanded event
@@ -2911,7 +2944,55 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
             wxDataViewEvent e = SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,node->GetItem());
             if( e.GetSkipped() )
                 return;
-            node->ToggleOpen();
+
+			// Find out if there are selected items below the current node.
+			bool selectCollapsingRow = false;
+			const unsigned rowAdjustment = node->GetSubTreeCount();
+			unsigned maxRowToBeTested = row + rowAdjustment;
+			for(unsigned i=0; i<m_selection.size(); ++i)
+			{
+				const unsigned testRow = m_selection[i];
+				if(testRow > row && testRow <= maxRowToBeTested)
+				{
+					selectCollapsingRow = true;
+					// get out as soon as we have found a node that is selected
+					break;
+				}
+			}
+
+			node->ToggleOpen();
+
+			// If the node to be closed has selected items the user won't see those any longer.
+			// We select the collapsing node in this case.
+			if(selectCollapsingRow)
+			{
+				SelectAllRows(false);
+				ChangeCurrentRow(row);
+				SelectRow(row, true);
+				SendSelectionChangedEvent(GetItemByRow(row));
+			}
+			else
+			{
+				// if there were no selected items below our node we still need to "fix" the
+				// selection list to adjust for the changing of the row indices.
+				// We actually do the opposite of what we are doing in OnExpanding().
+				for(unsigned i=0; i<m_selection.size(); ++i)
+				{
+					const unsigned testRow = m_selection[i];
+					// all rows above us are not affected, so skip them
+					if(testRow <= row)
+						continue;
+
+					m_selection[i] -= rowAdjustment;
+				}
+
+				// if the "current row" is being collapsed away we change it to the current row ;-)
+				if(m_currentRow > row && m_currentRow <= maxRowToBeTested)
+					ChangeCurrentRow(row);
+				else if(m_currentRow > row)
+					ChangeCurrentRow(m_currentRow - rowAdjustment);
+			}
+
             m_count = -1;
             UpdateDisplay();
             SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED,nd->GetItem());
@@ -3342,7 +3423,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     }
 
     //Test whether the mouse is hovered on the tree item button
-    bool hover = false;
+    bool hoverOverExpander = false;
     if ((!IsVirtualList()) && (GetOwner()->GetExpanderColumn() == col))
     {
         wxDataViewTreeNode * node = GetTreeNodeByRow(current);
@@ -3350,14 +3431,16 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         {
             int indent = node->GetIndentLevel();
             indent = GetOwner()->GetIndent()*indent;
-            wxRect rect( xpos + indent + EXPANDER_MARGIN,
-                         GetLineStart( current ) + EXPANDER_MARGIN + (GetLineHeight(current)/2) - (m_lineHeight/2) - EXPANDER_OFFSET,
-                         m_lineHeight-2*EXPANDER_MARGIN,
-                         m_lineHeight-2*EXPANDER_MARGIN + EXPANDER_OFFSET);
-            if( rect.Contains( x, y) )
+
+			// we make the rectangle we are looking in a bit bigger than the actual
+			// visual expander so the user can hit that little thing reliably
+            wxRect rect( xpos + indent,
+                         GetLineStart( current ) + (GetLineHeight(current) - m_lineHeight)/2,
+                         m_lineHeight, m_lineHeight);
+            if( rect.Contains(x, y) )
             {
                 //So the mouse is over the expander
-                hover = true;
+                hoverOverExpander = true;
                 if (m_underMouse && m_underMouse != node)
                 {
                     //wxLogMessage("Undo the row: %d", GetRowByItem(m_underMouse->GetItem()));
@@ -3374,7 +3457,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         if (node!=NULL && !node->HasChildren())
             delete node;
     }
-    if (!hover)
+    if (!hoverOverExpander)
     {
         if (m_underMouse != NULL)
         {
@@ -3436,7 +3519,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     }
 #endif // wxUSE_DRAG_AND_DROP
 
-    bool forceClick = false;
+    bool simulateClick = false;
 
     if (event.ButtonDClick())
     {
@@ -3452,7 +3535,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     if (event.LeftDClick())
     {
-        if ( current == m_lineLastClicked )
+		if(hoverOverExpander)
+		{
+			// a double click on the expander will be converted into a "simulated" normal click
+			simulateClick = true;
+		}
+		else if ( current == m_lineLastClicked )
         {
             if ((!ignore_other_columns) && (cell->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE))
             {
@@ -3480,11 +3568,11 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         {
             // The first click was on another item, so don't interpret this as
             // a double click, but as a simple click instead
-            forceClick = true;
+            simulateClick = true;
         }
     }
 
-    if (event.LeftUp())
+    if (event.LeftUp() && !hoverOverExpander)
     {
         if (m_lineSelectSingleOnUp != (unsigned int)-1)
         {
@@ -3494,34 +3582,8 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
             SendSelectionChangedEvent( GetItemByRow(m_lineSelectSingleOnUp) );
         }
 
-        //Process the event of user clicking the expander
-        bool expander = false;
-        if ((!IsVirtualList()) && (GetOwner()->GetExpanderColumn() == col))
-        {
-            wxDataViewTreeNode * node = GetTreeNodeByRow(current);
-            if( node!=NULL && node->HasChildren() )
-            {
-                int indent = node->GetIndentLevel();
-                indent = GetOwner()->GetIndent()*indent;
-                wxRect rect( xpos + indent + EXPANDER_MARGIN,
-                         GetLineStart( current ) + EXPANDER_MARGIN + (GetLineHeight(current)/2) - (m_lineHeight/2) - EXPANDER_OFFSET,
-                         m_lineHeight-2*EXPANDER_MARGIN,
-                         m_lineHeight-2*EXPANDER_MARGIN + EXPANDER_OFFSET);
-
-                if( rect.Contains( x, y) )
-                {
-                    expander = true;
-                    if( node->IsOpen() )
-                        OnCollapsing(current);
-                    else
-                        OnExpanding( current );
-                }
-            }
-            if (node && !node->HasChildren())
-               delete node;
-        }
         //If the user click the expander, we do not do editing even if the column with expander are editable
-        if (m_lastOnSame && !expander && !ignore_other_columns)
+        if (m_lastOnSame && !ignore_other_columns)
         {
             if ((col == m_currentCol) && (current == m_currentRow) &&
                 (cell->GetMode() & wxDATAVIEW_CELL_EDITABLE) )
@@ -3533,7 +3595,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         m_lastOnSame = false;
         m_lineSelectSingleOnUp = (unsigned int)-1;
     }
-    else
+    else if(!event.LeftUp())
     {
         // This is necessary, because after a DnD operation in
         // from and to ourself, the up event is swallowed by the
@@ -3570,7 +3632,18 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
     else if (event.MiddleDown())
     {
     }
-    if (event.LeftDown() || forceClick)
+
+	if((event.LeftDown() || simulateClick) && hoverOverExpander)
+	{
+		wxDataViewTreeNode* node = GetTreeNodeByRow(current);
+		// hoverOverExpander being true tells us that our node must be valid and have children.
+		// So we don't need any extra checks.
+		if( node->IsOpen() )
+			OnCollapsing(current);
+		else
+			OnExpanding(current);
+	}
+	else if ((event.LeftDown() || simulateClick) && !hoverOverExpander)
     {
         SetFocus();
 
@@ -3635,7 +3708,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // Update selection here...
         m_currentCol = col;
 
-        m_lastOnSame = !forceClick && ((col == oldCurrentCol) &&
+        m_lastOnSame = !simulateClick && ((col == oldCurrentCol) &&
                         (current == oldCurrentRow)) && oldWasSelected;
 
         // Call LeftClick after everything else as under GTK+
