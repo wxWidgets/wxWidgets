@@ -12,6 +12,7 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
     #include "wx/nonownedwnd.h"
     #include "wx/log.h"
 #endif
@@ -753,6 +754,20 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *_cmd)
     wxWindow* wxpeer = GetWXPeer();
     wxpeer->GetUpdateRegion() = updateRgn;
     wxpeer->MacSetCGContextRef( context );
+    
+    // first send an erase event to the entire update area
+    // for the toplevel window this really is the entire area
+    // for all the others only their client area, otherwise they
+    // might be drawing with full alpha and eg put blue into
+    // the grow-box area of a scrolled window (scroll sample)
+    
+    wxDC* dc = new wxWindowDC(wxpeer);
+    dc->SetDeviceClippingRegion(updateRgn);
+
+    wxEraseEvent eevent( wxpeer->GetId(), dc );
+    eevent.SetEventObject( wxpeer );
+    wxpeer->HandleWindowEvent( eevent );
+    delete dc ;
     
     wxPaintEvent event;
     event.SetTimestamp(0); //  todo
