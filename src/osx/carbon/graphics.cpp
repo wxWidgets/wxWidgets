@@ -2435,12 +2435,15 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& 
         int w, h;
         win_impl->GetSize( &w, &h );
         CGContextRef cgctx = 0;
-#ifdef __WXMAC__
-        cgctx =  (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef());
-#else
-        cgctx = wxMacGetContextFromCurrentNSContext() ;
+        wxASSERT_MSG(win_impl->GetWindow(), "Invalid wxWindow in wxMacCoreGraphicsRenderer::CreateContext");
+        if (win_impl->GetWindow())
+            cgctx =  (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef());
+#if wxOSX_USE_COCOA
+        else
+            cgctx = wxMacGetContextFromCurrentNSContext() ;
 #endif
-        return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
+        if (cgctx != 0)
+            return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
     }
     return NULL;
 }
