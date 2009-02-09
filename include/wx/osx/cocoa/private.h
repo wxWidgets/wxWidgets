@@ -128,6 +128,9 @@ public :
     virtual void        DoNotifyFocusEvent(bool receivedFocus); 
 
     void                SetFlipped(bool flipped);
+    bool                IsFlipped() const { return m_isFlipped; }
+
+    // cocoa thunk connected calls
 
     virtual unsigned int        draggingEntered(void* sender, WXWidget slf, void* _cmd);
     virtual void                draggingExited(void* sender, WXWidget slf, void* _cmd);
