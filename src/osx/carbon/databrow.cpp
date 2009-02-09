@@ -1059,14 +1059,19 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
 
  // try to determine the content's size (drawable part):
   Rect      content;
-  RgnHandle rgn(NewRgn());
+  HIShapeRef rgn = NULL;
+  
   UInt16    headerHeight;
 
-  if (this->GetRegion(kControlContentMetaPart,rgn) == noErr)
-    GetRegionBounds(rgn,&content);
+  if ( HIViewCopyShape(m_controlRef, kHIViewContentMetaPart, &rgn) == noErr)
+  {
+    CGRect cgrect;
+    HIShapeGetBounds(rgn, &cgrect);
+    content = (Rect){ cgrect.origin.y, cgrect.origin.x, cgrect.origin.y+cgrect.size.height, cgrect.origin.x+cgrect.size.width };
+    CFRelease(rgn);
+  }
   else
     GetControlBounds(m_controlRef, &content);
-  ::DisposeRgn(rgn);
  // space for the header
   this->GetHeaderButtonHeight(&headerHeight);
   content.top += headerHeight;

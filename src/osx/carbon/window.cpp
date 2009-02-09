@@ -917,19 +917,24 @@ void wxMacControl::Lower()
 
 void wxMacControl::GetContentArea(int &left , int &top , int &width , int &height) const
 {
-    RgnHandle rgn = NewRgn() ;
-    Rect content ;
-    if ( GetControlRegion( m_controlRef, kControlContentMetaPart , rgn ) == noErr )
-        GetRegionBounds( rgn , &content ) ;
+    HIShapeRef rgn = NULL;
+    Rect content ;  
+
+    if ( HIViewCopyShape(m_controlRef, kHIViewContentMetaPart, &rgn) == noErr)
+    {
+        CGRect cgrect;
+        HIShapeGetBounds(rgn, &cgrect);
+        content = (Rect){ cgrect.origin.y, cgrect.origin.x, cgrect.origin.y+cgrect.size.height, cgrect.origin.x+cgrect.size.width };
+        CFRelease(rgn);
+    }
     else
     {
-        GetControlBounds( m_controlRef , &content );
+        GetControlBounds(m_controlRef, &content);
         content.right -= content.left;
         content.left = 0;
         content.bottom -= content.top;
         content.top = 0;
     }
-    DisposeRgn( rgn ) ;
 
     left = content.left;
     top = content.top;
@@ -1387,12 +1392,6 @@ void wxMacControl::SetLabel( const wxString &title , wxFontEncoding encoding)
 void wxMacControl::GetFeatures( UInt32 * features )
 {
     GetControlFeatures( m_controlRef , features );
-}
-
-OSStatus wxMacControl::GetRegion( ControlPartCode partCode , RgnHandle region )
-{
-    OSStatus err = GetControlRegion( m_controlRef , partCode , region );
-    return err;
 }
 
 void wxMacControl::PulseGauge()
