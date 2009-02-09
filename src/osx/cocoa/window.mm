@@ -770,6 +770,7 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *_cmd)
         CGContextSaveGState( context );
     }
     wxpeer->MacPaintChildrenBorders();
+    wxpeer->MacSetCGContextRef( NULL );
     CGContextRestoreGState( context );
 }
 

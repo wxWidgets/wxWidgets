@@ -44,13 +44,23 @@ wxMacAutoreleasePool::~wxMacAutoreleasePool()
 
 #endif
 
-#if defined( __WXCOCOCA__ ) || wxOSX_USE_COCOA
+#if wxOSX_USE_COCOA_OR_IPHONE
 
-CGContextRef wxMacGetContextFromCurrentNSContext()
+CGContextRef wxOSXGetContextFromCurrentNSContext()
 {
     CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext]
                                           graphicsPort];
     return context;
+}
+
+void wxOSXLockFocus( WXWidget view) 
+{
+    [view lockFocus];
+}
+
+void wxOSXUnlockFocus( WXWidget view) 
+{
+    [view unlockFocus];
 }
 
 #endif

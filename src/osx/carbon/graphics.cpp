@@ -76,6 +76,13 @@ int UMAGetSystemVersion()
 
 #endif
 
+#if wxOSX_USE_COCOA_OR_IPHONE
+extern CGContextRef wxOSXGetContextFromCurrentNSContext() ;
+extern void wxOSXLockFocus( WXWidget view) ;
+extern void wxOSXUnlockFocus( WXWidget view) ;
+#endif
+
+
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
@@ -1392,13 +1399,15 @@ private:
     CGContextRef m_cgContext;
 #if wxOSX_USE_CARBON
     WindowRef m_windowRef;
+#else
+    WXWidget m_view;
 #endif
-    bool m_releaseContext;
+    bool m_contextSynthesized;
     CGAffineTransform m_windowTransform;
     wxDouble m_width;
     wxDouble m_height;
 
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_COCOA_OR_CARBON
     wxCFRef<HIShapeRef> m_clipRgn;
 #endif
 };
@@ -1444,12 +1453,15 @@ public :
 void wxMacCoreGraphicsContext::Init()
 {
     m_cgContext = NULL;
-    m_releaseContext = false;
+    m_contextSynthesized = false;
+    m_width = 0;
+    m_height = 0;
 #if wxOSX_USE_CARBON
     m_windowRef = NULL;
 #endif
-    m_width = 0;
-    m_height = 0;
+#if wxOSX_USE_COCOA_OR_IPHONE
+    m_view = NULL;
+#endif
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width, wxDouble height ) : wxGraphicsContext(renderer)
@@ -1472,19 +1484,33 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 {
     Init();
 
+    wxSize sz = window->GetSize();
+    m_width = sz.x;
+    m_height = sz.y;
+
+#if wxOSX_USE_COCOA_OR_IPHONE
+    m_view = window->GetHandle();
+
+    if ( !((wxWidgetCocoaImpl*) window->GetPeer())->IsFlipped() )
+    {
+        m_windowTransform = CGAffineTransformMakeTranslation( 0 , m_height );
+        m_windowTransform = CGAffineTransformScale( m_windowTransform , 1 , -1 );
+    }
+    else
+    {
+        m_windowTransform = CGAffineTransformIdentity;
+    }
+#else
     int originX , originY;
     originX = originY = 0;
-
     Rect bounds = { 0,0,0,0 };
-#if defined(__WXCOCOA__) || !wxOSX_USE_CARBON
-#else
     m_windowRef = (WindowRef) window->MacGetTopLevelWindowRef();
     window->MacWindowToRootWindow( &originX , &originY );
     GetWindowBounds( m_windowRef, kWindowContentRgn, &bounds );
-#endif
     m_windowTransform = CGAffineTransformMakeTranslation( 0 , bounds.bottom - bounds.top );
     m_windowTransform = CGAffineTransformScale( m_windowTransform , 1 , -1 );
     m_windowTransform = CGAffineTransformTranslate( m_windowTransform, originX, originY ) ;
+#endif
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext(wxGraphicsRenderer* renderer) : wxGraphicsContext(renderer)
@@ -1501,6 +1527,12 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext() : wxGraphicsContext(NULL)
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
     SetNativeContext(NULL);
+#if wxOSX_USE_COCOA_OR_IPHONE
+    if ( m_view )
+    {
+        CGContextFlush(m_cgContext);
+    }
+#endif
 }
 
 void wxMacCoreGraphicsContext::GetSize( wxDouble* width, wxDouble* height)
@@ -1537,18 +1569,20 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
 {
     if ( !m_cgContext )
     {
-#if defined(__WXCOCOA__) || ! wxOSX_USE_CARBON
-        wxFAIL_MSG("Cannot create wxDCs lazily");
-#else
+#if wxOSX_USE_COCOA_OR_IPHONE
+        wxOSXLockFocus(m_view);
+        m_cgContext = wxOSXGetContextFromCurrentNSContext();
+#endif
+#if wxOSX_USE_CARBON
         OSStatus status = QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
         if ( status != noErr )
         {
             wxFAIL_MSG("Cannot nest wxDCs on the same window");
         }
-
+#endif
         CGContextConcatCTM( m_cgContext, m_windowTransform );
         CGContextSaveGState( m_cgContext );
-        m_releaseContext = true;
+        m_contextSynthesized = true;
         if ( m_clipRgn.get() )
         {
             // the clip region is in device coordinates, so we convert this again to user coordinates
@@ -1568,6 +1602,22 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
             }
         }
         CGContextSaveGState( m_cgContext );
+        
+#if 0 // turn on for debugging of clientdc
+        static float color = 0.5 ;
+        static int channel = 0 ;
+        CGRect bounds = CGRectMake(-1000,-1000,2000,2000);
+        CGContextSetRGBFillColor( m_cgContext, channel == 0 ? color : 0.5 ,
+            channel == 1 ? color : 0.5 , channel == 2 ? color : 0.5 , 1 );
+        CGContextFillRect( m_cgContext, bounds );
+        color += 0.1 ;
+        if ( color > 0.9 )
+        {
+            color = 0.5 ;
+            channel++ ;
+            if ( channel == 3 )
+                channel = 0 ;
+        }
 #endif
     }
 }
@@ -1638,7 +1688,7 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( wxRasterOperationMode functio
 
 void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_COCOA_OR_CARBON
     if( m_cgContext )
     {
         wxCFRef<HIShapeRef> shape = wxCFRefFromGet(region.GetWXHRGN());
@@ -1680,7 +1730,7 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
     }
     else
     {
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_COCOA_OR_CARBON
         // the clipping itself must be stored as device coordinates, otherwise
         // we cannot apply it back correctly
         r.origin= CGPointApplyAffineTransform( r.origin, m_windowTransform );
@@ -1709,7 +1759,7 @@ void wxMacCoreGraphicsContext::ResetClip()
     }
     else
     {
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_COCOA_OR_CARBON
         m_clipRgn.reset();
 #else
     // allow usage as measuring context
@@ -1814,19 +1864,23 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
 
     if ( m_cgContext )
     {
-        // TODO : when is this necessary - should we add a Flush() method ? CGContextSynchronize( m_cgContext );
         CGContextRestoreGState( m_cgContext );
         CGContextRestoreGState( m_cgContext );
-        if ( m_releaseContext )
+        if ( m_contextSynthesized )
         {
+            // TODO: in case of performance problems, try issuing this not too 
+            // frequently (half of refresh rate)
+            CGContextFlush(m_cgContext);
 #if wxOSX_USE_CARBON
             QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
+#endif
+#if wxOSX_USE_COCOA_OR_IPHONE
+            wxOSXUnlockFocus(m_view);
 #endif
         }
         else
             CGContextRelease(m_cgContext);
     }
-
 
     m_cgContext = cg;
 
@@ -1843,7 +1897,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
         CGContextSaveGState( m_cgContext );
         CGContextSetTextMatrix( m_cgContext, CGAffineTransformIdentity );
         CGContextSaveGState( m_cgContext );
-        m_releaseContext = false;
+        m_contextSynthesized = false;
     }
 }
 
@@ -2422,10 +2476,6 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
     return &gs_MacCoreGraphicsRenderer;
 }
 
-#if defined( __WXCOCOA__ ) || wxOSX_USE_COCOA
-extern CGContextRef wxMacGetContextFromCurrentNSContext() ;
-#endif
-
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc )
 {
     const wxDCImpl* impl = dc.GetImpl();
@@ -2435,13 +2485,11 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& 
         int w, h;
         win_impl->GetSize( &w, &h );
         CGContextRef cgctx = 0;
+
         wxASSERT_MSG(win_impl->GetWindow(), "Invalid wxWindow in wxMacCoreGraphicsRenderer::CreateContext");
         if (win_impl->GetWindow())
             cgctx =  (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef());
-#if wxOSX_USE_COCOA
-        else
-            cgctx = wxMacGetContextFromCurrentNSContext() ;
-#endif
+
         if (cgctx != 0)
             return new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
     }

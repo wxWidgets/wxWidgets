@@ -180,6 +180,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
     wxWindowDCImpl( owner, window )
 {
+    wxASSERT_MSG( window->MacGetCGContextRef() != NULL, _T("using wxPaintDC without being in a native paint event") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );
