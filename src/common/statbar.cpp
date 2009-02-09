@@ -194,12 +194,15 @@ void wxStatusBarBase::PushStatusText(const wxString& text, int number)
     // save current status text in the stack
     m_panes[number].arrStack.push_back(GetStatusText(number));
 
-    // update current status text
     SetStatusText(text, number);
+        // update current status text (eventually also in the native control)
 }
 
 void wxStatusBarBase::PopStatusText(int number)
 {
+    wxASSERT_MSG(m_panes[number].arrStack.GetCount() == 1,
+                 "can't pop any further string");
+
     wxString text = m_panes[number].arrStack.back();
     m_panes[number].arrStack.pop_back();  // also remove it from the stack
 

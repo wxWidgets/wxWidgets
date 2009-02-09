@@ -36,6 +36,9 @@
     #include "wx/msw/uxtheme.h"
 #endif
 
+// no idea for a default width, just choose something
+#define DEFAULT_FIELD_WIDTH 25
+
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
@@ -59,6 +62,7 @@ wxStatusBar::wxStatusBar()
     SetParent(NULL);
     m_hWnd = 0;
     m_windowId = 0;
+    m_pDC = NULL;
 }
 
 bool wxStatusBar::Create(wxWindow *parent,
@@ -131,6 +135,9 @@ bool wxStatusBar::Create(wxWindow *parent,
     // work correctly, we need to wait until we return to the main loop
     PostSizeEventToParent();
 
+    // cache the DC instance used by UpdateFieldText
+    m_pDC = new wxClientDC(this);
+
     return true;
 }
 
@@ -140,6 +147,15 @@ wxStatusBar::~wxStatusBar()
     // frame is not - otherwise statusbar leaves a hole in the place it used to
     // occupy
     PostSizeEventToParent();
+}
+
+bool wxStatusBar::SetFont(const wxFont& font)
+{
+    if (!wxWindow::SetFont(font))
+        return false;
+
+    m_pDC->SetFont(font);
+    return true;
 }
 
 void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
@@ -198,6 +214,16 @@ void wxStatusBar::SetStatusText(const wxString& strText, int nField)
        return;
     }
 
+    wxStatusBarBase::SetStatusText(strText, nField);
+
+    UpdateFieldText(nField);
+}
+
+void wxStatusBar::UpdateFieldText(int nField)
+{
+    if (!m_pDC)
+        return;
+
     // Get field style, if any
     int style;
     switch(m_panes[nField].nStyle)
@@ -215,27 +241,28 @@ void wxStatusBar::SetStatusText(const wxString& strText, int nField)
         break;
     }
 
+    wxRect rc;
+    GetFieldRect(nField, rc);
+
+    int margin;
+    if (nField == GetFieldsCount()-1)
+        margin = -6;        // windows reports a smaller rect for the last field; enlarge it
+    else
+        margin = 4;
+
+    // do we need to ellipsize this string?
+    wxString ellipsizedStr =
+        wxControl::Ellipsize(GetStatusText(nField), *m_pDC,
+            GetLayoutDirection() == wxLayout_RightToLeft ? wxELLIPSIZE_START : wxELLIPSIZE_END,
+            rc.GetWidth() - margin,    // leave a small margin
+            wxELLIPSIZE_EXPAND_TAB);
+
     // Pass both field number and style. MSDN library doesn't mention
     // that nField and style have to be 'ORed'
-    if ( !StatusBar_SetText(GetHwnd(), nField | style, strText.wx_str()) )
+    if ( !StatusBar_SetText(GetHwnd(), nField | style, ellipsizedStr.wx_str()) )
     {
         wxLogLastError(wxT("StatusBar_SetText"));
     }
-}
-
-wxString wxStatusBar::GetStatusText(int nField) const
-{
-    wxCHECK_MSG( (nField >= 0) && ((size_t)nField < m_panes.GetCount()), wxEmptyString,
-                 _T("invalid statusbar field index") );
-
-    wxString str;
-    int len = StatusBar_GetTextLen(GetHwnd(), nField);
-    if ( len > 0 )
-    {
-        StatusBar_GetText(GetHwnd(), nField, wxStringBuffer(str, len));
-    }
-
-    return str;
 }
 
 int wxStatusBar::GetBorderX() const
@@ -295,9 +322,6 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
     return true;
 }
 
-// no idea for a default width, just choose something
-#define DEFAULT_FIELD_WIDTH 25
-
 wxSize wxStatusBar::DoGetBestSize() const
 {
     int borders[3];
@@ -329,7 +353,6 @@ wxSize wxStatusBar::DoGetBestSize() const
         // still need something even for an empty status bar
         width = 2*DEFAULT_FIELD_WIDTH;
     }
-
 
     // calculate height
     int height;
@@ -453,6 +476,14 @@ wxStatusBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         }
     }
 #endif
+
+    if ( nMsg == WM_SIZE )
+    {
+        for (int i=0; i<GetFieldsCount(); i++)
+            UpdateFieldText(i);
+            // re-set the field text, in case we need to ellipsize
+            // (or de-ellipsize) some parts of it
+    }
 
     return wxStatusBarBase::MSWWindowProc(nMsg, wParam, lParam);
 }

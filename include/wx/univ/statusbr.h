@@ -46,7 +46,6 @@ public:
 
     // get/set the text of the given field
     virtual void SetStatusText(const wxString& text, int number = 0);
-    virtual wxString GetStatusText(int number = 0) const;
 
     // Get the position and size of the field's internal bounding rectangle
     virtual bool GetFieldRect(int i, wxRect& rect) const;
@@ -96,7 +95,7 @@ protected:
 
 private:
     // the current status fields strings
-    wxArrayString m_statusText;
+    //wxArrayString m_statusText;
 
     // the absolute status fields widths
     wxArrayInt m_widthsAbs;

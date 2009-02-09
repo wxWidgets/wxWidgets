@@ -50,7 +50,6 @@ public:
 
     // Set status line text
     virtual void SetStatusText(const wxString& text, int number = 0);
-    virtual wxString GetStatusText(int number = 0) const;
 
     // Set status line widths
     virtual void SetStatusWidths(int n, const int widths_field[]);
@@ -96,9 +95,6 @@ protected:
 
     // common part of all ctors
     void Init();
-
-    // the array of the currently displayed strings
-    wxArrayString     m_statusStrings;
 
     // the last known height of the client rect
     int               m_lastClientHeight;

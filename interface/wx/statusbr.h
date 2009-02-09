@@ -121,7 +121,8 @@ public:
         Sets the number of fields, and optionally the field widths.
 
         @param number
-            The number of fields.
+            The number of fields. If this is greater than the previous number,
+            then new fields with empty strings will be added to the status bar.
         @param widths
             An array of n integers interpreted in the same way as
             in SetStatusWidths().

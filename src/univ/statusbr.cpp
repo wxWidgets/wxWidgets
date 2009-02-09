@@ -134,7 +134,7 @@ void wxStatusBarUniv::DoDraw(wxControlRenderer *renderer)
                 flags |= wxCONTROL_SIZEGRIP;
             }
 
-            m_renderer->DrawStatusField(dc, rect, m_statusText[n], flags, m_panes[n].nStyle);
+            m_renderer->DrawStatusField(dc, rect, GetStatusText(n), flags, m_panes[n].nStyle);
         }
 
         rect.x += rect.width + borderBetweenFields;
@@ -159,24 +159,17 @@ void wxStatusBarUniv::SetStatusText(const wxString& text, int number)
     wxCHECK_RET( number >= 0 && (size_t)number < m_panes.GetCount(),
                  _T("invalid status bar field index in SetStatusText()") );
 
-    if ( text == m_statusText[number] )
+    if ( text == GetStatusText(number) )
     {
         // nothing changed
         return;
     }
 
-    m_statusText[number] = text;
+    wxStatusBarBase::SetStatusText(text, number);
 
     RefreshField(number);
 }
 
-wxString wxStatusBarUniv::GetStatusText(int number) const
-{
-    wxCHECK_MSG( number >= 0 && (size_t)number < m_panes.GetCount(), wxEmptyString,
-                 _T("invalid status bar field index") );
-
-    return m_statusText[number];
-}
 
 // ----------------------------------------------------------------------------
 // fields count/widths
@@ -184,7 +177,6 @@ wxString wxStatusBarUniv::GetStatusText(int number) const
 
 void wxStatusBarUniv::SetFieldsCount(int number, const int *widths)
 {
-    m_statusText.SetCount(number);
     wxStatusBarBase::SetFieldsCount(number, widths);
 
     m_widthsAbs.Empty();

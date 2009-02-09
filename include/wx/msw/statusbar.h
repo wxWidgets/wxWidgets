@@ -14,6 +14,8 @@
 
 #if wxUSE_NATIVE_STATUSBAR
 
+class WXDLLIMPEXP_CORE wxClientDC;
+
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
 public:
@@ -39,7 +41,6 @@ public:
 
     // each field of status line has it's own text
     virtual void     SetStatusText(const wxString& text, int number = 0);
-    virtual wxString GetStatusText(int number = 0) const;
 
     // set status line fields' widths
     virtual void SetStatusWidths(int n, const int widths_field[]);
@@ -57,16 +58,22 @@ public:
     virtual int GetBorderX() const;
     virtual int GetBorderY() const;
 
+    virtual bool SetFont(const wxFont& font);
+
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
                                     WXWPARAM wParam,
                                     WXLPARAM lParam);
 protected:
     void CopyFieldsWidth(const int widths[]);
     void SetFieldsWidth();
+    void UpdateFieldText(int nField);
 
     // override some base class virtuals
     virtual wxSize DoGetBestSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
+
+    // used by UpdateFieldText
+    wxClientDC *m_pDC;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBar)

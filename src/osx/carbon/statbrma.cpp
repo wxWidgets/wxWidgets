@@ -23,6 +23,9 @@
 
 #include "wx/osx/private.h"
 
+// Margin between the field text and the field rect
+#define wxFIELD_TEXT_MARGIN 2
+
 
 BEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBarGeneric)
     EVT_PAINT(wxStatusBarMac::OnPaint)
@@ -67,55 +70,60 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
+void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
 {
     int w, h;
     GetSize( &w , &h );
-    wxRect rect;
-    GetFieldRect( i, rect );
 
     if ( !MacIsReallyHilited() )
         dc.SetTextForeground( wxColour( 0x80, 0x80, 0x80 ) );
 
     wxString text(GetStatusText( i ));
 
-    wxCoord x, y;
-    dc.GetTextExtent(text, &x, &y);
+    /*wxCoord x, y;
+    dc.GetTextExtent(text, &x, &y);    -- seems unused (FM)*/
 
-    int leftMargin = 2;
-    int xpos = rect.x + leftMargin + 1;
+    int xpos = rect.x + wxFIELD_TEXT_MARGIN + 1;
     int ypos = 1;
 
     if ( MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL )
         ypos++;
 
     dc.SetClippingRegion(rect.x, 0, rect.width, h);
-
     dc.DrawText(text, xpos, ypos);
-
     dc.DestroyClippingRegion();
 }
 
-void wxStatusBarMac::DrawField(wxDC& dc, int i)
+void wxStatusBarMac::DrawField(wxDC& dc, int i, int textHeight)
 {
-    DrawFieldText(dc, i);
+    wxRect rect;
+    GetFieldRect(i, rect);
+
+    DrawFieldText(dc, rect, i, textHeight);
 }
 
 void wxStatusBarMac::SetStatusText(const wxString& text, int number)
 {
+    // NOTE: seems this function is identic to wxStatusBarGeneric::SetStatusText;
+    //       probably can be removed without problems (FM)
+
     wxCHECK_RET( (number >= 0) && ((size_t)number < m_panes.GetCount()),
         wxT("invalid status bar field index") );
 
-    if ( m_statusStrings[number] == text )
-        return ;
+    if ( GetStatusText(number) == text )
+        return;
 
-    m_statusStrings[number] = text;
+    wxStatusBarGeneric::SetStatusText(text, number);
+
     wxRect rect;
     GetFieldRect(number, rect);
+
     int w, h;
     GetSize( &w, &h );
+
     rect.y = 0;
     rect.height = h ;
+
     Refresh( true, &rect );
     Update();
 }
@@ -162,12 +170,15 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.DrawLine(0, 0, w, 0);
     }
 
-    if ( GetFont().Ok() )
+    if ( GetFont().IsOk() )
         dc.SetFont(GetFont());
     dc.SetBackgroundMode(wxTRANSPARENT);
 
+    // compute char height only once for all panes:
+    int textHeight = dc.GetCharHeight();
+
     for ( size_t i = 0; i < m_panes.GetCount(); i ++ )
-        DrawField(dc, i);
+        DrawField(dc, i, textHeight);
 }
 
 void wxStatusBarMac::MacHiliteChanged()

@@ -28,8 +28,9 @@ class WXDLLIMPEXP_CORE wxStatusBarMac : public wxStatusBarGeneric
               long style = wxST_SIZEGRIP,
               const wxString& name = wxStatusBarNameStr);
 
-    virtual void DrawFieldText(wxDC& dc, int i);
-    virtual void DrawField(wxDC& dc, int i);
+    virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight);
+    virtual void DrawField(wxDC& dc, int i, int textHeight);
+
     virtual void SetStatusText(const wxString& text, int number = 0);
 
     // Implementation

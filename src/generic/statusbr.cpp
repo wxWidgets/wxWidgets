@@ -119,21 +119,9 @@ void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 {
     wxASSERT_MSG( number >= 0, _T("negative number of fields in wxStatusBar?") );
 
-    // enlarge the m_statusStrings array if needed:
-    for (size_t i = m_panes.GetCount(); i < (size_t)number; ++i)
-        m_statusStrings.Add( wxEmptyString );
-
-    // shrink the m_statusStrings array if needed:
-    for (int j = (int)m_panes.GetCount() - 1; j >= number; --j)
-        m_statusStrings.RemoveAt(j);
-
-    // forget the old cached pixel widths
-    m_widthsAbs.Empty();
-
+    // this will result in a call to SetStatusWidths() and thus an update to our
+    // m_widthsAbs cache
     wxStatusBarBase::SetFieldsCount(number, widths);
-
-    wxASSERT_MSG( m_panes.GetCount() == m_statusStrings.GetCount(),
-                  _T("This really should never happen, can we do away with m_panes.GetCount() here?") );
 }
 
 void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
@@ -141,10 +129,10 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
     wxCHECK_RET( (number >= 0) && ((size_t)number < m_panes.GetCount()),
                  _T("invalid status bar field index") );
 
-    wxString oldText = m_statusStrings[number];
+    wxString oldText = GetStatusText(number);
     if (oldText != text)
     {
-        m_statusStrings[number] = text;
+        wxStatusBarBase::SetStatusText(text, number);
 
         wxRect rect;
         GetFieldRect(number, rect);
@@ -158,23 +146,17 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
     }
 }
 
-wxString wxStatusBarGeneric::GetStatusText(int n) const
-{
-    wxCHECK_MSG( (n >= 0) && ((size_t)n < m_panes.GetCount()), wxEmptyString,
-                 _T("invalid status bar field index") );
-
-    return m_statusStrings[n];
-}
-
 void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
 {
     // only set status widths when n == number of statuswindows
     wxCHECK_RET( (size_t)n == m_panes.GetCount(), _T("status bar field count mismatch") );
 
-    // forget the old cached pixel widths
-    m_widthsAbs.Empty();
-
     wxStatusBarBase::SetStatusWidths(n, widths_field);
+
+    // update cache
+    int width;
+    GetClientSize(&width, &m_lastClientHeight);
+    m_widthsAbs = CalculateAbsWidths(width);
 }
 
 bool wxStatusBarGeneric::ShowsSizeGrip() const

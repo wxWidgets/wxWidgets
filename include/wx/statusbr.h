@@ -39,14 +39,16 @@ class wxStatusBarPane
 {
 public:
     wxStatusBarPane(int style = wxSB_NORMAL, size_t width = 0)
-        : nStyle(style), nWidth(width) {}
+        : nStyle(style), nWidth(width) { arrStack.Add(wxEmptyString); }
 
     int nStyle;
     int nWidth;     // the width maybe negative, indicating a variable-width field
 
     // this is the array of the stacked strings of this pane; note that this
-    // stack does not include the string currently displayed in this pane
-    // as it's stored in the native status bar control
+    // stack does include also the string currently displayed in this pane
+    // as the version stored in the native status bar control is possibly
+    // ellipsized; note that arrStack.Last() is the top of the stack
+    // (i.e. the string shown in the status bar)
     wxArrayString arrStack;
 };
 
@@ -74,8 +76,10 @@ public:
     // field text
     // ----------
 
-    virtual void SetStatusText(const wxString& text, int number = 0) = 0;
-    virtual wxString GetStatusText(int number = 0) const = 0;
+    virtual void SetStatusText(const wxString& text, int number = 0)
+        { m_panes[number].arrStack.Last() = text; }
+    virtual wxString GetStatusText(int number = 0) const
+        { return m_panes[number].arrStack.Last(); }
 
     void PushStatusText(const wxString& text, int number = 0);
     void PopStatusText(int number = 0);
