@@ -55,7 +55,7 @@ CGContextRef wxOSXGetContextFromCurrentNSContext()
 
 void wxOSXLockFocus( WXWidget view) 
 {
-    [view lockFocus];
+    [view lockFocusIfCanDraw];
 }
 
 void wxOSXUnlockFocus( WXWidget view) 
