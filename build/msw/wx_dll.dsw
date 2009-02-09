@@ -222,6 +222,36 @@ Package=<4>
 
 ###############################################################################
 
+Project: "propgrid"=.\wx_propgrid.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name wxtiff
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wxjpeg
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wxpng
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wxregex
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wxexpat
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name adv
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "qa"=.\wx_qa.dsp - Package Owner=<4>
 
 Package=<5>
@@ -302,9 +332,12 @@ Package=<5>
 
 Package=<4>
 {{{
-Begin Project Dependency
-Project_Dep_Name wxscintilla
-End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wxscintilla
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name core
+    End Project Dependency
 }}}
 
 ###############################################################################
