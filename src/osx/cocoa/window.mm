@@ -755,34 +755,22 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *_cmd)
     wxpeer->GetUpdateRegion() = updateRgn;
     wxpeer->MacSetCGContextRef( context );
     
-    // first send an erase event to the entire update area
-    // for the toplevel window this really is the entire area
-    // for all the others only their client area, otherwise they
-    // might be drawing with full alpha and eg put blue into
-    // the grow-box area of a scrolled window (scroll sample)
-    
-    wxDC* dc = new wxWindowDC(wxpeer);
-    dc->SetDeviceClippingRegion(updateRgn);
-
-    wxEraseEvent eevent( wxpeer->GetId(), dc );
-    eevent.SetEventObject( wxpeer );
-    wxpeer->HandleWindowEvent( eevent );
-    delete dc ;
-    
-    wxPaintEvent event;
-    event.SetTimestamp(0); //  todo
-    event.SetEventObject(wxpeer);
-    bool handled = wxpeer->HandleWindowEvent(event);
+    bool handled = wxpeer->MacDoRedraw( 0 );
             
     CGContextRestoreGState( context );
-    
+
+    CGContextSaveGState( context );
     if ( !handled )
     {
         // call super
         SEL _cmd = @selector(drawRect:);
         wxOSX_DrawRectHandlerPtr superimpl = (wxOSX_DrawRectHandlerPtr) [[slf superclass] instanceMethodForSelector:_cmd];
         superimpl(slf, _cmd, *(NSRect*)rect);
+        CGContextRestoreGState( context );
+        CGContextSaveGState( context );
     }
+    wxpeer->MacPaintChildrenBorders();
+    CGContextRestoreGState( context );
 }
 
 void wxWidgetCocoaImpl::clickedAction( WXWidget slf, void *_cmd, void *sender)
