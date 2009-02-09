@@ -163,11 +163,12 @@ public:
     wxWindowMac *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
     virtual void        TriggerScrollEvent( wxEventType scrollEvent ) ;
-    virtual bool        MacDoRedraw( void* updatergn , long time ) ;
-
     // this should not be overriden in classes above wxWindowMac
     // because it is called from its destructor via DeleteChildren
     virtual void        RemoveChild( wxWindowBase *child );
+    
+    virtual bool        MacDoRedraw( long time ) ;
+    virtual void        MacPaintChildrenBorders();
     virtual void        MacPaintBorders( int left , int top ) ;
     void                MacPaintGrowBox();
 

@@ -2254,6 +2254,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/renderer.cpp
     src/osx/carbon/settings.cpp
     src/osx/carbon/statbrma.cpp
+    src/osx/carbon/region.cpp
     <!-- cocoa bridge -->
     src/osx/carbon/utilscocoa.mm
 </if>
@@ -2281,7 +2282,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/notebmac.cpp
     src/osx/carbon/printdlg.cpp
     src/osx/carbon/radiobut.cpp
-    src/osx/carbon/region.cpp
     src/osx/carbon/scrolbar.cpp
     src/osx/carbon/slider.cpp
     src/osx/carbon/spinbutt.cpp
@@ -2462,7 +2462,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontpickerg.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
-    src/generic/regiong.cpp
     src/generic/statusbr.cpp
 </set>
 <set var="OSX_COCOA_HDR" hints="files">

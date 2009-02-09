@@ -56,6 +56,7 @@ WXDLLIMPEXP_BASE wxString wxMacFindFolder(short vRefNum,
                                           Boolean createFolder);
 
 template<typename T> EventParamType wxMacGetEventParamType() { wxFAIL_MSG( wxT("Unknown Param Type") ); return 0; }
+template<> inline EventParamType wxMacGetEventParamType<HIShapeRef>() { return typeHIShapeRef; }
 template<> inline EventParamType wxMacGetEventParamType<RgnHandle>() { return typeQDRgnHandle; }
 template<> inline EventParamType wxMacGetEventParamType<ControlRef>() { return typeControlRef; }
 template<> inline EventParamType wxMacGetEventParamType<WindowRef>() { return typeWindowRef; }

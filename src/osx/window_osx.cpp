@@ -1818,116 +1818,96 @@ void wxWindowMac::MacUpdateClippedRects() const
 /*
     This function must not change the updatergn !
  */
-bool wxWindowMac::MacDoRedraw( void* updatergnr , long time )
+bool wxWindowMac::MacDoRedraw( long time )
 {
     bool handled = false ;
-#if wxOSX_USE_CARBON
-    Rect updatebounds ;
-    RgnHandle updatergn = (RgnHandle) updatergnr ;
-    GetRegionBounds( updatergn , &updatebounds ) ;
+    
+    wxRegion formerUpdateRgn = m_updateRegion;
+    wxRegion clientUpdateRgn = formerUpdateRgn;
 
-    // wxLogDebug(wxT("update for %s bounds %d, %d, %d, %d"), wxString(GetClassInfo()->GetClassName()).c_str(), updatebounds.left, updatebounds.top , updatebounds.right , updatebounds.bottom ) ;
-
-    if ( !EmptyRgn(updatergn) )
+    wxSize sz = GetClientSize() ;
+    wxPoint origin = GetClientAreaOrigin() ;
+    
+    clientUpdateRgn.Intersect(origin.x , origin.y , origin.x + sz.x , origin.y + sz.y);
+    
+    // first send an erase event to the entire update area
     {
-        RgnHandle newupdate = NewRgn() ;
-        wxSize point = GetClientSize() ;
-        wxPoint origin = GetClientAreaOrigin() ;
-        SetRectRgn( newupdate , origin.x , origin.y , origin.x + point.x , origin.y + point.y ) ;
-        SectRgn( newupdate , updatergn , newupdate ) ;
+        // for the toplevel window this really is the entire area
+        // for all the others only their client area, otherwise they
+        // might be drawing with full alpha and eg put blue into
+        // the grow-box area of a scrolled window (scroll sample)
+        wxDC* dc = new wxWindowDC(this);
+        if ( IsTopLevel() )
+            dc->SetDeviceClippingRegion(formerUpdateRgn);
+        else
+            dc->SetDeviceClippingRegion(clientUpdateRgn);
 
-        // first send an erase event to the entire update area
+        wxEraseEvent eevent( GetId(), dc );
+        eevent.SetEventObject( this );
+        HandleWindowEvent( eevent );
+        delete dc ;
+    }
+
+    MacPaintGrowBox();
+
+    // calculate a client-origin version of the update rgn and set m_updateRegion to that
+    clientUpdateRgn.Offset( -origin.x , -origin.y );
+    m_updateRegion = clientUpdateRgn ;
+
+    if ( !m_updateRegion.Empty() )
+    {
+        // paint the window itself
+
+        wxPaintEvent event;
+        event.SetTimestamp(time);
+        event.SetEventObject(this);
+        handled = HandleWindowEvent(event);
+    }
+
+    m_updateRegion = formerUpdateRgn;
+    return handled;
+}
+
+void wxWindowMac::MacPaintChildrenBorders()
+{
+    // now we cannot rely on having its borders drawn by a window itself, as it does not
+    // get the updateRgn wide enough to always do so, so we do it from the parent
+    // this would also be the place to draw any custom backgrounds for native controls
+    // in Composited windowing
+    wxPoint clientOrigin = GetClientAreaOrigin() ;
+
+    wxWindowMac *child;
+    int x, y, w, h;
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext())
+    {
+        child = node->GetData();
+        if (child == NULL)
+            continue;
+        if (child == m_vScrollBar)
+            continue;
+        if (child == m_hScrollBar)
+            continue;
+        if (child->IsTopLevel())
+            continue;
+        if (!child->IsShown())
+            continue;
+
+        // only draw those in the update region (add a safety margin of 10 pixels for shadow effects
+
+        child->GetPosition( &x, &y );
+        child->GetSize( &w, &h );
+        
+        if ( m_updateRegion.Contains(clientOrigin.x+x-10, clientOrigin.y+y-10, w+20, h+20) )
         {
-            // for the toplevel window this really is the entire area
-            // for all the others only their client area, otherwise they
-            // might be drawing with full alpha and eg put blue into
-            // the grow-box area of a scrolled window (scroll sample)
-            wxDC* dc = new wxWindowDC(this);
-            if ( IsTopLevel() )
-                dc->SetDeviceClippingRegion(wxRegion(HIShapeCreateWithQDRgn(updatergn)));
-            else
-                dc->SetDeviceClippingRegion(wxRegion(HIShapeCreateWithQDRgn(newupdate)));
-
-            wxEraseEvent eevent( GetId(), dc );
-            eevent.SetEventObject( this );
-            HandleWindowEvent( eevent );
-            delete dc ;
-        }
-
-        MacPaintGrowBox();
-
-        // calculate a client-origin version of the update rgn and set m_updateRegion to that
-        OffsetRgn( newupdate , -origin.x , -origin.y ) ;
-        m_updateRegion = wxRegion(HIShapeCreateWithQDRgn(newupdate)) ;
-        DisposeRgn( newupdate ) ;
-
-        if ( !m_updateRegion.Empty() )
-        {
-            // paint the window itself
-
-            wxPaintEvent event;
-            event.SetTimestamp(time);
-            event.SetEventObject(this);
-            if ( !HandleWindowEvent(event) )
+            // paint custom borders
+            wxNcPaintEvent eventNc( child->GetId() );
+            eventNc.SetEventObject( child );
+            if ( !child->HandleWindowEvent( eventNc ) )
             {
-                // for native controls: call their native paint method
-                if ( !MacIsUserPane() || ( IsTopLevel() && GetBackgroundStyle() == wxBG_STYLE_SYSTEM ) )
-                {
-                    if ( wxTheApp->MacGetCurrentEvent() != NULL && wxTheApp->MacGetCurrentEventHandlerCallRef() != NULL
-                        && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
-                        CallNextEventHandler(
-                            (EventHandlerCallRef)wxTheApp->MacGetCurrentEventHandlerCallRef() ,
-                            (EventRef) wxTheApp->MacGetCurrentEvent() ) ;
-                }
-            }
-            
-            handled = true ;
-        }
-
-        // now we cannot rely on having its borders drawn by a window itself, as it does not
-        // get the updateRgn wide enough to always do so, so we do it from the parent
-        // this would also be the place to draw any custom backgrounds for native controls
-        // in Composited windowing
-        wxPoint clientOrigin = GetClientAreaOrigin() ;
-
-        wxWindowMac *child;
-        int x, y, w, h;
-        for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext())
-        {
-            child = node->GetData();
-            if (child == NULL)
-                continue;
-            if (child == m_vScrollBar)
-                continue;
-            if (child == m_hScrollBar)
-                continue;
-            if (child->IsTopLevel())
-                continue;
-            if (!child->IsShown())
-                continue;
-
-            // only draw those in the update region (add a safety margin of 10 pixels for shadow effects
-
-            child->GetPosition( &x, &y );
-            child->GetSize( &w, &h );
-            Rect childRect = { y , x , y + h , x + w } ;
-            OffsetRect( &childRect , clientOrigin.x , clientOrigin.y ) ;
-            InsetRect( &childRect , -10 , -10) ;
-
-            if ( RectInRgn( &childRect , updatergn ) )
-            {
-                // paint custom borders
-                wxNcPaintEvent eventNc( child->GetId() );
-                eventNc.SetEventObject( child );
-                if ( !child->HandleWindowEvent( eventNc ) )
-                {
-                    child->MacPaintBorders(0, 0) ;
-                }
+                child->MacPaintBorders(0, 0) ;
             }
         }
     }
-#endif
-    return handled ;
 }
 
 

@@ -131,24 +131,23 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
     {
         case kEventControlDraw :
             {
-                RgnHandle updateRgn = NULL ;
-                RgnHandle allocatedRgn = NULL ;
+                HIShapeRef updateRgn = NULL ;
+                HIMutableShapeRef allocatedRgn = NULL ;
                 wxRegion visRegion = thisWindow->MacGetVisibleRegion() ;
 
-                if ( cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr )
+                // according to the docs: redraw entire control if param not present
+                if ( cEvent.GetParameter<HIShapeRef>(kEventParamShape, &updateRgn) != noErr )
                 {
-                    HIShapeGetAsQDRgn( visRegion.GetWXHRGN(), updateRgn );
+                    updateRgn = visRegion.GetWXHRGN();
                 }
                 else
                 {
                     if ( thisWindow->MacGetLeftBorderSize() != 0 || thisWindow->MacGetTopBorderSize() != 0 )
                     {
                         // as this update region is in native window locals we must adapt it to wx window local
-                        allocatedRgn = NewRgn() ;
-                        CopyRgn( updateRgn , allocatedRgn ) ;
-
+                        allocatedRgn = HIShapeCreateMutableCopy(updateRgn);
+                        HIShapeOffset(allocatedRgn, thisWindow->MacGetLeftBorderSize() , thisWindow->MacGetTopBorderSize());
                         // hide the given region by the new region that must be shifted
-                        OffsetRgn( allocatedRgn , thisWindow->MacGetLeftBorderSize() , thisWindow->MacGetTopBorderSize() ) ;
                         updateRgn = allocatedRgn ;
                     }
                 }
@@ -210,9 +209,23 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             CGContextClearRect( cgContext, bounds );
                         }
 
-                        if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
-                            result = noErr ;
-
+                        if ( !HIShapeIsEmpty(updateRgn) )
+                        {
+                            // refcount increase because wxRegion constructor takes ownership of the native region
+                            CFRetain(updateRgn);
+                            thisWindow->GetUpdateRegion() = wxRegion(updateRgn);
+                            if ( !thisWindow->MacDoRedraw( cEvent.GetTicks() ) )
+                            {
+                               // for native controls: call their native paint method
+                                if ( !thisWindow->MacIsUserPane() || 
+                                    ( thisWindow->IsTopLevel() && thisWindow->GetBackgroundStyle() == wxBG_STYLE_SYSTEM ) )
+                                {
+                                    if ( thisWindow->GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
+                                        CallNextEventHandler( handler ,event ) ;
+                                }
+                            }
+                            thisWindow->MacPaintChildrenBorders();
+                        }
                         thisWindow->MacSetCGContextRef( NULL ) ;
                     }
 
@@ -221,7 +234,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 }
 
                 if ( allocatedRgn )
-                    DisposeRgn( allocatedRgn ) ;
+                    CFRelease( allocatedRgn ) ;
             }
             break ;
 

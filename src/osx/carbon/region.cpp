@@ -16,7 +16,7 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/osx/uma.h"
+#include "wx/osx/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
 IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator, wxObject)
@@ -101,9 +101,9 @@ wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode WXUNUSED(f
     wxUnusedVar(n);
     wxUnusedVar(points);
 
-#ifndef __LP64__
-
-    // TODO : any APIs ?
+#if 0 
+    // no non-QD APIs available
+    // TODO : remove ?
     // OS X somehow does not collect the region invisibly as before, so sometimes things
     // get drawn on screen instead of just being combined into a region, therefore we allocate a temp gworld now
 
@@ -405,7 +405,15 @@ wxRegionIterator::wxRegionIterator(const wxRegion& region)
  * Reset iterator for a new /e region.
  */
 
-#ifndef __LP64__
+class RegionToRectsCallbackData
+{
+public :
+    wxRect* m_rects ;
+    long m_current ;
+};
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+
 OSStatus wxMacRegionToRectsCounterCallback(
     UInt16 message, RgnHandle WXUNUSED(region), const Rect *WXUNUSED(rect), void *data )
 {
@@ -422,13 +430,6 @@ OSStatus wxMacRegionToRectsCounterCallback(
     return noErr;
 }
 
-class RegionToRectsCallbackData
-{
-public :
-    wxRect* m_rects ;
-    long m_current ;
-};
-
 OSStatus wxMacRegionToRectsSetterCallback(
     UInt16 message, RgnHandle WXUNUSED(region), const Rect *rect, void *data )
 {
@@ -440,6 +441,39 @@ OSStatus wxMacRegionToRectsSetterCallback(
 
     return noErr;
 }
+
+#endif
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+
+OSStatus wxOSXRegionToRectsCounterCallback(
+    int message, HIShapeRef WXUNUSED(region), const CGRect *WXUNUSED(rect), void *data )
+{
+    long *m_numRects = (long*) data ;
+    if ( message == kHIShapeEnumerateInit )
+    {
+        (*m_numRects) = 0 ;
+    }
+    else if (message == kHIShapeEnumerateRect)
+    {
+        (*m_numRects) += 1 ;
+    }
+
+    return noErr;
+}
+
+OSStatus wxOSXRegionToRectsSetterCallback(
+    int message, HIShapeRef WXUNUSED(region), const CGRect *rect, void *data )
+{
+    if (message == kHIShapeEnumerateRect)
+    {
+        RegionToRectsCallbackData *cb = (RegionToRectsCallbackData*) data ;
+        cb->m_rects[cb->m_current++] = wxRect( rect->origin.x , rect->origin.y , rect->size.width , rect->size.height ) ;
+    }
+
+    return noErr;
+}
+
 #endif
 
 void wxRegionIterator::Reset(const wxRegion& region)
@@ -459,35 +493,59 @@ void wxRegionIterator::Reset(const wxRegion& region)
     }
     else
     {
-#ifdef __LP64__
+#if 0
+        // fallback code in case we ever need it again
         // copying this to a path and dissecting the path would be an option
         m_numRects = 1;
         m_rects = new wxRect[m_numRects];
         m_rects[0] = m_region.GetBox();
+#endif
 
-#else
-        RegionToRectsUPP proc = (RegionToRectsUPP) wxMacRegionToRectsCounterCallback;
-
-        OSStatus err = noErr;
-        RgnHandle rgn = NewRgn();
-        HIShapeGetAsQDRgn(OTHER_M_REGION(region), rgn);
-
-        err = QDRegionToRects (rgn, kQDParseRegionFromTopLeft, proc, (void*)&m_numRects);
-        if (err == noErr)
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+        if ( HIShapeEnumerate != NULL )
         {
-            proc = (RegionToRectsUPP) wxMacRegionToRectsSetterCallback;
-            m_rects = new wxRect[m_numRects];
-            RegionToRectsCallbackData data ;
-            data.m_rects = m_rects ;
-            data.m_current = 0 ;
-            QDRegionToRects( rgn , kQDParseRegionFromTopLeft, proc, (void*)&data );
+            OSStatus err = HIShapeEnumerate (OTHER_M_REGION(region), kHIShapeParseFromTopLeft, wxOSXRegionToRectsCounterCallback, 
+                (void*)&m_numRects);
+            if (err == noErr)
+            {
+                m_rects = new wxRect[m_numRects];
+                RegionToRectsCallbackData data ;
+                data.m_rects = m_rects ;
+                data.m_current = 0 ;
+                HIShapeEnumerate( OTHER_M_REGION(region), kHIShapeParseFromTopLeft, wxOSXRegionToRectsSetterCallback, 
+                    (void*)&data );
+            }
+            else
+            {
+                m_numRects = 0;
+            }
         }
         else
-        {
-            m_numRects = 0;
-        }
-        DisposeRgn( rgn );
 #endif
+        {
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+            OSStatus err = noErr;
+            RgnHandle rgn = NewRgn();
+            HIShapeGetAsQDRgn(OTHER_M_REGION(region), rgn);
+
+            err = QDRegionToRects (rgn, kQDParseRegionFromTopLeft, wxMacRegionToRectsCounterCallback
+                , (void*)&m_numRects);
+            if (err == noErr)
+            {
+                m_rects = new wxRect[m_numRects];
+                RegionToRectsCallbackData data ;
+                data.m_rects = m_rects ;
+                data.m_current = 0 ;
+                QDRegionToRects( rgn , kQDParseRegionFromTopLeft, wxMacRegionToRectsSetterCallback, 
+                    (void*)&data );
+            }
+            else
+            {
+                m_numRects = 0;
+            }
+            DisposeRgn( rgn );
+#endif
+        }
     }
 }
 
