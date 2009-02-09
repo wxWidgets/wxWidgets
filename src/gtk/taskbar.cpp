@@ -12,7 +12,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_TASKBARICON
+#if wxUSE_TASKBARICON && defined(__WXGTK210__)
 
 #include "wx/taskbar.h"
 

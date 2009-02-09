@@ -65,7 +65,7 @@ private:
     #include "wx/palmos/taskbar.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/taskbar.h"
-#elif defined(__WXGTK20__)
+#elif defined(__WXGTK210__)
     #include "wx/gtk/taskbar.h"
 #elif defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__)
     #include "wx/unix/taskbarx11.h"
