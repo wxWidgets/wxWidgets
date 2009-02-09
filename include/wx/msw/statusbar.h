@@ -26,6 +26,7 @@ public:
                 long style = wxST_SIZEGRIP,
                 const wxString& name = wxStatusBarNameStr)
     {
+        m_pDC = NULL;
         (void)Create(parent, id, style, name);
     }
 

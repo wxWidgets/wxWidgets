@@ -123,6 +123,12 @@ bool wxStatusBar::Create(wxWindow *parent,
 
     SetFieldsCount(1);
     SubclassWin(m_hWnd);
+
+    // cache the DC instance used by UpdateFieldText:
+    // NOTE: create the DC before calling InheritAttributes() since
+    //       it may result in a call to our SetFont()
+    m_pDC = new wxClientDC(this);
+
     InheritAttributes();
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
@@ -135,9 +141,6 @@ bool wxStatusBar::Create(wxWindow *parent,
     // work correctly, we need to wait until we return to the main loop
     PostSizeEventToParent();
 
-    // cache the DC instance used by UpdateFieldText
-    m_pDC = new wxClientDC(this);
-
     return true;
 }
 
@@ -147,6 +150,8 @@ wxStatusBar::~wxStatusBar()
     // frame is not - otherwise statusbar leaves a hole in the place it used to
     // occupy
     PostSizeEventToParent();
+
+    wxDELETE(m_pDC);
 }
 
 bool wxStatusBar::SetFont(const wxFont& font)
@@ -154,7 +159,7 @@ bool wxStatusBar::SetFont(const wxFont& font)
     if (!wxWindow::SetFont(font))
         return false;
 
-    m_pDC->SetFont(font);
+    if (m_pDC) m_pDC->SetFont(font);
     return true;
 }
 
