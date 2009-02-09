@@ -633,6 +633,7 @@ wxToolBar::~wxToolBar()
         if (m_macUsesNativeToolbar)
             MacInstallNativeToolbar( false );
 
+        [(NSToolbar*)m_macToolbar setDelegate:nil];
         [(NSToolbar*)m_macToolbar release];
         m_macToolbar = NULL;
     }

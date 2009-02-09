@@ -186,6 +186,7 @@ protected :
 
 wxMenuCocoaImpl::~wxMenuCocoaImpl()
 {
+    [m_osxMenu setDelegate:nil];
     [m_osxMenu release];
 }
 

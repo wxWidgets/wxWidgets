@@ -227,6 +227,7 @@ wxNonOwnedWindowCocoaImpl::wxNonOwnedWindowCocoaImpl()
     
 wxNonOwnedWindowCocoaImpl::~wxNonOwnedWindowCocoaImpl()
 {
+    [m_macWindow setDelegate:nil];
     [m_macWindow release];
 }
 
