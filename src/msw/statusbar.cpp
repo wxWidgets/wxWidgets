@@ -27,6 +27,7 @@
     #include "wx/dcclient.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/control.h"
 #endif
 
 #include "wx/msw/private.h"
