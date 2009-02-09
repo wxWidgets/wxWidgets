@@ -450,8 +450,7 @@ public :
 
 
     virtual void GetFeatures( UInt32 *features );
-    virtual OSStatus GetRegion( ControlPartCode partCode , RgnHandle region );
-    
+   
     // to be moved into a tab control class
 
     virtual OSStatus SetTabEnabled( SInt16 tabNo , bool enable );
