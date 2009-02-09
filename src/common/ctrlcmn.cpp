@@ -262,83 +262,83 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
 
     switch (mode)
     {
-    case wxELLIPSIZE_START:
-        initialChar = 0;
-        for (nChars=0;
-             nChars < len && charOffsets[nChars] < excessPixels;
-             nChars++)
-            ;
-        break;
-
-    case wxELLIPSIZE_MIDDLE:
-        {
-            // the start & end of the removed span of chars
-            initialChar = len/2;
-            size_t endChar = len/2;
-
-            int removed = 0;
-            for ( ; removed < excessPixels; )
-            {
-                if (initialChar > 0)
-                {
-                    // width of the initialChar-th character
-                    int width = charOffsets[initialChar] -
-                                charOffsets[initialChar-1];
-
-                    // remove the initialChar-th character
-                    removed += width;
-                    initialChar--;
-                }
-
-                if (endChar < len - 1 &&
-                    removed < excessPixels)
-                {
-                    // width of the (endChar+1)-th character
-                    int width = charOffsets[endChar+1] -
-                                charOffsets[endChar];
-
-                    // remove the endChar-th character
-                    removed += width;
-                    endChar++;
-                }
-
-                if (initialChar == 0 && endChar == len-1)
-                {
-                    nChars = len+1;
-                    break;
-                }
-            }
-
-            initialChar++;
-            nChars = endChar - initialChar + 1;
-        }
-        break;
-
-    case wxELLIPSIZE_END:
-        {
-            wxASSERT(len > 0);
-
-            int maxWidth = totalWidth - excessPixels;
-            for (initialChar=0;
-                 initialChar < len &&
-                 charOffsets[initialChar] < maxWidth;
-                 initialChar++)
+        case wxELLIPSIZE_START:
+            initialChar = 0;
+            for ( nChars=0;
+                  nChars < len && charOffsets[nChars] < excessPixels;
+                  nChars++ )
                 ;
+            break;
 
-            if (initialChar == 0)
+        case wxELLIPSIZE_MIDDLE:
             {
-                nChars = len;
-            }
-            else
-            {
-                //initialChar--;      // go back one character
-                nChars = len - initialChar;
-            }
-        }
-        break;
+                // the start & end of the removed span of chars
+                initialChar = len/2;
+                size_t endChar = len/2;
 
-    default:
-        wxFAIL_MSG("invalid ellipsize mode");
+                int removed = 0;
+                for ( ; removed < excessPixels; )
+                {
+                    if (initialChar > 0)
+                    {
+                        // width of the initialChar-th character
+                        int width = charOffsets[initialChar] -
+                                    charOffsets[initialChar-1];
+
+                        // remove the initialChar-th character
+                        removed += width;
+                        initialChar--;
+                    }
+
+                    if (endChar < len - 1 &&
+                        removed < excessPixels)
+                    {
+                        // width of the (endChar+1)-th character
+                        int width = charOffsets[endChar+1] -
+                                    charOffsets[endChar];
+
+                        // remove the endChar-th character
+                        removed += width;
+                        endChar++;
+                    }
+
+                    if (initialChar == 0 && endChar == len-1)
+                    {
+                        nChars = len+1;
+                        break;
+                    }
+                }
+
+                initialChar++;
+                nChars = endChar - initialChar + 1;
+            }
+            break;
+
+        case wxELLIPSIZE_END:
+            {
+                wxASSERT(len > 0);
+
+                int maxWidth = totalWidth - excessPixels;
+                for ( initialChar = 0;
+                      initialChar < len && charOffsets[initialChar] < maxWidth;
+                      initialChar++ )
+                    ;
+
+                if (initialChar == 0)
+                {
+                    nChars = len;
+                }
+                else
+                {
+                    //initialChar--;      // go back one character
+                    nChars = len - initialChar;
+                }
+            }
+            break;
+
+        default:
+            wxFAIL_MSG("invalid ellipsize mode");
+            return curLine;
     }
 
     wxString ret(curLine);
