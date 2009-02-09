@@ -2847,10 +2847,11 @@ WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 // Necessary for drawing hrules and vrules, if specified
 void wxListCtrl::OnPaint(wxPaintEvent& event)
 {
+    const int itemCount = GetItemCount();
     const bool drawHRules = HasFlag(wxLC_HRULES);
     const bool drawVRules = HasFlag(wxLC_VRULES);
 
-    if (!InReportView() || !(drawHRules || drawVRules))
+    if (!InReportView() || !(drawHRules || drawVRules) || !itemCount)
     {
         event.Skip();
         return;
@@ -2870,12 +2871,10 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
     wxSize clientSize = GetClientSize();
     wxRect itemRect;
 
-    int itemCount = GetItemCount();
-    int i;
     if (drawHRules)
     {
-        long top = GetTopItem();
-        for (i = top; i < top + GetCountPerPage() + 1; i++)
+        const long top = GetTopItem();
+        for ( int i = top; i < top + GetCountPerPage() + 1; i++ )
         {
             if (GetItemRect(i, itemRect))
             {
@@ -2889,17 +2888,18 @@ void wxListCtrl::OnPaint(wxPaintEvent& event)
                 {
                     cy = itemRect.GetBottom();
                     dc.DrawLine(0, cy, clientSize.x, cy);
+                    break;
                 }
             }
         }
     }
-    i = itemCount - 1;
-    if (drawVRules && (i > -1))
+
+    if (drawVRules)
     {
         wxRect firstItemRect;
         GetItemRect(0, firstItemRect);
 
-        if (GetItemRect(i, itemRect))
+        if (GetItemRect(itemCount - 1, itemRect))
         {
             // this is a fix for bug 673394: erase the pixels which we would
             // otherwise leave on the screen
