@@ -170,6 +170,8 @@ class wxMenuItemCocoaImpl : public wxMenuItemImpl
 public :
     wxMenuItemCocoaImpl( wxMenuItem* peer, NSMenuItem* item ) : wxMenuItemImpl(peer), m_osxMenuItem(item)
     {
+        if ( ![m_osxMenuItem isSeparatorItem] )
+            [(wxNSMenuItem*)m_osxMenuItem setImplementation:this];
     }
     
     ~wxMenuItemCocoaImpl();
@@ -212,6 +214,8 @@ protected :
 
 wxMenuItemCocoaImpl::~wxMenuItemCocoaImpl()
 {
+    if ( ![m_osxMenuItem isSeparatorItem] )
+        [(wxNSMenuItem*)m_osxMenuItem setImplementation:nil];
 }
 
 
@@ -253,9 +257,5 @@ wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
         item = temp;
     }
     c = new wxMenuItemCocoaImpl( peer, item );
-    if ( kind != wxITEM_SEPARATOR )
-    {
-        [(wxNSMenuItem*)item setImplementation:c];
-    }
     return c;
 }

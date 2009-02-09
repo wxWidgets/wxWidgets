@@ -39,6 +39,7 @@
 - (id) init
 {
     [super init];
+    impl = NULL;
     return self;
 }
 
@@ -123,8 +124,15 @@
 class wxMenuCocoaImpl : public wxMenuImpl 
 {
 public :
-    wxMenuCocoaImpl( wxMenu* peer , NSMenu* menu) : wxMenuImpl(peer), m_osxMenu(menu)
+    wxMenuCocoaImpl( wxMenu* peer , wxNSMenu* menu) : wxMenuImpl(peer), m_osxMenu(menu)
     {
+        static wxNSMenuController* controller = NULL;
+        if ( controller == NULL )
+        {
+            controller = [[wxNSMenuController alloc] init];
+        }
+        [menu setDelegate:controller];
+        [m_osxMenu setImplementation:this];
     }
     
     virtual ~wxMenuCocoaImpl();
@@ -181,26 +189,20 @@ public :
     static wxMenuImpl* Create( wxMenu* peer, const wxString& title );
     static wxMenuImpl* CreateRootMenu( wxMenu* peer );
 protected :
-    NSMenu* m_osxMenu;
+    wxNSMenu* m_osxMenu;
 } ;
 
 wxMenuCocoaImpl::~wxMenuCocoaImpl()
 {
     [m_osxMenu setDelegate:nil];
+    [m_osxMenu setImplementation:nil];
     [m_osxMenu release];
 }
 
 wxMenuImpl* wxMenuImpl::Create( wxMenu* peer, const wxString& title )
 {
-    static wxNSMenuController* controller = NULL;
-    if ( controller == NULL )
-    {
-        controller = [[wxNSMenuController alloc] init];
-    }
     wxCFStringRef cfText( title );
     wxNSMenu* menu = [[wxNSMenu alloc] initWithTitle:cfText.AsNSString()];
     wxMenuImpl* c = new wxMenuCocoaImpl( peer, menu );
-    [menu setDelegate:controller];
-    [menu setImplementation:c];
     return c;
 }
