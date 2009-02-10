@@ -39,12 +39,7 @@
     #include "wx/osx/dcprint.h"
     #include "wx/osx/dcclient.h"
     #include "wx/osx/dcmemory.h"
-#if wxOSX_USE_CARBON
-#include "wx/osx/uma.h"
-#else
-#include "wx/osx/private.h"
-#endif
-
+    #include "wx/osx/private.h"
 #else
     #include "CoreServices/CoreServices.h"
     #include "ApplicationServices/ApplicationServices.h"
@@ -78,7 +73,7 @@ int UMAGetSystemVersion()
 
 #if wxOSX_USE_COCOA_OR_IPHONE
 extern CGContextRef wxOSXGetContextFromCurrentNSContext() ;
-extern void wxOSXLockFocus( WXWidget view) ;
+extern bool wxOSXLockFocus( WXWidget view) ;
 extern void wxOSXUnlockFocus( WXWidget view) ;
 #endif
 
@@ -1391,7 +1386,7 @@ public:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacCoreGraphicsContext)
 
 private:
-    void EnsureIsValid();
+    bool EnsureIsValid();
 
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
     virtual void DoDrawRotatedText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle );
@@ -1406,6 +1401,7 @@ private:
     CGAffineTransform m_windowTransform;
     wxDouble m_width;
     wxDouble m_height;
+    bool m_invisible;
 
 #if wxOSX_USE_COCOA_OR_CARBON
     wxCFRef<HIShapeRef> m_clipRgn;
@@ -1462,6 +1458,7 @@ void wxMacCoreGraphicsContext::Init()
 #if wxOSX_USE_COCOA_OR_IPHONE
     m_view = NULL;
 #endif
+    m_invisible = false;
 }
 
 wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width, wxDouble height ) : wxGraphicsContext(renderer)
@@ -1565,13 +1562,23 @@ void wxMacCoreGraphicsContext::Flush()
     CGContextFlush(m_cgContext);
 }
 
-void wxMacCoreGraphicsContext::EnsureIsValid()
+bool wxMacCoreGraphicsContext::EnsureIsValid()
 {
     if ( !m_cgContext )
     {
+        if (m_invisible)
+            return false;
+            
 #if wxOSX_USE_COCOA_OR_IPHONE
-        wxOSXLockFocus(m_view);
-        m_cgContext = wxOSXGetContextFromCurrentNSContext();
+        if ( wxOSXLockFocus(m_view) )
+        {
+            m_cgContext = wxOSXGetContextFromCurrentNSContext();
+            wxASSERT_MSG( m_cgContext != NULL, _T("Unable to retrieve drawing context from View"));
+        }
+        else
+        {
+            m_invisible = true;
+        }
 #endif
 #if wxOSX_USE_CARBON
         OSStatus status = QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
@@ -1580,46 +1587,50 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
             wxFAIL_MSG("Cannot nest wxDCs on the same window");
         }
 #endif
-        CGContextConcatCTM( m_cgContext, m_windowTransform );
-        CGContextSaveGState( m_cgContext );
-        m_contextSynthesized = true;
-        if ( m_clipRgn.get() )
+        if ( m_cgContext )
         {
-            // the clip region is in device coordinates, so we convert this again to user coordinates
-            wxCFRef<HIMutableShapeRef> hishape( HIShapeCreateMutableCopy( m_clipRgn ) );
-            CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
-            HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
-            // if the shape is empty, HIShapeReplacePathInCGContext doesn't work
-            if ( HIShapeIsEmpty(hishape))
+            CGContextConcatCTM( m_cgContext, m_windowTransform );
+            CGContextSaveGState( m_cgContext );
+            m_contextSynthesized = true;
+            if ( m_clipRgn.get() )
             {
-                CGRect empty = CGRectMake( 0,0,0,0 );
-                CGContextClipToRect( m_cgContext, empty );
+                // the clip region is in device coordinates, so we convert this again to user coordinates
+                wxCFRef<HIMutableShapeRef> hishape( HIShapeCreateMutableCopy( m_clipRgn ) );
+                CGPoint transformedOrigin = CGPointApplyAffineTransform( CGPointZero,m_windowTransform);
+                HIShapeOffset( hishape, -transformedOrigin.x, -transformedOrigin.y );
+                // if the shape is empty, HIShapeReplacePathInCGContext doesn't work
+                if ( HIShapeIsEmpty(hishape))
+                {
+                    CGRect empty = CGRectMake( 0,0,0,0 );
+                    CGContextClipToRect( m_cgContext, empty );
+                }
+                else
+                {
+                    HIShapeReplacePathInCGContext( hishape, m_cgContext );
+                    CGContextClip( m_cgContext );
+                }
             }
-            else
-            {
-                HIShapeReplacePathInCGContext( hishape, m_cgContext );
-                CGContextClip( m_cgContext );
-            }
-        }
-        CGContextSaveGState( m_cgContext );
-        
+            CGContextSaveGState( m_cgContext );
+            
 #if 0 // turn on for debugging of clientdc
-        static float color = 0.5 ;
-        static int channel = 0 ;
-        CGRect bounds = CGRectMake(-1000,-1000,2000,2000);
-        CGContextSetRGBFillColor( m_cgContext, channel == 0 ? color : 0.5 ,
-            channel == 1 ? color : 0.5 , channel == 2 ? color : 0.5 , 1 );
-        CGContextFillRect( m_cgContext, bounds );
-        color += 0.1 ;
-        if ( color > 0.9 )
-        {
-            color = 0.5 ;
-            channel++ ;
-            if ( channel == 3 )
-                channel = 0 ;
-        }
+            static float color = 0.5 ;
+            static int channel = 0 ;
+            CGRect bounds = CGRectMake(-1000,-1000,2000,2000);
+            CGContextSetRGBFillColor( m_cgContext, channel == 0 ? color : 0.5 ,
+                channel == 1 ? color : 0.5 , channel == 2 ? color : 0.5 , 1 );
+            CGContextFillRect( m_cgContext, bounds );
+            color += 0.1 ;
+            if ( color > 0.9 )
+            {
+                color = 0.5 ;
+                channel++ ;
+                if ( channel == 3 )
+                    channel = 0 ;
+            }
 #endif
+        }
     }
+    return m_cgContext != NULL;
 }
 
 // TODO test whether the private CGContextSetCompositeOperation works under 10.3 (using NSCompositingModes)
@@ -1629,8 +1640,9 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( wxRasterOperationMode functio
     if (m_logicalFunction == function)
         return true;
 
-    EnsureIsValid();
-
+    if (EnsureIsValid()==false)
+        return true;
+        
     bool retval = false;
     bool shouldAntiAlias = true;
     CGBlendMode mode = kCGBlendModeNormal;
@@ -1773,8 +1785,9 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     if ( m_pen.IsNull() )
         return ;
 
-    EnsureIsValid();
-
+    if (EnsureIsValid()==false)
+        return;
+        
     wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
 
     ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
@@ -1784,6 +1797,9 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
 
 void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonFillMode fillStyle )
 {
+    if (EnsureIsValid()==false)
+        return;
+        
     if ( !m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
         // when using shading, we cannot draw pen and brush at the same time
@@ -1818,8 +1834,6 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonF
         }
     }
 
-    EnsureIsValid();
-
     if ( !m_brush.IsNull() )
         ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
     if ( !m_pen.IsNull() )
@@ -1836,8 +1850,9 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
     if ( m_brush.IsNull() )
         return;
 
-    EnsureIsValid();
-
+    if (EnsureIsValid()==false)
+        return;
+        
     if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
         CGContextSaveGState( m_cgContext );
@@ -1933,7 +1948,9 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    EnsureIsValid();
+    if (EnsureIsValid()==false)
+        return;
+        
 #ifdef __WXMAC__
     wxMacCoreGraphicsBitmapData* refdata  =static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
     CGImageRef image = refdata->GetBitmap();
@@ -1970,30 +1987,33 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
 
 void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    EnsureIsValid();
-
+    if (EnsureIsValid()==false)
+        return;
+        
     CGRect r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) w , (CGFloat) h );
     CGContextSaveGState( m_cgContext );
     CGContextTranslateCTM( m_cgContext,(CGFloat) x ,(CGFloat) (y + h) );
     CGContextScaleCTM( m_cgContext, 1, -1 );
-#if wxOSX_USE_CARBON
+#if wxOSX_USE_COCOA_OR_CARBON
     PlotIconRefInContext( m_cgContext , &r , kAlignNone , kTransformNone ,
-        NULL , kPlotIconRefNormalFlags , MAC_WXHICON( icon.GetHICON() ) );
+        NULL , kPlotIconRefNormalFlags , icon.GetHICON() );
 #endif
     CGContextRestoreGState( m_cgContext );
 }
 
 void wxMacCoreGraphicsContext::PushState()
 {
-    EnsureIsValid();
-
+    if (EnsureIsValid()==false)
+        return;
+        
     CGContextSaveGState( m_cgContext );
 }
 
 void wxMacCoreGraphicsContext::PopState()
 {
-    EnsureIsValid();
-
+    if (EnsureIsValid()==false)
+        return;
+        
     CGContextRestoreGState( m_cgContext );
 }
 
@@ -2001,7 +2021,9 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
 {
     wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::DrawText - no valid font set") );
 
-    EnsureIsValid();
+    if (EnsureIsValid()==false)
+        return;
+        
 #if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
@@ -2059,7 +2081,9 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
 {
     wxCHECK_RET( !m_font.IsNull(), wxT("wxMacCoreGraphicsContext::DrawText - no valid font set") );
 
-    EnsureIsValid();
+    if (EnsureIsValid()==false)
+        return;
+        
 #if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
