@@ -12,7 +12,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_TASKBARICON && defined(__WXGTK210__)
+#if wxUSE_TASKBARICON
 
 #include "wx/taskbar.h"
 
@@ -24,6 +24,10 @@
 
 #include "eggtrayicon.h"
 #include <gtk/gtk.h>
+
+#if !GTK_CHECK_VERSION(2,10,0)
+    typedef struct _GtkStatusIcon GtkStatusIcon;
+#endif
 
 class wxTaskBarIcon::Private
 {
