@@ -747,10 +747,12 @@ public:
         m_model(NULL),
         m_value(wxNullVariant),
         m_column(NULL),
-        m_pos(-1,-1),
-        m_dataObject(NULL),
+        m_pos(-1,-1)
+#if wxUSE_DRAG_AND_DROP
+        , m_dataObject(NULL),
         m_dataBuffer(NULL),
         m_dataSize(0)
+#endif
         { }
 
     wxDataViewEvent(const wxDataViewEvent& event)
@@ -760,11 +762,13 @@ public:
         m_model(event.m_model),
         m_value(event.m_value),
         m_column(event.m_column),
-        m_pos(m_pos),
-        m_dataObject(event.m_dataObject),
+        m_pos(m_pos)
+#if wxUSE_DRAG_AND_DROP
+        , m_dataObject(event.m_dataObject),
         m_dataFormat(event.m_dataFormat),
         m_dataBuffer(event.m_dataBuffer),
         m_dataSize(event.m_dataSize)
+#endif
         { }
 
     wxDataViewItem GetItem() const { return m_item; }
