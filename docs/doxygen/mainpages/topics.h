@@ -19,6 +19,7 @@ The following is a basic categorization of them:
 @li @ref page_topics_drawing
 @li @ref page_topics_gui
 @li @ref page_topics_indivctrl
+@li @ref page_topics_other
 
 
 <hr>
@@ -94,7 +95,7 @@ The following is a basic categorization of them:
 @li @subpage overview_tips
 @li @subpage overview_docview
 
-@section page_topics_programming Other wxWidgets Programming Overviews
+@section page_topics_other Other wxWidgets Programming Overviews
 
 @li @subpage overview_backwardcompat
 @li @subpage overview_exceptions
