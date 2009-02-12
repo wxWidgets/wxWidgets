@@ -43,9 +43,9 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
 {
     // we can't use the native button for wxFLP_SAVE pickers as it can only
     // open existing files and there is no way to create a new file using it
-    if ( !(style & wxFLP_SAVE) && !gtk_check_version(2,6,0) )
+    if ( !(style & wxFLP_SAVE) && !(style & wxFLP_USE_TEXTCTRL) && !gtk_check_version(2,6,0) )
     {
-        // VERY IMPORTANT: this code is identic to relative code in wxDirButton;
+        // VERY IMPORTANT: this code is identical to relative code in wxDirButton;
         //                 if you find a problem here, fix it also in wxDirButton !
 
         if (!PreCreation( parent, pos, size ) ||
@@ -65,7 +65,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         m_wildcard = wildcard;
         if ((m_dialog = CreateDialog()) == NULL)
             return false;
-
+            
         // little trick used to avoid problems when there are other GTK windows 'grabbed':
         // GtkFileChooserDialog won't be responsive to user events if there is another
         // window which called gtk_grab_add (and this happens if e.g. a wxDialog is running
@@ -78,9 +78,9 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         g_signal_connect(m_dialog->m_widget, "show", G_CALLBACK(gtk_grab_add), NULL);
         g_signal_connect(m_dialog->m_widget, "hide", G_CALLBACK(gtk_grab_remove), NULL);
 
-        // NOTE: we deliberately ignore the given label as GtkFileChooserButton
         //       use as label the currently selected file
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
+        
         g_object_ref(m_widget);
         gtk_widget_show(m_widget);
 
@@ -124,6 +124,7 @@ void wxFileButton::OnDialogOK(wxCommandEvent& ev)
 void wxFileButton::SetPath(const wxString &str)
 {
     m_path = str;
+    
     if (m_dialog)
         UpdateDialogPath(m_dialog);
 }
@@ -157,7 +158,7 @@ static void gtk_dirbutton_currentfolderchanged_callback(GtkFileChooserButton *wi
     // NB: it's important to use gtk_file_chooser_get_filename instead of
     //     gtk_file_chooser_get_current_folder (see GTK docs) !
     wxGtkString filename(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget)));
-    p->UpdatePath(filename);
+    p->GTKUpdatePath(filename);
 
     // since GtkFileChooserButton when used to pick directories also uses a combobox,
     // maybe that the current folder has been changed but not through the GtkFileChooserDialog
@@ -187,7 +188,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator,
                         const wxString &name )
 {
-    if (!gtk_check_version(2,6,0))
+    if ( !(style & wxDIRP_USE_TEXTCTRL) && !gtk_check_version(2,6,0) )
     {
         // VERY IMPORTANT: this code is identic to relative code in wxFileButton;
         //                 if you find a problem here, fix it also in wxFileButton !
@@ -226,6 +227,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
         g_object_ref(m_widget);
 
+        
         gtk_widget_show(m_widget);
 
         // GtkFileChooserButton signals
@@ -247,6 +249,10 @@ wxDirButton::~wxDirButton()
 {
 }
 
+void wxDirButton::GTKUpdatePath(const char *gtkpath)
+{ 
+    m_path = wxString::FromUTF8(gtkpath);
+}
 void wxDirButton::SetPath(const wxString& str)
 {
     if ( m_path == str )
