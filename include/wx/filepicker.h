@@ -307,7 +307,7 @@ protected:
     long GetPickerStyle(long style) const
     {
         return (style & (wxFLP_OPEN|wxFLP_SAVE|wxFLP_OVERWRITE_PROMPT|
-                            wxFLP_FILE_MUST_EXIST|wxFLP_CHANGE_DIR));
+                            wxFLP_FILE_MUST_EXIST|wxFLP_CHANGE_DIR|wxFLP_USE_TEXTCTRL));
     }
 
 private:
@@ -409,7 +409,7 @@ protected:
 
     // extracts the style for our picker from wxFileDirPickerCtrlBase's style
     long GetPickerStyle(long style) const
-        { return (style & (wxDIRP_DIR_MUST_EXIST|wxDIRP_CHANGE_DIR)); }
+        { return (style & (wxDIRP_DIR_MUST_EXIST|wxDIRP_CHANGE_DIR|wxDIRP_USE_TEXTCTRL)); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxDirPickerCtrl)
