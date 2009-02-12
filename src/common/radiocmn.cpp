@@ -271,9 +271,26 @@ wxString wxRadioBoxBase::DoGetHelpTextAtPoint(const wxWindow *derived,
                                               const wxPoint& pt,
                                               wxHelpEvent::Origin origin) const
 {
-    const int item = origin == wxHelpEvent::Origin_HelpButton
-                        ? GetItemFromPoint(pt)
-                        : GetSelection();
+    int item;
+    switch ( origin )
+    {
+        case wxHelpEvent::Origin_HelpButton:
+            item = GetItemFromPoint(pt);
+            break;
+
+        case wxHelpEvent::Origin_Keyboard:
+            item = GetSelection();
+            break;
+
+        default:
+            wxFAIL_MSG( "unknown help even origin" );
+            // fall through
+
+        case wxHelpEvent::Origin_Unknown:
+            // this value is used when we're called from GetHelpText() for the
+            // radio box itself, so don't return item-specific text in this case
+            item = wxNOT_FOUND;
+    }
 
     if ( item != wxNOT_FOUND )
     {
