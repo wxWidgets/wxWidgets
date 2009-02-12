@@ -1524,12 +1524,6 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext() : wxGraphicsContext(NULL)
 wxMacCoreGraphicsContext::~wxMacCoreGraphicsContext()
 {
     SetNativeContext(NULL);
-#if wxOSX_USE_COCOA_OR_IPHONE
-    if ( m_view )
-    {
-        CGContextFlush(m_cgContext);
-    }
-#endif
 }
 
 void wxMacCoreGraphicsContext::GetSize( wxDouble* width, wxDouble* height)
