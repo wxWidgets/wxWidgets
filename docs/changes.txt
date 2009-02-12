@@ -419,7 +419,7 @@ All (GUI):
 - Added support for resizing wxWizard bitmaps to the current page height,
   via SetBitmapPlacement, SetBitmapBackgroundColour and SetMinimumBitmapWidth.
   Also made it easier to derive from wxWizard and override behaviour.
-- Made wxSizer::Fit() set the client size of the target window
+- Made wxSizer::Fit() set the client size of the target window.
 - Add support for wxDatePickerCtrl in wxGenericValidator (Herry Ayen Yang)
 - Added wxWindow::HasFocus().
 - Added wxGLCanvas::IsDisplaySupported().
