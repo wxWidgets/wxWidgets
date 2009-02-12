@@ -1262,7 +1262,7 @@ void wxAuiManager::MaximizePane(wxAuiPaneInfo& pane_info)
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
     {
         wxAuiPaneInfo& p = m_panes.Item(i);
-        if (!p.IsToolbar())
+        if (!p.IsToolbar() && !p.IsFloating()))
         {
             p.Restore();
 
