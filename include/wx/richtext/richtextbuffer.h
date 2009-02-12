@@ -314,7 +314,7 @@ public:
 
     void operator =(const wxRichTextRange& range) { m_start = range.m_start; m_end = range.m_end; }
     bool operator ==(const wxRichTextRange& range) const { return (m_start == range.m_start && m_end == range.m_end); }
-    bool operator !=(const wxRichTextRange& range) const { return (m_start != range.m_start && m_end != range.m_end); }
+    bool operator !=(const wxRichTextRange& range) const { return (m_start != range.m_start || m_end != range.m_end); }
     wxRichTextRange operator -(const wxRichTextRange& range) const { return wxRichTextRange(m_start - range.m_start, m_end - range.m_end); }
     wxRichTextRange operator +(const wxRichTextRange& range) const { return wxRichTextRange(m_start + range.m_start, m_end + range.m_end); }
 
