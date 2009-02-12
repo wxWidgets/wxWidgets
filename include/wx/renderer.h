@@ -278,7 +278,7 @@ public:
                               int flags = 0) = 0;
 
     // Draw a native wxRadioButton (just the graphical portion)
-    virtual void DrawOptionButton(wxWindow* win,
+    virtual void DrawRadioButton(wxWindow* win,
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0) = 0;
@@ -443,11 +443,11 @@ public:
                               int flags = 0)
         { m_rendererNative.DrawTextCtrl( win, dc, rect, flags); }
 
-    virtual void DrawOptionButton(wxWindow* win,
+    virtual void DrawRadioButton(wxWindow* win,
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0)
-        { m_rendererNative.DrawOptionButton( win, dc, rect, flags); }
+        { m_rendererNative.DrawRadioButton( win, dc, rect, flags); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }

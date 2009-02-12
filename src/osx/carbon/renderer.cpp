@@ -100,7 +100,7 @@ public:
 
     virtual void DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
 
-    virtual void DrawOptionButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
+    virtual void DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags=0);
 
 private:
     void DrawMacThemeButton(wxWindow *win,
@@ -500,7 +500,7 @@ void wxRendererMac::DrawComboBox(wxWindow* win, wxDC& dc,
     DrawMacThemeButton(win, dc, rect, flags, kind, kThemeAdornmentNone);
 }
 
-void wxRendererMac::DrawOptionButton(wxWindow* win, wxDC& dc,
+void wxRendererMac::DrawRadioButton(wxWindow* win, wxDC& dc,
                                 const wxRect& rect, int flags)
 {
     int kind;

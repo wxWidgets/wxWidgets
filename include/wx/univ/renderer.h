@@ -208,6 +208,13 @@ public:
                                  wxAlignment align = wxALIGN_LEFT,
                                  int indexAccel = -1) = 0;
 
+   // draw a radio button sans label or bitmap, for wxRenderer API compat.
+    virtual void DrawRadioButton(wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 wxAlignment align = wxALIGN_LEFT)
+     { DrawRadioButton(dc, wxEmptyString, wxNullBitmap, rect, flags, align); } 
+
 #if wxUSE_TOOLBAR
     // draw a toolbar button (label may be empty, bitmap may be invalid, if
     // both conditions are true this function draws a separator)

@@ -114,7 +114,7 @@ public:
                                 const wxRect& rect,
                                 int flags=0);
 
-    virtual void DrawOptionButton(wxWindow* win,
+    virtual void DrawRadioButton(wxWindow* win,
                                 wxDC& dc,
                                 const wxRect& rect,
                                 int flags=0);
@@ -728,7 +728,7 @@ void wxRendererGTK::DrawChoice(wxWindow* win, wxDC& dc,
 
 
 // Draw a themed radio button
-void wxRendererGTK::DrawOptionButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+void wxRendererGTK::DrawRadioButton(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
     GtkWidget *button = wxGTKPrivate::GetRadioButtonWidget();
 
