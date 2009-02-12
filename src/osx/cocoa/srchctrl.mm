@@ -55,12 +55,6 @@
     return self;
 }
 
-// use our common calls
-- (void) setTitle:(NSString *) title
-{
-    [self setStringValue: title];
-}
-
 - (void) searchAction: (id) sender
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );

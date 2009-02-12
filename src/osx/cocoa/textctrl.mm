@@ -49,6 +49,24 @@
 #include "wx/osx/private.h"
 #include "wx/osx/cocoa/private/textimpl.h"
 
+@interface wxNSSecureTextField : NSSecureTextField
+
+@end
+
+@implementation wxNSSecureTextField 
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+@end
+
 @implementation wxNSTextField
 
 + (void)initialize
@@ -61,20 +79,6 @@
     }
 }
 
-- (id)initWithFrame:(NSRect)frame
-{
-    [super initWithFrame:frame];
-    [self setDelegate: self];
-    [self setTarget: self];
-//    [self setAction: @selector(enterAction:)];
-    return self;
-}
-
-// use our common calls
-- (void) setTitle:(NSString *) title
-{
-    [self setStringValue: title];
-}
 /*
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
@@ -103,25 +107,13 @@
         }
     }
 }
-
-- (void) enterAction: (id) sender
-{
-    if ( impl )
-    {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) ) {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
-            event.SetEventObject( wxpeer );
-            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-            wxpeer->HandleWindowEvent( event );
-        }
-    }
-}
 */
 @end
 
 wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
 {
+    m_textField = (NSTextField*) w;
+    [m_textField setDelegate: w];
 }
 
 wxNSTextFieldControl::~wxNSTextFieldControl()
@@ -130,41 +122,68 @@ wxNSTextFieldControl::~wxNSTextFieldControl()
 
 wxString wxNSTextFieldControl::GetStringValue() const 
 {
-    wxCFStringRef cf( (CFStringRef) [[(wxNSTextField*) m_osxView stringValue] retain] );
+    wxCFStringRef cf( (CFStringRef) [[m_textField stringValue] retain] );
     return cf.AsString(m_wxPeer->GetFont().GetEncoding());
 }
 void wxNSTextFieldControl::SetStringValue( const wxString &str) 
 {
-    [(wxNSTextField*) m_osxView setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 void wxNSTextFieldControl::Copy() 
 {
+    NSText* editor = [m_textField currentEditor];
+    if ( editor )
+    {
+        [editor copy:nil];
+    }
 }
 
 void wxNSTextFieldControl::Cut() 
 {
+    NSText* editor = [m_textField currentEditor];
+    if ( editor )
+    {
+        [editor cut:nil];
+    }
 }
 
 void wxNSTextFieldControl::Paste() 
 {
+    NSText* editor = [m_textField currentEditor];
+    if ( editor )
+    {
+        [editor paste:nil];
+    }
 }
 
 bool wxNSTextFieldControl::CanPaste() const 
 { 
-    return false;
+    return true;
 }
 
 void wxNSTextFieldControl::SetEditable(bool editable) 
 {
-    [(wxNSTextField*) m_osxView setEditable:editable];
+    [m_textField setEditable:editable];
 }
 
 void wxNSTextFieldControl::GetSelection( long* from, long* to) const 
 {
+    NSText* editor = [m_textField currentEditor];
+    if ( editor )
+    {
+        NSRange range = [editor selectedRange];
+        *from = range.location;
+        *to = range.location + range.length;
+    }
 }
 
 void wxNSTextFieldControl::SetSelection( long from , long to )
 {
+    NSText* editor = [m_textField currentEditor];
+    if ( editor )
+    {
+        [editor setSelectedRange:NSMakeRange(from, to-from)];
+    }
 }
 
 void wxNSTextFieldControl::WriteText(const wxString& str) 
@@ -173,6 +192,22 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
     wxString former = GetStringValue();
     SetStringValue( former + str );
 }
+
+void wxNSTextFieldControl::controlAction(WXWidget slf, void* _cmd, void *sender)
+{
+    wxWindow* wxpeer = (wxWindow*) GetWXPeer();
+    if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) ) 
+    {
+        wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
+        event.SetEventObject( wxpeer );
+        event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+        wxpeer->HandleWindowEvent( event );
+    }
+}
+
+//
+//
+//
 
 wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer, 
                                     wxWindowMac* parent, 
@@ -184,7 +219,12 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
                                     long extraStyle)
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSTextField* v = [[wxNSTextField alloc] initWithFrame:r];
+    NSTextField* v = nil;
+    
+    if ( style & wxTE_PASSWORD )
+        v =[[wxNSSecureTextField alloc] initWithFrame:r];    
+    else
+        v= [[wxNSTextField alloc] initWithFrame:r];
     
     if ( style & wxNO_BORDER )
     {
@@ -192,6 +232,8 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         [v setBordered:NO];
     }
 
+    [v setBezeled:NO];
+    [v setBordered:NO];
     //[v setBezeled:NO];
     //[v setEditable:NO];
     //[v setDrawsBackground:NO];

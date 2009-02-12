@@ -48,7 +48,7 @@ public :
     {
     }
 
-    virtual void clickedAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
     virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
 private:
     int m_formerValue;
@@ -66,7 +66,7 @@ void wxSpinButtonCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cm
     wxWidgetCocoaImpl::mouseEvent(event, slf, _cmd);
 }
 
-void wxSpinButtonCocoaImpl::clickedAction( WXWidget slf, void *_cmd, void *sender)
+void wxSpinButtonCocoaImpl::controlAction( WXWidget slf, void *_cmd, void *sender)
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer )

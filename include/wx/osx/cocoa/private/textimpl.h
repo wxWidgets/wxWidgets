@@ -32,6 +32,10 @@ public :
     virtual void GetSelection( long* from, long* to) const ;
     virtual void SetSelection( long from , long to );
     virtual void WriteText(const wxString& str) ;
+    
+    virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
+protected :
+    NSTextField* m_textField;
 };
 
 #endif // _WX_OSX_COCOA_PRIVATE_TEXTIMPL_H_

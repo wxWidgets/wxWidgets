@@ -316,16 +316,17 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
      case NSScrollWheel :
         {
             wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
-            wxevent.m_wheelDelta = 1;
+            wxevent.m_wheelDelta = 10;
             wxevent.m_linesPerAction = 1;
+            NSLog(@"deltaX %f, deltaY %f",[nsEvent deltaX], [nsEvent deltaY]);
             if ( abs([nsEvent deltaX]) > abs([nsEvent deltaY]) )
             {
                 wxevent.m_wheelAxis = 1;
-                wxevent.m_wheelRotation = [nsEvent deltaX] > 0.0 ? 1 : -1;
+                wxevent.m_wheelRotation = [nsEvent deltaX] * 10.0;
             }
             else
             {
-                wxevent.m_wheelRotation = [nsEvent deltaY] > 0.0 ? 1 : -1;
+                wxevent.m_wheelRotation = [nsEvent deltaY] * 10.0;
             }
         }
         break ;
@@ -479,22 +480,22 @@ void wxOSX_drawRect(NSView* self, SEL _cmd, NSRect rect)
     return impl->drawRect(&rect, self, _cmd);
 }
 
-void wxOSX_clickedAction(NSView* self, SEL _cmd, id sender)
+void wxOSX_controlAction(NSView* self, SEL _cmd, id sender)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == NULL)
         return;
         
-    impl->clickedAction(self, _cmd, sender);
+    impl->controlAction(self, _cmd, sender);
 }
 
-void wxOSX_doubleClickedAction(NSView* self, SEL _cmd, id sender)
+void wxOSX_controlDoubleAction(NSView* self, SEL _cmd, id sender)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if (impl == NULL)
         return;
         
-    impl->doubleClickedAction(self, _cmd, sender);
+    impl->controlDoubleAction(self, _cmd, sender);
 }
 
 unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget slf, void *_cmd)
@@ -774,14 +775,14 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *_cmd)
     CGContextRestoreGState( context );
 }
 
-void wxWidgetCocoaImpl::clickedAction( WXWidget slf, void *_cmd, void *sender)
+void wxWidgetCocoaImpl::controlAction( WXWidget slf, void *_cmd, void *sender)
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer )
         wxpeer->OSXHandleClicked(0);
 }
 
-void wxWidgetCocoaImpl::doubleClickedAction( WXWidget slf, void *_cmd, void *sender)
+void wxWidgetCocoaImpl::controlDoubleAction( WXWidget slf, void *_cmd, void *sender)
 {
 }
 
@@ -839,8 +840,8 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(isFlipped), (IMP) wxOSX_isFlipped, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_NSRect={_NSPoint=ff}{_NSSize=ff}}" )
 
-    wxOSX_CLASS_ADD_METHOD(c, @selector(clickedAction:), (IMP) wxOSX_clickedAction, "v@:@" )
-    wxOSX_CLASS_ADD_METHOD(c, @selector(doubleClickedAction:), (IMP) wxOSX_doubleClickedAction, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(controlAction:), (IMP) wxOSX_controlAction, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(controlDoubleAction:), (IMP) wxOSX_controlDoubleAction, "v@:@" )
 
 #if wxUSE_DRAG_AND_DROP
     wxOSX_CLASS_ADD_METHOD(c, @selector(draggingEntered:), (IMP) wxOSX_draggingEntered, "I@:@" )
@@ -1046,6 +1047,11 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
         wxCFStringRef cf( title , m_wxPeer->GetFont().GetEncoding() );
         [m_osxView setTitle:cf.AsNSString()];
     }
+    else if ( [m_osxView respondsToSelector:@selector(setStringValue:) ] )
+    {
+        wxCFStringRef cf( title , m_wxPeer->GetFont().GetEncoding() );
+        [m_osxView setStringValue:cf.AsNSString()];
+    }
 }
     
 
@@ -1202,10 +1208,10 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
     if ([c respondsToSelector:@selector(setAction:)])
     {
         [c setTarget: c];
-        [c setAction: @selector(clickedAction:)];
+        [c setAction: @selector(controlAction:)];
         if ([c respondsToSelector:@selector(setDoubleAction:)])
         {
-            [c setDoubleAction: @selector(doubleClickedAction:)];
+            [c setDoubleAction: @selector(controlDoubleAction:)];
         }
         
     }

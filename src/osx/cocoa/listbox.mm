@@ -143,8 +143,8 @@ public :
     virtual void            UpdateLine( unsigned int n, wxListWidgetColumn* col = NULL ) ;
     virtual void            UpdateLineToEnd( unsigned int n);
 
-    virtual void            clickedAction(WXWidget slf, void* _cmd, void *sender);
-    virtual void            doubleClickedAction(void* _cmd);
+    virtual void            controlAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void            controlDoubleAction(void* _cmd);
 protected :
     wxNSTableView*          m_tableView ;
     
@@ -326,8 +326,17 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const
     {
         [col1 setMaxWidth:defaultWidth];
         [col1 setMinWidth:defaultWidth];
+        [col1 setWidth:defaultWidth];
     }
-    
+    else
+    {
+        [col1 setMaxWidth:1000];        
+        [col1 setMinWidth:10];
+        // temporary hack, because I cannot get the automatic column resizing
+        // to work properly
+        [col1 setWidth:1000];
+    }
+    [col1 setResizingMask: NSTableColumnAutoresizingMask];
     wxCocoaTableColumn* wxcol = new wxCocoaTableColumn( col1, editable );
     [col1 setColumn:wxcol];
 
@@ -360,8 +369,10 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
     {
         [col1 setMaxWidth:defaultWidth];
         [col1 setMinWidth:defaultWidth];
+        [col1 setWidth:defaultWidth];
     }
     
+    [col1 setResizingMask: NSTableColumnNoResizing];
     wxCocoaTableColumn* wxcol = new wxCocoaTableColumn( col1, editable );
     [col1 setColumn:wxcol];
 
@@ -471,7 +482,7 @@ void wxListWidgetCocoaImpl::UpdateLineToEnd( unsigned int n)
     [m_tableView reloadData];
 }
 
-void wxListWidgetCocoaImpl::clickedAction(WXWidget slf,void* _cmd, void *sender)
+void wxListWidgetCocoaImpl::controlAction(WXWidget slf,void* _cmd, void *sender)
 {
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
@@ -485,7 +496,7 @@ void wxListWidgetCocoaImpl::clickedAction(WXWidget slf,void* _cmd, void *sender)
     list->HandleLineEvent( sel, false );
 }
 
-void wxListWidgetCocoaImpl::doubleClickedAction(void* _cmd)
+void wxListWidgetCocoaImpl::controlDoubleAction(void* _cmd)
 {
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
@@ -519,13 +530,10 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
         [scrollview setHasHorizontalScroller:YES];
     
     [scrollview setAutohidesScrollers: ((style & wxLB_ALWAYS_SB) ? NO : YES)];
-    
+
     // setting up the true table
     
     wxNSTableView* tableview = [[wxNSTableView alloc] init];
-    [scrollview setDocumentView:tableview];
-    [tableview release];
-    
     // only one multi-select mode available
     if ( (style & wxLB_EXTENDED) || (style & wxLB_MULTIPLE) )
         [tableview setAllowsMultipleSelection:YES];
@@ -533,9 +541,16 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     // simple listboxes have no header row
     [tableview setHeaderView:nil];
     
-    [tableview setColumnAutoresizingStyle:NSTableViewLastColumnOnlyAutoresizingStyle];
+    if ( style & wxLB_HSCROLL )
+        [tableview setColumnAutoresizingStyle:NSTableViewNoColumnAutoresizing];
+    else
+        [tableview setColumnAutoresizingStyle:NSTableViewLastColumnOnlyAutoresizingStyle];
+        
     wxNSTableDataSource* ds = [[ wxNSTableDataSource alloc] init];
     [tableview setDataSource:ds];
+    [scrollview setDocumentView:tableview];
+    [tableview release];
+
     wxListWidgetCocoaImpl* c = new wxListWidgetCocoaImpl( wxpeer, scrollview, tableview, ds );
 
     // temporary hook for dnd

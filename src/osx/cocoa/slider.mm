@@ -47,7 +47,7 @@ public :
     {
     }
 
-    virtual void clickedAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
     virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
 };
 
@@ -57,7 +57,7 @@ public :
 // to thumbtrack and only after super mouseDown 
 // returns we will call the thumbrelease
 
-void wxSliderCocoaImpl::clickedAction( WXWidget slf, void *_cmd, void *sender)
+void wxSliderCocoaImpl::controlAction( WXWidget slf, void *_cmd, void *sender)
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer )

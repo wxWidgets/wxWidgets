@@ -75,7 +75,7 @@ public :
         return m_maximum;
     }
 
-    virtual void clickedAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
     virtual void mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
 protected:
     wxInt32 m_maximum;
@@ -87,7 +87,7 @@ protected:
 // to thumbtrack and only after super mouseDown 
 // returns we will call the thumbrelease
 
-void wxOSXScrollBarCocoaImpl::clickedAction( WXWidget slf, void *_cmd, void *sender)
+void wxOSXScrollBarCocoaImpl::controlAction( WXWidget slf, void *_cmd, void *sender)
 {
     wxEventType scrollEvent = wxEVT_NULL;
     switch ([(NSScroller*)m_osxView hitPart]) 

@@ -145,8 +145,8 @@ public :
     virtual bool                isFlipped(WXWidget slf, void* _cmd);
     virtual void                drawRect(void* rect, WXWidget slf, void* _cmd);
     
-    virtual void                clickedAction(WXWidget slf, void* _cmd, void* sender);
-    virtual void                doubleClickedAction(WXWidget slf, void* _cmd, void *sender);
+    virtual void                controlAction(WXWidget slf, void* _cmd, void* sender);
+    virtual void                controlDoubleAction(WXWidget slf, void* _cmd, void *sender);
 
 protected:
     WXWidget m_osxView;
