@@ -314,6 +314,19 @@ void ArraysTestCase::wxStringArrayTest()
                                           _T("a") ,
                                           _T("a") ,
                                           _T("a") ) );
+
+    a5.assign(a1.end(), a1.end());
+    CPPUNIT_ASSERT( a5.empty() );
+
+    a5.assign(a1.begin(), a1.end());
+    CPPUNIT_ASSERT( a5 == a1 );
+
+#ifdef wxHAS_VECTOR_TEMPLATE_ASSIGN
+    const wxString months[] = { "Jan", "Feb", "Mar" };
+    a5.assign(months, months + WXSIZEOF(months));
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(months), a5.size() );
+    CPPUNIT_ASSERT( COMPARE_3_VALUES(a5, "Jan", "Feb", "Mar") );
+#endif // wxHAS_VECTOR_TEMPLATE_ASSIGN
 }
 
 void ArraysTestCase::wxStringArraySplitTest()

@@ -41,7 +41,10 @@
     a specialization of wxArray class for the wxString member data: it is not
     implemented like this, but it does have all of the wxArray functions.
 
-    @todo what about stl? how does it integrate?
+    It also has the full set of <tt>std::vector<wxString></tt> compatible
+    methods, including nested @c iterator and @c const_iterator classes which
+    should be used in the new code for forward compatibility with the future
+    wxWidgets versions.
 
     @library{wxbase}
     @category{containers}

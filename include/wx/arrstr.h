@@ -91,6 +91,18 @@ public:
 
 #else // if !wxUSE_STL
 
+// this shouldn't be defined for compilers not supporting template methods or
+// without std::distance() -- and if all of the currently supported compilers
+// do have it, then it can just be removed and wxHAS_VECTOR_TEMPLATE_ASSIGN
+// code always used
+#define wxHAS_VECTOR_TEMPLATE_ASSIGN
+
+#ifdef wxHAS_VECTOR_TEMPLATE_ASSIGN
+    #include "wx/beforestd.h"
+    #include <iterator>
+    #include "wx/afterstd.h"
+#endif // wxHAS_VECTOR_TEMPLATE_ASSIGN
+
 class WXDLLIMPEXP_BASE wxArrayString
 {
 public:
@@ -265,7 +277,26 @@ public:
   wxArrayString(const_iterator first, const_iterator last)
     { Init(false); assign(first, last); }
   wxArrayString(size_type n, const_reference v) { Init(false); assign(n, v); }
-  void assign(const_iterator first, const_iterator last);
+
+#ifdef wxHAS_VECTOR_TEMPLATE_ASSIGN
+  template <class Iterator>
+  void assign(Iterator first, Iterator last)
+  {
+      clear();
+      reserve(std::distance(first, last));
+      for(; first != last; ++first)
+          push_back(*first);
+  }
+#else // !wxHAS_VECTOR_TEMPLATE_ASSIGN
+  void assign(const_iterator first, const_iterator last)
+  {
+      clear();
+      reserve(last - first);
+      for(; first != last; ++first)
+          push_back(*first);
+  }
+#endif // wxHAS_VECTOR_TEMPLATE_ASSIGN/!wxHAS_VECTOR_TEMPLATE_ASSIGN
+
   void assign(size_type n, const_reference v)
     { clear(); Add(v, n); }
   reference back() { return *(end() - 1); }

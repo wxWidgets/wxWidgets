@@ -378,13 +378,6 @@ void wxArrayString::Remove(const wxString& sz)
   RemoveAt(iIndex);
 }
 
-void wxArrayString::assign(const_iterator first, const_iterator last)
-{
-    reserve(last - first);
-    for(; first != last; ++first)
-        push_back(*first);
-}
-
 // ----------------------------------------------------------------------------
 // sorting
 // ----------------------------------------------------------------------------
