@@ -242,8 +242,10 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
 
 void wxWidgetCocoaImpl::SetDefaultButton( bool isDefault )
 { 
-    if ( [m_osxView isKindOfClass:[NSButton class]] )
-        [(NSButton*)m_osxView setKeyEquivalent: isDefault ? @"\r" : nil ];
+    if ( isDefault && [m_osxView isKindOfClass:[NSButton class]] )
+        // NOTE: setKeyEquivalent: nil will trigger an assert
+        // instead do not call in that case.
+        [(NSButton*)m_osxView setKeyEquivalent: @"\r" ];
 }
 
 void wxWidgetCocoaImpl::PerformClick() 
