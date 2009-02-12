@@ -1479,7 +1479,7 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
     else
     {
         wxClientDC dc(this);
-        dc.SetFont(m_pPropGrid->m_font);
+        dc.SetFont(m_pPropGrid->GetFont());
 
         int highest = 0;
         unsigned int i;

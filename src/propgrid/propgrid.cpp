@@ -573,16 +573,7 @@ void wxPropertyGrid::Init2()
 	// adjust bitmap icon y position so they are centered
     m_vspacing = wxPG_DEFAULT_VSPACING;
 
-    if ( !m_font.Ok() )
-    {
-        wxFont useFont = wxScrolledWindow::GetFont();
-        wxScrolledWindow::SetOwnFont( useFont );
-    }
-    else
-    {
-        // This should be otherwise called by SetOwnFont
-	    CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
-    }
+    CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
 
     // Allocate cell datas indirectly by calling setter
     m_propertyDefaultCell.SetBgCol(*wxBLACK);
@@ -1045,32 +1036,14 @@ bool wxPropertyGrid::SetFont( const wxFont& font )
     // Must disable active editor.
     ClearSelection(false);
 
-    // TODO: Following code is disabled with wxMac because
-    //   it is reported to fail. I (JMS) cannot debug it
-    //   personally right now.
-    // CS: should be fixed now, leaving old code in just in case, TODO: REMOVE
-#if 1 // !defined(__WXMAC__)
     bool res = wxScrolledWindow::SetFont( font );
     if ( res )
     {
         CalculateFontAndBitmapStuff( m_vspacing );
-
-        if ( m_pState )
-            m_pState->CalculateFontAndBitmapStuff(m_vspacing);
-
         Refresh();
     }
 
     return res;
-#else
-    // ** wxMAC Only **
-    // TODO: Remove after SetFont crash fixed.
-    if ( m_iFlags & wxPG_FL_INITIALIZED )
-    {
-        wxLogDebug(wxT("WARNING: propGrid.cpp: wxPropertyGrid::SetFont has been disabled on wxMac since there has been crash reported in it. If you are willing to debug the cause, replace line '#if !defined(__WXMAC__)' with line '#if 1' in wxPropertyGrid::SetFont."));
-    }
-    return false;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1670,7 +1643,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     int x = m_marginWidth - xRelMod;
 
-    const wxFont& normalfont = m_font;
+    wxFont normalFont = GetFont();
 
     bool reallyFocused = (m_iFlags & wxPG_FL_FOCUSED) != 0;
 
@@ -1707,7 +1680,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     // TODO: Only render columns that are within clipping region.
 
-    dc.SetFont(normalfont);
+    dc.SetFont(normalFont);
 
     wxPropertyGridConstIterator it( state, wxPG_ITERATE_VISIBLE, firstItem );
     int endScanBottomY = lastItemBottomY + lh;
@@ -1983,7 +1956,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         }
 
         if ( fontChanged )
-            dc.SetFont(normalfont);
+            dc.SetFont(normalFont);
 
         y += rowHeight;
     }
@@ -4294,7 +4267,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
                         if ( space )
                         {
                             int tw, th;
-    	                    GetTextExtent( tipString, &tw, &th, 0, 0, &m_font );
+    	                    GetTextExtent( tipString, &tw, &th, 0, 0 );
                             if ( tw > space )
                             {
                                 SetToolTip( tipString );

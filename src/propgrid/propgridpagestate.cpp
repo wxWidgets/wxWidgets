@@ -863,7 +863,7 @@ void wxPropertyGridPageState::SetSplitterLeft( bool subProps )
 {
     wxPropertyGrid* pg = GetGrid();
     wxClientDC dc(pg);
-    dc.SetFont(pg->m_font);
+    dc.SetFont(pg->GetFont());
 
     int maxW = GetColumnFitWidth(dc, m_properties, 0, subProps);
 
@@ -880,7 +880,7 @@ wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
 {
     wxPropertyGrid* pg = GetGrid();
     wxClientDC dc(pg);
-    dc.SetFont(pg->m_font);
+    dc.SetFont(pg->GetFont());
 
     int marginWidth = pg->m_marginWidth;
     int accWid = marginWidth;

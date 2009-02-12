@@ -668,7 +668,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         if ( rect.width < 0 )
         {
             wxCoord x, y;
-            GetTextExtent(text, &x, &y, 0, 0, &m_font);
+            pCb->GetTextExtent(text, &x, &y, 0, 0);
             rect.width = cis.x + wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2 + 9 + x;
         }
 
@@ -1333,7 +1333,7 @@ void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
     int state = m_state;
     if ( !(state & wxSCB_STATE_UNSPECIFIED) &&
-         m_font.GetWeight() == wxBOLD )
+         GetFont().GetWeight() == wxBOLD )
         state |= wxSCB_STATE_BOLD;
 
     DrawSimpleCheckBox(dc,rect,m_boxHeight,state,txcol);
