@@ -703,8 +703,10 @@ void wxWidgetCocoaImpl::resetCursorRects(WXWidget slf, void *_cmd)
             superimpl(slf, (SEL)_cmd);
         }
         else
+        {
             [slf addCursorRect: [slf bounds]
                 cursor: cursor];
+        }
     }
 }
   
@@ -943,9 +945,13 @@ void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
     // adjust the coordinates
     if (parent)
     {
-        wxPoint pt(parent->GetClientAreaOrigin());
-        x -= pt.x;
-        y -= pt.y;
+        int cx = 0,cy = 0,cw = 0,ch = 0;
+        if ( parent->GetPeer() )
+        {
+            parent->GetPeer()->GetContentArea(cx, cy, cw, ch);
+            x -= cx;
+            y -= cy;
+        }
     }
     NSRect r = wxToNSRect( [m_osxView superview], wxRect(x,y,width, height) );
     [m_osxView setFrame:r];
