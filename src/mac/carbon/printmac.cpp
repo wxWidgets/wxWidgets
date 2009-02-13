@@ -142,6 +142,7 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
     }
 
     PMSetCopies( m_macPrintSettings , data.GetNoCopies() , false ) ;
+    PMSetCollate(m_macPrintSettings, data.GetCollate());
     if ( data.IsOrientationReversed() )
         PMSetOrientation( m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
             kPMReverseLandscape : kPMReversePortrait , false ) ;
@@ -216,7 +217,9 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
         }
     }
 
-    // collate cannot be set
+    Boolean collate;
+    if (PMGetCollate(m_macPrintSettings, &collate) == noErr)
+        data.SetCollate(collate);
 #if 0
     {
         wxMacCFStringHolder name ;
