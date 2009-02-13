@@ -1858,7 +1858,7 @@ bool wxWindowMac::MacDoRedraw( long time )
     {
         // paint the window itself
 
-        wxPaintEvent event;
+        wxPaintEvent event(GetId());
         event.SetTimestamp(time);
         event.SetEventObject(this);
         handled = HandleWindowEvent(event);
