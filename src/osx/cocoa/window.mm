@@ -1337,6 +1337,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     NSWindow* tlw = now->GetWXWindow();
     wxNSView* v = [[wxNSView alloc] initWithFrame:[[tlw contentView] frame]];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( now, v, true );
+    c->InstallEventHandler();
     [tlw setContentView:v];
     return c;
 }
