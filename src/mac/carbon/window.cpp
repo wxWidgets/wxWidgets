@@ -3231,7 +3231,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
         {
             // paint the window itself
 
-            wxPaintEvent event;
+            wxPaintEvent event(GetId());
             event.SetTimestamp(time);
             event.SetEventObject(this);
             GetEventHandler()->ProcessEvent(event);
