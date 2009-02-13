@@ -183,6 +183,8 @@ public:    // used by the GTK callback only
     void UpdatePath(const char *gtkpath)
         { m_path = wxString::FromAscii(gtkpath); }
 
+    void GTKUpdatePath(const char *gtkpath);
+
 private:
     DECLARE_DYNAMIC_CLASS(wxDirButton)
 };
