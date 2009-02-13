@@ -87,14 +87,28 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
 
 @end
 
-@interface wxNSPanel : wxNSWindow
+@interface wxNSPanel : NSPanel
 
 {
+    wxNonOwnedWindowCocoaImpl* impl;
 }
+
+- (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation;
+- (wxNonOwnedWindowCocoaImpl*) implementation;
 
 @end
 
 @implementation wxNSPanel 
+
+- (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation
+{
+    impl = theImplementation;
+}
+
+- (wxNonOwnedWindowCocoaImpl*) implementation
+{
+    return impl;
+}
 
 @end
 
@@ -257,11 +271,7 @@ long style, long extraStyle, const wxString& name )
     
     if ( style & wxFRAME_TOOL_WINDOW )
     {
-        if ( ( style & wxSTAY_ON_TOP ) )
-            level = kCGUtilityWindowLevel;
-        else
-            level = kCGFloatingWindowLevel ;
-        
+        windowstyle |= NSTitledWindowMask | NSUtilityWindowMask;
     }
     else if ( ( style & wxPOPUP_WINDOW ) )
     {
@@ -325,12 +335,11 @@ long style, long extraStyle, const wxString& name )
     if ( extraStyle & wxFRAME_EX_METAL)
         windowstyle |= NSTexturedBackgroundWindowMask;
 
+    if ( ( style & wxFRAME_FLOAT_ON_PARENT ) || ( style & wxFRAME_TOOL_WINDOW ) )
+        level = kCGFloatingWindowLevel;
+
     if ( ( style & wxSTAY_ON_TOP ) )
         level = kCGUtilityWindowLevel;
-/*
-    if ( ( style & wxFRAME_FLOAT_ON_PARENT ) )
-        group = GetWindowGroupOfClass(kFloatingWindowClass);
-        */
     
     NSRect r = wxToNSRect( NULL, wxRect( pos, size) );
     
