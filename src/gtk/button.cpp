@@ -211,7 +211,7 @@ void wxButton::SetLabel( const wxString &lbl )
     gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
 
-    ApplyWidgetStyle( false );
+    GTKApplyWidgetStyle( false );
 }
 
 bool wxButton::Enable( bool enable )

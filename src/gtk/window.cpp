@@ -3741,7 +3741,7 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
     // apply style change (forceStyle=true so that new style is applied
     // even if the bg colour changed from valid to wxNullColour)
     if (GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
-        ApplyWidgetStyle(true);
+        GTKApplyWidgetStyle(true);
 
     return true;
 }
@@ -3763,17 +3763,17 @@ bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
 
     // apply style change (forceStyle=true so that new style is applied
     // even if the bg colour changed from valid to wxNullColour):
-    ApplyWidgetStyle(true);
+    GTKApplyWidgetStyle(true);
 
     return true;
 }
 
-PangoContext *wxWindowGTK::GtkGetPangoDefaultContext()
+PangoContext *wxWindowGTK::GTKGetPangoDefaultContext()
 {
     return gtk_widget_get_pango_context( m_widget );
 }
 
-GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
+GtkRcStyle *wxWindowGTK::GTKCreateWidgetStyle(bool forceStyle)
 {
     // do we need to apply any changes at all?
     if ( !forceStyle &&
@@ -3842,9 +3842,9 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
     return style;
 }
 
-void wxWindowGTK::ApplyWidgetStyle(bool forceStyle)
+void wxWindowGTK::GTKApplyWidgetStyle(bool forceStyle)
 {
-    GtkRcStyle *style = CreateWidgetStyle(forceStyle);
+    GtkRcStyle *style = GTKCreateWidgetStyle(forceStyle);
     if ( style )
     {
         DoApplyWidgetStyle(style);
@@ -3905,7 +3905,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
     {
         // apply style change (forceStyle=true so that new style is applied
         // even if the bg colour changed from valid to wxNullColour):
-        ApplyWidgetStyle(true);
+        GTKApplyWidgetStyle(true);
     }
     return true;
 }
@@ -4051,7 +4051,7 @@ bool wxWindowGTK::SetFont( const wxFont &font )
 
     // apply style change (forceStyle=true so that new style is applied
     // even if the font changed from valid to wxNullFont):
-    ApplyWidgetStyle(true);
+    GTKApplyWidgetStyle(true);
 
     return true;
 }
@@ -4292,7 +4292,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 #endif // wxUSE_CARET
 }
 
-void wxWindowGTK::GtkScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
+void wxWindowGTK::GTKScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
 {
     //RN: Note that static controls usually have no border on gtk, so maybe
     //it makes sense to treat that as simply no border at the wx level

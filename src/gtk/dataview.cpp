@@ -1828,7 +1828,7 @@ public:
 
         m_window = window;
 
-        m_context = window->GtkGetPangoDefaultContext();
+        m_context = window->GTKGetPangoDefaultContext();
         m_layout = pango_layout_new( m_context );
         m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
@@ -3829,7 +3829,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     m_widget = gtk_scrolled_window_new (NULL, NULL);
     g_object_ref(m_widget);
 
-    GtkScrolledWindowSetBorder(m_widget, style);
+    GTKScrolledWindowSetBorder(m_widget, style);
 
     m_treeview = gtk_tree_view_new();
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);

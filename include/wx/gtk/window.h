@@ -213,7 +213,7 @@ protected:
 
 public:
     // Returns the default context which usually is anti-aliased
-    PangoContext   *GtkGetPangoDefaultContext();
+    PangoContext   *GTKGetPangoDefaultContext();
 
 #if wxUSE_TOOLTIPS
     // applies tooltip to the widget (tip must be UTF-8 encoded)
@@ -340,17 +340,17 @@ protected:
     // modified GTK style with non-standard attributes. If forceStyle=true,
     // creates empty GtkRcStyle if there are no modifications, otherwise
     // returns NULL in such case.
-    GtkRcStyle *CreateWidgetStyle(bool forceStyle = false);
+    GtkRcStyle *GTKCreateWidgetStyle(bool forceStyle = false);
 
     // Overridden in many GTK widgets who have to handle subwidgets
-    virtual void ApplyWidgetStyle(bool forceStyle = false);
+    virtual void GTKApplyWidgetStyle(bool forceStyle = false);
 
     // helper function to ease native widgets wrapping, called by
     // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);
 
     // sets the border of a given GtkScrolledWindow from a wx style
-    static void GtkScrolledWindowSetBorder(GtkWidget* w, int style);
+    static void GTKScrolledWindowSetBorder(GtkWidget* w, int style);
 
     // set the current cursor for all GdkWindows making part of this widget
     // (see GTKGetWindow)

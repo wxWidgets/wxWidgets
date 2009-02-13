@@ -422,7 +422,7 @@ bool wxNotebook::InsertPage( size_t position,
     gtk_notebook_insert_page(notebook, win->m_widget, pageData->m_box, position);
 
     /* apply current style */
-    GtkRcStyle *style = CreateWidgetStyle();
+    GtkRcStyle *style = GTKCreateWidgetStyle();
     if ( style )
     {
         gtk_widget_modify_style(pageData->m_label, style);

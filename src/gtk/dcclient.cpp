@@ -282,7 +282,7 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window ) :
             SetDeviceLocalOrigin(widget->allocation.x, widget->allocation.y);
     }
 
-    m_context = window->GtkGetPangoDefaultContext();
+    m_context = window->GTKGetPangoDefaultContext();
     m_layout = pango_layout_new( m_context );
     m_fontdesc = pango_font_description_copy( widget->style->font_desc );
 
@@ -1813,7 +1813,7 @@ void wxWindowDCImpl::SetFont( const wxFont &font )
         {
             PangoContext *oldContext = m_context;
 
-            m_context = m_window->GtkGetPangoDefaultContext();
+            m_context = m_window->GTKGetPangoDefaultContext();
 
             // If we switch back/forth between different contexts
             // we also have to create a new layout. I think so,

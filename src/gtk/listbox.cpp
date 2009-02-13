@@ -375,7 +375,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     }
 
 
-    GtkScrolledWindowSetBorder(m_widget, style);
+    GTKScrolledWindowSetBorder(m_widget, style);
 
     m_treeview = GTK_TREE_VIEW( gtk_tree_view_new( ) );
 

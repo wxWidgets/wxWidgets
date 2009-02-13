@@ -692,7 +692,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
         GTKSetWrapMode();
 
-        GtkScrolledWindowSetBorder(m_widget, style);
+        GTKScrolledWindowSetBorder(m_widget, style);
 
         gtk_widget_add_events( GTK_WIDGET(m_text), GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK );
 

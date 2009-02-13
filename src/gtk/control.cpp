@@ -89,7 +89,7 @@ void wxControl::PostCreation(const wxSize& size)
     //     GetBestSize is called.
     gtk_widget_ensure_style(m_widget);
 
-    ApplyWidgetStyle();
+    GTKApplyWidgetStyle();
     SetInitialSize(size);
 }
 
