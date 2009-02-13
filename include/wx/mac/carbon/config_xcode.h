@@ -117,9 +117,9 @@
 // #define WXWIN_OS_DESCRIPTION "Darwin 7.9.0 Power Macintosh"
 // #define PACKAGE_BUGREPORT "wx-dev@lists.wxwidgets.org"
 // #define PACKAGE_NAME "wxWidgets"
-// #define PACKAGE_STRING "wxWidgets 2.8.9"
+// #define PACKAGE_STRING "wxWidgets 2.8.10"
 // #define PACKAGE_TARNAME "wxwidgets"
-// #define PACKAGE_VERSION "2.8.9"
+// #define PACKAGE_VERSION "2.8.10"
 
 // for regex
 #define WX_NO_REGEX_ADVANCED 1
