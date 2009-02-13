@@ -320,7 +320,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(wxGtkWidgetNewFromAdj_t widget_new,
 
 void wxControl::OnInternalIdle()
 {
-    if ( GtkShowFromOnIdle() )
+    if ( GTKShowFromOnIdle() )
         return;
 
     if ( GTK_WIDGET_REALIZED(m_widget) )

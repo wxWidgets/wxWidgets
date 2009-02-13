@@ -696,7 +696,7 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 void wxToolBar::OnInternalIdle()
 {
     // Check if we have to show window now
-    if (GtkShowFromOnIdle()) return;
+    if (GTKShowFromOnIdle()) return;
 
     wxCursor cursor = m_cursor;
     if (g_globalCursor.Ok()) cursor = g_globalCursor;

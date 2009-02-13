@@ -28,7 +28,7 @@ extern "C" {
 static void
 gtk_value_changed(GtkRange* range, wxScrollBar* win)
 {
-    wxEventType eventType = win->GetScrollEventType(range);
+    wxEventType eventType = win->GTKGetScrollEventType(range);
     if (eventType != wxEVT_NULL)
     {
         const int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;

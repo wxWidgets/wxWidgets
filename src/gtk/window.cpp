@@ -1156,7 +1156,7 @@ wxWindowGTK *FindWindowForMouseEvent(wxWindowGTK *win, wxCoord& x, wxCoord& y)
         if (!child->IsShown())
             continue;
 
-        if (child->IsTransparentForMouse())
+        if (child->GTKIsTransparentForMouse())
         {
             // wxStaticBox is transparent in the box itself
             int xx1 = child->m_x;
@@ -1368,10 +1368,6 @@ gtk_window_button_press_callback( GtkWidget *widget,
 
     AdjustEventButtonState(event);
 
-    // wxListBox actually gets mouse events from the item, so we need to give it
-    // a chance to correct this
-    win->FixUpMouseEvent(widget, event.m_x, event.m_y);
-
     // find the correct window to send the event to: it may be a different one
     // from the one which got it at GTK+ level because some controls don't have
     // their own X window and thus cannot get any events.
@@ -1418,7 +1414,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 static gboolean
-gtk_window_button_release_callback( GtkWidget *widget,
+gtk_window_button_release_callback( GtkWidget *WXUNUSED(widget),
                                     GdkEventButton *gdk_event,
                                     wxWindowGTK *win )
 {
@@ -1453,9 +1449,6 @@ gtk_window_button_release_callback( GtkWidget *widget,
     InitMouseEvent( win, event, gdk_event );
 
     AdjustEventButtonState(event);
-
-    // same wxListBox hack as above
-    win->FixUpMouseEvent(widget, event.m_x, event.m_y);
 
     if ( !g_captureWindow )
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
@@ -1751,7 +1744,7 @@ gtk_window_leave_callback( GtkWidget *widget,
 static void
 gtk_scrollbar_value_changed(GtkRange* range, wxWindow* win)
 {
-    wxEventType eventType = win->GetScrollEventType(range);
+    wxEventType eventType = win->GTKGetScrollEventType(range);
     if (eventType != wxEVT_NULL)
     {
         // Convert scroll event type to scrollwin event type
@@ -2549,7 +2542,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     }
 }
 
-bool wxWindowGTK::GtkShowFromOnIdle()
+bool wxWindowGTK::GTKShowFromOnIdle()
 {
     if (IsShown() && m_showOnIdle && !GTK_WIDGET_VISIBLE (m_widget))
     {
@@ -2576,7 +2569,7 @@ void wxWindowGTK::OnInternalIdle()
         GTKHandleDeferredFocusOut();
 
     // Check if we have to show window now
-    if (GtkShowFromOnIdle()) return;
+    if (GTKShowFromOnIdle()) return;
 
     if ( m_dirtyTabOrder )
     {
@@ -4218,7 +4211,7 @@ static inline bool IsScrollIncrement(double increment, double x)
     return fabs(increment - fabs(x)) < tolerance;
 }
 
-wxEventType wxWindowGTK::GetScrollEventType(GtkRange* range)
+wxEventType wxWindowGTK::GTKGetScrollEventType(GtkRange* range)
 {
     wxASSERT(range == m_scrollBar[0] || range == m_scrollBar[1]);
 

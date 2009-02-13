@@ -221,23 +221,17 @@ public:
 #endif // wxUSE_TOOLTIPS
 
     // Called when a window should delay showing itself
-    // until idle time. This partly mimmicks defered
-    // sizing under MSW.
-    void GtkShowOnIdle() { m_showOnIdle = true; }
+    // until idle time used in Reparent().
+    void GTKShowOnIdle() { m_showOnIdle = true; }
 
     // This is called from the various OnInternalIdle methods
-    bool GtkShowFromOnIdle();
-
-    // fix up the mouse event coords, used by wxListBox only so far
-    virtual void FixUpMouseEvent(GtkWidget * WXUNUSED(widget),
-                                 wxCoord& WXUNUSED(x),
-                                 wxCoord& WXUNUSED(y)) { }
+    bool GTKShowFromOnIdle();
 
     // is this window transparent for the mouse events (as wxStaticBox is)?
-    virtual bool IsTransparentForMouse() const { return false; }
+    virtual bool GTKIsTransparentForMouse() const { return false; }
 
     // Common scroll event handling code for wxWindow and wxScrollBar
-    wxEventType GetScrollEventType(GtkRange* range);
+    wxEventType GTKGetScrollEventType(GtkRange* range);
 
     // position and size of the window
     int                  m_x, m_y;
