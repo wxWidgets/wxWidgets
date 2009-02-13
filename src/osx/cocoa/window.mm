@@ -190,7 +190,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     // these parameters are not given for all events
     UInt32 button = [nsEvent buttonNumber];
     UInt32 clickCount = 0;
-    if ( eventType != NSScrollWheel ) 
+    if ( [nsEvent respondsToSelector:@selector(clickCount:)] ) 
         [nsEvent clickCount];
 
     wxevent.m_x = screenMouseLocation.x;
@@ -332,7 +332,11 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
         break ;
 
         case NSMouseEntered :
+            wxevent.SetEventType( wxEVT_ENTER_WINDOW ) ;
+            break;
         case NSMouseExited :
+            wxevent.SetEventType( wxEVT_LEAVE_WINDOW ) ;
+            break;
         case NSLeftMouseDragged :
         case NSRightMouseDragged :
         case NSOtherMouseDragged :
