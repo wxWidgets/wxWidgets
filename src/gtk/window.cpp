@@ -3716,10 +3716,10 @@ void wxWindowGTK::DoSetToolTip( wxToolTip *tip )
     wxWindowBase::DoSetToolTip(tip);
 
     if (m_tooltip)
-        m_tooltip->Apply( (wxWindow *)this );
+        m_tooltip->GTKApply( (wxWindow *)this );
 }
 
-void wxWindowGTK::ApplyToolTip( GtkTooltips *tips, const gchar *tip )
+void wxWindowGTK::GTKApplyToolTip( GtkTooltips *tips, const gchar *tip )
 {
     gtk_tooltips_set_tip(tips, GetConnectWidget(), tip, NULL);
 }

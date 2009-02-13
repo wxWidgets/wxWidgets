@@ -41,10 +41,10 @@ wxToolTip::wxToolTip( const wxString &tip )
 void wxToolTip::SetTip( const wxString &tip )
 {
     m_text = tip;
-    Apply( m_window );
+    GTKApply( m_window );
 }
 
-void wxToolTip::Apply( wxWindow *win )
+void wxToolTip::GTKApply( wxWindow *win )
 {
     if (!win)
         return;
@@ -55,13 +55,13 @@ void wxToolTip::Apply( wxWindow *win )
     m_window = win;
 
     if (m_text.empty())
-        m_window->ApplyToolTip( gs_tooltips, NULL );
+        m_window->GTKApplyToolTip( gs_tooltips, NULL );
     else
-        m_window->ApplyToolTip( gs_tooltips, wxGTK_CONV_SYS(m_text) );
+        m_window->GTKApplyToolTip( gs_tooltips, wxGTK_CONV_SYS(m_text) );
 }
 
 /* static */
-void wxToolTip::Apply(GtkWidget *w, const gchar *tip)
+void wxToolTip::GTKApply(GtkWidget *w, const gchar *tip)
 {
     if ( !gs_tooltips )
         gs_tooltips = gtk_tooltips_new();

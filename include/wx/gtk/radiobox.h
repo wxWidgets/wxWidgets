@@ -131,7 +131,7 @@ public:
     void GtkDisableEvents();
     void GtkEnableEvents();
 #if wxUSE_TOOLTIPS
-    void ApplyToolTip( GtkTooltips *tips, const gchar *tip );
+    void GTKApplyToolTip( GtkTooltips *tips, const gchar *tip );
 #endif // wxUSE_TOOLTIPS
 
     wxRadioBoxButtonsInfoList   m_buttonsInfo;

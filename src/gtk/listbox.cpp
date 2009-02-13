@@ -920,7 +920,7 @@ int wxListBox::DoListHitTest(const wxPoint& point) const
 // ----------------------------------------------------------------------------
 
 #if wxUSE_TOOLTIPS
-void wxListBox::ApplyToolTip( GtkTooltips *tips, const gchar *tip )
+void wxListBox::GTKApplyToolTip( GtkTooltips *tips, const gchar *tip )
 {
     // RN: Is this needed anymore?
     gtk_tooltips_set_tip( tips, GTK_WIDGET( m_treeview ), tip, NULL );

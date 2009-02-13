@@ -46,15 +46,12 @@ public:
     bool IsOk() const { return m_window != NULL; }
 
 
-    // wxGTK-only from now on
-
-    // this forwards back to wxWindow::ApplyToolTip()
-    void Apply( wxWindow *win );
+    // this forwards back to wxWindow::GTKApplyToolTip()
+    void GTKApply( wxWindow *win );
 
     // this just sets the given tooltip for the specified widget
-    //
-    // tip must be already UTF-8 encoded
-    static void Apply(GtkWidget *w, const gchar *tip);
+    // tip must be UTF-8 encoded
+    static void GTKApply(GtkWidget *w, const gchar *tip);
 
 private:
     wxString     m_text;
