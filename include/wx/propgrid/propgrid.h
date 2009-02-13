@@ -885,10 +885,13 @@ public:
     bool IsEditorsValueModified() const
         { return  ( m_iFlags & wxPG_FL_VALUE_MODIFIED ) ? true : false; }
 
-    /** Returns information about arbitrary position in the grid.
+    /**
+        Returns information about arbitrary position in the grid.
 
-        For wxPropertyGridHitTestResult definition, see
-        wxPropertyGridPageState::HitTest().
+        @param pt
+            Logical coordinates in the virtual grid space. Use
+            wxScrolledWindow::CalcUnscrolledPosition() if you need to
+            translate a scrolled position into a logical one.
     */
     wxPropertyGridHitTestResult HitTest( const wxPoint& pt ) const;
 

@@ -542,24 +542,13 @@ public:
                           unsigned int col,
                           bool subProps) const;
 
-    /** Returns information about arbitrary position in the grid.
+    /**
+        Returns information about arbitrary position in the grid.
 
-        wxPropertyGridHitTestResult definition:
-        @code
-            struct wxPropertyGridHitTestResult
-            {
-                wxPGProperty* GetProperty() const;
-
-                // column. -1 for margin
-                int             column;
-
-                // Index of splitter hit, -1 for none.
-                int             splitter;
-
-                // If splitter hit, then offset to that.
-                int             splitterHitOffset;
-            };
-        @endcode
+        @param pt
+            Logical coordinates in the virtual grid space. Use
+            wxScrolledWindow::CalcUnscrolledPosition() if you need to
+            translate a scrolled position into a logical one.
     */
     wxPropertyGridHitTestResult HitTest( const wxPoint& pt ) const;
 
