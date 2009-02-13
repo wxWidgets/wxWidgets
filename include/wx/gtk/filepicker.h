@@ -180,9 +180,6 @@ public:    // used by the GTK callback only
 
     bool m_bIgnoreNextChange;
 
-    void UpdatePath(const char *gtkpath)
-        { m_path = wxString::FromAscii(gtkpath); }
-
     void GTKUpdatePath(const char *gtkpath);
 
 private:
