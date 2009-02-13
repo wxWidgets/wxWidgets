@@ -14,7 +14,7 @@
 
 #if wxUSE_NATIVE_STATUSBAR
 
-class WXDLLIMPEXP_CORE wxClientDC;
+class WXDLLIMPEXP_FWD_CORE wxClientDC;
 
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
 {
