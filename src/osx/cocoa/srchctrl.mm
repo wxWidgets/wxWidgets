@@ -165,6 +165,9 @@ wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer,
     // per wx default cancel is not shown
     [[v cell] setCancelButtonCell:nil];
 
+    [v setBezeled:NO];
+    [v setBordered:NO];
+
     wxNSSearchFieldControl* c = new wxNSSearchFieldControl( wxpeer, v );
     c->SetStringValue( str );
     return c;
