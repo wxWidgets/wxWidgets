@@ -68,7 +68,7 @@ tar czf $DIST_DIR/wxWidgets-snapshot-$BUILD_VERSION.tar.gz $WX_TEMP_DIR
 
 cp $SCRIPTDIR/create_archives.sh $APPDIR/distrib/scripts
 chmod +x $APPDIR/distrib/scripts/create_archives.sh
-$APPDIR/distrib/scripts/create_archives.sh --all
+$APPDIR/distrib/scripts/create_archives.sh --wxall --wxmsw
 
 echo "Tarballs located at: $DIST_DIR"
 
