@@ -974,7 +974,7 @@ void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
     NSRect r = wxToNSRect( [m_osxView superview], wxRect(x,y,width, height) );
     [m_osxView setFrame:r];
     
-    if ([[m_osxView respondsToSelector:@selector(trackingTag)] )
+    if ([m_osxView respondsToSelector:@selector(trackingTag)] )
     {
         if ( [(wxNSView*)m_osxView trackingTag] )
             [m_osxView removeTrackingRect: [(wxNSView*)m_osxView trackingTag]];
