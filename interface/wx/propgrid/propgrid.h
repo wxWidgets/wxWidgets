@@ -674,9 +674,10 @@ public:
         Returns information about arbitrary position in the grid.
 
         @param pt
-            Logical coordinates in the virtual grid space. Use
-            wxScrolledWindow::CalcUnscrolledPosition() if you need to
-            translate a scrolled position into a logical one.
+            Coordinates in the virtual grid space. You may need to use
+            wxScrolledWindow::CalcScrolledPosition() for translating
+            wxPropertyGrid client coordinates into something this member
+            function can use.
     */
     wxPropertyGridHitTestResult HitTest( const wxPoint& pt ) const;
 
