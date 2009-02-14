@@ -44,9 +44,13 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 @interface wxNSView : NSView
 {
+    NSTrackingRectTag rectTag;
 }
 
 - (BOOL) canBecomeKeyView;
+// the tracking tag is needed to track mouse enter / exit events 
+- (void) setTrackingTag: (NSTrackingRectTag)tag;
+- (NSTrackingRectTag) trackingTag;
 
 @end // wxNSView
 
@@ -363,6 +367,16 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
 - (BOOL) canBecomeKeyView
 {
     return YES;
+}
+
+- (void) setTrackingTag: (NSTrackingRectTag)tag
+{
+    rectTag = tag;
+}
+
+- (NSTrackingRectTag) trackingTag
+{
+    return rectTag;
 }
 
 @end // wxNSView
@@ -959,6 +973,14 @@ void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
     }
     NSRect r = wxToNSRect( [m_osxView superview], wxRect(x,y,width, height) );
     [m_osxView setFrame:r];
+    
+    if ([[m_osxView respondsToSelector:@selector(trackingTag)] )
+    {
+        if ( [(wxNSView*)m_osxView trackingTag] )
+            [m_osxView removeTrackingRect: [(wxNSView*)m_osxView trackingTag]];
+        
+        [(wxNSView*)m_osxView setTrackingTag: [m_osxView addTrackingRect: [m_osxView bounds] owner: m_osxView userData: nil assumeInside: NO]];
+    }
 }
 
 void wxWidgetCocoaImpl::GetPosition( int &x, int &y ) const
