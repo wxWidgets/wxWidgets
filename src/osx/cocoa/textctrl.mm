@@ -67,6 +67,24 @@
 
 @end
 
+@interface wxNSTextView : NSScrollView
+
+@end
+
+@implementation wxNSTextView
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {    
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+@end
+
 @implementation wxNSTextField
 
 + (void)initialize
@@ -110,6 +128,102 @@
 */
 @end
 
+// wxNSTextViewControl
+
+wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
+{
+    m_scrollView = (NSScrollView*) w;
+    
+    [m_scrollView setHasVerticalScroller:YES];
+    [m_scrollView setHasHorizontalScroller:NO];
+    [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    NSSize contentSize = [m_scrollView contentSize];
+    
+    m_textView = [[NSTextView alloc] initWithFrame: NSMakeRect(0, 0,
+            contentSize.width, contentSize.height)];
+    [m_textView setVerticallyResizable:YES];
+    [m_textView setHorizontallyResizable:NO];
+    [m_textView setAutoresizingMask:NSViewWidthSizable];
+    
+    [m_scrollView setDocumentView: m_textView];
+
+    [m_textView setDelegate: w];
+}
+
+wxNSTextViewControl::~wxNSTextViewControl()
+{
+    if (m_textView)
+        [m_textView setDelegate: nil];
+}
+
+wxString wxNSTextViewControl::GetStringValue() const 
+{
+    if (m_textView) 
+    {
+        wxCFStringRef cf( (CFStringRef) [[m_textView string] retain] );
+        return cf.AsString(m_wxPeer->GetFont().GetEncoding());
+    }
+    return wxEmptyString;
+}
+void wxNSTextViewControl::SetStringValue( const wxString &str) 
+{
+    if (m_textView)
+        [m_textView setString: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+}
+void wxNSTextViewControl::Copy() 
+{
+    if (m_textView)
+        [m_textView copy:nil];
+
+}
+
+void wxNSTextViewControl::Cut() 
+{
+    if (m_textView)
+        [m_textView cut:nil];
+}
+
+void wxNSTextViewControl::Paste() 
+{
+    if (m_textView)
+        [m_textView paste:nil];
+}
+
+bool wxNSTextViewControl::CanPaste() const 
+{ 
+    return true;
+}
+
+void wxNSTextViewControl::SetEditable(bool editable) 
+{
+    if (m_textView)
+        [m_textView setEditable: editable];
+}
+
+void wxNSTextViewControl::GetSelection( long* from, long* to) const 
+{
+    if (m_textView)
+    {
+        NSRange range = [m_textView selectedRange];
+        *from = range.location;
+        *to = range.location + range.length;
+    }
+}
+
+void wxNSTextViewControl::SetSelection( long from , long to )
+{
+    [m_textView setSelectedRange:NSMakeRange(from, to-from)];
+}
+
+void wxNSTextViewControl::WriteText(const wxString& str) 
+{
+    // temp hack to get logging working early
+    wxString former = GetStringValue();
+    SetStringValue( former + str );
+}
+
+// wxNSTextFieldControl
+
 wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
 {
     m_textField = (NSTextField*) w;
@@ -118,6 +232,8 @@ wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : w
 
 wxNSTextFieldControl::~wxNSTextFieldControl()
 {
+    if (m_textField)
+        [m_textField setDelegate: nil];
 }
 
 wxString wxNSTextFieldControl::GetStringValue() const 
@@ -220,25 +336,34 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     NSTextField* v = nil;
+    wxWidgetCocoaImpl* c = NULL;
     
-    if ( style & wxTE_PASSWORD )
-        v =[[wxNSSecureTextField alloc] initWithFrame:r];    
-    else
-        v= [[wxNSTextField alloc] initWithFrame:r];
-    
-    if ( style & wxNO_BORDER )
+    if ( style & wxTE_MULTILINE || style & wxTE_RICH || style & wxTE_RICH2 )
     {
+        v = [[wxNSTextView alloc] initWithFrame:r];
+        c = new wxNSTextViewControl( wxpeer, v );
+        static_cast<wxNSTextViewControl*>(c)->SetStringValue(str);
+    }
+    else 
+    {
+        if ( style & wxTE_PASSWORD )
+            v = [[wxNSSecureTextField alloc] initWithFrame:r];
+        else
+            v = [[wxNSTextField alloc] initWithFrame:r];
+        
+        if ( style & wxNO_BORDER )
+        {
+            // FIXME: How can we remove the native control's border?
+            // setBordered is separate from the text ctrl's border.
+        }
+        
         [v setBezeled:NO];
         [v setBordered:NO];
+        
+        c = new wxNSTextFieldControl( wxpeer, v );
+        static_cast<wxNSTextFieldControl*>(c)->SetStringValue(str);
     }
-
-    [v setBezeled:NO];
-    [v setBordered:NO];
-    //[v setBezeled:NO];
-    //[v setEditable:NO];
-    //[v setDrawsBackground:NO];
     
-    wxWidgetCocoaImpl* c = new wxNSTextFieldControl( wxpeer, v );
     return c;
 }
 

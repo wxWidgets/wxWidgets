@@ -38,4 +38,26 @@ protected :
     NSTextField* m_textField;
 };
 
+class wxNSTextViewControl : public wxWidgetCocoaImpl, public wxTextWidgetImpl
+{
+public:
+    wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w );
+    virtual ~wxNSTextViewControl();
+
+    virtual wxString GetStringValue() const ;
+    virtual void SetStringValue( const wxString &str) ;
+    virtual void Copy() ;
+    virtual void Cut() ;
+    virtual void Paste() ;
+    virtual bool CanPaste() const ;
+    virtual void SetEditable(bool editable) ;
+    virtual void GetSelection( long* from, long* to) const ;
+    virtual void SetSelection( long from , long to );
+    virtual void WriteText(const wxString& str) ;
+
+protected:
+    NSScrollView* m_scrollView;
+    NSTextView* m_textView;
+};
+
 #endif // _WX_OSX_COCOA_PRIVATE_TEXTIMPL_H_
