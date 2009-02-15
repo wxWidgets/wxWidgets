@@ -208,6 +208,10 @@ AC_DEFUN([AC_BAKEFILE_SUFFIXES],
     dlldir="$libdir"
 
     case "${BAKEFILE_HOST}" in
+        dnl PA-RISC HP systems used .sl but IA64 use ELF-64 and so use the
+        dnl standard .so extension
+        ia64-hp-hpux* )
+        ;;
         *-hp-hpux* )
             SO_SUFFIX="sl"
             SO_SUFFIX_MODULE="sl"
@@ -309,7 +313,9 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       ;;
 
       *-*-linux* )
-        if test "$INTELCC" = "yes"; then
+        dnl newer icc versions use -fPIC just as gcc does and, in fact, the
+        dnl newest (v10+) ones don't even understand -KPIC any longer
+        if test "$INTELCC" = "yes" -a "$INTELCC8" != "yes"; then
             PIC_FLAG="-KPIC"
         elif test "x$SUNCXX" = "xyes"; then
             SHARED_LD_CC="${CC} -G -o"
@@ -743,20 +749,19 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
                     GCC_PCH=1
                 ],
                 [
-                    AC_TRY_COMPILE([],
-                        [
-                            #if !defined(__INTEL_COMPILER) || \
-                                (__INTEL_COMPILER < 800)
-                                There is no PCH support
-                            #endif
-                        ],
-                        [
-                            AC_MSG_RESULT([yes])
-                            ICC_PCH=1
-                        ],
-                        [
-                            AC_MSG_RESULT([no])
-                        ])
+                    if test "$INTELCXX8" = "yes"; then
+                        AC_MSG_RESULT([yes])
+                        ICC_PCH=1
+                        if test "$INTELCXX10" = "yes"; then
+                            ICC_PCH_CREATE_SWITCH="-pch-create"
+                            ICC_PCH_USE_SWITCH="-pch-use"
+                        else
+                            ICC_PCH_CREATE_SWITCH="-create-pch"
+                            ICC_PCH_USE_SWITCH="-use-pch"
+                        fi
+                    else
+                        AC_MSG_RESULT([no])
+                    fi
                 ])
             if test $GCC_PCH = 1 -o $ICC_PCH = 1 ; then
                 USE_PCH=1
@@ -772,6 +777,8 @@ AC_DEFUN([AC_BAKEFILE_PRECOMP_HEADERS],
 
     AC_SUBST(GCC_PCH)
     AC_SUBST(ICC_PCH)
+    AC_SUBST(ICC_PCH_CREATE_SWITCH)
+    AC_SUBST(ICC_PCH_USE_SWITCH)
     AC_SUBST(BK_MAKE_PCH)
 ])
 
@@ -828,7 +835,11 @@ AC_DEFUN([AC_BAKEFILE],
     AC_BAKEFILE_DEPS
     AC_BAKEFILE_RES_COMPILERS
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.3"
+    dnl OBJCFLAGS is set by Autoconf, but OBJCXXFLAGS is not:
+    AC_SUBST(OBJCXXFLAGS)
+
+
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.5"
 
     dnl includes autoconf_inc.m4:
     $1
@@ -862,10 +873,8 @@ cat <<EOF >bk-deps
 # Permission is given to use this file in any way.
 
 DEPSMODE=${DEPSMODE}
-DEPSDIR=.deps
 DEPSFLAG="${DEPSFLAG}"
-
-mkdir -p ${D}DEPSDIR
+DEPSDIRBASE=.deps
 
 if test ${D}DEPSMODE = gcc ; then
     ${D}* ${D}{DEPSFLAG}
@@ -886,9 +895,13 @@ if test ${D}DEPSMODE = gcc ; then
         esac
         shift
     done
+    objfilebase=\`basename ${D}objfile\`
+    builddir=\`dirname ${D}objfile\`
     depfile=\`basename ${D}srcfile | sed -e 's/\\..*${D}/.d/g'\`
     depobjname=\`echo ${D}depfile |sed -e 's/\\.d/.o/g'\`
-    
+    depsdir=${D}builddir/${D}DEPSDIRBASE
+    mkdir -p ${D}depsdir
+
     # if the compiler failed, we're done:
     if test ${D}{status} != 0 ; then
         rm -f ${D}depfile
@@ -897,21 +910,22 @@ if test ${D}DEPSMODE = gcc ; then
 
     # move created file to the location we want it in:
     if test -f ${D}depfile ; then
-        sed -e "s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{DEPSDIR}/${D}{objfile}.d
+        sed -e "s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{depsdir}/${D}{objfilebase}.d
         rm -f ${D}depfile
     else
         # "g++ -MMD -o fooobj.o foosrc.cpp" produces fooobj.d
-        depfile=\`basename ${D}objfile | sed -e 's/\\..*${D}/.d/g'\`
+        depfile=\`echo "${D}objfile" | sed -e 's/\\..*${D}/.d/g'\`
         if test ! -f ${D}depfile ; then
             # "cxx -MD -o fooobj.o foosrc.cpp" creates fooobj.o.d (Compaq C++)
             depfile="${D}objfile.d"
         fi
         if test -f ${D}depfile ; then
-            sed -e "/^${D}objfile/!s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{DEPSDIR}/${D}{objfile}.d
+            sed -e "\\,^${D}objfile,!s,${D}depobjname:,${D}objfile:,g" ${D}depfile >${D}{depsdir}/${D}{objfilebase}.d
             rm -f ${D}depfile
         fi
     fi
     exit 0
+
 elif test ${D}DEPSMODE = mwcc ; then
     ${D}* || exit ${D}?
     # Run mwcc again with -MM and redirect into the dep file we want
@@ -931,8 +945,15 @@ elif test ${D}DEPSMODE = mwcc ; then
         fi
         prevarg="${D}arg"
     done
-    ${D}* ${D}DEPSFLAG >${D}{DEPSDIR}/${D}{objfile}.d
+
+    objfilebase=\`basename ${D}objfile\`
+    builddir=\`dirname ${D}objfile\`
+    depsdir=${D}builddir/${D}DEPSDIRBASE
+    mkdir -p ${D}depsdir
+
+    ${D}* ${D}DEPSFLAG >${D}{depsdir}/${D}{objfilebase}.d
     exit 0
+
 elif test ${D}DEPSMODE = unixcc; then
     ${D}* || exit ${D}?
     # Run compiler again with deps flag and redirect into the dep file.
@@ -953,8 +974,15 @@ elif test ${D}DEPSMODE = unixcc; then
         esac
         shift
     done
-    eval "${D}cmd ${D}DEPSFLAG" | sed "s|.*:|${D}objfile:|" >${D}{DEPSDIR}/${D}{objfile}.d
+
+    objfilebase=\`basename ${D}objfile\`
+    builddir=\`dirname ${D}objfile\`
+    depsdir=${D}builddir/${D}DEPSDIRBASE
+    mkdir -p ${D}depsdir
+
+    eval "${D}cmd ${D}DEPSFLAG" | sed "s|.*:|${D}objfile:|" >${D}{depsdir}/${D}{objfilebase}.d
     exit 0
+
 else
     ${D}*
     exit ${D}?
@@ -1093,6 +1121,8 @@ header="${D}{2}"
 shift
 shift
 
+builddir=\`echo ${D}outfile | sed -e 's,/\\.pch/.*${D},,g'\`
+
 compiler=""
 headerfile=""
 
@@ -1105,7 +1135,7 @@ while test ${D}{#} -gt 0; do
                 headerfile="${D}{incdir}/${D}{header}"
             fi
         ;;
-        -use-pch|-use_pch )
+        -use-pch|-use_pch|-pch-use )
             shift
             add_to_cmdline=0
         ;;
@@ -1124,8 +1154,8 @@ else
     else
         mkdir -p \`dirname ${D}{outfile}\`
     fi
-    depsfile=".deps/\`echo ${D}{outfile} | tr '/.' '__'\`.d"
-    mkdir -p .deps
+    depsfile="${D}{builddir}/.deps/\`echo ${D}{outfile} | tr '/.' '__'\`.d"
+    mkdir -p ${D}{builddir}/.deps
     if test "x${GCC_PCH}" = "x1" ; then
         # can do this because gcc is >= 3.4:
         ${D}{compiler} -o ${D}{outfile} -MMD -MF "${D}{depsfile}" "${D}{headerfile}"
@@ -1137,7 +1167,7 @@ else
 #include "${D}header"
 EOT
         # using -MF icc complains about differing command lines in creation/use
-        ${D}compiler -c -create_pch ${D}outfile -MMD ${D}file && \\
+        ${D}compiler -c ${ICC_PCH_CREATE_SWITCH} ${D}outfile -MMD ${D}file && \\
           sed -e "s,^.*:,${D}outfile:," -e "s, ${D}file,," < ${D}dfile > ${D}depsfile && \\
           rm -f ${D}file ${D}dfile ${D}{filename}.o
     fi
