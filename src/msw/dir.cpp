@@ -40,55 +40,63 @@
 // define the types and functions used for file searching
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
 typedef WIN32_FIND_DATA FIND_STRUCT;
 typedef HANDLE FIND_DATA;
 typedef DWORD FIND_ATTR;
 
-static inline FIND_DATA InitFindData() { return INVALID_HANDLE_VALUE; }
+inline FIND_DATA InitFindData()
+{
+    return INVALID_HANDLE_VALUE;
+}
 
-static inline bool IsFindDataOk(FIND_DATA fd)
+inline bool IsFindDataOk(FIND_DATA fd)
 {
         return fd != INVALID_HANDLE_VALUE;
 }
 
-static inline void FreeFindData(FIND_DATA fd)
+inline void FreeFindData(FIND_DATA fd)
 {
-        if ( !::FindClose(fd) )
-        {
-            wxLogLastError(_T("FindClose"));
-        }
+    if ( !::FindClose(fd) )
+    {
+        wxLogLastError(_T("FindClose"));
+    }
 }
 
-static inline FIND_DATA FindFirst(const wxString& spec,
-                                      FIND_STRUCT *finddata)
+inline FIND_DATA FindFirst(const wxString& spec,
+                           FIND_STRUCT *finddata)
 {
-        return ::FindFirstFile(spec.fn_str(), finddata);
+    return ::FindFirstFile(spec.fn_str(), finddata);
 }
 
-static inline bool FindNext(FIND_DATA fd, FIND_STRUCT *finddata)
+inline bool FindNext(FIND_DATA fd, FIND_STRUCT *finddata)
 {
-        return ::FindNextFile(fd, finddata) != 0;
+    return ::FindNextFile(fd, finddata) != 0;
 }
 
-static const wxChar *GetNameFromFindData(FIND_STRUCT *finddata)
+const wxChar *GetNameFromFindData(FIND_STRUCT *finddata)
 {
-        return finddata->cFileName;
+    return finddata->cFileName;
 }
 
-static const FIND_ATTR GetAttrFromFindData(FIND_STRUCT *finddata)
+inline FIND_ATTR GetAttrFromFindData(FIND_STRUCT *finddata)
 {
-        return finddata->dwFileAttributes;
+    return finddata->dwFileAttributes;
 }
 
-static inline bool IsDir(FIND_ATTR attr)
+inline bool IsDir(FIND_ATTR attr)
 {
-        return (attr & FILE_ATTRIBUTE_DIRECTORY) != 0;
+    return (attr & FILE_ATTRIBUTE_DIRECTORY) != 0;
 }
 
-static inline bool IsHidden(FIND_ATTR attr)
+inline bool IsHidden(FIND_ATTR attr)
 {
-        return (attr & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) != 0;
+    return (attr & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM)) != 0;
 }
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // constants
