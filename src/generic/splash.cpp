@@ -52,12 +52,9 @@ wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int mil
                                const wxSize& size, long style)
     : wxFrame(parent, id, wxEmptyString, wxPoint(0,0), wxSize(100, 100), style)
 {
-    // At least for GTK+ 2.0, this hint is not available.
 #if defined(__WXGTK20__)
-#if GTK_CHECK_VERSION(2,2,0)
     gtk_window_set_type_hint(GTK_WINDOW(m_widget),
                              GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
-#endif
 #endif
 
     m_window = NULL;

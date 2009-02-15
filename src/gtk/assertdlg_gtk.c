@@ -23,10 +23,7 @@ extern "C" {
 /* For FILE */
 #include <stdio.h>
 
-
-#if GTK_CHECK_VERSION(2,4,0)
 #include <gtk/gtkexpander.h>
-#endif
 
 
 /* ----------------------------------------------------------------------------
@@ -147,9 +144,6 @@ void gtk_assert_dialog_process_backtrace (GtkAssertDialog *dlg)
    GtkAssertDialog signal handlers
  ---------------------------------------------------------------------------- */
 
-/* GtkFileChooserDialog and GtkExpander are only available in GTK+ >= 2.4 */
-#if GTK_CHECK_VERSION(2,4,0)
-
 void gtk_assert_dialog_expander_callback (GtkWidget *widget, GtkAssertDialog *dlg)
 {
     /* status is not yet updated so we need to invert it to get the new one */
@@ -202,7 +196,6 @@ void gtk_assert_dialog_save_backtrace_callback (GtkWidget *widget, GtkAssertDial
 
     gtk_widget_destroy (dialog);
 }
-#endif /* GTK+ 2.4+ */
 
 void gtk_assert_dialog_copy_callback (GtkWidget *widget, GtkAssertDialog *dlg)
 {
@@ -320,21 +313,10 @@ void gtk_assert_dialog_init(GtkAssertDialog *dlg)
         }
 
         /* add the expander */
-#if GTK_CHECK_VERSION(2,4,0)
-        if (!gtk_check_version (2, 4, 0))
-        {
-            dlg->expander = gtk_expander_new_with_mnemonic ("Back_trace:");
-            gtk_box_pack_start (GTK_BOX(vbox), dlg->expander, TRUE, TRUE, 0);
-            g_signal_connect (GTK_EXPANDER(dlg->expander), "activate",
-                              G_CALLBACK(gtk_assert_dialog_expander_callback), dlg);
-        }
-        else
-#endif
-        {
-            /* if GtkExpander is unavailable, then use a static frame instead */
-            dlg->expander = gtk_frame_new ("Back_trace:");
-            gtk_box_pack_start (GTK_BOX(vbox), dlg->expander, TRUE, TRUE, 0);
-        }
+        dlg->expander = gtk_expander_new_with_mnemonic ("Back_trace:");
+        gtk_box_pack_start (GTK_BOX(vbox), dlg->expander, TRUE, TRUE, 0);
+        g_signal_connect (GTK_EXPANDER(dlg->expander), "activate",
+                            G_CALLBACK(gtk_assert_dialog_expander_callback), dlg);
     }
 
     {
@@ -362,16 +344,10 @@ void gtk_assert_dialog_init(GtkAssertDialog *dlg)
         gtk_button_box_set_layout (GTK_BUTTON_BOX(hbox), GTK_BUTTONBOX_END);
 
         /* add the buttons */
-#if GTK_CHECK_VERSION(2,4,0)
-        if (!gtk_check_version (2, 4, 0))
-        {
-            /* add this button only if GTK supports GtkFileChooserDialog */
-            button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Save to _file",
-                                                    GTK_STOCK_SAVE, GTK_RESPONSE_NONE);
-            g_signal_connect (button, "clicked",
-                              G_CALLBACK(gtk_assert_dialog_save_backtrace_callback), dlg);
-        }
-#endif
+        button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Save to _file",
+                                                GTK_STOCK_SAVE, GTK_RESPONSE_NONE);
+        g_signal_connect (button, "clicked",
+                            G_CALLBACK(gtk_assert_dialog_save_backtrace_callback), dlg);
 
         button = gtk_assert_dialog_add_button_to (GTK_BOX(hbox), "Copy to clip_board",
                                                   GTK_STOCK_COPY, GTK_RESPONSE_NONE);
@@ -485,13 +461,6 @@ void gtk_assert_dialog_set_backtrace_callback(GtkAssertDialog *assertdlg,
 {
     assertdlg->callback = callback;
     assertdlg->userdata = userdata;
-
-    if (gtk_check_version (2, 4, 0))
-    {
-        /* we need to immediately process the stack trace as we're not using
-           an expander since GTK does not support it */
-        gtk_assert_dialog_process_backtrace (assertdlg);
-    }
 }
 
 void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
