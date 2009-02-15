@@ -30,8 +30,9 @@ AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_MACRO_DIR(m4)
 AC_LANG(C)
 
-dnl Compute the canonical target-system type variable
-AC_CANONICAL_TARGET
+dnl Compute the canonical build and host system type variables
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
 
 AM_INIT_AUTOMAKE
 dnl Do not rebuild generated files every time
