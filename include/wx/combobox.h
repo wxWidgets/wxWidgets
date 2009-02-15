@@ -26,7 +26,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxComboBoxNameStr[];
 #include "wx/textentry.h"
 
 class WXDLLIMPEXP_CORE wxComboBoxBase : public wxItemContainer,
-                                   public wxTextEntry
+                                        public wxTextEntry
 {
 public:
     // override these methods to disambiguate between two base classes versions

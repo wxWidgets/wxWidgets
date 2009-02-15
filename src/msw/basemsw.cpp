@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/event.h"
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"

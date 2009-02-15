@@ -24,11 +24,12 @@
     #pragma hdrstop
 #endif
 
-#include "wx/evtloop.h"
-
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/event.h"
 #endif //WX_PRECOMP
+
+#include "wx/evtloop.h"
 
 // ----------------------------------------------------------------------------
 // globals

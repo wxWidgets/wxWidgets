@@ -13,6 +13,8 @@
 #define _WX_MSW_EVTLOOP_H_
 
 #if wxUSE_GUI
+#include "wx/dynarray.h"
+#include "wx/msw/wrapwin.h"
 #include "wx/window.h"
 #endif
 
