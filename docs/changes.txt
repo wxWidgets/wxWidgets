@@ -119,9 +119,10 @@ Changes in behaviour which may result in compilation errors
   need to review them as wxDC doesn't have any virtual methods any longer and
   uses delegation instead of inheritance to present different behaviours.
 
-- wxWindow::ProcessEvent() has been made protected to prevent wrongly using it
-  instead of correct GetEventHandler()->ProcessEvent(). New ProcessWindowEvent()
-  was added for convenience.
+- wxWindow::ProcessEvent() (and other wxEvtHandler functions inherited by wxWindow)
+  has been made protected to prevent wrongly using it instead of correct
+  GetEventHandler()->ProcessEvent().
+  New ProcessWindowEvent() was added for convenience.
 
 - Return type of wxString::operator[] and wxString::iterator::operator* is no
   longer wxChar (i.e. char or wchar_t), but wxUniChar. This is not a problem
@@ -211,6 +212,11 @@ Changes in behaviour which may result in compilation errors
 - wxEVT_GRID_CELL_CHANGE event renamed to wxEVT_GRID_CELL_CHANGED and shouldn't
   be vetoed any more, use the new wxEVT_GRID_CELL_CHANGING event to do it.
 
+- Now wxWidgets at startup in debug builds checks if all wxEvent-derived classes
+  correctly implement the Clone() function, logging a warning if they don't.
+  A correct implementation for MyCustomEventClass::Clone() is simply:
+    virtual wxEvent *Clone() const  { return new MyCustomEventClass(*this); }
+
 
 Deprecated methods and their replacements
 -----------------------------------------
@@ -252,7 +258,9 @@ Deprecated methods and their replacements
 - wxTE_AUTO_SCROLL style is deprecated as it's always on by default anyhow.
 - wxThreadHelper::Create() has been deprecated in favour of wxThreadHelper::CreateThread
   which has a better name for a mix-in class, and allows setting the thread type.
-
+- wxDos2UnixFilename, wxUnix2DosFilename, wxStripExtension, wxGetTempFileName,
+  wxExpandPath, wxContractPath, wxRealPath, wxCopyAbsolutePath, wxSplitPath
+  were deprecated in favour of wxFileName methods. See docs for more info.
 
 Major new features in this release
 ----------------------------------
@@ -341,11 +349,19 @@ All:
 - Added wxPATH_RMDIR_FULL/RECURSIVE wxFileName::Rmdir() flags (Marcin Malich).
 - Added wxStandardPaths::GetAppDocumentsDir().
 - Added wx-prefixed versions of DECLARE_NO_{COPY,ASSIGN}_CLASS macros.
+- Added wxFileName::ReplaceEnvVariable and wxFileName::ReplaceHomeDir.
+- Added wxProtocol::SetDefaultTimeout(); the default timeout for both wxHTTP and wxFTP
+  protocols is 60 seconds.
+- Added wxStrnlen() for safe computation of string length.
+- Added wxImage::Clear() (troelsk)
 
 All (Unix):
 
 - Added wx-config --optional-libs command line option (John Labenski).
 - Noticeably (by a factor of ~150) improve wxIPC classes performance.
+- Configure options --with-opengl and --enable-mediactrl now default to "auto":
+  if OpenGL and GStreamer libraries are available the "gl" and "media" wx libraries
+  are automatically built.
 
 All (GUI):
 
@@ -451,10 +467,16 @@ All (GUI):
   GetNativeSizeHint() now return more sensible values in wxMSW and wxMac and
   no longer return bogus values.
 - Added wxControl::SetLabelText() and EscapeMnemonics().
+- Added support for wxFILTER_EMPTY and wxFILTER_DIGITS styles to wxTextValidator;
+  added also the SetCharIncludes() and SetCharExcludes() utilities.
+- Added wxIMAGE_OPTION_PNG_FILTER and many wxIMAGE_OPTION_PNG_COMPRESSION_* options
+  to wxImage and wxPNGHandler to allow for custom compression levels when saving PNGs
+- Added GetValue(), GetRange(), GetMessage() functions to wxProgressDialog
 
 wxGTK:
 
 - Support for markup and ellipsization in wxStaticText (Francesco Montorsi).
+- Ellipsize long strings in wxStatusBar (Francesco Montorsi)
 - Native implementation for wxHyperlinkCtrl (Francesco Montorsi).
 - Native keyboard navigation implementation.
 - Added wxCB_SORT support to wxComboBox (Evgeniy Tarassov).
@@ -501,6 +523,7 @@ wxMSW:
 - Added wxToolTip::SetMaxWidth() and improved default wrapping (Joachim Hönig).
 - Changed default toolbar bitmaps size from obsolete 16x15 to 24x24 used
   by modern apps.
+- Ellipsize long strings in wxStatusBar (Francesco Montorsi)
 
 wxX11:
 
