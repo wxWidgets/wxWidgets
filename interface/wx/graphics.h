@@ -194,6 +194,49 @@ public:
     bool IsNull() const;
 };
 
+/**
+    Anti-aliasing modes used by wxGraphicsContext::SetAntialisingMode
+*/
+enum wxAntialiasMode
+{
+    /** No anti-aliasing */
+    wxANTIALIAS_NONE, 
+    
+    /** The default anti-aliasing */
+    wxANTIALIAS_DEFAULT,
+};
+
+/**
+    Compositing is done using Porter-Duff compositions 
+    (see http://keithp.com/~keithp/porterduff/p253-porter.pdf) with
+    wxGraphicsContext::SetCompositionMode
+
+    The description give a short equation on how the values of a resulting
+    pixel are calculated.
+    @R = Result, @S = Source, @D = Destination, colors premultiplied with alpha
+    @Ra, @Sa, @Da their alpha components
+*/
+enum wxCompositionMode
+{
+    
+    /** classic Porter-Duff compositions */
+    wxCOMPOSITION_CLEAR, /**< @R = 0 */
+    wxCOMPOSITION_SOURCE, /**< @R = S */
+    wxCOMPOSITION_OVER, /**< @R = @S + @D*(1 - @Sa) */
+    wxCOMPOSITION_IN, /**< @R = @S*@Da */
+    wxCOMPOSITION_OUT, /**< @R = @S*(1 - @Da) */
+    wxCOMPOSITION_ATOP, /**< @R = @S*@Da + @D*(1 - @Sa) */
+
+    wxCOMPOSITION_DEST, /**< @R = @D, essentially a noop */
+    wxCOMPOSITION_DEST_OVER, /**< @R = @S*(1 - @Da) + @D */
+    wxCOMPOSITION_DEST_IN, /**< @R = @D*@Sa */
+    wxCOMPOSITION_DEST_OUT, /**< @R = @D*(1 - @Sa) */
+    wxCOMPOSITION_DEST_ATOP, /**< @R = @S*(1 - @Da) + @D*@Sa */
+    wxCOMPOSITION_XOR, /**< @R = @S*(1 - @Da) + @D*(1 - @Sa) */
+    
+    /** mathematical compositions */
+    wxCOMPOSITION_ADD, /**< @R = @S + @D */
+};
 
 
 /**
@@ -564,6 +607,38 @@ public:
         Translates the current transformation matrix.
     */
     virtual void Translate(wxDouble dx, wxDouble dy) = 0;
+
+    /**
+        Redirects all rendering is done into a fully transparent temporary context 
+    */
+    virtual void BeginLayer(wxDouble opacity) = 0;
+
+    /** 
+        Composites back the drawings into the context with the opacity given at 
+        the BeginLayer call
+    */
+    virtual void EndLayer() = 0;
+
+    /** 
+        Sets the antialiasing mode, returns true if it supported
+    */
+    virtual bool SetAntialiasMode(wxAntialiasMode antialias) = 0;
+
+    /** 
+        Returns the current shape antialiasing mode
+    */
+    virtual wxAntialiasMode GetAntialiasMode() const ;
+    
+    /**
+        Sets the compositing operator, returns true if it supported
+    */
+    virtual bool SetCompositionMode(wxCompositionMode op) = 0;
+
+    /** 
+        Returns the current compositing operator
+    */
+    virtual wxCompositionMode GetCompositionMode() const;
+    
 };
 
 
