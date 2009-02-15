@@ -3576,6 +3576,8 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 #if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXGTK20__)
             Update();
 #else
+            // TODO: remove this call or use wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI)
+            //       instead (needs to be tested!)
             wxYieldIfNeeded();
 #endif
         }
@@ -3606,9 +3608,11 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 
         SetCursor(m_oldCursor);
 
-#if defined( __WXMSW__ ) || defined(__WXMAC__)
+#if defined( __WXMSW__ ) || defined(__WXMAC__) || defined(__WXGTK20__)
         Update();
 #else
+        // TODO: remove this call or use wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI)
+        //       instead (needs to be tested!)
         wxYieldIfNeeded();
 #endif
     }

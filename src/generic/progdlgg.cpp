@@ -403,6 +403,9 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
                 m_msg->SetLabel(_("Done."));
             }
 
+            // allow the window to repaint:
+            // NOTE: since we yield only for UI events with this call, there
+            //       should be no side-effects
             wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
 
             (void)ShowModal();
@@ -453,6 +456,8 @@ bool wxProgressDialog::DoAfterUpdate(bool *skip)
 {
     // we have to yield because not only we want to update the display but
     // also to process the clicks on the cancel and skip buttons
+    // NOTE: using YieldFor() this call shouldn't give re-entrancy problems
+    //       for event handlers not interested to UI/user-input events.
     wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI|wxEVT_CATEGORY_USER_INPUT);
 
     Update();
@@ -672,6 +677,9 @@ void wxProgressDialog::UpdateMessage(const wxString &newmsg)
 
         Fit();   // adapt to the new label size
 
+        // allow the window to repaint:
+        // NOTE: since we yield only for UI events with this call, there
+        //       should be no side-effects
         wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
     }
 }

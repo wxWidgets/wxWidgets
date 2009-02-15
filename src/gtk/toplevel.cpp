@@ -1247,10 +1247,11 @@ void wxTopLevelWindowGTK::RequestUserAttention(int flags)
     bool new_hint_value = false;
 
     // FIXME: This is a workaround to focus handling problem
-    // If RequestUserAttention is called for example right after a wxSleep, OnInternalIdle hasn't
-    // yet been processed, and the internal focus system is not up to date yet.
-    // wxYieldIfNeeded ensures the processing of it, but can have unwanted side effects - MR
-    ::wxYieldIfNeeded();
+    // If RequestUserAttention is called for example right after a wxSleep, OnInternalIdle
+    // hasn't yet been processed, and the internal focus system is not up to date yet.
+    // YieldFor(wxEVT_CATEGORY_UI) ensures the processing of it (hopefully it
+    // won't have side effects) - MR
+    wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
 
     if(m_urgency_hint >= 0)
         g_source_remove(m_urgency_hint);
