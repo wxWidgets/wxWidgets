@@ -243,3 +243,33 @@ bool wxGUIEventLoop::Dispatch()
     (void) m_impl->ProcessEvent( &event );
     return true;
 }
+
+bool wxGUIEventLoop::YieldFor(long eventsToProcess)
+{
+    // Sometimes only 2 yields seem
+    // to do the trick, e.g. in the
+    // progress dialog
+    int i;
+    for (i = 0; i < 2; i++)
+    {
+        m_isInsideYield = true;
+        m_eventsToProcessInsideYield = eventsToProcess;
+
+        // Call dispatch at least once so that sockets
+        // can be tested
+        wxTheApp->Dispatch();
+
+        // TODO: implement event filtering using the eventsToProcess mask
+        while (wxTheApp && wxTheApp->Pending())
+            wxTheApp->Dispatch();
+
+#if wxUSE_TIMER
+        wxGenericTimerImpl::NotifyTimers();
+#endif
+        ProcessIdle();
+
+        m_isInsideYield = false;
+    }
+
+    return true;
+}

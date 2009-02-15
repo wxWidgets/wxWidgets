@@ -28,6 +28,7 @@ public:
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
     virtual bool IsRunning() const;
+    virtual bool YieldFor(long eventsToProcess);
 
     // MSW-specific methods
     // --------------------

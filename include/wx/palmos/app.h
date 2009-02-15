@@ -51,8 +51,6 @@ public:
 protected:
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
 
-    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
-
 public:
     // Implementation
     static bool RegisterWindowClasses();

@@ -37,6 +37,7 @@ public:
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
     virtual bool IsOk() const { return m_dispatcher != NULL; }
+    virtual bool YieldFor(long WXUNUSED(eventsToProcess)) { return true; }
 
 protected:
     virtual void OnNextIteration();

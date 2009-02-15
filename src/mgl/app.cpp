@@ -44,56 +44,6 @@ void wxApp::Exit()
     exit(0);
 }
 
-//-----------------------------------------------------------------------------
-// wxYield
-//-----------------------------------------------------------------------------
-
-bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
-{
-    if ( m_isInsideYield )
-    {
-        if ( !onlyIfNeeded )
-        {
-            wxFAIL_MSG( wxT("wxYield called recursively" ) );
-        }
-
-        return false;
-    }
-
-#if wxUSE_THREADS
-    if ( !wxThread::IsMain() )
-    {
-        // can't process events from other threads, MGL is thread-unsafe
-        return true;
-    }
-#endif // wxUSE_THREADS
-
-    m_isInsideYield = true;
-    m_eventsToProcessInsideYield = eventsToProcess;
-
-    wxLog::Suspend();
-
-    wxEventLoopBase * const eventLoop = wxEventLoop::GetActive();
-    if ( eventLoop )
-    {
-        // TODO: implement event filtering using the eventsToProcess mask
-
-        while (eventLoop->Pending())
-            eventLoop->Dispatch();
-    }
-
-    /* it's necessary to call ProcessIdle() to update the frames sizes which
-       might have been changed (it also will update other things set from
-       OnUpdateUI() which is a nice (and desired) side effect) */
-    while (wxTheApp->ProcessIdle()) { }
-
-    wxLog::Resume();
-
-    m_isInsideYield = false;
-
-    return true;
-}
-
 
 //-----------------------------------------------------------------------------
 // wxWakeUpIdle

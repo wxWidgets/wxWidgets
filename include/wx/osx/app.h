@@ -66,7 +66,6 @@ public:
     // Implementation
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
-    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
 
     // the installed application event handler
     WXEVENTHANDLERREF    MacGetEventHandler() { return m_macEventHandler ; }

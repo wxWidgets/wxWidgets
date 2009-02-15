@@ -26,10 +26,15 @@ public:
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
+    virtual bool YieldFor(long eventsToProcess);
 
 protected:
+
     // the exit code of this event loop
     int m_exitcode;
+
+    // used to temporarily store events in DoYield()
+    wxArrayPtrVoid m_arrGdkEvents;
 
     wxDECLARE_NO_COPY_CLASS(wxGUIEventLoop);
 };

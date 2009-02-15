@@ -32,6 +32,7 @@
 
 #include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
+#include "wx/evtloop.h"
 
 #include "wx/gtk/private.h"
 
@@ -75,7 +76,7 @@ public:
     ~wxClipboardSync()
     {
         while (ms_clipboard)
-            wxTheApp->YieldFor(wxEVT_CATEGORY_CLIPBOARD);
+            wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_CLIPBOARD);
     }
 
     // this method must be called by GTK+ callbacks to indicate that we got the

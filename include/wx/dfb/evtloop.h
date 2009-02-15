@@ -25,14 +25,12 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxConsoleEventLoop
 public:
     wxGUIEventLoop();
 
+    virtual bool YieldFor(long eventsToProcess);
+
     // returns DirectFB event buffer used by wx
     static wxIDirectFBEventBufferPtr GetDirectFBEventBuffer();
 
 private:
-    // wxYield implementation: iterate the loop as long as there are any
-    // pending events
-    void Yield();
-
     static void InitBuffer();
     static void CleanUp();
 

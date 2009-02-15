@@ -144,3 +144,8 @@ void wxGUIEventLoop::WakeUp()
     return;
 }
 
+bool wxGUIEventLoop::YieldFor(long eventsToProcess)
+{
+    return true;
+}
+

@@ -184,3 +184,39 @@ bool wxGUIEventLoop::Dispatch()
     return m_impl->GetKeepLooping();
 }
 
+
+//-----------------------------------------------------------------------------
+// wxYield
+//-----------------------------------------------------------------------------
+
+bool wxGUIEventLoop::YieldFor(long eventsToProcess)
+{
+#if wxUSE_THREADS
+    if ( !wxThread::IsMain() )
+    {
+        // can't process events from other threads, MGL is thread-unsafe
+        return true;
+    }
+#endif // wxUSE_THREADS
+
+    m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
+
+    wxLog::Suspend();
+
+    // TODO: implement event filtering using the eventsToProcess mask
+
+    while (Pending())
+        Dispatch();
+
+    /* it's necessary to call ProcessIdle() to update the frames sizes which
+       might have been changed (it also will update other things set from
+       OnUpdateUI() which is a nice (and desired) side effect) */
+    while (wxTheApp->ProcessIdle()) { }
+
+    wxLog::Resume();
+
+    m_isInsideYield = false;
+
+    return true;
+}

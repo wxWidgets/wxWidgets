@@ -365,3 +365,52 @@ bool wxGUIEventLoop::Dispatch()
 
     return true;
 }
+
+//
+// Yield to incoming messages
+//
+bool wxGUIEventLoop::YieldFor(long eventsToProcess)
+{
+    HAB vHab = 0;
+    QMSG vMsg;
+
+    //
+    // Disable log flushing from here because a call to wxYield() shouldn't
+    // normally result in message boxes popping up &c
+    //
+    wxLog::Suspend();
+
+    m_isInsideYield = true;
+    m_eventsToProcessInsideYield = eventsToProcess;
+
+    //
+    // We want to go back to the main message loop
+    // if we see a WM_QUIT. (?)
+    //
+    while (::WinPeekMsg(vHab, &vMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) && vMsg.msg != WM_QUIT)
+    {
+        // TODO: implement event filtering using the eventsToProcess mask
+
+#if wxUSE_THREADS
+        wxMutexGuiLeaveOrEnter();
+#endif // wxUSE_THREADS
+        if (!wxTheApp->Dispatch())
+            break;
+    }
+
+    //
+    // If they are pending events, we must process them.
+    //
+    if (wxTheApp)
+        wxTheApp->ProcessPendingEvents();
+
+    HandleSockets();
+
+    //
+    // Let the logs be flashed again
+    //
+    wxLog::Resume();
+    m_isInsideYield = false;
+
+    return true;
+} // end of wxYield

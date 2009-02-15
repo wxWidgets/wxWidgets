@@ -39,8 +39,6 @@ public:
 private:
     wxVideoMode m_videoMode;
 
-    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
-
     DECLARE_DYNAMIC_CLASS(wxApp)
 };
 

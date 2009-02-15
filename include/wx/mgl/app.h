@@ -51,8 +51,6 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxApp)
 
-    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
-
     wxVideoMode m_displayMode;
 };
 

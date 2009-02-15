@@ -767,52 +767,6 @@ void wxApp::Exit()
     wxAppConsole::Exit();
 }
 
-// Yield to other processes
-
-bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
-{
-    // Sometimes only 2 yields seem
-    // to do the trick, e.g. in the
-    // progress dialog
-    int i;
-    for (i = 0; i < 2; i++)
-    {
-        if ( m_isInsideYield )
-        {
-            if ( !onlyIfNeeded )
-            {
-                wxFAIL_MSG( wxT("wxYield called recursively" ) );
-            }
-
-            return false;
-        }
-
-        m_isInsideYield = true;
-        m_eventsToProcessInsideYield = eventsToProcess;
-
-        // Make sure we have an event loop object,
-        // or Pending/Dispatch will fail
-        wxEventLoopGuarantor dummyLoopIfNeeded;
-
-        // Call dispatch at least once so that sockets
-        // can be tested
-        wxTheApp->Dispatch();
-
-        // TODO: implement event filtering using the eventsToProcess mask
-        while (wxTheApp && wxTheApp->Pending())
-            wxTheApp->Dispatch();
-
-#if wxUSE_TIMER
-        wxGenericTimerImpl::NotifyTimers();
-#endif
-        ProcessIdle();
-
-        m_isInsideYield = false;
-    }
-
-    return true;
-}
-
 #ifdef __WXDEBUG__
 
 void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)

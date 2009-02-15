@@ -22,6 +22,7 @@ public:
     virtual int DispatchTimeout(unsigned long timeout);
 
     virtual void WakeUp();
+    virtual bool YieldFor(long eventsToProcess);
 
 private:
     double m_sleepTime;

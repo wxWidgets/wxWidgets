@@ -36,6 +36,154 @@
 
 wxEventLoopBase *wxEventLoopBase::ms_activeLoop = NULL;
 
+wxEventLoopBase::wxEventLoopBase()
+{
+    m_isInsideYield = false;
+    m_eventsToProcessInsideYield = wxEVT_CATEGORY_ALL;
+}
+
+void wxEventLoopBase::DelayPendingEventHandler(wxEvtHandler* toDelay)
+{
+    wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+    // move the handler from the list of handlers with processable pending events
+    // to the list of handlers with pending events which needs to be processed later
+    m_handlersWithPendingEvents.Remove(toDelay);
+
+    if (m_handlersWithPendingDelayedEvents.Index(toDelay) == wxNOT_FOUND)
+        m_handlersWithPendingDelayedEvents.Add(toDelay);
+
+    wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+}
+
+void wxEventLoopBase::RemovePendingEventHandler(wxEvtHandler* toRemove)
+{
+    wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+    if (m_handlersWithPendingEvents.Index(toRemove) != wxNOT_FOUND)
+    {
+        m_handlersWithPendingEvents.Remove(toRemove);
+
+        // check that the handler was present only once in the list
+        wxASSERT_MSG( m_handlersWithPendingEvents.Index(toRemove) == wxNOT_FOUND,
+                        "Handler occurs twice in the m_handlersWithPendingEvents list!" );
+    }
+    //else: it wasn't in this list at all, it's ok
+
+    if (m_handlersWithPendingDelayedEvents.Index(toRemove) != wxNOT_FOUND)
+    {
+        m_handlersWithPendingDelayedEvents.Remove(toRemove);
+
+        // check that the handler was present only once in the list
+        wxASSERT_MSG( m_handlersWithPendingDelayedEvents.Index(toRemove) == wxNOT_FOUND,
+                        "Handler occurs twice in m_handlersWithPendingDelayedEvents list!" );
+    }
+    //else: it wasn't in this list at all, it's ok
+
+    wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+}
+
+void wxEventLoopBase::AppendPendingEventHandler(wxEvtHandler* toAppend)
+{
+    wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+    if ( m_handlersWithPendingEvents.Index(toAppend) == wxNOT_FOUND )
+        m_handlersWithPendingEvents.Add(toAppend);
+
+    wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+}
+
+bool wxEventLoopBase::HasPendingEvents() const
+{
+    wxENTER_CRIT_SECT(const_cast<wxEventLoopBase*>(this)->m_handlersWithPendingEventsLocker);
+
+    bool has = !m_handlersWithPendingEvents.IsEmpty();
+
+    wxLEAVE_CRIT_SECT(const_cast<wxEventLoopBase*>(this)->m_handlersWithPendingEventsLocker);
+
+    return has;
+}
+
+void wxEventLoopBase::SuspendProcessingOfPendingEvents()
+{
+    wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+}
+
+void wxEventLoopBase::ResumeProcessingOfPendingEvents()
+{
+    wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+}
+
+void wxEventLoopBase::ProcessPendingEvents()
+{
+    wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+    wxCHECK_RET( m_handlersWithPendingDelayedEvents.IsEmpty(),
+                 "this helper list should be empty" );
+
+    // iterate until the list becomes empty: the handlers remove themselves
+    // from it when they don't have any more pending events
+    while (!m_handlersWithPendingEvents.IsEmpty())
+    {
+        // In ProcessPendingEvents(), new handlers might be added
+        // and we can safely leave the critical section here.
+        wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+        // NOTE: we always call ProcessPendingEvents() on the first event handler
+        //       with pending events because handlers auto-remove themselves
+        //       from this list (see RemovePendingEventHandler) if they have no
+        //       more pending events.
+        m_handlersWithPendingEvents[0]->ProcessPendingEvents();
+
+        wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+    }
+
+    // now the wxHandlersWithPendingEvents is surely empty; however some event
+    // handlers may have moved themselves into wxHandlersWithPendingDelayedEvents
+    // because of a selective wxYield call in progress.
+    // Now we need to move them back to wxHandlersWithPendingEvents so the next
+    // call to this function has the chance of processing them:
+    if (!m_handlersWithPendingDelayedEvents.IsEmpty())
+    {
+        WX_APPEND_ARRAY(m_handlersWithPendingEvents, m_handlersWithPendingDelayedEvents);
+        m_handlersWithPendingDelayedEvents.Clear();
+    }
+
+    wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+}
+
+void wxEventLoopBase::WakeUpIdle()
+{
+    WakeUp();
+}
+
+bool wxEventLoopBase::ProcessIdle()
+{
+    // process pending wx events before sending idle events
+    ProcessPendingEvents();
+
+    wxIdleEvent event;
+
+    event.SetEventObject(wxTheApp);
+    wxTheApp->ProcessEvent(event);
+    return event.MoreRequested();
+}
+
+bool wxEventLoopBase::Yield(bool onlyIfNeeded)
+{
+    if ( m_isInsideYield )
+    {
+        if ( !onlyIfNeeded )
+        {
+            wxFAIL_MSG( wxT("wxYield called recursively" ) );
+        }
+
+        return false;
+    }
+
+    return YieldFor(wxEVT_CATEGORY_ALL);
+}
+
 // wxEventLoopManual is unused in the other ports
 #if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && wxUSE_BASE)
 

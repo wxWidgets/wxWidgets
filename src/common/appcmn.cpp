@@ -40,6 +40,7 @@
 #include "wx/msgout.h"
 #include "wx/thread.h"
 #include "wx/vidmode.h"
+#include "wx/evtloop.h"
 
 #ifdef __WXDEBUG__
     #if wxUSE_STACKWALKER
@@ -77,9 +78,6 @@ wxAppBase::wxAppBase()
     m_forceTrueColour = false;
 
     m_isActive = true;
-
-    m_isInsideYield = false;
-    m_eventsToProcessInsideYield = wxEVT_CATEGORY_ALL;
 
     // We don't want to exit the app if the user code shows a dialog from its
     // OnInit() -- but this is what would happen if we set m_exitOnFrameDelete
@@ -326,23 +324,22 @@ void wxAppBase::SetActive(bool active, wxWindow * WXUNUSED(lastFocus))
     (void)ProcessEvent(event);
 }
 
-bool wxAppBase::IsEventAllowedInsideYield(wxEventCategory cat) const
-{
-    return (m_eventsToProcessInsideYield & cat) != 0;
-}
-
 bool wxAppBase::SafeYield(wxWindow *win, bool onlyIfNeeded)
 {
     wxWindowDisabler wd(win);
 
-    return Yield(onlyIfNeeded);
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+
+    return loop && loop->Yield(onlyIfNeeded);
 }
 
 bool wxAppBase::SafeYieldFor(wxWindow *win, long eventsToProcess)
 {
     wxWindowDisabler wd(win);
 
-    return YieldFor(eventsToProcess);
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+
+    return loop && loop->YieldFor(eventsToProcess);
 }
 
 

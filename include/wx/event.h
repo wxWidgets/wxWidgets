@@ -772,7 +772,7 @@ enum wxEventPropagation
 };
 
 // The different categories for a wxEvent; see wxEvent::GetEventCategory.
-// NOTE: they are used as OR-combinable flags by wxApp::Yield
+// NOTE: they are used as OR-combinable flags by wxEventLoopBase::YieldFor
 enum wxEventCategory
 {
     // this is the category for those events which are generated to update
@@ -802,10 +802,10 @@ enum wxEventCategory
 
     // implementation only
 
-    // used in the implementations of DoYield()
+    // used in the implementations of wxEventLoopBase::YieldFor
     wxEVT_CATEGORY_UNKNOWN = 32,
 
-    // a special category used as an argument to wxApp::Yield() to indicate that
+    // a special category used as an argument to wxEventLoopBase::YieldFor to indicate that
     // Yield() should leave all wxEvents on the queue while emptying the native event queue
     // (native events will be processed but the wxEvents they generate will be queued)
     wxEVT_CATEGORY_CLIPBOARD = 64,
@@ -817,7 +817,7 @@ enum wxEventCategory
     // events of the native toolkit and which typically are not-"delayable".
     wxEVT_CATEGORY_NATIVE_EVENTS = wxEVT_CATEGORY_UI|wxEVT_CATEGORY_USER_INPUT,
 
-    // used in wxApp::Yield to specify all event categories should be processed:
+    // used in wxEventLoopBase::YieldFor to specify all event categories should be processed:
     wxEVT_CATEGORY_ALL =
         wxEVT_CATEGORY_UI|wxEVT_CATEGORY_USER_INPUT|wxEVT_CATEGORY_SOCKET| \
         wxEVT_CATEGORY_TIMER|wxEVT_CATEGORY_THREAD
@@ -864,7 +864,7 @@ public:
     // for them wouldn't work (it needs to do a copy of the event)
     virtual wxEvent *Clone() const = 0;
 
-    // this function is used to selectively process events in wxApp::YieldFor
+    // this function is used to selectively process events in wxEventLoopBase::YieldFor
     // NOTE: by default it returns wxEVT_CATEGORY_UI just because the major
     //       part of wxWidgets events belong to that category.
     virtual wxEventCategory GetEventCategory() const
@@ -1120,7 +1120,7 @@ public:
         return ev;
     }
 
-    // this is important to avoid that calling wxApp::Yield() thread events
+    // this is important to avoid that calling wxEventLoopBase::YieldFor thread events
     // gets processed when this is unwanted:
     virtual wxEventCategory GetEventCategory() const
         { return wxEVT_CATEGORY_THREAD; }
@@ -3984,24 +3984,6 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 
 // Thread events
 #define EVT_THREAD(id, func)  wx__DECLARE_EVT1(wxEVT_COMMAND_THREAD, id, wxThreadEventHandler(func))
-
-// ----------------------------------------------------------------------------
-// Global data
-// ----------------------------------------------------------------------------
-
-// list containing event handlers with pending events for them
-//
-// notice that each event handler should occur at most once in this list
-extern WXDLLIMPEXP_BASE wxList *wxHandlersWithPendingEvents;
-extern WXDLLIMPEXP_BASE wxList *wxHandlersWithPendingDelayedEvents;
-#if wxUSE_THREADS
-    // this critical section protectes both the lists above
-    extern WXDLLIMPEXP_BASE wxCriticalSection *wxHandlersWithPendingEventsLocker;
-#endif
-
-// old list names:
-#define wxPendingEvents         wxHandlersWithPendingEvents
-#define wxPendingEventsLocker   wxHandlersWithPendingEventsLocker
 
 // ----------------------------------------------------------------------------
 // Helper functions

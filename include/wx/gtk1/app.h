@@ -70,8 +70,6 @@ private:
     bool m_isInAssert;
 #endif // __WXDEBUG__
 
-    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
-
     DECLARE_DYNAMIC_CLASS(wxApp)
 };
 

@@ -261,6 +261,8 @@ Deprecated methods and their replacements
 - wxDos2UnixFilename, wxUnix2DosFilename, wxStripExtension, wxGetTempFileName,
   wxExpandPath, wxContractPath, wxRealPath, wxCopyAbsolutePath, wxSplitPath
   were deprecated in favour of wxFileName methods. See docs for more info.
+- global wxPendingEvents and wxPendingEventsLocker objects were removed; now you may use
+  wxEventLoopBase::SuspendProcessingOfPendingEvents instead of locking wxPendingEventsLocker.
 
 Major new features in this release
 ----------------------------------
@@ -472,6 +474,9 @@ All (GUI):
 - Added wxIMAGE_OPTION_PNG_FILTER and many wxIMAGE_OPTION_PNG_COMPRESSION_* options
   to wxImage and wxPNGHandler to allow for custom compression levels when saving PNGs
 - Added GetValue(), GetRange(), GetMessage() functions to wxProgressDialog
+- Moved yield functions to wxEventLoopBase and implemented for wxMSW and wxGTK
+  a selective wxEventLoopBase::YieldFor() function.
+  Added also wxEventLoopBase::IsYielding to help cure re-entrancy problems with Yield().
 
 wxGTK:
 

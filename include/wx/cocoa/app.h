@@ -57,7 +57,6 @@ public:
     // Implement wxAppBase pure virtuals
     virtual void Exit();
 
-    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
     virtual void WakeUpIdle();
 
     virtual bool Initialize(int& argc, wxChar **argv);

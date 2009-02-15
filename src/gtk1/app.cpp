@@ -99,64 +99,6 @@ void wxapp_install_idle_handler();
 static wxMutex gs_idleTagsMutex;
 #endif
 
-//-----------------------------------------------------------------------------
-// wxYield
-//-----------------------------------------------------------------------------
-
-bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
-{
-    if ( m_isInsideYield )
-    {
-        if ( !onlyIfNeeded )
-        {
-            wxFAIL_MSG( wxT("wxYield called recursively" ) );
-        }
-
-        return false;
-    }
-
-#if wxUSE_THREADS
-    if ( !wxThread::IsMain() )
-    {
-        // can't call gtk_main_iteration() from other threads like this
-        return true;
-    }
-#endif // wxUSE_THREADS
-
-    m_isInsideYield = true;
-    m_eventsToProcessInsideYield = eventsToProcess;
-
-    // We need to remove idle callbacks or the loop will
-    // never finish.
-    wxTheApp->RemoveIdleTag();
-
-#if wxUSE_LOG
-    // disable log flushing from here because a call to wxYield() shouldn't
-    // normally result in message boxes popping up &c
-    wxLog::Suspend();
-#endif
-
-    // TODO: implement event filtering using the eventsToProcess mask
-    while (gtk_events_pending())
-        gtk_main_iteration();
-
-    // It's necessary to call ProcessIdle() to update the frames sizes which
-    // might have been changed (it also will update other things set from
-    // OnUpdateUI() which is a nice (and desired) side effect). But we
-    // call ProcessIdle() only once since this is not meant for longish
-    // background jobs (controlled by wxIdleEvent::RequestMore() and the
-    // return value of Processidle().
-    ProcessIdle();
-
-#if wxUSE_LOG
-    // let the logs be flashed again
-    wxLog::Resume();
-#endif
-
-    m_isInsideYield = false;
-
-    return true;
-}
 
 //-----------------------------------------------------------------------------
 // wxWakeUpIdle

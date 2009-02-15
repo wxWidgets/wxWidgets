@@ -504,66 +504,6 @@ void wxApp::OnQueryEndSession( wxCloseEvent& rEvent )
     }
 } // end of wxApp::OnQueryEndSession
 
-//
-// Yield to incoming messages
-//
-bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
-{
-    if ( m_isInsideYield )
-    {
-        if ( !onlyIfNeeded )
-        {
-            wxFAIL_MSG( _T("wxYield() called recursively") );
-        }
-
-        return false;
-    }
-
-    HAB vHab = 0;
-    QMSG vMsg;
-
-    //
-    // Disable log flushing from here because a call to wxYield() shouldn't
-    // normally result in message boxes popping up &c
-    //
-    wxLog::Suspend();
-
-    m_isInsideYield = true;
-    m_eventsToProcessInsideYield = eventsToProcess;
-
-    //
-    // We want to go back to the main message loop
-    // if we see a WM_QUIT. (?)
-    //
-    wxEventLoopGuarantor dummyLoopIfNeeded;
-    while (::WinPeekMsg(vHab, &vMsg, (HWND)NULL, 0, 0, PM_NOREMOVE) && vMsg.msg != WM_QUIT)
-    {
-        // TODO: implement event filtering using the eventsToProcess mask
-
-#if wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
-        if (!wxTheApp->Dispatch())
-            break;
-    }
-
-    //
-    // If they are pending events, we must process them.
-    //
-    if (wxTheApp)
-        wxTheApp->ProcessPendingEvents();
-
-    HandleSockets();
-
-    //
-    // Let the logs be flashed again
-    //
-    wxLog::Resume();
-    m_isInsideYield = false;
-
-    return true;
-} // end of wxYield
-
 int wxApp::AddSocketHandler(int handle, int mask,
                             void (*callback)(void*), void * gsock)
 {

@@ -26,6 +26,7 @@ public:
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp() { }
+    virtual bool YieldFor(long eventsToProcess);
 
 protected:
     int m_exitcode;

@@ -40,6 +40,8 @@ protected:
 
 #if wxUSE_GUI
 
+WX_DECLARE_OBJARRAY(MSG, wxMSGArray);
+
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxMSWEventLoopBase
 {
 public:
@@ -72,6 +74,7 @@ public:
     virtual bool Dispatch();
     virtual int DispatchTimeout(unsigned long timeout);
     virtual void WakeUp();
+    virtual bool YieldFor(long eventsToProcess);
 
 protected:
     virtual void OnNextIteration();
@@ -81,6 +84,8 @@ private:
     // non NULL)
     static bool IsChildOfCriticalWindow(wxWindowMSW *win);
 
+    // array of messages used for temporary storage by YieldFor()
+    wxMSGArray m_arrMSG;
 
     // critical window or NULL
     static wxWindowMSW *ms_winCritical;

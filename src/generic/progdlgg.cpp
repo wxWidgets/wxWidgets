@@ -42,6 +42,7 @@
 #endif
 
 #include "wx/progdlg.h"
+#include "wx/evtloop.h"
 
 // ---------------------------------------------------------------------------
 // macros
@@ -402,7 +403,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
                 m_msg->SetLabel(_("Done."));
             }
 
-            wxTheApp->YieldFor(wxEVT_CATEGORY_UI);
+            wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
 
             (void)ShowModal();
         }
@@ -452,7 +453,7 @@ bool wxProgressDialog::DoAfterUpdate(bool *skip)
 {
     // we have to yield because not only we want to update the display but
     // also to process the clicks on the cancel and skip buttons
-    wxTheApp->YieldFor(wxEVT_CATEGORY_UI|wxEVT_CATEGORY_USER_INPUT);
+    wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI|wxEVT_CATEGORY_USER_INPUT);
 
     Update();
 
@@ -671,7 +672,7 @@ void wxProgressDialog::UpdateMessage(const wxString &newmsg)
 
         Fit();   // adapt to the new label size
 
-        wxTheApp->YieldFor(wxEVT_CATEGORY_UI);
+        wxEventLoopBase::GetActive()->YieldFor(wxEVT_CATEGORY_UI);
     }
 }
 

@@ -162,11 +162,6 @@ bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **argv)
     GetTraits()->SetLocale();
 #endif // wxUSE_INTL
 
-#if wxUSE_THREADS
-    wxHandlersWithPendingEventsLocker = new wxCriticalSection;
-    wxHandlersWithPendingDelayedEvents = new wxList;
-#endif
-
 #ifndef __WXPALMOS__
     if ( m_appName.empty() && argv && argv[0] )
     {
@@ -190,17 +185,6 @@ void wxAppConsoleBase::CleanUp()
         delete m_mainLoop;
         m_mainLoop = NULL;
     }
-
-    delete wxHandlersWithPendingEvents;
-    wxHandlersWithPendingEvents = NULL;
-
-    delete wxHandlersWithPendingDelayedEvents;
-    wxHandlersWithPendingDelayedEvents = NULL;
-
-#if wxUSE_THREADS
-    delete wxHandlersWithPendingEventsLocker;
-    wxHandlersWithPendingEventsLocker = NULL;
-#endif // wxUSE_THREADS
 }
 
 // ----------------------------------------------------------------------------
@@ -291,7 +275,7 @@ wxAppTraits *wxAppConsoleBase::GetTraitsIfExists()
 }
 
 // ----------------------------------------------------------------------------
-// event processing
+// wxEventLoop redirection
 // ----------------------------------------------------------------------------
 
 int wxAppConsoleBase::MainLoop()
@@ -331,81 +315,37 @@ bool wxAppConsoleBase::Dispatch()
 
 bool wxAppConsoleBase::HasPendingEvents() const
 {
-    wxENTER_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
 
-    bool has = wxHandlersWithPendingEvents && !wxHandlersWithPendingEvents->IsEmpty();
-
-    wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
-
-    return has;
+    return loop && loop->HasPendingEvents();
 }
 
 void wxAppConsoleBase::SuspendProcessingOfPendingEvents()
 {
-    wxENTER_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+
+    if (loop) loop->SuspendProcessingOfPendingEvents();
 }
 
 void wxAppConsoleBase::ResumeProcessingOfPendingEvents()
 {
-    wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
-}
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
 
-/* static */
-bool wxAppConsoleBase::IsMainLoopRunning()
-{
-    const wxAppConsole * const app = GetInstance();
-
-    return app && app->m_mainLoop != NULL;
+    if (loop) loop->ResumeProcessingOfPendingEvents();
 }
 
 void wxAppConsoleBase::ProcessPendingEvents()
 {
-#if wxUSE_THREADS
-    if ( !wxHandlersWithPendingEventsLocker )
-        return;
-#endif
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
 
-    wxENTER_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
+    if (loop) loop->ProcessPendingEvents();
+}
 
-    wxCHECK_RET( wxHandlersWithPendingDelayedEvents->IsEmpty(),
-                 "this helper list should be empty" );
+bool wxAppConsoleBase::Yield(bool onlyIfNeeded)
+{
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
 
-    if (wxHandlersWithPendingEvents)
-    {
-        // iterate until the list becomes empty: the handlers remove themselves
-        // from it when they don't have any more pending events
-        wxList::compatibility_iterator node = wxHandlersWithPendingEvents->GetFirst();
-        while (node)
-        {
-            // In ProcessPendingEvents(), new handlers might be added
-            // and we can safely leave the critical section here.
-            wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
-
-            wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
-            handler->ProcessPendingEvents();
-
-            wxENTER_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
-
-            // restart as the iterators could have been invalidated
-            node = wxHandlersWithPendingEvents->GetFirst();
-        }
-    }
-
-    // now the wxHandlersWithPendingEvents is surely empty; however some event
-    // handlers may have moved themselves into wxHandlersWithPendingDelayedEvents
-    // because of a selective wxYield call in progress.
-    // Now we need to move them back to wxHandlersWithPendingEvents so the next
-    // call to this function has the chance of processing them:
-    if (!wxHandlersWithPendingDelayedEvents->IsEmpty())
-    {
-        if (!wxHandlersWithPendingEvents)
-            wxHandlersWithPendingEvents = new wxList;
-
-        WX_APPEND_LIST(wxHandlersWithPendingEvents, wxHandlersWithPendingDelayedEvents);
-        wxHandlersWithPendingDelayedEvents->Clear();
-    }
-
-    wxLEAVE_CRIT_SECT( *wxHandlersWithPendingEventsLocker );
+    return loop && loop->Yield(onlyIfNeeded);
 }
 
 void wxAppConsoleBase::WakeUpIdle()
@@ -416,14 +356,21 @@ void wxAppConsoleBase::WakeUpIdle()
 
 bool wxAppConsoleBase::ProcessIdle()
 {
-    // process pending wx events before sending idle events
-    ProcessPendingEvents();
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
 
-    wxIdleEvent event;
+    return loop && loop->ProcessIdle();
+}
 
-    event.SetEventObject(this);
-    ProcessEvent(event);
-    return event.MoreRequested();
+// ----------------------------------------------------------------------------
+// events
+// ----------------------------------------------------------------------------
+
+/* static */
+bool wxAppConsoleBase::IsMainLoopRunning()
+{
+    const wxAppConsole * const app = GetInstance();
+
+    return app && app->m_mainLoop != NULL;
 }
 
 int wxAppConsoleBase::FilterEvent(wxEvent& WXUNUSED(event))
@@ -603,7 +550,6 @@ bool wxAppConsoleBase::CheckBuildOptions(const char *optionsSignature,
         // normally wxLogFatalError doesn't return
         return false;
     }
-#undef wxCMP
 
     return true;
 }

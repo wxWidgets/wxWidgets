@@ -468,32 +468,6 @@ void wxApp::SetTopLevelRealizedWidget(WXDisplay* display, WXWidget widget)
         .m_topLevelRealizedWidget = (Widget)widget;
 }
 
-// Yield to other processes
-
-bool wxApp::DoYield(bool onlyIfNeeded, long eventsToProcess)
-{
-    if ( m_isInsideYield )
-    {
-        if ( !onlyIfNeeded )
-        {
-            wxFAIL_MSG( wxT("wxYield called recursively" ) );
-        }
-
-        return false;
-    }
-
-    m_isInsideYield = true;
-    m_eventsToProcessInsideYield = eventsToProcess;
-
-    wxEventLoopGuarantor dummyLoopIfNeeded;
-    while (wxTheApp && wxTheApp->Pending())
-        // TODO: implement event filtering using the eventsToProcess mask
-        wxTheApp->Dispatch();
-
-    m_isInsideYield = false;
-
-    return true;
-}
 
 // ----------------------------------------------------------------------------
 // accessors for C modules

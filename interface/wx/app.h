@@ -57,31 +57,26 @@ public:
 
     /**
         @name Event-handling
+
+        Note that you should look at wxEvtLoopBase for more event-processing
+        documentation.
     */
     //@{
 
     /**
-        Dispatches the next event in the windowing system event queue.
-        Blocks until an event appears if there are none currently
-        (use Pending() if this is not wanted).
+        Called by wxWidgets on creation of the application. Override this if you wish
+        to provide your own (environment-dependent) main loop.
 
-        This can be used for programming event loops, e.g.
-
-        @code
-        while (app.Pending())
-            Dispatch();
-        @endcode
-
-        @return @false if the event loop should stop and @true otherwise.
-
-        @see Pending(), wxEventLoopBase
+        @return 0 under X, and the wParam of the WM_QUIT message under Windows.
     */
-    virtual bool Dispatch();
+    virtual int MainLoop();
 
     /**
         Call this to explicitly exit the main message (event) loop.
         You should normally exit the main loop (and the application) by deleting
         the top window.
+
+        This function simply calls wxEvtLoopBase::Exit() on the active loop.
     */
     virtual void ExitMainLoop();
 
@@ -107,81 +102,6 @@ public:
     virtual void HandleEvent(wxEvtHandler* handler,
                              wxEventFunction func,
                              wxEvent& event) const;
-
-    /**
-        Returns @true if called from inside Yield().
-    */
-    virtual bool IsYielding() const;
-
-    /**
-        Process all pending events; it is necessary to call this function to
-        process posted events.
-
-        This happens during each event loop iteration in GUI mode but if there is
-        no main loop, it may be also called directly.
-    */
-    virtual void ProcessPendingEvents();
-
-    /**
-        Called by wxWidgets on creation of the application. Override this if you wish
-        to provide your own (environment-dependent) main loop.
-
-        @return 0 under X, and the wParam of the WM_QUIT message under Windows.
-    */
-    virtual int MainLoop();
-
-    /**
-        Returns @true if unprocessed events are in the window system event queue.
-
-        @see Dispatch()
-    */
-    virtual bool Pending();
-
-    /**
-        Yields control to pending messages in the windowing system.
-
-        This can be useful, for example, when a time-consuming process writes to a
-        text window. Without an occasional yield, the text window will not be updated
-        properly, and on systems with cooperative multitasking, such as Windows 3.1
-        other processes will not respond.
-
-        Caution should be exercised, however, since yielding may allow the
-        user to perform actions which are not compatible with the current task.
-        Disabling menu items or whole menus during processing can avoid unwanted
-        reentrance of code: see ::wxSafeYield for a better function.
-        You can avoid unwanted reentrancies also using IsYielding().
-
-        Note that Yield() will not flush the message logs. This is intentional as
-        calling Yield() is usually done to quickly update the screen and popping up
-        a message box dialog may be undesirable. If you do wish to flush the log
-        messages immediately (otherwise it will be done during the next idle loop
-        iteration), call wxLog::FlushActive.
-
-        Calling Yield() recursively is normally an error and an assert failure is
-        raised in debug build if such situation is detected. However if the
-        @a onlyIfNeeded parameter is @true, the method will just silently
-        return @false instead.
-    */
-    bool Yield(bool onlyIfNeeded = false);
-
-    /**
-        Works like Yield() with @e onlyIfNeeded == @true, except that it allows
-        the caller to specify a mask of the ::wxEventCategory values which
-        indicates which events should be processed and which should instead
-        be "delayed" (i.e. processed by the main loop later).
-
-        Note that this is a safer alternative to Yield() since it ensures that
-        only the events you're interested to are processed; i.e. helps to avoid
-        unwanted reentrancies.
-    */
-    bool YieldFor(long eventsToProcess);
-
-    /**
-        Returns @true if the given event category is allowed inside
-        a YieldFor() call (i.e. compares the given category against the
-        last mask passed to YieldFor()).
-    */
-    virtual bool IsEventAllowedInsideYield(wxEventCategory cat) const;
 
     //@}
 

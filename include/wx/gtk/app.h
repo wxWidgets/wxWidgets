@@ -78,10 +78,6 @@ public:
     bool EventsPending();
     bool DoIdle();
 
-protected:
-
-    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
-
 private:
     // true if we're inside an assert modal dialog
 #ifdef __WXDEBUG__

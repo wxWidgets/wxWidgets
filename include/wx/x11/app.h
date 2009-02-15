@@ -63,7 +63,6 @@ public:
     // Implementation
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
-    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
 
     WXWindow       GetTopLevelWidget() const { return m_topLevelWidget; }
     WXColormap     GetMainColormap(WXDisplay* display);

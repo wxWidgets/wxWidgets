@@ -221,6 +221,10 @@ public:
     // had been already processed or won't be processed at all, respectively
     virtual int FilterEvent(wxEvent& event);
 
+    // return true if we're running event loop, i.e. if the events can
+    // (already) be dispatched
+    static bool IsMainLoopRunning();
+
 #if wxUSE_EXCEPTIONS
     // execute the functor to handle the given event
     //
@@ -246,87 +250,34 @@ public:
     // exit, if you need to really handle the exceptions you need to override
     // OnExceptionInMainLoop()
     virtual void OnUnhandledException();
-#endif // wxUSE_EXCEPTIONS
 
-    // event processing functions
-    // --------------------------
-
-    // return true if we're running event loop, i.e. if the events can
-    // (already) be dispatched
-    static bool IsMainLoopRunning();
-
-    // temporary suspends processing of the pending events
-    virtual void SuspendProcessingOfPendingEvents();
-
-    // resume processing of the pending events previously stopped because of a
-    // call to SuspendProcessingOfPendingEvents()
-    virtual void ResumeProcessingOfPendingEvents();
-
-    // process all events in the wxHandlersWithPendingEvents list -- it is necessary
-    // to call this function to process posted events. This happens during each
-    // event loop iteration in GUI mode but if there is no main loop, it may be
-    // also called directly.
-    virtual void ProcessPendingEvents();
-
-    // check if there are pending events on global pending event list
-    bool HasPendingEvents() const;
-
-    // make sure that idle events are sent again
-    virtual void WakeUpIdle();
-
-        // execute the main GUI loop, the function returns when the loop ends
-    virtual int MainLoop();
-
-        // exit the main GUI loop during the next iteration (i.e. it does not
-        // stop the program immediately!)
-    virtual void ExitMainLoop();
-
-        // returns true if there are unprocessed events in the event queue
-    virtual bool Pending();
-
-        // process the first event in the event queue (blocks until an event
-        // appears if there are none currently, use Pending() if this is not
-        // wanted), returns false if the event loop should stop and true
-        // otherwise
-    virtual bool Dispatch();
-
-        // this virtual function is called  when the application
-        // becomes idle and normally just sends wxIdleEvent to all interested
-        // parties
-        //
-        // it should return true if more idle events are needed, false if not
-    virtual bool ProcessIdle();
-
-#if wxUSE_EXCEPTIONS
     // Function called if an uncaught exception is caught inside the main
     // event loop: it may return true to continue running the event loop or
     // false to stop it (in the latter case it may rethrow the exception as
     // well)
     virtual bool OnExceptionInMainLoop();
+
 #endif // wxUSE_EXCEPTIONS
 
-    // Yield-related hooks
-    // -------------------
 
-        // process all currently pending events right now
-        //
-        // it is an error to call Yield() recursively unless the value of
-        // onlyIfNeeded is true
-        //
-        // WARNING: this function is dangerous as it can lead to unexpected
-        //          reentrancies (i.e. when called from an event handler it
-        //          may result in calling the same event handler again), use
-        //          with _extreme_ care or, better, don't use at all!
-        // NOTE: in wxConsoleBase it doesn't do anything, just a hook for GUI wxApp
-    bool Yield(bool onlyIfNeeded = false)
-        { return DoYield(onlyIfNeeded, wxEVT_CATEGORY_ALL); }
-    bool YieldFor(long eventsToProcess)
-        { return DoYield(true, eventsToProcess); }
-    virtual bool IsYielding() const
-        { return false; }
-    virtual bool IsEventAllowedInsideYield(wxEventCategory WXUNUSED(cat)) const
-        { return true; }
-    // no SafeYield hooks since it uses wxWindow which is not available when wxUSE_GUI=0
+    // wxEventLoop redirections
+    // ------------------------
+
+    virtual void SuspendProcessingOfPendingEvents();
+    virtual void ResumeProcessingOfPendingEvents();
+    virtual void ProcessPendingEvents();
+    bool HasPendingEvents() const;
+
+    virtual bool Pending();
+    virtual bool Dispatch();
+
+    virtual int MainLoop();
+    virtual void ExitMainLoop();
+
+    bool Yield(bool onlyIfNeeded = false);
+
+    virtual void WakeUpIdle();
+    virtual bool ProcessIdle();
 
 
     // debugging support
@@ -395,10 +346,6 @@ protected:
     // for the first time
     virtual wxAppTraits *CreateTraits();
 
-    // the real yield function hook:
-    virtual bool DoYield(bool WXUNUSED(onlyIfNeeded), long WXUNUSED(eventsToProcess))
-        { return true; }
-
     // function used for dynamic wxApp creation
     static wxAppInitializerFunction ms_appInitFn;
 
@@ -423,13 +370,6 @@ protected:
     // the main event loop of the application (may be NULL if the loop hasn't
     // been started yet or has already terminated)
     wxEventLoopBase *m_mainLoop;
-
-    // the array of the handlers with pending events which needs to be processed
-    // inside ProcessPendingEvents()
-    // wxEvtHandlerArray m_handlersWithPendingEvents;    FIXME: enable this and remove global lists
-
-    // helper array used by ProcessPendingEvents()
-    // wxEvtHandlerArray m_handlersWithPendingDelayedEvents;    FIXME: enable this and remove global lists
 
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 
@@ -495,15 +435,6 @@ public:
         // safer alternatives to Yield(), using wxWindowDisabler
     virtual bool SafeYield(wxWindow *win, bool onlyIfNeeded);
     virtual bool SafeYieldFor(wxWindow *win, long eventsToProcess);
-
-        // returns true if the main thread is inside a Yield() call
-    virtual bool IsYielding() const
-        { return m_isInsideYield; }
-
-        // returns true if events of the given event category should be immediately
-        // processed inside a wxApp::Yield() call or rather should be queued for
-        // later processing by the main event loop
-    virtual bool IsEventAllowedInsideYield(wxEventCategory cat) const;
 
         // this virtual function is called in the GUI mode when the application
         // becomes idle and normally just sends wxIdleEvent to all interested
@@ -626,10 +557,6 @@ protected:
 
     // does any of our windows have focus?
     bool m_isActive;
-
-    // Yield() helpers:
-    bool m_isInsideYield;
-    long m_eventsToProcessInsideYield;
 
     wxDECLARE_NO_COPY_CLASS(wxAppBase);
 };

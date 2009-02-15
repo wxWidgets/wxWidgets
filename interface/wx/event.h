@@ -23,7 +23,7 @@ enum wxEventPropagation
 /**
     The different categories for a wxEvent; see wxEvent::GetEventCategory.
 
-    @note They are used as OR-combinable flags by wxApp::Yield.
+    @note They are used as OR-combinable flags by wxEventLoopBase::YieldFor.
 */
 enum wxEventCategory
 {
@@ -58,8 +58,8 @@ enum wxEventCategory
     wxEVT_CATEGORY_THREAD = 16,
 
     /**
-        This mask is used in wxApp::Yield to specify that all event categories should
-        be processed.
+        This mask is used in wxEventLoopBase::YieldFor to specify that all event
+        categories should be processed.
     */
     wxEVT_CATEGORY_ALL =
         wxEVT_CATEGORY_UI|wxEVT_CATEGORY_USER_INPUT|wxEVT_CATEGORY_SOCKET| \
@@ -148,7 +148,7 @@ public:
     /**
         Returns a generic category for this event.
 
-        This function is used to selectively process events in wxApp::Yield.
+        This function is used to selectively process events in wxEventLoopBase::YieldFor.
     */
     virtual wxEventCategory GetEventCategory() const;
 
@@ -2537,7 +2537,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see @ref overview_thread, wxApp::YieldFor
+    @see @ref overview_thread, wxEventLoopBase::YieldFor
 */
 class wxThreadEvent : public wxCommandEvent
 {
@@ -2558,7 +2558,7 @@ public:
         Returns @c wxEVT_CATEGORY_THREAD.
 
         This is important to avoid unwanted processing of thread events
-        when calling wxApp::YieldFor().
+        when calling wxEventLoopBase::YieldFor().
     */
     virtual wxEventCategory GetEventCategory() const;
 };

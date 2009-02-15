@@ -78,8 +78,6 @@ public:
 protected:
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
 
-    virtual bool DoYield(bool onlyIfNeeded, long eventsToProcess);
-
 public:
     // unregister any window classes registered by GetRegisteredClassName()
     static void UnregisterWindowClasses();
