@@ -477,7 +477,7 @@ int wxListBox::GetSelection() const
     return m_selections.IsEmpty() ? wxNOT_FOUND : m_selections[0];
 }
 
-int wxCMPFUNC_CONV wxCompareInts(int *n, int *m)
+static int wxCMPFUNC_CONV wxCompareInts(int *n, int *m)
 {
     return *n - *m;
 }

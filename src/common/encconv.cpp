@@ -51,11 +51,11 @@ static const wxUint16* GetEncTable(wxFontEncoding enc)
         int i = enc-wxFONTENCODING_MACMIN ;
         if ( gMacEncodingsInited[i] == false )
         {
-            // create 
+            // create
             CFStringEncoding cfencoding = wxMacGetSystemEncFromFontEnc( enc ) ;
             if( !CFStringIsEncodingAvailable( cfencoding ) )
                 return NULL;
-                
+
             memset( gMacEncodings[i] , 0 , 128 * 2 );
             char s[2] = { 0 , 0 };
             CFRange firstchar = CFRangeMake( 0, 1 );
@@ -84,12 +84,14 @@ typedef struct {
     wxUint8  c;
 } CharsetItem;
 
-extern "C" int wxCMPFUNC_CONV
+extern "C"
+{
+static int wxCMPFUNC_CONV
 CompareCharsetItems(const void *i1, const void *i2)
 {
     return ( ((CharsetItem*)i1) -> u - ((CharsetItem*)i2) -> u );
 }
-
+}
 
 static CharsetItem* BuildReverseTable(const wxUint16 *tbl)
 {
@@ -321,7 +323,7 @@ bool wxEncodingConverter::Convert(const wchar_t* input, wchar_t* output) const
                 wxT("You must call wxEncodingConverter::Init() before actually converting!"));
 
     bool replaced = false;
-    
+
     for (i = input, o = output; *i != 0;)
         *(o++) = (wchar_t)(GetTableValue(m_Table, (wxUint8)*(i++), replaced));
     *o = 0;
