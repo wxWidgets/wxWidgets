@@ -213,29 +213,25 @@ enum wxAntialiasMode
 
     The description give a short equation on how the values of a resulting
     pixel are calculated.
-    @R = Result, @S = Source, @D = Destination, colors premultiplied with alpha
-    @Ra, @Sa, @Da their alpha components
+    @e R = Result, @e S = Source, @e D = Destination, colors premultiplied with alpha
+    @e Ra, @e Sa, @e Da their alpha components
 */
 enum wxCompositionMode
 {
-    
-    /** classic Porter-Duff compositions */
-    wxCOMPOSITION_CLEAR, /**< @R = 0 */
-    wxCOMPOSITION_SOURCE, /**< @R = S */
-    wxCOMPOSITION_OVER, /**< @R = @S + @D*(1 - @Sa) */
-    wxCOMPOSITION_IN, /**< @R = @S*@Da */
-    wxCOMPOSITION_OUT, /**< @R = @S*(1 - @Da) */
-    wxCOMPOSITION_ATOP, /**< @R = @S*@Da + @D*(1 - @Sa) */
+    wxCOMPOSITION_CLEAR, /**< @e R = 0 */
+    wxCOMPOSITION_SOURCE, /**< @e R = S */
+    wxCOMPOSITION_OVER, /**< @e R = @e S + @e D*(1 - @e Sa) */
+    wxCOMPOSITION_IN, /**< @e R = @e S*@e Da */
+    wxCOMPOSITION_OUT, /**< @e R = @e S*(1 - @e Da) */
+    wxCOMPOSITION_ATOP, /**< @e R = @e S*@e Da + @e D*(1 - @e Sa) */
 
-    wxCOMPOSITION_DEST, /**< @R = @D, essentially a noop */
-    wxCOMPOSITION_DEST_OVER, /**< @R = @S*(1 - @Da) + @D */
-    wxCOMPOSITION_DEST_IN, /**< @R = @D*@Sa */
-    wxCOMPOSITION_DEST_OUT, /**< @R = @D*(1 - @Sa) */
-    wxCOMPOSITION_DEST_ATOP, /**< @R = @S*(1 - @Da) + @D*@Sa */
-    wxCOMPOSITION_XOR, /**< @R = @S*(1 - @Da) + @D*(1 - @Sa) */
-    
-    /** mathematical compositions */
-    wxCOMPOSITION_ADD, /**< @R = @S + @D */
+    wxCOMPOSITION_DEST, /**< @e R = @e D, essentially a noop */
+    wxCOMPOSITION_DEST_OVER, /**< @e R = @e S*(1 - @e Da) + @e D */
+    wxCOMPOSITION_DEST_IN, /**< @e R = @e D*@e Sa */
+    wxCOMPOSITION_DEST_OUT, /**< @e R = @e D*(1 - @e Sa) */
+    wxCOMPOSITION_DEST_ATOP, /**< @e R = @e S*(1 - @e Da) + @e D*@e Sa */
+    wxCOMPOSITION_XOR, /**< @e R = @e S*(1 - @e Da) + @e D*(1 - @e Sa) */
+    wxCOMPOSITION_ADD, /**< @e R = @e S + @e D */
 };
 
 
