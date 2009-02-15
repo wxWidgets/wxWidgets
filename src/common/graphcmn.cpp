@@ -501,9 +501,11 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
 IMPLEMENT_ABSTRACT_CLASS(wxGraphicsContext, wxObject)
 
 
-wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) : wxGraphicsObject(renderer)
+wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) : 
+    wxGraphicsObject(renderer),
+      m_antialias(wxANTIALIAS_DEFAULT),
+      m_composition(wxCOMPOSITION_OVER)
 {
-    m_logicalFunction = wxCOPY;
 }
 
 wxGraphicsContext::~wxGraphicsContext()
@@ -587,16 +589,6 @@ void wxGraphicsContext::SetBrush( const wxBrush& brush )
 void wxGraphicsContext::SetFont( const wxGraphicsFont& font )
 {
     m_font = font;
-}
-
-bool wxGraphicsContext::SetLogicalFunction( wxRasterOperationMode function )
-{
-    if ( function == wxCOPY )
-    {
-        m_logicalFunction = function;
-        return true;
-    }
-    return false;
 }
 
 void wxGraphicsContext::SetFont( const wxFont& font, const wxColour& colour )

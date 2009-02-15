@@ -347,8 +347,14 @@ public:
 
     virtual void * GetNativeContext();
 
-    virtual bool SetLogicalFunction( wxRasterOperationMode function );
+    virtual bool SetAntialiasMode(wxAntialiasMode antialias);
 
+    virtual bool SetCompositionMode(wxCompositionMode op);
+
+    virtual void BeginLayer(wxDouble opacity);
+
+    virtual void EndLayer();
+    
     virtual void StrokePath( const wxGraphicsPath& p );
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE );
 
@@ -380,6 +386,8 @@ private:
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
 
     cairo_t* m_context;
+    
+    wxVector<float> m_layerOpacities;
 
     wxDECLARE_NO_COPY_CLASS(wxCairoContext);
 };
@@ -1536,54 +1544,98 @@ void * wxCairoContext::GetNativeContext()
     return m_context;
 }
 
-// Cairo doesn't support bitwise logical function (a.k.a. ROP, raster output
-// mode). Cairo supports Porter-Duff compositing operators, but they are quite
-// different, although in some cases have similar names.
-bool wxCairoContext::SetLogicalFunction( wxRasterOperationMode function )
+bool wxCairoContext::SetAntialiasMode(wxAntialiasMode antialias)
 {
-    if (m_logicalFunction == function)
+    if (m_antialias == antialias)
         return true;
 
-    cairo_operator_t op;
-
-    switch ( function )
+    m_antialias = antialias;
+    
+    cairo_antialias_t antialiasMode;
+    switch (antialias)
     {
-        case wxCOPY:       // (default) src
-            op = CAIRO_OPERATOR_OVER; // (also default)
+        case wxANTIALIAS_DEFAULT:
+            antialiasMode = CAIRO_ANTIALIAS_DEFAULT;
             break;
-        case wxOR:         // src OR dst
-            op = CAIRO_OPERATOR_ADD;
+        case wxANTIALIAS_NONE:
+            antialiasMode = CAIRO_ANTIALIAS_NONE;
             break;
-        case wxNO_OP:      // dst
-            op = CAIRO_OPERATOR_DEST; // ignore the source
-            break;
-        case wxCLEAR:      // 0
-            op = CAIRO_OPERATOR_CLEAR;// clear dst
-            break;
-
-        case wxAND:        // src AND dst
-        case wxAND_INVERT: // (NOT src) AND dst
-        case wxAND_REVERSE:// src AND (NOT dst)
-        case wxEQUIV:      // (NOT src) XOR dst
-        case wxINVERT:     // NOT dst
-        case wxNAND:       // (NOT src) OR (NOT dst)
-        case wxNOR:        // (NOT src) AND (NOT dst)
-        case wxOR_INVERT:  // (NOT src) OR dst
-        case wxOR_REVERSE: // src OR (NOT dst)
-        case wxSET:        // 1
-        case wxSRC_INVERT: // NOT src
-        //wxXOR does _not_ correspond to CAIRO_OPERATOR_XOR
-        case wxXOR:        // src XOR dst
         default:
             return false;
     }
-
-    m_logicalFunction = function;
-    cairo_set_operator(m_context, op);
+    cairo_set_antialias(m_context, antialiasMode);
     return true;
 }
 
+bool wxCairoContext::SetCompositionMode(wxCompositionMode op)
+{
+    if ( m_composition == op )
+        return true;
+        
+    m_composition = op;
+    cairo_operator_t cop;
+    switch (op)
+    {
+        case wxCOMPOSITION__CLEAR:
+            cop = CAIRO_OPERATOR_CLEAR;
+            break;
+        case wxCOMPOSITION_SOURCE:
+            cop = CAIRO_OPERATOR_SOURCE;
+            break;
+        case wxCOMPOSITION_OVER:
+            cop = CAIRO_OPERATOR_OVER;
+            break;
+        case wxCOMPOSITION_IN:
+            cop = CAIRO_OPERATOR_IN;
+            break;
+        case wxCOMPOSITION_OUT:
+            cop = CAIRO_OPERATOR_OUT;
+            break;
+        case wxCOMPOSITION_ATOP:
+            cop = CAIRO_OPERATOR_ATOP;
+            break;
+        case wxCOMPOSITION_DEST:
+            cop = CAIRO_OPERATOR_DEST;
+            break;
+        case wxCOMPOSITION_DEST_OVER:
+            cop = CAIRO_OPERATOR_DEST_OVER;
+            break;
+        case wxCOMPOSITION_DEST_IN:
+            cop = CAIRO_OPERATOR_DEST_IN;
+            break;
+        case wxCOMPOSITION_DEST_OUT:
+            cop = CAIRO_OPERATOR_DEST_OUT;
+            break;
+        case wxCOMPOSITION_DEST_ATOP:
+            cop = CAIRO_OPERATOR_DEST_ATOP;
+            break;
+        case wxCOMPOSITION_XOR:
+            cop = CAIRO_OPERATOR_XOR;
+            break;
+        case wxCOMPOSITION_ADD:
+            cop = CAIRO_OPERATOR_ADD;
+            break;
+        default:
+            return false;
+    }
+    cairo_set_operator(m_context, cop);
+    return true;
+}
 
+void wxCairoContext::BeginLayer(wxDouble opacity)
+{
+    m_layerOpacities.push_back(opacity);
+    cairo_push_group(m_context);
+}
+
+void wxCairoContext::EndLayer()
+{
+    float opacity = m_layerOpacities.back();
+    m_layerOpacities.pop_back();
+    cairo_pop_group_to_source(m_context);
+    cairo_paint_with_alpha(m_context,opacity);
+}
+    
 //-----------------------------------------------------------------------------
 // wxCairoRenderer declaration
 //-----------------------------------------------------------------------------

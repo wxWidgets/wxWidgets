@@ -304,6 +304,14 @@ public:
     // draws a polygon
     virtual void DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
+    virtual bool SetAntialiasMode(wxAntialiasMode antialias);
+
+    virtual bool SetCompositionMode(wxCompositionMode op);
+
+    virtual void BeginLayer(wxDouble opacity);
+
+    virtual void EndLayer();
+    
     virtual void Translate( wxDouble dx , wxDouble dy );
     virtual void Scale( wxDouble xScale , wxDouble yScale );
     virtual void Rotate( wxDouble angle );
@@ -1110,6 +1118,9 @@ void wxGDIPlusContext::ResetClip()
 
 void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
 {
+   if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
 	if ( !m_pen.IsNull() )
 	{
         wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
@@ -1127,6 +1138,9 @@ void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
 
 void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode WXUNUSED(fillStyle) )
 {
+   if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
 	Point *cpoints = new Point[n];
 	for (size_t i = 0; i < n; i++)
@@ -1144,6 +1158,9 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
 
 void wxGDIPlusContext::StrokePath( const wxGraphicsPath& path )
 {
+   if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     if ( !m_pen.IsNull() )
     {
         wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
@@ -1153,6 +1170,9 @@ void wxGDIPlusContext::StrokePath( const wxGraphicsPath& path )
 
 void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode fillStyle )
 {
+   if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     if ( !m_brush.IsNull() )
     {
         wxGDIPlusOffsetHelper helper( m_context , ShouldOffset() );
@@ -1161,6 +1181,66 @@ void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , wxPolygonFillMode 
             (GraphicsPath*) path.GetNativePath());
     }
 }
+
+bool wxGDIPlusContext::SetAntialiasMode(wxAntialiasMode antialias)
+{
+    if (m_antialias == antialias)
+        return true;
+    
+    m_antialias = antialias;
+    
+    SmoothingMode antialiasMode;
+    switch (antialias)
+    {
+        case wxANTIALIAS_DEFAULT:
+            antialiasMode = SmoothingModeHighQuality;
+            break;
+        case wxANTIALIAS_NONE:
+            antialiasMode = SmoothingModeNone;
+            break;
+        default:
+            return false;
+    }
+    m_context->SetSmoothingMode(antialiasMode);
+    return true;
+}
+
+bool wxGDIPlusContext::SetCompositionMode(wxCompositionMode op)
+{
+    if ( m_composition == op )
+        return true;
+        
+    m_composition = op;
+    
+    if (m_composition == wxCOMPOSITION_DEST)
+        return true;
+
+    CompositingMode cop;
+    switch (op)
+    {
+        case wxCOMPOSITION_SOURCE:
+            cop = CompositingModeSourceCopy;
+            break;
+        case wxCOMPOSITION_OVER:
+            cop = CompositingModeSourceOver;
+            break;
+        default:
+            return false;
+    }
+
+    m_context->SetCompositingMode(cop);
+    return true;
+}
+
+void wxGDIPlusContext::BeginLayer(wxDouble opacity)
+{
+    // TODO
+}
+
+void wxGDIPlusContext::EndLayer()
+{
+    // TODO
+}    
 
 void wxGDIPlusContext::Rotate( wxDouble angle )
 {
@@ -1192,6 +1272,9 @@ void wxGDIPlusContext::PopState()
 
 void wxGDIPlusContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
+   if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     Bitmap* image = static_cast<wxGDIPlusBitmapData*>(bmp.GetRefData())->GetGDIPlusBitmap();
     if ( image )
     {
@@ -1215,6 +1298,9 @@ void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, 
 
 void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
+   if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     // the built-in conversion fails when there is alpha in the HICON (eg XP style icons), we can only
     // find out by looking at the bitmap data whether there really was alpha in it
     HICON hIcon = (HICON)icon.GetHICON();
@@ -1278,6 +1364,9 @@ void wxGDIPlusContext::DoDrawFilledText(const wxString& str,
                                         wxDouble x, wxDouble y,
                                         const wxGraphicsBrush& brush)
 {
+   if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     wxCHECK_RET( !m_font.IsNull(),
                  wxT("wxGDIPlusContext::DrawText - no valid font set") );
 

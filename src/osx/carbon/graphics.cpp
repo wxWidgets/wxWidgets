@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c) Stefan Csomor
+// copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -77,6 +77,35 @@ extern bool wxOSXLockFocus( WXWidget view) ;
 extern void wxOSXUnlockFocus( WXWidget view) ;
 #endif
 
+#if 1 // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+
+// TODO test whether this private API also works under 10.3
+
+// copying values from NSCompositingModes (see also webkit and cairo sources)
+
+typedef enum CGCompositeOperation {
+   kCGCompositeOperationClear           = 0,
+   kCGCompositeOperationCopy            = 1,
+   kCGCompositeOperationSourceOver      = 2,
+   kCGCompositeOperationSourceIn        = 3,
+   kCGCompositeOperationSourceOut       = 4,
+   kCGCompositeOperationSourceAtop      = 5,
+   kCGCompositeOperationDestinationOver = 6,
+   kCGCompositeOperationDestinationIn   = 7,
+   kCGCompositeOperationDestinationOut  = 8,
+   kCGCompositeOperationDestinationAtop = 9,
+   kCGCompositeOperationXOR             = 10,
+   kCGCompositeOperationPlusDarker      = 11,
+// NS only, unsupported by CG : Highlight 
+   kCGCompositeOperationPlusLighter     = 12
+} CGCompositeOperation ;
+
+extern "C"
+{
+   CG_EXTERN void CGContextSetCompositeOperation (CGContextRef context, int operation);
+} ;
+
+#endif
 
 //-----------------------------------------------------------------------------
 // constants
@@ -534,12 +563,7 @@ void wxMacCoreGraphicsPenData::Apply( wxGraphicsContext* context )
     }
     else
     {
-        if ( context->GetLogicalFunction() == wxINVERT || context->GetLogicalFunction() == wxXOR )
-        {
-            CGContextSetRGBStrokeColor( cg , (CGFloat) 1.0,(CGFloat)  1.0 , (CGFloat) 1.0, (CGFloat) 1.0 );
-        }
-        else
-            CGContextSetStrokeColorWithColor( cg , m_color );
+        CGContextSetStrokeColorWithColor( cg , m_color );
     }
 }
 
@@ -829,7 +853,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     OSStatus status = noErr;
     m_macATSUIStyle = NULL;
 
-    status = ATSUCreateAndCopyStyle( (ATSUStyle) font.MacGetATSUStyle() , &m_macATSUIStyle );
+    status = ATSUCreateAndcopyStyle( (ATSUStyle) font.MacGetATSUStyle() , &m_macATSUIStyle );
 
     wxASSERT_MSG( status == noErr, wxT("couldn't create ATSU style") );
 
@@ -1316,7 +1340,14 @@ public:
 
     virtual void * GetNativeContext();
 
-    bool SetLogicalFunction( wxRasterOperationMode function );
+    virtual bool SetAntialiasMode(wxAntialiasMode antialias);
+
+    virtual bool SetCompositionMode(wxCompositionMode op);
+
+    virtual void BeginLayer(wxDouble opacity);
+
+    virtual void EndLayer();
+    
     //
     // transformation
     //
@@ -1627,69 +1658,160 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
     return m_cgContext != NULL;
 }
 
-// TODO test whether the private CGContextSetCompositeOperation works under 10.3 (using NSCompositingModes)
-
-bool wxMacCoreGraphicsContext::SetLogicalFunction( wxRasterOperationMode function )
+bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
 {
-    if (m_logicalFunction == function)
-        return true;
-
     if (EnsureIsValid()==false)
         return true;
-        
-    bool retval = false;
-    bool shouldAntiAlias = true;
-    CGBlendMode mode = kCGBlendModeNormal;
 
-#if defined(__WXMAC__) && ( wxOSX_USE_IPHONE || ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 ) )
-#if wxOSX_USE_IPHONE
-    if ( 1 )
-#else
-    if ( UMAGetSystemVersion() >= 0x1050 )
-#endif
+    if (m_antialias == antialias)
+        return true;
+    
+    m_antialias = antialias;
+    
+    bool antialiasMode;
+    switch (antialias)
     {
-        retval = true;
-        switch ( function )
+        case wxANTIALIAS_DEFAULT:
+            antialiasMode = true;
+            break;
+        case wxANTIALIAS_NONE:
+            antialiasMode = false;
+            break;
+        default:
+            return false;
+    }
+    CGContextSetShouldAntialias(m_cgContext, antialiasMode);
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
+{
+    if (EnsureIsValid()==false)
+        return true;
+
+    if ( m_composition == op )
+        return true;
+        
+    m_composition = op;
+    
+    if (m_composition == wxCOMPOSITION_DEST)
+        return true;
+        
+#if wxOSX_USE_COCOA_OR_CARBON
+#if 1 // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
+    if ( UMAGetSystemVersion() < 0x1060 )
+    {
+        CGCompositeOperation cop = kCGCompositeOperationSourceOver;
+        CGBlendMode mode = kCGBlendModeNormal;
+        switch( op )
         {
-            // TODO find best corresponding porter duff modes
-            case wxCOPY :
-                mode = kCGBlendModeCopy;
-                break;
-            case wxCLEAR :
-                mode = kCGBlendModeClear;
-                break;
-            case wxXOR :
-                mode = kCGBlendModeXOR;
-                shouldAntiAlias = false;
-                break;
-            default :
-                retval = false;
-                break;
+        case wxCOMPOSITION_CLEAR:
+            cop = kCGCompositeOperationClear; 
+            break;
+        case wxCOMPOSITION_SOURCE:
+            cop = kCGCompositeOperationCopy; 
+            break;
+        case wxCOMPOSITION_OVER:
+            mode = kCGBlendModeNormal; 
+            break;
+        case wxCOMPOSITION_IN:
+            cop = kCGCompositeOperationSourceIn; 
+            break;
+        case wxCOMPOSITION_OUT:
+            cop = kCGCompositeOperationSourceOut; 
+            break;
+        case wxCOMPOSITION_ATOP:
+            cop = kCGCompositeOperationSourceAtop; 
+            break;
+        case wxCOMPOSITION_DEST_OVER:
+            cop = kCGCompositeOperationDestinationOver; 
+            break;
+        case wxCOMPOSITION_DEST_IN:
+            cop = kCGCompositeOperationDestinationIn; 
+            break;
+        case wxCOMPOSITION_DEST_OUT:
+            cop = kCGCompositeOperationDestinationOut; 
+            break;
+        case wxCOMPOSITION_DEST_ATOP:
+           cop = kCGCompositeOperationDestinationAtop; 
+            break;
+        case wxCOMPOSITION_XOR:
+            cop = kCGCompositeOperationXOR; 
+            break;
+        case wxCOMPOSITION_ADD:
+            mode = kCGBlendModePlusLighter ;
+            break;
+        default:
+            return false;
         }
+        if ( cop != kCGCompositeOperationSourceOver )
+            CGContextSetCompositeOperation(m_cgContext, cop);
+        else
+            CGContextSetBlendMode(m_cgContext, mode);
     }
     else
 #endif
+#endif
     {
-        if ( function == wxCOPY )
+        CGBlendMode mode = kCGBlendModeNormal;
+        switch( op )
         {
-            retval = true;
+        case wxCOMPOSITION_CLEAR:
+            mode = kCGBlendModeClear; 
+            break;
+        case wxCOMPOSITION_SOURCE:
+            mode = kCGBlendModeCopy; 
+            break;
+        case wxCOMPOSITION_OVER:
+            mode = kCGBlendModeNormal; 
+            break;
+        case wxCOMPOSITION_IN:
+            mode = kCGBlendModeSourceIn; 
+            break;
+        case wxCOMPOSITION_OUT:
+            mode = kCGBlendModeSourceOut; 
+            break;
+        case wxCOMPOSITION_ATOP:
+            mode = kCGBlendModeSourceAtop; 
+            break;
+        case wxCOMPOSITION_DEST_OVER:
+            mode = kCGBlendModeDestinationOver; 
+            break;
+        case wxCOMPOSITION_DEST_IN:
+            mode = kCGBlendModeDestinationIn; 
+            break;
+        case wxCOMPOSITION_DEST_OUT:
+            mode = kCGBlendModeDestinationOut; 
+            break;
+        case wxCOMPOSITION_DEST_ATOP:
+           mode = kCGBlendModeDestinationAtop; 
+            break;
+        case wxCOMPOSITION_XOR:
+            mode = kCGBlendModeXOR; 
+            break;
+            
+        case wxCOMPOSITION_ADD:
+            mode = kCGBlendModePlusLighter ;
+            break;
+        default:
+            return false;
         }
-        else if ( function == wxINVERT || function == wxXOR )
-        {
-            // change color to white
-            mode = kCGBlendModeExclusion;
-            shouldAntiAlias = false;
-            retval = true;
-        }
+        CGContextSetBlendMode(m_cgContext, mode);
     }
+    return true;
+}
 
-    if (retval)
-    {
-        m_logicalFunction = function;
-        CGContextSetBlendMode( m_cgContext, mode );
-        CGContextSetShouldAntialias(m_cgContext, shouldAntiAlias);
-    }
-    return retval ;
+void wxMacCoreGraphicsContext::BeginLayer(wxDouble opacity)
+{
+    CGContextSaveGState(m_cgContext);
+    CGContextSetAlpha(m_cgContext, opacity);
+    CGContextBeginTransparencyLayer(m_cgContext, 0);
+}
+
+void wxMacCoreGraphicsContext::EndLayer()
+{
+    CGContextEndTransparencyLayer(m_cgContext);
+    CGContextRestoreGState(m_cgContext);
 }
 
 void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
@@ -1782,6 +1904,9 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     if (EnsureIsValid()==false)
         return;
         
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
 
     ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
@@ -1794,6 +1919,9 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonF
     if (EnsureIsValid()==false)
         return;
         
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     if ( !m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
         // when using shading, we cannot draw pen and brush at the same time
@@ -1847,6 +1975,9 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
     if (EnsureIsValid()==false)
         return;
         
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
         CGContextSaveGState( m_cgContext );
@@ -1944,6 +2075,9 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
 {
     if (EnsureIsValid()==false)
         return;
+
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
         
 #ifdef __WXMAC__
     wxMacCoreGraphicsBitmapData* refdata  =static_cast<wxMacCoreGraphicsBitmapData*>(bmp.GetRefData());
@@ -1984,6 +2118,9 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
     if (EnsureIsValid()==false)
         return;
         
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
     CGRect r = CGRectMake( (CGFloat) 0.0 , (CGFloat) 0.0 , (CGFloat) w , (CGFloat) h );
     CGContextSaveGState( m_cgContext );
     CGContextTranslateCTM( m_cgContext,(CGFloat) x ,(CGFloat) (y + h) );
@@ -2018,6 +2155,9 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     if (EnsureIsValid()==false)
         return;
         
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
 #if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
@@ -2078,6 +2218,9 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
     if (EnsureIsValid()==false)
         return;
         
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
+
 #if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {

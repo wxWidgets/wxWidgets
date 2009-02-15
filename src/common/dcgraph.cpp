@@ -53,6 +53,43 @@ static inline double DegToRad(double deg)
     return (deg * M_PI) / 180.0;
 }
 
+static bool TranslateRasterOp(wxRasterOperationMode function, wxCompositionMode *op)
+{
+    switch ( function )
+    {
+        case wxCOPY:       // (default) src
+            *op = wxCOMPOSITION_SOURCE; //
+            break;
+        case wxOR:         // src OR dst
+            *op = wxCOMPOSITION_ADD;
+            break;
+        case wxNO_OP:      // dst
+            *op = wxCOMPOSITION_DEST; // ignore the source
+            break;
+        case wxCLEAR:      // 0
+            *op = wxCOMPOSITION_CLEAR;// clear dst
+            break;
+        case wxXOR:        // src XOR dst
+            *op = wxCOMPOSITION_XOR;
+            break;
+            
+        case wxAND:        // src AND dst
+        case wxAND_INVERT: // (NOT src) AND dst
+        case wxAND_REVERSE:// src AND (NOT dst)
+        case wxEQUIV:      // (NOT src) XOR dst
+        case wxINVERT:     // NOT dst
+        case wxNAND:       // (NOT src) OR (NOT dst)
+        case wxNOR:        // (NOT src) AND (NOT dst)
+        case wxOR_INVERT:  // (NOT src) OR dst
+        case wxOR_REVERSE: // src OR (NOT dst)
+        case wxSET:        // 1
+        case wxSRC_INVERT: // NOT src
+        default:
+            return false;
+    }
+    return true;
+}
+
 //-----------------------------------------------------------------------------
 // wxDC bridge class
 //-----------------------------------------------------------------------------
@@ -456,10 +493,16 @@ void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
         return;
 
     m_logicalFunction = function;
-    if ( m_graphicContext->SetLogicalFunction( function ) )
-        m_logicalFunctionSupported=true;
+    
+    wxCompositionMode mode;
+    m_logicalFunctionSupported = TranslateRasterOp( function, &mode);
+    if (m_logicalFunctionSupported)
+        m_logicalFunctionSupported = m_graphicContext->SetCompositionMode(mode);
+        
+    if (mode == wxCOMPOSITION_XOR)
+        m_graphicContext->SetAntialiasMode(wxANTIALIAS_NONE);
     else
-        m_logicalFunctionSupported=false;
+        m_graphicContext->SetAntialiasMode(wxANTIALIAS_DEFAULT);
 }
 
 bool wxGCDCImpl::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
@@ -822,53 +865,71 @@ bool wxGCDCImpl::DoStretchBlit(
 
     if ( logical_func == wxNO_OP )
         return true;
-    else if ( !m_graphicContext->SetLogicalFunction( logical_func ) )
+        
+    wxCompositionMode mode;
+    if ( !TranslateRasterOp(logical_func, &mode) )
     {
-        wxFAIL_MSG( wxT("Blitting is only supported with wxCOPY logical operation.") );
+        wxFAIL_MSG( wxT("Blitting is not supported with this logical operation.") );
         return false;
     }
 
-    if (xsrcMask == -1 && ysrcMask == -1)
+    bool retval = true;
+    
+    wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
+    if (m_graphicContext->SetCompositionMode(mode))
     {
-        xsrcMask = xsrc;
-        ysrcMask = ysrc;
+        wxAntialiasMode formerAa = m_graphicContext->GetAntialiasMode();
+        if (mode == wxCOMPOSITION_XOR)
+        {
+            m_graphicContext->SetAntialiasMode(wxANTIALIAS_NONE);
+        }
+            
+        if (xsrcMask == -1 && ysrcMask == -1)
+        {
+            xsrcMask = xsrc;
+            ysrcMask = ysrc;
+        }
+
+        wxRect subrect(source->LogicalToDeviceX(xsrc),
+                       source->LogicalToDeviceY(ysrc),
+                       source->LogicalToDeviceXRel(srcWidth),
+                       source->LogicalToDeviceYRel(srcHeight));
+
+        // if needed clip the subrect down to the size of the source DC
+        wxCoord sw, sh;
+        source->GetSize(&sw, &sh);
+        sw = source->LogicalToDeviceXRel(sw);
+        sh = source->LogicalToDeviceYRel(sh);
+        if (subrect.x + subrect.width > sw)
+            subrect.width = sw - subrect.x;
+        if (subrect.y + subrect.height > sh)
+            subrect.height = sh - subrect.y;
+
+        wxBitmap blit = source->GetAsBitmap( &subrect );
+
+        if ( blit.IsOk() )
+        {
+            if ( !useMask && blit.GetMask() )
+                blit.SetMask(NULL);
+
+            m_graphicContext->DrawBitmap( blit, xdest, ydest,
+                                          dstWidth, dstHeight);
+        }
+        else
+        {
+            wxFAIL_MSG( wxT("Cannot Blit. Unable to get contents of DC as bitmap.") );
+            retval = false;
+        }
+        
+        if (mode == wxCOMPOSITION_XOR)
+        {
+            m_graphicContext->SetAntialiasMode(formerAa);
+        }
     }
+    // reset composition
+    m_graphicContext->SetCompositionMode(formerMode);
 
-    wxRect subrect(source->LogicalToDeviceX(xsrc),
-                   source->LogicalToDeviceY(ysrc),
-                   source->LogicalToDeviceXRel(srcWidth),
-                   source->LogicalToDeviceYRel(srcHeight));
-
-    // if needed clip the subrect down to the size of the source DC
-    wxCoord sw, sh;
-    source->GetSize(&sw, &sh);
-    sw = source->LogicalToDeviceXRel(sw);
-    sh = source->LogicalToDeviceYRel(sh);
-    if (subrect.x + subrect.width > sw)
-        subrect.width = sw - subrect.x;
-    if (subrect.y + subrect.height > sh)
-        subrect.height = sh - subrect.y;
-
-    wxBitmap blit = source->GetAsBitmap( &subrect );
-
-    if ( blit.IsOk() )
-    {
-        if ( !useMask && blit.GetMask() )
-            blit.SetMask(NULL);
-
-        m_graphicContext->DrawBitmap( blit, xdest, ydest,
-                                      dstWidth, dstHeight);
-    }
-    else
-    {
-        wxFAIL_MSG( wxT("Cannot Blit. Unable to get contents of DC as bitmap.") );
-        return false;
-    }
-
-    // reset logical function
-    m_graphicContext->SetLogicalFunction( m_logicalFunction );
-
-    return true;
+    return retval;
 }
 
 void wxGCDCImpl::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,

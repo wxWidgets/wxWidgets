@@ -20,6 +20,38 @@
 #include "wx/dynarray.h"
 #include "wx/dc.h"
 
+enum wxAntialiasMode
+{
+    wxANTIALIAS_NONE, // should be 0
+    wxANTIALIAS_DEFAULT,
+};
+
+enum wxCompositionMode
+{
+    // R = Result, S = Source, D = Destination, premultiplied with alpha
+    // Ra, Sa, Da their alpha components
+    
+    // classic Porter-Duff compositions
+    // http://keithp.com/~keithp/porterduff/p253-porter.pdf
+    
+    wxCOMPOSITION_CLEAR, /* R = 0 */
+    wxCOMPOSITION_SOURCE, /* R = S */
+    wxCOMPOSITION_OVER, /* R = S + D*(1 - Sa) */
+    wxCOMPOSITION_IN, /* R = S*Da */
+    wxCOMPOSITION_OUT, /* R = S*(1 - Da) */
+    wxCOMPOSITION_ATOP, /* R = S*Da + D*(1 - Sa) */
+
+    wxCOMPOSITION_DEST, /* R = D, essentially a noop */
+    wxCOMPOSITION_DEST_OVER, /* R = S*(1 - Da) + D */
+    wxCOMPOSITION_DEST_IN, /* R = D*Sa */
+    wxCOMPOSITION_DEST_OUT, /* R = D*(1 - Sa) */
+    wxCOMPOSITION_DEST_ATOP, /* R = S*(1 - Da) + D*Sa */
+    wxCOMPOSITION_XOR, /* R = S*(1 - Da) + D*(1 - Sa) */
+    
+    // mathematical compositions
+    wxCOMPOSITION_ADD, /* R = S + D */
+};
+
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
 #if wxUSE_PRINTING_ARCHITECTURE
@@ -356,11 +388,17 @@ public:
     // returns the native context
     virtual void * GetNativeContext() = 0;
 
-    // returns the current logical function
-    virtual wxRasterOperationMode GetLogicalFunction() const { return m_logicalFunction; }
+    // returns the current shape antialiasing mode
+    virtual wxAntialiasMode GetAntialiasMode() const { return m_antialias; }
+    
+    // sets the antialiasing mode, returns true if it supported
+    virtual bool SetAntialiasMode(wxAntialiasMode antialias) = 0;
 
-    // sets the current logical function, returns true if it supported
-    virtual bool SetLogicalFunction(wxRasterOperationMode function);
+    // returns the current compositing operator
+    virtual wxCompositionMode GetCompositionMode() const { return m_composition; }
+    
+    // sets the compositing operator, returns true if it supported
+    virtual bool SetCompositionMode(wxCompositionMode op) = 0;
 
     // returns the size of the graphics context in device coordinates
     virtual void GetSize( wxDouble* width, wxDouble* height);
@@ -375,6 +413,14 @@ public:
     // returns the alpha on this context
     virtual wxDouble GetAlpha() const;
 #endif
+
+    // all rendering is done into a fully transparent temporary context
+    virtual void BeginLayer(wxDouble opacity) = 0;
+
+    // composites back the drawings into the content with the opacity given at 
+    // the BeginLayer call
+    virtual void EndLayer() = 0;
+
     //
     // transformation : changes the current transformation matrix CTM of the context
     //
@@ -477,7 +523,7 @@ public:
     // draws a polygon
     virtual void DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE );
 
-    // draws a polygon
+    // draws a rectangle
     virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h);
 
     // draws an ellipse
@@ -496,7 +542,8 @@ protected:
     wxGraphicsPen m_pen;
     wxGraphicsBrush m_brush;
     wxGraphicsFont m_font;
-    wxRasterOperationMode m_logicalFunction;
+    wxAntialiasMode m_antialias;
+    wxCompositionMode m_composition;
 
 protected:
     // implementations of overloaded public functions: we use different names
