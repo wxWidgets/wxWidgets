@@ -137,7 +137,7 @@ void wxGUIEventLoop::Exit(int rc)
     ::wxBreakDispatch();
 }
 
-bool wxGUIEventLoop::YieldFor(ong eventsToProcess)
+bool wxGUIEventLoop::YieldFor(long eventsToProcess)
 {
     m_isInsideYield = true;
     m_eventsToProcessInsideYield = eventsToProcess;
