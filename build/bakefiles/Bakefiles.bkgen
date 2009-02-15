@@ -153,7 +153,8 @@
     <add-flags formats="borland,dmars_smake,dmars,mingw,msvc,watcom">
         -DWRITE_OPTIONS_FILE=0
     </add-flags>
-    <del-flags files="wx.bkl">
+    <del-flags formats="borland,dmars_smake,dmars,mingw,msvc,watcom"
+               files="wx.bkl">
         -DWRITE_OPTIONS_FILE=0
     </del-flags>
 
