@@ -3198,6 +3198,7 @@ void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
 
         CGColorRef color = CGColorCreate( wxMacGetGenericRGBColorSpace() , component );
         HITextViewSetBackgroundColor( m_textView , color );
+        CGColorRelease(color);
     }
     else
 #endif
