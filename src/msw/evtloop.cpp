@@ -24,14 +24,16 @@
     #pragma hdrstop
 #endif
 
+#include "wx/evtloop.h"
+
 #ifndef WX_PRECOMP
     #if wxUSE_GUI
         #include "wx/window.h"
     #endif
     #include "wx/app.h"
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
-#include "wx/evtloop.h"
 #include "wx/thread.h"
 #include "wx/except.h"
 #include "wx/msw/private.h"

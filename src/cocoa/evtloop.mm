@@ -11,12 +11,12 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/evtloop.h"
+
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/app.h"
 #endif //WX_PRECOMP
-
-#include "wx/evtloop.h"
 
 #import <AppKit/NSApplication.h>
 #import <AppKit/NSEvent.h>

@@ -12,8 +12,8 @@
 #ifndef _WX_EVTLOOP_H_
 #define _WX_EVTLOOP_H_
 
+#include "wx/event.h"
 #include "wx/utils.h"
-
 
 /*
     NOTE ABOUT wxEventLoopBase::YieldFor LOGIC

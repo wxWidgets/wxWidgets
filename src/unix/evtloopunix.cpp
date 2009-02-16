@@ -21,6 +21,8 @@
 
 #if wxUSE_CONSOLE_EVENTLOOP
 
+#include "wx/evtloop.h"
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
@@ -28,7 +30,6 @@
 
 #include <errno.h>
 #include "wx/apptrait.h"
-#include "wx/evtloop.h"
 #include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/unix/pipe.h"
