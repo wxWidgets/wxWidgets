@@ -853,7 +853,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     OSStatus status = noErr;
     m_macATSUIStyle = NULL;
 
-    status = ATSUCreateAndcopyStyle( (ATSUStyle) font.MacGetATSUStyle() , &m_macATSUIStyle );
+    status = ATSUCreateAndCopyStyle( (ATSUStyle) font.MacGetATSUStyle() , &m_macATSUIStyle );
 
     wxASSERT_MSG( status == noErr, wxT("couldn't create ATSU style") );
 
