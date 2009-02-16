@@ -98,9 +98,30 @@ bool MyApp::OnInit()
     MyFrame* frame = new MyFrame((wxFrame *)NULL, wxID_ANY, _T("Animation Demo"),
                                  wxDefaultPosition, wxSize(500, 400),
                                  wxDEFAULT_FRAME_STYLE);
+    frame->Show(true);
 
-    // Give it an icon
-    frame->SetIcon(wxICON(sample));
+    SetTopWindow(frame);
+
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// MyFrame
+// ---------------------------------------------------------------------------
+
+#include "wx/wfstream.h"
+
+// Define my frame constructor
+MyFrame::MyFrame(wxWindow *parent,
+                 const wxWindowID id,
+                 const wxString& title,
+                 const wxPoint& pos,
+                 const wxSize& size,
+                 const long style)
+       : wxFrame(parent, id, title, pos, size,
+                          style | wxNO_FULL_REPAINT_ON_RESIZE)
+{
+    SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
@@ -132,36 +153,13 @@ bool MyApp::OnInit()
     menu_bar->Append(play_menu, _T("&Animation"));
     menu_bar->Append(help_menu, _T("&Help"));
 
-    // Associate the menu bar with the frame
-    frame->SetMenuBar(menu_bar);
+    // Associate the menu bar with this frame
+    SetMenuBar(menu_bar);
 
 #if wxUSE_STATUSBAR
-    frame->CreateStatusBar();
+    CreateStatusBar();
 #endif // wxUSE_STATUSBAR
 
-    frame->Show(true);
-
-    SetTopWindow(frame);
-
-    return true;
-}
-
-// ---------------------------------------------------------------------------
-// MyFrame
-// ---------------------------------------------------------------------------
-
-#include "wx/wfstream.h"
-
-// Define my frame constructor
-MyFrame::MyFrame(wxWindow *parent,
-                 const wxWindowID id,
-                 const wxString& title,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 const long style)
-       : wxFrame(parent, id, title, pos, size,
-                          style | wxNO_FULL_REPAINT_ON_RESIZE)
-{
     // use a wxBoxSizer otherwise wxFrame will automatically
     // resize the m_animationCtrl to fill its client area on
     // user resizes
