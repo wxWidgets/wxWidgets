@@ -132,7 +132,8 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     while (stream.IsOk())
     {
         // read a chunk of data
-        if (!stream.Read(buf, sizeof(buf)))
+        if (!stream.Read(buf, sizeof(buf)) &&
+            stream.GetLastError() != wxSTREAM_EOF)   // EOF is OK for now
         {
             // gdk_pixbuf_loader_close wants the GError == NULL
             gdk_pixbuf_loader_close(loader, NULL);
@@ -158,7 +159,9 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
         return false;
     }
 
-    // load complete
+    // load complete: gdk_pixbuf_loader_close will now check if the data we
+    // wrote inside the pixbuf loader does make sense and will give an error
+    // if it doesn't (because of a truncated file, corrupted data or whatelse)
     if (!gdk_pixbuf_loader_close(loader, &error))
     {
         wxLogDebug(wxT("Could not close the loader: %s"), error->message);
