@@ -36,7 +36,7 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__WIN16__, Win16 API (not supported since wxWidgets 2.6)}
 @itemdef{__WIN32__, Win32 API}
 @itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
-@itemdef{__WXCOCOA__, OS X using Cocoa API}
+@itemdef{__WXCOCOA__, OS X using wxCocoa Port}
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
 @itemdef{__WXWINCE__, Windows CE}
 @itemdef{__WXGTK__, GTK+}
@@ -45,16 +45,18 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__WXGTK24__, GTK+ 2.4 or higher}
 @itemdef{__WXGTK26__, GTK+ 2.6 or higher}
 @itemdef{__WXGTK210__, GTK+ 2.10 or higher}
+@itemdef{__WXMAC__, old define for Mac OS X}
 @itemdef{__WXMOTIF__, Motif}
 @itemdef{__WXMOTIF20__, Motif 2.0 or higher}
-@itemdef{__WXMAC__, Mac OS all targets}
-@itemdef{__WXMAC_CLASSIC__, MacOS for Classic}
-@itemdef{__WXMAC_CARBON__, MacOS for Carbon CFM (running under Classic or OSX)
-                            or true OS X Mach-O Builds}
-@itemdef{__WXMAC_OSX__, MacOS X Carbon Mach-O Builds}
 @itemdef{__WXMGL__, SciTech Soft MGL (__WXUNIVERSAL__ will be also defined)}
 @itemdef{__WXMSW__, Any Windows}
-@itemdef{__WXOSX__, Any Mac OS X port (either Carbon or Cocoa)}
+@itemdef{__WXOSX__, any OS X}
+@itemdef{__WXOSX_IPHONE__, OS X iPhone}
+@itemdef{__WXOSX_CARBON__, Mac OS X using Carbon}
+@itemdef{__WXOSX_COCOA__, Mac OS X using Cocoa}
+@itemdef{__WXOSX_MAC__, Mac OS X (Carbon or Cocoa)}
+@itemdef{__WXOSX_OR_COCOA__, Any Mac OS X port (wxOSX-Carbon, wxOSX-Cocoa or 
+                        wxCocoa)}
 @itemdef{__WXPALMOS__, PalmOS}
 @itemdef{__WXPM__, OS/2 native Presentation Manager}
 @itemdef{__WXSTUBS__, Stubbed version ('template' wxWin implementation)}
@@ -66,17 +68,17 @@ always tested using @ifdef_ and not @if_.
 @itemdef{__X__, any X11-based GUI toolkit except GTK+}
 @endDefList
 
-There are two wxWidgets ports to Mac OS. One of them, wxMac, exists in two versions:
-Classic and Carbon. The Classic version is the only one to work on Mac OS version 8.
-The Carbon version may be built either as CFM or Mach-O (binary format, like ELF)
-and the former may run under OS 9 while the latter only runs under OS X.
-Finally, there is a new Cocoa port which can only be used under OS X. To
-summarize:
+There are two wxWidgets ports to Mac OS X. One of them, wxOSX is the successor of the
+venerable wxMac, it currently exists in three versions: Carbon and Cocoa for the
+desktop and a very early iPhone port. And there is the Cocoa port named wxCocoa 
+which has not been updated very actively since beginning 2008. To summarize:
 
-@li If you want to test for all Mac platforms, classic and OS X, you
-    should test both @c __WXMAC__ and @c __WXCOCOA__.
+@li If you want to test for wxOSX on the desktop, use
+    @c __WXOSX_MAC__.
+@li If you want to test for wxOSX on the iPhone, use
+    @c __WXOSX_IPHONE__.
 @li If you want to test for any GUI Mac port under OS X, use
-    @c __WXOSX__.
+    @c __WXOSX_OR_COCOA__.
 @li If you want to test for any port under Mac OS X, including, for
     example, wxGTK and also wxBase, use @c __DARWIN__ (see below).
 
