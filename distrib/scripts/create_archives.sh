@@ -145,7 +145,7 @@ dospinport(){
     copyfilelist $portfiles $APPDIR $TMPFILESDIR
 
     if [ $port = "msw" ]; then
-        FILES=`find . -type f \( -path '*/CVS/*' -prune -o -exec ${SCRIPTDIR}/is_text.sh {} \; -print \)`
+        FILES=`find . -type f \( -path '*/.svn/*' -prune -o -exec ${SCRIPTDIR}/is_text.sh {} \; -print \)`
         echo "$FILES" > /tmp/textfiles
     fi
 
