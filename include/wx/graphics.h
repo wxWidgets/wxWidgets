@@ -417,7 +417,7 @@ public:
     // all rendering is done into a fully transparent temporary context
     virtual void BeginLayer(wxDouble opacity) = 0;
 
-    // composites back the drawings into the content with the opacity given at 
+    // composites back the drawings into the context with the opacity given at 
     // the BeginLayer call
     virtual void EndLayer() = 0;
 
