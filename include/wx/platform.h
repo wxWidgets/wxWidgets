@@ -35,17 +35,17 @@
 
 /* backwards compatible define, until configure gets updated */
 #if defined __WXMAC__
-#define __WXOSX_CARBON__
+#define __WXOSX_CARBON__ 1
 #endif
 
 #if defined(__WXOSX_CARBON__) || defined(__WXOSX_COCOA__) || defined(__WXOSX_IPHONE__) 
-#   define __WXOSX__
+#   define __WXOSX__ 1
 #endif
 
 #ifdef __WXOSX__
 /* for backwards compatibility of code (including our own) define __WXMAC__ */
 #   ifndef __WXMAC__
-#       define __WXMAC__
+#       define __WXMAC__ 1
 #   endif
 /* setup precise defines according to sdk used */
 #   include <TargetConditionals.h>
@@ -57,7 +57,7 @@
 #       if !( defined(TARGET_OS_MAC) && TARGET_OS_MAC )
 #           error "incorrect SDK for a Mac OS X build"
 #       endif
-#       define __WXOSX_MAC__
+#       define __WXOSX_MAC__ 1
 #   else
 #       error "one of __WXOSX_IPHONE__, __WXOSX_CARBON__ or __WXOSX_COCOA__ must be defined"
 #   endif
@@ -100,7 +100,7 @@
 
  */
 #if defined(__WXOSX__) || (defined(__WXCOCOA__) && (!defined(wxUSE_BASE) || !wxUSE_BASE))
-#   define __WXOSX_OR_COCOA__
+#   define __WXOSX_OR_COCOA__ 1
 #endif
 
 #ifdef __WXOSX_OR_COCOA__
