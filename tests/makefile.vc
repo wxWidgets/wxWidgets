@@ -31,11 +31,6 @@ TEST_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 $(__DEBUGINFO) \
 TEST_OBJECTS =  \
 	$(OBJS)\test_dummy.obj \
 	$(OBJS)\test_test.obj \
-	$(OBJS)\test_evthandler.obj \
-
-TEST_OBJECTS_ =  \
-	$(OBJS)\test_dummy.obj \
-	$(OBJS)\test_test.obj \
 	$(OBJS)\test_archivetest.obj \
 	$(OBJS)\test_ziptest.obj \
 	$(OBJS)\test_tartest.obj \
