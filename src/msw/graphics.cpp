@@ -1232,7 +1232,7 @@ bool wxGDIPlusContext::SetCompositionMode(wxCompositionMode op)
     return true;
 }
 
-void wxGDIPlusContext::BeginLayer(wxDouble opacity)
+void wxGDIPlusContext::BeginLayer(wxDouble /* opacity */)
 {
     // TODO
 }
