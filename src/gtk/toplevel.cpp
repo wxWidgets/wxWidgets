@@ -442,6 +442,7 @@ void wxTopLevelWindowGTK::Init()
     m_gdkFunc = 0;
     m_grabbed = false;
     m_deferShow = true;
+    m_deferShowAllowed = true;
     m_updateDecorSize = true;
 
     m_urgency_hint = -2;
@@ -780,7 +781,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    bool deferShow = show && !m_isShown && m_deferShow;
+    bool deferShow = show && !m_isShown && m_deferShow && m_deferShowAllowed;
     if (deferShow)
     {
         deferShow = false;
@@ -896,6 +897,8 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 {
     wxCHECK_RET( m_widget, wxT("invalid frame") );
 
+    m_deferShowAllowed = true;
+
     // deal with the position first
     int old_x = m_x;
     int old_y = m_y;
@@ -940,9 +943,9 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 
 void wxTopLevelWindowGTK::DoSetClientSize(int width, int height)
 {
-    if (m_deferShow && !m_isShown)
-        // Since client size is being explicitly set, don't change it later
-        m_deferShow = false;
+    // Since client size is being explicitly set, don't change it later
+    m_deferShowAllowed = false;
+
     wxTopLevelWindowBase::DoSetClientSize(width, height);
 }
 
