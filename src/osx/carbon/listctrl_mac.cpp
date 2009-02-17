@@ -148,7 +148,10 @@ static pascal OSStatus wxMacListCtrlEventHandler( EventHandlerCallRef handler , 
                 if (result == kControlButtonPart){
                     DataBrowserPropertyID col;
                     GetDataBrowserSortProperty(controlRef, &col);
-                    int column = col - kMinColumnId;
+                    
+                    DataBrowserTableViewColumnIndex column = 0;
+                    verify_noerr( GetDataBrowserTableViewColumnPosition( controlRef, col, &column ) );
+                    
                     le.m_col = column;
                     // FIXME: we can't use the sort property for virtual listctrls
                     // so we need to find a better way to determine which column was clicked...
@@ -945,13 +948,9 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
 
     if (m_dbImpl)
     {
+        wxASSERT_MSG( col < (int)m_colsInfo.GetCount(), _T("invalid column index in wxMacListCtrlItem") );
+        
         long mask = item.GetMask();
-        if ( col >= (int)m_colsInfo.GetCount() )
-        {
-            wxListItem* listItem = new wxListItem(item);
-            m_colsInfo.Append( listItem );
-        }
-        else
         {
             wxListItem listItem;
             GetColumn( col, listItem );
@@ -973,7 +972,10 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
         // change the appearance in the databrowser.
         DataBrowserListViewHeaderDesc columnDesc;
         columnDesc.version=kDataBrowserListViewLatestHeaderDesc;
-        verify_noerr( m_dbImpl->GetHeaderDesc( kMinColumnId + col, &columnDesc ) );
+
+        DataBrowserTableViewColumnID id = 0;
+        verify_noerr( m_dbImpl->GetColumnIDFromIndex( col, &id ) );
+        verify_noerr( m_dbImpl->GetHeaderDesc( id, &columnDesc ) );
 
         /*
         if (item.GetMask() & wxLIST_MASK_TEXT)
@@ -1003,7 +1005,7 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
             }
         }
 
-        verify_noerr( m_dbImpl->SetHeaderDesc( kMinColumnId + col, &columnDesc ) );
+        verify_noerr( m_dbImpl->SetHeaderDesc( id, &columnDesc ) );
 
     }
     return true;
@@ -1402,7 +1404,10 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
     if (m_dbImpl)
     {
         DataBrowserItemID id;
-        DataBrowserPropertyID col = kMinColumnId;
+
+        DataBrowserTableViewColumnID col = 0;
+        verify_noerr( m_dbImpl->GetColumnIDFromIndex( 0, &col ) );
+        
         Rect bounds;
         DataBrowserPropertyPart part = kDataBrowserPropertyEnclosingPart;
         if ( code == wxLIST_RECT_LABEL )
@@ -1883,7 +1888,11 @@ bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
         return true; // m_genericImpl->EndEditLabel(cancel);
 
     if (m_dbImpl)
-        verify_noerr( SetDataBrowserEditItem(m_dbImpl->GetControlRef(), kDataBrowserNoItem, kMinColumnId) );
+    {
+        DataBrowserTableViewColumnID id = 0;
+        verify_noerr( m_dbImpl->GetColumnIDFromIndex( 0, &id ) );
+        verify_noerr( SetDataBrowserEditItem(m_dbImpl->GetControlRef(), kDataBrowserNoItem, id ) );
+    }
     return true;
 }
 
@@ -2138,6 +2147,9 @@ long wxListCtrl::InsertColumn(long col, wxListItem& item)
                 just = teFlushRight;
         }
         m_dbImpl->InsertColumn(col, type, item.GetText(), just, width);
+        
+        wxListItem* listItem = new wxListItem(item);
+        m_colsInfo.Insert( col, listItem );
         SetColumn(col, item);
 
         // set/remove options based on the wxListCtrl type.
@@ -2668,8 +2680,10 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     wxString text;
     wxFont font = wxNullFont;
     int imgIndex = -1;
-    short listColumn = property - kMinColumnId;
-
+    
+    DataBrowserTableViewColumnIndex listColumn = 0;
+    OSStatus err = GetColumnPosition( property, &listColumn );
+    
     wxListCtrl* list = wxDynamicCast( GetWXPeer() , wxListCtrl );
     wxMacListCtrlItem* lcItem;
     wxColour color = *wxBLACK;
@@ -2680,7 +2694,8 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         if (!m_isVirtual)
         {
             lcItem = (wxMacListCtrlItem*) itemID;
-            if (lcItem->HasColumnInfo(listColumn)){
+            if (lcItem->HasColumnInfo(listColumn))
+            {
                 wxListItem* item = lcItem->GetColumnInfo(listColumn);
 
                 // we always use the 0 column to get font and text/background colors.
@@ -2903,7 +2918,9 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
 {
     wxString text;
     int imgIndex = -1;
-    short listColumn = property - kMinColumnId;
+
+    DataBrowserTableViewColumnIndex listColumn = 0;
+    verify_noerr( GetColumnPosition( property, &listColumn ) );
 
     OSStatus err = errDataBrowserPropertyNotSupported;
     wxListCtrl* list = wxDynamicCast( GetWXPeer() , wxListCtrl );
@@ -2977,7 +2994,8 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
              default:
                 if ( property >= kMinColumnId )
                 {
-                    short listColumn = property - kMinColumnId;
+                    DataBrowserTableViewColumnIndex listColumn = 0;
+                    verify_noerr( GetColumnPosition( property, &listColumn ) );
 
                     // TODO probably send the 'end edit' from here, as we
                     // can then deal with the veto
@@ -3101,7 +3119,8 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
     long itemOrder;
     long otherItemOrder;
 
-    int colId = sortProperty - kMinColumnId;
+    DataBrowserTableViewColumnIndex colId = 0;
+    verify_noerr( GetColumnPosition( sortProperty, &colId ) );
 
     wxListCtrl* list = wxDynamicCast( GetWXPeer() , wxListCtrl );
 
@@ -3185,7 +3204,11 @@ void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsign
         // would be shown. Making sure not to update items until the control is visible
         // seems to fix this issue.
         if (hasInfo && list->IsShown())
-            UpdateItem( wxMacDataBrowserRootContainer, listItem , kMinColumnId + column );
+        {
+            DataBrowserTableViewColumnID id = 0;
+            verify_noerr( GetColumnIDFromIndex( column, &id ) );
+            UpdateItem( wxMacDataBrowserRootContainer, listItem , id );
+        }
     }
 }
 

@@ -402,7 +402,8 @@ OSStatus wxMacDataBrowserControl::AddColumn( DataBrowserListViewColumnDesc *colu
     return AddDataBrowserListViewColumn( m_controlRef, columnDesc, position );
 }
 
-OSStatus wxMacDataBrowserControl::GetColumnIDFromIndex( DataBrowserTableViewColumnIndex position, DataBrowserTableViewColumnID* id ){
+OSStatus wxMacDataBrowserControl::GetColumnIDFromIndex( DataBrowserTableViewColumnIndex position, DataBrowserTableViewColumnID* id )
+{
     return GetDataBrowserTableViewColumnProperty( m_controlRef, position, id );
 }
 
@@ -891,7 +892,9 @@ void wxMacDataItemBrowserControl::UpdateItems(const wxMacDataItem *container,
     delete [] items;
 }
 
-void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyType colType,
+static int column_id_counter = 0;
+
+void wxMacDataItemBrowserControl::InsertColumn(int col, DataBrowserPropertyType colType,
                                             const wxString& title, SInt16 just, int defaultWidth)
 {
     DataBrowserListViewColumnDesc columnDesc;
@@ -919,18 +922,20 @@ void wxMacDataItemBrowserControl::InsertColumn(int colId, DataBrowserPropertyTyp
     columnDesc.headerBtnDesc.minimumWidth = 0;
     columnDesc.headerBtnDesc.maximumWidth = 30000;
 
-    columnDesc.propertyDesc.propertyID = (kMinColumnId + colId);
+    DataBrowserPropertyID id = kMinColumnId + column_id_counter;
+    column_id_counter++;
+
+    columnDesc.propertyDesc.propertyID = id;
     columnDesc.propertyDesc.propertyType = colType;
     columnDesc.propertyDesc.propertyFlags = kDataBrowserListViewSortableColumn;
     columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewTypeSelectColumn;
     columnDesc.propertyDesc.propertyFlags |= kDataBrowserListViewNoGapForIconInHeaderButton;
 
-    verify_noerr( AddColumn( &columnDesc, kDataBrowserListViewAppendColumn ) );
+    verify_noerr( AddColumn( &columnDesc, col ) );
 
     if (defaultWidth > 0){
-        SetColumnWidth(colId, defaultWidth);
+        SetColumnWidth(col, defaultWidth);
     }
-
 }
 
 void wxMacDataItemBrowserControl::SetColumnWidth(int colId, int width)
