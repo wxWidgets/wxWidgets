@@ -1496,6 +1496,8 @@ void MyTreeCtrl::OnContextMenu(wxContextMenuEvent& event)
     wxPoint pt = event.GetPosition();
 
     wxLogMessage(wxT("OnContextMenu at screen coords (%i, %i)"), pt.x, pt.y);
+
+    event.Skip();
 }
 
 void MyTreeCtrl::ShowMenu(wxTreeItemId id, const wxPoint& pt)
