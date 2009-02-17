@@ -2706,7 +2706,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         // delete it (in POSTPAINT notify)
                         if (m_imageListState && m_imageListState->GetImageCount() > 0)
                         {
-                            typedef BOOL (*ImageList_Copy_t)
+                            typedef BOOL (wxSTDCALL *ImageList_Copy_t)
                                 (HIMAGELIST, int, HIMAGELIST, int, UINT);
                             static ImageList_Copy_t s_pfnImageList_Copy = NULL;
                             static bool loaded = false;
