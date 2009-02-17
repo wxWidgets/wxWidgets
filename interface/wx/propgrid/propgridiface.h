@@ -245,7 +245,12 @@ public:
     wxPGProperty* GetFirst( int flags = wxPG_ITERATE_ALL );
 
     /**
-        Returns id of property with given name (case-sensitive).
+        Returns pointer to a property with given name (case-sensitive).
+        If there is no property with such name, @NULL pointer is returned.
+
+        @remarks Properties which have non-category, non-root parent
+                 can not be accessed globally by their name. Instead, use
+                 "<property>.<subproperty>" instead of "<subproperty>".
     */
     wxPGProperty* GetProperty( const wxString& name ) const;
 
@@ -296,7 +301,12 @@ public:
     wxPGProperty* GetPropertyByLabel( const wxString& label ) const;
 
     /**
-        Returns property with given name. @NULL if none found.
+        Returns pointer to a property with given name (case-sensitive).
+        If there is no property with such name, @NULL pointer is returned.
+
+        @remarks Properties which have non-category, non-root parent
+                 can not be accessed globally by their name. Instead, use
+                 "<property>.<subproperty>" instead of "<subproperty>".
     */
     wxPGProperty* GetPropertyByName( const wxString& name ) const;
 

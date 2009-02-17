@@ -352,14 +352,12 @@ public:
     }
 
     /**
-        Returns id of property with given name (case-sensitive).
+        Returns pointer to a property with given name (case-sensitive).
+        If there is no property with such name, @NULL pointer is returned.
 
-        If there is no property with such name, returned property id is invalid
-        ( i.e. it will return false with IsOk method).
-        @remarks
-        - Sub-properties (i.e. properties which have parent that is not
-          category or root) can not be accessed globally by their name.
-          Instead, use "<property>.<subproperty>" in place of "<subproperty>".
+        @remarks Properties which have non-category, non-root parent
+                 can not be accessed globally by their name. Instead, use
+                 "<property>.<subproperty>" instead of "<subproperty>".
     */
     wxPGProperty* GetProperty( const wxString& name ) const
     {
