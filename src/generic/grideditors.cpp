@@ -70,13 +70,20 @@
 void wxGridCellEditorEvtHandler::OnKillFocus(wxFocusEvent& event)
 {
     // Don't disable the cell if we're just starting to edit it
-    if (m_inSetFocus)
+    if ( m_inSetFocus )
+    {
+        event.Skip();
         return;
+    }
 
     // accept changes
     m_grid->DisableCellEditControl();
 
-    event.Skip();
+    // notice that we must not skip the event here because the call above may
+    // delete the control which received the kill focus event in the first
+    // place and if we pretend not having processed the event, the search for a
+    // handler for it will continue using the now deleted object resulting in a
+    // crash
 }
 
 void wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent& event)
