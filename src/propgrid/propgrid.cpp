@@ -2114,8 +2114,6 @@ void wxPropertyGrid::Refresh( bool WXUNUSED(eraseBackground),
 
 void wxPropertyGrid::Clear()
 {
-    ClearSelection(false);
-
     m_pState->DoClear();
 
     m_propHover = NULL;

@@ -1005,10 +1005,27 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
     }
 
     {
-        RT_START_TEST(ManagerClear)
+        RT_START_TEST(Clear)
+
+        // Manager clear
+        pgman->SelectProperty("Label");
         pgman->Clear();
 
         if ( pgman->GetPageCount() )
+            RT_FAILURE();
+
+        if ( pgman->GetGrid()->GetRoot()->GetChildCount() )
+            RT_FAILURE();
+
+        // Recreate the original grid
+        CreateGrid( -1, -1 );
+        pgman = m_pPropGridManager;
+
+        // Grid clear
+        pgman->SelectProperty("Label");
+        pgman->GetGrid()->Clear();
+
+        if ( pgman->GetGrid()->GetRoot()->GetChildCount() )
             RT_FAILURE();
 
         // Recreate the original grid

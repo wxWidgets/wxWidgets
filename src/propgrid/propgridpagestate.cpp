@@ -268,6 +268,15 @@ void wxPropertyGridPageState::InitNonCatMode()
 
 void wxPropertyGridPageState::DoClear()
 {
+    if ( m_pPropGrid->GetState() == this  )
+    {
+        m_pPropGrid->ClearSelection(false);
+    }
+    else
+    {
+        m_selected = NULL;
+    }
+
     m_regularArray.Empty();
     if ( m_abcArray )
         m_abcArray->Empty();
@@ -280,8 +289,6 @@ void wxPropertyGridPageState::DoClear()
 
     m_virtualHeight = 0;
     m_vhCalcPending = 0;
-
-    m_selected = NULL;
 }
 
 // -----------------------------------------------------------------------

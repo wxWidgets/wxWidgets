@@ -657,6 +657,8 @@ wxPropertyGridPageState* wxPropertyGridManager::GetPageState( int page ) const
 
 void wxPropertyGridManager::Clear()
 {
+    m_pPropGrid->ClearSelection(false);
+
     m_pPropGrid->Freeze();
 
     int i;
