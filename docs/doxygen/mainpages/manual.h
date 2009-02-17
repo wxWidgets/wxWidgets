@@ -9,9 +9,10 @@
 
 /**
 
-@mainpage wxWidgets 2.9.0: A portable C++ GUI toolkit
-@author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn, et al
-@date February, 2008
+@mainpage Contents
+@author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn,
+        Francesco Montorsi, Bryan Petty, et al
+@date February, 2009
 
 @image html main_wxlogo.png
 

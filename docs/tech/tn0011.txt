@@ -7,19 +7,20 @@
    define the version number for the library.  When updating the
    version number all of these files must be edited:
 
-       {wx}/configure.in
-       {wx}/*.spec
-       {wx}/include/wx/version.h
-       {wx}/include/msvc/wx/setup.h [only major.minor used here]
-       {wx}/samples/minimal/borland_ide.cpp
-       {wx}/docs/latex/wx/manual.tex
-       {wx}/docs/msw/install.txt {major release only}
-       {wx}/docs/changes.txt
-       {wx}/build/bakefiles/wxpresets/presets/wx_win32.bkl
-       {wx}/build/bakefiles/version.bkl {C:R:A}
-       {wx}/build/script/win_docs.bat {windows doc and setup file}
-       {wx}/distrib/scripts/build-environ.cfg {SVN tar and zip files}
-       {wx}/include/wx/mac/carbon/config_xcode.h
+   {wx}/configure.in
+   {wx}/*.spec
+   {wx}/include/wx/version.h
+   {wx}/include/msvc/wx/setup.h [only major.minor used here]
+   {wx}/samples/minimal/borland_ide.cpp
+   {wx}/docs/doxygen/Doxyfile_inc (PROJECT_NUMBER)
+   {wx}/docs/doxygen/mainpages/manual.h (just date)
+   {wx}/docs/msw/install.txt {major release only}
+   {wx}/docs/changes.txt
+   {wx}/build/bakefiles/wxpresets/presets/wx_win32.bkl
+   {wx}/build/bakefiles/version.bkl {C:R:A}
+   {wx}/build/script/win_docs.bat {windows doc and setup file}
+   {wx}/distrib/scripts/build-environ.cfg {SVN tar and zip files}
+   {wx}/include/wx/mac/carbon/config_xcode.h
 
    The script misc/scripts/inc_release can be used for incrementing
    the release field of the version, i.e. changing 2.8.x to 2.8.x+1.
