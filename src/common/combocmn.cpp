@@ -573,6 +573,8 @@ private:
 
 BEGIN_EVENT_TABLE(wxComboBoxExtraInputHandler, wxEvtHandler)
     EVT_KEY_DOWN(wxComboBoxExtraInputHandler::OnKey)
+    EVT_KEY_UP(wxComboBoxExtraInputHandler::OnKey)
+    EVT_CHAR(wxComboBoxExtraInputHandler::OnKey)
     EVT_SET_FOCUS(wxComboBoxExtraInputHandler::OnFocus)
     EVT_KILL_FOCUS(wxComboBoxExtraInputHandler::OnFocus)
 END_EVENT_TABLE()
