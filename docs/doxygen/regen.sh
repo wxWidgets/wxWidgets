@@ -30,7 +30,7 @@ mkdir -p out/html/wxmsw out/html/wxgtk out/html/wxmac
 # used in doxygen documentation, only in our html footer and by our
 # custom aliases
 cp images/powered-by-wxwidgets.png out/html
-cp images/*logo.png out/html
+cp images/logo_*.png out/html
 cp images/wxmsw/*png out/html/wxmsw
 cp images/wxmac/*png out/html/wxmac
 cp images/wxgtk/*png out/html/wxgtk
