@@ -28,6 +28,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include <gtk/gtk.h>
