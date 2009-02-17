@@ -3185,7 +3185,7 @@ bool wxMacMLTEHIViewControl::HasFocus() const
 
 void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OSX_VERSION_10_4
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     if (HITextViewSetBackgroundColor != NULL)
     {
         RGBColor col = MAC_WXCOLORREF(brush.GetColour().GetPixel()) ;
