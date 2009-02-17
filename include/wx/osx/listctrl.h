@@ -127,6 +127,9 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
   // Gets the item rectangle
   bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;
 
+  // Gets the item rectangle of a subitem
+  bool GetSubItemRect( long item, long subItem, wxRect& rect, int code = wxLIST_RECT_BOUNDS ) const;
+
   // Gets the item position
   bool GetItemPosition(long item, wxPoint& pos) const ;
 

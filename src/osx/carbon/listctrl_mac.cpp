@@ -1383,6 +1383,15 @@ wxRect wxListCtrl::GetViewRect() const
     return rect;
 }
 
+bool wxListCtrl::GetSubItemRect( long item, long subItem, wxRect& rect, int code ) const
+{
+    if (m_genericImpl)
+        return m_genericImpl->GetItemRect(item, rect, code);
+
+    // TODO: implement for DataBrowser implementation        
+    return false;
+}
+
 // Gets the item rectangle
 bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
 {
