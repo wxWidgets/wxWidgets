@@ -268,7 +268,7 @@ void wxPropertyGridPageState::InitNonCatMode()
 
 void wxPropertyGridPageState::DoClear()
 {
-    if ( m_pPropGrid->GetState() == this  )
+    if ( m_pPropGrid && m_pPropGrid->GetState() == this  )
     {
         m_pPropGrid->ClearSelection(false);
     }
