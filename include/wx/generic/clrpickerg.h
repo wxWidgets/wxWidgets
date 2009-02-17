@@ -25,8 +25,18 @@
 // the default style
 #define wxCLRBTN_DEFAULT_STYLE  (wxCLRBTN_SHOW_LABEL)
 
+#ifndef wxCLRBTN_USES_BMP_BUTTON
+    #define wxCLRBTN_USES_BMP_BUTTON 0
+#endif
 
-class WXDLLIMPEXP_CORE wxGenericColourButton : public wxButton,
+#if wxCLRBTN_USES_BMP_BUTTON
+    #include "wx/bmpbutton.h"
+    #define wxCLRBTN_BASE_CLASS wxBitmapButton
+#else
+     #define wxCLRBTN_BASE_CLASS wxButton
+#endif
+                                               
+class WXDLLIMPEXP_CORE wxGenericColourButton : public wxCLRBTN_BASE_CLASS,
                                                public wxColourPickerWidgetBase
 {
 public:
