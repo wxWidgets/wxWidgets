@@ -584,14 +584,17 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
 {
     // Let the wxComboCtrl event handler have a go first.
     wxComboCtrlBase* combo = m_combo;
-    wxObject* prevObj = event.GetEventObject();
 
-    event.SetId(combo->GetId());
-    event.SetEventObject(combo);
-    combo->GetEventHandler()->ProcessEvent(event);
+    wxKeyEvent redirectedEvent(event);
+    redirectedEvent.SetId(combo->GetId());
+    redirectedEvent.SetEventObject(combo);
 
-    event.SetId(((wxWindow*)prevObj)->GetId());
-    event.SetEventObject(prevObj);
+    if ( !combo->GetEventHandler()->ProcessEvent(redirectedEvent) )
+    {
+        // Don't let TAB through to the text ctrl - looks ugly
+        if ( event.GetKeyCode() != WXK_TAB )
+            event.Skip();
+    }
 }
 
 void wxComboBoxExtraInputHandler::OnFocus(wxFocusEvent& event)
@@ -1654,7 +1657,8 @@ void wxComboCtrlBase::OnKeyEvent(wxKeyEvent& event)
     }
     else // no popup
     {
-        if ( HandleAsNavigationKey(event) )
+        if ( GetParent()->HasFlag(wxTAB_TRAVERSAL) &&
+             HandleAsNavigationKey(event) )
             return;
 
         if ( IsKeyPopupToggle(event) )
