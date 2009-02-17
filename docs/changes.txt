@@ -473,6 +473,7 @@ All (GUI):
   added also the SetCharIncludes() and SetCharExcludes() utilities.
 - Added wxIMAGE_OPTION_PNG_FILTER and many wxIMAGE_OPTION_PNG_COMPRESSION_* options
   to wxImage and wxPNGHandler to allow for custom compression levels when saving PNGs
+  (Perdana Panduwana)
 - Added GetValue(), GetRange(), GetMessage() functions to wxProgressDialog
 - Moved yield functions to wxEventLoopBase and implemented for wxMSW and wxGTK
   a selective wxEventLoopBase::YieldFor() function.
