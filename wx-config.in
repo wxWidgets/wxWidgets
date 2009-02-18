@@ -72,7 +72,8 @@ usage()
   list  below.  The  --optional-libs parameter should be followed by  a list
   of  libs that should be linked to, but only if they are available.
 
-  Available libraries in this build are : @BUILT_WX_LIBS@
+  Available libraries in this build are:
+  @BUILT_WX_LIBS@
 
 EOF
 
