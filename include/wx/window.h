@@ -832,7 +832,9 @@ protected:
     //       The same holds for all other wxEvtHandler functions.
 
     using wxEvtHandler::ProcessEvent;
+#if wxUSE_THREADS
     using wxEvtHandler::ProcessThreadEvent;
+#endif
     using wxEvtHandler::SafelyProcessEvent;
     using wxEvtHandler::ProcessPendingEvents;
     using wxEvtHandler::AddPendingEvent;
