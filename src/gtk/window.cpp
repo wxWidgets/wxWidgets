@@ -1074,15 +1074,15 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
                                          T *gdk_event)
 {
     event.SetTimestamp( gdk_event->time );
-    event.m_shiftDown = gdk_event->state & GDK_SHIFT_MASK;
-    event.m_controlDown = gdk_event->state & GDK_CONTROL_MASK;
-    event.m_altDown = gdk_event->state & GDK_MOD1_MASK;
-    event.m_metaDown = gdk_event->state & GDK_META_MASK;
-    event.m_leftDown = gdk_event->state & GDK_BUTTON1_MASK;
-    event.m_middleDown = gdk_event->state & GDK_BUTTON2_MASK;
-    event.m_rightDown = gdk_event->state & GDK_BUTTON3_MASK;
-    event.m_aux1Down = gdk_event->state & GDK_BUTTON4_MASK;
-    event.m_aux2Down = gdk_event->state & GDK_BUTTON5_MASK;
+    event.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK) != 0;
+    event.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK) != 0;
+    event.m_altDown = (gdk_event->state & GDK_MOD1_MASK) != 0;
+    event.m_metaDown = (gdk_event->state & GDK_META_MASK) != 0;
+    event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK) != 0;
+    event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK) != 0;
+    event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK) != 0;
+    event.m_aux1Down = (gdk_event->state & GDK_BUTTON4_MASK) != 0;
+    event.m_aux2Down = (gdk_event->state & GDK_BUTTON5_MASK) != 0;
 
     wxPoint pt = win->GetClientAreaOrigin();
     event.m_x = (wxCoord)gdk_event->x - pt.x;
@@ -1992,16 +1992,16 @@ wxMouseState wxGetMouseState()
 
     ms.SetX(x);
     ms.SetY(y);
-    ms.SetLeftDown(mask & GDK_BUTTON1_MASK);
-    ms.SetMiddleDown(mask & GDK_BUTTON2_MASK);
-    ms.SetRightDown(mask & GDK_BUTTON3_MASK);
-    ms.SetAux1Down(mask & GDK_BUTTON4_MASK);
-    ms.SetAux2Down(mask & GDK_BUTTON5_MASK);
+    ms.SetLeftDown((mask & GDK_BUTTON1_MASK) != 0);
+    ms.SetMiddleDown((mask & GDK_BUTTON2_MASK) != 0);
+    ms.SetRightDown((mask & GDK_BUTTON3_MASK) != 0);
+    ms.SetAux1Down((mask & GDK_BUTTON4_MASK) != 0);
+    ms.SetAux2Down((mask & GDK_BUTTON5_MASK) != 0);
 
-    ms.SetControlDown(mask & GDK_CONTROL_MASK);
-    ms.SetShiftDown(mask & GDK_SHIFT_MASK);
-    ms.SetAltDown(mask & GDK_MOD1_MASK);
-    ms.SetMetaDown(mask & GDK_META_MASK);
+    ms.SetControlDown((mask & GDK_CONTROL_MASK) != 0);
+    ms.SetShiftDown((mask & GDK_SHIFT_MASK) != 0);
+    ms.SetAltDown((mask & GDK_MOD1_MASK) != 0);
+    ms.SetMetaDown((mask & GDK_META_MASK) != 0);
 
     return ms;
 }

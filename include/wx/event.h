@@ -397,7 +397,7 @@ class wxEventFunctorMethod
               <
                 Class,
                 EventArg,
-                wxConvertibleTo<Class, wxEvtHandler>::value
+                wxConvertibleTo<Class, wxEvtHandler>::value != 0
               >
 {
 private:

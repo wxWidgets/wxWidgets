@@ -30,7 +30,7 @@ public:
     // default copy ctor and dtor are ok
 
     // accessors
-    virtual bool IsOk() const { return m_cgColour; }
+    virtual bool IsOk() const { return m_cgColour != NULL; }
 
     virtual WXDLLIMPEXP_INLINE_CORE ChannelType Red() const { return m_red; }
     virtual WXDLLIMPEXP_INLINE_CORE ChannelType Green() const { return m_green; }

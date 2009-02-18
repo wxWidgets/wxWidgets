@@ -97,7 +97,7 @@ void wxRadioButton::SetValue(bool val)
 
 bool wxRadioButton::GetValue() const
 {
-    return m_peer->GetValue();
+    return m_peer->GetValue() != 0;
 }
 
 void wxRadioButton::Command(wxCommandEvent& event)

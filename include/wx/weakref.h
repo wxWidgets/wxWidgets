@@ -202,7 +202,7 @@ class wxWeakRef : public
 #ifdef USE_ONLY_STATIC_WEAKREF
                   wxWeakRefStatic<T>
 #else
-                  wxWeakRefImpl<T, wxIsStaticTrackable<T>::value>
+                  wxWeakRefImpl<T, wxIsStaticTrackable<T>::value != 0>
 #endif
 {
 public:
