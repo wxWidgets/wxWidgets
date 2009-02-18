@@ -1313,27 +1313,6 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     {
         if ( wxTheApp )
         {
-/*
-    CANNOT ENABLE: ProcessEvent() must always immediately process the event!
-
-            if (wxTheApp->IsYielding() &&
-                !wxTheApp->IsEventAllowedInsideYield(event.GetEventCategory()))
-            {
-                wxEvent* queuedEv = event.Clone();
-
-                // queue this event rather than processing it now
-                QueueEvent(queuedEv);
-                    // the wxWakeUpIdle call shouldn't probably be done
-                    // in this context (there's wxYield in the call stack)
-
-                return true;
-                    // it's not completely true that the event was processed;
-                    // but we cannot even say it was skipped or discarded...
-            }
-            //else: either we're not inside a wxYield() call or if we are,
-            //      we can process this event immediately.
-*/
-
             int rc = wxTheApp->FilterEvent(event);
             if ( rc != -1 )
             {
