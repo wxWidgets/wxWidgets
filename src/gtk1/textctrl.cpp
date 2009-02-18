@@ -24,6 +24,7 @@
 
 #include "wx/strconv.h"
 #include "wx/fontutil.h"        // for wxNativeFontInfo (GetNativeFontInfo())
+#include "wx/evtloop.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -185,7 +186,8 @@ static GtkDrawCallback gs_gtk_text_draw = NULL;
 extern "C" {
 static void wxgtk_text_draw( GtkWidget *widget, GdkRectangle *rect)
 {
-    if ( !wxTheApp->IsYielding() )
+    wxEventLoopBase* loop = wxEventLoopBase::GetActive();
+    if ( loop && loop->IsYielding() )
     {
         wxCHECK_RET( gs_gtk_text_draw != wxgtk_text_draw,
                      _T("infinite recursion in wxgtk_text_draw aborted") );
