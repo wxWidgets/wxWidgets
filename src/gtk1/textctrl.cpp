@@ -187,7 +187,7 @@ extern "C" {
 static void wxgtk_text_draw( GtkWidget *widget, GdkRectangle *rect)
 {
     wxEventLoopBase* loop = wxEventLoopBase::GetActive();
-    if ( loop && loop->IsYielding() )
+    if ( loop && !loop->IsYielding() )
     {
         wxCHECK_RET( gs_gtk_text_draw != wxgtk_text_draw,
                      _T("infinite recursion in wxgtk_text_draw aborted") );
