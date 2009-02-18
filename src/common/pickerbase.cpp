@@ -94,7 +94,7 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
         // the m_picker; for very long strings, this real-time synchronization could
         // become a CPU-blocker and thus should be avoided.
         // 32 characters will be more than enough for all common uses.
-        // m_text->SetMaxLength(32);
+        m_text->SetMaxLength(32);
 
         // set the initial contents of the textctrl
         m_text->SetValue(text);
