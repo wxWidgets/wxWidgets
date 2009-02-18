@@ -279,7 +279,7 @@ public:
 
     Example:
     @code
-        extern const wxEventType wxEVT_COMMAND_MYTHREAD_UPDATE;
+        wxDECLARE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent);
 
         class MyFrame : public wxFrame, public wxThreadHelper
         {
@@ -298,7 +298,7 @@ public:
 
             ...
             void DoStartALongTask();
-            void OnThreadUpdate(wxCommandEvent& evt);
+            void OnThreadUpdate(wxThreadEvent& evt);
             void OnClose(wxCloseEvent& evt);
             ...
 
@@ -312,7 +312,7 @@ public:
             DECLARE_EVENT_TABLE()
         };
 
-        DEFINE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE)
+        wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent)
         BEGIN_EVENT_TABLE(MyFrame, wxFrame)
             EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_UPDATE, MyFrame::OnThreadUpdate)
             EVT_CLOSE(MyFrame::OnClose)
@@ -364,7 +364,7 @@ public:
 
                 // VERY IMPORTANT: do not call any GUI function inside this
                 //                 function; rather use wxQueueEvent():
-                wxQueueEvent(this, new wxCommandEvent(wxEVT_COMMAND_MYTHREAD_UPDATE));
+                wxQueueEvent(this, new wxThreadEvent(wxEVT_COMMAND_MYTHREAD_UPDATE));
                     // we used pointer 'this' assuming it's safe; see OnClose()
             }
 
@@ -386,7 +386,7 @@ public:
             Destroy();
         }
 
-        void MyFrame::OnThreadUpdate(wxCommandEvent&evt)
+        void MyFrame::OnThreadUpdate(wxThreadEvent& evt)
         {
             // ...do something... e.g. m_pGauge->Pulse();
 
@@ -399,7 +399,7 @@ public:
     @library{wxbase}
     @category{threading}
 
-    @see wxThread
+    @see wxThread, wxThreadEvent
 */
 class wxThreadHelper
 {
@@ -631,8 +631,8 @@ enum
 
     @code
     // declare a new type of event, to be used by our MyThread class:
-    extern const wxEventType wxEVT_COMMAND_MYTHREAD_COMPLETED;
-    extern const wxEventType wxEVT_COMMAND_MYTHREAD_UPDATE;
+    wxDECLARE_EVENT(wxEVT_COMMAND_MYTHREAD_COMPLETED, wxThreadEvent);
+    wxDECLARE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent);
     class MyFrame;
 
     class MyThread : public wxThread
@@ -669,7 +669,8 @@ enum
         // a resume routine would be nearly identic to DoPauseThread()
         void DoResumeThread() { ... }
 
-        void OnThreadCompletion(wxCommandEvent&);
+        void OnThreadUpdate(wxThreadEvent&);
+        void OnThreadCompletion(wxThreadEvent&);
         void OnClose(wxCloseEvent&);
 
     protected:
@@ -686,8 +687,8 @@ enum
         EVT_COMMAND(wxID_ANY, wxEVT_COMMAND_MYTHREAD_COMPLETED, MyFrame::OnThreadCompletion)
     END_EVENT_TABLE()
 
-    DEFINE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_COMPLETED)
-    DEFINE_EVENT_TYPE(wxEVT_COMMAND_MYTHREAD_UPDATE)
+    wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_COMPLETED, wxThreadEvent)
+    wxDEFINE_EVENT(wxEVT_COMMAND_MYTHREAD_UPDATE, wxThreadEvent)
 
     void MyFrame::DoStartThread()
     {
@@ -721,13 +722,13 @@ enum
         {
             // ... do a bit of work...
 
-            wxQueueEvent(m_pHandler, new wxCommandEvent(wxEVT_COMMAND_MYTHREAD_UPDATE));
+            wxQueueEvent(m_pHandler, new wxThreadEvent(wxEVT_COMMAND_MYTHREAD_UPDATE));
         }
 
         // signal the event handler that this thread is going to be destroyed
         // NOTE: here we assume that using the m_pHandler pointer is safe,
         //       (in this case this is assured by the MyFrame destructor)
-        wxQueueEvent(m_pHandler, new wxCommandEvent(wxEVT_COMMAND_MYTHREAD_COMPLETED));
+        wxQueueEvent(m_pHandler, new wxThreadEvent(wxEVT_COMMAND_MYTHREAD_COMPLETED));
 
         return (wxThread::ExitCode)0;     // success
     }
@@ -740,12 +741,12 @@ enum
         m_pHandler->m_pThread = NULL;
     }
 
-    void MyFrame::OnThreadCompletion(wxCommandEvent&)
+    void MyFrame::OnThreadCompletion(wxThreadEvent&)
     {
         wxMessageOutputDebug().Printf("MYFRAME: MyThread exited!\n");
     }
 
-    void MyFrame::OnThreadUpdate(wxCommandEvent&)
+    void MyFrame::OnThreadUpdate(wxThreadEvent&)
     {
         wxMessageOutputDebug().Printf("MYFRAME: MyThread update...\n");
     }

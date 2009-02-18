@@ -13,9 +13,12 @@
 
 /**
 
-@page overview_thread Multithreading
+@page overview_thread Multithreading Overview
 
 Classes: wxThread, wxThreadHelper, wxMutex, wxCriticalSection, wxCondition, wxSemaphore
+
+
+@section overview_thread_intro When to use multiple threads
 
 wxWidgets provides a complete set of classes encapsulating objects necessary in
 multithreaded (MT) programs: the wxThread class itself and different
@@ -45,13 +48,17 @@ two possible implementation choices:
 - use wxIdleEvent (e.g. to perform a long calculation while updating a progress dialog)
 - do everything at once but call wxWindow::Update() or wxApp::YieldFor(wxEVT_CATEGORY_UI)
   periodically to update the screen.
+If instead you choose to use threads in your application, please read also
+the following sections of this overview.
 
-If instead you choose to use threads in your application, it is strongly recommended
+@section overview_thread_notes Important notes for multithreaded applications
+
+When writing a multi-threaded application, it is strongly recommended
 that <b>no secondary threads call GUI functions</b>.
 The design which uses one GUI thread and several worker threads which communicate
 with the main one using @b events is much more robust and will undoubtedly save you
 countless problems (example: under Win32 a thread can only access GDI objects such
-as pens, brushes, c created by itself and not by the other threads).
+as pens, brushes, device contexts created by itself and not by the other threads).
 
 For communication between secondary threads and the main thread, you may use
 wxEvtHandler::QueueEvent or its short version ::wxQueueEvent. These functions
@@ -62,6 +69,19 @@ synchronization classes to implement the solution which suits your needs
 yourself. In particular, please note that it is not enough to derive
 your class from wxThread and wxEvtHandler to send messages to it: in fact, this
 does not work at all.
+You're instead encouraged to use wxThreadHelper as it greatly simplifies the
+communication and the sharing of resources.
+
+You should also look at the wxThread docs for important notes about secondary
+threads and their deletion.
+
+Last, remember that if wxEventLoopBase::YieldFor() is used directly or indirectly
+(e.g. through wxProgressDialog) in your code, then you may have both re-entrancy
+problems and also problems caused by the processing of events out of order.
+To resolve the last problem wxThreadEvent can be used: thanks to its implementation
+of the wxThreadEvent::GetEventCategory function wxThreadEvent classes in fact
+do not get processed by wxEventLoopBase::YieldFor() unless you specify the
+@c wxEVT_CATEGORY_THREAD flag.
 
 See also the @sample{thread} for a sample showing some simple interactions
 between the main and secondary threads.

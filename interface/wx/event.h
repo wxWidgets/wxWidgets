@@ -147,6 +147,7 @@ public:
 
     /**
         Returns a generic category for this event.
+        wxEvent implementation returns @c wxEVT_CATEGORY_UI by default.
 
         This function is used to selectively process events in wxEventLoopBase::YieldFor.
     */
@@ -2030,6 +2031,11 @@ public:
     This event class contains information about command events, which originate
     from a variety of simple controls.
 
+    Note that wxCommandEvents and wxCommandEvent-derived event classes by default
+    and unlike other wxEvent-derived classes propagate upward from the source
+    window (the window which emits the event) up to the first parent which processes
+    the event. Be sure to read @ref overview_events_propagation.
+
     More complex controls, such as wxTreeCtrl, have separate command event classes.
 
     @beginEventTable{wxCommandEvent}
@@ -2533,6 +2539,12 @@ public:
 
     This class adds some simple functionalities to wxCommandEvent coinceived
     for inter-threads communications.
+
+    This event is not natively emitted by any control/class: this is just
+    an helper class for the user.
+    Its most important feature is the GetEventCategory() implementation which
+    allows thread events to @b NOT be processed by wxEventLoopBase::YieldFor calls
+    (unless the @c wxEVT_CATEGORY_THREAD is specified - which is never in wx code).
 
     @library{wxcore}
     @category{events}

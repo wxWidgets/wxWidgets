@@ -10,8 +10,15 @@
     @class wxProgressDialog
 
     This class represents a dialog that shows a short message and a
-    progress bar. Optionally, it can display ABORT and SKIP buttons,
+    progress bar. Optionally, it can display ABORT and SKIP buttons, and
     the elapsed, remaining and estimated time for the end of the progress.
+
+    Note that you must be aware that wxProgressDialog internally calls
+    wxEventLoopBase::YieldFor with @c wxEVT_CATEGORY_UI and @c wxEVT_CATEGORY_USER_INPUT
+    and this may cause unwanted re-entrancies or the out-of-order processing
+    of pending events (to help preventing the last problem if you're using
+    wxProgressDialog in a multi-threaded application you should be sure to use
+    wxThreadEvent for your inter-threads communications).
 
     @beginStyleTable
     @style{wxPD_APP_MODAL}
