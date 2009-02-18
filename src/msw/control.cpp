@@ -245,6 +245,9 @@ WXDWORD wxControl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxControl::DoGetBestSize() const
 {
+    if (m_windowSizer)
+       return wxControlBase::DoGetBestSize();
+       
     return wxSize(DEFAULT_ITEM_WIDTH, DEFAULT_ITEM_HEIGHT);
 }
 
