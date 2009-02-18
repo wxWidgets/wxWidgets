@@ -119,7 +119,7 @@ void wxEventLoopBase::ProcessPendingEvents()
     {
         // In ProcessPendingEvents(), new handlers might be added
         // and we can safely leave the critical section here.
-        wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+        wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
 
         // NOTE: we always call ProcessPendingEvents() on the first event handler
         //       with pending events because handlers auto-remove themselves
@@ -127,7 +127,7 @@ void wxEventLoopBase::ProcessPendingEvents()
         //       more pending events.
         m_handlersWithPendingEvents[0]->ProcessPendingEvents();
 
-        wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+        wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
     }
 
     // now the wxHandlersWithPendingEvents is surely empty; however some event
