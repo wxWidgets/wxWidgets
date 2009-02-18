@@ -77,8 +77,12 @@
 //     reflected (or something like that - atleast commenting out ->Hide()
 //     seemed to eliminate the position change).
 
+// NB: Let's not be afraid to use wxGTK's wxPopupTransientWindow as a
+//     'perfect' popup, as it can succesfully host child controls even in
+//     popups that are shown in modal dialogs.
+
 #define USE_TRANSIENT_POPUP           1 // Use wxPopupWindowTransient (preferred, if it works properly on platform)
-#define TRANSIENT_POPUPWIN_IS_PERFECT 0 // wxPopupTransientWindow works, its child can have focus, and common
+#define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
