@@ -106,7 +106,7 @@ enum wxLayoutAlignment
     @library{wxadv}
     @category{winlayout}
 
-    @see wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandling
+    @see wxSashEvent, wxSashLayoutWindow, @ref overview_events
 */
 class wxLayoutAlgorithm : public wxObject
 {
@@ -169,7 +169,7 @@ public:
     @library{wxadv}
     @category{miscwnd}
 
-    @see wxLayoutAlgorithm, wxSashWindow, @ref overview_eventhandling
+    @see wxLayoutAlgorithm, wxSashWindow, @ref overview_events
 */
 class wxSashLayoutWindow : public wxSashWindow
 {

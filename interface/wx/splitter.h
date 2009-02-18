@@ -423,7 +423,7 @@ public:
     @library{wxcore}
     @category{events}
 
-    @see wxSplitterWindow, @ref overview_eventhandling
+    @see wxSplitterWindow, @ref overview_events
 */
 class wxSplitterEvent : public wxNotifyEvent
 {

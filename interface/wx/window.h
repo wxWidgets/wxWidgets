@@ -1702,7 +1702,7 @@ public:
         Removes and returns the top-most event handler on the event handler stack.
 
         E.g. in the case of:
-            @image html overview_eventhandling_winstack.png
+            @image html overview_events_winstack.png
         when calling @c W->PopEventHandler(), the event handler @c A will be
         removed and @c B will be the first handler of the stack.
 
@@ -1737,7 +1737,7 @@ public:
             W->PushEventHandler(B);
         @endcode
         you will end up with the following situation:
-            @image html overview_eventhandling_winstack.png
+            @image html overview_events_winstack.png
 
         Note that you can use wxWindow::PopEventHandler to remove the event handler.
 

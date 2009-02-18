@@ -270,7 +270,7 @@ public:
     @library{wxbase}
     @category{events}
 
-    @see wxProcess, @ref overview_eventhandling
+    @see wxProcess, @ref overview_events
 */
 class wxProcessEvent : public wxEvent
 {

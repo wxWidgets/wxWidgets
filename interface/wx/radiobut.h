@@ -40,7 +40,7 @@
     @category{ctrl}
     @appearance{radiobutton.png}
 
-    @see @ref overview_eventhandling, wxRadioBox, wxCheckBox
+    @see @ref overview_events, wxRadioBox, wxCheckBox
 */
 class wxRadioButton : public wxControl
 {

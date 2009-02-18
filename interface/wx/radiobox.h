@@ -34,7 +34,7 @@
     @category{ctrl}
     @appearance{radiobox.png}
 
-    @see @ref overview_eventhandling, wxRadioButton, wxCheckBox
+    @see @ref overview_events, wxRadioButton, wxCheckBox
 */
 class wxRadioBox : public wxControl, wxItemContainerImmutable
 {

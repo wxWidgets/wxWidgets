@@ -455,7 +455,7 @@ public:
            function was found, in which case the function exits.
         -# The search is applied down the entire chain of event handlers (usually the
            chain has a length of one). This chain can be formed using wxEvtHandler::SetNextHandler():
-              @image html overview_eventhandling_chain.png
+              @image html overview_events_chain.png
            (referring to the image, if @c A->ProcessEvent is called and it doesn't handle
             the event, @c B->ProcessEvent will be called and so on...).
            Note that in the case of wxWindow you can build a stack of event handlers

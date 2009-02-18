@@ -107,7 +107,7 @@
     @category{ctrl}
     @appearance{slider.png}
 
-    @see @ref overview_eventhandling, wxScrollBar
+    @see @ref overview_events, wxScrollBar
 */
 class wxSlider : public wxControl
 {

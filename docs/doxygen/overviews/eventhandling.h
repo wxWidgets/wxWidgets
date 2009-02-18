@@ -7,9 +7,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-    @page overview_events Events and Event Handling
 
-    Related classes: wxEvtHandler, wxWindow, wxEvent
+@page overview_events Events and Event Handling
+
+Related classes: wxEvtHandler, wxWindow, wxEvent
 
 @li @ref overview_events_introduction
 @li @ref overview_events_eventhandling

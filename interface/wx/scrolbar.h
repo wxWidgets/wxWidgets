@@ -107,7 +107,7 @@
     @category{ctrl}
     @appearance{scrollbar.png}
 
-    @see @ref overview_scrolling, @ref overview_eventhandling, wxScrolled
+    @see @ref overview_scrolling, @ref overview_events, wxScrolled
 */
 class wxScrollBar : public wxControl
 {

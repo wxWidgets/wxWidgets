@@ -63,7 +63,7 @@ enum wxSashDragStatus
     @library{wxadv}
     @category{miscwnd}
 
-    @see wxSashEvent, wxSashLayoutWindow, @ref overview_eventhandling
+    @see wxSashEvent, wxSashLayoutWindow, @ref overview_events
 */
 class wxSashWindow : public wxWindow
 {
@@ -222,7 +222,7 @@ public:
     @library{wxadv}
     @category{events}
 
-    @see wxSashWindow, @ref overview_eventhandling
+    @see wxSashWindow, @ref overview_events
 */
 class wxSashEvent : public wxCommandEvent
 {

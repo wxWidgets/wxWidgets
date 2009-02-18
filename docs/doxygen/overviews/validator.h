@@ -90,7 +90,7 @@ internally.
 
 You can optionally define event handlers for the validator, to implement
 filtering. These handlers will capture events before the control itself does
-(see @ref overview_eventhandling_processing).
+(see @ref overview_events_processing).
 For an example implementation, see the @c valtext.h and @c valtext.cpp files in the
 wxWidgets library.
 

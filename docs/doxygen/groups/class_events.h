@@ -14,7 +14,7 @@
 An event object contains information about a specific event. Event handlers
 (usually member functions) have a single, event argument.
 
-Related Overviews: @ref overview_eventhandling
+Related Overviews: @ref overview_events
 
 Related macros/global-functions group: @ref group_funcmacro_events
 
