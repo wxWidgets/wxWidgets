@@ -761,7 +761,6 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
 {
     m_eventType = type;
     m_keyCode = 0;
-    m_scanCode = 0;
 #if wxUSE_UNICODE
     m_uniChar = 0;
 #endif
@@ -775,8 +774,6 @@ wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
     m_y = evt.m_y;
 
     m_keyCode = evt.m_keyCode;
-
-    m_scanCode = evt.m_scanCode;
     m_rawCode = evt.m_rawCode;
     m_rawFlags = evt.m_rawFlags;
 

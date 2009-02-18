@@ -1524,7 +1524,6 @@ public:
 
             m_keyCode = evt.m_keyCode;
 
-            m_scanCode = evt.m_scanCode;
             m_rawCode = evt.m_rawCode;
             m_rawFlags = evt.m_rawFlags;
 #if wxUSE_UNICODE
@@ -1538,9 +1537,6 @@ public:
     wxCoord       m_x, m_y;
 
     long          m_keyCode;
-
-    // FIXME: what is this for? relation to m_rawXXX?
-    bool          m_scanCode;
 
 #if wxUSE_UNICODE
     // This contains the full Unicode character

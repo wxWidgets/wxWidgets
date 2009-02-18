@@ -993,7 +993,6 @@ void wxWindowDFB::HandleKeyEvent(const wxDFBWindowEvent& event_)
     event.SetTimestamp(wxDFB_EVENT_TIMESTAMP(e));
     event.m_rawCode = e.key_code;
     event.m_keyCode = GetTranslatedKeyCode(e.key_id);
-    event.m_scanCode = 0; // not used by wx at all
 #if wxUSE_UNICODE
     event.m_uniChar = e.key_symbol;
 #endif

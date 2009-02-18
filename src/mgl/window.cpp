@@ -460,7 +460,6 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
     event.SetEventObject(win);
     event.SetTimestamp(e->when);
     event.m_keyCode = wxScanToKeyCode(e, true);
-    event.m_scanCode = 0; // not used by wx at all
     event.m_x = where.x;
     event.m_y = where.y;
     event.m_shiftDown = ( e->modifiers & EVT_SHIFTKEY ) != 0;
