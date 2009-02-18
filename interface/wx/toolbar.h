@@ -85,7 +85,7 @@
     ignores @c wxTB_NOICONS style. Also, toggling the @c wxTB_TEXT works only
     if the style was initially on.
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOOL(id, func)}
         Process a @c wxEVT_COMMAND_TOOL_CLICKED event (a synonym for @c
         wxEVT_COMMAND_MENU_SELECTED). Pass the id of the tool.

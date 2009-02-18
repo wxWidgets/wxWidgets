@@ -11,7 +11,7 @@
 
     The power events are generated when the system power state changes, e.g. the
     system is suspended, hibernated, plugged into or unplugged from the wall socket
-    and so on.
+    and so on. wxPowerEvents are emitted by wxWindows.
 
     Notice that currently only suspend and resume events are generated and only
     under MS Windows platform. To avoid the need to change the code using this
@@ -21,17 +21,17 @@
     supporting the power events.
 
     @beginEventTable{wxPowerEvent}
-    @event{EVT_POWER_SUSPENDING(func)}:
+    @event{EVT_POWER_SUSPENDING(func)}
            System is about to be suspended, this event can be vetoed to prevent
            suspend from taking place.
-    @event{EVT_POWER_SUSPENDED(func)}:
+    @event{EVT_POWER_SUSPENDED(func)}
            System is about to suspend: normally the application should quickly
            (i.e. without user intervention) close all the open files and network
            connections here, possibly remembering them to reopen them later when
            the system is resumed.
-    @event{EVT_POWER_SUSPEND_CANCEL(func)}:
+    @event{EVT_POWER_SUSPEND_CANCEL(func)}
            System suspension was cancelled because some application vetoed it.
-    @event{EVT_POWER_RESUME(func)}:
+    @event{EVT_POWER_RESUME(func)}
            System resumed from suspend: normally the application should restore
            the state in which it had been before the suspension.
     @endEventTable

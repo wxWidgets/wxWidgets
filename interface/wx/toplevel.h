@@ -45,6 +45,22 @@ enum
     Note that the instances of wxTopLevelWindow are managed by wxWidgets in the
     internal top level window list.
 
+    @beginEventEmissionTable
+    @event{EVT_ACTIVATE(id, func)}
+        Process a @c wxEVT_MAXIMIZE event. See wxMaximizeEvent.
+    @event{EVT_MOVE(func)}
+        Process a @c wxEVT_MOVE event, which is generated when a window is moved.
+        See wxMoveEvent.
+    @event{EVT_MOVE_START(func)}
+        Process a @c wxEVT_MOVE_START event, which is generated when the user starts
+        to move or size a window. wxMSW only.
+        See wxMoveEvent.
+    @event{EVT_MOVE_END(func)}
+        Process a @c wxEVT_MOVE_END event, which is generated when the user stops
+        moving or sizing a window. wxMSW only.
+        See wxMoveEvent.
+    @endEventTable
+
     @library{wxcore}
     @category{managedwnd}
 

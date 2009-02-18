@@ -33,7 +33,7 @@
            Uses the currently selected font to draw the label of the button.
     @endStyleTable
 
-    @beginEventTable{wxFontPickerEvent}
+    @beginEventEmissionTable{wxFontPickerEvent}
     @event{EVT_FONTPICKER_CHANGED(id, func)}
         The user changed the font selected in the control either using the button
         or using text control (see wxFNTP_USE_TEXTCTRL; note that in this case the

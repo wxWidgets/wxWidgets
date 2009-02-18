@@ -30,7 +30,7 @@
            Hides the "Show Hidden Files" checkbox (Generic only)
     @endStyleTable
 
-    @beginEventTable{wxFileCtrlEvent}
+    @beginEventEmissionTable{wxFileCtrlEvent}
     @event{EVT_FILECTRL_FILEACTIVATED(id, func)}
         The user activated a file(by double-clicking or pressing Enter)
     @event{EVT_FILECTRL_SELECTIONCHANGED(id, func)}

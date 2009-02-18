@@ -435,10 +435,12 @@ public:
     @class wxSocketEvent
 
     This event class contains information about socket events.
+    This kind of events are sent to the event handler specified with
+    wxSocketBase::SetEventHandler.
 
     @beginEventTable{wxSocketEvent}
     @event{EVT_SOCKET(id, func)}
-           Process a socket event, supplying the member function.
+        Process a socket event, supplying the member function.
     @endEventTable
 
     @library{wxnet}
@@ -622,7 +624,7 @@ enum
     wxFTP or wxHTTP in another thread) you must initialize the sockets from the
     main thread by calling Initialize() before creating the other ones.
 
-    @beginEventTable{wxSocketEvent}
+    @beginEventEmissionTable{wxSocketEvent}
     @event{EVT_SOCKET(id, func)}
         Process a @c wxEVT_SOCKET event.
         See @ref wxSocketEventFlags and @ref wxSocketFlags for more info.

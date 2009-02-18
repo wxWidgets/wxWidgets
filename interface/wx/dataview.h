@@ -525,7 +525,7 @@ public:
             This can be inefficient when displaying large number of items.
     @endStyleTable
 
-    @beginEventTable{wxDataViewEvent}
+    @beginEventEmissionTable{wxDataViewEvent}
     @event{EVT_DATAVIEW_SELECTION_CHANGED(id, func)}
            Process a wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_ACTIVATED(id, func)}

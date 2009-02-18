@@ -30,7 +30,7 @@
            only on PalmOS).
     @endStyleTable
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_RADIOBUTTON(id, func)}
            Process a @c wxEVT_COMMAND_RADIOBUTTON_SELECTED event, when the
            radiobutton is clicked.

@@ -90,7 +90,7 @@ enum wxLayoutAlignment
           It is an alternative way of specifying layouts for which the normal
           constraint system is unsuitable.
 
-    @beginEventTable{wxQueryLayoutInfoEvent,wxCalculateLayoutEvent}
+    @beginEventEmissionTable{wxQueryLayoutInfoEvent,wxCalculateLayoutEvent}
     @event{EVT_QUERY_LAYOUT_INFO(func)}
         Process a wxEVT_QUERY_LAYOUT_INFO event, to get size, orientation and
         alignment from a window. See wxQueryLayoutInfoEvent.

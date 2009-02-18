@@ -91,9 +91,11 @@ public:
         flag to disable this automatic parent resizing then.
     @endStyleTable
 
-    @beginEventTable{wxCollapsiblePaneEvent}
+    @beginEventEmissionTable{wxCollapsiblePaneEvent,wxNavigationKeyEvent}
     @event{EVT_COLLAPSIBLEPANE_CHANGED(id, func)}
-           The user expanded or collapsed the collapsible pane.
+        The user expanded or collapsed the collapsible pane.
+    @event{EVT_NAVIGATION_KEY(func)}
+        Process a navigation key event.
     @endEventTable
 
     @library{wxcore}

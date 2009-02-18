@@ -55,7 +55,7 @@
     @endStyleTable
 
 
-    @beginEventTable{wxAuiNotebookEvent}
+    @beginEventEmissionTable{wxAuiNotebookEvent}
     @event{EVT_AUINOTEBOOK_PAGE_CLOSE(id, func)}
         Provide description.
     @event{EVT_AUINOTEBOOK_PAGE_CHANGED(id, func)}

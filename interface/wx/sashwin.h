@@ -50,7 +50,7 @@ enum wxSashDragStatus
            Draws a thin black border.
     @endStyleTable
 
-    @beginEventTable{wxSashEvent}
+    @beginEventEmissionTable{wxSashEvent}
     @event{EVT_SASH_DRAGGED(id, func)}
            Process a wxEVT_SASH_DRAGGED event, when the user has finished
            dragging a sash.

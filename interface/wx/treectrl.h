@@ -60,7 +60,7 @@
         for a particular toolkit.
     @endStyleTable
 
-    @beginEventTable{wxTreeEvent}
+    @beginEventEmissionTable{wxTreeEvent}
     @event{EVT_TREE_BEGIN_DRAG(id, func)}
           Begin dragging with the left mouse button.
           If you want to enable left-dragging you need to intercept this event

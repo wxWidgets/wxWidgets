@@ -53,6 +53,16 @@ enum wxEllipsizeMode
     A control is generally a small window which processes user input and/or
     displays one or more item of data.
 
+    @beginEventEmissionTable{wxClipboardTextEvent}
+    @event{EVT_TEXT_COPY(id, func)}
+           Some or all of the controls content was copied to the clipboard.
+    @event{EVT_TEXT_CUT(id, func)}
+           Some or all of the controls content was cut (i.e. copied and
+           deleted).
+    @event{EVT_TEXT_PASTE(id, func)}
+           Clipboard content was pasted into the control.
+    @endEventTable
+
     @library{wxcore}
     @category{ctrl}
 

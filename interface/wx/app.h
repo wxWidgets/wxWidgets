@@ -493,6 +493,25 @@ public:
     In general, application-wide settings for GUI-only apps are accessible
     from wxApp (or from wxSystemSettings or wxSystemOptions classes).
 
+    @beginEventEmissionTable
+    @event{EVT_QUERY_END_SESSION(func)}
+        Process a query end session event, supplying the member function.
+        See wxCloseEvent.
+    @event{EVT_END_SESSION(func)}
+        Process an end session event, supplying the member function.
+        See wxCloseEvent.
+    @event{EVT_ACTIVATE_APP(func)}
+        Process a @c wxEVT_ACTIVATE_APP event. See wxActivateEvent.
+    @event{EVT_HIBERNATE(func)}
+        Process a hibernate event. See wxActivateEvent.
+    @event{EVT_DIALUP_CONNECTED(func)}
+        A connection with the network was established. See wxDialUpEvent.
+    @event{EVT_DIALUP_DISCONNECTED(func)}
+        The connection with the network was lost. See wxDialUpEvent.
+    @event{EVT_IDLE(func)}
+        Process a @c wxEVT_IDLE event. See wxIdleEvent.
+    @endEventTable
+
     @library{wxbase}
     @category{appmanagement}
 

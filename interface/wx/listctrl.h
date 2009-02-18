@@ -83,7 +83,7 @@
     @endStyleTable
 
 
-    @beginEventTable{wxListEvent}
+    @beginEventEmissionTable{wxListEvent}
     @event{EVT_LIST_BEGIN_DRAG(id, func)}
            Begin dragging with the left mouse button.
     @event{EVT_LIST_BEGIN_RDRAG(id, func)}

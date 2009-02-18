@@ -14,7 +14,7 @@
     derive your own class from it (see htlbox sample for the example) but you will
     only need to override a single wxHtmlListBox::OnGetItem function.
 
-    @beginEventTable{wxHtmlCellEvent,wxHtmlLinkEvent}
+    @beginEventEmissionTable{wxHtmlCellEvent,wxHtmlLinkEvent}
     @event{EVT_HTML_CELL_CLICKED(id, func)}
         A wxHtmlCell was clicked.
     @event{EVT_HTML_CELL_HOVER(id, func)}
@@ -180,25 +180,19 @@ protected:
 
     A wxSimpleHtmlListBox emits the same events used by wxListBox and by wxHtmlListBox.
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable
     @event{EVT_LISTBOX(id, func)}
         Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the list
-        is selected.
+        is selected. See wxCommandEvent.
     @event{EVT_LISTBOX_DCLICK(id, func)}
         Process a wxEVT_COMMAND_LISTBOX_DOUBLECLICKED event, when the listbox is
-        double-clicked.
-    @endEventTable
-
-    @beginEventTable{wxHtmlCellEvent}
+        double-clicked. See wxCommandEvent.
     @event{EVT_HTML_CELL_CLICKED(id, func)}
-        A wxHtmlCell was clicked.
+        A wxHtmlCell was clicked. See wxHtmlCellEvent.
     @event{EVT_HTML_CELL_HOVER(id, func)}
-        The mouse passed over a wxHtmlCell.
-    @endEventTable
-
-    @beginEventTable{wxHtmlLinkEvent}
+        The mouse passed over a wxHtmlCell. See wxHtmlCellEvent.
     @event{EVT_HTML_LINK_CLICKED(id, func)}
-        A wxHtmlCell which contains an hyperlink was clicked.
+        A wxHtmlCell which contains an hyperlink was clicked. See wxHtmlLinkEvent
     @endEventTable
 
     @library{wxhtml}

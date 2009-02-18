@@ -48,7 +48,7 @@ public:
     The user should be required to explicitly enable the taskbar icon on Unix,
     it shouldn't be on by default.
 
-    @beginEventTable{wxTaskBarIconEvent}
+    @beginEventEmissionTable{wxTaskBarIconEvent}
     Note that not all ports are required to send these events and so it's better
     to override wxTaskBarIcon::CreatePopupMenu() if all that the application does
     is that it shows a popup menu in reaction to mouse click.

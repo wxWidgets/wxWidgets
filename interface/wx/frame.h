@@ -106,14 +106,25 @@
            look. This is an extra style.
     @endExtraStyleTable
 
-    @beginEventTable{wxCloseEvent}
+    @beginEventEmissionTable
     @event{EVT_CLOSE(func)}
         The frame is being closed by the user or programmatically (see wxWindow::Close).
         The user may generate this event clicking the close button
         (typically the 'X' on the top-right of the title bar) if it's present
-        (see the @c wxCLOSE_BOX style).
+        (see the @c wxCLOSE_BOX style). See wxCloseEvent.
+    @event{EVT_ICONIZE(func)}
+        Process a @c wxEVT_ICONIZE event. See wxIconizeEvent.
+    @event{EVT_MENU_OPEN(func)}
+        A menu is about to be opened. See wxMenuEvent.
+    @event{EVT_MENU_CLOSE(func)}
+        A menu has been just closed. See wxMenuEvent.
+    @event{EVT_MENU_HIGHLIGHT(id, func)}
+        The menu item with the specified id has been highlighted: used to show
+        help prompts in the status bar by wxFrame. See wxMenuEvent.
+    @event{EVT_MENU_HIGHLIGHT_ALL(func)}
+        A menu item has been highlighted, i.e. the currently selected menu item has changed.
+        See wxMenuEvent.
     @endEventTable
-
 
     @library{wxcore}
     @category{managedwnd}

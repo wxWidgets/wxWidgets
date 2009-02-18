@@ -126,13 +126,15 @@ enum wxDialogLayoutAdaptationMode
     styles to have an effect.
 
 
-    @beginEventTable{wxCloseEvent}
+    @beginEventEmissionTable{wxCloseEvent}
     @event{EVT_CLOSE(func)}
         The dialog is being closed by the user or programmatically (see wxWindow::Close).
         The user may generate this event clicking the close button
         (typically the 'X' on the top-right of the title bar) if it's present
         (see the @c wxCLOSE_BOX style) or by clicking a button with the
         @c wxID_CANCEL or @c wxID_OK ids.
+    @event{EVT_INIT_DIALOG(func)}
+        Process a @c wxEVT_INIT_DIALOG event. See wxInitDialogEvent.
     @endEventTable
 
     @library{wxcore}

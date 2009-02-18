@@ -30,7 +30,7 @@
     The common wxBookCtrl styles described in the @ref overview_bookctrl are
     also supported.
 
-    @beginEventTable{wxBookCtrlEvent}
+    @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_TOOLBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
         Processes a @c wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED event.

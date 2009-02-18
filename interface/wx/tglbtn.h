@@ -17,9 +17,9 @@
 
     You can see wxToggleButton in action in @ref page_samples_controls.
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}
-           Handles a toggle button click event.
+        Handles a toggle button click event.
     @endEventTable
 
     @library{wxcore}
@@ -111,9 +111,9 @@ public:
 
     This control emits an update UI event.
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TOGGLEBUTTON(id, func)}
-           Handles a toggle button click event.
+        Handles a toggle button click event.
     @endEventTable
 
     @library{wxcore}

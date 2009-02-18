@@ -237,7 +237,7 @@ enum wxCalendarHitTestResult
            Show week numbers on the left side of the calendar. (not in generic)
     @endStyleTable
 
-    @beginEventTable{wxCalendarEvent}
+    @beginEventEmissionTable{wxCalendarEvent}
     @event{EVT_CALENDAR(id, func)}
            A day was double clicked in the calendar.
     @event{EVT_CALENDAR_SEL_CHANGED(id, func)}

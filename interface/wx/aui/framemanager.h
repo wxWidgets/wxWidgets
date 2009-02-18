@@ -111,7 +111,7 @@ enum wxAuiManagerOption
         understand layers is by running the wxAUI sample.
 
 
-    @beginEventTable{wxAuiManagerEvent}
+    @beginEventEmissionTable{wxAuiManagerEvent}
     @event{EVT_AUI_PANE_BUTTON(func)}
         Triggered when any button is pressed for any docked panes.
     @event{EVT_AUI_PANE_CLOSE(func)}

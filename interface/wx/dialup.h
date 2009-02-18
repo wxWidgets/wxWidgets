@@ -25,11 +25,11 @@
     most one instance of this class in the program accessed via Create() and
     you can't create the objects of this class directly.
 
-    @beginEventTable{wxDialUpEvent}
+    @beginEventEmissionTable{wxDialUpEvent}
     @event{EVT_DIALUP_CONNECTED(func)}
-           A connection with the network was established.
+        A connection with the network was established.
     @event{EVT_DIALUP_DISCONNECTED(func)}
-           The connection with the network was lost.
+        The connection with the network was lost.
     @endEventTable
 
     @library{wxcore}

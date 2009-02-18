@@ -45,7 +45,7 @@ enum wxOwnerDrawnComboBoxPaintingFlags
 
     @see wxComboCtrl window styles and @ref overview_windowstyles.
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected. Note that calling GetValue() returns the new

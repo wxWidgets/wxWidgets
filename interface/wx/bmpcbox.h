@@ -36,7 +36,7 @@
 
     @todo create wxCB_PROCESS_ENTER rather than reusing wxTE_PROCESS_ENTER!
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_COMBOBOX(id, func)}
            Process a wxEVT_COMMAND_COMBOBOX_SELECTED event, when an item on
            the list is selected.

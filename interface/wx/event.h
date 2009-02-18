@@ -869,11 +869,11 @@ public:
 
     @beginEventTable{wxKeyEvent}
     @event{EVT_KEY_DOWN(func)}
-           Process a wxEVT_KEY_DOWN event (any key has been pressed).
+        Process a @c wxEVT_KEY_DOWN event (any key has been pressed).
     @event{EVT_KEY_UP(func)}
-           Process a wxEVT_KEY_UP event (any key has been released).
+        Process a @c wxEVT_KEY_UP event (any key has been released).
     @event{EVT_CHAR(func)}
-           Process a wxEVT_CHAR event.
+        Process a @c wxEVT_CHAR event.
     @endEventTable
 
     @see wxKeyboardState
@@ -956,15 +956,15 @@ public:
     events received by windows.
 
     @beginEventTable{wxJoystickEvent}
-    @style{EVT_JOY_BUTTON_DOWN(func)}
-        Process a wxEVT_JOY_BUTTON_DOWN event.
-    @style{EVT_JOY_BUTTON_UP(func)}
-        Process a wxEVT_JOY_BUTTON_UP event.
-    @style{EVT_JOY_MOVE(func)}
-        Process a wxEVT_JOY_MOVE event.
-    @style{EVT_JOY_ZMOVE(func)}
-        Process a wxEVT_JOY_ZMOVE event.
-    @style{EVT_JOYSTICK_EVENTS(func)}
+    @event{EVT_JOY_BUTTON_DOWN(func)}
+        Process a @c wxEVT_JOY_BUTTON_DOWN event.
+    @event{EVT_JOY_BUTTON_UP(func)}
+        Process a @c wxEVT_JOY_BUTTON_UP event.
+    @event{EVT_JOY_MOVE(func)}
+        Process a @c wxEVT_JOY_MOVE event.
+    @event{EVT_JOY_ZMOVE(func)}
+        Process a @c wxEVT_JOY_ZMOVE event.
+    @event{EVT_JOYSTICK_EVENTS(func)}
         Processes all joystick events.
     @endEventTable
 
@@ -1066,10 +1066,10 @@ public:
 
     A scroll event holds information about events sent from scrolling windows.
 
+    Note that you can use the EVT_SCROLLWIN* macros for intercepting scroll window events
+    from the receiving window.
 
     @beginEventTable{wxScrollWinEvent}
-    You can use the EVT_SCROLLWIN* macros for intercepting scroll window events
-    from the receiving window.
     @event{EVT_SCROLLWIN(func)}
         Process all scroll events.
     @event{EVT_SCROLLWIN_TOP(func)}
@@ -1140,7 +1140,7 @@ public:
 
     @beginEventTable{wxSysColourChangedEvent}
     @event{EVT_SYS_COLOUR_CHANGED(func)}
-        Process a wxEVT_SYS_COLOUR_CHANGED event.
+        Process a @c wxEVT_SYS_COLOUR_CHANGED event.
     @endEventTable
 
     @library{wxcore}
@@ -1170,7 +1170,7 @@ public:
 
     @beginEventTable{wxWindowCreateEvent}
     @event{EVT_WINDOW_CREATE(func)}
-        Process a wxEVT_CREATE event.
+        Process a @c wxEVT_CREATE event.
     @endEventTable
 
     @library{wxcore}
@@ -1254,7 +1254,7 @@ public:
 
     @beginEventTable{wxPaintEvent}
     @event{EVT_PAINT(func)}
-        Process a wxEVT_PAINT event.
+        Process a @c wxEVT_PAINT event.
     @endEventTable
 
     @library{wxcore}
@@ -1282,7 +1282,7 @@ public:
 
     @beginEventTable{wxMaximizeEvent}
     @event{EVT_MAXIMIZE(func)}
-        Process a wxEVT_MAXIMIZE event.
+        Process a @c wxEVT_MAXIMIZE event.
     @endEventTable
 
     @library{wxcore}
@@ -1361,9 +1361,9 @@ enum wxUpdateUIMode
 
     @beginEventTable{wxUpdateUIEvent}
     @event{EVT_UPDATE_UI(id, func)}
-        Process a wxEVT_UPDATE_UI event for the command with the given id.
+        Process a @c wxEVT_UPDATE_UI event for the command with the given id.
     @event{EVT_UPDATE_UI_RANGE(id1, id2, func)}
-        Process a wxEVT_UPDATE_UI event for any command with id included in the given range.
+        Process a @c wxEVT_UPDATE_UI event for any command with id included in the given range.
     @endEventTable
 
     @library{wxcore}
@@ -1610,45 +1610,45 @@ public:
 
     @beginEventTable{wxMouseEvent}
     @event{EVT_LEFT_DOWN(func)}
-        Process a wxEVT_LEFT_DOWN event. The handler of this event should normally
+        Process a @c wxEVT_LEFT_DOWN event. The handler of this event should normally
         call event.Skip() to allow the default processing to take place as otherwise
         the window under mouse wouldn't get the focus.
     @event{EVT_LEFT_UP(func)}
-        Process a wxEVT_LEFT_UP event.
+        Process a @c wxEVT_LEFT_UP event.
     @event{EVT_LEFT_DCLICK(func)}
-        Process a wxEVT_LEFT_DCLICK event.
+        Process a @c wxEVT_LEFT_DCLICK event.
     @event{EVT_MIDDLE_DOWN(func)}
-        Process a wxEVT_MIDDLE_DOWN event.
+        Process a @c wxEVT_MIDDLE_DOWN event.
     @event{EVT_MIDDLE_UP(func)}
-        Process a wxEVT_MIDDLE_UP event.
+        Process a @c wxEVT_MIDDLE_UP event.
     @event{EVT_MIDDLE_DCLICK(func)}
-        Process a wxEVT_MIDDLE_DCLICK event.
+        Process a @c wxEVT_MIDDLE_DCLICK event.
     @event{EVT_RIGHT_DOWN(func)}
-        Process a wxEVT_RIGHT_DOWN event.
+        Process a @c wxEVT_RIGHT_DOWN event.
     @event{EVT_RIGHT_UP(func)}
-        Process a wxEVT_RIGHT_UP event.
+        Process a @c wxEVT_RIGHT_UP event.
     @event{EVT_RIGHT_DCLICK(func)}
-        Process a wxEVT_RIGHT_DCLICK event.
+        Process a @c wxEVT_RIGHT_DCLICK event.
     @event{EVT_MOUSE_AUX1_DOWN(func)}
-        Process a wxEVT_MOUSE_AUX1_DOWN event.
+        Process a @c wxEVT_MOUSE_AUX1_DOWN event.
     @event{EVT_MOUSE_AUX1_UP(func)}
-        Process a wxEVT_MOUSE_AUX1_UP event.
+        Process a @c wxEVT_MOUSE_AUX1_UP event.
     @event{EVT_MOUSE_AUX1_DCLICK(func)}
-        Process a wxEVT_MOUSE_AUX1_DCLICK event.
+        Process a @c wxEVT_MOUSE_AUX1_DCLICK event.
     @event{EVT_MOUSE_AUX2_DOWN(func)}
-        Process a wxEVT_MOUSE_AUX2_DOWN event.
+        Process a @c wxEVT_MOUSE_AUX2_DOWN event.
     @event{EVT_MOUSE_AUX2_UP(func)}
-        Process a wxEVT_MOUSE_AUX2_UP event.
+        Process a @c wxEVT_MOUSE_AUX2_UP event.
     @event{EVT_MOUSE_AUX2_DCLICK(func)}
-        Process a wxEVT_MOUSE_AUX2_DCLICK event.
+        Process a @c wxEVT_MOUSE_AUX2_DCLICK event.
     @event{EVT_MOTION(func)}
-        Process a wxEVT_MOTION event.
+        Process a @c wxEVT_MOTION event.
     @event{EVT_ENTER_WINDOW(func)}
-        Process a wxEVT_ENTER_WINDOW event.
+        Process a @c wxEVT_ENTER_WINDOW event.
     @event{EVT_LEAVE_WINDOW(func)}
-        Process a wxEVT_LEAVE_WINDOW event.
+        Process a @c wxEVT_LEAVE_WINDOW event.
     @event{EVT_MOUSEWHEEL(func)}
-        Process a wxEVT_MOUSEWHEEL event.
+        Process a @c wxEVT_MOUSEWHEEL event.
     @event{EVT_MOUSE_EVENTS(func)}
         Process all mouse events.
     @endEventTable
@@ -1986,7 +1986,7 @@ public:
 
     @beginEventTable{wxDropFilesEvent}
     @event{EVT_DROP_FILES(func)}
-        Process a wxEVT_DROP_FILES event.
+        Process a @c wxEVT_DROP_FILES event.
     @endEventTable
 
     @onlyfor{wxmsw}
@@ -2221,9 +2221,10 @@ public:
 
     @beginEventTable{wxActivateEvent}
     @event{EVT_ACTIVATE(func)}
-        Process a wxEVT_ACTIVATE event.
+        Process a @c wxEVT_ACTIVATE event.
     @event{EVT_ACTIVATE_APP(func)}
-        Process a wxEVT_ACTIVATE_APP event.
+        Process a @c wxEVT_ACTIVATE_APP event.
+        This event is received by the wxApp-derived instance only.
     @event{EVT_HIBERNATE(func)}
         Process a hibernate event, supplying the member function. This event applies
         to wxApp only, and only on Windows SmartPhone and PocketPC.
@@ -2231,7 +2232,6 @@ public:
         up as much memory as possible, and restore full working state when it receives
         a wxEVT_ACTIVATE or wxEVT_ACTIVATE_APP event.
     @endEventTable
-
 
     @library{wxcore}
     @category{events}
@@ -2259,7 +2259,7 @@ public:
     @class wxContextMenuEvent
 
     This class is used for context menu events, sent to give
-    the application a chance to show a context (popup) menu.
+    the application a chance to show a context (popup) menu for a wxWindow.
 
     Note that if wxContextMenuEvent::GetPosition returns wxDefaultPosition, this
     means that the event originated from a keyboard context button event, and you
@@ -2333,7 +2333,7 @@ public:
 
     @beginEventTable{wxEraseEvent}
     @event{EVT_ERASE_BACKGROUND(func)}
-        Process a wxEVT_ERASE_BACKGROUND event.
+        Process a @c wxEVT_ERASE_BACKGROUND event.
     @endEventTable
 
     @library{wxcore}
@@ -2369,9 +2369,9 @@ public:
 
     @beginEventTable{wxFocusEvent}
     @event{EVT_SET_FOCUS(func)}
-        Process a wxEVT_SET_FOCUS event.
+        Process a @c wxEVT_SET_FOCUS event.
     @event{EVT_KILL_FOCUS(func)}
-        Process a wxEVT_KILL_FOCUS event.
+        Process a @c wxEVT_KILL_FOCUS event.
     @endEventTable
 
     @library{wxcore}
@@ -2411,7 +2411,7 @@ public:
 
     @beginEventTable{wxChildFocusEvent}
     @event{EVT_CHILD_FOCUS(func)}
-        Process a wxEVT_CHILD_FOCUS event.
+        Process a @c wxEVT_CHILD_FOCUS event.
     @endEventTable
 
     @library{wxcore}
@@ -2458,7 +2458,7 @@ public:
 
     @beginEventTable{wxMouseCaptureLostEvent}
     @event{EVT_MOUSE_CAPTURE_LOST(func)}
-        Process a wxEVT_MOUSE_CAPTURE_LOST event.
+        Process a @c wxEVT_MOUSE_CAPTURE_LOST event.
     @endEventTable
 
     @onlyfor{wxmsw}
@@ -2467,7 +2467,7 @@ public:
     @category{events}
 
     @see wxMouseCaptureChangedEvent, @ref overview_events,
-    wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
+         wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
 */
 class wxMouseCaptureLostEvent : public wxEvent
 {
@@ -2587,9 +2587,9 @@ public:
 
     @beginEventTable{wxHelpEvent}
     @event{EVT_HELP(id, func)}
-        Process a wxEVT_HELP event.
+        Process a @c wxEVT_HELP event.
     @event{EVT_HELP_RANGE(id1, id2, func)}
-        Process a wxEVT_HELP event for a range of ids.
+        Process a @c wxEVT_HELP event for a range of ids.
     @endEventTable
 
     @library{wxcore}
@@ -2794,7 +2794,7 @@ enum wxIdleMode
 
     @beginEventTable{wxIdleEvent}
     @event{EVT_IDLE(func)}
-        Process a wxEVT_IDLE event.
+        Process a @c wxEVT_IDLE event.
     @endEventTable
 
     @library{wxbase}
@@ -2880,7 +2880,7 @@ public:
 
     @beginEventTable{wxInitDialogEvent}
     @event{EVT_INIT_DIALOG(func)}
-        Process a wxEVT_INIT_DIALOG event.
+        Process a @c wxEVT_INIT_DIALOG event.
     @endEventTable
 
     @library{wxcore}
@@ -2939,18 +2939,6 @@ public:
 
 
 /**
-    The possible flag values for a wxNavigationKeyEvent.
-*/
-enum wxNavigationKeyEventFlags
-{
-    wxNKEF_IS_BACKWARD = 0x0000,
-    wxNKEF_IS_FORWARD = 0x0001,
-    wxNKEF_WINCHANGE = 0x0002,
-    wxNKEF_FROMTAB = 0x0004
-};
-
-
-/**
     @class wxNavigationKeyEvent
 
     This event class contains information about navigation events,
@@ -2974,6 +2962,17 @@ enum wxNavigationKeyEventFlags
 class wxNavigationKeyEvent : public wxEvent
 {
 public:
+    /**
+        Flags which can be used with wxNavigationKeyEvent.
+    */
+    enum wxNavigationKeyEventFlags
+    {
+        IsBackward = 0x0000,
+        IsForward = 0x0001,
+        WinChange = 0x0002,
+        FromTab = 0x0004
+    };
+
     wxNavigationKeyEvent();
     wxNavigationKeyEvent(const wxNavigationKeyEvent& event);
 
@@ -3033,7 +3032,7 @@ public:
     @class wxMouseCaptureChangedEvent
 
     An mouse capture changed event is sent to a window that loses its
-    mouse capture. This is called even if wxWindow::ReleaseCapture
+    mouse capture. This is called even if wxWindow::ReleaseMouse
     was called by the application code. Handling this event allows
     an application to cater for unexpected capture releases which
     might otherwise confuse mouse handling code.
@@ -3042,14 +3041,14 @@ public:
 
     @beginEventTable{wxMouseCaptureChangedEvent}
     @event{EVT_MOUSE_CAPTURE_CHANGED(func)}
-        Process a wxEVT_MOUSE_CAPTURE_CHANGED event.
+        Process a @c wxEVT_MOUSE_CAPTURE_CHANGED event.
     @endEventTable
 
     @library{wxcore}
     @category{events}
 
     @see wxMouseCaptureLostEvent, @ref overview_events,
-    wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
+         wxWindow::CaptureMouse, wxWindow::ReleaseMouse, wxWindow::GetCapture
 */
 class wxMouseCaptureChangedEvent : public wxEvent
 {
@@ -3253,7 +3252,7 @@ public:
 
     @beginEventTable{wxShowEvent}
     @event{EVT_SHOW(func)}
-        Process a wxEVT_SHOW event.
+        Process a @c wxEVT_SHOW event.
     @endEventTable
 
     @library{wxcore}
@@ -3301,7 +3300,7 @@ public:
 
     @beginEventTable{wxIconizeEvent}
     @event{EVT_ICONIZE(func)}
-        Process a wxEVT_ICONIZE event.
+        Process a @c wxEVT_ICONIZE event.
     @endEventTable
 
     @library{wxcore}
@@ -3335,16 +3334,16 @@ public:
 /**
     @class wxMoveEvent
 
-    A move event holds information about move change events.
+    A move event holds information about wxTopLevelWindow move change events.
 
     @beginEventTable{wxMoveEvent}
     @event{EVT_MOVE(func)}
-        Process a wxEVT_MOVE event, which is generated when a window is moved.
+        Process a @c wxEVT_MOVE event, which is generated when a window is moved.
     @event{EVT_MOVE_START(func)}
-        Process a wxEVT_MOVE_START event, which is generated when the user starts
+        Process a @c wxEVT_MOVE_START event, which is generated when the user starts
         to move or size a window. wxMSW only.
     @event{EVT_MOVE_END(func)}
-        Process a wxEVT_MOVE_END event, which is generated when the user stops
+        Process a @c wxEVT_MOVE_END event, which is generated when the user stops
         moving or sizing a window. wxMSW only.
     @endEventTable
 
@@ -3371,7 +3370,7 @@ public:
 /**
     @class wxSizeEvent
 
-    A size event holds information about size change events.
+    A size event holds information about size change events of wxWindow.
 
     The EVT_SIZE handler function will be called when the window has been resized.
 
@@ -3387,7 +3386,7 @@ public:
 
     @beginEventTable{wxSizeEvent}
     @event{EVT_SIZE(func)}
-        Process a wxEVT_SIZE event.
+        Process a @c wxEVT_SIZE event.
     @endEventTable
 
     @library{wxcore}
@@ -3414,8 +3413,8 @@ public:
 /**
     @class wxSetCursorEvent
 
-    A wxSetCursorEvent is generated when the mouse cursor is about to be set as a
-    result of mouse motion.
+    A wxSetCursorEvent is generated from wxWindow when the mouse cursor is about
+    to be set as a result of mouse motion.
 
     This event gives the application the chance to perform specific mouse cursor
     processing based on the current position of the mouse within the window.
@@ -3423,7 +3422,7 @@ public:
 
     @beginEventTable{wxSetCursorEvent}
     @event{EVT_SET_CURSOR(func)}
-        Process a wxEVT_SET_CURSOR event.
+        Process a @c wxEVT_SET_CURSOR event.
     @endEventTable
 
     @library{wxcore}

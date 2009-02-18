@@ -263,7 +263,7 @@ public:
     wxStyledTextCtrl is a 1 to 1 mapping of "raw" scintilla interface, whose
     documentation can be found in the Scintilla website (http://www.scintilla.org/).
 
-    @beginEventTable{wxStyledTextEvent}
+    @beginEventEmissionTable{wxStyledTextEvent}
     @event{EVT_STC_CHANGE(id, fn)}
         TOWRITE
     @event{EVT_STC_STYLENEEDED(id, fn)}

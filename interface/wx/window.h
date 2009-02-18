@@ -182,11 +182,64 @@ enum wxWindowVariant
            mode set by wxUpdateUIEvent::SetMode is @c wxUPDATE_UI_PROCESS_SPECIFIED.
     @endExtraStyleTable
 
+    @beginEventEmissionTable
+    @event{EVT_ACTIVATE(id, func)}
+        Process a @c wxEVT_ACTIVATE event. See wxActivateEvent.
+    @event{EVT_CHILD_FOCUS(func)}
+        Process a @c wxEVT_CHILD_FOCUS event. See wxChildFocusEvent.
+    @event{EVT_CONTEXT_MENU(func)}
+        A right click (or other context menu command depending on platform) has been detected.
+        See wxContextMenuEvent.
+    @event{EVT_HELP(id, func)}
+        Process a @c wxEVT_HELP event. See wxHelpEvent.
+    @event{EVT_HELP_RANGE(id1, id2, func)}
+        Process a @c wxEVT_HELP event for a range of ids. See wxHelpEvent.
+    @event{EVT_DROP_FILES(func)}
+        Process a @c wxEVT_DROP_FILES event. See wxDropFilesEvent.
+    @event{EVT_ERASE_BACKGROUND(func)}
+        Process a @c wxEVT_ERASE_BACKGROUND event. See wxEraseEvent.
+    @event{EVT_SET_FOCUS(func)}
+        Process a @c wxEVT_SET_FOCUS event. See wxFocusEvent.
+    @event{EVT_KILL_FOCUS(func)}
+        Process a @c wxEVT_KILL_FOCUS event. See wxFocusEvent.
+    @event{EVT_IDLE(func)}
+        Process a @c wxEVT_IDLE event. See wxIdleEvent.
+    @event{EVT_JOY_*(func)}
+        Processes joystick events. See wxJoystickEvent.
+    @event{EVT_KEY_DOWN(func)}
+        Process a @c wxEVT_KEY_DOWN event (any key has been pressed).
+        See wxKeyEvent.
+    @event{EVT_KEY_UP(func)}
+        Process a @c wxEVT_KEY_UP event (any key has been released).
+    @event{EVT_CHAR(func)}
+        Process a @c wxEVT_CHAR event.
+        See wxKeyEvent.
+    @event{EVT_MOUSE_CAPTURE_LOST(func)}
+        Process a @c wxEVT_MOUSE_CAPTURE_LOST event. See wxMouseCaptureLostEvent.
+    @event{EVT_MOUSE_CAPTURE_CHANGED(func)}
+        Process a @c wxEVT_MOUSE_CAPTURE_CHANGED event. See wxMouseCaptureChangedEvent.
+    @event{EVT_MOUSE_*(func)}
+        See wxMouseEvent.
+    @event{EVT_PAINT(func)}
+        Process a @c wxEVT_PAINT event. See wxPaintEvent.
+    @event{EVT_POWER_*(func)}
+        The system power state changed. See wxPowerEvent.
+    @event{EVT_SCROLLWIN_*(func)}
+        Process scroll events. See wxScrollWinEvent.
+    @event{EVT_SET_CURSOR(func)}
+        Process a @c wxEVT_SET_CURSOR event. See wxSetCursorEvent.
+    @event{EVT_SHOW(func)}
+        Process a @c wxEVT_SHOW event. See wxShowEvent.
+    @event{EVT_SIZE(func)}
+        Process a @c wxEVT_SIZE event. See wxSizeEvent.
+    @event{EVT_SYS_COLOUR_CHANGED(func)}
+        Process a @c wxEVT_SYS_COLOUR_CHANGED event. See wxSysColourChangedEvent.
+    @endEventTable
+
     @library{wxcore}
     @category{miscwnd}
 
-    @see @ref overview_events "Event handling overview",
-         @ref overview_windowsizing "Window sizing overview"
+    @see @ref overview_events, @ref overview_windowsizing
 */
 class wxWindow : public wxEvtHandler
 {

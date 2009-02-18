@@ -26,6 +26,11 @@
 
     @remarks By default, a panel has the same colouring as a dialog.
 
+    @beginEventEmissionTable{wxNavigationKeyEvent}
+    @event{EVT_NAVIGATION_KEY(func)}
+        Process a navigation key event.
+    @endEventTable
+
     @library{wxbase}
     @category{miscwnd}
 

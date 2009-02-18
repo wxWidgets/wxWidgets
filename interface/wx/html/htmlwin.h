@@ -35,7 +35,7 @@
     @endStyleTable
 
 
-    @beginEventTable{wxHtmlCellEvent, wxHtmlLinkEvent}
+    @beginEventEmissionTable{wxHtmlCellEvent, wxHtmlLinkEvent}
     @event{EVT_HTML_CELL_CLICKED(id, func)}
         A wxHtmlCell was clicked.
     @event{EVT_HTML_CELL_HOVER(id, func)}

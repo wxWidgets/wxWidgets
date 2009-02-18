@@ -77,7 +77,7 @@ public:
            The value wraps at the minimum and maximum.
     @endStyleTable
 
-    @beginEventTable{wxSpinEvent}
+    @beginEventEmissionTable{wxSpinEvent}
     @event{EVT_SPIN(id, func)}
         Generated whenever an arrow is pressed.
     @event{EVT_SPIN_UP(id, func)}

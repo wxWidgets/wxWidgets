@@ -37,7 +37,7 @@
     @endStyleTable
 
 
-    @beginEventTable{wxSplitterEvent}
+    @beginEventEmissionTable{wxSplitterEvent}
     @event{EVT_SPLITTER_SASH_POS_CHANGING(id, func)}
         The sash position is in the process of being changed.
         May be used to modify the position of the tracking bar to properly

@@ -52,9 +52,16 @@ SYMBOL_CACHE_SIZE      = 0
 # Aliases - for use when documenting C++ classes
 #---------------------------------------------------------------------------
 
-# event aliases
-ALIASES = beginEventTable{1}="\n<h2>Events</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p>Event macros:<div>"
-ALIASES += beginEventTable{2}="\n<h2>Events</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span> or <span>void&nbsp;handlerFuncName(\2&&nbsp;event)</span></div></p>Event macros:<div>"
+# aliases to be used by classes which emit wxEvents (e.g. wxWindow, wxTextCtrl, etc):
+ALIASES = beginEventEmissionTable="\n<h2>Events emitted by this class</h2><p>Event macros for events emitted by this class:</p><div>"
+ALIASES += beginEventEmissionTable{1}="\n<h2>Events emitted by this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p>Event macros for events emitted by this class:<div>"
+ALIASES += beginEventEmissionTable{2}="\n<h2>Events emitted by this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span> or <span>void&nbsp;handlerFuncName(\2&&nbsp;event)</span></div></p>Event macros for events emitted by this class:<div>"
+
+# aliases to be used in wxEvent-derived classes:
+ALIASES += beginEventTable{1}="\n<h2>Events using this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span></div></p>Event macros:<div>"
+ALIASES += beginEventTable{2}="\n<h2>Events using this class</h2><p>The following event handler macros redirect the events to member function handlers '<b>func</b>' with prototypes like: <div class='eventHandler'><span>void&nbsp;handlerFuncName(\1&&nbsp;event)</span> or <span>void&nbsp;handlerFuncName(\2&&nbsp;event)</span></div></p>Event macros:<div>"
+
+# common event aliases:
 ALIASES += event{1}="</div>\li <span class='event'>\1</span>:<div class='eventDesc'>"
 ALIASES += event{2}="</div>\li <span class='event'>\1, \2</span>:<div class='eventDesc'>"
 ALIASES += event{3}="</div>\li <span class='event'>\1, \2, \3</span>:<div class='eventDesc'>"
@@ -314,10 +321,10 @@ GENERATE_CHI           = NO
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
 GENERATE_QHP           = NO
-QCH_FILE               = 
+QCH_FILE               =
 QHP_NAMESPACE          = org.wxwidgets.doxygen
 QHP_VIRTUAL_FOLDER     = doc
-QHG_LOCATION           = 
+QHG_LOCATION           =
 DISABLE_INDEX          = NO
 ENUM_VALUES_PER_LINE   = 1
 GENERATE_TREEVIEW      = NONE
@@ -420,7 +427,7 @@ HIDE_UNDOC_RELATIONS   = YES
 HAVE_DOT               = YES
 DOT_FONTNAME           = FreeSans
 DOT_FONTSIZE           = 10
-DOT_FONTPATH           = 
+DOT_FONTPATH           =
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = NO
 GROUP_GRAPHS           = NO

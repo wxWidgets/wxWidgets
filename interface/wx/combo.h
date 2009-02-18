@@ -292,7 +292,7 @@ struct wxComboCtrlFeatures
            Drop button will behave more like a standard push button.
     @endStyleTable
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TEXT(id, func)}
            Process a wxEVT_COMMAND_TEXT_UPDATED event, when the text changes.
     @event{EVT_TEXT_ENTER(id, func)}

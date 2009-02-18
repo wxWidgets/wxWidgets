@@ -71,7 +71,7 @@ public:
            wxBORDER_NONE|wxHL_CONTEXTMENU|wxHL_ALIGN_CENTRE.
     @endStyleTable
 
-    @beginEventTable{wxHyperlinkEvent}
+    @beginEventEmissionTable{wxHyperlinkEvent}
     @event{EVT_HYPERLINK(id, func)}
         The hyperlink was (left) clicked. If this event is not handled in user's
         code (or it's skipped; see wxEvent::Skip), then a call to wxLaunchDefaultBrowser

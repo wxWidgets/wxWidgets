@@ -18,7 +18,7 @@
            Sorts the entries alphabetically.
     @endStyleTable
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_CHOICE(id, func)}
            Process a wxEVT_COMMAND_CHOICE_SELECTED event, when an item on the
            list is selected.

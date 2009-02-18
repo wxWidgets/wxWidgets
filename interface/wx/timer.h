@@ -131,7 +131,8 @@ public:
 /**
     @class wxTimerEvent
 
-    wxTimerEvent object is passed to the event handler of timer events.
+    wxTimerEvent object is passed to the event handler of timer events
+    (see wxTimer::SetOwner).
 
     For example:
 

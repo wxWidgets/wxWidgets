@@ -45,7 +45,7 @@ enum wxFindReplaceDialogStyles
 /**
     @class wxFindDialogEvent
 
-    wxFindReplaceDialog events
+    wxFindReplaceDialog events.
 
     @beginEventTable{wxFindDialogEvent}
     @event{EVT_FIND(id, func)}

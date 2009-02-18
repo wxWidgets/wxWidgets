@@ -29,7 +29,7 @@
            (instead of no label at all).
     @endStyleTable
 
-    @beginEventTable{wxColourPickerEvent}
+    @beginEventEmissionTable{wxColourPickerEvent}
     @event{EVT_COLOURPICKER_CHANGED(id, func)}
            The user changed the colour selected in the control either using the
            button or using text control (see @c wxCLRP_USE_TEXTCTRL; note that

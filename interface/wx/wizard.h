@@ -223,7 +223,7 @@ public:
     wxDialog::EnableLayoutAdaptation() or per dialog with wxDialog::SetLayoutAdaptationMode().
     For more about layout adaptation, see @ref overview_dialog_autoscrolling.
 
-    @beginEventTable{wxWizardEvent}
+    @beginEventEmissionTable{wxWizardEvent}
     For some events, Veto() can be called to prevent the event from happening.
     @event{EVT_WIZARD_PAGE_CHANGED(id, func)}
         The page has just been changed (this event cannot be vetoed).

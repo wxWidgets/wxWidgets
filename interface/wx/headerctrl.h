@@ -66,7 +66,7 @@
         @c wxHD_ALLOW_REORDER.
     @endStyleTable
 
-    @beginEventTable{wxHeaderCtrlEvent}
+    @beginEventEmissionTable{wxHeaderCtrlEvent}
     @event{EVT_HEADER_CLICK(id, func)}
         A column heading was clicked.
     @event{EVT_HEADER_RIGHT_CLICK(id, func)}

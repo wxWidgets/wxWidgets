@@ -31,7 +31,7 @@
            Creates a flat button. Windows and GTK+ only.
     @endStyleTable
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_BUTTON(id, func)}
            Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked.
     @endEventTable

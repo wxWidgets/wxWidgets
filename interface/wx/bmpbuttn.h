@@ -54,7 +54,7 @@
     Note that the wxBU_EXACTFIT style supported by wxButton is not used by this
     class as bitmap buttons don't have any minimal standard size by default.
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_BUTTON(id, func)}
            Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked.
     @endEventTable

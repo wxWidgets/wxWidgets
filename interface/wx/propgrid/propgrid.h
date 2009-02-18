@@ -318,7 +318,7 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
     To process input from a property grid control, use these event handler macros
     to direct input to member functions that take a wxPropertyGridEvent argument.
 
-    @beginEventTable{wxPropertyGridEvent}
+    @beginEventEmissionTable{wxPropertyGridEvent}
     @event{EVT_PG_SELECTED (id, func)}
         Respond to wxEVT_PG_SELECTED event, generated when property value
         has been changed by user.

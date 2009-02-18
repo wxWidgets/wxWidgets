@@ -39,7 +39,7 @@ enum wxCheckBoxState
            Makes the text appear on the left of the checkbox.
     @endStyleTable
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_CHECKBOX(id, func)}
            Process a wxEVT_COMMAND_CHECKBOX_CLICKED event, when the checkbox
            is clicked.

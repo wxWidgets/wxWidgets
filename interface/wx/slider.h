@@ -40,7 +40,7 @@
            compatible with wxSL_SELRANGE.
     @endStyleTable
 
-    @beginEventTable{wxScrollEvent}
+    @beginEventEmissionTable{wxScrollEvent}
     You can use EVT_COMMAND_SCROLL... macros with window IDs for when intercepting
     scroll events from controls, or EVT_SCROLL... macros without window IDs for
     intercepting scroll events from the receiving window -- except for this,

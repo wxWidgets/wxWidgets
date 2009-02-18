@@ -24,7 +24,7 @@
     @endStyleTable
 
 
-    @beginEventTable{wxSpinEvent}
+    @beginEventEmissionTable{wxSpinEvent}
     @event{EVT_SPINCTRL(id, func)}
         Generated whenever the numeric value of the spinctrl is updated
     @endEventTable

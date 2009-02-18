@@ -25,35 +25,35 @@
 
     @beginStyleTable
     @style{wxLB_SINGLE}
-           Single-selection list.
+        Single-selection list.
     @style{wxLB_MULTIPLE}
-           Multiple-selection list: the user can toggle multiple items on and off.
-           This is the same as wxLB_EXTENDED in wxGTK2 port.
+        Multiple-selection list: the user can toggle multiple items on and off.
+        This is the same as wxLB_EXTENDED in wxGTK2 port.
     @style{wxLB_EXTENDED}
-           Extended-selection list: the user can extend the selection by using
-           @c SHIFT or @c CTRL keys together with the cursor movement keys or
-           the mouse.
+        Extended-selection list: the user can extend the selection by using
+        @c SHIFT or @c CTRL keys together with the cursor movement keys or
+        the mouse.
     @style{wxLB_HSCROLL}
-           Create horizontal scrollbar if contents are too wide (Windows only).
+        Create horizontal scrollbar if contents are too wide (Windows only).
     @style{wxLB_ALWAYS_SB}
-           Always show a vertical scrollbar.
+        Always show a vertical scrollbar.
     @style{wxLB_NEEDED_SB}
-           Only create a vertical scrollbar if needed.
+        Only create a vertical scrollbar if needed.
     @style{wxLB_SORT}
-           The listbox contents are sorted in alphabetical order.
+        The listbox contents are sorted in alphabetical order.
     @endStyleTable
 
     Note that @c wxLB_SINGLE, @c wxLB_MULTIPLE and @c wxLB_EXTENDED styles are
     mutually exclusive and you can specify at most one of them (single selection
     is the default). See also @ref overview_windowstyles.
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_LISTBOX(id, func)}
-           Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
-           list is selected or the selection changes.
+        Process a wxEVT_COMMAND_LISTBOX_SELECTED event, when an item on the
+        list is selected or the selection changes.
     @event{EVT_LISTBOX_DCLICK(id, func)}
-           Process a wxEVT_COMMAND_LISTBOXDOUBLECLICKED event, when the listbox
-           is double-clicked.
+        Process a wxEVT_COMMAND_LISTBOXDOUBLECLICKED event, when the listbox
+        is double-clicked.
     @endEventTable
 
     @library{wxcore}

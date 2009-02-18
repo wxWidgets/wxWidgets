@@ -1042,7 +1042,7 @@ public:
     wxID_REDO. The associated UI update events are also processed
     automatically, when the control has the focus.
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_TEXT(id, func)}
         Respond to a wxEVT_COMMAND_TEXT_UPDATED event, generated when the text
         changes. Notice that this event will be sent when the text controls

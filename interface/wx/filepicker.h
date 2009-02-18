@@ -40,7 +40,7 @@
     @endStyleTable
 
 
-    @beginEventTable{wxFileDirPickerEvent}
+    @beginEventEmissionTable{wxFileDirPickerEvent}
     @event{EVT_FILEPICKER_CHANGED(id, func)}
         The user changed the file selected in the control either using the
         button or using text control (see wxFLP_USE_TEXTCTRL; note that in
@@ -163,7 +163,7 @@ public:
            Change current working directory on each user directory selection change.
     @endStyleTable
 
-    @beginEventTable{wxFileDirPickerEvent}
+    @beginEventEmissionTable{wxFileDirPickerEvent}
     @event{EVT_DIRPICKER_CHANGED(id, func)}
         The user changed the directory selected in the control either using the
         button or using text control (see wxDIRP_USE_TEXTCTRL; note that in this

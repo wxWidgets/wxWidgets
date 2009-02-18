@@ -42,7 +42,7 @@
     The styles wxNB_LEFT, RIGHT and BOTTOM are not supported under
     Microsoft Windows XP when using visual themes.
 
-    @beginEventTable{wxBookCtrlEvent}
+    @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_NOTEBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
         Processes a @c wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED event.

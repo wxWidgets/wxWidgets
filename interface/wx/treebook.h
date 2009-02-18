@@ -21,7 +21,7 @@
     AddPage() and AddSubPage() to sequentially populate your tree by adding at
     every step a page or a subpage to the end of the tree.
 
-    @beginEventTable{wxBookCtrlEvent}
+    @beginEventEmissionTable{wxBookCtrlEvent}
     @event{EVT_TREEBOOK_PAGE_CHANGED(id, func)}
         The page selection was changed.
         Processes a @c wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED event.

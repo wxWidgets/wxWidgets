@@ -258,13 +258,14 @@ public:
 /**
     @class wxProcessEvent
 
-    A process event is sent when a process is terminated.
+    A process event is sent to the wxEvtHandler specified to wxProcess
+    when a process is terminated.
 
     @beginEventTable{wxProcessEvent}
     @event{EVT_END_PROCESS(id, func)}
-           Process a @c wxEVT_END_PROCESS event. @a id is the identifier of the process
-           object (the id passed to the wxProcess constructor) or a window to receive
-           the event.
+        Process a @c wxEVT_END_PROCESS event. @a id is the identifier of the process
+        object (the id passed to the wxProcess constructor) or a window to receive
+        the event.
     @endEventTable
 
     @library{wxbase}

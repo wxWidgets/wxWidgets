@@ -39,7 +39,7 @@
            capitalized.
     @endStyleTable
 
-    @beginEventTable{wxCommandEvent}
+    @beginEventEmissionTable{wxCommandEvent}
     To retrieve actual search queries, use EVT_TEXT and EVT_TEXT_ENTER events,
     just as you would with wxTextCtrl.
     @event{EVT_SEARCHCTRL_SEARCH_BTN(id, func)}
