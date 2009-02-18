@@ -624,7 +624,7 @@ if test "$USE_OS2" = 1; then
     WX_ARG_ENABLE(omf,     [  --enable-omf            use OMF object format], wxUSE_OMF)
 fi
 
-dnl --enablle-debug is equivalent to both --enable-debug_flag and
+dnl --enable-debug is equivalent to both --enable-debug_flag and
 dnl --enable-debug_info
 if test "$wxUSE_DEBUG" = "yes"; then
     DEFAULT_wxUSE_DEBUG_FLAG=yes
@@ -1012,7 +1012,7 @@ dnl   defines CFLAGS
 dnl
 dnl this magic incantation is needed to prevent AC_PROG_CC from setting the
 dnl default CFLAGS (something like "-g -O2") -- we don't need this as we add
-dnl -g and -O flags ourselves below
+dnl (if not already present in C*FLAGS) the -g and -O flags ourselves below
 CFLAGS=${CFLAGS:=}
 AC_BAKEFILE_PROG_CC
 
@@ -5139,7 +5139,13 @@ fi
 dnl DEBUG_CFLAGS contains debugging options (supposed to be the same for C and C++
 dnl compilers: we'd need a separate DEBUG_CXXFLAGS if this is ever not the case)
 DEBUG_CFLAGS=
-if test "$wxUSE_DEBUG_INFO" = "yes" ; then
+if `echo $CXXFLAGS $CFLAGS | grep " -g" >/dev/null`; then
+    dnl the CXXFLAGS or the CFLAGS variable already contains the -g flag
+    dnl (e.g. it was specified by the user before running configure); since
+    dnl later they will be merged with DEBUG_CFLAGS, don't set the -g option
+    dnl in DEBUG_CFLAGS to avoid (possibly different) flag duplicates
+    AC_MSG_WARN([CXXFLAGS/CFLAGS already contains -g flag; ignoring the --enable-debug_info option])
+elif test "$wxUSE_DEBUG_INFO" = "yes" ; then
     DEBUG_CFLAGS="-g"
 fi
 
@@ -5212,29 +5218,37 @@ fi
 
 dnl C/C++ compiler option for optimization (supposed to be the same for both)
 OPTIMISE_CFLAGS=
-if test "$wxUSE_OPTIMISE" = "no" ; then
-    if test "$GCC" = yes ; then
-        dnl use -O0 because compiling with it is faster than compiling with no
-        dnl optimization options at all (at least with g++ 3.2)
-        OPTIMISE_CFLAGS="-O0"
-    fi
+if `echo $CXXFLAGS $CFLAGS | grep " -O" >/dev/null`; then
+    dnl the CXXFLAGS or the CFLAGS variable already contains -O optimization flag
+    dnl (e.g. it was specified by the user before running configure); since
+    dnl later they will be merged with OPTIMISE_CFLAGS, don't set the -O option
+    dnl in OPTIMISE_CFLAGS to avoid (possibly different) flag duplicates
+    AC_MSG_WARN([CXXFLAGS/CFLAGS already contains -O flag; ignoring the --disable-optimise option])
 else
-    if test "$GCC" = yes ; then
-        case "${host}" in
-            *-pc-os2_emx | *-pc-os2-emx )
-                dnl Not all of the supported gcc versions understand
-                dnl -fstrict-aliasing and none actually needs it (yet).
-                OPTIMISE_CFLAGS="-O2"
-            ;;
-            *)
-                dnl Switch on optimisation but keep strict-aliasing off for
-                dnl now (see -fstrict-aliasing in the gcc manual). When it is
-                dnl switched back on consider using -Wstrict-aliasing=2.
-                OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
-            ;;
-        esac
+    if test "$wxUSE_OPTIMISE" = "no" ; then
+        if test "$GCC" = yes ; then
+            dnl use -O0 because compiling with it is faster than compiling with no
+            dnl optimization options at all (at least with g++ 3.2)
+            OPTIMISE_CFLAGS="-O0"
+        fi
     else
-        OPTIMISE_CFLAGS="-O"
+        if test "$GCC" = yes ; then
+            case "${host}" in
+                *-pc-os2_emx | *-pc-os2-emx )
+                    dnl Not all of the supported gcc versions understand
+                    dnl -fstrict-aliasing and none actually needs it (yet).
+                    OPTIMISE_CFLAGS="-O2"
+                ;;
+                *)
+                    dnl Switch on optimisation but keep strict-aliasing off for
+                    dnl now (see -fstrict-aliasing in the gcc manual). When it is
+                    dnl switched back on consider using -Wstrict-aliasing=2.
+                    OPTIMISE_CFLAGS="-O2 -fno-strict-aliasing"
+                ;;
+            esac
+        else
+            OPTIMISE_CFLAGS="-O"
+        fi
     fi
 fi
 
