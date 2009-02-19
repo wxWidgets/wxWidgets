@@ -1343,7 +1343,6 @@ void  wxWindowMac::MacPaintGrowBox()
 
         int size = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
         CGRect cgrect = CGRectMake( rect.right - size , rect.bottom - size , size , size ) ;
-        CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
         CGContextSaveGState( cgContext );
 
         if ( m_backgroundColour.Ok() )
