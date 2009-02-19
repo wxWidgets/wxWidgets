@@ -63,9 +63,36 @@
 #ifdef MSG_NOSIGNAL
     #define wxSOCKET_MSG_NOSIGNAL MSG_NOSIGNAL
 #else // MSG_NOSIGNAL not available (BSD including OS X)
-    #if defined(__UNIX__) && !defined(SO_NOSIGPIPE) && !defined( __VMS )
-        #error "Writing to socket could generate unhandled SIGPIPE."
-        #error "Please post information about your system to wx-dev."
+    // next best possibility is to use SO_NOSIGPIPE socket option, this covers
+    // BSD systems (including OS X) -- but if we don't have it neither, we have
+    // to fall back to the old way of simply disabling SIGPIPE temporarily, so
+    // define a class to do it in a simple way
+    #if defined(__UNIX__) && !defined(SO_NOSIGPIPE)
+    namespace
+    {
+        class IgnoreSignal
+        {
+        public:
+            // ctor disables the given signal
+            IgnoreSignal(int sig)
+                : m_handler(signal(sig, SIG_IGN)),
+                  m_sig(sig)
+            {
+            }
+
+            // dtor restores the old handler
+            ~IgnoreSignal()
+            {
+                signal(m_sig, m_handler);
+            }
+
+        private:
+            const sighandler_t m_handler;
+            const int m_sig;
+
+            wxDECLARE_NO_COPY_CLASS(IgnoreSignal);
+        };
+    } // anonymous namespace
     #endif
 
     #define wxSOCKET_MSG_NOSIGNAL 0
@@ -613,6 +640,10 @@ int wxSocketImpl::RecvStream(void *buffer, int size)
 
 int wxSocketImpl::SendStream(const void *buffer, int size)
 {
+#if !defined(MSG_NOSIGNAL) && !defined(SO_NOSIGPIPE)
+    IgnoreSignal ignore(SIGPIPE);
+#endif
+
     int ret;
     DO_WHILE_EINTR( ret, send(m_fd, static_cast<const char *>(buffer), size,
                               wxSOCKET_MSG_NOSIGNAL) );
