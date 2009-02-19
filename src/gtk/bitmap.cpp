@@ -21,10 +21,7 @@
     #include "wx/colour.h"
 #endif
 
-// HP aCC for PA-RISC can't compile rawbmp.h
-#if !defined(__HP_aCC) || !defined(__hppa)
-    #include "wx/rawbmp.h"
-#endif
+#include "wx/rawbmp.h"
 
 #include "wx/gtk/private/object.h"
 
@@ -859,7 +856,7 @@ void wxBitmap::PurgeOtherRepresentations(wxBitmap::Representation keep)
     }
 }
 
-#if !defined(__HP_aCC) || !defined(__hppa)
+#ifdef wxHAS_RAW_BITMAP
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
     void* bits = NULL;
@@ -880,7 +877,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
 }
-#endif
+#endif // wxHAS_RAW_BITMAP
 
 bool wxBitmap::HasAlpha() const
 {

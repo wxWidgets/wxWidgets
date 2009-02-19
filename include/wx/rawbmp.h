@@ -12,6 +12,10 @@
 #ifndef _WX_RAWBMP_H_
 #define _WX_RAWBMP_H_
 
+#include "wx/defs.h"
+
+#ifdef wxHAS_RAW_BITMAP
+
 #include "wx/image.h"
 #include "wx/bitmap.h"
 
@@ -749,4 +753,5 @@ struct wxPixelIterator : public wxPixelData<Image, PixelFormat>::Iterator
 {
 };
 
+#endif // wxHAS_RAW_BITMAP
 #endif // _WX_RAWBMP_H_
