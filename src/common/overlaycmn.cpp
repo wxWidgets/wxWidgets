@@ -152,11 +152,6 @@ void wxOverlayImpl::Init( wxDC* dc, int x , int y , int width , int height )
     m_y = y ;
     m_width = width ;
     m_height = height ;
-#if defined(__WXGTK__) && !defined(__WX_DC_BLIT_FIXED__)
-    wxPoint pt = dc->GetDeviceOrigin();
-    x += pt.x;
-    y += pt.y;
-#endif // broken wxGTK wxDC::Blit
     dcMem.Blit(0, 0, m_width, m_height,
         dc, x, y);
     dcMem.SelectObject( wxNullBitmap );
