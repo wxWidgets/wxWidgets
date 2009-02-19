@@ -54,6 +54,11 @@ wxClipboardEvent::wxClipboardEvent(const wxClipboardEvent& event)
 {
 }
 
+wxEvent* wxClipboardEvent::Clone() const
+{
+    return new wxClipboardEvent(*this);
+}
+
 bool wxClipboardEvent::SupportsFormat( const wxDataFormat &format ) const
 {
 #ifdef __WXGTK20__

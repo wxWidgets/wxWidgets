@@ -111,12 +111,11 @@ public:
     bool SupportsFormat(const wxDataFormat& format) const;
     void AddFormat(const wxDataFormat& format);
 
-    virtual wxEvent *Clone() const { return new wxClipboardEvent(*this); }
+    virtual wxEvent *Clone() const;
 
 protected:
     wxVector<wxDataFormat> m_formats;
 
-private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxClipboardEvent)
 };
 
