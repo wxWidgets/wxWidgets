@@ -237,12 +237,7 @@ public:
         m_method = method;
     }
 
-    virtual void operator()(wxEvtHandler *handler, wxEvent& event)
-    {
-        wxEvtHandler * const realHandler = m_handler ? m_handler : handler;
-
-        (realHandler->*m_method)(event);
-    }
+    virtual void operator()(wxEvtHandler *handler, wxEvent& event);
 
     virtual bool Matches(const wxEventFunctor& func) const
     {
@@ -3400,6 +3395,13 @@ private:
 
     wxDECLARE_NO_ASSIGN_CLASS(wxEventConnectionRef);
 };
+
+inline void wxObjectEventFunctor::operator()(wxEvtHandler *handler, wxEvent& event)
+{
+    wxEvtHandler * const realHandler = m_handler ? m_handler : handler;
+
+    (realHandler->*m_method)(event);
+}
 
 // Post a message to the given event handler which will be processed during the
 // next event loop iteration.
