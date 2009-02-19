@@ -12,6 +12,10 @@
 #define _WX_PRIVATE_FLAGSCHECK_H_
 
 #include "wx/debug.h"
+
+// IBM xlC 8 can't parse the template syntax
+#if !defined(__IBMCPP__)
+
 #include "wx/meta/if.h"
 
 namespace wxPrivate
@@ -36,7 +40,7 @@ namespace wxPrivate
 //
 // NB: If any of this doesn't compile with your compiler and would be too
 //     hard to make work, it's probably best to disable this code and replace
-//     the macros below with empty stubs, this isn't anything criticial.
+//     the macros below with empty stubs, this isn't anything critical.
 
 template<int val> struct FlagsHaveConflictingValues
 {
@@ -100,6 +104,10 @@ template<int all, int add> struct SafelyAddToMask
 
 #define wxADD_FLAG(f, others) \
     ::wxPrivate::SafelyAddToMask<f, others>::value
+
+#else
+    #define wxADD_FLAG(f, others) (f | others)
+#endif
 
 // Checks if flags value 'f' is within the mask of allowed values
 #define wxASSERT_VALID_FLAGS(f, mask)                   \
