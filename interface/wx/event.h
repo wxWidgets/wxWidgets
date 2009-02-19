@@ -54,6 +54,7 @@ enum wxEventCategory
         This category is for any event used to send notifications from the
         secondary threads to the main one or in general for notifications among
         different threads (which may or may not be user-generated).
+        See e.g. wxThreadEvent.
     */
     wxEVT_CATEGORY_THREAD = 16,
 
@@ -379,7 +380,7 @@ public:
         fields of this object are used by it, notably any wxString members of
         the event object must not be shallow copies of another wxString object
         as this would result in them still using the same string buffer behind
-        the scenes. For example
+        the scenes. For example:
         @code
             void FunctionInAWorkerThread(const wxString& str)
             {
@@ -389,6 +390,20 @@ public:
                 evt->SetString(str.c_str()); // make a deep copy
 
                 wxTheApp->QueueEvent( evt );
+            }
+        @endcode
+
+        Note that you can use wxThreadEvent instead of wxCommandEvent
+        to avoid this problem:
+        @code
+            void FunctionInAWorkerThread(const wxString& str)
+            {
+                wxThreadEvent evt;
+                evt->SetString(str);
+
+                // wxThreadEvent::Clone() makes sure that the internal wxString
+                // member is not shared by other wxString instances:
+                wxTheApp->QueueEvent( evt.Clone() );
             }
         @endcode
 
