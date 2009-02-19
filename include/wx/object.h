@@ -190,7 +190,7 @@ WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
             &basename::ms_classInfo,                                          \
             baseclsinfo2,                                                     \
             (int) sizeof(name),                                               \
-            (wxObjectConstructorFn) func);                                    \
+            func);                                                            \
                                                                               \
     wxClassInfo *name::GetClassInfo() const                                   \
         { return &name::ms_classInfo; }
