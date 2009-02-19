@@ -49,12 +49,12 @@ public:
     // Internal use only
     const wxBitmap *GetBitmapPtr(int index) const;
 private:
-    wxList  m_images;
+    wxObjectList  m_images;
 
     int     m_width;
     int     m_height;
 
-    DECLARE_DYNAMIC_CLASS(wxGenericImageList)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxGenericImageList)
 };
 
 #ifndef wxHAS_NATIVE_IMAGELIST
