@@ -172,6 +172,7 @@ public:
 #else
          w -= 2*wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 #endif
+         if (w < 0) w = 0;
          SetColumnWidth(0, w);
     }
 
