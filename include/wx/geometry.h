@@ -182,8 +182,11 @@ inline wxPoint2DInt wxPoint2DInt::operator-()
 
 inline wxPoint2DInt& wxPoint2DInt::operator=(const wxPoint2DInt& pt)
 {
-    m_x = pt.m_x;
-    m_y = pt.m_y;
+    if (this != &pt)
+    {
+        m_x = pt.m_x;
+        m_y = pt.m_y;
+    }
     return *this;
 }
 
@@ -411,8 +414,11 @@ inline wxPoint2DDouble wxPoint2DDouble::operator-()
 
 inline wxPoint2DDouble& wxPoint2DDouble::operator=(const wxPoint2DDouble& pt)
 {
-    m_x = pt.m_x;
-    m_y = pt.m_y;
+    if (this != &pt)
+    {
+        m_x = pt.m_x;
+        m_y = pt.m_y;
+    }
     return *this;
 }
 
