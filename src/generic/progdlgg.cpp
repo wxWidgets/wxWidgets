@@ -403,6 +403,9 @@ wxProgressDialog::Update(int value, const wxString& newmsg, bool *skip)
                 m_msg->SetLabel(_("Done."));
             }
 
+            wxCHECK_MSG(wxEventLoopBase::GetActive(), false,
+                        "wxProgressDialog::Update needs a running event loop");
+
             // allow the window to repaint:
             // NOTE: since we yield only for UI events with this call, there
             //       should be no side-effects
@@ -454,6 +457,9 @@ bool wxProgressDialog::Pulse(const wxString& newmsg, bool *skip)
 
 bool wxProgressDialog::DoAfterUpdate(bool *skip)
 {
+    wxCHECK_MSG(wxEventLoopBase::GetActive(), false,
+                "wxProgressDialog::DoAfterUpdate needs a running event loop");
+
     // we have to yield because not only we want to update the display but
     // also to process the clicks on the cancel and skip buttons
     // NOTE: using YieldFor() this call shouldn't give re-entrancy problems
@@ -671,6 +677,9 @@ void wxProgressDialog::EnableClose()
 
 void wxProgressDialog::UpdateMessage(const wxString &newmsg)
 {
+    wxCHECK_RET(wxEventLoopBase::GetActive(),
+                "wxProgressDialog::UpdateMessage needs a running event loop");
+
     if ( !newmsg.empty() && newmsg != m_msg->GetLabel() )
     {
         m_msg->SetLabel(newmsg);
