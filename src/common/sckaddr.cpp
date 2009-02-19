@@ -136,7 +136,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
     typedef char wxGethostBuf[1024];
 #endif
 
-#ifdef HAVE_FUNC_GETSERVBYNAME_R_3
+#ifdef HAVE_FUNC_GETSERVBYNAME_R_4
     struct wxGetservBuf : servent_data
     {
         wxGethostBuf()
@@ -383,7 +383,7 @@ servent *deepCopyServent(servent *s,
 servent *wxGetservbyname_r(const char *port,
                            const char *protocol,
                            servent *serv,
-                           wxGetservBuf buffer,
+                           wxGetservBuf& buffer,
                            int size)
 {
     servent *se;
