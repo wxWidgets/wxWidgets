@@ -1775,6 +1775,16 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
     }
 
     wxGenericTreeItem *parent = item->GetParent();
+    
+    // if the selected item will be deleted, select the parent ...
+    wxGenericTreeItem *to_be_selected = parent;
+    if (parent)
+    {
+        // .. unless there is a next sibling like wxMSW does it
+        int pos = parent->GetChildren().Index( item );
+        if ((int)(parent->GetChildren().GetCount()) > pos+1)
+            to_be_selected = parent->GetChildren().Item( pos+1 );
+    }
 
     // don't keep stale pointers around!
     if ( IsDescendantOf(item, m_key_current) )
@@ -1791,7 +1801,7 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
     // a different item, in idle time.
     if ( m_select_me && IsDescendantOf(item, m_select_me) )
     {
-        m_select_me = parent;
+        m_select_me = to_be_selected;
     }
 
     if ( IsDescendantOf(item, m_current) )
@@ -1802,7 +1812,7 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
 
         // m_current = parent;
         m_current = NULL;
-        m_select_me = parent;
+        m_select_me = to_be_selected;
     }
 
     // remove the item from the tree
