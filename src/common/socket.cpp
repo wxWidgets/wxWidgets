@@ -64,9 +64,9 @@
     #define wxSOCKET_MSG_NOSIGNAL MSG_NOSIGNAL
 #else // MSG_NOSIGNAL not available (BSD including OS X)
     // next best possibility is to use SO_NOSIGPIPE socket option, this covers
-    // BSD systems (including OS X) -- but if we don't have it neither, we have
-    // to fall back to the old way of simply disabling SIGPIPE temporarily, so
-    // define a class to do it in a simple way
+    // BSD systems (including OS X) -- but if we don't have it neither (AIX and
+    // old HP-UX do not), we have to fall back to the old way of simply
+    // disabling SIGPIPE temporarily, so define a class to do it in a safe way
     #if defined(__UNIX__) && !defined(SO_NOSIGPIPE)
     namespace
     {
@@ -93,7 +93,9 @@
             wxDECLARE_NO_COPY_CLASS(IgnoreSignal);
         };
     } // anonymous namespace
-    #endif
+
+    #define wxNEEDS_IGNORE_SIGPIPE
+    #endif // Unix without SO_NOSIGPIPE
 
     #define wxSOCKET_MSG_NOSIGNAL 0
 #endif
@@ -640,7 +642,7 @@ int wxSocketImpl::RecvStream(void *buffer, int size)
 
 int wxSocketImpl::SendStream(const void *buffer, int size)
 {
-#if !defined(MSG_NOSIGNAL) && !defined(SO_NOSIGPIPE)
+#ifdef wxNEEDS_IGNORE_SIGPIPE
     IgnoreSignal ignore(SIGPIPE);
 #endif
 
