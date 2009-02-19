@@ -22,7 +22,7 @@ class wxFDIODispatcher;
 namespace wxPrivate
 {
     class PipeIOHandler;
-};
+}
 
 class WXDLLIMPEXP_BASE wxConsoleEventLoop : public wxEventLoopManual
 {

@@ -130,7 +130,7 @@ public :
 protected :
     wxMenuItem* m_peer;
     
-    DECLARE_ABSTRACT_CLASS(wxMenuItemImpl);
+    DECLARE_ABSTRACT_CLASS(wxMenuItemImpl)
 } ;
 
 class wxMenuImpl : public wxObject 
@@ -159,7 +159,7 @@ public :
 protected :
     wxMenu* m_peer;
     
-    DECLARE_ABSTRACT_CLASS(wxMenuItemImpl);
+    DECLARE_ABSTRACT_CLASS(wxMenuItemImpl)
 } ;
 
 
