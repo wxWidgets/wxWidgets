@@ -52,7 +52,9 @@ private:
         CPPUNIT_TEST( ToULongLong );
 #endif // wxHAS_STRTOLL
         CPPUNIT_TEST( ToDouble );
+#if !wxUSE_STL
         CPPUNIT_TEST( WriteBuf );
+#endif //!wxUSE_STL
         CPPUNIT_TEST( CharStr );
     CPPUNIT_TEST_SUITE_END();
 
@@ -76,7 +78,9 @@ private:
     void ToULongLong();
 #endif // wxHAS_STRTOLL
     void ToDouble();
+#if !wxUSE_STL
     void WriteBuf();
+#endif //!wxUSE_STL
     void CharStr();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
@@ -635,6 +639,7 @@ void StringTestCase::ToDouble()
     }
 }
 
+#if !wxUSE_STL
 void StringTestCase::WriteBuf()
 {
     wxString s;
@@ -659,6 +664,7 @@ void StringTestCase::WriteBuf()
         CPPUNIT_ASSERT_EQUAL( 0, wxStrcmp(_T("barr"), s) );
     }
 }
+#endif //!wxUSE_STL
 
 
 static bool IsFoo(/* non-const */ char *s)

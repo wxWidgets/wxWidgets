@@ -1493,7 +1493,7 @@ wxChar *wxDoGetCwd(wxChar *buf, int sz)
         {
             sz -= 3;
             rc = ::DosQueryCurrentDir( 0 // current drive
-                                      ,cbuf + 3
+                                      ,(PBYTE)cbuf + 3
                                       ,(PULONG)&sz
                                      );
             cbuf[0] = char('A' + (ulDriveNum - 1));

@@ -150,7 +150,8 @@ static void wxDrawSplashBitmap(wxDC& dc, const wxBitmap& bitmap, int WXUNUSED(x)
 #endif // USE_PALETTE_IN_SPLASH
 
     dcMem.SelectObjectAsSource(bitmap);
-    dc.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(), & dcMem, 0, 0);
+    dc.Blit(0, 0, bitmap.GetWidth(), bitmap.GetHeight(), &dcMem, 0, 0, wxCOPY,
+            true /* use mask */);
     dcMem.SelectObject(wxNullBitmap);
 
 #ifdef USE_PALETTE_IN_SPLASH

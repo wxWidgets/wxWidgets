@@ -574,6 +574,7 @@ END_EVENT_TABLE()
 wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
 {
     m_action = actionNone;
+    m_action_window = NULL;
     m_last_mouse_move = wxPoint();
     m_hover_button = NULL;
     m_art = new wxAuiDefaultDockArt;
@@ -1261,7 +1262,7 @@ void wxAuiManager::MaximizePane(wxAuiPaneInfo& pane_info)
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
     {
         wxAuiPaneInfo& p = m_panes.Item(i);
-        if (!p.IsToolbar())
+        if (!p.IsToolbar() && !p.IsFloating())
         {
             p.Restore();
 

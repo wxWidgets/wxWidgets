@@ -23,6 +23,7 @@
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/module.h"
+    #include "wx/log.h"
 #endif
 
 #if !wxUSE_PROTOCOL_HTTP
@@ -173,7 +174,7 @@ size_t wxWinINetInputStream::OnSysRead(void *buffer, size_t bufsize)
             );
 
             wxLogError(wxT("Read failed with error %d: %s"),
-                       iError, errorString);
+                       iError, errorString.c_str());
         }
     }
 

@@ -568,6 +568,7 @@ bool wxDataObject::HasDataInPasteboard( void * pb )
 void wxTextDataObject::GetAllFormats( wxDataFormat *formats, wxDataObjectBase::Direction dir ) const
 {
     *formats++ = wxDataFormat( wxDF_TEXT );
+    *formats++ = wxDataFormat( wxDF_HTML );
     *formats = wxDataFormat( wxDF_UNICODETEXT );
 }
 #endif

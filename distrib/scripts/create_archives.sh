@@ -147,7 +147,7 @@ dospinport(){
 
 # use DOS line endings for text files for MSW archives.
     if [ $port = "msw" ]; then
-        FILES=`find . -type f \( -path '*/CVS/*' -prune -o -exec ${SCRIPTDIR}/is_text.sh {} \; -print \)`
+        FILES=`find . -type f \( -path '*/.svn/*' -prune -o -exec ${SCRIPTDIR}/is_text.sh {} \; -print \)`
         
     else
         FILES=`find . -name \*.ds?`        

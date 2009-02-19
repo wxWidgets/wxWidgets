@@ -348,43 +348,48 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 ControlPartCode currentControlPart = cEvent.GetParameter<ControlPartCode>(kEventParamControlCurrentPart , typeControlPartCode );
                 if ( currentControlPart == 0 )
                 {
-                    // kill focus
+                    if ( thisWindow->IsBeingDeleted() == false )
+                    {
+                        // kill focus
 #if wxUSE_CARET
-                    if ( thisWindow->GetCaret() )
-                        thisWindow->GetCaret()->OnKillFocus();
+                        if ( thisWindow->GetCaret() )
+                            thisWindow->GetCaret()->OnKillFocus();
 #endif
 
-                    wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
+                        wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
 
-                    // remove this as soon as posting the synthesized event works properly
-                    static bool inKillFocusEvent = false ;
+                        // remove this as soon as posting the synthesized event works properly
+                        static bool inKillFocusEvent = false ;
 
-                    if ( !inKillFocusEvent )
-                    {
-                        inKillFocusEvent = true ;
-                        wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
-                        event.SetEventObject(thisWindow);
-                        event.SetWindow(targetWindow);
-                        thisWindow->GetEventHandler()->ProcessEvent(event) ;
-                        inKillFocusEvent = false ;
+                        if ( !inKillFocusEvent )
+                        {
+                            inKillFocusEvent = true ;
+                            wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
+                            event.SetEventObject(thisWindow);
+                            thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                            inKillFocusEvent = false ;
+                        }
                     }
                 }
                 else if ( previousControlPart == 0 )
                 {
-                    // set focus
-                    // panel wants to track the window which was the last to have focus in it
-                    wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
-                    wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
-                    thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
+                    if ( thisWindow->IsBeingDeleted() == false )
+                    {
+                        // set focus
+                        // panel wants to track the window which was the last to have focus in it
+                        wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
+                        wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
+                        thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
 
 #if wxUSE_CARET
-                    if ( thisWindow->GetCaret() )
-                        thisWindow->GetCaret()->OnSetFocus();
+                        if ( thisWindow->GetCaret() )
+                            thisWindow->GetCaret()->OnSetFocus();
 #endif
 
-                    wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
-                    event.SetEventObject(thisWindow);
-                    thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                        wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
+                        event.SetEventObject(thisWindow);
+                        thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                    }
                 }
             }
             break;
@@ -3239,7 +3244,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
         {
             // paint the window itself
 
-            wxPaintEvent event;
+            wxPaintEvent event(GetId());
             event.SetTimestamp(time);
             event.SetEventObject(this);
             GetEventHandler()->ProcessEvent(event);

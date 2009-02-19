@@ -523,6 +523,12 @@ void wxComboBox::SetSelection(long from, long to)
         m_text->SetSelection(from,to);
 }
 
+void wxComboBox::GetSelection(long *from, long* to) const
+{
+    if ( m_text )
+        m_text->GetSelection(from,to);
+}
+
 int wxComboBox::DoAppend(const wxString& item)
 {
     return m_choice->DoAppend( item ) ;

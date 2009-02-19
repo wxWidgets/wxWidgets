@@ -20,7 +20,7 @@
        {wx}/build/bakefiles/version.bkl {C:R:A}
        {wx}/build/script/win_docs.bat {windows doc and setup file}
        {wx}/distrib/scripts/build-environ.cfg {cvs tar and zip files}
-       {wx}/include/wx/mac/carbon/config_xcode.h
+       {wx}/include/wx/mac/carbon/config_xcode.h {out of date in 2.8.10}
 
    The script misc/scripts/inc_release can be used for incrementing
    the release field of the version, i.e. changing 2.8.x to 2.8.x+1.

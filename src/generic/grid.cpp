@@ -7859,7 +7859,27 @@ void wxGrid::DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells)
     size_t count = cells.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        if ( cells[n] == m_currentCellCoords )
+        wxGridCellCoords cell = cells[n];
+
+        // If we are using attributes, then we may have just exposed another
+        // cell in a partially-visible merged cluster of cells. If the "anchor"
+        // (upper left) cell of this merged cluster is the cell indicated by
+        // m_currentCellCoords, then we need to refresh the cell highlight even
+        // though the "anchor" itself is not part of our update segment.
+        if ( CanHaveAttributes() )
+        {
+            int rows = 0,
+                cols = 0;
+            GetCellSize(cell.GetRow(), cell.GetCol(), &rows, &cols);
+
+            if ( rows < 0 )
+                cell.SetRow(cell.GetRow() + rows);
+
+            if ( cols < 0 )
+                cell.SetCol(cell.GetCol() + cols);
+        }
+
+        if ( cell == m_currentCellCoords )
         {
             wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
             DrawCellHighlight(dc, attr);

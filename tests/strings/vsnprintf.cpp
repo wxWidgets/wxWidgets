@@ -40,6 +40,11 @@ int r;
 #define ASSERT_STR_EQUAL( a, b ) \
     CPPUNIT_ASSERT_EQUAL( wxString(a), wxString(b) );
 
+#define CMP6(expected, x, y, z, w, t)                    \
+    r=wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z, w, t); \
+    CPPUNIT_ASSERT( r > 0 );                             \
+    ASSERT_STR_EQUAL( wxT(expected), buf );
+
 #define CMP5(expected, x, y, z, w)                    \
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z, w); \
     CPPUNIT_ASSERT( r > 0 );                          \
@@ -290,6 +295,10 @@ void VsnprintfTestCase::Asterisk()
     CMP5("0.1", "%*.*f", 3, 1, 0.123);
 
     CMP4("%0.002", "%%%.*f", 3, 0.0023456789);
+
+    CMP4("       a", "%*c", 8, 'a');
+    CMP4("    four", "%*s", 8, "four");
+    CMP6("    four   four", "%*s %*s", 8, "four", 6, "four");
 }
 
 void VsnprintfTestCase::Percent()

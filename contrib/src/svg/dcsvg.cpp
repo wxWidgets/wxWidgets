@@ -595,6 +595,13 @@ void wxSVGFileDC::NewGraphics ()
     wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::NewGraphics Call executed")) ;
 }
 
+void wxSVGFileDC::SetTextForeground ( const wxColour& textForegroundColour )
+{
+    m_textForegroundColour = textForegroundColour ;
+
+    wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::SetSetTextForeground Call executed")) ;
+}
+
 
 void wxSVGFileDC::SetFont(const wxFont& font)
 

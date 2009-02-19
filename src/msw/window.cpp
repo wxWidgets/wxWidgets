@@ -5180,9 +5180,9 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
             static bool s_initDone = false;
             if ( !s_initDone )
             {
-                wxLogNull noLog;
-
-                wxDynamicLibrary dllComCtl32(_T("comctl32.dll"), wxDL_VERBATIM);
+                // see comment in wxApp::GetComCtl32Version() explaining the
+                // use of wxLoadedDLL
+                wxLoadedDLL dllComCtl32(_T("comctl32.dll"));
                 if ( dllComCtl32.IsLoaded() )
                 {
                     s_pfn_TrackMouseEvent = (_TrackMouseEvent_t)
@@ -5190,10 +5190,6 @@ bool wxWindowMSW::HandleMouseMove(int x, int y, WXUINT flags)
                 }
 
                 s_initDone = true;
-
-                // notice that it's ok to unload comctl32.dll here as it won't
-                // be really unloaded, being still in use because we link to it
-                // statically too
             }
 
             if ( s_pfn_TrackMouseEvent )

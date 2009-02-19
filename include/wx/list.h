@@ -296,7 +296,7 @@ private:
             push_front( e );                                                  \
             return compatibility_iterator( this, begin() );                   \
         }                                                                     \
-        compatibility_iterator Insert( compatibility_iterator & i, elT e )    \
+        compatibility_iterator Insert(const compatibility_iterator &i, elT e) \
         {                                                                     \
             return compatibility_iterator( this, insert( i.m_iter, e ) );     \
         }                                                                     \
@@ -1035,18 +1035,22 @@ private:
         }                                                                   \
         iterator insert(const iterator& it, const_reference v = value_type())\
         {                                                                   \
-            Insert(it.m_node, (const_base_reference)v);                     \
-            return iterator(it.m_node->GetPrevious(), GetLast());           \
+            if ( it == end() )                                              \
+                Append((const_base_reference)v);                            \
+            else                                                            \
+                Insert(it.m_node, (const_base_reference)v);                 \
+            iterator itprev(it);                                            \
+            return itprev--;                                                \
         }                                                                   \
         void insert(const iterator& it, size_type n, const_reference v = value_type())\
         {                                                                   \
             for(size_type i = 0; i < n; ++i)                                \
-                Insert(it.m_node, (const_base_reference)v);                 \
+                insert(it, v);                                              \
         }                                                                   \
         void insert(const iterator& it, const_iterator first, const const_iterator& last)\
         {                                                                   \
             for(; first != last; ++first)                                   \
-                Insert(it.m_node, (const_base_reference)*first);            \
+                insert(it, *first);                                         \
         }                                                                   \
         iterator erase(const iterator& it)                                  \
         {                                                                   \
@@ -1055,7 +1059,9 @@ private:
         }                                                                   \
         iterator erase(const iterator& first, const iterator& last)         \
         {                                                                   \
-            iterator next = last; ++next;                                   \
+            iterator next = last;                                           \
+            if ( next != end() )                                            \
+                ++next;                                                     \
             DeleteNodes(first.m_node, last.m_node);                         \
             return next;                                                    \
         }                                                                   \
@@ -1066,10 +1072,11 @@ private:
             { splice(it, l, l.begin(), l.end() ); }                         \
         void splice(const iterator& it, name& l, const iterator& first)     \
         {                                                                   \
-            iterator tmp = first; ++tmp;                                    \
-            if(it == first || it == tmp) return;                            \
-            insert(it, *first);                                             \
-            l.erase(first);                                                 \
+            if ( it != first )                                              \
+            {                                                               \
+                insert(it, *first);                                         \
+                l.erase(first);                                             \
+            }                                                               \
         }                                                                   \
         void remove(const_reference v)                                      \
             { DeleteObject((const_base_reference)v); }                      \

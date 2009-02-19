@@ -574,12 +574,33 @@ void wxToolBar::CreateDisabledImageList()
     }
 }
 
+void wxToolBar::AdjustToolBitmapSize()
+{
+    wxSize s(m_defaultWidth, m_defaultHeight);
+    const wxSize orig_s(s);
+
+    for ( wxToolBarToolsList::const_iterator i = m_tools.begin();
+          i != m_tools.end();
+          ++i )
+    {
+        const wxBitmap& bmp = (*i)->GetNormalBitmap();
+        s.IncTo(wxSize(bmp.GetWidth(), bmp.GetHeight()));
+    }
+
+    if ( s != orig_s )
+        SetToolBitmapSize(s);
+}
+
 bool wxToolBar::Realize()
 {
     const size_t nTools = GetToolsCount();
     if ( nTools == 0 )
         // nothing to do
         return true;
+
+    // make sure tool size is larger enough for all all bitmaps to fit in
+    // (this is consistent with what other ports do):
+    AdjustToolBitmapSize();
 
 #ifdef wxREMAP_BUTTON_COLOURS
     // don't change the values of these constants, they can be set from the

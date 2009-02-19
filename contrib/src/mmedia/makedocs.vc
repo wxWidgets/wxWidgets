@@ -8,6 +8,7 @@ DOCDIR=$(WXDIR)\docs
 THISDIR = $(WXDIR)\contrib\src\$(NAME)
 DOCSOURCES=$(DOCSOURCEDIR)\$(NAME).tex \
  $(DOCSOURCEDIR)\classes.tex $(DOCSOURCEDIR)\topics.tex
+WAITFLAG=/WAIT
 
 alldocs: mkdirs html htmlhelp htb hlp pdfrtf
 html: $(DOCDIR)\html\$(NAME)\$(NAME).htm

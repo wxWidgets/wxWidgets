@@ -282,6 +282,8 @@ class WXDLLIMPEXP_SVG wxSVGFileDC : public wxDC
 
         void SetBrush(const wxBrush& brush) ;
 
+	void SetTextForeground (const wxColour& textForegroundColour ) ;
+
         void SetFont(const wxFont& font) ;
 
         void SetLogicalFunction(int  WXUNUSED(function))

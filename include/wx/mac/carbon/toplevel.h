@@ -69,7 +69,9 @@ public:
     virtual void SetTitle( const wxString& title);
     virtual wxString GetTitle() const;
 
+#if wxABI_VERSION >= 20809
     virtual void SetLabel( const wxString& title);
+#endif
 
 protected:
     // common part of all ctors

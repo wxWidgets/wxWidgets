@@ -57,6 +57,7 @@ public :
     virtual wxString GetLineText(long lineNo) const ;
     virtual void CheckSpelling(bool check) { }
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle );    
+    virtual void RemoveEventHandler() { }
 
 #ifndef __WXMAC_OSX__
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) = 0 ;
@@ -97,6 +98,7 @@ public :
     virtual void GetSelection( long* from, long* to) const ;
     virtual void SetSelection( long from , long to ) ;
     virtual void WriteText(const wxString& str) ;
+    virtual void RemoveEventHandler();
 
 protected :
 	virtual void CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef cfr );

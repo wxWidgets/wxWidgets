@@ -103,6 +103,7 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
     virtual void Copy();
     virtual void Cut();
     virtual void Paste();
+    
     virtual void SetInsertionPoint(long pos);
     virtual void SetInsertionPointEnd();
     virtual long GetInsertionPoint() const;
@@ -112,6 +113,10 @@ class WXDLLEXPORT wxComboBox : public wxControl, public wxComboBoxBase
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
     virtual bool IsEditable() const;
+
+#if wxABI_VERSION >= 20810
+    void GetSelection( long* from, long* to ) const;
+#endif
 
     virtual unsigned int GetCount() const;
 

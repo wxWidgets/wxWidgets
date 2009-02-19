@@ -216,6 +216,9 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
         SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     }
 
+    // No physical scrolling, so we can preserve margins
+    EnableScrolling(false, false);
+
     if (style & wxTE_READONLY)
         SetEditable(false);
 
@@ -388,7 +391,17 @@ void wxRichTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             SetupScrollbars();
         }
 
+        wxRect clipRect(availableSpace);
+        clipRect.x += GetBuffer().GetLeftMargin();
+        clipRect.y += GetBuffer().GetTopMargin();
+        clipRect.width -= (GetBuffer().GetLeftMargin() + GetBuffer().GetRightMargin());
+        clipRect.height -= (GetBuffer().GetTopMargin() + GetBuffer().GetBottomMargin());
+        clipRect.SetPosition(GetLogicalPoint(clipRect.GetPosition()));
+        dc.SetClippingRegion(clipRect);
+
         GetBuffer().Draw(dc, GetBuffer().GetRange(), GetInternalSelectionRange(), drawingArea, 0 /* descent */, 0 /* flags */);
+
+        dc.DestroyClippingRegion();
 
 #if wxRICHTEXT_USE_OWN_CARET
         if (GetCaret()->IsVisible())
@@ -1224,6 +1237,27 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
     bool scrolled = false;
 
     wxSize clientSize = GetClientSize();
+    clientSize.y -= GetBuffer().GetBottomMargin();
+
+    if (GetWindowStyle() & wxRE_CENTRE_CARET)
+    {
+        int y = rect.y - GetClientSize().y/2;
+        int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
+        if (y >= 0 && (y + clientSize.y) < GetBuffer().GetCachedSize().y)
+        {
+            if (startYUnits != yUnits)
+            {
+                SetScrollbars(ppuX, ppuY, sxUnits, syUnits, 0, yUnits);
+                scrolled = true;
+            }
+#if !wxRICHTEXT_USE_OWN_CARET
+            if (scrolled)
+#endif
+                PositionCaret();
+
+            return scrolled;
+        }
+    }
 
     // Going down
     if (keyCode == WXK_DOWN || keyCode == WXK_NUMPAD_DOWN ||
@@ -1248,11 +1282,11 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
                 scrolled = true;
             }
         }
-        else if (rect.y < startY)
+        else if (rect.y < (startY + GetBuffer().GetTopMargin()))
         {
             // Make it scroll so this item is at the top
             // of the window
-            int y = rect.y ;
+            int y = rect.y - GetBuffer().GetTopMargin();
             int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
 
             if (startYUnits != yUnits)
@@ -1268,11 +1302,11 @@ bool wxRichTextCtrl::ScrollIntoView(long position, int keyCode)
              keyCode == WXK_HOME || keyCode == WXK_NUMPAD_HOME ||
              keyCode == WXK_PAGEUP || keyCode == WXK_NUMPAD_PAGEUP )
     {
-        if (rect.y < startY)
+        if (rect.y < (startY + GetBuffer().GetBottomMargin()))
         {
             // Make it scroll so this item is at the top
             // of the window
-            int y = rect.y ;
+            int y = rect.y - GetBuffer().GetTopMargin();
             int yUnits = (int) (0.5 + ((float) y)/(float) ppuY);
 
             if (startYUnits != yUnits)
@@ -1326,8 +1360,9 @@ bool wxRichTextCtrl::IsPositionVisible(long pos) const
 
     wxRect rect = line->GetRect();
     wxSize clientSize = GetClientSize();
+    clientSize.y -= GetBuffer().GetBottomMargin();
 
-    return (rect.GetBottom() > startY) && (rect.GetTop() < (startY + clientSize.y));
+    return (rect.GetBottom() > (startY + GetBuffer().GetTopMargin())) && (rect.GetTop() < (startY + clientSize.y));
 }
 
 void wxRichTextCtrl::SetCaretPosition(long position, bool showAtLineStart)
@@ -1974,7 +2009,7 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop)
     int pixelsPerUnit = 5;
     wxSize clientSize = GetClientSize();
 
-    int maxHeight = GetBuffer().GetCachedSize().y;
+    int maxHeight = GetBuffer().GetCachedSize().y + GetBuffer().GetTopMargin();
 
     // Round up so we have at least maxHeight pixels
     int unitsY = (int) (((float)maxHeight/(float)pixelsPerUnit) + 0.5);
@@ -2941,6 +2976,12 @@ void wxRichTextCtrl::PositionCaret()
             GetCaret()->Hide();
             if (GetCaret()->GetSize() != newSz)
                 GetCaret()->SetSize(newSz);
+
+            int halfSize = newSz.y/2;
+            // If the caret is beyond the margin, hide it by moving it out of the way
+            if (((pt.y + halfSize) < GetBuffer().GetTopMargin()) || ((pt.y + halfSize) > (GetClientSize().y - GetBuffer().GetBottomMargin())))
+                pt.y = -200;
+
             GetCaret()->Move(pt);
             GetCaret()->Show();
         }

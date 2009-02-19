@@ -3185,22 +3185,26 @@ bool wxMacMLTEHIViewControl::HasFocus() const
 
 void wxMacMLTEHIViewControl::SetBackground( const wxBrush &brush )
 {
-    wxMacMLTEControl::SetBackground( brush ) ;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if (HITextViewSetBackgroundColor != NULL)
+    {
+        RGBColor col = MAC_WXCOLORREF(brush.GetColour().GetPixel()) ;
 
-#if 0
-    CGColorSpaceRef rgbSpace = CGColorSpaceCreateDeviceRGB();
-    RGBColor col = MAC_WXCOLORREF(brush.GetColour().GetPixel()) ;
+        float component[4] ;
+        component[0] = col.red / 65536.0 ;
+        component[1] = col.green / 65536.0 ;
+        component[2] = col.blue / 65536.0 ;
+        component[3] = 1.0 ; // alpha
 
-    float component[4] ;
-    component[0] = col.red / 65536.0 ;
-    component[1] = col.green / 65536.0 ;
-    component[2] = col.blue / 65536.0 ;
-    component[3] = 1.0 ; // alpha
-
-    CGColorRef color = CGColorCreate( rgbSpace , component );
-    HITextViewSetBackgroundColor( m_textView , color );
-    CGColorSpaceRelease( rgbSpace );
+        CGColorRef color = CGColorCreate( wxMacGetGenericRGBColorSpace() , component );
+        HITextViewSetBackgroundColor( m_textView , color );
+        CGColorRelease(color);
+    }
+    else
 #endif
+    {
+        wxMacMLTEControl::SetBackground( brush ) ;
+    }
 }
 
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2

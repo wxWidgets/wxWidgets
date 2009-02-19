@@ -96,25 +96,32 @@ All:
 - wxHashMap::insert() doesn't update the value if it didn't insert the element
   any more (Marcin Malich).
 - Correct bug in wxTimeSpan::Format() for negative spans.
+- Correct several bugs in wxList using end() iterators (Suzumizaki-Kimitaka).
 - Added Vietnamese translation (Tran Ngoc Quan).
 - Updated Slovenian translation (Martin Srebotnjak).
 - Corrected Serbian locale name (Cody Precord).
 - Fix wxURL::GetInputStream() for URLs with special characters in credentials
   (Robert Wruck).
+- Fix wxURI::GetUser() for URIs without password.
+- Correct wxDateTime DST computation for 2006 and later (Christopher Barker).
 
 All (GUI):
 
-- Fixed wxRichTextCtrl input that uses Alt on Mac OS X, for example
-  Polish Pro input.
+- wxRTC: fixed input that uses Alt on Mac OS X, for example Polish Pro input.
   Also fixed a bug whereby e.g. Croatian keys didn't work, by moving more code
   to key down handler.
-- Fixed a problem with HTML list generation for wxRichTextCtrl.
-- wxRichTextCtrl no longer deletes a character when content is selected
-  before pressing Delete.
-- Fixed inability to select no superscript and no subscript in wxRichTextCtrl's
+- wxRTC: fixed a problem with HTML list generation.
+- wxRTC: no longer deletes a character when content is selected before
+  pressing Delete.
+- wxRTC: fixed inability to select no superscript and no subscript in
   formatting dialog.
-- Fixed centering and right-justification when combined with left indentation.
-- Fixed wrapping problem for long lines.
+- wxRTC: fixed centering and right-justification when combined with left
+  indentation.
+- wxRTC: fixed lack of right margin when centering or right-justifying.
+- wxRTC: fixed wrong descent when wrapping lines with different font sizes.
+- wxRTC: fixed wrapping problem for long lines.
+- wxRTC: all buffer margins now respected.
+- wxRTC: Added wxRE_CENTRE_CARET to centre the caret line vertically.
 - Fixed wxHTML's pagebreaks computation in tables (D.J.Stauffer).
 - Fixed wxHtmlWindow::SelectionToText() to correctly insert newlines after
   single-cell paragraphs.
@@ -123,6 +130,9 @@ All (GUI):
 - Implemented wxWindow::DragAcceptFiles() on all platforms.
 - Added wxAUI_MGR_LIVE_RESIZE flag to wxAuiManager and made it the default on
   wxMac with CoreGraphics where sash drawing isn't implemented.
+- Use bitmap mask in wxSplashScreen.
+- Translate "(c)" and "(C)" to the real copyright sign in wxAboutBox.
+- Fix painting of highlight border for merged cells in wxGrid (K. Jones).
 
 All (Unix):
 
@@ -141,6 +151,13 @@ wxMSW:
 - Correct coordinates of wxDropFilesEvent (Dmitriy Maksimov).
 - Fix handling of abandoned mutexes in wxMutex (David Heffernan).
 - Avoid warnings about deprecated localtime with MSVC8/9 (Chris Stankevitz).
+- Fixed invisible CHM tooltip text bug when window text colour is black.
+- Automatically adjust toolbar's tool size if the provided bitmaps
+  don't fit into the default size.
+- Don't generate EVT_LISTBOX_DCLICK events with incorrect indices.
+- Don't reuse the double click handled by activation event handler for toggling
+  the item in wxTreeCtrl.
+
 
 wxMSW/CE:
 
@@ -151,6 +168,8 @@ wxGTK:
 - Fixed printing to use fonts sizes adjustment consistent with wxMSW.
 - Make colours used by list, tree and status bar controls more consistent with
   the system theme settings (Tim Kosse).
+- Worked around bug in GTK+ < 2.14 where enabling some controls such
+  as wxButton didn't re-enable sensitivity until the mouse was moved.
 
 2.8.9
 -----

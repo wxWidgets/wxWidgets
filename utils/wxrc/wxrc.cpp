@@ -113,11 +113,15 @@ public:
     bool IsRealClass(const wxString& name)
     {
         if (name == _T("tool") ||
+            name == _T("data") ||
             name == _T("unknown") ||
             name == _T("notebookpage") ||
             name == _T("separator") ||
             name == _T("sizeritem") ||
-            name == _T("wxMenuItem"))
+            name == _T("wxMenu") ||
+            name == _T("wxMenuBar") ||
+            name == _T("wxMenuItem") ||
+            name.EndsWith(_T("Sizer")) )
         {
             return false;
         }

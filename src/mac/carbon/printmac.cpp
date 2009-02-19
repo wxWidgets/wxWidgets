@@ -2,10 +2,10 @@
 // Name:        src/mac/carbon/printwin.cpp
 // Purpose:     wxMacPrinter framework
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Stefan Csomor
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) Julian Smart, Stefan Csomor
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -51,107 +51,108 @@ wxMacCarbonPrintData::wxMacCarbonPrintData()
     m_macPageFormat = kPMNoPageFormat;
     m_macPrintSettings = kPMNoPrintSettings;
     m_macPrintSession = kPMNoReference ;
-    ValidateOrCreate() ;
+    m_macPaper = kPMNoData;
+    
+    if ( PMCreateSession( &m_macPrintSession ) == noErr )
+    {
+        if ( PMCreatePageFormat(&m_macPageFormat) == noErr )
+        {
+            PMSessionDefaultPageFormat(m_macPrintSession,
+                    m_macPageFormat);
+            PMGetPageFormatPaper(m_macPageFormat, &m_macPaper);
+        }
+        
+        if ( PMCreatePrintSettings(&m_macPrintSettings) == noErr )
+        {
+            PMSessionDefaultPrintSettings(m_macPrintSession,
+                m_macPrintSettings);
+        }
+    }
 }
 
 wxMacCarbonPrintData::~wxMacCarbonPrintData()
 {
-    if (m_macPageFormat != kPMNoPageFormat)
-    {
-        (void)PMRelease(m_macPageFormat);
-        m_macPageFormat = kPMNoPageFormat;
-    }
-
-    if (m_macPrintSettings != kPMNoPrintSettings)
-    {
-        (void)PMRelease(m_macPrintSettings);
-        m_macPrintSettings = kPMNoPrintSettings;
-    }
-
-    if ( m_macPrintSession != kPMNoReference )
-    {
-        (void)PMRelease(m_macPrintSession);
-        m_macPrintSession = kPMNoReference;
-    }
-}
-
-void wxMacCarbonPrintData::ValidateOrCreate()
-{
-    OSStatus err = noErr ;
-    if ( m_macPrintSession == kPMNoReference )
-    {
-        err = PMCreateSession( (PMPrintSession *) &m_macPrintSession ) ;
-    }
-    //  Set up a valid PageFormat object.
-    if ( m_macPageFormat == kPMNoPageFormat)
-    {
-        err = PMCreatePageFormat((PMPageFormat *) &m_macPageFormat);
-
-        //  Note that PMPageFormat is not session-specific, but calling
-        //  PMSessionDefaultPageFormat assigns values specific to the printer
-        //  associated with the current printing session.
-        if ((err == noErr) &&
-            ( m_macPageFormat != kPMNoPageFormat))
-        {
-            err = PMSessionDefaultPageFormat((PMPrintSession) m_macPrintSession,
-                (PMPageFormat) m_macPageFormat);
-        }
-    }
-    else
-    {
-        err = PMSessionValidatePageFormat((PMPrintSession) m_macPrintSession,
-            (PMPageFormat) m_macPageFormat,
-            kPMDontWantBoolean);
-    }
-
-    //  Set up a valid PrintSettings object.
-    if ( m_macPrintSettings == kPMNoPrintSettings)
-    {
-        err = PMCreatePrintSettings((PMPrintSettings *) &m_macPrintSettings);
-
-        //  Note that PMPrintSettings is not session-specific, but calling
-        //  PMSessionDefaultPrintSettings assigns values specific to the printer
-        //  associated with the current printing session.
-        if ((err == noErr) &&
-            ( m_macPrintSettings != kPMNoPrintSettings))
-        {
-            err = PMSessionDefaultPrintSettings((PMPrintSession) m_macPrintSession,
-                (PMPrintSettings) m_macPrintSettings);
-        }
-    }
-    else
-    {
-        err = PMSessionValidatePrintSettings((PMPrintSession) m_macPrintSession,
-            (PMPrintSettings) m_macPrintSettings,
-            kPMDontWantBoolean);
-    }
+    (void)PMRelease(m_macPageFormat);
+    (void)PMRelease(m_macPrintSettings);
+    (void)PMRelease(m_macPrintSession);
 }
 
 bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
 {
-    ValidateOrCreate() ;
-    PMSetCopies( (PMPrintSettings) m_macPrintSettings , data.GetNoCopies() , false ) ;
+    PMPrinter printer;
+    PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
+
+    wxSize papersize = wxDefaultSize;
+    const wxPaperSize paperId = data.GetPaperId();
+    if ( paperId != wxPAPER_NONE && wxThePrintPaperDatabase )
+    {
+        papersize = wxThePrintPaperDatabase->GetSize(paperId);
+        if ( papersize != wxDefaultSize )
+        {
+            papersize.x /= 10;
+            papersize.y /= 10;
+        }
+    }
+    else
+    {
+        papersize = data.GetPaperSize();
+    }
+    
+    if ( papersize != wxDefaultSize )
+    {
+        papersize.x *= mm2pt;
+        papersize.y *= mm2pt;
+        
+        double height, width;
+        PMPaperGetHeight(m_macPaper, &height);
+        PMPaperGetWidth(m_macPaper, &width);
+        
+        if ( fabs( width - papersize.x ) >= 5 || 
+            fabs( height - papersize.y ) >= 5 )
+        {
+            // we have to change the current paper
+            CFArrayRef paperlist = 0 ;
+            if ( PMPrinterGetPaperList( printer, &paperlist ) == noErr )
+            {
+                PMPaper bestPaper = kPMNoData ;
+                CFIndex top = CFArrayGetCount(paperlist);
+                for ( CFIndex i = 0 ; i < top ; ++ i )
+                {
+                    PMPaper paper = (PMPaper) CFArrayGetValueAtIndex( paperlist, i );
+                    PMPaperGetHeight(paper, &height);
+                    PMPaperGetWidth(paper, &width);
+                    if ( fabs( width - papersize.x ) < 5 && 
+                        fabs( height - papersize.y ) < 5 )
+                    {
+                        // TODO test for duplicate hits and use additional
+                        // criteria for best match
+                        bestPaper = paper;
+                    }
+                }
+                if ( bestPaper != kPMNoData )
+                {
+                    PMPageFormat pageFormat;
+                    PMCreatePageFormatWithPMPaper(&pageFormat, bestPaper);
+                    PMCopyPageFormat( pageFormat, m_macPageFormat );
+                    PMRelease(pageFormat);
+                    PMGetPageFormatPaper(m_macPageFormat, &m_macPaper);
+                }
+            }
+        }
+    }
+
+    PMSetCopies( m_macPrintSettings , data.GetNoCopies() , false ) ;
+    PMSetCollate(m_macPrintSettings, data.GetCollate());
     if ( data.IsOrientationReversed() )
-        PMSetOrientation( (PMPageFormat) m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
+        PMSetOrientation( m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
             kPMReverseLandscape : kPMReversePortrait , false ) ;
     else
-        PMSetOrientation( (PMPageFormat) m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
+        PMSetOrientation( m_macPageFormat , ( data.GetOrientation() == wxLANDSCAPE ) ?
             kPMLandscape : kPMPortrait , false ) ;
     // collate cannot be set
 #if 0 // not yet tested
     if ( !m_printerName.empty() )
-        PMSessionSetCurrentPrinter( (PMPrintSession) m_macPrintSession , wxMacCFStringHolder( m_printerName , wxFont::GetDefaultEncoding() ) ) ;
-#endif
-#ifndef __LP64__
-    PMColorMode color ;
-    PMGetColorMode(  (PMPrintSettings) m_macPrintSettings, &color ) ;
-    if ( data.GetColour() )
-    {
-        if ( color == kPMBlackAndWhite )
-            PMSetColorMode( (PMPrintSettings) m_macPrintSettings, kPMColor ) ;
-    }
-    else
-        PMSetColorMode( (PMPrintSettings) m_macPrintSettings, kPMBlackAndWhite ) ;
+        PMSessionSetCurrentPrinter( m_macPrintSession , wxMacCFStringHolder( m_printerName , wxFont::GetDefaultEncoding() ) ) ;
 #endif
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
@@ -171,24 +172,22 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
                 mode = kPMDuplexNone ;
                 break ;
         }
-        PMSetDuplex( (PMPrintSettings) m_macPrintSettings, mode ) ;
+        PMSetDuplex( m_macPrintSettings, mode ) ;
     }
-#endif
-    // PMQualityMode not yet accessible via API
-    // todo paperSize
-
+#endif    
+    // PMQualityMode not accessible via API
+    // TODO: use our quality property to determine optimal resolution
     PMResolution res;
-    PMPrinter printer;
-    PMSessionGetCurrentPrinter(m_macPrintSession, &printer);
     PMTag tag = kPMMaxSquareResolution;
     PMPrinterGetPrinterResolution(printer, tag, &res);
-    PMSetResolution((PMPageFormat) m_macPageFormat, &res);
+    PMSetResolution(m_macPageFormat, &res);
 
     // after setting the new resolution the format has to be updated, otherwise the page rect remains 
     // at the 'old' scaling
-    PMSessionValidatePageFormat((PMPrintSession) m_macPrintSession,
-            (PMPageFormat) m_macPageFormat,
-            kPMDontWantBoolean) ;
+    PMSessionValidatePageFormat(m_macPrintSession,
+        m_macPageFormat, kPMDontWantBoolean);
+    PMSessionValidatePrintSettings(m_macPrintSession,
+        m_macPrintSettings, kPMDontWantBoolean);
 
     return true ;
 }
@@ -203,7 +202,7 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
         data.SetNoCopies( copies ) ;
 
     PMOrientation orientation ;
-    err = PMGetOrientation(  m_macPageFormat , &orientation ) ;
+    err = PMGetOrientation( m_macPageFormat , &orientation ) ;
     if ( err == noErr )
     {
         if ( orientation == kPMPortrait || orientation == kPMReversePortrait )
@@ -218,7 +217,9 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
         }
     }
 
-    // collate cannot be set
+    Boolean collate;
+    if (PMGetCollate(m_macPrintSettings, &collate) == noErr)
+        data.SetCollate(collate);
 #if 0
     {
         wxMacCFStringHolder name ;
@@ -229,17 +230,11 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
     }
 #endif
 
-#ifndef __LP64__
-    PMColorMode color ;
-    err = PMGetColorMode( m_macPrintSettings, &color ) ;
-    if ( err == noErr )
-        data.SetColour( !(color == kPMBlackAndWhite) ) ;
-#endif
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     if ( &PMGetDuplex!=NULL )
     {
         PMDuplexMode mode = 0 ;
-        PMGetDuplex( (PMPrintSettings) m_macPrintSettings, &mode ) ;
+        PMGetDuplex( m_macPrintSettings, &mode ) ;
         switch( mode )
         {
             case kPMDuplexNoTumble :
@@ -257,21 +252,17 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
 #endif
     // PMQualityMode not yet accessible via API
     
-    PMPaper paper ;
-    PMGetPageFormatPaper( m_macPageFormat, &paper );
-    
-    PMRect rPaper;
-    err = PMGetUnadjustedPaperRect( m_macPageFormat, &rPaper);
-    if ( err == noErr )
+    double height, width;
+    PMPaperGetHeight(m_macPaper, &height);
+    PMPaperGetWidth(m_macPaper, &width);
+
+    wxSize sz((int)(width * pt2mm + 0.5 ) ,
+         (int)(height * pt2mm + 0.5 ));
+    data.SetPaperSize(sz);
+    wxPaperSize id = wxThePrintPaperDatabase->GetSize(wxSize(sz.x* 10, sz.y * 10));
+    if (id != wxPAPER_NONE)
     {
-        wxSize sz((int)(( rPaper.right - rPaper.left ) * pt2mm + 0.5 ) ,
-             (int)(( rPaper.bottom - rPaper.top ) * pt2mm + 0.5 ));
-        data.SetPaperSize(sz);
-        wxPaperSize id = wxThePrintPaperDatabase->GetSize(wxSize(sz.x* 10, sz.y * 10));
-        if (id != wxPAPER_NONE)
-        {
-            data.SetPaperId(id);
-        }
+        data.SetPaperId(id);
     }
     return true ;
 }
@@ -419,7 +410,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     PMResolution res;
     wxMacCarbonPrintData* nativeData = (wxMacCarbonPrintData*)
           (m_printDialogData.GetPrintData().GetNativeData());
-    PMGetResolution((PMPageFormat) (nativeData->m_macPageFormat), &res);
+    PMGetResolution((nativeData->m_macPageFormat), &res);
     printout->SetPPIPrinter(int(res.hRes), int(res.vRes));
 
     // Set printout parameters

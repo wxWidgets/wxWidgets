@@ -149,7 +149,7 @@ void wxPickerBase::OnTextCtrlKillFocus(wxFocusEvent& event)
     event.Skip();
 
     // don't leave the textctrl empty
-    if (m_text->GetValue().empty())
+    if (m_text && m_text->GetValue().empty())
         UpdateTextCtrlFromPicker();
 }
 
