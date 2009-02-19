@@ -1564,6 +1564,7 @@ wxCalendarHitTestResult wxGenericCalendarCtrl::HitTest(const wxPoint& pos,
     }
 
     if ( pos.x - x0 < 0 )
+    {
         if ( pos.x >= 0 && pos.y > m_rowOffset + m_heightRow && pos.y <= m_rowOffset + m_heightRow * 7 )
         {
             if ( date )
@@ -1577,6 +1578,7 @@ wxCalendarHitTestResult wxGenericCalendarCtrl::HitTest(const wxPoint& pos,
         }
         else    // early exit -> the rest of the function checks for clicks on days
             return wxCAL_HITTEST_NOWHERE;
+    }
 
     // header: week days
     int wday = (pos.x - x0) / m_widthCol;
