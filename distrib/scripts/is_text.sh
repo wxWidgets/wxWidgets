@@ -26,10 +26,10 @@ if [ `basename $1` = "config.guess" ] ; then
 fi
 
 # ignore makefile.wat etc
-if [ basename $1 = "makefile.wat" ] ; then
+if [ `basename $1` = "makefile.wat" ] ; then
     exit 1
 fi
-if [ basename $1 = "config.wat" ] ; then
+if [ `basename $1` = "config.wat" ] ; then
     exit 1
 fi
 	
