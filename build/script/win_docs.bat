@@ -40,7 +40,7 @@ echo CVS update  >>  c:\temp.log
 
 rem add bakefile build...
 rem just build the formats not in the CVS to keep down the .#makefile...
-set PATH=%PATH%;C:\wx\Bakefile\src
+set PATH=%PATH%;C:\wx\Bakefile
 cd \wx\inno\wxw28b\build\bakefiles
 del .bakefile_gen.state
 if not exist Bakefiles.local.bkgen echo "Bakefiles.local.bkgen missing" >> c:\temp.log
