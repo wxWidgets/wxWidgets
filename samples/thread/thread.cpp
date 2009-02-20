@@ -121,7 +121,6 @@ private:
     void OnStartWorker(wxCommandEvent& event);
 
     void OnExecMain(wxCommandEvent& event);
-    void OnExecThread(wxCommandEvent& event);
 
     void OnShowCPUs(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -242,28 +241,6 @@ public:
     unsigned m_count;
 };
 
-// ----------------------------------------------------------------------------
-// a thread which simply calls wxExecute
-// ----------------------------------------------------------------------------
-
-class MyExecThread : public wxThread
-{
-public:
-    MyExecThread(const wxChar *command) : wxThread(wxTHREAD_JOINABLE),
-                                          m_command(command)
-    {
-        Create();
-    }
-
-    virtual ExitCode Entry()
-    {
-        return wxUIntToPtr(EXEC(m_command));
-    }
-
-private:
-    wxString m_command;
-};
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -313,14 +290,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(THREAD_STOP_THREAD, MyFrame::OnStopThread)
     EVT_MENU(THREAD_PAUSE_THREAD, MyFrame::OnPauseThread)
     EVT_MENU(THREAD_RESUME_THREAD, MyFrame::OnResumeThread)
-
+    EVT_MENU(THREAD_START_WORKER, MyFrame::OnStartWorker)
     EVT_MENU(THREAD_EXEC_MAIN, MyFrame::OnExecMain)
-    EVT_MENU(THREAD_EXEC_THREAD, MyFrame::OnExecThread)
 
     EVT_MENU(THREAD_SHOWCPUS, MyFrame::OnShowCPUs)
     EVT_MENU(THREAD_ABOUT, MyFrame::OnAbout)
-
-    EVT_MENU(THREAD_START_WORKER, MyFrame::OnStartWorker)
 
     EVT_UPDATE_UI(THREAD_START_WORKER, MyFrame::OnUpdateWorker)
     EVT_THREAD(WORKER_EVENT, MyFrame::OnWorkerEvent)
@@ -352,12 +326,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
     menuThread->Append(THREAD_RESUME_THREAD, _T("&Resume the first suspended thread\tCtrl-R"));
     menuThread->AppendSeparator();
     menuThread->Append(THREAD_START_WORKER, _T("Start a &worker thread\tCtrl-W"));
+    menuThread->Append(THREAD_EXEC_MAIN, _T("&Launch a program from main thread\tF5"));
     menuBar->Append(menuThread, _T("&Thread"));
-
-    wxMenu *menuExec = new wxMenu;
-    menuExec->Append(THREAD_EXEC_MAIN, _T("&Launch a program from main thread\tF5"));
-    menuExec->Append(THREAD_EXEC_THREAD, _T("L&aunch a program from a thread\tCtrl-F5"));
-    menuBar->Append(menuExec, _T("&Execute"));
 
     wxMenu *menuHelp = new wxMenu;
     menuHelp->Append(THREAD_SHOWCPUS, _T("&Show CPU count"));
@@ -601,17 +571,19 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnExecMain(wxCommandEvent& WXUNUSED(event))
 {
+    wxString cmd = wxGetTextFromUser("Please enter the command to execute",
+                                     "Enter command",
+#ifdef __WXMSW__
+                                     "notepad",
+#else
+                                     "/bin/echo \"Message from another process\"",
+#endif
+                                     this);
+    if (cmd.IsEmpty())
+        return;     // user clicked cancel
+
     wxLogMessage(wxT("The exit code from the main program is %ld"),
-                 EXEC(_T("/bin/echo \"main program\"")));
-}
-
-void MyFrame::OnExecThread(wxCommandEvent& WXUNUSED(event))
-{
-    MyExecThread thread(wxT("/bin/echo \"child thread\""));
-    thread.Run();
-
-    wxLogMessage(wxT("The exit code from a child thread is %ld"),
-                 (long)wxPtrToUInt(thread.Wait()));
+                 EXEC(cmd));
 }
 
 void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
