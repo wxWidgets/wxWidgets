@@ -107,6 +107,8 @@ public:
 
 private:
     // event handlers
+    // --------------
+
     void OnQuit(wxCommandEvent& event);
     void OnClear(wxCommandEvent& event);
 
@@ -117,8 +119,6 @@ private:
     void OnResumeThread(wxCommandEvent& event);
 
     void OnStartWorker(wxCommandEvent& event);
-    void OnWorkerEvent(wxThreadEvent& event);
-    void OnUpdateWorker(wxUpdateUIEvent& event);
 
     void OnExecMain(wxCommandEvent& event);
     void OnExecThread(wxCommandEvent& event);
@@ -127,6 +127,12 @@ private:
     void OnAbout(wxCommandEvent& event);
 
     void OnIdle(wxIdleEvent &event);
+    void OnWorkerEvent(wxThreadEvent& event);
+    void OnUpdateWorker(wxUpdateUIEvent& event);
+
+
+    // thread helper functions
+    // -----------------------
 
     // helper function - creates a new thread (but doesn't run it)
     MyThread *CreateThread();
@@ -137,6 +143,9 @@ private:
     // log the messages queued by LogThreadMessage()
     void DoLogThreadMessages();
 
+
+    // internal variables
+    // ------------------
 
     // just some place to put our messages in
     wxTextCtrl *m_txtctrl;
@@ -279,7 +288,7 @@ bool MyApp::OnInit()
 
     // uncomment this to get some debugging messages from the trace code
     // on the console (or just set WXTRACE env variable to include "thread")
-    //wxLog::AddTraceMask("thread");
+    wxLog::AddTraceMask("thread");
 
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *)NULL, _T("wxWidgets threads sample"),
@@ -311,11 +320,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(THREAD_SHOWCPUS, MyFrame::OnShowCPUs)
     EVT_MENU(THREAD_ABOUT, MyFrame::OnAbout)
 
-    EVT_UPDATE_UI(THREAD_START_WORKER, MyFrame::OnUpdateWorker)
     EVT_MENU(THREAD_START_WORKER, MyFrame::OnStartWorker)
 
+    EVT_UPDATE_UI(THREAD_START_WORKER, MyFrame::OnUpdateWorker)
     EVT_THREAD(WORKER_EVENT, MyFrame::OnWorkerEvent)
-
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
@@ -338,12 +346,12 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title,
     wxMenu *menuThread = new wxMenu;
     menuThread->Append(THREAD_START_THREAD, _T("&Start a new thread\tCtrl-N"));
     menuThread->Append(THREAD_START_THREADS, _T("Start &many threads at once"));
-    menuThread->Append(THREAD_STOP_THREAD, _T("S&top a running thread\tCtrl-S"));
+    menuThread->Append(THREAD_STOP_THREAD, _T("S&top the last spawned thread\tCtrl-S"));
     menuThread->AppendSeparator();
-    menuThread->Append(THREAD_PAUSE_THREAD, _T("&Pause a running thread\tCtrl-P"));
-    menuThread->Append(THREAD_RESUME_THREAD, _T("&Resume suspended thread\tCtrl-R"));
+    menuThread->Append(THREAD_PAUSE_THREAD, _T("&Pause the last spawned running thread\tCtrl-P"));
+    menuThread->Append(THREAD_RESUME_THREAD, _T("&Resume the first suspended thread\tCtrl-R"));
     menuThread->AppendSeparator();
-    menuThread->Append(THREAD_START_WORKER, _T("Start &worker thread\tCtrl-W"));
+    menuThread->Append(THREAD_START_WORKER, _T("Start a &worker thread\tCtrl-W"));
     menuBar->Append(menuThread, _T("&Thread"));
 
     wxMenu *menuExec = new wxMenu;
@@ -751,7 +759,7 @@ void *MyThread::Entry()
 {
     wxString text;
 
-    text.Printf(wxT("Thread 0x%lx started (priority = %u).\n"),
+    text.Printf(wxT("Thread %p started (priority = %u).\n"),
                 GetId(), GetPriority());
     WriteText(text);
     // wxLogMessage(text); -- test wxLog thread safeness
@@ -770,14 +778,14 @@ void *MyThread::Entry()
         if ( TestDestroy() )
             break;
 
-        text.Printf(wxT("[%u] Thread 0x%lx here.\n"), m_count, GetId());
+        text.Printf(wxT("[%u] Thread %p here.\n"), m_count, GetId());
         WriteText(text);
 
         // wxSleep() can't be called from non-GUI thread!
         wxThread::Sleep(1000);
     }
 
-    text.Printf(wxT("Thread 0x%lx finished.\n"), GetId());
+    text.Printf(wxT("Thread %p finished.\n"), GetId());
     WriteText(text);
     // wxLogMessage(text); -- test wxLog thread safeness
 
