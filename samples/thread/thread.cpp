@@ -833,7 +833,7 @@ void MyImageDialog::OnPaint(wxPaintEvent& WXUNUSED(evt))
 
     // paint a sort of progress bar with a 10px border:
     dc.SetBrush(*wxRED_BRUSH);
-    dc.DrawRectangle(10,10, 10+m_nCurrentProgress*(GUITHREAD_BMP_SIZE-20)/100,30);
+    dc.DrawRectangle(10,10, m_nCurrentProgress*(sz.GetWidth()-20)/100,30);
     dc.SetTextForeground(*wxBLUE);
     dc.DrawText(wxString::Format("%d%%", m_nCurrentProgress),
                 (sz.GetWidth()-dc.GetCharWidth()*2)/2,
@@ -998,7 +998,7 @@ wxThread::ExitCode MyGUIThread::Entry()
 
         // notify the dialog that another piece of our masterpiece is complete:
         wxThreadEvent event( wxEVT_COMMAND_THREAD, GUITHREAD_EVENT );
-        event.SetInt(i);
+        event.SetInt(i+1);
         wxQueueEvent( m_dlg, event.Clone() );
 
         // give the main thread the time to refresh before we lock the GUI mutex again
