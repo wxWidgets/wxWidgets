@@ -47,6 +47,23 @@ allhlp: wxhlp
 
 
 allpdfrtf: pdfrtf
+        cd $(WXDIR)\utils\tex2rtf\docs
+        nmake -f makefile.vc pdfrtf
+        cd $(WXDIR)\contrib\src\fl
+	nmake -f makedocs.vc pdfrtf
+        cd $(THISDIR)
+        cd $(WXDIR)\contrib\src\ogl
+        nmake -f makedocs.vc pdfrtf
+        cd $(THISDIR)
+        cd $(WXDIR)\contrib\src\svg
+        nmake -f makedocs.vc pdfrtf
+        cd $(THISDIR)
+        cd $(WXDIR)\contrib\src\gizmos
+        nmake -f makedocs.vc pdfrtf
+        cd $(THISDIR)
+        cd $(WXDIR)\contrib\src\mmedia
+        nmake -f makedocs.vc pdfrtf
+        cd $(THISDIR)
 
 allhtb: htb
 #        cd $(WXDIR)\utils\dialoged\src
@@ -54,6 +71,7 @@ allhtb: htb
         cd $(WXDIR)\utils\tex2rtf\docs
         nmake -f makefile.vc htb
         cd $(WXDIR)\contrib\src\fl
+	nmake -f makefile.vc htb
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\ogl
         nmake -f makedocs.vc htb
@@ -74,6 +92,7 @@ allhtml: wxhtml
         cd $(WXDIR)\utils\tex2rtf\docs
         nmake -f makefile.vc html
         cd $(WXDIR)\contrib\src\fl
+	nmake -f makefile.vc html
         cd $(THISDIR)
         cd $(WXDIR)\contrib\src\ogl
         nmake -f makedocs.vc html

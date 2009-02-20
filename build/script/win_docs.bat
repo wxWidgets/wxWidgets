@@ -77,7 +77,7 @@ call ps2pdf gizmos.ps >> c:\temp.log
 call ps2pdf mmedia.ps >> c:\temp.log
 call ps2pdf ogl.ps >> c:\temp.log
 call ps2pdf svg.ps >> c:\temp.log
-call ps2pdf tex2rtf.ps >> c:\temp.log
+call ps2pdf tex2rtf_rtf.ps >> c:\temp.log
 
 echo Zipping
 cd %WXWIN%
@@ -97,6 +97,7 @@ zip wxWidgets-%WXW_VER%-PDF.zip docs\pdf\*.pdf
 rem copy chm to inno
 cd %WXWIN%
 mkdir c:\wx\inno\wxw28b\docs\htmlhelp
+del \wx\inno\wxw28b\docs\htmlhelp\wx.chm
 copy docs\htmlhelp\wx.chm \wx\inno\wxw28b\docs\htmlhelp\wx.chm
 cd %WXWIN%\build\script
 iscc wxwidgets.iss >> c:\temp.log

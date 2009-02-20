@@ -6,7 +6,7 @@ NAME=svg
 DOCSOURCEDIR=$(WXDIR)\contrib\docs\latex\$(NAME)
 DOCDIR=$(WXDIR)\docs
 THISDIR = $(WXDIR)\contrib\src\$(NAME)
-DOCSOURCES=$(DOCSOURCEDIR)\dc$(NAME).tex \
+DOCSOURCES=$(DOCSOURCEDIR)\dc$(NAME).tex 
 WAITFLAG=/WAIT
 
 alldocs: mkdirs html htmlhelp htb hlp pdfrtf
