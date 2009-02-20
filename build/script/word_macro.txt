@@ -15,4 +15,27 @@ Sub wx28_ps()
     bye_bye
 End Sub
 
+Sub do_ps(mydir, myfile)
+' wx_ps Macro
+' Macro recorded 04/05/2005 by cje2
+'
+    sPrinter = ActivePrinter
+    sDAILYIN = Environ("DAILY") & "\in\"
+    ChangeFileOpenDirectory mydir
+    Documents.Open FileName:=myfile & ".rtf", ConfirmConversions:=False, ReadOnly:= _
+        False, AddToRecentFiles:=False, PasswordDocument:="", PasswordTemplate:= _
+        "", Revert:=False, WritePasswordDocument:="", WritePasswordTemplate:="", _
+        Format:=wdOpenFormatAuto
+    ActivePrinter = "Apple LaserWriter"
+    ActiveDocument.Fields.Update
+
+    Application.PrintOut FileName:="", Range:=wdPrintAllDocument, Item:= _
+        wdPrintDocumentContent, Copies:=1, Pages:="", PageType:=wdPrintAllPages, _
+        Collate:=True, Background:=False, PrintToFile:=True, PrintZoomColumn:=0, _
+        PrintZoomRow:=0, PrintZoomPaperWidth:=0, PrintZoomPaperHeight:=0, _
+        OutputFileName:=sDAILYIN & myfile & ".ps", Append:=False
+    ActiveDocument.Close SaveChanges:=wdDoNotSaveChanges
+    ActivePrinter = sPrinter
+End Sub
+
 
