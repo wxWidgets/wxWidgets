@@ -1,20 +1,6 @@
 ' This is saved as word macros; opens a pdf and writes out a ps file using
-' laserjet ps driver
+' Apple LaserWriter ps driver
 ' Note that the output dir and hardcoded printer must exist
-
-Sub wx28_ps()
-    swxWIN = Environ("WXWIN")
-    do_ps swxWIN & "\docs\pdf\", "wx"
-    do_ps swxWIN & "\contrib\docs\latex\svg", "svg"
-    do_ps swxWIN & "\contrib\docs\latex\ogl", "ogl"
-    do_ps swxWIN & "\contrib\docs\latex\mmedia", "mmedia"
-    do_ps swxWIN & "\contrib\docs\latex\gizmos", "gizmos"
-    do_ps swxWIN & "\contrib\docs\latex\fl", "fl"
-    do_ps swxWIN & "\utils\tex2rtf\docs", "tex2rtf"
-
-    bye_bye
-End Sub
-
 Sub do_ps(mydir, myfile)
 ' wx_ps Macro
 ' Macro recorded 04/05/2005 by cje2
@@ -28,7 +14,9 @@ Sub do_ps(mydir, myfile)
         Format:=wdOpenFormatAuto
     ActivePrinter = "Apple LaserWriter"
     ActiveDocument.Fields.Update
-
+ '   For Each afield In ActiveDocument.Fields
+  '      afield.Update
+  '  Next afield
     Application.PrintOut FileName:="", Range:=wdPrintAllDocument, Item:= _
         wdPrintDocumentContent, Copies:=1, Pages:="", PageType:=wdPrintAllPages, _
         Collate:=True, Background:=False, PrintToFile:=True, PrintZoomColumn:=0, _
@@ -36,6 +24,24 @@ Sub do_ps(mydir, myfile)
         OutputFileName:=sDAILYIN & myfile & ".ps", Append:=False
     ActiveDocument.Close SaveChanges:=wdDoNotSaveChanges
     ActivePrinter = sPrinter
+   End Sub
+
+Sub bye_bye()
+
+Application.Quit SaveChanges:=wdDoNotSaveChanges
+    
 End Sub
 
 
+Sub wx28_ps()
+    swxWIN = Environ("WXWIN")
+    do_ps swxWIN & "\docs\pdf", "wx"
+    do_ps swxWIN & "\docs\pdf", "svg"
+    do_ps swxWIN & "\docs\pdf", "ogl"
+    do_ps swxWIN & "\docs\pdf", "mmedia"
+    do_ps swxWIN & "\docs\pdf", "gizmos"
+    do_ps swxWIN & "\docs\pdf", "fl"
+    do_ps swxWIN & "\utils\tex2rtf\docs", "tex2rtf_rtf"
+
+    bye_bye
+End Sub
