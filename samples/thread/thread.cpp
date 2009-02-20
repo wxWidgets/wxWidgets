@@ -9,6 +9,14 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -27,10 +35,17 @@
 #include "wx/thread.h"
 #include "wx/dynarray.h"
 #include "wx/numdlg.h"
-
 #include "wx/progdlg.h"
 
+// ----------------------------------------------------------------------------
+// resources
+// ----------------------------------------------------------------------------
+
 #include "../sample.xpm"
+
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
 
 // define this to use wxExecute in the exec tests, otherwise just use system
 #define USE_EXECUTE
@@ -66,9 +81,6 @@ public:
     // indicates that we're shutting down and all threads should exit
     bool m_shuttingDown;
 };
-
-// Create a new application object
-IMPLEMENT_APP(MyApp)
 
 // Define a new frame type
 class MyFrame: public wxFrame
@@ -150,6 +162,10 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
 // ID for the menu commands
 enum
 {
@@ -196,70 +212,6 @@ public:
     MyFrame *m_frame;
 };
 
-MyThread::MyThread(MyFrame *frame)
-        : wxThread()
-{
-    m_count = 0;
-    m_frame = frame;
-}
-
-MyThread::~MyThread()
-{
-    wxCriticalSectionLocker locker(wxGetApp().m_critsect);
-
-    wxArrayThread& threads = wxGetApp().m_threads;
-    threads.Remove(this);
-
-    if ( threads.IsEmpty() )
-    {
-        // signal the main thread that there are no more threads left if it is
-        // waiting for us
-        if ( wxGetApp().m_shuttingDown )
-        {
-            wxGetApp().m_shuttingDown = false;
-
-            wxGetApp().m_semAllDone.Post();
-        }
-    }
-}
-
-void *MyThread::Entry()
-{
-    wxString text;
-
-    text.Printf(wxT("Thread 0x%lx started (priority = %u).\n"),
-                GetId(), GetPriority());
-    WriteText(text);
-    // wxLogMessage(text); -- test wxLog thread safeness
-
-    for ( m_count = 0; m_count < 10; m_count++ )
-    {
-        // check if the application is shutting down: in this case all threads
-        // should stop a.s.a.p.
-        {
-            wxCriticalSectionLocker locker(wxGetApp().m_critsect);
-            if ( wxGetApp().m_shuttingDown )
-                return NULL;
-        }
-
-        // check if just this thread was asked to exit
-        if ( TestDestroy() )
-            break;
-
-        text.Printf(wxT("[%u] Thread 0x%lx here.\n"), m_count, GetId());
-        WriteText(text);
-
-        // wxSleep() can't be called from non-GUI thread!
-        wxThread::Sleep(1000);
-    }
-
-    text.Printf(wxT("Thread 0x%lx finished.\n"), GetId());
-    WriteText(text);
-    // wxLogMessage(text); -- test wxLog thread safeness
-
-    return NULL;
-}
-
 // ----------------------------------------------------------------------------
 // worker thread
 // ----------------------------------------------------------------------------
@@ -280,57 +232,6 @@ public:
     MyFrame *m_frame;
     unsigned m_count;
 };
-
-MyWorkerThread::MyWorkerThread(MyFrame *frame)
-        : wxThread()
-{
-    m_frame = frame;
-    m_count = 0;
-}
-
-void MyWorkerThread::OnExit()
-{
-}
-
-#define TEST_YIELD_RACE_CONDITION       0
-
-void *MyWorkerThread::Entry()
-{
-#if TEST_YIELD_RACE_CONDITION
-    if ( TestDestroy() )
-        return NULL;
-
-    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
-
-    event.SetInt( 50 );
-    wxQueueEvent( m_frame, new wxThreadEvent(event) );
-
-    event.SetInt(-1);
-    wxQueueEvent( m_frame, new wxThreadEvent(event) );
-#else
-    for ( m_count = 0; !m_frame->Cancelled() && (m_count < 100); m_count++ )
-    {
-        // check if we were asked to exit
-        if ( TestDestroy() )
-            break;
-
-        // create any type of command event here
-        wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
-        event.SetInt( m_count );
-
-        // send in a thread-safe way
-        wxQueueEvent( m_frame, new wxThreadEvent(event) );
-
-        wxMilliSleep(200);
-    }
-
-    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
-    event.SetInt(-1); // that's all
-    wxQueueEvent( m_frame, new wxThreadEvent(event) );
-#endif
-
-    return NULL;
-}
 
 // ----------------------------------------------------------------------------
 // a thread which simply calls wxExecute
@@ -354,8 +255,45 @@ private:
     wxString m_command;
 };
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 // implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// the application class
+// ----------------------------------------------------------------------------
+
+// Create a new application object
+IMPLEMENT_APP(MyApp)
+
+MyApp::MyApp()
+{
+    m_shuttingDown = false;
+}
+
+// `Main program' equivalent, creating windows and returning main app frame
+bool MyApp::OnInit()
+{
+    if ( !wxApp::OnInit() )
+        return false;
+
+    // uncomment this to get some debugging messages from the trace code
+    // on the console (or just set WXTRACE env variable to include "thread")
+    //wxLog::AddTraceMask("thread");
+
+    // Create the main frame window
+    MyFrame *frame = new MyFrame((wxFrame *)NULL, _T("wxWidgets threads sample"),
+                                 50, 50, 450, 340);
+    SetTopWindow(frame);
+
+    // Show the frame
+    frame->Show(true);
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// MyFrame
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -381,24 +319,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
-MyApp::MyApp()
+// My frame constructor
+MyFrame::MyFrame(wxFrame *frame, const wxString& title,
+                 int x, int y, int w, int h)
+       : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
-    m_shuttingDown = false;
-}
-
-// `Main program' equivalent, creating windows and returning main app frame
-bool MyApp::OnInit()
-{
-    if ( !wxApp::OnInit() )
-        return false;
-
-    // uncomment this to get some debugging messages from the trace code
-    // on the console (or just set WXTRACE env variable to include "thread")
-    //wxLog::AddTraceMask("thread");
-
-    // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *)NULL, _T("wxWidgets threads sample"),
-                                 50, 50, 450, 340);
+    SetIcon(wxIcon(sample_xpm));
 
     // Make a menubar
     wxMenuBar *menuBar = new wxMenuBar;
@@ -431,22 +357,7 @@ bool MyApp::OnInit()
     menuHelp->Append(THREAD_ABOUT, _T("&About..."));
     menuBar->Append(menuHelp, _T("&Help"));
 
-    frame->SetMenuBar(menuBar);
-
-    // Show the frame
-    frame->Show(true);
-
-    SetTopWindow(frame);
-
-    return true;
-}
-
-// My frame constructor
-MyFrame::MyFrame(wxFrame *frame, const wxString& title,
-                 int x, int y, int w, int h)
-       : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
-{
-    SetIcon(wxIcon(sample_xpm));
+    SetMenuBar(menuBar);
 
     m_nRunning = m_nCount = 0;
 
@@ -803,3 +714,133 @@ bool MyFrame::Cancelled()
 
     return m_cancelled;
 }
+
+
+// ----------------------------------------------------------------------------
+// MyThread
+// ----------------------------------------------------------------------------
+
+MyThread::MyThread(MyFrame *frame)
+        : wxThread()
+{
+    m_count = 0;
+    m_frame = frame;
+}
+
+MyThread::~MyThread()
+{
+    wxCriticalSectionLocker locker(wxGetApp().m_critsect);
+
+    wxArrayThread& threads = wxGetApp().m_threads;
+    threads.Remove(this);
+
+    if ( threads.IsEmpty() )
+    {
+        // signal the main thread that there are no more threads left if it is
+        // waiting for us
+        if ( wxGetApp().m_shuttingDown )
+        {
+            wxGetApp().m_shuttingDown = false;
+
+            wxGetApp().m_semAllDone.Post();
+        }
+    }
+}
+
+void *MyThread::Entry()
+{
+    wxString text;
+
+    text.Printf(wxT("Thread 0x%lx started (priority = %u).\n"),
+                GetId(), GetPriority());
+    WriteText(text);
+    // wxLogMessage(text); -- test wxLog thread safeness
+
+    for ( m_count = 0; m_count < 10; m_count++ )
+    {
+        // check if the application is shutting down: in this case all threads
+        // should stop a.s.a.p.
+        {
+            wxCriticalSectionLocker locker(wxGetApp().m_critsect);
+            if ( wxGetApp().m_shuttingDown )
+                return NULL;
+        }
+
+        // check if just this thread was asked to exit
+        if ( TestDestroy() )
+            break;
+
+        text.Printf(wxT("[%u] Thread 0x%lx here.\n"), m_count, GetId());
+        WriteText(text);
+
+        // wxSleep() can't be called from non-GUI thread!
+        wxThread::Sleep(1000);
+    }
+
+    text.Printf(wxT("Thread 0x%lx finished.\n"), GetId());
+    WriteText(text);
+    // wxLogMessage(text); -- test wxLog thread safeness
+
+    return NULL;
+}
+
+
+// ----------------------------------------------------------------------------
+// MyWorkerThread
+// ----------------------------------------------------------------------------
+
+MyWorkerThread::MyWorkerThread(MyFrame *frame)
+        : wxThread()
+{
+    m_frame = frame;
+    m_count = 0;
+}
+
+void MyWorkerThread::OnExit()
+{
+}
+
+// define this symbol to 1 to test if the YieldFor() call in the wxProgressDialog::Update
+// function provokes a race condition in which the second wxThreadEvent posted by
+// MyWorkerThread::Entry is processed by the YieldFor() call of wxProgressDialog::Update
+// and results in the destruction of the progress dialog itself, resulting in a crash later.
+#define TEST_YIELD_RACE_CONDITION       0
+
+void *MyWorkerThread::Entry()
+{
+#if TEST_YIELD_RACE_CONDITION
+    if ( TestDestroy() )
+        return NULL;
+
+    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
+
+    event.SetInt( 50 );
+    wxQueueEvent( m_frame, event.Clone() );
+
+    event.SetInt(-1);
+    wxQueueEvent( m_frame, event.Clone() );
+#else
+    for ( m_count = 0; !m_frame->Cancelled() && (m_count < 100); m_count++ )
+    {
+        // check if we were asked to exit
+        if ( TestDestroy() )
+            break;
+
+        // create any type of command event here
+        wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
+        event.SetInt( m_count );
+
+        // send in a thread-safe way
+        wxQueueEvent( m_frame, event.Clone() );
+
+        wxMilliSleep(200);
+    }
+
+    wxThreadEvent event( wxEVT_COMMAND_THREAD, WORKER_EVENT );
+    event.SetInt(-1); // that's all
+    wxQueueEvent( m_frame, event.Clone() );
+#endif
+
+    return NULL;
+}
+
