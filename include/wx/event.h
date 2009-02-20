@@ -1105,6 +1105,14 @@ public:
         : wxCommandEvent(eventType, id)
         { }
 
+    wxThreadEvent(const wxThreadEvent& event)
+        : wxCommandEvent(event)
+    {
+        // make sure our string member (which uses COW, aka refcounting) is not
+        // shared by other wxString instances:
+        SetString(GetString().c_str());
+    }
+
     virtual wxEvent *Clone() const
     {
         wxThreadEvent* ev = new wxThreadEvent(*this);
@@ -2420,7 +2428,7 @@ public:
 
     virtual wxEvent *Clone() const { return new wxNavigationKeyEvent(*this); }
 
-    enum
+    enum wxNavigationKeyEventFlags
     {
         IsBackward = 0x0000,
         IsForward = 0x0001,
