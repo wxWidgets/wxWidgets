@@ -262,7 +262,7 @@ wxMutexError wxMutexInternal::Lock()
         if (m_owningThread == wxThread::GetCurrentId())
            return wxMUTEX_DEAD_LOCK;
     }
-        
+
     return HandleLockResult(pthread_mutex_lock(&m_mutex));
 }
 
@@ -377,7 +377,7 @@ wxMutexError wxMutexInternal::TryLock()
 wxMutexError wxMutexInternal::Unlock()
 {
     m_owningThread = 0;
-                
+
     int err = pthread_mutex_unlock(&m_mutex);
     switch ( err )
     {
@@ -589,14 +589,14 @@ wxSemaError wxSemaphoreInternal::Wait()
     while ( m_count == 0 )
     {
         wxLogTrace(TRACE_SEMA,
-                   _T("Thread %ld waiting for semaphore to become signalled"),
+                   _T("Thread %p waiting for semaphore to become signalled"),
                    wxThread::GetCurrentId());
 
         if ( m_cond.Wait() != wxCOND_NO_ERROR )
             return wxSEMA_MISC_ERROR;
 
         wxLogTrace(TRACE_SEMA,
-                   _T("Thread %ld finished waiting for semaphore, count = %lu"),
+                   _T("Thread %p finished waiting for semaphore, count = %lu"),
                    wxThread::GetCurrentId(), (unsigned long)m_count);
     }
 
@@ -663,7 +663,7 @@ wxSemaError wxSemaphoreInternal::Post()
     m_count++;
 
     wxLogTrace(TRACE_SEMA,
-               _T("Thread %ld about to signal semaphore, count = %lu"),
+               _T("Thread %p about to signal semaphore, count = %lu"),
                wxThread::GetCurrentId(), (unsigned long)m_count);
 
     return m_cond.Signal() == wxCOND_NO_ERROR ? wxSEMA_NO_ERROR
@@ -729,8 +729,8 @@ public:
             _T("EXITED"),
         };
 
-        wxLogTrace(TRACE_THREADS, _T("Thread %ld: %s => %s."),
-                   (long)GetId(), stateNames[m_state], stateNames[state]);
+        wxLogTrace(TRACE_THREADS, _T("Thread %p: %s => %s."),
+                   GetId(), stateNames[m_state], stateNames[state]);
 #endif // __WXDEBUG__
 
         m_state = state;
@@ -806,7 +806,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
 {
     wxThreadInternal *pthread = thread->m_internal;
 
-    wxLogTrace(TRACE_THREADS, _T("Thread %ld started."), THR_ID(pthread));
+    wxLogTrace(TRACE_THREADS, _T("Thread %p started."), THR_ID(pthread));
 
     // associate the thread pointer with the newly created thread so that
     // wxThread::This() will work
@@ -844,7 +844,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
     {
         // call the main entry
         wxLogTrace(TRACE_THREADS,
-                   _T("Thread %ld about to enter its Entry()."),
+                   _T("Thread %p about to enter its Entry()."),
                    THR_ID(pthread));
 
         wxTRY
@@ -852,7 +852,7 @@ void *wxThreadInternal::PthreadStart(wxThread *thread)
             pthread->m_exitcode = thread->Entry();
 
             wxLogTrace(TRACE_THREADS,
-                       _T("Thread %ld Entry() returned %lu."),
+                       _T("Thread %p Entry() returned %lu."),
                        THR_ID(pthread), wxPtrToUInt(pthread->m_exitcode));
         }
         wxCATCH_ALL( wxTheApp->OnUnhandledException(); )
@@ -975,7 +975,7 @@ void wxThreadInternal::Wait()
         wxMutexGuiLeave();
 
     wxLogTrace(TRACE_THREADS,
-               _T("Starting to wait for thread %ld to exit."),
+               _T("Starting to wait for thread %p to exit."),
                THR_ID(this));
 
     // to avoid memory leaks we should call pthread_join(), but it must only be
@@ -1015,7 +1015,7 @@ void wxThreadInternal::Pause()
                  wxT("thread must first be paused with wxThread::Pause().") );
 
    wxLogTrace(TRACE_THREADS,
-              _T("Thread %ld goes to sleep."), THR_ID(this));
+              _T("Thread %p goes to sleep."), THR_ID(this));
 
     // wait until the semaphore is Post()ed from Resume()
     m_semSuspend.Wait();
@@ -1031,7 +1031,7 @@ void wxThreadInternal::Resume()
     if ( IsReallyPaused() )
     {
        wxLogTrace(TRACE_THREADS,
-                  _T("Waking up thread %ld"), THR_ID(this));
+                  _T("Waking up thread %p"), THR_ID(this));
 
         // wake up Pause()
         m_semSuspend.Post();
@@ -1042,7 +1042,7 @@ void wxThreadInternal::Resume()
     else
     {
         wxLogTrace(TRACE_THREADS,
-                   _T("Thread %ld is not yet really paused"), THR_ID(this));
+                   _T("Thread %p is not yet really paused"), THR_ID(this));
     }
 
     SetState(STATE_RUNNING);
@@ -1405,7 +1405,7 @@ wxThreadError wxThread::Resume()
     switch ( state )
     {
         case STATE_PAUSED:
-            wxLogTrace(TRACE_THREADS, _T("Thread %ld suspended, resuming."),
+            wxLogTrace(TRACE_THREADS, _T("Thread %p suspended, resuming."),
                        GetId());
 
             m_internal->Resume();
@@ -1413,7 +1413,7 @@ wxThreadError wxThread::Resume()
             return wxTHREAD_NO_ERROR;
 
         case STATE_EXITED:
-            wxLogTrace(TRACE_THREADS, _T("Thread %ld exited, won't resume."),
+            wxLogTrace(TRACE_THREADS, _T("Thread %p exited, won't resume."),
                        GetId());
             return wxTHREAD_NO_ERROR;
 
@@ -1797,14 +1797,14 @@ static void DeleteThread(wxThread *This)
     // or wxThreadModule::OnExit() would deadlock
     wxMutexLocker locker( *gs_mutexDeleteThread );
 
-    wxLogTrace(TRACE_THREADS, _T("Thread %ld auto deletes."), This->GetId());
+    wxLogTrace(TRACE_THREADS, _T("Thread %p auto deletes."), This->GetId());
 
     delete This;
 
     wxCHECK_RET( gs_nThreadsBeingDeleted > 0,
                  _T("no threads scheduled for deletion, yet we delete one?") );
 
-    wxLogTrace(TRACE_THREADS, _T("%lu scheduled for deletion threads left."),
+    wxLogTrace(TRACE_THREADS, _T("%lu threads remain scheduled for deletion."),
                (unsigned long)gs_nThreadsBeingDeleted - 1);
 
     if ( !--gs_nThreadsBeingDeleted )
