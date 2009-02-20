@@ -111,7 +111,7 @@ public:
     dialog and calling them has no effect later.
 
     @library{wxcore}
-    @category{data}
+    @category{cmndlg,data}
 */
 class wxFindReplaceData : public wxObject
 {

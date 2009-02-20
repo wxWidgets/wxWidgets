@@ -29,7 +29,7 @@
     wxBitmap class documentation.
 
     @library{wxcore}
-    @category{misc}
+    @category{gdi}
 
     @see @ref overview_bitmap, wxBitmap, wxIcon, wxCursor
 */

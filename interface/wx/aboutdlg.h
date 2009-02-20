@@ -31,7 +31,7 @@
     so you should avoid specifying these fields to achieve more native look and feel.
 
     @library{wxadv}
-    @category{misc}
+    @category{cmndlg,data}
 
     @see wxAboutDialogInfo::SetArtists
 */

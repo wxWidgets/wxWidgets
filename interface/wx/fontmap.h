@@ -54,9 +54,9 @@
     @endcode
 
     @library{wxcore}
-    @category{misc}
+    @category{cfg}
 
-    @see wxEncodingConverter, @ref overview_nonenglish "Writing non-English applications"
+    @see wxEncodingConverter, @ref overview_nonenglish
 */
 class wxFontMapper
 {

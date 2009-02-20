@@ -69,7 +69,7 @@ public:
     @onlyfor{wxmsw}
 
     @library{wxcore}
-    @category{gdi,misc}
+    @category{gdi}
 
     @see wxMetafileDC
 */

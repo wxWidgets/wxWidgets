@@ -7,23 +7,25 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
-
     wxMessageQueue allows passing messages between threads.
 
     This class should be typically used to communicate between the main and worker
     threads. The main thread calls wxMessageQueue::Post and the worker thread
     calls wxMessageQueue::Receive.
 
-    For this class a message is an object of arbitrary type T.
+    @tparam T
+        For this class a message is an object of arbitrary type T.
+
     Notice that often there is a some special message indicating that the thread
     should terminate as there is no other way to gracefully shutdown a thread
     waiting on the message queue.
 
     @nolibrary
-    @category{misc}
+    @category{threading}
 
     @see wxThread
 */
+template <typename T>
 class wxMessageQueue<T>
 {
 public:

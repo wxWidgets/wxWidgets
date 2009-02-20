@@ -73,7 +73,7 @@
     @endcode
 
     @library{wxbase}
-    @category{misc}
+    @category{appmanagement}
 */
 class wxModule : public wxObject
 {

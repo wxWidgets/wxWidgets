@@ -12,7 +12,7 @@
     This class holds a variety of information related to font dialogs.
 
     @library{wxcore}
-    @category{cmndlg}
+    @category{cmndlg,data}
 
     @see @ref overview_cmndlg_font, wxFont, wxFontDialog
 */
@@ -137,7 +137,7 @@ public:
     stored by wxPageSetupDialogData).
 
     @library{wxcore}
-    @category{printing}
+    @category{printing,data}
 
     @see @ref overview_printing, wxPageSetupDialog
 */
@@ -349,7 +349,7 @@ public:
     This class holds a variety of information related to colour dialogs.
 
     @library{wxcore}
-    @category{cmndlg}
+    @category{cmndlg,data}
 
     @see wxColour, wxColourDialog, @ref overview_cmndlg_colour
 */
@@ -511,7 +511,7 @@ enum wxPrintBin
     @endcode
 
     @library{wxcore}
-    @category{printing}
+    @category{printing,data}
 
     @see @ref overview_printing, wxPrintDialog, wxPageSetupDialog,
          wxPrintDialogData, wxPageSetupDialogData, @ref overview_cmndlg_print,
@@ -681,7 +681,7 @@ public:
     settings.
 
     @library{wxcore}
-    @category{printing}
+    @category{printing,cmndlg,data}
 
     @see @ref overview_printing, wxPrintDialog, @ref overview_cmndlg_print
 */

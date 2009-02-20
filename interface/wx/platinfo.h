@@ -116,7 +116,7 @@ enum wxEndianness
     where it's running.
 
     @library{wxbase}
-    @category{misc}
+    @category{cfg}
 
     @see ::wxGetOsVersion(), wxIsPlatformLittleEndian(), wxIsPlatform64Bit(),
          wxAppTraits

@@ -57,7 +57,7 @@
     system call, but almost all of modern Unix systems do) only.
 
     @library{wxbase}
-    @category{misc}
+    @category{appmanagement}
 */
 class wxSingleInstanceChecker
 {

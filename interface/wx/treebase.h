@@ -12,7 +12,7 @@
     An opaque reference to a tree item.
 
     @library{wxcore}
-    @category{misc}
+    @category{data}
 
     @see wxTreeCtrl, wxTreeItemData, @ref overview_treectrl
 */

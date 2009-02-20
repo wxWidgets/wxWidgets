@@ -68,7 +68,7 @@
 
 
     @library{wxbase}
-    @category{misc}
+    @category{cfg}
 
     @see wxFileType
 */
@@ -228,7 +228,7 @@ wxMimeTypesManager* wxTheMimeTypesManager;
 
 
     @library{wxbase}
-    @category{misc}
+    @category{data}
 
     @see wxMimeTypesManager
 */

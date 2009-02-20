@@ -19,7 +19,7 @@ typedef int wxWindowID;
     and can also be used be used directly.
 
     @library{wxcore}
-    @category{misc}
+    @category{cfg}
 
     @see wxWindow::NewControlId(), wxWindow::UnreserveControlId(),
          @ref overview_windowids

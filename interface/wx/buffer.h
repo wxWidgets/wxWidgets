@@ -12,8 +12,11 @@
 
     @todo provide better docs for this class
 
+    @tparam T
+        The type of the characters stored in this class.
+
     @nolibrary
-    @category{misc}
+    @category{data}
 */
 template <typename T>
 class wxCharTypeBuffer
@@ -45,7 +48,7 @@ public:
     @todo provide better docs for this class
 
     @nolibrary
-    @category{misc}
+    @category{data}
 */
 class wxCharBuffer : public wxCharTypeBuffer<char>
 {
@@ -63,7 +66,7 @@ public:
     This class is available only when <tt>wxUSE_WCHAR_T==1</tt>
 
     @nolibrary
-    @category{misc}
+    @category{data}
 */
 class wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
 {
@@ -75,8 +78,6 @@ public:
     wxWCharBuffer(size_t len);
     wxWCharBuffer(const wxCStrData& cstr);
 };
-
-
 
 /**
     @class wxMemoryBuffer

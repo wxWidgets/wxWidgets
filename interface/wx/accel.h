@@ -34,7 +34,7 @@ enum wxAcceleratorEntryFlags
     (see wxAcceleratorTable).
 
     @library{wxcore}
-    @category{misc}
+    @category{data}
 
     @see wxAcceleratorTable, wxWindow::SetAcceleratorTable
 */
@@ -157,7 +157,7 @@ public:
     'OK'.
 
     @library{wxcore}
-    @category{misc}
+    @category{data}
 
     @stdobjects
     ::wxNullAcceleratorTable

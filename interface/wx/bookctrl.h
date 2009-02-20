@@ -23,7 +23,7 @@
     This is a pure virtual class so you cannot allocate it directly.
 
     @library{wxcore}
-    @category{miscwnd}
+    @category{bookctrl}
 
     @see @ref overview_bookctrl
 */
@@ -363,7 +363,7 @@ public:
     probably unnecessary to process both events at once.
 
     @library{wxcore}
-    @category{events}
+    @category{events,bookctrl}
 
     @see wxNotebook, wxListbook, wxChoicebook, wxTreebook, wxToolbook
 */

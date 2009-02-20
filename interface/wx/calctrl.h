@@ -53,7 +53,7 @@ enum wxCalendarDateBorder
     of this class are used with wxCalendarCtrl.
 
     @library{wxadv}
-    @category{misc}
+    @category{data}
 
     @see wxCalendarCtrl
 */

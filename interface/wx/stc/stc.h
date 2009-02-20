@@ -14,7 +14,7 @@
     @todo list styled text ctrl events.
 
     @library{wxbase}
-    @category{events}
+    @category{events,stc}
 */
 class wxStyledTextEvent : public wxCommandEvent
 {

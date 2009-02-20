@@ -163,7 +163,7 @@ enum wxSystemScreenType
     and user interface element sizes.
 
     @library{wxcore}
-    @category{misc}
+    @category{cfg}
 
     @see wxFont, wxColour
 */

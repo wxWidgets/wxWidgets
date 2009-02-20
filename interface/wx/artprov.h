@@ -164,7 +164,7 @@ typedef wxString wxArtID;
     identical bitmap for different client values!
 
     @library{wxcore}
-    @category{misc,data}
+    @category{misc}
 
     @see the @ref page_samples_artprov for an example of wxArtProvider usage.
 */

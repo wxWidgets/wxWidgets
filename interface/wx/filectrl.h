@@ -40,14 +40,14 @@
     @endEventTable
 
     @library{wxbase}
-    @category{miscwnd}
+    @category{ctrl}
     @appearance{filectrl.png}
 
     @nativeimpl{wxgtk}
 
     @see wxGenericDirCtrl
 */
-class wxFileCtrl : public wxWindow
+class wxFileCtrl : public wxControl
 {
 public:
     wxFileCtrl();

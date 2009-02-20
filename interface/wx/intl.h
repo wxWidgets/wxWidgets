@@ -361,7 +361,7 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
     @endWxPerlOnly
 
     @library{wxbase}
-    @category{misc}
+    @category{cfg}
 
     @see @ref overview_i18n, @ref page_samples_internat, wxXLocale
 */

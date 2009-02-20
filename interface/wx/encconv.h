@@ -18,14 +18,13 @@
     @c wxFONTENCODING_KOI8.
 
     @note
-
     Please use wxMBConv classes instead if possible. wxCSConv has much better
     support for various encodings than wxEncodingConverter.
     wxEncodingConverter is useful only if you rely on wxCONVERT_SUBSTITUTE mode
     of operation (see wxEncodingConverter::Init()).
 
     @library{wxbase}
-    @category{misc}
+    @category{conv}
 
     @see wxFontMapper, wxMBConv, @ref overview_nonenglish
 */

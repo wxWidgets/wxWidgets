@@ -20,7 +20,7 @@
     Windows.
 
     @library{wxbase}
-    @category{misc}
+    @category{cfg}
 
     @see wxFileConfig::Save
 */

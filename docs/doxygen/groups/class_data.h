@@ -12,6 +12,9 @@
 @ingroup group_class
 
 These are the data structure classes provided by wxWidgets.
+Some of them are used to store generic data (e.g. wxPoint, wxSize, etc),
+others are mainly helpers of other classes (e.g. wxListItem, wxCalendarDateAttr,
+wxFindReplaceDialogData, etc).
 
 */
 

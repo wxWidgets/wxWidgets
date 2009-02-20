@@ -63,7 +63,7 @@ enum wxImagePNGType
     ::wxNullImage
 
     @library{wxcore}
-    @category{misc}
+    @category{gdi}
 
     @see wxImage, wxInitAllImageHandlers()
 */
@@ -526,7 +526,7 @@ public:
         If the image has an alpha channel, all pixels with alpha value less
         than @a threshold are replaced with the mask colour and the alpha
         channel is removed. Otherwise nothing is done.
-        
+
         The mask colour is chosen automatically using
         FindFirstUnusedColour() by this function, see the overload below if you
         this is not appropriate.
@@ -558,7 +558,7 @@ public:
             considered to be opaque.
 
      */
-    void ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb, 
+    void ConvertAlphaToMask(unsigned char mr, unsigned char mg, unsigned char mb,
                             unsigned char threshold = wxIMAGE_ALPHA_THRESHOLD);
     //@}
 

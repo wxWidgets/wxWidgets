@@ -255,7 +255,7 @@
 
 
     @library{wxbase}
-    @category{misc}
+    @category{cfg}
 */
 class wxConfigBase : public wxObject
 {

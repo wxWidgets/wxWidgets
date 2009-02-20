@@ -2562,7 +2562,7 @@ public:
     (unless the @c wxEVT_CATEGORY_THREAD is specified - which is never in wx code).
 
     @library{wxcore}
-    @category{events}
+    @category{events,threading}
 
     @see @ref overview_thread, wxEventLoopBase::YieldFor
 */

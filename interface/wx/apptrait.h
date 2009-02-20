@@ -23,7 +23,7 @@
     implementation of the wxAppTraits interface.
 
     @library{wxbase}
-    @category{appmanagement}
+    @category{cfg}
 
     @see @ref overview_app, wxApp
 */

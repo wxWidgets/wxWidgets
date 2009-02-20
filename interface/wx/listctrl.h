@@ -1084,7 +1084,7 @@ public:
     Represents the attributes (color, font, ...) of a wxListCtrl's wxListItem.
 
     @library{wxbase}
-    @category{ctrl}
+    @category{data}
 
     @see @ref overview_listctrl, wxListCtrl, wxListItem
 */
@@ -1296,7 +1296,7 @@ enum wxListColumnFormat
     If the colour/font is not specified, the default list control colour/font is used.
 
     @library{wxbase}
-    @category{ctrl}
+    @category{data}
 
     @see wxListCtrl
 */

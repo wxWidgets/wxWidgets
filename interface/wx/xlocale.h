@@ -61,7 +61,7 @@
     IO) in the near future.
 
     @library{wxbase}
-    @category{misc}
+    @category{cfg}
 
     @see wxLocale
 */

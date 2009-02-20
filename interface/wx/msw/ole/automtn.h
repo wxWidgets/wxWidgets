@@ -33,7 +33,7 @@
     @onlyfor{wxmsw}
 
     @library{wxcore}
-    @category{misc}
+    @category{data}
 
     @see wxVariant
 */

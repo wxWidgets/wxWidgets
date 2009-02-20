@@ -38,7 +38,7 @@
     @endEventTable
 
     @library{wxcore}
-    @category{miscwnd}
+    @category{bookctrl}
 
     @see wxBookCtrl, wxBookCtrlEvent, wxNotebook, wxTreeCtrl, wxImageList,
          @ref overview_bookctrl, @ref page_samples_notebook

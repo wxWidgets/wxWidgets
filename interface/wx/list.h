@@ -89,7 +89,7 @@
         The type stored in the wxList nodes.
 
     @library{wxbase}
-    @category{data}
+    @category{containers}
 
     @see wxArray<T>, wxVector<T>, wxNode<T>
 */

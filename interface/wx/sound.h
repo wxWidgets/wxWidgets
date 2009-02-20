@@ -16,7 +16,7 @@
     Open Sound System or Simple DirectMedia Layer).
 
     @library{wxadv}
-    @category{misc}
+    @category{media}
 */
 class wxSound : public wxObject
 {

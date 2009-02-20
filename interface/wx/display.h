@@ -12,7 +12,7 @@
     Determines the sizes and locations of displays connected to the system.
 
     @library{wxcore}
-    @category{misc}
+    @category{cfg}
 
     @see wxClientDisplayRect(), wxDisplaySize(), wxDisplaySizeMM()
 */

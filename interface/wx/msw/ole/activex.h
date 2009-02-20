@@ -279,7 +279,7 @@ public:
     @onlyfor{wxmsw}
 
     @library{wxbase}
-    @category{misc,ipc}
+    @category{ctrl,ipc}
 
     @see wxActiveXEvent, @ref page_samples_flash
 */

@@ -41,7 +41,7 @@
     @endEventTable
 
     @library{wxcore}
-    @category{miscwnd}
+    @category{bookctrl}
 
     @see @ref overview_bookctrl, wxBookCtrlBase, wxNotebook,
          @ref page_samples_notebook

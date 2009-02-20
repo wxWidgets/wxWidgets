@@ -122,7 +122,7 @@
     The compile-time option to include or exclude this functionality is wxUSE_SYSTEM_OPTIONS.
 
     @library{wxbase}
-    @category{misc}
+    @category{cfg}
 
     @see wxSystemSettings
 */

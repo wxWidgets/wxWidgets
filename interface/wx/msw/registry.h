@@ -32,9 +32,6 @@
 
     @onlyfor{wxmsw}
 
-    @library{wxbase}
-    @category{misc}
-
     @b Example:
 
     @code
@@ -64,6 +61,10 @@
         key->GetNextKey(key_name, 1);
     }
     @endcode
+
+
+    @library{wxbase}
+    @category{cfg}
 */
 class wxRegKey
 {
@@ -77,7 +78,7 @@ public:
     */
     wxRegKey(const wxString& strKey);
     /**
-        The constructor to set the full name of the key using one of the 
+        The constructor to set the full name of the key using one of the
         standard keys, that is, HKCR, HKCU, HKLM, HKUSR, HKPD, HKCC or HKDD.
     */
     wxRegKey(StdKey keyParent, const wxString& strKey);
@@ -96,7 +97,7 @@ public:
         Write ///< Read and Write
     };
 
-    /** 
+    /**
         The standard registry key enumerator.
     */
     enum StdKey
@@ -128,7 +129,7 @@ public:
     Type_Multi_String,        ///< Multiple Unicode strings
     Type_Resource_list,       ///< Resource list in the resource map
     Type_Full_resource_descriptor,  ///< Resource list in the hardware description
-    Type_Resource_requirements_list ///< 
+    Type_Resource_requirements_list ///<
     };
 
     /**
@@ -146,12 +147,12 @@ public:
         using the key. Returns @true if successful.
     */
     bool Copy(wxRegKey& keyDst);
-    
+
     /**
         Copy the value to another key, possibly changing its name. By default
         it will remain the same. Returns @true if successful.
     */
-    bool CopyValue(const wxString& szValue, wxRegKey& keyDst,    
+    bool CopyValue(const wxString& szValue, wxRegKey& keyDst,
                   const wxString& szNewName = wxEmptyString);
     /**
         Creates the key. Will fail if the key already exists and @a bOkIfExists
@@ -170,7 +171,7 @@ public:
     void DeleteSelf();
 
     /**
-        Deletes the named value or use an empty string argument to remove the 
+        Deletes the named value or use an empty string argument to remove the
         default value of the key.
     */
     void DeleteValue(const wxString& szKey);
@@ -192,7 +193,7 @@ public:
         Returns @true if successful.
     */
     bool Export(wxOutputStream& ostr) const;
-    
+
     /**
         Gets the first key. Returns @true if successful.
     */
@@ -237,7 +238,7 @@ public:
         Gets the value type.
     */
     ValueType GetValueType(const wxString& szValue) const;
-    
+
     /**
         Returns @true if given subkey exists.
     */
@@ -324,13 +325,13 @@ public:
     /**
         Preallocate some memory for the name. For wxRegConfig usage only.
     */
-    void ReserveMemoryForName(size_t bytes); 
+    void ReserveMemoryForName(size_t bytes);
 
     /**
         Set or change the HKEY handle.
     */
     void SetHkey(WXHKEY hKey);
-    
+
     /**
         Set the full key name. The name is absolute. It should start with
         HKEY_xxx.
@@ -344,7 +345,7 @@ public:
         Set the name relative to the parent key
     */
     void SetName(const wxRegKey& keyParent, const wxString& strKey);
-    
+
     /**
         Sets the given @a szValue which must be numeric. If the value doesn't
         exist, it is created. Returns @true if successful.
@@ -356,7 +357,7 @@ public:
     */
     bool SetValue(const wxString& szValue, const wxString& strValue);
     /**
-        Sets the given @a szValue which must be binary. If the value doesn't 
+        Sets the given @a szValue which must be binary. If the value doesn't
         exist, it is created. Returns @true if successful.
     */
     bool SetValue(const wxString& szValue, const wxMemoryBuffer& buf);

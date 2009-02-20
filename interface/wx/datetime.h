@@ -2045,7 +2045,7 @@ public:
     @todo Write wxDateTimeHolidayAuthority documentation.
 
     @library{wxbase}
-    @category{misc}
+    @category{data}
 */
 class wxDateTimeHolidayAuthority
 {
