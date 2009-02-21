@@ -1227,7 +1227,7 @@ void wxListHeaderWindow::DrawCurrent()
 
     wxScreenDC dc;
     dc.SetLogicalFunction( wxINVERT );
-    dc.SetPen( wxPen( *wxBLACK, 2, wxSOLID ) );
+    dc.SetPen( wxPen(*wxBLACK, 2) );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     AdjustDC(dc);
@@ -1555,7 +1555,7 @@ void wxListTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 //  wxListMainWindow
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledCanvas)
+BEGIN_EVENT_TABLE(wxListMainWindow, wxWindow)
   EVT_PAINT          (wxListMainWindow::OnPaint)
   EVT_MOUSE_EVENTS   (wxListMainWindow::OnMouse)
   EVT_CHAR           (wxListMainWindow::OnChar)
