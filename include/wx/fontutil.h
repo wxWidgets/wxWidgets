@@ -143,8 +143,11 @@ public:
 
     wxNativeFontInfo& operator=(const wxNativeFontInfo& info)
     {
-        Free();
-        Init(info);
+        if (this != &info)
+        {
+            Free();
+            Init(info);
+        }
         return *this;
     }
 #endif // wxUSE_PANGO
