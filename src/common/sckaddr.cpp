@@ -148,7 +148,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxUNIXaddress, wxSockAddress)
     typedef char wxGetservBuf[1024];
 #endif
 
-#ifdef wxHAS_MT_SAFE_GETBY_FUNCS || !wxUSE_THREADS
+#if defined(wxHAS_MT_SAFE_GETBY_FUNCS) || !wxUSE_THREADS
     #define wxLOCK_GETBY_MUTEX(name)
 #else // may need mutexes to protect getxxxbyxxx() calls
     #if defined(HAVE_GETHOSTBYNAME) || \
