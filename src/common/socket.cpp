@@ -68,6 +68,7 @@
     // old HP-UX do not), we have to fall back to the old way of simply
     // disabling SIGPIPE temporarily, so define a class to do it in a safe way
     #if defined(__UNIX__) && !defined(SO_NOSIGPIPE)
+    extern "C" { typedef void (*wxSigHandler_t)(int); }
     namespace
     {
         class IgnoreSignal
@@ -87,7 +88,7 @@
             }
 
         private:
-            const sighandler_t m_handler;
+            const wxSigHandler_t m_handler;
             const int m_sig;
 
             wxDECLARE_NO_COPY_CLASS(IgnoreSignal);
