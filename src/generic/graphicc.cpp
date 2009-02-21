@@ -17,11 +17,11 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
 
+#include "wx/graphics.h"
+
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
     #include "wx/icon.h"
-
-    #include "wx/dc.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
     #include "wx/dcprint.h"
@@ -29,36 +29,9 @@
 
 #include "wx/private/graphics.h"
 #include "wx/rawbmp.h"
+#include "wx/vector.h"
 
 using namespace std;
-
-//-----------------------------------------------------------------------------
-// constants
-//-----------------------------------------------------------------------------
-
-const double RAD2DEG = 180.0 / M_PI;
-
-//-----------------------------------------------------------------------------
-// Local functions
-//-----------------------------------------------------------------------------
-
-static inline double dmin(double a, double b)
-{
-    return a < b ? a : b;
-}
-static inline double dmax(double a, double b)
-{
-    return a > b ? a : b;
-}
-
-static inline double DegToRad(double deg)
-{
-    return (deg * M_PI) / 180.0;
-}
-static inline double RadToDeg(double deg)
-{
-    return (deg * 180.0) / M_PI;
-}
 
 //-----------------------------------------------------------------------------
 // device context implementation
@@ -255,6 +228,8 @@ private :
     double *m_userLengths;
 
     wxPen m_pen;
+
+    wxDECLARE_NO_COPY_CLASS(wxCairoPenData);
 };
 
 class WXDLLIMPEXP_CORE wxCairoBrushData : public wxGraphicsObjectRefData
@@ -380,10 +355,11 @@ public:
                                 wxDouble *descent, wxDouble *externalLeading ) const;
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const;
 
+protected:
+    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
+
 private:
     void Init(cairo_t *context);
-
-    virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y );
 
     cairo_t* m_context;
     
@@ -1576,7 +1552,7 @@ bool wxCairoContext::SetCompositionMode(wxCompositionMode op)
     cairo_operator_t cop;
     switch (op)
     {
-        case wxCOMPOSITION__CLEAR:
+        case wxCOMPOSITION_CLEAR:
             cop = CAIRO_OPERATOR_CLEAR;
             break;
         case wxCOMPOSITION_SOURCE:
@@ -1796,7 +1772,7 @@ wxGraphicsMatrix wxCairoRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble
 
 wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
 {
-    if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
+    if ( !pen.Ok() || pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
         return wxNullGraphicsPen;
     else
     {
@@ -1808,7 +1784,7 @@ wxGraphicsPen wxCairoRenderer::CreatePen(const wxPen& pen)
 
 wxGraphicsBrush wxCairoRenderer::CreateBrush(const wxBrush& brush )
 {
-    if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
+    if ( !brush.Ok() || brush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
         return wxNullGraphicsBrush;
     else
     {
