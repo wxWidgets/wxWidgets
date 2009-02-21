@@ -171,6 +171,10 @@ wxGTK:
 - Worked around bug in GTK+ < 2.14 where enabling some controls such
   as wxButton didn't re-enable sensitivity until the mouse was moved.
 
+wxOS2:
+
+- Added implementation for wxSingleInstanceChecker contributed by Lauri Nurmi
+
 2.8.9
 -----
 
