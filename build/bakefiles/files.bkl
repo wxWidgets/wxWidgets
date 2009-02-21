@@ -235,6 +235,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/timerunx.cpp
     src/os2/dir.cpp
     src/os2/mimetype.cpp
+    src/os2/snglinst.cpp
     src/os2/stdpaths.cpp
     src/os2/thread.cpp
     src/os2/utils.cpp
