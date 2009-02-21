@@ -35,6 +35,8 @@
 #include "wx/aboutdlg.h"
 #include "wx/artprov.h"
 #include "wx/colordlg.h"
+#include "wx/wfstream.h"
+
 #include "anitest.h"
 
 #if !wxUSE_ANIMATIONCTRL
@@ -108,8 +110,6 @@ bool MyApp::OnInit()
 // ---------------------------------------------------------------------------
 // MyFrame
 // ---------------------------------------------------------------------------
-
-#include "wx/wfstream.h"
 
 // Define my frame constructor
 MyFrame::MyFrame(wxWindow *parent,

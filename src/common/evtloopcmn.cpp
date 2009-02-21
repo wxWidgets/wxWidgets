@@ -23,7 +23,7 @@
 #endif //WX_PRECOMP
 
 // ----------------------------------------------------------------------------
-// globals
+// wxEventLoopBase
 // ----------------------------------------------------------------------------
 
 wxEventLoopBase *wxEventLoopBase::ms_activeLoop = NULL;

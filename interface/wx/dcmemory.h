@@ -50,7 +50,7 @@ public:
     /**
         Constructs a new memory device context.
 
-        Use the wxDC::Ok() member to test whether the constructor was
+        Use the wxDC::IsOk() member to test whether the constructor was
         successful in creating a usable device context. Don't forget to select
         a bitmap into the DC before drawing on it.
     */
@@ -59,7 +59,7 @@ public:
         Constructs a new memory device context and calls SelectObject() with
         the given bitmap.
 
-        Use the wxDC::Ok() member to test whether the constructor was
+        Use the wxDC::IsOk() member to test whether the constructor was
         successful in creating a usable device context.
     */
     wxMemoryDC(wxBitmap& bitmap);
@@ -74,7 +74,7 @@ public:
         @ref overview_refcount).
 
         Also, before using the updated bitmap data, make sure to select it out
-        of context first (for example by selecting wxNullBitmap into the device
+        of context first (for example by selecting ::wxNullBitmap into the device
         context).
 
         @see wxDC::DrawBitmap()
@@ -88,7 +88,7 @@ public:
         the bitmap to a window. For this purpose, you may find wxDC::DrawIcon()
         easier to use instead.
 
-        If the argument is wxNullBitmap (or some other uninitialised wxBitmap)
+        If the argument is ::wxNullBitmap (or some other uninitialised wxBitmap)
         the current bitmap is selected out of the device context, and the
         original bitmap restored, allowing the current bitmap to be destroyed
         safely.

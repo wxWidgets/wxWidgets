@@ -153,7 +153,7 @@ wxAppConsoleBase::~wxAppConsoleBase()
 }
 
 // ----------------------------------------------------------------------------
-// initilization/cleanup
+// initialization/cleanup
 // ----------------------------------------------------------------------------
 
 bool wxAppConsoleBase::Initialize(int& WXUNUSED(argc), wxChar **argv)
