@@ -48,15 +48,17 @@ public:
             y-coordinate of the last visible cell.
 
         Returned value is y coordinate of first cell than didn't fit onto page.
-        Use this value as from in next call to Render() in order to print multipages document.
+        Use this value as from in next call to Render() in order to print
+        multipages document.
 
-        @warning
-        The Following three methods @b must always be called before any call to
-        Render() (preferably in this order):
+        @note
+        The following three methods @b must always be called before any call to
+        Render(), in this order:
         - SetDC()
         - SetSize()
         - SetHtmlText()
-        <b>Render() changes the DC's user scale and does NOT restore it.</b>
+
+        @note Render() changes the DC's user scale and does NOT restore it.
     */
     int Render(int x, int y, wxArrayInt& known_pagebreaks, int from = 0,
                int dont_render = false, int to = INT_MAX);

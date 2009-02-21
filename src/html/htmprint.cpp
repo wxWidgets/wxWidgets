@@ -74,6 +74,9 @@ void wxHtmlDCRenderer::SetDC(wxDC *dc, double pixel_scale)
 
 void wxHtmlDCRenderer::SetSize(int width, int height)
 {
+    wxCHECK_RET( width, "width must be non-zero" );
+    wxCHECK_RET( height, "height must be non-zero" );
+
     m_Width = width;
     m_Height = height;
 }
@@ -81,9 +84,10 @@ void wxHtmlDCRenderer::SetSize(int width, int height)
 
 void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepath, bool isdir)
 {
-    if (m_DC == NULL) return;
+    wxCHECK_RET( m_DC, "SetDC() must be called before SetHtmlText()" );
+    wxCHECK_RET( m_Width, "SetSize() must be called before SetHtmlText()" );
 
-    if (m_Cells != NULL) delete m_Cells;
+    wxDELETE(m_Cells);
 
     m_FS->ChangePathTo(basepath, isdir);
     m_Cells = (wxHtmlContainerCell*) m_Parser->Parse(html);
@@ -96,8 +100,10 @@ void wxHtmlDCRenderer::SetFonts(const wxString& normal_face, const wxString& fix
                                 const int *sizes)
 {
     m_Parser->SetFonts(normal_face, fixed_face, sizes);
-    if (m_DC == NULL && m_Cells != NULL)
+
+    if ( m_Cells )
         m_Cells->Layout(m_Width);
+    // else: SetHtmlText() not yet called, no need for relayout
 }
 
 void wxHtmlDCRenderer::SetStandardFonts(int size,
@@ -105,17 +111,20 @@ void wxHtmlDCRenderer::SetStandardFonts(int size,
                                         const wxString& fixed_face)
 {
     m_Parser->SetStandardFonts(size, normal_face, fixed_face);
-    if (m_DC == NULL && m_Cells != NULL)
+
+    if ( m_Cells )
         m_Cells->Layout(m_Width);
+    // else: SetHtmlText() not yet called, no need for relayout
 }
 
 int wxHtmlDCRenderer::Render(int x, int y,
                              wxArrayInt& known_pagebreaks,
                              int from, int dont_render, int to)
 {
-    int pbreak, hght;
+    wxCHECK_MSG( m_Cells, 0, "SetHtmlText() must be called before Render()" );
+    wxCHECK_MSG( m_DC, 0, "SetDC() must be called before Render()" );
 
-    if (m_Cells == NULL || m_DC == NULL) return 0;
+    int pbreak, hght;
 
     pbreak = (int)(from + m_Height);
     while (m_Cells->AdjustPagebreak(&pbreak, known_pagebreaks)) {}
