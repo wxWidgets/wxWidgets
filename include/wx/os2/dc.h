@@ -108,13 +108,13 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual void Clear(void);
+    virtual void Clear();
 
     virtual bool    StartDoc(const wxString& rsMessage);
-    virtual void    EndDoc(void);
+    virtual void    EndDoc();
 
-    virtual void    StartPage(void);
-    virtual void    EndPage(void);
+    virtual void    StartPage();
+    virtual void    EndPage();
 
     virtual void    SetFont(const wxFont& rFont);
     virtual void    SetPen(const wxPen& rPen);
@@ -123,17 +123,17 @@ public:
     virtual void    SetBackgroundMode(int nMode);
     virtual void    SetPalette(const wxPalette& rPalette);
 
-    virtual void    DestroyClippingRegion(void);
+    virtual void    DestroyClippingRegion();
 
-    virtual wxCoord GetCharHeight(void) const;
-    virtual wxCoord GetCharWidth(void) const;
+    virtual wxCoord GetCharHeight() const;
+    virtual wxCoord GetCharWidth() const;
 
-    virtual bool    CanDrawBitmap(void) const;
-    virtual bool    CanGetTextExtent(void) const;
-    virtual int     GetDepth(void) const;
-    virtual wxSize  GetPPI(void) const;
+    virtual bool    CanDrawBitmap() const;
+    virtual bool    CanGetTextExtent() const;
+    virtual int     GetDepth() const;
+    virtual wxSize  GetPPI() const;
 
-    virtual void    SetMapMode(int nMode);
+    virtual void    SetMapMode(wxMappingMode nMode);
     virtual void    SetUserScale( double dX
                                  ,double dY
                                 );
@@ -157,10 +157,10 @@ public:
     virtual void    SetRop(WXHDC hCdc);
     virtual void    SelectOldObjects(WXHDC hDc);
 
-    wxWindow*       GetWindow(void) const { return m_pCanvas; }
+    wxWindow*       GetWindow() const { return m_pCanvas; }
     void            SetWindow(wxWindow* pWin) { m_pCanvas = pWin; }
 
-    WXHDC           GetHDC(void) const { return m_hDC; }
+    WXHDC           GetHDC() const { return m_hDC; }
     void            SetHDC( WXHDC hDc
                            ,bool  bOwnsDC = FALSE
                           )
@@ -169,13 +169,13 @@ public:
         m_bOwnsDC = bOwnsDC;
     }
 
-    HPS             GetHPS(void) const { return m_hPS; }
+    HPS             GetHPS() const { return m_hPS; }
     void            SetHPS(HPS hPS)
     {
         m_hPS = hPS;
     }
-    const wxBitmap& GetSelectedBitmap(void) const { return m_vSelectedBitmap; }
-    wxBitmap&       GetSelectedBitmap(void) { return m_vSelectedBitmap; }
+    const wxBitmap& GetSelectedBitmap() const { return m_vSelectedBitmap; }
+    wxBitmap&       GetSelectedBitmap() { return m_vSelectedBitmap; }
 
     void            UpdateClipBox();
 
@@ -190,7 +190,7 @@ public:
 
     static void AddToBitmapCache(wxDCCacheEntry* pEntry);
     static void AddToDCCache(wxDCCacheEntry* pEntry);
-    static void ClearCache(void);
+    static void ClearCache();
 #endif
 
 protected:
@@ -349,7 +349,7 @@ public:
 
 #if wxUSE_PALETTE
     void DoSelectPalette(bool bRealize = FALSE);
-    void InitializePalette(void);
+    void InitializePalette();
 #endif // wxUSE_PALETTE
 
 protected:
