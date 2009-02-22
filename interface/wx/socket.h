@@ -427,6 +427,26 @@ public:
         Returns the length of the socket address.
     */
     int SockAddrLen();
+
+    /**
+        Returns the pointer to the low-level representation of the address.
+
+        This can be used to pass socket address information to a 3rd party
+        library.
+
+        @return
+            Pointer to a sockaddr-derived struct.
+    */
+    const sockaddr *GetAddressData() const;
+
+    /**
+        Returns the length of the buffer retrieved by GetAddressData().
+
+        @return
+            The size of the sockaddr-derived struct corresponding to this
+            address.
+    */
+    int GetAddressDataLen() const;
 };
 
 

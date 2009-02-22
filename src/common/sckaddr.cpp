@@ -722,6 +722,16 @@ wxString wxSockAddressImpl::GetPath() const
 // wxSockAddress
 // ----------------------------------------------------------------------------
 
+const sockaddr *wxSockAddress::GetAddressData() const
+{
+    return GetAddress().GetAddr();
+}
+
+int wxSockAddress::GetAddressDataLen() const
+{
+    return GetAddress().GetLen();
+}
+
 void wxSockAddress::Init()
 {
     if ( !wxSocketBase::IsInitialized() )

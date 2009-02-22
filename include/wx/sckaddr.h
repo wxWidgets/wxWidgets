@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        sckaddr.h
+// Name:        wx/sckaddr.h
 // Purpose:     Network address classes
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -19,6 +19,11 @@
 #include "wx/string.h"
 
 class wxSockAddressImpl;
+
+// forward declare it instead of including the system headers defining it which
+// can bring in <windows.h> under Windows which we don't want to include from
+// public wx headers
+struct sockaddr;
 
 // Any socket address kind
 class WXDLLIMPEXP_NET wxSockAddress : public wxObject
@@ -40,6 +45,10 @@ public:
 
     virtual void Clear();
     virtual Family Type() = 0;
+
+    // accessors for the low level address represented by this object
+    const sockaddr *GetAddressData() const;
+    int GetAddressDataLen() const;
 
     // we need to be able to create copies of the addresses polymorphically
     // (i.e. without knowing the exact address class)
