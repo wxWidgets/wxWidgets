@@ -607,7 +607,7 @@ No additional properties.
 
 @beginTable
 @hdr3col{property, type, description}
-@row3col{content, ,
+@row3col{content, items,
      Content of the control; this property has any number of @c \<item\> XML
      elements as its children, with the items text as their text values
      (default: empty).}
@@ -637,7 +637,7 @@ Example:
 @hdr3col{property, type, description}
 @row3col{selection, integer,
      Index of the initially selected item or -1 for no selection (default: -1).}
-@row3col{content, ,
+@row3col{content, items,
      Content of the control; this property has any number of @c \<item\> XML
      elements as its children, with the items text as their text values
      (default: empty).}
@@ -710,7 +710,7 @@ object.
 @hdr3col{property, type, description}
 @row3col{selection, integer,
      Index of the initially selected item or -1 for no selection (default: not used).}
-@row3col{content, ,
+@row3col{content, items,
      Content of the control; this property has any number of @c \<item\> XML
      elements as its children, with the items text as their text values
      (default: empty).}
@@ -874,7 +874,7 @@ page.
 @hdr3col{property, type, description}
 @row3col{selection, integer,
      Index of the initially selected item or -1 for no selection (default: -1).}
-@row3col{content, ,
+@row3col{content, items,
      Content of the control; this property has any number of @c \<item\> XML
      elements as its children, with the items text as their text values
      (default: empty).}
@@ -1143,7 +1143,7 @@ Each @c propertysheetpage has exactly one non-toplevel window as its child.
      for a two-dimensional radiobox (default: 1).}
 @row3col{selection, integer,
      Index of the initially selected item or -1 for no selection (default: -1).}
-@row3col{content, ,
+@row3col{content, items,
      Content of the control; this property has any number of @c \<item\> XML
      elements as its children, with the items text as their text values
      (see below; default: empty).}
