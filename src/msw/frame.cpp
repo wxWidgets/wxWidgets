@@ -441,7 +441,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
         // adjust for menu / titlebar height
         rc.bottom -= (2*menuHeight-1);
 
-        ::MoveWindow(Gethwnd(), rc.left, rc.top, rc.right, rc.bottom, FALSE);
+        ::MoveWindow(GetHwnd(), rc.left, rc.top, rc.right, rc.bottom, FALSE);
     }
 #endif
 
