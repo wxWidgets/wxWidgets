@@ -221,7 +221,7 @@ wxRegion::wxRegion(const wxRect& rRect)
                                      );
 } // end of wxRegion::wxRegion
 
-wxRegion::wxRegion(size_t n, const wxPoint *points, int WXUNUSED(fillStyle))
+wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode WXUNUSED(fillStyle))
 {
     // TO DO
 }

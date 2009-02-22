@@ -402,9 +402,10 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     // If they are pending events, we must process them.
     //
     if (wxTheApp)
+    {
         wxTheApp->ProcessPendingEvents();
-
-    HandleSockets();
+	wxTheApp->HandleSockets();
+    }
 
     //
     // Let the logs be flashed again
