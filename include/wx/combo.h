@@ -644,6 +644,8 @@ enum
     wxCP_IFLAG_CREATED      = 0x0001 // Set by wxComboCtrlBase after Create is called
 };
 
+class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
+
 
 class WXDLLIMPEXP_CORE wxComboPopup
 {
@@ -720,6 +722,9 @@ public:
     {
         return (m_iFlags & wxCP_IFLAG_CREATED) ? true : false;
     }
+
+    // Returns pointer to the associated parent wxComboCtrl.
+    wxComboCtrl* GetComboCtrl() const;
 
     // Default PaintComboControl behaviour
     static void DefaultPaintComboControl( wxComboCtrlBase* combo,

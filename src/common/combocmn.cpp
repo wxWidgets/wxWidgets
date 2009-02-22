@@ -499,6 +499,11 @@ void wxComboPopup::OnDismiss()
 {
 }
 
+wxComboCtrl* wxComboPopup::GetComboCtrl() const
+{
+    return wxStaticCast(m_combo, wxComboCtrl);
+}
+
 wxSize wxComboPopup::GetAdjustedSize( int minWidth,
                                       int prefHeight,
                                       int WXUNUSED(maxHeight) )

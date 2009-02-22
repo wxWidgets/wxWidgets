@@ -57,6 +57,11 @@ public:
     virtual wxSize GetAdjustedSize(int minWidth, int prefHeight, int maxHeight);
 
     /**
+        Returns pointer to the associated parent wxComboCtrl.
+    */
+    wxComboCtrl* GetComboCtrl() const;
+
+    /**
         The derived class must implement this to return pointer to the
         associated control created in Create().
     */
