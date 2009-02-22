@@ -1698,7 +1698,6 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         return true;
         
 #if wxOSX_USE_COCOA_OR_CARBON
-#if 1 // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
     if ( UMAGetSystemVersion() < 0x1060 )
     {
         CGCompositeOperation cop = kCGCompositeOperationSourceOver;
@@ -1749,9 +1748,9 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         else
             CGContextSetBlendMode(m_cgContext, mode);
     }
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
     else
-#endif
-#endif
     {
         CGBlendMode mode = kCGBlendModeNormal;
         switch( op )
@@ -1798,6 +1797,7 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         }
         CGContextSetBlendMode(m_cgContext, mode);
     }
+#endif
     return true;
 }
 
