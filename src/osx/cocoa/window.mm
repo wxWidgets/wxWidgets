@@ -51,7 +51,6 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 // the tracking tag is needed to track mouse enter / exit events 
 - (void) setTrackingTag: (NSTrackingRectTag)tag;
 - (NSTrackingRectTag) trackingTag;
-
 @end // wxNSView
 
 @interface NSView(PossibleMethods) 
@@ -131,7 +130,7 @@ long wxOSXTranslateCocoaKey( int unichar )
     return retval;
 }
 
-void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent )
+void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charString = NULL )
 {
     UInt32 modifiers = [nsEvent modifierFlags] ;
     int eventType = [nsEvent type];
@@ -164,6 +163,9 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent )
     if ( eventType != NSFlagsChanged )
     {
         NSString* nschars = [nsEvent characters];
+        if ( charString )
+            nschars = charString;
+        
         if ( nschars )
         {
             wxCFStringRef cfchars((CFStringRef)[nschars retain]);
@@ -444,6 +446,15 @@ void wxOSX_keyEvent(NSView* self, SEL _cmd, NSEvent *event)
     impl->keyEvent(event, self, _cmd);
 }
 
+void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text) 
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return;
+        
+    impl->insertText(text, self, _cmd);
+}
+
 BOOL wxOSX_performKeyEquivalent(NSView* self, SEL _cmd, NSEvent *event) 
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -673,22 +684,28 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    if ( !DoHandleKeyEvent(event) )
+    if ( [[slf window] firstResponder] != slf || !DoHandleKeyEvent(event) )
     {
         wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, event);
     }
 }
 
+void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
+{
+    if (m_lastKeyDownEvent && !DoHandleCharEvent(m_lastKeyDownEvent, text) )
+    {
+            wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:@selector(insertText:)];
+            superimpl(slf, @selector(insertText:), text);
+    }
+    m_lastKeyDownEvent = NULL;
+}
+
+
 bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    if ( !DoHandleKeyEvent(event) )
-    {
-        wxOSX_PerformKeyEventHandlerPtr superimpl = (wxOSX_PerformKeyEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-        return superimpl(slf, (SEL)_cmd, event);
-    }
-
-    return YES;
+    wxOSX_PerformKeyEventHandlerPtr superimpl = (wxOSX_PerformKeyEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+    return superimpl(slf, (SEL)_cmd, event);
 }
 
 bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
@@ -849,6 +866,8 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     wxOSX_CLASS_ADD_METHOD(c, @selector(keyDown:), (IMP) wxOSX_keyEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(keyUp:), (IMP) wxOSX_keyEvent, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(flagsChanged:), (IMP) wxOSX_keyEvent, "v@:@" )
+    
+    wxOSX_CLASS_ADD_METHOD(c, @selector(insertText:), (IMP) wxOSX_insertText, "v@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(performKeyEquivalent:), (IMP) wxOSX_performKeyEquivalent, "v@:@" )
 
@@ -907,6 +926,7 @@ void wxWidgetCocoaImpl::Init()
 {
     m_osxView = NULL;
     m_isFlipped = true;
+    m_lastKeyDownEvent = NULL;
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
@@ -1249,12 +1269,36 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
     }
 }
 
-bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
+static bool g_inKeyEvent = false;
+
+bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
-    SetupKeyEvent( wxevent, event );
+    SetupKeyEvent( wxevent, event, text );
+    
+    wxevent.SetEventType(wxEVT_CHAR);
 
     return GetWXPeer()->OSXHandleKeyEvent(wxevent);
+}
+
+bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
+{
+    wxASSERT_MSG(!g_inKeyEvent, "Re-entering key handler...\n");
+    g_inKeyEvent = true;
+    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+    SetupKeyEvent( wxevent, event );
+    
+    bool result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
+
+    // this will fire higher level events, like insertText, to help
+    // us handle EVT_CHAR, etc.
+    if ([event type] == NSKeyDown)
+    {
+        m_lastKeyDownEvent = event;
+        [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+    }
+    g_inKeyEvent = false;
+    return result;
 }
 
 bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)

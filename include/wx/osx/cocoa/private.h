@@ -124,7 +124,8 @@ public :
     void                InstallEventHandler( WXWidget control = NULL );
     
     virtual bool        DoHandleMouseEvent(NSEvent *event); 
-    virtual bool        DoHandleKeyEvent(NSEvent *event); 
+    virtual bool        DoHandleKeyEvent(NSEvent *event);
+    virtual bool        DoHandleCharEvent(NSEvent *event, NSString *text);
     virtual void        DoNotifyFocusEvent(bool receivedFocus); 
 
     void                SetFlipped(bool flipped);
@@ -138,6 +139,7 @@ public :
     virtual bool                performDragOperation(void* sender, WXWidget slf, void* _cmd);
     virtual void                mouseEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual void                keyEvent(WX_NSEvent event, WXWidget slf, void* _cmd);
+    virtual void                insertText(NSString* text, WXWidget slf, void* _cmd);
     virtual bool                performKeyEquivalent(WX_NSEvent event, WXWidget slf, void* _cmd);
     virtual bool                becomeFirstResponder(WXWidget slf, void* _cmd);
     virtual bool                resignFirstResponder(WXWidget slf, void* _cmd);
@@ -150,6 +152,7 @@ public :
 
 protected:
     WXWidget m_osxView;
+    NSEvent* m_lastKeyDownEvent;
     bool m_isFlipped;
     
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)
@@ -242,8 +245,11 @@ protected :
 
     @interface wxNSTextField : NSTextField
     {
+        wxWidgetCocoaImpl* impl;
     }
 
+    - (void) setImplementation:(wxWidgetCocoaImpl*) item;
+    - (wxWidgetCocoaImpl*) implementation;
     @end
 
     @interface wxNSMenu : NSMenu
