@@ -131,11 +131,12 @@ public:
     */
     virtual void SetStringValue(const wxString& value);
 
+protected:
     /**
-        Parent wxComboCtrl. This is parameter has been prepared before Init()
-        is called.
+        Parent wxComboCtrl. This member variable is prepared automatically
+        before Init() is called.
     */
-    wxComboCtrl m_combo;
+    wxComboCtrl*    m_combo;
 };
 
 
