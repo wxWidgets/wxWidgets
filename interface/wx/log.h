@@ -793,7 +793,7 @@ public:
         Forwards the message at specified level to the @e DoLog() function of the
         active log target if there is any, does nothing otherwise.
     */
-    static void OnLog(wxLogLevel level, const wxString& szString, time_t t);
+    static void OnLog(wxLogLevel level, const wxString& msg, time_t t);
 
     /**
         Remove the @a mask from the list of allowed masks for
@@ -873,6 +873,34 @@ public:
         @see Resume(), wxLogNull
     */
     static void Suspend();
+
+    /**
+        Log the given message.
+
+        This function should only be called from the DoLog() implementations in
+        the derived classes (which can't call wxLog::DoLog() directly as it is
+        protected), it should not be used for logging new messages which can be
+        only sent to the currently active logger using OnLog() which also
+        checks if the logging (for this level) is enabled while this method
+        just directly calls DoLog().
+
+        Example of use of this class from wxLogChain:
+        @code
+        void wxLogChain::DoLog(wxLogLevel level, const wxString& msg, time_t t)
+        {
+            // let the previous logger show it
+            if ( m_logOld && IsPassingMessages() )
+                m_logOld->Log(level, msg, t);
+
+            // and also send it to the new one
+            if ( m_logNew && m_logNew != this )
+                m_logNew->Log(level, msg, t);
+        }
+        @endcode
+
+        @since 2.9.0
+     */
+    void Log(wxLogLevel level, const wxString& msg, time_t timestamp);
 
 protected:
 

@@ -915,16 +915,11 @@ void wxLogChain::DoLog(wxLogLevel level, const wxString& szString, time_t t)
 {
     // let the previous logger show it
     if ( m_logOld && IsPassingMessages() )
-    {
-        // bogus cast just to access protected DoLog
-        ((wxLogChain *)m_logOld)->DoLog(level, szString, t);
-    }
+        m_logOld->Log(level, szString, t);
 
+    // and also send it to the new one
     if ( m_logNew && m_logNew != this )
-    {
-        // as above...
-        ((wxLogChain *)m_logNew)->DoLog(level, szString, t);
-    }
+        m_logNew->Log(level, szString, t);
 }
 
 #ifdef __VISUALC__

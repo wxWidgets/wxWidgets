@@ -355,7 +355,8 @@ All:
 - Added wxProtocol::SetDefaultTimeout(); the default timeout for both wxHTTP and wxFTP
   protocols is 60 seconds.
 - Added wxStrnlen() for safe computation of string length.
-- Added wxImage::Clear() (troelsk)
+- Added wxImage::Clear() (troelsk).
+- Added wxLog::Log().
 
 All (Unix):
 

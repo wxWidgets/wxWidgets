@@ -243,6 +243,14 @@ public:
     // change it otherwise)
     static void TimeStamp(wxString *str);
 
+    // this method should only be called from derived classes DoLog()
+    // implementations and shouldn't be called directly, use logging functions
+    // instead
+    void Log(wxLogLevel level, const wxString& msg, time_t t)
+    {
+        DoLog(level, msg, t);
+    }
+
     // make dtor virtual for all derived classes
     virtual ~wxLog();
 
@@ -256,7 +264,7 @@ public:
 #endif
 
 protected:
-    // the logging functions that can be overriden
+    // the logging functions that can be overridden
 
     // default DoLog() prepends the time stamp and a prefix corresponding
     // to the message to szString and then passes it to DoLogString()
