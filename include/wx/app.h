@@ -83,9 +83,6 @@ public:
     // class OnInit() to do it.
     virtual bool OnInit();
 
-    // this is here only temporary hopefully (FIXME)
-    virtual bool OnInitGui() { return true; }
-
     // This is the replacement for the normal main(): all program work should
     // be done here. When OnRun() returns, the programs starts shutting down.
     virtual int OnRun();

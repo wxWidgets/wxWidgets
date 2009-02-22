@@ -533,7 +533,7 @@ public:
 
     /**
         Get display mode that is used use. This is only used in framebuffer
-        wxWin ports (such as wxMGL or wxDFB).
+        wxWidgets ports (such as wxMGL or wxDFB).
     */
     virtual wxVideoMode GetDisplayMode() const;
 
@@ -637,9 +637,8 @@ public:
     virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
 
     /**
-        Set display mode to use. This is only used in framebuffer wxWin
-        ports (such as wxMGL or wxDFB). This method should be called from
-        wxApp::OnInitGui.
+        Set display mode to use. This is only used in framebuffer wxWidgets
+        ports (such as wxMGL or wxDFB).
     */
     virtual bool SetDisplayMode(const wxVideoMode& info);
 

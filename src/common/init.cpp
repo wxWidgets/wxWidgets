@@ -298,9 +298,7 @@ bool wxEntryStart(int& argc, wxChar **argv)
 
     // initialize wxRTTI
     if ( !DoCommonPreInit() )
-    {
         return false;
-    }
 
 
     // first of all, we need an application object
@@ -333,21 +331,14 @@ bool wxEntryStart(int& argc, wxChar **argv)
     // --------------------------------------------
 
     if ( !app->Initialize(argc, argv) )
-    {
         return false;
-    }
 
     // remember, possibly modified (e.g. due to removal of toolkit-specific
     // parameters), command line arguments in member variables
     app->argc = argc;
     app->argv = argv;
 
-
     wxCallAppCleanup callAppCleanup(app.get());
-
-    // for compatibility call the old initialization function too
-    if ( !app->OnInitGui() )
-        return false;
 
 
     // common initialization after wxTheApp creation
@@ -484,7 +475,6 @@ int wxEntryReal(int& argc, wxChar **argv)
 
     wxTRY
     {
-
         // app initialization
         if ( !wxTheApp->CallOnInit() )
         {
