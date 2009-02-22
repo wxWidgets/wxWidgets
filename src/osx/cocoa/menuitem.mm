@@ -16,6 +16,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/log.h"
     #include "wx/menu.h"
 #endif // WX_PRECOMP
 
@@ -193,7 +194,11 @@ public :
     
     void Hide( bool hide )
     {
-        [m_osxMenuItem setHidden:hide ];
+        // NB: setHidden is new as of 10.5 so we should not call it below there
+        if ([m_osxMenuItem respondsToSelector:@selector(setHidden:)])
+            [m_osxMenuItem setHidden:hide ];
+        else
+            wxLogDebug("wxMenuItemCocoaImpl::Hide not yet supported under OS X < 10.5");
     }
     
     void SetLabel( const wxString& text, wxAcceleratorEntry *entry ) 
