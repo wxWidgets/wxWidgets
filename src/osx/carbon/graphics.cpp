@@ -1737,9 +1737,11 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         case wxCOMPOSITION_XOR:
             cop = kCGCompositeOperationXOR; 
             break;
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
         case wxCOMPOSITION_ADD:
             mode = kCGBlendModePlusLighter ;
             break;
+#endif
         default:
             return false;
         }
