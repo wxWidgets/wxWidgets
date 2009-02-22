@@ -2289,7 +2289,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 if ( hDIB > 0 )
                 {
                     // reflect ysrc
-                    ysrc = hDIB - (ysrc + dstHeight);
+                    ysrc = hDIB - (ysrc + srcHeight);
                 }
 
                 if ( ::StretchDIBits(GetHdc(),
