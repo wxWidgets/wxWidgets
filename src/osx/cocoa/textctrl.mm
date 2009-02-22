@@ -50,7 +50,12 @@
 #include "wx/osx/cocoa/private/textimpl.h"
 
 @interface wxNSSecureTextField : NSSecureTextField
+{
+    wxWidgetCocoaImpl* impl;
+}
 
+- (void) setImplementation:(wxWidgetCocoaImpl*) item;
+- (wxWidgetCocoaImpl*) implementation;
 @end
 
 @implementation wxNSSecureTextField 
@@ -65,39 +70,16 @@
     }
 }
 
-@end
-
-@interface wxNSTextView : NSScrollView
-
-@end
-
-@implementation wxNSTextView
-
-+ (void)initialize
+- (wxWidgetCocoaImpl*) implementation
 {
-    static BOOL initialized = NO;
-    if (!initialized) 
-    {    
-        initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
-    }
+    return impl;
 }
 
-@end
-
-@implementation wxNSTextField
-
-+ (void)initialize
+- (void) setImplementation:(wxWidgetCocoaImpl*) item
 {
-    static BOOL initialized = NO;
-    if (!initialized) 
-    {
-        initialized = YES;
-        wxOSXCocoaClassAddWXMethods( self );
-    }
+    impl = item;
 }
 
-/*
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
     if ( impl )
@@ -112,6 +94,93 @@
     }
 }
 
+@end
+
+@interface wxNSTextView : NSScrollView
+{
+    wxWidgetCocoaImpl* impl;
+}
+
+- (void) setImplementation:(wxWidgetCocoaImpl*) item;
+- (wxWidgetCocoaImpl*) implementation;
+@end
+
+@implementation wxNSTextView
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {    
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+- (wxWidgetCocoaImpl*) implementation
+{
+    return impl;
+}
+
+- (void) setImplementation:(wxWidgetCocoaImpl*) item
+{
+    impl = item;
+}
+
+
+- (void)controlTextDidChange:(NSNotification *)aNotification
+{
+    if ( impl )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer ) {
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
+            event.SetEventObject( wxpeer );
+            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+            wxpeer->HandleWindowEvent( event );
+        }
+    }
+}
+@end
+
+@implementation wxNSTextField
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+- (wxWidgetCocoaImpl*) implementation
+{
+    return impl;
+}
+
+- (void) setImplementation:(wxWidgetCocoaImpl*) item
+{
+    impl = item;
+}
+
+
+- (void)controlTextDidChange:(NSNotification *)aNotification
+{
+    if ( impl )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if ( wxpeer ) {
+            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
+            event.SetEventObject( wxpeer );
+            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+            wxpeer->HandleWindowEvent( event );
+        }
+    }
+}
+
+/*
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification
 {
     if ( impl )
@@ -133,6 +202,7 @@
 wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
 {
     m_scrollView = (NSScrollView*) w;
+    [w setImplementation: this];
     
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:NO];
@@ -361,6 +431,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         [v setBordered:NO];
         
         c = new wxNSTextFieldControl( wxpeer, v );
+        [v setImplementation: c];
         static_cast<wxNSTextFieldControl*>(c)->SetStringValue(str);
     }
     
