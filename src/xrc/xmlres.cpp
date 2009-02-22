@@ -70,6 +70,22 @@ class wxXmlResourceDataRecords : public wxVector<wxXmlResourceDataRecord*>
     // this is a class so that it can be forward-declared
 };
 
+namespace
+{
+
+// helper used by DoFindResource() and elsewhere: returns true if this is an
+// object or object_ref node
+//
+// node must be non-NULL
+inline bool IsObjectNode(wxXmlNode *node)
+{
+    return node->GetType() == wxXML_ELEMENT_NODE &&
+             (node->GetName() == wxS("object") ||
+                node->GetName() == wxS("object_ref"));
+}
+
+} // anonymous namespace
+
 
 wxXmlResource *wxXmlResource::ms_instance = NULL;
 
@@ -551,86 +567,114 @@ bool wxXmlResource::UpdateResources()
     return rt;
 }
 
-
 wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
                                          const wxString& name,
                                          const wxString& classname,
-                                         bool recursive)
+                                         bool recursive) const
 {
-    wxString dummy;
     wxXmlNode *node;
 
     // first search for match at the top-level nodes (as this is
     // where the resource is most commonly looked for):
     for (node = parent->GetChildren(); node; node = node->GetNext())
     {
-        if ( node->GetType() == wxXML_ELEMENT_NODE &&
-                 (node->GetName() == wxT("object") ||
-                  node->GetName() == wxT("object_ref")) &&
-             node->GetAttribute(wxT("name"), &dummy) && dummy == name )
+        if ( IsObjectNode(node) && node->GetAttribute(wxS("name")) == name )
         {
-            wxString cls(node->GetAttribute(wxT("class"), wxEmptyString));
-            if (!classname || cls == classname)
+            // empty class name matches everything
+            if ( classname.empty() )
                 return node;
+
+            wxString cls(node->GetAttribute(wxS("class")));
+
             // object_ref may not have 'class' attribute:
-            if (cls.empty() && node->GetName() == wxT("object_ref"))
+            if (cls.empty() && node->GetName() == wxS("object_ref"))
             {
-                wxString refName = node->GetAttribute(wxT("ref"), wxEmptyString);
+                wxString refName = node->GetAttribute(wxS("ref"));
                 if (refName.empty())
                     continue;
-                wxXmlNode* refNode = FindResource(refName, wxEmptyString, true);
-                if (refNode &&
-                    refNode->GetAttribute(wxT("class"), wxEmptyString) == classname)
-                {
-                    return node;
-                }
+
+                const wxXmlNode * const refNode = GetResourceNode(refName);
+                if ( refNode )
+                    cls = refNode->GetAttribute(wxS("class"));
             }
+
+            if ( cls == classname )
+                return node;
         }
     }
 
+    // then recurse in child nodes
     if ( recursive )
+    {
         for (node = parent->GetChildren(); node; node = node->GetNext())
         {
-            if ( node->GetType() == wxXML_ELEMENT_NODE &&
-                 (node->GetName() == wxT("object") ||
-                  node->GetName() == wxT("object_ref")) )
+            if ( IsObjectNode(node) )
             {
                 wxXmlNode* found = DoFindResource(node, name, classname, true);
                 if ( found )
                     return found;
             }
         }
+    }
 
-   return NULL;
+    return NULL;
 }
 
 wxXmlNode *wxXmlResource::FindResource(const wxString& name,
                                        const wxString& classname,
                                        bool recursive)
 {
-    UpdateResources(); //ensure everything is up-to-date
+    wxString path;
+    wxXmlNode * const
+        node = GetResourceNodeAndLocation(name, classname, recursive, &path);
 
-    wxString dummy;
+    if ( !node )
+    {
+        wxLogError(_("XRC resource '%s' (class '%s') not found!"),
+                   name, classname);
+    }
+#if wxUSE_FILESYSTEM
+    else // node was found
+    {
+        // ensure that relative paths work correctly when loading this node
+        // (which should happen as soon as we return as FindResource() result
+        // is always passed to CreateResFromNode())
+        m_curFileSystem.ChangePathTo(path);
+    }
+#endif // wxUSE_FILESYSTEM
+
+    return node;
+}
+
+wxXmlNode *
+wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
+                                          const wxString& classname,
+                                          bool recursive,
+                                          wxString *path) const
+{
+    // ensure everything is up-to-date: this is needed to support on-remand
+    // reloading of XRC files
+    const_cast<wxXmlResource *>(this)->UpdateResources();
+
     for ( wxXmlResourceDataRecords::const_iterator f = Data().begin();
           f != Data().end(); ++f )
     {
-        wxXmlResourceDataRecord* const rec = *f;
-        if ( rec->Doc == NULL || rec->Doc->GetRoot() == NULL )
+        wxXmlResourceDataRecord *const rec = *f;
+        wxXmlDocument * const doc = rec->Doc;
+        if ( !doc || !doc->GetRoot() )
             continue;
 
-        wxXmlNode* found = DoFindResource(rec->Doc->GetRoot(),
-                                          name, classname, recursive);
+        wxXmlNode * const
+            found = DoFindResource(doc->GetRoot(), name, classname, recursive);
         if ( found )
         {
-#if wxUSE_FILESYSTEM
-            m_curFileSystem.ChangePathTo(rec->File);
-#endif
+            if ( path )
+                *path = rec->File;
+
             return found;
         }
     }
 
-    wxLogError(_("XRC resource '%s' (class '%s') not found!"),
-               name.c_str(), classname.c_str());
     return NULL;
 }
 
@@ -1518,17 +1562,13 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
 
 void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
 {
-    wxXmlNode *n = m_node->GetChildren();
-
-    while (n)
+    for ( wxXmlNode *n = m_node->GetChildren(); n; n = n->GetNext() )
     {
-        if (n->GetType() == wxXML_ELEMENT_NODE &&
-           (n->GetName() == wxT("object") || n->GetName() == wxT("object_ref")))
+        if ( IsObjectNode(n) )
         {
             m_resource->CreateResFromNode(n, parent, NULL,
                                           this_hnd_only ? this : NULL);
         }
-        n = n->GetNext();
     }
 }
 

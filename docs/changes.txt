@@ -357,6 +357,7 @@ All:
 - Added wxStrnlen() for safe computation of string length.
 - Added wxImage::Clear() (troelsk).
 - Added wxLog::Log().
+- Added wxXmlResource::GetResourceNode().
 
 All (Unix):
 

@@ -143,6 +143,26 @@ public:
     int GetFlags() const;
 
     /**
+        Returns the wxXmlNode containing the definition of the object with the
+        given name or @NULL.
+
+        This function recursively searches all the loaded XRC files for an
+        object with the specified @a name. If the object is found, the
+        wxXmlNode corresponding to it is returned, so this function can be used
+        to access additional information defined in the XRC file and not used
+        by wxXmlResource itself, e.g. contents of application-specific XML
+        tags.
+
+        @param name
+            The name of the resource which must be unique for this function to
+            work correctly, if there is more than one resource with the given
+            name the choice of the one returned by this function is undefined.
+        @return
+            The node corresponding to the resource with the given name or @NULL.
+    */
+    const wxXmlNode *GetResourceNode(const wxString& name) const;
+
+    /**
         Returns version information (a.b.c.d = d + 256*c + 2562*b + 2563*a).
     */
     long GetVersion() const;

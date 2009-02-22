@@ -227,7 +227,7 @@ public:
         { return GetVersion() -
                  (major*256*256*256 + minor*256*256 + release*256 + revision); }
 
-//// Singleton accessors.
+    //// Singleton accessors.
 
     // Gets the global resources object or creates one if none exists.
     static wxXmlResource *Get();
@@ -245,16 +245,48 @@ public:
     const wxString& GetDomain() const { return m_domain; }
     void SetDomain(const wxString& domain);
 
+
+    // This function returns the wxXmlNode containing the definition of the
+    // object with the given name or NULL.
+    //
+    // It can be used to access additional information defined in the XRC file
+    // and not used by wxXmlResource itself.
+    const wxXmlNode *GetResourceNode(const wxString& name) const
+        { return GetResourceNodeAndLocation(name, wxString(), true); }
+
 protected:
     // Scans the resources list for unloaded files and loads them. Also reloads
     // files that have been modified since last loading.
     bool UpdateResources();
 
-    // Finds a resource (calls UpdateResources) and returns a node containing it.
-    wxXmlNode *FindResource(const wxString& name, const wxString& classname, bool recursive = false);
 
-    // Helper function: finds a resource (calls UpdateResources) and returns a node containing it.
-    wxXmlNode *DoFindResource(wxXmlNode *parent, const wxString& name, const wxString& classname, bool recursive);
+    // Common implementation of GetResourceNode() and FindResource(): searches
+    // all top-level or all (if recursive == true) nodes if all loaded XRC
+    // files and returns the node, if found, as well as the path of the file it
+    // was found in if path is non-NULL
+    wxXmlNode *GetResourceNodeAndLocation(const wxString& name,
+                                          const wxString& classname,
+                                          bool recursive = false,
+                                          wxString *path = NULL) const;
+
+
+    // Note that these functions are used outside of wxWidgets itself, e.g.
+    // there are several known cases of inheriting from wxXmlResource just to
+    // be able to call FindResource() so we keep them for compatibility even if
+    // their names are not really consistent with GetResourceNode() public
+    // function and FindResource() is also non-const because it changes the
+    // current path of m_curFileSystem to ensure that relative paths work
+    // correctly when CreateResFromNode() is called immediately afterwards
+    // (something const public function intentionally does not do)
+
+    // Returns the node containing the resource with the given name and class
+    // name unless it's empty (then any class matches) or NULL if not found.
+    wxXmlNode *FindResource(const wxString& name, const wxString& classname,
+                            bool recursive = false);
+
+    // Helper function used by FindResource() to look under the given node.
+    wxXmlNode *DoFindResource(wxXmlNode *parent, const wxString& name,
+                              const wxString& classname, bool recursive) const;
 
     // Creates a resource from information in the given node
     // (Uses only 'handlerToUse' if != NULL)
