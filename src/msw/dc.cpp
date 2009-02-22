@@ -785,11 +785,16 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
                      wxCoord x2, wxCoord y2,
                      wxCoord xc, wxCoord yc)
 {
+    double dx = xc - x1;
+    double dy = yc - y1;
+    wxCoord r = (wxCoord)sqrt(dx*dx + dy*dy);
+
+
 #ifdef __WXWINCE__
     // Slower emulation since WinCE doesn't support Pie and Arc
-    double r = sqrt( (x1-xc)*(x1-xc) + (y1-yc)*(y1-yc) );
     double sa = acos((x1-xc)/r)/M_PI*180; // between 0 and 180
-    if( y1>yc ) sa = -sa; // below center
+    if( y1>yc )
+        sa = -sa; // below center
     double ea = atan2(yc-y2, x2-xc)/M_PI*180;
     DoDrawEllipticArcRot( xc-r, yc-r, 2*r, 2*r, sa, ea );
 #else
@@ -797,11 +802,6 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     WXMICROWIN_CHECK_HDC
 
     wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
-
-    double dx = xc - x1;
-    double dy = yc - y1;
-    double radius = (double)sqrt(dx*dx+dy*dy);
-    wxCoord r = (wxCoord)radius;
 
     // treat the special case of full circle separately
     if ( x1 == x2 && y1 == y2 )
@@ -816,7 +816,9 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     wxCoord yy2 = YLOG2DEV(y2);
     wxCoord xxc = XLOG2DEV(xc);
     wxCoord yyc = YLOG2DEV(yc);
-    wxCoord ray = (wxCoord) sqrt(double((xxc-xx1)*(xxc-xx1)+(yyc-yy1)*(yyc-yy1)));
+    dx = xxc - xx1;
+    dy = yyc - yy1;
+    wxCoord ray = (wxCoord)sqrt(dx*dx + dy*dy);
 
     wxCoord xxx1 = (wxCoord) (xxc-ray);
     wxCoord yyy1 = (wxCoord) (yyc-ray);
