@@ -4831,10 +4831,6 @@ SOURCE=..\..\include\wx\msw\ole\dataobj2.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\datecontrols.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\datectrl.h
 # End Source File
 # Begin Source File

@@ -719,10 +719,6 @@ SOURCE=..\..\include\wx\msw\calctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\datecontrols.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\datectrl.h
 # End Source File
 # Begin Source File

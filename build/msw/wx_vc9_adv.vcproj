@@ -1167,10 +1167,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\msw\datecontrols.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\msw\datectrl.h"
 				>
 			</File>

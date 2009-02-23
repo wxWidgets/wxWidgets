@@ -2898,7 +2898,6 @@ src/osx/iphone/window.mm
     wx/generic/animate.h
     wx/msw/bmpcbox.h
     wx/msw/calctrl.h
-    wx/msw/datecontrols.h
     wx/msw/datectrl.h
 </set>
 

@@ -773,6 +773,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/timerunx.cpp \
 	src/os2/dir.cpp \
 	src/os2/mimetype.cpp \
+	src/os2/snglinst.cpp \
 	src/os2/stdpaths.cpp \
 	src/os2/thread.cpp \
 	src/os2/utils.cpp \
@@ -3287,20 +3288,12 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR =  \
 	wx/gtk/dataview.h \
 	wx/gtk/hyperlink.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_NATIVE_HDR)
-COND_TOOLKIT_MSW_ADVANCED_PLATFORM_NATIVE_HDR =  \
-	wx/generic/animate.h \
-	wx/msw/bmpcbox.h \
-	wx/msw/calctrl.h \
-	wx/msw/datecontrols.h \
-	wx/msw/datectrl.h
-@COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_MSW_ADVANCED_PLATFORM_NATIVE_HDR)
-COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_NATIVE_HDR =  \
-	wx/generic/animate.h \
-	wx/msw/bmpcbox.h \
-	wx/msw/calctrl.h \
-	wx/msw/datecontrols.h \
-	wx/msw/datectrl.h
-@COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = $(COND_TOOLKIT_WINCE_ADVANCED_PLATFORM_NATIVE_HDR)
+@COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = \
+@COND_TOOLKIT_MSW@	wx/generic/animate.h wx/msw/bmpcbox.h wx/msw/calctrl.h \
+@COND_TOOLKIT_MSW@	wx/msw/datectrl.h
+@COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = \
+@COND_TOOLKIT_WINCE@	wx/generic/animate.h wx/msw/bmpcbox.h wx/msw/calctrl.h \
+@COND_TOOLKIT_WINCE@	wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/aboutdlg.h \
 	wx/animate.h \
@@ -3848,6 +3841,7 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_timerunx.o \
 	monodll_os2_dir.o \
 	monodll_os2_mimetype.o \
+	monodll_os2_snglinst.o \
 	monodll_os2_stdpaths.o \
 	monodll_os2_thread.o \
 	monodll_os2_utils.o \
@@ -5660,6 +5654,7 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_timerunx.o \
 	monolib_os2_dir.o \
 	monolib_os2_mimetype.o \
+	monolib_os2_snglinst.o \
 	monolib_os2_stdpaths.o \
 	monolib_os2_thread.o \
 	monolib_os2_utils.o \
@@ -7509,6 +7504,7 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_timerunx.o \
 	basedll_os2_dir.o \
 	basedll_os2_mimetype.o \
+	basedll_os2_snglinst.o \
 	basedll_os2_stdpaths.o \
 	basedll_os2_thread.o \
 	basedll_os2_utils.o \
@@ -7601,6 +7597,7 @@ COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_timerunx.o \
 	baselib_os2_dir.o \
 	baselib_os2_mimetype.o \
+	baselib_os2_snglinst.o \
 	baselib_os2_stdpaths.o \
 	baselib_os2_thread.o \
 	baselib_os2_utils.o \
@@ -14283,6 +14280,9 @@ monodll_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(MONODLL_ODEP)
 monodll_os2_mimetype.o: $(srcdir)/src/os2/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/mimetype.cpp
 
+monodll_os2_snglinst.o: $(srcdir)/src/os2/snglinst.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/snglinst.cpp
+
 monodll_os2_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/stdpaths.cpp
 
@@ -18959,6 +18959,9 @@ monolib_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(MONOLIB_ODEP)
 
 monolib_os2_mimetype.o: $(srcdir)/src/os2/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/mimetype.cpp
+
+monolib_os2_snglinst.o: $(srcdir)/src/os2/snglinst.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/snglinst.cpp
 
 monolib_os2_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/stdpaths.cpp
@@ -23637,6 +23640,9 @@ basedll_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(BASEDLL_ODEP)
 basedll_os2_mimetype.o: $(srcdir)/src/os2/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/os2/mimetype.cpp
 
+basedll_os2_snglinst.o: $(srcdir)/src/os2/snglinst.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/os2/snglinst.cpp
+
 basedll_os2_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/os2/stdpaths.cpp
 
@@ -24092,6 +24098,9 @@ baselib_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(BASELIB_ODEP)
 
 baselib_os2_mimetype.o: $(srcdir)/src/os2/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/os2/mimetype.cpp
+
+baselib_os2_snglinst.o: $(srcdir)/src/os2/snglinst.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/os2/snglinst.cpp
 
 baselib_os2_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/os2/stdpaths.cpp
