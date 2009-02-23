@@ -104,6 +104,7 @@ include/wx/generic/*.h
 include/wx/generic/private/*.h
 include/wx/generic/*.xpm
 include/wx/html/*.h
+include/wx/persist/*.h
 include/wx/richtext/*.h
 include/wx/aui/*.h
 include/wx/propgrid/*.h
