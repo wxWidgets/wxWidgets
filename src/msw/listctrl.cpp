@@ -2713,8 +2713,12 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     }
 
     // same thing for CDIS_FOCUS (except simpler as there is only one of them)
+    //
+    // NB: cast is needed to work around the bug in mingw32 headers which don't
+    //     have it inside ListView_GetNextItem() itself (unlike SDK ones)
     if ( ::GetFocus() == hwndList &&
-            ListView_GetNextItem(hwndList, -1, LVNI_FOCUSED) == item )
+            ListView_GetNextItem(
+                hwndList, static_cast<WPARAM>(-1), LVNI_FOCUSED) == item )
     {
         nmcd.uItemState |= CDIS_FOCUS;
     }

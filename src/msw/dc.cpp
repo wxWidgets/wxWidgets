@@ -1724,7 +1724,7 @@ void wxMSWDCImpl::SetRop(WXHDC dc)
     if ( !dc || m_logicalFunction < 0 )
         return;
 
-    int rop wxDUMMY_INITIALIZE(0);
+    int rop;
 
     switch (m_logicalFunction)
     {
@@ -1744,6 +1744,9 @@ void wxMSWDCImpl::SetRop(WXHDC dc)
         case wxNAND:         rop = R2_NOTMASKPEN;    break;
         case wxOR:           rop = R2_MERGEPEN;      break;
         case wxSET:          rop = R2_WHITE;         break;
+        default:
+            wxFAIL_MSG( wxS("unknown logical function") );
+            return;
     }
 
     SetROP2(GetHdc(), rop);

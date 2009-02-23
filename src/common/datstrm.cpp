@@ -549,6 +549,7 @@ void wxDataOutputStream::WriteDouble(double d)
 #if wxUSE_APPLE_IEEE
   wxConvertToIeeeExtended(d, (wxInt8 *)buf);
 #else
+  wxUnusedVar(d);
 #if !defined(__VMS__) && !defined(__GNUG__)
 # pragma warning "wxDataOutputStream::WriteDouble() not using IeeeExtended - will not work!"
 #endif

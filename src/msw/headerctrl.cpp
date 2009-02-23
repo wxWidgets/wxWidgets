@@ -535,7 +535,12 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 if ( idx != wxNOT_FOUND )
                 {
                     idx = MSWFromNativeIdx(idx);
-                    evtType = GetClickEventType(code == NM_RDBLCLK, 1);
+
+                    // due to a bug in mingw32 headers NM_RDBLCLK is signed
+                    // there so we need a cast to avoid warnings about signed/
+                    // unsigned comparison
+                    evtType = GetClickEventType(
+                                code == static_cast<UINT>(NM_RDBLCLK), 1);
                 }
                 //else: ignore clicks outside any column
             }

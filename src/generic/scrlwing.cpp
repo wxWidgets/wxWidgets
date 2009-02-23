@@ -1280,20 +1280,25 @@ wxScrollHelper::DoAdjustScrollbar(int orient,
     // in wxSHOW_SB_NEVER case don't show the scrollbar even if it's needed, in
     // wxSHOW_SB_ALWAYS case show the scrollbar even if it's not needed by
     // passing a special range value to SetScrollbar()
-    int range wxDUMMY_INITIALIZE(0);
+    int range;
     switch ( visibility )
     {
         case wxSHOW_SB_NEVER:
             range = 0;
             break;
 
+        case wxSHOW_SB_ALWAYS:
+            range = scrollUnits ? scrollUnits : -1;
+            break;
+
+        default:
+            wxFAIL_MSG( wxS("unknown scrollbar visibility") );
+            // fall through
+
         case wxSHOW_SB_DEFAULT:
             range = scrollUnits;
             break;
 
-        case wxSHOW_SB_ALWAYS:
-            range = scrollUnits ? scrollUnits : -1;
-            break;
     }
 
     m_win->SetScrollbar(orient, scrollPosition, scrollLinesPerPage, range);
