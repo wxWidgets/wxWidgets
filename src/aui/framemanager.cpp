@@ -3455,6 +3455,9 @@ void wxAuiManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
     wxAuiPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
+    if(!pane.frame)
+        return;
+
     wxPoint pt = ::wxGetMousePosition();
 
 #if 0
@@ -3558,6 +3561,9 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
     wxAuiPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
+    if(!pane.frame)
+        return;
+
     wxPoint pt = ::wxGetMousePosition();
 
 #if 0
@@ -3620,7 +3626,7 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
         if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
             pane.frame->SetTransparent(255);
     }
-     else if (m_has_maximized)
+    else if (m_has_maximized)
     {
         RestoreMaximizedPane();
     }
