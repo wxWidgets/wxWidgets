@@ -3044,17 +3044,17 @@ bool HTMLGo(void)
 
         wxChar buf[300];
         if (truncateFilenames)
-            wxSnprintf(buf, sizeof(buf), _T("%s.htm"), FileRoot);
+            wxSnprintf(buf, WXSIZEOF(buf), _T("%s.htm"), FileRoot);
         else
-            wxSnprintf(buf, sizeof(buf), _T("%s_contents.html"), FileRoot);
+            wxSnprintf(buf, WXSIZEOF(buf), _T("%s_contents.html"), FileRoot);
         if (TitlepageName) delete[] TitlepageName;
         TitlepageName = copystring(buf);
         Titlepage = wxFopen(buf, _T("w"));
 
         if (truncateFilenames)
-            wxSnprintf(buf, sizeof(buf), _T("%s_fc.htm"), FileRoot);
+            wxSnprintf(buf, WXSIZEOF(buf), _T("%s_fc.htm"), FileRoot);
         else
-            wxSnprintf(buf, sizeof(buf), _T("%s_fcontents.html"), FileRoot);
+            wxSnprintf(buf, WXSIZEOF(buf), _T("%s_fcontents.html"), FileRoot);
 
         contentsFrameName = copystring(buf);
 
