@@ -2113,7 +2113,7 @@ public:
 
     // explicitly specifying inline allows gcc < 3.4 to
     // handle the deprecation attribute even in the constructor.
-    wxDEPRECATED( inline
+    wxDEPRECATED_CONSTRUCTOR(
     wxGridEvent(int id,
                 wxEventType type,
                 wxObject* obj,
@@ -2174,7 +2174,7 @@ public:
         SetEventObject(obj);
     }
 
-    wxDEPRECATED( inline
+    wxDEPRECATED_CONSTRUCTOR(
     wxGridSizeEvent(int id,
                     wxEventType type,
                     wxObject* obj,
@@ -2232,7 +2232,7 @@ public:
         SetEventObject(obj);
     }
 
-    wxDEPRECATED( inline
+    wxDEPRECATED_CONSTRUCTOR(
     wxGridRangeSelectEvent(int id,
                            wxEventType type,
                            wxObject* obj,

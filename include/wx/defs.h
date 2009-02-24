@@ -503,7 +503,7 @@ typedef short int WXTYPE;
     handle the deprecation attribute even in the constructor.
     doesn't seem to work on Apple's gcc 4.0.1 unless using -O0
 */
-#if defined( __DARWIN__ ) && !defined(__WXDEBUG__)
+#if wxCHECK_GCC_VERSION(3, 4) || defined( __DARWIN__ )
     #define  wxDEPRECATED_CONSTRUCTOR(x) x
 #else
     #define  wxDEPRECATED_CONSTRUCTOR(x) wxDEPRECATED( inline x)
