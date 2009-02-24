@@ -3791,6 +3791,21 @@ void wxAuiNotebook::OnTabClicked(wxCommandEvent& command_evt)
     int idx = m_tabs.GetIdxFromWindow(wnd);
     wxASSERT(idx != -1);
 
+
+    // since a tab was clicked, let the parent know that we received
+    // the focus, even if we will assign that focus immediately
+    // to the child tab in the SetSelection call below
+    // (the child focus event will also let wxAuiManager, if any,
+    // know that the notebook control has been activated)
+    
+    wxWindow* parent = GetParent();
+    if (parent)
+    {
+        wxChildFocusEvent eventFocus(this);
+        parent->GetEventHandler()->ProcessEvent(eventFocus);
+    }
+
+
     SetSelection(idx);
 }
 
