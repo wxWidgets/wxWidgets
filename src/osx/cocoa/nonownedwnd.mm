@@ -61,6 +61,8 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
 // wx native implementation classes
 //
 
+typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector);
+
 @interface wxNSWindow : NSWindow
 
 {
@@ -69,7 +71,7 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
 
 - (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation;
 - (wxNonOwnedWindowCocoaImpl*) implementation;
-
+- (void)noResponderFor: (SEL) selector;
 @end
 
 @implementation wxNSWindow
@@ -84,6 +86,15 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
     return impl;
 }
 
+// NB: if we don't do this, all key downs that get handled lead to a NSBeep
+- (void)noResponderFor: (SEL) selector
+{
+    if (selector != @selector(keyDown:))
+    {
+        wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
+        superimpl(self, @selector(noResponderFor:), selector);
+    }
+}
 
 @end
 
@@ -95,7 +106,7 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
 
 - (void)setImplementation: (wxNonOwnedWindowCocoaImpl *) theImplementation;
 - (wxNonOwnedWindowCocoaImpl*) implementation;
-
+- (void)noResponderFor: (SEL) selector;
 @end
 
 @implementation wxNSPanel 
@@ -108,6 +119,16 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
 - (wxNonOwnedWindowCocoaImpl*) implementation
 {
     return impl;
+}
+
+// NB: if we don't do this, all key downs that get handled lead to a NSBeep
+- (void)noResponderFor: (SEL) selector
+{
+    if (selector != @selector(keyDown:))
+    {
+        wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
+        superimpl(self, @selector(noResponderFor:), selector);
+    }
 }
 
 @end
