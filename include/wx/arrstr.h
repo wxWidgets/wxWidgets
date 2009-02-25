@@ -92,10 +92,14 @@ public:
 #else // if !wxUSE_STL
 
 // this shouldn't be defined for compilers not supporting template methods or
-// without std::distance() -- and if all of the currently supported compilers
-// do have it, then it can just be removed and wxHAS_VECTOR_TEMPLATE_ASSIGN
-// code always used
-#define wxHAS_VECTOR_TEMPLATE_ASSIGN
+// without std::distance()
+//
+// FIXME-VC6: currently it's only not defined for VC6 in DLL build as it
+//            doesn't export template methods from DLL correctly so even though
+//            it compiles them fine, we get link errors when using wxArrayString
+#if !defined(__VISUALC6__) || !(defined(WXMAKINGDLL || defined(WXUSINGDLL)))
+    #define wxHAS_VECTOR_TEMPLATE_ASSIGN
+#endif
 
 #ifdef wxHAS_VECTOR_TEMPLATE_ASSIGN
     #include "wx/beforestd.h"
