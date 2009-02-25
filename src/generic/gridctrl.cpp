@@ -280,9 +280,19 @@ wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid& grid,
         dc.GetTextExtent(tok, &x, &y);
         if ( curr_x + x > max_x)
         {
-            lines.Add( wxString(thisline) );
-            thisline = tok;
-            curr_x=x;
+            if ( curr_x == 0 )
+            {
+                // this means that a single token is wider than the maximal
+                // width -- still use it as is as we need to show at least the
+                // part of it which fits
+                lines.Add(tok);
+            }
+            else
+            {
+                lines.Add(thisline);
+                thisline = tok;
+                curr_x = x;
+            }
         }
         else
         {
