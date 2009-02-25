@@ -133,6 +133,7 @@ All (GUI):
 - Use bitmap mask in wxSplashScreen.
 - Translate "(c)" and "(C)" to the real copyright sign in wxAboutBox.
 - Fix painting of highlight border for merged cells in wxGrid (K. Jones).
+- Fix handling of long lines in wxGridCellAutoWrapStringRenderer.
 
 All (Unix):
 
