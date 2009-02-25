@@ -3155,7 +3155,7 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEvtHandler)
 };
 
-WX_DEFINE_EXPORTED_ARRAY_PTR(wxEvtHandler*, wxEvtHandlerArray);
+WX_DEFINE_ARRAY_WITH_DECL_PTR(wxEvtHandler *, wxEvtHandlerArray, WXDLLIMPEXP_BASE);
 
 // ----------------------------------------------------------------------------
 // wxEventConnectionRef represents all connections between two event handlers
