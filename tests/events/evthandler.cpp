@@ -37,7 +37,11 @@ public:
 };
 
 typedef void (wxEvtHandler::*MyEventFunction)(MyEvent&);
-#define MyEventHandler(func) wxEVENT_HANDLER_CAST(MyEventFunction, func)
+#if wxEVENTS_COMPATIBILITY_2_8
+    #define MyEventHandler(func) wxEVENT_HANDLER_CAST(MyEventFunction, func)
+#else
+    #define MyEventHandler(func) &func
+#endif
 #define EVT_MYEVENT(func) \
     wx__DECLARE_EVT0(MyEventType, MyEventHandler(func))
 
@@ -152,30 +156,26 @@ private:
         CPPUNIT_TEST( BuiltinConnect );
         CPPUNIT_TEST( LegacyConnect );
 #if !wxEVENTS_COMPATIBILITY_2_8
-        CPPUNIT_TEST( ConnectFunction );
-        CPPUNIT_TEST( ConnectStaticMethod );
-        CPPUNIT_TEST( ConnectFunctor );
-        CPPUNIT_TEST( ConnectMethod );
-        CPPUNIT_TEST( ConnectMethodUsingBaseEvent );
-        CPPUNIT_TEST( ConnectMethodWithSink );
-        CPPUNIT_TEST( ConnectNonHandler );
-        CPPUNIT_TEST( StaticConnect );
-        CPPUNIT_TEST( InvalidConnect );
+        CPPUNIT_TEST( BindFunction );
+        CPPUNIT_TEST( BindStaticMethod );
+        CPPUNIT_TEST( BindFunctor );
+        CPPUNIT_TEST( BindMethod );
+        CPPUNIT_TEST( BindMethodUsingBaseEvent );
+        CPPUNIT_TEST( BindNonHandler );
+        CPPUNIT_TEST( InvalidBind );
 #endif // !wxEVENTS_COMPATIBILITY_2_8
     CPPUNIT_TEST_SUITE_END();
 
     void BuiltinConnect();
     void LegacyConnect();
 #if !wxEVENTS_COMPATIBILITY_2_8
-    void ConnectFunction();
-    void ConnectStaticMethod();
-    void ConnectFunctor();
-    void ConnectMethod();
-    void ConnectMethodUsingBaseEvent();
-    void ConnectMethodWithSink();
-    void ConnectNonHandler();
-    void StaticConnect();
-    void InvalidConnect();
+    void BindFunction();
+    void BindStaticMethod();
+    void BindFunctor();
+    void BindMethod();
+    void BindMethodUsingBaseEvent();
+    void BindNonHandler();
+    void InvalidBind();
 #endif // !wxEVENTS_COMPATIBILITY_2_8
 
 
@@ -207,18 +207,18 @@ void EvtHandlerTestCase::BuiltinConnect()
     handler.Disconnect(wxEVT_IDLE, (wxObjectEventFunction)(wxEventFunction)&MyHandler::OnIdle);
 
 #if !wxEVENTS_COMPATIBILITY_2_8
-    handler.Connect(wxEVT_IDLE, GlobalOnIdle);
-    handler.Disconnect(wxEVT_IDLE, GlobalOnIdle);
+    handler.Bind(wxEVT_IDLE, GlobalOnIdle);
+    handler.Unbind(wxEVT_IDLE, GlobalOnIdle);
 
     IdleFunctor f;
-    handler.Connect(wxEVT_IDLE, f);
-    handler.Disconnect(wxEVT_IDLE, f);
+    handler.Bind(wxEVT_IDLE, f);
+    handler.Unbind(wxEVT_IDLE, f);
 
-    handler.Connect(wxEVT_IDLE, &MyHandler::OnIdle);
-    handler.Disconnect(wxEVT_IDLE, &MyHandler::OnIdle);
+    handler.Bind(wxEVT_IDLE, &MyHandler::OnIdle, &handler);
+    handler.Unbind(wxEVT_IDLE, &MyHandler::OnIdle, &handler);
 
-    handler.Connect(wxEVT_IDLE, &MyHandler::StaticOnIdle);
-    handler.Disconnect(wxEVT_IDLE, &MyHandler::StaticOnIdle);
+    handler.Bind(wxEVT_IDLE, &MyHandler::StaticOnIdle);
+    handler.Unbind(wxEVT_IDLE, &MyHandler::StaticOnIdle);
 #endif // !wxEVENTS_COMPATIBILITY_2_8
 }
 
@@ -244,152 +244,142 @@ void EvtHandlerTestCase::LegacyConnect()
 
 #if !wxEVENTS_COMPATIBILITY_2_8
 
-void EvtHandlerTestCase::ConnectFunction()
+void EvtHandlerTestCase::BindFunction()
 {
     // function tests
-    handler.Connect( MyEventType, GlobalOnMyEvent );
+    handler.Bind( MyEventType, GlobalOnMyEvent );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( g_called.function );
-    handler.Disconnect( MyEventType, GlobalOnMyEvent );
+    handler.Unbind( MyEventType, GlobalOnMyEvent );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( !g_called.function ); // check that it was disconnected
 
-    handler.Connect( 0, MyEventType, GlobalOnMyEvent );
-    handler.Disconnect( 0, MyEventType, GlobalOnMyEvent );
+    handler.Bind( MyEventType, GlobalOnMyEvent, 0 );
+    handler.Unbind( MyEventType, GlobalOnMyEvent, 0 );
 
-    handler.Connect( 0, 0, MyEventType, GlobalOnMyEvent );
-    handler.Disconnect( 0, 0, MyEventType, GlobalOnMyEvent );
+    handler.Bind( MyEventType, GlobalOnMyEvent, 0, 0 );
+    handler.Unbind( MyEventType, GlobalOnMyEvent, 0, 0 );
 }
 
-void EvtHandlerTestCase::ConnectStaticMethod()
+void EvtHandlerTestCase::BindStaticMethod()
 {
     // static method tests (this is same as functions but still test it just in
     // case we hit some strange compiler bugs)
-    handler.Connect( MyEventType, &MyHandler::StaticOnMyEvent );
+    handler.Bind( MyEventType, &MyHandler::StaticOnMyEvent );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( g_called.smethod );
-    handler.Disconnect( MyEventType, &MyHandler::StaticOnMyEvent );
+    handler.Unbind( MyEventType, &MyHandler::StaticOnMyEvent );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( !g_called.smethod );
 
-    handler.Connect( 0, MyEventType, &MyHandler::StaticOnMyEvent );
-    handler.Disconnect( 0, MyEventType, &MyHandler::StaticOnMyEvent );
+    handler.Bind( MyEventType, &MyHandler::StaticOnMyEvent, 0 );
+    handler.Unbind( MyEventType, &MyHandler::StaticOnMyEvent, 0 );
 
-    handler.Connect( 0, 0, MyEventType, &MyHandler::StaticOnMyEvent );
-    handler.Disconnect( 0, 0, MyEventType, &MyHandler::StaticOnMyEvent );
+    handler.Bind( MyEventType, &MyHandler::StaticOnMyEvent, 0, 0 );
+    handler.Unbind( MyEventType, &MyHandler::StaticOnMyEvent, 0, 0 );
 }
 
-void EvtHandlerTestCase::ConnectFunctor()
+void EvtHandlerTestCase::BindFunctor()
 {
     // generalized functor tests
     MyFunctor functor;
 
-    handler.Connect( MyEventType, functor );
+    handler.Bind( MyEventType, functor );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( g_called.functor );
-    handler.Disconnect( MyEventType, functor );
+    handler.Unbind( MyEventType, functor );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( !g_called.functor );
 
-    handler.Connect( 0, MyEventType, functor );
-    handler.Disconnect( 0, MyEventType, functor );
+    handler.Bind( MyEventType, functor, 0 );
+    handler.Unbind( MyEventType, functor, 0 );
 
-    handler.Connect( 0, 0, MyEventType, functor );
-    handler.Disconnect( 0, 0, MyEventType, functor );
+    handler.Bind( MyEventType, functor, 0, 0 );
+    handler.Unbind( MyEventType, functor, 0, 0 );
 }
 
-void EvtHandlerTestCase::ConnectMethod()
+void EvtHandlerTestCase::BindMethod()
 {
     // class method tests
-    handler.Connect( MyEventType, &MyHandler::OnMyEvent );
+    handler.Bind( MyEventType, &MyHandler::OnMyEvent, &handler );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( g_called.method );
-    handler.Disconnect( MyEventType, &MyHandler::OnMyEvent );
+    handler.Unbind( MyEventType, &MyHandler::OnMyEvent, &handler );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( !g_called.method );
 
-    handler.Connect( 0, MyEventType, &MyHandler::OnMyEvent );
-    handler.Disconnect( 0, MyEventType, &MyHandler::OnMyEvent );
+    handler.Bind( MyEventType, &MyHandler::OnMyEvent, &handler, 0 );
+    handler.Unbind( MyEventType, &MyHandler::OnMyEvent, &handler, 0 );
 
-    handler.Connect( 0, 0, MyEventType, &MyHandler::OnMyEvent );
-    handler.Disconnect( 0, 0, MyEventType, &MyHandler::OnMyEvent );
+    handler.Bind( MyEventType, &MyHandler::OnMyEvent, &handler, 0, 0 );
+    handler.Unbind( MyEventType, &MyHandler::OnMyEvent, &handler, 0, 0 );
 }
 
-void EvtHandlerTestCase::ConnectMethodUsingBaseEvent()
+void EvtHandlerTestCase::BindMethodUsingBaseEvent()
 {
     // test connecting a method taking just wxEvent and not MyEvent: this
     // should work too if we don't need any MyEvent-specific information in the
     // handler
-    handler.Connect( MyEventType, &MyHandler::OnEvent );
+    handler.Bind( MyEventType, &MyHandler::OnEvent, &handler );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( g_called.method );
-    handler.Disconnect( MyEventType, &MyHandler::OnEvent );
+    handler.Unbind( MyEventType, &MyHandler::OnEvent, &handler );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( !g_called.method );
 
-    handler.Connect( 0, MyEventType, &MyHandler::OnEvent );
-    handler.Disconnect( 0, MyEventType, &MyHandler::OnEvent );
+    handler.Bind( MyEventType, &MyHandler::OnEvent, &handler, 0 );
+    handler.Unbind( MyEventType, &MyHandler::OnEvent, &handler, 0 );
 
-    handler.Connect( 0, 0, MyEventType, &MyHandler::OnEvent );
-    handler.Disconnect( 0, 0, MyEventType, &MyHandler::OnEvent );
+    handler.Bind( MyEventType, &MyHandler::OnEvent, &handler, 0, 0 );
+    handler.Unbind( MyEventType, &MyHandler::OnEvent, &handler, 0, 0 );
 }
 
-void EvtHandlerTestCase::ConnectMethodWithSink()
-{
-    handler.Connect( MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-    handler.Connect( 0, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-    handler.Connect( 0, 0, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
 
-    handler.Disconnect( MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-    handler.Disconnect( 0, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-    handler.Disconnect( 0, 0, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-}
-
-void EvtHandlerTestCase::ConnectNonHandler()
+void EvtHandlerTestCase::BindNonHandler()
 {
     // class method tests for class not derived from wxEvtHandler
     MySink sink;
 
-    handler.Connect( MyEventType, &MySink::OnMyEvent, NULL, &sink );
+    handler.Bind( MyEventType, &MySink::OnMyEvent, &sink );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( g_called.method );
-    handler.Disconnect( MyEventType, &MySink::OnMyEvent, NULL, &sink );
+    handler.Unbind( MyEventType, &MySink::OnMyEvent, &sink );
     g_called.Reset();
     handler.ProcessEvent(e);
     CPPUNIT_ASSERT( !g_called.method );
 }
 
-void EvtHandlerTestCase::StaticConnect()
-{
-    wxEvtHandler::Connect( &handler, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-    wxEvtHandler::Connect( &handler, 0, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-    wxEvtHandler::Connect( &handler, 0, 0, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-
-    wxEvtHandler::Disconnect( &handler, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-    wxEvtHandler::Disconnect( &handler, 0, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-    wxEvtHandler::Disconnect( &handler, 0, 0, MyEventType, &MyHandler::OnMyEvent, NULL, &handler );
-}
-
-void EvtHandlerTestCase::InvalidConnect()
+void EvtHandlerTestCase::InvalidBind()
 {
     // these calls shouldn't compile but we unfortunately can't check this
     // automatically, you need to uncomment them manually and test that
     // compilation does indeed fail
-    //handler.Connect(MyEventType, GlobalOnAnotherEvent);
-    //IdleFunctor f; handler.Connect(MyEventType, f);
-    //handler.Connect(MyEventType, &MyHandler::StaticOnAnotherEvent);
-    //handler.Connect(MyEventType, &MyHandler::OnAnotherEvent);
+
+    //handler.Bind(MyEventType, GlobalOnAnotherEvent);
+    //IdleFunctor f; handler.Bind(MyEventType, f);
+    //handler.Bind(MyEventType, &MyHandler::StaticOnAnotherEvent);
+    //handler.Bind(MyEventType, &MyHandler::OnAnotherEvent, &handler);
+
+    // Test that this sample (discussed on the mailing list) doesn't compile:
+    // >struct C1 : wxEvtHandler { };
+    // >struct C2 : wxEvtHandler { void OnWhatever(wxEvent&) };
+    // >C1 c1;
+    // >c1.Connect(&C2::OnWhatever); // BOOM
+
+    //MySink mySink;
+    //MyHandler myHandler;
+    //myHandler.Bind( MyEventType, &MyHandler::OnMyEvent, &mySink ); 
 }
 
 #endif // !wxEVENTS_COMPATIBILITY_2_8

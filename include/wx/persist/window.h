@@ -34,6 +34,7 @@ public:
     wxPersistentWindowBase(wxWindow *win)
         : wxPersistentObject(win)
     {
+#if wxEVENTS_COMPATIBILITY_2_8
         win->Connect
              (
                 wxEVT_DESTROY,
@@ -42,6 +43,9 @@ public:
                 NULL,
                 this
              );
+#else // !wxEVENTS_COMPATIBILITY_2_8
+        win->Bind(wxEVT_DESTROY, &wxPersistentWindowBase::HandleDestroy, this);
+#endif // wxEVENTS_COMPATIBILITY_2_8/!wxEVENTS_COMPATIBILITY_2_8
     }
 
     virtual wxString GetName() const
