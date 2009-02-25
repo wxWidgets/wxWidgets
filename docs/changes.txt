@@ -481,6 +481,7 @@ All (GUI):
   a selective wxEventLoopBase::YieldFor() function.
   Added also wxEventLoopBase::IsYielding to help cure re-entrancy problems with Yield().
 - Render <th> element contents in bold in wxHTML.
+- Added wxGrid::{Set,Get}{Row,Col}Sizes() methods (Andrey Putrin).
 
 wxGTK:
 

@@ -1028,6 +1028,68 @@ public:
     virtual bool CanHaveAttributes();
 };
 
+/**
+    @class wxGridSizesInfo
+
+    wxGridSizesInfo stores information about sizes of all wxGrid rows or
+    columns. 
+
+    It assumes that most of the rows or columns (which are both called elements
+    here as the difference between them doesn't matter at this class level)
+    have the default size and so stores it separately. And it uses a wxHashMap
+    to store the sizes of all elements which have the non-default size.
+
+    This structure is particularly useful for serializing the sizes of all
+    wxGrid elements at once.
+
+    @library{wxadv}
+    @category{grid}
+ */
+struct wxGridSizesInfo
+{
+    /**
+        Default constructor.
+
+        m_sizeDefault and m_customSizes must be initialized later.
+     */
+    wxGridSizesInfo();
+
+    /**
+        Constructor.
+
+        This constructor is used by wxGrid::GetRowSizes() and GetColSizes()
+        methods. User code will usually use the default constructor instead.
+
+        @param defSize
+            The default element size.
+        @param
+            Array containing the sizes of @em all elements, including those
+            which have the default size.
+     */
+    wxGridSizesInfo(int defSize, const wxArrayInt& allSizes);
+
+    /**
+        Get the element size.
+
+        @param pos
+            The index of the element.
+        @return
+            The size for this element, using m_customSizes if @a pos is in it
+            or m_sizeDefault otherwise.
+     */
+    int GetSize(unsigned pos) const;
+
+
+    /// Default size
+    int m_sizeDefault;
+
+    /**
+        Map with element indices as keys and their sizes as values.
+
+        This map only contains the elements with non-default size.
+     */
+    wxUnsignedToIntHashMap m_customSizes;
+};
 
 
 /**
@@ -2212,6 +2274,41 @@ public:
         @see HideRow(), SetRowSize()
      */
     void ShowRow(int col);
+
+    /**
+        Get size information for all columns at once.
+
+        This method is useful when the information about all column widths
+        needs to be saved. The widths can be later restored using
+        SetColSizes().
+
+        @sa wxGridSizesInfo, GetRowSizes()
+     */
+    wxGridSizesInfo GetColSizes() const;
+
+    /**
+        Get size information for all row at once.
+
+        @sa wxGridSizesInfo, GetColSizes()
+     */
+    wxGridSizesInfo GetRowSizes() const;
+
+    /**
+        Restore all columns sizes.
+
+        This is usually called with wxGridSizesInfo object previously returned
+        by GetColSizes().
+
+        @sa SetRowSizes()
+     */
+    void SetColSizes(const wxGridSizesInfo& sizeInfo);
+
+    /**
+        Restore all rows sizes.
+
+        @sa SetColSizes()
+     */
+    void SetRowSizes(const wxGridSizesInfo& sizeInfo);
 
     //@}
 

@@ -762,6 +762,39 @@ private:
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// wxGridSizesInfo stores information about sizes of the rows or columns.
+//
+// It assumes that most of the columns or rows have default size and so stores
+// the default size separately and uses a hash to map column or row numbers to
+// their non default size for those which don't have the default size.
+// ----------------------------------------------------------------------------
+
+// Hashmap to store postions as the keys and sizes as the values
+WX_DECLARE_HASH_MAP_WITH_DECL( unsigned, int, wxIntegerHash, wxIntegerEqual,
+                               wxUnsignedToIntHashMap, class WXDLLIMPEXP_ADV );
+
+struct WXDLLIMPEXP_ADV wxGridSizesInfo
+{
+    // default ctor, initialize m_sizeDefault and m_customSizes later
+    wxGridSizesInfo() { }
+
+    // ctor used by wxGrid::Get{Col,Row}Sizes()
+    wxGridSizesInfo(int defSize, const wxArrayInt& allSizes);
+
+    // default copy ctor, assignment operator and dtor are ok
+
+    // Get the size of the element with the given index
+    int GetSize(unsigned pos) const;
+
+
+    // default size
+    int m_sizeDefault;
+
+    // position -> size map containing all elements with non-default size
+    wxUnsignedToIntHashMap m_customSizes;
+};
+
+// ----------------------------------------------------------------------------
 // wxGrid
 // ----------------------------------------------------------------------------
 
@@ -1169,6 +1202,17 @@ public:
     void     SetColSize( int col, int width );
     void     HideCol(int col) { SetColSize(col, 0); }
     void     ShowCol(int col) { SetColSize(col, -1); }
+
+    // the row and column sizes can be also set all at once using
+    // wxGridSizesInfo which holds all of them at once
+
+    wxGridSizesInfo GetColSizes() const
+        { return wxGridSizesInfo(GetDefaultColSize(), m_colWidths); }
+    wxGridSizesInfo GetRowSizes() const
+        { return wxGridSizesInfo(GetDefaultRowSize(), m_rowHeights); }
+
+    void SetColSizes(const wxGridSizesInfo& sizeInfo);
+    void SetRowSizes(const wxGridSizesInfo& sizeInfo);
 
 
     // ------- columns (only, for now) reordering
@@ -2036,6 +2080,10 @@ private:
     // Append{Rows,Cols} is a bit different because of one less parameter
     bool DoAppendLines(bool (wxGridTableBase::*funcAppend)(size_t),
                        int num, bool updateLabels);
+
+    // Common part of Set{Col,Row}Sizes
+    void DoSetSizes(const wxGridSizesInfo& sizeInfo,
+                    const wxGridOperations& oper);
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()

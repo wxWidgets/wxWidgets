@@ -497,6 +497,9 @@ public:
     // Set the row height or column width
     virtual void SetLineSize(wxGrid *grid, int line, int size) const = 0;
 
+    // Set the row default height or column default width
+    virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const = 0;
+
     // True if rows/columns can be resized by user
     virtual bool CanResizeLines(const wxGrid *grid) const = 0;
 
@@ -571,6 +574,8 @@ public:
         { grid->SetRowSize(line, size); }
     virtual bool CanResizeLines(const wxGrid *grid) const
         { return grid->CanDragRowSize(); }
+    virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const
+        {  grid->SetDefaultRowSize(size, resizeExisting); } 
 
     virtual int GetLineAt(const wxGrid * WXUNUSED(grid), int line) const
         { return line; } // TODO: implement row reordering
@@ -632,6 +637,8 @@ public:
         { grid->SetColSize(line, size); }
     virtual bool CanResizeLines(const wxGrid *grid) const
         { return grid->CanDragColSize(); }
+    virtual void SetDefaultLineSize(wxGrid *grid, int size, bool resizeExisting) const
+        {  grid->SetDefaultColSize(size, resizeExisting); } 
 
     virtual int GetLineAt(const wxGrid *grid, int line) const
         { return grid->GetColAt(line); }

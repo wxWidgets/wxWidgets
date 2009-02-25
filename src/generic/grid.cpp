@@ -8336,6 +8336,48 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords& topLeft,
     return resultRect;
 }
 
+void wxGrid::DoSetSizes(const wxGridSizesInfo& sizeInfo,
+                        const wxGridOperations& oper)
+{
+    BeginBatch();
+    oper.SetDefaultLineSize(this, sizeInfo.m_sizeDefault, true);
+    const int numLines = oper.GetNumberOfLines(this);
+    for ( int i = 0; i < numLines; i++ )
+    {
+        int size = sizeInfo.GetSize(i);
+        if ( size != sizeInfo.m_sizeDefault)
+            oper.SetLineSize(this, i, size);
+    }
+    EndBatch();
+}
+
+void wxGrid::SetColSizes(const wxGridSizesInfo& sizeInfo)
+{
+    DoSetSizes(sizeInfo, wxGridColumnOperations());
+}
+
+void wxGrid::SetRowSizes(const wxGridSizesInfo& sizeInfo)
+{
+    DoSetSizes(sizeInfo, wxGridRowOperations());
+}
+
+wxGridSizesInfo::wxGridSizesInfo(int defSize, const wxArrayInt& allSizes)
+{
+    m_sizeDefault = defSize;
+    for ( size_t i = 0; i < allSizes.size(); i++ )
+    {
+        if ( allSizes[i] != defSize )
+            m_customSizes[i] = allSizes[i];
+    }
+}
+
+int wxGridSizesInfo::GetSize(unsigned pos) const
+{
+    wxUnsignedToIntHashMap::const_iterator it = m_customSizes.find(pos);
+
+    return it == m_customSizes.end() ? m_sizeDefault : it->second;
+}
+
 // ----------------------------------------------------------------------------
 // drop target
 // ----------------------------------------------------------------------------
