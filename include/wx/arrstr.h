@@ -97,7 +97,7 @@ public:
 // FIXME-VC6: currently it's only not defined for VC6 in DLL build as it
 //            doesn't export template methods from DLL correctly so even though
 //            it compiles them fine, we get link errors when using wxArrayString
-#if !defined(__VISUALC6__) || !(defined(WXMAKINGDLL || defined(WXUSINGDLL)))
+#if !defined(__VISUALC6__) || !(defined(WXMAKINGDLL) || defined(WXUSINGDLL))
     #define wxHAS_VECTOR_TEMPLATE_ASSIGN
 #endif
 
