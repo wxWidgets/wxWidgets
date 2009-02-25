@@ -112,10 +112,6 @@ enum wxMappingMode
     wxDCImpl class. The user-visible classes such as wxClientDC and
     wxPaintDC merely forward all calls to the backend implementation.
 
-    On Mac OS X colours with alpha channel are supported. Instances wxPen
-    or wxBrush that are built from wxColour use the colour's alpha values
-    when stroking or filling.
-
 
     @section dc_units Device and logical units
 
@@ -133,6 +129,13 @@ enum wxMappingMode
     on the screen to print on e.g. a paper.
 
 
+    @section dc_alpha_support Support for Transparency / Alpha Channel
+
+    On Mac OS X colours with alpha channel are supported. Instances of wxPen
+    or wxBrush that are built from wxColour use the colour's alpha values
+    when stroking or filling.
+
+
     @library{wxcore}
     @category{dc,gdi}
 
@@ -147,98 +150,9 @@ class wxDC : public wxObject
 {
 public:
     /**
-        Copy from a source DC to this DC, specifying the destination
-        coordinates, size of area to copy, source DC, source coordinates,
-        logical function, whether to use a bitmap mask, and mask source
-        position.
-
-        @param xdest
-            Destination device context x position.
-        @param ydest
-            Destination device context y position.
-        @param width
-            Width of source area to be copied.
-        @param height
-            Height of source area to be copied.
-        @param source
-            Source device context.
-        @param xsrc
-            Source device context x position.
-        @param ysrc
-            Source device context y position.
-        @param logicalFunc
-            Logical function to use, see SetLogicalFunction().
-        @param useMask
-            If @true, Blit does a transparent blit using the mask that is
-            associated with the bitmap selected into the source device context.
-            The Windows implementation does the following if MaskBlt cannot be
-            used:
-            <ol>
-            <li>Creates a temporary bitmap and copies the destination area into
-                it.</li>
-            <li>Copies the source area into the temporary bitmap using the
-                specified logical function.</li>
-            <li>Sets the masked area in the temporary bitmap to BLACK by ANDing
-                the mask bitmap with the temp bitmap with the foreground colour
-                set to WHITE and the bg colour set to BLACK.</li>
-            <li>Sets the unmasked area in the destination area to BLACK by
-                ANDing the mask bitmap with the destination area with the
-                foreground colour set to BLACK and the background colour set to
-                WHITE.</li>
-            <li>ORs the temporary bitmap with the destination area.</li>
-            <li>Deletes the temporary bitmap.</li>
-            </ol>
-            This sequence of operations ensures that the source's transparent
-            area need not be black, and logical functions are supported.
-            @n @b Note: on Windows, blitting with masks can be speeded up
-            considerably by compiling wxWidgets with the wxUSE_DC_CACHE option
-            enabled. You can also influence whether MaskBlt or the explicit
-            mask blitting code above is used, by using wxSystemOptions and
-            setting the @c no-maskblt option to 1.
-        @param xsrcMask
-            Source x position on the mask. If both xsrcMask and ysrcMask are
-            @c -1, xsrc and ysrc will be assumed for the mask source position.
-            Currently only implemented on Windows.
-        @param ysrcMask
-            Source y position on the mask. If both xsrcMask and ysrcMask are
-            @c -1, xsrc and ysrc will be assumed for the mask source position.
-            Currently only implemented on Windows.
-
-        @remarks There is partial support for Blit() in wxPostScriptDC, under X.
-
-        @see StretchBlit(), wxMemoryDC, wxBitmap, wxMask
+        @name Coordinate conversion functions
     */
-    bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width,
-              wxCoord height, wxDC* source, wxCoord xsrc, wxCoord ysrc,
-              wxRasterOperationMode logicalFunc = wxCOPY, bool useMask = false,
-              wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
-
-    /**
-        Adds the specified point to the bounding box which can be retrieved
-        with MinX(), MaxX() and MinY(), MaxY() functions.
-
-        @see ResetBoundingBox()
-    */
-    void CalcBoundingBox(wxCoord x, wxCoord y);
-
-    /**
-        Clears the device context using the current background brush.
-    */
-    void Clear();
-
-    /**
-        Displays a cross hair using the current pen. This is a vertical and
-        horizontal line the height and width of the window, centred on the
-        given point.
-    */
-    void CrossHair(wxCoord x, wxCoord y);
-
-    /**
-        Destroys the current clipping region so that none of the DC is clipped.
-
-        @see SetClippingRegion()
-    */
-    void DestroyClippingRegion();
+    //@{
 
     /**
         Convert @e device X coordinate to logical coordinate, using the current
@@ -267,6 +181,46 @@ public:
     wxCoord DeviceToLogicalYRel(wxCoord y) const;
 
     /**
+        Converts logical X coordinate to device coordinate, using the current
+        mapping mode, user scale factor, device origin and axis orientation.
+    */
+    wxCoord LogicalToDeviceX(wxCoord x) const;
+
+    /**
+        Converts logical X coordinate to relative device coordinate, using the
+        current mapping mode and user scale factor but ignoring the
+        axis orientation. Use this for converting a width, for example.
+    */
+    wxCoord LogicalToDeviceXRel(wxCoord x) const;
+
+    /**
+        Converts logical Y coordinate to device coordinate, using the current
+        mapping mode, user scale factor, device origin and axis orientation.
+    */
+    wxCoord LogicalToDeviceY(wxCoord y) const;
+
+    /**
+        Converts logical Y coordinate to relative device coordinate, using the
+        current mapping mode and user scale factor but ignoring the
+        axis orientation. Use this for converting a height, for example.
+    */
+    wxCoord LogicalToDeviceYRel(wxCoord y) const;
+
+    //@}
+
+
+
+    /**
+        @name Drawing functions
+    */
+    //@{
+
+    /**
+        Clears the device context using the current background brush.
+    */
+    void Clear();
+
+    /**
         Draws an arc of a circle, centred on (@a xc, @a yc), with starting
         point (@a x1, @a y1) and ending at (@a x2, @a y2). The current pen is
         used for the outline and the current brush for filling the shape.
@@ -275,7 +229,7 @@ public:
         to the end point.
     */
     void DrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
-                  wxCoord xc, wxCoord yc);
+                 wxCoord xc, wxCoord yc);
 
     /**
         Draw a bitmap on the device context at the specified point. If
@@ -292,25 +246,28 @@ public:
     void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y,
                     bool useMask = false);
 
-    //@{
     /**
         Draws a check mark inside the given rectangle.
     */
     void DrawCheckMark(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    void DrawCheckMark(const wxRect& rect);
-    //@}
 
-    //@{
+    /**
+        @overload
+    */
+    void DrawCheckMark(const wxRect& rect);
+
     /**
         Draws a circle with the given centre and radius.
 
         @see DrawEllipse()
     */
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius);
-    void DrawCircle(const wxPoint& pt, wxCoord radius);
-    //@}
 
-    //@{
+    /**
+        @overload
+    */
+    void DrawCircle(const wxPoint& pt, wxCoord radius);
+
     /**
         Draws an ellipse contained in the rectangle specified either with the
         given top left corner and the given size or directly. The current pen
@@ -319,9 +276,16 @@ public:
         @see DrawCircle()
     */
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
+
+    /**
+        @overload
+    */
     void DrawEllipse(const wxPoint& pt, const wxSize& size);
+
+    /**
+        @overload
+    */
     void DrawEllipse(const wxRect& rect);
-    //@}
 
     /**
         Draws an arc of an ellipse. The current pen is used for drawing the arc
@@ -349,7 +313,6 @@ public:
     */
     void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
 
-    //@{
     /**
         Draw optional bitmap and the text into the given rectangle and aligns
         it as specified by alignment parameter; it also will emphasize the
@@ -360,10 +323,13 @@ public:
                    const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                    int indexAccel = -1, wxRect* rectBounding = NULL);
+
+    /**
+        @overload
+    */
     void DrawLabel(const wxString& text, const wxRect& rect,
                    int alignment = wxALIGN_LEFT | wxALIGN_TOP,
                    int indexAccel = -1);
-    //@}
 
     /**
         Draws a line from the first point to the second. The current pen is
@@ -506,7 +472,6 @@ public:
     void DrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width,
                               wxCoord height, double radius);
 
-    //@{
     /**
         Draws a spline between all given points using the current pen.
 
@@ -516,10 +481,17 @@ public:
         @endWxPythonOnly
     */
     void DrawSpline(int n, wxPoint points[]);
+
+    /**
+        @overload
+    */
     void DrawSpline(const wxPointList* points);
+
+    /**
+        @overload
+    */
     void DrawSpline(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
                     wxCoord x3, wxCoord y3);
-    //@}
 
     /**
         Draws a text string at the specified point, using the current text
@@ -535,14 +507,46 @@ public:
     void DrawText(const wxString& text, wxCoord x, wxCoord y);
 
     /**
-        Ends a document (only relevant when outputting to a printer).
+        Fill the area specified by rect with a radial gradient, starting from
+        @a initialColour at the centre of the circle and fading to
+        @a destColour on the circle outside.
+
+        The circle is placed at the centre of @a rect.
+
+        @note Currently this function is very slow, don't use it for real-time
+              drawing.
     */
-    void EndDoc();
+    void GradientFillConcentric(const wxRect& rect,
+                                const wxColour& initialColour,
+                                const wxColour& destColour);
 
     /**
-        Ends a document page (only relevant when outputting to a printer).
+        Fill the area specified by rect with a radial gradient, starting from
+        @a initialColour at the centre of the circle and fading to
+        @a destColour on the circle outside.
+
+        @a circleCenter are the relative coordinates of centre of the circle in
+        the specified @a rect.
+
+        @note Currently this function is very slow, don't use it for real-time
+              drawing.
     */
-    void EndPage();
+    void GradientFillConcentric(const wxRect& rect,
+                                const wxColour& initialColour,
+                                const wxColour& destColour,
+                                const wxPoint& circleCenter);
+
+    /**
+        Fill the area specified by @a rect with a linear gradient, starting
+        from @a initialColour and eventually fading to @e destColour.
+
+        The @a nDirection specifies the direction of the colour change, default is
+        to use @a initialColour on the left part of the rectangle and
+        @a destColour on the right one.
+    */
+    void GradientFillLinear(const wxRect& rect, const wxColour& initialColour,
+                            const wxColour& destColour,
+                            wxDirection nDirection = wxRIGHT);
 
     /**
         Flood fills the device context starting from the given point, using
@@ -563,35 +567,26 @@ public:
                    wxFloodFillStyle style = wxFLOOD_SURFACE);
 
     /**
-        Gets the brush used for painting the background.
-
-        @see wxDC::SetBackground()
+        Displays a cross hair using the current pen. This is a vertical and
+        horizontal line the height and width of the window, centred on the
+        given point.
     */
-    const wxBrush& GetBackground() const;
+    void CrossHair(wxCoord x, wxCoord y);
+
+    //@}
+
 
     /**
-        Returns the current background mode: @c wxSOLID or @c wxTRANSPARENT.
-
-        @see SetBackgroundMode()
+        @name Clipping region functions
     */
-    int GetBackgroundMode() const;
+    //@{
 
     /**
-        Gets the current brush.
+        Destroys the current clipping region so that none of the DC is clipped.
 
-        @see wxDC::SetBrush()
+        @see SetClippingRegion()
     */
-    const wxBrush& GetBrush() const;
-
-    /**
-        Gets the character height of the currently set font.
-    */
-    wxCoord GetCharHeight() const;
-
-    /**
-        Gets the average character width of the currently set font.
-    */
-    wxCoord GetCharWidth() const;
+    void DestroyClippingRegion();
 
     /**
         Gets the rectangle surrounding the current clipping region.
@@ -604,43 +599,54 @@ public:
     void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
 
     /**
-        Returns the depth (number of bits/pixel) of this DC.
+        Sets the clipping region for this device context to the intersection of
+        the given region described by the parameters of this method and the
+        previously set clipping region. You should call DestroyClippingRegion()
+        if you want to set the clipping region exactly to the region specified.
 
-        @see wxDisplayDepth()
+        The clipping region is an area to which drawing is restricted. Possible
+        uses for the clipping region are for clipping text or for speeding up
+        window redraws when only a known area of the screen is damaged.
+
+        @see DestroyClippingRegion(), wxRegion
     */
-    int GetDepth() const;
+    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
     /**
-        Gets the current font. Notice that even although each device context
-        object has some default font after creation, this method would return a
-        wxNullFont initially and only after calling SetFont() a valid font is
-        returned.
+        @overload
     */
-    const wxFont& GetFont() const;
+    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
 
     /**
-        Gets the current layout direction of the device context. On platforms
-        where RTL layout is supported, the return value will either be
-        @c wxLayout_LeftToRight or @c wxLayout_RightToLeft. If RTL layout is
-        not supported, the return value will be @c wxLayout_Default.
-
-        @see SetLayoutDirection()
+        @overload
     */
-    wxLayoutDirection GetLayoutDirection() const;
+    void SetClippingRegion(const wxRect& rect);
 
     /**
-        Gets the current logical function.
+        Sets the clipping region for this device context.
 
-        @see SetLogicalFunction()
-    */
-    wxRasterOperationMode GetLogicalFunction() const;
+        Unlike SetClippingRegion(), this function works with physical
+        coordinates and not with the logical ones.
+     */
+    void SetDeviceClippingRegion(const wxRegion& region);
+
+    //@}
+
 
     /**
-        Gets the current mapping mode for the device context.
-
-        @see SetMapMode()
+        @name Text/character extent functions
     */
-    wxMappingMode GetMapMode() const;
+    //@{
+
+    /**
+        Gets the character height of the currently set font.
+    */
+    wxCoord GetCharHeight() const;
+
+    /**
+        Gets the average character width of the currently set font.
+    */
+    wxCoord GetCharWidth() const;
 
     /**
         Gets the dimensions of the string using the currently selected font.
@@ -693,74 +699,6 @@ public:
                                wxArrayInt& widths) const;
 
     /**
-        Gets the current pen.
-
-        @see SetPen()
-    */
-    const wxPen& GetPen() const;
-
-    /**
-        Gets in @a colour the colour at the specified location. Not available
-        for wxPostScriptDC or wxMetafileDC.
-
-        @note Setting a pixel can be done using DrawPoint().
-
-        @beginWxPythonOnly
-        The wxColour value is returned and is not required as a parameter.
-        @endWxPythonOnly
-    */
-    bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
-
-    /**
-        Returns the resolution of the device in pixels per inch.
-    */
-    wxSize GetPPI() const;
-
-    //@{
-    /**
-        Gets the horizontal and vertical extent of this device context in @e device units.
-        It can be used to scale graphics to fit the page.
-
-        For example, if @e maxX and @e maxY represent the maximum horizontal
-        and vertical 'pixel' values used in your application, the following
-        code will scale the graphic to fit on the printer page:
-
-        @code
-        wxCoord w, h;
-        dc.GetSize(&w, &h);
-        double scaleX = (double)(maxX / w);
-        double scaleY = (double)(maxY / h);
-        dc.SetUserScale(min(scaleX, scaleY),min(scaleX, scaleY));
-        @endcode
-
-        @beginWxPythonOnly
-        In place of a single overloaded method name, wxPython implements the
-        following methods:
-        - GetSize() - Returns a wxSize.
-        - GetSizeWH() - Returns a 2-tuple (width, height).
-        @endWxPythonOnly
-    */
-    void GetSize(wxCoord* width, wxCoord* height) const;
-    wxSize GetSize() const;
-    //@}
-
-    //@{
-    /**
-        Returns the horizontal and vertical resolution in millimetres.
-    */
-    void GetSizeMM(wxCoord* width, wxCoord* height) const;
-    wxSize GetSizeMM() const;
-    //@}
-
-    /**
-        Gets the current text background colour.
-
-        @see SetTextBackground()
-    */
-    const wxColour& GetTextBackground() const;
-
-    //@{
-    /**
         Gets the dimensions of the string using the currently selected font.
         @a string is the text string to measure, @a descent is the dimension
         from the baseline of the font to the bottom of the descender, and
@@ -790,8 +728,51 @@ public:
                        wxCoord* descent = NULL,
                        wxCoord* externalLeading = NULL,
                        const wxFont* font = NULL) const;
+
+    /**
+        @overload
+    */
     wxSize GetTextExtent(const wxString& string) const;
+
     //@}
+
+
+    /**
+        @name Text properties functions
+    */
+    //@{
+
+    /**
+        Returns the current background mode: @c wxSOLID or @c wxTRANSPARENT.
+
+        @see SetBackgroundMode()
+    */
+    int GetBackgroundMode() const;
+
+    /**
+        Gets the current font. Notice that even although each device context
+        object has some default font after creation, this method would return a
+        ::wxNullFont initially and only after calling SetFont() a valid font is
+        returned.
+    */
+    const wxFont& GetFont() const;
+
+    /**
+        Gets the current layout direction of the device context. On platforms
+        where RTL layout is supported, the return value will either be
+        @c wxLayout_LeftToRight or @c wxLayout_RightToLeft. If RTL layout is
+        not supported, the return value will be @c wxLayout_Default.
+
+        @see SetLayoutDirection()
+    */
+    wxLayoutDirection GetLayoutDirection() const;
+
+    /**
+        Gets the current text background colour.
+
+        @see SetTextBackground()
+    */
+    const wxColour& GetTextBackground() const;
 
     /**
         Gets the current text foreground colour.
@@ -801,75 +782,56 @@ public:
     const wxColour& GetTextForeground() const;
 
     /**
-        Gets the current user scale factor.
-
-        @see SetUserScale()
+        @a mode may be one of wxSOLID and wxTRANSPARENT. This setting
+        determines whether text will be drawn with a background colour or not.
     */
-    void GetUserScale(double* x, double* y) const;
+    void SetBackgroundMode(int mode);
 
-    //@{
     /**
-        Fill the area specified by rect with a radial gradient, starting from
-        @a initialColour at the centre of the circle and fading to
-        @a destColour on the circle outside.
+        Sets the current font for the DC. It must be a valid font, in
+        particular you should not pass wxNullFont to this method.
 
-        @a circleCenter are the relative coordinates of centre of the circle in
-        the specified @e rect. If not specified, the circle is placed at the
-        centre of rect.
-
-        @note Currently this function is very slow, don't use it for real-time
-              drawing.
+        @see wxFont
     */
-    void GradientFillConcentric(const wxRect& rect,
-                                const wxColour& initialColour,
-                                const wxColour& destColour);
-    void GradientFillConcentric(const wxRect& rect,
-                                const wxColour& initialColour,
-                                const wxColour& destColour,
-                                const wxPoint& circleCenter);
+    void SetFont(const wxFont& font);
+
+    /**
+        Sets the current text background colour for the DC.
+    */
+    void SetTextBackground(const wxColour& colour);
+
+    /**
+        Sets the current text foreground colour for the DC.
+
+        @see wxMemoryDC for the interpretation of colours when drawing into a
+             monochrome bitmap.
+    */
+    void SetTextForeground(const wxColour& colour);
+
+    /**
+        Sets the current layout direction for the device context. @a dir may be
+        either @c wxLayout_Default, @c wxLayout_LeftToRight or
+        @c wxLayout_RightToLeft.
+
+        @see GetLayoutDirection()
+    */
+    void SetLayoutDirection(wxLayoutDirection dir);
+
     //@}
 
-    /**
-        Fill the area specified by @a rect with a linear gradient, starting
-        from @a initialColour and eventually fading to @e destColour. The
-        @a nDirection specifies the direction of the colour change, default is
-        to use @a initialColour on the left part of the rectangle and
-        @a destColour on the right one.
-    */
-    void GradientFillLinear(const wxRect& rect, const wxColour& initialColour,
-                            const wxColour& destColour,
-                            wxDirection nDirection = wxRIGHT);
 
     /**
-        Returns @true if the DC is ok to use.
+        @name Bounding box functions
     */
-    bool IsOk() const;
+    //@{
 
     /**
-        Converts logical X coordinate to device coordinate, using the current
-        mapping mode, user scale factor, device origin and axis orientation.
-    */
-    wxCoord LogicalToDeviceX(wxCoord x) const;
+        Adds the specified point to the bounding box which can be retrieved
+        with MinX(), MaxX() and MinY(), MaxY() functions.
 
-    /**
-        Converts logical X coordinate to relative device coordinate, using the
-        current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a width, for example.
+        @see ResetBoundingBox()
     */
-    wxCoord LogicalToDeviceXRel(wxCoord x) const;
-
-    /**
-        Converts logical Y coordinate to device coordinate, using the current
-        mapping mode, user scale factor, device origin and axis orientation.
-    */
-    wxCoord LogicalToDeviceY(wxCoord y) const;
-
-    /**
-        Converts logical Y coordinate to relative device coordinate, using the
-        current mapping mode and user scale factor but ignoring the
-        axis orientation. Use this for converting a height, for example.
-    */
-    wxCoord LogicalToDeviceYRel(wxCoord y) const;
+    void CalcBoundingBox(wxCoord x, wxCoord y);
 
     /**
         Gets the maximum horizontal extent used in drawing commands so far.
@@ -899,165 +861,13 @@ public:
     */
     void ResetBoundingBox();
 
-    /**
-        Sets the x and y axis orientation (i.e., the direction from lowest to
-        highest values on the axis). The default orientation is x axis from
-        left to right and y axis from top down.
-
-        @param xLeftRight
-            True to set the x axis orientation to the natural left to right
-            orientation, @false to invert it.
-        @param yBottomUp
-            True to set the y axis orientation to the natural bottom up
-            orientation, @false to invert it.
-    */
-    void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-
-    /**
-        Sets the current background brush for the DC.
-    */
-    void SetBackground(const wxBrush& brush);
-
-    /**
-        @a mode may be one of wxSOLID and wxTRANSPARENT. This setting
-        determines whether text will be drawn with a background colour or not.
-    */
-    void SetBackgroundMode(int mode);
-
-    /**
-        Sets the current brush for the DC.
-
-        If the argument is wxNullBrush, the current brush is selected out of
-        the device context (leaving wxDC without any valid brush), allowing the
-        current brush to be destroyed safely.
-
-        @see wxBrush, wxMemoryDC (for the interpretation of colours when
-             drawing into a monochrome bitmap)
-    */
-    void SetBrush(const wxBrush& brush);
-
-    //@{
-    /**
-        Sets the clipping region for this device context to the intersection of
-        the given region described by the parameters of this method and the
-        previously set clipping region. You should call DestroyClippingRegion()
-        if you want to set the clipping region exactly to the region specified.
-
-        The clipping region is an area to which drawing is restricted. Possible
-        uses for the clipping region are for clipping text or for speeding up
-        window redraws when only a known area of the screen is damaged.
-
-        @see DestroyClippingRegion(), wxRegion
-    */
-    void SetClippingRegion(wxCoord x, wxCoord y, wxCoord width,
-                           wxCoord height);
-    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
-    void SetClippingRegion(const wxRect& rect);
     //@}
 
-    /**
-        Sets the clipping region for this device context.
-
-        Unlike SetClippingRegion(), this function works with physical
-        coordinates and not with the logical ones.
-     */
-    void SetDeviceClippingRegion(const wxRegion& region);
 
     /**
-        Sets the device origin (i.e., the origin in pixels after scaling has
-        been applied). This function may be useful in Windows printing
-        operations for placing a graphic on a page.
+        @name Page and document start/end functions
     */
-    void SetDeviceOrigin(wxCoord x, wxCoord y);
-
-    /**
-        Sets the current font for the DC. It must be a valid font, in
-        particular you should not pass wxNullFont to this method.
-
-        @see wxFont
-    */
-    void SetFont(const wxFont& font);
-
-    /**
-        Sets the current layout direction for the device context. @a dir may be
-        either @c wxLayout_Default, @c wxLayout_LeftToRight or
-        @c wxLayout_RightToLeft.
-
-        @see GetLayoutDirection()
-    */
-    void SetLayoutDirection(wxLayoutDirection dir);
-
-    /**
-        Sets the current logical function for the device context.
-        It determines how a @e source pixel (from a pen or brush colour, or source
-        device context if using Blit()) combines with a @e destination pixel in
-        the current device context.
-        Text drawing is not affected by this function.
-
-        See ::wxRasterOperationMode enumeration values for more info.
-
-        The default is @c wxCOPY, which simply draws with the current colour.
-        The others combine the current colour and the background using a logical
-        operation. @c wxINVERT is commonly used for drawing rubber bands or moving
-        outlines, since drawing twice reverts to the original colour.
-    */
-    void SetLogicalFunction(wxRasterOperationMode function);
-
-    /**
-        The mapping mode of the device context defines the unit of measurement
-        used to convert @e logical units to @e device units.
-
-        Note that in X, text drawing isn't handled consistently with the mapping mode;
-        a font is always specified in point size. However, setting the user scale (see
-        SetUserScale()) scales the text appropriately. In Windows, scalable
-        TrueType fonts are always used; in X, results depend on availability of
-        fonts, but usually a reasonable match is found.
-
-        The coordinate origin is always at the top left of the screen/printer.
-
-        Drawing to a Windows printer device context uses the current mapping
-        mode, but mapping mode is currently ignored for PostScript output.
-    */
-    void SetMapMode(wxMappingMode mode);
-
-    /**
-        If this is a window DC or memory DC, assigns the given palette to the
-        window or bitmap associated with the DC. If the argument is
-        wxNullPalette, the current palette is selected out of the device
-        context, and the original palette restored.
-
-        @see wxPalette
-    */
-    void SetPalette(const wxPalette& palette);
-
-    /**
-        Sets the current pen for the DC. If the argument is wxNullPen, the
-        current pen is selected out of the device context (leaving wxDC without
-        any valid pen), allowing the current brush to be destroyed safely.
-
-        @see wxMemoryDC for the interpretation of colours when drawing into a
-             monochrome bitmap.
-    */
-    void SetPen(const wxPen& pen);
-
-    /**
-        Sets the current text background colour for the DC.
-    */
-    void SetTextBackground(const wxColour& colour);
-
-    /**
-        Sets the current text foreground colour for the DC.
-
-        @see wxMemoryDC for the interpretation of colours when drawing into a
-             monochrome bitmap.
-    */
-    void SetTextForeground(const wxColour& colour);
-
-    /**
-        Sets the user scaling factor, useful for applications which require
-        'zooming'.
-    */
-    void SetUserScale(double xScale, double yScale);
+    //@{
 
     /**
         Starts a document (only relevant when outputting to a printer).
@@ -1069,6 +879,91 @@ public:
         Starts a document page (only relevant when outputting to a printer).
     */
     void StartPage();
+
+    /**
+        Ends a document (only relevant when outputting to a printer).
+    */
+    void EndDoc();
+
+    /**
+        Ends a document page (only relevant when outputting to a printer).
+    */
+    void EndPage();
+
+    //@}
+
+
+    /**
+        @name Bit-Block Transfer operations (blit)
+    */
+    //@{
+
+    /**
+        Copy from a source DC to this DC, specifying the destination
+        coordinates, size of area to copy, source DC, source coordinates,
+        logical function, whether to use a bitmap mask, and mask source
+        position.
+
+        @param xdest
+            Destination device context x position.
+        @param ydest
+            Destination device context y position.
+        @param width
+            Width of source area to be copied.
+        @param height
+            Height of source area to be copied.
+        @param source
+            Source device context.
+        @param xsrc
+            Source device context x position.
+        @param ysrc
+            Source device context y position.
+        @param logicalFunc
+            Logical function to use, see SetLogicalFunction().
+        @param useMask
+            If @true, Blit does a transparent blit using the mask that is
+            associated with the bitmap selected into the source device context.
+            The Windows implementation does the following if MaskBlt cannot be
+            used:
+            <ol>
+            <li>Creates a temporary bitmap and copies the destination area into
+                it.</li>
+            <li>Copies the source area into the temporary bitmap using the
+                specified logical function.</li>
+            <li>Sets the masked area in the temporary bitmap to BLACK by ANDing
+                the mask bitmap with the temp bitmap with the foreground colour
+                set to WHITE and the bg colour set to BLACK.</li>
+            <li>Sets the unmasked area in the destination area to BLACK by
+                ANDing the mask bitmap with the destination area with the
+                foreground colour set to BLACK and the background colour set to
+                WHITE.</li>
+            <li>ORs the temporary bitmap with the destination area.</li>
+            <li>Deletes the temporary bitmap.</li>
+            </ol>
+            This sequence of operations ensures that the source's transparent
+            area need not be black, and logical functions are supported.
+            @n @b Note: on Windows, blitting with masks can be speeded up
+            considerably by compiling wxWidgets with the wxUSE_DC_CACHE option
+            enabled. You can also influence whether MaskBlt or the explicit
+            mask blitting code above is used, by using wxSystemOptions and
+            setting the @c no-maskblt option to 1.
+        @param xsrcMask
+            Source x position on the mask. If both xsrcMask and ysrcMask are
+            @c -1, xsrc and ysrc will be assumed for the mask source position.
+            Currently only implemented on Windows.
+        @param ysrcMask
+            Source y position on the mask. If both xsrcMask and ysrcMask are
+            @c -1, xsrc and ysrc will be assumed for the mask source position.
+            Currently only implemented on Windows.
+
+        @remarks There is partial support for Blit() in wxPostScriptDC, under X.
+
+        @see StretchBlit(), wxMemoryDC, wxBitmap, wxMask
+    */
+    bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width,
+              wxCoord height, wxDC* source, wxCoord xsrc, wxCoord ysrc,
+              wxRasterOperationMode logicalFunc = wxCOPY, bool useMask = false,
+              wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
 
     /**
         Copy from a source DC to this DC, specifying the destination
@@ -1150,6 +1045,232 @@ public:
                      bool useMask = false,
                      wxCoord xsrcMask = wxDefaultCoord,
                      wxCoord ysrcMask = wxDefaultCoord);
+    //@}
+
+
+    /**
+        @name Background/foreground brush and pen
+    */
+    //@{
+
+    /**
+        Gets the brush used for painting the background.
+
+        @see wxDC::SetBackground()
+    */
+    const wxBrush& GetBackground() const;
+
+    /**
+        Gets the current brush.
+
+        @see wxDC::SetBrush()
+    */
+    const wxBrush& GetBrush() const;
+
+    /**
+        Gets the current pen.
+
+        @see SetPen()
+    */
+    const wxPen& GetPen() const;
+
+    /**
+        Sets the current background brush for the DC.
+    */
+    void SetBackground(const wxBrush& brush);
+
+    /**
+        Sets the current brush for the DC.
+
+        If the argument is wxNullBrush, the current brush is selected out of
+        the device context (leaving wxDC without any valid brush), allowing the
+        current brush to be destroyed safely.
+
+        @see wxBrush, wxMemoryDC (for the interpretation of colours when
+             drawing into a monochrome bitmap)
+    */
+    void SetBrush(const wxBrush& brush);
+
+    /**
+        Sets the current pen for the DC. If the argument is wxNullPen, the
+        current pen is selected out of the device context (leaving wxDC without
+        any valid pen), allowing the current brush to be destroyed safely.
+
+        @see wxMemoryDC for the interpretation of colours when drawing into a
+             monochrome bitmap.
+    */
+    void SetPen(const wxPen& pen);
+
+    //@}
+
+
+
+    /**
+        Returns the depth (number of bits/pixel) of this DC.
+
+        @see wxDisplayDepth()
+    */
+    int GetDepth() const;
+
+    /**
+        Returns the current device origin.
+
+        @see SetDeviceOrigin()
+    */
+    wxPoint GetDeviceOrigin() const;
+
+    /**
+        Gets the current logical function.
+
+        @see SetLogicalFunction()
+    */
+    wxRasterOperationMode GetLogicalFunction() const;
+
+    /**
+        Gets the current mapping mode for the device context.
+
+        @see SetMapMode()
+    */
+    wxMappingMode GetMapMode() const;
+
+    /**
+        Gets in @a colour the colour at the specified location. Not available
+        for wxPostScriptDC or wxMetafileDC.
+
+        @note Setting a pixel can be done using DrawPoint().
+
+        @beginWxPythonOnly
+        The wxColour value is returned and is not required as a parameter.
+        @endWxPythonOnly
+    */
+    bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
+
+    /**
+        Returns the resolution of the device in pixels per inch.
+    */
+    wxSize GetPPI() const;
+
+    /**
+        Gets the horizontal and vertical extent of this device context in @e device units.
+        It can be used to scale graphics to fit the page.
+
+        For example, if @e maxX and @e maxY represent the maximum horizontal
+        and vertical 'pixel' values used in your application, the following
+        code will scale the graphic to fit on the printer page:
+
+        @code
+        wxCoord w, h;
+        dc.GetSize(&w, &h);
+        double scaleX = (double)(maxX / w);
+        double scaleY = (double)(maxY / h);
+        dc.SetUserScale(min(scaleX, scaleY),min(scaleX, scaleY));
+        @endcode
+
+        @beginWxPythonOnly
+        In place of a single overloaded method name, wxPython implements the
+        following methods:
+        - GetSize() - Returns a wxSize.
+        - GetSizeWH() - Returns a 2-tuple (width, height).
+        @endWxPythonOnly
+    */
+    void GetSize(wxCoord* width, wxCoord* height) const;
+
+    /**
+        @overload
+    */
+    wxSize GetSize() const;
+
+    /**
+        Returns the horizontal and vertical resolution in millimetres.
+    */
+    void GetSizeMM(wxCoord* width, wxCoord* height) const;
+
+    /**
+        @overload
+    */
+    wxSize GetSizeMM() const;
+
+    /**
+        Gets the current user scale factor.
+
+        @see SetUserScale()
+    */
+    void GetUserScale(double* x, double* y) const;
+
+    /**
+        Returns @true if the DC is ok to use.
+    */
+    bool IsOk() const;
+
+    /**
+        Sets the x and y axis orientation (i.e., the direction from lowest to
+        highest values on the axis). The default orientation is x axis from
+        left to right and y axis from top down.
+
+        @param xLeftRight
+            True to set the x axis orientation to the natural left to right
+            orientation, @false to invert it.
+        @param yBottomUp
+            True to set the y axis orientation to the natural bottom up
+            orientation, @false to invert it.
+    */
+    void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
+
+    /**
+        Sets the device origin (i.e., the origin in pixels after scaling has
+        been applied). This function may be useful in Windows printing
+        operations for placing a graphic on a page.
+    */
+    void SetDeviceOrigin(wxCoord x, wxCoord y);
+
+    /**
+        Sets the current logical function for the device context.
+        It determines how a @e source pixel (from a pen or brush colour, or source
+        device context if using Blit()) combines with a @e destination pixel in
+        the current device context.
+        Text drawing is not affected by this function.
+
+        See ::wxRasterOperationMode enumeration values for more info.
+
+        The default is @c wxCOPY, which simply draws with the current colour.
+        The others combine the current colour and the background using a logical
+        operation. @c wxINVERT is commonly used for drawing rubber bands or moving
+        outlines, since drawing twice reverts to the original colour.
+    */
+    void SetLogicalFunction(wxRasterOperationMode function);
+
+    /**
+        The mapping mode of the device context defines the unit of measurement
+        used to convert @e logical units to @e device units.
+
+        Note that in X, text drawing isn't handled consistently with the mapping mode;
+        a font is always specified in point size. However, setting the user scale (see
+        SetUserScale()) scales the text appropriately. In Windows, scalable
+        TrueType fonts are always used; in X, results depend on availability of
+        fonts, but usually a reasonable match is found.
+
+        The coordinate origin is always at the top left of the screen/printer.
+
+        Drawing to a Windows printer device context uses the current mapping
+        mode, but mapping mode is currently ignored for PostScript output.
+    */
+    void SetMapMode(wxMappingMode mode);
+
+    /**
+        If this is a window DC or memory DC, assigns the given palette to the
+        window or bitmap associated with the DC. If the argument is
+        ::wxNullPalette, the current palette is selected out of the device
+        context, and the original palette restored.
+
+        @see wxPalette
+    */
+    void SetPalette(const wxPalette& palette);
+
+    /**
+        Sets the user scaling factor, useful for applications which require
+        'zooming'.
+    */
+    void SetUserScale(double xScale, double yScale);
 };
 
 
