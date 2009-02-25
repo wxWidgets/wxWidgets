@@ -49,6 +49,15 @@ enum wxBitmapType
 };
 
 /**
+    Polygon filling mode. See wxDC::DrawPolygon.
+*/
+enum wxPolygonFillMode
+{
+    wxODDEVEN_RULE = 1,
+    wxWINDING_RULE
+};
+
+/**
     Standard cursors. See wxCursor.
 */
 enum wxStockCursor
@@ -814,7 +823,7 @@ wxSize wxDefaultSize;
 
     @header{wx/gdicmn.h}
 */
-wxICON();
+#define wxICON(iconName)
 
 /**
     Returns @true if the display is colour, @false otherwise.
