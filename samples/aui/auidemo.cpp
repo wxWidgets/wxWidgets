@@ -1576,6 +1576,9 @@ wxAuiNotebook* MyFrame::CreateNotebook()
 
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
    wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
+   flex->AddGrowableRow( 0 );
+   flex->AddGrowableRow( 3 );
+   flex->AddGrowableCol( 1 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
    flex->Add( new wxStaticText( panel, -1, wxT("wxTextCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1)),
@@ -1584,9 +1587,6 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxSize(100,-1),
                 wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
    flex->Add( 5,5 );   flex->Add( 5,5 );
-   flex->AddGrowableRow( 0 );
-   flex->AddGrowableRow( 3 );
-   flex->AddGrowableCol( 1 );
    panel->SetSizer( flex );
    ctrl->AddPage( panel, wxT("wxPanel"), false, page_bmp );
 
