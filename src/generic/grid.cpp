@@ -6191,13 +6191,13 @@ wxRect wxGrid::CellToRect( int row, int col ) const
             rect.width += GetColWidth(i);
         for (i=row; i < row + cell_rows; i++)
             rect.height += GetRowHeight(i);
-    }
 
-    // if grid lines are enabled, then the area of the cell is a bit smaller
-    if (m_gridLinesEnabled)
-    {
-        rect.width -= 1;
-        rect.height -= 1;
+        // if grid lines are enabled, then the area of the cell is a bit smaller
+        if (m_gridLinesEnabled)
+        {
+            rect.width -= 1;
+            rect.height -= 1;
+        }
     }
 
     return rect;
@@ -8201,8 +8201,10 @@ void wxGrid::ClearSelection()
     m_selectedBlockBottomRight =
     m_selectedBlockCorner = wxGridNoCellCoords;
 
-    Refresh( false, &r1 );
-    Refresh( false, &r2 );
+    if ( !r1.IsEmpty() )
+        RefreshRect(r1, false);
+    if ( !r2.IsEmpty() )
+        RefreshRect(r2, false);
 
     if ( m_selection )
         m_selection->ClearSelection();
