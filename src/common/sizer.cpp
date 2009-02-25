@@ -1781,6 +1781,37 @@ DoAdjustForGrowables(int delta,
 
 void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz)
 {
+#ifdef __WXDEBUG__
+    // by the time this function is called, the sizer should be already fully
+    // initialized and hence the number of its columns and rows is known and we
+    // can check that all indices in m_growableCols/Rows are valid (see also
+    // comments in AddGrowableCol/Row())
+    if ( !m_rows || !m_cols )
+    {
+        int nrows, ncols;
+        CalcRowsCols(nrows, ncols);
+
+        if ( !m_rows )
+        {
+            for ( size_t n = 0; n < m_growableRows.size(); n++ )
+            {
+                wxASSERT_MSG( m_growableRows[n] < nrows,
+                              "invalid growable row index" );
+            }
+        }
+
+        if ( !m_cols )
+        {
+            for ( size_t n = 0; n < m_growableCols.size(); n++ )
+            {
+                wxASSERT_MSG( m_growableCols[n] < ncols,
+                              "invalid growable column index" );
+            }
+        }
+    }
+#endif // __WXDEBUG__
+
+
     if ( (m_flexDirection & wxHORIZONTAL) || (m_growMode != wxFLEX_GROWMODE_NONE) )
     {
         DoAdjustForGrowables
@@ -1851,10 +1882,16 @@ void wxFlexGridSizer::AddGrowableRow( size_t idx, int proportion )
 {
     int nrows, ncols;
     CalcRowsCols(nrows, ncols);
-    wxCHECK_RET( idx < (size_t)nrows, "invalid row index" );
 
     wxASSERT_MSG( !IsRowGrowable( idx ),
                   "AddGrowableRow() called for growable row" );
+
+    // notice that we intentionally don't check the index validity here in (the
+    // common) case when the number of rows was not specified in the ctor -- in
+    // this case it will be computed only later, when all items are added to
+    // the sizer, and the check will be done in AdjustForGrowables()
+    wxCHECK_RET( !m_rows || idx < (size_t)m_rows, "invalid row index" );
+
     m_growableRows.Add( idx );
     m_growableRowsProportions.Add( proportion );
 }
@@ -1863,10 +1900,14 @@ void wxFlexGridSizer::AddGrowableCol( size_t idx, int proportion )
 {
     int nrows, ncols;
     CalcRowsCols(nrows, ncols);
-    wxCHECK_RET( idx < (size_t)ncols, "invalid column index" );
 
     wxASSERT_MSG( !IsColGrowable( idx ),
                   "AddGrowableCol() called for growable column" );
+
+    // see comment in AddGrowableRow(): although it's less common to omit the
+    // specification of the number of columns, it still can also happen
+    wxCHECK_RET( !m_cols || idx < (size_t)ncols, "invalid column index" );
+
     m_growableCols.Add( idx );
     m_growableColsProportions.Add( proportion );
 }
