@@ -34,6 +34,28 @@ wxEventLoopBase::wxEventLoopBase()
     m_eventsToProcessInsideYield = wxEVT_CATEGORY_ALL;
 }
 
+bool wxEventLoopBase::IsMain() const
+{
+    if (wxTheApp)
+        return wxTheApp->GetMainLoop() == this;
+    return false;
+}
+
+/* static */
+void wxEventLoopBase::SetActive(wxEventLoopBase* loop)
+{
+    ms_activeLoop = loop;
+
+    if (wxTheApp)
+        wxTheApp->OnEventLoopEnter(loop);
+}
+
+void wxEventLoopBase::OnExit()
+{
+    if (wxTheApp)
+        wxTheApp->OnEventLoopExit(this);
+}
+
 void wxEventLoopBase::DelayPendingEventHandler(wxEvtHandler* toDelay)
 {
     wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);

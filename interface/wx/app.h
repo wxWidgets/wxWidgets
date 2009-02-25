@@ -91,6 +91,14 @@ public:
     */
     virtual int FilterEvent(wxEvent& event);
 
+    /**
+        Returns the main event loop instance, i.e. the event loop which is started
+        by OnRun() and which dispatches all events sent from the native toolkit
+        to the application (except when new event loops are temporarily set-up).
+        The returned value maybe @NULL. Put initialization code which needs a
+        non-@NULL main event loop into OnEventLoopEnter().
+    */
+    wxEventLoopBase* GetMainLoop() const;
 
     /**
         This function simply invokes the given method @a func of the specified
@@ -253,6 +261,22 @@ public:
         @see OnInitCmdLine()
     */
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+
+    /**
+        Called by wxEventLoopBase::SetActive(): you can override this function
+        and put here the code which needs an active event loop.
+
+        Note that this function is called whenever an event loop is activated;
+        you may want to use wxEventLoopBase::IsMain() to perform initialization
+        specific for the app's main event loop.
+    */
+    virtual void OnEventLoopEnter(wxEventLoopBase* loop);
+
+    /**
+        Called by wxEventLoopBase::OnExit() for each event loop which
+        is exited.
+    */
+    virtual void OnEventLoopExit(wxEventLoopBase* loop);
 
     /**
         This function is called if an unhandled exception occurs inside the main

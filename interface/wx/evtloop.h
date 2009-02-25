@@ -12,8 +12,15 @@
 
     Base class for all event loop implementations.
 
+    An event loop is a class which queries the queue of native events sent
+    to the wxWidgets application and dispatches them to the appropriate
+    wxEvtHandlers.
+
     An object of this class is created by wxAppTraits::CreateEventLoop() and
     used by wxApp to run the main application event loop.
+
+    You can create your own event loop if you need, provided that you restore
+    the main event loop once yours is destroyed (see wxEventLoopActivator).
 
     @library{wxbase}
     @category{appmanagement}
@@ -37,8 +44,15 @@ public:
         Called by wxEventLoopActivator, use an instance of this class instead
         of calling this method directly to ensure that the previously active
         event loop is restored.
+
+        Results in a call to wxAppConsole::OnEventLoopEnter.
      */
     static void SetActive(wxEventLoopBase* loop);
+
+    /**
+        Returns @true if this is the main loop executed by wxApp::OnRun().
+    */
+    bool IsMain() const;
 
 
     /**
@@ -193,7 +207,7 @@ public:
     //@{
 
     /**
-        Returns @true if called from inside Yield().
+        Returns @true if called from inside Yield() or from inside YieldFor().
     */
     virtual bool IsYielding() const;
 
@@ -261,7 +275,7 @@ protected:
         happens normally (because of Exit() call) or abnormally (because of an
         exception thrown from inside the loop).
 
-        Default version does nothing.
+        The default implementation calls wxAppConsole::OnEventLoopExit.
      */
     virtual void OnExit();
 };

@@ -61,6 +61,9 @@ public:
     // using it
     virtual bool IsOk() const { return true; }
 
+    // returns true if this is the main loop
+    bool IsMain() const;
+
 
     // dispatch&processing
     // -------------------
@@ -173,14 +176,14 @@ public:
     static wxEventLoopBase *GetActive() { return ms_activeLoop; }
 
     // set currently active (running) event loop
-    static void SetActive(wxEventLoopBase* loop) { ms_activeLoop = loop; }
+    static void SetActive(wxEventLoopBase* loop);
 
 
 protected:
     // this function should be called before the event loop terminates, whether
     // this happens normally (because of Exit() call) or abnormally (because of
     // an exception thrown from inside the loop)
-    virtual void OnExit() { }
+    virtual void OnExit();
 
     // the pointer to currently active loop
     static wxEventLoopBase *ms_activeLoop;
