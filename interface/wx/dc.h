@@ -49,33 +49,37 @@ enum wxFloodFillStyle
 };
 
 /**
-    The mapping mode which can be used with wxDC::SetMapMode.
+    The mapping used to transform @e logical units to @e device units.
+    See wxDC::SetMapMode.
 */
 enum wxMappingMode
 {
-    /** Each logical unit is 1 device pixel. */
+    /**
+        Each logical unit is 1 device pixel.
+        This is the default mapping mode for all wxDC-derived classes.
+    */
     wxMM_TEXT = 1,
 
+    /** Each logical unit is 1 millimeter. */
+    wxMM_METRIC,
+
+    /** Each logical unit is 1/10 of a millimeter. */
     wxMM_LOMETRIC,
-    wxMM_HIMETRIC,
 
-    /** Each logical unit is 1/10 of a mm. */
-    wxMM_LOENGLISH,
-
-    wxMM_HIENGLISH,
-
-    /** Each logical unit is 1/20 of a point, or 1/1440 of an inch. */
+    /**
+        Each logical unit is 1/20 of a @e "printer point", or 1/1440 of an inch
+        (also known as "twip"). Equivalent to about 17.64 micrometers.
+    */
     wxMM_TWIPS,
 
-    wxMM_ISOTROPIC,
-    wxMM_ANISOTROPIC,
-
-    /** Each logical unit is a point, or 1/72 of an inch. */
-    wxMM_POINTS,
-
-    /** Each logical unit is 1 mm. */
-    wxMM_METRIC
+    /**
+        Each logical unit is a @e "printer point" i.e. 1/72 of an inch.
+        Equivalent to about 353 micrometers.
+    */
+    wxMM_POINTS
 };
+
+
 
 /**
     @class wxDC
@@ -112,6 +116,23 @@ enum wxMappingMode
     or wxBrush that are built from wxColour use the colour's alpha values
     when stroking or filling.
 
+
+    @section dc_units Device and logical units
+
+    In the wxDC context there is a distinction between @e logical units and @e device units.
+
+    @b Device units are the units native to the particular device; e.g. for a screen,
+    a device unit is a @e pixel. For a printer, the device unit is defined by the
+    resolution of the printer (usually given in @c DPI: dot-per-inch).
+
+    All wxDC functions use instead @b logical units, unless where explicitely
+    stated. Logical units are arbitrary units mapped to device units using
+    the current mapping mode (see wxDC::SetMapMode).
+
+    This mechanism allows to reuse the same code which prints on e.g. a window
+    on the screen to print on e.g. a paper.
+
+
     @library{wxcore}
     @category{dc,gdi}
 
@@ -121,9 +142,6 @@ enum wxMappingMode
     @todo Precise definition of default/initial state.
     @todo Pixelwise definition of operations (e.g. last point of a line not
           drawn).
-    @todo Coordinates: state clearly which type of coordinates are returned by
-          the various Get*Point() or similar functions - often they are client
-          coordinates but not always.
 */
 class wxDC : public wxObject
 {
@@ -223,26 +241,26 @@ public:
     void DestroyClippingRegion();
 
     /**
-        Convert device X coordinate to logical coordinate, using the current
+        Convert @e device X coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
     */
     wxCoord DeviceToLogicalX(wxCoord x) const;
 
     /**
-        Convert device X coordinate to relative logical coordinate, using the
+        Convert @e device X coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
         axis orientation. Use this for converting a width, for example.
     */
     wxCoord DeviceToLogicalXRel(wxCoord x) const;
 
     /**
-        Converts device Y coordinate to logical coordinate, using the current
+        Converts @e device Y coordinate to logical coordinate, using the current
         mapping mode, user scale factor, device origin and axis orientation.
     */
     wxCoord DeviceToLogicalY(wxCoord y) const;
 
     /**
-        Convert device Y coordinate to relative logical coordinate, using the
+        Convert @e device Y coordinate to relative logical coordinate, using the
         current mapping mode and user scale factor but ignoring the
         axis orientation. Use this for converting a height, for example.
     */
@@ -618,7 +636,7 @@ public:
     wxRasterOperationMode GetLogicalFunction() const;
 
     /**
-        Gets the mapping mode for the device context.
+        Gets the current mapping mode for the device context.
 
         @see SetMapMode()
     */
@@ -700,8 +718,8 @@ public:
 
     //@{
     /**
-        This gets the horizontal and vertical resolution in device units. It
-        can be used to scale graphics to fit the page.
+        Gets the horizontal and vertical extent of this device context in @e device units.
+        It can be used to scale graphics to fit the page.
 
         For example, if @e maxX and @e maxY represent the maximum horizontal
         and vertical 'pixel' values used in your application, the following
@@ -987,7 +1005,7 @@ public:
 
     /**
         The mapping mode of the device context defines the unit of measurement
-        used to convert logical units to device units.
+        used to convert @e logical units to @e device units.
 
         Note that in X, text drawing isn't handled consistently with the mapping mode;
         a font is always specified in point size. However, setting the user scale (see

@@ -104,19 +104,14 @@ enum wxFloodFillStyle
     wxFLOOD_BORDER
 };
 
-//  Mapping modes (same values as used by Windows, don't change)
+//  Mapping modes
 enum wxMappingMode
 {
     wxMM_TEXT = 1,
+    wxMM_METRIC,
     wxMM_LOMETRIC,
-    wxMM_HIMETRIC,
-    wxMM_LOENGLISH,
-    wxMM_HIENGLISH,
     wxMM_TWIPS,
-    wxMM_ISOTROPIC,
-    wxMM_ANISOTROPIC,
-    wxMM_POINTS,
-    wxMM_METRIC
+    wxMM_POINTS
 };
 
 #if WXWIN_COMPATIBILITY_2_8
@@ -373,7 +368,7 @@ public:
     // logical functions
 
     virtual void SetLogicalFunction(wxRasterOperationMode function) = 0;
-    virtual wxRasterOperationMode GetLogicalFunction() const 
+    virtual wxRasterOperationMode GetLogicalFunction() const
                                       { return m_logicalFunction; }
 
     // text measurement
@@ -1134,7 +1129,7 @@ public:
 
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
-              wxRasterOperationMode rop = wxCOPY, bool useMask = false, 
+              wxRasterOperationMode rop = wxCOPY, bool useMask = false,
               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord)
     {
         return m_pimpl->DoBlit(xdest, ydest, width, height,
@@ -1142,7 +1137,7 @@ public:
     }
     bool Blit(const wxPoint& destPt, const wxSize& sz,
               wxDC *source, const wxPoint& srcPt,
-              wxRasterOperationMode rop = wxCOPY, bool useMask = false, 
+              wxRasterOperationMode rop = wxCOPY, bool useMask = false,
               const wxPoint& srcPtMask = wxDefaultPosition)
     {
         return m_pimpl->DoBlit(destPt.x, destPt.y, sz.x, sz.y,
@@ -1162,7 +1157,7 @@ public:
     }
     bool StretchBlit(const wxPoint& dstPt, const wxSize& dstSize,
                      wxDC *source, const wxPoint& srcPt, const wxSize& srcSize,
-                     wxRasterOperationMode rop = wxCOPY, bool useMask = false, 
+                     wxRasterOperationMode rop = wxCOPY, bool useMask = false,
                      const wxPoint& srcMaskPt = wxDefaultPosition)
     {
         return m_pimpl->DoStretchBlit(dstPt.x, dstPt.y, dstSize.x, dstSize.y,

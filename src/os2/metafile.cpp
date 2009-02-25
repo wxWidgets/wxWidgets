@@ -40,7 +40,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
 wxMetafileRefData::wxMetafileRefData(void)
 {
     m_metafile = 0;
-    m_windowsMappingMode = wxMM_ANISOTROPIC;
+    m_windowsMappingMode = MM_ANISOTROPIC;
 }
 
 wxMetafileRefData::~wxMetafileRefData(void)
@@ -56,7 +56,7 @@ wxMetafile::wxMetafile(const wxString& file)
 {
     m_refData = new wxMetafileRefData;
 
-    M_METAFILEDATA->m_windowsMappingMode = wxMM_ANISOTROPIC;
+    M_METAFILEDATA->m_windowsMappingMode = MM_ANISOTROPIC;
     M_METAFILEDATA->m_metafile = 0;
     if (!file.empty())
         M_METAFILEDATA->m_metafile = (WXHANDLE)0; // TODO: GetMetaFile(file);
@@ -185,7 +185,7 @@ wxMetafileDCImpl::wxMetafileDCImpl( wxDC *owner, const wxString& file,
 //  ::SetWindowExtEx((HDC) m_hDC,xext,yext, NULL);
 
     // Actual Windows mapping mode, for future reference.
-    m_windowsMappingMode = wxMM_ANISOTROPIC;
+    m_windowsMappingMode = MM_ANISOTROPIC;
 
     SetMapMode(wxMM_TEXT); // NOTE: does not set HDC mapmode (this is correct)
 }
