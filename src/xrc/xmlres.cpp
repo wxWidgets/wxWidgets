@@ -178,6 +178,11 @@ bool wxXmlResource::IsArchive(const wxString& filename)
 
 #endif // wxUSE_FILESYSTEM
 
+bool wxXmlResource::LoadFile(const wxFileName& file)
+{
+    return Load(wxFileSystem::FileNameToURL(file));
+}
+
 bool wxXmlResource::Load(const wxString& filemask_)
 {
     wxString filemask = ConvertFileNameToURL(filemask_);

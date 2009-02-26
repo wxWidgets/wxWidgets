@@ -109,8 +109,11 @@ public:
     virtual ~wxXmlResource();
 
     // Loads resources from XML files that match given filemask.
-    // This method understands VFS (see filesys.h).
+    // This method understands wxFileSystem URLs if wxUSE_FILESYS.
     bool Load(const wxString& filemask);
+
+    // Loads resources from single XRC file.
+    bool LoadFile(const wxFileName& file);
 
     // Unload resource from the given XML file (wildcards not allowed)
     bool Unload(const wxString& filename);

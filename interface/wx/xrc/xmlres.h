@@ -196,9 +196,26 @@ public:
                 wxLogError("Couldn't load resources!");
         @endcode
 
-        This method understands VFS (see wxFileSystem::FindFirst).
+        @note
+        If wxUSE_FILESYS is enabled, this method understands wxFileSystem URLs
+        (see wxFileSystem::FindFirst()).
+
+        @note
+        If you are sure that the argument is name of single XRC file (rather
+        than an URL or a wildcard), use LoadFile() instead.
+
+        @see LoadFile()
     */
     bool Load(const wxString& filemask);
+
+    /**
+        Simpler form of Load() for loading a single XRC file.
+
+        @since 2.9.0
+
+        @see Load()
+    */
+    bool LoadFile(const wxFileName& file);
 
     /**
         Loads a bitmap resource from a file.
