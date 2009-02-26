@@ -631,6 +631,7 @@ ALL_BASE_SOURCES =  \
 	src/mac/corefoundation/utilsexc_base.cpp \
 	src/os2/dir.cpp \
 	src/os2/mimetype.cpp \
+	src/os2/snglinst.cpp \
 	src/os2/stdpaths.cpp \
 	src/os2/thread.cpp \
 	src/os2/utils.cpp \
@@ -1568,7 +1569,7 @@ LOCALE_MSW_LINGUAS =  it
 @COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
 @COND_USE_PLUGINS_0@PLUGIN_ADV_EXTRALIBS = $(EXTRALIBS_SDL)
 @COND_PLATFORM_MACOSX_1@WXMACVERSION_CMD = \
-@COND_PLATFORM_MACOSX_1@	-compatibility_version 1.0 -current_version 1.0
+@COND_PLATFORM_MACOSX_1@	-compatibility_version 7.0 -current_version 7.0
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -3257,6 +3258,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_os2_dir.o \
 	monodll_os2_mimetype.o \
+	monodll_os2_snglinst.o \
 	monodll_os2_stdpaths.o \
 	monodll_os2_thread.o \
 	monodll_os2_utils.o \
@@ -5046,6 +5048,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_os2_dir.o \
 	monolib_os2_mimetype.o \
+	monolib_os2_snglinst.o \
 	monolib_os2_stdpaths.o \
 	monolib_os2_thread.o \
 	monolib_os2_utils.o \
@@ -6881,6 +6884,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_os2_dir.o \
 	basedll_os2_mimetype.o \
+	basedll_os2_snglinst.o \
 	basedll_os2_stdpaths.o \
 	basedll_os2_thread.o \
 	basedll_os2_utils.o \
@@ -7044,6 +7048,7 @@ COND_PLATFORM_MACOS_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_os2_dir.o \
 	baselib_os2_mimetype.o \
+	baselib_os2_snglinst.o \
 	baselib_os2_stdpaths.o \
 	baselib_os2_thread.o \
 	baselib_os2_utils.o \
@@ -11106,7 +11111,7 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_USE_XRC_1@__clean_wxrc___depname = clean-wxrc
 @COND_USE_XRC_1@__install_wxrc___depname = install-wxrc
 @COND_TOOLKIT_MSW@RCDEFS_H = msw/rcdefs.h
-@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).6.r
+@COND_TOOLKIT_COCOA@__cocoa_res___depname = lib/libwx_$(TOOLCHAIN_NAME).0.r
 @COND_TOOLKIT_COCOA@__cocoa_res_install___depname = cocoa-res-install
 @COND_SHARED_0@____SHARED = 
 @COND_SHARED_1@____SHARED = $(PIC_FLAG)
@@ -11378,15 +11383,15 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 @COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p_57 = --define wxNO_EXCEPTIONS
 @COND_USE_RTTI_0@__RTTI_DEFINE_p_57 = --define wxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p_57 = --define wxNO_THREADS
-@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).6
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .6.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_0_USE_SOVERSION_1@dll___targetsuf2 = .$(SO_SUFFIX).0
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf2 = .0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@dll___targetsuf3 \
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	= \
-@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).6.0.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).0.6.0
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .6.0.0.$(SO_SUFFIX)
-@COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@dll___targetsuf3 = -6.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.6.0.$(SO_SUFFIX)
+@COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@dll___targetsuf3 = -0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf3 = .$(SO_SUFFIX)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
@@ -11573,7 +11578,7 @@ clean: $(__clean_wxrc___depname)
 	rm -f $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 	rm -f $(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 	-(cd samples && $(MAKE) clean)
-	rm -f lib/libwx_$(TOOLCHAIN_NAME).6.rsrc lib/libwx_$(TOOLCHAIN_NAME).6.r
+	rm -f lib/libwx_$(TOOLCHAIN_NAME).0.rsrc lib/libwx_$(TOOLCHAIN_NAME).0.r
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -12235,13 +12240,13 @@ locale_msw_uninstall:
 	fi ; \
 	done
 
-@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).6.r: 
-@COND_TOOLKIT_COCOA@	$(REZ) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).6.rsrc
-@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).6.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).6.r
+@COND_TOOLKIT_COCOA@lib/libwx_$(TOOLCHAIN_NAME).0.r: 
+@COND_TOOLKIT_COCOA@	$(REZ) -d __UNIX__ -useDF $(top_srcdir)/src/cocoa/dummy.r -o lib/libwx_$(TOOLCHAIN_NAME).0.rsrc
+@COND_TOOLKIT_COCOA@	$(DEREZ) lib/libwx_$(TOOLCHAIN_NAME).0.rsrc -useDF >lib/libwx_$(TOOLCHAIN_NAME).0.r
 
 @COND_TOOLKIT_COCOA@cocoa-res-install: $(__cocoa_res___depname)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).6.r $(libdir)
-@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).6.rsrc $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).0.r $(libdir)
+@COND_TOOLKIT_COCOA@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).0.rsrc $(libdir)
 
 wxregex_regcomp.o: $(srcdir)/src/regex/regcomp.c
 	$(CCC) -c -o $@ $(WXREGEX_CFLAGS) $(srcdir)/src/regex/regcomp.c
@@ -12935,6 +12940,9 @@ monodll_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(MONODLL_ODEP)
 
 monodll_os2_mimetype.o: $(srcdir)/src/os2/mimetype.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/mimetype.cpp
+
+monodll_os2_snglinst.o: $(srcdir)/src/os2/snglinst.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/snglinst.cpp
 
 monodll_os2_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/stdpaths.cpp
@@ -17069,6 +17077,9 @@ monolib_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(MONOLIB_ODEP)
 
 monolib_os2_mimetype.o: $(srcdir)/src/os2/mimetype.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/mimetype.cpp
+
+monolib_os2_snglinst.o: $(srcdir)/src/os2/snglinst.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/snglinst.cpp
 
 monolib_os2_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/stdpaths.cpp
@@ -21207,6 +21218,9 @@ basedll_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(BASEDLL_ODEP)
 basedll_os2_mimetype.o: $(srcdir)/src/os2/mimetype.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/os2/mimetype.cpp
 
+basedll_os2_snglinst.o: $(srcdir)/src/os2/snglinst.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/os2/snglinst.cpp
+
 basedll_os2_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/os2/stdpaths.cpp
 
@@ -21794,6 +21808,9 @@ baselib_os2_dir.o: $(srcdir)/src/os2/dir.cpp $(BASELIB_ODEP)
 
 baselib_os2_mimetype.o: $(srcdir)/src/os2/mimetype.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/os2/mimetype.cpp
+
+baselib_os2_snglinst.o: $(srcdir)/src/os2/snglinst.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/os2/snglinst.cpp
 
 baselib_os2_stdpaths.o: $(srcdir)/src/os2/stdpaths.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/os2/stdpaths.cpp
