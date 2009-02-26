@@ -530,6 +530,17 @@ typedef short int WXTYPE;
 #   define wxDEPRECATED_BUT_USED_INTERNALLY(x) wxDEPRECATED(x)
 #endif
 
+/*
+    Combination of the two variants above: should be used for deprecated
+    functions which are defined inline and are used by wxWidgets itself.
+ */
+#ifdef WXBUILDING
+#   define wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(func, body) func { body }
+#else
+#   define wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(func, body) \
+        wxDEPRECATED(func) { body }
+#endif
+
 /*  everybody gets the assert and other debug macros */
 #include "wx/debug.h"
 

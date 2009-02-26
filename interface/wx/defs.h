@@ -1065,13 +1065,24 @@ template <typename T> wxDELETEA(T*& array);
     public:
         // OldMethod() is deprecated, use NewMethod() instead
         void NewMethod();
-        wxDEPRECATED_INLINE( void OldMethod(), NewMethod() );
+        wxDEPRECATED_INLINE( void OldMethod(), NewMethod(); )
     };
     @endcode
 
     @header{wx/defs.h}
 */
 #define wxDEPRECATED_INLINE(func, body)
+
+/**
+    Combination of wxDEPRECATED_BUT_USED_INTERNALLY() and wxDEPRECATED_INLINE().
+
+    This macro should be used for deprecated functions called by the library
+    itself (usually for backwards compatibility reasons) and which are defined
+    inline.
+
+    @header{wx/defs.h}
+*/
+#define wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(func, body)
 
 /**
     @c wxEXPLICIT is a macro which expands to the C++ @c explicit keyword if
