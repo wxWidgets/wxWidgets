@@ -546,12 +546,14 @@ public:
 
         @code
         T *item = array[n];
+        array.Remove(item);
         delete item;
-        array.Remove(n);
         @endcode
 
         See also WX_CLEAR_ARRAY() macro which deletes all elements of a wxArray
         (supposed to contain pointers).
+
+        @see RemoveAt()
     */
     void Remove(T item);
 
