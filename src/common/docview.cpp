@@ -650,7 +650,7 @@ wxView::~wxView()
     m_viewDocument->RemoveView(this);
 }
 
-bool wxView::TryValidator(wxEvent& event)
+bool wxView::TryBefore(wxEvent& event)
 {
     wxDocument * const doc = GetDocument();
     return doc && doc->ProcessEventHere(event);
@@ -1165,7 +1165,7 @@ wxView *wxDocManager::GetActiveView() const
     return view;
 }
 
-bool wxDocManager::TryValidator(wxEvent& event)
+bool wxDocManager::TryBefore(wxEvent& event)
 {
     wxView * const view = GetActiveView();
     return view && view->ProcessEventHere(event);
@@ -1801,15 +1801,18 @@ wxDocChildFrame::wxDocChildFrame(wxDocument *doc,
         view->SetFrame(this);
 }
 
-bool wxDocChildFrame::TryValidator(wxEvent& event)
+bool wxDocChildFrame::TryBefore(wxEvent& event)
 {
-    if ( !m_childView )
-        return false;
+    if ( m_childView )
+    {
+        // FIXME: why is this needed here?
+        m_childView->Activate(true);
 
-    // FIXME: why is this needed here?
-    m_childView->Activate(true);
+        if ( m_childView->ProcessEventHere(event) )
+            return true;
+    }
 
-    return m_childView->ProcessEventHere(event);
+    return wxFrame::TryBefore(event);
 }
 
 void wxDocChildFrame::OnActivate(wxActivateEvent& event)
@@ -1920,9 +1923,12 @@ void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 }
 
 // Extend event processing to search the view's event table
-bool wxDocParentFrame::TryValidator(wxEvent& event)
+bool wxDocParentFrame::TryBefore(wxEvent& event)
 {
-    return m_docManager && m_docManager->ProcessEventHere(event);
+    if ( m_docManager && m_docManager->ProcessEventHere(event) )
+        return true;
+
+    return wxFrame::TryBefore(event);
 }
 
 // Define the behaviour for the frame closing

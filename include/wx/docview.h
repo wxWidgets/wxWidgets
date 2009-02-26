@@ -107,7 +107,7 @@ public:
     // modified to false)
     virtual bool OnSaveModified();
 
-    // if you override, remember to call the default 
+    // if you override, remember to call the default
     // implementation (wxDocument::OnChangeFilename)
     virtual void OnChangeFilename(bool notifyViews);
 
@@ -243,7 +243,7 @@ public:
 
 protected:
     // hook the document into event handlers chain here
-    virtual bool TryValidator(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event);
 
     wxDocument*       m_viewDocument;
     wxString          m_viewTypeName;
@@ -467,7 +467,7 @@ public:
 
 protected:
     // hook the currently active view into event handlers chain here
-    virtual bool TryValidator(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event);
 
     // return the command processor for the current document, if any
     wxCommandProcessor *GetCurrentCommandProcessor() const;
@@ -528,7 +528,7 @@ public:
 
 protected:
     // hook the child view into event handlers chain here
-    virtual bool TryValidator(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event);
 
     wxDocument*       m_childDocument;
     wxView*           m_childView;
@@ -573,7 +573,7 @@ public:
 
 protected:
     // hook the document manager into event handling chain here
-    virtual bool TryValidator(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event);
 
     wxDocManager *m_docManager;
 

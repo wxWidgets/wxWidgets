@@ -515,7 +515,7 @@ void wxGenericMDIChildFrame::OnClose(wxCloseEvent& WXUNUSED(event))
     delete this;
 }
 
-bool wxGenericMDIChildFrame::TryParent(wxEvent& event)
+bool wxGenericMDIChildFrame::TryAfter(wxEvent& event)
 {
     // we shouldn't propagate the event to the parent if we received it from it
     // in the first place
@@ -523,7 +523,7 @@ bool wxGenericMDIChildFrame::TryParent(wxEvent& event)
     if ( parent && parent->WXIsInsideChildHandler(this) )
         return false;
 
-    return wxTDIChildFrame::TryParent(event);
+    return wxTDIChildFrame::TryAfter(event);
 }
 
 // ----------------------------------------------------------------------------

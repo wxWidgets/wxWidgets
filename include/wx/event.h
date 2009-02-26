@@ -3067,7 +3067,7 @@ public:
     //
     // It is meant to be called from ProcessEvent() only and is not virtual,
     // additional event handlers can be hooked into the normal event processing
-    // logic using TryValidator() hook.
+    // logic using TryBefore() and TryAfter() hooks.
     bool ProcessEventHere(wxEvent& event);
 
 
@@ -3090,21 +3090,42 @@ protected:
     // hooks for wxWindow used by ProcessEvent()
     // -----------------------------------------
 
-    // This one is called before trying our own event table to allow plugging
-    // in the validators.
-    //
-    // NB: This method is intentionally *not* inside wxUSE_VALIDATORS!
-    //     It is part of wxBase which doesn't use validators and the code
-    //     is compiled out when building wxBase w/o GUI classes, which affects
-    //     binary compatibility and wxBase library can't be used by GUI
-    //     ports.
-    virtual bool TryValidator(wxEvent& WXUNUSED(event)) { return false; }
+    // this one is called before trying our own event table to allow plugging
+    // in the event handlers overriding the default logic, this is used by e.g.
+    // validators.
+    virtual bool TryBefore(wxEvent& event)
+    {
+#ifdef WXWIN_COMPATIBILITY_2_8
+        // call the old virtual function to keep the code overriding it working
+        return TryValidator(event);
+#else
+        wxUnusedVar(event);
+        return false;
+#endif
+    }
 
     // this one is called after failing to find the event handle in our own
     // table to give a chance to the other windows to process it
     //
     // base class implementation passes the event to wxTheApp
-    virtual bool TryParent(wxEvent& event);
+    virtual bool TryAfter(wxEvent& event)
+    {
+#ifdef WXWIN_COMPATIBILITY_2_8
+        // as above, call the old virtual function for compatibility
+        return TryParent(event);
+#else
+        return DoTryApp(event);
+#endif
+    }
+
+#ifdef WXWIN_COMPATIBILITY_2_8
+    // deprecated method: override TryBefore() instead of this one
+    wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
+        virtual bool TryValidator(wxEvent& WXUNUSED(event)), return false; )
+
+    wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
+        virtual bool TryParent(wxEvent& event), return DoTryApp(event); )
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
     static const wxEventTable sm_eventTable;
@@ -3152,6 +3173,9 @@ protected:
     wxEventConnectionRef *FindRefInTrackerList(wxEvtHandler *eventSink);
 
 private:
+    // pass the event to wxTheApp instance, called from TryAfter()
+    bool DoTryApp(wxEvent& event);
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxEvtHandler)
 };
 

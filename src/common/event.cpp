@@ -1279,15 +1279,8 @@ wxEvtHandler::ProcessEventIfMatchesId(const wxEventTableEntryBase& entry,
     return false;
 }
 
-bool wxEvtHandler::TryParent(wxEvent& event)
+bool wxEvtHandler::DoTryApp(wxEvent& event)
 {
-    if ( GetNextHandler() )
-    {
-        // the next handler will pass it to wxTheApp if it doesn't process it,
-        // so return from here to avoid doing it again
-        return GetNextHandler()->TryParent(event);
-    }
-
     if ( wxTheApp && (this != wxTheApp) )
     {
         // Special case: don't pass wxEVT_IDLE to wxApp, since it'll always
@@ -1330,14 +1323,14 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
         return true;
 
     // pass the event to the next handler, notice that we shouldn't call
-    // TryParent() even if it doesn't handle the event as the last handler in
+    // TryAfter() even if it doesn't handle the event as the last handler in
     // the chain will do it
     if ( GetNextHandler() )
         return GetNextHandler()->ProcessEvent(event);
 
     // propagate the event upwards the window chain and/or to the application
     // object if it wasn't processed at this level
-    return TryParent(event);
+    return TryAfter(event);
 }
 
 bool wxEvtHandler::ProcessEventHere(wxEvent& event)
@@ -1346,9 +1339,8 @@ bool wxEvtHandler::ProcessEventHere(wxEvent& event)
     if ( !GetEvtHandlerEnabled() )
         return false;
 
-    // If we have a validator, it has higher priority than our own event
-    // handlers
-    if ( TryValidator(event) )
+    // Try the hooks which should be called before our own handlers
+    if ( TryBefore(event) )
         return true;
 
     // Handle per-instance dynamic event tables first

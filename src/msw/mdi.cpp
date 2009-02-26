@@ -669,7 +669,7 @@ void wxMDIParentFrame::OnMDICommand(wxCommandEvent& event)
 
 #endif // wxUSE_MENUS
 
-bool wxMDIParentFrame::TryValidator(wxEvent& event)
+bool wxMDIParentFrame::TryBefore(wxEvent& event)
 {
     // menu (and toolbar) events should be sent to the active child frame
     // first, if any
@@ -680,7 +680,7 @@ bool wxMDIParentFrame::TryValidator(wxEvent& event)
             return true;
     }
 
-    return wxMDIParentFrameBase::TryValidator(event);
+    return wxMDIParentFrameBase::TryBefore(event);
 }
 
 WXLRESULT wxMDIParentFrame::MSWDefWindowProc(WXUINT message,

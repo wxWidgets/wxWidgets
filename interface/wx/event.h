@@ -453,22 +453,29 @@ public:
         (such as a new control) where you define new event types, as opposed to
         allowing the user to override virtual functions.
 
-        An instance where you might actually override the ProcessEvent() function is where
-        you want to direct event processing to event handlers not normally noticed by
-        wxWidgets. For example, in the document/view architecture, documents and views
-        are potential event handlers. When an event reaches a frame, ProcessEvent() will
-        need to be called on the associated document and view in case event handler functions
-        are associated with these objects. The property classes library (wxProperty) also
-        overrides ProcessEvent() for similar reasons.
+        Notice that you don't usually need to override ProcessEvent() to
+        customize the event handling, overriding the specially provided
+        TryBefore() and TryAfter() functions is usually enough. For example,
+        wxMDIParentFrame may override TryBefore() to ensure that the menu
+        events are processed in the active child frame before being processed
+        in the parent frame itself.
 
         The normal order of event table searching is as follows:
+        -# wxApp::FilterEvent() is called. If it returns anything but @c -1
+           (default) the processing stops here.
         -# If the object is disabled (via a call to wxEvtHandler::SetEvtHandlerEnabled)
-           the function skips to step (6).
-        -# If the object is a wxWindow, ProcessEvent() is recursively called on the
-           window's wxValidator. If this returns @true, the function exits.
-        -# SearchEventTable() is called for this event handler. If this fails, the base
-           class table is tried, and so on until no more tables exist or an appropriate
-           function was found, in which case the function exits.
+           the function skips to step (7).
+        -# TryBefore() is called (this is where wxValidator are taken into
+           account for wxWindow objects). If this returns @true, the function exits.
+        -# Dynamic event table of the handlers connected using Connect() is
+           searched. If a handler is found, it is executed and the function
+           returns @true unless the handler used wxEvent::Skip() to indicate
+           that it didn't handle the event in which case the search continues.
+        -# Static events table of the handlers connected using event table
+           macros is searched for this event handler. If this fails, the base
+           class event table table is tried, and so on until no more tables
+           exist or an appropriate function was found. If a handler is found,
+           the same logic as in the previous step applies.
         -# The search is applied down the entire chain of event handlers (usually the
            chain has a length of one). This chain can be formed using wxEvtHandler::SetNextHandler():
               @image html overview_events_chain.png
@@ -477,20 +484,40 @@ public:
            Note that in the case of wxWindow you can build a stack of event handlers
            (see wxWindow::PushEventHandler() for more info).
            If any of the handlers of the chain return @true, the function exits.
-        -# If the object is a wxWindow and the event is a wxCommandEvent, ProcessEvent()
-           is recursively applied to the parent window's event handler.
-           If this returns @true, the function exits.
-        -# Finally, ProcessEvent() is called on the wxApp object.
+        -# TryAfter() is called: for the wxWindow object this may propagate the
+           event to the window parent (recursively). If the event is still not
+           processed, ProcessEvent() on wxTheApp object is called as the last
+           step.
+
+        Notice that steps (2)-(6) are performed in ProcessEventHere() which is
+        called by this function.
 
         @param event
             Event to process.
-
-        @return @true if a suitable event handler function was found and
-                 executed, and the function did not call wxEvent::Skip.
+        @return
+            @true if a suitable event handler function was found and executed,
+            and the function did not call wxEvent::Skip.
 
         @see SearchEventTable()
     */
     virtual bool ProcessEvent(wxEvent& event);
+
+    /**
+        Try to process the event in this event handler.
+
+        This method is called from ProcessEvent(), please see the detailed
+        description of the event processing logic there.
+
+        It is @em not virtual and so may not be overridden but it does call
+        virtual TryBefore() which may be overridden.
+
+        @param event
+            Event to process.
+        @return
+            @true if this object itself defines a handler for this event and
+            the handler didn't skip the event.
+     */
+    bool ProcessEventHere(wxEvent& event);
 
     /**
         Processes an event by calling ProcessEvent() and handles any exceptions
@@ -821,6 +848,66 @@ public:
     bool IsUnlinked() const;
 
     //@}
+
+protected:
+    /**
+        Method called by ProcessEvent() before examining this object event
+        tables.
+
+        This method can be overridden to hook into the event processing logic
+        as early as possible. You should usually call the base class version
+        when overriding this method, even if wxEvtHandler itself does nothing
+        here, some derived classes do use this method, e.g. wxWindow implements
+        support for wxValidator in it.
+
+        Example:
+        @code
+        class MyClass : public BaseClass // inheriting from wxEvtHandler
+        {
+        ...
+        protected:
+            virtual bool TryBefore(wxEvent& event)
+            {
+                if ( MyPreProcess(event) )
+                    return true;
+
+                return BaseClass::TryBefore(event);
+            }
+        };
+        @endcode
+
+        @see ProcessEvent(), ProcessEventHere()
+     */
+    virtual bool TryBefore(wxEvent& event);
+
+    /**
+        Method called by ProcessEvent() as last resort.
+
+        This method can be overridden to implement post-processing for the
+        events which were not processed anywhere else.
+
+        The base class version handles forwarding the unprocessed events to
+        wxApp at wxEvtHandler level and propagating them upwards the window
+        child-parent chain at wxWindow level and so should usually be called
+        when overriding this method:
+        @code
+        class MyClass : public BaseClass // inheriting from wxEvtHandler
+        {
+        ...
+        protected:
+            virtual bool TryAfter(wxEvent& event)
+            {
+                if ( BaseClass::TryAfter(event) )
+                    return true;
+
+                return MyPostProcess(event);
+            }
+        };
+        @endcode
+
+        @see ProcessEvent(), ProcessEventHere()
+     */
+    virtual bool TryAfter(wxEvent& event);
 };
 
 

@@ -1408,8 +1408,8 @@ public:
 
 protected:
     // event handling specific to wxWindow
-    virtual bool TryValidator(wxEvent& event);
-    virtual bool TryParent(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event);
+    virtual bool TryAfter(wxEvent& event);
 
     enum WindowOrder
     {

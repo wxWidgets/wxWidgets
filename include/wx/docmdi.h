@@ -44,7 +44,7 @@ public:
 protected:
     void Init();
 
-    virtual bool TryValidator(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event);
 
     wxDocManager *m_docManager;
 
@@ -89,7 +89,7 @@ public:
 protected:
     void Init();
 
-    virtual bool TryValidator(wxEvent& event);
+    virtual bool TryBefore(wxEvent& event);
 
     wxDocument*       m_childDocument;
     wxView*           m_childView;

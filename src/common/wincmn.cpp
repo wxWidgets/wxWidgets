@@ -2861,7 +2861,7 @@ bool wxWindowBase::UnregisterHotKey(int WXUNUSED(hotkeyId))
 // event processing
 // ----------------------------------------------------------------------------
 
-bool wxWindowBase::TryValidator(wxEvent& wxVALIDATOR_PARAM(event))
+bool wxWindowBase::TryBefore(wxEvent& event)
 {
 #if wxUSE_VALIDATORS
     // Can only use the validator of the window which
@@ -2876,10 +2876,10 @@ bool wxWindowBase::TryValidator(wxEvent& wxVALIDATOR_PARAM(event))
     }
 #endif // wxUSE_VALIDATORS
 
-    return false;
+    return wxEvtHandler::TryBefore(event);
 }
 
-bool wxWindowBase::TryParent(wxEvent& event)
+bool wxWindowBase::TryAfter(wxEvent& event)
 {
     // carry on up the parent-child hierarchy if the propagation count hasn't
     // reached zero yet
@@ -2901,7 +2901,7 @@ bool wxWindowBase::TryParent(wxEvent& event)
         }
     }
 
-    return wxEvtHandler::TryParent(event);
+    return wxEvtHandler::TryAfter(event);
 }
 
 // ----------------------------------------------------------------------------

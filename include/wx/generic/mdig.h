@@ -172,7 +172,7 @@ public:
     virtual wxString GetTitle() const { return m_title; }
     virtual void SetTitle(const wxString& title);
 
-    virtual bool TryParent(wxEvent& event);
+    virtual bool TryAfter(wxEvent& event);
 
     // implementation only from now on
 

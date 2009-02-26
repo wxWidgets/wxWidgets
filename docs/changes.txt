@@ -119,7 +119,7 @@ Changes in behaviour which may result in compilation errors
   need to review them as wxDC doesn't have any virtual methods any longer and
   uses delegation instead of inheritance to present different behaviours.
 
-- wxWindow::ProcessEvent() (and other wxEvtHandler functions inherited by wxWindow)
+- wxWindow::ProcessEvent() (and other wxEvtHandler methods inherited by wxWindow)
   has been made protected to prevent wrongly using it instead of correct
   GetEventHandler()->ProcessEvent().
   New ProcessWindowEvent() was added for convenience.
@@ -217,6 +217,10 @@ Changes in behaviour which may result in compilation errors
   A correct implementation for MyCustomEventClass::Clone() is simply:
     virtual wxEvent *Clone() const  { return new MyCustomEventClass(*this); }
 
+- Global wxPendingEvents and wxPendingEventsLocker objects were removed.
+  You may use wxEventLoopBase::SuspendProcessingOfPendingEvents instead of
+  locking wxPendingEventsLocker now.
+
 
 Deprecated methods and their replacements
 -----------------------------------------
@@ -234,14 +238,16 @@ Deprecated methods and their replacements
   "Attribute" instead of "Property" or "Prop" in their names.
 - wxConnection::OnExecute() is not formally deprecated yet but new code should
   use simpler OnExec() version which is called with wxString argument
-- wxMenuItem::GetLabel has been deprecated in favour of wxMenuItem::GetItemLabelText
-- wxMenuItem::GetText has been deprecated in favour of wxMenuItem::GetItemLabel
-- wxMenuItem::GetLabelFromText has been deprecated in favour of wxMenuItem::GetLabelText
-- wxMenuItem::SetText has been deprecated in favour of wxMenuItem::SetItemLabel
-- wxBrush's, wxPen's SetStyle() and GetStyle() as well as the wxBrush/wxPen ctor now take
-  respectively a wxBrushStyle and a wxPenStyle value instead of a plain "int style";
-  use the new wxBrush/wxPen style names (wxBRUSHSTYLE_XXX and wxPENSTYLE_XXX) instead
-  of the old deprecated wxXXX styles (which however are still available).
+- Various wxMenuItem methods were deprecated in favour of more consisently
+  named new versions:
+    . GetLabel() is now GetItemLabelText()
+    . GetText() is not GetItemLabel()
+    . GetLabelFromText() is now GetLabelText()
+    . SetText() is now SetItemLabel()
+- wxBrush's, wxPen's SetStyle() and GetStyle() as well as the wxBrush/wxPen
+  ctor now take respectively a wxBrushStyle and a wxPenStyle value instead of a
+  plain "int style"; use the new wxBrush/wxPen style names (wxBRUSHSTYLE_XXX
+  and wxPENSTYLE_XXX) instead of the old deprecated wxXXX styles.
 - EVT_GRID_CELL_CHANGE was deprecated, use EVT_GRID_CELL_CHANGED instead if you
   don't veto the event in its handler and EVT_GRID_CELL_CHANGING if you do.
 - EVT_CALENDAR_DAY event has been deprecated, use EVT_CALENDAR_SEL_CHANGED.
@@ -256,13 +262,14 @@ Deprecated methods and their replacements
   it with SetDeviceClippingRegion() if this was the correct thing to do in your
   code.
 - wxTE_AUTO_SCROLL style is deprecated as it's always on by default anyhow.
-- wxThreadHelper::Create() has been deprecated in favour of wxThreadHelper::CreateThread
-  which has a better name for a mix-in class, and allows setting the thread type.
+- wxThreadHelper::Create() has been renamed to CreateThread which has a better
+  name for a mix-in class, and allows setting the thread type.
 - wxDos2UnixFilename, wxUnix2DosFilename, wxStripExtension, wxGetTempFileName,
   wxExpandPath, wxContractPath, wxRealPath, wxCopyAbsolutePath, wxSplitPath
   were deprecated in favour of wxFileName methods. See docs for more info.
-- global wxPendingEvents and wxPendingEventsLocker objects were removed; now you may use
-  wxEventLoopBase::SuspendProcessingOfPendingEvents instead of locking wxPendingEventsLocker.
+- wxEvtHandler::TryValidator/Parent() are deprecated, override the new and
+  documented TryBefore/After() methods if you used to override these ones.
+
 
 Major new features in this release
 ----------------------------------
