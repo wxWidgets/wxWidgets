@@ -178,8 +178,10 @@ bool wxXmlResource::IsArchive(const wxString& filename)
 
 #endif // wxUSE_FILESYSTEM
 
-bool wxXmlResource::Load(const wxString& filemask)
+bool wxXmlResource::Load(const wxString& filemask_)
 {
+    wxString filemask = ConvertFileNameToURL(filemask_);
+
 #if wxUSE_FILESYSTEM
     wxFileSystem fsys;
 #   define wxXmlFindFirst  fsys.FindFirst(filemask, wxFILE)
@@ -197,8 +199,6 @@ bool wxXmlResource::Load(const wxString& filemask)
 
     while (!fnd.empty())
     {
-        fnd = ConvertFileNameToURL(fnd);
-
 #if wxUSE_FILESYSTEM
         if ( IsArchive(fnd) )
         {
