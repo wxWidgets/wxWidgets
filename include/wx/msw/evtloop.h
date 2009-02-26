@@ -42,7 +42,7 @@ protected:
 
 #if wxUSE_GUI
 
-WX_DECLARE_OBJARRAY(MSG, wxMSGArray);
+WX_DECLARE_EXPORTED_OBJARRAY(MSG, wxMSGArray);
 
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxMSWEventLoopBase
 {
