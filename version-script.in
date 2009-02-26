@@ -30,11 +30,11 @@
         *wxAuiManager*DoEndResizeAction*;
         *wxCArrayString*Release*;
         *wxDCBase*GetFontPointSizeAdjustment*;
-        *wxWindowBase*DragAcceptFiles*;
         *wxGraphicsBitmap*;
         *wxGraphicsContext*CreateBitmap*;
         *wxGraphicsContext*DrawGraphicsBitmap*;
         *wxGraphicsRenderer*CreateBitmap*;
+        *wxWindowBase*DragAcceptFiles*;
 };
 
 # public symbols added in 2.8.9 (please keep in alphabetical order):
