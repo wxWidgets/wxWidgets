@@ -880,6 +880,11 @@ public:
     /** Returns current vertical spacing. */
     int GetVerticalSpacing() const { return (int)m_vspacing; }
 
+    /**
+        Returns @true if a property editor control has focus.
+    */
+    bool IsEditorFocused() const;
+
     /** Returns true if editor's value was marked modified.
     */
     bool IsEditorsValueModified() const
@@ -1779,9 +1784,6 @@ protected:
     }
 
     void ImprovedClientToScreen( int* px, int* py );
-
-    // Returns True if editor control has focus
-    bool IsEditorFocused() const;
 
     // Called by focus event handlers. newFocused is the window that becomes
     // focused.

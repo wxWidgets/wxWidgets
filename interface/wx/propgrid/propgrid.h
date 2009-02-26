@@ -687,6 +687,11 @@ public:
     bool IsAnyModified() const;
 
     /**
+        Returns @true if a property editor control has focus.
+    */
+    bool IsEditorFocused() const;
+
+    /**
         Returns true if updating is frozen (ie. Freeze() called but not
         yet Thaw() ).
     */
