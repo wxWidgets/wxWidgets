@@ -94,7 +94,6 @@ public:
     void OnIconized(wxIconizeEvent& event);
 
     bool HandleActivate(int state, bool minimized, WXHWND activate);
-    bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
 
     // override window proc for MDI-specific message processing
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
@@ -109,6 +108,9 @@ public:
 #endif // wxUSE_MENUS
 
 protected:
+    // override to pass menu/toolbar events to the active child first
+    virtual bool TryValidator(wxEvent& event);
+
 #if wxUSE_MENUS_NATIVE
     virtual void InternalSetMenuBar();
 #endif // wxUSE_MENUS_NATIVE

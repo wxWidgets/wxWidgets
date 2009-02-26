@@ -540,25 +540,6 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
             }
             break;
 
-        case WM_COMMAND:
-            {
-                WXWORD id, cmd;
-                WXHWND hwnd;
-                UnpackCommand(wParam, lParam, &id, &hwnd, &cmd);
-
-                (void)HandleCommand(id, cmd, hwnd);
-
-                // even if the frame didn't process it, there is no need to try it
-                // once again (i.e. call wxFrame::HandleCommand()) - we just did it,
-                // so pretend we processed the message anyhow
-                processed = true;
-            }
-
-            // always pass this message DefFrameProc(), otherwise MDI menu
-            // commands (and sys commands - more surprisingly!) won't work
-            MSWDefWindowProc(message, wParam, lParam);
-            break;
-
         case WM_CREATE:
             m_clientWindow = OnCreateClient();
             // Uses own style for client style
@@ -688,13 +669,18 @@ void wxMDIParentFrame::OnMDICommand(wxCommandEvent& event)
 
 #endif // wxUSE_MENUS
 
-bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
+bool wxMDIParentFrame::TryValidator(wxEvent& event)
 {
-    wxMDIChildFrame * const child = GetActiveChild();
-    if ( child && child->HandleCommand(id, cmd, hwnd) )
-        return true;
+    // menu (and toolbar) events should be sent to the active child frame
+    // first, if any
+    if ( event.GetEventType() == wxEVT_COMMAND_MENU_SELECTED )
+    {
+        wxMDIChildFrame * const child = GetActiveChild();
+        if ( child && child->ProcessEventHere(event) )
+            return true;
+    }
 
-    return wxFrame::HandleCommand(id, cmd, hwnd);
+    return wxMDIParentFrameBase::TryValidator(event);
 }
 
 WXLRESULT wxMDIParentFrame::MSWDefWindowProc(WXUINT message,

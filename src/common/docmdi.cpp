@@ -70,7 +70,10 @@ void wxDocMDIParentFrame::OnMRUFile(wxCommandEvent& event)
 
 bool wxDocMDIParentFrame::TryValidator(wxEvent& event)
 {
-    return m_docManager && m_docManager->ProcessEventHere(event);
+    if ( m_docManager && m_docManager->ProcessEventHere(event) )
+        return true;
+
+    return wxMDIParentFrame::TryValidator(event);
 }
 
 void wxDocMDIParentFrame::OnCloseWindow(wxCloseEvent& event)
@@ -135,7 +138,10 @@ wxDocMDIChildFrame::~wxDocMDIChildFrame(void)
 
 bool wxDocMDIChildFrame::TryValidator(wxEvent& event)
 {
-    return m_childView && m_childView->ProcessEventHere(event);
+    if ( m_childView && m_childView->ProcessEventHere(event) )
+        return true;
+
+    return wxMDIChildFrame::TryValidator(event);
 }
 
 void wxDocMDIChildFrame::OnActivate(wxActivateEvent& event)
