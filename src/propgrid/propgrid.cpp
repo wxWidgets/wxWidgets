@@ -3787,7 +3787,7 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     else if ( xPos > (xAmount-(width/wxPG_PIXELS_PER_UNIT)) )
         xPos = 0;
 
-    int yAmount = (y+wxPG_PIXELS_PER_UNIT+2)/wxPG_PIXELS_PER_UNIT;
+    int yAmount = y / wxPG_PIXELS_PER_UNIT;
     int yPos = GetScrollPos( wxVERTICAL );
 
     SetScrollbars( wxPG_PIXELS_PER_UNIT, wxPG_PIXELS_PER_UNIT,
