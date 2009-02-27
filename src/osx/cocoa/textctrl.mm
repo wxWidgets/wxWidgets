@@ -165,6 +165,21 @@
     impl = item;
 }
 
+- (void) setEnabled:(BOOL) flag
+{
+    [super setEnabled: flag];
+
+    if (![self drawsBackground]) {
+        // Static text is drawn incorrectly when disabled.
+        // For an explanation, see
+        // http://www.cocoabuilder.com/archive/message/cocoa/2006/7/21/168028
+        if (flag) {
+            [self setTextColor: [NSColor controlTextColor]];
+        } else {
+            [self setTextColor: [NSColor secondarySelectedControlColor]];
+        }
+    }
+}
 
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
