@@ -520,7 +520,7 @@ inline size_t wxDocManager::GetNoHistoryFiles() const
 // wxDocChildFrameAny does
 // ----------------------------------------------------------------------------
 
-class wxDocChildFrameAnyBase
+class WXDLLIMPEXP_CORE wxDocChildFrameAnyBase
 {
 public:
     wxDocChildFrameAnyBase(wxDocument *doc, wxView *view)
