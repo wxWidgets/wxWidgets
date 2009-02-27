@@ -642,12 +642,24 @@ wxView::wxView()
     m_viewDocument = NULL;
 
     m_viewFrame = NULL;
+
+    m_docChildFrame = NULL;
 }
 
 wxView::~wxView()
 {
     GetDocumentManager()->ActivateView(this, false);
-    m_viewDocument->RemoveView(this);
+
+    // reset our frame view first, before removing it from the document as
+    // SetView(NULL) is a simple call while RemoveView() may result in user
+    // code being executed and this user code can, for example, show a message
+    // box which would result in an activation event for m_docChildFrame and so
+    // could reactivate the view being destroyed -- unless we reset it first
+    if ( m_docChildFrame && m_docChildFrame->GetView() == this )
+        m_docChildFrame->SetView(NULL);
+
+    if ( m_viewDocument )
+        m_viewDocument->RemoveView(this);
 }
 
 bool wxView::TryBefore(wxEvent& event)
@@ -1776,71 +1788,27 @@ void wxDocManager::ActivateView(wxView *view, bool activate)
 }
 
 // ----------------------------------------------------------------------------
-// Default document child frame
+// wxDocChildFrameAnyBase
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxDocChildFrame, wxFrame)
-    EVT_ACTIVATE(wxDocChildFrame::OnActivate)
-    EVT_CLOSE(wxDocChildFrame::OnCloseWindow)
-END_EVENT_TABLE()
-
-wxDocChildFrame::wxDocChildFrame(wxDocument *doc,
-                                 wxView *view,
-                                 wxFrame *frame,
-                                 wxWindowID id,
-                                 const wxString& title,
-                                 const wxPoint& pos,
-                                 const wxSize& size,
-                                 long style,
-                                 const wxString& name)
-               : wxFrame(frame, id, title, pos, size, style, name)
-{
-    m_childDocument = doc;
-    m_childView = view;
-    if (view)
-        view->SetFrame(this);
-}
-
-bool wxDocChildFrame::TryBefore(wxEvent& event)
+bool wxDocChildFrameAnyBase::CloseView(wxCloseEvent& event)
 {
     if ( m_childView )
     {
-        // FIXME: why is this needed here?
-        m_childView->Activate(true);
+        if ( event.CanVeto() && !m_childView->Close(false) )
+        {
+            event.Veto();
+            return false;
+        }
 
-        if ( m_childView->ProcessEventHere(event) )
-            return true;
+        m_childView->Activate(false);
+        delete m_childView;
+        m_childView = NULL;
     }
 
-    return wxFrame::TryBefore(event);
-}
-
-void wxDocChildFrame::OnActivate(wxActivateEvent& event)
-{
-    wxFrame::OnActivate(event);
-
-    if (m_childView)
-        m_childView->Activate(event.GetActive());
-}
-
-void wxDocChildFrame::OnCloseWindow(wxCloseEvent& event)
-{
-    if ( !m_childView )
-        return;
-
-    // passing false to Close() means to not delete associated window
-    if ( event.CanVeto() && !m_childView->Close(false) )
-    {
-        event.Veto();
-        return;
-    }
-
-    m_childView->Activate(false);
-    delete m_childView;
-    m_childView = NULL;
     m_childDocument = NULL;
 
-    Destroy();
+    return true;
 }
 
 // ----------------------------------------------------------------------------

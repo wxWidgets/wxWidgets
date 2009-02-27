@@ -54,54 +54,39 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDocMDIParentFrame);
 };
 
-/*
- * Use this instead of wxMDIChildFrame
- */
+// ----------------------------------------------------------------------------
+// An MDI document child frame: we need to define it as a class just for wxRTTI,
+// otherwise we could simply typedef it
+// ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDocMDIChildFrame: public wxMDIChildFrame
+typedef
+  wxDocChildFrameAny<wxMDIChildFrame, wxMDIParentFrame> wxDocMDIChildFrameBase;
+
+class WXDLLIMPEXP_CORE wxDocMDIChildFrame : public wxDocMDIChildFrameBase
 {
 public:
-    wxDocMDIChildFrame();
-    wxDocMDIChildFrame(wxDocument *doc, wxView *view, wxMDIParentFrame *frame, wxWindowID id,
-        const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-        long type = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr);
-    virtual ~wxDocMDIChildFrame();
-
-    bool Create(wxDocument *doc,
-                wxView *view,
-                wxMDIParentFrame *frame,
-                wxWindowID id,
-                const wxString& title,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long type = wxDEFAULT_FRAME_STYLE,
-                const wxString& name = wxFrameNameStr);
-
-    void OnActivate(wxActivateEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
-
-    inline wxDocument *GetDocument() const { return m_childDocument; }
-    inline wxView *GetView(void) const { return m_childView; }
-    inline void SetDocument(wxDocument *doc) { m_childDocument = doc; }
-    inline void SetView(wxView *view) { m_childView = view; }
-    bool Destroy() { m_childView = NULL; return wxMDIChildFrame::Destroy(); }
-
-protected:
-    void Init();
-
-    virtual bool TryBefore(wxEvent& event);
-
-    wxDocument*       m_childDocument;
-    wxView*           m_childView;
+    wxDocMDIChildFrame(wxDocument *doc,
+                       wxView *view,
+                       wxMDIParentFrame *parent,
+                       wxWindowID id,
+                       const wxString& title,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxDEFAULT_FRAME_STYLE,
+                       const wxString& name = wxFrameNameStr)
+        : wxDocMDIChildFrameBase(doc, view,
+                                 parent, id, title, pos, size, style, name)
+    {
+    }
 
 private:
-    DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxDocMDIChildFrame)
     wxDECLARE_NO_COPY_CLASS(wxDocMDIChildFrame);
 };
 
-#endif
-    // wxUSE_MDI_ARCHITECTURE
+WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxDocMDIChildFrameBase )
 
-#endif
-    // _WX_DOCMDI_H_
+
+#endif // wxUSE_MDI_ARCHITECTURE
+
+#endif // _WX_DOCMDI_H_

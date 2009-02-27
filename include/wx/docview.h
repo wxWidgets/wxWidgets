@@ -34,6 +34,8 @@ class WXDLLIMPEXP_FWD_CORE wxCommandProcessor;
 class WXDLLIMPEXP_FWD_CORE wxFileHistory;
 class WXDLLIMPEXP_FWD_BASE wxConfigBase;
 
+class wxDocChildFrameAnyBase;
+
 #if wxUSE_STD_IOSTREAM
   #include "wx/iosfwrap.h"
 #else
@@ -241,6 +243,16 @@ public:
     virtual wxPrintout *OnCreatePrintout();
 #endif
 
+    // implementation only
+    // -------------------
+
+    // set the associated frame, it is used to reset its view when we're
+    // destroyed
+    void SetDocChildFrame(wxDocChildFrameAnyBase *docChildFrame)
+    {
+        m_docChildFrame = docChildFrame;
+    }
+
 protected:
     // hook the document into event handlers chain here
     virtual bool TryBefore(wxEvent& event);
@@ -248,6 +260,8 @@ protected:
     wxDocument*       m_viewDocument;
     wxString          m_viewTypeName;
     wxWindow*         m_viewFrame;
+
+    wxDocChildFrameAnyBase *m_docChildFrame;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxView)
@@ -500,44 +514,153 @@ inline size_t wxDocManager::GetNoHistoryFiles() const
 #endif // WXWIN_COMPATIBILITY_2_6
 
 // ----------------------------------------------------------------------------
-// A default child frame
+// Base class for child frames -- this is what wxView renders itself into
+//
+// Notice that this is a mix-in class so it doesn't derive from wxWindow, only
+// wxDocChildFrameAny does
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDocChildFrame : public wxFrame
+class wxDocChildFrameAnyBase
 {
 public:
-    wxDocChildFrame(wxDocument *doc,
-                    wxView *view,
-                    wxFrame *frame,
-                    wxWindowID id,
-                    const wxString& title,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long type = wxDEFAULT_FRAME_STYLE,
-                    const wxString& name = wxFrameNameStr);
-    virtual ~wxDocChildFrame(){}
+    wxDocChildFrameAnyBase(wxDocument *doc, wxView *view)
+    {
+        m_childDocument = doc;
+        m_childView = view;
 
-    void OnActivate(wxActivateEvent& event);
-    void OnCloseWindow(wxCloseEvent& event);
+        if ( view )
+            view->SetDocChildFrame(this);
+    }
 
     wxDocument *GetDocument() const { return m_childDocument; }
     wxView *GetView() const { return m_childView; }
     void SetDocument(wxDocument *doc) { m_childDocument = doc; }
     void SetView(wxView *view) { m_childView = view; }
-    bool Destroy() { m_childView = NULL; return wxFrame::Destroy(); }
 
 protected:
-    // hook the child view into event handlers chain here
-    virtual bool TryBefore(wxEvent& event);
+    // we're not a wxEvtHandler but we provide this wxEvtHandler-like function
+    // which is called from TryBefore() of the derived classes to give our view
+    // a chance to process the message before the frame event handlers are used
+    bool TryProcessEvent(wxEvent& event)
+    {
+        return m_childView && m_childView->ProcessEventHere(event);
+    }
+
+    // called from EVT_CLOSE handler in the frame: check if we can close and do
+    // cleanup if so; veto the event otherwise
+    bool CloseView(wxCloseEvent& event);
+
 
     wxDocument*       m_childDocument;
     wxView*           m_childView;
 
+    wxDECLARE_NO_COPY_CLASS(wxDocChildFrameAnyBase);
+};
+
+// ----------------------------------------------------------------------------
+// Template implementing child frame concept using the given wxFrame-like class
+//
+// This is used to define wxDocChildFrame and wxDocMDIChildFrame: ChildFrame is
+// a wxFrame or wxMDIChildFrame (although in theory it could be any wxWindow-
+// derived class as long as it provided a ctor with the same signature as
+// wxFrame and OnActivate() method) and ParentFrame is either wxFrame or
+// wxMDIParentFrame.
+// ----------------------------------------------------------------------------
+
+template <class ChildFrame, class ParentFrame>
+class WXDLLIMPEXP_CORE wxDocChildFrameAny : public ChildFrame,
+                                            public wxDocChildFrameAnyBase
+{
+public:
+    typedef ChildFrame BaseClass;
+
+    // ctor for a frame showing the given view of the specified document
+    wxDocChildFrameAny(wxDocument *doc,
+                       wxView *view,
+                       ParentFrame *parent,
+                       wxWindowID id,
+                       const wxString& title,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = wxDEFAULT_FRAME_STYLE,
+                       const wxString& name = wxFrameNameStr)
+        : BaseClass(parent, id, title, pos, size, style, name),
+          wxDocChildFrameAnyBase(doc, view)
+    {
+        if ( view )
+            view->SetFrame(this);
+
+        this->Connect(wxEVT_ACTIVATE,
+                      wxActivateEventHandler(wxDocChildFrameAny::OnActivate));
+        this->Connect(wxEVT_CLOSE_WINDOW,
+                      wxCloseEventHandler(wxDocChildFrameAny::OnCloseWindow));
+    }
+
+    virtual bool Destroy()
+    {
+        // FIXME: why exactly do we do this? to avoid activation events during
+        //        destructions maybe?
+        m_childView = NULL;
+        return BaseClass::Destroy();
+    }
+
+protected:
+    // hook the child view into event handlers chain here
+    virtual bool TryBefore(wxEvent& event)
+    {
+        return TryProcessEvent(event) || BaseClass::TryBefore(event);
+    }
+
+private:
+    void OnActivate(wxActivateEvent& event)
+    {
+        BaseClass::OnActivate(event);
+
+        if ( m_childView )
+            m_childView->Activate(event.GetActive());
+    }
+
+    void OnCloseWindow(wxCloseEvent& event)
+    {
+        if ( CloseView(event) )
+            Destroy();
+        //else: vetoed
+    }
+
+    wxDECLARE_NO_COPY_TEMPLATE_CLASS_2(wxDocChildFrameAny,
+                                        ChildFrame, ParentFrame);
+};
+
+// ----------------------------------------------------------------------------
+// A default child frame: we need to define it as a class just for wxRTTI,
+// otherwise we could simply typedef it
+// ----------------------------------------------------------------------------
+
+typedef wxDocChildFrameAny<wxFrame, wxFrame> wxDocChildFrameBase;
+
+class WXDLLIMPEXP_CORE wxDocChildFrame : public wxDocChildFrameBase
+{
+public:
+    wxDocChildFrame(wxDocument *doc,
+                    wxView *view,
+                    wxFrame *parent,
+                    wxWindowID id,
+                    const wxString& title,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxDEFAULT_FRAME_STYLE,
+                    const wxString& name = wxFrameNameStr)
+        : wxDocChildFrameBase(doc, view,
+                              parent, id, title, pos, size, style, name)
+    {
+    }
+
 private:
     DECLARE_CLASS(wxDocChildFrame)
-    DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxDocChildFrame);
 };
+
+WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxDocChildFrameBase )
 
 // ----------------------------------------------------------------------------
 // A default parent frame
