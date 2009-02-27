@@ -3093,30 +3093,13 @@ protected:
     // this one is called before trying our own event table to allow plugging
     // in the event handlers overriding the default logic, this is used by e.g.
     // validators.
-    virtual bool TryBefore(wxEvent& event)
-    {
-#ifdef WXWIN_COMPATIBILITY_2_8
-        // call the old virtual function to keep the code overriding it working
-        return TryValidator(event);
-#else
-        wxUnusedVar(event);
-        return false;
-#endif
-    }
+    virtual bool TryBefore(wxEvent& event);
 
     // this one is called after failing to find the event handle in our own
     // table to give a chance to the other windows to process it
     //
     // base class implementation passes the event to wxTheApp
-    virtual bool TryAfter(wxEvent& event)
-    {
-#ifdef WXWIN_COMPATIBILITY_2_8
-        // as above, call the old virtual function for compatibility
-        return TryParent(event);
-#else
-        return DoTryApp(event);
-#endif
-    }
+    virtual bool TryAfter(wxEvent& event);
 
 #ifdef WXWIN_COMPATIBILITY_2_8
     // deprecated method: override TryBefore() instead of this one

@@ -1296,6 +1296,27 @@ bool wxEvtHandler::DoTryApp(wxEvent& event)
     return false;
 }
 
+bool wxEvtHandler::TryBefore(wxEvent& event)
+{
+#ifdef WXWIN_COMPATIBILITY_2_8
+    // call the old virtual function to keep the code overriding it working
+    return TryValidator(event);
+#else
+    wxUnusedVar(event);
+    return false;
+#endif
+}
+
+bool wxEvtHandler::TryAfter(wxEvent& event)
+{
+#ifdef WXWIN_COMPATIBILITY_2_8
+    // as above, call the old virtual function for compatibility
+    return TryParent(event);
+#else
+    return DoTryApp(event);
+#endif
+}
+
 bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
     // allow the application to hook into event processing
