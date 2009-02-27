@@ -86,8 +86,7 @@ class WXDLLIMPEXP_FWD_RICHTEXT wxRichTextStyleDefinition;
  * wxRichTextCtrl class declaration
  */
 
-class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxControl,
-                                            public wxTextCtrlIface,
+class WXDLLIMPEXP_RICHTEXT wxRichTextCtrl : public wxTextCtrlBase,
                                             public wxScrollHelper
 {
     DECLARE_CLASS( wxRichTextCtrl )
@@ -771,6 +770,10 @@ public:
      /// Font names take a long time to retrieve, so cache them (on demand)
      static const wxArrayString& GetAvailableFontNames();
      static void ClearAvailableFontNames();
+
+#ifdef __WXMSW__
+    virtual WXHWND GetEditHWND() const { return GetHWND(); }
+#endif
 
      WX_FORWARD_TO_SCROLL_HELPER()
 

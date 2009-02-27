@@ -196,7 +196,7 @@ wxRichTextCtrl::wxRichTextCtrl(wxWindow* parent,
 bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& value, const wxPoint& pos, const wxSize& size, long style,
                              const wxValidator& validator, const wxString& name)
 {
-    if (!wxControl::Create(parent, id, pos, size,
+    if (!wxTextCtrlBase::Create(parent, id, pos, size,
                            style|wxFULL_REPAINT_ON_RESIZE,
                            validator, name))
         return false;
@@ -2870,7 +2870,7 @@ bool wxRichTextCtrl::GetUncombinedStyle(long position, wxTextAttr& style)
 /// Set font, and also the buffer attributes
 bool wxRichTextCtrl::SetFont(const wxFont& font)
 {
-    wxControl::SetFont(font);
+    wxTextCtrlBase::SetFont(font);
 
     wxTextAttr attr = GetBuffer().GetAttributes();
     attr.SetFont(font);
