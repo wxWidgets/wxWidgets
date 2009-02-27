@@ -59,6 +59,14 @@ private:
 // otherwise we could simply typedef it
 // ----------------------------------------------------------------------------
 
+#ifdef __VISUALC6__
+    // "non dll-interface class 'wxDocChildFrameAny<>' used as base interface
+    // for dll-interface class 'wxDocMDIChildFrame'" -- this is bogus as the
+    // template will be DLL-exported but only once it is used as base class
+    // here!
+    #pragma warning (disable:4275)
+#endif
+
 typedef
   wxDocChildFrameAny<wxMDIChildFrame, wxMDIParentFrame> wxDocMDIChildFrameBase;
 
@@ -84,8 +92,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDocMDIChildFrame);
 };
 
-WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxDocMDIChildFrameBase )
-
+#ifdef __VISUALC6__
+    #pragma warning (default:4275)
+#endif
 
 #endif // wxUSE_MDI_ARCHITECTURE
 
