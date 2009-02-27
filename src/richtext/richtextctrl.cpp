@@ -124,11 +124,11 @@ private:
 };
 #endif
 
-IMPLEMENT_CLASS( wxRichTextCtrl, wxControl )
+IMPLEMENT_CLASS( wxRichTextCtrl, wxTextCtrlBase )
 
 IMPLEMENT_CLASS( wxRichTextEvent, wxNotifyEvent )
 
-BEGIN_EVENT_TABLE( wxRichTextCtrl, wxControl )
+BEGIN_EVENT_TABLE( wxRichTextCtrl, wxTextCtrlBase )
     EVT_PAINT(wxRichTextCtrl::OnPaint)
     EVT_ERASE_BACKGROUND(wxRichTextCtrl::OnEraseBackground)
     EVT_IDLE(wxRichTextCtrl::OnIdle)
