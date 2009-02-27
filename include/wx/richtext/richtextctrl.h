@@ -774,6 +774,15 @@ public:
 #ifdef __WXMSW__
     virtual WXHWND GetEditHWND() const { return GetHWND(); }
 #endif
+#ifdef __WXGTK__
+    // implement this to return the associated window, it will be used for
+    // event generation
+    virtual const wxWindow *GetEditableWindow() const { return NULL; }
+
+    // implement this to return the associated GtkEntry or another widget
+    // implementing GtkEditable
+    virtual GtkEditable *GetEditable() const { return NULL; }
+#endif
 
      WX_FORWARD_TO_SCROLL_HELPER()
 
