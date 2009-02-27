@@ -49,7 +49,7 @@ int wxColourDialog::ShowModal()
 {
     RGBColor currentColor ;
     
-    m_colourData.m_dataColour.GetRGBColor( currentColor );
+    m_colourData.m_dataColour.GetRGBColor( &currentColor );
     NColorPickerInfo info;
     OSStatus err ;
     memset(&info, 0, sizeof(info)) ;
