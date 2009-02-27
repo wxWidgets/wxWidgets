@@ -108,6 +108,11 @@ Changes in behaviour not resulting in compilation errors, please read this!
   GetSizeAvailableForScrollTarget() method, please see its documentation for
   more details.
 
+- Processing of pending events now requires a running event loop.
+  Thus initialization code (e.g. showing a dialog) previously done in wxApp::OnRun()
+  or equivalent function should now be done into wxApp::OnEventLoopEnter().
+  See wxApp::OnEventLoopEnter() and wxApp::OnEventLoopExit() docs for more info.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
