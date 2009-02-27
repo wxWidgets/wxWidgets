@@ -3145,6 +3145,11 @@ typedef const void* WXWidget;
         classname(const classname<arg>&);                 \
         classname& operator=(const classname<arg>&)
 
+#define wxDECLARE_NO_COPY_TEMPLATE_CLASS_2(classname, arg1, arg2) \
+    private:                                                      \
+        classname(const classname<arg1, arg2>&);                  \
+        classname& operator=(const classname<arg1, arg2>&)
+
 #define wxDECLARE_NO_ASSIGN_CLASS(classname)    \
     private:                                    \
         classname& operator=(const classname&)

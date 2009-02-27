@@ -975,8 +975,26 @@ typedef double wxDouble;
 
     @param classname The name of the template class.
     @param arg The name of the template parameter.
+
+    @see wxDECLARE_NO_COPY_TEMPLATE_CLASS_2
  */
 #define wxDECLARE_NO_COPY_TEMPLATE_CLASS(classname, arg)
+
+/**
+    Analog of wxDECLARE_NO_COPY_TEMPLATE_CLASS() for templates with 2
+    parameters.
+
+    This macro can be used for template classes with two template
+    parameters for the same purpose as wxDECLARE_NO_COPY_CLASS() is used with
+    the non-template classes.
+
+    @param classname The name of the template class.
+    @param arg1 The name of the first template parameter.
+    @param arg2 The name of the second template parameter.
+
+    @see wxDECLARE_NO_COPY_TEMPLATE_CLASS
+ */
+#define wxDECLARE_NO_COPY_TEMPLATE_CLASS_2(classname, arg1, arg2)
 
 /**
     A function which deletes and nulls the pointer.
