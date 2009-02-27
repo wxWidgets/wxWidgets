@@ -269,12 +269,16 @@ public:
         Note that this function is called whenever an event loop is activated;
         you may want to use wxEventLoopBase::IsMain() to perform initialization
         specific for the app's main event loop.
+
+        @see OnEventLoopExit()
     */
     virtual void OnEventLoopEnter(wxEventLoopBase* loop);
 
     /**
         Called by wxEventLoopBase::OnExit() for each event loop which
         is exited.
+
+        @see OnEventLoopEnter()
     */
     virtual void OnEventLoopExit(wxEventLoopBase* loop);
 
