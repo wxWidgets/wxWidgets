@@ -1032,7 +1032,7 @@ public:
     @class wxGridSizesInfo
 
     wxGridSizesInfo stores information about sizes of all wxGrid rows or
-    columns. 
+    columns.
 
     It assumes that most of the rows or columns (which are both called elements
     here as the difference between them doesn't matter at this class level)
@@ -1062,7 +1062,7 @@ struct wxGridSizesInfo
 
         @param defSize
             The default element size.
-        @param
+        @param allSizes
             Array containing the sizes of @em all elements, including those
             which have the default size.
      */

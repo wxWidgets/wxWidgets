@@ -3683,9 +3683,8 @@ wxEventType wxNewEventType();
  */
 #define wxEVENT_HANDLER_CAST(functype, func) (&func)
 
-//@{
 /**
-    These macros are used to define event table macros for handling custom
+    This macro is used to define event table macros for handling custom
     events.
 
     Example of use:
@@ -3713,20 +3712,28 @@ wxEventType wxNewEventType();
         The event type to handle.
     @param id
         The identifier of events to handle.
-    @param id1
-        The first identifier of the range.
-    @param id2
-        The second identifier of the range.
     @param fn
         The event handler method.
  */
-#define wx__DECLARE_EVT2(evt, id1, id2, fn) \
-    DECLARE_EVENT_TABLE_ENTRY(evt, id1, id2, fn, NULL),
 #define wx__DECLARE_EVT1(evt, id, fn) \
     wx__DECLARE_EVT2(evt, id, wxID_ANY, fn)
+
+/**
+    Generalized version of the wx__DECLARE_EVT1() macro taking a range of
+    IDs instead of a single one.
+    Argument @a id1 is the first identifier of the range, @a id2 is the
+    second identifier of the range.
+*/
+#define wx__DECLARE_EVT2(evt, id1, id2, fn) \
+    DECLARE_EVENT_TABLE_ENTRY(evt, id1, id2, fn, NULL),
+
+/**
+    Simplified version of the wx__DECLARE_EVT1() macro, to be used when the
+    event type must be handled regardless of the ID associated with the
+    specific event instances.
+*/
 #define wx__DECLARE_EVT0(evt, fn) \
     wx__DECLARE_EVT1(evt, wxID_ANY, fn)
-//@}
 
 
 /**
