@@ -67,7 +67,7 @@ int wxMacPrintDialog::ShowModal()
     
     NSPrintPanel* panel = [NSPrintPanel printPanel];
     NSPrintInfo* printInfo = ((wxOSXCocoaPrintData*)m_printDialogData.GetPrintData().GetNativeData())->GetNSPrintInfo();
-    if ( [panel runModalWithPrintInfo:printInfo] == NSOKButton )
+    if ( (NSInteger)[panel runModalWithPrintInfo:printInfo] == NSOKButton )
     {
         result = wxID_OK;
         m_printDialogData.GetPrintData().ConvertFromNative();
