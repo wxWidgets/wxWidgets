@@ -133,9 +133,10 @@ wxBasicString::wxBasicString(const wxString& str)
 // Takes an ANSI string and transforms it to Unicode
 void wxBasicString::Init(const char *sz)
 {
-    // get the size of required buffer
+    // get the size of required buffer: MetroWerks and Cygwin crash if NULL is
+    // passed to mbstowcs()
     UINT lenAnsi = strlen(sz);
-#ifdef __MWERKS__
+#if defined(__MWERKS__) || defined(__CYGWIN__)
     UINT lenWide = lenAnsi * 2 ;
 #else
     UINT lenWide = mbstowcs(NULL, sz, lenAnsi);
