@@ -2048,9 +2048,12 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString &choices
         m_renderer = (GtkCellRenderer*) gtk_cell_renderer_combo_new();
 
         GtkListStore *store = gtk_list_store_new( 1, G_TYPE_STRING );
-        size_t n;
-        for (n = 0; n < m_choices.GetCount(); n++)
-            gtk_list_store_insert_with_values( store, NULL, n, 0, m_choices[n].utf8_str(), -1 );
+        for (size_t n = 0; n < m_choices.GetCount(); n++)
+        {
+            gtk_list_store_insert_with_values(
+                store, NULL, n, 0,
+                static_cast<const char *>(m_choices[n].utf8_str()), -1 );
+        }
 
         g_object_set (m_renderer,
                 "model", store,
@@ -2113,7 +2116,8 @@ bool wxDataViewChoiceRenderer::GetValue( wxVariant &value ) const
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
         g_object_get_property( G_OBJECT(m_renderer), "text", &gvalue );
-        wxString temp = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ), const_cast<wxDataViewTextRenderer*>(this)->GetOwner()->GetOwner()->GetFont() );
+        wxString temp = wxGTK_CONV_BACK_FONT( g_value_get_string( &gvalue ),
+                const_cast<wxDataViewChoiceRenderer*>(this)->GetOwner()->GetOwner()->GetFont() );
         g_value_unset( &gvalue );
         value = temp;
         wxPrintf( "temp %s\n", temp );
