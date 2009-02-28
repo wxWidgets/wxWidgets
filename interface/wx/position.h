@@ -12,8 +12,6 @@
     This class represents the position of an item in any kind of grid of rows and
     columns such as wxGridBagSizer, or wxHVScrolledWindow.
 
-    @todo rename this class to wxItemPosition or such, wxPosition is too generic
-
     @library{wxbase}
     @category{data}
 
