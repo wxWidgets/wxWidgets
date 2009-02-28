@@ -546,6 +546,7 @@ wxMSW:
 - Changed default toolbar bitmaps size from obsolete 16x15 to 24x24 used
   by modern apps.
 - Ellipsize long strings in wxStatusBar (Francesco Montorsi)
+- Fix spurious repaint when changing tooltip text (Jonathan Liu).
 
 wxX11:
 
