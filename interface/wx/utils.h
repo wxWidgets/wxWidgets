@@ -366,9 +366,15 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags = 0);
     a busy cursor is shown while the browser is being launched (using
     wxBusyCursor).
 
-    The @a url may also be a local file path (with or without the "file://"
-    prefix), if it doesn't correspond to an existing file and the URL has no
-    scheme "http://" is prepended to it by default.
+    The parameter @a url is interpreted as follows:
+    - if it has a valid scheme (e.g. @c "file:", @c "http:" or @c "mailto:")
+      it is passed to the appropriate browser configured in the user system.
+    - if it has no valid scheme (e.g. it's a local file path without the @c "file:"
+      prefix), then ::wxFileExists and ::wxDirExists are used to test if it's a
+      local file/directory; if it is, then the browser is called with the
+      @a url parameter eventually prefixed by @c "file:".
+    - if it has no valid scheme and it's not a local file/directory, then @c "http:"
+      is prepended and the browser is called.
 
     Returns @true if the application was successfully launched.
 

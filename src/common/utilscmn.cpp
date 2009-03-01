@@ -1010,10 +1010,14 @@ static bool DoLaunchDefaultBrowserHelper(const wxString& urlOrig, int flags)
     //
     // for (int i=0; i<2; i++)
     // {
+    //   // test arguments without a valid URL scheme:
     //   wxLaunchDefaultBrowser("C:\\test.txt", i==0 ? 0 : wxBROWSER_NEW_WINDOW);
     //   wxLaunchDefaultBrowser("wxwidgets.org", i==0 ? 0 : wxBROWSER_NEW_WINDOW);
+    //
+    //   // test arguments with different valid schemes:
     //   wxLaunchDefaultBrowser("file:/C%3A/test.txt", i==0 ? 0 : wxBROWSER_NEW_WINDOW);
     //   wxLaunchDefaultBrowser("http://wxwidgets.org", i==0 ? 0 : wxBROWSER_NEW_WINDOW);
+    //   wxLaunchDefaultBrowser("mailto:user@host.org", i==0 ? 0 : wxBROWSER_NEW_WINDOW);
     // }
     // (assuming you have a C:\test.txt file)
 
@@ -1039,7 +1043,7 @@ static bool DoLaunchDefaultBrowserHelper(const wxString& urlOrig, int flags)
             // TODO: extract URLToFileName() to some always compiled in
             //       function
 #if wxUSE_FILESYSTEM
-            // ShellExecuteEx() doesn't like the "file" scheme when opening local files; 
+            // ShellExecuteEx() doesn't like the "file" scheme when opening local files;
             // remove it
             url = wxFileSystem::URLToFileName(url).GetFullPath();
 #endif // wxUSE_FILESYSTEM
