@@ -1001,8 +1001,7 @@ static bool DoLaunchDefaultBrowserHelper(const wxString& urlOrig, int flags)
     // this check is useful to avoid that wxURI recognizes as scheme parts of
     // the filename, in case urlOrig is a local filename
     // (e.g. "C:\\test.txt" when parsed by wxURI reports a scheme == "C")
-    bool hasValidScheme = uri.HasScheme() && 
-            (uri.GetScheme() == "http" || uri.GetScheme() == "file");
+    bool hasValidScheme = uri.HasScheme() && uri.GetScheme().length() > 1;
 
 #if defined(__WXMSW__)
 
