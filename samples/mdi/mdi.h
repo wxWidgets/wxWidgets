@@ -100,7 +100,7 @@ private:
 // menu items ids
 enum
 {
-    MDI_FULLSCREEN,
+    MDI_FULLSCREEN = 100,
     MDI_REFRESH,
     MDI_CHANGE_TITLE,
     MDI_CHANGE_POSITION,
