@@ -1152,6 +1152,13 @@ void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
     aboutInfo.AddDeveloper(wxT("Julian Smart"));
     aboutInfo.AddDeveloper(wxT("Vadim Zeitlin"));
 
+    // this is just to force the generic version of the about
+    // dialog under wxMSW so that it's easy to test if the grid
+    // repaints correctly when it has lost focus and a dialog
+    // (different from the Windows standard message box -- it doesn't
+    // work with it for some reason) is moved over it.
+    aboutInfo.SetWebSite(wxT("http://www.wxwidgets.org"));
+
     wxAboutBox(aboutInfo);
 }
 
