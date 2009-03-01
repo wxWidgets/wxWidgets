@@ -465,7 +465,7 @@ void wxToolTip::SetTip(const wxString& tip)
         // for some reason, changing the tooltip text directly results in
         // repaint of the controls under it, see #10520 -- but this doesn't
         // happen if we reset it first
-        ti.lpszText = _T("");
+        ti.lpszText = const_cast<wxChar *>(_T(""));
         (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, &ti);
 
         ti.lpszText = const_cast<wxChar *>(m_text.wx_str());
