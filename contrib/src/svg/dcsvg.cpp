@@ -595,6 +595,7 @@ void wxSVGFileDC::NewGraphics ()
     wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::NewGraphics Call executed")) ;
 }
 
+#ifdef __WXMAC__
 void wxSVGFileDC::SetTextForeground ( const wxColour& textForegroundColour )
 {
     m_textForegroundColour = textForegroundColour ;
@@ -602,6 +603,12 @@ void wxSVGFileDC::SetTextForeground ( const wxColour& textForegroundColour )
     wxASSERT_MSG(!wxSVG_DEBUG, wxT("wxSVGFileDC::SetSetTextForeground Call executed")) ;
 }
 
+void wxSVGFileDC::DoDrawSpline(wxList *points)
+{
+  wxDCBase::DoDrawSpline(points);
+}
+
+#endif
 
 void wxSVGFileDC::SetFont(const wxFont& font)
 
