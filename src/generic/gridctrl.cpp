@@ -32,6 +32,46 @@
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 
+
+// ----------------------------------------------------------------------------
+// wxGridCellRenderer
+// ----------------------------------------------------------------------------
+
+void wxGridCellRenderer::Draw(wxGrid& grid,
+                              wxGridCellAttr& attr,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int WXUNUSED(row), int WXUNUSED(col),
+                              bool isSelected)
+{
+    dc.SetBackgroundMode( wxBRUSHSTYLE_SOLID );
+
+    wxColour clr;
+    if ( grid.IsEnabled() )
+    {
+        if ( isSelected )
+        {
+            if ( grid.HasFocus() )
+                clr = grid.GetSelectionBackground();
+            else
+                clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+        }
+        else
+        {
+            clr = attr.GetBackgroundColour();
+        }
+    }
+    else // grey out fields if the grid is disabled
+    {
+        clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+    }
+
+    dc.SetBrush(clr);
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    dc.DrawRectangle(rect);
+}
+
+
 // ----------------------------------------------------------------------------
 // wxGridCellDateTimeRenderer
 // ----------------------------------------------------------------------------
@@ -337,44 +377,6 @@ wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid& grid,
     return wxSize(width,height);
 }
 
-
-// ----------------------------------------------------------------------------
-// wxGridCellRenderer
-// ----------------------------------------------------------------------------
-
-void wxGridCellRenderer::Draw(wxGrid& grid,
-                              wxGridCellAttr& attr,
-                              wxDC& dc,
-                              const wxRect& rect,
-                              int WXUNUSED(row), int WXUNUSED(col),
-                              bool isSelected)
-{
-    dc.SetBackgroundMode( wxBRUSHSTYLE_SOLID );
-
-    wxColour clr;
-    if ( grid.IsEnabled() )
-    {
-        if ( isSelected )
-        {
-            if ( grid.HasFocus() )
-                clr = grid.GetSelectionBackground();
-            else
-                clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
-        }
-        else
-        {
-            clr = attr.GetBackgroundColour();
-        }
-    }
-    else // grey out fields if the grid is disabled
-    {
-        clr = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
-    }
-
-    dc.SetBrush(clr);
-    dc.SetPen( *wxTRANSPARENT_PEN );
-    dc.DrawRectangle(rect);
-}
 
 // ----------------------------------------------------------------------------
 // wxGridCellStringRenderer
