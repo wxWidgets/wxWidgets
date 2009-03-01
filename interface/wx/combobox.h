@@ -9,15 +9,20 @@
 /**
     @class wxComboBox
 
-    A combobox is like a combination of an edit control and a listbox. It can
-    be displayed as static list with editable or read-only text field; or a
-    drop-down list with text field; or a drop-down list without a text field.
+    A combobox is like a combination of an edit control and a listbox.
+
+    It can be displayed as static list with editable or read-only text field;
+    or a drop-down list with text field; or a drop-down list without a text
+    field.
 
     A combobox permits a single selection only. Combobox items are numbered
     from zero.
 
     If you need a customized combobox, have a look at wxComboCtrl,
     wxOwnerDrawnComboBox, wxComboPopup and the ready-to-use wxBitmapComboBox.
+
+    Please refer to wxTextEntry documentation for the description of methods
+    operating with the text entry part of the combobox.
 
     @beginStyleTable
     @style{wxCB_SIMPLE}
@@ -57,7 +62,9 @@
 
     @see wxListBox, wxTextCtrl, wxChoice, wxCommandEvent
 */
-class wxComboBox : public wxControl, public wxItemContainer
+class wxComboBox : public wxControl,
+                   public wxItemContainer,
+                   public wxTextEntry
 {
 public:
     /**
@@ -176,47 +183,8 @@ public:
     //@}
 
     /**
-        Returns @true if the combobox is editable and there is a text selection
-        to copy to the clipboard. Only available on Windows.
-    */
-    virtual bool CanCopy() const;
+        Returns the item being selected right now.
 
-    /**
-        Returns @true if the combobox is editable and there is a text selection
-        to copy to the clipboard. Only available on Windows.
-    */
-    virtual bool CanCut() const;
-
-    /**
-        Returns @true if the combobox is editable and there is text on the
-        clipboard that can be pasted into the text field. Only available on
-        Windows.
-    */
-    virtual bool CanPaste() const;
-
-    /**
-        Returns @true if the combobox is editable and the last undo can be
-        redone. Only available on Windows.
-    */
-    virtual bool CanRedo() const;
-
-    /**
-        Returns @true if the combobox is editable and the last edit can be
-        undone. Only available on Windows.
-    */
-    virtual bool CanUndo() const;
-
-    /**
-        Copies the selected text to the clipboard.
-    */
-    virtual void Copy();
-
-    /**
-        Copies the selected text to the clipboard and removes the selection.
-    */
-    virtual void Cut();
-
-    /**
         This function does the same things as wxChoice::GetCurrentSelection()
         and returns the item currently selected in the dropdown list if it's
         open or the same thing as wxControlWithItems::GetSelection() otherwise.
@@ -224,7 +192,7 @@ public:
     virtual int GetCurrentSelection() const;
 
     /**
-        Returns the insertion point for the combobox's text field.
+        Same as wxTextEntry::GetInsertionPoint().
 
         @note Under wxMSW, this function always returns 0 if the combobox
               doesn't have the focus.
@@ -232,77 +200,7 @@ public:
     virtual long GetInsertionPoint() const;
 
     /**
-        Returns the last position in the combobox text field.
-    */
-    virtual long GetLastPosition() const;
-
-    /**
-        This is the same as wxTextCtrl::GetSelection() for the text control
-        which is part of the combobox. Notice that this is a different method
-        from wxControlWithItems::GetSelection().
-
-        Currently this method is only implemented in wxMSW and wxGTK.
-    */
-    virtual void GetSelection(long* from, long* to) const;
-
-    /**
-        Returns the current value in the combobox text field.
-    */
-    virtual wxString GetValue() const;
-
-    /**
-        Pastes text from the clipboard to the text field.
-    */
-    virtual void Paste();
-
-    /**
-        Redoes the last undo in the text field. Windows only.
-    */
-    virtual void Redo();
-
-    /**
-        Removes the text between the two positions in the combobox text field.
-
-        @param from
-            The first position.
-        @param to
-            The last position.
-    */
-    virtual void Remove(long from, long to);
-
-    /**
-        Replaces the text between two positions with the given text, in the
-        combobox text field.
-
-        @param from
-            The first position.
-        @param to
-            The second position.
-        @param text
-            The text to insert.
-    */
-    virtual void Replace(long from, long to, const wxString& text);
-
-    /**
-        Sets the insertion point in the combobox text field.
-
-        @param pos
-            The new insertion point.
-    */
-    virtual void SetInsertionPoint(long pos);
-
-    /**
-        Sets the insertion point at the end of the combobox text field.
-    */
-    virtual void SetInsertionPointEnd();
-
-    /**
-        Selects the text between the two positions, in the combobox text field.
-
-        @param from
-            The first position.
-        @param to
-            The second position.
+        Same as wxTextEntry::SetSelection().
 
         @beginWxPythonOnly
         This method is called SetMark() in wxPython, "SetSelection" is kept for
@@ -322,10 +220,5 @@ public:
             The text to set.
     */
     virtual void SetValue(const wxString& text);
-
-    /**
-        Undoes the last edit in the text field. Windows only.
-    */
-    virtual void Undo();
 };
 

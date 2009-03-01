@@ -847,7 +847,10 @@ public:
 
     A text control allows text to be displayed and edited.
 
-    It may be single line or multi-line.
+    It may be single line or multi-line. Notice that a lot of methods of the
+    text controls are found in the base wxTextEntry class which is a common
+    base class for wxTextCtrl and other controls using a single line text entry
+    field (e.g. wxComboBox).
 
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}
@@ -1068,7 +1071,8 @@ public:
 
     @see wxTextCtrl::Create, wxValidator
 */
-class wxTextCtrl : public wxControl
+class wxTextCtrl : public wxControl,
+                   public wxTextEntry
 {
 public:
     /**
@@ -1120,123 +1124,6 @@ public:
     virtual ~wxTextCtrl();
 
     /**
-        Appends the text to the end of the text control.
-
-        @param text
-            Text to write to the text control.
-
-        @remarks
-            After the text is appended, the insertion point will be at the
-            end of the text control. If this behaviour is not desired, the
-            programmer should use GetInsertionPoint() and SetInsertionPoint().
-
-        @see WriteText()
-    */
-    virtual void AppendText(const wxString& text);
-
-    /**
-        Call this function to enable auto-completion of the text typed in a
-        single-line text control using the given @a choices.
-
-        Notice that currently this function is only implemented in wxGTK2 and
-        wxMSW ports and does nothing under the other platforms.
-
-        @since 2.9.0
-
-        @return
-            @true if the auto-completion was enabled or @false if the operation
-            failed, typically because auto-completion is not supported by the
-            current platform.
-
-        @see AutoCompleteFileNames()
-    */
-    virtual bool AutoComplete(const wxArrayString& choices);
-
-    /**
-        Call this function to enable auto-completion of the text typed in a
-        single-line text control using all valid file system paths.
-
-        Notice that currently this function is only implemented in wxGTK2 port
-        and does nothing under the other platforms.
-
-        @since 2.9.0
-
-        @return
-            @true if the auto-completion was enabled or @false if the operation
-            failed, typically because auto-completion is not supported by the
-            current platform.
-
-        @see AutoComplete()
-    */
-    virtual bool AutoCompleteFileNames();
-
-    /**
-        Returns @true if the selection can be copied to the clipboard.
-    */
-    virtual bool CanCopy() const;
-
-    /**
-        Returns @true if the selection can be cut to the clipboard.
-    */
-    virtual bool CanCut() const;
-
-    /**
-        Returns @true if the contents of the clipboard can be pasted into the
-        text control.
-
-        On some platforms (Motif, GTK) this is an approximation and returns
-        @true if the control is editable, @false otherwise.
-    */
-    virtual bool CanPaste() const;
-
-    /**
-        Returns @true if there is a redo facility available and the last
-        operation can be redone.
-    */
-    virtual bool CanRedo() const;
-
-    /**
-        Returns @true if there is an undo facility available and the last
-        operation can be undone.
-    */
-    virtual bool CanUndo() const;
-
-    /**
-        Sets the new text control value.
-
-        It also marks the control as not-modified which means that IsModified()
-        would return @false immediately after the call to SetValue().
-
-        The insertion point is set to the start of the control (i.e. position
-        0) by this function.
-
-        This functions does not generate the @c wxEVT_COMMAND_TEXT_UPDATED
-        event but otherwise is identical to SetValue().
-
-        See @ref overview_events_prog for more information.
-
-        @since 2.7.1
-
-        @param value
-            The new value to set. It may contain newline characters if the text
-            control is multi-line.
-    */
-    virtual void ChangeValue(const wxString& value);
-
-    /**
-        Clears the text in the control.
-
-        Note that this function will generate a @c wxEVT_COMMAND_TEXT_UPDATED
-        event, i.e. its effect is identical to calling @c SetValue("").
-    */
-    virtual void Clear();
-
-    /**
-        Copies the selected text to the clipboard.
-    */
-    virtual void Copy();
-
-    /**
         Creates the text control for two-step construction.
 
         This method should be called if the default constructor was used for
@@ -1262,7 +1149,7 @@ public:
     virtual void DiscardEdits();
 
     /**
-        This functions inserts into the control the character which would have
+        This function inserts into the control the character which would have
         been inserted if the given key event had occurred in the text control.
 
         The @a event object should be the same as the one passed to @c EVT_KEY_DOWN
@@ -1280,35 +1167,6 @@ public:
         @see SetDefaultStyle()
     */
     virtual const wxTextAttr& GetDefaultStyle() const;
-
-    /**
-        Returns the insertion point, or cursor, position.
-
-        This is defined as the zero based index of the character position to
-        the right of the insertion point. For example, if the insertion point
-        is at the end of the single-line text control, it is equal to both
-        GetLastPosition() and @c "GetValue().Length()" (but notice that the latter
-        equality is not necessarily true for multiline edit controls which may
-        use multiple new line characters).
-
-        The following code snippet safely returns the character at the insertion
-        point or the zero character if the point is at the end of the control.
-
-        @code
-        char GetCurrentChar(wxTextCtrl *tc) {
-            if (tc->GetInsertionPoint() == tc->GetLastPosition())
-            return '\0';
-            return tc->GetValue[tc->GetInsertionPoint()];
-        }
-        @endcode
-    */
-    virtual long GetInsertionPoint() const;
-
-    /**
-        Returns the zero based index of the last position in the text control,
-        which is equal to the number of characters in the control.
-    */
-    virtual wxTextPos GetLastPosition() const;
 
     /**
         Gets the length of the specified line, not including any trailing
@@ -1354,43 +1212,6 @@ public:
     virtual int GetNumberOfLines() const;
 
     /**
-        Returns the string containing the text starting in the positions
-        @a from and up to @a to in the control.
-
-        The positions must have been returned by another wxTextCtrl method.
-        Please note that the positions in a multiline wxTextCtrl do @b not
-        correspond to the indices in the string returned by GetValue() because
-        of the different new line representations (@c CR or @c CR LF) and so
-        this method should be used to obtain the correct results instead of
-        extracting parts of the entire value. It may also be more efficient,
-        especially if the control contains a lot of data.
-    */
-    virtual wxString GetRange(long from, long to) const;
-
-    /**
-        Gets the current selection span.
-
-        If the returned values are equal, there was no selection. Please note
-        that the indices returned may be used with the other wxTextCtrl methods
-        but don't necessarily represent the correct indices into the string
-        returned by GetValue() for multiline controls under Windows (at least,)
-        you should use GetStringSelection() to get the selected text.
-
-        @param from
-            The returned first position.
-        @param to
-            The returned last position.
-    */
-    virtual void GetSelection(long* from, long* to) const;
-
-    /**
-        Gets the text currently selected in the control.
-
-        If there is no selection, the returned string is empty.
-    */
-    virtual wxString GetStringSelection() const;
-
-    /**
         Returns the style at this position in the text control.
 
         Not all platforms support this function.
@@ -1402,15 +1223,6 @@ public:
         @see SetStyle(), wxTextAttr
     */
     virtual bool GetStyle(long position, wxTextAttr& style);
-
-    /**
-        Gets the contents of the control.
-
-        Notice that for a multiline text control, the lines will be separated
-        by (Unix-style) @c \\n characters, even under Windows where they are
-        separated by a @c \\r\\n sequence in the native control.
-    */
-    virtual wxString GetValue() const;
 
     /**
         This function finds the character at the specified position expressed
@@ -1427,25 +1239,6 @@ public:
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
                                     wxTextCoord col,
                                     wxTextCoord row) const;
-
-    /**
-        Returns @true if the controls contents may be edited by user (note that
-        it always can be changed by the program).
-
-        In other words, this functions returns @true if the control hasn't been
-        put in read-only mode by a previous call to SetEditable().
-    */
-    virtual bool IsEditable() const;
-
-    /**
-        Returns @true if the control is currently empty.
-
-        This is the same as @c GetValue().empty() but can be much more
-        efficient for the multiline controls containing big amounts of text.
-
-        @since 2.7.1
-    */
-    virtual bool IsEmpty() const;
 
     /**
         Returns @true if the text has been modified by user.
@@ -1505,11 +1298,6 @@ public:
     void OnDropFiles(wxDropFilesEvent& event);
 
     /**
-        Pastes text from the clipboard to the text item.
-    */
-    virtual void Paste();
-
-    /**
         Converts given position to a zero-based column, line number pair.
 
         @param pos
@@ -1526,44 +1314,6 @@ public:
         @see XYToPosition()
     */
     virtual bool PositionToXY(long pos, long* x, long* y) const;
-
-    /**
-        If there is a redo facility and the last operation can be redone,
-        redoes the last operation.
-
-        Does nothing if there is no redo facility.
-    */
-    virtual void Redo();
-
-    /**
-        Removes the text starting at the first given position up to
-        (but not including) the character at the last position.
-
-        This function puts the current insertion point position at @a to as a
-        side effect.
-
-        @param from
-            The first position.
-        @param to
-            The last position.
-    */
-    virtual void Remove(long from, long to);
-
-    /**
-        Replaces the text starting at the first position up to
-        (but not including) the character at the last position with the given text.
-
-        This function puts the current insertion point position at @a to as a
-        side effect.
-
-        @param from
-            The first position.
-        @param to
-            The last position.
-        @param value
-            The value to replace the existing text with.
-    */
-    virtual void Replace(long from, long to, const wxString& value);
 
     /**
         Saves the contents of the control in a text file.
@@ -1604,83 +1354,11 @@ public:
     virtual bool SetDefaultStyle(const wxTextAttr& style);
 
     /**
-        Makes the text item editable or read-only, overriding the
-        @b wxTE_READONLY flag.
-
-        @param editable
-            If @true, the control is editable. If @false, the control is
-            read-only.
-
-        @see IsEditable()
-    */
-    virtual void SetEditable(bool editable);
-
-    /**
-        Sets the insertion point at the given position.
-
-        @param pos
-            Position to set, in the range from 0 to GetLastPosition() inclusive.
-    */
-    virtual void SetInsertionPoint(long pos);
-
-    /**
-        Sets the insertion point at the end of the text control.
-
-        This is equivalent to calling wxTextCtrl::SetInsertionPoint() with
-        wxTextCtrl::GetLastPosition() argument.
-    */
-    virtual void SetInsertionPointEnd();
-
-    /**
-        This function sets the maximum number of characters the user can enter
-        into the control.
-
-        In other words, it allows to limit the text value length to @a len not
-        counting the terminating @c NUL character.
-
-        If @a len is 0, the previously set max length limit, if any, is discarded
-        and the user may enter as much text as the underlying native text control widget
-        supports (typically at least 32Kb).
-        If the user tries to enter more characters into the text control when it
-        already is filled up to the maximal length, a @c wxEVT_COMMAND_TEXT_MAXLEN
-        event is sent to notify the program about it (giving it the possibility
-        to show an explanatory message, for example) and the extra input is discarded.
-
-        Note that in wxGTK this function may only be used with single line text controls.
-    */
-    virtual void SetMaxLength(unsigned long len);
-
-    /**
         Marks the control as being modified by the user or not.
 
         @see MarkDirty(), DiscardEdits()
     */
     void SetModified(bool modified);
-
-    /**
-        Selects the text starting at the first position up to (but not
-        including) the character at the last position.
-
-        If both parameters are equal to -1 all text in the control is selected.
-
-        Notice that the insertion point will be moved to @a from by this
-        function.
-
-        @param from
-            The first position.
-        @param to
-            The last position.
-
-        @see SelectAll()
-    */
-    virtual void SetSelection(long from, long to);
-
-    /**
-        Selects all text in the control.
-
-        @see SetSelection()
-    */
-    virtual void SelectAll();
 
     /**
         Changes the style of the given range.
@@ -1704,57 +1382,12 @@ public:
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
 
     /**
-        Sets the new text control value.
-
-        It also marks the control as not-modified which means that IsModified()
-        would return @false immediately after the call to SetValue().
-
-        The insertion point is set to the start of the control (i.e. position
-        0) by this function.
-
-        Note that, unlike most other functions changing the controls values,
-        this function generates a @c wxEVT_COMMAND_TEXT_UPDATED event. To avoid
-        this you can use ChangeValue() instead.
-
-        @param value
-            The new value to set. It may contain newline characters if the text
-            control is multi-line.
-    */
-    virtual void SetValue(const wxString& value);
-
-    /**
         Makes the line containing the given position visible.
 
         @param pos
             The position that should be visible.
     */
     virtual void ShowPosition(long pos);
-
-    /**
-        If there is an undo facility and the last operation can be undone,
-        undoes the last operation.
-
-        Does nothing if there is no undo facility.
-    */
-    virtual void Undo();
-
-    /**
-        Writes the text into the text control at the current insertion position.
-
-        @param text
-            Text to write to the text control.
-
-        @remarks
-            Newlines in the text string are the only control characters
-            allowed, and they will cause appropriate line breaks.
-            See operator<<() and AppendText() for more convenient ways of
-            writing to the window.
-            After the write operation, the insertion point will be at the end
-            of the inserted text, so subsequent write operations will be appended.
-            To append text after the user may have interacted with the control,
-            call wxTextCtrl::SetInsertionPointEnd() before writing.
-    */
-    virtual void WriteText(const wxString& text);
 
     /**
         Converts the given zero based column and line number to a position.
