@@ -4,13 +4,13 @@
 tn0001.txt   How to add a new sample
 tn0002.txt   wxWidgets translator guide
 tn0003.txt   Adding wxWidgets class documentation
-tn0004.htm   *** Not currently applicable Compiling a sample in the C++Builder IDE
+tn0004.htm   *** REMOVED *** (obsoleted by Bakefile changes)
 tn0005.txt   Adding a wxWidgets contribution
 tn0006.txt   *** REMOVED *** (obsoleted by tn0013.txt)
-tn0007.txt   *** Not currently applicable Using and modifying the BC++ IDE files
-tn0008.htm   How to learn wxWidgets programming
+tn0007.txt   *** REMOVED *** (obsoleted by Bakefile changes)
+tn0008.htm   *** REMOVED *** (included in the manual now)
 tn0009.htm   Creating and converting icons
-tn0010.htm   Compiling wxWidgets applications in the VC++ IDE
+tn0010.htm   *** REMOVED *** (obsoleted by Bakefile changes)
 tn0011.txt   All about version numbers
 tn0012.txt   wxWidgets platform, toolkit and library names
 tn0013.txt   How to make a wxGTK distribution
