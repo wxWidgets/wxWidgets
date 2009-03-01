@@ -75,7 +75,7 @@ public:
                               const wxRect& rect,
                               int flags = 0);
 
-    virtual wxSize GetCheckBoxSize(wxWindow* win);
+    virtual wxSize GetCheckBoxSize() const;
 
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
@@ -381,7 +381,7 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
                        kind, kThemeAdornmentNone);
 }
 
-wxSize wxRendererMac::GetCheckBoxSize(wxWindow* WXUNUSED(win))
+wxSize wxRendererMac::GetCheckBoxSize() const
 {
     wxSize size;
     SInt32 width, height;

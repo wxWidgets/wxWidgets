@@ -121,7 +121,7 @@ public:
 
     virtual void DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags = 0);
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win);
+    virtual wxSize GetCheckBoxSize() const;
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 };
@@ -428,7 +428,7 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
 }
 
 wxSize
-wxRendererGTK::GetCheckBoxSize(wxWindow *WXUNUSED(win))
+wxRendererGTK::GetCheckBoxSize() const
 {
     gint indicator_size, indicator_spacing;
     gtk_widget_style_get(wxGTKPrivate::GetCheckButtonWidget(),

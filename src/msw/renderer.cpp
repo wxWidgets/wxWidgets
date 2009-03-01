@@ -213,7 +213,7 @@ public:
                                 const wxRect& rect,
                                 int flags=0);
 
-    virtual wxSize GetCheckBoxSize(wxWindow *win);
+    virtual wxSize GetCheckBoxSize() const;
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
 
@@ -388,7 +388,7 @@ void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
     ::DrawFocusRect(GraphicsHDC(&dc), &rc);
 }
 
-wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
+wxSize wxRendererMSW::GetCheckBoxSize() const
 {
     return wxSize(::GetSystemMetrics(SM_CXMENUCHECK),
                   ::GetSystemMetrics(SM_CYMENUCHECK));
