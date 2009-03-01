@@ -15,151 +15,8 @@
     used to contain the number of years, hours, minutes, seconds and
     milliseconds.
 
-
-    @section datetime_constants Constants
-
-    Global constant wxDefaultDateTime and synonym for it wxInvalidDateTime are
+    Global constant ::wxDefaultDateTime and synonym for it ::wxInvalidDateTime are
     defined. This constant will be different from any valid wxDateTime object.
-
-    All the following constants are defined inside wxDateTime class (i.e., to
-    refer to them you should prepend their names with "wxDateTime::").
-
-    Time zone symbolic names:
-
-    @code
-    enum TZ
-    {
-        // the time in the current time zone
-        Local,
-
-        // zones from GMT (= Greenwhich Mean Time): they're guaranteed to be
-        // consequent numbers, so writing something like `GMT0 + offset' is
-        // safe if abs(offset) <= 12
-
-        // underscore stands for minus
-        GMT_12, GMT_11, GMT_10, GMT_9, GMT_8, GMT_7,
-        GMT_6, GMT_5, GMT_4, GMT_3, GMT_2, GMT_1,
-        GMT0,
-        GMT1, GMT2, GMT3, GMT4, GMT5, GMT6,
-        GMT7, GMT8, GMT9, GMT10, GMT11, GMT12, GMT13,
-        // Note that GMT12 and GMT_12 are not the same: there is a difference
-        // of exactly one day between them
-
-        // some symbolic names for TZ
-
-        // Europe
-        WET = GMT0,         // Western Europe Time
-        WEST = GMT1,        // Western Europe Summer Time
-        CET = GMT1,         // Central Europe Time
-        CEST = GMT2,        // Central Europe Summer Time
-        EET = GMT2,         // Eastern Europe Time
-        EEST = GMT3,        // Eastern Europe Summer Time
-        MSK = GMT3,         // Moscow Time
-        MSD = GMT4,         // Moscow Summer Time
-
-        // US and Canada
-        AST = GMT_4,        // Atlantic Standard Time
-        ADT = GMT_3,        // Atlantic Daylight Time
-        EST = GMT_5,        // Eastern Standard Time
-        EDT = GMT_4,        // Eastern Daylight Saving Time
-        CST = GMT_6,        // Central Standard Time
-        CDT = GMT_5,        // Central Daylight Saving Time
-        MST = GMT_7,        // Mountain Standard Time
-        MDT = GMT_6,        // Mountain Daylight Saving Time
-        PST = GMT_8,        // Pacific Standard Time
-        PDT = GMT_7,        // Pacific Daylight Saving Time
-        HST = GMT_10,       // Hawaiian Standard Time
-        AKST = GMT_9,       // Alaska Standard Time
-        AKDT = GMT_8,       // Alaska Daylight Saving Time
-
-        // Australia
-
-        A_WST = GMT8,       // Western Standard Time
-        A_CST = GMT13 + 1,  // Central Standard Time (+9.5)
-        A_EST = GMT10,      // Eastern Standard Time
-        A_ESST = GMT11,     // Eastern Summer Time
-
-        // New Zealand
-        NZST = GMT12,       // Standard Time
-        NZDT = GMT13,       // Daylight Saving Time
-
-        // Universal Coordinated Time = the new and politically correct name
-        // for GMT
-        UTC = GMT0
-    };
-    @endcode
-
-    Month names: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec and
-    Inv_Month for an invalid month are the values of @c wxDateTime::Month enum.
-
-    Likewise, Sun, Mon, Tue, Wed, Thu, Fri, Sat, and Inv_WeekDay are the values
-    in @c wxDateTime::WeekDay enum.
-
-    Finally, Inv_Year is defined to be an invalid value for year parameter.
-
-    GetMonthName() and GetWeekDayName() functions use the following flags:
-
-    @code
-    enum NameFlags
-    {
-        Name_Full = 0x01,       // return full name
-        Name_Abbr = 0x02        // return abbreviated name
-    };
-    @endcode
-
-    Several functions accept an extra parameter specifying the calendar to use
-    (although most of them only support now the Gregorian calendar). This
-    parameters is one of the following values:
-
-    @code
-    enum Calendar
-    {
-        Gregorian,  // calendar currently in use in Western countries
-        Julian      // calendar in use since -45 until the 1582 (or later)
-    };
-    @endcode
-
-    Date calculations often depend on the country and wxDateTime allows to set
-    the country whose conventions should be used using SetCountry(). It takes
-    one of the following values as parameter:
-
-    @code
-    enum Country
-    {
-        Country_Unknown, // no special information for this country
-        Country_Default, // set the default country with SetCountry() method
-                         // or use the default country with any other
-
-        Country_WesternEurope_Start,
-        Country_EEC = Country_WesternEurope_Start,
-        France,
-        Germany,
-        UK,
-        Country_WesternEurope_End = UK,
-
-        Russia,
-
-        USA
-    };
-    @endcode
-
-    Different parts of the world use different conventions for the week start.
-    In some countries, the week starts on Sunday, while in others -- on Monday.
-    The ISO standard doesn't address this issue, so we support both conventions
-    in the functions whose result depends on it (GetWeekOfYear() and
-    GetWeekOfMonth()).
-
-    The desired behvaiour may be specified by giving one of the following
-    constants as argument to these functions:
-
-    @code
-    enum WeekFlags
-    {
-        Default_First,   // Sunday_First for US, Monday_First for the rest
-        Monday_First,    // week starts with a Monday
-        Sunday_First     // week starts with a Sunday
-    };
-    @endcode
 
 
     @section datetime_static Static Functions
@@ -226,6 +83,167 @@
 class wxDateTime
 {
 public:
+    /**
+        A small unsigned integer type for storing things like minutes,
+        seconds &c. It should be at least short (i.e. not char) to contain
+        the number of milliseconds - it may also be 'int' because there is
+        no size penalty associated with it in our code, we don't store any
+        data in this format.
+    */
+    typedef unsigned short wxDateTime_t;
+
+
+    /**
+        Time zone symbolic names.
+    */
+    enum TZ
+    {
+        /// the time in the current time zone
+        Local,
+
+        //@{
+        /// zones from GMT (= Greenwhich Mean Time): they're guaranteed to be
+        /// consequent numbers, so writing something like `GMT0 + offset' is
+        /// safe if abs(offset) <= 12
+
+        // underscore stands for minus
+        GMT_12, GMT_11, GMT_10, GMT_9, GMT_8, GMT_7,
+        GMT_6, GMT_5, GMT_4, GMT_3, GMT_2, GMT_1,
+        GMT0,
+        GMT1, GMT2, GMT3, GMT4, GMT5, GMT6,
+        GMT7, GMT8, GMT9, GMT10, GMT11, GMT12, GMT13,
+        // Note that GMT12 and GMT_12 are not the same: there is a difference
+        // of exactly one day between them
+        //@}
+
+        // some symbolic names for TZ
+
+        // Europe
+        WET = GMT0,         //!< Western Europe Time
+        WEST = GMT1,        //!< Western Europe Summer Time
+        CET = GMT1,         //!< Central Europe Time
+        CEST = GMT2,        //!< Central Europe Summer Time
+        EET = GMT2,         //!< Eastern Europe Time
+        EEST = GMT3,        //!< Eastern Europe Summer Time
+        MSK = GMT3,         //!< Moscow Time
+        MSD = GMT4,         //!< Moscow Summer Time
+
+        // US and Canada
+        AST = GMT_4,        //!< Atlantic Standard Time
+        ADT = GMT_3,        //!< Atlantic Daylight Time
+        EST = GMT_5,        //!< Eastern Standard Time
+        EDT = GMT_4,        //!< Eastern Daylight Saving Time
+        CST = GMT_6,        //!< Central Standard Time
+        CDT = GMT_5,        //!< Central Daylight Saving Time
+        MST = GMT_7,        //!< Mountain Standard Time
+        MDT = GMT_6,        //!< Mountain Daylight Saving Time
+        PST = GMT_8,        //!< Pacific Standard Time
+        PDT = GMT_7,        //!< Pacific Daylight Saving Time
+        HST = GMT_10,       //!< Hawaiian Standard Time
+        AKST = GMT_9,       //!< Alaska Standard Time
+        AKDT = GMT_8,       //!< Alaska Daylight Saving Time
+
+        // Australia
+
+        A_WST = GMT8,       //!< Western Standard Time
+        A_CST = GMT13 + 1,  //!< Central Standard Time (+9.5)
+        A_EST = GMT10,      //!< Eastern Standard Time
+        A_ESST = GMT11,     //!< Eastern Summer Time
+
+        // New Zealand
+        NZST = GMT12,       //!< Standard Time
+        NZDT = GMT13,       //!< Daylight Saving Time
+
+        /// Universal Coordinated Time = the new and politically correct name
+        /// for GMT.
+        UTC = GMT0
+    };
+
+    /**
+        Several functions accept an extra parameter specifying the calendar to use
+        (although most of them only support now the Gregorian calendar). This
+        parameters is one of the following values.
+    */
+    enum Calendar
+    {
+        Gregorian,  ///< calendar currently in use in Western countries
+        Julian      ///< calendar in use since -45 until the 1582 (or later)
+    };
+
+    /**
+        Date calculations often depend on the country and wxDateTime allows to set
+        the country whose conventions should be used using SetCountry(). It takes
+        one of the following values as parameter.
+    */
+    enum Country
+    {
+        Country_Unknown, ///< no special information for this country
+        Country_Default, ///< set the default country with SetCountry() method
+                         ///< or use the default country with any other
+
+        Country_WesternEurope_Start,
+        Country_EEC = Country_WesternEurope_Start,
+        France,
+        Germany,
+        UK,
+        Country_WesternEurope_End = UK,
+
+        Russia,
+
+        USA
+    };
+
+    /// symbolic names for the months
+    enum Month
+    {
+        Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec,
+
+        /// Invalid month value.
+        Inv_Month
+    };
+
+    /// symbolic names for the weekdays
+    enum WeekDay
+    {
+        Sun, Mon, Tue, Wed, Thu, Fri, Sat,
+
+        /// Invalid week day value.
+        Inv_WeekDay
+    };
+
+    /// invalid value for the year
+    enum Year
+    {
+        Inv_Year = SHRT_MIN    // should hold in wxDateTime_t
+    };
+
+    /**
+        Flags to be used with GetMonthName() and GetWeekDayName() functions.
+    */
+    enum NameFlags
+    {
+        Name_Full = 0x01,       ///< return full name
+        Name_Abbr = 0x02        ///< return abbreviated name
+    };
+
+    /**
+        Different parts of the world use different conventions for the week start.
+        In some countries, the week starts on Sunday, while in others -- on Monday.
+        The ISO standard doesn't address this issue, so we support both conventions
+        in the functions whose result depends on it (GetWeekOfYear() and
+        GetWeekOfMonth()).
+
+        The desired behvaiour may be specified by giving one of the following
+        constants as argument to these functions.
+    */
+    enum WeekFlags
+    {
+        Default_First,   ///< Sunday_First for US, Monday_First for the rest
+        Monday_First,    ///< week starts with a Monday
+        Sunday_First     ///< week starts with a Sunday
+    };
+
+
     /**
         @name Constructors, Assignment Operators and Setters
 
