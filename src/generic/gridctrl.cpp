@@ -743,11 +743,6 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 
 wxSize wxGridCellBoolRenderer::ms_sizeCheckMark;
 
-// FIXME these checkbox size calculations are really ugly...
-
-// between checkmark and box
-static const wxCoord wxGRID_CHECKMARK_MARGIN = 2;
-
 wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
                                            wxGridCellAttr& WXUNUSED(attr),
                                            wxDC& WXUNUSED(dc),
@@ -757,18 +752,7 @@ wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
     // compute it only once (no locks for MT safeness in GUI thread...)
     if ( !ms_sizeCheckMark.x )
     {
-        // get checkbox size
-        wxCheckBox *checkbox = new wxCheckBox(&grid, wxID_ANY, wxEmptyString);
-        wxSize size = checkbox->GetBestSize();
-        wxCoord checkSize = size.y + 2 * wxGRID_CHECKMARK_MARGIN;
-
-#if defined(__WXMOTIF__)
-        checkSize -= size.y / 2;
-#endif
-
-        delete checkbox;
-
-        ms_sizeCheckMark.x = ms_sizeCheckMark.y = checkSize;
+        ms_sizeCheckMark = wxRendererNative::Get().GetCheckBoxSize();
     }
 
     return ms_sizeCheckMark;
