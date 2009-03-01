@@ -736,8 +736,8 @@ public:
 
     /**
         This function does the same as the standard ANSI C @c strftime(3)
-        function. Please see its description for the meaning of @a format
-        parameter.
+        function (http://www.cplusplus.com/reference/clibrary/ctime/strftime.html).
+        Please see its description for the meaning of @a format parameter.
 
         It also accepts a few wxWidgets-specific extensions: you can optionally
         specify the width of the field to follow using @c printf(3)-like syntax
@@ -791,25 +791,19 @@ public:
 
         @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
+
+        @see Format()
     */
     const char* ParseDate(const wxString& date,
                            wxString::const_iterator* end = NULL);
-    /**
-        This function is like ParseDateTime(), but it only allows the date to
-        be specified. It is thus less flexible then ParseDateTime(), but also
-        has less chances to misinterpret the user input.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+    /**
+        @overload
     */
     const char* ParseDate(const char* date);
-    /**
-        This function is like ParseDateTime(), but it only allows the date to
-        be specified. It is thus less flexible then ParseDateTime(), but also
-        has less chances to misinterpret the user input.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+    /**
+        @overload
     */
     const wchar_t* ParseDate(const wchar_t* date);
 
@@ -825,26 +819,14 @@ public:
     */
     const char* ParseDateTime(const wxString& datetime,
                               wxString::const_iterator* end = NULL);
-    /**
-        Parses the string @a datetime containing the date and time in free
-        format. This function tries as hard as it can to interpret the given
-        string as date and time. Unlike ParseRfc822Date(), it will accept
-        anything that may be accepted and will only reject strings which can
-        not be parsed in any way at all.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+    /**
+        @overload
     */
     const char* ParseDateTime(const char* datetime);
-    /**
-        Parses the string @a datetime containing the date and time in free
-        format. This function tries as hard as it can to interpret the given
-        string as date and time. Unlike ParseRfc822Date(), it will accept
-        anything that may be accepted and will only reject strings which can
-        not be parsed in any way at all.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+    /**
+        @overload
     */
     const wchar_t* ParseDateTime(const wchar_t* datetime);
 
@@ -869,61 +851,27 @@ public:
 
         @return @NULL if the conversion failed, otherwise return the pointer
                  to the character which stopped the scan.
+
+        @see Format()
     */
     const char* ParseFormat(const wxString& date,
-                             const wxString& format = wxDefaultDateTimeFormat,
-                             const wxDateTime& dateDef = wxDefaultDateTime,
-                             wxString::const_iterator* end = NULL);
+                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxDateTime& dateDef = wxDefaultDateTime,
+                            wxString::const_iterator* end = NULL);
+
     /**
-        This function parses the string @a date according to the given
-        @e format. The system @c strptime(3) function is used whenever
-        available, but even if it is not, this function is still implemented,
-        although support for locale-dependent format specifiers such as
-        @c "%c", @c "%x" or @c "%X" may not be perfect and GNU extensions such
-        as @c "%z" and @c "%Z" are not implemented. This function does handle
-        the month and weekday names in the current locale on all platforms,
-        however.
-
-        Please see the description of the ANSI C function @c strftime(3) for
-        the syntax of the format string.
-
-        The @a dateDef parameter is used to fill in the fields which could not
-        be determined from the format string. For example, if the format is
-        @c "%d" (the day of the month), the month and the year are taken from
-        @a dateDef. If it is not specified, Today() is used as the default
-        date.
-
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+        @overload
     */
     const char* ParseFormat(const char* date,
-                              const wxString& format = wxDefaultDateTimeFormat,
-                              const wxDateTime& dateDef = wxDefaultDateTime);
+                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxDateTime& dateDef = wxDefaultDateTime);
+
     /**
-        This function parses the string @a date according to the given
-        @e format. The system @c strptime(3) function is used whenever
-        available, but even if it is not, this function is still implemented,
-        although support for locale-dependent format specifiers such as
-        @c "%c", @c "%x" or @c "%X" may not be perfect and GNU extensions such
-        as @c "%z" and @c "%Z" are not implemented. This function does handle
-        the month and weekday names in the current locale on all platforms,
-        however.
-
-        Please see the description of the ANSI C function @c strftime(3) for
-        the syntax of the format string.
-
-        The @a dateDef parameter is used to fill in the fields which could not
-        be determined from the format string. For example, if the format is
-        @c "%d" (the day of the month), the month and the year are taken from
-        @a dateDef. If it is not specified, Today() is used as the default
-        date.
-
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+        @overload
     */
     const wchar_t* ParseFormat(const wchar_t* date,
-                                 const wxString& format = wxDefaultDateTimeFormat,
-                                 const wxDateTime& dateDef = wxDefaultDateTime);
+                               const wxString& format = wxDefaultDateTimeFormat,
+                               const wxDateTime& dateDef = wxDefaultDateTime);
 
     /**
         This function parses the string containing the date and time in ISO
@@ -972,42 +920,14 @@ public:
     */
     const char* ParseRfc822Date(const wxString& date,
                                   wxString::const_iterator* end = NULL);
+
     /**
-        Parses the string @a date looking for a date formatted according to the
-        RFC 822 in it. The exact description of this format may, of course, be
-        found in the RFC (section 5), but, briefly, this is the format used in
-        the headers of Internet email messages and one of the most common
-        strings expressing date in this format may be something like
-        @c "Sat, 18 Dec 1999 00:48:30 +0100".
-
-        Returns @NULL if the conversion failed, otherwise return the pointer to
-        the character immediately following the part of the string which could
-        be parsed. If the entire string contains only the date in RFC 822
-        format, the returned pointer will be pointing to a @c NUL character.
-
-        This function is intentionally strict, it will return an error for any
-        string which is not RFC 822 compliant. If you need to parse date
-        formatted in more free ways, you should use ParseDateTime() or
-        ParseDate() instead.
+        @overload
     */
     const char* ParseRfc822Date(const char* date);
+
     /**
-        Parses the string @a date looking for a date formatted according to the
-        RFC 822 in it. The exact description of this format may, of course, be
-        found in the RFC (section 5), but, briefly, this is the format used in
-        the headers of Internet email messages and one of the most common
-        strings expressing date in this format may be something like
-        @c "Sat, 18 Dec 1999 00:48:30 +0100".
-
-        Returns @NULL if the conversion failed, otherwise return the pointer to
-        the character immediately following the part of the string which could
-        be parsed. If the entire string contains only the date in RFC 822
-        format, the returned pointer will be pointing to a @c NUL character.
-
-        This function is intentionally strict, it will return an error for any
-        string which is not RFC 822 compliant. If you need to parse date
-        formatted in more free ways, you should use ParseDateTime() or
-        ParseDate() instead.
+        @overload
     */
     const wchar_t* ParseRfc822Date(const wchar_t* date);
 
@@ -1020,20 +940,14 @@ public:
     */
     const char* ParseTime(const wxString& time,
                            wxString::const_iterator* end = NULL);
-    /**
-        This functions is like ParseDateTime(), but only allows the time to be
-        specified in the input string.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+    /**
+        @overload
     */
     const char* ParseTime(const char* time);
-    /**
-        This functions is like ParseDateTime(), but only allows the time to be
-        specified in the input string.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+    /**
+        @overload
     */
     const wchar_t* ParseTime(const wchar_t* time);
 
