@@ -23,7 +23,7 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 
 // these flags define what kind of filenames is included in the list of files
 // enumerated by GetFirst/GetNext
-enum
+enum wxDirFlags
 {
     wxDIR_FILES     = 0x0001,       // include files
     wxDIR_DIRS      = 0x0002,       // include directories

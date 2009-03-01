@@ -97,7 +97,7 @@ public:
     These flags define what kind of filenames are included in the list of files
     enumerated by wxDir::GetFirst() and wxDir::GetNext().
 */
-enum
+enum wxDirFlags
 {
     wxDIR_FILES     = 0x0001,   ///< Includes files.
     wxDIR_DIRS      = 0x0002,   ///< Includes directories.
@@ -177,6 +177,7 @@ public:
         includes ::wxDIR_DIRS and so the function recurses into the
         subdirectories but if this flag is not specified, the function
         restricts the search only to the directory @a dirname itself.
+        See ::wxDirFlags for the list of the possible flags.
 
         @see Traverse()
     */
@@ -193,6 +194,7 @@ public:
         The @a flags parameter should always include ::wxDIR_FILES or the array
         would be unchanged and should include ::wxDIR_DIRS flag to recurse into
         subdirectories (both flags are included in the value by default).
+        See ::wxDirFlags for the list of the possible flags.
 
         @see Traverse()
     */
@@ -203,6 +205,7 @@ public:
     /**
         Start enumerating all files matching @a filespec (or all files if it is
         empty) and @e flags, return @true on success.
+        See ::wxDirFlags for the list of the possible flags.
     */
     bool GetFirst(wxString* filename,
                   const wxString& filespec = wxEmptyString,
@@ -272,6 +275,7 @@ public:
         @a flags contains ::wxDIR_DIRS flag. It will ignore the files (but
         still possibly recurse into subdirectories) if ::wxDIR_FILES flag is
         given.
+        See ::wxDirFlags for the list of the possible flags.
 
         For each found directory, @ref wxDirTraverser::OnDir() "sink.OnDir()"
         is called and @ref wxDirTraverser::OnFile() "sink.OnFile()" is called
