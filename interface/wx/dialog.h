@@ -583,6 +583,10 @@ public:
         modeless dialog modal. However ShowModal() can't be called twice
         without intervening EndModal() calls.
 
+        Note that this function creates a temporary event loop which takes
+        precedence over the application's main event loop (see wxEventLoopBase)
+        and which is destroyed when the dialog is dismissed.
+
         @return The value set with SetReturnCode().
 
         @see EndModal(), GetReturnCode(), SetReturnCode()

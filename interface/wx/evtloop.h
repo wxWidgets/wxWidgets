@@ -18,6 +18,7 @@
 
     An object of this class is created by wxAppTraits::CreateEventLoop() and
     used by wxApp to run the main application event loop.
+    Temporary event loops are usually created by wxDialog::ShowModal().
 
     You can create your own event loop if you need, provided that you restore
     the main event loop once yours is destroyed (see wxEventLoopActivator).
