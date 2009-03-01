@@ -47,7 +47,7 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     dc.SetBackgroundMode( wxBRUSHSTYLE_SOLID );
 
     wxColour clr;
-    if ( grid.IsEnabled() )
+    if ( grid.IsThisEnabled() )
     {
         if ( isSelected )
         {
@@ -392,7 +392,7 @@ void wxGridCellStringRenderer::SetTextColoursAndFont(const wxGrid& grid,
     // TODO some special colours for attr.IsReadOnly() case?
 
     // different coloured text when the grid is disabled
-    if ( grid.IsEnabled() )
+    if ( grid.IsThisEnabled() )
     {
         if ( isSelected )
         {
@@ -743,7 +743,7 @@ void wxGridCellFloatRenderer::SetParameters(const wxString& params)
 
 wxSize wxGridCellBoolRenderer::ms_sizeCheckMark;
 
-wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& grid,
+wxSize wxGridCellBoolRenderer::GetBestSize(wxGrid& WXUNUSED(grid),
                                            wxGridCellAttr& WXUNUSED(attr),
                                            wxDC& WXUNUSED(dc),
                                            int WXUNUSED(row),
