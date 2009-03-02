@@ -154,6 +154,11 @@ protected:
     virtual void DoSetValue(const wxString& value, int flags);
     virtual wxString DoGetValue() const = 0;
 
+    // override this to return the associated window, it will be used for event
+    // generation and also by generic hints implementation
+    virtual wxWindow *GetEditableWindow() = 0;
+
+
     // class which should be used to temporarily disable text change events
     //
     // if suppress argument in ctor is false, nothing is done
@@ -185,11 +190,6 @@ protected:
     bool EventsAllowed() const { return m_eventsBlock == 0; }
 
 private:
-    // override this to return the associated window, it will be used for event
-    // generation and also by generic hints implementation
-    virtual wxWindow *GetEditableWindow() = 0;
-
-
     // suppress or resume the text changed events generation: don't use these
     // functions directly, use EventsSuppressor class above instead
     void SuppressTextChangedEvents()
