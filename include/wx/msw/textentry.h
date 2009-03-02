@@ -3,7 +3,7 @@
 // Purpose:     wxMSW-specific wxTextEntry implementation
 // Author:      Vadim Zeitlin
 // Created:     2007-09-26
-// RCS-ID:      $Id: textentry.h 48944 2007-09-26 00:30:22Z VZ $
+// RCS-ID:      $Id$
 // Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,6 @@ public:
 
     // implement wxTextEntryBase pure virtual methods
     virtual void WriteText(const wxString& text);
-    virtual wxString GetValue() const;
     virtual void Remove(long from, long to);
 
     virtual void Copy();
