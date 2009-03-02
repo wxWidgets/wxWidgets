@@ -163,7 +163,8 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
         the main thread waits and then notify the main thread by posting
         an event.
      */
-    ProcessPendingEvents();
+    if (wxTheApp)
+        wxTheApp->ProcessPendingEvents();
 
 #if wxUSE_LOG
     // let the logs be flashed again

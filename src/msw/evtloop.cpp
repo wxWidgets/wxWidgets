@@ -503,7 +503,8 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     }
 
     // if there are pending events, we must process them.
-    ProcessPendingEvents();
+    if (wxTheApp)
+        wxTheApp->ProcessPendingEvents();
 
     // put back unprocessed events in the queue
     DWORD id = GetCurrentThreadId();
