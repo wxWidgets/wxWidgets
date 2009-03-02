@@ -3804,6 +3804,41 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 // Helper functions
 // ----------------------------------------------------------------------------
 
+// This is an ugly hack to allow the use of Bind() instead of Connect() inside
+// the library code if the library was built with support for it, here is how
+// it is used:
+//
+// class SomeEventHandlingClass : wxBIND_OR_CONNECT_HACK_BASE_CLASS
+//                                public SomeBaseClass
+// {
+// public:
+//     SomeEventHandlingClass(wxWindow *win)
+//     {
+//         // connect to the event for the given window
+//         wxBIND_OR_CONNECT_HACK(win, wxEVT_SOMETHING, wxSomeEventHandler,
+//                                SomeEventHandlingClass::OnSomeEvent, this);
+//     }
+//
+// private:
+//     void OnSomeEvent(wxSomeEvent&) { ... }
+// };
+//
+// This is *not* meant to be used by library users, it is only defined here
+// (and not in a private header) because the base class must be visible from
+// other public headers, please do NOT use this in your code, it will be
+// removed from future wx versions without warning.
+#if wxEVENTS_COMPATIBILITY_2_8
+    #define wxBIND_OR_CONNECT_HACK_BASE_CLASS public wxEvtHandler,
+    #define wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS : public wxEvtHandler
+    #define wxBIND_OR_CONNECT_HACK(w, evt, handler, func, obj) \
+        win->Connect(evt, handler(func), NULL, obj)
+#else // wxEVENTS_COMPATIBILITY_2_8
+    #define wxBIND_OR_CONNECT_HACK_BASE_CLASS
+    #define wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
+    #define wxBIND_OR_CONNECT_HACK(w, evt, handler, func, obj) \
+        win->Bind(evt, &func, obj)
+#endif // wxEVENTS_COMPATIBILITY_2_8/!wxEVENTS_COMPATIBILITY_2_8
+
 #if wxUSE_GUI
 
 // Find a window with the focus, that is also a descendant of the given window.

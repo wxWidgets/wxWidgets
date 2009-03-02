@@ -23,29 +23,15 @@
 
 // type-independent part of wxPersistentWindow
 class wxPersistentWindowBase :
-#if wxEVENTS_COMPATIBILITY_2_8
-    // in compatibility mode we need to derive from wxEvtHandler to be able to
-    // handle events
-    public wxEvtHandler ,
-#endif
+    wxBIND_OR_CONNECT_HACK_BASE_CLASS
     public wxPersistentObject
 {
 public:
     wxPersistentWindowBase(wxWindow *win)
         : wxPersistentObject(win)
     {
-#if wxEVENTS_COMPATIBILITY_2_8
-        win->Connect
-             (
-                wxEVT_DESTROY,
-                wxWindowDestroyEventHandler(
-                    wxPersistentWindowBase::HandleDestroy),
-                NULL,
-                this
-             );
-#else // !wxEVENTS_COMPATIBILITY_2_8
-        win->Bind(wxEVT_DESTROY, &wxPersistentWindowBase::HandleDestroy, this);
-#endif // wxEVENTS_COMPATIBILITY_2_8/!wxEVENTS_COMPATIBILITY_2_8
+        wxBIND_OR_CONNECT_HACK(win, wxEVT_DESTROY, wxWindowDestroyEventHandler,
+                               wxPersistentWindowBase::HandleDestroy, this);
     }
 
     virtual wxString GetName() const
