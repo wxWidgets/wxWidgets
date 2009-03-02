@@ -177,7 +177,6 @@ protected:
 
 private:
     // overridden wxTextEntry virtual methods
-    virtual const wxWindow *GetEditableWindow() const { return this; }
     virtual GtkEditable *GetEditable() const;
     virtual void EnableTextChangedEvents(bool enable);
 

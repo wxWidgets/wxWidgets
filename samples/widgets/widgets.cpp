@@ -97,6 +97,8 @@ enum
     TextEntry_DisableAutoComplete = TextEntry_Begin,
     TextEntry_AutoCompleteFixed,
     TextEntry_AutoCompleteFilenames,
+
+    TextEntry_SetHint,
     TextEntry_End
 };
 
@@ -164,9 +166,12 @@ protected:
     void OnToggleGlobalBusyCursor(wxCommandEvent& event);
     void OnToggleBusyCursor(wxCommandEvent& event);
 
+    // wxTextEntry-specific tests
     void OnDisableAutoComplete(wxCommandEvent& event);
     void OnAutoCompleteFixed(wxCommandEvent& event);
     void OnAutoCompleteFilenames(wxCommandEvent& event);
+
+    void OnSetHint(wxCommandEvent& event);
 
     void OnUpdateTextUI(wxUpdateUIEvent& event)
     {
@@ -308,6 +313,8 @@ BEGIN_EVENT_TABLE(WidgetsFrame, wxFrame)
     EVT_MENU(TextEntry_AutoCompleteFixed,     WidgetsFrame::OnAutoCompleteFixed)
     EVT_MENU(TextEntry_AutoCompleteFilenames, WidgetsFrame::OnAutoCompleteFilenames)
 
+    EVT_MENU(TextEntry_SetHint, WidgetsFrame::OnSetHint)
+
     EVT_UPDATE_UI_RANGE(TextEntry_Begin, TextEntry_End - 1,
                         WidgetsFrame::OnUpdateTextUI)
 
@@ -419,6 +426,8 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
                                    _T("Fixed-&list auto-completion"));
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteFilenames,
                                    _T("&Files names auto-completion"));
+    menuTextEntry->AppendSeparator();
+    menuTextEntry->Append(TextEntry_SetHint, "Set help &hint");
 
     mbar->Append(menuTextEntry, _T("&Text"));
 
@@ -946,6 +955,25 @@ void WidgetsFrame::OnAutoCompleteFilenames(wxCommandEvent& WXUNUSED(event))
         wxLogMessage("Enable auto completion of file names.");
     else
         wxLogMessage("AutoCompleteFileNames() failed.");
+}
+
+void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
+{
+    wxTextEntryBase *entry = CurrentPage()->GetTextEntry();
+    wxCHECK_RET( entry, "menu item should be disabled" );
+
+    static wxString s_hint("Type here");
+    wxString
+        hint = wxGetTextFromUser("Text hint:", "Widgets sample", s_hint, this);
+    if ( hint.empty() )
+        return;
+
+    s_hint = hint;
+
+    if ( entry->SetHint(hint) )
+        wxLogMessage("Set hint to \"%s\".", hint);
+    else
+        wxLogMessage("Text hints not supported.");
 }
 
 #endif // wxUSE_MENUS

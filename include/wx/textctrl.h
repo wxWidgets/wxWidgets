@@ -692,6 +692,9 @@ protected:
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
 
+private:
+    // implement the wxTextEntry pure virtual method
+    virtual wxWindow *GetEditableWindow() { return this; }
 
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     DECLARE_ABSTRACT_CLASS(wxTextCtrlBase)

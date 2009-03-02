@@ -16,6 +16,7 @@
 typedef long wxTextPos;
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
 
 // ----------------------------------------------------------------------------
 // wxTextEntryBase
@@ -24,8 +25,8 @@ class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_CORE wxTextEntryBase
 {
 public:
-    wxTextEntryBase() { m_eventsBlock = 0; }
-    virtual ~wxTextEntryBase() { }
+    wxTextEntryBase() { m_eventsBlock = 0; m_hintData = NULL; }
+    virtual ~wxTextEntryBase();
 
 
     // accessing the value
@@ -129,6 +130,17 @@ public:
     virtual void SetMaxLength(unsigned long WXUNUSED(len)) { }
 
 
+    // hints
+    // -----
+
+    // hint is the (usually greyed out) text shown in the control as long as
+    // it's empty and doesn't have focus, it is typically used in controls used
+    // for searching to let the user know what is supposed to be entered there
+
+    virtual bool SetHint(const wxString& hint);
+    virtual wxString GetHint() const;
+
+
 protected:
     // flags for DoSetValue(): common part of SetValue() and ChangeValue() and
     // also used to implement WriteText() in wxMSW
@@ -172,6 +184,11 @@ protected:
     bool EventsAllowed() const { return m_eventsBlock == 0; }
 
 private:
+    // override this to return the associated window, it will be used for event
+    // generation and also by generic hints implementation
+    virtual wxWindow *GetEditableWindow() = 0;
+
+
     // suppress or resume the text changed events generation: don't use these
     // functions directly, use EventsSuppressor class above instead
     void SuppressTextChangedEvents()
@@ -196,6 +213,9 @@ private:
 
     // if this counter is non-null, events are blocked
     unsigned m_eventsBlock;
+
+    // hint-related stuff, only allocated if/when SetHint() is used
+    wxTextEntryHintData *m_hintData;
 };
 
 #ifdef __WXUNIVERSAL__

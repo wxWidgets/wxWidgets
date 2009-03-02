@@ -54,10 +54,6 @@ public:
     void SendMaxLenEvent();
 
 private:
-    // implement this to return the associated window, it will be used for
-    // event generation
-    virtual const wxWindow *GetEditableWindow() const = 0;
-
     // implement this to return the associated GtkEntry or another widget
     // implementing GtkEditable
     virtual GtkEditable *GetEditable() const = 0;

@@ -42,6 +42,10 @@
 #include "wx/wupdlock.h"
 #include "wx/msw/private.h"
 
+#if wxUSE_UXTHEME
+    #include "wx/msw/uxtheme.h"
+#endif
+
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
@@ -445,6 +449,14 @@ WXHWND wxComboBox::GetEditHWND() const
     return hWndEdit;
 }
 
+wxWindow *wxComboBox::GetEditableWindow()
+{
+    wxASSERT_MSG( !HasFlag(wxCB_READONLY),
+                  _T("read-only combobox doesn't have any edit control") );
+
+    return this;
+}
+
 // ----------------------------------------------------------------------------
 // wxComboBox creation
 // ----------------------------------------------------------------------------
@@ -664,5 +676,23 @@ void wxComboBox::DoSetToolTip(wxToolTip *tip)
 }
 
 #endif // wxUSE_TOOLTIPS
+
+#if wxUSE_UXTHEME
+
+bool wxComboBox::SetHint(const wxString& hintOrig)
+{
+    wxString hint(hintOrig);
+    if ( wxUxThemeEngine::GetIfActive() )
+    {
+        // under XP (but not Vista) there is a bug in cue banners
+        // implementation for combobox edit control: the first character is
+        // partially chopped off, so prepend a space to make it fully visible
+        hint.insert(0, " ");
+    }
+
+    return wxTextEntry::SetHint(hint);
+}
+
+#endif // wxUSE_UXTHEME
 
 #endif // wxUSE_COMBOBOX

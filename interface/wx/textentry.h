@@ -352,6 +352,36 @@ public:
     virtual void SelectAll();
 
     /**
+        Sets a hint shown in an empty unfocused text control.
+
+        The hints are usually used to indicate to the user what is supposed to
+        be entered into the given entry field, e.g. a common use of them is to
+        show an explanation of what can be entered in a wxSearchCtrl.
+
+        The hint is shown (usually greyed out) for an empty control until it
+        gets focus and is shown again if the control loses it and remains
+        empty. It won't be shown once the control has a non-empty value,
+        although it will be shown again if the control contents is cleared.
+        Because of this, it generally only makes sense to use hints with the
+        controls which are initially empty.
+
+        Notice that hints are known as <em>cue banners</em> under MSW or
+        <em>placeholder strings</em> under OS X.
+
+        @since 2.9.0
+     */
+    virtual void SetHint(const wxString& hint);
+
+    /**
+        Returns the current hint string.
+
+        See SetHint() for more information about hints.
+
+        @since 2.9.0
+     */
+    virtual wxString GetHint() const;
+
+    /**
         Sets the new text control value.
 
         It also marks the control as not-modified which means that IsModified()

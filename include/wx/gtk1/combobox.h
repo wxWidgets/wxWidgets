@@ -169,6 +169,9 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
+    // implement wxTextEntry pure virtual method
+    virtual wxWindow *GetEditableWindow() { return this; }
+
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
     virtual bool UseGTKStyleBase() const { return true; }

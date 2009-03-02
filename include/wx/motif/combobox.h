@@ -107,6 +107,8 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
 
+    // implement wxTextEntry pure virtual methods
+    virtual wxWindow *GetEditableWindow() { return this; }
     virtual WXWidget GetTextWidget() const;
 
 private:

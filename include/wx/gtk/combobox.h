@@ -142,7 +142,7 @@ protected:
 
 private:
     // From wxTextEntry:
-    virtual const wxWindow *GetEditableWindow() const { return this; }
+    virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const;
     virtual void EnableTextChangedEvents(bool enable)
     {

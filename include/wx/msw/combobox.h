@@ -116,6 +116,11 @@ public:
 
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
+#if wxUSE_UXTHEME
+    // override wxTextEntry method to work around Windows bug
+    virtual bool SetHint(const wxString& hint);
+#endif // wxUSE_UXTHEME
+
 protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip(wxToolTip *tip);
@@ -136,8 +141,9 @@ protected:
     }
 
 private:
-    // this is the overridden wxTextEntry method which should only be called
-    // when we do have an edit control so it asserts if this is not the case
+    // there are the overridden wxTextEntry methods which should only be called
+    // when we do have an edit control so they assert if this is not the case
+    virtual wxWindow *GetEditableWindow();
     virtual WXHWND GetEditHWND() const;
 
     // common part of all ctors

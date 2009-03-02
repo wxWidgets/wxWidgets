@@ -149,6 +149,10 @@ public:
     virtual void GetSelection(long *from, long *to) const;
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
+
+private:
+    // implement wxTextEntry pure virtual method
+    virtual wxWindow *GetEditableWindow() { return this; }
 };
 
 #endif // __WX_COCOA_COMBOBOX_H__

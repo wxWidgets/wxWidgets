@@ -122,8 +122,8 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxChoice,
                                       );
 
 private:
-    // implement wxTextEntry pure virtual: it implements all the operations for
-    // the simple EDIT controls
+    // implement wxTextEntry pure virtual methods
+    virtual wxWindow *GetEditableWindow() { return this; }
     virtual WXHWND GetEditHWND() const { return m_hWnd; }
 
     DECLARE_DYNAMIC_CLASS(wxComboBox)

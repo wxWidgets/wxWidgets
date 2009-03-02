@@ -406,6 +406,7 @@ All (GUI):
 - Added support for labels for toolbar controls (Vince Harron).
 - Added wxMessageDialog::SetMessage() and SetExtendedMessage().
 - Added wxListCtrl::Set/GetColumnsOrder() (Yury Voronov).
+- Added wxTextEntry::SetHint().
 - Made wxLogWindow thread-safe (Barbara Maren Winkler).
 - Added wxWindow::AlwaysShowScrollbars() (Julian Scheid).
 - Added wxMouseEvent::GetClickCount() (Julian Scheid).

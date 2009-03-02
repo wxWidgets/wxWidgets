@@ -33,9 +33,97 @@
 #include "wx/textentry.h"
 #include "wx/clipbrd.h"
 
+// ----------------------------------------------------------------------------
+// wxTextEntryHintData
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxTextEntryHintData wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
+{
+public:
+    wxTextEntryHintData(wxTextEntryBase *entry, wxWindow *win)
+        : m_entry(entry),
+          m_win(win)
+    {
+        wxBIND_OR_CONNECT_HACK(win, wxEVT_SET_FOCUS, wxFocusEventHandler,
+                                wxTextEntryHintData::OnSetFocus, this);
+        wxBIND_OR_CONNECT_HACK(win, wxEVT_KILL_FOCUS, wxFocusEventHandler,
+                                wxTextEntryHintData::OnKillFocus, this);
+    }
+
+    // default dtor is ok
+
+    void SetHintString(const wxString& hint)
+    {
+        m_hint = hint;
+
+        if ( ShowsHint() )
+        {
+            // update it immediately
+            m_entry->ChangeValue(hint);
+        }
+        //else: the new hint will be shown later
+    }
+
+    const wxString& GetHintString() const { return m_hint; }
+
+private:
+    // are we showing the hint right now?
+    bool ShowsHint() const
+    {
+        return m_entry->GetValue() == m_hint;
+    }
+
+    void OnSetFocus(wxFocusEvent& event)
+    {
+        // hide the hint if we were showing it
+        if ( ShowsHint() )
+        {
+            // Clear() would send an event which we don't want, so do it like
+            // this
+            m_entry->ChangeValue(wxString());
+            m_win->SetForegroundColour(m_colFg);
+        }
+
+        event.Skip();
+    }
+
+    void OnKillFocus(wxFocusEvent& event)
+    {
+        // restore the hint if the user didn't do anything in the control
+        if ( m_entry->IsEmpty() )
+        {
+            m_entry->ChangeValue(m_hint);
+
+            m_colFg = m_win->GetForegroundColour();
+            m_win->SetForegroundColour(*wxLIGHT_GREY);
+        }
+
+        event.Skip();
+    }
+
+
+    wxTextEntryBase * const m_entry;
+    wxWindow * const m_win;
+
+    wxColour m_colFg;
+
+    wxString m_hint;
+
+    wxDECLARE_NO_COPY_CLASS(wxTextEntryHintData);
+};
+
 // ============================================================================
 // wxTextEntryBase implementation
 // ============================================================================
+
+wxTextEntryBase::~wxTextEntryBase()
+{
+    delete m_hintData;
+}
+
+// ----------------------------------------------------------------------------
+// text operations
+// ----------------------------------------------------------------------------
 
 wxString wxTextEntryBase::GetRange(long from, long to) const
 {
@@ -77,6 +165,10 @@ void wxTextEntryBase::Replace(long from, long to, const wxString& value)
     WriteText(value);
 }
 
+// ----------------------------------------------------------------------------
+// selection
+// ----------------------------------------------------------------------------
+
 bool wxTextEntryBase::HasSelection() const
 {
     long from, to;
@@ -100,6 +192,10 @@ wxString wxTextEntryBase::GetStringSelection() const
 
     return GetRange(from, to);
 }
+
+// ----------------------------------------------------------------------------
+// clipboard
+// ----------------------------------------------------------------------------
 
 bool wxTextEntryBase::CanCopy() const
 {
@@ -129,6 +225,25 @@ bool wxTextEntryBase::CanPaste() const
     }
 
     return false;
+}
+
+// ----------------------------------------------------------------------------
+// hints support
+// ----------------------------------------------------------------------------
+
+bool wxTextEntryBase::SetHint(const wxString& hint)
+{
+    if ( !m_hintData )
+        m_hintData = new wxTextEntryHintData(this, GetEditableWindow());
+
+    m_hintData->SetHintString(hint);
+
+    return true;
+}
+
+wxString wxTextEntryBase::GetHint() const
+{
+    return m_hintData ? m_hintData->GetHintString() : wxString();
 }
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

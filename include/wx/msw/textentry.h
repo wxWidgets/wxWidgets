@@ -54,6 +54,11 @@ public:
 
     virtual void SetMaxLength(unsigned long len);
 
+#if wxUSE_UXTHEME
+    virtual bool SetHint(const wxString& hint);
+    virtual wxString GetHint() const;
+#endif // wxUSE_UXTHEME
+
 protected:
     // this is really a hook for multiline text controls as the single line
     // ones don't need to ever scroll to show the selection but having it here

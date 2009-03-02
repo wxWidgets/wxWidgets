@@ -154,6 +154,9 @@ protected:
 
     virtual void SetClientDataType(wxClientDataType clientDataItemsType);
 
+    // implement wxTextEntry pure virtual method
+    virtual wxWindow *GetEditableWindow() { return this; }
+
     // the subcontrols
     wxComboBoxText*     m_text;
     wxComboBoxChoice*   m_choice;

@@ -166,6 +166,9 @@ protected:
     wxListBox *GetLBox() const { return m_lbox; }
 
 private:
+    // implement wxTextEntry pure virtual method
+    virtual wxWindow *GetEditableWindow() { return this; }
+
     // the popup listbox
     wxListBox *m_lbox;
 

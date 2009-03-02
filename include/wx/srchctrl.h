@@ -64,6 +64,10 @@ public:
 
     virtual void ShowCancelButton( bool show ) = 0;
     virtual bool IsCancelButtonVisible() const = 0;
+
+private:
+    // implement wxTextEntry pure virtual method
+    virtual wxWindow *GetEditableWindow() { return this; }
 };
 
 

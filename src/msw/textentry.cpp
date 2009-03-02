@@ -35,6 +35,10 @@
 
 #include "wx/msw/private.h"
 
+#if wxUSE_UXTHEME
+    #include "wx/msw/uxtheme.h"
+#endif
+
 #define GetEditHwnd() ((HWND)(GetEditHWND()))
 
 // ----------------------------------------------------------------------------
@@ -415,5 +419,45 @@ void wxTextEntry::SetMaxLength(unsigned long len)
 
     ::SendMessage(GetEditHwnd(), EM_LIMITTEXT, len, 0);
 }
+
+// ----------------------------------------------------------------------------
+// hints
+// ----------------------------------------------------------------------------
+
+#if wxUSE_UXTHEME
+
+#ifndef EM_SETCUEBANNER
+    #define EM_SETCUEBANNER 0x1501
+    #define EM_GETCUEBANNER 0x1502
+#endif
+
+bool wxTextEntry::SetHint(const wxString& hint)
+{
+    if ( wxUxThemeEngine::GetIfActive() )
+    {
+        // notice that this message always works with Unicode strings
+        if ( ::SendMessage(GetEditHwnd(), EM_SETCUEBANNER,
+                             0, (LPARAM)(const wchar_t *)hint.wc_str()) )
+            return true;
+    }
+
+    return wxTextEntryBase::SetHint(hint);
+}
+
+wxString wxTextEntry::GetHint() const
+{
+    if ( wxUxThemeEngine::GetIfActive() )
+    {
+        wchar_t buf[256];
+        if ( ::SendMessage(GetEditHwnd(), EM_GETCUEBANNER,
+                            (WPARAM)buf, WXSIZEOF(buf)) )
+            return buf;
+    }
+
+    return wxTextEntryBase::GetHint();
+}
+
+
+#endif // wxUSE_UXTHEME
 
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX
