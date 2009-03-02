@@ -59,6 +59,8 @@ public:
 #endif // wxUSE_UXTHEME
 
 protected:
+    virtual wxString DoGetValue() const;
+
     // this is really a hook for multiline text controls as the single line
     // ones don't need to ever scroll to show the selection but having it here
     // allows us to put Remove() in the base class

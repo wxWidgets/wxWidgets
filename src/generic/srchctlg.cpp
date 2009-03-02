@@ -577,7 +577,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
 // accessors
 // ---------
 
-wxString wxSearchCtrl::GetValue() const
+wxString wxSearchCtrl::DoGetValue() const
 {
     wxString value = m_text->GetValue();
     if (value == m_text->GetDescriptiveText())
@@ -585,11 +585,6 @@ wxString wxSearchCtrl::GetValue() const
     else
         return value;
 }
-void wxSearchCtrl::SetValue(const wxString& value)
-{
-    m_text->SetValue(value);
-}
-
 wxString wxSearchCtrl::GetRange(long from, long to) const
 {
     return m_text->GetRange(from, to);

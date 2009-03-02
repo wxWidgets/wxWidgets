@@ -44,7 +44,7 @@ public:
     virtual void WriteText(const wxString& text) = 0;
     virtual void AppendText(const wxString& text);
 
-    virtual wxString GetValue() const = 0;
+    virtual wxString GetValue() const;
     virtual wxString GetRange(long from, long to) const;
     bool IsEmpty() const { return GetLastPosition() <= 0; }
 
@@ -152,6 +152,7 @@ protected:
     };
 
     virtual void DoSetValue(const wxString& value, int flags);
+    virtual wxString DoGetValue() const = 0;
 
     // class which should be used to temporarily disable text change events
     //

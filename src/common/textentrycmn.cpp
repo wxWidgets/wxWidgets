@@ -48,15 +48,21 @@ public:
                                 wxTextEntryHintData::OnSetFocus, this);
         wxBIND_OR_CONNECT_HACK(win, wxEVT_KILL_FOCUS, wxFocusEventHandler,
                                 wxTextEntryHintData::OnKillFocus, this);
+
+        // we don't have any hint yet
+        m_showsHint = false;
     }
 
     // default dtor is ok
+
+    // are we showing the hint right now?
+    bool ShowsHint() const { return m_showsHint; }
 
     void SetHintString(const wxString& hint)
     {
         m_hint = hint;
 
-        if ( ShowsHint() )
+        if ( m_showsHint )
         {
             // update it immediately
             m_entry->ChangeValue(hint);
@@ -67,21 +73,17 @@ public:
     const wxString& GetHintString() const { return m_hint; }
 
 private:
-    // are we showing the hint right now?
-    bool ShowsHint() const
-    {
-        return m_entry->GetValue() == m_hint;
-    }
-
     void OnSetFocus(wxFocusEvent& event)
     {
         // hide the hint if we were showing it
-        if ( ShowsHint() )
+        if ( m_showsHint )
         {
             // Clear() would send an event which we don't want, so do it like
             // this
             m_entry->ChangeValue(wxString());
             m_win->SetForegroundColour(m_colFg);
+
+            m_showsHint = false;
         }
 
         event.Skip();
@@ -96,18 +98,26 @@ private:
 
             m_colFg = m_win->GetForegroundColour();
             m_win->SetForegroundColour(*wxLIGHT_GREY);
+
+            m_showsHint = true;
         }
 
         event.Skip();
     }
 
-
+    // the text control we're associated with (as its interface and its window)
     wxTextEntryBase * const m_entry;
     wxWindow * const m_win;
 
+    // the original foreground colour of m_win before we changed it
     wxColour m_colFg;
 
+    // the hint passed to wxTextEntry::SetHint()
     wxString m_hint;
+
+    // true if we're currently showing it, for this we must be empty and not
+    // have focus
+    bool m_showsHint;
 
     wxDECLARE_NO_COPY_CLASS(wxTextEntryHintData);
 };
@@ -122,8 +132,13 @@ wxTextEntryBase::~wxTextEntryBase()
 }
 
 // ----------------------------------------------------------------------------
-// text operations
+// text accessors
 // ----------------------------------------------------------------------------
+
+wxString wxTextEntryBase::GetValue() const
+{
+    return m_hintData && m_hintData->ShowsHint() ? wxString() : DoGetValue();
+}
 
 wxString wxTextEntryBase::GetRange(long from, long to) const
 {
@@ -137,6 +152,10 @@ wxString wxTextEntryBase::GetRange(long from, long to) const
 
     return sel;
 }
+
+// ----------------------------------------------------------------------------
+// text operations
+// ----------------------------------------------------------------------------
 
 void wxTextEntryBase::AppendText(const wxString& text)
 {

@@ -22,7 +22,6 @@ public:
 
     // implement wxTextEntryBase pure virtual methods
     virtual void WriteText(const wxString& text);
-    virtual wxString GetValue() const;
     virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
 
@@ -46,6 +45,8 @@ public:
     virtual void SetEditable(bool editable);
 
 protected:
+    virtual wxString DoGetValue() const;
+
     // translate wx text position (which may be -1 meaning "last one") to a
     // valid Motif text position
     long GetMotifPos(long pos) const;

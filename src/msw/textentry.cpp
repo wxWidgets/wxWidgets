@@ -184,7 +184,7 @@ void wxTextEntry::WriteText(const wxString& text)
     ::SendMessage(GetEditHwnd(), EM_REPLACESEL, 0, (LPARAM)text.wx_str());
 }
 
-wxString wxTextEntry::GetValue() const
+wxString wxTextEntry::DoGetValue() const
 {
     return wxGetWindowText(GetEditHWND());
 }

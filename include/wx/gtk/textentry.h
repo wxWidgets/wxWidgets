@@ -24,7 +24,6 @@ public:
 
     // implement wxTextEntryBase pure virtual methods
     virtual void WriteText(const wxString& text);
-    virtual wxString GetValue() const;
     virtual void Remove(long from, long to);
 
     virtual void Copy();
@@ -52,6 +51,9 @@ public:
 
     // implementation only from now on
     void SendMaxLenEvent();
+
+protected:
+    virtual wxString DoGetValue() const;
 
 private:
     // implement this to return the associated GtkEntry or another widget

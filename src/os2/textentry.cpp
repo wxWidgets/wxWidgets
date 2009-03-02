@@ -61,7 +61,7 @@ void wxTextEntry::WriteText(const wxString& text)
     ::WinSetWindowText(GetEditHwnd(), text.c_str());
 }
 
-wxString wxTextEntry::GetValue() const
+wxString wxTextEntry::DoGetValue() const
 {
     return wxGetWindowText(GetEditHWND());
 }

@@ -59,7 +59,7 @@ long wxTextEntry::GetMotifPos(long pos) const
 // operations on control text
 // ----------------------------------------------------------------------------
 
-wxString wxTextEntry::GetValue() const
+wxString wxTextEntry::DoGetValue() const
 {
     wxString str;
 

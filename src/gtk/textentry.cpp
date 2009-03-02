@@ -103,7 +103,7 @@ void wxTextEntry::WriteText(const wxString& value)
     gtk_editable_set_position(edit, len);
 }
 
-wxString wxTextEntry::GetValue() const
+wxString wxTextEntry::DoGetValue() const
 {
     const wxGtkString value(gtk_editable_get_chars(GetEditable(), 0, -1));
 

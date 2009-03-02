@@ -858,8 +858,9 @@ wxString wxTextCtrl::GetRange(long from, long to) const
     else
 #endif // wxUSE_RICHEDIT
     {
-        // retrieve all text
-        str = wxGetWindowText(GetHWND());
+        // retrieve all text: wxTextEntry method works even for multiline
+        // controls and must be used for single line ones to account for hints
+        str = wxTextEntry::GetValue();
 
         // need only a range?
         if ( from < to )
@@ -882,7 +883,7 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
     // comparing it with the old one (chances are that it will be different
     // anyhow, this comparison is there to avoid flicker for small single-line
     // edit controls mostly)
-    if ( (value.length() > 0x400) || (value != GetValue()) )
+    if ( (value.length() > 0x400) || (value != DoGetValue()) )
     {
         DoWriteText(value, flags /* doesn't include SelectionOnly here */);
 
