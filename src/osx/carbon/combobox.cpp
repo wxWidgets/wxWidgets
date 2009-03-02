@@ -394,6 +394,13 @@ bool wxComboBox::Create(wxWindow *parent,
     return true;
 }
 
+wxString wxComboBox::DoGetValue() const
+{
+    wxCHECK_MSG( m_text, wxString(), "can't be called for read-only combobox" );
+
+    return m_text->GetValue();
+}
+
 wxString wxComboBox::GetValue() const
 {
     wxString        result;

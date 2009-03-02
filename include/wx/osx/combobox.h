@@ -126,7 +126,7 @@ class WXDLLIMPEXP_CORE wxComboBox : public wxControl, public wxComboBoxBase
     virtual wxClientDataType GetClientDataType() const;
 
     // osx specific event handling common for all osx-ports
-    
+
     virtual bool        OSXHandleClicked( double timestampsec );
 
     wxCONTROL_ITEMCONTAINER_CLIENTDATAOBJECT_RECAST
@@ -141,6 +141,10 @@ protected:
     virtual void DoDeleteOneItem(unsigned int n);
     virtual void DoClear();
 
+    // wxTextEntry functions
+    virtual wxString DoGetValue() const;
+    virtual wxWindow *GetEditableWindow() { return this; }
+
     // override the base class virtuals involved in geometry calculations
     virtual wxSize DoGetBestSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
@@ -153,9 +157,6 @@ protected:
     virtual void * DoGetItemClientData(unsigned int n) const;
 
     virtual void SetClientDataType(wxClientDataType clientDataItemsType);
-
-    // implement wxTextEntry pure virtual method
-    virtual wxWindow *GetEditableWindow() { return this; }
 
     // the subcontrols
     wxComboBoxText*     m_text;
