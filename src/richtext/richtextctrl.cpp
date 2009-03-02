@@ -2294,7 +2294,7 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
 // set/get the controls text
 // ----------------------------------------------------------------------------
 
-wxString wxRichTextCtrl::GetValue() const
+wxString wxRichTextCtrl::DoGetValue() const
 {
     return GetBuffer().GetText();
 }

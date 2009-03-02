@@ -114,8 +114,6 @@ public:
 
 // Accessors
 
-    virtual wxString GetValue() const;
-
     virtual wxString GetRange(long from, long to) const;
 
     virtual int GetLineLength(long lineNo) const ;
@@ -771,6 +769,12 @@ public:
      static const wxArrayString& GetAvailableFontNames();
      static void ClearAvailableFontNames();
 
+     WX_FORWARD_TO_SCROLL_HELPER()
+
+     // implement wxTextEntry methods
+     virtual wxString DoGetValue() const;
+
+protected:
      // FIXME: this does not work, it allows this code to compile but will fail
      //        during run-time
 #ifdef __WXMSW__
@@ -780,8 +784,6 @@ public:
     virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const { return NULL; }
 #endif
-
-     WX_FORWARD_TO_SCROLL_HELPER()
 
 // Overrides
 protected:
