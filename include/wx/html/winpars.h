@@ -24,7 +24,7 @@ class WXDLLIMPEXP_FWD_HTML wxHtmlWindowInterface;
 class WXDLLIMPEXP_FWD_HTML wxHtmlWinParser;
 class WXDLLIMPEXP_FWD_HTML wxHtmlWinTagHandler;
 class WXDLLIMPEXP_FWD_HTML wxHtmlTagsModule;
-class wxHtmlWinParser_TextParsingState;
+struct wxHtmlWinParser_TextParsingState;
 
 
 //--------------------------------------------------------------------------------
