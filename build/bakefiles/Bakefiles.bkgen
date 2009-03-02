@@ -72,6 +72,10 @@
         borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msevc4prj,msvs2003prj,msvs2005prj,msvs2008prj,watcom
     </del-formats>
 
+    <!-- Some samples use MSVC-specific stuff -->
+    <del-formats files="../../samples/flash/flash.bkl,../../samples/mfc/mfc.bkl">
+        autoconf,borland,dmars_smake,dmars,mingw,msevc4prj,watcom
+    </del-formats>
 
     <!-- Default flags (for all formats and bakefiles): -->
     <add-flags>-Iformats</add-flags>
@@ -251,12 +255,15 @@
     <add-formats files="../../samples/*/*.bkl,../../samples/*/*/*.bkl">
         gnu
     </add-formats>
+    <del-formats files="../../samples/flash/flash.bkl,../../samples/mfc/mfc.bkl">
+        gnu
+    </del-formats>
     <add-flags files="../../samples/*/*.bkl,../../samples/*/*/*.bkl"
                formats="gnu">
         -DOUT_OF_TREE_MAKEFILES=1 -o$(INPUT_FILE_DIR)/makefile.unx
     </add-flags>
 
-    <!-- Personal customizations (not in CVS): -->
+    <!-- Personal customizations (not in VCS): -->
     <include file="Bakefiles.local.bkgen" ignore_missing="1"/>
 
 </bakefile-gen>
