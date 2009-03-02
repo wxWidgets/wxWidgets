@@ -104,8 +104,6 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual wxString GetValue() const;
-
     virtual int GetLineLength(wxTextCoord lineNo) const;
     virtual wxString GetLineText(wxTextCoord lineNo) const;
     virtual int GetNumberOfLines() const;
@@ -260,6 +258,7 @@ protected:
 
     // implements Set/ChangeValue()
     virtual void DoSetValue(const wxString& value, int flags = 0);
+    virtual wxString DoGetValue() const;
 
     // common part of all ctors
     void Init();

@@ -91,7 +91,7 @@ public:
     // implement the combobox interface
 
     // wxTextCtrl methods
-    virtual wxString GetValue() const;
+    virtual wxString GetValue() const { return DoGetValue(); }
     virtual void SetValue(const wxString& value);
     virtual void WriteText(const wxString& value);
     virtual void Copy();
@@ -151,6 +151,8 @@ public:
     virtual void SetClientDataType(wxClientDataType clientDataItemsType);
 
 protected:
+    virtual wxString DoGetValue() const;
+
     virtual int DoInsertItems(const wxArrayStringsAdapter& items,
                               unsigned int pos,
                               void **clientData, wxClientDataType type);

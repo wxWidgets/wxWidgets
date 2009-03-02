@@ -819,7 +819,7 @@ size_t wxTextCtrl::GetLineCount() const
     return MData().m_lines.GetCount();
 }
 
-wxString wxTextCtrl::GetValue() const
+wxString wxTextCtrl::DoGetValue() const
 {
     // for multiline controls we don't always store the total value but only
     // recompute it when asked - and to invalidate it we just empty it in

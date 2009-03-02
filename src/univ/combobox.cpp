@@ -273,7 +273,7 @@ wxComboBox::~wxComboBox()
 // wxComboBox methods forwarded to wxTextCtrl
 // ----------------------------------------------------------------------------
 
-wxString wxComboBox::GetValue() const
+wxString wxComboBox::DoGetValue() const
 {
     return wxComboCtrl::GetValue();
 }
