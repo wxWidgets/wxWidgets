@@ -202,7 +202,6 @@ public:
 protected:
     virtual void DoSetValue(const wxString& value, int flags);
     virtual wxString DoGetValue() const;
-    virtual void SetValue(const wxString& value);
 
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
