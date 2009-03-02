@@ -527,8 +527,7 @@ public:
         Returns the ordinal number of the week in the month (in 1-5 range).
 
         As GetWeekOfYear(), this function supports both conventions for the
-        week start. See the description of these @c WeekFlags in the
-        @ref datetime_constants section.
+        week start.
     */
     wxDateTime_t GetWeekOfMonth(WeekFlags flags = Monday_First,
                                 const TimeZone& tz = Local) const;
@@ -542,10 +541,9 @@ public:
         year. Accordingly, the week number will always be in 1-53 range (52 for
         non-leap years).
 
-        The function depends on the @ref datetime_constants "week start"
-        convention specified by the @a flags argument but its results for
-        @c Sunday_First are not well-defined as the ISO definition quoted above
-        applies to the weeks starting on Monday only.
+        The function depends on the week start convention specified by the @a flags
+        argument but its results for @c Sunday_First are not well-defined as the
+        ISO definition quoted above applies to the weeks starting on Monday only.
     */
     wxDateTime_t GetWeekOfYear(WeekFlags flags = Monday_First,
                                const TimeZone& tz = Local) const;
@@ -1381,9 +1379,6 @@ public:
     /**
         Sets the country to use by default. This setting influences the DST
         calculations, date formatting and other things.
-
-        The possible values for @a country parameter are enumerated in the
-        @ref datetime_constants section.
 
         @see GetCountry()
     */
