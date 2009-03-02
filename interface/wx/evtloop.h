@@ -147,41 +147,6 @@ public:
 
 
     /**
-        @name Pending events
-    */
-    //@{
-
-    /**
-        Process all pending events; it is necessary to call this function to
-        process posted events.
-
-        This happens during each event loop iteration in GUI mode but
-        it may be also called directly.
-    */
-    virtual void ProcessPendingEvents();
-
-    /**
-        Returns @true if there are pending events on the internal pending event list.
-    */
-    bool HasPendingEvents() const;
-
-    /**
-        Temporary suspends processing of the pending events.
-
-        @see ResumeProcessingOfPendingEvents()
-    */
-    void SuspendProcessingOfPendingEvents();
-
-    /**
-        Resume processing of the pending events previously stopped because of a
-        call to SuspendProcessingOfPendingEvents().
-    */
-    void ResumeProcessingOfPendingEvents();
-
-    //@}
-
-
-    /**
         @name Idle handling
     */
     //@{

@@ -277,13 +277,45 @@ public:
 #endif // wxUSE_EXCEPTIONS
 
 
+    // pending events
+    // --------------
+
+    // IMPORTANT: all these methods conceptually belong to wxEventLoopBase
+    //            but for many reasons we need to allow queuing of events
+    //            even when there's no event loop (e.g. in wxApp::OnInit);
+    //            this feature is used e.g. to queue events on secondary threads
+    //            or in wxPython to use wx.CallAfter before the GUI is initialized
+
+    // process all events in the m_handlersWithPendingEvents list -- it is necessary
+    // to call this function to process posted events. This happens during each
+    // event loop iteration in GUI mode but if there is no main loop, it may be
+    // also called directly.
+    virtual void ProcessPendingEvents();
+
+    // check if there are pending events on global pending event list
+    bool HasPendingEvents() const;
+
+    // temporary suspends processing of the pending events
+    void SuspendProcessingOfPendingEvents();
+
+    // resume processing of the pending events previously stopped because of a
+    // call to SuspendProcessingOfPendingEvents()
+    void ResumeProcessingOfPendingEvents();
+
+    // called by ~wxEvtHandler to (eventually) remove the handler from the list of
+    // the handlers with pending events
+    void RemovePendingEventHandler(wxEvtHandler* toRemove);
+
+    // adds an event handler to the list of the handlers with pending events
+    void AppendPendingEventHandler(wxEvtHandler* toAppend);
+
+    // moves the event handler from the list of the handlers with pending events
+    //to the list of the handlers with _delayed_ pending events
+    void DelayPendingEventHandler(wxEvtHandler* toDelay);
+
+
     // wxEventLoop redirections
     // ------------------------
-
-    virtual void SuspendProcessingOfPendingEvents();
-    virtual void ResumeProcessingOfPendingEvents();
-    virtual void ProcessPendingEvents();
-    bool HasPendingEvents() const;
 
     virtual bool Pending();
     virtual bool Dispatch();
@@ -387,6 +419,18 @@ protected:
     // the main event loop of the application (may be NULL if the loop hasn't
     // been started yet or has already terminated)
     wxEventLoopBase *m_mainLoop;
+
+    // the array of the handlers with pending events which needs to be processed
+    // inside ProcessPendingEvents()
+    wxEvtHandlerArray m_handlersWithPendingEvents;
+
+    // helper array used by ProcessPendingEvents()
+    wxEvtHandlerArray m_handlersWithPendingDelayedEvents;
+
+#if wxUSE_THREADS
+    // this critical section protects both the lists above
+    wxCriticalSection m_handlersWithPendingEventsLocker;
+#endif
 
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 

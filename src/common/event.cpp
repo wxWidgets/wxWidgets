@@ -402,10 +402,9 @@ wxEvent& wxEvent::operator=(const wxEvent& src)
 
 #if wxUSE_GUI
 
-/*
- * Command events
- *
- */
+// ----------------------------------------------------------------------------
+// wxCommandEvent
+// ----------------------------------------------------------------------------
 
 #ifdef __VISUALC__
     // 'this' : used in base member initializer list (for m_commandString)
@@ -447,9 +446,9 @@ wxString wxCommandEvent::GetString() const
     }
 }
 
-/*
- * UI update events
- */
+// ----------------------------------------------------------------------------
+// wxUpdateUIEvent
+// ----------------------------------------------------------------------------
 
 #if wxUSE_LONGLONG
 wxLongLong wxUpdateUIEvent::sm_lastUpdate = 0;
@@ -506,9 +505,9 @@ void wxUpdateUIEvent::ResetUpdateTime()
 #endif
 }
 
-/*
- * Scroll events
- */
+// ----------------------------------------------------------------------------
+// wxScrollEvent
+// ----------------------------------------------------------------------------
 
 wxScrollEvent::wxScrollEvent(wxEventType commandType,
                              int id,
@@ -520,9 +519,9 @@ wxScrollEvent::wxScrollEvent(wxEventType commandType,
     m_commandInt = pos;
 }
 
-/*
- * ScrollWin events
- */
+// ----------------------------------------------------------------------------
+// wxScrollWinEvent
+// ----------------------------------------------------------------------------
 
 wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
                                    int pos,
@@ -533,10 +532,9 @@ wxScrollWinEvent::wxScrollWinEvent(wxEventType commandType,
     m_commandInt = pos;
 }
 
-/*
- * Mouse events
- *
- */
+// ----------------------------------------------------------------------------
+// wxMouseEvent
+// ----------------------------------------------------------------------------
 
 wxMouseEvent::wxMouseEvent(wxEventType commandType)
 {
@@ -751,11 +749,9 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
     return pt;
 }
 
-
-/*
- * Keyboard event
- *
- */
+// ----------------------------------------------------------------------------
+// wxKeyEvent
+// ----------------------------------------------------------------------------
 
 wxKeyEvent::wxKeyEvent(wxEventType type)
 {
@@ -782,17 +778,29 @@ wxKeyEvent::wxKeyEvent(const wxKeyEvent& evt)
 #endif
 }
 
+// ----------------------------------------------------------------------------
+// wxWindowCreateEvent
+// ----------------------------------------------------------------------------
+
 wxWindowCreateEvent::wxWindowCreateEvent(wxWindow *win)
 {
     SetEventType(wxEVT_CREATE);
     SetEventObject(win);
 }
 
+// ----------------------------------------------------------------------------
+// wxWindowDestroyEvent
+// ----------------------------------------------------------------------------
+
 wxWindowDestroyEvent::wxWindowDestroyEvent(wxWindow *win)
 {
     SetEventType(wxEVT_DESTROY);
     SetEventObject(win);
 }
+
+// ----------------------------------------------------------------------------
+// wxChildFocusEvent
+// ----------------------------------------------------------------------------
 
 wxChildFocusEvent::wxChildFocusEvent(wxWindow *win)
                  : wxCommandEvent(wxEVT_CHILD_FOCUS)
@@ -1076,9 +1084,8 @@ wxEvtHandler::~wxEvtHandler()
     delete m_pendingEvents;
 
     // Remove us from the list of the pending events if necessary.
-    wxEventLoopBase *loop = wxEventLoopBase::GetActive();
-    if (loop)
-        loop->RemovePendingEventHandler(this);
+    if (wxTheApp)
+        wxTheApp->RemovePendingEventHandler(this);
 
     // we only delete object data, not untyped
     if ( m_clientDataType == wxClientData_Object )
@@ -1124,12 +1131,11 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
 {
     wxCHECK_RET( event, "NULL event can't be posted" );
 
-    wxEventLoopBase* loop = wxEventLoopBase::GetActive();
-    if (!loop)
+    if (!wxTheApp)
     {
         // we need an event loop which manages the list of event handlers with
         // pending events... cannot proceed without it!
-        wxLogDebug("No event loop is running! Cannot queue this event!");
+        wxLogDebug("No application object! Cannot queue this event!");
 
         // anyway delete the given event to avoid memory leaks
         delete event;
@@ -1148,7 +1154,7 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
     // 2) Add this event handler to list of event handlers that
     //    have pending events.
 
-    loop->AppendPendingEventHandler(this);
+    wxTheApp->AppendPendingEventHandler(this);
 
     // only release m_pendingEventsLock now because otherwise there is a race
     // condition as described in the ticket #9093: we could process the event
@@ -1165,12 +1171,11 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
 
 void wxEvtHandler::ProcessPendingEvents()
 {
-    wxEventLoopBase* loop = wxEventLoopBase::GetActive();
-    if (!loop)
+    if (!wxTheApp)
     {
         // we need an event loop which manages the list of event handlers with
         // pending events... cannot proceed without it!
-        wxLogDebug("No event loop is running! Cannot process pending events!");
+        wxLogDebug("No application object! Cannot process pending events!");
         return;
     }
 
@@ -1201,7 +1206,7 @@ void wxEvtHandler::ProcessPendingEvents()
         if (!node)
         {
             // all our events are NOT processable now... signal this:
-            loop->DelayPendingEventHandler(this);
+            wxTheApp->DelayPendingEventHandler(this);
 
             // see the comment at the beginning of evtloop.h header for the
             // logic behind YieldFor() and behind DelayPendingEventHandler()
@@ -1223,7 +1228,7 @@ void wxEvtHandler::ProcessPendingEvents()
     {
         // if there are no more pending events left, we don't need to
         // stay in this list
-        loop->RemovePendingEventHandler(this);
+        wxTheApp->RemovePendingEventHandler(this);
     }
 
     wxLEAVE_CRIT_SECT( m_pendingEventsLock );
@@ -1235,13 +1240,10 @@ void wxEvtHandler::ProcessPendingEvents()
     // of this object any more
 }
 
-/*
- * Event table stuff
- */
-/* static */ bool
-wxEvtHandler::ProcessEventIfMatchesId(const wxEventTableEntryBase& entry,
-                                      wxEvtHandler *handler,
-                                      wxEvent& event)
+/* static */
+bool wxEvtHandler::ProcessEventIfMatchesId(const wxEventTableEntryBase& entry,
+                                           wxEvtHandler *handler,
+                                           wxEvent& event)
 {
     int tableId1 = entry.m_id,
         tableId2 = entry.m_lastId;
@@ -1411,7 +1413,6 @@ bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)
     }
 #endif // wxUSE_EXCEPTIONS
 }
-
 
 bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
 {

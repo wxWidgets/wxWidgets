@@ -333,7 +333,7 @@ public:
     @library{wxbase}
     @category{events}
 
-    @see @ref overview_events_processing
+    @see @ref overview_events_processing, wxEventBlocker, wxEventLoopBase
 */
 class wxEvtHandler : public wxObject
 {
