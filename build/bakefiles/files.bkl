@@ -2947,11 +2947,7 @@ src/osx/iphone/window.mm
     wx/osx/dataview.h
     wx/osx/joystick.h
     wx/osx/sound.h
-    <!--wx/osx/carbon/drawer.h -->
-    <!--wx/osx/carbon/dataview.h -->
-    <!--wx/osx/carbon/databrow.h -->
-    wx/osx/carbon/sound.h
-    wx/osx/carbon/taskbarosx.h
+    wx/osx/taskbarosx.h
     wx/osx/core/joystick.h
 </set>
 
@@ -3345,8 +3341,8 @@ src/osx/iphone/window.mm
 </set>
 
 <set var="OPENGL_HDR_PLATFORM" hints="files">
-    <if cond="TOOLKIT=='OSX_CARBON'">wx/osx/glcanvas.h wx/osx/carbon/glcanvas.h</if>
-    <if cond="TOOLKIT=='OSX_COCOA'">wx/osx/glcanvas.h wx/osx/carbon/glcanvas.h</if>
+    <if cond="TOOLKIT=='OSX_CARBON'">wx/osx/glcanvas.h</if>
+    <if cond="TOOLKIT=='OSX_COCOA'">wx/osx/glcanvas.h</if>
     <if cond="TOOLKIT=='COCOA'">wx/cocoa/glcanvas.h</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         wx/gtk/glcanvas.h
