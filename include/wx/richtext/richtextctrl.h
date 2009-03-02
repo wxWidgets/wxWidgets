@@ -777,7 +777,7 @@ public:
     virtual WXHWND GetEditHWND() const { return GetHWND(); }
 #endif
 #ifdef __WXGTK__
-    virtual const wxWindow *GetEditableWindow() { return this; }
+    virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const { return NULL; }
 #endif
 
