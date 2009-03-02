@@ -228,12 +228,8 @@ public:
                               const wxRect& rect,
                               int flags = 0) = 0;
 
-#if WXWIN_COMPATIBILITY_2_8
     // Returns the default size of a check box.
-    wxDEPRECATED_INLINE( virtual wxSize GetCheckBoxSize(wxWindow *WXUNUSED(win)),
-                         return GetCheckBoxSize(); );
-#endif
-    virtual wxSize GetCheckBoxSize() const = 0;
+    virtual wxSize GetCheckBoxSize(wxWindow *win) = 0;
 
     // draw blank button
     //
@@ -408,12 +404,8 @@ public:
                               int flags = 0)
         { m_rendererNative.DrawCheckBox( win, dc, rect, flags ); }
 
-#if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED_INLINE( virtual wxSize GetCheckBoxSize(wxWindow *WXUNUSED(win)),
-                         return m_rendererNative.GetCheckBoxSize(); );
-#endif
-    virtual wxSize GetCheckBoxSize() const
-        { return m_rendererNative.GetCheckBoxSize(); }
+    virtual wxSize GetCheckBoxSize(wxWindow *win)
+        { return m_rendererNative.GetCheckBoxSize(win); }
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,

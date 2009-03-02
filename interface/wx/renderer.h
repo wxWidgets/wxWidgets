@@ -132,8 +132,9 @@ enum wxHeaderSortIconType
     @class wxDelegateRendererNative
 
     wxDelegateRendererNative allows reuse of renderers code by forwarding all the
-    wxRendererNative methods to the given object and thus allowing you to only
-    modify some of its methods -- without having to reimplement all of them.
+    wxRendererNative methods to the given object and
+    thus allowing you to only modify some of its methods -- without having to
+    reimplement all of them.
 
     Note that the "normal", inheritance-based approach, doesn't work with the
     renderers as it is impossible to derive from a class unknown at compile-time
@@ -145,11 +146,11 @@ enum wxHeaderSortIconType
     by using this class.
 
     Except for the constructor, it has exactly the same methods as
-    wxRendererNative and their implementation is trivial: they are simply forwarded
-    to the real renderer. Note that the "real" renderer may, in turn, be a
-    wxDelegateRendererNative as well and that there may be arbitrarily many levels
-    like this -- but at the end of the chain there must be a real renderer which
-    does the drawing.
+    wxRendererNative and their implementation is
+    trivial: they are simply forwarded to the real renderer. Note that the "real"
+    renderer may, in turn, be a wxDelegateRendererNative as well and that there may
+    be arbitrarily many levels like this -- but at the end of the chain there must
+    be a real renderer which does the drawing.
 
     @library{wxcore}
     @category{gdi}
@@ -210,7 +211,7 @@ public:
     virtual void DrawCheckBox(wxWindow *win, wxDC& dc,
                               const wxRect& rect, int flags = 0 );
 
-    virtual wxSize GetCheckBoxSize() const;
+    virtual wxSize GetCheckBoxSize(wxWindow *win);
 
     virtual void DrawPushButton(wxWindow *win, wxDC& dc,
                                 const wxRect& rect, int flags = 0 );
@@ -447,19 +448,19 @@ public:
 
     /**
         Returns the size of a check box.
+        The @a win parameter is not used currently and can be @NULL.
     */
-    virtual wxSize GetCheckBoxSize() const = 0;
+    virtual wxSize GetCheckBoxSize(wxWindow* win) = 0;
 
     /**
         Returns the height of a header button, either a fixed platform height if
-        available, or a
-        generic height based on the window's font.
+        available, or a generic height based on the @a win window's font.
     */
     virtual int GetHeaderButtonHeight(wxWindow* win) = 0;
 
     /**
-        Get the splitter parameters, see
-        wxSplitterRenderParams.
+        Get the splitter parameters, see wxSplitterRenderParams.
+        The @a win parameter should be a wxSplitterWindow.
     */
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow* win) = 0;
 
