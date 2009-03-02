@@ -63,7 +63,6 @@ public:
 
     // accessors
     // ---------
-    virtual wxString GetValue() const;
 
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
@@ -178,6 +177,7 @@ protected:
     virtual wxSize DoGetBestSize() const;
 
     virtual void DoSetValue(const wxString& value, int flags = 0);
+    virtual wxString DoGetValue() const;
 
     bool  m_editable;
 
