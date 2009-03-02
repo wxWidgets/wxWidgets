@@ -3649,7 +3649,6 @@ public:
     // ----------------------------------------------
 
     virtual void WriteText(const wxString& text) { AddText(text); }
-    virtual wxString GetValue() const { return GetText(); }
     virtual void Remove(long from, long to)
     {
         Replace(from, to, "");
@@ -3802,8 +3801,11 @@ public:
         return wxTextAreaBase::HitTest(pt, col, row);
     }
 
-#ifndef SWIG
 protected:
+    virtual wxString DoGetValue() const { return GetText(); }
+    virtual wxWindow *GetEditableWindow() { return this; }
+
+#ifndef SWIG
     virtual bool DoLoadFile(const wxString& file, int fileType);
     virtual bool DoSaveFile(const wxString& file, int fileType);
 
