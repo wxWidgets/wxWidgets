@@ -1935,10 +1935,8 @@ COND_USE_STC_1___wxscintilla___depname = \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= wx/gtk/glcanvas.h wx/unix/glx11.h
 @COND_TOOLKIT_MOTIF@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h wx/unix/glx11.h
 @COND_TOOLKIT_MSW@OPENGL_HDR_PLATFORM = wx/msw/glcanvas.h
-@COND_TOOLKIT_OSX_CARBON@OPENGL_HDR_PLATFORM = \
-@COND_TOOLKIT_OSX_CARBON@	wx/osx/glcanvas.h wx/osx/carbon/glcanvas.h
-@COND_TOOLKIT_OSX_COCOA@OPENGL_HDR_PLATFORM = \
-@COND_TOOLKIT_OSX_COCOA@	wx/osx/glcanvas.h wx/osx/carbon/glcanvas.h
+@COND_TOOLKIT_OSX_CARBON@OPENGL_HDR_PLATFORM = wx/osx/glcanvas.h
+@COND_TOOLKIT_OSX_COCOA@OPENGL_HDR_PLATFORM = wx/osx/glcanvas.h
 @COND_TOOLKIT_WINCE@OPENGL_HDR_PLATFORM = wx/msw/glcanvas.h
 @COND_TOOLKIT_X11@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h wx/unix/glx11.h
 COND_TOOLKIT__BASE_OSX_SRC =  \
@@ -3271,8 +3269,7 @@ COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 	wx/osx/dataview.h \
 	wx/osx/joystick.h \
 	wx/osx/sound.h \
-	wx/osx/carbon/sound.h \
-	wx/osx/carbon/taskbarosx.h \
+	wx/osx/taskbarosx.h \
 	wx/osx/core/joystick.h
 @COND_TOOLKIT_OSX_COCOA@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR)
 @COND_TOOLKIT_PM@ADVANCED_PLATFORM_HDR = \
