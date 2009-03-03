@@ -51,8 +51,8 @@ public:
     // implementation
     // --------------
 
-    void HasFocus();
-    void NotFocus();
+    void GTKSetHasFocus();
+    void GTKSetNotFocus();
     void StartSelect();
     void EndSelect();
     void DoApplyWidgetStyle(GtkRcStyle *style);

@@ -64,7 +64,7 @@ static void gtk_bmpbutton_enter_callback( GtkWidget *WXUNUSED(widget), wxBitmapB
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    button->HasFocus();
+    button->GTKSetHasFocus();
 }
 }
 
@@ -78,7 +78,7 @@ static void gtk_bmpbutton_leave_callback( GtkWidget *WXUNUSED(widget), wxBitmapB
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
-    button->NotFocus();
+    button->GTKSetNotFocus();
 }
 }
 
@@ -240,13 +240,13 @@ bool wxBitmapButton::Enable( bool enable )
     return true;
 }
 
-void wxBitmapButton::HasFocus()
+void wxBitmapButton::GTKSetHasFocus()
 {
     m_hasFocus = true;
     OnSetBitmap();
 }
 
-void wxBitmapButton::NotFocus()
+void wxBitmapButton::GTKSetNotFocus()
 {
     m_hasFocus = false;
     OnSetBitmap();
