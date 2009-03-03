@@ -449,7 +449,6 @@ private:
 
     // Relies on ValidateValue being called always before OnSetValue
     static int              ms_nextIndex;
-    static int              ms_prevIndex;
 };
 
 // -----------------------------------------------------------------------
