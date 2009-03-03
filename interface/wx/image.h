@@ -44,7 +44,7 @@ enum wxImagePNGType
 
     If you wish to extend the capabilities of wxImage, derive a class from
     wxImageHandler and add the handler using wxImage::AddHandler in your
-    application initialisation.
+    application initialization.
 
     Note that all wxImageHandlers provided by wxWidgets are part of
     the @ref page_libs_wxcore library.
@@ -457,6 +457,7 @@ public:
 
     /**
         Register an image handler.
+        See @ref image_handlers for a list of the available handlers.
     */
     static void AddHandler(wxImageHandler* handler);
 
@@ -1517,6 +1518,7 @@ wxImage wxNullImage;
 /**
     Initializes all available image handlers. For a list of available handlers,
     see wxImage.
+    If you don't need/want all image handlers loaded 
 
     @see wxImage, wxImageHandler
 

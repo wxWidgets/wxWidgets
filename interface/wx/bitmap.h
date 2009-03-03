@@ -21,7 +21,7 @@
 
     If you wish to extend the capabilities of wxBitmap, derive a class from
     wxBitmapHandler and add the handler using wxBitmap::AddHandler() in your
-    application initialisation.
+    application initialization.
 
     Note that all wxBitmapHandlers provided by wxWidgets are part of the
     @ref page_libs_wxcore library.
@@ -167,17 +167,21 @@ public:
     class (either wxNativePixelData for RGB bitmaps or wxAlphaPixelData
     for bitmaps with an additionaly alpha channel).
 
-    @note
-    Many wxBitmap functions take a @e type parameter, which is a value of the
-    ::wxBitmapType enumeration.
+    Note that many wxBitmap functions take a @e type parameter, which is a 
+    value of the ::wxBitmapType enumeration.
     The validity of those values depends however on the platform where your program
     is running and from the wxWidgets configuration.
-    If all possible wxWidgets settings are used, the Windows platform supports BMP file,
-    BMP resource, XPM data, and XPM.
-    Under wxGTK, the available formats are BMP file, XPM data, XPM file, and PNG file.
-    Under wxMotif, the available formats are XBM data, XBM file, XPM data, XPM file.
-    In addition, wxBitmap can load and save all formats that wxImage; see wxImage for
-    more info. Of course, you must have wxImage handlers loaded.
+    If all possible wxWidgets settings are used:
+    - wxMSW supports BMP and ICO files, BMP and ICO resources;
+    - wxGTK supports XPM files;
+    - wxMac supports PICT resources;
+    - wxX11 supports XPM files, XPM data, XBM data;
+
+    In addition, wxBitmap can load and save all formats that wxImage can; see wxImage
+    for more info. Of course, you must have loaded the wxImage handlers 
+    (see ::wxInitAllImageHandlers() and wxImage::AddHandler).
+    Note that all available wxBitmapHandlers for a given wxWidgets port are 
+    automatically loaded at startup so you won't need to use wxBitmap::AddHandler.
 
     @library{wxcore}
     @category{gdi}
@@ -336,6 +340,14 @@ public:
         @param handler
             A new bitmap format handler object. There is usually only one instance
             of a given handler class in an application session.
+            
+        Note that unlike wxImage::AddHandler, there's no documented list of
+        the wxBitmapHandlers available in wxWidgets.
+        This is because they are platform-specific and most important, they are 
+        all automatically loaded at startup.
+        
+        If you want to be sure that wxBitmap can load a certain type of image,
+        you'd better use wxImage::AddHandler.
 
         @see wxBitmapHandler
     */
