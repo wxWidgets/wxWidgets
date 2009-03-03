@@ -265,8 +265,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     // these parameters are not given for all events
     UInt32 button = [nsEvent buttonNumber];
     UInt32 clickCount = 0;
-    if ( [nsEvent respondsToSelector:@selector(clickCount:)] ) 
-        [nsEvent clickCount];
 
     wxevent.m_x = screenMouseLocation.x;
     wxevent.m_y = screenMouseLocation.y;
@@ -274,7 +272,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     wxevent.m_controlDown = modifiers & NSControlKeyMask;
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
     wxevent.m_metaDown = modifiers & NSCommandKeyMask;
-    wxevent.m_clickCount = clickCount;
     wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
 
     UInt32 mouseChord = 0; 
@@ -347,6 +344,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
         case NSLeftMouseDown :
         case NSRightMouseDown :
         case NSOtherMouseDown :
+            clickCount = [nsEvent clickCount];
             switch ( button )
             {
                 case 0 :
@@ -369,6 +367,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
         case NSLeftMouseUp :
         case NSRightMouseUp :
         case NSOtherMouseUp :
+            clickCount = [nsEvent clickCount];
             switch ( button )
             {
                 case 0 :
@@ -421,6 +420,9 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
         default :
             break ;
     }
+    
+    wxevent.m_clickCount = clickCount;
+    
 }
 
 @implementation wxNSView
