@@ -5030,11 +5030,7 @@ void wxPropertyGrid::OnFocusEvent( wxFocusEvent& event )
 void wxPropertyGrid::OnChildFocusEvent( wxChildFocusEvent& event )
 {
     HandleFocusChange((wxWindow*)event.GetEventObject());
-
-    //
-    // event.Skip() being commented out is aworkaround for bug reported
-    // in ticket #4840 (wxScrolledWindow problem with automatic scrolling).
-    //event.Skip();
+    event.Skip();
 }
 
 // -----------------------------------------------------------------------
