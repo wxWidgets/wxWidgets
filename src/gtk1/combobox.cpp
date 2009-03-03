@@ -596,7 +596,7 @@ void wxComboBox::SetSelection( int n )
     EnableEvents();
 }
 
-wxString wxComboBox::GetValue() const
+wxString wxComboBox::DoGetValue() const
 {
     GtkEntry *entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
     wxString tmp( wxGTK_CONV_BACK( gtk_entry_get_text( entry ) ) );

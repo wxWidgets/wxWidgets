@@ -406,7 +406,7 @@ void wxTextCtrl::CalculateScrollbar()
     }
 }
 
-wxString wxTextCtrl::GetValue() const
+wxString wxTextCtrl::DoGetValue() const
 {
     wxCHECK_MSG( m_text != NULL, wxEmptyString, wxT("invalid text ctrl") );
 

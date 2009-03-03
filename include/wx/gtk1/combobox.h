@@ -92,7 +92,7 @@ public:
     virtual void SetSelection(int n);
     virtual void SetString(unsigned int n, const wxString &text);
 
-    wxString GetValue() const;
+    wxString GetValue() const { return DoGetValue(); }
     void SetValue(const wxString& value);
     void WriteText(const wxString& value);
 
@@ -169,7 +169,8 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
-    // implement wxTextEntry pure virtual method
+    // implement wxTextEntry pure virtual methods
+    virtual wxString DoGetValue() const;
     virtual wxWindow *GetEditableWindow() { return this; }
 
     // Widgets that use the style->base colour for the BG colour should

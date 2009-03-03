@@ -42,8 +42,6 @@ public:
     // implement base class pure virtuals
     // ----------------------------------
 
-    virtual wxString GetValue() const;
-
     virtual int GetLineLength(long lineNo) const;
     virtual wxString GetLineText(long lineNo) const;
     virtual int GetNumberOfLines() const;
@@ -181,6 +179,7 @@ protected:
     virtual bool UseGTKStyleBase() const { return true; }
 
     virtual void DoSetValue(const wxString &value, int flags = 0);
+    virtual wxString DoGetValue() const;
 
 private:
     // change the font for everything in this control
