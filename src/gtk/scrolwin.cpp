@@ -44,6 +44,9 @@ void wxScrollHelper::DoAdjustScrollbar(GtkRange* range,
                                        int *lines,
                                        int *linesPerPage)
 {
+    if (!range)
+        return;
+
     int upper;
     int page_size;
     if (pixelsPerLine > 0 && winSize > 0 && winSize < virtSize)
