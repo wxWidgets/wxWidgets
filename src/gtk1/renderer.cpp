@@ -51,7 +51,7 @@ public:
     virtual void DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = 0
+                                  int flags = 0,
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params=NULL);
 
