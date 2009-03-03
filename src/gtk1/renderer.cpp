@@ -48,12 +48,12 @@ class WXDLLEXPORT wxRendererGTK : public wxDelegateRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)
-    virtual void DrawHeaderButton(wxWindow *win,
-                                  wxDC& dc,
-                                  const wxRect& rect,
-                                  int flags = 0,
-                                  wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* params=NULL);
+    virtual int DrawHeaderButton(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags = 0,
+                                 wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
+                                 wxHeaderButtonParams* params=NULL);
 
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
@@ -123,7 +123,7 @@ wxRendererGTK::GetButtonWidget()
 // list/tree controls drawing
 // ----------------------------------------------------------------------------
 
-void
+int
 wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
@@ -147,6 +147,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         "button",
         dc.LogicalToDeviceX(rect.x) -1, rect.y -1, rect.width +2, rect.height +2
     );
+
+    return rect.width + 2;
 }
 
 // ----------------------------------------------------------------------------
