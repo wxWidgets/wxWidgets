@@ -1390,7 +1390,6 @@ static wxFont GetSystemFont(const wxString& name)
         SYSFNT(wxSYS_ANSI_VAR_FONT)
         SYSFNT(wxSYS_SYSTEM_FONT)
         SYSFNT(wxSYS_DEVICE_DEFAULT_FONT)
-        SYSFNT(wxSYS_DEFAULT_PALETTE)
         SYSFNT(wxSYS_SYSTEM_FIXED_FONT)
         SYSFNT(wxSYS_DEFAULT_GUI_FONT)
         #undef SYSFNT

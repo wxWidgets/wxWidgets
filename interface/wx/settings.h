@@ -9,16 +9,28 @@
 
 /**
     Possible values for wxSystemSettings::GetFont() parameter.
+    
+    These values map 1:1 the native values supported by the Windows' @c GetStockObject
+    function. Note that other ports (other than wxMSW) will try to provide meaningful
+    fonts but they usually map the same font to various @c wxSYS_*_FONT values.
 */
 enum wxSystemFont
 {
-    wxSYS_OEM_FIXED_FONT = 10,   //!< Original equipment manufacturer dependent fixed-pitch font.
-    wxSYS_ANSI_FIXED_FONT,       //!< Windows fixed-pitch font.
-    wxSYS_ANSI_VAR_FONT,         //!< Windows variable-pitch (proportional) font.
-    wxSYS_SYSTEM_FONT,           //!< System font.
-    wxSYS_DEVICE_DEFAULT_FONT,   //!< Device-dependent font (Windows NT only).
-    wxSYS_DEFAULT_PALETTE,       //!< @todo docme.
-    wxSYS_SYSTEM_FIXED_FONT,     //!< @todo docme.
+    /// Original equipment manufacturer dependent fixed-pitch font.
+    wxSYS_OEM_FIXED_FONT = 10,
+        
+    /// Windows fixed-pitch (monospaced) font.
+    wxSYS_ANSI_FIXED_FONT,
+    
+    /// Windows variable-pitch (proportional) font.
+    wxSYS_ANSI_VAR_FONT,
+
+    /// System font. By default, the system uses the system font to draw menus, 
+    /// dialog box controls, and text.
+    wxSYS_SYSTEM_FONT,
+        
+    /// Device-dependent font (Windows NT and later only).
+    wxSYS_DEVICE_DEFAULT_FONT,
 
     /**
         Default font for user interface objects such as menus and dialog boxes.
@@ -31,55 +43,98 @@ enum wxSystemFont
 
 /**
     Possible values for wxSystemSettings::GetColour() parameter.
+    
+    These values map 1:1 the native values supported by the Windows' @c GetSysColor
+    function. Note that other ports (other than wxMSW) will try to provide meaningful
+    colours but they usually map the same colour to various @c wxSYS_COLOUR_* values.
 */
 enum wxSystemColour
 {
     wxSYS_COLOUR_SCROLLBAR,           //!< The scrollbar grey area.
-    wxSYS_COLOUR_BACKGROUND,          //!< The desktop colour.
-    wxSYS_COLOUR_ACTIVECAPTION,       //!< Active window caption.
-    wxSYS_COLOUR_INACTIVECAPTION,     //!< Inactive window caption.
-    wxSYS_COLOUR_MENU,                //!< Menu background.
-    wxSYS_COLOUR_WINDOW,              //!< Window background.
-    wxSYS_COLOUR_WINDOWFRAME,         //!< Window frame.
-    wxSYS_COLOUR_MENUTEXT,            //!< Menu text.
-    wxSYS_COLOUR_WINDOWTEXT,          //!< Text in windows.
-    wxSYS_COLOUR_CAPTIONTEXT,         //!< Text in caption, size box and scrollbar arrow box.
-    wxSYS_COLOUR_ACTIVEBORDER,        //!< Active window border.
-    wxSYS_COLOUR_INACTIVEBORDER,      //!< Inactive window border.
-    wxSYS_COLOUR_APPWORKSPACE,        //!< Background colour MDI applications.
-    wxSYS_COLOUR_HIGHLIGHT,           //!< Item(s) selected in a control.
-    wxSYS_COLOUR_HIGHLIGHTTEXT,       //!< Text of item(s) selected in a control.
-    wxSYS_COLOUR_BTNFACE,             //!< Face shading on push buttons.
-    wxSYS_COLOUR_BTNSHADOW,           //!< Edge shading on push buttons.
-    wxSYS_COLOUR_GRAYTEXT,            //!< Greyed (disabled) text.
-    wxSYS_COLOUR_BTNTEXT,             //!< Text on push buttons.
-    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of text in active captions.
-    wxSYS_COLOUR_BTNHIGHLIGHT,        //!< Highlight colour for buttons (same as wxSYS_COLOUR_3DHILIGHT).
-    wxSYS_COLOUR_3DDKSHADOW,          //!< Dark shadow for three-dimensional display elements.
+    wxSYS_COLOUR_DESKTOP,             //!< The desktop colour.
+    wxSYS_COLOUR_ACTIVECAPTION,       //!< Active window caption colour.
+    wxSYS_COLOUR_INACTIVECAPTION,     //!< Inactive window caption colour.
+    wxSYS_COLOUR_MENU,                //!< Menu background colour.
+    wxSYS_COLOUR_WINDOW,              //!< Window background colour.
+    wxSYS_COLOUR_WINDOWFRAME,         //!< Window frame colour.
+    wxSYS_COLOUR_MENUTEXT,            //!< Colour of the text used in the menus.
+    wxSYS_COLOUR_WINDOWTEXT,          //!< Colour of the text used in generic windows.
+    wxSYS_COLOUR_CAPTIONTEXT,         //!< Colour of the text used in captions, size boxes and scrollbar arrow boxes.
+    wxSYS_COLOUR_ACTIVEBORDER,        //!< Active window border colour.
+    wxSYS_COLOUR_INACTIVEBORDER,      //!< Inactive window border colour.
+    wxSYS_COLOUR_APPWORKSPACE,        //!< Background colour for MDI applications.
+    wxSYS_COLOUR_HIGHLIGHT,           //!< Colour of item(s) selected in a control.
+    wxSYS_COLOUR_HIGHLIGHTTEXT,       //!< Colour of the text of item(s) selected in a control.
+    wxSYS_COLOUR_BTNFACE,             //!< Face shading colour on push buttons.
+    wxSYS_COLOUR_BTNSHADOW,           //!< Edge shading colour on push buttons.
+    wxSYS_COLOUR_GRAYTEXT,            //!< Colour of greyed (disabled) text.
+    wxSYS_COLOUR_BTNTEXT,             //!< Colour of the text on push buttons.
+    wxSYS_COLOUR_INACTIVECAPTIONTEXT, //!< Colour of the text in active captions.
+    wxSYS_COLOUR_BTNHIGHLIGHT,        //!< Highlight colour for buttons.
+    wxSYS_COLOUR_3DDKSHADOW,          //!< Dark shadow colour for three-dimensional display elements.
     wxSYS_COLOUR_3DLIGHT,             //!< Light colour for three-dimensional display elements.
     wxSYS_COLOUR_INFOTEXT,            //!< Text colour for tooltip controls.
     wxSYS_COLOUR_INFOBK,              //!< Background colour for tooltip controls.
-
-    wxSYS_COLOUR_DESKTOP = wxSYS_COLOUR_BACKGROUND,
-    wxSYS_COLOUR_3DFACE = wxSYS_COLOUR_BTNFACE,
-    wxSYS_COLOUR_3DSHADOW = wxSYS_COLOUR_BTNSHADOW,
-    wxSYS_COLOUR_BTNHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
-    wxSYS_COLOUR_3DHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
-    wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
-
-    wxSYS_COLOUR_LISTBOX,             ///< Background colour for list-like contols.
-    wxSYS_COLOUR_HOTLIGHT,
+    wxSYS_COLOUR_LISTBOX,             //!< Background colour for list-like contols.
+    wxSYS_COLOUR_HOTLIGHT,            //!< Colour for a hyperlink or hot-tracked item.
+    
+    /**
+        Right side colour in the color gradient of an active window's title bar. 
+        @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side color.
+    */
     wxSYS_COLOUR_GRADIENTACTIVECAPTION,
+    
+    /**
+        Right side colour in the color gradient of an inactive window's title bar. 
+        @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side color.
+    */
     wxSYS_COLOUR_GRADIENTINACTIVECAPTION,
+    
+    /**
+        The colour used to highlight menu items when the menu appears as a flat menu. 
+        The highlighted menu item is outlined with @c wxSYS_COLOUR_HIGHLIGHT.
+    */
     wxSYS_COLOUR_MENUHILIGHT,
+    
+    /**
+        The background colour for the menu bar when menus appear as flat menus. 
+        However, @c wxSYS_COLOUR_MENU continues to specify the background color of the menu popup.
+    */
     wxSYS_COLOUR_MENUBAR,
+    
     /**
         Text colour for list-like controls.
-
+        
         @since 2.9.0
      */
     wxSYS_COLOUR_LISTBOXTEXT,
 
+    // synonyms:
+    
+    wxSYS_COLOUR_BACKGROUND = wxSYS_COLOUR_DESKTOP,
+        //!< Synonym for @c wxSYS_COLOUR_DESKTOP.
+    wxSYS_COLOUR_3DFACE = wxSYS_COLOUR_BTNFACE,
+        //!< Synonym for @c wxSYS_COLOUR_BTNFACE.
+    wxSYS_COLOUR_3DSHADOW = wxSYS_COLOUR_BTNSHADOW,
+        //!< Synonym for @c wxSYS_COLOUR_BTNSHADOW.
+    wxSYS_COLOUR_BTNHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
+        //!< Synonym for @c wxSYS_COLOUR_BTNHIGHLIGHT.
+    wxSYS_COLOUR_3DHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
+        //!< Synonym for @c wxSYS_COLOUR_BTNHIGHLIGHT.
+    wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
+        //!< Synonym for @c wxSYS_COLOUR_BTNHIGHLIGHT.
+    
+    /**
+        Synonim for @c wxSYS_COLOUR_BTNFACE.
+        
+        On wxMSW this colour should be used as the background colour of
+        wxFrames which are used as containers of controls; this is in fact the
+        same colour used for the borders of controls like e.g. wxNotebook.
+        
+        @since 2.9.0
+    */
+    wxSYS_COLOUR_FRAMEBK = wxSYS_COLOUR_BTNFACE,
+    
     wxSYS_COLOUR_MAX
 };
 
