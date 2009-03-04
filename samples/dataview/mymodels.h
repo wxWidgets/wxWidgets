@@ -11,6 +11,76 @@
 
 
 // ----------------------------------------------------------------------------
+// MyMusicTreeModelNode: a node inside MyMusicTreeModel
+// ----------------------------------------------------------------------------
+
+class MyMusicTreeModelNode;
+WX_DEFINE_ARRAY_PTR( MyMusicTreeModelNode*, MyMusicTreeModelNodePtrArray );
+
+class MyMusicTreeModelNode
+{
+public:
+    MyMusicTreeModelNode( MyMusicTreeModelNode* parent,
+                          const wxString &title, const wxString &artist, 
+                          unsigned int year )
+    {
+        m_parent = parent;
+
+        m_title = title;
+        m_artist = artist;
+        m_year = year;
+        m_quality = "good";
+    }
+
+    MyMusicTreeModelNode( MyMusicTreeModelNode* parent,
+                          const wxString &branch )
+    {
+        m_parent = parent;
+
+        m_title = branch;
+        m_year = -1;
+    }
+
+    ~MyMusicTreeModelNode()
+    {
+        // free all our children nodes
+        size_t count = m_children.GetCount();
+        for (size_t i = 0; i < count; i++)
+        {
+            MyMusicTreeModelNode *child = m_children[i];
+            delete child;
+        }
+    }
+
+    bool IsContainer() const
+        { return m_children.GetCount()>0; }
+
+    MyMusicTreeModelNode* GetParent()
+        { return m_parent; }
+    MyMusicTreeModelNodePtrArray& GetChildren()
+        { return m_children; }
+    MyMusicTreeModelNode* GetNthChild( unsigned int n )
+        { return m_children.Item( n ); }
+    void Insert( MyMusicTreeModelNode* child, unsigned int n)
+        { m_children.Insert( child, n); }
+    void Append( MyMusicTreeModelNode* child )
+        { m_children.Add( child ); }
+    unsigned int GetChildCount() const
+        { return m_children.GetCount(); }
+
+public:     // public to avoid getters/setters
+    wxString                m_title;
+    wxString                m_artist;
+    int                     m_year;
+    wxString                m_quality;
+
+private:
+    MyMusicTreeModelNode          *m_parent;
+    MyMusicTreeModelNodePtrArray   m_children;
+};
+
+
+// ----------------------------------------------------------------------------
 // MyMusicTreeModel
 // ----------------------------------------------------------------------------
 
@@ -26,64 +96,6 @@ Implement this data model
         6:  Ninth Symphony      Ludwig v. Beethoven  1824        good
         7:  German Requiem      Johannes Brahms      1868        good
 */
-
-class MyMusicTreeModelNode;
-WX_DEFINE_ARRAY_PTR( MyMusicTreeModelNode*, MyMusicTreeModelNodes );
-
-class MyMusicTreeModelNode
-{
-public:
-    MyMusicTreeModelNode( MyMusicTreeModelNode* parent,
-                      const wxString &title, const wxString &artist, int year )
-    {
-        m_parent = parent;
-        m_title = title;
-        m_artist = artist;
-        m_year = year;
-        m_quality = "good";
-        m_isContainer = false;
-    }
-
-    MyMusicTreeModelNode( MyMusicTreeModelNode* parent,
-                      const wxString &branch )
-    {
-        m_parent = parent;
-        m_title = branch;
-        m_year = -1;
-        m_isContainer = true;
-    }
-
-    ~MyMusicTreeModelNode()
-    {
-        size_t count = m_children.GetCount();
-        size_t i;
-        for (i = 0; i < count; i++)
-        {
-            MyMusicTreeModelNode *child = m_children[i];
-            delete child;
-        }
-    }
-
-    bool IsContainer()                                        { return m_isContainer; }
-
-    MyMusicTreeModelNode* GetParent()                         { return m_parent; }
-    MyMusicTreeModelNodes &GetChildren()                      { return m_children; }
-    MyMusicTreeModelNode* GetNthChild( unsigned int n )       { return m_children.Item( n ); }
-    void Insert( MyMusicTreeModelNode* child, unsigned int n) { m_children.Insert( child, n); }
-    void Append( MyMusicTreeModelNode* child )                { m_children.Add( child ); }
-    unsigned int GetChildCount()                              { return m_children.GetCount(); }
-
-public:
-    wxString            m_title;
-    wxString            m_artist;
-    int                 m_year;
-    wxString            m_quality;
-
-private:
-    MyMusicTreeModelNode   *m_parent;
-    MyMusicTreeModelNodes   m_children;
-    bool                    m_isContainer;
-};
 
 class MyMusicTreeModel: public wxDataViewModel
 {
@@ -101,8 +113,14 @@ public:
 
     // helper methods to change the model
 
-    void AddToClassical( const wxString &title, const wxString &artist, int year );
+    void AddToClassical( const wxString &title, const wxString &artist, 
+                         unsigned int year );
     void Delete( const wxDataViewItem &item );
+
+    wxDataViewItem GetNinthItem() const
+    {
+       return wxDataViewItem( m_ninth );
+    }
 
     // override sorting to always sort branches ascendingly
 
@@ -134,16 +152,15 @@ public:
     virtual unsigned int GetChildren( const wxDataViewItem &parent, 
                                       wxDataViewItemArray &array ) const;
 
-    wxDataViewItem GetNinthItem() const
-    {
-       return wxDataViewItem( m_ninth );
-    }
-
 private:
     MyMusicTreeModelNode*   m_root;
+
+    // pointers to some "special" nodes of the tree:
     MyMusicTreeModelNode*   m_pop;
     MyMusicTreeModelNode*   m_classical;
     MyMusicTreeModelNode*   m_ninth;
+
+    // ??
     bool                    m_classicalMusicIsKnownToControl;
 };
 
@@ -193,7 +210,7 @@ public:
 
 private:
     wxArrayString    m_array;
-    wxIcon           m_icon;
+    wxIcon           m_icon[2];
     int              m_virtualItems;
 };
 
