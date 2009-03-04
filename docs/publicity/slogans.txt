@@ -19,7 +19,7 @@ wxWidgets: "Practically Perfect in Every Way"
 
 On tote bag:
 
-"Bag yourself some cool tools at wxwindows.org"
+"Bag yourself some cool tools at wxwidgets.org"
 
 -----------
 
@@ -29,13 +29,13 @@ Build an app for Windows, Mac and Linux in a week?
 No sweat.
 
 <wxWidgets logo>
-wxwindows.org
+wxwidgets.org
 
 -----------
 
 Hallelujah!
 The future is open source and OS-agnostic.
-Tool up for it at wxwindows.org.
+Tool up for it at wxwidgets.org.
 
 -----------
 

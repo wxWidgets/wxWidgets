@@ -37,7 +37,7 @@ First steps
   Using configure is the only way to build the library. If it doesn't
   work for you for whatever reason, please report it (together with detailed
   information about your platform and the (relevant part of) contents of
-  config.log file) to wx-dev@lists.wxwindows.org.
+  config.log file) to wx-dev@lists.wxwidgets.org.
 
 
 COMPILING USING CONFIGURE
@@ -540,7 +540,7 @@ Bug reports
 Please send bug reports with a description of your environment,
 compiler and the error message(s) to the wxwin-developers mailing list at:
 
-    wx-dev@lists.wxwindows.org
+    wx-dev@lists.wxwidgets.org
 
 Julian Smart, Robert Roebling and Vadim Zeitlin, November 1999.
 

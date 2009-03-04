@@ -139,7 +139,7 @@ about how to use wxWidgets with Windows CE, and further
 work that needs to be done, see the wxWinCE topic in the
 reference manual, and also:
 
-http://wiki.wxwindows.org/wiki.pl?Developers_Notebook/WxWinCE
+http://wiki.wxwidgets.org/Developers_Notebook/WxWinCE
 
 The "Life!" demo in demos/life has some adaptations for
 wxWinCE, and also demonstrates how to make an installer for

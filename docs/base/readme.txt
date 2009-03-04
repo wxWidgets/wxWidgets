@@ -133,7 +133,7 @@ namely:
 
 * Usenet newsgroup comp.soft-sys.wxwindows
 
-* Mailing lists: see http://lists.wxwindows.org/ for more information
+* Mailing lists: see http://lists.wxwidgets.org/ for more information
 
 * WWW page: http://www.wxwidgets.org/
 

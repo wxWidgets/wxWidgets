@@ -246,7 +246,7 @@ Bug reports
 Please send bug reports with a description of your environment,
 compiler and the error message(s) to the wxwin-developers mailing list at:
 
-    wx-dev@lists.wxwindows.org
+    wx-dev@lists.wxwidgets.org
 
 Vaclav Slavik, Julian Smart, Robert Roebling and Vadim Zeitlin, February 2002.
 Mike Wetherell 2005/2006

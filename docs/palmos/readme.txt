@@ -77,7 +77,8 @@ wxWidgets 2.5.3 CSV source tree.  Whenever possible, I have used the Palm OS 6 A
 in places where the API was not practical to use, I wrote my own functions.
 
 I am submitting this source package as an entry in the wxWidgets Palm OS 6 port 
-challenge.  Details on this challenge are available at http://www.wxwindows.org/palmos.htm
+challenge.  Details on this challenge are available at:
+http://www.wxwidgets.org/about/news/palmos.htm
 
 Please note that this port is in a very early state.  Currently the port 
 provides limited functionality for the wxFrame, wxMenu, wxStatusBar, 
