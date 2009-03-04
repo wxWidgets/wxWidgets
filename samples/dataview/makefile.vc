@@ -30,6 +30,7 @@ DATAVIEW_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(CPPFLAGS) $(CXXFLAGS)
 DATAVIEW_OBJECTS =  \
 	$(OBJS)\dataview_dataview.obj \
+	$(OBJS)\dataview_mymodels.obj \
 	$(OBJS)\dataview_sample.res
 
 ### Conditionally set variables: ###
@@ -315,6 +316,9 @@ $(OBJS)\dataview.exe: $(DATAVIEW_OBJECTS) $(OBJS)\dataview_sample.res
 
 $(OBJS)\dataview_dataview.obj: .\dataview.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DATAVIEW_CXXFLAGS) .\dataview.cpp
+
+$(OBJS)\dataview_mymodels.obj: .\mymodels.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(DATAVIEW_CXXFLAGS) .\mymodels.cpp
 
 $(OBJS)\dataview_sample.res: .\..\sample.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) $(__NO_VC_CRTDBG_p_1)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) /i $(SETUPHDIR) /i .\..\..\include /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\samples /d NOPCH .\..\sample.rc

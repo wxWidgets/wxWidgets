@@ -51,6 +51,7 @@ DATAVIEW_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 DATAVIEW_OBJECTS =  \
 	$(__dataview_os2_lib_res) \
 	dataview_dataview.o \
+	dataview_mymodels.o \
 	$(__dataview___win32rc)
 
 ### Conditionally set variables: ###
@@ -182,6 +183,9 @@ dataview$(EXEEXT): $(DATAVIEW_OBJECTS) $(__dataview___win32rc)
 
 dataview_dataview.o: $(srcdir)/dataview.cpp
 	$(CXXC) -c -o $@ $(DATAVIEW_CXXFLAGS) $(srcdir)/dataview.cpp
+
+dataview_mymodels.o: $(srcdir)/mymodels.cpp
+	$(CXXC) -c -o $@ $(DATAVIEW_CXXFLAGS) $(srcdir)/mymodels.cpp
 
 dataview_sample_rc.o: $(srcdir)/../sample.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include

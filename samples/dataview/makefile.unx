@@ -57,7 +57,8 @@ WX_CONFIG_FLAGS = $(WX_CONFIG_DEBUG_FLAG) $(WX_CONFIG_UNICODE_FLAG) \
 DATAVIEW_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS) \
 	$(CXXFLAGS)
 DATAVIEW_OBJECTS =  \
-	dataview_dataview.o
+	dataview_dataview.o \
+	dataview_mymodels.o
 
 ### Conditionally set variables: ###
 
@@ -98,9 +99,12 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 dataview: $(DATAVIEW_OBJECTS)
-	$(CXX) -o $@ $(DATAVIEW_OBJECTS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs adv,core,base` $(LDFLAGS)
+	$(CXX) -o $@ $(DATAVIEW_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs adv,core,base`
 
 dataview_dataview.o: ./dataview.cpp
+	$(CXX) -c -o $@ $(DATAVIEW_CXXFLAGS) $(CPPDEPS) $<
+
+dataview_mymodels.o: ./mymodels.cpp
 	$(CXX) -c -o $@ $(DATAVIEW_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean

@@ -232,7 +232,8 @@ DATAVIEW_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	-i=.\..\..\samples -dNOPCH $(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) &
 	$(CXXFLAGS)
 DATAVIEW_OBJECTS =  &
-	$(OBJS)\dataview_dataview.obj
+	$(OBJS)\dataview_dataview.obj &
+	$(OBJS)\dataview_mymodels.obj
 
 
 all : $(OBJS)
@@ -264,6 +265,9 @@ $(OBJS)\dataview.exe :  $(DATAVIEW_OBJECTS) $(OBJS)\dataview_sample.res
 	wlink @$(OBJS)\dataview.lbc
 
 $(OBJS)\dataview_dataview.obj :  .AUTODEPEND .\dataview.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(DATAVIEW_CXXFLAGS) $<
+
+$(OBJS)\dataview_mymodels.obj :  .AUTODEPEND .\mymodels.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(DATAVIEW_CXXFLAGS) $<
 
 $(OBJS)\dataview_sample.res :  .AUTODEPEND .\..\sample.rc

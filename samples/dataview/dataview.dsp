@@ -256,7 +256,19 @@ SOURCE=.\dataview.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\mymodels.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\..\sample.rc
+# End Source File
+# End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\mymodels.h
 # End Source File
 # End Group
 # End Target
