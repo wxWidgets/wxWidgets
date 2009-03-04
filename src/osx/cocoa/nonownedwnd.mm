@@ -381,6 +381,8 @@ long style, long extraStyle, const wxString& name )
 
     [m_macWindow setDelegate:controller];
     
+    [m_macWindow setAcceptsMouseMovedEvents: YES];
+    
     // [m_macWindow makeKeyAndOrderFront:nil];
 }
 
