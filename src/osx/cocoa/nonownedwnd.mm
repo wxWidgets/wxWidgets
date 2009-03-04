@@ -292,7 +292,12 @@ long style, long extraStyle, const wxString& name )
     
     if ( style & wxFRAME_TOOL_WINDOW )
     {
-        windowstyle |= NSTitledWindowMask | NSUtilityWindowMask;
+        windowstyle |= NSUtilityWindowMask;
+        if ( ( style & wxMINIMIZE_BOX ) || ( style & wxMAXIMIZE_BOX ) ||
+            ( style & wxCLOSE_BOX ) || ( style & wxSYSTEM_MENU ) )
+        {
+            windowstyle |= NSTitledWindowMask ;
+        }
     }
     else if ( ( style & wxPOPUP_WINDOW ) )
     {
