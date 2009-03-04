@@ -5,6 +5,7 @@
 
     <exe id="arttest" template="wx_sample" template_append="wx_append">
         <sources>arttest.cpp artbrows.cpp</sources>
+        <headers>artbrows.h</headers>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>arttest.rc</win32-res>

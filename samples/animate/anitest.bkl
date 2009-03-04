@@ -4,9 +4,8 @@
     <include file="../../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="anitest" template="wx_sample" template_append="wx_append">
-        <sources>
-            anitest.cpp
-        </sources>
+        <sources>anitest.cpp</sources>
+        <headers>anitest.h</headers>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>

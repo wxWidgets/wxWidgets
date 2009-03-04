@@ -259,6 +259,18 @@ SOURCE=.\nativdlg.cpp
 SOURCE=.\nativdlg.rc
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\nativdg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\resource.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

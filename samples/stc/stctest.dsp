@@ -267,6 +267,22 @@ SOURCE=.\..\sample.rc
 SOURCE=.\stctest.cpp
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\defsext.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\edit.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\prefs.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

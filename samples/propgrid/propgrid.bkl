@@ -11,6 +11,10 @@
             sampleprops.cpp
             tests.cpp
         </sources>
+        <headers>
+            sampleprops.h
+            propgrid.h
+        </headers>
         <wx-lib>propgrid</wx-lib>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>

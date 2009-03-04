@@ -259,6 +259,22 @@ SOURCE=.\mfctest.cpp
 SOURCE=.\mfctest.rc
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\mfctest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\stdafx.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

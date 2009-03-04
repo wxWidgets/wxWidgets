@@ -271,6 +271,26 @@ SOURCE=.\xrcdemo.cpp
 SOURCE=.\xrcdemo.rc
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\custclas.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\derivdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\myframe.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrcdemo.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

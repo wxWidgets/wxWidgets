@@ -259,6 +259,14 @@ SOURCE=.\mdi.cpp
 SOURCE=.\mdi.rc
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\mdi.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

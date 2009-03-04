@@ -5,6 +5,7 @@
 
     <exe id="sashtest" template="wx_sample" template_append="wx_append">
         <sources>sashtest.cpp</sources>
+        <headers>sashtest.h</headers>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>

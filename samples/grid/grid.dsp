@@ -259,6 +259,14 @@ SOURCE=.\griddemo.cpp
 SOURCE=.\griddemo.rc
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\griddemo.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

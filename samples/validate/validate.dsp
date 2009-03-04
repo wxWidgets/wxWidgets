@@ -259,6 +259,14 @@ SOURCE=.\..\sample.rc
 SOURCE=.\validate.cpp
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\validate.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

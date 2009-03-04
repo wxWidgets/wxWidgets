@@ -259,6 +259,14 @@ SOURCE=.\..\..\samples\sample.rc
 SOURCE=.\tbtest.cpp
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\tbtest.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

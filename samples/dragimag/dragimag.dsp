@@ -259,6 +259,14 @@ SOURCE=.\dragimag.cpp
 SOURCE=.\dragimag.rc
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\dragimag.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

@@ -267,6 +267,22 @@ SOURCE=.\docview.rc
 SOURCE=.\view.cpp
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\doc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\docview.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\view.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

@@ -11,6 +11,7 @@
 
     <exe id="cube" template="wx_sample" template_append="wx_append" cond="USE_OPENGL=='1'">
         <sources>cube.cpp</sources>
+        <headers>cube.h</headers>
         <wx-lib>gl</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>

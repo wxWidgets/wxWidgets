@@ -259,6 +259,22 @@ SOURCE=.\..\..\samples\sample.rc
 SOURCE=.\server.cpp
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\connection.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ipcsetup.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\server.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

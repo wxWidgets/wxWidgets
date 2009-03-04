@@ -10,6 +10,12 @@
             derivdlg.cpp
             custclas.cpp
         </sources>
+        <headers>
+            derivdlg.h
+            xrcdemo.h
+            myframe.h
+            custclas.h
+        </headers>
         <wx-lib>xrc</wx-lib>
         <wx-lib>html</wx-lib>
         <wx-lib>adv</wx-lib>

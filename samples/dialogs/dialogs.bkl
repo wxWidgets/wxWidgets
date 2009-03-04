@@ -32,6 +32,7 @@
             dialogs.cpp
             $(GENERIC_DIALOGS_IN_NATIVE_BUILDS)
         </sources>
+        <headers>dialogs.h</headers>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>

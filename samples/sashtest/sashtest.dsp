@@ -259,6 +259,14 @@ SOURCE=.\sashtest.cpp
 SOURCE=.\sashtest.rc
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\sashtest.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

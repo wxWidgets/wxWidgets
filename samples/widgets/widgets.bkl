@@ -35,6 +35,7 @@
             toggle.cpp
             widgets.cpp
         </sources>
+        <headers>widgets.h itemcontainer.h</headers>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>

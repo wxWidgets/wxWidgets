@@ -5,6 +5,7 @@
 
     <exe id="layout" template="wx_sample" template_append="wx_append">
         <sources>layout.cpp</sources>
+        <headers>layout.h</headers>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>layout.rc</win32-res>

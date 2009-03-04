@@ -271,6 +271,18 @@ SOURCE=.\sampleprops.cpp
 SOURCE=.\tests.cpp
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\propgrid.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\sampleprops.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

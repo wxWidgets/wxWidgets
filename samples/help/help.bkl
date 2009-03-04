@@ -5,6 +5,7 @@
 
     <exe id="help" template="wx_sample" template_append="wx_append">
         <sources>demo.cpp</sources>
+        <headers>doc.h</headers>
         <wx-lib>html</wx-lib>
         <wx-lib>adv</wx-lib>
         <wx-lib>core</wx-lib>

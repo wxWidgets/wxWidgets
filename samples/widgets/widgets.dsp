@@ -367,6 +367,18 @@ SOURCE=.\toggle.cpp
 SOURCE=.\widgets.cpp
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\itemcontainer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\widgets.h
+# End Source File
+# End Group
 # End Target
 # End Project
 
