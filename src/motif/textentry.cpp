@@ -25,6 +25,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/window.h"
 #endif //WX_PRECOMP
 
 #include "wx/textentry.h"
