@@ -29,7 +29,7 @@ enum wxSystemFont
     wxSYS_SYSTEM_FONT,
     wxSYS_DEVICE_DEFAULT_FONT,
 
-    // don't use: MSDN says that this is a stock object provided only 
+    // don't use: MSDN says that this is a stock object provided only
     // for compatibility with 16-bit Windows versions earlier than 3.0!
     wxSYS_SYSTEM_FIXED_FONT,
 
@@ -78,6 +78,8 @@ enum wxSystemColour
     wxSYS_COLOUR_MENUBAR,
     wxSYS_COLOUR_LISTBOXTEXT,
 
+    wxSYS_COLOUR_MAX,
+
     // synonyms
     wxSYS_COLOUR_BACKGROUND = wxSYS_COLOUR_DESKTOP,
     wxSYS_COLOUR_3DFACE = wxSYS_COLOUR_BTNFACE,
@@ -85,9 +87,7 @@ enum wxSystemColour
     wxSYS_COLOUR_BTNHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
     wxSYS_COLOUR_3DHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
     wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
-    wxSYS_COLOUR_FRAMEBK = wxSYS_COLOUR_BTNFACE,
-
-    wxSYS_COLOUR_MAX
+    wxSYS_COLOUR_FRAMEBK = wxSYS_COLOUR_BTNFACE
 };
 
 // possible values for wxSystemSettings::GetMetric() index parameter

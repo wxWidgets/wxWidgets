@@ -9,7 +9,7 @@
 
 /**
     Possible values for wxSystemSettings::GetFont() parameter.
-    
+
     These values map 1:1 the native values supported by the Windows' @c GetStockObject
     function. Note that other ports (other than wxMSW) will try to provide meaningful
     fonts but they usually map the same font to various @c wxSYS_*_FONT values.
@@ -18,17 +18,17 @@ enum wxSystemFont
 {
     /// Original equipment manufacturer dependent fixed-pitch font.
     wxSYS_OEM_FIXED_FONT = 10,
-        
+
     /// Windows fixed-pitch (monospaced) font.
     wxSYS_ANSI_FIXED_FONT,
-    
+
     /// Windows variable-pitch (proportional) font.
     wxSYS_ANSI_VAR_FONT,
 
-    /// System font. By default, the system uses the system font to draw menus, 
+    /// System font. By default, the system uses the system font to draw menus,
     /// dialog box controls, and text.
     wxSYS_SYSTEM_FONT,
-        
+
     /// Device-dependent font (Windows NT and later only).
     wxSYS_DEVICE_DEFAULT_FONT,
 
@@ -43,7 +43,7 @@ enum wxSystemFont
 
 /**
     Possible values for wxSystemSettings::GetColour() parameter.
-    
+
     These values map 1:1 the native values supported by the Windows' @c GetSysColor
     function. Note that other ports (other than wxMSW) will try to provide meaningful
     colours but they usually map the same colour to various @c wxSYS_COLOUR_* values.
@@ -77,40 +77,44 @@ enum wxSystemColour
     wxSYS_COLOUR_INFOBK,              //!< Background colour for tooltip controls.
     wxSYS_COLOUR_LISTBOX,             //!< Background colour for list-like contols.
     wxSYS_COLOUR_HOTLIGHT,            //!< Colour for a hyperlink or hot-tracked item.
-    
+
     /**
-        Right side colour in the color gradient of an active window's title bar. 
+        Right side colour in the color gradient of an active window's title bar.
         @c wxSYS_COLOUR_ACTIVECAPTION specifies the left side color.
     */
     wxSYS_COLOUR_GRADIENTACTIVECAPTION,
-    
+
     /**
-        Right side colour in the color gradient of an inactive window's title bar. 
+        Right side colour in the color gradient of an inactive window's title bar.
         @c wxSYS_COLOUR_INACTIVECAPTION specifies the left side color.
     */
     wxSYS_COLOUR_GRADIENTINACTIVECAPTION,
-    
+
     /**
-        The colour used to highlight menu items when the menu appears as a flat menu. 
+        The colour used to highlight menu items when the menu appears as a flat menu.
         The highlighted menu item is outlined with @c wxSYS_COLOUR_HIGHLIGHT.
     */
     wxSYS_COLOUR_MENUHILIGHT,
-    
+
     /**
-        The background colour for the menu bar when menus appear as flat menus. 
+        The background colour for the menu bar when menus appear as flat menus.
         However, @c wxSYS_COLOUR_MENU continues to specify the background color of the menu popup.
     */
     wxSYS_COLOUR_MENUBAR,
-    
+
     /**
         Text colour for list-like controls.
-        
+
         @since 2.9.0
      */
     wxSYS_COLOUR_LISTBOXTEXT,
 
+    wxSYS_COLOUR_MAX
+
+
+
     // synonyms:
-    
+
     wxSYS_COLOUR_BACKGROUND = wxSYS_COLOUR_DESKTOP,
         //!< Synonym for @c wxSYS_COLOUR_DESKTOP.
     wxSYS_COLOUR_3DFACE = wxSYS_COLOUR_BTNFACE,
@@ -123,19 +127,18 @@ enum wxSystemColour
         //!< Synonym for @c wxSYS_COLOUR_BTNHIGHLIGHT.
     wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
         //!< Synonym for @c wxSYS_COLOUR_BTNHIGHLIGHT.
-    
+
     /**
         Synonim for @c wxSYS_COLOUR_BTNFACE.
-        
+
         On wxMSW this colour should be used as the background colour of
         wxFrames which are used as containers of controls; this is in fact the
-        same colour used for the borders of controls like e.g. wxNotebook.
-        
+        same colour used for the borders of controls like e.g. wxNotebook or
+        for the background of e.g. wxPanel.
+
         @since 2.9.0
     */
-    wxSYS_COLOUR_FRAMEBK = wxSYS_COLOUR_BTNFACE,
-    
-    wxSYS_COLOUR_MAX
+    wxSYS_COLOUR_FRAMEBK = wxSYS_COLOUR_BTNFACE
 };
 
 /**
@@ -197,7 +200,7 @@ enum wxSystemFeature
 };
 
 /**
-    Values for different screen designs.
+    Values for different screen designs. See wxSystemSettings::GetScreenType().
 */
 enum wxSystemScreenType
 {
@@ -220,7 +223,7 @@ enum wxSystemScreenType
     @library{wxcore}
     @category{cfg}
 
-    @see wxFont, wxColour
+    @see wxFont, wxColour, wxSystemOptions
 */
 class wxSystemSettings : public wxObject
 {
@@ -271,5 +274,11 @@ public:
         The return value is one of the ::wxSystemScreenType enum values.
     */
     static wxSystemScreenType GetScreenType();
+
+    /**
+        Returns @true if the port has certain feature.
+        See the ::wxSystemFeature enum values.
+    */
+    static bool HasFeature(wxSystemFeature index);
 };
 
