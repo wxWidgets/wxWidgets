@@ -67,13 +67,13 @@
     associating the model with a control like this:
 
     @code
-        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, ID_MUSIC_CTRL );
+        wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
         wxDataViewModel *musicModel = new MyMusicModel;
-        m_musicCtrl-AssociateModel( musicModel );
-        musicModel-DecRef();  // avoid memory leak !!
+        m_musicCtrl->AssociateModel( musicModel );
+        musicModel->DecRef();  // avoid memory leak !!
+        
         // add columns now
     @endcode
-
 
     @library{wxadv}
     @category{dvc}
@@ -522,44 +522,44 @@ public:
            Display fine rules between columns is supported.
     @style{wxDV_VARIABLE_LINE_HEIGHT}
            Allow variable line heights.
-            This can be inefficient when displaying large number of items.
+           This can be inefficient when displaying large number of items.
     @endStyleTable
 
     @beginEventEmissionTable{wxDataViewEvent}
     @event{EVT_DATAVIEW_SELECTION_CHANGED(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_ACTIVATED(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event.
     @event{EVT_DATAVIEW_ITEM_EDITING_STARTED(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED event.
     @event{EVT_DATAVIEW_ITEM_EDITING_DONE(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event.
     @event{EVT_DATAVIEW_ITEM_COLLAPSING(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING event.
     @event{EVT_DATAVIEW_ITEM_COLLAPSED(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED event.
     @event{EVT_DATAVIEW_ITEM_EXPANDING(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING event.
     @event{EVT_DATAVIEW_ITEM_EXPANDED(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED event.
     @event{EVT_DATAVIEW_ITEM_VALUE_CHANGED(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_CONTEXT_MENU(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICKED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICKED event.
     @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED event.
     @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED event.
     @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
     @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG event.
     @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
-           Process a wxEVT_COMMAND_DATAVIEW_ITEM_DROP event.
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP event.
     @endEventTable
 
     @library{wxadv}
@@ -1538,22 +1538,29 @@ public:
     edit a small table of data without having to write your own wxDataViewModel.
 
     @code
-       wxDataViewListCtrl *listctrl = new wxDataViewListCtrl( parent, -1 );
+       wxDataViewListCtrl *listctrl = new wxDataViewListCtrl( parent, wxID_ANY );
 
        listctrl->AppendToggleColumn( "Toggle" );
        listctrl->AppendTextColumn( "Text" );
 
        wxVector<wxVariant> data;
-       data.push_back( true );
-       data.push_back( "row 1" );
+       data.push_back( wxVariant(true) );
+       data.push_back( wxVariant("row 1") );
        listctrl->AppendItem( data );
 
        data.clear();
-       data.push_back( false );
-       data.push_back( "row 3" );
+       data.push_back( wxVariant(false) );
+       data.push_back( wxVariant("row 3") );
        listctrl->AppendItem( data );
     @endcode
-
+    
+    @beginStyleTable
+    See wxDataViewCtrl for the list of supported styles.
+    @endStyleTable
+    
+    @beginEventEmissionTable
+    See wxDataViewCtrl for the list of events emitted by this class.
+    @endEventTable
 
     @library{wxadv}
     @category{ctrl,dvc}
@@ -1596,75 +1603,99 @@ public:
     //@}
 
     /**
-        Appends a column to the control and additonally appends a
-        column to the store with the type @a varianttype.
+        @name Column management functions
     */
-    void AppendColumn( wxDataViewColumn *column, const wxString &varianttype );
-
+    //@{
+   
     /**
-        Prepends a column to the control and additonally prepends a
-        column to the store with the type @a varianttype.
-    */
-    void PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
-
-    /**
-        Inserts a column to the control and additonally inserts a
-        column to the store with the type @a varianttype.
-    */
-    void InsertColumn( unsigned int pos, wxDataViewColumn *column, const wxString &varianttype );
-
-    /**
-        Overridden from wxDataViewCtrl
-
-        Appends a column to the control and additonally appends a
+        Appends a column to the control and additionally appends a
         column to the store with the type string.
     */
     virtual void AppendColumn( wxDataViewColumn *column );
 
     /**
-        Overridden from wxDataViewCtrl
-
-        Prepends a column to the control and additonally prepends a
-        column to the store with the type string.
+        Appends a column to the control and additionally appends a
+        column to the list store with the type @a varianttype.
     */
-    virtual void PrependColumn( wxDataViewColumn *column );
+    void AppendColumn( wxDataViewColumn *column, const wxString &varianttype );
 
     /**
-        Overridden from wxDataViewCtrl
+        Appends a text column to the control and the store.
+        
+        See wxDataViewColumn::wxDataViewColumn for more info about
+        the parameters.
+    */
+    wxDataViewColumn *AppendTextColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+          int width = -1, wxAlignment align = wxALIGN_LEFT, 
+          int flags = wxDATAVIEW_COL_RESIZABLE );
 
-        Inserts a column to the control and additonally inserts a
+    /**
+        Appends a toggle column to the control and the store.
+        
+        See wxDataViewColumn::wxDataViewColumn for more info about
+        the parameters.
+    */
+    wxDataViewColumn *AppendToggleColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
+          int width = -1, wxAlignment align = wxALIGN_LEFT, 
+          int flags = wxDATAVIEW_COL_RESIZABLE );
+
+    /**
+        Appends a progress column to the control and the store.
+
+        See wxDataViewColumn::wxDataViewColumn for more info about
+        the parameters.
+    */
+    wxDataViewColumn *AppendProgressColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+          int width = -1, wxAlignment align = wxALIGN_LEFT, 
+          int flags = wxDATAVIEW_COL_RESIZABLE );
+
+    /**
+        Appends an icon-and-text column to the control and the store.
+
+        See wxDataViewColumn::wxDataViewColumn for more info about
+        the parameters.
+    */
+    wxDataViewColumn *AppendIconTextColumn( const wxString &label,
+          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
+          int width = -1, wxAlignment align = wxALIGN_LEFT, 
+          int flags = wxDATAVIEW_COL_RESIZABLE );
+
+    /**
+        Inserts a column to the control and additionally inserts a
         column to the store with the type string.
     */
     virtual void InsertColumn( unsigned int pos, wxDataViewColumn *column );
 
     /**
-        Inserts a text column to the control and the store.
+        Inserts a column to the control and additionally inserts a
+        column to the list store with the type @a varianttype.
     */
-    wxDataViewColumn *AppendTextColumn( const wxString &label,
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+    void InsertColumn( unsigned int pos, wxDataViewColumn *column, 
+                       const wxString &varianttype );
 
     /**
-        Inserts a toggle column to the control and the store.
+        Prepends a column to the control and additionally prepends a
+        column to the store with the type string.
     */
-    wxDataViewColumn *AppendToggleColumn( const wxString &label,
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+    virtual void PrependColumn( wxDataViewColumn *column );
 
     /**
-        Inserts a progress column to the control and the store.
+        Prepends a column to the control and additionally prepends a
+        column to the list store with the type @a varianttype.
     */
-    wxDataViewColumn *AppendProgressColumn( const wxString &label,
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
+    void PrependColumn( wxDataViewColumn *column, const wxString &varianttype );
 
+    //@}
+    
+    
     /**
-        Inserts a icon and text column to the control and the store.
+        @name Item management functions
     */
-    wxDataViewColumn *AppendIconTextColumn( const wxString &label,
-          wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
-          int width = -1, wxAlignment align = wxALIGN_LEFT, int flags = wxDATAVIEW_COL_RESIZABLE );
-
+    //@{
+    
     /**
         Appends an item (=row) to the control and store.
     */
@@ -1678,7 +1709,7 @@ public:
     /**
         Inserts an item (=row) to the control and store.
     */
-    void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
+    void InsertItem( unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
 
     /**
         Delete the row at position @a row.
@@ -1731,6 +1762,8 @@ public:
          respective column.
     */
     bool GetToggleValue( unsigned int row, unsigned int col ) const;
+    
+    //@}
 };
 
 
@@ -1741,8 +1774,16 @@ public:
     and forwards most of its API to that class.
     Additionally, it uses a wxImageList to store a list of icons.
 
-    The main purpose of this class is to look like a wxTreeCtrl to make a transition
-    from it to the wxDataViewCtrl class simpler.
+    The main purpose of this class is to represent a possible replacement for
+    wxTreeCtrl.
+
+    @beginStyleTable
+    See wxDataViewCtrl for the list of supported styles.
+    @endStyleTable
+    
+    @beginEventEmissionTable
+    See wxDataViewCtrl for the list of events emitted by this class.
+    @endEventTable
 
     @library{wxadv}
     @category{ctrl,dvc}
@@ -2238,6 +2279,43 @@ public:
 
     This is the event class for the wxDataViewCtrl notifications.
 
+    @beginEventTable{wxDataViewEvent}
+    @event{EVT_DATAVIEW_SELECTION_CHANGED(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED event.
+    @event{EVT_DATAVIEW_ITEM_ACTIVATED(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event.
+    @event{EVT_DATAVIEW_ITEM_EDITING_STARTED(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED event.
+    @event{EVT_DATAVIEW_ITEM_EDITING_DONE(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE event.
+    @event{EVT_DATAVIEW_ITEM_COLLAPSING(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING event.
+    @event{EVT_DATAVIEW_ITEM_COLLAPSED(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED event.
+    @event{EVT_DATAVIEW_ITEM_EXPANDING(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING event.
+    @event{EVT_DATAVIEW_ITEM_EXPANDED(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED event.
+    @event{EVT_DATAVIEW_ITEM_VALUE_CHANGED(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED event.
+    @event{EVT_DATAVIEW_ITEM_CONTEXT_MENU(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU event.
+    @event{EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICKED event.
+    @event{EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED event.
+    @event{EVT_DATAVIEW_COLUMN_SORTED(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED event.
+    @event{EVT_DATAVIEW_COLUMN_REORDERED(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED event.
+    @event{EVT_DATAVIEW_ITEM_BEGIN_DRAG(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_BEGIN_DRAG event.
+    @event{EVT_DATAVIEW_ITEM_DROP_POSSIBLE(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE event.
+    @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP event.
+    @endEventTable
+    
     @library{wxadv}
     @category{events,dvc}
 */
