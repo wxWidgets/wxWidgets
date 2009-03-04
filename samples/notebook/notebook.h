@@ -158,21 +158,22 @@ enum ID_COMMANDS
     ID_HITTEST
 };
 
+
 /*
-Name of each notebook page.
-Used as a label for a page, and used when cloning the notebook
-to decide what type of page it is.
+    Name of each notebook page.
+    Used as a label for a page, and used when cloning the notebook
+    to decide what type of page it is.
 */
 
-#define I_WAS_INSERTED_PAGE_NAME  wxT("Inserted")
-#define RADIOBUTTONS_PAGE_NAME wxT("Radiobuttons")
-#define VETO_PAGE_NAME wxT("Veto")
-#define MAXIMIZED_BUTTON_PAGE_NAME wxT("Maximized button")
+#define I_WAS_INSERTED_PAGE_NAME        wxT("Inserted")
+#define RADIOBUTTONS_PAGE_NAME          wxT("Radiobuttons")
+#define VETO_PAGE_NAME                  wxT("Veto")
+#define MAXIMIZED_BUTTON_PAGE_NAME      wxT("Maximized button")
 
 // Pages that can be added by the user
-#define INSERTED_PAGE_NAME wxT("Inserted ")
-#define ADDED_PAGE_NAME wxT("Added ")
-#define ADDED_PAGE_NAME_BEFORE wxT(" Inserted before ")
-#define ADDED_SUB_PAGE_NAME wxT(" Inserted sub-page ")
+#define INSERTED_PAGE_NAME              wxT("Inserted ")
+#define ADDED_PAGE_NAME                 wxT("Added ")
+#define ADDED_PAGE_NAME_BEFORE          wxT(" Inserted before ")
+#define ADDED_SUB_PAGE_NAME             wxT(" Inserted sub-page ")
 
 
