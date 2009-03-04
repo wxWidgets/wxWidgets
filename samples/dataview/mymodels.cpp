@@ -369,7 +369,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
     // row will be deleted first. Otherwise the
     // remaining indeces would all be wrong.
     rows.Sort( my_sort_reverse );
-    for (i = 0; i < rows.GetCount(); i++)
+    for (unsigned int i = 0; i < rows.GetCount(); i++)
         m_array.RemoveAt( rows[i] );
 
     // This is just to test if wxDataViewCtrl can
