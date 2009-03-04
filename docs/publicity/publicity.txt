@@ -88,7 +88,7 @@ a) FreshMeat:
    - hit "new release" at the top
    - follow the step by step
 
-b) wx-announce mailing list: mailto:wx-announce@lists.wxwindows.org
+b) wx-announce mailing list: mailto:wx-announce@lists.wxwidgets.org
 
    [where is the announcement text? TODO]
 
