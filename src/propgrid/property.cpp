@@ -1327,7 +1327,12 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
 
     // We need to check for these, otherwise GetGrid() may fail.
     if ( flags & wxPG_SETVAL_REFRESH_EDITOR )
+    {
         RefreshEditor();
+        wxPropertyGrid* pg = GetGridIfDisplayed();
+        if ( pg )
+            pg->DrawItemAndValueRelated(this);
+    }
 }
 
 
@@ -1977,6 +1982,8 @@ bool wxPGProperty::IsVisible() const
 wxPropertyGrid* wxPGProperty::GetGridIfDisplayed() const
 {
     wxPropertyGridPageState* state = GetParentState();
+    if ( !state )
+        return NULL;
     wxPropertyGrid* propGrid = state->GetGrid();
     if ( state == propGrid->GetState() )
         return propGrid;

@@ -1897,12 +1897,15 @@ public:
         SetValueInEvent() instead.
 
         @param pList
-        Pointer to list variant that contains child values. Used to indicate
-        which children should be marked as modified.
+            Pointer to list variant that contains child values. Used to
+            indicate which children should be marked as modified.
+
         @param flags
-        Various flags (for instance, wxPG_SETVAL_REFRESH_EDITOR).
+            Various flags (for instance, wxPG_SETVAL_REFRESH_EDITOR, which is
+            enabled by default).
     */
-    void SetValue( wxVariant value, wxVariant* pList = NULL, int flags = 0 );
+    void SetValue( wxVariant value, wxVariant* pList = NULL,
+                   int flags = wxPG_SETVAL_REFRESH_EDITOR );
 
     /** Set wxBitmap in front of the value. This bitmap may be ignored
         by custom cell renderers.

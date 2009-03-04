@@ -543,13 +543,7 @@ void wxPropertyGridInterface::SetPropVal( wxPGPropArg id, wxVariant& value )
     wxPG_PROP_ARG_CALL_PROLOG()
 
     if ( p )
-    {
         p->SetValue(value);
-        wxPropertyGrid* propGrid = p->GetGridIfDisplayed();
-        if ( propGrid )
-            propGrid->DrawItemAndValueRelated( p );
-
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -558,12 +552,8 @@ void wxPropertyGridInterface::SetPropertyValueString( wxPGPropArg id, const wxSt
 {
     wxPG_PROP_ARG_CALL_PROLOG()
 
-    if ( m_pState->DoSetPropertyValueString(p,value) )
-    {
-        wxPropertyGrid* propGrid = p->GetGridIfDisplayed();
-        if ( propGrid )
-            propGrid->DrawItemAndValueRelated( p );
-    }
+    if ( p )
+        m_pState->DoSetPropertyValueString(p, value);
 }
 
 // -----------------------------------------------------------------------

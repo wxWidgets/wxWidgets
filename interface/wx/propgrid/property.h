@@ -1371,10 +1371,11 @@ public:
             Pointer to list variant that contains child values. Used to indicate
             which children should be marked as modified. Usually you just use @NULL.
         @param flags
-            Use wxPG_SETVAL_REFRESH_EDITOR to update editor control, if it
-            was selected.
+            wxPG_SETVAL_REFRESH_EDITOR is set by default, to refresh editor
+            and redraw properties.
     */
-    void SetValue( wxVariant value, wxVariant* pList = NULL, int flags = 0 );
+    void SetValue( wxVariant value, wxVariant* pList = NULL,
+                   int flags = wxPG_SETVAL_REFRESH_EDITOR );
 
     /**
         Set wxBitmap in front of the value. This bitmap may be ignored

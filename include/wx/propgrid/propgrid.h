@@ -1358,6 +1358,21 @@ public:
 
     virtual void SetWindowStyleFlag( long style );
 
+    void DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 );
+
+    void DrawItem( wxPGProperty* p )
+    {
+        DrawItems(p,p);
+    }
+
+    virtual void DrawItemAndChildren( wxPGProperty* p );
+
+    /**
+        Draws item, children, and consequtive parents as long as category is
+        not met.
+     */
+    void DrawItemAndValueRelated( wxPGProperty* p );
+
 protected:
 
     /**
@@ -1759,21 +1774,6 @@ protected:
     /** Draws items from topitemy to bottomitemy */
     void DrawItems( wxDC& dc, unsigned int topitemy, unsigned int bottomitemy,
                     const wxRect* clip_rect = (const wxRect*) NULL );
-
-    void DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 );
-
-    void DrawItem( wxPGProperty* p )
-    {
-        DrawItems(p,p);
-    }
-
-    virtual void DrawItemAndChildren( wxPGProperty* p );
-
-    /**
-        Draws item, children, and consequtive parents as long as category is
-        not met.
-     */
-    void DrawItemAndValueRelated( wxPGProperty* p );
 
     // Translate wxKeyEvent to wxPG_ACTION_XXX
     int KeyEventToActions(wxKeyEvent &event, int* pSecond) const;
