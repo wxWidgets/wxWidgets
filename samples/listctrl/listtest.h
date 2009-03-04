@@ -153,7 +153,6 @@ protected:
 
     wxPanel *m_panel;
     MyListCtrl *m_listCtrl;
-    wxListCtrl *m_simpleListCtrl;
     wxTextCtrl *m_logWindow;
 
 private:

@@ -92,18 +92,18 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
-  if ( !wxApp::OnInit() )
-      return false;
+    if ( !wxApp::OnInit() )
+        return false;
 
-  // Create the main frame window
-  MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"));
+    // Create the main frame window
+    MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"));
 
-  // Show the frame
-  frame->Show(true);
+    // Show the frame
+    frame->Show(true);
 
-  SetTopWindow(frame);
+    SetTopWindow(frame);
 
-  return true;
+    return true;
 }
 
 
@@ -157,11 +157,10 @@ END_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame(const wxChar *title)
-       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(800, 500))
+       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(600, 500))
 {
     m_listCtrl = NULL;
     m_logWindow = NULL;
-    m_simpleListCtrl = NULL;
     m_smallVirtual = false;
 
     // Give it an icon
@@ -266,24 +265,11 @@ MyFrame::MyFrame(const wxChar *title)
 
     RecreateList(wxLC_REPORT | wxLC_SINGLE_SEL);
 
-    // Also add a simple list to the sample
-
-    m_simpleListCtrl = new wxListCtrl( m_panel, -1, wxDefaultPosition, wxDefaultSize,
-                                       wxLC_REPORT | wxLC_SINGLE_SEL );
-    m_simpleListCtrl->InsertColumn(0, "Column 1", wxLIST_FORMAT_LEFT, 80);
-    m_simpleListCtrl->InsertColumn(1, "Column 2", wxLIST_FORMAT_LEFT, 100);
-    m_simpleListCtrl->InsertColumn(2, "Column 3", wxLIST_FORMAT_LEFT, 100);
-
-    for ( int i = 0; i < NUM_ITEMS; i++ )
-    {
-        wxString buf;
-        buf.Printf(_T("Item %d"), i);
-        long tmp = m_simpleListCtrl->InsertItem(i, buf, 0);
-        buf.Printf(_T("Col 1, item %d"), i);
-        m_simpleListCtrl->SetItem(tmp, 1, buf);
-        buf.Printf(_T("Col 2, item %d"), i);
-        m_simpleListCtrl->SetItem(tmp, 2, buf);
-    }
+#ifdef __WXMSW__
+    // this is useful to know specially when debugging :)
+    wxLogMessage("Your version of comctl32.dll is: %d", 
+                 wxApp::GetComCtl32Version());
+#endif
 
 #if wxUSE_STATUSBAR
     CreateStatusBar();
@@ -312,8 +298,7 @@ void MyFrame::DoSize()
 
     wxSize size = GetClientSize();
     wxCoord y = (2*size.y)/3;
-    m_listCtrl->SetSize(0, 0, size.x-320, y);
-    if (m_simpleListCtrl) m_simpleListCtrl->SetSize(size.x-320+1, 0, 320-1, y);
+    m_listCtrl->SetSize(0, 0, size.x, y);
     m_logWindow->SetSize(0, y + 1, size.x, size.y - y -1);
 }
 
