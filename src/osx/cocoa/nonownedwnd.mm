@@ -483,11 +483,13 @@ void wxNonOwnedWindowCocoaImpl::GetSize( int &width, int &height ) const
     height = rect.size.height;
 }
 
-void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &right, int &width, int &height ) const
+void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &top, int &width, int &height ) const
 {
     NSRect outer = NSMakeRect(100,100,100,100);
     NSRect content = [NSWindow contentRectForFrameRect:outer styleMask:[m_macWindow styleMask] ];
     NSRect rect = [[m_macWindow contentView] frame];
+    left = rect.origin.x;
+    top = rect.origin.y;
     width = rect.size.width;
     height = rect.size.height;
 }
