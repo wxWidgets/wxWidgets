@@ -181,15 +181,15 @@ int wxFileDialog::ShowModal()
                 didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:) 
                 contextInfo: nil];
             [sheetDelegate waitForSheetToFinish];
-            result = [sheetDelegate code];
+            returnCode = [sheetDelegate code];
             [sheetDelegate release];
         }
         else
         {
-            result = [sPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() ];
+            returnCode = [sPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() ];
         }
         
-        if (result == NSOKButton )
+        if (returnCode == NSOKButton )
         {
             panel = sPanel;
             result = wxID_OK;
@@ -221,15 +221,15 @@ int wxFileDialog::ShowModal()
                 didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:) 
                 contextInfo: nil];
             [sheetDelegate waitForSheetToFinish];
-            result = [sheetDelegate code];
+            returnCode = [sheetDelegate code];
             [sheetDelegate release];
         }
         else
         {
-            result = [oPanel runModalForDirectory:dir.AsNSString() 
+            returnCode = [oPanel runModalForDirectory:dir.AsNSString() 
                         file:file.AsNSString() types:types];
         }
-        if (result == NSOKButton )
+        if (returnCode == NSOKButton )
         {
             panel = oPanel;
             result = wxID_OK;
