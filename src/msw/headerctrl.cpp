@@ -106,7 +106,9 @@ WXDWORD wxHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     // the control looks nicer with these styles and there doesn't seem to be
     // any reason to not use them so we always do (as for HDS_HORZ it is 0
     // anyhow but include it for clarity)
-    msStyle |= HDS_HORZ | HDS_BUTTONS | HDS_FLAT | HDS_FULLDRAG | HDS_HOTTRACK;
+    // NOTE: don't use however HDS_FLAT because it makes the control look
+    //       non-native when running WinXP in classic mode
+    msStyle |= HDS_HORZ | HDS_BUTTONS | HDS_FULLDRAG | HDS_HOTTRACK;
 
     return msStyle;
 }
