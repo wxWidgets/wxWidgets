@@ -1344,6 +1344,7 @@ bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event, text );
+    wxevent.SetEventObject(GetWXPeer());  
 
     return GetWXPeer()->OSXHandleKeyEvent(wxevent);
 }
@@ -1352,7 +1353,7 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 {
     wxKeyEvent wxevent(wxEVT_KEY_DOWN);
     SetupKeyEvent( wxevent, event );
-    
+    wxevent.SetEventObject(GetWXPeer());    
     bool result = GetWXPeer()->OSXHandleKeyEvent(wxevent);
 
     // this will fire higher level events, like insertText, to help
@@ -1372,6 +1373,7 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     wxPoint pt = wxFromNSPoint( m_osxView, clickLocation );
     wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
     SetupMouseEvent( wxevent , event ) ;
+    wxevent.SetEventObject(GetWXPeer());
     wxevent.m_x = pt.x;
     wxevent.m_y = pt.y;
 
