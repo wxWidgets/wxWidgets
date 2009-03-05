@@ -526,6 +526,7 @@ wxMac:
 
 wxMSW:
 
+- Fix many problems with selection in multi-selection wxTreeCtrl (Jonathan Liu).
 - Fixed infinite loop in wxThread::Wait() in console applications.
 - Return the restored window size from GetSize() when window is minimized.
 - wxCheckListBox now looks more native, especially under XP (Marcin Malich).

@@ -233,6 +233,22 @@ protected:
     // obtain the user data for the lParam member of TV_ITEM
     class wxTreeItemParam *GetItemParam(const wxTreeItemId& item) const;
 
+    // update the event to include the items client data and pass it to
+    // HandleWindowEvent(), return true if it processed it
+    bool HandleTreeEvent(wxTreeEvent& event) const;
+
+    // pass the event to HandleTreeEvent() and return true if the event was
+    // either unprocessed or not vetoed
+    bool IsTreeEventAllowed(wxTreeEvent& event) const
+    {
+        return !HandleTreeEvent(event) || event.IsAllowed();
+    }
+
+    // handle a key event in a multi-selection control
+    //
+    // return true if the key was processed, false otherwise
+    bool MSWHandleSelectionKey(WPARAM vkey);
+
 
     // data used only while editing the item label:
     wxTextCtrl  *m_textCtrl;        // text control in which it is edited
@@ -247,6 +263,8 @@ private:
     void DoSetItem(wxTreeViewItem *tvItem);
 
     void DoExpand(const wxTreeItemId& item, int flag);
+
+    void DoUnselectAll();
 
     void DeleteTextCtrl();
 
@@ -272,6 +290,15 @@ private:
     // the starting item for selection with Shift
     wxTreeItemId m_htSelStart, m_htClickedItem;
     wxPoint m_ptClick;
+
+    // whether dragging has started
+    bool m_dragStarted;
+
+    // whether focus was lost between subsequent clicks of a single item
+    bool m_focusLost;
+
+    // whether we need to trigger a state image click event
+    bool m_triggerStateImageClick;
 
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;
