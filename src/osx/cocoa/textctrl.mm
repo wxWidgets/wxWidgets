@@ -195,6 +195,27 @@
     }
 }
 
+typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl *control, NSTextView* textView, SEL commandSelector);
+
+- (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
+{
+    if (commandSelector == @selector(insertNewline:))
+    {
+        if ( impl  )
+        {
+            wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+            if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER ) 
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
+                event.SetEventObject( wxpeer );
+                event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+                wxpeer->HandleWindowEvent( event );
+            }
+        }
+    }
+    
+    return NO;
+}
 /*
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification
 {
@@ -217,7 +238,7 @@
 wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
 {
     m_scrollView = (NSScrollView*) w;
-    [w setImplementation: this];
+    [(wxNSTextField*)w setImplementation: this];
     
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:NO];
@@ -297,7 +318,9 @@ void wxNSTextViewControl::GetSelection( long* from, long* to) const
 
 void wxNSTextViewControl::SetSelection( long from , long to )
 {
-    [m_textView setSelectedRange:NSMakeRange(from, to-from)];
+    NSRange selrange = NSMakeRange(from, to-from);
+    [m_textView setSelectedRange:selrange];
+    [m_textView scrollRangeToVisible:selrange];
 }
 
 void wxNSTextViewControl::WriteText(const wxString& str) 
@@ -305,6 +328,7 @@ void wxNSTextViewControl::WriteText(const wxString& str)
     // temp hack to get logging working early
     wxString former = GetStringValue();
     SetStringValue( former + str );
+    SetSelection(GetStringValue().length(), GetStringValue().length());
 }
 
 // wxNSTextFieldControl
@@ -392,6 +416,7 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
     // temp hack to get logging working early
     wxString former = GetStringValue();
     SetStringValue( former + str );
+    SetSelection(GetStringValue().length(), GetStringValue().length());
 }
 
 void wxNSTextFieldControl::controlAction(WXWidget slf, void* _cmd, void *sender)
