@@ -173,7 +173,9 @@ void wxMacWakeUp()
 {
     resultCode = returnCode;
     sheetFinished = YES;
-    [sheet orderOut: self];
+    // NSAlerts don't need nor respond to orderOut
+    if ([sheet respondsToSelector:@selector(orderOut:)])
+        [sheet orderOut: self];
 }
 @end
 
