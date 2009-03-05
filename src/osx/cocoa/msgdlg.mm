@@ -183,8 +183,30 @@ int wxMessageDialog::ShowModal()
             }
         }
 
-        int button = [alert runModal];
-        
+
+        wxNonOwnedWindow* parentWindow = NULL;
+        int button = -1;
+                
+        if (GetParent()) 
+        {
+            parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
+        }
+ 
+        if (parentWindow)
+        {
+            NSWindow* nativeParent = parentWindow->GetWXWindow();
+            ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init]; 
+            [alert beginSheetModalForWindow: nativeParent modalDelegate: sheetDelegate 
+                didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:) 
+                contextInfo: nil];
+            [sheetDelegate waitForSheetToFinish];
+            button = [sheetDelegate code];
+            [sheetDelegate release];
+        }
+        else
+        {
+            button = [alert runModal];
+        }
         [alert release];
         
         if ( button < NSAlertFirstButtonReturn )
