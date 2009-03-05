@@ -2131,7 +2131,7 @@ bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id_)
     return true;
 }
 
-bool wxTreeCtrl::MSWHandleSelectionKey(WPARAM vkey)
+bool wxTreeCtrl::MSWHandleSelectionKey(unsigned vkey)
 {
     const bool bCtrl = wxIsCtrlDown();
     const bool bShift = wxIsShiftDown();

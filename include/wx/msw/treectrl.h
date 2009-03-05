@@ -247,7 +247,7 @@ protected:
     // handle a key event in a multi-selection control
     //
     // return true if the key was processed, false otherwise
-    bool MSWHandleSelectionKey(WPARAM vkey);
+    bool MSWHandleSelectionKey(unsigned vkey);
 
 
     // data used only while editing the item label:
