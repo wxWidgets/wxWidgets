@@ -17,6 +17,7 @@ typedef long wxTextPos;
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
 class WXDLLIMPEXP_FWD_CORE wxTextEntryHintData;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 
 // ----------------------------------------------------------------------------
 // wxTextEntryBase
