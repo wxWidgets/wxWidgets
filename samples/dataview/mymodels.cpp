@@ -351,7 +351,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
 {
     unsigned i;
     wxArrayInt rows;
-    for (int i = 0; i < items.GetCount(); i++)
+    for (i = 0; i < items.GetCount(); i++)
     {
         unsigned int row = GetRow( items[i] );
         if (row < m_array.GetCount())
