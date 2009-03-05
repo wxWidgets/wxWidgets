@@ -134,8 +134,8 @@ long wxOSXTranslateCocoaKey( NSEvent* event )
                     retval = WXK_HELP;
                     break;
                 default:
-                    int intchar = [[event characters] characterAtIndex: 0];
-                    if ( intchar >= NSF1FunctionKey && intchar >= NSF24FunctionKey )
+                    int intchar = [s characterAtIndex: 0];
+                    if ( intchar >= NSF1FunctionKey && intchar <= NSF24FunctionKey )
                         retval = WXK_F1 + (intchar - NSF1FunctionKey );
                     break;
             }
