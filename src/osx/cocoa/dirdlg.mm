@@ -66,8 +66,36 @@ int wxDirDialog::ShowModal()
     wxCFStringRef dir( m_path );
     
     m_path = wxEmptyString;
+
+    wxNonOwnedWindow* parentWindow = NULL;
+    int returnCode = -1;
     
-    if ( [oPanel runModalForDirectory:dir.AsNSString() file:nil types:nil] == NSOKButton )
+    if (GetParent()) 
+    {
+        parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
+    }
+    else
+    {
+        fprintf(stderr, "No parent!\n");
+    }
+    
+    if (parentWindow)
+    {
+        NSWindow* nativeParent = parentWindow->GetWXWindow();
+        ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init]; 
+        [oPanel beginSheetForDirectory:dir.AsNSString() file:nil types: nil 
+            modalForWindow: nativeParent modalDelegate: sheetDelegate 
+            didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:) 
+            contextInfo: nil];
+        [sheetDelegate waitForSheetToFinish];
+        returnCode = [sheetDelegate code];
+        [sheetDelegate release];
+    }
+    else
+    {
+        returnCode = (NSInteger)[oPanel runModalForDirectory:dir.AsNSString() file:nil types:nil];
+    }
+    if (returnCode == NSOKButton )
     {
         wxCFStringRef resultpath( [[[oPanel filenames] objectAtIndex:0] retain] );
         

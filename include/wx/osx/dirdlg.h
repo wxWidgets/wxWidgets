@@ -26,7 +26,6 @@ public:
     virtual int ShowModal();
 
 protected:
-    wxWindow *  m_parent;
 
     DECLARE_DYNAMIC_CLASS(wxDirDialog)
 };
