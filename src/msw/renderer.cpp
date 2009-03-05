@@ -163,10 +163,32 @@ private:
 #endif
 
 // ----------------------------------------------------------------------------
+// methods common to wxRendererMSW and wxRendererXP
+// ----------------------------------------------------------------------------
+
+class wxRendererMSWBase : public wxDelegateRendererNative
+{
+public:
+    wxRendererMSWBase() { }
+    wxRendererMSWBase(wxRendererNative& rendererNative)
+        : wxDelegateRendererNative(rendererNative) { }
+
+    void DrawFocusRect(wxWindow * win,
+                        wxDC& dc,
+                        const wxRect& rect,
+                        int flags = 0);
+
+    void DrawItemSelectionRect(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags = 0);
+};
+
+// ----------------------------------------------------------------------------
 // wxRendererMSW: wxRendererNative implementation for "old" Win32 systems
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRendererMSW : public wxDelegateRendererNative
+class WXDLLEXPORT wxRendererMSW : public wxRendererMSWBase
 {
 public:
     wxRendererMSW() { }
@@ -187,11 +209,6 @@ public:
                                 wxDC& dc,
                                 const wxRect& rect,
                                 int flags = 0);
-
-    virtual void DrawFocusRect(wxWindow* win,
-                               wxDC& dc,
-                               const wxRect& rect,
-                               int flags = 0);
 
     virtual void DrawChoice(wxWindow* win,
                             wxDC& dc,
@@ -227,10 +244,10 @@ private:
 
 #if wxUSE_UXTHEME
 
-class WXDLLEXPORT wxRendererXP : public wxDelegateRendererNative
+class WXDLLEXPORT wxRendererXP : public wxRendererMSWBase
 {
 public:
-    wxRendererXP() : wxDelegateRendererNative(wxRendererMSW::Get()) { }
+    wxRendererXP() : wxRendererMSWBase(wxRendererMSW::Get()) { }
 
     static wxRendererNative& Get();
 
@@ -269,18 +286,59 @@ public:
                                 const wxRect& rect,
                                 int flags = 0);
 
-    virtual void DrawItemSelectionRect(wxWindow *win,
-                                       wxDC& dc,
-                                       const wxRect& rect,
-                                       int flags = 0 );
-
-
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 private:
     wxDECLARE_NO_COPY_CLASS(wxRendererXP);
 };
 
 #endif // wxUSE_UXTHEME
+
+
+// ============================================================================
+// wxRendererMSWBase implementation
+// ============================================================================
+
+void wxRendererMSWBase::DrawFocusRect(wxWindow * WXUNUSED(win),
+                                      wxDC& dc,
+                                      const wxRect& rect,
+                                      int WXUNUSED(flags))
+{
+    RECT rc;
+    wxCopyRectToRECT(rect, rc);
+
+    ::DrawFocusRect(GraphicsHDC(&dc), &rc);
+}
+
+void wxRendererMSWBase::DrawItemSelectionRect(wxWindow *win,
+                                              wxDC& dc,
+                                              const wxRect& rect,
+                                              int flags)
+{
+    wxBrush brush;
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        if ( flags & wxCONTROL_FOCUSED )
+        {
+            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+        }
+        else // !focused
+        {
+            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+        }
+    }
+    else // !selected
+    {
+        brush = *wxTRANSPARENT_BRUSH;
+    }
+
+    dc.SetBrush(brush);
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle( rect );
+
+    if ((flags & wxCONTROL_FOCUSED) && (flags & wxCONTROL_CURRENT))
+        DrawFocusRect( win, dc, rect, flags );
+}
+
 
 // ============================================================================
 // wxRendererNative and wxRendererMSW implementation
@@ -375,17 +433,6 @@ wxRendererMSW::DrawPushButton(wxWindow * WXUNUSED(win),
     wxCopyRectToRECT(rect, rc);
 
     ::DrawFrameControl(GraphicsHDC(&dc), &rc, DFC_BUTTON, style);
-}
-
-void wxRendererMSW::DrawFocusRect(wxWindow * WXUNUSED(win),
-                                  wxDC& dc,
-                                  const wxRect& rect,
-                                  int WXUNUSED(flags))
-{
-    RECT rc;
-    wxCopyRectToRECT(rect, rc);
-
-    ::DrawFocusRect(GraphicsHDC(&dc), &rc);
 }
 
 wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
@@ -739,38 +786,6 @@ wxRendererXP::DrawPushButton(wxWindow * win,
                                 NULL
                             );
 }
-
-void
-wxRendererXP::DrawItemSelectionRect(wxWindow *win,
-                                    wxDC& dc,
-                                    const wxRect& rect,
-                                    int flags)
-{
-    wxBrush brush;
-    if ( flags & wxCONTROL_SELECTED )
-    {
-        if ( flags & wxCONTROL_FOCUSED )
-        {
-            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-        }
-        else // !focused
-        {
-            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-        }
-    }
-    else // !selected
-    {
-        brush = *wxTRANSPARENT_BRUSH;
-    }
-
-    dc.SetBrush(brush);
-    dc.SetPen(*wxTRANSPARENT_PEN);
-    dc.DrawRectangle( rect );
-
-    if ((flags & wxCONTROL_FOCUSED) && (flags & wxCONTROL_CURRENT))
-        DrawFocusRect( win, dc, rect, flags );
-}
-
 
 
 // ----------------------------------------------------------------------------

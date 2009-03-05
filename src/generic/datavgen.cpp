@@ -861,14 +861,6 @@ bool wxDataViewToggleRenderer::GetValue( wxVariant &WXUNUSED(value) ) const
 
 bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state) )
 {
-    // User wxRenderer here
-
-    wxRect rect;
-    rect.x = cell.x + cell.width/2 - 10;
-    rect.width = 20;
-    rect.y = cell.y + cell.height/2 - 10;
-    rect.height = 20;
-
     int flags = 0;
     if (m_toggle)
         flags |= wxCONTROL_CHECKED;
@@ -878,7 +870,7 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     wxRendererNative::Get().DrawCheckBox(
             GetOwner()->GetOwner(),
             *dc,
-            rect,
+            cell,
             flags );
 
     return true;
@@ -897,7 +889,9 @@ bool wxDataViewToggleRenderer::Activate( wxRect WXUNUSED(cell),
 
 wxSize wxDataViewToggleRenderer::GetSize() const
 {
-    return wxSize(20,20);
+    // the window parameter is not used by GetCheckBoxSize() so it's
+    // safe to pass NULL
+    return wxRendererNative::Get().GetCheckBoxSize(NULL);
 }
 
 // ---------------------------------------------------------
@@ -1681,7 +1675,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetPen(m_penRule);
         dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-        for (unsigned int i = item_start; i <= item_last+1; i++)
+        for (unsigned int i = item_start; i <= item_last; i++)
         {
             int y = GetLineStart( i );
             dc.DrawLine(x_start, y, x_last, y);
