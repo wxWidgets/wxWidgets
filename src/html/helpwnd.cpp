@@ -564,10 +564,12 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     // showtime
     if ( m_NavigPan && m_Splitter )
     {
-        if (m_NavigPan)
-            m_Splitter->SetMinimumPaneSize(m_NavigPan->GetBestSize().x);
-        else
-            m_Splitter->SetMinimumPaneSize(20);
+        // The panel will have its own min size which the splitter
+        // should respect
+        //if (m_NavigPan)
+        //    m_Splitter->SetMinimumPaneSize(m_NavigPan->GetBestSize().x);
+        //else
+        m_Splitter->SetMinimumPaneSize(20);
 
         if ( m_Cfg.navig_on )
         {
