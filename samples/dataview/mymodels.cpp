@@ -42,18 +42,18 @@ MyMusicTreeModel::MyMusicTreeModel()
 
     // setup pop music
     m_pop = new MyMusicTreeModelNode( m_root, wxT("Pop music") );
-    m_pop->Append( 
+    m_pop->Append(
         new MyMusicTreeModelNode( m_pop, wxT("You are not alone"), wxT("Michael Jackson"), 1995 ) );
-    m_pop->Append( 
+    m_pop->Append(
         new MyMusicTreeModelNode( m_pop, wxT("Take a bow"), wxT("Madonna"), 1994 ) );
     m_root->Append( m_pop );
 
     // setup classical music
     m_classical = new MyMusicTreeModelNode( m_root, wxT("Classical music") );
-    m_ninth = new MyMusicTreeModelNode( m_classical, wxT("Ninth symphony"), 
+    m_ninth = new MyMusicTreeModelNode( m_classical, wxT("Ninth symphony"),
                                         wxT("Ludwig van Beethoven"), 1824 );
     m_classical->Append( m_ninth );
-    m_classical->Append( new MyMusicTreeModelNode( m_classical, wxT("German Requiem"), 
+    m_classical->Append( new MyMusicTreeModelNode( m_classical, wxT("German Requiem"),
                                                    wxT("Johannes Brahms"), 1868 ) );
     m_root->Append( m_classical );
 
@@ -78,7 +78,7 @@ int MyMusicTreeModel::GetYear( const wxDataViewItem &item ) const
     return node->m_year;
 }
 
-void MyMusicTreeModel::AddToClassical( const wxString &title, const wxString &artist, 
+void MyMusicTreeModel::AddToClassical( const wxString &title, const wxString &artist,
                                        unsigned int year )
 {
     if (!m_classical)
@@ -115,7 +115,7 @@ void MyMusicTreeModel::Delete( const wxDataViewItem &item )
     {
         wxASSERT(node == m_root);
 
-        // don't make the control completely empty: 
+        // don't make the control completely empty:
         wxLogError("Cannot remove the root item!");
         return;
     }
@@ -176,16 +176,16 @@ void MyMusicTreeModel::GetValue( wxVariant &variant,
     switch (col)
     {
     case 0:
-        variant = node->m_title; 
+        variant = node->m_title;
         break;
-    case 1: 
-        variant = node->m_artist; 
+    case 1:
+        variant = node->m_artist;
         break;
-    case 2: 
-        variant = (long) node->m_year; 
+    case 2:
+        variant = (long) node->m_year;
         break;
-    case 3: 
-        variant = node->m_quality; 
+    case 3:
+        variant = node->m_quality;
         break;
     case 4:
         // wxMac doesn't conceal the popularity progress renderer, return 0 for containers
@@ -215,20 +215,20 @@ bool MyMusicTreeModel::SetValue( const wxVariant &variant,
     MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();
     switch (col)
     {
-        case 0: 
-            node->m_title = variant.GetString(); 
+        case 0:
+            node->m_title = variant.GetString();
             return true;
-        case 1: 
-            node->m_artist = variant.GetString(); 
+        case 1:
+            node->m_artist = variant.GetString();
             return true;
-        case 2: 
-            node->m_year = variant.GetLong(); 
+        case 2:
+            node->m_year = variant.GetLong();
             return true;
-        case 3: 
-            node->m_quality = variant.GetString(); 
+        case 3:
+            node->m_quality = variant.GetString();
             return true;
 
-        default: 
+        default:
             wxLogError( wxT("MyMusicTreeModel::SetValue: wrong column") );
     }
     return false;
@@ -260,7 +260,7 @@ bool MyMusicTreeModel::IsContainer( const wxDataViewItem &item ) const
     return node->IsContainer();
 }
 
-unsigned int MyMusicTreeModel::GetChildren( const wxDataViewItem &parent, 
+unsigned int MyMusicTreeModel::GetChildren( const wxDataViewItem &parent,
                                             wxDataViewItemArray &array ) const
 {
     MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) parent.GetID();
@@ -319,7 +319,7 @@ MyListModel::MyListModel() :
     m_virtualItems = INITIAL_NUMBER_OF_ITEMS;
 
     // the first 100 items are really stored in this model;
-    // all the others are synthetized on request 
+    // all the others are synthetized on request
     for (unsigned int i = 0; i < 100; i++)
     {
         wxString str;
@@ -349,8 +349,9 @@ void MyListModel::DeleteItem( const wxDataViewItem &item )
 
 void MyListModel::DeleteItems( const wxDataViewItemArray &items )
 {
+    unsigned i;
     wxArrayInt rows;
-    for (unsigned int i = 0; i < items.GetCount(); i++)
+    for (int i = 0; i < items.GetCount(); i++)
     {
         unsigned int row = GetRow( items[i] );
         if (row < m_array.GetCount())
@@ -369,7 +370,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
     // row will be deleted first. Otherwise the
     // remaining indeces would all be wrong.
     rows.Sort( my_sort_reverse );
-    for (unsigned int i = 0; i < rows.GetCount(); i++)
+    for (i = 0; i < rows.GetCount(); i++)
         m_array.RemoveAt( rows[i] );
 
     // This is just to test if wxDataViewCtrl can
@@ -394,12 +395,12 @@ void MyListModel::GetValueByRow( wxVariant &variant,
             variant = wxString::Format( wxT("virtual row %d"), row );
         else
             variant = m_array[ row ];
-    } 
+    }
     else if (col==1)
     {
         wxDataViewIconText data( wxT("test"), m_icon[ row%2 ] );
         variant << data;
-    } 
+    }
     else if (col==2)
     {
         if (row >= m_array.GetCount())
@@ -409,7 +410,7 @@ void MyListModel::GetValueByRow( wxVariant &variant,
     }
 }
 
-bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col, 
+bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
                                 wxDataViewItemAttr &attr )
 {
     if (col != 2)
