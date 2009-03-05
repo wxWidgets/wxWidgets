@@ -48,7 +48,7 @@ Point bounds;
     {
         wxClientDC dc(const_cast<wxStaticText*>(this));
         wxCoord width, height ;
-        dc.GetTextExtent( m_label , &width, &height);
+        dc.GetMultiLineTextExtent( m_label , &width, &height);
         // Some labels seem to have their last characters
         // stripped out.  Adding 4 pixels seems to be enough to fix this.
         bounds.h = width+4;
