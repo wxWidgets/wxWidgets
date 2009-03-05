@@ -271,7 +271,7 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 
     Show();
 
-    // There is is a problem if these are still in use
+    // There is a problem if these are still in use
     wxASSERT(!m_handlerFocus || !m_handlerFocus->GetNextHandler());
     wxASSERT(!m_handlerPopup || !m_handlerPopup->GetNextHandler());
 
