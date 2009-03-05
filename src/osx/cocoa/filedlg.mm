@@ -51,7 +51,6 @@ wxFileDialog::wxFileDialog(
 {
 }
 
-
 NSArray* GetTypesFromFilter( const wxString filter )
 {
     NSMutableArray* types = nil;
@@ -149,6 +148,14 @@ int wxFileDialog::ShowModal()
 
     m_path = wxEmptyString;
     m_fileNames.Clear();
+    
+    wxNonOwnedWindow* parentWindow = NULL;
+    int returnCode = -1;
+    
+    if (GetParent()) 
+    {
+        parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
+    }
 
     if (HasFlag(wxFD_SAVE))
     {
@@ -164,8 +171,25 @@ int wxFileDialog::ShowModal()
         if ( HasFlag(wxFD_OVERWRITE_PROMPT) )
         {
         }
-
-        if ( [sPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() ] == NSOKButton )
+    
+        if (parentWindow)
+        {
+            NSWindow* nativeParent = parentWindow->GetWXWindow();
+            ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init]; 
+            [sPanel beginSheetForDirectory:dir.AsNSString() file:file.AsNSString() 
+                modalForWindow: nativeParent modalDelegate: sheetDelegate 
+                didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:) 
+                contextInfo: nil];
+            [sheetDelegate waitForSheetToFinish];
+            result = [sheetDelegate code];
+            [sheetDelegate release];
+        }
+        else
+        {
+            result = [sPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() ];
+        }
+        
+        if (result == NSOKButton )
         {
             panel = sPanel;
             result = wxID_OK;
@@ -187,7 +211,25 @@ int wxFileDialog::ShowModal()
         [oPanel setCanChooseFiles:YES];
         [oPanel setMessage:cf.AsNSString()];
 
-        if ( [oPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() types:types] == NSOKButton )
+        if (parentWindow)
+        {
+            NSWindow* nativeParent = parentWindow->GetWXWindow();
+            ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init]; 
+            [oPanel beginSheetForDirectory:dir.AsNSString() file:file.AsNSString() 
+                types: types modalForWindow: nativeParent 
+                modalDelegate: sheetDelegate 
+                didEndSelector: @selector(sheetDidEnd:returnCode:contextInfo:) 
+                contextInfo: nil];
+            [sheetDelegate waitForSheetToFinish];
+            result = [sheetDelegate code];
+            [sheetDelegate release];
+        }
+        else
+        {
+            result = [oPanel runModalForDirectory:dir.AsNSString() 
+                        file:file.AsNSString() types:types];
+        }
+        if (result == NSOKButton )
         {
             panel = oPanel;
             result = wxID_OK;

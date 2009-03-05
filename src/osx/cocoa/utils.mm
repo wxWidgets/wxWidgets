@@ -138,6 +138,45 @@ void wxMacWakeUp()
 }
 @end
 
+/* 
+    allows ShowModal to work when using sheets.
+    see include/wx/osx/cocoa/private.h for more info 
+*/
+@implementation ModalDialogDelegate
+- (id)init
+{
+    [super init];
+    sheetFinished = NO;
+    resultCode = -1;
+    return self;
+}
+
+- (BOOL)finished 
+{
+    return sheetFinished;
+}
+
+- (int)code
+{
+    return resultCode;
+}
+
+- (void)waitForSheetToFinish
+{
+    while (!sheetFinished)
+    {
+        wxSafeYield();
+    }
+}
+
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    resultCode = returnCode;
+    sheetFinished = YES;
+    [sheet orderOut: self];
+}
+@end
+
 bool wxApp::DoInitGui()
 {
     [NSApplication sharedApplication];

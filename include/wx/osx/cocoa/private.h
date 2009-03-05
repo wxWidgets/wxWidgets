@@ -277,6 +277,24 @@ protected :
     
     void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c);
 
+    /*
+    We need this for ShowModal, as the sheet just disables the parent window and
+    returns control to the app, whereas we don't want to return from ShowModal
+    until the sheet has been dismissed.
+    */
+    @interface ModalDialogDelegate : NSObject
+    {
+        BOOL sheetFinished;
+        int resultCode;
+    }
+
+    - (BOOL)finished;
+    - (int)code;
+    - (void)waitForSheetToFinish;
+    - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+    @end
+
+
 #endif // __OBJC__
 
 // NSCursor
