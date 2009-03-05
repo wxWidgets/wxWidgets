@@ -185,11 +185,14 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(sizerIconAndText, wxSizerFlags(1).Expand().Border());
 
+// Mac typically doesn't use OK buttons just for dismissing dialogs.
+#if !defined(__WXMAC__)
     wxSizer *sizerBtns = CreateButtonSizer(wxOK);
     if ( sizerBtns )
     {
         sizerTop->Add(sizerBtns, wxSizerFlags().Expand().Border());
     }
+#endif
 
     SetSizerAndFit(sizerTop);
 
@@ -239,8 +242,13 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
 
 void wxGenericAboutBox(const wxAboutDialogInfo& info)
 {
+#if !defined(__WXGTK__) && !defined(__WXMAC__)
     wxGenericAboutDialog dlg(info);
     dlg.ShowModal();
+#else
+    wxGenericAboutDialog* dlg = new wxGenericAboutDialog(info);
+    dlg->Show();
+#endif
 }
 
 // currently wxAboutBox is implemented natively only under these platforms, for
