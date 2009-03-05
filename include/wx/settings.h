@@ -29,6 +29,10 @@ enum wxSystemFont
     wxSYS_SYSTEM_FONT,
     wxSYS_DEVICE_DEFAULT_FONT,
 
+    // don't use: this is here just to make the values of enum elements
+    // coincide with the corresponding MSW constants
+    wxSYS_DEFAULT_PALETTE,
+
     // don't use: MSDN says that this is a stock object provided only
     // for compatibility with 16-bit Windows versions earlier than 3.0!
     wxSYS_SYSTEM_FIXED_FONT,
