@@ -201,6 +201,9 @@
 #define wxCC_CUSTOM_IMAGE_MARGIN1       4  // before image
 #define wxCC_CUSTOM_IMAGE_MARGIN2       5  // after image
 
+#define DEFAULT_IMAGE_OFFSET_INCREMENT \
+    (wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2)
+
 #define wxPG_DRAG_MARGIN                30
 
 #if wxPG_NO_CHILD_EVT_MOTION

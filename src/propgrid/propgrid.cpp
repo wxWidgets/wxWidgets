@@ -2978,24 +2978,25 @@ wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
 {
     int itemy = p->GetY2(m_lineHeight);
     int vy = 0;
-    int cust_img_space = 0;
     int splitterX = m_pState->DoGetSplitterPosition(column-1);
     int colEnd = splitterX + m_pState->m_colWidths[column];
+    int imageOffset = 0;
 
     // TODO: If custom image detection changes from current, change this.
-    if ( m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE /*p->m_flags & wxPG_PROP_CUSTOMIMAGE*/ )
+    if ( m_iFlags & wxPG_FL_CUR_USES_CUSTOM_IMAGE )
     {
         //m_iFlags |= wxPG_FL_CUR_USES_CUSTOM_IMAGE;
-        int imwid = p->OnMeasureImage().x;
-        if ( imwid < 1 ) imwid = wxPG_CUSTOM_IMAGE_WIDTH;
-        cust_img_space = imwid + wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2;
+        int iw = p->OnMeasureImage().x;
+        if ( iw < 1 )
+            iw = wxPG_CUSTOM_IMAGE_WIDTH;
+        imageOffset = p->GetImageOffset(iw);
     }
 
     return wxRect
       (
-        splitterX+cust_img_space+wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1,
+        splitterX+imageOffset+wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1,
         itemy-vy,
-        colEnd-splitterX-wxPG_XBEFOREWIDGET-wxPG_CONTROL_MARGIN-cust_img_space-1,
+        colEnd-splitterX-wxPG_XBEFOREWIDGET-wxPG_CONTROL_MARGIN-imageOffset-1,
         m_lineHeight-1
       );
 }

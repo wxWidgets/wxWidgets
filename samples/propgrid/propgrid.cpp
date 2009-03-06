@@ -1531,6 +1531,21 @@ void FormMain::PopulateWithExamples ()
     // Set value after limiting so that it will be applied
     pg->SetPropertyValue( wxT("StringProperty"), wxT("some text") );
 
+    // Add string property with arbitrarily wide bitmap in front of it. We
+    // intentionally lower-than-typical row height here so that the ugly
+    // scaling code wont't be run.
+    pg->Append( new wxStringProperty( wxT("StringPropertyWithBitmap"),
+                wxPG_LABEL,
+                wxT("Test Text")) );
+    wxBitmap myTestBitmap(60, 15, 32);
+    wxMemoryDC mdc;
+    mdc.SelectObject(myTestBitmap);
+    mdc.Clear();
+    mdc.SetPen(*wxBLACK);
+    mdc.DrawLine(0, 0, 60, 15);
+    mdc.SelectObject(wxNullBitmap);
+    pg->SetPropertyImage( wxT("StringPropertyWithBitmap"), myTestBitmap );
+ 
 
     // this value array would be optional if values matched string indexes
     //long flags_prop_values[] = { wxICONIZE, wxCAPTION, wxMINIMIZE_BOX, wxMAXIMIZE_BOX };

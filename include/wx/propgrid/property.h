@@ -2093,6 +2093,11 @@ public:
     // Puts correct indexes to children
     void FixIndicesOfChildren( unsigned int starthere = 0 );
 
+    /**
+        Converts image width into full image offset, with margins.
+    */
+    int GetImageOffset( int imageWidth ) const;
+
 #ifndef SWIG
     // Returns wxPropertyGridPageState in which this property resides.
     wxPropertyGridPageState* GetParentState() const { return m_parentState; }

@@ -94,8 +94,6 @@ wxSize wxPGCellRenderer::GetImageSize( const wxPGProperty* WXUNUSED(property),
 void wxPGCellRenderer::DrawText( wxDC& dc, const wxRect& rect,
                                  int xOffset, const wxString& text ) const
 {
-    if ( xOffset )
-        xOffset += wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2;
     dc.DrawText( text,
                  rect.x+xOffset+wxPG_XBEFORETEXT,
                  rect.y+((rect.height-dc.GetCharHeight())/2) );
@@ -106,9 +104,6 @@ void wxPGCellRenderer::DrawEditorValue( wxDC& dc, const wxRect& rect,
                                         wxPGProperty* property,
                                         const wxPGEditor* editor ) const
 {
-    if ( xOffset )
-        xOffset += wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2;
-
     int yOffset = ((rect.height-dc.GetCharHeight())/2);
 
     if ( editor )
@@ -135,7 +130,7 @@ void wxPGCellRenderer::DrawCaptionSelectionRect( wxDC& dc, int x, int y, int w, 
 
 int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell& cell, int flags ) const
 {
-    int imageOffset = 0;
+    int imageWidth = 0;
 
     // If possible, use cell colours
     if ( !(flags & DontUseCellBgCol) )
@@ -164,10 +159,10 @@ int wxPGCellRenderer::PreDrawCell( wxDC& dc, const wxRect& rect, const wxPGCell&
                        rect.x + wxPG_CONTROL_MARGIN + wxCC_CUSTOM_IMAGE_MARGIN1,
                        rect.y + wxPG_CUSTOM_IMAGE_SPACINGY,
                        true );
-        imageOffset = bmp.GetWidth();
+        imageWidth = bmp.GetWidth();
     }
 
-    return imageOffset;
+    return imageWidth;
 }
 
 // -----------------------------------------------------------------------
@@ -196,12 +191,12 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     const wxPGCell* cell = NULL;
 
     wxString text;
-    int imageOffset = 0;
+    int imageWidth = 0;
     int preDrawFlags = flags;
 
     property->GetDisplayInfo(column, item, flags, &text, &cell);
 
-    imageOffset = PreDrawCell( dc, rect, *cell, preDrawFlags );
+    imageWidth = PreDrawCell( dc, rect, *cell, preDrawFlags );
 
     if ( column == 1 )
     {
@@ -231,7 +226,7 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
 
                 property->OnCustomPaint( dc, imageRect, paintdata );
 
-                imageOffset = paintdata.m_drawnWidth;
+                imageWidth = paintdata.m_drawnWidth;
             }
 
             text = property->GetValueAsString();
@@ -257,6 +252,8 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
         }
     }
 
+    int imageOffset = property->GetImageOffset(imageWidth);
+
     DrawEditorValue( dc, rect, imageOffset, text, property, editor );
 
     // active caption gets nice dotted rectangle
@@ -264,8 +261,11 @@ void wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
     {
         if ( flags & Selected )
         {
-            if ( imageOffset > 0 )
-                imageOffset += wxCC_CUSTOM_IMAGE_MARGIN2 + 4;
+            if ( imageWidth > 0 )
+            {
+                imageOffset -= DEFAULT_IMAGE_OFFSET_INCREMENT;
+                imageWidth += wxCC_CUSTOM_IMAGE_MARGIN2 + 4;
+            }
 
             DrawCaptionSelectionRect( dc,
                                       rect.x+wxPG_XBEFORETEXT-wxPG_CAPRECTXMARGIN+imageOffset,
@@ -1170,6 +1170,22 @@ wxSize wxPGProperty::OnMeasureImage( int WXUNUSED(item) ) const
     return wxSize(0,0);
 }
 
+int wxPGProperty::GetImageOffset( int imageWidth ) const
+{
+    int imageOffset = 0;
+
+    if ( imageWidth )
+    {
+        // Do not increment offset too much for wide images
+        if ( imageWidth <= (wxPG_CUSTOM_IMAGE_WIDTH+5) )
+            imageOffset = imageWidth + DEFAULT_IMAGE_OFFSET_INCREMENT;
+        else
+            imageOffset = imageWidth + 1;
+    }
+
+    return imageOffset;
+}
+
 wxPGCellRenderer* wxPGProperty::GetCellRenderer( int WXUNUSED(column) ) const
 {
     return wxPGGlobalVars->m_defaultRenderer;
@@ -1903,7 +1919,7 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
         wxSize maxSz = GetGrid()->GetImageSize();
         wxSize imSz(bmp.GetWidth(),bmp.GetHeight());
 
-        if ( imSz.x != maxSz.x || imSz.y != maxSz.y )
+        if ( imSz.y != maxSz.y )
         {
             // Create a memory DC
             wxBitmap* bmpNew = new wxBitmap(maxSz.x,maxSz.y,bmp.GetDepth());
@@ -1913,12 +1929,11 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
             // Scale
             // FIXME: This is ugly - use image or wait for scaling patch.
-            double scaleX = (double)maxSz.x / (double)imSz.x;
             double scaleY = (double)maxSz.y / (double)imSz.y;
 
-            dc.SetUserScale(scaleX,scaleY);
+            dc.SetUserScale(scaleY, scaleY);
 
-            dc.DrawBitmap( bmp, 0, 0 );
+            dc.DrawBitmap(bmp, 0, 0);
 
             m_valueBitmap = bmpNew;
         }
