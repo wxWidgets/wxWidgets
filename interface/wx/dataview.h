@@ -1373,7 +1373,7 @@ public:
         Override this and make it return @true in order to
         indicate that this renderer supports in-place editing.
     */
-    virtual bool HasEditorCtrl();
+    virtual bool HasEditorCtrl() const;
 
     /**
         Overrride this to react to a left click.

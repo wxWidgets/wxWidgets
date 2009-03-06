@@ -226,7 +226,7 @@ public:
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize() const;
 
-    virtual bool HasEditorCtrl() { return true; }
+    virtual bool HasEditorCtrl() const { return true; }
     virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
 
