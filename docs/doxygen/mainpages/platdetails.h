@@ -90,7 +90,7 @@ both architecture. Unfortunately, wxMac does not support any
 64-bit architecture since Apple decided not to port its Carbon
 API entirely to 64-bit.
 
-For further information, please see the files in @c docs/mac
+For further information, please see the files in @c docs/osx
 in the distribution.
 
 
@@ -109,7 +109,7 @@ functional, but the port has not reached the maturity
 of the wxMac port yet. It should be possible to use wxCocoa
 on 64-bit architectures.
 
-For further information, please see the files in @c docs/mac
+For further information, please see the files in @c docs/osx
 in the distribution.
 
 
