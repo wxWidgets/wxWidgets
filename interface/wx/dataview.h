@@ -1456,7 +1456,7 @@ enum wxDataViewColumnFlags
     @library{wxadv}
     @category{dvc}
 */
-class wxDataViewColumn : public wxHeaderColumn
+class wxDataViewColumn : public wxSettableHeaderColumn
 {
 public:
     /**
