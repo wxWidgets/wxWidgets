@@ -244,7 +244,13 @@ protected:
         return !HandleTreeEvent(event) || event.IsAllowed();
     }
 
-    // handle a key event in a multi-selection control
+    // generate a wxEVT_KEY_DOWN event from the specified WPARAM/LPARAM values
+    // having the same meaning as for WM_KEYDOWN, return true if it was
+    // processed
+    bool MSWHandleTreeKeyDownEvent(WXWPARAM wParam, WXLPARAM lParam);
+
+    // handle a key event in a multi-selection control, should be only called
+    // for keys which can be used to change the selection
     //
     // return true if the key was processed, false otherwise
     bool MSWHandleSelectionKey(unsigned vkey);

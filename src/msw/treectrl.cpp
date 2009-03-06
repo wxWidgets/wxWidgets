@@ -2525,6 +2525,40 @@ bool wxTreeCtrl::MSWHandleSelectionKey(unsigned vkey)
     return true;
 }
 
+bool wxTreeCtrl::MSWHandleTreeKeyDownEvent(WXWPARAM wParam, WXLPARAM lParam)
+{
+    wxTreeEvent keyEvent(wxEVT_COMMAND_TREE_KEY_DOWN, this);
+
+    int keyCode = wxCharCodeMSWToWX(wParam);
+
+    if ( !keyCode )
+    {
+        // wxCharCodeMSWToWX() returns 0 to indicate that this is a
+        // simple ASCII key
+        keyCode = wParam;
+    }
+
+    keyEvent.m_evtKey = CreateKeyEvent(wxEVT_KEY_DOWN, keyCode,
+                                       lParam, wParam);
+
+    bool processed = HandleTreeEvent(keyEvent);
+
+    // generate a separate event for Space/Return
+    if ( !wxIsCtrlDown() && !wxIsShiftDown() && !wxIsAltDown() &&
+         ((wParam == VK_SPACE) || (wParam == VK_RETURN)) )
+    {
+        const HTREEITEM htSel = (HTREEITEM)TreeView_GetSelection(GetHwnd());
+        if ( htSel )
+        {
+            wxTreeEvent activatedEvent(wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
+                                       this, htSel);
+            (void)HandleTreeEvent(activatedEvent);
+        }
+    }
+
+    return processed;
+}
+
 // we hook into WndProc to process WM_MOUSEMOVE/WM_BUTTONUP messages - as we
 // only do it during dragging, minimize wxWin overhead (this is important for
 // WM_MOUSEMOVE as they're a lot of them) by catching Windows messages directly
@@ -3027,39 +3061,37 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
     }
     else if ( (nMsg == WM_KEYDOWN || nMsg == WM_SYSKEYDOWN) && isMultiple )
     {
-        wxTreeEvent keyEvent(wxEVT_COMMAND_TREE_KEY_DOWN, this);
-
-        int keyCode = wxCharCodeMSWToWX(wParam);
-
-        if ( !keyCode )
+        // normally we want to generate wxEVT_KEY_DOWN events from TVN_KEYDOWN
+        // notification but for the keys which can be used to change selection
+        // we need to do it from here so as to not apply the default behaviour
+        // if the events are handled by the user code
+        switch ( wParam )
         {
-            // wxCharCodeMSWToWX() returns 0 to indicate that this is a
-            // simple ASCII key
-            keyCode = wParam;
+            case VK_RETURN:
+            case VK_SPACE:
+            case VK_UP:
+            case VK_DOWN:
+            case VK_LEFT:
+            case VK_RIGHT:
+            case VK_HOME:
+            case VK_END:
+            case VK_PRIOR:
+            case VK_NEXT:
+                if ( !MSWHandleTreeKeyDownEvent(wParam, lParam) )
+                {
+                    // use the key to update the selection if it was left
+                    // unprocessed
+                    MSWHandleSelectionKey(wParam);
+
+                    // pretend that we did process it in any case as we already
+                    // generated an event for it
+                    processed = true;
+                }
+
+            //default: for all the other keys leave processed as false so that
+            //         the tree control generates a TVN_KEYDOWN for us
         }
 
-        keyEvent.m_evtKey = CreateKeyEvent(wxEVT_KEY_DOWN, keyCode,
-                                           lParam, wParam);
-
-        processed = HandleTreeEvent(keyEvent);
-        if ( !processed )
-        {
-            // update the selection if key was left unprocessed
-            processed = MSWHandleSelectionKey(wParam);
-        }
-
-        // generate a separate event for Space/Return
-        if ( !wxIsCtrlDown() && !wxIsShiftDown() && !wxIsAltDown() &&
-             ((wParam == VK_SPACE) || (wParam == VK_RETURN)) )
-        {
-            const HTREEITEM htSel = (HTREEITEM)TreeView_GetSelection(GetHwnd());
-            if ( htSel )
-            {
-                wxTreeEvent activatedEvent(wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
-                                           this, htSel);
-                (void)HandleTreeEvent(activatedEvent);
-            }
-        }
     }
     else if ( nMsg == WM_COMMAND )
     {
@@ -3276,43 +3308,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // fabricate the lParam and wParam parameters sufficiently
                 // similar to the ones from a "real" WM_KEYDOWN so that
                 // CreateKeyEvent() works correctly
-                const bool isAltDown = ::GetKeyState(VK_MENU) < 0;
-                WXLPARAM lParam = (isAltDown ? KF_ALTDOWN : 0) << 16;
-
-                WXWPARAM wParam = info->wVKey;
-
-                int keyCode = wxCharCodeMSWToWX(wParam);
-                if ( !keyCode )
-                {
-                    // wxCharCodeMSWToWX() returns 0 to indicate that this is a
-                    // simple ASCII key
-                    keyCode = wParam;
-                }
-
-                wxTreeEvent keyEvent(wxEVT_COMMAND_TREE_KEY_DOWN, this);
-                keyEvent.m_evtKey = CreateKeyEvent(wxEVT_KEY_DOWN,
-                                                keyCode,
-                                                lParam,
-                                                wParam);
-
-                if ( HandleTreeEvent(keyEvent) )
-                {
-                    return true;
-                }
-
-                wxTreeItemId item = wxTreeItemId(TreeView_GetSelection(GetHwnd()));
-
-                // a separate event for Space/Return
-                if ( !wxIsCtrlDown() && !wxIsShiftDown() && !isAltDown &&
-                     ((info->wVKey == VK_SPACE) || (info->wVKey == VK_RETURN)) &&
-                     item )
-                {
-                    wxTreeEvent activatedEvent(wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
-                                       this, item);
-                    (void)HandleTreeEvent(activatedEvent);
-                }
-
-                return false;
+                return MSWHandleTreeKeyDownEvent(info->wVKey,
+                                                 wxIsAltDown() << 16);
             }
             break;
 
