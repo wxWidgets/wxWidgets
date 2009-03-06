@@ -664,9 +664,6 @@ public:
     virtual bool RecreateBuffer(const wxSize& size = wxDefaultSize);
 #endif
 
-    /// Set the selection
-    virtual void DoSetSelection(long from, long to, bool scrollCaret = true);
-
     /// Write text
     virtual void DoWriteText(const wxString& value, int flags = 0);
 

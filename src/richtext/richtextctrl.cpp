@@ -2563,11 +2563,6 @@ void wxRichTextCtrl::SetSelection(long from, long to)
         to = GetLastPosition()+1;
     }
 
-    DoSetSelection(from, to);
-}
-
-void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCaret))
-{
     if (from == to)
     {
         SelectNone();
