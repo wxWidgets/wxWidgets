@@ -422,14 +422,16 @@ size_t wxTextDataObject::GetDataSize() const
 
 bool wxTextDataObject::GetDataHere(void *buf) const
 {
-    wxStrcpy( (wxChar*)buf, GetText().c_str() );
+    // NOTE: use wxTmemcpy() instead of wxStrncpy() to allow
+    //       retrieval of strings with embedded NULLs
+    wxTmemcpy( (wxChar*)buf, GetText().c_str(), GetTextLength() );
 
     return true;
 }
 
-bool wxTextDataObject::SetData(size_t WXUNUSED(len), const void *buf)
+bool wxTextDataObject::SetData(size_t len, const void *buf)
 {
-    SetText( wxString((const wxChar*)buf) );
+    SetText( wxString((const wxChar*)buf, len/sizeof(wxChar)) );
 
     return true;
 }
