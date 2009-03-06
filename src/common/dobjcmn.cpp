@@ -117,7 +117,7 @@ void wxDataObjectComposite::Add(wxDataObjectSimple *dataObject, bool preferred)
     size_t indexFormats;
     size_t noOfFormats;
     wxDataFormat* formats;
-    
+
     noOfFormats = dataObject->GetFormatCount(wxDataObjectBase::Get);
     formats = new wxDataFormat[noOfFormats];
     for (indexFormats=0; indexFormats<noOfFormats; ++indexFormats)
@@ -126,7 +126,7 @@ void wxDataObjectComposite::Add(wxDataObjectSimple *dataObject, bool preferred)
     delete[] formats;
    // do the same with the 'SET' direction:
     noOfFormats = dataObject->GetFormatCount(wxDataObjectBase::Set);
-    
+
     formats = new wxDataFormat[noOfFormats];
     for (indexFormats=0; indexFormats<noOfFormats; ++indexFormats)
       wxCHECK_RET(this->GetObject(formats[indexFormats],wxDataObjectBase::Set) == NULL,
@@ -195,10 +195,18 @@ void* wxDataObjectComposite::SetSizeInBuffer( void* buffer, size_t size,
 
 #endif
 
-size_t wxDataObjectComposite::GetFormatCount(Direction WXUNUSED(dir)) const
+size_t wxDataObjectComposite::GetFormatCount(Direction dir) const
 {
-    // TODO what about the Get/Set only formats?
-    return m_dataObjects.GetCount();
+    size_t n = 0;
+
+    // NOTE: some wxDataObjectSimple objects may return a number greater than 1
+    //       from GetFormatCount(): this is the case of e.g. wxTextDataObject
+    //       under wxMac and wxGTK
+    wxSimpleDataObjectList::compatibility_iterator node;
+    for ( node = m_dataObjects.GetFirst(); node; node = node->GetNext() )
+        n += node->GetData()->GetFormatCount(dir);
+
+    return n;
 }
 
 void wxDataObjectComposite::GetAllFormats(wxDataFormat *formats,
@@ -209,8 +217,11 @@ void wxDataObjectComposite::GetAllFormats(wxDataFormat *formats,
 
     for ( node = m_dataObjects.GetFirst(); node; node = node->GetNext() )
     {
-      node->GetData()->GetAllFormats(formats+index,dir);
-      index += node->GetData()->GetFormatCount(dir);
+        // NOTE: some wxDataObjectSimple objects may return more than 1 format
+        //       from GetAllFormats(): this is the case of e.g. wxTextDataObject
+        //       under wxMac and wxGTK
+        node->GetData()->GetAllFormats(formats+index, dir);
+        index += node->GetData()->GetFormatCount(dir);
     }
 }
 
