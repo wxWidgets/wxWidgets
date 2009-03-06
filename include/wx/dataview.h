@@ -427,7 +427,7 @@ public:
     virtual int GetAlignment() const = 0;
 
     // in-place editing
-    virtual bool HasEditorCtrl()
+    virtual bool HasEditorCtrl() const
         { return false; }
     virtual wxControl* CreateEditorCtrl(wxWindow * WXUNUSED(parent),
                                         wxRect WXUNUSED(labelRect),
@@ -905,7 +905,7 @@ public:
     wxDataViewSpinRenderer( int min, int max,
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                             int alignment = wxDVR_DEFAULT_ALIGNMENT );
-    virtual bool HasEditorCtrl() { return true; }
+    virtual bool HasEditorCtrl() const { return true; }
     virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
     virtual bool Render( wxRect rect, wxDC *dc, int state );
@@ -930,7 +930,7 @@ public:
     wxDataViewChoiceRenderer( const wxArrayString &choices,
                             wxDataViewCellMode mode = wxDATAVIEW_CELL_EDITABLE,
                             int alignment = wxDVR_DEFAULT_ALIGNMENT );
-    virtual bool HasEditorCtrl() { return true; }
+    virtual bool HasEditorCtrl() const { return true; }
     virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
     virtual bool Render( wxRect rect, wxDC *dc, int state );
