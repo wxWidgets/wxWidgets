@@ -63,7 +63,8 @@ public:
 
     virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual bool EndEdit(int row, int col, const wxGrid* grid,
+                         const wxString& oldval, wxString *newval);
     virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
@@ -109,7 +110,8 @@ public:
 
     virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual bool EndEdit(int row, int col, const wxGrid* grid,
+                         const wxString& oldval, wxString *newval);
     virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
@@ -164,7 +166,8 @@ public:
 
     virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual bool EndEdit(int row, int col, const wxGrid* grid,
+                         const wxString& oldval, wxString *newval);
     virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
@@ -207,7 +210,8 @@ public:
 
     virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual bool EndEdit(int row, int col, const wxGrid* grid,
+                         const wxString& oldval, wxString *newval);
     virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
@@ -263,7 +267,8 @@ public:
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
 
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual bool EndEdit(int row, int col, const wxGrid* grid,
+                         const wxString& oldval, wxString *newval);
     virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
     virtual void Reset();
@@ -299,7 +304,8 @@ public:
     virtual wxGridCellEditor*  Clone() const;
 
     virtual void BeginEdit(int row, int col, wxGrid* grid);
-    virtual bool EndEdit(const wxString& oldval, wxString *newval);
+    virtual bool EndEdit(int row, int col, const wxGrid* grid,
+                         const wxString& oldval, wxString *newval);
     virtual void ApplyEdit(int row, int col, wxGrid* grid);
 
 private:
@@ -325,4 +331,5 @@ public:
 };
 
 #endif // wxUSE_GRID
+
 #endif // _WX_GENERIC_GRID_EDITORS_H_

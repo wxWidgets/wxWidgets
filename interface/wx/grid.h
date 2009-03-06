@@ -218,14 +218,21 @@ public:
         This function must check if the current value of the editing control is
         valid and different from the original value (available as @a oldval in
         its string form and possibly saved internally using its real type by
-        BeginEdit()). If it isn't, it just returns @false, otherwise it fills
-        @a newval with the representation of the new value in the string form,
-        if necessary saves it using its real type internally, and returns @true.
+        BeginEdit()). If it isn't, it just returns @false, otherwise it must do
+        the following:
+            # Save the new value internally so that ApplyEdit() could apply it.
+            # Fill @a newval (which is never @NULL) with the string
+            representation of the new value.
+            # Return @true
+
+        Notice that it must @em not modify the grid as the change could still
+        be vetoed.
 
         If the user-defined wxEVT_GRID_CELL_CHANGING event handler doesn't veto
         this change, ApplyEdit() will be called next.
     */
-    virtual bool EndEdit(const wxString& oldval, wxString* newval) = 0;
+    virtual bool EndEdit(int row, int col, const wxGrid* grid,
+                         const wxString& oldval, wxString* newval) = 0;
 
     /**
         Effectively save the changes in the grid.

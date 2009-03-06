@@ -218,8 +218,10 @@ public:
     // new value in its string form in the newval output parameter.
     //
     // This should also store the new value in its real type internally so that
-    // it could be used by ApplyEdit().
-    virtual bool EndEdit(const wxString& oldval, wxString *newval) = 0;
+    // it could be used by ApplyEdit() but it must not modify the grid as the
+    // change could still be vetoed.
+    virtual bool EndEdit(int row, int col, const wxGrid *grid,
+                         const wxString& oldval, wxString *newval) = 0;
 
     // Complete the editing of the current cell by storing the value saved by
     // the previous call to EndEdit() in the grid

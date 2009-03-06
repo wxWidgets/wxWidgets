@@ -5976,7 +5976,7 @@ void wxGrid::SaveEditControlValue()
         wxGridCellEditor* editor = attr->GetEditor(this, row, col);
 
         wxString newval;
-        bool changed = editor->EndEdit(oldval, &newval);
+        bool changed = editor->EndEdit(row, col, this, oldval, &newval);
 
         if ( changed && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) != -1 )
         {

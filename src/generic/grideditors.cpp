@@ -485,7 +485,10 @@ void wxGridCellTextEditor::DoBeginEdit(const wxString& startValue)
     Text()->SetFocus();
 }
 
-bool wxGridCellTextEditor::EndEdit(const wxString& WXUNUSED(oldval),
+bool wxGridCellTextEditor::EndEdit(int WXUNUSED(row),
+                                   int WXUNUSED(col),
+                                   const wxGrid* WXUNUSED(grid),
+                                   const wxString& WXUNUSED(oldval),
                                    wxString *newval)
 {
     wxCHECK_MSG( m_control, false,
@@ -681,7 +684,10 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
 }
 
-bool wxGridCellNumberEditor::EndEdit(const wxString& oldval, wxString *newval)
+bool wxGridCellNumberEditor::EndEdit(int WXUNUSED(row),
+                                     int WXUNUSED(col),
+                                     const wxGrid* WXUNUSED(grid),
+                                     const wxString& oldval, wxString *newval)
 {
     long value = 0;
     wxString text;
@@ -886,7 +892,10 @@ void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
     DoBeginEdit(GetString());
 }
 
-bool wxGridCellFloatEditor::EndEdit(const wxString& oldval, wxString *newval)
+bool wxGridCellFloatEditor::EndEdit(int WXUNUSED(row),
+                                    int WXUNUSED(col),
+                                    const wxGrid* WXUNUSED(grid),
+                                    const wxString& oldval, wxString *newval)
 {
     const wxString text(Text()->GetValue());
 
@@ -1182,7 +1191,10 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
     CBox()->SetFocus();
 }
 
-bool wxGridCellBoolEditor::EndEdit(const wxString& WXUNUSED(oldval),
+bool wxGridCellBoolEditor::EndEdit(int WXUNUSED(row),
+                                   int WXUNUSED(col),
+                                   const wxGrid* WXUNUSED(grid),
+                                   const wxString& WXUNUSED(oldval),
                                    wxString *newval)
 {
     bool value = CBox()->GetValue();
@@ -1370,7 +1382,10 @@ void wxGridCellChoiceEditor::BeginEdit(int row, int col, wxGrid* grid)
     }
 }
 
-bool wxGridCellChoiceEditor::EndEdit(const wxString& WXUNUSED(oldval),
+bool wxGridCellChoiceEditor::EndEdit(int WXUNUSED(row),
+                                     int WXUNUSED(col),
+                                     const wxGrid* WXUNUSED(grid),
+                                     const wxString& WXUNUSED(oldval),
                                      wxString *newval)
 {
     const wxString value = Combo()->GetValue();
@@ -1488,7 +1503,10 @@ void wxGridCellEnumEditor::BeginEdit(int row, int col, wxGrid* grid)
 
 }
 
-bool wxGridCellEnumEditor::EndEdit(const wxString& WXUNUSED(oldval),
+bool wxGridCellEnumEditor::EndEdit(int WXUNUSED(row),
+                                   int WXUNUSED(col),
+                                   const wxGrid* WXUNUSED(grid),
+                                   const wxString& WXUNUSED(oldval),
                                    wxString *newval)
 {
     long idx = Combo()->GetSelection();
