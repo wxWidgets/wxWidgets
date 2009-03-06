@@ -99,6 +99,7 @@ protected:
         return *(GetOwner()->GetColumn(idx));
     }
 
+    // FIXME: currently unused
     virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
     {
         wxDataViewCtrl * const owner = GetOwner();
@@ -738,12 +739,8 @@ wxSize wxDataViewTextRenderer::GetSize() const
 {
     const wxDataViewCtrl *view = GetView();
     if (!m_text.empty())
-    {
-        int x,y;
-        view->GetTextExtent( m_text, &x, &y );
-        return wxSize( x, y );
-    }
-    return wxSize(80,20);
+        return view->wxWindowBase::GetTextExtent( m_text );
+    return wxSize(wxDVC_DEFAULT_RENDERER_SIZE,wxDVC_DEFAULT_RENDERER_SIZE);
 }
 
 // ---------------------------------------------------------
@@ -844,7 +841,7 @@ wxSize wxDataViewBitmapRenderer::GetSize() const
     else if (m_icon.Ok())
         return wxSize( m_icon.GetWidth(), m_icon.GetHeight() );
 
-    return wxSize(16,16);
+    return wxSize(wxDVC_DEFAULT_RENDERER_SIZE,wxDVC_DEFAULT_RENDERER_SIZE);
 }
 
 // ---------------------------------------------------------
@@ -1242,30 +1239,30 @@ public:
     }
 
     virtual wxDragResult OnDragOver( wxCoord x, wxCoord y, wxDragResult def )
-        {
+    {
         wxDataFormat format = GetMatchingPair();
         if (format == wxDF_INVALID)
             return wxDragNone;
         return m_win->OnDragOver( format, x, y, def);
-        }
+    }
 
     virtual bool OnDrop( wxCoord x, wxCoord y )
-        {
+    {
         wxDataFormat format = GetMatchingPair();
         if (format == wxDF_INVALID)
             return false;
         return m_win->OnDrop( format, x, y );
-        }
+    }
 
     virtual wxDragResult OnData( wxCoord x, wxCoord y, wxDragResult def )
-        {
+    {
         wxDataFormat format = GetMatchingPair();
         if (format == wxDF_INVALID)
             return wxDragNone;
         if (!GetData())
             return wxDragNone;
         return m_win->OnData( format, x, y, def );
-        }
+    }
 
     virtual void OnLeave()
         { m_win->OnLeave(); }
@@ -1303,7 +1300,6 @@ int LINKAGEMODE wxDataViewSelectionCmp( unsigned int row1, unsigned int row2 )
     if (row1 == row2) return 0;
     return -1;
 }
-
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewMainWindow, wxWindow)
 
@@ -1771,7 +1767,6 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     cell_rect.x = x_start;
     for (unsigned int i = col_start; i < col_last; i++)
     {
-
         wxDataViewColumn *col = GetOwner()->GetColumnAt( i );
         wxDataViewRenderer *cell = col->GetRenderer();
         cell_rect.width = col->GetWidth();
@@ -2592,17 +2587,19 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
                 if (column->IsHidden())
                     continue;      // skip it!
 
-                if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
+                if ((col != 0) && 
+                    model->IsContainer(item) && 
+                    !model->HasContainerColumns(item))
                     continue;      // skip it!
 
-                const wxDataViewRenderer *renderer = column->GetRenderer();
                 wxVariant value;
                 model->GetValue( value, item, column->GetModelColumn() );
-                wxDataViewRenderer *renderer2 = const_cast<wxDataViewRenderer*>(renderer);
-                renderer2->SetValue( value );
+
+                wxDataViewRenderer *renderer = 
+                    const_cast<wxDataViewRenderer*>(column->GetRenderer());
+                renderer->SetValue( value );
                 height = wxMax( height, renderer->GetSize().y );
             }
-
 
             start += height;
         }
@@ -2628,14 +2625,14 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
     unsigned int yy = 0;
     for (;;)
     {
-    const wxDataViewTreeNode* node = GetTreeNodeByRow(row);
-    if (!node)
-    {
-        // not really correct...
-        return row + ((y-yy) / m_lineHeight);
-    }
+        const wxDataViewTreeNode* node = GetTreeNodeByRow(row);
+        if (!node)
+        {
+            // not really correct...
+            return row + ((y-yy) / m_lineHeight);
+        }
 
-    wxDataViewItem item = node->GetItem();
+        wxDataViewItem item = node->GetItem();
 
         if (node && !node->HasChildren())
         {
@@ -2644,31 +2641,34 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
             wxDELETE(node);
         }
 
-    unsigned int cols = GetOwner()->GetColumnCount();
-    unsigned int col;
-    int height = m_lineHeight;
-    for (col = 0; col < cols; col++)
-    {
+        unsigned int cols = GetOwner()->GetColumnCount();
+        unsigned int col;
+        int height = m_lineHeight;
+        for (col = 0; col < cols; col++)
+        {
             const wxDataViewColumn *column = GetOwner()->GetColumn(col);
             if (column->IsHidden())
                 continue;      // skip it!
 
-            if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
+            if ((col != 0) && 
+                model->IsContainer(item) && 
+                !model->HasContainerColumns(item))
                 continue;      // skip it!
 
-            const wxDataViewRenderer *renderer = column->GetRenderer();
             wxVariant value;
             model->GetValue( value, item, column->GetModelColumn() );
-            wxDataViewRenderer *renderer2 = const_cast<wxDataViewRenderer*>(renderer);
-            renderer2->SetValue( value );
+
+            wxDataViewRenderer *renderer = 
+                const_cast<wxDataViewRenderer*>(column->GetRenderer());
+            renderer->SetValue( value );
             height = wxMax( height, renderer->GetSize().y );
-    }
+        }
 
-    yy += height;
-    if (y < yy)
-        return row;
+        yy += height;
+        if (y < yy)
+            return row;
 
-    row++;
+        row++;
     }
 }
 
@@ -2703,14 +2703,17 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
             if (column->IsHidden())
                 continue;      // skip it!
 
-            if ((col != 0) && model->IsContainer(item) && !model->HasContainerColumns(item))
+            if ((col != 0) && 
+                model->IsContainer(item) && 
+                !model->HasContainerColumns(item))
                 continue;      // skip it!
 
-            const wxDataViewRenderer *renderer = column->GetRenderer();
             wxVariant value;
             model->GetValue( value, item, column->GetModelColumn() );
-            wxDataViewRenderer *renderer2 = const_cast<wxDataViewRenderer*>(renderer);
-            renderer2->SetValue( value );
+
+            wxDataViewRenderer *renderer = 
+                const_cast<wxDataViewRenderer*>(column->GetRenderer());
+            renderer->SetValue( value );
             height = wxMax( height, renderer->GetSize().y );
         }
 

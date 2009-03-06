@@ -33,10 +33,6 @@ class WXDLLIMPEXP_FWD_CORE wxImageList;
 #endif
 
 // ----------------------------------------------------------------------------
-// wxDataViewCtrl flags
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
@@ -48,6 +44,13 @@ class WXDLLIMPEXP_FWD_ADV wxDataViewRenderer;
 class WXDLLIMPEXP_FWD_ADV wxDataViewModelNotifier;
 
 extern WXDLLIMPEXP_DATA_ADV(const char) wxDataViewCtrlNameStr[];
+
+// ----------------------------------------------------------------------------
+// wxDataViewCtrl flags
+// ----------------------------------------------------------------------------
+
+// size of a wxDataViewRenderer without contents:
+#define wxDVC_DEFAULT_RENDERER_SIZE     20
 
 // the default width of new (text) columns:
 #define wxDVC_DEFAULT_WIDTH             80
@@ -526,7 +529,8 @@ public:
         { m_owner = owner; }
 
     // getters:
-    unsigned int GetModelColumn() const { return static_cast<unsigned int>(m_model_column); }
+    unsigned int GetModelColumn() const 
+        { return static_cast<unsigned int>(m_model_column); }
     wxDataViewCtrl *GetOwner() const        { return m_owner; }
     wxDataViewRenderer* GetRenderer() const { return m_renderer; }
 
@@ -566,11 +570,17 @@ public:
     wxDataViewCtrlBase();
     virtual ~wxDataViewCtrlBase();
 
+    // model
+    // -----
+
     virtual bool AssociateModel( wxDataViewModel *model );
     wxDataViewModel* GetModel();
     const wxDataViewModel* GetModel() const;
 
-    // short cuts
+
+    // column management
+    // -----------------
+
     wxDataViewColumn *PrependTextColumn( const wxString &label, unsigned int model_column,
                     wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
                     wxAlignment align = wxALIGN_NOT,
@@ -669,7 +679,6 @@ public:
                     wxAlignment align = wxALIGN_CENTER,
                     int flags = wxDATAVIEW_COL_RESIZABLE );
 
-
     virtual bool PrependColumn( wxDataViewColumn *col );
     virtual bool InsertColumn( unsigned int pos, wxDataViewColumn *col );
     virtual bool AppendColumn( wxDataViewColumn *col );
@@ -687,6 +696,10 @@ public:
         { return m_expander_column; }
 
     virtual wxDataViewColumn *GetSortingColumn() const = 0;
+
+
+    // items management
+    // ----------------
 
     void SetIndent( int indent )
         { m_indent = indent ; DoSetIndent(); }
