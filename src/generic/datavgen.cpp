@@ -2957,10 +2957,13 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
             }
             else
             {
+#if 0
+                // Why should we select the next row here???
                 SelectRow( row, false );
                 SelectRow( row + 1, true );
                 ChangeCurrentRow( row + 1 );
                 SendSelectionChangedEvent( GetItemByRow(row+1));
+#endif
             }
         }
         else
@@ -2973,10 +2976,15 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
     if (IsVirtualList())
         return;
 
-    wxDataViewTreeNode * node = GetTreeNodeByRow(row);
-    if( node != NULL )
+    wxDataViewTreeNode *node = GetTreeNodeByRow(row);
+    if (!node)
+        return;
+        
+    if( !node->HasChildren())
     {
-        wxDataViewTreeNode * nd = node;
+        delete node;
+        return;
+    }
 
         if( node->HasChildren() && node->IsOpen() )
         {
@@ -3035,7 +3043,7 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
 
             m_count = -1;
             UpdateDisplay();
-            SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED,nd->GetItem());
+            SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED,node->GetItem());
         }
         else
         {
@@ -3052,9 +3060,6 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
                 }
             }
         }
-        if( !nd->HasChildren())
-            delete nd;
-    }
 }
 
 wxDataViewTreeNode * wxDataViewMainWindow::FindNode( const wxDataViewItem & item )
@@ -4313,6 +4318,7 @@ void wxDataViewCtrl::Expand( const wxDataViewItem & item )
 void wxDataViewCtrl::Collapse( const wxDataViewItem & item )
 {
     int row = m_clientArea->GetRowByItem( item );
+    wxPrintf( "row %d\n", row );
     if (row != -1)
         m_clientArea->Collapse(row);
 }
