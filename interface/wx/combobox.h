@@ -82,6 +82,8 @@ public:
             Window identifier. The value wxID_ANY indicates a default value.
         @param value
             Initial selection string. An empty string indicates no selection.
+            Notice that for the controls with @c wxCB_READONLY style this
+            string must be one of the valid choices if it is not empty.
         @param pos
             Window position.
         @param size

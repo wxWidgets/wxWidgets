@@ -136,10 +136,20 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     if ( entry )
     {
-        gtk_entry_set_text( entry, wxGTK_CONV(value) );
-
         if (style & wxCB_READONLY)
+        {
+            // this will assert and do nothing if the value is not in our list
+            // of strings which is the desired behaviour (for consistency with
+            // wxMSW and also because it doesn't make sense to have a string
+            // which is not a possible choice in a read-only combobox)
+            SetStringSelection(value);
             gtk_entry_set_editable( entry, FALSE );
+        }
+        else // editable combobox
+        {
+            // any value is accepted, even if it's not in our list
+            gtk_entry_set_text( entry, wxGTK_CONV(value) );
+        }
 
         g_signal_connect_after (entry, "changed",
                                 G_CALLBACK (gtkcombobox_text_changed_callback), this);
