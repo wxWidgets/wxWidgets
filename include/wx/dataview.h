@@ -986,7 +986,7 @@ public:
     void AppendItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
     void PrependItem( const wxVector<wxVariant> &values, wxClientData *data = NULL );
     void InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data = NULL );
-    void DeleteItem( unsigned pos );
+    void DeleteItem( unsigned int pos );
     void DeleteAllItems();
 
     // override base virtuals

@@ -1415,7 +1415,8 @@ void wxDataViewListStore::PrependItem( const wxVector<wxVariant> &values, wxClie
     RowPrepended();
 }
 
-void wxDataViewListStore::InsertItem(  unsigned int row, const wxVector<wxVariant> &values, wxClientData *data )
+void wxDataViewListStore::InsertItem(  unsigned int row, const wxVector<wxVariant> &values, 
+                                       wxClientData *data )
 {
     wxDataViewListStoreLine *line = new wxDataViewListStoreLine( data );
     line->m_values = values;
@@ -1424,7 +1425,7 @@ void wxDataViewListStore::InsertItem(  unsigned int row, const wxVector<wxVarian
     RowInserted( row );
 }
 
-void wxDataViewListStore::DeleteItem( unsigned row )
+void wxDataViewListStore::DeleteItem( unsigned int row )
 {
     wxVector<wxDataViewListStoreLine*>::iterator it = m_data.begin() + row;
     m_data.erase( it );
@@ -1440,6 +1441,8 @@ void wxDataViewListStore::DeleteAllItems()
         wxDataViewListStoreLine* line = *it;
         delete line;
     }
+
+    m_data.clear();
 
     Reset( 0 );
 }
