@@ -313,9 +313,9 @@ All:
 
 - Added (experimental) IPv6 support to wxSocket (Arcen).
 - Cleaned up wxURI and made it Unicode-friendly.
-- Add support for wxExecute(wxEXEC_ASYNC) in wxBase (Lukasz Michalski)
+- Add support for wxExecute(wxEXEC_ASYNC) in wxBase (Lukasz Michalski).
 - Added wxXLocale class and xlocale-like functions using it.
-- Allow loading message catalogs from wxFileSystem (Axel Gembe)
+- Allow loading message catalogs from wxFileSystem (Axel Gembe).
 - Added wxMessageQueue class for inter-thread communications
 - Use UTF-8 for Unicode data in wxIPC classes (Anders Larsen)
 - Added support for user-defined types to wxConfig (Marcin Wojdyr).
@@ -327,6 +327,7 @@ All:
 - Implemented wxMemoryInputStream::CanRead().
 - Implemented wxMemoryFSHandler::FindFirst/Next().
 - Added wxEventLoop::DispatchTimeout().
+- Added wxZlibStream::SetDictionary() (Axel Gembe).
 - Added wxEXEC_BLOCK flag (Hank Schultz).
 - Add support for wxStream-derived classes to wxRTTI (Stas Sergeev).
 - Added wxStreamBuffer::Truncate() (Stas Sergeev).

@@ -44,6 +44,9 @@ class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
 
   static bool CanHandleGZip();
 
+  bool SetDictionary(const char *data, const size_t datalen);
+  bool SetDictionary(const wxMemoryBuffer &buf);
+
  protected:
   size_t OnSysRead(void *buffer, size_t size);
   wxFileOffset OnSysTell() const { return m_pos; }
@@ -71,6 +74,9 @@ class WXDLLIMPEXP_BASE wxZlibOutputStream: public wxFilterOutputStream {
   wxFileOffset GetLength() const { return m_pos; }
 
   static bool CanHandleGZip();
+
+  bool SetDictionary(const char *data, const size_t datalen);
+  bool SetDictionary(const wxMemoryBuffer &buf);
 
  protected:
   size_t OnSysWrite(const void *buffer, size_t size);

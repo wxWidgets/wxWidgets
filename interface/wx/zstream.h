@@ -76,6 +76,19 @@ public:
         Returns @true if zlib library in use can handle gzip compressed data.
     */
     static bool CanHandleGZip();
+
+    //@{
+    /**
+        Sets the dictionary to the specified chunk of data. This can improve
+        compression rate but note that the dictionary has to be the same when
+        you deflate the data as when you inflate the data, otherwise you
+        will inflate corrupted data.
+
+        Returns @true if the dictionary was successfully set.
+    */
+    bool SetDictionary(const char *data, const size_t datalen);
+    bool SetDictionary(const wxMemoryBuffer &buf);
+    //@}
 };
 
 
@@ -122,5 +135,18 @@ public:
         Returns @true if zlib library in use can handle gzip compressed data.
     */
     static bool CanHandleGZip();
+
+    //@{
+    /**
+        Sets the dictionary to the specified chunk of data. This can improve
+        compression rate but note that the dictionary has to be the same when
+        you deflate the data as when you inflate the data, otherwise you
+        will inflate corrupted data.
+
+        Returns @true if the dictionary was successfully set.
+    */
+    bool SetDictionary(const char *data, const size_t datalen);
+    bool SetDictionary(const wxMemoryBuffer &buf);
+    //@}
 };
 

@@ -248,6 +248,16 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
   return major > 1 || (major == 1 && minor >= 2);
 }
 
+bool wxZlibInputStream::SetDictionary(const char *data, const size_t datalen)
+{
+    return (inflateSetDictionary(m_inflate, (Bytef*)data, datalen) == Z_OK);
+}
+
+bool wxZlibInputStream::SetDictionary(const wxMemoryBuffer &buf)
+{
+    return SetDictionary((char*)buf.GetData(), buf.GetDataLen());
+}
+
 
 //////////////////////
 // wxZlibOutputStream
@@ -410,6 +420,16 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
 /* static */ bool wxZlibOutputStream::CanHandleGZip()
 {
   return wxZlibInputStream::CanHandleGZip();
+}
+
+bool wxZlibOutputStream::SetDictionary(const char *data, const size_t datalen)
+{
+    return (deflateSetDictionary(m_deflate, (Bytef*)data, datalen) == Z_OK);
+}
+
+bool wxZlibOutputStream::SetDictionary(const wxMemoryBuffer &buf)
+{
+    return SetDictionary((char*)buf.GetData(), buf.GetDataLen());
 }
 
 #endif
