@@ -21,7 +21,7 @@ class MyMusicTreeModelNode
 {
 public:
     MyMusicTreeModelNode( MyMusicTreeModelNode* parent,
-                          const wxString &title, const wxString &artist, 
+                          const wxString &title, const wxString &artist,
                           unsigned int year )
     {
         m_parent = parent;
@@ -30,6 +30,8 @@ public:
         m_artist = artist;
         m_year = year;
         m_quality = "good";
+
+        m_container = false;
     }
 
     MyMusicTreeModelNode( MyMusicTreeModelNode* parent,
@@ -39,6 +41,8 @@ public:
 
         m_title = branch;
         m_year = -1;
+
+        m_container = true;
     }
 
     ~MyMusicTreeModelNode()
@@ -53,7 +57,7 @@ public:
     }
 
     bool IsContainer() const
-        { return m_children.GetCount()>0; }
+        { return m_container; }
 
     MyMusicTreeModelNode* GetParent()
         { return m_parent; }
@@ -73,6 +77,17 @@ public:     // public to avoid getters/setters
     wxString                m_artist;
     int                     m_year;
     wxString                m_quality;
+
+    // TODO/FIXME:
+    // the GTK version of wxDVC (in particular wxDataViewCtrlInternal::ItemAdded)
+    // needs to know in advance if a node is or _will be_ a container.
+    // Thus implementing:
+    //   bool IsContainer() const
+    //    { return m_children.GetCount()>0; }
+    // doesn't work with wxGTK when MyMusicTreeModel::AddToClassical is called
+    // AND the classical node was removed (a new node temporary without children
+    // would be added to the control)
+    bool m_container;
 
 private:
     MyMusicTreeModelNode          *m_parent;
@@ -113,7 +128,7 @@ public:
 
     // helper methods to change the model
 
-    void AddToClassical( const wxString &title, const wxString &artist, 
+    void AddToClassical( const wxString &title, const wxString &artist,
                          unsigned int year );
     void Delete( const wxDataViewItem &item );
 
@@ -149,7 +164,7 @@ public:
 
     virtual wxDataViewItem GetParent( const wxDataViewItem &item ) const;
     virtual bool IsContainer( const wxDataViewItem &item ) const;
-    virtual unsigned int GetChildren( const wxDataViewItem &parent, 
+    virtual unsigned int GetChildren( const wxDataViewItem &parent,
                                       wxDataViewItemArray &array ) const;
 
 private:

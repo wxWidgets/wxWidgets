@@ -38,23 +38,23 @@
 
 MyMusicTreeModel::MyMusicTreeModel()
 {
-    m_root = new MyMusicTreeModelNode( NULL, wxT("My Music" ));
+    m_root = new MyMusicTreeModelNode( NULL, "My Music" );
 
     // setup pop music
-    m_pop = new MyMusicTreeModelNode( m_root, wxT("Pop music") );
+    m_pop = new MyMusicTreeModelNode( m_root, "Pop music" );
     m_pop->Append(
-        new MyMusicTreeModelNode( m_pop, wxT("You are not alone"), wxT("Michael Jackson"), 1995 ) );
+        new MyMusicTreeModelNode( m_pop, "You are not alone"), "Michael Jackson", 1995 ) );
     m_pop->Append(
-        new MyMusicTreeModelNode( m_pop, wxT("Take a bow"), wxT("Madonna"), 1994 ) );
+        new MyMusicTreeModelNode( m_pop, "Take a bow", "Madonna", 1994 ) );
     m_root->Append( m_pop );
 
     // setup classical music
-    m_classical = new MyMusicTreeModelNode( m_root, wxT("Classical music") );
-    m_ninth = new MyMusicTreeModelNode( m_classical, wxT("Ninth symphony"),
-                                        wxT("Ludwig van Beethoven"), 1824 );
+    m_classical = new MyMusicTreeModelNode( m_root, "Classical music" );
+    m_ninth = new MyMusicTreeModelNode( m_classical, "Ninth symphony",
+                                        "Ludwig van Beethoven", 1824 );
     m_classical->Append( m_ninth );
-    m_classical->Append( new MyMusicTreeModelNode( m_classical, wxT("German Requiem"),
-                                                   wxT("Johannes Brahms"), 1868 ) );
+    m_classical->Append( new MyMusicTreeModelNode( m_classical, "German Requiem",
+                                                   "Johannes Brahms", 1868 ) );
     m_root->Append( m_classical );
 
     m_classicalMusicIsKnownToControl = false;
@@ -86,8 +86,13 @@ void MyMusicTreeModel::AddToClassical( const wxString &title, const wxString &ar
         wxASSERT(m_root);
 
         // it was removed: restore it
-        m_classical = new MyMusicTreeModelNode( m_root, wxT("Classical music") );
+        m_classical = new MyMusicTreeModelNode( m_root, "Classical music" );
         m_root->Append( m_classical );
+
+        // notify control
+        wxDataViewItem child( (void*) m_classical );
+        wxDataViewItem parent( (void*) m_root );
+        ItemAdded( parent, child );
     }
 
     // add to the classical music node a new node:
@@ -95,6 +100,7 @@ void MyMusicTreeModel::AddToClassical( const wxString &title, const wxString &ar
         new MyMusicTreeModelNode( m_classical, title, artist, year );
     m_classical->Append( child_node );
 
+    // FIXME: what's m_classicalMusicIsKnownToControl for?
     if (m_classicalMusicIsKnownToControl)
     {
         // notify control
@@ -116,7 +122,7 @@ void MyMusicTreeModel::Delete( const wxDataViewItem &item )
         wxASSERT(node == m_root);
 
         // don't make the control completely empty:
-        wxLogError("Cannot remove the root item!");
+        wxLogError( "Cannot remove the root item!" );
         return;
     }
 
@@ -203,7 +209,7 @@ void MyMusicTreeModel::GetValue( wxVariant &variant,
         break;
 
     default:
-        wxLogError( wxT("MyMusicTreeModel::GetValue: wrong column %d"), col );
+        wxLogError( "MyMusicTreeModel::GetValue: wrong column %d", col );
     }
 }
 
@@ -229,7 +235,7 @@ bool MyMusicTreeModel::SetValue( const wxVariant &variant,
             return true;
 
         default:
-            wxLogError( wxT("MyMusicTreeModel::SetValue: wrong column") );
+            wxLogError( "MyMusicTreeModel::SetValue: wrong column" );
     }
     return false;
 }
@@ -323,7 +329,7 @@ MyListModel::MyListModel() :
     for (unsigned int i = 0; i < 100; i++)
     {
         wxString str;
-        str.Printf( wxT("real row %d"), i );
+        str.Printf( "real row %d"), i );
         m_array.Add( str );
     }
 
@@ -362,7 +368,7 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
     {
         // none of the selected items were in the range of the items
         // which we store... for simplicity, don't allow removing them
-        wxLogError("Cannot remove rows with an index greater than %d", m_array.GetCount());
+        wxLogError( "Cannot remove rows with an index greater than %d", m_array.GetCount() );
         return;
     }
 
@@ -392,21 +398,21 @@ void MyListModel::GetValueByRow( wxVariant &variant,
     if (col==0)
     {
         if (row >= m_array.GetCount())
-            variant = wxString::Format( wxT("virtual row %d"), row );
+            variant = wxString::Format( "virtual row %d", row );
         else
             variant = m_array[ row ];
     }
     else if (col==1)
     {
-        wxDataViewIconText data( wxT("test"), m_icon[ row%2 ] );
+        wxDataViewIconText data( "test", m_icon[ row%2 ] );
         variant << data;
     }
     else if (col==2)
     {
         if (row >= m_array.GetCount())
-            variant = wxT("plain");
+            variant = "plain";
         else
-            variant = wxT("blue/green/red");
+            variant = "blue/green/red";
     }
 }
 
@@ -435,7 +441,7 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
         {
             // the item is not in the range of the items
             // which we store... for simplicity, don't allow editing it
-            wxLogError("Cannot edit rows with an index greater than %d", m_array.GetCount());
+            wxLogError( "Cannot edit rows with an index greater than %d", m_array.GetCount() );
             return false;
         }
 
