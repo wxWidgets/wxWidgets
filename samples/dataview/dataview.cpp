@@ -82,6 +82,8 @@ public:     // event handlers
     void OnDeleteMusic(wxCommandEvent& event);
     void OnDeleteYear(wxCommandEvent& event);
     void OnSelectNinth(wxCommandEvent& event);
+    void OnCollapse(wxCommandEvent& event);
+    void OnExpand(wxCommandEvent& event);
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
@@ -245,6 +247,8 @@ enum
     ID_DELETE_MUSIC     = 101,
     ID_DELETE_YEAR      = 102,
     ID_SELECT_NINTH     = 103,
+    ID_COLLAPSE         = 104,
+    ID_EXPAND           = 105,
 
     ID_PREPEND_LIST     = 200,
     ID_DELETE_LIST      = 201,
@@ -263,6 +267,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_DELETE_MUSIC, MyFrame::OnDeleteMusic )
     EVT_BUTTON( ID_DELETE_YEAR, MyFrame::OnDeleteYear )
     EVT_BUTTON( ID_SELECT_NINTH, MyFrame::OnSelectNinth )
+    EVT_BUTTON( ID_COLLAPSE, MyFrame::OnCollapse )
+    EVT_BUTTON( ID_EXPAND, MyFrame::OnExpand )
+    
     EVT_BUTTON( ID_PREPEND_LIST, MyFrame::OnPrependList )
     EVT_BUTTON( ID_DELETE_LIST, MyFrame::OnDeleteList )
     EVT_BUTTON( ID_GOTO, MyFrame::OnGoto)
@@ -347,6 +354,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer->Add( new wxButton( firstPanel, ID_DELETE_MUSIC,_("Delete selected")),        0, wxALL, 10 );
     button_sizer->Add( new wxButton( firstPanel, ID_DELETE_YEAR, _("Delete \"Year\" column")), 0, wxALL, 10 );
     button_sizer->Add( new wxButton( firstPanel, ID_SELECT_NINTH,_("Select Ninth")),           0, wxALL, 10 );
+    button_sizer->Add( new wxButton( firstPanel, ID_COLLAPSE,    _("Collapse")),               0, wxALL, 10 );
+    button_sizer->Add( new wxButton( firstPanel, ID_EXPAND,      _("Expand")),                 0, wxALL, 10 );
 
     wxSizer *firstPanelSz = new wxBoxSizer( wxVERTICAL );
     m_ctrl[0]->SetMinSize(wxSize(-1, 200));
@@ -759,6 +768,20 @@ void MyFrame::OnDeleteYear( wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnSelectNinth( wxCommandEvent& WXUNUSED(event) )
 {
     m_ctrl[0]->Select( m_music_model->GetNinthItem() );
+}
+
+void MyFrame::OnCollapse( wxCommandEvent& WXUNUSED(event) )
+{
+    wxDataViewItem item = m_ctrl[0]->GetSelection();
+    if (item.IsOk())
+        m_ctrl[0]->Collapse( item );
+}
+
+void MyFrame::OnExpand( wxCommandEvent& WXUNUSED(event) )
+{
+    wxDataViewItem item = m_ctrl[0]->GetSelection();
+    if (item.IsOk())
+        m_ctrl[0]->Expand( item );
 }
 
 void MyFrame::OnValueChanged( wxDataViewEvent &event )
