@@ -2535,6 +2535,8 @@ case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 
 
 
+HOST_PREFIX="${host_alias}-"
+HOST_SUFFIX="-$host_alias"
 
 
 wx_major_version_number=2
@@ -33883,13 +33885,13 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       ;;
 
       *-*-darwin* )
-        install_name_tool=`which install_name_tool`
+        install_name_tool=`which ${HOST_PREFIX}install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
             SAMPLES_RPATH_POSTLINK="\$(wx_top_builddir)/change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
             cat <<EOF >change-install-names
 #!/bin/sh
 libnames=\`cd \${1} ; ls -1 | grep '\.[0-9][0-9]*\.dylib\$'\`
-inst_cmd="install_name_tool "
+inst_cmd="${HOST_PREFIX}install_name_tool "
 for i in \${libnames} ; do
     inst_cmd="\${inst_cmd} -change \${2}/lib/\${i} \${1}/\${i}"
 done
@@ -33963,9 +33965,8 @@ TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffi
 TOOLCHAIN_FULLNAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}-${WX_DEBUGTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 if test "$cross_compiling" = "yes"; then
-    HOST_SUFFIX="-$host_alias"
     TOOLCHAIN_NAME="$TOOLCHAIN_NAME$HOST_SUFFIX"
-    TOOLCHAIN_FULLNAME="${host_alias}-$TOOLCHAIN_FULLNAME"
+    TOOLCHAIN_FULLNAME="$HOST_PREFIX$TOOLCHAIN_FULLNAME"
 fi
 
 
