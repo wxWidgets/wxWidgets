@@ -79,6 +79,10 @@ public:
     virtual void RemoveGrab();
     virtual bool IsGrabbed() const { return m_grabbed; }
 
+
+    virtual void Refresh( bool eraseBackground = true,
+                          const wxRect *rect = (const wxRect *) NULL );
+
     // implementation from now on
     // --------------------------
 

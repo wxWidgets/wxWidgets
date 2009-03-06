@@ -1828,7 +1828,7 @@ gtk_window_realized_callback(GtkWidget* widget, wxWindow* win)
         gtk_im_context_set_client_window( win->m_imData->context,
                                           widget->window);
     }
-
+    
     // We cannot set colours and fonts before the widget
     // been realized, so we do this directly after realization
     // or otherwise in idle time
@@ -3526,38 +3526,40 @@ bool wxWindowGTK::ScrollPages(int pages)
     return DoScrollByUnits(ScrollDir_Vert, ScrollUnit_Page, pages);
 }
 
-#include "wx/treectrl.h"
-
 void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
                           const wxRect *rect)
 {
-    GtkWidget* widget;
-    if (m_wxwindow)
-        widget = m_wxwindow;
-    else if (m_widget)
-        widget = m_widget;
-    else
-        return;
+    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    if (!widget->window)
-        return;
-
-    if (rect == NULL)
+    if (!m_wxwindow)
     {
-        gdk_window_invalidate_rect( widget->window, NULL, TRUE );
+        if (rect)
+            gtk_widget_queue_draw_area( m_widget, rect->x, rect->y, rect->width, rect->height );
+        else
+            gtk_widget_queue_draw( m_widget );
     }
     else
     {
-        int x = rect->x;
-        if (GetLayoutDirection() == wxLayout_RightToLeft)
-            x = GetClientSize().x - x - rect->width;
-            
-        GdkRectangle r;
-        r.x = rect->x;
-        r.y = rect->y;
-        r.width = rect->width;
-        r.height = rect->height;
-        gdk_window_invalidate_rect( m_wxwindow->window, &r, TRUE );
+        // Just return if the widget or one of its ancestors isn't mapped
+        GtkWidget *w;
+        for (w = m_wxwindow; w != NULL; w = w->parent)
+            if (!GTK_WIDGET_MAPPED (w))
+                return;
+
+        if (rect)
+        {
+            int x = rect->x;
+            if (GetLayoutDirection() == wxLayout_RightToLeft)
+                x = GetClientSize().x - x - rect->width;
+            GdkRectangle r;
+            r.x = rect->x;
+            r.y = rect->y;
+            r.width = rect->width;
+            r.height = rect->height;
+            gdk_window_invalidate_rect( m_wxwindow->window, &r, TRUE );
+        }
+        else
+            gdk_window_invalidate_rect( m_wxwindow->window, NULL, TRUE );
     }
 }
 
@@ -3570,8 +3572,8 @@ void wxWindowGTK::Update()
         // This ensures nothing will overwrite the drawing we are about to do.
         gdk_display_sync(display);
 
-        gdk_window_process_updates(m_widget->window, true);
-
+        gdk_window_process_updates(m_widget->window, TRUE);
+        
         // Flush again, but no need to wait for it to finish
         gdk_display_flush(display);
     }

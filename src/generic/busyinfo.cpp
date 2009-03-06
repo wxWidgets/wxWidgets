@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/busyinfo.h"
+#include "wx/generic/stattextg.h"
 
 class WXDLLEXPORT wxInfoFrame : public wxFrame
 {
@@ -46,7 +47,11 @@ wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
                      | wxFRAME_TOOL_WINDOW | wxSTAY_ON_TOP)
 {
     wxPanel *panel = new wxPanel( this );
+#if __WXGTK__
+    wxGenericStaticText *text = new wxGenericStaticText(panel, wxID_ANY, message);
+#else
     wxStaticText *text = new wxStaticText(panel, wxID_ANY, message);
+#endif
 
     panel->SetCursor(*wxHOURGLASS_CURSOR);
     text->SetCursor(*wxHOURGLASS_CURSOR);
