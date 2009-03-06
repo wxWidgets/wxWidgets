@@ -79,7 +79,7 @@ public:
 
     void SetHasAttr( bool set )  { m_hasAttr = set; }
     void SetAttr( const wxDataViewItemAttr &attr ) { m_attr = attr; }
-    bool GetWantsAttr() { return m_wantsAttr; }
+    bool GetWantsAttr() const { return m_wantsAttr; }
 
     // implementation
     int CalculateAlignment() const;
@@ -134,8 +134,9 @@ public:
     wxSize GetSize() const;
 
     // in-place editing
-    virtual bool HasEditorCtrl();
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual bool HasEditorCtrl() const;
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, 
+                                         const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
 
 protected:
@@ -259,7 +260,8 @@ public:
     virtual wxSize GetSize() const;
 
     virtual bool HasEditorCtrl() { return true; }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, 
+                                         const wxVariant &value );
     virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
 
 private:
@@ -286,7 +288,9 @@ public:
     virtual bool Render( wxRect cell, wxDC *dc, int state );
     virtual wxSize GetSize() const;
     virtual bool Activate( wxRect cell,
-                           wxDataViewModel *model, const wxDataViewItem & item, unsigned int col );
+                           wxDataViewModel *model, 
+                           const wxDataViewItem& item, 
+                           unsigned int col );
 
 private:
     wxDateTime    m_date;
@@ -408,9 +412,9 @@ public:
     void Init();
 
     bool Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator );
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize, long style = 0,
+                const wxValidator& validator = wxDefaultValidator );
 
     virtual bool AssociateModel( wxDataViewModel *model );
 
@@ -441,8 +445,10 @@ public:
 
     virtual void EnsureVisible( const wxDataViewItem & item,
                                 const wxDataViewColumn *column = NULL );
-    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column ) const;
-    virtual wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn *column = NULL ) const;
+    virtual void HitTest( const wxPoint & point, wxDataViewItem & item, 
+                          wxDataViewColumn* &column ) const;
+    virtual wxRect GetItemRect( const wxDataViewItem & item, 
+                                const wxDataViewColumn *column = NULL ) const;
 
     virtual void Expand( const wxDataViewItem & item );
     virtual void Collapse( const wxDataViewItem & item );
