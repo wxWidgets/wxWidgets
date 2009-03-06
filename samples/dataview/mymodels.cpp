@@ -43,7 +43,7 @@ MyMusicTreeModel::MyMusicTreeModel()
     // setup pop music
     m_pop = new MyMusicTreeModelNode( m_root, "Pop music" );
     m_pop->Append(
-        new MyMusicTreeModelNode( m_pop, "You are not alone"), "Michael Jackson", 1995 ) );
+        new MyMusicTreeModelNode( m_pop, "You are not alone", "Michael Jackson", 1995 ) );
     m_pop->Append(
         new MyMusicTreeModelNode( m_pop, "Take a bow", "Madonna", 1994 ) );
     m_root->Append( m_pop );
@@ -329,7 +329,7 @@ MyListModel::MyListModel() :
     for (unsigned int i = 0; i < 100; i++)
     {
         wxString str;
-        str.Printf( "real row %d"), i );
+        str.Printf( "real row %d", i );
         m_array.Add( str );
     }
 
