@@ -394,9 +394,16 @@ void wxToolTip::Add(WXHWND hWnd)
             if ( ms_maxWidth != -1 && maxWidth > ms_maxWidth )
                 maxWidth = ms_maxWidth;
 
-            // only set a new width if it is bigger than the current setting
-            SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
-                               wxUIntToPtr(maxWidth));
+            // only set a new width if it is bigger than the current setting:
+            // otherwise adding a tooltip with shorter line(s) than a previous
+            // one would result in breaking the longer lines unnecessarily as
+            // all our tooltips share the same maximal width
+            if ( maxWidth > SendTooltipMessage(GetToolTipCtrl(),
+                                               TTM_GETMAXTIPWIDTH, 0) )
+            {
+                SendTooltipMessage(GetToolTipCtrl(), TTM_SETMAXTIPWIDTH,
+                                   wxUIntToPtr(maxWidth));
+            }
         }
         else
 #endif // TTM_SETMAXTIPWIDTH
