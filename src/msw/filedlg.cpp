@@ -459,12 +459,11 @@ int wxFileDialog::ShowModal()
         lpdt->x = 0;
         lpdt->y = 0;
 
-        wxSize extra_size = GetExtraControlSize();
-        // setting cx doesn't change the width of the dialog
-        lpdt->cx = extra_size.GetWidth();
-        // Dividing by 2 gives expected height on WinXP and Wine.
-        // I don't know why (MW).
-        lpdt->cy = extra_size.GetHeight() / 2;
+        // convert the size of the extra controls to the dialog units
+        const wxSize extraSize = GetExtraControlSize();
+        const LONG baseUnits = ::GetDialogBaseUnits();
+        lpdt->cx = ::MulDiv(extraSize.x, 4, LOWORD(baseUnits));
+        lpdt->cy = ::MulDiv(extraSize.y, 8, HIWORD(baseUnits));
 
         // after the DLGTEMPLATE there are 3 additional WORDs for dialog menu,
         // class and title, all three set to zeros.
