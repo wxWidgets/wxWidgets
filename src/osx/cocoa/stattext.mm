@@ -27,6 +27,38 @@
 
 #include <stdio.h>
 
+@interface wxNSStaticTextView : NSTextView
+{
+    wxWidgetCocoaImpl* impl;
+}
+
+- (void) setImplementation:(wxWidgetCocoaImpl*) item;
+- (wxWidgetCocoaImpl*) implementation;
+@end
+@implementation wxNSStaticTextView
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {    
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+- (wxWidgetCocoaImpl*) implementation
+{
+    return impl;
+}
+
+- (void) setImplementation:(wxWidgetCocoaImpl*) item
+{
+    impl = item;
+}
+@end
+
+
 wxSize wxStaticText::DoGetBestSize() const
 {
 Point bounds;
@@ -49,9 +81,10 @@ Point bounds;
         wxClientDC dc(const_cast<wxStaticText*>(this));
         wxCoord width, height ;
         dc.GetMultiLineTextExtent( m_label , &width, &height);
-        // Some labels seem to have their last characters
-        // stripped out.  Adding 4 pixels seems to be enough to fix this.
-        bounds.h = width+4;
+        // FIXME: Some labels seem to have their last characters
+        // stripped out.  Adding 12 pixels seems to be enough to fix this.
+        // Perhaps m_label is not being synced properly...
+        bounds.h = width+12;
         bounds.v = height;
     }
 
@@ -81,11 +114,17 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
                                     long extraStyle)
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSTextField* v = [[wxNSTextField alloc] initWithFrame:r];
+    wxNSStaticTextView* v = [[wxNSStaticTextView alloc] initWithFrame:r];
 
-    [v setBezeled:NO];
     [v setEditable:NO];
     [v setDrawsBackground:NO];
+    [v setString: wxCFStringRef( label , wxpeer->GetFont().GetEncoding() ).AsNSString()];
+    
+    NSRange allText = NSMakeRange(0, label.length());
+    if (style & wxALIGN_CENTER)
+        [v setAlignment: NSCenterTextAlignment range: allText];
+    else if (style & wxALIGN_RIGHT)
+        [v setAlignment: NSRightTextAlignment range: allText];
 
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;
