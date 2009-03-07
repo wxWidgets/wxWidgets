@@ -339,9 +339,11 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
 
     double value = m_value + step*m_increment;
 
-    // we can always reach the ends using the spinbutton
-    if (value < m_min) value = m_min;
-    if (value > m_max) value = m_max;
+    // Check for over/underflow wrapping around if necessary
+    if (value < m_min)
+        value = HasFlag(wxSP_WRAP) ? m_max : m_min;
+    if (value > m_max)
+        value = HasFlag(wxSP_WRAP) ? m_min : m_max;
 
     // Ignore the edges when it wraps since the up/down event may be opposite
     // They are in GTK and Mac

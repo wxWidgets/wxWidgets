@@ -497,6 +497,7 @@ All (GUI):
   Added also wxEventLoopBase::IsYielding to help cure re-entrancy problems with Yield().
 - Render <th> element contents in bold in wxHTML.
 - Added wxGrid::{Set,Get}{Row,Col}Sizes() methods (Andrey Putrin).
+- Add support for wxSP_WRAP in the generic version of wxSpinCtrlDouble.
 
 wxGTK:
 
