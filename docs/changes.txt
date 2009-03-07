@@ -373,6 +373,7 @@ All:
 - Added wxLog::Log().
 - Added wxProtocolLog and use it in wxFTP.
 - Added wxXmlResource::GetResourceNode().
+- Optimize wxString::Replace() to use an O(N) algorithm (Kuang-che Wu).
 
 All (Unix):
 

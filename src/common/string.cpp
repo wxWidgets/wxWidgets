@@ -36,6 +36,7 @@
 #include <stdlib.h>
 
 #include "wx/hashmap.h"
+#include "wx/vector.h"
 
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
@@ -1397,30 +1398,62 @@ size_t wxString::Replace(const wxString& strOld,
                 break;
         }
     }
-    else // general case
+    else if ( !bReplaceAll)
+    {
+        size_t pos = m_impl.find(strOld, 0);
+        if ( pos != npos )
+        {
+            m_impl.replace(pos, strOld.m_impl.length(), strNew.m_impl);
+            uiCount = 1;
+        }
+    }
+    else // replace all occurrences
     {
         const size_t uiOldLen = strOld.m_impl.length();
         const size_t uiNewLen = strNew.m_impl.length();
 
-        for ( size_t pos = 0; ; )
+        // first scan the string to find all positions at which the replacement
+        // should be made
+        wxVector<size_t> replacePositions;
+
+        size_t pos;
+        for ( pos = m_impl.find(strOld.m_impl, 0);
+              pos != npos;
+              pos = m_impl.find(strOld.m_impl, pos + uiOldLen))
         {
-            pos = m_impl.find(strOld.m_impl, pos);
-            if ( pos == npos )
-                break;
-
-            // replace this occurrence of the old string with the new one
-            m_impl.replace(pos, uiOldLen, strNew.m_impl);
-
-            // move up pos past the string that was replaced
-            pos += uiNewLen;
-
-            // increase replace count
-            uiCount++;
-
-            // stop after the first one?
-            if ( !bReplaceAll )
-                break;
+            replacePositions.push_back(pos);
+            ++uiCount;
         }
+
+        if ( !uiCount )
+            return 0;
+
+        // allocate enough memory for the whole new string
+        wxString tmp;
+        tmp.m_impl.reserve(m_impl.length() + uiCount*(uiNewLen - uiOldLen));
+
+        // copy this string to tmp doing replacements on the fly
+        size_t replNum = 0;
+        for ( pos = 0; replNum < uiCount; replNum++ )
+        {
+            const size_t nextReplPos = replacePositions[replNum];
+
+            if ( pos != nextReplPos )
+            {
+                tmp.m_impl.append(m_impl, pos, nextReplPos - pos);
+            }
+
+            tmp.m_impl.append(strNew.m_impl);
+            pos = nextReplPos + uiOldLen;
+        }
+
+        if ( pos != m_impl.length() )
+        {
+            // append the rest of the string unchanged
+            tmp.m_impl.append(m_impl, pos, m_impl.length() - pos);
+        }
+
+        swap(tmp);
     }
 
     return uiCount;

@@ -318,7 +318,7 @@ void StringTestCase::Replace()
         { \
             wxString s(o,olen); \
             s.replace( pos , len , replacement ); \
-            CPPUNIT_ASSERT( s == wxString(r,rlen) ); \
+            CPPUNIT_ASSERT_EQUAL( wxString(r,rlen), s ); \
         }
 
     TEST_NULLCHARREPLACE( _T("null\0char"), 9, 5, 1, _T("d"),
@@ -328,7 +328,7 @@ void StringTestCase::Replace()
         { \
             wxString s(o,olen); \
             s.Replace( olds, news, all ); \
-            CPPUNIT_ASSERT( s == wxString(r,rlen) ); \
+            CPPUNIT_ASSERT_EQUAL( wxString(r,rlen), s ); \
         }
 
     TEST_WXREPLACE( _T("null\0char"), 9, _T("c"), _T("de"), true,
@@ -338,6 +338,10 @@ void StringTestCase::Replace()
                           _T("null\0char"), 9 );
 
     TEST_WXREPLACE( "life", 4, "f", "", false, "lie", 3 );
+    TEST_WXREPLACE( "life", 4, "f", "", true, "lie", 3 );
+    TEST_WXREPLACE( "life", 4, "fe", "ve", true, "live", 4 );
+    TEST_WXREPLACE( "xx", 2, "x", "yy", true, "yyyy", 4 );
+    TEST_WXREPLACE( "xxx", 3, "xx", "z", true, "zx", 2 );
 
     #undef TEST_WXREPLACE
     #undef TEST_NULLCHARREPLACE

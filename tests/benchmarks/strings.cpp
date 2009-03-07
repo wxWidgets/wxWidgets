@@ -281,6 +281,18 @@ BENCHMARK_FUNC(ReplaceAll)
     return str.Replace("x", "y") != 0;
 }
 
+BENCHMARK_FUNC(ReplaceLonger)
+{
+    wxString str('x', ASCIISTR_LEN);
+    return str.Replace("x", "yy") != 0;
+}
+
+BENCHMARK_FUNC(ReplaceShorter)
+{
+    wxString str('x', ASCIISTR_LEN);
+    return str.Replace("xx", "y") != 0;
+}
+
 
 // ----------------------------------------------------------------------------
 // string buffers: wx[W]CharBuffer
