@@ -727,6 +727,8 @@ public:
     wxGridSizer( int rows, int cols, int vgap, int hgap );
     wxGridSizer( int cols, int vgap = 0, int hgap = 0 );
 
+    virtual wxSizerItem *Insert(size_t index, wxSizerItem *item);
+
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
 

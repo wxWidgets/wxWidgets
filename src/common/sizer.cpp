@@ -1333,18 +1333,45 @@ wxGridSizer::wxGridSizer( int cols, int vgap, int hgap )
 {
 }
 
+wxSizerItem *wxGridSizer::Insert(size_t index, wxSizerItem *item)
+{
+    // if only the number of columns or the number of rows is specified for a
+    // sizer, arbitrarily many items can be added to it but if both of them are
+    // fixed, then the sizer can't have more than that many items -- check for
+    // this here to ensure that we detect errors as soon as possible
+    if ( m_cols && m_rows )
+    {
+        if ( m_children.GetCount() == m_cols*m_rows )
+        {
+            wxFAIL_MSG( "too many items in grid sizer (maybe you should omit "
+                        "the number of either rows or columns?)" );
+
+            // additionally, continuing to use the specified number of columns
+            // and rows is not a good idea as callers of CalcRowsCols() expect
+            // that all sizer items can fit into m_cols/m_rows-sized arrays
+            // which is not the case if there are too many items and results in
+            // crashes, so let it compute the number of rows automatically by
+            // forgetting the (wrong) number of rows specified (this also has a
+            // nice side effect of giving only one assert even if there are
+            // many more items than allowed in this sizer)
+            m_rows = 0;
+        }
+    }
+
+    return wxSizer::Insert(index, item);
+}
+
 int wxGridSizer::CalcRowsCols(int& nrows, int& ncols) const
 {
     const int nitems = m_children.GetCount();
     if ( m_cols && m_rows )
     {
-        // if both rows and columns are specified by user, use the provided
-        // values even if we don't have enough items but check that we don't
-        // have too many of them as this is going to result in problems later
         ncols = m_cols;
         nrows = m_rows;
 
-        wxASSERT_MSG( ncols*nrows >= nitems, "too many items in grid sizer" );
+        // this should be impossible because the too high number of items
+        // should have been detected by Insert() above
+        wxASSERT_MSG( nitems <= ncols*nrows, "logic error in wxGridSizer" );
     }
     else if ( m_cols )
     {
