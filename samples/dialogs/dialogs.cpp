@@ -809,25 +809,32 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
     };
 
     wxArrayInt selections;
-    size_t count = wxGetMultipleChoices(selections,
+    const int count = wxGetSelectedChoices(selections,
                                         _T("This is a small sample\n")
                                         _T("A multi-choice convenience dialog"),
                                         _T("Please select a value"),
                                         WXSIZEOF(choices), choices,
                                         this);
-    if ( count )
+    if ( count >= 0 )
     {
         wxString msg;
-        msg.Printf(wxT("You selected %u items:\n"), (unsigned)count);
-        for ( size_t n = 0; n < count; n++ )
+        if ( count == 0 )
         {
-            msg += wxString::Format(wxT("\t%u: %u (%s)\n"),
-                                    (unsigned)n, (unsigned)selections[n],
-                                    choices[selections[n]].c_str());
+            msg = wxT("You did not select any items");
+        }
+        else
+        {
+            msg.Printf(wxT("You selected %u items:\n"), (unsigned)count);
+            for ( int n = 0; n < count; n++ )
+            {
+                msg += wxString::Format(wxT("\t%u: %u (%s)\n"),
+                                        (unsigned)n, (unsigned)selections[n],
+                                        choices[selections[n]].c_str());
+            }
         }
         wxLogMessage(msg);
     }
-    //else: cancelled or nothing selected
+    //else: cancelled
 }
 #endif // wxUSE_CHOICEDLG
 

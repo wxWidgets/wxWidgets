@@ -274,7 +274,8 @@ Deprecated methods and their replacements
   were deprecated in favour of wxFileName methods. See docs for more info.
 - wxEvtHandler::TryValidator/Parent() are deprecated, override the new and
   documented TryBefore/After() methods if you used to override these ones.
-
+- wxGetMultipleChoices() is deprecated, use wxGetSelectedChoices() which has
+  the same signature but returns -1 and not 0 if the dialog was cancelled.
 
 Major new features in this release
 ----------------------------------
@@ -498,6 +499,7 @@ All (GUI):
 - Render <th> element contents in bold in wxHTML.
 - Added wxGrid::{Set,Get}{Row,Col}Sizes() methods (Andrey Putrin).
 - Add support for wxSP_WRAP in the generic version of wxSpinCtrlDouble.
+- Added wxGetSelectedChoices() replacing wxGetMultipleChoices() (Kolya Kosenko).
 
 wxGTK:
 

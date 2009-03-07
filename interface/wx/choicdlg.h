@@ -394,7 +394,8 @@ wxString wxGetSingleChoiceData(const wxString& message,
     multiple-selection listbox. The user may choose an arbitrary (including 0)
     number of items in the listbox whose indices will be returned in
     @c selections array. The initial contents of this array will be used to
-    select the items when the dialog is shown.
+    select the items when the dialog is shown. If the user cancels the dialog,
+    the function returns -1 and @c selections array is left unchanged.
 
     You may pass the list of strings to choose from either using @c choices
     which is an array of @a n strings for the listbox or by using a single
@@ -405,7 +406,7 @@ wxString wxGetSingleChoiceData(const wxString& message,
 
     @header{wx/choicdlg.h}
 */
-size_t wxGetMultipleChoices(wxArrayInt& selections,
+int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& message,
                             const wxString& caption,
                             const wxArrayString& aChoices,
@@ -415,7 +416,7 @@ size_t wxGetMultipleChoices(wxArrayInt& selections,
                             bool centre = true,
                             int width = 150,
                             int height = 200);
-size_t wxGetMultipleChoices(wxArrayInt& selections,
+int wxGetSelectedChoices(wxArrayInt& selections,
                             const wxString& message,
                             const wxString& caption,
                             int n,

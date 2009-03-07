@@ -294,8 +294,8 @@ WXDLLIMPEXP_CORE void* wxGetSingleChoiceData(const wxString& message,
 
 // fill the array with the indices of the chosen items, it will be empty
 // if no items were selected or Cancel was pressed - return the number of
-// selections
-WXDLLIMPEXP_CORE size_t wxGetMultipleChoices(wxArrayInt& selections,
+// selections or -1 if cancelled
+WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
                                         const wxString& message,
                                         const wxString& caption,
                                         int n, const wxString *choices,
@@ -306,7 +306,7 @@ WXDLLIMPEXP_CORE size_t wxGetMultipleChoices(wxArrayInt& selections,
                                         int width = wxCHOICE_WIDTH,
                                         int height = wxCHOICE_HEIGHT);
 
-WXDLLIMPEXP_CORE size_t wxGetMultipleChoices(wxArrayInt& selections,
+WXDLLIMPEXP_CORE int wxGetSelectedChoices(wxArrayInt& selections,
                                         const wxString& message,
                                         const wxString& caption,
                                         const wxArrayString& choices,
@@ -316,5 +316,32 @@ WXDLLIMPEXP_CORE size_t wxGetMultipleChoices(wxArrayInt& selections,
                                         bool centre = true,
                                         int width = wxCHOICE_WIDTH,
                                         int height = wxCHOICE_HEIGHT);
+
+#if WXWIN_COMPATIBILITY_2_8
+// fill the array with the indices of the chosen items, it will be empty
+// if no items were selected or Cancel was pressed - return the number of
+// selections
+wxDEPRECATED( WXDLLIMPEXP_CORE size_t wxGetMultipleChoices(wxArrayInt& selections,
+                                        const wxString& message,
+                                        const wxString& caption,
+                                        int n, const wxString *choices,
+                                        wxWindow *parent = NULL,
+                                        int x = wxDefaultCoord,
+                                        int y = wxDefaultCoord,
+                                        bool centre = true,
+                                        int width = wxCHOICE_WIDTH,
+                                        int height = wxCHOICE_HEIGHT) );
+
+wxDEPRECATED( WXDLLIMPEXP_CORE size_t wxGetMultipleChoices(wxArrayInt& selections,
+                                        const wxString& message,
+                                        const wxString& caption,
+                                        const wxArrayString& choices,
+                                        wxWindow *parent = NULL,
+                                        int x = wxDefaultCoord,
+                                        int y = wxDefaultCoord,
+                                        bool centre = true,
+                                        int width = wxCHOICE_WIDTH,
+                                        int height = wxCHOICE_HEIGHT));
+#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif // _WX_GENERIC_CHOICDGG_H_
