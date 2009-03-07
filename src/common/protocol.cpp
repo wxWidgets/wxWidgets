@@ -208,7 +208,7 @@ void wxProtocol::LogResponse(const wxString& str)
         m_log->LogResponse(str);
 }
 
-void wxProtocolLog::DoLogString(const wxString& WXUNUSED_UNLESS_DEBUG(str))
+void wxProtocolLog::DoLogString(const wxString& str)
 {
     wxLogTrace(m_traceMask, "%s", str);
 }
