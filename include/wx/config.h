@@ -13,6 +13,9 @@
 #define _WX_CONFIG_H_BASE_
 
 #include "wx/defs.h"
+
+#if wxUSE_CONFIG
+
 #include "wx/confbase.h"
 
 #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
@@ -27,5 +30,6 @@
 #    include "wx/fileconf.h"
 #endif
 
-#endif
-    // _WX_CONFIG_H_BASE_
+#endif // wxUSE_CONFIG
+
+#endif // _WX_CONFIG_H_BASE_
