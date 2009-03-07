@@ -1027,6 +1027,14 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
   return true;
 }
 
+wxSize wxDataViewCtrl::DoGetBestSize() const
+{
+    wxSize best = wxControl::DoGetBestSize();
+    best.y = 80;
+    
+    return best;
+}
+
 /*static*/
 wxVisualAttributes wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
 {
@@ -1034,7 +1042,7 @@ wxVisualAttributes wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant var
 
     attr.colFg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     attr.colBg = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX );
-    attr.font.MacCreateFromThemeFont(kThemeViewsFont);
+    //attr.font.MacCreateFromThemeFont(kThemeViewsFont);
 
     return attr;
 }

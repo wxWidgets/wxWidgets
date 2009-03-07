@@ -508,6 +508,8 @@ public:
 // implementation
 //
 
+  virtual wxSize DoGetBestSize() const;
+
  // adds all children of the passed parent to the control; if 'parentItem' is invalid the root(s) is/are added:
   void AddChildrenLevel(wxDataViewItem const& parentItem);
 
