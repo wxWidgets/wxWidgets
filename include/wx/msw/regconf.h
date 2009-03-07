@@ -112,4 +112,4 @@ private:
 
 #endif // wxUSE_CONFIG && wxUSE_REGKEY
 
-#endif  // _WX_MSW_REGCONF_H_
+#endif // _WX_MSW_REGCONF_H_
