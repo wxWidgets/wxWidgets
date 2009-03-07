@@ -328,7 +328,7 @@ private:
     #if defined(__WXGTK20__)
         #define wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
     #elif defined(__WXMAC__)
-        #define wxNEEDS_UTF16_FOR_TEXT_DATAOBJ
+        #define wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
     #endif
 #endif // wxUSE_UNICODE
 
