@@ -972,7 +972,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
         {
          // initialize wxWidget event:
           wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED,dataViewCtrlPtr->GetId()); // variable definition
-
+          dataViewEvent.SetItem( dataViewCtrlPtr->GetSelection() );
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetModel      (dataViewCtrlPtr->GetModel());
          // finally send the equivalent wxWidget event:
