@@ -12,7 +12,9 @@
 #ifndef   _WX_MSW_INICONF_H_
 #define   _WX_MSW_INICONF_H_
 
-#if wxUSE_INICONF
+#include "wx/defs.h"
+
+#if wxUSE_CONFIG && wxUSE_INICONF
 
 // ----------------------------------------------------------------------------
 // wxIniConfig is a wxConfig implementation which uses MS Windows INI files to
@@ -99,6 +101,6 @@ private:
   DECLARE_ABSTRACT_CLASS(wxIniConfig)
 };
 
-#endif // wxUSE_INICONF
+#endif // wxUSE_CONFIG && wxUSE_INICONF
 
-#endif  //_WX_MSW_INICONF_H_
+#endif // _WX_MSW_INICONF_H_
