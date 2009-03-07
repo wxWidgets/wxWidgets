@@ -374,6 +374,7 @@ All:
 - Added wxProtocolLog and use it in wxFTP.
 - Added wxXmlResource::GetResourceNode().
 - Optimize wxString::Replace() to use an O(N) algorithm (Kuang-che Wu).
+- Added support of %l format specifier to wxDateTime::ParseFormat().
 
 All (Unix):
 

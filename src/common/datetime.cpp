@@ -3186,13 +3186,15 @@ wxDateTime::ParseFormat(const wxString& date,
          haveYear = false,
          haveHour = false,
          haveMin = false,
-         haveSec = false;
+         haveSec = false,
+         haveMsec = false;
 
     bool hourIsIn12hFormat = false, // or in 24h one?
          isPM = false;              // AM by default
 
     // and the value of the items we have (init them to get rid of warnings)
-    wxDateTime_t sec = 0,
+    wxDateTime_t msec = 0,
+                 sec = 0,
                  min = 0,
                  hour = 0;
     WeekDay wday = Inv_WeekDay;
@@ -3374,6 +3376,14 @@ wxDateTime::ParseFormat(const wxString& date,
 
                 haveYDay = true;
                 yday = (wxDateTime_t)num;
+                break;
+
+            case _T('l'):       // milliseconds (0-999)
+                if ( !GetNumericToken(width, input, &num) )
+                    return NULL;
+
+                haveMsec = true;
+                msec = (wxDateTime_t)num;
                 break;
 
             case _T('m'):       // month as a number (01-12)
@@ -3756,6 +3766,9 @@ wxDateTime::ParseFormat(const wxString& date,
     {
         tm.sec = sec;
     }
+
+    if ( haveMsec )
+        tm.msec = msec;
 
     Set(tm);
 
