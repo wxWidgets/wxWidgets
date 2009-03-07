@@ -186,7 +186,8 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
     // the text control borders (but we might want to use style border bits to
     // select the text control style)
     if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize,
-                            wxBORDER_NONE, wxDefaultValidator, name) )
+                            (style & ~wxBORDER_MASK) | wxBORDER_NONE,
+                            wxDefaultValidator, name) )
     {
         return false;
     }
