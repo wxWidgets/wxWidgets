@@ -133,7 +133,8 @@ static bool InitializeColumnDescription(DataBrowserListViewColumnDesc& columnDes
   }
   if (columnPtr->IsSortable())
     columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewSortableColumn;
-  if (columnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE)
+  if ((columnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE) || 
+      (columnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE))
     columnDescription.propertyDesc.propertyFlags |= kDataBrowserPropertyIsEditable;
   if ((columnDescription.propertyDesc.propertyType == kDataBrowserCustomType) ||
       (columnDescription.propertyDesc.propertyType == kDataBrowserDateTimeType) ||
@@ -489,7 +490,7 @@ void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
         DataBrowserPropertyFlags flags;
 
         verify_noerr(macDataViewListCtrlPtr->GetPropertyFlags(dataViewColumnPtr->GetPropertyID(),&flags));
-        if (mode == wxDATAVIEW_CELL_EDITABLE)
+        if ((mode == wxDATAVIEW_CELL_EDITABLE) || (mode == wxDATAVIEW_CELL_ACTIVATABLE))
           flags |= kDataBrowserPropertyIsEditable;
         else
           flags &= ~kDataBrowserPropertyIsEditable;
