@@ -13,6 +13,9 @@
 #define _WX_CONFIG_H_BASE_
 
 #include "wx/defs.h"
+
+#if wxUSE_CONFIG
+
 #include "wx/confbase.h"
 
 // ----------------------------------------------------------------------------
@@ -34,5 +37,7 @@
     #include "wx/fileconf.h"
     #define wxConfig wxFileConfig
 #endif
+
+#endif // wxUSE_CONFIG
 
 #endif // _WX_CONFIG_H_BASE_
