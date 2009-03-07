@@ -3308,8 +3308,8 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // fabricate the lParam and wParam parameters sufficiently
                 // similar to the ones from a "real" WM_KEYDOWN so that
                 // CreateKeyEvent() works correctly
-                return MSWHandleTreeKeyDownEvent(info->wVKey,
-                                                 wxIsAltDown() << 16);
+                return MSWHandleTreeKeyDownEvent(
+                        info->wVKey, (wxIsAltDown() ? KF_ALTDOWN : 0) << 16);
             }
             break;
 
