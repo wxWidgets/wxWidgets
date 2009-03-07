@@ -598,6 +598,10 @@ SOURCE=..\..\include\wx\protocol\http.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\protocol\log.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\protocol\protocol.h
 # End Source File
 # Begin Source File

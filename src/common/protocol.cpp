@@ -19,6 +19,7 @@
 #if wxUSE_PROTOCOL
 
 #include "wx/protocol/protocol.h"
+#include "wx/protocol/log.h"
 
 #ifndef WX_PRECOMP
     #include "wx/module.h"
@@ -64,6 +65,7 @@ wxProtocol::wxProtocol()
 #endif
 {
     m_lastError = wxPROTO_NOERR;
+    m_log = NULL;
     SetDefaultTimeout(60);      // default timeout is 60 seconds
 }
 
@@ -95,6 +97,10 @@ void wxProtocol::SetDefaultTimeout(wxUint32 Value)
 #endif
 }
 
+wxProtocol::~wxProtocol()
+{
+    delete m_log;
+}
 
 // ----------------------------------------------------------------------------
 // Read a line from socket
@@ -178,5 +184,32 @@ wxProtocolError wxProtocol::ReadLine(wxString& result)
 }
 
 #endif // wxUSE_SOCKETS
+
+// ----------------------------------------------------------------------------
+// logging
+// ----------------------------------------------------------------------------
+
+void wxProtocol::SetLog(wxProtocolLog *log)
+{
+    delete m_log;
+    m_log = log;
+}
+
+void wxProtocol::LogRequest(const wxString& str)
+{
+    if ( m_log )
+        m_log->LogRequest(str);
+}
+
+void wxProtocol::LogResponse(const wxString& str)
+{
+    if ( m_log )
+        m_log->LogResponse(str);
+}
+
+void wxProtocolLog::DoLogString(const wxString& WXUNUSED_UNLESS_DEBUG(str))
+{
+    wxLogTrace(m_traceMask, "%s", str);
+}
 
 #endif // wxUSE_PROTOCOL

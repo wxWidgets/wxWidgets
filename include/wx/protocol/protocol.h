@@ -24,6 +24,8 @@
     #include "wx/socket.h"
 #endif
 
+class WXDLLIMPEXP_FWD_NET wxProtocolLog;
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -55,6 +57,7 @@ class WXDLLIMPEXP_NET wxProtocol
 {
 public:
     wxProtocol();
+    virtual ~wxProtocol();
 
 #if wxUSE_SOCKETS
     bool Reconnect();
@@ -89,6 +92,30 @@ public:
         { SetDefaultTimeout(seconds); }
 
 
+    // logging support: each wxProtocol object may have the associated logger
+    // (by default there is none) which is used to log network requests and
+    // responses
+
+    // set the logger, deleting the old one and taking ownership of this one
+    void SetLog(wxProtocolLog *log);
+
+    // return the current logger, may be NULL
+    wxProtocolLog *GetLog() const { return m_log; }
+
+    // detach the existing logger without deleting it, the caller is
+    // responsible for deleting the returned pointer if it's non-NULL
+    wxProtocolLog *DetachLog()
+    {
+        wxProtocolLog * const log = m_log;
+        m_log = NULL;
+        return log;
+    }
+
+    // these functions forward to the same functions with the same names in
+    // wxProtocolLog if we have a valid logger and do nothing otherwise
+    void LogRequest(const wxString& str);
+    void LogResponse(const wxString& str);
+
 protected:
     // the timeout associated with the protocol:
     wxUint32        m_uiDefaultTimeout;
@@ -100,6 +127,8 @@ protected:
     wxProtocolError m_lastError;
 
 private:
+    wxProtocolLog *m_log;
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxProtocol)
 };
 

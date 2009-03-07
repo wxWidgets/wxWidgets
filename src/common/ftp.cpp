@@ -257,7 +257,7 @@ char wxFTP::SendCommand(const wxString& command)
         cmd = command;
     }
 
-    wxLogTrace(FTP_TRACE_MASK, _T("==> %s"), cmd.c_str());
+    LogRequest(cmd);
 #endif // __WXDEBUG__
 
     m_lastError = wxPROTO_NOERR;
@@ -301,6 +301,8 @@ char wxFTP::GetResult()
             return 0;
         }
 
+        LogResponse(line);
+
         if ( !m_lastResult.empty() )
         {
             // separate from last line
@@ -317,11 +319,6 @@ char wxFTP::GetResult()
             {
                 badReply = true;
             }
-            else
-            {
-                wxLogTrace(FTP_TRACE_MASK, _T("<== %s %s"),
-                           code.c_str(), line.c_str());
-            }
         }
         else // line has at least 4 chars
         {
@@ -331,8 +328,6 @@ char wxFTP::GetResult()
             if ( firstLine )
             {
                 code = wxString(line, LEN_CODE);
-                wxLogTrace(FTP_TRACE_MASK, _T("<== %s %s"),
-                           code.c_str(), line.c_str() + LEN_CODE + 1);
 
                 switch ( chMarker )
                 {
@@ -357,15 +352,6 @@ char wxFTP::GetResult()
                     {
                         endOfReply = true;
                     }
-
-                    wxLogTrace(FTP_TRACE_MASK, _T("<== %s %s"),
-                               code.c_str(), line.c_str() + LEN_CODE + 1);
-                }
-                else
-                {
-                    // just part of reply
-                    wxLogTrace(FTP_TRACE_MASK, _T("<== %s %s"),
-                               code.c_str(), line.c_str());
                 }
             }
         }
@@ -1008,8 +994,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
                                           &filesize) != 9 )
                             {
                                 // Hmm... Invalid response
-                                wxLogTrace(FTP_TRACE_MASK,
-                                           _T("Invalid LIST response"));
+                                wxLogDebug(wxT("Invalid LIST response"));
                             }
                         }
                         else // Windows-style response (?)
@@ -1019,8 +1004,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
                                           &filesize) != 4 )
                             {
                                 // something bad happened..?
-                                wxLogTrace(FTP_TRACE_MASK,
-                                           _T("Invalid or unknown LIST response"));
+                                wxLogDebug(wxT("Invalid or unknown LIST response"));
                             }
                         }
                     }

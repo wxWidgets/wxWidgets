@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        protocol/protocol.h
+// Name:        wx/protocol/protocol.h
 // Purpose:     interface of wxProtocol
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
@@ -107,5 +107,50 @@ public:
         @see wxSocketBase::SetTimeout
     */
     void SetDefaultTimeout(wxUint32 Value);
+
+    /**
+        @name Logging support.
+
+        Each wxProtocol object may have the associated logger (by default there
+        is none) which is used to log network requests and responses.
+
+        @see wxProtocolLog
+    */
+    //@{
+
+    /**
+        Set the logger, deleting the old one and taking ownership of this one.
+
+        @param log
+            New logger allocated on the heap or @NULL.
+     */
+    void SetLog(wxProtocolLog *log);
+
+    /**
+        Return the current logger, may be @NULL.
+     */
+    wxProtocolLog *GetLog() const { return m_log; }
+
+    /**
+        Detach the existing logger without deleting it.
+        
+        The caller is responsible for deleting the returned pointer if it's
+        non-@c NULL.
+     */
+    wxProtocolLog *DetachLog();
+
+    /**
+        Call wxProtocolLog::LogRequest() if we have a valid logger or do
+        nothing otherwise.
+     */
+    void LogRequest(const wxString& str);
+
+    /**
+        Call wxProtocolLog::LogResponse() if we have a valid logger or do
+        nothing otherwise.
+     */
+    void LogResponse(const wxString& str);
+
+    //@}
 };
 

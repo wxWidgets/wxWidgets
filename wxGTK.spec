@@ -360,6 +360,7 @@ wx/fs_inet.h
 wx/protocol/file.h
 wx/protocol/ftp.h
 wx/protocol/http.h
+wx/protocol/log.h
 wx/protocol/protocol.h
 wx/sckaddr.h
 wx/sckipc.h

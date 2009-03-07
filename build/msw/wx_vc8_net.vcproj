@@ -1115,6 +1115,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\protocol\log.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\protocol\protocol.h"
 				>
 			</File>

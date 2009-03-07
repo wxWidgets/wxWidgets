@@ -2455,6 +2455,7 @@ static void TestSocketClient()
 #ifdef TEST_FTP
 
 #include "wx/protocol/ftp.h"
+#include "wx/protocol/log.h"
 
 #define FTP_ANONYMOUS
 
@@ -4403,6 +4404,7 @@ int main(int argc, char **argv)
     // wxFTP cannot be a static variable as its ctor needs to access
     // wxWidgets internals after it has been initialized
     ftp = new wxFTP;
+    ftp->SetLog(new wxProtocolLog(FTP_TRACE_MASK));
 
     if ( TestFtpConnect() )
     {

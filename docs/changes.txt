@@ -370,6 +370,7 @@ All:
 - Added wxStrnlen() for safe computation of string length.
 - Added wxImage::Clear() (troelsk).
 - Added wxLog::Log().
+- Added wxProtocolLog and use it in wxFTP.
 - Added wxXmlResource::GetResourceNode().
 
 All (Unix):
