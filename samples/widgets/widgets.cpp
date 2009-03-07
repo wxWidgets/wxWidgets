@@ -240,10 +240,7 @@ private:
         if ( level == wxLOG_Trace )
         {
             if ( m_logOld )
-            {
-                // cast is needed to call protected method
-                ((LboxLogger *)m_logOld)->DoLog(level, str, t);
-            }
+                m_logOld->Log(level, str, t);
         }
         else
         {
