@@ -229,6 +229,9 @@ public:
     }
 
 private:
+    wxSUPPRESS_DOLOG_HIDE_WARNING()
+    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+
     // implement sink functions
     virtual void DoLog(wxLogLevel level, const wxString& str, time_t t)
     {
