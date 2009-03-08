@@ -1381,50 +1381,35 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
         CGRect cgrect = CGRectMake( rect.left , rect.top , rect.right - rect.left ,
             rect.bottom - rect.top ) ;
 
-        HIThemeFrameDrawInfo info ;
-        memset( &info, 0 , sizeof(info) ) ;
-
-        info.version = 0 ;
-        info.kind = 0 ;
-        info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
-        info.isFocused = hasFocus ;
-
         CGContextRef cgContext = (CGContextRef) GetParent()->MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
 
-        if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+        if ( m_peer->NeedsFrame() )
         {
-            info.kind = kHIThemeFrameTextFieldSquare ;
-            HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+            HIThemeFrameDrawInfo info ;
+            memset( &info, 0 , sizeof(info) ) ;
+
+            info.version = 0 ;
+            info.kind = 0 ;
+            info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
+            info.isFocused = hasFocus ;
+
+            if ( HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
+            {
+                info.kind = kHIThemeFrameTextFieldSquare ;
+                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+            }
+            else if ( HasFlag(wxSIMPLE_BORDER) )
+            {
+                info.kind = kHIThemeFrameListBox ;
+                HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
+            }
         }
-        else if ( HasFlag(wxSIMPLE_BORDER) )
-        {
-            info.kind = kHIThemeFrameListBox ;
-            HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
-        }
-        else if ( hasFocus )
+        
+        if ( hasFocus )
         {
             HIThemeDrawFocusRect( &cgrect , true , cgContext , kHIThemeOrientationNormal ) ;
         }
-#if 0 // TODO REMOVE now done in a separate call earlier in drawing the window itself
-        m_peer->GetRect( &rect ) ;
-        if ( MacHasScrollBarCorner() )
-        {
-            int variant = (m_hScrollBar == NULL ? m_vScrollBar : m_hScrollBar ) ->GetWindowVariant();
-            int size = m_hScrollBar ? m_hScrollBar->GetSize().y : ( m_vScrollBar ? m_vScrollBar->GetSize().x : MAC_SCROLLBAR_SIZE ) ;
-            CGRect cgrect = CGRectMake( rect.right - size , rect.bottom - size , size , size ) ;
-            CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
-            HIThemeGrowBoxDrawInfo info ;
-            memset( &info, 0, sizeof(info) ) ;
-            info.version = 0 ;
-            info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
-            info.kind = kHIThemeGrowBoxKindNone ;
-            // contrary to the docs ...SizeSmall does not work
-            info.size = kHIThemeGrowBoxSizeNormal ;
-            info.direction = 0 ;
-            HIThemeDrawGrowBox( &cgpoint , &info , cgContext , kHIThemeOrientationNormal ) ;
-        }
-#endif
     }
 #endif // wxOSX_USE_COCOA_OR_CARBON
 }
@@ -2097,25 +2082,28 @@ long wxWindowMac::MacGetLeftBorderSize() const
 
     SInt32 border = 0 ;
 
-    if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER))
+    if ( m_peer->NeedsFrame() )
     {
+        if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER))
+        {
 #if wxOSX_USE_COCOA_OR_CARBON
-        // this metric is only the 'outset' outside the simple frame rect
-        GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
-        border += 1;
+            // this metric is only the 'outset' outside the simple frame rect
+            GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
+            border += 1;
 #else
-        border += 2;
+            border += 2;
 #endif
-    }
-    else if (HasFlag(wxSIMPLE_BORDER))
-    {
+        }
+        else if (HasFlag(wxSIMPLE_BORDER))
+        {
 #if wxOSX_USE_COCOA_OR_CARBON
-        // this metric is only the 'outset' outside the simple frame rect
-        GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-        border += 1;
+            // this metric is only the 'outset' outside the simple frame rect
+            GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+            border += 1;
 #else
-        border += 1;
+            border += 1;
 #endif
+        }
     }
 
     return border ;
@@ -2398,6 +2386,7 @@ void wxWidgetImpl::Init()
     m_isRootControl = false;
     m_wxPeer = NULL;
     m_needsFocusRect = false;
+    m_needsFrame = true;
 }
 
 void wxWidgetImpl::SetNeedsFocusRect( bool needs )
@@ -2410,3 +2399,12 @@ bool wxWidgetImpl::NeedsFocusRect() const
     return m_needsFocusRect;
 }
 
+void wxWidgetImpl::SetNeedsFrame( bool needs )
+{
+    m_needsFrame = needs;
+}
+
+bool wxWidgetImpl::NeedsFrame() const
+{
+    return m_needsFrame;
+}

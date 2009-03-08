@@ -208,6 +208,9 @@ public :
     virtual bool        NeedsFocusRect() const;
     virtual void        SetNeedsFocusRect( bool needs );
 
+    virtual bool        NeedsFrame() const;
+    virtual void        SetNeedsFrame( bool needs );
+
     virtual bool        CanFocus() const = 0;
     // return true if successful
     virtual bool        SetFocus() = 0;
@@ -445,6 +448,7 @@ protected :
     bool                m_isRootControl;
     wxWindowMac*        m_wxPeer;
     bool                m_needsFocusRect;
+    bool                m_needsFrame;
 
     DECLARE_ABSTRACT_CLASS(wxWidgetImpl)
 };
