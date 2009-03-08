@@ -2178,6 +2178,13 @@ wxSize wxStaticBoxSizer::CalcMin()
 
     wxSize ret( wxBoxSizer::CalcMin() );
     ret.x += 2*other_border;
+
+    // ensure that we're wide enough to show the static box label (there is no
+    // need to check for the static box best size in vertical direction though)
+    const int boxWidth = m_staticBox->GetBestSize().x;
+    if ( ret.x < boxWidth )
+        ret.x = boxWidth;
+
     ret.y += other_border + top_border;
 
     return ret;
