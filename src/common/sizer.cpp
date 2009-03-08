@@ -1341,10 +1341,15 @@ wxSizerItem *wxGridSizer::Insert(size_t index, wxSizerItem *item)
     // this here to ensure that we detect errors as soon as possible
     if ( m_cols && m_rows )
     {
-        if ( m_children.GetCount() == m_cols*m_rows )
+        const int nitems = m_children.GetCount();
+        if ( nitems == m_cols*m_rows )
         {
-            wxFAIL_MSG( "too many items in grid sizer (maybe you should omit "
-                        "the number of either rows or columns?)" );
+            wxFAIL_MSG(
+                wxString::Format(
+                    "too many items (%d > %d*%d) in grid sizer (maybe you "
+                    "should omit the number of either rows or columns?)",
+                nitems + 1, m_cols, m_rows)
+            );
 
             // additionally, continuing to use the specified number of columns
             // and rows is not a good idea as callers of CalcRowsCols() expect
@@ -2146,19 +2151,10 @@ wxStaticBoxSizer::~wxStaticBoxSizer()
     delete m_staticBox;
 }
 
-static void GetStaticBoxBorders( wxStaticBox *box,
-                                 int *borderTop,
-                                 int *borderOther)
-{
-    // this has to be done platform by platform as there is no way to
-    // guess the thickness of a wxStaticBox border
-    box->GetBordersForSizer(borderTop, borderOther);
-}
-
 void wxStaticBoxSizer::RecalcSizes()
 {
     int top_border, other_border;
-    GetStaticBoxBorders(m_staticBox, &top_border, &other_border);
+    m_staticBox->GetBordersForSizer(&top_border, &other_border);
 
     m_staticBox->SetSize( m_position.x, m_position.y, m_size.x, m_size.y );
 
@@ -2178,7 +2174,7 @@ void wxStaticBoxSizer::RecalcSizes()
 wxSize wxStaticBoxSizer::CalcMin()
 {
     int top_border, other_border;
-    GetStaticBoxBorders(m_staticBox, &top_border, &other_border);
+    m_staticBox->GetBordersForSizer(&top_border, &other_border);
 
     wxSize ret( wxBoxSizer::CalcMin() );
     ret.x += 2*other_border;
