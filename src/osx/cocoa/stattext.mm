@@ -118,6 +118,7 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
 
     [v setEditable:NO];
     [v setDrawsBackground:NO];
+    [v setSelectable: NO];
     [v setString: wxCFStringRef( label , wxpeer->GetFont().GetEncoding() ).AsNSString()];
     
     NSRange allText = NSMakeRange(0, label.length());
