@@ -2864,7 +2864,6 @@ public:
     // Event queuing and processing
     // ----------------------------
 
-
     // Process an event right now: this can only be called from the main
     // thread, use QueueEvent() for scheduling the events for
     // processing from other threads.
@@ -2900,9 +2899,11 @@ public:
     void ProcessPendingEvents();
         // NOTE: uses ProcessEvent()
 
+    void DeletePendingEvents();
+
 #if wxUSE_THREADS
     bool ProcessThreadEvent(const wxEvent& event);
-        // NOTE: uses AddPendingEvent()
+        // NOTE: uses AddPendingEvent(); call only from secondary threads
 #endif
 
 

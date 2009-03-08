@@ -313,6 +313,9 @@ public:
     //to the list of the handlers with _delayed_ pending events
     void DelayPendingEventHandler(wxEvtHandler* toDelay);
 
+    // deletes the current pending events
+    void DeletePendingEvents();
+
 
     // wxEventLoop redirections
     // ------------------------
@@ -420,17 +423,26 @@ protected:
     // been started yet or has already terminated)
     wxEventLoopBase *m_mainLoop;
 
+
+    // pending events management vars:
+
     // the array of the handlers with pending events which needs to be processed
     // inside ProcessPendingEvents()
     wxEvtHandlerArray m_handlersWithPendingEvents;
 
-    // helper array used by ProcessPendingEvents()
+    // helper array used by ProcessPendingEvents() to store the event handlers
+    // which have pending events but of these events none can be processed right now
+    // (because of a call to wxEventLoop::YieldFor() which asked to selectively process
+    // pending events)
     wxEvtHandlerArray m_handlersWithPendingDelayedEvents;
 
 #if wxUSE_THREADS
     // this critical section protects both the lists above
     wxCriticalSection m_handlersWithPendingEventsLocker;
 #endif
+
+    // flag modified by Suspend/ResumeProcessingOfPendingEvents()
+    bool m_bDoPendingEventProcessing;
 
     friend class WXDLLIMPEXP_FWD_BASE wxEvtHandler;
 

@@ -132,6 +132,7 @@ wxAppConsoleBase::wxAppConsoleBase()
 {
     m_traits = NULL;
     m_mainLoop = NULL;
+    m_bDoPendingEventProcessing = true;
 
     ms_appInstance = static_cast<wxAppConsole *>(this);
 
@@ -415,17 +416,19 @@ bool wxAppConsoleBase::HasPendingEvents() const
 
 void wxAppConsoleBase::SuspendProcessingOfPendingEvents()
 {
-    wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
-        // entering the critical section locks blocks calls to ProcessPendingEvents()
+    m_bDoPendingEventProcessing = false;
 }
 
 void wxAppConsoleBase::ResumeProcessingOfPendingEvents()
 {
-    wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+    m_bDoPendingEventProcessing = true;
 }
 
 void wxAppConsoleBase::ProcessPendingEvents()
 {
+    if (!m_bDoPendingEventProcessing)
+        return;
+
     wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
 
     wxCHECK_RET( m_handlersWithPendingDelayedEvents.IsEmpty(),
@@ -458,6 +461,21 @@ void wxAppConsoleBase::ProcessPendingEvents()
         WX_APPEND_ARRAY(m_handlersWithPendingEvents, m_handlersWithPendingDelayedEvents);
         m_handlersWithPendingDelayedEvents.Clear();
     }
+
+    wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
+}
+
+void wxAppConsoleBase::DeletePendingEvents()
+{
+    wxENTER_CRIT_SECT(m_handlersWithPendingEventsLocker);
+
+    wxCHECK_RET( m_handlersWithPendingDelayedEvents.IsEmpty(),
+                 "this helper list should be empty" );
+
+    for (unsigned int i=0; i<m_handlersWithPendingEvents.GetCount(); i++)
+        m_handlersWithPendingEvents[i]->DeletePendingEvents();
+
+    m_handlersWithPendingEvents.Clear();
 
     wxLEAVE_CRIT_SECT(m_handlersWithPendingEventsLocker);
 }

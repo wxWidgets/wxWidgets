@@ -533,7 +533,32 @@ public:
         @see wxWindow::HandleWindowEvent
     */
     bool SafelyProcessEvent(wxEvent& event);
+    
+    /**
+        Processes the pending events previously queued using QueueEvent() or 
+        AddPendingEvent(); you must call this function only if you are sure
+        there are pending events for this handler, otherwise a @c wxCHECK
+        will fail.
+        
+        The real processing still happens in ProcessEvent() which is called by this
+        function.
+        
+        Note that this function needs a valid application object (see 
+        wxAppConsole::GetInstance()) because wxApp holds the list of the event
+        handlers with pending events and this function manipulates that list.
+    */
+    void ProcessPendingEvents();
 
+    /**
+        Deletes all events queued on this event handler using QueueEvent() or
+        AddPendingEvent().
+        
+        Use with care because the events which are deleted are (obviously) not
+        processed and this may have unwanted consequences (e.g. user actions events
+        will be lost).
+    */
+    void DeletePendingEvents();
+    
     /**
         Searches the event table, executing an event handler function if an appropriate
         one is found.
@@ -555,6 +580,9 @@ public:
 
                  If a suitable function is called but calls wxEvent::Skip, this
                  function will fail, and searching will continue.
+                 
+         @todo this function in the header is listed as an "implementation only" function;
+               are we sure we want to document it?
 
         @see ProcessEvent()
     */

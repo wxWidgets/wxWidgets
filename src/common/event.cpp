@@ -1079,13 +1079,11 @@ wxEvtHandler::~wxEvtHandler()
         delete m_dynamicEvents;
     }
 
-    if (m_pendingEvents)
-        m_pendingEvents->DeleteContents(true);
-    delete m_pendingEvents;
-
     // Remove us from the list of the pending events if necessary.
     if (wxTheApp)
         wxTheApp->RemovePendingEventHandler(this);
+
+    DeletePendingEvents();
 
     // we only delete object data, not untyped
     if ( m_clientDataType == wxClientData_Object )
@@ -1147,7 +1145,7 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
     wxENTER_CRIT_SECT( m_pendingEventsLock );
 
     if ( !m_pendingEvents )
-      m_pendingEvents = new wxList;
+        m_pendingEvents = new wxList;
 
     m_pendingEvents->Append(event);
 
@@ -1167,6 +1165,13 @@ void wxEvtHandler::QueueEvent(wxEvent *event)
     // 3) Inform the system that new pending events are somewhere,
     //    and that these should be processed in idle time.
     wxWakeUpIdle();
+}
+
+void wxEvtHandler::DeletePendingEvents()
+{
+    if (m_pendingEvents)
+        m_pendingEvents->DeleteContents(true);
+    wxDELETE(m_pendingEvents);
 }
 
 void wxEvtHandler::ProcessPendingEvents()

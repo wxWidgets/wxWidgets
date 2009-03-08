@@ -125,15 +125,35 @@ public:
 
     /**
         Process all pending events; it is necessary to call this function to
-        process posted events.
+        process events posted with wxEvtHandler::QueueEvent or wxEvtHandler::AddPendingEvent.
 
-        This happens during each event loop iteration in GUI mode but
+        This happens during each event loop iteration (see wxEventLoopBase) in GUI mode but
         it may be also called directly.
+        
+        Note that this function does not only process the pending events for the wxApp object
+        itself (which derives from wxEvtHandler) but also the pending events for @e any
+        event handler of this application.
+        
+        This function will immediately return and do nothing if SuspendProcessingOfPendingEvents()
+        was called.
     */
     virtual void ProcessPendingEvents();
+    
+    /**
+        Deletes the pending events of all wxEvtHandlers of this application.
+        
+        See wxEvtHandler::DeletePendingEvents() for warnings about deleting the pending
+        events.
+    */
+    void DeletePendingEvents();
 
     /**
         Returns @true if there are pending events on the internal pending event list.
+        
+        Whenever wxEvtHandler::QueueEvent or wxEvtHandler::AddPendingEvent() are
+        called (not only for wxApp itself, but for any event handler of the application!), 
+        the internal wxApp's list of handlers with pending events is updated and this
+        function will return true.
     */
     bool HasPendingEvents() const;
 
