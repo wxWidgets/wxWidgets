@@ -495,9 +495,10 @@ public:
     void HitTest( const wxPoint & point, wxDataViewItem & item, wxDataViewColumn* &column );
     wxRect GetItemRect( const wxDataViewItem & item, const wxDataViewColumn* column );
 
-    void Expand( unsigned int row ) { OnExpanding( row ); }
-    void Collapse( unsigned int row ) { OnCollapsing( row ); }
+    void Expand( unsigned int row );
+    void Collapse( unsigned int row );
     bool IsExpanded( unsigned int row ) const;
+    bool HasChildren( unsigned int row ) const;
 
 #if wxUSE_DRAG_AND_DROP
     bool EnableDragSource( const wxDataFormat &format );
@@ -518,8 +519,6 @@ private:
     int RecalculateCount();
 
     wxDataViewEvent SendExpanderEvent( wxEventType type, const wxDataViewItem & item );
-    void OnExpanding( unsigned int row );
-    void OnCollapsing( unsigned int row );
 
     wxDataViewTreeNode * FindNode( const wxDataViewItem & item );
 
@@ -2908,18 +2907,40 @@ bool wxDataViewMainWindow::IsExpanded( unsigned int row ) const
     return node->IsOpen();
 }
 
+bool wxDataViewMainWindow::HasChildren( unsigned int row ) const
+{
+    if (IsVirtualList())
+        return false;
 
-void wxDataViewMainWindow::OnExpanding( unsigned int row )
+    wxDataViewTreeNode * node = GetTreeNodeByRow(row);
+    if (!node)
+        return false;
+
+    if (!node->HasChildren())
+    {
+        delete node;
+        return false;
+    }
+
+    return true;
+}
+
+void wxDataViewMainWindow::Expand( unsigned int row )
 {
     if (IsVirtualList())
         return;
 
     wxDataViewTreeNode * node = GetTreeNodeByRow(row);
-    if( node != NULL )
+    if (!node)
+        return;
+        
+    if (!node->HasChildren())
     {
-        if( node->HasChildren())
-        {
-            if( !node->IsOpen())
+        delete node;
+        return;
+    }
+    
+            if (!node->IsOpen())
             {
                 wxDataViewEvent e = 
                     SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, node->GetItem());
@@ -2958,23 +2979,9 @@ void wxDataViewMainWindow::OnExpanding( unsigned int row )
                 // Send the expanded event
                 SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED,node->GetItem());
             }
-            else
-            {
-#if 0
-                // Why should we select the next row here???
-                SelectRow( row, false );
-                SelectRow( row + 1, true );
-                ChangeCurrentRow( row + 1 );
-                SendSelectionChangedEvent( GetItemByRow(row+1));
-#endif
-            }
-        }
-        else
-            delete node;
-    }
 }
 
-void wxDataViewMainWindow::OnCollapsing(unsigned int row)
+void wxDataViewMainWindow::Collapse(unsigned int row)
 {
     if (IsVirtualList())
         return;
@@ -2983,13 +2990,13 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
     if (!node)
         return;
         
-    if( !node->HasChildren())
+    if (!node->HasChildren())
     {
         delete node;
         return;
     }
 
-        if( node->HasChildren() && node->IsOpen() )
+        if (node->IsOpen())
         {
             wxDataViewEvent e = 
                 SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,node->GetItem());
@@ -3026,7 +3033,7 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
             {
                 // if there were no selected items below our node we still need to "fix" the
                 // selection list to adjust for the changing of the row indices.
-                // We actually do the opposite of what we are doing in OnExpanding().
+                // We actually do the opposite of what we are doing in Expand().
                 for(unsigned i=0; i<m_selection.size(); ++i)
                 {
                     const unsigned testRow = m_selection[i];
@@ -3047,21 +3054,6 @@ void wxDataViewMainWindow::OnCollapsing(unsigned int row)
             m_count = -1;
             UpdateDisplay();
             SendExpanderEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED,node->GetItem());
-        }
-        else
-        {
-            node = node->GetParent();
-            if( node != NULL )
-            {
-                int  parent = GetRowByItem( node->GetItem() );
-                if( parent >= 0 )
-                {
-                    SelectRow( row, false);
-                    SelectRow(parent , true );
-                    ChangeCurrentRow( parent );
-                    SendSelectionChangedEvent( node->GetItem() );
-                }
-            }
         }
 }
 
@@ -3389,16 +3381,57 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
             break;
         // Add the process for tree expanding/collapsing
         case WXK_LEFT:
-        OnCollapsing(m_currentRow);
-        break;
-    case WXK_RIGHT:
-        OnExpanding( m_currentRow);
-        break;
+        {
+            if (IsVirtualList())
+               break;
+
+            wxDataViewTreeNode* node = GetTreeNodeByRow(m_currentRow);
+            if (!node)
+                break;
+
+            if (node->HasChildren())
+            {
+                Collapse(m_currentRow);
+            }
+            else
+            {
+                wxDataViewTreeNode *parent_node = node->GetParent();
+                delete node;
+                if (parent_node)
+                {
+                    int parent = GetRowByItem( parent_node->GetItem() );
+                    if ( parent >= 0 )
+                    {
+                        unsigned int row = m_currentRow;
+                        SelectRow( row, false);
+                        SelectRow( parent, true );
+                        ChangeCurrentRow( parent );
+                        SendSelectionChangedEvent( parent_node->GetItem() );
+                    }
+                }
+            }
+            break;
+        }
+        case WXK_RIGHT:
+        {
+            if (!IsExpanded( m_currentRow ))
+                Expand( m_currentRow );
+            else
+            {
+                unsigned int row = m_currentRow;
+                SelectRow( row, false );
+                SelectRow( row + 1, true );
+                ChangeCurrentRow( row + 1 );
+                SendSelectionChangedEvent( GetItemByRow(row+1) );
+            }
+            break;
+        }
         case WXK_END:
+        {
             if (!IsEmpty())
                 OnArrowChar( GetRowCount() - 1, event );
             break;
-
+        }
         case WXK_HOME:
             if (!IsEmpty())
                 OnArrowChar( 0, event );
@@ -3693,9 +3726,9 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // valid and have children.
         // So we don't need any extra checks.
         if( node->IsOpen() )
-            OnCollapsing(current);
+            Collapse(current);
         else
-            OnExpanding(current);
+            Expand(current);
     }
     else if ((event.LeftDown() || simulateClick) && !hoverOverExpander)
     {
