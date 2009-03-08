@@ -947,9 +947,7 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
     //
     // Column to reduce, if needed. Take last one that exceeds minimum width.
-    // Except if auto splitter centering is used, in which case use widest.
     int reduceCol = -1;
-    int highestColWidth = 0;
 
 #ifdef __WXDEBUG__
     if ( debug )
@@ -967,18 +965,9 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
         }
         else
         {
-            if ( pg->HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
-            {
-                if ( m_colWidths[i] >= highestColWidth )
-                {
-                    highestColWidth = m_colWidths[i];
-                    reduceCol = i;
-                }
-            }
-            else
-            {
-                reduceCol = i;
-            }
+            // Always reduce the last column that is larger than minimum size
+            // (looks nicer, even with auto-centering enabled).
+            reduceCol = i;
         }
     }
 
