@@ -535,11 +535,17 @@ public:
     ~wxCriticalSection();
 
     /**
-        Enter the critical section (same as locking a mutex).
-
+        Enter the critical section (same as locking a mutex): if another thread
+        has already entered it, this call will block until the other thread
+        calls Leave().
         There is no error return for this function.
-        After entering the critical section protecting some global
-        data the thread running in critical section may safely use/modify it.
+
+        After entering the critical section protecting a data variable,
+        the thread running inside the critical section may safely use/modify it.
+
+        Note that entering the same critical section twice or more from the same
+        thread doesn't result in a deadlock; in this case in fact this function will
+        immediately return.
     */
     void Enter();
 
@@ -1505,6 +1511,9 @@ public:
     /**
         Locks the mutex object.
         This is equivalent to LockTimeout() with infinite timeout.
+
+        Note that if this mutex is already locked by the caller thread,
+        this function doesn't block but rather immediately returns.
 
         @return One of: @c wxMUTEX_NO_ERROR, @c wxMUTEX_DEAD_LOCK.
     */
