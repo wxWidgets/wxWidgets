@@ -586,6 +586,7 @@ public:
         Note that this function creates a temporary event loop which takes
         precedence over the application's main event loop (see wxEventLoopBase)
         and which is destroyed when the dialog is dismissed.
+        This also results in a call to wxApp::ProcessPendingEvents().
 
         @return The value set with SetReturnCode().
 
