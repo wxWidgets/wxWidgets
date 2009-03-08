@@ -535,6 +535,15 @@ BOOL wxOSX_performKeyEquivalent(NSView* self, SEL _cmd, NSEvent *event)
     return impl->performKeyEquivalent(event, self, _cmd);
 }
 
+BOOL wxOSX_acceptsFirstResponder(NSView* self, SEL _cmd)
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if (impl == NULL)
+        return NO;
+        
+    return impl->acceptsFirstResponder(self, _cmd);
+}
+
 BOOL wxOSX_becomeFirstResponder(NSView* self, SEL _cmd)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -780,6 +789,17 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
     return superimpl(slf, (SEL)_cmd, event);
 }
 
+bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
+{
+    // Make sure wxWindows can receive focus by default like they do for other ports.
+
+    // FIXME: It'd be nice to have some way to tie this in with AcceptsFocus
+    // but that currently causes loops because the call to m_peer->CanFocus() 
+    // ends up calling this method again. Don't know how to avoid it without
+    // making a setter method for focus.
+    return YES;
+}
+
 bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
 {
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
@@ -943,6 +963,7 @@ void wxOSXCocoaClassAddWXMethods(Class c)
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(performKeyEquivalent:), (IMP) wxOSX_performKeyEquivalent, "v@:@" )
 
+    wxOSX_CLASS_ADD_METHOD(c, @selector(acceptsFirstResponder), (IMP) wxOSX_acceptsFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(resignFirstResponder), (IMP) wxOSX_resignFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(resetCursorRects), (IMP) wxOSX_resetCursorRects, "v@:" )
@@ -1256,7 +1277,7 @@ void wxWidgetCocoaImpl::SetupTabs( const wxNotebook& notebook)
 void wxWidgetCocoaImpl::GetBestRect( wxRect *r ) const
 {
     r->x = r->y = r->width = r->height = 0;
-//    if (  [m_osxView isKindOfClass:[NSControl class]] )
+
     if (  [m_osxView respondsToSelector:@selector(sizeToFit)] )
     {
         NSRect former = [m_osxView frame];
@@ -1319,9 +1340,14 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
         [m_osxView setControlSize:size];
 }
 
-void wxWidgetCocoaImpl::SetFont(wxFont const&, wxColour const&, long, bool)
+void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&, long, bool)
 {
-    // TODO
+    if ([m_osxView respondsToSelector:@selector(setFont:)])
+#if wxOSX_USE_CORE_TEXT
+        [m_osxView setFont: (CTFontRef)font.MacGetCTFont()];
+#else
+
+#endif
 }
 
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )

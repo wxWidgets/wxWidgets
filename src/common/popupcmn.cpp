@@ -291,7 +291,7 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
         m_focus->SetFocus();
     }
 
-#if defined( __WXMSW__ ) || defined( __WXMAC__)
+#if defined( __WXMSW__ ) || (defined( __WXMAC__) && wxOSX_USE_CARBON)
     // MSW doesn't allow to set focus to the popup window, but we need to
     // subclass the window which has the focus, and not winFocus passed in or
     // otherwise everything else breaks down

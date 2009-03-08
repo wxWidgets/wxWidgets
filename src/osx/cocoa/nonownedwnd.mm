@@ -116,6 +116,11 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     impl = theImplementation;
 }
 
+- (BOOL)canBecomeKeyWindow
+{
+    return YES;
+}
+
 - (wxNonOwnedWindowCocoaImpl*) implementation
 {
     return impl;
@@ -144,8 +149,8 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 
 - (void)windowDidResize:(NSNotification *)notification;
 - (NSSize)windowWillResize:(NSWindow *)window toSize:(NSSize)proposedFrameSize;
-- (void)windowDidResignMain:(NSNotification *)notification;
-- (void)windowDidBecomeMain:(NSNotification *)notification;
+- (void)windowDidResignKey:(NSNotification *)notification;
+- (void)windowDidBecomeKey:(NSNotification *)notification;
 - (void)windowDidMove:(NSNotification *)notification;
 - (BOOL)windowShouldClose:(id)window;
 
@@ -219,7 +224,7 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     }
 }
 
-- (void)windowDidBecomeMain:(NSNotification *)notification
+- (void)windowDidBecomeKey:(NSNotification *)notification
 {
     wxNSWindow* window = (wxNSWindow*) [notification object];
     wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
@@ -231,7 +236,7 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     }
 }
 
-- (void)windowDidResignMain:(NSNotification *)notification
+- (void)windowDidResignKey:(NSNotification *)notification
 {
     wxNSWindow* window = (wxNSWindow*) [notification object];
     wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
@@ -239,7 +244,15 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     {
         wxNonOwnedWindow* wxpeer = windowimpl->GetWXPeer();
         if ( wxpeer )
+        {
             wxpeer->HandleActivated(0, false);
+            // Needed for popup window since the firstResponder 
+            // (focus in wx) doesn't change when this 
+            // TLW becomes inactive.
+            wxFocusEvent event( wxEVT_KILL_FOCUS, wxpeer->GetId());
+            event.SetEventObject(wxpeer);
+            wxpeer->HandleWindowEvent(event);
+        }
     }
 }
 
@@ -283,8 +296,11 @@ long style, long extraStyle, const wxString& name )
 
     int windowstyle = NSBorderlessWindowMask;
     
-    if ( style & wxFRAME_TOOL_WINDOW )
+    if ( style & wxFRAME_TOOL_WINDOW || ( style & wxPOPUP_WINDOW ) || 
+            GetWXPeer()->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG )
+    {
         m_macWindow = [wxNSPanel alloc];
+    }
     else
         m_macWindow = [wxNSWindow alloc];
     
@@ -383,7 +399,8 @@ long style, long extraStyle, const wxString& name )
     
     [m_macWindow setAcceptsMouseMovedEvents: YES];
     
-    // [m_macWindow makeKeyAndOrderFront:nil];
+    if ( ( style & wxPOPUP_WINDOW ) )
+        [m_macWindow makeKeyAndOrderFront:nil];
 }
 
 
