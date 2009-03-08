@@ -144,7 +144,7 @@ public :
     virtual void            UpdateLineToEnd( unsigned int n);
 
     virtual void            controlAction(WXWidget slf, void* _cmd, void *sender);
-    virtual void            controlDoubleAction(void* _cmd);
+    virtual void            controlDoubleAction(WXWidget slf, void* _cmd, void *sender);
 protected :
     wxNSTableView*          m_tableView ;
     
@@ -496,7 +496,7 @@ void wxListWidgetCocoaImpl::controlAction(WXWidget slf,void* _cmd, void *sender)
     list->HandleLineEvent( sel, false );
 }
 
-void wxListWidgetCocoaImpl::controlDoubleAction(void* _cmd)
+void wxListWidgetCocoaImpl::controlDoubleAction(WXWidget slf,void* _cmd, void *sender)
 {
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
