@@ -54,9 +54,8 @@ enum wxTextFileType
       wxTextFile::Clear resets the file to empty.
     - Save your changes: notice that the changes you make to the file will @b not be
       saved automatically; calling wxTextFile::Close or doing nothing discards them!
-      To save the changes you must explicitly callwxTextFile::Write - here, you may
+      To save the changes you must explicitly call wxTextFile::Write - here, you may
       also change the line termination type if you wish.
-
 
     @library{wxbase}
     @category{file}
@@ -242,10 +241,9 @@ public:
     */
     bool IsOpened() const;
 
-    //@{
     /**
-        Open() opens the file with the given name or the name which was given in the
-        wxTextFile(const wxString&) constructor and also loads file in memory on success.
+        Opens the file with the name which was given in the wxTextFile(const wxString&)
+        constructor and also loads file in memory on success.
 
         It will fail if the file does not exist, Create() should be used in this case.
 
@@ -253,8 +251,16 @@ public:
         it is used to convert the file to wide character representation.
     */
     bool Open(const wxMBConv& conv = wxConvAuto()) const;
+
+    /**
+        Opens the file with the given name and also loads file in memory on success.
+
+        It will fail if the file does not exist, Create() should be used in this case.
+
+        The @a conv argument is only meaningful in Unicode build of wxWidgets when
+        it is used to convert the file to wide character representation.
+    */
     bool Open(const wxString& strFile, const wxMBConv& conv = wxConvAuto()) const;
-    //@}
 
     /**
         Delete line number @a n from the file.
