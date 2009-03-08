@@ -1130,19 +1130,33 @@ wxSize wxDataViewIconTextRenderer::GetSize() const
     return wxSize(80,20);
 }
 
-wxControl *
-wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow * WXUNUSED(parent),
-                                            wxRect WXUNUSED(labelRect),
-                                            const wxVariant& WXUNUSED(value))
+wxControl* wxDataViewIconTextRenderer::CreateEditorCtrl(wxWindow *parent, wxRect labelRect, const wxVariant& value)
 {
-    return NULL;
+    wxDataViewIconText iconText;
+    iconText << value;
+
+    wxString text = iconText.GetText();
+
+    // adjust the label rect to take the width of the icon into account
+    if (iconText.GetIcon().IsOk())
+    {
+        int w = iconText.GetIcon().GetWidth() + 4;
+        labelRect.x += w;
+        labelRect.width -= w;
+    }
+
+    return new wxTextCtrl( parent, wxID_ANY, text,
+                           wxPoint(labelRect.x,labelRect.y),
+                           wxSize(labelRect.width,labelRect.height) );
 }
 
-bool
-wxDataViewIconTextRenderer::GetValueFromEditorCtrl(wxControl* WXUNUSED(editor),
-                                                wxVariant& WXUNUSED(value))
+bool wxDataViewIconTextRenderer::GetValueFromEditorCtrl( wxControl *editor, wxVariant& value )
 {
-    return false;
+    wxTextCtrl *text = (wxTextCtrl*) editor;
+
+    wxDataViewIconText iconText(text->GetValue(), m_value.GetIcon());
+    value << iconText;
+    return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -3143,21 +3157,64 @@ void wxDataViewMainWindow::HitTest( const wxPoint & point, wxDataViewItem & item
 wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item, 
                                           const wxDataViewColumn* column )
 {
-    int row = GetRowByItem(item);
-    int y = GetLineStart( row );
-    int h = GetLineHeight( m_lineHeight );
-    int x = 0;
-    wxDataViewColumn *col = NULL;
-    for( int i = 0, cols = GetOwner()->GetColumnCount(); i < cols; i ++ )
+    int xpos = 0;
+    int width = 0;
+	
+    unsigned int cols = GetOwner()->GetColumnCount();
+    // If column is null the loop will compute the combined width of all columns.
+    // Otherwise, it will compute the x position of the column we are looking for.
+    for (unsigned int i = 0; i < cols; i++)
     {
-    col = GetOwner()->GetColumnAt( i );
-    x += col->GetWidth();
-    if( GetOwner()->GetColumnAt(i+1) == column )
-        break;
+        wxDataViewColumn* col = GetOwner()->GetColumnAt( i );
+
+        if (col == column)
+            break;
+
+        if (col->IsHidden())
+            continue;      // skip it!
+
+        xpos += col->GetWidth();
+        width += col->GetWidth();
     }
-    int w = col->GetWidth();
-    m_owner->CalcScrolledPosition( x, y, &x, &y );
-    return wxRect(x, y, w, h);
+
+    if(column != 0)
+    {
+        // If we have a column, we need can get its width directly.
+        if(column->IsHidden())
+            width = 0;
+        else
+            width = column->GetWidth();
+
+    }
+    else
+    {
+        // If we have no column, we reset the x position back to zero.
+        xpos = 0;
+    }
+
+    // we have to take an expander column into account and compute its indentation
+    // to get the correct x position where the actual text is
+    int indent = 0;
+    int row = GetRowByItem(item);
+    if (!IsVirtualList() && (column == 0 || GetOwner()->GetExpanderColumn() == column) )
+    {
+        wxDataViewTreeNode* node = GetTreeNodeByRow(row);
+        indent = GetOwner()->GetIndent() * node->GetIndentLevel();
+        indent = indent + m_lineHeight;	// use m_lineHeight as the width of the expander
+
+        if(!node->HasChildren())
+            delete node;
+    }
+
+    wxRect itemRect( xpos + indent,
+                     GetLineStart( row ),
+                     width - indent,
+                     GetLineHeight( row ) );
+
+    GetOwner()->CalcScrolledPosition(  itemRect.x,  itemRect.y,
+                                      &itemRect.x, &itemRect.y );
+
+    return itemRect;
 }
 
 int wxDataViewMainWindow::RecalculateCount()
@@ -4365,6 +4422,17 @@ bool wxDataViewCtrl::IsExpanded( const wxDataViewItem & item ) const
     if (row != -1)
         return m_clientArea->IsExpanded(row);
     return false;
+}
+
+void wxDataViewCtrl::StartEditor( const wxDataViewItem & item, unsigned int column )
+{
+    wxDataViewColumn* col = GetColumn( column );
+    if (!col)
+        return;
+  
+    wxRect itemRect = GetItemRect(item, col);
+    wxDataViewRenderer* renderer = col->GetRenderer();
+    renderer->StartEditing(item, itemRect);
 }
 
 #endif

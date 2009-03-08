@@ -702,6 +702,10 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
     m_editorCtrl->PushEventHandler( handler );
 
+    // there might be no editor control for the given item
+    if (!m_editorCtrl)
+        return false;
+        
 #if defined(__WXGTK20__) && !defined(wxUSE_GENERICDATAVIEWCTRL)
     handler->SetFocusOnIdle();
 #else
