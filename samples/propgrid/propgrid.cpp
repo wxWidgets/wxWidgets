@@ -1531,6 +1531,25 @@ void FormMain::PopulateWithExamples ()
     // Set value after limiting so that it will be applied
     pg->SetPropertyValue( wxT("StringProperty"), wxT("some text") );
 
+    //
+    // Demonstrate "AutoComplete" attribute
+    pg->Append( new wxStringProperty( "StringProperty AutoComplete",
+                                      wxPG_LABEL ) );
+
+    wxArrayString autoCompleteStrings;
+    autoCompleteStrings.Add("One choice");
+    autoCompleteStrings.Add("Another choice");
+    autoCompleteStrings.Add("Another choice, yeah");
+    autoCompleteStrings.Add("Yet another choice");
+    autoCompleteStrings.Add("Yet another choice, bear with me");
+    pg->SetPropertyAttribute( "StringProperty AutoComplete",
+                              "AutoComplete",
+                              autoCompleteStrings );
+
+    pg->SetPropertyHelpString( "StringProperty AutoComplete",
+        "AutoComplete attribute has been set for this property "
+        "(try writing something beginning with 'a', 'o' or 'y').");
+
     // Add string property with arbitrarily wide bitmap in front of it. We
     // intentionally lower-than-typical row height here so that the ugly
     // scaling code wont't be run.

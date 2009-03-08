@@ -46,6 +46,11 @@
 */
 #define wxPG_ATTR_INLINE_HELP               wxS("InlineHelp")
 
+/** Universal, wxArrayString. Set to enable auto-completion in any
+    wxTextCtrl-based property editor.
+*/
+#define wxPG_ATTR_AUTOCOMPLETE              wxS("AutoComplete")
+
 /** wxBoolProperty specific, int, default 0. When 1 sets bool property to
     use checkbox instead of choice.
 */
@@ -193,6 +198,9 @@
 
     Simple string property. wxPG_STRING_PASSWORD attribute may be used
     to echo value as asterisks and use wxTE_PASSWORD for wxTextCtrl.
+    wxPG_ATTR_AUTOCOMPLETE attribute may be used to enable auto-completion
+    (use a wxArrayString value), and is also supported by any property that
+    happens to use a wxTextCtrl-based editor.
 
     @remarks wxStringProperty has a special trait: if it has value of
             "<composed>", and also has child properties, then its displayed

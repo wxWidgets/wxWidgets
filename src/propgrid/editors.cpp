@@ -1633,12 +1633,12 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
                                                   int maxLen )
 {
     wxWindowID id = wxPG_SUBID1;
-    wxPGProperty* selected = m_selected;
-    wxASSERT(selected);
+    wxPGProperty* prop = m_selected;
+    wxASSERT(prop);
 
     int tcFlags = wxTE_PROCESS_ENTER | extraStyle;
 
-    if ( selected->HasFlag(wxPG_PROP_READONLY) )
+    if ( prop->HasFlag(wxPG_PROP_READONLY) )
         tcFlags |= wxTE_READONLY;
 
     wxPoint p(pos.x,pos.y);
@@ -1675,14 +1675,12 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     SetupTextCtrlValue(value);
     tc->Create(ctrlParent,id,value, p, s,tcFlags);
     
-    wxWindow* ed = tc;
-
     // Center the control vertically
     if ( !hasSpecialSize )
-        FixPosForTextCtrl(ed);
+        FixPosForTextCtrl(tc);
 
 #ifdef __WXMSW__
-    ed->Show();
+    tc->Show();
     if ( secondary )
         secondary->Show();
 #endif
@@ -1691,7 +1689,14 @@ wxWindow* wxPropertyGrid::GenerateEditorTextCtrl( const wxPoint& pos,
     if ( maxLen > 0 )
         tc->SetMaxLength( maxLen );
 
-    return (wxWindow*) ed;
+    wxVariant attrVal = prop->GetAttribute(wxPG_ATTR_AUTOCOMPLETE);
+    if ( !attrVal.IsNull() )
+    {
+        wxASSERT(attrVal.GetType() == wxS("arrstring"));
+        tc->AutoComplete(attrVal.GetArrayString());
+    }
+
+    return tc;
 }
 
 // -----------------------------------------------------------------------

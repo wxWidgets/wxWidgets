@@ -515,6 +515,11 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 */
 #define wxPG_ATTR_INLINE_HELP               wxS("InlineHelp")
 
+/** Universal, wxArrayString. Set to enable auto-completion in any
+    wxTextCtrl-based property editor.
+*/
+#define wxPG_ATTR_AUTOCOMPLETE              wxS("AutoComplete")
+
 /** wxBoolProperty specific, int, default 0. When 1 sets bool property to
     use checkbox instead of choice.
 */
