@@ -27,6 +27,8 @@ public:
     {
         m_name = wxT("JPEG file");
         m_extension = wxT("jpg");
+        m_altExtensions.Add(wxT("jpeg"));
+        m_altExtensions.Add(wxT("jpe"));
         m_type = wxBITMAP_TYPE_JPEG;
         m_mime = wxT("image/jpeg");
     }

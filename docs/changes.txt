@@ -375,6 +375,7 @@ All:
 - Added wxXmlResource::GetResourceNode().
 - Optimize wxString::Replace() to use an O(N) algorithm (Kuang-che Wu).
 - Added support of %l format specifier to wxDateTime::ParseFormat().
+- wxImage handlers can now support multiple extensions (Ivan Krestinin).
 
 All (Unix):
 

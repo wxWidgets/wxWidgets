@@ -84,9 +84,20 @@ public:
     virtual ~wxImageHandler();
 
     /**
-        Gets the file extension associated with this handler.
+        Gets the preferred file extension associated with this handler.
+
+        @see GetAltExtensions()
     */
     const wxString& GetExtension() const;
+
+    /**
+        Returns the other file extensions associated with this handler.
+
+        The preferred extension for this handler is returned by GetExtension().
+
+        @since 2.9.0
+    */
+    const wxArrayString& GetAltExtensions() const;
 
     /**
         If the image file contains more than one image and the image handler is capable
@@ -160,12 +171,26 @@ public:
                           bool verbose = true);
 
     /**
-        Sets the handler extension.
+        Sets the preferred file extension associated with this handler.
 
         @param extension
-            Handler extension.
+            File extension without leading dot.
+
+        @see SetAltExtensions()
     */
     void SetExtension(const wxString& extension);
+
+    /**
+        Sets the alternative file extensions associated with this handler.
+
+        @param extensions
+            Array of file extensions.
+
+        @see SetExtension()
+
+        @since 2.9.0
+    */
+    void SetAltExtensions(const wxArrayString& extensions);
 
     /**
         Sets the handler MIME type.

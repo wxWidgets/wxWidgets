@@ -108,10 +108,12 @@ public:
 
     void SetName(const wxString& name) { m_name = name; }
     void SetExtension(const wxString& ext) { m_extension = ext; }
+    void SetAlExtensions(const wxArrayString& exts) { m_altExtensions = exts; }
     void SetType(wxBitmapType type) { m_type = type; }
     void SetMimeType(const wxString& type) { m_mime = type; }
     const wxString& GetName() const { return m_name; }
     const wxString& GetExtension() const { return m_extension; }
+    const wxArrayString& GetAltExtensions() const { return m_altExtensions; }
     wxBitmapType GetType() const { return m_type; }
     const wxString& GetMimeType() const { return m_mime; }
 
@@ -138,6 +140,7 @@ protected:
 
     wxString  m_name;
     wxString  m_extension;
+    wxArrayString m_altExtensions;
     wxString  m_mime;
     wxBitmapType m_type;
 

@@ -2438,10 +2438,12 @@ wxImageHandler *wxImage::FindHandler( const wxString& extension, wxBitmapType bi
     while (node)
     {
         wxImageHandler *handler = (wxImageHandler*)node->GetData();
-        if ( (handler->GetExtension().Cmp(extension) == 0) &&
-             ( (bitmapType == wxBITMAP_TYPE_ANY) || (handler->GetType() == bitmapType)) )
+        if ((bitmapType == wxBITMAP_TYPE_ANY) || (handler->GetType() == bitmapType))
         {
-            return handler;
+            if (handler->GetExtension() == extension)
+                return handler;
+            if (handler->GetAltExtensions().Index(extension, false) != wxNOT_FOUND)
+                return handler;
         }
         node = node->GetNext();
     }
@@ -2503,6 +2505,8 @@ wxString wxImage::GetImageExtWildcard()
     {
         wxImageHandler* Handler = (wxImageHandler*)Node->GetData();
         fmts += wxT("*.") + Handler->GetExtension();
+        for (size_t i = 0; i < Handler->GetAltExtensions().size(); i++)
+            fmts += wxT(";*.") + Handler->GetAltExtensions()[i];
         Node = Node->GetNext();
         if ( Node ) fmts += wxT(";");
     }

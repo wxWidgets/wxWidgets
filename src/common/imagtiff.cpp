@@ -108,6 +108,7 @@ wxTIFFHandler::wxTIFFHandler()
 {
     m_name = wxT("TIFF file");
     m_extension = wxT("tif");
+    m_altExtensions.Add(wxT("tiff"));
     m_type = wxBITMAP_TYPE_TIF;
     m_mime = wxT("image/tiff");
     TIFFSetWarningHandler((TIFFErrorHandler) TIFFwxWarningHandler);
