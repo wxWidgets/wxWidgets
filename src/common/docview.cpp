@@ -774,12 +774,9 @@ wxDocTemplate::~wxDocTemplate()
 // Tries to dynamically construct an object of the right class.
 wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
 {
-    wxDocument * const doc = DoCreateDocument();
+    wxScopedPtr<wxDocument> doc(DoCreateDocument());
 
-    // VZ: this code doesn't delete doc if InitDocument() (i.e. doc->OnCreate())
-    //     fails, is this intentional?
-
-    return doc && InitDocument(doc, path, flags) ? doc : NULL;
+    return doc && InitDocument(doc.get(), path, flags) ? doc.release() : NULL;
 }
 
 bool
@@ -1307,15 +1304,18 @@ wxDocument *wxDocManager::CreateDocument(const wxString& pathOrig, long flags)
     docNew->SetDocumentName(temp->GetDocumentName());
     docNew->SetDocumentTemplate(temp);
 
-    // call the appropriate function depending on whether we're creating a new
-    // file or opening an existing one
-    if ( !(flags & wxDOC_NEW ? docNew->OnNewDocument()
-                             : docNew->OnOpenDocument(path)) )
+    wxTRY
     {
-         // Document is implicitly deleted by DeleteAllViews
-         docNew->DeleteAllViews();
-         return NULL;
+        // call the appropriate function depending on whether we're creating a
+        // new file or opening an existing one
+        if ( !(flags & wxDOC_NEW ? docNew->OnNewDocument()
+                                 : docNew->OnOpenDocument(path)) )
+        {
+            docNew->DeleteAllViews();
+            return NULL;
+        }
     }
+    wxCATCH_ALL( docNew->DeleteAllViews(); throw; )
 
     // add the successfully opened file to MRU, but only if we're going to be
     // able to reopen it successfully later which requires the template for
