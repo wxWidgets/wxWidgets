@@ -2082,7 +2082,7 @@ long wxWindowMac::MacGetLeftBorderSize() const
 
     SInt32 border = 0 ;
 
-    if ( m_peer->NeedsFrame() )
+    if ( m_peer && m_peer->NeedsFrame() )
     {
         if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER))
         {
