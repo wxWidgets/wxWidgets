@@ -530,6 +530,10 @@ public:
            Process a @c wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED event.
     @event{EVT_DATAVIEW_ITEM_ACTIVATED(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED event.
+    @event{EVT_DATAVIEW_ITEM_START_EDITING(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED event. This
+           event can be vetoed in order to prevent editing on an item by item
+           basis. Still experimental.
     @event{EVT_DATAVIEW_ITEM_EDITING_STARTED(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED event.
     @event{EVT_DATAVIEW_ITEM_EDITING_DONE(id, func)}
