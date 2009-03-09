@@ -85,9 +85,15 @@ public:
     virtual wxDocument* CreateDocument(const wxString& path, long flags = 0);
 
     /**
-        Creates a new instance of the associated view class. If you have not
-        supplied a wxClassInfo parameter to the template constructor, you will
-        need to override this function to return an appropriate view instance.
+        Creates a new instance of the associated view class.
+
+        If you have not supplied a wxClassInfo parameter to the template
+        constructor, you will need to override this function to return an
+        appropriate view instance.
+
+        If the new view initialization fails, it must call
+        wxDocument::RemoveView() for consistency with the default behaviour of
+        this function.
     */
     virtual wxView* CreateView(wxDocument* doc, long flags = 0);
 
@@ -162,10 +168,25 @@ public:
     virtual wxString GetViewName() const;
 
     /**
-        Initialises the document, calling wxDocument::OnCreate(). This is
-        called from CreateDocument().
+        Initialises the document, calling wxDocument::OnCreate().
+
+        This is called from CreateDocument().
+
+        If you override this method, notice that you must @em delete the @a doc
+        if its initialization fails for consistency with the default behaviour.
+
+        @param doc
+            The document to initialize.
+        @param path
+            The associated file path.
+        @param flags
+            Flags passed to CreateDocument().
+        @return
+            @true if the initialization was successful or @false if it failed
+            in which case @a doc should be deleted by this function.
     */
-    virtual bool InitDocument(wxDocument* doc, const wxString& path,
+    virtual bool InitDocument(wxDocument* doc,
+                              const wxString& path,
                               long flags = 0);
 
     /**
@@ -1192,9 +1213,22 @@ public:
 
     /**
         Called just after the document object is created to give it a chance to
-        initialize itself. The default implementation uses the template
-        associated with the document to create an initial view. If this
-        function returns @false, the document is deleted.
+        initialize itself.
+
+        The default implementation uses the template associated with the
+        document to create an initial view.
+
+        For compatibility reasons, this method may either delete the document
+        itself if its initialization fails or not do it in which case it is
+        deleted by caller. It is recommended to delete the document explicitly
+        in this function if it can't be initialized.
+
+        @param path
+            The associated file path.
+        @param flags
+            Flags passed to CreateDocument().
+        @return
+            @true if the initialization was successful or @false if it failed.
     */
     virtual bool OnCreate(const wxString& path, long flags);
 

@@ -775,9 +775,16 @@ wxDocTemplate::~wxDocTemplate()
 // Tries to dynamically construct an object of the right class.
 wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
 {
-    wxScopedPtr<wxDocument> doc(DoCreateDocument());
+    // InitDocument() is supposed to delete the document object if its
+    // initialization fails so don't use wxScopedPtr<> here: this is fragile
+    // but unavoidable because the default implementation uses CreateView()
+    // which may -- or not -- create a wxView and if it does create it and its
+    // initialization fails then the view destructor will delete the document
+    // (via RemoveView()) and as we can't distinguish between the two cases we
+    // just have to assume that it always deletes it in case of failure
+    wxDocument * const doc = DoCreateDocument();
 
-    return doc && InitDocument(doc.get(), path, flags) ? doc.release() : NULL;
+    return doc && InitDocument(doc, path, flags) ? doc : NULL;
 }
 
 bool
