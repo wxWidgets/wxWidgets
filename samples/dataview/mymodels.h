@@ -124,6 +124,7 @@ public:
     // helper method for wxLog
 
     wxString GetTitle( const wxDataViewItem &item ) const;
+    wxString GetArtist( const wxDataViewItem &item ) const;
     int GetYear( const wxDataViewItem &item ) const;
 
     // helper methods to change the model

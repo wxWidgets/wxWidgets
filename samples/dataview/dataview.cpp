@@ -98,6 +98,7 @@ public:     // event handlers
     void OnCollapsed( wxDataViewEvent &event );
     void OnSelectionChanged( wxDataViewEvent &event );
 
+    void OnStartEditing( wxDataViewEvent &event );
     void OnEditingStarted( wxDataViewEvent &event );
     void OnEditingDone( wxDataViewEvent &event );
 
@@ -287,6 +288,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_DATAVIEW_ITEM_COLLAPSED(ID_MUSIC_CTRL, MyFrame::OnCollapsed)
     EVT_DATAVIEW_SELECTION_CHANGED(ID_MUSIC_CTRL, MyFrame::OnSelectionChanged)
 
+    EVT_DATAVIEW_ITEM_START_EDITING(ID_MUSIC_CTRL, MyFrame::OnStartEditing)
     EVT_DATAVIEW_ITEM_EDITING_STARTED(ID_MUSIC_CTRL, MyFrame::OnEditingStarted)
     EVT_DATAVIEW_ITEM_EDITING_DONE(ID_MUSIC_CTRL, MyFrame::OnEditingDone)
 
@@ -433,7 +435,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     mainSizer->Add( m_notebook, 1, wxGROW );
     mainSizer->Add( m_log, 0, wxGROW );
-
+    
     SetSizerAndFit(mainSizer);
 }
 
@@ -841,6 +843,20 @@ void MyFrame::OnExpanding( wxDataViewEvent &event )
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING, Item: %s", title );
 }
 
+
+void MyFrame::OnStartEditing( wxDataViewEvent &event )
+{
+    wxString artist = m_music_model->GetArtist( event.GetItem() );
+    if (artist == "Ludwig van Beethoven")
+    {
+        event.Veto();
+        
+        if (!m_log)
+           return;
+           
+        wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING vetoed, Item: %s", artist );
+    }
+}
 
 void MyFrame::OnEditingStarted( wxDataViewEvent &event )
 {

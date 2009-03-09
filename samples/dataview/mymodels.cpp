@@ -69,6 +69,15 @@ wxString MyMusicTreeModel::GetTitle( const wxDataViewItem &item ) const
     return node->m_title;
 }
 
+wxString MyMusicTreeModel::GetArtist( const wxDataViewItem &item ) const
+{
+    MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();
+    if (!node)      // happens if item.IsOk()==false
+        return wxEmptyString;
+
+    return node->m_artist;
+}
+
 int MyMusicTreeModel::GetYear( const wxDataViewItem &item ) const
 {
     MyMusicTreeModelNode *node = (MyMusicTreeModelNode*) item.GetID();

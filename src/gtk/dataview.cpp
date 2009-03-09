@@ -835,7 +835,153 @@ wxgtk_tree_model_has_default_sort_func (GtkTreeSortable        *sortable)
 }
 
 //-----------------------------------------------------------------------------
-// define new GTK+ class wxGtkRendererRenderer
+// define new GTK+ class GtkWxRendererText
+//-----------------------------------------------------------------------------
+
+extern "C" {
+
+#define GTK_TYPE_WX_CELL_RENDERER_TEXT               (gtk_wx_cell_renderer_text_get_type ())
+#define GTK_WX_CELL_RENDERER_TEXT(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WX_CELL_RENDERER_TEXT, GtkWxCellRendererText))
+#define GTK_WX_CELL_RENDERER_TEXT_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WX_CELL_RENDERER_TEXT, GtkWxCellRendererTextClass))
+#define GTK_IS_WX_CELL_RENDERER_TEXT(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WX_CELL_RENDERER_TEXT))
+#define GTK_IS_WX_CELL_RENDERER_TEXT_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WX_CELL_RENDERER_TEXT))
+#define GTK_WX_CELL_RENDERER_TEXT_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WX_CELL_RENDERER_TEXT, GtkWxCellRendererTextClass))
+
+GType            gtk_wx_cell_renderer_text_get_type (void);
+
+typedef struct _GtkWxCellRendererText GtkWxCellRendererText;
+typedef struct _GtkWxCellRendererTextClass GtkWxCellRendererTextClass;
+
+struct _GtkWxCellRendererText
+{
+  GtkCellRendererText parent;
+  
+  wxDataViewRenderer *wx_renderer;
+};
+
+struct _GtkWxCellRendererTextClass
+{
+  GtkCellRendererTextClass cell_parent_class;
+};
+
+
+static GtkWxCellRendererText *gtk_wx_cell_renderer_text_new   (void);
+static void gtk_wx_cell_renderer_text_init (
+                        GtkWxCellRendererText      *cell );
+static void gtk_wx_cell_renderer_text_class_init(
+                        GtkWxCellRendererTextClass *klass );
+static void gtk_wx_cell_renderer_text_finalize (
+                        GObject                *object );
+static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
+                        GtkCellRenderer         *cell,
+                        GdkEvent                *event,
+                        GtkWidget               *widget,
+                        const gchar             *path,
+                        GdkRectangle            *background_area,
+                        GdkRectangle            *cell_area,
+                        GtkCellRendererState     flags );
+
+
+static GObjectClass *text_cell_parent_class = NULL;
+static GObjectClass *text_cell_grand_parent_class = NULL;
+
+}  // extern "C"
+
+GType
+gtk_wx_cell_renderer_text_get_type (void)
+{
+    static GType cell_wx_type = 0;
+
+    if (!cell_wx_type)
+    {
+        const GTypeInfo cell_wx_info =
+        {
+            sizeof (GtkWxCellRendererTextClass),
+            NULL, /* base_init */
+            NULL, /* base_finalize */
+            (GClassInitFunc) gtk_wx_cell_renderer_text_class_init,
+            NULL, /* class_finalize */
+            NULL, /* class_data */
+            sizeof (GtkWxCellRendererText),
+            0,          /* n_preallocs */
+            (GInstanceInitFunc) gtk_wx_cell_renderer_text_init,
+        };
+
+        cell_wx_type = g_type_register_static( GTK_TYPE_CELL_RENDERER_TEXT,
+            "GtkWxCellRendererText", &cell_wx_info, (GTypeFlags)0 );
+    }
+
+    return cell_wx_type;
+}
+
+static void
+gtk_wx_cell_renderer_text_init (GtkWxCellRendererText *cell)
+{
+    cell->wx_renderer = NULL;
+}
+
+static void
+gtk_wx_cell_renderer_text_class_init (GtkWxCellRendererTextClass *klass)
+{
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (klass);
+
+    text_cell_parent_class = (GObjectClass*) g_type_class_peek_parent (klass);
+
+    object_class->finalize = gtk_wx_cell_renderer_text_finalize;
+
+    cell_class->start_editing = gtk_wx_cell_renderer_text_start_editing;
+}
+
+static void
+gtk_wx_cell_renderer_text_finalize (GObject *object)
+{
+    /* must chain up */
+    (* G_OBJECT_CLASS (text_cell_parent_class)->finalize) (object);
+}
+
+GtkWxCellRendererText*
+gtk_wx_cell_renderer_text_new (void)
+{
+    return (GtkWxCellRendererText*) g_object_new (GTK_TYPE_WX_CELL_RENDERER_TEXT, NULL);
+}
+
+static GtkCellEditable *gtk_wx_cell_renderer_text_start_editing(
+                        GtkCellRenderer         *gtk_renderer,
+                        GdkEvent                *gdk_event,
+                        GtkWidget               *widget,
+                        const gchar             *path,
+                        GdkRectangle            *background_area,
+                        GdkRectangle            *cell_area,
+                        GtkCellRendererState     flags )
+{
+    GtkWxCellRendererText *wxgtk_renderer = (GtkWxCellRendererText *) gtk_renderer;
+    wxDataViewRenderer *wx_renderer = wxgtk_renderer->wx_renderer;
+
+    GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
+    GtkTreeIter iter;
+    wx_renderer->GetOwner()->GetOwner()->GtkGetInternal()->get_iter( &iter, treepath );
+    wxDataViewItem item( (void*) iter.user_data );;
+    gtk_tree_path_free( treepath );
+
+    wxDataViewColumn *column = wx_renderer->GetOwner();
+    wxDataViewCtrl *dv = column->GetOwner();
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING, dv->GetId() );
+    event.SetDataViewColumn( column );
+    event.SetModel( dv->GetModel() );
+    event.SetColumn( wx_renderer->GetOwner()->GetModelColumn() );
+    event.SetItem( item );
+    dv->HandleWindowEvent( event );
+    
+    if (event.IsAllowed())
+        return GTK_CELL_RENDERER_CLASS(text_cell_parent_class)->
+           start_editing( gtk_renderer, gdk_event, widget, path, background_area, cell_area, flags );
+    else
+        return NULL;
+}
+
+//-----------------------------------------------------------------------------
+// define new GTK+ class GtkWxCellRenderer
 //-----------------------------------------------------------------------------
 
 extern "C" {
@@ -974,8 +1120,6 @@ gtk_wx_cell_renderer_new (void)
 {
     return (GtkCellRenderer*) g_object_new (GTK_TYPE_WX_CELL_RENDERER, NULL);
 }
-
-
 
 static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
                         GtkCellRenderer         *renderer,
@@ -1383,6 +1527,9 @@ static void
 wxgtk_renderer_editing_started( GtkCellRenderer *WXUNUSED(cell), GtkCellEditable *editable,
                                 gchar *path, wxDataViewRenderer *wxrenderer )
 {
+    if (!editable)
+       return;
+
     wxDataViewColumn *column = wxrenderer->GetOwner();
     wxDataViewCtrl *dv = column->GetOwner();
     wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, dv->GetId() );
@@ -1585,7 +1732,9 @@ wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxD
                                                 int align ) :
     wxDataViewRenderer( varianttype, mode, align )
 {
-    m_renderer = (GtkCellRenderer*) gtk_cell_renderer_text_new();
+    GtkWxCellRendererText *text_renderer = gtk_wx_cell_renderer_text_new();
+    text_renderer->wx_renderer = this;
+    m_renderer = (GtkCellRenderer*) text_renderer;
 
     if (mode & wxDATAVIEW_CELL_EDITABLE)
     {
