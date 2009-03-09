@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imaggif.h
+// Name:        wx/imagxpm.h
 // Purpose:     wxImage XPM handler
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -42,6 +42,4 @@ private:
 
 #endif // wxUSE_XPM
 
-#endif
-  // _WX_IMAGXPM_H_
-
+#endif // _WX_IMAGXPM_H_
