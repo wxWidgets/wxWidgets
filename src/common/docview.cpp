@@ -246,11 +246,13 @@ wxDocManager *wxDocument::GetDocumentManager() const
 
 bool wxDocument::OnNewDocument()
 {
-    if ( !OnSaveModified() )
-        return false;
+    // notice that there is no need to neither reset nor even check the
+    // modified flag here as the document itself is a new object (this is only
+    // called from CreateDocument()) and so it shouldn't be saved anyhow even
+    // if it is modified -- this could happen if the user code creates
+    // documents pre-filled with some user-entered (and which hence must not be
+    // lost) information
 
-    DeleteContents();
-    Modify(false);
     SetDocumentSaved(false);
 
     const wxString name = GetDocumentManager()->MakeNewDocumentName();
@@ -379,15 +381,20 @@ bool wxDocument::OnSaveDocument(const wxString& file)
 
 bool wxDocument::OnOpenDocument(const wxString& file)
 {
-    if ( !OnSaveModified() )
-        return false;
+    // notice that there is no need to check the modified flag here for the
+    // reasons explained in OnNewDocument()
 
     if ( !DoOpenDocument(file) )
         return false;
 
     SetFilename(file, true);
-    Modify(false);
-    m_savedYet = true;
+
+    // stretching the logic a little this does make sense because the document
+    // had been saved into the file we just loaded it from, it just could have
+    // happened during a previous program execution, it's just that the name of
+    // this method is a bit unfortunate, it should probably have been called
+    // HasAssociatedFileName()
+    SetDocumentSaved(true);
 
     UpdateAllViews();
 
