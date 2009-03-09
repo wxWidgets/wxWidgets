@@ -8,6 +8,7 @@ build/msw/wx_html.dsp
 build/msw/wx_media.dsp
 build/msw/wx_net.dsp
 build/msw/wx_odbc.dsp
+build/msw/wx_propgrid.dsp
 build/msw/wx_qa.dsp
 build/msw/wx_richtext.dsp
 build/msw/wx_stc.dsp
