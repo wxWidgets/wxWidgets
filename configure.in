@@ -26,8 +26,13 @@ dnl sets build, host variables and the same with _alias
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 
-HOST_PREFIX="${host_alias}-"
-HOST_SUFFIX="-$host_alias"
+if test "$cross_compiling" = "yes"; then
+    HOST_PREFIX="${host_alias}-"
+    HOST_SUFFIX="-$host_alias"
+else
+    HOST_PREFIX=
+    HOST_SUFFIX=
+fi
 
 dnl When making releases do:
 dnl
@@ -3855,14 +3860,9 @@ fi
 
 WX_VERSION_TAG=`echo WX${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}_${WX_RELEASE} | tr '[[a-z]]' '[[A-Z]]'`
 
-TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}"
+TOOLCHAIN_NAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 
-TOOLCHAIN_FULLNAME="${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}-${WX_DEBUGTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
-
-if test "$cross_compiling" = "yes"; then
-    TOOLCHAIN_NAME="$TOOLCHAIN_NAME$HOST_SUFFIX"
-    TOOLCHAIN_FULLNAME="$HOST_PREFIX$TOOLCHAIN_FULLNAME"
-fi
+TOOLCHAIN_FULLNAME="${HOST_PREFIX}${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}-${WX_CHARTYPE}-${WX_DEBUGTYPE}${config_linkage_component}-${WX_RELEASE}${WX_FLAVOUR}"
 
 dnl library link name
 dnl These just save us from exporting lib_{unicode,debug,flavour}_suffix.
