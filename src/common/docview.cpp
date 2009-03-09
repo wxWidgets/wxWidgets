@@ -664,10 +664,29 @@ wxView::~wxView()
     // box which would result in an activation event for m_docChildFrame and so
     // could reactivate the view being destroyed -- unless we reset it first
     if ( m_docChildFrame && m_docChildFrame->GetView() == this )
+    {
+        // prevent it from doing anything with us
         m_docChildFrame->SetView(NULL);
+
+        // it doesn't make sense to leave the frame alive if its associated
+        // view doesn't exist any more so unconditionally close it as well
+        //
+        // notice that we only get here if m_docChildFrame is non-NULL in the
+        // first place and it will be always NULL if we're deleted because our
+        // frame was closed, so this only catches the case of directly deleting
+        // the view, as it happens if its creation fails in wxDocTemplate::
+        // CreateView() for example
+        m_docChildFrame->GetWindow()->Destroy();
+    }
 
     if ( m_viewDocument )
         m_viewDocument->RemoveView(this);
+}
+
+void wxView::SetDocChildFrame(wxDocChildFrameAnyBase *docChildFrame)
+{
+    SetFrame(docChildFrame ? docChildFrame->GetWindow() : NULL);
+    m_docChildFrame = docChildFrame;
 }
 
 bool wxView::TryBefore(wxEvent& event)
@@ -1817,6 +1836,13 @@ bool wxDocChildFrameAnyBase::CloseView(wxCloseEvent& event)
         }
 
         m_childView->Activate(false);
+
+        // it is important to reset m_childView frame pointer to NULL before
+        // deleting it because while normally it is the frame which deletes the
+        // view when it's closed, the view also closes the frame if it is
+        // deleted directly not by us as indicated by its doc child frame
+        // pointer still being set
+        m_childView->SetDocChildFrame(NULL);
         delete m_childView;
         m_childView = NULL;
     }

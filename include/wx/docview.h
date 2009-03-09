@@ -248,10 +248,7 @@ public:
 
     // set the associated frame, it is used to reset its view when we're
     // destroyed
-    void SetDocChildFrame(wxDocChildFrameAnyBase *docChildFrame)
-    {
-        m_docChildFrame = docChildFrame;
-    }
+    void SetDocChildFrame(wxDocChildFrameAnyBase *docChildFrame);
 
 protected:
     // hook the document into event handlers chain here
@@ -523,7 +520,8 @@ inline size_t wxDocManager::GetNoHistoryFiles() const
 class WXDLLIMPEXP_CORE wxDocChildFrameAnyBase
 {
 public:
-    wxDocChildFrameAnyBase(wxDocument *doc, wxView *view)
+    wxDocChildFrameAnyBase(wxDocument *doc, wxView *view, wxWindow *win)
+        : m_win(win)
     {
         m_childDocument = doc;
         m_childView = view;
@@ -536,6 +534,8 @@ public:
     wxView *GetView() const { return m_childView; }
     void SetDocument(wxDocument *doc) { m_childDocument = doc; }
     void SetView(wxView *view) { m_childView = view; }
+
+    wxWindow *GetWindow() const { return m_win; }
 
 protected:
     // we're not a wxEvtHandler but we provide this wxEvtHandler-like function
@@ -553,6 +553,11 @@ protected:
 
     wxDocument*       m_childDocument;
     wxView*           m_childView;
+
+    // the associated window: having it here is not terribly elegant but it
+    // allows us to avoid having any virtual functions in this class
+    wxWindow * const m_win;
+
 
     wxDECLARE_NO_COPY_CLASS(wxDocChildFrameAnyBase);
 };
@@ -585,11 +590,8 @@ public:
                        long style = wxDEFAULT_FRAME_STYLE,
                        const wxString& name = wxFrameNameStr)
         : BaseClass(parent, id, title, pos, size, style, name),
-          wxDocChildFrameAnyBase(doc, view)
+          wxDocChildFrameAnyBase(doc, view, this)
     {
-        if ( view )
-            view->SetFrame(this);
-
         this->Connect(wxEVT_ACTIVATE,
                       wxActivateEventHandler(wxDocChildFrameAny::OnActivate));
         this->Connect(wxEVT_CLOSE_WINDOW,
