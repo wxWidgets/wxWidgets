@@ -122,7 +122,7 @@ extern void wxSetKeyboardHook(bool doIt);
 struct ClassRegInfo
 {
     // the base name of the class: this is used to construct the unique name in
-    // RegisterClassWithUniqueNames()
+    // wxApp::GetRegisteredClassName()
     wxString basename;
 
     // the name of the registered class with and without CS_[HV]REDRAW styles
