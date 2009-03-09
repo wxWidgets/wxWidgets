@@ -1877,11 +1877,10 @@ void wxPGMultiButton::Add( const wxBitmap& bitmap, int id )
 {
     id = GenId(id);
     wxSize sz = GetSize();
-    wxButton* button = new wxBitmapButton( this, id, bitmap, wxPoint(sz.x, 0), wxSize(sz.y, sz.y) );
-    m_buttons.push_back(button);
-    int bw = button->GetSize().x;
-    SetSize(wxSize(sz.x+bw,sz.y));
-    m_buttonsWidth += bw;
+    wxButton* button = new wxBitmapButton( this, id, bitmap,
+                                           wxPoint(sz.x, 0),
+                                           wxSize(sz.y, sz.y) );
+    DoAddButton( button, sz );
 }
 #endif
 
@@ -1889,7 +1888,14 @@ void wxPGMultiButton::Add( const wxString& label, int id )
 {
     id = GenId(id);
     wxSize sz = GetSize();
-    wxButton* button = new wxButton( this, id, label, wxPoint(sz.x, 0), wxSize(sz.y, sz.y) );
+    wxButton* button = new wxButton( this, id, label, wxPoint(sz.x, 0),
+                                     wxSize(sz.y, sz.y) );
+    DoAddButton( button, sz );
+}
+
+void wxPGMultiButton::DoAddButton( wxWindow* button,
+                                   const wxSize& sz )
+{
     m_buttons.push_back(button);
     int bw = button->GetSize().x;
     SetSize(wxSize(sz.x+bw,sz.y));
