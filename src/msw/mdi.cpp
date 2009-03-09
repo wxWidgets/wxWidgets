@@ -522,8 +522,8 @@ void wxMDIParentFrame::ActivatePrevious()
 // ---------------------------------------------------------------------------
 
 WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
-                                     WXWPARAM wParam,
-                                     WXLPARAM lParam)
+                                          WXWPARAM wParam,
+                                          WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
     bool processed = false;
@@ -537,6 +537,25 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
                 UnpackActivate(wParam, lParam, &state, &minimized, &hwnd);
 
                 processed = HandleActivate(state, minimized != 0, hwnd);
+            }
+            break;
+
+        case WM_COMMAND:
+            // system messages such as SC_CLOSE are sent as WM_COMMANDs to the
+            // parent MDI frame and we must let the DefFrameProc() have them
+            // for these commands to work (without it, closing the maximized
+            // MDI children doesn't work, for example)
+            {
+                WXWORD id, cmd;
+                WXHWND hwnd;
+                UnpackCommand(wParam, lParam, &id, &hwnd, &cmd);
+
+                if ( cmd == 0 /* menu */ &&
+                        id >= SC_SIZE /* first system menu command */ )
+                {
+                    MSWDefWindowProc(message, wParam, lParam);
+                    processed = true;
+                }
             }
             break;
 
@@ -561,8 +580,9 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
             break;
 
         case WM_SIZE:
-            // though we don't (usually) resize the MDI client to exactly fit the
-            // client area we need to pass this one to DefFrameProc to allow the children to show
+            // though we don't (usually) resize the MDI client to exactly fit
+            // the client area we need to pass this one to DefFrameProc to
+            // allow the children to show
             break;
     }
 
@@ -1020,8 +1040,8 @@ void wxMDIChildFrame::Activate()
 // ---------------------------------------------------------------------------
 
 WXLRESULT wxMDIChildFrame::MSWWindowProc(WXUINT message,
-                                    WXWPARAM wParam,
-                                    WXLPARAM lParam)
+                                         WXWPARAM wParam,
+                                         WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
     bool processed = false;
@@ -1053,11 +1073,6 @@ WXLRESULT wxMDIChildFrame::MSWWindowProc(WXUINT message,
             // things happen
             MSWDefWindowProc(message, wParam, lParam);
             break;
-
-        case WM_SYSCOMMAND:
-            // DefMDIChildProc handles SC_{NEXT/PREV}WINDOW here, so pass it
-            // the message (the base class version does not)
-            return MSWDefWindowProc(message, wParam, lParam);
 
         case WM_WINDOWPOSCHANGING:
             processed = HandleWindowPosChanging((LPWINDOWPOS)lParam);
