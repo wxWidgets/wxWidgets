@@ -134,21 +134,21 @@ bool wxSampleMultiButtonEditor::OnEvent( wxPropertyGrid* propGrid,
 
         if ( event.GetId() == buttons->GetButtonId(0) )
         {
-            // Do something when first button is pressed
+            // Do something when the first button is pressed
             wxLogDebug("First button pressed");
-            return true;
+            return false;  // Return false since value did not change
         }
         if ( event.GetId() == buttons->GetButtonId(1) )
         {
-            // Do something when second button is pressed
-            wxLogDebug("Second button pressed");
-            return true;
+            // Do something when the second button is pressed
+            wxMessageBox("Second button pressed");
+            return false;  // Return false since value did not change
         }
         if ( event.GetId() == buttons->GetButtonId(2) )
         {
-            // Do something when third button is pressed
-            wxLogDebug("Third button pressed");
-            return true;
+            // Do something when the third button is pressed
+            wxMessageBox("Third button pressed");
+            return false;  // Return false since value did not change
         }
     }
     return wxPGTextCtrlEditor::OnEvent(propGrid, property, ctrl, event);

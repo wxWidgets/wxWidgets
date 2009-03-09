@@ -2842,10 +2842,10 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     wxVariant pendingValue(selected->GetValueRef());
     wxWindow* wnd = GetEditorControl();
+    wxWindow* editorWnd = wxDynamicCast(event.GetEventObject(), wxWindow);
     int selFlags = 0;
     bool wasUnspecified = selected->IsValueUnspecified();
     int usesAutoUnspecified = selected->UsesAutoUnspecified();
-
     bool valueIsPending = false;
 
     m_chgInfo_changedProperty = NULL;
@@ -2891,17 +2891,19 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     if ( !buttonWasHandled )
     {
-        if ( wnd )
+        if ( wnd || m_wndEditor2 )
         {
             // First call editor class' event handler.
             const wxPGEditor* editor = selected->GetEditorClass();
 
-            if ( editor->OnEvent( this, selected, wnd, event ) )
+            if ( editor->OnEvent( this, selected, editorWnd, event ) )
             {
                 // If changes, validate them
                 if ( DoEditorValidate() )
                 {
-                    if ( editor->GetValueFromControl( pendingValue, m_selected, wnd ) )
+                    if ( editor->GetValueFromControl( pendingValue,
+                                                      m_selected,
+                                                      wnd ) )
                         valueIsPending = true;
                 }
                 else
@@ -2914,7 +2916,7 @@ void wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
         // Then the property's custom handler (must be always called, unless
         // validation failed).
         if ( !validationFailure )
-            buttonWasHandled = selected->OnEvent( this, wnd, event );
+            buttonWasHandled = selected->OnEvent( this, editorWnd, event );
     }
 
     // SetValueInEvent(), as called in one of the functions referred above

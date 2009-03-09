@@ -534,6 +534,8 @@ public:
 
 protected:
 
+    void DoAddButton( wxWindow* button, const wxSize& sz );
+
     int GenId( int id ) const;
 
     wxArrayPtrVoid  m_buttons;

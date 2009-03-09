@@ -220,18 +220,19 @@ public:
 
             if ( event.GetId() == buttons->GetButtonId(0) )
             {
-                // Do something when first button is pressed
-                return true;
+                // Do something when the first button is pressed
+                // Return true if the action modified the value in editor.
+                ...
             }
             if ( event.GetId() == buttons->GetButtonId(1) )
             {
-                // Do something when second button is pressed
-                return true;
+                // Do something when the second button is pressed
+                ...
             }
             if ( event.GetId() == buttons->GetButtonId(2) )
             {
-                // Do something when third button is pressed
-                return true;
+                // Do something when the third button is pressed
+                ...
             }
         }
         return wxPGTextCtrlEditor::OnEvent(propGrid, property, ctrl, event);
