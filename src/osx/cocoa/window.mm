@@ -791,21 +791,21 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
 
 bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
 {
-    // Make sure wxWindows can receive focus by default like they do for other ports.
-
-    // FIXME: It'd be nice to have some way to tie this in with AcceptsFocus
-    // but that currently causes loops because the call to m_peer->CanFocus() 
-    // ends up calling this method again. Don't know how to avoid it without
-    // making a setter method for focus.
-    return YES;
+    // FIXME: We need to find a way to query AcceptsFocus here, but when we do it
+    // it calls native APIs which lead us back here and into a loop.
+    wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+    return superimpl(slf, (SEL)_cmd);
 }
 
 bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
 {
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+    // get the current focus before running becomeFirstResponder
+    NSView* otherView = [[NSApp keyWindow] firstResponder]; 
+    wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     BOOL r = superimpl(slf, (SEL)_cmd);
     if ( r )
-        DoNotifyFocusEvent( true );
+        DoNotifyFocusEvent( true, otherWindow );
     return r;
 }
 
@@ -813,8 +813,11 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
 {
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
+    // get the current focus after running resignFirstResponder
+    NSView* otherView = [[NSApp keyWindow] firstResponder]; 
+    wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     if ( r )
-        DoNotifyFocusEvent( false );
+        DoNotifyFocusEvent( false, otherWindow );
     return r;
 }
 
@@ -1406,7 +1409,7 @@ bool wxWidgetCocoaImpl::DoHandleMouseEvent(NSEvent *event)
     return GetWXPeer()->HandleWindowEvent(wxevent);
 }
 
-void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus)
+void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow)
 {
     wxWindow* thisWindow = GetWXPeer();
     if ( thisWindow->MacGetTopLevelWindow() && NeedsFocusRect() )
@@ -1427,8 +1430,8 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus)
 
         wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
         event.SetEventObject(thisWindow);
-        // TODO how to find out the targetFocusWindow ?
-        // event.SetWindow(targetFocusWindow);
+        if (otherWindow)
+            event.SetWindow(otherWindow->GetWXPeer());
         thisWindow->HandleWindowEvent(event) ;
     }
     else // !receivedFocuss
@@ -1442,8 +1445,8 @@ void wxWidgetCocoaImpl::DoNotifyFocusEvent(bool receivedFocus)
                     
         wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
         event.SetEventObject(thisWindow);
-        // TODO how to find out the targetFocusWindow ?
-        // event.SetWindow(targetFocusWindow);
+        if (otherWindow)
+            event.SetWindow(otherWindow->GetWXPeer());
         thisWindow->HandleWindowEvent(event) ;
     }
 }

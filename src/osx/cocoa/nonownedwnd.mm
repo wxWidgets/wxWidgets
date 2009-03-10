@@ -398,9 +398,6 @@ long style, long extraStyle, const wxString& name )
     [m_macWindow setDelegate:controller];
     
     [m_macWindow setAcceptsMouseMovedEvents: YES];
-    
-    if ( ( style & wxPOPUP_WINDOW ) )
-        [m_macWindow makeKeyAndOrderFront:nil];
 }
 
 
@@ -423,7 +420,7 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
 {
     if ( show )
     {
-        [m_macWindow orderFront:nil];
+        [m_macWindow makeKeyAndOrderFront:nil];
         [[m_macWindow contentView] setNeedsDisplay:YES];
     }
     else 
