@@ -166,6 +166,7 @@ wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer,
     [[v cell] setCancelButtonCell:nil];
 
     wxNSSearchFieldControl* c = new wxNSSearchFieldControl( wxpeer, v );
+    c->SetNeedsFrame( false );
     c->SetStringValue( str );
     return c;
 }
