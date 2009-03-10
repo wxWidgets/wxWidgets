@@ -126,7 +126,7 @@ public :
     virtual bool        DoHandleMouseEvent(NSEvent *event); 
     virtual bool        DoHandleKeyEvent(NSEvent *event);
     virtual bool        DoHandleCharEvent(NSEvent *event, NSString *text);
-    virtual void        DoNotifyFocusEvent(bool receivedFocus); 
+    virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow); 
 
     void                SetFlipped(bool flipped);
     bool                IsFlipped() const { return m_isFlipped; }
