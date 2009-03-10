@@ -156,7 +156,7 @@ void MyMusicTreeModel::Delete( const wxDataViewItem &item )
 }
 
 int MyMusicTreeModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                               unsigned int column, bool ascending )
+                               unsigned int column, bool ascending ) const
 {
     wxASSERT(item1.IsOk() && item2.IsOk());
         // should never happen

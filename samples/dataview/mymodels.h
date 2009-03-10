@@ -141,7 +141,7 @@ public:
     // override sorting to always sort branches ascendingly
 
     int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                 unsigned int column, bool ascending );
+                 unsigned int column, bool ascending ) const;
 
     // implementation of base class virtuals to define model
 
