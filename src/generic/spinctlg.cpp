@@ -369,6 +369,12 @@ void wxSpinCtrlGenericBase::OnTextEnter(wxCommandEvent& event)
 
 void wxSpinCtrlGenericBase::OnTextChar(wxKeyEvent& event)
 {
+    if ( !HasFlag(wxSP_ARROW_KEYS) )
+    {
+        event.Skip();
+        return;
+    }
+
     double value = m_value;
     switch ( event.GetKeyCode() )
     {

@@ -127,6 +127,7 @@ protected:
 
     // the check/radio boxes for styles
     wxCheckBox *m_chkVert,
+               *m_chkArrowKeys,
                *m_chkWrap,
                *m_chkProcessEnter;
 
@@ -195,6 +196,7 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
                   : WidgetsPage(book, imaglist, spinbtn_xpm)
 {
     m_chkVert = NULL;
+    m_chkArrowKeys = NULL;
     m_chkWrap = NULL;
     m_chkProcessEnter = NULL;
     m_spinbtn = NULL;
@@ -219,6 +221,7 @@ void SpinBtnWidgetsPage::CreateContent()
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical"));
+    m_chkArrowKeys = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Arrow Keys"));
     m_chkWrap = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Wrap"));
     m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeft,
                                                     _T("Process &Enter"));
@@ -285,6 +288,7 @@ void SpinBtnWidgetsPage::CreateContent()
 void SpinBtnWidgetsPage::Reset()
 {
     m_chkVert->SetValue(true);
+    m_chkArrowKeys->SetValue(true);
     m_chkWrap->SetValue(false);
     m_chkProcessEnter->SetValue(false);
 }
@@ -298,6 +302,9 @@ void SpinBtnWidgetsPage::CreateSpin()
         flags |= wxSP_VERTICAL;
     else
         flags |= wxSP_HORIZONTAL;
+
+    if ( m_chkArrowKeys->GetValue() )
+        flags |= wxSP_ARROW_KEYS;
 
     if ( m_chkWrap->GetValue() )
         flags |= wxSP_WRAP;
