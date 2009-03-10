@@ -233,7 +233,7 @@ void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
 }
 
 int wxDataViewModel::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                              unsigned int column, bool ascending )
+                              unsigned int column, bool ascending ) const
 {
     // sort branches before leaves
     bool item1_is_container = IsContainer(item1);
@@ -432,7 +432,7 @@ bool wxDataViewIndexListModel::HasDefaultCompare() const
 int wxDataViewIndexListModel::Compare(const wxDataViewItem& item1,
                                       const wxDataViewItem& item2,
                                       unsigned int WXUNUSED(column),
-                                      bool ascending)
+                                      bool ascending) const
 {
     if (m_ordered)
     {
@@ -587,7 +587,7 @@ bool wxDataViewVirtualListModel::HasDefaultCompare() const
 int wxDataViewVirtualListModel::Compare(const wxDataViewItem& item1,
                                       const wxDataViewItem& item2,
                                       unsigned int WXUNUSED(column),
-                                      bool ascending)
+                                      bool ascending) const
 {
     unsigned int pos1 = wxPtrToUInt(item1.GetID());
     unsigned int pos2 = wxPtrToUInt(item2.GetID());
@@ -1943,7 +1943,7 @@ unsigned int wxDataViewTreeStore::GetChildren( const wxDataViewItem &item, wxDat
 }
 
 int wxDataViewTreeStore::Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int WXUNUSED(column), bool WXUNUSED(ascending) )
+                         unsigned int WXUNUSED(column), bool WXUNUSED(ascending) ) const
 {
     wxDataViewTreeStoreNode *node1 = FindNode( item1 );
     wxDataViewTreeStoreNode *node2 = FindNode( item2 );

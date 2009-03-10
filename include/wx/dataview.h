@@ -213,7 +213,7 @@ public:
 
     // default compare function
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int column, bool ascending );
+                         unsigned int column, bool ascending ) const;
     virtual bool HasDefaultCompare() const { return false; }
 
     // internal
@@ -262,7 +262,7 @@ public:
     // compare based on index
 
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int column, bool ascending );
+                         unsigned int column, bool ascending ) const;
     virtual bool HasDefaultCompare() const;
 
     // implement base methods
@@ -327,7 +327,7 @@ public:
     // compare based on index
 
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int column, bool ascending );
+                         unsigned int column, bool ascending ) const;
     virtual bool HasDefaultCompare() const;
 
     // implement base methods
@@ -1229,7 +1229,7 @@ public:
     virtual unsigned int GetChildren( const wxDataViewItem &item, wxDataViewItemArray &children ) const;
 
     virtual int Compare( const wxDataViewItem &item1, const wxDataViewItem &item2,
-                         unsigned int column, bool ascending );
+                         unsigned int column, bool ascending ) const;
 
     virtual bool HasDefaultCompare() const
         { return true; }

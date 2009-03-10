@@ -107,7 +107,7 @@ public:
     virtual int Compare(const wxDataViewItem& item1,
                         const wxDataViewItem& item2,
                         unsigned int column,
-                        bool ascending);
+                        bool ascending) const;
 
     /**
         Override this to indicate that the item has special font attributes.
