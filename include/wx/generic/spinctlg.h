@@ -110,7 +110,12 @@ protected:
     // Send the correct event type
     virtual void DoSendEvent() = 0;
 
+    // check if the value is in range
     bool InRange(double n) const { return (n >= m_min) && (n <= m_max); }
+
+    // ensure that the value is in range wrapping it round if necessary
+    double AdjustToFitInRange(double value) const;
+
 
     double m_value;
     double m_min;

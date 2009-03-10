@@ -338,13 +338,7 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
     if (((spin_value >= 0) && (m_spin_value >= 0)) || ((spin_value <= 0) && (m_spin_value <= 0)))
         step *= abs(spin_value - m_spin_value);
 
-    double value = m_value + step*m_increment;
-
-    // Check for over/underflow wrapping around if necessary
-    if (value < m_min)
-        value = HasFlag(wxSP_WRAP) ? m_max : m_min;
-    if (value > m_max)
-        value = HasFlag(wxSP_WRAP) ? m_min : m_max;
+    double value = AdjustToFitInRange(m_value + step*m_increment);
 
     // Ignore the edges when it wraps since the up/down event may be opposite
     // They are in GTK and Mac
@@ -356,7 +350,7 @@ void wxSpinCtrlGenericBase::OnSpinButton(wxSpinEvent& event)
 
     m_spin_value = spin_value;
 
-    if (InRange(value) && DoSetValue(value))
+    if ( DoSetValue(value) )
         DoSendEvent();
 }
 
@@ -398,6 +392,8 @@ void wxSpinCtrlGenericBase::OnTextChar(wxKeyEvent& event)
             event.Skip();
             return;
     }
+
+    value = AdjustToFitInRange(value);
 
     if ( m_textCtrl && m_textCtrl->IsModified() )
         SyncSpinToText();
@@ -487,6 +483,16 @@ bool wxSpinCtrlGenericBase::DoSetValue(double val)
     }
 
     return false;
+}
+
+double wxSpinCtrlGenericBase::AdjustToFitInRange(double value) const
+{
+    if (value < m_min)
+        value = HasFlag(wxSP_WRAP) ? m_max : m_min;
+    if (value > m_max)
+        value = HasFlag(wxSP_WRAP) ? m_min : m_max;
+
+    return value;
 }
 
 void wxSpinCtrlGenericBase::DoSetRange(double min, double max)

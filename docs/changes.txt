@@ -557,6 +557,7 @@ wxMSW:
   by modern apps.
 - Ellipsize long strings in wxStatusBar (Francesco Montorsi)
 - Fix spurious repaint when changing tooltip text (Jonathan Liu).
+- Fix wxSP_WRAP and wxSP_ARROW_KEYS in wxSpinCtrlDouble (Andrew Radke).
 
 wxX11:
 
