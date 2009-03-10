@@ -422,6 +422,27 @@ wxString wxLoadUserResource(const wxString& resourceName,
 */
 void wxPostDelete(wxObject* object);
 
+
+/**
+    Compare function type for use with wxQsort()
+
+    @header{wx/utils.h}
+*/
+extern "C"
+{
+typedef int (wxCMPFUNC_CONV *CMPFUNCDATA)(const void* pItem1, const void* pItem2, const void* user_data);
+}
+
+/**
+    Function for performing a qsort operation including a user data
+    parameter.
+
+    @header{wx/utils.h}
+*/
+void wxQsort(void *const pbase, size_t total_elems,
+             size_t size, CMPFUNCDATA cmp, const void* user_data);
+
+
 /**
     Under X only, sets the current display name. This is the X host and display
     name such as "colonsay:0.0", and the function indicates which display
