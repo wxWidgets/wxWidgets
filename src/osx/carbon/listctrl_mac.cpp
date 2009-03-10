@@ -783,7 +783,11 @@ wxListCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
     attr.colFg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     attr.colBg = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX );
-    attr.font.MacCreateFromThemeFont(kThemeViewsFont);
+#if wxOSX_USE_ATSU_TEXT
+    attr.font.MacCreateFromThemeFont( kThemeViewsFont ) ;
+#else
+    attr.font.MacCreateFromUIFont( kCTFontViewsFontType ) ;
+#endif
 
     return attr;
 }
