@@ -3022,14 +3022,15 @@ void wxGtkTreeModelNode::Resort()
     // Sort array keeping original positions
     wxQsort( temp, child_count, sizeof(wxGtkTreeModelChildWithPos),
              &wxGtkTreeModelChildWithPosCmp, m_internal );
-    // Transfer positions to new_order array
+    // Transfer positions to new_order array and
+    // IDs to m_children
+    m_children.Clear();
     gint *new_order = new gint[child_count];
     for (i = 0; i < child_count; i++)
+    {
        new_order[i] = temp[i].pos;
-    // Transfer IDs to m_children
-    m_children.Clear();
-    for (i = 0; i < child_count; i++)
        m_children.Add( temp[i].id );
+    }
     // Delete array
     delete [] temp;
 #else
