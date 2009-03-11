@@ -1394,9 +1394,15 @@ bool wxEvtHandler::SafelyProcessEvent(wxEvent& event)
     }
     catch ( ... )
     {
-        wxEventLoopBase *loop = wxEventLoopBase::GetActive();
+        // notice that we do it in 2 steps to avoid warnings about possibly
+        // uninitialized loop variable from some versions of g++ which are not
+        // smart enough to figure out that GetActive() doesn't throw and so
+        // that loop will always be initialized
+        wxEventLoopBase *loop = NULL;
         try
         {
+            loop = wxEventLoopBase::GetActive();
+
             if ( !wxTheApp || !wxTheApp->OnExceptionInMainLoop() )
             {
                 if ( loop )

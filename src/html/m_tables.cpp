@@ -769,7 +769,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
                 m_WParser->OpenContainer();
 
                 // the header should be rendered in bold by default
-                int boldOld wxDUMMY_INITIALIZE(0);
+                int boldOld = 0;
                 if ( isHeader )
                 {
                     boldOld = m_WParser->GetFontBold();
