@@ -188,7 +188,7 @@ public:
 // wxRendererMSW: wxRendererNative implementation for "old" Win32 systems
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxRendererMSW : public wxRendererMSWBase
+class wxRendererMSW : public wxRendererMSWBase
 {
 public:
     wxRendererMSW() { }
@@ -244,7 +244,7 @@ private:
 
 #if wxUSE_UXTHEME
 
-class WXDLLEXPORT wxRendererXP : public wxRendererMSWBase
+class wxRendererXP : public wxRendererMSWBase
 {
 public:
     wxRendererXP() : wxRendererMSWBase(wxRendererMSW::Get()) { }

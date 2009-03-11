@@ -357,7 +357,7 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusContext)
 };
 
-class WXDLLIMPEXP_CORE wxGDIPlusMeasuringContext : public wxGDIPlusContext
+class wxGDIPlusMeasuringContext : public wxGDIPlusContext
 {
 public:
     wxGDIPlusMeasuringContext( wxGraphicsRenderer* renderer ) : wxGDIPlusContext( renderer , m_hdc = GetDC(NULL), 1000, 1000 )
