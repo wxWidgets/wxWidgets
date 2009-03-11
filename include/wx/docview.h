@@ -530,6 +530,14 @@ public:
             view->SetDocChildFrame(this);
     }
 
+    ~wxDocChildFrameAnyBase()
+    {
+        // prevent the view from deleting us if we're being deleted directly
+        // (and not via Close() + Destroy())
+        if ( m_childView )
+            m_childView->SetDocChildFrame(NULL);
+    }
+
     wxDocument *GetDocument() const { return m_childDocument; }
     wxView *GetView() const { return m_childView; }
     void SetDocument(wxDocument *doc) { m_childDocument = doc; }
