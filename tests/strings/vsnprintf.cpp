@@ -90,7 +90,7 @@ int r;
         wxString(buffer))
 
 // this is the same as wxSnprintf() but it passes the format string to
-// wxVsnprintf() without using ATTRIBUTE_PRINTF and thus suppresses the gcc
+// wxVsnprintf() without using WX_ATTRIBUTE_PRINTF and thus suppresses the gcc
 // checks (and resulting warnings) for the format string
 //
 // use with extreme care and only when you're really sure the warnings must be

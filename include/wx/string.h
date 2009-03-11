@@ -350,7 +350,7 @@ public:
     // these are duplicated wxString methods, they're also declared below
     // if !wxNEEDS_WXSTRING_PRINTF_MIXIN:
 
-    // static wxString Format(const wString& format, ...) ATTRIBUTE_PRINTF_1;
+    // static wxString Format(const wString& format, ...) WX_ATTRIBUTE_PRINTF_1;
     WX_DEFINE_VARARG_FUNC_SANS_N0(static typename StringReturnType<T1>::type,
                                   Format, 1, (const wxFormatString&),
                                   DoFormatWchar, DoFormatUtf8)
@@ -372,7 +372,7 @@ public:
     // int Printf(const wxString& format, ...);
     WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxFormatString&),
                           DoPrintfWchar, DoPrintfUtf8)
-    // int sprintf(const wxString& format, ...) ATTRIBUTE_PRINTF_2;
+    // int sprintf(const wxString& format, ...) WX_ATTRIBUTE_PRINTF_2;
     WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxFormatString&),
                           DoPrintfWchar, DoPrintfUtf8)
 
@@ -2245,7 +2245,7 @@ public:
 
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
     // returns the string containing the result of Printf() to it
-  // static wxString Format(const wxString& format, ...) ATTRIBUTE_PRINTF_1;
+  // static wxString Format(const wxString& format, ...) WX_ATTRIBUTE_PRINTF_1;
   WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxFormatString&),
                         DoFormatWchar, DoFormatUtf8)
 #ifdef __WATCOMC__
@@ -2294,7 +2294,7 @@ public:
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // use Printf()
   // (take 'this' into account in attribute parameter count)
-  // int sprintf(const wxString& format, ...) ATTRIBUTE_PRINTF_2;
+  // int sprintf(const wxString& format, ...) WX_ATTRIBUTE_PRINTF_2;
   WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxFormatString&),
                         DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__

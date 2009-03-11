@@ -474,19 +474,19 @@ typedef short int WXTYPE;
 /*  ---------------------------------------------------------------------------- */
 
 /*  Printf-like attribute definitions to obtain warnings with GNU C/C++ */
-#ifndef ATTRIBUTE_PRINTF
+#ifndef WX_ATTRIBUTE_PRINTF
 #   if defined(__GNUC__) && !wxUSE_UNICODE
-#       define ATTRIBUTE_PRINTF(m, n) __attribute__ ((__format__ (__printf__, m, n)))
+#       define WX_ATTRIBUTE_PRINTF(m, n) __attribute__ ((__format__ (__printf__, m, n)))
 #   else
-#       define ATTRIBUTE_PRINTF(m, n)
+#       define WX_ATTRIBUTE_PRINTF(m, n)
 #   endif
 
-#   define ATTRIBUTE_PRINTF_1 ATTRIBUTE_PRINTF(1, 2)
-#   define ATTRIBUTE_PRINTF_2 ATTRIBUTE_PRINTF(2, 3)
-#   define ATTRIBUTE_PRINTF_3 ATTRIBUTE_PRINTF(3, 4)
-#   define ATTRIBUTE_PRINTF_4 ATTRIBUTE_PRINTF(4, 5)
-#   define ATTRIBUTE_PRINTF_5 ATTRIBUTE_PRINTF(5, 6)
-#endif /* !defined(ATTRIBUTE_PRINTF) */
+#   define WX_ATTRIBUTE_PRINTF_1 WX_ATTRIBUTE_PRINTF(1, 2)
+#   define WX_ATTRIBUTE_PRINTF_2 WX_ATTRIBUTE_PRINTF(2, 3)
+#   define WX_ATTRIBUTE_PRINTF_3 WX_ATTRIBUTE_PRINTF(3, 4)
+#   define WX_ATTRIBUTE_PRINTF_4 WX_ATTRIBUTE_PRINTF(4, 5)
+#   define WX_ATTRIBUTE_PRINTF_5 WX_ATTRIBUTE_PRINTF(5, 6)
+#endif /* !defined(WX_ATTRIBUTE_PRINTF) */
 
 
 /*  Macro to issue warning when using deprecated functions with gcc3 or MSVC7: */

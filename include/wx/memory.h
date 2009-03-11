@@ -351,8 +351,8 @@ static wxDebugContextDumpDelayCounter wxDebugContextDumpDelayCounter_File;
     static wxDebugContextDumpDelayCounter wxDebugContextDumpDelayCounter_Extra;
 
 // Output a debug message, in a system dependent fashion.
-void WXDLLIMPEXP_BASE wxTrace(const wxChar *fmt ...) ATTRIBUTE_PRINTF_1;
-void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) ATTRIBUTE_PRINTF_2;
+void WXDLLIMPEXP_BASE wxTrace(const wxChar *fmt ...) WX_ATTRIBUTE_PRINTF_1;
+void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) WX_ATTRIBUTE_PRINTF_2;
 
 #define WXTRACE wxTrace
 #define WXTRACELEVEL wxTraceLevel

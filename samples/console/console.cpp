@@ -1760,7 +1760,7 @@ static void TestRegExInteractive()
     #undef wxPrintf
     #undef wxSprintf
 
-    // NB: do _not_ use ATTRIBUTE_PRINTF here, we have some invalid formats
+    // NB: do _not_ use WX_ATTRIBUTE_PRINTF here, we have some invalid formats
     //     in the tests below
     int wxPrintf( const wxChar *format, ... );
     int wxSprintf( wxChar *str, const wxChar *format, ... );
