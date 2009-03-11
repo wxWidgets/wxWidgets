@@ -2973,6 +2973,7 @@ bool wxDataViewColumn::IsReorderable() const
 // wxGtkTreeModelNode
 //-----------------------------------------------------------------------------
 
+#if 0
 class wxGtkTreeModelChildWithPos
 {
 public:
@@ -2987,10 +2988,20 @@ int wxGtkTreeModelChildWithPosCmp( const void* data1, const void* data2, const v
     const wxGtkTreeModelChildWithPos* child2 = (const wxGtkTreeModelChildWithPos*) data2;
     const wxDataViewCtrlInternal *internal = (const wxDataViewCtrlInternal *) user_data;
     int ret = internal->GetDataViewModel()->Compare( child1->id, child2->id,
-        internal->GetSortColumn(), (internal->GetSortOrder() == GTK_SORT_ASCENDING) );
+        internal->GetSortColumn(), (internal->GetSortOrder() == GTK_SORT_DESCENDING) );
 
     return ret;
 }
+#else
+static
+int LINKAGEMODE wxGtkTreeModelChildPtrCmp( void*** data1, void*** data2 )
+{
+    return gs_internal->GetDataViewModel()->Compare( **data1, **data2,
+        gs_internal->GetSortColumn(), (gs_internal->GetSortOrder() == GTK_SORT_ASCENDING) );
+}
+
+WX_DEFINE_ARRAY_PTR( void**, wxGtkTreeModelChildrenPtr );
+#endif
 
 void wxGtkTreeModelNode::Resort()
 {
@@ -3010,7 +3021,36 @@ void wxGtkTreeModelNode::Resort()
         return;
     }
 
+    gint *new_order = new gint[child_count];
+
 #if 1
+    // m_children has the original *void
+    // ptrs points to these
+    wxGtkTreeModelChildrenPtr ptrs;
+    size_t i;
+    for (i = 0; i < child_count; i++)
+       ptrs.Add( &(m_children[i]) );
+    // Sort the ptrs
+    gs_internal = m_internal;
+    ptrs.Sort( &wxGtkTreeModelChildPtrCmp );
+ 
+    wxGtkTreeModelChildren temp;
+    void** base_ptr = &(m_children[0]);
+    // Transfer positions to new_order array and 
+    // IDs to temp
+    for (i = 0; i < child_count; i++)
+    {
+        new_order[i] = ptrs[i] - base_ptr;
+        temp.Add( *ptrs[i] );
+    }
+
+    // Transfer IDs back to m_children
+    m_children.Clear();
+    WX_APPEND_ARRAY( temp, m_children );
+#endif
+#if 0
+    // Too slow
+
     // Build up array with IDs and original positions
     wxGtkTreeModelChildWithPos* temp = new wxGtkTreeModelChildWithPos[child_count];
     size_t i;
@@ -3025,7 +3065,6 @@ void wxGtkTreeModelNode::Resort()
     // Transfer positions to new_order array and
     // IDs to m_children
     m_children.Clear();
-    gint *new_order = new gint[child_count];
     for (i = 0; i < child_count; i++)
     {
        new_order[i] = temp[i].pos;
@@ -3033,15 +3072,17 @@ void wxGtkTreeModelNode::Resort()
     }
     // Delete array
     delete [] temp;
-#else
+#endif
+
+#if 0
+    // Too slow
+    
     wxGtkTreeModelChildren temp;
     WX_APPEND_ARRAY( temp, m_children );
 
     gs_internal = m_internal;
     m_children.Sort( &wxGtkTreeModelChildCmp );
     
-    gint *new_order = new gint[child_count];
-
     unsigned int pos;
     for (pos = 0; pos < child_count; pos++)
     {
