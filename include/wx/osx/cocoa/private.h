@@ -98,7 +98,7 @@ public :
 
     void                SetDefaultButton( bool isDefault );
     void                PerformClick();
-    void                SetLabel(const wxString& title, wxFontEncoding encoding);
+    virtual void        SetLabel(const wxString& title, wxFontEncoding encoding);
 
     void                SetCursor( const wxCursor & cursor );
     void                CaptureMouse();

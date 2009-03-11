@@ -58,11 +58,32 @@
 }
 @end
 
+class wxStaticTextCocoaImpl : public wxWidgetCocoaImpl
+{
+public:
+    wxStaticTextCocoaImpl( wxWindowMac* peer , WXWidget w ) : wxWidgetCocoaImpl(peer, w)
+    {
+    }
+    
+    virtual void SetLabel(const wxString& title, wxFontEncoding encoding) 
+    { 
+        wxNSStaticTextView* v = (wxNSStaticTextView*)GetWXWidget();
+        wxWindow* wxpeer = GetWXPeer();
+        [v setString: wxCFStringRef( title , wxpeer->GetFont().GetEncoding() ).AsNSString()];
+    
+        int style = wxpeer->GetWindowStyleFlag();
+        NSRange allText = NSMakeRange(0, title.length());
+        if (style & wxALIGN_CENTER)
+            [v setAlignment: NSCenterTextAlignment range: allText];
+        else if (style & wxALIGN_RIGHT)
+            [v setAlignment: NSRightTextAlignment range: allText];
+    }
+};
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-Point bounds;
-
+    Point bounds;
+    
 #if wxOSX_USE_ATSU_TEXT
     OSStatus err = noErr;
     wxCFStringRef str( m_label,  GetFont().GetEncoding() );
@@ -81,13 +102,12 @@ Point bounds;
         wxClientDC dc(const_cast<wxStaticText*>(this));
         wxCoord width, height ;
         dc.GetMultiLineTextExtent( m_label , &width, &height);
-        // FIXME: Some labels seem to have their last characters
-        // stripped out.  Adding 12 pixels seems to be enough to fix this.
-        // Perhaps m_label is not being synced properly...
+        // FIXME: The calculations returned by this function are too small
+        // for some strings, so we adjust manually.
         bounds.h = width+12;
-        bounds.v = height;
+        bounds.v = height+4;
     }
-
+    
     if ( m_label.empty() )
         bounds.h = 0;
 
@@ -119,15 +139,8 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
     [v setEditable:NO];
     [v setDrawsBackground:NO];
     [v setSelectable: NO];
-    [v setString: wxCFStringRef( label , wxpeer->GetFont().GetEncoding() ).AsNSString()];
-    
-    NSRange allText = NSMakeRange(0, label.length());
-    if (style & wxALIGN_CENTER)
-        [v setAlignment: NSCenterTextAlignment range: allText];
-    else if (style & wxALIGN_RIGHT)
-        [v setAlignment: NSRightTextAlignment range: allText];
-
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+            
+    wxWidgetCocoaImpl* c = new wxStaticTextCocoaImpl( wxpeer, v );
     return c;
 /*
     Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );
