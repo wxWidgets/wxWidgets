@@ -142,9 +142,8 @@ To make use of wxWidgets, you currently need one of the following setups.
 
 (c) Mac OS/Mac OS X:
 
-@li A PowerPC or Intel Mac running Mac OS X 10.3 or higher
-@li The Apple Developer Tools (eg. GNU C++) or MetroWerks CodeWarrior (not
-    actively supported)
+@li A PowerPC or Intel Mac running Mac OS X 10.4 or higher
+@li The Apple Developer Tools (eg. GNU C++)
 
 Under all platforms it's recommended to have large amounts of free hard disk
 space. The exact amount needed depends on the port, compiler and build

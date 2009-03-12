@@ -19,8 +19,8 @@ requires. This chapter collects notes about differences among supported platform
 and ports.
 
 @li @ref page_port_wxgtk
-@li @ref page_port_wxmac
-@li @ref page_port_wxcocoa
+@li @ref page_port_wxosx_carbon
+@li @ref page_port_wxosx_cocoa
 @li @ref page_port_wxos2
 @li @ref page_port_wxmgl
 @li @ref page_port_wxx11
