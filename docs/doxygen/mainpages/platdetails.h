@@ -73,20 +73,20 @@ in the distribution.
 
 
 
-@section page_port_wxmac wxMac
+@section page_port_wxosx_carbon wxOSX/Carbon
 
 @htmlonly
 <img src="logo_osxleopard.png" alt="Mac OS X (Leopard) logo"
     title="Mac OS X (Leopard) logo" class="logo">
 @endhtmlonly
 
-wxMac is a port of wxWidgets for the Macintosh OS platform.
-Currently MacOS X 10.4 or higher are supported. wxMac can
+wxOSX/Carbon is a port of wxWidgets for the Macintosh OS platform.
+Currently MacOS X 10.4 or higher are supported. wxOSX/Carbon can
 be compiled both using Apple's command line developer tools
-as well as Apple's XCode IDE. wxMac supports both the Intel
+as well as Apple's XCode IDE. wxOSX/Carbon supports both the Intel
 and PowerPC architectures and can be used to produce
 "universal binaries" in order create application which can run
-both architecture. Unfortunately, wxMac does not support any
+both architecture. Unfortunately, wxOSX/Carbon does not support any
 64-bit architecture since Apple decided not to port its Carbon
 API entirely to 64-bit.
 
@@ -95,22 +95,28 @@ in the distribution.
 
 
 
-@section page_port_wxcocoa wxCocoa
+@section page_port_wxosx_cocoa wxOSX/Cocoa
 
 @htmlonly
 <img src="logo_osxleopard.png" alt="Mac OS X (Leopard) logo"
     title="Mac OS X (Leopard) logo" class="logo">
 @endhtmlonly
 
-wxCocoa is another port of wxWidgets for the Macintosh OS
-platform. In contrast to wxMac, it uses the Cocoa API.
-Much work has gone into this port and many controls are
-functional, but the port has not reached the maturity
-of the wxMac port yet. It should be possible to use wxCocoa
+wxOSX/Cocoa is another port of wxWidgets for the Macintosh OS
+platform. In contrast to wxOSX/Carbon, it uses the Cocoa API 
+in place of Carbon. Much work has gone into this port and many 
+controls are functional, but the port has not reached the maturity
+of the wxOSX/Cocoa port yet. It is possible to use wxOSX/Cocoa
 on 64-bit architectures.
 
 For further information, please see the files in @c docs/osx
 in the distribution.
+
+Note that there was a previous effort towards a Cocoa port called 
+wxCocoa, which is implemented totally with Cocoa API unlike the OSX/Cocoa port
+which uses OS X C APIs to share code, and while it is no longer being actively 
+developed, docs for it are available at @c docs/cocoa in the distribution.
+
 
 
 @section page_port_wxmgl wxMGL
