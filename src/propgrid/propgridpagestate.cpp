@@ -255,7 +255,7 @@ void wxPropertyGridPageState::InitNonCatMode()
             wxPGProperty* parent = p->GetParent();
             if ( parent->IsCategory() || parent->IsRoot() )
             {
-                m_abcArray->AddChild2(p);
+                m_abcArray->DoAddChild(p);
                 p->m_parent = &m_regularArray;
             }
         }
@@ -1655,11 +1655,11 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
         if ( m_abcArray && !property->IsCategory() &&
              (parentIsCategory || parentIsRoot) )
         {
-            m_abcArray->AddChild2( property, -1, false );
+            m_abcArray->DoAddChild( property, -1, false );
         }
 
         // Add to current mode.
-        parent->AddChild2( property, index, true );
+        parent->DoAddChild( property, index, true );
     }
     else
     {
@@ -1667,14 +1667,14 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
 
         if ( parentIsCategory )
             // Parent is category.
-            parent->AddChild2( property, index, false );
+            parent->DoAddChild( property, index, false );
         else if ( parentIsRoot )
             // Parent is root.
-            m_regularArray.AddChild2( property, -1, false );
+            m_regularArray.DoAddChild( property, -1, false );
 
         // Add to current mode
         if ( !property->IsCategory() )
-            m_abcArray->AddChild2( property, index, true );
+            m_abcArray->DoAddChild( property, index, true );
     }
 
     // category stuff

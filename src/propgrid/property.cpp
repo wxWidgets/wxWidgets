@@ -539,10 +539,12 @@ void wxPGProperty::InitAfterAdded( wxPropertyGridPageState* pageState,
     if ( GetChildCount() )
     {
         // Check parental flags
-        wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS),
-                      "Call SetFlag(wxPG_PROP_MISC_PARENT) or"
-                      "SetFlag(wxPG_PROP_AGGREGATE) before calling"
-                      "wxPGProperty::AddChild()." );
+        wxASSERT_MSG( ((m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
+                            wxPG_PROP_AGGREGATE) ||
+                      ((m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
+                            wxPG_PROP_MISC_PARENT),
+                      "wxPGProperty parental flags set incorrectly at "
+                      "this time" );
 
         if ( HasFlag(wxPG_PROP_AGGREGATE) )
         {
@@ -2034,7 +2036,8 @@ int wxPGProperty::GetY() const
 }
 
 // This is used by Insert etc.
-void wxPGProperty::AddChild2( wxPGProperty* prop, int index, bool correct_mode )
+void wxPGProperty::DoAddChild( wxPGProperty* prop, int index,
+                               bool correct_mode )
 {
     if ( index < 0 || (size_t)index >= m_children.size() )
     {
@@ -2050,20 +2053,67 @@ void wxPGProperty::AddChild2( wxPGProperty* prop, int index, bool correct_mode )
     prop->m_parent = this;
 }
 
-// This is used by properties that have fixed sub-properties
-void wxPGProperty::AddChild( wxPGProperty* prop )
+void wxPGProperty::DoPreAddChild( int index, wxPGProperty* prop )
 {
     wxASSERT_MSG( prop->GetBaseName().length(),
-                  "Property's children must have unique, non-empty names within their scope" );
+                  "Property's children must have unique, non-empty "
+                  "names within their scope" );
 
-    prop->m_arrIndex = m_children.size();
-    m_children.push_back( prop );
+    prop->m_arrIndex = index;
+    m_children.insert( m_children.begin()+index,
+                       prop );
 
     int custImgHeight = prop->OnMeasureImage().y;
     if ( custImgHeight < 0 /*|| custImgHeight > 1*/ )
         prop->m_flags |= wxPG_PROP_CUSTOMIMAGE;
 
     prop->m_parent = this;
+}
+
+void wxPGProperty::AddPrivateChild( wxPGProperty* prop )
+{
+    if ( !(m_flags & wxPG_PROP_PARENTAL_FLAGS) )
+        SetParentalType(wxPG_PROP_AGGREGATE);
+
+    wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
+                    wxPG_PROP_AGGREGATE,
+                  "Do not mix up AddPrivateChild() calls with other "
+                  "property adders." );
+
+    DoPreAddChild( m_children.size(), prop );
+}
+
+#if wxPG_COMPATIBILITY_1_4
+void wxPGProperty::AddChild( wxPGProperty* prop )
+{
+    AddPrivateChild(prop);
+}
+#endif
+
+wxPGProperty* wxPGProperty::InsertChild( int index,
+                                         wxPGProperty* childProperty )
+{
+    if ( index < 0 )
+        index = m_children.size();
+
+    if ( m_parentState )
+    {
+        m_parentState->DoInsert(this, index, childProperty);
+    }
+    else
+    {
+        if ( !(m_flags & wxPG_PROP_PARENTAL_FLAGS) )
+            SetParentalType(wxPG_PROP_MISC_PARENT);
+
+        wxASSERT_MSG( (m_flags & wxPG_PROP_PARENTAL_FLAGS) ==
+                        wxPG_PROP_MISC_PARENT,
+                      "Do not mix up AddPrivateChild() calls with other "
+                      "property adders." );
+
+        DoPreAddChild( index, childProperty );
+    }
+
+    return childProperty;
 }
 
 void wxPGProperty::RemoveChild( wxPGProperty* p )

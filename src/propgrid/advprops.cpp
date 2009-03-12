@@ -619,13 +619,12 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
     wxFont font;
     font << m_value;
 
-    SetParentalType(wxPG_PROP_AGGREGATE);
+    AddPrivateChild( new wxIntProperty( _("Point Size"),
+                     wxS("Point Size"),(long)font.GetPointSize() ) );
 
-    AddChild( new wxIntProperty( _("Point Size"), wxS("Point Size"),(long)font.GetPointSize() ) );
-
-    AddChild( new wxEnumProperty(_("Family"), wxS("PointSize"),
-              gs_fp_es_family_labels,gs_fp_es_family_values,
-              font.GetFamily()) );
+    AddPrivateChild( new wxEnumProperty(_("Family"), wxS("PointSize"),
+                     gs_fp_es_family_labels,gs_fp_es_family_values,
+                     font.GetFamily()) );
 
     wxString faceName = font.GetFaceName();
     // If font was not in there, add it now
@@ -638,16 +637,18 @@ wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
 
     p->SetValueFromString(faceName, wxPG_FULL_VALUE);
 
-    AddChild( p );
+    AddPrivateChild( p );
 
-    AddChild( new wxEnumProperty(_("Style"), wxS("Style"),
-              gs_fp_es_style_labels,gs_fp_es_style_values,font.GetStyle()) );
+    AddPrivateChild( new wxEnumProperty(_("Style"), wxS("Style"),
+                     gs_fp_es_style_labels,gs_fp_es_style_values,
+                     font.GetStyle()) );
 
-    AddChild( new wxEnumProperty(_("Weight"), wxS("Weight"),
-              gs_fp_es_weight_labels,gs_fp_es_weight_values,font.GetWeight()) );
+    AddPrivateChild( new wxEnumProperty(_("Weight"), wxS("Weight"),
+                     gs_fp_es_weight_labels,gs_fp_es_weight_values,
+                     font.GetWeight()) );
 
-    AddChild( new wxBoolProperty(_("Underlined"), wxS("Underlined"),
-              font.GetUnderlined()) );
+    AddPrivateChild( new wxBoolProperty(_("Underlined"), wxS("Underlined"),
+                     font.GetUnderlined()) );
 }
 
 wxFontProperty::~wxFontProperty() { }

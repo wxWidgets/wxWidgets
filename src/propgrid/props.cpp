@@ -1187,8 +1187,6 @@ WX_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN(wxFlagsProperty,long,TextCtrl)
 
 void wxFlagsProperty::Init()
 {
-    SetParentalType(wxPG_PROP_AGGREGATE);
-
     long value = m_value;
 
     //
@@ -1248,7 +1246,7 @@ void wxFlagsProperty::Init()
             {
                 boolProp = new wxBoolProperty( label, label, child_val );
             }
-            AddChild(boolProp);
+            AddPrivateChild(boolProp);
         }
 
         m_oldChoicesData = m_choices.GetDataPtr();

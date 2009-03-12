@@ -504,8 +504,11 @@ public:
             variant << value;
             SetValue(variant);
 
-            // If has private child properties then create them here. For example:
-            //     AddChild( new wxStringProperty( "Subprop 1", wxPG_LABEL, value.GetSubProp1() ) );
+            // If has private child properties then create them here.
+            // For example:
+            //     AddPrivateChild( new wxStringProperty("Subprop 1",
+            //                                           wxPG_LABEL,
+            //                                           value.GetSubProp1()));
         }
 
         @endcode
@@ -887,29 +890,41 @@ public:
     int AddChoice( const wxString& label, int value = wxPG_INVALID_VALUE );
 
     /**
-        Adds a child property. If you use this instead of
-        wxPropertyGridInterface::Insert() or
-        wxPropertyGridInterface::AppendIn(), then you must set up
-        property's parental type before making the call. To do this,
-        call property's SetParentalType() function with either
-        wxPG_PROP_MISC_PARENT (normal, public children) or with
-        wxPG_PROP_AGGREGATE (private children for subclassed property).
-        For instance:
+        Adds a private child property.
 
-        @code
-            wxPGProperty* prop = new wxStringProperty(wxS("Property"));
-            prop->SetParentalType(wxPG_PROP_MISC_PARENT);
-            wxPGProperty* prop2 = new wxStringProperty(wxS("Property2"));
-            prop->AddChild(prop2);
-        @endcode
+        @deprecated Use AddPrivateChild() instead.
+
+        @see AddPrivateChild()
     */
-    void AddChild( wxPGProperty* property );
+    wxDEPRECATED( void AddChild( wxPGProperty* prop ) );
+
+    /**
+        Adds a private child property. If you use this instead of
+        wxPropertyGridInterface::Insert() or
+        wxPropertyGridInterface::AppendIn(), then property's parental
+        type will automatically be set up to wxPG_PROP_AGGREGATE. In other
+        words, all properties of this property will become private.
+    */
+    void AddPrivateChild( wxPGProperty* prop );
 
     /**
         Adapts list variant into proper value using consecutive
         ChildChanged() calls.
     */
     void AdaptListToValue( wxVariant& list, wxVariant* value ) const;
+
+    /**
+        Use this member function to add independent (ie. regular) children to
+        a property.
+
+        @return Appended childProperty.
+
+        @remarks wxPropertyGrid is not automatically refreshed by this
+                function.
+
+        @see InsertChild(), AddPrivateChild()
+    */
+    wxPGProperty* AppendChild( wxPGProperty* childProperty );
 
     /**
         Determines, recursively, if all children are not unspecified.
@@ -1157,6 +1172,19 @@ public:
     int Index( const wxPGProperty* p ) const;
 
     /**
+        Use this member function to add independent (ie. regular) children to
+        a property.
+
+        @return Inserted childProperty.
+
+        @remarks wxPropertyGrid is not automatically refreshed by this
+                function.
+
+        @see AppendChild(), AddPrivateChild()
+    */
+    wxPGProperty* InsertChild( int index, wxPGProperty* childProperty );
+
+    /**
         Inserts a new choice to property's list of choices.
 
         @param label
@@ -1338,11 +1366,7 @@ public:
             wxPG_PROP_AGGREGATE (for derived property classes with private
             children).
 
-        @remarks You only need to call this if you use AddChild() to add
-                 child properties. Adding properties with
-                 wxPropertyGridInterface::Insert() or
-                 wxPropertyGridInterface::AppendIn() will automatically set
-                 property to use wxPG_PROP_MISC_PARENT style.
+        @remarks You generally do not need to call this function.
     */
     void SetParentalType( int flag );
 
