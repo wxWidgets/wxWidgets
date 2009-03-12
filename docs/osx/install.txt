@@ -8,12 +8,6 @@ wxWidgets on Linux (or on Windows using MinGW or Cygwin). See
 'Apple Developer Tools' below for more details on using
 configure.
 
-To target on MacOS 8 or 9, you need to buy Metrowerks
-CodeWarrior. You can then compile Mac Classic or MacOS X
-applications on Mac OS X, or compile Mac Classic or MacOS X
-applications on Mac Classic. However you can only run and debug
-each type of application on the target operating system.
-
 
 Apple Developer Tools: command line
 -----------------------------------
