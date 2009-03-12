@@ -24,7 +24,7 @@ with the Apple Developer Tools installed:
 1) cd into the base dir
 2) mkdir osx-build
 3) cd osx-build
-4) ../configure
+4) ../configure (add --with-osx_cocoa for the Cocoa port)
 5) make
 
 If you want to install the library into the system directories you'll need
