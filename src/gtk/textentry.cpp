@@ -107,7 +107,8 @@ wxString wxTextEntry::DoGetValue() const
 {
     const wxGtkString value(gtk_editable_get_chars(GetEditable(), 0, -1));
 
-    return wxGTK_CONV_BACK_FONT(value, GetEditableWindow()->GetFont());
+    return wxGTK_CONV_BACK_FONT(value,
+            const_cast<wxTextEntry *>(this)->GetEditableWindow()->GetFont());
 }
 
 void wxTextEntry::Remove(long from, long to)
@@ -318,7 +319,7 @@ void wxTextEntry::SendMaxLenEvent()
     // generating a dummy wxEVT_COMMAND_TEXT_UPDATED event
     //IgnoreNextTextUpdate();
 
-    wxWindow * const win = const_cast<wxWindow *>(GetEditableWindow());
+    wxWindow * const win = GetEditableWindow();
     wxCommandEvent event(wxEVT_COMMAND_TEXT_MAXLEN, win->GetId());
     event.SetEventObject(win);
     event.SetString(GetValue());
