@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 19 January 2009                                                     *
+# Date : 12 March 2009                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -92,7 +92,7 @@ OBJECTS = \
 		filepickerg.obj,\
 		bmpcboxg.obj,\
 		filectrlg.obj,srchctlg.obj,notifmsgg.obj,headerctrlg.obj,\
-		grideditors.obj,vlbox.obj,vscroll.obj
+		grideditors.obj,vlbox.obj,vscroll.obj,stattextg.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -162,7 +162,7 @@ SOURCES = \
 		filepickerg.cpp,\
 		vscroll.cpp,\
 		icon.cpp,bmpcboxg.cpp,filectrlg.cpp,srchctlg.cpp,notifmsgg.cpp\
-		,headerctrlg.cpp,grideditors.cpp
+		,headerctrlg.cpp,grideditors.cpp,stattextg.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -173,7 +173,7 @@ OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
 OBJECTS0=accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
 	listbkg.obj,mdig.obj,spinctlg.obj,splash.obj,timer.obj,\
 	combog.obj,icon.obj,collpaneg.obj,animateg.obj,\
-	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj,stattextg.obj
+	colrdlgg.obj,clrpickerg.obj,fontpickerg.obj
 .else
 .ifdef __WXGTK__
 OBJECTS0=accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj,\
