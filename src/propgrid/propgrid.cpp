@@ -4821,9 +4821,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
         // Travel and expand/collapse
         int selectDir = -2;
 
-        if ( p->GetChildCount() &&
-             !(p->m_flags & wxPG_PROP_DISABLED)
-           )
+        if ( p->GetChildCount() )
         {
             if ( action == wxPG_ACTION_COLLAPSE_PROPERTY || secondAction == wxPG_ACTION_COLLAPSE_PROPERTY )
             {
