@@ -73,7 +73,10 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
                                  long style,
                                  const wxString& name)
 {
-    if ( !wxNonOwnedWindow::Create(parent, id, pos, size, style, name) )
+    int w = WidthDefault(size.x);
+    int h = HeightDefault(size.y);
+
+    if ( !wxNonOwnedWindow::Create(parent, id, pos, wxSize(w,h), style, name) )
         return false;
 
     wxWindow::SetLabel( title ) ;
