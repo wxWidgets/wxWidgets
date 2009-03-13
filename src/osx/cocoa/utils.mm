@@ -181,6 +181,7 @@ void wxMacWakeUp()
 
 bool wxApp::DoInitGui()
 {
+    wxMacAutoreleasePool pool;
     [NSApplication sharedApplication];
 
     if (!sm_isEmbedded)
