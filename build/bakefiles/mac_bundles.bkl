@@ -61,8 +61,8 @@
                 <!-- PkgInfo: -->
                 echo -n "APPL????" >$(BUNDLE)/PkgInfo
 
-                <!-- make a hardlink to the binary: -->
-                ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
+                <!-- move the binary: -->
+                mv $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
 
                 <!-- copy the application icon: -->
                 cp -f $(BUNDLE_ICON) $(BUNDLE)/Resources/wxmac.icns
