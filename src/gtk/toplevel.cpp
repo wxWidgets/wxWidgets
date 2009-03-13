@@ -781,8 +781,10 @@ void wxTopLevelWindowGTK::Refresh( bool WXUNUSED(eraseBackground), const wxRect 
 {
     wxCHECK_RET( m_widget, wxT("invalid frame") );
     
-   gtk_widget_queue_draw( m_widget );
-   gdk_window_invalidate_rect( m_wxwindow->window, NULL, TRUE );
+    gtk_widget_queue_draw( m_widget );
+
+    if (m_wxwindow && m_wxwindow->window)
+        gdk_window_invalidate_rect( m_wxwindow->window, NULL, TRUE );
 }
 
 bool wxTopLevelWindowGTK::Show( bool show )
