@@ -274,12 +274,18 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)
 {
     wxFileName fn = wxFileSystem::URLToFileName(GetRightLocation(spec));
-    return wxFindFirstFile(ms_root + fn.GetFullPath(), flags);
+    const wxString found = wxFindFirstFile(ms_root + fn.GetFullPath(), flags);
+    if ( found.empty() )
+        return found;
+    return wxFileSystem::FileNameToURL(found);
 }
 
 wxString wxLocalFSHandler::FindNext()
 {
-    return wxFindNextFile();
+    const wxString found = wxFindNextFile();
+    if ( found.empty() )
+        return found;
+    return wxFileSystem::FileNameToURL(found);
 }
 
 
