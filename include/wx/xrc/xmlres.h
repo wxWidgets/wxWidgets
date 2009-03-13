@@ -115,6 +115,9 @@ public:
     // Loads resources from single XRC file.
     bool LoadFile(const wxFileName& file);
 
+    // Loads all XRC files from a directory.
+    bool LoadAllFiles(const wxString& dirname);
+
     // Unload resource from the given XML file (wildcards not allowed)
     bool Unload(const wxString& filename);
 

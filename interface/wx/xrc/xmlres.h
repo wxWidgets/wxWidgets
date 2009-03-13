@@ -204,7 +204,7 @@ public:
         If you are sure that the argument is name of single XRC file (rather
         than an URL or a wildcard), use LoadFile() instead.
 
-        @see LoadFile()
+        @see LoadFile(), LoadAllFiles()
     */
     bool Load(const wxString& filemask);
 
@@ -213,9 +213,21 @@ public:
 
         @since 2.9.0
 
-        @see Load()
+        @see Load(), LoadAllFiles()
     */
     bool LoadFile(const wxFileName& file);
+
+    /**
+        Loads all .xrc files from directory @a dirname.
+
+        Tries to load as many files as possible; if there's an error while
+        loading one file, it still attempts to load other files.
+
+        @since 2.9.0
+
+        @see LoadFile(), Load()
+    */
+    bool LoadAllFiles(const wxString& dirname);
 
     /**
         Loads a bitmap resource from a file.

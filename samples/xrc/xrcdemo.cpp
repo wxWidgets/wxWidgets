@@ -80,50 +80,8 @@ bool MyApp::OnInit()
     // Load all of the XRC files that will be used. You can put everything
     // into one giant XRC file if you wanted, but then they become more
     // diffcult to manage, and harder to reuse in later projects.
-    // The menubar
-    if (!wxXmlResource::Get()->Load(wxT("rc/menu.xrc")))
+    if ( !wxXmlResource::Get()->LoadAllFiles("rc") )
         return false;
-
-    // The toolbar
-    if (!wxXmlResource::Get()->Load(wxT("rc/toolbar.xrc")))
-        return false;
-
-    // Non-derived dialog example
-    if (!wxXmlResource::Get()->Load(wxT("rc/basicdlg.xrc")))
-        return false;
-
-    // Derived dialog example
-    if (!wxXmlResource::Get()->Load(wxT("rc/derivdlg.xrc")))
-        return false;
-
-    // Controls property example
-    if (!wxXmlResource::Get()->Load(wxT("rc/controls.xrc")))
-        return false;
-
-    // Frame example
-    if (!wxXmlResource::Get()->Load(wxT("rc/frame.xrc")))
-        return false;
-
-    // Uncentered example
-    if (!wxXmlResource::Get()->Load(wxT("rc/uncenter.xrc")))
-        return false;
-
-    // Custom class example
-    if (!wxXmlResource::Get()->Load(wxT("rc/custclas.xrc")))
-        return false;
-
-    // wxArtProvider example
-    if (!wxXmlResource::Get()->Load(wxT("rc/artprov.xrc")))
-        return false;
-
-    // Platform property example
-    if (!wxXmlResource::Get()->Load(wxT("rc/platform.xrc")))
-        return false;
-
-    // Variable expansion example
-    if (!wxXmlResource::Get()->Load(wxT("rc/variable.xrc")))
-        return false;
-
 
 #if wxUSE_HELP
     // Use the simple help provider to show the context-sensitive help

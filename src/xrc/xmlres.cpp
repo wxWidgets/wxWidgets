@@ -44,7 +44,7 @@
 #include "wx/fontenum.h"
 #include "wx/fontmap.h"
 #include "wx/artprov.h"
-
+#include "wx/dir.h"
 #include "wx/xml/xml.h"
 
 
@@ -181,6 +181,22 @@ bool wxXmlResource::IsArchive(const wxString& filename)
 bool wxXmlResource::LoadFile(const wxFileName& file)
 {
     return Load(wxFileSystem::FileNameToURL(file));
+}
+
+bool wxXmlResource::LoadAllFiles(const wxString& dirname)
+{
+    bool ok = true;
+    wxArrayString files;
+
+    wxDir::GetAllFiles(dirname, &files, "*.xrc");
+
+    for ( wxArrayString::const_iterator i = files.begin(); i != files.end(); ++i )
+    {
+        if ( !LoadFile(*i) )
+            ok = false;
+    }
+
+    return ok;
 }
 
 bool wxXmlResource::Load(const wxString& filemask_)
