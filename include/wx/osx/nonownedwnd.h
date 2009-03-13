@@ -61,8 +61,6 @@ public:
 
     // implement base class pure virtuals
 
-    virtual bool SetShape(const wxRegion& region);
-
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent();
 
@@ -75,6 +73,8 @@ public:
 
     // implementation from now on
     // --------------------------
+
+    virtual bool DoSetShape(const wxRegion& region);
 
     // activation hooks only necessary for MDI Implementation
     static void MacDelayedDeactivation(long timestamp);

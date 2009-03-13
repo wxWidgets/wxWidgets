@@ -49,6 +49,9 @@ public:
 
     virtual wxPoint GetClientAreaOrigin() const;
 
+    virtual bool SetShape(const wxRegion& region) 
+        { return DoSetShape(region); }
+
     // Attracts the users attention to this window if the application is
     // inactive (should be called when a background event occurs)
     virtual void RequestUserAttention(int flags = wxUSER_ATTENTION_INFO);
