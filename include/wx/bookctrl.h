@@ -286,7 +286,7 @@ protected:
     int GetNextPage(bool forward) const;
 
     // Lay out controls
-    void DoSize();
+    virtual void DoSize();
 
     // This method also invalidates the size of the controller and should be
     // called instead of just InvalidateBestSize() whenever pages are added or
@@ -309,7 +309,7 @@ protected:
     bool m_ownsImageList;
 
     // get the page area
-    wxRect GetPageRect() const;
+    virtual wxRect GetPageRect() const;
 
     // event handlers
     virtual wxSize GetControllerSize() const;
