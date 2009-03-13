@@ -200,7 +200,7 @@ widgets$(EXEEXT): $(WIDGETS_OBJECTS) $(__widgets___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >widgets.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f widgets$(EXEEXT) widgets.app/Contents/MacOS/widgets
+@COND_PLATFORM_MACOSX_1@	mv widgets$(EXEEXT) widgets.app/Contents/MacOS/widgets
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns widgets.app/Contents/Resources/wxmac.icns

@@ -222,7 +222,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	echo -n "APPL????" >client.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f client$(EXEEXT) client.app/Contents/MacOS/client
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mv client$(EXEEXT) client.app/Contents/MacOS/client
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns client.app/Contents/Resources/wxmac.icns
@@ -251,7 +251,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	echo -n "APPL????" >server.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f server$(EXEEXT) server.app/Contents/MacOS/server
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mv server$(EXEEXT) server.app/Contents/MacOS/server
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns server.app/Contents/Resources/wxmac.icns

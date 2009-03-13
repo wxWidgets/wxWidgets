@@ -184,7 +184,7 @@ auidemo$(EXEEXT): $(AUIDEMO_OBJECTS) $(__auidemo___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >auidemo.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f auidemo$(EXEEXT) auidemo.app/Contents/MacOS/auidemo
+@COND_PLATFORM_MACOSX_1@	mv auidemo$(EXEEXT) auidemo.app/Contents/MacOS/auidemo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns auidemo.app/Contents/Resources/wxmac.icns

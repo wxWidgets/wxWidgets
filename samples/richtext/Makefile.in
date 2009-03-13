@@ -184,7 +184,7 @@ richtext$(EXEEXT): $(RICHTEXT_OBJECTS) $(__richtext___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >richtext.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f richtext$(EXEEXT) richtext.app/Contents/MacOS/richtext
+@COND_PLATFORM_MACOSX_1@	mv richtext$(EXEEXT) richtext.app/Contents/MacOS/richtext
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns richtext.app/Contents/Resources/wxmac.icns

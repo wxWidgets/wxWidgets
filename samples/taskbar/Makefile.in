@@ -173,7 +173,7 @@ taskbar$(EXEEXT): $(TASKBAR_OBJECTS) $(__taskbar___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >taskbar.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f taskbar$(EXEEXT) taskbar.app/Contents/MacOS/taskbar
+@COND_PLATFORM_MACOSX_1@	mv taskbar$(EXEEXT) taskbar.app/Contents/MacOS/taskbar
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns taskbar.app/Contents/Resources/wxmac.icns

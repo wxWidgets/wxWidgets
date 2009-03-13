@@ -168,7 +168,7 @@ mdi$(EXEEXT): $(MDI_OBJECTS) $(__mdi___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >mdi.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f mdi$(EXEEXT) mdi.app/Contents/MacOS/mdi
+@COND_PLATFORM_MACOSX_1@	mv mdi$(EXEEXT) mdi.app/Contents/MacOS/mdi
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns mdi.app/Contents/Resources/wxmac.icns

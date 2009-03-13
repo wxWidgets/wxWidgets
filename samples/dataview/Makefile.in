@@ -174,7 +174,7 @@ dataview$(EXEEXT): $(DATAVIEW_OBJECTS) $(__dataview___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >dataview.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f dataview$(EXEEXT) dataview.app/Contents/MacOS/dataview
+@COND_PLATFORM_MACOSX_1@	mv dataview$(EXEEXT) dataview.app/Contents/MacOS/dataview
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns dataview.app/Contents/Resources/wxmac.icns

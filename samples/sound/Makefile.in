@@ -173,7 +173,7 @@ sound$(EXEEXT): $(SOUND_OBJECTS) $(__sound___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >sound.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f sound$(EXEEXT) sound.app/Contents/MacOS/sound
+@COND_PLATFORM_MACOSX_1@	mv sound$(EXEEXT) sound.app/Contents/MacOS/sound
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns sound.app/Contents/Resources/wxmac.icns

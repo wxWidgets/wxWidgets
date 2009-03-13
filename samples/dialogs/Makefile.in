@@ -184,7 +184,7 @@ dialogs$(EXEEXT): $(DIALOGS_OBJECTS) $(__dialogs___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >dialogs.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f dialogs$(EXEEXT) dialogs.app/Contents/MacOS/dialogs
+@COND_PLATFORM_MACOSX_1@	mv dialogs$(EXEEXT) dialogs.app/Contents/MacOS/dialogs
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns dialogs.app/Contents/Resources/wxmac.icns

@@ -168,7 +168,7 @@ power$(EXEEXT): $(POWER_OBJECTS) $(__power___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >power.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f power$(EXEEXT) power.app/Contents/MacOS/power
+@COND_PLATFORM_MACOSX_1@	mv power$(EXEEXT) power.app/Contents/MacOS/power
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns power.app/Contents/Resources/wxmac.icns

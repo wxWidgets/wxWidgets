@@ -173,7 +173,7 @@ anitest$(EXEEXT): $(ANITEST_OBJECTS) $(__anitest___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >anitest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f anitest$(EXEEXT) anitest.app/Contents/MacOS/anitest
+@COND_PLATFORM_MACOSX_1@	mv anitest$(EXEEXT) anitest.app/Contents/MacOS/anitest
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns anitest.app/Contents/Resources/wxmac.icns

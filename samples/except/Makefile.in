@@ -168,7 +168,7 @@ except$(EXEEXT): $(EXCEPT_OBJECTS) $(__except___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >except.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f except$(EXEEXT) except.app/Contents/MacOS/except
+@COND_PLATFORM_MACOSX_1@	mv except$(EXEEXT) except.app/Contents/MacOS/except
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns except.app/Contents/Resources/wxmac.icns

@@ -168,7 +168,7 @@ memcheck$(EXEEXT): $(MEMCHECK_OBJECTS) $(__memcheck___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >memcheck.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f memcheck$(EXEEXT) memcheck.app/Contents/MacOS/memcheck
+@COND_PLATFORM_MACOSX_1@	mv memcheck$(EXEEXT) memcheck.app/Contents/MacOS/memcheck
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns memcheck.app/Contents/Resources/wxmac.icns

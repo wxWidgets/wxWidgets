@@ -224,7 +224,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	echo -n "APPL????" >ipcclient.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f ipcclient$(EXEEXT) ipcclient.app/Contents/MacOS/ipcclient
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mv ipcclient$(EXEEXT) ipcclient.app/Contents/MacOS/ipcclient
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns ipcclient.app/Contents/Resources/wxmac.icns
@@ -253,7 +253,7 @@ distclean: clean
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	echo -n "APPL????" >ipcserver.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f ipcserver$(EXEEXT) ipcserver.app/Contents/MacOS/ipcserver
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mv ipcserver$(EXEEXT) ipcserver.app/Contents/MacOS/ipcserver
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns ipcserver.app/Contents/Resources/wxmac.icns

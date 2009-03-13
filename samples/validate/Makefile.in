@@ -168,7 +168,7 @@ validate$(EXEEXT): $(VALIDATE_OBJECTS) $(__validate___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >validate.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f validate$(EXEEXT) validate.app/Contents/MacOS/validate
+@COND_PLATFORM_MACOSX_1@	mv validate$(EXEEXT) validate.app/Contents/MacOS/validate
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns validate.app/Contents/Resources/wxmac.icns

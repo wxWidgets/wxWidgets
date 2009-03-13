@@ -172,7 +172,7 @@ zip$(EXEEXT): $(ZIP_OBJECTS) $(__zip___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >zip.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f zip$(EXEEXT) zip.app/Contents/MacOS/zip
+@COND_PLATFORM_MACOSX_1@	mv zip$(EXEEXT) zip.app/Contents/MacOS/zip
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns zip.app/Contents/Resources/wxmac.icns

@@ -315,7 +315,7 @@ test$(EXEEXT): $(TEST_OBJECTS)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	echo -n "APPL????" >test_gui.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
-@COND_PLATFORM_MACOSX_1_USE_GUI_1@	ln -f test_gui$(EXEEXT) test_gui.app/Contents/MacOS/test_gui
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	mv test_gui$(EXEEXT) test_gui.app/Contents/MacOS/test_gui
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns test_gui.app/Contents/Resources/wxmac.icns

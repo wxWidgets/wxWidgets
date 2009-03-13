@@ -170,7 +170,7 @@ docview$(EXEEXT): $(DOCVIEW_OBJECTS) $(__docview___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >docview.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f docview$(EXEEXT) docview.app/Contents/MacOS/docview
+@COND_PLATFORM_MACOSX_1@	mv docview$(EXEEXT) docview.app/Contents/MacOS/docview
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(srcdir)/doc.icns docview.app/Contents/Resources/wxmac.icns

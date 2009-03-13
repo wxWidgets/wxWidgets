@@ -172,7 +172,7 @@ htmlhelp$(EXEEXT): $(HTMLHELP_OBJECTS) $(__htmlhelp___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >htmlhelp.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f htmlhelp$(EXEEXT) htmlhelp.app/Contents/MacOS/htmlhelp
+@COND_PLATFORM_MACOSX_1@	mv htmlhelp$(EXEEXT) htmlhelp.app/Contents/MacOS/htmlhelp
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns htmlhelp.app/Contents/Resources/wxmac.icns

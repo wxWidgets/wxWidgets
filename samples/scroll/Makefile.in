@@ -168,7 +168,7 @@ scroll$(EXEEXT): $(SCROLL_OBJECTS) $(__scroll___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >scroll.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f scroll$(EXEEXT) scroll.app/Contents/MacOS/scroll
+@COND_PLATFORM_MACOSX_1@	mv scroll$(EXEEXT) scroll.app/Contents/MacOS/scroll
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns scroll.app/Contents/Resources/wxmac.icns

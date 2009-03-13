@@ -168,7 +168,7 @@ fractal$(EXEEXT): $(FRACTAL_OBJECTS) $(__fractal___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >fractal.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f fractal$(EXEEXT) fractal.app/Contents/MacOS/fractal
+@COND_PLATFORM_MACOSX_1@	mv fractal$(EXEEXT) fractal.app/Contents/MacOS/fractal
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns fractal.app/Contents/Resources/wxmac.icns

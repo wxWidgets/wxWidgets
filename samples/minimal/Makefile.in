@@ -168,7 +168,7 @@ minimal$(EXEEXT): $(MINIMAL_OBJECTS) $(__minimal___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >minimal.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f minimal$(EXEEXT) minimal.app/Contents/MacOS/minimal
+@COND_PLATFORM_MACOSX_1@	mv minimal$(EXEEXT) minimal.app/Contents/MacOS/minimal
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns minimal.app/Contents/Resources/wxmac.icns

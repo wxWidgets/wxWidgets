@@ -168,7 +168,7 @@ accesstest$(EXEEXT): $(ACCESSTEST_OBJECTS) $(__accesstest___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >accesstest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f accesstest$(EXEEXT) accesstest.app/Contents/MacOS/accesstest
+@COND_PLATFORM_MACOSX_1@	mv accesstest$(EXEEXT) accesstest.app/Contents/MacOS/accesstest
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns accesstest.app/Contents/Resources/wxmac.icns

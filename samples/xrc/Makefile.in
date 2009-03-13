@@ -187,7 +187,7 @@ xrcdemo$(EXEEXT): $(XRCDEMO_OBJECTS) $(__xrcdemo___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >xrcdemo.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f xrcdemo$(EXEEXT) xrcdemo.app/Contents/MacOS/xrcdemo
+@COND_PLATFORM_MACOSX_1@	mv xrcdemo$(EXEEXT) xrcdemo.app/Contents/MacOS/xrcdemo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns xrcdemo.app/Contents/Resources/wxmac.icns

@@ -200,7 +200,7 @@ render$(EXEEXT): $(RENDER_OBJECTS) $(__render___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >render.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f render$(EXEEXT) render.app/Contents/MacOS/render
+@COND_PLATFORM_MACOSX_1@	mv render$(EXEEXT) render.app/Contents/MacOS/render
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns render.app/Contents/Resources/wxmac.icns

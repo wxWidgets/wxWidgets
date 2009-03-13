@@ -168,7 +168,7 @@ drawing$(EXEEXT): $(DRAWING_OBJECTS) $(__drawing___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >drawing.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f drawing$(EXEEXT) drawing.app/Contents/MacOS/drawing
+@COND_PLATFORM_MACOSX_1@	mv drawing$(EXEEXT) drawing.app/Contents/MacOS/drawing
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns drawing.app/Contents/Resources/wxmac.icns

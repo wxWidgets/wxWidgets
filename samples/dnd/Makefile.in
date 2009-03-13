@@ -168,7 +168,7 @@ dnd$(EXEEXT): $(DND_OBJECTS) $(__dnd___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >dnd.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f dnd$(EXEEXT) dnd.app/Contents/MacOS/dnd
+@COND_PLATFORM_MACOSX_1@	mv dnd$(EXEEXT) dnd.app/Contents/MacOS/dnd
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns dnd.app/Contents/Resources/wxmac.icns

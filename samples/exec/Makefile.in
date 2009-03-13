@@ -168,7 +168,7 @@ exec$(EXEEXT): $(EXEC_OBJECTS) $(__exec___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >exec.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f exec$(EXEEXT) exec.app/Contents/MacOS/exec
+@COND_PLATFORM_MACOSX_1@	mv exec$(EXEEXT) exec.app/Contents/MacOS/exec
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns exec.app/Contents/Resources/wxmac.icns

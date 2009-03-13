@@ -168,7 +168,7 @@ vstest$(EXEEXT): $(VSTEST_OBJECTS) $(__vstest___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >vstest.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f vstest$(EXEEXT) vstest.app/Contents/MacOS/vstest
+@COND_PLATFORM_MACOSX_1@	mv vstest$(EXEEXT) vstest.app/Contents/MacOS/vstest
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns vstest.app/Contents/Resources/wxmac.icns
