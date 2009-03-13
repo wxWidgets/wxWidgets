@@ -46,7 +46,7 @@
 #endif
 
 #ifdef __WXMAC__
-    #include "wx/mac/printdlg.h"
+    #include "wx/osx/printdlg.h"
 #endif
 
 #include "printing.h"
