@@ -29,6 +29,7 @@
 
 #include "wx/toolbar.h"
 #include "wx/dcsvg.h"
+#include "wx/vector.h"
 
 #include "mondrian.xpm"
 
@@ -38,68 +39,80 @@
 #include "SVGlogo24.xpm"
 
 class MyChild;
+class MyCanvas;
 
-// Define a new application
+// ---------------------------------------------------------------------------
+// classes
+// ---------------------------------------------------------------------------
+
 class MyApp : public wxApp
 {
-    public:
-        bool OnInit();
+public:
+    bool OnInit();
 };
 
-// Define a new frame
 class MyFrame : public wxMDIParentFrame
 {
-    public:
-        int nWinCreated;
-
-        wxList m_children;
-
-        MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
+public:
+    MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
             const wxPoint& pos, const wxSize& size, const long style);
 
-        void InitToolBar(wxToolBar* toolBar);
+    void InitToolBar(wxToolBar* toolBar);
 
-        void OnSize(wxSizeEvent& event);
-        void OnAbout(wxCommandEvent& event);
-        void OnNewWindow(wxCommandEvent& event);
-        void OnQuit(wxCommandEvent& event);
-        void OnClose(wxCloseEvent& event);
-        void FileSavePicture (wxCommandEvent & WXUNUSED(event) ) ;
+    void OnSize(wxSizeEvent& event);
+    void OnAbout(wxCommandEvent& event);
+    void OnNewWindow(wxCommandEvent& event);
+    void OnQuit(wxCommandEvent& event);
+    void FileSavePicture (wxCommandEvent& event);
+    
+    unsigned int GetCountOfChildren() const
+        { return m_nWinCreated; }
 
-        DECLARE_EVENT_TABLE()
-};
-
-
-class MyCanvas : public wxScrolledWindow
-{
-    public:
-        int m_index ;
-
-        MyChild * m_child ;
-        MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size);
-        virtual void OnDraw(wxDC& dc);
-
-        DECLARE_EVENT_TABLE()
+private:
+    unsigned int m_nWinCreated;
+        
+    DECLARE_EVENT_TABLE()
 };
 
 class MyChild: public wxMDIChildFrame
 {
-    public:
-        MyCanvas *m_canvas;
-        MyFrame  *m_frame ;
+public:
+    MyChild(wxMDIParentFrame *parent, const wxString& title, 
+            const wxPoint& pos = wxDefaultPosition, 
+            const wxSize& size = wxDefaultSize, 
+            const long style = wxDEFAULT_FRAME_STYLE);
+    ~MyChild();
 
-        //////////////////// Methods
+    void OnActivate(wxActivateEvent& event);
+    void OnQuit(wxCommandEvent& event);
+    bool OnSave(wxString filename);
+    
+    MyFrame* GetFrame()
+        { return m_frame; }
 
-        MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
-        ~MyChild();
+private:
+    MyCanvas *m_canvas;
+    MyFrame  *m_frame;
 
-        void OnActivate(wxActivateEvent& event);
-        void OnQuit(wxCommandEvent& event);
-        void OnClose(wxCloseEvent& event);
-        bool OnSave(wxString filename) ;
-
-        DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
+
+class MyCanvas : public wxScrolledWindow
+{
+public:
+    MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size);
+    virtual void OnDraw(wxDC& dc);
+
+private:
+    int m_index;
+    MyChild* m_child;
+    
+    DECLARE_EVENT_TABLE()
+};
+
+// ---------------------------------------------------------------------------
+// constants
+// ---------------------------------------------------------------------------
 
 // menu items ids
 enum
@@ -112,27 +125,17 @@ enum
     MDI_ABOUT
 };
 
-
-IMPLEMENT_APP(MyApp)
-
-// ---------------------------------------------------------------------------
-// global variables
-// ---------------------------------------------------------------------------
-
-MyFrame *frame = (MyFrame *) NULL;
-
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxMDIParentFrame)
-EVT_MENU(MDI_ABOUT, MyFrame::OnAbout)
-EVT_MENU(MDI_NEW_WINDOW, MyFrame::OnNewWindow)
-EVT_MENU(MDI_QUIT, MyFrame::OnQuit)
-EVT_MENU (MDI_SAVE, MyFrame::FileSavePicture)
-EVT_CLOSE(MyFrame::OnClose)
+    EVT_MENU(MDI_ABOUT, MyFrame::OnAbout)
+    EVT_MENU(MDI_NEW_WINDOW, MyFrame::OnNewWindow)
+    EVT_MENU(MDI_QUIT, MyFrame::OnQuit)
+    EVT_MENU (MDI_SAVE, MyFrame::FileSavePicture)
 
-EVT_SIZE(MyFrame::OnSize)
+    EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
 
 // ===========================================================================
@@ -143,15 +146,36 @@ END_EVENT_TABLE()
 // MyApp
 // ---------------------------------------------------------------------------
 
-// Initialise this in OnInit, not statically
+IMPLEMENT_APP(MyApp)
+
 bool MyApp::OnInit()
 {
     // Create the main frame window
 
-    frame = new MyFrame((wxFrame *)NULL, -1, wxT("SVG Demo"),
-        wxPoint(-1, -1), wxSize(500, 400),
-        wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
+    MyFrame* frame = new MyFrame((wxFrame *)NULL, -1, wxT("SVG Demo"),
+                                 wxDefaultPosition, wxSize(500, 400),
+                                 wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 
+    frame->Show(true);
+
+    SetTopWindow(frame);
+
+    return true;
+}
+
+
+// ---------------------------------------------------------------------------
+// MyFrame
+// ---------------------------------------------------------------------------
+
+// Define my frame constructor
+MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
+                 const wxPoint& pos, const wxSize& size, const long style)
+        : wxMDIParentFrame(parent, id, title, pos, size, style)
+{
+    m_nWinCreated = 0;
+
+    SetIcon(wxICON(mondrian));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
@@ -168,103 +192,39 @@ bool MyApp::OnInit()
     menu_bar->Append(help_menu, wxT("&Help"));
 
     // Associate the menu bar with the frame
-    frame->SetMenuBar(menu_bar);
+    SetMenuBar(menu_bar);
 
 #if wxUSE_STATUSBAR
-    frame->CreateStatusBar();
+    CreateStatusBar();
 #endif // wxUSE_STATUSBAR
-
-    frame->Show(true);
-
-    SetTopWindow(frame);
-
-    return true;
-}
-
-
-// ---------------------------------------------------------------------------
-// MyFrame
-// ---------------------------------------------------------------------------
-
-// Define my frame constructor
-MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
-    const wxPoint& pos, const wxSize& size, const long style)
-        : wxMDIParentFrame(parent, id, title, pos, size, style)
-{
-    nWinCreated = 0 ;
-
-    // Give it an icon
-    SetIcon(wxICON(mondrian));
 
     CreateToolBar(wxNO_BORDER | wxTB_FLAT | wxTB_HORIZONTAL);
     InitToolBar(GetToolBar());
-
 }
-
-
-void MyFrame::OnClose(wxCloseEvent& event)
-{
-    if ( !event.CanVeto() )
-    {
-        event.Skip();
-        return ;
-    }
-    if ( m_children.GetCount () < 1 )
-    {
-        event.Skip();
-        return ;
-    }
-    // now try the children
-    wxObjectList::compatibility_iterator pNode = m_children.GetFirst ();
-    wxObjectList::compatibility_iterator pNext ;
-    MyChild * pChild ;
-    while ( pNode )
-    {
-        pNext = pNode -> GetNext ();
-        pChild = (MyChild*) pNode -> GetData ();
-        if (pChild -> Close ())
-        {
-            m_children.Erase(pNode) ;
-        }
-        else
-        {
-            event.Veto();
-            return;
-        }
-        pNode = pNext ;
-    }
-    event.Skip();
-}
-
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close();
 }
 
-
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    (void)wxMessageBox(wxT("wxWidgets 2.0 SVG 1.0 Test\n")
-        wxT("Author: Chris Elliott (c) 2002\n")
-        wxT("Usage: svg.exe \nClick File | New to show tests\n\n"), wxT("About SVG Test"));
+    (void)wxMessageBox(wxT("wxWidgets SVG sample\n")
+        wxT("Author: Chris Elliott (c) 2002-2009\n")
+        wxT("Usage: click File|New to show tests"), 
+        wxT("About SVG Test"));
 }
-
 
 void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 {
     // Make another frame, containing a canvas
-    MyChild *subframe ;
+    MyChild *subframe = new MyChild(this, wxT("SVG Frame"));
 
-    m_children.Append (new MyChild(frame, wxT("SVG Frame"),
-        wxPoint(-1, -1), wxSize(-1, -1),
-        wxDEFAULT_FRAME_STYLE )   ) ;
-
-    subframe = (MyChild *) m_children.GetLast() -> GetData ();
     wxString title;
-    title.Printf(wxT("SVG Test Window %d"), nWinCreated );
+    title.Printf(wxT("SVG Test Window %d"), m_nWinCreated );
+    
     // counts number of children previously, even if now closed
-    nWinCreated ++ ;
+    m_nWinCreated ++;
 
     // Give it a title and icon
     subframe->SetTitle(title);
@@ -292,7 +252,6 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     subframe->Show(true);
 }
 
-
 void MyFrame::OnSize(wxSizeEvent& event)
 {
     int w, h;
@@ -302,10 +261,9 @@ void MyFrame::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-
 void MyFrame::InitToolBar(wxToolBar* toolBar)
 {
-    const int maxBitmaps = 3 ;
+    const int maxBitmaps = 3;
     wxBitmap* bitmaps[maxBitmaps];
 
     bitmaps[0] = new wxBitmap( new_xpm );
@@ -324,14 +282,13 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
         delete bitmaps[i];
 }
 
-
 void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
 {
 #if wxUSE_FILEDLG
-    MyChild * pChild = (MyChild *)GetActiveChild ();
+    MyChild * pChild = (MyChild *)GetActiveChild();
     if (pChild == NULL)
     {
-        return ;
+        return;
     }
 
     wxFileDialog dialog(this, wxT("Save Picture as"), wxEmptyString, pChild->GetTitle(),
@@ -340,59 +297,48 @@ void MyFrame::FileSavePicture (wxCommandEvent & WXUNUSED(event) )
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        if (!pChild -> OnSave ( dialog.GetPath() ))
+        if (!pChild->OnSave ( dialog.GetPath() ))
         {
-            return ;
+            return;
         }
     }
-    return ;
+    return;
 #endif // wxUSE_FILEDLG
 }
 
-
-// Note that MDI_NEW_WINDOW and MDI_ABOUT commands get passed
-// to the parent window for processing, so no need to
-// duplicate event handlers here.
-BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
-    EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
-    EVT_CLOSE(MyChild::OnClose)
-END_EVENT_TABLE()
-
-BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-
-END_EVENT_TABLE()
 
 // ---------------------------------------------------------------------------
 // MyCanvas
 // ---------------------------------------------------------------------------
 
-// Define a constructor for my canvas
-MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
-: wxScrolledWindow(parent, -1, pos, size,
-wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
-{
-    m_child = (MyChild *) parent ;
-    SetBackgroundColour(wxColour(_T("WHITE")));
-    m_index = m_child->m_frame->nWinCreated % 7 ;
-}
+BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+END_EVENT_TABLE()
 
+// Define a constructor for my canvas
+MyCanvas::MyCanvas(MyChild *parent, const wxPoint& pos, const wxSize& size)
+    : wxScrolledWindow(parent, wxID_ANY, pos, size, wxSUNKEN_BORDER|wxVSCROLL|wxHSCROLL)
+{
+    SetBackgroundColour(wxColour(_T("WHITE")));
+
+    m_child = parent;
+    m_index = m_child->GetFrame()->GetCountOfChildren() % 7;
+}
 
 // Define the repainting behaviour
 void MyCanvas::OnDraw(wxDC& dc)
 {
     // vars to use ...
 #if wxUSE_STATUSBAR
-    wxString s ;
+    wxString s;
 #endif // wxUSE_STATUSBAR
-    wxPen wP ;
-    wxBrush wB ;
+    wxPen wP;
+    wxBrush wB;
     wxPoint points[6];
     wxColour wC;
-    wxFont wF ;
+    wxFont wF;
 
     dc.SetFont(*wxSWISS_FONT);
     dc.SetPen(*wxGREEN_PEN);
-
 
     switch (m_index)
     {
@@ -402,17 +348,17 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
             // draw point colored line and spline
-            wP = *wxCYAN_PEN ;
+            wP = *wxCYAN_PEN;
             wP.SetWidth(3);
             dc.SetPen(wP);
 
-            dc.DrawPoint (25,15) ;
+            dc.DrawPoint (25,15);
             dc.DrawLine(50, 30, 200, 30);
             dc.DrawSpline(50, 200, 50, 100, 200, 10);
 #if wxUSE_STATUSBAR
             s = wxT("Green Cross, Cyan Line and spline");
 #endif // wxUSE_STATUSBAR
-            break ;
+            break;
 
         case 1:
             // draw standard shapes
@@ -437,14 +383,14 @@ void MyCanvas::OnDraw(wxDC& dc)
 #if wxUSE_STATUSBAR
             s = wxT("Blue rectangle, red edge, clear rounded rectangle, gold ellipse, gold and clear stars");
 #endif // wxUSE_STATUSBAR
-            break ;
+            break;
 
         case 2:
             // draw text in Arial or similar font
             dc.DrawLine(50,25,50,35);
             dc.DrawLine(45,30,55,30);
             dc.DrawText(wxT("This is a Swiss-style string"), 50, 30);
-            wC = dc.GetTextForeground() ;
+            wC = dc.GetTextForeground();
             dc.SetTextForeground (_T("FIREBRICK"));
 
             // no effect in msw ??
@@ -454,12 +400,12 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawRotatedText(wxT("This is a 90 deg string"), 50, 200, 90);
             wF = wxFont ( 18, wxROMAN, wxITALIC, wxBOLD, false, wxT("Times New Roman"));
             dc.SetFont(wF);
-            dc.SetTextForeground (wC) ;
+            dc.SetTextForeground (wC);
             dc.DrawText(wxT("This is a Times-style string"), 50, 60);
 #if wxUSE_STATUSBAR
             s = wxT("Swiss, Times text; red text, rotated and colored orange");
 #endif // wxUSE_STATUSBAR
-            break ;
+            break;
 
         case 3 :
             // four arcs start and end points, center
@@ -480,22 +426,22 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.SetBrush(*wxRED_BRUSH);
             //top left corner, width and height, start and end angle
                                  // 315 same center and x-radius as last pie-arc, half Y radius
-            dc.DrawEllipticArc(25,50,100,50,180.0,45.0) ;
+            dc.DrawEllipticArc(25,50,100,50,180.0,45.0);
 
-            wP = *wxCYAN_PEN ;
+            wP = *wxCYAN_PEN;
             wP.SetWidth(3);
             dc.SetPen(wP);
                                  //wxTRANSPARENT));
-            dc.SetBrush (wxBrush (_T("SALMON"))) ;
-            dc.DrawEllipticArc(300,  0,200,100, 0.0,145.0) ;
+            dc.SetBrush (wxBrush (_T("SALMON")));
+            dc.DrawEllipticArc(300,  0,200,100, 0.0,145.0);
                                  //same end point
-            dc.DrawEllipticArc(300, 50,200,100,90.0,145.0) ;
-            dc.DrawEllipticArc(300,100,200,100,90.0,345.0) ;
+            dc.DrawEllipticArc(300, 50,200,100,90.0,145.0);
+            dc.DrawEllipticArc(300,100,200,100,90.0,345.0);
 
 #if wxUSE_STATUSBAR
             s = wxT("This is an arc test page");
 #endif // wxUSE_STATUSBAR
-            break ;
+            break;
 
         case 4:
             dc.DrawCheckMark ( 30,30,25,25);
@@ -505,7 +451,7 @@ void MyCanvas::OnDraw(wxDC& dc)
 #if wxUSE_STATUSBAR
             s = wxT("Two check marks");
 #endif // wxUSE_STATUSBAR
-            break ;
+            break;
 
         case 5:
             wF = wxFont ( 18, wxROMAN, wxITALIC, wxBOLD, false, wxT("Times New Roman"));
@@ -515,7 +461,7 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.DrawText(wxT("This is an 18pt string"), 50, 60);
 
             // rescale and draw in blue
-            wP = *wxCYAN_PEN ;
+            wP = *wxCYAN_PEN;
             dc.SetPen(wP);
             dc.SetUserScale (2.0,0.5);
             dc.SetDeviceOrigin(200,0);
@@ -526,18 +472,18 @@ void MyCanvas::OnDraw(wxDC& dc)
             dc.SetDeviceOrigin(200,200);
             dc.DrawText(wxT("This is an 18pt string 2 x 2 UserScaled"), 50, 60);
 
-            wP = *wxRED_PEN ;
+            wP = *wxRED_PEN;
             dc.SetPen(wP);
             dc.SetUserScale (1.0,1.0);
             dc.SetDeviceOrigin(0,10);
-            dc.SetMapMode (wxMM_METRIC) ; //svg ignores this
+            dc.SetMapMode (wxMM_METRIC); //svg ignores this
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
             dc.DrawText(wxT("This is an 18pt string in MapMode"), 50, 60);
 #if wxUSE_STATUSBAR
             s = wxT("Scaling test page");
 #endif // wxUSE_STATUSBAR
-            break ;
+            break;
 
         case 6:
             dc.DrawIcon( wxIcon(mondrian_xpm), 10, 10 );
@@ -545,7 +491,7 @@ void MyCanvas::OnDraw(wxDC& dc)
 #if wxUSE_STATUSBAR
             s = wxT("Icon and Bitmap ");
 #endif // wxUSE_STATUSBAR
-            break ;
+            break;
 
     }
 #if wxUSE_STATUSBAR
@@ -554,53 +500,50 @@ void MyCanvas::OnDraw(wxDC& dc)
 }
 
 
-
-
 // ---------------------------------------------------------------------------
 // MyChild
 // ---------------------------------------------------------------------------
 
-MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title,
-const wxPoint& pos, const wxSize& size,
-const long style)
-: wxMDIChildFrame(parent, -1, title, pos, size, style)
-{
+// Note that MDI_NEW_WINDOW and MDI_ABOUT commands get passed
+// to the parent window for processing, so no need to
+// duplicate event handlers here.
+BEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
+    EVT_MENU(MDI_CHILD_QUIT, MyChild::OnQuit)
+END_EVENT_TABLE()
 
-    m_frame = (MyFrame *) parent ;
+MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title,
+                 const wxPoint& pos, const wxSize& size,
+                 const long style)
+    : wxMDIChildFrame(parent, wxID_ANY, title, pos, size, style)
+{
+    m_frame = (MyFrame *) parent;
+    
 #if wxUSE_STATUSBAR
     CreateStatusBar();
     SetStatusText(title);
 #endif // wxUSE_STATUSBAR
 
-    int w, h ;
-    GetClientSize ( &w, &h );
-    m_canvas = new MyCanvas(this, wxPoint(0, 0),  wxSize (w,h)  );
+    m_canvas = new MyCanvas(this, wxPoint(0, 0), GetClientSize());
+    
     // Give it scrollbars
     m_canvas->SetScrollbars(20, 20, 50, 50);
-
 }
-
 
 MyChild::~MyChild()
 {
-    m_frame->m_children.DeleteObject(this);
 }
-
 
 void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(true);
 }
 
-
 bool MyChild::OnSave(wxString filename)
 {
-    wxSVGFileDC svgDC (filename, 600, 650) ;
+    wxSVGFileDC svgDC (filename, 600, 650);
     m_canvas->OnDraw (svgDC);
     return svgDC.IsOk();
 }
-
-
 
 void MyChild::OnActivate(wxActivateEvent& event)
 {
@@ -608,8 +551,3 @@ void MyChild::OnActivate(wxActivateEvent& event)
         m_canvas->SetFocus();
 }
 
-
-void MyChild::OnClose(wxCloseEvent& event)
-{
-    event.Skip();
-}
