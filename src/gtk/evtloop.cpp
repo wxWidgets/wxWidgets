@@ -133,6 +133,78 @@ int wxGUIEventLoop::DispatchTimeout(unsigned long timeout)
 // YieldFor
 //-----------------------------------------------------------------------------
 
+static void wxgtk_main_do_event(GdkEvent *event, wxGUIEventLoop* evtloop)
+{
+    // categorize the GDK event according to wxEventCategory.
+    // See http://library.gnome.org/devel/gdk/unstable/gdk-Events.html#GdkEventType
+    // for more info.
+
+    wxEventCategory cat = wxEVT_CATEGORY_UNKNOWN;
+    switch (event->type)
+    {
+    case GDK_SELECTION_REQUEST:
+    case GDK_SELECTION_NOTIFY:
+    case GDK_SELECTION_CLEAR:
+    case GDK_OWNER_CHANGE:
+        cat = wxEVT_CATEGORY_CLIPBOARD;
+        break;
+
+
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_SCROLL:        // generated from mouse buttons
+    case GDK_CLIENT_EVENT:
+        cat = wxEVT_CATEGORY_USER_INPUT;
+        break;
+
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+
+    case GDK_MOTION_NOTIFY:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_VISIBILITY_NOTIFY:
+    case GDK_PROPERTY_NOTIFY:
+
+    case GDK_FOCUS_CHANGE:
+    case GDK_CONFIGURE:
+    case GDK_WINDOW_STATE:
+    case GDK_SETTING:
+    case GDK_DELETE:
+    case GDK_DESTROY:
+
+    case GDK_EXPOSE:
+    case GDK_NO_EXPOSE:
+    case GDK_MAP:
+    case GDK_UNMAP:
+
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    case GDK_GRAB_BROKEN:
+        cat = wxEVT_CATEGORY_UI;
+        break;
+
+    default:
+        cat = wxEVT_CATEGORY_UNKNOWN;
+        break;
+    }
+
+    // is this event allowed now?
+    if (evtloop->IsEventAllowedInsideYield(cat))
+        gtk_main_do_event(event);         // process it now
+    else if (event->type != GDK_NOTHING)
+        evtloop->StoreGdkEventForLaterProcessing(gdk_event_copy(event));
+            // process it later (but make a copy; the caller will free the event pointer)
+}
+
 bool wxGUIEventLoop::YieldFor(long eventsToProcess)
 {
 #if wxUSE_THREADS
@@ -152,90 +224,18 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     wxLog::Suspend();
 #endif
 
-    // NOTE: gtk_main_iteration() doesn't allow us to filter events, so we
-    //       rather use gtk_main_do_event() after filtering the events at
-    //       GDK level
-
-    GdkDisplay* disp = gtk_widget_get_display(wxGetRootWindow());
-
-    // gdk_display_get_event() will transform X11 events into GDK events
-    // and will queue all of them in the display (private) structure;
-    // finally it will "unqueue" the last one and return it to us
-    GdkEvent* event = gdk_display_get_event(disp);
-    while (event)
-    {
-        // categorize the GDK event according to wxEventCategory.
-        // See http://library.gnome.org/devel/gdk/unstable/gdk-Events.html#GdkEventType
-        // for more info.
-
-        wxEventCategory cat = wxEVT_CATEGORY_UNKNOWN;
-        switch (event->type)
-        {
-        case GDK_SELECTION_REQUEST:
-        case GDK_SELECTION_NOTIFY:
-        case GDK_SELECTION_CLEAR:
-        case GDK_OWNER_CHANGE:
-            cat = wxEVT_CATEGORY_CLIPBOARD;
-            break;
-
-
-        case GDK_KEY_PRESS:
-        case GDK_KEY_RELEASE:
-        case GDK_BUTTON_PRESS:
-        case GDK_2BUTTON_PRESS:
-        case GDK_3BUTTON_PRESS:
-        case GDK_BUTTON_RELEASE:
-        case GDK_SCROLL:        // generated from mouse buttons
-        case GDK_CLIENT_EVENT:
-            cat = wxEVT_CATEGORY_USER_INPUT;
-            break;
-
-
-        case GDK_PROXIMITY_IN:
-        case GDK_PROXIMITY_OUT:
-
-        case GDK_MOTION_NOTIFY:
-        case GDK_ENTER_NOTIFY:
-        case GDK_LEAVE_NOTIFY:
-        case GDK_VISIBILITY_NOTIFY:
-        case GDK_PROPERTY_NOTIFY:
-
-        case GDK_FOCUS_CHANGE:
-        case GDK_CONFIGURE:
-        case GDK_WINDOW_STATE:
-        case GDK_SETTING:
-        case GDK_DELETE:
-        case GDK_DESTROY:
-
-        case GDK_EXPOSE:
-        case GDK_NO_EXPOSE:
-        case GDK_MAP:
-        case GDK_UNMAP:
-        //case GDK_DAMAGE:
-
-        case GDK_DRAG_ENTER:
-        case GDK_DRAG_LEAVE:
-        case GDK_DRAG_MOTION:
-        case GDK_DRAG_STATUS:
-        case GDK_DROP_START:
-        case GDK_DROP_FINISHED:
-        case GDK_GRAB_BROKEN:
-            cat = wxEVT_CATEGORY_UI;
-            break;
-
-        default:
-            cat = wxEVT_CATEGORY_UNKNOWN;
-            break;
-        }
-
-        if (eventsToProcess & cat)
-            gtk_main_do_event(event);       // process it now
-        else
-            m_arrGdkEvents.Add(event);      // process it later
-
-        // get next event
-        event = gdk_display_get_event(disp);
-    }
+    // temporarily replace the global GDK event handler with our function, which
+    // categorizes the events and using m_eventsToProcessInsideYield decides
+    // if an event should be processed immediately or not
+    // NOTE: this approach is better than using gdk_display_get_event() because
+    //       gtk_main_iteration() does more than just calling gdk_display_get_event()
+    //       and then call gtk_main_do_event()!
+    //       In particular in this way we also process input from sources like
+    //       GIOChannels (this is needed for e.g. wxGUIAppTraits::WaitForChild).
+    gdk_event_handler_set ((GdkEventFunc)wxgtk_main_do_event, this, NULL);
+    while (Pending())   // avoid false positives from our idle source
+        gtk_main_iteration();
+    gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
 
     if (eventsToProcess != wxEVT_CATEGORY_CLIPBOARD)
     {
@@ -252,6 +252,7 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     //      then we fall into a never-ending loop...
 
     // put all unprocessed GDK events back in the queue
+    GdkDisplay* disp = gtk_widget_get_display(wxGetRootWindow());
     for (size_t i=0; i<m_arrGdkEvents.GetCount(); i++)
     {
         GdkEvent* ev = (GdkEvent*)m_arrGdkEvents[i];

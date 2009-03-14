@@ -15,6 +15,8 @@
 // wxGUIEventLoop for wxGTK
 // ----------------------------------------------------------------------------
 
+typedef union  _GdkEvent        GdkEvent;
+
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 {
 public:
@@ -28,6 +30,9 @@ public:
     virtual void WakeUp();
     virtual bool YieldFor(long eventsToProcess);
 
+    void StoreGdkEventForLaterProcessing(GdkEvent* ev)
+        { m_arrGdkEvents.Add(ev); }
+    
 protected:
 
     // the exit code of this event loop
