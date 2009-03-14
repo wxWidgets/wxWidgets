@@ -220,8 +220,9 @@ GdkBitmap *wxMask::GetBitmap() const
     return m_bitmap;
 }
 
+
 //-----------------------------------------------------------------------------
-// wxBitmap
+// wxBitmapRefData
 //-----------------------------------------------------------------------------
 
 class wxBitmapRefData : public wxGDIRefData
@@ -347,20 +348,14 @@ wxBitmapRefData::~wxBitmapRefData()
 #endif // wxUSE_PALETTE
 }
 
+
+//-----------------------------------------------------------------------------
+// wxBitmap
 //-----------------------------------------------------------------------------
 
 #define M_BMPDATA ((wxBitmapRefData *)m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxGDIObject)
-
-wxBitmap::wxBitmap()
-{
-}
-
-wxBitmap::wxBitmap( int width, int height, int depth )
-{
-    Create( width, height, depth );
-}
 
 wxGDIRefData *wxBitmap::CreateGDIRefData() const
 {

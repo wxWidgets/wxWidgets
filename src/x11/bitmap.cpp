@@ -224,7 +224,7 @@ bool wxMask::Create( const wxBitmap& bitmap )
 }
 
 //-----------------------------------------------------------------------------
-// wxBitmap
+// wxBitmapRefData
 //-----------------------------------------------------------------------------
 
 class wxBitmapRefData : public wxGDIRefData
@@ -347,18 +347,14 @@ static WXPixmap wxGetSubPixmap( WXDisplay* xdisplay, WXPixmap xpixmap,
     return (WXPixmap)ret;
 }
 
+
+//-----------------------------------------------------------------------------
+// wxBitmap
+//-----------------------------------------------------------------------------
+
 #define M_BMPDATA ((wxBitmapRefData *)m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxGDIObject)
-
-wxBitmap::wxBitmap()
-{
-}
-
-wxBitmap::wxBitmap( int width, int height, int depth )
-{
-    Create( width, height, depth );
-}
 
 bool wxBitmap::Create( int width, int height, int depth )
 {

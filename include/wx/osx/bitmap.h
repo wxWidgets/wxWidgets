@@ -87,7 +87,7 @@ class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
     friend class WXDLLIMPEXP_FWD_CORE wxBitmapHandler;
 
 public:
-    wxBitmap(); // Platform-specific
+    wxBitmap() {} // Platform-specific
 
     // Initialize with raw data.
     wxBitmap(const char bits[], int width, int height, int depth = 1);
@@ -102,7 +102,8 @@ public:
     wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
 
     // If depth is omitted, will create a bitmap compatible with the display
-    wxBitmap(int width, int height, int depth = -1);
+    wxBitmap(int width, int height, int depth = -1) { (void)Create(width, height, depth); }
+    wxBitmap(const wxSize& sz, int depth = -1) { (void)Create(sz, depth); }
 
     // Convert from wxImage:
     wxBitmap(const wxImage& image, int depth = -1);
@@ -110,14 +111,17 @@ public:
     // Convert from wxIcon
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
 
-    virtual ~wxBitmap();
+    virtual ~wxBitmap() {}
 
     wxImage ConvertToImage() const;
 
     // get the given part of bitmap
     wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
-    virtual bool Create(int width, int height, int depth = -1);
+    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH)
+        { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
+
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);

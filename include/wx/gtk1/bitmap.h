@@ -64,8 +64,9 @@ private:
 class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:
-    wxBitmap();
-    wxBitmap( int width, int height, int depth = -1 );
+    wxBitmap() {}
+    wxBitmap( int width, int height, int depth = -1 ) { Create( width, height, depth ); }
+    wxBitmap( const wxSize& sz, int depth = -1 ) { Create( sz, depth ); }
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
 #ifdef wxNEEDS_CHARPP
@@ -79,7 +80,9 @@ public:
     wxBitmap( const wxImage& image, int depth = -1 ) { (void)CreateFromImage(image, depth); }
     virtual ~wxBitmap();
 
-    bool Create(int width, int height, int depth = -1);
+    bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH)
+        { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
 
     virtual int GetHeight() const;
     virtual int GetWidth() const;

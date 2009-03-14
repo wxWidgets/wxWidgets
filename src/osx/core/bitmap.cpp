@@ -608,13 +608,13 @@ PicHandle wxBitmapRefData::GetPictHandle()
                 err = GraphicsExportDoExport(exporter, NULL);
                 CGImageRelease( imageRef );
 
-				size_t handleSize = GetHandleSize( (Handle) m_pictHandle );
-				// the 512 bytes header is only needed for pict files, but not in memory
-				if ( handleSize >= 512 )
-				{
-					memmove( *m_pictHandle , (char*)(*m_pictHandle)+512, handleSize - 512 );
-					SetHandleSize( (Handle) m_pictHandle, handleSize - 512 );
-				}
+                size_t handleSize = GetHandleSize( (Handle) m_pictHandle );
+                // the 512 bytes header is only needed for pict files, but not in memory
+                if ( handleSize >= 512 )
+                {
+                    memmove( *m_pictHandle , (char*)(*m_pictHandle)+512, handleSize - 512 );
+                    SetHandleSize( (Handle) m_pictHandle, handleSize - 512 );
+                }
             }
             CloseComponent( exporter );
         }
@@ -785,6 +785,12 @@ wxBitmapRefData::~wxBitmapRefData()
     Free() ;
 }
 
+
+
+// ----------------------------------------------------------------------------
+// wxBitmap
+// ----------------------------------------------------------------------------
+
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 {
     bool created = false ;
@@ -890,14 +896,6 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     return true;
 }
 
-wxBitmap::wxBitmap()
-{
-}
-
-wxBitmap::~wxBitmap()
-{
-}
-
 wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits)
 {
     wxBitmapRefData* bitmapRefData;
@@ -950,11 +948,6 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
             wxFAIL_MSG(wxT("multicolor BITMAPs not yet implemented"));
         }
     } /* bitmapRefData->IsOk() */
-}
-
-wxBitmap::wxBitmap(int w, int h, int d)
-{
-    (void)Create(w, h, d);
 }
 
 wxBitmap::wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth)

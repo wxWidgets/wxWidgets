@@ -51,13 +51,16 @@ class WXDLLIMPEXP_CORE wxBitmap: public wxBitmapBase
 {
 public:
     wxBitmap() { }
-    wxBitmap( int width, int height, int depth = wxBITMAP_SCREEN_DEPTH );
+    wxBitmap( int width, int height, int depth = wxBITMAP_SCREEN_DEPTH ) 
+        { Create(width, height, depth); }
+    wxBitmap( const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH ) 
+        { Create(sz, depth); }
     wxBitmap( const char bits[], int width, int height, int depth = 1 );
     wxBitmap( const char* const* bits );
 #ifdef wxNEEDS_CHARPP
     // needed for old GCC
     wxBitmap(char** data)
-    { *this = wxBitmap(const_cast<const char* const*>(data)); }
+        { *this = wxBitmap(const_cast<const char* const*>(data)); }
 #endif
     wxBitmap( const wxString &filename, wxBitmapType type = wxBITMAP_DEFAULT_TYPE );
 #if wxUSE_IMAGE
@@ -67,6 +70,8 @@ public:
     virtual ~wxBitmap();
 
     bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH)
+        { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
 
     virtual int GetHeight() const;
     virtual int GetWidth() const;

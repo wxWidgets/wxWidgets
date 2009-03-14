@@ -39,6 +39,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxBitmapHandler, wxBitmapHandlerBase)
 // ========================================================================
 // wxBitmapRefData
 // ========================================================================
+
 class wxBitmapRefData: public wxGDIRefData
 {
     friend class wxBitmap;
@@ -60,8 +61,6 @@ protected:
     WX_NSBitmapImageRep m_cocoaNSBitmapImageRep;
     wxMask             *m_bitmapMask; // Optional mask
 };
-
-#define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
 
 wxBitmapRefData::wxBitmapRefData()
 {
@@ -102,6 +101,9 @@ wxBitmapRefData::~wxBitmapRefData()
 // ========================================================================
 // wxBitmap
 // ========================================================================
+
+#define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
+
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 
 wxBitmap::wxBitmap()
@@ -123,11 +125,6 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
     M_BITMAPDATA->m_numColors = 0;
 
     /* TODO: create the bitmap from data */
-}
-
-wxBitmap::wxBitmap(int w, int h, int d)
-{
-    (void)Create(w, h, d);
 }
 
 wxBitmap::wxBitmap(NSImage* cocoaNSImage)

@@ -114,7 +114,16 @@ public:
             );
 
     // If depth is omitted, will create a bitmap compatible with the display
-    wxBitmap( int nWidth, int nHeight, int nDepth = -1 );
+    wxBitmap( int nWidth, int nHeight, int nDepth = -1 )
+    {
+        Init();
+        (void)Create(nWidth, nHeight, nDepth);
+    }
+    wxBitmap( const wxSize& sz, int nDepth = -1 )
+    {
+        Init();
+        (void)Create(sz, nDepth);
+    }
 
     wxBitmap( const wxImage& image, int depth = -1 )
                          { (void)CreateFromImage(image, depth); }
@@ -152,8 +161,11 @@ public:
 
     virtual bool Create( int nWidth
                         ,int nHeight
-                        ,int nDepth = -1
+                        ,int nDepth = wxBITMAP_SCREEN_DEPTH
                        );
+    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH)
+        { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
+        
     virtual bool Create( const void* pData
                         ,wxBitmapType lType
                         ,int   nWidth

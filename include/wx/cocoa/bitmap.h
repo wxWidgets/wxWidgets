@@ -59,9 +59,11 @@ protected:
     WX_NSBitmapImageRep m_cocoaNSBitmapImageRep;
 };
 
+
 // ========================================================================
 // wxBitmap
 // ========================================================================
+
 class WXDLLIMPEXP_CORE wxBitmap: public wxGDIObject
 {
 // ------------------------------------------------------------------------
@@ -83,10 +85,13 @@ public:
     // Constructor for generalised creation from data
     wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     // If depth is omitted, will create a bitmap compatible with the display
-    wxBitmap(int width, int height, int depth = -1);
+    wxBitmap(int width, int height, int depth = -1)
+        { (void)Create(width, height, depth); }
+    wxBitmap(const wxSize& sz, int depth = -1)
+        { (void)Create(sz, depth); }
     // Convert from wxImage:
     wxBitmap(const wxImage& image, int depth = -1)
-    {   CreateFromImage(image, depth); }
+        { CreateFromImage(image, depth); }
     // Convert from wxIcon
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
 
@@ -100,7 +105,10 @@ public:
     // Initialize from wxImage
     bool CreateFromImage(const wxImage& image, int depth=-1);
 
-    virtual bool Create(int width, int height, int depth = -1);
+    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH)
+        { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
+
     bool Create(NSImage* cocoaNSImage);
     bool Create(NSBitmapImageRep* cocoaNSBitmapImageRep);
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);

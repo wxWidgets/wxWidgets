@@ -58,7 +58,7 @@ static pixel_format_t gs_pixel_format_wxImage =
     {0xFF,0x00,0, 0xFF,0x08,0, 0xFF,0x10,0, 0x00,0x00,0}; // RGB 24bpp for wxImage
 
 //-----------------------------------------------------------------------------
-// wxBitmap
+// wxBitmapRefData
 //-----------------------------------------------------------------------------
 
 class wxBitmapRefData: public wxGDIRefData
@@ -163,17 +163,14 @@ wxBitmapRefData::~wxBitmapRefData()
     delete m_palette;
 }
 
+
+//-----------------------------------------------------------------------------
+// wxBitmap
 //-----------------------------------------------------------------------------
 
 #define M_BMPDATA ((wxBitmapRefData *)m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxBitmapBase)
-
-wxBitmap::wxBitmap(int width, int height, int depth)
-{
-    Create(width, height, depth);
-}
-
 
 wxGDIRefData *wxBitmap::CreateGDIRefData() const
 {

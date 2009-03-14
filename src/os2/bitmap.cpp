@@ -277,19 +277,6 @@ wxBitmap::wxBitmap(
 } // end of wxBitmap::wxBitmap
 
 wxBitmap::wxBitmap(
-  int                               nW
-, int                               nH
-, int                               nD
-)
-{
-    Init();
-    (void)Create( nW
-                 ,nH
-                 ,nD
-                );
-} // end of wxBitmap::wxBitmap
-
-wxBitmap::wxBitmap(
   const void*                       pData
 , wxBitmapType                      lType
 , int                               nWidth

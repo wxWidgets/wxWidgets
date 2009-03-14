@@ -273,6 +273,11 @@ public:
         A depth of 32 including an alpha channel is supported under MSW, Mac and GTK+.
     */
     wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    
+    /**
+        @overload
+    */
+    wxBitmap(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /**
         Creates a bitmap from XPM data.
@@ -374,10 +379,15 @@ public:
     /**
         Creates a fresh bitmap.
         If the final argument is omitted, the display depth of the screen is used.
-
-        This overload works on all platforms.
+        
+        @return @true if the creation was successful.
     */
     virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
+    
+    /**
+        @overload
+    */
+    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
 
     /*
         Creates a bitmap from the given data, which can be of arbitrary type.

@@ -56,7 +56,7 @@
 #endif // no CLR_INVALID
 
 // ----------------------------------------------------------------------------
-// Bitmap data
+// wxBitmapRefData
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxBitmapRefData : public wxGDIImageRefData
@@ -510,11 +510,6 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 
     SetHBITMAP((WXHBITMAP)hbmp);
 #endif
-}
-
-wxBitmap::wxBitmap(int w, int h, int d)
-{
-    (void)Create(w, h, d);
 }
 
 wxBitmap::wxBitmap(int w, int h, const wxDC& dc)

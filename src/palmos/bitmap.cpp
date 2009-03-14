@@ -198,17 +198,9 @@ bool wxBitmap::CopyFromDIB(const wxDIB& dib)
 
 #endif // NEVER_USE_DIB
 
-wxBitmap::~wxBitmap()
-{
-}
-
 wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 {
     Init();
-}
-
-wxBitmap::wxBitmap(int w, int h, int d)
-{
 }
 
 wxBitmap::wxBitmap(int w, int h, const wxDC& dc)

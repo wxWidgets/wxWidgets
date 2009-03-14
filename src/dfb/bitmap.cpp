@@ -394,11 +394,6 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxBitmapBase)
 
-wxBitmap::wxBitmap(int width, int height, int depth)
-{
-    Create(width, height, depth);
-}
-
 bool wxBitmap::Create(const wxIDirectFBSurfacePtr& surface)
 {
     UnRef();
