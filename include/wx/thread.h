@@ -747,11 +747,13 @@ inline void wxMutexGuiLeave() { }
 
 // macros for entering/leaving critical sections which may be used without
 // having to take them inside "#if wxUSE_THREADS"
-// (the implementation uses dummy structs to force semicolon after the macro)
+// (the implementation uses dummy structs to force semicolon after the macro;
+// also notice that Watcom doesn't like declaring a struct as a member so we
+// need to actually define it in wxCRIT_SECT_DECLARE_MEMBER)
 #define wxENTER_CRIT_SECT(cs)            do {} while (0)
 #define wxLEAVE_CRIT_SECT(cs)            do {} while (0)
 #define wxCRIT_SECT_DECLARE(cs)          struct wxDummyCS##cs
-#define wxCRIT_SECT_DECLARE_MEMBER(cs)   struct wxDummyCSMember##cs
+#define wxCRIT_SECT_DECLARE_MEMBER(cs)   struct wxDummyCSMember##cs { }
 #define wxCRIT_SECT_LOCKER(name, cs)     struct wxDummyCSLocker##name
 
 // if there is only one thread, it is always the main one
