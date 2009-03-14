@@ -128,7 +128,7 @@
 }
 
 
-- (void)controlTextDidChange:(NSNotification *)aNotification
+- (void)textDidChange:(NSNotification *)aNotification
 {
     if ( impl )
     {
@@ -140,6 +140,26 @@
             wxpeer->HandleWindowEvent( event );
         }
     }
+}
+
+- (BOOL)textView:(NSTextView *)aTextView doCommandBySelector:(SEL)commandSelector
+{
+    if ( impl  )
+    {
+        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
+        if (commandSelector == @selector(insertNewline:))
+        {
+            if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER ) 
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
+                event.SetEventObject( wxpeer );
+                event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
+                wxpeer->HandleWindowEvent( event );
+            }
+        }
+    }
+    
+    return NO;
 }
 @end
 
