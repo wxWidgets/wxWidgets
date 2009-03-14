@@ -3414,11 +3414,10 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
-        {
-            if (m_currentRow >= 0)
             {
                 wxWindow *parent = GetParent();
-                wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, parent->GetId());
+                wxDataViewEvent le(wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED,
+                                   parent->GetId());
                 le.SetItem( GetItemByRow(m_currentRow) );
                 le.SetEventObject(parent);
                 le.SetModel(GetOwner()->GetModel());
@@ -3426,7 +3425,7 @@ void wxDataViewMainWindow::OnChar( wxKeyEvent &event )
                 parent->GetEventHandler()->ProcessEvent(le);
             }
             break;
-        }
+
         case WXK_UP:
             if ( m_currentRow > 0 )
                 OnArrowChar( m_currentRow - 1, event );
