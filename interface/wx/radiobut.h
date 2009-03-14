@@ -45,7 +45,6 @@
 class wxRadioButton : public wxControl
 {
 public:
-
     /**
         Default constructor.
 
@@ -63,11 +62,11 @@ public:
         @param label
             Label for the radio button.
         @param pos
-            Window position. If @c wxDefaultPosition is specified then a default
-        position is chosen.
+            Window position. If ::wxDefaultPosition is specified then a default
+            position is chosen.
         @param size
-            Window size. If @c wxDefaultSize is specified then a default size
-        is chosen.
+            Window size. If ::wxDefaultSize is specified then a default size
+            is chosen.
         @param style
             Window style. See wxRadioButton.
         @param validator

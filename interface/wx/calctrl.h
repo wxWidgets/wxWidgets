@@ -493,10 +493,10 @@ public:
 
         @param lowerdate
             The low limit for the dates shown by the control or
-            @c wxDefaultDateTime.
+            ::wxDefaultDateTime.
         @param upperdate
             The high limit for the dates shown by the control or
-            @c wxDefaultDateTime.
+            ::wxDefaultDateTime.
         @return
             @true if either limit is valid, @false otherwise
      */
@@ -510,11 +510,11 @@ public:
 
         @param lowerdate
             If non-@NULL, the value of the low limit for the dates shown by the
-            control is returned (which may be @c wxDefaultDateTime if no limit
+            control is returned (which may be ::wxDefaultDateTime if no limit
             is set).
         @param upperdate
             If non-@NULL, the value of the upper limit for the dates shown by
-            the control is returned (which may be @c wxDefaultDateTime if no
+            the control is returned (which may be ::wxDefaultDateTime if no
             limit is set).
         @return
             @true if either limit is set, @false otherwise

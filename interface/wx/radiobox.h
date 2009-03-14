@@ -57,10 +57,10 @@ public:
         @param label
             Label for the static box surrounding the radio buttons.
         @param pos
-            Window position. If @c wxDefaultPosition is specified then a
+            Window position. If ::wxDefaultPosition is specified then a
             default position is chosen.
         @param size
-            Window size. If @c wxDefaultSize is specified then a default size
+            Window size. If ::wxDefaultSize is specified then a default size
             is chosen.
         @param n
             Number of choices with which to initialize the radiobox.
@@ -100,10 +100,10 @@ public:
         @param label
             Label for the static box surrounding the radio buttons.
         @param pos
-            Window position. If @c wxDefaultPosition is specified then a
+            Window position. If ::wxDefaultPosition is specified then a
             default position is chosen.
         @param size
-            Window size. If @c wxDefaultSize is specified then a default size
+            Window size. If ::wxDefaultSize is specified then a default size
             is chosen.
         @param choices
             An array of choices with which to initialize the radiobox.

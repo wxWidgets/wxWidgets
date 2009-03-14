@@ -140,11 +140,11 @@ public:
         @param title
             The caption to be displayed on the frame's title bar.
         @param pos
-            The window position. The value @c wxDefaultPosition indicates a
+            The window position. The value ::wxDefaultPosition indicates a
             default position, chosen by either the windowing system or
             wxWidgets, depending on platform.
         @param size
-            The window size. The value @c wxDefaultSize indicates a default
+            The window size. The value ::wxDefaultSize indicates a default
             size, chosen by either the windowing system or wxWidgets, depending
             on platform.
         @param style
@@ -387,10 +387,10 @@ public:
         @param title
             The caption to be displayed on the frame's title bar.
         @param pos
-            The window position. The value @c wxDefaultPosition indicates a default position,
+            The window position. The value ::wxDefaultPosition indicates a default position,
             chosen by either the windowing system or wxWidgets, depending on platform.
         @param size
-            The window size. The value @c wxDefaultSize indicates a default size, chosen by
+            The window size. The value ::wxDefaultSize indicates a default size, chosen by
             either the windowing system or wxWidgets, depending on platform.
         @param style
             The window style. See wxMDIChildFrame.

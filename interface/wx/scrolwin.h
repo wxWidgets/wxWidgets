@@ -135,10 +135,10 @@ public:
         @param id
             Window identifier. The value @c wxID_ANY indicates a default value.
         @param pos
-            Window position. If a position of @c wxDefaultPosition is specified
+            Window position. If a position of ::wxDefaultPosition is specified
             then a default position is chosen.
         @param size
-            Window size. If a size of @c wxDefaultSize is specified then the
+            Window size. If a size of ::wxDefaultSize is specified then the
             window is sized appropriately.
         @param style
             Window style. See wxScrolled.

@@ -53,10 +53,10 @@ public:
         @param id
             An identifier for the panel. @c wxID_ANY is taken to mean a default.
         @param pos
-            The panel position. The value @c wxDefaultPosition indicates a default position,
+            The panel position. The value ::wxDefaultPosition indicates a default position,
             chosen by either the windowing system or wxWidgets, depending on platform.
         @param size
-            The panel size. The value @c wxDefaultSize indicates a default size, chosen by
+            The panel size. The value ::wxDefaultSize indicates a default size, chosen by
             either the windowing system or wxWidgets, depending on platform.
         @param style
             The window style. See wxPanel.

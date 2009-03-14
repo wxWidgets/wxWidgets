@@ -207,7 +207,7 @@ public:
     @param style
         Combination of style flags described in wxMessageDialog documentation.
     @param x
-        Horizontal dialog position (ignored under MSW). Use @c wxDefaultCoord
+        Horizontal dialog position (ignored under MSW). Use ::wxDefaultCoord
         for @a x and @a y to let the system position the window.
     @param y
         Vertical dialog position (ignored under MSW).
