@@ -106,16 +106,16 @@ wxOSX/Cocoa is another port of wxWidgets for the Macintosh OS
 platform. In contrast to wxOSX/Carbon, it uses the Cocoa API 
 in place of Carbon. Much work has gone into this port and many 
 controls are functional, but the port has not reached the maturity
-of the wxOSX/Cocoa port yet. It is possible to use wxOSX/Cocoa
+of the wxOSX/Carbon port yet. It is possible to use wxOSX/Cocoa
 on 64-bit architectures.
 
 For further information, please see the files in @c docs/osx
 in the distribution.
 
 Note that there was a previous effort towards a Cocoa port called 
-wxCocoa, which is implemented totally with Cocoa API unlike the OSX/Cocoa port
+wxCocoa, which was implemented totally with Cocoa API unlike the OSX/Cocoa port
 which uses OS X C APIs to share code, and while it is no longer being actively 
-developed, docs for it are available at @c docs/cocoa in the distribution.
+developed, docs for it are available in @c docs/cocoa in the distribution.
 
 
 
@@ -641,9 +641,14 @@ used by wxWidgets to e.g. use toolkit-specific features.
 In such case (or when you want to e.g. write a port-specific patch) it can be
 necessary to use the underlying toolkit API directly:
 
-@li wxMSW port uses win32 API: see MSDN docs at http://msdn2.microsoft.com/en-us/library/ms649779.aspx
-@li wxGTK port uses GTK+: see GTK+ 2.x docs at http://developer.gnome.org/doc/API/2.0/gtk/index.html
-@li wxMac port uses the Carbon API: see Carbon docs at http://developer.apple.com/carbon
-@li wxCocoa port uses the Cocoa API: see Cocoa docs at http://developer.apple.com/cocoa
+- wxMSW port uses win32 API: see MSDN docs at http://msdn2.microsoft.com/en-us/library/ms649779.aspx
+- wxGTK port uses GTK+ and other lower-level libraries; see 
+  - GTK+ docs at http://library.gnome.org/devel/gtk/unstable/
+  - GDK docs at http://library.gnome.org/devel/gdk/unstable/
+  - GLib docs at http://library.gnome.org/devel/glib/unstable/
+  - GObject docs at http://library.gnome.org/devel/gobject/unstable/
+  - Pango docs at http://library.gnome.org/devel/pango/unstable/
+- wxMac port uses the Carbon API: see Carbon docs at http://developer.apple.com/carbon
+- wxCocoa port uses the Cocoa API: see Cocoa docs at http://developer.apple.com/cocoa
 
 */
