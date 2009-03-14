@@ -53,7 +53,14 @@ IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxImage,WXDLLEXPORT)
 #endif
 
 //-----------------------------------------------------------------------------
-// wxImage
+// global data
+//-----------------------------------------------------------------------------
+
+wxList wxImage::sm_handlers;
+wxImage wxNullImage;
+
+//-----------------------------------------------------------------------------
+// wxImageRefData
 //-----------------------------------------------------------------------------
 
 class wxImageRefData: public wxObjectRefData
@@ -117,57 +124,14 @@ wxImageRefData::~wxImageRefData()
         free( m_alpha );
 }
 
-wxList wxImage::sm_handlers;
 
-wxImage wxNullImage;
-
+//-----------------------------------------------------------------------------
+// wxImage
 //-----------------------------------------------------------------------------
 
 #define M_IMGDATA static_cast<wxImageRefData*>(m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxImage, wxObject)
-
-wxImage::wxImage( int width, int height, bool clear )
-{
-    Create( width, height, clear );
-}
-
-wxImage::wxImage( int width, int height, unsigned char* data, bool static_data )
-{
-    Create( width, height, data, static_data );
-}
-
-wxImage::wxImage( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data )
-{
-    Create( width, height, data, alpha, static_data );
-}
-
-wxImage::wxImage( const wxString& name, wxBitmapType type, int index )
-{
-    LoadFile( name, type, index );
-}
-
-wxImage::wxImage( const wxString& name, const wxString& mimetype, int index )
-{
-    LoadFile( name, mimetype, index );
-}
-
-#if wxUSE_STREAMS
-wxImage::wxImage( wxInputStream& stream, wxBitmapType type, int index )
-{
-    LoadFile( stream, type, index );
-}
-
-wxImage::wxImage( wxInputStream& stream, const wxString& mimetype, int index )
-{
-    LoadFile( stream, mimetype, index );
-}
-#endif // wxUSE_STREAMS
-
-wxImage::wxImage(const char* const* xpmData)
-{
-    Create(xpmData);
-}
 
 bool wxImage::Create(const char* const* xpmData)
 {

@@ -221,27 +221,54 @@ public:
     };
 
     wxImage() {}
-    wxImage( int width, int height, bool clear = true );
-    wxImage( int width, int height, unsigned char* data, bool static_data = false );
-    wxImage( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
-    wxImage( const wxString& name, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1 );
-    wxImage( const wxString& name, const wxString& mimetype, int index = -1 );
-    wxImage( const char* const* xpmData );
+    wxImage( int width, int height, bool clear = true )
+        { Create( width, height, clear ); }
+    wxImage( int width, int height, unsigned char* data, bool static_data = false )
+        { Create( width, height, data, static_data ); }
+    wxImage( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false )
+        { Create( width, height, data, alpha, static_data ); }
+
+    // ctor variants using wxSize:
+    wxImage( const wxSize& sz, bool clear = true )
+        { Create( sz, clear ); }
+    wxImage( const wxSize& sz, unsigned char* data, bool static_data = false )
+        { Create( sz, data, static_data ); }
+    wxImage( const wxSize& sz, unsigned char* data, unsigned char* alpha, bool static_data = false )
+        { Create( sz, data, alpha, static_data ); }
+
+    wxImage( const wxString& name, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1 )
+        { LoadFile( name, type, index ); }
+    wxImage( const wxString& name, const wxString& mimetype, int index = -1 )
+        { LoadFile( name, mimetype, index ); }
+    wxImage( const char* const* xpmData )
+        { Create(xpmData); }
 
 #if wxUSE_STREAMS
-    wxImage( wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1 );
-    wxImage( wxInputStream& stream, const wxString& mimetype, int index = -1 );
+    wxImage( wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY, int index = -1 )
+        { LoadFile( stream, type, index ); }
+    wxImage( wxInputStream& stream, const wxString& mimetype, int index = -1 )
+        { LoadFile( stream, mimetype, index ); }
 #endif // wxUSE_STREAMS
 
-    bool Create( int width, int height, bool clear = true );
-    bool Create( int width, int height, unsigned char* data, bool static_data = false );
-    bool Create( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
     bool Create( const char* const* xpmData );
 #ifdef __BORLANDC__
     // needed for Borland 5.5
     wxImage( char** xpmData ) { Create(const_cast<const char* const*>(xpmData)); }
     bool Create( char** xpmData ) { return Create(const_cast<const char* const*>(xpmData)); }
 #endif
+
+    bool Create( int width, int height, bool clear = true );
+    bool Create( int width, int height, unsigned char* data, bool static_data = false );
+    bool Create( int width, int height, unsigned char* data, unsigned char* alpha, bool static_data = false );
+    
+    // Create() variants using wxSize:
+    bool Create( const wxSize& sz, bool clear = true )
+        { return Create(sz.GetWidth(), sz.GetHeight(), clear); }
+    bool Create( const wxSize& sz, unsigned char* data, bool static_data = false )
+        { return Create(sz.GetWidth(), sz.GetHeight(), data, static_data); }
+    bool Create( const wxSize& sz, unsigned char* data, unsigned char* alpha, bool static_data = false )
+        { return Create(sz.GetWidth(), sz.GetHeight(), data, alpha, static_data); }
+
     void Destroy();
    
     // initialize the image data with zeroes
