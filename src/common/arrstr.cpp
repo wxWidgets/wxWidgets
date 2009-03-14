@@ -206,6 +206,7 @@ void wxArrayString::Shrink()
         pNew[j] = m_pItems[j];
     delete [] m_pItems;
     m_pItems = pNew;
+    m_nSize = m_nCount
   }
 }
 
