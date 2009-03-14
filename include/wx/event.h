@@ -811,7 +811,8 @@ enum wxEventCategory
     // used in wxEventLoopBase::YieldFor to specify all event categories should be processed:
     wxEVT_CATEGORY_ALL =
         wxEVT_CATEGORY_UI|wxEVT_CATEGORY_USER_INPUT|wxEVT_CATEGORY_SOCKET| \
-        wxEVT_CATEGORY_TIMER|wxEVT_CATEGORY_THREAD
+        wxEVT_CATEGORY_TIMER|wxEVT_CATEGORY_THREAD|wxEVT_CATEGORY_UNKNOWN| \
+        wxEVT_CATEGORY_CLIPBOARD
 };
 
 /*
