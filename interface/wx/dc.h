@@ -444,7 +444,8 @@ public:
     void DrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
 
     /**
-        Draws the text rotated by @a angle degrees.
+        Draws the text rotated by @a angle degrees 
+        (positive angles are counterclockwise; the full angle is 360 degrees).
 
         @note Under Win9x only TrueType fonts can be drawn by this function. In
               particular, a font different from @c wxNORMAL_FONT should be used
