@@ -377,6 +377,19 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
 
 IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow, wxWindow)
 
+wxMDIClientWindow::~wxMDIClientWindow()
+{
+    // disconnect our handler because our ~wxWindow (which is going to be called
+    // after this dtor) will call DestroyChildren(); in turns our children
+    // ~wxWindow dtors will call wxWindow::Show(false) and this will generate
+    // a call to gtk_mdi_page_change_callback with an invalid parent
+    // (because gtk_mdi_page_change_callback expects a wxMDIClientWindow but
+    //  at that point of the dtor chain we are a simple wxWindow!)
+    g_signal_handlers_disconnect_by_func(m_widget, 
+                                         (gpointer)gtk_mdi_page_change_callback,
+                                         GetParent());
+}
+
 bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 {
     if ( !PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
