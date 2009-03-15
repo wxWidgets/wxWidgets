@@ -2,7 +2,7 @@
 // Name:        src/osx/cocoa/radiobut.mm
 // Purpose:     wxRadioButton
 // Author:      Stefan Csomor
-// Modified by: JS Lair (99/11/15) adding the cyclic group notion for radiobox
+// Modified by: 
 // Created:     ??/??/98
 // RCS-ID:      $Id: radiobut.cpp 54129 2008-06-11 19:30:52Z SC $
 // Copyright:   (c) AUTHOR

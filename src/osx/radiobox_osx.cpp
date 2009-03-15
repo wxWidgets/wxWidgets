@@ -22,6 +22,10 @@
 
 #include "wx/osx/private.h"
 
+// regarding layout: note that there are differences in inter-control
+// spacing between InterfaceBuild and the Human Interface Guidelines, we stick
+// to the latter, as those are also used eg in the System Preferences Dialogs
+
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 
 
@@ -355,7 +359,12 @@ void wxRadioBox::SetFocus()
 
 // Simulates the effect of the user issuing a command to the item
 //
-#define RADIO_SIZE 20
+#if wxOSX_USE_CARBON
+    #define RADIO_SIZE 20
+#else
+    // Cocoa has an additional border are of about 3 pixels
+    #define RADIO_SIZE 23
+#endif
 
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
@@ -395,11 +404,15 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
     maxWidth = -1;
     maxHeight = -1;
+    wxSize bestSizeRadio ;
+    if ( m_radioButtonCycle )
+        bestSizeRadio = m_radioButtonCycle->GetBestSize();
+        
     for (unsigned int i = 0 ; i < m_noItems; i++)
     {
         GetTextExtent(GetString(i), &eachWidth[i], &eachHeight[i] );
-        eachWidth[i] = (int)(eachWidth[i] + RADIO_SIZE);
-        eachHeight[i] = (int) eachHeight[i];
+        eachWidth[i] = eachWidth[i] + RADIO_SIZE;
+        eachHeight[i] = wxMax( eachHeight[i], bestSizeRadio.y );
 
         if (maxWidth < eachWidth[i])
             maxWidth = eachWidth[i];
@@ -407,7 +420,12 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             maxHeight = eachHeight[i];
     }
 
-    totHeight = GetRowCount() * maxHeight + (GetRowCount() - 1) * maxHeight / 2;
+    // according to HIG (official space - 3 Pixels Diff between Frame and Layout size)
+    int space = 3; 
+    if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
+        space = 2;
+        
+    totHeight = GetRowCount() * maxHeight + (GetRowCount() - 1) * space;
     totWidth  = GetColumnCount() * (maxWidth + charWidth);
 
     wxSize sz = DoGetSizeFromClientSize( wxSize( totWidth, totHeight ) ) ;
@@ -454,15 +472,15 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             else
             {
                 x_offset = x_start;
-                y_offset += 3 * maxHeight / 2 ; //+ charHeight / 2
+                y_offset += maxHeight + space;
             }
         }
 
-        current->SetSize( x_offset, y_offset, eachWidth[i], eachHeight[i]);
+        current->SetSize( x_offset, y_offset, eachWidth[i], eachHeight[i] );
         current = current->NextInCycle();
 
         if (m_windowStyle & wxRA_SPECIFY_ROWS)
-            y_offset += 3 * maxHeight / 2 ; // + charHeight / 2
+            y_offset += maxHeight + space; 
         else
             x_offset += maxWidth + charWidth;
     }
@@ -485,18 +503,27 @@ wxSize wxRadioBox::DoGetBestSize() const
     maxWidth = -1;
     maxHeight = -1;
 
+    wxSize bestSizeRadio ;
+    if ( m_radioButtonCycle )
+        bestSizeRadio = m_radioButtonCycle->GetBestSize();
+
     for (unsigned int i = 0 ; i < m_noItems; i++)
     {
         GetTextExtent(GetString(i), &eachWidth, &eachHeight, NULL, NULL, &font );
-        eachWidth  = (int)(eachWidth + RADIO_SIZE);
-        eachHeight = (int)eachHeight;
+        eachWidth  = (eachWidth + RADIO_SIZE);
+        eachHeight = wxMax(eachHeight, bestSizeRadio.y );
         if (maxWidth < eachWidth)
             maxWidth = eachWidth;
         if (maxHeight < eachHeight)
             maxHeight = eachHeight;
     }
 
-    totHeight = GetRowCount() * maxHeight + (GetRowCount() - 1) * maxHeight / 2;
+    // according to HIG (official space - 3 Pixels Diff between Frame and Layout size)
+    int space = 3; 
+    if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
+        space = 2;
+        
+    totHeight = GetRowCount() * maxHeight + (GetRowCount() - 1) * space;
     totWidth  = GetColumnCount() * (maxWidth + charWidth);
 
     wxSize sz = DoGetSizeFromClientSize( wxSize( totWidth, totHeight ) );
@@ -521,6 +548,8 @@ bool wxRadioBox::SetFont(const wxFont& font)
     bool retval = wxWindowBase::SetFont( font );
 
     // dont' update the native control, it has its own small font
+    
+    // should we iterate over the children ?
 
     return retval;
 }
