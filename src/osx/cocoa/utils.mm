@@ -192,8 +192,8 @@ bool wxApp::DoInitGui()
         NSAppleEventManager *appleEventManager = [NSAppleEventManager sharedAppleEventManager];
         [appleEventManager setEventHandler:controller andSelector:@selector(handleGetURLEvent:withReplyEvent:)
             forEventClass:kInternetEventClass andEventID:kAEGetURL];
+        [NSApp finishLaunching];
     }
-    [NSApp finishLaunching];
     return true;
 }
 

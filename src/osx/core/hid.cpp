@@ -651,6 +651,7 @@ class wxHIDModule : public wxModule
         {
             for(size_t i = 0; i < sm_keyboards.GetCount(); ++i)
                 delete (wxHIDKeyboard*) sm_keyboards[i];
+	        sm_keyboards.Clear(); 
         }
 };
 
