@@ -212,7 +212,7 @@ public:
         Called in response of an "open-application" Apple event.
         Override this to create a new document in your app.
 
-        @onlyfor{wxmac}
+        @onlyfor{wxosx}
     */
     virtual void MacNewFile();
 
@@ -223,28 +223,28 @@ public:
         user double clicked on it or if the document file was dropped on either the
         running application or the application icon in Finder.
 
-        @onlyfor{wxmac}
+        @onlyfor{wxosx}
     */
     virtual void MacOpenFile(const wxString& fileName);
 
     /**
         Called in response of a "get-url" Apple event.
 
-        @onlyfor{wxmac}
+        @onlyfor{wxosx}
     */
     virtual void MacOpenURL(const wxString& url);
 
     /**
         Called in response of a "print-document" Apple event.
 
-        @onlyfor{wxmac}
+        @onlyfor{wxosx}
     */
     virtual void MacPrintFile(const wxString& fileName);
 
     /**
         Called in response of a "reopen-application" Apple event.
 
-        @onlyfor{wxmac}
+        @onlyfor{wxosx}
     */
     virtual void MacReopenApp();
 

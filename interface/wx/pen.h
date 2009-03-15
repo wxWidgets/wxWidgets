@@ -182,7 +182,7 @@ public:
         @param stipple
             A stipple bitmap.
 
-        @onlyfor{wxmsw,wxmac}
+        @onlyfor{wxmsw,wxosx}
 
         @see SetWidth(), SetStipple()
     */

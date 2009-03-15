@@ -94,7 +94,7 @@ public:
         @param height
             The height of the image.
 
-        @onlyfor{wxmsw,wxmac}
+        @onlyfor{wxmsw,wxosx}
     */
     wxIcon(const char bits[], int width, int height);
 

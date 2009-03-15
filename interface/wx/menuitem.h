@@ -276,7 +276,7 @@ public:
         Sets the bitmap for the menu item.
         It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap).
 
-        @onlyfor{wxmsw,wxmac,wxgtk}
+        @onlyfor{wxmsw,wxosx,wxgtk}
     */
     virtual void SetBitmap(const wxBitmap& bmp);
 

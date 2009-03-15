@@ -192,7 +192,7 @@ public:
         icons for GTK. You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
 
-        @onlyfor{wxmsw,wxmac}
+        @onlyfor{wxmsw,wxosx}
 
         @param win
             The window which initiates the drag and drop operation.
@@ -216,7 +216,7 @@ public:
         icons for GTK. You should use the macro wxDROP_ICON() in portable
         programs instead of directly using either of these types.
 
-        @onlyfor{wxmsw,wxmac}
+        @onlyfor{wxmsw,wxosx}
 
         @param data
             The data associated with the drop source.

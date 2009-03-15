@@ -19,8 +19,7 @@ requires. This chapter collects notes about differences among supported platform
 and ports.
 
 @li @ref page_port_wxgtk
-@li @ref page_port_wxosx_carbon
-@li @ref page_port_wxosx_cocoa
+@li @ref page_port_wxosx
 @li @ref page_port_wxos2
 @li @ref page_port_wxmgl
 @li @ref page_port_wxx11
@@ -71,14 +70,14 @@ For further information, please see the files in @c docs/gtk
 in the distribution.
 
 
-
-
-@section page_port_wxosx_carbon wxOSX/Carbon
+@section page_port_wxosx wxOSX
 
 @htmlonly
 <img src="logo_osxleopard.png" alt="Mac OS X (Leopard) logo"
     title="Mac OS X (Leopard) logo" class="logo">
 @endhtmlonly
+
+@subsection page_port_wxosx_carbon wxOSX/Carbon
 
 wxOSX/Carbon is a port of wxWidgets for the Macintosh OS platform.
 Currently MacOS X 10.4 or higher are supported. wxOSX/Carbon can
@@ -90,17 +89,16 @@ both architecture. Unfortunately, wxOSX/Carbon does not support any
 64-bit architecture since Apple decided not to port its Carbon
 API entirely to 64-bit.
 
+@note Carbon has been deprecated by Apple as of OS X 10.5 and will likely
+be removed entirely in a future OS version. It's recommended you look into
+switching your app over to wxOSX/Cocoa as soon as possible.
+
 For further information, please see the files in @c docs/osx
 in the distribution.
 
 
 
-@section page_port_wxosx_cocoa wxOSX/Cocoa
-
-@htmlonly
-<img src="logo_osxleopard.png" alt="Mac OS X (Leopard) logo"
-    title="Mac OS X (Leopard) logo" class="logo">
-@endhtmlonly
+@subsection page_port_wxosx_cocoa wxOSX/Cocoa
 
 wxOSX/Cocoa is another port of wxWidgets for the Macintosh OS
 platform. In contrast to wxOSX/Carbon, it uses the Cocoa API 
@@ -109,10 +107,15 @@ controls are functional, but the port has not reached the maturity
 of the wxOSX/Carbon port yet. It is possible to use wxOSX/Cocoa
 on 64-bit architectures.
 
+In order to configure wxWidgets to compile wxOSX/Cocoa you will
+need to type:
+
+@verbatim configure --with-osx_cocoa @endverbatim
+
 For further information, please see the files in @c docs/osx
 in the distribution.
 
-Note that there was a previous effort towards a Cocoa port called 
+@note There was a previous effort towards a Cocoa port called 
 wxCocoa, which was implemented totally with Cocoa API unlike the OSX/Cocoa port
 which uses OS X C APIs to share code, and while it is no longer being actively 
 developed, docs for it are available in @c docs/cocoa in the distribution.
