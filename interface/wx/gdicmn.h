@@ -106,8 +106,11 @@ enum wxStockCursor
 
     A wxRealPoint is a useful data structure for graphics operations.
 
-    It contains floating point @e x and @e y members. See wxPoint for an
-    integer version.
+    It contains floating point @e x and @e y members. 
+    See wxPoint for an integer version.
+
+    Note that the coordinates stored inside a wxRealPoint object may be negative 
+    and that wxRealPoint functions do not perform any check against negative values.
 
     @library{wxcore}
     @category{data}
@@ -117,6 +120,9 @@ enum wxStockCursor
 class wxRealPoint
 {
 public:
+    /**
+        Initializes to zero the x and y members.
+    */
     wxRealPoint();
 
     /**
@@ -142,6 +148,10 @@ public:
 
     A class for manipulating rectangles.
 
+    Note that the x, y coordinates and the width and height stored inside a wxRect 
+    object may be negative and that wxRect functions do not perform any check against 
+    negative values.
+
     @library{wxcore}
     @category{data}
 
@@ -152,6 +162,7 @@ class wxRect
 public:
     /**
         Default constructor.
+        Initializes to zero the internal @a x, @a y, @a width and @a height members.
     */
     wxRect();
     /**
@@ -163,7 +174,7 @@ public:
     */
     wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
     /**
-        Creates a wxRect object from position and @a size values.
+        Creates a wxRect object from position @a pos and @a size values.
     */
     wxRect(const wxPoint& pos, const wxSize& size);
     /**
@@ -451,8 +462,12 @@ public:
 
     A wxPoint is a useful data structure for graphics operations.
 
-    It contains integer @e x and @e y members. See wxRealPoint for a floating
-    point version.
+    It contains integer @e x and @e y members. 
+    See wxRealPoint for a floating point version.
+
+    Note that the width and height stored inside a wxPoint object may be negative
+    and that wxPoint functions do not perform any check against negative values
+    (this is used to e.g. store the special -1 value in ::wxDefaultPosition instance).
 
     @library{wxcore}
     @category{data}
@@ -465,17 +480,21 @@ public:
 class wxPoint
 {
 public:
-    //@{
     /**
         Constructs a point.
+        Initializes the internal x and y coordinates to zero.
     */
     wxPoint();
+    
+    /**
+        Initializes the point object with the given @a x and @a y coordinates.
+    */
     wxPoint(int x, int y);
-    //@}
 
     /**
-        Assignment operator.
+        @name Miscellaneous operators
     */
+    //@{
     wxPoint& operator=(const wxPoint& pt);
 
     bool operator ==(const wxPoint& p1, const wxPoint& p2);
@@ -494,7 +513,8 @@ public:
 
     wxPoint& operator +=(const wxSize& sz);
     wxPoint& operator -=(const wxSize& sz);
-
+    //@}
+    
     /**
         x member.
     */
@@ -639,8 +659,14 @@ public:
 /**
     @class wxSize
 
-    A wxSize is a useful data structure for graphics operations. It simply
-    contains integer @e width and @e height members.
+    A wxSize is a useful data structure for graphics operations. 
+    It simply contains integer @e width and @e height members.
+    
+    Note that the width and height stored inside a wxSize object may be negative
+    and that wxSize functions do not perform any check against negative values
+    (this is used to e.g. store the special -1 value in ::wxDefaultSize instance).
+    See also IsFullySpecified() and SetDefaults() for utility functions regarding
+    the special -1 value.
 
     wxSize is used throughout wxWidgets as well as wxPoint which, although
     almost equivalent to wxSize, has a different meaning: wxPoint represents a
@@ -662,13 +688,15 @@ public:
 class wxSize
 {
 public:
-    //@{
     /**
-        Creates a size object.
+        Initializes this size object with zero width and height.
     */
     wxSize();
+    
+    /**
+        Initializes this size object with the given @a width and @a height.
+    */
     wxSize(int width, int height);
-    //@}
 
     //@{
     /**
@@ -768,9 +796,11 @@ public:
     */
     void SetWidth(int width);
 
+    
     /**
-        Assignment operator.
+        @name Miscellaneous operators
     */
+    //@{
     wxSize& operator=(const wxSize& sz);
 
     bool operator ==(const wxSize& s1, const wxSize& s2);
@@ -786,6 +816,7 @@ public:
     wxSize operator *(int factor, const wxSize& sz);
     wxSize& operator /=(int factor);
     wxSize& operator *=(int factor);
+    //@}
 };
 
 /**
