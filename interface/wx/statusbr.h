@@ -10,6 +10,11 @@
     @class wxStatusBarPane
     
     A status bar pane data container used by wxStatusBar.
+
+    @library{wxcore}
+    @category{miscwnd}
+
+    @see wxStatusBar
 */
 class wxStatusBarPane
 {

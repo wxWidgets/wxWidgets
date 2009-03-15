@@ -35,7 +35,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusBarNameStr[];
 // wxStatusBarPane: an helper for wxStatusBar
 // ----------------------------------------------------------------------------
 
-class wxStatusBarPane
+class WXDLLIMPEXP_CORE wxStatusBarPane
 {
     // only wxStatusBarBase can access our internal members and modify them:
     friend class WXDLLIMPEXP_FWD_CORE wxStatusBarBase;
