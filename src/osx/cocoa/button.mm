@@ -26,7 +26,7 @@
 wxSize wxButton::DoGetBestSize() const
 {
     if ( GetId() == wxID_HELP )
-        return wxSize( 20 , 20 ) ;
+        return wxSize( 23 , 23 ) ;
 
     wxSize sz = GetDefaultSize() ;
 

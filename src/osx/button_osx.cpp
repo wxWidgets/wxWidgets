@@ -35,7 +35,7 @@ bool wxButton::Create(wxWindow *parent,
     const wxString& name)
 {
     wxString label(lbl);
-    if (label.empty() && wxIsStockID(id))
+    if (label.empty() && wxIsStockID(id) && !(id == wxID_HELP))
         label = wxGetStockLabel(id);
 
     m_macIsUserPane = false ;
