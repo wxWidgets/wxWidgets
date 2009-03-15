@@ -232,7 +232,7 @@ void wxStatusBar::UpdateFieldText(int nField)
 
     // Get field style, if any
     int style;
-    switch(m_panes[nField].nStyle)
+    switch(m_panes[nField].GetStyle())
     {
     case wxSB_RAISED:
         style = SBT_POPOUT;
@@ -338,7 +338,7 @@ wxSize wxStatusBar::DoGetBestSize() const
     for ( size_t i = 0; i < m_panes.GetCount(); ++i )
     {
         int widthField =
-            m_bSameWidthForAllPanes ? DEFAULT_FIELD_WIDTH : m_panes[i].nWidth;
+            m_bSameWidthForAllPanes ? DEFAULT_FIELD_WIDTH : m_panes[i].GetWidth();
         if ( widthField >= 0 )
         {
             width += widthField;

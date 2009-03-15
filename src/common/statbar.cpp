@@ -104,7 +104,7 @@ void wxStatusBarBase::SetStatusWidths(int WXUNUSED_UNLESS_DEBUG(n),
     else
     {
         for ( size_t i = 0; i < m_panes.GetCount(); i++ )
-            m_panes[i].nWidth = widths[i];
+            m_panes[i].m_nWidth = widths[i];
 
         m_bSameWidthForAllPanes = false;
     }
@@ -121,7 +121,7 @@ void wxStatusBarBase::SetStatusStyles(int WXUNUSED_UNLESS_DEBUG(n),
     wxASSERT_MSG( (size_t)n == m_panes.GetCount(), _T("field number mismatch") );
 
     for ( size_t i = 0; i < m_panes.GetCount(); i++ )
-        m_panes[i].nStyle = styles[i];
+        m_panes[i].m_nStyle = styles[i];
 
     // update the display after the widths changed
     Refresh();
@@ -158,10 +158,10 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
 
         for ( i = 0; i < m_panes.GetCount(); i++ )
         {
-            if ( m_panes[i].nWidth >= 0 )
-                nTotalWidth += m_panes[i].nWidth;
+            if ( m_panes[i].GetWidth() >= 0 )
+                nTotalWidth += m_panes[i].GetWidth();
             else
-                nVarCount += -m_panes[i].nWidth;
+                nVarCount += -m_panes[i].GetWidth();
         }
 
         // the amount of extra width we have per each var width field
@@ -170,12 +170,12 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
         // do fill the array
         for ( i = 0; i < m_panes.GetCount(); i++ )
         {
-            if ( m_panes[i].nWidth >= 0 )
-                widths.Add(m_panes[i].nWidth);
+            if ( m_panes[i].GetWidth() >= 0 )
+                widths.Add(m_panes[i].GetWidth());
             else
             {
-                int nVarWidth = widthExtra > 0 ? (widthExtra * (-m_panes[i].nWidth)) / nVarCount : 0;
-                nVarCount += m_panes[i].nWidth;
+                int nVarWidth = widthExtra > 0 ? (widthExtra * (-m_panes[i].GetWidth())) / nVarCount : 0;
+                nVarCount += m_panes[i].GetWidth();
                 widthExtra -= nVarWidth;
                 widths.Add(nVarWidth);
             }
@@ -192,7 +192,7 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
 void wxStatusBarBase::PushStatusText(const wxString& text, int number)
 {
     // save current status text in the stack
-    m_panes[number].arrStack.push_back(GetStatusText(number));
+    m_panes[number].m_arrStack.push_back(GetStatusText(number));
 
     SetStatusText(text, number);
         // update current status text (eventually also in the native control)
@@ -200,11 +200,11 @@ void wxStatusBarBase::PushStatusText(const wxString& text, int number)
 
 void wxStatusBarBase::PopStatusText(int number)
 {
-    wxASSERT_MSG(m_panes[number].arrStack.GetCount() == 1,
+    wxASSERT_MSG(m_panes[number].m_arrStack.GetCount() == 1,
                  "can't pop any further string");
 
-    wxString text = m_panes[number].arrStack.back();
-    m_panes[number].arrStack.pop_back();  // also remove it from the stack
+    wxString text = m_panes[number].m_arrStack.back();
+    m_panes[number].m_arrStack.pop_back();  // also remove it from the stack
 
     // restore the popped status text in the pane
     SetStatusText(text, number);

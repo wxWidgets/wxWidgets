@@ -134,7 +134,7 @@ void wxStatusBarUniv::DoDraw(wxControlRenderer *renderer)
                 flags |= wxCONTROL_SIZEGRIP;
             }
 
-            m_renderer->DrawStatusField(dc, rect, GetStatusText(n), flags, m_panes[n].nStyle);
+            m_renderer->DrawStatusField(dc, rect, GetStatusText(n), flags, m_panes[n].GetStyle());
         }
 
         rect.x += rect.width + borderBetweenFields;
@@ -207,7 +207,7 @@ void wxStatusBarUniv::OnSize(wxSizeEvent& event)
     {
         for ( field = 0; field < m_panes.GetCount(); field++ )
         {
-            if ( m_panes[field].nWidth < 0 )
+            if ( m_panes[field].GetWidth() < 0 )
             {
                 // var width field
                 break;

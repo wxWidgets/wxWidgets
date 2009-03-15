@@ -225,7 +225,7 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
     if (rect.GetWidth() <= 0)
         return;     // happens when the status bar is shrinked in a very small area!
 
-    int style = m_panes[i].nStyle;
+    int style = m_panes[i].GetStyle();
     if (style != wxSB_FLAT)
     {
         // Draw border

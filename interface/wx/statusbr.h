@@ -7,6 +7,42 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    @class wxStatusBarPane
+    
+    A status bar pane data container used by wxStatusBar.
+*/
+class wxStatusBarPane
+{
+public:
+    /**
+        Constructs the pane with the given @a style and @a width.
+    */
+    wxStatusBarPane(int style = wxSB_NORMAL, size_t width = 0);
+        
+    /**
+        Returns the pane width; it maybe negative, indicating a variable-width field.
+    */
+    int GetWidth() const;
+    
+    /**
+        Returns the pane style.
+    */
+    int GetStyle() const;
+    
+    /**
+        Returns the stack of strings pushed on this pane.
+        
+        Note that this stack does include also the string currently displayed in this pane
+        as the version stored in the native status bar control is possibly ellipsized.
+        
+        Also note that GetStack().Last() is the top of the stack (i.e. the string shown 
+        in the status bar).
+    */
+    const wxArrayString& GetStack() const
+        { return m_arrStack; }
+};
+
+/**
     @class wxStatusBar
 
     A status bar is a narrow window that can be placed along the bottom of a frame
@@ -25,7 +61,7 @@
     @library{wxcore}
     @category{miscwnd}
 
-    @see wxFrame, @ref page_samples_statbar
+    @see wxStatusBarPane, wxFrame, @ref page_samples_statbar
 */
 class wxStatusBar : public wxWindow
 {
@@ -84,10 +120,11 @@ public:
     virtual bool GetFieldRect(int i, wxRect& rect) const;
 
     /**
-        Returns the number of fields in the status bar.
+        Returns the wxStatusBarPane representing the @a n-th field.
     */
-    int GetFieldsCount() const;
-
+    const wxStatusBarPane& GetField(int n) const
+        { return m_panes[n]; }
+    
     /**
         Returns the string associated with a status bar field.
 
@@ -101,6 +138,31 @@ public:
     */
     virtual wxString GetStatusText(int i = 0) const;
 
+    /**
+        Returns the stack of strings pushed (see PushStatusText()) on the
+        @a n-th field.
+        
+        See wxStatusBarPane::GetStack() for more info.
+    */
+    const wxArrayString& GetStatusStack(int n) const
+        { return m_panes[n].GetStack(); }
+
+    /**
+        Returns the width of the @a n-th field.
+        
+        See wxStatusBarPane::GetWidth() for more info.
+    */
+    int GetStatusWidth(int n) const
+        { return m_panes[n].GetWidth(); }
+
+    /**
+        Returns the style of the @a n-th field.
+        
+        See wxStatusBarPane::GetStyle() for more info.
+    */
+    int GetStatusStyle(int n) const
+        { return m_panes[n].GetStyle(); }
+        
     /**
         Sets the field text to the top of the stack, and pops the stack of saved
         strings.
