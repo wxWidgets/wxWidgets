@@ -133,7 +133,8 @@ DEFAULT_DEFAULT_wxUSE_DFB=0
 
 PROGRAM_EXT=
 SAMPLES_RPATH_FLAG=
-SAMPLES_RPATH_POSTLINK=
+DYLIB_RPATH_INSTALL=
+DYLIB_RPATH_POSTLINK=
 
 DEFAULT_STD_FLAG=yes
 
@@ -3781,17 +3782,19 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-darwin* )
         install_name_tool=`which ${HOST_PREFIX}install_name_tool`
         if test "$install_name_tool" -a -x "$install_name_tool"; then
-            SAMPLES_RPATH_POSTLINK="\$(wx_top_builddir)/change-install-names \$(LIBDIRNAME) \$(prefix) \$@"
+            DYLIB_RPATH_POSTLINK="${HOST_PREFIX}install_name_tool -id \$@ \$@"
             cat <<EOF >change-install-names
 #!/bin/sh
 libnames=\`cd \${1} ; ls -1 | grep '\.[[0-9]][[0-9]]*\.dylib\$'\`
-inst_cmd="${HOST_PREFIX}install_name_tool "
 for i in \${libnames} ; do
-    inst_cmd="\${inst_cmd} -change \${2}/lib/\${i} \${1}/\${i}"
+    ${HOST_PREFIX}install_name_tool -id \${1}/\${i} \${1}/\${i}
+    for dep in \${libnames} ; do
+        ${HOST_PREFIX}install_name_tool -change \${2}/\${dep} \${1}/\${dep} \${1}/\${i}
+    done
 done
-\${inst_cmd} \${3}
 EOF
             chmod +x change-install-names
+            DYLIB_RPATH_INSTALL="\$(wx_top_builddir)/change-install-names \${libdir} \$(wx_top_builddir)/lib"
         fi
 
         dnl the HEADER_PAD_OPTION is required by some wx samples to avoid the error:
@@ -3818,7 +3821,7 @@ EOF
 
     if test $wxUSE_RPATH = "no"; then
         SAMPLES_RPATH_FLAG=''
-        SAMPLES_RPATH_POSTLINK=''
+        DYLIB_PATH_POSTLINK=''
         WXCONFIG_RPATH=''
     fi
 
@@ -7647,8 +7650,9 @@ if test "$TOOLKIT_LOWERCASE" = "xxx"; then
 fi
 AC_SUBST(TOOLKIT_LOWERCASE)
 AC_SUBST(TOOLKIT_VERSION)
+AC_SUBST(DYLIB_RPATH_INSTALL)
+AC_SUBST(DYLIB_RPATH_POSTLINK)
 AC_SUBST(SAMPLES_RPATH_FLAG)
-AC_SUBST(SAMPLES_RPATH_POSTLINK)
 AC_SUBST(HEADER_PAD_OPTION)
 AC_SUBST(HOST_SUFFIX)
 AC_SUBST(CPPUNIT_CFLAGS)

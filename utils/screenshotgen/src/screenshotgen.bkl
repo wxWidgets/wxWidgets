@@ -12,7 +12,6 @@
 
             <wx-mac-app-bundle/>
             <ldflags>$(SAMPLES_RPATH_FLAG)</ldflags>
-            <postlink-command>$(SAMPLES_RPATH_POSTLINK)</postlink-command>
         </if>
 
         <sources>

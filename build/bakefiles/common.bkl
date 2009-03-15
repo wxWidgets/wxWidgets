@@ -637,8 +637,10 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <if cond="FORMAT=='autoconf'">
             <res-include>$(RCDEFDIR)</res-include>
             <res-include>$(TOP_SRCDIR)include</res-include>
+            <postlink-command>$(DYLIB_RPATH_POSTLINK)</postlink-command>
         </if>
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
+        
     </template>
 
     <template id="wx_3rdparty_dependencies_gui" cond="USE_GUI=='1'">

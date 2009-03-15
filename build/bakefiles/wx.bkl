@@ -101,6 +101,12 @@
             </command>
         </action>
 
+        <modify-target target="install">
+            <command>
+                $(DYLIB_RPATH_INSTALL)
+            </command>
+        </modify-target>
+
         <set var="RCDEFS_H">
             <if cond="TOOLKIT=='MSW'">msw/rcdefs.h</if>
         </set>
