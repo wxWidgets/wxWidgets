@@ -73,6 +73,8 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 - (void)setImage:(NSImage *)image;
 - (void)setControlSize:(NSControlSize)size;
 
+- (void)setFont:(NSFont *)fontObject;
+
 - (id)contentView;
 
 - (void)setTarget:(id)anObject;
@@ -801,7 +803,8 @@ bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
 {
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     // get the current focus before running becomeFirstResponder
-    NSView* otherView = [[NSApp keyWindow] firstResponder]; 
+    NSResponder* currentResponder = [[NSApp keyWindow] firstResponder]; 
+    NSView* otherView = (currentResponder != nil && [currentResponder isKindOfClass:[NSView class]]) ? (NSView*) currentResponder : NULL; 
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     BOOL r = superimpl(slf, (SEL)_cmd);
     if ( r )
@@ -814,7 +817,8 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
     // get the current focus after running resignFirstResponder
-    NSView* otherView = [[NSApp keyWindow] firstResponder]; 
+    NSResponder* currentResponder = [[NSApp keyWindow] firstResponder]; 
+    NSView* otherView = (currentResponder != nil && [currentResponder isKindOfClass:[NSView class]]) ? (NSView*) currentResponder : NULL; 
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     if ( r )
         DoNotifyFocusEvent( false, otherWindow );
@@ -1349,7 +1353,7 @@ void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&, long, bool)
 {
     if ([m_osxView respondsToSelector:@selector(setFont:)])
 #if wxOSX_USE_CORE_TEXT
-        [m_osxView setFont: (CTFontRef)font.MacGetCTFont()];
+        [m_osxView setFont: (NSFont*)font.MacGetCTFont()];
 #else
 
 #endif
