@@ -1086,8 +1086,10 @@ void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
             y -= cy;
         }
     }
+    [[m_osxView superview] setNeedsDisplayInRect:[m_osxView frame]];
     NSRect r = wxToNSRect( [m_osxView superview], wxRect(x,y,width, height) );
     [m_osxView setFrame:r];
+    [[m_osxView superview] setNeedsDisplayInRect:r]; 
     
     if ([m_osxView respondsToSelector:@selector(trackingTag)] )
     {
