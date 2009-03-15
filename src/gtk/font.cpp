@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/gtk/font.cpp
-// Purpose:
+// Purpose:     wxFont for wxGTK
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling and Julian Smart
@@ -113,8 +113,7 @@ private:
     wxFontEncoding  m_encoding;
     bool            m_noAA;      // No anti-aliasing
 
-    // The native font info, basicly an XFLD under GTK 1.2 and
-    // the pango font description under GTK 2.0.
+    // The native font info: basically a PangoFontDescription
     wxNativeFontInfo m_nativeFontInfo;
 
     friend class wxFont;
@@ -287,6 +286,36 @@ void wxFontRefData::SetPointSize(int pointSize)
     m_nativeFontInfo.SetPointSize(pointSize);
 }
 
+/*
+    NOTE: disabled because pango_font_description_set_absolute_size() and
+          wxDC::GetCharHeight() do not mix well: setting with the former a pixel
+          size of "30" makes the latter return 36...
+          Besides, we need to return GetPointSize() a point size value even if
+          SetPixelSize() was used and this would require further changes
+          (and use of pango_font_description_get_size_is_absolute in some places).
+
+bool wxFontRefData::SetPixelSize(const wxSize& pixelSize)
+{
+    wxCHECK_MSG( pixelSize.GetWidth() >= 0 && pixelSize.GetHeight() > 0, false,
+                 "Negative values for the pixel size or zero pixel height are not allowed" );
+
+    if (wx_pango_version_check(1,8,0) != NULL ||
+        pixelSize.GetWidth() != 0)
+    {
+        // NOTE: pango_font_description_set_absolute_size() only sets the font height;
+        //       if the user set the pixel width of the font explicitly or the pango
+        //       library is too old, we cannot proceed
+        return false;
+    }
+
+    pango_font_description_set_absolute_size( m_nativeFontInfo.description, 
+                                              pixelSize.GetHeight() * PANGO_SCALE );
+
+    return true;
+}
+
+*/
+
 void wxFontRefData::SetFamily(wxFontFamily family)
 {
     m_family = family;
@@ -356,12 +385,12 @@ wxFont::wxFont(const wxNativeFontInfo& info)
 }
 
 bool wxFont::Create( int pointSize,
-                    wxFontFamily family,
-                    wxFontStyle style,
-                    wxFontWeight weight,
+                     wxFontFamily family,
+                     wxFontStyle style,
+                     wxFontWeight weight,
                      bool underlined,
                      const wxString& face,
-                     wxFontEncoding encoding)
+                     wxFontEncoding encoding )
 {
     UnRef();
 

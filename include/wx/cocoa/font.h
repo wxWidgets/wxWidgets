@@ -62,7 +62,19 @@ public:
     {
         (void)Create(size, family, style, weight, underlined, face, encoding);
     }
-
+    
+    wxFont(const wxSize& pixelSize,
+           wxFontFamily family,
+           wxFontStyle style,
+           wxFontWeight weight,
+           bool underlined = false,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    {
+        Create(10, family, style, weight, underlined, face, encoding);
+        SetPixelSize(pixelSize);
+    }
+    
     /*! @abstract   Construction with opaque wxNativeFontInfo
      */
     wxFont(const wxNativeFontInfo& info)

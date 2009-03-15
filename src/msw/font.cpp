@@ -565,10 +565,15 @@ void wxNativeFontInfo::SetPointSize(int pointsize)
 
 void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
 {
+    // NOTE: although the MSW port allows for negative pixel size heights,
+    //       other ports don't and since it's a very useful feature assert
+    //       here if we get a negative height:
+    wxCHECK_RET( pixelSize.GetWidth() >= 0 && pixelSize.GetHeight() > 0,
+                 "Negative values for the pixel size or zero pixel height are not allowed" );
+    
     lf.lfHeight = pixelSize.GetHeight();
     lf.lfWidth = pixelSize.GetWidth();
 }
-
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
 {

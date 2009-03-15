@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/unix/fontutil.cpp
-// Purpose:     Font helper functions for X11 (GDK/X)
+// Purpose:     Font helper functions for wxX11, wxGTK, wxMotif
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     05.11.99
@@ -217,7 +217,6 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 {
     return wxFONTENCODING_SYSTEM;
 }
-
 
 void wxNativeFontInfo::SetPointSize(int pointsize)
 {

@@ -250,7 +250,6 @@ enum wxFontEncoding
 class wxFont : public wxGDIObject
 {
 public:
-    //@{
     /**
         Default ctor.
     */
@@ -265,15 +264,15 @@ public:
         Creates a font object with the specified attributes.
 
         @param pointSize
-            Size in points.
+            Size in points. See SetPointSize() for more info.
         @param family
             Font family, a generic way of referring to fonts without specifying actual
             facename. One of the ::wxFontFamily enumeration values.
         @param style
-            One of wxFONTSTYLE_NORMAL, wxFONTSTYLE_SLANT and wxFONTSTYLE_ITALIC.
+            One of @c wxFONTSTYLE_NORMAL, @c wxFONTSTYLE_SLANT and @c wxFONTSTYLE_ITALIC.
         @param weight
-            Font weight, sometimes also referred to as font boldness. One of
-            the ::wxFontWeight enumeration values.
+            Font weight, sometimes also referred to as font boldness. 
+            One of the ::wxFontWeight enumeration values.
         @param underline
             The value can be @true or @false.
             At present this has an effect on Windows and Motif 2.x only.
@@ -284,16 +283,16 @@ public:
             An encoding which may be one of the enumeration values of ::wxFontEncoding.
             Briefly these can be summed up as:
             <TABLE>
-                <TR><TD>wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
-                <TR><TD>wxFONTENCODING_DEFAULT</TD><TD>
+                <TR><TD>@c wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
+                <TR><TD>@c wxFONTENCODING_DEFAULT</TD><TD>
                     Default application encoding: this
                     is the encoding set by calls to
                     SetDefaultEncoding and which may be set to,
                     say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
                     default application encoding is the same as default system encoding.</TD></TR>
-                <TR><TD>wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
-                <TR><TD>wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
-                <TR><TD>wxFONTENCODING_CP1250...1252</TD><TD>Windows encodings similar to ISO8859 (but not identical).</TD></TR>
+                <TR><TD>@c wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
+                <TR><TD>@c wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
+                <TR><TD>@c wxFONTENCODING_CP1250...1252</TD><TD>Windows encodings similar to ISO8859 (but not identical).</TD></TR>
             </TABLE>
             If the specified encoding isn't available, no font is created
             (see also font encoding overview).
@@ -311,15 +310,12 @@ public:
         Creates a font object with the specified attributes.
 
         @param pixelSize
-            Size in pixels: this is directly supported only under MSW currently
-            where this constructor can be used directly, under other platforms a
-            font with the closest size to the given one is found using binary search
-            and the static New method must be used.
+            Size in pixels. See SetPixelSize() for more info.
         @param family
             Font family, a generic way of referring to fonts without specifying actual
             facename. One of ::wxFontFamily enumeration values.
         @param style
-            One of wxFONTSTYLE_NORMAL, wxFONTSTYLE_SLANT and wxFONTSTYLE_ITALIC.
+            One of @c wxFONTSTYLE_NORMAL, @c wxFONTSTYLE_SLANT and @c wxFONTSTYLE_ITALIC.
         @param weight
             Font weight, sometimes also referred to as font boldness.
             One of the ::wxFontWeight enumeration values.
@@ -333,16 +329,16 @@ public:
             An encoding which may be one of the enumeration values of ::wxFontEncoding.
             Briefly these can be summed up as:
             <TABLE>
-                <TR><TD>wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
-                <TR><TD>wxFONTENCODING_DEFAULT</TD><TD>
+                <TR><TD>@c wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
+                <TR><TD>@c wxFONTENCODING_DEFAULT</TD><TD>
                     Default application encoding: this
                     is the encoding set by calls to
                     SetDefaultEncoding and which may be set to,
                     say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
                     default application encoding is the same as default system encoding.</TD></TR>
-                <TR><TD>wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
-                <TR><TD>wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
-                <TR><TD>wxFONTENCODING_CP1250...1252</TD><TD>Windows encodings similar to ISO8859 (but not identical).</TD></TR>
+                <TR><TD>@c wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
+                <TR><TD>@c wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
+                <TR><TD>@c wxFONTENCODING_CP1250...1252</TD><TD>Windows encodings similar to ISO8859 (but not identical).</TD></TR>
             </TABLE>
             If the specified encoding isn't available, no font is created
             (see also font encoding overview).
@@ -355,7 +351,6 @@ public:
            bool underline = false,
            const wxString& faceName = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-    //@}
 
     /**
         Destructor.
@@ -424,7 +419,18 @@ public:
     virtual int GetPointSize() const;
 
     /**
-        Gets the font style. See wxFontStyle for a list of valid styles.
+        Gets the pixel size.
+        
+        Note that under wxMSW if you passed to SetPixelSize() (or to the ctor)
+        a wxSize object with a null width value, you'll get a null width in
+        the returned object.
+
+        @see SetPixelSize()
+    */
+    virtual wxSize GetPixelSize() const;
+    
+    /**
+        Gets the font style. See ::wxFontStyle for a list of valid styles.
 
         @see SetStyle()
     */
@@ -438,7 +444,7 @@ public:
     virtual bool GetUnderlined() const;
 
     /**
-        Gets the font weight. See wxFontWeight for a list of valid weight identifiers.
+        Gets the font weight. See ::wxFontWeight for a list of valid weight identifiers.
 
         @see SetWeight()
     */
@@ -457,11 +463,11 @@ public:
 
     //@{
     /**
-        These functions take the same parameters as
-        @ref wxFont::wxFont "wxFont constructors" and return a new font
+        This function takes the same parameters as
+        @ref wxFont::wxFont "wxFont constructors" and returns a new font
         object allocated on the heap.
 
-        Using @c New() is currently the only way to directly create a font with
+        Using New() is currently the only way to directly create a font with
         the given size in pixels on platforms other than wxMSW.
     */
     static wxFont* New(int pointSize, wxFontFamily family, wxFontStyle style,
@@ -545,8 +551,8 @@ public:
 
         @beginTable
         @hdr3col{platform, generic syntax, example}
-        @row3col{wxGTK2, @c [FACE-NAME] [bold] [oblique|italic] [POINTSIZE], Monospace bold 10}
-        @row3col{wxMSW, @c [light|bold] [italic] [FACE-NAME] [POINTSIZE] [ENCODING], Tahoma 10 WINDOWS-1252}
+        @row3col{wxGTK2, <tt>[FACE-NAME] [bold] [oblique|italic] [POINTSIZE]</tt>, Monospace bold 10}
+        @row3col{wxMSW, <tt>[light|bold] [italic] [FACE-NAME] [POINTSIZE] [ENCODING]</tt>, Tahoma 10 WINDOWS-1252}
         @endTable
 
         @todo add an example for wxMac
@@ -561,6 +567,9 @@ public:
 
     /**
         Sets the point size.
+        
+        The <em>point size</em> is defined as 1/72 of the anglo-Saxon inch 
+        (25.4 mm): it is approximately 0.0139 inch or 352.8 um. 
 
         @param pointSize
             Size in points.
@@ -569,6 +578,21 @@ public:
     */
     virtual void SetPointSize(int pointSize);
 
+    /**
+        Sets the pixel size.
+        
+        The height parameter of @a pixelSize must be positive while the width
+        parameter may also be zero (to indicate that you're not interested in the
+        width of the characters: a suitable width will be chosen for best rendering).
+        
+        This feature (specifying the font pixel size) is directly supported only 
+        under wxMSW and wxGTK currently; under other platforms a font with the 
+        closest size to the given one is found using binary search (this maybe slower).
+
+        @see GetPixelSize()
+    */
+    virtual void SetPixelSize(const wxSize& pixelSize);
+    
     /**
         Sets the font style.
 
@@ -629,24 +653,26 @@ wxFont wxNullFont;
 
 /**
     Equivalent to wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).
+    
+    @see wxSystemSettings
 */
 wxFont wxNORMAL_FONT;
 
 /**
-    A font using the wxFONTFAMILY_SWISS family and 2 points smaller than
+    A font using the @c wxFONTFAMILY_SWISS family and 2 points smaller than
     ::wxNORMAL_FONT.
 */
 wxFont wxSMALL_FONT;
 
 /**
-    A font using the wxFONTFAMILY_ROMAN family and wxFONTSTYLE_ITALIC style and
+    A font using the @c wxFONTFAMILY_ROMAN family and @c wxFONTSTYLE_ITALIC style and
     of the same size of ::wxNORMAL_FONT.
 */
 wxFont wxITALIC_FONT;
 
 /**
     A font identic to ::wxNORMAL_FONT except for the family used which is
-    wxFONTFAMILY_SWISS.
+    @c wxFONTFAMILY_SWISS.
 */
 wxFont wxSWISS_FONT;
 

@@ -186,6 +186,10 @@ wxConvertFromGTK(const wxString& s, wxFontEncoding enc)
 // availability of pango version major.minor.micro, nor the non-availability
 const gchar *wx_pango_version_check (int major, int minor, int micro)
 {
+    // NOTE: you don't need to use this macro to check for Pango features
+    //       added in pango-1.4 or earlier since GTK 2.4 (our minimum requirement
+    //       for GTK lib) required pango 1.4...
+    
 #ifdef PANGO_VERSION_MAJOR
     if (!gtk_check_version (2,11,0))
     {

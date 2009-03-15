@@ -111,6 +111,28 @@ class WXDLLIMPEXP_FWD_CORE wxNativeFontInfo;
 class WXDLLIMPEXP_CORE wxFontBase : public wxGDIObject
 {
 public:
+    /*
+        derived classes should provide the following ctors:
+    
+    wxFont();
+    wxFont(const wxString& nativeFontInfoString);
+    wxFont(const wxNativeFontInfo& info);
+    wxFont(int size,
+           wxFontFamily family,
+           wxFontStyle style,
+           wxFontWeight weight,
+           bool underlined = false,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    wxFont(const wxSize& pixelSize,
+           wxFontFamily family,
+           wxFontStyle style,
+           wxFontWeight weight,
+           bool underlined = false,
+           const wxString& face = wxEmptyString,
+           wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    */
+    
     // creator function
     virtual ~wxFontBase();
 

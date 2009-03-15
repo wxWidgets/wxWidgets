@@ -53,57 +53,27 @@
 // helper functions
 // ----------------------------------------------------------------------------
 
-static void AdjustFontSize(wxFont& font, wxDC& dc, const wxSize& pixelSize)
+static inline int flags2Style(int flags)
 {
-    int largestGood = 0;
-    int smallestBad = 0;
+    return flags & wxFONTFLAG_ITALIC
+                    ? wxFONTSTYLE_ITALIC
+                    : flags & wxFONTFLAG_SLANT
+                        ? wxFONTSTYLE_SLANT
+                        : wxFONTSTYLE_NORMAL;
+}
 
-    bool initialGoodFound = false;
-    bool initialBadFound = false;
+static inline int flags2Weight(int flags)
+{
+    return flags & wxFONTFLAG_LIGHT
+                    ? wxFONTWEIGHT_LIGHT
+                    : flags & wxFONTFLAG_BOLD
+                        ? wxFONTWEIGHT_BOLD
+                        : wxFONTWEIGHT_NORMAL;
+}
 
-    // NB: this assignment was separated from the variable definition
-    // in order to fix a gcc v3.3.3 compiler crash
-    int currentSize = font.GetPointSize();
-    while (currentSize > 0)
-    {
-        dc.SetFont(font);
-
-        // if currentSize (in points) results in a font that is smaller
-        // than required by pixelSize it is considered a good size
-        if (dc.GetCharHeight() <= pixelSize.GetHeight() &&
-                (!pixelSize.GetWidth() ||
-                 dc.GetCharWidth() <= pixelSize.GetWidth()))
-        {
-            largestGood = currentSize;
-            initialGoodFound = true;
-        }
-        else
-        {
-            smallestBad = currentSize;
-            initialBadFound = true;
-        }
-        if (!initialGoodFound)
-        {
-            currentSize /= 2;
-        }
-        else if (!initialBadFound)
-        {
-            currentSize *= 2;
-        }
-        else
-        {
-            int distance = smallestBad - largestGood;
-            if (distance == 1)
-                break;
-
-            currentSize = largestGood + distance / 2;
-        }
-
-        font.SetPointSize(currentSize);
-    }
-
-    if (currentSize != largestGood)
-        font.SetPointSize(largestGood);
+static inline bool flags2Underlined(int flags)
+{
+    return (flags & wxFONTFLAG_UNDERLINED) != 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -140,27 +110,17 @@ wxFont *wxFontBase::New(int size,
     return new wxFont(size, family, style, weight, underlined, face, encoding);
 }
 
-static inline int flags2Style(int flags)
+/* static */
+wxFont *wxFontBase::New(const wxSize& pixelSize,
+                        wxFontFamily family,
+                        wxFontStyle style,
+                        wxFontWeight weight,
+                        bool underlined,
+                        const wxString& face,
+                        wxFontEncoding encoding)
 {
-    return flags & wxFONTFLAG_ITALIC
-                    ? wxFONTSTYLE_ITALIC
-                    : flags & wxFONTFLAG_SLANT
-                        ? wxFONTSTYLE_SLANT
-                        : wxFONTSTYLE_NORMAL;
-}
-
-static inline int flags2Weight(int flags)
-{
-    return flags & wxFONTFLAG_LIGHT
-                    ? wxFONTWEIGHT_LIGHT
-                    : flags & wxFONTFLAG_BOLD
-                        ? wxFONTWEIGHT_BOLD
-                        : wxFONTWEIGHT_NORMAL;
-}
-
-static inline bool flags2Underlined(int flags)
-{
-    return (flags & wxFONTFLAG_UNDERLINED) != 0;
+    return new wxFont(pixelSize, family, style, weight, underlined,
+                      face, encoding);
 }
 
 /* static */
@@ -177,50 +137,12 @@ wxFont *wxFontBase::New(int pointSize,
 /* static */
 wxFont *wxFontBase::New(const wxSize& pixelSize,
                         wxFontFamily family,
-                        wxFontStyle style,
-                        wxFontWeight weight,
-                        bool underlined,
-                        const wxString& face,
-                        wxFontEncoding encoding)
-{
-#if defined(__WXMSW__)
-    return new wxFont(pixelSize, family, style, weight, underlined,
-                      face, encoding);
-#else
-    wxFont *self = New(10, family, style, weight, underlined, face, encoding);
-    wxScreenDC dc;
-    AdjustFontSize(*(wxFont *)self, dc, pixelSize);
-    return self;
-#endif
-}
-
-/* static */
-wxFont *wxFontBase::New(const wxSize& pixelSize,
-                        wxFontFamily family,
                         int flags,
                         const wxString& face,
                         wxFontEncoding encoding)
 {
     return New(pixelSize, family, flags2Style(flags), flags2Weight(flags),
                flags2Underlined(flags), face, encoding);
-}
-
-wxSize wxFontBase::GetPixelSize() const
-{
-    wxScreenDC dc;
-    dc.SetFont(*(wxFont *)this);
-    return wxSize(dc.GetCharWidth(), dc.GetCharHeight());
-}
-
-bool wxFontBase::IsUsingSizeInPixels() const
-{
-    return false;
-}
-
-void wxFontBase::SetPixelSize( const wxSize& pixelSize )
-{
-    wxScreenDC dc;
-    AdjustFontSize(*(wxFont *)this, dc, pixelSize);
 }
 
 /* static */
@@ -242,6 +164,81 @@ wxFont *wxFontBase::New(const wxString& strNativeFontDesc)
 bool wxFontBase::IsFixedWidth() const
 {
     return GetFamily() == wxFONTFAMILY_TELETYPE;
+}
+
+wxSize wxFontBase::GetPixelSize() const
+{
+    wxScreenDC dc;
+    dc.SetFont(*(wxFont *)this);
+    return wxSize(dc.GetCharWidth(), dc.GetCharHeight());
+}
+
+bool wxFontBase::IsUsingSizeInPixels() const
+{
+    return false;
+}
+
+void wxFontBase::SetPixelSize( const wxSize& pixelSize )
+{
+    wxCHECK_RET( pixelSize.GetWidth() >= 0 && pixelSize.GetHeight() > 0,
+                 "Negative values for the pixel size or zero pixel height are not allowed" );
+
+    wxScreenDC dc;
+
+    // NOTE: this algorithm for adjusting the font size is used by all
+    //       implementations of wxFont except under wxMSW and wxGTK where
+    //       native support to font creation using pixel-size is provided.
+    
+    int largestGood = 0;
+    int smallestBad = 0;
+
+    bool initialGoodFound = false;
+    bool initialBadFound = false;
+
+    // NB: this assignment was separated from the variable definition
+    // in order to fix a gcc v3.3.3 compiler crash
+    int currentSize = GetPointSize();
+    while (currentSize > 0)
+    {
+        dc.SetFont(*static_cast<wxFont*>(this));
+
+        // if currentSize (in points) results in a font that is smaller
+        // than required by pixelSize it is considered a good size
+        // NOTE: the pixel size width may be zero
+        if (dc.GetCharHeight() <= pixelSize.GetHeight() &&
+                (pixelSize.GetWidth() == 0 ||
+                 dc.GetCharWidth() <= pixelSize.GetWidth()))
+        {
+            largestGood = currentSize;
+            initialGoodFound = true;
+        }
+        else
+        {
+            smallestBad = currentSize;
+            initialBadFound = true;
+        }
+        if (!initialGoodFound)
+        {
+            currentSize /= 2;
+        }
+        else if (!initialBadFound)
+        {
+            currentSize *= 2;
+        }
+        else
+        {
+            int distance = smallestBad - largestGood;
+            if (distance == 1)
+                break;
+
+            currentSize = largestGood + distance / 2;
+        }
+
+        SetPointSize(currentSize);
+    }
+
+    if (currentSize != largestGood)
+        SetPointSize(largestGood);
 }
 
 void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
