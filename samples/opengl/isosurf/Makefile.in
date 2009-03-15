@@ -35,7 +35,6 @@ EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
-SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
@@ -154,7 +153,6 @@ distclean: clean
 @COND_USE_OPENGL_1@	
 @COND_USE_OPENGL_1@	$(__isosurf___mac_setfilecmd)
 @COND_USE_OPENGL_1@	$(__isosurf___os2_emxbindcmd)
-@COND_USE_OPENGL_1@	$(SAMPLES_RPATH_POSTLINK)
 
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@isosurf.app/Contents/PkgInfo: $(__isosurf___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1_USE_OPENGL_1@	mkdir -p isosurf.app/Contents

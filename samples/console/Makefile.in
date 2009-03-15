@@ -30,7 +30,6 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
-SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
@@ -105,7 +104,6 @@ console$(EXEEXT): $(CONSOLE_OBJECTS)
 	$(CXX) -o $@ $(CONSOLE_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	
 	$(__console___mac_setfilecmd)
-	$(SAMPLES_RPATH_POSTLINK)
 
 data: 
 	@mkdir -p .

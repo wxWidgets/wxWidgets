@@ -34,7 +34,6 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
-SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
@@ -151,7 +150,6 @@ regtest$(EXEEXT): $(REGTEST_OBJECTS) $(__regtest___win32rc)
 	
 	$(__regtest___mac_setfilecmd)
 	$(__regtest___os2_emxbindcmd)
-	$(SAMPLES_RPATH_POSTLINK)
 
 @COND_PLATFORM_MACOSX_1@regtest.app/Contents/PkgInfo: regtest$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1@	mkdir -p regtest.app/Contents

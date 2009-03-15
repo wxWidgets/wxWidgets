@@ -37,7 +37,6 @@ EXTRALIBS_SDL = @EXTRALIBS_SDL@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
-SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
@@ -171,7 +170,6 @@ forty$(EXEEXT): $(FORTY_OBJECTS) $(__forty___win32rc)
 	
 	$(__forty___mac_setfilecmd)
 	$(__forty___os2_emxbindcmd)
-	$(SAMPLES_RPATH_POSTLINK)
 
 @COND_PLATFORM_MACOSX_1@forty.app/Contents/PkgInfo: forty$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1@	mkdir -p forty.app/Contents

@@ -34,7 +34,6 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
-SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
@@ -153,7 +152,6 @@ distclean: clean
 @COND_PLATFORM_MSDOS_0@	
 @COND_PLATFORM_MSDOS_0@	$(__nettest___mac_setfilecmd)
 @COND_PLATFORM_MSDOS_0@	$(__nettest___os2_emxbindcmd)
-@COND_PLATFORM_MSDOS_0@	$(SAMPLES_RPATH_POSTLINK)
 
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@nettest.app/Contents/PkgInfo: $(__nettest___depname) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1_PLATFORM_MSDOS_0@	mkdir -p nettest.app/Contents

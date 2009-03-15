@@ -41,7 +41,6 @@ EXTRALIBS_SDL = @EXTRALIBS_SDL@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
-SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 HEADER_PAD_OPTION = @HEADER_PAD_OPTION@
 wx_top_builddir = @wx_top_builddir@
 
@@ -186,7 +185,6 @@ screenshotgen$(EXEEXT): $(SCREENSHOTGEN_OBJECTS) $(__screenshotgen___win32rc)
 	
 	$(__screenshotgen___mac_setfilecmd)
 	$(__screenshotgen___os2_emxbindcmd)
-	$(SAMPLES_RPATH_POSTLINK)
 
 @COND_PLATFORM_MACOSX_1@screenshotgen.app/Contents/PkgInfo: screenshotgen$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1@	mkdir -p screenshotgen.app/Contents
@@ -203,7 +201,7 @@ screenshotgen$(EXEEXT): $(SCREENSHOTGEN_OBJECTS) $(__screenshotgen___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >screenshotgen.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	ln -f screenshotgen$(EXEEXT) screenshotgen.app/Contents/MacOS/screenshotgen
+@COND_PLATFORM_MACOSX_1@	mv screenshotgen$(EXEEXT) screenshotgen.app/Contents/MacOS/screenshotgen
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns screenshotgen.app/Contents/Resources/wxmac.icns

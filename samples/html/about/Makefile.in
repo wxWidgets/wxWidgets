@@ -35,7 +35,6 @@ EXTRALIBS_GUI = @EXTRALIBS_GUI@
 CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
-SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
 wx_top_builddir = @wx_top_builddir@
 
 ### Variables: ###
@@ -155,7 +154,6 @@ about$(EXEEXT): $(ABOUT_OBJECTS) $(__about___win32rc)
 	
 	$(__about___mac_setfilecmd)
 	$(__about___os2_emxbindcmd)
-	$(SAMPLES_RPATH_POSTLINK)
 
 @COND_PLATFORM_MACOSX_1@about.app/Contents/PkgInfo: about$(EXEEXT) $(top_srcdir)/src/osx/carbon/Info.plist.in $(top_srcdir)/src/osx/carbon/wxmac.icns
 @COND_PLATFORM_MACOSX_1@	mkdir -p about.app/Contents
