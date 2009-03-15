@@ -89,12 +89,14 @@ wxObject *wxPropertySheetDialogXmlHandler::DoCreateResource()
                 }
             }
             else
-                wxLogError(wxT("Error in resource."));
+            {
+                ReportError(n, "propertysheetpage child must be a window");
+            }
             return wnd;
         }
         else
         {
-            wxLogError(wxT("Error in resource: no control within wxPropertySheetDialog's <page> tag."));
+            ReportError("propertysheetpage must have a window child");
             return NULL;
         }
     }

@@ -57,8 +57,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
     {
         if ( !m_toolbar )
         {
-            wxLogError(_("XRC syntax error: \"tool\" only allowed inside a "
-                         "toolbar"));
+            ReportError("tool only allowed inside a wxToolBar");
             return NULL;
         }
 
@@ -70,9 +69,11 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         {
             if ( kind != wxITEM_NORMAL )
             {
-                wxLogWarning(_("XRC syntax error: tool can't have both "
-                               "\"radio\" and \"toggle\" properties, "
-                               "ignoring the former."));
+                ReportParamError
+                (
+                    "toggle",
+                    "tool can't have both <radio> and <toggle> properties"
+                );
             }
 
             kind = wxITEM_CHECK;
@@ -85,9 +86,11 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
         {
             if ( kind != wxITEM_NORMAL )
             {
-                wxLogWarning(_("XRC syntax error: drop-down tool can't have "
-                               "neither \"radio\" nor \"toggle\" properties, "
-                               "ignoring them."));
+                ReportParamError
+                (
+                    "dropdown",
+                    "drop-down tool can't have neither <radio> nor <toggle> properties"
+                );
             }
 
             kind = wxITEM_DROPDOWN;
@@ -102,14 +105,20 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
                 menu = wxDynamicCast(res, wxMenu);
                 if ( !menu )
                 {
-                    wxLogError(_("XRC syntax error: invalid drop-down tool "
-                                 "contents (expected a menu)."));
+                    ReportError
+                    (
+                        nodeMenu,
+                        "drop-down tool contents can only be a wxMenu"
+                    );
                 }
 
                 if ( nodeMenu->GetNext() )
                 {
-                    wxLogWarning(_("XRC syntax error: unexpected extra "
-                                   "contents under drop-down tool."));
+                    ReportError
+                    (
+                        nodeMenu->GetNext(),
+                        "unexpected extra contents under drop-down tool"
+                    );
                 }
             }
         }
@@ -139,8 +148,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
     {
         if ( !m_toolbar )
         {
-            wxLogError(_("XRC syntax error: \"separator\" only allowed inside a "
-                         "toolbar"));
+            ReportError("separator only allowed inside wxToolBar");
             return NULL;
         }
         m_toolbar->AddSeparator();

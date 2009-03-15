@@ -44,8 +44,7 @@ wxObject *wxBitmapComboBoxXmlHandler::DoCreateResource()
     {
         if ( !m_combobox )
         {
-            wxLogError(_("XRC syntex error: ownerdrawnitem only allowed within "
-                         " a bitmapcombobox!"));
+            ReportError("ownerdrawnitem only allowed within a wxBitmapComboBox");
             return NULL;
         }
 

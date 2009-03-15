@@ -89,12 +89,14 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
                 }
             }
             else
-                wxLogError(wxT("Error in resource."));
+            {
+                ReportError(n, "notebookpage child must be a window");
+            }
             return wnd;
         }
         else
         {
-            wxLogError(wxT("Error in resource: no control within notebook's <page> tag."));
+            ReportError("notebookpage must have a window child");
             return NULL;
         }
     }

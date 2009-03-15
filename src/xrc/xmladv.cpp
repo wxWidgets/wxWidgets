@@ -60,8 +60,11 @@ wxAnimation wxXmlResourceHandler::GetAnimation(const wxString& param)
 
     if ( !ani.IsOk() )
     {
-        wxLogError(_("XRC resource: Cannot create animation from '%s'."),
-                   name.c_str());
+        ReportParamError
+        (
+            param,
+            wxString::Format("cannot create animation from \"%s\"", name)
+        );
         return wxNullAnimation;
     }
 

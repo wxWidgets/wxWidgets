@@ -86,12 +86,14 @@ wxObject *wxChoicebookXmlHandler::DoCreateResource()
                 }
             }
             else
-                wxLogError(wxT("Error in resource."));
+            {
+                ReportError(n, "choicebookpage child must be a window");
+            }
             return wnd;
         }
         else
         {
-            wxLogError(wxT("Error in resource: no control within choicebook's <page> tag."));
+            ReportError("choicebookpage must have a window child");
             return NULL;
         }
     }

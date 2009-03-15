@@ -87,7 +87,7 @@ wxObject *wxSplitterWindowXmlHandler::DoCreateResource()
     }
 
     if (win1 == NULL)
-        wxLogError(wxT("wxSplitterWindow node must contain at least one window."));
+        ReportError("wxSplitterWindow node must contain at least one window");
 
     bool horizontal = (GetParamValue(wxT("orientation")) != wxT("vertical"));
     if (win1 && win2)

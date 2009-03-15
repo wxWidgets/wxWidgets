@@ -261,6 +261,13 @@ public:
         { return GetResourceNodeAndLocation(name, wxString(), true); }
 
 protected:
+    // reports input error at position 'context'
+    void ReportError(wxXmlNode *context, const wxString& message);
+
+    // override this in derived class to customize errors reporting
+    virtual void DoReportError(const wxString& xrcFile, wxXmlNode *position,
+                               const wxString& message);
+
     // Scans the resources list for unloaded files and loads them. Also reloads
     // files that have been modified since last loading.
     bool UpdateResources();
@@ -529,6 +536,13 @@ protected:
 #if wxUSE_FILESYSTEM
     wxFileSystem& GetCurFileSystem() { return m_resource->GetCurFileSystem(); }
 #endif
+
+    // reports input error at position 'context'
+    void ReportError(wxXmlNode *context, const wxString& message);
+    // reports input error at m_node
+    void ReportError(const wxString& message);
+    // reports input error when parsing parameter with given name
+    void ReportParamError(const wxString& param, const wxString& message);
 };
 
 

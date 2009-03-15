@@ -95,7 +95,9 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
         wnd = wxDynamicCast(item, wxWindow);
 
         if (wnd == NULL && item != NULL)
-            wxLogError(wxT("Error in resource: control within treebook's <page> tag is not a window."));
+        {
+            ReportError(n, "treebookpage child must be a window");
+        }
     }
 
     size_t depth = GetLong( wxT("depth") );
@@ -134,7 +136,10 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
 
     }
     else
-        wxLogError(wxT("Error in resource. wxTreebookPage has an invalid depth."));
+    {
+        ReportParamError("depth", "invalid depth");
+    }
+
     return wnd;
 }
 

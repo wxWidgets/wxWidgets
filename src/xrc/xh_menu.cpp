@@ -91,9 +91,11 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
             {
                 if ( kind != wxITEM_NORMAL )
                 {
-                    wxLogWarning(_("XRC syntax error: a menu item can't have "
-                                   "both \"radio\" and \"checkable\" "
-                                   "properties, ignoring the former."));
+                    ReportParamError
+                    (
+                        "checkable",
+                        "menu item can't have both <radio> and <checkable> properties"
+                    );
                 }
 
                 kind = wxITEM_CHECK;

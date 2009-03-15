@@ -334,6 +334,60 @@ public:
         hasn't been found in the list of loaded resources.
     */
     bool Unload(const wxString& filename);
+
+protected:
+    /**
+        Reports error in XRC resources to the user.
+
+        Any errors in XRC input files should be reported using this method
+        (or its wxXmlResourceHandler::ReportError() equivalent). Unlike
+        wxLogError(), this method presents the error to the user in a more
+        usable form. In particular, the output is compiler-like and contains
+        information about the exact location of the error.
+
+        @param context XML node the error occurred in or relates to. This can
+                       be @NULL, but should be the most specific node possible,
+                       as its line number is what is reported to the user.
+        @param message Text of the error message. This string should always
+                       be in English (i.e. not wrapped in _()). It shouldn't
+                       be a sentence -- it should start with lower-case letter
+                       and shouldn't have a trailing period or exclamation
+                       point.
+
+        @since 2.9.0
+
+        @see wxXmlResourceHandler::ReportError(), DoReportError()
+     */
+    void ReportError(wxXmlNode *context, const wxString& message);
+
+    /**
+        Implementation of XRC resources errors reporting.
+
+        This method is called by ReportError() and shouldn't be called
+        directly; use ReportError() or wxXmlResourceHandler::ReportError()
+        to log errors.
+
+        Default implementation uses wxLogError().
+
+        @param xrcFile  File the error occurred in or empty string if it
+                        couldn't be determined.
+        @param position XML node where the error occurred or @NULL if it
+                        couldn't be determined.
+        @param message  Text of the error message. See ReportError()
+                        documentation for details of the string's format.
+
+        @note
+        You may override this method in a derived class to customize errors
+        reporting. If you do so, you'll need to either use the derived class
+        in all your code or call wxXmlResource::Set() to change the global
+        wxXmlResource instance to your class.
+
+        @since 2.9.0
+
+        @see ReportError()
+    */
+    virtual void DoReportError(const wxString& xrcFile, wxXmlNode *position,
+                               const wxString& message);
 };
 
 
@@ -544,5 +598,32 @@ protected:
         Sets common window options.
     */
     void SetupWindow(wxWindow* wnd);
+
+    /**
+        Reports error in XRC resources to the user.
+
+        See wxXmlResource::ReportError() for more information.
+
+        @since 2.9.0
+     */
+    void ReportError(wxXmlNode *context, const wxString& message);
+
+    /**
+        Like ReportError(wxXmlNode*, const wxString&), but uses the node
+        of currently processed object (m_node) as the context.
+
+        @since 2.9.0
+     */
+    void ReportError(const wxString& message);
+
+    /**
+        Like ReportError(wxXmlNode*, const wxString&), but uses the node
+        of parameter @a param of the currently processed object as the context.
+        This is convenience function for reporting errors in particular
+        parameters.
+
+        @since 2.9.0
+     */
+    void ReportParamError(const wxString& param, const wxString& message);
 };
 

@@ -403,7 +403,7 @@ bool wxXmlResource::AttachUnknownControl(const wxString& name,
     wxWindow *container = parent->FindWindow(name + wxT("_container"));
     if (!container)
     {
-        wxLogError(_("Cannot find container for unknown control '%s'."), name.c_str());
+        wxLogError("Cannot find container for unknown control '%s'.", name);
         return false;
     }
     return control->Reparent(container);
@@ -543,7 +543,11 @@ bool wxXmlResource::UpdateResources()
             }
             else if (rec->Doc->GetRoot()->GetName() != wxT("resource"))
             {
-                wxLogError(_("Invalid XRC resource '%s': doesn't have root node 'resource'."), rec->File);
+                ReportError
+                (
+                    rec->Doc->GetRoot(),
+                    "invalid XRC resource, doesn't have root node <resource>"
+                );
                 wxDELETE(rec->Doc);
                 rt = false;
             }
@@ -562,7 +566,7 @@ bool wxXmlResource::UpdateResources()
                     m_version = version;
                 if (m_version != version)
                 {
-                    wxLogError(_("Resource files must have same version number!"));
+                    wxLogError("Resource files must have same version number.");
                     rt = false;
                 }
 
@@ -651,8 +655,15 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name,
 
     if ( !node )
     {
-        wxLogError(_("XRC resource '%s' (class '%s') not found!"),
-                   name, classname);
+        ReportError
+        (
+            NULL,
+            wxString::Format
+            (
+                "XRC resource \"%s\" (class \"%s\") not found",
+                name, classname
+            )
+        );
     }
 #if wxUSE_FILESYSTEM
     else // node was found
@@ -770,8 +781,15 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
 
         if ( !refNode )
         {
-            wxLogError(_("Referenced object node with ref=\"%s\" not found!"),
-                       refName.c_str());
+            ReportError
+            (
+                node,
+                wxString::Format
+                (
+                    "referenced object node with ref=\"%s\" not found",
+                    refName
+                )
+            );
             return NULL;
         }
 
@@ -799,9 +817,16 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
         }
     }
 
-    wxLogError(_("No handler found for XML node '%s', class '%s'!"),
-               node->GetName().c_str(),
-               node->GetAttribute(wxT("class"), wxEmptyString).c_str());
+    ReportError
+    (
+        node,
+        wxString::Format
+        (
+            "no handler found for XML node \"%s\" (class \"%s\")",
+            node->GetName(),
+            node->GetAttribute("class", wxEmptyString)
+        )
+    );
     return NULL;
 }
 
@@ -873,8 +898,15 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
             if (!m_instance)
             {
                 wxString name = node->GetAttribute(wxT("name"), wxEmptyString);
-                wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
-                           subclass.c_str(), name.c_str());
+                ReportError
+                (
+                    node,
+                    wxString::Format
+                    (
+                        "subclass \"%s\" not found for resource \"%s\", not subclassing",
+                        subclass, name
+                    )
+                );
             }
         }
     }
@@ -948,9 +980,17 @@ int wxXmlResourceHandler::GetStyle(const wxString& param, int defaults)
         fl = tkn.GetNextToken();
         index = m_styleNames.Index(fl);
         if (index != wxNOT_FOUND)
+        {
             style |= m_styleValues[index];
+        }
         else
-            wxLogError(_("Unknown style flag ") + fl);
+        {
+            ReportParamError
+            (
+                param,
+                wxString::Format("unknown style flag \"%s\"", fl)
+            );
+        }
     }
     return style;
 }
@@ -1175,8 +1215,11 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param, const wxColour& 
         if (clr.Ok())
             return clr;
 
-        wxLogError(_("XRC resource: Incorrect colour specification '%s' for attribute '%s'."),
-                   v.c_str(), param.c_str());
+        ReportParamError
+        (
+            param,
+            wxString::Format("incorrect colour specification \"%s\"", v)
+        );
         return wxNullColour;
     }
 
@@ -1217,8 +1260,11 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
     if (fsfile == NULL)
     {
-        wxLogError(_("XRC resource: Cannot create bitmap from '%s'."),
-                   name.c_str());
+        ReportParamError
+        (
+            param,
+            wxString::Format("cannot open bitmap resource \"%s\"", name)
+        );
         return wxNullBitmap;
     }
     wxImage img(*(fsfile->GetStream()));
@@ -1229,8 +1275,11 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
 
     if (!img.Ok())
     {
-        wxLogError(_("XRC resource: Cannot create bitmap from '%s'."),
-                   name.c_str());
+        ReportParamError
+        (
+            param,
+            wxString::Format("cannot create bitmap from \"%s\"", name)
+        );
         return wxNullBitmap;
     }
     if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
@@ -1321,7 +1370,11 @@ wxSize wxXmlResourceHandler::GetSize(const wxString& param,
     if (!s.BeforeFirst(wxT(',')).ToLong(&sx) ||
         !s.AfterLast(wxT(',')).ToLong(&sy))
     {
-        wxLogError(_("Cannot parse coordinates from '%s'."), s.c_str());
+        ReportParamError
+        (
+            param,
+            wxString::Format("cannot parse coordinates value \"%s\"", s)
+        );
         return wxDefaultSize;
     }
 
@@ -1337,7 +1390,11 @@ wxSize wxXmlResourceHandler::GetSize(const wxString& param,
         }
         else
         {
-            wxLogError(_("Cannot convert dialog units: dialog unknown."));
+            ReportParamError
+            (
+                param,
+                "cannot convert dialog units: dialog unknown"
+            );
             return wxDefaultSize;
         }
     }
@@ -1369,7 +1426,11 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param,
 
     if (!s.ToLong(&sx))
     {
-        wxLogError(_("Cannot parse dimension from '%s'."), s.c_str());
+        ReportParamError
+        (
+            param,
+            wxString::Format("cannot parse dimension value \"%s\"", s)
+        );
         return defaultv;
     }
 
@@ -1385,7 +1446,11 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param,
         }
         else
         {
-            wxLogError(_("Cannot convert dialog units: dialog unknown."));
+            ReportParamError
+            (
+                param,
+                "cannot convert dialog units: dialog unknown"
+            );
             return defaultv;
         }
     }
@@ -1419,7 +1484,8 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     wxXmlNode *font_node = GetParamNode(param);
     if (font_node == NULL)
     {
-        wxLogError(_("Cannot find font node '%s'."), param.c_str());
+        ReportError(
+            wxString::Format("cannot find font node \"%s\"", param));
         return wxNullFont;
     }
 
@@ -1610,12 +1676,87 @@ void wxXmlResourceHandler::CreateChildrenPrivately(wxObject *parent, wxXmlNode *
 }
 
 
+//-----------------------------------------------------------------------------
+// errors reporting
+//-----------------------------------------------------------------------------
+
+void wxXmlResourceHandler::ReportError(const wxString& message)
+{
+    m_resource->ReportError(m_node, message);
+}
+
+void wxXmlResourceHandler::ReportError(wxXmlNode *context,
+                                       const wxString& message)
+{
+    m_resource->ReportError(context ? context : m_node, message);
+}
+
+void wxXmlResourceHandler::ReportParamError(const wxString& param,
+                                            const wxString& message)
+{
+    m_resource->ReportError(GetParamNode(param), message);
+}
+
+namespace
+{
+
+wxString
+GetFileNameFromNode(wxXmlNode *node, const wxXmlResourceDataRecords& files)
+{
+    wxXmlNode *root = node;
+    while ( root->GetParent() )
+        root = root->GetParent();
+
+    for ( wxXmlResourceDataRecords::const_iterator i = files.begin();
+          i != files.end(); ++i )
+    {
+        if ( (*i)->Doc->GetRoot() == root )
+        {
+            return (*i)->File;
+        }
+    }
+
+    return wxEmptyString; // not found
+}
+
+} // anonymous namespace
+
+void wxXmlResource::ReportError(wxXmlNode *context, const wxString& message)
+{
+    if ( !context )
+    {
+        DoReportError("", NULL, message);
+        return;
+    }
+
+    // We need to find out the file that 'context' is part of. Performance of
+    // this code is not critical, so we simply find the root XML node and
+    // compare it with all loaded XRC files.
+    const wxString filename = GetFileNameFromNode(context, Data());
+
+    DoReportError(filename, context, message);
+}
+
+void wxXmlResource::DoReportError(const wxString& xrcFile, wxXmlNode *position,
+                                  const wxString& message)
+{
+    const int line = position ? position->GetLineNumber() : -1;
+
+    wxString loc;
+    if ( !xrcFile.empty() )
+        loc = xrcFile + ':';
+    if ( line != -1 )
+        loc += wxString::Format("%d:", line);
+    if ( !loc.empty() )
+        loc += ' ';
+
+    wxLogError("XRC error: %s%s", loc, message);
+}
 
 
-
-
-
-// --------------- XRCID implementation -----------------------------
+//-----------------------------------------------------------------------------
+// XRCID implementation
+//-----------------------------------------------------------------------------
 
 #define XRCID_TABLE_SIZE     1024
 
@@ -1858,7 +1999,9 @@ static void AddStdXRCID_Records()
 
 
 
-// --------------- module and globals -----------------------------
+//-----------------------------------------------------------------------------
+// module and globals
+//-----------------------------------------------------------------------------
 
 // normally we would do the cleanup from wxXmlResourceModule::OnExit() but it
 // can happen that some XRC records have been created because of the use of

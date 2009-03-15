@@ -88,7 +88,7 @@ wxWindow *wxMdiXmlHandler::CreateFrame()
 
         if ( !mdiParent )
         {
-            wxLogError(wxT("Parent of wxMDIChildFrame must be wxMDIParentFrame."));
+            ReportError("parent of wxMDIChildFrame must be wxMDIParentFrame");
             return NULL;
         }
 

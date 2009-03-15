@@ -161,7 +161,7 @@ wxObject* wxSizerXmlHandler::Handle_sizeritem()
         else if (wnd)
             sitem->AssignWindow(wnd);
         else
-            wxLogError(wxT("Error in resource."));
+            ReportError(n, "unexpected item in sizer");
 
         // finally, set other wxSizerItem attributes
         SetSizerItemAttributes(sitem);
@@ -171,7 +171,7 @@ wxObject* wxSizerXmlHandler::Handle_sizeritem()
     }
     else /*n == NULL*/
     {
-        wxLogError(wxT("Error in resource: no window/sizer/spacer within sizeritem object."));
+        ReportError("no window/sizer/spacer within sizeritem object");
         return NULL;
     }
 }
@@ -181,8 +181,7 @@ wxObject* wxSizerXmlHandler::Handle_spacer()
 {
     if ( !m_parentSizer )
     {
-        wxLogError(_("XRC syntax error: \"spacer\" only allowed inside a "
-                     "sizer"));
+        ReportError("spacer only allowed inside a sizer");
         return NULL;
     }
 
@@ -205,7 +204,7 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
             (!parentNode || parentNode->GetType() != wxXML_ELEMENT_NODE ||
              !m_parentAsWindow) )
     {
-        wxLogError(_("XRC syntax error: sizer must have a window parent."));
+        ReportError("sizer must have a window parent");
         return NULL;
     }
 
@@ -232,7 +231,7 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
 
     if ( !sizer )
     {
-        wxLogError(_T("Failed to create size of class \"%s\""), m_class.c_str());
+        ReportError(wxString::Format("unknown sizer class \"%s\"", m_class));
         return NULL;
     }
 
@@ -348,7 +347,11 @@ void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
     {
         if (!tkn.GetNextToken().ToULong(&l))
         {
-            wxLogError(wxT("growable[rows|cols] must be comma-separated list of row numbers"));
+            ReportParamError
+            (
+                param,
+                "value must be comma-separated list of row numbers"
+            );
             break;
         }
 
@@ -467,13 +470,13 @@ wxObject *wxStdDialogButtonSizerXmlHandler::DoCreateResource()
             if (button)
                 m_parentSizer->AddButton(button);
             else
-                wxLogError(wxT("Error in resource - expected button."));
+                ReportError(n, "expected wxButton");
 
             return item;
         }
         else /*n == NULL*/
         {
-            wxLogError(wxT("Error in resource: no button within wxStdDialogButtonSizer."));
+            ReportError("no button within wxStdDialogButtonSizer");
             return NULL;
         }
     }
