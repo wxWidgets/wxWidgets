@@ -14,12 +14,13 @@
     Derive classes from this to store your own data. When retrieving information
     from a wxObject's reference data, you will need to cast to your own derived class.
 
-    @b Example:
+    @section objectrefdata_example Example
 
     @code
     // include file
+    // ------------
 
-    class MyCar: public wxObject
+    class MyCar : public wxObject
     {
     public:
         MyCar() { }
@@ -42,8 +43,11 @@
 
 
     // implementation
+    // --------------
 
-    class MyCarRefData: public wxObjectRefData
+    // the reference data class is typically a private class only visible in the
+    // implementation source file of the refcounted class.
+    class MyCarRefData : public wxObjectRefData
     {
     public:
         MyCarRefData()
@@ -54,6 +58,9 @@
         MyCarRefData( const MyCarRefData& data )
             : wxObjectRefData()
         {
+            // copy refcounted data; this is usually a time- and memory-consuming operation
+            // and is only done when two (or more) MyCar instances need to unshare a
+            // common instance of MyCarRefData
             m_price = data.m_price;
         }
 
@@ -62,20 +69,25 @@
             return m_price == data.m_price;
         }
 
+    private:
+        // in real world, reference counting is usually used only when
+        // the wxObjectRefData-derived class holds data very memory-consuming;
+        // in this example the various MyCar instances may share a MyCarRefData
+        // instance which however only takes 4 bytes for this integer!
         int m_price;
     };
 
 
     #define M_CARDATA ((MyCarRefData *)m_refData)
-
     IMPLEMENT_DYNAMIC_CLASS(MyCar,wxObject)
 
     MyCar::MyCar( int price )
     {
+        // here we init the MyCar internal data:
         m_refData = new MyCarRefData();
         M_CARDATA->m_price = price;
     }
-
+    
     wxObjectRefData *MyCar::CreateRefData() const
     {
         return new MyCarRefData;
@@ -88,15 +100,24 @@
 
     bool MyCar::operator == ( const MyCar& car ) const
     {
-        if (m_refData == car.m_refData) return true;
+        if (m_refData == car.m_refData)
+            return true;
+        if (!m_refData || !car.m_refData) 
+            return false;
 
-        if (!m_refData || !car.m_refData) return false;
-
+        // here we use the MyCarRefData::operator==() function.
+        // Note however that this comparison may be very slow if the
+        // reference data contains a lot of data to be compared.
         return ( *(MyCarRefData*)m_refData == *(MyCarRefData*)car.m_refData );
     }
 
     void MyCar::SetPrice( int price )
     {
+        // since this function modifies one of the MyCar internal property,
+        // we need to be sure that the other MyCar instances which share the
+        // same MyCarRefData instance are not affected by this call.
+        // I.e. it's very important to call UnShare() in all setters of
+        // refcounted classes!
         UnShare();
 
         M_CARDATA->m_price = price;
@@ -106,7 +127,7 @@
     {
         wxCHECK_MSG( IsOk(), -1, "invalid car" );
 
-        return (M_CARDATA->m_price);
+        return M_CARDATA->m_price;
     }
     @endcode
 
@@ -177,23 +198,32 @@ public:
     wxObject can be used to implement @ref overview_refcount "reference counted"
     objects, such as wxPen, wxBitmap and others
     (see @ref overview_refcount_list "this list").
+    See wxObjectRefData and @ref overview_refcount for more info about
+    reference counting.
 
     @library{wxbase}
     @category{rtti}
 
-    @see wxClassInfo, @ref overview_debugging, wxObjectRefData
+    @see wxClassInfo, @ref overview_debugging, @ref overview_refcount, 
+         wxObjectRefData, wxObjectDataPtr<T>
 */
 class wxObject
 {
 public:
 
+    /**
+        Default ctor; initializes to @NULL the internal reference data.
+    */
     wxObject();
 
     /**
         Copy ctor.
+
+        Sets the internal wxObject::m_refData pointer to point to the same
+        instance of the wxObjectRefData-derived class pointed by @c other and
+        increments the refcount of wxObject::m_refData.
     */
     wxObject(const wxObject& other);
-
 
     /**
         Destructor.
@@ -279,11 +309,7 @@ public:
     void UnRef();
 
     /**
-        Ensure that this object's data is not shared with any other object.
-
-        If we have no data, it is created using CreateRefData() below,
-        if we have shared data, it is copied using CloneRefData(),
-        otherwise nothing is done.
+        This is the same of AllocExclusive() but this method is public.
     */
     void UnShare();
 
@@ -304,13 +330,55 @@ public:
     void* operator new(size_t size, const wxString& filename = NULL, int lineNum = 0);
 
 protected:
+    /**
+        Ensure that this object's data is not shared with any other object.
+
+        If we have no data, it is created using CreateRefData();
+        if we have shared data (i.e. data with a reference count greater than 1), 
+        it is copied using CloneRefData(); otherwise nothing is done (the data
+        is already present and is not shared by other object instances).
+        
+        If you use this function you should make sure that you override the
+        CreateRefData() and CloneRefData() functions in your class otherwise
+        an assertion will fail at runtime.
+    */
+    void AllocExclusive();
+
+    /**
+        Creates a new instance of the wxObjectRefData-derived class specific to
+        this object and returns it.
+        
+        This is usually implemented as a one-line call:
+        @code
+        wxObjectRefData *MyObject::CreateRefData() const
+        {
+            return new MyObjectRefData;
+        }
+        @endcode
+    */
+    virtual wxObjectRefData *CreateRefData() const;
+
+    /**
+        Creates a new instance of the wxObjectRefData-derived class specific to
+        this object and initializes it copying @a data.
+        
+        This is usually implemented as a one-line call:
+        @code
+        wxObjectRefData *MyObject::CloneRefData(const wxObjectRefData *data) const
+        {
+            // rely on the MyObjectRefData copy ctor:
+            return new MyObjectRefData(*(MyObjectRefData *)data);
+        }
+        @endcode
+    */
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
     /**
         Pointer to an object which is the object's reference-counted data.
 
         @see Ref(), UnRef(), SetRefData(), GetRefData(), wxObjectRefData
     */
-    wxObjectRefData*  m_refData;
+    wxObjectRefData* m_refData;
 };
 
 
@@ -391,7 +459,7 @@ public:
 
 /**
 
-    This is helper template class primarily written to avoid memory leaks because of
+    This is an helper template class primarily written to avoid memory leaks because of
     missing calls to wxObjectRefData::DecRef().
 
     Despite the name this template can actually be used as a smart pointer for any
@@ -399,11 +467,10 @@ public:
     methods @b T::IncRef() and @b T::DecRef().
 
     The difference to wxSharedPtr<T> is that wxObjectDataPtr<T> relies on the reference
-    counting to be in the class pointed to where instead wxSharedPtr<T> implements the
+    counting to be in the class pointed to, where instead wxSharedPtr<T> implements the
     reference counting itself.
 
-
-    @b Example:
+    @section objectdataptr_example Example
 
     @code
     class MyCarRefData: public wxObjectRefData
@@ -418,8 +485,13 @@ public:
         }
 
         void SetPrice( int price )  { m_price = price; }
-        int GetPrice()              { return m_price; }
+        int GetPrice() const        { return m_price; }
 
+        bool operator == ( const MyCarRefData& other ) const
+        {
+            return m_price == other.m_price;
+        }
+        
     protected:
         int m_price;
     };
@@ -427,6 +499,8 @@ public:
     class MyCar
     {
     public:
+        // initializes this MyCar assigning to the
+        // internal data pointer a new instance of MyCarRefData
         MyCar( int price ) : m_data( new MyCarRefData )
         {
             m_data->SetPrice( price );
@@ -434,20 +508,30 @@ public:
 
         MyCar& operator =( const MyCar& tocopy )
         {
+            // shallow copy: this is just a fast copy of pointers; the real
+            // memory-consuming data which typically is stored inside
+            // MyCarRefData is not copied here!
             m_data = tocopy.m_data;
             return *this;
         }
 
         bool operator == ( const MyCar& other ) const
         {
-            if (m_data.get() == other.m_data.get()) return true;
-            return (m_data->GetPrice() == other.m_data->GetPrice());
+            if (m_data.get() == other.m_data.get())
+                return true; // this instance and the 'other' one share the
+                             // same MyCarRefData data...
+            
+            // rely on the MyCarRefData::operator==()
+            return (*m_data.get()) == (*other.m_data.get());
         }
 
         void SetPrice( int price )
         {
-           UnShare();
-           m_data->SetPrice( price );
+            // make sure changes to this class do not affect other instances
+            // currently sharing our same refcounted data:
+            UnShare();
+           
+            m_data->SetPrice( price );
         }
 
         int GetPrice() const
@@ -475,6 +559,7 @@ public:
     @see wxObject, wxObjectRefData, @ref overview_refcount, wxSharedPtr<T>,
          wxScopedPtr<T>, wxWeakRef<T>
 */
+template <class T>
 class wxObjectDataPtr<T>
 {
 public:
