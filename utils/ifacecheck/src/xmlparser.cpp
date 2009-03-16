@@ -171,7 +171,7 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
         if (i == 0) p = &m_strDefaultValue;
         if (i == 1) p = &m_strDefaultValueForCmp;
 
-        if (*p == "0u") *p = "0";
+        if (*p == "0u" || *p == "0l") *p = "0";
 
         p->Replace("0x000000001", "1");
         p->Replace("\\000\\000\\000", "");    // fix for unicode strings:
