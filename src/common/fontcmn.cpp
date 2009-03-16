@@ -320,7 +320,7 @@ bool wxFontBase::operator==(const wxFont& font) const
     // have different ref datas but still describe the same font
     return IsSameAs(font) ||
            (
-            Ok() == font.Ok() &&
+            IsOk() == font.IsOk() &&
             GetPointSize() == font.GetPointSize() &&
             // in wxGTK1 GetPixelSize() calls GetInternalFont() which uses
             // operator==() resulting in infinite recursion so we can't use it
@@ -339,43 +339,43 @@ bool wxFontBase::operator==(const wxFont& font) const
 
 wxString wxFontBase::GetFamilyString() const
 {
-    wxCHECK_MSG( Ok(), wxT("wxDEFAULT"), wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), "wxFONTFAMILY_DEFAULT", "invalid font" );
 
     switch ( GetFamily() )
     {
-        case wxDECORATIVE:   return wxT("wxDECORATIVE");
-        case wxROMAN:        return wxT("wxROMAN");
-        case wxSCRIPT:       return wxT("wxSCRIPT");
-        case wxSWISS:        return wxT("wxSWISS");
-        case wxMODERN:       return wxT("wxMODERN");
-        case wxTELETYPE:     return wxT("wxTELETYPE");
-        default:             return wxT("wxDEFAULT");
+        case wxFONTFAMILY_DECORATIVE:   return "wxFONTFAMILY_DECORATIVE";
+        case wxFONTFAMILY_ROMAN:        return "wxFONTFAMILY_ROMAN";
+        case wxFONTFAMILY_SCRIPT:       return "wxFONTFAMILY_SCRIPT";
+        case wxFONTFAMILY_SWISS:        return "wxFONTFAMILY_SWISS";
+        case wxFONTFAMILY_MODERN:       return "wxFONTFAMILY_MODERN";
+        case wxFONTFAMILY_TELETYPE:     return "wxFONTFAMILY_TELETYPE";
+        default:                        return "wxFONTFAMILY_DEFAULT";
     }
 }
 
 wxString wxFontBase::GetStyleString() const
 {
-    wxCHECK_MSG( Ok(), wxT("wxDEFAULT"), wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), "wxFONTSTYLE_DEFAULT", "invalid font" );
 
     switch ( GetStyle() )
     {
-        case wxNORMAL:   return wxT("wxNORMAL");
-        case wxSLANT:    return wxT("wxSLANT");
-        case wxITALIC:   return wxT("wxITALIC");
-        default:         return wxT("wxDEFAULT");
+        case wxFONTSTYLE_NORMAL:   return "wxFONTSTYLE_NORMAL";
+        case wxFONTSTYLE_SLANT:    return "wxFONTSTYLE_SLANT";
+        case wxFONTSTYLE_ITALIC:   return "wxFONTSTYLE_ITALIC";
+        default:                   return "wxFONTSTYLE_DEFAULT";
     }
 }
 
 wxString wxFontBase::GetWeightString() const
 {
-    wxCHECK_MSG( Ok(), wxT("wxDEFAULT"), wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), "wxFONTWEIGHT_DEFAULT", "invalid font" );
 
     switch ( GetWeight() )
     {
-        case wxNORMAL:   return wxT("wxNORMAL");
-        case wxBOLD:     return wxT("wxBOLD");
-        case wxLIGHT:    return wxT("wxLIGHT");
-        default:         return wxT("wxDEFAULT");
+        case wxFONTWEIGHT_NORMAL:   return "wxFONTWEIGHT_NORMAL";
+        case wxFONTWEIGHT_BOLD:     return "wxFONTWEIGHT_BOLD";
+        case wxFONTWEIGHT_LIGHT:    return "wxFONTWEIGHT_LIGHT";
+        default:                    return "wxFONTWEIGHT_DEFAULT";
     }
 }
 
@@ -384,7 +384,7 @@ bool wxFontBase::SetFaceName(const wxString& facename)
 #if wxUSE_FONTENUM
     if (!wxFontEnumerator::IsValidFacename(facename))
     {
-        UnRef();        // make Ok() return false
+        UnRef();        // make IsOk() return false
         return false;
     }
 #else // !wxUSE_FONTENUM
