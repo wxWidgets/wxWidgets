@@ -392,7 +392,7 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
                     for (unsigned int j=0; j<overloads.GetCount(); j++)
                         warning += "\n\treal header: " + overloads[j]->GetAsString(true, true, true, true);
 
-                    wxLogWarning(warning);
+                    wxLogWarning("%s", warning);
                     count++;
 
                     if (overloads.GetCount()>1)
