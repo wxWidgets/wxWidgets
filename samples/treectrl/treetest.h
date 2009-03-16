@@ -228,6 +228,7 @@ public:
     void OnClearBold(wxCommandEvent& WXUNUSED(event)) { DoSetBold(false); }
 
     void OnEnsureVisible(wxCommandEvent& event);
+    void OnSetFocus(wxCommandEvent& event);
 
     void OnCount(wxCommandEvent& event);
     void OnCountRec(wxCommandEvent& event);
@@ -339,6 +340,7 @@ enum
     TreeTest_ToggleSel,
     TreeTest_CollapseAndReset,
     TreeTest_EnsureVisible,
+    TreeTest_SetFocus,
     TreeTest_AddItem,
     TreeTest_InsertItem,
     TreeTest_IncIndent,

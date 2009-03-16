@@ -115,6 +115,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(SetImageSize)
     MENU_LINK(CollapseAndReset)
     MENU_LINK(EnsureVisible)
+    MENU_LINK(SetFocus)
     MENU_LINK(AddItem)
     MENU_LINK(InsertItem)
     MENU_LINK(IncIndent)
@@ -265,6 +266,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     tree_menu->Append(TreeTest_SortRev, wxT("Sort in reversed order"));
     tree_menu->AppendSeparator();
     tree_menu->Append(TreeTest_EnsureVisible, wxT("Make the last item &visible"));
+    tree_menu->Append(TreeTest_SetFocus, wxT("Set &focus to the tree"));
     tree_menu->AppendSeparator();
     tree_menu->Append(TreeTest_IncIndent, wxT("Add 5 points to indentation\tAlt-I"));
     tree_menu->Append(TreeTest_DecIndent, wxT("Reduce indentation by 5 points\tAlt-R"));
@@ -711,6 +713,11 @@ void MyFrame::OnCollapseAndReset(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnEnsureVisible(wxCommandEvent& WXUNUSED(event))
 {
     m_treeCtrl->DoEnsureVisible();
+}
+
+void MyFrame::OnSetFocus(wxCommandEvent& WXUNUSED(event))
+{
+    m_treeCtrl->SetFocus();
 }
 
 void MyFrame::OnInsertItem(wxCommandEvent& WXUNUSED(event))
