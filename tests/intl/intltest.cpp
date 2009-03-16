@@ -32,7 +32,7 @@
 class IntlTestCase : public CppUnit::TestCase
 {
 public:
-    IntlTestCase() {}
+    IntlTestCase() { m_locale=NULL; }
 
     virtual void setUp();
     virtual void tearDown();
@@ -59,9 +59,14 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( IntlTestCase, "IntlTestCase" );
 
 void IntlTestCase::setUp()
 {
+    if (!wxLocale::IsAvailable(wxLANGUAGE_FRENCH))
+        return;     // you should have french support installed to run this test!
+
     wxLocale::AddCatalogLookupPathPrefix("./intl");
 
     m_locale = new wxLocale;
+    CPPUNIT_ASSERT( m_locale);
+    
     // don't load default catalog, it may be unavailable:
     bool loaded = m_locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_CONV_ENCODING);
     CPPUNIT_ASSERT( loaded );
@@ -71,12 +76,18 @@ void IntlTestCase::setUp()
 
 void IntlTestCase::tearDown()
 {
-    delete m_locale;
-    m_locale = NULL;
+    if (m_locale)
+    {
+        delete m_locale;
+        m_locale = NULL;
+    }
 }
 
 void IntlTestCase::Domain()
 {
+    if (!m_locale)
+        return;     // no french support installed on this system!
+
     // _() searches all domains by default:
     CPPUNIT_ASSERT_EQUAL( "&Ouvrir un fichier", _("&Open bogus file") );
 
@@ -89,6 +100,9 @@ void IntlTestCase::Domain()
 
 void IntlTestCase::Headers()
 {
+    if (!m_locale)
+        return;     // no french support installed on this system!
+
     CPPUNIT_ASSERT_EQUAL( "wxWindows 2.0 i18n sample", m_locale->GetHeaderValue("Project-Id-Version") );
     CPPUNIT_ASSERT_EQUAL( "1999-01-13 18:19+0100", m_locale->GetHeaderValue("POT-Creation-Date") );
     CPPUNIT_ASSERT_EQUAL( "YEAR-MO-DA HO:MI+ZONE", m_locale->GetHeaderValue("PO-Revision-Date") );
