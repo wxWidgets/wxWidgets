@@ -47,6 +47,7 @@ private:
     wxGridBagSizer* Handle_wxGridBagSizer();
     wxSizer*  Handle_wxWrapSizer();
 
+    bool ValidateGridSizerChildren();
     void SetGrowables(wxFlexGridSizer* fsizer, const wxChar* param, bool rows);
     wxGBPosition GetGBPos(const wxString& param);
     wxGBSpan GetGBSpan(const wxString& param);

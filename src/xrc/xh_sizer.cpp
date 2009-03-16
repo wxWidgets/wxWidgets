@@ -215,7 +215,11 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
         sizer = Handle_wxStaticBoxSizer();
 #endif
     else if (m_class == wxT("wxGridSizer"))
+    {
+        if ( !ValidateGridSizerChildren() )
+            return NULL;
         sizer = Handle_wxGridSizer();
+    }
     else if (m_class == wxT("wxFlexGridSizer"))
     {
         flexsizer = Handle_wxFlexGridSizer();
@@ -227,13 +231,17 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
         sizer = flexsizer;
     }
     else if (m_class == wxT("wxWrapSizer"))
+    {
         sizer = Handle_wxWrapSizer();
-
-    if ( !sizer )
+    }
+    else
     {
         ReportError(wxString::Format("unknown sizer class \"%s\"", m_class));
-        return NULL;
     }
+
+    // creation of sizer failed for some (already reported) reason, so exit:
+    if ( !sizer )
+        return NULL;
 
     wxSize minsize = GetSize(wxT("minsize"));
     if (!(minsize == wxDefaultSize))
@@ -318,6 +326,8 @@ wxSizer*  wxSizerXmlHandler::Handle_wxGridSizer()
 
 wxFlexGridSizer* wxSizerXmlHandler::Handle_wxFlexGridSizer()
 {
+    if ( !ValidateGridSizerChildren() )
+        return NULL;
     return new wxFlexGridSizer(GetLong(wxT("rows")), GetLong(wxT("cols")),
                                GetDimension(wxT("vgap")), GetDimension(wxT("hgap")));
 }
@@ -325,6 +335,8 @@ wxFlexGridSizer* wxSizerXmlHandler::Handle_wxFlexGridSizer()
 
 wxGridBagSizer* wxSizerXmlHandler::Handle_wxGridBagSizer()
 {
+    if ( !ValidateGridSizerChildren() )
+        return NULL;
     return new wxGridBagSizer(GetDimension(wxT("vgap")), GetDimension(wxT("hgap")));
 }
 
@@ -335,16 +347,59 @@ wxSizer*  wxSizerXmlHandler::Handle_wxWrapSizer()
 }
 
 
+bool wxSizerXmlHandler::ValidateGridSizerChildren()
+{
+    int rows = GetLong("rows");
+    int cols = GetLong("cols");
+
+    if  ( rows && cols )
+    {
+        // fixed number of cells, need to verify children count
+        int children = 0;
+        for ( wxXmlNode *n = m_node->GetChildren(); n; n = n->GetNext() )
+        {
+            if ( n->GetType() == wxXML_ELEMENT_NODE &&
+                 (n->GetName() == "object" || n->GetName() == "object_ref") )
+            {
+                children++;
+            }
+        }
+
+        if ( children > rows * cols )
+        {
+            ReportError
+            (
+                wxString::Format
+                (
+                    "too many children in grid sizer: %d > %d x %d"
+                    " (consider omitting the number of rows or columns)",
+                    children,
+                    cols,
+                    rows
+                )
+            );
+            return false;
+        }
+    }
+
+    return true;
+}
+
 
 void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
                                      const wxChar* param,
                                      bool rows)
 {
+    int nrows, ncols;
+    sizer->CalcRowsCols(nrows, ncols);
+    const int nslots = rows ? nrows : ncols;
+
     wxStringTokenizer tkn;
-    unsigned long l;
     tkn.SetString(GetParamValue(param), wxT(","));
+
     while (tkn.HasMoreTokens())
     {
+        unsigned long l;
         if (!tkn.GetNextToken().ToULong(&l))
         {
             ReportParamError
@@ -353,6 +408,24 @@ void wxSizerXmlHandler::SetGrowables(wxFlexGridSizer* sizer,
                 "value must be comma-separated list of row numbers"
             );
             break;
+        }
+
+        if ( (int)l >= nslots )
+        {
+            ReportParamError
+            (
+                param,
+                wxString::Format
+                (
+                    "invalid %s index %d: must be less than %d",
+                    rows ? "row" : "column",
+                    l,
+                    nslots
+                )
+            );
+
+            // ignore incorrect value, still try to process the rest
+            continue;
         }
 
         if (rows)

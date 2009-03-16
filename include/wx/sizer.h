@@ -741,14 +741,15 @@ public:
     int GetVGap() const         { return m_vgap; }
     int GetHGap() const         { return m_hgap; }
 
+    // return the number of total items and the number of columns and rows
+    // (for internal use only)
+    int CalcRowsCols(int& rows, int& cols) const;
+
 protected:
     int    m_rows;
     int    m_cols;
     int    m_vgap;
     int    m_hgap;
-
-    // return the number of total items and the number of columns and rows
-    int CalcRowsCols(int& rows, int& cols) const;
 
     void SetItemBounds( wxSizerItem *item, int x, int y, int w, int h );
 
