@@ -31,6 +31,8 @@
 
 #include "wx/xml/xml.h"
 
+class WXDLLIMPEXP_FWD_BASE wxFileName;
+
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 class WXDLLIMPEXP_FWD_CORE wxDialog;

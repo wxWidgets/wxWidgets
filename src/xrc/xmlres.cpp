@@ -180,7 +180,11 @@ bool wxXmlResource::IsArchive(const wxString& filename)
 
 bool wxXmlResource::LoadFile(const wxFileName& file)
 {
+#if wxUSE_FILESYSTEM
     return Load(wxFileSystem::FileNameToURL(file));
+#else
+    return Load(file.GetFullPath());
+#endif
 }
 
 bool wxXmlResource::LoadAllFiles(const wxString& dirname)
