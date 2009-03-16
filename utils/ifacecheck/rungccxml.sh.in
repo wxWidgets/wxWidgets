@@ -50,7 +50,9 @@ for f in $headerlist; do
 done
 
 # filter the configure flags to pass to gccxml
-flags="@CXXFLAGS@"
+wx_top_builddir="@wx_top_builddir@"
+top_srcdir="@top_srcdir@"
+flags="@CPPFLAGS@ @CXXFLAGS@"
 
 # NOTE: it's important to define __WXDEBUG__ because some functions of wx
 #       are declared (and thus parsed by gcc) only if that symbol is defined.
