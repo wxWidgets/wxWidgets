@@ -244,15 +244,17 @@
    Note that it must be included before defining hardware symbols below as they
    could be already defined by configure
  */
+#include "wx/setup.h"
+
 #ifdef __GCCXML__
     /*
         we're using gccxml to create an XML representation of the entire
-        wxWidgets interface; pass it a special setup.h file
+        wxWidgets interface; use a special setup_gccxml.h file to fix some
+        of the stuff #defined by the real setup.h
     */
     #include "wx/setup_gccxml.h"
-#else
-    #include "wx/setup.h"
 #endif
+
 
 /*
    Hardware platform detection.
