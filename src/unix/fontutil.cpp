@@ -66,8 +66,7 @@ void wxNativeFontInfo::Init()
     description = NULL;
 }
 
-void
-wxNativeFontInfo::Init(const wxNativeFontInfo& info)
+void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
 {
     if (info.description)
         description = pango_font_description_copy(info.description);
@@ -138,19 +137,21 @@ bool wxNativeFontInfo::GetUnderlined() const
 
 wxString wxNativeFontInfo::GetFaceName() const
 {
+    // the Pango "family" is the wx "face name"
     return wxPANGO_CONV_BACK(pango_font_description_get_family(description));
 }
 
 wxFontFamily wxNativeFontInfo::GetFamily() const
 {
     wxFontFamily ret = wxFONTFAMILY_DEFAULT;
+
+    const char *family_name = pango_font_description_get_family( description );
+
     // note: not passing -1 as the 2nd parameter to g_ascii_strdown to work
     // around a bug in the 64-bit glib shipped with solaris 10, -1 causes it
     // to try to allocate 2^32 bytes.
-    const char *family_name = pango_font_description_get_family( description );
     if ( !family_name )
         return ret;
-
     wxGtkString family_text(g_ascii_strdown(family_name, strlen(family_name)));
 
     // Check for some common fonts, to salvage what we can from the current win32 centric wxFont API:
@@ -175,9 +176,10 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 #endif
                 &families, &n_families);
 
-        for (int i = 0;i < n_families;++i)
+        for (int i = 0; i < n_families; ++i)
         {
-            if (g_ascii_strcasecmp(pango_font_family_get_name( families[i] ), pango_font_description_get_family( description )) == 0 )
+            if (g_ascii_strcasecmp(pango_font_family_get_name( families[i] ),
+                                   pango_font_description_get_family( description )) == 0 )
             {
                 family = families[i];
                 break;
@@ -186,12 +188,15 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 
         g_free(families);
 
-        // Some gtk+ systems might query for a non-existing font from wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT)
-        // on initialization, don't assert until wxSystemSettings::GetFont is checked for this - MR
-        // wxASSERT_MSG( family, wxT("wxNativeFontInfo::GetFamily() - No appropriate PangoFontFamily found for ::description") );
+        // Some gtk+ systems might query for a non-existing font from 
+        // wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) on initialization,
+        // don't assert until wxSystemSettings::GetFont is checked for this - MR
+        // wxASSERT_MSG( family, 
+        //     "wxNativeFontInfo::GetFamily() - No appropriate PangoFontFamily found for ::description" );
 
         //BCI: Cache the wxFontFamily inside the class. Validate cache with
-        //BCI: g_ascii_strcasecmp(pango_font_description_get_family(description), pango_font_family_get_name(family)) == 0
+        //BCI: g_ascii_strcasecmp(pango_font_description_get_family(description), 
+        //                        pango_font_family_get_name(family)) == 0
 
         if (family != NULL && pango_font_family_is_monospace( family ))
             ret = wxFONTFAMILY_TELETYPE; // is deemed a monospace font by pango
@@ -200,14 +205,15 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 
     if (ret == wxFONTFAMILY_DEFAULT)
     {
-        if (strstr( family_text, "sans" ) != NULL) // checked before serif, so that "* Sans Serif" fonts are detected correctly
+        if (strstr( family_text, "sans" ) != NULL) 
+            // checked before serif, so that "* Sans Serif" fonts are detected correctly
             ret = wxFONTFAMILY_SWISS; // contains "Sans"
         else if (strstr( family_text, "serif" ) != NULL)
             ret = wxFONTFAMILY_ROMAN; // contains "Serif"
         else if (strncmp( family_text, "times", 5 ) == 0)
             ret = wxFONTFAMILY_ROMAN; // begins with "Times"
         else if (strncmp( family_text, "old", 3 ) == 0)
-            ret = wxFONTFAMILY_DECORATIVE; // Begins with "Old" - "Old English", "Old Town"
+            ret = wxFONTFAMILY_DECORATIVE; // begins with "Old" - "Old English", "Old Town"
     }
 
     return ret;
@@ -262,6 +268,8 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
 
 void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
 {
+    // wxWindowDCImpl::DoDrawText will take care of rendering font with
+    // the underline attribute
     wxFAIL_MSG( _T("not implemented") );
 }
 
@@ -278,10 +286,8 @@ void wxNativeFontInfo::SetFamily(wxFontFamily WXUNUSED(family))
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
 {
-    wxFAIL_MSG( _T("not implemented") );
+    wxFAIL_MSG( _T("not implemented: Pango encoding is always UTF8") );
 }
-
-
 
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
@@ -967,7 +973,8 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
 
         int i, round; // counters
 
-        // first round: search for equal, then for smaller and for larger size with the given weight and style
+        // first round: search for equal, then for smaller and for larger size 
+        // with the given weight and style
         int testweight = weight;
         int teststyle = style;
 
