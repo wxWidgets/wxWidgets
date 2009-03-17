@@ -138,6 +138,13 @@ static void wxgtk_main_do_event(GdkEvent *event, wxGUIEventLoop* evtloop)
     // categorize the GDK event according to wxEventCategory.
     // See http://library.gnome.org/devel/gdk/unstable/gdk-Events.html#GdkEventType
     // for more info.
+    
+    // NOTE: GDK_* constants which were not present in the GDK2.0 can be tested for
+    //       only at compile-time; when running the program (compiled with a recent GDK)
+    //       on a system with an older GDK lib we can be sure there won't be problems 
+    //       because event->type will never assume those values corresponding to 
+    //       new event types (since new event types are always added in GDK with non
+    //       conflicting values for ABI compatibility).
 
     wxEventCategory cat = wxEVT_CATEGORY_UNKNOWN;
     switch (event->type)
@@ -145,10 +152,11 @@ static void wxgtk_main_do_event(GdkEvent *event, wxGUIEventLoop* evtloop)
     case GDK_SELECTION_REQUEST:
     case GDK_SELECTION_NOTIFY:
     case GDK_SELECTION_CLEAR:
+#if GTK_CHECK_VERSION(2,6,0)
     case GDK_OWNER_CHANGE:
+#endif
         cat = wxEVT_CATEGORY_CLIPBOARD;
         break;
-
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -188,7 +196,12 @@ static void wxgtk_main_do_event(GdkEvent *event, wxGUIEventLoop* evtloop)
     case GDK_DRAG_STATUS:
     case GDK_DROP_START:
     case GDK_DROP_FINISHED:
+#if GTK_CHECK_VERSION(2,8,0)
     case GDK_GRAB_BROKEN:
+#endif
+#if GTK_CHECK_VERSION(2,14,0)
+    case GDK_DAMAGE:
+#endif
         cat = wxEVT_CATEGORY_UI;
         break;
 
