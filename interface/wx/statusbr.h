@@ -123,7 +123,12 @@ public:
         @see wxRect
     */
     virtual bool GetFieldRect(int i, wxRect& rect) const;
-
+    
+    /**
+        Returns the number of fields in the status bar. 
+    */
+    int GetFieldsCount() const;
+    
     /**
         Returns the wxStatusBarPane representing the @a n-th field.
     */
