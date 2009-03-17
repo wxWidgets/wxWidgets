@@ -263,11 +263,7 @@ void ScintillaWX::Initialise() {
     dropTarget->SetScintilla(this);
     stc->SetDropTarget(dropTarget);
 #endif // wxUSE_DRAG_AND_DROP
-#ifdef __WXMAC__
-    vs.extraFontFlag = false;  // UseAntiAliasing
-#else
     vs.extraFontFlag = true;   // UseAntiAliasing
-#endif
 }
 
 
