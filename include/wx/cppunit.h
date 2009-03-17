@@ -152,7 +152,8 @@ CPPUNIT_NS_END
 
 WX_CPPUNIT_ALLOW_EQUALS_TO_INT(long)
 WX_CPPUNIT_ALLOW_EQUALS_TO_INT(short)
-WX_CPPUNIT_ALLOW_EQUALS_TO_INT(size_t)
+WX_CPPUNIT_ALLOW_EQUALS_TO_INT(unsigned)
+WX_CPPUNIT_ALLOW_EQUALS_TO_INT(unsigned long)
 
 // Use this macro to compare a wxArrayString with the pipe-separated elements
 // of the given string

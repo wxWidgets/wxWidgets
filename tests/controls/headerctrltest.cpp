@@ -78,19 +78,19 @@ void HeaderCtrlTestCase::tearDown()
 
 void HeaderCtrlTestCase::AddDelete()
 {
-    CPPUNIT_ASSERT_EQUAL( 0, (size_t)m_header->GetColumnCount() );
+    CPPUNIT_ASSERT_EQUAL( 0, m_header->GetColumnCount() );
 
     m_header->AppendColumn(wxHeaderColumnSimple("Column 1"));
-    CPPUNIT_ASSERT_EQUAL( 1, (size_t)m_header->GetColumnCount() );
+    CPPUNIT_ASSERT_EQUAL( 1, m_header->GetColumnCount() );
 
     m_header->AppendColumn(wxHeaderColumnSimple("Column 2"));
-    CPPUNIT_ASSERT_EQUAL( 2, (size_t)m_header->GetColumnCount() );
+    CPPUNIT_ASSERT_EQUAL( 2, m_header->GetColumnCount() );
 
     m_header->InsertColumn(wxHeaderColumnSimple("Column 0"), 0);
-    CPPUNIT_ASSERT_EQUAL( 3, (size_t)m_header->GetColumnCount() );
+    CPPUNIT_ASSERT_EQUAL( 3, m_header->GetColumnCount() );
 
     m_header->DeleteColumn(2);
-    CPPUNIT_ASSERT_EQUAL( 2, (size_t)m_header->GetColumnCount() );
+    CPPUNIT_ASSERT_EQUAL( 2, m_header->GetColumnCount() );
 }
 
 void HeaderCtrlTestCase::BestSize()
