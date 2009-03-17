@@ -57,6 +57,26 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
     return wxPoint( x, y);
 }
 
+bool shouldHandleSelector(SEL selector)
+{
+    if (selector == @selector(noop:) 
+            || selector == @selector(complete:)
+            || selector == @selector(deleteBackward:)
+            || selector == @selector(deleteForward:)
+            || selector == @selector(insertNewline:)
+            || selector == @selector(insertTab:)
+            || selector == @selector(keyDown:)
+            || selector == @selector(keyUp:)
+            || selector == @selector(scrollPageUp:)
+            || selector == @selector(scrollPageDown:)
+            || selector == @selector(scrollToBeginningOfDocument:)
+            || selector == @selector(scrollToEndOfDocument:))
+        return false;
+        
+    return true;
+
+}
+
 //
 // wx native implementation classes
 //
@@ -64,7 +84,6 @@ wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
 typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector);
 
 @interface wxNSWindow : NSWindow
-
 {
     wxNonOwnedWindowCocoaImpl* impl;
 }
@@ -86,10 +105,18 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     return impl;
 }
 
+- (void)doCommandBySelector:(SEL)selector
+{
+    if (shouldHandleSelector(selector) && 
+        !(selector == @selector(cancel:) || selector == @selector(cancelOperation:)) )
+        [super doCommandBySelector:selector];
+}
+
+
 // NB: if we don't do this, all key downs that get handled lead to a NSBeep
 - (void)noResponderFor: (SEL) selector
 {
-    if (selector != @selector(keyDown:))
+    if (selector != @selector(keyDown:) && selector != @selector(keyUp:))
     {
         wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
         superimpl(self, @selector(noResponderFor:), selector);
@@ -126,10 +153,16 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     return impl;
 }
 
-// NB: if we don't do this, all key downs that get handled lead to a NSBeep
+- (void)doCommandBySelector:(SEL)selector
+{
+    if (shouldHandleSelector(selector))
+        [super doCommandBySelector:selector];
+}
+
+// NB: if we don't do this, it seems that all events that end here lead to a NSBeep
 - (void)noResponderFor: (SEL) selector
 {
-    if (selector != @selector(keyDown:))
+    if (selector != @selector(keyDown:) && selector != @selector(keyUp:))
     {
         wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
         superimpl(self, @selector(noResponderFor:), selector);
