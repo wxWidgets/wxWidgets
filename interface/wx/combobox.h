@@ -54,6 +54,16 @@
            Process a wxEVT_COMMAND_TEXT_ENTER event, when RETURN is pressed in
            the combobox (notice that the combobox must have been created with
            wxTE_PROCESS_ENTER style to receive this event).
+    @event{EVT_COMBOX_DROPDOWN(id, func)}
+           Process a wxEVT_COMMAND_COMBOBOX_DROPDOWN event, which is generated
+           when the list box part of the combo box is shown (drops down).
+           Notice that this event is currently only supported by wxMSW and
+           wxGTK with GTK+ 2.10 or later.
+    @event{EVT_COMBOX_CLOSEUP(id, func)}
+           Process a wxEVT_COMMAND_COMBOBOX_CLOSEUP event, which is generated
+           when the list box of the combo box disappears (closes up). This
+           event is only generated for the same platforms as
+           wxEVT_COMMAND_COMBOBOX_DROPDOWN above.
     @endEventTable
 
     @library{wxcore}

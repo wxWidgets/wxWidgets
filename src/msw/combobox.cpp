@@ -342,8 +342,19 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
                 // down is cancelled (see #8474)
                 m_lastAcceptedSelection = wxID_NONE;
             }
+            {
+                wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_DROPDOWN, GetId());
+                event.SetEventObject(this);
+                ProcessCommand(event);
+            }
             break;
-
+        case CBN_CLOSEUP:
+            {
+                wxCommandEvent event(wxEVT_COMMAND_COMBOBOX_CLOSEUP, GetId());
+                event.SetEventObject(this);
+                ProcessCommand(event);
+            }
+            break;
         case CBN_SELENDOK:
 #ifndef __SMARTPHONE__
             // we need to reset this to prevent the selection from being undone

@@ -44,6 +44,20 @@ gtkcombobox_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
     combo->SendSelectionChangedEvent(wxEVT_COMMAND_COMBOBOX_SELECTED);
 }
+
+static void
+gtkcombobox_popupshown_callback(GObject *WXUNUSED(gobject),
+                                GParamSpec *WXUNUSED(param_spec),
+                                wxComboBox *combo)
+{
+    gboolean isShown;
+    g_object_get( combo->m_widget, "popup-shown", &isShown, NULL );
+    wxCommandEvent event( isShown ? wxEVT_COMMAND_COMBOBOX_DROPDOWN
+                                  : wxEVT_COMMAND_COMBOBOX_CLOSEUP,
+                          combo->GetId() );
+    event.SetEventObject( combo );
+    combo->HandleWindowEvent( event );
+}
 }
 
 //-----------------------------------------------------------------------------
@@ -158,6 +172,12 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     g_signal_connect_after (m_widget, "changed",
                         G_CALLBACK (gtkcombobox_changed_callback), this);
 
+    if ( gtk_check_version(2,10,0) )
+    {
+        g_signal_connect (m_widget, "notify::popup-shown",
+                          G_CALLBACK (gtkcombobox_popupshown_callback), this);
+    }
+
     SetInitialSize(size); // need this too because this is a wxControlWithItems
 
     return true;
@@ -210,6 +230,8 @@ void wxComboBox::DisableEvents()
 
     g_signal_handlers_block_by_func(m_widget,
         (gpointer)gtkcombobox_changed_callback, this);
+    g_signal_handlers_block_by_func(m_widget,
+        (gpointer)gtkcombobox_popupshown_callback, this);
 }
 
 void wxComboBox::EnableEvents()
@@ -220,6 +242,8 @@ void wxComboBox::EnableEvents()
 
     g_signal_handlers_unblock_by_func(m_widget,
         (gpointer)gtkcombobox_changed_callback, this);
+    g_signal_handlers_unblock_by_func(m_widget,
+        (gpointer)gtkcombobox_popupshown_callback, this);
 }
 
 GtkWidget* wxComboBox::GetConnectWidget()

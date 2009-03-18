@@ -114,6 +114,8 @@ protected:
     void OnButtonSetValue(wxCommandEvent& event);
     void OnButtonSetCurrent(wxCommandEvent& event);
 
+    void OnDropdown(wxCommandEvent& event);
+    void OnCloseup(wxCommandEvent& event);
     void OnComboBox(wxCommandEvent& event);
     void OnComboText(wxCommandEvent& event);
 
@@ -199,6 +201,8 @@ BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(ComboPage_SetCurrent, ComboboxWidgetsPage::OnUpdateUISetCurrent)
 
     EVT_COMBOBOX(ComboPage_Combo, ComboboxWidgetsPage::OnComboBox)
+    EVT_COMBOBOX_DROPDOWN(ComboPage_Combo, ComboboxWidgetsPage::OnDropdown)
+    EVT_COMBOBOX_CLOSEUP(ComboPage_Combo, ComboboxWidgetsPage::OnCloseup)
     EVT_TEXT(ComboPage_Combo, ComboboxWidgetsPage::OnComboText)
     EVT_TEXT_ENTER(ComboPage_Combo, ComboboxWidgetsPage::OnComboText)
 
@@ -634,6 +638,16 @@ void ComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)
 void ComboboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 {
     CreateCombo();
+}
+
+void ComboboxWidgetsPage::OnDropdown(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(_T("Combobox dropped down"));
+}
+
+void ComboboxWidgetsPage::OnCloseup(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(_T("Combobox closed up"));
 }
 
 #endif //wxUSE_COMBOBOX
