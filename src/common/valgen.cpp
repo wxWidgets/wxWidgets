@@ -146,7 +146,7 @@ bool wxGenericValidator::TransferToWindow(void)
             return true;
         }
     } else
-#if (defined(__WXMAC__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
+#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxBitmapToggleButton)) )
     {
         wxBitmapToggleButton * pControl = (wxBitmapToggleButton *) m_validatorWindow;
@@ -416,6 +416,17 @@ bool wxGenericValidator::TransferFromWindow(void)
             return true;
         }
     } else
+#if (defined(__WXMAC__) || defined(__WXMSW__) || defined(__WXGTK20__)) && !defined(__WXUNIVERSAL__)
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxBitmapToggleButton)) )
+    {
+        wxBitmapToggleButton *pControl = (wxBitmapToggleButton *) m_validatorWindow;
+        if (m_pBool)
+        {
+            *m_pBool = pControl->GetValue() ;
+            return true;
+        }
+    } else
+#endif
 #endif
 
     // INT CONTROLS ***************************************
