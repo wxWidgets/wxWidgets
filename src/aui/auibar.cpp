@@ -1460,15 +1460,39 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
 {
     wxAuiToolBarItem* tool = FindTool(tool_id);
 
-    if (tool)
+    if (tool && (tool->kind == wxITEM_CHECK || tool->kind == wxITEM_RADIO))
     {
-        if (tool->kind != wxITEM_CHECK)
-            return;
-
-        if (state == true)
+        if (tool->kind == wxITEM_RADIO)
+        {
+            int i, idx, count;
+            idx = GetToolIndex(tool_id);
+            count = (int)m_items.GetCount();
+            
+            if (idx >= 0 && idx < count)
+            {
+                for (i = idx; i < count; ++i)
+                {
+                    if (m_items[i].kind != wxITEM_RADIO)
+                        break;
+                    m_items[i].state &= ~wxAUI_BUTTON_STATE_CHECKED;
+                }
+                for (i = idx; i > 0; i--)
+                {
+                    if (m_items[i].kind != wxITEM_RADIO)
+                        break;
+                    m_items[i].state &= ~wxAUI_BUTTON_STATE_CHECKED;
+                }
+            }
+            
             tool->state |= wxAUI_BUTTON_STATE_CHECKED;
-        else
-            tool->state &= ~wxAUI_BUTTON_STATE_CHECKED;
+        }
+         else if (tool->kind == wxITEM_CHECK)
+        {
+            if (state == true)
+                tool->state |= wxAUI_BUTTON_STATE_CHECKED;
+            else
+                tool->state &= ~wxAUI_BUTTON_STATE_CHECKED;
+        }
     }
 }
 
@@ -1478,7 +1502,7 @@ bool wxAuiToolBar::GetToolToggled(int tool_id) const
 
     if (tool)
     {
-        if (tool->kind != wxITEM_CHECK)
+        if ( (tool->kind != wxITEM_CHECK) && (tool->kind != wxITEM_RADIO) )
             return false;
 
         return (tool->state & wxAUI_BUTTON_STATE_CHECKED) ? true : false;
@@ -1744,6 +1768,7 @@ bool wxAuiToolBar::Realize()
 
             case wxITEM_CHECK:
             case wxITEM_NORMAL:
+            case wxITEM_RADIO:
             {
                 wxSize size = m_art->GetToolSize(dc, this, item);
                 sizer_item = sizer->Add(size.x + (m_tool_border_padding*2),
@@ -2202,6 +2227,11 @@ void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
             // draw a toggle button
             m_art->DrawButton(dc, this, item, item_rect);
         }
+        else if (item.kind == wxITEM_RADIO)
+        {
+            // draw a toggle button
+            m_art->DrawButton(dc, this, item, item_rect);
+        }
         else if (item.kind == wxITEM_CONTROL)
         {
             // draw the control's label
@@ -2371,7 +2401,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
         {
             UnsetToolTip();
 
-            if (hit_item->kind == wxITEM_CHECK)
+            if (hit_item->kind == wxITEM_CHECK || hit_item->kind == wxITEM_RADIO)
             {
                 bool toggle = false;
 
@@ -2381,7 +2411,11 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
                     toggle = true;
 
                 ToggleTool(m_action_item->id, toggle);
-
+                
+                // repaint immediately
+                Refresh(false);
+                Update();
+        
                 wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
                 e.SetEventObject(this);
                 GetEventHandler()->ProcessEvent(e);
