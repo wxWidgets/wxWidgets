@@ -108,7 +108,7 @@ public:
 
     void SetName(const wxString& name) { m_name = name; }
     void SetExtension(const wxString& ext) { m_extension = ext; }
-    void SetAlExtensions(const wxArrayString& exts) { m_altExtensions = exts; }
+    void SetAltExtensions(const wxArrayString& exts) { m_altExtensions = exts; }
     void SetType(wxBitmapType type) { m_type = type; }
     void SetMimeType(const wxString& type) { m_mime = type; }
     const wxString& GetName() const { return m_name; }
