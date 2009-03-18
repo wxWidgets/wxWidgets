@@ -441,7 +441,6 @@ CALLER_GRAPH           = NO
 GRAPHICAL_HIERARCHY    = NO
 DIRECTORY_GRAPH        = NO
 DOT_IMAGE_FORMAT       = png
-DOT_PATH               =
 DOTFILE_DIRS           =
 DOT_GRAPH_MAX_NODES    = 50
 MAX_DOT_GRAPH_DEPTH    = 1000
@@ -449,6 +448,12 @@ DOT_TRANSPARENT        = NO
 DOT_MULTI_TARGETS      = NO
 GENERATE_LEGEND        = YES
 DOT_CLEANUP            = YES
+
+# instead of setting a value for DOT_PATH it's easier and more portable to
+# put your dot utility in the PATH; if you are on a Unix system this is usually
+# done automatically; if you're on Windows you'll need to install GraphViz tools
+# and then manually add it to the PATH environment variable
+DOT_PATH               =
 
 #---------------------------------------------------------------------------
 # Search Engine Options
