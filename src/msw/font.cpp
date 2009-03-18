@@ -408,6 +408,7 @@ void wxFontRefData::Init(const wxNativeFontInfo& info, WXHFONT hFont)
 
     m_nativeFontInfoOk = true;
     m_nativeFontInfo = info;
+
     // This is the best we can do since we don't have the
     // correct information at this point.
     m_family = wxFONTFAMILY_SWISS;
@@ -422,7 +423,11 @@ bool wxFontRefData::Alloc(const wxFont *font)
 {
     if ( !m_nativeFontInfoOk )
     {
-        wxFillLogFont(&m_nativeFontInfo.lf, font);
+        // NOTE: we use wxNativeInfo::InitFromFont to avoid code duplication:
+        //       it results in using our m_* variables (except for m_hFont and
+        //       for m_nativeFontInfo obviously) for the initialization
+        //       of the wxNativeInfo::lf member.
+        m_nativeFontInfo.InitFromFont(*font);
         m_nativeFontInfoOk = true;
     }
 
@@ -848,6 +853,13 @@ wxString wxNativeFontInfo::ToString() const
 // wxFont
 // ----------------------------------------------------------------------------
 
+wxFont::wxFont(const wxString& fontdesc)
+{
+    wxNativeFontInfo info;
+    if ( info.FromString(fontdesc) )
+        (void)Create(info);
+}
+
 bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
 {
     UnRef();
@@ -855,13 +867,6 @@ bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
     m_refData = new wxFontRefData(info, hFont);
 
     return RealizeResource();
-}
-
-wxFont::wxFont(const wxString& fontdesc)
-{
-    wxNativeFontInfo info;
-    if ( info.FromString(fontdesc) )
-        (void)Create(info);
 }
 
 bool wxFont::DoCreate(int pointSize,
@@ -910,16 +915,15 @@ wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
 
 bool wxFont::RealizeResource()
 {
-    // don't do anything if we already have a valid font
-    if ( GetHFONT() )
-        return true;
-
-    return M_FONTDATA->Alloc(this);
+    // NOTE: the GetHFONT() call automatically triggers a reallocation of
+    //       the HFONT if necessary (will do nothing if we already have the resource); 
+    //       it returns NULL only if there is a failure in wxFontRefData::Alloc()...
+    return GetHFONT() != NULL;
 }
 
 bool wxFont::FreeResource(bool WXUNUSED(force))
 {
-    if ( !GetHFONT() )
+    if ( !M_FONTDATA )
         return false;
 
     M_FONTDATA->Free();
@@ -934,6 +938,8 @@ WXHANDLE wxFont::GetResourceHandle() const
 
 WXHFONT wxFont::GetHFONT() const
 {
+    // NOTE: wxFontRefData::GetHFONT() will automatically call
+    //       wxFontRefData::Alloc() if necessary
     return M_FONTDATA ? M_FONTDATA->GetHFONT(this) : 0;
 }
 
@@ -1026,93 +1032,95 @@ void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 
 int wxFont::GetPointSize() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
     return M_FONTDATA->GetPointSize();
 }
 
 wxSize wxFont::GetPixelSize() const
 {
-    wxCHECK_MSG( Ok(), wxDefaultSize, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid font") );
 
     return M_FONTDATA->GetPixelSize();
 }
 
 bool wxFont::IsUsingSizeInPixels() const
 {
-    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
     return M_FONTDATA->IsUsingSizeInPixels();
 }
 
 wxFontFamily wxFont::GetFamily() const
 {
-    wxCHECK_MSG( Ok(), wxFONTFAMILY_MAX, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxFONTFAMILY_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetFamily();
 }
 
 wxFontStyle wxFont::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), wxFONTSTYLE_MAX, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxFONTSTYLE_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetStyle();
 }
 
 wxFontWeight wxFont::GetWeight() const
 {
-    wxCHECK_MSG( Ok(), wxFONTWEIGHT_MAX, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetWeight();
 }
 
 bool wxFont::GetUnderlined() const
 {
-    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
     return M_FONTDATA->GetUnderlined();
 }
 
 wxString wxFont::GetFaceName() const
 {
-    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
 
     return M_FONTDATA->GetFaceName();
 }
 
 wxFontEncoding wxFont::GetEncoding() const
 {
-    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
 
     return M_FONTDATA->GetEncoding();
 }
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    return Ok() && M_FONTDATA->HasNativeFontInfo() ? &(M_FONTDATA->GetNativeFontInfo())
+    return IsOk() && M_FONTDATA->HasNativeFontInfo() ? &(M_FONTDATA->GetNativeFontInfo())
                                            : NULL;
 }
 
 wxString wxFont::GetNativeFontInfoDesc() const
 {
-    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
 
     // be sure we have an HFONT associated...
-    wxConstCast(this, wxFont)->RealizeResource();
+    const_cast<wxFont*>(this)->RealizeResource();
     return wxFontBase::GetNativeFontInfoDesc();
 }
 
 wxString wxFont::GetNativeFontInfoUserDesc() const
 {
-    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxEmptyString, wxT("invalid font") );
 
     // be sure we have an HFONT associated...
-    wxConstCast(this, wxFont)->RealizeResource();
+    const_cast<wxFont*>(this)->RealizeResource();
     return wxFontBase::GetNativeFontInfoUserDesc();
 }
 
 bool wxFont::IsFixedWidth() const
 {
+    wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
+
     if ( M_FONTDATA->HasNativeFontInfo() )
     {
         // the two low-order bits specify the pitch of the font, the rest is
