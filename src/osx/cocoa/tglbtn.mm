@@ -37,7 +37,7 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
     
-    [v setBezelStyle:NSRoundedBezelStyle];    
+    [v setBezelStyle:NSSmallSquareBezelStyle];    
     [v setButtonType:NSOnOffButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;
