@@ -115,6 +115,7 @@
             controls/textentrytest.cpp
             controls/treectrltest.cpp
             events/propagation.cpp
+            font/fonttest.cpp
             image/rawbmp.cpp
             html/htmlwindow.cpp
             misc/guifuncs.cpp
