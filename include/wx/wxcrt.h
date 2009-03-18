@@ -13,9 +13,6 @@
 #ifndef _WX_WXCRT_H_
 #define _WX_WXCRT_H_
 
-// NB: User code should include wx/crt.h instead of including this
-//     header directly.
-
 #include "wx/wxcrtbase.h"
 #include "wx/string.h"
 

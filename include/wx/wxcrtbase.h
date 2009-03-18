@@ -26,6 +26,10 @@
 
     NB: don't include any wxWidgets headers here because almost all of them
         include this one!
+        
+    NB2: User code should include wx/crt.h instead of including this
+         header directly.
+
  */
 
 #if !defined(__WXPALMOS5__)
