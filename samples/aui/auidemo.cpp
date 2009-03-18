@@ -811,13 +811,18 @@ MyFrame::MyFrame(wxWindow* parent,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
     tb3->SetToolBitmapSize(wxSize(16,16));
     wxBitmap tb3_bmp1 = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(16,16));
-    tb3->AddTool(ID_SampleItem+16, wxT("Test2"), tb3_bmp1);
-    tb3->AddTool(ID_SampleItem+17, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(ID_SampleItem+18, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(ID_SampleItem+19, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(ID_SampleItem+16, wxT("Check 1"), tb3_bmp1, wxT("Check 1"), wxITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+17, wxT("Check 2"), tb3_bmp1, wxT("Check 2"), wxITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+18, wxT("Check 3"), tb3_bmp1, wxT("Check 3"), wxITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+19, wxT("Check 4"), tb3_bmp1, wxT("Check 4"), wxITEM_CHECK);
     tb3->AddSeparator();
-    tb3->AddTool(ID_SampleItem+20, wxT("Test"), tb3_bmp1);
-    tb3->AddTool(ID_SampleItem+21, wxT("Test"), tb3_bmp1);
+    tb3->AddTool(ID_SampleItem+20, wxT("Radio 1"), tb3_bmp1, wxT("Radio 1"), wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+21, wxT("Radio 2"), tb3_bmp1, wxT("Radio 2"), wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+22, wxT("Radio 3"), tb3_bmp1, wxT("Radio 3"), wxITEM_RADIO);
+    tb3->AddSeparator();
+    tb3->AddTool(ID_SampleItem+23, wxT("Radio 1 (Group 2)"), tb3_bmp1, wxT("Radio 1 (Group 2)"), wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+24, wxT("Radio 2 (Group 2)"), tb3_bmp1, wxT("Radio 2 (Group 2)"), wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+25, wxT("Radio 3 (Group 2)"), tb3_bmp1, wxT("Radio 3 (Group 2)"), wxITEM_RADIO);
     tb3->SetCustomOverflowItems(prepend_items, append_items);
     tb3->Realize();
 
