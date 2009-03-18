@@ -463,12 +463,9 @@ public:
 
     //@{
     /**
-        This function takes the same parameters as
-        @ref wxFont::wxFont "wxFont constructors" and returns a new font
+        This function takes the same parameters as the relative
+        @ref wxFont::wxFont "wxFont constructor" and returns a new font
         object allocated on the heap.
-
-        Using New() is currently the only way to directly create a font with
-        the given size in pixels on platforms other than wxMSW.
     */
     static wxFont* New(int pointSize, wxFontFamily family, wxFontStyle style,
                        wxFontWeight weight,
