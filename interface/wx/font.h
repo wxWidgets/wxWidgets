@@ -285,17 +285,16 @@ public:
             <TABLE>
                 <TR><TD>@c wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_DEFAULT</TD><TD>
-                    Default application encoding: this
-                    is the encoding set by calls to
-                    SetDefaultEncoding and which may be set to,
-                    say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
-                    default application encoding is the same as default system encoding.</TD></TR>
+                    Default application encoding: this is the encoding set by calls to
+                    SetDefaultEncoding() and which may be set to, say, KOI8 to create all 
+                    fonts by default with KOI8 encoding. Initially, the default application 
+                    encoding is the same as default system encoding.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_CP1250...1252</TD><TD>Windows encodings similar to ISO8859 (but not identical).</TD></TR>
             </TABLE>
             If the specified encoding isn't available, no font is created
-            (see also font encoding overview).
+            (see also @ref overview_fontencoding).
 
         @remarks If the desired font does not exist, the closest match will be
                  chosen. Under Windows, only scalable TrueType fonts are used.
@@ -331,17 +330,16 @@ public:
             <TABLE>
                 <TR><TD>@c wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_DEFAULT</TD><TD>
-                    Default application encoding: this
-                    is the encoding set by calls to
-                    SetDefaultEncoding and which may be set to,
-                    say, KOI8 to create all fonts by default with KOI8 encoding. Initially, the
-                    default application encoding is the same as default system encoding.</TD></TR>
+                    Default application encoding: this is the encoding set by calls to
+                    SetDefaultEncoding() and which may be set to, say, KOI8 to create all 
+                    fonts by default with KOI8 encoding. Initially, the default application 
+                    encoding is the same as default system encoding.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_CP1250...1252</TD><TD>Windows encodings similar to ISO8859 (but not identical).</TD></TR>
             </TABLE>
             If the specified encoding isn't available, no font is created
-            (see also font encoding overview).
+            (see also @ref overview_fontencoding).
 
         @remarks If the desired font does not exist, the closest match will be
                  chosen. Under Windows, only scalable TrueType fonts are used.

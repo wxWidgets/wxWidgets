@@ -76,8 +76,8 @@ font on his system.
 To solve this problem, a wxFontMapper class is provided.
 
 This class stores the mapping between the encodings and the font face
-names which support them in wxConfig object. Of
-course, it would be fairly useless if it tried to determine these mappings by
+names which support them in wxConfigBase object. 
+Of course, it would be fairly useless if it tried to determine these mappings by
 itself, so, instead, it (optionally) asks the user and remembers his answers
 so that the next time the program will automatically choose the correct font.
 All these topics are illustrated by the @ref page_samples_font;
