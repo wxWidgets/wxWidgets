@@ -270,6 +270,10 @@ private:
 
     void DoExpand(const wxTreeItemId& item, int flag);
 
+    void DoSelectItem(const wxTreeItemId& item, bool select = true);
+    void DoUnselectItem(const wxTreeItemId& item);
+    void DoToggleItemSelection(const wxTreeItemId& item);
+
     void DoUnselectAll();
 
     void DeleteTextCtrl();
@@ -278,6 +282,9 @@ private:
     // and the tree has wxTR_HIDE_ROOT style)
     bool IsHiddenRoot(const wxTreeItemId& item) const;
 
+    // clears/sets the currently focused item
+    void ClearFocusedItem();
+    void SetFocusedItem(const wxTreeItemId& item);
 
     // the hash storing the items attributes (indexed by item ids)
     wxMapTreeAttr m_attrs;
@@ -302,6 +309,10 @@ private:
 
     // whether focus was lost between subsequent clicks of a single item
     bool m_focusLost;
+
+    // set when we are changing selection ourselves (only used in multi
+    // selection mode)
+    bool m_changingSelection;
 
     // whether we need to trigger a state image click event
     bool m_triggerStateImageClick;
