@@ -462,12 +462,10 @@ private:
 };
 
 
-//
 // Create functors for the templatized events, either allocated on the heap for
-// wxNewXXX() variants (this is needed in wxEvtHandler::Connect() to store them
+// wxNewXXX() variants (this is needed in wxEvtHandler::Bind<>() to store them
 // in dynamic event table) or just by returning them as temporary objects (this
-// is enough for Disconnect() and we allocate unnecessary heap allocation like
-// this)
+// is enough for Unbind<>() and we avoid unnecessary heap allocation like this).
 
 
 // Create functors wrapping other functors (including functions):
@@ -2978,26 +2976,26 @@ public:
     // Bind arbitrary functor (including just a function) to an event:
     template <typename EventTag, typename Functor>
     void Bind(const EventTag& eventType,
-              Functor func,
+              Functor functor,
               int winid = wxID_ANY,
               int lastId = wxID_ANY,
               wxObject *userData = NULL)
     {
         DoConnect(winid, lastId, eventType,
-                  wxNewEventFunctor(eventType, func),
+                  wxNewEventFunctor(eventType, functor),
                   userData);
     }
 
 
     template <typename EventTag, typename Functor>
     bool Unbind(const EventTag& eventType,
-                Functor func,
+                Functor functor,
                 int winid = wxID_ANY,
                 int lastId = wxID_ANY,
                 wxObject *userData = NULL)
     {
         return DoDisconnect(winid, lastId, eventType,
-                            wxMakeEventFunctor(eventType, func),
+                            wxMakeEventFunctor(eventType, functor),
                             userData);
     }
 
@@ -3005,31 +3003,29 @@ public:
     // Bind a method of a class (called on the specified eventSink which must
     // be convertible to this class) object to an event:
 
-    template
-      <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    template <typename EventTag, typename Class, typename EventArg, typename ObjClass>
     void Bind(const EventTag &eventType,
-              void (Class::*func)(EventArg &),
+              void (Class::*method)(EventArg &),
               ObjClass *eventSink,
               int winid = wxID_ANY,
               int lastId = wxID_ANY,
               wxObject *userData = NULL)
     {
         DoConnect(winid, lastId, eventType,
-                  wxNewEventFunctor(eventType, func, eventSink),
+                  wxNewEventFunctor(eventType, method, eventSink),
                   userData);
     }
 
-    template
-      <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    template <typename EventTag, typename Class, typename EventArg, typename ObjClass>
     bool Unbind(const EventTag &eventType,
-                void (Class::*func)(EventArg&),
+                void (Class::*method)(EventArg&),
                 ObjClass *eventSink,
                 int winid = wxID_ANY,
                 int lastId = wxID_ANY,
                 wxObject *userData = NULL )
     {
         return DoDisconnect(winid, lastId, eventType,
-                            wxMakeEventFunctor(eventType, func, eventSink),
+                            wxMakeEventFunctor(eventType, method, eventSink),
                             userData);
     }
 #endif // !wxEVENTS_COMPATIBILITY_2_8
