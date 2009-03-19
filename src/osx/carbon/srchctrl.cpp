@@ -122,6 +122,7 @@ wxMacSearchFieldControl::wxMacSearchFieldControl( wxTextCtrl *wxPeer,
 
     ::InstallControlEventHandler( m_controlRef, GetwxMacSearchControlEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, wxPeer, NULL);
+    SetNeedsFrame(false);
     wxMacUnicodeTextControl::InstallEventHandlers();
 }
 
