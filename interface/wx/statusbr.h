@@ -43,8 +43,7 @@ public:
         Also note that GetStack().Last() is the top of the stack (i.e. the string shown 
         in the status bar).
     */
-    const wxArrayString& GetStack() const
-        { return m_arrStack; }
+    const wxArrayString& GetStack() const;
 };
 
 /**
@@ -132,8 +131,7 @@ public:
     /**
         Returns the wxStatusBarPane representing the @a n-th field.
     */
-    const wxStatusBarPane& GetField(int n) const
-        { return m_panes[n]; }
+    const wxStatusBarPane& GetField(int n) const;
     
     /**
         Returns the string associated with a status bar field.
@@ -154,24 +152,21 @@ public:
         
         See wxStatusBarPane::GetStack() for more info.
     */
-    const wxArrayString& GetStatusStack(int n) const
-        { return m_panes[n].GetStack(); }
+    const wxArrayString& GetStatusStack(int n) const;
 
     /**
         Returns the width of the @a n-th field.
         
         See wxStatusBarPane::GetWidth() for more info.
     */
-    int GetStatusWidth(int n) const
-        { return m_panes[n].GetWidth(); }
+    int GetStatusWidth(int n) const;
 
     /**
         Returns the style of the @a n-th field.
         
         See wxStatusBarPane::GetStyle() for more info.
     */
-    int GetStatusStyle(int n) const
-        { return m_panes[n].GetStyle(); }
+    int GetStatusStyle(int n) const;
         
     /**
         Sets the field text to the top of the stack, and pops the stack of saved
