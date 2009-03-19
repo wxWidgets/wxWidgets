@@ -27,6 +27,8 @@
     number in a standard format it can use:
     @code wxPrintf_l(wxXLocale::GetCLocale(), "%g", number) @endcode
     to do it.
+    
+    See @ref group_funcmacro_locale for a list of wxXLocale-enabled functions.
 
     Conversely, if a program wanted to output the number in French locale, even if
     the current locale is different, it could use wxXLocale(wxLANGUAGE_FRENCH).
@@ -50,19 +52,12 @@
     @c wxUSE_XLOCALE was set to 0 during the library compilation.
 
 
-    @section xlocale_func Locale-dependent functions
-
-    Currently the following @c _l-functions are available:
-    - Character classification functions:
-      @c wxIsxxx_l(), e.g. @c wxIsalpha_l(), @c wxIslower_l() and all the others.
-    - Character transformation functions:
-      @c wxTolower_l() and @c wxToupper_l()
-    We hope to provide many more functions (covering numbers, time and formatted
-    IO) in the near future.
-
     @library{wxbase}
     @category{cfg}
 
+    @stdobjects
+    @li ::wxNullXLocale
+    
     @see wxLocale
 */
 class wxXLocale
@@ -98,4 +93,44 @@ public:
         or @false otherwise.
     */
     bool IsOk() const;
+    
+    /**
+        Comparison operator.
+    */
+    bool operator==(const wxXLocale& loc) const;
 };
+
+/**
+    An empty and invalid wxXLocale object.
+*/
+wxXLocale wxNullXLocale;
+
+
+
+// ============================================================================
+// Global functions/macros
+// ============================================================================
+
+/** @addtogroup group_funcmacro_locale */
+//@{
+
+int wxIsalnum_l(wchar_t c, const wxXLocale& loc);
+int wxIsalpha_l(wchar_t c, const wxXLocale& loc);
+int wxIscntrl_l(wchar_t c, const wxXLocale& loc);
+int wxIsdigit_l(wchar_t c, const wxXLocale& loc);
+int wxIsgraph_l(wchar_t c, const wxXLocale& loc);
+int wxIslower_l(wchar_t c, const wxXLocale& loc);
+int wxIsprint_l(wchar_t c, const wxXLocale& loc);
+int wxIspunct_l(wchar_t c, const wxXLocale& loc);
+int wxIsspace_l(wchar_t c, const wxXLocale& loc);
+int wxIsupper_l(wchar_t c, const wxXLocale& loc);
+int wxIsxdigit_l(wchar_t c, const wxXLocale& loc);
+wchar_t wxTolower_l(wchar_t c, const wxXLocale& loc);
+wchar_t wxToupper_l(wchar_t c, const wxXLocale& loc);
+
+double wxStrtod_l(const wchar_t *c, wchar_t **endptr, const wxXLocale& loc);
+long wxStrtol_l(const wchar_t *c, wchar_t **endptr, int base, const wxXLocale& loc);
+unsigned long wxStrtoul_l(const wchar_t *c, wchar_t **endptr, int base, const wxXLocale& loc);
+
+//@}
+

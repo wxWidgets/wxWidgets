@@ -38,6 +38,9 @@
 // This is the C locale object, it is created on demand
 static wxXLocale *gs_cLocale = NULL;
 
+wxXLocale wxNullXLocale;
+
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -100,6 +103,9 @@ wxXLocale::wxXLocale(wxLanguage lang)
 
 void wxXLocale::Init(const char *loc)
 {
+    if (!loc || *loc == '\0')
+        return;
+
     m_locale = _create_locale(LC_ALL, loc);
 }
 
@@ -117,7 +123,38 @@ void wxXLocale::Free()
 
 void wxXLocale::Init(const char *loc)
 {
+    if (!loc || *loc == '\0')
+        return;
+
     m_locale = newlocale(LC_ALL_MASK, loc, NULL);
+    if (!m_locale)
+    {
+        // NOTE: here we do something similar to what wxSetLocaleTryUTF8() does
+        //       in wxLocale code (but with newlocale() calls instead of wxSetlocale())
+        wxString buf(loc);
+        wxString buf2;
+        buf2 = buf + wxS(".UTF-8");
+        m_locale = newlocale(LC_ALL_MASK, buf2, NULL);
+        if ( !m_locale )
+        {
+            buf2 = buf + wxS(".utf-8");
+            m_locale = newlocale(LC_ALL_MASK, buf2, NULL);
+        }
+        if ( !m_locale )
+        {
+            buf2 = buf + wxS(".UTF8");
+            m_locale = newlocale(LC_ALL_MASK, buf2, NULL);
+        }
+        if ( !m_locale )
+        {
+            buf2 = buf + wxS(".utf8");
+            m_locale = newlocale(LC_ALL_MASK, buf2, NULL);
+        }
+    }
+    
+    // TODO: wxLocale performs many more manipulations of the given locale
+    //       string in the attempt to set a valid locale; reusing that code
+    //       (changing it to take a generic wxTryLocale callback) would be nice
 }
 
 void wxXLocale::Free()

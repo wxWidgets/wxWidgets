@@ -18,8 +18,8 @@
     using decimal point &c.
 
     TODO: Currently only the character classification and transformation
-          functions are implemented, we also need at least
-            - numbers: atof_l(), strtod_l() &c
+          functions and number <-> string functions, are implemented, 
+          we also need at least
             - formatted IO: scanf_l(), printf_l() &c
             - time: strftime_l(), strptime_l()
  */
@@ -44,6 +44,7 @@
         #include <locale.h>
         #include <xlocale.h>
         #include <ctype.h>
+        #include <stdlib.h>
 
         #if wxUSE_UNICODE
             #include <wctype.h>
@@ -95,6 +96,9 @@ public:
 
     // Get the type
     wxXLocale_t Get() const { return m_locale; }
+
+    bool operator== (const wxXLocale& loc) const
+        { return m_locale == loc.m_locale; }
 
 private:
     // Special ctor for the "C" locale, it's only used internally as the user
@@ -177,7 +181,7 @@ private:
 
 // A shorter synonym for the most commonly used locale object
 #define wxCLocale (wxXLocale::GetCLocale())
-
+extern WXDLLIMPEXP_DATA_BASE(wxXLocale) wxNullXLocale;
 
 // Wrappers for various functions:
 #ifdef wxHAS_XLOCALE_SUPPORT
@@ -224,7 +228,26 @@ private:
     inline int wxToupper_l(char c, const wxXLocale& loc)
         { return wxCRT_Toupper_lA(static_cast<unsigned char>(c), loc.Get()); }
 
+
+    // stdlib functions for numeric <-> string conversion
+    // NOTE: GNU libc does not have ato[fil]_l functions;
+    //       MSVC++8 does not have _strto[u]ll_l functions;
+    //       thus we take the minimal set of functions provided in both environments:
+
+    #define wxCRT_Strtod_lA wxXLOCALE_IDENT(strtod_l)
+    #define wxCRT_Strtol_lA wxXLOCALE_IDENT(strtol_l)
+    #define wxCRT_Strtoul_lA wxXLOCALE_IDENT(strtoul_l)
+
+    inline double wxStrtod_lA(const char *c, char **endptr, const wxXLocale& loc)
+        { return wxCRT_Strtod_lA(c, endptr, loc.Get()); }
+    inline long wxStrtol_lA(const char *c, char **endptr, int base, const wxXLocale& loc)
+        { return wxCRT_Strtol_lA(c, endptr, base, loc.Get()); }
+    inline unsigned long wxStrtoul_lA(const char *c, char **endptr, int base, const wxXLocale& loc)
+        { return wxCRT_Strtoul_lA(c, endptr, base, loc.Get()); }
+
     #if wxUSE_UNICODE
+    
+        // ctype functions
         #define wxCRT_Isalnum_lW wxXLOCALE_IDENT(iswalnum_l)
         #define wxCRT_Isalpha_lW wxXLOCALE_IDENT(iswalpha_l)
         #define wxCRT_Iscntrl_lW wxXLOCALE_IDENT(iswcntrl_l)
@@ -265,6 +288,20 @@ private:
             { return wxCRT_Tolower_lW(c, loc.Get()); }
         inline wchar_t wxToupper_l(wchar_t c, const wxXLocale& loc)
             { return wxCRT_Toupper_lW(c, loc.Get()); }
+
+
+        // stdlib functions for numeric <-> string conversion
+        // (see notes above about missing functions)
+        #define wxCRT_Strtod_lW wxXLOCALE_IDENT(wcstod_l)
+        #define wxCRT_Strtol_lW wxXLOCALE_IDENT(wcstol_l)
+        #define wxCRT_Strtoul_lW wxXLOCALE_IDENT(wcstoul_l)
+
+        inline double wxStrtod_l(const wchar_t *c, wchar_t **endptr, const wxXLocale& loc)
+            { return wxCRT_Strtod_lW(c, endptr, loc.Get()); }
+        inline long wxStrtol_l(const wchar_t *c, wchar_t **endptr, int base, const wxXLocale& loc)
+            { return wxCRT_Strtol_lW(c, endptr, base, loc.Get()); }
+        inline unsigned long wxStrtoul_l(const wchar_t *c, wchar_t **endptr, int base, const wxXLocale& loc)
+            { return wxCRT_Strtoul_lW(c, endptr, base, loc.Get()); }
 
     #endif // wxUSE_UNICDE (ctype functions)
 #else // !wxHAS_XLOCALE_SUPPORT
