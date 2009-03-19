@@ -85,6 +85,17 @@ ALIASES += endFlagTable="</div>\n"
 # creates appearance section: this should be used for all main GUI controls
 ALIASES += appearance{1}="\htmlonly <br><div><span class='appearance'>Appearance:</span><br><table class='appearance'><tr><td><img src='wxmsw/\1' alt='wxMSW appearance' class='appearance'></td><td><img src='wxgtk/\1' alt='wxGTK appearance' class='appearance'></td><td><img src='wxmac/\1' alt='wxMac appearance' class='appearance'></td></tr><tr><td>wxMSW appearance</td><td>wxGTK appearance</td><td>wxMac appearance</td></tr></table></div> \endhtmlonly"
 
+# aliases for the creation of "named member groups"
+# USAGE: the first argument must not contain spaces and be a unique identifier 
+#        of the member group for the class being documented;
+#        the second argument is the member group name and can contain spaces
+#        See wxString as an usage example.
+# NOTE: no warnings are given for wrong member group names so be careful and check
+#       the doxygen output to verify that there are no typos
+ALIASES += member_group_name{2}="<a name='\1'></a> \name \2"
+ALIASES += ref_member_group{2}="<a href='#\1' class='el'>\2</a>"
+
+
 #---------------------------------------------------------------------------
 # Aliases - for use when documenting any C++ entity
 #---------------------------------------------------------------------------
