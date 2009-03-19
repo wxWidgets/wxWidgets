@@ -134,21 +134,21 @@ void wxXLocale::Init(const char *loc)
         wxString buf(loc);
         wxString buf2;
         buf2 = buf + wxS(".UTF-8");
-        m_locale = newlocale(LC_ALL_MASK, buf2, NULL);
+        m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
         if ( !m_locale )
         {
             buf2 = buf + wxS(".utf-8");
-            m_locale = newlocale(LC_ALL_MASK, buf2, NULL);
+            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
         }
         if ( !m_locale )
         {
             buf2 = buf + wxS(".UTF8");
-            m_locale = newlocale(LC_ALL_MASK, buf2, NULL);
+            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
         }
         if ( !m_locale )
         {
             buf2 = buf + wxS(".utf8");
-            m_locale = newlocale(LC_ALL_MASK, buf2, NULL);
+            m_locale = newlocale(LC_ALL_MASK, buf2.c_str(), NULL);
         }
     }
     
