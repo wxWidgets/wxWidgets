@@ -204,10 +204,10 @@ void XLocaleTestCase::TestStdlibFunctionsWith(const wxXLocale& loc)
     CPPUNIT_ASSERT_EQUAL( 0x6fffff,   wxStrtol_l(endptr, NULL, 0, loc) );
     
     // strtoul
-    // NOTE: 3147483647 and 0x12A05F200 are greater than LONG_MAX (on 32bit machines) but
+    // NOTE: 3147483647 and 0xEE6B2800 are greater than LONG_MAX (on 32bit machines) but
     //       smaller than ULONG_MAX
     CPPUNIT_ASSERT_EQUAL( (unsigned long)3147483647,  wxStrtoul_l(wxT("3147483647"), NULL, 0, loc) );
-    CPPUNIT_ASSERT_EQUAL( (unsigned long)0x12A05F200, wxStrtoul_l(wxT("0x12A05F200"), NULL, 0, loc) );
+    CPPUNIT_ASSERT_EQUAL( (unsigned long)0xEE6B2800, wxStrtoul_l(wxT("0xEE6B2800"), NULL, 0, loc) );
 
     // TODO: test for "failure" behaviour of the functions above
 }
