@@ -275,12 +275,14 @@ enum wxLayoutDirection
 };
 
 /**
-    Encapsulates ::wxLanguage in a OS native lang.desc.
-                    translation information
+    Encapsulates a ::wxLanguage indentifier together with OS-specific information
+    related to that language.
 */
 struct WXDLLIMPEXP_BASE wxLanguageInfo
 {
-    /// ::wxLanguage id. It should be greater than @c wxLANGUAGE_USER_DEFINED.
+    /// ::wxLanguage id. 
+    /// It should be greater than @c wxLANGUAGE_USER_DEFINED when defining your own
+    /// language info structure.
     int Language;
 
     /// Canonical name of the language, e.g. @c fr_FR.
@@ -308,6 +310,36 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
     /// Return the locale name corresponding to this language usable with
     /// @c setlocale() on the current system.
     wxString GetLocaleName() const;
+};
+
+
+/**
+    The category of locale settings. See wxLocale::GetInfo().
+*/
+enum wxLocaleCategory
+{
+    /// (any) numbers
+    wxLOCALE_CAT_NUMBER,
+
+    /// date/time
+    wxLOCALE_CAT_DATE,
+
+    /// monetary value
+    wxLOCALE_CAT_MONEY,
+
+    wxLOCALE_CAT_MAX
+};
+
+/**
+    The values understood by wxLocale::GetInfo().
+*/
+enum wxLocaleInfo
+{
+    /// The thounsands separator
+    wxLOCALE_THOUSANDS_SEP,
+
+    /// The character used as decimal point
+    wxLOCALE_DECIMAL_POINT
 };
 
 
@@ -617,10 +649,19 @@ public:
 
     /**
         Tries to detect the user's default language setting.
-        Returns the ::wxLanguage value or @b wxLANGUAGE_UNKNOWN if the language-guessing
+        
+        Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the language-guessing
         algorithm failed.
     */
     static int GetSystemLanguage();
+
+    /**
+        Get the values of the given locale-dependent datum.
+
+        The current locale is used, the US default value is returned if everything 
+        else fails.
+    */
+    static wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat);
 
     /**
         Initializes the wxLocale instance.
