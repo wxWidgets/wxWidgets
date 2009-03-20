@@ -23,8 +23,10 @@
 IMPLEMENT_DYNAMIC_CLASS(wxToggleButtonXmlHandler, wxXmlResourceHandler)
 
 wxToggleButtonXmlHandler::wxToggleButtonXmlHandler()
-: wxXmlResourceHandler()
+    : wxXmlResourceHandler()
 {
+    XRC_ADD_STYLE(wxBU_EXACTFIT);
+
     AddWindowStyles();
 }
 

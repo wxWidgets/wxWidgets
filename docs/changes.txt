@@ -88,6 +88,13 @@ Major new features in 2.8 release
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
 
+2.8.11:
+-------
+
+All (GUI):
+
+- Add wxBU_EXACTFIT support to wxToggleButton XRC handler (Ronny Krueger).
+
 2.8.10:
 -------
 
