@@ -1183,12 +1183,13 @@ wxDateTime::ParseFormat(const wxString& date,
             case _T('c'):       // locale default date and time  representation
                 {
                     wxDateTime dt;
-                    tm tm;
 
                     const wxString inc(input);
 
                     // NOTE: %c is locale-dependent; try strptime
 #ifdef HAVE_STRPTIME
+                    struct tm tm;
+
                     // try using strptime() -- it may fail even if the input is
                     // correct but the date is out of range, so we will fall back
                     // to our generic code anyhow

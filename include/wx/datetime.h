@@ -133,6 +133,40 @@ extern WXDLLIMPEXP_DATA_BASE(const wxDateTime) wxDefaultDateTime;
 
 #define wxInvalidDateTime wxDefaultDateTime
 
+
+// ----------------------------------------------------------------------------
+// conditional compilation
+// ----------------------------------------------------------------------------
+
+#if defined(HAVE_STRPTIME) && defined(__GLIBC__) && \
+        ((__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0))
+    // glibc 2.0.7 strptime() is broken - the following snippet causes it to
+    // crash (instead of just failing):
+    //
+    //      strncpy(buf, "Tue Dec 21 20:25:40 1999", 128);
+    //      strptime(buf, "%x", &tm);
+    //
+    // so don't use it
+    #undef HAVE_STRPTIME
+#endif // broken strptime()
+
+#if defined(HAVE_STRPTIME) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
+    // configure detects strptime as linkable because it's in the OS X
+    // System library but MSL headers don't declare it.
+
+//    char *strptime(const char *, const char *, struct tm *);
+    // However, we DON'T want to just provide it here because we would
+    // crash and/or overwrite data when strptime from OS X tries
+    // to fill in MW's struct tm which is two fields shorter (no TZ stuff)
+    // So for now let's just say we don't have strptime
+    #undef HAVE_STRPTIME
+#endif
+
+// everyone has strftime except Win CE unless VC8 is used
+#if !defined(__WXWINCE__) || defined(__VISUALC8__)
+    #define HAVE_STRFTIME
+#endif
+
 // ----------------------------------------------------------------------------
 // wxDateTime represents an absolute moment in the time
 // ----------------------------------------------------------------------------
@@ -233,7 +267,7 @@ public:
         // adoption of the Gregorian calendar (see IsGregorian())
         //
         // All data and comments taken verbatim from "The Calendar FAQ (v 2.0)"
-        // by Claus Tøndering, http://www.pip.dknet.dk/~c-t/calendar.html
+        // by Claus Tï¿½ndering, http://www.pip.dknet.dk/~c-t/calendar.html
         // except for the comments "we take".
         //
         // Symbol "->" should be read as "was followed by" in the comments

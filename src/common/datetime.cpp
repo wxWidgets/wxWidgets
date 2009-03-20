@@ -88,7 +88,9 @@
 
 #include "wx/datetime.h"
 
-const long wxDateTime::TIME_T_FACTOR = 1000l;
+// ----------------------------------------------------------------------------
+// wxXTI
+// ----------------------------------------------------------------------------
 
 #if wxUSE_EXTENDED_RTTI
 
@@ -106,34 +108,10 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
 
 #endif // wxUSE_EXTENDED_RTTI
 
-//
+
 // ----------------------------------------------------------------------------
 // conditional compilation
 // ----------------------------------------------------------------------------
-
-#if defined(HAVE_STRPTIME) && defined(__GLIBC__) && \
-        ((__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0))
-    // glibc 2.0.7 strptime() is broken - the following snippet causes it to
-    // crash (instead of just failing):
-    //
-    //      strncpy(buf, "Tue Dec 21 20:25:40 1999", 128);
-    //      strptime(buf, "%x", &tm);
-    //
-    // so don't use it
-    #undef HAVE_STRPTIME
-#endif // broken strptime()
-
-#if defined(HAVE_STRPTIME) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
-    // configure detects strptime as linkable because it's in the OS X
-    // System library but MSL headers don't declare it.
-
-//    char *strptime(const char *, const char *, struct tm *);
-    // However, we DON'T want to just provide it here because we would
-    // crash and/or overwrite data when strptime from OS X tries
-    // to fill in MW's struct tm which is two fields shorter (no TZ stuff)
-    // So for now let's just say we don't have strptime
-    #undef HAVE_STRPTIME
-#endif
 
 #if defined(__MWERKS__) && wxUSE_UNICODE
     #include <wtime.h>
@@ -202,11 +180,6 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
         #define WX_TIMEZONE timezone
     #endif
 #endif // !WX_TIMEZONE && !WX_GMTOFF_IN_TM
-
-// everyone has strftime except Win CE unless VC8 is used
-#if !defined(__WXWINCE__) || defined(__VISUALC8__)
-    #define HAVE_STRFTIME
-#endif
 
 // NB: VC8 safe time functions could/should be used for wxMSW as well probably
 #if defined(__WXWINCE__) && defined(__VISUALC8__)
@@ -357,6 +330,8 @@ static const wxDateTime::wxDateTime_t gs_cumulatedDays[2][MONTHS_IN_YEAR] =
     { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 },
     { 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335 }
 };
+
+const long wxDateTime::TIME_T_FACTOR = 1000l;
 
 // ----------------------------------------------------------------------------
 // global data
