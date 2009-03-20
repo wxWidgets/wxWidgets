@@ -318,6 +318,10 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
 #endif
 #if wxOSX_USE_ATSU_TEXT
     {
+#if !wxOSX_USE_CARBON
+        // not needed outside
+        ThemeFontID m_macThemeFontID;
+#endif
         switch( font )
         {
             case wxOSX_SYSTEM_FONT_NORMAL:
@@ -969,6 +973,11 @@ void wxNativeFontInfo::EnsureValid()
 #if wxOSX_USE_ATSU_TEXT
     if ( !m_atsuFontValid )
     {
+#if !wxOSX_USE_CARBON
+        // not needed outside
+        wxInt16 m_qdFontFamily;
+        wxInt16 m_qdFontStyle;
+#endif
         wxCFStringRef cf( m_faceName, wxLocale::GetSystemEncoding() );
         ATSFontFamilyRef atsfamily = ATSFontFamilyFindFromName( cf , kATSOptionFlagsDefault );
         if ( atsfamily == (ATSFontFamilyRef) -1 )
