@@ -64,6 +64,122 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// constants (see also datetime.cpp)
+// ----------------------------------------------------------------------------
+
+static const int DAYS_PER_WEEK = 7;
+
+static const int HOURS_PER_DAY = 24;
+
+static const int SEC_PER_MIN = 60;
+
+static const int MIN_PER_HOUR = 60;
+
+// ----------------------------------------------------------------------------
+// parsing helpers
+// ----------------------------------------------------------------------------
+
+// see datetime.cpp:
+wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month);
+
+// return the month if the string is a month name or Inv_Month otherwise
+static wxDateTime::Month GetMonthFromName(const wxString& name, int flags)
+{
+    wxDateTime::Month mon;
+    for ( mon = wxDateTime::Jan; mon < wxDateTime::Inv_Month; wxNextMonth(mon) )
+    {
+        // case-insensitive comparison either one of or with both abbreviated
+        // and not versions
+        if ( flags & wxDateTime::Name_Full )
+        {
+            if ( name.CmpNoCase(wxDateTime::
+                        GetMonthName(mon, wxDateTime::Name_Full)) == 0 )
+            {
+                break;
+            }
+        }
+
+        if ( flags & wxDateTime::Name_Abbr )
+        {
+            if ( name.CmpNoCase(wxDateTime::
+                        GetMonthName(mon, wxDateTime::Name_Abbr)) == 0 )
+            {
+                break;
+            }
+        }
+    }
+
+    return mon;
+}
+
+// return the weekday if the string is a weekday name or Inv_WeekDay otherwise
+static wxDateTime::WeekDay GetWeekDayFromName(const wxString& name, int flags)
+{
+    wxDateTime::WeekDay wd;
+    for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
+    {
+        // case-insensitive comparison either one of or with both abbreviated
+        // and not versions
+        if ( flags & wxDateTime::Name_Full )
+        {
+            if ( name.CmpNoCase(wxDateTime::
+                        GetWeekDayName(wd, wxDateTime::Name_Full)) == 0 )
+            {
+                break;
+            }
+        }
+
+        if ( flags & wxDateTime::Name_Abbr )
+        {
+            if ( name.CmpNoCase(wxDateTime::
+                        GetWeekDayName(wd, wxDateTime::Name_Abbr)) == 0 )
+            {
+                break;
+            }
+        }
+    }
+
+    return wd;
+}
+
+/* static */
+struct tm *wxDateTime::GetTmNow(struct tm *tmstruct)
+{
+    time_t t = GetTimeNow();
+    return wxLocaltime_r(&t, tmstruct);
+}
+
+// scans all digits (but no more than len) and returns the resulting number
+static bool GetNumericToken(size_t len,
+                            const wxStringCharType*& p,
+                            unsigned long *number)
+{
+    size_t n = 1;
+    wxString s;
+    while ( wxIsdigit(*p) )
+    {
+        s += *p++;
+
+        if ( len && ++n > len )
+            break;
+    }
+
+    return !s.empty() && s.ToULong(number);
+}
+
+// scans all alphabetic characters and returns the resulting string
+static wxString GetAlphaToken(const wxStringCharType*& p)
+{
+    wxString s;
+    while ( wxIsalpha(*p) )
+    {
+        s += *p++;
+    }
+
+    return s;
+}
+
+// ----------------------------------------------------------------------------
 // wxDateTime to/from text representations
 // ----------------------------------------------------------------------------
 

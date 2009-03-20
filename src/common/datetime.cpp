@@ -391,7 +391,8 @@ extern const char *wxDumpDate(const wxDateTime* dt)
 #endif // Debug
 
 // get the number of days in the given month of the given year
-static inline
+// NOTE: not static because required by datetimefmt.cpp, too
+inline
 wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
 {
     // the number of days in month in Julian/Gregorian calendar: the first line
@@ -569,106 +570,6 @@ static void InitTm(struct tm& tm)
     tm.tm_mday = 1;   // mday 0 is invalid
     tm.tm_year = 76;  // any valid year
     tm.tm_isdst = -1; // auto determine
-}
-
-// parsing helpers
-// ---------------
-
-// return the month if the string is a month name or Inv_Month otherwise
-static wxDateTime::Month GetMonthFromName(const wxString& name, int flags)
-{
-    wxDateTime::Month mon;
-    for ( mon = wxDateTime::Jan; mon < wxDateTime::Inv_Month; wxNextMonth(mon) )
-    {
-        // case-insensitive comparison either one of or with both abbreviated
-        // and not versions
-        if ( flags & wxDateTime::Name_Full )
-        {
-            if ( name.CmpNoCase(wxDateTime::
-                        GetMonthName(mon, wxDateTime::Name_Full)) == 0 )
-            {
-                break;
-            }
-        }
-
-        if ( flags & wxDateTime::Name_Abbr )
-        {
-            if ( name.CmpNoCase(wxDateTime::
-                        GetMonthName(mon, wxDateTime::Name_Abbr)) == 0 )
-            {
-                break;
-            }
-        }
-    }
-
-    return mon;
-}
-
-// return the weekday if the string is a weekday name or Inv_WeekDay otherwise
-static wxDateTime::WeekDay GetWeekDayFromName(const wxString& name, int flags)
-{
-    wxDateTime::WeekDay wd;
-    for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
-    {
-        // case-insensitive comparison either one of or with both abbreviated
-        // and not versions
-        if ( flags & wxDateTime::Name_Full )
-        {
-            if ( name.CmpNoCase(wxDateTime::
-                        GetWeekDayName(wd, wxDateTime::Name_Full)) == 0 )
-            {
-                break;
-            }
-        }
-
-        if ( flags & wxDateTime::Name_Abbr )
-        {
-            if ( name.CmpNoCase(wxDateTime::
-                        GetWeekDayName(wd, wxDateTime::Name_Abbr)) == 0 )
-            {
-                break;
-            }
-        }
-    }
-
-    return wd;
-}
-
-/* static */
-struct tm *wxDateTime::GetTmNow(struct tm *tmstruct)
-{
-    time_t t = GetTimeNow();
-    return wxLocaltime_r(&t, tmstruct);
-}
-
-// scans all digits (but no more than len) and returns the resulting number
-static bool GetNumericToken(size_t len,
-                            const wxStringCharType*& p,
-                            unsigned long *number)
-{
-    size_t n = 1;
-    wxString s;
-    while ( wxIsdigit(*p) )
-    {
-        s += *p++;
-
-        if ( len && ++n > len )
-            break;
-    }
-
-    return !s.empty() && s.ToULong(number);
-}
-
-// scans all alphabetic characters and returns the resulting string
-static wxString GetAlphaToken(const wxStringCharType*& p)
-{
-    wxString s;
-    while ( wxIsalpha(*p) )
-    {
-        s += *p++;
-    }
-
-    return s;
 }
 
 // ============================================================================
@@ -1094,6 +995,7 @@ void wxDateTime::GetAmPmStrings(wxString *am, wxString *pm)
             *pm = wxString();
     }
 }
+
 
 // ----------------------------------------------------------------------------
 // Country stuff: date calculations depend on the country (DST, work days,
