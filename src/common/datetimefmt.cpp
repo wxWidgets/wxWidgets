@@ -1183,7 +1183,7 @@ wxDateTime::ParseFormat(const wxString& date,
             case _T('c'):       // locale default date and time  representation
                 {
                     wxDateTime dt;
-                    Tm tm;
+                    tm tm;
 
                     const wxString inc(input);
 
@@ -1194,7 +1194,22 @@ wxDateTime::ParseFormat(const wxString& date,
                     // to our generic code anyhow
                     const wxStringCharType *
                         result = CallStrptime(input, "%c", &tm);
-                    if ( !result )
+                    if ( result )
+                    {
+                        haveDay = haveMon = haveYear =
+                        haveHour = haveMin = haveSec = true;
+
+                        hour = tm.tm_hour;
+                        min = tm.tm_min;
+                        sec = tm.tm_sec;
+
+                        year = 1900 + tm.tm_year;
+                        mon = (Month)tm.tm_mon;
+                        mday = tm.tm_mday;
+                        
+                        input = result;     // proceed where strptime() ended
+                    }
+                    else
                     {
                         // strptime() failed; try generic heuristic code
 #endif // HAVE_STRPTIME
@@ -1209,24 +1224,23 @@ wxDateTime::ParseFormat(const wxString& date,
                             return NULL;
                         }
 
-                        tm = dt.GetTm();
+                        Tm tm = dt.GetTm();
+                        
+                        haveDay = haveMon = haveYear =
+                        haveHour = haveMin = haveSec = true;
+
+                        hour = tm.hour;
+                        min = tm.min;
+                        sec = tm.sec;
+
+                        year = tm.year;
+                        mon = tm.mon;
+                        mday = tm.mday;
+                        
                         input += endc - inc.begin();
 #ifdef HAVE_STRPTIME
                     }
-                    else
-                        input = result;     // proceed where strptime() ended
 #endif // HAVE_STRPTIME
-
-                    haveDay = haveMon = haveYear =
-                    haveHour = haveMin = haveSec = true;
-
-                    hour = tm.hour;
-                    min = tm.min;
-                    sec = tm.sec;
-
-                    year = tm.year;
-                    mon = tm.mon;
-                    mday = tm.mday;
                 }
                 break;
 
