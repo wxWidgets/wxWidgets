@@ -319,8 +319,17 @@ extern WXDLLIMPEXP_DATA_BASE(wxXLocale) wxNullXLocale;
     int WXDLLIMPEXP_BASE wxIsxdigit_l(const wxUniChar& c, const wxXLocale& loc);
     int WXDLLIMPEXP_BASE wxTolower_l(const wxUniChar& c, const wxXLocale& loc);
     int WXDLLIMPEXP_BASE wxToupper_l(const wxUniChar& c, const wxXLocale& loc);
-#endif // wxHAS_XLOCALE_SUPPORT/!wxHAS_XLOCALE_SUPPORT
 
+    // stdlib functions
+    double WXDLLIMPEXP_BASE wxStrtod_l(const wchar_t* str, wchar_t **endptr, const wxXLocale& loc);
+    double WXDLLIMPEXP_BASE wxStrtod_l(const char* str, char **endptr, const wxXLocale& loc);
+    long WXDLLIMPEXP_BASE wxStrtol_l(const wchar_t* str, wchar_t **endptr, int base, const wxXLocale& loc);
+    long WXDLLIMPEXP_BASE wxStrtol_l(const char* str, char **endptr, int base, const wxXLocale& loc);
+    unsigned long WXDLLIMPEXP_BASE wxStrtoul_l(const wchar_t* str, wchar_t **endptr, int base, const wxXLocale& loc);
+    unsigned long WXDLLIMPEXP_BASE wxStrtoul_l(const char* str, char **endptr, int base, const wxXLocale& loc);
+
+#endif // wxHAS_XLOCALE_SUPPORT/!wxHAS_XLOCALE_SUPPORT
+    
 #endif // wxUSE_XLOCALE
 
 #endif // _WX_XLOCALE_H_
