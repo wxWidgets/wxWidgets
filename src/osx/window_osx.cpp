@@ -335,33 +335,26 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
     m_peer->SetData<ControlSize>(kControlEntireControl, kControlSizeTag, &size ) ;
 #endif
 
-#if wxOSX_USE_COCOA_OR_CARBON
     wxFont font ;
 
-#if wxOSX_USE_ATSU_TEXT
-    ThemeFontID themeFont = kThemeSystemFont ;
-
-    // we will get that from the settings later
-    // and make this NORMAL later, but first
-    // we have a few calculations that we must fix
+    wxOSXSystemFont systemFont = wxOSX_SYSTEM_FONT_NORMAL ;
 
     switch ( variant )
     {
         case wxWINDOW_VARIANT_NORMAL :
-            themeFont = kThemeSystemFont ;
+            systemFont = wxOSX_SYSTEM_FONT_NORMAL ;
             break ;
 
         case wxWINDOW_VARIANT_SMALL :
-            themeFont = kThemeSmallSystemFont ;
+            systemFont = wxOSX_SYSTEM_FONT_SMALL ;
             break ;
 
         case wxWINDOW_VARIANT_MINI :
-            // not always defined in the headers
-            themeFont = 109 ;
+            systemFont = wxOSX_SYSTEM_FONT_MINI ;
             break ;
 
         case wxWINDOW_VARIANT_LARGE :
-            themeFont = kThemeSystemFont ;
+            systemFont = wxOSX_SYSTEM_FONT_NORMAL ;
             break ;
 
         default:
@@ -369,36 +362,9 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
             break ;
     }
 
-    font.MacCreateFromThemeFont( themeFont ) ;
-#else
-    CTFontUIFontType themeFont = kCTFontSystemFontType ;
-    switch ( variant )
-    {
-        case wxWINDOW_VARIANT_NORMAL :
-            themeFont = kCTFontSystemFontType;
-            break ;
-
-        case wxWINDOW_VARIANT_SMALL :
-            themeFont = kCTFontSmallSystemFontType;
-            break ;
-
-        case wxWINDOW_VARIANT_MINI :
-            themeFont = kCTFontMiniSystemFontType;
-            break ;
-
-        case wxWINDOW_VARIANT_LARGE :
-            themeFont = kCTFontSystemFontType;
-            break ;
-
-        default:
-            wxFAIL_MSG(_T("unexpected window variant"));
-            break ;
-    }
-    font.MacCreateFromUIFont( themeFont ) ;
-#endif
+    font.CreateSystemFont( systemFont ) ;
 
     SetFont( font ) ;
-#endif
 }
 
 void wxWindowMac::MacUpdateControlFont()
@@ -782,16 +748,14 @@ void wxWindowMac::MacInvalidateBorders()
         return ;
 
     int outerBorder = MacGetLeftBorderSize() ;
-#if wxOSX_USE_CARBON
-    if ( m_peer->NeedsFocusRect() /* && m_peer->HasFocus() */ )
+
+    if ( m_peer->NeedsFocusRect() )
         outerBorder += 4 ;
-#endif
 
     if ( outerBorder == 0 )
         return ;
 
     // now we know that we have something to do at all
-    
 
     int tx,ty,tw,th;
     
