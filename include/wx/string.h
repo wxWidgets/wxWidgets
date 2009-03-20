@@ -2202,25 +2202,34 @@ public:
     // check if the string contents matches a mask containing '*' and '?'
   bool Matches(const wxString& mask) const;
 
-    // conversion to numbers: all functions return true only if the whole
-    // string is a number and put the value of this number into the pointer
-    // provided, the base is the numeric base in which the conversion should be
-    // done and must be comprised between 2 and 36 or be 0 in which case the
-    // standard C rules apply (leading '0' => octal, "0x" => hex)
-        // convert to a signed integer
-    bool ToLong(long *val, int base = 10) const;
-        // convert to an unsigned integer
-    bool ToULong(unsigned long *val, int base = 10) const;
-        // convert to wxLongLong
+  // conversion to numbers: all functions return true only if the whole
+  // string is a number and put the value of this number into the pointer
+  // provided, the base is the numeric base in which the conversion should be
+  // done and must be comprised between 2 and 36 or be 0 in which case the
+  // standard C rules apply (leading '0' => octal, "0x" => hex)
+      // convert to a signed integer
+  bool ToLong(long *val, int base = 10) const;
+      // convert to an unsigned integer
+  bool ToULong(unsigned long *val, int base = 10) const;
+      // convert to wxLongLong
 #if defined(wxLongLong_t)
-    bool ToLongLong(wxLongLong_t *val, int base = 10) const;
-        // convert to wxULongLong
-    bool ToULongLong(wxULongLong_t *val, int base = 10) const;
+  bool ToLongLong(wxLongLong_t *val, int base = 10) const;
+      // convert to wxULongLong
+  bool ToULongLong(wxULongLong_t *val, int base = 10) const;
 #endif // wxLongLong_t
-        // convert to a double
-    bool ToDouble(double *val) const;
+      // convert to a double
+  bool ToDouble(double *val) const;
 
-
+#if wxUSE_XLOCALE
+  // conversions to numbers using C locale
+      // convert to a signed integer
+  bool ToCLong(long *val, int base = 10) const;
+      // convert to an unsigned integer
+  bool ToCULong(unsigned long *val, int base = 10) const;
+      // convert to a double
+  bool ToCDouble(double *val) const;
+#endif
+  
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error

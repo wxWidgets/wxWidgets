@@ -894,21 +894,43 @@ public:
     //@{
 
     /**
-        Attempts to convert the string to a floating point number. Returns @true on
-        success (the number is stored in the location pointed to by @e val) or @false
-        if the string does not represent such number (the value of @a val is not
-        modified in this case).
+        Attempts to convert the string to a floating point number. 
+        
+        Returns @true on success (the number is stored in the location pointed to by 
+        @a val) or @false if the string does not represent such number (the value of 
+        @a val is not modified in this case).
+        
+        Note that unlike ToCDouble() this function uses a localized version of
+        @c wxStrtod() and thus needs as decimal point (and thousands separator) the
+        locale-specific decimal point. Thus you should use this function only when
+        you are sure that this string contains a floating point number formatted with
+        the rules of the locale currently in use (see wxLocale).
+        
+        Refer to the docs of the standard function @c strtod() for more details about
+        the supported syntax.
 
-        @see ToLong(), ToULong()
+        @see ToCDouble(), ToLong(), ToULong()
     */
     bool ToDouble(double* val) const;
 
     /**
-        Attempts to convert the string to a signed integer in base @e base. Returns
-        @true on success in which case the number is stored in the location
+        Works like ToDouble() but unlike it this function expects the floating point
+        number to be formatted always with the rules dictated by the "C" locale
+        (in particular, the decimal point must be a dot), independently from the
+        current application-wide locale (see wxLocale).
+
+        @see ToDouble(), ToLong(), ToULong()
+    */
+    bool ToCDouble(double* val) const;
+
+    /**
+        Attempts to convert the string to a signed integer in base @a base. 
+        
+        Returns @true on success in which case the number is stored in the location
         pointed to by @a val or @false if the string does not represent a
         valid number in the given base (the value of @a val is not modified
         in this case).
+        
         The value of @a base must be comprised between 2 and 36, inclusive, or
         be a special value 0 which means that the usual rules of @c C numbers are
         applied: if the number starts with @c 0x it is considered to be in base
@@ -916,14 +938,31 @@ public:
         that you may not want to specify the base 0 if you are parsing the numbers
         which may have leading zeroes as they can yield unexpected (to the user not
         familiar with C) results.
+        
+        Note that unlike ToCLong() this function uses a localized version of
+        @c wxStrtol(). Thus you should use this function only when you are sure 
+        that this string contains an integer number formatted with
+        the rules of the locale currently in use (see wxLocale).
+        
+        Refer to the docs of the standard function @c strtol() for more details about
+        the supported syntax.
 
-        @see ToDouble(), ToULong()
+        @see ToCDouble(), ToDouble(), ToULong()
     */
     bool ToLong(long* val, int base = 10) const;
 
     /**
-        This is exactly the same as ToLong() but works with 64
-        bit integer numbers.
+        Works like ToLong() but unlike it this function expects the integer
+        number to be formatted always with the rules dictated by the "C" locale, 
+        independently from the current application-wide locale (see wxLocale).
+
+        @see ToDouble(), ToLong(), ToULong()
+    */
+    bool ToCLong(long* val, int base = 10) const;
+
+    /**
+        This is exactly the same as ToLong() but works with 64 bit integer numbers.
+        
         Notice that currently it doesn't work (always returns @false) if parsing of 64
         bit numbers is not supported by the underlying C run-time library. Compilers
         with C99 support and Microsoft Visual C++ version 7 and higher do support this.
@@ -933,7 +972,8 @@ public:
     bool ToLongLong(wxLongLong_t* val, int base = 10) const;
 
     /**
-        Attempts to convert the string to an unsigned integer in base @e base.
+        Attempts to convert the string to an unsigned integer in base @a base.
+        
         Returns @true on success in which case the number is stored in the
         location pointed to by @a val or @false if the string does not
         represent a valid number in the given base (the value of @a val is not
@@ -943,11 +983,21 @@ public:
         @c strtoul() and so it simply converts negative numbers to unsigned
         representation instead of rejecting them (e.g. -1 is returned as @c ULONG_MAX).
 
-        See ToLong() for the more detailed description of the @a base parameter.
+        See ToLong() for the more detailed description of the @a base parameter
+        (and of the locale-specific behaviour of this function).
 
-        @see ToDouble(), ToLong()
+        @see ToCULong(), ToDouble(), ToLong()
     */
     bool ToULong(unsigned long* val, int base = 10) const;
+
+    /**
+        Works like ToULong() but unlike it this function expects the integer
+        number to be formatted always with the rules dictated by the "C" locale, 
+        independently from the current application-wide locale (see wxLocale).
+
+        @see ToDouble(), ToLong(), ToULong()
+    */
+    bool ToCULong(unsigned long* val, int base = 10) const;
 
     /**
         This is exactly the same as ToULong() but works with 64

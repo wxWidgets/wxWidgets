@@ -588,6 +588,13 @@ void StringTestCase::ToLong()
 
         if ( ld.flags & (Number_LongLong | Number_Unsigned) )
             continue;
+        
+        // NOTE: unless you're using some exotic locale, ToCLong and ToLong
+        //       should behave the same for our test data set:
+
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToCLong(&l) );
+        if ( ld.IsOk() )
+            CPPUNIT_ASSERT_EQUAL( ld.LValue(), l );
 
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToLong(&l) );
         if ( ld.IsOk() )
@@ -605,6 +612,13 @@ void StringTestCase::ToULong()
         if ( ld.flags & (Number_LongLong | Number_Signed) )
             continue;
 
+        // NOTE: unless you're using some exotic locale, ToCLong and ToLong
+        //       should behave the same for our test data set:
+
+        CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToCULong(&ul) );
+        if ( ld.IsOk() )
+            CPPUNIT_ASSERT_EQUAL( ld.ULValue(), ul );
+        
         CPPUNIT_ASSERT_EQUAL( ld.IsOk(), wxString(ld.str).ToULong(&ul) );
         if ( ld.IsOk() )
             CPPUNIT_ASSERT_EQUAL( ld.ULValue(), ul );
@@ -667,20 +681,59 @@ void StringTestCase::ToDouble()
         { _T("12345"), 12345, true },
         { _T("-1"), -1, true },
         { _T("--1"), 0, false },
+        { _T("-3E-5"), -3E-5, true },
+        { _T("-3E-abcde5"), 0, false },
     };
 
-    // we need to use decimal point, not comma or whatever is its value for the
-    // current locale
-    wxSetlocale(LC_ALL, "C");
+    // test ToCDouble() first:
 
     size_t n;
     for ( n = 0; n < WXSIZEOF(doubleData); n++ )
     {
         const ToDoubleData& ld = doubleData[n];
+        CPPUNIT_ASSERT_EQUAL( ld.ok, wxString(ld.str).ToCDouble(&d) );
+        if ( ld.ok )
+            CPPUNIT_ASSERT_EQUAL( ld.value, d );
+    }
+
+
+    // test ToDouble() now:
+    // NOTE: for the test to be reliable, we need to set the locale explicitely
+    //       so that we know the decimal point character to use
+
+    if (!wxLocale::IsAvailable(wxLANGUAGE_FRENCH))
+        return;     // you should have french support installed to continue this test!
+
+    wxLocale *locale = new wxLocale;
+    
+    // don't load default catalog, it may be unavailable:
+    CPPUNIT_ASSERT( locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_CONV_ENCODING) );
+    
+    static const struct ToDoubleData doubleData2[] =
+    {
+        { _T("1"), 1, true },
+        { _T("1,23"), 1.23, true },
+        { _T(",1"), .1, true },
+        { _T("1,"), 1, true },
+        { _T("1,,"), 0, false },
+        { _T("0"), 0, true },
+        { _T("a"), 0, false },
+        { _T("12345"), 12345, true },
+        { _T("-1"), -1, true },
+        { _T("--1"), 0, false },
+        { _T("-3E-5"), -3E-5, true },
+        { _T("-3E-abcde5"), 0, false },
+    };
+
+    for ( n = 0; n < WXSIZEOF(doubleData2); n++ )
+    {
+        const ToDoubleData& ld = doubleData2[n];
         CPPUNIT_ASSERT_EQUAL( ld.ok, wxString(ld.str).ToDouble(&d) );
         if ( ld.ok )
             CPPUNIT_ASSERT_EQUAL( ld.value, d );
     }
+    
+    delete locale;
 }
 
 void StringTestCase::StringBuf()

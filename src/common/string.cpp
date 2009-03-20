@@ -37,6 +37,7 @@
 
 #include "wx/hashmap.h"
 #include "wx/vector.h"
+#include "wx/xlocale.h"
 
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
@@ -1644,63 +1645,104 @@ int wxString::Find(wxUniChar ch, bool bFromEnd) const
     #define DO_IF_NOT_WINCE(x)
 #endif
 
-#define WX_STRING_TO_INT_TYPE(out, base, func, T)                           \
-    wxCHECK_MSG( out, false, _T("NULL output pointer") );                   \
-    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );  \
-                                                                            \
+#define WX_STRING_TO_X_TYPE_START                                           \
+    wxCHECK_MSG( pVal, false, _T("NULL output pointer") );                  \
     DO_IF_NOT_WINCE( errno = 0; )                                           \
-                                                                            \
     const wxStringCharType *start = wx_str();                               \
-    wxStringCharType *end;                                                  \
-    T val = func(start, &end, base);                                        \
-                                                                            \
+    wxStringCharType *end;
+
+#define WX_STRING_TO_X_TYPE_END                                             \
     /* return true only if scan was stopped by the terminating NUL and */   \
     /* if the string was not empty to start with and no under/overflow */   \
     /* occurred: */                                                         \
     if ( *end || end == start DO_IF_NOT_WINCE(|| errno == ERANGE) )         \
         return false;                                                       \
-    *out = val;                                                             \
-    return true
+    *pVal = val;                                                            \
+    return true;
 
 bool wxString::ToLong(long *pVal, int base) const
 {
-    WX_STRING_TO_INT_TYPE(pVal, base, wxStrtol, long);
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+
+    WX_STRING_TO_X_TYPE_START
+    long val = wxStrtol(start, &end, base);
+    WX_STRING_TO_X_TYPE_END
 }
 
 bool wxString::ToULong(unsigned long *pVal, int base) const
 {
-    WX_STRING_TO_INT_TYPE(pVal, base, wxStrtoul, unsigned long);
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+
+    WX_STRING_TO_X_TYPE_START
+    unsigned long val = wxStrtoul(start, &end, base);
+    WX_STRING_TO_X_TYPE_END
 }
 
 bool wxString::ToLongLong(wxLongLong_t *pVal, int base) const
 {
-    WX_STRING_TO_INT_TYPE(pVal, base, wxStrtoll, wxLongLong_t);
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+
+    WX_STRING_TO_X_TYPE_START
+    wxLongLong_t val = wxStrtoll(start, &end, base);
+    WX_STRING_TO_X_TYPE_END
 }
 
 bool wxString::ToULongLong(wxULongLong_t *pVal, int base) const
 {
-    WX_STRING_TO_INT_TYPE(pVal, base, wxStrtoull, wxULongLong_t);
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+
+    WX_STRING_TO_X_TYPE_START
+    wxULongLong_t val = wxStrtoull(start, &end, base);
+    WX_STRING_TO_X_TYPE_END
 }
 
 bool wxString::ToDouble(double *pVal) const
 {
-    wxCHECK_MSG( pVal, false, _T("NULL output pointer") );
-
-    DO_IF_NOT_WINCE( errno = 0; )
-
-    const wxChar *start = c_str();
-    wxChar *end;
+    WX_STRING_TO_X_TYPE_START
     double val = wxStrtod(start, &end);
-
-    // return true only if scan was stopped by the terminating NUL and if the
-    // string was not empty to start with and no under/overflow occurred
-    if ( *end || end == start DO_IF_NOT_WINCE(|| errno == ERANGE) )
-        return false;
-
-    *pVal = val;
-
-    return true;
+    WX_STRING_TO_X_TYPE_END
 }
+
+#if wxUSE_XLOCALE
+
+bool wxString::ToCLong(long *pVal, int base) const
+{
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+
+    WX_STRING_TO_X_TYPE_START
+#if wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
+    long val = wxStrtol_lA(start, &end, base, wxCLocale);
+#else
+    long val = wxStrtol_l(start, &end, base, wxCLocale);
+#endif
+    WX_STRING_TO_X_TYPE_END
+}
+
+bool wxString::ToCULong(unsigned long *pVal, int base) const
+{
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+
+    WX_STRING_TO_X_TYPE_START
+#if wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
+    unsigned long val = wxStrtoul_lA(start, &end, base, wxCLocale);
+#else
+    unsigned long val = wxStrtoul_l(start, &end, base, wxCLocale);
+#endif
+    WX_STRING_TO_X_TYPE_END
+}
+
+bool wxString::ToCDouble(double *pVal) const
+{
+    WX_STRING_TO_X_TYPE_START
+#if wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
+    double val = wxStrtod_lA(start, &end, wxCLocale);
+#else
+    double val = wxStrtod_l(start, &end, wxCLocale);
+#endif
+    WX_STRING_TO_X_TYPE_END
+}
+
+#endif  // wxUSE_XLOCALE
 
 // ---------------------------------------------------------------------------
 // formatted output
