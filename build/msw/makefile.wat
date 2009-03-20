@@ -3412,6 +3412,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_config.obj &
 	$(OBJS)\monodll_convauto.obj &
 	$(OBJS)\monodll_datetime.obj &
+	$(OBJS)\monodll_datetimefmt.obj &
 	$(OBJS)\monodll_datstrm.obj &
 	$(OBJS)\monodll_dircmn.obj &
 	$(OBJS)\monodll_dynarray.obj &
@@ -3550,6 +3551,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_config.obj &
 	$(OBJS)\monolib_convauto.obj &
 	$(OBJS)\monolib_datetime.obj &
+	$(OBJS)\monolib_datetimefmt.obj &
 	$(OBJS)\monolib_datstrm.obj &
 	$(OBJS)\monolib_dircmn.obj &
 	$(OBJS)\monolib_dynarray.obj &
@@ -3686,6 +3688,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_config.obj &
 	$(OBJS)\basedll_convauto.obj &
 	$(OBJS)\basedll_datetime.obj &
+	$(OBJS)\basedll_datetimefmt.obj &
 	$(OBJS)\basedll_datstrm.obj &
 	$(OBJS)\basedll_dircmn.obj &
 	$(OBJS)\basedll_dynarray.obj &
@@ -3806,6 +3809,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_config.obj &
 	$(OBJS)\baselib_convauto.obj &
 	$(OBJS)\baselib_datetime.obj &
+	$(OBJS)\baselib_datetimefmt.obj &
 	$(OBJS)\baselib_datstrm.obj &
 	$(OBJS)\baselib_dircmn.obj &
 	$(OBJS)\baselib_dynarray.obj &
@@ -5821,6 +5825,9 @@ $(OBJS)\monodll_convauto.obj :  .AUTODEPEND ..\..\src\common\convauto.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_datetimefmt.obj :  .AUTODEPEND ..\..\src\common\datetimefmt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
@@ -8153,6 +8160,9 @@ $(OBJS)\monolib_convauto.obj :  .AUTODEPEND ..\..\src\common\convauto.cpp
 $(OBJS)\monolib_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_datetimefmt.obj :  .AUTODEPEND ..\..\src\common\datetimefmt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -10483,6 +10493,9 @@ $(OBJS)\basedll_convauto.obj :  .AUTODEPEND ..\..\src\common\convauto.cpp
 $(OBJS)\basedll_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_datetimefmt.obj :  .AUTODEPEND ..\..\src\common\datetimefmt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10790,6 +10803,9 @@ $(OBJS)\baselib_convauto.obj :  .AUTODEPEND ..\..\src\common\convauto.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_datetime.obj :  .AUTODEPEND ..\..\src\common\datetime.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_datetimefmt.obj :  .AUTODEPEND ..\..\src\common\datetimefmt.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_datstrm.obj :  .AUTODEPEND ..\..\src\common\datstrm.cpp

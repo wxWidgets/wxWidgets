@@ -288,6 +288,10 @@ SOURCE=..\..\src\common\datetime.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\datetimefmt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\datstrm.cpp
 # End Source File
 # Begin Source File

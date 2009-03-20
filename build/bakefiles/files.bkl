@@ -314,6 +314,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/config.cpp
     src/common/convauto.cpp
     src/common/datetime.cpp
+    src/common/datetimefmt.cpp
     src/common/datstrm.cpp
     src/common/dircmn.cpp
     src/common/dynarray.cpp

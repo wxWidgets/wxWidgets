@@ -304,6 +304,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_config.o \
 	$(OBJS)\monodll_convauto.o \
 	$(OBJS)\monodll_datetime.o \
+	$(OBJS)\monodll_datetimefmt.o \
 	$(OBJS)\monodll_datstrm.o \
 	$(OBJS)\monodll_dircmn.o \
 	$(OBJS)\monodll_dynarray.o \
@@ -443,6 +444,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_config.o \
 	$(OBJS)\monolib_convauto.o \
 	$(OBJS)\monolib_datetime.o \
+	$(OBJS)\monolib_datetimefmt.o \
 	$(OBJS)\monolib_datstrm.o \
 	$(OBJS)\monolib_dircmn.o \
 	$(OBJS)\monolib_dynarray.o \
@@ -580,6 +582,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_config.o \
 	$(OBJS)\basedll_convauto.o \
 	$(OBJS)\basedll_datetime.o \
+	$(OBJS)\basedll_datetimefmt.o \
 	$(OBJS)\basedll_datstrm.o \
 	$(OBJS)\basedll_dircmn.o \
 	$(OBJS)\basedll_dynarray.o \
@@ -700,6 +703,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_config.o \
 	$(OBJS)\baselib_convauto.o \
 	$(OBJS)\baselib_datetime.o \
+	$(OBJS)\baselib_datetimefmt.o \
 	$(OBJS)\baselib_datstrm.o \
 	$(OBJS)\baselib_dircmn.o \
 	$(OBJS)\baselib_dynarray.o \
@@ -5578,6 +5582,9 @@ $(OBJS)\monodll_convauto.o: ../../src/common/convauto.cpp
 $(OBJS)\monodll_datetime.o: ../../src/common/datetime.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_datetimefmt.o: ../../src/common/datetimefmt.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_datstrm.o: ../../src/common/datstrm.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7906,6 +7913,9 @@ $(OBJS)\monolib_convauto.o: ../../src/common/convauto.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_datetime.o: ../../src/common/datetime.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_datetimefmt.o: ../../src/common/datetimefmt.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_datstrm.o: ../../src/common/datstrm.cpp
@@ -10238,6 +10248,9 @@ $(OBJS)\basedll_convauto.o: ../../src/common/convauto.cpp
 $(OBJS)\basedll_datetime.o: ../../src/common/datetime.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_datetimefmt.o: ../../src/common/datetimefmt.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_datstrm.o: ../../src/common/datstrm.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10545,6 +10558,9 @@ $(OBJS)\baselib_convauto.o: ../../src/common/convauto.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_datetime.o: ../../src/common/datetime.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_datetimefmt.o: ../../src/common/datetimefmt.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_datstrm.o: ../../src/common/datstrm.cpp

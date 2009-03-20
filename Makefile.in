@@ -671,6 +671,7 @@ ALL_BASE_SOURCES =  \
 	src/common/config.cpp \
 	src/common/convauto.cpp \
 	src/common/datetime.cpp \
+	src/common/datetimefmt.cpp \
 	src/common/datstrm.cpp \
 	src/common/dircmn.cpp \
 	src/common/dynarray.cpp \
@@ -857,6 +858,7 @@ MONODLL_OBJECTS =  \
 	monodll_config.o \
 	monodll_convauto.o \
 	monodll_datetime.o \
+	monodll_datetimefmt.o \
 	monodll_datstrm.o \
 	monodll_dircmn.o \
 	monodll_dynarray.o \
@@ -980,6 +982,7 @@ MONOLIB_OBJECTS =  \
 	monolib_config.o \
 	monolib_convauto.o \
 	monolib_datetime.o \
+	monolib_datetimefmt.o \
 	monolib_datstrm.o \
 	monolib_dircmn.o \
 	monolib_dynarray.o \
@@ -1100,6 +1103,7 @@ BASEDLL_OBJECTS =  \
 	basedll_config.o \
 	basedll_convauto.o \
 	basedll_datetime.o \
+	basedll_datetimefmt.o \
 	basedll_datstrm.o \
 	basedll_dircmn.o \
 	basedll_dynarray.o \
@@ -1202,6 +1206,7 @@ BASELIB_OBJECTS =  \
 	baselib_config.o \
 	baselib_convauto.o \
 	baselib_datetime.o \
+	baselib_datetimefmt.o \
 	baselib_datstrm.o \
 	baselib_dircmn.o \
 	baselib_dynarray.o \
@@ -14021,6 +14026,9 @@ monodll_convauto.o: $(srcdir)/src/common/convauto.cpp $(MONODLL_ODEP)
 monodll_datetime.o: $(srcdir)/src/common/datetime.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datetime.cpp
 
+monodll_datetimefmt.o: $(srcdir)/src/common/datetimefmt.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datetimefmt.cpp
+
 monodll_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datstrm.cpp
 
@@ -18700,6 +18708,9 @@ monolib_convauto.o: $(srcdir)/src/common/convauto.cpp $(MONOLIB_ODEP)
 
 monolib_datetime.o: $(srcdir)/src/common/datetime.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datetime.cpp
+
+monolib_datetimefmt.o: $(srcdir)/src/common/datetimefmt.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datetimefmt.cpp
 
 monolib_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datstrm.cpp
@@ -23381,6 +23392,9 @@ basedll_convauto.o: $(srcdir)/src/common/convauto.cpp $(BASEDLL_ODEP)
 basedll_datetime.o: $(srcdir)/src/common/datetime.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/datetime.cpp
 
+basedll_datetimefmt.o: $(srcdir)/src/common/datetimefmt.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/datetimefmt.cpp
+
 basedll_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/datstrm.cpp
 
@@ -23839,6 +23853,9 @@ baselib_convauto.o: $(srcdir)/src/common/convauto.cpp $(BASELIB_ODEP)
 
 baselib_datetime.o: $(srcdir)/src/common/datetime.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/datetime.cpp
+
+baselib_datetimefmt.o: $(srcdir)/src/common/datetimefmt.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/datetimefmt.cpp
 
 baselib_datstrm.o: $(srcdir)/src/common/datstrm.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/datstrm.cpp

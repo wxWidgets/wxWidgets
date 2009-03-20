@@ -771,6 +771,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\datetimefmt.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\datstrm.cpp"
 				>
 			</File>
