@@ -1043,7 +1043,7 @@ wxVisualAttributes wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant var
 
     attr.colFg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     attr.colBg = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX );
-    //attr.font.MacCreateFromThemeFont(kThemeViewsFont);
+    //attr.font.CreateSystemFont(wxOSX_SYSTEM_FONT_VIEWS);
 
     return attr;
 }

@@ -41,6 +41,7 @@
 #endif
 
 #include "wx/fontdlg.h"
+#include "wx/fontutil.h"
 
 #if wxOSX_USE_EXPERIMENTAL_FONTDIALOG
 
@@ -82,7 +83,9 @@ wxMacCarbonFontPanelHandler(EventHandlerCallRef WXUNUSED(nextHandler),
                 if ( cEvent.GetParameter<CTFontDescriptorRef>( kEventParamCTFontDescriptor, typeCTFontDescriptorRef, &descr ) == noErr )
                 {
                     wxFont font;
-                    font.MacCreateFromCTFontDescriptor(descr);
+                    wxNativeFontInfo fontinfo;
+                    fontinfo.Init(descr);
+                    font.Create(fontinfo);
                     fontdata.SetChosenFont( font ) ;
                     setup = true;
                 }
@@ -229,7 +232,7 @@ int wxFontDialog::ShowModal()
 #if wxOSX_USE_CORE_TEXT
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
-        CTFontDescriptorRef descr = (CTFontDescriptorRef) CTFontCopyFontDescriptor( (CTFontRef) font.MacGetCTFont() );
+        CTFontDescriptorRef descr = (CTFontDescriptorRef) CTFontCopyFontDescriptor( (CTFontRef) font.GetCTFont() );
         err = SetFontInfoForSelection (kFontSelectionCoreTextType,1, &descr , NULL);
         CFRelease( descr );
         setup = true;

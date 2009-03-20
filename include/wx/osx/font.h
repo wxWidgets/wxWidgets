@@ -16,6 +16,21 @@
 // wxFont
 // ----------------------------------------------------------------------------
 
+// font styles
+enum wxOSXSystemFont
+{
+    wxOSX_SYSTEM_FONT_NONE = 0,
+    wxOSX_SYSTEM_FONT_NORMAL,
+    wxOSX_SYSTEM_FONT_BOLD,
+    wxOSX_SYSTEM_FONT_SMALL,
+    wxOSX_SYSTEM_FONT_SMALL_BOLD,
+    wxOSX_SYSTEM_FONT_MINI,
+    wxOSX_SYSTEM_FONT_MINI_BOLD,
+    wxOSX_SYSTEM_FONT_LABELS,
+    wxOSX_SYSTEM_FONT_VIEWS
+};
+
+
 class WXDLLIMPEXP_CORE wxFont : public wxFontBase
 {
 public:
@@ -75,15 +90,8 @@ public:
 
     bool Create(const wxNativeFontInfo& info);
 
-#if wxOSX_USE_ATSU_TEXT
-    bool MacCreateFromThemeFont( wxUint16 themeFontID ) ;
-#endif
-#if wxOSX_USE_CORE_TEXT
-    bool MacCreateFromUIFont( wxUint32 coreTextFontType );
-    bool MacCreateFromCTFontDescriptor( const void * ctFontDescriptor, int pointSize = 0 );
-    bool MacCreateFromCTFont( const void * ctFont );
-#endif
-
+    bool CreateSystemFont(wxOSXSystemFont font);
+    
     virtual ~wxFont();
 
     // implement base class pure virtuals
@@ -118,24 +126,35 @@ public:
 
     // Mac-specific, risks to change, don't use in portable code
 
-#if wxOSX_USE_ATSU_TEXT
+#if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
+    wxUint16 MacGetThemeFontID() const ;
     // 'old' Quickdraw accessors
     short MacGetFontNum() const;
-    short MacGetFontSize() const;
     wxByte  MacGetFontStyle() const;
-
-    // 'new' ATSUI accessors
-    wxUint32 MacGetATSUFontID() const;
-    wxUint32 MacGetATSUAdditionalQDStyles() const;
-    wxUint16 MacGetThemeFontID() const ;
-
-    // Returns an ATSUStyle not ATSUStyle*
 #endif
+
+#if wxOSX_USE_COCOA_OR_CARBON
+    CGFontRef GetCGFont() const;
+#endif
+
 #if wxOSX_USE_CORE_TEXT
-    const void * MacGetCTFont() const;
+    CTFontRef GetCTFont() const;
 #endif
+
 #if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
+    // Returns an ATSUStyle not ATSUStyle*
     void* MacGetATSUStyle() const ;
+#endif
+
+#if wxOSX_USE_COCOA
+    WX_NSFont GetNSFont() const;
+    static WX_NSFont CreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info);
+    static WX_NSFont CreateNSFont(const wxNativeFontInfo* info);
+#endif
+
+#if wxOSX_USE_IPHONE
+    WX_UIFont GetUIFont() const;
+    static WX_NSFont CreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info);
 #endif
 
 protected:
@@ -143,7 +162,6 @@ protected:
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
 private:
-    void Unshare();
 
     DECLARE_DYNAMIC_CLASS(wxFont)
 };

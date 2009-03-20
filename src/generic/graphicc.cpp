@@ -692,7 +692,7 @@ wxCairoFontData::wxCairoFontData( wxGraphicsRenderer* renderer, const wxFont &fo
     m_underlined = font.GetUnderlined();
 
 #ifdef __WXMAC__
-    m_font = cairo_atsui_font_face_create_for_atsu_font_id( font.MacGetATSUFontID() );
+    m_font = cairo_quartz_font_face_create_for_cgfont( font.GetCGFont() );
 #elif defined(__WXGTK__)
     m_font = pango_font_description_copy( font.GetNativeFontInfo()->description );
 #else

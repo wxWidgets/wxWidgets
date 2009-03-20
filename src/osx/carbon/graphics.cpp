@@ -171,7 +171,7 @@ CGColorRef wxMacCreateCGColor( const wxColour& col )
 CTFontRef wxMacCreateCTFont( const wxFont& font )
 {
 #ifdef __WXMAC__
-    return wxCFRetain((CTFontRef) font.MacGetCTFont());
+    return wxCFRetain((CTFontRef) font.GetCTFont());
 #else
     return CTFontCreateWithName( wxCFStringRef( font.GetFaceName(), wxLocale::GetSystemEncoding() ) , font.GetPointSize() , NULL );
 #endif
@@ -859,7 +859,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 
     // we need the scale here ...
 
-    Fixed atsuSize = IntToFixed( int( 1 * font.MacGetFontSize()) );
+    Fixed atsuSize = IntToFixed( int( 1 * font.GetPointSize()) );
     RGBColor atsuColor ;
     col.GetRGBColor( &atsuColor );
     ATSUAttributeTag atsuTags[] =

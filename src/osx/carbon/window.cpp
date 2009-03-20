@@ -1228,7 +1228,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
             flush = kHIThemeTextHorizontalFlushCenter;
         else if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_RIGHT )
             flush = kHIThemeTextHorizontalFlushRight;
-        HIViewSetTextFont( m_controlRef , part , (CTFontRef) font.MacGetCTFont() );
+        HIViewSetTextFont( m_controlRef , part , (CTFontRef) font.GetCTFont() );
         HIViewSetTextHorizontalFlush( m_controlRef, part, flush );
 
         if ( foreground != *wxBLACK || ignoreBlack == false )
@@ -1269,7 +1269,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
     {
         fontStyle.font = font.MacGetFontNum();
         fontStyle.style = font.MacGetFontStyle();
-        fontStyle.size = font.MacGetFontSize();
+        fontStyle.size = font.GetPointSize();
         fontStyle.flags = kControlUseFontMask | kControlUseFaceMask | kControlUseSizeMask;
     }
 

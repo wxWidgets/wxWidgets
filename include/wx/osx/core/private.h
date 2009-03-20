@@ -726,7 +726,7 @@ private :
 
 void wxMacCocoaRelease( void* obj );
 void wxMacCocoaAutorelease( void* obj );
-void wxMacCocoaRetain( void* obj );
+void* wxMacCocoaRetain( void* obj );
 
 
 #endif

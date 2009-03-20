@@ -4305,13 +4305,9 @@ void wxGenericListCtrl::CreateOrDestroyHeaderWindowAsNeeded()
                         wxTAB_TRAVERSAL
                       );
 
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
+#if defined( __WXMAC__ )
         wxFont font;
-#if wxOSX_USE_ATSU_TEXT
-        font.MacCreateFromThemeFont( kThemeSmallSystemFont );
-#else
-        font.MacCreateFromUIFont( kCTFontSystemFontType );
-#endif
+        font.CreateSystemFont( wxOSX_SYSTEM_FONT_SMALL );
         m_headerWin->SetFont( font );
 #endif
 

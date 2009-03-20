@@ -57,7 +57,11 @@ void wxStaticText::SetLabel(const wxString& label)
     m_labelOrig = label;
 
     // middle/end ellipsization is handled by the OS:
-    if ( HasFlag(wxST_ELLIPSIZE_END) || HasFlag(wxST_ELLIPSIZE_MIDDLE) )
+    if ( HasFlag(wxST_ELLIPSIZE_END) || HasFlag(wxST_ELLIPSIZE_MIDDLE) 
+#if wxOSX_USE_COCOA // Cocoa has all three modes
+         || HasFlag(wxST_ELLIPSIZE_START) 
+#endif
+    )
     {
         // remove markup
         wxString str(label);

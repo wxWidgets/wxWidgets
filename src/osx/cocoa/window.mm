@@ -1352,11 +1352,7 @@ void wxWidgetCocoaImpl::SetControlSize( wxWindowVariant variant )
 void wxWidgetCocoaImpl::SetFont(wxFont const& font, wxColour const&, long, bool)
 {
     if ([m_osxView respondsToSelector:@selector(setFont:)])
-#if wxOSX_USE_CORE_TEXT
-        [m_osxView setFont: (NSFont*)font.MacGetCTFont()];
-#else
-
-#endif
+        [m_osxView setFont: font.GetNSFont()];
 }
 
 void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )

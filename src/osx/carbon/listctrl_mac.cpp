@@ -783,11 +783,7 @@ wxListCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
     attr.colFg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
     attr.colBg = wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOX );
-#if wxOSX_USE_ATSU_TEXT
-    attr.font.MacCreateFromThemeFont( kThemeViewsFont ) ;
-#else
-    attr.font.MacCreateFromUIFont( kCTFontViewsFontType ) ;
-#endif
+    attr.font.CreateSystemFont(wxOSX_SYSTEM_FONT_VIEWS);
 
     return attr;
 }
@@ -2857,7 +2853,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         if (font.Ok())
         {
             info.fontID = kThemeSpecifiedFont;
-            info.font = (CTFontRef) font.MacGetCTFont();
+            info.font = (CTFontRef) font.GetCTFont();
             setup = true;
         }
     }
@@ -2872,7 +2868,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         {
             info.fontID = font.MacGetThemeFontID();
 
-            ::TextSize( (short)(font.MacGetFontSize()) ) ;
+            ::TextSize( (short)(font.GetPointSize()) ) ;
             ::TextFace( font.MacGetFontStyle() ) ;
         }
     }

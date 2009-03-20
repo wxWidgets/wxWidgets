@@ -51,9 +51,6 @@ void wxStockGDIMac::OnExit()
 {
 }
 
-extern wxFont* CreateNormalFont();
-extern wxFont* CreateSmallFont();
-
 const wxFont* wxStockGDIMac::GetFont(Item item)
 {
     wxFont* font = static_cast<wxFont*>(ms_stockObject[item]);
@@ -61,31 +58,14 @@ const wxFont* wxStockGDIMac::GetFont(Item item)
     {
         switch (item)
         {
-#if wxOSX_USE_COCOA_OR_CARBON
         case FONT_NORMAL:
             font = new wxFont;
-#if wxOSX_USE_ATSU_TEXT
-            font->MacCreateFromThemeFont(kThemeSystemFont);
-#else
-            font->MacCreateFromUIFont(kCTFontSystemFontType);
-#endif
+            font->CreateSystemFont(wxOSX_SYSTEM_FONT_NORMAL);
             break;
         case FONT_SMALL:
             font = new wxFont;
-#if wxOSX_USE_ATSU_TEXT
-            font->MacCreateFromThemeFont(kThemeSmallSystemFont);
-#else
-            font->MacCreateFromUIFont(kCTFontSmallSystemFontType);
-#endif
+            font->CreateSystemFont(wxOSX_SYSTEM_FONT_SMALL);
             break;
-#else
-        case FONT_NORMAL:
-            font = CreateNormalFont() ; 
-            break;
-        case FONT_SMALL:
-            font = CreateSmallFont(); 
-            break;
-#endif
         default:
             font = const_cast<wxFont*>(super::GetFont(item));
             break;

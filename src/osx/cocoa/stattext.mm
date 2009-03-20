@@ -27,14 +27,12 @@
 
 #include <stdio.h>
 
-@interface wxNSStaticTextView : NSTextView
+@interface wxNSStaticTextView : NSTextField
 {
     wxWidgetCocoaImpl* impl;
 }
-
-- (void) setImplementation:(wxWidgetCocoaImpl*) item;
-- (wxWidgetCocoaImpl*) implementation;
 @end
+
 @implementation wxNSStaticTextView
 
 + (void)initialize
@@ -47,82 +45,45 @@
     }
 }
 
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (void) setImplementation:(wxWidgetCocoaImpl*) item
-{
-    impl = item;
-}
 @end
 
 class wxStaticTextCocoaImpl : public wxWidgetCocoaImpl
 {
 public:
-    wxStaticTextCocoaImpl( wxWindowMac* peer , WXWidget w ) : wxWidgetCocoaImpl(peer, w)
+    wxStaticTextCocoaImpl( wxWindowMac* peer , WXWidget w , NSLineBreakMode lineBreak) : wxWidgetCocoaImpl(peer, w)
     {
+        m_lineBreak = lineBreak;
     }
     
     virtual void SetLabel(const wxString& title, wxFontEncoding encoding) 
     { 
         wxNSStaticTextView* v = (wxNSStaticTextView*)GetWXWidget();
         wxWindow* wxpeer = GetWXPeer();
-        [v setString: wxCFStringRef( title , wxpeer->GetFont().GetEncoding() ).AsNSString()];
-    
+        NSCell* cell = [v cell];
+        wxCFStringRef text( title , wxpeer->GetFont().GetEncoding() );
+
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineBreakMode:m_lineBreak];
         int style = wxpeer->GetWindowStyleFlag();
-        NSRange allText = NSMakeRange(0, title.length());
         if (style & wxALIGN_CENTER)
-            [v setAlignment: NSCenterTextAlignment range: allText];
+            [paragraphStyle setAlignment: NSCenterTextAlignment];
         else if (style & wxALIGN_RIGHT)
-            [v setAlignment: NSRightTextAlignment range: allText];
+            [paragraphStyle setAlignment: NSRightTextAlignment];
+    
+        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:paragraphStyle, NSParagraphStyleAttributeName, nil];
+        NSAttributedString *attrstring = [[NSAttributedString alloc] initWithString:text.AsNSString() attributes:dict];
+        [cell setAttributedStringValue:attrstring];
+        [attrstring release];
+        [paragraphStyle release];
     }
+private :
+    NSLineBreakMode m_lineBreak;
 };
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-    Point bounds;
-    
-#if wxOSX_USE_ATSU_TEXT
-    OSStatus err = noErr;
-    wxCFStringRef str( m_label,  GetFont().GetEncoding() );
-
-    SInt16 baseline;
-    if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
-    {
-        err = GetThemeTextDimensions(
-            (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
-            m_font.MacGetThemeFontID(), kThemeStateActive, false, &bounds, &baseline );
-        verify_noerr( err );
-    }
-    else
-#endif
-    {
-        wxClientDC dc(const_cast<wxStaticText*>(this));
-        wxCoord width, height ;
-        dc.GetMultiLineTextExtent( m_label , &width, &height);
-        // FIXME: The calculations returned by this function are too small
-        // for some strings, so we adjust manually.
-        bounds.h = width+12;
-        bounds.v = height+4;
-    }
-    
-    if ( m_label.empty() )
-        bounds.h = 0;
-
-    bounds.h += MacGetLeftBorderSize() + MacGetRightBorderSize();
-    bounds.v += MacGetTopBorderSize() + MacGetBottomBorderSize();
-
-    return wxSize( bounds.h, bounds.v );
+    return wxWindowMac::DoGetBestSize() ;
 }
-
-// for wxST_ELLIPSIZE_* support:
-
-/*
-   FIXME: UpdateLabel() should be called on size events when wxST_ELLIPSIZE_START is set
-          to allow correct dynamic ellipsizing of the label
-*/
 
 wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
                                     wxWindowMac* parent,
@@ -139,29 +100,26 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
     [v setEditable:NO];
     [v setDrawsBackground:NO];
     [v setSelectable: NO];
-            
-    wxWidgetCocoaImpl* c = new wxStaticTextCocoaImpl( wxpeer, v );
-    return c;
-/*
-    Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );
-
-    wxMacControl* peer = new wxMacControl( wxpeer );
-    OSStatus err = CreateStaticTextControl(
-        MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
-        &bounds, NULL, NULL, peer->GetControlRefAddr() );
-    verify_noerr( err );
-
-    if ( ( style & wxST_ELLIPSIZE_END ) || ( style & wxST_ELLIPSIZE_MIDDLE ) )
+    [v setBezeled:NO];
+    [v setBordered:NO];
+    
+    NSLineBreakMode linebreak = NSLineBreakByWordWrapping;
+    if ( ((wxStaticText*)wxpeer)->IsEllipsized() )
     {
-        TruncCode tCode = truncEnd;
         if ( style & wxST_ELLIPSIZE_MIDDLE )
-            tCode = truncMiddle;
-
-        err = peer->SetData( kControlStaticTextTruncTag, tCode );
-        err = peer->SetData( kControlStaticTextIsMultilineTag, (Boolean)0 );
+            linebreak = NSLineBreakByTruncatingMiddle;
+        else if (style & wxST_ELLIPSIZE_END )
+            linebreak = NSLineBreakByTruncatingTail;
+        else if (style & wxST_ELLIPSIZE_START )
+            linebreak = NSLineBreakByTruncatingHead;
     }
-    return peer;
-    */
+    else 
+    {
+        [[v cell] setWraps:YES];
+    }
+            
+    wxWidgetCocoaImpl* c = new wxStaticTextCocoaImpl( wxpeer, v, linebreak );
+    return c;
 }
 
 #endif //if wxUSE_STATTEXT

@@ -65,6 +65,7 @@ enum wxXLFDField
 // functions, the user code can only get the objects of this type from
 // somewhere and pass it somewhere else (possibly save them somewhere using
 // ToString() and restore them using FromString())
+
 class WXDLLIMPEXP_CORE wxNativeFontInfo
 {
 public:
@@ -113,6 +114,77 @@ public:
     FATTRS       fa;
     FONTMETRICS  fm;
     FACENAMEDESC fn;
+#elif defined(__WXOSX__)
+public:
+    wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
+    wxNativeFontInfo( int size,
+                  wxFontFamily family,
+                  wxFontStyle style,
+                  wxFontWeight weight,
+                  bool underlined,
+                  const wxString& faceName,
+                  wxFontEncoding encoding)
+    { Init(size,family,style,weight,underlined,faceName,encoding); }
+
+    ~wxNativeFontInfo() { Free(); }
+
+    wxNativeFontInfo& operator=(const wxNativeFontInfo& info)
+    {
+        if (this != &info)
+        {
+            Free();
+            Init(info);
+        }
+        return *this;
+    }
+
+#if wxOSX_USE_CORE_TEXT
+    void Init(CTFontDescriptorRef descr);
+#endif
+    void Init(const wxNativeFontInfo& info);
+    void Init(int size,
+                  wxFontFamily family,
+                  wxFontStyle style,
+                  wxFontWeight weight,
+                  bool underlined,
+                  const wxString& faceName ,
+                  wxFontEncoding encoding);
+
+    void Free();
+    void EnsureValid();
+    
+    bool m_descriptorValid;
+#if wxOSX_USE_CORE_TEXT
+    CTFontDescriptorRef m_ctFontDescriptor;
+#endif
+
+#if wxOSX_USE_ATSU_TEXT
+    bool            m_atsuFontValid;
+    // the atsu font ID
+    wxUint32        m_atsuFontID;
+    // the qd styles that are not intrinsic to the font above
+    wxInt16         m_atsuAdditionalQDStyles;
+#if wxOSX_USE_CARBON
+    wxInt16         m_qdFontFamily;
+    wxInt16         m_qdFontStyle;
+#endif
+#endif
+
+#if wxOSX_USE_COCOA
+    WX_NSFontDescriptor m_nsFontDescriptor;
+    void            ValidateNSFontDescriptor();
+#endif
+#if wxOSX_USE_IPHONE
+#endif
+
+    int           m_pointSize;
+    wxFontFamily  m_family;
+    wxFontStyle   m_style;
+    wxFontWeight  m_weight;
+    bool          m_underlined;
+    wxString      m_faceName;
+    wxFontEncoding m_encoding;
+public :
 #else // other platforms
     //
     //  This is a generic implementation that should work on all ports

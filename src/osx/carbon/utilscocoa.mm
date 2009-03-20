@@ -21,6 +21,8 @@
 #include "wx/osx/private.h"
 #endif
 
+#include "wx/fontutil.h"
+
 #ifdef __WXMAC__
 
 #if wxOSX_USE_CARBON
@@ -79,16 +81,112 @@ void wxMacCocoaAutorelease( void* obj )
     [(NSObject*)obj autorelease];
 }
 
-void wxMacCocoaRetain( void* obj )
+void* wxMacCocoaRetain( void* obj )
 {
     [(NSObject*)obj retain];
+    return obj;
 }
 
+// ----------------------------------------------------------------------------
+// NSFont Utils
+// ----------------------------------------------------------------------------
+
 #if wxOSX_USE_COCOA
+
+WX_NSFont wxFont::CreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
+{
+    NSFont* nsfont;
+    switch( font )
+    {
+        case wxOSX_SYSTEM_FONT_NORMAL:
+            nsfont = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+            break;
+        case wxOSX_SYSTEM_FONT_BOLD:
+            nsfont = [NSFont boldSystemFontOfSize:[NSFont systemFontSize]];
+            break;
+        case wxOSX_SYSTEM_FONT_SMALL:
+            nsfont = [NSFont systemFontOfSize:[NSFont smallSystemFontSize]];
+            break;
+        case wxOSX_SYSTEM_FONT_SMALL_BOLD:
+            nsfont = [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]];
+            break;
+        case wxOSX_SYSTEM_FONT_MINI:
+            nsfont = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+            break;
+       case wxOSX_SYSTEM_FONT_MINI_BOLD:
+            nsfont = [NSFont boldSystemFontOfSize:
+                [NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+            break;
+        case wxOSX_SYSTEM_FONT_LABELS:
+            nsfont = [NSFont labelFontOfSize:
+                [NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+            break;
+       case wxOSX_SYSTEM_FONT_VIEWS:
+            nsfont = [NSFont controlContentFontOfSize:0];
+            break;
+        default:
+            break;
+    }
+    [nsfont retain];
+    NSFontDescriptor*desc = [[nsfont fontDescriptor] retain];
+    if ( info->m_faceName.empty())
+    {
+        wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
+        wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
+        bool underlined = false;
+        
+        int size = (int) ([desc pointSize]+0.5);
+        NSFontSymbolicTraits traits = [desc symbolicTraits];
+            
+        if ( traits & NSFontBoldTrait )
+            fontweight = wxFONTWEIGHT_BOLD ;
+        else
+            fontweight = wxFONTWEIGHT_NORMAL ;
+        if ( traits & NSFontItalicTrait )
+            fontstyle = wxFONTSTYLE_ITALIC ;
+             
+        wxCFStringRef fontname( [desc postscriptName] );
+        info->Init(size,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
+            fontname.AsString(), wxFONTENCODING_DEFAULT);
+        
+    }
+    info->m_nsFontDescriptor = desc;
+    return nsfont;
+}
+
+void wxNativeFontInfo::ValidateNSFontDescriptor()
+{
+    NSFontDescriptor* desc  = [NSFont fontWithName:wxCFStringRef(m_faceName).AsNSString() size:m_pointSize];
+    NSFontSymbolicTraits traits = 0;
+
+    if (m_weight == wxFONTWEIGHT_BOLD)
+        traits |= NSFontBoldTrait;
+    if (m_style == wxFONTSTYLE_ITALIC || m_style == wxFONTSTYLE_SLANT)
+        traits |= NSFontItalicTrait;
+
+    if ( traits != 0 )
+    {
+        [desc autorelease];
+        desc = [desc fontDescriptorWithSymbolicTraits:traits];
+    }
+    m_nsFontDescriptor = desc;
+}
+
+WX_NSFont wxFont::CreateNSFont(const wxNativeFontInfo* info)
+{
+    NSFont* nsFont;
+    nsFont = [NSFont fontWithDescriptor:info->m_nsFontDescriptor size:info->m_pointSize];
+    
+    return nsFont;
+}
+
+#endif
 
 // ----------------------------------------------------------------------------
 // NSImage Utils
 // ----------------------------------------------------------------------------
+
+#if wxOSX_USE_COCOA
 
 //  From "Cocoa Drawing Guide:Working with Images"
 WX_NSImage  wxOSXCreateNSImageFromCGImage( CGImageRef image )
