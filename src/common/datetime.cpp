@@ -382,7 +382,8 @@ wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
 
 // returns the time zone in the C sense, i.e. the difference UTC - local
 // (in seconds)
-static int GetTimeZone()
+// NOTE: not static because used by datetimefmt.cpp
+int GetTimeZone()
 {
     // set to true when the timezone is set
     static bool s_timezoneSet = false;
@@ -455,7 +456,8 @@ static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
 #ifdef HAVE_STRFTIME
 
 // this function is a wrapper around strftime(3) adding error checking
-static wxString CallStrftime(const wxString& format, const tm* tm)
+// NOTE: not static because used by datetimefmt.cpp
+wxString CallStrftime(const wxString& format, const tm* tm)
 {
     wxChar buf[4096];
     // Create temp wxString here to work around mingw/cygwin bug 1046059
@@ -499,8 +501,9 @@ static void ReplaceDefaultYearMonthWithCurrent(int *year,
     }
 }
 
-// fll the struct tm with default values
-static void InitTm(struct tm& tm)
+// fill the struct tm with default values
+// NOTE: not static because used by datetimefmt.cpp
+void InitTm(struct tm& tm)
 {
     // struct tm may have etxra fields (undocumented and with unportable
     // names) which, nevertheless, must be set to 0
@@ -664,6 +667,13 @@ wxDateTime::TimeZone::TimeZone(wxDateTime::TZ tz)
 // ----------------------------------------------------------------------------
 // static functions
 // ----------------------------------------------------------------------------
+
+/* static */
+struct tm *wxDateTime::GetTmNow(struct tm *tmstruct)
+{
+    time_t t = GetTimeNow();
+    return wxLocaltime_r(&t, tmstruct);
+}
 
 /* static */
 bool wxDateTime::IsLeapYear(int year, wxDateTime::Calendar cal)

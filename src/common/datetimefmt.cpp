@@ -64,6 +64,16 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// helpers shared between datetime.cpp and datetimefmt.cpp
+// ----------------------------------------------------------------------------
+
+extern void InitTm(struct tm& tm);
+
+extern int GetTimeZone();
+
+extern wxString CallStrftime(const wxString& format, const tm* tm);
+
+// ----------------------------------------------------------------------------
 // constants (see also datetime.cpp)
 // ----------------------------------------------------------------------------
 
@@ -172,13 +182,6 @@ static wxDateTime::WeekDay GetWeekDayFromName(const wxString& name, int flags)
     }
 
     return wd;
-}
-
-/* static */
-struct tm *wxDateTime::GetTmNow(struct tm *tmstruct)
-{
-    time_t t = GetTimeNow();
-    return wxLocaltime_r(&t, tmstruct);
 }
 
 // scans all digits (but no more than len) and returns the resulting number
