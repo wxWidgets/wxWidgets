@@ -173,6 +173,7 @@ public:
 #if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     ATSUStyle       m_macATSUStyle ;
 #endif
+    wxCFRef<CGFontRef> m_cgFont;
 #if wxOSX_USE_COCOA
     WX_NSFont       m_nsFont;
 #endif
@@ -196,6 +197,7 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
 #if wxOSX_USE_CORE_TEXT
     m_ctFont = data.m_ctFont;
 #endif
+    m_cgFont = data.m_cgFont;
 #if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     if ( data.m_macATSUStyle != NULL )
     {
@@ -248,6 +250,7 @@ void wxFontRefData::Free()
 #if wxOSX_USE_CORE_TEXT
     m_ctFont.reset();
 #endif
+    m_cgFont.reset();
 #if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
     if ( m_macATSUStyle )
     {
@@ -414,6 +417,7 @@ void wxFontRefData::MacFindFont()
         {
             m_ctFont.reset( CTFontCreateWithFontDescriptor( m_info.m_ctFontDescriptor, 0/*m_pointSize */, NULL ) );
         }
+        m_cgFont.reset(CTFontCopyGraphicsFont(m_ctFont, NULL));
     }
 
 #endif
@@ -471,7 +475,11 @@ void wxFontRefData::MacFindFont()
                                      atsuTags, atsuSizes, atsuValues);
 
         wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
-        return;
+        if ( m_cgFont.get() == NULL )
+        {
+            ATSFontRef fontRef = FMGetATSFontRefFromFont(m_info.m_atsuFontID);
+            m_cgFont.reset( CGFontCreateWithPlatformFont( &fontRef ) );
+        }
     }
 #endif
 #if wxOSX_USE_COCOA
@@ -779,6 +787,21 @@ CTFontRef wxFont::GetCTFont() const
 }
 
 #endif
+
+#if wxOSX_USE_COCOA_OR_CARBON
+
+CGFontRef wxFont::GetCGFont() const
+{
+    wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
+
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
+    
+    return (M_FONTDATA->m_cgFont);
+}
+
+#endif
+
 
 #if wxOSX_USE_COCOA
 
