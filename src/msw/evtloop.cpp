@@ -387,6 +387,7 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
     // we don't want to process WM_QUIT from here - it should be processed in
     // the main event loop in order to stop it
     MSG msg;
+    int nPaintsReceived = 0;
     while ( PeekMessage(&msg, (HWND)0, 0, 0, PM_NOREMOVE) &&
             msg.message != WM_QUIT )
     {
@@ -396,8 +397,32 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
 
         if (msg.message == WM_PAINT)
         {
-            // WM_PAINT messages are the last ones of the queue...
-            break;
+            // NOTE: WM_PAINTs are categorized as wxEVT_CATEGORY_UI
+            if ((eventsToProcess & wxEVT_CATEGORY_UI) == 0)
+            {
+                // this msg is not going to be dispatched...
+                // however WM_PAINT is special: until there are damaged 
+                // windows, Windows will keep sending it forever!
+                if (nPaintsReceived > 10)
+                {
+                    // we got 10 WM_PAINT consecutive messages...
+                    // we must have reached the tail of the message queue:
+                    // we're now getting _only_ WM_PAINT events and this will
+                    // continue forever (since we don't dispatch them
+                    // because of the user-specified eventsToProcess mask)...
+                    // break out of this loop!
+                    break;
+                }
+                else
+                    nPaintsReceived++;
+            }
+            //else: we're going to dispatch it below,
+            //      so we don't need to take any special action
+        }
+        else
+        {
+            // reset the counter of consecutive WM_PAINT messages received:
+            nPaintsReceived = 0;
         }
 
         // choose a wxEventCategory for this Windows message
@@ -477,7 +502,6 @@ bool wxGUIEventLoop::YieldFor(long eventsToProcess)
                 {
                     // 0;WM_USER-1 is the range of message IDs reserved for use
                     // by the system.
-
                     // there are too many of these types of messages to handle
                     // them in this switch
                     cat = wxEVT_CATEGORY_UI;
