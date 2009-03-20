@@ -79,8 +79,6 @@ bool wxMSWEventLoopBase::Pending() const
 
 bool wxMSWEventLoopBase::GetNextMessage(WXMSG* msg)
 {
-    wxCHECK_MSG( IsRunning(), false, _T("can't get messages if not running") );
-
     const BOOL rc = ::GetMessage(msg, NULL, 0, 0);
 
     if ( rc == 0 )
