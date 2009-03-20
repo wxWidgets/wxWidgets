@@ -79,8 +79,40 @@ static const int MIN_PER_HOUR = 60;
 // parsing helpers
 // ----------------------------------------------------------------------------
 
-// see datetime.cpp:
-wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month);
+#ifdef HAVE_STRPTIME
+
+#if wxUSE_UNIX && !defined(HAVE_STRPTIME_DECL)
+    // configure detected that we had strptime() but not its declaration,
+    // provide it ourselves
+    extern "C" char *strptime(const char *, const char *, struct tm *);
+#endif
+
+// Unicode-friendly strptime() wrapper
+static const wxStringCharType *
+CallStrptime(const wxStringCharType *input, const char *fmt, tm *tm)
+{
+    // the problem here is that strptime() returns pointer into the string we
+    // passed to it while we're really interested in the pointer into the
+    // original, Unicode, string so we try to transform the pointer back
+#if wxUSE_UNICODE_WCHAR
+    wxCharBuffer inputMB(wxConvertWX2MB(input));
+#else // ASCII
+    const char * const inputMB = input;
+#endif // Unicode/Ascii
+
+    const char *result = strptime(inputMB, fmt, tm);
+    if ( !result )
+        return NULL;
+
+#if wxUSE_UNICODE_WCHAR
+    // FIXME: this is wrong in presence of surrogates &c
+    return input + (result - inputMB.data());
+#else // ASCII
+    return result;
+#endif // Unicode/Ascii
+}
+
+#endif // HAVE_STRPTIME
 
 // return the month if the string is a month name or Inv_Month otherwise
 static wxDateTime::Month GetMonthFromName(const wxString& name, int flags)
@@ -1151,20 +1183,39 @@ wxDateTime::ParseFormat(const wxString& date,
             case _T('c'):       // locale default date and time  representation
                 {
                     wxDateTime dt;
+                    Tm tm;
 
                     const wxString inc(input);
 
-                    // try the format which corresponds to ctime() output first
-                    wxString::const_iterator endc;
-                    if ( !dt.ParseFormat(inc, wxS("%a %b %d %H:%M:%S %Y"), &endc) &&
-                            !dt.ParseFormat(inc, wxS("%x %X"), &endc) &&
-                                !dt.ParseFormat(inc, wxS("%X %x"), &endc) )
+                    // NOTE: %c is locale-dependent; try strptime
+#ifdef HAVE_STRPTIME
+                    // try using strptime() -- it may fail even if the input is
+                    // correct but the date is out of range, so we will fall back
+                    // to our generic code anyhow
+                    const wxStringCharType *
+                        result = CallStrptime(input, "%c", &tm);
+                    if ( !result )
                     {
-                        // we've tried everything and still no match
-                        return NULL;
-                    }
+                        // strptime() failed; try generic heuristic code
+#endif // HAVE_STRPTIME
 
-                    Tm tm = dt.GetTm();
+                        // try the format which corresponds to ctime() output first
+                        wxString::const_iterator endc;
+                        if ( !dt.ParseFormat(inc, wxS("%a %b %d %H:%M:%S %Y"), &endc) &&
+                                !dt.ParseFormat(inc, wxS("%x %X"), &endc) &&
+                                    !dt.ParseFormat(inc, wxS("%X %x"), &endc) )
+                        {
+                            // we've tried everything and still no match
+                            return NULL;
+                        }
+
+                        tm = dt.GetTm();
+                        input += endc - inc.begin();
+#ifdef HAVE_STRPTIME
+                    }
+                    else
+                        input = result;     // proceed where strptime() ended
+#endif // HAVE_STRPTIME
 
                     haveDay = haveMon = haveYear =
                     haveHour = haveMin = haveSec = true;
@@ -1176,8 +1227,6 @@ wxDateTime::ParseFormat(const wxString& date,
                     year = tm.year;
                     mon = tm.mon;
                     mday = tm.mday;
-
-                    input += endc - inc.begin();
                 }
                 break;
 
@@ -1570,7 +1619,7 @@ wxDateTime::ParseFormat(const wxString& date,
     //      also always ignore the week day
     if ( haveDay )
     {
-        if ( mday > GetNumOfDaysInMonth(tm.year, tm.mon) )
+        if ( mday > GetNumberOfDays(tm.mon, tm.year) )
         {
             wxLogDebug(_T("bad month day in wxDateTime::ParseFormat"));
 
@@ -1798,7 +1847,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
                     // dates like 2/29/1976 which would be rejected otherwise
                     wxDateTime_t max_days = (wxDateTime_t)(
                         haveMon
-                        ? GetNumOfDaysInMonth(haveYear ? year : 1976, mon)
+                        ? GetNumberOfDays(mon, haveYear ? year : 1976)
                         : 31
                     );
 
@@ -1976,7 +2025,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
                 mon = (wxDateTime::Month)(day - 1);
 
                 // we're in the current year then
-                if ( (year > 0) && (year <= (int)GetNumOfDaysInMonth(Inv_Year, mon)) )
+                if ( (year > 0) && (year <= (int)GetNumberOfDays(mon, Inv_Year)) )
                 {
                     day = (wxDateTime_t)year;
 
@@ -2010,7 +2059,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     {
         // normally we check the day above but the check is optimistic in case
         // we find the day before its month/year so we have to redo it now
-        if ( day > GetNumOfDaysInMonth(year, mon) )
+        if ( day > GetNumberOfDays(mon, year) )
             return NULL;
 
         Set(day, mon, year);

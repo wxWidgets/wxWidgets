@@ -391,8 +391,7 @@ extern const char *wxDumpDate(const wxDateTime* dt)
 #endif // Debug
 
 // get the number of days in the given month of the given year
-// NOTE: not static because required by datetimefmt.cpp, too
-inline
+static inline
 wxDateTime::wxDateTime_t GetNumOfDaysInMonth(int year, wxDateTime::Month month)
 {
     // the number of days in month in Julian/Gregorian calendar: the first line
@@ -501,41 +500,6 @@ static wxString CallStrftime(const wxString& format, const tm* tm)
 }
 
 #endif // HAVE_STRFTIME
-
-#ifdef HAVE_STRPTIME
-
-#if wxUSE_UNIX && !defined(HAVE_STRPTIME_DECL)
-    // configure detected that we had strptime() but not its declaration,
-    // provide it ourselves
-    extern "C" char *strptime(const char *, const char *, struct tm *);
-#endif
-
-// Unicode-friendly strptime() wrapper
-static const wxStringCharType *
-CallStrptime(const wxStringCharType *input, const char *fmt, tm *tm)
-{
-    // the problem here is that strptime() returns pointer into the string we
-    // passed to it while we're really interested in the pointer into the
-    // original, Unicode, string so we try to transform the pointer back
-#if wxUSE_UNICODE_WCHAR
-    wxCharBuffer inputMB(wxConvertWX2MB(input));
-#else // ASCII
-    const char * const inputMB = input;
-#endif // Unicode/Ascii
-
-    const char *result = strptime(inputMB, fmt, tm);
-    if ( !result )
-        return NULL;
-
-#if wxUSE_UNICODE_WCHAR
-    // FIXME: this is wrong in presence of surrogates &c
-    return input + (result - inputMB.data());
-#else // ASCII
-    return result;
-#endif // Unicode/Ascii
-}
-
-#endif // HAVE_STRPTIME
 
 // if year and/or month have invalid values, replace them with the current ones
 static void ReplaceDefaultYearMonthWithCurrent(int *year,
