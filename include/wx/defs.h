@@ -2638,16 +2638,24 @@ typedef void*       WXDisplay;
 
 typedef const void * CFTypeRef;
 
-typedef const struct __CFString * CFStringRef;
+// typedef const struct __CFString * CFStringRef;
+
+#define DECLARE_WXOSX_OPAQUE_CFREF( name ) typedef struct __##name* name##Ref;
+#define DECLARE_WXOSX_OPAQUE_CONST_CFREF( name ) typedef const struct __##name* name##Ref;
+
+DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFString )
 typedef struct __CFString * CFMutableStringRef;
 
-typedef struct __CFRunLoopSource * CFRunLoopSourceRef;
+DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoopSource )
+DECLARE_WXOSX_OPAQUE_CONST_CFREF( CTFont )
+DECLARE_WXOSX_OPAQUE_CONST_CFREF( CTFontDescriptor )
 
-#define DECLARE_WXMAC_OPAQUE_CGREF( name ) typedef struct name* name##Ref;
+#define DECLARE_WXOSX_OPAQUE_CGREF( name ) typedef struct name* name##Ref;
 
-DECLARE_WXMAC_OPAQUE_CGREF( CGColor )
-DECLARE_WXMAC_OPAQUE_CGREF( CGImage )
-DECLARE_WXMAC_OPAQUE_CGREF( CGContext )
+DECLARE_WXOSX_OPAQUE_CGREF( CGColor )
+DECLARE_WXOSX_OPAQUE_CGREF( CGImage )
+DECLARE_WXOSX_OPAQUE_CGREF( CGContext )
+DECLARE_WXOSX_OPAQUE_CGREF( CGFont )
 
 typedef CGColorRef    WXCOLORREF;
 typedef CGImageRef    WXCGIMAGEREF;
@@ -2748,6 +2756,8 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSColorPanel);
 DECLARE_WXCOCOA_OBJC_CLASS(NSControl);
 DECLARE_WXCOCOA_OBJC_CLASS(NSCursor);
 DECLARE_WXCOCOA_OBJC_CLASS(NSEvent);
+DECLARE_WXCOCOA_OBJC_CLASS(NSFont);
+DECLARE_WXCOCOA_OBJC_CLASS(NSFontDescriptor);
 DECLARE_WXCOCOA_OBJC_CLASS(NSFontPanel);
 DECLARE_WXCOCOA_OBJC_CLASS(NSImage);
 DECLARE_WXCOCOA_OBJC_CLASS(NSLayoutManager);
