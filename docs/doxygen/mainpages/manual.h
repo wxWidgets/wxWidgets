@@ -9,10 +9,10 @@
 
 /**
 
-@mainpage Contents
+@mainpage Reference manual
 @author Julian Smart, Robert Roebling, Vadim Zeitlin, Robin Dunn,
         Francesco Montorsi, Bryan Petty, et al
-@date February, 2009
+@date March, 2009
 
 @image html main_wxlogo.png
 
