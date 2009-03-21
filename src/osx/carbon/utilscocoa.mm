@@ -168,10 +168,7 @@ void wxNativeFontInfo::ValidateNSFontDescriptor()
     {
         desc = [desc fontDescriptorWithSymbolicTraits:traits];
     }
-    else
-    {
-        wxMacCocoaRetain(desc);
-    }
+    wxMacCocoaRetain(desc);
     m_nsFontDescriptor = desc;
 }
 
@@ -179,7 +176,7 @@ WX_NSFont wxFont::CreateNSFont(const wxNativeFontInfo* info)
 {
     NSFont* nsFont;
     nsFont = [NSFont fontWithDescriptor:info->m_nsFontDescriptor size:info->m_pointSize];
-    
+    wxMacCocoaRetain(nsFont);
     return nsFont;
 }
 
