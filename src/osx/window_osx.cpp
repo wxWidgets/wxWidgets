@@ -195,7 +195,9 @@ wxWindowMac::~wxWindowMac()
 
 WXWidget wxWindowMac::GetHandle() const
 {
-    return (WXWidget) m_peer->GetWXWidget() ;
+    if ( m_peer )
+        return (WXWidget) m_peer->GetWXWidget() ;
+    return NULL;
 }
 
 //
