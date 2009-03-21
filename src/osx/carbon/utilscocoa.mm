@@ -166,8 +166,11 @@ void wxNativeFontInfo::ValidateNSFontDescriptor()
 
     if ( traits != 0 )
     {
-        [desc autorelease];
         desc = [desc fontDescriptorWithSymbolicTraits:traits];
+    }
+    else
+    {
+        wxMacCocoaRetain(desc);
     }
     m_nsFontDescriptor = desc;
 }
