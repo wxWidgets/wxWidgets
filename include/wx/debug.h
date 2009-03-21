@@ -1,58 +1,54 @@
-/**
-*  Name:        wx/debug.h
-*  Purpose:     Misc debug functions and macros
-*  Author:      Vadim Zeitlin
-*  Modified by: Ryan Norton (Converted to C)
-*  Created:     29/01/98
-*  RCS-ID:      $Id$
-*  Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
-*  Licence:     wxWindows licence
-*/
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/debug.h
+// Purpose:     Misc debug functions and macros
+// Author:      Vadim Zeitlin
+// Created:     29/01/98
+// RCS-ID:      $Id$
+// Copyright:   (c) 1998-2009 Vadim Zeitlin <vadim@wxwidgets.org>
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
-/* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
+#ifndef _WX_DEBUG_H_
+#define _WX_DEBUG_H_
 
-#ifndef   _WX_DEBUG_H_
-#define   _WX_DEBUG_H_
+#if !defined(__WXPALMOS5__) && !defined(__WXWINCE__)
+    #include  <assert.h>
+#endif // systems without assert.h
 
-#ifndef __WXPALMOS5__
-#ifndef __WXWINCE__
-#include  <assert.h>
-#endif
-#endif // ! __WXPALMOS5__
-#include  <limits.h>            /*  for CHAR_BIT used below */
+#include <limits.h>          // for CHAR_BIT used below
 
-#include  "wx/chartype.h"     /*  for __TFILE__ and wxChar */
+#include "wx/chartype.h"     // for __TFILE__ and wxChar
 
-/*  ---------------------------------------------------------------------------- */
-/*  Defines controlling the debugging macros */
-/*  ---------------------------------------------------------------------------- */
+// ----------------------------------------------------------------------------
+// Defines controlling the debugging macros
+// ----------------------------------------------------------------------------
 
-/*  if _DEBUG is defined (MS VC++ and others use it in debug builds), define */
-/*  __WXDEBUG__ too */
+// if _DEBUG is defined (MS VC++ and others use it in debug builds), define
+// __WXDEBUG__ too
 #ifdef _DEBUG
     #ifndef __WXDEBUG__
         #define __WXDEBUG__
-    #endif /*  !__WXDEBUG__ */
-#endif /*  _DEBUG */
+    #endif // !__WXDEBUG__
+#endif // _DEBUG
 
-/*  if NDEBUG is defined (<assert.h> uses it), undef __WXDEBUG__ and WXDEBUG */
+// if NDEBUG is defined (<assert.h> uses it), undef __WXDEBUG__ and WXDEBUG
 #ifdef NDEBUG
     #undef __WXDEBUG__
     #undef WXDEBUG
-#endif /*  NDEBUG */
+#endif // NDEBUG
 
-/*  if __WXDEBUG__ is defined, make sure that WXDEBUG is defined and >= 1 */
+// if __WXDEBUG__ is defined, make sure that WXDEBUG is defined and >= 1
 #ifdef __WXDEBUG__
     #if !defined(WXDEBUG) || !WXDEBUG
         #undef WXDEBUG
         #define WXDEBUG 1
-    #endif /*  !WXDEBUG */
-#endif /*  __WXDEBUG__ */
+    #endif // !WXDEBUG
+#endif // __WXDEBUG__
 
 #ifndef __WXFUNCTION__
     /* TODO: add more compilers supporting __FUNCTION__ */
     #if defined(__DMC__)
-        /* 
+        /*
            __FUNCTION__ happens to be not defined within class members
            http://www.digitalmars.com/drn-bin/wwwnews?c%2B%2B.beta/485
         */
@@ -67,30 +63,30 @@
     #endif
 #endif /* __WXFUNCTION__ already defined */
 
-/*  ---------------------------------------------------------------------------- */
-/*  Debugging macros */
-/*  */
-/*  All debugging macros rely on ASSERT() which in turn calls the user-defined */
-/*  OnAssert() function. To keep things simple, it's called even when the */
-/*  expression is true (i.e. everything is ok) and by default does nothing: just */
-/*  returns the same value back. But if you redefine it to do something more sexy */
-/*  (popping up a message box in your favourite GUI, sending you e-mail or */
-/*  whatever) it will affect all ASSERTs, FAILs and CHECKs in your code. */
-/*  */
-/*  Warning: if you don't like advice on programming style, don't read */
-/*  further! ;-) */
-/*  */
-/*  Extensive use of these macros is recommended! Remember that ASSERTs are */
-/*  disabled in final build (without __WXDEBUG__ defined), so they add strictly */
-/*  nothing to your program's code. On the other hand, CHECK macros do stay */
-/*  even in release builds, but in general are not much of a burden, while */
-/*  a judicious use of them might increase your program's stability. */
-/*  ---------------------------------------------------------------------------- */
+// ----------------------------------------------------------------------------
+// Debugging macros
+//
+// All debugging macros rely on ASSERT() which in turn calls the user-defined
+// OnAssert() function. To keep things simple, it's called even when the
+// expression is true (i.e. everything is ok) and by default does nothing: just
+// returns the same value back. But if you redefine it to do something more sexy
+// (popping up a message box in your favourite GUI, sending you e-mail or
+// whatever) it will affect all ASSERTs, FAILs and CHECKs in your code.
+//
+// Warning: if you don't like advice on programming style, don't read
+// further! ;-)
+//
+// Extensive use of these macros is recommended! Remember that ASSERTs are
+// disabled in final build (without __WXDEBUG__ defined), so they add strictly
+// nothing to your program's code. On the other hand, CHECK macros do stay
+// even in release builds, but in general are not much of a burden, while
+// a judicious use of them might increase your program's stability.
+// ----------------------------------------------------------------------------
 
-/*  Macros which are completely disabled in 'release' mode */
-/*  */
-/*  NB: these functions are implemented in src/common/appcmn.cpp */
-#if defined(__cplusplus) && defined(__WXDEBUG__)
+// Macros which are completely disabled in 'release' mode
+//
+// NB: these functions are implemented in src/common/appcmn.cpp
+#if defined(__WXDEBUG__)
   /*
     This function is called whenever one of debugging macros fails (i.e.
     condition is false in an assertion). To customize its behaviour, override
@@ -162,47 +158,47 @@
                                           const char *szCond,
                                           const wxString& szMsg);
 
-  /*  call this function to break into the debugger unconditionally (assuming */
-  /*  the program is running under debugger, of course) */
+  // call this function to break into the debugger unconditionally (assuming
+  // the program is running under debugger, of course)
   extern void WXDLLIMPEXP_BASE wxTrap();
 
-  /*  generic assert macro */
+  // generic assert macro
   #define wxASSERT(cond) wxASSERT_MSG(cond, (const char*)NULL)
 
 
-  /*  assert with additional message explaining its cause */
+  // assert with additional message explaining its cause
 
-  /*  Note: some compilers will give  a warning (such as           */
-  /*  "possible unwanted ;") when using a ";" instead of the "{}". */
+  // Note: some compilers will give  a warning (such as          
+  // "possible unwanted ;") when using a ";" instead of the "{}".
   #define wxASSERT_MSG(cond, msg)                                           \
     if ( cond )                                                             \
     {}                                                                      \
     else                                                                    \
         wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__, #cond, msg)
 
-  /*  special form of assert: always triggers it (in debug mode) */
+  // special form of assert: always triggers it (in debug mode)
   #define wxFAIL wxFAIL_MSG((const char*)NULL)
 
-  /*  FAIL with some message */
+  // FAIL with some message
   #define wxFAIL_MSG(msg) wxFAIL_COND_MSG("wxAssertFailure", msg)
 
-  /*  FAIL with some message and a condition */
+  // FAIL with some message and a condition
   #define wxFAIL_COND_MSG(cond, msg)                                          \
       wxOnAssert(__FILE__, __LINE__,  __WXFUNCTION__, cond, msg)
 
-  /*  An assert helper used to avoid warning when testing constant expressions, */
-  /*  i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about */
-  /*  expression being always true, but not using */
-  /*  wxASSERT( wxAssertIsEqual(sizeof(int), 4) ) */
-  /*  */
-  /*  NB: this is made obsolete by wxCOMPILE_TIME_ASSERT() and should no */
-  /*      longer be used. */
+  // An assert helper used to avoid warning when testing constant expressions,
+  // i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about
+  // expression being always true, but not using
+  // wxASSERT( wxAssertIsEqual(sizeof(int), 4) )
+  //
+  // NB: this is made obsolete by wxCOMPILE_TIME_ASSERT() and should no
+  //     longer be used.
   extern bool WXDLLIMPEXP_BASE wxAssertIsEqual(int x, int y);
 #else
   #define wxTrap()
 
-  /*  nothing to do in release mode (hopefully at this moment there are */
-  /*  no more bugs ;-) */
+  // nothing to do in release mode (hopefully at this moment there are
+  // no more bugs ;-)
   #define wxASSERT(cond)
   #define wxASSERT_MSG(cond, msg)
   #define wxFAIL
@@ -210,15 +206,13 @@
   #define wxFAIL_COND_MSG(cond, msg)
 #endif  /* __WXDEBUG__ */
 
-#ifdef __cplusplus
-    /*  Use of wxFalse instead of false suppresses compiler warnings about testing */
-    /*  constant expression */
-    extern WXDLLIMPEXP_DATA_BASE(const bool) wxFalse;
-#endif
+// Use of wxFalse instead of false suppresses compiler warnings about testing
+// constant expression
+extern WXDLLIMPEXP_DATA_BASE(const bool) wxFalse;
 
 #define wxAssertFailure wxFalse
 
-/*  NB: the following macros also work in release mode! */
+// NB: the following macros also work in release mode!
 
 /*
   These macros must be used only in invalid situation: for example, an
@@ -227,16 +221,16 @@
   CHECK( p != NULL ) or CHECK( p != NULL, return LogError("p is NULL!!") )
 */
 
-/*  check that expression is true, "return" if not (also FAILs in debug mode) */
+// check that expression is true, "return" if not (also FAILs in debug mode)
 #define wxCHECK(cond, rc)            wxCHECK_MSG(cond, rc, (const char*)NULL)
 
-/*  as wxCHECK but with a message explaining why we fail */
+// as wxCHECK but with a message explaining why we fail
 #define wxCHECK_MSG(cond, rc, msg)   wxCHECK2_MSG(cond, return rc, msg)
 
-/*  check that expression is true, perform op if not */
+// check that expression is true, perform op if not
 #define wxCHECK2(cond, op)           wxCHECK2_MSG(cond, op, (const char*)NULL)
 
-/*  as wxCHECK2 but with a message explaining why we fail */
+// as wxCHECK2 but with a message explaining why we fail
 
 #define wxCHECK2_MSG(cond, op, msg)                                       \
     if ( cond )                                                           \
@@ -248,24 +242,24 @@
     }                                                                     \
     struct wxDummyCheckStruct /* just to force a semicolon */
 
-/*  special form of wxCHECK2: as wxCHECK, but for use in void functions */
-/*  */
-/*  NB: there is only one form (with msg parameter) and it's intentional: */
-/*      there is no other way to tell the caller what exactly went wrong */
-/*      from the void function (of course, the function shouldn't be void */
-/*      to begin with...) */
+// special form of wxCHECK2: as wxCHECK, but for use in void functions
+//
+// NB: there is only one form (with msg parameter) and it's intentional:
+//     there is no other way to tell the caller what exactly went wrong
+//     from the void function (of course, the function shouldn't be void
+//     to begin with...)
 #define wxCHECK_RET(cond, msg)       wxCHECK2_MSG(cond, return, msg)
 
-/*  ---------------------------------------------------------------------------- */
-/*  Compile time asserts */
-/*  */
-/*  Unlike the normal assert and related macros above which are checked during */
-/*  the program tun-time the macros below will result in a compilation error if */
-/*  the condition they check is false. This is usually used to check the */
-/*  expressions containing sizeof()s which cannot be tested with the */
-/*  preprocessor. If you can use the #if's, do use them as you can give a more */
-/*  detailed error message then. */
-/*  ---------------------------------------------------------------------------- */
+// ----------------------------------------------------------------------------
+// Compile time asserts
+//
+// Unlike the normal assert and related macros above which are checked during
+// the program tun-time the macros below will result in a compilation error if
+// the condition they check is false. This is usually used to check the
+// expressions containing sizeof()s which cannot be tested with the
+// preprocessor. If you can use the #if's, do use them as you can give a more
+// detailed error message then.
+// ----------------------------------------------------------------------------
 
 /*
   How this works (you don't have to understand it to be able to use the
@@ -287,7 +281,7 @@
 
  It may be used both within a function and in the global scope.
 */
-#if defined(__WATCOMC__) && defined(__cplusplus)
+#if defined(__WATCOMC__)
     /* avoid "unused symbol" warning */
     #define wxCOMPILE_TIME_ASSERT(expr, msg) \
         class wxMAKE_UNIQUE_ASSERT_NAME { \
@@ -309,18 +303,18 @@
 #define wxCOMPILE_TIME_ASSERT2(expr, msg, text) \
     struct wxMAKE_UNIQUE_ASSERT_NAME2(text) { unsigned int msg: expr; }
 
-/*  helpers for wxCOMPILE_TIME_ASSERT below, for private use only */
+// helpers for wxCOMPILE_TIME_ASSERT below, for private use only
 #define wxMAKE_BITSIZE_MSG(type, size) type ## SmallerThan ## size ## Bits
 
-/*  a special case of compile time assert: check that the size of the given type */
-/*  is at least the given number of bits */
+// a special case of compile time assert: check that the size of the given type
+// is at least the given number of bits
 #define wxASSERT_MIN_BITSIZE(type, size) \
     wxCOMPILE_TIME_ASSERT(sizeof(type) * CHAR_BIT >= size, \
                           wxMAKE_BITSIZE_MSG(type, size))
 
-/*  ---------------------------------------------------------------------------- */
-/*  other miscellaneous debugger-related functions */
-/*  ---------------------------------------------------------------------------- */
+// ----------------------------------------------------------------------------
+// other miscellaneous debugger-related functions
+// ----------------------------------------------------------------------------
 
 /*
     Return true if we're running under debugger.
@@ -328,13 +322,10 @@
     Currently this only really works under Win32 and Mac in CodeWarrior builds,
     it always returns false in other cases.
  */
-#ifdef __cplusplus
-    /* ABX: check __WIN32__ instead of __WXMSW__ for the same MSWBase in any Win32 port */
-    #if defined(__WXMAC__) || defined(__WIN32__)
-        extern bool WXDLLIMPEXP_BASE wxIsDebuggerRunning();
-    #else /*  !Mac */
-        inline bool wxIsDebuggerRunning() { return false; }
-    #endif /*  Mac/!Mac */
-#endif /* __cplusplus */
+#if defined(__WXMAC__) || defined(__WIN32__)
+    extern bool WXDLLIMPEXP_BASE wxIsDebuggerRunning();
+#else // !Mac
+    inline bool wxIsDebuggerRunning() { return false; }
+#endif // Mac/!Mac
 
-#endif  /*  _WX_DEBUG_H_ */
+#endif // _WX_DEBUG_H_

@@ -541,9 +541,6 @@ typedef short int WXTYPE;
         wxDEPRECATED(func) { body }
 #endif
 
-/*  everybody gets the assert and other debug macros */
-#include "wx/debug.h"
-
 /*  NULL declaration: it must be defined as 0 for C++ programs (in particular, */
 /*  it must not be defined as "(void *)0" which is standard for C but completely */
 /*  breaks C++ code) */
@@ -552,6 +549,10 @@ typedef short int WXTYPE;
 #endif
 
 #ifdef __cplusplus
+
+// everybody gets the assert and other debug macros
+#include "wx/debug.h"
+
     // delete pointer if it is not NULL and NULL it afterwards
     template <typename T>
     inline void wxDELETE(T*& ptr)
