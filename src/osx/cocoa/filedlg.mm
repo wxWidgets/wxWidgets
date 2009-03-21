@@ -30,6 +30,7 @@
 #endif
 
 #include "wx/filename.h"
+#include "wx/tokenzr.h"
 
 #include "wx/osx/private.h"
 
@@ -102,34 +103,38 @@ NSArray* GetTypesFromFilter( const wxString filter )
         const size_t extCount = extensions.GetCount();
         for ( size_t i = 0 ; i < extCount; i++ )
         {
-            wxString extension = extensions[i];
-
-            // Remove leading '*'
-            if (extension.length() && (extension.GetChar(0) == '*'))
-                extension = extension.Mid( 1 );
-
-            // Remove leading '.'
-            if (extension.length() && (extension.GetChar(0) == '.'))
-                extension = extension.Mid( 1 );
-
-            if ( extension.IsEmpty() )
+            wxString extensiongroup = extensions[i];
+            wxStringTokenizer tokenizer( extensiongroup , wxT(";") ) ;
+            while ( tokenizer.HasMoreTokens() )
             {
-                if ( types != nil )
-                    [types release];
-                return nil;
+                wxString extension = tokenizer.GetNextToken() ;
+                // Remove leading '*'
+                if (extension.length() && (extension.GetChar(0) == '*'))
+                    extension = extension.Mid( 1 );
+
+                // Remove leading '.'
+                if (extension.length() && (extension.GetChar(0) == '.'))
+                    extension = extension.Mid( 1 );
+
+                if ( extension.IsEmpty() )
+                {
+                    if ( types != nil )
+                        [types release];
+                    return nil;
+                }
+
+                if ( types == nil )
+                    types = [[NSMutableArray alloc] init];
+
+                wxCFStringRef cfext(extension);
+                [types addObject: (NSString*)cfext.AsNSString()  ];
+#if 0
+                // add support for classic fileType / creator here
+                wxUint32 fileType, creator;
+                // extension -> mactypes
+#endif
             }
 
-
-            if ( types == nil )
-                types = [[NSMutableArray alloc] init];
-
-            wxCFStringRef cfext(extension);
-            [types addObject: (NSString*)cfext.AsNSString()  ];
-#if 0
-            // add support for classic fileType / creator here
-            wxUint32 fileType, creator;
-            // extension -> mactypes
-#endif
         }
     }
     return types;
@@ -172,7 +177,8 @@ int wxFileDialog::ShowModal()
         {
         }
     
-        if (parentWindow)
+        // avoid multiple event handlers on stack
+        if ( 0 /*parentWindow*/)
         {
             NSWindow* nativeParent = parentWindow->GetWXWindow();
             ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init]; 
@@ -211,7 +217,8 @@ int wxFileDialog::ShowModal()
         [oPanel setCanChooseFiles:YES];
         [oPanel setMessage:cf.AsNSString()];
 
-        if (parentWindow)
+        // avoid multiple event handlers on stack
+        if ( 0 /*parentWindow*/)
         {
             NSWindow* nativeParent = parentWindow->GetWXWindow();
             ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init]; 
