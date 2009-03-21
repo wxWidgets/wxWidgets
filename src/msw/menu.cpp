@@ -33,6 +33,7 @@
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/image.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN
@@ -490,20 +491,44 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 mii.wID = id;
             }
 
-            // we can't pass HBITMAP directly as hbmpItem for 2 reasons:
-            //  1. we can't draw it with transparency then (this is not
+            // Under versions of Windows older than Vista we can't pass HBITMAP
+            // directly as hbmpItem for 2 reasons:
+            //  1. We can't draw it with transparency then (this is not
             //     very important now but would be with themed menu bg)
-            //  2. worse, Windows inverts the bitmap for the selected
+            //  2. Worse, Windows inverts the bitmap for the selected
             //     item and this looks downright ugly
             //
-            // so instead draw it ourselves in MSWOnDrawItem()
+            // so we prefer to instead draw it ourselves in MSWOnDrawItem().
             mii.dwItemData = reinterpret_cast<ULONG_PTR>(pItem);
             if ( pItem->IsCheckable() )
             {
                 mii.hbmpChecked =
                 mii.hbmpUnchecked = HBMMENU_CALLBACK;
             }
-            mii.hbmpItem = HBMMENU_CALLBACK;
+
+            // However under Vista using HBMMENU_CALLBACK causes the entire
+            // menu to be drawn using the classic theme instead of the current
+            // one and it does handle transparency just fine so do use the real
+            // bitmap there
+#if wxUSE_IMAGE
+            if ( wxGetWinVersion() >= wxWinVersion_Vista )
+            {
+                // but we need to have transparency for this to work so ensure
+                // that we do
+                wxImage img(pItem->GetBitmap().ConvertToImage());
+                if ( !img.HasAlpha() )
+                {
+                    img.InitAlpha();
+                    pItem->SetBitmap(img);
+                }
+
+                mii.hbmpItem = GetHbitmapOf(pItem->GetBitmap());
+            }
+            else // pre-Vista
+#endif // wxUSE_IMAGE
+            {
+                mii.hbmpItem = HBMMENU_CALLBACK;
+            }
 
             ok = ::InsertMenuItem(GetHmenu(), pos, TRUE /* by pos */, &mii);
             if ( !ok )
