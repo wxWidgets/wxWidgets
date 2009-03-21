@@ -356,17 +356,10 @@
     </test>
 </xsl:template>
 
-<!--
-    We need to add something to the wxWidgets sources to run the tests with a
-    simple command so that these aren't necessary.
--->
 <xsl:template name="run-tests-win">
     <xsl:param name="options"/>
 <normalize-space>
-cd tests &amp;&amp;
-(for /d %x in (..\lib\*_dll) do @PATH=%x;%PATH%) &amp;&amp;
-(for /d %x in (*) do @if exist %x\test.exe %x\test) &amp;&amp;
-(for /d %x in (*) do @if exist %x\test_gui.exe %x\test_gui)
+cd tests &amp;&amp; runtests.bat
 </normalize-space>
 </xsl:template>
 
