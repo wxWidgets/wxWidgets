@@ -684,6 +684,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
         {
             wxHtmlTableCell *oldt = m_Table;
 
+            wxHtmlContainerCell *oldEnclosing = m_enclosingContainer;
             m_enclosingContainer = c = m_WParser->OpenContainer();
 
             m_Table = new wxHtmlTableCell(c, tag, m_WParser->GetPixelScale());
@@ -722,6 +723,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
             m_WParser->CloseContainer();
 
             m_Table = oldt;
+            m_enclosingContainer = oldEnclosing;
 
             return true; // ParseInner() called
         }
