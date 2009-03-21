@@ -1080,7 +1080,7 @@ void wxWidgetCocoaImpl::Move(int x, int y, int width, int height)
     wxWindowMac* parent = GetWXPeer()->GetParent();
     // under Cocoa we might have a contentView in the wxParent to which we have to 
     // adjust the coordinates
-    if (parent)
+    if (parent && [m_osxView superview] != parent->GetHandle() )
     {
         int cx = 0,cy = 0,cw = 0,ch = 0;
         if ( parent->GetPeer() )
