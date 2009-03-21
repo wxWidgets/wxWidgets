@@ -87,9 +87,7 @@ public:
 
     int                 m_extraStyle;  // global extra style
 
-#ifdef __WXDEBUG__
     int                 m_warnings;
-#endif
 
     int HasExtraStyle( int style ) const { return (m_extraStyle & style); }
 };
@@ -1752,11 +1750,6 @@ protected:
         on virtual height changes.
     */
     void CorrectEditorWidgetPosY();
-
-#ifdef __WXDEBUG__
-    void _log_items();
-    void OnScreenNote( const wxChar* format, ... );
-#endif
 
     /** Deselect current selection, if any. Returns true if success
         (ie. validator did not intercept). */

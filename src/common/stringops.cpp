@@ -191,14 +191,6 @@ bool wxStringOperationsUtf8::IsValidUtf8String(const char *str, size_t len)
     return true;
 }
 
-#ifdef __WXDEBUG__
-bool wxStringOperationsUtf8::IsValidUtf8LeadByte(unsigned char c)
-{
-    return (c <= 0x7F) || (c >= 0xC2 && c <= 0xF4);
-}
-#endif
-
-
 // NB: this is in this file and not unichar.cpp to keep all UTF-8 encoding
 //     code in single place
 wxUniChar::Utf8CharBuffer wxUniChar::AsUTF8() const

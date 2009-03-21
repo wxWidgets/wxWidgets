@@ -126,7 +126,7 @@ const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
 // the memory leaks when using it, however this breaks re-initializing the
 // library (i.e. repeated calls to wxInitialize/wxUninitialize) because the
 // event tables won't be rebuilt the next time, so disable this by default
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
+#if wxUSE_MEMORY_TRACING
 
 class wxEventTableEntryModule: public wxModule
 {
@@ -140,7 +140,7 @@ public:
 
 IMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule)
 
-#endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
+#endif // wxUSE_MEMORY_TRACING
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -878,7 +878,7 @@ void wxEventHashTable::Clear()
     m_size = 0;
 }
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
+#if wxUSE_MEMORY_TRACING
 
 // Clear all tables
 void wxEventHashTable::ClearAll()
@@ -891,7 +891,7 @@ void wxEventHashTable::ClearAll()
     }
 }
 
-#endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
+#endif // wxUSE_MEMORY_TRACING
 
 bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
 {

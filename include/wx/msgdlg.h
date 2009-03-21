@@ -140,7 +140,6 @@ public:
     // change the dialog style flag
     void SetMessageDialogStyle(long style)
     {
-#ifdef __WXDEBUG__
         wxASSERT_MSG( ((style & wxYES_NO) == wxYES_NO) || !(style & wxYES_NO),
                       "wxYES and wxNO may only be used together" );
 
@@ -161,7 +160,6 @@ public:
 
         if ((style & wxCANCEL_DEFAULT) != 0 && (style & wxNO_DEFAULT) != 0)
             wxFAIL_MSG("only one default button can be specified");
-#endif
 
         m_dialogStyle = style;
     }

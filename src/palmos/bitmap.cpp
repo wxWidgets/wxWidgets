@@ -77,10 +77,6 @@ public:
     wxPalette     m_bitmapPalette;
 #endif // wxUSE_PALETTE
 
-#ifdef __WXDEBUG__
-    wxDC         *m_selectedInto;
-#endif // __WXDEBUG__
-
 #if wxUSE_WXDIB
     wxDIB *m_dib;
 #endif
@@ -147,9 +143,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
 wxBitmapRefData::wxBitmapRefData()
 {
-#ifdef __WXDEBUG__
-    m_selectedInto = NULL;
-#endif
     m_bitmapMask = NULL;
 
     m_hBitmap = (WXHBITMAP) NULL;
@@ -310,15 +303,6 @@ wxMask *wxBitmap::GetMask() const
     return NULL;
 }
 
-#ifdef __WXDEBUG__
-
-wxDC *wxBitmap::GetSelectedInto() const
-{
-    return NULL;
-}
-
-#endif
-
 bool wxBitmap::HasAlpha() const
 {
     return false;
@@ -327,14 +311,6 @@ bool wxBitmap::HasAlpha() const
 // ----------------------------------------------------------------------------
 // wxBitmap setters
 // ----------------------------------------------------------------------------
-
-#ifdef __WXDEBUG__
-
-void wxBitmap::SetSelectedInto(wxDC *dc)
-{
-}
-
-#endif
 
 #if wxUSE_PALETTE
 

@@ -216,9 +216,6 @@ private:
     #define wxAutoBufferedPaintDCBase           wxBufferedPaintDC
 #endif
 
-
-#ifdef __WXDEBUG__
-
 class WXDLLIMPEXP_CORE wxAutoBufferedPaintDC : public wxAutoBufferedPaintDCBase
 {
 public:
@@ -226,30 +223,18 @@ public:
     wxAutoBufferedPaintDC(wxWindow* win)
         : wxAutoBufferedPaintDCBase(win)
     {
-        TestWinStyle(win);
+        wxASSERT_MSG( win->GetBackgroundStyle() == wxBG_STYLE_CUSTOM,
+            "You need to call SetBackgroundStyle(wxBG_STYLE_CUSTOM) in ctor, "
+            "and also, if needed, paint the background in wxEVT_PAINT handler."
+        );
     }
 
     virtual ~wxAutoBufferedPaintDC() { }
 
 private:
-
-    void TestWinStyle(wxWindow* win)
-    {
-        // Help the user to get the double-buffering working properly.
-        wxASSERT_MSG( win->GetBackgroundStyle() == wxBG_STYLE_CUSTOM,
-                      wxT("In constructor, you need to call SetBackgroundStyle(wxBG_STYLE_CUSTOM), ")
-                      wxT("and also, if needed, paint the background manually in the paint event handler."));
-    }
-
     wxDECLARE_NO_COPY_CLASS(wxAutoBufferedPaintDC);
 };
 
-#else // !__WXDEBUG__
-
-// In release builds, just use typedef
-typedef wxAutoBufferedPaintDCBase wxAutoBufferedPaintDC;
-
-#endif
 
 
 // Check if the window is natively double buffered and will return a wxPaintDC

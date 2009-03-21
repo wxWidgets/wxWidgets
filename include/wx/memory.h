@@ -9,23 +9,16 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MEMORYH__
-#define _WX_MEMORYH__
+#ifndef _WX_MEMORY_H_
+#define _WX_MEMORY_H_
 
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/msgout.h"
 
-/*
-  The macro which will be expanded to include the file and line number
-  info, or to be a straight call to the new operator.
-*/
-
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#if wxUSE_MEMORY_TRACING || wxUSE_DEBUG_CONTEXT
 
 #include <stddef.h>
-
-#ifdef __WXDEBUG__
 
 WXDLLIMPEXP_BASE void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool isVect = false);
 WXDLLIMPEXP_BASE void wxDebugFree(void * buf, bool isVect = false);
@@ -129,7 +122,6 @@ inline void operator delete[](void* pData, wxChar* /* fileName */, int /* lineNu
 }
 #endif // __VISUALC__>=1200
 #endif // wxUSE_GLOBAL_MEMORY_OPERATORS
-#endif // __WXDEBUG__
 
 //**********************************************************************************
 
@@ -357,7 +349,7 @@ void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) WX_ATTRIBUT
 #define WXTRACE wxTrace
 #define WXTRACELEVEL wxTraceLevel
 
-#else // (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#else // wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
 #define WXDEBUG_DUMPDELAYCOUNTER
 
@@ -374,7 +366,6 @@ void WXDLLIMPEXP_BASE wxTraceLevel(int level, const wxChar *fmt ...) WX_ATTRIBUT
 #define WXTRACE true ? (void)0 : wxTrace
 #define WXTRACELEVEL true ? (void)0 : wxTraceLevel
 
-#endif // (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#endif // wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
-#endif
-    // _WX_MEMORYH__
+#endif // _WX_MEMORY_H_

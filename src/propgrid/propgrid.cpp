@@ -176,7 +176,7 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
 
     wxVariant v;
 
-	// Prepare some shared variants
+    // Prepare some shared variants
     m_vEmptyString = wxString();
     m_vZero = (long) 0;
     m_vMinusOne = (long) -1;
@@ -193,9 +193,7 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     m_strUnits = wxS("Units");
     m_strInlineHelp = wxS("InlineHelp");
 
-#ifdef __WXDEBUG__
     m_warnings = 0;
-#endif
 }
 
 
@@ -498,10 +496,10 @@ void wxPropertyGrid::Init1()
 #endif
 
 #ifndef wxPG_ICON_WIDTH
-	m_expandbmp = NULL;
-	m_collbmp = NULL;
-	m_iconWidth = 11;
-	m_iconHeight = 11;
+    m_expandbmp = NULL;
+    m_collbmp = NULL;
+    m_iconWidth = 11;
+    m_iconHeight = 11;
 #else
     m_iconWidth = wxPG_ICON_WIDTH;
 #endif
@@ -558,19 +556,19 @@ void wxPropertyGrid::Init2()
 
 #ifndef wxPG_ICON_WIDTH
     // create two bitmap nodes for drawing
-	m_expandbmp = new wxBitmap(expand_xpm);
-	m_collbmp = new wxBitmap(collapse_xpm);
+    m_expandbmp = new wxBitmap(expand_xpm);
+    m_collbmp = new wxBitmap(collapse_xpm);
 
-	// calculate average font height for bitmap centering
+    // calculate average font height for bitmap centering
 
-	m_iconWidth = m_expandbmp->GetWidth();
-	m_iconHeight = m_expandbmp->GetHeight();
+    m_iconWidth = m_expandbmp->GetWidth();
+    m_iconHeight = m_expandbmp->GetHeight();
 #endif
 
     m_curcursor = wxCURSOR_ARROW;
     m_cursorSizeWE = new wxCursor( wxCURSOR_SIZEWE );
 
-	// adjust bitmap icon y position so they are centered
+    // adjust bitmap icon y position so they are centered
     m_vspacing = wxPG_DEFAULT_VSPACING;
 
     CalculateFontAndBitmapStuff( wxPG_DEFAULT_VSPACING );
@@ -590,9 +588,9 @@ void wxPropertyGrid::Init2()
     m_tlwHandler = handler;
     m_tlp->PushEventHandler(handler);
 
-	// set virtual size to this window size
+    // set virtual size to this window size
     wxSize wndsize = GetSize();
-	SetVirtualSize(wndsize.GetWidth(), wndsize.GetWidth());
+    SetVirtualSize(wndsize.GetWidth(), wndsize.GetWidth());
 
     m_timeCreated = ::wxGetLocalTimeMillis();
 
@@ -648,8 +646,8 @@ wxPropertyGrid::~wxPropertyGrid()
     delete m_cursorSizeWE;
 
 #ifndef wxPG_ICON_WIDTH
-	delete m_expandbmp;
-	delete m_collbmp;
+    delete m_expandbmp;
+    delete m_collbmp;
 #endif
 
     // Delete common value records
@@ -843,13 +841,13 @@ wxSize wxPropertyGrid::DoGetBestSize() const
 
 void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
 {
-	int x = 0, y = 0;
+    int x = 0, y = 0;
 
     m_captionFont = wxScrolledWindow::GetFont();
 
-	GetTextExtent(wxS("jG"), &x, &y, 0, 0, &m_captionFont);
+    GetTextExtent(wxS("jG"), &x, &y, 0, 0, &m_captionFont);
     m_subgroup_extramargin = x + (x/2);
-	m_fontHeight = y;
+    m_fontHeight = y;
 
 #if wxPG_USE_RENDERER_NATIVE
     m_iconWidth = wxPG_ICON_WIDTH;
@@ -878,7 +876,7 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
         m_marginWidth = m_gutterWidth*2 + m_iconWidth;
 
     m_captionFont.SetWeight(wxBOLD);
-	GetTextExtent(wxS("jG"), &x, &y, 0, 0, &m_captionFont);
+    GetTextExtent(wxS("jG"), &x, &y, 0, 0, &m_captionFont);
 
     m_lineHeight = m_fontHeight+(2*m_spacingy)+1;
 
@@ -3771,7 +3769,7 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     GetClientSize(&width,&height);
 
     // Now adjust virtual size.
-	SetVirtualSize(x, y);
+    SetVirtualSize(x, y);
 
     int xAmount = 0;
     int xPos = 0;
@@ -4268,7 +4266,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y, wxMouseEvent &event
                         if ( space )
                         {
                             int tw, th;
-    	                    GetTextExtent( tipString, &tw, &th, 0, 0 );
+                            GetTextExtent( tipString, &tw, &th, 0, 0 );
                             if ( tw > space )
                             {
                                 SetToolTip( tipString );

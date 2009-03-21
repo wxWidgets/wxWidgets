@@ -147,11 +147,6 @@ public:
     void SetHBITMAP(WXHBITMAP bmp) { SetHandle((WXHANDLE)bmp); }
     WXHBITMAP GetHBITMAP() const { return (WXHBITMAP)GetHandle(); }
 
-#ifdef __WXDEBUG__
-    void SetSelectedInto(wxDC *dc);
-    wxDC *GetSelectedInto() const;
-#endif // __WXDEBUG__
-
 protected:
     // common part of all ctors
     void Init();

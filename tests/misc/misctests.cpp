@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/misc/misctests.cpp
 // Purpose:     test miscellaneous stuff
-// Author:      Peter Most
+// Author:      Peter Most, Vadim Zeitlin
 // Created:     2008-07-10
 // RCS-ID:      $Id$
 // Copyright:   (c) 2008 Peter Most
+//              (c) 2009 Vadim Zeitlin
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -30,9 +31,11 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( MiscTestCase );
+        CPPUNIT_TEST( Assert );
         CPPUNIT_TEST( Delete );
     CPPUNIT_TEST_SUITE_END();
 
+    void Assert();
     void Delete();
 
     DECLARE_NO_COPY_CLASS(MiscTestCase)
@@ -43,6 +46,27 @@ CPPUNIT_TEST_SUITE_REGISTRATION( MiscTestCase );
 
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MiscTestCase, "MiscTestCase" );
+
+namespace
+{
+
+void AssertIfOdd(int n)
+{
+    wxASSERT_MSG( !(n % 2), "parameter must be even" );
+}
+
+} // anonymous namespace
+
+void MiscTestCase::Assert()
+{
+    AssertIfOdd(0);
+    WX_ASSERT_FAILS_WITH_ASSERT(AssertIfOdd(1));
+
+    // doesn't fail any more
+    wxAssertHandler_t oldHandler = wxSetAssertHandler(NULL);
+    AssertIfOdd(17);
+    wxSetAssertHandler(oldHandler);
+}
 
 void MiscTestCase::Delete()
 {

@@ -81,10 +81,6 @@ public:
     void* GetID() const                { return m_id; }
     operator const void* () const      { return m_id; }
 
-#ifdef __WXDEBUG__
-    void Print( const wxString &text ) const;
-#endif
-
 private:
     void* m_id;
 };

@@ -45,13 +45,11 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 
-#ifdef __WXDEBUG__
     virtual void OnAssertFailure(const wxChar *file,
                                  int line,
                                  const wxChar *func,
                                  const wxChar *cond,
                                  const wxChar *msg);
-#endif // __WXDEBUG__
 
     // GTK-specific methods
     // -------------------
@@ -80,9 +78,8 @@ public:
 
 private:
     // true if we're inside an assert modal dialog
-#ifdef __WXDEBUG__
     bool m_isInAssert;
-#endif // __WXDEBUG__
+
 #if wxUSE_THREADS
     wxMutex* m_idleMutex;
 #endif

@@ -11,7 +11,7 @@
 class TestAssertFailure { };
 
 // macro to use for the functions which are supposed to fail an assertion
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     // some old cppunit versions don't define CPPUNIT_ASSERT_THROW so roll our
     // own
     #define WX_ASSERT_FAILS_WITH_ASSERT(cond) \
@@ -23,7 +23,7 @@ class TestAssertFailure { };
                 CPPUNIT_FAIL("expected assertion not generated"); \
         }
 #else
-    // there are no assertions in non-debug build so just check that it fails
+    // there are no assertions in this build so just check that it fails
     #define WX_ASSERT_FAILS_WITH_ASSERT(cond) CPPUNIT_ASSERT(!(cond))
 #endif
 

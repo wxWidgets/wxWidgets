@@ -65,9 +65,10 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
     // checks correctness of UTF-8 sequence
     static bool IsValidUtf8String(const char *c,
                                   size_t len = wxStringImpl::npos);
-#ifdef __WXDEBUG__
-    static bool IsValidUtf8LeadByte(unsigned char c);
-#endif
+    static bool IsValidUtf8LeadByte(unsigned char c)
+    {
+        return (c <= 0x7F) || (c >= 0xC2 && c <= 0xF4);
+    }
 
     // table of offsets to skip forward when iterating over UTF-8 sequence
     static const unsigned char ms_utf8IterTable[256];

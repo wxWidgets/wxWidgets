@@ -328,20 +328,16 @@ name##PluginSentinel  m_pluginsentinel;
 #define wxDynamicCastThis(className) \
      (IsKindOf(&className::ms_classInfo) ? (className *)(this) : (className *)0)
 
-#ifdef __WXDEBUG__
-inline void* wxCheckCast(void *ptr)
+// FIXME-VC6: dummy argument needed because VC6 doesn't support explicitly
+//            choosing the template function to call
+template <class T>
+inline T *wxCheckCast(const void *ptr, T * = NULL)
 {
-    wxASSERT_MSG( ptr, _T("wxStaticCast() used incorrectly") );
-    return ptr;
+    wxASSERT_MSG( wxDynamicCast(ptr, T), "wxStaticCast() used incorrectly" );
+    return const_cast<T *>(static_cast<const T *>(ptr));
 }
-#define wxStaticCast(obj, className) \
- ((className *)wxCheckCast(wxDynamicCast(obj, className)))
 
-#else  // !__WXDEBUG__
-#define wxStaticCast(obj, className) \
-    const_cast<className *>(static_cast<const className *>(obj))
-
-#endif  // __WXDEBUG__
+#define wxStaticCast(obj, className) wxCheckCast((obj), (className *)NULL)
 
 // ----------------------------------------------------------------------------
 // set up memory debugging macros
@@ -359,7 +355,7 @@ inline void* wxCheckCast(void *ptr)
     _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT     = void operator delete[] (void* buf, wxChar*, int )
 */
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
+#if wxUSE_MEMORY_TRACING
 
 // All compilers get this one
 #define _WX_WANT_NEW_SIZET_WXCHAR_INT
@@ -400,7 +396,7 @@ inline void* wxCheckCast(void *ptr)
 
 #endif // wxUSE_ARRAY_MEMORY_OPERATORS
 
-#endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
+#endif // wxUSE_MEMORY_TRACING
 
 // ----------------------------------------------------------------------------
 // wxObjectRefData: ref counted data meant to be stored in wxObject
@@ -653,24 +649,16 @@ private :
 // more debugging macros
 // ----------------------------------------------------------------------------
 
-// Redefine new to be the debugging version. This doesn't work with all
-// compilers, in which case you need to use WXDEBUG_NEW explicitly if you wish
-// to use the debugging version.
-
-#ifdef __WXDEBUG__
+#if wxUSE_DEBUG_NEW_ALWAYS
     #define WXDEBUG_NEW new(__TFILE__,__LINE__)
 
-    #if wxUSE_DEBUG_NEW_ALWAYS
-        #if wxUSE_GLOBAL_MEMORY_OPERATORS
-            #define new WXDEBUG_NEW
-        #elif defined(__VISUALC__)
-            // Including this file redefines new and allows leak reports to
-            // contain line numbers
-            #include "wx/msw/msvcrt.h"
-        #endif
-    #endif // wxUSE_DEBUG_NEW_ALWAYS
-#else // !__WXDEBUG__
-    #define WXDEBUG_NEW new
-#endif // __WXDEBUG__/!__WXDEBUG__
+    #if wxUSE_GLOBAL_MEMORY_OPERATORS
+        #define new WXDEBUG_NEW
+    #elif defined(__VISUALC__)
+        // Including this file redefines new and allows leak reports to
+        // contain line numbers
+        #include "wx/msw/msvcrt.h"
+    #endif
+#endif // wxUSE_DEBUG_NEW_ALWAYS
 
 #endif // _WX_OBJECTH__

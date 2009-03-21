@@ -210,6 +210,7 @@ void wxProtocol::LogResponse(const wxString& str)
 
 void wxProtocolLog::DoLogString(const wxString& str)
 {
+    wxUnusedVar(str); // unused if wxLogTrace() is disabled
     wxLogTrace(m_traceMask, "%s", str);
 }
 

@@ -10,6 +10,31 @@
 //@{
 
 /**
+    @def wxDEBUG_LEVEL
+
+    Preprocessor symbol defining the level of debug support available.
+
+    Currently wxDEBUG_LEVEL is 0 in release builds (__WXDEBUG__ not defined)
+    and 1 in debug builds (it is). In the immediate future this will change
+    however and this symbol will be defined directly as 0, 1 or 2 while
+    __WXDEBUG__ won't be used by wxWidgets any longer.
+
+    @header{wx/debug.h}
+ */
+#define wxDEBUG_LEVEL
+
+/**
+    Type for the function called in case of assert failure.
+
+    @see wxSetAssertHandler()
+ */
+typedef void (*wxAssertHandler_t)(const wxString& file,
+                                  int line,
+                                  const wxString& func,
+                                  const wxString& cond,
+                                  const wxString& msg);
+
+/**
     Assert macro. An error message will be generated if the condition is @false in
     debug mode, but nothing will be done in the release build.
 
@@ -24,6 +49,32 @@
     @header{wx/debug.h}
 */
 #define wxASSERT( condition )
+
+/**
+    Assert macro for expensive run-time checks.
+
+    This macro does nothing unless wxDEBUG_LEVEL is 2 or more and is meant to
+    be used for the assertions with noticeable performance impact and which,
+    hence, should be disabled during run-time.
+
+    If wxDEBUG_LEVEL is 2 or more, it becomes the same as wxASSERT().
+
+    @header{wx/debug.h}
+ */
+#define wxASSERT_LEVEL_2( condition )
+
+/**
+    Assert macro with a custom message for expensive run-time checks.
+
+    If wxDEBUG_LEVEL is 2 or more, this is the same as wxASSERT_MSG(),
+    otherwise it doesn't do anything at all.
+
+    @see wxASSERT_LEVEL_2()
+
+    @header{wx/debug.h}
+ */
+#define wxASSERT_LEVEL_2_MSG( condition, msg)
+
 
 /**
     This macro results in a @ref wxCOMPILE_TIME_ASSERT "compile time assertion failure"
@@ -164,6 +215,13 @@
 #define wxCOMPILE_TIME_ASSERT2(condition, message, name)
 
 /**
+    Disable the condition checks in the assertions.
+
+    This is the same as calling wxSetAssertHandler() with @NULL handler.
+ */
+void wxDisableAsserts();
+
+/**
     Will always generate an assert error if this code is reached (in debug mode).
     Note that you don't have to (and cannot) use brackets when invoking this
     macro:
@@ -211,23 +269,38 @@
 bool wxIsDebuggerRunning();
 
 /**
-    This function is called whenever one of debugging macros fails (i.e.
-    condition is @false in an assertion). It is only defined in the debug mode,
-    in release builds the wxCHECK() failures don't result in anything.
+    Sets the function to be called in case of assertion failure.
 
-    To override the default behaviour in the debug builds which is to show the
-    user a dialog asking whether he wants to abort the program, continue or
-    continue ignoring any subsequent assert failures, you may override
-    wxApp::OnAssertFailure() which is called by this function if the global
-    application object exists.
+    The default assert handler forwards to wxApp::OnAssertFailure() whose
+    default behaviour is, in turn, to show the standard assertion failure
+    dialog if a wxApp object exists or shows the same dialog itself directly
+    otherwise.
+
+    While usually it is enough -- and more convenient -- to just override
+    OnAssertFailure(), to handle all assertion failures, including those
+    occurring even before wxApp object creation of after its destruction you
+    need to provide your assertion handler function.
+
+    This function also provides a simple way to disable all asserts: simply
+    pass @NULL pointer to it. Doing this will result in not even evaluating
+    assert conditions at all, avoiding almost all run-time cost of asserts.
+
+    Notice that this function is not MT-safe, so you should call it before
+    starting any other threads.
+
+    The return value of this function is the previous assertion handler. It can
+    be called after any pre-processing by your handler and can also be restored
+    later if you uninstall your handler.
+
+    @param handler
+        The function to call in case of assertion failure or @NULL.
+    @return
+        The previous assert handler which is not @NULL by default but could be
+        @NULL if it had been previously set to this value using this function.
 
     @header{wx/debug.h}
-*/
-void wxOnAssert( const char* fileName,
-                  int lineNumber,
-                  const char* function,
-                  const char* condition,
-                  const char* message = NULL );
+ */
+wxAssertHandler_t wxSetAssertHandler(wxAssertHandler_t handler);
 
 /**
     In debug mode (when @c __WXDEBUG__ is defined) this function generates a

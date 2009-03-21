@@ -87,7 +87,6 @@ public:
     // functions abstracting differences between GUI and console modes
     // ------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
     // show the assert dialog with the specified message in GUI or just print
     // the string to stderr in console mode
     //
@@ -96,7 +95,6 @@ public:
     //
     // return true to suppress subsequent asserts, false to continue as before
     virtual bool ShowAssertDialog(const wxString& msg) = 0;
-#endif // __WXDEBUG__
 
     // return true if fprintf(stderr) goes somewhere, false otherwise
     virtual bool HasStderr() = 0;
@@ -177,7 +175,7 @@ public:
 
 
 protected:
-#if wxUSE_STACKWALKER && defined( __WXDEBUG__ )
+#if wxUSE_STACKWALKER
     // utility function: returns the stack frame as a plain wxString
     virtual wxString GetAssertStackTrace();
 #endif
@@ -232,9 +230,7 @@ public:
 #endif // wxUSE_FONTMAP
     virtual wxRendererNative *CreateRenderer();
 
-#ifdef __WXDEBUG__
     virtual bool ShowAssertDialog(const wxString& msg);
-#endif // __WXDEBUG__
     virtual bool HasStderr();
 
     virtual void ScheduleForDestroy(wxObject *object);
@@ -273,9 +269,7 @@ public:
 #endif // wxUSE_FONTMAP
     virtual wxRendererNative *CreateRenderer();
 
-#ifdef __WXDEBUG__
     virtual bool ShowAssertDialog(const wxString& msg);
-#endif // __WXDEBUG__
     virtual bool HasStderr();
 
     virtual void ScheduleForDestroy(wxObject *object);

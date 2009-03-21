@@ -76,7 +76,7 @@ public:
                                                wxArrayString& desc) const;
 #endif // __WXGTK20____
 
-#if defined(__WXDEBUG__) && defined(__WXGTK20__)
+#if defined(__WXGTK20__)
     virtual bool ShowAssertDialog(const wxString& msg);
 #endif
 

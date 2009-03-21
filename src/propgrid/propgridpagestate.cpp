@@ -1566,16 +1566,18 @@ bool wxPropertyGridPageState::PrepareToAddItem( wxPGProperty* property,
         }
     }
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     // Warn for identical names in debug mode.
     if ( BaseGetPropertyByName(property->GetName()) &&
          (!scheduledParent || scheduledParent->IsCategory()) )
     {
-        wxLogError(wxT("wxPropertyGrid: Warning - item with name \"%s\" already exists."),
-            property->GetName().c_str());
+        wxFAIL_MSG(wxString::Format(
+            "wxPropertyGrid item with name \"%s\" already exists",
+            property->GetName()));
+
         wxPGGlobalVars->m_warnings++;
     }
-#endif
+#endif // wxDEBUG_LEVEL
 
     // Make sure nothing is selected.
     if ( propGrid )

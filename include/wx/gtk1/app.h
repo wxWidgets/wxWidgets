@@ -45,11 +45,13 @@ public:
 
     static bool InitialzeVisual();
 
-#ifdef __WXDEBUG__
-    virtual void OnAssert(const wxChar *file, int line, const wxChar *cond, const wxChar *msg);
+    virtual void OnAssertFailure(const wxChar *file,
+                                 int line,
+                                 const wxChar *func,
+                                 const wxChar *cond,
+                                 const wxChar *msg);
 
     bool IsInAssert() const { return m_isInAssert; }
-#endif // __WXDEBUG__
 
     gint            m_idleTag;
     void RemoveIdleTag();
@@ -66,9 +68,7 @@ public:
 
 private:
     // true if we're inside an assert modal dialog
-#ifdef __WXDEBUG__
     bool m_isInAssert;
-#endif // __WXDEBUG__
 
     DECLARE_DYNAMIC_CLASS(wxApp)
 };

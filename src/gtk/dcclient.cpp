@@ -2081,6 +2081,9 @@ void wxWindowDCImpl::SetLogicalFunction( wxRasterOperationMode function )
         case wxNO_OP:        mode = GDK_NOOP;          break;
         case wxSRC_INVERT:   mode = GDK_COPY_INVERT;   break;
         case wxNOR:          mode = GDK_NOR;           break;
+        default:
+            wxFAIL_MSG("unknown mode");
+            return;
     }
 
     m_logicalFunction = function;

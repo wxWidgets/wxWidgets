@@ -92,12 +92,12 @@ public:
     // MSW-specific
     // ------------
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     // this field is solely for error checking: we detect selecting a bitmap
     // into more than one DC at once or deleting a bitmap still selected into a
     // DC (both are serious programming errors under Windows)
     wxDC         *m_selectedInto;
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
 #if wxUSE_WXDIB
     // when GetRawData() is called for a DDB we need to convert it to a DIB
@@ -185,7 +185,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
 wxBitmapRefData::wxBitmapRefData()
 {
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     m_selectedInto = NULL;
 #endif
     m_bitmapMask = NULL;
@@ -202,7 +202,7 @@ wxBitmapRefData::wxBitmapRefData()
 wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
                : wxGDIImageRefData(data)
 {
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     m_selectedInto = NULL;
 #endif
 
@@ -1188,14 +1188,14 @@ wxBitmap wxBitmap::GetMaskBitmap() const
     return bmp;
 }
 
-#ifdef __WXDEBUG__
-
 wxDC *wxBitmap::GetSelectedInto() const
 {
+#if wxDEBUG_LEVEL
     return GetBitmapData() ? GetBitmapData()->m_selectedInto : NULL;
-}
-
+#else
+    return NULL;
 #endif
+}
 
 void wxBitmap::UseAlpha()
 {
@@ -1212,15 +1212,15 @@ bool wxBitmap::HasAlpha() const
 // wxBitmap setters
 // ----------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
-
 void wxBitmap::SetSelectedInto(wxDC *dc)
 {
+#if wxDEBUG_LEVEL
     if ( GetBitmapData() )
         GetBitmapData()->m_selectedInto = dc;
-}
-
+#else
+    wxUnusedVar(dc);
 #endif
+}
 
 #if wxUSE_PALETTE
 

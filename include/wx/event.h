@@ -1636,7 +1636,9 @@ private:
  wxEVT_PAINT_ICON
  */
 
-#if defined(__WXDEBUG__) && (defined(__WXMSW__) || defined(__WXPM__))
+#if wxDEBUG_LEVEL && (defined(__WXMSW__) || defined(__WXPM__))
+    #define wxHAS_PAINT_DEBUG
+
     // see comments in src/msw|os2/dcclient.cpp where g_isPainting is defined
     extern WXDLLIMPEXP_CORE int g_isPainting;
 #endif // debug
@@ -1647,15 +1649,15 @@ public:
     wxPaintEvent(int Id = 0)
         : wxEvent(Id, wxEVT_PAINT)
     {
-#if defined(__WXDEBUG__) && (defined(__WXMSW__) || defined(__WXPM__))
-        // set the internal flag for the duration of processing of WM_PAINT
+#ifdef wxHAS_PAINT_DEBUG
+        // set the internal flag for the duration of redrawing
         g_isPainting++;
 #endif // debug
     }
 
     // default copy ctor and dtor are normally fine, we only need them to keep
     // g_isPainting updated in debug build
-#if defined(__WXDEBUG__) && (defined(__WXMSW__) || defined(__WXPM__))
+#ifdef wxHAS_PAINT_DEBUG
     wxPaintEvent(const wxPaintEvent& event)
             : wxEvent(event)
     {
@@ -2804,10 +2806,11 @@ public:
     // Clear table
     void Clear();
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
-    // Clear all tables
+#if wxUSE_MEMORY_TRACING
+    // Clear all tables: only used to work around problems in memory tracing
+    // code
     static void ClearAll();
-#endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
+#endif // wxUSE_MEMORY_TRACING
 
 protected:
     // Init the hash table with the entries of the static event table.

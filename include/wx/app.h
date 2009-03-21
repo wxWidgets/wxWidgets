@@ -335,7 +335,6 @@ public:
     // debugging support
     // -----------------
 
-#ifdef __WXDEBUG__
     // this function is called when an assert failure occurs, the base class
     // version does the normal processing (i.e. shows the usual assert failure
     // dialog box)
@@ -355,7 +354,6 @@ public:
                           int line,
                           const wxChar *cond,
                           const wxChar *msg);
-#endif // __WXDEBUG__
 
     // check that the wxBuildOptions object (constructed in the application
     // itself, usually the one from IMPLEMENT_APP() macro) matches the build

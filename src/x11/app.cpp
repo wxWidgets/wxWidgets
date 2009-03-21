@@ -64,7 +64,6 @@ static wxWindow *g_prevFocus = NULL;
 //   X11 error handling
 //------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
 typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
 
 XErrorHandlerFunc gs_pfnXErrorHandler = 0;
@@ -77,7 +76,6 @@ static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
     else
         return 0;
 }
-#endif // __WXDEBUG__
 
 //------------------------------------------------------------------------
 //   wxApp
@@ -89,10 +87,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
 bool wxApp::Initialize(int& argC, wxChar **argV)
 {
-#if defined(__WXDEBUG__) && !wxUSE_NANOX
+#if !wxUSE_NANOX
     // install the X error handler
     gs_pfnXErrorHandler = XSetErrorHandler( wxXErrorHandler );
-#endif // __WXDEBUG__
+#endif
 
     wxString displayName;
     bool syncDisplay = false;
@@ -292,9 +290,6 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             return false;
     }
 
-#ifdef __WXDEBUG__
-    wxString windowClass = win->GetClassInfo()->GetClassName();
-#endif
 
     switch (event->type)
     {
@@ -453,10 +448,8 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
         }
 #if !wxUSE_NANOX
         case PropertyNotify:
-        {
-            //wxLogDebug("PropertyNotify: %s", windowClass.c_str());
             return HandlePropertyChange(_event);
-        }
+
         case ClientMessage:
         {
             if (!win->IsEnabled())
@@ -617,13 +610,6 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 return win->HandleWindowEvent(focusEvent);
             }
             return false;
-
-#ifdef __WXDEBUG__
-        default:
-            //wxString eventName = wxGetXEventName(XEvent& event);
-            //wxLogDebug(wxT("Event %s not handled"), eventName.c_str());
-            break;
-#endif // __WXDEBUG__
     }
 
     return false;
@@ -767,19 +753,3 @@ void wxApp::Exit()
     wxAppConsole::Exit();
 }
 
-#ifdef __WXDEBUG__
-
-void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
-{
-    // While the GUI isn't working that well, just print out the
-    // message.
-#if 1
-    wxAppBase::OnAssert(file, line, cond, msg);
-#else
-    wxString msg2;
-    msg2.Printf("At file %s:%d: %s", file, line, msg);
-    wxLogDebug(msg2);
-#endif
-}
-
-#endif // __WXDEBUG__

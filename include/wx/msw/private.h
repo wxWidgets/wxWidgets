@@ -692,14 +692,12 @@ public:
     {
         if ( m_hGlobal && !GlobalUnlock(m_hGlobal) )
         {
-#ifdef __WXDEBUG__
             // this might happen simply because the block became unlocked
             DWORD dwLastError = ::GetLastError();
             if ( dwLastError != NO_ERROR )
             {
                 wxLogApiError(_T("GlobalUnlock"), dwLastError);
             }
-#endif // __WXDEBUG__
         }
     }
 

@@ -171,7 +171,7 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     if (!wxTheApp)
         return TRUE;
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     // don't generate the idle events while the assert modal dialog is shown,
     // this completely confuses the apps which don't expect to be reentered
     // from some safely-looking functions
@@ -186,7 +186,7 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
         }
         return TRUE;
     }
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
     // When getting called from GDK's time-out handler
     // we are no longer within GDK's grab on the GUI
@@ -382,9 +382,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxApp,wxEvtHandler)
 
 wxApp::wxApp()
 {
-#ifdef __WXDEBUG__
     m_isInAssert = false;
-#endif // __WXDEBUG__
 
     m_idleTag = 0;
     g_isIdle = TRUE;
@@ -616,18 +614,29 @@ void wxApp::CleanUp()
     wxAppBase::CleanUp();
 }
 
-#ifdef __WXDEBUG__
-
-void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
+void wxApp::OnAssertFailure(const wxChar *file,
+                            int line,
+                            const wxChar* func,
+                            const wxChar* cond,
+                            const wxChar *msg)
 {
+    // there is no need to do anything if asserts are disabled in this build
+    // anyhow
+#if wxDEBUG_LEVEL
+    // block wx idle events while assert dialog is showing
     m_isInAssert = true;
 
-    wxAppBase::OnAssert(file, line, cond, msg);
+    wxAppBase::OnAssertFailure(file, line, func, cond, msg);
 
     m_isInAssert = false;
+#else // !wxDEBUG_LEVEL
+    wxUnusedVar(file);
+    wxUnusedVar(line);
+    wxUnusedVar(func);
+    wxUnusedVar(cond);
+    wxUnusedVar(msg);
+#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 }
-
-#endif // __WXDEBUG__
 
 void wxApp::RemoveIdleTag()
 {

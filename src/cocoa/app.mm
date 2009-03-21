@@ -184,10 +184,6 @@ wxApp::wxApp()
 {
     m_topWindow = NULL;
 
-#ifdef __WXDEBUG__
-    m_isInAssert = false;
-#endif // __WXDEBUG__
-
     argc = 0;
 #if !wxUSE_UNICODE
     argv = NULL;
@@ -465,15 +461,6 @@ void wxApp::CF_ObserveMainRunLoopBeforeWaiting(CFRunLoopObserverRef observer, in
         wxLogTrace(wxTRACE_COCOA, wxT("Idle END"));
     }
 }
-
-#ifdef __WXDEBUG__
-void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
-{
-    m_isInAssert = true;
-    wxAppBase::OnAssert(file, line, cond, msg);
-    m_isInAssert = false;
-}
-#endif // __WXDEBUG__
 
 /*  A note about Cocoa's event loops vs. run loops:
 

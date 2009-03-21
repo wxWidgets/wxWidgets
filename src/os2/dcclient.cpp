@@ -62,13 +62,13 @@ WX_DEFINE_OBJARRAY(wxArrayDCInfo);
 
 static RECT        g_paintStruct;
 
-#ifdef __WXDEBUG__
+#ifdef wxHAS_PAINT_DEBUG
     // a global variable which we check to verify that wxPaintDC are only
     // created in resopnse to WM_PAINT message - doing this from elsewhere is a
     // common programming error among wxWidgets programmers and might lead to
     // very subtle and difficult to debug refresh/repaint bugs.
     int g_isPainting = 0;
-#endif // __WXDEBUG__
+#endif // wxHAS_PAINT_DEBUG
 
 // ===========================================================================
 // implementation
@@ -308,7 +308,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *pCanvas) :
 {
     wxCHECK_RET(pCanvas, wxT("NULL canvas in wxPaintDC ctor"));
 
-#ifdef __WXDEBUG__
+#ifdef wxHAS_PAINT_DEBUG
     if (g_isPainting <= 0)
     {
         wxFAIL_MSG( wxT("wxPaintDC may be created only in EVT_PAINT handler!") );

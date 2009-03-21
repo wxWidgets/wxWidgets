@@ -80,10 +80,6 @@ public:
     void SendEvent();
 };
 
-#ifndef __WXDEBUG__
-inline void wxHyperlinkCtrlBase::CheckParams(const wxString&, const wxString&, long) { }
-#endif
-
 // ----------------------------------------------------------------------------
 // wxHyperlinkEvent
 // ----------------------------------------------------------------------------

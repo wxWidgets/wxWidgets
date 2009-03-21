@@ -38,13 +38,6 @@ bool operator == (const wxDataViewItem &left, const wxDataViewItem &right)
     return (left.GetID() == right.GetID() );
 }
 
-#ifdef __WXDEBUG__
-void wxDataViewItem::Print(const wxString& text) const
-{
-    wxPrintf(wxT("item %s: %lu\n"), text.GetData(), wxPtrToUInt(m_id));
-}
-#endif
-
 // ---------------------------------------------------------
 // wxDataViewModelNotifier
 // ---------------------------------------------------------

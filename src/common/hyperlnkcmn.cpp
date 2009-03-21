@@ -51,9 +51,12 @@ const char wxHyperlinkCtrlNameStr[] = "hyperlink";
 // wxHyperlinkCtrlBase
 // ----------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
-void wxHyperlinkCtrlBase::CheckParams(const wxString& label, const wxString& url, long style)
+void
+wxHyperlinkCtrlBase::CheckParams(const wxString& label,
+                                 const wxString& url,
+                                 long style)
 {
+#if wxDEBUG_LEVEL
     wxASSERT_MSG(!url.empty() || !label.empty(),
                  wxT("Both URL and label are empty ?"));
 
@@ -62,8 +65,12 @@ void wxHyperlinkCtrlBase::CheckParams(const wxString& label, const wxString& url
                     (int)((style & wxHL_ALIGN_RIGHT) != 0);
     wxASSERT_MSG(alignment == 1,
         wxT("Specify exactly one align flag!"));
+#else // !wxDEBUG_LEVEL
+    wxUnusedVar(label);
+    wxUnusedVar(url);
+    wxUnusedVar(style);
+#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 }
-#endif
 
 void wxHyperlinkCtrlBase::SendEvent()
 {

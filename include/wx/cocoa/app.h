@@ -67,17 +67,8 @@ public:
     virtual bool OnInit();
     virtual bool OnInitGui();
 
-#ifdef __WXDEBUG__
-    virtual void OnAssert(const wxChar *file, int line, const wxChar *cond, const wxChar *msg);
-    bool IsInAssert() const { return m_isInAssert; }
-#endif // __WXDEBUG__
-
     // Set true _before_ initializing wx to force embedded mode (no app delegate, etc.)
     static bool sm_isEmbedded;
-private:
-#ifdef __WXDEBUG__
-    bool m_isInAssert;
-#endif // __WXDEBUG__
 };
 
 #endif // _WX_COCOA_APP_H_
