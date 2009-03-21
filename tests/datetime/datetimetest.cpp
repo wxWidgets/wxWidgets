@@ -23,6 +23,7 @@
 #if wxUSE_DATETIME
 
 #include "wx/datetime.h"
+#include "wx/wxcrt.h"       // for wxStrstr()
 
 // need this to be able to use CPPUNIT_ASSERT_EQUAL with wxDateTime objects
 static std::ostream& operator<<(std::ostream& ostr, const wxDateTime& dt)
