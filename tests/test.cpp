@@ -231,16 +231,23 @@ int TestApp::OnRun()
 {
     CppUnit::TextTestRunner runner;
 
-    for (size_t i = 0; i < m_registries.size(); i++) {
-        auto_ptr<Test> test(m_registries[i].empty() ?
+    for (size_t i = 0; i < m_registries.size(); i++)
+    {
+        std::string reg = m_registries[i];
+        if (!reg.empty() && !wxString(reg).EndsWith("TestCase"))
+            reg += "TestCase";
+        // allow the user to specify the name of the testcase "in short form"
+        // (all wx test cases end with TestCase postfix)
+
+        auto_ptr<Test> test(reg.empty() ?
             TestFactoryRegistry::getRegistry().makeTest() :
-            TestFactoryRegistry::getRegistry(m_registries[i]).makeTest());
+            TestFactoryRegistry::getRegistry(reg).makeTest());
 
         TestSuite *suite = dynamic_cast<TestSuite*>(test.get());
 
         if (suite && suite->countTestCases() == 0)
             wxLogError(_T("No such test suite: %s"),
-                wxString(m_registries[i].c_str(), wxConvUTF8).c_str());
+                wxString(reg.c_str(), wxConvUTF8).c_str());
         else if (m_list)
             List(test.get());
         else
