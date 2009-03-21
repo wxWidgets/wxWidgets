@@ -156,7 +156,7 @@ WX_NSFont wxFont::CreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
 
 void wxNativeFontInfo::ValidateNSFontDescriptor()
 {
-    NSFontDescriptor* desc  = [NSFont fontWithName:wxCFStringRef(m_faceName).AsNSString() size:m_pointSize];
+    NSFontDescriptor* desc  = [NSFontDescriptor fontDescriptorWithName:wxCFStringRef(m_faceName).AsNSString() size:m_pointSize];
     NSFontSymbolicTraits traits = 0;
 
     if (m_weight == wxFONTWEIGHT_BOLD)
