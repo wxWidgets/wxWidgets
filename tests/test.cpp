@@ -255,7 +255,7 @@ int TestApp::OnRun()
     }
 
     if ( m_list )
-        return EXIT_SUCCESS;
+        return 0;
 
     runner.setOutputter(new CppUnit::CompilerOutputter(&runner.result(), cout));
 
@@ -279,7 +279,7 @@ int TestApp::OnRun()
     if ( m_detail || m_timing )
         runner.eventManager().addListener(&detailListener);
 
-    return runner.run("", false, true, !verbose) ? EXIT_SUCCESS : EXIT_FAILURE;
+    return runner.run("", false, true, !verbose) ? 0 : 1;
 }
 
 int TestApp::OnExit()
