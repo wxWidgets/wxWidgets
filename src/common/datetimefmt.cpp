@@ -1329,6 +1329,13 @@ wxDateTime::ParseFormat(const wxString& date,
             case _T('p'):       // AM or PM string
                 {
                     wxString am, pm, token = GetAlphaToken(input);
+                    
+                    // some locales have empty AM/PM tokens and thus when formatting
+                    // dates with the %p specifier mpthomg os gemerated; when trying to
+                    // parse them back, we get an empty token here... but that's not
+                    // an error.
+                    if (token.empty())
+                        break;
 
                     GetAmPmStrings(&am, &pm);
                     if (am.empty() && pm.empty())
