@@ -1,184 +1,227 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wxcrt.h
-// Purpose:     interface of global CRT wrapper functions
+// Name:        wx/wxcrt.h
+// Purpose:     interface of global wx wrappers for CRT functions
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/** @addtogroup group_funcmacro_string */
+
+/** @addtogroup group_funcmacro_crt */
 //@{
 
-/**
-    Returns @true if the pointer @a p is either @NULL or points to an empty string,
-    @false otherwise.
-
-    @header{wx/wxcrt.h}
-*/
-bool wxIsEmpty(const char* p);
-
-/**
-    This is a safe version of standard function @e strlen(): it does exactly
-    the same thing (i.e. returns the length of the string) except that it
-    returns 0 if @a p is the @NULL pointer.
-
-    @header{wx/wxcrt.h}
-*/
-size_t wxStrlen(const char* p);
-
-/**
-    This is a safe version of standard function @e strlen(): it returns the length
-    of the string s in bytes if this length is smaller than @a maxlen bytes.
-    Otherwise it returns @a maxlen.
-
-    The @a maxlen parameter makes it easier to avoid array indexing errors
-    since you are sure that wxStrnlen() won't read any memory exceeding the
-    @c "*(p+maxlen)" location.
-
-    @since 2.9.0
-
-    @header{wx/wxcrt.h}
-*/
-size_t wxStrnlen(const char* p, size_t maxlen);
-
-/**
-    This function complements the standard C function @e stricmp() which
-    performs case-insensitive comparison.
-
-    @return A negative value, 0, or positive value if @a p1 is less than,
-            equal to or greater than @a p2. The comparison is case-sensitive.
-
-    @header{wx/wxcrt.h}
-*/
-int wxStrcmp(const char* p1, const char* p2);
-
-/**
-    This function complements the standard C function @e strcmp() which performs
-    case-sensitive comparison.
-
-    @return A negative value, 0, or positive value if @a p1 is less than,
-            equal to or greater than @e p2. The comparison is case-insensitive.
-
-    @header{wx/wxcrt.h}
-*/
-int wxStricmp(const char* p1, const char* p2);
-
-/**
-    @deprecated Use wxString::operator== instead.
-
-    This macro is defined as:
-
-    @code
-    #define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
-    @endcode
-
-    @header{wx/wxcrt.h}
-*/
-bool wxStringEq(const wxString& s1, const wxString& s2);
-
-/**
-    @deprecated Use wxString::Find() instead.
-
-    Returns @true if the substring @a s1 is found within @a s2, ignoring case
-    if @a exact is @false. If @a subString is @false, no substring matching is
-    done.
-
-    @header{wx/wxcrt.h}
-*/
-bool wxStringMatch(const wxString& s1, const wxString& s2,
-                   bool subString = true, bool exact = false);
-
-/**
-    This is a convenience function wrapping wxStringTokenizer which simply
-    returns all tokens found in the given @a string in an array.
-
-    Please see wxStringTokenizer::wxStringTokenizer() for a description of the
-    other parameters.
-
-    @header{wx/wxcrt.h}
-*/
-wxArrayString wxStringTokenize(const wxString& string,
-                               const wxString& delims = wxDEFAULT_DELIMITERS,
-                               wxStringTokenizerMode mode = wxTOKEN_DEFAULT);
-
-/**
-    Safe and more convenient replacement for strncpy().
-
-    This function copies the source string @a src to the destination buffer @a
-    dst of size @a n without overflowing the buffer and ensuring that it is
-    always @NUL-terminated.
-
-    Example of use:
-    @code
-        char buf[256];
-        if ( wxStrlcpy(buf, GetSomeString(), WXSIZEOF(buf)) > WXSIZEOF(buf) )
-            ... handle truncation ...
-    @endcode
-    Notice that using wxStrncpy() in similar way is wrong, the above is broadly
-    equivalent to
-    @code
-        char buf[256];
-        buf[WXSIZEOF(buf) - 1] = '\0';
-        wxStrncpy(buf, GetSomeString(), WXSIZEOF(buf) - 1);
-        if ( buf[WXSIZEOF(buf) - 1] != '\0' )
-        {
-            ... truncation occurred ...
-            // need to NUL-terminate string manually
-            buf[WXSIZEOF(buf) - 1] = '\0';
-        }
-    @endcode
-    which should explain the advantage of using wxStrlcpy().
-
-    Notice that this function is similar to the OpenBSD strlcpy() function.
-
-    @param dst
-        Destination buffer of size (greater or) equal to @a n.
-    @param src
-        @NUL-terminated source string.
-    @param n
-        The size of the destination buffer.
-    @return
-        The length of @a src, if the returned value is greater or equal to @a n
-        then there was not enough space in the destination buffer and the
-        string was truncated.
-
-    @since 2.9.0
-
-    @header{wx/wxcrt.h}
- */
-size_t wxStrlcpy(char *dst, const char *src, size_t n);
-
-/**
-    This function replaces the dangerous standard function @e sprintf() and is
-    like @e snprintf() available on some platforms. The only difference with
-    @e sprintf() is that an additional argument - buffer size - is taken and
-    the buffer is never overflowed.
-
-    Returns the number of characters copied to the buffer or -1 if there is not
-    enough space.
-
-    @see wxVsnprintf(), wxString::Printf()
-
-    @header{wx/wxcrt.h}
-*/
-int wxSnprintf(char* buf, size_t len, const char* format, ...);
-
-/**
-    The same as wxSnprintf() but takes a @c va_list argument instead of an
-    arbitrary number of parameters.
-
-    @note If @c wxUSE_PRINTF_POS_PARAMS is set to 1, then this function
-          supports positional arguments (see wxString::Printf() for more
-          information). However other functions of the same family (wxPrintf(),
-          wxSprintf(), wxFprintf(), wxVfprintf(), wxVfprintf(), wxVprintf(),
-          wxVsprintf()) currently do not to support positional parameters even
-          when @c wxUSE_PRINTF_POS_PARAMS is 1.
-
-    @see wxSnprintf(), wxString::PrintfV()
-
-    @header{wx/wxcrt.h}
-*/
-int wxVsnprintf(char* buf, size_t len, const char* format, va_list argPtr);
+bool wxIsEmpty(const char *s);
+bool wxIsEmpty(const wchar_t *s);
+bool wxIsEmpty(const wxCharBuffer& s);
+bool wxIsEmpty(const wxWCharBuffer& s);
+bool wxIsEmpty(const wxString& s);
+bool wxIsEmpty(const wxCStrData& s);
+wxChar* wxTmemchr(const wxChar* s, wxChar c, size_t l);
+int wxTmemcmp(const wxChar* sz1, const wxChar* sz2, size_t len);
+wxChar* wxTmemcpy(wxChar* szOut, const wxChar* szIn, size_t len);
+wxChar* wxTmemmove(wxChar* szOut, const wxChar* szIn, size_t len);
+wxChar* wxTmemset(wxChar* szOut, const wxChar cIn, size_t len);
+char* wxTmemchr(const char* s, char c, size_t len);
+int wxTmemcmp(const char* sz1, const char* sz2, size_t len);
+char* wxTmemcpy(char* szOut, const char* szIn, size_t len);
+char* wxTmemmove(char* szOut, const char* szIn, size_t len);
+char* wxTmemset(char* szOut, const char cIn, size_t len);
+char* wxSetlocale(int category, const wxCharBuffer& locale);
+char* wxSetlocale(int category, const wxString& locale);
+char* wxSetlocale(int category, const wxCStrData& locale);
+size_t wxStrlen(const wxCharBuffer& s);
+size_t wxStrlen(const wxWCharBuffer& s);
+size_t wxStrlen(const wxString& s);
+size_t wxStrlen(const wxCStrData& s);
+size_t wxStrnlen(const char *str, size_t maxlen);
+size_t wxStrnlen(const char *str, size_t maxlen);
+size_t wxStrnlen(const wchar_t *str, size_t maxlen);
+size_t wxStrnlen(const wchar_t *str, size_t maxlen);
+char* wxStrdup(const wxCharBuffer& s);
+wchar_t* wxStrdup(const wxWCharBuffer& s);
+char* wxStrdup(const wxString& s);
+char* wxStrdup(const wxCStrData& s);
+char *wxStrcpy(char *dest, const char *src);
+wchar_t *wxStrcpy(wchar_t *dest, const wchar_t *src);
+char *wxStrcpy(char *dest, const wxString& src);
+char *wxStrcpy(char *dest, const wxCStrData& src);
+char *wxStrcpy(char *dest, const wxCharBuffer& src);
+wchar_t *wxStrcpy(wchar_t *dest, const wxString& src);
+wchar_t *wxStrcpy(wchar_t *dest, const wxCStrData& src);
+wchar_t *wxStrcpy(wchar_t *dest, const wxWCharBuffer& src);
+char *wxStrcpy(char *dest, const wchar_t *src);
+wchar_t *wxStrcpy(wchar_t *dest, const char *src);
+char *wxStrncpy(char *dest, const char *src, size_t n);
+wchar_t *wxStrncpy(wchar_t *dest, const wchar_t *src, size_t n);
+char *wxStrncpy(char *dest, const wxString& src, size_t n);
+char *wxStrncpy(char *dest, const wxCStrData& src, size_t n);
+char *wxStrncpy(char *dest, const wxCharBuffer& src, size_t n);
+wchar_t *wxStrncpy(wchar_t *dest, const wxString& src, size_t n);
+wchar_t *wxStrncpy(wchar_t *dest, const wxCStrData& src, size_t n);
+wchar_t *wxStrncpy(wchar_t *dest, const wxWCharBuffer& src, size_t n);
+char *wxStrncpy(char *dest, const wchar_t *src, size_t n);
+wchar_t *wxStrncpy(wchar_t *dest, const char *src, size_t n);
+size_t wxStrlcpy(char *dest, const char *src, size_t n);
+size_t wxStrlcpy(wchar_t *dest, const wchar_t *src, size_t n);
+char *wxStrcat(char *dest, const char *src);
+wchar_t *wxStrcat(wchar_t *dest, const wchar_t *src);
+char *wxStrcat(char *dest, const wxString& src);
+char *wxStrcat(char *dest, const wxCStrData& src);
+char *wxStrcat(char *dest, const wxCharBuffer& src);
+wchar_t *wxStrcat(wchar_t *dest, const wxString& src);
+wchar_t *wxStrcat(wchar_t *dest, const wxCStrData& src);
+wchar_t *wxStrcat(wchar_t *dest, const wxWCharBuffer& src);
+char *wxStrcat(char *dest, const wchar_t *src);
+wchar_t *wxStrcat(wchar_t *dest, const char *src);
+char *wxStrncat(char *dest, const char *src, size_t n);
+wchar_t *wxStrncat(wchar_t *dest, const wchar_t *src, size_t n);
+char *wxStrncat(char *dest, const wxString& src, size_t n);
+char *wxStrncat(char *dest, const wxCStrData& src, size_t n);
+char *wxStrncat(char *dest, const wxCharBuffer& src, size_t n);
+wchar_t *wxStrncat(wchar_t *dest, const wxString& src, size_t n);
+wchar_t *wxStrncat(wchar_t *dest, const wxCStrData& src, size_t n);
+wchar_t *wxStrncat(wchar_t *dest, const wxWCharBuffer& src, size_t n);
+char *wxStrncat(char *dest, const wchar_t *src, size_t n);
+wchar_t *wxStrncat(wchar_t *dest, const char *src, size_t n);
+int wxStrcmp_String(const wxString& s1, const T& s2);
+int wxStricmp_String(const wxString& s1, const T& s2);
+int wxStrcoll_String(const wxString& s1, const T& s2);;
+int wxStrcoll_String(const wxString& s1, const T& s2);
+size_t wxStrspn_String(const wxString& s1, const T& s2);
+size_t wxStrcspn_String(const wxString& s1, const T& s2);
+int wxStrncmp_String(const wxString& s1, const T& s2, size_t n);
+int wxStrnicmp_String(const wxString& s1, const T& s2, size_t n);
+size_t wxStrxfrm(char *dest, const char *src, size_t n);
+size_t wxStrxfrm(wchar_t *dest, const wchar_t *src, size_t n);
+size_t wxStrxfrm(T *dest, const wxCharTypeBuffer<T>& src, size_t n);
+size_t wxStrxfrm(char *dest, const wxString& src, size_t n);
+size_t wxStrxfrm(wchar_t *dest, const wxString& src, size_t n);
+size_t wxStrxfrm(char *dest, const wxCStrData& src, size_t n);
+size_t wxStrxfrm(wchar_t *dest, const wxCStrData& src, size_t n);
+char *wxStrtok(char *str, const char *delim, char **saveptr);
+wchar_t *wxStrtok(wchar_t *str, const wchar_t *delim, wchar_t **saveptr);
+char *wxStrtok(char *str, const wxCStrData& delim, char **saveptr);
+wchar_t *wxStrtok(wchar_t *str, const wxCStrData& delim, wchar_t **saveptr);
+char *wxStrtok(char *str, const wxString& delim, char **saveptr);
+wchar_t *wxStrtok(wchar_t *str, const wxString& delim, wchar_t **saveptr);
+const char *wxStrstr(const char *haystack, const char *needle);
+const wchar_t *wxStrstr(const wchar_t *haystack, const wchar_t *needle);
+const char *wxStrstr(const char *haystack, const wxString& needle);
+const wchar_t *wxStrstr(const wchar_t *haystack, const wxString& needle);
+const char *wxStrstr(const wxString& haystack, const wxString& needle);
+const char *wxStrstr(const wxCStrData& haystack, const wxString& needle);
+const char *wxStrstr(const wxCStrData& haystack, const wxCStrData& needle);
+const char *wxStrstr(const wxString& haystack, const char *needle);
+const char *wxStrstr(const wxCStrData& haystack, const char *needle);
+const wchar_t *wxStrstr(const wxString& haystack, const wchar_t *needle);
+const wchar_t *wxStrstr(const wxCStrData& haystack, const wchar_t *needle);
+const char *wxStrchr(const char *s, char c);
+const wchar_t *wxStrchr(const wchar_t *s, wchar_t c);
+const char *wxStrrchr(const char *s, char c);
+const wchar_t *wxStrrchr(const wchar_t *s, wchar_t c);
+const char *wxStrchr(const char *s, const wxUniChar& c);
+const wchar_t *wxStrchr(const wchar_t *s, const wxUniChar& c);
+const char *wxStrrchr(const char *s, const wxUniChar& c);
+const wchar_t *wxStrrchr(const wchar_t *s, const wxUniChar& c);
+const char *wxStrchr(const char *s, const wxUniCharRef& c);
+const wchar_t *wxStrchr(const wchar_t *s, const wxUniCharRef& c);
+const char *wxStrrchr(const char *s, const wxUniCharRef& c);
+const wchar_t *wxStrrchr(const wchar_t *s, const wxUniCharRef& c);
+const T* wxStrchr(const wxCharTypeBuffer<T>& s, T c);
+const T* wxStrrchr(const wxCharTypeBuffer<T>& s, T c);
+const T* wxStrchr(const wxCharTypeBuffer<T>& s, const wxUniChar& c);
+const T* wxStrrchr(const wxCharTypeBuffer<T>& s, const wxUniChar& c);
+const T* wxStrchr(const wxCharTypeBuffer<T>& s, const wxUniCharRef& c);
+const T* wxStrrchr(const wxCharTypeBuffer<T>& s, const wxUniCharRef& c);
+const char* wxStrchr(const wxString& s, char c);
+const char* wxStrrchr(const wxString& s, char c);
+const char* wxStrchr(const wxString& s, int c);
+const char* wxStrrchr(const wxString& s, int c);
+const char* wxStrchr(const wxString& s, const wxUniChar& c);
+const char* wxStrrchr(const wxString& s, const wxUniChar& c);
+const char* wxStrchr(const wxString& s, const wxUniCharRef& c);
+const char* wxStrrchr(const wxString& s, const wxUniCharRef& c);
+const wchar_t* wxStrchr(const wxString& s, wchar_t c);
+const wchar_t* wxStrrchr(const wxString& s, wchar_t c);
+const char* wxStrchr(const wxCStrData& s, char c);
+const char* wxStrrchr(const wxCStrData& s, char c);
+const char* wxStrchr(const wxCStrData& s, int c);
+const char* wxStrrchr(const wxCStrData& s, int c);
+const char* wxStrchr(const wxCStrData& s, const wxUniChar& c);
+const char* wxStrrchr(const wxCStrData& s, const wxUniChar& c);
+const char* wxStrchr(const wxCStrData& s, const wxUniCharRef& c);
+const char* wxStrrchr(const wxCStrData& s, const wxUniCharRef& c);
+const wchar_t* wxStrchr(const wxCStrData& s, wchar_t c);
+const wchar_t* wxStrrchr(const wxCStrData& s, wchar_t c);
+const char *wxStrpbrk(const char *s, const char *accept);
+const wchar_t *wxStrpbrk(const wchar_t *s, const wchar_t *accept);
+const char *wxStrpbrk(const char *s, const wxString& accept);
+const char *wxStrpbrk(const char *s, const wxCStrData& accept);
+const wchar_t *wxStrpbrk(const wchar_t *s, const wxString& accept);
+const wchar_t *wxStrpbrk(const wchar_t *s, const wxCStrData& accept);
+const char *wxStrpbrk(const wxString& s, const wxString& accept);
+const char *wxStrpbrk(const wxString& s, const char *accept);
+const wchar_t *wxStrpbrk(const wxString& s, const wchar_t *accept);
+const char *wxStrpbrk(const wxString& s, const wxCStrData& accept);
+const char *wxStrpbrk(const wxCStrData& s, const wxString& accept);
+const char *wxStrpbrk(const wxCStrData& s, const char *accept);
+const wchar_t *wxStrpbrk(const wxCStrData& s, const wchar_t *accept);
+const char *wxStrpbrk(const wxCStrData& s, const wxCStrData& accept);
+const T *wxStrpbrk(const S& s, const wxCharTypeBuffer<T>& accept);
+/* inlined non-const versions */;
+char *wxStrstr(char *haystack, const char *needle);
+wchar_t *wxStrstr(wchar_t *haystack, const wchar_t *needle);
+char *wxStrstr(char *haystack, const wxString& needle);
+wchar_t *wxStrstr(wchar_t *haystack, const wxString& needle);
+char * wxStrchr(char *s, char c);
+char * wxStrrchr(char *s, char c);
+wchar_t * wxStrchr(wchar_t *s, wchar_t c);
+wchar_t * wxStrrchr(wchar_t *s, wchar_t c);
+char * wxStrpbrk(char *s, const char *accept);
+wchar_t * wxStrpbrk(wchar_t *s, const wchar_t *accept);
+char * wxStrpbrk(char *s, const wxString& accept);
+wchar_t * wxStrpbrk(wchar_t *s, const wxString& accept);
+FILE *wxFopen(const wxString& path, const wxString& mode);
+FILE *wxFreopen(const wxString& path, const wxString& mode, FILE *stream);
+int wxRemove(const wxString& path);
+int wxRename(const wxString& oldpath, const wxString& newpath);
+char *wxFgets(char *s, int size, FILE *stream);
+int wxFgetc(FILE *stream);
+int wxUngetc(int c, FILE *stream);
+int wxAtoi(const wxString& str);
+int wxAtoi(const wxString& str);
+long wxAtol(const wxString& str);
+long wxAtol(const wxString& str);
+double wxAtof(const wxString& str);
+double wxAtof(const wxString& str);
+double wxStrtod(const char *nptr, char **endptr);
+double wxStrtod(const wchar_t *nptr, wchar_t **endptr);
+double wxStrtod(const wxCharTypeBuffer<T>& nptr, T **endptr);
+double wxStrtod(const wxString& nptr, T endptr);
+double wxStrtod(const wxCStrData& nptr, T endptr);
+int wxSystem(const wxString& str);
+int wxSystem(const wxString& str);
+char* wxGetenv(const char *name);
+wchar_t* wxGetenv(const wchar_t *name);
+char* wxGetenv(const wxString& name);
+char* wxGetenv(const wxCStrData& name);
+char* wxGetenv(const wxCharBuffer& name);
+wchar_t* wxGetenv(const wxWCharBuffer& name);
+size_t wxStrftime(char *s, size_t max, size_t max, const wxString& format, const struct tm *tm);
+size_t wxStrftime(wchar_t *s, size_t max, size_t max, const wxString& format, const struct tm *tm);
+bool wxIsalnum(const wxUniChar& c) ;
+bool wxIsalpha(const wxUniChar& c) ;
+bool wxIscntrl(const wxUniChar& c) ;
+bool wxIsdigit(const wxUniChar& c) ;
+bool wxIsgraph(const wxUniChar& c) ;
+bool wxIslower(const wxUniChar& c) ;
+bool wxIsprint(const wxUniChar& c) ;
+bool wxIspunct(const wxUniChar& c) ;
+bool wxIsspace(const wxUniChar& c) ;
+bool wxIsupper(const wxUniChar& c) ;
+bool wxIsxdigit(const wxUniChar& c);
+wxUniChar wxTolower(const wxUniChar& c);
+wxUniChar wxToupper(const wxUniChar& c);
+int wxIsctrl(const wxUniChar& c);
 
 //@}
-
