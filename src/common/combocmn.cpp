@@ -1789,7 +1789,10 @@ void wxComboCtrlBase::OnButtonClick()
 {
     // Derived classes can override this method for totally custom
     // popup action
-    ShowPopup();
+    if ( !IsPopupWindowState(Visible) )
+        ShowPopup();
+    else
+        HidePopup();
 }
 
 void wxComboCtrlBase::ShowPopup()
