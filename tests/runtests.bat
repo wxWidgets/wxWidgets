@@ -19,10 +19,10 @@ for /d %%x in (*) do @(
 )
 
 REM exit with code 1 if any of the test failed
-if %failure% EQU 1 exit 1
+if %failure% EQU 1 exit /b 1
 
 REM remove the failure env var:
 set failure=
 
 REM exit with code 0 (all tests passed successfully)
-exit 0
+exit /b 0
