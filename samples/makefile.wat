@@ -269,12 +269,6 @@ clean : .SYMBOLIC
 	cd wrapsizer
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
-	cd flash
-	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
-	cd $(WATCOM_CWD)
-	cd mfc
-	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
-	cd $(WATCOM_CWD)
 	cd memcheck
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
 	cd $(WATCOM_CWD)
@@ -631,16 +625,6 @@ wizard : .SYMBOLIC
 
 wrapsizer : .SYMBOLIC 
 	cd wrapsizer
-	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
-	cd $(WATCOM_CWD)
-
-flash : .SYMBOLIC 
-	cd flash
-	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
-	cd $(WATCOM_CWD)
-
-mfc : .SYMBOLIC 
-	cd mfc
 	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) all
 	cd $(WATCOM_CWD)
 
