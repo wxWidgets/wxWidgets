@@ -18,6 +18,7 @@
 #include <limits.h>          // for CHAR_BIT used below
 
 #include "wx/chartype.h"     // for __TFILE__ and wxChar
+#include "wx/cpp.h"          // for __WXFUNCTION__
 
 // ----------------------------------------------------------------------------
 // Defines controlling the debugging macros
@@ -44,24 +45,6 @@
         #define WXDEBUG 1
     #endif // !WXDEBUG
 #endif // __WXDEBUG__
-
-#ifndef __WXFUNCTION__
-    /* TODO: add more compilers supporting __FUNCTION__ */
-    #if defined(__DMC__)
-        /*
-           __FUNCTION__ happens to be not defined within class members
-           http://www.digitalmars.com/drn-bin/wwwnews?c%2B%2B.beta/485
-        */
-        #define __WXFUNCTION__ (NULL)
-    #elif defined(__GNUC__) || \
-          (defined(_MSC_VER) && _MSC_VER >= 1300) || \
-          defined(__FUNCTION__)
-        #define __WXFUNCTION__ __FUNCTION__
-    #else
-        /* still define __WXFUNCTION__ to avoid #ifdefs elsewhere */
-        #define __WXFUNCTION__ (NULL)
-    #endif
-#endif /* __WXFUNCTION__ already defined */
 
 // ----------------------------------------------------------------------------
 // Debugging macros
