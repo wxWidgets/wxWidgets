@@ -6287,28 +6287,8 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 // Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
 // in active frames and dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
-static FARPROC wxTheKeyboardHookProc = 0;
-int APIENTRY _EXPORT
-wxKeyboardHook(int nCode, WORD wParam, DWORD lParam);
 
-void wxSetKeyboardHook(bool doIt)
-{
-    if ( doIt )
-    {
-        wxTheKeyboardHookProc = MakeProcInstance((FARPROC) wxKeyboardHook, wxGetInstance());
-        wxTheKeyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC) wxTheKeyboardHookProc, wxGetInstance(),
-
-            GetCurrentThreadId()
-        //      (DWORD)GetCurrentProcess()); // This is another possibility. Which is right?
-            );
-    }
-    else
-    {
-        UnhookWindowsHookEx(wxTheKeyboardHook);
-    }
-}
-
-int APIENTRY _EXPORT
+int APIENTRY
 wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
 {
     DWORD hiWord = HIWORD(lParam);
@@ -6350,6 +6330,29 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
     }
 
     return (int)CallNextHookEx(wxTheKeyboardHook, nCode, wParam, lParam);
+}
+
+void wxSetKeyboardHook(bool doIt)
+{
+    if ( doIt )
+    {
+        wxTheKeyboardHook = ::SetWindowsHookEx
+                              (
+                                WH_KEYBOARD,
+                                (HOOKPROC)wxKeyboardHook,
+                                NULL,   // must be NULL for process hook
+                                ::GetCurrentThreadId()
+                              );
+        if ( !wxTheKeyboardHook )
+        {
+            wxLogLastError(_T("SetWindowsHookEx(wxKeyboardHook)"));
+        }
+    }
+    else // uninstall
+    {
+        if ( wxTheKeyboardHook )
+            ::UnhookWindowsHookEx(wxTheKeyboardHook);
+    }
 }
 
 #endif // !__WXMICROWIN__
