@@ -89,7 +89,7 @@
         These samples don't always build (they need non-default wxWidgets
         configuration or some 3rd party library being installed) so don't build
         them by default by using "optsub" template instead of "sub" one and
-        some of them also requite MSVC compiler so don't use them with the
+        some of them also require MSVC compiler so don't use them with the
         other ones.
      -->
     <if cond="FORMAT[:3] == 'msv'">
