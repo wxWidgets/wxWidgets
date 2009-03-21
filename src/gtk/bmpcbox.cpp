@@ -288,6 +288,8 @@ void wxBitmapComboBox::WriteText(const wxString& value)
 {
     if ( GetEntry() )
         wxComboBox::WriteText(value);
+    else
+        SetStringSelection(value);
 }
 
 wxString wxBitmapComboBox::GetValue() const
