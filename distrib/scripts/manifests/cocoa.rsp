@@ -3,6 +3,7 @@ readme-cocoa.txt
 
 include/wx/cocoa/*.h
 include/wx/cocoa/objc/*.h
+include/wx/cocoa/private/*.h
 src/cocoa/*.cpp
 src/cocoa/*.mm
 src/cocoa/*.r
