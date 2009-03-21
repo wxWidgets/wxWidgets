@@ -95,6 +95,11 @@ All (GUI):
 
 - Add wxBU_EXACTFIT support to wxToggleButton XRC handler (Ronny Krueger).
 
+wxMSW:
+
+- Fixed generation of wxEVT_CHAR_HOOK events.
+
+
 2.8.10:
 -------
 
