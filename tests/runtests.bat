@@ -5,6 +5,9 @@ REM This script is used to return the correct return value to the caller
 REM which is required by Buildbot to recognize failures.
 REM $Id$
 
+rem set the path for running the tests if they use DLL build of wx
+for /d %%x in (..\lib\*_dll) do @PATH=%x;%PATH%
+
 set failure=0
 
 for /d %%x in (*) do @(
