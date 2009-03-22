@@ -77,9 +77,9 @@ wxSpinCtrlXmlHandler::wxSpinCtrlXmlHandler()
     XRC_ADD_STYLE(wxSP_VERTICAL);
     XRC_ADD_STYLE(wxSP_ARROW_KEYS);
     XRC_ADD_STYLE(wxSP_WRAP);
-    XRC_ADD_STYLE(wxTE_LEFT);
-    XRC_ADD_STYLE(wxTE_CENTER);
-    XRC_ADD_STYLE(wxTE_RIGHT);
+    XRC_ADD_STYLE(wxALIGN_LEFT);
+    XRC_ADD_STYLE(wxALIGN_CENTER);
+    XRC_ADD_STYLE(wxALIGN_RIGHT);
 }
 
 wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
@@ -90,7 +90,7 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
                     GetID(),
                     GetText(wxT("value")),
                     GetPosition(), GetSize(),
-                    GetStyle(wxT("style"), wxSP_ARROW_KEYS | wxTE_RIGHT),
+                    GetStyle(wxT("style"), wxSP_ARROW_KEYS | wxALIGN_RIGHT),
                     GetLong(wxT("min"), DEFAULT_MIN),
                     GetLong(wxT("max"), DEFAULT_MAX),
                     GetLong(wxT("value"), DEFAULT_VALUE),

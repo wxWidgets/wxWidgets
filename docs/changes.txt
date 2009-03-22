@@ -503,6 +503,7 @@ All (GUI):
 - Render <th> element contents in bold in wxHTML.
 - Added wxGrid::{Set,Get}{Row,Col}Sizes() methods (Andrey Putrin).
 - Add support for wxSP_WRAP in the generic version of wxSpinCtrlDouble.
+- Add alignment flags support to wxSpinCtrl[Double] (Andrew Radke).
 - Added wxGetSelectedChoices() replacing wxGetMultipleChoices() (Kolya Kosenko).
 
 wxGTK:

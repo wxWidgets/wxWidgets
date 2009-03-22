@@ -119,9 +119,9 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
     m_value = gtk_spin_button_get_value( GTK_SPIN_BUTTON(m_widget));
 
     gfloat align;
-    if ( HasFlag(wxTE_RIGHT) )
+    if ( HasFlag(wxALIGN_RIGHT) )
         align = 1.0;
-    else if ( HasFlag(wxTE_CENTRE) )
+    else if ( HasFlag(wxALIGN_CENTRE) )
         align = 0.5;
     else
         align = 0.0;

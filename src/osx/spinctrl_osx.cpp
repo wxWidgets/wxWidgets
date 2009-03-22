@@ -66,7 +66,7 @@ protected:
          event.SetEventObject( GetParent() );
          GetParent()->HandleWindowEvent(event);
      }
-     
+
      void OnKillFocus(wxFocusEvent& event)
      {
          long l;
@@ -102,7 +102,7 @@ protected:
 
              m_spin->m_oldValue = l;
          }
-         
+
          // delegate to parent control
          event.SetEventObject( GetParent() );
          GetParent()->HandleWindowEvent(event);

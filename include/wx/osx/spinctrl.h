@@ -20,7 +20,7 @@
 // without tons of #ifdefs.
 // ----------------------------------------------------------------------------
 
-#if wxUSE_SPINBTN 
+#if wxUSE_SPINBTN
 
 #include "wx/containr.h"
 
@@ -43,7 +43,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
+               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = _T("wxSpinCtrl"))
     {
@@ -56,7 +56,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
+                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = _T("wxSpinCtrl"));
 
@@ -107,10 +107,10 @@ private:
     // the subcontrols
     wxTextCtrl *m_text;
     wxSpinButton *m_btn;
-    
+
     friend class wxSpinCtrlText;
     friend class wxSpinCtrlButton;
-    
+
     int            m_oldValue;
 private:
     DECLARE_EVENT_TABLE()
@@ -135,7 +135,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
+               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = _T("wxSpinCtrl"))
     {
@@ -147,7 +147,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
+                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = _T("wxSpinCtrl"))
     {

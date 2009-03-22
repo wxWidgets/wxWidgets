@@ -21,13 +21,13 @@
         events. Using this style will prevent the user from using the Enter key
         for dialog navigation (e.g. activating the default button in the
         dialog) under MSW.
-    @style{wxTE_LEFT}
-        Same as for wxTextCtrl: the text is left aligned.
-    @style{wxTE_CENTER}
-        Same as for wxTextCtrl: the text is centered.
-    @style{wxTE_RIGHT}
-        Same as for wxTextCtrl: the text is right aligned (this is the
-        default).
+    @style{wxALIGN_LEFT}
+        Same as wxTE_LEFT for wxTextCtrl: the text is left aligned.
+    @style{wxALIGN_CENTRE}
+        Same as wxTE_CENTRE for wxTextCtrl: the text is centered.
+    @style{wxALIGN_RIGHT}
+        Same as wxTE_RIGHT for wxTextCtrl: the text is right aligned (this is
+        the default).
     @endStyleTable
 
 

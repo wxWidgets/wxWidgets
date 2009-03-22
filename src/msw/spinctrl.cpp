@@ -336,11 +336,11 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
     // propagate text alignment style to text ctrl
-    if ( style & wxTE_RIGHT )
+    if ( style & wxALIGN_RIGHT )
         msStyle |= ES_RIGHT;
-    else if ( style & wxTE_CENTER )
+    else if ( style & wxALIGN_CENTER )
         msStyle |= ES_CENTER;
-    
+
     // this control is used for numeric entry so normally using these flags by
     // default shouldn't be a problem, if it is we can always add a style such
     // as wxSP_NON_NUMERIC later
@@ -481,7 +481,7 @@ void wxSpinCtrl::SetValue(const wxString& text)
 void  wxSpinCtrl::SetValue(int val)
 {
     m_blockEvent = true;
-    
+
     wxSpinButton::SetValue(val);
 
     // normally setting the value of the spin button is enough as it updates
@@ -497,7 +497,7 @@ void  wxSpinCtrl::SetValue(int val)
     }
 
     m_oldValue = GetValue();
-    
+
     m_blockEvent = false;
 }
 
