@@ -51,6 +51,7 @@
 #include "wx/artprov.h"
 #include "wx/collpane.h"
 #include "wx/arrstr.h"
+#include "wx/msgout.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -434,32 +435,6 @@ void wxLogGui::DoLog(wxLogLevel level, const wxString& szString, time_t t)
 #endif // wxUSE_STATUSBAR
             break;
 
-        case wxLOG_Trace:
-        case wxLOG_Debug:
-            #ifdef __WXDEBUG__
-            {
-                wxString str;
-                TimeStamp(&str);
-                str += szString;
-
-                #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
-                    // don't prepend debug/trace here: it goes to the
-                    // debug window anyhow
-                    str += wxT("\r\n");
-                    OutputDebugString(str.wx_str());
-                #else
-                    // send them to stderr
-                    wxFprintf(stderr, wxT("[%s] %s\n"),
-                              level == wxLOG_Trace ? wxT("Trace")
-                                                   : wxT("Debug"),
-                              str.c_str());
-                    fflush(stderr);
-                #endif
-            }
-            #endif // __WXDEBUG__
-
-            break;
-
         case wxLOG_FatalError:
             // show this one immediately
             wxMessageBox(szString, _("Fatal error"), wxICON_HAND);
@@ -491,6 +466,11 @@ void wxLogGui::DoLog(wxLogLevel level, const wxString& szString, time_t t)
             m_aTimes.Add((long)t);
             m_bHasMessages = true;
             break;
+
+        default:
+            // let the base class deal with debug/trace messages as well as any
+            // custom levels
+            wxLog::DoLog(level, szString, t);
     }
 }
 

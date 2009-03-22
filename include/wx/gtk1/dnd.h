@@ -57,7 +57,7 @@ public:
 
   // implementation
 
-    GdkAtom GetMatchingPair();
+    GdkAtom GetMatchingPair(bool quiet = false);
 
     void RegisterWidget( GtkWidget *widget );
     void UnregisterWidget( GtkWidget *widget );

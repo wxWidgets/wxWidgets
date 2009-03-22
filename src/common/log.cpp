@@ -260,47 +260,42 @@ void wxDoLogVerboseUtf8(const char *format, ...)
 }
 #endif // wxUSE_UNICODE_UTF8
 
-// debug functions
-#ifdef __WXDEBUG__
+// ----------------------------------------------------------------------------
+// debug and trace functions
+// ----------------------------------------------------------------------------
+
+#if wxUSE_LOG_DEBUG
+    void wxVLogDebug(const wxString& format, va_list argptr)
+    {
+        if ( wxLog::IsEnabled() )
+        {
+            wxLog::OnLog(wxLOG_Debug,
+                         wxString::FormatV(format, argptr), time(NULL));
+        }
+    }
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-    #define IMPLEMENT_LOG_DEBUG_FUNCTION_WCHAR(level)                   \
-      void wxDoLog##level##Wchar(const wxChar *format, ...)             \
-      {                                                                 \
-        va_list argptr;                                                 \
-        va_start(argptr, format);                                       \
-        wxVLog##level(format, argptr);                                  \
-        va_end(argptr);                                                 \
-      }
-#else
-    #define IMPLEMENT_LOG_DEBUG_FUNCTION_WCHAR(level)
-#endif
+    void wxDoLogDebugWchar(const wxChar *format, ...)
+    {
+        va_list argptr;
+        va_start(argptr, format);
+        wxVLogDebug(format, argptr);
+        va_end(argptr);
+    }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 
 #if wxUSE_UNICODE_UTF8
-    #define IMPLEMENT_LOG_DEBUG_FUNCTION_UTF8(level)                    \
-      void wxDoLog##level##Utf8(const char *format, ...)                \
-      {                                                                 \
-        va_list argptr;                                                 \
-        va_start(argptr, format);                                       \
-        wxVLog##level(format, argptr);                                  \
-        va_end(argptr);                                                 \
-      }
-#else
-    #define IMPLEMENT_LOG_DEBUG_FUNCTION_UTF8(level)
-#endif
+    void wxDoLogDebugUtf8(const char *format, ...)
+    {
+        va_list argptr;
+        va_start(argptr, format);
+        wxVLogDebug(format, argptr);
+        va_end(argptr);
+    }
+#endif // wxUSE_UNICODE_UTF8
+#endif // wxUSE_LOG_DEBUG
 
-#define IMPLEMENT_LOG_DEBUG_FUNCTION(level)                         \
-  void wxVLog##level(const wxString& format, va_list argptr)        \
-  {                                                                 \
-    if ( wxLog::IsEnabled() ) {                                     \
-      wxLog::OnLog(wxLOG_##level,                                   \
-                   wxString::FormatV(format, argptr), time(NULL));  \
-    }                                                               \
-  }                                                                 \
-  IMPLEMENT_LOG_DEBUG_FUNCTION_WCHAR(level)                         \
-  IMPLEMENT_LOG_DEBUG_FUNCTION_UTF8(level)
-
-
+#if wxUSE_LOG_TRACE
   void wxVLogTrace(const wxString& mask, const wxString& format, va_list argptr)
   {
     if ( wxLog::IsEnabled() && wxLog::IsAllowedTraceMask(mask) ) {
@@ -403,13 +398,8 @@ void wxDoLogVerboseUtf8(const char *format, ...)
   void wxVLogTrace(const wchar_t *mask, const wxString& format, va_list argptr)
     { wxVLogTrace(wxString(mask), format, argptr); }
 #endif // __WATCOMC__
+#endif // wxUSE_LOG_TRACE
 
-#else // release
-  #define IMPLEMENT_LOG_DEBUG_FUNCTION(level)
-#endif
-
-IMPLEMENT_LOG_DEBUG_FUNCTION(Debug)
-IMPLEMENT_LOG_DEBUG_FUNCTION(Trace)
 
 // wxLogSysError: one uses the last error code, for other  you must give it
 // explicitly
@@ -730,17 +720,32 @@ void wxLog::DoLog(wxLogLevel level, const wxString& szString, time_t t)
                 LogString(szString, t);
             break;
 
+#if wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
+#if wxUSE_LOG_TRACE
         case wxLOG_Trace:
+#endif
+#if wxUSE_LOG_DEBUG
         case wxLOG_Debug:
-#ifdef __WXDEBUG__
+#endif
             {
-                wxString msg = level == wxLOG_Trace ? wxS("Trace: ")
-                                                    : wxS("Debug: ");
-                msg << szString;
-                LogString(msg, t);
+                wxString str;
+
+                // don't prepend "debug/trace" prefix under MSW as it goes to
+                // the debug window anyhow and don't add time stamp neither as
+                // debug output viewers under Windows typically add it
+                // themselves anyhow
+                #ifndef __WXMSW__
+                    TimeStamp(&str);
+
+                    str += level == wxLOG_Trace ? wxT("Trace: ")
+                                                : wxT("Debug: ");
+                #endif // !__WXMSW__
+
+                str += szString;
+                wxMessageOutputDebug().Output(str);
             }
-#endif // Debug
             break;
+#endif // wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
     }
 }
 
@@ -793,30 +798,38 @@ void wxLogBuffer::Flush()
     }
 }
 
+#if wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
+
 void wxLogBuffer::DoLog(wxLogLevel level, const wxString& szString, time_t t)
 {
-    switch ( level )
+    // don't put debug messages in the buffer, we don't want to show
+    // them to the user in a msg box, log them immediately
+    bool showImmediately = false;
+#if wxUSE_LOG_TRACE
+    if ( level == wxLOG_Trace )
+        showImmediately = true;
+#endif
+#if wxUSE_LOG_DEBUG
+    if ( level == wxLOG_Debug )
+        showImmediately = true;
+#endif
+
+    if ( showImmediately )
     {
-        case wxLOG_Trace:
-        case wxLOG_Debug:
-#ifdef __WXDEBUG__
-            // don't put debug messages in the buffer, we don't want to show
-            // them to the user in a msg box, log them immediately
-            {
-                wxString str;
-                TimeStamp(&str);
-                str += szString;
+        wxString str;
+        TimeStamp(&str);
+        str += szString;
 
-                wxMessageOutputDebug dbgout;
-                dbgout.Printf(wxS("%s\n"), str.c_str());
-            }
-#endif // __WXDEBUG__
-            break;
-
-        default:
-            wxLog::DoLog(level, szString, t);
+        wxMessageOutputDebug dbgout;
+        dbgout.Printf(wxS("%s\n"), str.c_str());
+    }
+    else
+    {
+        wxLog::DoLog(level, szString, t);
     }
 }
+
+#endif // wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
 
 void wxLogBuffer::DoLogString(const wxString& szString, time_t WXUNUSED(t))
 {

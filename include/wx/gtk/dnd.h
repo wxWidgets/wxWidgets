@@ -40,8 +40,8 @@ public:
     wxDataFormat GetMatchingPair();
 
     // implementation
-    
-    GdkAtom GtkGetMatchingPair();
+
+    GdkAtom GtkGetMatchingPair(bool quiet = false);
 
     void GtkRegisterWidget( GtkWidget *widget );
     void GtkUnregisterWidget( GtkWidget *widget );

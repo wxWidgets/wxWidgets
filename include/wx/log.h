@@ -55,6 +55,7 @@ typedef unsigned long wxLogLevel;
 
 #include "wx/dynarray.h"
 
+// wxUSE_LOG_DEBUG enables the debug log messages
 #ifndef wxUSE_LOG_DEBUG
     #if wxDEBUG_LEVEL
         #define wxUSE_LOG_DEBUG 1
@@ -62,6 +63,15 @@ typedef unsigned long wxLogLevel;
         #define wxUSE_LOG_DEBUG 0
     #endif
 #endif
+
+// wxUSE_LOG_TRACE enables the trace messages, they are disabled by default
+#ifndef wxUSE_LOG_TRACE
+    #if wxDEBUG_LEVEL >= 2
+        #define wxUSE_LOG_TRACE 1
+    #else // wxDEBUG_LEVEL < 2
+        #define wxUSE_LOG_TRACE 0
+    #endif
+#endif // wxUSE_LOG_TRACE
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -353,7 +363,8 @@ private:
 // "trivial" derivations of wxLog
 // ----------------------------------------------------------------------------
 
-// log everything to a buffer
+// log everything except for the debug/trace messages (which are passed to
+// wxMessageOutputDebug) to a buffer
 class WXDLLIMPEXP_BASE wxLogBuffer : public wxLog
 {
 public:
@@ -367,10 +378,14 @@ public:
     virtual void Flush();
 
 protected:
+#if wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
     virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
-    virtual void DoLogString(const wxString& szString, time_t t);
 
     wxSUPPRESS_DOLOG_HIDE_WARNING()
+#endif // wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
+
+    virtual void DoLogString(const wxString& szString, time_t t);
+
     wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
 
 private:
@@ -626,6 +641,12 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 #else // !wxUSE_LOG
 
+#undef wxUSE_LOG_DEBUG
+#define wxUSE_LOG_DEBUG 0
+
+#undef wxUSE_LOG_TRACE
+#define wxUSE_LOG_TRACE 0
+
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
     #define WX_WATCOM_ONLY_CODE( x )  x
@@ -722,14 +743,42 @@ DECLARE_LOG_FUNCTION2(SysError, long, lErrCode);
 DECLARE_LOG_FUNCTION2(SysError, unsigned long, lErrCode);
 #endif
 
-// debug functions do nothing in release mode
-#if wxUSE_LOG && wxUSE_LOG_DEBUG
+
+// debug functions can be completely disabled in optimized builds
+
+// if these log functions are disabled, we prefer to define them as (empty)
+// variadic macros as this completely removes them and their argument
+// evaluation from the object code but if this is not supported by compiler we
+// use empty inline functions instead (defining them as nothing would result in
+// compiler warnings)
+//
+// note that making wxVLogDebug/Trace() themselves (empty inline) functions is
+// a bad idea as some compilers are stupid enough to not inline even empty
+// functions if their parameters are complicated enough, but by defining them
+// as an empty inline function we ensure that even dumbest compilers optimise
+// them away
+#ifdef __BORLANDC__
+    // but Borland gives "W8019: Code has no effect" for wxLogNop() so we need
+    // to define it differently for it to avoid these warnings (same problem as
+    // with wxUnusedVar())
+    #define wxLogNop() { }
+#else
+    inline void wxLogNop() { }
+#endif
+
+#if wxUSE_LOG_DEBUG
     DECLARE_LOG_FUNCTION(Debug);
+#else // !wxUSE_LOG_DEBUG
+    #define wxVLogDebug(fmt, valist) wxLogNop()
 
-    // there is no more unconditional LogTrace: it is not different from
-    // LogDebug and it creates overload ambiguities
-    //DECLARE_LOG_FUNCTION(Trace);
+    #ifdef HAVE_VARIADIC_MACROS
+        #define wxLogDebug(fmt, ...) wxLogNop()
+    #else // !HAVE_VARIADIC_MACROS
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug, 1, (const wxString&))
+    #endif
+#endif // wxUSE_LOG_DEBUG/!wxUSE_LOG_DEBUG
 
+#if wxUSE_LOG_TRACE
     // this version only logs the message if the mask had been added to the
     // list of masks with AddTraceMask()
     DECLARE_LOG_FUNCTION2(Trace, const wxString&, mask);
@@ -744,44 +793,18 @@ DECLARE_LOG_FUNCTION2(SysError, unsigned long, lErrCode);
     // string identifiers
 #if WXWIN_COMPATIBILITY_2_8
     DECLARE_LOG_FUNCTION2(Trace, wxTraceMask, mask);
-#endif // wxDEBUG_LEVEL
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
     DECLARE_LOG_FUNCTION2(Trace, int, mask);
 #endif
-#else   //!debug || !wxUSE_LOG
-    // these functions do nothing in release builds, but don't define them as
-    // nothing as it could result in different code structure in debug and
-    // release and this could result in trouble when these macros are used
-    // inside if/else
-    //
-    // note that making wxVLogDebug/Trace() themselves (empty inline) functions
-    // is a bad idea as some compilers are stupid enough to not inline even
-    // empty functions if their parameters are complicated enough, but by
-    // defining them as an empty inline function we ensure that even dumbest
-    // compilers optimise them away
-#ifdef __BORLANDC__
-    // but Borland gives "W8019: Code has no effect" for wxLogNop() so we need
-    // to define it differently for it to avoid these warnings (same problem as
-    // with wxUnusedVar())
-    #define wxLogNop() { }
-#else
-    inline void wxLogNop() { }
-#endif
+#endif // WXWIN_COMPATIBILITY_2_8
 
-    #define wxVLogDebug(fmt, valist) wxLogNop()
+#else  // !wxUSE_LOG_TRACE
     #define wxVLogTrace(mask, fmt, valist) wxLogNop()
 
     #ifdef HAVE_VARIADIC_MACROS
-        // unlike the inline functions below, this completely removes the
-        // wxLogXXX calls from the object file:
-        #define wxLogDebug(fmt, ...) wxLogNop()
         #define wxLogTrace(mask, fmt, ...) wxLogNop()
     #else // !HAVE_VARIADIC_MACROS
-        //inline void wxLogDebug(const wxString& fmt, ...) {}
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug, 1, (const wxString&))
-        //inline void wxLogTrace(wxTraceMask, const wxString& fmt, ...) {}
-        //inline void wxLogTrace(const wxString&, const wxString& fmt, ...) {}
         WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (wxTraceMask, const wxString&))
         WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const wxString&, const wxString&))
         #ifdef __WATCOMC__
@@ -790,7 +813,7 @@ DECLARE_LOG_FUNCTION2(SysError, unsigned long, lErrCode);
         WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const wchar_t*, const wchar_t*))
         #endif
     #endif // HAVE_VARIADIC_MACROS/!HAVE_VARIADIC_MACROS
-#endif // debug/!debug
+#endif // wxUSE_LOG_TRACE/!wxUSE_LOG_TRACE
 
 #if defined(__VISUALC__) && __VISUALC__ < 1300
     #pragma warning(default:4003)

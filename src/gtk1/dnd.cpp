@@ -37,13 +37,6 @@
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
-//-----------------------------------------------------------------------------
-// thread system
-//-----------------------------------------------------------------------------
-
-#if wxUSE_THREADS
-#endif
-
 //----------------------------------------------------------------------------
 // global data
 //----------------------------------------------------------------------------
@@ -472,13 +465,8 @@ wxDragResult wxDropTarget::OnDragOver( wxCoord WXUNUSED(x),
 {
     // GetMatchingPair() checks for m_dataObject too, no need to do it here
 
-    // disable the debug message from GetMatchingPair() - there are too many
-    // of them otherwise
-#ifdef __WXDEBUG__
-    wxLogNull noLog;
-#endif // Debug
-
-    return (GetMatchingPair() != (GdkAtom) 0) ? def : wxDragNone;
+    // disable the debug message from GetMatchingPair() by passing true to it
+    return (GetMatchingPair(true) != (GdkAtom) 0) ? def : wxDragNone;
 }
 
 bool wxDropTarget::OnDrop( wxCoord WXUNUSED(x), wxCoord WXUNUSED(y) )
@@ -515,10 +503,11 @@ GdkAtom wxDropTarget::GetMatchingPair()
         GdkAtom formatAtom = GPOINTER_TO_INT(child->data);
         wxDataFormat format( formatAtom );
 
-#ifdef __WXDEBUG__
-        wxLogTrace(TRACE_DND, wxT("Drop target: drag has format: %s"),
-                   format.GetId().c_str());
-#endif // Debug
+        if ( !quiet )
+        {
+            wxLogTrace(TRACE_DND, wxT("Drop target: drag has format: %s"),
+                       format.GetId().c_str());
+        }
 
         if (m_dataObject->IsSupportedFormat( format ))
             return formatAtom;

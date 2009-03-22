@@ -720,7 +720,7 @@ public:
     wxThreadState GetState() const { return m_state; }
     void SetState(wxThreadState state)
     {
-#ifdef __WXDEBUG__
+#if wxUSE_LOG_TRACE
         static const wxChar *stateNames[] =
         {
             _T("NEW"),
@@ -731,7 +731,7 @@ public:
 
         wxLogTrace(TRACE_THREADS, _T("Thread %p: %s => %s."),
                    GetId(), stateNames[m_state], stateNames[state]);
-#endif // __WXDEBUG__
+#endif // wxUSE_LOG_TRACE
 
         m_state = state;
     }

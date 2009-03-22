@@ -3459,7 +3459,7 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
                               wxWindow *win,
                               bool captureMouse)
 {
-#ifdef __WXDEBUG__
+#if wxUSE_LOG_TRACE
     static const wxChar *cursorModes[] =
     {
         _T("SELECT_CELL"),
@@ -3476,7 +3476,7 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
                                   : win ? _T("rowLabelWin")
                                         : _T("gridWin"),
                cursorModes[m_cursorMode], cursorModes[mode]);
-#endif
+#endif // wxUSE_LOG_TRACE
 
     if ( mode == m_cursorMode &&
          win == m_winCapture &&
