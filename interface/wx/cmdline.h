@@ -10,22 +10,23 @@
     wxCmdLineEntryDesc::flags field is a combination of these bit masks.
 
     Notice that by default (i.e. if flags are just 0), options are optional
-    (sic) and each call to wxCmdLineEntryDesc::AddParam() allows one more
+    (sic) and each call to wxCmdLineParser::AddParam() allows one more
     parameter - this may be changed by giving non-default flags to it, i.e. use
-    wxCMD_LINE_OPTION_MANDATORY to require that the option is given and
-    wxCMD_LINE_PARAM_OPTIONAL to make a parameter optional. Also,
-    wxCMD_LINE_PARAM_MULTIPLE may be specified if the programs accepts a
+    @c wxCMD_LINE_OPTION_MANDATORY to require that the option is given and
+    @c wxCMD_LINE_PARAM_OPTIONAL to make a parameter optional.
+    
+    Also, @c wxCMD_LINE_PARAM_MULTIPLE may be specified if the programs accepts a
     variable number of parameters - but it only can be given for the last
     parameter in the command line description. If you use this flag, you will
     probably need to use wxCmdLineEntryDesc::GetParamCount() to retrieve the
     number of parameters effectively specified after calling
     wxCmdLineEntryDesc::Parse().
 
-    wxCMD_LINE_NEEDS_SEPARATOR can be specified to require a separator (either
+    @c wxCMD_LINE_NEEDS_SEPARATOR can be specified to require a separator (either
     a colon, an equal sign or white space) between the option name and its
     value. By default, no separator is required.
 */
-enum
+enum wxCmdLineEntryFlags
 {
     wxCMD_LINE_OPTION_MANDATORY = 0x01, ///< This option must be given.
     wxCMD_LINE_PARAM_OPTIONAL   = 0x02, ///< The parameter may be omitted.
@@ -35,7 +36,7 @@ enum
 };
 
 /**
-    The possible values of wxCmdLineEntryDesc::type which specifies the type of
+    The possible values of wxCmdLineEntryDesc::type which specify the type of
     the value accepted by an option.
 */
 enum wxCmdLineParamType
@@ -52,10 +53,19 @@ enum wxCmdLineParamType
 */
 enum wxCmdLineEntryType
 {
+    /// A boolean argument of the program; e.g. @c -v to enable verbose mode.
     wxCMD_LINE_SWITCH,
+    
+    /// An argument with an associated value; e.g. @c "-o filename" to specify
+    /// an optional output filename.
     wxCMD_LINE_OPTION,
+    
+    /// A parameter: a required program argument.
     wxCMD_LINE_PARAM,
+    
+    /// Additional usage text. See wxCmdLineParser::AddUsageText.
     wxCMD_LINE_USAGE_TEXT,
+    
     wxCMD_LINE_NONE     ///< Use this to terminate the list.
 };
 
@@ -69,37 +79,53 @@ enum wxCmdLineSplitType
 };
 
 /**
-    The structure wxCmdLineEntryDesc is used to describe the one command line
+    The structure wxCmdLineEntryDesc is used to describe a command line
     switch, option or parameter. An array of such structures should be passed
     to wxCmdLineParser::SetDesc().
 
-    Also, the meanings of parameters of the wxCmdLineParser::AddXXX() functions
+    Note that the meanings of parameters of the wxCmdLineParser::AddXXX() functions
     are the same as of the corresponding fields in this structure.
 */
 struct wxCmdLineEntryDesc
 {
+    /**
+        The kind of this program argument.
+        See ::wxCmdLineEntryType for more info.
+    */
     wxCmdLineEntryType kind;
 
     /**
-        This is the usual, short, name of the switch or the option.
+        The usual, short, name of the switch or the option.
+        
+        It may contain only letters, digits and the underscores.
+        This field is unused if <tt>kind == wxCMD_LINE_PARAM</tt>.
     */
     const char *shortName;
 
     /**
-        @c longName is the corresponding long name or empty if the option
-        has no long name. Both of these fields are unused for the parameters. Both
-        the short and long option names can contain only letters, digits and the
-        underscores.
+        The long name for this program argument (may be empty if the option
+        has no long name).
+        
+        It may contain only letters, digits and the underscores.
+        This field is unused if <tt>kind == wxCMD_LINE_PARAM</tt>.
     */
     const char *longName;
 
     /**
-        This description is used by the wxCmdLineEntryDesc::Usage() method to
+        This description is used by the wxCmdLineParser::Usage() method to
         construct a help message explaining the syntax of the program.
     */
     const char *description;
 
+    /**
+        The type associated with this option (ignored if <tt>kind != wxCMD_LINE_OPTION</tt>).
+        See ::wxCmdLineParamType for more info.
+    */
     wxCmdLineParamType type;
+    
+    /**
+        A combination of one or more ::wxCmdLineEntryFlags enum values.
+    */
     int flags;
 };
 
@@ -129,16 +155,15 @@ struct wxCmdLineEntryDesc
 
     In the documentation below the following terminology is used:
 
-    - @b switch: This is a boolean option which can be given or not, but which
-                 doesn't have any value. We use the word switch to distinguish
+    - @b switch: a boolean option which can be given or not, but which doesn't have 
+                 any value. We use the word @e switch to distinguish
                  such boolean options from more generic options like those
                  described below. For example, @c "-v" might be a switch
                  meaning "enable verbose mode".
-    - @b option: Option for us here is something which comes with a value 0
-                 unlike a switch. For example, @c -o: @c filename might be an
+    - @b option: a switch with a value associated to it. 
+                 For example, @c "-o filename" might be an
                  option for specifying the name of the output file.
-    - @b parameter: This is a required program argument.
-    - @b text: This is a text which can be shown in usage information.
+    - @b parameter: a required program argument.
 
 
     @section cmdlineparser_construction Construction

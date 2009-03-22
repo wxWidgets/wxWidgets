@@ -36,7 +36,7 @@ class WXDLLIMPEXP_FWD_BASE wxDateTime;
 
 // by default, options are optional (sic) and each call to AddParam() allows
 // one more parameter - this may be changed by giving non-default flags to it
-enum
+enum wxCmdLineEntryFlags
 {
     wxCMD_LINE_OPTION_MANDATORY = 0x01, // this option must be given
     wxCMD_LINE_PARAM_OPTIONAL   = 0x02, // the parameter may be omitted
