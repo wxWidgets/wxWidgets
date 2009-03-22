@@ -34,7 +34,8 @@
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5
 
     #define wxOSX_USE_CORE_TEXT 1
-    #define wxOSX_USE_ATSU_TEXT 0
+    // MLTE-TextControl uses ATSU
+    #define wxOSX_USE_ATSU_TEXT 1
 
 #else // platform < 10.5
 

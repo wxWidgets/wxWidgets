@@ -170,7 +170,7 @@ public:
 #if wxOSX_USE_CORE_TEXT
     wxCFRef<CTFontRef> m_ctFont;
 #endif
-#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     ATSUStyle       m_macATSUStyle ;
 #endif
     wxCFRef<CGFontRef> m_cgFont;
@@ -196,9 +196,9 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
 #endif
 #if wxOSX_USE_CORE_TEXT
     m_ctFont = data.m_ctFont;
-#endif
+#endif 
     m_cgFont = data.m_cgFont;
-#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     if ( data.m_macATSUStyle != NULL )
     {
         ATSUCreateStyle(&m_macATSUStyle) ;
@@ -228,7 +228,7 @@ void wxFontRefData::Init()
 #if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
     m_macThemeFontID = kThemeCurrentPortFont ;
 #endif
-#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     m_macATSUStyle = NULL ;
 #endif
 #if wxOSX_USE_COCOA
@@ -251,7 +251,7 @@ void wxFontRefData::Free()
     m_ctFont.reset();
 #endif
     m_cgFont.reset();
-#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
@@ -762,7 +762,7 @@ wxUint16 wxFont::MacGetThemeFontID() const
 
 #endif
 
-#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
 void * wxFont::MacGetATSUStyle() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );

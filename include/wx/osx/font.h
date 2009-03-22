@@ -141,7 +141,7 @@ public:
     CTFontRef GetCTFont() const;
 #endif
 
-#if wxOSX_USE_CORE_TEXT || wxOSX_USE_ATSU_TEXT
+#if wxOSX_USE_ATSU_TEXT
     // Returns an ATSUStyle not ATSUStyle*
     void* MacGetATSUStyle() const ;
 #endif
