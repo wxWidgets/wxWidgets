@@ -239,7 +239,7 @@ extern bool g_mainThreadLocked;
 #if wxUSE_THREADS
 #   define DEBUG_MAIN_THREAD \
         wxASSERT_MSG( !g_mainThreadLocked || !wxThread::IsMain(), \
-                      "GUI reentrancy detected" )
+                      "GUI reentrancy detected" );
 #else
 #   define DEBUG_MAIN_THREAD
 #endif
