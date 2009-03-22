@@ -56,9 +56,10 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MiscTestCase, "MiscTestCase" );
 namespace
 {
 
-void AssertIfOdd(int n)
+bool AssertIfOdd(int n)
 {
     wxASSERT_MSG( !(n % 2), "parameter must be even" );
+    return true;
 }
 
 } // anonymous namespace
