@@ -176,9 +176,9 @@ int wxFileDialog::ShowModal()
         if ( HasFlag(wxFD_OVERWRITE_PROMPT) )
         {
         }
-    
-        // avoid multiple event handlers on stack
-        if ( 0 /*parentWindow*/)
+
+/*
+        if (parentWindow)
         {
             NSWindow* nativeParent = parentWindow->GetWXWindow();
             ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init]; 
@@ -191,6 +191,7 @@ int wxFileDialog::ShowModal()
             [sheetDelegate release];
         }
         else
+*/
         {
             returnCode = [sPanel runModalForDirectory:dir.AsNSString() file:file.AsNSString() ];
         }
@@ -217,8 +218,8 @@ int wxFileDialog::ShowModal()
         [oPanel setCanChooseFiles:YES];
         [oPanel setMessage:cf.AsNSString()];
 
-        // avoid multiple event handlers on stack
-        if ( 0 /*parentWindow*/)
+/*
+        if (parentWindow)
         {
             NSWindow* nativeParent = parentWindow->GetWXWindow();
             ModalDialogDelegate* sheetDelegate = [[ModalDialogDelegate alloc] init]; 
@@ -232,6 +233,7 @@ int wxFileDialog::ShowModal()
             [sheetDelegate release];
         }
         else
+*/
         {
             returnCode = [oPanel runModalForDirectory:dir.AsNSString() 
                         file:file.AsNSString() types:types];

@@ -192,6 +192,7 @@ int wxMessageDialog::ShowModal()
             parentWindow = dynamic_cast<wxNonOwnedWindow*>(wxGetTopLevelParent(GetParent()));
         }
  
+ /*
         if (parentWindow)
         {
             NSWindow* nativeParent = parentWindow->GetWXWindow();
@@ -204,6 +205,7 @@ int wxMessageDialog::ShowModal()
             [sheetDelegate release];
         }
         else
+*/
         {
             button = [alert runModal];
         }

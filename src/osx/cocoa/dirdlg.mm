@@ -78,7 +78,8 @@ int wxDirDialog::ShowModal()
     {
         fprintf(stderr, "No parent!\n");
     }
-    
+
+/*    
     if (parentWindow)
     {
         NSWindow* nativeParent = parentWindow->GetWXWindow();
@@ -92,6 +93,7 @@ int wxDirDialog::ShowModal()
         [sheetDelegate release];
     }
     else
+*/
     {
         returnCode = (NSInteger)[oPanel runModalForDirectory:dir.AsNSString() file:nil types:nil];
     }
