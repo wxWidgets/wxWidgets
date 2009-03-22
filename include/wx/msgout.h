@@ -51,6 +51,10 @@ public:
                                 (wxFormatString(f1)));
 #endif
 
+    // called by DoPrintf() to output formatted string but can also be called
+    // directly if no formatting is needed
+    virtual void Output(const wxString& str) = 0;
+
 protected:
     // NB: this is pure virtual so that it can be implemented in dllexported
     //     wxMessagOutput class
@@ -60,9 +64,6 @@ protected:
 #if wxUSE_UNICODE_UTF8
     virtual void DoPrintfUtf8(const char *format, ...) = 0;
 #endif
-
-    // called by DoPrintf() to output formatted string
-    virtual void Output(const wxString& str) = 0;
 };
 
 #ifdef __VISUALC__
@@ -90,7 +91,6 @@ protected:
 #if wxUSE_UNICODE_UTF8
     virtual void DoPrintfUtf8(const char *format, ...);
 #endif
-    virtual void Output(const wxString& str) = 0;
 
 private:
     static wxMessageOutput* ms_msgOut;
@@ -109,9 +109,9 @@ class WXDLLIMPEXP_BASE wxMessageOutputStderr : public wxMessageOutput
 public:
     wxMessageOutputStderr() { }
 
-protected:
     virtual void Output(const wxString& str);
 
+protected:
     // return the string with "\n" appended if it doesn't already terminate
     // with it (in which case it's returned unchanged)
     wxString AppendLineFeedIfNeeded(const wxString& str);
@@ -134,7 +134,6 @@ public:
     wxMessageOutputBest(wxMessageOutputFlags flags = wxMSGOUT_PREFER_STDERR)
         : m_flags(flags) { }
 
-protected:
     virtual void Output(const wxString& str);
 
 private:
@@ -152,7 +151,6 @@ class WXDLLIMPEXP_CORE wxMessageOutputMessageBox : public wxMessageOutput
 public:
     wxMessageOutputMessageBox() { }
 
-protected:
     virtual void Output(const wxString& str);
 };
 
@@ -167,7 +165,6 @@ class WXDLLIMPEXP_BASE wxMessageOutputDebug : public wxMessageOutputStderr
 public:
     wxMessageOutputDebug() { }
 
-protected:
     virtual void Output(const wxString& str);
 };
 
@@ -180,7 +177,6 @@ class WXDLLIMPEXP_BASE wxMessageOutputLog : public wxMessageOutput
 public:
     wxMessageOutputLog() { }
 
-protected:
     virtual void Output(const wxString& str);
 };
 
