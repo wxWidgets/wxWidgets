@@ -42,16 +42,6 @@
 #include "wx/vidmode.h"
 #include "wx/evtloop.h"
 
-#ifdef __WXDEBUG__
-    #if wxUSE_STACKWALKER
-        #include "wx/stackwalk.h"
-    #endif // wxUSE_STACKWALKER
-#endif // __WXDEBUG__
-
-#if defined(__WXMSW__)
-    #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
-#endif
-
 #if wxUSE_FONTMAP
     #include "wx/fontmap.h"
 #endif // wxUSE_FONTMAP
@@ -487,10 +477,9 @@ wxRendererNative *wxGUIAppTraitsBase::CreateRenderer()
     return NULL;
 }
 
-#if 1 // def __WXDEBUG__
-
 bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 {
+#if wxDEBUG_LEVEL
     // under MSW we prefer to use the base class version using ::MessageBox()
     // even if wxMessageBox() is available because it has less chances to
     // double fault our app than our wxMessageBox()
@@ -534,12 +523,15 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 
         //case wxNO: nothing to do
     }
+#endif // !wxUSE_MSGDLG/wxUSE_MSGDLG
+#else // !wxDEBUG_LEVEL
+    // this function always exists (for ABI compatibility) but is never called
+    // if debug level is 0 and so can simply do nothing then
+    wxUnusedVar(msg);
+#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
     return false;
-#endif // !wxUSE_MSGDLG/wxUSE_MSGDLG
 }
-
-#endif // __WXDEBUG__
 
 bool wxGUIAppTraitsBase::HasStderr()
 {
