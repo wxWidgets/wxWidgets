@@ -6,7 +6,7 @@ REM which is required by Buildbot to recognize failures.
 REM $Id: runtests.bat 59695 2009-03-21 13:49:20Z FM $
 
 rem set the path for running the tests if they use DLL build of wx
-for /d %%x in (..\lib\*_dll) do @PATH=%x;%PATH%
+for /d %%x in ("..\lib\*_dll") do @set PATH=%%x;%PATH%
 
 set failure=0
 
