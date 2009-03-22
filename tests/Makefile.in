@@ -14,7 +14,6 @@ INSTALL = @INSTALL@
 EXEEXT = @EXEEXT@
 WINDRES = @WINDRES@
 SETFILE = @SETFILE@
-ICC_PCH_USE_SWITCH = @ICC_PCH_USE_SWITCH@
 BK_DEPS = @BK_DEPS@
 BK_MAKE_PCH = @BK_MAKE_PCH@
 srcdir = @srcdir@
@@ -132,6 +131,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_textctrltest.o \
 	test_gui_textentrytest.o \
 	test_gui_treectrltest.o \
+	test_gui_clone.o \
 	test_gui_propagation.o \
 	test_gui_fonttest.o \
 	test_gui_rawbmp.o \
@@ -171,7 +171,7 @@ PRINTFBENCH_ODEP = $(_____pch_testprec_printfbench_testprec_h_gch___depname)
 @COND_PLATFORM_MAC_1@__test___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL test$(EXEEXT)
 @COND_GCC_PCH_1@__test_PCH_INC = -I./.pch/testprec_test
-@COND_ICC_PCH_1@__test_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__test_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/testprec_test/testprec.h.gch
 @COND_USE_PCH_1@_____pch_testprec_test_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_test/testprec.h.gch
@@ -204,7 +204,7 @@ PRINTFBENCH_ODEP = $(_____pch_testprec_printfbench_testprec_h_gch___depname)
 @COND_TOOLKIT_COCOA@____test_gui_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_COCOA@	$(__test_gui_app_Contents_PkgInfo___depname)
 @COND_GCC_PCH_1@__test_gui_PCH_INC = -I./.pch/testprec_test_gui
-@COND_ICC_PCH_1@__test_gui_PCH_INC = $(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__test_gui_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/testprec_test_gui/testprec.h.gch
 @COND_USE_PCH_1@_____pch_testprec_test_gui_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_test_gui/testprec.h.gch
@@ -236,8 +236,7 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 @COND_PLATFORM_MAC_1@__printfbench___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL printfbench$(EXEEXT)
 @COND_GCC_PCH_1@__printfbench_PCH_INC = -I./.pch/testprec_printfbench
-@COND_ICC_PCH_1@__printfbench_PCH_INC = \
-@COND_ICC_PCH_1@	$(ICC_PCH_USE_SWITCH) \
+@COND_ICC_PCH_1@__printfbench_PCH_INC = -use_pch \
 @COND_ICC_PCH_1@	./.pch/testprec_printfbench/testprec.h.gch
 @COND_USE_PCH_1@_____pch_testprec_printfbench_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_printfbench/testprec.h.gch
@@ -572,6 +571,9 @@ test_gui_textentrytest.o: $(srcdir)/controls/textentrytest.cpp $(TEST_GUI_ODEP)
 
 test_gui_treectrltest.o: $(srcdir)/controls/treectrltest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/controls/treectrltest.cpp
+
+test_gui_clone.o: $(srcdir)/events/clone.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/clone.cpp
 
 test_gui_propagation.o: $(srcdir)/events/propagation.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/events/propagation.cpp

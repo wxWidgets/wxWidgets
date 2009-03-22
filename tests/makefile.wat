@@ -18,11 +18,7 @@
 !  loaddll wpp      wppdi86
 !  loaddll wppaxp   wppdaxp
 !  loaddll wpp386   wppd386
-! if $(__VERSION__) >= 1280
-!  loaddll wlink    wlinkd
-! else
 !  loaddll wlink    wlink
-! endif
 !  loaddll wlib     wlibd
 !endif
 
@@ -348,6 +344,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_textctrltest.obj &
 	$(OBJS)\test_gui_textentrytest.obj &
 	$(OBJS)\test_gui_treectrltest.obj &
+	$(OBJS)\test_gui_clone.obj &
 	$(OBJS)\test_gui_propagation.obj &
 	$(OBJS)\test_gui_fonttest.obj &
 	$(OBJS)\test_gui_rawbmp.obj &
@@ -654,6 +651,9 @@ $(OBJS)\test_gui_textentrytest.obj :  .AUTODEPEND .\controls\textentrytest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_treectrltest.obj :  .AUTODEPEND .\controls\treectrltest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_clone.obj :  .AUTODEPEND .\events\clone.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_propagation.obj :  .AUTODEPEND .\events\propagation.cpp

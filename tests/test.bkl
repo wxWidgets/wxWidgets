@@ -114,6 +114,7 @@
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             controls/treectrltest.cpp
+            events/clone.cpp
             events/propagation.cpp
             font/fonttest.cpp
             image/rawbmp.cpp
