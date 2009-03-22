@@ -487,7 +487,7 @@ wxRendererNative *wxGUIAppTraitsBase::CreateRenderer()
     return NULL;
 }
 
-#ifdef __WXDEBUG__
+#if 1 // def __WXDEBUG__
 
 bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 {
