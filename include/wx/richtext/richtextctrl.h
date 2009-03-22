@@ -777,7 +777,10 @@ protected:
 #ifdef __WXMSW__
     virtual WXHWND GetEditHWND() const { return GetHWND(); }
 #endif
-#ifdef __WXGTK__
+#ifdef __WXMOTIF__
+    virtual WXWidget GetTextWidget() const { return NULL; }
+#endif
+#ifdef __WXGTK20__
     virtual wxWindow *GetEditableWindow() { return this; }
     virtual GtkEditable *GetEditable() const { return NULL; }
 #endif
