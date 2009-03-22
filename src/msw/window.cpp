@@ -6360,7 +6360,7 @@ void wxSetKeyboardHook(bool doIt)
 
 #endif // !__WXMICROWIN__
 
-#if wxDEBUG_LEVEL > =2
+#if wxDEBUG_LEVEL >= 2
 const wxChar *wxGetMessageName(int message)
 {
     switch ( message )
