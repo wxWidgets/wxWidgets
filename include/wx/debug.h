@@ -276,8 +276,8 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
     #define wxASSERT_LEVEL_2_MSG(cond, msg) wxASSERT_MSG(cond, msg)
     #define wxASSERT_LEVEL_2(cond) wxASSERT(cond)
 #else // wxDEBUG_LEVEL < 2
-    #define wxASSERT_LEVEL_2_MSG
-    #define wxASSERT_LEVEL_2
+    #define wxASSERT_LEVEL_2_MSG(cond, msg)
+    #define wxASSERT_LEVEL_2(cond)
 #endif
 
 
