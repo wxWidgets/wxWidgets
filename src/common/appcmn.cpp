@@ -479,7 +479,6 @@ wxRendererNative *wxGUIAppTraitsBase::CreateRenderer()
 
 bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 {
-#if wxDEBUG_LEVEL
     // under MSW we prefer to use the base class version using ::MessageBox()
     // even if wxMessageBox() is available because it has less chances to
     // double fault our app than our wxMessageBox()
@@ -491,6 +490,7 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 #if defined(__WXMSW__) || defined(__WXDFB__) || !wxUSE_MSGDLG
     return wxAppTraitsBase::ShowAssertDialog(msg);
 #else // wxUSE_MSGDLG
+#if wxDEBUG_LEVEL
     wxString msgDlg = msg;
 
 #if wxUSE_STACKWALKER
@@ -523,7 +523,6 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 
         //case wxNO: nothing to do
     }
-#endif // !wxUSE_MSGDLG/wxUSE_MSGDLG
 #else // !wxDEBUG_LEVEL
     // this function always exists (for ABI compatibility) but is never called
     // if debug level is 0 and so can simply do nothing then
@@ -531,6 +530,7 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 #endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
     return false;
+#endif // !wxUSE_MSGDLG/wxUSE_MSGDLG
 }
 
 bool wxGUIAppTraitsBase::HasStderr()
