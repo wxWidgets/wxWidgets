@@ -30,8 +30,9 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
-                double min = 0, double max = 100, double initial = 0, double inc = 1,
+                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                double min = 0, double max = 100, double initial = 0,
+                double inc = 1,
                 const wxString& name = _T("wxSpinCtrlGTKBase"));
 
     // wxSpinCtrl(Double) methods call DoXXX functions of the same name
@@ -101,7 +102,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
+               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = _T("wxSpinCtrl"))
     {
@@ -113,11 +114,12 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
+                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = _T("wxSpinCtrl"))
     {
-        return wxSpinCtrlGTKBase::Create(parent, id, value, pos, size, style, min, max, initial, 1, name);
+        return wxSpinCtrlGTKBase::Create(parent, id, value, pos, size,
+                                         style, min, max, initial, 1, name);
     }
 
     // accessors
@@ -149,11 +151,13 @@ public:
                      const wxString& value = wxEmptyString,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
-                     long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
-                     double min = 0, double max = 100, double initial = 0, double inc = 1,
+                     long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                     double min = 0, double max = 100, double initial = 0,
+                     double inc = 1,
                      const wxString& name = _T("wxSpinCtrlDouble"))
     {
-        Create(parent, id, value, pos, size, style, min, max, initial, inc, name);
+        Create(parent, id, value, pos, size, style,
+               min, max, initial, inc, name);
     }
 
     bool Create(wxWindow *parent,
@@ -161,11 +165,13 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
-                double min = 0, double max = 100, double initial = 0, double inc = 1,
+                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                double min = 0, double max = 100, double initial = 0,
+                double inc = 1,
                 const wxString& name = _T("wxSpinCtrlDouble"))
     {
-        return wxSpinCtrlGTKBase::Create(parent, id, value, pos, size, style, min, max, initial, inc, name);
+        return wxSpinCtrlGTKBase::Create(parent, id, value, pos, size,
+                                         style, min, max, initial, inc, name);
     }
 
     // accessors
