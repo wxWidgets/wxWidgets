@@ -63,10 +63,16 @@ enum wxKillError
     and GetErrorStream() can then be used to retrieve the streams corresponding to the
     child process standard output, input and error output respectively.
 
+    @beginEventEmissionTable{wxProcessEvent}
+    @event{EVT_END_PROCESS(id, func)}
+        Process a @c wxEVT_END_PROCESS event, sent by wxProcess::OnTerminate upon
+        the external process termination.
+    @endEventTable
+
     @library{wxbase}
     @category{appmanagement}
 
-    @see wxExecute(), @ref page_samples_exec "exec sample"
+    @see wxExecute(), @ref page_samples_exec
 */
 class wxProcess : public wxEvtHandler
 {
