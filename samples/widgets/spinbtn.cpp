@@ -67,6 +67,14 @@ enum
     SpinBtnPage_SpinCtrlDouble
 };
 
+// alignment radiobox values
+enum
+{
+    Align_Left,
+    Align_Centre,
+    Align_Right
+};
+
 // ----------------------------------------------------------------------------
 // SpinBtnWidgetsPage
 // ----------------------------------------------------------------------------
@@ -130,6 +138,7 @@ protected:
                *m_chkArrowKeys,
                *m_chkWrap,
                *m_chkProcessEnter;
+   wxRadioBox *m_radioAlign;
 
     // the spinbtn and the spinctrl and the sizer containing them
     wxSpinButton *m_spinbtn;
@@ -199,6 +208,7 @@ SpinBtnWidgetsPage::SpinBtnWidgetsPage(WidgetsBookCtrl *book,
     m_chkArrowKeys = NULL;
     m_chkWrap = NULL;
     m_chkProcessEnter = NULL;
+    m_radioAlign = NULL;
     m_spinbtn = NULL;
     m_spinctrl = NULL;
     m_spinctrldbl = NULL;
@@ -225,6 +235,21 @@ void SpinBtnWidgetsPage::CreateContent()
     m_chkWrap = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Wrap"));
     m_chkProcessEnter = CreateCheckBoxAndAddToSizer(sizerLeft,
                                                     _T("Process &Enter"));
+
+    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+
+    static const wxString halign[] =
+    {
+        _T("left"),
+        _T("centre"),
+        _T("right"),
+    };
+
+    m_radioAlign = new wxRadioBox(this, wxID_ANY, _T("&Text alignment"),
+                                   wxDefaultPosition, wxDefaultSize,
+                                   WXSIZEOF(halign), halign, 1);
+
+    sizerLeft->Add(m_radioAlign, 0, wxGROW | wxALL, 5);
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
@@ -291,6 +316,7 @@ void SpinBtnWidgetsPage::Reset()
     m_chkArrowKeys->SetValue(true);
     m_chkWrap->SetValue(false);
     m_chkProcessEnter->SetValue(false);
+    m_radioAlign->SetSelection(Align_Right);
 }
 
 void SpinBtnWidgetsPage::CreateSpin()
@@ -311,6 +337,26 @@ void SpinBtnWidgetsPage::CreateSpin()
 
     if ( m_chkProcessEnter->GetValue() )
         flags |= wxTE_PROCESS_ENTER;
+
+    int textFlags = 0;
+    switch ( m_radioAlign->GetSelection() )
+    {
+        default:
+            wxFAIL_MSG(_T("unexpected radiobox selection"));
+            // fall through
+
+        case Align_Left:
+            textFlags |= wxALIGN_LEFT;  // no-op
+            break;
+
+        case Align_Centre:
+            textFlags |= wxALIGN_CENTRE_HORIZONTAL;
+            break;
+
+        case Align_Right:
+            textFlags |= wxALIGN_RIGHT;
+            break;
+    }
 
     int val = m_min;
     if ( m_spinbtn )
@@ -334,13 +380,13 @@ void SpinBtnWidgetsPage::CreateSpin()
     m_spinctrl = new wxSpinCtrl(this, SpinBtnPage_SpinCtrl,
                                 wxString::Format(_T("%d"), val),
                                 wxDefaultPosition, wxDefaultSize,
-                                flags,
+                                flags | textFlags,
                                 m_min, m_max, val);
 
     m_spinctrldbl = new wxSpinCtrlDouble(this, SpinBtnPage_SpinCtrlDouble,
                                          wxString::Format(_T("%d"), val),
                                          wxDefaultPosition, wxDefaultSize,
-                                         flags,
+                                         flags | textFlags,
                                          m_min, m_max, val, 0.1);
 
     // Add spacers, labels and spin controls to the sizer.

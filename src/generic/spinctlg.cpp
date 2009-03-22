@@ -58,9 +58,9 @@ static const wxCoord MARGIN = 2;
 class wxSpinCtrlTextGeneric : public wxTextCtrl
 {
 public:
-    wxSpinCtrlTextGeneric(wxSpinCtrlGenericBase *spin, const wxString& value)
-        : wxTextCtrl(spin->GetParent(), wxID_ANY, value, wxDefaultPosition,
-                     wxDefaultSize, wxTE_NOHIDESEL|wxTE_PROCESS_ENTER)
+    wxSpinCtrlTextGeneric(wxSpinCtrlGenericBase *spin, const wxString& value, long style=0)
+        : wxTextCtrl(spin->GetParent(), wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
+                     ( style & wxALIGN_MASK ) | wxTE_NOHIDESEL | wxTE_PROCESS_ENTER)
     {
         m_spin = spin;
 
@@ -197,7 +197,7 @@ bool wxSpinCtrlGenericBase::Create(wxWindow *parent,
     m_max   = max;
     m_increment = increment;
 
-    m_textCtrl   = new wxSpinCtrlTextGeneric(this, value);
+    m_textCtrl   = new wxSpinCtrlTextGeneric(this, value, style);
     m_spinButton = new wxSpinCtrlButtonGeneric(this, style);
 
     m_spin_value = m_spinButton->GetValue();

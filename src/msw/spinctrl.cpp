@@ -335,10 +335,16 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     WXDWORD exStyle = 0;
     WXDWORD msStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
+    // propagate text alignment style to text ctrl
+    if ( style & wxTE_RIGHT )
+        msStyle |= ES_RIGHT;
+    else if ( style & wxTE_CENTER )
+        msStyle |= ES_CENTER;
+    
     // this control is used for numeric entry so normally using these flags by
     // default shouldn't be a problem, if it is we can always add a style such
     // as wxSP_NON_NUMERIC later
-    msStyle |= ES_RIGHT | ES_NUMBER;
+    msStyle |= ES_NUMBER;
 
     // calculate the sizes: the size given is the total size for both controls
     // and we need to fit them both in the given width (height is the same)

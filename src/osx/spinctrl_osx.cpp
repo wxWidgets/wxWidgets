@@ -250,7 +250,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     }
 
     wxSize csize = size ;
-    m_text = new wxSpinCtrlText(this, value, style & wxTE_PROCESS_ENTER ? wxTE_PROCESS_ENTER : 0 );
+    m_text = new wxSpinCtrlText(this, value, style & ( wxTE_PROCESS_ENTER | wxALIGN_MASK ) );
     m_btn = new wxSpinCtrlButton(this, style);
 
     m_btn->SetRange(min, max);
