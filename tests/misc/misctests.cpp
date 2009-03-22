@@ -20,6 +20,10 @@
 
 #include "wx/defs.h"
 
+// just some classes using wxRTTI for wxStaticCast() test
+#include "wx/tarstrm.h"
+#include "wx/zipstrm.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -33,10 +37,12 @@ private:
     CPPUNIT_TEST_SUITE( MiscTestCase );
         CPPUNIT_TEST( Assert );
         CPPUNIT_TEST( Delete );
+        CPPUNIT_TEST( StaticCast );
     CPPUNIT_TEST_SUITE_END();
 
     void Assert();
     void Delete();
+    void StaticCast();
 
     DECLARE_NO_COPY_CLASS(MiscTestCase)
 };
@@ -91,5 +97,21 @@ void MiscTestCase::Delete()
     struct SomeUnknownStruct *p = NULL;
     wxDELETE(p);
 #endif
+}
+
+void MiscTestCase::StaticCast()
+{
+    wxTarEntry tarEntry;
+    CPPUNIT_ASSERT( wxStaticCast(&tarEntry, wxArchiveEntry) );
+
+    wxArchiveEntry *entry = &tarEntry;
+    CPPUNIT_ASSERT( wxStaticCast(entry, wxTarEntry) );
+
+    wxZipEntry zipEntry;
+    entry = &zipEntry;
+    CPPUNIT_ASSERT( wxStaticCast(entry, wxZipEntry) );
+
+    WX_ASSERT_FAILS_WITH_ASSERT( wxStaticCast(entry, wxTarEntry) );
+    WX_ASSERT_FAILS_WITH_ASSERT( wxStaticCast(&zipEntry, wxTarEntry) );
 }
 
