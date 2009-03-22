@@ -118,7 +118,7 @@ private:
     bool m_longlist;
     bool m_detail;
     bool m_timing;
-    vector<string> m_registries;
+    wxArrayString m_registries;
 
     // event handling hooks
     FilterEventFunc m_filterEventFunc;
@@ -186,7 +186,7 @@ bool TestApp::OnCmdLineParsed(wxCmdLineParser& parser)
 {
     if (parser.GetParamCount())
         for (size_t i = 0; i < parser.GetParamCount(); i++)
-            m_registries.push_back(string(parser.GetParam(i).mb_str()));
+            m_registries.push_back(parser.GetParam(i));
     else
         m_registries.push_back("");
 
@@ -233,21 +233,20 @@ int TestApp::OnRun()
 
     for (size_t i = 0; i < m_registries.size(); i++)
     {
-        std::string reg = m_registries[i];
-        if (!reg.empty() && !wxString(reg).EndsWith("TestCase"))
+        wxString reg = m_registries[i];
+        if (!reg.empty() && !reg.EndsWith("TestCase"))
             reg += "TestCase";
         // allow the user to specify the name of the testcase "in short form"
         // (all wx test cases end with TestCase postfix)
 
         auto_ptr<Test> test(reg.empty() ?
             TestFactoryRegistry::getRegistry().makeTest() :
-            TestFactoryRegistry::getRegistry(reg).makeTest());
+            TestFactoryRegistry::getRegistry(string(reg.mb_str())).makeTest());
 
         TestSuite *suite = dynamic_cast<TestSuite*>(test.get());
 
         if (suite && suite->countTestCases() == 0)
-            wxLogError(_T("No such test suite: %s"),
-                wxString(reg.c_str(), wxConvUTF8).c_str());
+            wxLogError(_T("No such test suite: %s"), reg);
         else if (m_list)
             List(test.get());
         else
