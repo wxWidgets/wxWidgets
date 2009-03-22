@@ -67,7 +67,7 @@ extern const char *wxDumpFont(const wxFont *font)
              font->GetPointSize(),
              font->GetEncoding());
 
-    wxStrlcpy(buf, s, WXSIZEOF(buf));
+    wxStrlcpy(buf, s.mb_str(), WXSIZEOF(buf));
     return buf;
 }
 
