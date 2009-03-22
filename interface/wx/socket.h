@@ -625,7 +625,7 @@ enum
     wxSOCKET_NOWAIT = 1,    ///< Read/write as much data as possible and return immediately.
     wxSOCKET_WAITALL = 2,   ///< Wait for all required data to be read/written unless an error occurs.
     wxSOCKET_BLOCK = 4,     ///< Block the GUI (do not yield) while reading/writing data.
-    wxSOCKET_REUSEADDR = 8, ///< Allows the use of an in-use port (wxServerSocket only)
+    wxSOCKET_REUSEADDR = 8, ///< Allows the use of an in-use port.
     wxSOCKET_BROADCAST = 16, ///< Switches the socket to broadcast mode
     wxSOCKET_NOBIND = 32    ///< Stops the socket from being bound to a specific
                             ///< adapter (normally used in conjunction with
