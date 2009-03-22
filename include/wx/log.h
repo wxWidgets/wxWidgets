@@ -60,11 +60,11 @@ typedef unsigned long wxLogLevel;
 #include "wx/dynarray.h"
 
 #ifndef wxUSE_LOG_DEBUG
-#  ifdef __WXDEBUG__
-#    define wxUSE_LOG_DEBUG 1
-#  else // !__WXDEBUG__
-#    define wxUSE_LOG_DEBUG 0
-#  endif
+    #if wxDEBUG_LEVEL
+        #define wxUSE_LOG_DEBUG 1
+    #else // !wxDEBUG_LEVEL
+        #define wxUSE_LOG_DEBUG 0
+    #endif
 #endif
 
 // ----------------------------------------------------------------------------
@@ -72,9 +72,9 @@ typedef unsigned long wxLogLevel;
 // ----------------------------------------------------------------------------
 
 #if wxUSE_GUI
+    class WXDLLIMPEXP_FWD_CORE wxFrame;
     class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
     class WXDLLIMPEXP_FWD_CORE wxLogFrame;
-    class WXDLLIMPEXP_FWD_CORE wxFrame;
     class WXDLLIMPEXP_FWD_CORE wxWindow;
 #endif // wxUSE_GUI
 
@@ -804,7 +804,7 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
 // debug only logging functions: use them with API name and error code
 // ----------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
+#if wxUSE_LOG_DEBUG
     // make life easier for people using VC++ IDE: clicking on the message
     // will take us immediately to the place of the failed API
 #ifdef __VISUALC__
@@ -822,10 +822,10 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
 
     #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
 
-#else   //!debug
+#else // !wxUSE_LOG_DEBUG
     #define wxLogApiError(api, err) wxLogNop()
     #define wxLogLastError(api) wxLogNop()
-#endif  //debug/!debug
+#endif // wxUSE_LOG_DEBUG/!wxUSE_LOG_DEBUG
 
 // wxCocoa has additiional trace masks
 #if defined(__WXCOCOA__)
