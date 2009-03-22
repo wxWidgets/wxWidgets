@@ -42,8 +42,10 @@
 
 // helper: return EPOLLxxx mask corresponding to the given flags (and also log
 // debugging messages about it)
-static uint32_t GetEpollMask(int flags, int WXUNUSED_UNLESS_DEBUG(fd))
+static uint32_t GetEpollMask(int flags, int fd)
 {
+    wxUnusedVar(fd); // unused if wxLogTrace() disabled
+
     uint32_t ep = 0;
 
     if ( flags & wxFDIO_INPUT )
