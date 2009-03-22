@@ -331,6 +331,9 @@ void wxDoLogVerboseUtf8(const char *format, ...)
   }
 #endif // wxUSE_UNICODE_UTF8
 
+// deprecated (but not declared as such because we don't want to complicate
+// DECLARE_LOG_FUNCTION macros even more) overloads for wxTraceMask
+#if WXWIN_COMPATIBILITY_2_8
   void wxVLogTrace(wxTraceMask mask, const wxString& format, va_list argptr)
   {
     // we check that all of mask bits are set in the current mask, so
@@ -361,7 +364,10 @@ void wxDoLogVerboseUtf8(const char *format, ...)
   }
 #endif // wxUSE_UNICODE_UTF8
 
+#endif // WXWIN_COMPATIBILITY_2_8
+
 #ifdef __WATCOMC__
+#if WXWIN_COMPATIBILITY_2_8
   // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
   void wxDoLogTraceWchar(int mask, const wxChar *format, ...)
   {
@@ -370,6 +376,7 @@ void wxDoLogVerboseUtf8(const char *format, ...)
     wxVLogTrace(mask, format, argptr);
     va_end(argptr);
   }
+#endif // WXWIN_COMPATIBILITY_2_8
 
   void wxDoLogTraceWchar(const char *mask, const wxChar *format, ...)
   {
@@ -387,8 +394,10 @@ void wxDoLogVerboseUtf8(const char *format, ...)
     va_end(argptr);
   }
 
+#if WXWIN_COMPATIBILITY_2_8
   void wxVLogTrace(int mask, const wxString& format, va_list argptr)
     { wxVLogTrace((wxTraceMask)mask, format, argptr); }
+#endif // WXWIN_COMPATIBILITY_2_8
   void wxVLogTrace(const char *mask, const wxString& format, va_list argptr)
     { wxVLogTrace(wxString(mask), format, argptr); }
   void wxVLogTrace(const wchar_t *mask, const wxString& format, va_list argptr)
@@ -975,7 +984,10 @@ size_t          wxLog::ms_suspendCount = 0;
 
 wxString        wxLog::ms_timestamp(wxS("%X"));  // time only, no date
 
+#if WXWIN_COMPATIBILITY_2_8
 wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
+#endif // wxDEBUG_LEVEL
+
 wxArrayString   wxLog::ms_aTraceMasks;
 
 // ----------------------------------------------------------------------------

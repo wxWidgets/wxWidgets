@@ -15,30 +15,26 @@
 #include "wx/defs.h"
 
 // ----------------------------------------------------------------------------
-// common constants for use in wxUSE_LOG/!wxUSE_LOG
-// ----------------------------------------------------------------------------
-
-// the trace masks have been superceded by symbolic trace constants, they're
-// for compatibility only andwill be removed soon - do NOT use them
-
-// meaning of different bits of the trace mask (which allows selectively
-// enable/disable some trace messages)
-#define wxTraceMemAlloc 0x0001  // trace memory allocation (new/delete)
-#define wxTraceMessages 0x0002  // trace window messages/X callbacks
-#define wxTraceResAlloc 0x0004  // trace GDI resource allocation
-#define wxTraceRefCount 0x0008  // trace various ref counting operations
-
-#ifdef  __WXMSW__
-    #define wxTraceOleCalls 0x0100  // OLE interface calls
-#endif
-
-// ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
 
-// NB: these types are needed even if wxUSE_LOG == 0
-typedef unsigned long wxTraceMask;
+// NB: this is needed even if wxUSE_LOG == 0
 typedef unsigned long wxLogLevel;
+
+// the trace masks have been superseded by symbolic trace constants, they're
+// for compatibility only and will be removed soon - do NOT use them
+#if WXWIN_COMPATIBILITY_2_8
+    #define wxTraceMemAlloc 0x0001  // trace memory allocation (new/delete)
+    #define wxTraceMessages 0x0002  // trace window messages/X callbacks
+    #define wxTraceResAlloc 0x0004  // trace GDI resource allocation
+    #define wxTraceRefCount 0x0008  // trace various ref counting operations
+
+    #ifdef  __WXMSW__
+        #define wxTraceOleCalls 0x0100  // OLE interface calls
+    #endif
+
+    typedef unsigned long wxTraceMask;
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // headers
@@ -191,9 +187,6 @@ public:
     // gets duplicate counting status
     static bool GetRepetitionCounting() { return ms_bRepetCounting; }
 
-    // trace mask (see wxTraceXXX constants for details)
-    static void SetTraceMask(wxTraceMask ulMask) { ms_ulTraceMask = ulMask; }
-
     // add string trace mask
     static void AddTraceMask(const wxString& str);
 
@@ -220,9 +213,6 @@ public:
 
     // gets the verbose status
     static bool GetVerbose() { return ms_bVerbose; }
-
-    // get trace mask
-    static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
 
     // is this trace mask in the list?
     static bool IsAllowedTraceMask(const wxString& mask);
@@ -259,6 +249,14 @@ public:
     // this function doesn't do anything any more, don't call it
     wxDEPRECATED( static wxChar *SetLogBuffer(wxChar *buf, size_t size = 0) );
 #endif
+
+    // don't use integer masks any more, use string trace masks instead
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED_INLINE( static void SetTraceMask(wxTraceMask ulMask),
+        ms_ulTraceMask = ulMask; )
+    wxDEPRECATED_BUT_USED_INTERNALLY_INLINE( static wxTraceMask GetTraceMask(),
+        return ms_ulTraceMask; )
+#endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
     // the logging functions that can be overridden
@@ -343,8 +341,12 @@ private:
     // disabled
     static wxString    ms_timestamp;
 
+#if WXWIN_COMPATIBILITY_2_8
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
-    static wxArrayString ms_aTraceMasks; // more powerful filter for wxLogTrace
+#endif // WXWIN_COMPATIBILITY_2_8
+
+    // currently enabled trace masks
+    static wxArrayString ms_aTraceMasks;
 };
 
 // ----------------------------------------------------------------------------
@@ -740,7 +742,9 @@ DECLARE_LOG_FUNCTION2(SysError, unsigned long, lErrCode);
     // and this one does nothing if all of level bits are not set in
     // wxLog::GetActive()->GetTraceMask() -- it's deprecated in favour of
     // string identifiers
+#if WXWIN_COMPATIBILITY_2_8
     DECLARE_LOG_FUNCTION2(Trace, wxTraceMask, mask);
+#endif // wxDEBUG_LEVEL
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
     DECLARE_LOG_FUNCTION2(Trace, int, mask);

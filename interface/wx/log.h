@@ -28,11 +28,6 @@ enum wxLogLevelValues
 };
 
 /**
-    The type used for trace masks.
-*/
-typedef unsigned long wxTraceMask;
-
-/**
     The type used to specify a log level.
 
     Default values of ::wxLogLevel used by wxWidgets are contained in the
@@ -613,24 +608,11 @@ public:
     but may be activated, for example, in order to help the user find some program
     problem.
 
-    As for the (real) trace messages, their handling depends on the settings of
-    the (application global) @e trace mask which can either be specified using
-    SetTraceMask(), GetTraceMask() and wxLogTrace() which takes an integer mask
-    or using AddTraceMask() for string trace masks.
+    As for the (real) trace messages, their handling depends on the currently
+    enabled trace masks: if AddTraceMask() was called for the mask of the given
+    message, it will be logged, otherwise nothing happens.
 
-    The difference between bit-wise and string trace masks is that a message using
-    integer trace mask will only be logged if all bits of the mask are set in the
-    current mask while a message using string mask will be logged simply if the
-    mask had been added before to the list of allowed ones.
     For example,
-
-    @code
-    wxLogTrace( wxTraceRefCount|wxTraceOleCalls, "Active object ref count: %d", nRef );
-    @endcode
-
-    will do something only if the current trace mask contains both @c wxTraceRefCount
-    and @c wxTraceOle, but:
-
     @code
     wxLogTrace( wxTRACE_OleCalls, "IFoo::Bar() called" );
     @endcode
@@ -640,11 +622,6 @@ public:
     @code
     wxLog::AddTraceMask( wxTRACE_OleCalls);
     @endcode
-
-    Using string masks is simpler and allows you to easily add custom ones, so this
-    is the preferred way of working with trace messages. The integer trace mask is
-    kept for compatibility and for additional (but very rarely needed) flexibility
-    only.
 
     The standard trace masks are given in wxLogTrace() documentation.
 
@@ -766,6 +743,7 @@ public:
     static const wxString& GetTimestamp();
 
     /**
+        @deprecated
         Returns the current trace mask, see Customization() section for details.
     */
     static wxTraceMask GetTraceMask();
@@ -848,7 +826,8 @@ public:
     static void DisableTimestamp();
 
     /**
-        Sets the trace mask, see @ref log_derivingyours section for details.
+        @deprecated
+        Sets the trace mask, see @ref log_tracemasks section for details.
     */
     static void SetTraceMask(wxTraceMask mask);
 
@@ -1112,15 +1091,15 @@ void wxVLogError(const char* formatString, va_list argPtr);
     function is that usually there are a lot of trace messages, so it might
     make sense to separate them from other debug messages.
 
-    wxLogDebug(const char*,const char*,...) and
-    wxLogDebug(wxTraceMask,const char*,...) can be used instead if you would
-    like to be able to separate trace messages into different categories which
-    can be enabled or disabled with the static functions provided in wxLog.
+    wxLogTrace(const char*,const char*,...) and can be used instead of
+    wxLogDebug() if you would like to be able to separate trace messages into
+    different categories which can be enabled or disabled with
+    wxLog::AddTraceMask() and wxLog::RemoveTraceMask().
 
     @header{wx/log.h}
 */
-void wxLogTrace(const char* formatString, ... );
-void wxVLogTrace(const char* formatString, va_list argPtr);
+void wxLogTrace(const char *mask, const char* formatString, ... );
+void wxVLogTrace(const char *mask, const char* formatString, va_list argPtr);
 //@}
 
 /** @addtogroup group_funcmacro_log */
@@ -1178,7 +1157,7 @@ void wxVLogTrace(const char* mask,
     This version of wxLogTrace() only logs the message if all the bits
     corresponding to the @a mask are set in the wxLog trace mask which can be
     set by calling wxLog::SetTraceMask(). This version is less flexible than
-    wxLogDebug(const char*,const char*,...) because it doesn't allow defining
+    wxLogTrace(const char*,const char*,...) because it doesn't allow defining
     the user trace masks easily. This is why it is deprecated in favour of
     using string trace masks.
 
