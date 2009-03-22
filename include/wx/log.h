@@ -73,9 +73,6 @@ typedef unsigned long wxLogLevel;
 
 #if wxUSE_GUI
     class WXDLLIMPEXP_FWD_CORE wxFrame;
-    class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
-    class WXDLLIMPEXP_FWD_CORE wxLogFrame;
-    class WXDLLIMPEXP_FWD_CORE wxWindow;
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------

@@ -14,6 +14,10 @@
 
 #if wxUSE_GUI
 
+class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxLogFrame;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 // ----------------------------------------------------------------------------
 // the following log targets are only compiled in if the we're compiling the
 // GUI part (andnot just the base one) of the library, they're implemented in
