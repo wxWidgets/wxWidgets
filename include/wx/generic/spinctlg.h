@@ -51,7 +51,8 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
-                double min = 0, double max = 100, double initial = 0, double inc = 1,
+                double min = 0, double max = 100, double initial = 0,
+                double inc = 1,
                 const wxString& name = _T("wxSpinCtrl"));
 
     virtual ~wxSpinCtrlGenericBase();
@@ -158,7 +159,8 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
-                double min = 0, double max = 100, double initial = 0, double inc = 1,
+                double min = 0, double max = 100, double initial = 0,
+                double inc = 1,
                 const wxString& name = _T("wxSpinCtrl"))
     {
         m_min = min;
@@ -186,7 +188,8 @@ public:
     // void SetValue(T val)
     // void SetRange(T minVal, T maxVal)
     // void SetIncrement(T inc)
-    virtual void SetSnapToTicks(bool snap_to_ticks) { m_snap_to_ticks = snap_to_ticks; }
+    virtual void SetSnapToTicks(bool snap_to_ticks)
+        { m_snap_to_ticks = snap_to_ticks; }
     // void SetDigits(unsigned digits)              - wxSpinCtrlDouble only
 
     // Select text in the textctrl
@@ -203,8 +206,16 @@ protected:
         return n;
     }
 
-    bool DoSetValue(double val) { wxTextCtrl::SetValue(wxString::Format(m_format.c_str(), val)); return true; }
-    void DoSetRange(double min_val, double max_val) { m_min = min_val; m_max = max_val; }
+    bool DoSetValue(double val)
+    {
+        wxTextCtrl::SetValue(wxString::Format(m_format.c_str(), val));
+        return true;
+    }
+    void DoSetRange(double min_val, double max_val)
+    {
+        m_min = min_val;
+        m_max = max_val;
+    }
     void DoSetIncrement(double inc) { m_increment = inc; } // Note: unused
 
     double m_value;
@@ -248,17 +259,20 @@ public:
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = _T("wxSpinCtrl"))
     {
-        return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size, style, min, max, initial, 1, name);
+        return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
+                                             style, min, max, initial, 1, name);
     }
 
     // accessors
-    int GetValue(wxSPINCTRL_GETVALUE_FIX) const { return wxRound( DoGetValue() ); }
+    int GetValue(wxSPINCTRL_GETVALUE_FIX) const
+        { return wxRound( DoGetValue() ); }
     int GetMin() const       { return wxRound( m_min ); }
     int GetMax() const       { return wxRound( m_max ); }
     int GetIncrement() const { return wxRound( m_increment ); }
 
     // operations
-    void SetValue(const wxString& value)    { wxSpinCtrlGenericBase::SetValue(value); } // visibility problem w/ gcc
+    void SetValue(const wxString& value)
+        { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue( int value )              { DoSetValue(value); }
     void SetRange( int minVal, int maxVal ) { DoSetRange(minVal, maxVal); }
     void SetIncrement( double inc )         { DoSetIncrement(inc); }
@@ -286,11 +300,13 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
-                     double min = 0, double max = 100, double initial = 0, double inc = 1,
+                     double min = 0, double max = 100, double initial = 0,
+                     double inc = 1,
                      const wxString& name = _T("wxSpinCtrlDouble"))
     {
         m_digits = 0;
-        Create(parent, id, value, pos, size, style, min, max, initial, inc, name);
+        Create(parent, id, value, pos, size, style,
+               min, max, initial, inc, name);
     }
 
     bool Create(wxWindow *parent,
@@ -299,10 +315,13 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxSP_ARROW_KEYS | wxTE_RIGHT,
-                double min = 0, double max = 100, double initial = 0, double inc = 1,
+                double min = 0, double max = 100, double initial = 0,
+                double inc = 1,
                 const wxString& name = _T("wxSpinCtrlDouble"))
     {
-        return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size, style, min, max, initial, inc, name);
+        return wxSpinCtrlGenericBase::Create(parent, id, value, pos, size,
+                                             style, min, max, initial,
+                                             inc, name);
     }
 
     // accessors
@@ -313,7 +332,8 @@ public:
     unsigned GetDigits() const { return m_digits; }
 
     // operations
-    void SetValue(const wxString& value)        { wxSpinCtrlGenericBase::SetValue(value); } // visibility problem w/ gcc
+    void SetValue(const wxString& value)
+        { wxSpinCtrlGenericBase::SetValue(value); }
     void SetValue(double value)                 { DoSetValue(value); }
     void SetRange(double minVal, double maxVal) { DoSetRange(minVal, maxVal); }
     void SetIncrement(double inc)               { DoSetIncrement(inc); }
