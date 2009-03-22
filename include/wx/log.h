@@ -805,7 +805,9 @@ DECLARE_LOG_FUNCTION2(SysError, unsigned long, lErrCode);
     #ifdef HAVE_VARIADIC_MACROS
         #define wxLogTrace(mask, fmt, ...) wxLogNop()
     #else // !HAVE_VARIADIC_MACROS
+        #if WXWIN_COMPATIBILITY_2_8
         WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (wxTraceMask, const wxString&))
+        #endif
         WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const wxString&, const wxString&))
         #ifdef __WATCOMC__
         // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
