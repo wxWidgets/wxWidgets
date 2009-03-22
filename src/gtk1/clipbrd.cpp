@@ -35,7 +35,7 @@ GdkAtom  g_timestampAtom   = 0;
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_CLIPBOARD) to enable the trace messages from here
 // (there will be a *lot* of them!)
-static const wxChar *TRACE_CLIPBOARD = _T("clipboard");
+#define TRACE_CLIPBOARD "clipboard"
 
 //-----------------------------------------------------------------------------
 // reminder
