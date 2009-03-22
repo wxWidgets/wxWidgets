@@ -45,6 +45,32 @@
 
 #include "wx/tokenzr.h"
 
+// debugger helper: this function can be called from a debugger to show what
+// the date really is
+extern const char *wxDumpFont(const wxFont *font)
+{
+    static char buf[256];
+
+    const wxFontWeight weight = font->GetWeight();
+
+    wxString s;
+    s.Printf(wxS("%s-%s-%s-%d-%d"),
+             font->GetFaceName(),
+             weight == wxFONTWEIGHT_NORMAL
+                ? _T("normal")
+                : weight == wxFONTWEIGHT_BOLD
+                    ? _T("bold")
+                    : _T("light"),
+             font->GetStyle() == wxFONTSTYLE_NORMAL
+                ? _T("regular")
+                : _T("italic"),
+             font->GetPointSize(),
+             font->GetEncoding());
+
+    wxStrlcpy(buf, s, WXSIZEOF(buf));
+    return buf;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================

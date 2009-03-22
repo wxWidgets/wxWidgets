@@ -904,13 +904,9 @@ wxActiveXContainer::~wxActiveXContainer()
 }
 
 // VZ: we might want to really report an error instead of just asserting here
-#ifdef __WXDEBUG__
-    #define CHECK_HR(hr) \
-        wxASSERT_MSG( SUCCEEDED(hr), \
+#define CHECK_HR(hr) \
+    wxASSERT_LEVEL_2_MSG( SUCCEEDED(hr), \
             wxString::Format("HRESULT = %X", (unsigned)(hr)) )
-#else
-    #define CHECK_HR(hr) wxUnusedVar(hr)
-#endif
 
 //---------------------------------------------------------------------------
 // wxActiveXContainer::CreateActiveX

@@ -202,13 +202,12 @@ bool wxApp::OnInitGui()
     if ( !wxAppBase::OnInitGui() )
         return false;
 
-#ifdef __WXDEBUG__
     // MGL redirects stdout and stderr to physical console, so lets redirect
-    // it to file in debug build. Do it only when WXSTDERR environment variable is set
+    // it to file if WXSTDERR environment variable is set to be able to see
+    // wxLogDebug() output
     wxString redirect;
     if ( wxGetEnv(wxT("WXSTDERR"), &redirect) )
         freopen(redirect.mb_str(), "wt", stderr);
-#endif // __WXDEBUG__
 
     wxLog *oldLog = wxLog::SetActiveTarget(new wxLogGui);
     if ( oldLog ) delete oldLog;

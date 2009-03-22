@@ -86,12 +86,9 @@ protected:
 unsigned wxDisplayFactoryMacOSX::GetCount()
 {
     CGDisplayCount count;
-#ifdef __WXDEBUG__
-    CGDisplayErr err =
-#endif
-    CGGetActiveDisplayList(0, NULL, &count);
+    CGDisplayErr err = CGGetActiveDisplayList(0, NULL, &count);
 
-    wxASSERT(err == CGDisplayNoErr);
+    wxCHECK_MSG( err != CGDisplayNoErr, 0, "CGGetActiveDisplayList() failed" );
 
     return count;
 }
@@ -136,12 +133,9 @@ wxDisplayImpl *wxDisplayFactoryMacOSX::CreateDisplay(unsigned n)
     CGDisplayCount theCount = GetCount();
     CGDirectDisplayID* theIDs = new CGDirectDisplayID[theCount];
 
-#ifdef __WXDEBUG__
-    CGDisplayErr err =
-#endif
-    CGGetActiveDisplayList(theCount, theIDs, &theCount);
+    CGDisplayErr err = CGGetActiveDisplayList(theCount, theIDs, &theCount);
+    wxCHECK_MSG( err != CGDisplayNoErr, NULL, "CGGetActiveDisplayList() failed" );
 
-    wxASSERT( err == CGDisplayNoErr );
     wxASSERT( n < theCount );
 
     wxDisplayImplMacOSX *display = new wxDisplayImplMacOSX(n, theIDs[n]);

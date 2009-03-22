@@ -26,14 +26,14 @@
 
 #include <string.h>
 
-#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
+#if wxUSE_DEBUG_CONTEXT
     #if defined(__VISAGECPP__)
         #define DEBUG_PRINTF(NAME) { static int raz=0; \
             printf( #NAME " %i\n",raz); fflush(stdout); raz++; }
     #else
         #define DEBUG_PRINTF(NAME)
     #endif
-#endif // __WXDEBUG__ || wxUSE_DEBUG_CONTEXT
+#endif // wxUSE_DEBUG_CONTEXT
 
 // we must disable optimizations for VC.NET because otherwise its too eager
 // linker discards wxClassInfo objects in release build thus breaking many,
@@ -103,7 +103,7 @@ bool wxObject::IsKindOf(const wxClassInfo *info) const
     return (thisInfo) ? thisInfo->IsKindOf(info) : false ;
 }
 
-#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING && defined( new )
+#if wxUSE_MEMORY_TRACING && defined( new )
     #undef new
 #endif
 
@@ -225,11 +225,11 @@ void wxClassInfo::Register()
             sm_classTable = classTable;
     }
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     // reentrance guard - see note above
     static int entry = 0;
     wxASSERT_MSG(++entry == 1, _T("wxClassInfo::Register() reentrance"));
-#endif
+#endif // wxDEBUG_LEVEL
 
     // Using IMPLEMENT_DYNAMIC_CLASS() macro twice (which may happen if you
     // link any object module twice mistakenly, or link twice against wx shared
@@ -246,9 +246,9 @@ void wxClassInfo::Register()
 
     sm_classTable->Put(m_className, (wxObject *)this);
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     --entry;
-#endif
+#endif // wxDEBUG_LEVEL
 }
 
 void wxClassInfo::Unregister()
@@ -266,7 +266,7 @@ void wxClassInfo::Unregister()
 
 wxObject *wxCreateDynamicObject(const wxString& name)
 {
-#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
+#if wxUSE_DEBUG_CONTEXT
     DEBUG_PRINTF(wxObject *wxCreateDynamicObject)
 #endif
 
@@ -338,7 +338,7 @@ void wxObjectRefData::DecRef()
 
 void wxObject::Ref(const wxObject& clone)
 {
-#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
+#if wxUSE_DEBUG_CONTEXT
     DEBUG_PRINTF(wxObject::Ref)
 #endif
 

@@ -147,9 +147,7 @@ bool wxControl::OS2CreateControl( const wxChar*   zClassname,
 
     if ( !m_hWnd )
     {
-#ifdef __WXDEBUG__
         wxLogError(wxT("Failed to create a control of class '%s'"), zClassname);
-#endif // DEBUG
 
         return false;
     }

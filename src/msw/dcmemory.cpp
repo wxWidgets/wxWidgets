@@ -106,9 +106,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
         ::SelectObject(GetHdc(), (HBITMAP) m_oldBitmap);
         if ( m_selectedBitmap.Ok() )
         {
-#ifdef __WXDEBUG__
             m_selectedBitmap.SetSelectedInto(NULL);
-#endif
             m_selectedBitmap = wxNullBitmap;
         }
     }
@@ -123,9 +121,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     if ( !hBmp )
         return;
 
-#ifdef __WXDEBUG__
     m_selectedBitmap.SetSelectedInto(GetOwner());
-#endif
     hBmp = (WXHBITMAP)::SelectObject(GetHdc(), (HBITMAP)hBmp);
 
     if ( !hBmp )

@@ -732,7 +732,7 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacAppEventHandler )
 #endif
 
-#if defined( __WXDEBUG__ ) && wxOSX_USE_COCOA_OR_CARBON
+#if wxDEBUG_LEVEL && wxOSX_USE_COCOA_OR_CARBON
 
 pascal static void
 wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
@@ -778,7 +778,7 @@ wxMacAssertOutputHandler(OSType WXUNUSED(componentSignature),
 #endif
 }
 
-#endif //__WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
 extern "C" void macPostedEventCallback(void *WXUNUSED(unused))
 {
@@ -789,7 +789,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 {
     // Mac-specific
 
-#if defined( __WXDEBUG__ ) && wxOSX_USE_COCOA_OR_CARBON
+#if wxDEBUG_LEVEL && wxOSX_USE_COCOA_OR_CARBON
     InstallDebugAssertOutputHandler( NewDebugAssertOutputHandlerUPP( wxMacAssertOutputHandler ) );
 #endif
 

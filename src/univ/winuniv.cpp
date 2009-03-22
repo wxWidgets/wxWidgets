@@ -45,11 +45,9 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
-// turn Refresh() debugging on/off
-#define WXDEBUG_REFRESH
-
-#ifndef __WXDEBUG__
-    #undef WXDEBUG_REFRESH
+#if wxDEBUG_LEVEL >= 2
+    // turn Refresh() debugging on/off
+    #define WXDEBUG_REFRESH
 #endif
 
 #if defined(WXDEBUG_REFRESH) && defined(__WXMSW__) && !defined(__WXMICROWIN__)

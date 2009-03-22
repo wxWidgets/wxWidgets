@@ -245,7 +245,6 @@ char wxFTP::SendCommand(const wxString& command)
         return 0;
     }
 
-#ifdef __WXDEBUG__
     // don't show the passwords in the logs (even in debug ones)
     wxString cmd, password;
     if ( command.Upper().StartsWith(_T("PASS "), &password) )
@@ -258,7 +257,6 @@ char wxFTP::SendCommand(const wxString& command)
     }
 
     LogRequest(cmd);
-#endif // __WXDEBUG__
 
     m_lastError = wxPROTO_NOERR;
     return GetResult();

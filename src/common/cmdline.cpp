@@ -74,7 +74,6 @@ struct wxCmdLineOption
                     int fl)
     {
         // wxCMD_LINE_USAGE_TEXT uses only description, shortName and longName is empty
-    #ifdef __WXDEBUG__
         if ( k != wxCMD_LINE_USAGE_TEXT )
         {
             wxASSERT_MSG
@@ -95,8 +94,6 @@ struct wxCmdLineOption
                 wxT("Long option contains invalid characters")
             );
         }
-    #endif // __WXDEBUG__
-
 
         kind = k;
 
@@ -450,7 +447,7 @@ void wxCmdLineParser::AddParam(const wxString& desc,
 {
     // do some consistency checks: a required parameter can't follow an
     // optional one and nothing should follow a parameter with MULTIPLE flag
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     if ( !m_data->m_paramDesc.IsEmpty() )
     {
         wxCmdLineParam& param = m_data->m_paramDesc.Last();
@@ -464,7 +461,7 @@ void wxCmdLineParser::AddParam(const wxString& desc,
                           _T("a required parameter can't follow an optional one") );
         }
     }
-#endif // Debug
+#endif // wxDEBUG_LEVEL
 
     wxCmdLineParam *param = new wxCmdLineParam(desc, type, flags);
 

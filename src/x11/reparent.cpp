@@ -152,11 +152,6 @@ bool wxReparenter::WaitAndReparent(wxWindow* newParent, wxAdoptedWindow* toRepar
     if (!WM_STATE)
         WM_STATE = XInternAtom(display, "WM_STATE", False);
 
-#ifdef __WXDEBUG__
-    if (!windowName.empty())
-        wxLogDebug(_T("Waiting for window %s"), windowName.c_str());
-#endif
-
     sm_done = false;
 
     wxEventLoop eventLoop;

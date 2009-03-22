@@ -1813,7 +1813,7 @@ DoAdjustForGrowables(int delta,
 
 void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz)
 {
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     // by the time this function is called, the sizer should be already fully
     // initialized and hence the number of its columns and rows is known and we
     // can check that all indices in m_growableCols/Rows are valid (see also
@@ -1841,7 +1841,7 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz)
             }
         }
     }
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
 
     if ( (m_flexDirection & wxHORIZONTAL) || (m_growMode != wxFLEX_GROWMODE_NONE) )

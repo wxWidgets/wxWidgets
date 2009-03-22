@@ -272,7 +272,7 @@ wxStringOperationsUtf8::DecodeNonAsciiChar(wxStringImpl::const_iterator i)
 
     // mask to extract lead byte's value ('x' bits above), by sequence's length:
     static const unsigned char s_leadValueMask[4] =  { 0x7F, 0x1F, 0x0F, 0x07 };
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     // mask and value of lead byte's most significant bits, by length:
     static const unsigned char s_leadMarkerMask[4] = { 0x80, 0xE0, 0xF0, 0xF8 };
     static const unsigned char s_leadMarkerVal[4] =  { 0x00, 0xC0, 0xE0, 0xF0 };

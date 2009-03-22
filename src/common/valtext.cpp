@@ -76,7 +76,7 @@ void wxTextValidator::SetStyle(long style)
 {
     m_validatorStyle = style;
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     int check;
     check = (int)HasFlag(wxFILTER_ALPHA) + (int)HasFlag(wxFILTER_ALPHANUMERIC) +
             (int)HasFlag(wxFILTER_DIGITS) + (int)HasFlag(wxFILTER_NUMERIC);
@@ -93,7 +93,7 @@ void wxTextValidator::SetStyle(long style)
             (int)HasFlag(wxFILTER_EXCLUDE_LIST) + (int)HasFlag(wxFILTER_EXCLUDE_CHAR_LIST);
     wxASSERT_MSG(check <= 1,
         "Using both an include/exclude list may lead to unexpected results");
-#endif
+#endif // wxDEBUG_LEVEL
 }
 
 bool wxTextValidator::Copy(const wxTextValidator& val)

@@ -88,10 +88,9 @@ void wxFileSelOk(Widget WXUNUSED(fs), XtPointer WXUNUSED(client_data), XmFileSel
 
 static wxString ParseWildCard( const wxString& wild )
 {
-#ifdef __WXDEBUG__
-    static const wxChar* msg =
-        _T("Motif file dialog does not understand this ")
-        _T("wildcard syntax");
+#if wxDEBUG_LEVEL
+    static const char *msg =
+        "Motif file dialog does not understand this wildcard syntax";
 #endif
 
     wxArrayString wildDescriptions, wildFilters;

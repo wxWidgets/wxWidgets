@@ -301,16 +301,12 @@ void wxNonOwnedWindow::HandleQueuedPaintRequests()
     // blit the entire back buffer to front soon
     m_isPainting = true;
 
-#ifdef __WXDEBUG__
     int requestsCount = 0;
-#endif
 
     wxRect request;
     while ( m_toPaint->GetNext(request) )
     {
-#ifdef __WXDEBUG__
         requestsCount++;
-#endif
         wxRect clipped(request);
         clipped.Intersect(winRect);
         if ( clipped.IsEmpty() )

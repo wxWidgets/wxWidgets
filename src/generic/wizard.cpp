@@ -214,11 +214,6 @@ wxSize wxWizardSizer::CalcMin()
 
 wxSize wxWizardSizer::GetMaxChildSize()
 {
-#if !defined(__WXDEBUG__)
-    if ( m_childSize.IsFullySpecified() )
-        return m_childSize;
-#endif
-
     wxSize maxOfMin;
 
     for ( wxSizerItemList::compatibility_iterator childNode = m_children.GetFirst();
@@ -229,21 +224,6 @@ wxSize wxWizardSizer::GetMaxChildSize()
         maxOfMin.IncTo(child->CalcMin());
         maxOfMin.IncTo(SiblingSize(child));
     }
-
-    // No longer applicable since we may change sizes when size adaptation is done
-#if 0
-#ifdef __WXDEBUG__
-    if ( m_childSize.IsFullySpecified() && m_childSize != maxOfMin )
-    {
-        wxFAIL_MSG( _T("Size changed in wxWizard::GetPageAreaSizer()")
-                    _T("after RunWizard().\n")
-                    _T("Did you forget to call GetSizer()->Fit(this) ")
-                    _T("for some page?")) ;
-
-        return m_childSize;
-    }
-#endif // __WXDEBUG__
-#endif
 
     if ( m_owner->m_started )
     {

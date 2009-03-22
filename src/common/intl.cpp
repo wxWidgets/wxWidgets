@@ -105,34 +105,6 @@ static const size_t LEN_FULL = LEN_LANG + 1 + LEN_SUBLANG; // 1 for '_'
 // global functions
 // ----------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
-
-// small class to suppress the translation erros until exit from current scope
-class NoTransErr
-{
-public:
-    NoTransErr() { ms_suppressCount++; }
-    ~NoTransErr() { ms_suppressCount--;  }
-
-    static bool Suppress() { return ms_suppressCount > 0; }
-
-private:
-    static size_t ms_suppressCount;
-};
-
-size_t NoTransErr::ms_suppressCount = 0;
-
-#else // !Debug
-
-class NoTransErr
-{
-public:
-    NoTransErr() { }
-~NoTransErr() { }
-};
-
-#endif // Debug/!Debug
-
 static wxLocale *wxSetLocale(wxLocale *pLocale);
 
 namespace
@@ -1210,16 +1182,8 @@ bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
                     << GetFullSearchPath(ExtractLang(szDirPrefix));
     }
 
-    // don't give translation errors here because the wxstd catalog might
-    // not yet be loaded (and it's normal)
-    //
-    // (we're using an object because we have several return paths)
-
-    NoTransErr noTransErr;
-    wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
-                szName, searchPath.c_str());
-    wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in \"%s\""),
-                szName, searchPath.c_str());
+    wxLogTrace(TRACE_I18N, wxS("Looking for \"%s.mo\" in search path \"%s\""),
+                szName, searchPath);
 
     wxFileName fn(szName);
     fn.SetExt(wxS("mo"));
@@ -2442,18 +2406,11 @@ const wxString& wxLocale::GetString(const wxString& origString,
 
     if ( trans == NULL )
     {
-#ifdef __WXDEBUG__
-        if ( !NoTransErr::Suppress() )
-        {
-            NoTransErr noTransErr;
-
-            wxLogTrace(TRACE_I18N,
-                    wxS("string \"%s\"[%ld] not found in %slocale '%s'."),
-                    origString, (long)n,
-                    wxString::Format(wxS("domain '%s' "), domain).c_str(),
-                    m_strLocale.c_str());
-        }
-#endif // __WXDEBUG__
+        wxLogTrace(TRACE_I18N,
+                wxS("string \"%s\"[%ld] not found in %slocale '%s'."),
+                origString, (long)n,
+                wxString::Format(wxS("domain '%s' "), domain).c_str(),
+                m_strLocale.c_str());
 
         if (n == size_t(-1))
             return GetUntranslatedString(origString);

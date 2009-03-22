@@ -235,9 +235,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     // Some people may wish to use this, but
     // probably it shouldn't be here by default.
-#ifdef __WXDEBUG__
     //    wxRedirectIOToConsole();
-#endif
 
     wxWinHandleHash = new wxWinHashTable(wxKEY_INTEGER, 100);
 

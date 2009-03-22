@@ -149,16 +149,13 @@
 
 #include "wx/cmdproc.h"
 
-// turn extra wxTextCtrl-specific debugging on/off
-#define WXDEBUG_TEXT
+#if wxDEBUG_LEVEL >= 2
+    // turn extra wxTextCtrl-specific debugging on/off
+    #define WXDEBUG_TEXT
 
-// turn wxTextCtrl::Replace() debugging on (slows down code a *lot*!)
-#define WXDEBUG_TEXT_REPLACE
-
-#ifndef __WXDEBUG__
-    #undef WXDEBUG_TEXT
-    #undef WXDEBUG_TEXT_REPLACE
-#endif
+    // turn wxTextCtrl::Replace() debugging on (slows down code a *lot*!)
+    #define WXDEBUG_TEXT_REPLACE
+#endif // wxDEBUG_LEVEL >= 2
 
 // wxStringTokenize only needed for debug checks
 #ifdef WXDEBUG_TEXT_REPLACE
@@ -4765,11 +4762,11 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         }
 #endif
     }
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL >= 2
     // Ctrl-R refreshes the control in debug mode
     else if ( event.ControlDown() && event.GetKeyCode() == 'r' )
         Refresh();
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL >= 2
 
     event.Skip();
 }

@@ -770,7 +770,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     // enumerate all explicit formats on the clipboard.
     // note that this does not include implicit / synthetic (automatically
     // converted) formats.
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL >= 2
     // get the format enumerator
     IEnumFORMATETC *pEnumFormatEtc = NULL;
     hr = pDataObject->EnumFormatEtc(DATADIR_GET, &pEnumFormatEtc);
@@ -803,7 +803,7 @@ bool wxClipboard::GetData( wxDataObject& data )
 
         pEnumFormatEtc->Release();
     }
-#endif // Debug
+#endif // wxDEBUG_LEVEL >= 2
 
     STGMEDIUM medium;
     // stop at the first valid format found on the clipboard

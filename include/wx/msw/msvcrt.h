@@ -14,7 +14,8 @@
 // used like this:
 //      wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
 // to turn on memory leak checks for programs compiled with Microsoft Visual
-// C++ (5.0+). The macro will expand to nothing under other compilers.
+// C++ (5.0+). The macro will not be defined under other compilers or if it
+// can't be used with MSVC for whatever reason.
 
 #ifndef _MSW_MSVCRT_H_
 #define _MSW_MSVCRT_H_
@@ -22,7 +23,7 @@
 // use debug CRT functions for memory leak detections in VC++ 5.0+ in debug
 // builds
 #undef wxUSE_VC_CRTDBG
-#if defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ >= 1000) \
+#if defined(_DEBUG) && defined(__VISUALC__) && (__VISUALC__ >= 1000) \
     && !defined(UNDER_CE)
     // it doesn't combine well with wxWin own memory debugging methods
     #if !wxUSE_GLOBAL_MEMORY_OPERATORS && !wxUSE_MEMORY_TRACING && !defined(__NO_VC_CRTDBG__)
@@ -31,11 +32,6 @@
 #endif
 
 #ifdef wxUSE_VC_CRTDBG
-    // VC++ uses this macro as debug/release mode indicator
-    #ifndef _DEBUG
-        #define _DEBUG
-    #endif
-
     // Need to undef new if including crtdbg.h which may redefine new itself
     #ifdef new
         #undef new

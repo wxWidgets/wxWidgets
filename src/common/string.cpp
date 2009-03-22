@@ -105,7 +105,7 @@ static wxStrCacheInitializer gs_stringCacheInit;
 
 // gdb seems to be unable to display thread-local variables correctly, at least
 // not my 6.4.98 version under amd64, so provide this debugging helper to do it
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL >= 2
 
 struct wxStrCacheDumper
 {
@@ -130,7 +130,7 @@ struct wxStrCacheDumper
 
 void wxDumpStrCache() { wxStrCacheDumper::ShowAll(); }
 
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL >= 2
 
 #ifdef wxPROFILE_STRING_CACHE
 

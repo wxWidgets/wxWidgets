@@ -68,7 +68,6 @@ wxHashTable *wxWidgetHashTable = NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
-#ifdef __WXDEBUG__
 extern "C"
 {
     typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
@@ -86,7 +85,6 @@ static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 }
 
 }
-#endif // __WXDEBUG__
 
 bool wxApp::Initialize(int& argc_, wxChar **argv_)
 {
@@ -251,10 +249,8 @@ bool wxApp::Initialize(int& argc_, wxChar **argv_)
     }
     m_initialDisplay = (WXDisplay*) dpy;
 
-#ifdef __WXDEBUG__
     // install the X error handler
     gs_pfnXErrorHandler = XSetErrorHandler(wxXErrorHandler);
-#endif // __WXDEBUG__
 
     // Add general resize proc
     XtActionsRec rec;

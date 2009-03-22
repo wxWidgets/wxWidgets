@@ -49,7 +49,7 @@
 
 #include "wx/fontutil.h"
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     #include "wx/thread.h"
 #endif
 
@@ -236,16 +236,13 @@ extern bool g_mainThreadLocked;
 // debug
 //-----------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
-
 #if wxUSE_THREADS
-#   define DEBUG_MAIN_THREAD if (wxThread::IsMain() && g_mainThreadLocked) printf("gui reentrance");
+#   define DEBUG_MAIN_THREAD \
+        wxASSERT_MSG( !g_mainThreadLocked || !wxThread::IsMain(), \
+                      "GUI reentrancy detected" )
 #else
 #   define DEBUG_MAIN_THREAD
 #endif
-#else
-#define DEBUG_MAIN_THREAD
-#endif // Debug
 
 // the trace mask used for the focus debugging messages
 #define TRACE_FOCUS _T("focus")

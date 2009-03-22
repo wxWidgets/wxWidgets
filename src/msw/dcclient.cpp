@@ -223,7 +223,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
 
         return;
     }
-#endif // __WXDEBUG__
+#endif // wxHAS_PAINT_DEBUG
 
     m_window = window;
 

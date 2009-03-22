@@ -61,11 +61,11 @@
 // functions
 // ----------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     static const wxChar *GetTymedName(DWORD tymed);
-#else // !Debug
+#else // !wxDEBUG_LEVEL
     #define GetTymedName(tymed) wxEmptyString
-#endif // Debug/!Debug
+#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC interface implementation
@@ -719,7 +719,7 @@ void* wxDataObject::SetSizeInBuffer( void* buffer, size_t size,
     return p;
 }
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
 
 const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
 {
@@ -764,7 +764,7 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
     #endif // VC++
 }
 
-#endif // Debug
+#endif // wxDEBUG_LEVEL
 
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject supports CF_DIB format
@@ -1264,7 +1264,7 @@ void wxURLDataObject::SetURL(const wxString& url)
 // private functions
 // ----------------------------------------------------------------------------
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
 
 static const wxChar *GetTymedName(DWORD tymed)
 {
@@ -1305,12 +1305,10 @@ void wxDataObject::SetAutoDelete()
 {
 }
 
-#ifdef __WXDEBUG__
 const wxChar *wxDataObject::GetFormatName(wxDataFormat WXUNUSED(format))
 {
     return NULL;
 }
-#endif // __WXDEBUG__
 
 #endif // wxUSE_DATAOBJ
 

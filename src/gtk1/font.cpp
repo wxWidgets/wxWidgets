@@ -97,26 +97,6 @@ public:
     // and this one also modifies all the other font data fields
     void SetNativeFontInfo(const wxNativeFontInfo& info);
 
-    // debugger helper: shows what the font really is
-    //
-    // VZ: I need this as my gdb either shows wildly wrong values or crashes
-    //     when I ask it to "p fontRefData" :-(
-#if defined(__WXDEBUG__)
-    void Dump() const
-    {
-        wxPrintf(_T("%s-%s-%s-%d-%d\n"),
-                 m_faceName.c_str(),
-                 m_weight == wxFONTWEIGHT_NORMAL
-                    ? _T("normal")
-                    : m_weight == wxFONTWEIGHT_BOLD
-                        ? _T("bold")
-                        : _T("light"),
-                 m_style == wxFONTSTYLE_NORMAL ? _T("regular") : _T("italic"),
-                 m_pointSize,
-                 m_encoding);
-    }
-#endif // Debug
-
 protected:
     // common part of all ctors
     void Init(int pointSize,

@@ -250,8 +250,8 @@ wxString wxStandardPaths::GetAppDir()
 {
     wxFileName fn(wxGetFullModuleName());
 
-    // allow running the apps directly from build directory in debug builds
-#ifdef __WXDEBUG__
+    // allow running the apps directly from build directory in MSVC debug builds
+#ifdef _DEBUG
     wxString lastdir;
     if ( fn.GetDirCount() )
     {
@@ -260,7 +260,7 @@ wxString wxStandardPaths::GetAppDir()
         if ( lastdir.Matches(_T("debug*")) || lastdir.Matches(_T("vc*msw*")) )
             fn.RemoveLastDir();
     }
-#endif // __WXDEBUG__
+#endif // _DEBUG
 
     return fn.GetPath();
 }

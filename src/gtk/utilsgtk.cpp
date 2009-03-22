@@ -26,12 +26,12 @@
 #include "wx/gtk/private/timer.h"
 #include "wx/evtloop.h"
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     #include "wx/gtk/assertdlg_gtk.h"
     #if wxUSE_STACKWALKER
         #include "wx/stackwalk.h"
     #endif // wxUSE_STACKWALKER
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
 #include <stdarg.h>
 #include <string.h>
@@ -328,9 +328,7 @@ void wxGUIAppTraits::SetLocale()
 }
 #endif
 
-#ifdef __WXDEBUG__
-
-#if wxUSE_STACKWALKER
+#if wxDEBUG_LEVEL && wxUSE_STACKWALKER
 
 // private helper class
 class StackDump : public wxStackWalker
@@ -379,13 +377,15 @@ extern "C"
     }
 }
 
-#endif      // wxUSE_STACKWALKER
+#endif // wxDEBUG_LEVEL && wxUSE_STACKWALKER
 
 bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 {
-    // under GTK2 we prefer to use a dialog widget written using directly GTK+;
-    // in fact we cannot use a dialog written using wxWidgets: it would need
-    // the wxWidgets idle processing to work correctly!
+#if wxDEBUG_LEVEL
+    // under GTK2 we prefer to use a dialog widget written using directly in
+    // GTK+ as use a dialog written using wxWidgets would need the wxWidgets
+    // idle processing to work correctly which might not be the case when
+    // assert happens
     GtkWidget *dialog = gtk_assert_dialog_new();
     gtk_assert_dialog_set_message(GTK_ASSERT_DIALOG(dialog), msg.mb_str());
 
@@ -426,9 +426,12 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 
     gtk_widget_destroy(dialog);
     return returnCode;
+#else // !wxDEBUG_LEVEL
+    // this function is never called in this case
+    wxUnusedVar(msg);
+    return false;
+#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 }
-
-#endif  // __WXDEBUG__
 
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {

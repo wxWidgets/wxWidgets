@@ -457,12 +457,10 @@ void wxMSWDCImpl::SelectOldObjects(WXHDC dc)
         if (m_oldBitmap)
         {
             ::SelectObject((HDC) dc, (HBITMAP) m_oldBitmap);
-#ifdef __WXDEBUG__
             if (m_selectedBitmap.IsOk())
             {
                 m_selectedBitmap.SetSelectedInto(NULL);
             }
-#endif
         }
         m_oldBitmap = 0;
         if (m_oldPen)

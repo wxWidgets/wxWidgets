@@ -222,9 +222,9 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
 
 
-#ifdef  __WXDEBUG__
+#if wxDEBUG_LEVEL >= 2
     const wxChar *wxGetMessageName(int message);
-#endif  //__WXDEBUG__
+#endif  // wxDEBUG_LEVEL >= 2
 
 void wxRemoveHandleAssociation(wxWindowMSW *win);
 extern void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
@@ -638,13 +638,12 @@ void wxWindowMSW::SetFocus()
     HWND hWnd = GetHwnd();
     wxCHECK_RET( hWnd, _T("can't set focus to invalid window") );
 
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+#if !defined(__WXWINCE__)
     ::SetLastError(0);
 #endif
 
     if ( !::SetFocus(hWnd) )
     {
-#if defined(__WXDEBUG__) && !defined(__WXMICROWIN__)
         // was there really an error?
         DWORD dwRes = ::GetLastError();
         if ( dwRes )
@@ -655,7 +654,6 @@ void wxWindowMSW::SetFocus()
                 wxLogApiError(_T("SetFocus"), dwRes);
             }
         }
-#endif // Debug
     }
 }
 
@@ -2655,12 +2653,13 @@ wxWindowCreationHook::~wxWindowCreationHook()
 // Main window proc
 LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    // trace all messages - useful for the debugging
-#ifdef __WXDEBUG__
+    // trace all messages: useful for the debugging but noticeably slows down
+    // the code so don't do it by default
+#if wxDEBUG_LEVEL >= 2
     wxLogTrace(wxTraceMessages,
                wxT("Processing %s(hWnd=%p, wParam=%08lx, lParam=%08lx)"),
                wxGetMessageName(message), hWnd, (long)wParam, lParam);
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL >= 2
 
     wxWindowMSW *wnd = wxFindWinFromHandle(hWnd);
 
@@ -3512,10 +3511,10 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 
     if ( !processed )
     {
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL >= 2
         wxLogTrace(wxTraceMessages, wxT("Forwarding %s to DefWindowProc."),
                    wxGetMessageName(message));
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL >= 2
         rc.result = MSWDefWindowProc(message, wParam, lParam);
     }
 
@@ -3539,20 +3538,24 @@ void wxAssociateWinWithHandle(HWND hwnd, wxWindowMSW *win)
     wxCHECK_RET( hwnd != (HWND)NULL,
                  wxT("attempt to add a NULL hwnd to window list ignored") );
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     WindowHandles::const_iterator i = gs_windowHandles.find(hwnd);
     if ( i != gs_windowHandles.end() )
     {
         if ( i->second != win )
         {
-            wxLogDebug(wxT("HWND %p already associated with another window (%s)"),
-                       hwnd, win->GetClassInfo()->GetClassName());
+            wxFAIL_MSG(
+                wxString::Format(
+                    wxT("HWND %p already associated with another window (%s)"),
+                    hwnd, win->GetClassInfo()->GetClassName()
+                )
+            );
         }
         //else: this actually happens currently because we associate the window
         //      with its HWND during creation (if we create it) and also when
         //      SubclassWin() is called later, this is ok
     }
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
     gs_windowHandles[hwnd] = (wxWindow *)win;
 }
@@ -6357,7 +6360,7 @@ void wxSetKeyboardHook(bool doIt)
 
 #endif // !__WXMICROWIN__
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL > =2
 const wxChar *wxGetMessageName(int message)
 {
     switch ( message )
@@ -6826,7 +6829,7 @@ const wxChar *wxGetMessageName(int message)
             return s_szBuf.c_str();
     }
 }
-#endif //__WXDEBUG__
+#endif // wxDEBUG_LEVEL >= 2
 
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 {

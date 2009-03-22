@@ -1478,11 +1478,12 @@ public:
 #endif
     wxSize m_bestSize;  // Cached size
 
-#ifdef __WXDEBUG__  // Stuff for getting useful debugging strings
+    // Stuff for getting useful debugging strings
+#if wxDEBUG_LEVEL
     wxDynamicLibrary m_dllQuartz;
     LPAMGETERRORTEXT m_lpAMGetErrorText;
     wxString GetErrorString(HRESULT hrdsv);
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
     wxEvtHandler* m_evthandler;
 
     friend class wxAMMediaEvtHandler;
@@ -1527,7 +1528,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxAMMediaBackend, wxMediaBackend)
 //---------------------------------------------------------------------------
 // Usual debugging macros
 //---------------------------------------------------------------------------
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
 #define MAX_ERROR_TEXT_LEN 160
 
 // Get the error string for Active Movie
@@ -1614,13 +1615,13 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 {
     // First get the AMGetErrorText procedure in debug
     // mode for more meaningful messages
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     if ( m_dllQuartz.Load(_T("quartz.dll"), wxDL_VERBATIM) )
     {
         m_lpAMGetErrorText = (LPAMGETERRORTEXT)
                                 m_dllQuartz.GetSymbolAorW(wxT("AMGetErrorText"));
     }
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
 
 

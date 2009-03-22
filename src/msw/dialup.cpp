@@ -1269,7 +1269,6 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
                 // fall through
 
             case WAIT_FAILED:
-#ifdef __WXDEBUG__
                 // using wxLogLastError() from here is dangerous: we risk to
                 // deadlock the main thread if wxLog sends output to GUI
                 DWORD err = GetLastError();
@@ -1280,7 +1279,6 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
                     err,
                     wxSysErrorMsg(err)
                 );
-#endif // __WXDEBUG__
 
                 // no sense in continuing, who knows if the handles we're
                 // waiting for even exist yet...

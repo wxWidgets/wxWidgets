@@ -936,10 +936,6 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
     wxPropertyGrid* pg = GetGrid();
 
-#ifdef __WXDEBUG__
-    const bool debug = false;
-#endif
-
     unsigned int i;
     unsigned int lastColumn = m_colWidths.size() - 1;
     int width = m_width;
@@ -949,10 +945,9 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     // Column to reduce, if needed. Take last one that exceeds minimum width.
     int reduceCol = -1;
 
-#ifdef __WXDEBUG__
-    if ( debug )
-        wxLogDebug(wxT("ColumnWidthCheck (virtualWidth: %i, clientWidth: %i)"), width, clientWidth);
-#endif
+    wxLogTrace("propgrid",
+               wxS("ColumnWidthCheck (virtualWidth: %i, clientWidth: %i)"),
+               width, clientWidth);
 
     //
     // Check min sizes
@@ -975,10 +970,9 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     for ( i=0; i<m_colWidths.size(); i++ )
         colsWidth += m_colWidths[i];
 
-#ifdef __WXDEBUG__
-    if ( debug )
-        wxLogDebug(wxT("  HasVirtualWidth: %i  colsWidth: %i"),(int)pg->HasVirtualWidth(),colsWidth);
-#endif
+    wxLogTrace("propgrid",
+               wxS("  HasVirtualWidth: %i  colsWidth: %i"),
+               (int)pg->HasVirtualWidth(), colsWidth);
 
     // Then mode-based requirement
     if ( !pg->HasVirtualWidth() )
@@ -989,10 +983,9 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
         if ( colsWidth < width )
         {
             // Increase column
-#ifdef __WXDEBUG__
-            if ( debug )
-                wxLogDebug(wxT("  Adjust last column to %i"), m_colWidths[lastColumn] + widthHigher);
-#endif
+            wxLogTrace("propgrid",
+                       wxS("  Adjust last column to %i"),
+                       m_colWidths[lastColumn] + widthHigher);
             m_colWidths[lastColumn] = m_colWidths[lastColumn] + widthHigher;
         }
         else if ( colsWidth > width )
@@ -1000,10 +993,10 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             // Reduce column
             if ( reduceCol != -1 )
             {
-            #ifdef __WXDEBUG__
-                if ( debug )
-                    wxLogDebug(wxT("  Reduce column %i (by %i)"), reduceCol, -widthHigher);
-            #endif
+                wxLogTrace("propgrid",
+                           wxT("  Reduce column %i (by %i)"),
+                           reduceCol, -widthHigher);
+
                 // Reduce widest column, and recheck
                 m_colWidths[reduceCol] = m_colWidths[reduceCol] + widthHigher;
                 CheckColumnWidths();
@@ -1025,11 +1018,10 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             pg->RecalculateVirtualSize();
     }
 
-#ifdef __WXDEBUG__
-    if ( debug )
-        for ( i=0; i<m_colWidths.size(); i++ )
-            wxLogDebug(wxT("col%i: %i"),i,m_colWidths[i]);
-#endif
+    for ( i=0; i<m_colWidths.size(); i++ )
+    {
+        wxLogTrace("propgrid", wxS("col%i: %i"), i, m_colWidths[i]);
+    }
 
     // Auto center splitter
     if ( !(pg->GetInternalFlags() & wxPG_FL_DONT_CENTER_SPLITTER) &&
@@ -1424,13 +1416,12 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
                     }
                     else
                     {
-                #ifdef __WXDEBUG__
-                        if ( wxStrcmp(current->GetType(), p->GetValue().GetType()) != 0)
-                        {
-                            wxLogDebug(wxT("wxPropertyGridPageState::DoSetPropertyValues Warning: Setting value of property \"%s\" from variant"),
-                                p->GetName().c_str());
-                        }
-                #endif
+                        wxASSERT_LEVEL_2_MSG(
+                            wxStrcmp(current->GetType(), p->GetValue().GetType()) == 0,
+                            wxString::Format(
+                                wxS("setting value of property \"%s\" from variant"),
+                                p->GetName().c_str())
+                        );
 
                         p->SetValue(*current);
                     }

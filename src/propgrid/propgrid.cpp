@@ -627,11 +627,10 @@ wxPropertyGrid::~wxPropertyGrid()
     m_tlp->RemoveEventHandler(handler);
     delete handler;
 
-#ifdef __WXDEBUG__
-    if ( IsEditorsValueModified() )
-        ::wxMessageBox(wxS("Most recent change in property editor was lost!!!\n\n(if you don't want this to happen, close your frames and dialogs using Close(false).)"),
-                       wxS("wxPropertyGrid Debug Warning") );
-#endif
+    wxASSERT_MSG( !IsEditorsValueModified(),
+                  wxS("Most recent change in property editor was lost!!! ")
+                  wxS("(if you don't want this to happen, close your frames ")
+                  wxS("and dialogs using Close(false).)") );
 
 #if wxPG_DOUBLE_BUFFER
     if ( m_doubleBuffer )
@@ -3749,16 +3748,10 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
 
     m_pState->EnsureVirtualHeight();
 
-#ifdef __WXDEBUG__
-    int by1 = m_pState->GetVirtualHeight();
-    int by2 = m_pState->GetActualVirtualHeight();
-    if ( by1 != by2 )
-    {
-        wxString s = wxString::Format(wxT("VirtualHeight=%i, ActualVirtualHeight=%i, should match!"), by1, by2);
-        wxFAIL_MSG(s.c_str());
-        wxLogDebug(s);
-    }
-#endif
+    wxASSERT_LEVEL_2_MSG(
+        m_pState->GetVirtualHeight() == m_pState->GetActualVirtualHeight(),
+        "VirtualHeight and ActualVirtualHeight should match"
+    );
 
     m_iFlags |= wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
 

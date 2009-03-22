@@ -230,7 +230,7 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& dt)
 
 wxDateTime wxCalendarCtrl::GetDate() const
 {
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     SYSTEMTIME st;
     if ( !MonthCal_GetCurSel(GetHwnd(), &st) )
     {
@@ -242,7 +242,7 @@ wxDateTime wxCalendarCtrl::GetDate() const
     wxDateTime dt(st);
 
     wxASSERT_MSG( dt == m_date, "mismatch between data and control" );
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
     return m_date;
 }

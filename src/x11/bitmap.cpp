@@ -1475,7 +1475,7 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, const void* bits,
 
         M_BMPHANDLERDATA->m_bpp = bpp;  // mono as well?
 
-#if __WXDEBUG__
+#if wxDEBUG_LEVEL
         unsigned int depthRet;
         int xRet, yRet;
         unsigned int widthRet, heightRet, borderWidthRet;
@@ -1483,7 +1483,7 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, const void* bits,
             &widthRet, &heightRet, &borderWidthRet, &depthRet);
 
         wxASSERT_MSG( bpp == (int)depthRet, wxT("colour depth mismatch") );
-#endif
+#endif // wxDEBUG_LEVEL
 
         XpmFreeAttributes(&xpmAttr);
 

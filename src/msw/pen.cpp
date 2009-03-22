@@ -373,11 +373,9 @@ bool wxPenRefData::Alloc()
 
            default:
                lb.lbStyle = BS_SOLID;
-#ifdef __WXDEBUG__
                // this should be unnecessary (it's unused) but suppresses the
                // Purify messages about uninitialized memory read
                lb.lbHatch = 0;
-#endif
                break;
        }
 

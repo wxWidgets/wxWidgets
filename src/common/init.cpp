@@ -37,20 +37,22 @@
 #include "wx/scopedptr.h"
 #include "wx/except.h"
 
-#if defined(__WXMSW__) && defined(__WXDEBUG__)
+#if defined(__WXMSW__)
     #include "wx/msw/msvcrt.h"
 
-    static struct EnableMemLeakChecking
-    {
-        EnableMemLeakChecking()
+    #ifdef wxCrtSetDbgFlag
+        static struct EnableMemLeakChecking
         {
-            // do check for memory leaks on program exit (another useful flag
-            // is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free deallocated
-            // memory which may be used to simulate low-memory condition)
-            wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
-        }
-    } gs_enableLeakChecks;
-#endif // __WXMSW__ && __WXDEBUG__
+            EnableMemLeakChecking()
+            {
+                // check for memory leaks on program exit (another useful flag
+                // is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free deallocated
+                // memory which may be used to simulate low-memory condition)
+                wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+            }
+        } gs_enableLeakChecks;
+    #endif // wxCrtSetDbgFlag
+#endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
 // private classes

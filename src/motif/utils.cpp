@@ -375,7 +375,6 @@ void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
     }
 }
 
-#ifdef __WXDEBUG__
 wxString wxGetXEventName(XEvent& event)
 {
 #if wxUSE_NANOX
@@ -401,7 +400,6 @@ wxString wxGetXEventName(XEvent& event)
     return str;
 #endif
 }
-#endif
 
 // ----------------------------------------------------------------------------
 // accelerators

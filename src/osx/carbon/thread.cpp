@@ -848,7 +848,6 @@ wxThread::~wxThread()
 
     g_numberOfThreads--;
 
-#ifdef __WXDEBUG__
     m_critsect.Enter();
 
     // check that the thread either exited or couldn't be created
@@ -861,7 +860,6 @@ wxThread::~wxThread()
     }
 
     m_critsect.Leave();
-#endif
 
     wxDELETE( m_internal ) ;
 }

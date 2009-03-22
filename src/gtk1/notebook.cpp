@@ -430,15 +430,13 @@ int wxNotebook::DoSetSelection( size_t page, int flags )
     m_selection = page;
     gtk_notebook_set_page( GTK_NOTEBOOK(m_widget), page );
 
-#ifdef __WXDEBUG__
-    if ( !(flags & SetSelection_SendEvent) )
-    {
-            // gtk_notebook_set_current_page will emit the switch-page signal which will be
-            // caught by our gtk_notebook_page_change_callback which should have reset the
-            // flag to false:
-        wxASSERT(!m_skipNextPageChangeEvent);
-    }
-#endif // __WXDEBUG__
+    // gtk_notebook_set_current_page is supposed to emit the switch-page signal
+    // which should be caught by our gtk_notebook_page_change_callback which
+    // should have reset the flag to false, check it:
+    wxASSERT_LEVEL_2(
+        (flags & SetSelection_SendEvent) || !m_skipNextPageChangeEvent,
+        "internal error in selection events generation"
+    );
 
     wxNotebookPage *client = GetPage(page);
     if ( client )

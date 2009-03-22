@@ -92,12 +92,10 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
             g_free(atom_name);
         }
 
-#ifdef __WXDEBUG__
         wxDataFormat clip( selection_data->selection );
         wxLogTrace( TRACE_CLIPBOARD,
                     wxT("selection received for targets, clipboard %s"),
                     clip.GetId().c_str() );
-#endif // __WXDEBUG__
 
         // the atoms we received, holding a list of targets (= formats)
         GdkAtom *atoms = (GdkAtom *)selection_data->data;
@@ -266,7 +264,6 @@ selection_handler( GtkWidget *WXUNUSED(widget),
 
     wxDataFormat format( selection_data->target );
 
-#ifdef __WXDEBUG__
     wxLogTrace(TRACE_CLIPBOARD,
                _T("clipboard data in format %s, GtkSelectionData is target=%s type=%s selection=%s timestamp=%u"),
                format.GetId().c_str(),
@@ -275,7 +272,6 @@ selection_handler( GtkWidget *WXUNUSED(widget),
                wxString::FromAscii(gdk_atom_name(selection_data->selection)).c_str(),
                GPOINTER_TO_UINT( signal_data )
                );
-#endif
 
     if (!data->IsSupportedFormat( format )) return;
 

@@ -314,7 +314,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *pCanvas) :
         wxFAIL_MSG( wxT("wxPaintDC may be created only in EVT_PAINT handler!") );
         return;
     }
-#endif // __WXDEBUG__
+#endif // wxHAS_PAINT_DEBUG
 
     m_pCanvas = pCanvas;
 

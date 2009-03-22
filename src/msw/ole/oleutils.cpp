@@ -130,7 +130,7 @@ wxBasicString::~wxBasicString()
 // Debug support
 // ----------------------------------------------------------------------------
 
-#if defined(__WXDEBUG__) && ( ( defined(__VISUALC__) && (__VISUALC__ > 1000) ) || defined(__MWERKS__) )
+#if wxDEBUG_LEVEL && ( ( defined(__VISUALC__) && (__VISUALC__ > 1000) ) || defined(__MWERKS__) )
 static wxString GetIidName(REFIID riid)
 {
   // an association between symbolic name and numeric value of an IID
@@ -258,31 +258,10 @@ void wxLogRelease(const wxChar *szInterface, ULONG cRef)
   wxLogTrace(wxTRACE_OleCalls, wxT("After %s::Release: m_cRef = %d"), szInterface, cRef - 1);
 }
 
-#elif defined(__WXDEBUG__) && defined(__VISUALC__) && (__VISUALC__ <= 1000)
+#endif  // wxDEBUG_LEVEL
 
-// For VC++ 4
-void wxLogQueryInterface(const char *szInterface, REFIID riid)
-{
-  wxLogTrace("%s::QueryInterface", szInterface);
-}
+#endif // wxUSE_DRAG_AND_DROP
 
-void wxLogAddRef(const char *szInterface, ULONG cRef)
-{
-  wxLogTrace("After %s::AddRef: m_cRef = %d", szInterface, cRef + 1);
-}
+#endif // __CYGWIN10__
 
-void wxLogRelease(const char *szInterface, ULONG cRef)
-{
-  wxLogTrace("After %s::Release: m_cRef = %d", szInterface, cRef - 1);
-}
-
-#endif  // __WXDEBUG__
-
-#endif
-  // wxUSE_DRAG_AND_DROP
-
-#endif
-  // __CYGWIN10__
-
-#endif
-  // wxUSE_OLE
+#endif // wxUSE_OLE

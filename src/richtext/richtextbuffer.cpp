@@ -2854,7 +2854,7 @@ bool wxRichTextParagraphLayoutBox::DoNumberList(const wxRichTextRange& range, co
 
     bool withUndo = ((flags & wxRICHTEXT_SETSTYLE_WITH_UNDO) != 0);
     // bool applyMinimal = ((flags & wxRICHTEXT_SETSTYLE_OPTIMIZE) != 0);
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     bool specifyLevel = ((flags & wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL) != 0);
 #endif
 

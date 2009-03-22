@@ -402,15 +402,15 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     wstyle |= LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     size_t nModes = 0;
 
     #define MAP_MODE_STYLE(wx, ms)                                            \
         if ( style & (wx) ) { wstyle |= (ms); nModes++; }
-#else // !__WXDEBUG__
+#else // !wxDEBUG_LEVEL
     #define MAP_MODE_STYLE(wx, ms)                                            \
         if ( style & (wx) ) wstyle |= (ms);
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
 
     MAP_MODE_STYLE(wxLC_ICON, LVS_ICON)
     MAP_MODE_STYLE(wxLC_SMALL_ICON, LVS_SMALLICON)

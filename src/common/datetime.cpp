@@ -308,14 +308,15 @@ static const long MILLISECONDS_PER_DAY = 86400000l;
 // (i.e. JDN(Jan 1, 1970) = 2440587.5)
 static const long EPOCH_JDN = 2440587l;
 
-// used only in asserts
-#ifdef __WXDEBUG__
+// these values are only used in asserts so don't define them if asserts are
+// disabled to avoid warnings about unused static variables
+#if wxDEBUG_LEVEL
 // the date of JDN -0.5 (as we don't work with fractional parts, this is the
 // reference date for us) is Nov 24, 4714BC
 static const int JDN_0_YEAR = -4713;
 static const int JDN_0_MONTH = wxDateTime::Nov;
 static const int JDN_0_DAY = 24;
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
 // the constants used for JDN calculations
 static const long JDN_OFFSET         = 32046l;
@@ -350,8 +351,8 @@ wxDateTime::Country wxDateTime::ms_country = wxDateTime::Country_Unknown;
 // private functions
 // ----------------------------------------------------------------------------
 
-// debugger helper: shows what the date really is
-#ifdef __WXDEBUG__
+// debugger helper: this function can be called from a debugger to show what
+// the date really is
 extern const char *wxDumpDate(const wxDateTime* dt)
 {
     static char buf[128];
@@ -363,7 +364,6 @@ extern const char *wxDumpDate(const wxDateTime* dt)
 
     return buf;
 }
-#endif // Debug
 
 // get the number of days in the given month of the given year
 static inline

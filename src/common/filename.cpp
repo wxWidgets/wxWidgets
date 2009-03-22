@@ -472,9 +472,8 @@ void wxFileName::Assign(const wxString& fullpathOrig,
     wxString volume, path, name, ext;
     bool hasExt;
 
-    // do some consistency checks in debug mode: the name should be really just
-    // the filename and the path should be really just a path
-#ifdef __WXDEBUG__
+    // do some consistency checks: the name should be really just the filename
+    // and the path should be really just a path
     wxString volDummy, pathDummy, nameDummy, extDummy;
 
     SplitPath(fullname, &volDummy, &pathDummy, &name, &ext, &hasExt, format);
@@ -486,12 +485,6 @@ void wxFileName::Assign(const wxString& fullpathOrig,
 
     wxASSERT_MSG( nameDummy.empty() && extDummy.empty(),
                   _T("the path shouldn't contain file name nor extension") );
-
-#else // !__WXDEBUG__
-    SplitPath(fullname, NULL /* no volume */, NULL /* no path */,
-                        &name, &ext, &hasExt, format);
-    SplitPath(fullpath, &volume, &path, NULL, NULL, format);
-#endif // __WXDEBUG__/!__WXDEBUG__
 
     Assign(volume, path, name, ext, hasExt, format);
 }

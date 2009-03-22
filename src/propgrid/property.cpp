@@ -959,14 +959,8 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
 
     int propagatedFlags = argFlags & (wxPG_REPORT_ERROR|wxPG_PROGRAMMATIC_VALUE);
 
-#ifdef __WXDEBUG__
-    bool debug_print = false;
-#endif
-
-#ifdef __WXDEBUG__
-    if ( debug_print )
-        wxLogDebug(wxT(">> %s.StringToValue('%s')"),GetLabel().c_str(),text.c_str());
-#endif
+    wxLogTrace("propgrid",
+               wxT(">> %s.StringToValue('%s')"), GetLabel(), text);
 
     wxString::const_iterator it = text.begin();
     wxUniChar a;
@@ -998,11 +992,9 @@ bool wxPGProperty::StringToValue( wxVariant& variant, const wxString& text, int 
                     wxVariant variant(child->GetValue());
                     wxString childName = child->GetBaseName();
 
-                #ifdef __WXDEBUG__
-                    if ( debug_print )
-                        wxLogDebug(wxT("token = '%s', child = %s"),
-                                   token.c_str(), childName.c_str());
-                #endif
+                    wxLogTrace("propgrid",
+                               wxT("token = '%s', child = %s"),
+                               token, childName);
 
                     // Add only if editable or setting programmatically
                     if ( (argFlags & wxPG_PROGRAMMATIC_VALUE) ||
@@ -2505,12 +2497,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxPGRootProperty, wxPGProperty)
 wxPGRootProperty::wxPGRootProperty( const wxString& name )
     : wxPGProperty()
 {
-#ifdef __WXDEBUG__
     m_name = name;
     m_label = m_name;
-#else
-    wxUnusedVar(name);
-#endif
     SetParentalType(0);
     m_depth = 0;
 }

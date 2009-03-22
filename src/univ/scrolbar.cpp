@@ -40,11 +40,9 @@
 #include "wx/univ/inphand.h"
 #include "wx/univ/theme.h"
 
-#define WXDEBUG_SCROLLBAR
-
-#ifndef __WXDEBUG__
-    #undef WXDEBUG_SCROLLBAR
-#endif // !__WXDEBUG__
+#if wxDEBUG_LEVEL >= 2
+    #define WXDEBUG_SCROLLBAR
+#endif
 
 #if defined(WXDEBUG_SCROLLBAR) && defined(__WXMSW__) && !defined(__WXMICROWIN__)
 #include "wx/msw/private.h"

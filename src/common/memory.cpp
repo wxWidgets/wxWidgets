@@ -16,7 +16,7 @@
     #pragma hdrstop
 #endif
 
-#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#if wxUSE_MEMORY_TRACING || wxUSE_DEBUG_CONTEXT
 
 #include "wx/memory.h"
 
@@ -46,7 +46,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-#if wxUSE_THREADS && defined(__WXDEBUG__)
+#if wxUSE_THREADS
 #define USE_THREADSAFE_MEMORY_ALLOCATION 1
 #else
 #define USE_THREADSAFE_MEMORY_ALLOCATION 0
@@ -575,18 +575,13 @@ void wxDebugContext::TraverseList (PmSFV func, wxMemStruct *from)
   */
 bool wxDebugContext::PrintList (void)
 {
-#ifdef __WXDEBUG__
   TraverseList ((PmSFV)&wxMemStruct::PrintNode, (checkPoint ? checkPoint->m_next : NULL));
 
   return true;
-#else
-  return false;
-#endif
 }
 
 bool wxDebugContext::Dump(void)
 {
-#ifdef __WXDEBUG__
   {
     const wxChar* appName = wxT("application");
     wxString appNameStr;
@@ -608,12 +603,8 @@ bool wxDebugContext::Dump(void)
   OutputDumpLine(wxEmptyString);
 
   return true;
-#else
-  return false;
-#endif
 }
 
-#ifdef __WXDEBUG__
 struct wxDebugStatsStruct
 {
   long instanceCount;
@@ -638,11 +629,9 @@ static wxDebugStatsStruct *InsertStatsStruct(wxDebugStatsStruct *head, wxDebugSt
   st->next = head;
   return st;
 }
-#endif
 
 bool wxDebugContext::PrintStatistics(bool detailed)
 {
-#ifdef __WXDEBUG__
   {
     const wxChar* appName = wxT("application");
     wxString appNameStr;
@@ -729,10 +718,6 @@ bool wxDebugContext::PrintStatistics(bool detailed)
   OutputDumpLine(wxEmptyString);
 
   return true;
-#else
-  (void)detailed;
-  return false;
-#endif
 }
 
 bool wxDebugContext::PrintClasses(void)
@@ -902,7 +887,6 @@ static MemoryCriticalSection memLocker;
 #endif // USE_THREADSAFE_MEMORY_ALLOCATION
 
 
-#ifdef __WXDEBUG__
 #if !(defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
 #if wxUSE_GLOBAL_MEMORY_OPERATORS
 void * operator new (size_t size, wxChar * fileName, int lineNum)
@@ -1049,8 +1033,6 @@ void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
     free((char *)st);
 }
 
-#endif // __WXDEBUG__
-
 // Trace: send output to the current debugging stream
 void wxTrace(const wxChar * ...)
 {
@@ -1167,4 +1149,4 @@ void wxDebugContextDumpDelayCounter::DoDump()
 // least one cleanup counter object
 static wxDebugContextDumpDelayCounter wxDebugContextDumpDelayCounter_One;
 
-#endif // (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#endif // wxUSE_MEMORY_TRACING || wxUSE_DEBUG_CONTEXT

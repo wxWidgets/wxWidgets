@@ -55,22 +55,6 @@ struct WXDLLEXPORT wxPaintDCInfo
 
 WX_DEFINE_OBJARRAY(wxArrayDCInfo)
 
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// global variables
-// ----------------------------------------------------------------------------
-
-#ifdef __WXDEBUG__
-    // a global variable which we check to verify that wxPaintDC are only
-    // created in response to WM_PAINT message - doing this from elsewhere is a
-    // common programming error among wxWidgets programmers and might lead to
-    // very subtle and difficult to debug refresh/repaint bugs.
-    int g_isPainting = 0;
-#endif // __WXDEBUG__
-
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -191,15 +175,6 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
    wxClientDCImpl( owner )
 {
     wxCHECK_RET( window, wxT("NULL canvas in wxPaintDCImpl ctor") );
-
-#ifdef __WXDEBUG__
-    if ( g_isPainting <= 0 )
-    {
-        wxFAIL_MSG( wxT("wxPaintDCImpl may be created only in EVT_PAINT handler!") );
-
-        return;
-    }
-#endif // __WXDEBUG__
 
     m_window = window;
 

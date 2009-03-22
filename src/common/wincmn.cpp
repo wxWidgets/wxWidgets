@@ -1152,19 +1152,22 @@ void wxWindowBase::PushEventHandler(wxEvtHandler *handlerToPush)
 
     SetEventHandler(handlerToPush);
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     // final checks of the operations done above:
     wxASSERT_MSG( handlerToPush->GetPreviousHandler() == NULL,
-        "the first handler of the wxWindow stack should have no previous handlers set" );
+        "the first handler of the wxWindow stack should "
+        "have no previous handlers set" );
     wxASSERT_MSG( handlerToPush->GetNextHandler() != NULL,
-        "the first handler of the wxWindow stack should have non-NULL next handler" );
+        "the first handler of the wxWindow stack should "
+        "have non-NULL next handler" );
 
     wxEvtHandler* pLast = handlerToPush;
-    while (pLast && pLast != this)
+    while ( pLast && pLast != this )
         pLast = pLast->GetNextHandler();
     wxASSERT_MSG( pLast->GetNextHandler() == NULL,
-        "the last handler of the wxWindow stack should have this window as next handler" );
-#endif
+        "the last handler of the wxWindow stack should "
+        "have this window as next handler" );
+#endif // wxDEBUG_LEVEL
 }
 
 wxEvtHandler *wxWindowBase::PopEventHandler(bool deleteHandler)

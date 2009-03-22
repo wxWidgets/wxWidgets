@@ -1139,7 +1139,7 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
         return;
     }
 
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL >= 2
     // FIXME_MGL -- debugging stuff, to be removed!
     static int debugPaintEvents = -1;
     if ( debugPaintEvents == -1 )
@@ -1150,7 +1150,7 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
         dc->fillRect(-1000,-1000,2000,2000);
         wxMilliSleep(50);
     }
-#endif
+#endif // wxDEBUG_LEVEL >= 2
 
     MGLRegion clip;
     dc->getClipRegion(clip);

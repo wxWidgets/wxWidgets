@@ -205,7 +205,7 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
 
 wxDateTime wxDatePickerCtrl::GetValue() const
 {
-#ifdef __WXDEBUG__
+#if wxDEBUG_LEVEL
     wxDateTime dt;
     SYSTEMTIME st;
     if ( DateTime_GetSystemtime(GetHwnd(), &st) == GDT_VALID )
@@ -216,7 +216,7 @@ wxDateTime wxDatePickerCtrl::GetValue() const
     wxASSERT_MSG( m_date.IsValid() == dt.IsValid() &&
                     (!dt.IsValid() || dt == m_date),
                   _T("bug in wxDatePickerCtrl: m_date not in sync") );
-#endif // __WXDEBUG__
+#endif // wxDEBUG_LEVEL
 
     return m_date;
 }

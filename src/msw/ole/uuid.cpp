@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_OLE && ( wxUSE_DRAG_AND_DROP || (defined(__WXDEBUG__) && wxUSE_DATAOBJ) )
+#if wxUSE_OLE && (wxUSE_DRAG_AND_DROP || wxUSE_DATAOBJ)
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapwin.h"
