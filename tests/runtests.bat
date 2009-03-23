@@ -14,7 +14,16 @@ for /d %%x in (*) do @(
     if exist %%x\test.exe (
         %%x\test.exe
         if %errorlevel% GEQ 1 set failure=1
+
+        REM separe the output of the test we just executed from the next one
+        echo.
+        echo.
+        echo ========================================================================
+        echo ========================================================================
+        echo.
+        echo.
     )
+    
     if exist %%x\test_gui.exe (
         %%x\test_gui.exe
         if %errorlevel% GEQ 1 set failure=1
@@ -22,10 +31,10 @@ for /d %%x in (*) do @(
 )
 
 REM exit with code 1 if any of the test failed
-if %failure% EQU 1 exit /b 1
+if %failure% EQU 1 exit 1
 
 REM remove the failure env var:
 set failure=
 
 REM exit with code 0 (all tests passed successfully)
-exit /b 0
+exit 0
