@@ -215,7 +215,7 @@ void wxListBox::GetValueCallback( unsigned int n, wxListWidgetColumn* col , wxLi
         value.Set( GetString( n ) );
 }
 
-void wxListBox::SetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value )
+void wxListBox::SetValueCallback( unsigned int WXUNUSED(n), wxListWidgetColumn* WXUNUSED(col) , wxListWidgetCellValue& WXUNUSED(value) )
 {
 }
 

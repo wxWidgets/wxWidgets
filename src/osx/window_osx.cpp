@@ -2158,7 +2158,7 @@ Rect wxMacGetBoundsForControl( wxWindowMac* window , const wxPoint& pos , const 
     return bounds ;
 }
 
-bool wxWindowMac::OSXHandleClicked( double timestampsec )
+bool wxWindowMac::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     return false;
 }

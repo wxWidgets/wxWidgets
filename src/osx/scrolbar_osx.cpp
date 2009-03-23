@@ -83,7 +83,7 @@ void wxScrollBar::Command( wxCommandEvent& event )
     ProcessCommand( event );
 }
 
-bool wxScrollBar::OSXHandleClicked( double timestampsec )
+bool wxScrollBar::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     int new_pos = m_peer->GetValue();
 

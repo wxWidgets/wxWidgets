@@ -245,7 +245,7 @@ void wxNonOwnedWindow::HandleResized( double timestampsec )
     wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
 }
 
-void wxNonOwnedWindow::HandleResizing( double timestampsec, wxRect* rect )
+void wxNonOwnedWindow::HandleResizing( double WXUNUSED(timestampsec), wxRect* rect )
 {
     wxRect r = *rect ;
 

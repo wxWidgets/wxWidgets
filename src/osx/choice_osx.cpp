@@ -230,7 +230,7 @@ void * wxChoice::DoGetItemClientData(unsigned int n) const
     return (void *)m_datas[n];
 }
 
-bool wxChoice::OSXHandleClicked( double timestampsec )
+bool wxChoice::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     wxCommandEvent event( wxEVT_COMMAND_CHOICE_SELECTED, m_windowId );
 

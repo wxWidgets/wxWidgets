@@ -66,13 +66,13 @@ wxWindow *wxButton::SetDefault()
     return btnOldDefault;
 }
 
-void wxButton::Command (wxCommandEvent & event)
+void wxButton::Command (wxCommandEvent & WXUNUSED(event))
 {
     m_peer->PerformClick() ;
     // ProcessCommand(event);
 }
 
-bool wxButton::OSXHandleClicked( double timestampsec )
+bool wxButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId);
     event.SetEventObject(this);
@@ -111,7 +111,7 @@ bool wxDisclosureTriangle::IsOpen() const
    return m_peer->GetValue() == 1;
 }
 
-bool wxDisclosureTriangle::OSXHandleClicked( double timestampsec )
+bool wxDisclosureTriangle::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     // Just emit button event for now
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, m_windowId);

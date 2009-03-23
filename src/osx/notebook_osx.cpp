@@ -282,7 +282,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     return true;
 }
 
-int wxNotebook::HitTest(const wxPoint& pt, long * flags) const
+int wxNotebook::HitTest(const wxPoint& WXUNUSED(pt), long * WXUNUSED(flags)) const
 {
     int resultV = wxNOT_FOUND;
 #if 0
@@ -510,7 +510,7 @@ void wxNotebook::ChangePage(int nOldSel, int nSel)
     m_peer->SetValue( m_nSelection + 1 ) ;
 }
 
-bool wxNotebook::OSXHandleClicked( double timestampsec )
+bool wxNotebook::OSXHandleClicked( double WXUNUSED(timestampsec) )
 {
     bool status = false ;
 
