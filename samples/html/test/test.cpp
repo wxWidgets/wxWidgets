@@ -30,6 +30,7 @@
 #include "wx/utils.h"
 #include "wx/clipbrd.h"
 #include "wx/dataobj.h"
+#include "wx/stopwatch.h"
 
 #include "../../sample.xpm"
 
@@ -192,7 +193,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuFile = new wxMenu;
     wxMenu *menuNav = new wxMenu;
 
-    menuFile->Append(ID_PageOpen, _("&Open HTML page..."));
+    menuFile->Append(ID_PageOpen, _("&Open HTML page...\tCtrl-O"));
     menuFile->Append(ID_DefaultLocalBrowser, _("&Open current page with default browser"));
     menuFile->Append(ID_DefaultWebBrowser, _("Open a &web page with default browser"));
     menuFile->AppendSeparator();
@@ -233,7 +234,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_Html = new MyHtmlWindow(this);
     m_Html->SetRelatedFrame(this, _("HTML : %s"));
 #if wxUSE_STATUSBAR
-    m_Html->SetRelatedStatusBar(0);
+    m_Html->SetRelatedStatusBar(1);
 #endif // wxUSE_STATUSBAR
     m_Html->ReadCustomization(wxConfig::Get());
     m_Html->LoadFile(wxFileName(wxT("test.htm")));
@@ -270,7 +271,15 @@ void MyFrame::OnPageOpen(wxCommandEvent& WXUNUSED(event))
         wxEmptyString, wxEmptyString, wxT("HTML files|*.htm;*.html"));
 
     if (!p.empty())
+    {
+#if wxUSE_STOPWATCH
+        wxStopWatch sw;
+#endif
         m_Html->LoadFile(wxFileName(p));
+#if wxUSE_STOPWATCH
+        wxLogStatus("Loaded \"%s\" in %lums", p, sw.Time());
+#endif
+    }
 #endif // wxUSE_FILEDLG
 }
 
