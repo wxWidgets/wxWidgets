@@ -38,6 +38,7 @@
 // check if we're currently in a paint event
 inline bool wxInPaintEvent(wxWindow* win, wxDC& dc)
 {
+    wxUnusedVar(dc);
     return ( win->MacGetCGContextRef() != NULL );
 }
 

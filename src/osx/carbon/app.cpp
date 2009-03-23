@@ -1516,6 +1516,15 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     event.m_y = wherey;
     event.SetTimestamp(when);
     event.SetEventObject(focus);
+#else
+    wxUnusedVar(event);
+    wxUnusedVar(focus);
+    wxUnusedVar(keymessage);
+    wxUnusedVar(modifiers);
+    wxUnusedVar(when);
+    wxUnusedVar(wherex);
+    wxUnusedVar(wherey);
+    wxUnusedVar(uniChar);
 #endif
 }
 

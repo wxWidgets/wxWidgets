@@ -302,6 +302,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     DisposeDrag( theDrag );
     CFRelease( pasteboard );
     gTrackingGlobals.m_currentSource = NULL;
+#else
+    wxUnusedVar(flags);
 #endif
 
     return gTrackingGlobals.m_result;

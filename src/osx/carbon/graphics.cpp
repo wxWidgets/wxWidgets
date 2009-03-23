@@ -1806,7 +1806,7 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
 void wxMacCoreGraphicsContext::BeginLayer(wxDouble opacity)
 {
     CGContextSaveGState(m_cgContext);
-    CGContextSetAlpha(m_cgContext, opacity);
+    CGContextSetAlpha(m_cgContext, (CGFloat) opacity);
     CGContextBeginTransparencyLayer(m_cgContext, 0);
 }
 
@@ -2179,7 +2179,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         y += CTFontGetAscent(font);
 
         CGContextSaveGState(m_cgContext);
-        CGContextTranslateCTM(m_cgContext, x, y);
+        CGContextTranslateCTM(m_cgContext, (CGFloat) x, (CGFloat) y);
         CGContextScaleCTM(m_cgContext, 1, -1);
         CGContextSetTextPosition(m_cgContext, 0, 0);
         CTLineDraw( line, m_cgContext );
@@ -2352,7 +2352,8 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, attributes) );
         wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
-        CGFloat w, a, d, l;
+        double w;
+        CGFloat a, d, l;
 
         w = CTLineGetTypographicBounds(line, &a, &d, &l) ;
 
@@ -2703,6 +2704,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeWindow( vo
 #if wxOSX_USE_CARBON
     return new wxMacCoreGraphicsContext(this,(WindowRef)window);
 #else
+    wxUnusedVar(window);
     return NULL;
 #endif
 }

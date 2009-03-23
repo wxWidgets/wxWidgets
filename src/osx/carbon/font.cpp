@@ -283,7 +283,7 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
 #if wxOSX_USE_CORE_TEXT
     if (  UMAGetSystemVersion() >= 0x1050 )
     {
-        CTFontUIFontType uifont;
+        CTFontUIFontType uifont = kCTFontSystemFontType;
         switch( font )
         {
             case wxOSX_SYSTEM_FONT_NORMAL:
@@ -323,7 +323,7 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
     {
 #if !wxOSX_USE_CARBON
         // not needed outside
-        ThemeFontID m_macThemeFontID;
+        ThemeFontID m_macThemeFontID = kThemeSystemFont;
 #endif
         switch( font )
         {

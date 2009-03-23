@@ -70,7 +70,7 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
+void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int WXUNUSED(textHeight))
 {
     int w, h;
     GetSize( &w , &h );

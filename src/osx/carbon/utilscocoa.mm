@@ -95,7 +95,7 @@ void* wxMacCocoaRetain( void* obj )
 
 WX_NSFont wxFont::CreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
 {
-    NSFont* nsfont;
+    NSFont* nsfont = nil;
     switch( font )
     {
         case wxOSX_SYSTEM_FONT_NORMAL:

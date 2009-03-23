@@ -298,8 +298,8 @@ void wxMimeTypesManagerImpl::InitIfNeeded()
 
 
 // read system and user mailcaps and other files
-void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
-                                        const wxString& sExtraDir)
+void wxMimeTypesManagerImpl::Initialize(int WXUNUSED(mailcapStyles),
+                                        const wxString& WXUNUSED(sExtraDir))
 {
 #ifdef __VMS
     // XDG tables are never installed on OpenVMS

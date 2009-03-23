@@ -71,6 +71,8 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 #endif
     }
 #elif defined(wxOSX_USE_COCOA)
+    wxUnusedVar(inActivate);
+    wxUnusedVar(inWindowRef);
 // TODO: implement me!
 #endif
 }
