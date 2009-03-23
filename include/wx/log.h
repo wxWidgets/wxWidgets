@@ -66,9 +66,9 @@ typedef unsigned long wxLogLevel;
 
 // wxUSE_LOG_TRACE enables the trace messages, they are disabled by default
 #ifndef wxUSE_LOG_TRACE
-    #if wxDEBUG_LEVEL >= 2
+    #if wxDEBUG_LEVEL
         #define wxUSE_LOG_TRACE 1
-    #else // wxDEBUG_LEVEL < 2
+    #else // !wxDEBUG_LEVEL
         #define wxUSE_LOG_TRACE 0
     #endif
 #endif // wxUSE_LOG_TRACE
