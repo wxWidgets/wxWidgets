@@ -51,11 +51,7 @@
 
 @interface wxNSSecureTextField : NSSecureTextField
 {
-    wxWidgetCocoaImpl* impl;
 }
-
-- (void) setImplementation:(wxWidgetCocoaImpl*) item;
-- (wxWidgetCocoaImpl*) implementation;
 @end
 
 @implementation wxNSSecureTextField 
@@ -70,18 +66,10 @@
     }
 }
 
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (void) setImplementation:(wxWidgetCocoaImpl*) item
-{
-    impl = item;
-}
-
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
@@ -98,11 +86,8 @@
 
 @interface wxNSTextView : NSScrollView
 {
-    wxWidgetCocoaImpl* impl;
 }
 
-- (void) setImplementation:(wxWidgetCocoaImpl*) item;
-- (wxWidgetCocoaImpl*) implementation;
 @end
 
 @implementation wxNSTextView
@@ -117,19 +102,10 @@
     }
 }
 
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (void) setImplementation:(wxWidgetCocoaImpl*) item
-{
-    impl = item;
-}
-
-
 - (void)textDidChange:(NSNotification *)aNotification
 {
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
@@ -144,6 +120,8 @@
 
 - (BOOL)textView:(NSTextView *)aTextView doCommandBySelector:(SEL)commandSelector
 {
+    wxUnusedVar(aTextView);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl  )
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
@@ -175,16 +153,6 @@
     }
 }
 
-- (wxWidgetCocoaImpl*) implementation
-{
-    return impl;
-}
-
-- (void) setImplementation:(wxWidgetCocoaImpl*) item
-{
-    impl = item;
-}
-
 - (void) setEnabled:(BOOL) flag
 {
     [super setEnabled: flag];
@@ -203,6 +171,8 @@
 
 - (void)controlTextDidChange:(NSNotification *)aNotification
 {
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
         wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
@@ -219,8 +189,11 @@ typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl 
 
 - (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
 {
+    wxUnusedVar(textView);
+    wxUnusedVar(control);
     if (commandSelector == @selector(insertNewline:))
     {
+        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
         if ( impl  )
         {
             wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
@@ -258,7 +231,6 @@ typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl 
 wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
 {
     m_scrollView = (NSScrollView*) w;
-    [(wxNSTextField*)w setImplementation: this];
     
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:NO];
@@ -439,7 +411,8 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
     SetSelection(GetStringValue().length(), GetStringValue().length());
 }
 
-void wxNSTextFieldControl::controlAction(WXWidget slf, void* _cmd, void *sender)
+void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf), 
+    void* WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer && (wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER) ) 
@@ -456,26 +429,27 @@ void wxNSTextFieldControl::controlAction(WXWidget slf, void* _cmd, void *sender)
 //
 
 wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxString& str,
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    NSTextField* v = nil;
     wxWidgetCocoaImpl* c = NULL;
     
     if ( style & wxTE_MULTILINE || style & wxTE_RICH || style & wxTE_RICH2 )
     {
+        wxNSTextView* v = nil;
         v = [[wxNSTextView alloc] initWithFrame:r];
         c = new wxNSTextViewControl( wxpeer, v );
         static_cast<wxNSTextViewControl*>(c)->SetStringValue(str);
     }
     else 
     {
+        NSTextField* v = nil;
         if ( style & wxTE_PASSWORD )
             v = [[wxNSSecureTextField alloc] initWithFrame:r];
         else
@@ -491,7 +465,6 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         [v setBordered:NO];
         
         c = new wxNSTextFieldControl( wxpeer, v );
-        [v setImplementation: c];
         static_cast<wxNSTextFieldControl*>(c)->SetStringValue(str);
     }
     

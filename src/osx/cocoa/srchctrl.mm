@@ -57,6 +57,7 @@
 
 - (void) searchAction: (id) sender
 {
+    (void) sender;
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
@@ -151,13 +152,13 @@ wxNSSearchFieldControl::~wxNSSearchFieldControl()
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxString& str,
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSSearchField* v = [[wxNSSearchField alloc] initWithFrame:r];

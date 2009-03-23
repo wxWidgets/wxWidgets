@@ -246,11 +246,7 @@ protected :
 
     @interface wxNSTextField : NSTextField
     {
-        wxWidgetCocoaImpl* impl;
     }
-
-    - (void) setImplementation:(wxWidgetCocoaImpl*) item;
-    - (wxWidgetCocoaImpl*) implementation;
     @end
 
     @interface wxNSMenu : NSMenu
