@@ -274,11 +274,14 @@ public:
 
     /**
         Sets the bitmap for the menu item.
-        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap).
+
+        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if @a
+        checked is @true (default value) or SetBitmaps(wxNullBitmap, bmp)
+        otherwise.
 
         @onlyfor{wxmsw,wxosx,wxgtk}
     */
-    virtual void SetBitmap(const wxBitmap& bmp);
+    virtual void SetBitmap(const wxBitmap& bmp, bool checked = true);
 
     /**
         Sets the checked/unchecked bitmaps for the menu item.
