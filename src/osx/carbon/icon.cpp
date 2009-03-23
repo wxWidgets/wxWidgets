@@ -221,7 +221,7 @@ bool wxIcon::LoadFile(
         }
         else if ( filename == wxT("wxICON_DELETE") )
         {
-            theId = kTrashIcon ;
+            theId = kToolbarDeleteIcon ;
         }
         else if ( filename == wxT("wxICON_GO_BACK") )
         {
@@ -233,11 +233,7 @@ bool wxIcon::LoadFile(
         }
         else if ( filename == wxT("wxICON_GO_HOME") )
         {
-            theId = kUserFolderIcon ;
-        }
-        else if ( filename == wxT("wxICON_HELP_FOLDER") )
-        {
-            theId = kHelpFolderIcon ;
+            theId = kToolbarHomeIcon ;
         }
         else if ( filename == wxT("wxICON_HELP_SETTINGS") )
         {
@@ -246,10 +242,6 @@ bool wxIcon::LoadFile(
         else if ( filename == wxT("wxICON_HELP_PAGE") )
         {
             theId = kGenericDocumentIcon ;
-        }
-        else if ( filename == wxT("wxICON_PRINT") )
-        {
-            theId = kPrintMonitorFolderIcon ;
         }
         else
         {
