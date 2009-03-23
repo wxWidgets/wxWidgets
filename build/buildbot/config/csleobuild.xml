@@ -55,7 +55,7 @@
     <scheduler>trunk_quick</scheduler>
     
     <steps>
-        <checkout branch="WX_2_9_OSX_PREVIEW"/>
+        <checkout branch="branches/WX_2_9_OSX_PREVIEW"/>
         <configure/>
         <compile-all/>
         <run-tests/>
@@ -67,7 +67,7 @@
     <scheduler>trunk_quick</scheduler>
 
     <steps>
-        <checkout branch="WX_2_9_OSX_PREVIEW"/>
+        <checkout branch="branches/WX_2_9_OSX_PREVIEW"/>
         <configure options="--with-osx_cocoa"/>
         <compile-all/>
         <run-tests/>
