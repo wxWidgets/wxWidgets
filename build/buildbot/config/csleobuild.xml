@@ -49,5 +49,29 @@
         <run-tests/>
     </steps>
 </build>
+<build>
+    <name>OSX 10.5 Intel wxOSX Carbon 2.9 Preview</name>
+    <builddir>csleo</builddir>
+    <scheduler>trunk_quick</scheduler>
+    
+    <steps>
+        <checkout branch="WX_2_9_OSX_PREVIEW"/>
+        <configure/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+  <build>
+    <name>OSX 10.5 Intel wxOSX Cocoa 2.9 Preview</name>
+    <builddir>csleo_cocoa</builddir>
+    <scheduler>trunk_quick</scheduler>
+
+    <steps>
+        <checkout branch="WX_2_9_OSX_PREVIEW"/>
+        <configure options="--with-osx_cocoa"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+  </build>
    
 </bot>
