@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 27 January 2009                                                     *
+# Date : 23 March 2009                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -212,7 +212,7 @@ OBJECTS2=tbarbase.obj,srchcmn.obj,\
 		listctrlcmn.obj,socketiohandler.obj,fdiodispatcher.obj,\
 		selectdispatcher.obj,overlaycmn.obj,windowid.obj,sstream.obj,\
 		wrapsizer.obj,headerctrlcmn.obj,headercolcmn.obj,\
-		rearrangectrl.obj,spinctrlcmn.obj
+		rearrangectrl.obj,spinctrlcmn.obj,datetimefmt.obj,xlocale.obj
 
 OBJECTS_MOTIF=radiocmn.obj,combocmn.obj
 
@@ -647,3 +647,5 @@ headerctrlcmn.obj : headerctrlcmn.cpp
 headercolcmn.obj : headercolcmn.cpp
 rearrangectrl.obj : rearrangectrl.cpp
 spinctrlcmn.obj : spinctrlcmn.cpp
+datetimefmt.obj : datetimefmt.cpp
+xlocale.obj : xlocale.cpp
