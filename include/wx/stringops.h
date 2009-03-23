@@ -28,25 +28,21 @@
 struct WXDLLIMPEXP_BASE wxStringOperationsWchar
 {
     // moves the iterator to the next Unicode character
-    static void IncIter(wxStringImpl::iterator& i) { ++i; }
-    static void IncIter(wxStringImpl::const_iterator& i) { ++i; }
+    template <typename Iterator>
+    static void IncIter(Iterator& i) { ++i; }
 
     // moves the iterator to the previous Unicode character
-    static void DecIter(wxStringImpl::iterator& i) { --i; }
-    static void DecIter(wxStringImpl::const_iterator& i) { --i; }
+    template <typename Iterator>
+    static void DecIter(Iterator& i) { --i; }
 
     // moves the iterator by n Unicode characters
-    static wxStringImpl::iterator AddToIter(const wxStringImpl::iterator& i, ptrdiff_t n)
-        { return i + n; }
-    static wxStringImpl::const_iterator AddToIter(const wxStringImpl::const_iterator& i, ptrdiff_t n)
+    template <typename Iterator>
+    static Iterator AddToIter(const Iterator& i, ptrdiff_t n)
         { return i + n; }
 
     // returns distance of the two iterators in Unicode characters
-    static ptrdiff_t DiffIters(const wxStringImpl::iterator& i1,
-                               const wxStringImpl::iterator& i2)
-        { return i1 - i2; }
-    static ptrdiff_t DiffIters(const wxStringImpl::const_iterator& i1,
-                               const wxStringImpl::const_iterator& i2)
+    template <typename Iterator>
+    static ptrdiff_t DiffIters(const Iterator& i1, const Iterator& i2)
         { return i1 - i2; }
 
     // encodes the character to a form used to represent it in internal
