@@ -116,8 +116,10 @@ wxUnsafeSnprintf(T *buf, size_t len, const wxChar *fmt, ...)
 class VsnprintfTestCase : public CppUnit::TestCase
 {
 public:
-    VsnprintfTestCase();
-    
+    VsnprintfTestCase() {}
+
+    virtual void setUp();
+
 private:
     CPPUNIT_TEST_SUITE( VsnprintfTestCase );
         CPPUNIT_TEST( C );
@@ -175,8 +177,6 @@ private:
                 size_t max, const wxChar *format, ...);
     void Miscellaneous();
 
-    virtual void setUp();
-
     DECLARE_NO_COPY_CLASS(VsnprintfTestCase)
 };
 
@@ -186,7 +186,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( VsnprintfTestCase );
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( VsnprintfTestCase, "VsnprintfTestCase" );
 
-VsnprintfTestCase::VsnprintfTestCase()
+void VsnprintfTestCase::setUp()
 {
     // this call is required to avoid check failures when running on machines
     // with a locale where the decimal point is not '.'
