@@ -152,14 +152,14 @@ public:
         wxASSERT_MSG( (style & wxID_OK) != wxID_OK,
                       "wxMessageBox: Did you mean wxOK (and not wxID_OK)?" );
 
-        if ((style & wxNO_DEFAULT) != 0 && (style & wxNO) == 0)
-            wxFAIL_MSG("wxNO_DEFAULT is invalid without wxNO");
+        wxASSERT_MSG( !(style & wxNO_DEFAULT) || (style & wxNO),
+                      "wxNO_DEFAULT is invalid without wxNO" );
 
-        if ((style & wxCANCEL_DEFAULT) != 0 && (style & wxCANCEL) == 0)
-            wxFAIL_MSG("wxCANCEL_DEFAULT is invalid without wxCANCEL");
+        wxASSERT_MSG( !(style & wxCANCEL_DEFAULT) || (style & wxCANCEL),
+                      "wxCANCEL_DEFAULT is invalid without wxCANCEL" );
 
-        if ((style & wxCANCEL_DEFAULT) != 0 && (style & wxNO_DEFAULT) != 0)
-            wxFAIL_MSG("only one default button can be specified");
+        wxASSERT_MSG( !(style & wxCANCEL_DEFAULT) || !(style & wxNO),
+                      "only one default button can be specified" );
 
         m_dialogStyle = style;
     }
