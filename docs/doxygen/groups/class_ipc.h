@@ -12,7 +12,7 @@
 @ingroup group_class
 
 wxWidgets provides simple interprocess communications facilities based on
-Windows DDE, but available on most platforms using TCP.
+Windows DDE, but they are available on most platforms using TCP.
 
 Related Overviews: @ref overview_ipc
 
