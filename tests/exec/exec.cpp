@@ -79,12 +79,19 @@ void ExecTestCase::TestExecute()
     // test asynch exec
     long pid = wxExecute(ASYNC_COMMAND, wxEXEC_ASYNC);
     CPPUNIT_ASSERT( pid != 0 );
-    CPPUNIT_ASSERT( wxKill(pid) == 0 );
+
+    // NOTE: under Windows the first wxKill() invocation with wxSIGTERM
+    //       may fail if the system is fast and the ASYNC_COMMAND app
+    //       doesn't manage to create its HWND before our wxKill() is
+    //       executed; in that case we "fall back" to the second invocation 
+    //       with wxSIGKILL (which should always succeed)
+    CPPUNIT_ASSERT( wxKill(pid, wxSIGTERM) == 0 ||
+                    wxKill(pid, wxSIGKILL) == 0 );
 
     // test running COMMAND again, but this time with redirection:
-    wxArrayString stdout;
-    CPPUNIT_ASSERT( wxExecute(COMMAND, stdout, wxEXEC_SYNC) == 0 );
-    CPPUNIT_ASSERT( stdout[0] == "hi" );
+    wxArrayString stdout_arr;
+    CPPUNIT_ASSERT( wxExecute(COMMAND, stdout_arr, wxEXEC_SYNC) == 0 );
+    CPPUNIT_ASSERT( stdout_arr[0] == "hi" );
 }
 
 void ExecTestCase::TestProcess()
@@ -97,7 +104,8 @@ void ExecTestCase::TestProcess()
     // we're not going to process the wxEVT_END_PROCESS event,
     // so the proc instance will auto-delete itself after we kill
     // the asynch process:
-    CPPUNIT_ASSERT( wxKill(pid) == 0 );
+    CPPUNIT_ASSERT( wxKill(pid, wxSIGTERM) == 0 ||
+                    wxKill(pid, wxSIGKILL) == 0 );
 
     
     // test wxExecute with wxProcess and REDIRECTION
@@ -105,11 +113,12 @@ void ExecTestCase::TestProcess()
     proc2->Redirect();
     CPPUNIT_ASSERT( wxExecute(COMMAND, wxEXEC_SYNC, proc2) == 0 );
     
-    wxStringOutputStream stdout;
+    wxStringOutputStream stdout_stream;
     CPPUNIT_ASSERT( proc2->GetInputStream() );
-    CPPUNIT_ASSERT( proc2->GetInputStream()->Read(stdout).GetLastError() == wxSTREAM_EOF );
+    CPPUNIT_ASSERT_EQUAL( wxSTREAM_EOF,
+        proc2->GetInputStream()->Read(stdout_stream).GetLastError() );
     
-    wxString str(stdout.GetString());
+    wxString str(stdout_stream.GetString());
     CPPUNIT_ASSERT_EQUAL( "hi", str.Trim() );
 }
 
