@@ -1214,7 +1214,7 @@ template <typename T>
 wxStreamBuffer *
 CreateBufferIfNeeded(T& stream, wxStreamBuffer *buffer, size_t bufsize = 1024)
 {
-    return buffer ? buffer : new wxStreamBuffer(stream, bufsize);
+    return buffer ? buffer : new wxStreamBuffer(bufsize, stream);
 }
 
 } // anonymous namespace

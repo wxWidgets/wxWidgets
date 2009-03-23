@@ -172,8 +172,13 @@ public:
         and calling SetBufferIO() but is more convenient.
 
         @since 2.9.0
+
+        @param bufsize
+            The size of buffer in bytes.
+        @param stream
+            The associated input stream, the buffer will be used in read mode.
      */
-    wxStreamBuffer(wxInputStream& stream, size_t bufsize);
+    wxStreamBuffer(size_t bufsize, wxInputStream& stream);
 
     /**
         Constructor for an output buffer of the specified size.
@@ -182,8 +187,13 @@ public:
         and calling SetBufferIO() but is more convenient.
 
         @since 2.9.0
+
+        @param bufsize
+            The size of buffer in bytes.
+        @param stream
+            The associated output stream, the buffer will be used in write mode.
      */
-    wxStreamBuffer(wxOutputStream& stream, size_t bufsize);
+    wxStreamBuffer(size_t bufsize, wxOutputStream& stream);
 
     /**
         Constructor; creates a new empty stream buffer which won't flush any data

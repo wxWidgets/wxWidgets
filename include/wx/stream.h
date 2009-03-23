@@ -421,13 +421,13 @@ public:
         InitWithStream(stream, mode);
     }
 
-    wxStreamBuffer(wxInputStream& stream, size_t bufsize)
+    wxStreamBuffer(size_t bufsize, wxInputStream& stream)
     {
         InitWithStream(stream, read);
         SetBufferIO(bufsize);
     }
 
-    wxStreamBuffer(wxOutputStream& stream, size_t bufsize)
+    wxStreamBuffer(size_t bufsize, wxOutputStream& stream)
     {
         InitWithStream(stream, write);
         SetBufferIO(bufsize);
