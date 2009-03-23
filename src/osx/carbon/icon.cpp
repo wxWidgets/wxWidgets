@@ -203,6 +203,54 @@ bool wxIcon::LoadFile(
         {
             theId = kGenericDocumentIcon ;
         }
+        else if ( filename == wxT("wxICON_CDROM") )
+        {
+            theId = kGenericCDROMIcon ;
+        }
+        else if ( filename == wxT("wxICON_FLOPPY") )
+        {
+            theId = kGenericFloppyIcon ;
+        }
+        else if ( filename == wxT("wxICON_HARDDISK") )
+        {
+            theId = kGenericHardDiskIcon ;
+        }
+        else if ( filename == wxT("wxICON_REMOVABLE") )
+        {
+            theId = kGenericRemovableMediaIcon ;
+        }
+        else if ( filename == wxT("wxICON_DELETE") )
+        {
+            theId = kTrashIcon ;
+        }
+        else if ( filename == wxT("wxICON_GO_BACK") )
+        {
+            theId = kBackwardArrowIcon ;
+        }
+        else if ( filename == wxT("wxICON_GO_FORWARD") )
+        {
+            theId = kForwardArrowIcon ;
+        }
+        else if ( filename == wxT("wxICON_GO_HOME") )
+        {
+            theId = kUserFolderIcon ;
+        }
+        else if ( filename == wxT("wxICON_HELP_FOLDER") )
+        {
+            theId = kHelpFolderIcon ;
+        }
+        else if ( filename == wxT("wxICON_HELP_SETTINGS") )
+        {
+            theId = kGenericFontIcon ;
+        }
+        else if ( filename == wxT("wxICON_HELP_PAGE") )
+        {
+            theId = kGenericDocumentIcon ;
+        }
+        else if ( filename == wxT("wxICON_PRINT") )
+        {
+            theId = kPrintMonitorFolderIcon ;
+        }
         else
         {
             IconRef iconRef = NULL ;
