@@ -315,6 +315,7 @@ private:
 
 - (void) clickedAction: (id) sender
 {
+    wxUnusedVar(sender);
     if ( impl )
     {
         impl->Action();
@@ -337,21 +338,25 @@ private:
 
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
 {
+    wxUnusedVar(toolbar);
     return nil;
 }
 
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar
 {
+    wxUnusedVar(toolbar);
     return nil;
 }
 
 - (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
 {
+    wxUnusedVar(toolbar);
     return nil;
 }
 
 - (NSToolbarItem*) toolbar:(NSToolbar*) toolbar itemForItemIdentifier:(NSString*) itemIdentifier willBeInsertedIntoToolbar:(BOOL) flag
 {
+    wxUnusedVar(toolbar);
 #ifdef __LP64__
     wxToolBarTool* tool = (wxToolBarTool*) [itemIdentifier longLongValue];
 #else
@@ -393,6 +398,7 @@ private:
 
 - (void) clickedAction: (id) sender
 {
+    wxUnusedVar(sender);
     if ( impl )
     {
         impl->Action();
@@ -699,7 +705,7 @@ void wxToolBar::DoGetSize( int *width, int *height ) const
     {
         WXWindow tlw = MacGetTopLevelWindowRef();
         float toolbarHeight = 0.0;
-        NSRect windowFrame;
+        NSRect windowFrame = NSMakeRect(0, 0, 0, 0);
  
         if(m_macToolbar && [(NSToolbar*)m_macToolbar isVisible])
         {

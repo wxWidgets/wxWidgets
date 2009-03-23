@@ -57,7 +57,7 @@ public :
 // to thumbtrack and only after super mouseDown 
 // returns we will call the thumbrelease
 
-void wxSliderCocoaImpl::controlAction( WXWidget slf, void *_cmd, void *sender)
+void wxSliderCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer )
@@ -79,15 +79,15 @@ void wxSliderCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
 
 wxWidgetImplType* wxWidgetImpl::CreateSlider( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     wxInt32 value,
                                     wxInt32 minimum,
                                     wxInt32 maximum,
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSSlider* v = [[wxNSSlider alloc] initWithFrame:r];

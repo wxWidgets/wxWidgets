@@ -66,7 +66,7 @@ void wxSpinButtonCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cm
     wxWidgetCocoaImpl::mouseEvent(event, slf, _cmd);
 }
 
-void wxSpinButtonCocoaImpl::controlAction( WXWidget slf, void *_cmd, void *sender)
+void wxSpinButtonCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer )
@@ -94,15 +94,15 @@ void wxSpinButtonCocoaImpl::controlAction( WXWidget slf, void *_cmd, void *sende
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateSpinButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     wxInt32 value,
                                     wxInt32 minimum,
                                     wxInt32 maximum,
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSStepper* v = [[wxNSStepper alloc] initWithFrame:r];

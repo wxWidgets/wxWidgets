@@ -609,7 +609,7 @@ void wxOSX_controlDoubleAction(NSView* self, SEL _cmd, id sender)
     impl->controlDoubleAction(self, _cmd, sender);
 }
 
-unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget slf, void *_cmd)
+unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 {
     id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
     NSPasteboard *pboard = [sender draggingPasteboard];
@@ -654,7 +654,7 @@ unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget slf, void *_cm
     return nsresult;
 }
 
-void wxWidgetCocoaImpl::draggingExited(void* s, WXWidget slf, void *_cmd)
+void wxWidgetCocoaImpl::draggingExited(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 {
     id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
     NSPasteboard *pboard = [sender draggingPasteboard];
@@ -674,7 +674,7 @@ void wxWidgetCocoaImpl::draggingExited(void* s, WXWidget slf, void *_cmd)
     CFRelease(pboardRef);
  }
 
-unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget slf, void *_cmd)
+unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 {
     id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
     NSPasteboard *pboard = [sender draggingPasteboard];
@@ -719,7 +719,7 @@ unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget slf, void *_cm
     return nsresult;
 }
 
-bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget slf, void *_cmd)
+bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 {
     id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
 
@@ -844,7 +844,7 @@ void wxWidgetCocoaImpl::resetCursorRects(WXWidget slf, void *_cmd)
     }
 }
   
-bool wxWidgetCocoaImpl::isFlipped(WXWidget slf, void *_cmd)
+bool wxWidgetCocoaImpl::isFlipped(WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 {
     return m_isFlipped;
 }
@@ -852,7 +852,7 @@ bool wxWidgetCocoaImpl::isFlipped(WXWidget slf, void *_cmd)
 
 #define OSX_DEBUG_DRAWING 0
 
-void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *_cmd)
+void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
 {
     CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSaveGState( context );
@@ -911,14 +911,14 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *_cmd)
     CGContextRestoreGState( context );
 }
 
-void wxWidgetCocoaImpl::controlAction( WXWidget slf, void *_cmd, void *sender)
+void wxWidgetCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxWindow* wxpeer = (wxWindow*) GetWXPeer();
     if ( wxpeer )
         wxpeer->OSXHandleClicked(0);
 }
 
-void wxWidgetCocoaImpl::controlDoubleAction( WXWidget slf, void *_cmd, void *sender)
+void wxWidgetCocoaImpl::controlDoubleAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
 }
 
@@ -1059,7 +1059,7 @@ void wxWidgetCocoaImpl::Lower()
 {
 }
 
-void wxWidgetCocoaImpl::ScrollRect( const wxRect *rect, int dx, int dy )
+void wxWidgetCocoaImpl::ScrollRect( const wxRect *WXUNUSED(rect), int WXUNUSED(dx), int WXUNUSED(dy) )
 {
 #if 1
     SetNeedsDisplay() ;
@@ -1197,12 +1197,12 @@ void wxWidgetCocoaImpl::SetLabel( const wxString& title, wxFontEncoding encoding
 {
     if ( [m_osxView respondsToSelector:@selector(setTitle:) ] )
     {
-        wxCFStringRef cf( title , m_wxPeer->GetFont().GetEncoding() );
+        wxCFStringRef cf( title , encoding );
         [m_osxView setTitle:cf.AsNSString()];
     }
     else if ( [m_osxView respondsToSelector:@selector(setStringValue:) ] )
     {
-        wxCFStringRef cf( title , m_wxPeer->GetFont().GetEncoding() );
+        wxCFStringRef cf( title , encoding );
         [m_osxView setStringValue:cf.AsNSString()];
     }
 }
@@ -1278,7 +1278,7 @@ void wxWidgetCocoaImpl::SetBitmap( const wxBitmap& bitmap )
     }
 }
 
-void wxWidgetCocoaImpl::SetupTabs( const wxNotebook& notebook)
+void wxWidgetCocoaImpl::SetupTabs( const wxNotebook& WXUNUSED(notebook))
 {
     // implementation in subclass
 }
@@ -1315,7 +1315,7 @@ void wxWidgetCocoaImpl::PulseGauge()
 {
 }
 
-void wxWidgetCocoaImpl::SetScrollThumb( wxInt32 val, wxInt32 view )
+void wxWidgetCocoaImpl::SetScrollThumb( wxInt32 WXUNUSED(val), wxInt32 WXUNUSED(view) )
 {
 }
 
@@ -1485,8 +1485,9 @@ void wxWidgetCocoaImpl::SetFlipped(bool flipped)
 // Factory methods
 //
 
-wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-                            long style, long extraStyle)
+wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(parent), 
+    wxWindowID WXUNUSED(id), const wxPoint& pos, const wxSize& size,
+    long WXUNUSED(style), long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSView* v = [[wxNSView alloc] initWithFrame:r];

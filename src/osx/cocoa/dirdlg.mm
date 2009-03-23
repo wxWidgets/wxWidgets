@@ -37,8 +37,8 @@
 IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 
 wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
-        const wxString& defaultPath, long style, const wxPoint& pos,
-        const wxSize& size, const wxString& name)
+        const wxString& defaultPath, long style, const wxPoint& WXUNUSED(pos),
+        const wxSize& WXUNUSED(size), const wxString& WXUNUSED(name))
 {
     m_parent = parent;
 

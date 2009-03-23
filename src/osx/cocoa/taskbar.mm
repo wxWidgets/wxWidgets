@@ -231,7 +231,7 @@ WX_NSMenu wxTaskBarIconDockImpl::CocoaDoGetDockNSMenu()
     return (WX_NSMenu)dockMenu->GetHMenu();
 }
 
-bool wxTaskBarIconDockImpl::SetIcon(const wxIcon& icon, const wxString& tooltip)
+bool wxTaskBarIconDockImpl::SetIcon(const wxIcon& WXUNUSED(icon), const wxString& WXUNUSED(tooltip))
 {
     wxMacAutoreleasePool pool;
     m_originalDockIcon = [[[NSApplication sharedApplication] applicationIconImage] retain];
@@ -246,7 +246,7 @@ bool wxTaskBarIconDockImpl::RemoveIcon()
     return true;
 }
 
-bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *menu)
+bool wxTaskBarIconDockImpl::PopupMenu(wxMenu *WXUNUSED(menu))
 {
     wxFAIL_MSG(wxT("You cannot force the Dock icon menu to popup"));
     return false;
@@ -266,7 +266,7 @@ wxTaskBarIconCustomStatusItemImpl::~wxTaskBarIconCustomStatusItemImpl()
 {
 }
 
-bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxString& tooltip)
+bool wxTaskBarIconCustomStatusItemImpl::SetIcon(const wxIcon& icon, const wxString& WXUNUSED(tooltip))
 {
     wxMacAutoreleasePool pool;
     if(!m_cocoaNSStatusItem)
@@ -359,7 +359,7 @@ void wxTaskBarIconWindowCustom::OnMouseEvent(wxMouseEvent &event)
     m_taskBarIconImpl->GetTaskBarIcon()->ProcessEvent(tbiEvent);
 }
 
-void wxTaskBarIconWindowCustom::OnPaint(wxPaintEvent &event)
+void wxTaskBarIconWindowCustom::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     wxPaintDC dc(this);
     // FIXME: This is a temporary hack until we can see real icons

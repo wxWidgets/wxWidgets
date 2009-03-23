@@ -23,13 +23,13 @@
 #include "wx/osx/private.h"
 
 wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxBitmap& bitmap,
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
-                                    long extraStyle) 
+                                    long WXUNUSED(extraStyle)) 
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];

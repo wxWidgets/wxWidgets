@@ -87,7 +87,7 @@ protected:
 // to thumbtrack and only after super mouseDown 
 // returns we will call the thumbrelease
 
-void wxOSXScrollBarCocoaImpl::controlAction( WXWidget slf, void *_cmd, void *sender)
+void wxOSXScrollBarCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxEventType scrollEvent = wxEVT_NULL;
     switch ([(NSScroller*)m_osxView hitPart]) 
@@ -136,12 +136,12 @@ void wxOSXScrollBarCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSScroller* v = [[wxNSScroller alloc] initWithFrame:r];

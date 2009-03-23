@@ -55,6 +55,7 @@
 
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem
 {
+    wxUnusedVar(tabViewItem);
     wxNSTabView* view = (wxNSTabView*) tabView;
     wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( view );
 
@@ -68,6 +69,7 @@
 - (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem;
 
 {
+    wxUnusedVar(tabViewItem);
     wxNSTabView* view = (wxNSTabView*) tabView;
     wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( view );
     if ( viewimpl )
@@ -225,12 +227,12 @@ public:
 #endif
 */
 wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(extraStyle))
 {
     static wxTabViewController* controller = NULL;
 

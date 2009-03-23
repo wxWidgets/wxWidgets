@@ -32,6 +32,7 @@
 
 - (void) clickedAction: (id) sender
 {
+    wxUnusedVar(sender);
     if ( impl )
     {
         impl->GetWXPeer()->GetMenu()->HandleCommandProcess(impl->GetWXPeer());
@@ -40,6 +41,7 @@
 
 - (BOOL)validateMenuItem:(NSMenuItem *) menuItem
 {
+    wxUnusedVar(menuItem);
     if( impl )
     {
         impl->GetWXPeer()->GetMenu()->HandleCommandUpdateStatus(impl->GetWXPeer());
@@ -225,10 +227,10 @@ wxMenuItemCocoaImpl::~wxMenuItemCocoaImpl()
 
 
 wxMenuItemImpl* wxMenuItemImpl::Create( wxMenuItem* peer, wxMenu *pParentMenu,
-                       int id,
+                       int WXUNUSED(id),
                        const wxString& text,
                        wxAcceleratorEntry *entry,
-                       const wxString& strHelp,
+                       const wxString& WXUNUSED(strHelp),
                        wxItemKind kind,
                        wxMenu *pSubMenu )
 {

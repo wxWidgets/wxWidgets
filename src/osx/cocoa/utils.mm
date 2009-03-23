@@ -76,12 +76,14 @@ void wxMacWakeUp()
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
 {
+    wxUnusedVar(sender);
     // let wx do this, not cocoa
     return NO;
 }
 
 - (BOOL)application:(NSApplication *)sender openFile:(NSString *)filename;
 {
+    wxUnusedVar(sender);
     wxCFStringRef cf(wxCFRetain(filename));
     wxTheApp->MacOpenFile(cf.AsString()) ;
     return YES;
@@ -89,12 +91,14 @@ void wxMacWakeUp()
 
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender;
 {
+    wxUnusedVar(sender);
     wxTheApp->MacNewFile() ;
     return NO;
 }
 
 - (BOOL)application:(NSApplication *)sender printFile:(NSString *)filename
 {
+    wxUnusedVar(sender);
     wxCFStringRef cf(wxCFRetain(filename));
     wxTheApp->MacPrintFile(cf.AsString()) ;
     return YES;
@@ -109,6 +113,7 @@ void wxMacWakeUp()
 */
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
+    wxUnusedVar(sender);
     wxWindow* win = wxTheApp->GetTopWindow() ;
     if ( win )
     {
@@ -125,6 +130,8 @@ void wxMacWakeUp()
 
 - (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
 {
+    wxUnusedVar(flag);
+    wxUnusedVar(sender);
     wxTheApp->MacReopenApp() ;
     return NO;
 }
@@ -132,6 +139,7 @@ void wxMacWakeUp()
 - (void)handleGetURLEvent:(NSAppleEventDescriptor *)event
     withReplyEvent:(NSAppleEventDescriptor *)replyEvent
 {
+    wxUnusedVar(replyEvent);
     NSString* url = [[event descriptorAtIndex:1] stringValue];
     wxCFStringRef cf(wxCFRetain(url));
     wxTheApp->MacOpenURL(cf.AsString()) ;
@@ -171,6 +179,7 @@ void wxMacWakeUp()
 
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
+    wxUnusedVar(contextInfo);
     resultCode = returnCode;
     sheetFinished = YES;
     // NSAlerts don't need nor respond to orderOut
@@ -266,14 +275,6 @@ void wxEndBusyCursor()
 bool wxIsBusy()
 {
     return (gs_wxBusyCursorCount > 0);
-}
-
-void wxMacGlobalToLocal( WindowRef window , Point*pt )
-{
-}
-
-void wxMacLocalToGlobal( WindowRef window , Point*pt )
-{
 }
 
 wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const

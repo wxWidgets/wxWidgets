@@ -54,11 +54,11 @@ void wxToolTip::SetWindow( wxWindow *win )
     m_window = win ;
 }
 
-void wxToolTip::Enable( bool flag )
+void wxToolTip::Enable( bool WXUNUSED(flag) )
 {
 }
 
-void wxToolTip::SetDelay( long msecs )
+void wxToolTip::SetDelay( long WXUNUSED(msecs) )
 {
 }
 
@@ -70,7 +70,7 @@ void wxToolTip::SetReshow( long WXUNUSED(msecs) )
 {
 }
 
-void wxToolTip::RelayEvent( wxWindow *win , wxMouseEvent &event )
+void wxToolTip::RelayEvent( wxWindow *WXUNUSED(win) , wxMouseEvent &WXUNUSED(event) )
 {
 }
 
@@ -79,7 +79,7 @@ void wxToolTip::RemoveToolTips()
 }
 
 // --- mac specific
-void wxToolTip::NotifyWindowDelete( WXHWND win )
+void wxToolTip::NotifyWindowDelete( WXHWND WXUNUSED(win) )
 {
 }
 

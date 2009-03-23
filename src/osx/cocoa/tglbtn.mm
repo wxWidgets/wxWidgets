@@ -26,13 +26,13 @@
 #include "wx/osx/private.h"
 
 wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
-                                    const wxString& label,
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
+                                    const wxString& WXUNUSED(label),
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
@@ -44,13 +44,13 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
-                                    const wxBitmap& label,
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
+                                    const wxBitmap& WXUNUSED(label),
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle))
 {    
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];

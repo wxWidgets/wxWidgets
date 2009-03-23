@@ -156,7 +156,7 @@ public :
         [NSApp setAppleMenu:[[m_osxMenu itemAtIndex:0] submenu]];
     }
 
-    virtual void Enable( bool enable )
+    virtual void Enable( bool WXUNUSED(enable) )
     {
     }
     

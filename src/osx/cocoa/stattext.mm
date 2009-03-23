@@ -60,7 +60,7 @@ public:
         wxNSStaticTextView* v = (wxNSStaticTextView*)GetWXWidget();
         wxWindow* wxpeer = GetWXPeer();
         NSCell* cell = [v cell];
-        wxCFStringRef text( title , wxpeer->GetFont().GetEncoding() );
+        wxCFStringRef text( title , encoding );
 
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setLineBreakMode:m_lineBreak];
@@ -86,13 +86,13 @@ wxSize wxStaticText::DoGetBestSize() const
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
-                                    wxWindowMac* parent,
-                                    wxWindowID id,
-                                    const wxString& label,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
+                                    const wxString& WXUNUSED(label),
                                     const wxPoint& pos,
                                     const wxSize& size,
                                     long style,
-                                    long extraStyle)
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSStaticTextView* v = [[wxNSStaticTextView alloc] initWithFrame:r];

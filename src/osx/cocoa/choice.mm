@@ -53,13 +53,13 @@
 @end
 
 wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     wxMenu* menu,
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStylew)
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSPopUpButton* v = [[wxNSPopUpButton alloc] initWithFrame:r pullsDown:NO];

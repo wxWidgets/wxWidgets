@@ -166,13 +166,13 @@ wxSize wxButton::GetDefaultSize()
 
 
 wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
+                                    wxWindowMac* WXUNUSED(parent), 
                                     wxWindowID id, 
-                                    const wxString& label,
+                                    const wxString& WXUNUSED(label),
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle) 
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle)) 
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
@@ -253,13 +253,13 @@ void wxWidgetCocoaImpl::PerformClick()
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxString& label,
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle) 
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle)) 
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];

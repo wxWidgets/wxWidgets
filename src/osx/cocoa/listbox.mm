@@ -239,6 +239,7 @@ protected:
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
+    wxUnusedVar(aTableView);
     if ( impl )
         return impl->ListGetCount();
     return 0;
@@ -248,6 +249,7 @@ protected:
         objectValueForTableColumn:(NSTableColumn *)aTableColumn 
         row:(NSInteger)rowIndex
 {
+    wxUnusedVar(aTableView);
     wxNSTableColumn* tablecol = (wxNSTableColumn *)aTableColumn;
     wxListBox* lb = dynamic_cast<wxListBox*>(impl->GetWXPeer());
     wxCocoaTableColumn* col = [tablecol column];
@@ -261,6 +263,7 @@ protected:
         setObjectValue:(id)value forTableColumn:(NSTableColumn *)aTableColumn 
         row:(NSInteger)rowIndex
 {
+    wxUnusedVar(aTableView);
     wxNSTableColumn* tablecol = (wxNSTableColumn *)aTableColumn;
     wxListBox* lb = dynamic_cast<wxListBox*>(impl->GetWXPeer());
     wxCocoaTableColumn* col = [tablecol column];
@@ -309,8 +312,8 @@ unsigned int wxListWidgetCocoaImpl::ListGetCount() const
 // columns
 //
 
-wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const wxString& title, bool editable, 
-                                wxAlignment just, int defaultWidth) 
+wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const wxString& WXUNUSED(title), bool editable, 
+                                wxAlignment WXUNUSED(just), int defaultWidth) 
 {
     wxNSTableColumn* col1 = [[wxNSTableColumn alloc] init];
     [col1 setEditable:editable];
@@ -345,8 +348,8 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertTextColumn( unsigned pos, const
     return wxcol;
 }
 
-wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , const wxString& title, bool editable, 
-                                wxAlignment just, int defaultWidth ) 
+wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , const wxString& WXUNUSED(title), bool editable, 
+                                wxAlignment WXUNUSED(just), int defaultWidth ) 
 {
    wxNSTableColumn* col1 = [[wxNSTableColumn alloc] init];
     [col1 setEditable:editable];
@@ -386,31 +389,12 @@ wxListWidgetColumn* wxListWidgetCocoaImpl::InsertCheckColumn( unsigned pos , con
 // inserting / removing lines
 //
 
-void wxListWidgetCocoaImpl::ListInsert( unsigned int n ) 
+void wxListWidgetCocoaImpl::ListInsert( unsigned int WXUNUSED(n) ) 
 {
-#if 0
-    {
-        wxListBoxCocoaLine* line = new wxListBoxCocoaLine();
-        line->SetLabel(items[i]);
-        if ( m_items.size() <= n+i )
-            m_items.push_back( line );
-        else
-            m_items.insert(m_items.begin()+n, line);
-/*
-        NSMutableDictionary* line = [[NSMutableDictionary alloc] init];
-        [line setObject:wxCFStringRef(items[i]).AsNSString() forKey:column1];
-        NSMutableArray* array = [m_dataSource items];
-        if ( [array count] <= n+i )
-            [array addObject:line];
-        else
-            [array insertObject:line atIndex:n];
-*/
-    }
-#endif
     [m_tableView reloadData];
 }
 
-void wxListWidgetCocoaImpl::ListDelete( unsigned int n ) 
+void wxListWidgetCocoaImpl::ListDelete( unsigned int WXUNUSED(n) ) 
 {
     [m_tableView reloadData];
 }
@@ -470,19 +454,19 @@ void wxListWidgetCocoaImpl::ListScrollTo( unsigned int n )
 }
 
     
-void wxListWidgetCocoaImpl::UpdateLine( unsigned int n, wxListWidgetColumn* col ) 
+void wxListWidgetCocoaImpl::UpdateLine( unsigned int WXUNUSED(n), wxListWidgetColumn* WXUNUSED(col) ) 
 {
     // TODO optimize
     [m_tableView reloadData];
 }
 
-void wxListWidgetCocoaImpl::UpdateLineToEnd( unsigned int n) 
+void wxListWidgetCocoaImpl::UpdateLineToEnd( unsigned int WXUNUSED(n)) 
 {
     // TODO optimize
     [m_tableView reloadData];
 }
 
-void wxListWidgetCocoaImpl::controlAction(WXWidget slf,void* _cmd, void *sender)
+void wxListWidgetCocoaImpl::controlAction(WXWidget WXUNUSED(slf),void* WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
@@ -496,7 +480,7 @@ void wxListWidgetCocoaImpl::controlAction(WXWidget slf,void* _cmd, void *sender)
     list->HandleLineEvent( sel, false );
 }
 
-void wxListWidgetCocoaImpl::controlDoubleAction(WXWidget slf,void* _cmd, void *sender)
+void wxListWidgetCocoaImpl::controlDoubleAction(WXWidget WXUNUSED(slf),void* WXUNUSED(_cmd), void *WXUNUSED(sender))
 {
     wxListBox *list = static_cast<wxListBox*> ( GetWXPeer());
     wxCHECK_RET( list != NULL , wxT("Listbox expected"));
@@ -512,12 +496,12 @@ void wxListWidgetCocoaImpl::controlDoubleAction(WXWidget slf,void* _cmd, void *s
 
 
 wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     NSScrollView* scrollview = [[NSScrollView alloc] initWithFrame:r];
@@ -561,7 +545,7 @@ wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer,
     return c;
 }
 
-int wxListBox::DoListHitTest(const wxPoint& inpoint) const
+int wxListBox::DoListHitTest(const wxPoint& WXUNUSED(inpoint)) const
 {
 #if wxOSX_USE_CARBON
     OSStatus err;
