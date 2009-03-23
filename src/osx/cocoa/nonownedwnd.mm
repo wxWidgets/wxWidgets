@@ -118,8 +118,9 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 {
     if (selector != @selector(keyDown:) && selector != @selector(keyUp:))
     {
-        wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
-        superimpl(self, @selector(noResponderFor:), selector);
+        [super noResponderFor:selector];
+//        wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
+//        superimpl(self, @selector(noResponderFor:), selector);
     }
 }
 
@@ -164,8 +165,9 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 {
     if (selector != @selector(keyDown:) && selector != @selector(keyUp:))
     {
-        wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
-        superimpl(self, @selector(noResponderFor:), selector);
+        [super noResponderFor:selector];
+//        wxOSX_NoResponderHandlerPtr superimpl = (wxOSX_NoResponderHandlerPtr) [[self superclass] instanceMethodForSelector:@selector(noResponderFor:)];
+//        superimpl(self, @selector(noResponderFor:), selector);
     }
 }
 
@@ -318,8 +320,8 @@ void wxNonOwnedWindowCocoaImpl::Destroy()
     wxPendingDelete.Append( new wxDeferredObjectDeleter( this ) );
 }
 
-void wxNonOwnedWindowCocoaImpl::Create( wxWindow* parent, const wxPoint& pos, const wxSize& size,
-long style, long extraStyle, const wxString& name )
+void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), const wxPoint& pos, const wxSize& size,
+long style, long extraStyle, const wxString& WXUNUSED(name) )
 {
     static wxNonOwnedWindowController* controller = NULL;
     
@@ -461,7 +463,7 @@ bool wxNonOwnedWindowCocoaImpl::Show(bool show)
     return true;
 }
     
-bool wxNonOwnedWindowCocoaImpl::ShowWithEffect(bool show, wxShowEffect effect, unsigned timeout)
+bool wxNonOwnedWindowCocoaImpl::ShowWithEffect(bool show, wxShowEffect WXUNUSED(effect), unsigned WXUNUSED(timeout))
 {
     return Show(show);
 }
@@ -477,7 +479,7 @@ bool wxNonOwnedWindowCocoaImpl::SetTransparent(wxByte alpha)
     return true;
 }
 
-bool wxNonOwnedWindowCocoaImpl::SetBackgroundColour(const wxColour& col )
+bool wxNonOwnedWindowCocoaImpl::SetBackgroundColour(const wxColour& WXUNUSED(col) )
 {
     return true;
 }
@@ -499,7 +501,7 @@ void wxNonOwnedWindowCocoaImpl::SetExtraStyle( long exStyle )
     }
 }
     
-bool wxNonOwnedWindowCocoaImpl::SetBackgroundStyle(wxBackgroundStyle style)
+bool wxNonOwnedWindowCocoaImpl::SetBackgroundStyle(wxBackgroundStyle WXUNUSED(style))
 {
     return true;
 }
@@ -541,7 +543,7 @@ void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &top, int &width,
     height = rect.size.height;
 }
     
-bool wxNonOwnedWindowCocoaImpl::SetShape(const wxRegion& region)
+bool wxNonOwnedWindowCocoaImpl::SetShape(const wxRegion& WXUNUSED(region))
 {
     return false;
 }
@@ -569,7 +571,7 @@ void wxNonOwnedWindowCocoaImpl::Iconize( bool iconize )
         [m_macWindow deminiaturize:nil];
 }
     
-void wxNonOwnedWindowCocoaImpl::Maximize(bool maximize)
+void wxNonOwnedWindowCocoaImpl::Maximize(bool WXUNUSED(maximize))
 {
     [m_macWindow zoom:nil];
 }
@@ -588,7 +590,7 @@ bool wxNonOwnedWindowCocoaImpl::IsFullScreen() const
     return m_macFullScreenData != NULL ;
 }
     
-bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long style)
+bool wxNonOwnedWindowCocoaImpl::ShowFullScreen(bool show, long WXUNUSED(style))
 {
     if ( show )
     {
