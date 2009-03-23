@@ -335,7 +335,7 @@ public:
 
     @see @ref overview_events_processing, wxEventBlocker, wxEventLoopBase
 */
-class wxEvtHandler : public wxObject
+class wxEvtHandler : public wxObject, public wxTrackable
 {
 public:
     /**
