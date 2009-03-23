@@ -10,7 +10,8 @@
 
 @page overview_sizer Sizers Overview
 
-Classes: wxSizer, wxGridSizer, wxFlexGridSizer, wxBoxSizer, wxStaticBoxSizer
+Classes: wxSizer, wxBoxSizer, wxStaticBoxSizer, wxGridSizer, wxFlexGridSizer,
+         wxGridBagSizer
 
 Sizers, as represented by the wxSizer class and its descendants in the
 wxWidgets class hierarchy, have become the method of choice to define the
@@ -339,6 +340,9 @@ necessarily the same height or width as in the wxGridSizer.
 wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static box
 around the sizer. Note that this static box has to be created separately.
 
+wxGridBagSizer is a rather special kind of sizer which, unlike the other
+classes, allows to directly put the elements at the given position in the
+sizer. Please see its documentation for more details.
 
 @section overview_sizer_button CreateButtonSizer
 
