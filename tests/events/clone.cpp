@@ -62,7 +62,7 @@ void EventCloneTestCase::CheckAll()
 
         const std::string
             msg = std::string("Event class \"") + 
-                  std::string(ci->GetClassName().c_str()) + "\"";
+                  std::string(ci->GetClassName()) + "\"";
 
         CPPUNIT_ASSERT_MESSAGE( msg, ci->IsDynamic() );
 
