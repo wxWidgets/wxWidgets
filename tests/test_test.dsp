@@ -289,6 +289,10 @@ SOURCE=.\events\evthandler.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\exec\exec.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\ffilestream.cpp
 # End Source File
 # Begin Source File

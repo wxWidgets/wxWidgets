@@ -104,9 +104,14 @@ public:
                         wxInputStream *errStream);
 #endif // wxUSE_STREAMS
 
+    // implementation only - don't use!
+    // --------------------------------
+    
+    // needs to be public since it needs to be used from wxExecute() global func
+    void SetPid(long pid) { m_pid = pid; }
+
 protected:
     void Init(wxEvtHandler *parent, int id, int flags);
-    void SetPid(long pid) { m_pid = pid; }
 
     int m_id;
     long m_pid;

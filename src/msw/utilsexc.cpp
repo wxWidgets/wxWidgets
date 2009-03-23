@@ -899,6 +899,9 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
     {
         // may be NULL or not
         data->handler = handler;
+
+        if (handler)
+            handler->SetPid(pi.dwProcessId);
     }
 
     DWORD tid;

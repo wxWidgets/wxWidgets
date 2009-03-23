@@ -39,6 +39,7 @@
             datetime/datetimetest.cpp
             events/evthandler.cpp
             events/timertest.cpp
+            exec/exec.cpp
             filekind/filekind.cpp
             filename/filenametest.cpp
             filesys/filesystest.cpp

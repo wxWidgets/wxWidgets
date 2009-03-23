@@ -51,11 +51,14 @@ enum wxKillError
     notified about the process termination and also retrieve its exit status which is
     unavailable from ::wxExecute() in the case of asynchronous execution.
 
-    @note If the process termination notification is processed by the
-    parent, it is responsible for deleting the wxProcess object which sent it.
-    However, if it is not processed, the object will delete itself and so the
-    library users should only delete those objects whose notifications have been
-    processed (and call wxProcess::Detach for others).
+    @note 
+        If the @c wxEVT_END_PROCESS event sent after termination is processed by the
+        parent, then it is responsible for deleting the wxProcess object which sent it.
+        However, if it is not processed, the object will <b>delete itself</b> and so the
+        library users should only delete those objects whose notifications have been
+        processed (and call wxProcess::Detach for others).
+        This also means that unless you're going to process the @c wxEVT_END_PROCESS event,
+        you <b>must</b> allocate the wxProcess class on the heap.
 
     wxProcess also supports IO redirection of the child process. For this, you have
     to call its Redirect() method before passing it to ::wxExecute().
@@ -119,15 +122,20 @@ public:
     void CloseOutput();
 
     /**
+        Detaches this event handler from the parent specified in the constructor
+        (see wxEvtHandler::Unlink() for a similar but not identic function).
+    
         Normally, a wxProcess object is deleted by its parent when it receives the
-        notification about the process termination. However, it might happen that the
-        parent object is destroyed before the external process is terminated (e.g. a
-        window from which this external process was launched is closed by the user)
-        and in this case it @b should not delete the wxProcess object, but
-        @b should call Detach() instead. After the wxProcess object is detached
-        from its parent, no notification events will be sent to the parent and the
-        object will delete itself upon reception of the process termination
-        notification.
+        notification about the process termination. 
+        
+        However, it might happen that the parent object is destroyed before the external 
+        process is terminated (e.g. a window from which this external process was launched 
+        is closed by the user) and in this case it @b should not delete the wxProcess 
+        object, but @b should call Detach() instead. 
+        
+        After the wxProcess object is detached from its parent, no notification events 
+        will be sent to the parent and the object will delete itself upon reception of 
+        the process termination notification.
     */
     void Detach();
 
@@ -161,7 +169,8 @@ public:
     wxOutputStream* GetOutputStream() const;
 
     /**
-        Returns the process ID of the process launched by Open().
+        Returns the process ID of the process launched by Open() or set by
+        wxExecute() (if you passed this wxProcess as argument).
     */
     long GetPid() const;
 
@@ -214,6 +223,8 @@ public:
     /**
         It is called when the process with the pid @a pid finishes.
         It raises a wxWidgets event when it isn't overridden.
+        
+        Note that this function won't be called if you Kill() the process.
 
         @param pid
             The pid of the process which has just terminated.

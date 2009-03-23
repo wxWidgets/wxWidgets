@@ -14,6 +14,7 @@ INSTALL = @INSTALL@
 EXEEXT = @EXEEXT@
 WINDRES = @WINDRES@
 SETFILE = @SETFILE@
+ICC_PCH_USE_SWITCH = @ICC_PCH_USE_SWITCH@
 BK_DEPS = @BK_DEPS@
 BK_MAKE_PCH = @BK_MAKE_PCH@
 srcdir = @srcdir@
@@ -63,6 +64,7 @@ TEST_OBJECTS =  \
 	test_datetimetest.o \
 	test_evthandler.o \
 	test_timertest.o \
+	test_exec.o \
 	test_filekind.o \
 	test_filenametest.o \
 	test_filesystest.o \
@@ -171,7 +173,7 @@ PRINTFBENCH_ODEP = $(_____pch_testprec_printfbench_testprec_h_gch___depname)
 @COND_PLATFORM_MAC_1@__test___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL test$(EXEEXT)
 @COND_GCC_PCH_1@__test_PCH_INC = -I./.pch/testprec_test
-@COND_ICC_PCH_1@__test_PCH_INC = -use_pch \
+@COND_ICC_PCH_1@__test_PCH_INC = $(ICC_PCH_USE_SWITCH) \
 @COND_ICC_PCH_1@	./.pch/testprec_test/testprec.h.gch
 @COND_USE_PCH_1@_____pch_testprec_test_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_test/testprec.h.gch
@@ -204,7 +206,7 @@ PRINTFBENCH_ODEP = $(_____pch_testprec_printfbench_testprec_h_gch___depname)
 @COND_TOOLKIT_COCOA@____test_gui_BUNDLE_TGT_REF_DEP = \
 @COND_TOOLKIT_COCOA@	$(__test_gui_app_Contents_PkgInfo___depname)
 @COND_GCC_PCH_1@__test_gui_PCH_INC = -I./.pch/testprec_test_gui
-@COND_ICC_PCH_1@__test_gui_PCH_INC = -use_pch \
+@COND_ICC_PCH_1@__test_gui_PCH_INC = $(ICC_PCH_USE_SWITCH) \
 @COND_ICC_PCH_1@	./.pch/testprec_test_gui/testprec.h.gch
 @COND_USE_PCH_1@_____pch_testprec_test_gui_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_test_gui/testprec.h.gch
@@ -236,7 +238,8 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 @COND_PLATFORM_MAC_1@__printfbench___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL printfbench$(EXEEXT)
 @COND_GCC_PCH_1@__printfbench_PCH_INC = -I./.pch/testprec_printfbench
-@COND_ICC_PCH_1@__printfbench_PCH_INC = -use_pch \
+@COND_ICC_PCH_1@__printfbench_PCH_INC = \
+@COND_ICC_PCH_1@	$(ICC_PCH_USE_SWITCH) \
 @COND_ICC_PCH_1@	./.pch/testprec_printfbench/testprec.h.gch
 @COND_USE_PCH_1@_____pch_testprec_printfbench_testprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/testprec_printfbench/testprec.h.gch
@@ -388,6 +391,9 @@ test_evthandler.o: $(srcdir)/events/evthandler.cpp $(TEST_ODEP)
 
 test_timertest.o: $(srcdir)/events/timertest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/timertest.cpp
+
+test_exec.o: $(srcdir)/exec/exec.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/exec/exec.cpp
 
 test_filekind.o: $(srcdir)/filekind/filekind.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/filekind/filekind.cpp

@@ -40,6 +40,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_datetimetest.o \
 	$(OBJS)\test_evthandler.o \
 	$(OBJS)\test_timertest.o \
+	$(OBJS)\test_exec.o \
 	$(OBJS)\test_filekind.o \
 	$(OBJS)\test_filenametest.o \
 	$(OBJS)\test_filesystest.o \
@@ -408,6 +409,9 @@ $(OBJS)\test_evthandler.o: ./events/evthandler.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_timertest.o: ./events/timertest.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_exec.o: ./exec/exec.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_filekind.o: ./filekind/filekind.cpp

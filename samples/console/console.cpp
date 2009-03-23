@@ -110,7 +110,6 @@
     #define TEST_DIR
     #define TEST_DYNLIB
     #define TEST_ENVIRON
-    #define TEST_EXECUTE
     #define TEST_FILE
     #define TEST_FILECONF
     #define TEST_FILENAME
@@ -574,93 +573,6 @@ static void TestEnvironment()
 }
 
 #endif // TEST_ENVIRON
-
-// ----------------------------------------------------------------------------
-// wxExecute
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_EXECUTE
-
-#include "wx/utils.h"
-
-static void TestExecute()
-{
-    wxPuts(_T("*** testing wxExecute ***"));
-
-#ifdef __UNIX__
-    #define COMMAND "echo hi"
-    #define ASYNC_COMMAND "xclock"
-    #define SHELL_COMMAND "echo hi from shell"
-    #define REDIRECT_COMMAND "cat -n Makefile"
-#elif defined(__WXMSW__)
-    #define COMMAND "command.com /c echo hi"
-    #define ASYNC_COMMAND "notepad"
-    #define SHELL_COMMAND "echo hi"
-    #define REDIRECT_COMMAND COMMAND
-#else
-    #error "no command to exec"
-#endif // OS
-
-    wxPrintf(_T("Testing wxShell: "));
-    fflush(stdout);
-    if ( wxShell(_T(SHELL_COMMAND)) )
-        wxPuts(_T("Ok."));
-    else
-        wxPuts(_T("ERROR."));
-
-    wxPrintf(_T("Testing wxExecute: "));
-    fflush(stdout);
-    if ( wxExecute(_T(COMMAND), wxEXEC_SYNC) == 0 )
-        wxPuts(_T("Ok."));
-    else
-        wxPuts(_T("ERROR."));
-
-    wxPrintf(_T("Testing async wxExecute: "));
-    fflush(stdout);
-    int pid = wxExecute(ASYNC_COMMAND);
-    if ( pid != 0 )
-    {
-        wxPuts(_T("Ok (command launched)."));
-        if ( wxKill(pid) == -1 )
-            wxPuts("ERROR: failed to kill child process.");
-    }
-    else
-        wxPuts(_T("ERROR."));
-
-    wxPrintf(_T("Testing wxExecute with redirection:\n"));
-    wxArrayString output;
-    if ( wxExecute(_T(REDIRECT_COMMAND), output) != 0 )
-    {
-        wxPuts(_T("ERROR."));
-    }
-    else
-    {
-        // don't show too much output, MAX_LINES is enough
-        static const unsigned MAX_LINES = 20;
-
-        const unsigned count = output.size();
-        for ( unsigned n = 0;
-              n < (count > MAX_LINES ? MAX_LINES/2 : count);
-              n++ )
-        {
-            wxPrintf("%04u:\t%s\n", n + 1, output[n]);
-        }
-
-        if ( count > MAX_LINES )
-        {
-            wxPrintf("... skipping %u lines...\n", count - MAX_LINES);
-
-            for ( unsigned n = count - MAX_LINES/2; n < count; n++ )
-            {
-                wxPrintf("%04u:\t%s\n", n + 1, output[n]);
-            }
-        }
-
-        wxPuts(_T("Ok."));
-    }
-}
-
-#endif // TEST_EXECUTE
 
 // ----------------------------------------------------------------------------
 // file
@@ -4339,10 +4251,6 @@ int main(int argc, char **argv)
 #ifdef TEST_ENVIRON
     TestEnvironment();
 #endif // TEST_ENVIRON
-
-#ifdef TEST_EXECUTE
-    TestExecute();
-#endif // TEST_EXECUTE
 
 #ifdef TEST_FILECONF
     TestFileConfRead();

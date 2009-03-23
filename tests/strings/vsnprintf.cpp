@@ -175,6 +175,8 @@ private:
                 size_t max, const wxChar *format, ...);
     void Miscellaneous();
 
+    virtual void setUp();
+
     DECLARE_NO_COPY_CLASS(VsnprintfTestCase)
 };
 
@@ -188,7 +190,7 @@ VsnprintfTestCase::VsnprintfTestCase()
 {
     // this call is required to avoid check failures when running on machines
     // with a locale where the decimal point is not '.'
-    wxSetlocale(LC_NUMERIC, "C");
+    wxSetlocale(LC_ALL, "C");
 }
 
 void VsnprintfTestCase::C()

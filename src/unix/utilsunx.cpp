@@ -601,6 +601,8 @@ long wxExecute(char **argv, int flags, wxProcess *process)
     {
         // save it for WaitForChild() use
         execData.pid = pid;
+        if (execData.process)
+            execData.process->SetPid(pid);  // and also in the wxProcess
 
         // prepare for IO redirection
 
