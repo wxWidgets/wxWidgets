@@ -649,7 +649,7 @@ void DateTimeTestCase::TestTimeFormat()
         for ( size_t n = 0; n < WXSIZEOF(formatTestFormats); n++ )
         {
             const char *fmt = formatTestFormats[n].format;
-            
+
             // skip the check with %p for those locales which have empty AM/PM strings:
             // for those locales it's impossible to pass the test with %p...
             wxString am, pm;
@@ -674,7 +674,7 @@ void DateTimeTestCase::TestTimeFormat()
             {
                 // ParseFormat() should have parsed the entire string or left
                 // some final useless strings (e.g. with Italian locale the
-                // 's' string for the first test date looks like 
+                // 's' string for the first test date looks like
                 //      "---> sab 29 mag 1976 18:30:00 CET"
                 // so we just need to ignore CET)
                 CPPUNIT_ASSERT( !*result || strcmp(result, "CET") == 0 );
@@ -907,15 +907,24 @@ void DateTimeTestCase::TestDateParse()
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
-        if ( dt.ParseDate(parseTestDates[n].str) )
+        const char * const datestr = parseTestDates[n].str;
+
+        const char * const end = dt.ParseDate(datestr);
+        if ( end && !*end )
         {
-            CPPUNIT_ASSERT( parseTestDates[n].good );
+            WX_ASSERT_MESSAGE(
+                ("Erroneously parsed \"%s\"", datestr),
+                parseTestDates[n].good
+            );
 
             CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
         }
         else // failed to parse
         {
-            CPPUNIT_ASSERT( !parseTestDates[n].good );
+            WX_ASSERT_MESSAGE(
+                ("Failed to parse \"%s\"", datestr),
+                !parseTestDates[n].good
+            );
         }
     }
 }
@@ -1011,14 +1020,24 @@ void DateTimeTestCase::TestDateTimeParse()
     wxDateTime dt;
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
-        if ( dt.ParseDateTime(parseTestDates[n].str) )
+        const char * const datestr = parseTestDates[n].str;
+
+        if ( dt.ParseDateTime(datestr) )
         {
-            CPPUNIT_ASSERT( parseTestDates[n].good );
+            WX_ASSERT_MESSAGE(
+                ("Erroneously parsed \"%s\"", datestr),
+                parseTestDates[n].good
+            );
 
             CPPUNIT_ASSERT_EQUAL( parseTestDates[n].date.DT(), dt );
         }
         else // failed to parse
         {
+            WX_ASSERT_MESSAGE(
+                ("Failed to parse \"%s\"", datestr),
+                !parseTestDates[n].good
+            );
+
             CPPUNIT_ASSERT( !parseTestDates[n].good );
         }
     }
