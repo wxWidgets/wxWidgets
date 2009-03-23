@@ -3529,7 +3529,12 @@ bool wxWindowGTK::ScrollPages(int pages)
 void wxWindowGTK::Refresh(bool WXUNUSED(eraseBackground),
                           const wxRect *rect)
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
+    if ( !m_widget )
+    {
+        // it is valid to call Refresh() for a window which hasn't been created
+        // yet, it simply doesn't do anything in this case
+        return;
+    }
 
     if (!m_wxwindow)
     {
