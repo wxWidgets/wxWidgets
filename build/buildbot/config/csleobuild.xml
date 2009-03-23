@@ -51,7 +51,7 @@
 </build>
 <build>
     <name>OSX 10.5 Intel wxOSX Carbon 2.9 Preview</name>
-    <builddir>csleo</builddir>
+    <builddir>csleo_pre</builddir>
     <scheduler>trunk_quick</scheduler>
     
     <steps>
@@ -63,7 +63,7 @@
 </build>
   <build>
     <name>OSX 10.5 Intel wxOSX Cocoa 2.9 Preview</name>
-    <builddir>csleo_cocoa</builddir>
+    <builddir>csleo_cocoa_pre</builddir>
     <scheduler>trunk_quick</scheduler>
 
     <steps>
