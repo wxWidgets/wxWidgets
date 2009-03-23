@@ -1442,6 +1442,9 @@ public:
 
     void SetShow(bool show) { m_show = show; }
     bool GetShow() const { return m_show; }
+#if wxABI_VERSION >= 20811
+    bool IsShown() const { return GetShow(); }
+#endif
 
     virtual wxEvent *Clone() const { return new wxShowEvent(*this); }
 
@@ -1468,7 +1471,9 @@ public:
 
     // return true if the frame was iconized, false if restored
     bool Iconized() const { return m_iconized; }
-
+#if wxABI_VERSION >= 20811
+    bool IsIconized() const { return Iconized(); }
+#endif
     virtual wxEvent *Clone() const { return new wxIconizeEvent(*this); }
 
 protected:

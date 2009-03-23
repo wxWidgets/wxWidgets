@@ -418,6 +418,11 @@ public:
     void SetClippingRegion(const wxRegion& region)
         { DoSetClippingRegionAsRegion(region); }
 
+#if wxABI_VERSION >= 20811
+    void SetDeviceClippingRegion(const wxRegion& region)
+        { DoSetClippingRegionAsRegion(region); }
+#endif
+
     virtual void DestroyClippingRegion() { ResetClipping(); }
 
     void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const

@@ -159,6 +159,26 @@ public:
     void SetProperties(wxXmlProperty *prop) { m_properties = prop; }
     virtual void AddProperty(wxXmlProperty *prop);
 
+#if wxABI_VERSION >= 20811
+    wxString GetAttribute(const wxString& attrName,
+                         const wxString& defaultVal) const
+    {
+        return GetPropVal(attrName, defaultVal);
+    }
+    bool GetAttribute(const wxString& attrName, wxString *value) const
+    {
+        return GetPropVal(attrName, value);
+    }
+    void AddAttribute(const wxString& attrName, const wxString& value)
+    {
+        AddProperty(attrName, value);
+    }
+    wxXmlProperty* GetAttributes() const
+    { 
+        return GetProperties();
+    }
+#endif // wx >= 2.8.11
+
 private:
     wxXmlNodeType m_type;
     wxString m_name;
