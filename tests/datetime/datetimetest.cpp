@@ -83,6 +83,19 @@ private:
 
 #endif // CHANGE_SYSTEM_DATE
 
+// helper class setting the locale to "C" for its lifetime
+class CLocaleSetter
+{
+public:
+    CLocaleSetter() : m_locOld(setlocale(LC_ALL, "C")) { }
+    ~CLocaleSetter() { setlocale(LC_ALL, m_locOld); }
+
+private:
+    const char * const m_locOld;
+
+    wxDECLARE_NO_COPY_CLASS(CLocaleSetter);
+};
+
 // ----------------------------------------------------------------------------
 // broken down date representation used for testing
 // ----------------------------------------------------------------------------
@@ -905,6 +918,10 @@ void DateTimeTestCase::TestDateParse()
     CPPUNIT_ASSERT( dt.ParseDate(_T("today")) );
     CPPUNIT_ASSERT_EQUAL( wxDateTime::Today(), dt );
 
+    // the other test strings use "C" locale so set it for the duration of this
+    // test
+    CLocaleSetter cloc;
+
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
         const char * const datestr = parseTestDates[n].str;
@@ -1016,7 +1033,9 @@ void DateTimeTestCase::TestDateTimeParse()
          { 22, wxDateTime::Nov, 2007, 19, 40, 0}, true },
     };
 
-    // special cases
+    // the test strings use "C" locale so set it for the duration of this test
+    CLocaleSetter cloc;
+
     wxDateTime dt;
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
