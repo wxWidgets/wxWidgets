@@ -85,10 +85,7 @@ static wxIconBundle wxMacArtProvider_CreateIconBundle(const wxArtID& id)
     ART_MSGBOX(wxART_GO_HOME,     wxICON_GO_HOME,     home) 
 
     ART_MSGBOX(wxART_HELP_SETTINGS, wxICON_HELP_SETTINGS, htmoptns) 
-    ART_MSGBOX(wxART_HELP_FOLDER, wxICON_HELP_FOLDER, htmfoldr) 
     ART_MSGBOX(wxART_HELP_PAGE,   wxICON_HELP_PAGE,   htmpage) 
-	 
-    ART_MSGBOX(wxART_PRINT,       wxICON_PRINT,       print) 
  	
     return wxNullIconBundle;
 }
