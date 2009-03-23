@@ -13,6 +13,17 @@
 
 <xi:include href="include/csleobuild.xml"/>
 
+<scheduler>
+    <name>preview_quick</name>
+    <branch>branches/WX_2_9_OSX_PREVIEW</branch>
+    <treeStableTimer>900</treeStableTimer>
+    <fileNotImportant>docs/* interface/*</fileNotImportant>
+</scheduler>
+
+<slavelock>
+    <name>preview</name>
+</slavelock>
+
 <build>
     <name>OSX 10.5 Intel wxOSX Carbon trunk</name>
     <builddir>csleo</builddir>
@@ -52,8 +63,7 @@
 <build>
     <name>OSX 10.5 Intel wxOSX Carbon 2.9 Preview</name>
     <builddir>csleo_pre</builddir>
-    <scheduler>trunk_quick</scheduler>
-    
+    <scheduler>preview_quick</scheduler>    
     <steps>
         <checkout branch="branches/WX_2_9_OSX_PREVIEW"/>
         <configure/>
@@ -64,8 +74,7 @@
   <build>
     <name>OSX 10.5 Intel wxOSX Cocoa 2.9 Preview</name>
     <builddir>csleo_cocoa_pre</builddir>
-    <scheduler>trunk_quick</scheduler>
-
+    <scheduler>preview_quick</scheduler>
     <steps>
         <checkout branch="branches/WX_2_9_OSX_PREVIEW"/>
         <configure options="--with-osx_cocoa"/>
