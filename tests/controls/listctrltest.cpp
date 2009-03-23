@@ -83,12 +83,13 @@ void ListCtrlTestCase::tearDown()
 
 void ListCtrlTestCase::ColumnsOrder()
 {
-    static const int NUM_COLS;
     int n;
     wxListItem li;
     li.SetMask(wxLIST_MASK_TEXT);
 
     // first set up some columns
+    static const int NUM_COLS = 3;
+
     m_list->InsertColumn(0, "Column 0");
     m_list->InsertColumn(1, "Column 1");
     m_list->InsertColumn(2, "Column 2");
