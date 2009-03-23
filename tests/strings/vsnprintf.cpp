@@ -117,7 +117,7 @@ class VsnprintfTestCase : public CppUnit::TestCase
 {
 public:
     VsnprintfTestCase();
-
+    
 private:
     CPPUNIT_TEST_SUITE( VsnprintfTestCase );
         CPPUNIT_TEST( C );
@@ -188,7 +188,7 @@ VsnprintfTestCase::VsnprintfTestCase()
 {
     // this call is required to avoid check failures when running on machines
     // with a locale where the decimal point is not '.'
-    wxSetlocale(LC_NUMERIC, "English");
+    wxSetlocale(LC_NUMERIC, "C");
 }
 
 void VsnprintfTestCase::C()
