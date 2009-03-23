@@ -73,6 +73,7 @@ public:
     void OnPlayAsyncOnStack(wxCommandEvent& event);
     void OnPlayLoop(wxCommandEvent& event);
     void OnStop(wxCommandEvent& event);
+    void OnPlayBell(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
 
@@ -114,6 +115,7 @@ enum
     Sound_PlayAsyncOnStack,
     Sound_PlayLoop,
     Sound_Stop,
+    Sound_PlayBell,
 
     Sound_Quit = wxID_EXIT,
     Sound_About = wxID_ABOUT
@@ -139,6 +141,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Sound_PlayAsyncOnStack, MyFrame::OnPlayAsyncOnStack)
     EVT_MENU(Sound_PlayLoop,         MyFrame::OnPlayLoop)
     EVT_MENU(Sound_Stop,             MyFrame::OnStop)
+    EVT_MENU(Sound_PlayBell,         MyFrame::OnPlayBell)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -206,6 +209,8 @@ MyFrame::MyFrame(const wxString& title)
     playMenu->Append(Sound_PlayLoop, _T("&Loop sound\tCtrl-L"));
     playMenu->AppendSeparator();
     playMenu->Append(Sound_Stop, _T("&Stop playing\tCtrl-T"));
+    playMenu->AppendSeparator();
+    playMenu->Append(Sound_PlayBell, _T("Play system bell"));
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(Sound_About, _T("&About...\tF1"), _T("Show about dialog"));
@@ -1088,6 +1093,11 @@ void MyFrame::OnPlayLoop(wxCommandEvent& WXUNUSED(event))
 
     if (m_sound->IsOk())
         m_sound->Play(wxSOUND_ASYNC | wxSOUND_LOOP);
+}
+
+void MyFrame::OnPlayBell(wxCommandEvent& WXUNUSED(event))
+{
+    wxBell();
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
