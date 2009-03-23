@@ -687,8 +687,6 @@ void wxProgressDialog::UpdateMessage(const wxString &newmsg)
     {
         m_msg->SetLabel(newmsg);
 
-        Fit();   // adapt to the new label size
-
         // allow the window to repaint:
         // NOTE: since we yield only for UI events with this call, there
         //       should be no side-effects

@@ -112,10 +112,14 @@ public:
     wxString GetMessage() const;
 
     /**
-        Works like Update() but makes the gauge control run in indeterminate mode
-        (see wxGauge documentation); sets the remaining and the estimated time labels
-        (if present) to "Unknown" or to @a newmsg (if it's non-empty); moves the progress
-        bar a bit to indicate that some progress was done.
+        Like Update() but makes the gauge control run in indeterminate mode.
+
+        In indeterminate mode the remaining and the estimated time labels (if
+        present) are set to to "Unknown" or to @a newmsg (if it's non-empty).
+        Each call to this function moves the progress bar a bit to indicate
+        that some progress was done.
+
+        @see wxGauge::Pulse(), Update()
     */
     virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool* skip = NULL);
 
@@ -125,13 +129,18 @@ public:
     void Resume();
 
     /**
-        Updates the dialog, setting the progress bar to the new value and, if
-        given changes the message above it. Returns @true unless the "Cancel" button
-        has been pressed.
+        Updates the dialog, setting the progress bar to the new value and
+        updating the message if new one is specified.
+
+        Returns @true unless the "Cancel" button has been pressed.
 
         If @false is returned, the application can either immediately destroy the
         dialog or ask the user for the confirmation and if the abort is not confirmed
         the dialog may be resumed with Resume() function.
+
+        Notice that you may want to call Fit() to change the dialog size to
+        conform to the length of the new message if desired. The dialog does
+        not do this automatically.
 
         @param value
             The new value of the progress meter. It should be less than or equal to
