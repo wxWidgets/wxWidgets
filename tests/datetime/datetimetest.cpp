@@ -739,12 +739,14 @@ void DateTimeTestCase::TestTimeFormat()
             }
             else // conversion succeeded
             {
-                // ParseFormat() should have parsed the entire string or left
-                // some final useless strings (e.g. with Italian locale the
-                // 's' string for the first test date looks like
-                //      "---> sab 29 mag 1976 18:30:00 CET"
-                // so we just need to ignore CET)
-                CPPUNIT_ASSERT( !*result || strcmp(result, "CET") == 0 );
+                // currently ParseFormat() doesn't support "%Z" and so is
+                // incapable of parsing time zone part used at the end of date
+                // representations in many (but not "C") locales, compensate
+                // for it ourselves by simply consuming and ignoring it
+                while ( *result && (*result >= 'A' && *result <= 'Z') )
+                    result++;
+
+                CPPUNIT_ASSERT( !*result );
 
                 switch ( kind )
                 {
