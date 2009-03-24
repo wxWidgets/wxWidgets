@@ -1525,8 +1525,6 @@ wxDateTime::ParseFormat(const wxString& date,
                     // try to parse what follows as "%H:%M:%S" and, if this
                     // fails, as "%I:%M:%S %p" - this should catch the most
                     // common cases
-                    wxDateTime dt;
-
                     const wxDateTime
                         dt = ParseFormatAt(input, date.end(), "%T", "%r");
                     if ( !dt.IsValid() )
