@@ -92,9 +92,63 @@ public:
 
 private:
     const char * const m_locOld;
-
     wxDECLARE_NO_COPY_CLASS(CLocaleSetter);
 };
+
+// helper function translating week day/month names from English to the current
+// locale
+static wxString TranslateDate(const wxString& str)
+{
+    // small optimization: if there are no alphabetic characters in the string,
+    // there is nothing to translate
+    wxString::const_iterator i, end = str.end();
+    for ( i = str.begin(); i != end; ++i )
+    {
+        if ( isalpha(*i) )
+            break;
+    }
+
+    if ( i == end )
+        return str;
+
+    wxString trans(str);
+
+    static const char *weekdays[] =
+    {
+        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+    };
+
+    for ( wxDateTime::WeekDay wd = wxDateTime::Sun;
+          wd < wxDateTime::Inv_WeekDay;
+          wxNextWDay(wd) )
+    {
+        trans.Replace
+              (
+                weekdays[wd],
+                wxDateTime::GetWeekDayName(wd, wxDateTime::Name_Abbr)
+              );
+    }
+
+
+    static const char *months[] =
+    {
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+        "Nov", "Dec"
+    };
+
+    for ( wxDateTime::Month mon = wxDateTime::Jan;
+          mon < wxDateTime::Inv_Month;
+          wxNextMonth(mon) )
+    {
+        trans.Replace
+              (
+                months[mon],
+                wxDateTime::GetMonthName(mon, wxDateTime::Name_Abbr)
+              );
+    }
+
+    return trans;
+}
 
 // ----------------------------------------------------------------------------
 // broken down date representation used for testing
@@ -918,13 +972,9 @@ void DateTimeTestCase::TestDateParse()
     CPPUNIT_ASSERT( dt.ParseDate(_T("today")) );
     CPPUNIT_ASSERT_EQUAL( wxDateTime::Today(), dt );
 
-    // the other test strings use "C" locale so set it for the duration of this
-    // test
-    CLocaleSetter cloc;
-
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
-        const char * const datestr = parseTestDates[n].str;
+        const wxString datestr = TranslateDate(parseTestDates[n].str);
 
         const char * const end = dt.ParseDate(datestr);
         if ( end && !*end )
@@ -1033,15 +1083,17 @@ void DateTimeTestCase::TestDateTimeParse()
          { 22, wxDateTime::Nov, 2007, 19, 40, 0}, true },
     };
 
-    // the test strings use "C" locale so set it for the duration of this test
+    // the test strings here use "PM" which is not available in all locales so
+    // we need to use "C" locale for them
     CLocaleSetter cloc;
 
     wxDateTime dt;
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
-        const char * const datestr = parseTestDates[n].str;
+        const wxString datestr = TranslateDate(parseTestDates[n].str);
 
-        if ( dt.ParseDateTime(datestr) )
+        const char * const end = dt.ParseDateTime(datestr);
+        if ( end && !*end )
         {
             WX_ASSERT_MESSAGE(
                 ("Erroneously parsed \"%s\"", datestr),
