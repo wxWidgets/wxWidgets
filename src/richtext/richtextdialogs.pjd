@@ -234,7 +234,7 @@
           <string name="proxy-Implementation filename">"richtextfontpage.cpp"</string>
           <string name="proxy-Header filename">"../../include/wx/richtext/richtextfontpage.h"</string>
           <string name="proxy-XRC filename">""</string>
-          <string name="proxy-Title">"wxRichTextFontPage"</string>
+          <string name="proxy-Title">""</string>
           <bool name="proxy-Centre">1</bool>
           <string name="proxy-Icon">""</string>
           <bool name="proxy-Dialog units">0</bool>
@@ -1943,7 +1943,7 @@
           <string name="proxy-Implementation filename">"richtextindentspage.cpp"</string>
           <string name="proxy-Header filename">"../../include/wx/richtext/richtextindentspage.h"</string>
           <string name="proxy-XRC filename">""</string>
-          <string name="proxy-Title">"wxRichTextFontPage"</string>
+          <string name="proxy-Title">""</string>
           <bool name="proxy-Centre">1</bool>
           <string name="proxy-Icon">""</string>
           <bool name="proxy-Dialog units">0</bool>
@@ -4445,7 +4445,7 @@
           <string name="proxy-Implementation filename">"richtexttabspage.cpp"</string>
           <string name="proxy-Header filename">"../../include/wx/richtext/richtexttabspage.h"</string>
           <string name="proxy-XRC filename">""</string>
-          <string name="proxy-Title">"wxRichTextFontPage"</string>
+          <string name="proxy-Title">""</string>
           <bool name="proxy-Centre">1</bool>
           <string name="proxy-Icon">""</string>
           <bool name="proxy-Dialog units">0</bool>
@@ -5173,7 +5173,7 @@
           <string name="proxy-Implementation filename">"richtextbulletspage.cpp"</string>
           <string name="proxy-Header filename">"../../include/wx/richtext/richtextbulletspage.h"</string>
           <string name="proxy-XRC filename">""</string>
-          <string name="proxy-Title">"wxRichTextBulletsPage"</string>
+          <string name="proxy-Title">""</string>
           <bool name="proxy-Centre">1</bool>
           <string name="proxy-Icon">""</string>
           <bool name="proxy-Dialog units">0</bool>
@@ -5238,14 +5238,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -6845,7 +6837,7 @@
           <string name="proxy-Implementation filename">"richtextstylepage.cpp"</string>
           <string name="proxy-Header filename">"../../include/wx/richtext/richtextstylepage.h"</string>
           <string name="proxy-XRC filename">""</string>
-          <string name="proxy-Title">"wxRichTextStylePage"</string>
+          <string name="proxy-Title">""</string>
           <bool name="proxy-Centre">1</bool>
           <string name="proxy-Icon">""</string>
           <bool name="proxy-Dialog units">0</bool>
@@ -6897,7 +6889,6 @@
           <long name="proxy-Height">300</long>
           <bool name="proxy-AUI manager">0</bool>
           <string name="proxy-Event sources">""</string>
-          <bool name="proxy-wxTHICK_FRAME">0</bool>
           <document>
             <string name="title">"wxBoxSizer V"</string>
             <string name="type">"dialog-control-document"</string>
@@ -6911,14 +6902,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -10112,7 +10095,7 @@
           <string name="proxy-Implementation filename">"richtextliststylepage.cpp"</string>
           <string name="proxy-Header filename">"../../include/wx/richtext/richtextliststylepage.h"</string>
           <string name="proxy-XRC filename">""</string>
-          <string name="proxy-Title">"wxRichTextListStylePage"</string>
+          <string name="proxy-Title">""</string>
           <bool name="proxy-Centre">1</bool>
           <string name="proxy-Icon">""</string>
           <bool name="proxy-Dialog units">0</bool>
@@ -10164,7 +10147,6 @@
           <long name="proxy-Height">300</long>
           <bool name="proxy-AUI manager">0</bool>
           <string name="proxy-Event sources">""</string>
-          <bool name="proxy-wxTHICK_FRAME">0</bool>
           <document>
             <string name="title">"wxBoxSizer V"</string>
             <string name="type">"dialog-control-document"</string>
@@ -10178,14 +10160,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -10574,6 +10548,8 @@
                   <string name="proxy-Implementation filename">""</string>
                   <string name="proxy-Header filename">""</string>
                   <string name="proxy-Member variable name">""</string>
+                  <string name="proxy-Tab label">"Bullet style"</string>
+                  <string name="proxy-Tab icon">""</string>
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>
                   <string name="proxy-Background colour">""</string>
@@ -10626,8 +10602,6 @@
                   <string name="proxy-Custom ctor arguments">""</string>
                   <string name="proxy-Event sources">""</string>
                   <bool name="proxy-AUI manager">0</bool>
-                  <string name="proxy-Tab label">"Bullet style"</string>
-                  <string name="proxy-Tab icon">""</string>
                   <document>
                     <string name="title">"wxBoxSizer V"</string>
                     <string name="type">"dialog-control-document"</string>
@@ -11950,6 +11924,8 @@
                   <string name="proxy-Implementation filename">""</string>
                   <string name="proxy-Header filename">""</string>
                   <string name="proxy-Member variable name">""</string>
+                  <string name="proxy-Tab label">"Spacing"</string>
+                  <string name="proxy-Tab icon">""</string>
                   <string name="proxy-Help text">""</string>
                   <string name="proxy-Tooltip text">""</string>
                   <string name="proxy-Background colour">""</string>
@@ -12002,8 +11978,6 @@
                   <string name="proxy-Custom ctor arguments">""</string>
                   <string name="proxy-Event sources">""</string>
                   <bool name="proxy-AUI manager">0</bool>
-                  <string name="proxy-Tab label">"Spacing"</string>
-                  <string name="proxy-Tab icon">""</string>
                   <document>
                     <string name="title">"wxBoxSizer V"</string>
                     <string name="type">"dialog-control-document"</string>
