@@ -217,8 +217,9 @@ enum wxSystemScreenType
     @class wxSystemSettings
 
     wxSystemSettings allows the application to ask for details about the system.
-    This can include settings such as standard colours, fonts,
-    and user interface element sizes.
+
+    This can include settings such as standard colours, fonts, and user interface 
+    element sizes.
 
     @library{wxcore}
     @category{cfg}
@@ -238,13 +239,23 @@ public:
 
     /**
         Returns a system colour.
-        @a index can be one of the ::wxSystemColour enum values.
+
+        @param index 
+            Can be one of the ::wxSystemColour enum values.
+            
+        @return
+            The returned colour is always valid.
     */
     static wxColour GetColour(wxSystemColour index);
 
     /**
         Returns a system font.
-        @a index can be one of the ::wxSystemFont enum values.
+
+        @param index 
+            Can be one of the ::wxSystemFont enum values.
+            
+        @return
+            The returned font is always valid.
     */
     static wxFont GetFont(wxSystemFont index);
 

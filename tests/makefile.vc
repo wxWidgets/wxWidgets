@@ -122,6 +122,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_guifuncs.obj \
 	$(OBJS)\test_gui_selstoretest.obj \
 	$(OBJS)\test_gui_garbage.obj \
+	$(OBJS)\test_gui_settings.obj \
 	$(OBJS)\test_gui_socket.obj \
 	$(OBJS)\test_gui_clientsize.obj \
 	$(OBJS)\test_gui_setsize.obj
@@ -728,6 +729,9 @@ $(OBJS)\test_gui_selstoretest.obj: .\misc\selstoretest.cpp
 
 $(OBJS)\test_gui_garbage.obj: .\misc\garbage.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\misc\garbage.cpp
+
+$(OBJS)\test_gui_settings.obj: .\misc\settings.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\misc\settings.cpp
 
 $(OBJS)\test_gui_socket.obj: .\net\socket.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\net\socket.cpp

@@ -952,6 +952,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\misc\settings.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\geometry\size.cpp"
 				>
 			</File>

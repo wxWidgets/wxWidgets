@@ -309,6 +309,10 @@ SOURCE=.\window\setsize.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\misc\settings.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\geometry\size.cpp
 # End Source File
 # Begin Source File

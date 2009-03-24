@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/fontenum.h"
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private/win_gtk.h"
@@ -232,6 +233,7 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
             break;
     }
 
+    wxASSERT(color.IsOk());
     return color;
 }
 
@@ -255,6 +257,13 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                 wxNativeFontInfo info;
                 info.description = ButtonStyle()->font_desc;
                 gs_fontSystem = wxFont(info);
+                
+                // (try to) heal the default font (on some common systems e.g. Ubuntu
+                // it's "Sans Serif" but the real font is called "Sans"):
+                if (!wxFontEnumerator::IsValidFacename(gs_fontSystem.GetFaceName()) &&
+                    gs_fontSystem.GetFaceName() == "Sans Serif")
+                    gs_fontSystem.SetFaceName("Sans");
+                
                 info.description = NULL;
             }
             font = gs_fontSystem;
@@ -263,6 +272,9 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
         default:
             break;
     }
+
+    wxASSERT(font.IsOk() && wxFontEnumerator::IsValidFacename(font.GetFaceName()));
+
     return font;
 }
 

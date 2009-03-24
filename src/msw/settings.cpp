@@ -40,6 +40,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/fontenum.h"
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -207,8 +208,10 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         colSys = ::GetSysColor(index);
 #endif
     }
-
-    return wxRGBToColour(colSys);
+    
+    wxColour ret = wxRGBToColour(colSys);
+    wxASSERT(ret.IsOk());
+    return ret;
 }
 
 // ----------------------------------------------------------------------------
@@ -267,6 +270,8 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         gs_fontDefault = new wxFont(wxCreateFontFromStockObject(SYSTEM_FONT));
     }
 
+    wxASSERT(gs_fontDefault->IsOk() && 
+             wxFontEnumerator::IsValidFacename(gs_fontDefault->GetFaceName()));
     return *gs_fontDefault;
 #else // !__WXWINCE__
     // wxWindow ctor calls GetFont(wxSYS_DEFAULT_GUI_FONT) so we're
@@ -286,6 +291,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         gs_fontDefault = new wxFont(font);
     }
 
+    wxASSERT(font.IsOk() && wxFontEnumerator::IsValidFacename(font.GetFaceName()));
     return font;
 #endif // __WXWINCE__/!__WXWINCE__
 }

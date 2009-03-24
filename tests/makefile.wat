@@ -357,6 +357,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_guifuncs.obj &
 	$(OBJS)\test_gui_selstoretest.obj &
 	$(OBJS)\test_gui_garbage.obj &
+	$(OBJS)\test_gui_settings.obj &
 	$(OBJS)\test_gui_socket.obj &
 	$(OBJS)\test_gui_clientsize.obj &
 	$(OBJS)\test_gui_setsize.obj
@@ -683,6 +684,9 @@ $(OBJS)\test_gui_selstoretest.obj :  .AUTODEPEND .\misc\selstoretest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_garbage.obj :  .AUTODEPEND .\misc\garbage.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_settings.obj :  .AUTODEPEND .\misc\settings.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_socket.obj :  .AUTODEPEND .\net\socket.cpp

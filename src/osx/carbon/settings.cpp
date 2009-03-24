@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/fontenum.h"
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative
@@ -146,6 +147,8 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
             break ;
     }
 
+    //wxASSERT(resultColor.IsOk());
+
     return resultColor;
 }
 
@@ -155,20 +158,25 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
+    wxFont font;
+    
     switch (index)
     {
         case wxSYS_ANSI_VAR_FONT :
         case wxSYS_SYSTEM_FONT :
         case wxSYS_DEVICE_DEFAULT_FONT :
         case wxSYS_DEFAULT_GUI_FONT :
-            return *wxSMALL_FONT ;
+            font = *wxSMALL_FONT ;
             break ;
 
         default :
+            font = *wxNORMAL_FONT ;
             break ;
     }
 
-    return *wxNORMAL_FONT;
+    //wxASSERT(font.IsOk() && wxFontEnumerator::IsValidFacename(font.GetFaceName()));
+
+    return font;
 }
 
 // ----------------------------------------------------------------------------
