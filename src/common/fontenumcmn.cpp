@@ -89,7 +89,7 @@ bool wxFontEnumerator::IsValidFacename(const wxString &facename)
     //     support locales that have characters that are not contained in code 
     //     page 1252. It is not a font but a face name for a nonexistent font."
     // Thus we need to consider "Ms Shell Dlg" and "Ms Shell Dlg 2" as valid
-    // font face names even if they are enumerated by wxFontEnumerator
+    // font face names even if they are not enumerated by wxFontEnumerator
     if (facename.IsSameAs(wxT("Ms Shell Dlg"), false) ||
         facename.IsSameAs(wxT("Ms Shell Dlg 2"), false))
         return true;

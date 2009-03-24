@@ -105,7 +105,7 @@ extern WXDLLIMPEXP_DATA_BASE(wxAssertHandler_t) wxTheAssertHandler;
 
     While usually it is enough -- and more convenient -- to just override
     OnAssertFailure(), to handle all assertion failures, including those
-    occurring even before wxApp object creation of after its destruction you
+    occurring even before wxApp object creation or after its destruction you
     need to provide your assertion handler function.
 
     This function also provides a simple way to disable all asserts: simply
@@ -128,7 +128,7 @@ inline wxAssertHandler_t wxSetAssertHandler(wxAssertHandler_t handler)
 
 #else // !wxDEBUG_LEVEL
 
-// provide empty subs in case assertions are completely disabled
+// provide empty stubs in case assertions are completely disabled
 //
 // NB: can't use WXUNUSED() here as we're included from wx/defs.h before it is
 //     defined
