@@ -276,6 +276,10 @@ void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     pango_font_description_set_family(description, wxPANGO_CONV(facename));
+    
+    // we return true because Pango doesn't tell us if the call failed or not;
+    // instead on wxGTK wxFont::SetFaceName() will call wxFontBase::SetFaceName()
+    // which does the check
     return true;
 }
 
