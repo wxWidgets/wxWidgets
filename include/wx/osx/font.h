@@ -128,22 +128,25 @@ public:
 
 #if wxOSX_USE_CARBON && wxOSX_USE_ATSU_TEXT
     wxUint16 MacGetThemeFontID() const ;
+
     // 'old' Quickdraw accessors
     short MacGetFontNum() const;
     wxByte  MacGetFontStyle() const;
 #endif
 
 #if wxOSX_USE_COCOA_OR_CARBON
-    CGFontRef GetCGFont() const;
+    CGFontRef OSXGetCGFont() const;
 #endif
 
 #if wxOSX_USE_CORE_TEXT
-    CTFontRef GetCTFont() const;
+    CTFontRef OSXGetCTFont() const;
 #endif
 
 #if wxOSX_USE_ATSU_TEXT
     // Returns an ATSUStyle not ATSUStyle*
     void* MacGetATSUStyle() const ;
+    void* OSXGetATSUStyle() const { return MacGetATSUStyle() ; }
+
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED( wxUint32 MacGetATSUFontID() const );
     wxDEPRECATED( wxUint32 MacGetATSUAdditionalQDStyles() const );
@@ -151,14 +154,14 @@ public:
 #endif
 
 #if wxOSX_USE_COCOA
-    WX_NSFont GetNSFont() const;
-    static WX_NSFont CreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info);
-    static WX_NSFont CreateNSFont(const wxNativeFontInfo* info);
+    WX_NSFont OSXGetNSFont() const;
+    static WX_NSFont OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info);
+    static WX_NSFont OSXCreateNSFont(const wxNativeFontInfo* info);
 #endif
 
 #if wxOSX_USE_IPHONE
-    WX_UIFont GetUIFont() const;
-    static WX_NSFont CreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info);
+    WX_UIFont OSXGetUIFont() const;
+    static WX_NSFont OSXCreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info);
 #endif
 
 protected:

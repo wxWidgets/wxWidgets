@@ -2853,7 +2853,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         if (font.Ok())
         {
             info.fontID = kThemeSpecifiedFont;
-            info.font = (CTFontRef) font.GetCTFont();
+            info.font = (CTFontRef) font.OSXGetCTFont();
             setup = true;
         }
     }

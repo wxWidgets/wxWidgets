@@ -384,10 +384,10 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
     }
 #endif
 #if wxOSX_USE_COCOA
-    m_nsFont = wxFont::CreateNSFont( font, &m_info );
+    m_nsFont = wxFont::OSXCreateNSFont( font, &m_info );
 #endif
 #if wxOSX_USE_IPHONE
-    m_uiFont = wxFont::CreateUIFont( font, &m_info );
+    m_uiFont = wxFont::OSXCreateUIFont( font, &m_info );
 #endif
 }
 
@@ -483,10 +483,10 @@ void wxFontRefData::MacFindFont()
     }
 #endif
 #if wxOSX_USE_COCOA
-    m_nsFont = wxFont::CreateNSFont( &m_info );
+    m_nsFont = wxFont::OSXCreateNSFont( &m_info );
 #endif
 #if wxOSX_USE_IPHONE
-    m_uiFont = wxFont::CreateUIFont( &m_info );
+    m_uiFont = wxFont::OSXCreateUIFont( &m_info );
 #endif
     m_fontValid = true;
 }
@@ -799,7 +799,7 @@ wxUint32 wxFont::MacGetATSUAdditionalQDStyles() const
 
 #if wxOSX_USE_CORE_TEXT
 
-CTFontRef wxFont::GetCTFont() const
+CTFontRef wxFont::OSXGetCTFont() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
 
@@ -813,7 +813,7 @@ CTFontRef wxFont::GetCTFont() const
 
 #if wxOSX_USE_COCOA_OR_CARBON
 
-CGFontRef wxFont::GetCGFont() const
+CGFontRef wxFont::OSXGetCGFont() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
 
@@ -828,7 +828,7 @@ CGFontRef wxFont::GetCGFont() const
 
 #if wxOSX_USE_COCOA
 
-NSFont* wxFont::GetNSFont() const
+NSFont* wxFont::OSXGetNSFont() const
 {
     wxCHECK_MSG( M_FONTDATA != NULL , 0, wxT("invalid font") );
 
@@ -1057,7 +1057,7 @@ void wxNativeFontInfo::EnsureValid()
 #endif
 #if wxOSX_USE_COCOA
     if ( m_nsFontDescriptor == NULL )
-        ValidateNSFontDescriptor();
+        OSXValidateNSFontDescriptor();
 #endif
 #if wxOSX_USE_IPHONE
     // TODO

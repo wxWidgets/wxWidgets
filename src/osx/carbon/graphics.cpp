@@ -171,7 +171,7 @@ CGColorRef wxMacCreateCGColor( const wxColour& col )
 CTFontRef wxMacCreateCTFont( const wxFont& font )
 {
 #ifdef __WXMAC__
-    return wxCFRetain((CTFontRef) font.GetCTFont());
+    return wxCFRetain((CTFontRef) font.OSXGetCTFont());
 #else
     return CTFontCreateWithName( wxCFStringRef( font.GetFaceName(), wxLocale::GetSystemEncoding() ) , font.GetPointSize() , NULL );
 #endif
@@ -815,7 +815,7 @@ public:
     virtual ATSUStyle GetATSUStyle() { return m_macATSUIStyle; }
 #endif
 #if wxOSX_USE_CORE_TEXT
-    CTFontRef GetCTFont() const { return m_ctFont ; }
+    CTFontRef OSXGetCTFont() const { return m_ctFont ; }
 #endif
     wxColour GetColour() const { return m_colour ; }
 
@@ -2165,7 +2165,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
         wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
-        CTFontRef font = fref->GetCTFont();
+        CTFontRef font = fref->OSXGetCTFont();
         CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
         CTUnderlineStyle ustyle = fref->GetUnderlined() ? kCTUnderlineStyleSingle : kCTUnderlineStyleNone ;
         wxCFRef<CFNumberRef> underlined( CFNumberCreate(NULL, kCFNumberSInt32Type, &ustyle) );
@@ -2342,7 +2342,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     if ( UMAGetSystemVersion() >= 0x1050 )
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
-        CTFontRef font = fref->GetCTFont();
+        CTFontRef font = fref->OSXGetCTFont();
 
         wxCFStringRef text(str, wxLocale::GetSystemEncoding() );
         CFStringRef keys[] = { kCTFontAttributeName  };
@@ -2437,7 +2437,7 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
 #if wxOSX_USE_CORE_TEXT
     {
         wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
-        CTFontRef font = fref->GetCTFont();
+        CTFontRef font = fref->OSXGetCTFont();
 
         wxCFStringRef t(text, wxLocale::GetSystemEncoding() );
         CFStringRef keys[] = { kCTFontAttributeName  };

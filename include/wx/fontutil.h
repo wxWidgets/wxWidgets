@@ -172,7 +172,7 @@ public:
 
 #if wxOSX_USE_COCOA
     WX_NSFontDescriptor m_nsFontDescriptor;
-    void            ValidateNSFontDescriptor();
+    void            OSXValidateNSFontDescriptor();
 #endif
 #if wxOSX_USE_IPHONE
 #endif

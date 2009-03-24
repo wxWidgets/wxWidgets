@@ -93,7 +93,7 @@ void* wxMacCocoaRetain( void* obj )
 
 #if wxOSX_USE_COCOA
 
-WX_NSFont wxFont::CreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
+WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
 {
     NSFont* nsfont = nil;
     switch( font )
@@ -154,7 +154,7 @@ WX_NSFont wxFont::CreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
     return nsfont;
 }
 
-void wxNativeFontInfo::ValidateNSFontDescriptor()
+void wxNativeFontInfo::OSXValidateNSFontDescriptor()
 {
     NSFontDescriptor* desc  = [NSFontDescriptor fontDescriptorWithName:wxCFStringRef(m_faceName).AsNSString() size:m_pointSize];
     NSFontSymbolicTraits traits = 0;
@@ -172,7 +172,7 @@ void wxNativeFontInfo::ValidateNSFontDescriptor()
     m_nsFontDescriptor = desc;
 }
 
-WX_NSFont wxFont::CreateNSFont(const wxNativeFontInfo* info)
+WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
 {
     NSFont* nsFont;
     nsFont = [NSFont fontWithDescriptor:info->m_nsFontDescriptor size:info->m_pointSize];
