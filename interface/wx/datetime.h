@@ -1281,8 +1281,53 @@ public:
     static int GetCurrentYear(Calendar cal = Gregorian);
 
     /**
-        Gets the full (default) or abbreviated (specify @c Name_Abbr name of
-        the given month.
+        Return the standard English name of the given month.
+
+        This function always returns "January" or "Jan" for January, use
+        GetMonthName() to retrieve the name of the month in the users current
+        locale.
+
+        @param month
+            One of wxDateTime::Jan, ..., wxDateTime::Dec values.
+        @param flags
+            Either Name_Full (default) or Name_Abbr.
+
+        @see GetEnglishWeekDayName()
+
+        @since 2.9.0
+     */
+    static wxString GetEnglishMonthName(Month month,
+                                        NameFlags flags = Name_Full);
+
+    /**
+        Return the standard English name of the given week day.
+
+        This function always returns "Monday" or "Mon" for Monday, use
+        GetWeekDayName() to retrieve the name of the month in the users current
+        locale.
+
+        @param weekday
+            One of wxDateTime::Sun, ..., wxDateTime::Sat values.
+        @param flags
+            Either Name_Full (default) or Name_Abbr.
+
+        @see GetEnglishMonthName()
+
+        @since 2.9.0
+     */
+    static wxString GetEnglishWeekDayName(WeekDay weekday,
+                                          NameFlags flags = Name_Full);
+
+    /**
+        Gets the full (default) or abbreviated name of the given month.
+
+        This function returns the name in the current locale, use
+        GetEnglishMonthName() to get the untranslated name if necessary.
+
+        @param month
+            One of wxDateTime::Jan, ..., wxDateTime::Dec values.
+        @param flags
+            Either Name_Full (default) or Name_Abbr.
 
         @see GetWeekDayName()
     */
@@ -1330,13 +1375,20 @@ public:
     static tm* GetTmNow();
 
     /**
-        Gets the full (default) or abbreviated (specify @c Name_Abbr) name of
-        the given week day.
+        Gets the full (default) or abbreviated name of the given week day.
+
+        This function returns the name in the current locale, use
+        GetEnglishWeekDayName() to get the untranslated name if necessary.
+
+        @param weekday
+            One of wxDateTime::Sun, ..., wxDateTime::Sat values.
+        @param flags
+            Either Name_Full (default) or Name_Abbr.
 
         @see GetMonthName()
     */
     static wxString GetWeekDayName(WeekDay weekday,
-                                    NameFlags flags = Name_Full);
+                                   NameFlags flags = Name_Full);
 
     /**
         Returns @true if DST was used in the given year (the current one by

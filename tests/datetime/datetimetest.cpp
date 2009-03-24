@@ -113,28 +113,16 @@ static wxString TranslateDate(const wxString& str)
 
     wxString trans(str);
 
-    static const char *weekdays[] =
-    {
-        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
-    };
-
     for ( wxDateTime::WeekDay wd = wxDateTime::Sun;
           wd < wxDateTime::Inv_WeekDay;
           wxNextWDay(wd) )
     {
         trans.Replace
               (
-                weekdays[wd],
+                wxDateTime::GetEnglishWeekDayName(wd, wxDateTime::Name_Abbr),
                 wxDateTime::GetWeekDayName(wd, wxDateTime::Name_Abbr)
               );
     }
-
-
-    static const char *months[] =
-    {
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
-        "Nov", "Dec"
-    };
 
     for ( wxDateTime::Month mon = wxDateTime::Jan;
           mon < wxDateTime::Inv_Month;
@@ -142,7 +130,7 @@ static wxString TranslateDate(const wxString& str)
     {
         trans.Replace
               (
-                months[mon],
+                wxDateTime::GetEnglishMonthName(mon, wxDateTime::Name_Abbr),
                 wxDateTime::GetMonthName(mon, wxDateTime::Name_Abbr)
               );
     }

@@ -562,15 +562,24 @@ public:
                                         int year = Inv_Year,
                                         Calendar cal = Gregorian);
 
+
         // get the full (default) or abbreviated month name in the current
         // locale, returns empty string on error
     static wxString GetMonthName(Month month,
                                  NameFlags flags = Name_Full);
 
+        // get the standard English full (default) or abbreviated month name
+    static wxString GetEnglishMonthName(Month month,
+                                        NameFlags flags = Name_Full);
+
         // get the full (default) or abbreviated weekday name in the current
         // locale, returns empty string on error
     static wxString GetWeekDayName(WeekDay weekday,
                                    NameFlags flags = Name_Full);
+
+        // get the standard English full (default) or abbreviated weekday name
+    static wxString GetEnglishWeekDayName(WeekDay weekday,
+                                          NameFlags flags = Name_Full);
 
         // get the AM and PM strings in the current locale (may be empty)
     static void GetAmPmStrings(wxString *am, wxString *pm);

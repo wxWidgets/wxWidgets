@@ -803,12 +803,61 @@ wxDateTime::wxDateTime_t wxDateTime::GetNumberOfDays(wxDateTime::Month month,
     }
 }
 
+namespace
+{
+
+// helper function used by GetEnglish/WeekDayName(): returns 0 if flags is
+// Name_Full and 1 if it is Name_Abbr or -1 if the flags is incorrect (and
+// asserts in this case)
+//
+// the return value of this function is used as an index into 2D array
+// containing full names in its first row and abbreviated ones in the 2nd one
+int NameArrayIndexFromFlag(wxDateTime::NameFlags flags)
+{
+    switch ( flags )
+    {
+        case wxDateTime::Name_Full:
+            return 0;
+
+        case wxDateTime::Name_Abbr:
+            return 1;
+
+        default:
+            wxFAIL_MSG( "unknown wxDateTime::NameFlags value" );
+    }
+
+    return -1;
+}
+
+} // anonymous namespace
+
+/* static */
+wxString wxDateTime::GetEnglishMonthName(Month month, NameFlags flags)
+{
+    wxCHECK_MSG( month != Inv_Month, wxEmptyString, "invalid month" );
+
+    static const char *monthNames[2][MONTHS_IN_YEAR] =
+    {
+        { "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December" },
+        { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" }
+    };
+
+    const int idx = NameArrayIndexFromFlag(flags);
+    if ( idx == -1 )
+        return wxString();
+
+    return monthNames[idx][month];
+}
+
 /* static */
 wxString wxDateTime::GetMonthName(wxDateTime::Month month,
                                   wxDateTime::NameFlags flags)
 {
-    wxCHECK_MSG( month != Inv_Month, wxEmptyString, _T("invalid month") );
 #ifdef HAVE_STRFTIME
+    wxCHECK_MSG( month != Inv_Month, wxEmptyString, _T("invalid month") );
+
     // notice that we must set all the fields to avoid confusing libc (GNU one
     // gets confused to a crash if we don't do this)
     tm tm;
@@ -817,56 +866,36 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
 
     return CallStrftime(flags == Name_Abbr ? _T("%b") : _T("%B"), &tm);
 #else // !HAVE_STRFTIME
-    wxString ret;
-    switch(month)
-    {
-        case Jan:
-            ret = (flags == Name_Abbr ? wxT("Jan"): wxT("January"));
-            break;
-        case Feb:
-            ret = (flags == Name_Abbr ? wxT("Feb"): wxT("Febuary"));
-            break;
-        case Mar:
-            ret = (flags == Name_Abbr ? wxT("Mar"): wxT("March"));
-            break;
-        case Apr:
-            ret = (flags == Name_Abbr ? wxT("Apr"): wxT("April"));
-            break;
-        case May:
-            ret = (flags == Name_Abbr ? wxT("May"): wxT("May"));
-            break;
-        case Jun:
-            ret = (flags == Name_Abbr ? wxT("Jun"): wxT("June"));
-            break;
-        case Jul:
-            ret = (flags == Name_Abbr ? wxT("Jul"): wxT("July"));
-            break;
-        case Aug:
-            ret = (flags == Name_Abbr ? wxT("Aug"): wxT("August"));
-            break;
-        case Sep:
-            ret = (flags == Name_Abbr ? wxT("Sep"): wxT("September"));
-            break;
-        case Oct:
-            ret = (flags == Name_Abbr ? wxT("Oct"): wxT("October"));
-            break;
-        case Nov:
-            ret = (flags == Name_Abbr ? wxT("Nov"): wxT("November"));
-            break;
-        case Dec:
-            ret = (flags == Name_Abbr ? wxT("Dec"): wxT("December"));
-            break;
-    }
-    return ret;
+    return GetEnglishMonthName(month, flags);
 #endif // HAVE_STRFTIME/!HAVE_STRFTIME
+}
+
+/* static */
+wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, NameFlags flags)
+{
+    wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, _T("invalid weekday") );
+
+    static const char *weekdayNames[2][DAYS_PER_400_YEARS] =
+    {
+        { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+          "Saturday" },
+        { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" },
+    };
+
+    const int idx = NameArrayIndexFromFlag(flags);
+    if ( idx == -1 )
+        return wxString();
+
+    return weekdayNames[idx][wday];
 }
 
 /* static */
 wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
                                     wxDateTime::NameFlags flags)
 {
-    wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, _T("invalid weekday") );
 #ifdef HAVE_STRFTIME
+    wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, _T("invalid weekday") );
+
     // take some arbitrary Sunday (but notice that the day should be such that
     // after adding wday to it below we still have a valid date, e.g. don't
     // take 28 here!)
@@ -885,32 +914,7 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
     // ... and call strftime()
     return CallStrftime(flags == Name_Abbr ? _T("%a") : _T("%A"), &tm);
 #else // !HAVE_STRFTIME
-    wxString ret;
-    switch(wday)
-    {
-        case Sun:
-            ret = (flags == Name_Abbr ? wxT("Sun") : wxT("Sunday"));
-            break;
-        case Mon:
-            ret = (flags == Name_Abbr ? wxT("Mon") : wxT("Monday"));
-            break;
-        case Tue:
-            ret = (flags == Name_Abbr ? wxT("Tue") : wxT("Tuesday"));
-            break;
-        case Wed:
-            ret = (flags == Name_Abbr ? wxT("Wed") : wxT("Wednesday"));
-            break;
-        case Thu:
-            ret = (flags == Name_Abbr ? wxT("Thu") : wxT("Thursday"));
-            break;
-        case Fri:
-            ret = (flags == Name_Abbr ? wxT("Fri") : wxT("Friday"));
-            break;
-        case Sat:
-            ret = (flags == Name_Abbr ? wxT("Sat") : wxT("Saturday"));
-            break;
-    }
-    return ret;
+    return GetEnglishWeekDayName(wday, flags);
 #endif // HAVE_STRFTIME/!HAVE_STRFTIME
 }
 
