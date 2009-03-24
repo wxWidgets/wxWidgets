@@ -250,7 +250,7 @@ typedef pid_t GPid;
 #define wxUSE_INTL          1
 #include <locale.h>
 
-#if defined( __WXMOTIF__ )
+#if defined (__WXMOTIF__) || defined( __WXX11__ )
 #define wxUSE_XLOCALE 0
 #else
 #define wxUSE_XLOCALE 1
