@@ -144,6 +144,10 @@ public:
 #if wxOSX_USE_ATSU_TEXT
     // Returns an ATSUStyle not ATSUStyle*
     void* MacGetATSUStyle() const ;
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED( wxUint32 MacGetATSUFontID() const );
+    wxDEPRECATED( wxUint32 MacGetATSUAdditionalQDStyles() const );
+#endif
 #endif
 
 #if wxOSX_USE_COCOA

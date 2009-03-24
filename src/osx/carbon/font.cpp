@@ -772,6 +772,29 @@ void * wxFont::MacGetATSUStyle() const
     
     return M_FONTDATA->m_macATSUStyle;
 }
+
+#if WXWIN_COMPATIBILITY_2_8
+wxUint32 wxFont::MacGetATSUFontID() const 
+{
+    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
+    
+    return M_FONTDATA->m_info.m_atsuFontID;
+}
+
+wxUint32 wxFont::MacGetATSUAdditionalQDStyles() const
+{
+    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+
+    // cast away constness otherwise lazy font resolution is not possible
+    const_cast<wxFont *>(this)->RealizeResource();
+    
+    return M_FONTDATA->m_info.m_atsuAdditionalQDStyles;
+}
+#endif
+
 #endif
 
 #if wxOSX_USE_CORE_TEXT
