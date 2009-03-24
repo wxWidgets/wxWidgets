@@ -184,6 +184,7 @@
         <string name="PATH variable">"%AUTO%"</string>
         <bool name="Suppress source rules">0</bool>
         <bool name="Enable makefile generation">1</bool>
+        <string name="CFG">""</string>
       </document>
     </document>
   </data>
@@ -297,14 +298,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -3436,7 +3429,7 @@
                         <long name="proxy-Y">-1</long>
                         <long name="proxy-Width">-1</long>
                         <long name="proxy-Height">-1</long>
-                        <string name="proxy-AlignH">"Centre"</string>
+                        <string name="proxy-AlignH">"Right"</string>
                         <string name="proxy-AlignV">"Centre"</string>
                         <long name="proxy-Stretch factor">0</long>
                         <long name="proxy-Border">5</long>
@@ -4502,7 +4495,6 @@
           <long name="proxy-Height">300</long>
           <bool name="proxy-AUI manager">0</bool>
           <string name="proxy-Event sources">""</string>
-          <bool name="proxy-wxTHICK_FRAME">0</bool>
           <document>
             <string name="title">"wxBoxSizer V"</string>
             <string name="type">"dialog-control-document"</string>
@@ -4516,14 +4508,6 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
-            <string name="proxy-AlignH">"Centre"</string>
-            <string name="proxy-AlignV">"Centre"</string>
-            <long name="proxy-Stretch factor">0</long>
-            <long name="proxy-Border">5</long>
-            <bool name="proxy-wxLEFT">1</bool>
-            <bool name="proxy-wxRIGHT">1</bool>
-            <bool name="proxy-wxTOP">1</bool>
-            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -5006,7 +4990,7 @@
                     <long name="proxy-Y">-1</long>
                     <long name="proxy-Width">-1</long>
                     <long name="proxy-Height">-1</long>
-                    <string name="proxy-AlignH">"Centre"</string>
+                    <string name="proxy-AlignH">"Expand"</string>
                     <string name="proxy-AlignV">"Centre"</string>
                     <long name="proxy-Stretch factor">0</long>
                     <long name="proxy-Border">5</long>
@@ -5074,7 +5058,7 @@
                     <long name="proxy-Y">-1</long>
                     <long name="proxy-Width">-1</long>
                     <long name="proxy-Height">-1</long>
-                    <string name="proxy-AlignH">"Centre"</string>
+                    <string name="proxy-AlignH">"Expand"</string>
                     <string name="proxy-AlignV">"Centre"</string>
                     <long name="proxy-Stretch factor">0</long>
                     <long name="proxy-Border">5</long>
@@ -5142,7 +5126,7 @@
                     <long name="proxy-Y">-1</long>
                     <long name="proxy-Width">-1</long>
                     <long name="proxy-Height">-1</long>
-                    <string name="proxy-AlignH">"Centre"</string>
+                    <string name="proxy-AlignH">"Expand"</string>
                     <string name="proxy-AlignV">"Centre"</string>
                     <long name="proxy-Stretch factor">0</long>
                     <long name="proxy-Border">5</long>
