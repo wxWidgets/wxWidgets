@@ -802,49 +802,33 @@ public:
 
     /**
         This function is like ParseDateTime(), but it only allows the date to
-        be specified. It is thus less flexible then ParseDateTime(), but also
-        has less chances to misinterpret the user input.
+        be specified.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+        It is thus less flexible then ParseDateTime(), but also has less
+        chances to misinterpret the user input.
+
+        See ParseFormat() for the description of function parameters and return
+        value.
 
         @see Format()
     */
     const char* ParseDate(const wxString& date,
-                           wxString::const_iterator* end = NULL);
-
-    /**
-        @overload
-    */
-    const char* ParseDate(const char* date);
-
-    /**
-        @overload
-    */
-    const wchar_t* ParseDate(const wchar_t* date);
+                          wxString::const_iterator* end = NULL);
 
     /**
         Parses the string @a datetime containing the date and time in free
-        format. This function tries as hard as it can to interpret the given
-        string as date and time. Unlike ParseRfc822Date(), it will accept
-        anything that may be accepted and will only reject strings which can
-        not be parsed in any way at all.
+        format.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+        This function tries as hard as it can to interpret the given string as
+        date and time. Unlike ParseRfc822Date(), it will accept anything that
+        may be accepted and will only reject strings which can not be parsed in
+        any way at all.
+
+        See ParseFormat() for the description of function parameters and return
+        value.
     */
     const char* ParseDateTime(const wxString& datetime,
                               wxString::const_iterator* end = NULL);
-
-    /**
-        @overload
-    */
-    const char* ParseDateTime(const char* datetime);
-
-    /**
-        @overload
-    */
-    const wchar_t* ParseDateTime(const wchar_t* datetime);
 
     /**
         This function parses the string @a date according to the given
@@ -865,8 +849,38 @@ public:
         @a dateDef. If it is not specified, Today() is used as the default
         date.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+        Notice that the return value of this method is not actually a pointer
+        but rather an object of a special proxy class which is convertible to
+        either @c char* or @c wchar_t* pointer. This is needed for
+        compatibility with the existing code but the new code should use @a end
+        parameter instead and just test whether the return value is @NULL or
+        not, e.g.:
+        @code
+            wxDateTime dt;
+            wxString str = "...";
+            wxString::const_iterator end;
+            if ( !dt.ParseFormat(str, "%Y-%m-%d", &end) )
+                ... parsing failed ...
+            else if ( end == str.end() )
+                ... entire string parsed ...
+            else
+                ... wxString(end, str.end()) left over ...
+        @endcode
+
+        @param date
+            The string to be parsed.
+        @param format
+            strptime()-like format string.
+        @param dateDef
+            Used to fill in the date components not specified in the @a date
+            string.
+        @param end
+            If non-@NULL, will be filled with the iterator pointing to the
+            location where the parsing stopped. If the entire string was
+            consumed, it is set to @c date.end().
+        @return
+            Pointer-like object indicating the location where the scan stopped
+            if parsing was successful or @NULL-like otherwise.
 
         @see Format()
     */
@@ -878,16 +892,9 @@ public:
     /**
         @overload
     */
-    const char* ParseFormat(const char* date,
+    const char* ParseFormat(const wxString& date,
                             const wxString& format = wxDefaultDateTimeFormat,
-                            const wxDateTime& dateDef = wxDefaultDateTime);
-
-    /**
-        @overload
-    */
-    const wchar_t* ParseFormat(const wchar_t* date,
-                               const wxString& format = wxDefaultDateTimeFormat,
-                               const wxDateTime& dateDef = wxDefaultDateTime);
+                            wxString::const_iterator* end = NULL);
 
     /**
         This function parses the string containing the date and time in ISO
@@ -933,39 +940,22 @@ public:
         string which is not RFC 822 compliant. If you need to parse date
         formatted in more free ways, you should use ParseDateTime() or
         ParseDate() instead.
+
+        See ParseFormat() for the description of function parameters and return
+        value.
     */
     const char* ParseRfc822Date(const wxString& date,
-                                  wxString::const_iterator* end = NULL);
-
-    /**
-        @overload
-    */
-    const char* ParseRfc822Date(const char* date);
-
-    /**
-        @overload
-    */
-    const wchar_t* ParseRfc822Date(const wchar_t* date);
+                                wxString::const_iterator* end = NULL);
 
     /**
         This functions is like ParseDateTime(), but only allows the time to be
         specified in the input string.
 
-        @return @NULL if the conversion failed, otherwise return the pointer
-                 to the character which stopped the scan.
+        See ParseFormat() for the description of function parameters and return
+        value.
     */
     const char* ParseTime(const wxString& time,
-                           wxString::const_iterator* end = NULL);
-
-    /**
-        @overload
-    */
-    const char* ParseTime(const char* time);
-
-    /**
-        @overload
-    */
-    const wchar_t* ParseTime(const wchar_t* time);
+                          wxString::const_iterator* end = NULL);
 
     //@}
 

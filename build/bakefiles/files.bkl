@@ -390,6 +390,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="BASE_CMN_HDR" hints="files">
     wx/afterstd.h
+    wx/anystr.h
     wx/app.h
     wx/apptrait.h
     wx/archive.h

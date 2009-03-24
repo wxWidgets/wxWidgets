@@ -1612,6 +1612,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\anystr.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\app.h"
 				>
 			</File>

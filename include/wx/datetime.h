@@ -26,6 +26,7 @@
 #include <limits.h>             // for INT_MIN
 
 #include "wx/longlong.h"
+#include "wx/anystr.h"
 
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 class WXDLLIMPEXP_FWD_BASE wxTimeSpan;
@@ -1098,101 +1099,34 @@ public:
     inline wxTimeSpan Subtract(const wxDateTime& dt) const;
     inline wxTimeSpan operator-(const wxDateTime& dt2) const;
 
-    // conversion to/from text: all conversions from text return the pointer to
-    // the next character following the date specification (i.e. the one where
-    // the scan had to stop) or NULL on failure; for the versions taking
-    // wxString or wxCStrData, we don't know if the user code needs char* or
-    // wchar_t* pointer and so we return char* one for compatibility with the
-    // existing ANSI code and also return iterator in another output parameter
-    // (it will be equal to end if the entire string was parsed)
+    // conversion to/from text: all conversions from text return an object
+    // representing the next character following the date specification (i.e.
+    // the one where the scan had to stop) or a special NULL-like object
+    // on failure -- this object is necessary to preserve compatibility with
+    // the existing code assigning the return value of these functions to
+    // either char* or wxChar* (new code should treat the return value as bool
+    // and use end parameter to retrieve the end of the scan)
     // ------------------------------------------------------------------------
 
         // parse a string in RFC 822 format (found e.g. in mail headers and
         // having the form "Wed, 10 Feb 1999 19:07:07 +0100")
-    const char *ParseRfc822Date(const wxString& date,
+    wxAnyStrPtr ParseRfc822Date(const wxString& date,
                                 wxString::const_iterator *end = NULL);
-    const char *ParseRfc822Date(const wxCStrData& date,
-                                wxString::const_iterator *end = NULL)
-    {
-        return ParseRfc822Date(date.AsString(), end);
-    }
-
-    const wchar_t *ParseRfc822Date(const wchar_t* date)
-    {
-        return ReturnEndAsWidePtr(&wxDateTime::ParseRfc822Date, date);
-    }
-
-    const char *ParseRfc822Date(const char* date)
-    {
-        return ParseRfc822Date(wxString(date));
-    }
 
         // parse a date/time in the given format (see strptime(3)), fill in
         // the missing (in the string) fields with the values of dateDef (by
         // default, they will not change if they had valid values or will
         // default to Today() otherwise)
-
-        // notice that we unfortunately need all those overloads because we use
-        // the type of the date string to select the return value of the
-        // function: it's wchar_t if a wide string is passed for compatibility
-        // with the code doing "const wxChar *p = dt.ParseFormat(_T("..."))",
-        // but char* in all other cases for compatibility with ANSI build which
-        // allowed code like "const char *p = dt.ParseFormat("...")"
-        //
-        // so we need wchar_t overload and now passing s.c_str() as first
-        // argument is ambiguous because it's convertible to both wxString and
-        // wchar_t* and now it's passing char* which becomes ambiguous as it is
-        // convertible to both wxString and wxCStrData hence we need char*
-        // overload too
-        //
-        // and to make our life more miserable we also pay for having the
-        // optional dateDef parameter: as it's almost never used, we want to
-        // allow people to omit it when specifying the end iterator output
-        // parameter but we still have to allow specifying dateDef too, so we
-        // need another overload for this
-        //
-        // FIXME: all this mess could be avoided by using some class similar to
-        //        wxFormatString, i.e. remembering string [pointer] of any type
-        //        and convertible to either char* or wchar_t* as wxCStrData and
-        //        having only 1 (or 2, because of the last paragraph above)
-        //        overload taking it, see #9560
-    const char *ParseFormat(const wxString& date,
+    wxAnyStrPtr ParseFormat(const wxString& date,
                             const wxString& format = wxDefaultDateTimeFormat,
                             const wxDateTime& dateDef = wxDefaultDateTime,
                             wxString::const_iterator *end = NULL);
 
-    const char *ParseFormat(const wxString& date,
+    wxAnyStrPtr ParseFormat(const wxString& date,
                             const wxString& format,
                             wxString::const_iterator *end)
     {
         return ParseFormat(date, format, wxDefaultDateTime, end);
-    }
-
-    const char *ParseFormat(const wxCStrData& date,
-                            const wxString& format = wxDefaultDateTimeFormat,
-                            const wxDateTime& dateDef = wxDefaultDateTime,
-                            wxString::const_iterator *end = NULL)
-    {
-        return ParseFormat(date.AsString(), format, dateDef, end);
-    }
-
-    const wchar_t *ParseFormat(const wchar_t *date,
-                               const wxString& format = wxDefaultDateTimeFormat,
-                               const wxDateTime& dateDef = wxDefaultDateTime)
-    {
-        const wxString datestr(date);
-        wxString::const_iterator end;
-        if ( !ParseFormat(datestr, format, dateDef, &end) )
-            return NULL;
-
-        return date + (end - datestr.begin());
-    }
-
-    const char *ParseFormat(const char *date,
-                            const wxString& format = "%c",
-                            const wxDateTime& dateDef = wxDefaultDateTime)
-    {
-        return ParseFormat(wxString(date), format, dateDef);
     }
 
 
@@ -1221,65 +1155,18 @@ public:
 
         // parse a string containing the date/time in "free" format, this
         // function will try to make an educated guess at the string contents
-    const char *ParseDateTime(const wxString& datetime,
+    wxAnyStrPtr ParseDateTime(const wxString& datetime,
                               wxString::const_iterator *end = NULL);
-
-    const char *ParseDateTime(const wxCStrData& datetime,
-                              wxString::const_iterator *end = NULL)
-    {
-        return ParseDateTime(datetime.AsString(), end);
-    }
-
-    const wchar_t *ParseDateTime(const wchar_t *datetime)
-    {
-        return ReturnEndAsWidePtr(&wxDateTime::ParseDateTime, datetime);
-    }
-
-    const char *ParseDateTime(const char *datetime)
-    {
-        return ParseDateTime(wxString(datetime));
-    }
 
         // parse a string containing the date only in "free" format (less
         // flexible than ParseDateTime)
-    const char *ParseDate(const wxString& date,
+    wxAnyStrPtr ParseDate(const wxString& date,
                           wxString::const_iterator *end = NULL);
-
-    const char *ParseDate(const wxCStrData& date,
-                          wxString::const_iterator *end = NULL)
-    {
-        return ParseDate(date.AsString(), end);
-    }
-
-    const wchar_t *ParseDate(const wchar_t *date)
-    {
-        return ReturnEndAsWidePtr(&wxDateTime::ParseDate, date);
-    }
-
-    const char *ParseDate(const char *date)
-    {
-        return ParseDate(wxString(date));
-    }
 
         // parse a string containing the time only in "free" format
-    const char *ParseTime(const wxString& time,
+    wxAnyStrPtr ParseTime(const wxString& time,
                           wxString::const_iterator *end = NULL);
 
-    const char *ParseTime(const wxCStrData& time,
-                          wxString::const_iterator *end = NULL)
-    {
-        return ParseTime(time.AsString(), end);
-    }
-
-    const wchar_t *ParseTime(const wchar_t *time)
-    {
-        return ReturnEndAsWidePtr(&wxDateTime::ParseTime, time);
-    }
-
-    const char *ParseTime(const char *time)
-    {
-        return ParseTime(wxString(time));
-    }
 
         // this function accepts strftime()-like format string (default
         // argument corresponds to the preferred date and time representation
@@ -1326,23 +1213,6 @@ public:
     static struct tm *GetTmNow(struct tm *tmstruct);
 
 private:
-    // helper function for defining backward-compatible wrappers for code
-    // using wchar_t* pointer instead of wxString iterators
-    typedef
-    const char *(wxDateTime::*StringMethod)(const wxString& s,
-                                            wxString::const_iterator *end);
-
-    const wchar_t *ReturnEndAsWidePtr(StringMethod func, const wchar_t *p)
-    {
-        const wxString s(p);
-        wxString::const_iterator end;
-        if ( !(this->*func)(s, &end) )
-            return NULL;
-
-        return p + (end - s.begin());
-    }
-
-
     // the current country - as it's the same for all program objects (unless
     // it runs on a _really_ big cluster system :-), this is a static member:
     // see SetCountry() and GetCountry()

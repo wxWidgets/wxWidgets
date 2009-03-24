@@ -309,6 +309,7 @@ WXSCINTILLA_OBJECTS =  \
 PLUGINS_INST_DIR = $(libdir)/wx/$(PLUGIN_VERSION0)
 ALL_BASE_HEADERS =  \
 	wx/afterstd.h \
+	wx/anystr.h \
 	wx/app.h \
 	wx/apptrait.h \
 	wx/archive.h \
@@ -467,6 +468,7 @@ ALL_HEADERS =  \
 	$(ALL_GUI_HEADERS)
 ALL_PORTS_BASE_HEADERS =  \
 	wx/afterstd.h \
+	wx/anystr.h \
 	wx/app.h \
 	wx/apptrait.h \
 	wx/archive.h \
