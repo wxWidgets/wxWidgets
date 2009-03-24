@@ -110,14 +110,19 @@ CallStrptime(const wxString& str,
              const char *fmt,
              tm *tm)
 {
-    const char *start = str.mb_str();
-    start = wxStringOperations::AddToIter(start, p - str.begin());
+    // convert from iterator to char pointer: this is simple as wxCStrData
+    // already supports this
+    const char * const start = str.c_str() + (p - str.begin());
 
     const char * const end = strptime(start, fmt, tm);
     if ( !end )
         return false;
 
-    p += wxStringOperations::DiffIters(end, start);
+    // convert back from char pointer to iterator: unfortunately we have no way
+    // to do it efficiently currently so create a temporary string just to
+    // compute the number of characters between start and end
+    p += wxString(start, end - start).length();
+
     return true;
 }
 
