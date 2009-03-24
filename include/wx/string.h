@@ -262,9 +262,11 @@ public:
     wxUniChar operator[](unsigned int n) const { return operator[](size_t(n)); }
 #endif // size_t != unsigned int
 
-    // these operators are needed to emulate the pointer semantics of c_str():
+    // These operators are needed to emulate the pointer semantics of c_str():
     // expressions like "wxChar *p = str.c_str() + 1;" should continue to work
-    // (we need both versions to resolve ambiguities):
+    // (we need both versions to resolve ambiguities). Note that this means
+    // the 'n' value is interpreted as addition to char*/wchar_t* pointer, it
+    // is *not* number of Unicode characters in wxString.
     wxCStrData operator+(int n) const
         { return wxCStrData(m_str, m_offset + n, m_owned); }
     wxCStrData operator+(long n) const
@@ -287,8 +289,16 @@ public:
     inline wxUniChar operator*() const;
 
 private:
+    // the wxString this object was returned for
     const wxString *m_str;
+    // Offset into c_str() return value. Note that this is *not* offset in
+    // m_str in Unicode characters. Instead, it is index into the
+    // char*/wchar_t* buffer returned by c_str(). It's interpretation depends
+    // on how is the wxCStrData instance used: if it is eventually cast to
+    // const char*, m_offset will be in bytes form string's start; if it is
+    // cast to const wchar_t*, it will be in wchar_t values.
     size_t m_offset;
+    // should m_str be deleted, i.e. is it owned by us?
     bool m_owned;
 
     friend class WXDLLIMPEXP_FWD_BASE wxString;
