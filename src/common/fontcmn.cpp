@@ -662,7 +662,20 @@ wxString wxNativeFontInfo::ToUserString() const
     wxString face = GetFaceName();
     if ( !face.empty() )
     {
-        desc << _T(' ') << face;
+        if (face.Contains(' ') || face.Contains(';') || face.Contains(','))
+        {
+            face.Replace("'", "");
+                // eventually remove quote characters: most systems do not
+                // allow them in a facename anyway so this usually does nothing
+
+            // make it possible for FromUserString() function to understand
+            // that the different words which compose this facename are
+            // not different adjectives or other data but rather all parts
+            // of the facename
+            desc << _T(" '") << face << _("'");
+        }
+        else
+            desc << _T(' ') << face;
     }
 
     int size = GetPointSize();
@@ -687,10 +700,20 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
     // reset to the default state
     Init();
 
+    // ToUserString() will quote the facename if it contains spaces, commas
+    // or semicolons: we must be able to understand that quoted text is
+    // a single token:
+    wxString toparse(s);
+    /*
+    wxString::iterator i = toparse.find("'");
+    if (i != wxString::npos)
+    {
+        for (; *i != '\'' && *i != toparse.end(); i++)
+            ;
+    }*/
+
     // parse a more or less free form string
-    //
-    // TODO: we should handle at least the quoted facenames
-    wxStringTokenizer tokenizer(s, _T(";, "), wxTOKEN_STRTOK);
+    wxStringTokenizer tokenizer(toparse, _T(";, "), wxTOKEN_STRTOK);
 
     wxString face;
     unsigned long size;
@@ -698,6 +721,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 #if wxUSE_FONTMAP
     bool encodingfound = false;
 #endif
+    bool insideQuotes = false;
 
     while ( tokenizer.HasMoreTokens() )
     {
@@ -705,8 +729,36 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 
         // normalize it
         token.Trim(true).Trim(false).MakeLower();
+        if (insideQuotes)
+        {
+            if (token.StartsWith("'") || 
+                token.EndsWith("'"))
+            {
+                insideQuotes = false;
+
+                // add this last token to the facename:
+                face += " " + token;
+
+                // normalize facename:
+                face = face.Trim(true).Trim(false);
+                face.Replace("'", "");
+
+                continue;
+            }
+        }
+        else
+        {
+            if (token.StartsWith("'"))
+                insideQuotes = true;
+        }
 
         // look for the known tokens
+        if ( insideQuotes )
+        {
+            // only the facename may be quoted:
+            face += " " + token;
+            continue;
+        }
         if ( token == _T("underlined") || token == _("underlined") )
         {
             SetUnderlined(true);
