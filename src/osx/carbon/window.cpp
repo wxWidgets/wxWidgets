@@ -79,6 +79,14 @@
 #define wxMAC_DEBUG_REDRAW 0
 #endif
 
+// Get the window with the focus
+WXWidget wxWidgetImpl::FindFocus()
+{
+    ControlRef control = NULL ;
+    GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
+    return control;
+}
+
 // ---------------------------------------------------------------------------
 // Carbon Events
 // ---------------------------------------------------------------------------

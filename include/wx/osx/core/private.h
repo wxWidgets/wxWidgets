@@ -32,6 +32,8 @@ wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( const unsigned char * from 
 
 #if wxUSE_GUI
 
+WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
+
 #if wxOSX_USE_IPHONE
 #include <CoreGraphics/CoreGraphics.h>
 #else
@@ -257,6 +259,8 @@ public :
     static void         RemoveAssociations( wxWidgetImpl* impl);
     
     static void         Associate( WXWidget control, wxWidgetImpl *impl );
+    
+    static WXWidget     FindFocus();
     
     // static creation methods, must be implemented by all toolkits
     

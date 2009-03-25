@@ -200,10 +200,6 @@ WXWidget wxWindowMac::GetHandle() const
     return NULL;
 }
 
-//
-// TODO END move to window_osx.cpp
-//
-
 // ---------------------------------------------------------------------------
 // Utility Routines to move between different coordinate systems
 // ---------------------------------------------------------------------------
@@ -1515,16 +1511,9 @@ void wxWindowMac::MacOnScroll( wxScrollEvent &event )
     }
 }
 
-// Get the window with the focus
 wxWindow *wxWindowBase::DoFindFocus()
 {
-#if wxOSX_USE_CARBON
-    ControlRef control ;
-    GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
-    return wxFindWindowFromWXWidget( (WXWidget) control ) ;
-#else
-    return NULL;
-#endif
+    return wxFindWindowFromWXWidget(wxWidgetImpl::FindFocus());
 }
 
 void wxWindowMac::OnInternalIdle()
@@ -2006,7 +1995,10 @@ void wxWindowMac::MacRepositionScrollBars()
 
 bool wxWindowMac::AcceptsFocus() const
 {
-    return m_peer->CanFocus() && wxWindowBase::AcceptsFocus();
+    if ( MacIsUserPane() )
+        return wxWindowBase::AcceptsFocus();
+    else
+        return m_peer->CanFocus();
 }
 
 void wxWindowMac::MacSuperChangedPosition()

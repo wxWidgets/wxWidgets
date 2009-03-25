@@ -38,7 +38,6 @@ typedef SInt32 SRefCon;
 bool wxMacConvertEventToRecord( EventRef event , EventRecord *rec);
 #endif
 
-WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
 // TODO REMOVE WXDLLIMPEXP_CORE wxNonOwnedWindow* wxFindWindowFromWXWindow( WXWindow inWindow );
 
 #endif // wxUSE_GUI

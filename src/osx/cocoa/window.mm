@@ -31,6 +31,29 @@
 
 #include <objc/objc-runtime.h>
 
+// Get the window with the focus
+
+WXWidget wxWidgetImpl::FindFocus()
+{
+    NSView* focusedView = nil;
+    NSWindow* keyWindow = [[NSApplication sharedApplication] keyWindow];
+    if ( keyWindow != nil )
+    {
+        NSResponder* responder = [keyWindow firstResponder];
+        if ( [responder isKindOfClass:[NSTextView class]] && 
+            [keyWindow fieldEditor:NO forObject:nil] != nil )
+        {
+            focusedView = [(NSTextView*)responder delegate];
+        }
+        else
+        {
+            if ( [responder isKindOfClass:[NSView class]] )
+                focusedView = (NSView*) responder;
+        }
+    }
+    return focusedView;
+}
+
 NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
 {
     int x, y, w, h ;
@@ -47,7 +70,6 @@ NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
     NSTrackingRectTag rectTag;
 }
 
-- (BOOL) canBecomeKeyView;
 // the tracking tag is needed to track mouse enter / exit events 
 - (void) setTrackingTag: (NSTrackingRectTag)tag;
 - (NSTrackingRectTag) trackingTag;
@@ -439,11 +461,6 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     }
 }
 
-- (BOOL) canBecomeKeyView
-{
-    return YES;
-}
-
 - (void) setTrackingTag: (NSTrackingRectTag)tag
 {
     rectTag = tag;
@@ -793,22 +810,26 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
 
 bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
 {
-    // FIXME: We need to find a way to query AcceptsFocus here, but when we do it
-    // it calls native APIs which lead us back here and into a loop.
-    wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-    return superimpl(slf, (SEL)_cmd);
+    if ( m_wxPeer->MacIsUserPane() )
+        return m_wxPeer->AcceptsFocus();
+    else
+    {
+        wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+        return superimpl(slf, (SEL)_cmd);
+    }
 }
 
 bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
 {
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     // get the current focus before running becomeFirstResponder
-    NSResponder* currentResponder = [[NSApp keyWindow] firstResponder]; 
-    NSView* otherView = (currentResponder != nil && [currentResponder isKindOfClass:[NSView class]]) ? (NSView*) currentResponder : NULL; 
+    NSView* otherView = FindFocus(); 
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     BOOL r = superimpl(slf, (SEL)_cmd);
     if ( r )
+    {
         DoNotifyFocusEvent( true, otherWindow );
+    }
     return r;
 }
 
@@ -817,11 +838,14 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
     // get the current focus after running resignFirstResponder
-    NSResponder* currentResponder = [[NSApp keyWindow] firstResponder]; 
-    NSView* otherView = (currentResponder != nil && [currentResponder isKindOfClass:[NSView class]]) ? (NSView*) currentResponder : NULL; 
+    NSView* otherView = FindFocus(); 
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
-    if ( r )
+    // NSTextViews have an editor as true responder, therefore the might get the
+    // resign notification if their editor takes over, don't trigger any event hen
+    if ( r && otherWindow != this)
+    {
         DoNotifyFocusEvent( false, otherWindow );
+    }
     return r;
 }
 
@@ -1163,7 +1187,7 @@ bool wxWidgetCocoaImpl::CanFocus() const
 
 bool wxWidgetCocoaImpl::HasFocus() const
 {
-    return ( [[m_osxView window] firstResponder] == m_osxView );
+    return ( FindFocus() == m_osxView );
 }
 
 bool wxWidgetCocoaImpl::SetFocus() 
