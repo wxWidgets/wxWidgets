@@ -701,7 +701,7 @@ void DateTimeTestCase::TestTimeFormat()
     for ( size_t d = 0; d < WXSIZEOF(formatTestDates); d++ )
     {
         wxDateTime dt = formatTestDates[d].DT();
-        for ( size_t n = 0; n < WXSIZEOF(formatTestFormats); n++ )
+        for ( unsigned n = 0; n < WXSIZEOF(formatTestFormats); n++ )
         {
             const char *fmt = formatTestFormats[n].format;
 
@@ -723,7 +723,10 @@ void DateTimeTestCase::TestTimeFormat()
             if ( !result )
             {
                 // conversion failed - should it have?
-                CPPUNIT_ASSERT( kind == CompareNone );
+                WX_ASSERT_MESSAGE(
+                    ("Test #%lu failed: failed to parse \"%s\"", n, s),
+                    kind == CompareNone
+                );
             }
             else // conversion succeeded
             {
@@ -734,7 +737,11 @@ void DateTimeTestCase::TestTimeFormat()
                 while ( *result && (*result >= 'A' && *result <= 'Z') )
                     result++;
 
-                CPPUNIT_ASSERT( !*result );
+                WX_ASSERT_MESSAGE(
+                    ("Test #%lu failed: \"%s\" was lest unparsed in \"%s\"",
+                     n, result, s),
+                    !*result
+                );
 
                 switch ( kind )
                 {
