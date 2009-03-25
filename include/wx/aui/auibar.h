@@ -119,6 +119,7 @@ public:
         dropdown = true;
         sticky = true;
         user_data = 0;
+        alignment = wxALIGN_CENTER;
     }
 
     wxAuiToolBarItem(const wxAuiToolBarItem& c)
@@ -152,6 +153,7 @@ public:
         dropdown = c.dropdown;
         sticky = c.sticky;
         user_data = c.user_data;
+        alignment = c.alignment;
     }
 
 
@@ -209,6 +211,9 @@ public:
     void SetUserData(long l) { user_data = l; }
     long GetUserData() const { return user_data; }
 
+    void SetAlignment(int l) { alignment = l; }
+    int GetAlignment() const { return alignment; }
+
 private:
 
     wxWindow* window;          // item's associated window
@@ -229,6 +234,7 @@ private:
     bool dropdown;             // true if the item has a dropdown button
     bool sticky;               // overrides button states if true (always active)
     long user_data;            // user-specified data
+    int alignment;             // sizer alignment flag, defaults to wxCENTER, may be wxEXPAND or any other
 };
 
 #ifndef SWIG

@@ -1786,7 +1786,7 @@ bool wxAuiToolBar::Realize()
                 sizer_item = sizer->Add(size.x + (m_tool_border_padding*2),
                                         size.y + (m_tool_border_padding*2),
                                         item.proportion,
-                                        wxALIGN_CENTER);
+                                        item.alignment);
                 if (i+1 < count)
                 {
                     sizer->AddSpacer(m_tool_packing);
@@ -1803,7 +1803,7 @@ bool wxAuiToolBar::Realize()
                 sizer_item = sizer->Add(size.x + (m_tool_border_padding*2),
                                         size.y + (m_tool_border_padding*2),
                                         0,
-                                        wxALIGN_CENTER);
+                                        item.alignment);
                 // add tool packing
                 if (i+1 < count)
                 {
