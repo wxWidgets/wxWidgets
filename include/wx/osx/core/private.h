@@ -32,8 +32,6 @@ wxString WXDLLIMPEXP_CORE wxMacMakeStringFromPascal( const unsigned char * from 
 
 #if wxUSE_GUI
 
-WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
-
 #if wxOSX_USE_IPHONE
 #include <CoreGraphics/CoreGraphics.h>
 #else
@@ -96,6 +94,8 @@ class wxMacControl;
 class wxWidgetImpl;
 class wxNotebook;
 class wxTextCtrl;
+
+WXDLLIMPEXP_CORE wxWindowMac * wxFindWindowFromWXWidget(WXWidget inControl );
 
 #if wxOSX_USE_CARBON
 typedef wxMacControl wxWidgetImplType;
