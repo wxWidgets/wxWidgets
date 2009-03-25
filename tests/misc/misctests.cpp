@@ -58,7 +58,8 @@ namespace
 
 bool AssertIfOdd(int n)
 {
-    wxASSERT_MSG( !(n % 2), "parameter must be even" );
+    wxCHECK_MSG( !(n % 2), false, "parameter must be even" );
+
     return true;
 }
 
@@ -100,6 +101,18 @@ void MiscTestCase::Delete()
 #endif
 }
 
+namespace
+{
+
+// helper function used just to avoid warnings about value computed not being
+// used in WX_ASSERT_FAILS_WITH_ASSERT() in StaticCast() below
+bool IsNull(void *p)
+{
+    return p == NULL;
+}
+
+} // anonymous namespace
+
 void MiscTestCase::StaticCast()
 {
     wxTarEntry tarEntry;
@@ -112,7 +125,7 @@ void MiscTestCase::StaticCast()
     entry = &zipEntry;
     CPPUNIT_ASSERT( wxStaticCast(entry, wxZipEntry) );
 
-    WX_ASSERT_FAILS_WITH_ASSERT( wxStaticCast(entry, wxTarEntry) );
-    WX_ASSERT_FAILS_WITH_ASSERT( wxStaticCast(&zipEntry, wxTarEntry) );
+    WX_ASSERT_FAILS_WITH_ASSERT( IsNull(wxStaticCast(entry, wxTarEntry)) );
+    WX_ASSERT_FAILS_WITH_ASSERT( IsNull(wxStaticCast(&zipEntry, wxTarEntry)) );
 }
 
