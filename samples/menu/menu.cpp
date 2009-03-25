@@ -680,7 +680,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     (void)wxMessageBox(_T("wxWidgets menu sample\n(c) 1999-2001 Vadim Zeitlin"),
                        _T("About wxWidgets menu sample"),
-                       wxICON_INFORMATION);
+                       wxOK | wxICON_INFORMATION);
 }
 
 void MyFrame::OnDeleteMenu(wxCommandEvent& WXUNUSED(event))
