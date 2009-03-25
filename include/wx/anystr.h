@@ -61,10 +61,9 @@ public:
     // different conversions to pointers)
     operator bool() const { return m_str != NULL; }
 
-#ifdef __VISUALC6__
-    // FIXME-VC6: it also needs this one or it complains about ambiguity
+    // at least VC6 and VC7 also need this one or they complain about ambiguity
+    // for !anystr expressions
     bool operator!() const { return !((bool)*this); }
-#endif // __VISUALC6__
 
 
     // and these are the conversions operator which allow to assign the result
@@ -129,22 +128,21 @@ public:
     // already works fine.
 
 private:
-    // the original string and the offset in it we correspond to, if the string
-    // is NULL this object is NULL pointer-like
+    // the original string and the position in it we correspond to, if the
+    // string is NULL this object is NULL pointer-like
     const wxString * const m_str;
     const wxString::const_iterator m_iter;
 
     wxDECLARE_NO_ASSIGN_CLASS(wxAnyStrPtr);
 };
 
-// FIXME-VC6: expressions involving logical operations are not compiled
-//            correctly without these operators
-#ifdef __VISUALC6__
-    inline bool operator||(const wxAnyStrPtr& p, bool v) { return (bool)p || v; }
-    inline bool operator||(bool v, const wxAnyStrPtr& p) { return v || (bool)p; }
-    inline bool operator&&(const wxAnyStrPtr& p, bool v) { return (bool)p && v; }
-    inline bool operator&&(bool v, const wxAnyStrPtr& p) { return v && (bool)p; }
-#endif // __VISUALC6__
+// at least for VC6 and VC7 these operators are needed too, otherwise boolean
+// expressions involving wxAnyStrPtr don't compile because of ambiguity between
+// built-in overloads of these operators for (bool, bool/char*/wchar_t*)
+inline bool operator||(const wxAnyStrPtr& p, bool v) { return (bool)p || v; }
+inline bool operator||(bool v, const wxAnyStrPtr& p) { return v || (bool)p; }
+inline bool operator&&(const wxAnyStrPtr& p, bool v) { return (bool)p && v; }
+inline bool operator&&(bool v, const wxAnyStrPtr& p) { return v && (bool)p; }
 
 #endif // _WX_ANYSTR_H_
 

@@ -33,6 +33,12 @@ changes:
      wxString, in many cases code using it won't compile any more and NULL
      should be replaced with an empty string.
 
+- Functions returning "const wxChar *" were changed as well. Mostly they now
+  return wxString which is then transparently convertible to either "const char
+  *" or "const wchar_t *" but in some cases, notably wxDateTime::ParseXXX(),
+  the returned string could be NULL and so a separate helper class is used. If
+  you obtain compilation errors because of this, you can always correct them by
+  explicitly assigning the function return value to a variable of wanted type.
 
 - Some structure fields which used to be of type "const wxChar *" (such as
   wxCmdLineEntryDesc::shortName, longName and description fields) are now of
