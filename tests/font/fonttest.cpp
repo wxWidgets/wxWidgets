@@ -86,12 +86,14 @@ void FontTestCase::GetSet()
         // test Get/SetFamily()
 
         test.SetFamily( wxFONTFAMILY_MODERN );
-        //CPPUNIT_ASSERT_EQUAL( wxFONTFAMILY_MODERN, test.GetFamily() );
+        CPPUNIT_ASSERT( test.IsOk() );
+        CPPUNIT_ASSERT_EQUAL( wxFONTFAMILY_MODERN, test.GetFamily() );
 
         
         // test Get/SetEncoding()
 
         //test.SetEncoding( wxFONTENCODING_KOI8 );
+        //CPPUNIT_ASSERT( test.IsOk() );
         //CPPUNIT_ASSERT_EQUAL( wxFONTENCODING_KOI8 , test.GetEncoding() );
 
         
@@ -99,31 +101,51 @@ void FontTestCase::GetSet()
         
         const wxString& nid = test.GetNativeFontInfoDesc();
         CPPUNIT_ASSERT( !nid.empty() );
+            // documented to be never empty
         
         wxFont temp;
-        temp.SetNativeFontInfo(nid);
+        CPPUNIT_ASSERT( temp.SetNativeFontInfo(nid) );
+        CPPUNIT_ASSERT( temp.IsOk() );
         CPPUNIT_ASSERT( temp == test );
-        
+
         
         // test Get/SetNativeFontInfoUserDesc 
         
         const wxString& niud = test.GetNativeFontInfoUserDesc();
         CPPUNIT_ASSERT( !niud.empty() );
+            // documented to be never empty
         
         wxFont temp2;
-        temp2.SetNativeFontInfoUserDesc(niud);
+        CPPUNIT_ASSERT( temp2.SetNativeFontInfoUserDesc(niud) );
+        CPPUNIT_ASSERT( temp2.IsOk() );
+
+#ifdef __WXGTK__
+        // Pango saves/restores all font info in the user-friendly string:
         CPPUNIT_ASSERT( temp2 == test );
-        
-        
+#else
+        // NOTE: as documented GetNativeFontInfoUserDesc/SetNativeFontInfoUserDesc
+        //       are not granted to save/restore all font info.
+        //       In fact e.g. the font family is not saved at all; test only those
+        //       info which GetNativeFontInfoUserDesc() does indeed save:
+        CPPUNIT_ASSERT_EQUAL( test.GetWeight(), temp2.GetWeight() );
+        CPPUNIT_ASSERT_EQUAL( test.GetStyle(), temp2.GetStyle() );
+        CPPUNIT_ASSERT( test.GetFaceName().CmpNoCase(temp2.GetFaceName()) == 0 );
+        CPPUNIT_ASSERT_EQUAL( test.GetPointSize(), temp2.GetPointSize() );
+        CPPUNIT_ASSERT_EQUAL( test.GetEncoding(), temp2.GetEncoding() );
+#endif
+
+
         // test Get/SetPointSize()
         
         test.SetPointSize(30);
+        CPPUNIT_ASSERT( test.IsOk() );
         CPPUNIT_ASSERT_EQUAL( 30, test.GetPointSize() );
         
         
         // test Get/SetPixelSize()
         
         test.SetPixelSize(wxSize(0,30));
+        CPPUNIT_ASSERT( test.IsOk() );
         CPPUNIT_ASSERT( test.GetPixelSize().GetHeight() <= 30 );
             // NOTE: the match found by SetPixelSize() may be not 100% precise; it
             //       only grants that a font smaller than the required height will
@@ -133,18 +155,26 @@ void FontTestCase::GetSet()
         // test Get/SetStyle()
         
         test.SetStyle(wxFONTSTYLE_SLANT);
+        CPPUNIT_ASSERT( test.IsOk() );
+#ifdef __WXMSW__
+        // on wxMSW wxFONTSTYLE_SLANT==wxFONTSTYLE_ITALIC
+        CPPUNIT_ASSERT( wxFONTSTYLE_SLANT == test.GetStyle() ||
+                        wxFONTSTYLE_ITALIC == test.GetStyle() );
+#else
         CPPUNIT_ASSERT_EQUAL( wxFONTSTYLE_SLANT, test.GetStyle() );
-        
+#endif
         
         // test Get/SetUnderlined()
         
         test.SetUnderlined(true);
+        CPPUNIT_ASSERT( test.IsOk() );
         CPPUNIT_ASSERT_EQUAL( true, test.GetUnderlined() );
         
         
         // test Get/SetWeight()
         
         test.SetWeight(wxFONTWEIGHT_BOLD);
+        CPPUNIT_ASSERT( test.IsOk() );
         CPPUNIT_ASSERT_EQUAL( wxFONTWEIGHT_BOLD, test.GetWeight() );
     }
 }
