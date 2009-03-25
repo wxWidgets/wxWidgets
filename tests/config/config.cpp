@@ -43,6 +43,7 @@ private:
 
     void ReadWriteLocalTest();
     void RecordingDefaultsTest();
+
     void ReadValues(wxConfig *config, bool has_values);
 
     DECLARE_NO_COPY_CLASS(ConfigTestCase)
@@ -76,33 +77,33 @@ void ConfigTestCase::ReadWriteLocalTest()
     config = new wxConfig(app, vendor, wxT(""), wxT(""),
                                     wxCONFIG_USE_LOCAL_FILE);
     wxString string1 = config->Read(wxT("string1"));
-    CPPUNIT_ASSERT_EQUAL( string1, wxString(wxT("abc")) );
+    CPPUNIT_ASSERT_EQUAL( "abc", string1 );
     string1 = config->Read(wxT("string1"), wxT("defaultvalue"));
-    CPPUNIT_ASSERT_EQUAL( string1, wxString(wxT("abc")) );
+    CPPUNIT_ASSERT_EQUAL( "abc", string1 );
 
     wxString string2;
     bool r = config->Read(wxT("string2"), &string2);
     CPPUNIT_ASSERT( r );
-    CPPUNIT_ASSERT_EQUAL( string2, wxString(wxT("def")) );
+    CPPUNIT_ASSERT_EQUAL( "def", string2 );
 
     r = config->Read(wxT("string2"), &string2, wxT("defaultvalue"));
     CPPUNIT_ASSERT( r );
-    CPPUNIT_ASSERT_EQUAL( string2, wxString(wxT("def")) );
+    CPPUNIT_ASSERT_EQUAL( "def", string2 );
 
     int int1 = config->Read(wxT("int1"), 5);
-    CPPUNIT_ASSERT_EQUAL( int1, 123 );
+    CPPUNIT_ASSERT_EQUAL( 123, int1 );
 
     long long1;
     r = config->Read(wxT("long1"), &long1);
     CPPUNIT_ASSERT( r );
-    CPPUNIT_ASSERT_EQUAL( long1, 234L );
+    CPPUNIT_ASSERT_EQUAL( 234L, long1 );
 
     CPPUNIT_ASSERT( config->ReadLong(wxT("long1"), 0) == 234 );
 
     double double1;
     r = config->Read(wxT("double1"), &double1);
     CPPUNIT_ASSERT( r );
-    CPPUNIT_ASSERT_EQUAL( double1, 345.67 );
+    CPPUNIT_ASSERT_EQUAL( 345.67, double1 );
 
     CPPUNIT_ASSERT( config->ReadDouble(wxT("double1"), 0) == double1 );
 
@@ -112,7 +113,7 @@ void ConfigTestCase::ReadWriteLocalTest()
 
     r = config->Read(wxT("bool1"), &bool1);
     CPPUNIT_ASSERT( r );
-    CPPUNIT_ASSERT_EQUAL( bool1, true );
+    CPPUNIT_ASSERT_EQUAL( true, bool1 );
 
     CPPUNIT_ASSERT( config->ReadBool(wxT("bool1"), false) == bool1 );
 
@@ -136,27 +137,27 @@ void ConfigTestCase::ReadValues(wxConfig *config, bool has_values)
     wxString string2 = config->Read(wxT("string2"), wxString(wxT("def")));
     wxString string3, string4;
     r = config->Read(wxT("string3"), &string3, wxT("abc"));
-    CPPUNIT_ASSERT_EQUAL( r, has_values );
+    CPPUNIT_ASSERT_EQUAL( has_values, r );
     r = config->Read(wxT("string4"), &string4, wxString(wxT("def")));
-    CPPUNIT_ASSERT_EQUAL( r, has_values );
+    CPPUNIT_ASSERT_EQUAL( has_values, r );
     int int1;
     r = config->Read(wxT("int1"), &int1, 123);
-    CPPUNIT_ASSERT_EQUAL( r, has_values );
+    CPPUNIT_ASSERT_EQUAL( has_values, r );
     int int2 = config->Read(wxT("int2"), 1234);
     CPPUNIT_ASSERT_EQUAL( int2, 1234 );
     long long1;
     r = config->Read(wxString(wxT("long1")), &long1, 234L);
-    CPPUNIT_ASSERT_EQUAL( r, has_values );
+    CPPUNIT_ASSERT_EQUAL( has_values, r );
     double double1;
     r = config->Read(wxT("double1"), &double1, 345.67);
-    CPPUNIT_ASSERT_EQUAL( r, has_values );
+    CPPUNIT_ASSERT_EQUAL( has_values, r );
     bool bool1;
     r = config->Read(wxT("bool1"), &bool1, true);
-    CPPUNIT_ASSERT_EQUAL( r, has_values );
+    CPPUNIT_ASSERT_EQUAL( has_values, r );
 #ifdef wxHAS_CONFIG_TEMPLATE_RW
     wxColour color1;
     r = config->Read(wxT("color1"), &color1, wxColour(11,22,33,44));
-    CPPUNIT_ASSERT_EQUAL( r, has_values );
+    CPPUNIT_ASSERT_EQUAL( has_values, r );
 #endif // wxHAS_CONFIG_TEMPLATE_RW
 }
 
@@ -170,10 +171,10 @@ void ConfigTestCase::RecordingDefaultsTest()
     config->DeleteAll();
     config->SetRecordDefaults(false); // by default it is false
     ReadValues(config, false);
-    CPPUNIT_ASSERT_EQUAL( (int) config->GetNumberOfEntries(), 0 );
+    CPPUNIT_ASSERT_EQUAL( 0, config->GetNumberOfEntries() );
     config->SetRecordDefaults(true);
     ReadValues(config, false);
-    CPPUNIT_ASSERT_EQUAL( (int) config->GetNumberOfEntries(), 10 );
+    CPPUNIT_ASSERT_EQUAL( 10, config->GetNumberOfEntries() );
     ReadValues(config, true);
     config->DeleteAll();
     delete config;
