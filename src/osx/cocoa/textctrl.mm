@@ -82,6 +82,16 @@
     }
 }
 
+- (void)controlTextDidEndEditing:(NSNotification *)aNotification
+{
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl )
+    {
+        impl->DoNotifyFocusEvent( false, NULL );
+    }
+}
+
 @end
 
 @interface wxNSTextView : NSScrollView
@@ -209,21 +219,16 @@ typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl 
     
     return NO;
 }
-/*
+
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification
 {
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl )
     {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer ) {
-            wxFocusEvent event(wxEVT_KILL_FOCUS, wxpeer->GetId());
-            event.SetEventObject( wxpeer );
-            event.SetWindow( wxpeer );
-            wxpeer->HandleWindowEvent( event );
-        }
+        impl->DoNotifyFocusEvent( false, NULL );
     }
 }
-*/
 @end
 
 // wxNSTextViewControl
