@@ -72,6 +72,7 @@ static wxIconBundle wxMacArtProvider_CreateIconBundle(const wxArtID& id)
     ART_MSGBOX(wxART_FOLDER,      wxICON_FOLDER,      folder)
     ART_MSGBOX(wxART_FOLDER_OPEN, wxICON_FOLDER_OPEN, folder_open)
     ART_MSGBOX(wxART_NORMAL_FILE, wxICON_NORMAL_FILE, deffile)
+    ART_MSGBOX(wxART_EXECUTABLE_FILE, wxICON_EXECUTABLE_FILE, exefile)
 
     ART_MSGBOX(wxART_CDROM,       wxICON_CDROM,       cdrom) 
     ART_MSGBOX(wxART_FLOPPY,      wxICON_FLOPPY,      floppy) 

@@ -203,6 +203,10 @@ bool wxIcon::LoadFile(
         {
             theId = kGenericDocumentIcon ;
         }
+        else if ( filename == wxT("wxICON_EXECUTABLE_FILE") )
+        {
+            theId = kGenericApplicationIcon ;
+        }
         else if ( filename == wxT("wxICON_CDROM") )
         {
             theId = kGenericCDROMIcon ;
