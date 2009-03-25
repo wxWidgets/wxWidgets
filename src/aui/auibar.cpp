@@ -931,6 +931,9 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
     item.min_size = wxDefaultSize;
     item.user_data = 0;
     item.sticky = false;
+    
+    if (item.id == wxID_ANY) 
+        item.id = wxNewId(); 
 
     if (!item.disabled_bitmap.IsOk())
     {
@@ -996,6 +999,9 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
     item.user_data = 0;
     item.sticky = false;
 
+    if (item.id == wxID_ANY) 
+        item.id = wxNewId(); 
+ 	
     m_items.Add(item);
     return &m_items.Last();
 }
