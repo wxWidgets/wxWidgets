@@ -259,7 +259,10 @@ extern void WXDLLIMPEXP_BASE wxOnAssert(const char *file,
     // wxFAIL is a special form of assert: it always triggers (and so is
     // usually used in normally unreachable code)
     #define wxFAIL_COND_MSG(cond, msg) \
-        wxOnAssert(__FILE__, __LINE__,  __WXFUNCTION__, cond, msg)
+        if ( !wxTheAssertHandler )                                            \
+        {}                                                                    \
+        else                                                                  \
+            wxOnAssert(__FILE__, __LINE__,  __WXFUNCTION__, cond, msg)
     #define wxFAIL_MSG(msg) wxFAIL_COND_MSG("Assert failure", msg)
     #define wxFAIL wxFAIL_MSG((const char*)NULL)
 #else // !wxDEBUG_LEVEL
