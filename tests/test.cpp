@@ -107,6 +107,13 @@ public:
         {
             return functor();
         }
+        catch ( std::exception& e )
+        {
+            // cppunit deals with the standard exceptions itself, let it do as
+            // it output more details (especially for std::exception-derived
+            // CppUnit::Exception) than we do
+            throw;
+        }
         catch ( ... )
         {
             reportError(context, CppUnit::Message("Uncaught exception",
