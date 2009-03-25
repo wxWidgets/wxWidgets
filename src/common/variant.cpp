@@ -1838,12 +1838,25 @@ bool wxVariant::Convert(wxDateTime* value) const
         *value = ((wxVariantDataDateTime*)GetData())->GetValue();
         return true;
     }
+
     // Fallback to string conversion
     wxString val;
-    return Convert(&val) &&
-                (value->ParseDateTime(val.c_str()/*FIXME-UTF8*/) ||
-                 value->ParseDate(val.c_str()/*FIXME-UTF8*/) ||
-                 value->ParseTime(val.c_str()/*FIXME-UTF8*/));
+    if ( !Convert(&val) )
+        return false;
+
+    // Try to parse this as either date and time, only date or only time
+    // checking that the entire string was parsed
+    wxString::const_iterator end;
+    if ( value->ParseDateTime(val, &end) && end == val.end() )
+        return true;
+
+    if ( value->ParseDate(val, &end) && end == val.end() )
+        return true;
+
+    if ( value->ParseTime(val, &end) && end == val.end() )
+        return true;
+
+    return false;
 }
 #endif // wxUSE_DATETIME
 
