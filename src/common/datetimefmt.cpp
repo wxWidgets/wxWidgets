@@ -237,11 +237,12 @@ GetWeekDayFromName(const wxString& name, int flags, int lang)
 // scans all digits (but no more than len) and returns the resulting number
 bool GetNumericToken(size_t len,
                      wxString::const_iterator& p,
+                     const wxString::const_iterator& end,
                      unsigned long *number)
 {
     size_t n = 1;
     wxString s;
-    while ( wxIsdigit(*p) )
+    while ( p != end && wxIsdigit(*p) )
     {
         s += *p++;
 
@@ -253,10 +254,12 @@ bool GetNumericToken(size_t len,
 }
 
 // scans all alphabetic characters and returns the resulting string
-wxString GetAlphaToken(wxString::const_iterator& p)
+wxString
+GetAlphaToken(wxString::const_iterator& p,
+              const wxString::const_iterator& end)
 {
     wxString s;
-    while ( wxIsalpha(*p) )
+    while ( p != end && wxIsalpha(*p) )
     {
         s += *p++;
     }
@@ -1062,10 +1065,10 @@ bool
 wxDateTime::ParseFormat(const wxString& date,
                         const wxString& format,
                         const wxDateTime& dateDef,
-                        wxString::const_iterator *end)
+                        wxString::const_iterator *endParse)
 {
     wxCHECK_MSG( !format.empty(), false, "format can't be empty" );
-    wxCHECK_MSG( end, false, "end iterator pointer must be specified" );
+    wxCHECK_MSG( endParse, false, "end iterator pointer must be specified" );
 
     wxString str;
     unsigned long num;
@@ -1096,6 +1099,7 @@ wxDateTime::ParseFormat(const wxString& date,
     int year = 0;
 
     wxString::const_iterator input = date.begin();
+    const wxString::const_iterator end = date.end();
     for ( wxString::const_iterator fmt = format.begin(); fmt != format.end(); ++fmt )
     {
         if ( *fmt != _T('%') )
@@ -1166,7 +1170,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 {
                     wday = GetWeekDayFromName
                            (
-                            GetAlphaToken(input),
+                            GetAlphaToken(input, end),
                             *fmt == 'a' ? Name_Abbr : Name_Full,
                             DateLang_Local
                            );
@@ -1184,7 +1188,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 {
                     mon = GetMonthFromName
                           (
-                            GetAlphaToken(input),
+                            GetAlphaToken(input, end),
                             *fmt == 'b' ? Name_Abbr : Name_Full,
                             DateLang_Local
                           );
@@ -1224,7 +1228,7 @@ wxDateTime::ParseFormat(const wxString& date,
                         const wxDateTime dt = ParseFormatAt
                                               (
                                                 input,
-                                                date.end(),
+                                                end,
                                                 wxS("%a %b %d %H:%M:%S %Y"),
                                                 wxS("%x %X"),
                                                 wxS("%X %x")
@@ -1249,7 +1253,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('d'):       // day of a month (01-31)
-                if ( !GetNumericToken(width, input, &num) ||
+                if ( !GetNumericToken(width, input, end, &num) ||
                         (num > 31) || (num < 1) )
                 {
                     // no match
@@ -1263,7 +1267,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('H'):       // hour in 24h format (00-23)
-                if ( !GetNumericToken(width, input, &num) || (num > 23) )
+                if ( !GetNumericToken(width, input, end, &num) || (num > 23) )
                 {
                     // no match
                     return false;
@@ -1274,7 +1278,8 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('I'):       // hour in 12h format (01-12)
-                if ( !GetNumericToken(width, input, &num) || !num || (num > 12) )
+                if ( !GetNumericToken(width, input, end, &num) ||
+                        !num || (num > 12) )
                 {
                     // no match
                     return false;
@@ -1286,7 +1291,8 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('j'):       // day of the year
-                if ( !GetNumericToken(width, input, &num) || !num || (num > 366) )
+                if ( !GetNumericToken(width, input, end, &num) ||
+                        !num || (num > 366) )
                 {
                     // no match
                     return false;
@@ -1297,7 +1303,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('l'):       // milliseconds (0-999)
-                if ( !GetNumericToken(width, input, &num) )
+                if ( !GetNumericToken(width, input, end, &num) )
                     return false;
 
                 haveMsec = true;
@@ -1305,7 +1311,8 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('m'):       // month as a number (01-12)
-                if ( !GetNumericToken(width, input, &num) || !num || (num > 12) )
+                if ( !GetNumericToken(width, input, end, &num) ||
+                        !num || (num > 12) )
                 {
                     // no match
                     return false;
@@ -1316,7 +1323,8 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('M'):       // minute as a decimal number (00-59)
-                if ( !GetNumericToken(width, input, &num) || (num > 59) )
+                if ( !GetNumericToken(width, input, end, &num) ||
+                        (num > 59) )
                 {
                     // no match
                     return false;
@@ -1328,7 +1336,7 @@ wxDateTime::ParseFormat(const wxString& date,
 
             case _T('p'):       // AM or PM string
                 {
-                    wxString am, pm, token = GetAlphaToken(input);
+                    wxString am, pm, token = GetAlphaToken(input, end);
 
                     // some locales have empty AM/PM tokens and thus when formatting
                     // dates with the %p specifier nothing is generated; when trying to
@@ -1355,7 +1363,7 @@ wxDateTime::ParseFormat(const wxString& date,
             case _T('r'):       // time as %I:%M:%S %p
                 {
                     wxDateTime dt;
-                    if ( !dt.ParseFormat(wxString(input, date.end()),
+                    if ( !dt.ParseFormat(wxString(input, end),
                                          wxS("%I:%M:%S %p"), &input) )
                         return false;
 
@@ -1371,7 +1379,7 @@ wxDateTime::ParseFormat(const wxString& date,
             case _T('R'):       // time as %H:%M
                 {
                     const wxDateTime
-                        dt = ParseFormatAt(input, date.end(), wxS("%H:%M"));
+                        dt = ParseFormatAt(input, end, wxS("%H:%M"));
                     if ( !dt.IsValid() )
                         return false;
 
@@ -1385,7 +1393,8 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('S'):       // second as a decimal number (00-61)
-                if ( !GetNumericToken(width, input, &num) || (num > 61) )
+                if ( !GetNumericToken(width, input, end, &num) ||
+                        (num > 61) )
                 {
                     // no match
                     return false;
@@ -1398,7 +1407,7 @@ wxDateTime::ParseFormat(const wxString& date,
             case _T('T'):       // time as %H:%M:%S
                 {
                     const wxDateTime
-                        dt = ParseFormatAt(input, date.end(), wxS("%H:%M:%S"));
+                        dt = ParseFormatAt(input, end, wxS("%H:%M:%S"));
                     if ( !dt.IsValid() )
                         return false;
 
@@ -1414,7 +1423,8 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('w'):       // weekday as a number (0-6), Sunday = 0
-                if ( !GetNumericToken(width, input, &num) || (wday > 6) )
+                if ( !GetNumericToken(width, input, end, &num) ||
+                        (wday > 6) )
                 {
                     // no match
                     return false;
@@ -1470,7 +1480,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     }
 
                     const wxDateTime
-                        dt = ParseFormatAt(input, date.end(),
+                        dt = ParseFormatAt(input, end,
                                            fmtDate, fmtDateAlt);
                     if ( !dt.IsValid() )
                         return false;
@@ -1511,7 +1521,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     // fails, as "%I:%M:%S %p" - this should catch the most
                     // common cases
                     const wxDateTime
-                        dt = ParseFormatAt(input, date.end(), "%T", "%r");
+                        dt = ParseFormatAt(input, end, "%T", "%r");
                     if ( !dt.IsValid() )
                         return false;
 
@@ -1528,7 +1538,8 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('y'):       // year without century (00-99)
-                if ( !GetNumericToken(width, input, &num) || (num > 99) )
+                if ( !GetNumericToken(width, input, end, &num) ||
+                        (num > 99) )
                 {
                     // no match
                     return false;
@@ -1542,7 +1553,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 break;
 
             case _T('Y'):       // year with century
-                if ( !GetNumericToken(width, input, &num) )
+                if ( !GetNumericToken(width, input, end, &num) )
                 {
                     // no match
                     return false;
@@ -1659,7 +1670,7 @@ wxDateTime::ParseFormat(const wxString& date,
     if ( haveWDay && GetWeekDay() != wday )
         return false;
 
-    *end = input;
+    *endParse = input;
 
     return true;
 }
@@ -1745,10 +1756,14 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
         { wxTRANSLATE("tomorrow"),          1 },
     };
 
+    const size_t lenRest = date.end() - p;
     for ( size_t n = 0; n < WXSIZEOF(literalDates); n++ )
     {
         const wxString dateStr = wxGetTranslation(literalDates[n].str);
         size_t len = dateStr.length();
+
+        if ( len > lenRest )
+            continue;
 
         const wxString::const_iterator pEnd = p + len;
         if ( wxString(p, pEnd).CmpNoCase(dateStr) == 0 )
