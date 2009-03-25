@@ -227,6 +227,21 @@ void wxAuiDefaultToolBarArt::SetTextOrientation(int orientation)
     m_text_orientation = orientation;
 }
 
+unsigned int wxAuiDefaultToolBarArt::GetFlags()
+{
+    return m_flags;
+}
+
+wxFont wxAuiDefaultToolBarArt::GetFont()
+{
+    return m_font;
+}
+
+int wxAuiDefaultToolBarArt::GetTextOrientation()
+{
+    return m_text_orientation;
+}
+
 void wxAuiDefaultToolBarArt::DrawBackground(
                                     wxDC& dc,
                                     wxWindow* WXUNUSED(wnd),

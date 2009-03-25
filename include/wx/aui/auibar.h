@@ -249,8 +249,11 @@ public:
 
     virtual wxAuiToolBarArt* Clone() = 0;
     virtual void SetFlags(unsigned int flags) = 0;
+    virtual unsigned int GetFlags() = 0;
     virtual void SetFont(const wxFont& font) = 0;
+    virtual wxFont GetFont() = 0;
     virtual void SetTextOrientation(int orientation) = 0;
+    virtual int GetTextOrientation() = 0;
 
     virtual void DrawBackground(
                          wxDC& dc,
@@ -327,8 +330,11 @@ public:
 
     virtual wxAuiToolBarArt* Clone();
     virtual void SetFlags(unsigned int flags);
+    virtual unsigned int GetFlags();
     virtual void SetFont(const wxFont& font);
+    virtual wxFont GetFont();
     virtual void SetTextOrientation(int orientation);
+    virtual int GetTextOrientation();
 
     virtual void DrawBackground(
                 wxDC& dc,
