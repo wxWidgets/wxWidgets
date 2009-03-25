@@ -31,9 +31,16 @@ enum wxFontFamily
 */
 enum wxFontStyle
 {
+    /// The font is drawn without slant.
     wxFONTSTYLE_NORMAL = wxNORMAL,
+
+    /// The font is slanted in an italic style.
     wxFONTSTYLE_ITALIC = wxITALIC,
+    
+    /// The font is slanted, but in a roman style. 
+    /// Note that under wxMSW this style is the same as @c wxFONTSTYLE_ITALIC.
     wxFONTSTYLE_SLANT = wxSLANT,
+
     wxFONTSTYLE_MAX
 };
 
