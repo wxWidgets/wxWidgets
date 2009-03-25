@@ -401,18 +401,21 @@ public:
         Note that the returned string is not meant to be shown or edited by the user: a
         typical use of this function is for serializing in string-form a wxFont object.
 
-        @see SetNativeFontInfo(),GetNativeFontInfoUserDesc()
+        @see SetNativeFontInfo(), GetNativeFontInfoUserDesc()
     */
     wxString GetNativeFontInfoDesc() const;
 
     /**
         Returns a user-friendly string for this font object.
         Returned string is always non-empty.
+        
+        The string does not encode all wxFont infos under all platforms;
+        e.g. under wxMSW the font family is not present in the returned string.
 
         Some examples of the formats of returned strings (which are platform-dependent)
         are in SetNativeFontInfoUserDesc().
 
-        @see GetNativeFontInfoDesc()
+        @see SetNativeFontInfoUserDesc(), GetNativeFontInfoDesc()
     */
     wxString GetNativeFontInfoUserDesc() const;
 
@@ -562,6 +565,12 @@ public:
         For more detailed information about the allowed syntaxes you can look at the
         documentation of the native API used for font-rendering
         (e.g. @c pango_font_description_from_string on GTK).
+        
+        Note that unlike SetNativeFontInfo(), this function doesn't always restore all
+        attributes of the wxFont object under all platforms; e.g. on wxMSW the font family
+        is not restored (because GetNativeFontInfoUserDesc doesn't return it on wxMSW).
+        If you want to serialize/deserialize a font in string form, you should use
+        GetNativeFontInfoDesc() and SetNativeFontInfo() instead.
 
         @see SetNativeFontInfo()
     */
