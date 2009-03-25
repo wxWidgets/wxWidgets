@@ -427,6 +427,7 @@ public:
     virtual ~wxAuiToolBar();
 
     void SetWindowStyleFlag(long style);
+    long GetWindowStyleFlag() const;
 
     void SetArtProvider(wxAuiToolBarArt* art);
     wxAuiToolBarArt* GetArtProvider() const;

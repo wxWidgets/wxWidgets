@@ -865,6 +865,10 @@ void wxAuiToolBar::SetWindowStyleFlag(long style)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_BOTTOM);
 }
 
+long wxAuiToolBar::GetWindowStyleFlag() const
+{
+    return m_style;
+}
 
 void wxAuiToolBar::SetArtProvider(wxAuiToolBarArt* art)
 {
@@ -1344,6 +1348,8 @@ void wxAuiToolBar::SetGripperVisible(bool visible)
     m_gripper_visible = visible;
     if (visible)
         m_style |= wxAUI_TB_GRIPPER;
+    else
+        m_style &= ~wxAUI_TB_GRIPPER;
     Realize();
     Refresh(false);
 }
@@ -1359,6 +1365,8 @@ void wxAuiToolBar::SetOverflowVisible(bool visible)
     m_overflow_visible = visible;
     if (visible)
         m_style |= wxAUI_TB_OVERFLOW;
+    else
+        m_style &= ~wxAUI_TB_OVERFLOW;
     Refresh(false);
 }
 
