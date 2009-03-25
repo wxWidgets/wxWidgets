@@ -44,7 +44,8 @@ private:
     void ReadWriteLocalTest();
     void RecordingDefaultsTest();
 
-    void ReadValues(wxConfig *config, bool has_values);
+    // return the number of values we (attempted to) read
+    int ReadValues(wxConfig *config, bool has_values);
 
     DECLARE_NO_COPY_CLASS(ConfigTestCase)
 };
@@ -130,35 +131,59 @@ void ConfigTestCase::ReadWriteLocalTest()
     delete config;
 }
 
-void ConfigTestCase::ReadValues(wxConfig *config, bool has_values)
+int ConfigTestCase::ReadValues(wxConfig *config, bool has_values)
 {
+    int read = 0;
     bool r;
+
     wxString string1 = config->Read(wxT("string1"), wxT("abc"));
+    read++;
+
     wxString string2 = config->Read(wxT("string2"), wxString(wxT("def")));
-    wxString string3, string4;
+    read++;
+
+    wxString string3;
     r = config->Read(wxT("string3"), &string3, wxT("abc"));
     CPPUNIT_ASSERT_EQUAL( has_values, r );
+    read++;
+
+    wxString string4;
     r = config->Read(wxT("string4"), &string4, wxString(wxT("def")));
     CPPUNIT_ASSERT_EQUAL( has_values, r );
+    read++;
+
     int int1;
     r = config->Read(wxT("int1"), &int1, 123);
     CPPUNIT_ASSERT_EQUAL( has_values, r );
+    read++;
+
     int int2 = config->Read(wxT("int2"), 1234);
     CPPUNIT_ASSERT_EQUAL( int2, 1234 );
+    read++;
+
     long long1;
     r = config->Read(wxString(wxT("long1")), &long1, 234L);
     CPPUNIT_ASSERT_EQUAL( has_values, r );
+    read++;
+
     double double1;
     r = config->Read(wxT("double1"), &double1, 345.67);
     CPPUNIT_ASSERT_EQUAL( has_values, r );
+    read++;
+
     bool bool1;
     r = config->Read(wxT("bool1"), &bool1, true);
     CPPUNIT_ASSERT_EQUAL( has_values, r );
+    read++;
+
 #ifdef wxHAS_CONFIG_TEMPLATE_RW
     wxColour color1;
     r = config->Read(wxT("color1"), &color1, wxColour(11,22,33,44));
     CPPUNIT_ASSERT_EQUAL( has_values, r );
+    read++;
 #endif // wxHAS_CONFIG_TEMPLATE_RW
+
+    return read;
 }
 
 
@@ -173,8 +198,8 @@ void ConfigTestCase::RecordingDefaultsTest()
     ReadValues(config, false);
     CPPUNIT_ASSERT_EQUAL( 0, config->GetNumberOfEntries() );
     config->SetRecordDefaults(true);
-    ReadValues(config, false);
-    CPPUNIT_ASSERT_EQUAL( 10, config->GetNumberOfEntries() );
+    int read = ReadValues(config, false);
+    CPPUNIT_ASSERT_EQUAL( read, config->GetNumberOfEntries() );
     ReadValues(config, true);
     config->DeleteAll();
     delete config;
