@@ -39,6 +39,9 @@ changes:
   the returned string could be NULL and so a separate helper class is used. If
   you obtain compilation errors because of this, you can always correct them by
   explicitly assigning the function return value to a variable of wanted type.
+  A slightly more intrusive but better solution is to use ParseXXX() version
+  with wxString::const_iterator output parameter which simply returns bool to
+  indicate the parsing success.
 
 - Some structure fields which used to be of type "const wxChar *" (such as
   wxCmdLineEntryDesc::shortName, longName and description fields) are now of

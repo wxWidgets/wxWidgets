@@ -682,7 +682,7 @@ wxString wxDateTime::Format(const wxString& format, const TimeZone& tz) const
 //
 // this function is "strict" by design - it must reject anything except true
 // RFC822 time specs.
-wxAnyStrPtr
+bool
 wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
 {
     wxString::const_iterator p = date.begin();
@@ -692,7 +692,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     const wxString::const_iterator endWday = p + WDAY_LEN;
     const wxString wday(p, endWday);
     if ( GetWeekDayFromName(wday, Name_Abbr, DateLang_English) == Inv_WeekDay )
-        return wxAnyStrPtr();
+        return false;
     //else: ignore week day for now, we could also check that it really
     //      corresponds to the specified date
 
@@ -700,11 +700,11 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
 
     // 2. separating comma
     if ( *p++ != ',' || *p++ != ' ' )
-        return wxAnyStrPtr();
+        return false;
 
     // 3. day number
     if ( !wxIsdigit(*p) )
-        return wxAnyStrPtr();
+        return false;
 
     wxDateTime_t day = (wxDateTime_t)(*p++ - '0');
     if ( wxIsdigit(*p) )
@@ -714,7 +714,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     }
 
     if ( *p++ != ' ' )
-        return wxAnyStrPtr();
+        return false;
 
     // 4. month name
     static const int MONTH_LEN = 3;
@@ -722,20 +722,20 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     const wxString monName(p, endMonth);
     Month mon = GetMonthFromName(monName, Name_Abbr, DateLang_English);
     if ( mon == Inv_Month )
-        return wxAnyStrPtr();
+        return false;
 
     p = endMonth;
 
     if ( *p++ != ' ' )
-        return wxAnyStrPtr();
+        return false;
 
     // 5. year
     if ( !wxIsdigit(*p) )
-        return wxAnyStrPtr();
+        return false;
 
     int year = *p++ - '0';
     if ( !wxIsdigit(*p) ) // should have at least 2 digits in the year
-        return wxAnyStrPtr();
+        return false;
 
     year *= 10;
     year += *p++ - '0';
@@ -749,7 +749,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
         if ( !wxIsdigit(*p) )
         {
             // no 3 digit years please
-            return wxAnyStrPtr();
+            return false;
         }
 
         year *= 10;
@@ -757,30 +757,30 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     }
 
     if ( *p++ != ' ' )
-        return wxAnyStrPtr();
+        return false;
 
     // 6. time in hh:mm:ss format with seconds being optional
     if ( !wxIsdigit(*p) )
-        return wxAnyStrPtr();
+        return false;
 
     wxDateTime_t hour = (wxDateTime_t)(*p++ - '0');
 
     if ( !wxIsdigit(*p) )
-        return wxAnyStrPtr();
+        return false;
 
     hour *= 10;
     hour = (wxDateTime_t)(hour + (*p++ - '0'));
 
     if ( *p++ != ':' )
-        return wxAnyStrPtr();
+        return false;
 
     if ( !wxIsdigit(*p) )
-        return wxAnyStrPtr();
+        return false;
 
     wxDateTime_t min = (wxDateTime_t)(*p++ - '0');
 
     if ( !wxIsdigit(*p) )
-        return wxAnyStrPtr();
+        return false;
 
     min *= 10;
     min += (wxDateTime_t)(*p++ - '0');
@@ -790,19 +790,19 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     {
         p++;
         if ( !wxIsdigit(*p) )
-            return wxAnyStrPtr();
+            return false;
 
         sec = (wxDateTime_t)(*p++ - '0');
 
         if ( !wxIsdigit(*p) )
-            return wxAnyStrPtr();
+            return false;
 
         sec *= 10;
         sec += (wxDateTime_t)(*p++ - '0');
     }
 
     if ( *p++ != ' ' )
-        return wxAnyStrPtr();
+        return false;
 
     // 7. now the interesting part: the timezone
     int offset wxDUMMY_INITIALIZE(0);
@@ -812,7 +812,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
         bool plus = *p++ == '+';
 
         if ( !wxIsdigit(*p) || !wxIsdigit(*(p + 1)) )
-            return wxAnyStrPtr();
+            return false;
 
 
         // hours
@@ -821,7 +821,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
         p += 2;
 
         if ( !wxIsdigit(*p) || !wxIsdigit(*(p + 1)) )
-            return wxAnyStrPtr();
+            return false;
 
         // minutes
         offset += 10*(*p - '0') + (*(p + 1) - '0');
@@ -847,7 +847,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
             };
 
             if ( *p < _T('A') || *p > _T('Z') || *p == _T('J') )
-                return wxAnyStrPtr();
+                return false;
 
             offset = offsets[*p++ - 'A'];
         }
@@ -878,7 +878,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
             else if ( tz == _T("PDT") )
                 offset = PDT - GMT0;
             else
-                return wxAnyStrPtr();
+                return false;
 
             p += tz.length();
         }
@@ -895,7 +895,7 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
     if ( end )
         *end = p;
 
-    return wxAnyStrPtr(date, p);
+    return true;
 }
 
 #ifdef __WINDOWS__
@@ -1058,13 +1058,14 @@ static wxString GetLocaleDateFormat()
 
 #endif // __WINDOWS__
 
-wxAnyStrPtr
+bool
 wxDateTime::ParseFormat(const wxString& date,
                         const wxString& format,
                         const wxDateTime& dateDef,
                         wxString::const_iterator *end)
 {
-    wxCHECK_MSG( !format.empty(), wxAnyStrPtr(), "format can't be empty" );
+    wxCHECK_MSG( !format.empty(), false, "format can't be empty" );
+    wxCHECK_MSG( end, false, "end iterator pointer must be specified" );
 
     wxString str;
     unsigned long num;
@@ -1115,7 +1116,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( *input++ != *fmt )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
             }
 
@@ -1172,7 +1173,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     if ( wday == Inv_WeekDay )
                     {
                         // no match
-                        return wxAnyStrPtr();
+                        return false;
                     }
                 }
                 haveWDay = true;
@@ -1190,7 +1191,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     if ( mon == Inv_Month )
                     {
                         // no match
-                        return wxAnyStrPtr();
+                        return false;
                     }
                 }
                 haveMon = true;
@@ -1229,7 +1230,7 @@ wxDateTime::ParseFormat(const wxString& date,
                                                 wxS("%X %x")
                                               );
                         if ( !dt.IsValid() )
-                            return wxAnyStrPtr();
+                            return false;
 
                         Tm tm = dt.GetTm();
 
@@ -1252,7 +1253,7 @@ wxDateTime::ParseFormat(const wxString& date,
                         (num > 31) || (num < 1) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 // we can't check whether the day range is correct yet, will
@@ -1265,7 +1266,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( !GetNumericToken(width, input, &num) || (num > 23) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 haveHour = true;
@@ -1276,7 +1277,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( !GetNumericToken(width, input, &num) || !num || (num > 12) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 haveHour = true;
@@ -1288,7 +1289,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( !GetNumericToken(width, input, &num) || !num || (num > 366) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 haveYDay = true;
@@ -1297,7 +1298,7 @@ wxDateTime::ParseFormat(const wxString& date,
 
             case _T('l'):       // milliseconds (0-999)
                 if ( !GetNumericToken(width, input, &num) )
-                    return wxAnyStrPtr();
+                    return false;
 
                 haveMsec = true;
                 msec = (wxDateTime_t)num;
@@ -1307,7 +1308,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( !GetNumericToken(width, input, &num) || !num || (num > 12) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 haveMon = true;
@@ -1318,7 +1319,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( !GetNumericToken(width, input, &num) || (num > 59) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 haveMin = true;
@@ -1338,7 +1339,7 @@ wxDateTime::ParseFormat(const wxString& date,
 
                     GetAmPmStrings(&am, &pm);
                     if (am.empty() && pm.empty())
-                        return wxAnyStrPtr();  // no am/pm strings defined
+                        return false;  // no am/pm strings defined
                     if ( token.CmpNoCase(pm) == 0 )
                     {
                         isPM = true;
@@ -1346,7 +1347,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     else if ( token.CmpNoCase(am) != 0 )
                     {
                         // no match
-                        return wxAnyStrPtr();
+                        return false;
                     }
                 }
                 break;
@@ -1356,7 +1357,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     wxDateTime dt;
                     if ( !dt.ParseFormat(wxString(input, date.end()),
                                          wxS("%I:%M:%S %p"), &input) )
-                        return wxAnyStrPtr();
+                        return false;
 
                     haveHour = haveMin = haveSec = true;
 
@@ -1372,7 +1373,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     const wxDateTime
                         dt = ParseFormatAt(input, date.end(), wxS("%H:%M"));
                     if ( !dt.IsValid() )
-                        return wxAnyStrPtr();
+                        return false;
 
                     haveHour =
                     haveMin = true;
@@ -1387,7 +1388,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( !GetNumericToken(width, input, &num) || (num > 61) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 haveSec = true;
@@ -1399,7 +1400,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     const wxDateTime
                         dt = ParseFormatAt(input, date.end(), wxS("%H:%M:%S"));
                     if ( !dt.IsValid() )
-                        return wxAnyStrPtr();
+                        return false;
 
                     haveHour =
                     haveMin =
@@ -1416,7 +1417,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( !GetNumericToken(width, input, &num) || (wday > 6) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 haveWDay = true;
@@ -1472,7 +1473,7 @@ wxDateTime::ParseFormat(const wxString& date,
                         dt = ParseFormatAt(input, date.end(),
                                            fmtDate, fmtDateAlt);
                     if ( !dt.IsValid() )
-                        return wxAnyStrPtr();
+                        return false;
 
                     Tm tm = dt.GetTm();
 
@@ -1493,7 +1494,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     // use strptime() to do it for us (FIXME !Unicode friendly)
                     struct tm tm;
                     if ( !CallStrptime(date, input, "%X", &tm) )
-                        return wxAnyStrPtr();
+                        return false;
 
                     haveHour = haveMin = haveSec = true;
 
@@ -1512,7 +1513,7 @@ wxDateTime::ParseFormat(const wxString& date,
                     const wxDateTime
                         dt = ParseFormatAt(input, date.end(), "%T", "%r");
                     if ( !dt.IsValid() )
-                        return wxAnyStrPtr();
+                        return false;
 
                     haveHour =
                     haveMin =
@@ -1530,7 +1531,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( !GetNumericToken(width, input, &num) || (num > 99) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 haveYear = true;
@@ -1544,7 +1545,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( !GetNumericToken(width, input, &num) )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
 
                 haveYear = true;
@@ -1559,7 +1560,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 if ( *input++ != _T('%') )
                 {
                     // no match
-                    return wxAnyStrPtr();
+                    return false;
                 }
                 break;
 
@@ -1569,7 +1570,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 // fall through
 
             default:            // not a known format spec
-                return wxAnyStrPtr();
+                return false;
         }
     }
 
@@ -1610,14 +1611,14 @@ wxDateTime::ParseFormat(const wxString& date,
     if ( haveDay )
     {
         if ( mday > GetNumberOfDays(tm.mon, tm.year) )
-            return wxAnyStrPtr();
+            return false;
 
         tm.mday = mday;
     }
     else if ( haveYDay )
     {
         if ( yday > GetNumberOfDays(tm.year) )
-            return wxAnyStrPtr();
+            return false;
 
         Tm tm2 = wxDateTime(1, Jan, tm.year).SetToYearDay(yday).GetTm();
 
@@ -1656,17 +1657,18 @@ wxDateTime::ParseFormat(const wxString& date,
 
     // finally check that the week day is consistent -- if we had it
     if ( haveWDay && GetWeekDay() != wday )
-        return wxAnyStrPtr();
+        return false;
 
-    if ( end )
-        *end = input;
+    *end = input;
 
-    return wxAnyStrPtr(date, input);
+    return true;
 }
 
-wxAnyStrPtr
+bool
 wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
 {
+    wxCHECK_MSG( end, false, "end iterator pointer must be specified" );
+
     // Set to current day and hour, so strings like '14:00' becomes today at
     // 14, not some other random date
     wxDateTime dtDate = wxDateTime::Today();
@@ -1687,7 +1689,7 @@ wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
 
         const wxString timestr(endDate, date.end());
         if ( !dtTime.ParseTime(timestr, &endTime) )
-            return wxAnyStrPtr();
+            return false;
 
         endBoth = endDate + (endTime - timestr.begin());
     }
@@ -1695,14 +1697,14 @@ wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
     {
         // check if we have a time followed by a date
         if ( !dtTime.ParseTime(date, &endTime) )
-            return wxAnyStrPtr();
+            return false;
 
         while ( endTime != date.end() && wxIsspace(*endTime) )
             ++endTime;
 
         const wxString datestr(endTime, date.end());
         if ( !dtDate.ParseDate(datestr, &endDate) )
-            return wxAnyStrPtr();
+            return false;
 
         endBoth = endTime + (endDate - datestr.begin());
     }
@@ -1711,16 +1713,16 @@ wxDateTime::ParseDateTime(const wxString& date, wxString::const_iterator *end)
         dtTime.GetHour(), dtTime.GetMinute(), dtTime.GetSecond(),
         dtTime.GetMillisecond());
 
-    // Return endpoint of scan
-    if ( end )
-        *end = endBoth;
+    *end = endBoth;
 
-    return wxAnyStrPtr(date, endBoth);
+    return true;
 }
 
-wxAnyStrPtr
+bool
 wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
 {
+    wxCHECK_MSG( end, false, "end iterator pointer must be specified" );
+
     // this is a simplified version of ParseDateTime() which understands only
     // "today" (for wxDate compatibility) and digits only otherwise (and not
     // all esoteric constructions ParseDateTime() knows about)
@@ -1762,10 +1764,9 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
                 *this += wxDateSpan::Days(dayDiffFromToday);
             }
 
-            if ( end )
-                *end = pEnd;
+            *end = pEnd;
 
-            return wxAnyStrPtr(date, pEnd);
+            return true;
         }
     }
 
@@ -1986,7 +1987,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     // either no more tokens or the scan was stopped by something we couldn't
     // parse - in any case, see if we can construct a date from what we have
     if ( !haveDay && !haveWDay )
-        return wxAnyStrPtr();
+        return false;
 
     if ( haveWDay && (haveMon || haveYear || haveDay) &&
          !(haveDay && haveMon && haveYear) )
@@ -1994,7 +1995,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
         // without adjectives (which we don't support here) the week day only
         // makes sense completely separately or with the full date
         // specification (what would "Wed 1999" mean?)
-        return wxAnyStrPtr();
+        return false;
     }
 
     if ( !haveWDay && haveYear && !(haveDay && haveMon) )
@@ -2020,7 +2021,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
         }
 
         if ( !haveMon )
-            return wxAnyStrPtr();
+            return false;
     }
 
     if ( !haveMon )
@@ -2038,7 +2039,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
         // normally we check the day above but the check is optimistic in case
         // we find the day before its month/year so we have to redo it now
         if ( day > GetNumberOfDays(mon, year) )
-            return wxAnyStrPtr();
+            return false;
 
         Set(day, mon, year);
 
@@ -2046,7 +2047,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
         {
             // check that it is really the same
             if ( GetWeekDay() != wday )
-                return wxAnyStrPtr();
+                return false;
         }
     }
     else // haveWDay
@@ -2065,15 +2066,16 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
         p--;
     }
 
-    if ( end )
-        *end = p;
+    *end = p;
 
-    return wxAnyStrPtr(date, p);
+    return true;
 }
 
-wxAnyStrPtr
+bool
 wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
 {
+    wxCHECK_MSG( end, false, "end iterator pointer must be specified" );
+
     // first try some extra things
     static const struct
     {
@@ -2098,7 +2100,7 @@ wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
             if ( end )
                 *end = p;
 
-            return wxAnyStrPtr(time, p);
+            return true;
         }
     }
 
@@ -2118,12 +2120,11 @@ wxDateTime::ParseTime(const wxString& time, wxString::const_iterator *end)
 
     for ( size_t nFmt = 0; nFmt < WXSIZEOF(timeFormats); nFmt++ )
     {
-        const wxAnyStrPtr result = ParseFormat(time, timeFormats[nFmt], end);
-        if ( result )
-            return result;
+        if ( ParseFormat(time, timeFormats[nFmt], end) )
+            return true;
     }
 
-    return wxAnyStrPtr();
+    return false;
 }
 
 // ----------------------------------------------------------------------------

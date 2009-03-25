@@ -136,13 +136,5 @@ private:
     wxDECLARE_NO_ASSIGN_CLASS(wxAnyStrPtr);
 };
 
-// at least for VC6 and VC7 these operators are needed too, otherwise boolean
-// expressions involving wxAnyStrPtr don't compile because of ambiguity between
-// built-in overloads of these operators for (bool, bool/char*/wchar_t*)
-inline bool operator||(const wxAnyStrPtr& p, bool v) { return (bool)p || v; }
-inline bool operator||(bool v, const wxAnyStrPtr& p) { return v || (bool)p; }
-inline bool operator&&(const wxAnyStrPtr& p, bool v) { return (bool)p && v; }
-inline bool operator&&(bool v, const wxAnyStrPtr& p) { return v && (bool)p; }
-
 #endif // _WX_ANYSTR_H_
 

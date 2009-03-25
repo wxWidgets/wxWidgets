@@ -1099,36 +1099,41 @@ public:
     inline wxTimeSpan Subtract(const wxDateTime& dt) const;
     inline wxTimeSpan operator-(const wxDateTime& dt2) const;
 
-    // conversion to/from text: all conversions from text return an object
-    // representing the next character following the date specification (i.e.
-    // the one where the scan had to stop) or a special NULL-like object
-    // on failure -- this object is necessary to preserve compatibility with
-    // the existing code assigning the return value of these functions to
-    // either char* or wxChar* (new code should treat the return value as bool
-    // and use end parameter to retrieve the end of the scan)
+    // conversion to/from text
     // ------------------------------------------------------------------------
+
+    // all conversions functions return true to indicate whether parsing
+    // succeeded or failed and fill in the provided end iterator, which must
+    // not be NULL, with the location of the character where the parsing
+    // stopped (this will be end() of the passed string if everything was
+    // parsed)
 
         // parse a string in RFC 822 format (found e.g. in mail headers and
         // having the form "Wed, 10 Feb 1999 19:07:07 +0100")
-    wxAnyStrPtr ParseRfc822Date(const wxString& date,
-                                wxString::const_iterator *end = NULL);
+    bool ParseRfc822Date(const wxString& date,
+                         wxString::const_iterator *end);
 
         // parse a date/time in the given format (see strptime(3)), fill in
         // the missing (in the string) fields with the values of dateDef (by
         // default, they will not change if they had valid values or will
         // default to Today() otherwise)
-    wxAnyStrPtr ParseFormat(const wxString& date,
-                            const wxString& format = wxDefaultDateTimeFormat,
-                            const wxDateTime& dateDef = wxDefaultDateTime,
-                            wxString::const_iterator *end = NULL);
+    bool ParseFormat(const wxString& date,
+                     const wxString& format,
+                     const wxDateTime& dateDef,
+                     wxString::const_iterator *end);
 
-    wxAnyStrPtr ParseFormat(const wxString& date,
-                            const wxString& format,
-                            wxString::const_iterator *end)
+    bool ParseFormat(const wxString& date,
+                     const wxString& format,
+                     wxString::const_iterator *end)
     {
         return ParseFormat(date, format, wxDefaultDateTime, end);
     }
 
+    bool ParseFormat(const wxString& date,
+                     wxString::const_iterator *end)
+    {
+        return ParseFormat(date, wxDefaultDateTimeFormat, wxDefaultDateTime, end);
+    }
 
         // parse a string containing date, time or both in ISO 8601 format
         //
@@ -1136,49 +1141,36 @@ public:
         // provide compatibility overloads for them
     bool ParseISODate(const wxString& date)
     {
-        // FIXME-VC6: notice that writing "return ParseFormat() && ..." crashes
-        //            VC6 with internal compiler error so don't attempt to
-        //            simplify this code like this
-
         wxString::const_iterator end;
-        if ( !ParseFormat(date, wxS("%Y-%m-%d"), &end) )
-            return false;
-
-        return end == date.end();
+        return ParseFormat(date, wxS("%Y-%m-%d"), &end) && end == date.end();
     }
 
     bool ParseISOTime(const wxString& time)
     {
         wxString::const_iterator end;
-        if ( !ParseFormat(time, wxS("%H:%M:%S"), &end) )
-            return false;
-        
-        return end == time.end();
+        return ParseFormat(time, wxS("%H:%M:%S"), &end) && end == time.end();
     }
 
     bool ParseISOCombined(const wxString& datetime, char sep = 'T')
     {
         wxString::const_iterator end;
         const wxString fmt = wxS("%Y-%m-%d") + wxString(sep) + wxS("%H:%M:%S");
-        if ( !ParseFormat(datetime, fmt, &end) )
-           return false;
-       
-        return end == datetime.end();
+        return ParseFormat(datetime, fmt, &end) && end == datetime.end();
     }
 
         // parse a string containing the date/time in "free" format, this
         // function will try to make an educated guess at the string contents
-    wxAnyStrPtr ParseDateTime(const wxString& datetime,
-                              wxString::const_iterator *end = NULL);
+    bool ParseDateTime(const wxString& datetime,
+                       wxString::const_iterator *end);
 
         // parse a string containing the date only in "free" format (less
         // flexible than ParseDateTime)
-    wxAnyStrPtr ParseDate(const wxString& date,
-                          wxString::const_iterator *end = NULL);
+    bool ParseDate(const wxString& date,
+                   wxString::const_iterator *end);
 
         // parse a string containing the time only in "free" format
-    wxAnyStrPtr ParseTime(const wxString& time,
-                          wxString::const_iterator *end = NULL);
+    bool ParseTime(const wxString& time,
+                   wxString::const_iterator *end);
 
 
         // this function accepts strftime()-like format string (default
@@ -1202,6 +1194,52 @@ public:
         // can also be useful to set it to ' '
     wxString FormatISOCombined(char sep = 'T') const
         { return FormatISODate() + sep + FormatISOTime(); }
+
+
+    // backwards compatible versions of the parsing functions: they return an
+    // object representing the next character following the date specification
+    // (i.e. the one where the scan had to stop) or a special NULL-like object
+    // on failure
+    //
+    // they're not deprecated because a lot of existing code uses them and
+    // there is no particular harm in keeping them but you should still prefer
+    // the versions above in the new code
+    wxAnyStrPtr ParseRfc822Date(const wxString& date)
+    {
+        wxString::const_iterator end;
+        return ParseRfc822Date(date, &end) ? wxAnyStrPtr(date, end)
+                                           : wxAnyStrPtr();
+    }
+
+    wxAnyStrPtr ParseFormat(const wxString& date,
+                            const wxString& format = wxDefaultDateTimeFormat,
+                            const wxDateTime& dateDef = wxDefaultDateTime)
+    {
+        wxString::const_iterator end;
+        return ParseFormat(date, format, dateDef, &end) ? wxAnyStrPtr(date, end)
+                                                        : wxAnyStrPtr();
+    }
+
+    wxAnyStrPtr ParseDateTime(const wxString& datetime)
+    {
+        wxString::const_iterator end;
+        return ParseDateTime(datetime, &end) ? wxAnyStrPtr(datetime, end)
+                                             : wxAnyStrPtr();
+    }
+
+    wxAnyStrPtr ParseDate(const wxString& date)
+    {
+        wxString::const_iterator end;
+        return ParseDate(date, &end) ? wxAnyStrPtr(date, end)
+                                     : wxAnyStrPtr();
+    }
+
+    wxAnyStrPtr ParseTime(const wxString& time)
+    {
+        wxString::const_iterator end;
+        return ParseTime(time, &end) ? wxAnyStrPtr(time, end)
+                                     : wxAnyStrPtr();
+    }
 
     // implementation
     // ------------------------------------------------------------------------

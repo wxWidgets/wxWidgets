@@ -1271,9 +1271,8 @@ bool wxVariantDataDateTime::Read(wxString& str)
         return true;
     }
 
-    if(! m_value.ParseDateTime(str.c_str()/*FIXME-UTF8*/))
-        return false;
-    return true;
+    wxString::const_iterator end;
+    return m_value.ParseDateTime(str, &end) && end == str.end();
 }
 
 // wxVariant

@@ -869,8 +869,8 @@ int wxCmdLineParser::Parse(bool showUsage)
                         case wxCMD_LINE_VAL_DATE:
                             {
                                 wxDateTime dt;
-                                const char *res = dt.ParseDate(value);
-                                if ( !res || *res )
+                                wxString::const_iterator end;
+                                if ( !dt.ParseDate(value) || end != value.end() )
                                 {
                                     errorMsg << wxString::Format(_("Option '%s': '%s' cannot be converted to a date."),
                                                                  name.c_str(), value.c_str())
