@@ -28,6 +28,7 @@
 #ifdef __VISUALC__
     #pragma warning(default:4100)
 #endif
+#include <cppunit/Protector.h>
 #include <cppunit/Test.h>
 #include <cppunit/TestResult.h>
 #include "wx/afterstd.h"
@@ -35,10 +36,86 @@
 #include "wx/cmdline.h"
 #include <iostream>
 
+#ifdef __WXMSW__
+    #include "wx/msw/msvcrt.h"
+#endif
+
+using namespace std;
+
 using CppUnit::Test;
 using CppUnit::TestSuite;
 using CppUnit::TestFactoryRegistry;
 
+// exception class for MSVC debug CRT assertion failures
+#ifdef wxUSE_VC_CRTDBG
+
+struct CrtAssertFailure
+{
+    CrtAssertFailure(const char *message) : m_msg(message) { }
+
+    const wxString m_msg;
+
+    wxDECLARE_NO_ASSIGN_CLASS(CrtAssertFailure);
+};
+
+#endif // wxUSE_VC_CRTDBG
+
+// this function should only be called from a catch clause
+static string GetExceptionMessage()
+{
+    wxString msg;
+
+    try
+    {
+        throw;
+    }
+#if wxDEBUG_LEVEL
+    catch ( TestAssertFailure& e )
+    {
+        msg << "wxWidgets assert: " << e.m_cond << " failed "
+               "at " << e.m_file << ":" << e.m_line << " in " << e.m_func
+            << " with message " << e.m_msg;
+    }
+#endif // wxDEBUG_LEVEL
+#ifdef wxUSE_VC_CRTDBG
+    catch ( CrtAssertFailure& e )
+    {
+        msg << "CRT assert failure: " << e.m_msg;
+    }
+#endif // wxUSE_VC_CRTDBG
+    catch ( std::exception& e )
+    {
+        msg << "std::exception: " << e.what();
+    }
+    catch ( ... )
+    {
+        msg = "Unknown exception caught.";
+    }
+
+    return string(msg.mb_str());
+}
+
+// Protector adding handling of wx-specific (this includes MSVC debug CRT in
+// this context) exceptions
+class wxUnitTestProtector : public CppUnit::Protector
+{
+public:
+    virtual bool protect(const CppUnit::Functor &functor,
+                         const CppUnit::ProtectorContext& context)
+    {
+        try
+        {
+            return functor();
+        }
+        catch ( ... )
+        {
+            reportError(context, CppUnit::Message("Uncaught exception",
+                                                  GetExceptionMessage()));
+        }
+
+        return false;
+    }
+};
 
 // Displays the test name before starting to execute it: this helps with
 // diagnosing where exactly does a test crash or hang when/if it does.
@@ -70,8 +147,6 @@ protected :
     wxStopWatch m_watch;
 };
 
-using namespace std;
-
 #if wxUSE_GUI
     typedef wxApp TestAppBase;
 #else
@@ -99,17 +174,6 @@ public:
     void SetFilterEventFunc(FilterEventFunc f) { m_filterEventFunc = f; }
     void SetProcessEventFunc(ProcessEventFunc f) { m_processEventFunc = f; }
 
-#ifdef __WXDEBUG__
-    virtual void OnAssertFailure(const wxChar *,
-                                 int,
-                                 const wxChar *,
-                                 const wxChar *,
-                                 const wxChar *)
-    {
-        throw TestAssertFailure();
-    }
-#endif // __WXDEBUG__
-
 private:
     void List(Test *test, const string& parent = "") const;
 
@@ -125,7 +189,58 @@ private:
     ProcessEventFunc m_processEventFunc;
 };
 
-IMPLEMENT_APP_CONSOLE(TestApp)
+IMPLEMENT_APP_NO_MAIN(TestApp)
+
+#ifdef wxUSE_VC_CRTDBG
+
+static int TestCrtReportHook(int reportType, char *message, int *)
+{
+    if ( reportType != _CRT_ASSERT )
+        return FALSE;
+
+    throw CrtAssertFailure(message);
+}
+
+#endif // wxUSE_VC_CRTDBG
+
+#if wxDEBUG_LEVEL
+
+static void TestAssertHandler(const wxString& file,
+                              int line,
+                              const wxString& func,
+                              const wxString& cond,
+                              const wxString& msg)
+{
+    throw TestAssertFailure(file, line, func, cond, msg);
+}
+
+#endif // wxDEBUG_LEVEL
+
+int main(int argc, char **argv)
+{
+    // tests can be ran non-interactively so make sure we don't show any assert
+    // dialog boxes -- neither our own nor from MSVC debug CRT -- which would
+    // prevent them from completing
+
+#if wxDEBUG_LEVEL
+    wxSetAssertHandler(TestAssertHandler);
+#endif // wxDEBUG_LEVEL
+
+#ifdef wxUSE_VC_CRTDBG
+    _CrtSetReportHook(TestCrtReportHook);
+#endif // wxUSE_VC_CRTDBG
+
+    try
+    {
+        return wxEntry(argc, argv);
+    }
+    catch ( ... )
+    {
+        cerr << "\n" << GetExceptionMessage() << endl;
+    }
+
+    return -1;
+}
 
 TestApp::TestApp()
   : m_list(false),
@@ -277,6 +392,10 @@ int TestApp::OnRun()
     DetailListener detailListener(m_timing);
     if ( m_detail || m_timing )
         runner.eventManager().addListener(&detailListener);
+
+    // finally ensure that we report our own exceptions nicely instead of
+    // giving "uncaught exception of unknown type" messages
+    runner.eventManager().pushProtector(new wxUnitTestProtector);
 
     return runner.run("", false, true, !verbose) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

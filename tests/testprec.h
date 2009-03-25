@@ -8,7 +8,30 @@
 #endif
 
 // thrown when assert fails in debug build
-class TestAssertFailure { };
+class TestAssertFailure
+{
+public:
+    TestAssertFailure(const wxString& file,
+                      int line,
+                      const wxString& func,
+                      const wxString& cond,
+                      const wxString& msg)
+        : m_file(file),
+          m_line(line),
+          m_func(func),
+          m_cond(cond),
+          m_msg(msg)
+    {
+    }
+
+    const wxString m_file;
+    const int m_line;
+    const wxString m_func;
+    const wxString m_cond;
+    const wxString m_msg;
+
+    wxDECLARE_NO_ASSIGN_CLASS(TestAssertFailure);
+};
 
 // macro to use for the functions which are supposed to fail an assertion
 #if wxDEBUG_LEVEL
