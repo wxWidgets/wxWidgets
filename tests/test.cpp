@@ -31,6 +31,7 @@
 #include <cppunit/Protector.h>
 #include <cppunit/Test.h>
 #include <cppunit/TestResult.h>
+#include <cppunit/TestFailure.h>
 #include "wx/afterstd.h"
 
 #include "wx/cmdline.h"
@@ -137,21 +138,45 @@ public:
 
     virtual void startTest(CppUnit::Test *test)
     {
-        std::cout << test->getName () << " ";
+        wxPrintf("  %-60s  ", test->getName());
+        m_result = RESULT_OK;
         m_watch.Start();
+    }
+
+    virtual void addFailure(const CppUnit::TestFailure& failure) {
+        m_result = failure.isError() ? RESULT_ERROR : RESULT_FAIL;
     }
 
     virtual void endTest(CppUnit::Test * WXUNUSED(test))
     {
         m_watch.Pause();
-        if ( m_timing )
-            std::cout << " (in "<< m_watch.Time() << " ms )";
-        std::cout << "\n";
+        wxPrintf(GetResultStr(m_result));
+        if (m_timing)
+            wxPrintf("  %6d ms", m_watch.Time());
+        wxPrintf("\n");
     }
 
 protected :
+    enum ResultType {
+        RESULT_OK = 0,
+        RESULT_FAIL,
+        RESULT_ERROR
+    };
+
+    wxString GetResultStr(ResultType type) const {
+        static const wxChar* ResultTypeNames[] = {
+            wxT("OK"),
+            wxT(" F"),
+            wxT("ER")
+        };
+        wxCHECK_MSG(static_cast<size_t>(type) < WXSIZEOF(ResultTypeNames),
+            ResultTypeNames[RESULT_ERROR], "invalid entry type");
+        return ResultTypeNames[type];
+    }
+
     bool m_timing;
     wxStopWatch m_watch;
+    ResultType m_result;
 };
 
 #if wxUSE_GUI
@@ -404,7 +429,8 @@ int TestApp::OnRun()
     // giving "uncaught exception of unknown type" messages
     runner.eventManager().pushProtector(new wxUnitTestProtector);
 
-    return runner.run("", false, true, !verbose) ? EXIT_SUCCESS : EXIT_FAILURE;
+    bool printProgress = !(verbose || m_detail || m_timing);
+    return runner.run("", false, true, printProgress) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 int TestApp::OnExit()
