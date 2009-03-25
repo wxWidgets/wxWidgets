@@ -94,13 +94,22 @@
 
 @end
 
-@interface wxNSTextView : NSScrollView
+@interface wxNSTextScrollView : NSScrollView
 {
 }
+@end
+
+@interface wxNSTextView : NSTextView
+{
+    wxNSTextScrollView* scrollView;
+}
+
+- (void)setScrollView: (wxNSTextScrollView *) sv;
+- (wxNSTextScrollView*) scrollView;
 
 @end
 
-@implementation wxNSTextView
+@implementation wxNSTextScrollView
 
 + (void)initialize
 {
@@ -149,6 +158,44 @@
     
     return NO;
 }
+
+- (void)textDidEndEditing:(NSNotification *)aNotification
+{
+    wxUnusedVar(aNotification);
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    if ( impl )
+    {
+        impl->DoNotifyFocusEvent( false, NULL );
+    }
+}
+@end
+
+@implementation wxNSTextView
+
+- (BOOL) becomeFirstResponder
+{
+    BOOL val = [super becomeFirstResponder];
+    
+    if ( val )
+    {
+        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( scrollView );
+        if (impl )
+            impl->DoNotifyFocusEvent( true, NULL );
+
+    }
+    return val;
+}
+
+- (void)setScrollView: (wxNSTextScrollView *) sv
+{
+    scrollView = sv;
+}
+
+- (wxNSTextScrollView*) scrollView
+{
+    return scrollView;
+}
+
 @end
 
 @implementation wxNSTextField
@@ -235,22 +282,25 @@ typedef BOOL (*wxOSX_insertNewlineHandlerPtr)(NSView* self, SEL _cmd, NSControl 
 
 wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
 {
-    m_scrollView = (NSScrollView*) w;
+    wxNSTextScrollView* sv = (wxNSTextScrollView*) w;
+    m_scrollView = sv;
     
     [m_scrollView setHasVerticalScroller:YES];
     [m_scrollView setHasHorizontalScroller:NO];
     [m_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     NSSize contentSize = [m_scrollView contentSize];
     
-    m_textView = [[NSTextView alloc] initWithFrame: NSMakeRect(0, 0,
+    wxNSTextView* tv = [[wxNSTextView alloc] initWithFrame: NSMakeRect(0, 0,
             contentSize.width, contentSize.height)];
-    [m_textView setVerticallyResizable:YES];
-    [m_textView setHorizontallyResizable:NO];
-    [m_textView setAutoresizingMask:NSViewWidthSizable];
+    m_textView = tv;
+    [tv setVerticallyResizable:YES];
+    [tv setHorizontallyResizable:NO];
+    [tv setAutoresizingMask:NSViewWidthSizable];
     
-    [m_scrollView setDocumentView: m_textView];
+    [m_scrollView setDocumentView: tv];
 
-    [m_textView setDelegate: w];
+    [tv setDelegate: w];
+    [tv setScrollView:sv];
 }
 
 wxNSTextViewControl::~wxNSTextViewControl()
@@ -447,8 +497,8 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
     
     if ( style & wxTE_MULTILINE || style & wxTE_RICH || style & wxTE_RICH2 )
     {
-        wxNSTextView* v = nil;
-        v = [[wxNSTextView alloc] initWithFrame:r];
+        wxNSTextScrollView* v = nil;
+        v = [[wxNSTextScrollView alloc] initWithFrame:r];
         c = new wxNSTextViewControl( wxpeer, v );
         static_cast<wxNSTextViewControl*>(c)->SetStringValue(str);
     }
