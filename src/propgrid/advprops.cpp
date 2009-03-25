@@ -2094,7 +2094,9 @@ bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
 {
     wxDateTime dt;
 
-    const char* c = dt.ParseFormat(text, wxString(wxDefaultDateTimeFormat), wxDefaultDateTime, NULL);
+    // FIXME: do we really want to return true from here if only part of the
+    //        string was parsed?
+    const char* c = dt.ParseFormat(text);
 
     if ( c )
     {
