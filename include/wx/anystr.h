@@ -61,6 +61,11 @@ public:
     // different conversions to pointers)
     operator bool() const { return m_str != NULL; }
 
+#ifdef __VISUALC6__
+    // FIXME-VC6: it also needs this one or it complains about ambiguity
+    bool operator!() const { return !((bool)*this); }
+#endif // __VISUALC6__
+
 
     // and these are the conversions operator which allow to assign the result
     // of FuncReturningAnyStrPtr() to either char* or wxChar* (i.e. wchar_t*)
@@ -131,6 +136,15 @@ private:
 
     wxDECLARE_NO_ASSIGN_CLASS(wxAnyStrPtr);
 };
+
+// FIXME-VC6: expressions involving logical operations are not compiled
+//            correctly without these operators
+#ifdef __VISUALC6__
+    inline bool operator||(const wxAnyStrPtr& p, bool v) { return (bool)p || v; }
+    inline bool operator||(bool v, const wxAnyStrPtr& p) { return v || (bool)p; }
+    inline bool operator&&(const wxAnyStrPtr& p, bool v) { return (bool)p && v; }
+    inline bool operator&&(bool v, const wxAnyStrPtr& p) { return v && (bool)p; }
+#endif // __VISUALC6__
 
 #endif // _WX_ANYSTR_H_
 

@@ -1136,21 +1136,34 @@ public:
         // provide compatibility overloads for them
     bool ParseISODate(const wxString& date)
     {
+        // FIXME-VC6: notice that writing "return ParseFormat() && ..." crashes
+        //            VC6 with internal compiler error so don't attempt to
+        //            simplify this code like this
+
         wxString::const_iterator end;
-        return ParseFormat(date, wxS("%Y-%m-%d"), &end) && end == date.end();
+        if ( !ParseFormat(date, wxS("%Y-%m-%d"), &end) )
+            return false;
+
+        return end == date.end();
     }
 
     bool ParseISOTime(const wxString& time)
     {
         wxString::const_iterator end;
-        return ParseFormat(time, wxS("%H:%M:%S"), &end) && end == time.end();
+        if ( !ParseFormat(time, wxS("%H:%M:%S"), &end) )
+            return false;
+        
+        return end == time.end();
     }
 
     bool ParseISOCombined(const wxString& datetime, char sep = 'T')
     {
         wxString::const_iterator end;
         const wxString fmt = wxS("%Y-%m-%d") + wxString(sep) + wxS("%H:%M:%S");
-        return ParseFormat(datetime, fmt, &end) && end == datetime.end();
+        if ( !ParseFormat(datetime, fmt, &end) )
+           return false;
+       
+        return end == datetime.end();
     }
 
         // parse a string containing the date/time in "free" format, this
