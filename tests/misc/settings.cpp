@@ -19,6 +19,8 @@
 
 #include "wx/settings.h"
 #include "wx/fontenum.h"
+#include "wx/brush.h"
+#include "wx/pen.h"
 
 // ----------------------------------------------------------------------------
 // test class
