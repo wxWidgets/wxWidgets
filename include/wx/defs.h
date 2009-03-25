@@ -2618,8 +2618,8 @@ typedef unsigned short  WXWORD;
 
 typedef WX_OPAQUE_TYPE(PicHandle ) * WXHMETAFILE ;
 #if wxOSX_USE_CARBON
-typedef WX_OPAQUE_TYPE(ControlRef ) * WXWidget ;
-typedef WX_OPAQUE_TYPE(WindowRef) * WXWindow ;
+typedef struct OpaqueControlRef* WXWidget ;
+typedef struct OpaqueWindowPtr* WXWindow ;
 typedef struct __AGLPixelFormatRec   *WXGLPixelFormat;
 typedef struct __AGLContextRec       *WXGLContext;
 #endif
