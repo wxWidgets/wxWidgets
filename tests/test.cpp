@@ -376,24 +376,34 @@ extern void SetProcessEventFunc(ProcessEventFunc func)
 //
 int TestApp::OnRun()
 {
+#if wxUSE_LOG
+    // Switch off logging unless --verbose
+    bool verbose = wxLog::GetVerbose();
+    wxLog::EnableLogging(verbose);
+#else
+    bool verbose = false;
+#endif
+
     CppUnit::TextTestRunner runner;
 
     for (size_t i = 0; i < m_registries.size(); i++)
     {
         wxString reg = m_registries[i];
-        if (!reg.empty() && !reg.EndsWith("TestCase"))
-            reg += "TestCase";
         // allow the user to specify the name of the testcase "in short form"
         // (all wx test cases end with TestCase postfix)
+        if (!reg.empty() && !reg.EndsWith("TestCase"))
+            reg += "TestCase";
+
+        string stdreg(reg.mb_str());
 
         auto_ptr<Test> test(reg.empty() ?
             TestFactoryRegistry::getRegistry().makeTest() :
-            TestFactoryRegistry::getRegistry(string(reg.mb_str())).makeTest());
+            TestFactoryRegistry::getRegistry(stdreg).makeTest());
 
         TestSuite *suite = dynamic_cast<TestSuite*>(test.get());
 
         if (suite && suite->countTestCases() == 0)
-            wxLogError(_T("No such test suite: %s"), reg);
+            cerr << "No such test suite: " << stdreg << endl;
         else if (m_list)
             List(test.get());
         else
@@ -404,14 +414,6 @@ int TestApp::OnRun()
         return EXIT_SUCCESS;
 
     runner.setOutputter(new CppUnit::CompilerOutputter(&runner.result(), cout));
-
-#if wxUSE_LOG
-    // Switch off logging unless --verbose
-    bool verbose = wxLog::GetVerbose();
-    wxLog::EnableLogging(verbose);
-#else
-    bool verbose = false;
-#endif
 
     // there is a bug
     // (http://sf.net/tracker/index.php?func=detail&aid=1649369&group_id=11795&atid=111795)
