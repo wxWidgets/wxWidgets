@@ -91,6 +91,12 @@ Major new features in 2.8 release
 2.8.11:
 -------
 
+All:
+
+- Added several functions forward compatible with wxWidgets 3.0 (troelsk):
+  wxDC::SetDeviceClippingRegion(), wxShowEvent::IsShown(),
+  wxIconizeEvent::IsIconized(), wxFileName::StripExtension().
+
 All (GUI):
 
 - Add wxBU_EXACTFIT support to wxToggleButton XRC handler (Ronny Krueger).

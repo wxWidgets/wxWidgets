@@ -481,6 +481,12 @@ public:
                             wxString *path,
                             wxPathFormat format = wxPATH_NATIVE);
 
+#if wxABI_VERSION >= 20811
+        // strip the file extension
+    static wxString StripExtension(const wxString& fullpath);
+#endif // wxABI_VERSION >= 20811
+
+
     // Filesize
 
         // returns the size of the given filename

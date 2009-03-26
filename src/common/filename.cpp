@@ -2139,6 +2139,14 @@ void wxFileName::SplitPath(const wxString& fullpath,
     }
 }
 
+/* static */
+wxString wxFileName::StripExtension(const wxString& fullpath)
+{
+    wxFileName fn(fullpath);
+    fn.SetExt("");
+    return fn.GetFullPath();
+}
+
 // ----------------------------------------------------------------------------
 // time functions
 // ----------------------------------------------------------------------------
