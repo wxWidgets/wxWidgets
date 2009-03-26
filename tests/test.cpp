@@ -108,7 +108,7 @@ public:
         {
             return functor();
         }
-        catch ( std::exception& e )
+        catch ( std::exception& )
         {
             // cppunit deals with the standard exceptions itself, let it do as
             // it output more details (especially for std::exception-derived
