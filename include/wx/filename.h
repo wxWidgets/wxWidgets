@@ -519,7 +519,7 @@ public:
                             wxString *path,
                             wxPathFormat format = wxPATH_NATIVE);
 
-        // Strip the file extension
+        // strip the file extension: "foo.bar" => "foo" (but ".baz" => ".baz")
     static wxString StripExtension(const wxString& fullpath);
 
 #ifdef wxHAS_FILESYSTEM_VOLUMES
