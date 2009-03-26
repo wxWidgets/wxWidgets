@@ -384,16 +384,7 @@ void wxStripExtension(wchar_t *buffer) { wxDoStripExtension(buffer); }
 
 void wxStripExtension(wxString& buffer)
 {
-    //RN:  Be careful about the handling the case where
-    //buffer.length() == 0
-    for(size_t i = buffer.length() - 1; i != wxString::npos; --i)
-    {
-        if (buffer.GetChar(i) == wxT('.'))
-        {
-          buffer = buffer.Left(i);
-          break;
-        }
-    }
+   buffer = wxFileName::StripExtension(buffer);
 }
 
 // Destructive removal of /./ and /../ stuff

@@ -555,10 +555,11 @@ wxDEPRECATED_BUT_USED_INTERNALLY(
     WXDLLIMPEXP_BASE void wxUnix2DosFilename(wchar_t *s) );
 
 // Strip the extension, in situ
+// Deprecated in favour of wxFileName::StripExtension() but notice that their
+// behaviour is slightly different, see the manual
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(char *buffer) );
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(wchar_t *buffer) );
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxStripExtension(wxString& buffer) );
-    // DEPRECATED: construct a wxFileName, use ClearExt() and then GetFullPath()
 
 // Get a temporary filename
 wxDEPRECATED_BUT_USED_INTERNALLY( WXDLLIMPEXP_BASE wxChar* wxGetTempFileName(const wxString& prefix, wxChar *buf = NULL) );

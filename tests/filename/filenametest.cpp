@@ -454,35 +454,15 @@ void FileNameTestCase::TestReplace()
                           fn.GetFullPath(wxPATH_UNIX) );
 }
 
-#if WXWIN_COMPATIBILITY_2_8
-
-#ifdef __VISUALC__
-    // disable warning about using deprecated wxStripExtension()
-    #pragma warning(disable:4996)
-#endif
-
-wxString wxTestStripExtension(wxString szFile)
-{
-    wxStripExtension(szFile);
-    return szFile;
-}
-
-#ifdef __VISUALC__
-    #pragma warning(default:4996)
-#endif
-
 void FileNameTestCase::TestStrip()
 {
-    //test a crash
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("")), wxTestStripExtension(_T("")) );
-
-    //others
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("")), wxTestStripExtension(_T(".")) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("")), wxTestStripExtension(_T(".wav")) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("good")), wxTestStripExtension(_T("good.wav")) );
-    CPPUNIT_ASSERT_EQUAL( wxString(_T("good.wav")), wxTestStripExtension(_T("good.wav.wav")) );
+    CPPUNIT_ASSERT_EQUAL( "", wxFileName::StripExtension(_T("")) );
+    CPPUNIT_ASSERT_EQUAL( ".", wxFileName::StripExtension(_T(".")) );
+    CPPUNIT_ASSERT_EQUAL( ".vimrc", wxFileName::StripExtension(_T(".vimrc")) );
+    CPPUNIT_ASSERT_EQUAL( "bad", wxFileName::StripExtension(_T("bad")) );
+    CPPUNIT_ASSERT_EQUAL( "good", wxFileName::StripExtension(_T("good.wav")) );
+    CPPUNIT_ASSERT_EQUAL( "good.wav", wxFileName::StripExtension(_T("good.wav.wav")) );
 }
-#endif // WXWIN_COMPATIBILITY_2_8
 
 #ifdef __WINDOWS__
 

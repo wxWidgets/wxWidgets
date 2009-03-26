@@ -519,6 +519,9 @@ public:
                             wxString *path,
                             wxPathFormat format = wxPATH_NATIVE);
 
+        // Strip the file extension
+    static wxString StripExtension(const wxString& fullpath);
+
 #ifdef wxHAS_FILESYSTEM_VOLUMES
         // return the string representing a file system volume, or drive
     static wxString GetVolumeString(char drive, int flags = wxPATH_GET_SEPARATOR);

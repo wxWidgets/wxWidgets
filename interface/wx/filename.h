@@ -1137,6 +1137,28 @@ public:
                             wxString* path,
                             wxPathFormat format = wxPATH_NATIVE);
 
+
+    /**
+        Strip the file extension.
+
+        This function does more than just removing everything after the last
+        period from the string, for example it will return the string ".vimrc"
+        unchanged because the part after the period is not an extension but the
+        file name in this case. You can use wxString::BeforeLast() to really
+        get just the part before the last period (but notice that that function
+        returns empty string if period is not present at all unlike this
+        function which returns the @a fullname unchanged in this case).
+
+        @param fullname
+           File path including name and, optionally, extension.
+
+        @return
+            File path without extension
+
+        @since 2.9.0
+    */
+    static wxString StripExtension(const wxString& fullname);
+
     /**
         Sets the access and modification times to the current moment.
     */
