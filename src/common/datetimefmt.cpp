@@ -1078,7 +1078,7 @@ static wxString TranslateFromUnicodeFormat( const wxString& fmt)
 
     wxChar chLast = _T('\0');
     size_t lastCount = 0;
-    for ( const wxChar *p = fmt; /* NUL handled inside */; p++ )
+    for ( wxString::const_iterator p = fmt.begin(); /* NUL handled inside */; p++ )
     {
         if ( *p == chLast )
         {
@@ -1086,7 +1086,7 @@ static wxString TranslateFromUnicodeFormat( const wxString& fmt)
             continue;
         }
 
-        switch ( *p )
+        switch ( (char) *p )
         {
             // these characters come in groups, start counting them
             case _T('d'):
