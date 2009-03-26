@@ -1717,8 +1717,8 @@ wxDateTime::ParseFormat(const wxString& date,
                          }
                         else // assume USA
                         {
-                            fmtDate = _T("%d/%m/%y");
-                            fmtDateAlt = _T("%m/%d/%y");
+                            fmtDate = _T("%m/%d/%y");
+                            fmtDateAlt = _T("%d/%m/%y");
                         }
                     }
 
