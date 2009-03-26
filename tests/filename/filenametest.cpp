@@ -120,9 +120,7 @@ private:
         CPPUNIT_TEST( TestComparison );
         CPPUNIT_TEST( TestSplit );
         CPPUNIT_TEST( TestSetPath );
-#if WXWIN_COMPATIBILITY_2_8
         CPPUNIT_TEST( TestStrip );
-#endif
         CPPUNIT_TEST( TestNormalize );
         CPPUNIT_TEST( TestReplace );
 #ifdef __WINDOWS__
@@ -134,9 +132,7 @@ private:
     void TestComparison();
     void TestSplit();
     void TestSetPath();
-#if WXWIN_COMPATIBILITY_2_8
     void TestStrip();
-#endif
     void TestNormalize();
     void TestReplace();
 #ifdef __WINDOWS__
