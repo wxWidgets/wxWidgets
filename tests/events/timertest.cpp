@@ -132,8 +132,9 @@ void TimerEventTestCase::Multiple()
     const int numTicks = handler.GetNumEvents();
     CPPUNIT_ASSERT( numTicks <= 20 );
 
-    // and we should get a decent number of them (unless the system is horribly
-    // loaded so if it does happen that this test fails we may need to remove
-    // it)
-    CPPUNIT_ASSERT( numTicks > 10 );
+    // and we should get a decent number of them but if the system is very
+    // loaded (as happens with build bot slaves running a couple of builds in
+    // parallel actually) it may be much less than 20 so just check that we get
+    // more than one
+    CPPUNIT_ASSERT( numTicks > 1 );
 }
