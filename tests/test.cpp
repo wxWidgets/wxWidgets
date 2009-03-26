@@ -143,7 +143,8 @@ public:
         m_watch.Start();
     }
 
-    virtual void addFailure(const CppUnit::TestFailure& failure) {
+    virtual void addFailure(const CppUnit::TestFailure& failure)
+    {
         m_result = failure.isError() ? RESULT_ERROR : RESULT_FAIL;
     }
 
@@ -157,21 +158,27 @@ public:
     }
 
 protected :
-    enum ResultType {
+    enum ResultType
+    {
         RESULT_OK = 0,
         RESULT_FAIL,
-        RESULT_ERROR
+        RESULT_ERROR,
+        RESULT_MAX
     };
 
-    wxString GetResultStr(ResultType type) const {
-        static const wxChar* ResultTypeNames[] = {
-            wxT("OK"),
-            wxT(" F"),
-            wxT("ER")
+    wxString GetResultStr(ResultType type) const
+    {
+        static const char *resultTypeNames[] =
+        {
+            "  OK",
+            "FAIL",
+            " ERR"
         };
-        wxCHECK_MSG(static_cast<size_t>(type) < WXSIZEOF(ResultTypeNames),
-            ResultTypeNames[RESULT_ERROR], "invalid entry type");
-        return ResultTypeNames[type];
+
+        wxCOMPILE_TIME_ASSERT( WXSIZEOF(resultTypeNames) == RESULT_MAX,
+                               ResultTypeNamesMismatch );
+
+        return resultTypeNames[type];
     }
 
     bool m_timing;
