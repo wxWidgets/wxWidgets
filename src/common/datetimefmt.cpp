@@ -1067,26 +1067,28 @@ static wxString GetLocaleDateFormat()
 
 // under OSX locale formats are defined using
 // http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
-// 
+//
 // so we need a translation function, bluntly copied from the windows
 // version above and enhanced with the additional elements needed
 
-static wxString TranslateFromUnicodeFormat( const wxString& fmt)
+static wxString TranslateFromUnicodeFormat(const wxString& fmt)
 {
-
     wxString fmtWX;
 
     wxChar chLast = _T('\0');
     size_t lastCount = 0;
-    for ( wxString::const_iterator p = fmt.begin(); /* NUL handled inside */; p++ )
+    for ( wxString::const_iterator p = fmt.begin(); /* end handled inside */; ++p )
     {
-        if ( *p == chLast )
+        if ( p == fmt.end() || *p == chLast )
         {
             lastCount++;
+            if ( p == fmt.end() )
+                break;
+
             continue;
         }
 
-        switch ( (char) *p )
+        switch ( (*p).GetValue() )
         {
             // these characters come in groups, start counting them
             case _T('d'):
@@ -1182,7 +1184,7 @@ static wxString TranslateFromUnicodeFormat( const wxString& fmt)
                                     wxFAIL_MSG( _T("wrong number of 'H's") );
                             }
                             break;
-                            
+
                        case _T('h'):
                             switch ( lastCount )
                             {
@@ -1208,7 +1210,7 @@ static wxString TranslateFromUnicodeFormat( const wxString& fmt)
                                     wxFAIL_MSG( _T("wrong number of 'm's") );
                             }
                             break;
-                            
+
                        case _T('s'):
                             switch ( lastCount )
                             {
@@ -1221,7 +1223,7 @@ static wxString TranslateFromUnicodeFormat( const wxString& fmt)
                                     wxFAIL_MSG( _T("wrong number of 's's") );
                             }
                             break;
-                            
+
                         case _T('g'):
                             // strftime() doesn't have era string,
                             // ignore this format
@@ -1239,20 +1241,14 @@ static wxString TranslateFromUnicodeFormat( const wxString& fmt)
 
                 // not a special character so must be just a separator,
                 // treat as is
-                if ( *p != _T('\0') )
+                if ( *p == _T('%') )
                 {
-                    if ( *p == _T('%') )
-                    {
-                        // this one needs to be escaped
-                        fmtWX += _T('%');
-                    }
-
-                    fmtWX += *p;
+                    // this one needs to be escaped
+                    fmtWX += _T('%');
                 }
-        }
 
-        if ( *p == _T('\0') )
-            break;
+                fmtWX += *p;
+        }
     }
 
     return fmtWX;
@@ -1261,7 +1257,7 @@ static wxString TranslateFromUnicodeFormat( const wxString& fmt)
 static wxString GetLocaleDateFormat()
 {
     wxCFRef<CFLocaleRef> currentLocale( CFLocaleCopyCurrent() );
- 
+
     wxCFRef<CFDateFormatterRef> dateFormatter( CFDateFormatterCreate
         (NULL, currentLocale, kCFDateFormatterShortStyle, kCFDateFormatterNoStyle));
     wxCFStringRef cfs = wxCFRetain( CFDateFormatterGetFormat(dateFormatter ));
@@ -1271,7 +1267,7 @@ static wxString GetLocaleDateFormat()
 static wxString GetLocaleFullDateFormat()
 {
     wxCFRef<CFLocaleRef> currentLocale( CFLocaleCopyCurrent() );
- 
+
     wxCFRef<CFDateFormatterRef> dateFormatter( CFDateFormatterCreate
         (NULL, currentLocale, kCFDateFormatterLongStyle, kCFDateFormatterMediumStyle));
     wxCFStringRef cfs = wxCFRetain( CFDateFormatterGetFormat(dateFormatter ));
@@ -1461,7 +1457,7 @@ wxDateTime::ParseFormat(const wxString& date,
                                 hasValidDate = true;
                             }
                         }
-                        
+
                         if ( !hasValidDate )
 #endif // __WXOSX__
                         {
@@ -1726,12 +1722,12 @@ wxDateTime::ParseFormat(const wxString& date,
                         dt = ParseFormatAt(input, end,
                                            fmtDate, fmtDateAlt);
                     Tm tm;
-                    
+
                     if ( !dt.IsValid() )
                     {
                         wxString fmtDateLong = fmtDate;
                         wxString fmtDateLongAlt = fmtDateAlt;
-                        
+
 
                         if ( !fmtDateLong.empty() )
                         {
@@ -1741,7 +1737,7 @@ wxDateTime::ParseFormat(const wxString& date,
                                            fmtDateLong, fmtDateLongAlt);
                             if ( !dtLong.IsValid() )
                                 return false;
-                                
+
                             tm = dtLong.GetTm();
                         }
                         else
