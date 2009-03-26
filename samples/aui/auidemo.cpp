@@ -1580,7 +1580,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome to wxAUI") , false, page_bmp);
 
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
-   wxFlexGridSizer *flex = new wxFlexGridSizer( 2 );
+   wxFlexGridSizer *flex = new wxFlexGridSizer( 4, 2, 0, 0 );
    flex->AddGrowableRow( 0 );
    flex->AddGrowableRow( 3 );
    flex->AddGrowableCol( 1 );
