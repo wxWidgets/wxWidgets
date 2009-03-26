@@ -1061,6 +1061,227 @@ static wxString GetLocaleDateFormat()
 
 #endif // __WINDOWS__
 
+#ifdef __WXOSX__
+
+#include "wx/osx/private.h"
+
+// under OSX locale formats are defined using
+// http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
+// 
+// so we need a translation function, bluntly copied from the windows
+// version above and enhanced with the additional elements needed
+
+static wxString TranslateFromUnicodeFormat( const wxString& fmt)
+{
+
+    wxString fmtWX;
+
+    wxChar chLast = _T('\0');
+    size_t lastCount = 0;
+    for ( const wxChar *p = fmt; /* NUL handled inside */; p++ )
+    {
+        if ( *p == chLast )
+        {
+            lastCount++;
+            continue;
+        }
+
+        switch ( *p )
+        {
+            // these characters come in groups, start counting them
+            case _T('d'):
+            case _T('M'):
+            case _T('y'):
+            case _T('g'):
+            case _T('h'):
+            case _T('H'):
+            case _T('m'):
+            case _T('s'):
+                chLast = *p;
+                lastCount = 1;
+                break;
+
+            default:
+                // first deal with any special characters we have had
+                if ( lastCount )
+                {
+                    switch ( chLast )
+                    {
+                        case _T('d'):
+                            switch ( lastCount )
+                            {
+                                case 1: // d
+                                case 2: // dd
+                                    // these two are the same as we
+                                    // don't distinguish between 1 and
+                                    // 2 digits for days
+                                    fmtWX += _T("%d");
+                                    break;
+
+                                case 3: // ddd
+                                    fmtWX += _T("%a");
+                                    break;
+
+                                case 4: // dddd
+                                    fmtWX += _T("%A");
+                                    break;
+
+                                default:
+                                    wxFAIL_MSG( _T("too many 'd's") );
+                            }
+                            break;
+
+                        case _T('M'):
+                            switch ( lastCount )
+                            {
+                                case 1: // M
+                                case 2: // MM
+                                    // as for 'd' and 'dd' above
+                                    fmtWX += _T("%m");
+                                    break;
+
+                                case 3:
+                                    fmtWX += _T("%b");
+                                    break;
+
+                                case 4:
+                                    fmtWX += _T("%B");
+                                    break;
+
+                                default:
+                                    wxFAIL_MSG( _T("too many 'M's") );
+                            }
+                            break;
+
+                        case _T('y'):
+                            switch ( lastCount )
+                            {
+                                case 1: // y
+                                case 2: // yy
+                                    fmtWX += _T("%y");
+                                    break;
+
+                                case 4: // yyyy
+                                    fmtWX += _T("%Y");
+                                    break;
+
+                                default:
+                                    wxFAIL_MSG( _T("wrong number of 'y's") );
+                            }
+                            break;
+
+                        case _T('H'):
+                            switch ( lastCount )
+                            {
+                                case 1: // H
+                                case 2: // HH
+                                    fmtWX += _T("%H");
+                                    break;
+
+                                default:
+                                    wxFAIL_MSG( _T("wrong number of 'H's") );
+                            }
+                            break;
+                            
+                       case _T('h'):
+                            switch ( lastCount )
+                            {
+                                case 1: // h
+                                case 2: // hh
+                                    fmtWX += _T("%h");
+                                    break;
+
+                                default:
+                                    wxFAIL_MSG( _T("wrong number of 'h's") );
+                            }
+                            break;
+
+                       case _T('m'):
+                            switch ( lastCount )
+                            {
+                                case 1: // m
+                                case 2: // mm
+                                    fmtWX += _T("%M");
+                                    break;
+
+                                default:
+                                    wxFAIL_MSG( _T("wrong number of 'm's") );
+                            }
+                            break;
+                            
+                       case _T('s'):
+                            switch ( lastCount )
+                            {
+                                case 1: // s
+                                case 2: // ss
+                                    fmtWX += _T("%S");
+                                    break;
+
+                                default:
+                                    wxFAIL_MSG( _T("wrong number of 's's") );
+                            }
+                            break;
+                            
+                        case _T('g'):
+                            // strftime() doesn't have era string,
+                            // ignore this format
+                            wxASSERT_MSG( lastCount <= 2,
+                                          _T("too many 'g's") );
+                            break;
+
+                        default:
+                            wxFAIL_MSG( _T("unreachable") );
+                    }
+
+                    chLast = _T('\0');
+                    lastCount = 0;
+                }
+
+                // not a special character so must be just a separator,
+                // treat as is
+                if ( *p != _T('\0') )
+                {
+                    if ( *p == _T('%') )
+                    {
+                        // this one needs to be escaped
+                        fmtWX += _T('%');
+                    }
+
+                    fmtWX += *p;
+                }
+        }
+
+        if ( *p == _T('\0') )
+            break;
+    }
+
+    return fmtWX;
+}
+
+static wxString GetLocaleDateFormat()
+{
+    wxCFRef<CFLocaleRef> currentLocale( CFLocaleCopyCurrent() );
+ 
+    wxCFRef<CFDateFormatterRef> dateFormatter( CFDateFormatterCreate
+        (NULL, currentLocale, kCFDateFormatterShortStyle, kCFDateFormatterNoStyle));
+    wxCFStringRef cfs = wxCFRetain( CFDateFormatterGetFormat(dateFormatter ));
+    return TranslateFromUnicodeFormat(cfs.AsString());
+}
+
+static wxString GetLocaleFullDateFormat()
+{
+    wxCFRef<CFLocaleRef> currentLocale( CFLocaleCopyCurrent() );
+ 
+    wxCFRef<CFDateFormatterRef> dateFormatter( CFDateFormatterCreate
+        (NULL, currentLocale, kCFDateFormatterLongStyle, kCFDateFormatterMediumStyle));
+    wxCFStringRef cfs = wxCFRetain( CFDateFormatterGetFormat(dateFormatter ));
+    return TranslateFromUnicodeFormat(cfs.AsString());
+}
+
+
+
+#endif // __WXOSX__
+
 bool
 wxDateTime::ParseFormat(const wxString& date,
                         const wxString& format,
@@ -1222,21 +1443,43 @@ wxDateTime::ParseFormat(const wxString& date,
                     else // strptime() failed; try generic heuristic code
 #endif // HAVE_STRPTIME
                     {
+                        Tm tm;
+#ifdef __WXOSX__
+                        bool hasValidDate = false;
+                        wxString fmtDate = GetLocaleFullDateFormat();
+                        if ( !fmtDate.empty() )
+                        {
+                            const wxDateTime dt = ParseFormatAt
+                                                (
+                                                    input,
+                                                    end,
+                                                    fmtDate
+                                                );
+                            if ( dt.IsValid() )
+                            {
+                                tm = dt.GetTm();
+                                hasValidDate = true;
+                            }
+                        }
+                        
+                        if ( !hasValidDate )
+#endif // __WXOSX__
+                        {
+                            // try the format which corresponds to ctime() output
+                            // first, then the generic date/time formats
+                            const wxDateTime dt = ParseFormatAt
+                                                (
+                                                    input,
+                                                    end,
+                                                    wxS("%a %b %d %H:%M:%S %Y"),
+                                                    wxS("%x %X"),
+                                                    wxS("%X %x")
+                                                );
+                            if ( !dt.IsValid() )
+                                return false;
+                            tm = dt.GetTm();
+                        }
 
-                        // try the format which corresponds to ctime() output
-                        // first, then the generic date/time formats
-                        const wxDateTime dt = ParseFormatAt
-                                              (
-                                                input,
-                                                end,
-                                                wxS("%a %b %d %H:%M:%S %Y"),
-                                                wxS("%x %X"),
-                                                wxS("%X %x")
-                                              );
-                        if ( !dt.IsValid() )
-                            return false;
-
-                        Tm tm = dt.GetTm();
 
                         hour = tm.hour;
                         min = tm.min;
@@ -1459,9 +1702,9 @@ wxDateTime::ParseFormat(const wxString& date,
                     wxString fmtDate,
                              fmtDateAlt;
 
-#ifdef __WINDOWS__
+#if defined( __WINDOWS__ ) || defined( __WXOSX__ )
                     // The above doesn't work for all locales, try to query
-                    // Windows for the right way of formatting the date:
+                    // the OS for the right way of formatting the date:
                     fmtDate = GetLocaleDateFormat();
                     if ( fmtDate.empty() )
 #endif // __WINDOWS__
@@ -1471,21 +1714,41 @@ wxDateTime::ParseFormat(const wxString& date,
                         {
                             fmtDate = _T("%d/%m/%y");
                             fmtDateAlt = _T("%m/%d/%y");
-                        }
+                         }
                         else // assume USA
                         {
-                            fmtDate = _T("%m/%d/%y");
-                            fmtDateAlt = _T("%d/%m/%y");
+                            fmtDate = _T("%d/%m/%y");
+                            fmtDateAlt = _T("%m/%d/%y");
                         }
                     }
 
                     const wxDateTime
                         dt = ParseFormatAt(input, end,
                                            fmtDate, fmtDateAlt);
+                    Tm tm;
+                    
                     if ( !dt.IsValid() )
-                        return false;
+                    {
+                        wxString fmtDateLong = fmtDate;
+                        wxString fmtDateLongAlt = fmtDateAlt;
+                        
 
-                    Tm tm = dt.GetTm();
+                        if ( !fmtDateLong.empty() )
+                        {
+                            fmtDateLong.Replace("%y","%Y");
+                            fmtDateLongAlt.Replace("%y","%Y");
+                            const wxDateTime dtLong = ParseFormatAt(input, end,
+                                           fmtDateLong, fmtDateLongAlt);
+                            if ( !dtLong.IsValid() )
+                                return false;
+                                
+                            tm = dtLong.GetTm();
+                        }
+                        else
+                            return false;
+                    }
+                    else
+                        tm = dt.GetTm();
 
                     haveDay =
                     haveMon =
