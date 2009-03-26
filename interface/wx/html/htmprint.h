@@ -25,12 +25,28 @@ public:
     wxHtmlDCRenderer();
 
     /**
-        Returns the height of the HTML text. This is important if area height
-        (see wxHtmlDCRenderer::SetSize) is smaller that total height and thus
-        the page cannot fit into it. In that case you're supposed to call
-        Render() as long as its return value is smaller than GetTotalHeight()'s.
+        Returns the width of the HTML text in pixels.
+
+        This can be compared with the width parameter of SetSize() to check if
+        the document being printed fits into the page boundary.
+
+        @see GetTotalHeight()
+
+        @since 2.9.0
+     */
+    int GetTotalWidth() const;
+
+    /**
+        Returns the height of the HTML text in pixels.
+
+        This is important if area height (see wxHtmlDCRenderer::SetSize) is
+        smaller that total height and thus the page cannot fit into it. In that
+        case you're supposed to call Render() as long as its return value is
+        smaller than GetTotalHeight()'s.
+
+        @see GetTotalWidth()
     */
-    int GetTotalHeight();
+    int GetTotalHeight() const;
 
     /**
         Renders HTML text to the DC.
@@ -245,6 +261,29 @@ public:
         Sets the parent window for dialogs.
     */
     void SetParentWindow(wxWindow* window);
+
+private:
+    /**
+        Check whether the document fits into the page area.
+
+        This function is called by the base class OnPreparePrinting()
+        implementation and by default checks whether the document fits into
+        @a pageArea horizontally and warns the user if it does not, giving him
+        the possibility to cancel printing in this case (presumably in order to
+        change some layout options and retry it again).
+
+        You may override it to either suppress this check if truncation of the
+        HTML being printed is acceptable or, on the contrary, add more checks to
+        it, e.g. for the fit in the vertical direction if the document should
+        always appear on a single page.
+
+        @return
+            @true if wxHtmlPrintout should continue or @false to cancel
+            printing.
+
+        @since 2.9.0
+     */
+    virtual bool CheckFit(const wxSize& pageArea, const wxSize& docArea) const;
 };
 
 

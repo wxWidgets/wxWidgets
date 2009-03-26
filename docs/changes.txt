@@ -514,6 +514,8 @@ All (GUI):
 - Add support for wxSP_WRAP in the generic version of wxSpinCtrlDouble.
 - Add alignment flags support to wxSpinCtrl[Double] (Andrew Radke).
 - Added wxGetSelectedChoices() replacing wxGetMultipleChoices() (Kolya Kosenko).
+- Check whether document fits into page horizontally in wxHtmlPrintout, see the
+  new CheckFit() method for more information.
 
 wxGTK:
 

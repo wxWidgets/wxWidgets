@@ -80,9 +80,12 @@ public:
     int Render(int x, int y, wxArrayInt& known_pagebreaks, int from = 0,
                int dont_render = false, int to = INT_MAX);
 
+    // returns total width of the html document
+    int GetTotalWidth() const;
+
     // returns total height of the html document
     // (compare Render's return value with this)
-    int GetTotalHeight();
+    int GetTotalHeight() const;
 
 private:
     wxDC *m_DC;
@@ -169,6 +172,18 @@ public:
     static void CleanUpStatics();
 
 private:
+    // this function is called by the base class OnPreparePrinting()
+    // implementation and by default checks whether the document fits into
+    // pageArea horizontally and warns the user if it does not, giving him
+    // the possibility to cancel printing in this case
+    //
+    // you may override it to either suppress this check if truncation of the
+    // HTML being printed is acceptable or, on the contrary, add more checks to
+    // it, e.g. for the fit in the vertical direction if the document should
+    // always appear on a single page
+    //
+    // return true if printing should go ahead or false to cancel it
+    virtual bool CheckFit(const wxSize& pageArea, const wxSize& docArea) const;
 
     void RenderPage(wxDC *dc, int page);
             // renders one page into dc

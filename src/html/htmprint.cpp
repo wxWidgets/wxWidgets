@@ -150,11 +150,14 @@ int wxHtmlDCRenderer::Render(int x, int y,
     else return GetTotalHeight();
 }
 
-
-int wxHtmlDCRenderer::GetTotalHeight()
+int wxHtmlDCRenderer::GetTotalWidth() const
 {
-    if (m_Cells) return m_Cells->GetHeight();
-    else return 0;
+    return m_Cells ? m_Cells->GetWidth() : 0;
+}
+
+int wxHtmlDCRenderer::GetTotalHeight() const
+{
+    return m_Cells ? m_Cells->GetHeight() : 0;
 }
 
 
@@ -195,6 +198,40 @@ void wxHtmlPrintout::CleanUpStatics()
 void wxHtmlPrintout::AddFilter(wxHtmlFilter *filter)
 {
     m_Filters.Append(filter);
+}
+
+bool
+wxHtmlPrintout::CheckFit(const wxSize& pageArea, const wxSize& docArea) const
+{
+    if ( docArea.x > pageArea.x )
+    {
+        wxMessageDialog
+            dlg
+            (
+                NULL,
+                wxString::Format
+                (
+                 _("The document \"%s\" doesn't fit on the page "
+                   "horizontally and will be truncated if printed.\n"
+                   "\n"
+                   "Would you like to proceed with printing it nevertheless?"),
+                 GetTitle()
+                ),
+                _("Printing"),
+                wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION
+            );
+        dlg.SetExtendedMessage
+            (
+                _("If possible, try changing the layout parameters to "
+                  "make the printout more narrow")
+            );
+        dlg.SetYesNoLabels(_("&Print"), _("&Cancel"));
+
+        if ( dlg.ShowModal() != wxYES )
+            return false;
+    }
+
+    return true;
 }
 
 void wxHtmlPrintout::OnPreparePrinting()
@@ -248,14 +285,27 @@ void wxHtmlPrintout::OnPreparePrinting()
 
     /* prepare main renderer: */
     m_Renderer->SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
-    m_Renderer->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)),
-                          (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom) -
-                          m_FooterHeight - m_HeaderHeight -
-                          ((m_HeaderHeight == 0) ? 0 : m_MarginSpace * ppmm_v) -
-                          ((m_FooterHeight == 0) ? 0 : m_MarginSpace * ppmm_v)
-                          ));
+
+    const int printAreaW = int(ppmm_h * (mm_w - m_MarginLeft - m_MarginRight));
+    int printAreaH = int(ppmm_v * (mm_h - m_MarginTop - m_MarginBottom));
+    if ( m_HeaderHeight )
+        printAreaH -= m_HeaderHeight + m_MarginSpace * ppmm_v;
+    if ( m_FooterHeight )
+        printAreaH -= m_FooterHeight + m_MarginSpace * ppmm_v;
+
+    m_Renderer->SetSize(printAreaW, printAreaH);
     m_Renderer->SetHtmlText(m_Document, m_BasePath, m_BasePathIsDir);
-    CountPages();
+
+    if ( CheckFit(wxSize(printAreaW, printAreaH),
+                  wxSize(m_Renderer->GetTotalWidth(),
+                         m_Renderer->GetTotalHeight())) )
+    {
+        // do paginate the document
+        CountPages();
+    }
+    //else: if we don't call CountPages() m_PageBreaks remains empty and our
+    //      GetPageInfo() will return 0 as max page and so nothing will be
+    //      printed
 }
 
 bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
