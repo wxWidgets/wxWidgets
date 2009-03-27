@@ -438,7 +438,7 @@ inline bool wxSetEnv(const wxString& var, const char *value)
 inline bool wxSetEnv(const wxString& var, const wchar_t *value)
     { return wxSetEnv(var, wxString(value)); }
 template<typename T>
-inline bool wxSetEnv(const wxString& var, const wxCharTypeBuffer<T>& value)
+inline bool wxSetEnv(const wxString& var, const wxScopedCharTypeBuffer<T>& value)
     { return wxSetEnv(var, wxString(value)); }
 inline bool wxSetEnv(const wxString& var, const wxCStrData& value)
     { return wxSetEnv(var, wxString(value)); }

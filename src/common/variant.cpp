@@ -908,13 +908,13 @@ wxVariant::wxVariant(const wxCStrData& val, const wxString& name)
     m_name = name;
 }
 
-wxVariant::wxVariant(const wxCharBuffer& val, const wxString& name)
+wxVariant::wxVariant(const wxScopedCharBuffer& val, const wxString& name)
 {
     m_data = new wxVariantDataString(wxString(val));
     m_name = name;
 }
 
-wxVariant::wxVariant(const wxWCharBuffer& val, const wxString& name)
+wxVariant::wxVariant(const wxScopedWCharBuffer& val, const wxString& name)
 {
     m_data = new wxVariantDataString(wxString(val));
     m_name = name;

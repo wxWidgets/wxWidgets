@@ -399,7 +399,7 @@ wxUString &wxUString::assignFromCString( const char* str )
     if (!str)
         return assign( wxUString() );
 
-    wxWCharBuffer buffer = wxConvLibc.cMB2WC( str );
+    wxScopedWCharBuffer buffer = wxConvLibc.cMB2WC( str );
 
     return assign( buffer );
 }
@@ -409,12 +409,12 @@ wxUString &wxUString::assignFromCString( const char* str, const wxMBConv &conv )
     if (!str)
         return assign( wxUString() );
 
-    wxWCharBuffer buffer = conv.cMB2WC( str );
+    wxScopedWCharBuffer buffer = conv.cMB2WC( str );
 
     return assign( buffer );
 }
 
-wxCharBuffer wxUString::utf8_str() const
+wxScopedCharBuffer wxUString::utf8_str() const
 {
     size_type utf8_length = 0;
     const wxChar32 *ptr = data();
@@ -491,7 +491,7 @@ wxCharBuffer wxUString::utf8_str() const
     return result;
 }
 
-wxU16CharBuffer wxUString::utf16_str() const
+wxScopedU16CharBuffer wxUString::utf16_str() const
 {
     size_type utf16_length = 0;
     const wxChar32 *ptr = data();

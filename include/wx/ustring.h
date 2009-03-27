@@ -17,14 +17,18 @@
 
 #if SIZEOF_WCHAR_T == 2
 typedef wxWCharBuffer wxU16CharBuffer;
+typedef wxScopedWCharBuffer wxScopedU16CharBuffer;
 #else
 typedef wxCharTypeBuffer<wxChar16> wxU16CharBuffer;
+typedef wxScopedCharTypeBuffer<wxChar16> wxScopedU16CharBuffer;
 #endif
 
 #if SIZEOF_WCHAR_T == 4
 typedef wxWCharBuffer wxU32CharBuffer;
+typedef wxScopedWCharBuffer wxScopedU32CharBuffer;
 #else
 typedef wxCharTypeBuffer<wxChar32> wxU32CharBuffer;
+typedef wxScopedCharTypeBuffer<wxChar32> wxScopedU32CharBuffer;
 #endif
 
 
@@ -35,15 +39,15 @@ public:
 
     wxUString( const wxChar32 *str )                            { assign(str); }
     wxUString( const wxUString &str )                           { assign(str); }
-    wxUString( const wxU32CharBuffer &buf )                     { assign(buf); }
+    wxUString( const wxScopedU32CharBuffer &buf )                     { assign(buf); }
 
     wxUString( const char *str )                                { assign(str); }
-    wxUString( const wxCharBuffer &buf )                        { assign(buf); }
+    wxUString( const wxScopedCharBuffer &buf )                        { assign(buf); }
     wxUString( const char *str, const wxMBConv &conv )          { assign(str,conv); }
-    wxUString( const wxCharBuffer &buf, const wxMBConv &conv )  { assign(buf,conv); }
+    wxUString( const wxScopedCharBuffer &buf, const wxMBConv &conv )  { assign(buf,conv); }
 
     wxUString( const wxChar16 *str )                            { assign(str); }
-    wxUString( const wxU16CharBuffer &buf )                     { assign(buf); }
+    wxUString( const wxScopedU16CharBuffer &buf )                     { assign(buf); }
 
     wxUString( const wxCStrData *cstr )                         { assign(cstr); }
     wxUString( const wxString &str )                            { assign(str); }
@@ -116,11 +120,11 @@ public:
 
     // conversions
 
-    wxCharBuffer utf8_str() const;
-    wxU16CharBuffer utf16_str() const;
+    wxScopedCharBuffer utf8_str() const;
+    wxScopedU16CharBuffer utf16_str() const;
 
 #if SIZEOF_WCHAR_T == 2
-    wxWCharBuffer wc_str() const
+    wxScopedWCharBuffer wc_str() const
     {
        return utf16_str();
     }
@@ -145,13 +149,13 @@ public:
     }
 
 #if wxUSE_UNICODE_UTF8
-    wxCharBuffer wx_str()
+    wxScopedCharBuffer wx_str()
     {
         return utf8_str();
     }
 #else
 #if SIZEOF_WCHAR_T == 2
-    wxWCharBuffer wx_str()
+    wxScopedWCharBuffer wx_str()
     {
         return utf16_str();
     }
@@ -201,7 +205,7 @@ public:
         return (wxUString &) base->assign( n, ch );
     }
 
-    wxUString &assign( const wxU32CharBuffer &buf )
+    wxUString &assign( const wxScopedU32CharBuffer &buf )
     {
         return assign( buf.data() );
     }
@@ -211,7 +215,7 @@ public:
         return assignFromCString( str );
     }
 
-    wxUString &assign( const wxCharBuffer &buf )
+    wxUString &assign( const wxScopedCharBuffer &buf )
     {
         return assignFromCString( buf.data() );
     }
@@ -221,7 +225,7 @@ public:
         return assignFromCString( str, conv );
     }
 
-    wxUString &assign( const wxCharBuffer &buf, const wxMBConv &conv )
+    wxUString &assign( const wxScopedCharBuffer &buf, const wxMBConv &conv )
     {
         return assignFromCString( buf.data(), conv );
     }
@@ -231,7 +235,7 @@ public:
         return assignFromUTF16( str );
     }
 
-    wxUString &assign( const wxU16CharBuffer &buf )
+    wxUString &assign( const wxScopedU16CharBuffer &buf )
     {
         return assignFromUTF16( buf.data() );
     }
@@ -360,12 +364,12 @@ public:
 
     // append [wx overload]
 
-    wxUString &append( const wxU16CharBuffer &buf )
+    wxUString &append( const wxScopedU16CharBuffer &buf )
     {
         return append( buf.data() );
     }
 
-    wxUString &append( const wxU32CharBuffer &buf )
+    wxUString &append( const wxScopedU32CharBuffer &buf )
     {
         return append( buf.data() );
     }
@@ -375,7 +379,7 @@ public:
         return append( wxUString( str ) );
     }
 
-    wxUString &append( const wxCharBuffer &buf )
+    wxUString &append( const wxScopedCharBuffer &buf )
     {
         return append( wxUString( buf ) );
     }
@@ -467,17 +471,17 @@ public:
         return insert( n, wxUString( s ) );
     }
 
-    wxUString &insert( size_type n, const wxCharBuffer &buf )
+    wxUString &insert( size_type n, const wxScopedCharBuffer &buf )
     {
         return insert( n, wxUString( buf ) );
     }
 
-    wxUString &insert( size_type n, const wxU16CharBuffer &buf )
+    wxUString &insert( size_type n, const wxScopedU16CharBuffer &buf )
     {
         return insert( n, wxUString( buf ) );
     }
 
-    wxUString &insert( size_type n, const wxU32CharBuffer &buf )
+    wxUString &insert( size_type n, const wxScopedU32CharBuffer &buf )
     {
         return insert( n, buf.data() );
     }
@@ -536,11 +540,11 @@ public:
         { return assign( s ); }
     wxUString& operator=(const wxChar32 *s)
         { return assign( s ); }
-    wxUString& operator=(const wxCharBuffer &s)
+    wxUString& operator=(const wxScopedCharBuffer &s)
         { return assign( s ); }
-    wxUString& operator=(const wxU16CharBuffer &s)
+    wxUString& operator=(const wxScopedU16CharBuffer &s)
         { return assign( s ); }
-    wxUString& operator=(const wxU32CharBuffer &s)
+    wxUString& operator=(const wxScopedU32CharBuffer &s)
         { return assign( s ); }
     wxUString& operator=(const char ch)
         { return assign( ch ); }
@@ -566,11 +570,11 @@ public:
         { return append( s ); }
     wxUString& operator+=(const wxChar32 *s)
         { return append( s ); }
-    wxUString& operator+=(const wxCharBuffer &s)
+    wxUString& operator+=(const wxScopedCharBuffer &s)
         { return append( s ); }
-    wxUString& operator+=(const wxU16CharBuffer &s)
+    wxUString& operator+=(const wxScopedU16CharBuffer &s)
         { return append( s ); }
-    wxUString& operator+=(const wxU32CharBuffer &s)
+    wxUString& operator+=(const wxScopedU32CharBuffer &s)
         { return append( s ); }
     wxUString& operator+=(const char ch)
         { return append( ch ); }
@@ -597,11 +601,11 @@ inline wxUString operator+(const wxUString &s1, const wxChar16* s2)
     { return s1 + wxUString(s2); }
 inline wxUString operator+(const wxUString &s1, const wxChar32 *s2)
     { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxCharBuffer &s2)
+inline wxUString operator+(const wxUString &s1, const wxScopedCharBuffer &s2)
     { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxU16CharBuffer &s2)
+inline wxUString operator+(const wxUString &s1, const wxScopedU16CharBuffer &s2)
     { return s1 + wxUString(s2); }
-inline wxUString operator+(const wxUString &s1, const wxU32CharBuffer &s2)
+inline wxUString operator+(const wxUString &s1, const wxScopedU32CharBuffer &s2)
     { return s1 + wxUString(s2); }
 inline wxUString operator+(const wxUString &s1, char s2)
     { return s1 + wxUString(s2); }
@@ -624,11 +628,11 @@ inline wxUString operator+(const wxChar16* s1, const wxUString &s2)
     { return wxUString(s1) + s2; }
 inline wxUString operator+(const wxChar32 *s1, const wxUString &s2)
     { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxCharBuffer &s1, const wxUString &s2)
+inline wxUString operator+(const wxScopedCharBuffer &s1, const wxUString &s2)
     { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxU16CharBuffer &s1, const wxUString &s2)
+inline wxUString operator+(const wxScopedU16CharBuffer &s1, const wxUString &s2)
     { return wxUString(s1) + s2; }
-inline wxUString operator+(const wxU32CharBuffer &s1, const wxUString &s2)
+inline wxUString operator+(const wxScopedU32CharBuffer &s1, const wxUString &s2)
     { return wxUString(s1) + s2; }
 inline wxUString operator+(char s1, const wxUString &s2)
     { return wxUString(s1) + s2; }
@@ -686,9 +690,9 @@ wxUSTRING_COMP_OPERATORS( const wxString & )
 wxUSTRING_COMP_OPERATORS( const char * )
 wxUSTRING_COMP_OPERATORS( const wxChar16 * )
 wxUSTRING_COMP_OPERATORS( const wxChar32 * )
-wxUSTRING_COMP_OPERATORS( const wxCharBuffer & )
-wxUSTRING_COMP_OPERATORS( const wxU16CharBuffer & )
-wxUSTRING_COMP_OPERATORS( const wxU32CharBuffer & )
+wxUSTRING_COMP_OPERATORS( const wxScopedCharBuffer & )
+wxUSTRING_COMP_OPERATORS( const wxScopedU16CharBuffer & )
+wxUSTRING_COMP_OPERATORS( const wxScopedU32CharBuffer & )
 wxUSTRING_COMP_OPERATORS( const wxCStrData * )
 
 #endif // _WX_USTRING_H_

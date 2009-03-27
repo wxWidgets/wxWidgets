@@ -8,44 +8,189 @@
 
 
 /**
-    wxCharTypeBuffer<T> is a template class for storing characters.
+    wxScopedCharTypeBuffer<T> is a template class for storing characters.
 
-    @todo provide better docs for this class
+    Data are stored in reference-counted buffer. In other words, making a copy
+    of wxScopedCharTypeBuffer<T> will @em not make another copy of the stored
+    string data, it will still point to the same location in memory.
+
+    wxScopedCharTypeBuffer<T> supports two storage modes: owned and non-owned.
+    "Owned" data buffer (created with CreateOwned() or wxCharTypeBuffer<T>
+    derived class) owns the data and frees them when the last buffer pointing
+    to them is destroyed.
+
+    "Non-owned" buffer (created with CreateNonOwned()), on the other hand,
+    references data owned by somebody else -- typical use is by
+    wxString::mb_str() or wxString::wc_str(), which may return non-owned buffer
+    pointing to wxString's internal store.
+
+    Because of this, the validity of data stored in wxScopedCharTypeBuffer<T>
+    is limited by the lifetime of the "parent" object that created the
+    buffer (e.g. the wxString on which mb_str() was called).
+
+    If you need to preserve the data for longer, assign it to
+    wxCharTypeBuffer<T> instead of wxScopedCharTypeBuffer<T>. On the other
+    hand, use wxScopedCharTypeBuffer<T> if the buffer is to be destroyed before
+    the "parent" object -- typical use would be creating it on the stack and
+    destroying when it goes out of scope (hence the class' name).
 
     @tparam T
         The type of the characters stored in this class.
+
+    @since 2.9.0
 
     @nolibrary
     @category{data}
 */
 template <typename T>
-class wxCharTypeBuffer
+class wxScopedCharTypeBuffer
 {
 public:
+    /// Stored characters type.
     typedef T CharType;
 
-    wxCharTypeBuffer(const CharType *str = NULL);
-    wxCharTypeBuffer(size_t len);
-    wxCharTypeBuffer(const wxCharTypeBuffer& src);
-    ~wxCharTypeBuffer();
+    /// Default constructor, creates NULL buffer.
+    wxScopedCharTypeBuffer();
 
+    /**
+        Creates non-owned buffer from string data @a str.
+
+        The buffer's destructor will not destroy @a str. The returned buffer's
+        data is valid only as long as @a str is valid.
+     */
+    static const wxScopedCharTypeBuffer CreateNonOwned(const CharType *str);
+
+    /**
+        Creates owned buffer from @a str and takes ownership of it.
+
+        The buffer's destructor will free @a str when its reference count
+        reaches zero (initial count is 1).
+     */
+    static const wxScopedCharTypeBuffer CreateOwned(const CharType *str);
+
+    /**
+        Copy constructor.
+
+        Increases reference count on the data, does @em not make wxStrdup()
+        copy of the data.
+     */
+    wxScopedCharTypeBuffer(const wxScopedCharTypeBuffer& src);
+
+    /// Assignment operator behaves in the same way as the copy constructor.
+    wxScopedCharTypeBuffer& operator=(const wxScopedCharTypeBuffer& src);
+
+    /**
+        Destructor. Frees stored data if it is in "owned" mode and data's
+        reference count reaches zero.
+     */
+    ~wxScopedCharTypeBuffer();
+
+    /// Resets the buffer to NULL, freeing the data if necessary.
     void reset();
 
+    /// Returns pointer to the stored data.
+    CharType *data();
+
+    /// Returns const pointer to the stored data.
+    const CharType *data() const;
+
+    /// Implicit conversion to C string.
+    operator const CharType *() const;
+
+    /// Random access to the stored C string.
+    CharType operator[](size_t n) const;
+};
+
+/// Scoped char buffer.
+typedef wxScopedCharTypeBuffer<char> wxScopedCharBuffer;
+
+/// Scoped wchar_t buffer.
+typedef wxScopedCharTypeBuffer<wchar_t> wxScopedWCharBuffer;
+
+/**
+    wxCharTypeBuffer<T> is a template class for storing characters.
+
+    The difference from wxScopedCharTypeBuffer<T> is that this class
+    doesn't have non-owned mode and the data stored in it are valid for
+    as long as the buffer instance exists. Other than that, this class'
+    behaviour is the same as wxScopedCharTypeBuffer<T>'s -- in particular,
+    the data are reference-counted and copying the buffer is cheap.
+
+    wxScopedCharTypeBuffer<T> buffers can be converted into wxCharTypeBuffer<T>.
+
+    @tparam T
+        The type of the characters stored in this class.
+
+    @since 2.9.0
+
+    @nolibrary
+    @category{data}
+*/
+template <typename T>
+class wxCharTypeBuffer : public wxScopedCharTypeBuffer<T>
+{
+public:
+    /**
+        Creates (owned) buffer from @a str and takes ownership of it.
+
+        @see wxScopedCharTypeBuffer<T>::CreateOwned()
+     */
+    wxCharTypeBuffer(const CharType *str = NULL);
+
+
+    /**
+        Creates (owned) buffer of size @a len.
+
+        @see wxScopedCharTypeBuffer<T>::CreateOwned()
+     */
+    wxCharTypeBuffer(size_t len);
+
+    /**
+        Copy constructor.
+
+        Increases reference count on the data, does @em not make wxStrdup()
+        copy of the data.
+     */
+    wxCharTypeBuffer(const wxCharTypeBuffer& src);
+
+    /**
+        Makes a copy of scoped buffer @a src.
+
+        If @a src is a non-owned buffer, a copy of its data is made using
+        wxStrdup(). If @a src is an owned buffer, this constructor behaves
+        in the usual way (reference count on buffer data is incremented).
+     */
+    wxCharTypeBuffer(const wxScopedCharTypeBuffer<T>& src);
+
+    /**
+        Assigns @a str to this buffer and takes ownership of it (i.e. the
+        buffer becomes "owned").
+     */
     wxCharTypeBuffer& operator=(const CharType *str);
+
+    /// Assignment operator behaves in the same way as the copy constructor.
     wxCharTypeBuffer& operator=(const wxCharTypeBuffer& src);
 
-    bool extend(size_t len);
+    /**
+        Assigns a scoped buffer to this buffer.
 
-    CharType *data();
-    const CharType *data() const;
-    operator const CharType *() const;
-    CharType operator[](size_t n) const;
+        If @a src is a non-owned buffer, a copy of its data is made using
+        wxStrdup(). If @a src is an owned buffer, the assignment behaves
+        in the usual way (reference count on buffer data is incremented).
+     */
+    wxCharTypeBuffer& operator=(const wxScopedCharTypeBuffer<T>& src);
+
+    /**
+        Extends the buffer to have size @a len.
+
+        Can only be called on buffers that don't share data with another
+        buffer (i.e. reference count of the data is 1).
+     */
+    bool extend(size_t len);
 };
 
 /**
     This is a specialization of wxCharTypeBuffer<T> for @c char type.
-
-    @todo provide better docs for this class
 
     @nolibrary
     @category{data}
@@ -54,8 +199,10 @@ class wxCharBuffer : public wxCharTypeBuffer<char>
 {
 public:
     typedef wxCharTypeBuffer<char> wxCharTypeBufferBase;
+    typedef wxScopedCharTypeBuffer<char> wxScopedCharTypeBufferBase;
 
     wxCharBuffer(const wxCharTypeBufferBase& buf);
+    wxCharBuffer(const wxScopedCharTypeBufferBase& buf);
     wxCharBuffer(const CharType *str = NULL);
     wxCharBuffer(size_t len);
     wxCharBuffer(const wxCStrData& cstr);
@@ -63,7 +210,6 @@ public:
 
 /**
     This is a specialization of wxCharTypeBuffer<T> for @c wchar_t type.
-    This class is available only when <tt>wxUSE_WCHAR_T==1</tt>
 
     @nolibrary
     @category{data}
@@ -72,8 +218,10 @@ class wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
 {
 public:
     typedef wxCharTypeBuffer<wchar_t> wxCharTypeBufferBase;
+    typedef wxScopedCharTypeBuffer<wchar_t> wxScopedCharTypeBufferBase;
 
     wxWCharBuffer(const wxCharTypeBufferBase& buf);
+    wxWCharBuffer(const wxScopedCharTypeBufferBase& buf);
     wxWCharBuffer(const CharType *str = NULL);
     wxWCharBuffer(size_t len);
     wxWCharBuffer(const wxCStrData& cstr);

@@ -445,7 +445,7 @@ wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr);
 #ifdef __WINDOWS__
     #define wxScanfConvertFormatW(fmt) fmt
 #else
-    const wxWCharBuffer
+    const wxScopedWCharBuffer
     WXDLLIMPEXP_BASE wxScanfConvertFormatW(const wchar_t *format);
 #endif
 
@@ -463,9 +463,9 @@ WX_DEFINE_SCANFUNC(wxSscanf, 2, (const char *str, const char *format),
                    wxCRT_SscanfA, (str, format))
 WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wchar_t *str, const wchar_t *format),
                    wxCRT_SscanfW, (str, wxScanfConvertFormatW(format)))
-WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxCharBuffer& str, const char *format),
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxScopedCharBuffer& str, const char *format),
                    wxCRT_SscanfA, (str.data(), format))
-WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxWCharBuffer& str, const wchar_t *format),
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxScopedWCharBuffer& str, const wchar_t *format),
                    wxCRT_SscanfW, (str.data(), wxScanfConvertFormatW(format)))
 WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxString& str, const char *format),
                    wxCRT_SscanfA, (str.mb_str(), format))
@@ -480,8 +480,8 @@ WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxCStrData& str, const wchar_t *format),
 #ifndef __VISUALC___
 int WXDLLIMPEXP_BASE wxVsscanf(const char *str, const char *format, va_list ap);
 int WXDLLIMPEXP_BASE wxVsscanf(const wchar_t *str, const wchar_t *format, va_list ap);
-int WXDLLIMPEXP_BASE wxVsscanf(const wxCharBuffer& str, const char *format, va_list ap);
-int WXDLLIMPEXP_BASE wxVsscanf(const wxWCharBuffer& str, const wchar_t *format, va_list ap);
+int WXDLLIMPEXP_BASE wxVsscanf(const wxScopedCharBuffer& str, const char *format, va_list ap);
+int WXDLLIMPEXP_BASE wxVsscanf(const wxScopedWCharBuffer& str, const wchar_t *format, va_list ap);
 int WXDLLIMPEXP_BASE wxVsscanf(const wxString& str, const char *format, va_list ap);
 int WXDLLIMPEXP_BASE wxVsscanf(const wxString& str, const wchar_t *format, va_list ap);
 int WXDLLIMPEXP_BASE wxVsscanf(const wxCStrData& str, const char *format, va_list ap);

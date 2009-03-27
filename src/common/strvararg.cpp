@@ -520,7 +520,7 @@ class wxScanfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
     }
 };
 
-const wxWCharBuffer wxScanfConvertFormatW(const wchar_t *format)
+const wxScopedWCharBuffer wxScanfConvertFormatW(const wchar_t *format)
 {
     return wxScanfFormatConverterWchar().Convert(format);
 }

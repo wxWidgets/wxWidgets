@@ -182,7 +182,7 @@ static wxStrCacheStatsDumper s_showCacheStats;
 wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
 {
 #if wxUSE_UNICODE && !wxUSE_UNICODE_UTF8
-    const wxCharBuffer buf(str.AsCharBuf());
+    const wxScopedCharBuffer buf(str.AsCharBuf());
     if ( !buf )
         os.clear(wxSTD ios_base::failbit);
     else
@@ -199,13 +199,13 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
     return os << str.c_str();
 }
 
-wxSTD ostream& operator<<(wxSTD ostream& os, const wxCharBuffer& str)
+wxSTD ostream& operator<<(wxSTD ostream& os, const wxScopedCharBuffer& str)
 {
     return os << str.data();
 }
 
 #ifndef __BORLANDC__
-wxSTD ostream& operator<<(wxSTD ostream& os, const wxWCharBuffer& str)
+wxSTD ostream& operator<<(wxSTD ostream& os, const wxScopedWCharBuffer& str)
 {
     return os << str.data();
 }
@@ -223,7 +223,7 @@ wxSTD wostream& operator<<(wxSTD wostream& wos, const wxCStrData& str)
     return wos << str.AsWChar();
 }
 
-wxSTD wostream& operator<<(wxSTD wostream& wos, const wxWCharBuffer& str)
+wxSTD wostream& operator<<(wxSTD wostream& wos, const wxScopedWCharBuffer& str)
 {
     return wos << str.data();
 }
@@ -395,7 +395,7 @@ const char* wxCStrData::AsChar() const
     //             adding more fields to wxString and require profiling results
     //             to be sure that we really gain enough from them to justify
     //             doing it.
-    wxCharBuffer buf(str->mb_str());
+    wxScopedCharBuffer buf(str->mb_str());
 
     // if it failed, return empty string and not NULL to avoid crashes in code
     // written with either wxWidgets 2 wxString or std::string behaviour in
@@ -426,7 +426,7 @@ const wchar_t* wxCStrData::AsWChar() const
     wxString *str = wxConstCast(m_str, wxString);
 
     // convert the string:
-    wxWCharBuffer buf(str->wc_str());
+    wxScopedWCharBuffer buf(str->wc_str());
 
     // notice that here, unlike above in AsChar(), conversion can't fail as our
     // internal UTF-8 is always well-formed -- or the string was corrupted and
@@ -465,15 +465,15 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
 {
     // anything to do?
     if ( !psz || nLength == 0 )
-        return SubstrBufFromMB(L"", 0);
+        return SubstrBufFromMB(wxWCharBuffer(L""), 0);
 
     if ( nLength == npos )
         nLength = wxNO_LEN;
 
     size_t wcLen;
-    wxWCharBuffer wcBuf(conv.cMB2WC(psz, nLength, &wcLen));
+    wxScopedWCharBuffer wcBuf(conv.cMB2WC(psz, nLength, &wcLen));
     if ( !wcLen )
-        return SubstrBufFromMB(_T(""), 0);
+        return SubstrBufFromMB(wxWCharBuffer(L""), 0);
     else
         return SubstrBufFromMB(wcBuf, wcLen);
 }
@@ -486,7 +486,7 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
 {
     // anything to do?
     if ( !psz || nLength == 0 )
-        return SubstrBufFromMB("", 0);
+        return SubstrBufFromMB(wxCharBuffer(""), 0);
 
     // if psz is already in UTF-8, we don't have to do the roundtrip to
     // wchar_t* and back:
@@ -509,9 +509,9 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
 
     // first convert to wide string:
     size_t wcLen;
-    wxWCharBuffer wcBuf(conv.cMB2WC(psz, nLength, &wcLen));
+    wxScopedWCharBuffer wcBuf(conv.cMB2WC(psz, nLength, &wcLen));
     if ( !wcLen )
-        return SubstrBufFromMB("", 0);
+        return SubstrBufFromMB(wxCharBuffer(""), 0);
 
     // and then to UTF-8:
     SubstrBufFromMB buf(ConvertStr(wcBuf, wcLen, wxMBConvStrictUTF8()));
@@ -529,15 +529,15 @@ wxString::SubstrBufFromWC wxString::ConvertStr(const wchar_t *pwz, size_t nLengt
 {
     // anything to do?
     if ( !pwz || nLength == 0 )
-        return SubstrBufFromWC("", 0);
+        return SubstrBufFromWC(wxCharBuffer(""), 0);
 
     if ( nLength == npos )
         nLength = wxNO_LEN;
 
     size_t mbLen;
-    wxCharBuffer mbBuf(conv.cWC2MB(pwz, nLength, &mbLen));
+    wxScopedCharBuffer mbBuf(conv.cWC2MB(pwz, nLength, &mbLen));
     if ( !mbLen )
-        return SubstrBufFromWC("", 0);
+        return SubstrBufFromWC(wxCharBuffer(""), 0);
     else
         return SubstrBufFromWC(mbBuf, mbLen);
 }
@@ -547,14 +547,14 @@ wxString::SubstrBufFromWC wxString::ConvertStr(const wchar_t *pwz, size_t nLengt
 #if wxUSE_UNICODE_WCHAR
 
 //Convert wxString in Unicode mode to a multi-byte string
-const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
+const wxScopedCharBuffer wxString::mb_str(const wxMBConv& conv) const
 {
     return conv.cWC2MB(wx_str(), length() + 1 /* size, not length */, NULL);
 }
 
 #elif wxUSE_UNICODE_UTF8
 
-const wxWCharBuffer wxString::wc_str() const
+const wxScopedWCharBuffer wxString::wc_str() const
 {
     return wxMBConvStrictUTF8().cMB2WC
                                 (
@@ -564,20 +564,23 @@ const wxWCharBuffer wxString::wc_str() const
                                 );
 }
 
-const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
+const wxScopedCharBuffer wxString::mb_str(const wxMBConv& conv) const
 {
     if ( conv.IsUTF8() )
-        return wxCharBuffer::CreateNonOwned(m_impl.c_str());
+        return wxScopedCharBuffer::CreateNonOwned(m_impl.c_str());
 
     // FIXME-UTF8: use wc_str() here once we have buffers with length
 
     size_t wcLen;
-    wxWCharBuffer wcBuf(wxMBConvStrictUTF8().cMB2WC
-                                             (
-                                                m_impl.c_str(),
-                                                m_impl.length() + 1, // size
-                                                &wcLen
-                                             ));
+    wxScopedWCharBuffer wcBuf
+                        (
+                          wxMBConvStrictUTF8().cMB2WC
+                                               (
+                                                 m_impl.c_str(),
+                                                 m_impl.length() + 1, // size
+                                                 &wcLen
+                                               )
+                        );
     if ( !wcLen )
         return wxCharBuffer("");
 
@@ -588,7 +591,7 @@ const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
 
 //Converts this string to a wide character string if unicode
 //mode is not enabled and wxUSE_WCHAR_T is enabled
-const wxWCharBuffer wxString::wc_str(const wxMBConv& conv) const
+const wxScopedWCharBuffer wxString::wc_str(const wxMBConv& conv) const
 {
     return conv.cMB2WC(wx_str(), length() + 1 /* size, not length */, NULL);
 }
@@ -1196,7 +1199,7 @@ wxString wxString::FromAscii(char ascii)
     return wxString(wxUniChar((wchar_t)c));
 }
 
-const wxCharBuffer wxString::ToAscii() const
+const wxScopedCharBuffer wxString::ToAscii() const
 {
     // this will allocate enough space for the terminating NUL too
     wxCharBuffer buffer(length());
@@ -2085,8 +2088,8 @@ bool wxString::Matches(const wxString& mask) const
 
   // FIXME-UTF8: implement using iterators, remove #if
 #if wxUSE_UNICODE_UTF8
-  wxWCharBuffer maskBuf = mask.wc_str();
-  wxWCharBuffer txtBuf = wc_str();
+  const wxScopedWCharBuffer maskBuf = mask.wc_str();
+  const wxScopedWCharBuffer txtBuf = wc_str();
   const wxChar *pszMask = maskBuf.data();
   const wxChar *pszTxt = txtBuf.data();
 #else

@@ -130,7 +130,7 @@ extern XColor itemColors[5] ;
 
 wxString wxXmStringToString( const XmString& xmString );
 XmString wxStringToXmString( const char* string );
-inline XmString wxStringToXmString( const wxCharBuffer& string )
+inline XmString wxStringToXmString( const wxScopedCharBuffer& string )
     { return wxStringToXmString(string.data()); }
 inline XmString wxStringToXmString( const wxString& string )
     { return wxStringToXmString((const char*)string.mb_str()); }

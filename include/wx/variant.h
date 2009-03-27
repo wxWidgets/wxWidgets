@@ -210,8 +210,8 @@ public:
     wxVariant(const char* val, const wxString& name = wxEmptyString);
     wxVariant(const wchar_t* val, const wxString& name = wxEmptyString);
     wxVariant(const wxCStrData& val, const wxString& name = wxEmptyString);
-    wxVariant(const wxCharBuffer& val, const wxString& name = wxEmptyString);
-    wxVariant(const wxWCharBuffer& val, const wxString& name = wxEmptyString);
+    wxVariant(const wxScopedCharBuffer& val, const wxString& name = wxEmptyString);
+    wxVariant(const wxScopedWCharBuffer& val, const wxString& name = wxEmptyString);
 
     bool operator== (const wxString& value) const;
     bool operator!= (const wxString& value) const;
@@ -225,7 +225,7 @@ public:
     wxVariant& operator=(const wxCStrData& value)
         { return *this = value.AsString(); }
     template<typename T>
-    wxVariant& operator=(const wxCharTypeBuffer<T>& value)
+    wxVariant& operator=(const wxScopedCharTypeBuffer<T>& value)
         { return *this = value.data(); }
 
     inline operator wxString () const {  return MakeString(); }

@@ -61,6 +61,7 @@ private:
         CPPUNIT_TEST( ExplicitConversion );
         CPPUNIT_TEST( IndexedAccess );
         CPPUNIT_TEST( BeforeAndAfter );
+        CPPUNIT_TEST( ScopedBuffers );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -93,6 +94,7 @@ private:
     void ExplicitConversion();
     void IndexedAccess();
     void BeforeAndAfter();
+    void ScopedBuffers();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
@@ -924,3 +926,26 @@ void StringTestCase::BeforeAndAfter()
     CPPUNIT_ASSERT_EQUAL( L"\xe7a=l\xe0", s.AfterLast(';') );
 }
 
+void StringTestCase::ScopedBuffers()
+{
+    // wxString relies on efficient buffers, verify they work as they should
+
+    const char *literal = "Hello World!";
+
+    // non-owned buffer points to the string passed to it
+    wxScopedCharBuffer sbuf = wxScopedCharBuffer::CreateNonOwned(literal);
+    CPPUNIT_ASSERT( sbuf.data() == literal );
+
+    // a copy of scoped non-owned buffer still points to the same string
+    wxScopedCharBuffer sbuf2(sbuf);
+    CPPUNIT_ASSERT( sbuf.data() == sbuf2.data() );
+
+    // but assigning it to wxCharBuffer makes a full copy
+    wxCharBuffer buf(sbuf);
+    CPPUNIT_ASSERT( buf.data() != literal );
+    CPPUNIT_ASSERT_EQUAL( literal, buf.data() );
+
+    wxCharBuffer buf2 = sbuf;
+    CPPUNIT_ASSERT( buf2.data() != literal );
+    CPPUNIT_ASSERT_EQUAL( literal, buf2.data() );
+}

@@ -128,16 +128,16 @@ class WXDLLIMPEXP_BASE wxFormatString
 {
 public:
     wxFormatString(const char *str)
-        : m_char(wxCharBuffer::CreateNonOwned(str)), m_str(NULL), m_cstr(NULL) {}
+        : m_char(wxScopedCharBuffer::CreateNonOwned(str)), m_str(NULL), m_cstr(NULL) {}
     wxFormatString(const wchar_t *str)
-        : m_wchar(wxWCharBuffer::CreateNonOwned(str)), m_str(NULL), m_cstr(NULL) {}
+        : m_wchar(wxScopedWCharBuffer::CreateNonOwned(str)), m_str(NULL), m_cstr(NULL) {}
     wxFormatString(const wxString& str)
         : m_str(&str), m_cstr(NULL) {}
     wxFormatString(const wxCStrData& str)
         : m_str(NULL), m_cstr(&str) {}
-    wxFormatString(const wxCharBuffer& str)
+    wxFormatString(const wxScopedCharBuffer& str)
         : m_char(str), m_str(NULL), m_cstr(NULL)  {}
-    wxFormatString(const wxWCharBuffer& str)
+    wxFormatString(const wxScopedWCharBuffer& str)
         : m_wchar(str), m_str(NULL), m_cstr(NULL) {}
 
 
@@ -168,7 +168,7 @@ private:
     // ..AsWChar() below)
     const char* InputAsChar();
     const char* AsChar();
-    wxCharBuffer m_convertedChar;
+    wxScopedCharBuffer m_convertedChar;
 #endif // !wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
@@ -178,12 +178,12 @@ public:
 private:
     const wchar_t* InputAsWChar();
     const wchar_t* AsWChar();
-    wxWCharBuffer m_convertedWChar;
+    wxScopedWCharBuffer m_convertedWChar;
 #endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 
 private:
-    wxCharBuffer  m_char;
-    wxWCharBuffer m_wchar;
+    wxScopedCharBuffer  m_char;
+    wxScopedWCharBuffer m_wchar;
 
     // NB: we can use a pointer here, because wxFormatString is only used
     //     as function argument, so it has shorter life than the string
@@ -240,12 +240,12 @@ struct wxFormatStringArgumentFinder<wxString>
     : public wxFormatStringArgumentFinder<const wxString&> {};
 
 template<>
-struct wxFormatStringArgumentFinder<wxCharBuffer>
-    : public wxFormatStringArgumentFinder<const wxCharBuffer&> {};
+struct wxFormatStringArgumentFinder<wxScopedCharBuffer>
+    : public wxFormatStringArgumentFinder<const wxScopedCharBuffer&> {};
 
 template<>
-struct wxFormatStringArgumentFinder<wxWCharBuffer>
-    : public wxFormatStringArgumentFinder<const wxWCharBuffer&> {};
+struct wxFormatStringArgumentFinder<wxScopedWCharBuffer>
+    : public wxFormatStringArgumentFinder<const wxScopedWCharBuffer&> {};
 
 
 // ----------------------------------------------------------------------------
@@ -314,7 +314,7 @@ struct wxArgNormalizerWchar : public wxArgNormalizer<T>
 template<typename CharType>
 struct wxArgNormalizerWithBuffer
 {
-    typedef wxCharTypeBuffer<CharType> CharBuffer;
+    typedef wxScopedCharTypeBuffer<CharType> CharBuffer;
 
     wxArgNormalizerWithBuffer() {}
     wxArgNormalizerWithBuffer(const CharBuffer& buf,
@@ -409,12 +409,12 @@ struct wxArgNormalizerUtf8<const char*>
     {
         if ( wxLocaleIsUtf8 )
         {
-            m_value = wxCharBuffer::CreateNonOwned(s);
+            m_value = wxScopedCharBuffer::CreateNonOwned(s);
         }
         else
         {
             // convert to widechar string first:
-            wxWCharBuffer buf(wxConvLibc.cMB2WC(s));
+            wxScopedWCharBuffer buf(wxConvLibc.cMB2WC(s));
 
             // then to UTF-8:
             if ( buf )
@@ -485,10 +485,10 @@ WX_ARG_NORMALIZER_FORWARD(char*, const char*);
 WX_ARG_NORMALIZER_FORWARD(wchar_t*, const wchar_t*);
 
 // versions for passing wx[W]CharBuffer:
-WX_ARG_NORMALIZER_FORWARD(wxCharBuffer, const char*);
-WX_ARG_NORMALIZER_FORWARD(const wxCharBuffer&, const char*);
-WX_ARG_NORMALIZER_FORWARD(wxWCharBuffer, const wchar_t*);
-WX_ARG_NORMALIZER_FORWARD(const wxWCharBuffer&, const wchar_t*);
+WX_ARG_NORMALIZER_FORWARD(wxScopedCharBuffer, const char*);
+WX_ARG_NORMALIZER_FORWARD(const wxScopedCharBuffer&, const char*);
+WX_ARG_NORMALIZER_FORWARD(wxScopedWCharBuffer, const wchar_t*);
+WX_ARG_NORMALIZER_FORWARD(const wxScopedWCharBuffer&, const wchar_t*);
 
 // versions for std::[w]string:
 #if wxUSE_STD_STRING
