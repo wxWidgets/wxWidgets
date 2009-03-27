@@ -373,9 +373,7 @@ private:
     size_t m_nCopied;
 };
 
-
-
-#ifdef __WINDOWS
+#ifdef __WINDOWS__
 
 // on Windows, we should use %s and %c regardless of the build:
 class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
