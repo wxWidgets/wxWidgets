@@ -833,7 +833,7 @@ wxAuiToolBar::wxAuiToolBar(wxWindow* parent,
     m_gripper_sizer_item = NULL;
     m_overflow_sizer_item = NULL;
     m_dragging = false;
-    m_style = style;
+    m_style = style | wxBORDER_NONE;
     m_gripper_visible = (m_style & wxAUI_TB_GRIPPER) ? true : false;
     m_overflow_visible = (m_style & wxAUI_TB_OVERFLOW) ? true : false;
     m_overflow_state = 0;
