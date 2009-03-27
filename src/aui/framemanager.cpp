@@ -4378,9 +4378,19 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                 wxScreenDC dc;
 #endif
                 if (!m_action_hintrect.IsEmpty())
+                {
+                    // remove old resize hint
                     DrawResizeHint(dc, m_action_hintrect);
-                DrawResizeHint(dc, rect);
-                m_action_hintrect = rect;
+                    m_action_hintrect = wxRect();
+                }
+                
+                // draw new resize hint, if it's inside the managed frame
+                wxRect frame_screen_rect = m_frame->GetScreenRect();
+                if (frame_screen_rect.Contains(rect))
+                {
+                    DrawResizeHint(dc, rect);
+                    m_action_hintrect = rect;
+                }
             }
         }
     }
