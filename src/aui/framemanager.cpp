@@ -558,6 +558,136 @@ static int PaneSortFunc(wxAuiPaneInfo** p1, wxAuiPaneInfo** p2)
 }
 
 
+
+
+// this utility class implements a proportional sizer
+// as it existed in wxWidgets 2.8 and before.
+
+class wxAuiProportionalBoxSizer : public wxBoxSizer
+{
+public:
+    wxAuiProportionalBoxSizer(int orientation) : wxBoxSizer(orientation) { }
+    
+    void RecalcSizes()
+    {
+        if (m_children.GetCount() == 0)
+            return;
+
+        int fixed_height = 0;
+        int fixed_width = 0;
+        int stretchable = 0;
+        wxSizerItemList::compatibility_iterator node;
+        
+        // find fixed width and height, as well
+        // as the total stretchable proportions
+        node = m_children.GetFirst();
+        while (node)
+        {
+            wxSizerItem *item = node->GetData();
+            
+            if (item->IsShown())
+            {
+                stretchable += item->GetProportion();
+                
+                wxSize size(item->GetMinSizeWithBorder());
+                if (item->GetProportion() == 0)
+                {
+                    if (m_orient == wxVERTICAL)
+                    {
+                        fixed_height += size.y;
+                        fixed_width = wxMax(fixed_width, size.x);
+                    }
+                     else
+                    {
+                        fixed_width += size.x;
+                        fixed_height = wxMax(fixed_height, size.y);
+                    }
+                }
+            }
+            
+            node = node->GetNext();
+        }
+
+
+        // delta specifies the total amount to be allocated to stretch spaces
+        int delta = 0;
+        if (stretchable)
+        {
+            if (m_orient == wxHORIZONTAL)
+                delta = m_size.x - fixed_width;
+                 else
+                delta = m_size.y - fixed_height;
+        }
+
+        // go through each item and assign sizes
+        wxPoint pt(m_position);
+        node = m_children.GetFirst();
+        while (node)
+        {
+            wxSizerItem* item = node->GetData();
+
+            if (item->IsShown())
+            {
+                wxSize size(item->GetMinSizeWithBorder());
+
+                if (m_orient == wxVERTICAL)
+                {
+                    wxCoord height = size.y;
+                    if (item->GetProportion())
+                    {
+                        height = (delta * item->GetProportion()) / stretchable;
+                        delta -= height;
+                        stretchable -= item->GetProportion();
+                    }
+
+                    wxPoint child_pos(pt);
+                    wxSize child_size(size.x, height);
+
+                    if (item->GetFlag() & (wxEXPAND | wxSHAPED))
+                        child_size.x = m_size.x;
+                    else if (item->GetFlag() & wxALIGN_RIGHT)
+                        child_pos.x += m_size.x - size.x;
+                    else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_HORIZONTAL))
+                        child_pos.x += (m_size.x - size.x) / 2;
+
+                    item->SetDimension(child_pos, child_size);
+
+                    pt.y += height;
+                }
+                 else
+                {
+                    wxCoord width = size.x;
+                    if (item->GetProportion())
+                    {
+                        width = (delta * item->GetProportion()) / stretchable;
+                        delta -= width;
+                        stretchable -= item->GetProportion();
+                    }
+
+                    wxPoint child_pos(pt);
+                    wxSize child_size(width, size.y);
+
+                    if (item->GetFlag() & (wxEXPAND | wxSHAPED))
+                        child_size.y = m_size.y;
+                    else if (item->GetFlag() & wxALIGN_BOTTOM)
+                        child_pos.y += m_size.y - size.y;
+                    else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_VERTICAL))
+                        child_pos.y += (m_size.y - size.y) / 2;
+
+                    item->SetDimension(child_pos, child_size);
+                    
+                    pt.x += width;
+                }
+            }
+
+            node = node->GetNext();
+        }
+    }
+};
+
+
+
+
 // -- wxAuiManager class implementation --
 
 
@@ -1884,7 +2014,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
     }
 
     // create the sizer for the dock
-    wxSizer* dock_sizer = new wxBoxSizer(orientation);
+    wxSizer* dock_sizer = new wxAuiProportionalBoxSizer(orientation);
 
     // add each pane to the dock
     bool has_maximized_pane = false;
