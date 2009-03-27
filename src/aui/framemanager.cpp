@@ -4127,6 +4127,11 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
             }
         }
 
+        // new size can never be more than the number of dock pixels
+        if (new_pixsize > dock_pixels)
+            new_pixsize = dock_pixels;
+
+
         // find a pane in our dock to 'steal' space from or to 'give'
         // space to -- this is essentially what is done when a pane is
         // resized; the pane should usually be the first non-fixed pane
@@ -4153,7 +4158,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
             m_action = actionNone;
             return false;
         }
-
+        
         // calculate the new proportion of the pane
         int new_proportion = (new_pixsize*total_proportion)/dock_pixels;
 
@@ -4201,9 +4206,25 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         int prop_diff = new_proportion - pane.dock_proportion;
 
         // borrow the space from our neighbor pane to the
-        // right or bottom (depending on orientation)
-        dock.panes.Item(borrow_pane)->dock_proportion -= prop_diff;
+        // right or bottom (depending on orientation);
+        // also make sure we don't make the neighbor too small
+        int prop_borrow = dock.panes.Item(borrow_pane)->dock_proportion;
+
+        if (prop_borrow - prop_diff < 0)
+        {
+            // borrowing from other pane would make it too small,
+            // so cancel the resize operation
+            prop_borrow = min_proportion;
+        }
+         else
+        {
+            prop_borrow -= prop_diff;
+        }
+
+        
+        dock.panes.Item(borrow_pane)->dock_proportion = prop_borrow;
         pane.dock_proportion = new_proportion;
+
 
         // repaint
         Update();
