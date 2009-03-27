@@ -418,14 +418,6 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
     else if ( style & wxBK_RIGHT )
         tabStyle |= TCS_VERTICAL | TCS_RIGHT;
 
-    // ex style
-    if ( exstyle )
-    {
-        // note that we never want to have the default WS_EX_CLIENTEDGE style
-        // as it looks too ugly for the notebooks
-        *exstyle = 0;
-    }
-
     return tabStyle;
 }
 
