@@ -247,6 +247,14 @@ template<>
 struct wxFormatStringArgumentFinder<wxScopedWCharBuffer>
     : public wxFormatStringArgumentFinder<const wxScopedWCharBuffer&> {};
 
+template<>
+struct wxFormatStringArgumentFinder<wxCharBuffer>
+    : public wxFormatStringArgumentFinder<const wxCharBuffer&> {};
+
+template<>
+struct wxFormatStringArgumentFinder<wxWCharBuffer>
+    : public wxFormatStringArgumentFinder<const wxWCharBuffer&> {};
+
 
 // ----------------------------------------------------------------------------
 // wxArgNormalizer*<T> converters
@@ -489,6 +497,10 @@ WX_ARG_NORMALIZER_FORWARD(wxScopedCharBuffer, const char*);
 WX_ARG_NORMALIZER_FORWARD(const wxScopedCharBuffer&, const char*);
 WX_ARG_NORMALIZER_FORWARD(wxScopedWCharBuffer, const wchar_t*);
 WX_ARG_NORMALIZER_FORWARD(const wxScopedWCharBuffer&, const wchar_t*);
+WX_ARG_NORMALIZER_FORWARD(wxCharBuffer, const char*);
+WX_ARG_NORMALIZER_FORWARD(const wxCharBuffer&, const char*);
+WX_ARG_NORMALIZER_FORWARD(wxWCharBuffer, const wchar_t*);
+WX_ARG_NORMALIZER_FORWARD(const wxWCharBuffer&, const wchar_t*);
 
 // versions for std::[w]string:
 #if wxUSE_STD_STRING
