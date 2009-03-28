@@ -103,6 +103,7 @@ typedef wxMacControl wxWidgetImplType;
 typedef wxWidgetImpl wxWidgetImplType;
 #endif
 
+#if wxUSE_MENUS
 class wxMenuItemImpl : public wxObject 
 {
 public :
@@ -163,7 +164,7 @@ protected :
     
     DECLARE_ABSTRACT_CLASS(wxMenuItemImpl)
 } ;
-
+#endif
 
 
 class WXDLLIMPEXP_CORE wxWidgetImpl : public wxObject
