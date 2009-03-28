@@ -26,7 +26,10 @@ dnl sets build, host variables and the same with _alias
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 
-if test "$cross_compiling" = "yes"; then
+dnl notice that if --host was given but --build was not, cross_compiling is
+dnl only set to "maybe" and not "yes" and will be either set to "yes" later or
+dnl configure will exit with error in AC_PROG_CC so don't test for = "yes" here
+if test "$cross_compiling" != "no"; then
     HOST_PREFIX="${host_alias}-"
     HOST_SUFFIX="-$host_alias"
 else
@@ -7290,7 +7293,7 @@ dnl ---------------------------------------------------------------------------
 dnl get the string with OS info - used by wxGetOsDescription() on MacOS X
 dnl ---------------------------------------------------------------------------
 
-if test "$cross_compiling" = "yes"; then
+if test "$cross_compiling" != "no"; then
     dnl Use best guess from host as we can't use uname when cross compiling
     OSINFO="\"$host\""
 else
