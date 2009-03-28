@@ -245,10 +245,7 @@ public:
     }
 
     wxCharTypeBuffer(const wxCharTypeBuffer& src)
-    {
-        this->m_data = src.m_data;
-        this->IncRef();
-    }
+        : wxScopedCharTypeBuffer<T>(src) {}
 
     wxCharTypeBuffer& operator=(const CharType *str)
     {
@@ -261,13 +258,7 @@ public:
 
     wxCharTypeBuffer& operator=(const wxCharTypeBuffer& src)
     {
-        if ( &src == this )
-            return *this;
-
-        this->DecRef();
-        this->m_data = src.m_data;
-        this->IncRef();
-
+        wxScopedCharTypeBuffer<T>::operator=(src);
         return *this;
     }
 
