@@ -1011,8 +1011,12 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
         return;
     }
 
-    if ( !DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL) &&
-            !DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG) )
+    bool anySet =
+        DoSelectAndSetIcon(icons, SM_CXSMICON, SM_CYSMICON, ICON_SMALL);
+    if ( DoSelectAndSetIcon(icons, SM_CXICON, SM_CYICON, ICON_BIG) )
+        anySet = true;
+
+    if ( !anySet )
     {
         wxFAIL_MSG( "icon bundle doesn't contain any suitable icon" );
     }
