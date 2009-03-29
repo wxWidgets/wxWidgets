@@ -205,7 +205,10 @@ protected:
     // only once per instance's lifetime for each requested wxArtID.
     virtual wxBitmap CreateBitmap(const wxArtID& WXUNUSED(id),
                                   const wxArtClient& WXUNUSED(client),
-                                  const wxSize& WXUNUSED(size)) { return wxNullBitmap; }
+                                  const wxSize& WXUNUSED(size))
+    {
+        return wxNullBitmap;
+    }
 
     virtual wxIconBundle CreateIconBundle(const wxArtID& WXUNUSED(id),
                                           const wxArtClient& WXUNUSED(client))
@@ -215,6 +218,8 @@ protected:
 
 private:
     static void CommonAddingProvider();
+    static wxIconBundle DoGetIconBundle(const wxArtID& id,
+                                        const wxArtClient& client);
 
 private:
     // list of providers:

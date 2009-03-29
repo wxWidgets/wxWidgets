@@ -34,8 +34,6 @@
 class wxMacArtProvider : public wxArtProvider
 {
 protected:
-    virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
-                                  const wxSize& size);
     virtual wxIconBundle CreateIconBundle(const wxArtID& id,
                                           const wxArtClient& client);
 };
@@ -103,24 +101,6 @@ wxIconBundle wxMacArtProvider::CreateIconBundle(const wxArtID& id, const wxArtCl
         return wxMacArtProvider_CreateIconBundle(wxART_FOLDER);
 
     return wxMacArtProvider_CreateIconBundle(id);
-}
-
-// ----------------------------------------------------------------------------
-// CreateBitmap
-// ----------------------------------------------------------------------------
-
-wxBitmap wxMacArtProvider::CreateBitmap(const wxArtID& id,
-                                        const wxArtClient& client,
-                                        const wxSize& reqSize)
-{
-    wxIconBundle ic(CreateIconBundle(id, client));
-    if (ic.IsOk())
-    {
-        wxIcon theIcon(ic.GetIcon(reqSize));
-        return wxBitmap(theIcon);
-    }
-
-    return wxNullBitmap;
 }
 
 

@@ -235,28 +235,63 @@ wxArtProvider::~wxArtProvider()
         {
             bmp = node->GetData()->CreateBitmap(id, client, size);
             if ( bmp.Ok() )
-            {
-#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
-                if ( size != wxDefaultSize &&
-                     (bmp.GetWidth() != size.x || bmp.GetHeight() != size.y) )
-                {
-                    wxImage img = bmp.ConvertToImage();
-                    img.Rescale(size.x, size.y);
-                    bmp = wxBitmap(img);
-                }
-#endif
                 break;
+        }
+
+        if ( !bmp.Ok() )
+        {
+            // no bitmap created -- as a fallback, try if we can find desired
+            // icon in a bundle
+            wxIconBundle iconBundle = DoGetIconBundle(id, client);
+            if ( iconBundle.IsOk() )
+            {
+                wxSize sz(size != wxDefaultSize
+                            ? size
+                            : GetNativeSizeHint(client));
+                wxIcon icon(iconBundle.GetIcon(sz));
+                if ( icon.IsOk() )
+                    bmp.CopyFromIcon(icon);
             }
-            // We could try the IconBundles here and convert what we find
-            // to a bitmap.
         }
+
+        if ( bmp.IsOk() )
+        {
+            // if we didn't get the correct size, resize the bitmap
+#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
+            if ( size != wxDefaultSize &&
+                 (bmp.GetWidth() != size.x || bmp.GetHeight() != size.y) )
+            {
+                wxImage img = bmp.ConvertToImage();
+                img.Rescale(size.x, size.y);
+                bmp = wxBitmap(img);
+            }
+#endif
+        }
+
         sm_cache->PutBitmap(hashId, bmp);
-        }
+    }
 
     return bmp;
 }
 
-/*static*/ wxIconBundle wxArtProvider::GetIconBundle(const wxArtID& id, const wxArtClient& client)
+/*static*/
+wxIconBundle wxArtProvider::GetIconBundle(const wxArtID& id, const wxArtClient& client)
+{
+    wxIconBundle iconbundle(DoGetIconBundle(id, client));
+
+    if ( iconbundle.IsOk() )
+    {
+        return iconbundle;
+    }
+    else
+    {
+        // fall back to single-icon bundle
+        return wxIconBundle(GetIcon(id, client));
+    }
+}
+
+/*static*/
+wxIconBundle wxArtProvider::DoGetIconBundle(const wxArtID& id, const wxArtClient& client)
 {
     // safety-check against writing client,id,size instead of id,client,size:
     wxASSERT_MSG( client.Last() == _T('C'), _T("invalid 'client' parameter") );
@@ -286,16 +321,9 @@ wxArtProvider::~wxArtProvider()
                                          const wxArtClient& client,
                                          const wxSize& size)
 {
-    wxCHECK_MSG( sm_providers, wxNullIcon, _T("no wxArtProvider exists") );
-
-    // First look for an appropriate icon bundle - this will give us the best icon
-    wxIconBundle iconBundle = GetIconBundle(id, client);
-    if ( iconBundle.IsOk() )
-        return iconBundle.GetIcon(size);
-
-    // If there is no icon bundle then look for a bitmap
     wxBitmap bmp = GetBitmap(id, client, size);
-    if ( !bmp.Ok() )
+
+    if ( !bmp.IsOk() )
         return wxNullIcon;
 
     wxIcon icon;
