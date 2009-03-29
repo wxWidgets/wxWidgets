@@ -41,6 +41,8 @@ class wxGTK2ArtProvider : public wxArtProvider
 protected:
     virtual wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& client,
                                   const wxSize& size);
+    virtual wxIconBundle CreateIconBundle(const wxArtID& id,
+                                          const wxArtClient& client);
 };
 
 /*static*/ void wxArtProvider::InitNativeProvider()
@@ -55,10 +57,10 @@ protected:
 namespace
 {
 
-const char *wxArtIDToStock(const wxArtID& id)
+const wxScopedCharBuffer wxArtIDToStock(const wxArtID& id)
 {
     #define ART(wxid, gtkid) \
-           if (id == wxid) return gtkid;
+           if (id == wxid) return wxScopedCharBuffer::CreateNonOwned(gtkid);
 
     ART(wxART_ERROR,                               GTK_STOCK_DIALOG_ERROR)
     ART(wxART_INFORMATION,                         GTK_STOCK_DIALOG_INFO)
@@ -116,16 +118,19 @@ const char *wxArtIDToStock(const wxArtID& id)
     ART(wxART_FIND,                                GTK_STOCK_FIND)
     ART(wxART_FIND_AND_REPLACE,                    GTK_STOCK_FIND_AND_REPLACE)
 
-    return NULL;
-
     #undef ART
+
+    // allow passing GTK+ stock IDs to wxArtProvider -- if a recognized wx
+    // ID wasn't found, pass it to GTK+ in the hope it is a GTK+ or theme
+    // icon name:
+    return id.utf8_str();
 }
 
 GtkIconSize ArtClientToIconSize(const wxArtClient& client)
 {
     if (client == wxART_TOOLBAR)
         return GTK_ICON_SIZE_LARGE_TOOLBAR;
-    else if (client == wxART_MENU)
+    else if (client == wxART_MENU || client == wxART_FRAME_ICON)
         return GTK_ICON_SIZE_MENU;
     else if (client == wxART_CMN_DIALOG || client == wxART_MESSAGE_BOX)
         return GTK_ICON_SIZE_DIALOG;
@@ -203,20 +208,56 @@ GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
                                     GTK_STATE_NORMAL, size, NULL, NULL);
 }
 
-GdkPixbuf *CreateThemeIcon(const char *iconname,
-                                  GtkIconSize iconsize, const wxSize& sz)
+GdkPixbuf *CreateThemeIcon(const char *iconname, int size)
 {
-    wxSize size(sz);
-    if (size == wxDefaultSize)
+    return gtk_icon_theme_load_icon
+           (
+               gtk_icon_theme_get_default(),
+               iconname,
+               size,
+               (GtkIconLookupFlags)0,
+               NULL
+           );
+}
+
+
+// creates either stock or theme icon
+GdkPixbuf *CreateGtkIcon(const char *icon_name,
+                         GtkIconSize stock_size, const wxSize& pixel_size)
+{
+    // try stock GTK+ icon first
+    GdkPixbuf *pixbuf = CreateStockIcon(icon_name, stock_size);
+    if ( pixbuf )
+        return pixbuf;
+
+    // if that fails, try theme icon
+    wxSize size(pixel_size);
+    if ( pixel_size == wxDefaultSize )
+        gtk_icon_size_lookup(stock_size, &size.x, &size.y);
+    return CreateThemeIcon(icon_name, size.x);
+}
+
+template<typename SizeType, typename LoaderFunc>
+wxIconBundle DoCreateIconBundle(const char *stockid,
+                                const SizeType *sizes_from,
+                                const SizeType *sizes_to,
+                                LoaderFunc get_icon)
+
+{
+    wxIconBundle bundle;
+
+    for ( const SizeType *i = sizes_from; i != sizes_to; ++i )
     {
-        gtk_icon_size_lookup(iconsize, &size.x, &size.y);
+        GdkPixbuf *pixbuf = get_icon(stockid, *i);
+        if ( !pixbuf )
+            continue;
+
+        wxIcon icon;
+        icon.SetPixbuf(pixbuf);
+        bundle.AddIcon(icon);
     }
 
-    return gtk_icon_theme_load_icon(
-                    gtk_icon_theme_get_default(),
-                    iconname,
-                    size.x,
-                    (GtkIconLookupFlags)0, NULL);
+    return bundle;
 }
 
 } // anonymous namespace
@@ -225,22 +266,16 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
                                          const wxArtClient& client,
                                          const wxSize& size)
 {
-    wxCharBuffer stockid = wxArtIDToStock(id);
+    const wxScopedCharBuffer stockid = wxArtIDToStock(id);
+
     GtkIconSize stocksize = (size == wxDefaultSize) ?
                                 ArtClientToIconSize(client) :
                                 FindClosestIconSize(size);
-
     // we must have some size, this is arbitrary
     if (stocksize == GTK_ICON_SIZE_INVALID)
         stocksize = GTK_ICON_SIZE_BUTTON;
 
-    // allow passing GTK+ stock IDs to wxArtProvider:
-    if (!stockid)
-        stockid = id.ToAscii();
-
-    GdkPixbuf *pixbuf = CreateStockIcon(stockid, stocksize);
-    if (!pixbuf)
-        pixbuf = CreateThemeIcon(stockid, stocksize, size);
+    GdkPixbuf *pixbuf = CreateGtkIcon(stockid, stocksize, size);
 
     if (pixbuf && size != wxDefaultSize &&
         (size.x != gdk_pixbuf_get_width(pixbuf) ||
@@ -260,6 +295,60 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
         bmp.SetPixbuf(pixbuf);
 
     return bmp;
+}
+
+wxIconBundle
+wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
+                                    const wxArtClient& WXUNUSED(client))
+{
+    const wxScopedCharBuffer stockid = wxArtIDToStock(id);
+
+    // try to load the bundle as stock icon first
+    GtkStyle* style = wxGTKPrivate::GetButtonWidget()->style;
+    GtkIconSet* iconset = gtk_style_lookup_icon_set(style, stockid);
+    if ( iconset )
+    {
+        GtkIconSize *sizes;
+        gint n_sizes;
+        gtk_icon_set_get_sizes(iconset, &sizes, &n_sizes);
+        wxIconBundle bundle = DoCreateIconBundle
+                              (
+                                  stockid,
+                                  sizes, sizes + n_sizes,
+                                  &CreateStockIcon
+                              );
+        g_free(sizes);
+        return bundle;
+    }
+
+    // otherwise try icon themes
+#ifdef __WXGTK26__
+    if ( !gtk_check_version(2,6,0) )
+    {
+        gint *sizes = gtk_icon_theme_get_icon_sizes
+                      (
+                          gtk_icon_theme_get_default(),
+                          stockid
+                      );
+        if ( !sizes )
+            return wxNullIconBundle;
+
+        gint *last = sizes;
+        while ( *last )
+            last++;
+
+        wxIconBundle bundle = DoCreateIconBundle
+                              (
+                                  stockid,
+                                  sizes, last,
+                                  &CreateThemeIcon
+                              );
+        g_free(sizes);
+        return bundle;
+    }
+#endif // __WXGTK26__
+
+    return wxNullIconBundle;
 }
 
 // ----------------------------------------------------------------------------
