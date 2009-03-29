@@ -910,7 +910,7 @@ wxDateTime::ParseFormat(const wxString& date,
             {
                 // a white space in the format string matches 0 or more white
                 // spaces in the input
-                while ( wxIsspace(*input) )
+                while ( input != end && wxIsspace(*input) )
                 {
                     input++;
                 }
@@ -919,7 +919,7 @@ wxDateTime::ParseFormat(const wxString& date,
             {
                 // any other character (not whitespace, not '%') must be
                 // matched by itself in the input
-                if ( *input++ != *fmt )
+                if ( input == end || *input++ != *fmt )
                 {
                     // no match
                     return false;
