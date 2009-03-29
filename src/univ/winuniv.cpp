@@ -35,11 +35,13 @@
     #include "wx/menu.h"
     #include "wx/frame.h"
     #include "wx/log.h"
+    #include "wx/button.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/colschem.h"
 #include "wx/univ/renderer.h"
 #include "wx/univ/theme.h"
+
 
 #if wxUSE_CARET
     #include "wx/caret.h"
