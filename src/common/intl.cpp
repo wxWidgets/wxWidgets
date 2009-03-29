@@ -2718,7 +2718,7 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                     {
                         case 1: // h
                         case 2: // hh
-                            fmtWX += "%h";
+                            fmtWX += "%I";
                             break;
 
                         default:
