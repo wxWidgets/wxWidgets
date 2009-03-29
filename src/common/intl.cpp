@@ -2613,6 +2613,13 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
 
     char chLast = '\0';
     size_t lastCount = 0;
+    
+    const char* formatchars = 
+        "dghHmMsSy"
+#ifdef __WXMSW__
+        "t"
+#endif
+        ;
     for ( wxString::const_iterator p = fmt.begin(); /* end handled inside */; ++p )
     {
         if ( p != fmt.end() )
@@ -2624,7 +2631,7 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
             }
 
             const wxUniChar ch = (*p).GetValue();
-            if ( ch.IsAscii() && strchr("dghHmMsSy", ch) )
+            if ( ch.IsAscii() && strchr(formatchars, ch) )
             {
                 // these characters come in groups, start counting them
                 chLast = ch;
@@ -2758,6 +2765,23 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                     wxASSERT_MSG( lastCount <= 2, "too many 'g's" );
                     break;
 
+                case 'a':
+                    fmtWX += "%p";
+                    break;
+#ifdef __WXMSW__
+                case 't':
+                    switch ( lastCount )
+                    {
+                        case 1: // t
+                        case 2: // tt
+                            fmtWX += "%p";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "too many 't's" );
+                    }
+                    break;
+#endif
                 default:
                     wxFAIL_MSG( "unreachable" );
             }
