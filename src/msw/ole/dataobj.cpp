@@ -1256,7 +1256,8 @@ void wxURLDataObject::SetURL(const wxString& url)
     }
 
 #if wxUSE_UNICODE
-    SetData(wxDF_UNICODETEXT, url.length() + 1, url.wc_str());
+    // notice that SetData() takes size in bytes
+    SetData(wxDF_UNICODETEXT, (url.length() + 1)*sizeof(wxChar), url.wc_str());
 #endif
 }
 
