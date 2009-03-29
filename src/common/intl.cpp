@@ -75,6 +75,7 @@
 #if defined(__WXOSX__)
     #include "wx/osx/core/cfref.h"
     #include <CoreFoundation/CFLocale.h>
+    #include <CoreFoundation/CFDateFormatter.h>
     #include "wx/osx/core/cfstring.h"
 #endif
 
@@ -2909,8 +2910,34 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
         case wxLOCALE_LONG_DATE_FMT:
         case wxLOCALE_DATE_TIME_FMT:
         case wxLOCALE_TIME_FMT:
-            // TODO
-            return wxString();
+            {
+                CFDateFormatterStyle dateStyle = kCFDateFormatterNoStyle;
+                CFDateFormatterStyle timeStyle = kCFDateFormatterNoStyle;
+                switch (index )
+                {
+                    case wxLOCALE_SHORT_DATE_FMT:
+                        dateStyle = kCFDateFormatterMediumStyle;
+                        break;
+                    case wxLOCALE_LONG_DATE_FMT:
+                        dateStyle = kCFDateFormatterLongStyle;
+                        break;
+                    case wxLOCALE_DATE_TIME_FMT:
+                        dateStyle = kCFDateFormatterMediumStyle;
+                        timeStyle = kCFDateFormatterMediumStyle;
+                        break;
+                    case wxLOCALE_TIME_FMT:
+                        timeStyle = kCFDateFormatterMediumStyle;
+                        break;
+                    default:
+                        wxFAIL_MSG( "unexpected time locale" );
+                        return wxString();
+                }
+                wxCFRef<CFDateFormatterRef> dateFormatter( CFDateFormatterCreate
+                    (NULL, userLocaleRef, dateStyle, timeStyle));
+                wxCFStringRef cfs = wxCFRetain( CFDateFormatterGetFormat(dateFormatter ));
+                return TranslateFromUnicodeFormat(cfs.AsString());
+            }
+            break;
 
         default:
             wxFAIL_MSG( "Unknown locale info" );
