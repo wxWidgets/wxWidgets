@@ -23,6 +23,7 @@
     #include "wx/intl.h"
     #include "wx/bitmap.h"
     #include "wx/image.h"
+    #include "wx/stream.h"
 #endif
 
 #include "wx/arrimpl.cpp"
@@ -60,6 +61,14 @@ wxIconBundle::wxIconBundle(const wxString& file, wxBitmapType type)
     AddIcon(file, type);
 }
 
+#if wxUSE_STREAMS
+wxIconBundle::wxIconBundle(wxInputStream& stream, wxBitmapType type)
+            : wxGDIObject()
+{
+    AddIcon(stream, type);
+}
+#endif // wxUSE_STREAMS
+
 wxIconBundle::wxIconBundle(const wxIcon& icon)
             : wxGDIObject()
 {
@@ -81,6 +90,41 @@ void wxIconBundle::DeleteIcons()
     UnRef();
 }
 
+namespace
+{
+
+// Adds icon from 'input' to the bundle. Shows 'errorMessage' on failure
+// (it must contain "%d", because it is used to report # of image in the file
+// that failed to load):
+template<typename T>
+void DoAddIcon(wxIconBundle& bundle,
+               T& input, wxBitmapType type,
+               const wxString& errorMessage)
+{
+#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
+    wxImage image;
+
+    const size_t count = wxImage::GetImageCount(input, type);
+    for ( size_t i = 0; i < count; ++i )
+    {
+        if ( !image.LoadFile(input, type, i) )
+        {
+            wxLogError(errorMessage, i);
+            continue;
+        }
+
+        wxIcon tmp;
+        tmp.CopyFromBitmap(wxBitmap(image));
+        bundle.AddIcon(tmp);
+    }
+#else // !wxUSE_IMAGE
+    wxUnusedVar(input);
+    wxUnusedVar(type);
+#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+}
+
+} // anonymous namespace
+
 void wxIconBundle::AddIcon(const wxString& file, wxBitmapType type)
 {
 #ifdef __WXMAC__
@@ -96,28 +140,20 @@ void wxIconBundle::AddIcon(const wxString& file, wxBitmapType type)
     }
 #endif // __WXMAC__
 
-#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
-    wxImage image;
-
-    const size_t count = wxImage::GetImageCount( file, type );
-    for ( size_t i = 0; i < count; ++i )
-    {
-        if ( !image.LoadFile( file, type, i ) )
-        {
-            wxLogError( _("Failed to load image %d from file '%s'."),
-                        i, file.c_str() );
-            continue;
-        }
-
-        wxIcon tmp;
-        tmp.CopyFromBitmap(wxBitmap(image));
-        AddIcon(tmp);
-    }
-#else // !wxUSE_IMAGE
-    wxUnusedVar(file);
-    wxUnusedVar(type);
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+    DoAddIcon
+    (
+        *this,
+        file, type,
+        wxString::Format(_("Failed to load image %%d from file '%s'."), file)
+    );
 }
+
+#if wxUSE_STREAMS
+void wxIconBundle::AddIcon(wxInputStream& stream, wxBitmapType type)
+{
+    DoAddIcon(*this, stream, type, _("Failed to load image %d from stream."));
+}
+#endif // wxUSE_STREAMS
 
 wxIcon wxIconBundle::GetIcon(const wxSize& size) const
 {

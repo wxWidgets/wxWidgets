@@ -29,7 +29,14 @@ public:
     /**
         Initializes the bundle with the icon(s) found in the file.
     */
-    wxIconBundle(const wxString& file, wxBitmapType type);
+    wxIconBundle(const wxString& file, wxBitmapType type = wxBITMAP_TYPE_ANY);
+
+    /**
+        Initializes the bundle with the icon(s) found in the stream.
+
+        @since 2.9.0
+    */
+    wxIconBundle(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY);
 
     /**
         Initializes the bundle with a single icon.
@@ -47,11 +54,20 @@ public:
     virtual ~wxIconBundle();
 
     /**
-        Adds all the icons contained in the file to the bundle; if the collection
-        already contains icons with the same width and height, they are replaced
-        by the new ones.
+        Adds all the icons contained in the file to the bundle; if the
+        collection already contains icons with the same width and height, they
+        are replaced by the new ones.
     */
-    void AddIcon(const wxString& file, wxBitmapType type);
+    void AddIcon(const wxString& file, wxBitmapType type = wxBITMAP_TYPE_ANY);
+
+    /**
+        Adds all the icons contained in the stream to the bundle; if the
+        collection already contains icons with the same width and height, they
+        are replaced by the new ones.
+
+        @since 2.9.0
+    */
+    void AddIcon(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY);
 
     /**
         Adds the icon to the collection; if the collection already
