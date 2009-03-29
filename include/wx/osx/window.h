@@ -19,8 +19,17 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxNonOwnedWindow;
 
-class WXDLLIMPEXP_FWD_CORE wxMacControl ;
-class WXDLLIMPEXP_FWD_CORE wxWidgetImpl ;
+#if wxOSX_USE_CARBON
+    class WXDLLIMPEXP_FWD_CORE wxMacControl ;
+    typedef wxMacControl wxOSXWidgetImpl;
+#elif wxOSX_USE_COCOA
+    class WXDLLIMPEXP_FWD_CORE wxWidgetCocoaImpl ;
+    typedef wxWidgetCocoaImpl wxOSXWidgetImpl;
+#elif wxOSX_USE_IPHONE
+    class WXDLLIMPEXP_FWD_CORE wxWidgetIPhoneImpl ;
+    typedef wxWidgetIPhoneImpl wxOSXWidgetImpl;
+#endif
+
 
 class WXDLLIMPEXP_CORE wxWindowMac: public wxWindowBase
 {
@@ -244,11 +253,7 @@ public:
                                            int& w, int& h , bool adjustForOrigin ) const ;
 
     // the 'true' OS level control for this wxWindow
-#if wxOSX_USE_CARBON
-    wxMacControl*       GetPeer() const { return m_peer ; }
-#else
-    wxWidgetImpl*       GetPeer() const { return m_peer ; }
-#endif
+    wxOSXWidgetImpl*       GetPeer() const { return m_peer ; }
  
     void *              MacGetCGContextRef() { return m_cgContextRef ; }
     void                MacSetCGContextRef(void * cg) { m_cgContextRef = cg ; }
@@ -261,12 +266,9 @@ protected:
     // For controls like radio buttons which are genuinely composite
     wxList              m_subControls;
 
-#if wxOSX_USE_CARBON
     // the peer object, allowing for cleaner API support
-    wxMacControl *       m_peer ;
-#else
-    wxWidgetImpl *       m_peer ;
-#endif
+    wxOSXWidgetImpl *   m_peer ;
+
     void *              m_cgContextRef ;
 
     // cache the clipped rectangles within the window hierarchy
