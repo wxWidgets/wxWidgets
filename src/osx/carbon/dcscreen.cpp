@@ -16,7 +16,9 @@
 
 #include "wx/osx/private.h"
 #include "wx/graphics.h"
+#if wxOSX_USE_COCOA_OR_CARBON
 #include "wx/osx/private/glgrab.h"
+#endif
 
 IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 
@@ -69,9 +71,9 @@ wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
         srcRect.size.width = subrect->GetWidth();
         srcRect.size.height = subrect->GetHeight();
     }
-    
     wxBitmap bmp = wxBitmap(srcRect.size.width, srcRect.size.height, 32);
-    
+#if wxOSX_USE_IPHONE
+#else
     CGContextRef context = (CGContextRef)bmp.GetHBITMAP();
     
     CGContextSaveGState(context);
@@ -89,6 +91,6 @@ wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     CGContextDrawImage(context, srcRect, image);
     
     CGContextRestoreGState(context);
-
+#endif
     return bmp;
 }
