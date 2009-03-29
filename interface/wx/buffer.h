@@ -57,16 +57,24 @@ public:
 
         The buffer's destructor will not destroy @a str. The returned buffer's
         data is valid only as long as @a str is valid.
+
+        @param str String data.
+        @param len If specified, length of the string, otherwise the string
+                   is considered to be NUL-terminated.
      */
-    static const wxScopedCharTypeBuffer CreateNonOwned(const CharType *str);
+    static const wxScopedCharTypeBuffer CreateNonOwned(const CharType *str, size_t len = wxNO_LEN);
 
     /**
         Creates owned buffer from @a str and takes ownership of it.
 
         The buffer's destructor will free @a str when its reference count
         reaches zero (initial count is 1).
+
+        @param str String data.
+        @param len If specified, length of the string, otherwise the string
+                   is considered to be NUL-terminated.
      */
-    static const wxScopedCharTypeBuffer CreateOwned(const CharType *str);
+    static const wxScopedCharTypeBuffer CreateOwned(const CharType *str, size_t len = wxNO_LEN);
 
     /**
         Copy constructor.
@@ -93,6 +101,9 @@ public:
 
     /// Returns const pointer to the stored data.
     const CharType *data() const;
+
+    /// Returns length of the string stored.
+    size_t length() const;
 
     /// Implicit conversion to C string.
     operator const CharType *() const;
@@ -133,9 +144,13 @@ public:
     /**
         Creates (owned) buffer from @a str and takes ownership of it.
 
+        @param str String data.
+        @param len If specified, length of the string, otherwise the string
+                   is considered to be NUL-terminated.
+
         @see wxScopedCharTypeBuffer<T>::CreateOwned()
      */
-    wxCharTypeBuffer(const CharType *str = NULL);
+    wxCharTypeBuffer(const CharType *str = NULL, size_t len = wxNO_LEN);
 
 
     /**

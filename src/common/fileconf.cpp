@@ -471,7 +471,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
     }
 #else // !wxUSE_UNICODE
     // no need for conversion
-    cbuf = wxCharBuffer::CreateNonOwned((char *)buf.GetData());
+    cbuf = wxCharBuffer::CreateNonOwned((char *)buf.GetData(), buf.GetDataLen());
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
 

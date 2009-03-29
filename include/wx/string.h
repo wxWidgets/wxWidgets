@@ -1637,7 +1637,7 @@ public:
         if ( len )
             *len = length();
 
-        return wxCharTypeBuffer<T>::CreateNonOwned(wx_str());
+        return wxCharTypeBuffer<T>::CreateNonOwned(wx_str(), length());
 #endif // Unicode build kind
     }
 
@@ -3540,9 +3540,10 @@ struct wxStringAsBufHelper<wchar_t>
 {
     static wxScopedWCharBuffer Get(const wxString& s, size_t *len)
     {
+        const size_t length = s.length();
         if ( len )
-            *len = s.length();
-        return wxScopedWCharBuffer::CreateNonOwned(s.wx_str());
+            *len = length;
+        return wxScopedWCharBuffer::CreateNonOwned(s.wx_str(), length);
     }
 };
 
@@ -3553,9 +3554,10 @@ struct wxStringAsBufHelper<char>
 {
     static wxScopedCharBuffer Get(const wxString& s, size_t *len)
     {
+        const size_t length = s.utf8_length();
         if ( len )
-            *len = s.utf8_length();
-        return wxScopedCharBuffer::CreateNonOwned(s.wx_str());
+            *len = length;
+        return wxScopedCharBuffer::CreateNonOwned(s.wx_str(), length);
     }
 };
 

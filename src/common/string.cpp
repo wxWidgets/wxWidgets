@@ -59,7 +59,7 @@
 namespace wxPrivate
 {
 
-static UntypedBufferData s_untypedNullData(NULL);
+static UntypedBufferData s_untypedNullData(NULL, 0);
 
 UntypedBufferData * const untypedNullDataPtr = &s_untypedNullData;
 
@@ -499,7 +499,8 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
             // we must pass the real string length to SubstrBufFromMB ctor
             if ( nLength == npos )
                 nLength = psz ? strlen(psz) : 0;
-            return SubstrBufFromMB(wxCharBuffer::CreateNonOwned(psz), nLength);
+            return SubstrBufFromMB(wxCharBuffer::CreateNonOwned(psz, nLength),
+                                   nLength);
         }
         // else: do the roundtrip through wchar_t*
     }
@@ -567,7 +568,7 @@ const wxScopedWCharBuffer wxString::wc_str() const
 const wxScopedCharBuffer wxString::mb_str(const wxMBConv& conv) const
 {
     if ( conv.IsUTF8() )
-        return wxScopedCharBuffer::CreateNonOwned(m_impl.c_str());
+        return wxScopedCharBuffer::CreateNonOwned(m_impl.c_str(), m_impl.length());
 
     // FIXME-UTF8: use wc_str() here once we have buffers with length
 

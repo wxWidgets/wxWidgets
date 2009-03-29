@@ -596,6 +596,10 @@ typedef short int WXTYPE;
 /*  integer on success as failure indicator */
 #define wxNOT_FOUND       (-1)
 
+/* the default value for some length parameters meaning that the string is */
+/* NUL-terminated */
+#define wxNO_LEN ((size_t)-1)
+
 /*  ---------------------------------------------------------------------------- */
 /*  macros dealing with comparison operators */
 /*  ---------------------------------------------------------------------------- */

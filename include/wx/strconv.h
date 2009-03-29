@@ -36,10 +36,6 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 // the error value returned by wxMBConv methods
 #define wxCONV_FAILED ((size_t)-1)
 
-// the default value for some length parameters meaning that the string is
-// NUL-terminated
-#define wxNO_LEN ((size_t)-1)
-
 // ----------------------------------------------------------------------------
 // wxMBConv (abstract base class for conversions)
 // ----------------------------------------------------------------------------
