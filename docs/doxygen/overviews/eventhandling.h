@@ -61,23 +61,27 @@ To be more precise, each event is described by:
 @section overview_events_eventhandling Event Handling
 
 There are two principal ways to handle events in wxWidgets. One of them uses
-<em>event table</em> macros and allows you to define the connection between events
+<em>event table</em> macros and allows you to define the binding between events
 and their handlers only statically, i.e., during program compilation. The other
-one uses wxEvtHandler::Connect() call and can be used to connect, and
-disconnect, the handlers dynamically, i.e., during run-time depending on some
-conditions. It also allows the direct connection of the events of one object to a
-handler method in another object. The static event tables can only handle
-events in the object where they are defined so using Connect() is more flexible
+one uses wxEvtHandler::Bind<>() call and can be used to bind and
+unbind, the handlers dynamically, i.e. during run-time depending on some
+conditions. It also allows the direct binding of events to:
+@li A handler method in another object.
+@li An ordinary function like a static method or a global function.
+@li An arbitrary functor like boost::function<>.
+
+The static event tables can only handle
+events in the object where they are defined so using Bind<>() is more flexible
 than using the event tables. On the other hand, event tables are more succinct
-and centralize all event handlers connection in one place. You can either
+and centralize all event handler bindings in one place. You can either
 choose a single approach that you find preferable or freely combine both
 methods in your program in different classes or even in one and the same class,
 although this is probably sufficiently confusing to be a bad idea.
 
 But before you make this choice, let us discuss these two ways in more
 detail. In the next section we provide a short introduction to handling the
-events using the event tables. Please see @ref overview_events_connect
-for the discussion of Connect().
+events using the event tables. Please see @ref overview_events_bind
+for the discussion of Bind<>().
 
 @subsection overview_events_eventtables Event Handling with Event Tables
 
@@ -90,7 +94,7 @@ containing the menu, so let's suppose that you need to handle some events in @c
 MyFrame class deriving from wxFrame.
 
 First define one or more <em>event handlers</em>. They
-are just simple (non-virtual) methods of the class that take as a parameter a
+are just simple methods of the class that take as a parameter a
 reference to an object of a wxEvent-derived class and have no return value (any
 return information is passed via the argument, which is why it is non-const).
 You also need to insert a macro
@@ -150,7 +154,7 @@ the event table definition; just defining it in MyFrame class is @e not enough.
 Let us now look at the details of this definition: the first line means that we
 are defining the event table for MyFrame class and that its base class is
 wxFrame, so events not processed by MyFrame will, by default, be handled by
-wxFrame. The next four lines define connections of individual events to their
+wxFrame. The next four lines define bindings of individual events to their
 handlers: the first two of them map menu commands from the items with the
 identifiers specified as the first macro parameter to two different member
 functions. In the next one, @c EVT_SIZE means that any changes in the size of
@@ -205,73 +209,59 @@ wxEvent-derived classes in the discussion of each control generating these
 events.
 
 
-@subsection overview_events_connect Dynamic Event Handling
+@subsection overview_events_bind Dynamic Event Handling
 
-As with the event tables, decide in which class you intend to
-handle the events first and, as before, this class must derive from
-wxEvtHandler (usually indirectly via wxWindow). See the declaration of MyFrame
-in the previous section. However the similarities end here and both the syntax
-and the possibilities of handling events in this way are rather different.
-
+The possibilities of handling events in this way are rather different.
 Let us start by looking at the syntax: the first obvious difference is that you
 need not use DECLARE_EVENT_TABLE() nor BEGIN_EVENT_TABLE() and the
 associated macros. Instead, in any place in your code, but usually in
 the code of the class defining the handler itself (and definitely not in the
-global scope as with the event tables), call its Connect() method like this:
+global scope as with the event tables), call its Bind<>() method like this:
 
 @code
 MyFrame::MyFrame(...)
 {
-      Connect(wxID_EXIT, wxEVT_COMMAND_MENU_SELECTED,
-                wxCommandEventHandler(MyFrame::OnExit));
+      Bind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnExit, this, wxID_EXIT);
 }
 @endcode
 
-This class should be self-explanatory except for wxCommandEventHandler part:
-this is a macro that ensures that the method is of the correct type by using
-static_cast in the same way as the event table macros.
+Note that @c this pointer must be specified here.
 
 Now let us describe the semantic differences:
 <ul>
     <li>
-        Event handlers can be connected at any moment. For example, it's possible
-        to do some initialization first and only connect the handlers if and when
+        Event handlers can be bound at any moment. For example, it's possible
+        to do some initialization first and only bind the handlers if and when
         it succeeds. This can avoid the need to test that the object was properly
-        initialized in the event handlers themselves. With Connect() they
+        initialized in the event handlers themselves. With Bind<>() they
         simply won't be called if it wasn't correctly initialized.
     </li>
 
     <li>
-        As a slight extension of the above, the handlers can also be
-        Disconnect()-ed at any time and maybe later reconnected. Of course,
+        As a slight extension of the above, the handlers can also be unbound at
+        any time with Unbind<>() (and maybe rebound later). Of course,
         it's also possible to emulate this behaviour with the classic
-        static (i.e., connected via event tables) handlers by using an internal
+        static (i.e., bound via event tables) handlers by using an internal
         flag indicating whether the handler is currently enabled and returning
-        from it if it isn't, but using dynamically connected handlers requires
+        from it if it isn't, but using dynamically bind handlers requires
         less code and is also usually more clear.
     </li>
 
     <li>
-        Also notice that you must derive a class inherited from, say,
-        wxTextCtrl even if you don't want to modify the control behaviour at
-        all but just want to handle some of its events. This is especially
-        inconvenient when the control is loaded from the XRC. Connecting the
-        event handler dynamically bypasses the need for this unwanted
-        sub-classing.
-    </li>
+        Almost last but very, very far from least is the increased flexibility
+        which allows to bind an event to:
+        @li A method in another object.
+        @li An ordinary function like a static method or a global function.
+        @li An arbitrary functor like boost::function<>.
 
-    <li>
-        Last but very, very far from least is the possibility to connect an
-        event of some object to a method of another object. This is impossible
-        to do with event tables because it is not possible to specify the
-        object to dispatch the event to so it necessarily needs to be sent to
-        the same object which generated the event. Not so with Connect() which
-        has an optional @c eventSink parameter that can be used to specify the
-        object which will handle the event. Of course, in this case the method
-        being connected must belong to the class that is the type of the
-        @c eventSink object! To give a quick example, people often want to catch
-        mouse movement events happening when the mouse is in one of the frame
-        children in the frame itself. Doing it in a naive way doesn't work:
+        This is impossible to do with the event tables because it is not
+        possible to specify these handlers to dispatch the event to, so it
+        necessarily needs to be sent to the same object which generated the
+        event. Not so with Bind<>() which can be used to specify these handlers
+        which will handle the event. To give a quick example, a common question
+        is how to receive the mouse movement events happening when the mouse is
+        in one of the frame children in the frame itself. Doing it in a naive
+        way doesn't work:
         <ul>
             <li>
                 A @c EVT_LEAVE_WINDOW(MyFrame::OnMouseLeave) line in the frame
@@ -295,10 +285,7 @@ Now let us describe the semantic differences:
         @code
             MyFrame::MyFrame(...)
             {
-              m_child->Connect(wxID_ANY, wxEVT_LEAVE_WINDOW,
-                               wxMouseEventHandler(MyFrame::OnMouseLeave),
-                               NULL,  // unused extra data parameter
-                               this); // this indicates the object to connect to
+              m_child->Bind(wxEVT_LEAVE_WINDOW, &MyFrame::OnMouseLeave, this);
             }
         @endcode
         will work exactly as expected. Note that you can get the object that
@@ -306,9 +293,118 @@ Now let us describe the semantic differences:
         wxEvent::GetEventObject() method of @c event argument passed to the
         event handler.
     </li>
+
+    <li>
+        Really last point is the consequence of the previous one: because of
+        increased flexibility of Bind(), it is also safer as it is impossible
+        to accidentally use a method of another class. Instead of run-time
+        crashes you will get compilation errors in this case when using Bind().
+    </li>
 </ul>
 
-To summarize, using Connect() requires slightly more typing but is much more
+Here are some more examples of how to use different event handlers.
+
+You can use a method from a completely different object as an event handler:
+
+@code
+void MyFrameHandler::OnFrameExit( wxCommandEvent & )
+{
+    // Do something useful.
+}
+
+MyFrameHandler myFrameHandler;
+
+MyFrame::MyFrame()
+{
+      Bind( wxEVT_COMMAND_MENU_SELECTED, &MyFrameHandler::OnFrameExit,
+              &myFrameHandler, wxID_EXIT );
+}
+@endcode
+
+Note that @c MyFrameHandler doesn't need to derive from wxEvtHandler. But
+keep in mind that then the lifetime of @c myFrameHandler must be greater than
+that of @c MyFrame object -- or at least it needs to be unbound before being
+destroyed.
+
+To use an ordinary function or a static method as an event handler you would
+write something like this:
+
+@code
+void HandleExit( wxCommandEvent & )
+{
+    // Do something useful
+}
+
+MyFrame::MyFrame()
+{
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &HandleExit, wxID_EXIT );
+}
+@endcode
+
+And finally you can bind to an arbitrary functor and use it as an event
+handler:
+
+@code
+
+struct MyFunctor
+{
+    void operator()( wxCommandEvent & )
+    {
+        // Do something useful
+    }
+};
+
+MyFunctor myFunctor;
+
+MyFrame::MyFrame()
+{
+    Bind( wxEVT_COMMAND_MENU_SELECTED, &myFunctor, wxID_EXIT );
+}
+@endcode
+
+A common example of a functor is boost::function<>:
+
+@code
+using namespace boost;
+
+void MyHandler::OnExit( wxCommandEvent & )
+{
+    // Do something useful
+}
+
+MyHandler myHandler;
+
+MyFrame::MyFrame()
+{
+    function< void ( wxCommandEvent & ) > exitHandler( bind( &MyHandler::OnExit, &myHandler, _1 ));
+
+    Bind( wxEVT_COMMAND_MENU_SELECTED, exitHandler, wxID_EXIT );
+}
+@endcode
+
+
+With the aid of boost::bind<>() you can even use methods or functions which
+don't quite have the correct signature:
+
+@code
+void MyHandler::OnExit( int exitCode, wxCommandEvent &, wxString goodByeMessage )
+{
+    // Do something useful
+}
+
+MyHandler myHandler;
+
+MyFrame::MyFrame()
+{
+    function< void ( wxCommandEvent & ) > exitHandler(
+            bind( &MyHandler::OnExit, &myHandler, EXIT_FAILURE, _1, "Bye" ));
+
+    Bind( wxEVT_COMMAND_MENU_SELECTED, exitHandler, wxID_EXIT );
+}
+@endcode
+
+
+To summarize, using Bind<>() requires slightly more typing but is much more
 flexible than using static event tables so don't hesitate to use it when you
 need this extra power. On the other hand, event tables are still perfectly fine
 in simple situations where this extra flexibility is not needed.
@@ -344,8 +440,8 @@ doesn't count as having handled the event and the search continues):
     </li>
 
     <li value="3">
-    The list of dynamically connected event handlers, i.e., those for which
-    Connect() was called, is consulted. Notice that this is done before
+    The list of dynamically bind event handlers, i.e., those for which
+    Bind<>() was called, is consulted. Notice that this is done before
     checking the static event table entries, so if both a dynamic and a static
     event handler match the same event, the static one is never going to be
     used.
@@ -370,7 +466,7 @@ doesn't count as having handled the event and the search continues):
         @image html overview_events_winstack.png
     (referring to the image, if @c W->ProcessEvent is called, it immediately calls
      @c A->ProcessEvent; if nor @c A nor @c B handle the event, then the wxWindow
-     itself is used - i.e. the dynamically connected event handlers and static
+     itself is used - i.e. the dynamically bind event handlers and static
      event table entries of wxWindow are looked as the last possibility, after
      all pushed event handlers were tested).
     Note however that usually there are no wxEvtHandler chains nor wxWindows stacks
@@ -499,10 +595,10 @@ void MyFrame::OnMyEvent(wxCommandEvent& event)
     wxString text = event.GetText();
 }
 
-// example of code handling the event with Connect():
+// example of code handling the event with Bind<>():
 MyFrame::MyFrame()
 {
-    Connect(ID_MY_WINDOW, MY_EVENT, &MyFrame::OnMyEvent);
+    Bind(MY_EVENT, &MyFrame::OnMyEvent, this, ID_MY_WINDOW);
 }
 
 // example of code generating the event
@@ -561,14 +657,14 @@ wxDEFINE_EVENT(MY_PLOT_CLICKED, MyPlotEvent);
 typedef void (wxEvtHandler::*MyPlotEventFunction)(MyPlotEvent&);
 #define MyPlotEventHandler(func) wxEVENT_HANDLER_CAST(MyPlotEventFunction, func)
 
-// if your code is only built sing reasonably modern compilers, you could just
+// if your code is only built using reasonably modern compilers, you could just
 // do this instead:
 #define MyPlotEventHandler(func) (&func)
 
 // finally define a macro for creating the event table entries for the new
 // event type
 //
-// remember that you don't need this at all if you only use Connect() and that
+// remember that you don't need this at all if you only use Bind<>() and that
 // you can replace MyPlotEventHandler(func) with just &func unless you use a
 // really old compiler
 #define MY_EVT_PLOT_CLICK(id, func) \
@@ -583,7 +679,7 @@ END_EVENT_TABLE()
 
 MyFrame::MyFrame()
 {
-    Connect(ID_MY_WINDOW, MY_PLOT_CLICKED, &MyFrame::OnPlot);
+    Bind(MY_PLOT_CLICKED, &MyFrame::OnPlot, this, ID_MY_WINDOW);
 }
 
 void MyFrame::OnPlot(MyPlotEvent& event)
@@ -626,9 +722,6 @@ code by the underlying toolkit or OS itself. But even if it does exist at
 wxWidgets level, it should never be called directly as the event handlers are
 not part of wxWidgets API and should never be called directly.
 
-Finally, please notice that the event handlers themselves shouldn't be virtual.
-They should always be non-virtual and usually private (as there is no need to
-make them public) methods of a wxEvtHandler-derived class.
 
 
 @subsection overview_events_prog User Generated Events vs Programmatically Generated Events
@@ -656,7 +749,7 @@ equivalents.
 
 @subsection overview_events_pluggable Pluggable Event Handlers
 
-<em>TODO: Probably deprecated, Connect() provides a better way to do this</em>
+<em>TODO: Probably deprecated, Bind() provides a better way to do this</em>
 
 In fact, you don't have to derive a new class from a window class
 if you don't want to. You can derive a new class from wxEvtHandler instead,
@@ -703,7 +796,7 @@ generated for you automatically by wxWidgets. This is useful when you don't
 care about the exact identifier either because you're not going to process the
 events from the control being created or because you process the events
 from all controls in one place (in which case you should specify @c wxID_ANY
-in the event table or wxEvtHandler::Connect call
+in the event table or wxEvtHandler::Bind call
 as well). The automatically generated identifiers are always negative and so
 will never conflict with the user-specified identifiers which must be always
 positive.
