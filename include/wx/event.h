@@ -381,7 +381,7 @@ struct HandlerImpl<T, A, false>
 // allowed to handle different events in the same handler taking wxEvent&, for
 // example
 template
-  <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+  <typename EventTag, typename Class, typename EventArg, typename EventHandler>
 class wxEventFunctorMethod
     : public wxEventFunctor,
       private wxPrivate::HandlerImpl
@@ -399,7 +399,7 @@ public:
     typedef typename wxPrivate::EventClassOf<EventTag>::type EventClass;
 
 
-    wxEventFunctorMethod(void (Class::*method)(EventArg&), ObjClass *handler)
+    wxEventFunctorMethod(void (Class::*method)(EventArg&), EventHandler *handler)
     {
         wxASSERT_MSG( handler || this->IsEvtHandler(),
                       "handlers defined in non-wxEvtHandler-derived classes "
@@ -457,7 +457,7 @@ public:
     }
 
 private:
-    ObjClass *m_handler;
+    EventHandler *m_handler;
     void (Class::*m_method)(EventArg&);
 };
 
@@ -486,29 +486,29 @@ wxMakeEventFunctor(const EventTag&, Functor func)
 
 // Create functors for methods:
 template
-  <typename EventTag, typename Class, typename EventArg, typename ObjClass>
-inline wxEventFunctorMethod<EventTag, Class, EventArg, ObjClass> *
+  <typename EventTag, typename Class, typename EventArg, typename EventHandler>
+inline wxEventFunctorMethod<EventTag, Class, EventArg, EventHandler> *
 wxNewEventFunctor(const EventTag&,
                   void (Class::*method)(EventArg&),
-                  ObjClass *handler)
+                  EventHandler *handler)
 {
-    return new wxEventFunctorMethod<EventTag, Class, EventArg, ObjClass>(
+    return new wxEventFunctorMethod<EventTag, Class, EventArg, EventHandler>(
                 method, handler);
 }
 
 template
-    <typename EventTag, typename Class, typename EventArg, typename ObjClass>
-inline wxEventFunctorMethod<EventTag, Class, EventArg, ObjClass>
+    <typename EventTag, typename Class, typename EventArg, typename EventHandler>
+inline wxEventFunctorMethod<EventTag, Class, EventArg, EventHandler>
 wxMakeEventFunctor(const EventTag&,
                    void (Class::*method)(EventArg&),
-                   ObjClass *handler)
+                   EventHandler *handler)
 {
-    return wxEventFunctorMethod<EventTag, Class, EventArg, ObjClass>(
+    return wxEventFunctorMethod<EventTag, Class, EventArg, EventHandler>(
                 method, handler);
 }
 
 // Special case for the wxNewEventFunctor() calls used inside the event table
-// macros: they don't specify the handler so ObjClass can't be deduced
+// macros: they don't specify the handler so EventHandler can't be deduced
 template <typename EventTag, typename Class, typename EventArg>
 inline wxEventFunctorMethod<EventTag, Class, EventArg, Class> *
 wxNewEventFunctor(const EventTag&, void (Class::*method)(EventArg&))
@@ -518,7 +518,7 @@ wxNewEventFunctor(const EventTag&, void (Class::*method)(EventArg&))
 }
 
 template
-    <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    <typename EventTag, typename Class, typename EventArg, typename EventHandler>
 inline wxEventFunctorMethod<EventTag, Class, EventArg, Class>
 wxMakeEventFunctor(const EventTag&, void (Class::*method)(EventArg&))
 {
@@ -3005,32 +3005,32 @@ public:
     }
 
 
-    // Bind a method of a class (called on the specified eventSink which must
+    // Bind a method of a class (called on the specified handler which must
     // be convertible to this class) object to an event:
 
-    template <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    template <typename EventTag, typename Class, typename EventArg, typename EventHandler>
     void Bind(const EventTag &eventType,
               void (Class::*method)(EventArg &),
-              ObjClass *eventSink,
+              EventHandler *handler,
               int winid = wxID_ANY,
               int lastId = wxID_ANY,
               wxObject *userData = NULL)
     {
         DoConnect(winid, lastId, eventType,
-                  wxNewEventFunctor(eventType, method, eventSink),
+                  wxNewEventFunctor(eventType, method, handler),
                   userData);
     }
 
-    template <typename EventTag, typename Class, typename EventArg, typename ObjClass>
+    template <typename EventTag, typename Class, typename EventArg, typename EventHandler>
     bool Unbind(const EventTag &eventType,
                 void (Class::*method)(EventArg&),
-                ObjClass *eventSink,
+                EventHandler *handler,
                 int winid = wxID_ANY,
                 int lastId = wxID_ANY,
                 wxObject *userData = NULL )
     {
         return DoDisconnect(winid, lastId, eventType,
-                            wxMakeEventFunctor(eventType, method, eventSink),
+                            wxMakeEventFunctor(eventType, method, handler),
                             userData);
     }
 #endif // !wxEVENTS_COMPATIBILITY_2_8
@@ -3156,7 +3156,7 @@ protected:
     virtual void *DoGetClientData() const;
 
     // Search tracker objects for event connection with this sink
-    wxEventConnectionRef *FindRefInTrackerList(wxEvtHandler *eventSink);
+    wxEventConnectionRef *FindRefInTrackerList(wxEvtHandler *handler);
 
 private:
     // pass the event to wxTheApp instance, called from TryAfter()
