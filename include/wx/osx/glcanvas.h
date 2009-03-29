@@ -12,7 +12,12 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
+#ifdef __WXOSX_IPHONE__
+#import <OpenGLES/ES1/gl.h>
+#import <OpenGLES/ES1/glext.h>
+#else
 #include <OpenGL/gl.h>
+#endif
 
 // low level calls
 
