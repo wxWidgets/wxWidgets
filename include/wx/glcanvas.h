@@ -118,10 +118,11 @@ public:
     // miscellaneous helper functions
     // ------------------------------
 
+#ifndef wxHAS_OPENGL_ES 
     // call glcolor() for the colour with the given name, return false if
     // colour not found
     bool SetColour(const wxString& colour);
-
+#endif
 
     // return true if the extension with given name is supported
     //
