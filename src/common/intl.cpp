@@ -2689,36 +2689,42 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
 {
-    struct lconv *locale_info = localeconv();
-    switch (cat)
+    lconv * const lc = localeconv();
+    if ( !lc )
+        return wxString();
+
+    switch ( cat )
     {
         case wxLOCALE_CAT_NUMBER:
-            switch (index)
+            switch ( index )
             {
                 case wxLOCALE_THOUSANDS_SEP:
-                    return wxString(locale_info->thousands_sep,
-                                    *wxConvCurrent);
+                    return lc->thousands_sep;
+
                 case wxLOCALE_DECIMAL_POINT:
-                    return wxString(locale_info->decimal_point,
-                                    *wxConvCurrent);
-                default:
-                    return wxEmptyString;
+                    return lc->decimal_point;
             }
+            break;
+
         case wxLOCALE_CAT_MONEY:
-            switch (index)
+            switch ( index )
             {
                 case wxLOCALE_THOUSANDS_SEP:
-                    return wxString(locale_info->mon_thousands_sep,
-                                    *wxConvCurrent);
+                    return lc->mon_thousands_sep;
+
                 case wxLOCALE_DECIMAL_POINT:
-                    return wxString(locale_info->mon_decimal_point,
-                                    *wxConvCurrent);
-                default:
-                    return wxEmptyString;
+                    return lc->mon_decimal_point;
             }
+            break;
+
         default:
-            return wxEmptyString;
+            wxFAIL_MSG( "unknown wxLocaleCategory" );
+            return wxString(); // skip second assert below
     }
+
+    wxFAIL_MSG( "unknown wxLocaleInfo value for this category" );
+
+    return wxString();
 }
 
 #endif // platform
