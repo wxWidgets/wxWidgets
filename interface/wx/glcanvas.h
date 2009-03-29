@@ -32,6 +32,9 @@
     best to check your native platform's glcanvas header (on windows
     include/wx/msw/glcanvas.h) to see what features your native platform
     provides.
+    
+    wxHAS_OPENGL_ES is defined on platforms that only have this implementation
+    available (eg the iPhone) und don't support the full specification.
 
     @library{wxgl}
     @category{gl}
