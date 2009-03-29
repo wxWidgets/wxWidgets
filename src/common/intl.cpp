@@ -2849,8 +2849,12 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
         case wxLOCALE_DATE_TIME_FMT:
             // there doesn't seem to be any specific setting for this, so just
             // combine date and time ones
+            //
+            // we use the short date because this is what "%c" uses by default
+            // ("%#c" uses long date but we have no way to specify the
+            // alternate representation here)
             {
-                const wxString datefmt = GetInfo(wxLOCALE_LONG_DATE_FMT);
+                const wxString datefmt = GetInfo(wxLOCALE_SHORT_DATE_FMT);
                 if ( datefmt.empty() )
                     break;
 
