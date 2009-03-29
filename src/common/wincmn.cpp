@@ -474,7 +474,7 @@ void wxWindowBase::FitInside()
 }
 
 // On Mac, scrollbars are explicitly children.
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
 static bool wxHasRealChildren(const wxWindowBase* win)
 {
     int realChildCount = 0;
@@ -550,7 +550,7 @@ wxSize wxWindowBase::DoGetBestSize() const
     }
 #endif // wxUSE_CONSTRAINTS
     else if ( !GetChildren().empty()
-#ifdef __WXMAC__
+#if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
               && wxHasRealChildren(this)
 #endif
               )
