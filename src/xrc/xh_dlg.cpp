@@ -73,7 +73,7 @@ wxObject *wxDialogXmlHandler::DoCreateResource()
     if (HasParam(wxT("pos")))
         dlg->Move(GetPosition());
     if (HasParam(wxT("icon")))
-        dlg->SetIcon(GetIcon(wxT("icon"), wxART_FRAME_ICON));
+        dlg->SetIcons(GetIconBundle(wxT("icon"), wxART_FRAME_ICON));
 
     SetupWindow(dlg);
 

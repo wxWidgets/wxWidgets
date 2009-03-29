@@ -117,7 +117,7 @@ wxObject *wxMdiXmlHandler::DoCreateResource()
     {
         wxFrame* f = wxDynamicCast(frame, wxFrame);
         if (f)
-            f->SetIcon(GetIcon(wxT("icon"), wxART_FRAME_ICON));
+            f->SetIcons(GetIconBundle(wxT("icon"), wxART_FRAME_ICON));
     }
 
     SetupWindow(frame);

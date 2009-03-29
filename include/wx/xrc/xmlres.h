@@ -33,6 +33,7 @@
 
 class WXDLLIMPEXP_FWD_BASE wxFileName;
 
+class WXDLLIMPEXP_FWD_CORE wxIconBundle;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 class WXDLLIMPEXP_FWD_CORE wxDialog;
@@ -507,6 +508,10 @@ protected:
     wxIcon GetIcon(const wxString& param = wxT("icon"),
                    const wxArtClient& defaultArtClient = wxART_OTHER,
                    wxSize size = wxDefaultSize);
+
+    // Gets an icon bundle.
+    wxIconBundle GetIconBundle(const wxString& param,
+                               const wxArtClient& defaultArtClient = wxART_OTHER);
 
 #if wxUSE_ANIMATIONCTRL
     // Gets an animation.

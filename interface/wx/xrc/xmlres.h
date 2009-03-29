@@ -533,6 +533,19 @@ protected:
                    wxSize size = wxDefaultSize);
 
     /**
+        Returns an icon bundle.
+
+        @note
+        Bundles can be loaded either with stock IDs or from files that contain
+        more than one image (e.g. Windows icon files). If a file contains only
+        single image, a bundle with only one icon will be created.
+
+        @since 2.9.0
+     */
+    wxIconBundle GetIconBundle(const wxString& param,
+                               const wxArtClient& defaultArtClient = wxART_OTHER);
+
+    /**
         Gets the integer value from the parameter.
     */
     long GetLong(const wxString& param, long defaultv = 0);

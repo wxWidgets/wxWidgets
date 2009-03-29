@@ -1230,31 +1230,49 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param, const wxColour& 
     return clr;
 }
 
+namespace
+{
 
+// if 'param' has stock_id/stock_client, extracts them and returns true
+bool GetStockArtAttrs(const wxXmlNode *paramNode,
+                      const wxString& defaultArtClient,
+                      wxString& art_id, wxString& art_client)
+{
+    if ( paramNode )
+    {
+        art_id = paramNode->GetAttribute("stock_id", "");
+
+        if ( !art_id.empty() )
+        {
+            art_id = wxART_MAKE_ART_ID_FROM_STR(art_id);
+
+            art_client = paramNode->GetAttribute("stock_client", "");
+            if ( art_client.empty() )
+                art_client = defaultArtClient;
+            else
+                art_client = wxART_MAKE_CLIENT_ID_FROM_STR(art_client);
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+} // anonymous namespace
 
 wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
                                          const wxArtClient& defaultArtClient,
                                          wxSize size)
 {
     /* If the bitmap is specified as stock item, query wxArtProvider for it: */
-    wxXmlNode *bmpNode = GetParamNode(param);
-    if ( bmpNode )
+    wxString art_id, art_client;
+    if ( GetStockArtAttrs(GetParamNode(param), defaultArtClient,
+                          art_id, art_client) )
     {
-        wxString sid = bmpNode->GetAttribute(wxT("stock_id"), wxEmptyString);
-        if ( !sid.empty() )
-        {
-            wxString scl = bmpNode->GetAttribute(wxT("stock_client"), wxEmptyString);
-            if (scl.empty())
-                scl = defaultArtClient;
-            else
-                scl = wxART_MAKE_CLIENT_ID_FROM_STR(scl);
-
-            wxBitmap stockArt =
-                wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(sid),
-                                         scl, size);
-            if ( stockArt.Ok() )
-                return stockArt;
-        }
+        wxBitmap stockArt(wxArtProvider::GetBitmap(art_id, art_client, size));
+        if ( stockArt.Ok() )
+            return stockArt;
     }
 
     /* ...or load the bitmap from file: */
@@ -1300,6 +1318,52 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
     return icon;
 }
 
+wxIconBundle wxXmlResourceHandler::GetIconBundle(const wxString& param,
+                                                 const wxArtClient& defaultArtClient)
+{
+    wxString art_id, art_client;
+    if ( GetStockArtAttrs(GetParamNode(param), defaultArtClient,
+                          art_id, art_client) )
+    {
+        wxIconBundle stockArt(wxArtProvider::GetIconBundle(art_id, art_client));
+        if ( stockArt.IsOk() )
+            return stockArt;
+    }
+
+    const wxString name = GetParamValue(param);
+    if ( name.empty() )
+        return wxNullIconBundle;
+
+#if wxUSE_FILESYSTEM
+    wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
+    if ( fsfile == NULL )
+    {
+        ReportParamError
+        (
+            param,
+            wxString::Format("cannot open icon resource \"%s\"", name)
+        );
+        return wxNullIconBundle;
+    }
+
+    wxIconBundle bundle(*(fsfile->GetStream()));
+    delete fsfile;
+#else
+    wxIconBundle bundle(name);
+#endif
+
+    if ( !bundle.IsOk() )
+    {
+        ReportParamError
+        (
+            param,
+            wxString::Format("cannot create icon from \"%s\"", name)
+        );
+        return wxNullIconBundle;
+    }
+
+    return bundle;
+}
 
 
 wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
