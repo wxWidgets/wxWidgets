@@ -123,7 +123,7 @@ const wxScopedCharBuffer wxArtIDToStock(const wxArtID& id)
     // allow passing GTK+ stock IDs to wxArtProvider -- if a recognized wx
     // ID wasn't found, pass it to GTK+ in the hope it is a GTK+ or theme
     // icon name:
-    return id.utf8_str();
+    return id.mb_str();
 }
 
 GtkIconSize ArtClientToIconSize(const wxArtClient& client)
