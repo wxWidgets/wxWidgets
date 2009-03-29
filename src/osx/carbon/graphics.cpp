@@ -72,9 +72,11 @@ int UMAGetSystemVersion()
 #endif
 
 #if wxOSX_USE_COCOA_OR_IPHONE
-extern CGContextRef wxOSXGetContextFromCurrentNSContext() ;
+extern CGContextRef wxOSXGetContextFromCurrentContext() ;
+#if wxOSX_USE_COCOA
 extern bool wxOSXLockFocus( WXWidget view) ;
 extern void wxOSXUnlockFocus( WXWidget view) ;
+#endif
 #endif
 
 #if 1 // MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_5
@@ -1519,12 +1521,14 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 #if wxOSX_USE_COCOA_OR_IPHONE
     m_view = window->GetHandle();
 
-    if ( !((wxWidgetCocoaImpl*) window->GetPeer())->IsFlipped() )
+#if wxOSX_USE_COCOA
+    if ( ! window->GetPeer()->IsFlipped() )
     {
         m_windowTransform = CGAffineTransformMakeTranslation( 0 , m_height );
         m_windowTransform = CGAffineTransformScale( m_windowTransform , 1 , -1 );
     }
     else
+#endif
     {
         m_windowTransform = CGAffineTransformIdentity;
     }
@@ -1594,13 +1598,20 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
         if (m_invisible)
             return false;
             
-#if wxOSX_USE_COCOA_OR_IPHONE
+#if wxOSX_USE_COCOA
         if ( wxOSXLockFocus(m_view) )
         {
-            m_cgContext = wxOSXGetContextFromCurrentNSContext();
+            m_cgContext = wxOSXGetContextFromCurrentContext();
             wxASSERT_MSG( m_cgContext != NULL, _T("Unable to retrieve drawing context from View"));
         }
         else
+        {
+            m_invisible = true;
+        }
+#endif
+#if wxOSX_USE_IPHONE
+        m_cgContext = wxOSXGetContextFromCurrentContext();
+        if ( m_cgContext == NULL )
         {
             m_invisible = true;
         }
@@ -1617,6 +1628,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
             CGContextConcatCTM( m_cgContext, m_windowTransform );
             CGContextSaveGState( m_cgContext );
             m_contextSynthesized = true;
+#if wxOSX_USE_COCOA_OR_CARBON
             if ( m_clipRgn.get() )
             {
                 // the clip region is in device coordinates, so we convert this again to user coordinates
@@ -1635,6 +1647,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
                     CGContextClip( m_cgContext );
                 }
             }
+#endif
             CGContextSaveGState( m_cgContext );
             
 #if 0 // turn on for debugging of clientdc
@@ -2016,7 +2029,7 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
 #if wxOSX_USE_CARBON
             QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
 #endif
-#if wxOSX_USE_COCOA_OR_IPHONE
+#if wxOSX_USE_COCOA
             wxOSXUnlockFocus(m_view);
 #endif
         }

@@ -46,9 +46,9 @@ wxMacAutoreleasePool::~wxMacAutoreleasePool()
 
 #endif
 
-#if wxOSX_USE_COCOA_OR_IPHONE
+#if wxOSX_USE_COCOA
 
-CGContextRef wxOSXGetContextFromCurrentNSContext()
+CGContextRef wxOSXGetContextFromCurrentContext()
 {
     CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext]
                                           graphicsPort];
@@ -63,6 +63,16 @@ bool wxOSXLockFocus( WXWidget view)
 void wxOSXUnlockFocus( WXWidget view) 
 {
     [view unlockFocus];
+}
+
+#endif
+
+#if wxOSX_USE_IPHONE
+
+CGContextRef wxOSXGetContextFromCurrentContext()
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    return context;
 }
 
 #endif
@@ -111,15 +121,15 @@ WX_NSFont wxFont::OSXCreateNSFont(wxOSXSystemFont font, wxNativeFontInfo* info)
             nsfont = [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]];
             break;
         case wxOSX_SYSTEM_FONT_MINI:
-            nsfont = [NSFont systemFontOfSize:[NSFont systemFontSize]];
+            nsfont = [NSFont systemFontOfSize:
+                [NSFont systemFontSizeForControlSize:NSMiniControlSize]];
             break;
        case wxOSX_SYSTEM_FONT_MINI_BOLD:
             nsfont = [NSFont boldSystemFontOfSize:
                 [NSFont systemFontSizeForControlSize:NSMiniControlSize]];
             break;
         case wxOSX_SYSTEM_FONT_LABELS:
-            nsfont = [NSFont labelFontOfSize:
-                [NSFont systemFontSizeForControlSize:NSMiniControlSize]];
+            nsfont = [NSFont labelFontOfSize:[NSFont labelFontSize]];
             break;
        case wxOSX_SYSTEM_FONT_VIEWS:
             nsfont = [NSFont controlContentFontOfSize:0];
@@ -182,6 +192,69 @@ WX_NSFont wxFont::OSXCreateNSFont(const wxNativeFontInfo* info)
 
 #endif
 
+#if wxOSX_USE_IPHONE
+
+WX_UIFont wxFont::OSXCreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info)
+{
+    UIFont* uifont;
+    switch( font )
+    {
+        case wxOSX_SYSTEM_FONT_NORMAL:
+            uifont = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+            break;
+        case wxOSX_SYSTEM_FONT_BOLD:
+            uifont = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+            break;
+        case wxOSX_SYSTEM_FONT_MINI:
+        case wxOSX_SYSTEM_FONT_SMALL:
+            uifont = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+            break;
+        case wxOSX_SYSTEM_FONT_MINI_BOLD:
+        case wxOSX_SYSTEM_FONT_SMALL_BOLD:
+            uifont = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
+            break;
+        case wxOSX_SYSTEM_FONT_VIEWS:
+        case wxOSX_SYSTEM_FONT_LABELS:
+            uifont = [UIFont systemFontOfSize:[UIFont labelFontSize]];
+            break;
+        default:
+            break;
+    }
+    [uifont retain];
+    if ( info->m_faceName.empty())
+    {
+        wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
+        wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
+        bool underlined = false;
+        
+        int size = (int) ([uifont pointSize]+0.5);
+        /*
+        NSFontSymbolicTraits traits = [desc symbolicTraits];
+            
+        if ( traits & NSFontBoldTrait )
+            fontweight = wxFONTWEIGHT_BOLD ;
+        else
+            fontweight = wxFONTWEIGHT_NORMAL ;
+        if ( traits & NSFontItalicTrait )
+            fontstyle = wxFONTSTYLE_ITALIC ;
+        */
+        wxCFStringRef fontname( [uifont familyName] );
+        info->Init(size,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
+            fontname.AsString(), wxFONTENCODING_DEFAULT);
+        
+    }
+    return uifont;
+}
+
+WX_UIFont wxFont::OSXCreateUIFont(const wxNativeFontInfo* info)
+{
+    UIFont* uiFont;
+    uiFont = [UIFont fontWithName:wxCFStringRef(info->m_faceName).AsNSString() size:info->m_pointSize];
+    wxMacCocoaRetain(uiFont);
+    return uiFont;
+}
+
+#endif
 // ----------------------------------------------------------------------------
 // NSImage Utils
 // ----------------------------------------------------------------------------

@@ -161,7 +161,8 @@ public:
 
 #if wxOSX_USE_IPHONE
     WX_UIFont OSXGetUIFont() const;
-    static WX_NSFont OSXCreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info);
+    static WX_UIFont OSXCreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info);
+    static WX_UIFont OSXCreateUIFont(const wxNativeFontInfo* info);
 #endif
 
 protected:

@@ -209,7 +209,7 @@ wxFontRefData::wxFontRefData(const wxFontRefData& data)
     m_nsFont = (NSFont*) wxMacCocoaRetain(data.m_nsFont);
 #endif
 #if wxOSX_USE_IPHONE
-    m_uiFont = wxMacCocoaRetain(data.m_uiFont);
+    m_uiFont = (UIFont*) wxMacCocoaRetain(data.m_uiFont);
 #endif
     
 }
@@ -932,9 +932,6 @@ void wxNativeFontInfo::Init()
 #if wxOSX_USE_COCOA
     m_nsFontDescriptor = NULL;
 #endif
-#if wxOSX_USE_IPHONE
-    m_uiFontDescriptor = NULL;
-#endif
     m_pointSize = 0;
     m_family = wxFONTFAMILY_DEFAULT;
     m_style = wxFONTSTYLE_NORMAL;
@@ -1083,9 +1080,6 @@ void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
 #if wxOSX_USE_COCOA
     m_nsFontDescriptor = (NSFontDescriptor*) wxMacCocoaRetain(info.m_nsFontDescriptor);
 #endif
-#if wxOSX_USE_IPHONE
-    m_uiFontDescriptor = wxMacCocoaRetain(info.m_uiFontDescriptor);;
-#endif
     m_pointSize = info.m_pointSize;
     m_family = info.m_family;
     m_style = info.m_style;
@@ -1129,10 +1123,6 @@ void wxNativeFontInfo::Free()
 #if wxOSX_USE_COCOA
     wxMacCocoaRelease(m_nsFontDescriptor);
     m_nsFontDescriptor = NULL;
-#endif
-#if wxOSX_USE_IPHONE
-    wxMacCocoaRelease(m_uiFontDescriptor);
-    m_uiFontDescriptor = NULL
 #endif
     m_descriptorValid = false;
 }
