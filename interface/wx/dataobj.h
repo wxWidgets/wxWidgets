@@ -277,7 +277,14 @@ public:
         Set the data in the format @a format of the length @a len provided in
         the buffer @a buf.
 
-        @return @true on success, @false on failure.
+        @param format
+            The format for which to set the data.
+        @param len
+            The size of data in bytes.
+        @param buf
+            Non-@NULL pointer to the data.
+        @return
+            @true on success, @false on failure.
     */
     virtual bool SetData(const wxDataFormat& format, size_t len, const void* buf);
 
