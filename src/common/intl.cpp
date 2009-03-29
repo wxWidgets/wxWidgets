@@ -72,7 +72,7 @@
 #include "wx/hashset.h"
 #include "wx/filesys.h"
 
-#if defined(__DARWIN__)
+#if defined(__WXOSX__)
     #include "wx/osx/core/cfref.h"
     #include <CoreFoundation/CFLocale.h>
     #include "wx/osx/core/cfstring.h"
@@ -841,7 +841,7 @@ wxPluralFormsCalculator* wxPluralFormsCalculator::make(const char* s)
 //
 // This is a "low-level" class and is used only by wxMsgCatalog
 // NOTE: for the documentation of the binary catalog (.MO) files refer to
-//       the GNU gettext manual: 
+//       the GNU gettext manual:
 //       http://www.gnu.org/software/autoconf/manual/gettext/MO-Files.html
 // ----------------------------------------------------------------------------
 
@@ -1464,9 +1464,9 @@ bool wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
             }
 
             // skip this string
-            // IMPORTANT: accesses to the 'data' pointer are valid only for 
+            // IMPORTANT: accesses to the 'data' pointer are valid only for
             //            the first 'length+1' bytes (GNU specs says that the
-            //            final NUL is not counted in length); using wxStrnlen() 
+            //            final NUL is not counted in length); using wxStrnlen()
             //            we make sure we don't access memory beyond the valid range
             //            (which otherwise may happen for invalid MO files):
             offset += wxStrnlen(str, length - offset) + 1;
@@ -2593,56 +2593,283 @@ bool wxLocale::AddCatalog(const wxString& szDomain,
 // accessors for locale-dependent data
 // ----------------------------------------------------------------------------
 
+#if defined(__WXMSW__) || defined(__WXOSX__)
+
+namespace
+{
+
+// This function translates from Unicode date formats described at
+//
+//      http://unicode.org/reports/tr35/tr35-6.html#Date_Format_Patterns
+//
+// to strftime()-like syntax. This translation is not lossless but we try to do
+// our best.
+
+static wxString TranslateFromUnicodeFormat(const wxString& fmt)
+{
+    wxString fmtWX;
+    fmtWX.reserve(fmt.length());
+
+    char chLast = '\0';
+    size_t lastCount = 0;
+    for ( wxString::const_iterator p = fmt.begin(); /* end handled inside */; ++p )
+    {
+        if ( p != fmt.end() )
+        {
+            if ( *p == chLast )
+            {
+                lastCount++;
+                continue;
+            }
+
+            const wxUniChar ch = (*p).GetValue();
+            if ( ch.IsAscii() && strchr("dghHmMsSy", ch) )
+            {
+                // these characters come in groups, start counting them
+                chLast = ch;
+                lastCount = 1;
+                continue;
+            }
+        }
+
+        // interpret any special characters we collected so far
+        if ( lastCount )
+        {
+            switch ( chLast )
+            {
+                case 'd':
+                    switch ( lastCount )
+                    {
+                        case 1: // d
+                        case 2: // dd
+                            // these two are the same as we don't distinguish
+                            // between 1 and 2 digits for days
+                            fmtWX += "%d";
+                            break;
+
+                        case 3: // ddd
+                            fmtWX += "%a";
+                            break;
+
+                        case 4: // dddd
+                            fmtWX += "%A";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "too many 'd's" );
+                    }
+                    break;
+
+                case 'M':
+                    switch ( lastCount )
+                    {
+                        case 1: // M
+                        case 2: // MM
+                            // as for 'd' and 'dd' above
+                            fmtWX += "%m";
+                            break;
+
+                        case 3:
+                            fmtWX += "%b";
+                            break;
+
+                        case 4:
+                            fmtWX += "%B";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "too many 'M's" );
+                    }
+                    break;
+
+                case 'y':
+                    switch ( lastCount )
+                    {
+                        case 1: // y
+                        case 2: // yy
+                            fmtWX += "%y";
+                            break;
+
+                        case 4: // yyyy
+                            fmtWX += "%Y";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "wrong number of 'y's" );
+                    }
+                    break;
+
+                case 'H':
+                    switch ( lastCount )
+                    {
+                        case 1: // H
+                        case 2: // HH
+                            fmtWX += "%H";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "wrong number of 'H's" );
+                    }
+                    break;
+
+               case 'h':
+                    switch ( lastCount )
+                    {
+                        case 1: // h
+                        case 2: // hh
+                            fmtWX += "%h";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "wrong number of 'h's" );
+                    }
+                    break;
+
+               case 'm':
+                    switch ( lastCount )
+                    {
+                        case 1: // m
+                        case 2: // mm
+                            fmtWX += "%M";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "wrong number of 'm's" );
+                    }
+                    break;
+
+               case 's':
+                    switch ( lastCount )
+                    {
+                        case 1: // s
+                        case 2: // ss
+                            fmtWX += "%S";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "wrong number of 's's" );
+                    }
+                    break;
+
+                case 'g':
+                    // strftime() doesn't have era string,
+                    // ignore this format
+                    wxASSERT_MSG( lastCount <= 2, "too many 'g's" );
+                    break;
+
+                default:
+                    wxFAIL_MSG( "unreachable" );
+            }
+
+            chLast = '\0';
+            lastCount = 0;
+        }
+
+        if ( p == fmt.end() )
+            break;
+
+        // not a special character so must be just a separator, treat as is
+        if ( *p == _T('%') )
+        {
+            // this one needs to be escaped
+            fmtWX += _T('%');
+        }
+
+        fmtWX += *p;
+    }
+
+    return fmtWX;
+}
+
+} // anonymous namespace
+
+#endif // __WXMSW__ || __WXOSX__
+
 #if defined(__WXMSW__)
+
+namespace
+{
+
+LCTYPE GetLCTYPEFormatFromLocalInfo(wxLocaleInfo index)
+{
+    switch ( index )
+    {
+        case wxLOCALE_SHORT_DATE_FMT:
+            return LOCALE_SSHORTDATE;
+
+        case wxLOCALE_LONG_DATE_FMT:
+            return LOCALE_SLONGDATE;
+
+        case wxLOCALE_TIME_FMT:
+            return LOCALE_STIMEFORMAT;
+
+        default:
+            wxFAIL_MSG( "no matching LCTYPE" );
+    }
+
+    return 0;
+}
+
+} // anonymous namespace
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
 {
     wxUint32 lcid = LOCALE_USER_DEFAULT;
-
-    if (wxGetLocale())
+    if ( wxGetLocale() )
     {
-        const wxLanguageInfo *info = GetLanguageInfo(wxGetLocale()->GetLanguage());
+        const wxLanguageInfo * const
+            info = GetLanguageInfo(wxGetLocale()->GetLanguage());
         if ( info )
             lcid = info->GetLCID();
     }
 
     wxString str;
-    wxChar buffer[256];
-    size_t count;
-    buffer[0] = wxS('\0');
-    switch (index)
+
+    wxChar buf[256];
+    buf[0] = wxT('\0');
+
+    switch ( index )
     {
         case wxLOCALE_DECIMAL_POINT:
-            count = ::GetLocaleInfo(lcid, LOCALE_SDECIMAL, buffer, 256);
-            if (!count)
-                str << wxS(".");
-            else
-                str << buffer;
+            if ( ::GetLocaleInfo(lcid, LOCALE_SDECIMAL, buf, WXSIZEOF(buf)) )
+                str = buf;
             break;
-#if 0
-        case wxSYS_LIST_SEPARATOR:
-            count = ::GetLocaleInfo(lcid, LOCALE_SLIST, buffer, 256);
-            if (!count)
-                str << wxS(",");
-            else
-                str << buffer;
+
+        case wxLOCALE_SHORT_DATE_FMT:
+        case wxLOCALE_LONG_DATE_FMT:
+        case wxLOCALE_TIME_FMT:
+            if ( ::GetLocaleInfo(lcid, GetLCTYPEFormatFromLocalInfo(index),
+                                 buf, WXSIZEOF(buf)) )
+            {
+                return TranslateFromUnicodeFormat(buf);
+            }
             break;
-        case wxSYS_LEADING_ZERO: // 0 means no leading zero, 1 means leading zero
-            count = ::GetLocaleInfo(lcid, LOCALE_ILZERO, buffer, 256);
-            if (!count)
-                str << wxS("0");
-            else
-                str << buffer;
+
+        case wxLOCALE_DATE_TIME_FMT:
+            // there doesn't seem to be any specific setting for this, so just
+            // combine date and time ones
+            {
+                const wxString datefmt = GetInfo(wxLOCALE_LONG_DATE_FMT);
+                if ( datefmt.empty() )
+                    break;
+
+                const wxString timefmt = GetInfo(wxLOCALE_TIME_FMT);
+                if ( timefmt.empty() )
+                    break;
+
+                str << datefmt << ' ' << timefmt;
+            }
             break;
-#endif
+
         default:
-            wxFAIL_MSG(wxS("Unknown System String !"));
+            wxFAIL_MSG( "unknown wxLocaleInfo" );
     }
+
     return str;
 }
 
-#elif defined(__DARWIN__)
+#elif defined(__WXOSX__)
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
@@ -2674,17 +2901,104 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
             cfstr = (CFStringRef) CFLocaleGetValue(userLocaleRef, kCFLocaleDecimalSeparator);
             break;
 
+        case wxLOCALE_SHORT_DATE_FMT:
+        case wxLOCALE_LONG_DATE_FMT:
+        case wxLOCALE_DATE_TIME_FMT:
+        case wxLOCALE_TIME_FMT:
+            // TODO
+            return wxString();
+
         default:
             wxFAIL_MSG( "Unknown locale info" );
-            cfstr = CFSTR("");
-            break;
+            return wxString();
     }
 
     wxCFStringRef str(wxCFRetain(cfstr));
     return str.AsString();
 }
 
-#else // !__WXMSW__ && !__DARWIN__
+#else // !__WXMSW__ && !__WXOSX__, assume generic POSIX
+
+namespace
+{
+
+wxString GetDateFormatFromLangInfo(wxLocaleInfo index)
+{
+#ifdef HAVE_LANGINFO_H
+    // array containing parameters for nl_langinfo() indexes by offset of index
+    // from wxLOCALE_SHORT_DATE_FMT
+    static const nl_item items[] =
+    {
+        D_FMT, D_T_FMT, D_T_FMT, T_FMT,
+    };
+
+    const int nlidx = index - wxLOCALE_SHORT_DATE_FMT;
+    if ( nlidx < 0 || nlidx >= (int)WXSIZEOF(items) )
+    {
+        wxFAIL_MSG( "logic error in GetInfo() code" );
+        return wxString();
+    }
+
+    const wxString fmt(nl_langinfo(items[nlidx]));
+
+    // just return the format returned by nl_langinfo() except for long date
+    // format which we need to recover from date/time format ourselves (but not
+    // if we failed completely)
+    if ( fmt.empty() || index != wxLOCALE_LONG_DATE_FMT )
+        return fmt;
+
+    // this is not 100% precise but the idea is that a typical date/time format
+    // under POSIX systems is a combination of a long date format with time one
+    // so we should be able to get just the long date format by removing all
+    // time-specific format specifiers
+    static const char *timeFmtSpecs = "HIklMpPrRsSTXzZ";
+    static const char *timeSep = " :./-";
+
+    wxString fmtDateOnly;
+    const wxString::const_iterator end = fmt.end();
+    wxString::const_iterator lastSep = end;
+    for ( wxString::const_iterator p = fmt.begin(); p != end; ++p )
+    {
+        if ( strchr(timeSep, *p) )
+        {
+            if ( lastSep == end )
+                lastSep = p;
+
+            // skip it for now, we'll discard it if it's followed by a time
+            // specifier later or add it to fmtDateOnly if it is not
+            continue;
+        }
+
+        if ( *p == '%' &&
+                (p + 1 != end) && strchr(timeFmtSpecs, p[1]) )
+        {
+            // time specified found: skip it and any preceding separators
+            ++p;
+            lastSep = end;
+            continue;
+        }
+
+        if ( lastSep != end )
+        {
+            fmtDateOnly += wxString(lastSep, p);
+            lastSep = end;
+        }
+
+        fmtDateOnly += *p;
+    }
+
+    return fmtDateOnly;
+#else // !HAVE_LANGINFO_H
+    // no fallback, let the application deal with unavailability of
+    // nl_langinfo() itself as there is no good way for us to do it (well, we
+    // could try to reverse engineer the format from strftime() output but this
+    // looks like too much trouble considering the relatively small number of
+    // systems without nl_langinfo() still in use)
+    return wxString();
+#endif // HAVE_LANGINFO_H/!HAVE_LANGINFO_H
+}
+
+} // anonymous namespace
 
 /* static */
 wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
@@ -2693,36 +3007,43 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory cat)
     if ( !lc )
         return wxString();
 
-    switch ( cat )
+    switch ( index )
     {
-        case wxLOCALE_CAT_NUMBER:
-            switch ( index )
-            {
-                case wxLOCALE_THOUSANDS_SEP:
-                    return lc->thousands_sep;
+        case wxLOCALE_THOUSANDS_SEP:
+            if ( cat == wxLOCALE_CAT_NUMBER )
+                return lc->thousands_sep;
+            else if ( cat == wxLOCALE_CAT_MONEY )
+                return lc->mon_thousands_sep;
 
-                case wxLOCALE_DECIMAL_POINT:
-                    return lc->decimal_point;
-            }
+            wxFAIL_MSG( "invalid wxLocaleCategory" );
             break;
 
-        case wxLOCALE_CAT_MONEY:
-            switch ( index )
-            {
-                case wxLOCALE_THOUSANDS_SEP:
-                    return lc->mon_thousands_sep;
 
-                case wxLOCALE_DECIMAL_POINT:
-                    return lc->mon_decimal_point;
-            }
+        case wxLOCALE_DECIMAL_POINT:
+            if ( cat == wxLOCALE_CAT_NUMBER )
+                return lc->decimal_point;
+            else if ( cat == wxLOCALE_CAT_MONEY )
+                return lc->mon_decimal_point;
+
+            wxFAIL_MSG( "invalid wxLocaleCategory" );
             break;
+
+        case wxLOCALE_SHORT_DATE_FMT:
+        case wxLOCALE_LONG_DATE_FMT:
+        case wxLOCALE_DATE_TIME_FMT:
+        case wxLOCALE_TIME_FMT:
+            if ( cat != wxLOCALE_CAT_DATE && cat != wxLOCALE_CAT_DEFAULT )
+            {
+                wxFAIL_MSG( "invalid wxLocaleCategory" );
+                break;
+            }
+
+            return GetDateFormatFromLangInfo(index);
+
 
         default:
-            wxFAIL_MSG( "unknown wxLocaleCategory" );
-            return wxString(); // skip second assert below
+            wxFAIL_MSG( "unknown wxLocaleInfo value" );
     }
-
-    wxFAIL_MSG( "unknown wxLocaleInfo value for this category" );
 
     return wxString();
 }

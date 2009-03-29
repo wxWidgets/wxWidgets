@@ -386,6 +386,7 @@ All:
 - Added support of %l format specifier to wxDateTime::ParseFormat().
 - wxImage handlers can now support multiple extensions (Ivan Krestinin).
 - Added wxFileName::StripExtension() (troelsk).
+- Added wxLOCALE_DATE/TIME_FMT support to wxLocale::GetInfo().
 
 All (Unix):
 

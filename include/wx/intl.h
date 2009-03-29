@@ -364,6 +364,10 @@ enum wxLocaleCategory
     // monetary value
     wxLOCALE_CAT_MONEY,
 
+    // default category for wxLocaleInfo values which only apply to a single
+    // category (e.g. wxLOCALE_SHORT_DATE_FMT)
+    wxLOCALE_CAT_DEFAULT,
+
     wxLOCALE_CAT_MAX
 };
 
@@ -373,11 +377,21 @@ enum wxLocaleCategory
 
 enum wxLocaleInfo
 {
-    // the thounsands separator
+    // the thousands separator (for wxLOCALE_CAT_NUMBER or MONEY)
     wxLOCALE_THOUSANDS_SEP,
 
-    // the character used as decimal point
-    wxLOCALE_DECIMAL_POINT
+    // the character used as decimal point (for wxLOCALE_CAT_NUMBER or MONEY)
+    wxLOCALE_DECIMAL_POINT,
+
+    // the stftime()-formats used for short/long date and time representations
+    // (under some platforms short and long date formats are the same)
+    //
+    // NB: these elements should appear in this order, code in GetInfo() relies
+    //     on it
+    wxLOCALE_SHORT_DATE_FMT,
+    wxLOCALE_LONG_DATE_FMT,
+    wxLOCALE_DATE_TIME_FMT,
+    wxLOCALE_TIME_FMT
 
 };
 
@@ -449,7 +463,8 @@ public:
 
     // get the values of the given locale-dependent datum: the current locale
     // is used, the US default value is returned if everything else fails
-    static wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat);
+    static wxString GetInfo(wxLocaleInfo index,
+                            wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT);
 
     // return true if the locale was set successfully
     bool IsOk() const { return m_pszOldLocale != NULL; }

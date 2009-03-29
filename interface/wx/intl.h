@@ -280,7 +280,7 @@ enum wxLayoutDirection
 */
 struct WXDLLIMPEXP_BASE wxLanguageInfo
 {
-    /// ::wxLanguage id. 
+    /// ::wxLanguage id.
     /// It should be greater than @c wxLANGUAGE_USER_DEFINED when defining your own
     /// language info structure.
     int Language;
@@ -314,20 +314,33 @@ struct WXDLLIMPEXP_BASE wxLanguageInfo
 
 
 /**
-    The category of locale settings. See wxLocale::GetInfo().
+    The category of locale settings.
+
+    @see wxLocale::GetInfo()
 */
 enum wxLocaleCategory
 {
-    /// (any) numbers
+    /// Number formatting.
     wxLOCALE_CAT_NUMBER,
 
-    /// date/time
+    /// Date/time formatting.
     wxLOCALE_CAT_DATE,
 
-    /// monetary value
+    /// Monetary values formatting.
     wxLOCALE_CAT_MONEY,
 
-    wxLOCALE_CAT_MAX
+    /**
+        Default category for the wxLocaleInfo value.
+
+        This category can be used for values which only make sense for a single
+        category, e.g. wxLOCALE_SHORT_DATE_FMT which can only be used with
+        wxLOCALE_CAT_DATE. As this is the default value of the second parameter
+        of wxLocale::GetInfo(), wxLOCALE_CAT_DATE can be omitted when asking
+        for wxLOCALE_SHORT_DATE_FMT value.
+
+        @since 2.9.0
+     */
+    wxLOCALE_CAT_DEFAULT
 };
 
 /**
@@ -335,11 +348,70 @@ enum wxLocaleCategory
 */
 enum wxLocaleInfo
 {
-    /// The thounsands separator
+    /**
+        The thousands separator.
+
+        This value can be used with either wxLOCALE_CAT_NUMBER or
+        wxLOCALE_CAT_MONEY categories.
+     */
     wxLOCALE_THOUSANDS_SEP,
 
-    /// The character used as decimal point
-    wxLOCALE_DECIMAL_POINT
+    /**
+        The character used as decimal point.
+
+        This value can be used with either wxLOCALE_CAT_NUMBER or
+        wxLOCALE_CAT_MONEY categories.
+     */
+    wxLOCALE_DECIMAL_POINT,
+
+    /**
+        The date and time formats.
+
+        The strings returned by wxLocale::GetInfo() use strftime() or,
+        equivalently, wxDateTime::Format() format. If the relevant format
+        couldn't be determined, an empty string is returned -- there is no
+        fallback value so that the application could determine the best course
+        of actions itself in such case.
+
+        All of these values are used with wxLOCALE_CAT_DATE in
+        wxLocale::GetInfo() or, more typically, with wxLOCALE_CAT_DEFAULT as
+        they only apply to a single category.
+     */
+    //@{
+
+    /**
+        Short date format.
+
+        Notice that short and long date formats may be the same under POSIX
+        systems currently but may, and typically are, different under MSW or OS
+        X.
+
+        @since 2.9.0
+     */
+    wxLOCALE_SHORT_DATE_FMT,
+
+    /**
+        Long date format.
+
+        @since 2.9.0
+     */
+    wxLOCALE_LONG_DATE_FMT,
+
+    /**
+        Date and time format.
+
+        @since 2.9.0
+     */
+    wxLOCALE_DATE_TIME_FMT,
+
+    /**
+        Time format.
+
+        @since 2.9.0
+     */
+    wxLOCALE_TIME_FMT
+
+    //@}
 };
 
 
@@ -649,7 +721,7 @@ public:
 
     /**
         Tries to detect the user's default language setting.
-        
+
         Returns the ::wxLanguage value or @c wxLANGUAGE_UNKNOWN if the language-guessing
         algorithm failed.
     */
@@ -658,10 +730,19 @@ public:
     /**
         Get the values of the given locale-dependent datum.
 
-        The current locale is used, the US default value is returned if everything 
-        else fails.
+        This function returns the value of the locale-specific option specified
+        by the given @a index.
+
+        @param index
+            One of the elements of wxLocaleInfo enum.
+        @param cat
+            The category to use with the given index or wxLOCALE_CAT_DEFAULT if
+            the index can only apply to a single category.
+        @return
+            The option value or empty string if the function failed.
     */
-    static wxString GetInfo(wxLocaleInfo index, wxLocaleCategory cat);
+    static wxString GetInfo(wxLocaleInfo index,
+                            wxLocaleCategory cat = wxLOCALE_CAT_DEFAULT);
 
     /**
         Initializes the wxLocale instance.

@@ -5841,65 +5841,6 @@ if test "$ac_cv_func_gettimeofday" = "yes"; then
 fi
 
 if test "$wxUSE_DATETIME" = "yes"; then
-    dnl check for strptime and for its declaration as some systems lack it
-    AC_CHECK_FUNC(strptime)
-    if test "$ac_cv_func_strptime" = "yes"; then
-        AC_CACHE_CHECK([for strptime declaration], wx_cv_func_strptime_decl,
-            [
-                AC_LANG_PUSH(C++)
-                AC_TRY_COMPILE(
-                    [
-                        #include <time.h>
-                    ],
-                    [
-                        struct tm t;
-                        strptime("foo", "bar", &t);
-                    ],
-                    wx_cv_func_strptime_decl=yes,
-                    wx_cv_func_strptime_decl=no
-                )
-                AC_LANG_POP()
-            ]
-        )
-    fi
-    if test "$wx_cv_func_strptime_decl" = "yes"; then
-        AC_DEFINE(HAVE_STRPTIME_DECL)
-    else
-        wx_strptime_decl="extern char *strptime(const char *, const char *, struct tm *);"
-    fi
-    if test "$ac_cv_func_strptime" = "yes"; then
-        dnl strptime() behaviour doesn't conform to POSIX under Mac OS X <
-        dnl 10.5 and possibly other BSD variants, check that strptime() we
-        dnl have fails to parse format when the string doesn't match it instea
-        dnl of just stopping immediately and returning non-NULL
-        AC_CACHE_CHECK([whether strptime() fails on invalid strings],
-            wx_cv_func_strptime_ok,
-            [AC_RUN_IFELSE(
-                [
-                    #include <stdlib.h>
-                    #include <time.h>
-                    #include "confdefs.h"
-
-                    $wx_strptime_decl
-
-                    int main()
-                    {
-                        struct tm t;
-                        return !!strptime("", "%x", &t);
-                    }
-                ],
-                wx_cv_func_strptime_ok=yes,
-                wx_cv_func_strptime_ok=no,
-                dnl be pessimistic when cross-compiling
-                wx_cv_func_strptime_ok=no
-            )]
-        )
-
-        if test "$wx_cv_func_strptime_ok" = "yes"; then
-            AC_DEFINE(HAVE_STRPTIME)
-        fi
-    fi
-
     dnl check for timezone variable
     dnl   doesn't exist under Darwin / Mac OS X which uses tm_gmtoff instead
     AC_CACHE_CHECK(for timezone variable in <time.h>,

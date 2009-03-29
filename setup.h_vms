@@ -955,12 +955,6 @@ typedef pid_t GPid;
 /* define if you have statvfs function */
 #undef HAVE_STATVFS
 
-/* Define if you have strptime() */
-#define HAVE_STRPTIME 1
-
-/* Define if you have strptime() declaration */
-#define HAVE_STRPTIME_DECL 1
-
 /* Define if you have strtoull() and strtoll() */
 #define HAVE_STRTOULL 1
 

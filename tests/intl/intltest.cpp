@@ -41,10 +41,12 @@ private:
     CPPUNIT_TEST_SUITE( IntlTestCase );
         CPPUNIT_TEST( Domain );
         CPPUNIT_TEST( Headers );
+        CPPUNIT_TEST( DateTimeFmt );
     CPPUNIT_TEST_SUITE_END();
 
     void Domain();
     void Headers();
+    void DateTimeFmt();
 
     wxLocale *m_locale;
 
@@ -59,14 +61,17 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( IntlTestCase, "IntlTestCase" );
 
 void IntlTestCase::setUp()
 {
-    if (!wxLocale::IsAvailable(wxLANGUAGE_FRENCH))
-        return;     // you should have french support installed to run this test!
+    // Check that French locale is supported, this test doesn't work without it
+    // and all the other function need to check whether m_locale is non-NULL
+    // before continuing
+    if ( !wxLocale::IsAvailable(wxLANGUAGE_FRENCH) )
+        return;
 
     wxLocale::AddCatalogLookupPathPrefix("./intl");
 
     m_locale = new wxLocale;
-    CPPUNIT_ASSERT( m_locale);
-    
+    CPPUNIT_ASSERT( m_locale );
+
     // don't load default catalog, it may be unavailable:
     bool loaded = m_locale->Init(wxLANGUAGE_FRENCH, wxLOCALE_CONV_ENCODING);
     CPPUNIT_ASSERT( loaded );
@@ -86,7 +91,7 @@ void IntlTestCase::tearDown()
 void IntlTestCase::Domain()
 {
     if (!m_locale)
-        return;     // no french support installed on this system!
+        return;
 
     // _() searches all domains by default:
     CPPUNIT_ASSERT_EQUAL( "&Ouvrir un fichier", _("&Open bogus file") );
@@ -100,8 +105,8 @@ void IntlTestCase::Domain()
 
 void IntlTestCase::Headers()
 {
-    if (!m_locale)
-        return;     // no french support installed on this system!
+    if ( !m_locale )
+        return;
 
     CPPUNIT_ASSERT_EQUAL( "wxWindows 2.0 i18n sample", m_locale->GetHeaderValue("Project-Id-Version") );
     CPPUNIT_ASSERT_EQUAL( "1999-01-13 18:19+0100", m_locale->GetHeaderValue("POT-Creation-Date") );
@@ -116,6 +121,45 @@ void IntlTestCase::Headers()
 
     // and that it fails for nonexisting header:
     CPPUNIT_ASSERT_EQUAL( "", m_locale->GetHeaderValue("X-Not-Here") );
+}
+
+static void CompareFormats(const wxString& expected, wxString actual)
+{
+    if ( actual.empty() )
+    {
+        // this means that GetInfo() failed which can happen, just ignore
+        return;
+    }
+
+#ifdef __GLIBC__
+    // glibc uses some extensions in its formats which we need to convert to
+    // standard form
+    actual.Replace("%T", "%H:%M:%S");
+    actual.Replace("%e", "%d");
+#endif // __GLIBC__
+
+    CPPUNIT_ASSERT_EQUAL( expected, actual );
+}
+
+void IntlTestCase::DateTimeFmt()
+{
+    if ( !m_locale )
+        return;
+
+    CompareFormats( "%d.%m.%Y", m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
+    CompareFormats( "%a %d %b %Y", m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
+    CompareFormats( "%a %d %b %Y %H:%M:%S %Z",
+                    m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
+    CompareFormats( "%H:%M:%S", m_locale->GetInfo(wxLOCALE_TIME_FMT) );
+
+    // also test for "C" locale
+    setlocale(LC_ALL, "C");
+
+    CompareFormats( "%m/%d/%y", m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
+    CompareFormats( "%a %b %d %Y", m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
+    CompareFormats( "%a %b %d %H:%M:%S %Y",
+                    m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
+    CompareFormats( "%H:%M:%S", m_locale->GetInfo(wxLOCALE_TIME_FMT) );
 }
 
 #endif // wxUSE_INTL

@@ -881,12 +881,6 @@
 /* define if you have statvfs function */
 #undef HAVE_STATVFS
 
-/* Define if you have strptime() */
-#undef HAVE_STRPTIME
-
-/* Define if strptime() is declared in headers */
-#undef HAVE_STRPTIME_DECL
-
 /* Define if you have strtoull() and strtoll() */
 #undef HAVE_STRTOULL
 
