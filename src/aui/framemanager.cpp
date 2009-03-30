@@ -4033,26 +4033,84 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
     // resize the dock or the pane
     if (m_action_part && m_action_part->type==wxAuiDockUIPart::typeDockSizer)
     {
+        // first, we must calculate the maximum size the dock may be
+        int sash_size = m_art->GetMetric(wxAUI_DOCKART_SASH_SIZE);
+
+        int used_width = 0, used_height = 0;
+
+        wxSize client_size = m_frame->GetClientSize();
+        
+        size_t dock_i, dock_count = m_docks.GetCount();
+        for (dock_i = 0; dock_i < dock_count; ++dock_i)
+        {
+            wxAuiDockInfo& dock = m_docks.Item(dock_i);
+            if (dock.dock_direction == wxAUI_DOCK_TOP ||
+                dock.dock_direction == wxAUI_DOCK_BOTTOM)
+            {
+                used_height += dock.size;
+            }
+            if (dock.dock_direction == wxAUI_DOCK_LEFT ||
+                dock.dock_direction == wxAUI_DOCK_RIGHT)
+            {
+                used_width += dock.size;
+            }
+            if (dock.resizable)
+                used_width += sash_size;
+        }
+        
+        
+        int available_width = client_size.GetWidth() - used_width;
+        int available_height = client_size.GetHeight() - used_height;
+        
+        
+#if wxUSE_STATUSBAR
+        // if there's a status control, the available
+        // height decreases accordingly
+        if (m_frame && m_frame->IsKindOf(CLASSINFO(wxFrame)))
+        {
+            wxFrame* frame = static_cast<wxFrame*>(m_frame);
+            wxStatusBar* status = frame->GetStatusBar();
+            if (status)
+            {
+                wxSize status_client_size = status->GetClientSize();
+                available_height -= status_client_size.GetHeight();
+            }
+        }
+#endif
+    
         wxRect& rect = m_action_part->dock->rect;
 
         wxPoint new_pos(event.m_x - m_action_offset.x,
             event.m_y - m_action_offset.y);
-
+        int new_size, old_size = m_action_part->dock->size;
+        
         switch (m_action_part->dock->dock_direction)
         {
         case wxAUI_DOCK_LEFT:
-            m_action_part->dock->size = new_pos.x - rect.x;
+            new_size = new_pos.x - rect.x;
+            if (new_size-old_size > available_width)
+                new_size = old_size+available_width;
+            m_action_part->dock->size = new_size;
             break;
         case wxAUI_DOCK_TOP:
-            m_action_part->dock->size = new_pos.y - rect.y;
+            new_size = new_pos.y - rect.y;
+            if (new_size-old_size > available_height)
+                new_size = old_size+available_height;
+            m_action_part->dock->size = new_size;
             break;
         case wxAUI_DOCK_RIGHT:
-            m_action_part->dock->size = rect.x + rect.width -
-                new_pos.x - m_action_part->rect.GetWidth();
+            new_size = rect.x + rect.width - new_pos.x -
+                       m_action_part->rect.GetWidth();
+            if (new_size-old_size > available_width)
+                new_size = old_size+available_width;
+            m_action_part->dock->size = new_size;
             break;
         case wxAUI_DOCK_BOTTOM:
-            m_action_part->dock->size = rect.y + rect.height -
+            new_size = rect.y + rect.height -
                 new_pos.y - m_action_part->rect.GetHeight();
+            if (new_size-old_size > available_height)
+                new_size = old_size+available_height;
+            m_action_part->dock->size = new_size;
             break;
         }
 
