@@ -2618,6 +2618,8 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
         "dghHmMsSy"
 #ifdef __WXMSW__
         "t"
+#else
+        "EawD"
 #endif
         ;
     for ( wxString::const_iterator p = fmt.begin(); /* end handled inside */; ++p )
@@ -2654,7 +2656,7 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                             // between 1 and 2 digits for days
                             fmtWX += "%d";
                             break;
-
+#ifdef __WXMSW__
                         case 3: // ddd
                             fmtWX += "%a";
                             break;
@@ -2662,12 +2664,57 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                         case 4: // dddd
                             fmtWX += "%A";
                             break;
-
+#endif
                         default:
                             wxFAIL_MSG( "too many 'd's" );
                     }
                     break;
+#ifndef __WXMSW__
+                case 'D':
+                    switch ( lastCount )
+                    {
+                        case 1: // D
+                        case 2: // DD
+                        case 3: // DDD
+                            fmtWX += "%j";
+                            break;
 
+                        default:
+                            wxFAIL_MSG( "wrong number of 'D's" );
+                    }
+                    break;
+               case 'w':
+                    switch ( lastCount )
+                    {
+                        case 1: // w
+                        case 2: // ww
+                            fmtWX += "%W";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "wrong number of 'w's" );
+                    }
+                    break;
+                case 'E':
+                   switch ( lastCount )
+                    {
+                        case 1: // E
+                        case 2: // EE
+                        case 3: // EEE
+                            fmtWX += "%a";
+                            break;
+                        case 4: // EEEE
+                            fmtWX += "%A";
+                            break;
+                        case 5: // EEEEE
+                            fmtWX += "%a";
+                            break;
+
+                        default:
+                            wxFAIL_MSG( "wrong number of 'E's" );
+                    }
+                    break;
+#endif
                 case 'M':
                     switch ( lastCount )
                     {
@@ -2763,11 +2810,13 @@ static wxString TranslateFromUnicodeFormat(const wxString& fmt)
                     // strftime() doesn't have era string,
                     // ignore this format
                     wxASSERT_MSG( lastCount <= 2, "too many 'g's" );
+         
                     break;
-
+#ifndef __WXMSW__
                 case 'a':
                     fmtWX += "%p";
                     break;
+#endif
 #ifdef __WXMSW__
                 case 't':
                     switch ( lastCount )
@@ -2940,13 +2989,13 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                 switch (index )
                 {
                     case wxLOCALE_SHORT_DATE_FMT:
-                        dateStyle = kCFDateFormatterMediumStyle;
+                        dateStyle = kCFDateFormatterShortStyle;
                         break;
                     case wxLOCALE_LONG_DATE_FMT:
                         dateStyle = kCFDateFormatterLongStyle;
                         break;
                     case wxLOCALE_DATE_TIME_FMT:
-                        dateStyle = kCFDateFormatterMediumStyle;
+                        dateStyle = kCFDateFormatterFullStyle;
                         timeStyle = kCFDateFormatterMediumStyle;
                         break;
                     case wxLOCALE_TIME_FMT:
@@ -2959,7 +3008,10 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                 wxCFRef<CFDateFormatterRef> dateFormatter( CFDateFormatterCreate
                     (NULL, userLocaleRef, dateStyle, timeStyle));
                 wxCFStringRef cfs = wxCFRetain( CFDateFormatterGetFormat(dateFormatter ));
-                return TranslateFromUnicodeFormat(cfs.AsString());
+                wxString format = TranslateFromUnicodeFormat(cfs.AsString());
+                // we always want full years
+                format.Replace("%y","%Y");
+                return format;
             }
             break;
 
