@@ -266,11 +266,17 @@ ParseFormatAt(wxString::const_iterator& p,
 // wxDateTime to/from text representations
 // ----------------------------------------------------------------------------
 
-wxString wxDateTime::Format(const wxString& format, const TimeZone& tz) const
+wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 {
-    wxCHECK_MSG( !format.empty(), wxEmptyString,
+    wxCHECK_MSG( !formatp.empty(), wxEmptyString,
                  _T("NULL format in wxDateTime::Format") );
 
+    wxString format = formatp;
+#ifdef __WXOSX__
+    format.Replace("%c",wxLocale::GetInfo(wxLOCALE_DATE_TIME_FMT));
+    format.Replace("%x",wxLocale::GetInfo(wxLOCALE_SHORT_DATE_FMT));
+    format.Replace("%X",wxLocale::GetInfo(wxLOCALE_TIME_FMT));
+#endif
     // we have to use our own implementation if the date is out of range of
     // strftime() or if we use non standard specificators
 #ifdef HAVE_STRFTIME
