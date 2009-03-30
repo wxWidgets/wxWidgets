@@ -611,15 +611,18 @@ wxCFStringRef::wxCFStringRef( const wxString &st , wxFontEncoding WXUNUSED_IN_UN
 #if wxUSE_UNICODE
 #if wxUSE_UNICODE_WCHAR
         // native = wchar_t 4 bytes for us
-        reset( CFStringCreateWithBytes( kCFAllocatorDefault,
-            (const UInt8*)str.wc_str() , str.length()*4, kCFStringEncodingUTF32Native, false /* no BOM */ ) );
+        const wchar_t * const data = str.wc_str();
+        const size_t size = str.length()*sizeof(wchar_t);
 #elif wxUSE_UNICODE_UTF8
         // native = utf8
-        reset( CFStringCreateWithBytes( kCFAllocatorDefault,
-            (const UInt8*) str.utf8_str() , str.utf8_length() , kCFStringEncodingUTF8, false /* no BOM */ ) );
+        const char * const data = str.utf8_str();
+        const size_t size = str.utf8_length();
 #else
-    #error "unsupported unicode representation"
+    #error "unsupported Unicode representation"
 #endif
+
+        reset( CFStringCreateWithBytes( kCFAllocatorDefault,
+            (const UInt8*)data, size, kCFStringEncodingUTF8, false /* no BOM */ ) );
 #else // not wxUSE_UNICODE
         reset( CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
             wxMacGetSystemEncFromFontEnc( encoding ) ) );
