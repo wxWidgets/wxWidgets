@@ -40,6 +40,7 @@
     #include "wx/dcscreen.h"
     #include "wx/toolbar.h"
     #include "wx/image.h"
+    #include "wx/statusbr.h"
 #endif
 
 WX_CHECK_BUILD_OPTIONS("wxAUI")
