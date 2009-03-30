@@ -205,6 +205,9 @@ public :
     virtual void        GetSize( int &width, int &height ) const = 0;
     virtual void        SetControlSize( wxWindowVariant variant ) = 0;
 
+    // native view coordinates are topleft to bottom right (flipped regarding CoreGraphics origin)
+    virtual bool        IsFlipped() const { return true; }
+
     virtual void        SetNeedsDisplay( const wxRect* where = NULL ) = 0;
     virtual bool        GetNeedsDisplay() const = 0;
 

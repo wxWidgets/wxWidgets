@@ -22,12 +22,9 @@ class WXDLLIMPEXP_FWD_CORE wxNonOwnedWindow;
 #if wxOSX_USE_CARBON
     class WXDLLIMPEXP_FWD_CORE wxMacControl ;
     typedef wxMacControl wxOSXWidgetImpl;
-#elif wxOSX_USE_COCOA
-    class WXDLLIMPEXP_FWD_CORE wxWidgetCocoaImpl ;
-    typedef wxWidgetCocoaImpl wxOSXWidgetImpl;
-#elif wxOSX_USE_IPHONE
-    class WXDLLIMPEXP_FWD_CORE wxWidgetIPhoneImpl ;
-    typedef wxWidgetIPhoneImpl wxOSXWidgetImpl;
+#elif wxOSX_USE_COCOA_OR_IPHONE
+    class WXDLLIMPEXP_FWD_CORE wxWidgetImpl ;
+    typedef wxWidgetImpl wxOSXWidgetImpl;
 #endif
 
 

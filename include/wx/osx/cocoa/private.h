@@ -129,7 +129,7 @@ public :
     virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow); 
 
     void                SetFlipped(bool flipped);
-    bool                IsFlipped() const { return m_isFlipped; }
+    virtual bool        IsFlipped() const { return m_isFlipped; }
 
     // cocoa thunk connected calls
 
