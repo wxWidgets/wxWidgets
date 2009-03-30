@@ -954,7 +954,7 @@ protected:
     @library{wxbase}
     @category{logging}
 */
-class wxLogNull : public wxLog
+class wxLogNull
 {
 public:
     /**
