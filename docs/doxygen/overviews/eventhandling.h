@@ -70,18 +70,28 @@ conditions. It also allows the direct binding of events to:
 @li An ordinary function like a static method or a global function.
 @li An arbitrary functor like boost::function<>.
 
-The static event tables can only handle
-events in the object where they are defined so using Bind<>() is more flexible
-than using the event tables. On the other hand, event tables are more succinct
-and centralize all event handler bindings in one place. You can either
-choose a single approach that you find preferable or freely combine both
-methods in your program in different classes or even in one and the same class,
-although this is probably sufficiently confusing to be a bad idea.
+The static event tables can only handle events in the object where they are
+defined so using Bind<>() is more flexible than using the event tables. On the
+other hand, event tables are more succinct and centralize all event handler
+bindings in one place. You can either choose a single approach that you find
+preferable or freely combine both methods in your program in different classes
+or even in one and the same class, although this is probably sufficiently
+confusing to be a bad idea.
 
-But before you make this choice, let us discuss these two ways in more
-detail. In the next section we provide a short introduction to handling the
-events using the event tables. Please see @ref overview_events_bind
-for the discussion of Bind<>().
+Also notice that most of the existing wxWidgets tutorials and discussions use
+the event tables because they historically preceded the apparition of dynamic
+event handling in wxWidgets. But this absolutely doesn't mean that using the
+event tables is the preferred way: handling events dynamically is better in
+several aspects and you should strongly consider doing it if you are just
+starting with wxWidgets. On the other hand, you still need to know about the
+event tables if only because you are going to see them in many samples and
+examples.
+
+So before you make the choice between static event tables and dynamically
+connecting the event handlers, let us discuss these two ways in more detail. In
+the next section we provide a short introduction to handling the events using
+the event tables. Please see @ref overview_events_bind for the discussion of
+Bind<>().
 
 @subsection overview_events_eventtables Event Handling with Event Tables
 
@@ -302,9 +312,12 @@ Now let us describe the semantic differences:
     </li>
 </ul>
 
-Here are some more examples of how to use different event handlers.
+Let us now look at more examples of how to use different event handlers using
+the two overloads of Bind() function: first one for the object methods and the
+other one for arbitrary functors (callable objects, including simple functions):
 
-You can use a method from a completely different object as an event handler:
+In addition to using a method of the object generating the event itself, you
+can use a method from a completely different object as an event handler:
 
 @code
 void MyFrameHandler::OnFrameExit( wxCommandEvent & )
@@ -325,6 +338,7 @@ Note that @c MyFrameHandler doesn't need to derive from wxEvtHandler. But
 keep in mind that then the lifetime of @c myFrameHandler must be greater than
 that of @c MyFrame object -- or at least it needs to be unbound before being
 destroyed.
+
 
 To use an ordinary function or a static method as an event handler you would
 write something like this:
