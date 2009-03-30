@@ -379,6 +379,26 @@ extern void SetProcessEventFunc(ProcessEventFunc func)
     wxGetApp().SetProcessEventFunc(func);
 }
 
+// helper of OnRun(): gets the test with the given name, returning NULL (and
+// not an empty test suite) if there is no such test
+static Test *GetTestByName(const wxString& name)
+{
+    Test *
+      test = TestFactoryRegistry::getRegistry(string(name.mb_str())).makeTest();
+    if ( test )
+    {
+        TestSuite * const suite = dynamic_cast<TestSuite *>(test);
+        if ( !suite || !suite->countTestCases() )
+        {
+            // it's a bogus test, don't use it
+            delete test;
+            test = NULL;
+        }
+    }
+
+    return test;
+}
+
 // Run
 //
 int TestApp::OnRun()
@@ -395,26 +415,34 @@ int TestApp::OnRun()
 
     for (size_t i = 0; i < m_registries.size(); i++)
     {
+        Test *test;
+
         wxString reg = m_registries[i];
-        // allow the user to specify the name of the testcase "in short form"
-        // (all wx test cases end with TestCase postfix)
-        if (!reg.empty() && !reg.EndsWith("TestCase"))
-            reg += "TestCase";
+        if ( reg.empty() )
+        {
+            // no test name, run all the tests
+            test = TestFactoryRegistry::getRegistry().makeTest();
+        }
+        else // test name specified, run just this test
+        {
+            test = GetTestByName(reg);
 
-        string stdreg(reg.mb_str());
+            if ( !test && !reg.EndsWith("TestCase") )
+            {
+                test = GetTestByName(reg + "TestCase");
+            }
 
-        auto_ptr<Test> test(reg.empty() ?
-            TestFactoryRegistry::getRegistry().makeTest() :
-            TestFactoryRegistry::getRegistry(stdreg).makeTest());
+            if ( !test )
+            {
+                cerr << "No such test suite: " << string(reg.mb_str()) << endl;
+                return 2;
+            }
+        }
 
-        TestSuite *suite = dynamic_cast<TestSuite*>(test.get());
-
-        if (suite && suite->countTestCases() == 0)
-            cerr << "No such test suite: " << stdreg << endl;
-        else if (m_list)
-            List(test.get());
+        if (m_list)
+            List(test);
         else
-            runner.addTest(test.release());
+            runner.addTest(test);
     }
 
     if ( m_list )
