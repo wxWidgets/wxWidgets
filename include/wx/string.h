@@ -4015,7 +4015,7 @@ inline const char* wxCStrData::AsChar() const
 
 inline const wxScopedCharBuffer wxCStrData::AsCharBuf() const
 {
-#if !wxUSE_UNICODE
+#if !wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY
     return wxScopedCharBuffer::CreateNonOwned(AsChar());
 #else
     return AsString().mb_str();
