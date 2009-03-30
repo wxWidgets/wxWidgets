@@ -146,7 +146,15 @@ void IntlTestCase::DateTimeFmt()
     if ( !m_locale )
         return;
 
-    CompareFormats( "%d.%m.%Y", m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
+#ifdef __GLIBC__
+    // glibc also uses dots for French locale separator for some reason (the
+    // standard format uses slashes)
+    static const char *FRENCH_DATE_FMT = "%d.%m.%y";
+#else
+    static const char *FRENCH_DATE_FMT = "%d/%m/%y";
+#endif
+
+    CompareFormats( FRENCH_DATE_FMT, m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
     CompareFormats( "%a %d %b %Y", m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
     CompareFormats( "%a %d %b %Y %H:%M:%S %Z",
                     m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
