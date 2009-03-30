@@ -1277,9 +1277,9 @@ public:
     { assign(pwz, nLength); }
 
   wxString(const wxScopedCharBuffer& buf)
-    { assign(buf.data()); } // FIXME-UTF8: fix for embedded NUL and buffer length
+    { assign(buf.data(), buf.length()); }
   wxString(const wxScopedWCharBuffer& buf)
-    { assign(buf.data()); } // FIXME-UTF8: fix for embedded NUL and buffer length
+    { assign(buf.data(), buf.length()); }
 
     // NB: this version uses m_impl.c_str() to force making a copy of the
     //     string, so that "wxString(str.c_str())" idiom for passing strings
@@ -1341,8 +1341,10 @@ public:
   #else
     // wxStringImpl is either not std::string or needs conversion
     operator wxStdWideString() const
-        // FIXME-UTF8: broken for embedded NULs
-        { return wxStdWideString(wc_str()); }
+    {
+        wxScopedWCharBuffer buf(wc_str());
+        return wxStdWideString(buf.data(), buf.length());
+    }
   #endif
 
   #if (!wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY) && wxUSE_STL_BASED_WXSTRING
@@ -1351,8 +1353,10 @@ public:
   #else
     // wxStringImpl is either not std::string or needs conversion
     operator std::string() const
-        // FIXME-UTF8: broken for embedded NULs
-        { return std::string(mb_str()); }
+    {
+        wxScopedCharBuffer buf(mb_str());
+        return std::string(buf.data(), buf.length());
+    }
   #endif
 #endif // wxUSE_STL
 
@@ -1921,10 +1925,10 @@ public:
 
     // from wxScopedWCharBuffer
   wxString& operator=(const wxScopedWCharBuffer& s)
-    { return operator=(s.data()); } // FIXME-UTF8: fix for embedded NULs
+    { return assign(s); }
     // from wxScopedCharBuffer
   wxString& operator=(const wxScopedCharBuffer& s)
-    { return operator=(s.data()); } // FIXME-UTF8: fix for embedded NULs
+    { return assign(s); }
 
   // string concatenation
     // in place concatenation
@@ -1960,9 +1964,9 @@ public:
 
       // string += buffer (i.e. from wxGetString)
   wxString& operator<<(const wxScopedWCharBuffer& s)
-    { return operator<<((const wchar_t *)s); }
+    { return append(s); }
   wxString& operator<<(const wxScopedCharBuffer& s)
-    { return operator<<((const char *)s); }
+    { return append(s); }
 
     // string += C string
   wxString& Append(const wxString& s)
@@ -2464,9 +2468,9 @@ public:
   wxString& append(const wxCStrData& str)
     { return append(str.AsString()); }
   wxString& append(const wxScopedCharBuffer& str)
-    { return append(str.data()); }
+    { return append(str.data(), str.length()); }
   wxString& append(const wxScopedWCharBuffer& str)
-    { return append(str.data()); }
+    { return append(str.data(), str.length()); }
   wxString& append(const wxCStrData& str, size_t n)
     { return append(str.AsString(), 0, n); }
   wxString& append(const wxScopedCharBuffer& str, size_t n)
@@ -2596,9 +2600,9 @@ public:
   wxString& assign(const wxCStrData& str)
     { return assign(str.AsString()); }
   wxString& assign(const wxScopedCharBuffer& str)
-    { return assign(str.data()); }
+    { return assign(str.data(), str.length()); }
   wxString& assign(const wxScopedWCharBuffer& str)
-    { return assign(str.data()); }
+    { return assign(str.data(), str.length()); }
   wxString& assign(const wxCStrData& str, size_t len)
     { return assign(str.AsString(), len); }
   wxString& assign(const wxScopedCharBuffer& str, size_t len)
@@ -3352,9 +3356,9 @@ public:
       return *this;
   }
   wxString& operator+=(const wxScopedCharBuffer& s)
-    { return operator+=(s.data()); }
+    { return append(s); }
   wxString& operator+=(const wxScopedWCharBuffer& s)
-    { return operator+=(s.data()); }
+    { return append(s); }
       // string += char
   wxString& operator+=(wxUniChar ch)
   {

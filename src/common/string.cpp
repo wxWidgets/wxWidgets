@@ -499,7 +499,7 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
             // we must pass the real string length to SubstrBufFromMB ctor
             if ( nLength == npos )
                 nLength = psz ? strlen(psz) : 0;
-            return SubstrBufFromMB(wxCharBuffer::CreateNonOwned(psz, nLength),
+            return SubstrBufFromMB(wxScopedCharBuffer::CreateNonOwned(psz, nLength),
                                    nLength);
         }
         // else: do the roundtrip through wchar_t*
@@ -550,17 +550,25 @@ wxString::SubstrBufFromWC wxString::ConvertStr(const wchar_t *pwz, size_t nLengt
 //Convert wxString in Unicode mode to a multi-byte string
 const wxScopedCharBuffer wxString::mb_str(const wxMBConv& conv) const
 {
-    return conv.cWC2MB(wx_str(), length() + 1 /* size, not length */, NULL);
+    // NB: Length passed to cWC2MB() doesn't include terminating NUL, it's
+    //     added by it automatically. If we passed length()+1 here, it would
+    //     create a buffer with 2 trailing NULs of length one greater than
+    //     expected.
+    return conv.cWC2MB(wx_str(), length(), NULL);
 }
 
 #elif wxUSE_UNICODE_UTF8
 
 const wxScopedWCharBuffer wxString::wc_str() const
 {
+    // NB: Length passed to cMB2WC() doesn't include terminating NUL, it's
+    //     added by it automatically. If we passed length()+1 here, it would
+    //     create a buffer with 2 trailing NULs of length one greater than
+    //     expected.
     return wxMBConvStrictUTF8().cMB2WC
                                 (
                                     m_impl.c_str(),
-                                    m_impl.length() + 1, // size, not length
+                                    m_impl.length(),
                                     NULL
                                 );
 }
@@ -570,22 +578,11 @@ const wxScopedCharBuffer wxString::mb_str(const wxMBConv& conv) const
     if ( conv.IsUTF8() )
         return wxScopedCharBuffer::CreateNonOwned(m_impl.c_str(), m_impl.length());
 
-    // FIXME-UTF8: use wc_str() here once we have buffers with length
-
-    size_t wcLen;
-    wxScopedWCharBuffer wcBuf
-                        (
-                          wxMBConvStrictUTF8().cMB2WC
-                                               (
-                                                 m_impl.c_str(),
-                                                 m_impl.length() + 1, // size
-                                                 &wcLen
-                                               )
-                        );
-    if ( !wcLen )
+    wxScopedWCharBuffer wcBuf(wc_str());
+    if ( !wcBuf.length() )
         return wxCharBuffer("");
 
-    return conv.cWC2MB(wcBuf, wcLen+1, NULL);
+    return conv.cWC2MB(wcBuf.data(), wcBuf.length(), NULL);
 }
 
 #else // ANSI
@@ -594,7 +591,11 @@ const wxScopedCharBuffer wxString::mb_str(const wxMBConv& conv) const
 //mode is not enabled and wxUSE_WCHAR_T is enabled
 const wxScopedWCharBuffer wxString::wc_str(const wxMBConv& conv) const
 {
-    return conv.cMB2WC(wx_str(), length() + 1 /* size, not length */, NULL);
+    // NB: Length passed to cMB2WC() doesn't include terminating NUL, it's
+    //     added by it automatically. If we passed length()+1 here, it would
+    //     create a buffer with 2 trailing NULs of length one greater than
+    //     expected.
+    return conv.cMB2WC(wx_str(), length(), NULL);
 }
 
 #endif // Unicode/ANSI
