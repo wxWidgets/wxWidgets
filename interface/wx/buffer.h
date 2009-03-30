@@ -200,8 +200,27 @@ public:
 
         Can only be called on buffers that don't share data with another
         buffer (i.e. reference count of the data is 1).
+
+        @see shrink()
      */
     bool extend(size_t len);
+
+    /**
+        Shrinks the buffer to have size @a len and NUL-terminates the string
+        at this length.
+
+        Can only be called on buffers that don't share data with another
+        buffer (i.e. reference count of the data is 1).
+
+        @param len Length to shrink to. Must not be larger than current length.
+
+        @note The string is not reallocated to take less memory.
+
+        @since 2.9.0
+
+        @see extend()
+     */
+    bool shrink(size_t len);
 };
 
 /**

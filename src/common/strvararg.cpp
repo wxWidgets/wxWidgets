@@ -152,7 +152,7 @@ public:
         m_nCopied = 0;
     }
 
-    wxCharTypeBuffer<CharType> Convert(const CharType *format)
+    wxScopedCharTypeBuffer<CharType> Convert(const CharType *format)
     {
         // this is reset to NULL if we modify the format string
         m_fmtOrig = format;
@@ -263,12 +263,14 @@ public:
         // format
         if ( m_fmtOrig )
         {
-            return wxCharTypeBuffer<CharType>::CreateNonOwned(m_fmtOrig);
+            return wxScopedCharTypeBuffer<CharType>::CreateNonOwned(m_fmtOrig);
         }
         else
         {
-            // NULL-terminate converted format string:
-            *m_fmtLast = 0;
+            // shrink converted format string to actual size (instead of
+            // over-sized allocation from CopyAllBefore()) and NUL-terminate
+            // it:
+            m_fmt.shrink(m_fmtLast - m_fmt.data());
             return m_fmt;
         }
     }

@@ -330,6 +330,17 @@ public:
 
         return true;
     }
+
+    void shrink(size_t len)
+    {
+        wxASSERT_MSG( this->m_data->m_owned, "cannot shrink non-owned buffer" );
+        wxASSERT_MSG( this->m_data->m_ref == 1, "can't shrink shared buffer" );
+
+        wxASSERT( len <= this->length() );
+
+        this->m_data->m_length = len;
+        this->data()[len] = 0;
+    }
 };
 
 WXDLLIMPEXP_TEMPLATE_INSTANCE_BASE( wxCharTypeBuffer<char> )
