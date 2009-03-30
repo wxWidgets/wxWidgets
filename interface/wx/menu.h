@@ -427,7 +427,7 @@ public:
       specifying an object whose class has @c EVT_MENU entries;
 
     Note that instead of static @c EVT_MENU macros you can also use dynamic
-    connection; see @ref overview_events_connect.
+    connection; see @ref overview_events_bind.
 
     @library{wxcore}
     @category{menus}
