@@ -1700,7 +1700,7 @@ void wxGtkPrinterDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCo
 
     bool underlined = m_font.Ok() && m_font.GetUnderlined();
 
-    const wxUTF8Buf data = text.utf8_str();
+    const wxScopedCharBuffer data = text.utf8_str();
 
     size_t datalen = strlen(data);
     pango_layout_set_text( m_layout, data, datalen);
@@ -2102,7 +2102,7 @@ void wxGtkPrinterDCImpl::DoGetTextExtent(const wxString& string, wxCoord *width,
     cairo_scale(m_cairo, m_scaleX, m_scaleY);
 
     // Set layout's text
-    const wxUTF8Buf dataUTF8 = string.utf8_str();
+    const wxScopedCharBuffer dataUTF8 = string.utf8_str();
 
     gint oldSize=0;
     if ( theFont )

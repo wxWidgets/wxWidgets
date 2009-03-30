@@ -72,7 +72,7 @@ public:
                                               : size, wxIPC_UNICODETEXT); }
   bool Execute(const wxString& s)
   {
-      const wxUTF8Buf buf = s.utf8_str();
+      const wxScopedCharBuffer buf = s.utf8_str();
       return DoExecute(buf, strlen(buf) + 1, wxIPC_UTF8TEXT);
   }
   bool Execute(const wxCStrData& cs)
@@ -94,7 +94,7 @@ public:
                                        : size, wxIPC_UNICODETEXT); }
   bool Poke(const wxString& item, const wxString s)
   {
-      const wxUTF8Buf buf = s.utf8_str();
+      const wxScopedCharBuffer buf = s.utf8_str();
       return DoPoke(item, buf,  strlen(buf) + 1, wxIPC_UTF8TEXT);
   }
   bool Poke(const wxString& item, const wxCStrData& cs)
@@ -116,7 +116,7 @@ public:
                                          : size, wxIPC_UNICODETEXT); }
   bool Advise(const wxString& item, const wxString s)
   {
-      const wxUTF8Buf buf = s.utf8_str();
+      const wxScopedCharBuffer buf = s.utf8_str();
       return DoAdvise(item, buf,  strlen(buf) + 1, wxIPC_UTF8TEXT);
   }
   bool Advise(const wxString& item, const wxCStrData& cs)

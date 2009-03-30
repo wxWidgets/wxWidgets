@@ -508,7 +508,7 @@ bool wxSockAddressImpl::SetHostName4(const wxString& name)
     if ( !addr )
         return false;
 
-    const wxUTF8Buf namebuf(name.utf8_str());
+    const wxScopedCharBuffer namebuf(name.utf8_str());
 
     // first check if this is an address in quad dotted notation
 #if defined(HAVE_INET_ATON)
@@ -695,7 +695,7 @@ bool wxSockAddressImpl::SetPath(const wxString& path)
     if ( !addr )
         return false;
 
-    const wxUTF8Buf buf(path.utf8_str());
+    const wxScopedCharBuffer buf(path.utf8_str());
     if ( strlen(buf) >= UNIX_PATH_MAX )
         return false;
 

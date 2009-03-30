@@ -479,7 +479,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
     _("Test 2 ..."),
     _("Yes I like wxWidgets!"));
 
-  const wxUTF8Buf msg1(s.utf8_str());
+  const wxScopedCharBuffer msg1(s.utf8_str());
   size_t len  = wxStrlen(msg1) + 1;
   wxCharBuffer msg2(wxStrlen(msg1));
 

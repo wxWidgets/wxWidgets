@@ -427,13 +427,6 @@ typedef wxWritableCharTypeBuffer<wchar_t> wxWritableWCharBuffer;
     #define wxWX2WCbuf wxWCharBuffer
 #endif // Unicode/ANSI
 
-// type of the value returned by wxString::utf8_str()
-#if wxUSE_UNICODE_UTF8
-    #define wxUTF8Buf char *
-#else
-    #define wxUTF8Buf wxCharBuffer
-#endif
-
 // ----------------------------------------------------------------------------
 // A class for holding growable data buffers (not necessarily strings)
 // ----------------------------------------------------------------------------

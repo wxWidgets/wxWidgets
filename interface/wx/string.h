@@ -420,12 +420,7 @@ public:
 
         @see wc_str(), c_str(), mb_str()
     */
-    const char* utf8_str() const;
-    
-    /**
-        @overload
-    */
-    const wxCharBuffer utf8_str() const;
+    const wxScopedCharBuffer utf8_str() const;
 
     /**
         Converts the strings contents to the wide character represention
@@ -497,12 +492,7 @@ public:
     /**
         Same as utf8_str().
     */
-    const char* ToUTF8() const;
-
-    /**
-        @overload
-    */
-    const wxCharBuffer ToUTF8() const;
+    const wxScopedCharBuffer ToUTF8() const;
 
     //@}
 

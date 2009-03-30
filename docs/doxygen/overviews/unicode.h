@@ -372,19 +372,13 @@ const char *p = s.ToUTF8();
 puts(p); // or call any other function taking const char *
 @endcode
 does @b not work because the temporary buffer returned by wxString::ToUTF8() is
-destroyed and @c p is left pointing nowhere. To correct this you may use
+destroyed and @c p is left pointing nowhere. To correct this you should use
 @code
-wxCharBuffer p(s.ToUTF8());
+const wxScopedCharBuffer p(s.ToUTF8());
 puts(p);
 @endcode
-which does work but results in an unnecessary copy of string data in the build
-configurations when wxString::ToUTF8() returns the pointer to internal string buffer.
-If this inefficiency is important you may write
-@code
-const wxUTF8Buf p(s.ToUTF8());
-puts(p);
-@endcode
-where @c wxUTF8Buf is the type corresponding to the real return type of wxString::ToUTF8().
+which does work.
+
 Similarly, wxWX2WCbuf can be used for the return type of wxString::wc_str().
 But, once again, none of these cryptic types is really needed if you just pass
 the return value of any of the functions mentioned in this section to another

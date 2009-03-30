@@ -1710,8 +1710,10 @@ public:
         return FromImpl(wxStringImpl(utf8, len));
     }
 
-    const char* utf8_str() const { return wx_str(); }
-    const char* ToUTF8() const { return wx_str(); }
+    const wxScopedCharBuffer utf8_str() const
+        { return wxCharBuffer::CreateNonOwned(wx_str()); }
+    const wxScopedCharBuffer ToUTF8() const
+        { return wxCharBuffer::CreateNonOwned(wx_str()); }
 
     // this function exists in UTF-8 build only and returns the length of the
     // internal UTF-8 representation
