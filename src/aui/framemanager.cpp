@@ -3026,7 +3026,8 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         // toolbars may only be moved in and to fixed-pane docks,
         // otherwise we will try to float the pane.  Also, the pane
         // should float if being dragged over center pane windows
-        if (!part->dock->fixed || part->dock->dock_direction == wxAUI_DOCK_CENTER)
+        if (!part->dock->fixed || part->dock->dock_direction == wxAUI_DOCK_CENTER ||
+            pt.x >= cli_size.x || pt.x <= 0 || pt.y >= cli_size.y || pt.y <= 0)
         {
             if (m_last_rect.IsEmpty() || m_last_rect.Contains(pt.x, pt.y ))
             {
@@ -3034,13 +3035,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
             }
             else
             {
-                if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
-                   (drop.IsFloatable() ||
-                    (part->dock->dock_direction != wxAUI_DOCK_CENTER &&
-                     part->dock->dock_direction != wxAUI_DOCK_NONE)))
+                if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) && drop.IsFloatable())
                 {
-                    if (drop.IsFloatable())
-                        drop.Float();
+                    drop.Float();
                 }
 
                 m_skipping = false;
