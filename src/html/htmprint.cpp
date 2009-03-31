@@ -289,9 +289,9 @@ void wxHtmlPrintout::OnPreparePrinting()
     const int printAreaW = int(ppmm_h * (mm_w - m_MarginLeft - m_MarginRight));
     int printAreaH = int(ppmm_v * (mm_h - m_MarginTop - m_MarginBottom));
     if ( m_HeaderHeight )
-        printAreaH -= m_HeaderHeight + m_MarginSpace * ppmm_v;
+        printAreaH -= int(m_HeaderHeight + m_MarginSpace * ppmm_v);
     if ( m_FooterHeight )
-        printAreaH -= m_FooterHeight + m_MarginSpace * ppmm_v;
+        printAreaH -= int(m_FooterHeight + m_MarginSpace * ppmm_v);
 
     m_Renderer->SetSize(printAreaW, printAreaH);
     m_Renderer->SetHtmlText(m_Document, m_BasePath, m_BasePathIsDir);
