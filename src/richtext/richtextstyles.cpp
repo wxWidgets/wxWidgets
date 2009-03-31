@@ -681,9 +681,9 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     int thisFontSize = ((attr.GetFlags() & wxTEXT_ATTR_FONT_SIZE) != 0) ? attr.GetFontSize() : stdFontSize;
 
     if (thisFontSize < stdFontSize)
-        size ++;
-    else if (thisFontSize > stdFontSize)
         size --;
+    else if (thisFontSize > stdFontSize)
+        size ++;
 
     str += wxT("<font");
 
