@@ -276,11 +276,14 @@ int wxToupper_l(const wxUniChar& c, const wxXLocale& loc)
              case !wxHAS_XLOCALE_SUPPORT...
 */
 
+/*
+    Note that this code is similar to (a portion of) wxLocale::IsAvailable code
+*/
 #define IMPLEMENT_STRTOX_L_START                                \
     wxCHECK(loc.IsOk(), 0);                                     \
                                                                 \
     /* (Try to) temporary set the locale to 'C' */              \
-    const char *oldLocale = wxSetlocale(LC_NUMERIC, "");        \
+    const char *oldLocale = wxSetlocale(LC_NUMERIC, NULL);      \
     const char *tmp = wxSetlocale(LC_NUMERIC, "C");             \
     if ( !tmp )                                                 \
     {                                                           \
@@ -289,9 +292,7 @@ int wxToupper_l(const wxUniChar& c, const wxXLocale& loc)
         errno = EINVAL;                                         \
             /* signal an error (better than nothing) */         \
         return 0;                                               \
-    }                                                           \
-                                                                \
-
+    }
 
 #define IMPLEMENT_STRTOX_L_END                                  \
     /* restore the original locale */                           \
