@@ -240,8 +240,10 @@ bool MyApp::OnInit()
     wxLocale::AddCatalogLookupPathPrefix(".");
 
     // Initialize the catalogs we'll be using
+    const wxLanguageInfo* pInfo = wxLocale::GetLanguageInfo(m_lang);
     if (!m_locale.AddCatalog("internat"))
-        wxLogError(_("Couldn't find/load the 'internat' catalog."));
+        wxLogError(_("Couldn't find/load the 'internat' catalog for locale '%s'."),
+                   pInfo ? pInfo->GetLocaleName() : _("unknown"));
 
     // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
     // a localized error message:
@@ -330,8 +332,8 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxString sysname = m_locale.GetSysName();
     wxString canname = m_locale.GetCanonicalName();
 
-    localeInfo.Printf(_("Language: %s\nSystem locale name:\n%s\nCanonical locale name: %s\n"),
-        locale.c_str(), sysname.c_str(), canname.c_str() );
+    localeInfo.Printf(_("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
+                      locale.c_str(), sysname.c_str(), canname.c_str() );
 
     wxMessageDialog dlg(
                         this,
