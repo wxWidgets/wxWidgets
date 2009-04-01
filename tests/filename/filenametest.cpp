@@ -24,6 +24,10 @@
 #include "wx/filename.h"
 #include "wx/filefn.h"
 
+#ifdef __WXMSW__
+    #include "wx/msw/registry.h"
+#endif // __WXMSW__
+
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
@@ -345,9 +349,6 @@ void FileNameTestCase::TestNormalize()
         { ".\\foo", wxPATH_NORM_LONG, ".\\foo", wxPATH_DOS },
         { "..\\Makefile.in", wxPATH_NORM_LONG, "..\\Makefile.in", wxPATH_DOS },
         { "..\\foo", wxPATH_NORM_LONG, "..\\foo", wxPATH_DOS },
-#ifdef __WXMSW__
-        { "..\\MKINST~1", wxPATH_NORM_LONG, "..\\mkinstalldirs", wxPATH_DOS },
-#endif
     };
 
     // set the env var ABCDEF
@@ -375,6 +376,29 @@ void FileNameTestCase::TestNormalize()
             expected, fn.GetFullPath(fnt.fmt)
         );
     }
+
+    // MSW-only test for wxPATH_NORM_LONG: notice that we only run it if short
+    // names generation is not disabled for this system as otherwise the file
+    // MKINST~1 doesn't exist at all and normalizing it fails (it's possible
+    // that we're on a FAT partition in which case the test would still succeed
+    // and also that the registry key was changed recently and didn't take
+    // effect yet but these are marginal cases which we consciously choose to
+    // ignore for now)
+#ifdef __WXMSW__
+    long shortNamesDisabled;
+    if ( wxRegKey
+         (
+            wxRegKey::HKLM,
+            "SYSTEM\\CurrentControlSet\\Control\\FileSystem"
+         ).QueryValue("NtfsDisable8dot3NameCreation", &shortNamesDisabled) &&
+            !shortNamesDisabled )
+    {
+        wxFileName fn("..\\MKINST~1");
+        CPPUNIT_ASSERT( fn.Normalize(wxPATH_NORM_LONG, cwd) );
+        CPPUNIT_ASSERT_EQUAL( "..\\mkinstalldirs", fn.GetFullPath() );
+    }
+    //else: when in doubt, don't run the test
+#endif // __WXMSW__
 }
 
 void FileNameTestCase::TestReplace()
