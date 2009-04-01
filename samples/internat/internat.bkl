@@ -21,6 +21,7 @@
     <wx-data id="cs" template="catalog"/>
     <wx-data id="de" template="catalog"/>
     <wx-data id="fr" template="catalog"/>
+    <wx-data id="it" template="catalog"/>
     <wx-data id="ka" template="catalog"/>
     <wx-data id="pl" template="catalog"/>
     <wx-data id="ru" template="catalog"/>
