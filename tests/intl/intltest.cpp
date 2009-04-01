@@ -152,7 +152,7 @@ void IntlTestCase::DateTimeFmt()
     // standard format uses slashes)
     static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
 #else
-    static const char *FRENCH_DATE_FMT = "%d/%m/%y";
+    static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
 #endif
 
     CompareFormats( "French short date", FRENCH_DATE_FMT,
