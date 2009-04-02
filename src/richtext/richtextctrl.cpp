@@ -994,7 +994,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 #ifdef __WXMAC__
                 if (event.CmdDown())
 #else
-                if (event.CmdDown() || event.AltDown())
+                // Fixes AltGr+key with European input languages on Windows
+                if ((event.CmdDown() && !event.AltDown()) || (event.AltDown() && !event.CmdDown()))
 #endif
                 {
                     event.Skip();
