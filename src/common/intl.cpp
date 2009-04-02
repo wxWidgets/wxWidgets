@@ -2992,7 +2992,7 @@ wxString wxLocale::GetInfo(wxLocaleInfo index, wxLocaleCategory WXUNUSED(cat))
                         dateStyle = kCFDateFormatterShortStyle;
                         break;
                     case wxLOCALE_LONG_DATE_FMT:
-                        dateStyle = kCFDateFormatterLongStyle;
+                        dateStyle = kCFDateFormatterFullStyle;
                         break;
                     case wxLOCALE_DATE_TIME_FMT:
                         dateStyle = kCFDateFormatterFullStyle;
