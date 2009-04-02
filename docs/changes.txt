@@ -100,6 +100,7 @@ All:
 All (GUI):
 
 - Add wxBU_EXACTFIT support to wxToggleButton XRC handler (Ronny Krueger).
+- wxRTC: fixed AltGr+key input on Windows.
 
 wxMSW:
 
