@@ -158,7 +158,11 @@ void IntlTestCase::DateTimeFmtFrench()
 #else
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
     static const char *FRENCH_LONG_DATE_FMT = "%A %d %B %Y";
+#ifdef __WXOSX__
+    static const char *FRENCH_DATE_TIME_FMT = "%A %d %B %Y %H:%M:%S";
+#else
     static const char *FRENCH_DATE_TIME_FMT = "%d/%m/%Y %H:%M:%S";
+#endif
 #endif
 
     CompareFormats( "French short date", FRENCH_DATE_FMT,
@@ -181,7 +185,11 @@ void IntlTestCase::DateTimeFmtC()
 #else
     static const char *C_DATE_FMT = "%d/%m/%Y";
     static const char *C_LONG_DATE_FMT = "%A %d %B %Y";
+#ifdef __WXOSX__
+    static const char *C_DATE_TIME_FMT = "%A %d %B %Y %H:%M:%S";
+#else
     static const char *C_DATE_TIME_FMT = "%d/%m/%Y %H:%M:%S";
+#endif
 #endif
 
     setlocale(LC_ALL, "C");
