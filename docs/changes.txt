@@ -95,7 +95,8 @@ All:
 
 - Added several functions forward compatible with wxWidgets 3.0 (troelsk):
   wxDC::SetDeviceClippingRegion(), wxShowEvent::IsShown(),
-  wxIconizeEvent::IsIconized(), wxFileName::StripExtension().
+  wxIconizeEvent::IsIconized(), wxFileName::StripExtension(),
+  wxXmlNode::GetAttribute[s](), wxXmlNode::AddAttribute().
 
 All (GUI):
 
