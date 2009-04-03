@@ -216,6 +216,15 @@ public:
 private:
     void List(Test *test, const string& parent = "") const;
 
+    // call List() if m_list or runner.addTest() otherwise
+    void AddTest(CppUnit::TestRunner& runner, Test *test)
+    {
+        if (m_list)
+            List(test);
+        else
+            runner.addTest(test);
+    }
+
     // command lines options/parameters
     bool m_list;
     bool m_longlist;
@@ -349,11 +358,6 @@ bool TestApp::OnCmdLineParsed(wxCmdLineParser& parser)
         for (size_t i = 0; i < parser.GetParamCount(); i++)
             m_registries.push_back(parser.GetParam(i));
     }
-    else
-    {
-        // FIXME: this is an ugly and unnecessary hack
-        m_registries.push_back("");
-    }
 
     m_longlist = parser.Found("longlist");
     m_list = m_longlist || parser.Found("list");
@@ -442,19 +446,17 @@ int TestApp::OnRun()
 
     CppUnit::TextTestRunner runner;
 
-    for (size_t i = 0; i < m_registries.size(); i++)
+    if ( m_registries.empty() )
     {
-        Test *test;
-
-        wxString reg = m_registries[i];
-        if ( reg.empty() )
+        // run or list all tests
+        AddTest(runner, TestFactoryRegistry::getRegistry().makeTest());
+    }
+    else // run only the selected tests
+    {
+        for (size_t i = 0; i < m_registries.size(); i++)
         {
-            // no test name, run all the tests
-            test = TestFactoryRegistry::getRegistry().makeTest();
-        }
-        else // test name specified, run just this test
-        {
-            test = GetTestByName(reg);
+            const wxString reg = m_registries[i];
+            Test *test = GetTestByName(reg);
 
             if ( !test && !reg.EndsWith("TestCase") )
             {
@@ -466,12 +468,9 @@ int TestApp::OnRun()
                 cerr << "No such test suite: " << string(reg.mb_str()) << endl;
                 return 2;
             }
-        }
 
-        if (m_list)
-            List(test);
-        else
-            runner.addTest(test);
+            AddTest(runner, test);
+        }
     }
 
     if ( m_list )
