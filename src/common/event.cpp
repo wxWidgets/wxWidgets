@@ -1307,7 +1307,7 @@ bool wxEvtHandler::DoTryApp(wxEvent& event)
 
 bool wxEvtHandler::TryBefore(wxEvent& event)
 {
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     // call the old virtual function to keep the code overriding it working
     return TryValidator(event);
 #else
@@ -1318,7 +1318,7 @@ bool wxEvtHandler::TryBefore(wxEvent& event)
 
 bool wxEvtHandler::TryAfter(wxEvent& event)
 {
-#ifdef WXWIN_COMPATIBILITY_2_8
+#if WXWIN_COMPATIBILITY_2_8
     // as above, call the old virtual function for compatibility
     return TryParent(event);
 #else
