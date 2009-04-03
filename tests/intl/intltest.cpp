@@ -41,12 +41,14 @@ private:
     CPPUNIT_TEST_SUITE( IntlTestCase );
         CPPUNIT_TEST( Domain );
         CPPUNIT_TEST( Headers );
-        CPPUNIT_TEST( DateTimeFmt );
+        CPPUNIT_TEST( DateTimeFmtFrench );
+        CPPUNIT_TEST( DateTimeFmtC );
     CPPUNIT_TEST_SUITE_END();
 
     void Domain();
     void Headers();
-    void DateTimeFmt();
+    void DateTimeFmtFrench();
+    void DateTimeFmtC();
 
     wxLocale *m_locale;
 
@@ -142,7 +144,7 @@ CompareFormats(const char *msg, const wxString& expected, wxString actual)
     CPPUNIT_ASSERT_EQUAL_MESSAGE( msg, expected, actual );
 }
 
-void IntlTestCase::DateTimeFmt()
+void IntlTestCase::DateTimeFmtFrench()
 {
     if ( !m_locale )
         return;
@@ -151,27 +153,44 @@ void IntlTestCase::DateTimeFmt()
     // glibc also uses dots for French locale separator for some reason (the
     // standard format uses slashes)
     static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
+    static const char *FRENCH_LONG_DATE_FMT = "%a %d %b %Y";
+    static const char *FRENCH_DATE_TIME_FMT = "%a %d %b %Y %T %Z";
 #else
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
+    static const char *FRENCH_LONG_DATE_FMT = "%A %d %B %Y";
+    static const char *FRENCH_DATE_TIME_FMT = "%d/%m/%Y %H:%M:%S";
 #endif
 
     CompareFormats( "French short date", FRENCH_DATE_FMT,
                    m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
-    CompareFormats( "French long date", "%a %d %b %Y",
+    CompareFormats( "French long date", FRENCH_LONG_DATE_FMT,
                     m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
-    CompareFormats( "French date and time", "%a %d %b %Y %H:%M:%S %Z",
+    CompareFormats( "French date and time", FRENCH_DATE_TIME_FMT,
                     m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
     CompareFormats( "French time", "%H:%M:%S",
                     m_locale->GetInfo(wxLOCALE_TIME_FMT) );
+}
 
-    // also test for "C" locale
+void IntlTestCase::DateTimeFmtC()
+{
+    // again, glibc uses different defaults
+#ifdef __GLIBC__
+    static const char *C_DATE_FMT = "%m/%d/%y";
+    static const char *C_LONG_DATE_FMT = "%a %b %d %Y";
+    static const char *C_DATE_TIME_FMT = "%a %b %d %H:%M:%S %Y";
+#else
+    static const char *C_DATE_FMT = "%d/%m/%Y";
+    static const char *C_LONG_DATE_FMT = "%A %d %B %Y";
+    static const char *C_DATE_TIME_FMT = "%d/%m/%Y %H:%M:%S";
+#endif
+
     setlocale(LC_ALL, "C");
 
-    CompareFormats( "C short date", "%m/%d/%y",
+    CompareFormats( "C short date", C_DATE_FMT,
                     m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
-    CompareFormats( "C long date", "%a %b %d %Y",
+    CompareFormats( "C long date", C_LONG_DATE_FMT,
                     m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
-    CompareFormats( "C date and time", "%a %b %d %H:%M:%S %Y",
+    CompareFormats( "C date and time", C_DATE_TIME_FMT,
                     m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
     CompareFormats( "C time", "%H:%M:%S",
                     m_locale->GetInfo(wxLOCALE_TIME_FMT) );
