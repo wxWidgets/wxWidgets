@@ -46,7 +46,6 @@
 #endif // WX_PRECOMP
 
 #include "wx/thread.h"
-#include "wx/tokenzr.h"
 
 #include <ctype.h>
 
@@ -92,6 +91,42 @@ static const int MIN_PER_HOUR = 60;
 namespace
 {
 
+// all the functions below taking non-const wxString::const_iterator p advance
+// it until the end of the match
+
+// scans all digits (but no more than len) and returns the resulting number
+bool GetNumericToken(size_t len,
+                     wxString::const_iterator& p,
+                     const wxString::const_iterator& end,
+                     unsigned long *number)
+{
+    size_t n = 1;
+    wxString s;
+    while ( p != end && wxIsdigit(*p) )
+    {
+        s += *p++;
+
+        if ( len && ++n > len )
+            break;
+    }
+
+    return !s.empty() && s.ToULong(number);
+}
+
+// scans all alphabetic characters and returns the resulting string
+wxString
+GetAlphaToken(wxString::const_iterator& p,
+              const wxString::const_iterator& end)
+{
+    wxString s;
+    while ( p != end && wxIsalpha(*p) )
+    {
+        s += *p++;
+    }
+
+    return s;
+}
+
 enum
 {
     DateLang_English = 1,
@@ -105,8 +140,16 @@ enum
 // month name or DateLang_English to parse it as a standard English name or
 // their combination to interpret it in any way
 wxDateTime::Month
-GetMonthFromName(const wxString& name, int flags, int lang)
+GetMonthFromName(wxString::const_iterator& p,
+                 const wxString::const_iterator& end,
+                 int flags,
+                 int lang)
 {
+    const wxString::const_iterator pOrig = p;
+    const wxString name = GetAlphaToken(p, end);
+    if ( name.empty() )
+        return wxDateTime::Inv_Month;
+
     wxDateTime::Month mon;
     for ( mon = wxDateTime::Jan; mon < wxDateTime::Inv_Month; wxNextMonth(mon) )
     {
@@ -140,12 +183,34 @@ GetMonthFromName(const wxString& name, int flags, int lang)
 
             if ( lang & DateLang_Local )
             {
-                if ( name.CmpNoCase(wxDateTime::GetMonthName(mon,
-                        wxDateTime::Name_Abbr)) == 0 )
+                // some locales (e.g. French one) use periods for the
+                // abbreviated month names but it's never part of name so
+                // compare it specially
+                wxString nameAbbr = wxDateTime::GetMonthName(mon,
+                    wxDateTime::Name_Abbr);
+                const bool hasPeriod = *nameAbbr.rbegin() == '.';
+                if ( hasPeriod )
+                    nameAbbr.erase(nameAbbr.end() - 1);
+
+                if ( name.CmpNoCase(nameAbbr) == 0 )
+                {
+                    if ( hasPeriod )
+                    {
+                        // skip trailing period if it was part of the match
+                        if ( *p == '.' )
+                            ++p;
+                        else // no match as no matching period
+                            continue;
+                    }
+
                     break;
+                }
             }
         }
     }
+
+    if ( mon == wxDateTime::Inv_Month )
+        p = pOrig;
 
     return mon;
 }
@@ -155,8 +220,15 @@ GetMonthFromName(const wxString& name, int flags, int lang)
 // flags and lang parameters have the same meaning as for GetMonthFromName()
 // above
 wxDateTime::WeekDay
-GetWeekDayFromName(const wxString& name, int flags, int lang)
+GetWeekDayFromName(wxString::const_iterator& p,
+                   const wxString::const_iterator& end,
+                   int flags, int lang)
 {
+    const wxString::const_iterator pOrig = p;
+    const wxString name = GetAlphaToken(p, end);
+    if ( name.empty() )
+        return wxDateTime::Inv_WeekDay;
+
     wxDateTime::WeekDay wd;
     for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
     {
@@ -195,55 +267,10 @@ GetWeekDayFromName(const wxString& name, int flags, int lang)
         }
     }
 
+    if ( wd == wxDateTime::Inv_WeekDay )
+        p = pOrig;
+
     return wd;
-}
-
-// scans all digits (but no more than len) and returns the resulting number
-bool GetNumericToken(size_t len,
-                     wxString::const_iterator& p,
-                     const wxString::const_iterator& end,
-                     unsigned long *number)
-{
-    size_t n = 1;
-    wxString s;
-    while ( p != end && wxIsdigit(*p) )
-    {
-        s += *p++;
-
-        if ( len && ++n > len )
-            break;
-    }
-
-    return !s.empty() && s.ToULong(number);
-}
-
-// scans all alphabetic characters and returns the resulting string
-wxString
-GetAlphaToken(wxString::const_iterator& p,
-              const wxString::const_iterator& end)
-{
-    wxString s;
-    while ( p != end && wxIsalpha(*p) )
-    {
-        s += *p++;
-    }
-
-    return s;
-}
-
-// scans all characters which can appear in a week day/month name
-//
-// this is different from GetAlphaToken() as some locales (e.g. fr_FR) use
-// trailing periods after the abbreviated week day/month names
-wxString
-GetNameToken(wxString::const_iterator& p,
-             const wxString::const_iterator& end)
-{
-    wxString token = GetAlphaToken(p, end);
-    if ( p != end && *p == '.' )
-        token += *p++;
-
-    return token;
 }
 
 // parses string starting at given iterator using the specified format and,
@@ -671,18 +698,16 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 bool
 wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
 {
+    const wxString::const_iterator pEnd = date.end();
     wxString::const_iterator p = date.begin();
 
     // 1. week day
-    static const int WDAY_LEN = 3;
-    const wxString::const_iterator endWday = p + WDAY_LEN;
-    const wxString wday(p, endWday);
-    if ( GetWeekDayFromName(wday, Name_Abbr, DateLang_English) == Inv_WeekDay )
+    const wxDateTime::WeekDay
+        wd = GetWeekDayFromName(p, pEnd, Name_Abbr, DateLang_English);
+    if ( wd == Inv_WeekDay )
         return false;
     //else: ignore week day for now, we could also check that it really
     //      corresponds to the specified date
-
-    p = endWday;
 
     // 2. separating comma
     if ( *p++ != ',' || *p++ != ' ' )
@@ -703,14 +728,9 @@ wxDateTime::ParseRfc822Date(const wxString& date, wxString::const_iterator *end)
         return false;
 
     // 4. month name
-    static const int MONTH_LEN = 3;
-    const wxString::const_iterator endMonth = p + MONTH_LEN;
-    const wxString monName(p, endMonth);
-    Month mon = GetMonthFromName(monName, Name_Abbr, DateLang_English);
+    const Month mon = GetMonthFromName(p, pEnd, Name_Abbr, DateLang_English);
     if ( mon == Inv_Month )
         return false;
-
-    p = endMonth;
 
     if ( *p++ != ' ' )
         return false;
@@ -993,7 +1013,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 {
                     wday = GetWeekDayFromName
                            (
-                            GetNameToken(input, end),
+                            input, end,
                             *fmt == 'a' ? Name_Abbr : Name_Full,
                             DateLang_Local
                            );
@@ -1011,7 +1031,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 {
                     mon = GetMonthFromName
                           (
-                            GetNameToken(input, end),
+                            input, end,
                             *fmt == 'b' ? Name_Abbr : Name_Full,
                             DateLang_Local
                           );
@@ -1528,6 +1548,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     // all esoteric constructions ParseDateTime() knows about)
 
     const wxString::const_iterator pBegin = date.begin();
+    const wxString::const_iterator pEnd = date.end();
 
     wxString::const_iterator p = pBegin;
     while ( wxIsspace(*p) )
@@ -1545,7 +1566,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
         { wxTRANSLATE("tomorrow"),          1 },
     };
 
-    const size_t lenRest = date.end() - p;
+    const size_t lenRest = pEnd - p;
     for ( size_t n = 0; n < WXSIZEOF(literalDates); n++ )
     {
         const wxString dateStr = wxGetTranslation(literalDates[n].str);
@@ -1585,6 +1606,8 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
          haveMon = false,       // the month?
          haveYear = false;      // the year?
 
+    bool monWasNumeric = false; // was month specified as a number?
+
     // and the value of the items we have (init them to get rid of warnings)
     WeekDay wday = Inv_WeekDay;
     wxDateTime_t day = 0;
@@ -1592,18 +1615,23 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     int year = 0;
 
     // tokenize the string
-    size_t nPosCur = 0;
     static const wxStringCharType *dateDelimiters = wxS(".,/-\t\r\n ");
-    wxStringTokenizer tok(wxString(p, date.end()), dateDelimiters);
-    while ( tok.HasMoreTokens() )
+    while ( p != pEnd )
     {
-        wxString token = tok.GetNextToken();
-        if ( !token )
-            continue;
+        // skip white space and date delimiters
+        while ( wxStrchr(".,/-\t\r\n ", *p) )
+        {
+            ++p;
+        }
 
-        // is it a number?
+        // modify copy of the iterator as we're not sure if the next token is
+        // still part of the date at all
+        wxString::const_iterator pCopy = p;
+
+        // we can have either alphabetic or numeric token, start by testing if
+        // it's the latter
         unsigned long val;
-        if ( token.ToULong(&val) )
+        if ( GetNumericToken(10 /* max length */, pCopy, pEnd, &val) )
         {
             // guess what this number is
 
@@ -1667,6 +1695,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
             else if ( isMonth )
             {
                 haveMon = true;
+                monWasNumeric = true;
 
                 mon = (Month)(val - 1);
             }
@@ -1676,7 +1705,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
             // be careful not to overwrite the current mon value
             Month mon2 = GetMonthFromName
                          (
-                            token,
+                            pCopy, pEnd,
                             Name_Full | Name_Abbr,
                             DateLang_Local | DateLang_English
                          );
@@ -1685,20 +1714,18 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
                 // it's a month
                 if ( haveMon )
                 {
-                    // but we already have a month - maybe we guessed wrong?
-                    if ( !haveDay )
-                    {
-                        // no need to check in month range as always < 12, but
-                        // the days are counted from 1 unlike the months
-                        day = (wxDateTime_t)(mon + 1);
-                        haveDay = true;
-                    }
-                    else
-                    {
-                        // could possible be the year (doesn't the year come
-                        // before the month in the japanese format?) (FIXME)
+                    // but we already have a month - maybe we guessed wrong
+                    // when we had interpreted that numeric value as a month
+                    // and it was the day number instead?
+                    if ( haveDay || !monWasNumeric )
                         break;
-                    }
+
+                    // assume we did and change our mind: reinterpret the month
+                    // value as a day (notice that there is no need to check
+                    // that it is valid as month values are always < 12, but
+                    // the days are counted from 1 unlike the months)
+                    day = (wxDateTime_t)(mon + 1);
+                    haveDay = true;
                 }
 
                 mon = mon2;
@@ -1709,7 +1736,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
             {
                 WeekDay wday2 = GetWeekDayFromName
                                 (
-                                    token,
+                                    pCopy, pEnd,
                                     Name_Full | Name_Abbr,
                                     DateLang_Local | DateLang_English
                                 );
@@ -1717,9 +1744,7 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
                 {
                     // a week day
                     if ( haveWDay )
-                    {
                         break;
-                    }
 
                     wday = wday2;
 
@@ -1757,8 +1782,11 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
                     size_t n;
                     for ( n = 0; n < WXSIZEOF(ordinals); n++ )
                     {
-                        if ( token.CmpNoCase(ordinals[n]) == 0 )
+                        const wxString ord = wxGetTranslation(ordinals[n]);
+                        const size_t len = ord.length();
+                        if ( date.compare(p - pBegin, len, ord) == 0 )
                         {
+                            p += len;
                             break;
                         }
                     }
@@ -1785,7 +1813,8 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
             }
         }
 
-        nPosCur = tok.GetPosition();
+        // advance iterator past a successfully parsed token
+        p = pCopy;
     }
 
     // either no more tokens or the scan was stopped by something we couldn't
@@ -1859,15 +1888,6 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
         *this = Today();
 
         SetToWeekDayInSameWeek(wday);
-    }
-
-    // return the pointer to the first unparsed char
-    p += nPosCur;
-    if ( nPosCur && wxStrchr(dateDelimiters, *(p - 1)) )
-    {
-        // if we couldn't parse the token after the delimiter, put back the
-        // delimiter as well
-        p--;
     }
 
     *end = p;
