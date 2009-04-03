@@ -231,6 +231,21 @@ GetAlphaToken(wxString::const_iterator& p,
     return s;
 }
 
+// scans all characters which can appear in a week day/month name
+//
+// this is different from GetAlphaToken() as some locales (e.g. fr_FR) use
+// trailing periods after the abbreviated week day/month names
+wxString
+GetNameToken(wxString::const_iterator& p,
+             const wxString::const_iterator& end)
+{
+    wxString token = GetAlphaToken(p, end);
+    if ( p != end && *p == '.' )
+        token += *p++;
+
+    return token;
+}
+
 // parses string starting at given iterator using the specified format and,
 // optionally, a fall back format (and optionally another one... but it stops
 // there, really)
@@ -978,7 +993,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 {
                     wday = GetWeekDayFromName
                            (
-                            GetAlphaToken(input, end),
+                            GetNameToken(input, end),
                             *fmt == 'a' ? Name_Abbr : Name_Full,
                             DateLang_Local
                            );
@@ -996,7 +1011,7 @@ wxDateTime::ParseFormat(const wxString& date,
                 {
                     mon = GetMonthFromName
                           (
-                            GetAlphaToken(input, end),
+                            GetNameToken(input, end),
                             *fmt == 'b' ? Name_Abbr : Name_Full,
                             DateLang_Local
                           );
