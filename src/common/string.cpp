@@ -39,6 +39,10 @@
 #include "wx/vector.h"
 #include "wx/xlocale.h"
 
+#ifdef __WXMSW__
+    #include "wx/msw/wrapwin.h"
+#endif // __WXMSW__
+
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
     #define wxStringMemcpy   memcpy
@@ -1122,9 +1126,36 @@ size_t wxString::find_last_not_of(const wxOtherCharType* sz, size_t nStart,
 
 int wxString::CmpNoCase(const wxString& s) const
 {
-#if wxUSE_UNICODE_UTF8
-    // FIXME-UTF8: use wxUniChar::ToLower/ToUpper once added
+#if defined(__WXMSW__) && !wxUSE_UNICODE_UTF8
+    // prefer to use CompareString() if available as it's more efficient than
+    // doing it manual or even using wxStricmp() (see #10375)
+    switch ( ::CompareString(LOCALE_USER_DEFAULT, NORM_IGNORECASE,
+                             m_impl.c_str(), m_impl.length(),
+                             s.m_impl.c_str(), s.m_impl.length()) )
+    {
+        case CSTR_LESS_THAN:
+            return -1;
 
+        case CSTR_EQUAL:
+            return 0;
+
+        case CSTR_GREATER_THAN:
+            return 1;
+
+        default:
+            wxFAIL_MSG( "unexpected CompareString() return value" );
+            // fall through
+
+        case 0:
+            wxLogLastError("CompareString");
+            // use generic code below
+    }
+#endif // __WXMSW__ && !wxUSE_UNICODE_UTF8
+
+    // do the comparison manually: notice that we can't use wxStricmp() as it
+    // doesn't handle embedded NULs
+
+    // FIXME-UTF8: use wxUniChar::ToLower/ToUpper once added
     const_iterator i1 = begin();
     const_iterator end1 = end();
     const_iterator i2 = s.begin();
@@ -1146,9 +1177,6 @@ int wxString::CmpNoCase(const wxString& s) const
     else if ( len1 > len2 )
         return 1;
     return 0;
-#else // wxUSE_UNICODE_WCHAR or ANSI
-    return wxStricmp(m_impl.c_str(), s.m_impl.c_str());
-#endif
 }
 
 
