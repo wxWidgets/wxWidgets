@@ -207,7 +207,7 @@ void UnicodeTestCase::ConstructorsWithConversion()
 
     wxString s2(wchar);
     CPPUNIT_ASSERT_EQUAL( wchar, s2 );
-    CPPUNIT_ASSERT_EQUAL( utf8, s2 );
+    CPPUNIT_ASSERT_EQUAL( wxString::FromUTF8(utf8), s2 );
 #else
     CPPUNIT_ASSERT_EQUAL( utf8, s1 );
 #endif
