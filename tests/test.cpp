@@ -222,6 +222,7 @@ private:
     bool m_detail;
     bool m_timing;
     wxArrayString m_registries;
+    wxLocale *m_locale;
 
     // event handling hooks
     FilterEventFunc m_filterEventFunc;
@@ -287,6 +288,8 @@ TestApp::TestApp()
 {
     m_filterEventFunc = NULL;
     m_processEventFunc = NULL;
+
+    m_locale = NULL;
 }
 
 // Init
@@ -326,6 +329,9 @@ void TestApp::OnInitCmdLine(wxCmdLineParser& parser)
         { wxCMD_LINE_SWITCH, "t", "timing",
             "print names and mesure running time of individual test, run them",
             wxCMD_LINE_VAL_NONE, 0 },
+        { wxCMD_LINE_OPTION, "", "locale",
+            "locale to use when running the program",
+            wxCMD_LINE_VAL_STRING, 0 },
         { wxCMD_LINE_PARAM, NULL, NULL, "REGISTRY", wxCMD_LINE_VAL_STRING,
             wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE },
         wxCMD_LINE_DESC_END
@@ -339,15 +345,38 @@ void TestApp::OnInitCmdLine(wxCmdLineParser& parser)
 bool TestApp::OnCmdLineParsed(wxCmdLineParser& parser)
 {
     if (parser.GetParamCount())
+    {
         for (size_t i = 0; i < parser.GetParamCount(); i++)
             m_registries.push_back(parser.GetParam(i));
+    }
     else
+    {
+        // FIXME: this is an ugly and unnecessary hack
         m_registries.push_back("");
+    }
 
-    m_longlist = parser.Found(_T("longlist"));
-    m_list = m_longlist || parser.Found(_T("list"));
-    m_timing = parser.Found(_T("timing"));
-    m_detail = !m_timing && parser.Found(_T("detail"));
+    m_longlist = parser.Found("longlist");
+    m_list = m_longlist || parser.Found("list");
+    m_timing = parser.Found("timing");
+    m_detail = !m_timing && parser.Found("detail");
+
+    wxString loc;
+    if ( parser.Found("locale", &loc) )
+    {
+        const wxLanguageInfo * const info = wxLocale::FindLanguageInfo(loc);
+        if ( !info )
+        {
+            cerr << "Locale \"" << string(loc.mb_str()) << "\" is unknown.\n";
+            return false;
+        }
+
+        m_locale = new wxLocale(info->Language);
+        if ( !m_locale->IsOk() )
+        {
+            cerr << "Using locale \"" << string(loc.mb_str()) << "\" failed.\n";
+            return false;
+        }
+    }
 
     return TestAppBase::OnCmdLineParsed(parser);
 }
@@ -472,6 +501,8 @@ int TestApp::OnRun()
 
 int TestApp::OnExit()
 {
+    delete m_locale;
+
 #if wxUSE_GUI
     delete GetTopWindow();
 #endif // wxUSE_GUI
