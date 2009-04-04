@@ -1615,7 +1615,6 @@ wxDateTime::ParseDate(const wxString& date, wxString::const_iterator *end)
     int year = 0;
 
     // tokenize the string
-    static const wxStringCharType *dateDelimiters = wxS(".,/-\t\r\n ");
     while ( p != pEnd )
     {
         // skip white space and date delimiters
