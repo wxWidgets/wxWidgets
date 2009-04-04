@@ -97,12 +97,30 @@ assertEquals(const char *expected,
 }
 
 inline void
+assertEquals(const wxString& expected,
+             const char *actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals(expected, wxString(actual), sourceLine, message);
+}
+
+inline void
 assertEquals(const wchar_t *expected,
              const wxString& actual,
              CppUnit::SourceLine sourceLine,
              const std::string& message)
 {
     assertEquals(wxString(expected), actual, sourceLine, message);
+}
+
+inline void
+assertEquals(const wxString& expected,
+             const wchar_t *actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals(expected, wxString(actual), sourceLine, message);
 }
 
 CPPUNIT_NS_END
@@ -137,6 +155,7 @@ CPPUNIT_NS_END
     #define WX_CPPUNIT_ALLOW_EQUALS_TO_INT(T) \
         CPPUNIT_NS_BEGIN \
             WX_CPPUNIT_ASSERT_EQUALS(int, T) \
+            WX_CPPUNIT_ASSERT_EQUALS(T, int) \
             WX_CPPUNIT_ASSERT_EQUALS(T, T) \
         CPPUNIT_NS_END
 
@@ -147,6 +166,7 @@ CPPUNIT_NS_END
     #define WX_CPPUNIT_ALLOW_EQUALS_TO_INT(T) \
         CPPUNIT_NS_BEGIN \
             WX_CPPUNIT_ASSERT_EQUALS(int, T) \
+            WX_CPPUNIT_ASSERT_EQUALS(T, int) \
         CPPUNIT_NS_END
 #endif // VC6/!VC6
 
