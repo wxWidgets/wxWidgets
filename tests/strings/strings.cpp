@@ -943,9 +943,9 @@ void StringTestCase::ScopedBuffers()
     // but assigning it to wxCharBuffer makes a full copy
     wxCharBuffer buf(sbuf);
     CPPUNIT_ASSERT( buf.data() != literal );
-    CPPUNIT_ASSERT_EQUAL( literal, buf.data() );
+    CPPUNIT_ASSERT_EQUAL( literal, buf );
 
     wxCharBuffer buf2 = sbuf;
     CPPUNIT_ASSERT( buf2.data() != literal );
-    CPPUNIT_ASSERT_EQUAL( literal, buf2.data() );
+    CPPUNIT_ASSERT_EQUAL( literal, buf );
 }
