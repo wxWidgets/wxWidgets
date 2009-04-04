@@ -235,7 +235,8 @@ void VsnprintfTestCase::P()
     //          printed as '(nil)'.
     //          MSVC always print them as %8X on 32 bit systems and as %16X
     //          on 64 bit systems
-#ifdef __VISUALC__
+    //          mingw32 uses MSVC CRT by default so uses the same rules
+#if defined(__VISUALC__) || (defined(__MINGW32__) && !__USE_MINGW_ANSI_STDIO)
     #if SIZEOF_VOID_P == 4
         CMP3("00ABCDEF", "%p", (void*)0xABCDEF);
         CMP3("00000000", "%p", (void*)NULL);
@@ -243,6 +244,9 @@ void VsnprintfTestCase::P()
         CMP3("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
         CMP3("0000000000000000", "%p", (void*)NULL);
     #endif
+#elif defined(__MINGW32__) 
+    CMP3("0xabcdef", "%p", (void*)0xABCDEF); 
+    CMP3("0", "%p", (void*)NULL); 
 #elif defined(__GNUG__)
     CMP3("0xabcdef", "%p", (void*)0xABCDEF);
     CMP3("(nil)", "%p", (void*)NULL);
