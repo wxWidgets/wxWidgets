@@ -348,21 +348,27 @@ void VsnprintfTestCase::S()
 #define ABCDEFGHI   "\xCE\xB1\xCE\xB2\xCE\xB3\xCE\xB4\xCE\xB5\xCE\xB6\xCE\xB7\xCE\xB8\xCE\xB9"
         // alpha+beta+gamma+delta+epsilon+zeta+eta+theta+iota
 
-#define ALPHA_w     wxT(ALPHA)
-#define ABC_w       wxT(ABC)
-#define ABCDE_w     wxT(ABCDE)
-#define ABCDEFGHI_w wxT(ABCDEFGHI)
+    // the 'expected' and 'arg' parameters of this macro are supposed to be
+    // UTF-8 strings
+#define CMP3_UTF8(expected, fmt, arg)                                         \
+    CPPUNIT_ASSERT_EQUAL                                                      \
+    (                                                                         \
+        wxString::FromUTF8(expected).length(),                                \
+        wxSnprintf(buf, MAX_TEST_LEN, fmt, wxString::FromUTF8(arg))           \
+    );                                                                        \
+    CPPUNIT_ASSERT_EQUAL                                                      \
+    (                                                                         \
+        wxString::FromUTF8(expected),                                         \
+        buf                                                                   \
+    )
 
-    // CMP3 uses wxT() on the first argument so we need to be careful
-    // when using string concatenation that all parts of the string after
-    // the first explicitely use wxT():
-    CMP3("  " ABC_w,     "%5s",  ABC);
-    CMP3("    " ALPHA_w, "%5s",  ALPHA);
-    CMP3(ABCDEFGHI,      "%5s",  ABCDEFGHI);
-    CMP3(ABC L"  ",      "%-5s", ABC);
-    CMP3(ABCDEFGHI,      "%-5s", ABCDEFGHI);
-    CMP3(ABCDE,          "%.5s", ABCDEFGHI);
-#endif
+    CMP3_UTF8("  " ABC,     "%5s",  ABC);
+    CMP3_UTF8("    " ALPHA, "%5s",  ALPHA);
+    CMP3_UTF8(ABCDEFGHI,    "%5s",  ABCDEFGHI);
+    CMP3_UTF8(ABC "  ",     "%-5s", ABC);
+    CMP3_UTF8(ABCDEFGHI,    "%-5s", ABCDEFGHI);
+    CMP3_UTF8(ABCDE,        "%.5s", ABCDEFGHI);
+#endif // wxUSE_UNICODE
 
     // test a string which has a NULL character after "ab";
     // obviously it should be handled exactly like just as "ab"
