@@ -233,8 +233,11 @@ ArchiveTestSuite *ziptest::makeSuite()
 {
     ArchiveTestSuite::makeSuite();
 
-#ifndef WXARC_NO_POPEN 
-    // if have popen then can check the piped output of 'zip - -'
+#if !defined WXARC_NO_POPEN && !defined __WXMSW__
+    // If have popen then can check the piped output of 'zip - -'.
+    // The gnuwin32 build of infozip does work for this, e.g.:
+    //  C:\>echo test data to pipe through zip | zip -q > foo.zip 
+    // doesn't produce a valid zip, so disabled for now.
     if (IsInPath(_T("zip")))
         for (int options = 0; options <= PipeIn; options += PipeIn) {
             string name = Description(_T("ZipPipeTestCase"), options,

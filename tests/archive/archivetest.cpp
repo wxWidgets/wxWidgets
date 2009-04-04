@@ -804,10 +804,14 @@ void ArchiveTestCase<ClassFactoryT>::ExtractArchive(wxInputStream& in)
 
         const TestEntry& testEntry = *it->second;
 
+#ifndef __WXMSW__
+        // On Windows some archivers compensate for Windows DST handling, but
+        // other don't, so disable the test for now.
         wxDateTime dt = testEntry.GetDateTime();
         if (dt.IsValid())
             CPPUNIT_ASSERT_MESSAGE("timestamp check" + error_context,
                                    dt == entry->GetDateTime());
+#endif
 
         // non-seekable entries are allowed to have GetSize == wxInvalidOffset
         // until the end of the entry's data has been read past
