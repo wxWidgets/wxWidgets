@@ -89,6 +89,15 @@ CPPUNIT_NS_BEGIN
 // compare wxStrings directly with C strings
 inline void
 assertEquals(const char *expected,
+             const char *actual,
+             CppUnit::SourceLine sourceLine,
+             const std::string& message)
+{
+    assertEquals(wxString(expected), wxString(actual), sourceLine, message);
+}
+
+inline void
+assertEquals(const char *expected,
              const wxString& actual,
              CppUnit::SourceLine sourceLine,
              const std::string& message)

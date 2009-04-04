@@ -207,8 +207,8 @@ void CrtTestCase::Strpbrk()
     CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX.c_str(), s.mb_str()) );
     CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWX.c_str(), s.wc_str()) );
 
-    CPPUNIT_ASSERT_EQUAL( (char *)NULL, wxStrpbrk(strWX, "xyz") );
-    CPPUNIT_ASSERT_EQUAL( (wchar_t *)NULL, wxStrpbrk(strWX.c_str(), L"xyz") );
+    CPPUNIT_ASSERT( !wxStrpbrk(strWX, "xyz") );
+    CPPUNIT_ASSERT( !wxStrpbrk(strWX.c_str(), L"xyz") );
 }
 
 void CrtTestCase::Strnlen()
