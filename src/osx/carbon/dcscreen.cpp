@@ -61,6 +61,8 @@ wxScreenDCImpl::~wxScreenDCImpl()
 #endif
 }
 
+// TODO Switch to CGWindowListCreateImage for 10.5 and above
+
 wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
     CGRect srcRect = CGRectMake(0, 0, m_width, m_height);
