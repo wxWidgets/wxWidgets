@@ -1168,25 +1168,25 @@ wxDateTime::ParseFormat(const wxString& date,
 
             case _T('p'):       // AM or PM string
                 {
-                    wxString am, pm, token = GetAlphaToken(input, end);
-
-                    // some locales have empty AM/PM tokens and thus when formatting
-                    // dates with the %p specifier nothing is generated; when trying to
-                    // parse them back, we get an empty token here... but that's not
-                    // an error.
-                    if (token.empty())
-                        break;
-
+                    wxString am, pm;
                     GetAmPmStrings(&am, &pm);
-                    if (am.empty() && pm.empty())
-                        return false;  // no am/pm strings defined
-                    if ( token.CmpNoCase(pm) == 0 )
+
+                    // we can never match %p in locales which don't use AM/PM
+                    if ( am.empty() || pm.empty() )
+                        return false;
+
+                    const size_t pos = input - date.begin();
+                    if ( date.compare(pos, pm.length(), pm) == 0 )
                     {
                         isPM = true;
+                        input += pm.length();
                     }
-                    else if ( token.CmpNoCase(am) != 0 )
+                    else if ( date.compare(pos, am.length(), am) == 0 )
                     {
-                        // no match
+                        input += am.length();
+                    }
+                    else // no match
+                    {
                         return false;
                     }
                 }
