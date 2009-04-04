@@ -111,9 +111,6 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     HIRect rect;
     CGImageRef image;
     CGContextRef context;
-    void* data;
-
-    size_t bytesPerRow;
 
     HIViewCreateOffscreenImage( handle, 0, &rect, &image);
 

@@ -116,8 +116,8 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
                                     const wxString& label,
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle) 
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle)) 
 {
     OSStatus err;
     Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
@@ -175,12 +175,12 @@ void wxMacControl::SetDefaultButton( bool isDefault )
 
 wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxString& label,
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle) 
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle)) 
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
     wxMacControl* peer = new wxMacControl(wxpeer) ;

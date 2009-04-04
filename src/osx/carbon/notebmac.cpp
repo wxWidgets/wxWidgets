@@ -32,11 +32,11 @@
 
 wxWidgetImplType* wxWidgetImpl::CreateTabView( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );
 

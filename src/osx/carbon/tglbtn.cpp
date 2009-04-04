@@ -28,12 +28,12 @@
 
 wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
-                                    wxWindowID id, 
-                                    const wxString& label,
+                                    wxWindowID WXUNUSED(id), 
+                                    const wxString& WXUNUSED(label),
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
     
@@ -45,12 +45,12 @@ wxWidgetImplType* wxWidgetImpl::CreateToggleButton( wxWindowMac* wxpeer,
     
 wxWidgetImplType* wxWidgetImpl::CreateBitmapToggleButton( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxBitmap& label,
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle))
 {    
     Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
     wxMacControl* peer = new wxMacControl(wxpeer) ;

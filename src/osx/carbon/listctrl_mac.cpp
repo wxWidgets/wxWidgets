@@ -1385,7 +1385,7 @@ wxRect wxListCtrl::GetViewRect() const
     return rect;
 }
 
-bool wxListCtrl::GetSubItemRect( long item, long subItem, wxRect& rect, int code ) const
+bool wxListCtrl::GetSubItemRect( long item, long WXUNUSED(subItem), wxRect& rect, int code ) const
 {
     if (m_genericImpl)
         return m_genericImpl->GetItemRect(item, rect, code);

@@ -72,14 +72,14 @@ public :
 
 wxWidgetImplType* wxWidgetImpl::CreateGauge( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowID WXUNUSED(id), 
                                     wxInt32 value,
                                     wxInt32 minimum,
                                     wxInt32 maximum,
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );
     wxMacGaugeCarbonControl* peer = new wxMacGaugeCarbonControl( wxpeer );

@@ -44,12 +44,12 @@ public :
 
 wxWidgetImplType* wxWidgetImpl::CreateChoice( wxWindowMac* wxpeer, 
                                     wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowID WXUNUSED(id), 
                                     wxMenu* menu,
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long style, 
-                                    long extraStylew)
+                                    long WXUNUSED(style), 
+                                    long WXUNUSED(extraStyle))
 {
     Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size );
 

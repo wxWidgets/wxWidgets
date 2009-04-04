@@ -1181,7 +1181,7 @@ void wxNonOwnedWindowCarbonImpl::Create(
     const wxPoint& pos,
     const wxSize& size,
     long style, long extraStyle, 
-    const wxString& name )
+    const wxString& WXUNUSED(name) )
 {
 
     OSStatus err = noErr ;

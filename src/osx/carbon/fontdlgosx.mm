@@ -68,8 +68,8 @@
     wxCFStringRef cfOkString( wxT("OK"), wxLocale::GetSystemEncoding() );
     wxCFStringRef cfCancelString( wxT("Cancel"), wxLocale::GetSystemEncoding() );
 
-    NSRect rectCancel = NSMakeRect( 10.0 , 10.0 , 82  , 24 );
-    NSRect rectOK = NSMakeRect( 100.0 , 10.0 , 82  , 24 );
+    NSRect rectCancel = NSMakeRect( (CGFloat) 10.0 , (CGFloat)10.0 , (CGFloat)82  , (CGFloat)24 );
+    NSRect rectOK = NSMakeRect( (CGFloat)100.0 , (CGFloat)10.0 , (CGFloat)82  , (CGFloat)24 );
 
     NSButton* cancelButton = [[NSButton alloc] initWithFrame:rectCancel];
     [cancelButton setTitle:(NSString*)wxCFRetain((CFStringRef)cfCancelString)];

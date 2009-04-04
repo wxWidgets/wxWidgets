@@ -621,7 +621,7 @@ IMPLEMENT_CLASS(wxDataViewBitmapRenderer,wxDataViewRenderer)
 // ---------------------------------------------------------
 // wxDataViewIconTextRenderer
 // ---------------------------------------------------------
-wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(wxString const& varianttype, wxDataViewCellMode mode, int align)
+wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(wxString const& varianttype, wxDataViewCellMode mode, int WXUNUSED(align))
                            :wxDataViewRenderer(varianttype,mode)
 {
 }
@@ -653,7 +653,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer)
 // ---------------------------------------------------------
 // wxDataViewToggleRenderer
 // ---------------------------------------------------------
-wxDataViewToggleRenderer::wxDataViewToggleRenderer(wxString const& varianttype, wxDataViewCellMode mode, int align)
+wxDataViewToggleRenderer::wxDataViewToggleRenderer(wxString const& varianttype, wxDataViewCellMode mode, int WXUNUSED(align))
                          :wxDataViewRenderer(varianttype,mode)
 {
 }
@@ -674,7 +674,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer,wxDataViewRenderer)
 // ---------------------------------------------------------
 // wxDataViewProgressRenderer
 // ---------------------------------------------------------
-wxDataViewProgressRenderer::wxDataViewProgressRenderer(wxString const& label, wxString const& varianttype, wxDataViewCellMode mode, int align)
+wxDataViewProgressRenderer::wxDataViewProgressRenderer(wxString const& WXUNUSED(label), wxString const& varianttype, wxDataViewCellMode mode, int align)
                            :wxDataViewRenderer(varianttype,mode,align)
 {
 }
@@ -1037,7 +1037,7 @@ wxSize wxDataViewCtrl::DoGetBestSize() const
 }
 
 /*static*/
-wxVisualAttributes wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+wxVisualAttributes wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     wxVisualAttributes attr;
 
@@ -1305,7 +1305,7 @@ int wxDataViewCtrl::GetSelections(wxDataViewItemArray& sel) const
   return static_cast<int>(NoOfSelectedItems);
 }
 
-void wxDataViewCtrl::HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
+void wxDataViewCtrl::HitTest(wxPoint const& WXUNUSED(point), wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
 {
   item = wxDataViewItem();
   columnPtr = NULL;

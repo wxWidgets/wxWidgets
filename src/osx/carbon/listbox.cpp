@@ -31,12 +31,12 @@
 // ============================================================================
 
 wxWidgetImplType* wxWidgetImpl::CreateListBox( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(extraStyle))
 {
     wxMacDataBrowserListControl* control = new wxMacDataBrowserListControl( wxpeer, pos, size, style );
     // TODO CHECK control->SetClientDataType( m_clientDataItemsType );

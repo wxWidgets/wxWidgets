@@ -1523,7 +1523,7 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *WXUNUSED(t), bool WXUNUSED(enabl
     // everything already done in the tool's implementation
 }
 
-void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
+void wxToolBar::DoToggleTool(wxToolBarToolBase *WXUNUSED(t), bool WXUNUSED(toggle))
 {
     // everything already done in the tool's implementation
 }

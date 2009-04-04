@@ -46,7 +46,7 @@ wxDrawerWindow::~wxDrawerWindow()
 }
 
 bool wxDrawerWindow::Create(wxWindow *parent,
- wxWindowID id, const wxString& title,
+ wxWindowID id, const wxString& WXUNUSED(title),
  wxSize size, wxDirection edge, const wxString& name)
 {
     wxASSERT_MSG(NULL != parent, wxT("wxDrawerWindows must be attached to a parent window."));

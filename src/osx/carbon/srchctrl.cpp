@@ -66,7 +66,7 @@ static const EventTypeSpec eventList[] =
 // implementation
 // ============================================================================
 
-static pascal OSStatus wxMacSearchControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+static pascal OSStatus wxMacSearchControlEventHandler( EventHandlerCallRef WXUNUSED(handler) , EventRef event , void *data )
 {
     OSStatus result = eventNotHandledErr ;
 
@@ -205,13 +205,13 @@ bool wxMacSearchFieldControl::SetFocus()
 }
 
 wxWidgetImplType* wxWidgetImpl::CreateSearchControl( wxTextCtrl* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID id, 
+                                    wxWindowMac* WXUNUSED(parent), 
+                                    wxWindowID WXUNUSED(id), 
                                     const wxString& str,
                                     const wxPoint& pos, 
                                     const wxSize& size,
                                     long style, 
-                                    long extraStyle)
+                                    long WXUNUSED(extraStyle))
 {
     wxMacControl* peer = new wxMacSearchFieldControl( wxpeer , str , pos , size , style );
 

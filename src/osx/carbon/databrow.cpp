@@ -1030,7 +1030,12 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
     } /* switch */
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(DataBrowserItemID, DataBrowserItemNotification, DataBrowserItemDataRef) */
 
-void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, DataBrowserItemState state, Rect const* rectangle, SInt16 bitDepth, Boolean colorDevice)
+void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID itemID, 
+                                DataBrowserPropertyID propertyID, 
+                                DataBrowserItemState state, 
+                                Rect const* rectangle, 
+                                SInt16 WXUNUSED(bitDepth), 
+                                Boolean WXUNUSED(colorDevice))
 {
   DataBrowserTableViewColumnIndex columnIndex;
 
@@ -1129,7 +1134,11 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
   dataViewCustomRendererPtr->SetDC(NULL);
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID, DataBrowserPropertyID, DataBrowserItemState, Rect const*, SInt16, Boolean) */
 
-Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserEditItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, CFStringRef theString, Rect* maxEditTextRect, Boolean* shrinkToFit)
+Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserEditItemProc(DataBrowserItemID WXUNUSED(itemID), 
+                                        DataBrowserPropertyID WXUNUSED(propertyID), 
+                                        CFStringRef WXUNUSED(theString), 
+                                        Rect* WXUNUSED(maxEditTextRect), 
+                                        Boolean* WXUNUSED(shrinkToFit))
 {
   return false;
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserEditItemProc(DataBrowserItemID, DataBrowserPropertyID, CFStringRef, Rect*, Boolean*) */
