@@ -125,24 +125,24 @@ void IntlTestCase::Headers()
     CPPUNIT_ASSERT_EQUAL( "", m_locale->GetHeaderValue("X-Not-Here") );
 }
 
-static void
-CompareFormats(const char *msg, const wxString& expected, wxString actual)
+static wxString
+NormalizeFormat(const wxString& fmtOrig)
 {
-    if ( actual.empty() )
-    {
-        // this means that GetInfo() failed which can happen, just ignore
-        return;
-    }
+    wxString fmt(fmtOrig);
 
 #ifdef __GLIBC__
     // glibc uses some extensions in its formats which we need to convert to
     // standard form
-    actual.Replace("%T", "%H:%M:%S");
-    actual.Replace("%e", "%d");
+    fmt.Replace("%T", "%H:%M:%S");
+    fmt.Replace("%e", "%d");
 #endif // __GLIBC__
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( msg, expected, actual );
+    return fmt;
 }
+
+#define WX_ASSERT_EQUAL_FORMAT(msg, expected, actual) \
+    if ( !actual.empty() ) \
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg, expected, NormalizeFormat(actual))
 
 void IntlTestCase::DateTimeFmtFrench()
 {
@@ -154,7 +154,7 @@ void IntlTestCase::DateTimeFmtFrench()
     // standard format uses slashes)
     static const char *FRENCH_DATE_FMT = "%d.%m.%Y";
     static const char *FRENCH_LONG_DATE_FMT = "%a %d %b %Y";
-    static const char *FRENCH_DATE_TIME_FMT = "%a %d %b %Y %T %Z";
+    static const char *FRENCH_DATE_TIME_FMT = "%a %d %b %Y %H:%M:%S %Z";
 #else
     static const char *FRENCH_DATE_FMT = "%d/%m/%Y";
     static const char *FRENCH_LONG_DATE_FMT = "%A %d %B %Y";
@@ -165,13 +165,13 @@ void IntlTestCase::DateTimeFmtFrench()
 #endif
 #endif
 
-    CompareFormats( "French short date", FRENCH_DATE_FMT,
+    WX_ASSERT_EQUAL_FORMAT( "French short date", FRENCH_DATE_FMT,
                    m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
-    CompareFormats( "French long date", FRENCH_LONG_DATE_FMT,
+    WX_ASSERT_EQUAL_FORMAT( "French long date", FRENCH_LONG_DATE_FMT,
                     m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
-    CompareFormats( "French date and time", FRENCH_DATE_TIME_FMT,
+    WX_ASSERT_EQUAL_FORMAT( "French date and time", FRENCH_DATE_TIME_FMT,
                     m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
-    CompareFormats( "French time", "%H:%M:%S",
+    WX_ASSERT_EQUAL_FORMAT( "French time", "%H:%M:%S",
                     m_locale->GetInfo(wxLOCALE_TIME_FMT) );
 }
 
@@ -194,13 +194,13 @@ void IntlTestCase::DateTimeFmtC()
 
     setlocale(LC_ALL, "C");
 
-    CompareFormats( "C short date", C_DATE_FMT,
+    WX_ASSERT_EQUAL_FORMAT( "C short date", C_DATE_FMT,
                     m_locale->GetInfo(wxLOCALE_SHORT_DATE_FMT) );
-    CompareFormats( "C long date", C_LONG_DATE_FMT,
+    WX_ASSERT_EQUAL_FORMAT( "C long date", C_LONG_DATE_FMT,
                     m_locale->GetInfo(wxLOCALE_LONG_DATE_FMT) );
-    CompareFormats( "C date and time", C_DATE_TIME_FMT,
+    WX_ASSERT_EQUAL_FORMAT( "C date and time", C_DATE_TIME_FMT,
                     m_locale->GetInfo(wxLOCALE_DATE_TIME_FMT) );
-    CompareFormats( "C time", "%H:%M:%S",
+    WX_ASSERT_EQUAL_FORMAT( "C time", "%H:%M:%S",
                     m_locale->GetInfo(wxLOCALE_TIME_FMT) );
 }
 
