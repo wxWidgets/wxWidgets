@@ -741,7 +741,7 @@ void DateTimeTestCase::TestTimeFormat()
                     result++;
 
                 WX_ASSERT_MESSAGE(
-                    ("Test #%lu failed: \"%s\" was lest unparsed in \"%s\"",
+                    ("Test #%lu failed: \"%s\" was left unparsed in \"%s\"",
                      n, result, s),
                     !*result
                 );
