@@ -764,7 +764,8 @@ bool wxQTMediaBackend::SetPosition(wxLongLong where)
 {
     TimeRecord theTimeRecord;
     memset(&theTimeRecord, 0, sizeof(TimeRecord));
-    theTimeRecord.value.lo = where.GetValue();
+    theTimeRecord.value.lo = where.GetLo();
+    theTimeRecord.value.hi = where.GetHi();
     theTimeRecord.scale = ::GetMovieTimeScale(m_movie);
     theTimeRecord.base = ::GetMovieTimeBase(m_movie);
     ::SetMovieTime(m_movie, &theTimeRecord);
