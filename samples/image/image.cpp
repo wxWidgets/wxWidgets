@@ -143,7 +143,8 @@ public:
         wxMenu *menu = new wxMenu;
         menu->Append(wxID_SAVE);
         menu->AppendSeparator();
-        m_pClearBgMenu = menu->AppendCheckItem(ID_PAINT_BG, _T("&Paint background"));
+        menu->AppendCheckItem(ID_PAINT_BG, _T("&Paint background"),
+                              "Uncheck this for transparent images");
         menu->AppendSeparator();
         menu->Append(ID_RESIZE, _T("&Fit to window\tCtrl-F"));
         menu->AppendSeparator();
@@ -153,6 +154,8 @@ public:
         wxMenuBar *mbar = new wxMenuBar;
         mbar->Append(menu, _T("&Image"));
         SetMenuBar(mbar);
+
+        mbar->Check(ID_PAINT_BG, true);
 
         CreateStatusBar(2);
         if ( numImages != 1 )
@@ -176,7 +179,7 @@ public:
     {
         wxPaintDC dc(this);
 
-        if (m_pClearBgMenu->IsChecked())
+        if ( GetMenuBar()->IsChecked(ID_PAINT_BG) )
             ClearBackground();
 
         const wxSize size = GetClientSize();
@@ -390,7 +393,6 @@ private:
     }
 
     wxBitmap m_bitmap;
-    wxMenuItem* m_pClearBgMenu;
 
     DECLARE_EVENT_TABLE()
 };
