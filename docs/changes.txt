@@ -518,6 +518,7 @@ All (GUI):
 - Added wxGetSelectedChoices() replacing wxGetMultipleChoices() (Kolya Kosenko).
 - Check whether document fits into page horizontally in wxHtmlPrintout, see the
   new CheckFit() method for more information.
+- Allow reading GIFs with incorrectly specified animation size.
 
 wxGTK:
 
