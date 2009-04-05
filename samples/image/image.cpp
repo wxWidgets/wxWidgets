@@ -6,6 +6,7 @@
 // Created:     1998
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998-2005 Robert Roebling
+//              (c) 2005-2009 Vadim Zeitlin
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -127,6 +128,7 @@ public:
         Create(parent, desc, bitmap);
     }
 
+private:
     bool Create(wxFrame *parent,
                 const wxString& desc,
                 const wxBitmap& bitmap,
@@ -139,6 +141,7 @@ public:
             return false;
 
         m_bitmap = bitmap;
+        m_zoom = 1.;
 
         wxMenu *menu = new wxMenu;
         menu->Append(wxID_SAVE);
@@ -147,6 +150,9 @@ public:
                               "Uncheck this for transparent images");
         menu->AppendSeparator();
         menu->Append(ID_RESIZE, _T("&Fit to window\tCtrl-F"));
+        menu->Append(wxID_ZOOM_IN, "Zoom &in\tCtrl-+");
+        menu->Append(wxID_ZOOM_OUT, "Zoom &out\tCtrl--");
+        menu->Append(wxID_ZOOM_100, "Reset zoom to &100%\tCtrl-1");
         menu->AppendSeparator();
         menu->Append(ID_ROTATE_LEFT, _T("Rotate &left\tCtrl-L"));
         menu->Append(ID_ROTATE_RIGHT, _T("Rotate &right\tCtrl-R"));
@@ -182,11 +188,16 @@ public:
         if ( GetMenuBar()->IsChecked(ID_PAINT_BG) )
             ClearBackground();
 
+        dc.SetUserScale(m_zoom, m_zoom);
+
         const wxSize size = GetClientSize();
-        dc.DrawBitmap(m_bitmap,
-                    (size.x - m_bitmap.GetWidth())/2,
-                    (size.y - m_bitmap.GetHeight())/2,
-                    true /* use mask */);
+        dc.DrawBitmap
+           (
+                m_bitmap,
+                dc.DeviceToLogicalX((size.x - m_zoom*m_bitmap.GetWidth())/2),
+                dc.DeviceToLogicalY((size.y - m_zoom*m_bitmap.GetHeight())/2),
+                true /* use mask */
+           );
     }
 
     void OnSave(wxCommandEvent& WXUNUSED(event))
@@ -361,7 +372,18 @@ public:
         m_bitmap = wxBitmap(img);
 
         UpdateStatusBar();
-        Refresh();
+    }
+
+    void OnZoom(wxCommandEvent& event)
+    {
+        if ( event.GetId() == wxID_ZOOM_IN )
+            m_zoom *= 1.2;
+        else if ( event.GetId() == wxID_ZOOM_OUT )
+            m_zoom /= 1.2;
+        else // wxID_ZOOM_100
+            m_zoom = 1.;
+
+        UpdateStatusBar();
     }
 
     void OnRotate(wxCommandEvent& event)
@@ -381,18 +403,19 @@ public:
         m_bitmap = wxBitmap(img);
 
         UpdateStatusBar();
+    }
+
+    void UpdateStatusBar()
+    {
+        wxLogStatus(this, _T("Image size: (%d, %d), zoom %.2f"),
+                    m_bitmap.GetWidth(),
+                    m_bitmap.GetHeight(),
+                    m_zoom);
         Refresh();
     }
 
-private:
-    void UpdateStatusBar()
-    {
-        wxLogStatus(this, _T("Image size: (%d, %d)"),
-                    m_bitmap.GetWidth(),
-                    m_bitmap.GetHeight());
-    }
-
     wxBitmap m_bitmap;
+    double m_zoom;
 
     DECLARE_EVENT_TABLE()
 };
@@ -552,6 +575,10 @@ BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_MENU(wxID_SAVE, MyImageFrame::OnSave)
     EVT_MENU_RANGE(ID_ROTATE_LEFT, ID_ROTATE_RIGHT, MyImageFrame::OnRotate)
     EVT_MENU(ID_RESIZE, MyImageFrame::OnResize)
+
+    EVT_MENU(wxID_ZOOM_IN, MyImageFrame::OnZoom)
+    EVT_MENU(wxID_ZOOM_OUT, MyImageFrame::OnZoom)
+    EVT_MENU(wxID_ZOOM_100, MyImageFrame::OnZoom)
 END_EVENT_TABLE()
 
 //-----------------------------------------------------------------------------
@@ -648,9 +675,11 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-    (void)wxMessageBox( _T("wxImage demo\n")
-                        _T("Robert Roebling (c) 1998,2000"),
-                        _T("About wxImage Demo"), wxICON_INFORMATION | wxOK );
+    (void)wxMessageBox( "wxImage demo\n"
+                        "(c) Robert Roebling 1998-2005"
+                        "(c) Vadim Zeitlin 2005-2009",
+                        "About wxImage Demo",
+                        wxICON_INFORMATION | wxOK );
 }
 
 wxString MyFrame::LoadUserImage(wxImage& image)
