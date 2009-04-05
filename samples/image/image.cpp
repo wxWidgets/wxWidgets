@@ -117,13 +117,29 @@ enum
 class MyImageFrame : public wxFrame
 {
 public:
-    MyImageFrame(wxFrame *parent, const wxString& desc, const wxBitmap& bitmap)
-        : wxFrame(parent, wxID_ANY,
-                wxString::Format(_T("Image from %s"), desc.c_str()),
-                wxDefaultPosition, wxDefaultSize,
-                wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE),
-                m_bitmap(bitmap)
+    MyImageFrame(wxFrame *parent, const wxString& desc, const wxImage& image)
     {
+        Create(parent, desc, wxBitmap(image), image.GetImageCount(desc));
+    }
+
+    MyImageFrame(wxFrame *parent, const wxString& desc, const wxBitmap& bitmap)
+    {
+        Create(parent, desc, bitmap);
+    }
+
+    bool Create(wxFrame *parent,
+                const wxString& desc,
+                const wxBitmap& bitmap,
+                int numImages = 1)
+    {
+        if ( !wxFrame::Create(parent, wxID_ANY,
+                              wxString::Format(_T("Image from %s"), desc),
+                              wxDefaultPosition, wxDefaultSize,
+                              wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE) )
+            return false;
+
+        m_bitmap = bitmap;
+
         wxMenu *menu = new wxMenu;
         menu->Append(wxID_SAVE);
         menu->AppendSeparator();
@@ -138,13 +154,17 @@ public:
         mbar->Append(menu, _T("&Image"));
         SetMenuBar(mbar);
 
-        CreateStatusBar();
+        CreateStatusBar(2);
+        if ( numImages != 1 )
+            SetStatusText(wxString::Format("%d images", numImages), 1);
 
         SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
 
         UpdateStatusBar();
 
-//        SetBackgroundColour(*wxWHITE);
+        Show();
+
+        return true;
     }
 
     void OnEraseBackground(wxEraseEvent& WXUNUSED(event))
@@ -656,7 +676,7 @@ void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
     wxImage image;
     wxString filename = LoadUserImage(image);
     if ( !filename.empty() )
-        (new MyImageFrame(this, filename, wxBitmap(image)))->Show();
+        new MyImageFrame(this, filename, image);
 }
 
 void MyFrame::OnImageInfo( wxCommandEvent &WXUNUSED(event) )
@@ -735,7 +755,7 @@ void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        (new MyImageFrame(this, _T("Clipboard"), dobjBmp.GetBitmap()))->Show();
+        new MyImageFrame(this, _T("Clipboard"), dobjBmp.GetBitmap());
     }
     wxTheClipboard->Close();
 }
@@ -765,9 +785,7 @@ void MyFrame::OnThumbnail( wxCommandEvent &WXUNUSED(event) )
 
     const long loadTime = sw.Time();
 
-    MyImageFrame * const
-        frame = new MyImageFrame(this, filename, wxBitmap(image));
-    frame->Show();
+    MyImageFrame * const frame = new MyImageFrame(this, filename, image);
     wxLogStatus(frame, "Loaded \"%s\" in %ldms", filename, loadTime);
 #else
     wxLogError( _T("Couldn't create file selector dialog") );

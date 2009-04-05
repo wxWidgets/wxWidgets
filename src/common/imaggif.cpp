@@ -100,6 +100,16 @@ bool wxGIFHandler::DoCanRead( wxInputStream& stream )
     return decod.CanRead(stream);
 }
 
+int wxGIFHandler::GetImageCount( wxInputStream& stream )
+{
+    wxGIFDecoder decod;
+    wxGIFErrorCode error = decod.LoadGIF(stream);
+    if ( (error != wxGIF_OK) && (error != wxGIF_TRUNCATED) )
+        return -1;
+
+    return decod.GetFrameCount();
+}
+
 #endif  // wxUSE_STREAMS
 
 #endif  // wxUSE_GIF

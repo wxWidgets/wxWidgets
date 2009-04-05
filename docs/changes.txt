@@ -519,6 +519,7 @@ All (GUI):
 - Check whether document fits into page horizontally in wxHtmlPrintout, see the
   new CheckFit() method for more information.
 - Allow reading GIFs with incorrectly specified animation size.
+- Return number of frames in animated GIF from wxGIFHandler::GetImageCount().
 
 wxGTK:
 

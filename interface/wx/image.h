@@ -109,7 +109,9 @@ public:
             Currently, the stream must support seeking.
 
         @return Number of available images. For most image handlers, this is 1
-                (exceptions are TIFF and ICO formats).
+                (exceptions are TIFF and ICO formats as well as animated GIFs
+                for which this function returns the number of frames in the
+                animation).
     */
     virtual int GetImageCount(wxInputStream& stream);
 
@@ -1603,7 +1605,9 @@ public:
         @li wxBITMAP_TYPE_ANY: Will try to autodetect the format.
 
         @return Number of available images. For most image handlers, this is 1
-                (exceptions are TIFF and ICO formats).
+                (exceptions are TIFF and ICO formats as well as animated GIFs
+                for which this function returns the number of frames in the
+                animation).
     */
     static int GetImageCount(const wxString& filename,
                              wxBitmapType type = wxBITMAP_TYPE_ANY);
