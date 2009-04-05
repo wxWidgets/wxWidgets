@@ -1081,6 +1081,9 @@ typedef wxUint32 wxDword;
     #else
         #error "error defining ssize_t, size_t is not 4 or 8 bytes"
     #endif
+
+    /* prevent ssize_t redefinitions in other libraries */
+    #define HAVE_SSIZE_T
 #endif
 
 // we can't rely on Windows _W64 being defined as windows.h may not be included
