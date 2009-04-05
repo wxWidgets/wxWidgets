@@ -106,6 +106,8 @@ All (GUI):
 wxMSW:
 
 - Fixed generation of wxEVT_CHAR_HOOK events.
+- Implement wxFileName::SetTimes() for directories (Steve Lamerton).
+
 
 
 2.8.10:
@@ -181,7 +183,6 @@ wxMSW:
 
 
 wxMSW/CE:
-
 - Don't hardcode the menu bar height (Michele Spighi).
 
 wxGTK:
