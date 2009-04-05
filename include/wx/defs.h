@@ -1018,6 +1018,9 @@ inline void *wxUIntToPtr(wxUIntPtr p)
     #else
         #error "error defining ssize_t, size_t is not 4 or 8 bytes"
     #endif
+
+    /* prevent ssize_t redefinitions in other libraries */
+    #define HAVE_SSIZE_T
 #endif
 
 
