@@ -774,6 +774,11 @@ public:
     /**
         Sets the item client data.
 
+        Notice that the client data previously associated with the @a item (if
+        any) is @em not freed by this function and so calling this function
+        multiple times for the same item will result in memory leaks unless you
+        delete the old item data pointer yourself.
+
         @beginWxPythonOnly
         - @b SetPyData( @a item, @c obj): Associate the given Python Object with
             the wxTreeItemData for the given item Id.

@@ -92,6 +92,12 @@ public:
 
     /**
         Sets the item associated with this node.
+
+        Notice that this function is automatically called by wxTreeCtrl methods
+        associating an object of this class with a tree control item such as
+        wxTreeCtrl::AppendItem(), wxTreeCtrl::InsertItem() and
+        wxTreeCtrl::SetItemData() so there is usually no need to call it
+        yourself.
     */
     void SetId(const wxTreeItemId& id);
 };
