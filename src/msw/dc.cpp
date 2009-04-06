@@ -278,27 +278,31 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxBrushAttrsSetter);
 };
 
-// this class saves the old stretch blit mode during its life time
+#ifdef __WXWINCE__
+
+#define SET_STRETCH_BLT_MODE(hdc)
+
+#else // !__WXWINCE__
+
+// this class sets the stretch blit mode to COLORONCOLOR during its lifetime
+//
+// don't use it directly, use SET_STRETCH_BLT_MODE() macro instead as it
+// expands to nothing under WinCE which doesn't have SetStretchBltMode()
 class StretchBltModeChanger
 {
 public:
-    StretchBltModeChanger(HDC hdc,
-                          int WXUNUSED_IN_WINCE(mode))
+    StretchBltModeChanger(HDC hdc)
         : m_hdc(hdc)
     {
-#ifndef __WXWINCE__
-        m_modeOld = ::SetStretchBltMode(m_hdc, mode);
+        m_modeOld = ::SetStretchBltMode(m_hdc, COLORONCOLOR);
         if ( !m_modeOld )
             wxLogLastError(_T("SetStretchBltMode"));
-#endif
     }
 
     ~StretchBltModeChanger()
     {
-#ifndef __WXWINCE__
         if ( !::SetStretchBltMode(m_hdc, m_modeOld) )
             wxLogLastError(_T("SetStretchBltMode"));
-#endif
     }
 
 private:
@@ -308,6 +312,11 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(StretchBltModeChanger);
 };
+
+#define SET_STRETCH_BLT_MODE(hdc) \
+    StretchBltModeChanger wxMAKE_UNIQUE_NAME(stretchModeChanger)(hdc)
+
+#endif // __WXWINCE__/!__WXWINCE__
 
 #if wxUSE_DYNLIB_CLASS
 
@@ -1294,9 +1303,7 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
             return;
     }
 
-#ifndef __WXWINCE__
-    StretchBltModeChanger changeMode(GetHdc(), COLORONCOLOR);
-#endif
+    SET_STRETCH_BLT_MODE(GetHdc());
 
     if ( useMask )
     {
@@ -2216,9 +2223,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                 wxLogLastError(wxT("BitBlt"));
             }
 
-#ifndef __WXWINCE__
-            StretchBltModeChanger changeMode(dc_buffer, COLORONCOLOR);
-#endif
+            SET_STRETCH_BLT_MODE(GetHdc());
 
             // copy src to buffer using selected raster op
             if ( !::StretchBlt(dc_buffer, 0, 0, dstWidth, dstHeight,
@@ -2286,7 +2291,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                              sizeof(ds),
                              &ds) == sizeof(ds) )
             {
-                StretchBltModeChanger changeMode(GetHdc(), COLORONCOLOR);
+                SET_STRETCH_BLT_MODE(GetHdc());
 
                 // Figure out what co-ordinate system we're supposed to specify
                 // ysrc in.
@@ -2325,9 +2330,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
 #endif
         // __WXWINCE__
         {
-#ifndef __WXWINCE__
-            StretchBltModeChanger changeMode(GetHdc(), COLORONCOLOR);
-#endif
+            SET_STRETCH_BLT_MODE(GetHdc());
 
             if ( !::StretchBlt
                     (
