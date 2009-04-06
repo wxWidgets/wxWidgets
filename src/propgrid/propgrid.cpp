@@ -825,11 +825,17 @@ void wxPropertyGrid::SetExtraStyle( long exStyle )
 // returns the best acceptable minimal size
 wxSize wxPropertyGrid::DoGetBestSize() const
 {
-    int hei = 15;
-    if ( m_lineHeight > hei )
-        hei = m_lineHeight;
-    wxSize sz = wxSize( 60, hei+40 );
+    int lineHeight = wxMax(15, m_lineHeight);
 
+    // don't make the grid too tall (limit height to 10 items) but don't
+    // make it too small neither
+    int numLines = wxMin
+                   (
+                    wxMax(m_pState->m_properties->GetChildCount(), 3),
+                    10
+                   );
+
+    const wxSize sz = wxSize(60, lineHeight*numLines + 40);
     CacheBestSize(sz);
     return sz;
 }
