@@ -19,6 +19,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/palette.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include <stdlib.h>
