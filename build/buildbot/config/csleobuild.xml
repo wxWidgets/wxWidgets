@@ -13,6 +13,13 @@
 
 <xi:include href="include/csleobuild.xml"/>
 
+<scheduler>
+    <name>branch_2_9_0</name>
+    <branch>branches/WX_2_9_0_BRANCH</branch>
+    <treeStableTimer>900</treeStableTimer>
+    <fileNotImportant>docs/* interface/*</fileNotImportant>
+</scheduler>
+
 <build>
     <name>OSX 10.5 Intel wxOSX Carbon trunk</name>
     <builddir>csleo</builddir>
@@ -49,4 +56,28 @@
         <run-tests/>
     </steps>
 </build>
+
+<build>
+    <name>OSX 10.5 Intel wxOSX Carbon 2.9.0</name>
+    <builddir>csleo_pre</builddir>
+    <scheduler>branch_2_9_0</scheduler>    
+    <steps>
+        <checkout branch="branches/WX_2_9_0_BRANCH"/>
+        <configure/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+</build>
+  <build>
+    <name>OSX 10.5 Intel wxOSX Cocoa 2.9.0</name>
+    <builddir>csleo_cocoa_pre</builddir>
+    <scheduler>branch_2_9_0</scheduler>
+    <steps>
+        <checkout branch="branches/WX_2_9_0_BRANCH"/>
+        <configure options="--with-osx_cocoa"/>
+        <compile-all/>
+        <run-tests/>
+    </steps>
+  </build>
+
 </bot>
