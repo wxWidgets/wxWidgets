@@ -6518,6 +6518,10 @@ const wxChar *wxGetMessageName(int message)
         case 0x0120: return wxT("WM_MENUCHAR");
         case 0x0121: return wxT("WM_ENTERIDLE");
 
+        case 0x0127: return wxT("WM_CHANGEUISTATE");
+        case 0x0128: return wxT("WM_UPDATEUISTATE");
+        case 0x0129: return wxT("WM_QUERYUISTATE");
+
         case 0x0132: return wxT("WM_CTLCOLORMSGBOX");
         case 0x0133: return wxT("WM_CTLCOLOREDIT");
         case 0x0134: return wxT("WM_CTLCOLORLISTBOX");
