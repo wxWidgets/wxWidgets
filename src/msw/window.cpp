@@ -6318,6 +6318,21 @@ const wxChar *wxGetMessageName(int message)
         case 0x011F: return wxT("WM_MENUSELECT");
         case 0x0120: return wxT("WM_MENUCHAR");
         case 0x0121: return wxT("WM_ENTERIDLE");
+
+        case 0x0127: return wxT("WM_CHANGEUISTATE");
+        case 0x0128: return wxT("WM_UPDATEUISTATE");
+        case 0x0129: return wxT("WM_QUERYUISTATE");
+
+        case 0x0132: return wxT("WM_CTLCOLORMSGBOX");
+        case 0x0133: return wxT("WM_CTLCOLOREDIT");
+        case 0x0134: return wxT("WM_CTLCOLORLISTBOX");
+        case 0x0135: return wxT("WM_CTLCOLORBTN");
+        case 0x0136: return wxT("WM_CTLCOLORDLG");
+        case 0x0137: return wxT("WM_CTLCOLORSCROLLBAR");
+        case 0x0138: return wxT("WM_CTLCOLORSTATIC");
+
+        case 0x01E1: return wxT("MN_GETHMENU");
+
         case 0x0200: return wxT("WM_MOUSEMOVE");
         case 0x0201: return wxT("WM_LBUTTONDOWN");
         case 0x0202: return wxT("WM_LBUTTONUP");
