@@ -918,7 +918,6 @@ bool wxListCtrl::SetItem(wxListItem& info)
     // call ListView_SetItem() at all
     if ( item.mask )
     {
-        item.cchTextMax = 0;
         if ( !ListView_SetItem(GetHwnd(), &item) )
         {
             wxLogDebug(_T("ListView_SetItem() failed"));
