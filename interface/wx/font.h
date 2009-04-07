@@ -358,6 +358,15 @@ public:
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     /**
+        Constructor from font description string.
+
+        This constructor uses SetNativeFontInfo() to initialize the font. If @a
+        fontdesc is invalid font remains uninitialized, i.e. its IsOk() method
+        will return @false.
+     */
+    wxFont(const wxString& fontdesc);
+
+    /**
         Destructor.
 
         See @ref overview_refcount_destruct "reference-counted object destruction"
