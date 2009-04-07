@@ -893,7 +893,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
             data = new wxListItemInternalData();
             item.lParam = (LPARAM) data;
             item.mask |= LVIF_PARAM;
-        };
+        }
 
 
         // user data
@@ -910,8 +910,8 @@ bool wxListCtrl::SetItem(wxListItem& info)
                 data->attr->AssignFrom(attrNew);
             else
                 data->attr = new wxListItemAttr(attrNew);
-        };
-    };
+        }
+    }
 
 
     // we could be changing only the attribute in which case we don't need to
@@ -1626,7 +1626,7 @@ long wxListCtrl::FindItem(long start, wxUIntPtr data)
         if (GetItemData(idx) == data)
             return idx;
         idx++;
-    };
+    }
 
     return -1;
 }
@@ -1746,7 +1746,7 @@ long wxListCtrl::InsertItem(const wxListItem& info)
             // and remember that we have some now...
             m_hasAnyAttr = true;
         }
-    };
+    }
 
     long rv = ListView_InsertItem(GetHwnd(), & item);
 
