@@ -920,13 +920,15 @@ public:
 
     @beginEventTable{wxTreeEvent}
     @event{EVT_TREE_BEGIN_DRAG(id, func)}
-        Begin dragging with the left mouse button.
-          If you want to enable left-dragging you need to intercept this event
-          and explicitely call wxTreeEvent::Allow(), as it's vetoed by default.
+        Begin dragging with the left mouse button. If you want to enable
+        left-dragging you need to intercept this event and explicitely call
+        wxTreeEvent::Allow(), as it's vetoed by default. Also notice that the
+        control must have an associated image list (see SetImageList()) to
+        drag its items under MSW.
     @event{EVT_TREE_BEGIN_RDRAG(id, func)}
-          Begin dragging with the right mouse button.
-          If you want to enable right-dragging you need to intercept this event
-          and explicitely call wxTreeEvent::Allow(), as it's vetoed by default.
+        Begin dragging with the right mouse button. If you want to enable
+        right-dragging you need to intercept this event and explicitely call
+        wxTreeEvent::Allow(), as it's vetoed by default.
     @event{EVT_TREE_END_DRAG(id, func)}
         End dragging with the left or right mouse button.
     @event{EVT_TREE_BEGIN_LABEL_EDIT(id, func)}
