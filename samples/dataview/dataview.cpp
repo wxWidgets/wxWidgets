@@ -931,6 +931,7 @@ void MyFrame::OnHeaderClick( wxDataViewEvent &event )
     int pos = m_ctrl[0]->GetColumnPosition( event.GetDataViewColumn() );
 
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, Column position: %d", pos );
+    wxLogMessage( "Column width: %d", event.GetDataViewColumn()->GetWidth() );
 }
 
 void MyFrame::OnHeaderRightClick( wxDataViewEvent &event )
