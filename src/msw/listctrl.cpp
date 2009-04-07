@@ -3200,6 +3200,9 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
                                    const wxListItem& info,
                                    LV_ITEM& lvItem)
 {
+    wxASSERT_MSG( 0 <= info.m_col && info.m_col < ctrl->GetColumnCount(),
+                  "wxListCtrl column index out of bounds" );
+
     lvItem.iItem = (int) info.m_itemId;
 
     lvItem.iImage = info.m_image;
