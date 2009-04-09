@@ -700,6 +700,7 @@ wxGridSelection::ToggleCellSelection(int row, int col,
         }
     }
 
+    bool rowSelectionWasChanged = false;
     // remove a cell from a row, adding up to two new blocks
     if ( m_selectionMode != wxGrid::wxGridSelectColumns )
     {
@@ -711,6 +712,8 @@ wxGridSelection::ToggleCellSelection(int row, int col,
                 m_rowSelection.RemoveAt(n);
                 n--;
                 count--;
+
+                rowSelectionWasChanged = true;
 
                 if (m_selectionMode == wxGrid::wxGridSelectCells)
                 {
@@ -724,6 +727,7 @@ wxGridSelection::ToggleCellSelection(int row, int col,
         }
     }
 
+    bool colSelectionWasChanged = false;
     // remove a cell from a column, adding up to two new blocks
     if ( m_selectionMode != wxGrid::wxGridSelectRows )
     {
@@ -735,6 +739,8 @@ wxGridSelection::ToggleCellSelection(int row, int col,
                 m_colSelection.RemoveAt(n);
                 n--;
                 count--;
+
+                colSelectionWasChanged = true;
 
                 if (m_selectionMode == wxGrid::wxGridSelectCells)
                 {
@@ -751,73 +757,92 @@ wxGridSelection::ToggleCellSelection(int row, int col,
     // Refresh the screen and send the event; according to m_selectionMode,
     // we need to either update only the cell, or the whole row/column.
     wxRect r;
-    switch (m_selectionMode)
+    if ( m_selectionMode == wxGrid::wxGridSelectCells )
     {
-        case wxGrid::wxGridSelectCells:
+        if ( !m_grid->GetBatchCount() )
         {
-            if ( !m_grid->GetBatchCount() )
-            {
-                r = m_grid->BlockToDeviceRect(
-                    wxGridCellCoords( row, col ),
-                    wxGridCellCoords( row, col ) );
-                ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
-            }
-
-            wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
-                wxEVT_GRID_RANGE_SELECT,
-                m_grid,
+            r = m_grid->BlockToDeviceRect(
                 wxGridCellCoords( row, col ),
-                wxGridCellCoords( row, col ),
-                false,
-                kbd );
-            m_grid->GetEventHandler()->ProcessEvent( gridEvt );
+                wxGridCellCoords( row, col ) );
+            ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
         }
-            break;
 
-        case wxGrid::wxGridSelectRows:
+        wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
+            wxEVT_GRID_RANGE_SELECT,
+            m_grid,
+            wxGridCellCoords( row, col ),
+            wxGridCellCoords( row, col ),
+            false,
+            kbd );
+        m_grid->GetEventHandler()->ProcessEvent( gridEvt );
+    }
+    else  // rows/columns selection mode
+    {
+        if ( m_selectionMode != wxGrid::wxGridSelectColumns &&
+                rowSelectionWasChanged )
         {
-            if ( !m_grid->GetBatchCount() )
+            int numCols = m_grid->GetNumberCols();
+            for ( int colFrom = 0, colTo = 0; colTo <= numCols; ++colTo )
             {
-                r = m_grid->BlockToDeviceRect(
-                    wxGridCellCoords( row, 0 ),
-                    wxGridCellCoords( row, m_grid->GetNumberCols() - 1 ) );
-                ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
+                if ( m_colSelection.Index(colTo) >= 0 || colTo == numCols )
+                {
+                    if ( colFrom < colTo )
+                    {
+                        if ( !m_grid->GetBatchCount() )
+                        {
+                            r = m_grid->BlockToDeviceRect(
+                                wxGridCellCoords( row, colFrom ),
+                                wxGridCellCoords( row, colTo-1 ) );
+                            ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
+                        }
+
+                        wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
+                            wxEVT_GRID_RANGE_SELECT,
+                            m_grid,
+                            wxGridCellCoords( row, colFrom ),
+                            wxGridCellCoords( row, colTo - 1 ),
+                            false,
+                            kbd );
+                        m_grid->GetEventHandler()->ProcessEvent( gridEvt );
+                    }
+
+                    colFrom = colTo + 1;
+                }
             }
-
-            wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
-                wxEVT_GRID_RANGE_SELECT,
-                m_grid,
-                wxGridCellCoords( row, 0 ),
-                wxGridCellCoords( row, m_grid->GetNumberCols() - 1 ),
-                false,
-                kbd );
-            m_grid->GetEventHandler()->ProcessEvent( gridEvt );
         }
-            break;
 
-        case wxGrid::wxGridSelectColumns:
+        if ( m_selectionMode != wxGrid::wxGridSelectRows &&
+                colSelectionWasChanged )
         {
-            if ( !m_grid->GetBatchCount() )
+            int numRows = m_grid->GetNumberRows();
+            for ( int rowFrom = 0, rowTo = 0; rowTo <= numRows; ++rowTo )
             {
-                r = m_grid->BlockToDeviceRect(
-                    wxGridCellCoords( 0, col ),
-                    wxGridCellCoords( m_grid->GetNumberRows() - 1, col ) );
-              ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
+                if ( m_rowSelection.Index(rowTo) >= 0 || rowTo == numRows )
+                {
+                    if (rowFrom < rowTo)
+                    {
+                        if ( !m_grid->GetBatchCount() )
+                        {
+                            r = m_grid->BlockToDeviceRect(
+                                wxGridCellCoords( rowFrom, col ),
+                                wxGridCellCoords( rowTo - 1, col ) );
+                          ((wxWindow *)m_grid->m_gridWin)->Refresh( false, &r );
+                        }
+
+                        wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
+                            wxEVT_GRID_RANGE_SELECT,
+                            m_grid,
+                            wxGridCellCoords( rowFrom, col ),
+                            wxGridCellCoords( rowTo - 1, col ),
+                            false,
+                            kbd );
+                        m_grid->GetEventHandler()->ProcessEvent( gridEvt );
+                    }
+
+                    rowFrom = rowTo + 1;
+                }
             }
-
-            wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
-                wxEVT_GRID_RANGE_SELECT,
-                m_grid,
-                wxGridCellCoords( 0, col ),
-                wxGridCellCoords( m_grid->GetNumberRows() - 1, col ),
-                false,
-                kbd );
-            m_grid->GetEventHandler()->ProcessEvent( gridEvt );
         }
-            break;
-
-        default:
-            break;
     }
 }
 

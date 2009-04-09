@@ -8083,7 +8083,8 @@ void wxGrid::DeselectLine(int line, const wxGridOperations& oper)
         return;
 
     const wxGridSelectionModes mode = m_selection->GetSelectionMode();
-    if ( mode == oper.GetSelectionMode() )
+    if ( mode == oper.GetSelectionMode() ||
+            mode == wxGrid::wxGridSelectRowsOrColumns )
     {
         const wxGridCellCoords c(oper.MakeCoords(line, 0));
         if ( m_selection->IsInSelection(c) )
