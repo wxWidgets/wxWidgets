@@ -95,6 +95,8 @@ Detailed Description:
 def getTextValue(node, recursive=False):
     text = ""
     for child in node.childNodes:
+        if child.nodeType == child.ELEMENT_NODE and child.nodeName == "ref":
+            text += getTextValue(child)
         if child.nodeType == child.TEXT_NODE:
             text += child.nodeValue.strip()
             
@@ -147,6 +149,7 @@ class DoxyMLParser:
                         if child.nodeType == child.ELEMENT_NODE:
                             param[child.nodeName] = getTextValue(child)
                     new_method.params.append(param)
+            print "Adding %s" % (new_method.name + new_method.argsstring)
             new_class.methods.append(new_method)
 
 if __name__ == "__main__":
