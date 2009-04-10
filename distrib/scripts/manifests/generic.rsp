@@ -201,20 +201,35 @@ tests/*.fc
 tests/archive/*.cpp
 tests/archive/*.h
 tests/arrays/*.cpp
+tests/base64/*.cpp
+tests/benchmarks/*.cpp
+tests/benchmarks/*.h
+tests/cmdline/*.cpp
+tests/config/*.cpp
+tests/controls/*.cpp
+tests/controls/*.h
 tests/datetime/*.cpp
+tests/events/*.cpp
+tests/exec/*.cpp
 tests/fileconf/*.cpp
 tests/filekind/*.cpp
 tests/filename/*.cpp
 tests/filesys/*.cpp
+tests/font/*.cpp
 tests/fontmap/*.cpp
 tests/formatconverter/*.cpp
 tests/geometry/*.cpp
 tests/hashes/*.cpp
+tests/html/*.cpp
+tests/image/*.cpp
 tests/intl/*.cpp
 tests/intl/fr/internat.*
 tests/lists/*.cpp
 tests/longlong/*.cpp
 tests/mbconv/*.cpp
+tests/misc/*.cpp
+tests/net/*.cpp
+tests/net/*.cpp
 
 tests/regex/*.cpp
 tests/regex/*.inc
@@ -228,5 +243,12 @@ tests/streams/*.h
 
 tests/strings/*.cpp
 tests/textfile/*.cpp
+tests/thread/*.cpp
 
 tests/uris/*.cpp
+
+tests/vectors/*.cpp
+tests/weakref/*.cpp
+tests/window/*.cpp
+tests/xlocale/*.cpp
+tests/xml/*.cpp
