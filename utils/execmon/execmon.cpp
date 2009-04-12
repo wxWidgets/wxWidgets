@@ -47,13 +47,13 @@ class MonitoredProcess : public wxProcess
 public:
     MonitoredProcess()
         { Redirect(); m_crashed=false; m_exitCode=0; }
-    
+
     void OnTerminate(int WXUNUSED(pid), int status)
     {
-        wxStringOutputStream stdout, stderr;
-        if (GetInputStream()) stdout.Write(*GetInputStream());
-        if (GetErrorStream()) stderr.Write(*GetErrorStream());
-        
+        wxStringOutputStream out, err;
+        if (GetInputStream()) out.Write(*GetInputStream());
+        if (GetErrorStream()) err.Write(*GetErrorStream());
+
         //wxPrintf("%s\n", stdout.GetString());
         //wxPrintf("%s\n", stderr.GetString());
 
@@ -62,26 +62,26 @@ public:
         // but then the assert dialog pop-ups and thus the app doesn't exit
         // FIXME: make assertion detection work also under other platforms
         //        see http://trac.wxwidgets.org/ticket/10697
-        m_crashed = stdout.GetString().Contains("assert") ||
-                    stderr.GetString().Contains("assert");
+        m_crashed = out.GetString().Contains("assert") ||
+                    err.GetString().Contains("assert");
         m_exitCode = status;
     }
-    
+
     void Kill()
     {
         wxProcess::Kill(GetPid());
-        
+
         // wxProcess::Kill doesn't trigger a call to OnTerminate() normally...
         // but we still need to call it!
         OnTerminate(0, -1);
     }
-    
+
     bool Crashed() const
         { return m_crashed; }
-        
+
     int GetExitCode() const
         { return m_exitCode; }
-    
+
 private:
     bool m_crashed;
     int m_exitCode;
@@ -102,37 +102,38 @@ public:
 
 bool TestExec(const wxVector<wxFileName>& programs, long timeout)
 {
+    size_t i;
     wxVector<MonitorData*> data;
-    
+
     // run all programs specified as command line parameters
     wxArrayLong procID;
-    for (size_t i=0; i<programs.size(); i++)
+    for (i=0; i<programs.size(); i++)
     {
         MonitorData *dt = new MonitorData(programs[i].GetFullPath());
-        
+
         long pid = wxExecute(programs[i].GetFullPath(), wxEXEC_ASYNC, &dt->process);
         if (pid == 0)
             wxLogError("could not run the program '%s'", programs[i].GetFullPath());
         else
         {
-            wxLogMessage("started program '%s' (pid %d)...", 
+            wxLogMessage("started program '%s' (pid %d)...",
                          programs[i].GetFullPath(), pid);
             wxASSERT(dt->process.GetPid() == pid);
 
             data.push_back(dt);
         }
     }
-    
+
     // sleep some moments
     wxSleep(timeout);
-    
+
     // check if all processes are still running
     bool allok = true;
-    for (size_t i=0; i<data.size(); i++)
+    for (i=0; i<data.size(); i++)
     {
         MonitoredProcess& proc = data[i]->process;
         const wxString& prog = data[i]->program;
-        
+
         if (wxProcess::Exists(proc.GetPid()))
             proc.Kill();
         else
@@ -140,8 +141,8 @@ bool TestExec(const wxVector<wxFileName>& programs, long timeout)
             // this typically never happens, at least when running wx-programs
             // built with debug builds of wx (see MonitoredProcess::OnTerminate;
             // even if an asserts fail the app doesn't automatically close!):
-            
-            wxLogMessage("program '%s' (pid %d) is NOT running anymore...", 
+
+            wxLogMessage("program '%s' (pid %d) is NOT running anymore...",
                          prog, proc.GetPid());
             allok = false;
         }
@@ -149,14 +150,14 @@ bool TestExec(const wxVector<wxFileName>& programs, long timeout)
         if (data[i]->process.Crashed())
         {
             allok = false;
-            wxLogMessage("program '%s' (pid %d) crashed...", 
+            wxLogMessage("program '%s' (pid %d) crashed...",
                          prog, proc.GetPid());
         }
         else
-            wxLogMessage("program '%s' (pid %d) ended with exit code %d...", 
+            wxLogMessage("program '%s' (pid %d) ended with exit code %d...",
                          prog, proc.GetPid(), proc.GetExitCode());
     }
-    
+
     return allok;
 }
 
@@ -177,19 +178,19 @@ int main(int argc, char **argv)
 
     static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
-        { wxCMD_LINE_SWITCH, "h", "help", 
+        { wxCMD_LINE_SWITCH, "h", "help",
             "show this help message",
             wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
-        { wxCMD_LINE_OPTION, "t", "timeout", 
+        { wxCMD_LINE_OPTION, "t", "timeout",
             "kills all processes still alive after 'num' seconds",
             wxCMD_LINE_VAL_NUMBER, 0 },
-        { wxCMD_LINE_PARAM, "", "", 
+        { wxCMD_LINE_PARAM, "", "",
             "program-to-run",
             wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_MULTIPLE },
 
         { wxCMD_LINE_NONE }
     };
-    
+
     wxLog::DisableTimestamp();
 
     wxCmdLineParser parser(cmdLineDesc, argc, argv);
@@ -208,14 +209,14 @@ int main(int argc, char **argv)
                 wxFileName fn(parser.GetParam(i));
                 if (!fn.IsAbsolute())
                     fn.MakeAbsolute();
-                
+
                 programs.push_back(fn);
             }
-            
+
             long timeout;
             if (!parser.Found("t", &timeout))
                 timeout = 3;
-            
+
             return TestExec(programs, timeout) ? 0 : 1;
         }
         break;
