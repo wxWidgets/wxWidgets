@@ -101,7 +101,11 @@ public:
     void OnDecFont(wxCommandEvent& WXUNUSED(event)) { DoResizeFont(-2); }
 
     void OnBold(wxCommandEvent& event);
+    void OnLight(wxCommandEvent& event);
+    
     void OnItalic(wxCommandEvent& event);
+    void OnSlant(wxCommandEvent& event);
+    
     void OnUnderline(wxCommandEvent& event);
 
     void OnwxPointerFont(wxCommandEvent& event);
@@ -119,6 +123,8 @@ public:
 
     void OnSetNativeDesc(wxCommandEvent& event);
     void OnSetNativeUserDesc(wxCommandEvent& event);
+    
+    void OnSetFamily(wxCommandEvent& event);
     void OnSetFaceName(wxCommandEvent& event);
     void OnSetEncoding(wxCommandEvent& event);
 
@@ -134,6 +140,9 @@ protected:
     // wxFONTENCODING_SYSTEM if the dialog was cancelled
     wxFontEncoding GetEncodingFromUser();
 
+    // ask the user to choose a font family and return it or
+    // wxFONTFAMILY_DEFAULT if the dialog was cancelled
+    wxFontFamily GetFamilyFromUser();
 
     size_t      m_fontSize; // in points
 
@@ -161,8 +170,13 @@ enum
 
     Font_IncSize,
     Font_DecSize,
+    
     Font_Bold,
+    Font_Light,
+    
     Font_Italic,
+    Font_Slant,
+    
     Font_Underlined,
     
     // standard global wxFont objects:
@@ -179,6 +193,7 @@ enum
     Font_wxSYS_SYSTEM_FONT,
     Font_wxSYS_DEVICE_DEFAULT_FONT,
     Font_wxSYS_DEFAULT_GUI_FONT,
+    Font_SystemSettings,
 
     Font_Choose = 100,
     Font_EnumFamiliesForEncoding,
@@ -187,6 +202,7 @@ enum
     Font_EnumEncodings,
     Font_SetNativeDesc,
     Font_SetNativeUserDesc,
+    Font_SetFamily,
     Font_SetFaceName,
     Font_SetEncoding,
     Font_Max
@@ -207,8 +223,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Font_IncSize, MyFrame::OnIncFont)
     EVT_MENU(Font_DecSize, MyFrame::OnDecFont)
+    
     EVT_MENU(Font_Bold, MyFrame::OnBold)
+    EVT_MENU(Font_Light, MyFrame::OnLight)
+    
     EVT_MENU(Font_Italic, MyFrame::OnItalic)
+    EVT_MENU(Font_Slant, MyFrame::OnSlant)
+    
     EVT_MENU(Font_Underlined, MyFrame::OnUnderline)
 
     EVT_MENU(Font_wxNORMAL_FONT, MyFrame::OnwxPointerFont)
@@ -225,6 +246,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Font_SetNativeDesc, MyFrame::OnSetNativeDesc)
     EVT_MENU(Font_SetNativeUserDesc, MyFrame::OnSetNativeUserDesc)
+    EVT_MENU(Font_SetFamily, MyFrame::OnSetFamily)
     EVT_MENU(Font_SetFaceName, MyFrame::OnSetFaceName)
     EVT_MENU(Font_SetEncoding, MyFrame::OnSetEncoding)
 
@@ -299,41 +321,50 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->Append(Font_DecSize, wxT("&Decrease font size by 2 points\tCtrl-D"));
     menuFont->AppendSeparator();
     menuFont->AppendCheckItem(Font_Bold, wxT("&Bold\tCtrl-B"), wxT("Toggle bold state"));
+    menuFont->AppendCheckItem(Font_Light, wxT("&Light\tCtrl-L"), wxT("Toggle light state"));
+    menuFont->AppendSeparator();
     menuFont->AppendCheckItem(Font_Italic, wxT("&Oblique\tCtrl-O"), wxT("Toggle italic state"));
+    menuFont->AppendCheckItem(Font_Slant, wxT("&Slant\tCtrl-S"), wxT("Toggle slant state"));
+    menuFont->AppendSeparator();
     menuFont->AppendCheckItem(Font_Underlined, wxT("&Underlined\tCtrl-U"),
-                     wxT("Toggle underlined state"));
+                              wxT("Toggle underlined state"));
 
     menuFont->AppendSeparator();
     menuFont->Append(Font_SetNativeDesc,
                      wxT("Set native font &description\tShift-Ctrl-D"));
     menuFont->Append(Font_SetNativeUserDesc,
                      wxT("Set &user font description\tShift-Ctrl-U"));
-    menuFont->Append(Font_SetFaceName, wxT("Check font face name"));                     
+    menuFont->AppendSeparator();
+    menuFont->Append(Font_SetFamily, wxT("Set font family"));
+    menuFont->Append(Font_SetFaceName, wxT("Set font face name"));                     
     menuFont->Append(Font_SetEncoding, wxT("Set font &encoding\tShift-Ctrl-E"));
 
     wxMenu *menuSelect = new wxMenu;
     menuSelect->Append(Font_Choose, wxT("&Select font...\tCtrl-S"),
-                     wxT("Select a standard font"));
+                       wxT("Select a standard font"));
 
     wxMenu *menuStdFonts = new wxMenu;
     menuStdFonts->Append(Font_wxNORMAL_FONT, wxT("wxNORMAL_FONT"), wxT("Normal font used by wxWidgets"));
     menuStdFonts->Append(Font_wxSMALL_FONT,  wxT("wxSMALL_FONT"),  wxT("Small font used by wxWidgets"));
     menuStdFonts->Append(Font_wxITALIC_FONT, wxT("wxITALIC_FONT"), wxT("Italic font used by wxWidgets"));
     menuStdFonts->Append(Font_wxSWISS_FONT,  wxT("wxSWISS_FONT"),  wxT("Swiss font used by wxWidgets"));
-    menuStdFonts->AppendSeparator();
-    menuStdFonts->Append(Font_wxSYS_OEM_FIXED_FONT, wxT("wxSYS_OEM_FIXED_FONT"), 
-                         wxT("Original equipment manufacturer dependent fixed-pitch font."));
-    menuStdFonts->Append(Font_wxSYS_ANSI_FIXED_FONT,  wxT("wxSYS_ANSI_FIXED_FONT"),  
-                         wxT("Windows fixed-pitch (monospaced) font. "));
-    menuStdFonts->Append(Font_wxSYS_ANSI_VAR_FONT, wxT("wxSYS_ANSI_VAR_FONT"), 
-                         wxT("Windows variable-pitch (proportional) font."));
-    menuStdFonts->Append(Font_wxSYS_SYSTEM_FONT,  wxT("wxSYS_SYSTEM_FONT"), 
-                         wxT("System font."));
-    menuStdFonts->Append(Font_wxSYS_DEVICE_DEFAULT_FONT,  wxT("wxSYS_DEVICE_DEFAULT_FONT"),
-                         wxT("Device-dependent font."));
-    menuStdFonts->Append(Font_wxSYS_DEFAULT_GUI_FONT,  wxT("wxSYS_DEFAULT_GUI_FONT"), 
-                         wxT("Default font for user interface objects such as menus and dialog boxes. "));
     menuSelect->Append(Font_Standard, wxT("Standar&d fonts"), menuStdFonts);
+
+    wxMenu *menuSettingFonts = new wxMenu;
+    menuSettingFonts->Append(Font_wxSYS_OEM_FIXED_FONT, wxT("wxSYS_OEM_FIXED_FONT"), 
+                         wxT("Original equipment manufacturer dependent fixed-pitch font."));
+    menuSettingFonts->Append(Font_wxSYS_ANSI_FIXED_FONT,  wxT("wxSYS_ANSI_FIXED_FONT"),  
+                         wxT("Windows fixed-pitch (monospaced) font. "));
+    menuSettingFonts->Append(Font_wxSYS_ANSI_VAR_FONT, wxT("wxSYS_ANSI_VAR_FONT"), 
+                         wxT("Windows variable-pitch (proportional) font."));
+    menuSettingFonts->Append(Font_wxSYS_SYSTEM_FONT,  wxT("wxSYS_SYSTEM_FONT"), 
+                         wxT("System font."));
+    menuSettingFonts->Append(Font_wxSYS_DEVICE_DEFAULT_FONT,  wxT("wxSYS_DEVICE_DEFAULT_FONT"),
+                         wxT("Device-dependent font."));
+    menuSettingFonts->Append(Font_wxSYS_DEFAULT_GUI_FONT,  wxT("wxSYS_DEFAULT_GUI_FONT"), 
+                         wxT("Default font for user interface objects such as menus and dialog boxes. "));
+    menuSelect->Append(Font_SystemSettings, wxT("System fonts"), menuSettingFonts);
+    
     
     menuSelect->AppendSeparator();
     menuSelect->Append(Font_EnumFamilies, wxT("Enumerate font &families\tCtrl-F"));
@@ -530,6 +561,38 @@ void MyFrame::OnSetNativeDesc(wxCommandEvent& WXUNUSED(event))
     DoChangeFont(font);
 }
 
+void MyFrame::OnSetNativeUserDesc(wxCommandEvent& WXUNUSED(event))
+{
+    wxString fontdesc = GetCanvas()->GetTextFont().GetNativeFontInfoUserDesc();
+    wxString fontUserInfo = wxGetTextFromUser(
+            wxT("Here you can edit current font description"),
+            wxT("Input font description"), fontdesc,
+            this);
+    if (fontUserInfo.IsEmpty())
+        return;     // user clicked "Cancel" - do nothing
+
+    wxFont font;
+    if (font.SetNativeFontInfoUserDesc(fontUserInfo))
+    {
+        wxASSERT_MSG(font.Ok(), wxT("The font should now be valid"));
+        DoChangeFont(font);
+    }
+    else
+    {
+        wxASSERT_MSG(!font.Ok(), wxT("The font should now be invalid"));
+        wxMessageBox(wxT("Error trying to create a font with such description..."));
+    }
+}
+
+void MyFrame::OnSetFamily(wxCommandEvent& WXUNUSED(event))
+{
+    wxFontFamily f = GetFamilyFromUser();
+
+    wxFont font = m_canvas->GetTextFont();
+    font.SetFamily(f);
+    DoChangeFont(font);
+}
+
 void MyFrame::OnSetFaceName(wxCommandEvent& WXUNUSED(event))
 {
     wxString facename = GetCanvas()->GetTextFont().GetFaceName();
@@ -551,29 +614,6 @@ void MyFrame::OnSetFaceName(wxCommandEvent& WXUNUSED(event))
         wxASSERT_MSG(!font.Ok(), wxT("The font should now be invalid"));
         wxMessageBox(wxT("There is no font with such face name..."),
                      wxT("Invalid face name"), wxOK|wxICON_ERROR, this);
-    }    
-}
-
-void MyFrame::OnSetNativeUserDesc(wxCommandEvent& WXUNUSED(event))
-{
-    wxString fontdesc = GetCanvas()->GetTextFont().GetNativeFontInfoUserDesc();
-    wxString fontUserInfo = wxGetTextFromUser(
-            wxT("Here you can edit current font description"),
-            wxT("Input font description"), fontdesc,
-            this);
-    if (fontUserInfo.IsEmpty())
-        return;     // user clicked "Cancel" - do nothing
-
-    wxFont font;
-    if (font.SetNativeFontInfoUserDesc(fontUserInfo))
-    {
-        wxASSERT_MSG(font.Ok(), wxT("The font should now be valid"));
-        DoChangeFont(font);
-    }
-    else
-    {
-        wxASSERT_MSG(!font.Ok(), wxT("The font should now be invalid"));
-        wxMessageBox(wxT("Error trying to create a font with such description..."));
     }
 }
 
@@ -615,6 +655,36 @@ wxFontEncoding MyFrame::GetEncodingFromUser()
     return i == -1 ? wxFONTENCODING_SYSTEM : (wxFontEncoding)encodings[i];
 }
 
+wxFontFamily MyFrame::GetFamilyFromUser()
+{
+    wxArrayString names;
+    wxArrayInt families;
+
+    families.push_back(wxFONTFAMILY_DECORATIVE);
+    families.push_back(wxFONTFAMILY_ROMAN);
+    families.push_back(wxFONTFAMILY_SCRIPT);
+    families.push_back(wxFONTFAMILY_SWISS);
+    families.push_back(wxFONTFAMILY_MODERN);
+    families.push_back(wxFONTFAMILY_TELETYPE);
+
+    names.push_back("DECORATIVE");
+    names.push_back("ROMAN");
+    names.push_back("SCRIPT");
+    names.push_back("SWISS");
+    names.push_back("MODERN");
+    names.push_back("TELETYPE");
+
+    int i = wxGetSingleChoiceIndex
+            (
+                wxT("Choose the family"),
+                SAMPLE_TITLE,
+                names,
+                this
+            );
+
+    return i == -1 ? wxFONTFAMILY_DEFAULT : (wxFontFamily)families[i];
+}
+
 void MyFrame::DoResizeFont(int diff)
 {
     wxFont font = m_canvas->GetTextFont();
@@ -631,11 +701,27 @@ void MyFrame::OnBold(wxCommandEvent& event)
     DoChangeFont(font);
 }
 
+void MyFrame::OnLight(wxCommandEvent& event)
+{
+    wxFont font = m_canvas->GetTextFont();
+
+    font.SetWeight(event.IsChecked() ? wxFONTWEIGHT_LIGHT : wxFONTWEIGHT_NORMAL);
+    DoChangeFont(font);
+}
+
 void MyFrame::OnItalic(wxCommandEvent& event)
 {
     wxFont font = m_canvas->GetTextFont();
 
     font.SetStyle(event.IsChecked() ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL);
+    DoChangeFont(font);
+}
+
+void MyFrame::OnSlant(wxCommandEvent& event)
+{
+    wxFont font = m_canvas->GetTextFont();
+
+    font.SetStyle(event.IsChecked() ? wxFONTSTYLE_SLANT : wxFONTSTYLE_NORMAL);
     DoChangeFont(font);
 }
 
@@ -730,8 +816,12 @@ void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
     wxMenuBar *mbar = GetMenuBar();
     if ( mbar )
     {
+        mbar->Check(Font_Light, font.GetWeight() == wxFONTWEIGHT_LIGHT);
         mbar->Check(Font_Bold, font.GetWeight() == wxFONTWEIGHT_BOLD);
+        
         mbar->Check(Font_Italic, font.GetStyle() == wxFONTSTYLE_ITALIC);
+        mbar->Check(Font_Slant, font.GetStyle() == wxFONTSTYLE_SLANT);
+        
         mbar->Check(Font_Underlined, font.GetUnderlined());
     }
 }
