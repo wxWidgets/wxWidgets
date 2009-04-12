@@ -91,6 +91,7 @@ void  wxSTCDropTarget::OnLeave() {
 #define wxSTCCallTipBase wxFrame
 #endif
 
+#include "wx/panel.h"
 #include "wx/dcbuffer.h"
 
 
