@@ -35,6 +35,8 @@
 #include "wx/sstream.h"
 #include "wx/utils.h"
 #include "wx/filename.h"
+#include "wx/app.h"
+#include "wx/log.h"
 
 // ============================================================================
 // implementation
