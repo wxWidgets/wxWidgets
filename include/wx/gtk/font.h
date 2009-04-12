@@ -20,9 +20,9 @@ public:
     wxFont() { }
 
     // wxGTK-specific
-    wxFont(const wxString& fontname)
+    wxFont(const wxString& nativeFontInfoString)
     {
-        Create(fontname);
+        Create(nativeFontInfoString);
     }
 
     wxFont(const wxNativeFontInfo& info);

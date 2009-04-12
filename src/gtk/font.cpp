@@ -56,8 +56,7 @@ public:
                   const wxString& faceName = wxEmptyString,
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-    // from XFLD
-    wxFontRefData(const wxString& fontname);
+    wxFontRefData(const wxString& nativeFontInfoString);
 
     // copy ctor
     wxFontRefData( const wxFontRefData& data );
@@ -222,9 +221,9 @@ wxFontRefData::wxFontRefData(int size, wxFontFamily family, wxFontStyle style,
     Init(size, family, style, weight, underlined, faceName, encoding);
 }
 
-wxFontRefData::wxFontRefData(const wxString& fontname)
+wxFontRefData::wxFontRefData(const wxString& nativeFontInfoString)
 {
-    m_nativeFontInfo.FromString( fontname );
+    m_nativeFontInfo.FromString( nativeFontInfoString );
 
     InitFromNative();
 }
