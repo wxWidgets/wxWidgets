@@ -141,7 +141,9 @@ extern WXDLLIMPEXP_DATA_BASE(const wxDateTime) wxDefaultDateTime;
 
 // everyone has strftime except Win CE unless VC8 is used
 #if !defined(__WXWINCE__) || defined(__VISUALC8__)
-    #define HAVE_STRFTIME
+    #ifndef HAVE_STRFTIME
+        #define HAVE_STRFTIME
+    #endif
 #endif
 
 // ----------------------------------------------------------------------------
