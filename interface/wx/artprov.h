@@ -59,7 +59,7 @@ typedef wxString wxArtID;
     @section artprovider_identify Identifying art resources
 
     Every bitmap and icon bundle are known to wxArtProvider under an unique ID that
-    is used when requesting a resource from it. The ID is represented by wxArtID type
+    is used when requesting a resource from it. The ID is represented by the ::wxArtID type
     and can have one of these predefined values (you can see bitmaps represented by these
     constants in the @ref page_samples_artprov):
 
@@ -125,15 +125,14 @@ typedef wxString wxArtID;
     When running under GTK+ 2, GTK+ stock item IDs (e.g. @c "gtk-cdrom") may be used
     as well:
     @code
-        #ifdef __WXGTK__
+    #ifdef __WXGTK__
         wxBitmap bmp = wxArtProvider::GetBitmap("gtk-cdrom", wxART_MENU);
-        #endif
+    #endif
     @endcode
     For a list of the GTK+ stock items please refer to the GTK+ documentation page
     http://library.gnome.org/devel/gtk/stable/gtk-Stock-Items.html.
-    Additionally, if wxGTK was compiled against GTK+ >= 2.4, then it is also
-    possible to load icons from current icon theme by specifying their name (without
-    extension and directory components).
+    It is also possible to load icons from the current icon theme by specifying their name 
+    (without extension and directory components).
     Icon themes recognized by GTK+ follow the freedesktop.org Icon Themes specification
     (see http://freedesktop.org/Standards/icon-theme-spec).
     Note that themes are not guaranteed to contain all icons, so wxArtProvider may
