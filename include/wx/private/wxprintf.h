@@ -56,7 +56,8 @@ using namespace std ;
 
 
 // the conversion specifiers accepted by wxCRT_VsnprintfW
-enum wxPrintfArgType {
+enum wxPrintfArgType
+{
     wxPAT_INVALID = -1,
 
     wxPAT_INT,          // %d, %i, %o, %u, %x, %X
@@ -79,15 +80,18 @@ enum wxPrintfArgType {
 
     wxPAT_NINT,         // %n
     wxPAT_NSHORTINT,    // %hn
-    wxPAT_NLONGINT      // %ln
+    wxPAT_NLONGINT,     // %ln
+
+    wxPAT_STAR          // '*' used for width or precision
 };
 
 // an argument passed to wxCRT_VsnprintfW
-typedef union {
+union wxPrintfArg
+{
     int pad_int;                        //  %d, %i, %o, %u, %x, %X
     long int pad_longint;               // %ld, etc
 #ifdef wxLongLong_t
-    wxLongLong_t pad_longlongint;      // %Ld, etc
+    wxLongLong_t pad_longlongint;       // %Ld, etc
 #endif
     size_t pad_sizet;                   // %Zd, etc
 
@@ -104,9 +108,9 @@ typedef union {
     int *pad_nint;                      // %n
     short int *pad_nshortint;           // %hn
     long int *pad_nlongint;             // %ln
-} wxPrintfArg;
+};
 
-// helper for converting string into either char* or wchar_t* dependening
+// helper for converting string into either char* or wchar_t* depending
 // on the type of wxPrintfConvSpec<T> instantiation:
 template<typename CharType> struct wxPrintfStringHelper {};
 
@@ -159,10 +163,6 @@ public:
 
     // a little buffer where formatting flags like #+\.hlqLZ are stored by Parse()
     // for use in Process()
-    // NB: even if this buffer is used only for numeric conversion specifiers
-    //     and thus could be safely declared as a char[] buffer, we want it to
-    //     be wchar_t so that in Unicode builds we can avoid to convert its
-    //     contents to Unicode chars when copying it in user's buffer.
     char m_szFlags[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
 
 
@@ -609,6 +609,10 @@ bool wxPrintfConvSpec<CharType>::LoadArg(wxPrintfArg *p, va_list &argptr)
             p->pad_nlongint = va_arg(argptr, long int *);
             break;
 
+        case wxPAT_STAR:
+            // this will be handled as part of the next argument
+            return true;
+
         case wxPAT_INVALID:
         default:
             return false;
@@ -788,72 +792,131 @@ int wxPrintfConvSpec<CharType>::Process(CharType *buf, size_t lenMax, wxPrintfAr
 template<typename CharType>
 struct wxPrintfConvSpecParser
 {
-    wxPrintfConvSpecParser(const CharType *format)
+    typedef wxPrintfConvSpec<CharType> ConvSpec;
+
+    wxPrintfConvSpecParser(const CharType *fmt)
         : posarg_present(false), nonposarg_present(false),
           nargs(0)
     {
         memset(pspec, 0, sizeof(pspec));
 
-        const CharType *toparse = format;
-
         // parse the format string
-        for (; *toparse != wxT('\0'); toparse++)
+        for ( const CharType *toparse = fmt; *toparse != wxT('\0'); toparse++ )
         {
-            if (*toparse == wxT('%') )
+            // skip everything except format specifications
+            if ( *toparse != '%' )
+                continue;
+
+            // also skip escaped percent signs
+            if ( toparse[1] == '%' )
             {
-                arg[nargs].Init();
-
-                // let's see if this is a (valid) conversion specifier...
-                if (arg[nargs].Parse(toparse))
-                {
-                    // ...yes it is
-                    wxPrintfConvSpec<CharType> *current = &arg[nargs];
-
-                    // make toparse point to the end of this specifier
-                    toparse = current->m_pArgEnd;
-
-                    if (current->m_pos > 0)
-                    {
-                        // the positionals start from number 1... adjust the index
-                        current->m_pos--;
-                        posarg_present = true;
-                    }
-                    else
-                    {
-                        // not a positional argument...
-                        current->m_pos = nargs;
-                        nonposarg_present = true;
-                    }
-
-                    // this conversion specifier is tied to the pos-th argument...
-                    pspec[current->m_pos] = current;
-                    nargs++;
-
-                    if (nargs == wxMAX_SVNPRINTF_ARGUMENTS)
-                    {
-                        wxLogDebug(wxT("A single call to wxVsnprintf() has more than %d arguments; ")
-                                   wxT("ignoring all remaining arguments."), wxMAX_SVNPRINTF_ARGUMENTS);
-                        break;  // cannot handle any additional conv spec
-                    }
-                }
-                else
-                {
-                    // it's safe to look in the next character of toparse as at
-                    // worst we'll hit its \0
-                    if (*(toparse+1) == wxT('%'))
-                    {
-                        // the Parse() returned false because we've found a %%
-                        toparse++;
-                    }
-                }
+                toparse++;
+                continue;
             }
+
+            ConvSpec *spec = &specs[nargs];
+            spec->Init();
+
+            // attempt to parse this format specification
+            if ( !spec->Parse(toparse) )
+                continue;
+
+            // advance to the end of this specifier
+            toparse = spec->m_pArgEnd;
+
+            // special handling for specifications including asterisks: we need
+            // to reserve an extra slot (or two if asterisks were used for both
+            // width and precision) in specs array in this case
+            for ( const char *f = strchr(spec->m_szFlags, '*');
+                  f;
+                  f = strchr(f + 1, '*') )
+            {
+                if ( nargs++ == wxMAX_SVNPRINTF_ARGUMENTS )
+                    break;
+
+                // TODO: we need to support specifiers of the form "%2$*1$s"
+                // (this is the same as "%*s") as if any positional arguments
+                // are used all asterisks must be positional as well but this
+                // requires a lot of changes in this code (basically we'd need
+                // to rewrite Parse() to return "*" and conversion itself as
+                // separate entries)
+                if ( posarg_present )
+                {
+                    wxFAIL_MSG
+                    (
+                        wxString::Format
+                        (
+                            "Format string \"%s\" uses both positional "
+                            "parameters and '*' but this is not currently "
+                            "supported by this implementation, sorry.",
+                            fmt
+                        )
+                    );
+                }
+
+                specs[nargs] = *spec;
+
+                // make an entry for '*' and point to it from pspec
+                spec->Init();
+                spec->m_type = wxPAT_STAR;
+                pspec[nargs - 1] = spec;
+
+                spec = &specs[nargs];
+            }
+
+            // check if this is a positional or normal argument
+            if ( spec->m_pos > 0 )
+            {
+                // the positional arguments start from number 1 so we need
+                // to adjust the index
+                spec->m_pos--;
+                posarg_present = true;
+            }
+            else // not a positional argument...
+            {
+                spec->m_pos = nargs;
+                nonposarg_present = true;
+            }
+
+            // this conversion specifier is tied to the pos-th argument...
+            pspec[spec->m_pos] = spec;
+
+            if ( nargs++ == wxMAX_SVNPRINTF_ARGUMENTS )
+                break;
+        }
+
+
+        // warn if we lost any arguments (the program probably will crash
+        // anyhow because of stack corruption...)
+        if ( nargs == wxMAX_SVNPRINTF_ARGUMENTS )
+        {
+            wxFAIL_MSG
+            (
+                wxString::Format
+                (
+                    "wxVsnprintf() currently supports only %d arguments, "
+                    "but format string \"%s\" defines more of them.\n"
+                    "You need to change wxMAX_SVNPRINTF_ARGUMENTS and "
+                    "recompile if more are really needed.",
+                    fmt, wxMAX_SVNPRINTF_ARGUMENTS
+                )
+            );
         }
     }
 
-    wxPrintfConvSpec<CharType> arg[wxMAX_SVNPRINTF_ARGUMENTS];
-    wxPrintfConvSpec<CharType> *pspec[wxMAX_SVNPRINTF_ARGUMENTS];
-    bool posarg_present, nonposarg_present;
+    // total number of valid elements in specs
     unsigned nargs;
+
+    // all format specifications in this format string in order of their
+    // appearance (which may be different from arguments order)
+    ConvSpec specs[wxMAX_SVNPRINTF_ARGUMENTS];
+
+    // pointer to specs array element for the N-th argument
+    ConvSpec *pspec[wxMAX_SVNPRINTF_ARGUMENTS];
+
+    // true if any positional/non-positional parameters are used
+    bool posarg_present,
+         nonposarg_present;
 };
 
 #undef APPEND_CH
