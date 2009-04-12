@@ -795,9 +795,11 @@ struct wxPrintfConvSpecParser
     typedef wxPrintfConvSpec<CharType> ConvSpec;
 
     wxPrintfConvSpecParser(const CharType *fmt)
-        : posarg_present(false), nonposarg_present(false),
-          nargs(0)
     {
+        nargs = 0;
+        posarg_present =
+        nonposarg_present = false;
+
         memset(pspec, 0, sizeof(pspec));
 
         // parse the format string
