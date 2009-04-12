@@ -2517,13 +2517,12 @@ bool wxLocale::IsAvailable(int lang)
 #elif defined(__UNIX__)
 
     // Test if setting the locale works, then set it back.
-    const char *oldLocale = wxSetlocale(LC_ALL, "");
-    const char *tmp = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName);
-    if ( !tmp )
+    const char *oldLocale = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName);
+    if ( !oldLocale )
     {
         // Some C libraries don't like xx_YY form and require xx only
-        tmp = wxSetlocaleTryUTF8(LC_ALL, ExtractLang(info->CanonicalName));
-        if ( !tmp )
+        oldLocale = wxSetlocaleTryUTF8(LC_ALL, ExtractLang(info->CanonicalName));
+        if ( !oldLocale )
             return false;
     }
     // restore the original locale

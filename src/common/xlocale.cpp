@@ -282,13 +282,12 @@ int wxToupper_l(const wxUniChar& c, const wxXLocale& loc)
 #define IMPLEMENT_STRTOX_L_START                                \
     wxCHECK(loc.IsOk(), 0);                                     \
                                                                 \
-    /* (Try to) temporary set the locale to 'C' */              \
-    const char *oldLocale = wxSetlocale(LC_NUMERIC, NULL);      \
-    const char *tmp = wxSetlocale(LC_NUMERIC, "C");             \
-    if ( !tmp )                                                 \
+    /* (Try to) temporary set the 'C' locale */                 \
+    const char *oldLocale = wxSetlocale(LC_NUMERIC, "C");       \
+    if ( !oldLocale )                                           \
     {                                                           \
-        /* restore the original locale */                       \
-        wxSetlocale(LC_NUMERIC, oldLocale);                     \
+        /* the current locale was not changed; no need to */    \
+        /* restore the previous one... */                       \
         errno = EINVAL;                                         \
             /* signal an error (better than nothing) */         \
         return 0;                                               \
