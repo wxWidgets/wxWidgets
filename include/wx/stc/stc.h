@@ -3592,13 +3592,8 @@ public:
     bool DoDropText(long x, long y, const wxString& data);
 #endif
 
-    // Specify whether anti-aliased fonts should be used.  Will have no effect
-    // on some platforms, but on some (wxMac for example) can greatly improve
-    // performance.
-    void SetUseAntiAliasing(bool useAA);
-
-    // Returns the current UseAntiAliasing setting.
-    bool GetUseAntiAliasing();
+    void SetUseAntiAliasing(bool WXUNUSED(useAA)) { }
+    bool GetUseAntiAliasing() { return true; }
 
 
 

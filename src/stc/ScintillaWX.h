@@ -168,8 +168,6 @@ public:
     void DoScrollToLine(int line);
     void DoScrollToColumn(int column);
     void ClipChildren(wxDC& dc, PRectangle rect);
-    void SetUseAntiAliasing(bool useAA);
-    bool GetUseAntiAliasing();
 
 private:
     bool                capturedMouse;
@@ -193,7 +191,7 @@ private:
     int sysCaretHeight;
 #endif
    
-    friend class wxSTCCallTip;
+    friend class wxSTCCallTipContent;
 };
 
 //----------------------------------------------------------------------

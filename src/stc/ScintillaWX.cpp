@@ -81,6 +81,7 @@ void  wxSTCDropTarget::OnLeave() {
 }
 #endif // wxUSE_DRAG_AND_DROP
 
+//--------------------------------------------------------------------------
 
 #if wxUSE_POPUPWIN
 #include "wx/popupwin.h"
@@ -92,33 +93,14 @@ void  wxSTCDropTarget::OnLeave() {
 
 #include "wx/dcbuffer.h"
 
-class wxSTCCallTip : public wxSTCCallTipBase {
-public:
-    wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx) :
-#if wxUSE_POPUPWIN
-        wxSTCCallTipBase(parent, wxBORDER_NONE),
-#else
-        wxSTCCallTipBase(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                         wxFRAME_NO_TASKBAR
-                         | wxFRAME_FLOAT_ON_PARENT
-                         | wxBORDER_NONE
-#ifdef __WXMAC__
-                         | wxPOPUP_WINDOW  
-#endif
-            ), 
-#endif
-          m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
-        {
-            SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-        }
 
-    ~wxSTCCallTip() {
-#if wxUSE_POPUPWIN && defined(__WXGTK__)
-        wxRect rect = GetRect();
-        rect.x = m_cx;
-        rect.y = m_cy;
-        GetParent()->Refresh(false, &rect);
-#endif
+class wxSTCCallTipContent : public wxPanel {
+public:
+    wxSTCCallTipContent(wxWindow* parent, CallTip* ct, ScintillaWX* swx)
+        : wxPanel(parent, -1),
+          m_ct(ct), m_swx(swx)
+    {
+        SetBackgroundStyle(wxBG_STYLE_CUSTOM);
     }
 
     bool AcceptsFocus() const { return false; }
@@ -135,7 +117,7 @@ public:
 
     void OnFocus(wxFocusEvent& event)
     {
-        GetParent()->SetFocus();
+        GetGrandParent()->SetFocus();
         event.Skip();
     }
 
@@ -146,6 +128,52 @@ public:
         m_ct->MouseClick(p);
         m_swx->CallTipClick();
     }
+    
+private:
+    CallTip*      m_ct;
+    ScintillaWX*  m_swx;
+    DECLARE_EVENT_TABLE()
+};
+
+
+BEGIN_EVENT_TABLE(wxSTCCallTipContent, wxPanel)
+    EVT_PAINT(wxSTCCallTipContent::OnPaint)
+    EVT_SET_FOCUS(wxSTCCallTipContent::OnFocus)
+    EVT_LEFT_DOWN(wxSTCCallTipContent::OnLeftDown)
+END_EVENT_TABLE()
+
+
+    
+class wxSTCCallTip : public wxSTCCallTipBase {
+public:
+    wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx) :
+#if wxUSE_POPUPWIN
+        wxSTCCallTipBase(parent, wxBORDER_NONE),
+#else
+        wxSTCCallTipBase(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                         wxFRAME_NO_TASKBAR
+                         | wxFRAME_FLOAT_ON_PARENT
+                         | wxBORDER_NONE
+#ifdef __WXMAC__
+                         | wxPOPUP_WINDOW  
+#endif
+            ), 
+#endif
+        m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
+        {
+            m_content = new wxSTCCallTipContent(this, ct, swx);
+        }
+
+    ~wxSTCCallTip() {
+#if wxUSE_POPUPWIN && defined(__WXGTK__)
+        wxRect rect = GetRect();
+        rect.x = m_cx;
+        rect.y = m_cy;
+        GetParent()->Refresh(false, &rect);
+#endif
+    }
+
+    bool AcceptsFocus() const { return false; }
 
     virtual void DoSetSize(int x, int y,
                            int width, int height,
@@ -161,6 +189,8 @@ public:
             GetParent()->ClientToScreen(NULL, &y);
         }
         wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
+
+        m_content->SetSize(0, 0, width, height, sizeFlags);
     }
 
 #if wxUSE_POPUPWIN
@@ -187,17 +217,10 @@ public:
     }
 
 private:
-    CallTip*      m_ct;
-    ScintillaWX*  m_swx;
     int           m_cx, m_cy;
-    DECLARE_EVENT_TABLE()
+    wxSTCCallTipContent* m_content;
 };
 
-BEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
-    EVT_PAINT(wxSTCCallTip::OnPaint)
-    EVT_SET_FOCUS(wxSTCCallTip::OnFocus)
-    EVT_LEFT_DOWN(wxSTCCallTip::OnLeftDown)
-END_EVENT_TABLE()
 
 
 //----------------------------------------------------------------------
@@ -252,6 +275,7 @@ ScintillaWX::~ScintillaWX() {
     Finalise();
 }
 
+
 //----------------------------------------------------------------------
 // base class virtuals
 
@@ -263,7 +287,6 @@ void ScintillaWX::Initialise() {
     dropTarget->SetScintilla(this);
     stc->SetDropTarget(dropTarget);
 #endif // wxUSE_DRAG_AND_DROP
-    vs.extraFontFlag = true;   // UseAntiAliasing
 }
 
 
@@ -1096,15 +1119,6 @@ void ScintillaWX::ClipChildren(wxDC& WXUNUSED(dc), PRectangle WXUNUSED(rect))
 //     dc.SetClippingRegion(rgn);
 }
 
-
-void ScintillaWX::SetUseAntiAliasing(bool useAA) {
-    vs.extraFontFlag = useAA;
-    InvalidateStyleRedraw();
-}
-
-bool ScintillaWX::GetUseAntiAliasing() {
-    return vs.extraFontFlag;
-}
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
