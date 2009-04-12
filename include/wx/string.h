@@ -1711,9 +1711,7 @@ public:
     }
 
     const wxScopedCharBuffer utf8_str() const
-        { return wxCharBuffer::CreateNonOwned(wx_str()); }
-    const wxScopedCharBuffer ToUTF8() const
-        { return wxCharBuffer::CreateNonOwned(wx_str()); }
+        { return wxCharBuffer::CreateNonOwned(m_impl.c_str(), m_impl.length()); }
 
     // this function exists in UTF-8 build only and returns the length of the
     // internal UTF-8 representation
@@ -1729,7 +1727,6 @@ public:
         return s;
     }
     const wxScopedCharBuffer utf8_str() const { return mb_str(wxMBConvUTF8()); }
-    const wxScopedCharBuffer ToUTF8() const { return utf8_str(); }
 #else // ANSI
     static wxString FromUTF8(const char *utf8)
       { return wxString(wxMBConvUTF8().cMB2WC(utf8)); }
@@ -1758,8 +1755,9 @@ public:
     }
     const wxScopedCharBuffer utf8_str() const
       { return wxMBConvUTF8().cWC2MB(wc_str()); }
-    const wxScopedCharBuffer ToUTF8() const { return utf8_str(); }
 #endif
+
+    const wxScopedCharBuffer ToUTF8() const { return utf8_str(); }
 
     // functions for storing binary data in wxString:
 #if wxUSE_UNICODE
