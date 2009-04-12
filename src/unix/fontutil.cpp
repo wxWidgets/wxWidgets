@@ -107,12 +107,10 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
 
 wxFontWeight wxNativeFontInfo::GetWeight() const
 {
-#if 0
     // We seem to currently initialize only by string.
     // In that case PANGO_FONT_MASK_WEIGHT is always set.
-    if (!(pango_font_description_get_set_fields(description) & PANGO_FONT_MASK_WEIGHT))
-        return wxFONTWEIGHT_NORMAL;
-#endif
+    // if (!(pango_font_description_get_set_fields(description) & PANGO_FONT_MASK_WEIGHT))
+    //    return wxFONTWEIGHT_NORMAL;
 
     PangoWeight pango_weight = pango_font_description_get_weight( description );
 
@@ -143,7 +141,7 @@ wxString wxNativeFontInfo::GetFaceName() const
 
 wxFontFamily wxNativeFontInfo::GetFamily() const
 {
-    wxFontFamily ret = wxFONTFAMILY_DEFAULT;
+    wxFontFamily ret = wxFONTFAMILY_UNKNOWN;
 
     const char *family_name = pango_font_description_get_family( description );
 
@@ -154,11 +152,12 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         return ret;
     wxGtkString family_text(g_ascii_strdown(family_name, strlen(family_name)));
 
-    // Check for some common fonts, to salvage what we can from the current win32 centric wxFont API:
-    if (strncmp( family_text, "monospace", 9 ) == 0)
-        ret = wxFONTFAMILY_TELETYPE; // begins with "Monospace"
-    else if (strncmp( family_text, "courier", 7 ) == 0)
-        ret = wxFONTFAMILY_TELETYPE; // begins with "Courier"
+    // Check for some common fonts, to salvage what we can from the current
+    // win32 centric wxFont API:
+    if (strncasecmp( family_text, "monospace", 9 ) == 0)
+        ret = wxFONTFAMILY_TELETYPE;    // begins with "Monospace"
+    else if (strncasecmp( family_text, "courier", 7 ) == 0)
+        ret = wxFONTFAMILY_TELETYPE;    // begins with "Courier"
 #if defined(__WXGTK20__) || defined(HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE)
     else
 #ifdef __WXGTK20__
@@ -191,29 +190,24 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
         // Some gtk+ systems might query for a non-existing font from 
         // wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) on initialization,
         // don't assert until wxSystemSettings::GetFont is checked for this - MR
-        // wxASSERT_MSG( family, 
-        //     "wxNativeFontInfo::GetFamily() - No appropriate PangoFontFamily found for ::description" );
-
-        //BCI: Cache the wxFontFamily inside the class. Validate cache with
-        //BCI: g_ascii_strcasecmp(pango_font_description_get_family(description), 
-        //                        pango_font_family_get_name(family)) == 0
+        // wxASSERT_MSG( family, "No appropriate PangoFontFamily found for ::description" );
 
         if (family != NULL && pango_font_family_is_monospace( family ))
             ret = wxFONTFAMILY_TELETYPE; // is deemed a monospace font by pango
     }
 #endif // GTK+ 2 || HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
 
-    if (ret == wxFONTFAMILY_DEFAULT)
+    if (ret == wxFONTFAMILY_UNKNOWN)
     {
-        if (strstr( family_text, "sans" ) != NULL) 
+        if (strstr( family_text, "sans" ) != NULL || strstr( family_text, "Sans" ) != NULL)
             // checked before serif, so that "* Sans Serif" fonts are detected correctly
-            ret = wxFONTFAMILY_SWISS; // contains "Sans"
-        else if (strstr( family_text, "serif" ) != NULL)
-            ret = wxFONTFAMILY_ROMAN; // contains "Serif"
-        else if (strncmp( family_text, "times", 5 ) == 0)
-            ret = wxFONTFAMILY_ROMAN; // begins with "Times"
-        else if (strncmp( family_text, "old", 3 ) == 0)
-            ret = wxFONTFAMILY_DECORATIVE; // begins with "Old" - "Old English", "Old Town"
+            ret = wxFONTFAMILY_SWISS;       // contains "Sans"
+        else if (strstr( family_text, "serif" ) != NULL || strstr( family_text, "Serif" ) != NULL)
+            ret = wxFONTFAMILY_ROMAN;       // contains "Serif"
+        else if (strncasecmp( family_text, "times", 5 ) == 0)
+            ret = wxFONTFAMILY_ROMAN;       // begins with "Times"
+        else if (strncasecmp( family_text, "old", 3 ) == 0)
+            ret = wxFONTFAMILY_DECORATIVE;  // begins with "Old" - "Old English", "Old Town"
     }
 
     return ret;
@@ -240,7 +234,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
             pango_font_description_set_style( description, PANGO_STYLE_OBLIQUE );
             break;
         default:
-            wxFAIL_MSG( _T("unknown font style") );
+            wxFAIL_MSG( "unknown font style" );
             // fall through
         case wxFONTSTYLE_NORMAL:
             pango_font_description_set_style( description, PANGO_STYLE_NORMAL );
@@ -259,7 +253,7 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
             pango_font_description_set_weight(description, PANGO_WEIGHT_LIGHT);
             break;
         default:
-            wxFAIL_MSG( _T("unknown font weight") );
+            wxFAIL_MSG( "unknown font weight" );
             // fall through
         case wxFONTWEIGHT_NORMAL:
             pango_font_description_set_weight(description, PANGO_WEIGHT_NORMAL);
@@ -269,28 +263,84 @@ void wxNativeFontInfo::SetWeight(wxFontWeight weight)
 void wxNativeFontInfo::SetUnderlined(bool WXUNUSED(underlined))
 {
     // wxWindowDCImpl::DoDrawText will take care of rendering font with
-    // the underline attribute
-    wxFAIL_MSG( _T("not implemented") );
+    // the underline attribute!
+    wxFAIL_MSG( "not implemented" );
 }
 
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     pango_font_description_set_family(description, wxPANGO_CONV(facename));
-    
+
     // we return true because Pango doesn't tell us if the call failed or not;
     // instead on wxGTK wxFont::SetFaceName() will call wxFontBase::SetFaceName()
     // which does the check
     return true;
 }
 
-void wxNativeFontInfo::SetFamily(wxFontFamily WXUNUSED(family))
+void wxNativeFontInfo::SetFamily(wxFontFamily family)
 {
-    wxFAIL_MSG( _T("not implemented") );
+    wxArrayString facename;
+
+    // the list of fonts associated with a family was partially
+    // taken from http://www.codestyle.org/css/font-family
+
+    switch ( family )
+    {
+        case wxFONTFAMILY_SCRIPT:
+            // corresponds to the cursive font family in the page linked above
+            facename.Add(wxS("URW Chancery L"));
+            facename.Add(wxS("Comic Sans MS"));
+            break;
+
+        case wxFONTFAMILY_DECORATIVE:
+            // corresponds to the fantasy font family in the page linked above
+            facename.Add(wxS("Impact"));
+            break;
+
+        case wxFONTFAMILY_ROMAN:
+            // corresponds to the serif font family in the page linked above
+            facename.Add(wxS("Century Schoolbook L"));
+            facename.Add(wxS("URW Bookman L"));
+            facename.Add(wxS("URW Palladio L"));
+            facename.Add(wxS("DejaVu Serif"));
+            facename.Add(wxS("FreeSerif"));
+            facename.Add(wxS("Times New Roman"));
+            facename.Add(wxS("Times"));
+            break;
+
+        case wxFONTFAMILY_TELETYPE:
+        case wxFONTFAMILY_MODERN:
+            // corresponds to the monospace font family in the page linked above
+            facename.Add(wxS("DejaVu Sans Mono"));
+            facename.Add(wxS("Nimbus Mono L"));
+            facename.Add(wxS("Bitstream Vera Sans Mono"));
+            facename.Add(wxS("Andale Mono"));
+            facename.Add(wxS("Lucida Sans Typewriter"));
+            facename.Add(wxS("FreeMono"));
+            facename.Add(wxS("Courier New"));
+            facename.Add(wxS("Courier"));
+            break;
+
+        case wxFONTFAMILY_SWISS:
+        case wxFONTFAMILY_DEFAULT:
+        default:
+            // corresponds to the sans-serif font family in the page linked above
+            facename.Add(wxS("DejaVu Sans"));
+            facename.Add(wxS("URW Gothic L"));
+            facename.Add(wxS("Nimbus Sans L"));
+            facename.Add(wxS("Bitstream Vera Sans"));
+            facename.Add(wxS("Lucida Sans"));
+            facename.Add(wxS("Arial"));
+            facename.Add(wxS("FreeSans"));
+            break;
+    }
+
+    SetFaceName(facename);
 }
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
 {
-    wxFAIL_MSG( _T("not implemented: Pango encoding is always UTF8") );
+    wxFAIL_MSG( "not implemented: Pango encoding is always UTF8" );
 }
 
 bool wxNativeFontInfo::FromString(const wxString& s)
@@ -306,15 +356,15 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     // pango > 1.13. Note that the segfault could happen also for pointsize
     // smaller than this limit !!
     wxString str(s);
-    const size_t pos = str.find_last_of(_T(" "));
+    const size_t pos = str.find_last_of(wxS(" "));
     double size;
     if ( pos != wxString::npos && wxString(str, pos + 1).ToDouble(&size) )
     {
         wxString sizeStr;
         if ( size < 1 )
-            sizeStr = _T("1");
+            sizeStr = wxS("1");
         else if ( size >= 1E6 )
-            sizeStr = _T("1E6");
+            sizeStr = wxS("1E6");
 
         if ( !sizeStr.empty() )
         {

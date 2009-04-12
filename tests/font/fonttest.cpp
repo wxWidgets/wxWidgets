@@ -85,11 +85,14 @@ void FontTestCase::GetSet()
 
         // test Get/SetFamily()
 
-        test.SetFamily( wxFONTFAMILY_MODERN );
+        test.SetFamily( wxFONTFAMILY_ROMAN );
         CPPUNIT_ASSERT( test.IsOk() );
-        CPPUNIT_ASSERT_EQUAL( wxFONTFAMILY_MODERN, test.GetFamily() );
+        CPPUNIT_ASSERT( wxFONTFAMILY_ROMAN == test.GetFamily() || 
+                        wxFONTFAMILY_UNKNOWN == test.GetFamily() );
+            // note that there is always the possibility that GetFamily() returns
+            // wxFONTFAMILY_UNKNOWN so that we consider it as a valid return value
 
-        
+
         // test Get/SetEncoding()
 
         //test.SetEncoding( wxFONTENCODING_KOI8 );

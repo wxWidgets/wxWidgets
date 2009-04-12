@@ -8,22 +8,39 @@
 
 
 /**
-    Standard font families: these may be used only for the font creation, it
-    doesn't make sense to query an existing font for its font family as,
-    especially if the font had been created from a native font description, it
-    may be unknown.
+    Standard font families: these are used mainly during wxFont creation to specify
+    the generic properties of the font without hardcoding in the sources a specific
+    face name.
+
+    wxFontFamily thus allows to group the font face names of fonts with similar
+    properties. Most wxWidgets ports use lists of fonts for each font family
+    inspired by the data taken from http://www.codestyle.org/css/font-family.
 */
 enum wxFontFamily
 {
     wxFONTFAMILY_DEFAULT = wxDEFAULT,           //!< Chooses a default font.
+    
     wxFONTFAMILY_DECORATIVE = wxDECORATIVE,     //!< A decorative font.
     wxFONTFAMILY_ROMAN = wxROMAN,               //!< A formal, serif font.
     wxFONTFAMILY_SCRIPT = wxSCRIPT,             //!< A handwriting font.
     wxFONTFAMILY_SWISS = wxSWISS,               //!< A sans-serif font.
-    wxFONTFAMILY_MODERN = wxMODERN,             //!< A fixed pitch font.
-    wxFONTFAMILY_TELETYPE = wxTELETYPE,         //!< A teletype font.
-    wxFONTFAMILY_MAX,
-    wxFONTFAMILY_UNKNOWN = wxFONTFAMILY_MAX
+    
+    /// A fixed pitch font. Note that wxFont currently does not make distinctions
+    /// between @c wxFONTFAMILY_MODERN and @c wxFONTFAMILY_TELETYPE.
+    wxFONTFAMILY_MODERN = wxMODERN,
+    
+    /// A teletype (i.e. monospaced) font.
+    /// Monospace fonts have a fixed width like typewriters and often have strong angular 
+    /// or block serifs. Monospace font faces are often used code samples and have a simple, 
+    /// functional font style.
+    /// See also wxFont::IsFixedWidth() for an easy way to test for monospace property.
+    wxFONTFAMILY_TELETYPE = wxTELETYPE,
+    
+    /// Returned by wxFont::GetFamily() when the face name of the font cannot
+    /// be classified into one of the previous wxFontFamily values.
+    wxFONTFAMILY_UNKNOWN = wxFONTFAMILY_MAX,
+
+    wxFONTFAMILY_MAX
 };
 
 /**
@@ -273,8 +290,9 @@ public:
         @param pointSize
             Size in points. See SetPointSize() for more info.
         @param family
-            Font family, a generic way of referring to fonts without specifying actual
-            facename. One of the ::wxFontFamily enumeration values.
+            The font family: a generic portable way of referring to fonts without specifying a
+            facename. This parameter must be one of the ::wxFontFamily enumeration values.
+            If the @a faceName argument is provided, then it overrides the font family.
         @param style
             One of @c wxFONTSTYLE_NORMAL, @c wxFONTSTYLE_SLANT and @c wxFONTSTYLE_ITALIC.
         @param weight
@@ -284,8 +302,8 @@ public:
             The value can be @true or @false.
             At present this has an effect on Windows and Motif 2.x only.
         @param faceName
-            An optional string specifying the actual typeface to be used.
-            If it is an empty string, a default typeface will be chosen based on the family.
+            An optional string specifying the face name to be used.
+            If it is an empty string, a default face name will be chosen based on the family.
         @param encoding
             An encoding which may be one of the enumeration values of ::wxFontEncoding.
             Briefly these can be summed up as:
@@ -318,8 +336,9 @@ public:
         @param pixelSize
             Size in pixels. See SetPixelSize() for more info.
         @param family
-            Font family, a generic way of referring to fonts without specifying actual
-            facename. One of ::wxFontFamily enumeration values.
+            The font family: a generic portable way of referring to fonts without specifying a
+            facename. This parameter must be one of the ::wxFontFamily enumeration values.
+            If the @a faceName argument is provided, then it overrides the font family.
         @param style
             One of @c wxFONTSTYLE_NORMAL, @c wxFONTSTYLE_SLANT and @c wxFONTSTYLE_ITALIC.
         @param weight
@@ -329,8 +348,8 @@ public:
             The value can be @true or @false.
             At present this has an effect on Windows and Motif 2.x only.
         @param faceName
-            An optional string specifying the actual typeface to be used.
-            If it is an empty string, a default typeface will be chosen based on the family.
+            An optional string specifying the face name to be used.
+            If it is an empty string, a default face name will be chosen based on the family.
         @param encoding
             An encoding which may be one of the enumeration values of ::wxFontEncoding.
             Briefly these can be summed up as:
@@ -360,8 +379,8 @@ public:
     /**
         Constructor from font description string.
 
-        This constructor uses SetNativeFontInfo() to initialize the font. If @a
-        fontdesc is invalid font remains uninitialized, i.e. its IsOk() method
+        This constructor uses SetNativeFontInfo() to initialize the font.
+        If @a fontdesc is invalid the font remains uninitialized, i.e. its IsOk() method
         will return @false.
      */
     wxFont(const wxString& fontdesc);
@@ -388,16 +407,20 @@ public:
     static wxFontEncoding GetDefaultEncoding();
 
     /**
-        Returns the typeface name associated with the font, or the empty string if
-        there is no typeface information.
+        Returns the face name associated with the font, or the empty string if
+        there is no face information.
 
         @see SetFaceName()
     */
     virtual wxString GetFaceName() const;
 
     /**
-        Gets the font family. See SetFamily() for a list of valid
-        family identifiers.
+        Gets the font family.
+        As described in ::wxFontFamily docs the returned value acts as a rough,
+        basic classification of the main font properties (look, spacing).
+        
+        If the current font face name is not recognized by wxFont or by the
+        underlying system, @c wxFONTFAMILY_UNKNOWN is returned.
 
         @see SetFamily()
     */
@@ -470,6 +493,11 @@ public:
     /**
         Returns @true if the font is a fixed width (or monospaced) font,
         @false if it is a proportional one or font is invalid.
+        
+        Note that this function under some platforms is different than just testing
+        for the font family being equal to @c wxFONTFAMILY_TELETYPE because native
+        platform-specific functions are used for the check (resulting in a more
+        accurate return value).
     */
     virtual bool IsFixedWidth() const;
 
@@ -522,11 +550,11 @@ public:
             A valid facename, which should be on the end-user's system.
 
         @remarks To avoid portability problems, don't rely on a specific face,
-                 but specify the font family instead or as well.
+                 but specify the font family instead or as well (see ::wxFontFamily).
                  A suitable font will be found on the end-user's system.
-                 If both the family and the facename are specified,
-                 wxWidgets will first search for the specific face, and
-                 then for a font belonging to the same family.
+                 If both the family and the facename are specified, wxWidgets will 
+                 first search for the specific face, and then for a font belonging 
+                 to the same family.
 
         @see GetFaceName(), SetFamily()
     */

@@ -93,7 +93,6 @@ protected:
     void InitFromNative();
 
 private:
-    wxFontFamily    m_family;
     wxFontEncoding  m_encoding;
     bool            m_underlined;
     bool            m_noAA;      // No anti-aliasing
@@ -118,7 +117,8 @@ void wxFontRefData::Init(int pointSize,
                          const wxString& faceName,
                          wxFontEncoding encoding)
 {
-    m_family = family == wxFONTFAMILY_DEFAULT ? wxFONTFAMILY_SWISS : family;
+    if (family == wxFONTFAMILY_DEFAULT)
+        family = wxFONTFAMILY_SWISS;
 
     m_underlined = underlined;
     m_encoding = encoding;
@@ -138,21 +138,7 @@ void wxFontRefData::Init(int pointSize,
     }
     else
     {
-        switch (m_family)
-        {
-            case wxFONTFAMILY_MODERN:
-            case wxFONTFAMILY_TELETYPE:
-               pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
-               break;
-            case wxFONTFAMILY_ROMAN:
-               pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
-               break;
-            case wxFONTFAMILY_SWISS:
-               // SWISS = sans serif
-            default:
-               pango_font_description_set_family( m_nativeFontInfo.description, "sans" );
-               break;
-        }
+        SetFamily(family);
     }
 
     SetStyle( style == wxDEFAULT ? wxFONTSTYLE_NORMAL : style );
@@ -174,24 +160,6 @@ void wxFontRefData::InitFromNative()
     if (pango_size == 0)
         m_nativeFontInfo.SetPointSize(wxDEFAULT_FONT_SIZE);
 
-    wxString faceName = wxGTK_CONV_BACK_SYS(pango_font_description_get_family(desc));
-    if (faceName == wxT("monospace"))
-    {
-        m_family = wxFONTFAMILY_TELETYPE;
-    }
-    else if (faceName == wxT("sans"))
-    {
-        m_family = wxFONTFAMILY_SWISS;
-    }
-    else if (faceName == wxT("serif"))
-    {
-        m_family = wxFONTFAMILY_ROMAN;
-    }
-    else
-    {
-        m_family = wxFONTFAMILY_UNKNOWN;
-    }
-
     // Pango description are never underlined
     m_underlined = false;
 
@@ -202,7 +170,6 @@ void wxFontRefData::InitFromNative()
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
              : wxGDIRefData()
 {
-    m_family = data.m_family;
     m_underlined = data.m_underlined;
     m_encoding = data.m_encoding;
     m_noAA = data.m_noAA;
@@ -268,25 +235,21 @@ bool wxFontRefData::SetPixelSize(const wxSize& pixelSize)
 
     return true;
 }
-
 */
 
 void wxFontRefData::SetFamily(wxFontFamily family)
 {
-    m_family = family;
-
-    // wxNativeInfo::SetFamily asserts because is currently not implemented---
-    // we just save the family here FIXME
+    m_nativeFontInfo.SetFamily(family);
 }
 
 void wxFontRefData::SetStyle(wxFontStyle style)
 {
-    m_nativeFontInfo.SetStyle((wxFontStyle)style);
+    m_nativeFontInfo.SetStyle(style);
 }
 
 void wxFontRefData::SetWeight(wxFontWeight weight)
 {
-    m_nativeFontInfo.SetWeight((wxFontWeight)weight);
+    m_nativeFontInfo.SetWeight(weight);
 }
 
 void wxFontRefData::SetUnderlined(bool underlined)
@@ -395,12 +358,7 @@ wxFontFamily wxFont::GetFamily() const
 {
     wxCHECK_MSG( IsOk(), wxFONTFAMILY_MAX, wxT("invalid font") );
 
-    wxFontFamily ret = M_FONTDATA->m_nativeFontInfo.GetFamily();
-
-    if (ret == wxFONTFAMILY_DEFAULT)
-        ret = M_FONTDATA->m_family;
-
-    return ret;
+    return M_FONTDATA->m_nativeFontInfo.GetFamily();
 }
 
 wxFontStyle wxFont::GetStyle() const
