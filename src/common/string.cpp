@@ -366,95 +366,6 @@ wxString::~wxString()
 }
 #endif
 
-#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
-const char* wxCStrData::AsChar() const
-{
-#if wxUSE_UNICODE_UTF8
-    if ( wxLocaleIsUtf8 )
-        return AsInternal();
-#endif
-    // under non-UTF8 locales, we have to convert the internal UTF-8
-    // representation using wxConvLibc and cache the result
-
-    wxString *str = wxConstCast(m_str, wxString);
-
-    // convert the string:
-    //
-    // FIXME-UTF8: we'd like to do the conversion in the existing buffer (if we
-    //             have it) but it's unfortunately not obvious to implement
-    //             because we don't know how big buffer do we need for the
-    //             given string length (in case of multibyte encodings, e.g.
-    //             ISO-2022-JP or UTF-8 when internal representation is wchar_t)
-    //
-    //             One idea would be to store more than just m_convertedToChar
-    //             in wxString: then we could record the length of the string
-    //             which was converted the last time and try to reuse the same
-    //             buffer if the current length is not greater than it (this
-    //             could still fail because string could have been modified in
-    //             place but it would work most of the time, so we'd do it and
-    //             only allocate the new buffer if in-place conversion returned
-    //             an error). We could also store a bit saying if the string
-    //             was modified since the last conversion (and update it in all
-    //             operation modifying the string, of course) to avoid unneeded
-    //             consequential conversions. But both of these ideas require
-    //             adding more fields to wxString and require profiling results
-    //             to be sure that we really gain enough from them to justify
-    //             doing it.
-    wxScopedCharBuffer buf(str->mb_str());
-
-    // if it failed, return empty string and not NULL to avoid crashes in code
-    // written with either wxWidgets 2 wxString or std::string behaviour in
-    // mind: neither of them ever returns NULL and so we shouldn't neither
-    if ( !buf )
-        return "";
-
-    if ( str->m_convertedToChar &&
-         strlen(buf) == strlen(str->m_convertedToChar) )
-    {
-        // keep the same buffer for as long as possible, so that several calls
-        // to c_str() in a row still work:
-        strcpy(str->m_convertedToChar, buf);
-    }
-    else
-    {
-        str->m_convertedToChar = buf.release();
-    }
-
-    // and keep it:
-    return str->m_convertedToChar + m_offset;
-}
-#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
-
-#if !wxUSE_UNICODE_WCHAR
-const wchar_t* wxCStrData::AsWChar() const
-{
-    wxString *str = wxConstCast(m_str, wxString);
-
-    // convert the string:
-    wxScopedWCharBuffer buf(str->wc_str());
-
-    // notice that here, unlike above in AsChar(), conversion can't fail as our
-    // internal UTF-8 is always well-formed -- or the string was corrupted and
-    // all bets are off anyhow
-
-    // FIXME-UTF8: do the conversion in-place in the existing buffer
-    if ( str->m_convertedToWChar &&
-         wxWcslen(buf) == wxWcslen(str->m_convertedToWChar) )
-    {
-        // keep the same buffer for as long as possible, so that several calls
-        // to c_str() in a row still work:
-        memcpy(str->m_convertedToWChar, buf, sizeof(wchar_t) * wxWcslen(buf));
-    }
-    else
-    {
-        str->m_convertedToWChar = buf.release();
-    }
-
-    // and keep it:
-    return str->m_convertedToWChar + m_offset;
-}
-#endif // !wxUSE_UNICODE_WCHAR
-
 // ===========================================================================
 // wxString class core
 // ===========================================================================
@@ -549,61 +460,97 @@ wxString::SubstrBufFromWC wxString::ConvertStr(const wchar_t *pwz, size_t nLengt
 }
 #endif // wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
 
+// This std::string::c_str()-like method returns a wide char pointer to string
+// contents. In wxUSE_UNICODE_WCHAR case it is trivial as it can simply return
+// a pointer to the internal representation. Otherwise a conversion is required
+// and it returns a temporary buffer.
+//
+// However for compatibility with c_str() and to avoid breaking existing code
+// doing
+//
+//      for ( const wchar_t *p = s.wc_str(); *p; p++ )
+//          ... use *p...
+//
+// we actually need to ensure that the returned buffer is _not_ temporary and
+// so we use wxString::m_convertedToWChar to store the returned data
+#if !wxUSE_UNICODE_WCHAR
 
-#if wxUSE_UNICODE_WCHAR
-
-//Convert wxString in Unicode mode to a multi-byte string
-const wxScopedCharBuffer wxString::mb_str(const wxMBConv& conv) const
+const wchar_t *wxString::AsWChar(const wxMBConv& conv) const
 {
-    // NB: Length passed to cWC2MB() doesn't include terminating NUL, it's
-    //     added by it automatically. If we passed length()+1 here, it would
-    //     create a buffer with 2 trailing NULs of length one greater than
-    //     expected.
-    return conv.cWC2MB(wx_str(), length(), NULL);
+    const char * const strMB = m_impl.c_str();
+    const size_t lenMB = m_impl.length();
+
+    // find out the size of the buffer needed
+    const size_t lenWC = conv.ToWChar(NULL, 0, strMB, lenMB);
+    if ( lenWC == wxCONV_FAILED )
+        return NULL;
+
+    // keep the same buffer if the string size didn't change: this is not only
+    // an optimization but also ensure that code which modifies string
+    // character by character (without changing its length) can continue to use
+    // the pointer returned by a previous wc_str() call even after changing the
+    // string
+
+    // TODO-UTF8: we could check for ">" instead of "!=" here as this would
+    //            allow to save on buffer reallocations but at the cost of
+    //            consuming (even) more memory, we should benchmark this to
+    //            determine if it's worth doing
+    if ( !m_convertedToWChar.m_str || lenWC != m_convertedToWChar.m_len )
+    {
+        if ( !const_cast<wxString *>(this)->m_convertedToWChar.Extend(lenWC) )
+            return NULL;
+    }
+
+    // finally do convert
+    m_convertedToWChar.m_str[lenWC] = L'\0';
+    if ( conv.ToWChar(m_convertedToWChar.m_str, lenWC,
+                      strMB, lenMB) == wxCONV_FAILED )
+        return NULL;
+
+    return m_convertedToWChar.m_str;
 }
 
-#elif wxUSE_UNICODE_UTF8
+#endif // !wxUSE_UNICODE_WCHAR
 
-const wxScopedWCharBuffer wxString::wc_str() const
-{
-    // NB: Length passed to cMB2WC() doesn't include terminating NUL, it's
-    //     added by it automatically. If we passed length()+1 here, it would
-    //     create a buffer with 2 trailing NULs of length one greater than
-    //     expected.
-    return wxMBConvStrictUTF8().cMB2WC
-                                (
-                                    m_impl.c_str(),
-                                    m_impl.length(),
-                                    NULL
-                                );
-}
 
-const wxScopedCharBuffer wxString::mb_str(const wxMBConv& conv) const
+// Same thing for mb_str() which returns a normal char pointer to string
+// contents: this always requires converting it to the specified encoding in
+// non-ANSI build except if we need to convert to UTF-8 and this is what we
+// already use internally.
+#if wxUSE_UNICODE
+
+const char *wxString::AsChar(const wxMBConv& conv) const
 {
+#if wxUSE_UNICODE_UTF8
     if ( conv.IsUTF8() )
-        return wxScopedCharBuffer::CreateNonOwned(m_impl.c_str(), m_impl.length());
+        return m_impl.c_str();
 
-    wxScopedWCharBuffer wcBuf(wc_str());
-    if ( !wcBuf.length() )
-        return wxCharBuffer("");
+    const wchar_t * const strWC = AsWChar(wxMBConvStrictUTF8());
+    const size_t lenWC = m_convertedToWChar.m_len;
+#else // wxUSE_UNICODE_WCHAR
+    const wchar_t * const strWC = m_impl.c_str();
+    const size_t lenWC = m_impl.length();
+#endif // wxUSE_UNICODE_UTF8/wxUSE_UNICODE_WCHAR
 
-    return conv.cWC2MB(wcBuf.data(), wcBuf.length(), NULL);
+    const size_t lenMB = conv.FromWChar(NULL, 0, strWC, lenWC);
+    if ( lenMB == wxCONV_FAILED )
+        return NULL;
+
+    if ( !m_convertedToChar.m_str || lenMB != m_convertedToChar.m_len )
+    {
+        if ( !const_cast<wxString *>(this)->m_convertedToChar.Extend(lenMB) )
+            return NULL;
+    }
+
+    m_convertedToChar.m_str[lenMB] = '\0';
+    if ( conv.FromWChar(m_convertedToChar.m_str, lenMB,
+                        strWC, lenWC) == wxCONV_FAILED )
+        return NULL;
+
+    return m_convertedToChar.m_str;
 }
 
-#else // ANSI
-
-//Converts this string to a wide character string if unicode
-//mode is not enabled and wxUSE_WCHAR_T is enabled
-const wxScopedWCharBuffer wxString::wc_str(const wxMBConv& conv) const
-{
-    // NB: Length passed to cMB2WC() doesn't include terminating NUL, it's
-    //     added by it automatically. If we passed length()+1 here, it would
-    //     create a buffer with 2 trailing NULs of length one greater than
-    //     expected.
-    return conv.cMB2WC(wx_str(), length(), NULL);
-}
-
-#endif // Unicode/ANSI
+#endif // wxUSE_UNICODE
 
 // shrink to minimal size (releasing extra memory)
 bool wxString::Shrink()

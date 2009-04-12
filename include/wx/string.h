@@ -246,8 +246,15 @@ public:
     operator const void*() const { return AsChar(); }
 
     // returns buffers that are valid as long as the associated wxString exists
-    inline const wxScopedCharBuffer AsCharBuf() const;
-    inline const wxScopedWCharBuffer AsWCharBuf() const;
+    const wxScopedCharBuffer AsCharBuf() const
+    {
+        return wxScopedCharBuffer::CreateNonOwned(AsChar());
+    }
+
+    const wxScopedWCharBuffer AsWCharBuf() const
+    {
+        return wxScopedWCharBuffer::CreateNonOwned(AsWChar());
+    }
 
     inline wxString AsString() const;
 
@@ -1786,21 +1793,34 @@ public:
     // accepting the file names. The return value is always the same, but the
     // type differs because a function may either return pointer to the buffer
     // directly or have to use intermediate buffer for translation.
+
 #if wxUSE_UNICODE
 
+    // this is an optimization: even though using mb_str(wxConvLibc) does the
+    // same thing (i.e. returns pointer to internal representation as locale is
+    // always an UTF-8 one) in wxUSE_UTF8_LOCALE_ONLY case, we can avoid the
+    // extra checks and the temporary buffer construction by providing a
+    // separate mb_str() overload
 #if wxUSE_UTF8_LOCALE_ONLY
     const char* mb_str() const { return wx_str(); }
-    const wxScopedCharBuffer mb_str(const wxMBConv& conv) const;
-#else
-    const wxScopedCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const;
-#endif
+    const wxScopedCharBuffer mb_str(const wxMBConv& conv) const
+    {
+        return AsCharBuf(conv);
+    }
+#else // !wxUSE_UTF8_LOCALE_ONLY
+    const wxScopedCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const
+    {
+        return AsCharBuf(conv);
+    }
+#endif // wxUSE_UTF8_LOCALE_ONLY/!wxUSE_UTF8_LOCALE_ONLY
 
     const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
 
 #if wxUSE_UNICODE_WCHAR
     const wchar_t* wc_str() const { return wx_str(); }
 #elif wxUSE_UNICODE_UTF8
-    const wxScopedWCharBuffer wc_str() const;
+    const wxScopedWCharBuffer wc_str() const
+        { return AsWCharBuf(wxMBConvStrictUTF8()); }
 #endif
     // for compatibility with !wxUSE_UNICODE version
     const wxWX2WCbuf wc_str(const wxMBConv& WXUNUSED(conv)) const
@@ -1813,16 +1833,16 @@ public:
 #endif // wxMBFILES/!wxMBFILES
 
 #else // ANSI
-    const wxChar* mb_str() const { return wx_str(); }
+    const char* mb_str() const { return wx_str(); }
 
     // for compatibility with wxUSE_UNICODE version
     const char* mb_str(const wxMBConv& WXUNUSED(conv)) const { return wx_str(); }
 
     const wxWX2MBbuf mbc_str() const { return mb_str(); }
 
-#if wxUSE_WCHAR_T
-    const wxScopedWCharBuffer wc_str(const wxMBConv& conv = wxConvLibc) const;
-#endif // wxUSE_WCHAR_T
+    const wxScopedWCharBuffer wc_str(const wxMBConv& conv = wxConvLibc) const
+        { return AsWCharBuf(conv); }
+
     const wxScopedCharBuffer fn_str() const
         { return wxConvFile.cWC2WX( wc_str( wxConvLibc ) ); }
 #endif // Unicode/ANSI
@@ -3421,36 +3441,105 @@ private:
   wxStringImpl m_impl;
 
   // buffers for compatibility conversion from (char*)c_str() and
-  // (wchar_t*)c_str():
-  // FIXME-UTF8: bechmark various approaches to keeping compatibility buffers
+  // (wchar_t*)c_str(): the pointers returned by these functions should remain
+  // valid until the string itself is modified for compatibility with the
+  // existing code and consistency with std::string::c_str() so returning a
+  // temporary buffer won't do and we need to cache the conversion results
+
+  // TODO-UTF8: benchmark various approaches to keeping compatibility buffers
   template<typename T>
   struct ConvertedBuffer
   {
-      ConvertedBuffer() : m_buf(NULL) {}
+      // notice that there is no need to initialize m_len here as it's unused
+      // as long as m_str is NULL
+      ConvertedBuffer() : m_str(NULL) {}
       ~ConvertedBuffer()
-          { free(m_buf); }
+          { free(m_str); }
 
-      operator T*() const { return m_buf; }
-
-      ConvertedBuffer& operator=(T *str)
+      bool Extend(size_t len)
       {
-          free(m_buf);
-          m_buf = str;
-          return *this;
+          // add extra 1 for the trailing NUL
+          void * const str = realloc(m_str, sizeof(T)*(len + 1));
+          if ( !str )
+              return false;
+
+          m_str = static_cast<T *>(str);
+          m_len = len;
+
+          return true;
       }
 
-      T *m_buf;
+      const wxScopedCharTypeBuffer<T> AsScopedBuffer() const
+      {
+          return wxScopedCharTypeBuffer<T>::CreateNonOwned(m_str, m_len);
+      }
+
+      T *m_str;     // pointer to the string data
+      size_t m_len; // length, not size, i.e. in chars and without last NUL
   };
-#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+
+
+#if wxUSE_UNICODE
+  // common mb_str() and wxCStrData::AsChar() helper: performs the conversion
+  // and returns either m_convertedToChar.m_str (in which case its m_len is
+  // also updated) or NULL if it failed
+  //
+  // there is an important exception: in wxUSE_UNICODE_UTF8 build if conv is a
+  // UTF-8 one, we return m_impl.c_str() directly, without doing any conversion
+  // as optimization and so the caller needs to check for this before using
+  // m_convertedToChar
+  //
+  // NB: AsChar() returns char* in any build, unlike mb_str()
+  const char *AsChar(const wxMBConv& conv) const;
+
+  // mb_str() implementation helper
+  wxScopedCharBuffer AsCharBuf(const wxMBConv& conv) const
+  {
+#if wxUSE_UNICODE_UTF8
+      // avoid conversion if we can
+      if ( conv.IsUTF8() )
+      {
+          return wxScopedCharBuffer::CreateNonOwned(m_impl.c_str(),
+                  m_impl.length());
+      }
+#endif // wxUSE_UNICODE_UTF8
+
+      // call this solely in order to fill in m_convertedToChar as AsChar()
+      // updates it as a side effect: this is a bit ugly but it's a completely
+      // internal function so the users of this class shouldn't care or know
+      // about it and doing it like this, i.e. having a separate AsChar(),
+      // allows us to avoid the creation and destruction of a temporary buffer
+      // when using wxCStrData without duplicating any code
+      AsChar(conv);
+
+      return m_convertedToChar.AsScopedBuffer();
+  }
+
   ConvertedBuffer<char> m_convertedToChar;
-#endif
+#endif // !wxUSE_UNICODE
+
 #if !wxUSE_UNICODE_WCHAR
+  // common wc_str() and wxCStrData::AsWChar() helper for both UTF-8 and ANSI
+  // builds: converts the string contents into m_convertedToWChar and returns
+  // NULL if the conversion failed (this can only happen in ANSI build)
+  //
+  // NB: AsWChar() returns wchar_t* in any build, unlike wc_str()
+  const wchar_t *AsWChar(const wxMBConv& conv) const;
+
+  // wc_str() implementation helper
+  wxScopedWCharBuffer AsWCharBuf(const wxMBConv& conv) const
+  {
+      AsWChar(conv);
+
+      return m_convertedToWChar.AsScopedBuffer();
+  }
+
   ConvertedBuffer<wchar_t> m_convertedToWChar;
-#endif
+#endif // !wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE_UTF8
   // FIXME-UTF8: (try to) move this elsewhere (TLS) or solve differently
-  //             assigning to character pointer to by wxString::interator may
+  //             assigning to character pointer to by wxString::iterator may
   //             change the underlying wxStringImpl iterator, so we have to
   //             keep track of all iterators and update them as necessary:
   struct wxStringIteratorNodeHead
@@ -3994,45 +4083,53 @@ inline wxCStrData::~wxCStrData()
         delete const_cast<wxString*>(m_str); // cast to silence warnings
 }
 
-// simple cases for AsChar() and AsWChar(), the complicated ones are
-// in string.cpp
-#if wxUSE_UNICODE_WCHAR
+// AsChar() and AsWChar() implementations simply forward to wxString methods
+
 inline const wchar_t* wxCStrData::AsWChar() const
 {
-    return m_str->wx_str() + m_offset;
-}
-#endif // wxUSE_UNICODE_WCHAR
+    const wchar_t * const p =
+#if wxUSE_UNICODE_WCHAR
+        m_str->wc_str();
+#elif wxUSE_UNICODE_UTF8
+        m_str->AsWChar(wxMBConvStrictUTF8());
+#else
+        m_str->AsWChar(wxConvLibc);
+#endif
 
+    // in Unicode build the string always has a valid Unicode representation
+    // and even if a conversion is needed (as in UTF8 case) it can't fail
+    //
+    // but in ANSI build the string contents might be not convertible to
+    // Unicode using the current locale encoding so we do need to check for
+    // errors
 #if !wxUSE_UNICODE
-inline const char* wxCStrData::AsChar() const
-{
-    return m_str->wx_str() + m_offset;
-}
+    if ( !p )
+    {
+        // if conversion fails, return empty string and not NULL to avoid
+        // crashes in code written with either wxWidgets 2 wxString or
+        // std::string behaviour in mind: neither of them ever returns NULL
+        // from its c_str() and so we shouldn't neither
+        //
+        // notice that the same is done in AsChar() below and
+        // wxString::wc_str() and mb_str() for the same reasons
+        return L"";
+    }
 #endif // !wxUSE_UNICODE
 
-#if wxUSE_UTF8_LOCALE_ONLY
+    return p + m_offset;
+}
+
 inline const char* wxCStrData::AsChar() const
 {
-    return wxStringOperations::AddToIter(m_str->wx_str(), m_offset);
-}
-#endif // wxUSE_UTF8_LOCALE_ONLY
+#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+    const char * const p = m_str->AsChar(wxConvLibc);
+    if ( !p )
+        return "";
+#else // !wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY
+    const char * const p = m_str->mb_str();
+#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 
-inline const wxScopedCharBuffer wxCStrData::AsCharBuf() const
-{
-#if !wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY
-    return wxScopedCharBuffer::CreateNonOwned(AsChar());
-#else
-    return AsString().mb_str();
-#endif
-}
-
-inline const wxScopedWCharBuffer wxCStrData::AsWCharBuf() const
-{
-#if wxUSE_UNICODE_WCHAR
-    return wxScopedWCharBuffer::CreateNonOwned(AsWChar());
-#else
-    return AsString().wc_str();
-#endif
+    return p + m_offset;
 }
 
 inline wxString wxCStrData::AsString() const
