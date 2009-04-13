@@ -110,7 +110,8 @@ void FontTestCase::GetSet()
         CPPUNIT_ASSERT( temp.SetNativeFontInfo(nid) );
         CPPUNIT_ASSERT( temp.IsOk() );
         WX_ASSERT_MESSAGE( 
-            ("Test #%lu failed; native info desc was \"%s\"", n, nid),
+            ("Test #%lu failed; native info desc was \"%s\" for test and \"%s\" for temp", \
+             n, nid, temp.GetNativeFontInfoDesc()),
             temp == test );
 
         
@@ -127,7 +128,8 @@ void FontTestCase::GetSet()
 #ifdef __WXGTK__
         // Pango saves/restores all font info in the user-friendly string:
         WX_ASSERT_MESSAGE( 
-            ("Test #%lu failed; native info user desc was \"%s\"", n, niud),
+            ("Test #%lu failed; native info user desc was \"%s\" for test and \"%s\" for temp2", \
+             n, niud, temp2.GetNativeFontInfoUserDesc()),
             temp2 == test );
 #else
         // NOTE: as documented GetNativeFontInfoUserDesc/SetNativeFontInfoUserDesc
