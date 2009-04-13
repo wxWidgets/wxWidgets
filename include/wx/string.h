@@ -3510,7 +3510,18 @@ private:
       // about it and doing it like this, i.e. having a separate AsChar(),
       // allows us to avoid the creation and destruction of a temporary buffer
       // when using wxCStrData without duplicating any code
-      AsChar(conv);
+      if ( !AsChar(conv) )
+      {
+          // although it would be probably more correct to return NULL buffer
+          // from here if the conversion fails, a lot of existing code doesn't
+          // expect mb_str() (or wc_str()) to ever return NULL so return an
+          // empty string otherwise to avoid crashes in it
+          //
+          // also, some existing code does check for the conversion success and
+          // so asserting here would be bad too -- even if it does mean that
+          // silently losing data is possible for badly written code
+          return wxScopedCharBuffer::CreateNonOwned("", 0);
+      }
 
       return m_convertedToChar.AsScopedBuffer();
   }
@@ -3529,7 +3540,8 @@ private:
   // wc_str() implementation helper
   wxScopedWCharBuffer AsWCharBuf(const wxMBConv& conv) const
   {
-      AsWChar(conv);
+      if ( !AsWChar(conv) )
+          return wxScopedWCharBuffer::CreateNonOwned(L"", 0);
 
       return m_convertedToWChar.AsScopedBuffer();
   }
