@@ -41,6 +41,10 @@
     #include "wx/msw/msvcrt.h"
 #endif
 
+#ifdef __WXOSX__
+    #include "wx/osx/private.h"
+#endif
+
 using namespace std;
 
 using CppUnit::Test;
@@ -436,6 +440,13 @@ static Test *GetTestByName(const wxString& name)
 //
 int TestApp::OnRun()
 {
+#if wxUSE_GUI
+#ifdef __WXOSX__
+    // make sure there's always an autorelease pool ready
+    wxMacAutoreleasePool autoreleasepool;
+#endif
+#endif
+
 #if wxUSE_LOG
     // Switch off logging unless --verbose
     bool verbose = wxLog::GetVerbose();
