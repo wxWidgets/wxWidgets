@@ -3823,6 +3823,14 @@ wxEventType wxNewEventType();
     The class @a cls must be the wxEvent-derived class associated with the
     events of this type and its full declaration must be visible from the point
     of use of this macro.
+
+    For example:
+    @code
+    wxDECLARE_EVENT(MY_COMMAND_EVENT, wxCommandEvent);
+
+    class MyCustomEvent : public wxEvent { ... };
+    wxDECLARE_EVENT(MY_CUSTOM_EVENT, MyCustomEvent);
+    @endcode
  */
 #define wxDECLARE_EVENT(name, cls) \
         wxDECLARE_EXPORTED_EVENT(wxEMPTY_PARAMETER_VALUE, name, cls)

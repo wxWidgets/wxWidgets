@@ -124,7 +124,7 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
     // Declare a local (not exported) wxEventType-based event type:
 
     #define wxDECLARE_EVENT( name, type ) \
-        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type );
+        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
 
 #else
     // Define/Declare a templatized event type with the corresponding event as
@@ -149,7 +149,7 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
     // Declare a local (not exported) templatized event type:
 
     #define wxDECLARE_EVENT( name, type ) \
-        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type );
+        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
 
 #endif
 
