@@ -829,9 +829,12 @@ install-headers: install-gtk-shared-stamp
 
 	# TODO:  Should probably use setup.py's install of the wxPython headers...
 	mkdir -p debian/$(package_headers)/usr/include/wx-$(release)/wx/wxPython
+	mkdir -p debian/$(package_headers)/usr/include/wx-$(release)/wx/wxPython/i_files
 	cp -p wxPython/include/wx/wxPython/*.h \
 	    debian/$(package_headers)/usr/include/wx-$(release)/wx/wxPython/
-
+    cp -p wxPython/include/wx/wxPython/src/*.i wxPython/include/wx/wxPython/src/_*.py \
+        wxPython/include/wx/wxPython/src/*.swg \
+	    debian/$(package_headers)/usr/include/wx-$(release)/wx/wxPython/i_files
 
 install-i18n: DH_OPTIONS=-p$(package_i18n)
 install-i18n: build-i18n-stamp install-gtk-shared-stamp
