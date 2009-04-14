@@ -111,6 +111,8 @@ enum wxFontFlag
 
 /**
     Font encodings.
+    
+    See wxFont::SetEncoding().
 */
 enum wxFontEncoding
 {
@@ -405,7 +407,16 @@ public:
         @see @ref overview_fontencoding, SetDefaultEncoding()
     */
     static wxFontEncoding GetDefaultEncoding();
-
+    
+    /**
+        Returns the encoding of this font.
+        
+        Note that under wxGTK the returned value is always @c wxFONTENCODING_UTF8.
+        
+        @see SetEncoding()
+    */
+    virtual wxFontEncoding GetEncoding() const;
+    
     /**
         Returns the face name associated with the font, or the empty string if
         there is no face information.
@@ -541,6 +552,16 @@ public:
         @see @ref overview_fontencoding, GetDefaultEncoding()
     */
     static void SetDefaultEncoding(wxFontEncoding encoding);
+    
+    /**
+        Sets the encoding for this font.
+        
+        Note that under wxGTK this function has no effect (because the underlying
+        Pango library always uses @c wxFONTENCODING_UTF8).
+        
+        @see GetEncoding()
+    */
+    virtual void SetEncoding(wxFontEncoding encoding);
 
     /**
         Sets the facename for the font.

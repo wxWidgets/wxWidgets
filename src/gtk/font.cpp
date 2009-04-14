@@ -93,7 +93,6 @@ protected:
     void InitFromNative();
 
 private:
-    wxFontEncoding  m_encoding;
     bool            m_underlined;
     bool            m_noAA;      // No anti-aliasing
 
@@ -115,16 +114,12 @@ void wxFontRefData::Init(int pointSize,
                          wxFontWeight weight,
                          bool underlined,
                          const wxString& faceName,
-                         wxFontEncoding encoding)
+                         wxFontEncoding WXUNUSED(encoding))
 {
     if (family == wxFONTFAMILY_DEFAULT)
         family = wxFONTFAMILY_SWISS;
 
     m_underlined = underlined;
-    m_encoding = encoding;
-    if ( m_encoding == wxFONTENCODING_DEFAULT )
-        m_encoding = wxFont::GetDefaultEncoding();
-
     m_noAA = false;
 
     // Create native font info
@@ -133,7 +128,7 @@ void wxFontRefData::Init(int pointSize,
     // And set its values
     if (!faceName.empty())
     {
-       pango_font_description_set_family( m_nativeFontInfo.description,
+        pango_font_description_set_family( m_nativeFontInfo.description,
                                            wxGTK_CONV_SYS(faceName) );
     }
     else
@@ -162,16 +157,12 @@ void wxFontRefData::InitFromNative()
 
     // Pango description are never underlined
     m_underlined = false;
-
-    // always with GTK+ 2
-    m_encoding = wxFONTENCODING_UTF8;
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
              : wxGDIRefData()
 {
     m_underlined = data.m_underlined;
-    m_encoding = data.m_encoding;
     m_noAA = data.m_noAA;
 
     // Forces a copy of the internal data.  wxNativeFontInfo should probably
@@ -267,13 +258,9 @@ bool wxFontRefData::SetFaceName(const wxString& facename)
     return m_nativeFontInfo.SetFaceName(facename);
 }
 
-void wxFontRefData::SetEncoding(wxFontEncoding encoding)
+void wxFontRefData::SetEncoding(wxFontEncoding WXUNUSED(encoding))
 {
-    m_encoding = encoding;
-
-    // the internal Pango encoding is always UTF8; here we save the
-    // encoding just to make it possible to return it from GetEncoding()
-    // FIXME: this seems wrong; shouldn't GetEncoding() always return wxFONTENCODING_UTF8?
+    // with GTK+ 2 Pango always uses UTF8 internally, we cannot change it
 }
 
 void wxFontRefData::SetNativeFontInfo(const wxNativeFontInfo& info)
@@ -386,7 +373,8 @@ wxFontEncoding wxFont::GetEncoding() const
 {
     wxCHECK_MSG( IsOk(), wxFONTENCODING_SYSTEM, wxT("invalid font") );
 
-    return M_FONTDATA->m_encoding;
+    return wxFONTENCODING_UTF8;
+        // Pango always uses UTF8... see also SetEncoding()
 }
 
 bool wxFont::GetNoAntiAliasing() const
