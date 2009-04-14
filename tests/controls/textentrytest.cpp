@@ -174,13 +174,13 @@ void TextEntryTestCase::Replace()
 {
     wxTextEntry * const entry = GetTestEntry();
 
-    entry->SetValue("Hello replace\n"
+    entry->SetValue("Hello replace!"
                     "0123456789012");
     entry->SetInsertionPoint(0);
 
     entry->Replace(6, 13, "changed");
 
-    CPPUNIT_ASSERT_EQUAL("Hello changed\n"
+    CPPUNIT_ASSERT_EQUAL("Hello changed!"
                          "0123456789012",
                          entry->GetValue());
     CPPUNIT_ASSERT_EQUAL(13, entry->GetInsertionPoint());

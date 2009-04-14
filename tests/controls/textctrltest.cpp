@@ -42,7 +42,10 @@ private:
 
     CPPUNIT_TEST_SUITE( TextCtrlTestCase );
         wxTEXT_ENTRY_TESTS();
+        CPPUNIT_TEST( MultiLineReplace );
     CPPUNIT_TEST_SUITE_END();
+
+    void MultiLineReplace();
 
     wxTextCtrl *m_text;
 
@@ -73,4 +76,28 @@ void TextCtrlTestCase::tearDown()
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
+
+void TextCtrlTestCase::MultiLineReplace()
+{
+    // we need a multiline control for this test so recreate it
+    delete m_text;
+    m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize,
+                            wxTE_MULTILINE);
+
+    m_text->SetValue("Hello replace\n"
+                    "0123456789012");
+    m_text->SetInsertionPoint(0);
+
+    m_text->Replace(6, 13, "changed");
+
+    CPPUNIT_ASSERT_EQUAL("Hello changed\n"
+                         "0123456789012",
+                         m_text->GetValue());
+    CPPUNIT_ASSERT_EQUAL(13, m_text->GetInsertionPoint());
+
+    m_text->Replace(13, -1, "");
+    CPPUNIT_ASSERT_EQUAL("Hello changed", m_text->GetValue());
+    CPPUNIT_ASSERT_EQUAL(13, m_text->GetInsertionPoint());
+}
 
