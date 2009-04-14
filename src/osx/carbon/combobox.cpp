@@ -57,9 +57,12 @@ public:
         : wxTextCtrl( cb , 1 )
     {
         m_cb = cb;
-        SetTriggerOnSetValue( false );
     }
 
+    void ForwardEnableTextChangedEvents(bool enable)
+    {
+        EnableTextChangedEvents(enable);
+    }
 protected:
     void OnChar( wxKeyEvent& event )
     {
@@ -147,6 +150,7 @@ protected:
 
         event.Skip();
     }
+    
 private:
     wxComboBox *m_cb;
 
@@ -392,6 +396,12 @@ bool wxComboBox::Create(wxWindow *parent,
     SetStringSelection(value);
 
     return true;
+}
+
+void wxComboBox::EnableTextChangedEvents(bool enable)
+{ 
+    if ( m_text )
+        m_text->ForwardEnableTextChangedEvents(enable);
 }
 
 wxString wxComboBox::DoGetValue() const

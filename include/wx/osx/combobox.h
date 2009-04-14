@@ -158,6 +158,8 @@ protected:
 
     virtual void SetClientDataType(wxClientDataType clientDataItemsType);
 
+    virtual void EnableTextChangedEvents(bool enable);
+
     // the subcontrols
     wxComboBoxText*     m_text;
     wxComboBoxChoice*   m_choice;

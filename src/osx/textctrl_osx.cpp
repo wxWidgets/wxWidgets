@@ -80,7 +80,7 @@ void wxTextCtrl::Init()
 
     m_maxLength = 0;
     m_privateContextMenu = NULL;
-    m_triggerOnSetValue = true ;
+    m_triggerUpdateEvents = true ;
 }
 
 wxTextCtrl::~wxTextCtrl()
@@ -167,20 +167,6 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
     GetTextPeer()->GetSelection( from , to ) ;
 }
 
-void wxTextCtrl::DoSetValue(const wxString& str, int flags)
-{
-    // optimize redraws
-    if ( GetValue() == str )
-        return;
-
-    GetTextPeer()->SetStringValue( str ) ;
-
-    if ( (flags & SetValue_SendEvent) && m_triggerOnSetValue )
-    {
-        SendTextUpdatedEvent();
-    }
-}
-
 void wxTextCtrl::SetMaxLength(unsigned long len)
 {
     m_maxLength = len ;
@@ -225,10 +211,8 @@ void wxTextCtrl::Cut()
     {
         GetTextPeer()->Cut() ;
 
-        wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, m_windowId );
-        event.SetEventObject( this );
-        HandleWindowEvent( event );
-      }
+        SendTextUpdatedEvent();
+    }
 }
 
 void wxTextCtrl::Paste()
@@ -238,10 +222,7 @@ void wxTextCtrl::Paste()
         GetTextPeer()->Paste() ;
 
         // TODO: eventually we should add setting the default style again
-
-        wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, m_windowId );
-        event.SetEventObject( this );
-        HandleWindowEvent( event );
+        SendTextUpdatedEvent();
     }
 }
 
@@ -307,14 +288,11 @@ wxTextPos wxTextCtrl::GetLastPosition() const
     return GetTextPeer()->GetLastPosition() ;
 }
 
-void wxTextCtrl::Replace(long from, long to, const wxString& str)
-{
-    GetTextPeer()->Replace( from , to , str ) ;
-}
-
 void wxTextCtrl::Remove(long from, long to)
 {
     GetTextPeer()->Remove( from , to ) ;
+    if ( m_triggerUpdateEvents )
+        SendTextUpdatedEvent();
 }
 
 void wxTextCtrl::SetSelection(long from, long to)
@@ -325,17 +303,14 @@ void wxTextCtrl::SetSelection(long from, long to)
 void wxTextCtrl::WriteText(const wxString& str)
 {
     GetTextPeer()->WriteText( str ) ;
-}
-
-void wxTextCtrl::AppendText(const wxString& text)
-{
-    SetInsertionPointEnd();
-    WriteText( text );
+    if ( m_triggerUpdateEvents )
+        SendTextUpdatedEvent();
 }
 
 void wxTextCtrl::Clear()
 {
     GetTextPeer()->Clear() ;
+    SendTextUpdatedEvent();
 }
 
 bool wxTextCtrl::IsModified() const
