@@ -795,6 +795,8 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
     int actualX = x;
     int actualY = y;
 
+#if 0
+    // min and max sizes are only for sizers, not for explicit size setting
     if ((m_minWidth != -1) && (actualWidth < m_minWidth))
         actualWidth = m_minWidth;
     if ((m_minHeight != -1) && (actualHeight < m_minHeight))
@@ -803,6 +805,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         actualWidth = m_maxWidth;
     if ((m_maxHeight != -1) && (actualHeight > m_maxHeight))
         actualHeight = m_maxHeight;
+#endif
 
     bool doMove = false, doResize = false ;
 
