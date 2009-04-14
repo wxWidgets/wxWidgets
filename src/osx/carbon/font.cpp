@@ -576,6 +576,14 @@ wxFont::~wxFont()
 {
 }
 
+void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
+{
+    UnRef();
+    
+    m_refData = new wxFontRefData( info);
+}
+
+
 bool wxFont::RealizeResource()
 {
     M_FONTDATA->MacFindFont();
@@ -938,7 +946,7 @@ void wxNativeFontInfo::Init()
     m_weight = wxFONTWEIGHT_NORMAL;
     m_underlined = false;
     m_faceName.clear();
-    m_encoding = wxFONTENCODING_DEFAULT;
+    m_encoding = wxFont::GetDefaultEncoding();
     m_descriptorValid = false;
 }
 
@@ -1105,6 +1113,8 @@ void wxNativeFontInfo::Init(int size,
     m_weight = weight;
     m_underlined = underlined;
     m_faceName = faceName;
+    if ( encoding == wxFONTENCODING_DEFAULT )
+        encoding = wxFont::GetDefaultEncoding();
     m_encoding = encoding;
 
 }
@@ -1289,6 +1299,8 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family_)
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding_)
 {
+    if ( encoding_ == wxFONTENCODING_DEFAULT )
+        encoding_ = wxFont::GetDefaultEncoding();
     m_encoding = encoding_;
     // not reflected in native descriptors
 }

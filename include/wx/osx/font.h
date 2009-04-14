@@ -166,6 +166,8 @@ public:
 #endif
 
 protected:
+    virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
+
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
