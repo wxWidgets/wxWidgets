@@ -79,7 +79,6 @@ public:
 
     // editing
     virtual void Clear();
-    virtual void Replace(long from, long to, const wxString& value);
     virtual void Remove(long from, long to);
 
     // sets/clears the dirty flag
@@ -100,7 +99,6 @@ public:
     // writing text inserts it at the current position;
     // appending always inserts it at the end
     virtual void WriteText(const wxString& text);
-    virtual void AppendText(const wxString& text);
 
     // translate between the position (which is just an index into the textctrl
     // considering all its contents as a single strings) and (x, y) coordinates
@@ -176,7 +174,6 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
-    virtual void DoSetValue(const wxString& value, int flags = 0);
     virtual wxString DoGetValue() const;
 
     bool  m_editable;
@@ -187,17 +184,12 @@ protected:
   // need to make this public because of the current implementation via callbacks
     unsigned long  m_maxLength;
 
-    bool GetTriggerOnSetValue() const
-    {
-        return m_triggerOnSetValue;
+    virtual void EnableTextChangedEvents(bool enable)
+    { 
+        m_triggerUpdateEvents = enable;
     }
-
-    void SetTriggerOnSetValue(bool trigger)
-    {
-        m_triggerOnSetValue = trigger;
-    }
-
-    bool m_triggerOnSetValue ;
+    
+    bool m_triggerUpdateEvents ;
 
 private :
   wxMenu  *m_privateContextMenu;
