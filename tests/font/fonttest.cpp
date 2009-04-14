@@ -51,6 +51,27 @@ CPPUNIT_TEST_SUITE_REGISTRATION( FontTestCase );
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FontTestCase, "FontTestCase" );
 
+wxString DumpFont(const wxFont *font)
+{
+    // dumps the internal properties of a wxFont in the same order they
+    // are checked by wxFontBase::operator==()
+    
+    wxASSERT(font->IsOk());
+    
+    wxString s;
+    s.Printf(wxS("%d-%d;%d-%d-%d-%d-%d-%s-%d"),
+             font->GetPointSize(),
+             font->GetPixelSize().x,
+             font->GetPixelSize().y,
+             font->GetFamily(),
+             font->GetStyle(),
+             font->GetWeight(),
+             font->GetUnderlined() ? 1 : 0,
+             font->GetFaceName(),
+             font->GetEncoding());
+
+    return s;
+}
 
 void FontTestCase::GetSet()
 {
@@ -110,8 +131,8 @@ void FontTestCase::GetSet()
         CPPUNIT_ASSERT( temp.SetNativeFontInfo(nid) );
         CPPUNIT_ASSERT( temp.IsOk() );
         WX_ASSERT_MESSAGE( 
-            ("Test #%lu failed; native info desc was \"%s\" for test and \"%s\" for temp", \
-             n, nid, temp.GetNativeFontInfoDesc()),
+            ("Test #%lu failed\ndump of test font: \"%s\"\ndump of temp font: \"%s\"", \
+             n, DumpFont(&test), DumpFont(&temp)),
             temp == test );
 
         
