@@ -85,7 +85,8 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
                                                 false //no BOM/external representation
                                                 ));
 
-        wxCHECK(theString != NULL, wxCONV_FAILED);
+        if ( theString == NULL )
+            return wxCONV_FAILED;
 
         /* NOTE: The string content includes the NULL element if the source string did
          * That means we have to do nothing special because the destination will have
