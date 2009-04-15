@@ -209,7 +209,7 @@ inline int Stricmp(const char *psz1, const char *psz2)
 
 // Lightweight object returned by wxString::c_str() and implicitly convertible
 // to either const char* or const wchar_t*.
-class WXDLLIMPEXP_BASE wxCStrData
+class wxCStrData
 {
 private:
     // Ctors; for internal use by wxString and wxCStrData only
