@@ -226,11 +226,6 @@ Changes in behaviour which may result in compilation errors
 - wxEVT_GRID_CELL_CHANGE event renamed to wxEVT_GRID_CELL_CHANGED and shouldn't
   be vetoed any more, use the new wxEVT_GRID_CELL_CHANGING event to do it.
 
-- Now wxWidgets at startup in debug builds checks if all wxEvent-derived classes
-  correctly implement the Clone() function, logging a warning if they don't.
-  A correct implementation for MyCustomEventClass::Clone() is simply:
-    virtual wxEvent *Clone() const  { return new MyCustomEventClass(*this); }
-
 - Global wxPendingEvents and wxPendingEventsLocker objects were removed.
   You may use wxEventLoopBase::SuspendProcessingOfPendingEvents instead of
   locking wxPendingEventsLocker now.
