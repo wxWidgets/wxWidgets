@@ -1738,6 +1738,9 @@ wxGraphicsContext * wxCairoRenderer::CreateContextFromNativeWindow( void * windo
 
 wxGraphicsContext * wxCairoRenderer::CreateMeasuringContext()
 {
+#ifdef __WXGTK__
+    return CreateContextFromNativeWindow(gdk_get_default_root_window());
+#endif
     return NULL;
     // TODO
 }
