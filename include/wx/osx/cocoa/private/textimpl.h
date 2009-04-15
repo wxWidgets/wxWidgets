@@ -36,6 +36,8 @@ public :
     virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
 protected :
     NSTextField* m_textField;
+    long m_selStart;
+    long m_selEnd;
 };
 
 class wxNSTextViewControl : public wxWidgetCocoaImpl, public wxTextWidgetImpl
