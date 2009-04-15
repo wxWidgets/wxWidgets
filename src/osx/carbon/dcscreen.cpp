@@ -31,8 +31,8 @@ wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
    wxWindowDCImpl( owner )
 {
 #if wxOSX_USE_COCOA_OR_IPHONE
-    m_graphicContext = NULL;
-    m_ok = false ;
+    SetGraphicsContext( wxGraphicsContext::Create() );
+    m_ok = true ;
 #else
     CGRect cgbounds ;
     cgbounds = CGDisplayBounds(CGMainDisplayID());
