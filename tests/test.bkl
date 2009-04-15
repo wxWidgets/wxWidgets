@@ -108,6 +108,7 @@
             geometry/rect.cpp
             geometry/size.cpp
             geometry/point.cpp
+            graphics/measuring.cpp
             config/config.cpp
             controls/comboboxtest.cpp
             controls/headerctrltest.cpp
