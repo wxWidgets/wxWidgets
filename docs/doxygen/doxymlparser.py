@@ -54,7 +54,7 @@ class ClassDefinition:
         str_repr = """
 Class: %s
 Bases: %s
-Inlcudes: %s
+Includes: %s
 Brief Description: 
 %s
 
@@ -98,9 +98,10 @@ def getTextValue(node, recursive=False):
         if child.nodeType == child.ELEMENT_NODE and child.nodeName == "ref":
             text += getTextValue(child)
         if child.nodeType == child.TEXT_NODE:
-            text += child.nodeValue.strip()
+            # Add a space to ensure we have a space between qualifiers and parameter names
+            text += child.nodeValue.strip() + " "
             
-    return text
+    return text.strip()
 
 def doxyMLToText(node):
     return text
