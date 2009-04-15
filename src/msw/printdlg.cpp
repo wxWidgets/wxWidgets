@@ -369,7 +369,7 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
             pd.hDevMode = NULL;
             pd.hDevNames = NULL;
 
-#ifdef wxDEBUG_LEVEL
+#if wxDEBUG_LEVEL
             wxLogDebug(wxT("Printing error: ") + wxGetPrintDlgError());
 #endif // wxDEBUG_LEVEL
         }
