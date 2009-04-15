@@ -281,7 +281,7 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
   // or zero if the two items are equivalent.
 
   // data is arbitrary data to be passed to the sort function.
-  bool SortItems(wxListCtrlCompare fn, long data);
+  bool SortItems(wxListCtrlCompare fn, wxUIntPtr data);
 
   wxMacDataBrowserListCtrlControl* GetListPeer() const;
 
@@ -317,7 +317,7 @@ class WXDLLIMPEXP_CORE wxListCtrl: public wxControl
   void Command(wxCommandEvent& event) { ProcessCommand(event); };
 
   wxListCtrlCompare GetCompareFunc() { return m_compareFunc; };
-  long GetCompareFuncData() { return m_compareFuncData; };
+  wxUIntPtr GetCompareFuncData() { return m_compareFuncData; };
 
 
   // public overrides needed for pimpl approach
@@ -391,7 +391,7 @@ protected:
   void*  m_macListCtrlEventHandler;
   void*  m_cgContext;
   wxListCtrlCompare m_compareFunc;
-  long m_compareFuncData;
+  wxUIntPtr m_compareFuncData;
 
   wxTextCtrl*       m_textCtrl;        // The control used for editing a label
   wxImageList *     m_imageListNormal; // The image list for normal icons

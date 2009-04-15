@@ -52,7 +52,7 @@
 // ----------------------------------------------------------------------------
 
 static
-int wxCALLBACK wxFileDataNameCompare( long data1, long data2, long sortOrder)
+int wxCALLBACK wxFileDataNameCompare( long data1, long data2, wxUIntPtr sortOrder)
 {
      wxFileData *fd1 = (wxFileData *)wxUIntToPtr(data1);
      wxFileData *fd2 = (wxFileData *)wxUIntToPtr(data2);
@@ -70,7 +70,7 @@ int wxCALLBACK wxFileDataNameCompare( long data1, long data2, long sortOrder)
 }
 
 static
-int wxCALLBACK wxFileDataSizeCompare(long data1, long data2, long sortOrder)
+int wxCALLBACK wxFileDataSizeCompare(long data1, long data2, wxUIntPtr sortOrder)
 {
      wxFileData *fd1 = (wxFileData *)wxUIntToPtr(data1);
      wxFileData *fd2 = (wxFileData *)wxUIntToPtr(data2);
@@ -92,7 +92,7 @@ int wxCALLBACK wxFileDataSizeCompare(long data1, long data2, long sortOrder)
 }
 
 static
-int wxCALLBACK wxFileDataTypeCompare(long data1, long data2, long sortOrder)
+int wxCALLBACK wxFileDataTypeCompare(long data1, long data2, wxUIntPtr sortOrder)
 {
      wxFileData *fd1 = (wxFileData *)wxUIntToPtr(data1);
      wxFileData *fd2 = (wxFileData *)wxUIntToPtr(data2);
@@ -114,7 +114,7 @@ int wxCALLBACK wxFileDataTypeCompare(long data1, long data2, long sortOrder)
 }
 
 static
-int wxCALLBACK wxFileDataTimeCompare(long data1, long data2, long sortOrder)
+int wxCALLBACK wxFileDataTimeCompare(long data1, long data2, wxUIntPtr sortOrder)
 {
      wxFileData *fd1 = (wxFileData *)wxUIntToPtr(data1);
      wxFileData *fd2 = (wxFileData *)wxUIntToPtr(data2);

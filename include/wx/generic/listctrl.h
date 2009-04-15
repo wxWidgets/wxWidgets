@@ -138,7 +138,7 @@ public:
     long InsertColumn( long col, const wxString& heading,
                        int format = wxLIST_FORMAT_LEFT, int width = -1 );
     bool ScrollList( int dx, int dy );
-    bool SortItems( wxListCtrlCompare fn, long data );
+    bool SortItems( wxListCtrlCompare fn, wxUIntPtr data );
     bool Update( long item );
     // Must provide overload to avoid hiding it (and warnings about it)
     virtual void Update() { wxControl::Update(); }

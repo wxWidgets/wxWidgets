@@ -353,7 +353,7 @@ public:
     // or zero if the two items are equivalent.
 
     // data is arbitrary data to be passed to the sort function.
-    bool SortItems(wxListCtrlCompare fn, long data);
+    bool SortItems(wxListCtrlCompare fn, wxUIntPtr data);
 
     // IMPLEMENTATION
     virtual bool MSWCommand(WXUINT param, WXWORD id);

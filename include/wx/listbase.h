@@ -22,7 +22,8 @@
 // ----------------------------------------------------------------------------
 
 // type of compare function for wxListCtrl sort operation
-typedef int (wxCALLBACK *wxListCtrlCompare)(long item1, long item2, long sortData);
+typedef
+int (wxCALLBACK *wxListCtrlCompare)(long item1, long item2, wxUIntPtr sortData);
 
 // ----------------------------------------------------------------------------
 // wxListCtrl constants

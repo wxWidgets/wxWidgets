@@ -610,7 +610,7 @@ public:
     void InsertItem( wxListItem &item );
     void InsertColumn( long col, wxListItem &item );
     int GetItemWidthWithImage(wxListItem * item);
-    void SortItems( wxListCtrlCompare fn, long data );
+    void SortItems( wxListCtrlCompare fn, wxUIntPtr data );
 
     size_t GetItemCount() const;
     bool IsEmpty() const { return GetItemCount() == 0; }

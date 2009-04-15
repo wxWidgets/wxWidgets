@@ -71,7 +71,8 @@ static const int NUM_ITEMS = 10;
 // number of items in icon/small icon view
 static const int NUM_ICONS = 9;
 
-int wxCALLBACK MyCompareFunction(long item1, long item2, long WXUNUSED(sortData))
+int wxCALLBACK
+MyCompareFunction(long item1, long item2, wxUIntPtr WXUNUSED(sortData))
 {
     // inverse the order
     if (item1 < item2)

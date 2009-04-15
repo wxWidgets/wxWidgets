@@ -4152,7 +4152,7 @@ int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
 // ----------------------------------------------------------------------------
 
 static wxListCtrlCompare list_ctrl_compare_func_2;
-static long              list_ctrl_compare_data;
+static wxUIntPtr         list_ctrl_compare_data;
 
 int LINKAGEMODE list_ctrl_compare_func_1( wxListLineData **arg1, wxListLineData **arg2 )
 {
@@ -4166,7 +4166,7 @@ int LINKAGEMODE list_ctrl_compare_func_1( wxListLineData **arg1, wxListLineData 
     return list_ctrl_compare_func_2( data1, data2, list_ctrl_compare_data );
 }
 
-void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
+void wxListMainWindow::SortItems( wxListCtrlCompare fn, wxUIntPtr data )
 {
     // selections won't make sense any more after sorting the items so reset
     // them
@@ -4918,7 +4918,7 @@ bool wxGenericListCtrl::ScrollList( int dx, int dy )
 // or zero if the two items are equivalent.
 // data is arbitrary data to be passed to the sort function.
 
-bool wxGenericListCtrl::SortItems( wxListCtrlCompare fn, long data )
+bool wxGenericListCtrl::SortItems( wxListCtrlCompare fn, wxUIntPtr data )
 {
     m_mainWin->SortItems( fn, data );
     return true;
