@@ -46,6 +46,8 @@
 // wxWindowsPrintNativeData
 //----------------------------------------------------------------------------
 
+#if wxDEBUG_LEVEL
+
 static wxString wxGetPrintDlgError()
 {
     DWORD err = CommDlgExtendedError();
@@ -78,6 +80,9 @@ static wxString wxGetPrintDlgError()
     }
     return msg;
 }
+
+#endif // wxDEBUG_LEVEL
+
 
 static HGLOBAL
 wxCreateDevNames(const wxString& driverName,
@@ -364,7 +369,9 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
             pd.hDevMode = NULL;
             pd.hDevNames = NULL;
 
+#ifdef wxDEBUG_LEVEL
             wxLogDebug(wxT("Printing error: ") + wxGetPrintDlgError());
+#endif // wxDEBUG_LEVEL
         }
         else
         {
