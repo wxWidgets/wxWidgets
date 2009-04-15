@@ -334,7 +334,7 @@ bool wxIcon::LoadFile(
 #endif
         }
     }
-    return true ;
+    return false;
 }
 
 void wxIcon::CopyFromBitmap( const wxBitmap& bmp )
@@ -353,9 +353,11 @@ bool  wxICONResourceHandler::LoadFile(
     int desiredWidth, int desiredHeight )
 {
     wxIcon icon ;
-    icon.LoadFile( name , wxBITMAP_TYPE_ICON_RESOURCE , desiredWidth , desiredHeight ) ;
-    bitmap->CopyFromIcon( icon ) ;
-
-    return bitmap->Ok() ;
+    if ( icon.LoadFile( name , wxBITMAP_TYPE_ICON_RESOURCE , desiredWidth , desiredHeight ) )
+    {
+        bitmap->CopyFromIcon( icon ) ;
+        return bitmap->Ok() ;
+    }
+    return false;
 }
 
