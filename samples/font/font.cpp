@@ -324,7 +324,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->AppendCheckItem(Font_Light, wxT("&Light\tCtrl-L"), wxT("Toggle light state"));
     menuFont->AppendSeparator();
     menuFont->AppendCheckItem(Font_Italic, wxT("&Oblique\tCtrl-O"), wxT("Toggle italic state"));
+#ifndef __WXMSW__
+    // under wxMSW slant == italic so there's no reason to provide another menu item for the same thing
     menuFont->AppendCheckItem(Font_Slant, wxT("&Slant\tCtrl-S"), wxT("Toggle slant state"));
+#endif
     menuFont->AppendSeparator();
     menuFont->AppendCheckItem(Font_Underlined, wxT("&Underlined\tCtrl-U"),
                               wxT("Toggle underlined state"));
@@ -820,7 +823,9 @@ void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
         mbar->Check(Font_Bold, font.GetWeight() == wxFONTWEIGHT_BOLD);
         
         mbar->Check(Font_Italic, font.GetStyle() == wxFONTSTYLE_ITALIC);
+#ifndef __WXMSW__
         mbar->Check(Font_Slant, font.GetStyle() == wxFONTSTYLE_SLANT);
+#endif
         
         mbar->Check(Font_Underlined, font.GetUnderlined());
     }
@@ -1017,9 +1022,16 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // output the font name/info
     wxString fontInfo;
-    fontInfo.Printf(wxT("Font size is %d points, family: %s, encoding: %s"),
+    
+    fontInfo.Printf(wxT("Face name: %s, family: %s"),
+                    m_font.GetFaceName().c_str(),
+                    m_font.GetFamilyString().c_str());
+
+    dc.DrawText(fontInfo, x, y);
+    y += hLine;
+
+    fontInfo.Printf(wxT("Size: %d points, encoding: %s"),
                     m_font.GetPointSize(),
-                    m_font.GetFamilyString().c_str(),
                     wxFontMapper::
                         GetEncodingDescription(m_font.GetEncoding()).c_str());
 

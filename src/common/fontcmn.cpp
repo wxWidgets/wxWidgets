@@ -375,6 +375,7 @@ wxString wxFontBase::GetFamilyString() const
         case wxFONTFAMILY_SWISS:        return "wxFONTFAMILY_SWISS";
         case wxFONTFAMILY_MODERN:       return "wxFONTFAMILY_MODERN";
         case wxFONTFAMILY_TELETYPE:     return "wxFONTFAMILY_TELETYPE";
+        case wxFONTFAMILY_UNKNOWN:      return "wxFONTFAMILY_UNKNOWN";
         default:                        return "wxFONTFAMILY_DEFAULT";
     }
 }
