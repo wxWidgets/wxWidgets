@@ -314,14 +314,19 @@ wxString wxNSTextViewControl::GetStringValue() const
     if (m_textView) 
     {
         wxCFStringRef cf( (CFStringRef) [[m_textView string] retain] );
-        return cf.AsString(m_wxPeer->GetFont().GetEncoding());
+        wxString result = cf.AsString(m_wxPeer->GetFont().GetEncoding());
+        wxMacConvertNewlines13To10( &result ) ;
+        return result;
     }
     return wxEmptyString;
 }
 void wxNSTextViewControl::SetStringValue( const wxString &str) 
 {
+    wxString st = str;
+    wxMacConvertNewlines10To13( &st );
+
     if (m_textView)
-        [m_textView setString: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+        [m_textView setString: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 void wxNSTextViewControl::Copy() 
 {
@@ -365,6 +370,21 @@ void wxNSTextViewControl::GetSelection( long* from, long* to) const
 
 void wxNSTextViewControl::SetSelection( long from , long to )
 {
+    long textLength = [[m_textView string] length];
+    if ((from == -1) && (to == -1))
+    {
+        from = 0 ;
+        to = textLength ;
+    }
+    else
+    {
+        from = wxMin(textLength,wxMax(from,0)) ;
+        if ( to == -1 )
+            to = textLength;
+        else
+            to = wxMax(0,wxMin(textLength,to)) ;
+    }
+
     NSRange selrange = NSMakeRange(from, to-from);
     [m_textView setSelectedRange:selrange];
     [m_textView scrollRangeToVisible:selrange];
@@ -372,10 +392,10 @@ void wxNSTextViewControl::SetSelection( long from , long to )
 
 void wxNSTextViewControl::WriteText(const wxString& str) 
 {
-    // temp hack to get logging working early
-    wxString former = GetStringValue();
-    SetStringValue( former + str );
-    SetSelection(GetStringValue().length(), GetStringValue().length());
+    wxString st = str;
+    wxMacConvertNewlines10To13( &st );
+
+    [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
 // wxNSTextFieldControl
@@ -384,6 +404,7 @@ wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : w
 {
     m_textField = (NSTextField*) w;
     [m_textField setDelegate: w];
+    m_selStart = m_selEnd = 0;
 }
 
 wxNSTextFieldControl::~wxNSTextFieldControl()
@@ -397,10 +418,12 @@ wxString wxNSTextFieldControl::GetStringValue() const
     wxCFStringRef cf( (CFStringRef) [[m_textField stringValue] retain] );
     return cf.AsString(m_wxPeer->GetFont().GetEncoding());
 }
+
 void wxNSTextFieldControl::SetStringValue( const wxString &str) 
 {
     [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
+
 void wxNSTextFieldControl::Copy() 
 {
     NSText* editor = [m_textField currentEditor];
@@ -447,23 +470,59 @@ void wxNSTextFieldControl::GetSelection( long* from, long* to) const
         *from = range.location;
         *to = range.location + range.length;
     }
+    else
+    {
+        *from = m_selStart;
+        *to = m_selEnd;
+    }
 }
 
 void wxNSTextFieldControl::SetSelection( long from , long to )
 {
+    long textLength = [[m_textField stringValue] length];
+    if ((from == -1) && (to == -1))
+    {
+        from = 0 ;
+        to = textLength ;
+    }
+    else
+    {
+        from = wxMin(textLength,wxMax(from,0)) ;
+        if ( to == -1 )
+            to = textLength;
+        else
+            to = wxMax(0,wxMin(textLength,to)) ;
+    }
+
     NSText* editor = [m_textField currentEditor];
     if ( editor )
     {
         [editor setSelectedRange:NSMakeRange(from, to-from)];
     }
+    else
+    {
+        m_selStart = from;
+        m_selEnd = to;
+    }
 }
 
 void wxNSTextFieldControl::WriteText(const wxString& str) 
 {
-    // temp hack to get logging working early
-    wxString former = GetStringValue();
-    SetStringValue( former + str );
-    SetSelection(GetStringValue().length(), GetStringValue().length());
+    NSText* editor = [m_textField currentEditor];
+    if ( editor )
+    {
+        [editor insertText:wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
+    }
+    else
+    {
+        wxString val = GetStringValue() ;
+        long start , end ;
+        GetSelection( &start , &end ) ;
+        val.Remove( start , end - start ) ;
+        val.insert( start , str ) ;
+        SetStringValue( val ) ;
+        SetSelection( start + str.length() , start + str.length() ) ;
+    }
 }
 
 void wxNSTextFieldControl::controlAction(WXWidget WXUNUSED(slf), 
