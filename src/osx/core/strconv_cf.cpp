@@ -115,8 +115,7 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
                     dstSize * sizeof(wchar_t),
                     &usedBufLen);
 
-            // charsConverted is > 0 iff conversion succeeded
-            if(charsConverted <= 0)
+            if(charsConverted < CFStringGetLength(theString))
                 return wxCONV_FAILED;
 
             /* usedBufLen is the number of bytes written, so we divide by
@@ -217,8 +216,7 @@ WXDLLIMPEXP_BASE wxMBConv* new_wxMBConv_cf(wxFontEncoding encoding)
                 &usedBufLen
             );
 
-        // charsConverted is > 0 iff conversion succeeded
-        if(charsConverted <= 0)
+        if(charsConverted < CFStringGetLength(theString) )
             return wxCONV_FAILED;
 
         return usedBufLen;
