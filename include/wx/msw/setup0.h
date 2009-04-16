@@ -579,6 +579,18 @@
 #define wxUSE_GRAPHICS_CONTEXT 0
 #endif
 
+// Enable the new wxCairoContext classes for an advanced
+// 2D drawing API.  (Still somewhat experimental)
+//
+// Please note that you will need to link with Cairo for this to work.
+//
+// Default is 0
+//
+// Recommended setting: 1
+#ifndef wxUSE_CAIRO
+#define wxUSE_CAIRO 0
+#endif
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------

@@ -281,7 +281,15 @@
     <set var="UNICOWS_LIB">
         <if cond="MSLU=='1'">unicows</if>
     </set>
-
+    <set var="CAIRO_LIB">
+        <if cond="USE_CAIRO=='1'">cairo</if>
+    </set>
+    <set var="CAIRO_LIBDIR">
+        <if cond="USE_CAIRO=='1'">$(DOLLAR)(CAIRO_ROOT)/lib</if>
+    </set>
+    <set var="CAIRO_INCLUDEDIR">
+        <if cond="USE_CAIRO=='1'">$(DOLLAR)(CAIRO_ROOT)/include/cairo</if>
+    </set>
     <if cond="FORMAT!='autoconf'">
         <set var="GDIPLUS_LIB">
             <if cond="USE_GDIPLUS=='1'">gdiplus</if>
@@ -485,6 +493,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <if cond="FORMAT!='autoconf'"><define>$(GFXCTX_DEFINE)</define></if>
         <include cond="FORMAT!='autoconf'">$(SETUPHDIR)</include>
         <include cond="FORMAT!='autoconf'">$(TOP_SRCDIR)include</include>
+        <include cond="FORMAT!='autoconf'">$(CAIRO_INCLUDEDIR)</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
         <if cond="TOOLKIT=='MGL' and FORMAT=='watcom'">
             <lib-path>$(MGLLIBPATH)</lib-path>
@@ -530,6 +539,8 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <if cond="FORMAT!='autoconf' and PLATFORM_WIN32=='1'">
             <sys-lib>$(UNICOWS_LIB)</sys-lib>
             <sys-lib>$(GDIPLUS_LIB)</sys-lib>
+            <sys-lib>$(CAIRO_LIB)</sys-lib>
+            <lib-path>$(CAIRO_LIBDIR)</lib-path>
             <if cond="FORMAT=='borland'">
                 <sys-lib>ole2w32</sys-lib>
             </if>

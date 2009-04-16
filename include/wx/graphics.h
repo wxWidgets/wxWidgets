@@ -676,6 +676,9 @@ public :
 
     static wxGraphicsRenderer* GetDefaultRenderer();
 
+#if wxABI_VERSION >= 20811
+    static wxGraphicsRenderer* GetCairoRenderer();
+#endif
     // Context
 
     virtual wxGraphicsContext * CreateContext( const wxWindowDC& dc) = 0 ;

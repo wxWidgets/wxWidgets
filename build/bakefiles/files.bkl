@@ -666,6 +666,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dragimgg.cpp
     src/generic/filepickerg.cpp
     src/generic/fontpickerg.cpp
+    src/generic/graphicc.cpp
     src/generic/listbkg.cpp
     src/generic/logg.cpp
     src/generic/numdlgg.cpp
@@ -980,7 +981,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filedlgg.cpp
-    src/generic/graphicc.cpp
     src/generic/listctrl.cpp
     src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
