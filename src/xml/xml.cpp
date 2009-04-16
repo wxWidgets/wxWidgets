@@ -783,12 +783,18 @@ bool OutputString(wxOutputStream& stream,
 
 #if wxUSE_UNICODE
     wxUnusedVar(convMem);
+    if ( !convFile )
+        convFile = &wxConvUTF8;
 
-    const wxWX2MBbuf buf(str.mb_str(*(convFile ? convFile : &wxConvUTF8)));
-    if ( !buf )
+    const wxScopedCharBuffer buf(str.mb_str(*convFile));
+    if ( !buf.length() )
+    {
+        // conversion failed, can't write this string in an XML file in this
+        // (presumably non-UTF-8) encoding
         return false;
+    }
 
-    stream.Write(buf, strlen(buf));
+    stream.Write(buf, buf.length());
 #else // !wxUSE_UNICODE
     if ( convFile && convMem )
     {

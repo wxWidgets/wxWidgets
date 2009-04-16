@@ -55,27 +55,27 @@ int r;
 
 #define CMP6(expected, fmt, y, z, w, t)                    \
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), y, z, w, t); \
-    CPPUNIT_ASSERT( r == (int)wxStrlen(buf) );             \
+    CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP5(expected, fmt, y, z, w)                    \
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), y, z, w); \
-    CPPUNIT_ASSERT( r == (int)wxStrlen(buf) );          \
+    CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP4(expected, fmt, y, z)                     \
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), y, z);  \
-    CPPUNIT_ASSERT( r == (int)wxStrlen(buf) );        \
+    CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP3(expected, fmt, y)                        \
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), y);     \
-    CPPUNIT_ASSERT( r == (int)wxStrlen(buf) );        \
+    CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP2(expected, fmt)                           \
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt));        \
-    CPPUNIT_ASSERT( r == (int)wxStrlen(buf) );        \
+    CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
 // NOTE: this macro is used also with too-small buffers (see Miscellaneous())
