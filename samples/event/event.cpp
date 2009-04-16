@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     31.01.01
 // RCS-ID:      $Id$
-// Copyright:   (c) 2001 Vadim Zeitlin
+// Copyright:   (c) 2001-2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -77,6 +77,9 @@ public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+#if !wxEVENTS_COMPATIBILITY_2_8
+    void OnBind(wxCommandEvent& event);
+#endif // !wxEVENTS_COMPATIBILITY_2_8
     void OnConnect(wxCommandEvent& event);
     void OnDynamic(wxCommandEvent& event);
     void OnPushEventHandler(wxCommandEvent& event);
@@ -88,11 +91,37 @@ public:
 
     void OnUpdateUIPop(wxUpdateUIEvent& event);
 
-protected:
+private:
+    // symbolic names for the status bar fields
+    enum
+    {
+        Status_Main = 0,
+        Status_Dynamic,
+        Status_Push
+    };
+
+    void UpdateDynamicStatus(bool on)
+    {
+#if wxUSE_STATUSBAR
+        if ( on )
+        {
+            SetStatusText("You can now use \"Dynamic\" item in the menu");
+            SetStatusText("Dynamic: on", Status_Dynamic);
+        }
+        else
+        {
+            SetStatusText("You can no more use \"Dynamic\" item in the menu");
+            SetStatusText("Dynamic: off", Status_Dynamic);
+        }
+#endif // wxUSE_STATUSBAR
+    }
+
     // number of pushed event handlers
     unsigned m_nPush;
 
-private:
+    // the button to whose event we connect dynamically
+    wxButton *m_btnDynamic;
+
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
 };
@@ -128,20 +157,13 @@ enum
     // menu items
     Event_Quit = 1,
     Event_About,
+    Event_Bind,
     Event_Connect,
     Event_Dynamic,
     Event_Push,
     Event_Pop,
     Event_Custom,
     Event_Test
-};
-
-// status bar fields
-enum
-{
-    Status_Main = 0,
-    Status_Dynamic,
-    Status_Push
 };
 
 // ----------------------------------------------------------------------------
@@ -155,6 +177,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Event_Quit,  MyFrame::OnQuit)
     EVT_MENU(Event_About, MyFrame::OnAbout)
 
+#if !wxEVENTS_COMPATIBILITY_2_8
+    EVT_MENU(Event_Bind, MyFrame::OnBind)
+#endif // !wxEVENTS_COMPATIBILITY_2_8
     EVT_MENU(Event_Connect, MyFrame::OnConnect)
 
     EVT_MENU(Event_Custom, MyFrame::OnFireCustom)
@@ -216,12 +241,13 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size)
+       : wxFrame(NULL, wxID_ANY, title, pos, size)
 {
     SetIcon(wxICON(sample));
 
     // init members
     m_nPush = 0;
+    m_btnDynamic = NULL;
 
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
@@ -231,9 +257,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(Event_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     wxMenu *menuEvent = new wxMenu;
-    menuEvent->Append(Event_Connect, _T("&Connect\tCtrl-C"),
-                     _T("Connect or disconnect the dynamic event handler"),
-                     true /* checkable */);
+#if !wxEVENTS_COMPATIBILITY_2_8
+    menuEvent->AppendCheckItem(Event_Bind, "&Bind\tCtrl-B",
+                               "Bind or unbind a dynamic event handler");
+#endif // !wxEVENTS_COMPATIBILITY_2_8
+    menuEvent->AppendCheckItem(Event_Connect, _T("&Connect\tCtrl-C"),
+                     _T("Connect or disconnect the dynamic event handler"));
     menuEvent->Append(Event_Dynamic, _T("&Dynamic event\tCtrl-D"),
                       _T("Dynamic event sample - only works after Connect"));
     menuEvent->AppendSeparator();
@@ -261,6 +290,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetStatusText(_T("Dynamic: off"), Status_Dynamic);
     SetStatusText(_T("Push count: 0"), Status_Push);
 #endif // wxUSE_STATUSBAR
+
+    wxPanel * const panel = new wxPanel(this);
+    wxSizer * const sizer = new wxBoxSizer(wxHORIZONTAL);
+    const wxSizerFlags centreY(wxSizerFlags().Centre().Border());
+    sizer->Add(new wxStaticText(panel, wxID_ANY,
+        "This button will only work if its handler is dynamically connected"),
+        centreY);
+    m_btnDynamic = new wxButton(panel, Event_Dynamic, "&Dynamic button");
+    sizer->Add(m_btnDynamic, centreY);
+    panel->SetSizer(sizer);
 }
 
 MyFrame::~MyFrame()
@@ -285,47 +324,83 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox( wxT("Event sample shows different ways of using events\n")
-                  wxT("(c) 2001 Vadim Zeitlin"),
-                  wxT("About Event Sample"), wxOK | wxICON_INFORMATION, this );
+    wxMessageBox("Event sample shows different ways of using events\n"
+                 "(c) 2001-2009 Vadim Zeitlin",
+                 "About wxWidgets Event Sample",
+                 wxOK | wxICON_INFORMATION, this);
 }
 
 // ----------------------------------------------------------------------------
 // dynamic event handling stuff
 // ----------------------------------------------------------------------------
 
-void MyFrame::OnDynamic(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnDynamic(wxCommandEvent& event)
 {
+    wxString origin;
+    if ( event.GetEventObject() == this )
+        origin = "menu item";
+    else if ( event.GetEventObject() == m_btnDynamic )
+        origin = "button";
+    else
+        origin = "unknown event source";
+
     wxMessageBox
     (
-        wxT("This is a dynamic event handler which can be connected ")
-        wxT("and disconnected at run-time."),
-        wxT("Dynamic Event Handler"), wxOK | wxICON_INFORMATION, this
+        "This message box is shown from the dynamically connected "
+        "event handler in response to event generated by " + origin,
+        "wxWidgets Event Sample", wxOK | wxICON_INFORMATION, this
     );
 }
+
+#if !wxEVENTS_COMPATIBILITY_2_8
+
+void MyFrame::OnBind(wxCommandEvent& event)
+{
+    if ( event.IsChecked() )
+    {
+        // as we bind directly to the button, there is no need to use an id
+        // here: the button will only ever get its own events
+        m_btnDynamic->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MyFrame::OnDynamic,
+                           this);
+
+        // but we do need the id for the menu command as the frame gets all of
+        // them
+        Bind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnDynamic, this,
+             Event_Dynamic);
+    }
+    else // disconnect
+    {
+        m_btnDynamic->Unbind(wxEVT_COMMAND_BUTTON_CLICKED,
+                             &MyFrame::OnDynamic, this);
+        Unbind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnDynamic, this,
+               Event_Dynamic);
+    }
+
+    UpdateDynamicStatus(event.IsChecked());
+}
+
+#endif // !wxEVENTS_COMPATIBILITY_2_8
 
 void MyFrame::OnConnect(wxCommandEvent& event)
 {
     if ( event.IsChecked() )
     {
+        m_btnDynamic->Connect(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED,
+                              wxCommandEventHandler(MyFrame::OnDynamic),
+                              NULL, this);
         Connect(Event_Dynamic, wxEVT_COMMAND_MENU_SELECTED,
                 wxCommandEventHandler(MyFrame::OnDynamic));
-
-#if wxUSE_STATUSBAR
-        SetStatusText(_T("You can now use \"Dynamic\" item in the menu"));
-        SetStatusText(_T("Dynamic: on"), Status_Dynamic);
-#endif // wxUSE_STATUSBAR
     }
     else // disconnect
     {
+        m_btnDynamic->Disconnect(wxID_ANY, wxEVT_COMMAND_BUTTON_CLICKED,
+                                 wxCommandEventHandler(MyFrame::OnDynamic),
+                                 NULL, this);
         Disconnect(Event_Dynamic, wxEVT_COMMAND_MENU_SELECTED,
                    wxCommandEventHandler(MyFrame::OnDynamic));
-
-#if wxUSE_STATUSBAR
-        SetStatusText(_T("You can no more use \"Dynamic\" item in the menu"));
-        SetStatusText(_T("Dynamic: off"), Status_Dynamic);
-#endif // wxUSE_STATUSBAR
     }
+
+    UpdateDynamicStatus(event.IsChecked());
 }
 
 // ----------------------------------------------------------------------------
