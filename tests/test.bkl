@@ -168,5 +168,23 @@
         <wx-lib>base</wx-lib>
     </exe>
 
+    <fragment format="autoconf">
+# notice the ugly hack with using CXXWARNINGS: we can't use CPPFLAGS as
+# currently the value in the makefile would be ignored if we did, but
+# warnings don't matter when we expect compilation to fail anyhow so we can
+# use this variable to enable the compilation of code which is supposed to
+# fail
+failtest:
+	@$(RM) test_evthandler.o
+	@for d in GLOBAL STATIC METHOD FUNCTOR DERIVED WRONG_CLASS; do \
+	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \
+	        echo "*** Compilation with TEST_INVALID_BIND_$$d unexpectedly succeeded.">&amp;2; \
+	        exit 1; \
+	    fi; \
+	done; \
+	exit 0
+
+.PHONY: failtest
+    </fragment>
 
 </makefile>

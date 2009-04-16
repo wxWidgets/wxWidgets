@@ -628,6 +628,23 @@ printfbench_printfbench.o: $(srcdir)/benchmarks/printfbench.cpp $(PRINTFBENCH_OD
 @COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
 @COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
 
+# notice the ugly hack with using CXXWARNINGS: we can't use CPPFLAGS as
+# currently the value in the makefile would be ignored if we did, but
+# warnings don't matter when we expect compilation to fail anyhow so we can
+# use this variable to enable the compilation of code which is supposed to
+# fail
+failtest:
+	@$(RM) test_evthandler.o
+	@for d in GLOBAL STATIC METHOD FUNCTOR DERIVED WRONG_CLASS; do \
+	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \
+	        echo "*** Compilation with TEST_INVALID_BIND_$$d unexpectedly succeeded.">&2; \
+	        exit 1; \
+	    fi; \
+	done; \
+	exit 0
+
+.PHONY: failtest
+
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
 

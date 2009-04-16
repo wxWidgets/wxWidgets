@@ -366,20 +366,35 @@ void EvtHandlerTestCase::InvalidBind()
     // automatically, you need to uncomment them manually and test that
     // compilation does indeed fail
 
-    //handler.Bind(MyEventType, GlobalOnAnotherEvent);
-    //IdleFunctor f; handler.Bind(MyEventType, f);
-    //handler.Bind(MyEventType, &MyHandler::StaticOnAnotherEvent);
-    //handler.Bind(MyEventType, &MyHandler::OnAnotherEvent, &handler);
+    // connecting a handler with incompatible signature shouldn't work
+#ifdef TEST_INVALID_BIND_GLOBAL
+    handler.Bind(MyEventType, GlobalOnAnotherEvent);
+#endif
+#ifdef TEST_INVALID_BIND_STATIC
+    handler.Bind(MyEventType, &MyHandler::StaticOnAnotherEvent);
+#endif
+#ifdef TEST_INVALID_BIND_METHOD
+    handler.Bind(MyEventType, &MyHandler::OnAnotherEvent, &handler);
+#endif
+#ifdef TEST_INVALID_BIND_FUNCTOR
+    IdleFunctor f;
+    handler.Bind(MyEventType, f);
+#endif
 
-    // Test that this sample (discussed on the mailing list) doesn't compile:
-    // >struct C1 : wxEvtHandler { };
-    // >struct C2 : wxEvtHandler { void OnWhatever(wxEvent&) };
-    // >C1 c1;
-    // >c1.Connect(&C2::OnWhatever); // BOOM
+    // calling a derived class method with a base class pointer must not work
+#ifdef TEST_INVALID_BIND_DERIVED
+    struct C1 : wxEvtHandler { };
+    struct C2 : wxEvtHandler { void OnWhatever(wxEvent&); };
+    C1 c1;
+    c1.Bind(&C2::OnWhatever);
+#endif
 
-    //MySink mySink;
-    //MyHandler myHandler;
-    //myHandler.Bind( MyEventType, &MyHandler::OnMyEvent, &mySink ); 
+    // using object pointer incompatible with the method must not work
+#ifdef TEST_INVALID_BIND_WRONG_CLASS
+    MySink mySink;
+    MyHandler myHandler;
+    myHandler.Bind(MyEventType, &MyHandler::OnMyEvent, &mySink);
+#endif
 }
 
 #endif // !wxEVENTS_COMPATIBILITY_2_8
