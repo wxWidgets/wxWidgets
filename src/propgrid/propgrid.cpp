@@ -63,8 +63,6 @@
 
 #include "wx/timer.h"
 #include "wx/dcbuffer.h"
-#include "wx/clipbrd.h"
-#include "wx/dataobj.h"
 
 #ifdef __WXMSW__
     #include "wx/msw/private.h"
