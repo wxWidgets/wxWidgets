@@ -637,7 +637,7 @@ printfbench_printfbench.o: $(srcdir)/benchmarks/printfbench.cpp $(PRINTFBENCH_OD
 # fail
 failtest:
 	@$(RM) test_evthandler.o
-	@for d in GLOBAL STATIC METHOD FUNCTOR DERIVED WRONG_CLASS; do \
+	@for d in GLOBAL STATIC METHOD FUNCTOR NO_HANDLER DERIVED WRONG_CLASS; do \
 	    if $(MAKE) CXXWARNINGS=-DTEST_INVALID_BIND_$$d test_evthandler.o 2>/dev/null; then \
 	        echo "*** Compilation with TEST_INVALID_BIND_$$d unexpectedly succeeded.">&2; \
 	        exit 1; \

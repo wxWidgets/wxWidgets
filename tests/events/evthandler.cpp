@@ -381,6 +381,11 @@ void EvtHandlerTestCase::InvalidBind()
     handler.Bind(MyEventType, f);
 #endif
 
+    // the handler can't be omitted when calling Bind()
+#ifdef TEST_INVALID_BIND_NO_HANDLER
+    handler.Bind(MyEventType, &MyHandler::OnMyEvent);
+#endif
+
     // calling a derived class method with a base class pointer must not work
 #ifdef TEST_INVALID_BIND_DERIVED
     struct C1 : wxEvtHandler { };
