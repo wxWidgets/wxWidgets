@@ -863,7 +863,9 @@ public:
            instead. For the control created with this style, you can still use
            Ctrl-Enter to pass to the next control from the keyboard.
     @style{wxTE_MULTILINE}
-           The text control allows multiple lines.
+           The text control allows multiple lines. If this style is not
+           specified, line break characters should not be used in the controls
+           value.
     @style{wxTE_PASSWORD}
            The text will be echoed as asterisks.
     @style{wxTE_READONLY}
