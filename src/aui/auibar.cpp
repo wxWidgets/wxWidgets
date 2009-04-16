@@ -539,7 +539,13 @@ wxSize wxAuiDefaultToolBarArt::GetLabelSize(
 
     // get item's width
     width = item.GetMinSize().GetWidth();
-
+    
+    if (width == -1)
+    {
+        // no width specified, measure the text ourselves
+        width = dc.GetTextExtent(item.GetLabel()).GetX();
+    }
+    
     return wxSize(width, height);
 }
 
