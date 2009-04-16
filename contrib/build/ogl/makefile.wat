@@ -18,11 +18,7 @@
 !  loaddll wpp      wppdi86
 !  loaddll wppaxp   wppdaxp
 !  loaddll wpp386   wppd386
-! if $(__VERSION__) >= 1280
-!  loaddll wlink    wlinkd
-! else
 !  loaddll wlink    wlink
-! endif
 !  loaddll wlib     wlibd
 !endif
 
@@ -122,6 +118,14 @@ __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 __GDIPLUS_LIB_p =
 !ifeq USE_GDIPLUS 1
 __GDIPLUS_LIB_p = gdiplus.lib
+!endif
+__CAIRO_LIB_p =
+!ifeq USE_CAIRO 1
+__CAIRO_LIB_p = cairo.lib
+!endif
+____CAIRO_LIBDIR_FILENAMES_p =
+!ifeq USE_CAIRO 1
+____CAIRO_LIBDIR_FILENAMES_p = libpath $(CAIRO_ROOT)\lib
 !endif
 __WXLIB_CORE_p =
 !ifeq MONOLITHIC 0
@@ -223,6 +227,10 @@ __GFXCTX_DEFINE_p =
 !ifeq USE_GDIPLUS 1
 __GFXCTX_DEFINE_p = -dwxUSE_GRAPHICS_CONTEXT=1
 !endif
+____CAIRO_INCLUDEDIR_FILENAMES =
+!ifeq USE_CAIRO 1
+____CAIRO_INCLUDEDIR_FILENAMES = -i=$(CAIRO_ROOT)\include\cairo
+!endif
 
 ### Variables: ###
 
@@ -236,10 +244,10 @@ OGLDLL_CXXFLAGS = -bd $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\src\ogl\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=..\..\src\ogl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_OGL &
-	/fh=$(OBJS)\wxprec_ogldll.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
-	$(CXXFLAGS)
+	-i=..\..\src\ogl\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
+	-wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\ogl\..\..\include &
+	-dWXUSINGDLL -dWXMAKINGDLL_OGL /fh=$(OBJS)\wxprec_ogldll.pch $(__RTTIFLAG) &
+	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 OGLDLL_OBJECTS =  &
 	$(OBJS)\ogldll_dummy.obj &
 	$(OBJS)\ogldll_basic2.obj &
@@ -258,9 +266,10 @@ OGLLIB_CXXFLAGS = $(__DEBUGINFO_1) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=..\..\src\ogl\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
-	-i=..\..\src\ogl\..\..\include /fh=$(OBJS)\wxprec_ogllib.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
+	-i=..\..\src\ogl\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx &
+	-wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=..\..\src\ogl\..\..\include &
+	/fh=$(OBJS)\wxprec_ogllib.pch $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) &
+	$(CXXFLAGS)
 OGLLIB_OBJECTS =  &
 	$(OBJS)\ogllib_dummy.obj &
 	$(OBJS)\ogllib_basic2.obj &
@@ -301,9 +310,9 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	@%append $(OBJS)\ogldll.lbc option quiet
 	@%append $(OBJS)\ogldll.lbc name $^@
 	@%append $(OBJS)\ogldll.lbc option caseexact
-	@%append $(OBJS)\ogldll.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) $(LDFLAGS)
+	@%append $(OBJS)\ogldll.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
 	@for %i in ($(OGLDLL_OBJECTS)) do @%append $(OBJS)\ogldll.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\ogldll.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p) ) do @%append $(OBJS)\ogldll.lbc library %i
 	@%append $(OBJS)\ogldll.lbc option resource=$(OBJS)\ogldll_version.res
 	@%append $(OBJS)\ogldll.lbc system nt_dll
 	wlink @$(OBJS)\ogldll.lbc
@@ -321,7 +330,7 @@ $(OBJS)\ogldll_dummy.obj :  .AUTODEPEND ..\..\src\ogl\..\..\..\src\common\dummy.
 	$(CXX) -bt=nt -zq -fo=$^@ $(OGLDLL_CXXFLAGS) $<
 
 $(OBJS)\ogldll_version.res :  .AUTODEPEND ..\..\src\ogl\..\..\..\src\msw\version.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\ogl\..\..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_wat$(VENDORTAG) -i=..\..\src\ogl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_OGL $<
+	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\src\ogl\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ogl_wat$(VENDORTAG) -i=..\..\src\ogl\..\..\include -dWXUSINGDLL -dWXMAKINGDLL_OGL $<
 
 $(OBJS)\ogldll_basic2.obj :  .AUTODEPEND ..\..\src\ogl\basic2.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(OGLDLL_CXXFLAGS) $<

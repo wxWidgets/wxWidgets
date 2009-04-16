@@ -23,10 +23,10 @@ PLOTDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\plot\..\..\..\include -W \
-	-Wall -I..\..\src\plot\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_PLOT \
-	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\plot\..\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I..\..\src\plot\..\..\include \
+	-DWXUSINGDLL -DWXMAKINGDLL_PLOT $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 PLOTDLL_OBJECTS =  \
 	$(OBJS)\plotdll_dummy.o \
 	$(OBJS)\plotdll_version_rc.o \
@@ -35,9 +35,10 @@ PLOTLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\plot\..\..\..\include -W \
-	-Wall -I..\..\src\plot\..\..\include $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I..\..\src\plot\..\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES) -W -Wall -I..\..\src\plot\..\..\include \
+	$(__RTTIFLAG) $(__EXCEPTIONSFLAG) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
+	$(CXXFLAGS)
 PLOTLIB_OBJECTS =  \
 	$(OBJS)\plotlib_dummy.o \
 	$(OBJS)\plotlib_plot.o
@@ -121,6 +122,9 @@ endif
 ifeq ($(USE_GDIPLUS),1)
 __GFXCTX_DEFINE_p_1 = --define wxUSE_GRAPHICS_CONTEXT=1
 endif
+ifeq ($(USE_CAIRO),1)
+__CAIRO_INCLUDEDIR_p = --include-dir $(CAIRO_ROOT)/include/cairo
+endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
@@ -139,6 +143,12 @@ __UNICOWS_LIB_p = -lunicows
 endif
 ifeq ($(USE_GDIPLUS),1)
 __GDIPLUS_LIB_p = -lgdiplus
+endif
+ifeq ($(USE_CAIRO),1)
+__CAIRO_LIB_p = -lcairo
+endif
+ifeq ($(USE_CAIRO),1)
+____CAIRO_LIBDIR_FILENAMES_p = -L$(CAIRO_ROOT)\lib
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_CORE_p = \
@@ -221,6 +231,9 @@ endif
 ifeq ($(USE_GDIPLUS),1)
 __GFXCTX_DEFINE_p = -DwxUSE_GRAPHICS_CONTEXT=1
 endif
+ifeq ($(USE_CAIRO),1)
+____CAIRO_INCLUDEDIR_FILENAMES = -I$(CAIRO_ROOT)\include\cairo
+endif
 
 
 all: $(OBJS)
@@ -240,7 +253,7 @@ clean:
 
 ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_gcc$(VENDORTAG).dll: $(PLOTDLL_OBJECTS) $(OBJS)\plotdll_version_rc.o
-	$(CXX) $(LINK_DLL_FLAGS) -fPIC -o $@ $(PLOTDLL_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib=$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot.a $(LDFLAGS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
+	$(CXX) $(LINK_DLL_FLAGS) -fPIC -o $@ $(PLOTDLL_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib=$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot.a $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)
 endif
 
 ifeq ($(SHARED),0)
@@ -254,7 +267,7 @@ $(OBJS)\plotdll_dummy.o: ../../src/plot/../../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(PLOTDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\plotdll_version_rc.o: ../../src/plot/../../../src/msw/version.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ../../src/plot/../../../include --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_gcc$(VENDORTAG) --include-dir ../../src/plot/../../include --define WXUSINGDLL --define WXMAKINGDLL_PLOT
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ../../src/plot/../../../include $(__CAIRO_INCLUDEDIR_p) --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_plot_gcc$(VENDORTAG) --include-dir ../../src/plot/../../include --define WXUSINGDLL --define WXMAKINGDLL_PLOT
 
 $(OBJS)\plotdll_plot.o: ../../src/plot/plot.cpp
 	$(CXX) -c -o $@ $(PLOTDLL_CXXFLAGS) $(CPPDEPS) $<

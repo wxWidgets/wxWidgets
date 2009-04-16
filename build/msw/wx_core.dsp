@@ -4441,6 +4441,10 @@ SOURCE=..\..\src\generic\fontpickerg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\graphicc.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\listbkg.cpp
 # End Source File
 # Begin Source File

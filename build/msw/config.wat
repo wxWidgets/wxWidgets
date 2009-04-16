@@ -98,6 +98,9 @@ USE_RTTI = 1
 # Enable threading in compiled code. [0,1]
 USE_THREADS = 1
 
+# Enable wxCairoContext for platforms other than Linux/GTK. [0,1]
+USE_CAIRO = 0
+
 # Link with gdiplus.lib? (Needed for wxGraphicsContext, will also set wxUSE_GRAPHICS_CONTEXT) [0,1]
 USE_GDIPLUS = 0
 

@@ -23,10 +23,10 @@ SPLITTREE_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\..\include -W -Wall -I. \
-	$(__DLLFLAG_p) -I.\..\..\..\..\samples -DNOPCH -I.\..\..\..\include \
-	$(__RTTIFLAG_5) $(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES_p) -W -Wall -I. $(__DLLFLAG_p) \
+	-I.\..\..\..\..\samples -DNOPCH -I.\..\..\..\include $(__RTTIFLAG_5) \
+	$(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 SPLITTREE_OBJECTS =  \
 	$(OBJS)\splittree_sample_rc.o \
 	$(OBJS)\splittree_tree.o
@@ -147,6 +147,12 @@ endif
 ifeq ($(USE_GDIPLUS),1)
 __GFXCTX_DEFINE_p_1 = --define wxUSE_GRAPHICS_CONTEXT=1
 endif
+ifeq ($(USE_CAIRO),1)
+____CAIRO_INCLUDEDIR_FILENAMES_p = -I$(CAIRO_ROOT)\include\cairo
+endif
+ifeq ($(USE_CAIRO),1)
+__CAIRO_INCLUDEDIR_p = --include-dir $(CAIRO_ROOT)/include/cairo
+endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
@@ -179,6 +185,12 @@ __UNICOWS_LIB_p = -lunicows
 endif
 ifeq ($(USE_GDIPLUS),1)
 __GDIPLUS_LIB_p = -lgdiplus
+endif
+ifeq ($(USE_CAIRO),1)
+__CAIRO_LIB_p = -lcairo
+endif
+ifeq ($(USE_CAIRO),1)
+____CAIRO_LIBDIR_FILENAMES_p = -L$(CAIRO_ROOT)\lib
 endif
 ifeq ($(BUILD),debug)
 ifeq ($(DEBUG_INFO),default)
@@ -218,10 +230,10 @@ clean:
 	-if exist $(OBJS)\splittree.exe del $(OBJS)\splittree.exe
 
 $(OBJS)\splittree.exe: $(SPLITTREE_OBJECTS) $(OBJS)\splittree_sample_rc.o
-	$(CXX) -o $@ $(SPLITTREE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(LDFLAGS)  -lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+	$(CXX) -o $@ $(SPLITTREE_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)  -lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
 $(OBJS)\splittree_sample_rc.o: ./../../../../samples/sample.rc
-	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../../include --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../../samples --define NOPCH --include-dir ./../../../include
+	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../../samples --define NOPCH --include-dir ./../../../include
 
 $(OBJS)\splittree_tree.o: ./tree.cpp
 	$(CXX) -c -o $@ $(SPLITTREE_CXXFLAGS) $(CPPDEPS) $<

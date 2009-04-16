@@ -23,9 +23,9 @@ WXRC_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__OPTIMIZEFLAG_4) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include /W4 /I. $(__DLLFLAG_p) \
-	/D_CONSOLE /DwxUSE_GUI=0 $(__RTTIFLAG_9) $(__EXCEPTIONSFLAG_10) $(CPPFLAGS) \
-	$(CXXFLAGS)
+	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include \
+	$(____CAIRO_INCLUDEDIR_FILENAMES_p) /W4 /I. $(__DLLFLAG_p) /D_CONSOLE \
+	/DwxUSE_GUI=0 $(__RTTIFLAG_9) $(__EXCEPTIONSFLAG_10) $(CPPFLAGS) $(CXXFLAGS)
 WXRC_OBJECTS =  \
 	$(OBJS)\wxrc_wxrc.obj
 
@@ -202,6 +202,9 @@ __MSLU_DEFINE_p = /DwxUSE_UNICODE_MSLU=1
 !if "$(USE_GDIPLUS)" == "1"
 __GFXCTX_DEFINE_p = /DwxUSE_GRAPHICS_CONTEXT=1
 !endif
+!if "$(USE_CAIRO)" == "1"
+____CAIRO_INCLUDEDIR_FILENAMES_p = /I$(CAIRO_ROOT)\include\cairo
+!endif
 !if "$(SHARED)" == "1"
 __DLLFLAG_p = /DWXUSINGDLL
 !endif
@@ -223,6 +226,12 @@ __UNICOWS_LIB_p = unicows.lib
 !if "$(USE_GDIPLUS)" == "1"
 __GDIPLUS_LIB_p = gdiplus.lib
 !endif
+!if "$(USE_CAIRO)" == "1"
+__CAIRO_LIB_p = cairo.lib
+!endif
+!if "$(USE_CAIRO)" == "1"
+____CAIRO_LIBDIR_FILENAMES_p = /LIBPATH:$(CAIRO_ROOT)\lib
+!endif
 
 
 all: $(OBJS)
@@ -243,8 +252,8 @@ clean:
 
 !if "$(USE_XRC)" == "1"
 $(OBJS)\wxrc.exe: $(WXRC_OBJECTS)
-	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\wxrc.pdb"  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(LDFLAGS) @<<
-	$(WXRC_OBJECTS)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib
+	link /NOLOGO /OUT:$@  $(__DEBUGINFO_1) /pdb:"$(OBJS)\wxrc.pdb"  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS) @<<
+	$(WXRC_OBJECTS)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib
 <<
 !endif
 

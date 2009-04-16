@@ -18,11 +18,7 @@
 !  loaddll wpp      wppdi86
 !  loaddll wppaxp   wppdaxp
 !  loaddll wpp386   wppd386
-! if $(__VERSION__) >= 1280
-!  loaddll wlink    wlinkd
-! else
 !  loaddll wlink    wlink
-! endif
 !  loaddll wlib     wlibd
 !endif
 
@@ -178,6 +174,14 @@ __GDIPLUS_LIB_p =
 !ifeq USE_GDIPLUS 1
 __GDIPLUS_LIB_p = gdiplus.lib
 !endif
+__CAIRO_LIB_p =
+!ifeq USE_CAIRO 1
+__CAIRO_LIB_p = cairo.lib
+!endif
+____CAIRO_LIBDIR_FILENAMES_p =
+!ifeq USE_CAIRO 1
+____CAIRO_LIBDIR_FILENAMES_p = libpath $(CAIRO_ROOT)\lib
+!endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
 __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
@@ -211,6 +215,10 @@ __GFXCTX_DEFINE_p =
 !ifeq USE_GDIPLUS 1
 __GFXCTX_DEFINE_p = -dwxUSE_GRAPHICS_CONTEXT=1
 !endif
+____CAIRO_INCLUDEDIR_FILENAMES =
+!ifeq USE_CAIRO 1
+____CAIRO_INCLUDEDIR_FILENAMES = -i=$(CAIRO_ROOT)\include\cairo
+!endif
 __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
@@ -228,9 +236,9 @@ WIDGET_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	$(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=.\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. &
-	$(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $(__RTTIFLAG_7) &
-	$(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
+	-i=.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -wx -wcd=549 &
+	-wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH &
+	$(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
 WIDGET_OBJECTS =  &
 	$(OBJS)\widget_widget.obj
 
@@ -256,9 +264,9 @@ $(OBJS)\widget.exe :  $(WIDGET_OBJECTS) $(OBJS)\widget_widget.res
 	@%append $(OBJS)\widget.lbc option quiet
 	@%append $(OBJS)\widget.lbc name $^@
 	@%append $(OBJS)\widget.lbc option caseexact
-	@%append $(OBJS)\widget.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(LDFLAGS)
+	@%append $(OBJS)\widget.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(____CAIRO_LIBDIR_FILENAMES_p) $(LDFLAGS)
 	@for %i in ($(WIDGET_OBJECTS)) do @%append $(OBJS)\widget.lbc file %i
-	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\widget.lbc library %i
+	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\widget.lbc library %i
 	@%append $(OBJS)\widget.lbc option resource=$(OBJS)\widget_widget.res
 	@for %i in () do @%append $(OBJS)\widget.lbc option stack=%i
 	wlink @$(OBJS)\widget.lbc
@@ -271,5 +279,5 @@ $(OBJS)\widget_widget.obj :  .AUTODEPEND .\widget.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGET_CXXFLAGS) $<
 
 $(OBJS)\widget_widget.res :  .AUTODEPEND .\widget.rc
-	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $<
+	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $<
 
