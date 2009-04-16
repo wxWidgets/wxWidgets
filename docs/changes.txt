@@ -227,7 +227,7 @@ Changes in behaviour which may result in compilation errors
   be vetoed any more, use the new wxEVT_GRID_CELL_CHANGING event to do it.
 
 - wxListCtrlCompare function used with wxListCtrl::SortItems() must now declare
-  its third parameter as wxUIntPtr and not long (this allows passing pointers
+  its third parameter as wxIntPtr and not long (this allows passing pointers
   to it under 64 bit platforms too).
 
 - Global wxPendingEvents and wxPendingEventsLocker objects were removed.

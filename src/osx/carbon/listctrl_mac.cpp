@@ -2205,7 +2205,7 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 }
 
 
-bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxUIntPtr data)
+bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
 {
     if (m_genericImpl)
         return m_genericImpl->SortItems(fn, data);

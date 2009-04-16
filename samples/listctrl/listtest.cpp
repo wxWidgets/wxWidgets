@@ -72,7 +72,7 @@ static const int NUM_ITEMS = 10;
 static const int NUM_ICONS = 9;
 
 int wxCALLBACK
-MyCompareFunction(long item1, long item2, wxUIntPtr WXUNUSED(sortData))
+MyCompareFunction(long item1, long item2, wxIntPtr WXUNUSED(sortData))
 {
     // inverse the order
     if (item1 < item2)

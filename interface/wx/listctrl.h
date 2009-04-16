@@ -842,7 +842,7 @@ public:
         using the specified @a fnSortCallBack function. This function must have the
         following prototype:
         @code
-        int wxCALLBACK wxListCompareFunction(long item1, long item2, wxUIntPtr sortData)
+        int wxCALLBACK wxListCompareFunction(long item1, long item2, wxIntPtr sortData)
         @endcode
 
         It is called each time when the two items must be compared and should return 0
@@ -860,7 +860,7 @@ public:
 
         Please see the @ref page_samples_listctrl for an example of using this function.
     */
-    bool SortItems(wxListCtrlCompare fnSortCallBack, wxUIntPtr data);
+    bool SortItems(wxListCtrlCompare fnSortCallBack, wxIntPtr data);
 
 protected:
 

@@ -1865,7 +1865,7 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 struct wxInternalDataSort
 {
     wxListCtrlCompare user_fn;
-    wxUIntPtr data;
+    wxIntPtr data;
 };
 
 int CALLBACK wxInternalDataCompareFunc(LPARAM lParam1, LPARAM lParam2,  LPARAM lParamSort)
@@ -1882,7 +1882,7 @@ int CALLBACK wxInternalDataCompareFunc(LPARAM lParam1, LPARAM lParam2,  LPARAM l
 
 }
 
-bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxUIntPtr data)
+bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
 {
     wxInternalDataSort internalData;
     internalData.user_fn = fn;
