@@ -57,6 +57,9 @@
     #include "../sample.xpm"
 #endif
 
+static const int NUM_CHILDREN_PER_LEVEL = 5;
+static const int NUM_LEVELS = 2;
+
 // verify that the item is ok and insult the user if it is not
 #define CHECK_ITEM( item ) if ( !item.IsOk() ) {                                 \
                              wxMessageBox(wxT("Please select some item first!"), \
@@ -624,7 +627,7 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnRecreate(wxCommandEvent& event)
 {
     OnDeleteAll(event);
-    m_treeCtrl->AddTestItemsToTree(5, 2);
+    m_treeCtrl->AddTestItemsToTree(NUM_CHILDREN_PER_LEVEL, NUM_LEVELS);
 }
 
 void MyFrame::OnSetImageSize(wxCommandEvent& WXUNUSED(event))
@@ -852,7 +855,7 @@ MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
     CreateStateImageList();
 
     // Add some items to the tree
-    AddTestItemsToTree(5, 2);
+    AddTestItemsToTree(NUM_CHILDREN_PER_LEVEL, NUM_LEVELS);
 }
 
 void MyTreeCtrl::CreateImageList(int size)
@@ -1102,9 +1105,13 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
     SetItemTextColour(id, *wxBLUE);
 
     id = GetNextChild(rootId, cookie);
-    id = GetNextChild(rootId, cookie);
-    SetItemTextColour(id, *wxRED);
-    SetItemBackgroundColour(id, *wxLIGHT_GREY);
+    if ( id )
+        id = GetNextChild(rootId, cookie);
+    if ( id )
+    {
+        SetItemTextColour(id, *wxRED);
+        SetItemBackgroundColour(id, *wxLIGHT_GREY);
+    }
 }
 
 void MyTreeCtrl::GetItemsRecursively(const wxTreeItemId& idParent,
