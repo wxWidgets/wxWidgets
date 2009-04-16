@@ -258,15 +258,21 @@ private:
 
 #if wxEVENTS_COMPATIBILITY_2_8
 
-// Create a functor for the legacy events: handler can be NULL and its default
-// value is used by the event table macros
-
+// Create a functor for the legacy events: used by Connect()
 inline wxObjectEventFunctor *
 wxNewEventFunctor(const wxEventType& WXUNUSED(evtType),
                   wxObjectEventFunction method,
-                  wxEvtHandler *handler = NULL)
+                  wxEvtHandler *handler)
 {
     return new wxObjectEventFunctor(method, handler);
+}
+
+// This version is used by DECLARE_EVENT_TABLE_ENTRY()
+inline wxObjectEventFunctor *
+wxNewEventFunctor(const wxEventType& WXUNUSED(evtType),
+                  wxObjectEventFunction method)
+{
+    return new wxObjectEventFunctor(method, NULL);
 }
 
 inline wxObjectEventFunctor
