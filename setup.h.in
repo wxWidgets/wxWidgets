@@ -552,7 +552,7 @@
 #define wxUSE_RICHEDIT2 0
 #endif
 
-#if !defined(__WIN32__)
+#if !defined(__WIN32__) && !defined(__APPLE__)
 #define wxUSE_CAIRO 1
 #else
 #define wxUSE_CAIRO 0
