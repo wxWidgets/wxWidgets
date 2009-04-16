@@ -1224,6 +1224,12 @@ void wxFlagsProperty::Init()
 
     m_children.clear();
 
+    // Relay wxPG_BOOL_USE_CHECKBOX and wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING
+    // to child bool property controls.
+    long attrUseCheckBox = GetAttributeAsLong(wxPG_BOOL_USE_CHECKBOX, 0);
+    long attrUseDCC = GetAttributeAsLong(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,
+                                         0);
+
     if ( m_choices.IsOk() )
     {
         const wxPGChoices& choices = m_choices;
@@ -1246,6 +1252,12 @@ void wxFlagsProperty::Init()
             {
                 boolProp = new wxBoolProperty( label, label, child_val );
             }
+            if ( attrUseCheckBox )
+                boolProp->SetAttribute(wxPG_BOOL_USE_CHECKBOX,
+                                       true);
+            if ( attrUseDCC )
+                boolProp->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,
+                                       true);
             AddPrivateChild(boolProp);
         }
 
@@ -1492,6 +1504,22 @@ void wxFlagsProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVari
         thisValue = (long)(oldValue | vi);
     else
         thisValue = (long)(oldValue & ~(vi));
+}
+
+bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
+{
+    if ( name == wxPG_BOOL_USE_CHECKBOX ||
+         name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
+    {
+        for ( size_t i=0; i<GetChildCount(); i++ )
+        {
+            Item(i)->SetAttribute(name, value);
+        }
+        // Must return false so that the attribute is stored in
+        // flag property's actual property storage
+        return false;
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------

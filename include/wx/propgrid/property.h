@@ -520,13 +520,23 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 */
 #define wxPG_ATTR_AUTOCOMPLETE              wxS("AutoComplete")
 
-/** wxBoolProperty specific, int, default 0. When 1 sets bool property to
-    use checkbox instead of choice.
+/** wxBoolProperty and wxFlagsProperty specific. Value type is bool.
+    Default value is False.
+
+    When set to True, bool property will use check box instead of a
+    combo box as its editor control. If you set this attribute
+    for a wxFlagsProperty, it is automatically applied to child
+    bool properties.
 */
 #define wxPG_BOOL_USE_CHECKBOX              wxS("UseCheckbox")
 
-/** wxBoolProperty specific, int, default 0. When 1 sets bool property value
-    to cycle on double click (instead of showing the popup listbox).
+/** wxBoolProperty and wxFlagsProperty specific. Value type is bool.
+    Default value is False.
+
+    Set to True for the bool property to cycle value on double click
+    (instead of showing the popup listbox). If you set this attribute
+    for a wxFlagsProperty, it is automatically applied to child
+    bool properties.
 */
 #define wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING  wxS("UseDClickCycling")
 

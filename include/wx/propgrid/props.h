@@ -538,6 +538,7 @@ public:
                                int childIndex,
                                wxVariant& childValue ) const;
     virtual void RefreshChildren();
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
     // GetChoiceSelection needs to overridden since m_choices is
     // used and value is integer, but it is not index.

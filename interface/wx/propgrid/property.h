@@ -51,13 +51,23 @@
 */
 #define wxPG_ATTR_AUTOCOMPLETE              wxS("AutoComplete")
 
-/** wxBoolProperty specific, int, default 0. When 1 sets bool property to
-    use checkbox instead of choice.
+/** wxBoolProperty and wxFlagsProperty specific. Value type is bool.
+    Default value is False.
+
+    When set to True, bool property will use check box instead of a
+    combo box as its editor control. If you set this attribute
+    for a wxFlagsProperty, it is automatically applied to child
+    bool properties.
 */
 #define wxPG_BOOL_USE_CHECKBOX              wxS("UseCheckbox")
 
-/** wxBoolProperty specific, int, default 0. When 1 sets bool property value
-    to cycle on double click (instead of showing the popup listbox).
+/** wxBoolProperty and wxFlagsProperty specific. Value type is bool.
+    Default value is False.
+
+    Set to True for the bool property to cycle value on double click
+    (instead of showing the popup listbox). If you set this attribute
+    for a wxFlagsProperty, it is automatically applied to child
+    bool properties.
 */
 #define wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING  wxS("UseDClickCycling")
 
@@ -300,13 +310,16 @@
 
     @subsection wxFlagsProperty
 
-    Represents a bit set that fits in a long integer. wxBoolProperty sub-properties
-    are created for editing individual bits. Textctrl is created to manually edit
-    the flags as a text; a continous sequence of spaces, commas and semicolons
-    is considered as a flag id separator.
-    <b>Note: </b> When changing "choices" (ie. flag labels) of wxFlagsProperty, you
-    will need to use wxPGProperty::SetChoices() - otherwise they will not get updated
-    properly.
+    Represents a bit set that fits in a long integer. wxBoolProperty sub-
+    properties are created for editing individual bits. Textctrl is created to
+    manually edit the flags as a text; a continous sequence of spaces, commas
+    and semicolons are considered as a flag id separator.
+
+    <b>Note:</b> When changing "choices" (ie. flag labels) of wxFlagsProperty,
+    you will need to use wxPGProperty::SetChoices() - otherwise they will not
+    get updated properly.
+
+    wxFlagsProperty supports the same attributes as wxBoolProperty.
 
     @subsection wxArrayStringProperty
 
@@ -1454,7 +1467,7 @@ public:
     Helper class for managing choices of wxPropertyGrid properties.
     Each entry can have label, value, bitmap, text colour, and background
     colour.
- 
+
     wxPGChoices uses reference counting, similar to other wxWidgets classes.
     This means that assignment operator and copy constructor only copy the
     reference and not the actual data. Use Copy() member function to create a
