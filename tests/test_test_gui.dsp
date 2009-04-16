@@ -281,6 +281,10 @@ SOURCE=.\controls\listctrltest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\graphics\measuring.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\geometry\point.cpp
 # End Source File
 # Begin Source File

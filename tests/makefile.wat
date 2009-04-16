@@ -18,11 +18,7 @@
 !  loaddll wpp      wppdi86
 !  loaddll wppaxp   wppdaxp
 !  loaddll wpp386   wppd386
-! if $(__VERSION__) >= 1280
-!  loaddll wlink    wlinkd
-! else
 !  loaddll wlink    wlink
-! endif
 !  loaddll wlib     wlibd
 !endif
 
@@ -342,6 +338,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_rect.obj &
 	$(OBJS)\test_gui_size.obj &
 	$(OBJS)\test_gui_point.obj &
+	$(OBJS)\test_gui_measuring.obj &
 	$(OBJS)\test_gui_config.obj &
 	$(OBJS)\test_gui_comboboxtest.obj &
 	$(OBJS)\test_gui_headerctrltest.obj &
@@ -639,6 +636,9 @@ $(OBJS)\test_gui_size.obj :  .AUTODEPEND .\geometry\size.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_point.obj :  .AUTODEPEND .\geometry\point.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_measuring.obj :  .AUTODEPEND .\graphics\measuring.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_config.obj :  .AUTODEPEND .\config\config.cpp
