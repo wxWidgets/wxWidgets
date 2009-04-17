@@ -269,8 +269,8 @@ wxNewEventFunctor(const wxEventType& WXUNUSED(evtType),
 
 // This version is used by DECLARE_EVENT_TABLE_ENTRY()
 inline wxObjectEventFunctor *
-wxNewEventFunctor(const wxEventType& WXUNUSED(evtType),
-                  wxObjectEventFunction method)
+wxNewEventTableFunctor(const wxEventType& WXUNUSED(evtType),
+                       wxObjectEventFunction method)
 {
     return new wxObjectEventFunctor(method, NULL);
 }
