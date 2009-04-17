@@ -91,6 +91,15 @@ Major new features in 2.8 release
 2.8.11:
 -------
 
+*** INCOMPATIBLE CHANGE: ***
+
+Due to an oversight, a bug fix in wxMSW resulted in an incompatible change in
+wxTreeCtrl behaviour: its EVT_TREE_ITEM_ACTIVATED handler now must skip the
+event being processed to allow the item to be toggled by double clicking on it.
+I.e. you need to ensure there is an "event.Skip()" in your item activation
+handler if you do wish to allow the item to be toggled.
+
+
 All:
 
 - Added several functions forward compatible with wxWidgets 3.0 (troelsk):
