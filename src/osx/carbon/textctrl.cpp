@@ -234,7 +234,7 @@ public :
 
     void AdjustCreationAttributes( const wxColour& background, bool visible ) ;
 
-    virtual void SetFont( const wxFont & font, const wxColour& foreground, long windowStyle ) ;
+    virtual void SetFont( const wxFont & font, const wxColour& foreground, long windowStyle, bool ignoreBlack ) ;
     virtual void SetBackgroundColour(const wxColour& col );
     virtual void SetStyle( long start, long end, const wxTextAttr& style ) ;
     virtual void Copy() ;
@@ -1080,7 +1080,8 @@ void wxMacMLTEControl::TXNSetAttribute( const wxTextAttr& style , long from , lo
 
 void wxMacMLTEControl::SetFont(const wxFont & font,
                                const wxColour& foreground,
-                               long WXUNUSED(windowStyle))
+                               long WXUNUSED(windowStyle),
+                               bool WXUNUSED(ignoreBlack))
 {
     wxMacEditHelper help( m_txn ) ;
     TXNSetAttribute( wxTextAttr( foreground, wxNullColour, font ), kTXNStartOffset, kTXNEndOffset ) ;
