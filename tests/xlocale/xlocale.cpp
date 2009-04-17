@@ -202,12 +202,12 @@ void XLocaleTestCase::TestStdlibFunctionsWith(const wxXLocale& loc)
     CPPUNIT_ASSERT_EQUAL( 0x60c0c0,   wxStrtol_l(endptr, &endptr, 16, loc) );
     CPPUNIT_ASSERT_EQUAL( -0x374D20,  wxStrtol_l(endptr, &endptr, 2, loc) );
     CPPUNIT_ASSERT_EQUAL( 0x6fffff,   wxStrtol_l(endptr, NULL, 0, loc) );
-    
+
     // strtoul
     // NOTE: 3147483647 and 0xEE6B2800 are greater than LONG_MAX (on 32bit machines) but
     //       smaller than ULONG_MAX
-    CPPUNIT_ASSERT_EQUAL( (unsigned long)3147483647,  wxStrtoul_l(wxT("3147483647"), NULL, 0, loc) );
-    CPPUNIT_ASSERT_EQUAL( (unsigned long)0xEE6B2800, wxStrtoul_l(wxT("0xEE6B2800"), NULL, 0, loc) );
+    CPPUNIT_ASSERT_EQUAL( 3147483647ul,  wxStrtoul_l(wxT("3147483647"), NULL, 0, loc) );
+    CPPUNIT_ASSERT_EQUAL( 0xEE6B2800ul, wxStrtoul_l(wxT("0xEE6B2800"), NULL, 0, loc) );
 
     // TODO: test for "failure" behaviour of the functions above
 }
@@ -246,7 +246,7 @@ void XLocaleTestCase::TestCtypeFunctions()
     CPPUNIT_ASSERT( locIT.IsOk() ); // doesn't make sense to continue otherwise
 
     TestCtypeFunctionsWith(locIT);
-    
+
     CPPUNIT_ASSERT( wxIsalpha_l(wxT('\xe1'), locIT) );
     CPPUNIT_ASSERT( wxIslower_l(wxT('\xe1'), locIT) );
 #endif
@@ -284,11 +284,11 @@ void XLocaleTestCase::TestStdlibFunctions()
 
     // comma as decimal point:
     CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), NULL, locFR) );
-    
+
     // space as thousands separator is not recognized by wxStrtod_l():
     CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1 234,5"), NULL, locFR) );
-    
-    
+
+
     // italian
 
     if (!wxLocale::IsAvailable(wxLANGUAGE_ITALIAN))
@@ -301,7 +301,7 @@ void XLocaleTestCase::TestStdlibFunctions()
 
     // comma as decimal point:
     CPPUNIT_ASSERT_EQUAL( 1.234, wxStrtod_l(wxT("1,234"), NULL, locIT) );
-    
+
     // dot as thousands separator is not recognized by wxStrtod_l():
     CPPUNIT_ASSERT( 1234.5 != wxStrtod_l(wxT("1.234,5"), NULL, locIT) );
 #endif
