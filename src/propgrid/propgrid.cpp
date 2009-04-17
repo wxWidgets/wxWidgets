@@ -1038,7 +1038,7 @@ bool wxPropertyGrid::SetFont( const wxFont& font )
     ClearSelection(false);
 
     bool res = wxScrolledWindow::SetFont( font );
-    if ( res )
+    if ( res && GetParent()) // may not have been Create()ed yet
     {
         CalculateFontAndBitmapStuff( m_vspacing );
         Refresh();
