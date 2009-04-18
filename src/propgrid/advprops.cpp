@@ -660,8 +660,7 @@ void wxFontProperty::OnSetValue()
 
     if ( !font.Ok() )
     {
-        font = wxFont(10,wxSWISS,wxNORMAL,wxNORMAL);
-        m_value << font;
+        m_value << *wxNORMAL_FONT;
     }
 }
 
