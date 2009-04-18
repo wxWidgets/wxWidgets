@@ -1949,14 +1949,14 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
 
     rowsizer->Add( ed, 1, wxEXPAND|wxALL, spacing );
     topsizer->Add( rowsizer, 1, wxEXPAND, 0 );
-    rowsizer = new wxBoxSizer( wxHORIZONTAL );
-    const int but_sz_flags =
-        wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT;
-    rowsizer->Add( new wxButton(dlg,wxID_OK,_("Ok")),
-        0, but_sz_flags, spacing );
-    rowsizer->Add( new wxButton(dlg,wxID_CANCEL,_("Cancel")),
-        0, but_sz_flags, spacing );
-    topsizer->Add( rowsizer, 0, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL, 0 );
+
+    wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
+    buttonSizer->AddButton(new wxButton(dlg, wxID_OK));
+    buttonSizer->AddButton(new wxButton(dlg, wxID_CANCEL));
+    buttonSizer->Realize();
+    topsizer->Add( buttonSizer, 0,
+                   wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxBOTTOM|wxRIGHT,
+                   spacing );
 
     dlg->SetSizer( topsizer );
     topsizer->SetSizeHints( dlg );
@@ -2111,9 +2111,6 @@ bool wxArrayEditorDialog::Create( wxWindow *parent,
 
     m_curFocus = 1;
 
-    const int but_sz_flags =
-        wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL; //wxBOTTOM|wxLEFT|wxRIGHT;
-
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
 
     // Message
@@ -2183,17 +2180,14 @@ bool wxArrayEditorDialog::Create( wxWindow *parent,
     topsizer->Add( new wxStaticLine(this,-1),
         0, wxEXPAND|wxTOP|wxLEFT|wxRIGHT, spacing );
 
-    // buttons
-    rowsizer = new wxBoxSizer( wxHORIZONTAL );
-    /*
-    const int but_sz_flags =
-        wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxBOTTOM|wxLEFT|wxRIGHT;
-    */
-    rowsizer->Add( new wxButton(this,wxID_OK,_("Ok")),
-        0, but_sz_flags, spacing );
-    rowsizer->Add( new wxButton(this,wxID_CANCEL,_("Cancel")),
-        0, but_sz_flags, spacing );
-    topsizer->Add( rowsizer, 0, wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL, 0 );
+    // Standard dialog buttons
+    wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
+    buttonSizer->AddButton(new wxButton(this, wxID_OK));
+    buttonSizer->AddButton(new wxButton(this, wxID_CANCEL));
+    buttonSizer->Realize();
+    topsizer->Add( buttonSizer, 0,
+                   wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL,
+                   spacing );
 
     m_edValue->SetFocus();
 
