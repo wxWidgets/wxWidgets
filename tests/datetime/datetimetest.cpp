@@ -306,7 +306,7 @@ void DateTimeTestCase::TestLeapYears()
     {
         const LeapYearTestData& y = years[n];
 
-        CPPUNIT_ASSERT( wxDateTime::IsLeapYear(y.year) == y.isLeap );
+        CPPUNIT_ASSERT_EQUAL( y.isLeap, wxDateTime::IsLeapYear(y.year) );
     }
 }
 
@@ -324,7 +324,7 @@ void DateTimeTestCase::TestTimeSet()
         wxString s1 = d1.Format(),
                  s2 = d2.Format();
 
-        CPPUNIT_ASSERT( s1 == s2 );
+        CPPUNIT_ASSERT_EQUAL( s1, s2 );
     }
 }
 
@@ -357,7 +357,7 @@ void DateTimeTestCase::TestTimeWDays()
         wxDateTime dt(d.day, d.month, d.year, d.hour, d.min, d.sec);
 
         wxDateTime::WeekDay wday = dt.GetWeekDay();
-        CPPUNIT_ASSERT( wday == d.wday );
+        CPPUNIT_ASSERT_EQUAL( d.wday, wday );
     }
 
     // test SetToWeekDay()
@@ -570,10 +570,10 @@ for n in range(20):
             wmon2 = dt.GetWeekOfMonth(wxDateTime::Sunday_First),
             dnum = dt.GetDayOfYear();
 
-        CPPUNIT_ASSERT( dnum == wn.dnum );
-        CPPUNIT_ASSERT( wmon == wn.wmon );
-        CPPUNIT_ASSERT( wmon2 == wn.wmon2 );
-        CPPUNIT_ASSERT( week == wn.week );
+        CPPUNIT_ASSERT_EQUAL( wn.dnum, dnum );
+        CPPUNIT_ASSERT_EQUAL( wn.wmon, wmon );
+        CPPUNIT_ASSERT_EQUAL( wn.wmon2, wmon2 );
+        CPPUNIT_ASSERT_EQUAL( wn.week, week );
 
         int year = d.year;
         if ( week == 1 && d.month != wxDateTime::Jan )
@@ -584,7 +584,7 @@ for n in range(20):
 
         wxDateTime
             dt2 = wxDateTime::SetToWeekOfYear(year, week, dt.GetWeekDay());
-        CPPUNIT_ASSERT( dt2 == dt );
+        CPPUNIT_ASSERT_EQUAL( dt, dt2 );
     }
 }
 
@@ -1141,9 +1141,9 @@ void DateTimeTestCase::TestTimeArithmetics()
         dt1 = dt + span;
         dt2 = dt - span;
 
-        CPPUNIT_ASSERT( dt1 - span == dt );
-        CPPUNIT_ASSERT( dt2 + span == dt );
-        CPPUNIT_ASSERT( dt2 + 2*span == dt1 );
+        CPPUNIT_ASSERT_EQUAL( dt, dt1 - span );
+        CPPUNIT_ASSERT_EQUAL( dt, dt2 + span );
+        CPPUNIT_ASSERT_EQUAL( dt1, dt2 + 2*span );
     }
 }
 
