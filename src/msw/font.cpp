@@ -291,7 +291,7 @@ protected:
 
     void Init(const wxNativeFontInfo& info, WXHFONT hFont = 0);
 
-    // are we using m_nativeFontInfo.lf.lfHeight for point size or pixel size? 
+    // are we using m_nativeFontInfo.lf.lfHeight for point size or pixel size?
     bool             m_sizeUsingPixels;
 
     // Windows font handle, created on demand in GetHFONT()
@@ -321,26 +321,26 @@ void wxFontRefData::Init(int pointSize,
                          const wxString& faceName,
                          wxFontEncoding encoding)
 {
-    m_sizeUsingPixels = sizeUsingPixels;
- 	if ( m_sizeUsingPixels ) 
- 	    SetPixelSize(pixelSize); 
- 	else 
- 	    SetPointSize(pointSize); 
-
-    SetStyle(style); 
- 	SetWeight(weight); 
- 	SetUnderlined(underlined); 
-
     m_hFont = NULL;
 
- 	// set the family/facename 
- 	SetFamily(family); 
- 	if ( !faceName.empty() ) 
- 	    SetFaceName(faceName); 
+    m_sizeUsingPixels = sizeUsingPixels;
+    if ( m_sizeUsingPixels )
+        SetPixelSize(pixelSize);
+    else
+        SetPointSize(pointSize);
 
-    // deal with encoding now (it may override the font family and facename 
- 	// so do it after setting them) 
- 	SetEncoding(encoding); 
+    SetStyle(style);
+    SetWeight(weight);
+    SetUnderlined(underlined);
+
+    // set the family/facename
+    SetFamily(family);
+    if ( !faceName.empty() )
+        SetFaceName(faceName);
+
+    // deal with encoding now (it may override the font family and facename
+    // so do it after setting them)
+    SetEncoding(encoding);
 }
 
 void wxFontRefData::Init(const wxNativeFontInfo& info, WXHFONT hFont)
@@ -511,7 +511,7 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
     //       here if we get a negative height:
     wxCHECK_RET( pixelSize.GetWidth() >= 0 && pixelSize.GetHeight() > 0,
                  "Negative values for the pixel size or zero pixel height are not allowed" );
-    
+
     lf.lfHeight = pixelSize.GetHeight();
     lf.lfWidth = pixelSize.GetWidth();
 }
@@ -852,7 +852,7 @@ wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
 bool wxFont::RealizeResource()
 {
     // NOTE: the GetHFONT() call automatically triggers a reallocation of
-    //       the HFONT if necessary (will do nothing if we already have the resource); 
+    //       the HFONT if necessary (will do nothing if we already have the resource);
     //       it returns NULL only if there is a failure in wxFontRefData::Alloc()...
     return GetHFONT() != NULL;
 }
