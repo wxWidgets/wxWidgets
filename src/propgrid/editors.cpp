@@ -841,6 +841,10 @@ wxWindow* wxPGChoiceEditor::CreateControlsBase( wxPropertyGrid* propGrid,
 
     int odcbFlags = extraStyle | wxBORDER_NONE | wxTE_PROCESS_ENTER;
 
+    if ( (property->GetFlags() & wxPG_PROP_USE_DCC) &&
+         (property->IsKindOf(CLASSINFO(wxBoolProperty)) ) )
+        odcbFlags |= wxODCB_DCLICK_CYCLES;
+
     //
     // If common value specified, use appropriate index
     unsigned int cmnVals = property->GetDisplayedCommonValueCount();
