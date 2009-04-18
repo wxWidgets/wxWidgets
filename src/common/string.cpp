@@ -1691,7 +1691,7 @@ bool wxString::ToCLong(long *pVal, int base) const
     wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
 
     WX_STRING_TO_X_TYPE_START
-#if wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
+#if (wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE) && defined(wxHAS_XLOCALE_SUPPORT)
     long val = wxStrtol_lA(start, &end, base, wxCLocale);
 #else
     long val = wxStrtol_l(start, &end, base, wxCLocale);
@@ -1704,7 +1704,7 @@ bool wxString::ToCULong(unsigned long *pVal, int base) const
     wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
 
     WX_STRING_TO_X_TYPE_START
-#if wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
+#if (wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE) && defined(wxHAS_XLOCALE_SUPPORT)
     unsigned long val = wxStrtoul_lA(start, &end, base, wxCLocale);
 #else
     unsigned long val = wxStrtoul_l(start, &end, base, wxCLocale);
@@ -1715,7 +1715,7 @@ bool wxString::ToCULong(unsigned long *pVal, int base) const
 bool wxString::ToCDouble(double *pVal) const
 {
     WX_STRING_TO_X_TYPE_START
-#if wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
+#if (wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE) && defined(wxHAS_XLOCALE_SUPPORT)
     double val = wxStrtod_lA(start, &end, wxCLocale);
 #else
     double val = wxStrtod_l(start, &end, wxCLocale);
