@@ -353,9 +353,9 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
             long timeSinceCreation = (::wxGetLocalTimeMillis() - GetGrid()->m_timeCreated).ToLong();
 
             // If too long, don't set splitter
-            if ( timeSinceCreation < 3000 )
+            if ( timeSinceCreation < 250 )
             {
-                if ( m_properties->GetChildCount() || timeSinceCreation > 750 )
+                if ( m_properties->GetChildCount() )
                 {
                     SetSplitterLeft( false );
                 }
