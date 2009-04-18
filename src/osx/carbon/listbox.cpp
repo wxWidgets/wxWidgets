@@ -345,7 +345,7 @@ wxMacDataBrowserListControl::~wxMacDataBrowserListControl()
 }
 
 void wxMacDataBrowserListControl::ItemNotification(
-                        const wxMacDataItem* itemID,
+                        DataBrowserItemID itemID,
                         DataBrowserItemNotification message,
                         DataBrowserItemDataRef itemData)
 {

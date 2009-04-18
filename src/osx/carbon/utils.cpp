@@ -756,13 +756,7 @@ Boolean wxMacDataItemBrowserControl::CompareItems(DataBrowserItemID itemOneID,
 {
     wxMacDataItem* itemOne = (wxMacDataItem*) itemOneID;
     wxMacDataItem* itemTwo = (wxMacDataItem*) itemTwoID;
-    return CompareItems( itemOne , itemTwo , sortProperty );
-}
 
-Boolean wxMacDataItemBrowserControl::CompareItems(const wxMacDataItem*  itemOne,
-    const wxMacDataItem*  itemTwo,
-    DataBrowserPropertyID sortProperty)
-{
     Boolean retval = false;
     if ( itemOne != NULL )
         retval = itemOne->IsLessThan( this , itemTwo , sortProperty);
@@ -776,15 +770,6 @@ OSStatus wxMacDataItemBrowserControl::GetSetItemData(
     Boolean changeValue )
 {
     wxMacDataItem* item = (wxMacDataItem*) itemID;
-    return GetSetItemData(item, property, itemData , changeValue );
-}
-
-OSStatus wxMacDataItemBrowserControl::GetSetItemData(
-    wxMacDataItem* item,
-    DataBrowserPropertyID property,
-    DataBrowserItemDataRef itemData,
-    Boolean changeValue )
-{
     OSStatus err = errDataBrowserPropertyNotSupported;
     switch( property )
     {
@@ -810,14 +795,6 @@ void wxMacDataItemBrowserControl::ItemNotification(
     DataBrowserItemDataRef itemData)
 {
     wxMacDataItem* item = (wxMacDataItem*) itemID;
-    ItemNotification( item , message, itemData);
-}
-
-void wxMacDataItemBrowserControl::ItemNotification(
-    const wxMacDataItem* item,
-    DataBrowserItemNotification message,
-    DataBrowserItemDataRef itemData)
-{
     if (item != NULL)
         item->Notification( this, message, itemData);
 }

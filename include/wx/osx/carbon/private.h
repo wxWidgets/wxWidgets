@@ -733,22 +733,6 @@ public :
 
 public :
 
-    // item aware methods, to be used in subclasses
-
-    virtual Boolean CompareItems(const wxMacDataItem* itemOneID,
-                        const wxMacDataItem* itemTwoID,
-                        DataBrowserPropertyID sortProperty);
-
-    virtual OSStatus GetSetItemData(wxMacDataItem* itemID,
-                        DataBrowserPropertyID property,
-                        DataBrowserItemDataRef itemData,
-                        Boolean changeValue );
-
-    virtual void    ItemNotification(
-                        const wxMacDataItem* itemID,
-                        DataBrowserItemNotification message,
-                        DataBrowserItemDataRef itemData);
-
     // as we are getting the same events for human and API selection we have to suppress
     // events in the latter case, since this will be used from many subclasses we keep it here
 
@@ -913,7 +897,7 @@ public:
     virtual void            UpdateLineToEnd( unsigned int n) ;
 
     virtual void            ItemNotification(
-                                const wxMacDataItem* itemID,
+                                DataBrowserItemID itemID,
                                 DataBrowserItemNotification message,
                                 DataBrowserItemDataRef itemData);
 

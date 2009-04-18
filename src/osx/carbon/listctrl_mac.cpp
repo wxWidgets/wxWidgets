@@ -2682,7 +2682,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     int imgIndex = -1;
     
     DataBrowserTableViewColumnIndex listColumn = 0;
-    OSStatus err = GetColumnPosition( property, &listColumn );
+    GetColumnPosition( property, &listColumn );
     
     wxListCtrl* list = wxDynamicCast( GetWXPeer() , wxListCtrl );
     wxMacListCtrlItem* lcItem;
