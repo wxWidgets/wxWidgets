@@ -345,6 +345,16 @@ enum wxLocaleCategory
 
 /**
     The values understood by wxLocale::GetInfo().
+    
+    Note that for the @c wxLOCALE_*_FMT constants (the date and time formats), 
+    the strings returned by wxLocale::GetInfo() use strftime() or,
+    equivalently, wxDateTime::Format() format. If the relevant format
+    couldn't be determined, an empty string is returned -- there is no
+    fallback value so that the application could determine the best course
+    of actions itself in such case.
+
+    All of these values are used with @c wxLOCALE_CAT_DATE in wxLocale::GetInfo() or, 
+    more typically, with @c wxLOCALE_CAT_DEFAULT as they only apply to a single category.
 */
 enum wxLocaleInfo
 {
@@ -365,26 +375,10 @@ enum wxLocaleInfo
     wxLOCALE_DECIMAL_POINT,
 
     /**
-        The date and time formats.
-
-        The strings returned by wxLocale::GetInfo() use strftime() or,
-        equivalently, wxDateTime::Format() format. If the relevant format
-        couldn't be determined, an empty string is returned -- there is no
-        fallback value so that the application could determine the best course
-        of actions itself in such case.
-
-        All of these values are used with wxLOCALE_CAT_DATE in
-        wxLocale::GetInfo() or, more typically, with wxLOCALE_CAT_DEFAULT as
-        they only apply to a single category.
-     */
-    //@{
-
-    /**
         Short date format.
 
         Notice that short and long date formats may be the same under POSIX
-        systems currently but may, and typically are, different under MSW or OS
-        X.
+        systems currently but may, and typically are, different under MSW or OS X.
 
         @since 2.9.0
      */
@@ -410,8 +404,6 @@ enum wxLocaleInfo
         @since 2.9.0
      */
     wxLOCALE_TIME_FMT
-
-    //@}
 };
 
 
