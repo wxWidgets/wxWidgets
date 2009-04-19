@@ -701,6 +701,12 @@ public:
     virtual wxGraphicsContext* CreateContextFromNativeWindow(void* window) = 0;
 
     /**
+        Creates a wxGraphicsContext that can be used for measuring texts only. 
+        No drawing commands are allowed.
+    */
+    virtual wxGraphicsContext * CreateMeasuringContext() = 0;
+
+    /**
         Creates a native graphics font from a wxFont and a text colour.
     */
     virtual wxGraphicsFont CreateFont(const wxFont& font,
