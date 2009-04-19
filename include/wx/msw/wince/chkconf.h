@@ -141,5 +141,13 @@
     #define wxUSE_COLOURDLG 0
 #endif // __SMARTPHONE__
 
+// eVC can't compile template Bind() but VC8 can
+#if !wxEVENTS_COMPATIBILITY_2_8
+#   if !wxCHECK_VISUALC_VERSION(8)
+#       undef wxEVENTS_COMPATIBILITY_2_8
+#       define wxEVENTS_COMPATIBILITY_2_8 1
+#   endif
+#endif
+
 #endif // _WX_MSW_WINCE_CHKCONF_H_
 

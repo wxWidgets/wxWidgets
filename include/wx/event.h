@@ -78,7 +78,7 @@ typedef int wxEventType;
 #define wxStaticCastEvent(type, val) static_cast<type>(val)
 
 #define DECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
-    wxEventTableEntry(type, winid, idLast, wxNewEventFunctor(type, fn), obj)
+    wxEventTableEntry(type, winid, idLast, wxNewEventTableFunctor(type, fn), obj)
 
 #define DECLARE_EVENT_TABLE_TERMINATOR() \
     wxEventTableEntry(wxEVT_NULL, 0, 0, 0, 0)
@@ -258,15 +258,21 @@ private:
 
 #if wxEVENTS_COMPATIBILITY_2_8
 
-// Create a functor for the legacy events: handler can be NULL and its default
-// value is used by the event table macros
-
+// Create a functor for the legacy events: used by Connect()
 inline wxObjectEventFunctor *
 wxNewEventFunctor(const wxEventType& WXUNUSED(evtType),
                   wxObjectEventFunction method,
-                  wxEvtHandler *handler = NULL)
+                  wxEvtHandler *handler)
 {
     return new wxObjectEventFunctor(method, handler);
+}
+
+// This version is used by DECLARE_EVENT_TABLE_ENTRY()
+inline wxObjectEventFunctor *
+wxNewEventTableFunctor(const wxEventType& WXUNUSED(evtType),
+                       wxObjectEventFunction method)
+{
+    return new wxObjectEventFunctor(method, NULL);
 }
 
 inline wxObjectEventFunctor
@@ -507,23 +513,15 @@ wxMakeEventFunctor(const EventTag&,
                 method, handler);
 }
 
-// Special case for the wxNewEventFunctor() calls used inside the event table
-// macros: they don't specify the handler so EventHandler can't be deduced
+// Create an event functor for the event table via DECLARE_EVENT_TABLE_ENTRY:
+// in this case we don't have the handler (as it's always the same as the
+// object which generated the event) so we must use Class as its type
 template <typename EventTag, typename Class, typename EventArg>
 inline wxEventFunctorMethod<EventTag, Class, EventArg, Class> *
-wxNewEventFunctor(const EventTag&, void (Class::*method)(EventArg&))
+wxNewEventTableFunctor(const EventTag&, void (Class::*method)(EventArg&))
 {
     return new wxEventFunctorMethod<EventTag, Class, EventArg, Class>(
                     method, NULL);
-}
-
-template
-    <typename EventTag, typename Class, typename EventArg, typename EventHandler>
-inline wxEventFunctorMethod<EventTag, Class, EventArg, Class>
-wxMakeEventFunctor(const EventTag&, void (Class::*method)(EventArg&))
-{
-    return wxEventFunctorMethod<EventTag, Class, EventArg, Class>(
-                method, NULL);
 }
 
 #endif // !wxEVENTS_COMPATIBILITY_2_8
