@@ -1636,11 +1636,12 @@ public:
 /**
     @class wxStaticBoxSizer
 
-    wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static
-    box around the sizer.
-    This static box may be either created independently or the sizer may create
-    it itself as a convenience. In any case, the sizer owns the wxStaticBox control
-    and will delete it, if it is deleted.
+    wxStaticBoxSizer is a sizer derived from wxBoxSizer but adds a static box around 
+    the sizer.
+
+    The static box may be either created independently or the sizer may create it 
+    itself as a convenience. In any case, the sizer owns the wxStaticBox control
+    and will delete it in the wxStaticBoxSizer destructor.
 
     @library{wxcore}
     @category{winlayout}
@@ -1653,8 +1654,11 @@ public:
     /**
         This constructor uses an already existing static box.
 
-        It takes the associated static box and the orientation @a orient, which
-        can be either @c wxVERTICAL or @c wxHORIZONTAL as parameters.
+        @param box
+            The static box to associate with the sizer (which will take its
+            ownership).
+        @param orient
+            Can be either @c wxVERTICAL or @c wxHORIZONTAL.
     */
     wxStaticBoxSizer(wxStaticBox* box, int orient);
 
