@@ -378,7 +378,7 @@ wxFontRefData::wxFontRefData(wxOSXSystemFont font, int size)
             if ( style & underline )
                 underlined = true ;
                 
-            m_info.Init(size,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
+            m_info.Init(fontSize,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
                 wxMacMakeStringFromPascal( qdFontName ), wxFONTENCODING_DEFAULT);
          }
     }
