@@ -49,6 +49,35 @@
 #include "wx/osx/private.h"
 #include "wx/osx/cocoa/private/textimpl.h"
 
+@interface NSView(EditableView) 
+- (BOOL)isEditable;
+- (void)setEditable:(BOOL)flag;
+@end
+
+class wxMacEditHelper
+{
+public :
+    wxMacEditHelper( NSView* textView )
+    {
+        m_textView = textView ;
+        if ( textView )
+        {
+            m_formerState = [textView isEditable];
+            [textView setEditable:YES];
+        }
+    }
+
+    ~wxMacEditHelper()
+    {
+        if ( m_textView )
+            [m_textView setEditable:m_formerState];
+    }
+
+protected :
+    BOOL m_formerState ;
+    NSView* m_textView;
+} ;
+
 @interface wxNSSecureTextField : NSSecureTextField
 {
 }
@@ -324,6 +353,7 @@ void wxNSTextViewControl::SetStringValue( const wxString &str)
 {
     wxString st = str;
     wxMacConvertNewlines10To13( &st );
+    wxMacEditHelper helper(m_textView);
 
     if (m_textView)
         [m_textView setString: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
@@ -394,7 +424,8 @@ void wxNSTextViewControl::WriteText(const wxString& str)
 {
     wxString st = str;
     wxMacConvertNewlines10To13( &st );
-
+    wxMacEditHelper helper(m_textView);
+    
     [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
@@ -421,6 +452,7 @@ wxString wxNSTextFieldControl::GetStringValue() const
 
 void wxNSTextFieldControl::SetStringValue( const wxString &str) 
 {
+    wxMacEditHelper helper(m_textField);
     [m_textField setStringValue: wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
@@ -511,6 +543,7 @@ void wxNSTextFieldControl::WriteText(const wxString& str)
     NSText* editor = [m_textField currentEditor];
     if ( editor )
     {
+        wxMacEditHelper helper(m_textField);
         [editor insertText:wxCFStringRef( str , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
     }
     else
