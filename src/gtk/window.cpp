@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/gtk/window.cpp
-// Purpose:
+// Purpose:     wxWindowGTK implementation
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart
@@ -1958,8 +1958,10 @@ wxWindow *wxWindowBase::DoFindFocus()
 
 void wxWindowGTK::AddChildGTK(wxWindowGTK* child)
 {
-    /* the window might have been scrolled already, do we
-       have to adapt the position */
+    wxASSERT_MSG(m_wxwindow, "Cannot add a child to a window without a client area");
+    
+    // the window might have been scrolled already, we
+    // have to adapt the position
     wxPizza* pizza = WX_PIZZA(m_wxwindow);
     child->m_x += pizza->m_scroll_x;
     child->m_y += pizza->m_scroll_y;
@@ -2436,7 +2438,10 @@ bool wxWindowGTK::Destroy()
 void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
     gtk_widget_set_size_request(m_widget, width, height);
+    
     // inform the parent to perform the move
+    wxASSERT_MSG(m_parent && m_parent->m_wxwindow, 
+                 "the parent window has no client area?");
     WX_PIZZA(m_parent->m_wxwindow)->move(m_widget, x, y);
 }
 
