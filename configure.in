@@ -7951,10 +7951,7 @@ AC_PROG_MAKE_SET
 AC_CONFIG_HEADERS([lib/wx/include/${TOOLCHAIN_FULLNAME}/wx/setup.h:setup.h.in])
 
 if test "$USE_WIN32" = 1; then
-    AC_CONFIG_COMMANDS(
-        [
-            rcdefs.h
-        ],
+    AC_CONFIG_COMMANDS([rcdefs.h],
         [
             mkdir -p $outdir &&
             $CPP $infile | sed 's/^# *[1-9].*//;s/^ *//;/./,/^$/!d' > $outdir/rcdefs.h
