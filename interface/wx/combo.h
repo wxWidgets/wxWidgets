@@ -332,9 +332,10 @@ public:
             Initial selection string. An empty string indicates no selection.
         @param pos
             Window position.
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. If wxDefaultSize is specified then the window is sized
-            appropriately.
+            Window size. 
+            If ::wxDefaultSize is specified then the window is sized appropriately.
         @param style
             Window style. See wxComboCtrl.
         @param validator

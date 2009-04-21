@@ -50,9 +50,10 @@ public:
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
             Window position.
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. If wxDefaultSize is specified then the choice is sized
-            appropriately.
+            Window size. 
+            If ::wxDefaultSize is specified then the choice is sized appropriately.
         @param n
             Number of strings with which to initialise the choice control.
         @param choices

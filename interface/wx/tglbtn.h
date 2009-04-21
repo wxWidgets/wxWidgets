@@ -47,10 +47,10 @@ public:
             Text to be displayed next to the toggle button.
         @param pos
             Toggle button position.
-            If wxDefaultPosition is specified then a default position is chosen.
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
             Toggle button size.
-            If wxDefaultSize is specified then a default size is chosen.
+            If ::wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxToggleButton.
         @param val

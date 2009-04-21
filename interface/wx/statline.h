@@ -46,7 +46,7 @@ public:
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
             Window position.
-            If wxDefaultPosition is specified then a default position is chosen.
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
             Size. Note that either the height or the width (depending on
             whether the line if horizontal or vertical) is ignored.

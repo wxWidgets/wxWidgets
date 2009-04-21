@@ -51,9 +51,10 @@ public:
             The text shown just before the list control.
         @param pos
             Window position.
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. If wxDefaultSize is specified then the window is sized
-            appropriately.
+            Window size. 
+            If ::wxDefaultSize is specified then the window is sized appropriately.
         @param style
             Window style. See wxEditableListBox.
         @param name

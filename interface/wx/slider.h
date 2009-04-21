@@ -131,9 +131,11 @@ public:
         @param maxValue
             Maximum slider position.
         @param pos
-            Window position. If wxDefaultPosition is specified then a default position is chosen.
+            Window position. 
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. If wxDefaultSize is specified then a default size is chosen.
+            Window size. 
+            If ::wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxSlider.
         @param validator

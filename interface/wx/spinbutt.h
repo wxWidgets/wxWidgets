@@ -113,10 +113,10 @@ public:
             Window identifier. The value wxID_ANY indicates a default value.
         @param pos
             Window position.
-            If wxDefaultPosition is specified then a default position is chosen.
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
             Window size.
-            If wxDefaultSize is specified then a default size is chosen.
+            If ::wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxSpinButton class description.
         @param name

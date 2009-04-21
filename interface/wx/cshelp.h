@@ -256,9 +256,11 @@ public:
             Button identifier. Defaults to wxID_CONTEXT_HELP.
         @param pos
             Button position.
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Button size. If wxDefaultSize is specified then the button is sized
-            appropriately for the question mark bitmap.
+            Button size. 
+            If ::wxDefaultSize is specified then the button is sized appropriately 
+            for the question mark bitmap.
         @param style
             Window style.
 

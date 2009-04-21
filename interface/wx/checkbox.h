@@ -71,11 +71,11 @@ public:
         @param label
             Text to be displayed next to the checkbox.
         @param pos
-            Checkbox position. If wxDefaultPosition is specified then a default
-            position is chosen.
+            Checkbox position. 
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Checkbox size. If wxDefaultSize is specified then a default size is
-            chosen.
+            Checkbox size. 
+            If ::wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxCheckBox.
         @param validator

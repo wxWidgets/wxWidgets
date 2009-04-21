@@ -84,9 +84,11 @@ public:
             Bitmap to be displayed.
         @param pos
             Button position.
+            If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Button size. If wxDefaultSize is specified then the button is sized
-            appropriately for the bitmap.
+            Button size. 
+            If ::wxDefaultSize is specified then the button is sized appropriately 
+            for the bitmap.
         @param style
             Window style. See wxBitmapButton.
         @param validator

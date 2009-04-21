@@ -20,11 +20,9 @@ enum wxURIHostType
 /**
     @class wxURI
 
-    wxURI is used to extract information from a URI (Uniform Resource
-    Identifier).
+    wxURI is used to extract information from a URI (Uniform Resource Identifier).
 
-    For information about URIs, see RFC 3986
-    <http://www.ietf.org/rfc/rfc3986.txt>.
+    For information about URIs, see RFC 3986 (http://www.ietf.org/rfc/rfc3986.txt).
 
     In short, a URL is a URI. In other words, URL is a subset of a URI - all
     acceptable URLs are also acceptable URIs.
@@ -42,13 +40,12 @@ enum wxURIHostType
     to a @NULL C string.
 
     Example:
-
     @code
-    //protocol will hold the http protocol (i.e. "http")
-    wxString protocol;
-    wxURI myuri("http://mysite.com");
-    if( myuri.HasScheme() )
-        protocol = myuri.GetScheme();
+        // protocol will hold the http protocol (i.e. "http")
+        wxString protocol;
+        wxURI myuri("http://mysite.com");
+        if( myuri.HasScheme() )
+            protocol = myuri.GetScheme();
     @endcode
 
     @note On URIs with a "file" scheme wxURI does not parse the userinfo,
@@ -276,8 +273,7 @@ public:
     void Resolve(const wxURI& base, int flags = wxURI_STRICT);
 
     /**
-        Translates all escape sequences (normal characters and returns the
-        result.
+        Translates all escape sequences (normal characters and returns the result.
 
         If you want to unescape an entire wxURI, use BuildUnescapedURI()
         instead, as it performs some optimizations over this method.
