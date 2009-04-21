@@ -304,22 +304,8 @@ void wxListbook::SetImageList(wxImageList *imageList)
     // If imageList presence has changed, we update the list control view
     if ( (imageList != NULL) != (GetImageList() != NULL) )
     {
-        wxArrayString labels;
-        labels.Alloc(GetPageCount());
-
-        wxArrayInt imageIds;
-        imageIds.Alloc(GetPageCount());
-
+        // Preserve the selection which is lost when changing the mode
         const int oldSel = GetSelection();
-        size_t i;
-
-        // Grab snapshot of all list control items before changing the window
-        // style (which deletes the items)
-        for ( i = 0; i < GetPageCount(); i++ )
-        {
-           labels.Add(GetPageText(i));
-           imageIds.Add(GetPageImage(i));
-        }
 
         // Update the style to use icon view for images, report view otherwise
         long style = wxLC_SINGLE_SEL;
@@ -335,12 +321,6 @@ void wxListbook::SetImageList(wxImageList *imageList)
         list->SetWindowStyleFlag(style);
         if ( !imageList )
             list->InsertColumn(0, wxT("Pages"));
-
-        // Add back the list control items
-        for ( i = 0; i < GetPageCount(); i++ )
-        {
-           list->InsertItem(i, labels[i], imageIds[i]);
-        }
 
         // Restore selection
         if ( oldSel != wxNOT_FOUND )
