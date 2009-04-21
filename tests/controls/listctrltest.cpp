@@ -41,12 +41,14 @@ private:
         CPPUNIT_TEST( ColumnsOrder );
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
         CPPUNIT_TEST( ItemRect );
+        CPPUNIT_TEST( ChangeMode );
     CPPUNIT_TEST_SUITE_END();
 
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
     void ColumnsOrder();
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
     void ItemRect();
+    void ChangeMode();
 
     wxListCtrl *m_list;
 
@@ -174,5 +176,23 @@ void ListCtrlTestCase::ItemRect()
     CPPUNIT_ASSERT_EQUAL( 40, r.GetWidth() );
 
     WX_ASSERT_FAILS_WITH_ASSERT( m_list->GetSubItemRect(0, 3, r) );
+}
+
+void ListCtrlTestCase::ChangeMode()
+{
+    m_list->InsertColumn(0, "Header");
+    m_list->InsertItem(0, "First");
+    m_list->InsertItem(1, "Second");
+    CPPUNIT_ASSERT_EQUAL( 2, m_list->GetItemCount() );
+
+    // check that switching the mode preserves the items
+    m_list->SetWindowStyle(wxLC_ICON);
+    CPPUNIT_ASSERT_EQUAL( 2, m_list->GetItemCount() );
+    CPPUNIT_ASSERT_EQUAL( "First", m_list->GetItemText(0) );
+
+    // and so does switching back
+    m_list->SetWindowStyle(wxLC_REPORT);
+    CPPUNIT_ASSERT_EQUAL( 2, m_list->GetItemCount() );
+    CPPUNIT_ASSERT_EQUAL( "First", m_list->GetItemText(0) );
 }
 
