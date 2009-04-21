@@ -2212,6 +2212,10 @@ bool wxStaticBoxSizer::Detach( wxWindow *window )
 
 #endif // wxUSE_STATBOX
 
+//---------------------------------------------------------------------------
+// wxStdDialogButtonSizer
+//---------------------------------------------------------------------------
+
 #if wxUSE_BUTTON
 
 wxStdDialogButtonSizer::wxStdDialogButtonSizer()

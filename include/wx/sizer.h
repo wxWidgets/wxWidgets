@@ -969,6 +969,10 @@ private:
 
 #endif // wxUSE_STATBOX
 
+//---------------------------------------------------------------------------
+// wxStdDialogButtonSizer
+//---------------------------------------------------------------------------
+
 #if wxUSE_BUTTON
 
 class WXDLLIMPEXP_CORE wxStdDialogButtonSizer: public wxBoxSizer
