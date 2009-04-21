@@ -53,7 +53,8 @@
 // GTK+ signal handler
 // ----------------------------------------------------------------------------
 
-#if defined( __WXGTK20__ ) && GTK_CHECK_VERSION(2,12,0)
+#if defined( __WXGTK20__ )
+#if GTK_CHECK_VERSION(2,12,0)
 extern "C" {
 static
 gboolean statusbar_query_tooltip(GtkWidget  *widget,
@@ -75,6 +76,7 @@ gboolean statusbar_query_tooltip(GtkWidget  *widget,
     return TRUE;
 }
 }
+#endif
 #endif
 
 // ----------------------------------------------------------------------------
@@ -124,13 +126,15 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
     SetFieldsCount(1);
     
-#if defined( __WXGTK20__ ) && GTK_CHECK_VERSION(2,12,0)
+#if defined( __WXGTK20__ )
+#if GTK_CHECK_VERSION(2,12,0)
     if (HasFlag(wxST_SHOW_TIPS) && !gtk_check_version(2,12,0))
     {
         g_object_set(m_widget, "has-tooltip", TRUE, NULL); 
         g_signal_connect(m_widget, "query-tooltip",  
                          G_CALLBACK(statusbar_query_tooltip), this); 
     }
+#endif
 #endif
 
     return true;
