@@ -66,7 +66,7 @@
     @stdobjects
     ::wxEmptyString
 
-    @see @ref overview_string, @ref overview_unicode, 
+    @see @ref overview_string, @ref overview_unicode,
          @ref group_funcmacro_string "String-related functions", wxUString,
          wxCharBuffer, wxUniChar, wxStringTokenizer, wxStringBuffer, wxStringBufferLength
 */
@@ -75,7 +75,7 @@ class wxString
 public:
     /**
         @name Standard types
-        
+
         Types used with wxString.
     */
     //@{
@@ -96,11 +96,11 @@ public:
         a single character or a wide (Unicode) string. For all constructors (except the
         default which creates an empty string) there is also a corresponding assignment
         operator.
-        
+
         See also the assign() STL-like function.
     */
     //@{
-    
+
     /**
        Default constructor
     */
@@ -168,7 +168,7 @@ public:
        Constructs a string from @a str.
     */
     wxString(const std::wstring& str);
-    
+
     /**
         String destructor.
 
@@ -187,7 +187,7 @@ public:
     wxString operator =(wxUniChar c);
 
     //@}
-    
+
 
 
     /**
@@ -195,11 +195,11 @@ public:
 
         These functions return the string length and/or check whether the string
         is empty.
-        
+
         See also the length(), size() or empty() STL-like functions.
     */
     //@{
-    
+
 
     /**
         Returns the length of the string.
@@ -240,8 +240,8 @@ public:
     /**
         @member_group_name{ch_access, Character access}
 
-        Many functions below take a character index in the string. 
-        As with C strings and arrays, the indices start from 0, so the first character 
+        Many functions below take a character index in the string.
+        As with C strings and arrays, the indices start from 0, so the first character
         of a string is string[0]. An attempt to access a character beyond the end of the
         string (which may even be 0 if the string is empty) will provoke an assert
         failure in @ref overview_debugging "debug builds", but no checks are
@@ -266,10 +266,10 @@ public:
 
     /**
         Returns a writable buffer of at least @a len bytes.
-        
+
         It returns a pointer to a new memory block, and the existing data will not be copied.
         Call UngetWriteBuf() as soon as possible to put the string back into a reasonable state.
-        
+
         This method is deprecated, please use wxStringBuffer or wxStringBufferLength instead.
     */
     wxStringCharType* GetWriteBuf(size_t len);
@@ -288,12 +288,12 @@ public:
         This method is deprecated, please use wxStringBuffer or wxStringBufferLength instead.
     */
     void UngetWriteBuf();
-    
+
     /**
         @overload
     */
     void UngetWriteBuf(size_t len);
-    
+
     /**
         Sets the character at position @e n.
     */
@@ -301,15 +301,15 @@ public:
 
     /**
         Returns a the last character.
-        
+
         This is a wxWidgets 1.xx compatibility function;
         you should not use it in new code.
     */
     wxUniChar Last() const;
-    
+
     /**
         Returns a reference to the last character (writable).
-        
+
         This is a wxWidgets 1.xx compatibility function;
         you should not use it in new code.
     */
@@ -324,13 +324,13 @@ public:
         Returns a writable reference to the @a i-th character of the string.
     */
     wxUniCharRef operator [](size_t i);
-    
+
     //@}
-    
+
 
     /**
         @member_group_name{conv, Conversions}
-        
+
         This section contains both implicit and explicit conversions to C style
         strings. Although implicit conversion is quite convenient, you are advised
         to use wc_str() for the sake of clarity.
@@ -394,7 +394,7 @@ public:
         for file handling.
     */
     const wchar_t* fn_str() const;
-    
+
     /**
         @overload
     */
@@ -455,7 +455,7 @@ public:
        wchar_t* or UTF-8-encoded char*, depending on the build).
     */
     const wxStringCharType *wx_str() const;
-    
+
     /**
         Converts the string to an 8-bit string in ISO-8859-1 encoding in the
         form of a wxCharBuffer (Unicode builds only).
@@ -501,9 +501,9 @@ public:
         @member_group_name{concat, Concatenation}
 
         Almost anything may be concatenated (appended to) with a string!
-        
-        Note that the various operator<<() overloads work as C++ stream insertion 
-        operators. They insert the given value into the string. 
+
+        Note that the various operator<<() overloads work as C++ stream insertion
+        operators. They insert the given value into the string.
         Precision and format cannot be set using them. Use Printf() instead.
 
         See also the insert() and append() STL-like functions.
@@ -549,7 +549,7 @@ public:
         Concatenation: returns a new string equal to the concatenation of the operands.
     */
     wxString operator +(const wxString& x, const wxString& y);
-    
+
     /**
         @overload
     */
@@ -577,14 +577,14 @@ public:
         Concatenation in place: the argument is appended to the string.
     */
     void operator +=(const wxString& str);
-    
+
     /**
         @overload
     */
     void operator +=(wxUniChar c);
-    
+
     //@}
-    
+
 
     /**
         @member_group_name{cmp, Comparison}
@@ -602,7 +602,7 @@ public:
         StartsWith() is helpful when parsing a line of text which should start
         with some predefined prefix and is more efficient than doing direct string
         comparison as you would also have to precalculate the length of the prefix.
-        
+
         See also the compare() STL-like function.
     */
     //@{
@@ -628,19 +628,26 @@ public:
     int CmpNoCase(const wxString& s) const;
 
     /**
-        Test whether the string is equal to the single character @a c. 
-        
+        Test whether the string is equal to another string @a s.
+
         The test is case-sensitive if @a caseSensitive is @true (default) or not if it is
         @false.
-        
-        Returns @true if the string is equal to the character, @false otherwise.
-        
+
+        @return @true if the string is equal to the other one, @false otherwise.
+
         @see Cmp(), CmpNoCase()
     */
-    bool IsSameAs(const wxString &s, bool caseSensitive = true) const;
-    
+    bool IsSameAs(const wxString& s, bool caseSensitive = true) const;
+
     /**
-        @overload
+        Test whether the string is equal to the single character @a ch.
+
+        The test is case-sensitive if @a caseSensitive is @true (default) or not if it is
+        @false.
+
+        @return @true if the string is equal to this character, @false otherwise.
+
+        @see Cmp(), CmpNoCase()
     */
     bool IsSameAs(wxUniChar ch, bool caseSensitive = true) const;
 
@@ -651,9 +658,9 @@ public:
 
     /**
         This function can be used to test if the string starts with the specified
-        @a prefix. 
-        
-        If it does, the function will return @true and put the rest of the string 
+        @a prefix.
+
+        If it does, the function will return @true and put the rest of the string
         (i.e. after the prefix) into @a rest string if it is not @NULL.
         Otherwise, the function returns @false and doesn't modify the @a rest.
     */
@@ -667,17 +674,17 @@ public:
         modify the @e rest.
     */
     bool EndsWith(const wxString& suffix, wxString *rest = NULL) const;
-    
+
     //@}
-    
-    
+
+
     /**
         @member_group_name{substring, Substring extraction}
 
         These functions allow you to extract a substring from the string. The
         original string is not modified and the function returns the extracted
         substring.
-        
+
         See also the at() and the substr() STL-like functions.
     */
 
@@ -690,12 +697,12 @@ public:
     /**
         Returns the part of the string between the indices @a from and @a to
         inclusive.
-        
+
         This is a wxWidgets 1.xx compatibility function, use Mid()
         instead (but note that parameters have different meaning).
     */
     wxString SubString(size_t from, size_t to) const;
-    
+
     /**
         Same as Mid() (substring extraction).
     */
@@ -734,10 +741,10 @@ public:
         Returns the empty string if @a ch is not found.
     */
     wxString BeforeLast(wxUniChar ch) const;
-    
+
     //@}
-    
-    
+
+
     /**
         @member_group_name{caseconv, Case conversion}
 
@@ -796,7 +803,7 @@ public:
         @see Upper()
     */
     wxString& MakeUpper();
-    
+
     /**
         Returns this string converted to upper case.
 
@@ -811,35 +818,35 @@ public:
         code.
     */
     void UpperCase();
-    
+
     //@}
-    
-    
+
+
     /**
         @member_group_name{search, Searching and replacing}
 
         These functions replace the standard @c strchr() and @c strstr()
         functions.
-        
+
         See also the find(), rfind(), replace() STL-like functions.
     */
     //@{
 
     /**
-        Searches for the given character @a ch. 
+        Searches for the given character @a ch.
         Returns the position or @c wxNOT_FOUND if not found.
     */
     int Find(wxUniChar ch, bool fromEnd = false) const;
 
     /**
-        Searches for the given string @a sub. 
+        Searches for the given string @a sub.
         Returns the starting position or @c wxNOT_FOUND if not found.
     */
     int Find(const wxString& sub) const;
 
     /**
         Same as Find().
-        
+
         This is a wxWidgets 1.xx compatibility function;
         you should not use it in new code.
     */
@@ -847,7 +854,7 @@ public:
 
     /**
         Same as Find().
-        
+
         This is a wxWidgets 1.xx compatibility function;
         you should not use it in new code.
     */
@@ -855,15 +862,15 @@ public:
 
     /**
         Replace first (or all) occurrences of substring with another one.
-        
+
         @param strOld
             The string to search for replacing.
         @param strNew
             The substitution string.
         @param replaceAll
-            If @true a global replace will be done (default), otherwise only the 
+            If @true a global replace will be done (default), otherwise only the
             first occurrence will be replaced.
-        
+
         Returns the number of replacements made.
     */
     size_t Replace(const wxString& strOld, const wxString& strNew,
@@ -884,18 +891,18 @@ public:
     //@{
 
     /**
-        Attempts to convert the string to a floating point number. 
-        
-        Returns @true on success (the number is stored in the location pointed to by 
-        @a val) or @false if the string does not represent such number (the value of 
+        Attempts to convert the string to a floating point number.
+
+        Returns @true on success (the number is stored in the location pointed to by
+        @a val) or @false if the string does not represent such number (the value of
         @a val is not modified in this case).
-        
+
         Note that unlike ToCDouble() this function uses a localized version of
         @c wxStrtod() and thus needs as decimal point (and thousands separator) the
         locale-specific decimal point. Thus you should use this function only when
         you are sure that this string contains a floating point number formatted with
         the rules of the locale currently in use (see wxLocale).
-        
+
         Refer to the docs of the standard function @c strtod() for more details about
         the supported syntax.
 
@@ -914,13 +921,13 @@ public:
     bool ToCDouble(double* val) const;
 
     /**
-        Attempts to convert the string to a signed integer in base @a base. 
-        
+        Attempts to convert the string to a signed integer in base @a base.
+
         Returns @true on success in which case the number is stored in the location
         pointed to by @a val or @false if the string does not represent a
         valid number in the given base (the value of @a val is not modified
         in this case).
-        
+
         The value of @a base must be comprised between 2 and 36, inclusive, or
         be a special value 0 which means that the usual rules of @c C numbers are
         applied: if the number starts with @c 0x it is considered to be in base
@@ -928,12 +935,12 @@ public:
         that you may not want to specify the base 0 if you are parsing the numbers
         which may have leading zeroes as they can yield unexpected (to the user not
         familiar with C) results.
-        
+
         Note that unlike ToCLong() this function uses a localized version of
-        @c wxStrtol(). Thus you should use this function only when you are sure 
+        @c wxStrtol(). Thus you should use this function only when you are sure
         that this string contains an integer number formatted with
         the rules of the locale currently in use (see wxLocale).
-        
+
         Refer to the docs of the standard function @c strtol() for more details about
         the supported syntax.
 
@@ -943,7 +950,7 @@ public:
 
     /**
         Works like ToLong() but unlike it this function expects the integer
-        number to be formatted always with the rules dictated by the "C" locale, 
+        number to be formatted always with the rules dictated by the "C" locale,
         independently from the current application-wide locale (see wxLocale).
 
         @see ToDouble(), ToLong(), ToULong()
@@ -952,7 +959,7 @@ public:
 
     /**
         This is exactly the same as ToLong() but works with 64 bit integer numbers.
-        
+
         Notice that currently it doesn't work (always returns @false) if parsing of 64
         bit numbers is not supported by the underlying C run-time library. Compilers
         with C99 support and Microsoft Visual C++ version 7 and higher do support this.
@@ -963,7 +970,7 @@ public:
 
     /**
         Attempts to convert the string to an unsigned integer in base @a base.
-        
+
         Returns @true on success in which case the number is stored in the
         location pointed to by @a val or @false if the string does not
         represent a valid number in the given base (the value of @a val is not
@@ -982,7 +989,7 @@ public:
 
     /**
         Works like ToULong() but unlike it this function expects the integer
-        number to be formatted always with the rules dictated by the "C" locale, 
+        number to be formatted always with the rules dictated by the "C" locale,
         independently from the current application-wide locale (see wxLocale).
 
         @see ToDouble(), ToLong(), ToULong()
@@ -1003,8 +1010,8 @@ public:
         @member_group_name{fmt, Formatting and printing}
 
         Both formatted versions (Printf/() and stream-like insertion operators
-        exist (for basic types only). 
-        
+        exist (for basic types only).
+
         See also the static Format() and FormatV() functions.
     */
     //@{
@@ -1030,20 +1037,20 @@ public:
     int PrintfV(const wxString& pszFormat, va_list argPtr);
 
     //@}
-    
-    
+
+
     /**
         @member_group_name{mem, Memory management}
 
-        The following are "advanced" functions and they will be needed rarely. 
-        Alloc() and Shrink() are only interesting for optimization purposes. 
-        wxStringBuffer and wxStringBufferLength classes may be very useful when working 
+        The following are "advanced" functions and they will be needed rarely.
+        Alloc() and Shrink() are only interesting for optimization purposes.
+        wxStringBuffer and wxStringBufferLength classes may be very useful when working
         with some external API which requires the caller to provide a writable buffer.
-        
+
         See also the reserve() and resize() STL-like functions.
     */
     //@{
-    
+
     /**
         Preallocate enough space for wxString to store @a nLen characters.
 
@@ -1105,11 +1112,11 @@ public:
 
     /**
         Empties the string and frees memory occupied by it.
-        
+
         @see Empty()
     */
     void Clear();
-    
+
     //@}
 
 
@@ -1123,21 +1130,21 @@ public:
 
     /**
         Returns @true if target appears anywhere in wxString; else @false.
-        
+
         This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
     */
     bool Contains(const wxString& str) const;
 
     /**
         Makes the string empty, but doesn't free memory occupied by the string.
-        
+
         @see Clear().
     */
     void Empty();
 
     /**
         Returns the number of occurrences of @e ch in the string.
-        
+
         This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
     */
     int Freq(wxUniChar ch) const;
@@ -1153,14 +1160,14 @@ public:
 
     /**
         Returns @true if the string is an integer (with possible sign).
-        
+
         This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
     */
     bool IsNumber() const;
 
     /**
         Returns @true if the string is a word.
-        
+
         This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
     */
     bool IsWord() const;
@@ -1168,22 +1175,22 @@ public:
     /**
         Adds @a count copies of @a chPad to the beginning, or to the end of the
         string (the default).
-        
+
         Removes spaces from the left or from the right (default).
     */
     wxString& Pad(size_t count, wxUniChar chPad = ' ', bool fromRight = true);
-    
+
     /**
         Removes all characters from the string starting at @a pos.
         Use Truncate() as a more readable alternative.
-        
+
         This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
     */
     wxString& Remove(size_t pos);
-    
+
     /**
         Removes @a len characters from the string, starting at @a pos.
-        
+
         This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
     */
     wxString& Remove(size_t pos, size_t len);
@@ -1194,10 +1201,10 @@ public:
     wxString& RemoveLast(size_t n = 1);
 
     /**
-        Strip characters at the front and/or end. 
-        
+        Strip characters at the front and/or end.
+
         This is the same as Trim() except that it doesn't change this string.
-        
+
         This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
     */
     wxString Strip(stripType s = trailing) const;
@@ -1212,7 +1219,7 @@ public:
         Truncate the string to the given length.
     */
     wxString& Truncate(size_t len);
-    
+
     //@}
 
 
@@ -1222,12 +1229,12 @@ public:
         @member_group_name{iter, Iterator interface}
 
         These methods return iterators to the beginnnig or end of the string.
-        
+
         Please see any STL reference (e.g. http://www.cppreference.com/wiki/string/start)
         for their documentation.
     */
     //@{
-    
+
     const_iterator begin() const;
     iterator begin();
     const_iterator end() const;
@@ -1237,7 +1244,7 @@ public:
     reverse_iterator rbegin();
     const_reverse_iterator rend() const;
     reverse_iterator rend();
-    
+
     //@}
 
 
@@ -1245,13 +1252,13 @@ public:
     /**
         @member_group_name{stl, STL interface}
 
-        The supported STL functions are listed here. 
-        
+        The supported STL functions are listed here.
+
         Please see any STL reference (e.g. http://www.cppreference.com/wiki/string/start)
         for their documentation.
     */
     //@{
-    
+
     wxString& append(const wxString& str, size_t pos, size_t n);
     wxString& append(const wxString& str);
     wxString& append(const char *sz, size_t n);
@@ -1362,9 +1369,9 @@ public:
     size_type size() const;
     wxString substr(size_t nStart = 0, size_t nLen = npos) const;
     void swap(wxString& str);
-    
+
     //@}
-    
+
 
 
     // STATIC FUNCTIONS
