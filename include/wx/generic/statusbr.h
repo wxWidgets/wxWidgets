@@ -30,7 +30,7 @@ public:
     wxStatusBarGeneric() { Init(); }
     wxStatusBarGeneric(wxWindow *parent,
                        wxWindowID winid = wxID_ANY,
-                       long style = wxST_SIZEGRIP,
+                       long style = wxST_DEFAULT_STYLE,
                        const wxString& name = wxStatusBarNameStr)
     {
         Init();
@@ -41,7 +41,7 @@ public:
     virtual ~wxStatusBarGeneric();
 
     bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY,
-                long style = wxST_SIZEGRIP,
+                long style = wxST_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
 
     // Create status line
@@ -63,6 +63,10 @@ public:
     virtual int GetBorderX() const { return m_borderX; }
     virtual int GetBorderY() const { return m_borderY; }
 
+
+    // implementation only (not part of wxStatusBar public API):
+
+    int GetFieldFromPoint(const wxPoint& point) const;
 
 protected:      // event handlers
 
@@ -104,6 +108,7 @@ protected:
 
     int               m_borderX;
     int               m_borderY;
+
     wxPen             m_mediumShadowPen;
     wxPen             m_hilightPen;
 

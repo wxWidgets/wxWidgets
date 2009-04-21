@@ -27,7 +27,7 @@ public:
 
     wxStatusBarUniv(wxWindow *parent,
                     wxWindowID id = wxID_ANY,
-                    long style = 0,
+                    long style = wxST_DEFAULT_STYLE,
                     const wxString& name = wxPanelNameStr)
     {
         Init();
@@ -37,7 +37,7 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
-                long style = 0,
+                long style = wxST_DEFAULT_STYLE,
                 const wxString& name = wxPanelNameStr);
 
     // set field count/widths

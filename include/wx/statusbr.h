@@ -26,6 +26,12 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusBarNameStr[];
 // wxStatusBar constants
 // ----------------------------------------------------------------------------
 
+// wxStatusBar styles
+#define wxST_SIZEGRIP         0x0010
+#define wxST_SHOW_TIPS        0x0020
+
+#define wxST_DEFAULT_STYLE    (wxST_SIZEGRIP|wxST_SHOW_TIPS|wxFULL_REPAINT_ON_RESIZE)
+
 // style flags for fields
 #define wxSB_NORMAL    0x0000
 #define wxSB_FLAT      0x0001
@@ -42,7 +48,8 @@ class WXDLLIMPEXP_CORE wxStatusBarPane
 
 public:
     wxStatusBarPane(int style = wxSB_NORMAL, size_t width = 0)
-        : m_nStyle(style), m_nWidth(width) { m_arrStack.Add(wxEmptyString); }
+        : m_nStyle(style), m_nWidth(width) 
+        { m_arrStack.Add(wxEmptyString); m_bEllipsized=false; }
         
     int GetWidth() const
         { return m_nWidth; }
@@ -52,7 +59,12 @@ public:
     const wxArrayString& GetStack() const
         { return m_arrStack; }
 
-    // use wxStatusBar setter functions to modify a wxStatusBarPane
+    // implementation-only getter:
+    bool IsEllipsized() const
+        { return m_bEllipsized; }
+
+    // NOTE: there are no setters in wxStatusBarPane; 
+    //       use wxStatusBar functions to modify a wxStatusBarPane
 
 protected:
     int m_nStyle;
@@ -61,9 +73,12 @@ protected:
     // this is the array of the stacked strings of this pane; note that this
     // stack does include also the string currently displayed in this pane
     // as the version stored in the native status bar control is possibly
-    // ellipsized; note that arrStack.Last() is the top of the stack
+    // ellipsized; note that m_arrStack.Last() is the top of the stack
     // (i.e. the string shown in the status bar)
     wxArrayString m_arrStack;
+
+    // was the m_arrStack.Last() string shown in the status bar control ellipsized?
+    bool m_bEllipsized;
 };
 
 WX_DECLARE_OBJARRAY(wxStatusBarPane, wxStatusBarPaneArray);
@@ -138,6 +153,9 @@ public:
     // get the dimensions of the horizontal and vertical borders
     virtual int GetBorderX() const = 0;
     virtual int GetBorderY() const = 0;
+    
+    wxSize GetBorders() const
+        { return wxSize(GetBorderX(), GetBorderY()); }
 
     // miscellaneous
     // -------------
@@ -158,6 +176,11 @@ protected:
 
     // calculate the real field widths for the given total available size
     wxArrayInt CalculateAbsWidths(wxCoord widthTotal) const;
+    
+    // an internal utility used to keep track of which panes have labels
+    // which were last rendered as ellipsized...
+    void SetEllipsizedFlag(int n, bool ellipsized)
+        { m_panes[n].m_bEllipsized = ellipsized; }
 
     // the array with the pane infos:
     wxStatusBarPaneArray m_panes;

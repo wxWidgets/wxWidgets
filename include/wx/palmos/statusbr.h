@@ -21,7 +21,7 @@ public:
     wxStatusBarPalm();
     wxStatusBarPalm(wxWindow *parent,
                     wxWindowID id = wxID_ANY,
-                    long style = wxST_SIZEGRIP,
+                    long style = wxST_DEFAULT_STYLE,
                     const wxString& name = wxEmptyString)
     {
         (void)Create(parent, id, style, name);
@@ -29,7 +29,7 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
-                long style = wxST_SIZEGRIP,
+                long style = wxST_DEFAULT_STYLE,
                 const wxString& name = wxEmptyString);
 
     virtual ~wxStatusBarPalm();

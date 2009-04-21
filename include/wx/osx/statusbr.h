@@ -19,13 +19,13 @@ class WXDLLIMPEXP_CORE wxStatusBarMac : public wxStatusBarGeneric
 
     wxStatusBarMac();
     wxStatusBarMac(wxWindow *parent, wxWindowID id = wxID_ANY,
-           long style = wxST_SIZEGRIP,
+           long style = wxST_DEFAULT_STYLE,
            const wxString& name = wxStatusBarNameStr);
 
     virtual ~wxStatusBarMac();
 
     bool Create(wxWindow *parent, wxWindowID id = wxID_ANY,
-              long style = wxST_SIZEGRIP,
+              long style = wxST_DEFAULT_STYLE,
               const wxString& name = wxStatusBarNameStr);
 
     virtual void DrawFieldText(wxDC& dc, const wxRect& rc, int i, int textHeight);

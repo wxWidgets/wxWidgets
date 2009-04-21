@@ -17,6 +17,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/toplevel.h"      // the base class
+#include "wx/statusbr.h"
 
 // the default names for various classs
 extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusLineNameStr[];
@@ -103,10 +104,9 @@ public:
 #if wxUSE_STATUSBAR
     // create the main status bar by calling OnCreateStatusBar()
     virtual wxStatusBar* CreateStatusBar(int number = 1,
-                                         long style = wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE,
+                                         long style = wxST_DEFAULT_STYLE,
                                          wxWindowID winid = 0,
-                                         const wxString& name =
-                                            wxStatusLineNameStr);
+                                         const wxString& name = wxStatusLineNameStr);
     // return a new status bar
     virtual wxStatusBar *OnCreateStatusBar(int number,
                                            long style,

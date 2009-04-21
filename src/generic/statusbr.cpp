@@ -2,7 +2,7 @@
 // Name:        src/generic/statusbr.cpp
 // Purpose:     wxStatusBarGeneric class implementation
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Francesco Montorsi
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
@@ -29,6 +29,7 @@
 
 #ifdef __WXGTK20__
     #include <gtk/gtk.h>
+    #include "wx/gtk/private.h"
 #endif
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the
@@ -48,6 +49,33 @@
 // Margin between the field text and the field rect
 #define wxFIELD_TEXT_MARGIN 2
 
+// ----------------------------------------------------------------------------
+// GTK+ signal handler
+// ----------------------------------------------------------------------------
+
+#if defined( __WXGTK20__ ) && GTK_CHECK_VERSION(2,12,0)
+extern "C" {
+static
+gboolean statusbar_query_tooltip(GtkWidget  *widget,
+                                 gint        x,
+                                 gint        y,
+                                 gboolean    keyboard_mode,
+                                 GtkTooltip *tooltip,
+                                 wxStatusBar* statbar)
+{
+    int n = statbar->GetFieldFromPoint(wxPoint(x,y));
+    if (n == wxNOT_FOUND)
+        return FALSE;
+
+    // should we show the tooltip for the n-th pane of the statusbar?
+    if (!statbar->GetField(n).IsEllipsized())
+        return FALSE;   // no, it's not useful
+
+    gtk_tooltip_set_text(tooltip, wxGTK_CONV_SYS(statbar->GetStatusText(n)));
+    return TRUE;
+}
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // wxStatusBarGeneric
@@ -95,6 +123,15 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
     SetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, height);
 
     SetFieldsCount(1);
+    
+#if defined( __WXGTK20__ ) && GTK_CHECK_VERSION(2,12,0)
+    if (HasFlag(wxST_SHOW_TIPS) && !gtk_check_version(2,12,0))
+    {
+        g_object_set(m_widget, "has-tooltip", TRUE, NULL); 
+        g_signal_connect(m_widget, "query-tooltip",  
+                         G_CALLBACK(statusbar_query_tooltip), this); 
+    }
+#endif
 
     return true;
 }
@@ -208,6 +245,10 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
         wxELLIPSIZE_EXPAND_TAB);
         // Ellipsize() will do something only if necessary
 
+    // update the ellipsization status for this pane; this is used to decide
+    // whether a tooltip should be shown or not for this pane
+    SetEllipsizedFlag(i, text != GetStatusText(i));
+
 #if defined( __WXGTK__ ) || defined(__WXMAC__)
     xpos++;
     ypos++;
@@ -229,11 +270,8 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
     if (style != wxSB_FLAT)
     {
         // Draw border
-        // For wxSB_NORMAL:
-        // Have grey background, plus 3-d border -
-        // One black rectangle.
-        // Inside this, left and top sides - dark grey. Bottom and right -
-        // white.
+        // For wxSB_NORMAL: paint a grey background, plus 3-d border (one black rectangle)
+        // Inside this, left and top sides (dark grey). Bottom and right (white).
         // Reverse it for wxSB_RAISED
 
         dc.SetPen((style == wxSB_RAISED) ? m_mediumShadowPen : m_hilightPen);
@@ -264,14 +302,13 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)
         dc.DrawLine(rect.x, rect.y,
                     rect.x + rect.width, rect.y);
         dc.DrawLine(rect.x, rect.y + rect.height,
-                   rect.x, rect.y);
+                    rect.x, rect.y);
 #endif
     }
 
     DrawFieldText(dc, rect, i, textHeight);
 }
 
-// Get the position and size of the field's internal bounding rectangle
 bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 {
     wxCHECK_MSG( (n >= 0) && ((size_t)n < m_panes.GetCount()), false,
@@ -292,7 +329,29 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
     return true;
 }
 
-// Initialize colours
+int wxStatusBarGeneric::GetFieldFromPoint(const wxPoint& pt) const
+{
+    if (m_widthsAbs.IsEmpty())
+        return wxNOT_FOUND;
+
+    // NOTE: we explicitely don't take in count the borders since they are only
+    //       useful when rendering the status text, not for hit-test computations
+    
+    if (pt.y <= 0 || pt.y >= m_lastClientHeight)
+        return wxNOT_FOUND;
+
+    int x = 0;
+    for ( size_t i = 0; i < m_panes.GetCount(); i++ )
+    {
+        if (pt.x > x && pt.x < x+m_widthsAbs[i])
+            return i;
+        
+        x += m_widthsAbs[i];
+    }
+
+    return wxNOT_FOUND;
+}
+
 void wxStatusBarGeneric::InitColours()
 {
 #if defined(__WXPM__)
@@ -366,7 +425,6 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
         DrawField(dc, i, textHeight);
 }
 
-// Responds to colour changes, and passes event on to children.
 void wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     InitColours();

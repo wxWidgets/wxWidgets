@@ -23,12 +23,12 @@ public:
         Constructs the pane with the given @a style and @a width.
     */
     wxStatusBarPane(int style = wxSB_NORMAL, size_t width = 0);
-        
+
     /**
         Returns the pane width; it maybe negative, indicating a variable-width field.
     */
     int GetWidth() const;
-    
+
     /**
         Returns the pane style.
     */
@@ -52,10 +52,19 @@ public:
     A status bar is a narrow window that can be placed along the bottom of a frame
     to give small amounts of status information. It can contain one or more fields,
     one or more of which can be variable length according to the size of the window.
+    
+    Note that in wxStatusBar context, the terms @e pane and @e field are synonyms.
 
     @beginStyleTable
     @style{wxST_SIZEGRIP}
-        Displays a gripper at the right-hand side of the status bar.
+        Displays a gripper at the right-hand side of the status bar which can be used
+        to resize the parent window.
+    @style{wxST_SHOW_TIPS}
+        Displays tooltips for those panes whose status text has been ellipsized because
+        the status text doesn't fit the pane width.
+        Note that this style has effect only on wxGTK (with GTK+ >= 2.12) currently.
+    @style{wxST_DEFAULT_STYLE}
+        The default style: includes @c wxST_SIZEGRIP|wxST_SHOW_TIPS|wxFULL_REPAINT_ON_RESIZE. 
     @endStyleTable
 
     @remarks
@@ -93,7 +102,7 @@ public:
         @see Create()
     */
     wxStatusBar(wxWindow* parent, wxWindowID id = wxID_ANY,
-                long style = wxST_SIZEGRIP,
+                long style = wxST_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
 
     /**
@@ -106,7 +115,7 @@ public:
         See wxStatusBar() for details.
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
-                long style = wxST_SIZEGRIP,
+                long style = wxST_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
 
     /**
@@ -132,6 +141,15 @@ public:
         Returns the wxStatusBarPane representing the @a n-th field.
     */
     const wxStatusBarPane& GetField(int n) const;
+    
+    /**
+        Returns the horizontal and vertical borders used when rendering the field
+        text inside the field area.
+        
+        Note that the rect returned by GetFieldRect() already accounts for the
+        presence of horizontal and vertical border returned by this function.
+    */
+    wxSize GetBorders() const;
     
     /**
         Returns the string associated with a status bar field.

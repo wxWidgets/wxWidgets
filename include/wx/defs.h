@@ -1770,11 +1770,6 @@ enum wxBorder
 #define wxTC_OWNERDRAW        0x0400
 
 /*
- * wxStatusBar95 flags
- */
-#define wxST_SIZEGRIP         0x0010
-
-/*
  * wxStaticBitmap flags
  */
 #define wxBI_EXPAND           wxEXPAND
