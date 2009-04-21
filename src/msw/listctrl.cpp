@@ -3200,8 +3200,15 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
                                    const wxListItem& info,
                                    LV_ITEM& lvItem)
 {
-    wxASSERT_MSG( 0 <= info.m_col && info.m_col < ctrl->GetColumnCount(),
-                  "wxListCtrl column index out of bounds" );
+    if ( ctrl->InReportView() )
+    {
+        wxASSERT_MSG( 0 <= info.m_col && info.m_col < ctrl->GetColumnCount(),
+                      "wxListCtrl column index out of bounds" );
+    }
+    else // not in report view
+    {
+        wxASSERT_MSG( info.m_col == 0, "columns only exist in report view" );
+    }
 
     lvItem.iItem = (int) info.m_itemId;
 
