@@ -338,9 +338,6 @@ wxFont wxTextAttr::GetFont() const
         fontFamily = GetFontFamily();
 
     wxFont font(fontSize, fontFamily, fontStyle, fontWeight, underlined, fontFaceName, encoding);
-#ifdef __WXMAC__
-    font.SetNoAntiAliasing(true);
-#endif
     return font;
 }
 
