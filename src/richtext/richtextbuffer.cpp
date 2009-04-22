@@ -8762,9 +8762,6 @@ bool wxRichTextAttr::operator== (const wxRichTextAttr& attr) const
 wxFont wxRichTextAttr::CreateFont() const
 {
     wxFont font(m_fontSize, wxDEFAULT, m_fontStyle, m_fontWeight, m_fontUnderlined, m_fontFaceName);
-#ifdef __WXMAC__
-    font.SetNoAntiAliasing(true);
-#endif
     return font;
 }
 
