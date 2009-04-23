@@ -2,16 +2,16 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #if GetEnv("WXW_VER") == "CVS"
-    #define INFOFILE  "C:\wx\inno\wxWidgets\BuildSVN.txt"
+    #define INFOFILE  "C:\wx\inno\wx29b\BuildSVN.txt"
     #define WX_VERSION "SVN"
 #else
-    #define INFOFILE "C:\wx\inno\wxWidgets\docs\msw\install.txt"
+    #define INFOFILE "C:\wx\inno\wx29b\docs\msw\install.txt"
     #define WX_VERSION GetENV("WXW_VER")
 #endif
 
 #define SETUPFILENAME  "wxMSW-" + GetENV("WXW_VER") + "-Setup"
 
-#define INNODIR "C:\wx\inno\wxWidgets"
+#define INNODIR "C:\wx\inno\wx29b"
 
 [Setup]
 AppName=wxWidgets
