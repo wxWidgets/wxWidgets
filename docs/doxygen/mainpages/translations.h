@@ -351,11 +351,11 @@ to foil spam robots, remove one <tt>\@</tt> from them.
 
 @section page_translations_howtohelp How to help
 
-wxWidgets uses the standard GNU gettext tools for i18n so if you are already
-familiar with them you shouldn't have any problems with working on wxWidgets
-translations.
+wxWidgets uses the standard <a href="http://www.gnu.org/software/gettext/">GNU
+gettext</a> tools for i18n so if you are already familiar with them you
+shouldn't have any problems with working on wxWidgets translations.
 
-Here are the the steps you should follow:
+Here are the steps you should follow:
 
 -# Get the latest version of the file <tt>locale/wxstd.pot</tt> from the
    wxWidgets source tree: if you're using
