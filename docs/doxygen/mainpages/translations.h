@@ -362,18 +362,18 @@ Here are the the steps you should follow:
    <a href="http://www.wxwidgets.org/develop/svn.htm">Subversion</a>
    or the <a href="http://wxwindows.sourceforge.net/snapshots/">daily snapshots</a>
    you should already have it.
-   Otherwise you can always retrieve it directly from the cvs repository via the
+   Otherwise you can always retrieve it directly from the Subversion repository via the
    <a href="http://svn.wxwidgets.org/viewvc/wx/wxWidgets/trunk/locale/wxstd.pot?view=co">Web interface</a>.
 -# Rename it to <tt>XY.po</tt> where <tt>"XY"</tt> is the 2 letter
-   <a href="http://lcweb.loc.gov/standards/iso639-2/englangn.html">ISO 639-1 language code</a>
+   <a href="http://www.loc.gov/standards/iso639-2/php/English_list.php">ISO 639-2 language code</a>
    for your language.
 -# Translate the strings in this file using either your favourite text
    editor or a specialized tool such as Vaclav Slavik's excellent
-   <a href="http://poedit.sourceforge.net/" target=_top>poEdit</a> utility.
+   <a href="http://www.poedit.net/">poEdit</a> utility.
 -# Verify that your translations can at least be compiled (even if they
    are yet incomplete) by running <tt>msgfmt -v XY.po</tt> command:
    please note that you <i>must</i> use the <tt>-v</tt> option. In
-   particular, please fill the header fields because msgfmt doesn't
+   particular, please fill the header fields because @c msgfmt doesn't
    accept the default values for them.
 -# Send the finished translation to <a href="mailto:vadim@wxwidgets.org">Vadim Zeitlin</a>
    and it will be added to the next wxWidgets release or snapshot.
