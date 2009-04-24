@@ -259,6 +259,14 @@ SOURCE=.\isosurf.cpp
 SOURCE=.\..\..\..\samples\sample.rc
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\isosurf.h
+# End Source File
+# End Group
 # End Target
 # End Project
 

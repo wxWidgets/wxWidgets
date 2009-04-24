@@ -267,6 +267,22 @@ SOURCE=.\penguin.rc
 SOURCE=.\trackball.c
 # End Source File
 # End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\dxfrenderer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\penguin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\trackball.h
+# End Source File
+# End Group
 # End Target
 # End Project
 
