@@ -315,6 +315,15 @@ Major new features in this release
   was added.
 
 
+2.9.1:
+------
+
+i18n:
+
+- Korean translations added (Sungkee Jung).
+- Romanian translations added (Manuel Ciosici).
+
+
 2.9.0
 -----
 
@@ -584,9 +593,8 @@ wxDFB:
 - Implement wxBitmap ctor from XBM data.
 
 i18n:
+-----
 
-- Korean translations added (Sungkee Jung).
-- Romanian translations added (Manuel Ciosici).
 - Slovak translations added (Ivan Masár).
 
 
