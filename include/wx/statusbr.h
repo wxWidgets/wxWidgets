@@ -105,6 +105,8 @@ public:
     // field text
     // ----------
 
+    // NOTE: even if it is not pure virtual, SetStatusText() must be overloaded by 
+    //       the derived classes to update the given text in the native control
     virtual void SetStatusText(const wxString& text, int number = 0)
         { m_panes[number].GetStack().Last() = text; }
     virtual wxString GetStatusText(int number = 0) const

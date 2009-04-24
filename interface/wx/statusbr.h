@@ -53,6 +53,9 @@ public:
     to give small amounts of status information. It can contain one or more fields,
     one or more of which can be variable length according to the size of the window.
     
+    wxStatusBar also maintains an independent stack of status texts for each field
+    (see PushStatusText() and PopStatusText()).
+
     Note that in wxStatusBar context, the terms @e pane and @e field are synonyms.
 
     @beginStyleTable
@@ -195,7 +198,7 @@ public:
     void PopStatusText(int field = 0);
 
     /**
-        Saves the current field text in a per field stack, and sets the field text
+        Saves the current field text in a per-field stack, and sets the field text
         to the string passed as argument.
 
         @see PopStatusText()
@@ -239,7 +242,11 @@ public:
     virtual void SetStatusStyles(int n, const int* styles);
 
     /**
-        Sets the text for one field.
+        Sets the status text for the @a i-th field.
+        
+        The given text will replace the current text. Note that unlike PushStatusText()
+        this function won't save the current text (and calling PopStatusText() won't
+        restore it!).
 
         @param text
             The text to be set. Use an empty string ("") to clear the field.

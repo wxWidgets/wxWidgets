@@ -191,22 +191,25 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
 
 void wxStatusBarBase::PushStatusText(const wxString& text, int number)
 {
-    // save current status text in the stack
-    m_panes[number].m_arrStack.push_back(GetStatusText(number));
+    // save the new text (in non-ellipsized form) in the stack
+    m_panes[number].m_arrStack.push_back(text);
 
     SetStatusText(text, number);
-        // update current status text (eventually also in the native control)
+        // update current status text (which will possibly be ellipsized) 
+        // also in the native control
 }
 
 void wxStatusBarBase::PopStatusText(int number)
 {
-    wxASSERT_MSG(m_panes[number].m_arrStack.GetCount() == 1,
+    wxASSERT_MSG(m_panes[number].m_arrStack.GetCount() >= 1,
                  "can't pop any further string");
 
-    wxString text = m_panes[number].m_arrStack.back();
-    m_panes[number].m_arrStack.pop_back();  // also remove it from the stack
+    // the top of the stack is the status text currently shown in the native control;
+    // remove it
+    m_panes[number].m_arrStack.pop_back();
 
-    // restore the popped status text in the pane
+    // restore the previous status text in the native control
+    const wxString& text = m_panes[number].m_arrStack.back();
     SetStatusText(text, number);
 }
 
