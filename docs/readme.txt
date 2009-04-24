@@ -1,4 +1,4 @@
-wxWidgets 2.9.x
+wxWidgets 2.9.0
 ---------------------------------------------------------
 
 Welcome to wxWidgets, a cross-platform C++ framework for
