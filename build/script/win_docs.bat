@@ -14,6 +14,7 @@ echo Building wxWidgets-%WXW_VER% docs... > c:\temp.log
 
 set WXWIN=c:\wx\wx29b
 set DAILY=c:\daily
+set INNO=c:\wx\inno\wx29b
 
 rem svn already in my path...
 set PATH=%PATH%;c:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
@@ -32,7 +33,7 @@ svn cleanup >>  c:\temp.log
 svn up >>  c:\temp.log
 
 rem now inno
-cd \wx\inno\wx29b >>  c:\temp.log
+cd %INNO% >>  c:\temp.log
 rem Don't update the svn automatically
 rem svn cleanup >>  c:\temp.log
 rem svn up >>  c:\temp.log
@@ -53,7 +54,7 @@ copy include\wx\univ\setup0.h include\wx\univ\setup.h
 echo SVN update  >>  c:\temp.log
 
 rem just build the formats not in the SVN to keep down the .#makefile...
-cd \wx\inno\wx29b\build\bakefiles
+cd %INNO%\build\bakefiles
 del .bakefile_gen.state
 bakefile_gen -k -f dmars,dmars_smake,msevc4prj >> c:\temp.log
 
@@ -79,7 +80,7 @@ zip wxWidgets-%WXW_VER%-htb.zip wx.htb
 copy wxWidgets-%WXW_VER%-htb.zip %DAILY%
 
 
-mkdir c:\wx\inno\wx29b\docs\htmlhelp
+mkdir %INNO%\docs\htmlhelp
 copy %WXWIN%\docs\doxygen\out\wx.chm \wx\inno\wx29b\docs\htmlhelp\wx.chm
 cd %WXWIN%\build\script
 iscc wxwidgets.iss >> c:\temp.log
