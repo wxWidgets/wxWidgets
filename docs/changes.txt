@@ -434,7 +434,6 @@ All (GUI):
 - Added wxEventBlocker class (Francesco Montorsi).
 - Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
 - Added wxSizerFlags::Top() and Bottom().
-- Slovak translation added.
 - Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
 - Implemented background colour in wxRichTextCtrl.
 - Fixed crashes in helpview when opening a file.
@@ -583,6 +582,12 @@ wxX11:
 wxDFB:
 
 - Implement wxBitmap ctor from XBM data.
+
+i18n:
+
+- Korean translations added (Sungkee Jung).
+- Romanian translations added (Manuel Ciosici).
+- Slovak translations added (Ivan Masár).
 
 
 2.8.10:
