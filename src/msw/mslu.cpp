@@ -223,7 +223,16 @@ WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wchar_t *name)
         return _wrmdir(name);
 }
 
-WXDLLIMPEXP_BASE int wxMSLU__wstat(const wchar_t *name, struct _stat *buffer)
+#ifdef wxHAS_HUGE_FILES
+WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wchar_t *name, wxStructStat *buffer)
+{
+    if ( wxUsingUnicowsDll() )
+        return _stati64((const char*)wxConvFile.cWX2MB(name), buffer);
+    else
+        return _wstati64(name, buffer);
+}
+#else // !wxHAS_HUGE_FILES
+WXDLLIMPEXP_BASE int wxMSLU__wstat(const wchar_t *name, wxStructStat *buffer)
 {
     if ( wxUsingUnicowsDll() )
         return _stat((const char*)wxConvFile.cWX2MB(name), buffer);
@@ -231,25 +240,7 @@ WXDLLIMPEXP_BASE int wxMSLU__wstat(const wchar_t *name, struct _stat *buffer)
         return _wstat(name, buffer);
 }
 
-#ifdef __BORLANDC__
-//here _stati64 is defined as stati64, see wx/filefn.h
-#undef _stati64
-WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wchar_t *name, struct _stati64 *buffer)
- {
-     if ( wxUsingUnicowsDll() )
-        return _stati64((const char*)wxConvFile.cWX2MB(name), (stati64 *) buffer);
-    else
-        return _wstati64(name, (stati64 *) buffer);
-}
-#else
-WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wchar_t *name, struct _stati64 *buffer)
-{
-    if ( wxUsingUnicowsDll() )
-        return _stati64((const char*)wxConvFile.cWX2MB(name), buffer);
-    else
-        return _wstati64(name, buffer);
-}
-#endif //__BORLANDC__
+#endif // wxHAS_HUGE_FILES/!wxHAS_HUGE_FILES
 
 #endif // compilers having wopen() &c
 

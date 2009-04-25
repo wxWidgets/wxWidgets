@@ -187,12 +187,54 @@ enum wxFileKind
     // huge file support (or at least not all functions needed for it by wx)
     // currently
 
+    // types
+
     #ifdef wxHAS_HUGE_FILES
         typedef wxLongLong_t wxFileOffset;
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
     #else
         typedef off_t wxFileOffset;
     #endif
+
+    // at least Borland 5.5 doesn't like "struct ::stat" so don't use the scope
+    // resolution operator present in wxPOSIX_IDENT for it
+    #ifdef __BORLANDC__
+        #define wxPOSIX_STRUCT(s)    struct s
+    #else
+        #define wxPOSIX_STRUCT(s)    struct wxPOSIX_IDENT(s)
+    #endif
+
+    // Notice that Watcom is the only compiler to have a wide char
+    // version of struct stat as well as a wide char stat function variant.
+    // This was dropped since OW 1.4 "for consistency across platforms".
+    //
+    // Borland is also special in that it uses _stat with Unicode functions
+    // (for MSVC compatibility?) but stat with ANSI ones
+    #ifdef __BORLANDC__
+        #if wxHAS_HUGE_FILES
+            #define wxStructStat struct stati64
+        #else
+            #if wxUSE_UNICODE
+                #define wxStructStat struct _stat
+            #else
+                #define wxStructStat struct stat
+            #endif
+        #endif
+    #else // !__BORLANDC__
+        #ifdef wxHAS_HUGE_FILES
+            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
+                #define wxStructStat struct _wstati64
+            #else
+                #define wxStructStat struct _stati64
+            #endif
+        #else
+            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
+                #define wxStructStat struct _wstat
+            #else
+                #define wxStructStat struct _stat
+            #endif
+        #endif
+    #endif // __BORLANDC__/!__BORLANDC__
 
 
     // functions
@@ -208,14 +250,6 @@ enum wxFileKind
     #else // by default assume MSVC-compatible names
         #define wxPOSIX_IDENT(func)    _ ## func
         #define wxHAS_UNDERSCORES_IN_POSIX_IDENTS
-    #endif
-
-    // at least Borland 5.5 doesn't like "struct ::stat" so don't use the scope
-    // resolution operator present in wxPOSIX_IDENT for it
-    #ifdef __BORLANDC__
-        #define wxPOSIX_STRUCT(s)    struct s
-    #else
-        #define wxPOSIX_STRUCT(s)    struct wxPOSIX_IDENT(s)
     #endif
 
     // first functions not working with strings, i.e. without ANSI/Unicode
@@ -285,11 +319,13 @@ enum wxFileKind
                 WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
                 WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
 
-                WXDLLIMPEXP_BASE int
-                wxMSLU__wstat(const wxChar *name, wxPOSIX_STRUCT(stat) *buffer);
-                WXDLLIMPEXP_BASE int
-                wxMSLU__wstati64(const wxChar *name,
-                                 wxPOSIX_STRUCT(stati64) *buffer);
+                #ifdef wxHAS_HUGE_FILES
+                    WXDLLIMPEXP_BASE int
+                    wxMSLU__wstati64(const wxChar *name, wxStructStat *buffer);
+                #else // !wxHAS_HUGE_FILES
+                    WXDLLIMPEXP_BASE int
+                    wxMSLU__wstat(const wxChar *name, wxStructStat *buffer);
+                #endif // wxHAS_HUGE_FILES/!wxHAS_HUGE_FILES
             #endif // Windows compilers with MSLU support
 
             #define   wxCRT_Open       wxMSLU__wopen
@@ -346,34 +382,6 @@ enum wxFileKind
             #endif
         #endif
     #endif // wxUSE_UNICODE/!wxUSE_UNICODE
-
-    // Types: Notice that Watcom is the only compiler to have a wide char
-    // version of struct stat as well as a wide char stat function variant.
-    // This was dropped since OW 1.4 "for consistency across platforms".
-    //
-    // Borland is also special in that it uses _stat with Unicode functions
-    // (for MSVC compatibility?) but stat with ANSI ones
-    #ifdef __BORLANDC__
-        #if wxUSE_UNICODE
-            #define wxStructStat struct _stat
-        #else
-            #define wxStructStat struct stat
-        #endif
-    #else // !__BORLANDC__
-        #ifdef wxHAS_HUGE_FILES
-            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
-                #define wxStructStat struct _wstati64
-            #else
-                #define wxStructStat struct _stati64
-            #endif
-        #else
-            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
-                #define wxStructStat struct _wstat
-            #else
-                #define wxStructStat struct _stat
-            #endif
-        #endif
-    #endif // __BORLANDC__/!__BORLANDC__
 
     // constants (unless already defined by the user code)
     #ifdef wxHAS_UNDERSCORES_IN_POSIX_IDENTS
