@@ -217,17 +217,6 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
                               const wxValidator& wxVALIDATOR_PARAM(validator),
                               const wxString& name)
 {
-#if wxUSE_STATBOX
-    // wxGTK doesn't allow to create controls with static box as the parent so
-    // this will result in a crash when the program is ported to wxGTK so warn
-    // the user about it
-
-    // if you get this assert, the correct solution is to create the controls
-    // as siblings of the static box
-    wxASSERT_MSG( !parent || !wxDynamicCast(parent, wxStaticBox),
-                  _T("wxStaticBox can't be used as a window parent!") );
-#endif // wxUSE_STATBOX
-
     // ids are limited to 16 bits under MSW so if you care about portability,
     // it's not a good idea to use ids out of this range (and negative ids are
     // reserved for wxWidgets own usage)

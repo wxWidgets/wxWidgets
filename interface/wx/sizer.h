@@ -1642,6 +1642,19 @@ public:
     The static box may be either created independently or the sizer may create it 
     itself as a convenience. In any case, the sizer owns the wxStaticBox control
     and will delete it in the wxStaticBoxSizer destructor.
+    
+    Note that since wxWidgets 2.9.0 you are encouraged to build the windows which are
+    placed inside wxStaticBoxes as children of the wxStaticBox itself:
+    @code
+        ...
+        wxStaticBoxSizer *sz = new wxStaticBoxSizer(wxVERTICAL, parentWindow, "StaticBox");
+        sz->Add(new wxStaticText(sz->GetStaticBox(), "This window is a child of the staticbox"));
+        ...
+    @endcode
+    
+    Creating the windows which are placed inside wxStaticBoxes as siblings of the
+    wxStaticBox is still allowed but it's deprecated as it gives some problems
+    (e.g. relative to tooltips) on some ports.
 
     @library{wxcore}
     @category{winlayout}

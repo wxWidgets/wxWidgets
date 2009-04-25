@@ -284,6 +284,11 @@ Deprecated methods and their replacements
   documented TryBefore/After() methods if you used to override these ones.
 - wxGetMultipleChoices() is deprecated, use wxGetSelectedChoices() which has
   the same signature but returns -1 and not 0 if the dialog was cancelled.
+- building the windows which are placed inside wxStaticBoxes as siblings of the
+  wxStaticBox is still allowed but it's deprecated as it gives some problems
+  on some ports (e.g. wxGTK).
+  You should now create windows placed inside a wxStaticBox as children of
+  the static box itself.
 
 Major new features in this release
 ----------------------------------

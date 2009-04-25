@@ -12,18 +12,22 @@
     A static box is a rectangle drawn around other windows to denote
     a logical grouping of items.
 
-    Please note that a static box should @b not be used as the parent for the
-    controls it contains, instead they should be @b siblings of each other.
-    Although using a static box as a parent might work in some ports of wxWidgets,
-    it would result in a crash under, for example, wxGTK, and thus it's explicitely
-    disallowed (an assertion will fail if you try to add children to a wxStaticBox).
+    Note that since wxWidgets 2.9.0 you are encouraged to build the windows which are
+    placed inside wxStaticBoxes as children of the wxStaticBox itself:
+    @code
+        ...
+        wxStaticBox *stbox = new wxStaticBox(parentWindow, wxID_ANY, "StaticBox");
 
-    Also, please note that because of this, the order in which you create new
-    controls is important. Create your wxStaticBox control @b before any
-    siblings that are to appear inside the wxStaticBox in order to preserve the
-    correct Z-order of controls.
+        new wxStaticText(stbox, "This window is a child of the staticbox");
+        ...
+    @endcode
     
-    You may want to use wxStaticBoxSizer instead of wxStaticBox to avoid this problem.
+    Creating the windows which are placed inside wxStaticBoxes as siblings of the
+    wxStaticBox is still allowed but it's deprecated as it gives some problems
+    (e.g. relative to tooltips) on some ports.
+    
+    Also note that there is a specialized wxSizer class (wxStaticBoxSizer) which can
+    be used as an easier way to pack items into a static box.
 
     @library{wxcore}
     @category{ctrl}

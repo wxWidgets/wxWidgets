@@ -13,6 +13,7 @@
 #if wxUSE_STATBOX
 
 #include "wx/statbox.h"
+#include "wx/gtk/private/win_gtk.h"     // for wxPizza
 
 #include <gtk/gtk.h>
 
@@ -31,7 +32,9 @@ static void size_allocate(GtkWidget* widget, GtkAllocation* alloc, void*)
     GtkWidget* label_widget = gtk_frame_get_label_widget(GTK_FRAME(widget));
     int w = alloc->width -
         2 * widget->style->xthickness - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD;
-    if (w < 0) w = 0;
+    if (w < 0) 
+        w = 0;
+
     if (label_widget->allocation.width > w)
     {
         GtkAllocation alloc2 = label_widget->allocation;
@@ -79,6 +82,7 @@ bool wxStaticBox::Create( wxWindow *parent,
 
     m_widget = GTKCreateFrame(label);
     g_object_ref(m_widget);
+
     // only base SetLabel needs to be called after GTKCreateFrame
     wxControl::SetLabel(label);
 
@@ -97,12 +101,25 @@ bool wxStaticBox::Create( wxWindow *parent,
 
     if (gtk_check_version(2, 12, 0))
     {
-        // for clipping label as GTK >= 2.12 does
-        g_signal_connect(m_widget, "size_allocate",
-            G_CALLBACK(size_allocate), NULL);
+        // we connect this signal to perform label-clipping as GTK >= 2.12 does
+        g_signal_connect(m_widget, "size_allocate", G_CALLBACK(size_allocate), NULL);
     }
 
     return true;
+}
+
+void wxStaticBox::AddChild( wxWindowBase *child )
+{
+    if (!m_wxwindow)
+    {
+        // make this window a container of other wxWindows by instancing a wxPizza
+        // and packing it into the GtkFrame:
+        m_wxwindow = wxPizza::New( 0, this );
+        gtk_widget_show( m_wxwindow );
+        gtk_container_add( GTK_CONTAINER (m_widget), m_wxwindow );
+    }
+
+    wxWindow::AddChild( child );
 }
 
 void wxStaticBox::SetLabel( const wxString& label )
