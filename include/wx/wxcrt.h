@@ -733,14 +733,14 @@ template <typename T>
 inline char * wxStrchr(char *s, T c)
     { return (char *)wxStrchr((const char *)s, c); }
 template <typename T>
-inline char * wxStrchr(wchar_t *s, T c)
-    { return (char *)wxStrchr((const wchar_t *)s, c); }
+inline wchar_t * wxStrchr(wchar_t *s, T c)
+    { return (wchar_t *)wxStrchr((const wchar_t *)s, c); }
 template <typename T>
 inline char * wxStrrchr(char *s, T c)
     { return (char *)wxStrrchr((const char *)s, c); }
 template <typename T>
-inline char * wxStrrchr(wchar_t *s, T c)
-    { return (char *)wxStrrchr((const wchar_t *)s, c); }
+inline wchar_t * wxStrrchr(wchar_t *s, T c)
+    { return (wchar_t *)wxStrrchr((const wchar_t *)s, c); }
 
 template <typename T>
 inline char * wxStrpbrk(char *s, T accept)
