@@ -29,7 +29,7 @@
 #endif
 
 // eVC doesn't have standard streams
-#if !wxCHECK_VISUALC_VERSION(8)
+#ifdef __EVC4__
     #undef wxUSE_STD_IOSTREAM
     #define wxUSE_STD_IOSTREAM 0
 #endif
@@ -52,7 +52,7 @@
 #define wxUSE_JOYSTICK 0
 
 // libtiff doesn't build with eVC but is ok with VC8
-#if !wxCHECK_VISUALC_VERSION(8)
+#ifdef __EVC4__
     #undef wxUSE_LIBTIFF
     #define wxUSE_LIBTIFF 0
 #endif
@@ -90,7 +90,7 @@
 #define wxUSE_PRINTING_ARCHITECTURE 0
 
 // regex doesn't build with eVC but is ok with VC8
-#if !wxCHECK_VISUALC_VERSION(8)
+#ifdef __EVC4__
     #undef wxUSE_REGEX
     #define wxUSE_REGEX 0
 #endif
@@ -149,7 +149,7 @@
 
 // eVC can't compile template Bind() but VC8 can
 #if !wxEVENTS_COMPATIBILITY_2_8
-#   if !wxCHECK_VISUALC_VERSION(8)
+#   ifdef __EVC4__
 #       undef wxEVENTS_COMPATIBILITY_2_8
 #       define wxEVENTS_COMPATIBILITY_2_8 1
 #   endif

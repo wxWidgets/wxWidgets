@@ -116,6 +116,7 @@ symbols, although this has not always been followed.
 @itemdef{__VMS__, VMS}
 @itemdef{__WINDOWS__, any Windows}
 @itemdef{__WINE__, Wine}
+@itemdef{_WIN32_WCE, Windows CE version}
 @endDefList
 
 
@@ -155,6 +156,7 @@ compiler used.
                         to the compiler version: 500 is 5.0.}
 @itemdef{__DJGPP__, DJGPP}
 @itemdef{__DIGITALMARS__, Digital Mars}
+@itemdef{__EVC4__, Embedded Visual C++ 4 (can be only used for building wxWinCE)}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}
 @itemdef{__MINGW32__, MinGW}
@@ -172,7 +174,6 @@ compiler used.
 @itemdef{__XLC__, AIX compiler}
 @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to
                     the compiler version, @c 1100 is @c 11.0 and @c 1200 is OpenWatcom.}
-@itemdef{_WIN32_WCE, Windows CE version}
 @endDefList
 
 
