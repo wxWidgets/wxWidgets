@@ -106,6 +106,7 @@
         </steps>
     </build>
 
+    <!-- VZ: disable because this results in buildbot configuration error
     <build>
         <name>XPSP2 VC9 wxMSW 2.9.x debug</name>
         <builddir>XPSP2_VC9_wxMSW_29x_debug</builddir>
@@ -131,4 +132,5 @@
             <run-tests/>
         </steps>
     </build>
+    -->
 </bot>
