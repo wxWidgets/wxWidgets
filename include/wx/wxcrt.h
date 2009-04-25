@@ -722,31 +722,31 @@ inline const T *wxStrpbrk(const S& s, const wxScopedCharTypeBuffer<T>& accept)
 
 
 /* inlined non-const versions */
-inline char *wxStrstr(char *haystack, const char *needle)
+template <typename T>
+inline char *wxStrstr(char *haystack, T needle)
     { return (char *)wxStrstr((const char *)haystack, needle); }
-inline wchar_t *wxStrstr(wchar_t *haystack, const wchar_t *needle)
-    { return (wchar_t *)wxStrstr((const wchar_t *)haystack, needle); }
-inline char *wxStrstr(char *haystack, const wxString& needle)
-    { return (char *)wxStrstr((const char *)haystack, needle); }
-inline wchar_t *wxStrstr(wchar_t *haystack, const wxString& needle)
+template <typename T>
+inline wchar_t *wxStrstr(wchar_t *haystack, T needle)
     { return (wchar_t *)wxStrstr((const wchar_t *)haystack, needle); }
 
-inline char * wxStrchr(char *s, char c)
+template <typename T>
+inline char * wxStrchr(char *s, T c)
     { return (char *)wxStrchr((const char *)s, c); }
-inline char * wxStrrchr(char *s, char c)
+template <typename T>
+inline char * wxStrchr(wchar_t *s, T c)
+    { return (char *)wxStrchr((const char *)s, c); }
+template <typename T>
+inline char * wxStrrchr(char *s, T c)
     { return (char *)wxStrrchr((const char *)s, c); }
-inline wchar_t * wxStrchr(wchar_t *s, wchar_t c)
-    { return (wchar_t *)wxStrchr((const wchar_t *)s, c); }
-inline wchar_t * wxStrrchr(wchar_t *s, wchar_t c)
-    { return (wchar_t *)wxStrrchr((const wchar_t *)s, c); }
+template <typename T>
+inline char * wxStrrchr(wchar_t *s, T c)
+    { return (char *)wxStrrchr((const char *)s, c); }
 
-inline char * wxStrpbrk(char *s, const char *accept)
+template <typename T>
+inline char * wxStrpbrk(char *s, T accept)
     { return (char *)wxStrpbrk((const char *)s, accept); }
-inline wchar_t * wxStrpbrk(wchar_t *s, const wchar_t *accept)
-    { return (wchar_t *)wxStrpbrk((const wchar_t *)s, accept); }
-inline char * wxStrpbrk(char *s, const wxString& accept)
-    { return (char *)wxStrpbrk((const char *)s, accept); }
-inline wchar_t * wxStrpbrk(wchar_t *s, const wxString& accept)
+template <typename T>
+inline wchar_t * wxStrpbrk(wchar_t *s, T accept)
     { return (wchar_t *)wxStrpbrk((const wchar_t *)s, accept); }
 
 
