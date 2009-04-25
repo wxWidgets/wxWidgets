@@ -183,7 +183,9 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #elif !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
     #define wxCRT_StrdupA strdup
 #endif
-#if defined(__WINDOWS__)
+
+// all compilers except Cygwin provide _wcsdup() under Windows
+#if defined(__WINDOWS__) && !defined(__CYGWIN__)
     #define wxCRT_StrdupW _wcsdup
 #elif defined(HAVE_WCSDUP)
     #define wxCRT_StrdupW wcsdup
