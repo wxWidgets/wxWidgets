@@ -195,7 +195,7 @@ private:
 // The MSW version had problems with SetTextColour() et
 // al as the wxListItemAttr's were stored keyed on the
 // item index. If a item was inserted anywhere but the end
-// of the list the the text attributes (colour etc) for
+// of the list the text attributes (colour etc) for
 // the following items were out of sync.
 //
 // Solution:
@@ -207,42 +207,26 @@ private:
 //
 // However what we can do is store a pointer to a
 // structure which contains the attributes we want *and*
-// a lParam for the users data, e.g.
+// a lParam -- and this is what wxMSWListItemData does.
 //
-// class wxListItemInternalData
-// {
-// public:
-//   wxListItemAttr *attr;
-//   long lParam; // user data
-// };
-//
-// To conserve memory, a wxListItemInternalData is
+// To conserve memory, a wxMSWListItemData is
 // only allocated for a LV_ITEM if text attributes or
 // user data(lparam) are being set.
-
-
-// class wxListItemInternalData
-class wxListItemInternalData
+class wxMSWListItemData
 {
 public:
-   wxListItemAttr *attr;
-   LPARAM lParam; // user data
+   wxMSWListItemData() : attr(NULL), lParam(0) {}
+   ~wxMSWListItemData() { delete attr; }
 
-   wxListItemInternalData() : attr(NULL), lParam(0) {}
-   ~wxListItemInternalData()
-   {
-       if (attr)
-           delete attr;
-   }
+    wxListItemAttr *attr;
+    LPARAM lParam; // real user data
 
-    wxDECLARE_NO_COPY_CLASS(wxListItemInternalData);
+    wxDECLARE_NO_COPY_CLASS(wxMSWListItemData);
 };
 
 // Get the internal data structure
-static wxListItemInternalData *wxGetInternalData(HWND hwnd, long itemId);
-static wxListItemInternalData *wxGetInternalData(const wxListCtrl *ctl, long itemId);
-static wxListItemAttr *wxGetInternalDataAttr(const wxListCtrl *ctl, long itemId);
-static void wxDeleteInternalData(wxListCtrl* ctl, long itemId);
+static wxMSWListItemData *wxGetInternalData(HWND hwnd, long itemId);
+static wxMSWListItemData *wxGetInternalData(const wxListCtrl *ctl, long itemId);
 
 
 #if wxUSE_EXTENDED_RTTI
@@ -332,15 +316,17 @@ END_EVENT_TABLE()
 
 void wxListCtrl::Init()
 {
-    m_imageListNormal = NULL;
-    m_imageListSmall = NULL;
+    m_imageListNormal =
+    m_imageListSmall =
     m_imageListState = NULL;
-    m_ownsImageListNormal = m_ownsImageListSmall = m_ownsImageListState = false;
+    m_ownsImageListNormal =
+    m_ownsImageListSmall =
+    m_ownsImageListState = false;
+
     m_colCount = 0;
     m_count = 0;
-    m_ignoreChangeMessages = false;
     m_textCtrl = NULL;
-    m_AnyInternalData = false;
+
     m_hasAnyAttr = false;
 }
 
@@ -503,17 +489,11 @@ void wxListCtrl::UpdateStyle()
 
 void wxListCtrl::FreeAllInternalData()
 {
-    if (m_AnyInternalData)
-    {
-        int n = GetItemCount();
+    const unsigned count = m_internalData.size();
+    for ( unsigned n = 0; n < count; n++ )
+        delete m_internalData[n];
 
-        m_ignoreChangeMessages = true;
-        for (int i = 0; i < n; i++)
-            wxDeleteInternalData(this, i);
-        m_ignoreChangeMessages = false;
-
-        m_AnyInternalData = false;
-    }
+    m_internalData.clear();
 }
 
 void wxListCtrl::DeleteEditControl()
@@ -876,28 +856,27 @@ bool wxListCtrl::SetItem(wxListItem& info)
     wxConvertToMSWListItem(this, info, item);
 
     // we never update the lParam if it contains our pointer
-    // to the wxListItemInternalData structure
+    // to the wxMSWListItemData structure
     item.mask &= ~LVIF_PARAM;
 
     // check if setting attributes or lParam
-    if (info.HasAttributes() || (info.m_mask  & wxLIST_MASK_DATA))
+    if ( info.HasAttributes() || (info.m_mask & wxLIST_MASK_DATA) )
     {
         // get internal item data
-        // perhaps a cache here ?
-        wxListItemInternalData *data = wxGetInternalData(this, id);
+        wxMSWListItemData *data = MSWGetItemData(id);
 
-        if (! data)
+        if ( !data )
         {
-            // need to set it
-            m_AnyInternalData = true;
-            data = new wxListItemInternalData();
+            // need to allocate the internal data object
+            data = new wxMSWListItemData;
+            m_internalData.push_back(data);
             item.lParam = (LPARAM) data;
             item.mask |= LVIF_PARAM;
         }
 
 
         // user data
-        if (info.m_mask  & wxLIST_MASK_DATA)
+        if ( info.m_mask & wxLIST_MASK_DATA )
             data->lParam = info.m_data;
 
         // attributes
@@ -1081,6 +1060,19 @@ void wxListCtrl::SetItemText(long item, const wxString& str)
     SetItem(info);
 }
 
+// Gets the internal item data
+wxMSWListItemData *wxListCtrl::MSWGetItemData(long itemId) const
+{
+    LV_ITEM it;
+    it.mask = LVIF_PARAM;
+    it.iItem = itemId;
+
+    if ( !ListView_GetItem(GetHwnd(), &it) )
+        return NULL;
+
+    return (wxMSWListItemData *) it.lParam;
+}
+
 // Gets the item data
 wxUIntPtr wxListCtrl::GetItemData(long item) const
 {
@@ -1255,7 +1247,7 @@ void wxListCtrl::SetItemTextColour( long item, const wxColour &col )
 wxColour wxListCtrl::GetItemTextColour( long item ) const
 {
     wxColour col;
-    wxListItemInternalData *data = wxGetInternalData(this, item);
+    wxMSWListItemData *data = MSWGetItemData(item);
     if ( data && data->attr )
         col = data->attr->GetTextColour();
 
@@ -1273,7 +1265,7 @@ void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col )
 wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
 {
     wxColour col;
-    wxListItemInternalData *data = wxGetInternalData(this, item);
+    wxMSWListItemData *data = MSWGetItemData(item);
     if ( data && data->attr )
         col = data->attr->GetBackgroundColour();
 
@@ -1291,7 +1283,7 @@ void wxListCtrl::SetItemFont( long item, const wxFont &f )
 wxFont wxListCtrl::GetItemFont( long item ) const
 {
     wxFont f;
-    wxListItemInternalData *data = wxGetInternalData(this, item);
+    wxMSWListItemData *data = MSWGetItemData(item);
     if ( data && data->attr )
         f = data->attr->GetFont();
 
@@ -1607,27 +1599,46 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
     // inconsistent with the generic version - so we adjust the index
     if (start != -1)
         start --;
-    return ListView_FindItem(GetHwnd(), (int) start, &findInfo);
+    return ListView_FindItem(GetHwnd(), start, &findInfo);
 }
 
-// Find an item whose data matches this data, starting from the item after 'start'
-// or the beginning if 'start' is -1.
-// NOTE : Lindsay Mathieson - 14-July-2002
-//        No longer use ListView_FindItem as the data attribute is now stored
-//        in a wxListItemInternalData structure refernced by the actual lParam
+// Find an item whose data matches this data, starting from the item after
+// 'start' or the beginning if 'start' is -1.
 long wxListCtrl::FindItem(long start, wxUIntPtr data)
 {
-    long  idx = start + 1;
-    long count = GetItemCount();
-
-    while (idx < count)
+    // we can't use ListView_FindItem() directly as we don't store the data
+    // pointer itself in the control but rather our own internal data, so first
+    // we need to find the right value to search for (and there can be several
+    // of them)
+    int idx = wxNOT_FOUND;
+    const unsigned count = m_internalData.size();
+    for ( unsigned n = 0; n < count; n++ )
     {
-        if (GetItemData(idx) == data)
-            return idx;
-        idx++;
+        if ( m_internalData[n]->lParam == (LPARAM)data )
+        {
+            LV_FINDINFO findInfo;
+            findInfo.flags = LVFI_PARAM;
+            findInfo.lParam = (LPARAM)wxPtrToUInt(m_internalData[n]);
+
+            int rc = ListView_FindItem(GetHwnd(), start, &findInfo);
+            if ( rc != -1 )
+            {
+                if ( idx == wxNOT_FOUND || rc < idx )
+                {
+                    idx = rc;
+                    if ( idx == start + 1 )
+                    {
+                        // we can stop here, we don't risk finding a closer
+                        // match
+                        break;
+                    }
+                }
+                //else: this item is after the previously found one
+            }
+        }
     }
 
-    return -1;
+    return idx;
 }
 
 // Find an item nearest this position in the specified direction, starting from
@@ -1650,7 +1661,7 @@ long wxListCtrl::FindItem(long start, const wxPoint& pt, int direction)
     else if ( direction == wxLIST_FIND_RIGHT )
         findInfo.vkDirection = VK_RIGHT;
 
-    return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
+    return ListView_FindItem(GetHwnd(), start, &findInfo);
 }
 
 // Determines which item (if any) is at the specified point,
@@ -1722,18 +1733,18 @@ long wxListCtrl::InsertItem(const wxListItem& info)
     wxConvertToMSWListItem(this, info, item);
     item.mask &= ~LVIF_PARAM;
 
-    // check wether we need to allocate our internal data
-    bool needInternalData = ((info.m_mask & wxLIST_MASK_DATA) || info.HasAttributes());
-    if (needInternalData)
+    // check whether we need to allocate our internal data
+    bool needInternalData = (info.m_mask & wxLIST_MASK_DATA) ||
+                                info.HasAttributes();
+    if ( needInternalData )
     {
-        m_AnyInternalData = true;
         item.mask |= LVIF_PARAM;
 
-        // internal stucture that manages data
-        wxListItemInternalData *data = new wxListItemInternalData();
-        item.lParam = (LPARAM) data;
+        wxMSWListItemData * const data = new wxMSWListItemData;
+        m_internalData.push_back(data);
+        item.lParam = (LPARAM)data;
 
-        if (info.m_mask & wxLIST_MASK_DATA)
+        if ( info.m_mask & wxLIST_MASK_DATA )
             data->lParam = info.m_data;
 
         // check whether it has any custom attributes
@@ -1872,8 +1883,8 @@ int CALLBACK wxInternalDataCompareFunc(LPARAM lParam1, LPARAM lParam2,  LPARAM l
 {
     wxInternalDataSort * const internalData = (wxInternalDataSort *) lParamSort;
 
-    wxListItemInternalData *data1 = (wxListItemInternalData *) lParam1;
-    wxListItemInternalData *data2 = (wxListItemInternalData *) lParam2;
+    wxMSWListItemData *data1 = (wxMSWListItemData *) lParam1;
+    wxMSWListItemData *data2 = (wxMSWListItemData *) lParam2;
 
     long d1 = (data1 == NULL ? 0 : data1->lParam);
     long d2 = (data2 == NULL ? 0 : data2->lParam);
@@ -2093,23 +2104,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         const int iItem = nmLV->iItem;
 
 
-        // FreeAllInternalData will cause LVN_ITEMCHANG* messages, which can be
-        // ignored for efficiency.  It is done here because the internal data is in the
-        // process of being deleted so we don't want to try and access it below.
-        if ( m_ignoreChangeMessages &&
-             ( (nmLV->hdr.code == LVN_ITEMCHANGED) ||
-               (nmLV->hdr.code == LVN_ITEMCHANGING)) )
-        {
-            return true;
-        }
-
-
         // If we have a valid item then check if there is a data value
         // associated with it and put it in the event.
         if ( iItem >= 0 && iItem < GetItemCount() )
         {
-            wxListItemInternalData *internaldata =
-                wxGetInternalData(GetHwnd(), iItem);
+            wxMSWListItemData *internaldata =
+                MSWGetItemData(iItem);
 
             if ( internaldata )
                 event.m_item.m_data = internaldata->lParam;
@@ -2206,8 +2206,24 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
                 event.m_itemIndex = iItem;
-                // delete the assoicated internal data
-                wxDeleteInternalData(this, iItem);
+
+                // delete the associated internal data
+                if ( wxMSWListItemData *data = MSWGetItemData(iItem) )
+                {
+                    const unsigned count = m_internalData.size();
+                    for ( unsigned n = 0; n < count; n++ )
+                    {
+                        if ( m_internalData[n] == data )
+                        {
+                            m_internalData.erase(m_internalData.begin() + n);
+                            delete data;
+                            data = NULL;
+                            break;
+                        }
+                    }
+
+                    wxASSERT_MSG( data, "invalid internal data pointer?" );
+                }
                 break;
 
             case LVN_INSERTITEM:
@@ -3003,8 +3019,11 @@ wxListItemAttr *wxListCtrl::OnGetItemAttr(long WXUNUSED_UNLESS_DEBUG(item)) cons
 
 wxListItemAttr *wxListCtrl::DoGetItemColumnAttr(long item, long column) const
 {
-    return IsVirtual() ? OnGetItemColumnAttr(item, column)
-                       : wxGetInternalDataAttr(this, item);
+    if ( IsVirtual() )
+        return OnGetItemColumnAttr(item, column);
+
+    wxMSWListItemData * const data = MSWGetItemData(item);
+    return data ? data->attr : NULL;
 }
 
 void wxListCtrl::SetItemCount(long count)
@@ -3032,51 +3051,6 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
 }
 
 // ----------------------------------------------------------------------------
-// internal data stuff
-// ----------------------------------------------------------------------------
-
-static wxListItemInternalData *wxGetInternalData(HWND hwnd, long itemId)
-{
-    LV_ITEM it;
-    it.mask = LVIF_PARAM;
-    it.iItem = itemId;
-
-    if ( !ListView_GetItem(hwnd, &it) )
-        return NULL;
-
-    return (wxListItemInternalData *) it.lParam;
-}
-
-static
-wxListItemInternalData *wxGetInternalData(const wxListCtrl *ctl, long itemId)
-{
-    return wxGetInternalData(GetHwndOf(ctl), itemId);
-}
-
-static
-wxListItemAttr *wxGetInternalDataAttr(const wxListCtrl *ctl, long itemId)
-{
-    wxListItemInternalData *data = wxGetInternalData(ctl, itemId);
-
-    return data ? data->attr : NULL;
-}
-
-static void wxDeleteInternalData(wxListCtrl* ctl, long itemId)
-{
-    wxListItemInternalData *data = wxGetInternalData(ctl, itemId);
-    if (data)
-    {
-        LV_ITEM item;
-        memset(&item, 0, sizeof(item));
-        item.iItem = itemId;
-        item.mask = LVIF_PARAM;
-        item.lParam = (LPARAM) 0;
-        ListView_SetItem((HWND)ctl->GetHWND(), &item);
-        delete data;
-    }
-}
-
-// ----------------------------------------------------------------------------
 // wxWin <-> MSW items conversions
 // ----------------------------------------------------------------------------
 
@@ -3084,8 +3058,8 @@ static void wxConvertFromMSWListItem(HWND hwndListCtrl,
                                      wxListItem& info,
                                      LV_ITEM& lvItem)
 {
-    wxListItemInternalData *internaldata =
-        (wxListItemInternalData *) lvItem.lParam;
+    wxMSWListItemData *internaldata =
+        (wxMSWListItemData *) lvItem.lParam;
 
     if (internaldata)
         info.m_data = internaldata->lParam;
