@@ -197,11 +197,21 @@ void wxStatusBarBase::PushStatusText(const wxString& text, int number)
     SetStatusText(text, number);
         // update current status text (which will possibly be ellipsized) 
         // also in the native control
+
+    // SetStatusText() typically has an optimization built-in to avoid flickering
+    // which won't refresh the status bar pane if the current top of the stack
+    // is identic to the text passed to that function.
+    // Since this optimization however cannot detect push/pop operations on the stack
+    // we need to explicitely refresh the status bar pane ourselves:
+    wxRect rect;
+    GetFieldRect(number, rect);
+    Refresh(true, &rect);
+    Update();
 }
 
 void wxStatusBarBase::PopStatusText(int number)
 {
-    wxASSERT_MSG(m_panes[number].m_arrStack.GetCount() >= 1,
+    wxASSERT_MSG(m_panes[number].m_arrStack.GetCount() > 1,
                  "can't pop any further string");
 
     // the top of the stack is the status text currently shown in the native control;
@@ -211,6 +221,13 @@ void wxStatusBarBase::PopStatusText(int number)
     // restore the previous status text in the native control
     const wxString& text = m_panes[number].m_arrStack.back();
     SetStatusText(text, number);
+
+    // see comment in wxStatusBarBase::PushStatusText about why we need to explicitely
+    // refresh the status bar pane
+    wxRect rect;
+    GetFieldRect(number, rect);
+    Refresh(true, &rect);
+    Update();
 }
 
 #endif // wxUSE_STATUSBAR
