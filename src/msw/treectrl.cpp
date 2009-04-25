@@ -3372,7 +3372,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 return MSWHandleTreeKeyDownEvent(
                         info->wVKey, (wxIsAltDown() ? KF_ALTDOWN : 0) << 16);
             }
-            break;
 
 
         // Vista's tree control has introduced some problems with our

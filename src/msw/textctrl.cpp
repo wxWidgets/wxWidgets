@@ -424,7 +424,9 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         }
 #endif
 
+#if wxUSE_INKEDIT
         if (!IsInkEdit())
+#endif // wxUSE_INKEDIT
         {
             if ( m_verRichEdit == 2 )
             {

@@ -451,7 +451,7 @@ wxString wxTextEntry::GetHint() const
         wchar_t buf[256];
         if ( ::SendMessage(GetEditHwnd(), EM_GETCUEBANNER,
                             (WPARAM)buf, WXSIZEOF(buf)) )
-            return buf;
+            return wxString(buf);
     }
 
     return wxTextEntryBase::GetHint();
