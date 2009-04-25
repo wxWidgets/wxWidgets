@@ -28,6 +28,12 @@
     #define wxUSE_DISPLAY 0
 #endif
 
+// eVC doesn't have standard streams
+#if !wxCHECK_VISUALC_VERSION(8)
+    #undef wxUSE_STD_IOSTREAM
+    #define wxUSE_STD_IOSTREAM 0
+#endif
+
 // wxFSVolume currently doesn't compile under CE and it's not clear if it makes
 // sense at all there (the drives and their names are fixed on CE systems)
 #undef wxUSE_FSVOLUME
