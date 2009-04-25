@@ -470,7 +470,7 @@ public:
     // returns background colour (of wxNullColour if none set), so that widgets can
     // adapt to it:
     wxColour GetBackgroundColour();
-    void SetBorder(const wxColour& clr1, const wxColour& clr2) {m_UseBorder = true; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
+    void SetBorder(const wxColour& clr1, const wxColour& clr2, int border = 1) {m_Border = border; m_BorderColour1 = clr1, m_BorderColour2 = clr2;}
     virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
 
@@ -529,7 +529,8 @@ protected:
     bool m_UseBkColour;
     wxColour m_BkColour;
             // background color of this container
-    bool m_UseBorder;
+    int m_Border;
+            // border size. Draw only if m_Border > 0
     wxColour m_BorderColour1, m_BorderColour2;
             // borders color of this container
     int m_LastLayout;

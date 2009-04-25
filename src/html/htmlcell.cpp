@@ -735,7 +735,7 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
     m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
     m_UseBkColour = false;
-    m_UseBorder = false;
+    m_Border = 0;
     m_MinHeight = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;
     m_LastLayout = -1;
@@ -1124,8 +1124,9 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
         dc.DrawRectangle(xlocal, real_y1, m_Width, real_y2 - real_y1 + 1);
     }
 
-    if (m_UseBorder)
+    if (m_Border == 1)
     {
+        // draw thin border using lines 
         wxPen mypen1(m_BorderColour1, 1, wxPENSTYLE_SOLID);
         wxPen mypen2(m_BorderColour2, 1, wxPENSTYLE_SOLID);
 
@@ -1136,7 +1137,56 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
         dc.DrawLine(xlocal + m_Width - 1, ylocal, xlocal +  m_Width - 1, ylocal + m_Height - 1);
         dc.DrawLine(xlocal, ylocal + m_Height - 1, xlocal + m_Width, ylocal + m_Height - 1);
     }
+    else if (m_Border> 0)
+    {     
+        wxBrush mybrush1(m_BorderColour1, wxBRUSHSTYLE_SOLID);
+        wxBrush mybrush2(m_BorderColour2, wxBRUSHSTYLE_SOLID);
+        
+        // draw upper left corner
+        // 0---------------5
+        // |              /
+        // | 3-----------4
+        // | |
+        // | 2
+        // |/
+        // 1 
 
+        wxPoint poly[6];
+        poly[0].x =m_PosX; poly[0].y = m_PosY ;
+        poly[1].x =m_PosX; poly[1].y = m_PosY + m_Height;
+        poly[2].x =m_PosX + m_Border; poly[2].y = poly[1].y - m_Border;
+        poly[3].x =poly[2].x ; poly[3].y = m_PosY + m_Border;
+        poly[4].x =m_PosX + m_Width - m_Border; poly[4].y = poly[3].y;
+        poly[5].x =m_PosX + m_Width; poly[5].y = m_PosY;
+
+        dc.SetBrush(mybrush1);
+        dc.SetPen(*wxTRANSPARENT_PEN);
+        dc.DrawPolygon(6, poly, x, y);
+        
+        // draw lower right corner reusing point 1,2,4 and 5
+        //                 5
+        //                /|
+        //               4 |
+        //               | |
+        //   2-----------3 |
+        //  /              |
+        // 1---------------0
+        dc.SetBrush(mybrush2);
+        poly[0].x = poly[5].x; poly[0].y = poly[1].y;
+        poly[3].x = poly[4].x; poly[3].y = poly[2].y;
+        dc.DrawPolygon(6, poly, x, y);
+
+        // smooth color transition like firefox 
+        wxColour borderMediumColour(
+            (m_BorderColour1.Red() + m_BorderColour2.Red()) /2 ,
+            (m_BorderColour1.Green() + m_BorderColour2.Green()) /2 ,
+            (m_BorderColour1.Blue() + m_BorderColour2.Blue()) /2 
+            );
+        wxPen mypen3(borderMediumColour, 1, wxPENSTYLE_SOLID);
+        dc.SetPen(mypen3);
+        dc.DrawLines(2, &poly[1], x, y - 1); // between 1 and 2
+        dc.DrawLines(2, &poly[4], x, y - 1); // between 4 and 5
+    }
     if (m_Cells)
     {
         // draw container's contents:

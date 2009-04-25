@@ -323,6 +323,10 @@ Major new features in this release
 2.9.1:
 ------
 
+All:
+
+- wxHTML: add support for table borders width (Laurent Humbertclaude).
+
 i18n:
 
 - Korean translations added (Sungkee Jung).

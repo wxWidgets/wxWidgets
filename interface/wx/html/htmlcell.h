@@ -413,8 +413,10 @@ public:
             Colour of top and left lines
         @param clr2
             Colour of bottom and right lines
+        @param border
+            Size of the border in pixels
     */
-    void SetBorder(const wxColour& clr1, const wxColour& clr2);
+    void SetBorder(const wxColour& clr1, const wxColour& clr2, int border = 1);
 
     /**
         Sets the indentation (free space between borders of container and subcells).
