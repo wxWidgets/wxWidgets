@@ -39,7 +39,7 @@ wxStatusBarXmlHandler::wxStatusBarXmlHandler()
     XRC_ADD_STYLE(wxSTB_DEFAULT_STYLE);
 
     // compat style name:
-    XRC_ADD_STYLE(wxST_SIZE_GRIP);
+    XRC_ADD_STYLE(wxST_SIZEGRIP);
 
     AddWindowStyles();
 }
