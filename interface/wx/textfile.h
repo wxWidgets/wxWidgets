@@ -6,9 +6,10 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// TODO: document wxTextBuffer
 
 /**
-    The line termination type (kept wxTextFileType name for compability).
+    The line termination type.
 */
 enum wxTextFileType
 {
@@ -66,6 +67,11 @@ class wxTextFile
 {
 public:
     /**
+        Default type for current platform determined at compile time.
+     */
+    static const wxTextFileType typeDefault;
+
+    /**
         Default constructor, use Create() or Open() with a file name parameter to
         initialize the object.
     */
@@ -84,8 +90,7 @@ public:
     /**
         Adds a line to the end of file.
     */
-    void AddLine(const wxString& str,
-                 wxTextFileType type = wxTextBuffer::typeDefault);
+    void AddLine(const wxString& str, wxTextFileType type = typeDefault);
 
     /**
         Delete all lines from the file, set current line number to 0.
@@ -144,7 +149,7 @@ public:
         compiling with the Apple Developer Tools) and @c wxTextFileType_Mac under
         Mac OS (including Mac OS X when compiling with CodeWarrior).
     */
-    static const wxChar* GetEOL(wxTextFileType type = wxTextBuffer::typeDefault);
+    static const wxChar* GetEOL(wxTextFileType type = typeDefault);
 
     /**
         This method together with GetNextLine() allows more "iterator-like"
@@ -234,7 +239,7 @@ public:
         Insert a line before the line number @a n.
     */
     void InsertLine(const wxString& str, size_t n,
-                    wxTextFileType type = wxTextBuffer::typeDefault);
+                    wxTextFileType type = typeDefault);
 
     /**
         Returns @true if the file is currently opened.
