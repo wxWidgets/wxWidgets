@@ -236,7 +236,7 @@ MyFrame::MyFrame(const wxChar *title)
     menuList->Append(LIST_SHOW_VIEW_RECT, _T("Show &view rect"));
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
     menuList->Append(LIST_SET_COL_ORDER, _T("Se&t columns order\tShift-Ctrl-O"));
-    menuList->Append(LIST_GET_COL_ORDER, _T("Show&w columns order\tCtrl-O"));
+    menuList->Append(LIST_GET_COL_ORDER, _T("Sho&w columns order\tCtrl-O"));
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
     menuList->AppendSeparator();
     menuList->Append(LIST_SORT, _T("Sor&t\tCtrl-T"));
