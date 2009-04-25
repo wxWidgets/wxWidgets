@@ -150,7 +150,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_FREEZE, MyFrame::OnFreeze)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
+#ifdef __WXOSX__
     EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
+#endif // __WXOSX__
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
@@ -346,10 +348,14 @@ void MyFrame::OnToggleLines(wxCommandEvent& event)
     m_listCtrl->SetSingleStyle(wxLC_HRULES | wxLC_VRULES, event.IsChecked());
 }
 
+#ifdef __WXOSX__
+
 void MyFrame::OnToggleMacUseGeneric(wxCommandEvent& event)
 {
     wxSystemOptions::SetOption(wxT("mac.listctrl.always_use_generic"), event.IsChecked());
 }
+
+#endif // __WXOSX__
 
 void MyFrame::OnGoTo(wxCommandEvent& WXUNUSED(event))
 {
