@@ -325,6 +325,10 @@ Major new features in this release
 
 All:
 
+- Include port number in host header in wxHTTP (Marcin 'Malcom' Malich).
+
+All (GUI):
+
 - wxHTML: add support for table borders width (Laurent Humbertclaude).
 
 i18n:
