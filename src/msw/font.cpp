@@ -264,9 +264,6 @@ public:
         m_nativeFontInfo.SetEncoding(encoding);
     }
 
-    // native font info
-    bool HasNativeFontInfo() const { return true; }
-
     const wxNativeFontInfo& GetNativeFontInfo() const
         { return m_nativeFontInfo; }
 
@@ -1031,8 +1028,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    return IsOk() && M_FONTDATA->HasNativeFontInfo() ? &(M_FONTDATA->GetNativeFontInfo())
-                                           : NULL;
+    return IsOk() ? &(M_FONTDATA->GetNativeFontInfo()) : NULL;
 }
 
 wxString wxFont::GetNativeFontInfoDesc() const
@@ -1057,15 +1053,10 @@ bool wxFont::IsFixedWidth() const
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
-    if ( M_FONTDATA->HasNativeFontInfo() )
-    {
-        // the two low-order bits specify the pitch of the font, the rest is
-        // family
-        BYTE pitch =
-            (BYTE)(M_FONTDATA->GetNativeFontInfo().lf.lfPitchAndFamily & PITCH_MASK);
+    // the two low-order bits specify the pitch of the font, the rest is
+    // family
+    BYTE pitch =
+        (BYTE)(M_FONTDATA->GetNativeFontInfo().lf.lfPitchAndFamily & PITCH_MASK);
 
-        return pitch == FIXED_PITCH;
-    }
-
-    return wxFontBase::IsFixedWidth();
+    return pitch == FIXED_PITCH;
 }
