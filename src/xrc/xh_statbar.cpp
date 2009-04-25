@@ -31,7 +31,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxStatusBarXmlHandler, wxXmlResourceHandler)
 wxStatusBarXmlHandler::wxStatusBarXmlHandler()
                       :wxXmlResourceHandler()
 {
-    XRC_ADD_STYLE(wxST_SIZEGRIP);
+    XRC_ADD_STYLE(wxSTB_SIZEGRIP);
+    XRC_ADD_STYLE(wxSTB_SHOW_TIPS);
+    XRC_ADD_STYLE(wxSTB_ELLIPSIZE_START);
+    XRC_ADD_STYLE(wxSTB_ELLIPSIZE_MIDDLE);
+    XRC_ADD_STYLE(wxSTB_ELLIPSIZE_END);
+    XRC_ADD_STYLE(wxSTB_DEFAULT_STYLE);
+
+    // compat style name:
+    XRC_ADD_STYLE(wxST_SIZE_GRIP);
+
     AddWindowStyles();
 }
 

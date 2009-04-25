@@ -104,7 +104,7 @@ public:
 #if wxUSE_STATUSBAR
     // create the main status bar by calling OnCreateStatusBar()
     virtual wxStatusBar* CreateStatusBar(int number = 1,
-                                         long style = wxST_DEFAULT_STYLE,
+                                         long style = wxSTB_DEFAULT_STYLE,
                                          wxWindowID winid = 0,
                                          const wxString& name = wxStatusLineNameStr);
     // return a new status bar

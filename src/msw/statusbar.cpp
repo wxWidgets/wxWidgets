@@ -89,9 +89,9 @@ bool wxStatusBar::Create(wxWindow *parent,
     // setting SBARS_SIZEGRIP is perfectly useless: it's always on by default
     // (at least in the version of comctl32.dll I'm using), and the only way to
     // turn it off is to use CCS_TOP style - as we position the status bar
-    // manually anyhow (see DoMoveWindow), use CCS_TOP style if wxST_SIZEGRIP
+    // manually anyhow (see DoMoveWindow), use CCS_TOP style if wxSTB_SIZEGRIP
     // is not given
-    if ( !(style & wxST_SIZEGRIP) )
+    if ( !(style & wxSTB_SIZEGRIP) )
     {
         wstyle |= CCS_TOP;
     }

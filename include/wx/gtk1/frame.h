@@ -57,7 +57,7 @@ public:
     virtual void PositionStatusBar();
 
     virtual wxStatusBar* CreateStatusBar(int number = 1,
-                                         long style = wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE,
+                                         long style = wxSTB_DEFAULT_STYLE,
                                          wxWindowID id = 0,
                                          const wxString& name = wxStatusLineNameStr);
 

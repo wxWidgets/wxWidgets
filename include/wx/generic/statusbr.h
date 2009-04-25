@@ -30,7 +30,7 @@ public:
     wxStatusBarGeneric() { Init(); }
     wxStatusBarGeneric(wxWindow *parent,
                        wxWindowID winid = wxID_ANY,
-                       long style = wxST_DEFAULT_STYLE,
+                       long style = wxSTB_DEFAULT_STYLE,
                        const wxString& name = wxStatusBarNameStr)
     {
         Init();
@@ -41,7 +41,7 @@ public:
     virtual ~wxStatusBarGeneric();
 
     bool Create(wxWindow *parent, wxWindowID winid = wxID_ANY,
-                long style = wxST_DEFAULT_STYLE,
+                long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
 
     // Create status line
@@ -90,7 +90,7 @@ protected:
     virtual void InitColours();
 
     // true if the status bar shows the size grip: for this it must have
-    // wxST_SIZEGRIP style and the window it is attached to must be resizeable
+    // wxSTB_SIZEGRIP style and the window it is attached to must be resizeable
     // and not maximized
     bool ShowsSizeGrip() const;
 

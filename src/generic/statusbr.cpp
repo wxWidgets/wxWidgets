@@ -57,10 +57,10 @@
 #if GTK_CHECK_VERSION(2,12,0)
 extern "C" {
 static
-gboolean statusbar_query_tooltip(GtkWidget  *widget,
+gboolean statusbar_query_tooltip(GtkWidget*   WXUNUSED(widget),
                                  gint        x,
                                  gint        y,
-                                 gboolean    keyboard_mode,
+                                 gboolean     WXUNUSED(keyboard_mode),
                                  GtkTooltip *tooltip,
                                  wxStatusBar* statbar)
 {
@@ -72,7 +72,11 @@ gboolean statusbar_query_tooltip(GtkWidget  *widget,
     if (!statbar->GetField(n).IsEllipsized())
         return FALSE;   // no, it's not useful
 
-    gtk_tooltip_set_text(tooltip, wxGTK_CONV_SYS(statbar->GetStatusText(n)));
+    const wxString& str = statbar->GetStatusText(n);
+    if (str.empty())
+        return FALSE;
+    
+    gtk_tooltip_set_text(tooltip, wxGTK_CONV_SYS(str));
     return TRUE;
 }
 }
@@ -128,7 +132,7 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
     
 #if defined( __WXGTK20__ )
 #if GTK_CHECK_VERSION(2,12,0)
-    if (HasFlag(wxST_SHOW_TIPS) && !gtk_check_version(2,12,0))
+    if (HasFlag(wxSTB_SHOW_TIPS) && !gtk_check_version(2,12,0))
     {
         g_object_set(m_widget, "has-tooltip", TRUE, NULL); 
         g_signal_connect(m_widget, "query-tooltip",  
@@ -202,7 +206,7 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
 
 bool wxStatusBarGeneric::ShowsSizeGrip() const
 {
-    if ( !HasFlag(wxST_SIZEGRIP) )
+    if ( !HasFlag(wxSTB_SIZEGRIP) )
         return false;
 
     wxTopLevelWindow * const
@@ -242,16 +246,34 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
     }
 
     // eventually ellipsize the text so that it fits the field width
-    text = wxControl::Ellipsize(
-        text, dc,
-        GetLayoutDirection() == wxLayout_RightToLeft ? wxELLIPSIZE_START : wxELLIPSIZE_END,
-        maxWidth,
-        wxELLIPSIZE_EXPAND_TAB);
-        // Ellipsize() will do something only if necessary
+    
+    wxEllipsizeMode ellmode = (wxEllipsizeMode)-1;
+    if (HasFlag(wxSTB_ELLIPSIZE_START)) ellmode = wxELLIPSIZE_START;
+    else if (HasFlag(wxSTB_ELLIPSIZE_MIDDLE)) ellmode = wxELLIPSIZE_MIDDLE;
+    else if (HasFlag(wxSTB_ELLIPSIZE_END)) ellmode = wxELLIPSIZE_END;
 
-    // update the ellipsization status for this pane; this is used to decide
-    // whether a tooltip should be shown or not for this pane
-    SetEllipsizedFlag(i, text != GetStatusText(i));
+    if (ellmode == (wxEllipsizeMode)-1)
+    {
+        // if we have the wxSTB_SHOW_TIPS we must set the ellipsized flag even if
+        // we don't ellipsize the text but just truncate it
+        if (HasFlag(wxSTB_SHOW_TIPS))
+            SetEllipsizedFlag(i, dc.GetTextExtent(text).GetWidth() > maxWidth);
+
+        dc.SetClippingRegion(rect);
+    }
+    else
+    {
+        text = wxControl::Ellipsize(text, dc,
+                                    ellmode,
+                                    maxWidth,
+                                    wxELLIPSIZE_EXPAND_TAB);
+            // Ellipsize() will do something only if necessary
+
+        // update the ellipsization status for this pane; this is used later to 
+        // decide whether a tooltip should be shown or not for this pane 
+        // (if we have wxSTB_SHOW_TIPS)
+        SetEllipsizedFlag(i, text != GetStatusText(i));
+    }
 
 #if defined( __WXGTK__ ) || defined(__WXMAC__)
     xpos++;
@@ -260,6 +282,9 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
 
     // draw the text
     dc.DrawText(text, xpos, ypos);
+    
+    if (ellmode == (wxEllipsizeMode)-1)
+        dc.DestroyClippingRegion();
 }
 
 void wxStatusBarGeneric::DrawField(wxDC& dc, int i, int textHeight)

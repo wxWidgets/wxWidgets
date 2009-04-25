@@ -59,15 +59,25 @@ public:
     Note that in wxStatusBar context, the terms @e pane and @e field are synonyms.
 
     @beginStyleTable
-    @style{wxST_SIZEGRIP}
+    @style{wxSTB_SIZEGRIP}
         Displays a gripper at the right-hand side of the status bar which can be used
         to resize the parent window.
-    @style{wxST_SHOW_TIPS}
-        Displays tooltips for those panes whose status text has been ellipsized because
-        the status text doesn't fit the pane width.
+    @style{wxSTB_SHOW_TIPS}
+        Displays tooltips for those panes whose status text has been ellipsized/truncated
+        because the status text doesn't fit the pane width.
         Note that this style has effect only on wxGTK (with GTK+ >= 2.12) currently.
-    @style{wxST_DEFAULT_STYLE}
-        The default style: includes @c wxST_SIZEGRIP|wxST_SHOW_TIPS|wxFULL_REPAINT_ON_RESIZE. 
+    @style{wxSTB_ELLIPSIZE_START}
+        Replace the beginning of the status texts with an ellipsis when the status text
+        widths exceed the status bar pane's widths (uses wxControl::Ellipsize).
+    @style{wxSTB_ELLIPSIZE_MIDDLE}
+        Replace the middle of the status texts with an ellipsis when the status text
+        widths exceed the status bar pane's widths (uses wxControl::Ellipsize).
+    @style{wxSTB_ELLIPSIZE_END}
+        Replace the end of the status texts with an ellipsis when the status text
+        widths exceed the status bar pane's widths (uses wxControl::Ellipsize).
+    @style{wxSTB_DEFAULT_STYLE}
+        The default style: includes 
+        @c wxSTB_SIZEGRIP|wxSTB_SHOW_TIPS|wxSTB_ELLIPSIZE_END|wxFULL_REPAINT_ON_RESIZE. 
     @endStyleTable
 
     @remarks
@@ -105,7 +115,7 @@ public:
         @see Create()
     */
     wxStatusBar(wxWindow* parent, wxWindowID id = wxID_ANY,
-                long style = wxST_DEFAULT_STYLE,
+                long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
 
     /**
@@ -118,7 +128,7 @@ public:
         See wxStatusBar() for details.
     */
     bool Create(wxWindow* parent, wxWindowID id = wxID_ANY,
-                long style = wxST_DEFAULT_STYLE,
+                long style = wxSTB_DEFAULT_STYLE,
                 const wxString& name = wxStatusBarNameStr);
 
     /**
@@ -233,11 +243,11 @@ public:
             The number of fields in the status bar. Must be equal to the
             number passed to SetFieldsCount() the last time it was called.
         @param styles
-            Contains an array of n integers with the styles for each field. There
-            are three possible styles:
-            - wxSB_NORMAL (default): The field appears sunken with a standard 3D border.
-            - wxSB_FLAT: No border is painted around the field so that it appears flat.
-            - wxSB_RAISED: A raised 3D border is painted around the field.
+            Contains an array of @a n integers with the styles for each field. 
+            There are three possible styles:
+            - @c wxSB_NORMAL (default): The field appears sunken with a standard 3D border.
+            - @c wxSB_FLAT: No border is painted around the field so that it appears flat.
+            - @c wxSB_RAISED: A raised 3D border is painted around the field.
     */
     virtual void SetStatusStyles(int n, const int* styles);
 
