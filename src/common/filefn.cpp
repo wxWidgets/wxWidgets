@@ -131,7 +131,7 @@ const int wxInvalidOffset = -1;
 // regardless of the mode parameter. This hack works around the problem by
 // setting the mode with _wchmod.
 //
-int wxCRT_Open(const wchar_t *pathname, int flags, mode_t mode)
+int wxCRT_OpenW(const wchar_t *pathname, int flags, mode_t mode)
 {
     int moreflags = 0;
 

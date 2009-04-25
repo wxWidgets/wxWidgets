@@ -303,85 +303,80 @@ enum wxFileKind
     #define   wxEof        wxPOSIX_IDENT(eof)
 
     // then the functions taking strings
+
+    // first the ANSI versions
+    #define   wxCRT_OpenA       wxPOSIX_IDENT(open)
+    #define   wxCRT_AccessA     wxPOSIX_IDENT(access)
+    #define   wxCRT_MkDirA      wxPOSIX_IDENT(mkdir)
+    #define   wxCRT_RmDirA      wxPOSIX_IDENT(rmdir)
+    #ifdef wxHAS_HUGE_FILES
+        #define   wxCRT_StatA       wxPOSIX_IDENT(stati64)
+    #else
+        // Unfortunately Watcom is not consistent
+        #if defined(__OS2__) && defined(__WATCOMC__)
+            #define   wxCRT_StatA       _stat
+        #else
+            #define   wxCRT_StatA       wxPOSIX_IDENT(stat)
+        #endif
+    #endif
+
+    // then wide char ones
+    #if wxUSE_UNICODE
+        // special workaround for buggy wopen() in bcc 5.5
+        #if defined(__BORLANDC__) && \
+            (__BORLANDC__ >= 0x550 && __BORLANDC__ <= 0x551)
+                WXDLLIMPEXP_BASE int wxCRT_OpenW(const wxChar *pathname,
+                                                 int flags, mode_t mode);
+        #else
+            #define wxCRT_OpenW       _wopen
+        #endif
+
+        #define   wxCRT_AccessW     _waccess
+        #define   wxCRT_MkDirW      _wmkdir
+        #define   wxCRT_RmDirW      _wrmdir
+        #ifdef wxHAS_HUGE_FILES
+            #define   wxCRT_StatW       _wstati64
+        #else
+            #define   wxCRT_StatW       _wstat
+        #endif
+    #endif // wxUSE_UNICODE
+
+
+    // finally the default char-type versions
     #if wxUSE_UNICODE
         #if wxUSE_UNICODE_MSLU
             // implement the missing file functions in Win9x ourselves
-            #if defined( __VISUALC__ ) \
-                || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
-                || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
-                || ( defined(__BORLANDC__) && (__BORLANDC__ > 0x460) ) \
-                || defined(__DMC__)
+            WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name,
+                                               int flags, int mode);
+            WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name,
+                                                 int mode);
+            WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
+            WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
 
-                WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name,
-                                                   int flags, int mode);
-                WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name,
-                                                     int mode);
-                WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
-                WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
-
-                #ifdef wxHAS_HUGE_FILES
-                    WXDLLIMPEXP_BASE int
-                    wxMSLU__wstati64(const wxChar *name, wxStructStat *buffer);
-                #else // !wxHAS_HUGE_FILES
-                    WXDLLIMPEXP_BASE int
-                    wxMSLU__wstat(const wxChar *name, wxStructStat *buffer);
-                #endif // wxHAS_HUGE_FILES/!wxHAS_HUGE_FILES
-            #endif // Windows compilers with MSLU support
+            WXDLLIMPEXP_BASE int
+            wxMSLU__wstat(const wxChar *name, wxStructStat *buffer);
 
             #define   wxCRT_Open       wxMSLU__wopen
 
             #define   wxCRT_Access     wxMSLU__waccess
             #define   wxCRT_MkDir      wxMSLU__wmkdir
             #define   wxCRT_RmDir      wxMSLU__wrmdir
-            #ifdef wxHAS_HUGE_FILES
-                #define   wxCRT_Stat   wxMSLU__wstati64
-            #else
-                #define   wxCRT_Stat   wxMSLU__wstat
-            #endif
+            #define   wxCRT_Stat       wxMSLU__wstat
         #else // !wxUSE_UNICODE_MSLU
-            #ifdef __BORLANDC__
-                #if __BORLANDC__ >= 0x550 && __BORLANDC__ <= 0x551
-                    WXDLLIMPEXP_BASE int wxCRT_Open(const wxChar *pathname,
-                                                    int flags, mode_t mode);
-                #else
-                    #define   wxCRT_Open       _wopen
-                #endif
-                #define   wxCRT_Access     _waccess
-                #define   wxCRT_MkDir      _wmkdir
-                #define   wxCRT_RmDir      _wrmdir
-                #ifdef wxHAS_HUGE_FILES
-                    #define   wxCRT_Stat       _wstati64
-                #else
-                    #define   wxCRT_Stat       _wstat
-                #endif
-            #else
-                #define   wxCRT_Open       _wopen
-                #define   wxCRT_Access     _waccess
-                #define   wxCRT_MkDir      _wmkdir
-                #define   wxCRT_RmDir      _wrmdir
-                #ifdef wxHAS_HUGE_FILES
-                    #define   wxCRT_Stat       _wstati64
-                #else
-                    #define   wxCRT_Stat       _wstat
-                #endif
-            #endif
+            #define wxCRT_Open      wxCRT_OpenW
+            #define wxCRT_Access    wxCRT_AccessW
+            #define wxCRT_MkDir     wxCRT_MkDirW
+            #define wxCRT_RmDir     wxCRT_RmDirW
+            #define wxCRT_Stat      wxCRT_StatW
         #endif // wxUSE_UNICODE_MSLU/!wxUSE_UNICODE_MSLU
     #else // !wxUSE_UNICODE
-        #define   wxCRT_Open       wxPOSIX_IDENT(open)
-        #define   wxCRT_Access     wxPOSIX_IDENT(access)
-        #define   wxCRT_MkDir      wxPOSIX_IDENT(mkdir)
-        #define   wxCRT_RmDir      wxPOSIX_IDENT(rmdir)
-        #ifdef wxHAS_HUGE_FILES
-            #define   wxCRT_Stat       wxPOSIX_IDENT(stati64)
-        #else
-            // Unfortunately Watcom is not consistent, so:-
-            #if defined(__OS2__) && defined(__WATCOMC__)
-                #define   wxCRT_Stat       _stat
-            #else
-                #define   wxCRT_Stat       wxPOSIX_IDENT(stat)
-            #endif
-        #endif
+        #define wxCRT_Open      wxCRT_OpenA
+        #define wxCRT_Access    wxCRT_AccessA
+        #define wxCRT_MkDir     wxCRT_MkDirA
+        #define wxCRT_RmDir     wxCRT_RmDirA
+        #define wxCRT_Stat      wxCRT_StatA
     #endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
 
     // constants (unless already defined by the user code)
     #ifdef wxHAS_UNDERSCORES_IN_POSIX_IDENTS
