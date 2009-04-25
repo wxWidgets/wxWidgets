@@ -164,7 +164,7 @@ compiler used.
 @itemdef{__SUNCC__, Sun CC, see also wxCHECK_SUNCC_VERSION}
 @itemdef{__SYMANTECC__, Symantec C++}
 @itemdef{__VISAGECPP__, IBM Visual Age (OS/2)}
-@itemdef{__VISUALC__, Microsoft Visual C++, see also wxCHECK_VISUALC_VERSION.
+@itemdef{__VISUALC__, Microsoft Visual C++, see also ::wxCHECK_VISUALC_VERSION.
                     The value of this macro corresponds to the compiler version:
                     @c 1020 for @c 4.2 (the first supported version), @c 1100 for
                     @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols
