@@ -238,17 +238,27 @@
 /*
    Compiler-specific checks.
  */
-#if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
+
+// Borland
+#ifdef __BORLANDC__
+
+#if __BORLANDC__ < 0x500
     /* BC++ 4.0 can't compile JPEG library */
 #   undef wxUSE_LIBJPEG
 #   define wxUSE_LIBJPEG 0
 #endif
 
 /* wxUSE_DEBUG_NEW_ALWAYS = 1 not compatible with BC++ in DLL mode */
-#if defined(__BORLANDC__) && (defined(WXMAKINGDLL) || defined(WXUSINGDLL))
+#if defined(WXMAKINGDLL) || defined(WXUSINGDLL)
 #   undef wxUSE_DEBUG_NEW_ALWAYS
 #   define wxUSE_DEBUG_NEW_ALWAYS 0
 #endif
+
+/* compiling src/msw/gdiplus.cpp results in "macro expansion too long" error */
+#undef wxUSE_GRAPHICS_CONTEXT
+#define wxUSE_GRAPHICS_CONTEXT 0
+
+#endif /* __BORLANDC__ */
 
 /* DMC++ doesn't have definitions for date picker control, so use generic control
  */
