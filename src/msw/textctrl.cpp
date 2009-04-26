@@ -2951,10 +2951,8 @@ bool wxRichEditModule::Load(Version version)
 // load the InkEdit library
 bool wxRichEditModule::LoadInkEdit()
 {
-    static wxDynamicLibrary ms_inkEditLib;
-    static bool             ms_inkEditLibLoadAttemped;
     if (ms_inkEditLibLoadAttemped)
-        ms_inkEditLib.IsLoaded();
+        return ms_inkEditLib.IsLoaded();
 
     ms_inkEditLibLoadAttemped = true;
 
