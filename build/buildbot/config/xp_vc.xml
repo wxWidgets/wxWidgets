@@ -106,7 +106,6 @@
         </steps>
     </build>
 
-    <!-- VZ: disable because this results in buildbot configuration error
     <build>
         <name>XPSP2 VC9 wxMSW 2.9.x debug</name>
         <builddir>XPSP2_VC9_wxMSW_29x_debug</builddir>
@@ -114,7 +113,7 @@
         <sandbox>VC9</sandbox>
         <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC9libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC9libs/cppunit-1.12.1/lib/cppunitd.lib</make>
         <steps>
-            <checkout branch="branches/WX_2_9_0_BRANCH"/>
+            <checkout branch="{$RELEASE_BRANCH}"/>
             <compile-all tests="true"/>
             <run-tests/>
         </steps>
@@ -127,10 +126,9 @@
         <sandbox>VC6</sandbox>
         <make>nmake /nologo /f makefile.vc BUILD=debug SHARED=1 CPPUNIT_CFLAGS=-Ik:/buildbot/VC6libs/cppunit-1.12.1/include CPPUNIT_LIBS=k:/buildbot/VC6libs/cppunit-1.12.1/lib/cppunitd.lib</make>
         <steps>
-            <checkout branch="branches/WX_2_9_0_BRANCH"/>
+            <checkout branch="{$RELEASE_BRANCH}"/>
             <compile-all tests="true"/>
             <run-tests/>
         </steps>
     </build>
-    -->
 </bot>

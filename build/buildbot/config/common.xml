@@ -32,6 +32,13 @@
 </scheduler>
 
 <scheduler>
+    <name>release_quick</name>
+    <branch><RELEASE_BRANCH/></branch>
+    <treeStableTimer>900</treeStableTimer>
+    <fileNotImportant>docs/* interface/*</fileNotImportant>
+</scheduler>
+
+<scheduler>
     <name>stable_quick</name>
     <branch><STABLE_BRANCH/></branch>
     <treeStableTimer>900</treeStableTimer>
@@ -73,6 +80,10 @@
 
 <slavelock>
     <name><STABLE_BRANCH/></name>
+</slavelock>
+
+<slavelock>
+    <name><RELEASE_BRANCH/></name>
 </slavelock>
 
 <!--
