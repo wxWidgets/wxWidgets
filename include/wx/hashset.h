@@ -99,7 +99,7 @@ public:                                                                      \
     void erase( const const_iterator& it ) { erase( *it ); }                 \
                                                                              \
     /* count() == 0 | 1 */                                                   \
-    size_type count( const const_key_type& key )                             \
+    size_type count( const const_key_type& key ) const                       \
         { return GetNode( key ) ? 1 : 0; }                                   \
 }
 
