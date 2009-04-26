@@ -27,6 +27,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/hashmap.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -53,7 +54,7 @@ static wxTimerMap& TimerMap()
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
-  
+
 LRESULT APIENTRY _EXPORT wxTimerWndProc(HWND hWnd, UINT message,
                                         WPARAM wParam, LPARAM lParam);
 
