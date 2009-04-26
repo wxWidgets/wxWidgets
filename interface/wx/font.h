@@ -432,8 +432,8 @@ public:
         If the current font face name is not recognized by wxFont or by the
         underlying system, @c wxFONTFAMILY_UNKNOWN is returned.
         
-        Note that currently this function is rather unreliable (wxFONTFAMILY_UNKNOWN is 
-        returned in too many cases) and not particularly useful. 
+        Note that currently this function is rather unreliable (@c wxFONTFAMILY_UNKNOWN
+        is returned in too many cases) and not particularly useful. 
         Font families mostly make sense only for font creation; see SetFamily().
 
         @see SetFamily()
@@ -544,14 +544,16 @@ public:
 
     /**
         Sets the facename for the font.
-        Returns @true if the given face name exists; @false otherwise.
 
         @param faceName
             A valid facename, which should be on the end-user's system.
 
         @remarks To avoid portability problems, don't rely on a specific face,
-                 but specify the font family instead (see ::wxFontFamily).
-                 A suitable font will be found on the end-user's system.
+                 but specify the font family instead (see ::wxFontFamily and SetFamily()).
+
+        @return @true if the given face name exists; if the face name doesn't exist
+                in the user's system then the font is invalidated (so that IsOk() will 
+                return @false) and @false is returned.
 
         @see GetFaceName(), SetFamily()
     */
