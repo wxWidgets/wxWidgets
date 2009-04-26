@@ -641,10 +641,9 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
 
     lf.lfPitchAndFamily = (BYTE)(DEFAULT_PITCH) | ff_family;
 
-    if ( !wxStrlen(lf.lfFaceName) )
-    {
-        SetFaceName(facename);
-    }
+    // reset the facename so that CreateFontIndirect() will automatically choose a
+    // face name based only on the font family.
+    lf.lfFaceName[0] = '\0';
 }
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)

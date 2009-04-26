@@ -401,12 +401,11 @@ public:
     */
     virtual ~wxFont();
 
+    
     /**
-        Returns the current application's default encoding.
-
-        @see @ref overview_fontencoding, SetDefaultEncoding()
+        @name Getters
     */
-    static wxFontEncoding GetDefaultEncoding();
+    //@{
     
     /**
         Returns the encoding of this font.
@@ -432,6 +431,10 @@ public:
         
         If the current font face name is not recognized by wxFont or by the
         underlying system, @c wxFONTFAMILY_UNKNOWN is returned.
+        
+        Note that currently this function is rather unreliable (wxFONTFAMILY_UNKNOWN is 
+        returned in too many cases) and not particularly useful. 
+        Font families mostly make sense only for font creation; see SetFamily().
 
         @see SetFamily()
     */
@@ -516,43 +519,19 @@ public:
         Returns @true if this object is a valid font, @false otherwise.
     */
     virtual bool IsOk() const;
-
-    //@{
-    /**
-        This function takes the same parameters as the relative
-        @ref wxFont::wxFont "wxFont constructor" and returns a new font
-        object allocated on the heap.
-    */
-    static wxFont* New(int pointSize, wxFontFamily family, wxFontStyle style,
-                       wxFontWeight weight,
-                       bool underline = false,
-                       const wxString& faceName = wxEmptyString,
-                       wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-    static wxFont* New(int pointSize, wxFontFamily family,
-                       int flags = wxFONTFLAG_DEFAULT,
-                       const wxString& faceName = wxEmptyString,
-                       wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-    static wxFont* New(const wxSize& pixelSize,
-                       wxFontFamily family,
-                       wxFontStyle style,
-                       wxFontWeight weight,
-                       bool underline = false,
-                       const wxString& faceName = wxEmptyString,
-                       wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-    static wxFont* New(const wxSize& pixelSize,
-                       wxFontFamily family,
-                       int flags = wxFONTFLAG_DEFAULT,
-                       const wxString& faceName = wxEmptyString,
-                       wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-    //@}
-
-    /**
-        Sets the default font encoding.
-
-        @see @ref overview_fontencoding, GetDefaultEncoding()
-    */
-    static void SetDefaultEncoding(wxFontEncoding encoding);
     
+    //@}
+    
+    
+    
+    /**
+        @name Setters
+        
+        These functions internally recreate the native font object with the new
+        specified property.
+    */
+    //@{
+
     /**
         Sets the encoding for this font.
         
@@ -571,11 +550,8 @@ public:
             A valid facename, which should be on the end-user's system.
 
         @remarks To avoid portability problems, don't rely on a specific face,
-                 but specify the font family instead or as well (see ::wxFontFamily).
+                 but specify the font family instead (see ::wxFontFamily).
                  A suitable font will be found on the end-user's system.
-                 If both the family and the facename are specified, wxWidgets will 
-                 first search for the specific face, and then for a font belonging 
-                 to the same family.
 
         @see GetFaceName(), SetFamily()
     */
@@ -583,6 +559,11 @@ public:
 
     /**
         Sets the font family.
+        
+        As described in ::wxFontFamily docs the given @a family value acts as a rough,
+        basic indication of the main font properties (look, spacing).
+
+        Note that changing the font family results in changing the font face name.
 
         @param family
             One of the ::wxFontFamily values.
@@ -691,6 +672,9 @@ public:
         @see GetWeight()
     */
     virtual void SetWeight(wxFontWeight weight);
+    
+    //@}
+
 
     /**
         Inequality operator.
@@ -712,6 +696,52 @@ public:
         Assignment operator, using @ref overview_refcount "reference counting".
     */
     wxFont& operator =(const wxFont& font);
+    
+    
+    // statics
+
+    /**
+        Returns the current application's default encoding.
+
+        @see @ref overview_fontencoding, SetDefaultEncoding()
+    */
+    static wxFontEncoding GetDefaultEncoding();
+
+    /**
+        Sets the default font encoding.
+
+        @see @ref overview_fontencoding, GetDefaultEncoding()
+    */
+    static void SetDefaultEncoding(wxFontEncoding encoding);
+    
+    //@{
+    /**
+        This function takes the same parameters as the relative
+        @ref wxFont::wxFont "wxFont constructor" and returns a new font
+        object allocated on the heap.
+    */
+    static wxFont* New(int pointSize, wxFontFamily family, wxFontStyle style,
+                       wxFontWeight weight,
+                       bool underline = false,
+                       const wxString& faceName = wxEmptyString,
+                       wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    static wxFont* New(int pointSize, wxFontFamily family,
+                       int flags = wxFONTFLAG_DEFAULT,
+                       const wxString& faceName = wxEmptyString,
+                       wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    static wxFont* New(const wxSize& pixelSize,
+                       wxFontFamily family,
+                       wxFontStyle style,
+                       wxFontWeight weight,
+                       bool underline = false,
+                       const wxString& faceName = wxEmptyString,
+                       wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    static wxFont* New(const wxSize& pixelSize,
+                       wxFontFamily family,
+                       int flags = wxFONTFLAG_DEFAULT,
+                       const wxString& faceName = wxEmptyString,
+                       wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    //@}
 };
 
 
