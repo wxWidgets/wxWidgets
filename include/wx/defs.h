@@ -1063,8 +1063,6 @@ typedef wxUint32 wxDword;
     #endif
 #elif defined(__PALMOS__)
     #define HAVE_SSIZE_T
-#elif wxCHECK_WATCOM_VERSION(1,4)
-    #define HAVE_SSIZE_T
 #endif
 #endif /* !HAVE_SSIZE_T */
 
