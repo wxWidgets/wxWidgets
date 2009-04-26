@@ -1596,7 +1596,7 @@ void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 {
     RECT rect = wxGetClientRect(GetHwnd());
-    
+
     wxDC *dc = event.GetDC();
     if (!dc) return;
     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc->GetImpl();
@@ -1721,6 +1721,7 @@ bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
     return true;
 }
 
+#ifndef __WXWINCE__
 bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
 {
     // erase any dummy separators which were used
@@ -1832,14 +1833,14 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                             r.right = clientSize.x;
                             r.top = 0;
                             r.bottom = clientSize.y;
-                            
+
                             wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
                             HRESULT hr = theme->DrawThemeBackground(hTheme, GetHdcOf(*impl), 0, 0, & r, & clipRect);
                             if ( hr == S_OK )
                                 haveRefreshed = true;
                         }
                     }
-#endif
+#endif // wxUSE_UXTHEME
 
                     if (!haveRefreshed)
                         dc.DrawRectangle(rectItem);
@@ -1864,6 +1865,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
 
     return true;
 }
+#endif // __WXWINCE__
 
 void wxToolBar::HandleMouseMove(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
