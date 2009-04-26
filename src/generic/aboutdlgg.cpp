@@ -245,7 +245,7 @@ void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
     wxGenericAboutDialog dlg(info, parent);
     dlg.ShowModal();
 #else
-    wxGenericAboutDialog* dlg = new wxGenericAboutDialog(info);
+    wxGenericAboutDialog* dlg = new wxGenericAboutDialog(info, parent);
     dlg->Show();
 #endif
 }
