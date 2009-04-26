@@ -48,6 +48,7 @@
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 #include "wx/headerctrl.h"
+#include "wx/hashset.h"
 
 #include "wx/generic/gridsel.h"
 #include "wx/generic/gridctrl.h"
@@ -70,6 +71,9 @@ const char wxGridNameStr[] = "grid";
 
 // Required for wxIs... functions
 #include <ctype.h>
+
+WX_DECLARE_HASH_SET_WITH_DECL(int, wxIntegerHash, wxIntegerEqual,
+                              wxGridFixedIndicesSet, class WXDLLIMPEXP_ADV);
 
 
 // ----------------------------------------------------------------------------
@@ -1822,6 +1826,9 @@ wxGrid::~wxGrid()
 
     delete m_typeRegistry;
     delete m_selection;
+
+    delete m_setFixedRows;
+    delete m_setFixedCols;
 }
 
 //
@@ -2046,6 +2053,9 @@ void wxGrid::Init()
 
     m_rowLabelWidth  = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
     m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
+
+    m_setFixedRows =
+    m_setFixedCols = NULL;
 
     // init attr cache
     m_attrCache.row = -1;
@@ -2916,11 +2926,12 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     //
     else if ( event.LeftDown() )
     {
-        // don't send a label click event for a hit on the
-        // edge of the row label - this is probably the user
-        // wanting to resize the row
-        //
-        if ( YToEdgeOfRow(y) < 0 )
+        row = YToEdgeOfRow(y);
+        if ( row != wxNOT_FOUND && CanDragRowSize(row) )
+        {
+            ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, m_rowLabelWin);
+        }
+        else // not a request to start resizing
         {
             row = YToRow(y);
             if ( row >= 0 &&
@@ -2948,12 +2959,6 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                 ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, m_rowLabelWin);
             }
         }
-        else
-        {
-            // starting to drag-resize a row
-            if ( CanDragRowSize() )
-                ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, m_rowLabelWin);
-        }
     }
 
     // ------------ Left double click
@@ -2961,7 +2966,15 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     else if (event.LeftDClick() )
     {
         row = YToEdgeOfRow(y);
-        if ( row < 0 )
+        if ( row != wxNOT_FOUND && CanDragRowSize(row) )
+        {
+            // adjust row height depending on label text
+            AutoSizeRowLabelSize( row );
+
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
+            m_dragLastPos = -1;
+        }
+        else // not on row separator or it's not resizeable
         {
             row = YToRow(y);
             if ( row >=0 &&
@@ -2969,14 +2982,6 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             {
                 // no default action at the moment
             }
-        }
-        else
-        {
-            // adjust row height depending on label text
-            AutoSizeRowLabelSize( row );
-
-            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
-            m_dragLastPos = -1;
         }
     }
 
@@ -3027,12 +3032,11 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     else if ( event.Moving() )
     {
         m_dragRowOrCol = YToEdgeOfRow( y );
-        if ( m_dragRowOrCol >= 0 )
+        if ( m_dragRowOrCol != wxNOT_FOUND )
         {
             if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
-                // don't capture the mouse yet
-                if ( CanDragRowSize() )
+                if ( CanDragRowSize(m_dragRowOrCol) )
                     ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, m_rowLabelWin, false);
             }
         }
@@ -3248,12 +3252,14 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     //
     else if ( event.LeftDown() )
     {
-        // don't send a label click event for a hit on the
-        // edge of the col label - this is probably the user
-        // wanting to resize the col
-        //
-        if ( XToEdgeOfCol(x) < 0 )
+        int col = XToEdgeOfCol(x);
+        if ( col != wxNOT_FOUND && CanDragColSize(col) )
         {
+            ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, GetColLabelWindow());
+        }
+        else // not a request to start resizing
+        {
+            col = XToCol(x);
             if ( col >= 0 &&
                  !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, col, event ) )
             {
@@ -3293,13 +3299,6 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                     ChangeCursorMode(WXGRID_CURSOR_SELECT_COL, GetColLabelWindow());
                 }
             }
-        }
-        else
-        {
-            // starting to drag-resize a col
-            //
-            if ( CanDragColSize() )
-                ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, GetColLabelWindow());
         }
     }
 
@@ -3394,8 +3393,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         {
             if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
             {
-                // don't capture the cursor yet
-                if ( CanDragColSize() )
+                if ( CanDragColSize(m_dragRowOrCol) )
                     ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, GetColLabelWindow(), false);
             }
         }
@@ -3796,27 +3794,24 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
         return;
     }
 
-    if ( dragRow >= 0 )
+    if ( dragRow >= 0 && CanDragGridSize() && CanDragRowSize(dragRow) )
     {
-        m_dragRowOrCol = dragRow;
-
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
-            if ( CanDragRowSize() && CanDragGridSize() )
-                ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, NULL, false);
+            m_dragRowOrCol = dragRow;
+            ChangeCursorMode(WXGRID_CURSOR_RESIZE_ROW, NULL, false);
         }
     }
     // When using the native header window we can only resize the columns by
     // dragging the dividers in it because we can't make it enter into the
     // column resizing mode programmatically
-    else if ( dragCol >= 0 && !m_useNativeHeader )
+    else if ( dragCol >= 0 && !m_useNativeHeader &&
+                CanDragGridSize() && CanDragColSize(dragCol) )
     {
-        m_dragRowOrCol = dragCol;
-
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
-            if ( CanDragColSize() && CanDragGridSize() )
-                ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, NULL, false);
+            m_dragRowOrCol = dragCol;
+            ChangeCursorMode(WXGRID_CURSOR_RESIZE_COL, NULL, false);
         }
     }
     else // Neither on a row or col edge
@@ -6124,23 +6119,15 @@ int wxGrid::XToPos(int x) const
     return PosToLinePos(x, true /* clip */, wxGridColumnOperations());
 }
 
-// return the row number that that the y coord is near the edge of, or -1 if
+// return the row number such that the y coord is near the edge of, or -1 if
 // not near an edge.
 //
-// coords can only possibly be near an edge if
-//    (a) the row/column is large enough to still allow for an "inner" area
-//        that is _not_ near the edge (i.e., if the height/width is smaller
-//        than WXGRID_LABEL_EDGE_ZONE, coords are _never_ considered to be
-//        near the edge).
-//   and
-//    (b) resizing rows/columns (the thing for which edge detection is
-//        relevant at all) is enabled.
-//
+// notice that position can only possibly be near an edge if the row/column is
+// large enough to still allow for an "inner" area that is _not_ near the edge
+// (i.e., if the height/width is smaller than WXGRID_LABEL_EDGE_ZONE, pos will
+// _never_ be considered to be near the edge).
 int wxGrid::PosToEdgeOfLine(int pos, const wxGridOperations& oper) const
 {
-    if ( !oper.CanResizeLines(this) )
-        return -1;
-
     const int line = oper.PosToLine(this, pos, true);
 
     if ( oper.GetLineSize(this, line) > WXGRID_LABEL_EDGE_ZONE )
@@ -7480,6 +7467,22 @@ wxGridCellRenderer * wxGrid::GetDefaultRendererForType(const wxString& typeName)
 // ----------------------------------------------------------------------------
 // row/col size
 // ----------------------------------------------------------------------------
+
+void wxGrid::DoDisableLineResize(int line, wxGridFixedIndicesSet *& setFixed)
+{
+    if ( !setFixed )
+    {
+        setFixed = new wxGridFixedIndicesSet;
+    }
+
+    setFixed->insert(line);
+}
+
+bool
+wxGrid::DoCanResizeLine(int line, const wxGridFixedIndicesSet *setFixed) const
+{
+    return !setFixed || !setFixed->count(line);
+}
 
 void wxGrid::EnableDragRowSize( bool enable )
 {

@@ -377,6 +377,14 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
     grid->SetCellValue(7, 1, _T("Big box!"));
 
+    // create a separator-like row: it's grey and it's non-resizeable
+    grid->DisableRowResize(10);
+    grid->SetRowSize(10, 30);
+    attr = new wxGridCellAttr;
+    attr->SetBackgroundColour(*wxLIGHT_GREY);
+    grid->SetRowAttr(10, attr);
+    grid->SetCellValue(10, 0, "You can't resize this row interactively -- try it");
+
     // this does exactly nothing except testing that SetAttr() handles NULL
     // attributes and does reference counting correctly
     grid->SetAttr(11, 11, NULL);

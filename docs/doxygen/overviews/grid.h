@@ -143,12 +143,15 @@ to fit its contents with wxGrid::AutoSizeRow() or do it for all rows at once
 with wxGrid::AutoSizeRows().
 
 Additionally, by default the user can also drag the row separator lines to
-resize the rows interactively. This can be forbidden by calling
-wxGrid::DisableDragRowSize(). If you do allow the user to resize the grid rows,
-it may be a good idea to save their heights and restore it when the grid is
-recreated the next time (possibly during a next program execution): the
-functions wxGrid::GetRowSizes() and wxGrid::SetRowSizes() can help with this,
-you will just need to serialize wxGridSizesInfo structure returned by the
-former in some way and deserialize it back before calling the latter.
+resize the rows interactively. This can be forbidden completely by calling
+wxGrid::DisableDragRowSize() or just for the individual rows using
+wxGrid::DisableRowResize().
+
+If you do allow the user to resize the grid rows, it may be a good idea to save
+their heights and restore it when the grid is recreated the next time (possibly
+during a next program execution): the functions wxGrid::GetRowSizes() and
+wxGrid::SetRowSizes() can help with this, you will just need to serialize
+wxGridSizesInfo structure returned by the former in some way and deserialize it
+back before calling the latter.
 
 */

@@ -329,6 +329,7 @@ All:
 
 All (GUI):
 
+- wxGrid: add possibility to prevent resizing of individual rows/columns.
 - wxHTML: add support for table borders width (Laurent Humbertclaude).
 
 i18n:
