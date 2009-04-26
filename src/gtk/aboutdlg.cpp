@@ -109,7 +109,7 @@ wxGtkAboutDialogOnLink(GtkAboutDialog * WXUNUSED(about),
     wxLaunchDefaultBrowser(wxGTK_CONV_BACK_SYS(link));
 }
 
-void wxAboutBox(const wxAboutDialogInfo& info)
+void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
 {
     if ( !gtk_check_version(2,6,0) )
     {

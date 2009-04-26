@@ -1741,7 +1741,7 @@ void MyFrame::ShowSimpleAboutDialog(wxCommandEvent& WXUNUSED(event))
     wxAboutDialogInfo info;
     InitAboutInfoMinimal(info);
 
-    wxAboutBox(info);
+    wxAboutBox(info, this);
 }
 
 void MyFrame::ShowFancyAboutDialog(wxCommandEvent& WXUNUSED(event))
@@ -1749,7 +1749,7 @@ void MyFrame::ShowFancyAboutDialog(wxCommandEvent& WXUNUSED(event))
     wxAboutDialogInfo info;
     InitAboutInfoWebsite(info);
 
-    wxAboutBox(info);
+    wxAboutBox(info, this);
 }
 
 void MyFrame::ShowFullAboutDialog(wxCommandEvent& WXUNUSED(event))
@@ -1757,16 +1757,16 @@ void MyFrame::ShowFullAboutDialog(wxCommandEvent& WXUNUSED(event))
     wxAboutDialogInfo info;
     InitAboutInfoAll(info);
 
-    wxAboutBox(info);
+    wxAboutBox(info, this);
 }
 
 // a trivial example of a custom dialog class
 class MyAboutDialog : public wxGenericAboutDialog
 {
 public:
-    MyAboutDialog(const wxAboutDialogInfo& info)
+    MyAboutDialog(const wxAboutDialogInfo& info, wxWindow* parent)
     {
-        Create(info);
+        Create(info, parent);
     }
 
     // add some custom controls
@@ -1783,7 +1783,7 @@ void MyFrame::ShowCustomAboutDialog(wxCommandEvent& WXUNUSED(event))
     wxAboutDialogInfo info;
     InitAboutInfoAll(info);
 
-    MyAboutDialog dlg(info);
+    MyAboutDialog dlg(info, this);
     dlg.ShowModal();
 }
 

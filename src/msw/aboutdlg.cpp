@@ -37,7 +37,7 @@
 // ============================================================================
 
 // our public entry point
-void wxAboutBox(const wxAboutDialogInfo& info)
+void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 {
     // we prefer to show a simple message box if we don't have any fields which
     // can't be shown in it because as much as there is a standard about box
@@ -62,12 +62,12 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         // add everything remaining
         msg << info.GetDescriptionAndCredits();
 
-        wxMessageBox(msg, wxString::Format(_("About %s"), name));
+        wxMessageBox(msg, wxString::Format(_("About %s"), name, wxOK | wxCENTRE, parent));
     }
     else // simple "native" version is not enough
     {
         // we need to use the full-blown generic version
-        wxGenericAboutBox(info);
+        wxGenericAboutBox(info, parent);
     }
 }
 

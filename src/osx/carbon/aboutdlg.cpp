@@ -56,7 +56,7 @@ public:
 // implementation
 // ============================================================================
 
-void wxAboutBox(const wxAboutDialogInfo& info)
+void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* WXUNUSED(parent))
 {
     // Mac native about box currently can show only name, version, copyright
     // and description fields and we also shoehorn the credits text into the

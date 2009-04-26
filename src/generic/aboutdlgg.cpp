@@ -113,10 +113,9 @@ wxString wxAboutDialogInfo::GetCopyrightToDisplay() const
 // wxGenericAboutDialog
 // ----------------------------------------------------------------------------
 
-bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
+bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* parent)
 {
-    // this is a modal dialog thus we'll use GetParentForModalDialog:
-    if ( !wxDialog::Create(GetParentForModalDialog(), wxID_ANY, _("About ") + info.GetName(),
+    if ( !wxDialog::Create(parent, wxID_ANY, _("About ") + info.GetName(),
                            wxDefaultPosition, wxDefaultSize, wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE) )
         return false;
 
@@ -196,7 +195,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
 
     SetSizerAndFit(sizerTop);
 
-    CentreOnScreen();
+    CentreOnParent();
 
     return true;
 }
@@ -240,10 +239,10 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
 // public functions
 // ----------------------------------------------------------------------------
 
-void wxGenericAboutBox(const wxAboutDialogInfo& info)
+void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 {
 #if !defined(__WXGTK__) && !defined(__WXMAC__)
-    wxGenericAboutDialog dlg(info);
+    wxGenericAboutDialog dlg(info, parent);
     dlg.ShowModal();
 #else
     wxGenericAboutDialog* dlg = new wxGenericAboutDialog(info);
@@ -255,9 +254,9 @@ void wxGenericAboutBox(const wxAboutDialogInfo& info)
 // the others we provide a generic fallback here
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXGTK26__)
 
-void wxAboutBox(const wxAboutDialogInfo& info)
+void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent)
 {
-    wxGenericAboutBox(info);
+    wxGenericAboutBox(info, parent);
 }
 
 #endif // platforms without native about dialog

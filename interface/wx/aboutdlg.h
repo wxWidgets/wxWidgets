@@ -201,7 +201,7 @@ public:
 
     @header{wx/aboutdlg.h}
 */
-void wxAboutBox(const wxAboutDialogInfo& info);
+void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
 
 /**
     This function does the same thing as wxAboutBox() except that it always uses
@@ -218,6 +218,6 @@ void wxAboutBox(const wxAboutDialogInfo& info);
 
     @header{wx/aboutdlg.h}
 */
-void wxGenericAboutBox(const wxAboutDialogInfo& info);
+void wxGenericAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
 
 //@}
