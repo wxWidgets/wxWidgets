@@ -585,7 +585,7 @@ bool wxStatusBar::MSWProcessMessage(WXMSG* pMsg)
     return wxWindow::MSWProcessMessage(pMsg);
 }
 
-bool wxStatusBar::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM* WXUNUSED(result));
+bool wxStatusBar::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM* WXUNUSED(result))
 {
     if ( HasFlag(wxSTB_SHOW_TIPS) )
     {
