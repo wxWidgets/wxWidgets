@@ -14,6 +14,9 @@
 
 #if wxUSE_NATIVE_STATUSBAR
 
+#include "wx/vector.h"
+#include "wx/tooltip.h"
+
 class WXDLLIMPEXP_FWD_CORE wxClientDC;
 
 class WXDLLIMPEXP_CORE wxStatusBar : public wxStatusBarBase
@@ -41,7 +44,7 @@ public:
     virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
 
     // each field of status line has it's own text
-    virtual void     SetStatusText(const wxString& text, int number = 0);
+    virtual void SetStatusText(const wxString& text, int number = 0);
 
     // set status line fields' widths
     virtual void SetStatusWidths(int n, const int widths_field[]);
@@ -64,6 +67,7 @@ public:
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
                                     WXWPARAM wParam,
                                     WXLPARAM lParam);
+
 protected:
     void CopyFieldsWidth(const int widths[]);
     void SetFieldsWidth();
@@ -72,9 +76,16 @@ protected:
     // override some base class virtuals
     virtual wxSize DoGetBestSize() const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
+#if wxUSE_TOOLTIPS
+    virtual bool MSWProcessMessage(WXMSG* pMsg);
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result);
+#endif
 
     // used by UpdateFieldText
     wxClientDC *m_pDC;
+
+    // the tooltips used when wxSTB_SHOW_TIPS is given
+    wxVector<wxToolTip*> m_tooltips;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBar)

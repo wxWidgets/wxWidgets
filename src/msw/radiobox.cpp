@@ -462,7 +462,9 @@ void wxRadioBox::DoSetItemToolTip(unsigned int item, wxToolTip *tooltip)
     if ( tooltip != NULL )
         tooltip->Add(hwndRbtn);
     else // unset the tooltip
-        wxToolTip::Remove(hwndRbtn);
+        wxToolTip::Remove(hwndRbtn, 0, wxRect(0,0,0,0));
+        // the second parameter can be zero since it's ignored by Remove()
+        // as we pass a rect for which wxRect::IsEmpty()==true...
 }
 
 #endif // wxUSE_TOOLTIPS

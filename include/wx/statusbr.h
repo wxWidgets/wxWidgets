@@ -183,7 +183,20 @@ public:
     virtual bool CanBeOutsideClientArea() const { return true; }
 
 protected:
+
+    // wxWindow overrides:
+
+    virtual void DoSetToolTip( wxToolTip *tip )
+        { 
+            wxASSERT_MSG(!HasFlag(wxSTB_SHOW_TIPS),
+                         "Do not set tooltip(s) manually when using wxSTB_SHOW_TIPS!");
+            return wxWindow::DoSetToolTip(tip);
+        }
+
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+
+    // internal helpers & data:
 
     // calculate the real field widths for the given total available size
     wxArrayInt CalculateAbsWidths(wxCoord widthTotal) const;
