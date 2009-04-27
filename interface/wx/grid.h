@@ -2038,7 +2038,7 @@ public:
     /**
         @name Column and Row Sizes
 
-        @see overview_grid_resizing
+        @see @ref overview_grid_resizing
      */
     //@{
 
