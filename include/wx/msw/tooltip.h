@@ -13,6 +13,7 @@
 #define _WX_MSW_TOOLTIP_H_
 
 #include "wx/object.h"
+#include "wx/gdicmn.h"
 
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 
