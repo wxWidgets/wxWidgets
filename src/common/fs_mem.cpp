@@ -186,8 +186,14 @@ void wxMemoryFSHandlerBase::AddFileWithMimeType(const wxString& filename,
                                                 const wxString& textdata,
                                                 const wxString& mimetype)
 {
+#if wxUSE_UNICODE
+    const wxScopedCharBuffer data(textdata.To8BitData());
+#else
+    const wxString& data = textdata;
+#endif
+
     AddFileWithMimeType(filename,
-                        (const void*) textdata.mb_str(), textdata.length(),
+                        static_cast<const char *>(data), data.length(),
                         mimetype);
 }
 
