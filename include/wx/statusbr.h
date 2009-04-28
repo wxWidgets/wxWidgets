@@ -186,13 +186,15 @@ protected:
 
     // wxWindow overrides:
 
-    virtual void DoSetToolTip( wxToolTip *tip )
+#if wxUSE_TOOLTIPS
+   virtual void DoSetToolTip( wxToolTip *tip )
         {
             wxASSERT_MSG(!HasFlag(wxSTB_SHOW_TIPS),
                          "Do not set tooltip(s) manually when using wxSTB_SHOW_TIPS!");
             wxWindow::DoSetToolTip(tip);
         }
-
+#endif
+   
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
 
