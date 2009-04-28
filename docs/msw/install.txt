@@ -272,30 +272,27 @@ If you receive this error add bufferoverflowu.lib to link, e.g.:
 
 See http://support.microsoft.com/?id=894573 for more information.
 
-Borland C++ Compilation
+Borland [Now Embarcadero] C++ Compilation
 ----------------------------------------------------------------
 
-The minimum version required is 5.5 (last version supported by BC++ 5.0 was
-2.4.2), which can be downloaded for free from:
-http://www.borland.com/products/downloads/download_cbuilder.html
+The minimum version required is 5.82 (test with bcc32 -v for the version).
 
 We have found that the free Turbo Explorer and commercial BDS work fine; the
-debugger is very good. To avoid linker errors you will need to add
+debugger is very good. Currently (April 2009) the download page is at 
+https://downloads.embarcadero.com/free/c_builder.
+To avoid linker errors you will need to add
 -DSHARED=1 to the makefile line for the library
 
-The version 5.6 included in Borland C++ Builder 2006 works as well after the
-following small change: please remove the test for __WINDOWS__ from line 88
-of the file BCCDIR\include\stl\_threads.h.
 
 Compiling using the makefiles:
 
-1. Change directory to build\msw. Type 'make -f makefile.bcc' to
+1. Change directory to build\msw. Type 'make -f makefile.bcc -DSHARED=1' to
    make the wxWidgets core library. Ignore the compiler warnings.
-   This produces a couple of libraries in the lib\bcc_lib directory.
+   This produces a couple of libraries in the lib\bcc_dll directory.
 
 2. Change directory to a sample or demo such as samples\minimal, and type
-  'make -f makefile.bcc'. This produces a windows exe file - by default
-   in the bcc_mswd subdirectory.
+  'make -f makefile.bcc -DSHARED=1'. This produces a windows exe file - by default
+   in the bcc_mswdudll subdirectory.
 
 Note (1): the wxWidgets makefiles assume dword structure alignment. Please
 make sure that your own project or makefile settings use the
