@@ -13,6 +13,19 @@
 
 #include "wx/kbdstate.h"
 
+// the symbolic names for the mouse buttons
+enum wxMouseButton
+{
+    wxMOUSE_BTN_ANY     = -1,
+    wxMOUSE_BTN_NONE    = 0,
+    wxMOUSE_BTN_LEFT    = 1,
+    wxMOUSE_BTN_MIDDLE  = 2,
+    wxMOUSE_BTN_RIGHT   = 3,
+    wxMOUSE_BTN_AUX1    = 4,
+    wxMOUSE_BTN_AUX2    = 5,
+    wxMOUSE_BTN_MAX
+};
+
 // ----------------------------------------------------------------------------
 // wxMouseState contains the information about mouse position, buttons and also
 // key modifiers
@@ -37,17 +50,64 @@ public:
     wxCoord GetX() const { return m_x; }
     wxCoord GetY() const { return m_y; }
     wxPoint GetPosition() const { return wxPoint(m_x, m_y); }
+    void GetPosition(wxCoord *x, wxCoord *y) const
+    {
+        if ( x )
+            *x = m_x;
+        if ( y )
+            *y = m_y;
+    }
+
+    // this overload is for compatibility only
+    void GetPosition(long *x, long *y) const
+    {
+        if ( x )
+            *x = m_x;
+        if ( y )
+            *y = m_y;
+    }
 
     // accessors for the pressed buttons
-    bool LeftDown()    const { return m_leftDown; }
-    bool MiddleDown()  const { return m_middleDown; }
-    bool RightDown()   const { return m_rightDown; }
-    bool Aux1Down()    const { return m_aux1Down; }
-    bool Aux2Down()    const { return m_aux2Down; }
+    bool LeftIsDown()    const { return m_leftDown; }
+    bool MiddleIsDown()  const { return m_middleDown; }
+    bool RightIsDown()   const { return m_rightDown; }
+    bool Aux1IsDown()    const { return m_aux1Down; }
+    bool Aux2IsDown()    const { return m_aux2Down; }
+
+    bool ButtonIsDown(wxMouseButton but) const
+    {
+        switch ( but )
+        {
+            default:
+                wxFAIL_MSG(wxT("invalid parameter in wxMouseState::ButtonIsDown"));
+                // fall through
+
+            case wxMOUSE_BTN_ANY:
+                return LeftIsDown() || MiddleIsDown() || RightIsDown() ||
+                            Aux1IsDown() || Aux2IsDown();
+
+            case wxMOUSE_BTN_LEFT:
+                return LeftIsDown();
+
+            case wxMOUSE_BTN_MIDDLE:
+                return MiddleIsDown();
+
+            case wxMOUSE_BTN_RIGHT:
+                return RightIsDown();
+
+            case wxMOUSE_BTN_AUX1:
+                return Aux1IsDown();
+
+            case wxMOUSE_BTN_AUX2:
+                return Aux2IsDown();
+        }
+    }
+
 
     // these functions are mostly used by wxWidgets itself
     void SetX(wxCoord x) { m_x = x; }
     void SetY(wxCoord y) { m_y = y; }
+    void SetPosition(wxPoint pos) { m_x = pos.x, m_y = pos.y; }
 
     void SetLeftDown(bool down)   { m_leftDown = down; }
     void SetMiddleDown(bool down) { m_middleDown = down; }
@@ -55,7 +115,14 @@ public:
     void SetAux1Down(bool down)   { m_aux1Down = down; }
     void SetAux2Down(bool down)   { m_aux2Down = down; }
 
-private:
+    // this mostly makes sense in the derived classes such as wxMouseEvent
+    void SetState(const wxMouseState& state) { *this = state; }
+
+
+    // for compatibility reasons these variables are public as the code using
+    // wxMouseEvent often uses them directly -- however they should not be
+    // accessed directly in this class, use the accessors above instead
+// private:
     bool m_leftDown   : 1;
     bool m_middleDown : 1;
     bool m_rightDown  : 1;

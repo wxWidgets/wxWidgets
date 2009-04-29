@@ -7,6 +7,34 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+/// Symbolic names for the mouse buttons.
+enum wxMouseButton
+{
+    /// Any mouse button, means to check for any button being pressed for
+    /// example.
+    wxMOUSE_BTN_ANY     = -1,
+
+    /// None of the mouse buttons.
+    wxMOUSE_BTN_NONE    = 0,
+
+    /// Left mouse button.
+    wxMOUSE_BTN_LEFT    = 1,
+
+    /// Middle mouse button.
+    wxMOUSE_BTN_MIDDLE  = 2,
+
+    /// Right mouse button.
+    wxMOUSE_BTN_RIGHT   = 3,
+
+    /// First additional mouse button.
+    wxMOUSE_BTN_AUX1    = 4,
+
+    /// Second additional mouse button.
+    wxMOUSE_BTN_AUX2    = 5,
+
+    wxMOUSE_BTN_MAX
+};
+
 
 /**
     @class wxMouseState
@@ -47,32 +75,35 @@ public:
     /**
         Returns the physical mouse position.
     */
+    //@{
     wxPoint GetPosition() const;
+    void GetPosition(int *x, int *y) const;
+    //@}
 
     /**
-        Returns @true if the left mouse button changed to down.
+        Returns @true if the left mouse button is currently down.
     */
-    bool LeftDown() const;
+    bool LeftIsDown() const;
 
     /**
-        Returns @true if the middle mouse button changed to down.
+        Returns @true if the middle mouse button is currently down.
     */
-    bool MiddleDown() const;
+    bool MiddleIsDown() const;
 
     /**
-        Returns @true if the right mouse button changed to down.
+        Returns @true if the right mouse button is currently down.
     */
-    bool RightDown() const;
+    bool RightIsDown() const;
 
     /**
-        Returns @true if the first extra button mouse button changed to down.
+        Returns @true if the first extra button mouse button is currently down.
     */
-    bool Aux1Down() const;
+    bool Aux1IsDown() const;
 
     /**
-        Returns @true if the second extra button mouse button changed to down.
+        Returns @true if the second extra button mouse button is currently down.
     */
-    bool Aux2Down() const;
+    bool Aux2IsDown() const;
 };
 
 

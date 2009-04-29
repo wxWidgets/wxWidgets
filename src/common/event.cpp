@@ -703,34 +703,6 @@ bool wxMouseEvent::Button(int but) const
     }
 }
 
-bool wxMouseEvent::ButtonIsDown(int but) const
-{
-    switch (but)
-    {
-        default:
-            wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonIsDown"));
-            // fall through
-
-        case wxMOUSE_BTN_ANY:
-            return LeftIsDown() || MiddleIsDown() || RightIsDown() || Aux1Down() || Aux2Down();
-
-        case wxMOUSE_BTN_LEFT:
-            return LeftIsDown();
-
-        case wxMOUSE_BTN_MIDDLE:
-            return MiddleIsDown();
-
-        case wxMOUSE_BTN_RIGHT:
-            return RightIsDown();
-
-        case wxMOUSE_BTN_AUX1:
-            return Aux1IsDown();
-
-        case wxMOUSE_BTN_AUX2:
-            return Aux2IsDown();
-    }
-}
-
 int wxMouseEvent::GetButton() const
 {
     for ( int i = 1; i < wxMOUSE_BTN_MAX; i++ )
