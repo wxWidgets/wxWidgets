@@ -940,7 +940,10 @@ void GridFrame::OnCellLeftClick( wxGridEvent& ev )
 
 void GridFrame::OnRowSize( wxGridSizeEvent& ev )
 {
-    wxLogMessage(_T("Resized row %d"), ev.GetRowOrCol());
+    const int row = ev.GetRowOrCol();
+
+    wxLogMessage("Resized row %d, new height = %d",
+                 row, grid->GetRowSize(row));
 
     ev.Skip();
 }
@@ -948,7 +951,10 @@ void GridFrame::OnRowSize( wxGridSizeEvent& ev )
 
 void GridFrame::OnColSize( wxGridSizeEvent& ev )
 {
-    wxLogMessage(_T("Resized col %d"), ev.GetRowOrCol());
+    const int col = ev.GetRowOrCol();
+
+    wxLogMessage("Resized column %d, new width = %d",
+                 col, grid->GetColSize(col));
 
     ev.Skip();
 }
