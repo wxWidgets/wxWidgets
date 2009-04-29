@@ -152,7 +152,7 @@ void wxAutoScrollTimer::Notify()
         {
             // and then send a pseudo mouse-move event to refresh the selection
             wxMouseEvent event2(wxEVT_MOTION);
-            wxGetMousePosition(&event2.m_x, &event2.m_y);
+            event2.SetPosition(wxGetMousePosition());
 
             // the mouse event coordinates should be client, not screen as
             // returned by wxGetMousePosition
