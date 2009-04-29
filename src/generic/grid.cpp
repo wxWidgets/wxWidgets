@@ -2969,7 +2969,11 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
         if ( row != wxNOT_FOUND && CanDragRowSize(row) )
         {
             // adjust row height depending on label text
+            //
+            // TODO: generate RESIZING event, see #10754
             AutoSizeRowLabelSize( row );
+
+            SendSizeEvent(wxEVT_GRID_ROW_SIZE, row, -1, event);
 
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
             m_dragLastPos = -1;
@@ -2990,14 +2994,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     else if ( event.LeftUp() )
     {
         if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
-        {
-            DoEndDragResizeRow();
-
-            // Note: we are ending the event *after* doing
-            // default processing in this case
-            //
-            SendEvent( wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
-        }
+            DoEndDragResizeRow(event);
 
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_rowLabelWin);
         m_dragLastPos = -1;
@@ -3318,7 +3315,11 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         else
         {
             // adjust column width depending on label text
+            //
+            // TODO: generate RESIZING event, see #10754
             AutoSizeColLabelSize( colEdge );
+
+            SendSizeEvent(wxEVT_GRID_COL_SIZE, -1, colEdge, event);
 
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
             m_dragLastPos = -1;
@@ -3332,7 +3333,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
         switch ( m_cursorMode )
         {
             case WXGRID_CURSOR_RESIZE_COL:
-                DoEndDragResizeCol();
+                DoEndDragResizeCol(event);
                 break;
 
             case WXGRID_CURSOR_MOVE_COL:
@@ -3754,17 +3755,12 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event, const wxGridCellCoords& coords)
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
     {
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-        DoEndDragResizeRow();
-
-        // Note: we are ending the event *after* doing
-        // default processing in this case
-        //
-        SendEvent( wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event );
+        DoEndDragResizeRow(event);
     }
     else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_COL )
     {
         ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL);
-        DoEndDragResizeCol();
+        DoEndDragResizeCol(event);
     }
 
     m_dragLastPos = -1;
@@ -3894,10 +3890,11 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event)
     }
 }
 
-void wxGrid::DoEndDragResizeLine(const wxGridOperations& oper)
+// this function returns true only if the size really changed
+bool wxGrid::DoEndDragResizeLine(const wxGridOperations& oper)
 {
     if ( m_dragLastPos == -1 )
-        return;
+        return false;
 
     const wxGridOperations& doper = oper.Dual();
 
@@ -3921,9 +3918,12 @@ void wxGrid::DoEndDragResizeLine(const wxGridOperations& oper)
 
     // do resize the line
     const int lineStart = oper.GetLineStartPos(this, m_dragRowOrCol);
+    const int lineSizeOld = oper.GetLineSize(this, m_dragRowOrCol);
     oper.SetLineSize(this, m_dragRowOrCol,
                      wxMax(m_dragLastPos - lineStart,
                            oper.GetMinimalLineSize(this, m_dragRowOrCol)));
+    const bool
+        sizeChanged = oper.GetLineSize(this, m_dragRowOrCol) != lineSizeOld;
 
     m_dragLastPos = -1;
 
@@ -3986,24 +3986,24 @@ void wxGrid::DoEndDragResizeLine(const wxGridOperations& oper)
 
     // show the edit control back again
     ShowCellEditControl();
+
+    return sizeChanged;
 }
 
-void wxGrid::DoEndDragResizeRow()
+void wxGrid::DoEndDragResizeRow(const wxMouseEvent& event)
 {
-    DoEndDragResizeLine(wxGridRowOperations());
+    // TODO: generate RESIZING event, see #10754
+
+    if ( DoEndDragResizeLine(wxGridRowOperations()) )
+        SendSizeEvent(wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event);
 }
 
-void wxGrid::DoEndDragResizeCol(wxMouseEvent *event)
+void wxGrid::DoEndDragResizeCol(const wxMouseEvent& event)
 {
-    DoEndDragResizeLine(wxGridColumnOperations());
+    // TODO: generate RESIZING event, see #10754
 
-    // Note: we are ending the event *after* doing
-    // default processing in this case
-    //
-    if ( event )
-        SendEvent( wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, *event );
-    else
-        SendEvent( wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol );
+    if ( DoEndDragResizeLine(wxGridColumnOperations()) )
+        SendSizeEvent(wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event);
 }
 
 void wxGrid::DoStartMoveCol(int col)
@@ -4177,37 +4177,40 @@ wxGrid::DoAppendLines(bool (wxGridTableBase::*funcAppend)(size_t),
     return (m_table->*funcAppend)(num);
 }
 
-//
-// ----- event handlers
-//
+// ----------------------------------------------------------------------------
+// event generation helpers
+// ----------------------------------------------------------------------------
+
+void
+wxGrid::SendSizeEvent(wxEventType type,
+                      int row, int col,
+                      const wxMouseEvent& mouseEv)
+{
+   int rowOrCol = row == -1 ? col : row;
+
+   wxGridSizeEvent gridEvt( GetId(),
+           type,
+           this,
+           rowOrCol,
+           mouseEv.GetX() + GetRowLabelSize(),
+           mouseEv.GetY() + GetColLabelSize(),
+           mouseEv);
+
+   GetEventHandler()->ProcessEvent(gridEvt);
+}
 
 // Generate a grid event based on a mouse event and return:
 //  -1 if the event was vetoed
 //  +1 if the event was processed (but not vetoed)
 //   0 if the event wasn't handled
 int
-wxGrid::SendEvent(const wxEventType type,
+wxGrid::SendEvent(wxEventType type,
                   int row, int col,
-                  wxMouseEvent& mouseEv)
+                  const wxMouseEvent& mouseEv)
 {
    bool claimed, vetoed;
 
-   if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
-   {
-       int rowOrCol = (row == -1 ? col : row);
-
-       wxGridSizeEvent gridEvt( GetId(),
-               type,
-               this,
-               rowOrCol,
-               mouseEv.GetX() + GetRowLabelSize(),
-               mouseEv.GetY() + GetColLabelSize(),
-               mouseEv);
-
-       claimed = GetEventHandler()->ProcessEvent(gridEvt);
-       vetoed = !gridEvt.IsAllowed();
-   }
-   else if ( type == wxEVT_GRID_RANGE_SELECT )
+   if ( type == wxEVT_GRID_RANGE_SELECT )
    {
        // Right now, it should _never_ end up here!
        wxGridRangeSelectEvent gridEvt( GetId(),
@@ -4270,28 +4273,13 @@ wxGrid::SendEvent(const wxEventType type,
 int
 wxGrid::SendEvent(const wxEventType type, int row, int col, const wxString& s)
 {
-   bool claimed, vetoed;
+    wxGridEvent gridEvt( GetId(), type, this, row, col );
+    gridEvt.SetString(s);
 
-    if ( type == wxEVT_GRID_ROW_SIZE || type == wxEVT_GRID_COL_SIZE )
-    {
-        int rowOrCol = (row == -1 ? col : row);
-
-        wxGridSizeEvent gridEvt( GetId(), type, this, rowOrCol );
-
-        claimed = GetEventHandler()->ProcessEvent(gridEvt);
-        vetoed  = !gridEvt.IsAllowed();
-    }
-    else
-    {
-        wxGridEvent gridEvt( GetId(), type, this, row, col );
-        gridEvt.SetString(s);
-
-        claimed = GetEventHandler()->ProcessEvent(gridEvt);
-        vetoed  = !gridEvt.IsAllowed();
-     }
+    const bool claimed = GetEventHandler()->ProcessEvent(gridEvt);
 
     // A Veto'd event may not be `claimed' so test this first
-    if (vetoed)
+    if ( !gridEvt.IsAllowed() )
         return -1;
 
     return claimed ? 1 : 0;

@@ -1956,10 +1956,10 @@ protected:
     // it was processed (but not vetoed) and 0 if it wasn't processed
     int SendEvent(const wxEventType evtType,
                   int row, int col,
-                  wxMouseEvent& e);
+                  const wxMouseEvent& e);
     int SendEvent(const wxEventType evtType,
                   const wxGridCellCoords& coords,
-                  wxMouseEvent& e)
+                  const wxMouseEvent& e)
         { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), e); }
     int SendEvent(const wxEventType evtType,
                   int row, int col,
@@ -1970,6 +1970,11 @@ protected:
         { return SendEvent(evtType, coords.GetRow(), coords.GetCol(), s); }
     int SendEvent(const wxEventType evtType, const wxString& s = wxString())
         { return SendEvent(evtType, m_currentCellCoords, s); }
+
+    // send wxEVT_GRID_{ROW,COL}_SIZE
+    void SendSizeEvent(wxEventType type,
+                       int row, int col,
+                       const wxMouseEvent& mouseEv);
 
     void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
@@ -2084,14 +2089,14 @@ private:
     void DoUpdateResizeColWidth(int w);
     void DoStartMoveCol(int col);
 
-    void DoEndDragResizeRow();
-    void DoEndDragResizeCol(wxMouseEvent *event = NULL);
+    void DoEndDragResizeRow(const wxMouseEvent& event);
+    void DoEndDragResizeCol(const wxMouseEvent& event);
     void DoEndMoveCol(int pos);
 
 
     // common implementations of methods defined for both rows and columns
     void DeselectLine(int line, const wxGridOperations& oper);
-    void DoEndDragResizeLine(const wxGridOperations& oper);
+    bool DoEndDragResizeLine(const wxGridOperations& oper);
     int PosToLinePos(int pos, bool clipToMinMax,
                      const wxGridOperations& oper) const;
     int PosToLine(int pos, bool clipToMinMax,

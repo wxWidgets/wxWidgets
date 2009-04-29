@@ -3639,18 +3639,16 @@ public:
     This event class contains information about a row/column resize event.
 
     @beginEventTable{wxGridSizeEvent}
-    @event{EVT_GRID_COL_SIZE(func)}
-        The user resized a column by dragging it. Processes a
-        @c wxEVT_GRID_COL_SIZE event type.
-    @event{EVT_GRID_ROW_SIZE(func)}
-        The user resized a row by dragging it. Processes a
-        @c wxEVT_GRID_ROW_SIZE event type.
     @event{EVT_GRID_CMD_COL_SIZE(id, func)}
-        The user resized a column by dragging it; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_COL_SIZE event type.
+        The user resized a column, corresponds to @c wxEVT_GRID_COL_SIZE event
+        type.
     @event{EVT_GRID_CMD_ROW_SIZE(id, func)}
-        The user resized a row by dragging it; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_ROW_SIZE event type.
+        The user resized a row, corresponds to @c wxEVT_GRID_ROW_SIZE event
+        type.
+    @event{EVT_GRID_COL_SIZE(func)}
+        Same as EVT_GRID_CMD_COL_SIZE() but uses `wxID_ANY` id.
+    @event{EVT_GRID_ROW_SIZE(func)}
+        Same as EVT_GRID_CMD_ROW_SIZE() but uses `wxID_ANY` id.
     @endEventTable
 
     @library{wxadv}

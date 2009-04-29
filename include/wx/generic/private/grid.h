@@ -195,7 +195,12 @@ private:
 
         // as this is done by the user we should notify the main program about
         // it
-        GetOwner()->SendEvent(wxEVT_GRID_COL_SIZE, -1, idx);
+
+        // make up a dummy event for the grid event to use -- unfortunately we
+        // can't do anything else here
+        wxMouseEvent e;
+        e.SetState(wxGetMouseState());
+        GetOwner()->SendSizeEvent(wxEVT_GRID_COL_SIZE, -1, idx, e);
     }
 
     // overridden to react to the columns order changes in the customization
@@ -226,7 +231,12 @@ private:
 
     void OnEndResize(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoEndDragResizeCol();
+        // we again need to pass a mouse event to be used for the grid event
+        // generation but we don't have it here so use a dummy one as in
+        // UpdateColumnVisibility()
+        wxMouseEvent e;
+        e.SetState(wxGetMouseState());
+        GetOwner()->DoEndDragResizeCol(e);
 
         event.Skip();
     }
