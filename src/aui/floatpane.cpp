@@ -144,7 +144,7 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
 
         SetClientSize(size);
     }
-    
+
     if (pane.IsFixed())
     {
         SetWindowStyleFlag(GetWindowStyleFlag() & ~wxRESIZE_BORDER);
@@ -323,7 +323,7 @@ void wxAuiFloatingFrame::OnActivate(wxActivateEvent& event)
 // functionality to wxWidgets itself)
 bool wxAuiFloatingFrame::isMouseDown()
 {
-    return wxGetMouseState().LeftDown();
+    return wxGetMouseState().LeftIsDown();
 }
 
 

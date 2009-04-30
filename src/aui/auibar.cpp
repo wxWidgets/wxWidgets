@@ -554,13 +554,13 @@ wxSize wxAuiDefaultToolBarArt::GetLabelSize(
 
     // get item's width
     width = item.GetMinSize().GetWidth();
-    
+
     if (width == -1)
     {
         // no width specified, measure the text ourselves
         width = dc.GetTextExtent(item.GetLabel()).GetX();
     }
-    
+
     return wxSize(width, height);
 }
 
@@ -956,9 +956,9 @@ wxAuiToolBarItem* wxAuiToolBar::AddTool(int tool_id,
     item.min_size = wxDefaultSize;
     item.user_data = 0;
     item.sticky = false;
-    
-    if (item.id == wxID_ANY) 
-        item.id = wxNewId(); 
+
+    if (item.id == wxID_ANY)
+        item.id = wxNewId();
 
     if (!item.disabled_bitmap.IsOk())
     {
@@ -1024,9 +1024,9 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
     item.user_data = 0;
     item.sticky = false;
 
-    if (item.id == wxID_ANY) 
-        item.id = wxNewId(); 
- 	
+    if (item.id == wxID_ANY)
+        item.id = wxNewId();
+
     m_items.Add(item);
     return &m_items.Last();
 }
@@ -1475,7 +1475,7 @@ void wxAuiToolBar::RefreshOverflowState()
     // find out if the mouse cursor is inside the dropdown rectangle
     if (overflow_rect.Contains(pt.x, pt.y))
     {
-        if (::wxGetMouseState().LeftDown())
+        if (::wxGetMouseState().LeftIsDown())
             overflow_state = wxAUI_BUTTON_STATE_PRESSED;
         else
             overflow_state = wxAUI_BUTTON_STATE_HOVER;
@@ -1502,7 +1502,7 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
             int i, idx, count;
             idx = GetToolIndex(tool_id);
             count = (int)m_items.GetCount();
-            
+
             if (idx >= 0 && idx < count)
             {
                 for (i = idx; i < count; ++i)
@@ -1518,7 +1518,7 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
                     m_items[i].state &= ~wxAUI_BUTTON_STATE_CHECKED;
                 }
             }
-            
+
             tool->state |= wxAUI_BUTTON_STATE_CHECKED;
         }
          else if (tool->kind == wxITEM_CHECK)
@@ -2446,11 +2446,11 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
                     toggle = true;
 
                 ToggleTool(m_action_item->id, toggle);
-                
+
                 // repaint immediately
                 Refresh(false);
                 Update();
-        
+
                 wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
                 e.SetEventObject(this);
                 GetEventHandler()->ProcessEvent(e);
