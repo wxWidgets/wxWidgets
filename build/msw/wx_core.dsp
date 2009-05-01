@@ -546,6 +546,10 @@ SOURCE=..\..\src\common\menucmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\mousemanager.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\msgout.cpp
 # End Source File
 # Begin Source File
@@ -6203,6 +6207,10 @@ SOURCE=..\..\include\wx\metafile.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\minifram.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\mousemanager.h
 # End Source File
 # Begin Source File
 

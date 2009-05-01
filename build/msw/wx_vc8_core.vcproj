@@ -1099,6 +1099,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\mousemanager.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\msgout.cpp"
 				>
 			</File>
@@ -7025,6 +7029,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\minifram.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\mousemanager.h"
 				>
 			</File>
 			<File

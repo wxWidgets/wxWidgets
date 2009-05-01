@@ -1723,6 +1723,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_listctrlcmn.o \
 	$(OBJS)\monodll_matrix.o \
 	$(OBJS)\monodll_menucmn.o \
+	$(OBJS)\monodll_mousemanager.o \
 	$(OBJS)\monodll_nbkbase.o \
 	$(OBJS)\monodll_overlaycmn.o \
 	$(OBJS)\monodll_paper.o \
@@ -1964,6 +1965,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_listctrlcmn.o \
 	$(OBJS)\monodll_matrix.o \
 	$(OBJS)\monodll_menucmn.o \
+	$(OBJS)\monodll_mousemanager.o \
 	$(OBJS)\monodll_nbkbase.o \
 	$(OBJS)\monodll_overlaycmn.o \
 	$(OBJS)\monodll_paper.o \
@@ -2410,6 +2412,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_listctrlcmn.o \
 	$(OBJS)\monolib_matrix.o \
 	$(OBJS)\monolib_menucmn.o \
+	$(OBJS)\monolib_mousemanager.o \
 	$(OBJS)\monolib_nbkbase.o \
 	$(OBJS)\monolib_overlaycmn.o \
 	$(OBJS)\monolib_paper.o \
@@ -2651,6 +2654,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_listctrlcmn.o \
 	$(OBJS)\monolib_matrix.o \
 	$(OBJS)\monolib_menucmn.o \
+	$(OBJS)\monolib_mousemanager.o \
 	$(OBJS)\monolib_nbkbase.o \
 	$(OBJS)\monolib_overlaycmn.o \
 	$(OBJS)\monolib_paper.o \
@@ -3012,6 +3016,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_listctrlcmn.o \
 	$(OBJS)\coredll_matrix.o \
 	$(OBJS)\coredll_menucmn.o \
+	$(OBJS)\coredll_mousemanager.o \
 	$(OBJS)\coredll_nbkbase.o \
 	$(OBJS)\coredll_overlaycmn.o \
 	$(OBJS)\coredll_paper.o \
@@ -3253,6 +3258,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_listctrlcmn.o \
 	$(OBJS)\coredll_matrix.o \
 	$(OBJS)\coredll_menucmn.o \
+	$(OBJS)\coredll_mousemanager.o \
 	$(OBJS)\coredll_nbkbase.o \
 	$(OBJS)\coredll_overlaycmn.o \
 	$(OBJS)\coredll_paper.o \
@@ -3504,6 +3510,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_listctrlcmn.o \
 	$(OBJS)\corelib_matrix.o \
 	$(OBJS)\corelib_menucmn.o \
+	$(OBJS)\corelib_mousemanager.o \
 	$(OBJS)\corelib_nbkbase.o \
 	$(OBJS)\corelib_overlaycmn.o \
 	$(OBJS)\corelib_paper.o \
@@ -3745,6 +3752,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_listctrlcmn.o \
 	$(OBJS)\corelib_matrix.o \
 	$(OBJS)\corelib_menucmn.o \
+	$(OBJS)\corelib_mousemanager.o \
 	$(OBJS)\corelib_nbkbase.o \
 	$(OBJS)\corelib_overlaycmn.o \
 	$(OBJS)\corelib_paper.o \
@@ -7407,6 +7415,11 @@ $(OBJS)\monodll_menucmn.o: ../../src/common/menucmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_mousemanager.o: ../../src/common/mousemanager.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_nbkbase.o: ../../src/common/nbkbase.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9736,6 +9749,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_menucmn.o: ../../src/common/menucmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_mousemanager.o: ../../src/common/mousemanager.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12097,6 +12115,11 @@ $(OBJS)\coredll_menucmn.o: ../../src/common/menucmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_mousemanager.o: ../../src/common/mousemanager.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_nbkbase.o: ../../src/common/nbkbase.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -13579,6 +13602,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_menucmn.o: ../../src/common/menucmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_mousemanager.o: ../../src/common/mousemanager.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

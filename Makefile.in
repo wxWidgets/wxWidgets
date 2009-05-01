@@ -3521,6 +3521,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/listbox.h \
 	wx/mdi.h \
 	wx/menu.h \
+	wx/mousemanager.h \
 	wx/msgdlg.h \
 	wx/nativewin.h \
 	wx/numdlg.h \
@@ -4104,6 +4105,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_listctrlcmn.o \
 	monodll_matrix.o \
 	monodll_menucmn.o \
+	monodll_mousemanager.o \
 	monodll_nbkbase.o \
 	monodll_overlaycmn.o \
 	monodll_paper.o \
@@ -4296,6 +4298,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_listctrlcmn.o \
 	monodll_matrix.o \
 	monodll_menucmn.o \
+	monodll_mousemanager.o \
 	monodll_nbkbase.o \
 	monodll_overlaycmn.o \
 	monodll_paper.o \
@@ -5917,6 +5920,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_listctrlcmn.o \
 	monolib_matrix.o \
 	monolib_menucmn.o \
+	monolib_mousemanager.o \
 	monolib_nbkbase.o \
 	monolib_overlaycmn.o \
 	monolib_paper.o \
@@ -6109,6 +6113,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_listctrlcmn.o \
 	monolib_matrix.o \
 	monolib_menucmn.o \
+	monolib_mousemanager.o \
 	monolib_nbkbase.o \
 	monolib_overlaycmn.o \
 	monolib_paper.o \
@@ -7877,6 +7882,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_listctrlcmn.o \
 	coredll_matrix.o \
 	coredll_menucmn.o \
+	coredll_mousemanager.o \
 	coredll_nbkbase.o \
 	coredll_overlaycmn.o \
 	coredll_paper.o \
@@ -8069,6 +8075,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_listctrlcmn.o \
 	coredll_matrix.o \
 	coredll_menucmn.o \
+	coredll_mousemanager.o \
 	coredll_nbkbase.o \
 	coredll_overlaycmn.o \
 	coredll_paper.o \
@@ -9385,6 +9392,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_listctrlcmn.o \
 	corelib_matrix.o \
 	corelib_menucmn.o \
+	corelib_mousemanager.o \
 	corelib_nbkbase.o \
 	corelib_overlaycmn.o \
 	corelib_paper.o \
@@ -9577,6 +9585,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_listctrlcmn.o \
 	corelib_matrix.o \
 	corelib_menucmn.o \
+	corelib_mousemanager.o \
 	corelib_nbkbase.o \
 	corelib_overlaycmn.o \
 	corelib_paper.o \
@@ -18173,6 +18182,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_menucmn.o: $(srcdir)/src/common/menucmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/menucmn.cpp
 
+@COND_USE_GUI_1@monodll_mousemanager.o: $(srcdir)/src/common/mousemanager.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/mousemanager.cpp
+
 @COND_USE_GUI_1@monodll_nbkbase.o: $(srcdir)/src/common/nbkbase.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/nbkbase.cpp
 
@@ -22855,6 +22867,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_menucmn.o: $(srcdir)/src/common/menucmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/menucmn.cpp
+
+@COND_USE_GUI_1@monolib_mousemanager.o: $(srcdir)/src/common/mousemanager.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/mousemanager.cpp
 
 @COND_USE_GUI_1@monolib_nbkbase.o: $(srcdir)/src/common/nbkbase.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/nbkbase.cpp
@@ -27728,6 +27743,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_menucmn.o: $(srcdir)/src/common/menucmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/menucmn.cpp
 
+@COND_USE_GUI_1@coredll_mousemanager.o: $(srcdir)/src/common/mousemanager.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/mousemanager.cpp
+
 @COND_USE_GUI_1@coredll_nbkbase.o: $(srcdir)/src/common/nbkbase.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/nbkbase.cpp
 
@@ -31231,6 +31249,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_menucmn.o: $(srcdir)/src/common/menucmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/menucmn.cpp
+
+@COND_USE_GUI_1@corelib_mousemanager.o: $(srcdir)/src/common/mousemanager.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/mousemanager.cpp
 
 @COND_USE_GUI_1@corelib_nbkbase.o: $(srcdir)/src/common/nbkbase.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/nbkbase.cpp
