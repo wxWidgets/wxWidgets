@@ -1972,9 +1972,9 @@ protected:
         { return SendEvent(evtType, m_currentCellCoords, s); }
 
     // send wxEVT_GRID_{ROW,COL}_SIZE
-    void SendSizeEvent(wxEventType type,
-                       int row, int col,
-                       const wxMouseEvent& mouseEv);
+    void SendGridSizeEvent(wxEventType type,
+                           int row, int col,
+                           const wxMouseEvent& mouseEv);
 
     void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );

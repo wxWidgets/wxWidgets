@@ -200,7 +200,7 @@ private:
         // can't do anything else here
         wxMouseEvent e;
         e.SetState(wxGetMouseState());
-        GetOwner()->SendSizeEvent(wxEVT_GRID_COL_SIZE, -1, idx, e);
+        GetOwner()->SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, idx, e);
     }
 
     // overridden to react to the columns order changes in the customization

@@ -2973,7 +2973,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             // TODO: generate RESIZING event, see #10754
             AutoSizeRowLabelSize( row );
 
-            SendSizeEvent(wxEVT_GRID_ROW_SIZE, row, -1, event);
+            SendGridSizeEvent(wxEVT_GRID_ROW_SIZE, row, -1, event);
 
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
             m_dragLastPos = -1;
@@ -3319,7 +3319,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             // TODO: generate RESIZING event, see #10754
             AutoSizeColLabelSize( colEdge );
 
-            SendSizeEvent(wxEVT_GRID_COL_SIZE, -1, colEdge, event);
+            SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, colEdge, event);
 
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, GetColLabelWindow());
             m_dragLastPos = -1;
@@ -3995,7 +3995,7 @@ void wxGrid::DoEndDragResizeRow(const wxMouseEvent& event)
     // TODO: generate RESIZING event, see #10754
 
     if ( DoEndDragResizeLine(wxGridRowOperations()) )
-        SendSizeEvent(wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event);
+        SendGridSizeEvent(wxEVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, event);
 }
 
 void wxGrid::DoEndDragResizeCol(const wxMouseEvent& event)
@@ -4003,7 +4003,7 @@ void wxGrid::DoEndDragResizeCol(const wxMouseEvent& event)
     // TODO: generate RESIZING event, see #10754
 
     if ( DoEndDragResizeLine(wxGridColumnOperations()) )
-        SendSizeEvent(wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event);
+        SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, m_dragRowOrCol, event);
 }
 
 void wxGrid::DoStartMoveCol(int col)
@@ -4182,7 +4182,7 @@ wxGrid::DoAppendLines(bool (wxGridTableBase::*funcAppend)(size_t),
 // ----------------------------------------------------------------------------
 
 void
-wxGrid::SendSizeEvent(wxEventType type,
+wxGrid::SendGridSizeEvent(wxEventType type,
                       int row, int col,
                       const wxMouseEvent& mouseEv)
 {
