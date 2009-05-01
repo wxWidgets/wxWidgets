@@ -608,7 +608,9 @@ GdkWindow *wxRadioBox::GTKGetWindow(wxArrayGdkWindows& windows) const
     {
         GtkWidget *button = GTK_WIDGET( node->GetData()->button );
 
-        windows.push_back(button->window);
+        // don't put NULL pointers in the 'windows' array!
+        if (button->window)
+            windows.push_back(button->window);
 
         node = node->GetNext();
     }
