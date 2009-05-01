@@ -50,7 +50,7 @@ enum wxMouseButton
     has no linking requirements.
 
     @nolibrary
-    @category{misc}
+    @category{events}
 
     @see wxGetMouseState(), wxMouseEvent
  */

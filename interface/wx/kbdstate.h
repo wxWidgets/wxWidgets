@@ -18,8 +18,8 @@
     This class is implemented entirely inline in @<wx/kbdstate.h@> and thus has
     no linking requirements.
 
-    @category{misc}
     @nolibrary
+    @category{events}
 
     @see wxKeyEvent, wxMouseState
  */
