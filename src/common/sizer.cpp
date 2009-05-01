@@ -2165,6 +2165,17 @@ void wxStaticBoxSizer::RecalcSizes()
     m_size.x -= 2*other_border;
     m_size.y -= top_border + other_border;
 
+#ifdef __WXGTK20__
+    if (m_staticBox->GetChildren().GetCount() > 0)
+    {
+        // if the wxStaticBox has created a wxPizza to contain its children
+        // (see wxStaticBox::AddChild) then we need to place the items it contains
+        // in the wxBoxSizer::RecalcSizes() call below using coordinates relative 
+        // to the top-left corner of the staticbox:
+        m_position.x = m_position.y = 0;
+    }
+#endif
+
     wxBoxSizer::RecalcSizes();
 
     m_position = old_pos;
