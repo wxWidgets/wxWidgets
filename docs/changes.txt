@@ -332,6 +332,10 @@ All (GUI):
 - wxGrid: add possibility to prevent resizing of individual rows/columns.
 - wxHTML: add support for table borders width (Laurent Humbertclaude).
 
+MSW:
+
+- Allow changing the height of wxChoice and wxComboBox.
+
 i18n:
 
 - Korean translations added (Sungkee Jung).

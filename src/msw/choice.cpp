@@ -265,7 +265,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter& items,
     // we need to refresh our size in order to have enough space for the
     // newly added items
     if ( !IsFrozen() )
-        UpdateVisibleHeight();
+        MSWUpdateDropDownHeight();
 
     InvalidateBestSize();
 
@@ -279,7 +279,7 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
     SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
 
     if ( !IsFrozen() )
-        UpdateVisibleHeight();
+        MSWUpdateDropDownHeight();
 
     InvalidateBestSize();
 }
@@ -289,7 +289,7 @@ void wxChoice::DoClear()
     SendMessage(GetHwnd(), CB_RESETCONTENT, 0, 0);
 
     if ( !IsFrozen() )
-        UpdateVisibleHeight();
+        MSWUpdateDropDownHeight();
 
     InvalidateBestSize();
 }
@@ -448,13 +448,31 @@ void* wxChoice::DoGetItemClientData(unsigned int n) const
 }
 
 // ----------------------------------------------------------------------------
-// wxMSW specific helpers
+// wxMSW-specific geometry management
 // ----------------------------------------------------------------------------
 
-void wxChoice::UpdateVisibleHeight()
+void wxChoice::MSWUpdateVisibleHeight()
+{
+    if ( m_heightOwn != wxDefaultCoord )
+        ::SendMessage(GetHwnd(), CB_SETITEMHEIGHT, (WPARAM)-1, m_heightOwn);
+}
+
+#if wxUSE_DEFERRED_SIZING
+void wxChoice::MSWEndDeferWindowPos()
+{
+    // we can only set the height of the choice itself now as it is reset to
+    // default every time the control is resized
+    MSWUpdateVisibleHeight();
+
+    wxChoiceBase::MSWEndDeferWindowPos();
+}
+#endif // wxUSE_DEFERRED_SIZING
+
+void wxChoice::MSWUpdateDropDownHeight()
 {
     // be careful to not change the width here
-    DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, GetSize().y, wxSIZE_USE_EXISTING);
+    DoSetSize(wxDefaultCoord, wxDefaultCoord, wxDefaultCoord, GetSize().y,
+              wxSIZE_USE_EXISTING);
 }
 
 void wxChoice::DoMoveWindow(int x, int y, int width, int height)
@@ -488,20 +506,28 @@ void wxChoice::DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags)
 {
-    int heightOrig = height;
+    const int heightOrig = height;
 
     // the height which we must pass to Windows should be the total height of
     // the control including the drop down list while the height given to us
     // is, of course, just the height of the permanently visible part of it
     if ( height != wxDefaultCoord )
     {
-        // don't make the drop down list too tall, arbitrarily limit it to 40
-        // items max and also don't leave it empty
+        // set our new own height but be careful not to make it too big: the
+        // native control apparently stores it as a single byte and so setting
+        // own height to 256 pixels results in default height being used (255
+        // is still ok)
+        if ( height > UCHAR_MAX )
+            height = UCHAR_MAX;
+        m_heightOwn = height;
+
+        // don't make the drop down list too tall, arbitrarily limit it to 30
+        // items max and also don't make it too small if it's currently empty
         size_t nItems = GetCount();
         if ( !nItems )
             nItems = 9;
-        else if ( nItems > 24 )
-            nItems = 24;
+        else if ( nItems > 30 )
+            nItems = 30;
 
         // add space for the drop down list
         const int hItem = SendMessage(GetHwnd(), CB_GETITEMHEIGHT, 0, 0);
@@ -527,10 +553,27 @@ void wxChoice::DoSetSize(int x, int y,
 
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
 
-    // If we're storing a pending size, make sure we store
-    // the original size for reporting back to the app.
-    if (m_pendingSize != wxDefaultSize)
+    // make the control itself of the requested height: notice that this
+    // must be done after changing its size or it has no effect (apparently
+    // the height is reset to default during the control layout) and that it's
+    // useless to to do it when using the deferred sizing -- in this case it
+    // will be done from MSWEndDeferWindowPos()
+#if wxUSE_DEFERRED_SIZING
+    if ( m_pendingSize == wxDefaultSize )
+    {
+        // not using deferred sizing, update it immediately
+        MSWUpdateVisibleHeight();
+    }
+    else // in the middle of deferred sizing
+    {
+        // we need to report the size of the visible part of the control back
+        // in GetSize() and not height stored by DoSetSize() in m_pendingSize
         m_pendingSize = wxSize(width, heightOrig);
+    }
+#else // !wxUSE_DEFERRED_SIZING
+    // always update the visible height immediately
+    MSWUpdateVisibleHeight();
+#endif // wxUSE_DEFERRED_SIZING
 }
 
 wxSize wxChoice::DoGetBestSize() const
@@ -558,6 +601,10 @@ wxSize wxChoice::DoGetBestSize() const
     CacheBestSize(best);
     return best;
 }
+
+// ----------------------------------------------------------------------------
+// MSW message handlers
+// ----------------------------------------------------------------------------
 
 WXLRESULT wxChoice::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
