@@ -151,16 +151,6 @@
     #define HAVE_TRACKMOUSEEVENT
 #endif // everything needed for TrackMouseEvent()
 
-// if this is set to 1, we use deferred window sizing to reduce flicker when
-// resizing complicated window hierarchies, but this can in theory result in
-// different behaviour than the old code so we keep the possibility to use it
-// by setting this to 0 (in the future this should be removed completely)
-#ifdef __WXWINCE__
-#define USE_DEFERRED_SIZING 0
-#else
-#define USE_DEFERRED_SIZING 1
-#endif
-
 // set this to 1 to filter out duplicate mouse events, e.g. mouse move events
 // when mouse position didnd't change
 #ifdef __WXWINCE__
@@ -1761,11 +1751,11 @@ void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 
 bool wxWindowMSW::IsSizeDeferred() const
 {
-#if USE_DEFERRED_SIZING
+#if wxUSE_DEFERRED_SIZING
     if ( m_pendingPosition != wxDefaultPosition ||
          m_pendingSize     != wxDefaultSize )
         return true;
-#endif // USE_DEFERRED_SIZING
+#endif // wxUSE_DEFERRED_SIZING
 
     return false;
 }
@@ -1773,7 +1763,7 @@ bool wxWindowMSW::IsSizeDeferred() const
 // Get total size
 void wxWindowMSW::DoGetSize(int *x, int *y) const
 {
-#if USE_DEFERRED_SIZING
+#if wxUSE_DEFERRED_SIZING
     // if SetSize() had been called at wx level but not realized at Windows
     // level yet (i.e. EndDeferWindowPos() not called), we still should return
     // the new and not the old position to the other wx code
@@ -1785,7 +1775,7 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
             *y = m_pendingSize.y;
     }
     else // use current size
-#endif // USE_DEFERRED_SIZING
+#endif // wxUSE_DEFERRED_SIZING
     {
         RECT rect = wxGetWindowRect(GetHwnd());
 
@@ -1799,7 +1789,7 @@ void wxWindowMSW::DoGetSize(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMSW::DoGetClientSize(int *x, int *y) const
 {
-#if USE_DEFERRED_SIZING
+#if wxUSE_DEFERRED_SIZING
     if ( m_pendingSize != wxDefaultSize )
     {
         // we need to calculate the client size corresponding to pending size
@@ -1817,7 +1807,7 @@ void wxWindowMSW::DoGetClientSize(int *x, int *y) const
             *y = rect.bottom - rect.top;
     }
     else
-#endif // USE_DEFERRED_SIZING
+#endif // wxUSE_DEFERRED_SIZING
     {
         RECT rect = wxGetClientRect(GetHwnd());
 
@@ -1918,7 +1908,7 @@ void wxWindowMSW::DoClientToScreen(int *x, int *y) const
 bool
 wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
 {
-#if USE_DEFERRED_SIZING
+#if wxUSE_DEFERRED_SIZING
     // if our parent had prepared a defer window handle for us, use it (unless
     // we are a top level window)
     wxWindowMSW * const parent = IsTopLevel() ? NULL : GetParent();
@@ -1948,13 +1938,13 @@ wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
     }
 
     // otherwise (or if deferring failed) move the window in place immediately
-#endif // USE_DEFERRED_SIZING
+#endif // wxUSE_DEFERRED_SIZING
     if ( !::MoveWindow((HWND)hwnd, x, y, width, height, IsShown()) )
     {
         wxLogLastError(wxT("MoveWindow"));
     }
 
-    // if USE_DEFERRED_SIZING, indicates that we didn't use deferred move,
+    // if wxUSE_DEFERRED_SIZING, indicates that we didn't use deferred move,
     // ignored otherwise
     return false;
 }
@@ -1970,7 +1960,7 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
 
     if ( DoMoveSibling(m_hWnd, x, y, width, height) )
     {
-#if USE_DEFERRED_SIZING
+#if wxUSE_DEFERRED_SIZING
         m_pendingPosition = wxPoint(x, y);
         m_pendingSize = wxSize(width, height);
     }
@@ -1978,7 +1968,7 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
     {
         m_pendingPosition = wxDefaultPosition;
         m_pendingSize = wxDefaultSize;
-#endif // USE_DEFERRED_SIZING
+#endif // wxUSE_DEFERRED_SIZING
     }
 }
 
@@ -4914,7 +4904,7 @@ bool wxWindowMSW::HandleExitSizeMove()
 
 bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
 {
-#if USE_DEFERRED_SIZING
+#if wxUSE_DEFERRED_SIZING
     // when we resize this window, its children are probably going to be
     // repositioned as well, prepare to use DeferWindowPos() for them
     int numChildren = 0;
@@ -4941,7 +4931,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
                 useDefer = true;
         }
     }
-#endif // USE_DEFERRED_SIZING
+#endif // wxUSE_DEFERRED_SIZING
 
     // update this window size
     bool processed = false;
@@ -4974,7 +4964,7 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
             processed = HandleWindowEvent(event);
     }
 
-#if USE_DEFERRED_SIZING
+#if wxUSE_DEFERRED_SIZING
     // and finally change the positions of all child windows at once
     if ( useDefer && m_hDWP )
     {
@@ -4996,12 +4986,11 @@ bool wxWindowMSW::HandleSize(int WXUNUSED(w), int WXUNUSED(h), WXUINT wParam)
               node;
               node = node->GetNext() )
         {
-            wxWindowMSW *child = node->GetData();
-            child->m_pendingPosition = wxDefaultPosition;
-            child->m_pendingSize = wxDefaultSize;
+            wxWindowMSW * const child = node->GetData();
+            child->MSWEndDeferWindowPos();
         }
     }
-#endif // USE_DEFERRED_SIZING
+#endif // wxUSE_DEFERRED_SIZING
 
     return processed;
 }
