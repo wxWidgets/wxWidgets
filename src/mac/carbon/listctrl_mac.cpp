@@ -620,7 +620,8 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
 
 void wxListCtrl::OnDblClick(wxMouseEvent& event)
 {
-    m_current = -1;
+    if ( m_renameTimer->IsRunning() )
+        m_renameTimer->Stop();
     event.Skip();
 }
 
@@ -1659,6 +1660,9 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
                 if ( !IsVirtual() )
                     id = (DataBrowserItemID)m_dbImpl->GetItemFromLine(line);
                 
+                if ( (state & wxLIST_STATE_FOCUSED) && (m_current == line)) 
+                    return line;
+                
                 if ( (state == wxLIST_STATE_DONTCARE ) )
                     return line;
                 
@@ -1678,6 +1682,9 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
                 DataBrowserItemID id = line + 1; 
                 if ( !IsVirtual() )
                     id = (DataBrowserItemID)m_dbImpl->GetItemFromLine(line);
+                
+                if ( (state & wxLIST_STATE_FOCUSED) && (m_current == line)) 
+                    return line;
                 
                 if ( (state == wxLIST_STATE_DONTCARE ) )
                     return line;
@@ -1790,6 +1797,7 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
+    m_current = -1;
     if (m_genericImpl)
         return m_genericImpl->DeleteAllItems();
 
