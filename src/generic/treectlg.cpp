@@ -2951,9 +2951,13 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
 
         if ( m_imageListNormal )
         {
-            int image_w, image_h;
-            m_imageListNormal->GetSize( 0, image_w, image_h );
-            rect.width += image_w + MARGIN_BETWEEN_IMAGE_AND_TEXT;
+            int image = ((wxGenericTreeItem*) item.m_pItem)->GetCurrentImage();
+            if ( image != NO_IMAGE )
+            {
+                int image_w, image_h;
+                m_imageListNormal->GetSize( image, image_w, image_h );
+                rect.width += image_w + MARGIN_BETWEEN_IMAGE_AND_TEXT;
+            }
         }
     }
     else // the entire line
