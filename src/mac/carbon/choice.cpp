@@ -359,7 +359,6 @@ wxSize wxChoice::DoGetBestSize() const
         wxCoord width, height ;
         dc.GetTextExtent( wxT("X"), &width, &height);
         int cx = width ;
-        lbHeight += 4;
 #else
         // And just a bit more
         int cx = ::TextWidth( "X" , 0 , 1 ) ;
