@@ -328,6 +328,7 @@ Major new features in this release
 
 All:
 
+- Added wxStd{Input,Output}Stream classes (Jonathan Liu).
 - Include port number in host header in wxHTTP (Marcin 'Malcom' Malich).
 
 All (GUI):

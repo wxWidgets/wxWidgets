@@ -3464,6 +3464,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_regex.obj &
 	$(OBJS)\monodll_stdpbase.obj &
 	$(OBJS)\monodll_sstream.obj &
+	$(OBJS)\monodll_stdstream.obj &
 	$(OBJS)\monodll_stopwatch.obj &
 	$(OBJS)\monodll_strconv.obj &
 	$(OBJS)\monodll_stream.obj &
@@ -3603,6 +3604,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_regex.obj &
 	$(OBJS)\monolib_stdpbase.obj &
 	$(OBJS)\monolib_sstream.obj &
+	$(OBJS)\monolib_stdstream.obj &
 	$(OBJS)\monolib_stopwatch.obj &
 	$(OBJS)\monolib_strconv.obj &
 	$(OBJS)\monolib_stream.obj &
@@ -3740,6 +3742,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_regex.obj &
 	$(OBJS)\basedll_stdpbase.obj &
 	$(OBJS)\basedll_sstream.obj &
+	$(OBJS)\basedll_stdstream.obj &
 	$(OBJS)\basedll_stopwatch.obj &
 	$(OBJS)\basedll_strconv.obj &
 	$(OBJS)\basedll_stream.obj &
@@ -3861,6 +3864,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_regex.obj &
 	$(OBJS)\baselib_stdpbase.obj &
 	$(OBJS)\baselib_sstream.obj &
+	$(OBJS)\baselib_stdstream.obj &
 	$(OBJS)\baselib_stopwatch.obj &
 	$(OBJS)\baselib_strconv.obj &
 	$(OBJS)\baselib_stream.obj &
@@ -5957,6 +5961,9 @@ $(OBJS)\monodll_stdpbase.obj :  .AUTODEPEND ..\..\src\common\stdpbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_sstream.obj :  .AUTODEPEND ..\..\src\common\sstream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_stdstream.obj :  .AUTODEPEND ..\..\src\common\stdstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stopwatch.obj :  .AUTODEPEND ..\..\src\common\stopwatch.cpp
@@ -8297,6 +8304,9 @@ $(OBJS)\monolib_stdpbase.obj :  .AUTODEPEND ..\..\src\common\stdpbase.cpp
 $(OBJS)\monolib_sstream.obj :  .AUTODEPEND ..\..\src\common\sstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_stdstream.obj :  .AUTODEPEND ..\..\src\common\stdstream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_stopwatch.obj :  .AUTODEPEND ..\..\src\common\stopwatch.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -10635,6 +10645,9 @@ $(OBJS)\basedll_stdpbase.obj :  .AUTODEPEND ..\..\src\common\stdpbase.cpp
 $(OBJS)\basedll_sstream.obj :  .AUTODEPEND ..\..\src\common\sstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_stdstream.obj :  .AUTODEPEND ..\..\src\common\stdstream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_stopwatch.obj :  .AUTODEPEND ..\..\src\common\stopwatch.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10945,6 +10958,9 @@ $(OBJS)\baselib_stdpbase.obj :  .AUTODEPEND ..\..\src\common\stdpbase.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_sstream.obj :  .AUTODEPEND ..\..\src\common\sstream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_stdstream.obj :  .AUTODEPEND ..\..\src\common\stdstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_stopwatch.obj :  .AUTODEPEND ..\..\src\common\stopwatch.cpp

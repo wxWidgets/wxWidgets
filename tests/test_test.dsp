@@ -397,6 +397,10 @@ SOURCE=.\streams\sstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\streams\stdstream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strings\stdstrings.cpp
 # End Source File
 # Begin Source File

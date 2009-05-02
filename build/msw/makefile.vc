@@ -359,6 +359,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_regex.obj \
 	$(OBJS)\monodll_stdpbase.obj \
 	$(OBJS)\monodll_sstream.obj \
+	$(OBJS)\monodll_stdstream.obj \
 	$(OBJS)\monodll_stopwatch.obj \
 	$(OBJS)\monodll_strconv.obj \
 	$(OBJS)\monodll_stream.obj \
@@ -503,6 +504,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_regex.obj \
 	$(OBJS)\monolib_stdpbase.obj \
 	$(OBJS)\monolib_sstream.obj \
+	$(OBJS)\monolib_stdstream.obj \
 	$(OBJS)\monolib_stopwatch.obj \
 	$(OBJS)\monolib_strconv.obj \
 	$(OBJS)\monolib_stream.obj \
@@ -645,6 +647,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_regex.obj \
 	$(OBJS)\basedll_stdpbase.obj \
 	$(OBJS)\basedll_sstream.obj \
+	$(OBJS)\basedll_stdstream.obj \
 	$(OBJS)\basedll_stopwatch.obj \
 	$(OBJS)\basedll_strconv.obj \
 	$(OBJS)\basedll_stream.obj \
@@ -771,6 +774,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_regex.obj \
 	$(OBJS)\baselib_stdpbase.obj \
 	$(OBJS)\baselib_sstream.obj \
+	$(OBJS)\baselib_stdstream.obj \
 	$(OBJS)\baselib_stopwatch.obj \
 	$(OBJS)\baselib_strconv.obj \
 	$(OBJS)\baselib_stream.obj \
@@ -5904,6 +5908,9 @@ $(OBJS)\monodll_stdpbase.obj: ..\..\src\common\stdpbase.cpp
 $(OBJS)\monodll_sstream.obj: ..\..\src\common\sstream.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\sstream.cpp
 
+$(OBJS)\monodll_stdstream.obj: ..\..\src\common\stdstream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\stdstream.cpp
+
 $(OBJS)\monodll_stopwatch.obj: ..\..\src\common\stopwatch.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\stopwatch.cpp
 
@@ -8129,6 +8136,9 @@ $(OBJS)\monolib_stdpbase.obj: ..\..\src\common\stdpbase.cpp
 
 $(OBJS)\monolib_sstream.obj: ..\..\src\common\sstream.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\sstream.cpp
+
+$(OBJS)\monolib_stdstream.obj: ..\..\src\common\stdstream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\stdstream.cpp
 
 $(OBJS)\monolib_stopwatch.obj: ..\..\src\common\stopwatch.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\stopwatch.cpp
@@ -10356,6 +10366,9 @@ $(OBJS)\basedll_stdpbase.obj: ..\..\src\common\stdpbase.cpp
 $(OBJS)\basedll_sstream.obj: ..\..\src\common\sstream.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\sstream.cpp
 
+$(OBJS)\basedll_stdstream.obj: ..\..\src\common\stdstream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\stdstream.cpp
+
 $(OBJS)\basedll_stopwatch.obj: ..\..\src\common\stopwatch.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) ..\..\src\common\stopwatch.cpp
 
@@ -10667,6 +10680,9 @@ $(OBJS)\baselib_stdpbase.obj: ..\..\src\common\stdpbase.cpp
 
 $(OBJS)\baselib_sstream.obj: ..\..\src\common\sstream.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\sstream.cpp
+
+$(OBJS)\baselib_stdstream.obj: ..\..\src\common\stdstream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\stdstream.cpp
 
 $(OBJS)\baselib_stopwatch.obj: ..\..\src\common\stopwatch.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASELIB_CXXFLAGS) ..\..\src\common\stopwatch.cpp

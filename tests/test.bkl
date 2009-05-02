@@ -76,6 +76,7 @@
             streams/memstream.cpp
             streams/socketstream.cpp
             streams/sstream.cpp
+            streams/stdstream.cpp
             streams/tempfile.cpp
             streams/textstreamtest.cpp
             streams/zlibstream.cpp

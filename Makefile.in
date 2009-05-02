@@ -405,6 +405,7 @@ ALL_BASE_HEADERS =  \
 	wx/stack.h \
 	wx/stackwalk.h \
 	wx/stdpaths.h \
+	wx/stdstream.h \
 	wx/stockitem.h \
 	wx/stopwatch.h \
 	wx/strconv.h \
@@ -564,6 +565,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/stack.h \
 	wx/stackwalk.h \
 	wx/stdpaths.h \
+	wx/stdstream.h \
 	wx/stockitem.h \
 	wx/stopwatch.h \
 	wx/strconv.h \
@@ -714,6 +716,7 @@ ALL_BASE_SOURCES =  \
 	src/common/regex.cpp \
 	src/common/stdpbase.cpp \
 	src/common/sstream.cpp \
+	src/common/stdstream.cpp \
 	src/common/stopwatch.cpp \
 	src/common/strconv.cpp \
 	src/common/stream.cpp \
@@ -901,6 +904,7 @@ MONODLL_OBJECTS =  \
 	monodll_regex.o \
 	monodll_stdpbase.o \
 	monodll_sstream.o \
+	monodll_stdstream.o \
 	monodll_stopwatch.o \
 	monodll_strconv.o \
 	monodll_stream.o \
@@ -1025,6 +1029,7 @@ MONOLIB_OBJECTS =  \
 	monolib_regex.o \
 	monolib_stdpbase.o \
 	monolib_sstream.o \
+	monolib_stdstream.o \
 	monolib_stopwatch.o \
 	monolib_strconv.o \
 	monolib_stream.o \
@@ -1146,6 +1151,7 @@ BASEDLL_OBJECTS =  \
 	basedll_regex.o \
 	basedll_stdpbase.o \
 	basedll_sstream.o \
+	basedll_stdstream.o \
 	basedll_stopwatch.o \
 	basedll_strconv.o \
 	basedll_stream.o \
@@ -1249,6 +1255,7 @@ BASELIB_OBJECTS =  \
 	baselib_regex.o \
 	baselib_stdpbase.o \
 	baselib_sstream.o \
+	baselib_stdstream.o \
 	baselib_stopwatch.o \
 	baselib_strconv.o \
 	baselib_stream.o \
@@ -14162,6 +14169,9 @@ monodll_stdpbase.o: $(srcdir)/src/common/stdpbase.cpp $(MONODLL_ODEP)
 monodll_sstream.o: $(srcdir)/src/common/sstream.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/sstream.cpp
 
+monodll_stdstream.o: $(srcdir)/src/common/stdstream.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/stdstream.cpp
+
 monodll_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/stopwatch.cpp
 
@@ -18847,6 +18857,9 @@ monolib_stdpbase.o: $(srcdir)/src/common/stdpbase.cpp $(MONOLIB_ODEP)
 
 monolib_sstream.o: $(srcdir)/src/common/sstream.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/sstream.cpp
+
+monolib_stdstream.o: $(srcdir)/src/common/stdstream.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/stdstream.cpp
 
 monolib_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/stopwatch.cpp
@@ -23534,6 +23547,9 @@ basedll_stdpbase.o: $(srcdir)/src/common/stdpbase.cpp $(BASEDLL_ODEP)
 basedll_sstream.o: $(srcdir)/src/common/sstream.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/sstream.cpp
 
+basedll_stdstream.o: $(srcdir)/src/common/stdstream.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/stdstream.cpp
+
 basedll_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/stopwatch.cpp
 
@@ -23995,6 +24011,9 @@ baselib_stdpbase.o: $(srcdir)/src/common/stdpbase.cpp $(BASELIB_ODEP)
 
 baselib_sstream.o: $(srcdir)/src/common/sstream.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/sstream.cpp
+
+baselib_stdstream.o: $(srcdir)/src/common/stdstream.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/stdstream.cpp
 
 baselib_stopwatch.o: $(srcdir)/src/common/stopwatch.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/stopwatch.cpp

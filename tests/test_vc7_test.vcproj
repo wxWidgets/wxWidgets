@@ -726,6 +726,9 @@
 				RelativePath=".\streams\sstream.cpp">
 			</File>
 			<File
+				RelativePath=".\streams\stdstream.cpp">
+			</File>
+			<File
 				RelativePath=".\strings\stdstrings.cpp">
 			</File>
 			<File

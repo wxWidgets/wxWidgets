@@ -77,6 +77,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_memstream.o \
 	$(OBJS)\test_socketstream.o \
 	$(OBJS)\test_sstream.o \
+	$(OBJS)\test_stdstream.o \
 	$(OBJS)\test_tempfile.o \
 	$(OBJS)\test_textstreamtest.o \
 	$(OBJS)\test_zlibstream.o \
@@ -522,6 +523,9 @@ $(OBJS)\test_socketstream.o: ./streams/socketstream.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_sstream.o: ./streams/sstream.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_stdstream.o: ./streams/stdstream.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_tempfile.o: ./streams/tempfile.cpp

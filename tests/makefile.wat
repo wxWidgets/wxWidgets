@@ -316,6 +316,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_memstream.obj &
 	$(OBJS)\test_socketstream.obj &
 	$(OBJS)\test_sstream.obj &
+	$(OBJS)\test_stdstream.obj &
 	$(OBJS)\test_tempfile.obj &
 	$(OBJS)\test_textstreamtest.obj &
 	$(OBJS)\test_zlibstream.obj &
@@ -583,6 +584,9 @@ $(OBJS)\test_socketstream.obj :  .AUTODEPEND .\streams\socketstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_sstream.obj :  .AUTODEPEND .\streams\sstream.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_stdstream.obj :  .AUTODEPEND .\streams\stdstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_tempfile.obj :  .AUTODEPEND .\streams\tempfile.cpp
