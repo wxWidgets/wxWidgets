@@ -1415,11 +1415,11 @@ bool wxEvtHandler::SearchEventTable(wxEventTable& table, wxEvent& event)
     return false;
 }
 
-void wxEvtHandler::DoConnect(int id,
-                             int lastId,
-                             wxEventType eventType,
-                             wxEventFunctor *func,
-                             wxObject *userData)
+void wxEvtHandler::DoBind(int id,
+                          int lastId,
+                          wxEventType eventType,
+                          wxEventFunctor *func,
+                          wxObject *userData)
 {
     wxDynamicEventTableEntry *entry =
         new wxDynamicEventTableEntry(eventType, id, lastId, func, userData);
@@ -1443,11 +1443,11 @@ void wxEvtHandler::DoConnect(int id,
 }
 
 bool
-wxEvtHandler::DoDisconnect(int id,
-                           int lastId,
-                           wxEventType eventType,
-                           const wxEventFunctor& func,
-                           wxObject *userData)
+wxEvtHandler::DoUnbind(int id,
+                       int lastId,
+                       wxEventType eventType,
+                       const wxEventFunctor& func,
+                       wxObject *userData)
 {
     if (!m_dynamicEvents)
         return false;
@@ -1469,7 +1469,7 @@ wxEvtHandler::DoDisconnect(int id,
         if ((entry->m_id == id) &&
             ((entry->m_lastId == lastId) || (lastId == wxID_ANY)) &&
             ((entry->m_eventType == eventType) || (eventType == wxEVT_NULL)) &&
-            entry->m_fn->Matches(func) &&
+            entry->m_fn->IsMatching(func) &&
             ((entry->m_callbackUserData == userData) || !userData))
         {
             delete entry->m_callbackUserData;

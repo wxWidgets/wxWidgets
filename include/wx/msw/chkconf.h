@@ -415,10 +415,9 @@
    Currently only recent MSVC compilers can build the new events code under
    Windows.
  */
-#if !wxEVENTS_COMPATIBILITY_2_8
+#ifdef wxHAS_EVENT_BIND
 #   if !wxCHECK_VISUALC_VERSION(7)
-#       undef wxEVENTS_COMPATIBILITY_2_8
-#       define wxEVENTS_COMPATIBILITY_2_8 1
+#       undef wxHAS_EVENT_BIND
 #   endif
 #endif
 

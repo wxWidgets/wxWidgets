@@ -99,5 +99,13 @@
     #define wxHAVE_RAW_BITMAP
 #endif
 
+/*
+   If this is defined, wxEvtHandler::Bind<>() is available (not all compilers
+   have the required template support for this and in particular under Windows
+   where only g++ and MSVC >= 7 currently support it, for the others it will be
+   undefined in wx/chkconf.h).
+ */
+#define wxHAS_EVENT_BIND
+
 #endif /*  _WX_FEATURES_H_ */
 
