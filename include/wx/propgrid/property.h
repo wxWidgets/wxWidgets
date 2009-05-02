@@ -1951,7 +1951,21 @@ public:
         else m_flags &= ~wxPG_PROP_COLLAPSED;
     }
 
+    /**
+        Sets given property flag(s).
+    */
     void SetFlag( FlagType flag ) { m_flags |= flag; }
+
+    /**
+        Sets or clears given property flag(s).
+    */
+    void ChangeFlag( FlagType flag, bool set )
+    {
+        if ( set )
+            m_flags |= flag;
+        else
+            m_flags &= ~flag;
+    }
 
     void SetFlagRecursively( FlagType flag, bool set );
 

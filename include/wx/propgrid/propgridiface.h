@@ -1021,7 +1021,7 @@ public:
         if ( flags & wxPG_RECURSE )
             p->SetFlagRecursively(wxPG_PROP_READONLY, set);
         else
-            p->SetFlag(wxPG_PROP_READONLY);
+            p->ChangeFlag(wxPG_PROP_READONLY, set);
     }
 
     /** Sets property's value to unspecified.

@@ -1353,10 +1353,7 @@ void wxPGProperty::SetValueInEvent( wxVariant value ) const
 
 void wxPGProperty::SetFlagRecursively( FlagType flag, bool set )
 {
-    if ( set )
-        SetFlag(flag);
-    else
-        ClearFlag(flag);
+    ChangeFlag(flag, set);
 
     unsigned int i;
     for ( i = 0; i < GetChildCount(); i++ )
