@@ -42,6 +42,12 @@ for opt in option_dict:
 
 options, arguments = parser.parse_args()
 
+def get_first_value(alist):
+    if len(alist) > 0:
+        return alist[0]
+    else:
+        return ""
+
 class ClassDefinition:
     def __init__(self):
         self.name = ""
@@ -114,6 +120,38 @@ class DoxyMLParser:
     def __init__(self):
         self.classes = []
 
+    def find_class(self, name):
+        for aclass in self.classes:
+            if aclass.name == name:
+                return aclass
+                
+        return None
+
+    def get_enums_and_functions(self, filename, aclass):
+        file_path = os.path.dirname(filename)
+        enum_filename = os.path.join(file_path, aclass.name[2:] + "_8h.xml")
+        if os.path.exists(enum_filename):
+            root = minidom.parse(enum_filename).documentElement
+            for method in root.getElementsByTagName("memberdef"):
+                if method.getAttribute("kind") == "enum":
+                    self.parse_enum(aclass, method, root)
+
+    def is_derived_from_base(self, aclass, abase):
+        base = get_first_value(aclass.bases)
+        while base and base != "":
+            
+            if base == abase:
+                return True
+                
+            parentclass = self.find_class(base)
+            
+            if parentclass:
+                base = get_first_value(parentclass.bases)
+            else:
+                base = None
+                
+        return False
+
     def parse(self, filename):
         self.xmldoc = minidom.parse(filename).documentElement
         for node in self.xmldoc.getElementsByTagName("compounddef"):
@@ -139,15 +177,6 @@ class DoxyMLParser:
 
         return new_class
         
-    def get_enums_and_functions(self, filename, aclass):
-        file_path = os.path.dirname(filename)
-        enum_filename = os.path.join(file_path, aclass.name[2:] + "_8h.xml")
-        if os.path.exists(enum_filename):
-            root = minidom.parse(enum_filename).documentElement
-            for method in root.getElementsByTagName("memberdef"):
-                if method.getAttribute("kind") == "enum":
-                    self.parse_enum(aclass, method, root)
-    
     def parse_enum(self, new_class, enum, root):
         enum_name = ""
         enum_values = []
