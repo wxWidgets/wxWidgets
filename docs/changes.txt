@@ -289,6 +289,9 @@ Deprecated methods and their replacements
   on some ports (e.g. wxGTK).
   You should now create windows placed inside a wxStaticBox as children of
   the static box itself.
+- wxMouseState::{Left,Middle,Right}Down() were renamed to XXXIsDown() for
+  consistency with wxMouseEvent and the old names were deprecated.
+
 
 Major new features in this release
 ----------------------------------
