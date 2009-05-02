@@ -820,6 +820,10 @@ public:
     virtual void SetNextHandler(wxEvtHandler *handler);
     virtual void SetPreviousHandler(wxEvtHandler *handler);
 
+
+    // Watcom doesn't allow reducing access with using access declaration, see
+    // #10749
+#ifndef __WATCOMC__
 protected:
 
     // NOTE: we change the access specifier of the following wxEvtHandler functions
@@ -839,6 +843,7 @@ protected:
     using wxEvtHandler::ProcessPendingEvents;
     using wxEvtHandler::AddPendingEvent;
     using wxEvtHandler::QueueEvent;
+#endif // __WATCOMC__
 
 public:
 
