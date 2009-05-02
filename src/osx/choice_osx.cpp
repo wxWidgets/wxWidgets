@@ -280,7 +280,6 @@ wxSize wxChoice::DoGetBestSize() const
         wxCoord width, height ;
         dc.GetTextExtent( wxT("X"), &width, &height);
         int cx = width ;
-        lbHeight += 4;
 
         lbWidth += cx ;
     }
