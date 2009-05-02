@@ -23,6 +23,8 @@ import string
 
 import sys
 import types
+
+from common import *
 from xml.dom import minidom
 
 option_dict = { 
@@ -41,12 +43,6 @@ for opt in option_dict:
     parser.add_option("--" + opt, default=default, action=action, dest=opt, help=option_dict[opt][1])
 
 options, arguments = parser.parse_args()
-
-def get_first_value(alist):
-    if len(alist) > 0:
-        return alist[0]
-    else:
-        return ""
 
 class ClassDefinition:
     def __init__(self):
