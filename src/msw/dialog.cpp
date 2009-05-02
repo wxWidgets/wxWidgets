@@ -150,7 +150,9 @@ void wxDialog::Init()
 #if wxUSE_TOOLBAR && defined(__POCKETPC__)
     m_dialogToolBar = NULL;
 #endif
+#if wxUSE_DIALOG_SIZEGRIP
     m_hGripper = 0;
+#endif // wxUSE_DIALOG_SIZEGRIP
 }
 
 bool wxDialog::Create(wxWindow *parent,
@@ -179,6 +181,7 @@ bool wxDialog::Create(wxWindow *parent,
     CreateToolBar();
 #endif
 
+#if wxUSE_DIALOG_SIZEGRIP
     if ( HasFlag(wxRESIZE_BORDER) )
     {
         CreateGripper();
@@ -186,6 +189,7 @@ bool wxDialog::Create(wxWindow *parent,
         Connect(wxEVT_CREATE,
                 wxWindowCreateEventHandler(wxDialog::OnWindowCreate));
     }
+#endif // wxUSE_DIALOG_SIZEGRIP
 
     return true;
 }
@@ -195,7 +199,9 @@ wxDialog::~wxDialog()
     // this will also reenable all the other windows for a modal dialog
     Show(false);
 
+#if wxUSE_DIALOG_SIZEGRIP
     DestroyGripper();
+#endif // wxUSE_DIALOG_SIZEGRIP
 }
 
 // ----------------------------------------------------------------------------
@@ -306,6 +312,8 @@ void wxDialog::EndModal(int retCode)
 // wxDialog gripper handling
 // ----------------------------------------------------------------------------
 
+#if wxUSE_DIALOG_SIZEGRIP
+
 void wxDialog::SetWindowStyleFlag(long style)
 {
     wxDialogBase::SetWindowStyleFlag(style);
@@ -394,6 +402,8 @@ void wxDialog::OnWindowCreate(wxWindowCreateEvent& event)
     event.Skip();
 }
 
+#endif // wxUSE_DIALOG_SIZEGRIP
+
 // ----------------------------------------------------------------------------
 // wxWin event handlers
 // ----------------------------------------------------------------------------
@@ -475,6 +485,7 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
             break;
 
         case WM_SIZE:
+#if wxUSE_DIALOG_SIZEGRIP
             if ( m_hGripper )
             {
                 switch ( wParam )
@@ -487,6 +498,7 @@ WXLRESULT wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lPar
                         ShowGripper(true);
                 }
             }
+#endif // wxUSE_DIALOG_SIZEGRIP
 
             // the Windows dialogs unfortunately are not meant to be resizeable
             // at all and their standard class doesn't include CS_[VH]REDRAW
