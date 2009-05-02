@@ -523,7 +523,7 @@ class wxEventFunctorFunctor : public wxEventFunctor
 public:
     typedef typename EventTag::EventClass EventArg;
 
-    wxEventFunctorFunctor(Functor& handler)
+    wxEventFunctorFunctor(const Functor& handler)
         : m_handler(handler), m_handlerAddr(&handler)
         { }
 
@@ -591,14 +591,14 @@ wxMakeEventFunctor(const EventTag&, void (*func)(EventArg &))
 // Create functors wrapping other functors:
 template <typename EventTag, typename Functor>
 inline wxEventFunctorFunctor<EventTag, Functor> *
-wxNewEventFunctor(const EventTag&, Functor &func)
+wxNewEventFunctor(const EventTag&, const Functor &func)
 {
     return new wxEventFunctorFunctor<EventTag, Functor>(func);
 }
 
 template <typename EventTag, typename Functor>
 inline wxEventFunctorFunctor<EventTag, Functor>
-wxMakeEventFunctor(const EventTag&, Functor &func)
+wxMakeEventFunctor(const EventTag&, const Functor &func)
 {
     return wxEventFunctorFunctor<EventTag, Functor>(func);
 }
@@ -3059,7 +3059,7 @@ public:
     // Bind functors to an event:
     template <typename EventTag, typename Functor>
     void Bind(const EventTag& eventType,
-              Functor &functor,
+              const Functor &functor,
               int winid = wxID_ANY,
               int lastId = wxID_ANY,
               wxObject *userData = NULL)
@@ -3072,7 +3072,7 @@ public:
 
     template <typename EventTag, typename Functor>
     bool Unbind(const EventTag& eventType,
-                Functor &functor,
+                const Functor &functor,
                 int winid = wxID_ANY,
                 int lastId = wxID_ANY,
                 wxObject *userData = NULL)
