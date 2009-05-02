@@ -60,7 +60,7 @@ public:
 /**
     @class wxStdInputStream
 
-    wxStdInputStream is a std::istream derived stream buffer which reads from
+    wxStdInputStream is a std::istream derived stream which reads from
     a wxInputStream.
 
     Example:
