@@ -971,6 +971,7 @@ void wxMacDataItemBrowserControl::RemoveItems(wxMacDataItem *container, wxArrayM
 
 void wxMacDataItemBrowserControl::RemoveAllItems(wxMacDataItem *container)
 {
+    SetScrollPosition(0, 0);
     OSStatus err = wxMacDataBrowserControl::RemoveItems( (DataBrowserItemID)container, 0 , NULL , kDataBrowserItemNoProperty );
     verify_noerr( err );
 }
