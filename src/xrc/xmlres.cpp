@@ -84,6 +84,48 @@ inline bool IsObjectNode(wxXmlNode *node)
                 node->GetName() == wxS("object_ref"));
 }
 
+// special XML attribute with name of input file, see GetFileNameFromNode()
+const char *ATTR_INPUT_FILENAME = "__wx:filename";
+
+// helper to get filename corresponding to an XML node
+wxString
+GetFileNameFromNode(wxXmlNode *node, const wxXmlResourceDataRecords& files)
+{
+    // this loop does two things: it looks for ATTR_INPUT_FILENAME among
+    // parents and if it isn't used, it finds the root of the XML tree 'node'
+    // is in
+    for ( ;; )
+    {
+        // in some rare cases (specifically, when an <object_ref> is used, see
+        // wxXmlResource::CreateResFromNode() and MergeNodesOver()), we work
+        // with XML nodes that are not rooted in any document from 'files'
+        // (because a new node was created by CreateResFromNode() to merge the
+        // content of <object_ref> and the referenced <object>); in that case,
+        // we hack around the problem by putting the information about input
+        // file into a custom attribute
+        if ( node->HasAttribute(ATTR_INPUT_FILENAME) )
+            return node->GetAttribute(ATTR_INPUT_FILENAME);
+
+        if ( !node->GetParent() )
+            break; // we found the root of this XML tree
+
+        node = node->GetParent();
+    }
+
+    // NB: 'node' now points to the root of XML document
+
+    for ( wxXmlResourceDataRecords::const_iterator i = files.begin();
+          i != files.end(); ++i )
+    {
+        if ( (*i)->Doc->GetRoot() == node )
+        {
+            return (*i)->File;
+        }
+    }
+
+    return wxEmptyString; // not found
+}
+
 } // anonymous namespace
 
 
@@ -714,10 +756,11 @@ wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
     return NULL;
 }
 
-static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
+static void MergeNodesOver(wxXmlNode& dest, wxXmlNode& overwriteWith,
+                           const wxString& overwriteFilename)
 {
     // Merge attributes:
-    for ( wxXmlAttribute *attr = with.GetAttributes();
+    for ( wxXmlAttribute *attr = overwriteWith.GetAttributes();
           attr; attr = attr->GetNext() )
     {
         wxXmlAttribute *dattr;
@@ -736,7 +779,7 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
    }
 
     // Merge child nodes:
-    for (wxXmlNode* node = with.GetChildren(); node; node = node->GetNext())
+    for (wxXmlNode* node = overwriteWith.GetChildren(); node; node = node->GetNext())
     {
         wxString name = node->GetAttribute(wxT("name"), wxEmptyString);
         wxXmlNode *dnode;
@@ -747,28 +790,32 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
                  dnode->GetAttribute(wxT("name"), wxEmptyString) == name &&
                  dnode->GetType() == node->GetType() )
             {
-                MergeNodes(*dnode, *node);
+                MergeNodesOver(*dnode, *node, overwriteFilename);
                 break;
             }
         }
 
         if ( !dnode )
         {
+            wxXmlNode *copyOfNode = new wxXmlNode(*node);
+            // remember referenced object's file, see GetFileNameFromNode()
+            copyOfNode->AddAttribute(ATTR_INPUT_FILENAME, overwriteFilename);
+
             static const wxChar *AT_END = wxT("end");
             wxString insert_pos = node->GetAttribute(wxT("insert_at"), AT_END);
             if ( insert_pos == AT_END )
             {
-                dest.AddChild(new wxXmlNode(*node));
+                dest.AddChild(copyOfNode);
             }
             else if ( insert_pos == wxT("begin") )
             {
-                dest.InsertChild(new wxXmlNode(*node), dest.GetChildren());
+                dest.InsertChild(copyOfNode, dest.GetChildren());
             }
         }
     }
 
-    if ( dest.GetType() == wxXML_TEXT_NODE && with.GetContent().length() )
-         dest.SetContent(with.GetContent());
+    if ( dest.GetType() == wxXML_TEXT_NODE && overwriteWith.GetContent().length() )
+         dest.SetContent(overwriteWith.GetContent());
 }
 
 wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
@@ -798,7 +845,11 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
         }
 
         wxXmlNode copy(*refNode);
-        MergeNodes(copy, *node);
+        MergeNodesOver(copy, *node, GetFileNameFromNode(node, Data()));
+
+        // remember referenced object's file, see GetFileNameFromNode()
+        copy.AddAttribute(ATTR_INPUT_FILENAME,
+                          GetFileNameFromNode(refNode, Data()));
 
         return CreateResFromNode(&copy, parent, instance);
     }
@@ -1764,30 +1815,6 @@ void wxXmlResourceHandler::ReportParamError(const wxString& param,
 {
     m_resource->ReportError(GetParamNode(param), message);
 }
-
-namespace
-{
-
-wxString
-GetFileNameFromNode(wxXmlNode *node, const wxXmlResourceDataRecords& files)
-{
-    wxXmlNode *root = node;
-    while ( root->GetParent() )
-        root = root->GetParent();
-
-    for ( wxXmlResourceDataRecords::const_iterator i = files.begin();
-          i != files.end(); ++i )
-    {
-        if ( (*i)->Doc->GetRoot() == root )
-        {
-            return (*i)->File;
-        }
-    }
-
-    return wxEmptyString; // not found
-}
-
-} // anonymous namespace
 
 void wxXmlResource::ReportError(wxXmlNode *context, const wxString& message)
 {
