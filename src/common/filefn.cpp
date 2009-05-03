@@ -1279,7 +1279,7 @@ bool wxMkdir(const wxString& dir, int perm)
 #else  // !MSW, !DOS and !OS/2 VAC++
     wxUnusedVar(perm);
   #ifdef __WXWINCE__
-    if ( CreateDirectory(dir, NULL) == 0 )
+    if ( CreateDirectory(dir.fn_str(), NULL) == 0 )
   #else
     if ( wxMkDir(dir.fn_str()) != 0 )
   #endif
@@ -1304,7 +1304,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
   #if defined(__OS2__)
     if ( ::DosDeleteDir(dir.c_str()) != 0 )
   #elif defined(__WXWINCE__)
-    if ( RemoveDirectory(dir) == 0 )
+    if ( RemoveDirectory(dir.fn_str()) == 0 )
   #else
     if ( wxRmDir(dir.fn_str()) != 0 )
   #endif
