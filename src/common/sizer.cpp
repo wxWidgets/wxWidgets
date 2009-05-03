@@ -2158,23 +2158,36 @@ void wxStaticBoxSizer::RecalcSizes()
 
     m_staticBox->SetSize( m_position.x, m_position.y, m_size.x, m_size.y );
 
-    wxPoint old_pos( m_position );
-    m_position.x += other_border;
-    m_position.y += top_border;
     wxSize old_size( m_size );
     m_size.x -= 2*other_border;
     m_size.y -= top_border + other_border;
 
-#ifdef __WXGTK20__
+    wxPoint old_pos( m_position );
     if (m_staticBox->GetChildren().GetCount() > 0)
     {
+#if defined( __WXGTK20__ )
         // if the wxStaticBox has created a wxPizza to contain its children
         // (see wxStaticBox::AddChild) then we need to place the items it contains
         // in the wxBoxSizer::RecalcSizes() call below using coordinates relative 
         // to the top-left corner of the staticbox:
         m_position.x = m_position.y = 0;
-    }
+#else
+        // if the wxStaticBox has childrens, then these windows must be placed
+        // by the wxBoxSizer::RecalcSizes() call below using coordinates relative 
+        // to the top-left corner of the staticbox (but unlike wxGTK, we need
+        // to keep in count the static borders here!):
+        m_position.x = other_border;
+        m_position.y = top_border;
 #endif
+    }
+    else
+    {
+        // the windows contained in the staticbox have been created as siblings of the
+        // staticbox (this is the "old" way of staticbox contents creation); in this
+        // case we need to position them with coordinates relative to our common parent
+        m_position.x += other_border;
+        m_position.y += top_border;
+    }
 
     wxBoxSizer::RecalcSizes();
 
