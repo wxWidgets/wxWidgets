@@ -411,14 +411,4 @@
 #   define wxUSE_POSTSCRIPT 1
 #endif
 
-/*
-   Currently only recent MSVC compilers can build the new events code under
-   Windows.
- */
-#ifdef wxHAS_EVENT_BIND
-#   if !wxCHECK_VISUALC_VERSION(7)
-#       undef wxHAS_EVENT_BIND
-#   endif
-#endif
-
 #endif /* _WX_MSW_CHKCONF_H_ */
