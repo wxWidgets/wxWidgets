@@ -184,16 +184,6 @@ wxStdInputStreamBuffer::pbackfail(int c)
 }
 
 // ==========================================================================
-// wxStdInputStream
-// ==========================================================================
-
-wxStdInputStream::wxStdInputStream(wxInputStream& stream) :
-    std::istream(NULL), m_streamBuffer(stream)
-{
-    std::ios::init(&m_streamBuffer);
-}
-
-// ==========================================================================
 // wxStdOutputStreamBuffer
 // ==========================================================================
 
@@ -260,13 +250,44 @@ wxStdOutputStreamBuffer::overflow(int c)
 }
 
 // ==========================================================================
-// wxStdOutputStream
+// wxStdInputStream and wxStdOutputStream
 // ==========================================================================
+
+// FIXME-VC6: it is impossible to call basic_ios<char>::init() with this
+//            compiler, it complains about invalid call to non-static member
+//            function so use a suspicious (as it uses a pointer to not yet
+//            constructed streambuf) but working workaround
+//
+//            It also doesn't like using istream in the ctor initializer list
+//            and we must spell it out as basic_istream<char>.
+#ifdef __VISUALC6__
+
+wxStdInputStream::wxStdInputStream(wxInputStream& stream)
+    : std::basic_istream<char, std::char_traits<char> >(&m_streamBuffer),
+      m_streamBuffer(stream)
+{
+}
+
+wxStdOutputStream::wxStdOutputStream(wxOutputStream& stream)
+    : std::basic_ostream<char, std::char_traits<char> >(&m_streamBuffer),
+      m_streamBuffer(stream)
+{
+}
+
+#else // !VC6
+
+wxStdInputStream::wxStdInputStream(wxInputStream& stream) :
+    std::istream(NULL), m_streamBuffer(stream)
+{
+    std::ios::init(&m_streamBuffer);
+}
 
 wxStdOutputStream::wxStdOutputStream(wxOutputStream& stream) :
     std::ostream(NULL), m_streamBuffer(stream)
 {
     std::ios::init(&m_streamBuffer);
 }
+
+#endif // VC6/!VC6
 
 #endif // wxUSE_STD_IOSTREAM
