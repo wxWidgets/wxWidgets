@@ -844,14 +844,31 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
             return NULL;
         }
 
-        wxXmlNode copy(*refNode);
-        MergeNodesOver(copy, *node, GetFileNameFromNode(node, Data()));
+        if ( !node->GetChildren() )
+        {
+            // In the typical, simple case, <object_ref> is used to link
+            // to another node and doesn't have any content of its own that
+            // would overwrite linked object's properties. In this case,
+            // we can simply create the resource from linked node.
 
-        // remember referenced object's file, see GetFileNameFromNode()
-        copy.AddAttribute(ATTR_INPUT_FILENAME,
-                          GetFileNameFromNode(refNode, Data()));
+            return CreateResFromNode(refNode, parent, instance);
+        }
+        else
+        {
+            // In the more complicated (but rare) case, <object_ref> has
+            // subnodes that partially overwrite content of the referenced
+            // object. In this case, we need to merge both XML trees and
+            // load the resource from result of the merge.
 
-        return CreateResFromNode(&copy, parent, instance);
+            wxXmlNode copy(*refNode);
+            MergeNodesOver(copy, *node, GetFileNameFromNode(node, Data()));
+
+            // remember referenced object's file, see GetFileNameFromNode()
+            copy.AddAttribute(ATTR_INPUT_FILENAME,
+                              GetFileNameFromNode(refNode, Data()));
+
+            return CreateResFromNode(&copy, parent, instance);
+        }
     }
 
     if (handlerToUse)
