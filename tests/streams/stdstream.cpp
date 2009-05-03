@@ -29,10 +29,13 @@
 
 // when std::streamoff is simply long we don't need this as we already allow
 // comparisons between int and long but we do need it otherwise -- and we don't
-// have any way to detect it so for now just assume that all 64 bit builds use
-// long as streamoff and if this is wrong we'll add a check to configure later
-#if SIZEOF_SIZE_T != 8
-    WX_CPPUNIT_ALLOW_EQUALS_TO_INT(std::streamoff)
+// have any way to detect it so for now just assume that all 64 bit Unix builds
+// use long as streamoff and if this is wrong we'll add a check to configure
+// later
+#ifndef __WXMSW__
+    #if SIZEOF_SIZE_T != 8
+        WX_CPPUNIT_ALLOW_EQUALS_TO_INT(std::streamoff)
+    #endif
 #endif
 
 // ==========================================================================
