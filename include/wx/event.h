@@ -99,60 +99,51 @@ typedef int wxEventType;
 // generate a new unique event type
 extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 
-// New macros to create templatized event types:
+// define macros to create new event types:
+#ifdef wxHAS_EVENT_BIND
+    // events are represented by an instance of wxEventTypeTag and the
+    // corresponding type must be specified for type-safety checks
 
-#ifndef wxHAS_EVENT_BIND
+    // define a new custom event type, can be used alone or after event
+    // declaration in the header using one of the macros below
+    #define wxDEFINE_EVENT( name, type ) \
+        const wxEventTypeTag< type > name( wxNewEventType() )
 
-    // Define/Declare a wxEventType-based event type:
+    // the general version allowing exporting the event type from DLL, used by
+    // wxWidgets itself
+    #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
+        extern const expdecl wxEventTypeTag< type > name
+
+    // this is the version which will normally be used in the user code
+    #define wxDECLARE_EVENT( name, type ) \
+        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
+
+
+    // these macros are only used internally for backwards compatibility and
+    // allow to define an alias for an existing event type (this is used by
+    // wxEVT_SPIN_XXX)
+    #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
+        const wxEventTypeTag< type > name( value )
+
+    #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
+        extern const expdecl wxEventTypeTag< type > name
+#else // !wxHAS_EVENT_BIND
+    // the macros are the same ones as above but defined differently as we only
+    // use the integer event type values to identify events in this case
 
     #define wxDEFINE_EVENT( name, type ) \
         const wxEventType name( wxNewEventType() )
 
     #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
         extern const expdecl wxEventType name
-
-    // Define/Declare a wxEventType-based event type and initialize it with a
-    // predefined event type. (Only used for wxEVT_SPIN_XXX for backward
-    // compatibility)
+    #define wxDECLARE_EVENT( name, type ) \
+        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
 
     #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
         const wxEventType name = value
-
     #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
         extern const expdecl wxEventType name
-
-    // Declare a local (not exported) wxEventType-based event type:
-
-    #define wxDECLARE_EVENT( name, type ) \
-        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
-
-#else // wxHAS_EVENT_BIND
-
-    // Define/Declare a templatized event type with the corresponding event as
-    // a nested typedef:
-
-    #define wxDEFINE_EVENT( name, type ) \
-        const wxEventTypeTag< type > name( wxNewEventType() )
-
-    #define wxDECLARE_EXPORTED_EVENT( expdecl, name, type ) \
-        extern const expdecl wxEventTypeTag< type > name
-
-    // Define/Declare a templatized event type and initialize it with a
-    // predefined event type. (Only used for wxEVT_SPIN_XXX for backward
-    // compatibility)
-
-    #define wxDEFINE_EVENT_ALIAS( name, type, value ) \
-        const wxEventTypeTag< type > name( value )
-
-    #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
-        extern const expdecl wxEventTypeTag< type > name
-
-    // Declare a local (not exported) templatized event type:
-
-    #define wxDECLARE_EVENT( name, type ) \
-        wxDECLARE_EXPORTED_EVENT( wxEMPTY_PARAMETER_VALUE, name, type )
-
-#endif // wxHAS_EVENT_BIND
+#endif // wxHAS_EVENT_BIND/!wxHAS_EVENT_BIND
 
 // Try to cast the given event handler to the correct handler type:
 
@@ -3903,16 +3894,16 @@ typedef void (wxEvtHandler::*wxClipboardTextEventFunction)(wxClipboardTextEvent&
 // (and not in a private header) because the base class must be visible from
 // other public headers, please do NOT use this in your code, it will be
 // removed from future wx versions without warning.
-#ifndef wxHAS_EVENT_BIND
-    #define wxBIND_OR_CONNECT_HACK_BASE_CLASS public wxEvtHandler,
-    #define wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS : public wxEvtHandler
-    #define wxBIND_OR_CONNECT_HACK(w, evt, handler, func, obj) \
-        win->Connect(evt, handler(func), NULL, obj)
-#else // wxHAS_EVENT_BIND
+#ifdef wxHAS_EVENT_BIND
     #define wxBIND_OR_CONNECT_HACK_BASE_CLASS
     #define wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS
     #define wxBIND_OR_CONNECT_HACK(w, evt, handler, func, obj) \
         win->Bind(evt, &func, obj)
+#else // wxHAS_EVENT_BIND
+    #define wxBIND_OR_CONNECT_HACK_BASE_CLASS public wxEvtHandler,
+    #define wxBIND_OR_CONNECT_HACK_ONLY_BASE_CLASS : public wxEvtHandler
+    #define wxBIND_OR_CONNECT_HACK(w, evt, handler, func, obj) \
+        win->Connect(evt, handler(func), NULL, obj)
 #endif // wxHAS_EVENT_BIND
 
 #if wxUSE_GUI
