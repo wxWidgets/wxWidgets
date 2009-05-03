@@ -69,7 +69,7 @@ public:
     wxStdInputStream in(file);
     std::vector<std::string> words;
 
-    // read words from stdin
+    // read words from words.txt
     std::copy(std::istream_iterator<std::string>(in),
               std::istream_iterator<std::string>(),
               std::back_inserter(words));
