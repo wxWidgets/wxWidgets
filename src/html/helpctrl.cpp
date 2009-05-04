@@ -115,12 +115,7 @@ void wxHtmlHelpController::SetTitleFormat(const wxString& title)
 // Find the top-most parent window
 wxWindow* wxHtmlHelpController::FindTopLevelWindow()
 {
-    wxWindow* parent = m_helpWindow;
-    while (parent && !parent->IsTopLevel())
-    {
-        parent = parent->GetParent();
-    }
-    return parent;
+    return wxGetTopLevelParent(m_helpWindow);
 }
 
 bool wxHtmlHelpController::AddBook(const wxFileName& book_file, bool show_wait_msg)
