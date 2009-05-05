@@ -123,17 +123,17 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
             }
         }
 
-        wxToolBarToolBase * const
-            tool = m_toolbar->AddTool
-                             (
-                                GetID(),
-                                GetText(wxT("label")),
-                                GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
-                                GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
-                                kind,
-                                GetText(wxT("tooltip")),
-                                GetText(wxT("longhelp"))
-                             );
+        wxToolBarToolBase * const tool =
+            m_toolbar->AddTool
+                       (
+                          GetID(),
+                          GetText(wxT("label")),
+                          GetBitmap(wxT("bitmap"), wxART_TOOLBAR, m_toolSize),
+                          GetBitmap(wxT("bitmap2"), wxART_TOOLBAR, m_toolSize),
+                          kind,
+                          GetText(wxT("tooltip")),
+                          GetText(wxT("longhelp"))
+                       );
 
         if ( GetBool(wxT("disabled")) )
             m_toolbar->EnableTool(GetID(), false);
@@ -172,9 +172,9 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
                          GetName());
         SetupWindow(toolbar);
 
-        wxSize bmpsize = GetSize(wxT("bitmapsize"));
-        if (!(bmpsize == wxDefaultSize))
-            toolbar->SetToolBitmapSize(bmpsize);
+        m_toolSize = GetSize(wxT("bitmapsize"));
+        if (!(m_toolSize == wxDefaultSize))
+            toolbar->SetToolBitmapSize(m_toolSize);
         wxSize margins = GetSize(wxT("margins"));
         if (!(margins == wxDefaultSize))
             toolbar->SetMargins(margins.x, margins.y);
