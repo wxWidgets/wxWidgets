@@ -12,11 +12,9 @@
 #ifndef _WX_CONFIG_H_BASE_
 #define _WX_CONFIG_H_BASE_
 
-#include "wx/defs.h"
+#include "wx/confbase.h"
 
 #if wxUSE_CONFIG
-
-#include "wx/confbase.h"
 
 #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
 #    ifdef __WIN32__
