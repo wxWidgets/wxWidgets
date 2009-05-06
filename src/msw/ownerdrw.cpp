@@ -262,14 +262,9 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 // draw the item
 bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
                               const wxRect& rc,
-                              wxODAction act,
+                              wxODAction,
                               wxODStatus st)
 {
-    // we do nothing on focus change
-    if ( act == wxODFocusChanged )
-        return true;
-
-
     // this flag determines whether or not an edge will
     // be drawn around the bitmap. In most "windows classic"
     // applications, a 1-pixel highlight edge is drawn around

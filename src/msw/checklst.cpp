@@ -232,6 +232,13 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     SelectInHDC selBrush2(hdc, ::GetStockObject(NULL_BRUSH));
     Rectangle(hdc, x, y, x + nCheckWidth, y + nCheckHeight);
 
+    if (stat & wxODHasFocus)
+    {
+        RECT rect;
+        wxCopyRectToRECT(rc, rect);
+        DrawFocusRect(hdc, &rect);
+    }
+
     return true;
 }
 
