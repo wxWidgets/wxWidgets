@@ -157,7 +157,7 @@ bool MyApp::OnInit()
     new wxDocTemplate(docManager, "Drawing", "*.drw", "", "drw",
                       "Drawing Doc", "Drawing View",
                       CLASSINFO(DrawingDocument), CLASSINFO(DrawingView));
-#if defined( __WXMAC__ )  && defined( wxOSX_USE_CARBON )
+#if defined( __WXMAC__ )  && wxOSX_USE_CARBON
     wxFileName::MacRegisterDefaultTypeAndCreator("drw" , 'WXMB' , 'WXMA');
 #endif
 
@@ -173,7 +173,7 @@ bool MyApp::OnInit()
         new wxDocTemplate(docManager, "Text", "*.txt;*.text", "", "txt;text",
                           "Text Doc", "Text View",
                           CLASSINFO(TextEditDocument), CLASSINFO(TextEditView));
-#if defined( __WXMAC__ )  && defined( wxOSX_USE_CARBON )
+#if defined( __WXMAC__ ) && wxOSX_USE_CARBON
         wxFileName::MacRegisterDefaultTypeAndCreator("txt" , 'TEXT' , 'WXMA');
 #endif
     }
