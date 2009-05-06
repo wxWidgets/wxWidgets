@@ -215,6 +215,9 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 
     ImageList_Destroy(himl);
 
+    if (stat & wxODHasFocus)
+        wxRendererNative::Get().DrawFocusRect(m_pParent, dc, rc);
+
     return true;
 }
 
