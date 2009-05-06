@@ -581,7 +581,7 @@
 #endif
 
 #if defined (__WXMSW__)
-#    if !defined(__WATCOMC__)
+#    if !wxONLY_WATCOM_EARLIER_THAN(1, 8)
 #        define wxHAVE_RAW_BITMAP
 #    endif
 #endif
