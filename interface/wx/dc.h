@@ -602,12 +602,19 @@ public:
     /**
         Sets the clipping region for this device context to the intersection of
         the given region described by the parameters of this method and the
-        previously set clipping region. You should call DestroyClippingRegion()
-        if you want to set the clipping region exactly to the region specified.
+        previously set clipping region.
 
         The clipping region is an area to which drawing is restricted. Possible
         uses for the clipping region are for clipping text or for speeding up
         window redraws when only a known area of the screen is damaged.
+
+        Notice that you need to call DestroyClippingRegion() if you want to set
+        the clipping region exactly to the region specified.
+
+        Also note that if the clipping region is empty, any previously set
+        clipping region is destroyed, i.e. it is equivalent to calling
+        DestroyClippingRegion(), and not to clipping out all drawing on the DC
+        as might be expected.
 
         @see DestroyClippingRegion(), wxRegion
     */
