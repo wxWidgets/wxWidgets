@@ -24,7 +24,7 @@
 // Web Kit Control
 // ----------------------------------------------------------------------------
 
-class wxWebKitCtrl : public wxControl
+class WXDLLIMPEXP_CORE wxWebKitCtrl : public wxControl
 {
 public:
     DECLARE_DYNAMIC_CLASS(wxWebKitCtrl)
@@ -133,7 +133,7 @@ enum {
 
 
 
-class wxWebKitBeforeLoadEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxWebKitBeforeLoadEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS( wxWebKitBeforeLoadEvent )
 
@@ -154,7 +154,7 @@ protected:
     int m_navType;
 };
 
-class wxWebKitStateChangedEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxWebKitStateChangedEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS( wxWebKitStateChangedEvent )
 
@@ -173,7 +173,7 @@ protected:
 };
 
 
-class wxWebKitNewWindowEvent : public wxCommandEvent
+class WXDLLIMPEXP_CORE wxWebKitNewWindowEvent : public wxCommandEvent
 {
     DECLARE_DYNAMIC_CLASS( wxWebViewNewWindowEvent )
 public:
