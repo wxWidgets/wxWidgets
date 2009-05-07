@@ -2233,7 +2233,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OSX_CARBON_COCOA_SRC" hints="files">
 <if cond="PLATFORM_MACOSX=='1'">
     <!-- wxWebKit files -->
-    <!-- (TODO Move one level up) -->
+    src/html/htmlctrl/webkit/webkit.mm
     <!-- Native color/font dialogs -->
     src/osx/carbon/colordlgosx.mm
     src/osx/carbon/fontdlgosx.mm
@@ -2265,6 +2265,20 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/region.cpp
     <!-- cocoa bridge -->
     src/osx/carbon/utilscocoa.mm
+    <!-- Generic implementations used by wxOSX: -->
+    src/generic/caret.cpp
+    src/generic/clrpickerg.cpp
+    src/generic/collpaneg.cpp
+    src/generic/colrdlgg.cpp
+    src/generic/dirdlgg.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/filedlgg.cpp
+    src/generic/filepickerg.cpp
+    src/generic/fontdlgg.cpp
+    src/generic/fontpickerg.cpp
+    src/generic/listctrl.cpp
+    src/generic/prntdlgg.cpp
+    src/generic/statusbr.cpp
 </if>
 </set>
 
@@ -2303,23 +2317,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/toolbar.cpp
     src/osx/carbon/tooltip.cpp
     src/osx/carbon/window.cpp
-
-    src/html/htmlctrl/webkit/webkit.mm
-    <!-- Generic implementations used by wxMac: -->
-    src/generic/caret.cpp
-    src/generic/clrpickerg.cpp
-    src/generic/collpaneg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontdlgg.cpp
-    src/generic/fontpickerg.cpp
-    src/generic/listctrl.cpp
-    src/generic/prntdlgg.cpp
-    src/generic/statusbr.cpp
 </set>
 
 <!-- Header files like wx/osx/foo.h which include wx/osx/carbon/foo.h -->
 <set var="OSX_SHARED_HDR" hints="files">
+    <!-- wxWebKit headers -->
+    wx/html/webkit.h
+    <!-- other shared headers -->
     wx/osx/accel.h
     wx/osx/app.h
     wx/osx/bitmap.h
@@ -2397,6 +2401,20 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/treectrl.h
     wx/osx/uma.h
     wx/osx/window.h
+    <!-- Generic implementations used by wxOSX: -->
+    wx/generic/caret.h
+    wx/generic/clrpickerg.h
+    wx/generic/collpaneg.h
+    wx/generic/colrdlgg.h
+    wx/generic/dirdlgg.h
+    wx/generic/fdrepdlg.h
+    wx/generic/filedlgg.h
+    wx/generic/filepickerg.h
+    wx/generic/fontdlgg.h
+    wx/generic/fontpickerg.h
+    wx/generic/listctrl.h
+    wx/generic/prntdlgg.h
+    wx/generic/statusbr.h
 </set>
 <!-- wxMac Carbon header files -->
 <set var="OSX_CARBON_HDR" hints="files">
@@ -2412,18 +2430,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/carbon/region.h
     wx/osx/carbon/statbmp.h
     wx/osx/carbon/uma.h
-    <!-- Generic implementations used by wxMac: -->
-    wx/generic/caret.h
-    wx/generic/clrpickerg.h
-    wx/generic/collpaneg.h
-    wx/generic/fdrepdlg.h
-    wx/generic/filepickerg.h
-    wx/generic/fontdlgg.h
-    wx/generic/fontpickerg.h
-    wx/generic/listctrl.h
-    wx/generic/statusbr.h
-    <!-- wxWebKit headers -->
-    wx/html/webkit.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2461,16 +2467,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/toolbar.mm
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
-    src/generic/caret.cpp
-    src/generic/clrpickerg.cpp
-    src/generic/collpaneg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontdlgg.cpp
-    src/generic/fontpickerg.cpp
-    src/generic/listctrl.cpp
-    src/generic/prntdlgg.cpp
-    src/generic/statusbr.cpp
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
