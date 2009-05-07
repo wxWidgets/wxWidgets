@@ -44,6 +44,7 @@
 #include "wx/fontenum.h"
 #include "wx/fontmap.h"
 #include "wx/artprov.h"
+#include "wx/imaglist.h"
 #include "wx/dir.h"
 #include "wx/xml/xml.h"
 
@@ -1333,9 +1334,16 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
                                          const wxArtClient& defaultArtClient,
                                          wxSize size)
 {
+    return GetBitmap(GetParamNode(param), defaultArtClient, size);
+}
+
+wxBitmap wxXmlResourceHandler::GetBitmap(const wxXmlNode* node,
+                                         const wxArtClient& defaultArtClient,
+                                         wxSize size)
+{
     /* If the bitmap is specified as stock item, query wxArtProvider for it: */
     wxString art_id, art_client;
-    if ( GetStockArtAttrs(GetParamNode(param), defaultArtClient,
+    if ( GetStockArtAttrs(node, defaultArtClient,
                           art_id, art_client) )
     {
         wxBitmap stockArt(wxArtProvider::GetBitmap(art_id, art_client, size));
@@ -1344,7 +1352,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     }
 
     /* ...or load the bitmap from file: */
-    wxString name = GetParamValue(param);
+    wxString name = GetParamValue(node);
     if (name.empty()) return wxNullBitmap;
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
@@ -1352,7 +1360,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     {
         ReportParamError
         (
-            param,
+            node->GetName(),
             wxString::Format("cannot open bitmap resource \"%s\"", name)
         );
         return wxNullBitmap;
@@ -1367,7 +1375,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     {
         ReportParamError
         (
-            param,
+            node->GetName(),
             wxString::Format("cannot create bitmap from \"%s\"", name)
         );
         return wxNullBitmap;
@@ -1381,10 +1389,18 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
                                      const wxArtClient& defaultArtClient,
                                      wxSize size)
 {
+    return GetIcon(GetParamNode(param), defaultArtClient, size);
+}
+
+wxIcon wxXmlResourceHandler::GetIcon(const wxXmlNode* node,
+                                     const wxArtClient& defaultArtClient,
+                                     wxSize size)
+{
     wxIcon icon;
-    icon.CopyFromBitmap(GetBitmap(param, defaultArtClient, size));
+    icon.CopyFromBitmap(GetBitmap(node, defaultArtClient, size));
     return icon;
 }
+
 
 wxIconBundle wxXmlResourceHandler::GetIconBundle(const wxString& param,
                                                  const wxArtClient& defaultArtClient)
@@ -1434,6 +1450,46 @@ wxIconBundle wxXmlResourceHandler::GetIconBundle(const wxString& param,
 }
 
 
+wxImageList *wxXmlResourceHandler::GetImageList(const wxString& param)
+{
+    wxXmlNode * const imagelist_node = GetParamNode(param);
+    if ( !imagelist_node )
+        return NULL;
+
+    wxXmlNode * const oldnode = m_node;
+    m_node = imagelist_node;
+
+    // size
+    wxSize size = GetSize();
+    size.SetDefaults(wxSize(wxSystemSettings::GetMetric(wxSYS_ICON_X),
+                            wxSystemSettings::GetMetric(wxSYS_ICON_Y)));
+
+    // mask: true by default
+    bool mask = HasParam(wxT("mask")) ? GetBool(wxT("mask"), true) : true;
+
+    // now we have everything we need to create the image list
+    wxImageList *imagelist = new wxImageList(size.x, size.y, mask);
+
+    // add images
+    wxString parambitmap = wxT("bitmap");
+    if ( HasParam(parambitmap) )
+    {
+        wxXmlNode *n = m_node->GetChildren();
+        while (n)
+        {
+            if (n->GetType() == wxXML_ELEMENT_NODE && n->GetName() == parambitmap)
+            {
+                // add icon instead of bitmap to keep the bitmap mask
+                imagelist->Add(GetIcon(n));
+            }
+            n = n->GetNext();
+        }
+    }
+
+    m_node = oldnode;
+    return imagelist;
+}
+
 wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
 {
     wxCHECK_MSG(m_node, NULL, wxT("You can't access handler data before it was initialized!"));
@@ -1464,9 +1520,9 @@ bool wxXmlResourceHandler::IsOfClass(wxXmlNode *node, const wxString& classname)
 
 
 
-wxString wxXmlResourceHandler::GetNodeContent(wxXmlNode *node)
+wxString wxXmlResourceHandler::GetNodeContent(const wxXmlNode *node)
 {
-    wxXmlNode *n = node;
+    const wxXmlNode *n = node;
     if (n == NULL) return wxEmptyString;
     n = n->GetChildren();
 
@@ -1490,6 +1546,10 @@ wxString wxXmlResourceHandler::GetParamValue(const wxString& param)
         return GetNodeContent(GetParamNode(param));
 }
 
+wxString wxXmlResourceHandler::GetParamValue(const wxXmlNode* node)
+{
+    return GetNodeContent(node);
+}
 
 
 wxSize wxXmlResourceHandler::GetSize(const wxString& param,

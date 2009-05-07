@@ -333,6 +333,7 @@ All:
 
 All (GUI):
 
+- Support loading wxListCtrl items and image lists from XRC (Kinaou Hervé).
 - wxGrid: add possibility to prevent resizing of individual rows/columns.
 - wxHTML: add support for table borders width (Laurent Humbertclaude).
 - Added wxMouseEventsManager.

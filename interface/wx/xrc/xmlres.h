@@ -492,6 +492,14 @@ protected:
     wxBitmap GetBitmap(const wxString& param = "bitmap",
                        const wxArtClient& defaultArtClient = wxART_OTHER,
                        wxSize size = wxDefaultSize);
+    /**
+        Gets a bitmap from an XmlNode.
+
+        @since 2.9.1
+    */
+    wxBitmap GetBitmap(const wxXmlNode* node,
+                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       wxSize size = wxDefaultSize);
 
     /**
         Gets a bool flag (1, t, yes, on, true are @true, everything else is @false).
@@ -533,6 +541,15 @@ protected:
                    wxSize size = wxDefaultSize);
 
     /**
+        Gets an icon from an XmlNode.
+
+        @since 2.9.1
+    */
+    wxIcon GetIcon(const wxXmlNode* node,
+                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   wxSize size = wxDefaultSize);
+
+    /**
         Returns an icon bundle.
 
         @note
@@ -544,6 +561,16 @@ protected:
      */
     wxIconBundle GetIconBundle(const wxString& param,
                                const wxArtClient& defaultArtClient = wxART_OTHER);
+
+    /**
+        Creates an image list from the @a param markup data.
+
+        @return
+            The new instance of wxImageList or @NULL if no data is found.
+
+        @since 2.9.1
+    */
+    wxImageList *GetImageList(const wxString& param = wxT("imagelist"));
 
     /**
         Gets the integer value from the parameter.
@@ -569,6 +596,13 @@ protected:
         Finds the parameter value or returns the empty string.
     */
     wxString GetParamValue(const wxString& param);
+
+    /**
+        Returns the node parameter value.
+
+        @since 2.9.1
+    */
+    wxString GetParamValue(const wxXmlNode* node);
 
     /**
         Gets the position (may be in dialog units).
