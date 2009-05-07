@@ -1998,13 +1998,14 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     m_btnModeless = new wxButton(this, wxID_ANY, _T("Mode&less dialog"));
     m_btnDelete = new wxButton(this, wxID_ANY, _T("&Delete button"));
 
-    wxButton *btnOk = new wxButton(this, wxID_CANCEL, _T("&Close"));
     sizerTop->Add(m_btnModal, 0, wxALIGN_CENTER | wxALL, 5);
     sizerTop->Add(m_btnModeless, 0, wxALIGN_CENTER | wxALL, 5);
     sizerTop->Add(m_btnDelete, 0, wxALIGN_CENTER | wxALL, 5);
-    sizerTop->Add(btnOk, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerTop->Add(new wxButton(this, wxID_CLOSE), 0, wxALIGN_CENTER | wxALL, 5);
 
     SetSizerAndFit(sizerTop);
+
+    SetEscapeId(wxID_CLOSE);
 
     m_btnModal->SetFocus();
     m_btnModal->SetDefault();
