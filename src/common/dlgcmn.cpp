@@ -450,6 +450,12 @@ void wxDialogBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     // destroy the dialog. The default OnCancel (above) simply ends a modal
     // dialog, and hides a modeless dialog.
 
+    int idCancel = GetEscapeId();
+    if ( idCancel == wxID_NONE )
+        return;
+    if ( idCancel == wxID_ANY )
+        idCancel = wxID_CANCEL;
+
     // VZ: this is horrible and MT-unsafe. Can't we reuse some of these global
     //     lists here? don't dare to change it now, but should be done later!
     static wxList closing;
@@ -459,7 +465,7 @@ void wxDialogBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
     closing.Append(this);
 
-    wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+    wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, idCancel);
     cancelEvent.SetEventObject( this );
     GetEventHandler()->ProcessEvent(cancelEvent); // This may close the dialog
 
