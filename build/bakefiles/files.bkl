@@ -2175,6 +2175,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/checkbox_osx.cpp
     src/osx/checklst_osx.cpp
     src/osx/choice_osx.cpp
+    src/osx/dataview_osx.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
     src/osx/gauge_osx.cpp
@@ -2208,6 +2209,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
+    src/osx/core/dataview.cpp
     src/osx/core/dcmemory.cpp
     src/osx/core/display.cpp
     src/osx/core/fontenum.cpp
@@ -2941,6 +2943,7 @@ src/osx/iphone/window.mm
     src/generic/animateg.cpp
     src/osx/carbon/sound.cpp
     src/osx/cocoa/aboutdlg.mm
+    src/osx/cocoa/dataview.mm
     src/osx/cocoa/taskbar.mm
     src/osx/core/hidjoystick.cpp
 </set>
@@ -2952,6 +2955,7 @@ src/osx/iphone/window.mm
     wx/osx/sound.h
     wx/osx/taskbarosx.h
     wx/osx/core/joystick.h
+    wx/osx/cocoa/dataview.h
 </set>
 
 <set var="ADVANCED_COCOA_SRC" hints="files">
