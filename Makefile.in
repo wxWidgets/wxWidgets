@@ -3297,7 +3297,8 @@ COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR =  \
 	wx/osx/joystick.h \
 	wx/osx/sound.h \
 	wx/osx/taskbarosx.h \
-	wx/osx/core/joystick.h
+	wx/osx/core/joystick.h \
+	wx/osx/cocoa/dataview.h
 @COND_TOOLKIT_OSX_COCOA@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_OSX_COCOA_ADVANCED_PLATFORM_HDR)
 @COND_TOOLKIT_PM@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_PM@	wx/generic/animate.h wx/os2/joystick.h wx/os2/sound.h
@@ -11789,6 +11790,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
 	monodll_checkbox_osx.o \
 	monodll_checklst_osx.o \
 	monodll_choice_osx.o \
+	monodll_dataview_osx.o \
 	monodll_dialog_osx.o \
 	monodll_osx_fontutil.o \
 	monodll_gauge_osx.o \
@@ -11820,6 +11822,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
 	monodll_window_osx.o \
 	monodll_core_bitmap.o \
 	monodll_core_colour.o \
+	monodll_core_dataview.o \
 	monodll_core_dcmemory.o \
 	monodll_core_display.o \
 	monodll_core_fontenum.o \
@@ -11889,6 +11892,7 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_animateg.o \
 	monodll_carbon_sound.o \
 	monodll_cocoa_aboutdlg.o \
+	monodll_cocoa_dataview.o \
 	monodll_osx_cocoa_taskbar.o \
 	monodll_hidjoystick.o
 @COND_TOOLKIT_OSX_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS)
@@ -11963,6 +11967,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17 =  \
 	monolib_checkbox_osx.o \
 	monolib_checklst_osx.o \
 	monolib_choice_osx.o \
+	monolib_dataview_osx.o \
 	monolib_dialog_osx.o \
 	monolib_osx_fontutil.o \
 	monolib_gauge_osx.o \
@@ -11994,6 +11999,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17 =  \
 	monolib_window_osx.o \
 	monolib_core_bitmap.o \
 	monolib_core_colour.o \
+	monolib_core_dataview.o \
 	monolib_core_dcmemory.o \
 	monolib_core_display.o \
 	monolib_core_fontenum.o \
@@ -12063,6 +12069,7 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_animateg.o \
 	monolib_carbon_sound.o \
 	monolib_cocoa_aboutdlg.o \
+	monolib_cocoa_dataview.o \
 	monolib_osx_cocoa_taskbar.o \
 	monolib_hidjoystick.o
 @COND_TOOLKIT_OSX_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_0)
@@ -12137,6 +12144,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1 =  \
 	coredll_checkbox_osx.o \
 	coredll_checklst_osx.o \
 	coredll_choice_osx.o \
+	coredll_dataview_osx.o \
 	coredll_dialog_osx.o \
 	coredll_osx_fontutil.o \
 	coredll_gauge_osx.o \
@@ -12168,6 +12176,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1 =  \
 	coredll_window_osx.o \
 	coredll_core_bitmap.o \
 	coredll_core_colour.o \
+	coredll_dataview.o \
 	coredll_core_dcmemory.o \
 	coredll_core_display.o \
 	coredll_core_fontenum.o \
@@ -12231,6 +12240,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
 	corelib_checkbox_osx.o \
 	corelib_checklst_osx.o \
 	corelib_choice_osx.o \
+	corelib_dataview_osx.o \
 	corelib_dialog_osx.o \
 	corelib_osx_fontutil.o \
 	corelib_gauge_osx.o \
@@ -12262,6 +12272,7 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
 	corelib_window_osx.o \
 	corelib_core_bitmap.o \
 	corelib_core_colour.o \
+	corelib_dataview.o \
 	corelib_core_dcmemory.o \
 	corelib_core_display.o \
 	corelib_core_fontenum.o \
@@ -12331,6 +12342,7 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_animateg.o \
 	advdll_carbon_sound.o \
 	advdll_cocoa_aboutdlg.o \
+	advdll_cocoa_dataview.o \
 	advdll_osx_cocoa_taskbar.o \
 	advdll_hidjoystick.o
 @COND_TOOLKIT_OSX_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_8)
@@ -12411,6 +12423,7 @@ COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_animateg.o \
 	advlib_carbon_sound.o \
 	advlib_cocoa_aboutdlg.o \
+	advlib_cocoa_dataview.o \
 	advlib_osx_cocoa_taskbar.o \
 	advlib_hidjoystick.o
 @COND_TOOLKIT_OSX_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_OSX_COCOA___ADVANCED_PLATFORM_SRC_OBJECTS_9)
@@ -16735,6 +16748,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_choice_osx.o: $(srcdir)/src/osx/choice_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/choice_osx.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_dataview_osx.o: $(srcdir)/src/osx/dataview_osx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/dataview_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_dataview_osx.o: $(srcdir)/src/osx/dataview_osx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/dataview_osx.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_dialog_osx.o: $(srcdir)/src/osx/dialog_osx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/dialog_osx.cpp
 
@@ -16920,6 +16939,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_core_colour.o: $(srcdir)/src/osx/core/colour.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/colour.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_core_dataview.o: $(srcdir)/src/osx/core/dataview.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/dataview.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_core_dataview.o: $(srcdir)/src/osx/core/dataview.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/dataview.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monodll_core_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
@@ -18573,6 +18598,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_cocoa_aboutdlg.o: $(srcdir)/src/osx/cocoa/aboutdlg.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/aboutdlg.mm
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_cocoa_dataview.o: $(srcdir)/src/osx/cocoa/dataview.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dataview.mm
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_cocoa_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
@@ -21445,6 +21473,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_choice_osx.o: $(srcdir)/src/osx/choice_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/choice_osx.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_dataview_osx.o: $(srcdir)/src/osx/dataview_osx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/dataview_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_dataview_osx.o: $(srcdir)/src/osx/dataview_osx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/dataview_osx.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_dialog_osx.o: $(srcdir)/src/osx/dialog_osx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/dialog_osx.cpp
 
@@ -21630,6 +21664,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_core_colour.o: $(srcdir)/src/osx/core/colour.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/colour.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_core_dataview.o: $(srcdir)/src/osx/core/dataview.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/dataview.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_core_dataview.o: $(srcdir)/src/osx/core/dataview.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/dataview.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@monolib_core_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
@@ -23283,6 +23323,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_cocoa_aboutdlg.o: $(srcdir)/src/osx/cocoa/aboutdlg.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/aboutdlg.mm
+
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_cocoa_dataview.o: $(srcdir)/src/osx/cocoa/dataview.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dataview.mm
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_cocoa_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
@@ -26347,6 +26390,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_choice_osx.o: $(srcdir)/src/osx/choice_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/choice_osx.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_dataview_osx.o: $(srcdir)/src/osx/dataview_osx.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/dataview_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_dataview_osx.o: $(srcdir)/src/osx/dataview_osx.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/dataview_osx.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_dialog_osx.o: $(srcdir)/src/osx/dialog_osx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/dialog_osx.cpp
 
@@ -26532,6 +26581,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_core_colour.o: $(srcdir)/src/osx/core/colour.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/colour.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_dataview.o: $(srcdir)/src/osx/core/dataview.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/dataview.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_dataview.o: $(srcdir)/src/osx/core/dataview.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/dataview.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@coredll_core_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
@@ -29875,6 +29930,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_choice_osx.o: $(srcdir)/src/osx/choice_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/choice_osx.cpp
 
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_dataview_osx.o: $(srcdir)/src/osx/dataview_osx.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/dataview_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_dataview_osx.o: $(srcdir)/src/osx/dataview_osx.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/dataview_osx.cpp
+
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_dialog_osx.o: $(srcdir)/src/osx/dialog_osx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/dialog_osx.cpp
 
@@ -30060,6 +30121,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_core_colour.o: $(srcdir)/src/osx/core/colour.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/colour.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_dataview.o: $(srcdir)/src/osx/core/dataview.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/dataview.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_dataview.o: $(srcdir)/src/osx/core/dataview.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/dataview.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@corelib_core_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_CARBON_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
@@ -31738,6 +31805,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA@advdll_cocoa_aboutdlg.o: $(srcdir)/src/osx/cocoa/aboutdlg.mm $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/aboutdlg.mm
 
+@COND_TOOLKIT_OSX_COCOA@advdll_cocoa_dataview.o: $(srcdir)/src/osx/cocoa/dataview.mm $(ADVDLL_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dataview.mm
+
 @COND_TOOLKIT_OSX_COCOA@advdll_osx_cocoa_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(ADVDLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
 
@@ -32046,6 +32116,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_OSX_COCOA@advlib_cocoa_aboutdlg.o: $(srcdir)/src/osx/cocoa/aboutdlg.mm $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/aboutdlg.mm
+
+@COND_TOOLKIT_OSX_COCOA@advlib_cocoa_dataview.o: $(srcdir)/src/osx/cocoa/dataview.mm $(ADVLIB_ODEP)
+@COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/dataview.mm
 
 @COND_TOOLKIT_OSX_COCOA@advlib_osx_cocoa_taskbar.o: $(srcdir)/src/osx/cocoa/taskbar.mm $(ADVLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA@	$(CXXC) -c -o $@ $(ADVLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/taskbar.mm
@@ -33041,14 +33114,14 @@ sound_sdl_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp
 	$(CXXC) -c -o $@ $(SOUND_SDL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
 
-@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
-@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
-@COND_USE_STC_1@	cd $(srcdir)/src/stc && ./gen_iface.py
-@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
-@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
+@COND_PYTHON@@COND_USE_STC_1@	cd $(srcdir)/src/stc && ./gen_iface.py
+@COND_PYTHON@@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
+@COND_PYTHON@@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
 
 #
 # "make dist" target implementation:
