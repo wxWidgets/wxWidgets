@@ -6922,6 +6922,13 @@ if test "$wxUSE_STC" = "yes"; then
    AC_DEFINE(wxUSE_STC)
    USE_STC=1
    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS stc"
+
+   dnl python is used to update src/stc.h (see build/bakefiles/scintilla.bkl)
+   AC_PATH_PROG(PYTHON, python)
+   if test "x$PYTHON" = "x"; then
+     COND_PYTHON="#"
+   fi
+   AC_SUBST(COND_PYTHON)
 fi
 
 if test "$wxUSE_MENUS" = "yes"; then
