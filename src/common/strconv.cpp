@@ -3146,31 +3146,12 @@ wxMBConv *wxCSConv::DoCreate() const
 
         delete conv;
     }
+
+    wxLogTrace(TRACE_STRCONV,
+               wxT("encoding \"%s\" is not supported by this system"),
+               (m_name ? m_name
+                       : wxFontMapperBase::GetEncodingName(m_encoding)));
 #endif // wxUSE_FONTMAP
-
-    // NB: This is a hack to prevent deadlock. What could otherwise happen
-    //     in Unicode build: wxConvLocal creation ends up being here
-    //     because of some failure and logs the error. But wxLog will try to
-    //     attach a timestamp, for which it will need wxConvLocal (to convert
-    //     time to char* and then wchar_t*), but that fails, tries to log the
-    //     error, but wxLog has an (already locked) critical section that
-    //     guards the static buffer.
-    static bool alreadyLoggingError = false;
-    if (!alreadyLoggingError)
-    {
-        alreadyLoggingError = true;
-        wxLogError(_("Cannot convert from the charset '%s'!"),
-                   m_name ? m_name
-                      :
-#if wxUSE_FONTMAP
-                         (const char*)wxFontMapperBase::GetEncodingDescription(m_encoding).ToAscii()
-#else // !wxUSE_FONTMAP
-                         (const char*)wxString::Format(_("encoding %i"), m_encoding).ToAscii()
-#endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
-              );
-
-        alreadyLoggingError = false;
-    }
 
     return NULL;
 }
