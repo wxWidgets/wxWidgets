@@ -3149,7 +3149,7 @@ wxMBConv *wxCSConv::DoCreate() const
 
     wxLogTrace(TRACE_STRCONV,
                wxT("encoding \"%s\" is not supported by this system"),
-               (m_name ? m_name
+               (m_name ? wxString(m_name)
                        : wxFontMapperBase::GetEncodingName(m_encoding)));
 #endif // wxUSE_FONTMAP
 
