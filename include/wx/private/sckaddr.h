@@ -178,13 +178,13 @@ public:
             case FAMILY_INET6:
                 CreateINET6();
                 break;
-#endif
+#endif // wxUSE_IPV6
 
 #ifdef wxHAS_UNIX_DOMAIN_SOCKETS
             case FAMILY_UNIX:
-#endif
                 CreateUnix();
                 break;
+#endif // wxHAS_UNIX_DOMAIN_SOCKETS
 
             default:
                 wxFAIL_MSG( "unsupported socket address family" );
