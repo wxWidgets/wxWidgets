@@ -236,11 +236,7 @@ int wxDialog::ShowModal()
     if ( !m_endModalCalled )
     {
         // modal dialog needs a parent window, so try to find one
-        wxWindow *parent = GetParent();
-        if ( !parent )
-        {
-            parent = FindSuitableParent();
-        }
+        wxWindow * const parent = GetParentForModalDialog();
 
         // remember where the focus was
         wxWindow *oldFocus = m_pOldFocus;
