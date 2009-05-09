@@ -227,7 +227,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   m_menuSocket->Append(CLIENT_CLOSE, _("&Close session\tCtrl-Q"), _("Close connection"));
 
   m_menuDatagramSocket = new wxMenu();
-  m_menuDatagramSocket->Append(CLIENT_DGRAM, _("Send Datagram"), _("Test UDP sockets"));
+  m_menuDatagramSocket->Append(CLIENT_DGRAM, _("&Datagram test\tCtrl-D"), _("Test UDP sockets"));
 
 #if wxUSE_URL
   m_menuProtocols = new wxMenu();
@@ -238,8 +238,8 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   // Append menus to the menubar
   m_menuBar = new wxMenuBar();
   m_menuBar->Append(m_menuFile, _("&File"));
-  m_menuBar->Append(m_menuSocket, _("&SocketClient"));
-  m_menuBar->Append(m_menuDatagramSocket, _("&DatagramSocket"));
+  m_menuBar->Append(m_menuSocket, _("&TCP"));
+  m_menuBar->Append(m_menuDatagramSocket, _("&UDP"));
 #if wxUSE_URL
   m_menuBar->Append(m_menuProtocols, _("&Protocols"));
 #endif
@@ -328,6 +328,8 @@ void MyFrame::OpenConnection(wxSockAddress::Family family)
     _("Enter the address of the wxSocket demo server:"),
     _("Connect ..."),
     _("localhost"));
+  if ( hostname.empty() )
+    return;
 
   addr->Hostname(hostname);
   addr->Service(3000);
@@ -578,9 +580,52 @@ void MyFrame::OnCloseConnection(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDatagram(wxCommandEvent& WXUNUSED(event))
 {
-  m_text->AppendText(_("\n=== Datagram test begins ===\n"));
-  m_text->AppendText(_("Sorry, not implemented\n"));
-  m_text->AppendText(_("=== Datagram test ends ===\n"));
+    wxString hostname = wxGetTextFromUser
+                        (
+                         "Enter the address of the wxSocket demo server:",
+                         "UDP peer",
+                         "localhost"
+                        );
+    if ( hostname.empty() )
+        return;
+
+    TestLogger logtest("UDP");
+
+    wxIPV4address addrLocal;
+    addrLocal.Hostname();
+    wxDatagramSocket sock(addrLocal);
+    if ( !sock.IsOk() )
+    {
+        wxLogMessage("ERROR: failed to create UDP socket");
+        return;
+    }
+
+    wxLogMessage("Created UDP socket at %s:%u",
+                 addrLocal.IPAddress(), addrLocal.Service());
+
+    wxIPV4address addrPeer;
+    addrPeer.Hostname(hostname);
+    addrPeer.Service(3000);
+
+    wxLogMessage("Testing UDP with peer at %s:%u",
+                 addrPeer.IPAddress(), addrPeer.Service());
+
+    char buf[] = "Uryyb sebz pyvrag!";
+    if ( sock.SendTo(addrPeer, buf, sizeof(buf)).LastCount() != sizeof(buf) )
+    {
+        wxLogMessage("ERROR: failed to send data");
+        return;
+    }
+
+    if ( sock.RecvFrom(addrPeer, buf, sizeof(buf)).LastCount() != sizeof(buf) )
+    {
+        wxLogMessage("ERROR: failed to receive data");
+        return;
+    }
+
+    wxLogMessage("Received \"%s\" from %s:%u.",
+                 wxString::From8BitData(buf, sock.LastCount()),
+                 addrPeer.IPAddress(), addrPeer.Service());
 }
 
 #if wxUSE_URL
