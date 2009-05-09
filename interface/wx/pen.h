@@ -134,6 +134,7 @@ enum wxPenCap
     @li ::wxBLUE_PEN
     @li ::wxCYAN_PEN
     @li ::wxGREEN_PEN
+    @li ::wxYELLOW_PEN
     @li ::wxGREY_PEN
     @li ::wxLIGHT_GREY_PEN
     @li ::wxMEDIUM_GREY_PEN
@@ -388,6 +389,13 @@ wxPen* wxCYAN_PEN;
     (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
 */
 wxPen* wxGREEN_PEN;
+
+/**
+    Yellow pen.
+    Except for the color it has all standard attributes
+    (1-pixel width, @c wxPENSTYLE_SOLID and @c wxCAP_ROUND styles, etc...).
+*/
+wxPen* wxYELLOW_PEN;
 
 /**
     Black pen.

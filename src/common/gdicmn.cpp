@@ -545,6 +545,9 @@ const wxBrush* wxStockGDI::GetBrush(Item item)
         case BRUSH_GREEN:
             brush = new wxBrush(*GetColour(COLOUR_GREEN), wxBRUSHSTYLE_SOLID);
             break;
+        case BRUSH_YELLOW:
+            brush = new wxBrush(*GetColour(COLOUR_YELLOW), wxBRUSHSTYLE_SOLID);
+            break;
         case BRUSH_GREY:
             brush = new wxBrush(wxColour(wxT("GREY")), wxBRUSHSTYLE_SOLID);
             break;
@@ -589,6 +592,9 @@ const wxColour* wxStockGDI::GetColour(Item item)
             break;
         case COLOUR_GREEN:
             colour = new wxColour(0, 255, 0);
+            break;
+        case COLOUR_YELLOW:
+            colour = new wxColour(255, 255, 0);
             break;
         case COLOUR_LIGHTGREY:
             colour = new wxColour(wxT("LIGHT GREY"));
@@ -679,6 +685,9 @@ const wxPen* wxStockGDI::GetPen(Item item)
             break;
         case PEN_GREEN:
             pen = new wxPen(*GetColour(COLOUR_GREEN), 1, wxPENSTYLE_SOLID);
+            break;
+        case PEN_YELLOW:
+            pen = new wxPen(*GetColour(COLOUR_YELLOW), 1, wxPENSTYLE_SOLID);
             break;
         case PEN_GREY:
             pen = new wxPen(wxColour(wxT("GREY")), 1, wxPENSTYLE_SOLID);
