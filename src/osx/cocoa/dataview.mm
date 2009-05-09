@@ -1009,7 +1009,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
   customRendererObject->customRenderer->SetDC(NULL);
 }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+#if 0 //TODO FIXME: MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 -(NSUInteger) hitTestForEvent:(NSEvent*)event inRect:(NSRect)cellFrame ofView:(NSView*)controlView
 {
   NSPoint point = [controlView convertPoint:[event locationInWindow] fromView:nil];
