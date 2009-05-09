@@ -125,6 +125,8 @@ public:
     void Server_OnRequest(wxSocketEvent& event);
 
 private:
+    void HandleDisconnect(wxTCPConnection *connection);
+
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxTCPEventHandler);
 };
@@ -687,25 +689,33 @@ BEGIN_EVENT_TABLE(wxTCPEventHandler, wxEvtHandler)
     EVT_SOCKET(_SERVER_ONREQUEST_ID, wxTCPEventHandler::Server_OnRequest)
 END_EVENT_TABLE()
 
+void wxTCPEventHandler::HandleDisconnect(wxTCPConnection *connection)
+{
+    // connection was closed (either gracefully or not): destroy everything
+    connection->m_sock->Notify(false);
+    connection->m_sock->Close();
+
+    connection->SetConnected(false);
+    connection->OnDisconnect();
+}
+
 void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 {
     wxSocketBase *sock = event.GetSocket();
     if (!sock)
-        return ;
+        return;
 
     wxSocketNotify evt = event.GetSocketEvent();
-    wxTCPConnection *connection = (wxTCPConnection *)(sock->GetClientData());
+    wxTCPConnection * const
+        connection = static_cast<wxTCPConnection *>(sock->GetClientData());
 
     // This socket is being deleted; skip this event
     if (!connection)
         return;
 
-    // We lost the connection: destroy everything
-    if (evt == wxSOCKET_LOST)
+    if ( evt == wxSOCKET_LOST )
     {
-        sock->Notify(false);
-        sock->Close();
-        connection->OnDisconnect();
+        HandleDisconnect(connection);
         return;
     }
 
@@ -826,10 +836,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
             break;
 
         case IPC_DISCONNECT:
-            sock->Notify(false);
-            sock->Close();
-            connection->SetConnected(false);
-            connection->OnDisconnect();
+            HandleDisconnect(connection);
             break;
 
         case IPC_FAIL:
@@ -851,7 +858,7 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
 {
     wxSocketServer *server = (wxSocketServer *) event.GetSocket();
     if (!server)
-        return ;
+        return;
     wxTCPServer *ipcserv = (wxTCPServer *) server->GetClientData();
 
     // This socket is being deleted; skip this event
@@ -864,7 +871,7 @@ void wxTCPEventHandler::Server_OnRequest(wxSocketEvent &event)
     // Accept the connection, getting a new socket
     wxSocketBase *sock = server->Accept();
     if (!sock)
-        return ;
+        return;
     if (!sock->Ok())
     {
         sock->Destroy();
