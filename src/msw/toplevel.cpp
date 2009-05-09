@@ -374,8 +374,9 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     return CreateFrame(title, pos, size);
 #else // !__WXMICROWIN__
     // static cast is valid as we're only ever called for dialogs
-    wxWindow * const 
-        parent = static_cast<wxDialog *>(this)->GetParentForModalDialog();
+    wxWindow * const
+        parent = static_cast<wxDialog *>(this)->
+                    GetParentForModalDialog(GetParent());
 
     m_hWnd = (WXHWND)::CreateDialogIndirect
                        (

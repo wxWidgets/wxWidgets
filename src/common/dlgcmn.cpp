@@ -80,8 +80,10 @@ void wxDialogBase::Init()
 
 wxWindow *wxDialogBase::CheckIfCanBeUsedAsParent(wxWindow *parent) const
 {
-    extern WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
+    if ( !parent )
+        return NULL;
 
+    extern WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
     if ( wxPendingDelete.Member(parent) || parent->IsBeingDeleted() )
     {
         // this window is being deleted and we shouldn't create any children
@@ -120,17 +122,14 @@ wxWindow *wxDialogBase::GetParentForModalDialog(wxWindow *parent) const
     if ( HasFlag(wxDIALOG_NO_PARENT) )
         return NULL;
 
-    // by default, use the parent specified in the ctor
-    if ( !parent )
-        parent = GetParent();
-
     // first try the given parent
     if ( parent )
         parent = CheckIfCanBeUsedAsParent(wxGetTopLevelParent(parent));
 
     // then the currently active window
     if ( !parent )
-        parent = CheckIfCanBeUsedAsParent(wxGetActiveWindow());
+        parent = CheckIfCanBeUsedAsParent(
+                    wxGetTopLevelParent(wxGetActiveWindow()));
 
     // and finally the application main window
     if ( !parent )

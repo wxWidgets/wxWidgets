@@ -90,8 +90,11 @@ public:
     void SetEscapeId(int escapeId);
     int GetEscapeId() const { return m_escapeId; }
 
-    // Returns the parent to use for modal dialogs if the user did not specify it
-    // explicitly. If parent argument is NULL, use GetParent() by default.
+    // Find the parent to use for modal dialog: try to use the specified parent
+    // but fall back to the current active window or main application window as
+    // last resort if it is unsuitable.
+    //
+    // This function always returns a valid top level window or NULL.
     wxWindow *GetParentForModalDialog(wxWindow *parent = NULL) const;
 
 #if wxUSE_STATTEXT // && wxUSE_TEXTCTRL

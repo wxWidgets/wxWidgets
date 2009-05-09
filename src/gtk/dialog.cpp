@@ -111,7 +111,7 @@ int wxDialog::ShowModal()
     if ( win )
         win->GTKReleaseMouseAndNotify();
 
-    wxWindow * const parent = GetParentForModalDialog();
+    wxWindow * const parent = GetParentForModalDialog(GetParent());
     if ( parent )
     {
         gtk_window_set_transient_for( GTK_WINDOW(m_widget),
