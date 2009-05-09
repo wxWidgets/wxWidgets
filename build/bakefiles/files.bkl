@@ -2209,7 +2209,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
-    src/osx/core/dataview.cpp
     src/osx/core/dcmemory.cpp
     src/osx/core/display.cpp
     src/osx/core/fontenum.cpp
@@ -2920,7 +2919,6 @@ src/osx/iphone/window.mm
     src/osx/carbon/aboutdlg.cpp
     src/osx/carbon/drawer.cpp
     src/osx/carbon/dataview.cpp
-    src/osx/carbon/databrow.cpp
     src/osx/carbon/sound.cpp
     src/osx/carbon/taskbar.cpp
     src/osx/core/hidjoystick.cpp
