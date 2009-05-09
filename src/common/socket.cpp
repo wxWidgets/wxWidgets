@@ -364,6 +364,14 @@ void wxSocketImpl::PostCreation()
 
 wxSocketError wxSocketImpl::UpdateLocalAddress()
 {
+    if ( !m_local.IsOk() )
+    {
+        // ensure that we have a valid object using the correct family: correct
+        // being the same one as our peer uses as we have no other way to
+        // determine it
+        m_local.Create(m_peer.GetFamily());
+    }
+
     WX_SOCKLEN_T lenAddr = m_local.GetLen();
     if ( getsockname(m_fd, m_local.GetWritableAddr(), &lenAddr) != 0 )
     {
