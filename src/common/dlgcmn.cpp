@@ -78,32 +78,63 @@ void wxDialogBase::Init()
     SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
 }
 
-// helper of GetParentForModalDialog()
-static bool CanBeUsedAsParent(wxWindow *parent)
+wxWindow *wxDialogBase::CheckIfCanBeUsedAsParent(wxWindow *parent) const
 {
     extern WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
 
-    return !parent->HasExtraStyle(wxWS_EX_TRANSIENT) &&
-                parent->IsShownOnScreen() &&
-                    !wxPendingDelete.Member(parent) &&
-                        !parent->IsBeingDeleted();
+    if ( wxPendingDelete.Member(parent) || parent->IsBeingDeleted() )
+    {
+        // this window is being deleted and we shouldn't create any children
+        // under it
+        return NULL;
+    }
+
+    if ( parent->HasExtraStyle(wxWS_EX_TRANSIENT) )
+    {
+        // this window is not being deleted yet but it's going to disappear
+        // soon so still don't parent this window under it
+        return NULL;
+    }
+
+    if ( !parent->IsShownOnScreen() )
+    {
+        // using hidden parent won't work correctly neither
+        return NULL;
+    }
+
+    if ( parent == this )
+    {
+        // not sure if this can really happen but it doesn't hurt to guard
+        // against this clearly invalid situation
+        return NULL;
+    }
+
+    return parent;
 }
 
 wxWindow *wxDialogBase::GetParentForModalDialog(wxWindow *parent) const
 {
     // creating a parent-less modal dialog will result (under e.g. wxGTK2)
-    // in an unfocused dialog, so try to find a valid parent for it:
+    // in an unfocused dialog, so try to find a valid parent for it unless we
+    // were explicitly asked not to
+    if ( HasFlag(wxDIALOG_NO_PARENT) )
+        return NULL;
+
+    // by default, use the parent specified in the ctor
+    if ( !parent )
+        parent = GetParent();
+
+    // first try the given parent
     if ( parent )
-        parent = wxGetTopLevelParent(parent);
+        parent = CheckIfCanBeUsedAsParent(wxGetTopLevelParent(parent));
 
-    if ( !parent || !CanBeUsedAsParent(parent) )
-        parent = wxTheApp->GetTopWindow();
+    // then the currently active window
+    if ( !parent )
+        parent = CheckIfCanBeUsedAsParent(wxGetActiveWindow());
 
-    if ( parent && !CanBeUsedAsParent(parent) )
-    {
-        // can't use this one, it's going to disappear
-        parent = NULL;
-    }
+    // and finally the application main window
+    if ( !parent )
+        parent = CheckIfCanBeUsedAsParent(wxTheApp->GetTopWindow());
 
     return parent;
 }

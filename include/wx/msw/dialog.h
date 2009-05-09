@@ -108,12 +108,6 @@ public:
     WXLRESULT MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
-    // find the window to use as parent for this dialog if none has been
-    // specified explicitly by the user
-    //
-    // may return NULL
-    wxWindow *FindSuitableParent() const;
-
     // common part of all ctors
     void Init();
 

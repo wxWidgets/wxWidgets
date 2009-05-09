@@ -166,28 +166,6 @@ bool wxDialog::IsModalShowing() const
 
 #endif // WXWIN_COMPATIBILITY_2_6
 
-wxWindow *wxDialog::FindSuitableParent() const
-{
-    // first try to use the currently active window
-    HWND hwndFg = ::WinQueryActiveWindow(HWND_DESKTOP);
-    wxWindow *parent = hwndFg ? wxFindWinFromHandle((WXHWND)hwndFg)
-                              : NULL;
-    if ( !parent )
-    {
-        // next try the main app window
-        parent = wxTheApp->GetTopWindow();
-    }
-
-    // finally, check if the parent we found is really suitable
-    if ( !parent || parent == (wxWindow *)this || !parent->IsShown() )
-    {
-        // don't use this one
-        parent = NULL;
-    }
-
-    return parent;
-}
-
 bool wxDialog::Show( bool bShow )
 {
     if ( bShow == IsShown() )

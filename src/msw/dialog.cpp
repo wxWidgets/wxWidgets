@@ -208,28 +208,6 @@ wxDialog::~wxDialog()
 // showing the dialogs
 // ----------------------------------------------------------------------------
 
-wxWindow *wxDialog::FindSuitableParent() const
-{
-    // first try to use the currently active window
-    HWND hwndFg = ::GetForegroundWindow();
-    wxWindow *parent = hwndFg ? wxFindWinFromHandle((WXHWND)hwndFg)
-                              : NULL;
-    if ( !parent )
-    {
-        // next try the main app window
-        parent = wxTheApp->GetTopWindow();
-    }
-
-    // finally, check if the parent we found is really suitable
-    if ( !parent || parent == (wxWindow *)this || !parent->IsShown() )
-    {
-        // don't use this one
-        parent = NULL;
-    }
-
-    return parent;
-}
-
 bool wxDialog::Show(bool show)
 {
     if ( show == IsShown() )

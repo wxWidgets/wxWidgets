@@ -91,7 +91,7 @@ public:
     int GetEscapeId() const { return m_escapeId; }
 
     // Returns the parent to use for modal dialogs if the user did not specify it
-    // explicitly
+    // explicitly. If parent argument is NULL, use GetParent() by default.
     wxWindow *GetParentForModalDialog(wxWindow *parent = NULL) const;
 
 #if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
@@ -210,6 +210,10 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+    // helper of GetParentForModalDialog(): returns the passed in window if it
+    // can be used as our parent or NULL if it can't
+    wxWindow *CheckIfCanBeUsedAsParent(wxWindow *parent) const;
 
     // handle Esc key presses
     void OnCharHook(wxKeyEvent& event);

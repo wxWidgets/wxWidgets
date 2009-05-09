@@ -96,14 +96,6 @@ public:
 
 protected:
     //
-    // find the window to use as parent for this dialog if none has been
-    // specified explicitly by the user
-    //
-    // may return NULL
-    //
-    wxWindow *FindSuitableParent() const;
-
-    //
     // Common part of all ctors
     //
     void Init(void);
