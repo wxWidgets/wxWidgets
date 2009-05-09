@@ -31,6 +31,14 @@
 
 #include "wx/socket.h"
 
+// this example is currently written to use only IP or only IPv6 sockets, it
+// should be extended to allow using either in the future
+#if wxUSE_IPV6
+    typedef wxIPV6address IPaddress;
+#else
+    typedef wxIPV4address IPaddress;
+#endif
+
 // --------------------------------------------------------------------------
 // resources
 // --------------------------------------------------------------------------
@@ -190,12 +198,10 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
   // Create the address - defaults to localhost:0 initially
-#if wxUSE_IPV6
-  wxIPV6address addr;
-#else
-  wxIPV4address addr;
-#endif
+  IPaddress addr;
   addr.Service(3000);
+
+  wxLogMessage("Creating server at %s:%u", addr.IPAddress(), addr.Service());
 
   // Create the socket
   m_server = new wxSocketServer(addr);
@@ -206,10 +212,13 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
     wxLogMessage("Could not listen at the specified port !");
     return;
   }
+
+  IPaddress addrReal;
+  if ( !m_server->GetLocal(addrReal) )
+    wxLogMessage("ERROR: couldn't get the address we bound to");
   else
-  {
-    wxLogMessage("Server listening.");
-  }
+    wxLogMessage("Server listening at %s:%u",
+                 addrReal.IPAddress(), addrReal.Service());
 
   // Setup the event handler and subscribe to connection events
   m_server->SetEventHandler(*this, SERVER_ID);
@@ -335,7 +344,12 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
 
   if (sock)
   {
-    wxLogMessage("New client connection accepted");
+    IPaddress addr;
+    if ( !sock->GetPeer(addr) )
+      wxLogMessage("New connection from unknown client accepted.");
+    else
+      wxLogMessage("New client connection from %s:%u accepted",
+                   addr.IPAddress(), addr.Service());
   }
   else
   {
