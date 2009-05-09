@@ -725,6 +725,7 @@ WXDLLIMPEXP_BASE bool wxEndsWithPathSeparator(const wxString& filename);
 #if WXWIN_COMPATIBILITY_2_8
 // split the full path into path (including drive for DOS), name and extension
 // (understands both '/' and '\\')
+// Deprecated in favour of wxFileName::SplitPath
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxSplitPath(const wxString& fileName,
                                                 wxString *pstrPath,
                                                 wxString *pstrName,
