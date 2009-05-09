@@ -565,16 +565,7 @@ void wxConsoleEventLoop::WakeUp()
 
 void wxConsoleEventLoop::ProcessMessage(WXMSG *msg)
 {
-    if ( msg->message == WM_TIMER )
-    {
-        TIMERPROC proc = (TIMERPROC)msg->lParam;
-        if ( proc )
-            (*proc)(NULL, 0, msg->wParam, 0);
-    }
-    else
-    {
-        ::DispatchMessage(msg);
-    }
+    ::DispatchMessage(msg);
 }
 
 bool wxConsoleEventLoop::Dispatch()
