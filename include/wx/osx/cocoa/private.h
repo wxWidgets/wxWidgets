@@ -222,10 +222,10 @@ protected :
 
 #ifdef __OBJC__
 
-    extern NSRect wxToNSRect( NSView* parent, const wxRect& r );
-    extern wxRect wxFromNSRect( NSView* parent, const NSRect& rect );
-    extern NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );
-    extern wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p );
+    WXDLLIMPEXP_CORE NSRect wxToNSRect( NSView* parent, const wxRect& r );
+    WXDLLIMPEXP_CORE wxRect wxFromNSRect( NSView* parent, const NSRect& rect );
+    WXDLLIMPEXP_CORE NSPoint wxToNSPoint( NSView* parent, const wxPoint& p );
+    WXDLLIMPEXP_CORE wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p );
     
     NSRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
         bool adjustForOrigin = true );
