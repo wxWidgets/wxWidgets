@@ -2175,7 +2175,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/checkbox_osx.cpp
     src/osx/checklst_osx.cpp
     src/osx/choice_osx.cpp
-    src/osx/dataview_osx.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
     src/osx/gauge_osx.cpp
@@ -2918,6 +2917,7 @@ src/osx/iphone/window.mm
     src/generic/animateg.cpp
     src/osx/carbon/aboutdlg.cpp
     src/osx/carbon/drawer.cpp
+    src/osx/dataview_osx.cpp
     src/osx/carbon/dataview.cpp
     src/osx/carbon/sound.cpp
     src/osx/carbon/taskbar.cpp
@@ -2941,6 +2941,7 @@ src/osx/iphone/window.mm
     src/generic/animateg.cpp
     src/osx/carbon/sound.cpp
     src/osx/cocoa/aboutdlg.mm
+    src/osx/dataview_osx.cpp
     src/osx/cocoa/dataview.mm
     src/osx/cocoa/taskbar.mm
     src/osx/core/hidjoystick.cpp
