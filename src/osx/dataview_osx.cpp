@@ -676,10 +676,72 @@ void wxDataViewCtrl::OnSize(wxSizeEvent& event)
   event.Skip();
 }
 
+wxSize wxDataViewCtrl::DoGetBestSize() const
+{
+    wxSize best = wxControl::DoGetBestSize();
+    best.y = 80;
+    
+    return best;
+}
+
+void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
+{
+    event.Skip();
+    
+    if (GetModel() == NULL)
+        return;
+
+#if 0
+    // Doesn't compile anymore
+    wxMacDataViewDataBrowserListViewControlPointer MacDataViewListCtrlPtr(dynamic_cast<wxMacDataViewDataBrowserListViewControlPointer>(m_peer));
+
+    int NoOfChildren;
+    wxDataViewItemArray items;
+    NoOfChildren = GetModel()->GetChildren( wxDataViewItem(), items);
+    if (NoOfChildren == 0)
+       return;
+    wxDataViewItem firstChild = items[0];
+
+    UInt16 headerHeight = 0;
+    MacDataViewListCtrlPtr->GetHeaderButtonHeight(&headerHeight);
+  
+    
+    if (event.GetY() < headerHeight)
+    {
+       unsigned int col_count = GetColumnCount();
+       unsigned int col;
+       for (col = 0; col < col_count; col++)
+       {
+           wxDataViewColumn *column = GetColumn( col );
+           if (column->IsHidden())
+              continue;
+           
+           Rect itemrect;
+           ::GetDataBrowserItemPartBounds( MacDataViewListCtrlPtr->GetControlRef(), 
+              reinterpret_cast<DataBrowserItemID>(firstChild.GetID()), column->GetPropertyID(),
+              kDataBrowserPropertyEnclosingPart, &itemrect );
+           
+           if (abs( event.GetX() - itemrect.right) < 3)
+           {
+               if (column->GetFlags() & wxDATAVIEW_COL_RESIZABLE)
+                  SetCursor( wxCursor( wxCURSOR_SIZEWE ) );
+               else
+                  SetCursor( *wxSTANDARD_CURSOR );
+               return;
+           }
+       }
+       
+    }
+    
+    SetCursor( *wxSTANDARD_CURSOR );
+#endif
+}
+
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl,wxDataViewCtrlBase)
 
 BEGIN_EVENT_TABLE(wxDataViewCtrl,wxDataViewCtrlBase)
   EVT_SIZE(wxDataViewCtrl::OnSize)
+  EVT_MOTION(wxDataViewCtrl::OnMouse)
 END_EVENT_TABLE()
 
 #endif // (wxUSE_DATAVIEWCTRL != 0) && (!defined(wxUSE_GENERICDATAVIEWCTRL) || (wxUSE_GENERICDATAVIEWCTRL == 0))

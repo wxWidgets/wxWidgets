@@ -135,7 +135,8 @@ static bool InitializeColumnDescription(DataBrowserListViewColumnDesc& columnDes
   }
   if (columnPtr->IsSortable())
     columnDescription.propertyDesc.propertyFlags |= kDataBrowserListViewSortableColumn;
-  if (columnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE)
+  if ((columnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_EDITABLE) ||
+      (columnPtr->GetRenderer()->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE))
     columnDescription.propertyDesc.propertyFlags |= kDataBrowserPropertyIsEditable;
   if ((columnDescription.propertyDesc.propertyType == kDataBrowserCustomType) ||
       (columnDescription.propertyDesc.propertyType == kDataBrowserDateTimeType) ||
@@ -1637,8 +1638,14 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
 
   wxDC *dc = dataViewCustomRendererPtr->GetDC();
   
-  wxRect cellrect( static_cast<int>(rectangle->left),
-                   static_cast<int>(rectangle->top),
+  int active_border_fudge = 0;
+  if (dataViewCtrlPtr->HasFocus() && !dataViewCtrlPtr->HasFlag( wxBORDER_NONE ))
+     active_border_fudge = 1;
+  else
+     active_border_fudge = -2;
+  
+  wxRect cellrect( static_cast<int>(rectangle->left + active_border_fudge),
+                   static_cast<int>(rectangle->top + active_border_fudge),
                    static_cast<int>(1+rectangle->right-rectangle->left),
                    static_cast<int>(rectangle->bottom-rectangle->top) );
                    
@@ -1654,8 +1661,8 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
       Rect itemrect;
       GetDataBrowserItemPartBounds( this->m_controlRef, itemID, propertyID,
          kDataBrowserPropertyEnclosingPart, &itemrect );
-      rect.x = itemrect.left;
-      rect.width = itemrect.right-itemrect.left+1;
+      rect.x = itemrect.left-2;
+      rect.width = itemrect.right-itemrect.left+3;
       
       wxBrush selBrush( col );
       wxPen oldpen( dc->GetPen() );
@@ -2168,7 +2175,8 @@ void wxDataViewRenderer::SetMode(wxDataViewCellMode mode)
         DataBrowserPropertyFlags flags;
 
         verify_noerr(macDataViewListCtrlPtr->GetPropertyFlags(dataViewColumnPtr->GetNativeData()->GetPropertyID(),&flags));
-        if (mode == wxDATAVIEW_CELL_EDITABLE)
+        if ((mode == wxDATAVIEW_CELL_EDITABLE) ||
+            (mode == wxDATAVIEW_CELL_ACTIVATABLE))
           flags |= kDataBrowserPropertyIsEditable;
         else
           flags &= ~kDataBrowserPropertyIsEditable;
