@@ -580,8 +580,11 @@ protected:
   virtual void DoSetExpanderColumn();
   virtual void DoSetIndent();
 
+  virtual wxSize DoGetBestSize() const;
+
  // event handling
   void OnSize(wxSizeEvent &event);
+  void OnMouse(wxMouseEvent &event);
 
 private:
  // initializing of local variables:
