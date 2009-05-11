@@ -147,6 +147,7 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
 
 #if wxUSE_TOOLTIPS

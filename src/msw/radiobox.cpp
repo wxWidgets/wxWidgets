@@ -567,56 +567,33 @@ wxSize wxRadioBox::DoGetBestSize() const
     return best;
 }
 
-// Restored old code.
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    int currentX, currentY;
-    GetPosition(&currentX, &currentY);
-    int widthOld, heightOld;
-    GetSize(&widthOld, &heightOld);
+    if ( (width == wxDefaultCoord && (sizeFlags & wxSIZE_AUTO_WIDTH)) ||
+            (height == wxDefaultCoord && (sizeFlags & wxSIZE_AUTO_HEIGHT)) )
+    {
+        // Attempt to have a look coherent with other platforms: We compute the
+        // biggest toggle dim, then we align all items according this value.
+        const wxSize totSize = GetTotalButtonSize(GetMaxButtonSize());
 
-    int xx = x;
-    int yy = y;
+        // only change our width/height if asked for
+        if ( width == wxDefaultCoord && (sizeFlags & wxSIZE_AUTO_WIDTH) )
+            width = totSize.x;
 
-    if (x == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        xx = currentX;
-    if (y == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-        yy = currentY;
+        if ( height == wxDefaultCoord && (sizeFlags & wxSIZE_AUTO_HEIGHT) )
+            height = totSize.y;
+    }
 
-    int y_offset = yy;
-    int x_offset = xx;
+    wxStaticBox::DoSetSize(x, y, width, height);
+}
 
-    int cx1, cy1;
-    wxGetCharSize(m_hWnd, &cx1, &cy1, GetFont());
+void wxRadioBox::DoMoveWindow(int x, int y, int width, int height)
+{
+    wxStaticBox::DoMoveWindow(x, y, width, height);
 
-    // Attempt to have a look coherent with other platforms: We compute the
-    // biggest toggle dim, then we align all items according this value.
     wxSize maxSize = GetMaxButtonSize();
     int maxWidth = maxSize.x,
         maxHeight = maxSize.y;
-
-    wxSize totSize = GetTotalButtonSize(maxSize);
-    int totWidth = totSize.x,
-        totHeight = totSize.y;
-
-    // only change our width/height if asked for
-    if ( width == wxDefaultCoord )
-    {
-        if ( sizeFlags & wxSIZE_AUTO_WIDTH )
-            width = totWidth;
-        else
-            width = widthOld;
-    }
-
-    if ( height == wxDefaultCoord )
-    {
-        if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
-            height = totHeight;
-        else
-            height = heightOld;
-    }
-
-    DoMoveWindow(xx, yy, width, height);
 
     // Now position all the buttons: the current button will be put at
     // wxPoint(x_offset, y_offset) and the new row/column will start at
@@ -629,8 +606,11 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     // wxRA_SPECIFY_ROWS means that the buttons are arranged top to bottom and
     // GetMajorDim() is the number of rows.
 
-    x_offset += cx1;
-    y_offset += cy1;
+    int cx1, cy1;
+    wxGetCharSize(m_hWnd, &cx1, &cy1, GetFont());
+
+    int x_offset = x + cx1;
+    int y_offset = y + cy1;
 
     // Add extra space under the label, if it exists.
     if (!wxControl::GetLabel().empty())
