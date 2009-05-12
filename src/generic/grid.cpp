@@ -4204,7 +4204,7 @@ wxGrid::SendGridSizeEvent(wxEventType type,
 //  +1 if the event was processed (but not vetoed)
 //   0 if the event wasn't handled
 int
-wxGrid::SendEvent(wxEventType type,
+wxGrid::SendEvent(const wxEventType type,
                   int row, int col,
                   const wxMouseEvent& mouseEv)
 {
