@@ -224,6 +224,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 ____CORE_SRC_FILENAMES_OBJECTS =  &
+	$(OBJS)\monodll_activex.obj &
 	$(OBJS)\monodll_app.obj &
 	$(OBJS)\monodll_bitmap.obj &
 	$(OBJS)\monodll_brush.obj &
@@ -307,7 +308,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_nativewin.obj &
 	$(OBJS)\monodll_notebook.obj &
 	$(OBJS)\monodll_access.obj &
-	$(OBJS)\monodll_activex.obj &
 	$(OBJS)\monodll_ownerdrw.obj &
 	$(OBJS)\monodll_radiobox.obj &
 	$(OBJS)\monodll_radiobut.obj &
@@ -468,6 +468,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 ____CORE_SRC_FILENAMES_OBJECTS =  &
+	$(OBJS)\monodll_activex.obj &
 	$(OBJS)\monodll_app.obj &
 	$(OBJS)\monodll_bitmap.obj &
 	$(OBJS)\monodll_brush.obj &
@@ -918,6 +919,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 ____CORE_SRC_FILENAMES_1_OBJECTS =  &
+	$(OBJS)\monolib_activex.obj &
 	$(OBJS)\monolib_app.obj &
 	$(OBJS)\monolib_bitmap.obj &
 	$(OBJS)\monolib_brush.obj &
@@ -1001,7 +1003,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_nativewin.obj &
 	$(OBJS)\monolib_notebook.obj &
 	$(OBJS)\monolib_access.obj &
-	$(OBJS)\monolib_activex.obj &
 	$(OBJS)\monolib_ownerdrw.obj &
 	$(OBJS)\monolib_radiobox.obj &
 	$(OBJS)\monolib_radiobut.obj &
@@ -1162,6 +1163,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 ____CORE_SRC_FILENAMES_1_OBJECTS =  &
+	$(OBJS)\monolib_activex.obj &
 	$(OBJS)\monolib_app.obj &
 	$(OBJS)\monolib_bitmap.obj &
 	$(OBJS)\monolib_brush.obj &
@@ -1533,6 +1535,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 ____CORE_SRC_FILENAMES_2_OBJECTS =  &
+	$(OBJS)\coredll_activex.obj &
 	$(OBJS)\coredll_app.obj &
 	$(OBJS)\coredll_bitmap.obj &
 	$(OBJS)\coredll_brush.obj &
@@ -1616,7 +1619,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_nativewin.obj &
 	$(OBJS)\coredll_notebook.obj &
 	$(OBJS)\coredll_access.obj &
-	$(OBJS)\coredll_activex.obj &
 	$(OBJS)\coredll_ownerdrw.obj &
 	$(OBJS)\coredll_radiobox.obj &
 	$(OBJS)\coredll_radiobut.obj &
@@ -1777,6 +1779,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 ____CORE_SRC_FILENAMES_2_OBJECTS =  &
+	$(OBJS)\coredll_activex.obj &
 	$(OBJS)\coredll_app.obj &
 	$(OBJS)\coredll_bitmap.obj &
 	$(OBJS)\coredll_brush.obj &
@@ -2029,6 +2032,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 ____CORE_SRC_FILENAMES_3_OBJECTS =  &
+	$(OBJS)\corelib_activex.obj &
 	$(OBJS)\corelib_app.obj &
 	$(OBJS)\corelib_bitmap.obj &
 	$(OBJS)\corelib_brush.obj &
@@ -2112,7 +2116,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_nativewin.obj &
 	$(OBJS)\corelib_notebook.obj &
 	$(OBJS)\corelib_access.obj &
-	$(OBJS)\corelib_activex.obj &
 	$(OBJS)\corelib_ownerdrw.obj &
 	$(OBJS)\corelib_radiobox.obj &
 	$(OBJS)\corelib_radiobut.obj &
@@ -2273,6 +2276,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 ____CORE_SRC_FILENAMES_3_OBJECTS =  &
+	$(OBJS)\corelib_activex.obj &
 	$(OBJS)\corelib_app.obj &
 	$(OBJS)\corelib_bitmap.obj &
 	$(OBJS)\corelib_brush.obj &
@@ -6206,9 +6210,6 @@ $(OBJS)\monodll_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 $(OBJS)\monodll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
 $(OBJS)\monodll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -6652,6 +6653,11 @@ $(OBJS)\monodll_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
 
 $(OBJS)\monodll_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_app.obj :  .AUTODEPEND ..\..\src\msw\app.cpp
@@ -8547,9 +8553,6 @@ $(OBJS)\monolib_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 $(OBJS)\monolib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
 $(OBJS)\monolib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -8993,6 +8996,11 @@ $(OBJS)\monolib_xml.obj :  .AUTODEPEND ..\..\src\xml\xml.cpp
 
 $(OBJS)\monolib_xtixml.obj :  .AUTODEPEND ..\..\src\common\xtixml.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_app.obj :  .AUTODEPEND ..\..\src\msw\app.cpp
@@ -11278,9 +11286,6 @@ $(OBJS)\coredll_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 $(OBJS)\coredll_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
-$(OBJS)\coredll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-
 $(OBJS)\coredll_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
@@ -11361,6 +11366,11 @@ $(OBJS)\coredll_mono.obj :  .AUTODEPEND ..\..\src\univ\themes\mono.cpp
 
 $(OBJS)\coredll_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_app.obj :  .AUTODEPEND ..\..\src\msw\app.cpp
@@ -12769,9 +12779,6 @@ $(OBJS)\corelib_nativewin.obj :  .AUTODEPEND ..\..\src\msw\nativewin.cpp
 $(OBJS)\corelib_access.obj :  .AUTODEPEND ..\..\src\msw\ole\access.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
-$(OBJS)\corelib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-
 $(OBJS)\corelib_ownerdrw.obj :  .AUTODEPEND ..\..\src\msw\ownerdrw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -12852,6 +12859,11 @@ $(OBJS)\corelib_mono.obj :  .AUTODEPEND ..\..\src\univ\themes\mono.cpp
 
 $(OBJS)\corelib_win32.obj :  .AUTODEPEND ..\..\src\univ\themes\win32.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_activex.obj :  .AUTODEPEND ..\..\src\msw\ole\activex.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_app.obj :  .AUTODEPEND ..\..\src\msw\app.cpp

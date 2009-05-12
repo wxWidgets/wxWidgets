@@ -2412,6 +2412,7 @@ COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
 	wx/x11/region.h
 @COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = $(COND_TOOLKIT_MOTIF_LOWLEVEL_HDR)
 COND_TOOLKIT_MSW_LOWLEVEL_HDR =  \
+	wx/msw/ole/activex.h \
 	wx/msw/popupwin.h \
 	wx/msw/uxtheme.h \
 	wx/msw/uxthemep.h \
@@ -2422,8 +2423,13 @@ COND_TOOLKIT_MSW_LOWLEVEL_HDR =  \
 @COND_TOOLKIT_OSX_CARBON@LOWLEVEL_HDR = 
 @COND_TOOLKIT_OSX_COCOA@LOWLEVEL_HDR = 
 @COND_TOOLKIT_PM@LOWLEVEL_HDR = 
-@COND_TOOLKIT_WINCE@LOWLEVEL_HDR = wx/msw/popupwin.h \
-@COND_TOOLKIT_WINCE@	wx/msw/uxtheme.h wx/msw/uxthemep.h wx/msw/htmlhelp.h
+COND_TOOLKIT_WINCE_LOWLEVEL_HDR =  \
+	wx/msw/ole/activex.h \
+	wx/msw/popupwin.h \
+	wx/msw/uxtheme.h \
+	wx/msw/uxthemep.h \
+	wx/msw/htmlhelp.h
+@COND_TOOLKIT_WINCE@LOWLEVEL_HDR = $(COND_TOOLKIT_WINCE_LOWLEVEL_HDR)
 COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/imaglist.h \
@@ -2770,7 +2776,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/msvcrt.h \
 	wx/msw/notebook.h \
 	wx/msw/ole/access.h \
-	wx/msw/ole/activex.h \
 	wx/msw/ole/dataform.h \
 	wx/msw/ole/dataobj.h \
 	wx/msw/ole/dataobj2.h \
@@ -3178,7 +3183,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/msvcrt.h \
 	wx/msw/notebook.h \
 	wx/msw/ole/access.h \
-	wx/msw/ole/activex.h \
 	wx/msw/ole/dataform.h \
 	wx/msw/ole/dataobj.h \
 	wx/msw/ole/dataobj2.h \
@@ -4538,6 +4542,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_activex.o \
 	monodll_msw_app.o \
 	monodll_msw_bitmap.o \
 	monodll_msw_brush.o \
@@ -4593,6 +4598,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS = 
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_activex.o \
 	monodll_msw_app.o \
 	monodll_msw_bitmap.o \
 	monodll_msw_brush.o \
@@ -4974,7 +4980,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_nativewin.o \
 	monodll_msw_notebook.o \
 	monodll_access.o \
-	monodll_activex.o \
 	monodll_msw_ownerdrw.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
@@ -5185,7 +5190,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_msw_nativewin.o \
 	monodll_msw_notebook.o \
 	monodll_access.o \
-	monodll_activex.o \
 	monodll_msw_ownerdrw.o \
 	monodll_msw_radiobox.o \
 	monodll_msw_radiobut.o \
@@ -5377,6 +5381,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
+	monodll_activex.o \
 	monodll_msw_app.o \
 	monodll_msw_bitmap.o \
 	monodll_msw_brush.o \
@@ -5432,6 +5437,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_1 = 
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
+	monodll_activex.o \
 	monodll_msw_app.o \
 	monodll_msw_bitmap.o \
 	monodll_msw_brush.o \
@@ -6332,6 +6338,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
+	monolib_activex.o \
 	monolib_msw_app.o \
 	monolib_msw_bitmap.o \
 	monolib_msw_brush.o \
@@ -6387,6 +6394,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_17)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_2 = 
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
+	monolib_activex.o \
 	monolib_msw_app.o \
 	monolib_msw_bitmap.o \
 	monolib_msw_brush.o \
@@ -6768,7 +6776,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_nativewin.o \
 	monolib_msw_notebook.o \
 	monolib_access.o \
-	monolib_activex.o \
 	monolib_msw_ownerdrw.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
@@ -6979,7 +6986,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_nativewin.o \
 	monolib_msw_notebook.o \
 	monolib_access.o \
-	monolib_activex.o \
 	monolib_msw_ownerdrw.o \
 	monolib_msw_radiobox.o \
 	monolib_msw_radiobut.o \
@@ -7171,6 +7177,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
+	monolib_activex.o \
 	monolib_msw_app.o \
 	monolib_msw_bitmap.o \
 	monolib_msw_brush.o \
@@ -7226,6 +7233,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_17)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_3 = 
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
+	monolib_activex.o \
 	monolib_msw_app.o \
 	monolib_msw_bitmap.o \
 	monolib_msw_brush.o \
@@ -8273,6 +8281,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
+	coredll_activex.o \
 	coredll_msw_app.o \
 	coredll_msw_bitmap.o \
 	coredll_msw_brush.o \
@@ -8328,6 +8337,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_1)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_4 = 
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
+	coredll_activex.o \
 	coredll_msw_app.o \
 	coredll_msw_bitmap.o \
 	coredll_msw_brush.o \
@@ -8709,7 +8719,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_nativewin.o \
 	coredll_msw_notebook.o \
 	coredll_access.o \
-	coredll_activex.o \
 	coredll_msw_ownerdrw.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
@@ -8920,7 +8929,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_nativewin.o \
 	coredll_msw_notebook.o \
 	coredll_access.o \
-	coredll_activex.o \
 	coredll_msw_ownerdrw.o \
 	coredll_msw_radiobox.o \
 	coredll_msw_radiobut.o \
@@ -9112,6 +9120,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
+	coredll_activex.o \
 	coredll_msw_app.o \
 	coredll_msw_bitmap.o \
 	coredll_msw_brush.o \
@@ -9167,6 +9176,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_1)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_5 = 
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
+	coredll_activex.o \
 	coredll_msw_app.o \
 	coredll_msw_bitmap.o \
 	coredll_msw_brush.o \
@@ -9762,6 +9772,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
+	corelib_activex.o \
 	corelib_msw_app.o \
 	corelib_msw_bitmap.o \
 	corelib_msw_brush.o \
@@ -9817,6 +9828,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_4)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_6 = 
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
+	corelib_activex.o \
 	corelib_msw_app.o \
 	corelib_msw_bitmap.o \
 	corelib_msw_brush.o \
@@ -10198,7 +10210,6 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_nativewin.o \
 	corelib_msw_notebook.o \
 	corelib_access.o \
-	corelib_activex.o \
 	corelib_msw_ownerdrw.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
@@ -10409,7 +10420,6 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_nativewin.o \
 	corelib_msw_notebook.o \
 	corelib_access.o \
-	corelib_activex.o \
 	corelib_msw_ownerdrw.o \
 	corelib_msw_radiobox.o \
 	corelib_msw_radiobut.o \
@@ -10601,6 +10611,7 @@ COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
+	corelib_activex.o \
 	corelib_msw_app.o \
 	corelib_msw_bitmap.o \
 	corelib_msw_brush.o \
@@ -10656,6 +10667,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 @COND_TOOLKIT_OSX_COCOA@	$(__OSX_LOWLEVEL_SRC_OBJECTS_1_4)
 @COND_TOOLKIT_PM@__LOWLEVEL_SRC_OBJECTS_7 = 
 COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
+	corelib_activex.o \
 	corelib_msw_app.o \
 	corelib_msw_bitmap.o \
 	corelib_msw_brush.o \
@@ -16420,6 +16432,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_utilsx.o: $(srcdir)/src/x11/utilsx.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/utilsx.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_app.o: $(srcdir)/src/msw/app.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/app.cpp
 
@@ -17703,12 +17721,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_access.o: $(srcdir)/src/msw/ole/access.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monodll_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
@@ -21136,6 +21148,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_utilsx.o: $(srcdir)/src/x11/utilsx.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/utilsx.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_app.o: $(srcdir)/src/msw/app.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/app.cpp
 
@@ -22419,12 +22437,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_access.o: $(srcdir)/src/msw/ole/access.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@monolib_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
@@ -26044,6 +26056,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_utilsx.o: $(srcdir)/src/x11/utilsx.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/utilsx.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@coredll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_app.o: $(srcdir)/src/msw/app.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/app.cpp
 
@@ -27327,12 +27345,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_access.o: $(srcdir)/src/msw/ole/access.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@coredll_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
@@ -29572,6 +29584,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_utilsx.o: $(srcdir)/src/x11/utilsx.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/utilsx.cpp
 
+@COND_TOOLKIT_MSW_USE_GUI_1@corelib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
+@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_app.o: $(srcdir)/src/msw/app.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/app.cpp
 
@@ -30855,12 +30873,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_access.o: $(srcdir)/src/msw/ole/access.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/access.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_activex.o: $(srcdir)/src/msw/ole/activex.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/activex.cpp
 
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@corelib_msw_ownerdrw.o: $(srcdir)/src/msw/ownerdrw.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ownerdrw.cpp
@@ -33074,14 +33086,14 @@ sound_sdl_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp
 	$(CXXC) -c -o $@ $(SOUND_SDL_CXXFLAGS) $(srcdir)/src/unix/sound_sdl.cpp
 
 
-@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
-@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
-@COND_USE_STC_1@	cd $(srcdir)/src/stc && ./gen_iface.py
-@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
-@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
+@COND_PYTHON@@COND_USE_STC_1@	cd $(srcdir)/src/stc && ./gen_iface.py
+@COND_PYTHON@@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
+@COND_PYTHON@@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
 
 #
 # "make dist" target implementation:
