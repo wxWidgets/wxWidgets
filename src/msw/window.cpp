@@ -513,13 +513,15 @@ void wxWindowMSW::Init()
     m_lastKeydownProcessed = false;
 
     m_hWnd = 0;
-    m_hDWP = 0;
 
     m_xThumbSize = 0;
     m_yThumbSize = 0;
 
+#if wxUSE_DEFERRED_SIZING
+    m_hDWP = 0;
     m_pendingPosition = wxDefaultPosition;
     m_pendingSize = wxDefaultSize;
+#endif // wxUSE_DEFERRED_SIZING
 
 #ifdef __POCKETPC__
     m_contextMenuEnabled = false;
