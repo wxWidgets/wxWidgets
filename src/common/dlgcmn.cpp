@@ -104,7 +104,9 @@ wxWindow *wxDialogBase::CheckIfCanBeUsedAsParent(wxWindow *parent) const
         return NULL;
     }
 
-    if ( parent == this )
+    // FIXME-VC6: this compiler requires an explicit const cast or it fails
+    //            with error C2446
+    if ( const_cast<const wxWindow *>(parent) == this )
     {
         // not sure if this can really happen but it doesn't hurt to guard
         // against this clearly invalid situation
