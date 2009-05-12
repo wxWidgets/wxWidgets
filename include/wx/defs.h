@@ -303,8 +303,7 @@ typedef short int WXTYPE;
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
         /*  VC++ 6.0 and 5.0 have std::wstring (what about earlier versions?) */
         #define HAVE_STD_WSTRING
-    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
-          && wxCHECK_GCC_VERSION(3, 3)
+    #elif defined(__MINGW32__) && wxCHECK_GCC_VERSION(3, 3)
         /*  GCC 3.1 has std::wstring; 3.0 never was in MinGW, 2.95 hasn't it */
         #define HAVE_STD_WSTRING
     #endif
@@ -374,10 +373,11 @@ typedef short int WXTYPE;
 
 
 #ifndef HAVE_WOSTREAM
-    // Mingw <= 3.4 and any version (so far) when targetting PalmOS don't have
-    // std::wostream
+    // Mingw <= 3.4 and all versions of Cygwin as well as any gcc version (so
+    // far) targeting PalmOS don't have std::wostream
     #if defined(__PALMOS__) || \
-        (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0))
+        (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0)) || \
+        defined(__CYGWIN__)
         #define wxNO_WOSTREAM
     #endif
 
