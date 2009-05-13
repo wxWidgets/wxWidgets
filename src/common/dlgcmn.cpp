@@ -470,6 +470,8 @@ void wxDialogBase::OnButton(wxCommandEvent& event)
 
 wxDEFINE_EVENT( wxEVT_WINDOW_MODAL_DIALOG_CLOSED , wxWindowModalDialogEvent  );
 
+IMPLEMENT_DYNAMIC_CLASS(wxWindowModalDialogEvent, wxCommandEvent)
+
 bool wxDialogBase::ShowWindowModal ()
 {
     ShowModal();
