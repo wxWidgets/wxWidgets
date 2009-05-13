@@ -465,6 +465,40 @@ void wxDialogBase::OnButton(wxCommandEvent& event)
 }
 
 // ----------------------------------------------------------------------------
+// compatibility methods for supporting the modality API 
+// ----------------------------------------------------------------------------
+
+wxDEFINE_EVENT( wxEVT_WINDOW_MODAL_DIALOG_CLOSED , wxWindowModalDialogEvent  );
+
+bool wxDialogBase::ShowWindowModal ()
+{
+    ShowModal();
+    SendWindowModalDialogEvent ( wxEVT_WINDOW_MODAL_DIALOG_CLOSED  );
+    return true;
+}
+
+void wxDialogBase::SendWindowModalDialogEvent ( wxEventType type )
+{
+    wxCommandEvent event ( type, GetId());
+    event.SetEventObject(this);
+    
+    if ( !GetEventHandler()->ProcessEvent(event) )
+    {
+        // the event is not propagated upwards to the parent automatically
+        // because the dialog is a top level window, so do it manually as
+        // in 9 cases of 10 the message must be processed by the dialog
+        // owner and not the dialog itself
+        (void)GetParent()->GetEventHandler()->ProcessEvent(event);
+    }    
+}
+
+
+wxDialogModality wxDialogBase::GetModality() const
+{
+    return IsModal() ? wxDIALOG_MODALITY_APP_MODAL : wxDIALOG_MODALITY_NONE;
+}
+
+// ----------------------------------------------------------------------------
 // other event handlers
 // ----------------------------------------------------------------------------
 
