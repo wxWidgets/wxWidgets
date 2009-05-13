@@ -806,10 +806,9 @@ long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
     @param output
         The string array where the stdout of the executed process is saved.
     @param flags
-        Must include either wxEXEC_ASYNC or wxEXEC_SYNC and can also include
-        wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
+        May include wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
         wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
-        their combination, in wxEXEC_SYNC case.
+        their combination. wxEXEC_SYNC is always implicitly added to the flags.
 
     @see wxShell(), wxProcess, @ref page_samples_exec,
          wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
@@ -823,7 +822,8 @@ long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
     please see its documentation for general information.
 
     This version adds the possibility to additionally capture the messages from
-    standard error output in the @a errors array.
+    standard error output in the @a errors array. As with the above overload
+    capturing standard output only, execution is always synchronous.
 
     @param command
         The command to execute and any parameters to pass to it as a single
@@ -833,10 +833,9 @@ long wxExecute(const wxString& command, wxArrayString& output, int flags = 0);
     @param errors
         The string array where the stderr of the executed process is saved.
     @param flags
-        Must include either wxEXEC_ASYNC or wxEXEC_SYNC and can also include
-        wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
+        May include wxEXEC_NOHIDE, wxEXEC_MAKE_GROUP_LEADER (in either case) or
         wxEXEC_NODISABLE and wxEXEC_NOEVENTS or wxEXEC_BLOCK, which is equal to
-        their combination, in wxEXEC_SYNC case.
+        their combination. wxEXEC_SYNC is always implicitly added to the flags.
 
     @see wxShell(), wxProcess, @ref page_samples_exec,
          wxLaunchDefaultApplication(), wxLaunchDefaultBrowser()
