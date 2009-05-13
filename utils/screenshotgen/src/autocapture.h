@@ -10,8 +10,12 @@
 #define _AUTOCAPTURE_H_
 
 #include <vector>
-#include "wx/filename.h"
 
+#include "wx/gdicmn.h"
+
+class wxBitmap;
+class wxFlexGridSizer;
+class wxWindow;
 class wxNotebook;
 
 /**
@@ -210,11 +214,9 @@ public:
     */
     AutoCaptureMechanism(wxNotebook *notebook,
                          int flag = AJ_NormalAll,
-                         int margin = 5)
-        : m_notebook(notebook), m_flag(flag),
-          m_margin(margin), m_grid(NULL) {}
+                         int margin = 5);
 
-    ~AutoCaptureMechanism(){}
+    ~AutoCaptureMechanism() { }
 
     /**
         Register a control and perform specifid auto adjustments.
@@ -277,31 +279,34 @@ public:
     /**
         Take a screenshot for the given region.
 
-        @param rect is the given rectangular region.
-
-        @param delay is only useful for Mac, for fixing a delay bug. It seems that it didn't
-        fix the bug, so it might be removed soon.
+		@param bitmap
+			Bitmap to save the screenshot to.
+        @param rect
+			Given rectangular region.
+        @param delay
+			Only useful for Mac, for fixing a delay bug. It seems that it
+			didn't fix the bug, so it might be removed soon.
     */
-    static wxBitmap Capture(wxRect rect, int delay = 0);
+    static bool Capture(wxBitmap* bitmap, wxRect rect, int delay = 0);
 
     /**
         Take a screenshot for the given region.
 
-        @see Capture(wxRect rect, int delay)
+        @see Capture(wxBitmap*,wxRect,int)
     */
-    static wxBitmap Capture(int x, int y, int width, int height, int delay = 0);
+    static bool Capture(wxBitmap* bitmap, int x, int y, int width, int height, int delay = 0);
 
     /**
         Save the screenshot as the name of @a fileName in the default directory.
 
         @a fileName should be without ".png".
     */
-    static void Save(wxBitmap screenshot, wxString fileName);
+    static void Save(wxBitmap* screenshot, const wxString& fileName);
 
     /**
         Set the default directory where the screenshots will be generated.
     */
-    static void SetDefaultDirectory(wxString dir) { default_dir = dir; }
+    static void SetDefaultDirectory(const wxString& dir) { default_dir = dir; }
 
     /**
         Get the default directory where the screenshots will be generated.
@@ -344,7 +349,7 @@ private:
     /*
         Capture and auto adjust the control. Used by CaptureAll().
     */
-    wxBitmap Capture(Control & ctrl);
+    bool Capture(wxBitmap* bitmap, Control& ctrl);
 
     /*
         Get the correct rectangular region that the control occupies. Used by
@@ -384,7 +389,7 @@ private:
 
         The gap is 20 pixels by default. Currently it isn't configurable.
     */
-    static wxBitmap Union(wxBitmap pic1, wxBitmap pic2);
+    static bool Union(wxBitmap* top, wxBitmap* bottom, wxBitmap* result);
 
     /*
         Delay a few seconds without blocking GUI.
