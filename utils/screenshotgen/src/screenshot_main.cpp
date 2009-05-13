@@ -82,7 +82,7 @@ void ScreenshotFrame::OnCaptureFullScreen(wxCommandEvent& WXUNUSED(event))
     wxCoord screenWidth, screenHeight;
     dcScreen.GetSize(&screenWidth, &screenHeight);
 
-	wxBitmap fullscreen(0, 0);
+    wxBitmap fullscreen(1, 1);
     AutoCaptureMechanism::Capture(&fullscreen, 0, 0, screenWidth, screenHeight);
 
     AutoCaptureMechanism::Save(&fullscreen, _T("fullscreen"));

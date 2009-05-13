@@ -87,7 +87,7 @@ bool AutoCaptureMechanism::Capture(wxBitmap* bitmap, int x, int y,
     }
     while(!fullscreen.IsOk());
 
-    bitmap = fullscreen.GetSubBitmap(wxRect(x,y,width,height));
+    *bitmap = fullscreen.GetSubBitmap(wxRect(x, y, width, height));
 
     // to prevent loading the old screenshot next time
     system("rm /tmp/wx_screen_capture.png");
@@ -171,7 +171,7 @@ void AutoCaptureMechanism::CaptureAll()
         }
 
         // create the screenshot
-        wxBitmap screenshot(0, 0);
+        wxBitmap screenshot(1, 1);
         Capture(&screenshot, ctrl);
 
         if(ctrl.flag & AJ_Union)
@@ -181,9 +181,9 @@ void AutoCaptureMechanism::CaptureAll()
             {
                 ++it;
                 it->name = ctrl.name; //preserving the name
-                wxBitmap screenshot2(0, 0);
+                wxBitmap screenshot2(1, 1);
                 Capture(&screenshot2, *it);
-                wxBitmap combined(0, 0);
+                wxBitmap combined(1, 1);
                 Union(&screenshot, &screenshot2, &combined);
                 screenshot = combined;
             }

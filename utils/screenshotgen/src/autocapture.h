@@ -279,13 +279,13 @@ public:
     /**
         Take a screenshot for the given region.
 
-		@param bitmap
-			Bitmap to save the screenshot to.
+        @param bitmap
+            Bitmap to save the screenshot to.
         @param rect
-			Given rectangular region.
+            Given rectangular region.
         @param delay
-			Only useful for Mac, for fixing a delay bug. It seems that it
-			didn't fix the bug, so it might be removed soon.
+            Only useful for Mac, for fixing a delay bug. It seems that it
+            didn't fix the bug, so it might be removed soon.
     */
     static bool Capture(wxBitmap* bitmap, wxRect rect, int delay = 0);
 
