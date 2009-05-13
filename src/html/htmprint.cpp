@@ -227,7 +227,7 @@ wxHtmlPrintout::CheckFit(const wxSize& pageArea, const wxSize& docArea) const
             );
         dlg.SetYesNoLabels(_("&Print"), _("&Cancel"));
 
-        if ( dlg.ShowModal() != wxYES )
+        if ( dlg.ShowModal() != wxID_YES )
             return false;
     }
 
