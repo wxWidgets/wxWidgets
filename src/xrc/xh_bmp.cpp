@@ -32,9 +32,7 @@ wxBitmapXmlHandler::wxBitmapXmlHandler()
 
 wxObject *wxBitmapXmlHandler::DoCreateResource()
 {
-    // NB: empty parameter name means "take directly from this node's next
-    //     instead of from subnode with given name"
-    return new wxBitmap(GetBitmap(wxEmptyString));
+    return new wxBitmap(GetBitmap(m_node));
 }
 
 bool wxBitmapXmlHandler::CanHandle(wxXmlNode *node)

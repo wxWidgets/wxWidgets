@@ -1334,13 +1334,29 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
                                          const wxArtClient& defaultArtClient,
                                          wxSize size)
 {
-    return GetBitmap(GetParamNode(param), defaultArtClient, size);
+    // it used to be possible to pass an empty string here to indicate that the
+    // bitmap name should be read from this node itself but this is not
+    // supported any more because GetBitmap(m_node) can be used directly
+    // instead
+    wxASSERT_MSG( !param.empty(), "bitmap parameter name can't be empty" );
+
+    const wxXmlNode* const node = GetParamNode(param);
+
+    if ( !node )
+    {
+        // this is not an error as bitmap parameter could be optional
+        return wxNullBitmap;
+    }
+
+    return GetBitmap(node, defaultArtClient, size);
 }
 
 wxBitmap wxXmlResourceHandler::GetBitmap(const wxXmlNode* node,
                                          const wxArtClient& defaultArtClient,
                                          wxSize size)
 {
+    wxCHECK_MSG( node, wxNullBitmap, "bitmap node can't be NULL" );
+
     /* If the bitmap is specified as stock item, query wxArtProvider for it: */
     wxString art_id, art_client;
     if ( GetStockArtAttrs(node, defaultArtClient,
@@ -1389,7 +1405,18 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
                                      const wxArtClient& defaultArtClient,
                                      wxSize size)
 {
-    return GetIcon(GetParamNode(param), defaultArtClient, size);
+    // see comment in GetBitmap(wxString) overload
+    wxASSERT_MSG( !param.empty(), "icon parameter name can't be empty" );
+
+    const wxXmlNode* const node = GetParamNode(param);
+
+    if ( !node )
+    {
+        // this is not an error as icon parameter could be optional
+        return wxIcon();
+    }
+
+    return GetIcon(node, defaultArtClient, size);
 }
 
 wxIcon wxXmlResourceHandler::GetIcon(const wxXmlNode* node,
