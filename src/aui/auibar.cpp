@@ -728,9 +728,9 @@ void wxAuiDefaultToolBarArt::SetElementSize(int element_id, int size)
 {
     switch (element_id)
     {
-        case wxAUI_TBART_SEPARATOR_SIZE: m_separator_size = size;
-        case wxAUI_TBART_GRIPPER_SIZE:   m_gripper_size = size;
-        case wxAUI_TBART_OVERFLOW_SIZE:  m_overflow_size = size;
+        case wxAUI_TBART_SEPARATOR_SIZE: m_separator_size = size; break;
+        case wxAUI_TBART_GRIPPER_SIZE:   m_gripper_size = size; break;
+        case wxAUI_TBART_OVERFLOW_SIZE:  m_overflow_size = size; break;
     }
 }
 
