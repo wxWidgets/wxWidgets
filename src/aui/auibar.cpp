@@ -2453,6 +2453,7 @@ void wxAuiToolBar::OnLeftUp(wxMouseEvent& evt)
 
                 wxCommandEvent e(wxEVT_COMMAND_MENU_SELECTED, m_action_item->id);
                 e.SetEventObject(this);
+                e.SetInt (toggle);
                 GetEventHandler()->ProcessEvent(e);
                 DoIdleUpdate();
             }
