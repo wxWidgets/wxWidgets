@@ -303,6 +303,9 @@ wxMacListCtrlEventDelegate::wxMacListCtrlEventDelegate( wxListCtrl* list, int id
 
 bool wxMacListCtrlEventDelegate::ProcessEvent( wxEvent& event )
 {
+    int id = event.GetId();
+    wxObject* obj = event.GetEventObject();
+    
     // even though we use a generic list ctrl underneath, make sure
     // we present ourselves as wxListCtrl.
     event.SetEventObject( m_list );
@@ -311,9 +314,19 @@ bool wxMacListCtrlEventDelegate::ProcessEvent( wxEvent& event )
     if ( !event.IsKindOf( CLASSINFO( wxCommandEvent ) ) )
     {
         if (m_list->GetEventHandler()->ProcessEvent( event ))
+        {
+            event.SetId(id);
+            event.SetEventObject(obj);
             return true;
+        }
     }
-    return wxEvtHandler::ProcessEvent(event);
+    // Also try with the original id
+    bool success = wxEvtHandler::ProcessEvent(event);
+    event.SetId(id);
+    event.SetEventObject(obj);
+    if (!success && id != m_id)
+        success = wxEvtHandler::ProcessEvent(event);
+    return success;
 }
 
 //-----------------------------------------------------------------------------
