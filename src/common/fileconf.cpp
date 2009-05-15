@@ -746,6 +746,11 @@ void wxFileConfig::SetPath(const wxString& strPath)
     DoSetPath(strPath, true /* create missing path components */);
 }
 
+const wxString& wxFileConfig::GetPath() const
+{
+    return m_strPath;
+}
+
 // ----------------------------------------------------------------------------
 // enumeration
 // ----------------------------------------------------------------------------

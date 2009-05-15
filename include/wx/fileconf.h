@@ -153,7 +153,7 @@ public:
 
   // implement inherited pure virtual functions
   virtual void SetPath(const wxString& strPath);
-  virtual const wxString& GetPath() const { return m_strPath; }
+  virtual const wxString& GetPath() const;
 
   virtual bool GetFirstGroup(wxString& str, long& lIndex) const;
   virtual bool GetNextGroup (wxString& str, long& lIndex) const;
