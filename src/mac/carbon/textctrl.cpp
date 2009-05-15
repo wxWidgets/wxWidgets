@@ -2016,6 +2016,15 @@ wxTextPos wxMacMLTEControl::GetLastPosition() const
     wxTextPos actualsize = 0 ;
 
     Handle theText ;
+#if wxUSE_UNICODE
+    OSErr err = TXNGetDataEncoded( m_txn, kTXNStartOffset, kTXNEndOffset, &theText, kTXNUnicodeTextData );
+    // all done
+    if ( err == noErr )
+    {
+        actualsize = GetHandleSize( theText )/sizeof(UniChar);
+        DisposeHandle( theText ) ;
+    }
+#else
     OSErr err = TXNGetDataEncoded( m_txn, kTXNStartOffset, kTXNEndOffset, &theText, kTXNTextData );
 
     // all done
@@ -2024,6 +2033,7 @@ wxTextPos wxMacMLTEControl::GetLastPosition() const
         actualsize = GetHandleSize( theText ) ;
         DisposeHandle( theText ) ;
     }
+#endif
     else
     {
         actualsize = 0 ;
