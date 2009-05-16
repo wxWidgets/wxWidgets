@@ -74,9 +74,9 @@ wxCursor::wxCursor(const wxString& cursor_file,
         return;
     
     // eventually set the hotspot:
-    if (!image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X))
+    if (!img.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X))
         img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX);
-    if (!image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y))
+    if (!img.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y))
         img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY);
     
     InitFromImage(img);
