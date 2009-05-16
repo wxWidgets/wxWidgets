@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/gtk/cursor.cpp
-// Purpose:
+// Purpose:     wxCursor implementation
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
@@ -23,7 +23,7 @@
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
-// wxCursor
+// wxCursorRefData
 //-----------------------------------------------------------------------------
 
 class wxCursorRefData: public wxGDIRefData
@@ -47,13 +47,75 @@ wxCursorRefData::~wxCursorRefData()
     if (m_cursor) gdk_cursor_unref( m_cursor );
 }
 
+
+//-----------------------------------------------------------------------------
+// wxCursor
 //-----------------------------------------------------------------------------
 
 #define M_CURSORDATA static_cast<wxCursorRefData*>(m_refData)
 
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject)
 
+// used in the following two ctors
+extern GtkWidget *wxGetRootWindow();
+
+
 wxCursor::wxCursor()
+{
+}
+
+#if wxUSE_IMAGE
+wxCursor::wxCursor(const wxString& cursor_file,
+                   wxBitmapType type,
+                   int hotSpotX, int hotSpotY)
+{
+    wxImage img;
+    if (!img.LoadFile(cursor_file, type))
+        return;
+    
+    // eventually set the hotspot:
+    if (!image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_X))
+        img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, hotSpotX);
+    if (!image.HasOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y))
+        img.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, hotSpotY);
+    
+    InitFromImage(img);
+}
+
+wxCursor::wxCursor(const wxImage& img)
+{
+    InitFromImage(img);
+}
+#endif
+
+wxCursor::wxCursor(const char bits[], int width, int height,
+                   int hotSpotX, int hotSpotY,
+                   const char maskBits[], const wxColour *fg, const wxColour *bg)
+{
+    if (!maskBits)
+        maskBits = bits;
+    if (!fg)
+        fg = wxBLACK;
+    if (!bg)
+        bg = wxWHITE;
+    if (hotSpotX < 0 || hotSpotX >= width)
+        hotSpotX = 0;
+    if (hotSpotY < 0 || hotSpotY >= height)
+        hotSpotY = 0;
+
+    GdkBitmap *data = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) bits, width, height );
+    GdkBitmap *mask = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) maskBits, width, height);
+
+    m_refData = new wxCursorRefData;
+    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(
+                 data, mask, fg->GetColor(), bg->GetColor(),
+                 hotSpotX, hotSpotY );
+
+    g_object_unref (data);
+    g_object_unref (mask);
+}
+
+wxCursor::~wxCursor()
 {
 }
 
@@ -123,75 +185,6 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
     M_CURSORDATA->m_cursor = gdk_cursor_new( gdk_cur );
 }
 
-
-// used in the following two ctors
-extern GtkWidget *wxGetRootWindow();
-
-wxCursor::wxCursor(const wxString& cursor_file,
-                   wxBitmapType type,
-                   int hotSpotX, int hotSpotY)
-{
-    /* TODO: test this code! */
-
-    // Must be an XBM file
-    if (type != wxBITMAP_TYPE_XPM) {
-        wxLogError("Invalid cursor bitmap type '%d'", type);
-        return;
-    }
-
-    // load the XPM
-    GdkBitmap *mask = NULL;
-    GdkBitmap *data = gdk_pixmap_create_from_xpm( wxGetRootWindow()->window,
-                                                  &mask, NULL, cursor_file.mb_str() );
-    if (!data)
-        return;
-
-    // check given hotspot
-    gint w, h;
-    gdk_drawable_get_size( data, &w, &h );
-    if (hotSpotX < 0 || hotSpotX >= w)
-        hotSpotX = 0;
-    if (hotSpotY < 0 || hotSpotY >= h)
-        hotSpotY = 0;
-
-    // create the real cursor
-    m_refData = new wxCursorRefData;
-    M_CURSORDATA->m_cursor =
-        gdk_cursor_new_from_pixmap( data, mask,
-                                    wxBLACK->GetColor(), wxWHITE->GetColor(),
-                                    hotSpotX, hotSpotY );
-
-    g_object_unref (data);
-    g_object_unref (mask);
-}
-
-wxCursor::wxCursor(const char bits[], int width, int height,
-                   int hotSpotX, int hotSpotY,
-                   const char maskBits[], const wxColour *fg, const wxColour *bg)
-{
-    if (!maskBits)
-        maskBits = bits;
-    if (!fg)
-        fg = wxBLACK;
-    if (!bg)
-        bg = wxWHITE;
-    if (hotSpotX < 0 || hotSpotX >= width)
-        hotSpotX = 0;
-    if (hotSpotY < 0 || hotSpotY >= height)
-        hotSpotY = 0;
-
-    GdkBitmap *data = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) bits, width, height );
-    GdkBitmap *mask = gdk_bitmap_create_from_data( wxGetRootWindow()->window, (gchar *) maskBits, width, height);
-
-    m_refData = new wxCursorRefData;
-    M_CURSORDATA->m_cursor = gdk_cursor_new_from_pixmap(
-                 data, mask, fg->GetColor(), bg->GetColor(),
-                 hotSpotX, hotSpotY );
-
-    g_object_unref (data);
-    g_object_unref (mask);
-}
-
 #if wxUSE_IMAGE
 
 static void GetHotSpot(const wxImage& image, int& x, int& y)
@@ -212,7 +205,7 @@ static void GetHotSpot(const wxImage& image, int& x, int& y)
         y = 0;
 }
 
-wxCursor::wxCursor( const wxImage & image )
+void wxCursor::InitFromImage( const wxImage & image )
 {
     int w = image.GetWidth() ;
     int h = image.GetHeight();
@@ -344,10 +337,6 @@ wxCursor::wxCursor( const wxImage & image )
 }
 
 #endif // wxUSE_IMAGE
-
-wxCursor::~wxCursor()
-{
-}
 
 GdkCursor *wxCursor::GetCursor() const
 {
