@@ -36,7 +36,12 @@ ifeq ($(strip $(PYVERS)),)
     PY_BUILD_DEPS = python$(PYVERS), python$(PYVERS)-dbg, python$(PYVERS)-dev
 else
     DEB_PYTHON_SYSTEM=pycentral
-    PY_BUILD_DEPS = python-all, python-all-dev, python-dbg, python-central
+    PY_BUILD_DEPS = python-all, python-all-dev, python-central
+
+    # Etch doesn't have python-all-dbg, so check if it should be added to the dependencies
+    ifeq (True, $(shell if dpkg-query -s python-all-dbg > /dev/null 2>&1; then echo True; fi))
+        PY_BUILD_DEPS := $(PY_BUILD_DEPS), python-all-dbg
+    endif
 endif
 
 
@@ -797,8 +802,7 @@ install-headers: install-gtk-shared-stamp
 	mkdir -p debian/$(package_headers)/usr/include/wx-$(release)/wx/wxPython/i_files
 	cp -p wxPython/include/wx/wxPython/*.h \
 	    debian/$(package_headers)/usr/include/wx-$(release)/wx/wxPython/
-    cp -p wxPython/include/wx/wxPython/src/*.i wxPython/include/wx/wxPython/src/_*.py \
-        wxPython/include/wx/wxPython/src/*.swg \
+	cp -p wxPython/src/*.i wxPython/src/_*.py wxPython/src/*.swg \
 	    debian/$(package_headers)/usr/include/wx-$(release)/wx/wxPython/i_files
 
 install-i18n: DH_OPTIONS=-p$(package_i18n)
