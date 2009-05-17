@@ -109,7 +109,15 @@ void FontTestCase::GetSet()
         CPPUNIT_ASSERT( !test.SetFaceName("a dummy face name") );
         CPPUNIT_ASSERT( !test.IsOk() );
 
-        CPPUNIT_ASSERT( test.SetFaceName("Arial") );
+        // if the call to SetFaceName() below fails on your system/port,
+        // consider adding another branch to this #if
+#if defined(__WXMSW__) || defined(__WXOSX__)
+        static const char *knownGoodFaceName = "Arial";
+#else
+        static const char *knownGoodFaceName = "Fixed";
+#endif
+
+        CPPUNIT_ASSERT( test.SetFaceName(knownGoodFaceName) );
         CPPUNIT_ASSERT( test.IsOk() );
 
 
