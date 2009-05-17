@@ -677,7 +677,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 {
     long l;
 
-    wxStringTokenizer tokenizer(s, wxS(";"));
+    wxStringTokenizer tokenizer(s, wxS(";"), wxTOKEN_RET_EMPTY_ALL);
 
     // first the version
     wxString token = tokenizer.GetNextToken();
@@ -749,10 +749,11 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         return false;
     lf.lfPitchAndFamily = (BYTE)l;
 
-    token = tokenizer.GetNextToken();
-    if(!token)
+    if ( !tokenizer.HasMoreTokens() )
         return false;
-    wxStrcpy(lf.lfFaceName, token.c_str());
+
+    // the face name may be empty
+    wxStrcpy(lf.lfFaceName, tokenizer.GetNextToken());
 
     return true;
 }
@@ -776,7 +777,7 @@ wxString wxNativeFontInfo::ToString() const
              lf.lfClipPrecision,
              lf.lfQuality,
              lf.lfPitchAndFamily,
-             (const wxChar*)lf.lfFaceName);
+             lf.lfFaceName);
 
     return s;
 }
