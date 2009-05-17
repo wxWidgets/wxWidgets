@@ -310,18 +310,18 @@ void EvtHandlerTestCase::BindFunctor()
     handler.Bind( MyEventType, functor, 0, 0 );
     handler.Unbind( MyEventType, functor, 0, 0 );
 
-    // Test that a temporary functor is working as well. Note that Unbind will
-    // fail because a functor can only be unbound if it is the same instance as
-    // in Bind!
-
+    // test that a temporary functor is working as well and also test that
+    // unbinding a different (though equal) instance of the same functor does
+    // not work
+    MyFunctor func;
     handler.Bind( MyEventType, MyFunctor() );
-    CPPUNIT_ASSERT( !handler.Unbind( MyEventType, MyFunctor() ));
+    CPPUNIT_ASSERT( !handler.Unbind( MyEventType, func ));
 
     handler.Bind( MyEventType, MyFunctor(), 0 );
-    CPPUNIT_ASSERT( !handler.Unbind( MyEventType, MyFunctor(), 0 ));
+    CPPUNIT_ASSERT( !handler.Unbind( MyEventType, func, 0 ));
 
     handler.Bind( MyEventType, MyFunctor(), 0, 0 );
-    CPPUNIT_ASSERT( !handler.Unbind( MyEventType, MyFunctor(), 0, 0 ));
+    CPPUNIT_ASSERT( !handler.Unbind( MyEventType, func, 0, 0 ));
 }
 
 void EvtHandlerTestCase::BindMethod()
