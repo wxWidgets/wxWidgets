@@ -206,7 +206,14 @@ void FontTestCase::NativeFontInfo()
     // test that clearly invalid font info strings do not work
     wxFont font;
     CPPUNIT_ASSERT( !font.SetNativeFontInfo("") );
+
+    // pango_font_description_from_string() used by wxFont in wxGTK and wxX11
+    // never returns an error at all so this assertion fails there -- and as it
+    // doesn't seem to be possible to do anything about it maybe we should
+    // change wxMSW and other ports to also accept any strings?
+#if !defined(__WXGTK__) && !defined(__WXX11__)
     CPPUNIT_ASSERT( !font.SetNativeFontInfo("bloordyblop") );
+#endif
 }
 
 void FontTestCase::NativeFontInfoUserDesc()
