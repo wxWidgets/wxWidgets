@@ -192,8 +192,10 @@ const wxChar *wxTimerHiddenWindowModule::ms_className = NULL;
 
 bool wxTimerHiddenWindowModule::OnInit()
 {
-    ms_hwnd = NULL;
-    ms_className = NULL;
+    // do not initialize ms_hwnd to ms_className to NULL here: it may happen
+    // that our GetHWND() is called before the modules are initialized if a
+    // timer is created from wxApp-derived class ctor and in this case we
+    // shouldn't overwrite it
 
     return true;
 }
