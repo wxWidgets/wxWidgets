@@ -106,7 +106,7 @@ void SettingsTestCase::GlobalColours()
 
 void SettingsTestCase::GlobalFonts()
 {
-    wxFont font[] =
+    const wxFont font[] =
     {
         *wxNORMAL_FONT,
         *wxSMALL_FONT,
@@ -115,8 +115,13 @@ void SettingsTestCase::GlobalFonts()
     };
 
     for (unsigned int i=0; i < WXSIZEOF(font); i++)
-        CPPUNIT_ASSERT( font[i].IsOk() && 
-                        wxFontEnumerator::IsValidFacename(font[i].GetFaceName()) );
+    {
+        CPPUNIT_ASSERT( font[i].IsOk() );
+
+        const wxString facename = font[i].GetFaceName();
+        if ( !facename.empty() )
+            CPPUNIT_ASSERT( wxFontEnumerator::IsValidFacename(facename) );
+    }
 }
 
 void SettingsTestCase::GlobalBrushes()
