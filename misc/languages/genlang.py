@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 #
-# Generates wxLanguage enum (to be cut&pasted to include/wx/intl.h)
-# and convertion tables (ditto to src/common/intl.cpp)
+# This script must be ran from misc/languages subdirectory.
+#
+# It generates wxLanguage enum (to be cut&pasted to include/wx/intl.h)
+# and conversion tables (ditto to src/common/intl.cpp)
 #
 
 import string
