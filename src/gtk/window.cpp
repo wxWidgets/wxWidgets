@@ -2824,28 +2824,39 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
 
 bool wxWindowGTK::Show( bool show )
 {
-    wxCHECK_MSG( (m_widget != NULL), false, wxT("invalid window") );
-
-    if (!wxWindowBase::Show(show))
+    if ( !wxWindowBase::Show(show) )
     {
         // nothing to do
         return false;
     }
 
-    if (show && m_showOnIdle)
+    // notice that we may call Hide() before the window is created and this is
+    // actually useful to create it hidden initially -- but we can't call
+    // Show() before it is created
+    if ( !m_widget )
     {
-        // deferred
+        wxASSERT_MSG( !show, "can't show invalid window" );
+        return true;
     }
-    else
+
+    if ( show )
     {
-        if (show)
-            gtk_widget_show(m_widget);
-        else
-            gtk_widget_hide(m_widget);
-        wxShowEvent eventShow(GetId(), show);
-        eventShow.SetEventObject(this);
-        HandleWindowEvent(eventShow);
+        if ( m_showOnIdle )
+        {
+            // defer until later
+            return true;
+        }
+
+        gtk_widget_show(m_widget);
     }
+    else // hide
+    {
+        gtk_widget_hide(m_widget);
+    }
+
+    wxShowEvent eventShow(GetId(), show);
+    eventShow.SetEventObject(this);
+    HandleWindowEvent(eventShow);
 
     return true;
 }
