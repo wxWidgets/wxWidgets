@@ -250,12 +250,12 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(wxPaperSize id)
     // are likely to be taken into account first. This fixes problems with,
     // for example, Letter reverting to A4 in the page setup dialog because
     // it was wrongly translated to Note.
-    size_t i;
-    for (i = 0; i < GetCount(); i++)
+    const wxSize sz = GetSize(id);
+    for ( size_t i = 0; i < GetCount(); i++ )
     {
-        wxPrintPaperType* paperType = Item(i);
-        wxSize paperSize = paperType->GetSize() ;
-        if ( abs( paperSize.x - sz.x ) < 10 && abs( paperSize.y - sz.y ) < 10 )
+        wxPrintPaperType* const paperType = Item(i);
+        const wxSize paperSize = paperType->GetSize() ;
+        if ( abs(paperSize.x - sz.x) < 10 && abs(paperSize.y - sz.y) < 10 )
             return paperType;
     }
 
