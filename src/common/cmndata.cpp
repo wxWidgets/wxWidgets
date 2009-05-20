@@ -649,9 +649,12 @@ void wxPageSetupDialogData::CalculatePaperSizeFromId()
 
     wxSize sz = wxThePrintPaperDatabase->GetSize(m_printData.GetPaperId());
 
-    // sz is in 10ths of a mm, while paper size is in mm
-    m_paperSize.x = sz.x / 10;
-    m_paperSize.y = sz.y / 10;
+    if (sz != wxSize(0, 0))
+    {
+        // sz is in 10ths of a mm, while paper size is in mm
+        m_paperSize.x = sz.x / 10;
+        m_paperSize.y = sz.y / 10;
+    }
 }
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
