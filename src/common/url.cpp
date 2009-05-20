@@ -267,7 +267,11 @@ wxInputStream *wxURL::GetInputStream()
     wxIPV4address addr;
 
     // m_protoinfo is NULL when we use a proxy
-    if (!m_useProxy && m_protoinfo->m_needhost)
+    if (
+#if wxUSE_PROTOCOL_HTTP
+         !m_useProxy &&
+#endif // wxUSE_PROTOCOL_HTTP
+         m_protoinfo->m_needhost )
     {
         if (!addr.Hostname(m_server))
         {
@@ -283,13 +287,15 @@ wxInputStream *wxURL::GetInputStream()
             return NULL;
         }
     }
-#endif
+#endif // wxUSE_SOCKETS
 
     wxString fullPath;
 
+#if wxUSE_PROTOCOL_HTTP
     // When we use a proxy, we have to pass the whole URL to it.
     if (m_useProxy)
         fullPath += m_url;
+#endif // wxUSE_PROTOCOL_HTTP
 
     if(m_path.empty())
         fullPath += wxT("/");
