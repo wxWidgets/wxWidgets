@@ -111,6 +111,11 @@ All (GUI):
 
 - Add wxBU_EXACTFIT support to wxToggleButton XRC handler (Ronny Krueger).
 - wxRTC: fixed AltGr+key input on Windows.
+- Paper size conversion from dimensions to id now uses definition ordering
+  in order to use common types where there are duplications, fixing problems
+  where invalid sizes caused incorrect second invocation of page setup
+  dialog.
+- Added background colour setting to wxRichTextCtrl font dialog.
 
 wxMSW:
 
