@@ -106,6 +106,8 @@ void wxGLContext::SetCurrent(const wxGLCanvas& win) const
     if (m_glContext)
     {
         GdkWindow *window = GTK_PIZZA(win.m_wxwindow)->bin_window;
+        if (window == NULL)
+            return;
 
         if (wxGLCanvas::GetGLXVersion() >= 13)
             // GLX >= 1.3
