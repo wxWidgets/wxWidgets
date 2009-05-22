@@ -725,7 +725,6 @@ class WXDLLIMPEXP_ADV wxGridStringTable : public wxGridTableBase
 public:
     wxGridStringTable();
     wxGridStringTable( int numRows, int numCols );
-    virtual ~wxGridStringTable();
 
     // these are pure virtual in wxGridTableBase
     //

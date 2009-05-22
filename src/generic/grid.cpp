@@ -1144,10 +1144,6 @@ wxGridStringTable::wxGridStringTable( int numRows, int numCols )
     m_data.Add( sa, numRows );
 }
 
-wxGridStringTable::~wxGridStringTable()
-{
-}
-
 wxString wxGridStringTable::GetValue( int row, int col )
 {
     wxCHECK_MSG( (row < GetNumberRows()) && (col < GetNumberCols()),
