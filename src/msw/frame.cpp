@@ -913,7 +913,8 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
 #if wxUSE_MENUS
 
-bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
+bool
+wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU WXUNUSED(hMenu))
 {
     // WM_MENUSELECT is generated for both normal items and menus, including
     // the top level menus of the menu bar, which can't be represented using
