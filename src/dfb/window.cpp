@@ -72,6 +72,15 @@ IMPLEMENT_ABSTRACT_CLASS(wxWindowDFB, wxWindowBase)
 BEGIN_EVENT_TABLE(wxWindowDFB, wxWindowBase)
 END_EVENT_TABLE()
 
+//-----------------------------------------------------------------------------
+// global functions
+//-----------------------------------------------------------------------------
+
+wxWindow *wxGetActiveWindow()
+{
+    return wxWindow::FindFocus();
+}
+
 // ----------------------------------------------------------------------------
 // constructors and such
 // ----------------------------------------------------------------------------
