@@ -521,7 +521,12 @@ class WXDLLIMPEXP_CORE wxDocChildFrameAnyBase
 {
 public:
     // default ctor, use Create() after it
-    wxDocChildFrameAnyBase() { m_win = NULL; }
+    wxDocChildFrameAnyBase()
+    {
+        m_childDocument = NULL;
+        m_childView = NULL;
+        m_win = NULL;
+    }
 
     // full ctor equivalent to using the default one and Create(0
     wxDocChildFrameAnyBase(wxDocument *doc, wxView *view, wxWindow *win)
@@ -631,10 +636,10 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr)
     {
-        if ( !BaseClass::Create(parent, id, title, pos, size, style, name) )
+        if ( !wxDocChildFrameAnyBase::Create(doc, view, this) )
             return false;
 
-        if ( !wxDocChildFrameAnyBase::Create(doc, view, this) )
+        if ( !BaseClass::Create(parent, id, title, pos, size, style, name) )
             return false;
 
         this->Connect(wxEVT_ACTIVATE,
