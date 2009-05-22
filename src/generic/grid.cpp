@@ -1127,11 +1127,14 @@ IMPLEMENT_DYNAMIC_CLASS( wxGridStringTable, wxGridTableBase )
 wxGridStringTable::wxGridStringTable()
         : wxGridTableBase()
 {
+    m_numCols = 0;
 }
 
 wxGridStringTable::wxGridStringTable( int numRows, int numCols )
         : wxGridTableBase()
 {
+    m_numCols = numCols;
+
     m_data.Alloc( numRows );
 
     wxArrayString sa;
@@ -1143,19 +1146,6 @@ wxGridStringTable::wxGridStringTable( int numRows, int numCols )
 
 wxGridStringTable::~wxGridStringTable()
 {
-}
-
-int wxGridStringTable::GetNumberRows()
-{
-    return m_data.GetCount();
-}
-
-int wxGridStringTable::GetNumberCols()
-{
-    if ( m_data.GetCount() > 0 )
-        return m_data[0].GetCount();
-    else
-        return 0;
 }
 
 wxString wxGridStringTable::GetValue( int row, int col )
@@ -1327,6 +1317,8 @@ bool wxGridStringTable::InsertCols( size_t pos, size_t numCols )
         }
     }
 
+    m_numCols += numCols;
+
     if ( GetView() )
     {
         wxGridTableMessage msg( this,
@@ -1350,6 +1342,8 @@ bool wxGridStringTable::AppendCols( size_t numCols )
     {
         m_data[row].Add( wxEmptyString, numCols );
     }
+
+    m_numCols += numCols;
 
     if ( GetView() )
     {
@@ -1404,16 +1398,23 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
             m_colLabels.RemoveAt( colID, nToRm );
     }
 
-    for ( row = 0; row < curNumRows; row++ )
+    if ( numCols >= curNumCols )
     {
-        if ( numCols >= curNumCols )
+        for ( row = 0; row < curNumRows; row++ )
         {
             m_data[row].Clear();
         }
-        else
+
+        m_numCols = 0;
+    }
+    else // something will be left
+    {
+        for ( row = 0; row < curNumRows; row++ )
         {
             m_data[row].RemoveAt( colID, numCols );
         }
+
+        m_numCols -= numCols;
     }
 
     if ( GetView() )

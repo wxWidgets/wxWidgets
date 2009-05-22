@@ -729,10 +729,10 @@ public:
 
     // these are pure virtual in wxGridTableBase
     //
-    int GetNumberRows();
-    int GetNumberCols();
-    wxString GetValue( int row, int col );
-    void SetValue( int row, int col, const wxString& s );
+    virtual int GetNumberRows() { return m_data.size(); }
+    virtual int GetNumberCols() { return m_numCols; }
+    virtual wxString GetValue( int row, int col );
+    virtual void SetValue( int row, int col, const wxString& s );
 
     // overridden functions from wxGridTableBase
     //
@@ -751,6 +751,12 @@ public:
 
 private:
     wxGridStringArray m_data;
+
+    // notice that while we don't need to store the number of our rows as it's
+    // always equal to the size of m_data array, we do need to store the number
+    // of our columns as we can't retrieve it from m_data when the number of
+    // rows is 0 (see #10818)
+    int m_numCols;
 
     // These only get used if you set your own labels, otherwise the
     // GetRow/ColLabelValue functions return wxGridTableBase defaults
