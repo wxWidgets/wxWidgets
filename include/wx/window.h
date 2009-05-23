@@ -1694,6 +1694,11 @@ private:
     int DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y);
 #endif // wxUSE_MENUS
 
+    // layout the window children when its size changes unless this was
+    // explicitly disabled with SetAutoLayout(false)
+    void InternalOnSize(wxSizeEvent& event);
+
+
     // the stack of windows which have captured the mouse
     static struct WXDLLIMPEXP_FWD_CORE wxWindowNext *ms_winCaptureNext;
 

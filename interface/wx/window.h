@@ -2600,19 +2600,23 @@ public:
 
     /**
         Sets the window to have the given layout sizer.
+
         The window will then own the object, and will take care of its deletion.
         If an existing layout constraints object is already owned by the
-        window, it will be deleted if the deleteOld parameter is @true.
+        window, it will be deleted if the @a deleteOld parameter is @true.
 
         Note that this function will also call SetAutoLayout() implicitly with @true
-        parameter if the @a sizer is non-@NULL and @false otherwise.
+        parameter if the @a sizer is non-@NULL and @false otherwise so that the
+        sizer will be effectively used to layout the window children whenever
+        it is resized.
 
         @param sizer
             The sizer to set. Pass @NULL to disassociate and conditionally delete
             the window's sizer. See below.
         @param deleteOld
             If @true (the default), this will delete any pre-existing sizer.
-            Pass @false if you wish to handle deleting the old sizer yourself.
+            Pass @false if you wish to handle deleting the old sizer yourself
+            but remember to do it yourself in this case to avoid memory leaks.
 
         @remarks SetSizer enables and disables Layout automatically.
     */
@@ -2665,20 +2669,17 @@ public:
 
     /**
         Determines whether the Layout() function will be called automatically
-        when the window is resized. Please note that this only happens for the
-        windows usually used to contain children, namely wxPanel and wxTopLevelWindow
-        (and the classes deriving from them).
+        when the window is resized.
 
         This method is called implicitly by SetSizer() but if you use SetConstraints()
         you should call it manually or otherwise the window layout won't be correctly
         updated when its size changes.
 
         @param autoLayout
-            Set this to @true if you wish the Layout() function to be
-            called automatically when the window is resized
-            (really happens only if you derive from wxPanel or wxTopLevelWindow).
+            Set this to @true if you wish the Layout() function to be called
+            automatically when the window is resized.
 
-        @see SetConstraints()
+        @see SetSizer(), SetConstraints()
     */
     void SetAutoLayout(bool autoLayout);
 

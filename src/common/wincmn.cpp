@@ -102,6 +102,7 @@ BEGIN_EVENT_TABLE(wxWindowBase, wxEvtHandler)
     EVT_HELP(wxID_ANY, wxWindowBase::OnHelp)
 #endif // wxUSE_HELP
 
+    EVT_SIZE(wxWindowBase::InternalOnSize)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -2093,6 +2094,14 @@ bool wxWindowBase::Layout()
 #endif
 
     return true;
+}
+
+void wxWindowBase::InternalOnSize(wxSizeEvent& event)
+{
+    if ( GetAutoLayout() )
+        Layout();
+
+    event.Skip();
 }
 
 #if wxUSE_CONSTRAINTS
