@@ -86,6 +86,9 @@ USE_XRC = 1
 # Build wxAUI library (USE_GUI must be 1)? [0,1]
 USE_AUI = 1
 
+# Build wxMahogany library (USE_GUI must be 1)? [0,1]
+USE_MAHOGANY = 1
+
 # Build wxPropertyGrid library (USE_GUI must be 1)? [0,1]
 USE_PROPGRID = 1
 

@@ -34,6 +34,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xrc", "wx_vc9_xrc.vcproj", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aui", "wx_vc9_aui.vcproj", "{A16D3832-0F42-57CE-8F48-50E06649ADE8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mahogany", "wx_vc9_mahogany.vcproj", "{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "propgrid", "wx_vc9_propgrid.vcproj", "{97FDAB45-9C58-5BC5-A2F4-EE42739EBC63}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "richtext", "wx_vc9_richtext.vcproj", "{7FB0902D-8579-5DCE-B883-DAF66A885005}"
@@ -329,6 +331,22 @@ Global
 		{A16D3832-0F42-57CE-8F48-50E06649ADE8}.Release|Win32.Build.0 = Release|Win32
 		{A16D3832-0F42-57CE-8F48-50E06649ADE8}.Debug|Win32.ActiveCfg = Debug|Win32
 		{A16D3832-0F42-57CE-8F48-50E06649ADE8}.Debug|Win32.Build.0 = Debug|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.DLL Universal Debug|Win32.ActiveCfg = DLL Universal Debug|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.DLL Universal Debug|Win32.Build.0 = DLL Universal Debug|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.DLL Release|Win32.Build.0 = DLL Release|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.Universal Release|Win32.ActiveCfg = Universal Release|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.Universal Release|Win32.Build.0 = Universal Release|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.Universal Debug|Win32.ActiveCfg = Universal Debug|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.Universal Debug|Win32.Build.0 = Universal Debug|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.Release|Win32.ActiveCfg = Release|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.Release|Win32.Build.0 = Release|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{406E61B2-3DF1-50E2-ADEE-B36E7DBC3FD6}.Debug|Win32.Build.0 = Debug|Win32
 		{97FDAB45-9C58-5BC5-A2F4-EE42739EBC63}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
 		{97FDAB45-9C58-5BC5-A2F4-EE42739EBC63}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
 		{97FDAB45-9C58-5BC5-A2F4-EE42739EBC63}.DLL Universal Debug|Win32.ActiveCfg = DLL Universal Debug|Win32

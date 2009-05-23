@@ -619,6 +619,13 @@
 // Recommended setting: 1
 #define wxUSE_AUI       1
 
+// Use wxWidget's Mahogany classes for ribbon-like interfaces
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_MAHOGANY  1
+
 // Use wxPropertyGrid.
 //
 // Default is 1

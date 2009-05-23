@@ -44,7 +44,7 @@ MAIN_LIBS = ['mono', 'base', 'core', 'adv', 'html', 'xml', 'net',
 # List of library names/ids for categories with different names:
 LIBS_NOGUI = ['xml', 'net']
 LIBS_GUI   = ['core', 'adv', 'html', 'gl', 'qa', 'xrc', 'media',
-              'aui', 'propgrid', 'richtext', 'stc']
+              'aui', 'propgrid', 'richtext', 'stc', 'mahogany']
 # Additional libraries that must be linked in:
 EXTRALIBS = {
     'gl' : '$(EXTRALIBS_OPENGL)',

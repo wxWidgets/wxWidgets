@@ -145,6 +145,9 @@
     <set var="WXLIB_AUI">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('aui')))</if>
     </set>
+    <set var="WXLIB_MAHOGANY">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('mahogany')))</if>
+    </set>
     <set var="WXLIB_PROPGRID">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('propgrid')))</if>
     </set>
