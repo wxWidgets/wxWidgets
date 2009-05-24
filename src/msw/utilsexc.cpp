@@ -38,6 +38,7 @@
 #include "wx/process.h"
 #include "wx/thread.h"
 #include "wx/apptrait.h"
+#include "wx/evtloop.h"
 #include "wx/vector.h"
 
 
@@ -1007,8 +1008,19 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
             ::Sleep(50);
         }
 
-        // we must process messages or we'd never get wxWM_PROC_TERMINATED
-        traits->AlwaysYield();
+        // we must always process messages for our hidden window or we'd never
+        // get wxWM_PROC_TERMINATED and so this loop would never terminate
+        MSG msg;
+        ::PeekMessage(&msg, data->hWnd, 0, 0, PM_REMOVE);
+
+        // we may also need to process messages for all the other application
+        // windows
+        if ( !(flags & wxEXEC_NOEVENTS) )
+        {
+            wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
+            if ( loop )
+                loop->Yield();
+        }
     }
 
     if ( !(flags & wxEXEC_NODISABLE) )
