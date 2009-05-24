@@ -28,6 +28,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/hashmap.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/msw/private.h"
