@@ -2222,7 +2222,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         }
                     }
 
-                    wxASSERT_MSG( data, "invalid internal data pointer?" );
+                    wxASSERT_MSG( !data, "invalid internal data pointer?" );
                 }
                 break;
 
