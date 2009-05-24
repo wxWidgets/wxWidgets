@@ -200,11 +200,6 @@ void *wxGUIAppTraits::BeforeChildWaitLoop()
     return new ChildWaitLoopData(wd, winActive);
 }
 
-void wxGUIAppTraits::AlwaysYield()
-{
-    wxYield();
-}
-
 void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
 {
     wxEndBusyCursor();
