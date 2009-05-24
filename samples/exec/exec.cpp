@@ -121,7 +121,7 @@ public:
     void OnAbout(wxCommandEvent& event);
 
     // polling output of async processes
-    void OnTimer(wxTimerEvent& event);
+    void OnIdleTimer(wxTimerEvent& event);
     void OnIdle(wxIdleEvent& event);
 
     // for MyPipedProcess
@@ -130,6 +130,9 @@ public:
 
     // for MyProcess
     void OnAsyncTermination(MyProcess *process);
+
+    // timer updating a counter in the background
+    void OnBgTimer(wxTimerEvent& event);
 
 private:
     void ShowOutput(const wxString& cmd,
@@ -172,6 +175,10 @@ private:
 
     // the idle event wake up timer
     wxTimer m_timerIdleWakeUp;
+
+    // a background timer allowing to easily check visually whether the
+    // messages are processed or not
+    wxTimer m_timerBg;
 
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
@@ -293,6 +300,10 @@ private:
 // IDs for the controls and the menu commands
 enum
 {
+    // timer ids
+    Exec_TimerIdle = 10,
+    Exec_TimerBg,
+
     // menu items
     Exec_Quit = 100,
     Exec_Kill,
@@ -311,7 +322,7 @@ enum
     Exec_DDERequest,
     Exec_Redirect,
     Exec_Pipe,
-    Exec_About = 300,
+    Exec_About = wxID_ABOUT,
 
     // control ids
     Exec_Btn_Send = 1000,
@@ -358,7 +369,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_IDLE(MyFrame::OnIdle)
 
-    EVT_TIMER(wxID_ANY, MyFrame::OnTimer)
+    EVT_TIMER(Exec_TimerIdle, MyFrame::OnIdleTimer)
+    EVT_TIMER(Exec_TimerBg, MyFrame::OnBgTimer)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
@@ -420,7 +432,8 @@ bool MyApp::OnInit()
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size),
-         m_timerIdleWakeUp(this)
+         m_timerIdleWakeUp(this, Exec_TimerIdle),
+         m_timerBg(this, Exec_TimerBg)
 {
     m_pidLast = 0;
 
@@ -494,9 +507,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
-    CreateStatusBar();
+    CreateStatusBar(2);
     SetStatusText(_T("Welcome to wxWidgets exec sample!"));
 #endif // wxUSE_STATUSBAR
+
+    m_timerBg.Start(1000);
 }
 
 MyFrame::~MyFrame()
@@ -1054,9 +1069,15 @@ void MyFrame::OnIdle(wxIdleEvent& event)
     }
 }
 
-void MyFrame::OnTimer(wxTimerEvent& WXUNUSED(event))
+void MyFrame::OnIdleTimer(wxTimerEvent& WXUNUSED(event))
 {
     wxWakeUpIdle();
+}
+
+void MyFrame::OnBgTimer(wxTimerEvent& WXUNUSED(event))
+{
+    static unsigned long s_ticks = 0;
+    SetStatusText(wxString::Format("%lu ticks", s_ticks++), 1);
 }
 
 void MyFrame::OnProcessTerminated(MyPipedProcess *process)
