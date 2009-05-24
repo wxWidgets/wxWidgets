@@ -567,6 +567,16 @@
 #define wxUSE_UNICODE_UTF8 0
 #define wxUSE_UTF8_LOCALE_ONLY 0
 
+/*
+   Use GStreamer for Unix.
+
+   Default is 0 as this requires a lot of dependencies which might not be
+   available.
+
+   Recommended setting: 1 (wxMediaCtrl won't work by default without it).
+ */
+#define wxUSE_GSTREAMER 0
+
 /* --- start MSW options --- */
 
 #ifndef wxUSE_UNICODE_MSLU

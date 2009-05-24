@@ -578,14 +578,6 @@
 // Recommended setting: 1
 #define wxUSE_MEDIACTRL     1
 
-// Use GStreamer for Unix.
-//
-// Default is 0 as this requires a lot of dependencies which might not be
-// available.
-//
-// Recommended setting: 1 (wxMediaCtrl won't work by default without it)
-#define wxUSE_GSTREAMER    0
-
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
 // Default is 1
