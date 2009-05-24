@@ -2367,13 +2367,18 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 wxZeroMemory(lvhti);
 
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
-              if(nmhdr->code == GN_CONTEXTMENU) {
-                  lvhti.pt = ((NMRGINFO*)nmhdr)->ptAction;
-              } else
+                if ( nmhdr->code == GN_CONTEXTMENU )
+                {
+                    lvhti.pt = ((NMRGINFO*)nmhdr)->ptAction;
+                }
+                else
 #endif //__WXWINCE__
-                ::GetCursorPos(&(lvhti.pt));
-                ::ScreenToClient(GetHwnd(),&(lvhti.pt));
-                if ( ListView_HitTest(GetHwnd(),&lvhti) != -1 )
+                {
+                    ::GetCursorPos(&(lvhti.pt));
+                }
+
+                ::ScreenToClient(GetHwnd(), &lvhti.pt);
+                if ( ListView_HitTest(GetHwnd(), &lvhti) != -1 )
                 {
                     if ( lvhti.flags & LVHT_ONITEM )
                     {
@@ -2536,6 +2541,17 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // -----------------
 
     event.SetEventType(eventType);
+
+    // fill in the item before passing it to the event handler if we do have a
+    // valid item index and haven't filled it yet (e.g. for LVN_ITEMCHANGED)
+    if ( event.m_itemIndex != -1 && !event.m_item.GetMask() )
+    {
+        wxListItem& item = event.m_item;
+
+        item.SetId(event.m_itemIndex);
+        item.SetMask(wxLIST_MASK_TEXT | wxLIST_MASK_IMAGE | wxLIST_MASK_DATA);
+        GetItem(item);
+    }
 
     bool processed = HandleWindowEvent(event);
 
