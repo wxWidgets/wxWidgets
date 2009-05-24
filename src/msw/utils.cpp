@@ -598,24 +598,43 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
 #endif // WinCE/32
 }
 
-bool wxDoSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
-                const wxChar *WXUNUSED_IN_WINCE(value))
+bool wxDoSetEnv(const wxString& var, const wxChar *value)
 {
-    // some compilers have putenv() or _putenv() or _wputenv() but it's better
-    // to always use Win32 function directly instead of dealing with them
 #ifdef __WXWINCE__
     // no environment variables under CE
+    wxUnusedVar(var);
+    wxUnusedVar(value);
     return false;
-#else
+#else // !__WXWINCE__
+    // update the CRT environment if possible as people expect getenv() to also
+    // work and it is not affected by Win32 SetEnvironmentVariable() call (OTOH
+    // the CRT does use Win32 call to update the process environment block so
+    // there is no need to call it)
+    //
+    // TODO: add checks for the other compilers (and update wxSetEnv()
+    //       documentation in interface/wx/utils.h accordingly)
+#if defined(__VISUALC__)
+    // notice that Microsoft _putenv() has different semantics from POSIX
+    // function with almost the same name: in particular it makes a copy of the
+    // string instead of using it as part of environment so we can safely call
+    // it here without going through all the troubles with wxSetEnvModule as in
+    // src/unix/utilsunx.cpp
+    wxString envstr = var;
+    envstr += '=';
+    if ( value )
+        envstr += value;
+    _putenv(envstr);
+#else // other compiler
     if ( !::SetEnvironmentVariable(var.t_str(), value) )
     {
         wxLogLastError(_T("SetEnvironmentVariable"));
 
         return false;
     }
+#endif // compiler
 
     return true;
-#endif
+#endif // __WXWINCE__/!__WXWINCE__
 }
 
 bool wxSetEnv(const wxString& variable, const wxString& value)

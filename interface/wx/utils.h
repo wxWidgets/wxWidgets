@@ -169,8 +169,9 @@ void wxInfoMessageBox(wxWindow parent = NULL);
 wxChar* wxGetenv(const wxString& var);
 
 /**
-    Returns the current value of the environment variable @c var in @c value.
-    @c value may be @NULL if you just want to know if the variable exists and
+    Returns the current value of the environment variable @a var in @a value.
+
+    @a value may be @NULL if you just want to know if the variable exists and
     are not interested in its value.
 
     Returns @true if the variable exists, @false otherwise.
@@ -180,10 +181,24 @@ wxChar* wxGetenv(const wxString& var);
 bool wxGetEnv(const wxString& var, wxString* value);
 
 /**
-    Sets the value of the environment variable @c var (adding it if necessary)
-    to @c value.
+    Sets the value of the environment variable @a var (adding it if necessary)
+    to @a value.
 
-    Returns @true on success.
+    Notice that under Windows platforms the program may have two different
+    environment blocks: the first one is that of a Windows process and is
+    always present, but the CRT may maintain its own independent copy of the
+    environment. wxSetEnv() will always update the first copy, which means that
+    wxGetEnv(), which uses it directly, will always return the expected value
+    after this call. But wxSetEnv() only updates the second copy for some
+    compilers/CRT implementations (currently only MSVC) and so using wxGetenv()
+    (notice the difference in case) may not return the updated value.
+
+    @param var
+        The environment variable to be set, must not contain @c '=' character.
+    @param value
+        New value of the variable.
+    @return
+        @true on success or @false if changing the value failed.
 
     @see wxUnsetEnv()
 
@@ -192,8 +207,9 @@ bool wxGetEnv(const wxString& var, wxString* value);
 bool wxSetEnv(const wxString& var, const wxString& value);
 
 /**
-    Removes the variable @c var from the environment. wxGetEnv() will return
-    @NULL after the call to this function.
+    Removes the variable @a var from the environment.
+
+    wxGetEnv() will return @NULL after the call to this function.
 
     Returns @true on success.
 

@@ -342,6 +342,7 @@ All (GUI):
 MSW:
 
 - Allow changing the height of wxChoice and wxComboBox.
+- Update CRT environment block in wxSetEnv() too.
 
 i18n:
 
