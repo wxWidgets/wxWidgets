@@ -3402,10 +3402,16 @@ src/osx/iphone/window.mm
 <!-- ====================================================================== -->
 
 <set var="MAHOGANY_SRC" hints="files">
+    src/mahogany/art.cpp
     src/mahogany/bar.cpp
+	src/mahogany/page.cpp
+	src/mahogany/panel.cpp
 </set>
 <set var="MAHOGANY_HDR" hints="files">
+    wx/mahogany/art.h
     wx/mahogany/bar.h
+	wx/mahogany/page.h
+	wx/mahogany/panel.h
 </set>
 
 <!-- ====================================================================== -->

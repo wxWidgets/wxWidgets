@@ -821,66 +821,6 @@
 			UniqueIdentifier="{63537534-1833-5C1F-8DBD-359A84F294C8}"
 			>
 			<File
-				RelativePath="..\..\include\wx\msw\setup.h"
-				>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-				/>
-				<FileConfiguration
-					Name="DLL Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_dll\mswu\wx\setup.h"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswu\wx\setup.h"
-						Outputs="..\..\lib\vc_dll\mswu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="DLL Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_dll\mswud\wx\setup.h"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswud\wx\setup.h"
-						Outputs="..\..\lib\vc_dll\mswud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-				/>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-				/>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_lib\mswu\wx\setup.h"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswu\wx\setup.h"
-						Outputs="..\..\lib\vc_lib\mswu\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Creating ..\..\lib\vc_lib\mswud\wx\setup.h"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswud\wx\setup.h"
-						Outputs="..\..\lib\vc_lib\mswud\wx\setup.h"
-						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\include\wx\univ\setup.h"
 				>
 				<FileConfiguration
@@ -939,6 +879,66 @@
 				<FileConfiguration
 					Name="Debug|Win32"
 				/>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\setup.h"
+				>
+				<FileConfiguration
+					Name="DLL Universal Release|Win32"
+				/>
+				<FileConfiguration
+					Name="DLL Universal Debug|Win32"
+				/>
+				<FileConfiguration
+					Name="DLL Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating ..\..\lib\vc_dll\mswu\wx\setup.h"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswu\wx\setup.h"
+						Outputs="..\..\lib\vc_dll\mswu\wx\setup.h"
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="DLL Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating ..\..\lib\vc_dll\mswud\wx\setup.h"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_dll\mswud\wx\setup.h"
+						Outputs="..\..\lib\vc_dll\mswud\wx\setup.h"
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Universal Release|Win32"
+				/>
+				<FileConfiguration
+					Name="Universal Debug|Win32"
+				/>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating ..\..\lib\vc_lib\mswu\wx\setup.h"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswu\wx\setup.h"
+						Outputs="..\..\lib\vc_lib\mswu\wx\setup.h"
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Creating ..\..\lib\vc_lib\mswud\wx\setup.h"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\lib\vc_lib\mswud\wx\setup.h"
+						Outputs="..\..\lib\vc_lib\mswud\wx\setup.h"
+						AdditionalDependencies="&quot;$(INTDIR)&quot; &quot;$(OUTDIR)&quot;"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -1043,7 +1043,19 @@
 			UniqueIdentifier="{8C07E926-65B0-5F00-B0D6-7F40DA69BB25}"
 			>
 			<File
+				RelativePath="..\..\include\wx\mahogany\art.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\mahogany\bar.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\mahogany\page.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\mahogany\panel.h"
 				>
 			</File>
 		</Filter>
@@ -1053,7 +1065,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\src\mahogany\art.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\mahogany\bar.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\mahogany\page.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\mahogany\panel.cpp"
 				>
 			</File>
 		</Filter>

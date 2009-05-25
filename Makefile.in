@@ -1719,7 +1719,10 @@ MAHOGANYDLL_CXXFLAGS = $(__mahoganydll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 MAHOGANYDLL_OBJECTS =  \
 	$(__mahoganydll___win32rc) \
-	mahoganydll_bar.o
+	mahoganydll_art.o \
+	mahoganydll_bar.o \
+	mahoganydll_page.o \
+	mahoganydll_panel.o
 MAHOGANYDLL_ODEP = $(_____pch_wxprec_mahoganydll_wx_wxprec_h_gch___depname)
 MAHOGANYLIB_CXXFLAGS = $(__mahoganylib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1727,7 +1730,10 @@ MAHOGANYLIB_CXXFLAGS = $(__mahoganylib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_REGEX_p) \
 	$(__INC_EXPAT_p) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
 MAHOGANYLIB_OBJECTS =  \
-	mahoganylib_bar.o
+	mahoganylib_art.o \
+	mahoganylib_bar.o \
+	mahoganylib_page.o \
+	mahoganylib_panel.o
 MAHOGANYLIB_ODEP = $(_____pch_wxprec_mahoganylib_wx_wxprec_h_gch___depname)
 PROPGRIDDLL_CXXFLAGS = $(__propgriddll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -32824,11 +32830,29 @@ auilib_tabmdi.o: $(srcdir)/src/aui/tabmdi.cpp $(AUILIB_ODEP)
 mahoganydll_version_rc.o: $(srcdir)/src/msw/version.rc $(MAHOGANYDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_MAHOGANY
 
+mahoganydll_art.o: $(srcdir)/src/mahogany/art.cpp $(MAHOGANYDLL_ODEP)
+	$(CXXC) -c -o $@ $(MAHOGANYDLL_CXXFLAGS) $(srcdir)/src/mahogany/art.cpp
+
 mahoganydll_bar.o: $(srcdir)/src/mahogany/bar.cpp $(MAHOGANYDLL_ODEP)
 	$(CXXC) -c -o $@ $(MAHOGANYDLL_CXXFLAGS) $(srcdir)/src/mahogany/bar.cpp
 
+mahoganydll_page.o: $(srcdir)/src/mahogany/page.cpp $(MAHOGANYDLL_ODEP)
+	$(CXXC) -c -o $@ $(MAHOGANYDLL_CXXFLAGS) $(srcdir)/src/mahogany/page.cpp
+
+mahoganydll_panel.o: $(srcdir)/src/mahogany/panel.cpp $(MAHOGANYDLL_ODEP)
+	$(CXXC) -c -o $@ $(MAHOGANYDLL_CXXFLAGS) $(srcdir)/src/mahogany/panel.cpp
+
+mahoganylib_art.o: $(srcdir)/src/mahogany/art.cpp $(MAHOGANYLIB_ODEP)
+	$(CXXC) -c -o $@ $(MAHOGANYLIB_CXXFLAGS) $(srcdir)/src/mahogany/art.cpp
+
 mahoganylib_bar.o: $(srcdir)/src/mahogany/bar.cpp $(MAHOGANYLIB_ODEP)
 	$(CXXC) -c -o $@ $(MAHOGANYLIB_CXXFLAGS) $(srcdir)/src/mahogany/bar.cpp
+
+mahoganylib_page.o: $(srcdir)/src/mahogany/page.cpp $(MAHOGANYLIB_ODEP)
+	$(CXXC) -c -o $@ $(MAHOGANYLIB_CXXFLAGS) $(srcdir)/src/mahogany/page.cpp
+
+mahoganylib_panel.o: $(srcdir)/src/mahogany/panel.cpp $(MAHOGANYLIB_ODEP)
+	$(CXXC) -c -o $@ $(MAHOGANYLIB_CXXFLAGS) $(srcdir)/src/mahogany/panel.cpp
 
 propgriddll_version_rc.o: $(srcdir)/src/msw/version.rc $(PROPGRIDDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_62) $(__INC_TIFF_p_62) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_PROPGRID

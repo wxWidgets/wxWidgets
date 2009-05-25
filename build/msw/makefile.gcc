@@ -1240,7 +1240,10 @@ MAHOGANYDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 MAHOGANYDLL_OBJECTS =  \
 	$(OBJS)\mahoganydll_dummy.o \
 	$(OBJS)\mahoganydll_version_rc.o \
-	$(OBJS)\mahoganydll_bar.o
+	$(OBJS)\mahoganydll_art.o \
+	$(OBJS)\mahoganydll_bar.o \
+	$(OBJS)\mahoganydll_page.o \
+	$(OBJS)\mahoganydll_panel.o
 MAHOGANYLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -1251,7 +1254,10 @@ MAHOGANYLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
 MAHOGANYLIB_OBJECTS =  \
 	$(OBJS)\mahoganylib_dummy.o \
-	$(OBJS)\mahoganylib_bar.o
+	$(OBJS)\mahoganylib_art.o \
+	$(OBJS)\mahoganylib_bar.o \
+	$(OBJS)\mahoganylib_page.o \
+	$(OBJS)\mahoganylib_panel.o
 PROPGRIDDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -14835,13 +14841,31 @@ $(OBJS)\mahoganydll_dummy.o: ../../src/common/dummy.cpp
 $(OBJS)\mahoganydll_version_rc.o: ../../src/msw/version.rc
 	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) --include-dir $(SETUPHDIR) --include-dir ../../include --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_gcc$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/lib --define WXUSINGDLL --define WXMAKINGDLL_MAHOGANY
 
+$(OBJS)\mahoganydll_art.o: ../../src/mahogany/art.cpp
+	$(CXX) -c -o $@ $(MAHOGANYDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\mahoganydll_bar.o: ../../src/mahogany/bar.cpp
+	$(CXX) -c -o $@ $(MAHOGANYDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\mahoganydll_page.o: ../../src/mahogany/page.cpp
+	$(CXX) -c -o $@ $(MAHOGANYDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\mahoganydll_panel.o: ../../src/mahogany/panel.cpp
 	$(CXX) -c -o $@ $(MAHOGANYDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\mahoganylib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(MAHOGANYLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\mahoganylib_art.o: ../../src/mahogany/art.cpp
+	$(CXX) -c -o $@ $(MAHOGANYLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\mahoganylib_bar.o: ../../src/mahogany/bar.cpp
+	$(CXX) -c -o $@ $(MAHOGANYLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\mahoganylib_page.o: ../../src/mahogany/page.cpp
+	$(CXX) -c -o $@ $(MAHOGANYLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\mahoganylib_panel.o: ../../src/mahogany/panel.cpp
 	$(CXX) -c -o $@ $(MAHOGANYLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\propgriddll_dummy.o: ../../src/common/dummy.cpp

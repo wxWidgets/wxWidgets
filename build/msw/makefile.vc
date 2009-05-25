@@ -1319,7 +1319,10 @@ MAHOGANYDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_397)$(__DEBUGRUNTIME) /DWIN32 \
 MAHOGANYDLL_OBJECTS =  \
 	$(OBJS)\mahoganydll_dummy.obj \
 	$(OBJS)\mahoganydll_version.res \
-	$(OBJS)\mahoganydll_bar.obj
+	$(OBJS)\mahoganydll_art.obj \
+	$(OBJS)\mahoganydll_bar.obj \
+	$(OBJS)\mahoganydll_page.obj \
+	$(OBJS)\mahoganydll_panel.obj
 MAHOGANYLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_410)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.pdb \
@@ -1333,7 +1336,10 @@ MAHOGANYLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_410)$(__DEBUGRUNTIME) /DWIN32 \
 	$(CPPFLAGS) $(CXXFLAGS)
 MAHOGANYLIB_OBJECTS =  \
 	$(OBJS)\mahoganylib_dummy.obj \
-	$(OBJS)\mahoganylib_bar.obj
+	$(OBJS)\mahoganylib_art.obj \
+	$(OBJS)\mahoganylib_bar.obj \
+	$(OBJS)\mahoganylib_page.obj \
+	$(OBJS)\mahoganylib_panel.obj
 PROPGRIDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_424)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid_vc$(VENDORTAG).pdb \
@@ -14585,14 +14591,32 @@ $(OBJS)\mahoganydll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\mahoganydll_version.res: ..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_4) $(__NO_VC_CRTDBG_p_68)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) /i $(SETUPHDIR) /i ..\..\include /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\lib /d WXUSINGDLL /d WXMAKINGDLL_MAHOGANY ..\..\src\msw\version.rc
 
+$(OBJS)\mahoganydll_art.obj: ..\..\src\mahogany\art.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYDLL_CXXFLAGS) ..\..\src\mahogany\art.cpp
+
 $(OBJS)\mahoganydll_bar.obj: ..\..\src\mahogany\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYDLL_CXXFLAGS) ..\..\src\mahogany\bar.cpp
+
+$(OBJS)\mahoganydll_page.obj: ..\..\src\mahogany\page.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYDLL_CXXFLAGS) ..\..\src\mahogany\page.cpp
+
+$(OBJS)\mahoganydll_panel.obj: ..\..\src\mahogany\panel.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYDLL_CXXFLAGS) ..\..\src\mahogany\panel.cpp
 
 $(OBJS)\mahoganylib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
+$(OBJS)\mahoganylib_art.obj: ..\..\src\mahogany\art.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) ..\..\src\mahogany\art.cpp
+
 $(OBJS)\mahoganylib_bar.obj: ..\..\src\mahogany\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) ..\..\src\mahogany\bar.cpp
+
+$(OBJS)\mahoganylib_page.obj: ..\..\src\mahogany\page.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) ..\..\src\mahogany\page.cpp
+
+$(OBJS)\mahoganylib_panel.obj: ..\..\src\mahogany\panel.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) ..\..\src\mahogany\panel.cpp
 
 $(OBJS)\propgriddll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRIDDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp

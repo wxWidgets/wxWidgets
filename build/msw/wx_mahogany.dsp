@@ -293,77 +293,6 @@ SOURCE=..\..\src\msw\version.rc
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\setup.h
-
-!IF  "$(CFG)" == "mahogany - Win32 DLL Universal Release"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mahogany - Win32 DLL Universal Debug"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mahogany - Win32 DLL Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
-InputPath=..\..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mahogany - Win32 DLL Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
-InputPath=..\..\include\wx\msw\setup.h
-
-"..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mahogany - Win32 Universal Release"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mahogany - Win32 Universal Debug"
-
-# Begin Custom Build - 
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mahogany - Win32 Release"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
-InputPath=..\..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswu\wx\setup.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "mahogany - Win32 Debug"
-
-# Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
-InputPath=..\..\include\wx\msw\setup.h
-
-"..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy "$(InputPath)" ..\..\lib\vc_lib\mswud\wx\setup.h
-
-# End Custom Build
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\univ\setup.h
 
 !IF  "$(CFG)" == "mahogany - Win32 DLL Universal Release"
@@ -427,6 +356,77 @@ InputPath=..\..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "mahogany - Win32 Debug"
 
 # Begin Custom Build - 
+
+# End Custom Build
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\setup.h
+
+!IF  "$(CFG)" == "mahogany - Win32 DLL Universal Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "mahogany - Win32 DLL Universal Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "mahogany - Win32 DLL Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
+InputPath=..\..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "mahogany - Win32 DLL Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
+InputPath=..\..\include\wx\msw\setup.h
+
+"..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "mahogany - Win32 Universal Release"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "mahogany - Win32 Universal Debug"
+
+# Begin Custom Build - 
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "mahogany - Win32 Release"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
+InputPath=..\..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswu\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "mahogany - Win32 Debug"
+
+# Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
+InputPath=..\..\include\wx\msw\setup.h
+
+"..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy "$(InputPath)" ..\..\lib\vc_lib\mswud\wx\setup.h
 
 # End Custom Build
 
@@ -530,7 +530,19 @@ InputPath=..\..\include\wx\msw\genrcdefs.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\include\wx\mahogany\art.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\mahogany\bar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\mahogany\page.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\mahogany\panel.h
 # End Source File
 # End Group
 # Begin Group "Source Files"
@@ -538,7 +550,19 @@ SOURCE=..\..\include\wx\mahogany\bar.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\..\src\mahogany\art.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\mahogany\bar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\mahogany\page.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\mahogany\panel.cpp
 # End Source File
 # End Group
 # End Target

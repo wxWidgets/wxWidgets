@@ -4366,7 +4366,10 @@ MAHOGANYDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(CPPFLAGS) $(CXXFLAGS)
 MAHOGANYDLL_OBJECTS =  &
 	$(OBJS)\mahoganydll_dummy.obj &
-	$(OBJS)\mahoganydll_bar.obj
+	$(OBJS)\mahoganydll_art.obj &
+	$(OBJS)\mahoganydll_bar.obj &
+	$(OBJS)\mahoganydll_page.obj &
+	$(OBJS)\mahoganydll_panel.obj
 MAHOGANYLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -4377,7 +4380,10 @@ MAHOGANYLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 MAHOGANYLIB_OBJECTS =  &
 	$(OBJS)\mahoganylib_dummy.obj &
-	$(OBJS)\mahoganylib_bar.obj
+	$(OBJS)\mahoganylib_art.obj &
+	$(OBJS)\mahoganylib_bar.obj &
+	$(OBJS)\mahoganylib_page.obj &
+	$(OBJS)\mahoganylib_panel.obj
 PROPGRIDDLL_CXXFLAGS = -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
@@ -15093,13 +15099,31 @@ $(OBJS)\mahoganydll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 $(OBJS)\mahoganydll_version.res :  .AUTODEPEND ..\..\src\msw\version.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=..\..\include -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_wat$(VENDORTAG)  -i=..\..\src\tiff\libtiff -i=..\..\src\jpeg -i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex -i=..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_MAHOGANY $<
 
+$(OBJS)\mahoganydll_art.obj :  .AUTODEPEND ..\..\src\mahogany\art.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANYDLL_CXXFLAGS) $<
+
 $(OBJS)\mahoganydll_bar.obj :  .AUTODEPEND ..\..\src\mahogany\bar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANYDLL_CXXFLAGS) $<
+
+$(OBJS)\mahoganydll_page.obj :  .AUTODEPEND ..\..\src\mahogany\page.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANYDLL_CXXFLAGS) $<
+
+$(OBJS)\mahoganydll_panel.obj :  .AUTODEPEND ..\..\src\mahogany\panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANYDLL_CXXFLAGS) $<
 
 $(OBJS)\mahoganylib_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANYLIB_CXXFLAGS) $<
 
+$(OBJS)\mahoganylib_art.obj :  .AUTODEPEND ..\..\src\mahogany\art.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANYLIB_CXXFLAGS) $<
+
 $(OBJS)\mahoganylib_bar.obj :  .AUTODEPEND ..\..\src\mahogany\bar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANYLIB_CXXFLAGS) $<
+
+$(OBJS)\mahoganylib_page.obj :  .AUTODEPEND ..\..\src\mahogany\page.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANYLIB_CXXFLAGS) $<
+
+$(OBJS)\mahoganylib_panel.obj :  .AUTODEPEND ..\..\src\mahogany\panel.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANYLIB_CXXFLAGS) $<
 
 $(OBJS)\propgriddll_dummy.obj :  .AUTODEPEND ..\..\src\common\dummy.cpp
