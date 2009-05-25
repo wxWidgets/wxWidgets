@@ -1428,7 +1428,7 @@ wxSpinCtrl supports the properties as @ref xrc_wxspinbutton.
     Initial position of the sash (default: 0).}
 @row3col{minsize, integer,
     Minimum child size (default: not set).}
-@row3col{minsize, @ref overview_xrcformat_type_float,
+@row3col{gravity, @ref overview_xrcformat_type_float,
     Sash gravity, see wxSplitterWindow::SetSashGravity() (default: not set).}
 @endTable
 
