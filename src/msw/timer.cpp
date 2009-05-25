@@ -122,6 +122,11 @@ bool wxMSWTimerImpl::Start(int milliseconds, bool oneShot)
     // check that SetTimer() didn't reuse an existing id: according to the MSDN
     // this can happen and this would be catastrophic to us as we rely on ids
     // uniquely identifying the timers because we use them as keys in the hash
+    //
+    // notice that this also happens if the same id is reused for multiple
+    // timers: this used to work in previous versions but was never supported
+    // and absolutely shouldn't be done, use wxID_ANY to assign an id to the
+    // timer automatically or ensure that all your timers have unique ids
     if ( TimerMap().find(m_id) != TimerMap().end() )
     {
         wxLogError(_("Timer creation failed."));
