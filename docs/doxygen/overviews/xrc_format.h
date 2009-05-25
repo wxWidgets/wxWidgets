@@ -959,13 +959,36 @@ Each @c listbookpage has exactly one non-toplevel window as its child.
 
 @subsubsection xrc_wxlistctrl wxListCtrl
 
-A listctrl can have one or more child objects of the class @ref xrc_wxlistitem
+A list control can have one or more child objects of the class @ref xrc_wxlistitem
 and one or more objects of the @ref xrc_wximagelist class. The latter is
 defined either using @c \<imagelist\> tag for the control with @c wxLC_ICON
 style or using @c \<imagelist-small\> tag for the control with @c
 wxLC_SMALL_ICON style.
 
-@subsubsection xrc_wxlistitem wxListItem
+Report mode list controls (i.e. created with @c wxLC_REPORT style) can in
+addition have one or more @ref xrc_wxlistcol child elements.
+
+@subsubsection xrc_wxlistcol listcol
+
+The @c listcol class can only be used for wxListCtrl children. It can have the
+following properties:
+@beginTable
+@hdr3col{property, type, description}
+@row3col{align, wxListColumnFormat,
+    The alignment for the item.
+    Can be one of @c wxLIST_FORMAT_LEFT, @c wxLIST_FORMAT_RIGHT or
+    @c wxLIST_FORMAT_CENTRE.}
+@row3col{text, @ref overview_xrcformat_type_string,
+    The title of the column. }
+@row3col{width, integer,
+    The column width. }
+@endTable
+
+The columns are appended to the control in order of their appearance and may be
+referenced by 0-based index in the @c col attributes of subsequent @c listitem
+objects.
+
+@subsubsection xrc_wxlistitem listitem
 
 The @c listitem is a child object for the class @ref xrc_wxlistctrl.
 It can have the following properties:
@@ -986,14 +1009,14 @@ It can have the following properties:
     Add a bitmap in the 'small' @ref xrc_wximagelist associated with the
     @ref xrc_wxlistctrl parent and associate it with this item.
     If the 'small' imagelist is not defined it will be created implicitly.}
+@row3col{col, integer,
+    The zero-based column index.}
 @row3col{image, integer,
     The zero-based index of the image associated with the item
     in the (normal) image list.}
 @row3col{image-small, integer,
     The zero-based index of the image associated with the item
     in the 'small' image list.}
-@row3col{col, integer,
-    The zero-based column index.}
 @row3col{data, integer,
     The client data for the item.}
 @row3col{font, @ref overview_xrcformat_type_font,
@@ -1001,33 +1024,14 @@ It can have the following properties:
 @row3col{image, integer,
     The zero-based index of the image associated with the item
     into the image list.}
-@row3col{mask, @ref overview_xrcformat_type_style,
-    The mask indicating which fields of this class are valid.
-    Can be any combination of the following values:
-        - wxLIST_MASK_STATE: @b GetState is valid.
-        - wxLIST_MASK_TEXT: @b GetText is valid.
-        - wxLIST_MASK_IMAGE: @b GetImage is valid.
-        - wxLIST_MASK_DATA: @b GetData is valid.
-        - wxLIST_MASK_WIDTH: @b GetWidth is valid.
-        - wxLIST_MASK_FORMAT: @b GetFormat is valid. }
 @row3col{state, @ref overview_xrcformat_type_style,
-    The item state flags (note that the valid state flags are influenced
-    by the value of the @c statemask, see below).
-    Can be any combination of the following values:
+    The item state. Can be any combination of the following values:
         - @c wxLIST_STATE_FOCUSED: The item has the focus.
         - @c wxLIST_STATE_SELECTED: The item is selected.
-        - @c wxLIST_STATE_DONTCARE: Don't care what the state is. Win32 only.
-        - @c wxLIST_STATE_DROPHILITED: The item is highlighted to receive a drop event. Win32 only.
-        - @c wxLIST_STATE_CUT: The item is in the cut state. Win32 only. }
-@row3col{statemask, bitlist,
-    A mask indicating which state flags are valid. This is a bitlist of the
-    flags reported above for the item state. }
 @row3col{text, @ref overview_xrcformat_type_string,
-    The text label (or header for columns) for the item. }
+    The text label for the item. }
 @row3col{textcolour, @ref overview_xrcformat_type_colour,
     The text colour for the item. }
-@row3col{width, integer,
-    The column width. }
 @endTable
 
 Notice that the item position can't be specified here, the items are appended

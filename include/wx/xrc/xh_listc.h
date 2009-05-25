@@ -16,6 +16,7 @@
 #if wxUSE_XRC && wxUSE_LISTCTRL
 
 class WXDLLIMPEXP_FWD_CORE wxListCtrl;
+class WXDLLIMPEXP_FWD_CORE wxListItem;
 
 class WXDLLIMPEXP_XRC wxListCtrlXmlHandler : public wxXmlResourceHandler
 {
@@ -25,8 +26,13 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    long Handle_wxListItem();
-    wxObject* Handle_wxListCtrl();
+    // handlers for wxListCtrl itself and its listcol and listitem children
+    wxListCtrl *HandleListCtrl();
+    void HandleListCol();
+    void HandleListItem();
+
+    // common part to HandleList{Col,Item}()
+    void HandleCommonItemAttrs(wxListItem& item);
 
     // gets the items image index in the corresponding image list (normal if
     // which is wxIMAGE_LIST_NORMAL or small if it is wxIMAGE_LIST_SMALL)

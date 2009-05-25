@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/xrc/xh_listc.cpp
 // Purpose:     XRC resource for wxListCtrl
-// Author:      Brian Gavin
+// Author:      Brian Gavin, Kinaou Hervé, Vadim Zeitlin
 // Created:     2000/09/09
 // RCS-ID:      $Id$
 // Copyright:   (c) 2000 Brian Gavin
+//              (c) 2009 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -26,11 +27,20 @@
 #include "wx/listctrl.h"
 #include "wx/imaglist.h"
 
+namespace
+{
+
+const char *LISTCTRL_CLASS_NAME = "wxListCtrl";
+const char *LISTITEM_CLASS_NAME = "listitem";
+const char *LISTCOL_CLASS_NAME = "listcol";
+
+} // anonymous namespace
+
 
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrlXmlHandler, wxXmlResourceHandler)
 
 wxListCtrlXmlHandler::wxListCtrlXmlHandler()
-: wxXmlResourceHandler()
+    : wxXmlResourceHandler()
 {
     // wxListItem styles
     XRC_ADD_STYLE(wxLIST_FORMAT_LEFT);
@@ -42,11 +52,8 @@ wxListCtrlXmlHandler::wxListCtrlXmlHandler()
     XRC_ADD_STYLE(wxLIST_MASK_DATA);
     XRC_ADD_STYLE(wxLIST_MASK_WIDTH);
     XRC_ADD_STYLE(wxLIST_MASK_FORMAT);
-    XRC_ADD_STYLE(wxLIST_STATE_DONTCARE);
-    XRC_ADD_STYLE(wxLIST_STATE_DROPHILITED);
     XRC_ADD_STYLE(wxLIST_STATE_FOCUSED);
     XRC_ADD_STYLE(wxLIST_STATE_SELECTED);
-    XRC_ADD_STYLE(wxLIST_STATE_CUT);
 
     // wxListCtrl styles
     XRC_ADD_STYLE(wxLC_LIST);
@@ -71,30 +78,69 @@ wxListCtrlXmlHandler::wxListCtrlXmlHandler()
 
 wxObject *wxListCtrlXmlHandler::DoCreateResource()
 {
-    if (m_class == wxT("listitem"))
+    if ( m_class == LISTITEM_CLASS_NAME )
     {
-        Handle_wxListItem();
-        return m_parentAsWindow;
+        HandleListItem();
+    }
+    else if ( m_class == LISTCOL_CLASS_NAME )
+    {
+        HandleListCol();
     }
     else
-        return Handle_wxListCtrl();
+    {
+        wxASSERT_MSG( m_class == LISTCTRL_CLASS_NAME,
+                        "can't handle unknown node" );
+
+        return HandleListCtrl();
+    }
+
+    return m_parentAsWindow;
 }
 
 bool wxListCtrlXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return IsOfClass(node, wxT("wxListCtrl")) ||
-            IsOfClass(node, wxT("listitem"));
+    return IsOfClass(node, LISTCTRL_CLASS_NAME) ||
+            IsOfClass(node, LISTITEM_CLASS_NAME) ||
+             IsOfClass(node, LISTCOL_CLASS_NAME);
 }
 
-long wxListCtrlXmlHandler::Handle_wxListItem()
+void wxListCtrlXmlHandler::HandleCommonItemAttrs(wxListItem& item)
+{
+    if (HasParam(wxT("align")))
+        item.SetAlign((wxListColumnFormat)GetStyle(wxT("align")));
+    if (HasParam(wxT("text")))
+        item.SetText(GetText(wxT("text")));
+}
+
+void wxListCtrlXmlHandler::HandleListCol()
 {
     wxListCtrl * const list = wxDynamicCast(m_parentAsWindow, wxListCtrl);
-    wxCHECK_MSG( list, -1, "must have wxListCtrl parent" );
+    wxCHECK_RET( list, "must have wxListCtrl parent" );
+
+    if ( !list->HasFlag(wxLC_REPORT) )
+    {
+        ReportError("Only report mode list controls can have columns.");
+        return;
+    }
 
     wxListItem item;
 
-    if (HasParam(wxT("align")))
-        item.SetAlign((wxListColumnFormat)GetStyle(wxT("align")));
+    HandleCommonItemAttrs(item);
+    if (HasParam(wxT("width")))
+        item.SetWidth((int)GetLong(wxT("width")));
+
+    list->InsertColumn(list->GetColumnCount(), item);
+}
+
+void wxListCtrlXmlHandler::HandleListItem()
+{
+    wxListCtrl * const list = wxDynamicCast(m_parentAsWindow, wxListCtrl);
+    wxCHECK_RET( list, "must have wxListCtrl parent" );
+
+    wxListItem item;
+
+    HandleCommonItemAttrs(item);
+
     if (HasParam(wxT("bg")))
         item.SetBackgroundColour(GetColour(wxT("bg")));
     if (HasParam(wxT("col")))
@@ -103,20 +149,12 @@ long wxListCtrlXmlHandler::Handle_wxListItem()
         item.SetData(GetLong(wxT("data")));
     if (HasParam(wxT("font")))
         item.SetFont(GetFont());
-    if (HasParam(wxT("mask")))
-        item.SetMask(GetStyle(wxT("mask")));
     if (HasParam(wxT("state")))
         item.SetState(GetStyle(wxT("state")));
-    if (HasParam(wxT("statemask")))
-        item.SetStateMask(GetStyle(wxT("statemask")));
-    if (HasParam(wxT("text")))
-        item.SetText(GetText(wxT("text")));
     if (HasParam(wxT("textcolour")))
         item.SetTextColour(GetColour(wxT("textcolour")));
     if (HasParam(wxT("textcolor")))
         item.SetTextColour(GetColour(wxT("textcolor")));
-    if (HasParam(wxT("width")))
-        item.SetWidth((int)GetLong(wxT("width")));
 
     // the list control icon style, may be 0
     int image;
@@ -133,10 +171,10 @@ long wxListCtrlXmlHandler::Handle_wxListItem()
     // append the list item to the control
     item.SetId(list->GetItemCount());
 
-    return list->InsertItem(item);
+    list->InsertItem(item);
 }
 
-wxObject* wxListCtrlXmlHandler::Handle_wxListCtrl()
+wxListCtrl *wxListCtrlXmlHandler::HandleListCtrl()
 {
     XRC_MAKE_INSTANCE(list, wxListCtrl)
 

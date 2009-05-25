@@ -584,8 +584,17 @@
                                 <border>5</border>
                                 <object class="wxListCtrl" name="controls_listctrl">
                                     <size>220,160</size>
-                                    <style>wxLC_REPORT</style>
-                                    <!-- this control is filled in from the code -->
+                                    <style>wxLC_REPORT|wxBORDER_SIMPLE</style>
+                                    <object class="listcol">
+                                        <text>Name</text>
+                                        <width>150</width>
+                                    </object>
+                                    <object class="listcol">
+                                        <text>Weight</text>
+                                        <align>wxLIST_FORMAT_RIGHT</align>
+                                        <width>50</width>
+                                    </object>
+                                    <!-- the items are added from the code -->
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -593,7 +602,7 @@
                                 <border>5</border>
                                 <object class="wxListCtrl" name="controls_listctrl2">
                                     <size>220,160</size>
-                                    <style>wxLC_ICON</style>
+                                    <style>wxLC_ICON|wxBORDER_SIMPLE</style>
                                     <object class="listitem">
                                         <text>Information</text>
                                         <bitmap stock_id="wxART_INFORMATION"/>
@@ -609,7 +618,7 @@
                                 <border>5</border>
                                 <object class="wxListCtrl" name="controls_listctrl3">
                                     <size>220,160</size>
-                                    <style>wxLC_SMALL_ICON</style>
+                                    <style>wxLC_SMALL_ICON|wxBORDER_SIMPLE</style>
                                     <imagelist-small>
                                         <size>20,20</size>
                                         <bitmap stock_id="wxART_INFORMATION"/>

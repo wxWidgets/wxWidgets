@@ -207,22 +207,20 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
     wxXmlResource::Get()->LoadDialog(&dlg, this, wxT("controls_dialog"));
 
 #if wxUSE_LISTCTRL
-    // There is no data in the listctrl. This will add some columns
-    // and some data. You don't need to use any pointers
-    // at all to manipulate the controls, just simply use the XRCCTL(...) macros.
-    // "controls_treectrl" is the name of this control in the XRC.
-    // (1) Insert a column, with the column header of "Name"
-    // (The '_' function around "Name" marks this string as one to translate).
-    XRCCTRL(dlg, "controls_listctrl", wxListCtrl)->InsertColumn( 0,
-                                                                 _("Name"),
-                                                                 wxLIST_FORMAT_LEFT,
-                                                                 ( 200 )
-                                                                );
-    // (2) Insert some items into the listctrl
-    XRCCTRL(dlg, "controls_listctrl", wxListCtrl)->InsertItem(0,wxT("Todd Hope"));
-    XRCCTRL(dlg, "controls_listctrl", wxListCtrl)->InsertItem(1,wxT("Kim Wynd"));
-    XRCCTRL(dlg, "controls_listctrl", wxListCtrl)->InsertItem(2,wxT("Leon Li"));
-#endif
+    // The resource file specifies the columns of the control as they are
+    // typically static while the items themselves are added from here as
+    // usually they are not static (but if they are, they can be defined in the
+    // resources too, see the two other list controls definitions in
+    // controls.xrc)
+
+    // Insert some items into the listctrl: notice that we can access it using
+    // XRCCTRL
+    wxListCtrl * const list = XRCCTRL(dlg, "controls_listctrl", wxListCtrl);
+
+    list->InsertItem(0, "Athos");   list->SetItem(0, 1, "90");
+    list->InsertItem(1, "Porthos"); list->SetItem(1, 1, "120");
+    list->InsertItem(2, "Aramis");  list->SetItem(2, 1, "80");
+#endif // wxUSE_LISTCTRL
 
 #if wxUSE_TREECTRL
     // There is no data in the tree ctrl. These lines will add some.
