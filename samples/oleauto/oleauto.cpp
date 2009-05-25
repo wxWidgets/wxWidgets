@@ -201,12 +201,36 @@ void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
     wxAutomationObject excelObject, rangeObject;
     if (!excelObject.GetInstance(_T("Excel.Application")))
     {
+        // Start Excel if it is not running
         if (!excelObject.CreateInstance(_T("Excel.Application")))
         {
             wxMessageBox(_T("Could not create Excel object."));
             return;
         }
     }
+
+    // Ensure that Excel is visible
+    if (!excelObject.PutProperty(_T("Visible"), true))
+    {
+        wxMessageBox(_T("Could not make Excel object visible"));
+    }
+    const wxVariant workbooksCountVariant = excelObject.GetProperty(_T("Workbooks.Count"));
+    if (workbooksCountVariant.IsNull())
+    {
+        wxMessageBox(_T("Could not get workbooks count"));
+        return;
+    }
+    const long workbooksCount = workbooksCountVariant;
+    if (workbooksCount == 0)
+    {
+        const wxVariant workbook = excelObject.CallMethod(_T("Workbooks.Add"));
+        if (workbook.IsNull())
+        {
+            wxMessageBox(_T("Could not create new Workbook"));
+            return;
+        }
+    }
+
     if (!excelObject.PutProperty(_T("ActiveCell.Value"), _T("wxWidgets automation test!")))
     {
         wxMessageBox(_T("Could not set active cell value."));
