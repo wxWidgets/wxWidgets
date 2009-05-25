@@ -123,6 +123,7 @@
     <define-wxlib-name>adv</define-wxlib-name>
     <define-wxlib-name>qa</define-wxlib-name>
     <define-wxlib-name>aui</define-wxlib-name>
+	<define-wxlib-name>mahogany</define-wxlib-name>
     <define-wxlib-name>propgrid</define-wxlib-name>
     <define-wxlib-name>stc</define-wxlib-name>
     <define-wxlib-name>richtext</define-wxlib-name>
@@ -163,6 +164,7 @@
         <if cond="value=='adv'"><sys-lib>$(WXLIB_ADV_NAME)</sys-lib></if>
         <if cond="value=='qa'"><sys-lib>$(WXLIB_QA_NAME)</sys-lib></if>
         <if cond="value=='aui'"><sys-lib>$(WXLIB_AUI_NAME)</sys-lib></if>
+		<if cond="value=='mahogany'"><sys-lib>$(WXLIB_MAHOGANY_NAME)</sys-lib></if>
         <if cond="value=='propgrid'"><sys-lib>$(WXLIB_PROPGRID_NAME)</sys-lib></if>
         <if cond="value=='richtext'"><sys-lib>$(WXLIB_RICHTEXT_NAME)</sys-lib></if>
 

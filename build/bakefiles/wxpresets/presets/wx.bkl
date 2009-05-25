@@ -90,7 +90,8 @@
 
         <wx-lib>richtext</wx-lib>
         <wx-lib>aui</wx-lib>
-        <wx-lib>propgrid</wx-lib>
+        <wx-lib>mahogany</wx-lib>
+		<wx-lib>propgrid</wx-lib>
         <wx-lib>stc</wx-lib>
         <wx-lib>qa</wx-lib>
         <wx-lib>gl</wx-lib>
@@ -121,7 +122,7 @@
                          tag definitions.
     -->
     <set var="WX_LIB_LIST">
-        base core net xml xrc html adv media gl qa aui propgrid richtext stc
+        base core net xml xrc html adv media gl qa aui mahogany propgrid richtext stc
     </set>
 
     <!-- if you define this variable to 0 before including wx presets, the
