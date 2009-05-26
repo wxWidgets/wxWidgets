@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="mahogany"
-	ProjectGUID="{2614F3F0-4BF8-50DB-B0AE-A029BCC1466B}">
+	Name="ribbon"
+	ProjectGUID="{717E754A-A748-5A81-AA86-AA4640D51560}">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
@@ -19,7 +19,7 @@
 		<Configuration
 			Name="DLL Universal Release|Win32"
 			OutputDirectory="vc_mswunivudll"
-			IntermediateDirectory="vc_mswunivudll\mahogany"
+			IntermediateDirectory="vc_mswunivudll\ribbon"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -32,9 +32,9 @@
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
-				AssemblerListingLocation="vc_mswunivudll\mahogany\"
-				ObjectFile="vc_mswunivudll\mahogany\"
-				ProgramDataBaseFileName="vc_mswunivudll\mahogany.pdb"
+				AssemblerListingLocation="vc_mswunivudll\ribbon\"
+				ObjectFile="vc_mswunivudll\ribbon\"
+				ProgramDataBaseFileName="vc_mswunivudll\ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -44,13 +44,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_mahogany.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswunivudll\mahogany.exe"
+				AdditionalDependencies="wxmswuniv29u_ribbon.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswunivudll\ribbon.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswunivudll\mahogany.pdb"
+				ProgramDatabaseFile="vc_mswunivudll\ribbon.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -80,7 +80,7 @@
 		<Configuration
 			Name="DLL Universal Debug|Win32"
 			OutputDirectory="vc_mswunivuddll"
-			IntermediateDirectory="vc_mswunivuddll\mahogany"
+			IntermediateDirectory="vc_mswunivuddll\ribbon"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -96,9 +96,9 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
-				AssemblerListingLocation="vc_mswunivuddll\mahogany\"
-				ObjectFile="vc_mswunivuddll\mahogany\"
-				ProgramDataBaseFileName="vc_mswunivuddll\mahogany.pdb"
+				AssemblerListingLocation="vc_mswunivuddll\ribbon\"
+				ObjectFile="vc_mswunivuddll\ribbon\"
+				ProgramDataBaseFileName="vc_mswunivuddll\ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -108,13 +108,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_mahogany.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswunivuddll\mahogany.exe"
+				AdditionalDependencies="wxmswuniv29ud_ribbon.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswunivuddll\ribbon.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswunivuddll\mahogany.pdb"
+				ProgramDatabaseFile="vc_mswunivuddll\ribbon.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -144,7 +144,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="vc_mswudll"
-			IntermediateDirectory="vc_mswudll\mahogany"
+			IntermediateDirectory="vc_mswudll\ribbon"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -157,9 +157,9 @@
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
-				AssemblerListingLocation="vc_mswudll\mahogany\"
-				ObjectFile="vc_mswudll\mahogany\"
-				ProgramDataBaseFileName="vc_mswudll\mahogany.pdb"
+				AssemblerListingLocation="vc_mswudll\ribbon\"
+				ObjectFile="vc_mswudll\ribbon\"
+				ProgramDataBaseFileName="vc_mswudll\ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -169,13 +169,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_mahogany.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswudll\mahogany.exe"
+				AdditionalDependencies="wxmsw29u_ribbon.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswudll\ribbon.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswudll\mahogany.pdb"
+				ProgramDatabaseFile="vc_mswudll\ribbon.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -205,7 +205,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="vc_mswuddll"
-			IntermediateDirectory="vc_mswuddll\mahogany"
+			IntermediateDirectory="vc_mswuddll\ribbon"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -221,9 +221,9 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
-				AssemblerListingLocation="vc_mswuddll\mahogany\"
-				ObjectFile="vc_mswuddll\mahogany\"
-				ProgramDataBaseFileName="vc_mswuddll\mahogany.pdb"
+				AssemblerListingLocation="vc_mswuddll\ribbon\"
+				ObjectFile="vc_mswuddll\ribbon\"
+				ProgramDataBaseFileName="vc_mswuddll\ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -233,13 +233,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_mahogany.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswuddll\mahogany.exe"
+				AdditionalDependencies="wxmsw29ud_ribbon.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswuddll\ribbon.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_dll"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswuddll\mahogany.pdb"
+				ProgramDatabaseFile="vc_mswuddll\ribbon.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -269,7 +269,7 @@
 		<Configuration
 			Name="Universal Release|Win32"
 			OutputDirectory="vc_mswunivu"
-			IntermediateDirectory="vc_mswunivu\mahogany"
+			IntermediateDirectory="vc_mswunivu\ribbon"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -282,9 +282,9 @@
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
-				AssemblerListingLocation="vc_mswunivu\mahogany\"
-				ObjectFile="vc_mswunivu\mahogany\"
-				ProgramDataBaseFileName="vc_mswunivu\mahogany.pdb"
+				AssemblerListingLocation="vc_mswunivu\ribbon\"
+				ObjectFile="vc_mswunivu\ribbon\"
+				ProgramDataBaseFileName="vc_mswunivu\ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -294,13 +294,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29u_mahogany.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswunivu\mahogany.exe"
+				AdditionalDependencies="wxmswuniv29u_ribbon.lib  wxmswuniv29u_adv.lib  wxmswuniv29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswunivu\ribbon.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswunivu\mahogany.pdb"
+				ProgramDatabaseFile="vc_mswunivu\ribbon.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -330,7 +330,7 @@
 		<Configuration
 			Name="Universal Debug|Win32"
 			OutputDirectory="vc_mswunivud"
-			IntermediateDirectory="vc_mswunivud\mahogany"
+			IntermediateDirectory="vc_mswunivud\ribbon"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -346,9 +346,9 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
-				AssemblerListingLocation="vc_mswunivud\mahogany\"
-				ObjectFile="vc_mswunivud\mahogany\"
-				ProgramDataBaseFileName="vc_mswunivud\mahogany.pdb"
+				AssemblerListingLocation="vc_mswunivud\ribbon\"
+				ObjectFile="vc_mswunivud\ribbon\"
+				ProgramDataBaseFileName="vc_mswunivud\ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -358,13 +358,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmswuniv29ud_mahogany.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswunivud\mahogany.exe"
+				AdditionalDependencies="wxmswuniv29ud_ribbon.lib  wxmswuniv29ud_adv.lib  wxmswuniv29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswunivud\ribbon.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswunivud\mahogany.pdb"
+				ProgramDatabaseFile="vc_mswunivud\ribbon.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -394,7 +394,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="vc_mswu"
-			IntermediateDirectory="vc_mswu\mahogany"
+			IntermediateDirectory="vc_mswu\ribbon"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -407,9 +407,9 @@
 				ExceptionHandling="TRUE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
-				AssemblerListingLocation="vc_mswu\mahogany\"
-				ObjectFile="vc_mswu\mahogany\"
-				ProgramDataBaseFileName="vc_mswu\mahogany.pdb"
+				AssemblerListingLocation="vc_mswu\ribbon\"
+				ObjectFile="vc_mswu\ribbon\"
+				ProgramDataBaseFileName="vc_mswu\ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -419,13 +419,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29u_mahogany.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswu\mahogany.exe"
+				AdditionalDependencies="wxmsw29u_ribbon.lib  wxmsw29u_adv.lib  wxmsw29u_core.lib  wxbase29u.lib   wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswu\ribbon.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswu\mahogany.pdb"
+				ProgramDatabaseFile="vc_mswu\ribbon.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -455,7 +455,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="vc_mswud"
-			IntermediateDirectory="vc_mswud\mahogany"
+			IntermediateDirectory="vc_mswud\ribbon"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -471,9 +471,9 @@
 				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				RuntimeTypeInfo="TRUE"
-				AssemblerListingLocation="vc_mswud\mahogany\"
-				ObjectFile="vc_mswud\mahogany\"
-				ProgramDataBaseFileName="vc_mswud\mahogany.pdb"
+				AssemblerListingLocation="vc_mswud\ribbon\"
+				ObjectFile="vc_mswud\ribbon\"
+				ProgramDataBaseFileName="vc_mswud\ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				Detect64BitPortabilityProblems="TRUE"
@@ -483,13 +483,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=""
-				AdditionalDependencies="wxmsw29ud_mahogany.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
-				OutputFile="vc_mswud\mahogany.exe"
+				AdditionalDependencies="wxmsw29ud_ribbon.lib  wxmsw29ud_adv.lib  wxmsw29ud_core.lib  wxbase29ud.lib   wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib"
+				OutputFile="vc_mswud\ribbon.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=".\..\..\lib\vc_lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="vc_mswud\mahogany.pdb"
+				ProgramDatabaseFile="vc_mswud\ribbon.pdb"
 				SubSystem="2"
 				TargetMachine="1"/>
 			<Tool
@@ -526,7 +526,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\mahogany.cpp">
+				RelativePath=".\ribbondemo.cpp">
 			</File>
 		</Filter>
 		<Filter

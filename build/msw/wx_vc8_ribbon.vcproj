@@ -9,8 +9,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="mahogany"
-	ProjectGUID="{0AAF3BB9-34BE-55D7-B07C-F3EB0BDB24E2}"
+	Name="ribbon"
+	ProjectGUID="{F751C47E-8534-571F-8E4A-F0E6AC978D63}"
 	>
 	<Platforms>
 		<Platform
@@ -24,7 +24,7 @@
 		<Configuration
 			Name="DLL Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivudll\mahogany"
+			IntermediateDirectory="vc_mswunivudll\ribbon"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -49,16 +49,16 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_MAHOGANY"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_RIBBON"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivudll\wxprec_mahoganydll.pch"
-				AssemblerListingLocation="vc_mswunivudll\mahogany\"
-				ObjectFile="vc_mswunivudll\mahogany\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290u_mahogany_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswunivudll\wxprec_ribbondll.pch"
+				AssemblerListingLocation="vc_mswunivudll\ribbon\"
+				ObjectFile="vc_mswunivudll\ribbon\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290u_ribbon_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290u_mahogany_vc_custom;WXUSINGDLL;WXMAKINGDLL_MAHOGANY"
+				PreprocessorDefinitions="__WXMSW__;__WXUNIVERSAL__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290u_ribbon_vc_custom;WXUSINGDLL;WXMAKINGDLL_RIBBON"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -80,14 +80,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxmswuniv29u_adv.lib ..\..\lib\vc_dll\wxmswuniv29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
-				OutputFile="..\..\lib\vc_dll\wxmswuniv290u_mahogany_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmswuniv290u_ribbon_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29u_mahogany.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29u_ribbon.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290u_mahogany_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290u_ribbon_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -101,7 +101,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_vc8_mahogany.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_ribbon.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -114,7 +114,7 @@
 		<Configuration
 			Name="DLL Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswunivuddll\mahogany"
+			IntermediateDirectory="vc_mswunivuddll\ribbon"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -139,7 +139,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_MAHOGANY"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_RIBBON"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -148,10 +148,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_mahoganydll.pch"
-				AssemblerListingLocation="vc_mswunivuddll\mahogany\"
-				ObjectFile="vc_mswunivuddll\mahogany\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290ud_mahogany_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswunivuddll\wxprec_ribbondll.pch"
+				AssemblerListingLocation="vc_mswunivuddll\ribbon\"
+				ObjectFile="vc_mswunivuddll\ribbon\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmswuniv290ud_ribbon_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -162,7 +162,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290ud_mahogany_vc_custom;WXUSINGDLL;WXMAKINGDLL_MAHOGANY"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXUNIVERSAL__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmswuniv290ud_ribbon_vc_custom;WXUSINGDLL;WXMAKINGDLL_RIBBON"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswunivud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -173,14 +173,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxmswuniv29ud_adv.lib ..\..\lib\vc_dll\wxmswuniv29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
-				OutputFile="..\..\lib\vc_dll\wxmswuniv290ud_mahogany_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmswuniv290ud_ribbon_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29ud_mahogany.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmswuniv29ud_ribbon.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290ud_mahogany_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmswuniv290ud_ribbon_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -194,7 +194,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_vc8_mahogany.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_ribbon.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -207,7 +207,7 @@
 		<Configuration
 			Name="DLL Release|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswudll\mahogany"
+			IntermediateDirectory="vc_mswudll\ribbon"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -232,16 +232,16 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_MAHOGANY"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;__WXMSW__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_RIBBON"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswudll\wxprec_mahoganydll.pch"
-				AssemblerListingLocation="vc_mswudll\mahogany\"
-				ObjectFile="vc_mswudll\mahogany\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290u_mahogany_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswudll\wxprec_ribbondll.pch"
+				AssemblerListingLocation="vc_mswudll\ribbon\"
+				ObjectFile="vc_mswudll\ribbon\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290u_ribbon_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -252,7 +252,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290u_mahogany_vc_custom;WXUSINGDLL;WXMAKINGDLL_MAHOGANY"
+				PreprocessorDefinitions="__WXMSW__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290u_ribbon_vc_custom;WXUSINGDLL;WXMAKINGDLL_RIBBON"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswu;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -263,14 +263,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiff.lib wxjpeg.lib wxpng.lib  wxzlib.lib wxregexu.lib wxexpat.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxmsw29u_adv.lib ..\..\lib\vc_dll\wxmsw29u_core.lib ..\..\lib\vc_dll\wxbase29u.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw290u_mahogany_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw290u_ribbon_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_mahogany.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw29u_ribbon.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290u_mahogany_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290u_ribbon_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -284,7 +284,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_vc8_mahogany.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_ribbon.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -297,7 +297,7 @@
 		<Configuration
 			Name="DLL Debug|Win32"
 			OutputDirectory="..\..\lib\vc_dll"
-			IntermediateDirectory="vc_mswuddll\mahogany"
+			IntermediateDirectory="vc_mswuddll\ribbon"
 			ConfigurationType="2"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -322,7 +322,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
-				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_MAHOGANY"
+				PreprocessorDefinitions="_USRDLL;DLL_EXPORTS;_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXUSINGDLL;WXMAKINGDLL_RIBBON"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -331,10 +331,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswuddll\wxprec_mahoganydll.pch"
-				AssemblerListingLocation="vc_mswuddll\mahogany\"
-				ObjectFile="vc_mswuddll\mahogany\"
-				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290ud_mahogany_vc_custom.pdb"
+				PrecompiledHeaderFile="vc_mswuddll\wxprec_ribbondll.pch"
+				AssemblerListingLocation="vc_mswuddll\ribbon\"
+				ObjectFile="vc_mswuddll\ribbon\"
+				ProgramDataBaseFileName="..\..\lib\vc_dll\wxmsw290ud_ribbon_vc_custom.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -345,7 +345,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290ud_mahogany_vc_custom;WXUSINGDLL;WXMAKINGDLL_MAHOGANY"
+				PreprocessorDefinitions="_DEBUG;__WXMSW__;__WXDEBUG__;_UNICODE;WXBUILDING;WXDLLNAME=wxmsw290ud_ribbon_vc_custom;WXUSINGDLL;WXMAKINGDLL_RIBBON"
 				Culture="1033"
 				AdditionalIncludeDirectories="..\..\lib\vc_dll\mswud;..\..\include;..\..\src\tiff\libtiff;..\..\src\jpeg;..\..\src\png;..\..\src\zlib;..\..\src\regex;..\..\src\expat\lib"
 			/>
@@ -356,14 +356,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="wxtiffd.lib wxjpegd.lib wxpngd.lib  wxzlibd.lib wxregexud.lib wxexpatd.lib    kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib ..\..\lib\vc_dll\wxmsw29ud_adv.lib ..\..\lib\vc_dll\wxmsw29ud_core.lib ..\..\lib\vc_dll\wxbase29ud.lib"
-				OutputFile="..\..\lib\vc_dll\wxmsw290ud_mahogany_vc_custom.dll"
+				OutputFile="..\..\lib\vc_dll\wxmsw290ud_ribbon_vc_custom.dll"
 				LinkIncremental="2"
-				ImportLibrary="..\..\lib\vc_dll\wxmsw29ud_mahogany.lib"
+				ImportLibrary="..\..\lib\vc_dll\wxmsw29ud_ribbon.lib"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\..\lib\vc_dll"
 				GenerateManifest="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290ud_mahogany_vc_custom.pdb"
+				ProgramDatabaseFile="..\..\lib\vc_dll\wxmsw290ud_ribbon_vc_custom.pdb"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -377,7 +377,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_dll\wx_vc8_mahogany.bsc"
+				OutputFile="..\..\lib\vc_dll\wx_vc8_ribbon.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -390,7 +390,7 @@
 		<Configuration
 			Name="Universal Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivu\mahogany"
+			IntermediateDirectory="vc_mswunivu\ribbon"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -421,10 +421,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivu\wxprec_mahoganylib.pch"
-				AssemblerListingLocation="vc_mswunivu\mahogany\"
-				ObjectFile="vc_mswunivu\mahogany\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29u_mahogany.pdb"
+				PrecompiledHeaderFile="vc_mswunivu\wxprec_ribbonlib.pch"
+				AssemblerListingLocation="vc_mswunivu\ribbon\"
+				ObjectFile="vc_mswunivu\ribbon\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29u_ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -444,7 +444,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmswuniv29u_mahogany.lib"
+				OutputFile="..\..\lib\vc_lib\wxmswuniv29u_ribbon.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -458,7 +458,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_vc8_mahogany.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_ribbon.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -471,7 +471,7 @@
 		<Configuration
 			Name="Universal Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswunivud\mahogany"
+			IntermediateDirectory="vc_mswunivud\ribbon"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -505,10 +505,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswunivud\wxprec_mahoganylib.pch"
-				AssemblerListingLocation="vc_mswunivud\mahogany\"
-				ObjectFile="vc_mswunivud\mahogany\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29ud_mahogany.pdb"
+				PrecompiledHeaderFile="vc_mswunivud\wxprec_ribbonlib.pch"
+				AssemblerListingLocation="vc_mswunivud\ribbon\"
+				ObjectFile="vc_mswunivud\ribbon\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmswuniv29ud_ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -528,7 +528,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmswuniv29ud_mahogany.lib"
+				OutputFile="..\..\lib\vc_lib\wxmswuniv29ud_ribbon.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -542,7 +542,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_vc8_mahogany.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_ribbon.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -555,7 +555,7 @@
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswu\mahogany"
+			IntermediateDirectory="vc_mswu\ribbon"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -586,10 +586,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswu\wxprec_mahoganylib.pch"
-				AssemblerListingLocation="vc_mswu\mahogany\"
-				ObjectFile="vc_mswu\mahogany\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29u_mahogany.pdb"
+				PrecompiledHeaderFile="vc_mswu\wxprec_ribbonlib.pch"
+				AssemblerListingLocation="vc_mswu\ribbon\"
+				ObjectFile="vc_mswu\ribbon\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29u_ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -609,7 +609,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29u_mahogany.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw29u_ribbon.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -623,7 +623,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_vc8_mahogany.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_ribbon.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -636,7 +636,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\..\lib\vc_lib"
-			IntermediateDirectory="vc_mswud\mahogany"
+			IntermediateDirectory="vc_mswud\ribbon"
 			ConfigurationType="4"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -670,10 +670,10 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="wx/wxprec.h"
-				PrecompiledHeaderFile="vc_mswud\wxprec_mahoganylib.pch"
-				AssemblerListingLocation="vc_mswud\mahogany\"
-				ObjectFile="vc_mswud\mahogany\"
-				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29ud_mahogany.pdb"
+				PrecompiledHeaderFile="vc_mswud\wxprec_ribbonlib.pch"
+				AssemblerListingLocation="vc_mswud\ribbon\"
+				ObjectFile="vc_mswud\ribbon\"
+				ProgramDataBaseFileName="..\..\lib\vc_lib\wxmsw29ud_ribbon.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -693,7 +693,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\vc_lib\wxmsw29ud_mahogany.lib"
+				OutputFile="..\..\lib\vc_lib\wxmsw29ud_ribbon.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -707,7 +707,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
-				OutputFile="..\..\lib\vc_lib\wx_vc8_mahogany.bsc"
+				OutputFile="..\..\lib\vc_lib\wx_vc8_ribbon.bsc"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -1047,19 +1047,19 @@
 			UniqueIdentifier="{8C07E926-65B0-5F00-B0D6-7F40DA69BB25}"
 			>
 			<File
-				RelativePath="..\..\include\wx\mahogany\art.h"
+				RelativePath="..\..\include\wx\ribbon\art.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\mahogany\bar.h"
+				RelativePath="..\..\include\wx\ribbon\bar.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\mahogany\page.h"
+				RelativePath="..\..\include\wx\ribbon\page.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\mahogany\panel.h"
+				RelativePath="..\..\include\wx\ribbon\panel.h"
 				>
 			</File>
 		</Filter>
@@ -1069,19 +1069,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\src\mahogany\art.cpp"
+				RelativePath="..\..\src\ribbon\art.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\mahogany\bar.cpp"
+				RelativePath="..\..\src\ribbon\bar.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\mahogany\page.cpp"
+				RelativePath="..\..\src\ribbon\page.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\mahogany\panel.cpp"
+				RelativePath="..\..\src\ribbon\panel.cpp"
 				>
 			</File>
 		</Filter>

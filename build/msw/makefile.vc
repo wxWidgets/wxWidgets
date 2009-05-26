@@ -19,7 +19,7 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 	DEBUG_FLAG="$(DEBUG_FLAG)" DEBUG_RUNTIME_LIBS="$(DEBUG_RUNTIME_LIBS)" \
 	MONOLITHIC="$(MONOLITHIC)" USE_GUI="$(USE_GUI)" USE_HTML="$(USE_HTML)" \
 	USE_MEDIA="$(USE_MEDIA)" USE_XRC="$(USE_XRC)" USE_AUI="$(USE_AUI)" \
-	USE_MAHOGANY="$(USE_MAHOGANY)" USE_PROPGRID="$(USE_PROPGRID)" \
+	USE_RIBBON="$(USE_RIBBON)" USE_PROPGRID="$(USE_PROPGRID)" \
 	USE_RICHTEXT="$(USE_RICHTEXT)" USE_STC="$(USE_STC)" \
 	USE_OPENGL="$(USE_OPENGL)" USE_QA="$(USE_QA)" \
 	USE_EXCEPTIONS="$(USE_EXCEPTIONS)" USE_RTTI="$(USE_RTTI)" \
@@ -1305,41 +1305,41 @@ AUILIB_OBJECTS =  \
 	$(OBJS)\auilib_auibook.obj \
 	$(OBJS)\auilib_auibar.obj \
 	$(OBJS)\auilib_tabmdi.obj
-MAHOGANYDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_397)$(__DEBUGRUNTIME) /DWIN32 \
+RIBBONDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_397)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
-	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).pdb \
+	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).pdb \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I..\..\include /W4 \
 	/DWXBUILDING /I..\..\src\tiff\libtiff /I..\..\src\jpeg /I..\..\src\png \
 	/I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib /DWXUSINGDLL \
-	/DWXMAKINGDLL_MAHOGANY $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_mahoganydll.pch" $(CPPFLAGS) $(CXXFLAGS)
-MAHOGANYDLL_OBJECTS =  \
-	$(OBJS)\mahoganydll_dummy.obj \
-	$(OBJS)\mahoganydll_version.res \
-	$(OBJS)\mahoganydll_art.obj \
-	$(OBJS)\mahoganydll_bar.obj \
-	$(OBJS)\mahoganydll_page.obj \
-	$(OBJS)\mahoganydll_panel.obj
-MAHOGANYLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_410)$(__DEBUGRUNTIME) /DWIN32 \
+	/DWXMAKINGDLL_RIBBON $(__RTTIFLAG) $(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" \
+	/Fp"$(OBJS)\wxprec_ribbondll.pch" $(CPPFLAGS) $(CXXFLAGS)
+RIBBONDLL_OBJECTS =  \
+	$(OBJS)\ribbondll_dummy.obj \
+	$(OBJS)\ribbondll_version.res \
+	$(OBJS)\ribbondll_art.obj \
+	$(OBJS)\ribbondll_bar.obj \
+	$(OBJS)\ribbondll_page.obj \
+	$(OBJS)\ribbondll_panel.obj
+RIBBONLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_410)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
-	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.pdb \
+	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.pdb \
 	$(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ \
 	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
 	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	$(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I..\..\include /W4 \
 	/DWXBUILDING /I..\..\src\tiff\libtiff /I..\..\src\jpeg /I..\..\src\png \
 	/I..\..\src\zlib /I..\..\src\regex /I..\..\src\expat\lib $(__RTTIFLAG) \
-	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_mahoganylib.pch" \
+	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_ribbonlib.pch" \
 	$(CPPFLAGS) $(CXXFLAGS)
-MAHOGANYLIB_OBJECTS =  \
-	$(OBJS)\mahoganylib_dummy.obj \
-	$(OBJS)\mahoganylib_art.obj \
-	$(OBJS)\mahoganylib_bar.obj \
-	$(OBJS)\mahoganylib_page.obj \
-	$(OBJS)\mahoganylib_panel.obj
+RIBBONLIB_OBJECTS =  \
+	$(OBJS)\ribbonlib_dummy.obj \
+	$(OBJS)\ribbonlib_art.obj \
+	$(OBJS)\ribbonlib_bar.obj \
+	$(OBJS)\ribbonlib_page.obj \
+	$(OBJS)\ribbonlib_panel.obj
 PROPGRIDDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_424)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid_vc$(VENDORTAG).pdb \
@@ -4352,9 +4352,9 @@ ____wxaui_namedll_DEP = $(__auidll___depname)
 !if "$(SHARED)" == "0"
 ____wxaui_namelib_DEP = $(__auilib___depname)
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_MAHOGANY)" == "1"
-__mahoganydll___depname = \
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).dll
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RIBBON)" == "1"
+__ribbondll___depname = \
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).dll
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_397 = D
@@ -4362,9 +4362,9 @@ __RUNTIME_LIBS_397 = D
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_397 = $(__THREADSFLAG)
 !endif
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_MAHOGANY)" == "1"
-__mahoganylib___depname = \
-	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.lib
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_RIBBON)" == "1"
+__ribbonlib___depname = \
+	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib
 !endif
 !if "$(RUNTIME_LIBS)" == "dynamic"
 __RUNTIME_LIBS_410 = D
@@ -4373,10 +4373,10 @@ __RUNTIME_LIBS_410 = D
 __RUNTIME_LIBS_410 = $(__THREADSFLAG)
 !endif
 !if "$(SHARED)" == "1"
-____wxmahogany_namedll_DEP = $(__mahoganydll___depname)
+____wxribbon_namedll_DEP = $(__ribbondll___depname)
 !endif
 !if "$(SHARED)" == "0"
-____wxmahogany_namelib_DEP = $(__mahoganylib___depname)
+____wxribbon_namelib_DEP = $(__ribbonlib___depname)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_PROPGRID)" == "1"
 __propgriddll___depname = \
@@ -4689,7 +4689,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: setup_h $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__wxscintilla) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__mahoganydll___depname) $(__mahoganylib___depname) $(__propgriddll___depname) $(__propgridlib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__stcdll___depname) $(__stclib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
+all: setup_h $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(__wxpng___depname) $(__wxjpeg___depname) $(__wxtiff___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(__wxscintilla) $(__monodll___depname) $(__monolib___depname) $(__basedll___depname) $(__baselib___depname) $(__netdll___depname) $(__netlib___depname) $(__coredll___depname) $(__corelib___depname) $(__advdll___depname) $(__advlib___depname) $(__mediadll___depname) $(__medialib___depname) $(__htmldll___depname) $(__htmllib___depname) $(__qadll___depname) $(__qalib___depname) $(__xmldll___depname) $(__xmllib___depname) $(__xrcdll___depname) $(__xrclib___depname) $(__auidll___depname) $(__auilib___depname) $(__ribbondll___depname) $(__ribbonlib___depname) $(__propgriddll___depname) $(__propgridlib___depname) $(__richtextdll___depname) $(__richtextlib___depname) $(__stcdll___depname) $(__stclib___depname) $(__gldll___depname) $(__gllib___depname) build_cfg_file
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -4757,11 +4757,11 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui_vc$(VENDORTAG).pdb del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui_vc$(VENDORTAG).pdb
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).dll
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).ilk del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).ilk
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).pdb del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).pdb
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.lib
-	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.lib
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).dll
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).ilk del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).ilk
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).pdb del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).pdb
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib
+	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid_vc$(VENDORTAG).dll del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid_vc$(VENDORTAG).dll
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid_vc$(VENDORTAG).ilk del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid_vc$(VENDORTAG).ilk
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid_vc$(VENDORTAG).pdb del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid_vc$(VENDORTAG).pdb
@@ -5043,23 +5043,23 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 wxaui: $(____wxaui_namedll_DEP) $(____wxaui_namelib_DEP)
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_MAHOGANY)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).dll: $(OBJS)\mahoganydll_dummy.obj  $(MAHOGANYDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\mahoganydll_version.res $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
-	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_4) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG).pdb"  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(LDFLAGS) @<<
-	$(MAHOGANYDLL_OBJECTS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.lib
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RIBBON)" == "1"
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).dll: $(OBJS)\ribbondll_dummy.obj  $(RIBBONDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\ribbondll_version.res $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
+	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_4) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG).pdb"  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(LDFLAGS) @<<
+	$(RIBBONDLL_OBJECTS)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib
 <<
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_MAHOGANY)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.lib: $(OBJS)\mahoganylib_dummy.obj  $(MAHOGANYLIB_OBJECTS)
+!if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_RIBBON)" == "1"
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib: $(OBJS)\ribbonlib_dummy.obj  $(RIBBONLIB_OBJECTS)
 	if exist $@ del $@
 	link /LIB /NOLOGO /OUT:$@ @<<
-	$(MAHOGANYLIB_OBJECTS)
+	$(RIBBONLIB_OBJECTS)
 <<
 !endif
 
-!if "$(MONOLITHIC)" == "0" && "$(USE_MAHOGANY)" == "1"
-wxmahogany: $(____wxmahogany_namedll_DEP) $(____wxmahogany_namelib_DEP)
+!if "$(MONOLITHIC)" == "0" && "$(USE_RIBBON)" == "1"
+wxribbon: $(____wxribbon_namedll_DEP) $(____wxribbon_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_PROPGRID)" == "1"
@@ -14585,38 +14585,38 @@ $(OBJS)\auilib_auibar.obj: ..\..\src\aui\auibar.cpp
 $(OBJS)\auilib_tabmdi.obj: ..\..\src\aui\tabmdi.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(AUILIB_CXXFLAGS) ..\..\src\aui\tabmdi.cpp
 
-$(OBJS)\mahoganydll_dummy.obj: ..\..\src\common\dummy.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
+$(OBJS)\ribbondll_dummy.obj: ..\..\src\common\dummy.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
-$(OBJS)\mahoganydll_version.res: ..\..\src\msw\version.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_4) $(__NO_VC_CRTDBG_p_68)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) /i $(SETUPHDIR) /i ..\..\include /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany_vc$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\lib /d WXUSINGDLL /d WXMAKINGDLL_MAHOGANY ..\..\src\msw\version.rc
+$(OBJS)\ribbondll_version.res: ..\..\src\msw\version.rc
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_4) $(__NO_VC_CRTDBG_p_68)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) /i $(SETUPHDIR) /i ..\..\include /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon_vc$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\lib /d WXUSINGDLL /d WXMAKINGDLL_RIBBON ..\..\src\msw\version.rc
 
-$(OBJS)\mahoganydll_art.obj: ..\..\src\mahogany\art.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYDLL_CXXFLAGS) ..\..\src\mahogany\art.cpp
+$(OBJS)\ribbondll_art.obj: ..\..\src\ribbon\art.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\art.cpp
 
-$(OBJS)\mahoganydll_bar.obj: ..\..\src\mahogany\bar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYDLL_CXXFLAGS) ..\..\src\mahogany\bar.cpp
+$(OBJS)\ribbondll_bar.obj: ..\..\src\ribbon\bar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\bar.cpp
 
-$(OBJS)\mahoganydll_page.obj: ..\..\src\mahogany\page.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYDLL_CXXFLAGS) ..\..\src\mahogany\page.cpp
+$(OBJS)\ribbondll_page.obj: ..\..\src\ribbon\page.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\page.cpp
 
-$(OBJS)\mahoganydll_panel.obj: ..\..\src\mahogany\panel.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYDLL_CXXFLAGS) ..\..\src\mahogany\panel.cpp
+$(OBJS)\ribbondll_panel.obj: ..\..\src\ribbon\panel.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\panel.cpp
 
-$(OBJS)\mahoganylib_dummy.obj: ..\..\src\common\dummy.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
+$(OBJS)\ribbonlib_dummy.obj: ..\..\src\common\dummy.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
-$(OBJS)\mahoganylib_art.obj: ..\..\src\mahogany\art.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) ..\..\src\mahogany\art.cpp
+$(OBJS)\ribbonlib_art.obj: ..\..\src\ribbon\art.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\art.cpp
 
-$(OBJS)\mahoganylib_bar.obj: ..\..\src\mahogany\bar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) ..\..\src\mahogany\bar.cpp
+$(OBJS)\ribbonlib_bar.obj: ..\..\src\ribbon\bar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\bar.cpp
 
-$(OBJS)\mahoganylib_page.obj: ..\..\src\mahogany\page.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) ..\..\src\mahogany\page.cpp
+$(OBJS)\ribbonlib_page.obj: ..\..\src\ribbon\page.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\page.cpp
 
-$(OBJS)\mahoganylib_panel.obj: ..\..\src\mahogany\panel.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MAHOGANYLIB_CXXFLAGS) ..\..\src\mahogany\panel.cpp
+$(OBJS)\ribbonlib_panel.obj: ..\..\src\ribbon\panel.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\panel.cpp
 
 $(OBJS)\propgriddll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(PROPGRIDDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/mahogany/page.cpp
-// Purpose:     Container for ribbon-bar-style interface panels
+// Name:        src/ribbon/panel.cpp
+// Purpose:     Ribbon-style container for a group of related tools / controls
 // Author:      Peter Cawley
 // Modified by:
 // Created:     2009-05-25
@@ -14,9 +14,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/mahogany/page.h"
+#include "wx/ribbon/panel.h"
 
-#if wxUSE_MAHOGANY
+#if wxUSE_RIBBON
 
 #ifndef WX_PRECOMP
 #endif
@@ -27,4 +27,4 @@
 
 
 
-#endif // wxUSE_MAHOGANY
+#endif // wxUSE_RIBBON

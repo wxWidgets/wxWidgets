@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mahogany/panel.h
+// Name:        wx/ribbon/panel.h
 // Purpose:     Ribbon-style container for a group of related tools / controls
 // Author:      Peter Cawley
 // Modified by:

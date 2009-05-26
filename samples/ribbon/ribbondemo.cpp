@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        mahogany.cpp
-// Purpose:     wxMahogany: Ribbon-like user interface - sample/test program
+// Name:        ribbondemo.cpp
+// Purpose:     wxRibbon: Ribbon user interface - sample/test program
 // Author:      Peter Cawley
 // Modified by:
 // Created:     2009-05-25

@@ -224,15 +224,15 @@ OBJS = &
 LIBDIRNAME = .\..\..\lib\$(COMPILER_PREFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-MAHOGANY_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
+RIBBON_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	$(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
 	-i=.\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) &
 	-i=.\..\..\samples -dNOPCH $(__RTTIFLAG_7) $(__EXCEPTIONSFLAG_8) $(CPPFLAGS) &
 	$(CXXFLAGS)
-MAHOGANY_OBJECTS =  &
-	$(OBJS)\mahogany_mahogany.obj
+RIBBON_OBJECTS =  &
+	$(OBJS)\ribbon_ribbondemo.obj
 
 
 all : $(OBJS)
@@ -241,7 +241,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\mahogany.exe
+all : .SYMBOLIC $(OBJS)\ribbon.exe
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -249,23 +249,23 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\mahogany.exe del $(OBJS)\mahogany.exe
+	-if exist $(OBJS)\ribbon.exe del $(OBJS)\ribbon.exe
 
-$(OBJS)\mahogany.exe :  $(MAHOGANY_OBJECTS) $(OBJS)\mahogany_sample.res
-	@%create $(OBJS)\mahogany.lbc
-	@%append $(OBJS)\mahogany.lbc option quiet
-	@%append $(OBJS)\mahogany.lbc name $^@
-	@%append $(OBJS)\mahogany.lbc option caseexact
-	@%append $(OBJS)\mahogany.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(LDFLAGS)
-	@for %i in ($(MAHOGANY_OBJECTS)) do @%append $(OBJS)\mahogany.lbc file %i
-	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_mahogany.lib  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\mahogany.lbc library %i
-	@%append $(OBJS)\mahogany.lbc option resource=$(OBJS)\mahogany_sample.res
-	@for %i in () do @%append $(OBJS)\mahogany.lbc option stack=%i
-	wlink @$(OBJS)\mahogany.lbc
+$(OBJS)\ribbon.exe :  $(RIBBON_OBJECTS) $(OBJS)\ribbon_sample.res
+	@%create $(OBJS)\ribbon.lbc
+	@%append $(OBJS)\ribbon.lbc option quiet
+	@%append $(OBJS)\ribbon.lbc name $^@
+	@%append $(OBJS)\ribbon.lbc option caseexact
+	@%append $(OBJS)\ribbon.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16' $(LDFLAGS)
+	@for %i in ($(RIBBON_OBJECTS)) do @%append $(OBJS)\ribbon.lbc file %i
+	@for %i in ( wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\ribbon.lbc library %i
+	@%append $(OBJS)\ribbon.lbc option resource=$(OBJS)\ribbon_sample.res
+	@for %i in () do @%append $(OBJS)\ribbon.lbc option stack=%i
+	wlink @$(OBJS)\ribbon.lbc
 
-$(OBJS)\mahogany_mahogany.obj :  .AUTODEPEND .\mahogany.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MAHOGANY_CXXFLAGS) $<
+$(OBJS)\ribbon_ribbondemo.obj :  .AUTODEPEND .\ribbondemo.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBON_CXXFLAGS) $<
 
-$(OBJS)\mahogany_sample.res :  .AUTODEPEND .\..\sample.rc
+$(OBJS)\ribbon_sample.res :  .AUTODEPEND .\..\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@    -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\samples -dNOPCH $<
 

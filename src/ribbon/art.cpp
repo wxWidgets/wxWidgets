@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/mahogany/panel.cpp
-// Purpose:     Ribbon-style container for a group of related tools / controls
+// Name:        src/ribbon/art.cpp
+// Purpose:     Art providers for ribbon-bar-style interface
 // Author:      Peter Cawley
 // Modified by:
 // Created:     2009-05-25
@@ -8,15 +8,16 @@
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
+
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 
-#include "wx/mahogany/panel.h"
+#include "wx/ribbon/art.h"
 
-#if wxUSE_MAHOGANY
+#if wxUSE_RIBBON
 
 #ifndef WX_PRECOMP
 #endif
@@ -27,4 +28,4 @@
 
 
 
-#endif // wxUSE_MAHOGANY
+#endif // wxUSE_RIBBON

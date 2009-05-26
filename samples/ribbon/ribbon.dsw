@@ -2,7 +2,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 # WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
 
 ###############################################################################
-Project: "mahogany"=mahogany.dsp - Package Owner=<4>
+Project: "ribbon"=ribbon.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -11,7 +11,7 @@ Package=<5>
 Package=<4>
 {{{
 Begin Project Dependency
-Project_Dep_Name mahogany
+Project_Dep_Name ribbon
 End Project Dependency
 Begin Project Dependency
 Project_Dep_Name adv
@@ -26,7 +26,7 @@ End Project Dependency
 
 ###############################################################################
 
-Project: "mahogany"=..\..\build\msw\wx_mahogany.dsp - Package Owner=<4>
+Project: "ribbon"=..\..\build\msw\wx_ribbon.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mahogany/page.h
+// Name:        wx/ribbon/page.h
 // Purpose:     Container for ribbon-bar-style interface panels
 // Author:      Peter Cawley
 // Modified by:
@@ -9,21 +9,21 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MAHOGANY_PAGE_H_
-#define _WX_MAHOGANY_PAGE_H_
+#ifndef _WX_RIBBON_PAGE_H_
+#define _WX_RIBBON_PAGE_H_
 
 #include "wx/defs.h"
 
-#if wxUSE_MAHOGANY
+#if wxUSE_RIBBON
 
-class wxMahoganyBar;
+class wxRibbonBar;
 
-class WXDLLIMPEXP_MAHOGANY wxMahoganyPage : public wxControl
+class WXDLLIMPEXP_RIBBON wxRibbonPage : public wxControl
 {
 public:
-	wxMahoganyPage();
+	wxRibbonPage();
 
-	wxMahoganyPage(wxMahoganyBar* parent,
+	wxRibbonPage(wxRibbonBar* parent,
 				   wxWindowID id = wxID_ANY,
 				   const wxString& label = wxEmptyString,
 				   const wxBitmap& icon = wxNullBitmap,
@@ -31,9 +31,9 @@ public:
 				   const wxSize& size = wxDefaultSize,
 				   long style = 0);
 
-	virtual ~wxMahoganyPage();
+	virtual ~wxRibbonPage();
 
-	bool Create(wxMahoganyBar* parent,
+	bool Create(wxRibbonBar* parent,
 				wxWindowID id = wxID_ANY,
 				const wxString& label = wxEmptyString,
 				const wxBitmap& icon = wxNullBitmap,
@@ -49,13 +49,13 @@ protected:
 	bool m_scroll_buttons_visible;
 
 #ifndef SWIG
-	DECLARE_CLASS(wxMahoganyPage)
+	DECLARE_CLASS(wxRibbonPage)
 	DECLARE_EVENT_TABLE()
 #endif
 
 	WX_DECLARE_CONTROL_CONTAINER();
 };
 
-#endif // wxUSE_MAHOGANY
+#endif // wxUSE_RIBBON
 
-#endif // _WX_MAHOGANY_PAGE_H_
+#endif // _WX_RIBBON_PAGE_H_

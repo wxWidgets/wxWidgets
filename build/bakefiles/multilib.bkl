@@ -284,29 +284,29 @@
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">aui=auilib+auidll</set>
     
     <!-- ================================================================ -->
-    <!--                          MAHOGANY                                -->
+    <!--                            RIBBON                                -->
     <!-- ================================================================ -->
 
-    <dll id="mahoganydll" template="wx_dll"
-         cond="SHARED=='1' and USE_MAHOGANY=='1' and MONOLITHIC=='0'">
+    <dll id="ribbondll" template="wx_dll"
+         cond="SHARED=='1' and USE_RIBBON=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
-        <define>WXMAKINGDLL_MAHOGANY</define>
-        <sources>$(MAHOGANY_SRC)</sources>
+        <define>WXMAKINGDLL_RIBBON</define>
+        <sources>$(RIBBON_SRC)</sources>
         <library>advdll</library>
         <library>coredll</library>
         <library>basedll</library>
-        <msvc-headers>$(MAHOGANY_HDR)</msvc-headers>
+        <msvc-headers>$(RIBBON_HDR)</msvc-headers>
     </dll>
 
-    <lib id="mahoganylib" template="wx_lib"
-         cond="SHARED=='0' and USE_MAHOGANY=='1' and MONOLITHIC=='0'">
-        <sources>$(MAHOGANY_SRC)</sources>
-        <msvc-headers>$(MAHOGANY_HDR)</msvc-headers>
+    <lib id="ribbonlib" template="wx_lib"
+         cond="SHARED=='0' and USE_RIBBON=='1' and MONOLITHIC=='0'">
+        <sources>$(RIBBON_SRC)</sources>
+        <msvc-headers>$(RIBBON_HDR)</msvc-headers>
     </lib>
     
-    <wxshortcut id="wxmahogany" cond="MONOLITHIC=='0' and USE_MAHOGANY=='1'"/>
+    <wxshortcut id="wxribbon" cond="MONOLITHIC=='0' and USE_RIBBON=='1'"/>
 
-    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">mahogany=mahoganylib+mahoganydll</set>
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">ribbon=ribbonlib+ribbondll</set>
 
     <!-- ================================================================ -->
     <!--                            PROPGRID                              -->

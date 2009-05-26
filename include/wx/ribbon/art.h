@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/mahogany/art.cpp
+// Name:        wx/ribbon/art.h
 // Purpose:     Art providers for ribbon-bar-style interface
 // Author:      Peter Cawley
 // Modified by:
@@ -9,23 +9,23 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "wx/wxprec.h"
+#ifndef _WX_RIBBON_ART_H_
+#define _WX_RIBBON_ART_H_
 
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
+#include "wx/defs.h"
 
-#include "wx/mahogany/art.h"
+#if wxUSE_RIBBON
 
-#if wxUSE_MAHOGANY
+class WXDLLIMPEXP_AUI wxRibbonArtProvider
+{
+public:
+	wxRibbonArtProvider() { }
+	virtual ~wxRibbonArtProvider() { }
 
-#ifndef WX_PRECOMP
-#endif
+	virtual wxRibbonArtProvider* Clone() = 0;
+    virtual void SetFlags(unsigned int flags) = 0;
+};
 
-#ifdef __WXMSW__
-#include "wx/msw/private.h"
-#endif
+#endif // wxUSE_RIBBON
 
-
-
-#endif // wxUSE_MAHOGANY
+#endif // _WX_RIBBON_ART_H_

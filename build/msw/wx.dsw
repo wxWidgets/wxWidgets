@@ -206,7 +206,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "mahogany"=wx_mahogany.dsp - Package Owner=<4>
+Project: "ribbon"=wx_ribbon.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/mahogany/bar.cpp
+// Name:        src/ribbon/bar.cpp
 // Purpose:     Top-level component of the ribbon-bar-style interface
 // Author:      Peter Cawley
 // Modified by:
@@ -15,9 +15,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/mahogany/bar.h"
+#include "wx/ribbon/bar.h"
 
-#if wxUSE_MAHOGANY
+#if wxUSE_RIBBON
 
 #ifndef WX_PRECOMP
 #endif
@@ -26,15 +26,15 @@
 #include "wx/msw/private.h"
 #endif
 
-IMPLEMENT_CLASS(wxMahoganyBar, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxMahoganyBarEvent, wxNotifyEvent)
+IMPLEMENT_CLASS(wxRibbonBar, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxRibbonBarEvent, wxNotifyEvent)
 
-BEGIN_EVENT_TABLE(wxMahoganyBar, wxControl)
+BEGIN_EVENT_TABLE(wxRibbonBar, wxControl)
 END_EVENT_TABLE()
 
-WX_DELEGATE_TO_CONTROL_CONTAINER(wxMahoganyBar, wxControl)
+WX_DELEGATE_TO_CONTROL_CONTAINER(wxRibbonBar, wxControl)
 
-wxMahoganyBar::wxMahoganyBar()
+wxRibbonBar::wxRibbonBar()
 {
 	m_flags = 0;
 	m_tab_scroll_amount = 0;
@@ -43,7 +43,7 @@ wxMahoganyBar::wxMahoganyBar()
 	m_tab_scroll_buttons_shown = false;
 }
 
-wxMahoganyBar::wxMahoganyBar(wxWindow* parent,
+wxRibbonBar::wxRibbonBar(wxWindow* parent,
 							 wxWindowID id,
 							 const wxPoint& pos,
 							 const wxSize& size,
@@ -52,11 +52,11 @@ wxMahoganyBar::wxMahoganyBar(wxWindow* parent,
 	CommonInit(style);
 }
 
-wxMahoganyBar::~wxMahoganyBar()
+wxRibbonBar::~wxRibbonBar()
 {
 }
 
-bool wxMahoganyBar::Create(wxWindow* parent,
+bool wxRibbonBar::Create(wxWindow* parent,
 				wxWindowID id,
 				const wxPoint& pos,
 				const wxSize& size,
@@ -70,10 +70,10 @@ bool wxMahoganyBar::Create(wxWindow* parent,
 	return true;
 }
 
-void wxMahoganyBar::CommonInit(long style)
+void wxRibbonBar::CommonInit(long style)
 {
 	WX_INIT_CONTROL_CONTAINER();
-    SetName(wxT("wxMahoganyBar"));
+    SetName(wxT("wxRibbonBar"));
 
 	m_flags = style;
 	m_tab_height = 20; // initial guess
@@ -83,4 +83,4 @@ void wxMahoganyBar::CommonInit(long style)
 	m_tab_scroll_buttons_shown = false;
 }
 
-#endif // wxUSE_MAHOGANY
+#endif // wxUSE_RIBBON
