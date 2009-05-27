@@ -140,11 +140,15 @@ wxWidgetImplType* wxWidgetImpl::CreateScrollBar( wxWindowMac* wxpeer,
                                     wxWindowID WXUNUSED(id), 
                                     const wxPoint& pos, 
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
+                                    long style, 
                                     long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSScroller* v = [[wxNSScroller alloc] initWithFrame:r];
+    // the creation rect defines the orientation 
+    NSRect createRect = ( style & wxSB_HORIZONTAL ) ? NSMakeRect(r.origin.x, r.origin.y , 17, 16) :
+        NSMakeRect(r.origin.x, r.origin.y , 16, 17);
+    wxNSScroller* v = [[wxNSScroller alloc] initWithFrame:createRect];
+    [v setFrame:r];
 
     wxWidgetCocoaImpl* c = new wxOSXScrollBarCocoaImpl( wxpeer, v );
     [v setEnabled:YES];
