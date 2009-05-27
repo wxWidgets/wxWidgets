@@ -108,7 +108,7 @@
 -->
 
 <mailnotifier>
-    <extraRecipient>wx-buildbot -at- lists.wxwidgets.org</extraRecipient>
+    <extraRecipient>wx-buildbot -at- googlegroups.com</extraRecipient>
 </mailnotifier>
 
 <!--
