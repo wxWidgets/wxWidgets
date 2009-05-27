@@ -16,12 +16,20 @@
 
 #if wxUSE_RIBBON
 
+#include "wx/control.h"
+#include "wx/ribbon/page.h"
+
+class wxRibbonArtProvider;
+
 enum wxRibbonBarOption
 {
 	wxRIBBON_BAR_SHOW_PAGE_LABELS	= 1 << 0,
 	wxRIBBON_BAR_SHOW_PAGE_ICONS	= 1 << 1,
+	wxRIBBON_BAR_FLOW_HORIZONTAL	= 0,
+	wxRIBBON_BAR_FLOW_VERTICAL		= 1 << 2,
 
-	wxRIBBON_BAR_DEFAULT_STYLE = wxRIBBON_BAR_SHOW_PAGE_LABELS
+	wxRIBBON_BAR_DEFAULT_STYLE = wxRIBBON_BAR_FLOW_HORIZONTAL | wxRIBBON_BAR_SHOW_PAGE_LABELS,
+	wxRIBBON_BAR_FOLDBAR_STYLE = wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonBarEvent : public wxNotifyEvent
@@ -45,6 +53,21 @@ private:
 #endif
 };
 
+class WXDLLIMPEXP_RIBBON wxRibbonPageTabInfo
+{
+public:
+	wxRect rect;
+	wxRibbonPage *page;
+	int ideal_width;
+	int small_begin_need_separator_width;
+	int small_must_have_separator_width;
+	int minimum_width;
+};
+
+#ifndef SWIG
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfo, wxRibbonPageTabInfoArray, WXDLLIMPEXP_RIBBON);
+#endif
+
 class WXDLLIMPEXP_RIBBON wxRibbonBar : public wxControl
 {
 public:
@@ -64,10 +87,28 @@ public:
 				const wxSize& size = wxDefaultSize,
 				long style = wxRIBBON_BAR_DEFAULT_STYLE);
 
-protected:
-	void CommonInit(long style);
+	void SetTabCtrlMargins(int left, int right);
 
+	void SetArtProvider(wxRibbonArtProvider* art);
+	wxRibbonArtProvider* GetArtProvider() const;
+
+protected:
+	void AddChild(wxWindowBase *child);
+	void CommonInit(long style);
+	void AddPage(wxRibbonPage *page);
+	void RecalculateTabSizes();
+
+	void OnPaint(wxPaintEvent& evt);
+    void OnEraseBackground(wxEraseEvent& evt);
+    void OnSize(wxSizeEvent& evt);
+
+    wxRibbonPageTabInfoArray m_pages;
+	wxRibbonArtProvider* m_art;
 	long m_flags;
+	int m_tabs_total_width_ideal;
+	int m_tabs_total_width_minimum;
+	int m_tab_margin_left;
+	int m_tab_margin_right;
 	int m_tab_height;
 	int m_tab_scroll_amount;
 	int m_current_page;
@@ -78,8 +119,6 @@ protected:
 	DECLARE_CLASS(wxRibbonBar)
 	DECLARE_EVENT_TABLE()
 #endif
-
-	WX_DECLARE_CONTROL_CONTAINER();
 };
 
 #ifndef SWIG

@@ -16,6 +16,9 @@
 
 #if wxUSE_RIBBON
 
+#include "wx/bitmap.h"
+#include "wx/control.h"
+
 class wxRibbonBar;
 
 class WXDLLIMPEXP_RIBBON wxRibbonPage : public wxControl
@@ -40,6 +43,8 @@ public:
 				const wxPoint& pos = wxDefaultPosition,
 				const wxSize& size = wxDefaultSize,
 				long style = 0);
+
+	wxBitmap& GetIcon() {return m_icon;}
 
 protected:
 	void CommonInit(const wxString& label, const wxBitmap& icon);
