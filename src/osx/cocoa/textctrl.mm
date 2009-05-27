@@ -429,6 +429,13 @@ void wxNSTextViewControl::WriteText(const wxString& str)
     [m_textView insertText:wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
 
+void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack )
+{
+    if ([m_textView respondsToSelector:@selector(setFont:)])
+        [m_textView setFont: font.OSXGetNSFont()];
+}
+
+
 // wxNSTextFieldControl
 
 wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : wxWidgetCocoaImpl(wxPeer, w)
