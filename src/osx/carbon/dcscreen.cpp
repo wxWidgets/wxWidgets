@@ -30,12 +30,13 @@ IMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl)
 wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
    wxWindowDCImpl( owner )
 {
-#if wxOSX_USE_COCOA_OR_IPHONE
-    SetGraphicsContext( wxGraphicsContext::Create() );
-    m_ok = true ;
-#else
     CGRect cgbounds ;
     cgbounds = CGDisplayBounds(CGMainDisplayID());
+    m_width = (wxCoord)cgbounds.size.width;
+    m_height = (wxCoord)cgbounds.size.height;
+#if wxOSX_USE_COCOA_OR_IPHONE
+    SetGraphicsContext( wxGraphicsContext::Create() );
+#else
     Rect bounds;
     bounds.top = (short)cgbounds.origin.y;
     bounds.left = (short)cgbounds.origin.x;
@@ -45,10 +46,8 @@ wxScreenDCImpl::wxScreenDCImpl( wxDC *owner ) :
     CreateNewWindow( kOverlayWindowClass, overlayAttributes, &bounds, (WindowRef*) &m_overlayWindow );
     ShowWindow((WindowRef)m_overlayWindow);
     SetGraphicsContext( wxGraphicsContext::CreateFromNativeWindow( m_overlayWindow ) );
-    m_width = (wxCoord)cgbounds.size.width;
-    m_height = (wxCoord)cgbounds.size.height;
-    m_ok = true ;
 #endif
+    m_ok = true ;
 }
 
 wxScreenDCImpl::~wxScreenDCImpl()
