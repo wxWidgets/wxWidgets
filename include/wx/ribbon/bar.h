@@ -93,13 +93,17 @@ public:
 	wxRibbonArtProvider* GetArtProvider() const;
 
 protected:
-	void AddChild(wxWindowBase *child);
+	friend class wxRibbonPage;
+
+	wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
 	void CommonInit(long style);
 	void AddPage(wxRibbonPage *page);
 	void RecalculateTabSizes();
 
 	void OnPaint(wxPaintEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
+	void DoEraseBackground(wxDC& dc);
     void OnSize(wxSizeEvent& evt);
 
     wxRibbonPageTabInfoArray m_pages;

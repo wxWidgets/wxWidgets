@@ -19,8 +19,12 @@
 enum wxRibbonArtSetting
 {
 	wxRIBBON_ART_TAB_SEPARATION_SIZE,
-	wxRIBBON_ART_TAB_BACKGROUND_COLOUR,
+	wxRIBBON_ART_TAB_LABEL_FONT,
+	wxRIBBON_ART_TAB_LABEL_COLOUR,
+	wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR,
 };
+
+class wxRibbonPageTabInfo;
 
 class WXDLLIMPEXP_AUI wxRibbonArtProvider
 {
@@ -29,7 +33,7 @@ public:
 	virtual ~wxRibbonArtProvider() { }
 
 	virtual wxRibbonArtProvider* Clone() = 0;
-    virtual void SetFlags(unsigned int flags) = 0;
+    virtual void SetFlags(long flags) = 0;
 
 	virtual int GetMetric(int id) = 0;
     virtual void SetMetric(int id, int new_val) = 0;
@@ -44,6 +48,15 @@ public:
 						wxDC& dc,
 						wxWindow* wnd,
 						const wxRect& rect) = 0;
+
+	virtual void DrawTab(wxDC& dc,
+						wxWindow* wnd,
+						const wxRibbonPageTabInfo& tab) = 0;
+
+	virtual void DrawTabSeparator(wxDC& dc,
+						wxWindow* wnd,
+						const wxRect& rect,
+						double visibility) = 0;
 
 	virtual void DrawPageBackground(
 						wxDC& dc,
@@ -68,7 +81,7 @@ public:
 	virtual ~wxRibbonDefaultArtProvider();
 
 	wxRibbonArtProvider* Clone();
-	void SetFlags(unsigned int flags);
+	void SetFlags(long flags);
 
 	int GetMetric(int id);
     void SetMetric(int id, int new_val);
@@ -81,6 +94,16 @@ public:
 						wxDC& dc,
 						wxWindow* wnd,
 						const wxRect& rect);
+
+	void DrawTab(wxDC& dc,
+				 wxWindow* wnd,
+				 const wxRibbonPageTabInfo& tab);
+
+	void DrawTabSeparator(
+						wxDC& dc,
+						wxWindow* wnd,
+						const wxRect& rect,
+						double visibility);
 
 	void DrawPageBackground(
 						wxDC& dc,
@@ -98,6 +121,10 @@ public:
 						int* minimum);
 
 protected:
+	wxColour m_tab_label_colour;
+	wxBrush m_tab_ctrl_background_brush;
+	wxFont m_tab_label_font;
+	long m_flags;
 	int m_tab_separation_size;
 };
 

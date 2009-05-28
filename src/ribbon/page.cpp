@@ -80,6 +80,8 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmap& icon)
 	m_icon = icon;
 	m_scroll_amount = 0;
 	m_scroll_buttons_visible = false;
+
+	wxDynamicCast(GetParent(), wxRibbonBar)->AddPage(this);
 }
 
 #endif // wxUSE_RIBBON
