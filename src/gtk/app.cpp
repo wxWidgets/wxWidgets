@@ -332,7 +332,6 @@ wxApp::wxApp()
 
     m_idleTag = 0;
     g_isIdle = true;
-    wxapp_install_idle_handler();
 
     // this is NULL for a "regular" wxApp, but is set (and freed) by a wxGLApp
     m_glVisualInfo = (void *) NULL;
@@ -530,6 +529,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #if wxUSE_INTL
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
+
+    WakeUpIdle();
 
     return true;
 }
