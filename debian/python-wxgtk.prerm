@@ -3,7 +3,7 @@
 set -e
 
 for PY in =PYVERS; do
-    update-alternatives --remove wx-python$PY.pth /usr/lib/wx/python$PY/wx=V.pth
+    update-alternatives --remove wx$PY.pth /usr/lib/wx/python$PY/wx=V.pth
 done
 
 #DEBHELPER#

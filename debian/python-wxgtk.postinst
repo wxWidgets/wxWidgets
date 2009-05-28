@@ -6,9 +6,13 @@ WXPYTHONDIR="=WXPYDIR"
 PYVERS="=PYVERS"
 
 for PY in $PYVERS; do
-    update-alternatives --install /usr/lib/python$PY/site-packages/wx.pth  \
-	wx-python$PY.pth	                                           \
-	/usr/lib/wx/python$PY/wx=V.pth       =PRIO
+    case $PY in 
+	2.3|2.4|2.5) pylib=/usr/lib/python$PY/site-packages;;
+	*)           pylib=/usr/lib/python$PY/dist-packages;;
+    esac
+    mkdir -p $pylib
+    update-alternatives --install $pylib/wx.pth  wx$PY.pth	\
+	                /usr/lib/wx/python$PY/wx=V.pth       =PRIO
 done
 
 #DEBHELPER#

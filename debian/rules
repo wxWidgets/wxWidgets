@@ -44,6 +44,10 @@ else
     endif
 endif
 
+# sitedir: name of the site-packages/dist-packages directory depending on the
+# python version. Call as: $(call sitedir, <python version>).
+sitedir = $(if $(filter $(subst python,,$(1)), 2.3 2.4 2.5),site,dist)-packages
+
 
 # The python-dbg on Dapper had a configuration bug that makes trying
 # to use distutils with it error out.  The problem seems to be that
@@ -850,6 +854,7 @@ install-gtk-py%-lib:
 	cd wxPython && 								\
 		python$* ./setup.py install 					\
 	        	--prefix=`pwd`/../debian/$(package_gtk_py_lib)/usr	\
+			--install-layout=deb					\
 		        WX_CONFIG='$(wxconfig)'					\
 			SYS_WX_CONFIG='$(py_wxconfig)'				\
 	        	WXPORT=$(pytoolkit)					\
@@ -857,22 +862,26 @@ install-gtk-py%-lib:
 			$(PY_OPENGL)						\
 			FLAVOUR=$(DEBIAN_WXFLAVOUR)
 
-	mv debian/$(package_gtk_py_lib)/usr/lib/python$*/site-packages/wx.pth	\
+	mv debian/$(package_gtk_py_lib)/usr/lib/python$*/*-packages/wx.pth	\
 	       debian/$(package_gtk_py_lib)/usr/lib/wx/python$*/wx$(release).pth
 
-	find debian/$(package_gtk_py_lib)/usr/lib/python$*/site-packages	\
-		-name '*.py?' -exec rm '{}' ';'
+	find debian/$(package_gtk_py_lib)/usr/lib/python$* -name '*.py?' -exec rm '{}' ';'
 
-	rm -f debian/$(package_gtk_py_lib)/usr/lib/python$*/site-packages/$(wxpydir)/wx/tools/XRCed/license.txt
+	rm -f debian/$(package_gtk_py_lib)/usr/lib/python$*/*-packages/$(wxpydir)/wx/tools/XRCed/license.txt
 
 ifndef DEBIAN_WX_DEFAULT_VERSION
 	@# Move files out for the wxversion package
 	DH_OPTIONS=-p$(package_gtk_py_ver)					\
 		 dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) 		\
-				usr/lib/python$*/site-packages/wxversion.py		
+				usr/lib/python$*/$(call sitedir, $*)/wxversion.py		
 endif
-	rm -f debian/$(package_gtk_py_lib)/usr/lib/python$*/site-packages/wxversion.py
-	rm -f debian/$(package_gtk_py_lib)/usr/lib/python$*/site-packages/wxPython_common*.egg-info
+	rm -f debian/$(package_gtk_py_lib)/usr/lib/python$*/$(call sitedir, $*)/wxversion.py
+	rm -f debian/$(package_gtk_py_lib)/usr/lib/python$*/$(call sitedir, $*)/wxPython_common*.egg-info
+
+	# Not sure why yet, but for Py2.6 an extra set of .py files are being installed in the 
+	# wrong place, so let's get rid of them if they are there
+	rm -rf debian/$(package_gtk_py_lib)/usr/lib/python$*/$(call sitedir, $*)/wx
+	rm -rf debian/$(package_gtk_py_lib)/usr/lib/python$*/$(call sitedir, $*)/wxPython
 
 
 install-gtk-py-tools: DH_OPTIONS=-p$(package_gtk_py_tools)
@@ -1057,6 +1066,7 @@ binary-arch: build_arch install_arch
 	dh_installmenu -a
 ifdef PY_DBG_OK
 	rm -rf debian/$(package_gtk_dbg_py)/usr/share/doc/$(package_gtk_dbg_py)
+	mkdir -p $(package_gtk_py_lib) debian/$(package_gtk_dbg_py)/usr/share/doc
 	ln -s $(package_gtk_py_lib) debian/$(package_gtk_dbg_py)/usr/share/doc/$(package_gtk_dbg_py)
 else
 	rm -rf debian/$(package_gtk_dbg_py)
