@@ -241,6 +241,8 @@
 
 #define wxUSE_STOPWATCH     0
 
+#define wxUSE_FSWATCHER     0
+
 #define wxUSE_CONFIG        0
 
 #define wxUSE_CONFIG_NATIVE   0
