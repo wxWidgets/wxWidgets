@@ -153,6 +153,16 @@ wxStatusBar::~wxStatusBar()
     // occupy
     PostSizeEventToParent();
 
+    // delete existing tooltips
+    for (size_t i=0; i<m_tooltips.size(); i++)
+    {
+        if (m_tooltips[i])
+        {
+            delete m_tooltips[i];
+            m_tooltips[i] = NULL;
+        }
+    }
+
     wxDELETE(m_pDC);
 }
 
@@ -179,8 +189,11 @@ void wxStatusBar::SetFieldsCount(int nFields, const int *widths)
     // reset all current tooltips
     for (size_t i=0; i<m_tooltips.size(); i++)
     {
-        delete m_tooltips[i];
-        m_tooltips[i] = NULL;
+        if (m_tooltips[i])
+        {
+            delete m_tooltips[i];
+            m_tooltips[i] = NULL;
+        }
     }
 
     // shrink/expand the array:
