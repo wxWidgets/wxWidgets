@@ -20,13 +20,13 @@ AC_ARG_ENABLE(sdltest, [  --disable-sdltest       Do not try to compile and run 
 		    , enable_sdltest=yes)
 
   if test x$sdl_exec_prefix != x ; then
-    sdl_args="$sdl_args --exec-prefix=$sdl_exec_prefix"
+    sdl_config_args="$sdl_config_args --exec-prefix=$sdl_exec_prefix"
     if test x${SDL_CONFIG+set} != xset ; then
       SDL_CONFIG=$sdl_exec_prefix/bin/sdl-config
     fi
   fi
   if test x$sdl_prefix != x ; then
-    sdl_args="$sdl_args --prefix=$sdl_prefix"
+    sdl_config_args="$sdl_config_args --prefix=$sdl_prefix"
     if test x${SDL_CONFIG+set} != xset ; then
       SDL_CONFIG=$sdl_prefix/bin/sdl-config
     fi
@@ -42,12 +42,12 @@ AC_ARG_ENABLE(sdltest, [  --disable-sdltest       Do not try to compile and run 
   if test "$SDL_CONFIG" = "no" ; then
     no_sdl=yes
   else
-    SDL_CFLAGS=`$SDL_CONFIG $sdlconf_args --cflags`
-    SDL_LIBS=`$SDL_CONFIG $sdlconf_args --libs`
+    SDL_CFLAGS=`$SDL_CONFIG $sdl_config_args --cflags`
+    SDL_LIBS=`$SDL_CONFIG $sdl_config_args --libs`
 
-    sdl_major_version=`$SDL_CONFIG $sdl_args --version | \
+    sdl_major_version=`$SDL_CONFIG $sdl_config_args --version | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-    sdl_minor_version=`$SDL_CONFIG $sdl_args --version | \
+    sdl_minor_version=`$SDL_CONFIG $sdl_config_args --version | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
     sdl_micro_version=`$SDL_CONFIG $sdl_config_args --version | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`

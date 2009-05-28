@@ -44,10 +44,21 @@ AC_ARG_WITH(cppunit-exec-prefix,[  --with-cppunit-exec-prefix=PFX  Exec prefix w
 
     cppunit_major_min=`echo $cppunit_version_min | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+    if test "x${cppunit_major_min}" = "x" ; then
+       cppunit_major_min=0
+    fi
+    
     cppunit_minor_min=`echo $cppunit_version_min | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+    if test "x${cppunit_minor_min}" = "x" ; then
+       cppunit_minor_min=0
+    fi
+    
     cppunit_micro_min=`echo $cppunit_version_min | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+    if test "x${cppunit_micro_min}" = "x" ; then
+       cppunit_micro_min=0
+    fi
 
     cppunit_version_proper=`expr \
         $cppunit_major_version \> $cppunit_major_min \| \

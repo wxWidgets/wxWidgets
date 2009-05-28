@@ -126,8 +126,7 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
                 PLATFORM_BEOS=1
             ;;
             * )
-                dnl wxWidgets-specific: allow unknown Unix systems
-                dnl AC_MSG_ERROR([Unknown platform: $BAKEFILE_FORCE_PLATFORM])
+                AC_MSG_ERROR([Unknown platform: $BAKEFILE_FORCE_PLATFORM])
             ;;
         esac
     fi
@@ -839,7 +838,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_SUBST(OBJCXXFLAGS)
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.5"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.6"
 
     dnl includes autoconf_inc.m4:
     $1
