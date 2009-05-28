@@ -670,7 +670,7 @@ wxString wxCFStringRef::AsString(wxFontEncoding WXUNUSED_IN_UNICODE(encoding))
     #error "unsupported unicode representation"
   #endif
 #else
-    wxString result(buf, cStrLen) ;
+    result = wxString(buf, cStrLen) ;
 #endif
     
     delete[] buf ;
