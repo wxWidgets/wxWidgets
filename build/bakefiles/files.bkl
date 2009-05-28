@@ -107,9 +107,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
  -->
 <set var="BASE_UNIX_SRC" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_SRC)
+    src/unix/fswatcher.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
     $(BASE_UNIX_AND_DARWIN_NOTWXMAC_HDR)
+    wx/unix/fswatcher.h
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -133,6 +135,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/timer.cpp
     src/msw/utils.cpp
     src/msw/utilsexc.cpp
+    src/msw/fswatcher.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC" hints="files">
     src/msw/evtloop.cpp
@@ -164,6 +167,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/wrapcctl.h
     wx/msw/wrapcdlg.h
     wx/msw/wrapwin.h
+    wx/msw/fswatcher.h
 </set>
 <set var="BASE_WINCE_HDR" hints="files">
     <if cond="TOOLKIT=='WINCE'">
@@ -182,6 +186,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/stdpaths_cf.cpp
     src/osx/core/strconv_cf.cpp
     src/osx/core/utilsexc_base.cpp
+    src/osx/fswatcher.cpp
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
     wx/osx/core/cfdataref.h
@@ -191,6 +196,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/core/private.h
     wx/osx/core/stdpaths.h
     wx/osx/core/private/strconv_cf.h
+    wx/osx/fswatcher.h
 </set>
 
 <!-- Base files used by OS X ports (not Carbon) -->
@@ -381,6 +387,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/xtistrm.cpp
     src/common/zipstrm.cpp
     src/common/zstream.cpp
+    src/common/fswatchercmn.cpp
+    src/generic/fswatcherg.cpp
 </set>
 <set var="BASE_AND_GUI_CMN_SRC" hints="files">
     src/common/event.cpp
@@ -530,6 +538,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/meta/if.h
     wx/meta/int2type.h
     wx/meta/movable.h
+    wx/fswatcher.h
+    wx/generic/fswatcher.h
 </set>
 
 
