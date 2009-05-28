@@ -169,19 +169,19 @@ public:
 
     wxVector() : m_size(0), m_capacity(0), m_values(NULL) {}
 
-    wxVector(size_type size)
+    wxVector(size_type p_size)
         : m_size(0), m_capacity(0), m_values(NULL)
     {
-        reserve(size);
-        for ( size_t n = 0; n < size; n++ )
+        reserve(p_size);
+        for ( size_t n = 0; n < p_size; n++ )
             push_back(value_type());
     }
 
-    wxVector(size_type size, const value_type& v)
+    wxVector(size_type p_size, const value_type& v)
         : m_size(0), m_capacity(0), m_values(NULL)
     {
-        reserve(size);
-        for ( size_t n = 0; n < size; n++ )
+        reserve(p_size);
+        for ( size_t n = 0; n < p_size; n++ )
             push_back(v);
     }
 
