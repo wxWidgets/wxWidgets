@@ -324,6 +324,8 @@ void wxRibbonBar::OnPaint(wxPaintEvent& evt)
 	DoEraseBackground(dc);
 
 	size_t numtabs = m_pages.GetCount();
+	double sep_visibility = 0.0;
+	bool draw_sep = false;
 	for(size_t i = 0; i < numtabs; ++i)
 	{
 		wxRibbonPageTabInfo& info = m_pages.Item(i);
@@ -331,6 +333,34 @@ void wxRibbonBar::OnPaint(wxPaintEvent& evt)
 		dc.DestroyClippingRegion();
 		dc.SetClippingRegion(info.rect);
 		m_art->DrawTab(dc, this, info);
+
+		if(info.rect.width < info.small_begin_need_separator_width)
+		{
+			draw_sep = true;
+			if(info.rect.width < info.small_must_have_separator_width)
+			{
+				sep_visibility += 1.0;
+			}
+			else
+			{
+				sep_visibility += (double)(info.small_begin_need_separator_width - info.rect.width) / (double)(info.small_begin_need_separator_width - info.small_must_have_separator_width);
+			}
+		}
+	}
+	if(draw_sep)
+	{
+		wxRect rect = m_pages.Item(0).rect;
+		rect.width = m_art->GetMetric(wxRIBBON_ART_TAB_SEPARATION_SIZE);
+		sep_visibility /= (double)numtabs;
+		for(size_t i = 0; i < numtabs - 1; ++i)
+		{
+			wxRibbonPageTabInfo& info = m_pages.Item(i);
+			rect.x = info.rect.x + info.rect.width;
+
+			dc.DestroyClippingRegion();
+			dc.SetClippingRegion(rect);
+			m_art->DrawTabSeparator(dc, this, rect, sep_visibility);
+		}
 	}
 }
 
@@ -343,6 +373,11 @@ void wxRibbonBar::DoEraseBackground(wxDC& dc)
 	wxRect tabs(GetClientSize());
 	tabs.height = m_tab_height;
 	m_art->DrawTabCtrlBackground(dc, this, tabs);
+
+	wxRect page(GetClientSize());
+	page.height -= tabs.height;
+	page.y += tabs.height;
+	m_art->DrawPageBackground(dc, this, page);
 }
 
 void wxRibbonBar::OnSize(wxSizeEvent& evt)

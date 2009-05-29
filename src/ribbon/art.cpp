@@ -30,9 +30,17 @@
 
 wxRibbonDefaultArtProvider::wxRibbonDefaultArtProvider()
 {
+	// TODO: 'Intelligent' colour picking rather than hardcoded defaults
 	m_tab_label_colour = wxColour(21, 66, 139);
+	m_tab_separator_colour = wxColour(183, 212, 249);
+	m_tab_separator_gradient_colour = wxColour(116, 153, 203);
+	m_page_background_colour = wxColour(199, 216, 237);
+	m_page_background_gradient_colour = wxColour(227, 244, 255);
+	m_page_background_top_colour = wxColour(223, 233, 245);
+	m_page_background_top_gradient_colour = wxColour(209, 223, 240);
 	m_tab_ctrl_background_brush = wxBrush(wxColour(191, 219, 255));
 	m_tab_label_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
+	m_page_border_pen = wxPen(wxColour(141, 178, 227));
 	m_tab_separation_size = 3;
 }
 
@@ -45,8 +53,15 @@ wxRibbonArtProvider* wxRibbonDefaultArtProvider::Clone()
 	wxRibbonDefaultArtProvider *copy = new wxRibbonDefaultArtProvider;
 
 	copy->m_tab_label_colour = m_tab_label_colour;
+	copy->m_tab_separator_colour = m_tab_separator_colour;
+	copy->m_tab_separator_gradient_colour = m_tab_separator_gradient_colour;
+	copy->m_page_background_colour = m_page_background_colour;
+	copy->m_page_background_gradient_colour = m_page_background_gradient_colour;
+	copy->m_page_background_top_colour = m_page_background_top_colour;
+	copy->m_page_background_top_gradient_colour = m_page_background_top_gradient_colour;
 	copy->m_tab_ctrl_background_brush = m_tab_ctrl_background_brush;
 	copy->m_tab_label_font = m_tab_label_font;
+	copy->m_page_border_pen = m_page_border_pen;
 	copy->m_flags = m_flags;
 	copy->m_tab_separation_size = m_tab_separation_size;
 
@@ -104,6 +119,13 @@ wxColour wxRibbonDefaultArtProvider::GetColour(int id)
 	{
 		case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR: return m_tab_ctrl_background_brush.GetColour();
 		case wxRIBBON_ART_TAB_LABEL_COLOUR: return m_tab_label_colour;
+		case wxRIBBON_ART_TAB_SEPARATOR_COLOUR: return m_tab_separator_colour;
+		case wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR: return m_tab_separator_gradient_colour;
+		case wxRIBBON_ART_PAGE_BORDER_COLOUR: return m_page_border_pen.GetColour();
+		case wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR: return m_page_background_top_colour;
+		case wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR: return m_page_background_top_gradient_colour;
+		case wxRIBBON_ART_PAGE_BACKGROUND_COLOUR: return  m_page_background_colour;
+		case wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR: return m_page_background_gradient_colour;
 		default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
 	}
 
@@ -116,6 +138,13 @@ void wxRibbonDefaultArtProvider::SetColour(int id, const wxColor& colour)
 	{
 		case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR: m_tab_ctrl_background_brush.SetColour(colour);
 		case wxRIBBON_ART_TAB_LABEL_COLOUR: m_tab_label_colour = colour;
+		case wxRIBBON_ART_TAB_SEPARATOR_COLOUR: m_tab_separator_colour = colour;
+		case wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR: m_tab_separator_gradient_colour = colour;
+		case wxRIBBON_ART_PAGE_BORDER_COLOUR: m_page_border_pen.SetColour(colour);
+		case wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR: m_page_background_top_colour = colour;
+		case wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR: m_page_background_top_gradient_colour = colour;
+		case wxRIBBON_ART_PAGE_BACKGROUND_COLOUR:  m_page_background_colour = colour;
+		case wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR: m_page_background_gradient_colour = colour;
 		default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
 	}
 }
@@ -128,6 +157,9 @@ void wxRibbonDefaultArtProvider::DrawTabCtrlBackground(
 	dc.SetPen(*wxTRANSPARENT_PEN);
 	dc.SetBrush(m_tab_ctrl_background_brush);
 	dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+
+	dc.SetPen(m_page_border_pen);
+	dc.DrawLine(rect.x + 3, rect.y + rect.height - 1, rect.x + rect.width - 3, rect.y + rect.height - 1);
 }
 
 void wxRibbonDefaultArtProvider::DrawTab(
@@ -136,9 +168,11 @@ void wxRibbonDefaultArtProvider::DrawTab(
 				 const wxRibbonPageTabInfo& tab)
 {
 	// Temporary code to make tab regions extremely visible
+	/*
 	dc.SetPen(*wxTRANSPARENT_PEN);
 	dc.SetBrush(*wxTheBrushList->FindOrCreateBrush(wxColour(255, 0, 0)));
 	dc.DrawRectangle(tab.rect.x, tab.rect.y, tab.rect.width, tab.rect.height);
+	*/
 
 	if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
 	{
@@ -160,10 +194,81 @@ void wxRibbonDefaultArtProvider::DrawTab(
 			}
 			else
 			{
-				dc.DrawText(label, x + (width - text_width) / 2, y);
+				dc.DrawText(label, x + (width - text_width) / 2 + 1, y);
 			}
 		}
 	}
+}
+
+void wxRibbonDefaultArtProvider::DrawTabSeparator(
+						wxDC& dc,
+						wxWindow* wnd,
+						const wxRect& rect,
+						double visibility)
+{
+	if(visibility <= 0.0)
+	{
+		return;
+	}
+	if(visibility > 1.0)
+	{
+		visibility = 1.0;
+	}
+	wxCoord x = rect.x + rect.width / 2;
+	double h = (double)(rect.height - 1);
+
+	double r1 = m_tab_ctrl_background_brush.GetColour().Red() * (1.0 - visibility) + 0.5;
+	double g1 = m_tab_ctrl_background_brush.GetColour().Green() * (1.0 - visibility) + 0.5;
+	double b1 = m_tab_ctrl_background_brush.GetColour().Blue() * (1.0 - visibility) + 0.5;
+	double r2 = m_tab_separator_colour.Red();
+	double g2 = m_tab_separator_colour.Green();
+	double b2 = m_tab_separator_colour.Blue();
+	double r3 = m_tab_separator_gradient_colour.Red();
+	double g3 = m_tab_separator_gradient_colour.Green();
+	double b3 = m_tab_separator_gradient_colour.Blue();
+
+	for(int i = 0; i < rect.height - 1; ++i)
+	{
+		double p = ((double)i)/h;
+
+		double r = (p * r3 + (1.0 - p) * r2) * visibility + r1;
+		double g = (p * g3 + (1.0 - p) * g2) * visibility + g1;
+		double b = (p * b3 + (1.0 - p) * b2) * visibility + b1;
+
+		wxPen P(wxColour((unsigned char)r, (unsigned char)g, (unsigned char)b));
+		dc.SetPen(P);
+		dc.DrawPoint(x, rect.y + i);
+	}
+}
+
+// Taken from wxAUI's dockart.cpp
+static void DrawVerticalGradientRectangle(wxDC& dc,
+                                  const wxRect& rect,
+                                  const wxColour& start_color,
+                                  const wxColour& end_color)
+{
+    int rd, gd, bd, high = 0;
+    rd = end_color.Red() - start_color.Red();
+    gd = end_color.Green() - start_color.Green();
+    bd = end_color.Blue() - start_color.Blue();
+
+    high = rect.GetHeight() - 1;
+
+    for (int i = 0; i <= high; ++i)
+    {
+        int r,g,b;
+
+        r = start_color.Red() + (high <= 0 ? 0 : (((i*rd*100)/high)/100));
+        g = start_color.Green() + (high <= 0 ? 0 : (((i*gd*100)/high)/100));
+        b = start_color.Blue() + (high <= 0 ? 0 : (((i*bd*100)/high)/100));
+
+        wxPen p(wxColor((unsigned char)r,
+                        (unsigned char)g,
+                        (unsigned char)b));
+        dc.SetPen(p);
+
+        dc.DrawLine(rect.x, rect.y+i, rect.x+rect.width, rect.y+i);
+    }
 }
 
 void wxRibbonDefaultArtProvider::DrawPageBackground(
@@ -171,6 +276,52 @@ void wxRibbonDefaultArtProvider::DrawPageBackground(
 						wxWindow* wnd,
 						const wxRect& rect)
 {
+	dc.SetPen(*wxTRANSPARENT_PEN);
+	dc.SetBrush(m_tab_ctrl_background_brush);
+
+	{
+		wxRect edge(rect);
+
+		edge.width = 2;
+	    dc.DrawRectangle(edge.x, edge.y, edge.width, edge.height);
+
+		edge.x += rect.width - 2;
+		dc.DrawRectangle(edge.x, edge.y, edge.width, edge.height);
+
+		edge = rect;
+		edge.height = 2;
+		edge.y += (rect.height - edge.height);
+		dc.DrawRectangle(edge.x, edge.y, edge.width, edge.height);
+	}
+
+	{
+		wxRect background(rect);
+		background.x += 2;
+		background.width -= 4;
+		background.height -= 2;
+
+		background.height /= 5;
+		DrawVerticalGradientRectangle(dc, background, m_page_background_top_colour, m_page_background_top_gradient_colour);
+
+		background.y += background.height;
+		background.height = rect.height - 2 - background.height;
+		DrawVerticalGradientRectangle(dc, background, m_page_background_colour, m_page_background_gradient_colour);
+	}
+
+	{
+		wxPoint border_points[8];
+		border_points[0] = wxPoint(3, -1);
+		border_points[1] = wxPoint(1, 1);
+		border_points[2] = wxPoint(1, rect.height - 4);
+		border_points[3] = wxPoint(3, rect.height - 2);
+		border_points[4] = wxPoint(rect.width - 4, rect.height - 2);
+		border_points[5] = wxPoint(rect.width - 2, rect.height - 4);
+		border_points[6] = wxPoint(rect.width - 2, 1);
+		border_points[7] = wxPoint(rect.width - 3, -1);
+
+		dc.SetPen(m_page_border_pen);
+		dc.DrawLines(sizeof(border_points)/sizeof(wxPoint), border_points, rect.x, rect.y);
+	}
 }
 
 void wxRibbonDefaultArtProvider::GetBarTabWidth(
@@ -189,11 +340,7 @@ void wxRibbonDefaultArtProvider::GetBarTabWidth(
 	{
 		dc.SetFont(m_tab_label_font);
 		width += dc.GetTextExtent(label).GetWidth();
-		min += 25; // enough for a few chars
-		if(width < min)
-		{
-			min = width;
-		}
+		min += wxMin(25, width); // enough for a few chars
 		if(bitmap.IsOk())
 		{
 			// gap between label and bitmap
