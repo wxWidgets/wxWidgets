@@ -2124,41 +2124,17 @@ public:
     wxPropertyGridPageState* GetParentState() const { return m_parentState; }
 #endif
 
+#ifndef SWIG
     wxPGProperty* GetItemAtY( unsigned int y,
                               unsigned int lh,
                               unsigned int* nextItemY ) const;
+#endif
+
+    wxPGProperty* GetItemAtY( unsigned int y ) const;
 
     /** Returns (direct) child property with given name (or NULL if not found).
     */
     wxPGProperty* GetPropertyByName( const wxString& name ) const;
-
-#ifdef SWIG
-     %extend {
-        DocStr(GetClientData,
-               "Returns the client data object for a property", "");
-        PyObject* GetClientData() {
-            wxPyClientData* data = (wxPyClientData*)self->GetClientObject();
-            if (data) {
-                Py_INCREF(data->m_obj);
-                return data->m_obj;
-            } else {
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-
-        DocStr(SetClientData,
-               "Associate the given client data.", "");
-        void SetClientData(PyObject* clientData) {
-            wxPyClientData* data = new wxPyClientData(clientData);
-            self->SetClientObject(data);
-        }
-    }
-    %pythoncode {
-         GetClientObject = GetClientData
-         SetClientObject = SetClientData
-    }
-#endif
 
 #ifndef SWIG
 

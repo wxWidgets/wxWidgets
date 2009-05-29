@@ -2335,6 +2335,12 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y, unsigned int lh, unsigne
     return (wxPGProperty*) result;
 }
 
+wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y ) const
+{
+    unsigned int nextItemY;
+    return GetItemAtY(y, GetGrid()->GetRowHeight(), &nextItemY);
+}
+
 void wxPGProperty::Empty()
 {
     size_t i;
