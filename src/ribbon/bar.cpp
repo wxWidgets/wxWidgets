@@ -38,8 +38,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxRibbonBarEvent, wxNotifyEvent)
 
 BEGIN_EVENT_TABLE(wxRibbonBar, wxControl)
   EVT_ERASE_BACKGROUND(wxRibbonBar::OnEraseBackground)
+  EVT_LEAVE_WINDOW(wxRibbonbar::OnMouseLeave)
+  EVT_MOTION(wxRibbonBar::OnMouseMove)
   EVT_PAINT(wxRibbonBar::OnPaint)
-  EVT_SIZE(wxRibbonBar::OnSize)  
+  EVT_SIZE(wxRibbonBar::OnSize)
 END_EVENT_TABLE()
 
 void wxRibbonBar::AddPage(wxRibbonPage *page)
@@ -47,6 +49,8 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
 	wxRibbonPageTabInfo info;
 
 	info.page = page;
+	info.active = false;
+	info.hovered = false;
 	// info.rect not set (intentional)
 
 	wxMemoryDC dcTemp;
@@ -74,6 +78,90 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
 	page->Hide(); // Most likely case is that this new page is not the active tab
 
 	RecalculateTabSizes();
+
+	if(m_pages.GetCount() == 1)
+	{
+		SetActivePage(0);
+	}
+}
+
+void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
+{
+	int x = evt.GetX();
+	int y = evt.GetY();
+	int hovered_page = -1;
+	if(y < m_tab_height)
+	{
+		// It is quite likely that the mouse moved a small amount and is still over the same tab
+		if(m_current_hovered_page != -1 && m_pages.Item((size_t)m_current_hovered_page).rect.Contains(x, y))
+		{
+			hovered_page = m_current_hovered_page;
+		}
+		else
+		{
+			size_t numtabs = m_pages.GetCount();
+			for(size_t i = 0; i < numtabs; ++i)
+			{
+				if(m_pages.Item(i).rect.Contains(x, y))
+				{
+					hovered_page = (int)i;
+					break;
+				}
+			}
+		}
+	}
+	if(hovered_page != m_current_hovered_page)
+	{
+		if(m_current_hovered_page != -1)
+		{
+			m_pages.Item((int)m_current_hovered_page).hovered = false;
+		}
+		m_current_hovered_page = hovered_page;
+		if(m_current_hovered_page != -1)
+		{
+			m_pages.Item((int)m_current_hovered_page).hovered = true;
+		}
+		Refresh();
+	}
+}
+
+void wxRibbonBar::OnMouseLeave(wxMouseEvent& evt)
+{
+	// The ribbon bar is (usually) at the top of a window, and at least on MSW, the mouse
+	// can leave the window quickly and leave a tab in the hovered state.
+	if(m_current_hovered_page != -1)
+	{
+		m_pages.Item((int)m_current_hovered_page).hovered = false;
+		m_current_hovered_page = -1;
+		Refresh();
+	}
+}
+
+bool wxRibbonBar::SetActivePage(size_t page)
+{
+	if(m_current_page == (int)page)
+	{
+		return true;
+	}
+
+	if(page >= m_pages.GetCount())
+	{
+		return false;
+	}
+
+	if(m_current_page != -1)
+	{
+		m_pages.Item((size_t)m_current_page).active = false;
+	}
+	m_current_page = (int)page;
+	m_pages.Item(page).active = true;
+
+	return true;
+}
+
+int wxRibbonBar::GetActivePage() const
+{
+	return m_current_page;
 }
 
 void wxRibbonBar::SetTabCtrlMargins(int left, int right)

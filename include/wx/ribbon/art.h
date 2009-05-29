@@ -24,6 +24,13 @@ enum wxRibbonArtSetting
 	wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
 	wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
 	wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR,
+	wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_COLOUR,
+	wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
+	wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR,
+	wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR,
+	wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR,
+	wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
+	wxRIBBON_ART_TAB_BORDER_COLOUR,
 	wxRIBBON_ART_PAGE_BORDER_COLOUR,
 	wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR,
 	wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR,
@@ -131,6 +138,12 @@ protected:
 	wxColour m_tab_label_colour;
 	wxColour m_tab_separator_colour;
 	wxColour m_tab_separator_gradient_colour;
+	wxColour m_tab_active_background_colour;
+	wxColour m_tab_active_background_gradient_colour;
+	wxColour m_tab_hover_background_colour;
+	wxColour m_tab_hover_background_gradient_colour;
+	wxColour m_tab_hover_background_top_colour;
+	wxColour m_tab_hover_background_top_gradient_colour;
 	wxColour m_page_background_colour;
 	wxColour m_page_background_gradient_colour;
 	wxColour m_page_background_top_colour;
@@ -138,6 +151,7 @@ protected:
 	wxBrush m_tab_ctrl_background_brush;
 	wxFont m_tab_label_font;
 	wxPen m_page_border_pen;
+	wxPen m_tab_border_pen;
 	long m_flags;
 	int m_tab_separation_size;
 };

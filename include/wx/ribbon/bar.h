@@ -62,6 +62,8 @@ public:
 	int small_begin_need_separator_width;
 	int small_must_have_separator_width;
 	int minimum_width;
+	bool active;
+	bool hovered;
 };
 
 #ifndef SWIG
@@ -92,6 +94,9 @@ public:
 	void SetArtProvider(wxRibbonArtProvider* art);
 	wxRibbonArtProvider* GetArtProvider() const;
 
+	bool SetActivePage(size_t page);
+    int GetActivePage() const;
+
 protected:
 	friend class wxRibbonPage;
 
@@ -105,6 +110,8 @@ protected:
     void OnEraseBackground(wxEraseEvent& evt);
 	void DoEraseBackground(wxDC& dc);
     void OnSize(wxSizeEvent& evt);
+	void OnMouseMove(wxMouseEvent& evt);
+	void OnMouseLeave(wxMouseEvent& evt);
 
     wxRibbonPageTabInfoArray m_pages;
 	wxRibbonArtProvider* m_art;
