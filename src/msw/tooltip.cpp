@@ -215,11 +215,17 @@ LRESULT APIENTRY wxToolTipWndProc(HWND hwndTT,
 
 void wxToolTip::Enable(bool flag)
 {
+    // Make sure the tooltip has been created
+    (void) GetToolTipCtrl();
+
     SendTooltipMessageToAll(ms_hwndTT, TTM_ACTIVATE, flag, 0);
 }
 
 void wxToolTip::SetDelay(long milliseconds)
 {
+    // Make sure the tooltip has been created
+    (void) GetToolTipCtrl();
+
     SendTooltipMessageToAll(ms_hwndTT, TTM_SETDELAYTIME,
                             TTDT_INITIAL, milliseconds);
 }
