@@ -623,7 +623,7 @@ bool wxDoSetEnv(const wxString& var, const wxChar *value)
     envstr += '=';
     if ( value )
         envstr += value;
-    _putenv(envstr);
+    _tputenv(envstr.t_str());
 #else // other compiler
     if ( !::SetEnvironmentVariable(var.t_str(), value) )
     {
