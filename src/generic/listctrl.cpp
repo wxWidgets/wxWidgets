@@ -5198,4 +5198,18 @@ void wxGenericListCtrl::Refresh(bool eraseBackground, const wxRect *rect)
     }
 }
 
+void wxGenericListCtrl::Update()
+{
+    if ( m_mainWin )
+    {
+        if ( m_mainWin->m_dirty )
+            m_mainWin->RecalculatePositions();
+
+        m_mainWin->Update();
+    }
+
+    if ( m_headerWin )
+        m_headerWin->Update();
+}
+
 #endif // wxUSE_LISTCTRL

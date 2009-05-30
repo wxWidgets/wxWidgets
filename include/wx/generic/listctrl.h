@@ -139,9 +139,6 @@ public:
                        int format = wxLIST_FORMAT_LEFT, int width = -1 );
     bool ScrollList( int dx, int dy );
     bool SortItems( wxListCtrlCompare fn, wxIntPtr data );
-    bool Update( long item );
-    // Must provide overload to avoid hiding it (and warnings about it)
-    virtual void Update() { wxControl::Update(); }
 
     // are we in report mode?
     bool InReportView() const { return HasFlag(wxLC_REPORT); }
@@ -162,6 +159,10 @@ public:
     wxDEPRECATED( int GetItemSpacing( bool isSmall ) const );
 #endif // WXWIN_COMPATIBILITY_2_6
 
+
+    // overridden base class virtuals
+    // ------------------------------
+
     virtual wxVisualAttributes GetDefaultAttributes() const
     {
         return GetClassDefaultAttributes(GetWindowVariant());
@@ -170,8 +171,14 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    virtual void Update();
+
+
     // implementation only from now on
     // -------------------------------
+
+    // generic version extension, don't use in portable code
+    bool Update( long item );
 
     void OnInternalIdle( );
 
