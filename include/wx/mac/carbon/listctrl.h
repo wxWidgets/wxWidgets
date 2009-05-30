@@ -325,6 +325,12 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   virtual bool SetForegroundColour(const wxColour& colour);
   virtual bool SetBackgroundColour(const wxColour& colour);
   virtual wxColour GetBackgroundColour() const;
+
+#if wxABI_VERSION >= 20811
+  virtual void Freeze ();
+  virtual void Thaw ();
+  virtual void Update ();
+#endif
   
   // functions for editing/timer
   void OnRenameTimer();

@@ -927,6 +927,27 @@ wxColour wxListCtrl::GetBackgroundColour() const
     return wxNullColour;
 }
 
+void wxListCtrl::Freeze ()
+{
+    if (m_genericImpl)
+        m_genericImpl->Freeze();
+    wxControl::Freeze();
+}
+
+void wxListCtrl::Thaw ()
+{
+    if (m_genericImpl)
+        m_genericImpl->Thaw();
+    wxControl::Thaw();
+}
+
+void wxListCtrl::Update ()
+{
+    if (m_genericImpl)
+        m_genericImpl->Update();
+    wxControl::Update();
+}
+
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
