@@ -446,16 +446,16 @@ enum wxFileKind
     #define wxHAS_NATIVE_LSTAT
 #else // Unix or Windows using unknown compiler, assume POSIX supported
     typedef off_t wxFileOffset;
-    #ifdef _LARGE_FILES
+    #ifdef HAVE_LARGEFILE_SUPPORT
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
         wxCOMPILE_TIME_ASSERT( sizeof(off_t) == sizeof(wxLongLong_t),
                                 BadFileSizeType );
         // wxFile is present and supports large files
-        #ifdef wxUSE_FILE
+        #if wxUSE_FILE
             #define wxHAS_LARGE_FILES
         #endif
         // wxFFile is present and supports large files
-        #if SIZEOF_LONG == 8 || defined HAVE_FSEEKO
+        #if wxUSE_FFILE && (SIZEOF_LONG == 8 || defined HAVE_FSEEKO)
             #define wxHAS_LARGE_FFILES
         #endif
     #else

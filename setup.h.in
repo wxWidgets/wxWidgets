@@ -753,8 +753,11 @@
  * Define if compiler has __thread keyword.
  */
 #undef HAVE___THREAD_KEYWORD
+/*
+ * Define if large (64 bit file offsets) files are supported.
+ */
+#undef HAVE_LARGEFILE_SUPPORT
 
-/* compatibility */
 /*
  * Use OpenGL
  */

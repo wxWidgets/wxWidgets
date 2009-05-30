@@ -197,8 +197,12 @@ Currently the following symbols exist:
     implemented in a generic way, using a critical section.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
     supports template Read() and Write() methods in wxConfig.}
-@itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in size.}
-@itemdef{wxHAS_LARGE_FFILES, Defined if wxFFile supports files more than 4GB in size.}
+@itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in
+    size (notice that you must include @c wx/filefn.h before testing for this
+    symbol).}
+@itemdef{wxHAS_LARGE_FFILES, Defined if wxFFile supports files more than 4GB in
+    size (notice that you must include @c wx/filefn.h before testing for this
+    symbol).}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,
