@@ -1580,6 +1580,10 @@ public:
     wxArrayInt GetIndicesForStrings( const wxArrayString& strings,
                                      wxArrayString* unmatched = NULL ) const;
 
+    /** Returns property at given virtual y coordinate.
+    */
+    wxPGProperty* GetItemAtY( unsigned int y ) const;
+
     /**
         Returns @true if item at given index has a valid value;
     */

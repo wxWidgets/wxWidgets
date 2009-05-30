@@ -1058,9 +1058,8 @@ class WXDLLIMPEXP_PROPGRID wxPGProperty : public wxObject
     friend class wxPropertyGridPageState;
     friend class wxPropertyGridPopulator;
     friend class wxStringProperty;  // Proper "<composed>" support requires this
-#ifndef SWIG
+
     DECLARE_ABSTRACT_CLASS(wxPGProperty)
-#endif
 public:
     typedef wxUint32 FlagType;
 
@@ -2148,9 +2147,15 @@ public:
     wxPropertyGridPageState* GetParentState() const { return m_parentState; }
 #endif
 
+#ifndef SWIG
     wxPGProperty* GetItemAtY( unsigned int y,
                               unsigned int lh,
                               unsigned int* nextItemY ) const;
+#endif
+
+    /** Returns property at given virtual y coordinate.
+    */
+    wxPGProperty* GetItemAtY( unsigned int y ) const;
 
     /** Returns (direct) child property with given name (or NULL if not found).
     */

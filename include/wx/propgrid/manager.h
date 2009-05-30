@@ -65,9 +65,7 @@ class WXDLLIMPEXP_PROPGRID wxPropertyGridPage : public wxEvtHandler,
                                                 public wxPropertyGridPageState
 {
     friend class wxPropertyGridManager;
-#ifndef SWIG
     DECLARE_CLASS(wxPropertyGridPage)
-#endif
 public:
 
     wxPropertyGridPage();
@@ -212,39 +210,18 @@ private:
 class WXDLLIMPEXP_PROPGRID
     wxPropertyGridManager : public wxPanel, public wxPropertyGridInterface
 {
-#ifndef SWIG
     DECLARE_CLASS(wxPropertyGridManager)
-#endif
     friend class wxPropertyGridPage;
 public:
 
-#ifdef SWIG
-    %pythonAppend wxPropertyGridManager {
-        self._setOORInfo(self)
-        self.DoDefaultTypeMappings()
-        self.edited_objects = {}
-        self.DoDefaultValueTypeMappings()
-        if not hasattr(self.__class__,'_vt2setter'):
-            self.__class__._vt2setter = {}
-    }
-    %pythonAppend wxPropertyGridManager() ""
-
-    wxPropertyGridManager( wxWindow *parent, wxWindowID id = wxID_ANY,
-                           const wxPoint& pos = wxDefaultPosition,
-                           const wxSize& size = wxDefaultSize,
-                           long style = wxPGMAN_DEFAULT_STYLE,
-                           const wxChar* name =
-                                wxPyPropertyGridManagerNameStr );
-    %RenameCtor(PrePropertyGridManager,  wxPropertyGridManager());
-
-#else
-
+#ifndef SWIG
     /**
         Two step constructor.
         Call Create when this constructor is called to build up the
         wxPropertyGridManager.
       */
     wxPropertyGridManager();
+#endif
 
     /** The default constructor. The styles to be used are styles valid for
         the wxWindow.
@@ -258,8 +235,6 @@ public:
 
     /** Destructor */
     virtual ~wxPropertyGridManager();
-
-#endif
 
     /** Creates new property page. Note that the first page is not created
         automatically.
@@ -587,19 +562,6 @@ public:
         than desired splitter position, especially when sizers are being used.
     */
     void SetSplitterPosition( int pos, int column = 0 );
-
-#ifdef SWIG
-    %pythoncode {
-        def GetValuesFromPage(self,
-                              page,
-                              dict_=None,
-                              as_strings=False,
-                              inc_attributes=False):
-            "Same as GetValues, but returns values from specific page only."
-            "For argument descriptions, see GetValues."
-            return page.GetPropertyValues(dict_, as_strings, inc_attributes)
-    }
-#endif
 
 protected:
 

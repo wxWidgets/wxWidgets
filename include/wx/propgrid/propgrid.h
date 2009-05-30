@@ -583,30 +583,10 @@ class WXDLLIMPEXP_PROPGRID
     friend class wxPropertyGridManager;
     friend class wxPGCanvas;
 
-#ifndef SWIG
     DECLARE_DYNAMIC_CLASS(wxPropertyGrid)
-#endif
 public:
 
-#ifdef SWIG
-    %pythonAppend wxPropertyGrid {
-        self._setOORInfo(self)
-        self.DoDefaultTypeMappings()
-        self.edited_objects = {}
-        self.DoDefaultValueTypeMappings()
-        if not hasattr(self.__class__,'_vt2setter'):
-            self.__class__._vt2setter = {}
-    }
-    %pythonAppend wxPropertyGrid() ""
-
-    wxPropertyGrid( wxWindow *parent, wxWindowID id = wxID_ANY,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxPG_DEFAULT_STYLE,
-                    const wxChar* name = wxPyPropertyGridNameStr );
-    %RenameCtor(PrePropertyGrid,  wxPropertyGrid());
-#else
-
+#ifndef SWIG
     /**
         Two step constructor.
 
@@ -614,6 +594,7 @@ public:
         wxPropertyGrid
     */
     wxPropertyGrid();
+#endif
 
     /** The default constructor. The styles to be used are styles valid for
         the wxWindow and wxScrolledWindow.
@@ -628,7 +609,6 @@ public:
 
     /** Destructor */
     virtual ~wxPropertyGrid();
-#endif
 
     /** Adds given key combination to trigger given action.
 

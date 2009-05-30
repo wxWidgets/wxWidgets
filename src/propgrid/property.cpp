@@ -2274,7 +2274,9 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
     return h;
 }
 
-wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y, unsigned int lh, unsigned int* nextItemY ) const
+wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
+                                        unsigned int lh,
+                                        unsigned int* nextItemY ) const
 {
     wxASSERT( nextItemY );
 
@@ -2344,6 +2346,12 @@ void wxPGProperty::Empty()
     }
 
     m_children.clear();
+}
+
+wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y ) const
+{
+    unsigned int nextItem;
+    return GetItemAtY( y, GetGrid()->GetRowHeight(), &nextItem);
 }
 
 void wxPGProperty::DeleteChildren()
