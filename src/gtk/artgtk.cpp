@@ -57,10 +57,10 @@ protected:
 namespace
 {
 
-const wxScopedCharBuffer wxArtIDToStock(const wxArtID& id)
+wxString wxArtIDToStock(const wxArtID& id)
 {
     #define ART(wxid, gtkid) \
-           if (id == wxid) return wxScopedCharBuffer::CreateNonOwned(gtkid);
+           if (id == wxid) return gtkid;
 
     ART(wxART_ERROR,                               GTK_STOCK_DIALOG_ERROR)
     ART(wxART_INFORMATION,                         GTK_STOCK_DIALOG_INFO)
@@ -123,7 +123,7 @@ const wxScopedCharBuffer wxArtIDToStock(const wxArtID& id)
     // allow passing GTK+ stock IDs to wxArtProvider -- if a recognized wx
     // ID wasn't found, pass it to GTK+ in the hope it is a GTK+ or theme
     // icon name:
-    return id.mb_str();
+    return id;
 }
 
 GtkIconSize ArtClientToIconSize(const wxArtClient& client)
@@ -266,7 +266,7 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
                                          const wxArtClient& client,
                                          const wxSize& size)
 {
-    const wxScopedCharBuffer stockid = wxArtIDToStock(id);
+    const wxString stockid = wxArtIDToStock(id);
 
     GtkIconSize stocksize = (size == wxDefaultSize) ?
                                 ArtClientToIconSize(client) :
@@ -275,7 +275,7 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
     if (stocksize == GTK_ICON_SIZE_INVALID)
         stocksize = GTK_ICON_SIZE_BUTTON;
 
-    GdkPixbuf *pixbuf = CreateGtkIcon(stockid, stocksize, size);
+    GdkPixbuf *pixbuf = CreateGtkIcon(stockid.utf8_str(), stocksize, size);
 
     if (pixbuf && size != wxDefaultSize &&
         (size.x != gdk_pixbuf_get_width(pixbuf) ||
@@ -301,11 +301,11 @@ wxIconBundle
 wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
                                     const wxArtClient& WXUNUSED(client))
 {
-    const wxScopedCharBuffer stockid = wxArtIDToStock(id);
+    const wxString stockid = wxArtIDToStock(id);
 
     // try to load the bundle as stock icon first
     GtkStyle* style = wxGTKPrivate::GetButtonWidget()->style;
-    GtkIconSet* iconset = gtk_style_lookup_icon_set(style, stockid);
+    GtkIconSet* iconset = gtk_style_lookup_icon_set(style, stockid.utf8_str());
     if ( iconset )
     {
         GtkIconSize *sizes;
@@ -313,7 +313,7 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
         gtk_icon_set_get_sizes(iconset, &sizes, &n_sizes);
         wxIconBundle bundle = DoCreateIconBundle
                               (
-                                  stockid,
+                                  stockid.utf8_str(),
                                   sizes, sizes + n_sizes,
                                   &CreateStockIcon
                               );
@@ -328,7 +328,7 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
         gint *sizes = gtk_icon_theme_get_icon_sizes
                       (
                           gtk_icon_theme_get_default(),
-                          stockid
+                          stockid.utf8_str()
                       );
         if ( !sizes )
             return wxNullIconBundle;
@@ -339,7 +339,7 @@ wxGTK2ArtProvider::CreateIconBundle(const wxArtID& id,
 
         wxIconBundle bundle = DoCreateIconBundle
                               (
-                                  stockid,
+                                  stockid.utf8_str(),
                                   sizes, last,
                                   &CreateThemeIcon
                               );
