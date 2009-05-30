@@ -116,16 +116,6 @@ __LIB_PNG_p =
 !ifeq USE_GUI 1
 __LIB_PNG_p = wxpng$(WXDEBUGFLAG).lib
 !endif
-__WXLIB_NET_p =
-!ifeq MONOLITHIC 0
-__WXLIB_NET_p = &
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
-!endif
-__WXLIB_XML_p =
-!ifeq MONOLITHIC 0
-__WXLIB_XML_p = &
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
-!endif
 __DEBUGINFO =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
@@ -143,22 +133,22 @@ __DEBUGINFO = -d0
 !ifeq DEBUG_INFO 1
 __DEBUGINFO = -d2
 !endif
-__DEBUGINFO_2 =
+__DEBUGINFO_1 =
 !ifeq BUILD debug
 !ifeq DEBUG_INFO default
-__DEBUGINFO_2 = debug all
+__DEBUGINFO_1 = debug all
 !endif
 !endif
 !ifeq BUILD release
 !ifeq DEBUG_INFO default
-__DEBUGINFO_2 = 
+__DEBUGINFO_1 = 
 !endif
 !endif
 !ifeq DEBUG_INFO 0
-__DEBUGINFO_2 = 
+__DEBUGINFO_1 = 
 !endif
 !ifeq DEBUG_INFO 1
-__DEBUGINFO_2 = debug all
+__DEBUGINFO_1 = debug all
 !endif
 __OPTIMIZEFLAG =
 !ifeq BUILD debug
@@ -194,6 +184,30 @@ __EXCEPTIONSFLAG =
 !endif
 !ifeq USE_EXCEPTIONS 1
 __EXCEPTIONSFLAG = -xs
+!endif
+__WXLIB_NET_p =
+!ifeq MONOLITHIC 0
+__WXLIB_NET_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
+!endif
+__WXLIB_XML_p =
+!ifeq MONOLITHIC 0
+__WXLIB_XML_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
+!endif
+__WXLIB_BASE_p =
+!ifeq MONOLITHIC 0
+__WXLIB_BASE_p = &
+	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
+__WXLIB_MONO_p =
+!ifeq MONOLITHIC 1
+__WXLIB_MONO_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
+!endif
+__GDIPLUS_LIB_p =
+!ifeq USE_GDIPLUS 1
+__GDIPLUS_LIB_p = gdiplus.lib
 !endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
@@ -234,20 +248,6 @@ __GFXCTX_DEFINE_p = -dwxUSE_GRAPHICS_CONTEXT=1
 __DLLFLAG_p =
 !ifeq SHARED 1
 __DLLFLAG_p = -dWXUSINGDLL
-!endif
-__WXLIB_BASE_p =
-!ifeq MONOLITHIC 0
-__WXLIB_BASE_p = &
-	wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-__WXLIB_MONO_p =
-!ifeq MONOLITHIC 1
-__WXLIB_MONO_p = &
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
-!endif
-__GDIPLUS_LIB_p =
-!ifeq USE_GDIPLUS 1
-__GDIPLUS_LIB_p = gdiplus.lib
 !endif
 
 ### Variables: ###
@@ -363,16 +363,6 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_socket.obj &
 	$(OBJS)\test_gui_clientsize.obj &
 	$(OBJS)\test_gui_setsize.obj
-PRINTFBENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) &
-	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\include &
-	-wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. $(__DLLFLAG_p) -dwxUSE_GUI=0 &
-	$(CPPUNIT_CFLAGS) /fh=$(OBJS)\testprec_printfbench.pch $(__RTTIFLAG) &
-	$(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
-PRINTFBENCH_OBJECTS =  &
-	$(OBJS)\printfbench_dummy.obj &
-	$(OBJS)\printfbench_printfbench.obj
 
 
 all : $(OBJS)
@@ -381,7 +371,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\test.exe $(__test_gui___depname) data fr $(OBJS)\printfbench.exe
+all : .SYMBOLIC $(OBJS)\test.exe $(__test_gui___depname) data fr
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -391,16 +381,15 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
 	-if exist $(OBJS)\test.exe del $(OBJS)\test.exe
 	-if exist $(OBJS)\test_gui.exe del $(OBJS)\test_gui.exe
-	-if exist $(OBJS)\printfbench.exe del $(OBJS)\printfbench.exe
 
 $(OBJS)\test.exe :  $(TEST_OBJECTS)
 	@%create $(OBJS)\test.lbc
 	@%append $(OBJS)\test.lbc option quiet
 	@%append $(OBJS)\test.lbc name $^@
 	@%append $(OBJS)\test.lbc option caseexact
-	@%append $(OBJS)\test.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS) $(LDFLAGS)
+	@%append $(OBJS)\test.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS) $(LDFLAGS)
 	@for %i in ($(TEST_OBJECTS)) do @%append $(OBJS)\test.lbc file %i
-	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_XML_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\test.lbc library %i
+	@for %i in ( $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\test.lbc library %i
 	@%append $(OBJS)\test.lbc
 	@for %i in () do @%append $(OBJS)\test.lbc option stack=%i
 	wlink @$(OBJS)\test.lbc
@@ -411,7 +400,7 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	@%append $(OBJS)\test_gui.lbc option quiet
 	@%append $(OBJS)\test_gui.lbc name $^@
 	@%append $(OBJS)\test_gui.lbc option caseexact
-	@%append $(OBJS)\test_gui.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_' $(LDFLAGS)
+	@%append $(OBJS)\test_gui.lbc  $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) $(CPPUNIT_LIBS) system nt ref 'main_' $(LDFLAGS)
 	@for %i in ($(TEST_GUI_OBJECTS)) do @%append $(OBJS)\test_gui.lbc file %i
 	@for %i in ( $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\test_gui.lbc library %i
 	@%append $(OBJS)\test_gui.lbc option resource=$(OBJS)\test_gui_sample.res
@@ -426,18 +415,6 @@ data : .SYMBOLIC
 fr : .SYMBOLIC 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
 	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%f copy .\intl\fr\%f $(OBJS)\intl\fr
-
-$(OBJS)\printfbench.exe :  $(PRINTFBENCH_OBJECTS)
-	@%create $(OBJS)\printfbench.lbc
-	@%append $(OBJS)\printfbench.lbc option quiet
-	@%append $(OBJS)\printfbench.lbc name $^@
-	@%append $(OBJS)\printfbench.lbc option caseexact
-	@%append $(OBJS)\printfbench.lbc  $(__DEBUGINFO_2)  libpath $(LIBDIRNAME) system nt ref 'main_' $(CPPUNIT_LIBS) $(LDFLAGS)
-	@for %i in ($(PRINTFBENCH_OBJECTS)) do @%append $(OBJS)\printfbench.lbc file %i
-	@for %i in ( $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib wininet.lib) do @%append $(OBJS)\printfbench.lbc library %i
-	@%append $(OBJS)\printfbench.lbc
-	@for %i in () do @%append $(OBJS)\printfbench.lbc option stack=%i
-	wlink @$(OBJS)\printfbench.lbc
 
 $(OBJS)\test_dummy.obj :  .AUTODEPEND .\dummy.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
@@ -705,10 +682,4 @@ $(OBJS)\test_gui_clientsize.obj :  .AUTODEPEND .\window\clientsize.cpp
 
 $(OBJS)\test_gui_setsize.obj :  .AUTODEPEND .\window\setsize.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
-
-$(OBJS)\printfbench_dummy.obj :  .AUTODEPEND .\dummy.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(PRINTFBENCH_CXXFLAGS) $<
-
-$(OBJS)\printfbench_printfbench.obj :  .AUTODEPEND .\benchmarks\printfbench.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(PRINTFBENCH_CXXFLAGS) $<
 

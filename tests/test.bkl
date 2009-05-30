@@ -92,8 +92,8 @@
             xml/xmltest.cpp
         </sources>
         <wx-lib>net</wx-lib>
-        <wx-lib>base</wx-lib>
         <wx-lib>xml</wx-lib>
+        <wx-lib>base</wx-lib>
     </exe>
 
 
@@ -158,16 +158,6 @@
 
     <wx-data id="fr" template="catalog"/>
 
-
-    <!-- BENCHMARKS -->
-
-    <exe id="printfbench" template="wx_sample_console,wx_test"
-                          template_append="wx_append_base">
-        <sources>
-            benchmarks/printfbench.cpp
-        </sources>
-        <wx-lib>base</wx-lib>
-    </exe>
 
     <fragment format="autoconf">
 # notice the ugly hack with using CXXWARNINGS: we can't use CPPFLAGS as

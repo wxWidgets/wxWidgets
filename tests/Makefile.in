@@ -148,13 +148,6 @@ TEST_GUI_OBJECTS =  \
 	test_gui_clientsize.o \
 	test_gui_setsize.o
 TEST_GUI_ODEP =  $(_____pch_testprec_test_gui_testprec_h_gch___depname)
-PRINTFBENCH_CXXFLAGS = $(__printfbench_PCH_INC) -D__WX$(TOOLKIT)__ \
-	$(__WXUNIV_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) -I$(srcdir) $(__DLLFLAG_p) -DwxUSE_GUI=0 \
-	$(CPPUNIT_CFLAGS) $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
-PRINTFBENCH_OBJECTS =  \
-	printfbench_printfbench.o
-PRINTFBENCH_ODEP = $(_____pch_testprec_printfbench_testprec_h_gch___depname)
 
 ### Conditionally set variables: ###
 
@@ -237,26 +230,17 @@ COND_MONOLITHIC_0___WXLIB_CORE_p = \
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@__LIB_PNG_p \
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@	= \
 @COND_USE_GUI_1_wxUSE_LIBPNG_builtin@	-lwxpng$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_PLATFORM_MAC_0@__printfbench___mac_setfilecmd = @true
-@COND_PLATFORM_MAC_1@__printfbench___mac_setfilecmd = \
-@COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL printfbench$(EXEEXT)
-@COND_GCC_PCH_1@__printfbench_PCH_INC = -I./.pch/testprec_printfbench
-@COND_ICC_PCH_1@__printfbench_PCH_INC = \
-@COND_ICC_PCH_1@	$(ICC_PCH_USE_SWITCH) \
-@COND_ICC_PCH_1@	./.pch/testprec_printfbench/testprec.h.gch
-@COND_USE_PCH_1@_____pch_testprec_printfbench_testprec_h_gch___depname \
-@COND_USE_PCH_1@	= ./.pch/testprec_printfbench/testprec.h.gch
+@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
+@COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
+@COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
+@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
 COND_MONOLITHIC_0___WXLIB_NET_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_NET_p = $(COND_MONOLITHIC_0___WXLIB_NET_p)
 COND_MONOLITHIC_0___WXLIB_XML_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_XML_p = $(COND_MONOLITHIC_0___WXLIB_XML_p)
-@COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
-@COND_USE_EXCEPTIONS_0@__EXCEPTIONS_DEFINE_p = -DwxNO_EXCEPTIONS
-@COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
-@COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
-@COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
 COND_MONOLITHIC_0___WXLIB_BASE_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
@@ -273,7 +257,7 @@ COND_wxUSE_REGEX_builtin___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data fr printfbench$(EXEEXT)
+all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data fr
 
 install: 
 
@@ -287,13 +271,12 @@ clean:
 	rm -f test$(EXEEXT)
 	rm -f test_gui$(EXEEXT)
 	rm -rf test_gui.app
-	rm -f printfbench$(EXEEXT)
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 test$(EXEEXT): $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(TEST_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	
 	$(__test___mac_setfilecmd)
 
@@ -353,14 +336,6 @@ fr:
 	cp -pRf $(srcdir)/intl/fr/$$f ./intl/fr ;; \
 	esac; \
 	done
-
-printfbench$(EXEEXT): $(PRINTFBENCH_OBJECTS)
-	$(CXX) -o $@ $(PRINTFBENCH_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS) $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
-	
-	$(__printfbench___mac_setfilecmd)
-
-@COND_USE_PCH_1@./.pch/testprec_printfbench/testprec.h.gch: 
-@COND_USE_PCH_1@	$(BK_MAKE_PCH) ./.pch/testprec_printfbench/testprec.h.gch testprec.h $(CXX) $(PRINTFBENCH_CXXFLAGS)
 
 test_test.o: $(srcdir)/test.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/test.cpp
@@ -622,9 +597,6 @@ test_gui_clientsize.o: $(srcdir)/window/clientsize.cpp $(TEST_GUI_ODEP)
 
 test_gui_setsize.o: $(srcdir)/window/setsize.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/window/setsize.cpp
-
-printfbench_printfbench.o: $(srcdir)/benchmarks/printfbench.cpp $(PRINTFBENCH_ODEP)
-	$(CXXC) -c -o $@ $(PRINTFBENCH_CXXFLAGS) $(srcdir)/benchmarks/printfbench.cpp
 
 
 # notice the ugly hack with using CXXWARNINGS: we can't use CPPFLAGS as
