@@ -2156,34 +2156,6 @@ public:
     */
     wxPGProperty* GetPropertyByName( const wxString& name ) const;
 
-#ifdef SWIG
-     %extend {
-        DocStr(GetClientData,
-               "Returns the client data object for a property", "");
-        PyObject* GetClientData() {
-            wxPyClientData* data = (wxPyClientData*)self->GetClientObject();
-            if (data) {
-                Py_INCREF(data->m_obj);
-                return data->m_obj;
-            } else {
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-
-        DocStr(SetClientData,
-               "Associate the given client data.", "");
-        void SetClientData(PyObject* clientData) {
-            wxPyClientData* data = new wxPyClientData(clientData);
-            self->SetClientObject(data);
-        }
-    }
-    %pythoncode {
-         GetClientObject = GetClientData
-         SetClientObject = SetClientData
-    }
-#endif
-
 #ifndef SWIG
 
     // Returns various display-related information for given column

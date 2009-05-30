@@ -152,6 +152,15 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(wxPGGlobalVarsClassManager, wxModule)
 
 
+// When wxPG is loaded dynamically after the application is already running
+// then the built-in module system won't pick this one up.  Add it manually.
+void wxPGInitResourceModule()
+{
+    wxModule* module = new wxPGGlobalVarsClassManager;
+    module->Init();
+    wxModule::RegisterModule(module);
+}
+
 wxPGGlobalVarsClass* wxPGGlobalVars = NULL;
 
 

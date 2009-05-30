@@ -156,7 +156,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 // -----------------------------------------------------------------------
 // Declare part of custom colour property macro pairs.
 
-#if wxUSE_IMAGE || defined(SWIG)
+#if wxUSE_IMAGE
     #include "wx/image.h"
 #endif
 
@@ -356,7 +356,7 @@ protected:
 
 #endif
 
-#if wxUSE_CHOICEDLG || defined(SWIG)
+#if wxUSE_CHOICEDLG
 
 /** @class wxMultiChoiceProperty
     @ingroup classes

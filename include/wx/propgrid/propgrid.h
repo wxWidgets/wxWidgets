@@ -102,6 +102,10 @@ extern WXDLLIMPEXP_PROPGRID wxPGGlobalVarsClass* wxPGGlobalVars;
 
 #define wxPGVariant_Bool(A)     (A?wxPGVariant_True:wxPGVariant_False)
 
+// When wxPG is loaded dynamically after the application is already running
+// then the built-in module system won't pick this one up.  Add it manually.
+WXDLLIMPEXP_PROPGRID void wxPGInitResourceModule();
+
 #endif // !SWIG
 
 // -----------------------------------------------------------------------
