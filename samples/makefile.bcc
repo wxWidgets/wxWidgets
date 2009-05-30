@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
+all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -82,14 +82,14 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>collpane.bat
 	call collpane.bat
 	@del collpane.bat
-	@echo cd config >config.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>config.bat
-	call config.bat
-	@del config.bat
 	@echo cd combo >combo.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>combo.bat
 	call combo.bat
 	@del combo.bat
+	@echo cd config >config.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>config.bat
+	call config.bat
+	@del config.bat
 	@echo cd console >console.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>console.bat
 	call console.bat
@@ -138,14 +138,14 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>event.bat
 	call event.bat
 	@del event.bat
-	@echo cd exec >exec.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>exec.bat
-	call exec.bat
-	@del exec.bat
 	@echo cd except >except.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>except.bat
 	call except.bat
 	@del except.bat
+	@echo cd exec >exec.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>exec.bat
+	call exec.bat
+	@del exec.bat
 	@echo cd font >font.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>font.bat
 	call font.bat
@@ -234,6 +234,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>popup.bat
 	call popup.bat
 	@del popup.bat
+	@echo cd power >power.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>power.bat
+	call power.bat
+	@del power.bat
 	@echo cd printing >printing.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>printing.bat
 	call printing.bat
@@ -290,6 +294,14 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>stc.bat
 	call stc.bat
 	@del stc.bat
+	@echo cd svg >svg.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>svg.bat
+	call svg.bat
+	@del svg.bat
+	@echo cd taborder >taborder.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>taborder.bat
+	call taborder.bat
+	@del taborder.bat
 	@echo cd taskbar >taskbar.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>taskbar.bat
 	call taskbar.bat
@@ -334,6 +346,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>wrapsizer.bat
 	call wrapsizer.bat
 	@del wrapsizer.bat
+	@echo cd xrc >xrc.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>xrc.bat
+	call xrc.bat
+	@del xrc.bat
 	@echo cd memcheck >memcheck.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>memcheck.bat
 	call memcheck.bat
@@ -387,17 +403,17 @@ collpane:
 	call collpane.bat
 	@del collpane.bat
 
-config: 
-	@echo cd config >config.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>config.bat
-	call config.bat
-	@del config.bat
-
 combo: 
 	@echo cd combo >combo.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>combo.bat
 	call combo.bat
 	@del combo.bat
+
+config: 
+	@echo cd config >config.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>config.bat
+	call config.bat
+	@del config.bat
 
 console: 
 	@echo cd console >console.bat
@@ -471,17 +487,17 @@ event:
 	call event.bat
 	@del event.bat
 
-exec: 
-	@echo cd exec >exec.bat
-	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>exec.bat
-	call exec.bat
-	@del exec.bat
-
 except: 
 	@echo cd except >except.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>except.bat
 	call except.bat
 	@del except.bat
+
+exec: 
+	@echo cd exec >exec.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>exec.bat
+	call exec.bat
+	@del exec.bat
 
 font: 
 	@echo cd font >font.bat
@@ -615,6 +631,12 @@ popup:
 	call popup.bat
 	@del popup.bat
 
+power: 
+	@echo cd power >power.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>power.bat
+	call power.bat
+	@del power.bat
+
 printing: 
 	@echo cd printing >printing.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>printing.bat
@@ -699,6 +721,18 @@ stc:
 	call stc.bat
 	@del stc.bat
 
+svg: 
+	@echo cd svg >svg.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>svg.bat
+	call svg.bat
+	@del svg.bat
+
+taborder: 
+	@echo cd taborder >taborder.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>taborder.bat
+	call taborder.bat
+	@del taborder.bat
+
 taskbar: 
 	@echo cd taskbar >taskbar.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>taskbar.bat
@@ -764,6 +798,12 @@ wrapsizer:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>wrapsizer.bat
 	call wrapsizer.bat
 	@del wrapsizer.bat
+
+xrc: 
+	@echo cd xrc >xrc.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>xrc.bat
+	call xrc.bat
+	@del xrc.bat
 
 memcheck: 
 	@echo cd memcheck >memcheck.bat
