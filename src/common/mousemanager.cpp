@@ -45,18 +45,27 @@ END_EVENT_TABLE()
 // wxMouseEventsManager implementation
 // ============================================================================
 
-wxMouseEventsManager::wxMouseEventsManager(wxWindow *win)
-    : m_win(win)
+void wxMouseEventsManager::Init()
 {
+    m_win = NULL;
     m_state = State_Normal;
     m_item = wxNOT_FOUND;
+}
 
+bool wxMouseEventsManager::Create(wxWindow *win)
+{
+    wxASSERT_MSG( !m_win, "Create() must not be called twice" );
+
+    m_win = win;
     win->PushEventHandler(this);
+
+    return true;
 }
 
 wxMouseEventsManager::~wxMouseEventsManager()
 {
-    m_win->RemoveEventHandler(this);
+    if ( m_win )
+        m_win->RemoveEventHandler(this);
 }
 
 void wxMouseEventsManager::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))

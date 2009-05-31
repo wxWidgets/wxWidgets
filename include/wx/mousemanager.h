@@ -34,8 +34,11 @@ class WXDLLIMPEXP_CORE wxMouseEventsManager : public wxEvtHandler
 {
 public:
     // a mouse event manager is always associated with a window and must be
-    // deleted by the window when it is destroyed
-    wxMouseEventsManager(wxWindow *win);
+    // deleted by the window when it is destroyed so if it is created using the
+    // default ctor Create() must be called later
+    wxMouseEventsManager() { Init(); }
+    wxMouseEventsManager(wxWindow *win) { Init(); Create(win); }
+    bool Create(wxWindow *win);
 
     virtual ~wxMouseEventsManager();
 
@@ -113,6 +116,8 @@ private:
         State_Dragging  // the item is being dragged
     };
 
+    // common part of both ctors
+    void Init();
 
     // various event handlers
     void OnCaptureLost(wxMouseCaptureLostEvent& event);
@@ -121,8 +126,9 @@ private:
     void OnMove(wxMouseEvent& event);
 
 
-    // the associated window, never NULL
-    wxWindow * const m_win;
+    // the associated window, never NULL except between the calls to the
+    // default ctor and Create()
+    wxWindow *m_win;
 
     // the current state
     State m_state;

@@ -38,6 +38,15 @@ class wxMouseEventsManager : public wxEvtHandler
 {
 public:
     /**
+        Default constructor.
+
+        You must call Create() to finish initializing the mouse events manager.
+        If possible, avoid the use of this constructor in favour of the other
+        one which fully initializes the mouse events manager immediately.
+     */
+    wxMouseEventsManager();
+
+    /**
         Constructor creates the manager for the window.
 
         A mouse event manager is always associated with a window and must be
@@ -45,6 +54,14 @@ public:
         allocated on the heap however).
      */
     wxMouseEventsManager(wxWindow *win);
+
+    /**
+        Finishes initialization of the object created using default
+        constructor.
+
+        Currently always returns @true.
+     */
+    bool Create(wxWindow *win);
 
 protected:
     /**
