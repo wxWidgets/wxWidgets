@@ -212,6 +212,7 @@ public:
 protected:
     virtual void DoGetScreenPosition(int *x, int *y) const;
     virtual void DoGetPosition(int *x, int *y) const;
+    virtual void DoSetSize(int x, int y, int width, int height, int sizeFlags);
     virtual void DoSetClientSize(int width, int height);
     virtual void InternalSetMenuBar();
     virtual bool IsMDIChild() const { return true; }

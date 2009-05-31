@@ -902,6 +902,14 @@ bool wxMDIChildFrame::Show(bool show)
     return true;
 }
 
+void
+wxMDIChildFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    // we need to disable client area origin adjustments used for the child
+    // windows for the frame itself
+    wxMDIChildFrameBase::DoSetSize(x, y, width, height, sizeFlags);
+}
+
 // Set the client size (i.e. leave the calculation of borders etc.
 // to wxWidgets)
 void wxMDIChildFrame::DoSetClientSize(int width, int height)
