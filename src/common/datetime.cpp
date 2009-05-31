@@ -453,7 +453,7 @@ static long GetTruncatedJDN(wxDateTime::wxDateTime_t day,
             - JDN_OFFSET;
 }
 
-#ifdef HAVE_STRFTIME
+#ifdef wxHAS_STRFTIME
 
 // this function is a wrapper around strftime(3) adding error checking
 // NOTE: not static because used by datetimefmt.cpp
@@ -476,7 +476,7 @@ wxString CallStrftime(const wxString& format, const tm* tm)
     return s;
 }
 
-#endif // HAVE_STRFTIME
+#endif // wxHAS_STRFTIME
 
 // if year and/or month have invalid values, replace them with the current ones
 static void ReplaceDefaultYearMonthWithCurrent(int *year,
@@ -855,7 +855,7 @@ wxString wxDateTime::GetEnglishMonthName(Month month, NameFlags flags)
 wxString wxDateTime::GetMonthName(wxDateTime::Month month,
                                   wxDateTime::NameFlags flags)
 {
-#ifdef HAVE_STRFTIME
+#ifdef wxHAS_STRFTIME
     wxCHECK_MSG( month != Inv_Month, wxEmptyString, _T("invalid month") );
 
     // notice that we must set all the fields to avoid confusing libc (GNU one
@@ -865,9 +865,9 @@ wxString wxDateTime::GetMonthName(wxDateTime::Month month,
     tm.tm_mon = month;
 
     return CallStrftime(flags == Name_Abbr ? _T("%b") : _T("%B"), &tm);
-#else // !HAVE_STRFTIME
+#else // !wxHAS_STRFTIME
     return GetEnglishMonthName(month, flags);
-#endif // HAVE_STRFTIME/!HAVE_STRFTIME
+#endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
 }
 
 /* static */
@@ -893,7 +893,7 @@ wxString wxDateTime::GetEnglishWeekDayName(WeekDay wday, NameFlags flags)
 wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
                                     wxDateTime::NameFlags flags)
 {
-#ifdef HAVE_STRFTIME
+#ifdef wxHAS_STRFTIME
     wxCHECK_MSG( wday != Inv_WeekDay, wxEmptyString, _T("invalid weekday") );
 
     // take some arbitrary Sunday (but notice that the day should be such that
@@ -913,9 +913,9 @@ wxString wxDateTime::GetWeekDayName(wxDateTime::WeekDay wday,
 
     // ... and call strftime()
     return CallStrftime(flags == Name_Abbr ? _T("%a") : _T("%A"), &tm);
-#else // !HAVE_STRFTIME
+#else // !wxHAS_STRFTIME
     return GetEnglishWeekDayName(wday, flags);
-#endif // HAVE_STRFTIME/!HAVE_STRFTIME
+#endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
 }
 
 /* static */
