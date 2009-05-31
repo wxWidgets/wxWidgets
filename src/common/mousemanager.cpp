@@ -103,6 +103,7 @@ void wxMouseEventsManager::OnLeftDown(wxMouseEvent& event)
     }
 
     m_state = State_Pressed;
+    m_win->SetFocus();
     m_win->CaptureMouse();
     MouseClickBegin(m_item);
 }
