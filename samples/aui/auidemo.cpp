@@ -1461,9 +1461,9 @@ void MyFrame::OnTabAlignment(wxCommandEvent &evt)
             wxAuiNotebook* nb = (wxAuiNotebook*)pane.window;
 
             if (evt.GetId() == ID_NotebookAlignTop)
-                nb->SetWindowStyleFlag(nb->GetWindowStyleFlag()^wxAUI_NB_BOTTOM|wxAUI_NB_TOP);
+                nb->SetWindowStyleFlag((nb->GetWindowStyleFlag()^wxAUI_NB_BOTTOM)|wxAUI_NB_TOP);
            else if (evt.GetId() == ID_NotebookAlignBottom)
-               nb->SetWindowStyleFlag(nb->GetWindowStyleFlag()^wxAUI_NB_TOP|wxAUI_NB_BOTTOM);
+               nb->SetWindowStyleFlag((nb->GetWindowStyleFlag()^wxAUI_NB_TOP)|wxAUI_NB_BOTTOM);
             nb->Refresh();
         }
     }
