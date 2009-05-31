@@ -40,9 +40,9 @@
 #include "wx/statline.h"
 #include "wx/sysopt.h"
 #include "wx/module.h"
-#include "wx/private/stattext.h"
 #include "wx/bookctrl.h"
 #include "wx/scrolwin.h"
+#include "wx/textwrapper.h"
 
 #if wxUSE_DISPLAY
 #include "wx/display.h"
