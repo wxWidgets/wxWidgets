@@ -87,6 +87,13 @@ public:
                     int width = 0, int height = 0,
                     const wxString& description = wxEmptyString);
 
+    // as above, but takes reference DC as first argument to take resolution,
+    // size, font metrics etc. from
+    wxEnhMetaFileDC(const wxDC& referenceDC,
+                    const wxString& filename = wxEmptyString,
+                    int width = 0, int height = 0,
+                    const wxString& description = wxEmptyString);
+
     // obtain a pointer to the new metafile (caller should delete it)
     wxEnhMetaFile *Close();
 
