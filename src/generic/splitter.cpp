@@ -922,9 +922,12 @@ wxSize wxSplitterWindow::DoGetBestSize() const
         pSash = &sizeBest.y;
     }
 
-    // account for the border and the sash
+    // account for the sash if the window is actually split
+    if ( m_windowOne && m_windowTwo )
+        *pSash += GetSashSize();
+
+    // account for the border too
     int border = 2*GetBorderSize();
-    *pSash += GetSashSize();
     sizeBest.x += border;
     sizeBest.y += border;
 
