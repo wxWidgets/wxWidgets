@@ -406,6 +406,14 @@ public:
     wxAuiPaneInfo& SetLayer(int layer) { dock_layer = layer; return *this; }
     int GetLayer() { return dock_layer; }
 
+    // get/set the z-layer of the pane when docked.
+    // when two panes are docked in the same direction, layer, row and position tabs will be formed
+    // the z-layer is used to decide the ordering of the tabs with 0 being the pane at the very back(left tab)
+    // while these are currently expressed as tabs other display methods could be used instead in future
+    // especially for e.g. a cellphone port, which would still use the same z-layering
+    wxAuiPaneInfo& SetZLayer(int zlayer) { dock_zlayer = zlayer; return *this; }
+    int GetZLayer() { return dock_zlayer; }
+
     // get/set the row of the pane when docked.
     wxAuiPaneInfo& SetRow(int row) { dock_row = row; return *this; }
     int GetRow() { return dock_row; }
@@ -558,6 +566,7 @@ public:
     int dock_layer;       // layer number (0 = innermost layer)
     int dock_row;         // row number on the docking bar (0 = first row)
     int dock_pos;         // position inside the row (0 = first position)
+    int dock_zlayer;      // layer number along the z-axis (0 = back)
 
     wxSize best_size;     // size that the layout engine will prefer
     wxSize min_size;      // minimum size the pane window can tolerate
