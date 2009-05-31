@@ -330,6 +330,7 @@ All:
 
 - Added wxStd{Input,Output}Stream classes (Jonathan Liu).
 - Include port number in host header in wxHTTP (Marcin 'Malcom' Malich).
+- Added wxTempFile::Flush().
 
 All (GUI):
 

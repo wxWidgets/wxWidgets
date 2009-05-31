@@ -130,6 +130,18 @@ public:
     void Discard();
 
     /**
+        Flush the data written to the file to disk.
+
+        This simply calls wxFile::Flush() for the underlying file and may be
+        necessary with file systems such as XFS and Ext4 under Linux. Calling
+        this function may however have serious performance implications and
+        also is not necessary with many other file systems so it is not done by
+        default -- but you can call it before calling Commit() to absolutely
+        ensure that the data was indeed written to the disk correctly.
+     */
+    bool Flush();
+
+    /**
         Returns @true if the file was successfully opened.
     */
     bool IsOpened() const;
