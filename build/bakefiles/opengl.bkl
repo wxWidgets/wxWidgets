@@ -14,27 +14,10 @@
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('base')))</if>
     </set>
 
-    <!--
-        When using makefile-based formats (so exclude all project files as well
-        as autoconf) we want to allow people to override the value of
-        wxUSE_GLCANVAS in setup.h by specifying USE_OPENGL=1 on make command
-        line so we predefine it as 1 on the compiler command line in this case
-        and only define it in setup.h if it han't been defined yet.
-     -->
-    <if cond="FORMAT in ['autoconf','msvc','msvc6prj','msvs2003prj','msvs2005prj','msvs2008prj']">
-        <set var="OPENGL_DEFINE"/>
-    </if>
-    <if cond="FORMAT not in ['autoconf','msvc','msvc6prj','msvs2003prj','msvs2005prj','msvs2008prj']">
-        <set var="OPENGL_DEFINE">
-            <if cond="USE_OPENGL=='1'">wxUSE_GLCANVAS=1</if>
-        </set>
-    </if>
-
     <dll id="gldll" template="wx_dll"
          cond="SHARED=='1' and USE_GUI=='1' and USE_OPENGL=='1'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_GL</define>
-        <define>$(OPENGL_DEFINE)</define>
         <sources>$(OPENGL_SRC)</sources>
         <msvc-headers>$(OPENGL_HDR)</msvc-headers>
 
@@ -52,7 +35,6 @@
 
     <lib id="gllib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and USE_OPENGL=='1'">
-        <define>$(OPENGL_DEFINE)</define>
         <sources>$(OPENGL_SRC)</sources>
         <msvc-headers>$(OPENGL_HDR)</msvc-headers>
     </lib>

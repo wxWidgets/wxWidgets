@@ -130,7 +130,7 @@ USE_STC = 1
 
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 !ifndef USE_OPENGL
-USE_OPENGL = 0
+USE_OPENGL = 1
 !endif
 
 # Build quality assurance classes library (USE_GUI must be 1)? [0,1]

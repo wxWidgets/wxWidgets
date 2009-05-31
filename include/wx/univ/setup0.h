@@ -1073,13 +1073,12 @@
 // list of libraries used to link your application (although this is done
 // implicitly for Microsoft Visual C++ users).
 //
-// Default is 0 unless USE_OPENGL was defined on make command line in which
-// case this is predefined as 1.
+// Default is 1 unless the compiler is known to ship without the necessary
+// headers (Digital Mars) or the platform doesn't support OpenGL (Windows CE).
 //
-// Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
-#ifndef wxUSE_GLCANVAS
-    #define wxUSE_GLCANVAS       0
-#endif
+// Recommended setting: 1 if you intend to use OpenGL, can be safely set to 0
+// otherwise.
+#define wxUSE_GLCANVAS       1
 
 // wxRichTextCtrl allows editing of styled text.
 //
