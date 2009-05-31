@@ -138,6 +138,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(ShowParent)
     MENU_LINK(ShowPrevSibling)
     MENU_LINK(ShowNextSibling)
+    MENU_LINK(ScrollTo)
 #undef MENU_LINK
 
 END_EVENT_TABLE()
@@ -297,6 +298,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     item_menu->Append(TreeTest_ShowParent, "Show pa&rent");
     item_menu->Append(TreeTest_ShowPrevSibling, "Show &previous sibling");
     item_menu->Append(TreeTest_ShowNextSibling, "Show &next sibling");
+    item_menu->AppendSeparator();
+    item_menu->Append(TreeTest_ScrollTo, "Scroll &to item",
+                      "Scroll to the last by one top level child");
 
 #ifndef NO_MULTIPLE_SELECTION
     item_menu->AppendSeparator();
@@ -819,6 +823,17 @@ void MyFrame::DoShowRelativeItem(TreeFunc1_t pfn, const wxString& label)
     else
         wxLogMessage("The %s item is \"%s\"",
                      label, m_treeCtrl->GetItemText(new_item));
+}
+
+void MyFrame::OnScrollTo(wxCommandEvent& WXUNUSED(event))
+{
+    // scroll to the last but one top level child
+    wxTreeItemId item = m_treeCtrl->GetPrevSibling(
+                            m_treeCtrl->GetLastChild(
+                                m_treeCtrl->GetRootItem()));
+    CHECK_ITEM( item );
+
+    m_treeCtrl->ScrollTo(item);
 }
 
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))

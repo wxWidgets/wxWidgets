@@ -340,6 +340,7 @@ All (GUI):
 - wxHTML: add support for table borders width (Laurent Humbertclaude).
 - Added wxMouseEventsManager.
 - Building OpenGL library is now enabled by default.
+- Improve wxTreeCtrl::ScrollTo() in generic version (Raanan Barzel).
 
 MSW:
 
