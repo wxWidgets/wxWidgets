@@ -87,10 +87,10 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     m_pane_window->Reparent(this);
 
     wxAuiPaneInfo contained_pane = pane;
-    contained_pane.Dock().Center().Show().
-                    CaptionVisible(false).
-                    PaneBorder(false).
-                    Layer(0).Row(0).Position(0);
+    contained_pane.Dock().SetDirectionCenter().Show().
+                    SetCaptionVisible(false).
+                    SetBorder(false).
+                    SetLayer(0).SetRow(0).SetPosition(0);
 
     // Carry over the minimum size
     wxSize pane_min_size = pane.window->GetMinSize();

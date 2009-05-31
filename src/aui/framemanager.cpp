@@ -1017,8 +1017,8 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
         wxASSERT_MSG(client_window, wxT("Client window is NULL!"));
 
         AddPane(client_window,
-                wxAuiPaneInfo().Name(wxT("mdiclient")).
-                CenterPane().PaneBorder(false));
+                wxAuiPaneInfo().SetName(wxT("mdiclient")).
+                SetCenterPane().SetBorder(false));
     }
     else if (m_frame->IsKindOf(CLASSINFO(wxAuiMDIParentFrame)))
     {
@@ -1027,8 +1027,8 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
         wxASSERT_MSG(client_window, wxT("Client window is NULL!"));
 
         AddPane(client_window,
-                wxAuiPaneInfo().Name(wxT("mdiclient")).
-                CenterPane().PaneBorder(false));
+                wxAuiPaneInfo().SetName(wxT("mdiclient")).
+                SetCenterPane().SetBorder(false));
     }
 
 #endif
@@ -1214,14 +1214,14 @@ bool wxAuiManager::AddPane(wxWindow* window,
                            const wxString& caption)
 {
     wxAuiPaneInfo pinfo;
-    pinfo.Caption(caption);
+    pinfo.SetCaption(caption);
     switch (direction)
     {
-        case wxTOP:    pinfo.Top(); break;
-        case wxBOTTOM: pinfo.Bottom(); break;
-        case wxLEFT:   pinfo.Left(); break;
-        case wxRIGHT:  pinfo.Right(); break;
-        case wxCENTER: pinfo.CenterPane(); break;
+        case wxTOP:    pinfo.SetDirectionTop(); break;
+        case wxBOTTOM: pinfo.SetDirectionBottom(); break;
+        case wxLEFT:   pinfo.SetDirectionLeft(); break;
+        case wxRIGHT:  pinfo.SetDirectionRight(); break;
+        case wxCENTER: pinfo.SetCenterPane(); break;
     }
     return AddPane(window, pinfo);
 }
@@ -1281,19 +1281,19 @@ bool wxAuiManager::InsertPane(wxWindow* window, const wxAuiPaneInfo& pane_info,
         {
             existing_pane.Float();
             if (pane_info.floating_pos != wxDefaultPosition)
-                existing_pane.FloatingPosition(pane_info.floating_pos);
+                existing_pane.SetFloatingPosition(pane_info.floating_pos);
             if (pane_info.floating_size != wxDefaultSize)
-                existing_pane.FloatingSize(pane_info.floating_size);
+                existing_pane.SetFloatingSize(pane_info.floating_size);
         }
         else
         {
             // if the new pane is docked then we should undo maximize
             RestoreMaximizedPane();
 
-            existing_pane.Direction(pane_info.dock_direction);
-            existing_pane.Layer(pane_info.dock_layer);
-            existing_pane.Row(pane_info.dock_row);
-            existing_pane.Position(pane_info.dock_pos);
+            existing_pane.SetDirection(pane_info.dock_direction);
+            existing_pane.SetLayer(pane_info.dock_layer);
+            existing_pane.SetRow(pane_info.dock_row);
+            existing_pane.SetPosition(pane_info.dock_pos);
         }
     }
 
@@ -2950,10 +2950,10 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         if (drop.IsToolbar())
             new_layer = auiToolBarLayer;
 
-        drop.Dock().Left().
-             Layer(new_layer).
-             Row(0).
-             Position(pt.y - GetDockPixelOffset(drop) - offset.y);
+        drop.Dock().SetDirectionLeft().
+             SetLayer(new_layer).
+             SetRow(0).
+             SetPosition(pt.y - GetDockPixelOffset(drop) - offset.y);
         return ProcessDockResult(target, drop);
     }
     else if (pt.y < layer_insert_offset &&
@@ -2966,10 +2966,10 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         if (drop.IsToolbar())
             new_layer = auiToolBarLayer;
 
-        drop.Dock().Top().
-             Layer(new_layer).
-             Row(0).
-             Position(pt.x - GetDockPixelOffset(drop) - offset.x);
+        drop.Dock().SetDirectionTop().
+             SetLayer(new_layer).
+             SetRow(0).
+             SetPosition(pt.x - GetDockPixelOffset(drop) - offset.x);
         return ProcessDockResult(target, drop);
     }
     else if (pt.x >= cli_size.x - layer_insert_offset &&
@@ -2982,10 +2982,10 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         if (drop.IsToolbar())
             new_layer = auiToolBarLayer;
 
-        drop.Dock().Right().
-             Layer(new_layer).
-             Row(0).
-             Position(pt.y - GetDockPixelOffset(drop) - offset.y);
+        drop.Dock().SetDirectionRight().
+             SetLayer(new_layer).
+             SetRow(0).
+             SetPosition(pt.y - GetDockPixelOffset(drop) - offset.y);
         return ProcessDockResult(target, drop);
     }
     else if (pt.y >= cli_size.y - layer_insert_offset &&
@@ -2998,10 +2998,10 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         if (drop.IsToolbar())
             new_layer = auiToolBarLayer;
 
-        drop.Dock().Bottom().
-             Layer(new_layer).
-             Row(0).
-             Position(pt.x - GetDockPixelOffset(drop) - offset.x);
+        drop.Dock().SetDirectionBottom().
+             SetLayer(new_layer).
+             SetRow(0).
+             SetPosition(pt.x - GetDockPixelOffset(drop) - offset.x);
         return ProcessDockResult(target, drop);
     }
 
@@ -3045,7 +3045,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
                 return ProcessDockResult(target, drop);
             }
 
-            drop.Position(pt.x - GetDockPixelOffset(drop) - offset.x);
+            drop.SetPosition(pt.x - GetDockPixelOffset(drop) - offset.x);
 
             return ProcessDockResult(target, drop);
         }
@@ -3056,10 +3056,10 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         m_last_rect.Inflate( 15, 15 );
 
         drop.Dock().
-             Direction(part->dock->dock_direction).
-             Layer(part->dock->dock_layer).
-             Row(part->dock->dock_row).
-             Position(dock_drop_offset);
+             SetDirection(part->dock->dock_direction).
+             SetLayer(part->dock->dock_layer).
+             SetRow(part->dock->dock_row).
+             SetPosition(dock_drop_offset);
 
         if ((
             ((pt.y < part->dock->rect.y + 1) && part->dock->IsHorizontal()) ||
@@ -3171,8 +3171,8 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
             DoInsertDockRow(panes, part->dock->dock_direction,
                             layer, 0);
             drop.Dock().
-                 Direction(part->dock->dock_direction).
-                 Layer(layer).Row(0).Position(0);
+                 SetDirection(part->dock->dock_direction).
+                 SetLayer(layer).SetRow(0).SetPosition(0);
             return ProcessDockResult(target, drop);
         }
 
@@ -3252,10 +3252,10 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         if (insert_dock_row)
         {
             DoInsertDockRow(panes, insert_dir, insert_layer, insert_row);
-            drop.Dock().Direction(insert_dir).
-                        Layer(insert_layer).
-                        Row(insert_row).
-                        Position(0);
+            drop.Dock().SetDirection(insert_dir).
+                        SetLayer(insert_layer).
+                        SetRow(insert_row).
+                        SetPosition(0);
             return ProcessDockResult(target, drop);
         }
 
@@ -3302,10 +3302,10 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         }
 
         drop.Dock().
-             Direction(part->dock->dock_direction).
-             Layer(part->dock->dock_layer).
-             Row(part->dock->dock_row).
-             Position(drop_position);
+             SetDirection(part->dock->dock_direction).
+             SetLayer(part->dock->dock_layer).
+             SetRow(part->dock->dock_row).
+             SetPosition(drop_position);
         return ProcessDockResult(target, drop);
     }
 
@@ -3502,7 +3502,7 @@ wxRect wxAuiManager::CalculateHintRect(wxWindow* pane_window,
     wxAuiDockUIPartArray uiparts;
     wxAuiPaneInfo hint = GetPane(pane_window);
     hint.name = wxT("__HINT__");
-    hint.PaneBorder(true);
+    hint.SetBorder(true);
     hint.Show();
 
     if (!hint.IsOk())

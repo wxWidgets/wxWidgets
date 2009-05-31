@@ -2890,7 +2890,7 @@ void wxAuiNotebook::InitNotebook(long style)
     m_mgr.SetDockSizeConstraint(1.0, 1.0); // no dock size constraint
 
     m_mgr.AddPane(m_dummy_wnd,
-              wxAuiPaneInfo().Name(wxT("dummy")).Bottom().CaptionVisible(false).Show(false));
+              wxAuiPaneInfo().SetName(wxT("dummy")).SetDirectionBottom().SetCaptionVisible(false).Show(false));
 
     m_mgr.Update();
 }
@@ -2989,8 +2989,8 @@ void wxAuiNotebook::UpdateHintWindowSize()
     wxAuiPaneInfo& info = m_mgr.GetPane(wxT("dummy"));
     if (info.IsOk())
     {
-        info.MinSize(size);
-        info.BestSize(size);
+        info.SetMinSize(size);
+        info.SetBestSize(size);
         m_dummy_wnd->SetSize(size);
     }
 }
@@ -3529,7 +3529,7 @@ wxAuiTabCtrl* wxAuiNotebook::GetActiveTabCtrl()
     tabframe->m_tabs->SetFlags(m_flags);
     tabframe->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
     m_mgr.AddPane(tabframe,
-                  wxAuiPaneInfo().Center().CaptionVisible(false));
+                  wxAuiPaneInfo().SetDirectionCenter().SetCaptionVisible(false));
 
     m_mgr.Update();
 
@@ -3615,27 +3615,27 @@ void wxAuiNotebook::Split(size_t page, int direction)
 
     // create a pane info structure with the information
     // about where the pane should be added
-    wxAuiPaneInfo pane_info = wxAuiPaneInfo().Bottom().CaptionVisible(false);
+    wxAuiPaneInfo pane_info = wxAuiPaneInfo().SetDirectionBottom().SetCaptionVisible(false);
     wxPoint mouse_pt;
 
     if (direction == wxLEFT)
     {
-        pane_info.Left();
+        pane_info.SetDirectionLeft();
         mouse_pt = wxPoint(0, cli_size.y/2);
     }
     else if (direction == wxRIGHT)
     {
-        pane_info.Right();
+        pane_info.SetDirectionRight();
         mouse_pt = wxPoint(cli_size.x, cli_size.y/2);
     }
     else if (direction == wxTOP)
     {
-        pane_info.Top();
+        pane_info.SetDirectionTop();
         mouse_pt = wxPoint(cli_size.x/2, 0);
     }
     else if (direction == wxBOTTOM)
     {
-        pane_info.Bottom();
+        pane_info.SetDirectionBottom();
         mouse_pt = wxPoint(cli_size.x/2, cli_size.y);
     }
 
@@ -4011,7 +4011,7 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             new_tabs->m_tabs->SetFlags(m_flags);
 
             m_mgr.AddPane(new_tabs,
-                          wxAuiPaneInfo().Bottom().CaptionVisible(false),
+                          wxAuiPaneInfo().SetDirectionBottom().SetCaptionVisible(false),
                           mouse_client_pt);
             m_mgr.Update();
             dest_tabs = new_tabs->m_tabs;
@@ -4151,7 +4151,7 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
 
     if (!center_found && first_good)
     {
-        m_mgr.GetPane(first_good).Centre();
+        m_mgr.GetPane(first_good).SetDirectionCentre();
     }
 
     if (!m_isBeingDeleted)
