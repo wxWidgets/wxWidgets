@@ -1122,6 +1122,19 @@ public:
     //@}
 
 
+    /**
+        Copy attributes from another DC.
+
+        The copied attributes currently are:
+            - Font
+            - Text foreground and background colours
+            - Background brush
+            - Layout direction
+
+        @param dc
+            A valid (i.e. its IsOk() must return @true) source device context.
+     */
+    void CopyAttributes(const wxDC& dc);
 
     /**
         Returns the depth (number of bits/pixel) of this DC.

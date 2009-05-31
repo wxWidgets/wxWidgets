@@ -341,6 +341,7 @@ All (GUI):
 - Added wxMouseEventsManager.
 - Building OpenGL library is now enabled by default.
 - Improve wxTreeCtrl::ScrollTo() in generic version (Raanan Barzel).
+- Added wxDC::CopyAttributes() and use it in wxBufferedDC.
 
 MSW:
 

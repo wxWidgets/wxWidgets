@@ -118,8 +118,8 @@ private:
         m_style = style;
 
         // inherit the same layout direction as the original DC
-        if (dc && dc->IsOk())
-            SetLayoutDirection(dc->GetLayoutDirection());
+        if ( dc && dc->IsOk() )
+            CopyAttributes(*dc);
     }
 
     // check that the bitmap is valid and use it
