@@ -1372,7 +1372,7 @@ void wxPGProperty::RefreshEditor()
 
 wxVariant wxPGProperty::GetDefaultValue() const
 {
-    wxVariant defVal = GetAttribute(wxS("DefaultValue"));
+    wxVariant defVal = GetAttribute(wxPG_ATTR_DEFAULT_VALUE);
     if ( !defVal.IsNull() )
         return defVal;
 

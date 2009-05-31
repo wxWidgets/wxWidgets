@@ -74,6 +74,7 @@ public:
     wxPGCachedString    m_strbool;
     wxPGCachedString    m_strlist;
 
+    wxPGCachedString    m_strDefaultValue;
     wxPGCachedString    m_strMin;
     wxPGCachedString    m_strMax;
     wxPGCachedString    m_strUnits;
@@ -1847,6 +1848,11 @@ inline int wxPGProperty::GetDisplayedCommonValueCount() const
             return (int) pg->GetCommonValueCount();
     }
     return 0;
+}
+
+inline void wxPGProperty::SetDefaultValue( wxVariant& value )
+{
+    SetAttribute(wxPG_ATTR_DEFAULT_VALUE, value);
 }
 
 inline void wxPGProperty::SetEditor( const wxString& editorName )

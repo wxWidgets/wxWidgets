@@ -639,6 +639,8 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 */
 
 // Redefine attribute macros to use cached strings
+#undef wxPG_ATTR_DEFAULT_VALUE
+#define wxPG_ATTR_DEFAULT_VALUE           wxPGGlobalVars->m_strDefaultValue
 #undef wxPG_ATTR_MIN
 #define wxPG_ATTR_MIN                     wxPGGlobalVars->m_strMin
 #undef wxPG_ATTR_MAX
@@ -1853,6 +1855,14 @@ public:
     */
     void SetTextColour( const wxColour& colour,
                         bool recursively = false );
+
+    /** Set default value of a property. Synonymous to
+
+        @code
+            SetAttribute("DefaultValue", value);
+        @endcode
+    */
+    void SetDefaultValue( wxVariant& value );
 
 #ifndef SWIG
     /** Sets editor for a property.

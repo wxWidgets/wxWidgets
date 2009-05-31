@@ -195,6 +195,7 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     m_strlong = wxS("long");
     m_strbool = wxS("bool");
     m_strlist = wxS("list");
+    m_strDefaultValue = wxS("DefaultValue");
     m_strMin = wxS("Min");
     m_strMax = wxS("Max");
     m_strUnits = wxS("Units");

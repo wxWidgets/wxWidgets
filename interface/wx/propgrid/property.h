@@ -1341,6 +1341,14 @@ public:
     */
     void SetChoiceSelection( int newValue );
 
+    /** Set default value of a property. Synonymous to
+
+        @code
+            SetAttribute("DefaultValue", value);
+        @endcode
+    */
+    void SetDefaultValue( wxVariant& value );
+
     /**
         Sets property's help string, which is shown, for example, in
         wxPropertyGridManager's description text box.
