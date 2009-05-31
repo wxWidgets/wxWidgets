@@ -1070,14 +1070,17 @@
 
 // Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
 // headers and libraries to be able to compile the library with wxUSE_GLCANVAS
-// set to 1. Note that for some compilers (notably Microsoft Visual C++) you
-// will need to manually add opengl32.lib and glu32.lib to the list of
-// libraries linked with your program if you use OpenGL.
+// set to 1 and, under Windows, also to add opengl32.lib and glu32.lib to the
+// list of libraries used to link your application (although this is done
+// implicitly for Microsoft Visual C++ users).
 //
-// Default is 0.
+// Default is 0 unless USE_OPENGL was defined on make command line in which
+// case this is predefined as 1.
 //
 // Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
-#define wxUSE_GLCANVAS       0
+#ifndef wxUSE_GLCANVAS
+    #define wxUSE_GLCANVAS       0
+#endif
 
 // wxRichTextCtrl allows editing of styled text.
 //
