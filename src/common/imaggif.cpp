@@ -98,14 +98,18 @@ bool wxGIFHandler::DoCanRead( wxInputStream& stream )
 {
     wxGIFDecoder decod;
     return decod.CanRead(stream);
+         // it's ok to modify the stream position here
 }
 
-int wxGIFHandler::GetImageCount( wxInputStream& stream )
+int wxGIFHandler::DoGetImageCount( wxInputStream& stream )
 {
     wxGIFDecoder decod;
     wxGIFErrorCode error = decod.LoadGIF(stream);
     if ( (error != wxGIF_OK) && (error != wxGIF_TRUNCATED) )
         return -1;
+    
+    // NOTE: this function modifies the current stream position but it's ok
+    //       (see wxImageHandler::GetImageCount)
 
     return decod.GetFrameCount();
 }

@@ -2658,19 +2658,27 @@ void wxImage::RotateHue(double angle)
 IMPLEMENT_ABSTRACT_CLASS(wxImageHandler,wxObject)
 
 #if wxUSE_STREAMS
-bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream), bool WXUNUSED(verbose), int WXUNUSED(index) )
+int wxImageHandler::GetImageCount( wxInputStream& stream )
 {
-    return false;
-}
+    // NOTE: this code is the same of wxAnimationDecoder::CanRead and
+    //       wxImageHandler::CallDoCanRead
 
-bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool WXUNUSED(verbose) )
-{
-    return false;
-}
+    if ( !stream.IsSeekable() )
+        return false;        // can't test unseekable stream
 
-int wxImageHandler::GetImageCount( wxInputStream& WXUNUSED(stream) )
-{
-    return 1;
+    wxFileOffset posOld = stream.TellI();
+    int n = DoGetImageCount(stream);
+
+    // restore the old position to be able to test other formats and so on
+    if ( stream.SeekI(posOld) == wxInvalidOffset )
+    {
+        wxLogDebug(_T("Failed to rewind the stream in wxImageHandler!"));
+
+        // reading would fail anyhow as we're not at the right position
+        return false;
+    }
+
+    return n;
 }
 
 bool wxImageHandler::CanRead( const wxString& name )
@@ -2688,13 +2696,13 @@ bool wxImageHandler::CanRead( const wxString& name )
 
 bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 {
-    wxFileOffset posOld = stream.TellI();
-    if ( posOld == wxInvalidOffset )
-    {
-        // can't test unseekable stream
-        return false;
-    }
+    // NOTE: this code is the same of wxAnimationDecoder::CanRead and
+    //       wxImageHandler::GetImageCount
+    
+    if ( !stream.IsSeekable() )
+        return false;        // can't test unseekable stream
 
+    wxFileOffset posOld = stream.TellI();
     bool ok = DoCanRead(stream);
 
     // restore the old position to be able to test other formats and so on

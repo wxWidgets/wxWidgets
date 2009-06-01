@@ -641,7 +641,9 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
      */
     if ( IsBmp )
     {
-        if (stream.SeekI(bmpOffset) == wxInvalidOffset)
+        // NOTE: seeking a positive amount in wxFromCurrent mode allows us to
+        //       load even non-seekable streams (see wxInputStream::SeekI docs)!
+        if (stream.SeekI(bmpOffset, wxFromCurrent) == wxInvalidOffset)
             return false;
         //else: icon, just carry on
     }
@@ -899,15 +901,9 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     wxInt32         dbuf[4];
     wxInt8          bbuf[4];
 
-    wxFileOffset offset = 0; // keep gcc quiet
     if ( IsBmp )
     {
         // read the header off the .BMP format file
-
-        offset = stream.TellI();
-        if (offset == wxInvalidOffset)
-            offset = 0;
-
         stream.Read(bbuf, 2);
         stream.Read(dbuf, 16);
     }
@@ -918,7 +914,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     #if 0 // unused
         wxInt32 size = wxINT32_SWAP_ON_BE(dbuf[0]);
     #endif
-    offset = offset + wxINT32_SWAP_ON_BE(dbuf[2]);
+    wxFileOffset offset = wxINT32_SWAP_ON_BE(dbuf[2]);
 
     stream.Read(dbuf, 4 * 2);
     int width = wxINT32_SWAP_ON_BE((int)dbuf[0]);
@@ -1021,7 +1017,7 @@ bool wxBMPHandler::DoCanRead(wxInputStream& stream)
 {
     unsigned char hdr[2];
 
-    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
         return false;
 
     // do we have the BMP file signature?
@@ -1259,8 +1255,6 @@ bool wxICOHandler::SaveFile(wxImage *image,
 bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
                             bool verbose, int index)
 {
-    if (stream.SeekI(0) == wxInvalidOffset)
-        return false;
     return DoLoadFile(image, stream, verbose, index);
 }
 
@@ -1272,9 +1266,9 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
 
     ICONDIR IconDir;
 
-    wxFileOffset iPos = stream.TellI();
     stream.Read(&IconDir, sizeof(IconDir));
     wxUint16 nIcons = wxUINT16_SWAP_ON_BE(IconDir.idCount);
+    
     // nType is 1 for Icons, 2 for Cursors:
     wxUint16 nType = wxUINT16_SWAP_ON_BE(IconDir.idType);
 
@@ -1285,9 +1279,13 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     int colmax = 0;
     int iSel = wxNOT_FOUND;
 
-    for (int i = 0; i < nIcons; i++ )
+    // remember how many bytes we read from the stream:
+    wxFileOffset offset = sizeof(IconDir);
+    
+    for (unsigned int i = 0; i < nIcons; i++ )
     {
-        stream.Read(pCurrentEntry, sizeof(ICONDIRENTRY));
+        offset += stream.Read(pCurrentEntry, sizeof(ICONDIRENTRY)).LastRead();
+        
         // bHeight and bColorCount are wxUint8
         if ( pCurrentEntry->bWidth >= wMax )
         {
@@ -1301,6 +1299,7 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
                 colmax = pCurrentEntry->bColorCount;
             }
         }
+        
         pCurrentEntry++;
     }
 
@@ -1320,8 +1319,13 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     {
         // seek to selected icon:
         pCurrentEntry = pIconDirEntry + iSel;
-        if (stream.SeekI(iPos + wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset), wxFromStart) == wxInvalidOffset)
+        
+        // NOTE: seeking a positive amount in wxFromCurrent mode allows us to
+        //       load even non-seekable streams (see wxInputStream::SeekI docs)!
+        if (stream.SeekI(wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset) - offset, 
+                         wxFromCurrent) == wxInvalidOffset)
             return false;
+        
         bResult = LoadDib(image, stream, true, IsBmp);
         bool bIsCursorType = (this->GetType() == wxBITMAP_TYPE_CUR) || (this->GetType() == wxBITMAP_TYPE_ANI);
         if ( bResult && bIsCursorType && nType == 2 )
@@ -1331,30 +1335,27 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
             image->SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, wxUINT16_SWAP_ON_BE(pCurrentEntry->wBitCount));
         }
     }
-    delete[] pIconDirEntry;
+    
+    delete [] pIconDirEntry;
+    
     return bResult;
 }
 
-int wxICOHandler::GetImageCount(wxInputStream& stream)
+int wxICOHandler::DoGetImageCount(wxInputStream& stream)
 {
     ICONDIR IconDir;
-    wxFileOffset iPos = stream.TellI();
-    if (stream.SeekI(0) == wxInvalidOffset)
-        return 0;
+
     if (stream.Read(&IconDir, sizeof(IconDir)).LastRead() != sizeof(IconDir))
+             // it's ok to modify the stream position here
         return 0;
-    wxUint16 nIcons = wxUINT16_SWAP_ON_BE(IconDir.idCount);
-    if (stream.SeekI(iPos) == wxInvalidOffset)
-        return 0;
-    return (int)nIcons;
+    
+    return (int)wxUINT16_SWAP_ON_BE(IconDir.idCount);
 }
 
 bool wxICOHandler::DoCanRead(wxInputStream& stream)
 {
-    if (stream.SeekI(0) == wxInvalidOffset)
-        return false;
     unsigned char hdr[4];
-    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
         return false;
 
     // hdr[2] is one for an icon and two for a cursor
@@ -1374,10 +1375,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxCURHandler, wxICOHandler)
 
 bool wxCURHandler::DoCanRead(wxInputStream& stream)
 {
-    if (stream.SeekI(0) == wxInvalidOffset)
-        return false;
     unsigned char hdr[4];
-    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
         return false;
 
     // hdr[2] is one for an icon and two for a cursor
@@ -1408,12 +1407,13 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
 {
     wxANIDecoder decod;
     return decod.CanRead(stream);
+             // it's ok to modify the stream position here
 }
 
-int wxANIHandler::GetImageCount(wxInputStream& stream)
+int wxANIHandler::DoGetImageCount(wxInputStream& stream)
 {
     wxANIDecoder decoder;
-    if (!decoder.Load(stream))
+    if (!decoder.Load(stream))  // it's ok to modify the stream position here
         return wxNOT_FOUND;
 
     return decoder.GetFrameCount();

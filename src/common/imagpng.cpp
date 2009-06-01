@@ -302,7 +302,7 @@ bool wxPNGHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[4];
 
-    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
         return false;
 
     return memcmp(hdr, "\211PNG", WXSIZEOF(hdr)) == 0;

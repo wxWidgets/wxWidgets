@@ -413,7 +413,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     return true;
 }
 
-int wxTIFFHandler::GetImageCount( wxInputStream& stream )
+int wxTIFFHandler::DoGetImageCount( wxInputStream& stream )
 {
     TIFF *tif = TIFFwxOpen( stream, "image", "r" );
 
@@ -426,6 +426,9 @@ int wxTIFFHandler::GetImageCount( wxInputStream& stream )
     } while (TIFFReadDirectory(tif));
 
     TIFFClose( tif );
+    
+    // NOTE: this function modifies the current stream position but it's ok
+    //       (see wxImageHandler::GetImageCount)
 
     return dircount;
 }
@@ -587,7 +590,7 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[2];
 
-    if ( !stream.Read(&hdr[0], WXSIZEOF(hdr)) )
+    if ( !stream.Read(&hdr[0], WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
         return false;
 
     return (hdr[0] == 'I' && hdr[1] == 'I') ||

@@ -575,15 +575,12 @@ as an End of Information itself)
 // CanRead:
 //  Returns true if the file looks like a valid GIF, false otherwise.
 //
-bool wxGIFDecoder::CanRead(wxInputStream &stream) const
+bool wxGIFDecoder::DoCanRead(wxInputStream &stream) const
 {
     unsigned char buf[3];
 
     if ( !stream.Read(buf, WXSIZEOF(buf)) )
         return false;
-
-    if (stream.SeekI(-(wxFileOffset)WXSIZEOF(buf), wxFromCurrent) == wxInvalidOffset)
-        return false;       // this happens e.g. for non-seekable streams
 
     return memcmp(buf, "GIF", WXSIZEOF(buf)) == 0;
 }

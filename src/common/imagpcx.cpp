@@ -487,7 +487,7 @@ bool wxPCXHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
 bool wxPCXHandler::DoCanRead( wxInputStream& stream )
 {
-    unsigned char c = stream.GetC();
+    unsigned char c = stream.GetC();     // it's ok to modify the stream position here
     if ( !stream )
         return false;
 
