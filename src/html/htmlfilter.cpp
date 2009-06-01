@@ -13,11 +13,11 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_HTML
-
-#ifdef __BORDLANDC__
-#pragma hdrstop
+#ifdef __BORLANDC__
+    #pragma hdrstop
 #endif
+
+#if wxUSE_HTML
 
 #ifndef WXPRECOMP
 #endif
