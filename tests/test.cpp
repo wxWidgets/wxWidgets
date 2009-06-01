@@ -385,7 +385,11 @@ bool TestApp::OnInit()
     if ( !TestAppBase::OnInit() )
         return false;
 
-    cout << "Test program for wxWidgets\n"
+#if wxUSE_GUI
+    cout << "Test program for wxWidgets GUI features\n"
+#else
+    cout << "Test program for wxWidgets non-GUI features\n"
+#endif
          << "build: " << WX_BUILD_OPTIONS_SIGNATURE << std::endl;
 
 #if wxUSE_GUI

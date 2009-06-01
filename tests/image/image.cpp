@@ -23,6 +23,7 @@
 
 #include "wx/image.h"
 #include "wx/url.h"
+#include "wx/log.h"
 #include "wx/mstream.h"
 #include "wx/zstream.h"
 #include "wx/wfstream.h"
