@@ -21,7 +21,7 @@
 #ifndef WX_PRECOMP
 #endif // WX_PRECOMP
 
-#include "wx/bitmap.h"
+#include "wx/image.h"
 #include "wx/url.h"
 #include "wx/mstream.h"
 #include "wx/zstream.h"

@@ -16,6 +16,7 @@
 
 #include "wx/colour.h"
 #include "wx/gdicmn.h"
+#include "wx/log.h"
 
 class WXDLLIMPEXP_FWD_BASE wxInputStream;
 class WXDLLIMPEXP_FWD_CORE wxImage;

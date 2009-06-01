@@ -62,15 +62,15 @@ const wxString g_verylongString =
 #define DO_LONG_BENCHMARK(fnc, prefix)                                                     \
     fnc(buffer, BUFSIZE,                                                                   \
         prefix##"This is a reasonably long string with various %s arguments, exactly %d, " \
-        "and is used as benchmark for %s - %% %.2f %d %s",                                 \
-        "(many!!)", 6, "this program", 23.342f, 999,                                       \
+        prefix##"and is used as benchmark for %s - %% %.2f %d %s",                                 \
+        prefix##"(many!!)", 6, "this program", 23.342f, 999,                                       \
         (const char*)g_verylongString.c_str());
 
 #define DO_LONG_POSITIONAL_BENCHMARK(fnc, prefix)                                          \
     fnc(buffer, BUFSIZE,                                                                   \
         prefix##"This is a %2$s and thus is harder to parse... let's %1$s "                \
-        "for our benchmarking aims - %% %3$f %5$d %4$s",                                   \
-        "test it", "string with positional arguments", 23.342f,                            \
+        prefix##"for our benchmarking aims - %% %3$f %5$d %4$s",                                   \
+        prefix##"test it", "string with positional arguments", 23.342f,                            \
         (const char*)g_verylongString.c_str(), 999);
 
 #define DO_BENCHMARK(fnc, prefix)                                                          \
