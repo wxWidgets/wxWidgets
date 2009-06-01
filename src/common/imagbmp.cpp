@@ -1280,11 +1280,11 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
     int iSel = wxNOT_FOUND;
 
     // remember how many bytes we read from the stream:
-    wxFileOffset offset = sizeof(IconDir);
+    wxFileOffset alreadySeeked = sizeof(IconDir);
     
     for (unsigned int i = 0; i < nIcons; i++ )
     {
-        offset += stream.Read(pCurrentEntry, sizeof(ICONDIRENTRY)).LastRead();
+        alreadySeeked += stream.Read(pCurrentEntry, sizeof(ICONDIRENTRY)).LastRead();
         
         // bHeight and bColorCount are wxUint8
         if ( pCurrentEntry->bWidth >= wMax )
@@ -1322,8 +1322,8 @@ bool wxICOHandler::DoLoadFile(wxImage *image, wxInputStream& stream,
         
         // NOTE: seeking a positive amount in wxFromCurrent mode allows us to
         //       load even non-seekable streams (see wxInputStream::SeekI docs)!
-        if (stream.SeekI(wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset) - offset, 
-                         wxFromCurrent) == wxInvalidOffset)
+        wxFileOffset offset = wxUINT32_SWAP_ON_BE(pCurrentEntry->dwImageOffset) - alreadySeeked;
+        if (offset != 0 && stream.SeekI(offset, wxFromCurrent) == wxInvalidOffset)
             return false;
         
         bResult = LoadDib(image, stream, true, IsBmp);
