@@ -226,6 +226,73 @@ wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
     }
 }
 
+#if wxUSE_ENH_METAFILE_FROM_DC
+
+void PixelToHIMETRIC(LONG *x, LONG *y, HDC hdcRef)
+{
+    int iWidthMM = GetDeviceCaps(hdcRef, HORZSIZE),
+        iHeightMM = GetDeviceCaps(hdcRef, VERTSIZE),
+        iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
+        iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
+
+    *x *= (iWidthMM * 100);
+    *x /= iWidthPels;
+    *y *= (iHeightMM * 100);
+    *y /= iHeightPels;
+}
+
+void HIMETRICToPixel(LONG *x, LONG *y, HDC hdcRef)
+{
+    int iWidthMM = GetDeviceCaps(hdcRef, HORZSIZE),
+        iHeightMM = GetDeviceCaps(hdcRef, VERTSIZE),
+        iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
+        iHeightPels = GetDeviceCaps(hdcRef, VERTRES);
+
+    *x *= iWidthPels;
+    *x /= (iWidthMM * 100);
+    *y *= iHeightPels;
+    *y /= (iHeightMM * 100);
+}
+
+wxEnhMetaFileDC::wxEnhMetaFileDC(const wxDC& referenceDC,
+                                 const wxString& filename,
+                                 int width, int height,
+                                 const wxString& description)
+{
+    m_width = width;
+    m_height = height;
+    HDC hdcRef = GetHdcOf(referenceDC);
+
+    RECT rect;
+    RECT *pRect;
+    if ( width && height )
+    {
+        rect.top =
+        rect.left = 0;
+        rect.right = width;
+        rect.bottom = height;
+
+        // CreateEnhMetaFile() wants them in HIMETRIC
+        PixelToHIMETRIC(&rect.right, &rect.bottom, hdcRef);
+
+        pRect = &rect;
+    }
+    else
+    {
+        // GDI will try to find out the size for us (not recommended)
+        pRect = (LPRECT)NULL;
+    }
+
+    m_hDC = (WXHDC)::CreateEnhMetaFile(hdcRef, GetMetaFileName(filename),
+                                       pRect, description.wx_str());
+    if ( !m_hDC )
+    {
+        wxLogLastError(_T("CreateEnhMetaFile"));
+    }
+}
+
+#endif
+
 void wxEnhMetaFileDC::DoGetSize(int *width, int *height) const
 {
     if ( width )

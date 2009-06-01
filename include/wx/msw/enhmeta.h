@@ -18,6 +18,9 @@
     #include "wx/dataobj.h"
 #endif
 
+// Change this to 1 if you set wxUSE_HIGH_QUALITY_PREVIEW_IN_WXMSW to 1 in prntbase.cpp
+#define wxUSE_ENH_METAFILE_FROM_DC 0
+
 // ----------------------------------------------------------------------------
 // wxEnhMetaFile: encapsulation of Win32 HENHMETAFILE
 // ----------------------------------------------------------------------------
@@ -81,6 +84,15 @@ public:
     wxEnhMetaFileDC(const wxString& filename = wxEmptyString,
                     int width = 0, int height = 0,
                     const wxString& description = wxEmptyString);
+
+#if wxUSE_ENH_METAFILE_FROM_DC
+    // as above, but takes reference DC as first argument to take resolution,
+    // size, font metrics etc. from
+    wxEnhMetaFileDC(const wxDC& referenceDC,
+                    const wxString& filename = wxEmptyString,
+                    int width = 0, int height = 0,
+                    const wxString& description = wxEmptyString);
+#endif
 
     virtual ~wxEnhMetaFileDC();
 
