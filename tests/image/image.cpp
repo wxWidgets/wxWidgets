@@ -107,6 +107,12 @@ void ImageTestCase::LoadFromFile()
 
 void ImageTestCase::LoadFromSocketStream()
 {
+    if (!IsNetworkAvailable())      // implemented in test.cpp
+    {
+        wxLogWarning("No network connectivity; skipping the ImageTestCase::LoadFromSocketStream test unit.");
+        return;
+    }
+
     struct {
         const char* url;
         wxBitmapType type;
