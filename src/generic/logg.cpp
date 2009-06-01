@@ -917,6 +917,9 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 
 void wxLogDialog::CreateDetailsControls(wxWindow *parent)
 {
+    wxString fmt = wxLog::GetTimestamp();
+    bool hasTimeStamp = !fmt.IsEmpty();
+
     // create the list ctrl now
     m_listctrl = new wxListCtrl(parent, wxID_ANY,
                                 wxDefaultPosition, wxDefaultSize,
@@ -933,7 +936,9 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
     // no need to translate these strings as they're not shown to the
     // user anyhow (we use wxLC_NO_HEADER style)
     m_listctrl->InsertColumn(0, _T("Message"));
-    m_listctrl->InsertColumn(1, _T("Time"));
+
+    if (hasTimeStamp)
+        m_listctrl->InsertColumn(1, _T("Time"));
 
     // prepare the imagelist
     static const int ICON_SIZE = 16;
@@ -968,14 +973,7 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
 
     m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
 
-    // and fill it
-    wxString fmt = wxLog::GetTimestamp();
-    if ( !fmt )
-    {
-        // default format
-        fmt = _T("%c");
-    }
-
+    // fill the listctrl
     size_t count = m_messages.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
@@ -1007,12 +1005,15 @@ void wxLogDialog::CreateDetailsControls(wxWindow *parent)
         msg = EllipsizeString(msg);
 
         m_listctrl->InsertItem(n, msg, image);
-        m_listctrl->SetItem(n, 1, TimeStamp(fmt, (time_t)m_times[n]));
+
+        if (hasTimeStamp)
+            m_listctrl->SetItem(n, 1, TimeStamp(fmt, (time_t)m_times[n]));
     }
 
     // let the columns size themselves
     m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
-    m_listctrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
+    if (hasTimeStamp)
+        m_listctrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
 
     // calculate an approximately nice height for the listctrl
     int height = GetCharHeight()*(count + 4);
