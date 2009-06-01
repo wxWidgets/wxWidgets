@@ -59,3 +59,5 @@ typedef bool (*ProcessEventFunc)(wxEvent&);
 
 extern void SetFilterEventFunc(FilterEventFunc func);
 extern void SetProcessEventFunc(ProcessEventFunc func);
+
+extern bool IsNetworkAvailable();
