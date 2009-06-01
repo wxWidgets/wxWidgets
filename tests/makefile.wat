@@ -325,6 +325,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_queue.obj &
 	$(OBJS)\test_tls.obj &
 	$(OBJS)\test_uris.obj &
+	$(OBJS)\test_url.obj &
 	$(OBJS)\test_vectors.obj &
 	$(OBJS)\test_evtconnection.obj &
 	$(OBJS)\test_weakref.obj &
@@ -354,6 +355,7 @@ TEST_GUI_OBJECTS =  &
 	$(OBJS)\test_gui_clone.obj &
 	$(OBJS)\test_gui_propagation.obj &
 	$(OBJS)\test_gui_fonttest.obj &
+	$(OBJS)\test_gui_image.obj &
 	$(OBJS)\test_gui_rawbmp.obj &
 	$(OBJS)\test_gui_htmlwindow.obj &
 	$(OBJS)\test_gui_guifuncs.obj &
@@ -410,7 +412,7 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+	for %f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 fr : .SYMBOLIC 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
@@ -590,6 +592,9 @@ $(OBJS)\test_tls.obj :  .AUTODEPEND .\thread\tls.cpp
 $(OBJS)\test_uris.obj :  .AUTODEPEND .\uris\uris.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_url.obj :  .AUTODEPEND .\uris\url.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_vectors.obj :  .AUTODEPEND .\vectors\vectors.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
@@ -654,6 +659,9 @@ $(OBJS)\test_gui_propagation.obj :  .AUTODEPEND .\events\propagation.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_fonttest.obj :  .AUTODEPEND .\font\fonttest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
+
+$(OBJS)\test_gui_image.obj :  .AUTODEPEND .\image\image.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_GUI_CXXFLAGS) $<
 
 $(OBJS)\test_gui_rawbmp.obj :  .AUTODEPEND .\image\rawbmp.cpp

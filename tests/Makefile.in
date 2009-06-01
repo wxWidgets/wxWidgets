@@ -110,6 +110,7 @@ TEST_OBJECTS =  \
 	test_queue.o \
 	test_tls.o \
 	test_uris.o \
+	test_url.o \
 	test_vectors.o \
 	test_evtconnection.o \
 	test_weakref.o \
@@ -138,6 +139,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_clone.o \
 	test_gui_propagation.o \
 	test_gui_fonttest.o \
+	test_gui_image.o \
 	test_gui_rawbmp.o \
 	test_gui_htmlwindow.o \
 	test_gui_guifuncs.o \
@@ -315,7 +317,7 @@ test$(EXEEXT): $(TEST_OBJECTS)
 
 data: 
 	@mkdir -p .
-	@for f in testdata.fc; do \
+	@for f in horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm; do \
 	if test ! -f ./$$f -a ! -d ./$$f ; \
 	then x=yep ; \
 	else x=`find $(srcdir)/$$f -newer ./$$f -print` ; \
@@ -508,6 +510,9 @@ test_tls.o: $(srcdir)/thread/tls.cpp $(TEST_ODEP)
 test_uris.o: $(srcdir)/uris/uris.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/uris.cpp
 
+test_url.o: $(srcdir)/uris/url.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/uris/url.cpp
+
 test_vectors.o: $(srcdir)/vectors/vectors.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/vectors/vectors.cpp
 
@@ -570,6 +575,9 @@ test_gui_propagation.o: $(srcdir)/events/propagation.cpp $(TEST_GUI_ODEP)
 
 test_gui_fonttest.o: $(srcdir)/font/fonttest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/font/fonttest.cpp
+
+test_gui_image.o: $(srcdir)/image/image.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/image/image.cpp
 
 test_gui_rawbmp.o: $(srcdir)/image/rawbmp.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/image/rawbmp.cpp

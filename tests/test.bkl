@@ -85,6 +85,7 @@
             thread/queue.cpp
             thread/tls.cpp
             uris/uris.cpp
+            uris/url.cpp
             vectors/vectors.cpp
             weakref/evtconnection.cpp
             weakref/weakref.cpp
@@ -120,6 +121,7 @@
             events/clone.cpp
             events/propagation.cpp
             font/fonttest.cpp
+            image/image.cpp
             image/rawbmp.cpp
             html/htmlwindow.cpp
             misc/guifuncs.cpp
@@ -148,6 +150,10 @@
 
     <wx-data id="data">
         <files>testdata.fc</files>
+        
+        <!-- test data for image/image.cpp test unit: -->
+        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg  
+               horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
     </wx-data>
 
     <template id="catalog">

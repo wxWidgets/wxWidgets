@@ -1100,6 +1100,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\uris\url.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\strings\vararg.cpp"
 				>
 			</File>

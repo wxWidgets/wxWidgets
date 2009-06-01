@@ -896,6 +896,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\image\image.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\listctrltest.cpp"
 				>
 			</File>

@@ -453,6 +453,10 @@ SOURCE=.\uris\uris.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\uris\url.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strings\vararg.cpp
 # End Source File
 # Begin Source File

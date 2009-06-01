@@ -86,6 +86,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_queue.o \
 	$(OBJS)\test_tls.o \
 	$(OBJS)\test_uris.o \
+	$(OBJS)\test_url.o \
 	$(OBJS)\test_vectors.o \
 	$(OBJS)\test_evtconnection.o \
 	$(OBJS)\test_weakref.o \
@@ -116,6 +117,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_clone.o \
 	$(OBJS)\test_gui_propagation.o \
 	$(OBJS)\test_gui_fonttest.o \
+	$(OBJS)\test_gui_image.o \
 	$(OBJS)\test_gui_rawbmp.o \
 	$(OBJS)\test_gui_htmlwindow.o \
 	$(OBJS)\test_gui_guifuncs.o \
@@ -358,7 +360,7 @@ endif
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (testdata.fc) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
@@ -538,6 +540,9 @@ $(OBJS)\test_tls.o: ./thread/tls.cpp
 $(OBJS)\test_uris.o: ./uris/uris.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_url.o: ./uris/url.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_vectors.o: ./vectors/vectors.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
@@ -602,6 +607,9 @@ $(OBJS)\test_gui_propagation.o: ./events/propagation.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_fonttest.o: ./font/fonttest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_image.o: ./image/image.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_rawbmp.o: ./image/rawbmp.cpp

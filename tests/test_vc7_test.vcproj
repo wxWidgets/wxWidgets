@@ -768,6 +768,9 @@
 				RelativePath=".\uris\uris.cpp">
 			</File>
 			<File
+				RelativePath=".\uris\url.cpp">
+			</File>
+			<File
 				RelativePath=".\strings\vararg.cpp">
 			</File>
 			<File
