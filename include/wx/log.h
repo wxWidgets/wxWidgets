@@ -230,7 +230,7 @@ public:
     // return the current loglevel limit
     static wxLogLevel GetLogLevel() { return ms_logLevel; }
 
-    // get the current timestamp format string (may be NULL)
+    // get the current timestamp format string (maybe empty)
     static const wxString& GetTimestamp() { return ms_timestamp; }
 
 
@@ -347,7 +347,7 @@ private:
 
     static size_t      ms_suspendCount; // if positive, logs are not flushed
 
-    // format string for strftime(), if NULL, time stamping log messages is
+    // format string for strftime(), if empty, time stamping log messages is
     // disabled
     static wxString    ms_timestamp;
 
