@@ -854,8 +854,11 @@ void MyFrame::OnStartEditing( wxDataViewEvent &event )
         if (!m_log)
            return;
            
-        wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING vetoed, Item: %s", artist );
+        wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING vetoed. Artist: %s", artist );
     }
+    else
+        wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING not vetoed. Artist: %s", artist );
+    
 }
 
 void MyFrame::OnEditingStarted( wxDataViewEvent &event )

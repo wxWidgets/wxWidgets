@@ -681,13 +681,30 @@ public:
 
 bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect labelRect )
 {
+    wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
+
+    // Before doing anything we send an event asking if editing of this item is really wanted.
+    wxDataViewEvent start_event( wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING, dv_ctrl->GetId() );
+    start_event.SetDataViewColumn( GetOwner() );
+    start_event.SetModel( dv_ctrl->GetModel() );
+    start_event.SetItem( item );
+    start_event.SetEventObject( dv_ctrl );
+    dv_ctrl->GetEventHandler()->ProcessEvent( start_event );
+    if( !start_event.IsAllowed() )
+        return false;
+
     m_item = item; // remember for later
 
     unsigned int col = GetOwner()->GetModelColumn();
     wxVariant value;
-    GetOwner()->GetOwner()->GetModel()->GetValue( value, item, col );
+    dv_ctrl->GetModel()->GetValue( value, item, col );
 
-    m_editorCtrl = CreateEditorCtrl( GetOwner()->GetOwner()->GetMainWindow(), labelRect, value );
+    m_editorCtrl = CreateEditorCtrl( dv_ctrl->GetMainWindow(), labelRect, value );
+
+	// there might be no editor control for the given item
+    if(!m_editorCtrl)
+        return false;
+
     (void) new wxKillRef( m_editorCtrl.get() );
 
     wxDataViewEditorCtrlEvtHandler *handler =
@@ -695,10 +712,6 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
     m_editorCtrl->PushEventHandler( handler );
 
-    // there might be no editor control for the given item
-    if (!m_editorCtrl)
-        return false;
-        
 #if defined(__WXGTK20__) && !defined(wxUSE_GENERICDATAVIEWCTRL)
     handler->SetFocusOnIdle();
 #else
@@ -706,18 +719,20 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 #endif
 
     // Now we should send Editing Started event
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, GetOwner()->GetOwner()->GetId() );
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED, dv_ctrl->GetId() );
     event.SetDataViewColumn( GetOwner() );
-    event.SetModel( GetOwner()->GetOwner()->GetModel() );
+    event.SetModel( dv_ctrl->GetModel() );
     event.SetItem( item );
-    GetOwner()->GetOwner()->GetEventHandler()->ProcessEvent( event );
+    event.SetEventObject( dv_ctrl );
+    dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
     return true;
 }
 
 void wxDataViewRendererBase::CancelEditing()
 {
-    if (!m_editorCtrl) return;
+    if (!m_editorCtrl)
+        return;
 
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
 
@@ -727,12 +742,15 @@ void wxDataViewRendererBase::CancelEditing()
 
 bool wxDataViewRendererBase::FinishEditing()
 {
-    if (!m_editorCtrl) return true;
+    if (!m_editorCtrl)
+        return true;
 
     wxVariant value;
     GetValueFromEditorCtrl( m_editorCtrl, value );
 
-    GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
+    wxDataViewCtrl* dv_ctrl = GetOwner()->GetOwner();
+
+    dv_ctrl->GetMainWindow()->SetFocus();
 
     m_editorCtrl->Hide();
     wxPendingDelete.Append( m_editorCtrl );
@@ -741,15 +759,16 @@ bool wxDataViewRendererBase::FinishEditing()
         return false;
 
     unsigned int col = GetOwner()->GetModelColumn();
-    GetOwner()->GetOwner()->GetModel()->SetValue( value, m_item, col );
-    GetOwner()->GetOwner()->GetModel()->ValueChanged( m_item, col );
+    dv_ctrl->GetModel()->SetValue( value, m_item, col );
+    dv_ctrl->GetModel()->ValueChanged( m_item, col );
 
     // Now we should send Editing Done event
-    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, GetOwner()->GetOwner()->GetId() );
+    wxDataViewEvent event( wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE, dv_ctrl->GetId() );
     event.SetDataViewColumn( GetOwner() );
-    event.SetModel( GetOwner()->GetOwner()->GetModel() );
+    event.SetModel( dv_ctrl->GetModel() );
     event.SetItem( m_item );
-    GetOwner()->GetOwner()->GetEventHandler()->ProcessEvent( event );
+    event.SetEventObject( dv_ctrl );
+    dv_ctrl->GetEventHandler()->ProcessEvent( event );
 
     return true;
 }
