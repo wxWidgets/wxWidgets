@@ -336,6 +336,7 @@ extern bool IsNetworkAvailable()
     }
 
     wxSocketClient sock;
+    sock.SetTimeout(10);    // 10 secs
     bool online = sock.Connect(addr);
     
     wxSocketBase::Shutdown();
