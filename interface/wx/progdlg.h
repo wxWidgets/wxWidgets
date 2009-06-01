@@ -129,6 +129,15 @@ public:
     void Resume();
 
     /**
+        Changes the maximum value of the progress meter given in the constructor.
+        This function can only be called (with a positive value) if the value passed 
+        in the constructor was positive.
+
+        @since 2.9.1
+    */
+    void SetRange(int maximum);
+
+    /**
         Updates the dialog, setting the progress bar to the new value and
         updating the message if new one is specified.
 
