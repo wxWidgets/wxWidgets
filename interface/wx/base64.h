@@ -130,7 +130,7 @@ size_t wxBase64Decode(void* dst, size_t dstLen,
                       const char* src,
                       size_t srcLen = wxNO_LEN,
                       wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
-                      size_t posErr = NULL);
+                      size_t *posErr = NULL);
 
 /**
     See the wxBase64Decode(void*,size_t,const char*,size_t,wxBase64DecodeMode,size_t)
@@ -147,7 +147,7 @@ size_t wxBase64Decode(void* dst, size_t dstLen,
 wxMemoryBuffer wxBase64Decode(const char* src,
                               size_t srcLen = wxNO_LEN,
                               wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
-                              size_t posErr = NULL);
+                              size_t *posErr = NULL);
 
 /**
     See the wxBase64Decode(void*,size_t,const char*,size_t,wxBase64DecodeMode,size_t)
@@ -160,7 +160,7 @@ wxMemoryBuffer wxBase64Decode(const char* src,
 */
 wxMemoryBuffer wxBase64Decode(const wxString& src,
                               wxBase64DecodeMode mode = wxBase64DecodeMode_Strict,
-                              size_t posErr = NULL);
+                              size_t *posErr = NULL);
 
 //@}
 
