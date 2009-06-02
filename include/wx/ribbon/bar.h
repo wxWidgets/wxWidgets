@@ -36,16 +36,25 @@ class WXDLLIMPEXP_RIBBON wxRibbonBarEvent : public wxNotifyEvent
 {
 public:
 	wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
-					   int win_id = 0)
+					   int win_id = 0,
+					   wxRibbonPage* page = NULL)
 		: wxNotifyEvent(command_type, win_id)
+		, m_page(page)
 	{
 	}
 #ifndef SWIG
 	wxRibbonBarEvent(const wxRibbonBarEvent& c) : wxNotifyEvent(c)
 	{
+		m_page = c.m_page;
 	}
 #endif
 	wxEvent *Clone() const { return new wxRibbonBarEvent(*this); }
+
+	wxRibbonPage* GetPage() {return m_page;}
+	void SetPage(wxRibbonPage* page) {m_page = page;}
+
+protected:
+	wxRibbonPage* m_page;
 
 #ifndef SWIG
 private:
@@ -95,12 +104,14 @@ public:
 	wxRibbonArtProvider* GetArtProvider() const;
 
 	bool SetActivePage(size_t page);
+	bool SetActivePage(wxRibbonPage* page);
     int GetActivePage() const;
 
 protected:
 	friend class wxRibbonPage;
 
 	wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+	wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = NULL);
 
 	void CommonInit(long style);
 	void AddPage(wxRibbonPage *page);
@@ -110,8 +121,14 @@ protected:
     void OnEraseBackground(wxEraseEvent& evt);
 	void DoEraseBackground(wxDC& dc);
     void OnSize(wxSizeEvent& evt);
+	void OnMouseLeftDown(wxMouseEvent& evt);
+	void OnMouseMiddleDown(wxMouseEvent& evt);
+	void OnMouseMiddleUp(wxMouseEvent& evt);
+	void OnMouseRightDown(wxMouseEvent& evt);
+	void OnMouseRightUp(wxMouseEvent& evt);
 	void OnMouseMove(wxMouseEvent& evt);
 	void OnMouseLeave(wxMouseEvent& evt);
+	void DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type);
 
     wxRibbonPageTabInfoArray m_pages;
 	wxRibbonArtProvider* m_art;
@@ -124,6 +141,8 @@ protected:
 	int m_tab_scroll_amount;
 	int m_current_page;
 	int m_current_hovered_page;
+	int m_tab_scroll_left_button_width;
+	int m_tab_scroll_right_button_width;
 	bool m_tab_scroll_buttons_shown;
 
 #ifndef SWIG

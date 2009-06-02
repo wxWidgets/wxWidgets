@@ -48,6 +48,7 @@ wxRibbonDefaultArtProvider::wxRibbonDefaultArtProvider()
 	m_tab_label_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
 	m_tab_border_pen = wxPen(wxColour(153, 187, 232));
 	m_page_border_pen = wxPen(wxColour(141, 178, 227));
+	m_cached_tab_separator_visibility = -10.0; // valid visibilities are in range [0, 1]
 	m_tab_separation_size = 3;
 }
 
@@ -218,7 +219,7 @@ static void DrawVerticalGradientRectangle(wxDC& dc,
 
 void wxRibbonDefaultArtProvider::DrawTabCtrlBackground(
 						wxDC& dc,
-						wxWindow* wnd,
+						wxWindow* WXUNUSED(wnd),
 						const wxRect& rect)
 {
 	dc.SetPen(*wxTRANSPARENT_PEN);
@@ -226,12 +227,19 @@ void wxRibbonDefaultArtProvider::DrawTabCtrlBackground(
 	dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 
 	dc.SetPen(m_page_border_pen);
-	dc.DrawLine(rect.x + 3, rect.y + rect.height - 1, rect.x + rect.width - 3, rect.y + rect.height - 1);
+	if(rect.width > 6)
+	{
+		dc.DrawLine(rect.x + 3, rect.y + rect.height - 1, rect.x + rect.width - 3, rect.y + rect.height - 1);
+	}
+	else
+	{
+		dc.DrawLine(rect.x, rect.y + rect.height - 1, rect.x + rect.width, rect.y + rect.height - 1);
+	}
 }
 
 void wxRibbonDefaultArtProvider::DrawTab(
 				 wxDC& dc,
-				 wxWindow* wnd,
+				 wxWindow* WXUNUSED(wnd),
 				 const wxRibbonPageTabInfo& tab)
 {
 	if(tab.active || tab.hovered)
@@ -305,10 +313,12 @@ void wxRibbonDefaultArtProvider::DrawTab(
 			dc.SetTextForeground(m_tab_label_colour);
 			dc.SetBackgroundMode(wxTRANSPARENT);
 
-			int text_width = dc.GetTextExtent(label).GetWidth();
+			int text_height;
+			int text_width;
+			dc.GetTextExtent(label, &text_width, &text_height);
 			int width = tab.rect.width - 5;
 			int x = tab.rect.x + 3;
-			int y = tab.rect.y + 2;
+			int y = tab.rect.y + (tab.rect.height - text_height) / 2;
 
 			if(width <= text_width)
 			{
@@ -337,6 +347,28 @@ void wxRibbonDefaultArtProvider::DrawTabSeparator(
 	{
 		visibility = 1.0;
 	}
+
+	// The tab separator is relatively expensive to draw (for its size), and is
+	// usually drawn multiple times sequentially (in different positions), so it
+	// makes sense to draw it once and cache it.
+	if(!m_cached_tab_separator.IsOk() || m_cached_tab_separator.GetSize() != rect.GetSize() || visibility != m_cached_tab_separator_visibility)
+	{
+		wxRect size(rect.GetSize());
+		ReallyDrawTabSeparator(wnd, size, visibility);
+	}
+	dc.DrawBitmap(m_cached_tab_separator, rect.x, rect.y, false);
+}
+
+void wxRibbonDefaultArtProvider::ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility)
+{
+	if(!m_cached_tab_separator.IsOk() || m_cached_tab_separator.GetSize() != rect.GetSize())
+	{
+		m_cached_tab_separator = wxBitmap(rect.GetSize());
+	}
+
+	wxMemoryDC dc(m_cached_tab_separator);
+	DrawTabCtrlBackground(dc, wnd, rect);
+
 	wxCoord x = rect.x + rect.width / 2;
 	double h = (double)(rect.height - 1);
 
@@ -362,11 +394,13 @@ void wxRibbonDefaultArtProvider::DrawTabSeparator(
 		dc.SetPen(P);
 		dc.DrawPoint(x, rect.y + i);
 	}
+
+	m_cached_tab_separator_visibility = visibility;
 }
 
 void wxRibbonDefaultArtProvider::DrawPageBackground(
 						wxDC& dc,
-						wxWindow* wnd,
+						wxWindow* WXUNUSED(wnd),
 						const wxRect& rect)
 {
 	dc.SetPen(*wxTRANSPARENT_PEN);
@@ -417,9 +451,89 @@ void wxRibbonDefaultArtProvider::DrawPageBackground(
 	}
 }
 
+void wxRibbonDefaultArtProvider::DrawScrollButton(
+						wxDC& dc,
+						wxWindow* WXUNUSED(wnd),
+						const wxRect& rect,
+						long style)
+{
+	switch(style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK)
+	{
+	case wxRIBBON_SCROLL_BTN_LEFT:
+	case wxRIBBON_SCROLL_BTN_RIGHT:
+		break;
+	case wxRIBBON_SCROLL_BTN_UP:
+	case wxRIBBON_SCROLL_BTN_DOWN:
+		// TODO
+		return;
+	}
+
+	{
+		wxRect background(rect);
+		background.x++;
+		background.y++;
+		background.width -= 2;
+		background.height -= 2;
+
+		background.height /= 5;
+		DrawVerticalGradientRectangle(dc, background, m_page_background_top_colour, m_page_background_top_gradient_colour);
+
+		background.y += background.height;
+		background.height = rect.height - 2 - background.height;
+		DrawVerticalGradientRectangle(dc, background, m_page_background_colour, m_page_background_gradient_colour);
+	}
+
+	{
+		wxPoint border_points[7];
+		if((style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) == wxRIBBON_SCROLL_BTN_LEFT)
+		{
+			border_points[0] = wxPoint(2, 0);
+			border_points[1] = wxPoint(rect.width - 1, 0);
+			border_points[2] = wxPoint(rect.width - 1, rect.height - 1);
+			border_points[3] = wxPoint(2, rect.height - 1);
+			border_points[4] = wxPoint(0, rect.height - 3);
+			border_points[5] = wxPoint(0, 2);
+		}
+		else
+		{
+			border_points[0] = wxPoint(0, 0);
+			border_points[1] = wxPoint(rect.width - 3, 0);
+			border_points[2] = wxPoint(rect.width - 1, 2);
+			border_points[3] = wxPoint(rect.width - 1, rect.height - 3);
+			border_points[4] = wxPoint(rect.width - 3, rect.height - 1);
+			border_points[5] = wxPoint(0, rect.height - 1);
+		}
+		border_points[6] = border_points[0];
+
+		dc.SetPen(m_page_border_pen);
+		dc.DrawLines(sizeof(border_points)/sizeof(wxPoint), border_points, rect.x, rect.y);
+	}
+
+	{
+		wxPoint arrow_points[3];
+		if((style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) == wxRIBBON_SCROLL_BTN_LEFT)
+		{
+			arrow_points[0] = wxPoint(rect.width / 2 - 1, rect.height / 2);
+			arrow_points[1] = arrow_points[0] + wxPoint(2, -2);
+			arrow_points[2] = arrow_points[0] + wxPoint(2,  2);
+		}
+		else
+		{
+			arrow_points[0] = wxPoint(rect.width / 2 + 1, rect.height / 2);
+			arrow_points[1] = arrow_points[0] - wxPoint(2,  2);
+			arrow_points[2] = arrow_points[0] - wxPoint(2, -2);
+		}
+
+		dc.SetPen(*wxTRANSPARENT_PEN);
+		wxBrush B(m_tab_label_colour);
+		dc.SetBrush(B);
+		dc.DrawPolygon(sizeof(arrow_points)/sizeof(wxPoint), arrow_points, rect.x, rect.y);
+	}
+}
+
 void wxRibbonDefaultArtProvider::GetBarTabWidth(
 						wxDC& dc,
-						wxWindow* wnd,
+						wxWindow* WXUNUSED(wnd),
 						const wxString& label,
 						const wxBitmap& bitmap,
 						int* ideal,
@@ -429,7 +543,7 @@ void wxRibbonDefaultArtProvider::GetBarTabWidth(
 {
 	int width = 0;
 	int min = 0;
-	if(!label.IsEmpty())
+	if((m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS) && !label.IsEmpty())
 	{
 		dc.SetFont(m_tab_label_font);
 		width += dc.GetTextExtent(label).GetWidth();
@@ -441,7 +555,7 @@ void wxRibbonDefaultArtProvider::GetBarTabWidth(
 			min += 2;
 		}
 	}
-	if(bitmap.IsOk())
+	if((m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS) && bitmap.IsOk())
 	{
 		width += bitmap.GetWidth();
 		min += bitmap.GetWidth();
@@ -463,6 +577,42 @@ void wxRibbonDefaultArtProvider::GetBarTabWidth(
 	{
 		*minimum = min;
 	}
+}
+
+int wxRibbonDefaultArtProvider::GetTabCtrlHeight(
+						wxDC& dc,
+						wxWindow* WXUNUSED(wnd),
+						const wxRibbonPageTabInfoArray& pages)
+{
+	int text_height = 0;
+	int icon_height = 0;
+
+	if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
+	{
+		text_height = dc.GetTextExtent(wxT("ABCDEFXj")).GetHeight() + 10;
+	}
+	if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
+	{
+		size_t numpages = pages.GetCount();
+		for(size_t i = 0; i < numpages; ++i)
+		{
+			const wxRibbonPageTabInfo& info = pages.Item(i);
+			if(info.page->GetIcon().IsOk())
+			{
+				icon_height = wxMax(icon_height, info.page->GetIcon().GetHeight() + 4);
+			}
+		}
+	}
+
+	return wxMax(text_height, icon_height);
+}
+
+wxSize wxRibbonDefaultArtProvider::GetScrollButtonMinimumSize(
+						wxDC& WXUNUSED(dc),
+						wxWindow* WXUNUSED(wnd),
+						long WXUNUSED(style))
+{
+	return wxSize(12, 12);
 }
 
 #endif // wxUSE_RIBBON

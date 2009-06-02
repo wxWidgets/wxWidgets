@@ -38,7 +38,30 @@ enum wxRibbonArtSetting
 	wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR,
 };
 
+enum wxRibbonScrollButtonStyle
+{
+	wxRIBBON_SCROLL_BTN_LEFT = 0,
+	wxRIBBON_SCROLL_BTN_RIGHT = 1,
+	wxRIBBON_SCROLL_BTN_UP = 2,
+	wxRIBBON_SCROLL_BTN_DOWN = 3,
+
+	wxRIBBON_SCROLL_BTN_DIRECTION_MASK = 3,
+
+	wxRIBBON_SCROLL_BTN_NORMAL = 0,
+	wxRIBBON_SCROLL_BTN_HOVERED = 4,
+	wxRIBBON_SCROLL_BTN_ACTIVE = 8,
+
+	wxRIBBON_SCROLL_BTN_STATE_MASK = 12,
+
+	wxRIBBON_SCROLL_BTN_FOR_OTHER = 0,
+	wxRIBBON_SCROLL_BTN_FOR_TABS = 16,
+	wxRIBBON_SCROLL_BTN_FOR_PAGE = 32,
+
+	wxRIBBON_SCROLL_BTN_FOR_MASK = 48,
+};
+
 class wxRibbonPageTabInfo;
+class wxRibbonPageTabInfoArray;
 
 class WXDLLIMPEXP_AUI wxRibbonArtProvider
 {
@@ -77,6 +100,12 @@ public:
 						wxWindow* wnd,
 						const wxRect& rect) = 0;
 
+	virtual void DrawScrollButton(
+						wxDC& dc,
+						wxWindow* wnd,
+						const wxRect& rect,
+						long style) = 0;
+
 	virtual void GetBarTabWidth(
 						wxDC& dc,
                         wxWindow* wnd,
@@ -86,6 +115,16 @@ public:
 						int* small_begin_need_separator,
 						int* small_must_have_separator,
 						int* minimum) = 0;
+
+	virtual int GetTabCtrlHeight(
+						wxDC& dc,
+						wxWindow* wnd,
+						const wxRibbonPageTabInfoArray& pages) = 0;
+
+	virtual wxSize GetScrollButtonMinimumSize(
+						wxDC& dc,
+						wxWindow* wnd,
+						long style) = 0;
 };
 
 class WXDLLIMPEXP_AUI wxRibbonDefaultArtProvider : public wxRibbonArtProvider
@@ -124,6 +163,12 @@ public:
 						wxWindow* wnd,
 						const wxRect& rect);
 
+	void DrawScrollButton(
+						wxDC& dc,
+						wxWindow* wnd,
+						const wxRect& rect,
+						long style);
+
 	void GetBarTabWidth(
 						wxDC& dc,
 						wxWindow* wnd,
@@ -134,7 +179,20 @@ public:
 						int* small_must_have_separator,
 						int* minimum);
 
+	int GetTabCtrlHeight(
+						wxDC& dc,
+						wxWindow* wnd,
+						const wxRibbonPageTabInfoArray& pages);
+
+	wxSize GetScrollButtonMinimumSize(
+						wxDC& dc,
+						wxWindow* wnd,
+						long style);
+
 protected:
+	void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility);
+
+	wxBitmap m_cached_tab_separator;
 	wxColour m_tab_label_colour;
 	wxColour m_tab_separator_colour;
 	wxColour m_tab_separator_gradient_colour;
@@ -152,6 +210,7 @@ protected:
 	wxFont m_tab_label_font;
 	wxPen m_page_border_pen;
 	wxPen m_tab_border_pen;
+	double m_cached_tab_separator_visibility;
 	long m_flags;
 	int m_tab_separation_size;
 };

@@ -33,14 +33,26 @@
 
 WX_DEFINE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfoArray);
 
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGED, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGING, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_DOWN, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_UP, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_DOWN, wxRibbonBarEvent);
+wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP, wxRibbonBarEvent);
+
 IMPLEMENT_CLASS(wxRibbonBar, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonBarEvent, wxNotifyEvent)
 
 BEGIN_EVENT_TABLE(wxRibbonBar, wxControl)
   EVT_ERASE_BACKGROUND(wxRibbonBar::OnEraseBackground)
-  EVT_LEAVE_WINDOW(wxRibbonbar::OnMouseLeave)
+  EVT_LEAVE_WINDOW(wxRibbonBar::OnMouseLeave)
+  EVT_LEFT_DOWN(wxRibbonBar::OnMouseLeftDown)
+  EVT_MIDDLE_DOWN(wxRibbonBar::OnMouseMiddleDown)
+  EVT_MIDDLE_UP(wxRibbonBar::OnMouseMiddleUp)
   EVT_MOTION(wxRibbonBar::OnMouseMove)
   EVT_PAINT(wxRibbonBar::OnPaint)
+  EVT_RIGHT_DOWN(wxRibbonBar::OnMouseRightDown)
+  EVT_RIGHT_UP(wxRibbonBar::OnMouseRightUp)
   EVT_SIZE(wxRibbonBar::OnSize)
 END_EVENT_TABLE()
 
@@ -77,12 +89,15 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
 
 	page->Hide(); // Most likely case is that this new page is not the active tab
 
+	m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
 	RecalculateTabSizes();
 
 	if(m_pages.GetCount() == 1)
 	{
-		SetActivePage(0);
+		SetActivePage((size_t)0);
 	}
+
+	Refresh();
 }
 
 void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
@@ -99,15 +114,7 @@ void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
 		}
 		else
 		{
-			size_t numtabs = m_pages.GetCount();
-			for(size_t i = 0; i < numtabs; ++i)
-			{
-				if(m_pages.Item(i).rect.Contains(x, y))
-				{
-					hovered_page = (int)i;
-					break;
-				}
-			}
+			HitTestTabs(evt.GetPosition(), &hovered_page);
 		}
 	}
 	if(hovered_page != m_current_hovered_page)
@@ -125,7 +132,7 @@ void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
 	}
 }
 
-void wxRibbonBar::OnMouseLeave(wxMouseEvent& evt)
+void wxRibbonBar::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
 	// The ribbon bar is (usually) at the top of a window, and at least on MSW, the mouse
 	// can leave the window quickly and leave a tab in the hovered state.
@@ -152,11 +159,27 @@ bool wxRibbonBar::SetActivePage(size_t page)
 	if(m_current_page != -1)
 	{
 		m_pages.Item((size_t)m_current_page).active = false;
+		m_pages.Item((size_t)m_current_page).page->Hide();
 	}
 	m_current_page = (int)page;
 	m_pages.Item(page).active = true;
+	m_pages.Item(page).page->Show();
+	Refresh();
 
 	return true;
+}
+
+bool wxRibbonBar::SetActivePage(wxRibbonPage* page)
+{
+	size_t numpages = m_pages.GetCount();
+	for(size_t i = 0; i < numpages; ++i)
+	{
+		if(m_pages.Item(i).page == page)
+		{
+			return SetActivePage(i);
+		}
+	}
+	return false;
 }
 
 int wxRibbonBar::GetActivePage() const
@@ -202,6 +225,8 @@ void wxRibbonBar::RecalculateTabSizes()
 			x += info.rect.width + tabsep;
 		}
 		m_tab_scroll_buttons_shown = false;
+		m_tab_scroll_left_button_width = 0;
+		m_tab_scroll_right_button_width = 0;
 	}
 	else if(width < m_tabs_total_width_minimum)
 	{
@@ -216,10 +241,30 @@ void wxRibbonBar::RecalculateTabSizes()
 			x += info.rect.width + tabsep;
 		}
 		m_tab_scroll_buttons_shown = true;
-		// TODO: fix m_tab_scroll_amount if it is out of bounds
+		{
+			wxMemoryDC temp_dc;
+			m_tab_scroll_left_button_width = m_art->GetScrollButtonMinimumSize(temp_dc, this, wxRIBBON_SCROLL_BTN_LEFT | wxRIBBON_SCROLL_BTN_NORMAL | wxRIBBON_SCROLL_BTN_FOR_TABS).GetWidth();
+			m_tab_scroll_right_button_width = m_art->GetScrollButtonMinimumSize(temp_dc, this, wxRIBBON_SCROLL_BTN_RIGHT | wxRIBBON_SCROLL_BTN_NORMAL | wxRIBBON_SCROLL_BTN_FOR_TABS).GetWidth();
+		}
+		if(m_tab_scroll_amount == 0)
+		{
+			m_tab_scroll_left_button_width = 0;
+		}
+		else if(m_tab_scroll_amount + width > m_tabs_total_width_minimum)
+		{
+			m_tab_scroll_amount = m_tabs_total_width_minimum - width;
+			m_tab_scroll_right_button_width = 0;
+		}
+		else if(m_tab_scroll_amount + width == m_tabs_total_width_minimum)
+		{
+			m_tab_scroll_right_button_width = 0;
+		}
 	}
 	else
 	{
+		m_tab_scroll_buttons_shown = false;
+		m_tab_scroll_left_button_width = 0;
+		m_tab_scroll_right_button_width = 0;
 		// Complex case: everything sized such that: minimum <= width < ideal
 		/*
 		   Strategy:
@@ -405,7 +450,7 @@ void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
 	}
 }
 
-void wxRibbonBar::OnPaint(wxPaintEvent& evt)
+void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
 	wxAutoBufferedPaintDC dc(this);
 
@@ -414,11 +459,18 @@ void wxRibbonBar::OnPaint(wxPaintEvent& evt)
 	size_t numtabs = m_pages.GetCount();
 	double sep_visibility = 0.0;
 	bool draw_sep = false;
+	wxRect tabs_rect(m_tab_margin_left, 0, GetClientSize().GetWidth() - m_tab_margin_left - m_tab_margin_right, m_tab_height);
+	if(m_tab_scroll_buttons_shown)
+	{
+		tabs_rect.x += m_tab_scroll_left_button_width;
+		tabs_rect.width -= m_tab_scroll_left_button_width + m_tab_scroll_right_button_width;
+	}
 	for(size_t i = 0; i < numtabs; ++i)
 	{
 		wxRibbonPageTabInfo& info = m_pages.Item(i);
 
 		dc.DestroyClippingRegion();
+		dc.SetClippingRegion(tabs_rect);
 		dc.SetClippingRegion(info.rect);
 		m_art->DrawTab(dc, this, info);
 
@@ -450,10 +502,25 @@ void wxRibbonBar::OnPaint(wxPaintEvent& evt)
 			m_art->DrawTabSeparator(dc, this, rect, sep_visibility);
 		}
 	}
+	if(m_tab_scroll_buttons_shown)
+	{
+		dc.DestroyClippingRegion();
+		if(m_tab_scroll_left_button_width != 0)
+		{
+			wxRect rect(tabs_rect.x - m_tab_scroll_left_button_width, 0, m_tab_scroll_left_button_width, m_tab_height);
+			m_art->DrawScrollButton(dc, this, rect, wxRIBBON_SCROLL_BTN_LEFT | wxRIBBON_SCROLL_BTN_NORMAL | wxRIBBON_SCROLL_BTN_FOR_TABS);
+		}
+		if(m_tab_scroll_right_button_width != 0)
+		{
+			wxRect rect(tabs_rect.x + tabs_rect.width, 0, m_tab_scroll_right_button_width, m_tab_height);
+			m_art->DrawScrollButton(dc, this, rect, wxRIBBON_SCROLL_BTN_RIGHT | wxRIBBON_SCROLL_BTN_NORMAL | wxRIBBON_SCROLL_BTN_FOR_TABS);
+		}
+	}
 }
 
-void wxRibbonBar::OnEraseBackground(wxEraseEvent& evt)
+void wxRibbonBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 {
+	// Background painting done in main paint handler to reduce screen flicker
 }
 
 void wxRibbonBar::DoEraseBackground(wxDC& dc)
@@ -468,10 +535,85 @@ void wxRibbonBar::DoEraseBackground(wxDC& dc)
 	m_art->DrawPageBackground(dc, this, page);
 }
 
-void wxRibbonBar::OnSize(wxSizeEvent& evt)
+void wxRibbonBar::OnSize(wxSizeEvent& WXUNUSED(evt))
 {
 	RecalculateTabSizes();
 	Refresh();
+}
+
+wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
+{
+	if(position.y < m_tab_height)
+	{
+		size_t numtabs = m_pages.GetCount();
+		for(size_t i = 0; i < numtabs; ++i)
+		{
+			wxRibbonPageTabInfo& info = m_pages.Item(i);
+			if(info.rect.Contains(position))
+			{
+				if(index != NULL)
+				{
+					*index = (int)i;
+				}
+				return &info;
+			}
+		}
+	}
+	if(index != NULL)
+	{
+		*index = -1;
+	}
+	return NULL;
+}
+
+void wxRibbonBar::OnMouseLeftDown(wxMouseEvent& evt)
+{
+	wxRibbonPageTabInfo *tab = HitTestTabs(evt.GetPosition());
+	if(tab && tab != &m_pages.Item(m_current_page))
+	{
+		wxRibbonBarEvent query(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGING, GetId(), tab->page);
+		query.SetEventObject(this);
+		ProcessWindowEvent(query);
+		if(query.IsAllowed())
+		{
+			SetActivePage(query.GetPage());
+
+			wxRibbonBarEvent notification(wxEVT_COMMAND_RIBBONBAR_PAGE_CHANGED, GetId(), m_pages.Item(m_current_page).page);
+			notification.SetEventObject(this);
+			ProcessWindowEvent(notification);
+		}
+	}
+}
+
+void wxRibbonBar::OnMouseMiddleDown(wxMouseEvent& evt)
+{
+	DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_DOWN);
+}
+
+void wxRibbonBar::OnMouseMiddleUp(wxMouseEvent& evt)
+{
+	DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_UP);
+}
+
+void wxRibbonBar::OnMouseRightDown(wxMouseEvent& evt)
+{
+	DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_DOWN);
+}
+
+void wxRibbonBar::OnMouseRightUp(wxMouseEvent& evt)
+{
+	DoMouseButtonCommon(evt, wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP);
+}
+
+void wxRibbonBar::DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type)
+{
+	wxRibbonPageTabInfo *tab = HitTestTabs(evt.GetPosition());
+	if(tab)
+	{
+		wxRibbonBarEvent notification(tab_event_type, GetId(), tab->page);
+		notification.SetEventObject(this);
+		ProcessWindowEvent(notification);
+	}
 }
 
 #endif // wxUSE_RIBBON
