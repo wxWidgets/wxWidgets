@@ -107,6 +107,24 @@ enum wxEndianness
     wxENDIAN_MAX
 };
 
+/**
+    A structure containing informations about a Linux distribution as returned 
+    by the @c lsb_release utility.
+    
+    See wxGetLinuxDistributionInfo() or wxPlatformInfo::GetLinuxDistributionInfo()
+    for more info.
+*/
+struct wxLinuxDistributionInfo
+{
+    wxString Id;                //!< The id of the distribution; e.g. "Ubuntu"
+    wxString Release;           //!< The version of the distribution; e.g. "9.04"
+    wxString CodeName;          //!< The code name of the distribution; e.g. "jaunty"
+    wxString Description;       //!< The description of the distribution; e.g. "Ubuntu 9.04"
+    
+    bool operator==(const wxLinuxDistributionInfo& ldi) const;
+    bool operator!=(const wxLinuxDistributionInfo& ldi) const;
+};
+
 
 /**
     @class wxPlatformInfo
@@ -117,8 +135,16 @@ enum wxEndianness
     This class does not only have @e getters for the informations above, it also has
     @e setters. This allows you to e.g. save the current platform informations in a 
     data file (maybe in string form) so that when you later load it, you can easily
-    retrieve (see the static getters for string->enum conversion functions) the 
-    signature of the system which generated it.
+    retrieve (see the static getters for string->enum conversion functions) and store
+    inside a wxPlatformInfo instance (using its setters) the signature of the system 
+    which generated it.
+    
+    In general however you only need to use the static Get() function and then
+    access the various informations for the current platform:
+    @code
+        wxLogMessage("This application is running under %s.",
+                     wxPlatformInfo::Get().GetOperatingSystemIdName());
+    @endcode
 
     @library{wxbase}
     @category{cfg}
@@ -285,6 +311,13 @@ public:
     static wxString GetPortIdShortName(wxPortId port,
                                        bool usingUniversal);
 
+    /**
+        Returns the operating system directory.
+        
+        See wxGetOSDirectory() for more info.
+    */
+    static wxString GetOperatingSystemDirectory();
+
     //@}
     
     
@@ -323,11 +356,32 @@ public:
         Returns the operating system ID of this wxPlatformInfo instance.
     */
     wxOperatingSystemId GetOperatingSystemId() const;
+    
+    /**
+        Returns the description of the operating system of this wxPlatformInfo instance.
+        
+        See wxGetOSDescription() for more info.
+    */
+    wxString GetOperatingSystemDescription() const;
 
     /**
         Returns the wxWidgets port ID associated with this wxPlatformInfo instance.
     */
     wxPortId GetPortId() const;
+    
+    /**
+        Returns the Linux distribution info associated with this wxPlatformInfo instance.
+        
+        See wxGetLinuxDistributionInfo() for more info.
+    */
+    wxLinuxDistributionInfo GetLinuxDistributionInfo() const;
+    
+    /**
+        Returns the desktop environment associated with this wxPlatformInfo instance.
+        
+        See wxAppTraits::GetDesktopEnvironment() for more info.
+    */
+    wxString GetDesktopEnvironment() const;
 
     /**
         Returns the run-time major version of the toolkit associated with this
@@ -436,8 +490,22 @@ public:
         Sets the version of the toolkit associated with this wxPlatformInfo instance.
     */
     void SetToolkitVersion(int major, int minor);
+
+    /**
+        Sets the operating system description associated with this wxPlatformInfo instance.
+    */
+    void SetOperatingSystemDescription(const wxString& desc);
+ 
+    /**
+        Sets the desktop environment associated with this wxPlatformInfo instance.
+    */
+    void SetDesktopEnvironment(const wxString& de);
+    
+    /**
+        Sets the linux distribution info associated with this wxPlatformInfo instance.
+    */
+    void SetLinuxDistributionInfo(const wxLinuxDistributionInfo& di);
     
     //@}
-    
 };
 

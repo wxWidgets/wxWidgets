@@ -105,8 +105,8 @@ static const wxChar* const wxEndiannessNames[] =
 // local functions
 // ----------------------------------------------------------------------------
 
-// returns log in base 2 of the value, this maps the enum values to the
-// corresponding indices
+// returns the logarithm in base 2 of 'value'; this maps the enum values to the
+// corresponding indexes of the string arrays above
 static unsigned wxGetIndexFromEnumValue(int value)
 {
     wxCHECK_MSG( value, (unsigned)-1, _T("invalid enum value") );
@@ -159,6 +159,9 @@ bool wxPlatformInfo::operator==(const wxPlatformInfo &t) const
            m_osVersionMajor == t.m_osVersionMajor &&
            m_osVersionMinor == t.m_osVersionMinor &&
            m_os == t.m_os &&
+           m_osDesc == t.m_osDesc &&
+           m_ldi == t.m_ldi &&
+           m_desktopEnv == t.m_desktopEnv &&
            m_port == t.m_port &&
            m_usingUniversal == t.m_usingUniversal &&
            m_arch == t.m_arch &&
@@ -182,11 +185,18 @@ void wxPlatformInfo::InitForCurrentPlatform()
     {
         m_port = traits->GetToolkitVersion(&m_tkVersionMajor, &m_tkVersionMinor);
         m_usingUniversal = traits->IsUsingUniversalWidgets();
+        m_desktopEnv = traits->GetDesktopEnvironment();
     }
 
     m_os = wxGetOsVersion(&m_osVersionMajor, &m_osVersionMinor);
+    m_osDesc = wxGetOsDescription();
     m_endian = wxIsPlatformLittleEndian() ? wxENDIAN_LITTLE : wxENDIAN_BIG;
     m_arch = wxIsPlatform64Bit() ? wxARCH_64 : wxARCH_32;
+    
+#ifdef __LINUX__
+    m_ldi = wxGetLinuxDistributionInfo();
+#endif
+    // else: leave m_ldi empty
 }
 
 /* static */
@@ -200,6 +210,12 @@ const wxPlatformInfo& wxPlatformInfo::Get()
     }
 
     return gs_platInfo;
+}
+
+/* static */
+wxString wxPlatformInfo::GetOperatingSystemDirectory()
+{
+    return wxGetOSDirectory();
 }
 
 

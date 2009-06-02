@@ -684,6 +684,23 @@ bool wxIsPlatform64Bit();
 */
 bool wxIsPlatformLittleEndian();
 
+/**
+    Returns a structure containing informations about the currently running
+    Linux distribution.
+    
+    This function uses the @c lsb_release utility which is part of the 
+    <tt>Linux Standard Base Core</tt> specification 
+    (see http://refspecs.linux-foundation.org/lsb.shtml) since the very first LSB 
+    release 1.0 (released in 2001).
+    The @c lsb_release utility is very common on modern Linux distributions but in
+    case it's not available, then this function will return a ::wxLinuxDistributionInfo
+    structure containing empty strings.
+    
+    This function is Linux-specific and is only available when the @c __LINUX__
+    symbol is defined.
+*/
+wxLinuxDistributionInfo wxGetLinuxDistributionInfo();
+
 //@}
 
 
