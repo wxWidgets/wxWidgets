@@ -31,12 +31,14 @@ operator==(const wxArrayInt& array1, const wxArrayInt& array2);
 //
 // Additional Property Editors
 //
+#ifndef SWIG
 #if wxUSE_SPINBTN
 WX_PG_DECLARE_EDITOR_WITH_DECL(SpinCtrl,WXDLLIMPEXP_PROPGRID)
 #endif
 
 #if wxUSE_DATEPICKCTRL
 WX_PG_DECLARE_EDITOR_WITH_DECL(DatePickerCtrl,WXDLLIMPEXP_PROPGRID)
+#endif
 #endif
 
 // -----------------------------------------------------------------------
