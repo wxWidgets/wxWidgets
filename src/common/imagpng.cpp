@@ -568,18 +568,16 @@ wxPNGHandler::LoadFile(wxImage *image,
     if (!image->Ok())
         goto error;
 
-    lines = (unsigned char **)malloc( (size_t)(height * sizeof(unsigned char *)) );
+    // initialize all line pointers to NULL to ensure that they can be safely
+    // free()d if an error occurs before all of them could be allocated
+    lines = (unsigned char **)calloc(height, sizeof(unsigned char *));
     if ( !lines )
         goto error;
 
     for (i = 0; i < height; i++)
     {
         if ((lines[i] = (unsigned char *)malloc( (size_t)(width * (sizeof(unsigned char) * 4)))) == NULL)
-        {
-            for ( unsigned int n = 0; n < i; n++ )
-                free( lines[n] );
             goto error;
-        }
     }
 
     png_read_image( png_ptr, lines );
