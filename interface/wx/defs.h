@@ -776,6 +776,34 @@ enum wxUpdateUI
 };
 
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+/**
+    C99-like sized MIN/MAX constants for all integer types.
+
+    For each @c n in the set 8, 16, 32, 64 we define @c wxINTn_MIN, @c
+    wxINTn_MAX and @c wxUINTc_MAX (@c wxUINTc_MIN is always 0 and so is not
+    defined).
+ */
+//@{
+#define wxINT8_MIN CHAR_MIN
+#define wxINT8_MAX CHAR_MAX
+#define wxUINT8_MAX UCHAR_MAX
+
+#define wxINT16_MIN SHRT_MIN
+#define wxINT16_MAX SHRT_MAX
+#define wxUINT16_MAX USHRT_MAX
+
+#define wxINT32_MIN INT_MIN-or-LONG_MIN
+#define wxINT32_MAX INT_MAX-or-LONG_MAX
+#define wxUINT32_MAX UINT_MAX-or-LONG_MAX
+
+#define wxINT64_MIN LLONG_MIN
+#define wxINT64_MAX LLONG_MAX
+#define wxUINT64_MAX ULLONG_MAX
+//@}
 
 // ----------------------------------------------------------------------------
 // types

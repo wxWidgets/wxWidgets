@@ -916,16 +916,20 @@ typedef wxUint16 wxWord;
 /* also define C99-like sized MIN/MAX constants */
 #define wxINT8_MIN CHAR_MIN
 #define wxINT8_MAX CHAR_MAX
+#define wxUINT8_MAX UCHAR_MAX
 
 #define wxINT16_MIN SHRT_MIN
 #define wxINT16_MAX SHRT_MAX
+#define wxUINT16_MAX USHRT_MAX
 
 #if SIZEOF_INT == 4
     #define wxINT32_MIN INT_MIN
     #define wxINT32_MAX INT_MAX
+    #define wxUINT32_MAX UINT_MAX
 #elif SIZEOF_LONG == 4
     #define wxINT32_MIN LONG_MIN
     #define wxINT32_MAX LONG_MAX
+    #define wxUINT32_MAX ULONG_MAX
 #else
     #error "Unknown 32 bit type"
 #endif
@@ -933,11 +937,13 @@ typedef wxUint16 wxWord;
 typedef wxUint32 wxDword;
 
 #ifdef LLONG_MAX
-    #define wxINT64_MAX LLONG_MAX
     #define wxINT64_MIN LLONG_MIN
+    #define wxINT64_MAX LLONG_MAX
+    #define wxUINT64_MAX ULLONG_MAX
 #else
-    #define wxINT64_MAX wxLL(9223372036854775807)
     #define wxINT64_MIN (wxLL(-9223372036854775807)-1)
+    #define wxINT64_MAX wxLL(9223372036854775807)
+    #define wxUINT64_MAX wxULL(0xFFFFFFFFFFFFFFFF)
 #endif
 
 /*  64 bit */
