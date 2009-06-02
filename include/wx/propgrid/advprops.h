@@ -19,14 +19,13 @@
 // -----------------------------------------------------------------------
 
 
+#ifndef SWIG
+
 //
 // Additional Value Type Handlers
 //
-#ifndef SWIG
 bool WXDLLIMPEXP_PROPGRID
 operator==(const wxArrayInt& array1, const wxArrayInt& array2);
-#endif
-
 
 //
 // Additional Property Editors
@@ -38,6 +37,8 @@ WX_PG_DECLARE_EDITOR_WITH_DECL(SpinCtrl,WXDLLIMPEXP_PROPGRID)
 #if wxUSE_DATEPICKCTRL
 WX_PG_DECLARE_EDITOR_WITH_DECL(DatePickerCtrl,WXDLLIMPEXP_PROPGRID)
 #endif
+
+#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 
