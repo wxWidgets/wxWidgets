@@ -26,6 +26,8 @@
     #include "wx/stream.h"
 #endif
 
+#include "wx/wfstream.h"
+
 #include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(wxIconArray)
 
@@ -96,31 +98,43 @@ namespace
 // Adds icon from 'input' to the bundle. Shows 'errorMessage' on failure
 // (it must contain "%d", because it is used to report # of image in the file
 // that failed to load):
-template<typename T>
 void DoAddIcon(wxIconBundle& bundle,
-               T& input, wxBitmapType type,
+               wxInputStream& input,
+               wxBitmapType type,
                const wxString& errorMessage)
 {
-#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
     wxImage image;
+
+    const wxFileOffset posOrig = input.TellI();
 
     const size_t count = wxImage::GetImageCount(input, type);
     for ( size_t i = 0; i < count; ++i )
     {
+        if ( i )
+        {
+            // the call to LoadFile() for the first sub-image updated the
+            // stream position but we need to start reading the subsequent
+            // sub-image at the image beginning too
+            input.SeekI(posOrig);
+        }
+
         if ( !image.LoadFile(input, type, i) )
         {
             wxLogError(errorMessage, i);
             continue;
         }
 
+        if ( type == wxBITMAP_TYPE_ANY )
+        {
+            // store the type so that we don't need to try all handlers again
+            // for the subsequent images, they should all be of the same type
+            type = image.GetType();
+        }
+
         wxIcon tmp;
         tmp.CopyFromBitmap(wxBitmap(image));
         bundle.AddIcon(tmp);
     }
-#else // !wxUSE_IMAGE
-    wxUnusedVar(input);
-    wxUnusedVar(type);
-#endif // wxUSE_IMAGE/!wxUSE_IMAGE
 }
 
 } // anonymous namespace
@@ -140,10 +154,11 @@ void wxIconBundle::AddIcon(const wxString& file, wxBitmapType type)
     }
 #endif // __WXMAC__
 
+    wxFFileInputStream stream(file);
     DoAddIcon
     (
         *this,
-        file, type,
+        stream, type,
         wxString::Format(_("Failed to load image %%d from file '%s'."), file)
     );
 }
