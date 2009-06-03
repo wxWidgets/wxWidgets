@@ -640,9 +640,7 @@ wxgtk_tree_model_iter_n_children (GtkTreeModel *tree_model,
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
-
-    if (iter != NULL)
-        g_return_val_if_fail (wxtree_model->stamp == iter->stamp, 0);
+    g_return_val_if_fail ( !iter || wxtree_model->stamp == iter->stamp, 0);
 
     return wxtree_model->internal->iter_n_children( iter );
 }
