@@ -102,7 +102,7 @@ handler if you do wish to allow the item to be toggled.
 
 All:
 
-- Fixed crashes due to invalid input in PNG and TIFF image loaders.
+- Fixed crashes due to invalid input in PNG and TIFF image loaders (Tielei Wang).
 - Added several functions forward compatible with wxWidgets 3.0 (troelsk):
   wxDC::SetDeviceClippingRegion(), wxShowEvent::IsShown(),
   wxIconizeEvent::IsIconized(), wxFileName::StripExtension(),
