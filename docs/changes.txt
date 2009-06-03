@@ -344,6 +344,10 @@ All (GUI):
 - Added wxDC::CopyAttributes() and use it in wxBufferedDC.
 - Added wxTextWrapper helper class useful for wrapping lines of text.
 
+GTK:
+
+- wxRadioBox constructor uses default consistent with other ports now.
+
 MSW:
 
 - Allow changing the height of wxChoice and wxComboBox.
