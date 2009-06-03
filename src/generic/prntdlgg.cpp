@@ -229,8 +229,7 @@ void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
     {
         m_rangeRadioBox = new wxRadioBox(this, wxPRINTID_RANGE, _("Print Range"),
                                          wxDefaultPosition, wxDefaultSize,
-                                         2, choices,
-                                         1, wxRA_VERTICAL);
+                                         2, choices);
         m_rangeRadioBox->SetSelection(1);
 
         mainsizer->Add( m_rangeRadioBox, 0, wxLEFT|wxTOP|wxRIGHT, 10 );

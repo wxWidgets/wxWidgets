@@ -74,10 +74,7 @@ wxBEGIN_FLAGS( wxRadioBoxStyle )
     wxFLAGS_MEMBER(wxHSCROLL)
 
     wxFLAGS_MEMBER(wxRA_SPECIFY_COLS)
-    wxFLAGS_MEMBER(wxRA_HORIZONTAL)
     wxFLAGS_MEMBER(wxRA_SPECIFY_ROWS)
-    wxFLAGS_MEMBER(wxRA_VERTICAL)
-
 wxEND_FLAGS( wxRadioBoxStyle )
 
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxRadioBox, wxControl,"wx/radiobox.h")

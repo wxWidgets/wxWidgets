@@ -147,11 +147,11 @@ bool wxRadioBox::Create(wxWindow *parent,
     if ( !(style & (wxRA_LEFTTORIGHT | wxRA_TOPTOBOTTOM)) )
     {
         // horizontal radiobox use left to right layout
-        if ( style & wxRA_HORIZONTAL )
+        if ( style & wxRA_SPECIFY_COLS )
         {
             style |= wxRA_LEFTTORIGHT;
         }
-        else if ( style & wxRA_VERTICAL )
+        else if ( style & wxRA_SPECIFY_ROWS )
         {
             style |= wxRA_TOPTOBOTTOM;
         }
@@ -160,7 +160,7 @@ bool wxRadioBox::Create(wxWindow *parent,
             wxFAIL_MSG( _T("you must specify wxRA_XXX style!") );
 
             // use default
-            style = wxRA_HORIZONTAL | wxRA_LEFTTORIGHT;
+            style = wxRA_SPECIFY_COLS | wxRA_LEFTTORIGHT;
         }
     }
 
