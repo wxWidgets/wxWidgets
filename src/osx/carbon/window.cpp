@@ -184,7 +184,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 #endif
 
                 {
-                    bool created = false ;
                     CGContextRef cgContext = NULL ;
                     OSStatus err = cEvent.GetParameter<CGContextRef>(kEventParamCGContextRef, &cgContext) ;
                     if ( err != noErr )
@@ -208,7 +207,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                                     iter = iter->GetParent() ;
                             }
                         }
-                        CGContextSetAlpha( cgContext , alpha ) ;
+                        CGContextSetAlpha( cgContext, alpha ) ;
 
                         if ( thisWindow->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
                         {
@@ -229,16 +228,20 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                                     ( thisWindow->IsTopLevel() && thisWindow->GetBackgroundStyle() == wxBG_STYLE_SYSTEM ) )
                                 {
                                     if ( thisWindow->GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
-                                        CallNextEventHandler( handler ,event ) ;
+                                    {
+                                        CallNextEventHandler( handler,event ) ;
+                                        result = noErr ;
+                                    }
                                 }
+                            }
+                            else 
+                            {
+                                result = noErr ;
                             }
                             thisWindow->MacPaintChildrenBorders();
                         }
                         thisWindow->MacSetCGContextRef( NULL ) ;
                     }
-
-                    if ( created )
-                        CGContextRelease( cgContext ) ;
                 }
 
                 if ( allocatedRgn )
