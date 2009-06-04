@@ -689,9 +689,6 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
                             ? image->GetOptionInt(wxIMAGE_OPTION_PNG_BITDEPTH)
                             : 8;
 
-    wxASSERT_MSG( iBitDepth == 8 || iBitDepth == 16,
-                    _T("PNG bit depth must be 8 or 16") );
-
     bool bHasAlpha = image->HasAlpha();
     bool bHasMask = image->HasMask();
     bool bUseAlpha = bHasAlpha || bHasMask;
