@@ -7300,6 +7300,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\textwrapper.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\tglbtn.h"
 				>
 			</File>
@@ -7473,6 +7477,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xrc\xh_dlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_editlbox.h"
 				>
 			</File>
 			<File

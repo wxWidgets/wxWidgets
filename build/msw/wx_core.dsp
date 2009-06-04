@@ -6463,6 +6463,10 @@ SOURCE=..\..\include\wx\textentry.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\textwrapper.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\tglbtn.h
 # End Source File
 # Begin Source File
@@ -6636,6 +6640,10 @@ SOURCE=..\..\include\wx\xrc\xh_dirpicker.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_dlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_editlbox.h
 # End Source File
 # Begin Source File
 

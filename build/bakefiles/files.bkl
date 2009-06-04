@@ -3195,10 +3195,10 @@ src/osx/iphone/window.mm
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
-    src/xrc/xh_frame.cpp
-    src/xrc/xh_mdi.cpp
+    src/xrc/xh_editlbox.cpp
     src/xrc/xh_filepicker.cpp
     src/xrc/xh_fontpicker.cpp
+    src/xrc/xh_frame.cpp
     src/xrc/xh_gauge.cpp
     src/xrc/xh_gdctl.cpp
     src/xrc/xh_grid.cpp
@@ -3207,6 +3207,7 @@ src/osx/iphone/window.mm
     src/xrc/xh_listb.cpp
     src/xrc/xh_listbk.cpp
     src/xrc/xh_listc.cpp
+    src/xrc/xh_mdi.cpp
     src/xrc/xh_menu.cpp
     src/xrc/xh_notbk.cpp
     src/xrc/xh_odcombo.cpp
@@ -3259,6 +3260,7 @@ src/osx/iphone/window.mm
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h
+    wx/xrc/xh_editlbox.h
     wx/xrc/xh_filepicker.h
     wx/xrc/xh_fontpicker.h
     wx/xrc/xh_frame.h

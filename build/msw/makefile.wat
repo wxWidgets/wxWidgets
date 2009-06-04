@@ -151,10 +151,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_datectrl.obj &
 	$(OBJS)\monodll_xh_dirpicker.obj &
 	$(OBJS)\monodll_xh_dlg.obj &
-	$(OBJS)\monodll_xh_frame.obj &
-	$(OBJS)\monodll_xh_mdi.obj &
+	$(OBJS)\monodll_xh_editlbox.obj &
 	$(OBJS)\monodll_xh_filepicker.obj &
 	$(OBJS)\monodll_xh_fontpicker.obj &
+	$(OBJS)\monodll_xh_frame.obj &
 	$(OBJS)\monodll_xh_gauge.obj &
 	$(OBJS)\monodll_xh_gdctl.obj &
 	$(OBJS)\monodll_xh_grid.obj &
@@ -163,6 +163,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_xh_listb.obj &
 	$(OBJS)\monodll_xh_listbk.obj &
 	$(OBJS)\monodll_xh_listc.obj &
+	$(OBJS)\monodll_xh_mdi.obj &
 	$(OBJS)\monodll_xh_menu.obj &
 	$(OBJS)\monodll_xh_notbk.obj &
 	$(OBJS)\monodll_xh_odcombo.obj &
@@ -846,10 +847,10 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_datectrl.obj &
 	$(OBJS)\monolib_xh_dirpicker.obj &
 	$(OBJS)\monolib_xh_dlg.obj &
-	$(OBJS)\monolib_xh_frame.obj &
-	$(OBJS)\monolib_xh_mdi.obj &
+	$(OBJS)\monolib_xh_editlbox.obj &
 	$(OBJS)\monolib_xh_filepicker.obj &
 	$(OBJS)\monolib_xh_fontpicker.obj &
+	$(OBJS)\monolib_xh_frame.obj &
 	$(OBJS)\monolib_xh_gauge.obj &
 	$(OBJS)\monolib_xh_gdctl.obj &
 	$(OBJS)\monolib_xh_grid.obj &
@@ -858,6 +859,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_xh_listb.obj &
 	$(OBJS)\monolib_xh_listbk.obj &
 	$(OBJS)\monolib_xh_listc.obj &
+	$(OBJS)\monolib_xh_mdi.obj &
 	$(OBJS)\monolib_xh_menu.obj &
 	$(OBJS)\monolib_xh_notbk.obj &
 	$(OBJS)\monolib_xh_odcombo.obj &
@@ -4204,10 +4206,10 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_datectrl.obj &
 	$(OBJS)\xrcdll_xh_dirpicker.obj &
 	$(OBJS)\xrcdll_xh_dlg.obj &
-	$(OBJS)\xrcdll_xh_frame.obj &
-	$(OBJS)\xrcdll_xh_mdi.obj &
+	$(OBJS)\xrcdll_xh_editlbox.obj &
 	$(OBJS)\xrcdll_xh_filepicker.obj &
 	$(OBJS)\xrcdll_xh_fontpicker.obj &
+	$(OBJS)\xrcdll_xh_frame.obj &
 	$(OBJS)\xrcdll_xh_gauge.obj &
 	$(OBJS)\xrcdll_xh_gdctl.obj &
 	$(OBJS)\xrcdll_xh_grid.obj &
@@ -4216,6 +4218,7 @@ XRCDLL_OBJECTS =  &
 	$(OBJS)\xrcdll_xh_listb.obj &
 	$(OBJS)\xrcdll_xh_listbk.obj &
 	$(OBJS)\xrcdll_xh_listc.obj &
+	$(OBJS)\xrcdll_xh_mdi.obj &
 	$(OBJS)\xrcdll_xh_menu.obj &
 	$(OBJS)\xrcdll_xh_notbk.obj &
 	$(OBJS)\xrcdll_xh_odcombo.obj &
@@ -4273,10 +4276,10 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_datectrl.obj &
 	$(OBJS)\xrclib_xh_dirpicker.obj &
 	$(OBJS)\xrclib_xh_dlg.obj &
-	$(OBJS)\xrclib_xh_frame.obj &
-	$(OBJS)\xrclib_xh_mdi.obj &
+	$(OBJS)\xrclib_xh_editlbox.obj &
 	$(OBJS)\xrclib_xh_filepicker.obj &
 	$(OBJS)\xrclib_xh_fontpicker.obj &
+	$(OBJS)\xrclib_xh_frame.obj &
 	$(OBJS)\xrclib_xh_gauge.obj &
 	$(OBJS)\xrclib_xh_gdctl.obj &
 	$(OBJS)\xrclib_xh_grid.obj &
@@ -4285,6 +4288,7 @@ XRCLIB_OBJECTS =  &
 	$(OBJS)\xrclib_xh_listb.obj &
 	$(OBJS)\xrclib_xh_listbk.obj &
 	$(OBJS)\xrclib_xh_listc.obj &
+	$(OBJS)\xrclib_xh_mdi.obj &
 	$(OBJS)\xrclib_xh_menu.obj &
 	$(OBJS)\xrclib_xh_notbk.obj &
 	$(OBJS)\xrclib_xh_odcombo.obj &
@@ -6444,16 +6448,16 @@ $(OBJS)\monodll_xh_dirpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_dirpicker.cpp
 $(OBJS)\monodll_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-
-$(OBJS)\monodll_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
+$(OBJS)\monodll_xh_editlbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_editlbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_filepicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_filepicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_fontpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_fontpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_gauge.obj :  .AUTODEPEND ..\..\src\xrc\xh_gauge.cpp
@@ -6478,6 +6482,9 @@ $(OBJS)\monodll_xh_listbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_listbk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_listc.obj :  .AUTODEPEND ..\..\src\xrc\xh_listc.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
@@ -8787,16 +8794,16 @@ $(OBJS)\monolib_xh_dirpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_dirpicker.cpp
 $(OBJS)\monolib_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-
-$(OBJS)\monolib_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
+$(OBJS)\monolib_xh_editlbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_editlbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_filepicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_filepicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_fontpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_fontpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_gauge.obj :  .AUTODEPEND ..\..\src\xrc\xh_gauge.cpp
@@ -8821,6 +8828,9 @@ $(OBJS)\monolib_xh_listbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_listbk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_listc.obj :  .AUTODEPEND ..\..\src\xrc\xh_listc.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
@@ -14707,16 +14717,16 @@ $(OBJS)\xrcdll_xh_dirpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_dirpicker.cpp
 $(OBJS)\xrcdll_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
-
-$(OBJS)\xrcdll_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
+$(OBJS)\xrcdll_xh_editlbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_editlbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_filepicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_filepicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_fontpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_fontpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_gauge.obj :  .AUTODEPEND ..\..\src\xrc\xh_gauge.cpp
@@ -14741,6 +14751,9 @@ $(OBJS)\xrcdll_xh_listbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_listbk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_listc.obj :  .AUTODEPEND ..\..\src\xrc\xh_listc.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
+
+$(OBJS)\xrcdll_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCDLL_CXXFLAGS) $<
 
 $(OBJS)\xrcdll_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp
@@ -14887,16 +14900,16 @@ $(OBJS)\xrclib_xh_dirpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_dirpicker.cpp
 $(OBJS)\xrclib_xh_dlg.obj :  .AUTODEPEND ..\..\src\xrc\xh_dlg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
-
-$(OBJS)\xrclib_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
+$(OBJS)\xrclib_xh_editlbox.obj :  .AUTODEPEND ..\..\src\xrc\xh_editlbox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_filepicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_filepicker.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_fontpicker.obj :  .AUTODEPEND ..\..\src\xrc\xh_fontpicker.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_frame.obj :  .AUTODEPEND ..\..\src\xrc\xh_frame.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_gauge.obj :  .AUTODEPEND ..\..\src\xrc\xh_gauge.cpp
@@ -14921,6 +14934,9 @@ $(OBJS)\xrclib_xh_listbk.obj :  .AUTODEPEND ..\..\src\xrc\xh_listbk.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_listc.obj :  .AUTODEPEND ..\..\src\xrc\xh_listc.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
+
+$(OBJS)\xrclib_xh_mdi.obj :  .AUTODEPEND ..\..\src\xrc\xh_mdi.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(XRCLIB_CXXFLAGS) $<
 
 $(OBJS)\xrclib_xh_menu.obj :  .AUTODEPEND ..\..\src\xrc\xh_menu.cpp

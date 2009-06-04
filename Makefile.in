@@ -1582,10 +1582,10 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_datectrl.o \
 	xrcdll_xh_dirpicker.o \
 	xrcdll_xh_dlg.o \
-	xrcdll_xh_frame.o \
-	xrcdll_xh_mdi.o \
+	xrcdll_xh_editlbox.o \
 	xrcdll_xh_filepicker.o \
 	xrcdll_xh_fontpicker.o \
+	xrcdll_xh_frame.o \
 	xrcdll_xh_gauge.o \
 	xrcdll_xh_gdctl.o \
 	xrcdll_xh_grid.o \
@@ -1594,6 +1594,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_listb.o \
 	xrcdll_xh_listbk.o \
 	xrcdll_xh_listc.o \
+	xrcdll_xh_mdi.o \
 	xrcdll_xh_menu.o \
 	xrcdll_xh_notbk.o \
 	xrcdll_xh_odcombo.o \
@@ -1648,10 +1649,10 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_datectrl.o \
 	xrclib_xh_dirpicker.o \
 	xrclib_xh_dlg.o \
-	xrclib_xh_frame.o \
-	xrclib_xh_mdi.o \
+	xrclib_xh_editlbox.o \
 	xrclib_xh_filepicker.o \
 	xrclib_xh_fontpicker.o \
+	xrclib_xh_frame.o \
 	xrclib_xh_gauge.o \
 	xrclib_xh_gdctl.o \
 	xrclib_xh_grid.o \
@@ -1660,6 +1661,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_listb.o \
 	xrclib_xh_listbk.o \
 	xrclib_xh_listc.o \
+	xrclib_xh_mdi.o \
 	xrclib_xh_menu.o \
 	xrclib_xh_notbk.o \
 	xrclib_xh_odcombo.o \
@@ -3568,6 +3570,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/textctrl.h \
 	wx/textdlg.h \
 	wx/textentry.h \
+	wx/textwrapper.h \
 	wx/toolbar.h \
 	wx/validate.h \
 	wx/valtext.h \
@@ -3723,6 +3726,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_datectrl.h \
 	wx/xrc/xh_dirpicker.h \
 	wx/xrc/xh_dlg.h \
+	wx/xrc/xh_editlbox.h \
 	wx/xrc/xh_filepicker.h \
 	wx/xrc/xh_fontpicker.h \
 	wx/xrc/xh_frame.h \
@@ -3980,10 +3984,10 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_datectrl.o \
 	monodll_xh_dirpicker.o \
 	monodll_xh_dlg.o \
-	monodll_xh_frame.o \
-	monodll_xh_mdi.o \
+	monodll_xh_editlbox.o \
 	monodll_xh_filepicker.o \
 	monodll_xh_fontpicker.o \
+	monodll_xh_frame.o \
 	monodll_xh_gauge.o \
 	monodll_xh_gdctl.o \
 	monodll_xh_grid.o \
@@ -3992,6 +3996,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_listb.o \
 	monodll_xh_listbk.o \
 	monodll_xh_listc.o \
+	monodll_xh_mdi.o \
 	monodll_xh_menu.o \
 	monodll_xh_notbk.o \
 	monodll_xh_odcombo.o \
@@ -5776,10 +5781,10 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_datectrl.o \
 	monolib_xh_dirpicker.o \
 	monolib_xh_dlg.o \
-	monolib_xh_frame.o \
-	monolib_xh_mdi.o \
+	monolib_xh_editlbox.o \
 	monolib_xh_filepicker.o \
 	monolib_xh_fontpicker.o \
+	monolib_xh_frame.o \
 	monolib_xh_gauge.o \
 	monolib_xh_gdctl.o \
 	monolib_xh_grid.o \
@@ -5788,6 +5793,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_listb.o \
 	monolib_xh_listbk.o \
 	monolib_xh_listc.o \
+	monolib_xh_mdi.o \
 	monolib_xh_menu.o \
 	monolib_xh_notbk.o \
 	monolib_xh_odcombo.o \
@@ -15760,17 +15766,17 @@ monodll_xh_dirpicker.o: $(srcdir)/src/xrc/xh_dirpicker.cpp $(MONODLL_ODEP)
 monodll_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_dlg.cpp
 
-monodll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
-
-monodll_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+monodll_xh_editlbox.o: $(srcdir)/src/xrc/xh_editlbox.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_editlbox.cpp
 
 monodll_xh_filepicker.o: $(srcdir)/src/xrc/xh_filepicker.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_filepicker.cpp
 
 monodll_xh_fontpicker.o: $(srcdir)/src/xrc/xh_fontpicker.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_fontpicker.cpp
+
+monodll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
 
 monodll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
@@ -15795,6 +15801,9 @@ monodll_xh_listbk.o: $(srcdir)/src/xrc/xh_listbk.cpp $(MONODLL_ODEP)
 
 monodll_xh_listc.o: $(srcdir)/src/xrc/xh_listc.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_listc.cpp
+
+monodll_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
 
 monodll_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_menu.cpp
@@ -20476,17 +20485,17 @@ monolib_xh_dirpicker.o: $(srcdir)/src/xrc/xh_dirpicker.cpp $(MONOLIB_ODEP)
 monolib_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_dlg.cpp
 
-monolib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
-
-monolib_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+monolib_xh_editlbox.o: $(srcdir)/src/xrc/xh_editlbox.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_editlbox.cpp
 
 monolib_xh_filepicker.o: $(srcdir)/src/xrc/xh_filepicker.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_filepicker.cpp
 
 monolib_xh_fontpicker.o: $(srcdir)/src/xrc/xh_fontpicker.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_fontpicker.cpp
+
+monolib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
 
 monolib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
@@ -20511,6 +20520,9 @@ monolib_xh_listbk.o: $(srcdir)/src/xrc/xh_listbk.cpp $(MONOLIB_ODEP)
 
 monolib_xh_listc.o: $(srcdir)/src/xrc/xh_listc.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_listc.cpp
+
+monolib_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
 
 monolib_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_menu.cpp
@@ -32506,17 +32518,17 @@ xrcdll_xh_dirpicker.o: $(srcdir)/src/xrc/xh_dirpicker.cpp $(XRCDLL_ODEP)
 xrcdll_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_dlg.cpp
 
-xrcdll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCDLL_ODEP)
-	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
-
-xrcdll_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(XRCDLL_ODEP)
-	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+xrcdll_xh_editlbox.o: $(srcdir)/src/xrc/xh_editlbox.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_editlbox.cpp
 
 xrcdll_xh_filepicker.o: $(srcdir)/src/xrc/xh_filepicker.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_filepicker.cpp
 
 xrcdll_xh_fontpicker.o: $(srcdir)/src/xrc/xh_fontpicker.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_fontpicker.cpp
+
+xrcdll_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
 
 xrcdll_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
@@ -32541,6 +32553,9 @@ xrcdll_xh_listbk.o: $(srcdir)/src/xrc/xh_listbk.cpp $(XRCDLL_ODEP)
 
 xrcdll_xh_listc.o: $(srcdir)/src/xrc/xh_listc.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_listc.cpp
+
+xrcdll_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
 
 xrcdll_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_menu.cpp
@@ -32683,17 +32698,17 @@ xrclib_xh_dirpicker.o: $(srcdir)/src/xrc/xh_dirpicker.cpp $(XRCLIB_ODEP)
 xrclib_xh_dlg.o: $(srcdir)/src/xrc/xh_dlg.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_dlg.cpp
 
-xrclib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCLIB_ODEP)
-	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
-
-xrclib_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(XRCLIB_ODEP)
-	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
+xrclib_xh_editlbox.o: $(srcdir)/src/xrc/xh_editlbox.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_editlbox.cpp
 
 xrclib_xh_filepicker.o: $(srcdir)/src/xrc/xh_filepicker.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_filepicker.cpp
 
 xrclib_xh_fontpicker.o: $(srcdir)/src/xrc/xh_fontpicker.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_fontpicker.cpp
+
+xrclib_xh_frame.o: $(srcdir)/src/xrc/xh_frame.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_frame.cpp
 
 xrclib_xh_gauge.o: $(srcdir)/src/xrc/xh_gauge.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_gauge.cpp
@@ -32718,6 +32733,9 @@ xrclib_xh_listbk.o: $(srcdir)/src/xrc/xh_listbk.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_listc.o: $(srcdir)/src/xrc/xh_listc.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_listc.cpp
+
+xrclib_xh_mdi.o: $(srcdir)/src/xrc/xh_mdi.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_mdi.cpp
 
 xrclib_xh_menu.o: $(srcdir)/src/xrc/xh_menu.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_menu.cpp

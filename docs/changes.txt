@@ -336,6 +336,7 @@ All (GUI):
 
 - wxWindow::SetAutoLayout() now works for all windows, not just panels.
 - Support wxListCtrl columns, items and image lists in XRC (Kinaou Hervé).
+- Added wxEditableListBox XRC handler.
 - wxGrid: add possibility to prevent resizing of individual rows/columns.
 - wxHTML: add support for table borders width (Laurent Humbertclaude).
 - Added wxMouseEventsManager.
