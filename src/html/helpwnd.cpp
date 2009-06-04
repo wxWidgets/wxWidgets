@@ -364,7 +364,12 @@ bool wxHtmlHelpWindow::Create(wxWindow* parent, wxWindowID id,
     {
         // traditional help controller; splitter window with html page on the
         // right and a notebook containing various pages on the left
-        m_Splitter = new wxSplitterWindow(this);
+        long splitterStyle = wxSP_3D;
+        // Drawing moving sash can cause problems on wxMac
+#ifdef __WXMAC__
+        splitterStyle |= wxSP_LIVE_UPDATE;
+#endif
+        m_Splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, splitterStyle);
 
         topWindowSizer->Add(m_Splitter, 1, wxEXPAND);
 
