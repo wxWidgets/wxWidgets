@@ -122,6 +122,7 @@ wxMSW:
 
 - Fixed generation of wxEVT_CHAR_HOOK events.
 - Implement wxFileName::SetTimes() for directories (Steve Lamerton).
+- Correct wxTopLevelWindow::SetShape() for windows with menu bar (Peter Friis).
 - Backported speed-up of Vaclav Slavik's high quality print preview speed-up.
   You now need to set wxUSE_HIGH_QUALITY_PREVIEW_IN_WXMSW in
   src/common/prntbase.cpp and wxUSE_ENH_METAFILE_FROM_DC in

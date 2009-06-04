@@ -1001,7 +1001,7 @@ bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
     DWORD dwStyle =   ::GetWindowLong(GetHwnd(), GWL_STYLE);
     DWORD dwExStyle = ::GetWindowLong(GetHwnd(), GWL_EXSTYLE);
     ::GetClientRect(GetHwnd(), &rect);
-    ::AdjustWindowRectEx(&rect, dwStyle, FALSE, dwExStyle);
+    ::AdjustWindowRectEx(&rect, dwStyle, ::GetMenu(GetHwnd()) != NULL, dwExStyle);
     ::OffsetRgn(hrgn, -rect.left, -rect.top);
 
     // Now call the shape API with the new region.
