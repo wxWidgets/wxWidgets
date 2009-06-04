@@ -1494,7 +1494,7 @@ No additional properties.
 @row3col{label, @ref overview_xrcformat_type_text,
      Label to display (required).}
 @row3col{wrap, integer,
-     Number of characters per line to wrap the text for, see
+     Wrap the text so that each line is at most the given number of pixels, see
      wxStaticText::Wrap() (default: no wrap).}
 @endTable
 
