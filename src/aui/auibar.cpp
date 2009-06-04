@@ -849,6 +849,7 @@ wxAuiToolBar::wxAuiToolBar(wxWindow* parent,
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 }
 
 
@@ -2187,7 +2188,7 @@ void wxAuiToolBar::OnIdle(wxIdleEvent& evt)
 
 void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
-    wxBufferedPaintDC dc(this);
+    wxAutoBufferedPaintDC dc(this);
     wxRect cli_rect(wxPoint(0,0), GetClientSize());
 
 
