@@ -103,7 +103,10 @@ bool wxListBox::Create(
 
 wxListBox::~wxListBox()
 {
+    m_blockEvents = true;
     FreeData();
+    m_blockEvents = false;
+
     // make sure no native events get sent to a object in destruction
     delete m_peer;
     m_peer = NULL;
