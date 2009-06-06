@@ -34,6 +34,10 @@ public:
     /**
         Initializes the bundle with the icon(s) found in the stream.
 
+        Notice that the @a stream must be seekable, at least if it contains
+        more than one icon. The stream pointer is positioned after the last
+        icon read from the stream when this function returns.
+
         @since 2.9.0
     */
     wxIconBundle(wxInputStream& stream, wxBitmapType type = wxBITMAP_TYPE_ANY);
@@ -64,6 +68,10 @@ public:
         Adds all the icons contained in the stream to the bundle; if the
         collection already contains icons with the same width and height, they
         are replaced by the new ones.
+
+        Notice that, as well as in the constructor loading the icon bundle from
+        stream, the @a stream must be seekable, at least if more than one icon
+        is to be loaded from it.
 
         @since 2.9.0
     */
