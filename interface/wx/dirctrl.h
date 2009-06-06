@@ -25,6 +25,8 @@
            directory.
     @style{wxDIRCTRL_EDIT_LABELS}
            Allow the folder and file labels to be editable.
+    @style{wxDIRCTRL_MULTIPLE}
+           Allows multiple files and folders to be selected.
     @endStyleTable
 
     @library{wxbase}
@@ -119,6 +121,13 @@ public:
     virtual wxString GetFilePath() const;
 
     /**
+        Fills the array @a paths with the currently selected filepaths.
+
+        This function doesn't count a directory as a selection.
+    */
+    virtual void GetFilePaths(wxArrayString& paths) const;
+
+    /**
         Returns the filter string.
     */
     virtual wxString GetFilter() const;
@@ -137,6 +146,11 @@ public:
         Gets the currently-selected directory or filename.
     */
     virtual wxString GetPath() const;
+
+    /**
+        Fills the array @a paths with the selected directories and filenames.
+    */
+    virtual void GetPaths(wxArrayString& paths) const;
 
     /**
         Returns the root id for the tree control.
@@ -185,5 +199,27 @@ public:
             control. If @false, they will not be displayed.
     */
     virtual void ShowHidden(bool show);
+
+    /**
+        Selects the given item.
+
+        In multiple selection controls, can be also used to deselect a
+        currently selected item if the value of @a select is false.
+        Existing selections are not changed. Only visible items can be
+        (de)selected, otherwise use ExpandPath().
+    */
+    virtual void SelectPath(const wxString& path, bool select = true);
+
+    /**
+        Selects only the specified paths, clearing any previous selection.
+
+        Only supported when wxDIRCTRL_MULTIPLE is set.
+    */
+    virtual void SelectPaths(const wxArrayString& paths);
+
+    /**
+        Removes the selection from all currently selected items.
+    */
+    virtual void UnselectAll();
 };
 

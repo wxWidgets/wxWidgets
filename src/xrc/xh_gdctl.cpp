@@ -34,6 +34,7 @@ wxGenericDirCtrlXmlHandler::wxGenericDirCtrlXmlHandler()
     XRC_ADD_STYLE(wxDIRCTRL_3D_INTERNAL);
     XRC_ADD_STYLE(wxDIRCTRL_SELECT_FIRST);
     XRC_ADD_STYLE(wxDIRCTRL_EDIT_LABELS);
+    XRC_ADD_STYLE(wxDIRCTRL_MULTIPLE);
     AddWindowStyles();
 }
 
