@@ -28,14 +28,16 @@
 #ifdef __VISUALC__
     #pragma warning(disable:4100)
 #endif
+
 #include <cppunit/TestListener.h>
-#ifdef __VISUALC__
-    #pragma warning(default:4100)
-#endif
 #include <cppunit/Protector.h>
 #include <cppunit/Test.h>
 #include <cppunit/TestResult.h>
 #include <cppunit/TestFailure.h>
+
+#ifdef __VISUALC__
+    #pragma warning(default:4100)
+#endif
 #include "wx/afterstd.h"
 
 #include "wx/cmdline.h"
