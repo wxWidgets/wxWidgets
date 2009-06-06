@@ -1530,7 +1530,6 @@ public:
         return DoGetValue();
     }
 
-#ifndef SWIG
     /** Returns reference to the internal stored value. GetValue is preferred
         way to get the actual value, since GetValueRef ignores DoGetValue,
         which may override stored value.
@@ -1544,7 +1543,13 @@ public:
     {
         return m_value;
     }
-#endif
+
+    // Helper function (for wxPython bindings and such) for settings protected
+    // m_value.
+    wxVariant GetValuePlain() const
+    {
+        return m_value;
+    }
 
     /** Returns text representation of property's value.
 
@@ -1975,6 +1980,13 @@ public:
     {
         wxVariant val;  // Create NULL variant
         SetValue(val);
+    }
+
+    // Helper function (for wxPython bindings and such) for settings protected
+    // m_value.
+    void SetValuePlain( wxVariant value )
+    {
+        m_value = value;
     }
 
 #if wxUSE_VALIDATORS
