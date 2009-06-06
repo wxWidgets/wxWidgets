@@ -18,6 +18,8 @@
     #include "wx/wx.h"
 #endif
 
+#if wxUSE_STREAMS
+
 #ifdef __UNIX__
     #include <sys/socket.h>
 #endif
@@ -30,7 +32,11 @@
 #include "wx/sckstrm.h"
 #include "wx/mstream.h"
 
-#if wxUSE_STREAMS
+#ifdef __VISUALC__
+    #define isatty _isatty
+    #define fdopen _fdopen
+    #define fileno _fileno
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // The test case
