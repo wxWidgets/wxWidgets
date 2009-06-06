@@ -589,14 +589,24 @@ expdecl wxVariant& operator << ( wxVariant &variant, const classname &value )\
 } \
 expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
 { \
-    wxASSERT( variant.GetType() == #classname );\
-    classname##VariantData *data = (classname##VariantData*) variant.GetData();\
+    wxASSERT_MSG( variant.GetType() == wxS(#classname), \
+                  wxString::Format("Variant type should have been '%s'" \
+                                   "instead of '%s'", \
+                                   wxS(#classname), \
+                                   variant.GetType().c_str())); \
+    classname##VariantData *data = \
+        (classname##VariantData*) variant.GetData(); \
     return data->GetValue();\
 } \
 expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
 { \
-    wxASSERT( variant.GetType() == #classname );\
-    classname##VariantData *data = (classname##VariantData*) variant.GetData();\
+    wxASSERT_MSG( variant.GetType() == wxS(#classname), \
+                  wxString::Format("Variant type should have been '%s'" \
+                                   "instead of '%s'", \
+                                   wxS(#classname), \
+                                   variant.GetType().c_str())); \
+    classname##VariantData *data = \
+        (classname##VariantData*) variant.GetData(); \
     return data->GetValue();\
 }
 
