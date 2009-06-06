@@ -59,13 +59,15 @@ CppUnit::Test *tartest::makeTest(
         return NULL;
 
     if (genericInterface)
+    {
         return new ArchiveTestCase<wxArchiveClassFactory>(
                             descr, new wxTarClassFactory,
                             options, archiver, unarchiver);
-    else
-        return new ArchiveTestCase<wxTarClassFactory>(
-                            descr, new wxTarClassFactory,
-                            options, archiver, unarchiver);
+    }
+
+    return new ArchiveTestCase<wxTarClassFactory>(
+                        descr, new wxTarClassFactory,
+                        options, archiver, unarchiver);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(tartest);
