@@ -40,6 +40,10 @@
 #include <winioctl.h>
 #endif
 
+#ifdef __VISUALC__
+    #define fileno _fileno
+#endif
+
 using std::auto_ptr;
 
 
