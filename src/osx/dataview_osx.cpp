@@ -12,7 +12,6 @@
 
 #if (wxUSE_DATAVIEWCTRL != 0) && (!defined(wxUSE_GENERICDATAVIEWCTRL) || (wxUSE_GENERICDATAVIEWCTRL == 0))
 
-#include <carbon/carbon.h>
 #include <limits>
 
 #ifndef WX_PRECOMP
@@ -38,7 +37,7 @@ wxString ConcatenateDataViewItemValues(wxDataViewCtrl const* dataViewCtrlPtr, wx
   {
    // variable definition:
     wxVariant dataValue;
-    
+
     dataViewCtrlPtr->GetModel()->GetValue(dataValue,dataViewItem,dataViewCtrlPtr->GetColumn(i)->GetModelColumn());
     if (i > 0)
       dataString << wxT('\t');
@@ -239,7 +238,7 @@ void wxOSXDataViewModelNotifier::AdjustRowHeight(wxDataViewItem const& item)
       for (col = 0; col < num; col++)
       {
           wxDataViewColumn* column(this->m_DataViewCtrlPtr->GetColumnPtr(col));
-          
+
           if (!(column->IsHidden()))
           {
             wxDataViewCustomRenderer *renderer = dynamic_cast<wxDataViewCustomRenderer*>(column->GetRenderer());
@@ -274,7 +273,7 @@ void wxOSXDataViewModelNotifier::AdjustRowHeights(wxDataViewItemArray const& ite
         for (col = 0; col < num; col++)
         {
             wxDataViewColumn* column(this->m_DataViewCtrlPtr->GetColumnPtr(col));
-            
+
             if (!(column->IsHidden()))
             {
               wxDataViewCustomRenderer *renderer = dynamic_cast<wxDataViewCustomRenderer*>(column->GetRenderer());
@@ -680,14 +679,14 @@ wxSize wxDataViewCtrl::DoGetBestSize() const
 {
     wxSize best = wxControl::DoGetBestSize();
     best.y = 80;
-    
+
     return best;
 }
 
 void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
 {
     event.Skip();
-    
+
     if (GetModel() == NULL)
         return;
 
@@ -704,8 +703,8 @@ void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
 
     UInt16 headerHeight = 0;
     MacDataViewListCtrlPtr->GetHeaderButtonHeight(&headerHeight);
-  
-    
+
+
     if (event.GetY() < headerHeight)
     {
        unsigned int col_count = GetColumnCount();
@@ -715,12 +714,12 @@ void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
            wxDataViewColumn *column = GetColumn( col );
            if (column->IsHidden())
               continue;
-           
+
            Rect itemrect;
-           ::GetDataBrowserItemPartBounds( MacDataViewListCtrlPtr->GetControlRef(), 
+           ::GetDataBrowserItemPartBounds( MacDataViewListCtrlPtr->GetControlRef(),
               reinterpret_cast<DataBrowserItemID>(firstChild.GetID()), column->GetPropertyID(),
               kDataBrowserPropertyEnclosingPart, &itemrect );
-           
+
            if (abs( event.GetX() - itemrect.right) < 3)
            {
                if (column->GetFlags() & wxDATAVIEW_COL_RESIZABLE)
@@ -730,9 +729,9 @@ void wxDataViewCtrl::OnMouse(wxMouseEvent& event)
                return;
            }
        }
-       
+
     }
-    
+
     SetCursor( *wxSTANDARD_CURSOR );
 #endif
 }

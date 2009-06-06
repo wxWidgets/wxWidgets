@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/osx/cocoa/dataview.mm
 // Purpose:     wxDataView
-// Author:      
+// Author:
 // Modified by:
 // Created:     2009-01-31
 // RCS-ID:      $Id: dataview.mm$
-// Copyright:   
+// Copyright:
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -40,7 +40,7 @@
   NSTableColumn* tableColumn; // not owned by the class
 
   wxDataViewCustomRenderer* customRenderer; // not owned by the class
-  
+
   wxPointerObject* item; // not owned by the class
 }
 
@@ -83,8 +83,8 @@
 -(id) copyWithZone:(NSZone*)zone
 {
   wxCustomRendererObject* copy;
-  
-  
+
+
   copy = [[[self class] allocWithZone:zone] init];
   copy->customRenderer = customRenderer;
   copy->item           = item;
@@ -101,7 +101,7 @@
 static NSInteger CompareItems(id item1, id item2, void* context)
 {
   NSArray* const sortDescriptors = (NSArray*) context;
-  
+
   NSUInteger const noOfDescriptors = [sortDescriptors count];
 
   NSInteger result(NSOrderedAscending);
@@ -113,7 +113,7 @@ static NSInteger CompareItems(id item1, id item2, void* context)
     wxSortDescriptorObject* const sortDescriptor = (wxSortDescriptorObject*)[sortDescriptors objectAtIndex:i];
 
     int wxComparisonResult;
-    
+
     wxComparisonResult = [sortDescriptor modelPtr]->Compare(wxDataViewItem([((wxPointerObject*) item1) pointer]),
                                                             wxDataViewItem([((wxPointerObject*) item2) pointer]),
                                                             [sortDescriptor columnPtr]->GetModelColumn(),
@@ -210,7 +210,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 {
   self = [super init];
   if (self != nil)
-    self.pointer = NULL;
+    self->pointer = NULL;
   return self;
 }
 
@@ -218,7 +218,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 {
   self = [super init];
   if (self != nil)
-    self.pointer = initPointer;
+    self->pointer = initPointer;
   return self;
 }
 
@@ -282,8 +282,8 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 -(id) copyWithZone:(NSZone*)zone
 {
   wxSortDescriptorObject* copy;
-  
-  
+
+
   copy = [super copyWithZone:zone];
   copy->columnPtr = columnPtr;
   copy->modelPtr  = modelPtr;
@@ -346,7 +346,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 
   [children release];
   [items    release];
-  
+
   [super dealloc];
 }
 
@@ -363,7 +363,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 
   NSString* bestType([pasteboard availableTypeFromArray:supportedTypes]);
 
-  
+
   if (bestType != nil)
   {
     wxDataViewCtrl* const  dataViewCtrlPtr(implementation->GetDataViewCtrl());
@@ -380,7 +380,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
     {
       NSArray*   dataArray((NSArray*)[pasteboard propertyListForType:DataViewPboardType]);
       NSUInteger indexDraggedItem, noOfDraggedItems([dataArray count]);
-      
+
       indexDraggedItem = 0;
       while (indexDraggedItem < noOfDraggedItems)
       {
@@ -423,7 +423,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
       CFDataRef              osxData; // needed to convert internally used UTF-16 representation to a UTF-8 representation
       wxDataObjectComposite* dataObjects   (new wxDataObjectComposite());
       wxTextDataObject*      textDataObject(new wxTextDataObject());
-      
+
       osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,(CFStringRef)[pasteboard stringForType:NSStringPboardType],kCFStringEncodingUTF8,32);
       if (textDataObject->SetData(::CFDataGetLength(osxData),::CFDataGetBytePtr(osxData)))
         dataObjects->Add(textDataObject);
@@ -560,7 +560,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
   NSArray* newDescriptors;
 
   NSMutableArray* wxSortDescriptors;
-  
+
   NSUInteger noOfDescriptors;
 
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
@@ -613,7 +613,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 
   NSString* bestType([pasteboard availableTypeFromArray:supportedTypes]);
 
-  
+
   if (bestType != nil)
   {
     wxDataViewCtrl* const  dataViewCtrlPtr(implementation->GetDataViewCtrl());
@@ -630,7 +630,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
     {
       NSArray*               dataArray((NSArray*)[pasteboard propertyListForType:DataViewPboardType]);
       NSUInteger             indexDraggedItem, noOfDraggedItems([dataArray count]);
-      
+
       indexDraggedItem = 0;
       while (indexDraggedItem < noOfDraggedItems)
       {
@@ -673,7 +673,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
       CFDataRef              osxData; // needed to convert internally used UTF-16 representation to a UTF-8 representation
       wxDataObjectComposite* dataObjects   (new wxDataObjectComposite());
       wxTextDataObject*      textDataObject(new wxTextDataObject());
-      
+
       osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,(CFStringRef)[pasteboard stringForType:NSStringPboardType],kCFStringEncodingUTF8,32);
       if (textDataObject->SetData(::CFDataGetLength(osxData),::CFDataGetBytePtr(osxData)))
         dataObjects->Add(textDataObject);
@@ -707,7 +707,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
  // string representation exists
 {
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
-  
+
   wxDataViewItemArray dataViewItems;
 
 
@@ -752,7 +752,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
           size_t const dataBufferSize = sizeof(wxDataFormatId)+dataSize;
          // variable definitions (used in all case statements):
           wxMemoryBuffer dataBuffer(dataBufferSize);
-          
+
           dataBuffer.AppendData(&idDataFormat,sizeof(wxDataFormatId));
           switch (idDataFormat)
           {
@@ -806,7 +806,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
     if (dataStringAvailable)
     {
       wxCFStringRef osxString(dataString);
-      
+
       [pasteboard declareTypes:[NSArray arrayWithObjects:DataViewPboardType,NSStringPboardType,nil] owner:nil];
       [pasteboard setPropertyList:dataArray forType:DataViewPboardType];
       [pasteboard setString:osxString.AsNSString() forType:NSStringPboardType];
@@ -1064,8 +1064,8 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 -(id) copyWithZone:(NSZone*)zone
 {
   wxImageTextCell* cell;
-  
-  
+
+
   cell = (wxImageTextCell*) [super copyWithZone:zone];
   cell->image          = [image retain];
   cell->imageSize      = imageSize;
@@ -1234,7 +1234,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
    // to draw an image correctly the coordinate system has to be transformed to a bottom-top coordinate system, otherwise the image's
    // content is flipped:
     NSAffineTransform* coordinateTransform([NSAffineTransform transform]);
-    
+
     if ([controlView isFlipped])
     {
       [coordinateTransform scaleXBy: 1.0 yBy:-1.0]; // first the coordinate system is brought back to bottom-top orientation
@@ -1296,7 +1296,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
  // if the image was not hit let's try the text part:
   if (textFrame.size.width > [self cellTextSize].width) // for unknown reasons the alignment of the text cell is ignored; therefore change the size so that
     textFrame.size.width = [self cellTextSize].width;   // alignment does not influence the visualization anymore
-  return [super hitTestForEvent:event inRect:textFrame ofView:controlView];    
+  return [super hitTestForEvent:event inRect:textFrame ofView:controlView];
 }
 #endif
 
@@ -1320,7 +1320,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
   if (imageFrame.size.height > imageSize.height)
     imageFrame.size.height = imageSize.height;
   imageFrame.origin.y += ceil(0.5*(cellFrame.size.height-imageFrame.size.height));
-  
+
   return imageFrame;
 }
 
@@ -1407,7 +1407,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
  // has full control if a context menu should be shown or not
 {
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
-            
+
   wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU,dataViewCtrlPtr->GetId());
 
   wxDataViewItemArray selectedItems;
@@ -1433,7 +1433,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
   wxDataViewColumn* const dataViewColumnPtr(reinterpret_cast<wxDataViewColumn*>([[tableColumn identifier] pointer]));
 
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
-            
+
   wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK,dataViewCtrlPtr->GetId());
 
 
@@ -1452,13 +1452,13 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
    // remove the sort order from the previously sorted column table (it can also be that
    // no sorted column table exists):
     UInt32 const noOfColumns = [outlineView numberOfColumns];
-    
+
     for (UInt32 i=0; i<noOfColumns; ++i)
       [[[outlineView tableColumns] objectAtIndex:i] setSortDescriptorPrototype:nil];
    // make column table sortable:
     NSArray*          sortDescriptors;
     NSSortDescriptor* sortDescriptor;
-    
+
     sortDescriptor = [[NSSortDescriptor alloc] initWithKey:[NSString stringWithFormat:@"%d",[outlineView columnWithIdentifier:[tableColumn identifier]]]
                                                  ascending:YES];
     sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
@@ -1471,7 +1471,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldCollapseItem:(id)item
 {
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
-            
+
   wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,dataViewCtrlPtr->GetId()); // variable definition
 
 
@@ -1487,7 +1487,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 -(BOOL) outlineView:(NSOutlineView*)outlineView shouldExpandItem:(id)item
 {
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
-            
+
   wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING,dataViewCtrlPtr->GetId()); // variable definition
 
 
@@ -1526,7 +1526,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
   wxDataViewColumn* const dataViewColumnPtr(reinterpret_cast<wxDataViewColumn*>([[[[self tableColumns] objectAtIndex:newColumnPosition] identifier] pointer]));
 
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
-  
+
   wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_REORDERED,dataViewCtrlPtr->GetId());
 
 
@@ -1539,7 +1539,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 -(void) outlineViewItemDidCollapse:(NSNotification*)notification
 {
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
-            
+
   wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED,dataViewCtrlPtr->GetId());
 
 
@@ -1551,7 +1551,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
 -(void) outlineViewItemDidExpand:(NSNotification*)notification
 {
   wxDataViewCtrl* const dataViewCtrlPtr = implementation->GetDataViewCtrl();
-            
+
   wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED,dataViewCtrlPtr->GetId());
 
 
@@ -1644,7 +1644,7 @@ wxCocoaDataViewControl::wxCocoaDataViewControl(wxWindow* peer, wxPoint const& po
 {
  // initialize scrollview (the outline view is part of a scrollview):
   NSScrollView* scrollview = (NSScrollView*) this->GetWXWidget(); // definition for abbreviational purposes
-  
+
 
   [scrollview setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
   [scrollview setBorderType:NSNoBorder];
@@ -1866,10 +1866,10 @@ bool wxCocoaDataViewControl::AssociateModel(wxDataViewModel* model)
 int wxCocoaDataViewControl::GetSelections(wxDataViewItemArray& sel) const
 {
   NSIndexSet* selectedRowIndexes([this->m_OutlineView selectedRowIndexes]);
-  
+
   NSUInteger indexRow;
 
-  
+
   sel.Empty();
   sel.Alloc([selectedRowIndexes count]);
   indexRow = [selectedRowIndexes firstIndex];
@@ -1946,7 +1946,7 @@ void wxCocoaDataViewControl::HitTest(wxPoint const& point, wxDataViewItem& item,
   int indexColumn;
   int indexRow;
 
-  
+
   indexColumn = [this->m_OutlineView columnAtPoint:nativePoint];
   indexRow    = [this->m_OutlineView rowAtPoint:   nativePoint];
   if ((indexColumn >= 0) && (indexRow >= 0))
@@ -1988,7 +1988,7 @@ wxDataFormat wxCocoaDataViewControl::GetDnDDataFormat(wxDataObjectComposite* dat
     size_t       indexFormat;
 
     wxDataFormat* formats;
-    
+
    // get all formats and check afterwards if the formats are compatible; if they are compatible the preferred format is returned otherwise
    // wxDF_INVALID is returned;
    // currently compatible types (ordered by priority are):
@@ -2035,7 +2035,7 @@ wxDataObjectComposite* wxCocoaDataViewControl::GetDnDDataObjects(NSData* dataObj
 {
   wxDataFormatId dataFormatID;
 
-  
+
   [dataObject getBytes:&dataFormatID length:sizeof(wxDataFormatId)];
   switch (dataFormatID)
   {
@@ -2043,7 +2043,7 @@ wxDataObjectComposite* wxCocoaDataViewControl::GetDnDDataObjects(NSData* dataObj
     case wxDF_UNICODETEXT:
       {
         wxTextDataObject* textDataObject(new wxTextDataObject());
-        
+
         if (textDataObject->SetData(wxDataFormat(dataFormatID),[dataObject length]-sizeof(wxDataFormatId),reinterpret_cast<char const*>([dataObject bytes])+sizeof(wxDataFormatId)))
         {
           wxDataObjectComposite* dataObjectComposite(new wxDataObjectComposite());
@@ -2123,8 +2123,8 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(wxString const& varianttype, wxDa
                        :wxDataViewRenderer(varianttype,mode,align)
 {
   NSTextFieldCell* cell;
-  
-  
+
+
   cell = [[NSTextFieldCell alloc] init];
   [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
   [cell setLineBreakMode:NSLineBreakByTruncatingMiddle];
@@ -2155,8 +2155,8 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(wxString const& varianttype, 
                          :wxDataViewRenderer(varianttype,mode,align)
 {
   NSImageCell* cell;
-  
-  
+
+
   cell = [[NSImageCell alloc] init];
   this->SetNativeData(new wxDataViewRendererNativeData(cell));
   [cell release];
@@ -2187,8 +2187,8 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(wxArrayString const& choices,
                          :wxDataViewRenderer(wxT("string"),mode,alignment), m_Choices(choices)
 {
   NSPopUpButtonCell* cell;
-  
-  
+
+
   cell = [[NSPopUpButtonCell alloc] init];
   [cell setControlSize:NSMiniControlSize];
   [cell setFont:[[NSFont fontWithName:[[cell font] fontName] size:[NSFont systemFontSizeForControlSize:NSMiniControlSize]] autorelease]];
@@ -2224,7 +2224,7 @@ wxDataViewDateRenderer::wxDataViewDateRenderer(wxString const& varianttype, wxDa
 
   NSDateFormatter* dateFormatter;
 
-  
+
   dateFormatter = [[NSDateFormatter alloc] init];
   [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
   [dateFormatter setDateStyle:NSDateFormatterShortStyle];
@@ -2290,8 +2290,8 @@ wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(wxString const& variantty
                            :wxDataViewRenderer(varianttype,mode)
 {
   wxImageTextCell* cell;
-  
-  
+
+
   cell = [[wxImageTextCell alloc] init];
   [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
   this->SetNativeData(new wxDataViewRendererNativeData(cell));
@@ -2303,7 +2303,7 @@ bool wxDataViewIconTextRenderer::Render()
   if (this->GetValue().GetType() == this->GetVariantType())
   {
     wxDataViewIconText iconText;
-    
+
     wxImageTextCell* cell;
 
     cell = (wxImageTextCell*) this->GetNativeData()->GetItemCell();
@@ -2329,8 +2329,8 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer(wxString const& varianttype, 
                          :wxDataViewRenderer(varianttype,mode)
 {
   NSButtonCell* cell;
-  
-  
+
+
   cell = [[NSButtonCell alloc] init];
   [cell setAlignment:ConvertToNativeHorizontalTextAlignment(align)];
   [cell setButtonType:NSSwitchButton];
@@ -2362,8 +2362,8 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer(wxString const& label, wx
                            :wxDataViewRenderer(varianttype,mode,align)
 {
   NSLevelIndicatorCell* cell;
-  
-  
+
+
   cell = [[NSLevelIndicatorCell alloc] initWithLevelIndicatorStyle:NSContinuousCapacityLevelIndicatorStyle];
   [cell setMinValue:0];
   [cell setMaxValue:100];
@@ -2473,7 +2473,7 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
       NSArray*          sortDescriptors;
       NSSortDescriptor* sortDescriptor;
       NSTableColumn*    tableColumn;
-      
+
       tableColumn     = this->m_NativeDataPtr->GetNativeColumnPtr();
       sortDescriptor  = [[NSSortDescriptor alloc] initWithKey:[[tableColumn sortDescriptorPrototype] key] ascending:m_ascending];
       sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
