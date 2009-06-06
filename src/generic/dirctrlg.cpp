@@ -1179,12 +1179,7 @@ void wxGenericDirCtrl::SelectPath(const wxString& path, bool select)
 
     if ( done )
     {
-        if(select && m_treeCtrl->IsSelected(id))
-            return;
-        else
-        {
-            m_treeCtrl->SelectItem(id, select);
-        }
+        m_treeCtrl->SelectItem(id, select);
     }
 }
 
