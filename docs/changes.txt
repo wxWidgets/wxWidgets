@@ -354,6 +354,7 @@ MSW:
 - Allow changing the height of wxChoice and wxComboBox.
 - Update CRT environment block in wxSetEnv() too.
 - Fix wxMDIChildFrame::SetSize() (Lars Rosenboom).
+- Fix wxTreeCtrl::UnselectItem() in single selection controls.
 
 i18n:
 
