@@ -11,6 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../src/common/debugrpt.cpp:578
 msgid ""
@@ -847,7 +848,7 @@ msgstr "修正のための情報を次のディレクトリに生成しました
 
 #: ../src/common/debugrpt.cpp:565
 msgid "A debug report has been generated. It can be found in"
-msgstr "修正のための情報を次のディレクトリに生成しました。\n"
+msgstr "修正のための情報を次のディレクトリに生成しました。"
 
 #: ../src/common/xtixml.cpp:406
 msgid "A non empty collection must consist of 'element' nodes"
@@ -1033,7 +1034,7 @@ msgstr "*** 次のファイルを含んでいます：\n"
 #: ../src/generic/animateg.cpp:164
 #, c-format
 msgid "Animation file is not of type %ld."
-msgstr "イメージファイルは形式 %d ではありません。"
+msgstr "イメージファイルは形式 %ld ではありません。"
 
 #: ../src/generic/logg.cpp:1087
 #, c-format
