@@ -5,6 +5,12 @@
 #if (defined(__VISUALC__) && (__VISUALC__ >= 1300)) || \
     (defined(__GNUC__) && (__GNUC__ >= 3))
     #define wxHAVE_U_ESCAPE
+
+    // and disable warning that using them results in with MSVC 8+
+    #if wxCHECK_VISUALC_VERSION(8)
+        // universal-character-name encountered in source
+        #pragma warning(disable:4428)
+    #endif
 #endif
 
 // thrown when assert fails in debug build
