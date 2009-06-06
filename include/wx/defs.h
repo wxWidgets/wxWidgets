@@ -141,6 +141,9 @@
         #ifndef _CRT_NON_CONFORMING_SWPRINTFS
             #define _CRT_NON_CONFORMING_SWPRINTFS 1
         #endif
+        #ifndef _SCL_SECURE_NO_WARNINGS
+            #define _SCL_SECURE_NO_WARNINGS 1
+        #endif
     #endif /* VC++ 8 */
 #endif /*  __VISUALC__ */
 
