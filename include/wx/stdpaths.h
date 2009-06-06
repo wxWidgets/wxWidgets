@@ -17,6 +17,8 @@
 #include "wx/string.h"
 #include "wx/filefn.h"
 
+class WXDLLIMPEXP_FWD_BASE wxStandardPaths;
+
 // ----------------------------------------------------------------------------
 // wxStandardPaths returns the standard locations in the file system
 // ----------------------------------------------------------------------------
@@ -50,7 +52,7 @@ public:
 
 
     // return the global standard paths object
-    static wxStandardPathsBase& Get();
+    static wxStandardPaths& Get();
 
     // return the path (directory+filename) of the running executable or
     // wxEmptyString if it couldn't be determined.

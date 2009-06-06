@@ -43,7 +43,7 @@ static wxStandardPaths gs_stdPaths;
 // ============================================================================
 
 /* static */
-wxStandardPathsBase& wxStandardPathsBase::Get()
+wxStandardPaths& wxStandardPathsBase::Get()
 {
     wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
     wxCHECK_MSG( traits, gs_stdPaths, _T("create wxApp before calling this") );
@@ -72,7 +72,7 @@ wxString wxStandardPathsBase::GetExecutablePath() const
     return filename.GetFullPath();
 }
 
-wxStandardPathsBase& wxAppTraitsBase::GetStandardPaths()
+wxStandardPaths& wxAppTraitsBase::GetStandardPaths()
 {
     return gs_stdPaths;
 }

@@ -51,7 +51,7 @@ public:
     /**
         Returns reference to the unique global standard paths object.
     */
-    static wxStandardPathsBase& Get();
+    static wxStandardPaths& Get();
 
     /**
         Return the directory for the document files used by this application.
