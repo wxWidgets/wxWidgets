@@ -594,9 +594,9 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     dc.SetFont(m_caption_font);
 
     DrawCaptionBackground(dc, rect,
-                          (pane.state & wxAuiPaneInfo::optionActive)?true:false);
+                          (pane.HasFlag(wxAuiPaneInfo::optionActive))?false:true);
 
-    if (pane.state & wxAuiPaneInfo::optionActive)
+    if (!pane.HasFlag(wxAuiPaneInfo::optionActive))
         dc.SetTextForeground(m_active_caption_text_colour);
     else
         dc.SetTextForeground(m_inactive_caption_text_colour);
@@ -686,13 +686,13 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
     {
         default:
         case wxAUI_BUTTON_CLOSE:
-            if (pane.state & wxAuiPaneInfo::optionActive)
+            if (!pane.HasFlag(wxAuiPaneInfo::optionActive))
                 bmp = m_active_close_bitmap;
             else
                 bmp = m_inactive_close_bitmap;
             break;
         case wxAUI_BUTTON_PIN:
-            if (pane.state & wxAuiPaneInfo::optionActive)
+            if (!pane.HasFlag(wxAuiPaneInfo::optionActive))
                 bmp = m_active_pin_bitmap;
             else
                 bmp = m_inactive_pin_bitmap;
@@ -700,14 +700,14 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
         case wxAUI_BUTTON_MAXIMIZE_RESTORE:
             if (pane.IsMaximized())
             {
-                if (pane.state & wxAuiPaneInfo::optionActive)
+                if (!pane.HasFlag(wxAuiPaneInfo::optionActive))
                     bmp = m_active_restore_bitmap;
                 else
                     bmp = m_inactive_restore_bitmap;
             }
             else
             {
-                if (pane.state & wxAuiPaneInfo::optionActive)
+                if (!pane.HasFlag(wxAuiPaneInfo::optionActive))
                     bmp = m_active_maximize_bitmap;
                 else
                     bmp = m_inactive_maximize_bitmap;
@@ -732,7 +732,7 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
     if (button_state == wxAUI_BUTTON_STATE_HOVER ||
         button_state == wxAUI_BUTTON_STATE_PRESSED)
     {
-        if (pane.state & wxAuiPaneInfo::optionActive)
+        if (!pane.HasFlag(wxAuiPaneInfo::optionActive))
         {
             dc.SetBrush(wxBrush(wxAuiStepColour(m_active_caption_colour, 120)));
             dc.SetPen(wxPen(wxAuiStepColour(m_active_caption_colour, 70)));

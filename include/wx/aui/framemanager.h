@@ -148,21 +148,43 @@ class WXDLLIMPEXP_AUI wxAuiPaneInfo
 public:
 
     wxAuiPaneInfo()
+    :
+    #if WXWIN_COMPATIBILITY_2_8
+      name(m_name)
+    , caption(m_caption)
+    , window(m_window)
+    , frame(m_frame)
+    , state(m_state)
+    , dock_direction(m_dock_direction)
+    , dock_layer(m_dock_layer)
+    , dock_row(m_dock_row)
+    , dock_pos(m_dock_pos)
+    , best_size(m_best_size)
+    , min_size(m_min_size)
+    , max_size(m_max_size)
+    , floating_pos(m_floating_pos)
+    , floating_size(m_floating_size)
+    , dock_proportion(m_dock_proportion)
+    , buttons(m_buttons)
+    , rect(m_rect)
+#else // !WXWIN_COMPATIBILITY_2_8
+#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
+    , m_name(wxT(""))
+    , m_caption(wxT(""))
+    , m_window(NULL)
+    , m_frame(NULL)
+    , m_state(0)
+    , m_dock_direction(wxAUI_DOCK_LEFT)
+    , m_dock_layer(0)
+    , m_dock_row(0)
+    , m_dock_pos(0)
+    , m_best_size(wxDefaultSize)
+    , m_min_size(wxDefaultSize)
+    , m_max_size(wxDefaultSize)
+    , m_floating_pos(wxDefaultPosition)
+    , m_floating_size(wxDefaultSize)
+    , m_dock_proportion(0)
     {
-        window = NULL;
-        frame = NULL;
-        state = 0;
-        dock_direction = wxAUI_DOCK_LEFT;
-        dock_layer = 0;
-        dock_row = 0;
-        dock_pos = 0;
-        floating_pos = wxDefaultPosition;
-        floating_size = wxDefaultSize;
-        best_size = wxDefaultSize;
-        min_size = wxDefaultSize;
-        max_size = wxDefaultSize;
-        dock_proportion = 0;
-
         SetDefaultPane();
     }
 
@@ -170,45 +192,65 @@ public:
 
 #ifndef SWIG
     wxAuiPaneInfo(const wxAuiPaneInfo& c)
+    #if WXWIN_COMPATIBILITY_2_8
+    : name(m_name)
+    , caption(m_caption)
+    , window(m_window)
+    , frame(m_frame)
+    , state(m_state)
+    , dock_direction(m_dock_direction)
+    , dock_layer(m_dock_layer)
+    , dock_row(m_dock_row)
+    , dock_pos(m_dock_pos)
+    , best_size(m_best_size)
+    , min_size(m_min_size)
+    , max_size(m_max_size)
+    , floating_pos(m_floating_pos)
+    , floating_size(m_floating_size)
+    , dock_proportion(m_dock_proportion)
+    , buttons(m_buttons)
+    , rect(m_rect)
+#else // !WXWIN_COMPATIBILITY_2_8
+#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
     {
-        name = c.name;
-        caption = c.caption;
-        window = c.window;
-        frame = c.frame;
-        state = c.state;
-        dock_direction = c.dock_direction;
-        dock_layer = c.dock_layer;
-        dock_row = c.dock_row;
-        dock_pos = c.dock_pos;
-        best_size = c.best_size;
-        min_size = c.min_size;
-        max_size = c.max_size;
-        floating_pos = c.floating_pos;
-        floating_size = c.floating_size;
-        dock_proportion = c.dock_proportion;
-        buttons = c.buttons;
-        rect = c.rect;
+        m_name = c.m_name;
+        m_caption = c.m_caption;
+        m_window = c.m_window;
+        m_frame = c.m_frame;
+        m_state = c.m_state;
+        m_dock_direction = c.m_dock_direction;
+        m_dock_layer = c.m_dock_layer;
+        m_dock_row = c.m_dock_row;
+        m_dock_pos = c.m_dock_pos;
+        m_best_size = c.m_best_size;
+        m_min_size = c.m_min_size;
+        m_max_size = c.m_max_size;
+        m_floating_pos = c.m_floating_pos;
+        m_floating_size = c.m_floating_size;
+        m_dock_proportion = c.m_dock_proportion;
+        m_buttons = c.m_buttons;
+        m_rect = c.m_rect;
     }
 
     wxAuiPaneInfo& operator=(const wxAuiPaneInfo& c)
     {
-        name = c.name;
-        caption = c.caption;
-        window = c.window;
-        frame = c.frame;
-        state = c.state;
-        dock_direction = c.dock_direction;
-        dock_layer = c.dock_layer;
-        dock_row = c.dock_row;
-        dock_pos = c.dock_pos;
-        best_size = c.best_size;
-        min_size = c.min_size;
-        max_size = c.max_size;
-        floating_pos = c.floating_pos;
-        floating_size = c.floating_size;
-        dock_proportion = c.dock_proportion;
-        buttons = c.buttons;
-        rect = c.rect;
+        m_name = c.m_name;
+        m_caption = c.m_caption;
+        m_window = c.m_window;
+        m_frame = c.m_frame;
+        m_state = c.m_state;
+        m_dock_direction = c.m_dock_direction;
+        m_dock_layer = c.m_dock_layer;
+        m_dock_row = c.m_dock_row;
+        m_dock_pos = c.m_dock_pos;
+        m_best_size = c.m_best_size;
+        m_min_size = c.m_min_size;
+        m_max_size = c.m_max_size;
+        m_floating_pos = c.m_floating_pos;
+        m_floating_size = c.m_floating_size;
+        m_dock_proportion = c.m_dock_proportion;
+        m_buttons = c.m_buttons;
+        m_rect = c.m_rect;
         return *this;
     }
 #else // SWIG
@@ -216,80 +258,87 @@ public:
 #endif // !SWIG
 
 #if WXWIN_COMPATIBILITY_2_8
-    wxDEPRECATED( wxAuiPaneInfo& Window(wxWindow* w) { window = w; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Name(const wxString& n) { name = n; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Caption(const wxString& c) { caption = c; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Left() { dock_direction = wxAUI_DOCK_LEFT; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Right() { dock_direction = wxAUI_DOCK_RIGHT; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Top() { dock_direction = wxAUI_DOCK_TOP; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Bottom() { dock_direction = wxAUI_DOCK_BOTTOM; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Center() { dock_direction = wxAUI_DOCK_CENTER; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Centre() { dock_direction = wxAUI_DOCK_CENTRE; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Direction(int direction) { dock_direction = direction; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Layer(int layer) { dock_layer = layer; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Row(int row) { dock_row = row; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Position(int pos) { dock_pos = pos; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& BestSize(const wxSize& size) { best_size = size; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& MinSize(const wxSize& size) { min_size = size; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& MaxSize(const wxSize& size) { max_size = size; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& BestSize(int x, int y) { best_size.Set(x,y); return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& MinSize(int x, int y) { min_size.Set(x,y); return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& MaxSize(int x, int y) { max_size.Set(x,y); return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& FloatingPosition(const wxPoint& pos) { floating_pos = pos; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& FloatingPosition(int x, int y) { floating_pos.x = x; floating_pos.y = y; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& FloatingSize(const wxSize& size) { floating_size = size; return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& FloatingSize(int x, int y) { floating_size.Set(x,y); return *this; } );
-    wxDEPRECATED( wxAuiPaneInfo& Fixed() { return SetFlag(optionResizable, false); } );
-    wxDEPRECATED( wxAuiPaneInfo& Resizable(bool resizable = true) { return SetFlag(optionResizable, resizable); } );
-    wxDEPRECATED( wxAuiPaneInfo& CaptionVisible(bool visible = true) { return SetFlag(optionCaption, visible); } );
-    wxDEPRECATED( wxAuiPaneInfo& PaneBorder(bool visible = true) { return SetFlag(optionPaneBorder, visible); } );
-    wxDEPRECATED( wxAuiPaneInfo& Gripper(bool visible = true) { return SetFlag(optionGripper, visible); } );
-    wxDEPRECATED( wxAuiPaneInfo& GripperTop(bool attop = true) { return SetFlag(optionGripperTop, attop); } );
-    wxDEPRECATED( wxAuiPaneInfo& CloseButton(bool visible = true) { return SetFlag(buttonClose, visible); } );
-    wxDEPRECATED( wxAuiPaneInfo& MaximizeButton(bool visible = true) { return SetFlag(buttonMaximize, visible); } );
-    wxDEPRECATED( wxAuiPaneInfo& MinimizeButton(bool visible = true) { return SetFlag(buttonMinimize, visible); } );
-    wxDEPRECATED( wxAuiPaneInfo& PinButton(bool visible = true) { return SetFlag(buttonPin, visible); } );
-    wxDEPRECATED( wxAuiPaneInfo& DestroyOnClose(bool b = true) { return SetFlag(optionDestroyOnClose, b); } );
-    wxDEPRECATED( wxAuiPaneInfo& TopDockable(bool b = true) { return SetFlag(optionTopDockable, b); } );
-    wxDEPRECATED( wxAuiPaneInfo& BottomDockable(bool b = true) { return SetFlag(optionBottomDockable, b); } );
-    wxDEPRECATED( wxAuiPaneInfo& LeftDockable(bool b = true) { return SetFlag(optionLeftDockable, b); } );
-    wxDEPRECATED( wxAuiPaneInfo& RightDockable(bool b = true) { return SetFlag(optionRightDockable, b); } );
-    wxDEPRECATED( wxAuiPaneInfo& Floatable(bool b = true) { return SetFlag(optionFloatable, b); } );
-    wxDEPRECATED( wxAuiPaneInfo& Movable(bool b = true) { return SetFlag(optionMovable, b); } );
-    wxDEPRECATED( wxAuiPaneInfo& DockFixed(bool b = true) { return SetFlag(optionDockFixed, b); } );
-    wxDEPRECATED( wxAuiPaneInfo& Dockable(bool b = true) { return SetTopDockable(b).SetBottomDockable(b).SetLeftDockable(b).SetRightDockable(b); } );
-    wxDEPRECATED( wxAuiPaneInfo& CentrePane() { return SetCenterPane(); } );
-    wxDEPRECATED( wxAuiPaneInfo& CenterPane()
-    {
-        state = 0;
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Window(wxWindow* w) , m_window = w; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Name(const wxString& n) , m_name = n; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Caption(const wxString& c) , m_caption = c; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Left() , m_dock_direction = wxAUI_DOCK_LEFT; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Right() , m_dock_direction = wxAUI_DOCK_RIGHT; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Top() , m_dock_direction = wxAUI_DOCK_TOP; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Bottom() , m_dock_direction = wxAUI_DOCK_BOTTOM; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Center() , m_dock_direction = wxAUI_DOCK_CENTER; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Centre() , m_dock_direction = wxAUI_DOCK_CENTRE; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Direction(int direction) , m_dock_direction = direction; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Layer(int layer) , m_dock_layer = layer; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Row(int row) , m_dock_row = row; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Position(int pos) , m_dock_pos = pos; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& BestSize(const wxSize& size) , m_best_size = size; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& MinSize(const wxSize& size) , m_min_size = size; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& MaxSize(const wxSize& size) , m_max_size = size; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& BestSize(int x, int y) , m_best_size.Set(x,y); return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& MinSize(int x, int y) , m_min_size.Set(x,y); return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& MaxSize(int x, int y) , m_max_size.Set(x,y); return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& FloatingPosition(const wxPoint& pos) , m_floating_pos = pos; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& FloatingPosition(int x, int y) , m_floating_pos.x = x; m_floating_pos.y = y; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& FloatingSize(const wxSize& size) , m_floating_size = size; return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& FloatingSize(int x, int y) , m_floating_size.Set(x,y); return *this; );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Fixed() , return SetFlag(optionResizable, false); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Resizable(bool resizable = true) , return SetFlag(optionResizable, resizable); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& CaptionVisible(bool visible = true) , return SetFlag(optionCaption, visible); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& PaneBorder(bool visible = true) , return SetFlag(optionPaneBorder, visible); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Gripper(bool visible = true) , return SetFlag(optionGripper, visible); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& GripperTop(bool attop = true) , return SetFlag(optionGripperTop, attop); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& CloseButton(bool visible = true) , return SetFlag(buttonClose, visible); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& MaximizeButton(bool visible = true) , return SetFlag(buttonMaximize, visible); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& MinimizeButton(bool visible = true) , return SetFlag(buttonMinimize, visible); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& PinButton(bool visible = true) , return SetFlag(buttonPin, visible); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& DestroyOnClose(bool b = true) , return SetFlag(optionDestroyOnClose, b); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& TopDockable(bool b = true) , return SetFlag(optionTopDockable, b); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& BottomDockable(bool b = true) , return SetFlag(optionBottomDockable, b); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& LeftDockable(bool b = true) , return SetFlag(optionLeftDockable, b); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& RightDockable(bool b = true) , return SetFlag(optionRightDockable, b); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Floatable(bool b = true) , return SetFlag(optionFloatable, b); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Movable(bool b = true) , return SetFlag(optionMovable, b); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& DockFixed(bool b = true) , return SetFlag(optionDockFixed, b); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& Dockable(bool b = true) , return SetTopDockable(b).SetBottomDockable(b).SetLeftDockable(b).SetRightDockable(b); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& CentrePane() , return SetCenterPane(); );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& CenterPane() ,
+        m_state = 0;
         return SetDirectionCenter().SetBorder().SetResizable();
-    } );
-    wxDEPRECATED( wxAuiPaneInfo& DefaultPane()
-    {
-        state |= optionTopDockable | optionBottomDockable |
+    );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& DefaultPane() ,
+        m_state |= optionTopDockable | optionBottomDockable |
                  optionLeftDockable | optionRightDockable |
                  optionFloatable | optionMovable | optionResizable |
                  optionCaption | optionPaneBorder | buttonClose;
         return *this;
-    } );
-    wxDEPRECATED( wxAuiPaneInfo& ToolbarPane()
-    {
+    );
+    wxDEPRECATED_INLINE( wxAuiPaneInfo& ToolbarPane() ,
         SetDefaultPane();
-        state |= (optionToolbar | optionGripper);
-        state &= ~(optionResizable | optionCaption);
-        if (dock_layer == 0)
-            dock_layer = 10;
+        m_state |= (optionToolbar | optionGripper);
+        m_state &= ~(optionResizable | optionCaption);
+        if (m_dock_layer == 0)
+            m_dock_layer = 10;
         return *this;
-    } );
+    );
 #else // !WXWIN_COMPATIBILITY_2_8
 #endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
+    // return a string serializing the state of this pane.
+    wxString GetInfo() const;
+    // load the pane state from a serialized string.
+    void LoadInfo(wxString& info);
+
     // returns true if the pane contains a toolbar.
     bool IsToolbar() const { return HasFlag(optionToolbar); }
 
     // returns true if the wxAuiPaneInfo structure is valid. A pane structure is valid if it has an associated window.
-    bool IsOk() const { return window != NULL; }
-    // associate a window with this pane
-    wxAuiPaneInfo& SetWindow(wxWindow* w) { window = w; return *this; }
+    bool IsOk() const { return m_window != NULL; }
+    // get/set the window associated with this pane
+    wxWindow* GetWindow() const { return m_window; }
+    wxAuiPaneInfo& SetWindow(wxWindow* w) { m_window = w; return *this; }
+
+    // get/set the floating frame window that holds the pane
+    wxFrame* GetFrame() const { return m_frame; }
+    wxAuiPaneInfo& SetFrame(wxFrame* frame) { m_frame = frame; return *this; }
 
     // get/set if the pane is resizable.
     // opposite of Is/SetFixed.
@@ -381,95 +430,106 @@ public:
     wxAuiPaneInfo& SetPinButton(bool visible = true) { return SetFlag(buttonPin, visible); }
 
     // get/set the name of the pane.
-    wxAuiPaneInfo& SetName(const wxString& n) { name = n; return *this; }
-    wxString GetName() { return name; }
+    wxString GetName() const { return m_name; }
+    wxAuiPaneInfo& SetName(const wxString& n) { m_name = n; return *this; }
 
     // get/set the caption of the pane.
-    wxAuiPaneInfo& SetCaption(const wxString& c) { caption = c; return *this; }
-    wxString GetCaption() { return caption; }
+    wxString GetCaption() const { return m_caption; }
+    wxAuiPaneInfo& SetCaption(const wxString& c) { m_caption = c; return *this; }
 
     // get/set the pane dock position.
-    wxAuiPaneInfo& SetDirection(int direction) { dock_direction = direction; return *this; }
-    int GetDirection() { return dock_direction; }
+    int GetDirection() const { return m_dock_direction; }
+    wxAuiPaneInfo& SetDirection(int direction) { m_dock_direction = direction; return *this; }
     // Convenience functions to the above
-    wxAuiPaneInfo& SetDirectionLeft() { dock_direction = wxAUI_DOCK_LEFT; return *this; }
-    wxAuiPaneInfo& SetDirectionRight() { dock_direction = wxAUI_DOCK_RIGHT; return *this; }
-    wxAuiPaneInfo& SetDirectionTop() { dock_direction = wxAUI_DOCK_TOP; return *this; }
-    wxAuiPaneInfo& SetDirectionBottom() { dock_direction = wxAUI_DOCK_BOTTOM; return *this; }
-    wxAuiPaneInfo& SetDirectionCenter() { dock_direction = wxAUI_DOCK_CENTER; return *this; }
-    wxAuiPaneInfo& SetDirectionCentre() { dock_direction = wxAUI_DOCK_CENTRE; return *this; }
+    wxAuiPaneInfo& SetDirectionLeft() { m_dock_direction = wxAUI_DOCK_LEFT; return *this; }
+    wxAuiPaneInfo& SetDirectionRight() { m_dock_direction = wxAUI_DOCK_RIGHT; return *this; }
+    wxAuiPaneInfo& SetDirectionTop() { m_dock_direction = wxAUI_DOCK_TOP; return *this; }
+    wxAuiPaneInfo& SetDirectionBottom() { m_dock_direction = wxAUI_DOCK_BOTTOM; return *this; }
+    wxAuiPaneInfo& SetDirectionCenter() { m_dock_direction = wxAUI_DOCK_CENTER; return *this; }
+    wxAuiPaneInfo& SetDirectionCentre() { m_dock_direction = wxAUI_DOCK_CENTRE; return *this; }
 
     // get/set the layer of the pane when docked.
     // The dock layer is similar to an onion, the inner-most layer being layer 0.
     // Each shell moving in the outward direction has a higher layer number.
     // This allows for more complex docking layout formation.
-    wxAuiPaneInfo& SetLayer(int layer) { dock_layer = layer; return *this; }
-    int GetLayer() { return dock_layer; }
+    int GetLayer() const { return m_dock_layer; }
+    wxAuiPaneInfo& SetLayer(int layer) { m_dock_layer = layer; return *this; }
 
     // get/set the row of the pane when docked.
-    wxAuiPaneInfo& SetRow(int row) { dock_row = row; return *this; }
-    int GetRow() { return dock_row; }
+    int GetRow() const { return m_dock_row; }
+    wxAuiPaneInfo& SetRow(int row) { m_dock_row = row; return *this; }
 
     // get/set the position of the pane when docked.
-    wxAuiPaneInfo& SetPosition(int pos) { dock_pos = pos; return *this; }
-    int GetPosition() { return dock_pos; }
+    int GetPosition() const { return m_dock_pos; }
+    wxAuiPaneInfo& SetPosition(int pos) { m_dock_pos = pos; return *this; }
+
+    // get/set the proportion of the pane.
+    int GetProportion() const { return m_dock_proportion; }
+    wxAuiPaneInfo& SetProportion(int proportion) { m_dock_proportion = proportion; return *this; }
 
     // get/set the position of the pane when floating.
-    wxAuiPaneInfo& SetFloatingPosition(int x, int y) { floating_pos.x = x; floating_pos.y = y; return *this; }
-    wxAuiPaneInfo& SetFloatingPosition(const wxPoint& pos) { floating_pos = pos; return *this; }
-    wxPoint GetFloatingPosition() { return floating_pos; }
+    wxPoint GetFloatingPosition() const { return m_floating_pos; }
+    wxAuiPaneInfo& SetFloatingPosition(int x, int y) { m_floating_pos.x = x; m_floating_pos.y = y; return *this; }
+    wxAuiPaneInfo& SetFloatingPosition(const wxPoint& pos) { m_floating_pos = pos; return *this; }
 
     // get/set the size of the pane when floating.
-    wxAuiPaneInfo& SetFloatingSize(int x, int y) { floating_size.Set(x,y); return *this; }
-    wxAuiPaneInfo& SetFloatingSize(const wxSize& size) { floating_size = size; return *this; }
-    wxSize GetFloatingSize() { return floating_size; }
+    wxSize GetFloatingSize() const { return m_floating_size; }
+    wxAuiPaneInfo& SetFloatingSize(int x, int y) { m_floating_size.Set(x,y); return *this; }
+    wxAuiPaneInfo& SetFloatingSize(const wxSize& size) { m_floating_size = size; return *this; }
 
     // get/set the ideal size of the pane.
-    wxAuiPaneInfo& SetBestSize(int x, int y) { best_size.Set(x,y); return *this; }
-    wxAuiPaneInfo& SetBestSize(const wxSize& size) { best_size = size; return *this; }
-    wxSize GetBestSize() { return best_size; }
+    wxSize GetBestSize() const { return m_best_size; }
+    wxAuiPaneInfo& SetBestSize(int x, int y) { m_best_size.Set(x,y); return *this; }
+    wxAuiPaneInfo& SetBestSize(const wxSize& size) { m_best_size = size; return *this; }
 
     // get/set the minimum size of the pane.
-    wxAuiPaneInfo& SetMinSize(int x, int y) { min_size.Set(x,y); return *this; }
-    wxAuiPaneInfo& SetMinSize(const wxSize& size) { min_size = size; return *this; }
-    wxSize GetMinSize() { return min_size; }
+    wxSize GetMinSize() const { return m_min_size; }
+    wxAuiPaneInfo& SetMinSize(int x, int y) { m_min_size.Set(x,y); return *this; }
+    wxAuiPaneInfo& SetMinSize(const wxSize& size) { m_min_size = size; return *this; }
 
     // get/set the maximum size of the pane.
-    wxAuiPaneInfo& SetMaxSize(int x, int y) { max_size.Set(x,y); return *this; }
-    wxAuiPaneInfo& SetMaxSize(const wxSize& size) { max_size = size; return *this; }
-    wxSize GetMaxSize() { return max_size; };
+    wxSize GetMaxSize() const { return m_max_size; };
+    wxAuiPaneInfo& SetMaxSize(int x, int y) { m_max_size.Set(x,y); return *this; }
+    wxAuiPaneInfo& SetMaxSize(const wxSize& size) { m_max_size = size; return *this; }
+
+    // get/set the current rectangle (populated by wxAUI).
+    wxRect GetRect() const { return m_rect; };
+    wxAuiPaneInfo& SetRect(const wxRect& rect) { m_rect = rect; return *this; }
+
+    // get the array of buttons that are present on the pane.
+    wxAuiPaneButtonArray& GetButtons() { return m_buttons; }
 
     // get/set whether the containing dock can have a resize sash.
     // when DockFixed is true no sash will be available.
+    bool IsDockFixed() const { return HasFlag(optionDockFixed); }
     wxAuiPaneInfo& SetDockFixed(bool b = true) { return SetFlag(optionDockFixed, b); }
-    bool IsDockFixed() { return HasFlag(optionDockFixed); }
 
     // get/set a property flag for this pane, used internally by other get/set functions.
+    bool HasFlag(int flag) const
+    {
+        return (m_state & flag) != 0;
+    }
     wxAuiPaneInfo& SetFlag(int flag, bool option_state)
     {
         if (option_state)
-            state |= flag;
+            m_state |= flag;
         else
-            state &= ~flag;
+            m_state &= ~flag;
         return *this;
-    }
-    bool HasFlag(int flag) const
-    {
-        return (state & flag) != 0;
     }
 
     // adopt the default center pane settings for this pane.
     wxAuiPaneInfo& SetCentrePane() { return SetCenterPane(); }
     wxAuiPaneInfo& SetCenterPane()
     {
-        state = 0;
+        m_state = 0;
         return SetDirectionCenter().SetBorder().SetResizable();
     }
 
     // adopt the default pane settings for this pane.
     wxAuiPaneInfo& SetDefaultPane()
     {
-        state |= optionTopDockable | optionBottomDockable |
+        m_state |= optionTopDockable | optionBottomDockable |
                  optionLeftDockable | optionRightDockable |
                  optionFloatable | optionMovable | optionResizable |
                  optionCaption | optionPaneBorder | buttonClose;
@@ -480,10 +540,10 @@ public:
     wxAuiPaneInfo& SetToolbarPane()
     {
         SetDefaultPane();
-        state |= (optionToolbar | optionGripper);
-        state &= ~(optionResizable | optionCaption);
-        if (dock_layer == 0)
-            dock_layer = 10;
+        m_state |= (optionToolbar | optionGripper);
+        m_state &= ~(optionResizable | optionCaption);
+        if (m_dock_layer == 0)
+            m_dock_layer = 10;
         return *this;
     }
 
@@ -497,9 +557,9 @@ public:
     {
         // note source is not passed by reference so we can overwrite, to keep the
         // unsafe bits of "dest"
-        source.window = window;
-        source.frame = frame;
-        source.buttons = buttons;
+        source.m_window = m_window;
+        source.m_frame = m_frame;
+        source.m_buttons = m_buttons;
         // now assign
         *this = source;
     }
@@ -547,29 +607,48 @@ public:
     };
 
 public:
-    wxString name;        // name of the pane
-    wxString caption;     // caption displayed on the window
+#if WXWIN_COMPATIBILITY_2_8
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxString& name; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxString& caption; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxWindow*& window; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxFrame*& frame; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( unsigned int& state; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( int& dock_direction; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( int& dock_layer; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( int& dock_row; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( int& dock_pos; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxSize& best_size; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxSize& min_size; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxSize& max_size; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxPoint& floating_pos; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxSize& floating_size; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( int& dock_proportion; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxAuiPaneButtonArray& buttons; )
+    wxDEPRECATED_BUT_USED_INTERNALLY( wxRect& rect; )
+#else // !WXWIN_COMPATIBILITY_2_8
+#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
+private:
+    wxString m_name;        // name of the pane
+    wxString m_caption;     // caption displayed on the window
 
-    wxWindow* window;     // window that is in this pane
-    wxFrame* frame;       // floating frame window that holds the pane
-    unsigned int state;   // a combination of wxPaneState values
+    wxWindow* m_window;     // window that is in this pane
+    wxFrame* m_frame;       // floating frame window that holds the pane
+    unsigned int m_state;   // a combination of wxPaneState values
 
-    int dock_direction;   // dock direction (top, bottom, left, right, center)
-    int dock_layer;       // layer number (0 = innermost layer)
-    int dock_row;         // row number on the docking bar (0 = first row)
-    int dock_pos;         // position inside the row (0 = first position)
+    int m_dock_direction;   // dock direction (top, bottom, left, right, center)
+    int m_dock_layer;       // layer number (0 = innermost layer)
+    int m_dock_row;         // row number on the docking bar (0 = first row)
+    int m_dock_pos;         // position inside the row (0 = first position)
 
-    wxSize best_size;     // size that the layout engine will prefer
-    wxSize min_size;      // minimum size the pane window can tolerate
-    wxSize max_size;      // maximum size the pane window can tolerate
+    wxSize m_best_size;     // size that the layout engine will prefer
+    wxSize m_min_size;      // minimum size the pane window can tolerate
+    wxSize m_max_size;      // maximum size the pane window can tolerate
 
-    wxPoint floating_pos; // position while floating
-    wxSize floating_size; // size while floating
-    int dock_proportion;  // proportion while docked
-
-    wxAuiPaneButtonArray buttons; // buttons on the pane
-
-    wxRect rect;              // current rectangle (populated by wxAUI)
+    wxPoint m_floating_pos; // position while floating
+    wxSize m_floating_size; // size while floating
+    int m_dock_proportion;  // proportion while docked
+    wxAuiPaneButtonArray m_buttons; // buttons on the pane
+    wxRect m_rect;          // current rectangle (populated by wxAUI)
 };
 
 
