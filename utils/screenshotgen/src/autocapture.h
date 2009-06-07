@@ -9,7 +9,9 @@
 #ifndef _AUTOCAPTURE_H_
 #define _AUTOCAPTURE_H_
 
+#include "wx/beforestd.h"
 #include <vector>
+#include "wx/afterstd.h"
 
 #include "wx/gdicmn.h"
 
