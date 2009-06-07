@@ -18,11 +18,21 @@ struct __CFURL;
 typedef const __CFURL * wxCFURLRef;
 typedef __CFBundle * wxCFBundleRef;
 
+// we inherit the GUI CF-based wxStandardPaths implementation from the Unix one
+// used for console programs if possible (i.e. if we're under a Unix system at
+// all)
+#if defined(__UNIX__)
+    #include "wx/unix/stdpaths.h"
+    #define wxStandardPathsCFBase wxStandardPaths
+#else
+    #define wxStandardPathsCFBase wxStandardPathsBase
+#endif
+
 // ----------------------------------------------------------------------------
 // wxStandardPaths
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxStandardPathsCF : public wxStandardPathsBase
+class WXDLLIMPEXP_BASE wxStandardPathsCF : public wxStandardPathsCFBase
 {
 public:
     wxStandardPathsCF();
@@ -53,15 +63,5 @@ protected:
 
     wxCFBundleRef m_bundle;
 };
-
-// If using UNIX (i.e. darwin) then use UNIX standard paths
-#if defined(__UNIX__)
-#include "wx/unix/stdpaths.h"
-#else
-// If compiling wxMac for CarbonLib then we are wxStandardPaths
-class WXDLLIMPEXP_BASE wxStandardPaths: public wxStandardPathsCF
-{
-};
-#endif
 
 #endif // _WX_MAC_STDPATHS_H_
