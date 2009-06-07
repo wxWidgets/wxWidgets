@@ -1240,7 +1240,7 @@ void MyAutoScrollingWindow::OnDraw(wxDC& dc)
     dc.SetPen(*wxTRANSPARENT_PEN);
     const wxString str = sm_testData;
     size_t strLength = str.length();
-    wxString::const_iterator str_i = std.begin();
+    wxString::const_iterator str_i = str.begin();
 
     // draw the characters
     // 1. for each update region
