@@ -161,7 +161,9 @@ void wxFontDataProperty::RefreshChildren()
     Item(6)->SetValue( variant );
 }
 
-void wxFontDataProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
+wxVariant wxFontDataProperty::ChildChanged( wxVariant& thisValue,
+                                            int childIndex,
+                                            wxVariant& childValue ) const
 {
     wxFontData fontData;
     fontData << thisValue;
@@ -183,7 +185,9 @@ void wxFontDataProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxV
             fontData.SetChosenFont(font);
     }
 
-    thisValue << fontData;
+    wxVariant newVariant;
+    newVariant << fontData;
+    return newVariant;
 }
 
 // -----------------------------------------------------------------------
@@ -211,7 +215,9 @@ void wxSizeProperty::RefreshChildren()
     Item(1)->SetValue( (long)size.y );
 }
 
-void wxSizeProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
+wxVariant wxSizeProperty::ChildChanged( wxVariant& thisValue,
+                                        int childIndex,
+                                        wxVariant& childValue ) const
 {
     wxSize& size = wxSizeRefFromVariant(thisValue);
     int val = wxPGVariantToInt(childValue);
@@ -220,6 +226,9 @@ void wxSizeProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVaria
         case 0: size.x = val; break;
         case 1: size.y = val; break;
     }
+    wxVariant newVariant;
+    newVariant << size;
+    return newVariant;
 }
 
 // -----------------------------------------------------------------------
@@ -247,7 +256,9 @@ void wxPointProperty::RefreshChildren()
     Item(1)->SetValue( (long)point.y );
 }
 
-void wxPointProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
+wxVariant wxPointProperty::ChildChanged( wxVariant& thisValue,
+                                         int childIndex,
+                                         wxVariant& childValue ) const
 {
     wxPoint& point = wxPointRefFromVariant(thisValue);
     int val = wxPGVariantToInt(childValue);
@@ -256,6 +267,9 @@ void wxPointProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVari
         case 0: point.x = val; break;
         case 1: point.y = val; break;
     }
+    wxVariant newVariant;
+    newVariant << point;
+    return newVariant;
 }
 
 

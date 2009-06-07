@@ -711,7 +711,9 @@ void wxFontProperty::RefreshChildren()
     Item(5)->SetValue( font.GetUnderlined() );
 }
 
-void wxFontProperty::ChildChanged( wxVariant& thisValue, int ind, wxVariant& childValue ) const
+wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
+                                        int ind,
+                                        wxVariant& childValue ) const
 {
     wxFont font;
     font << thisValue;
@@ -761,7 +763,9 @@ void wxFontProperty::ChildChanged( wxVariant& thisValue, int ind, wxVariant& chi
         font.SetUnderlined( childValue.GetBool() );
     }
 
-    thisValue << font;
+    wxVariant newVariant;
+    newVariant << font;
+    return newVariant;
 }
 
 /*

@@ -698,18 +698,25 @@ public:
     virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* wnd_primary, wxEvent& event );
 
     /**
-        Called after value of a child property has been altered. Note that this function is
-        usually called at the time that value of this property, or given child property, is
-        still pending for change.
+        Called after value of a child property has been altered. Must return
+        new value of the whole property (after any alterations warrented by
+        child's new value).
+
+        Note that this function is usually called at the time that value of
+        this property, or given child property, is still pending for change,
+        and as such, result of GetValue() or m_value should not be relied
+        on.
 
         Sample pseudo-code implementation:
 
         @code
-        void MyProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
+        wxVariant MyProperty::ChildChanged( wxVariant& thisValue,
+                                            int childIndex,
+                                            wxVariant& childValue ) const
         {
             // Acquire reference to actual type of data stored in variant
-            // (TFromVariant only exists if wxPropertyGrid's wxVariant-macros were used to create
-            // the variant class).
+            // (TFromVariant only exists if wxPropertyGrid's wxVariant-macros
+            // were used to create the variant class).
             T& data = TFromVariant(thisValue);
 
             // Copy childValue into data.
@@ -723,17 +730,28 @@ public:
                     break;
                 ...
             }
+
+            // Return altered data
+            return data;
         }
         @endcode
 
         @param thisValue
-            Value of this property, that should be altered.
+            Value of this property. Changed value should be returned (in
+            previous versions of wxPropertyGrid it was only necessary to
+            write value back to this argument).
         @param childIndex
-            Index of child changed (you can use Item(childIndex) to get).
+            Index of child changed (you can use Item(childIndex) to get
+            child property).
         @param childValue
-            Value of the child property.
+            (Pending) value of the child property.
+
+        @return
+            Modified value of the whole property.
     */
-    virtual void ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const;
+    virtual wxVariant ChildChanged( wxVariant& thisValue,
+                                    int childIndex,
+                                    wxVariant& childValue ) const;
 
     /**
         Returns pointer to an instance of used editor.

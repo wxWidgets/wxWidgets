@@ -2163,7 +2163,10 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
             }
 
             if ( allChildrenSpecified )
-                ChildChanged(*value, i, childValue);
+            {
+                *value = ChildChanged(*value, i, childValue);
+            }
+
             n++;
             if ( n == (unsigned int)list.GetCount() )
                 break;
@@ -2365,10 +2368,11 @@ void wxPGProperty::DeleteChildren()
     }
 }
 
-void wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
-                                 int WXUNUSED(childIndex),
-                                 wxVariant& WXUNUSED(childValue) ) const
+wxVariant wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
+                                      int WXUNUSED(childIndex),
+                                      wxVariant& WXUNUSED(childValue) ) const
 {
+    return wxNullVariant;
 }
 
 bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const

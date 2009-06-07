@@ -183,8 +183,9 @@ public:
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxWindow* primary, wxEvent& event );
-    virtual void ChildChanged( wxVariant& thisValue,
-                               int childIndex, wxVariant& childValue ) const;
+    virtual wxVariant ChildChanged( wxVariant& thisValue,
+                                    int childIndex,
+                                    wxVariant& childValue ) const;
     virtual void RefreshChildren();
 
 protected:

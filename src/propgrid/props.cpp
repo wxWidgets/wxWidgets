@@ -1487,15 +1487,18 @@ void wxFlagsProperty::RefreshChildren()
     m_oldValue = flags;
 }
 
-void wxFlagsProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
+wxVariant wxFlagsProperty::ChildChanged( wxVariant& thisValue,
+                                         int childIndex,
+                                         wxVariant& childValue ) const
 {
     long oldValue = thisValue.GetLong();
     long val = childValue.GetLong();
     unsigned long vi = m_choices.GetValue(childIndex);
+
     if ( val )
-        thisValue = (long)(oldValue | vi);
-    else
-        thisValue = (long)(oldValue & ~(vi));
+        return (long) (oldValue | vi);
+
+    return (long) (oldValue & ~(vi));
 }
 
 bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
