@@ -36,8 +36,16 @@
 #include "wx/wfstream.h"
 
 #ifdef __WXMSW__
-#include "wx/msw/wrapwin.h"
-#include <winioctl.h>
+    #include "wx/msw/wrapwin.h"
+    #ifdef __VISUALC__
+        // 'nonstandard extension used : nameless struct/union' occurs inside
+        // winioctl.h
+        #pragma warning(disable:4201)
+    #endif
+    #include <winioctl.h>
+    #ifdef __VISUALC__
+        #pragma warning(default:4201)
+    #endif
 #endif
 
 #ifdef __VISUALC__
