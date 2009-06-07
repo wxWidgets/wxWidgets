@@ -325,7 +325,7 @@ Client::CreateBuffer(int* msgsize)
         //returned buffer will contain test indicator, message size in kb and data
         bufsize = size*1024+2;
         buf = new char[bufsize];
-        buf[0] = (char)0xDE; //second byte contains size in kilobytes
+        buf[0] = (unsigned char)0xDE; //second byte contains size in kilobytes
         buf[1] = (char)(size);
         *msgsize = size*1024;
     }
@@ -334,7 +334,7 @@ Client::CreateBuffer(int* msgsize)
         //returned buffer will contain test indicator, message size in kb and data
         bufsize = (*msgsize)+2;
         buf = new char[bufsize];
-        buf[0] = (char)0xBE; //second byte contains size in bytes
+        buf[0] = (unsigned char)0xBE; //second byte contains size in bytes
         buf[1] = (char)(*msgsize);
     }
     return buf;
