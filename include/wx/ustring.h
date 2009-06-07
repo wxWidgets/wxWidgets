@@ -31,6 +31,12 @@ typedef wxCharTypeBuffer<wxChar32> wxU32CharBuffer;
 typedef wxScopedCharTypeBuffer<wxChar32> wxScopedU32CharBuffer;
 #endif
 
+#ifdef __VISUALC__
+    // "non dll-interface class 'std::basic_string<wxChar32>' used as base
+    // interface for dll-interface class 'wxString'" -- this is OK in our case
+    // (and warning is unavoidable anyhow)
+    #pragma warning(disable:4275)
+#endif
 
 class WXDLLIMPEXP_BASE wxUString: public std::basic_string<wxChar32>
 {
@@ -588,6 +594,10 @@ public:
         { return append( ch ); }
 
 };
+
+#ifdef __VISUALC__
+    #pragma warning(default:4275)
+#endif
 
 inline wxUString operator+(const wxUString &s1, const wxUString &s2)
     { wxUString ret( s1 ); ret.append( s2 ); return ret; }
