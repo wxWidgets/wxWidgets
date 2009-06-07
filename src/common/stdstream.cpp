@@ -39,7 +39,7 @@
 namespace
 {
 
-inline bool
+bool
 IosSeekDirToWxSeekMode(std::ios_base::seekdir way,
                        wxSeekMode& seekMode)
 {
