@@ -595,9 +595,11 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         col << pgman->GetPropertyValue(wxT("ColourProperty"));
         if ( col != *wxBLACK )
             RT_FAILURE();
-        if ( wxSizeRefFromVariant(pg->GetPropertyValue(wxT("Size"))) != wxSize(150,150) )
+        wxVariant varSize(pg->GetPropertyValue(wxT("Size")));
+        if ( wxSizeRefFromVariant(varSize) != wxSize(150,150) )
             RT_FAILURE();
-        if ( wxPointRefFromVariant(pg->GetPropertyValue(wxT("Position"))) != wxPoint(150,150) )
+        wxVariant varPos(pg->GetPropertyValue(wxT("Position")));
+        if ( wxPointRefFromVariant(varPos) != wxPoint(150,150) )
             RT_FAILURE();
         if ( !(pg->GetPropertyValueAsArrayInt(wxT("MultiChoiceProperty")) == test_arrint_1) )
             RT_FAILURE();
@@ -643,9 +645,11 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         col << pgman->GetPropertyValue(wxT("ColourProperty"));
         if ( col != *wxWHITE )
             RT_FAILURE();
-        if ( wxSizeRefFromVariant(pgman->GetPropertyValue(wxT("Size"))) != wxSize(300,300) )
+        varSize = pgman->GetPropertyValue(wxT("Size"));
+        if ( wxSizeRefFromVariant(varSize) != wxSize(300,300) )
             RT_FAILURE();
-        if ( wxPointRefFromVariant(pgman->GetPropertyValue(wxT("Position"))) != wxPoint(300,300) )
+        varPos = pgman->GetPropertyValue(wxT("Position"));
+        if ( wxPointRefFromVariant(varPos) != wxPoint(300,300) )
             RT_FAILURE();
         if ( !(pgman->GetPropertyValueAsArrayInt(wxT("MultiChoiceProperty")) == test_arrint_2) )
             RT_FAILURE();
