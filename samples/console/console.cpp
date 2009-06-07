@@ -520,8 +520,8 @@ static void TestDllListLoaded()
         const wxDynamicLibraryDetails& details = dlls[n];
         printf("%-45s", (const char *)details.GetPath().mb_str());
 
-        void *addr;
-        size_t len;
+        void *addr wxDUMMY_INITIALIZE(NULL);
+        size_t len wxDUMMY_INITIALIZE(0);
         if ( details.GetAddress(&addr, &len) )
         {
             printf(" %08lx:%08lx",
