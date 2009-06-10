@@ -123,6 +123,6 @@ bool wxDisclosureTriangle::OSXHandleClicked( double WXUNUSED(timestampsec) )
 
 wxSize wxDisclosureTriangle::DoGetBestSize() const
 {
-    return wxSize(16,16);
+    return wxWindow::DoGetBestSize();
 }
 
