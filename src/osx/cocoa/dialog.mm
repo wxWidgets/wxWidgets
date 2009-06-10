@@ -47,12 +47,15 @@ void wxDialog::DoShowModal()
     NSWindow* theWindow = GetWXWindow();
     
     NSModalSession session = [NSApp beginModalSessionForWindow:theWindow];
+    int response = 0;
     while (IsModal()) 
     {
         wxMacAutoreleasePool autoreleasepool;
-        if ([NSApp runModalSession:session] != NSRunContinuesResponse)
-            break;
-        // TODO should we do some idle processing ?
+        // we cannot break based on the return value, because nested
+        // alerts might set this to stopped as well, so it would be
+        // unsafe
+        [NSApp runModalSession:session];
+        // TODO Idle
     }
     [NSApp endModalSession:session];
 
