@@ -826,7 +826,10 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
     PasteboardRef pboardRef;    
     PasteboardCreate((CFStringRef)[pboard name], &pboardRef);
     target->SetCurrentDragPasteboard(pboardRef);
-    result = target->OnData(pt.x, pt.y, result);
+
+    if (target->OnDrop(pt.x, pt.y))
+        result = target->OnData(pt.x, pt.y, result);
+
     CFRelease(pboardRef);
      
     return result != wxDragNone;
