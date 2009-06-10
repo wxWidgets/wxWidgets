@@ -14,6 +14,17 @@
 /** @addtogroup group_funcmacro_misc */
 //@{
 
+/** 
+    Elements of this enum specify the possible behaviours of wxBase64Decode
+    when an invalid character is encountered.
+*/
+enum wxBase64DecodeMode
+{
+    wxBase64DecodeMode_Strict,  ///< Normal behaviour: stop at any invalid characters.
+    wxBase64DecodeMode_SkipWS,  ///< Skip whitespace characters.
+    wxBase64DecodeMode_Relaxed  ///< The most lenient behaviour: simply ignore all invalid characters.
+};
+
 /**
     This function encodes the given data using base64.
 
@@ -133,7 +144,7 @@ size_t wxBase64Decode(void* dst, size_t dstLen,
                       size_t *posErr = NULL);
 
 /**
-    See the wxBase64Decode(void*,size_t,const char*,size_t,wxBase64DecodeMode,size_t)
+    See the wxBase64Decode(void*,size_t,const char*,size_t,wxBase64DecodeMode,size_t*)
     overload for more info about the parameters of this function.
 
     This overload allocates memory internally and returns it as wxMemoryBuffer
@@ -150,7 +161,7 @@ wxMemoryBuffer wxBase64Decode(const char* src,
                               size_t *posErr = NULL);
 
 /**
-    See the wxBase64Decode(void*,size_t,const char*,size_t,wxBase64DecodeMode,size_t)
+    See the wxBase64Decode(void*,size_t,const char*,size_t,wxBase64DecodeMode,size_t*)
     overload for more info about the parameters of this function.
 
     This overload takes as input a wxString and returns the internally-allocated
