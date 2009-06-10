@@ -324,7 +324,6 @@ case "${host}" in
     AC_DEFINE(__DARWIN__)
     AC_DEFINE(TARGET_CARBON)
     DEFAULT_DEFAULT_wxUSE_OSX_CARBON=1
-    DEFAULT_STD_FLAG=no
   ;;
 
   *-*-beos* )
