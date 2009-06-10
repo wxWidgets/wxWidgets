@@ -55,7 +55,7 @@
 // ID for the menu commands
 enum
 {
-    PANE_COLLAPSE,
+    PANE_COLLAPSE = 100,
     PANE_EXPAND,
     PANE_SETLABEL,
     PANE_SHOWDLG,
