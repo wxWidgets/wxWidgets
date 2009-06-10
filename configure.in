@@ -388,6 +388,7 @@ dnl automatic features
 DEFAULT_wxUSE_UNICODE_UTF8=auto
 DEFAULT_wxUSE_OPENGL=auto
 DEFAULT_wxUSE_MEDIACTRL=auto
+DEFAULT_wxUSE_COMPILER_TLS=auto
 
 DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
 
@@ -687,6 +688,7 @@ WX_ARG_DISABLE(rpath,        [  --disable-rpath         disable use of rpath for
 WX_ARG_ENABLE(objc_uniquifying,[  --enable-objc_uniquifying enable Objective-C class name uniquifying], wxUSE_OBJC_UNIQUIFYING)
 
 WX_ARG_DISABLE(visibility,   [  --disable-visibility    disable use of ELF symbols visibility even if supported], wxUSE_VISIBILITY)
+WX_ARG_DISABLE(tls,          [  --disable-tls           disable use of compiler TLS support], wxUSE_COMPILER_TLS)
 
 dnl ---------------------------------------------------------------------------
 dnl optional non GUI features
@@ -4985,48 +4987,59 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
         fi
       fi
 
-      dnl test for compiler thread-specific variables support
-      AC_CACHE_CHECK([for __thread keyword],
-                     wx_cv_cc___thread,
-          [
-              AC_TRY_COMPILE([#include <pthread.h>],
-                  [
-                      static __thread int n = 0;
-                      static __thread int *p = 0;
-                  ],
-                  wx_cv_cc___thread=yes,
-                  wx_cv_cc___thread=no
-              )
-          ]
-      )
-
-      if test "$wx_cv_cc___thread" = "yes"; then
-          AX_GXX_VERSION
-          if test -n "$ax_cv_gxx_version"; then
-              dnl g++ supports __thread since at least version 3.3 but its support
-              dnl seems to be broken until 4.1, see
-              dnl   http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/108388
-              dnl
-              dnl NB: we still need to test __thread support with
-              dnl     AC_TRY_COMPILE above even for g++ 4 as it doesn't
-              dnl     support it for all architectures (e.g. it doesn't
-              dnl     work under OS X)
-              AC_MSG_CHECKING([whether __thread support in g++ is usable])
-              case "$ax_cv_gxx_version" in
-                1.* | 2.* | 3.* )
-                    AC_MSG_RESULT([no, it's broken])
-                    wx_cv_cc___thread=no
-                    ;;
-                *)
-                    AC_MSG_RESULT([yes, it works])
-                    ;;
-              esac
+      if test "$wxUSE_COMPILER_TLS" = "auto"; then
+          if test "$USE_NETBSD" = 1; then
+              AC_MSG_WARN([Disabling TLS under NetBSD, please contact wx-dev if it works now])
+              wxUSE_COMPILER_TLS=no
+          else
+              wxUSE_COMPILER_TLS=yes
           fi
       fi
 
-      if test "$wx_cv_cc___thread" = "yes"; then
-        AC_DEFINE(HAVE___THREAD_KEYWORD)
-      fi
+      if test "$wxUSE_COMPILER_TLS" = "yes"; then
+          dnl test for compiler thread-specific variables support
+          AC_CACHE_CHECK([for __thread keyword],
+                         wx_cv_cc___thread,
+              [
+                  AC_TRY_COMPILE([#include <pthread.h>],
+                      [
+                          static __thread int n = 0;
+                          static __thread int *p = 0;
+                      ],
+                      wx_cv_cc___thread=yes,
+                      wx_cv_cc___thread=no
+                  )
+              ]
+          )
+
+          if test "$wx_cv_cc___thread" = "yes"; then
+              AX_GXX_VERSION
+              if test -n "$ax_cv_gxx_version"; then
+                  dnl g++ supports __thread since at least version 3.3 but its support
+                  dnl seems to be broken until 4.1, see
+                  dnl   http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/108388
+                  dnl
+                  dnl NB: we still need to test __thread support with
+                  dnl     AC_TRY_COMPILE above even for g++ 4 as it doesn't
+                  dnl     support it for all architectures (e.g. it doesn't
+                  dnl     work under OS X)
+                  AC_MSG_CHECKING([whether __thread support in g++ is usable])
+                  case "$ax_cv_gxx_version" in
+                    1.* | 2.* | 3.* )
+                        AC_MSG_RESULT([no, it's broken])
+                        wx_cv_cc___thread=no
+                        ;;
+                    *)
+                        AC_MSG_RESULT([yes, it works])
+                        ;;
+                  esac
+              fi
+          fi
+
+          if test "$wx_cv_cc___thread" = "yes"; then
+            AC_DEFINE(HAVE___THREAD_KEYWORD)
+          fi
+        fi
     fi
 
 dnl from if !MSW
