@@ -528,6 +528,18 @@ void wxPropertyGridManager::SetWindowStyleFlag( long style )
 
 // -----------------------------------------------------------------------
 
+bool wxPropertyGridManager::Reparent( wxWindowBase *newParent )
+{
+    if ( m_pPropGrid )
+        m_pPropGrid->OnTLPChanging((wxWindow*)newParent);
+
+    bool res = wxPanel::Reparent(newParent);
+
+    return res;
+}
+
+// -----------------------------------------------------------------------
+
 // Actually shows given page.
 bool wxPropertyGridManager::DoSelectPage( int index )
 {

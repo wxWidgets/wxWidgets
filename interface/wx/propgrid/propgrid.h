@@ -698,6 +698,20 @@ public:
     bool IsFrozen() const;
 
     /**
+        Call this any time your code causes wxPropertyGrid's top-level parent
+        to change.
+
+        @param newTLP
+            New top-level parent that is about to be set. Old top-level parent
+            window should still exist as the current one.
+
+        @remarks This function is automatically called from wxPropertyGrid::
+                 Reparent() and wxPropertyGridManager::Reparent(). You only
+                 need to use it if you reparent wxPropertyGrid indirectly.
+    */
+    void OnTLPChanging( wxWindow* newTLP );
+
+    /**
         Refreshes any active editor control.
     */
     void RefreshEditor();

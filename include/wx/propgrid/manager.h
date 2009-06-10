@@ -592,6 +592,7 @@ public:
     virtual void SetExtraStyle ( long exStyle );
     virtual bool SetFont ( const wxFont& font );
     virtual void SetWindowStyleFlag ( long style );
+    virtual bool Reparent( wxWindowBase *newParent );
 
 protected:
     virtual wxSize DoGetBestSize() const;

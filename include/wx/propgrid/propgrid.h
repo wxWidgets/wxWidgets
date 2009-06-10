@@ -893,6 +893,20 @@ public:
      */
     bool IsFrozen() const { return (m_frozen>0)?true:false; }
 
+    /**
+        Call this any time your code causes wxPropertyGrid's top-level parent
+        to change.
+
+        @param newTLP
+            New top-level parent that is about to be set. Old top-level parent
+            window should still exist as the current one.
+
+        @remarks This function is automatically called from wxPropertyGrid::
+                 Reparent() and wxPropertyGridManager::Reparent(). You only
+                 need to use it if you reparent wxPropertyGrid indirectly.
+    */
+    void OnTLPChanging( wxWindow* newTLP );
+
     /** Redraws given property.
     */
     virtual void RefreshProperty( wxPGProperty* p );
@@ -1416,7 +1430,7 @@ public:
     virtual void Freeze();
     virtual void SetExtraStyle( long exStyle );
     virtual void Thaw();
-
+    virtual bool Reparent( wxWindowBase *newParent );
 
 protected:
     virtual wxSize DoGetBestSize() const;
@@ -1606,10 +1620,7 @@ protected:
     // handling mess).
     wxWindow*           m_curFocused;
 
-    // wxPGTLWHandler
-    wxEvtHandler*       m_tlwHandler;
-
-    // Top level parent
+    // Last known top-level parent
     wxWindow*           m_tlp;
 
     // Sort function
@@ -1714,6 +1725,8 @@ protected:
     void OnScrollEvent( wxScrollWinEvent &event );
 
     void OnSysColourChanged( wxSysColourChangedEvent &event );
+
+    void OnTLPClose( wxCloseEvent& event );
 
 protected:
 
