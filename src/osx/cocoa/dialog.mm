@@ -47,7 +47,6 @@ void wxDialog::DoShowModal()
     NSWindow* theWindow = GetWXWindow();
     
     NSModalSession session = [NSApp beginModalSessionForWindow:theWindow];
-    int response = 0;
     while (IsModal()) 
     {
         wxMacAutoreleasePool autoreleasepool;
@@ -55,7 +54,10 @@ void wxDialog::DoShowModal()
         // alerts might set this to stopped as well, so it would be
         // unsafe
         [NSApp runModalSession:session];
-        // TODO Idle
+
+        // do some idle processing 
+        if (wxTheApp) 
+            wxTheApp->ProcessIdle(); 
     }
     [NSApp endModalSession:session];
 
