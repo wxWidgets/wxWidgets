@@ -15,6 +15,105 @@
 #include "wx/event.h"
 #include "wx/utils.h"
 
+// ----------------------------------------------------------------------------
+// wxEventLoopSource: source of i/o for wxEventLoop
+// ----------------------------------------------------------------------------
+
+#if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
+
+#define wxTRACE_Event_Source wxT("EventSource")
+
+// handler used to process events on event loop sources
+class WXDLLIMPEXP_BASE wxEventLoopSourceHandler
+{
+public:
+    // called when descriptor is available for non-blocking read
+    virtual void OnReadWaiting() = 0;
+
+    // called when descriptor is available  for non-blocking write
+    virtual void OnWriteWaiting() = 0;
+
+    // called when there is exception on descriptor
+    virtual void OnExceptionWaiting() = 0;
+
+    // virtual dtor for the base class
+    virtual ~wxEventLoopSourceHandler() { }
+};
+
+// those flags describes what events should be reported
+enum
+{
+    wxEVENT_SOURCE_INPUT = 0x01,
+    wxEVENT_SOURCE_OUTPUT = 0x02,
+    wxEVENT_SOURCE_EXCEPTION = 0x04,
+    wxEVENT_SOURCE_ALL = wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_OUTPUT |
+                        wxEVENT_SOURCE_EXCEPTION,
+};
+
+// This class is a simple wrapper for OS specific resources than can be a
+// source of I/O. On Unix,for instance these are file descriptors.
+//
+// Instances of this class doesn't take resposibility of any resource you pass
+// to them, I.E. you have to release them yourself.
+//
+// (CHECK: maybe it is actually better to release resources at the end, because
+// otherwise the user has to manually remove all resources from wxEventLoop...
+// OTOH sources are more likely to be used by internal code, not by client code)
+// Another approach: trying do release resources in event loop destructor, and
+// just silently pass if they were already freed.
+class WXDLLIMPEXP_BASE wxEventLoopSource
+{
+public:
+    typedef int Resource;
+
+    // hashing function
+    class Hash
+    {
+    public:
+        unsigned long operator() (const wxEventLoopSource& src) const
+        {
+            // XXX a little unsafe, define platform dependand way
+            return static_cast<long>(src.GetResource());
+        }
+
+        Hash& operator=(const Hash&) { return *this; }
+    };
+
+    // comparison operator
+    class Equal
+    {
+    public:
+        bool operator() (const wxEventLoopSource& a,
+                const wxEventLoopSource& b) const
+        {
+            return a.GetResource() == b.GetResource();
+        }
+
+        Equal& operator=(const Equal&) { return *this; }
+    };
+
+    // ctor setting internal value to the os resource res
+    wxEventLoopSource(int res) : m_res(res) { }
+
+    // sets internal value to res
+    void SetResource(int res)
+    {
+        m_res = res;
+    }
+
+    // returns associated resource
+    Resource GetResource() const
+    {
+        return m_res;
+    }
+
+protected:
+    Resource m_res;
+};
+
+#endif
+
+
 /*
     NOTE ABOUT wxEventLoopBase::YieldFor LOGIC
     ------------------------------------------
@@ -95,6 +194,36 @@ public:
     // to it (can be called from non main thread)
     virtual void WakeUp() = 0;
 
+#if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
+
+    // adding/removing sources
+    // -----------------------
+
+    // adds source to be monitored for I/O events specified in flags. Upon an
+    // event the appropriate method of handler will be called. The handler is
+    // owned be the calling client and will not be freed in any case.
+    // Returns true if the source was successfully added, false if it failed
+    // (this may happen for example when this source is already monitored)
+    virtual bool AddSource(const wxEventLoopSource& source,
+                            wxEventLoopSourceHandler* handler,
+                            int WXUNUSED(flags))
+    {
+        if (!handler)
+            return false;
+
+        wxEventLoopSourceHashMap::value_type val(source, handler);
+        bool ret = m_sourceMap.insert(val).second;
+        return ret;
+    }
+
+    // removes the source from the list of monitored sources.
+    // Returns true if the source was successfully removed, false otherwise
+    virtual bool RemoveSource(const wxEventLoopSource& source)
+    {
+        return 1 == m_sourceMap.erase(source);
+    }
+
+#endif
 
     // idle handling
     // -------------
@@ -160,6 +289,14 @@ protected:
     // YieldFor() helpers:
     bool m_isInsideYield;
     long m_eventsToProcessInsideYield;
+
+#if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
+    WX_DECLARE_HASH_MAP(wxEventLoopSource, wxEventLoopSourceHandler*,
+            wxEventLoopSource::Hash, wxEventLoopSource::Equal,
+            wxEventLoopSourceHashMap);
+
+    wxEventLoopSourceHashMap m_sourceMap;
+#endif
 
     wxDECLARE_NO_COPY_CLASS(wxEventLoopBase);
 };

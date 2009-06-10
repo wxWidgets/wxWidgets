@@ -180,6 +180,71 @@ wxConsoleEventLoop::~wxConsoleEventLoop()
 }
 
 //-----------------------------------------------------------------------------
+// adding & removing sources
+//-----------------------------------------------------------------------------
+
+// This class is a temporary bridge between event loop sources and
+// FDIODispatcher. It is going to be removed soon, when all subject interfaces
+// are modified
+class wxFDIOEventLoopSourceHandler : public wxFDIOHandler
+{
+public:
+    wxFDIOEventLoopSourceHandler(wxEventLoopSourceHandler* handler) :
+        m_impl(handler) { }
+
+    virtual void OnReadWaiting()
+    {
+        m_impl->OnReadWaiting();
+    }
+    virtual void OnWriteWaiting()
+    {
+        m_impl->OnWriteWaiting();
+    }
+
+    virtual void OnExceptionWaiting()
+    {
+        m_impl->OnExceptionWaiting();
+    }
+
+protected:
+    wxEventLoopSourceHandler* m_impl;
+};
+
+
+bool wxConsoleEventLoop::AddSource(const wxEventLoopSource& source,
+                                    wxEventLoopSourceHandler* handler,
+                                    int flags)
+{
+    wxLogTrace(wxTRACE_Event_Source,
+            "wxConsoleEventLoop::AddSource() adding source");
+
+    if (!wxEventLoopBase::AddSource(source, handler, flags))
+        return false;
+
+    // translating into wxFDIOHandler
+    // XXX this is a memory leak of course, but this is really temporary, so
+    // we are not creating another map of handlers
+    wxFDIOHandler* h = new wxFDIOEventLoopSourceHandler(handler);
+
+    m_dispatcher->RegisterFD(source.GetResource(), h, flags);
+
+    return true;
+}
+
+bool wxConsoleEventLoop::RemoveSource(const wxEventLoopSource& source)
+{
+    wxLogTrace(wxTRACE_Event_Source,
+            "wxConsoleEventLoop::RemoveSource() removing source");
+
+    if (!wxEventLoopBase::RemoveSource(source))
+        return false;
+
+    m_dispatcher->UnregisterFD(source.GetResource());
+
+    return true;
+}
+
+//-----------------------------------------------------------------------------
 // events dispatch and loop handling
 //-----------------------------------------------------------------------------
 
