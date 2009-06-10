@@ -346,7 +346,7 @@ bool wxNonOwnedWindow::SetBackgroundStyle(wxBackgroundStyle style)
     if ( !wxWindow::SetBackgroundStyle(style) )
         return false ;
         
-    return m_nowpeer->SetBackgroundStyle(style);
+    return m_nowpeer ? m_nowpeer->SetBackgroundStyle(style) : true;
 }
 
 void wxNonOwnedWindow::DoMoveWindow(int x, int y, int width, int height)
