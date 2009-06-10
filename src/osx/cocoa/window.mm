@@ -706,7 +706,8 @@ unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget WXUNUSED(slf),
         return NSDragOperationNone;
 
     wxDragResult result = wxDragNone;
-    wxPoint pt = wxFromNSPoint( m_osxView, [sender draggingLocation] );
+    NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
+    wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
 
     if ( sourceDragMask & NSDragOperationLink )
         result = wxDragLink;
@@ -771,7 +772,8 @@ unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget WXUNUSED(slf),
         return NSDragOperationNone;
 
     wxDragResult result = wxDragNone;
-    wxPoint pt = wxFromNSPoint( m_osxView, [sender draggingLocation] );
+    NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
+    wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
 
     if ( sourceDragMask & NSDragOperationLink )
         result = wxDragLink;
@@ -811,7 +813,8 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
     wxWindow* wxpeer = GetWXPeer();
     wxDropTarget* target = wxpeer->GetDropTarget();
     wxDragResult result = wxDragNone;
-    wxPoint pt = wxFromNSPoint( m_osxView, [sender draggingLocation] );
+    NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
+    wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
 
     if ( sourceDragMask & NSDragOperationLink )
         result = wxDragLink;
