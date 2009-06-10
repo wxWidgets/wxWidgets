@@ -99,12 +99,18 @@ bool wxNonOwnedWindowCarbonImpl::SetBackgroundColour(const wxColour& col )
     if ( col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDocumentWindowBackground)) )
     {
         SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDocumentWindowBackground, false ) ;
-        SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+        m_wxPeer->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+        // call directly if object is not yet completely constructed
+        if ( m_wxPeer->GetNonOwnedPeer() == NULL )
+            SetBackgroundStyle(wxBG_STYLE_SYSTEM);
     }
     else if ( col == wxColour(wxMacCreateCGColorFromHITheme(kThemeBrushDialogBackgroundActive)) )
     {
         SetThemeWindowBackground( (WindowRef) m_macWindow,  kThemeBrushDialogBackgroundActive, false ) ;
-        SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+        m_wxPeer->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+        // call directly if object is not yet completely constructed
+        if ( m_wxPeer->GetNonOwnedPeer() == NULL )
+            SetBackgroundStyle(wxBG_STYLE_SYSTEM);
     }
     return true;
 }
