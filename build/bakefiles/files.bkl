@@ -3404,14 +3404,16 @@ src/osx/iphone/window.mm
 <set var="RIBBON_SRC" hints="files">
     src/ribbon/art.cpp
     src/ribbon/bar.cpp
-	src/ribbon/page.cpp
-	src/ribbon/panel.cpp
+    src/ribbon/control.cpp
+    src/ribbon/page.cpp
+    src/ribbon/panel.cpp
 </set>
 <set var="RIBBON_HDR" hints="files">
     wx/ribbon/art.h
     wx/ribbon/bar.h
-	wx/ribbon/page.h
-	wx/ribbon/panel.h
+    wx/ribbon/control.h
+    wx/ribbon/page.h
+    wx/ribbon/panel.h
 </set>
 
 <!-- ====================================================================== -->

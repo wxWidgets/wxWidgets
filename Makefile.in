@@ -1721,6 +1721,7 @@ RIBBONDLL_OBJECTS =  \
 	$(__ribbondll___win32rc) \
 	ribbondll_art.o \
 	ribbondll_bar.o \
+	ribbondll_control.o \
 	ribbondll_page.o \
 	ribbondll_panel.o
 RIBBONDLL_ODEP =  $(_____pch_wxprec_ribbondll_wx_wxprec_h_gch___depname)
@@ -1732,6 +1733,7 @@ RIBBONLIB_CXXFLAGS = $(__ribbonlib_PCH_INC) -D__WX$(TOOLKIT)__ \
 RIBBONLIB_OBJECTS =  \
 	ribbonlib_art.o \
 	ribbonlib_bar.o \
+	ribbonlib_control.o \
 	ribbonlib_page.o \
 	ribbonlib_panel.o
 RIBBONLIB_ODEP =  $(_____pch_wxprec_ribbonlib_wx_wxprec_h_gch___depname)
@@ -32835,6 +32837,9 @@ ribbondll_art.o: $(srcdir)/src/ribbon/art.cpp $(RIBBONDLL_ODEP)
 ribbondll_bar.o: $(srcdir)/src/ribbon/bar.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/bar.cpp
 
+ribbondll_control.o: $(srcdir)/src/ribbon/control.cpp $(RIBBONDLL_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/control.cpp
+
 ribbondll_page.o: $(srcdir)/src/ribbon/page.cpp $(RIBBONDLL_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONDLL_CXXFLAGS) $(srcdir)/src/ribbon/page.cpp
 
@@ -32846,6 +32851,9 @@ ribbonlib_art.o: $(srcdir)/src/ribbon/art.cpp $(RIBBONLIB_ODEP)
 
 ribbonlib_bar.o: $(srcdir)/src/ribbon/bar.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/bar.cpp
+
+ribbonlib_control.o: $(srcdir)/src/ribbon/control.cpp $(RIBBONLIB_ODEP)
+	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/control.cpp
 
 ribbonlib_page.o: $(srcdir)/src/ribbon/page.cpp $(RIBBONLIB_ODEP)
 	$(CXXC) -c -o $@ $(RIBBONLIB_CXXFLAGS) $(srcdir)/src/ribbon/page.cpp
