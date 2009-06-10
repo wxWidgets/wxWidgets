@@ -14,8 +14,6 @@
 
 #if wxUSE_GUI
 
-#include <carbon/carbon.h>
-
 #include "wx/osx/core/dataview.h"
 #include "wx/osx/private.h"
 
