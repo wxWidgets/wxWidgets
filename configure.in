@@ -326,17 +326,6 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_OSX_CARBON=1
     DEFAULT_STD_FLAG=no
   ;;
-  powerpc-apple-macos* )
-    dnl Classic Mac OS (< X)
-    USE_UNIX=0
-    dnl For some reason the test that should be cross-compiler capable fails
-    dnl However, there is no doubt that MacOS PowerPC is big endian.
-    ac_cv_c_bigendian=yes
-    dnl AC_DEFINE(TARGET_CARBON)
-    dnl platform.h needs TARGET_CARBON before setup.h, we'll add it to CPPFLAGS
-    DEFAULT_DEFAULT_wxUSE_OSX_CARBON=1
-    DEFAULT_STD_FLAG=no
-  ;;
 
   *-*-beos* )
     dnl leave USE_UNIX on - BeOS is sufficiently Unix-like for this
