@@ -848,8 +848,12 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     if ( !DoHandleMouseEvent(event) )
     {
-        wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-        superimpl(slf, (SEL)_cmd, event);
+        // for plain NSView mouse events would propagate to parents otherwise
+        if (!m_wxPeer->MacIsUserPane())
+        {
+            wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+            superimpl(slf, (SEL)_cmd, event);
+        }
     }
 }
 
@@ -866,8 +870,8 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
     if (m_lastKeyDownEvent && !DoHandleCharEvent(m_lastKeyDownEvent, text) )
     {
-            wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-            superimpl(slf, (SEL)_cmd, text);
+        wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+        superimpl(slf, (SEL)_cmd, text);
     }
     m_lastKeyDownEvent = NULL;
 }
