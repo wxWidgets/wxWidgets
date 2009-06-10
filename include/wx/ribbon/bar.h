@@ -16,10 +16,8 @@
 
 #if wxUSE_RIBBON
 
-#include "wx/control.h"
+#include "wx/ribbon/control.h"
 #include "wx/ribbon/page.h"
-
-class wxRibbonArtProvider;
 
 enum wxRibbonBarOption
 {
@@ -27,9 +25,17 @@ enum wxRibbonBarOption
 	wxRIBBON_BAR_SHOW_PAGE_ICONS	= 1 << 1,
 	wxRIBBON_BAR_FLOW_HORIZONTAL	= 0,
 	wxRIBBON_BAR_FLOW_VERTICAL		= 1 << 2,
+	wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS = 1 << 3,
+	wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS = 1 << 4,
 
-	wxRIBBON_BAR_DEFAULT_STYLE = wxRIBBON_BAR_FLOW_HORIZONTAL | wxRIBBON_BAR_SHOW_PAGE_LABELS,
-	wxRIBBON_BAR_FOLDBAR_STYLE = wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
+	wxRIBBON_BAR_DEFAULT_STYLE =  wxRIBBON_BAR_FLOW_HORIZONTAL
+								| wxRIBBON_BAR_SHOW_PAGE_LABELS
+								| wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS,
+
+	wxRIBBON_BAR_FOLDBAR_STYLE =  wxRIBBON_BAR_FLOW_VERTICAL
+								| wxRIBBON_BAR_SHOW_PAGE_ICONS
+								| wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
+								| wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS,
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonBarEvent : public wxNotifyEvent
@@ -79,7 +85,7 @@ public:
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfo, wxRibbonPageTabInfoArray, WXDLLIMPEXP_RIBBON);
 #endif
 
-class WXDLLIMPEXP_RIBBON wxRibbonBar : public wxControl
+class WXDLLIMPEXP_RIBBON wxRibbonBar : public wxRibbonControl
 {
 public:
 	wxRibbonBar();
@@ -101,11 +107,13 @@ public:
 	void SetTabCtrlMargins(int left, int right);
 
 	void SetArtProvider(wxRibbonArtProvider* art);
-	wxRibbonArtProvider* GetArtProvider() const;
 
 	bool SetActivePage(size_t page);
 	bool SetActivePage(wxRibbonPage* page);
     int GetActivePage() const;
+
+	virtual wxSize DoGetBestSize() const;
+	virtual bool HasMultiplePages() const { return true; }
 
 protected:
 	friend class wxRibbonPage;
@@ -116,6 +124,7 @@ protected:
 	void CommonInit(long style);
 	void AddPage(wxRibbonPage *page);
 	void RecalculateTabSizes();
+	void RecalculateMinSize();
 
 	void OnPaint(wxPaintEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
@@ -131,7 +140,6 @@ protected:
 	void DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type);
 
     wxRibbonPageTabInfoArray m_pages;
-	wxRibbonArtProvider* m_art;
 	long m_flags;
 	int m_tabs_total_width_ideal;
 	int m_tabs_total_width_minimum;

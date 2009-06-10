@@ -40,16 +40,27 @@ wxRibbonDefaultArtProvider::wxRibbonDefaultArtProvider()
 	m_tab_hover_background_gradient_colour = wxColour(225, 210, 165);
 	m_tab_hover_background_top_colour = wxColour(196, 221, 254);
 	m_tab_hover_background_top_gradient_colour = wxColour(221, 235, 254);
+	m_panel_label_colour = wxColour(62, 106, 170);
 	m_page_background_colour = wxColour(199, 216, 237);
 	m_page_background_gradient_colour = wxColour(227, 244, 255);
 	m_page_background_top_colour = wxColour(223, 233, 245);
 	m_page_background_top_gradient_colour = wxColour(209, 223, 240);
 	m_tab_ctrl_background_brush = wxBrush(wxColour(191, 219, 255));
+	m_panel_label_background_brush = wxBrush(wxColour(193, 216, 241));
 	m_tab_label_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
+	m_panel_label_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
 	m_tab_border_pen = wxPen(wxColour(153, 187, 232));
+	m_panel_border_pen = wxPen(wxColour(197, 210, 223));
+	m_panel_border_gradient_pen = wxPen(wxColour(158, 191, 219));
 	m_page_border_pen = wxPen(wxColour(141, 178, 227));
 	m_cached_tab_separator_visibility = -10.0; // valid visibilities are in range [0, 1]
 	m_tab_separation_size = 3;
+	m_page_border_left = 2;
+	m_page_border_top = 1;
+	m_page_border_right = 2;
+	m_page_border_bottom = 3;
+	m_panel_x_separation_size = 1;
+	m_panel_y_separation_size = 1;
 }
 
 wxRibbonDefaultArtProvider::~wxRibbonDefaultArtProvider()
@@ -69,16 +80,27 @@ wxRibbonArtProvider* wxRibbonDefaultArtProvider::Clone()
 	copy->m_tab_hover_background_gradient_colour = m_tab_hover_background_gradient_colour;
 	copy->m_tab_hover_background_top_colour = m_tab_hover_background_top_colour;
 	copy->m_tab_hover_background_top_gradient_colour = m_tab_hover_background_top_gradient_colour;
+	copy->m_panel_label_colour = m_panel_label_colour;
 	copy->m_page_background_colour = m_page_background_colour;
 	copy->m_page_background_gradient_colour = m_page_background_gradient_colour;
 	copy->m_page_background_top_colour = m_page_background_top_colour;
 	copy->m_page_background_top_gradient_colour = m_page_background_top_gradient_colour;
 	copy->m_tab_ctrl_background_brush = m_tab_ctrl_background_brush;
+	copy->m_panel_label_background_brush = m_panel_label_background_brush;
 	copy->m_tab_label_font = m_tab_label_font;
+	copy->m_panel_label_font = m_panel_label_font;
 	copy->m_page_border_pen = m_page_border_pen;
+	copy->m_panel_border_pen = m_panel_border_pen;
+	copy->m_panel_border_gradient_pen = m_panel_border_gradient_pen;
 	copy->m_tab_border_pen = m_tab_border_pen;
 	copy->m_flags = m_flags;
 	copy->m_tab_separation_size = m_tab_separation_size;
+	copy->m_page_border_left = m_page_border_left;
+	copy->m_page_border_top = m_page_border_top;
+	copy->m_page_border_right = m_page_border_right;
+	copy->m_page_border_bottom = m_page_border_bottom;
+	copy->m_panel_x_separation_size = m_panel_x_separation_size;
+	copy->m_panel_y_separation_size = m_panel_y_separation_size;
 
 	return copy;
 }
@@ -93,6 +115,12 @@ int wxRibbonDefaultArtProvider::GetMetric(int id)
 	switch(id)
 	{
 		case wxRIBBON_ART_TAB_SEPARATION_SIZE: return m_tab_separation_size;
+		case wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE: return m_page_border_left;
+		case wxRIBBON_ART_PAGE_BORDER_TOP_SIZE: return m_page_border_top;
+		case wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE: return m_page_border_right;
+		case wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE: return m_page_border_bottom;
+		case wxRIBBON_ART_PANEL_X_SEPARATION_SIZE: return m_panel_x_separation_size;
+		case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE: return m_panel_y_separation_size;
 		default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
 	}
 
@@ -104,6 +132,12 @@ void wxRibbonDefaultArtProvider::SetMetric(int id, int new_val)
 	switch(id)
 	{
 		case wxRIBBON_ART_TAB_SEPARATION_SIZE: m_tab_separation_size = new_val;
+		case wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE: m_page_border_left = new_val;
+		case wxRIBBON_ART_PAGE_BORDER_TOP_SIZE: m_page_border_top = new_val;
+		case wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE: m_page_border_right = new_val;
+		case wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE: m_page_border_bottom = new_val;
+		case wxRIBBON_ART_PANEL_X_SEPARATION_SIZE: m_panel_x_separation_size = new_val;
+		case wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE: m_panel_y_separation_size = new_val;
 		default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
 	}
 }
@@ -113,6 +147,7 @@ void wxRibbonDefaultArtProvider::SetFont(int id, const wxFont& font)
 	switch(id)
 	{
 		case wxRIBBON_ART_TAB_LABEL_FONT: m_tab_label_font = font;
+		case wxRIBBON_ART_PANEL_LABEL_FONT: m_panel_label_font = font;
 		default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
 	}
 }
@@ -122,6 +157,7 @@ wxFont wxRibbonDefaultArtProvider::GetFont(int id)
 	switch(id)
 	{
 		case wxRIBBON_ART_TAB_LABEL_FONT: return m_tab_label_font;
+		case wxRIBBON_ART_PANEL_LABEL_FONT: return m_panel_label_font;
 		default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
 	}
 
@@ -143,6 +179,10 @@ wxColour wxRibbonDefaultArtProvider::GetColour(int id)
 		case wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR: return m_tab_hover_background_colour;
 		case wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR: return m_tab_hover_background_gradient_colour;
 		case wxRIBBON_ART_TAB_BORDER_COLOUR: return m_tab_border_pen.GetColour();
+		case wxRIBBON_ART_PANEL_BORDER_COLOUR: return m_panel_border_pen.GetColour();
+		case wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR: return m_panel_border_gradient_pen.GetColour();
+		case wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR: return m_panel_label_background_brush.GetColour();
+		case wxRIBBON_ART_PANEL_LABEL_COLOUR: return m_panel_label_colour;
 		case wxRIBBON_ART_PAGE_BORDER_COLOUR: return m_page_border_pen.GetColour();
 		case wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR: return m_page_background_top_colour;
 		case wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR: return m_page_background_top_gradient_colour;
@@ -169,6 +209,10 @@ void wxRibbonDefaultArtProvider::SetColour(int id, const wxColor& colour)
 		case wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR: m_tab_hover_background_colour = colour;
 		case wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR: m_tab_hover_background_gradient_colour = colour;
 		case wxRIBBON_ART_TAB_BORDER_COLOUR: m_tab_border_pen.SetColour(colour);
+		case wxRIBBON_ART_PANEL_BORDER_COLOUR: m_panel_border_pen.SetColour(colour);
+		case wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR: m_panel_border_gradient_pen.SetColour(colour);
+		case wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR: m_panel_label_background_brush.SetColour(colour);
+		case wxRIBBON_ART_PANEL_LABEL_COLOUR: m_panel_label_colour = colour;
 		case wxRIBBON_ART_PAGE_BORDER_COLOUR: m_page_border_pen.SetColour(colour);
 		case wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR: m_page_background_top_colour = colour;
 		case wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR: m_page_background_top_gradient_colour = colour;
@@ -216,6 +260,47 @@ static void DrawVerticalGradientRectangle(wxDC& dc,
         dc.DrawLine(rect.x, rect.y+i, rect.x+rect.width, rect.y+i);
     }
 }
+
+static void DrawParallelGradientLines(wxDC& dc,
+									int nlines,
+									const wxPoint* line_origins,
+									int stepx,
+									int stepy,
+									int numsteps,
+									int offset_x,
+									int offset_y,
+									const wxColour& start_colour,
+									const wxColour& end_colour)
+{
+	int rd, gd, bd;
+    rd = end_colour.Red() - start_colour.Red();
+    gd = end_colour.Green() - start_colour.Green();
+    bd = end_colour.Blue() - start_colour.Blue();
+
+	for (int step = 0; step < numsteps; ++step)
+    {
+        int r,g,b;
+
+        r = start_colour.Red() + (((step*rd*100)/numsteps)/100);
+        g = start_colour.Green() + (((step*gd*100)/numsteps)/100);
+        b = start_colour.Blue() + (((step*bd*100)/numsteps)/100);
+
+        wxPen p(wxColour((unsigned char)r,
+                        (unsigned char)g,
+                        (unsigned char)b));
+        dc.SetPen(p);
+
+		for(int n = 0; n < nlines; ++n)
+		{
+			dc.DrawLine(offset_x + line_origins[n].x, offset_y + line_origins[n].y,
+						offset_x + line_origins[n].x + stepx, offset_y + line_origins[n].y + stepy);
+		}
+
+		offset_x += stepx;
+		offset_y += stepy;
+    }
+}
+
 
 void wxRibbonDefaultArtProvider::DrawTabCtrlBackground(
 						wxDC& dc,
@@ -513,21 +598,91 @@ void wxRibbonDefaultArtProvider::DrawScrollButton(
 		wxPoint arrow_points[3];
 		if((style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) == wxRIBBON_SCROLL_BTN_LEFT)
 		{
-			arrow_points[0] = wxPoint(rect.width / 2 - 1, rect.height / 2);
-			arrow_points[1] = arrow_points[0] + wxPoint(2, -2);
-			arrow_points[2] = arrow_points[0] + wxPoint(2,  2);
+			arrow_points[0] = wxPoint(rect.width / 2 - 2, rect.height / 2);
+			arrow_points[1] = arrow_points[0] + wxPoint(3, -3);
+			arrow_points[2] = arrow_points[0] + wxPoint(3,  3);
 		}
 		else
 		{
-			arrow_points[0] = wxPoint(rect.width / 2 + 1, rect.height / 2);
-			arrow_points[1] = arrow_points[0] - wxPoint(2,  2);
-			arrow_points[2] = arrow_points[0] - wxPoint(2, -2);
+			arrow_points[0] = wxPoint(rect.width / 2 + 2, rect.height / 2);
+			arrow_points[1] = arrow_points[0] - wxPoint(3,  3);
+			arrow_points[2] = arrow_points[0] - wxPoint(3, -3);
 		}
 
 		dc.SetPen(*wxTRANSPARENT_PEN);
 		wxBrush B(m_tab_label_colour);
 		dc.SetBrush(B);
 		dc.DrawPolygon(sizeof(arrow_points)/sizeof(wxPoint), arrow_points, rect.x, rect.y);
+	}
+}
+
+void wxRibbonDefaultArtProvider::DrawPanelBackground(
+						wxDC& dc,
+						wxRibbonPanel* wnd,
+						const wxRect& rect)
+{
+	wxRect true_rect(rect);
+	if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
+	{
+		true_rect.y += 1;
+		true_rect.height -= 2;
+	}
+	else
+	{
+		true_rect.x += 1;
+		true_rect.width -= 2;
+	}
+
+	{
+		dc.SetBrush(m_panel_label_background_brush);
+		dc.SetFont(m_panel_label_font);
+		dc.SetPen(*wxTRANSPARENT_PEN);
+		dc.SetTextForeground(m_panel_label_colour);
+
+		wxRect label_rect(true_rect);
+		wxSize label_size(dc.GetTextExtent(wnd->GetLabel()));
+
+		label_rect.SetHeight(label_size.GetHeight() + 2);
+		label_rect.SetY(true_rect.GetBottom() - label_rect.GetHeight());
+
+		dc.DrawRectangle(label_rect.GetX(), label_rect.GetY(), label_rect.GetWidth(), label_rect.GetHeight());
+		dc.DrawText(wnd->GetLabel(), label_rect.x + (label_rect.GetWidth() - label_size.GetWidth()) / 2, label_rect.y + (label_rect.GetHeight() - label_size.GetHeight()) / 2);
+	}
+
+	{
+		wxPoint border_points[9];
+		border_points[0] = wxPoint(2, 0);
+		border_points[1] = wxPoint(true_rect.width - 3, 0);
+		border_points[2] = wxPoint(true_rect.width - 1, 2);
+		border_points[3] = wxPoint(true_rect.width - 1, true_rect.height - 3);
+		border_points[4] = wxPoint(true_rect.width - 3, true_rect.height - 1);
+		border_points[5] = wxPoint(2, true_rect.height - 1);
+		border_points[6] = wxPoint(0, true_rect.height - 3);
+		border_points[7] = wxPoint(0, 2);
+
+		if(m_panel_border_pen.GetColour() == m_panel_border_gradient_pen.GetColour())
+		{
+			border_points[8] = border_points[0];
+			dc.SetPen(m_panel_border_pen);
+			dc.DrawLines(sizeof(border_points)/sizeof(wxPoint), border_points, true_rect.x, true_rect.y);
+		}
+		else
+		{
+			dc.SetPen(m_panel_border_pen);
+			dc.DrawLines(3, border_points, true_rect.x, true_rect.y);
+#define SingleLine(start, finish) \
+	        dc.DrawLine(start.x + true_rect.x, start.y + true_rect.y, finish.x + true_rect.x, finish.y + true_rect.y)
+			SingleLine(border_points[0], border_points[7]);
+
+			dc.SetPen(m_panel_border_gradient_pen);
+			dc.DrawLines(3, border_points + 4, true_rect.x, true_rect.y);
+			SingleLine(border_points[4], border_points[3]);
+#undef SingleLine
+
+			border_points[6] = border_points[2];
+			DrawParallelGradientLines(dc, 2, border_points + 6, 0, 1, border_points[3].y - border_points[2].y + 1,
+				true_rect.x, true_rect.y, m_panel_border_pen.GetColour(), m_panel_border_gradient_pen.GetColour());
+		}
 	}
 }
 
@@ -589,6 +744,7 @@ int wxRibbonDefaultArtProvider::GetTabCtrlHeight(
 
 	if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
 	{
+		dc.SetFont(m_tab_label_font);
 		text_height = dc.GetTextExtent(wxT("ABCDEFXj")).GetHeight() + 10;
 	}
 	if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
@@ -613,6 +769,20 @@ wxSize wxRibbonDefaultArtProvider::GetScrollButtonMinimumSize(
 						long WXUNUSED(style))
 {
 	return wxSize(12, 12);
+}
+
+wxSize wxRibbonDefaultArtProvider::GetPanelSize(
+						wxDC& dc,
+						const wxRibbonPanel* wnd,
+						wxSize client_size)
+{
+	dc.SetFont(m_panel_label_font);
+	wxSize label_size = dc.GetTextExtent(wnd->GetLabel());
+
+	client_size.IncBy(0, label_size.GetHeight());
+	client_size.IncBy(4, 8); // Guesswork at the moment
+
+	return client_size;
 }
 
 #endif // wxUSE_RIBBON

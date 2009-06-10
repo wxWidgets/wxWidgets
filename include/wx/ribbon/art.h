@@ -19,6 +19,13 @@
 enum wxRibbonArtSetting
 {
 	wxRIBBON_ART_TAB_SEPARATION_SIZE,
+	wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE,
+	wxRIBBON_ART_PAGE_BORDER_TOP_SIZE,
+	wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE,
+	wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE,
+	wxRIBBON_ART_PANEL_X_SEPARATION_SIZE,
+	wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE,
+	wxRIBBON_ART_PANEL_LABEL_FONT,
 	wxRIBBON_ART_TAB_LABEL_FONT,
 	wxRIBBON_ART_TAB_LABEL_COLOUR,
 	wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
@@ -31,6 +38,10 @@ enum wxRibbonArtSetting
 	wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR,
 	wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
 	wxRIBBON_ART_TAB_BORDER_COLOUR,
+	wxRIBBON_ART_PANEL_BORDER_COLOUR,
+	wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR,
+	wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
+	wxRIBBON_ART_PANEL_LABEL_COLOUR,
 	wxRIBBON_ART_PAGE_BORDER_COLOUR,
 	wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR,
 	wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR,
@@ -60,6 +71,7 @@ enum wxRibbonScrollButtonStyle
 	wxRIBBON_SCROLL_BTN_FOR_MASK = 48,
 };
 
+class wxRibbonPanel;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
 
@@ -71,6 +83,7 @@ public:
 
 	virtual wxRibbonArtProvider* Clone() = 0;
     virtual void SetFlags(long flags) = 0;
+	virtual long GetFlags() = 0;
 
 	virtual int GetMetric(int id) = 0;
     virtual void SetMetric(int id, int new_val) = 0;
@@ -106,6 +119,11 @@ public:
 						const wxRect& rect,
 						long style) = 0;
 
+	virtual void DrawPanelBackground(
+						wxDC& dc,
+						wxRibbonPanel* wnd,
+						const wxRect& rect) = 0;
+
 	virtual void GetBarTabWidth(
 						wxDC& dc,
                         wxWindow* wnd,
@@ -125,6 +143,11 @@ public:
 						wxDC& dc,
 						wxWindow* wnd,
 						long style) = 0;
+
+	virtual wxSize GetPanelSize(
+						wxDC& dc,
+						const wxRibbonPanel* wnd,
+						wxSize client_size) = 0;
 };
 
 class WXDLLIMPEXP_AUI wxRibbonDefaultArtProvider : public wxRibbonArtProvider
@@ -135,6 +158,7 @@ public:
 
 	wxRibbonArtProvider* Clone();
 	void SetFlags(long flags);
+	long GetFlags() {return m_flags;}
 
 	int GetMetric(int id);
     void SetMetric(int id, int new_val);
@@ -169,6 +193,11 @@ public:
 						const wxRect& rect,
 						long style);
 
+	void DrawPanelBackground(
+						wxDC& dc,
+						wxRibbonPanel* wnd,
+						const wxRect& rect);
+
 	void GetBarTabWidth(
 						wxDC& dc,
 						wxWindow* wnd,
@@ -189,6 +218,11 @@ public:
 						wxWindow* wnd,
 						long style);
 
+	wxSize GetPanelSize(
+						wxDC& dc,
+						const wxRibbonPanel* wnd,
+						wxSize client_size);
+
 protected:
 	void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility);
 
@@ -202,17 +236,28 @@ protected:
 	wxColour m_tab_hover_background_gradient_colour;
 	wxColour m_tab_hover_background_top_colour;
 	wxColour m_tab_hover_background_top_gradient_colour;
+	wxColour m_panel_label_colour;
 	wxColour m_page_background_colour;
 	wxColour m_page_background_gradient_colour;
 	wxColour m_page_background_top_colour;
 	wxColour m_page_background_top_gradient_colour;
 	wxBrush m_tab_ctrl_background_brush;
+	wxBrush m_panel_label_background_brush;
 	wxFont m_tab_label_font;
+	wxFont m_panel_label_font;
 	wxPen m_page_border_pen;
+	wxPen m_panel_border_pen;
+	wxPen m_panel_border_gradient_pen;
 	wxPen m_tab_border_pen;
 	double m_cached_tab_separator_visibility;
 	long m_flags;
 	int m_tab_separation_size;
+	int m_page_border_left;
+	int m_page_border_top;
+	int m_page_border_right;
+	int m_page_border_bottom;
+	int m_panel_x_separation_size;
+	int m_panel_y_separation_size;
 };
 
 #endif // wxUSE_RIBBON

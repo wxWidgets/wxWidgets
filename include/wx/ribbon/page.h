@@ -16,23 +16,24 @@
 
 #if wxUSE_RIBBON
 
+#include "wx/ribbon/control.h"
+#include "wx/ribbon/panel.h"
 #include "wx/bitmap.h"
-#include "wx/control.h"
 
 class wxRibbonBar;
 
-class WXDLLIMPEXP_RIBBON wxRibbonPage : public wxControl
+class WXDLLIMPEXP_RIBBON wxRibbonPage : public wxRibbonControl
 {
 public:
 	wxRibbonPage();
 
 	wxRibbonPage(wxRibbonBar* parent,
-				   wxWindowID id = wxID_ANY,
-				   const wxString& label = wxEmptyString,
-				   const wxBitmap& icon = wxNullBitmap,
-				   const wxPoint& pos = wxDefaultPosition,
-				   const wxSize& size = wxDefaultSize,
-				   long style = 0);
+				 wxWindowID id = wxID_ANY,
+				 const wxString& label = wxEmptyString,
+				 const wxBitmap& icon = wxNullBitmap,
+				 const wxPoint& pos = wxDefaultPosition,
+				 const wxSize& size = wxDefaultSize,
+				 long style = 0);
 
 	virtual ~wxRibbonPage();
 
@@ -44,9 +45,22 @@ public:
 				const wxSize& size = wxDefaultSize,
 				long style = 0);
 
+	void SetArtProvider(wxRibbonArtProvider* art);
+
 	wxBitmap& GetIcon() {return m_icon;}
+	virtual wxSize GetMinSize() const;
+	virtual wxSize DoGetBestSize() const;
+
+	virtual bool Layout();
+
+	wxOrientation GetMajorAxis() const;
 
 protected:
+	virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+	void OnEraseBackground(wxEraseEvent& evt);
+	void OnPaint(wxPaintEvent& evt);
+
 	void CommonInit(const wxString& label, const wxBitmap& icon);
 
 	wxBitmap m_icon;
@@ -57,8 +71,6 @@ protected:
 	DECLARE_CLASS(wxRibbonPage)
 	DECLARE_EVENT_TABLE()
 #endif
-
-	WX_DECLARE_CONTROL_CONTAINER();
 };
 
 #endif // wxUSE_RIBBON

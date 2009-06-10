@@ -40,10 +40,10 @@ wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_MIDDLE_UP, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_DOWN, wxRibbonBarEvent);
 wxDEFINE_EVENT(wxEVT_COMMAND_RIBBONBAR_TAB_RIGHT_UP, wxRibbonBarEvent);
 
-IMPLEMENT_CLASS(wxRibbonBar, wxControl)
+IMPLEMENT_CLASS(wxRibbonBar, wxRibbonControl)
 IMPLEMENT_DYNAMIC_CLASS(wxRibbonBarEvent, wxNotifyEvent)
 
-BEGIN_EVENT_TABLE(wxRibbonBar, wxControl)
+BEGIN_EVENT_TABLE(wxRibbonBar, wxRibbonControl)
   EVT_ERASE_BACKGROUND(wxRibbonBar::OnEraseBackground)
   EVT_LEAVE_WINDOW(wxRibbonBar::OnMouseLeave)
   EVT_LEFT_DOWN(wxRibbonBar::OnMouseLeftDown)
@@ -88,8 +88,10 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
 	m_pages.Add(info);
 
 	page->Hide(); // Most likely case is that this new page is not the active tab
+	page->SetArtProvider(m_art);
 
 	m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
+	RecalculateMinSize();
 	RecalculateTabSizes();
 
 	if(m_pages.GetCount() == 1)
@@ -128,7 +130,8 @@ void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
 		{
 			m_pages.Item((int)m_current_hovered_page).hovered = true;
 		}
-		Refresh();
+		wxRect tab_rect(0, 0, GetSize().GetWidth(), m_tab_height);
+		Refresh(true, &tab_rect);
 	}
 }
 
@@ -163,7 +166,16 @@ bool wxRibbonBar::SetActivePage(size_t page)
 	}
 	m_current_page = (int)page;
 	m_pages.Item(page).active = true;
-	m_pages.Item(page).page->Show();
+	{
+		wxWindow *wnd = m_pages.Item(page).page;
+		wxPoint position(0, m_tab_height);
+		wnd->SetPosition(position);
+		wxSize size(GetClientSize());
+		size.DecBy(position.x, position.y);
+		wnd->SetSize(size);
+		wnd->Layout();
+		wnd->Show();
+	}
 	Refresh();
 
 	return true;
@@ -395,7 +407,7 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
 						 wxWindowID id,
 						 const wxPoint& pos,
 						 const wxSize& size,
-						 long style) : wxControl(parent, id, pos, size, style)
+						 long style) : wxRibbonControl(parent, id, pos, size, style)
 {
 	CommonInit(style);
 }
@@ -411,7 +423,7 @@ bool wxRibbonBar::Create(wxWindow* parent,
 				const wxSize& size,
 				long style)
 {
-	if(!wxControl::Create(parent, id, pos, size, style))
+	if(!wxRibbonControl::Create(parent, id, pos, size, style))
 		return false;
 
 	CommonInit(style);
@@ -423,7 +435,6 @@ void wxRibbonBar::CommonInit(long style)
 {
     SetName(wxT("wxRibbonBar"));
 
-	m_art = NULL;
 	m_flags = style;
 	m_tabs_total_width_ideal = 0;
 	m_tabs_total_width_minimum = 0;
@@ -435,7 +446,10 @@ void wxRibbonBar::CommonInit(long style)
 	m_current_hovered_page = -1;
 	m_tab_scroll_buttons_shown = false;
 
-	SetArtProvider(new wxRibbonDefaultArtProvider);
+	if(m_art == NULL)
+	{
+		SetArtProvider(new wxRibbonDefaultArtProvider);
+	}
 	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 }
 
@@ -444,15 +458,30 @@ void wxRibbonBar::SetArtProvider(wxRibbonArtProvider* art)
 	delete m_art;
 	m_art = art;
 
-	if(m_art)
+	if(art)
 	{
-		m_art->SetFlags(m_flags);
+		art->SetFlags(m_flags);
+	}
+	size_t numpages = m_pages.GetCount();
+	for(size_t i = 0; i < numpages; ++i)
+	{
+		wxRibbonPage *page = m_pages.Item(i).page;
+		if(page->GetArtProvider() != art)
+		{
+			page->SetArtProvider(art);
+		}
 	}
 }
 
 void wxRibbonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
 	wxAutoBufferedPaintDC dc(this);
+
+	if(GetUpdateRegion().Contains(0, 0, GetClientSize().GetWidth(), m_tab_height) == wxOutRegion)
+	{
+		// Nothing to do in the tab area, and the page area is handled by the active page
+		return;
+	}
 
 	DoEraseBackground(dc);
 
@@ -528,16 +557,20 @@ void wxRibbonBar::DoEraseBackground(wxDC& dc)
 	wxRect tabs(GetClientSize());
 	tabs.height = m_tab_height;
 	m_art->DrawTabCtrlBackground(dc, this, tabs);
-
-	wxRect page(GetClientSize());
-	page.height -= tabs.height;
-	page.y += tabs.height;
-	m_art->DrawPageBackground(dc, this, page);
 }
 
 void wxRibbonBar::OnSize(wxSizeEvent& WXUNUSED(evt))
 {
 	RecalculateTabSizes();
+	if(m_current_page != -1)
+	{
+		int w, h;
+		GetClientSize(&w, &h);
+		wxRibbonPage* wnd = m_pages.Item(m_current_page).page;
+		wnd->SetSize(w, h - m_tab_height);
+		wnd->Layout();
+		//wnd->Refresh();
+	}
 	Refresh();
 }
 
@@ -614,6 +647,52 @@ void wxRibbonBar::DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_t
 		notification.SetEventObject(this);
 		ProcessWindowEvent(notification);
 	}
+}
+
+void wxRibbonBar::RecalculateMinSize()
+{
+	wxSize min_size(wxDefaultCoord, wxDefaultCoord);
+	size_t numtabs = m_pages.GetCount();
+	if(numtabs != 0)
+	{
+		min_size = m_pages.Item(0).page->GetMinSize();
+
+		for(size_t i = 1; i < numtabs; ++i)
+		{
+			wxRibbonPageTabInfo& info = m_pages.Item(i);
+			wxSize page_min = info.page->GetMinSize();
+
+			min_size.x = wxMax(min_size.x, page_min.x);
+			min_size.y = wxMax(min_size.y, page_min.y);
+		}
+	}
+	if(min_size.y != wxDefaultCoord)
+	{
+		// TODO: Decide on best course of action when min height is unspecified
+		// - should we specify it to the tab minimum, or leave it unspecified?
+		min_size.IncBy(0, m_tab_height);
+	}
+
+	m_minWidth = min_size.GetWidth();
+	m_minHeight = min_size.GetHeight();
+}
+
+wxSize wxRibbonBar::DoGetBestSize() const
+{
+	wxSize best(0, 0);
+	if(m_current_page != -1)
+	{
+		best = m_pages.Item(m_current_page).page->GetBestSize();
+	}
+	if(best.GetHeight() == wxDefaultCoord)
+	{
+		best.SetHeight(m_tab_height);
+	}
+	else
+	{
+		best.IncBy(0, m_tab_height);
+	}
+	return best;
 }
 
 #endif // wxUSE_RIBBON

@@ -70,8 +70,24 @@ MyFrame::MyFrame()
 	m_ribbon = new wxRibbonBar(this);
 
 	// Page names are from MS Word 2007, will be changed later
-	new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Home"));
-	new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Insert"));
+	{
+		wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Home"));
+		new wxRibbonPanel(home, wxID_ANY, wxT("Clipboard"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON | wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+		new wxRibbonPanel(home, wxID_ANY, wxT("Font"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
+		new wxRibbonPanel(home, wxID_ANY, wxT("Paragraph"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
+		new wxRibbonPanel(home, wxID_ANY, wxT("Styles"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
+		new wxRibbonPanel(home, wxID_ANY, wxT("Editing"));
+	}
+	{
+		wxRibbonPage* insert = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Insert"));
+		new wxRibbonPanel(insert, wxID_ANY, wxT("Pages"));
+		new wxRibbonPanel(insert, wxID_ANY, wxT("Tables"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+		new wxRibbonPanel(insert, wxID_ANY, wxT("Illustrations"));
+		new wxRibbonPanel(insert, wxID_ANY, wxT("Links"));
+		new wxRibbonPanel(insert, wxID_ANY, wxT("Header & Footer"));
+		new wxRibbonPanel(insert, wxID_ANY, wxT("Text"));
+		new wxRibbonPanel(insert, wxID_ANY, wxT("Symbols"));
+	}
 	new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Page Layout"));
 	new wxRibbonPage(m_ribbon, wxID_ANY, wxT("References"));
 	new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Mailings"));
