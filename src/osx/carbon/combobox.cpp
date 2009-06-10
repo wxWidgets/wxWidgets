@@ -261,12 +261,11 @@ wxSize wxComboBox::DoGetBestSize() const
     if ( m_text != NULL )
     {
         wxSize  sizeText = m_text->GetBestSize();
-        if (sizeText.y > size.y)
-            size.y = sizeText.y;
+        if (sizeText.y + 2 * TEXTFOCUSBORDER > size.y)
+            size.y = sizeText.y + 2 * TEXTFOCUSBORDER;
 
         size.x = m_choice->GetPopupWidth() + sizeText.x + MARGIN;
         size.x += TEXTFOCUSBORDER ;
-        size.y += 2 * TEXTFOCUSBORDER ;
     }
     else
     {
@@ -291,9 +290,13 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height)
     {
         wxCoord wText = width - m_choice->GetPopupWidth() - MARGIN;
         m_text->SetSize(TEXTFOCUSBORDER, TEXTFOCUSBORDER, wText, -1);
+        wxSize tSize = m_text->GetSize();
+        wxSize cSize = m_choice->GetSize();
+        
+        int yOffset = ( tSize.y + 2 * TEXTFOCUSBORDER - cSize.y ) / 2;
 
         // put it at an inset of 1 to have outer area shadows drawn as well
-        m_choice->SetSize(TEXTFOCUSBORDER + wText + MARGIN - 1 , TEXTFOCUSBORDER, m_choice->GetPopupWidth() , -1);
+        m_choice->SetSize(TEXTFOCUSBORDER + wText + MARGIN - 1 , yOffset, m_choice->GetPopupWidth() , -1);
     }
 }
 
