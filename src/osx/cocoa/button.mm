@@ -252,6 +252,122 @@ void wxWidgetCocoaImpl::PerformClick()
 {
 }
 
+//
+// wxDisclosureButton implementation
+//
+
+@interface wxDisclosureNSButton : NSButton
+{
+
+    BOOL isOpen;
+}
+
+- (void) updateImage;
+
+- (void) toggle;
+
++ (NSImage *)rotateImage: (NSImage *)image;
+
+@end
+
+@implementation wxDisclosureNSButton
+
++ (void)initialize
+{
+    static BOOL initialized = NO;
+    if (!initialized) 
+    {
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
+    }
+}
+
+- (id) initWithFrame:(NSRect) frame
+{
+    self = [super initWithFrame:frame];
+    [self setBezelStyle:NSSmallSquareBezelStyle];
+    isOpen = NO;
+    [self setImagePosition:NSImageLeft];
+    [self updateImage];
+    return self;
+}
+
+- (int) intValue
+{
+    return isOpen ? 1 : 0;
+}
+
+- (void) setIntValue: (int) v
+{
+    isOpen = ( v != 0 );
+    [self updateImage];
+}
+
+- (void) toggle
+{
+    isOpen = !isOpen;
+    [self updateImage];
+}
+
+wxCFRef<NSImage*> downArray ;
+
+- (void) updateImage
+{
+    if ( downArray.get() == NULL )
+    {
+        downArray.reset( [wxDisclosureNSButton rotateImage:[NSImage imageNamed:NSImageNameRightFacingTriangleTemplate]] );
+    }
+    
+    if ( isOpen )
+        [self setImage:(NSImage*)downArray.get()];
+    else
+        [self setImage:[NSImage imageNamed:NSImageNameRightFacingTriangleTemplate]];
+}
+
++ (NSImage *)rotateImage: (NSImage *)image
+{
+    NSSize imageSize = [image size];
+    NSSize newImageSize = NSMakeSize(imageSize.height, imageSize.width);
+    NSImage* newImage = [[NSImage alloc] initWithSize: newImageSize];
+ 
+    [newImage lockFocus];
+    
+    NSAffineTransform* tm = [NSAffineTransform transform];
+    [tm translateXBy:newImageSize.width/2 yBy:newImageSize.height/2];
+    [tm rotateByDegrees:-90];
+    [tm translateXBy:-newImageSize.width/2 yBy:-newImageSize.height/2];
+    [tm concat];
+    
+    
+    [image drawInRect:NSMakeRect(0,0,newImageSize.width, newImageSize.height)
+        fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
+    
+    [newImage unlockFocus];
+    return newImage;
+}
+
+@end
+
+class wxDisclosureTriangleCocoaImpl : public wxWidgetCocoaImpl
+{
+public :
+    wxDisclosureTriangleCocoaImpl(wxWindowMac* peer , WXWidget w) :
+        wxWidgetCocoaImpl(peer, w)
+    {
+    }
+    
+    ~wxDisclosureTriangleCocoaImpl()
+    {
+    }
+
+    virtual void controlAction(WXWidget slf, void* _cmd, void *sender)
+    {
+        wxDisclosureNSButton* db = (wxDisclosureNSButton*)m_osxView;
+        [db toggle];
+        wxWidgetCocoaImpl::controlAction(slf, _cmd, sender );
+    }
+};
+
 wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer, 
                                     wxWindowMac* WXUNUSED(parent), 
                                     wxWindowID WXUNUSED(id), 
@@ -262,11 +378,8 @@ wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer,
                                     long WXUNUSED(extraStyle)) 
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
-    wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
-    [v setBezelStyle:NSDisclosureBezelStyle];
-    [v setButtonType:NSOnOffButton];
+    wxDisclosureNSButton* v = [[wxDisclosureNSButton alloc] initWithFrame:r];
     [v setTitle:wxCFStringRef( label).AsNSString()];
-    [v setImagePosition:NSImageRight];
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
+    wxDisclosureTriangleCocoaImpl* c = new wxDisclosureTriangleCocoaImpl( wxpeer, v );
     return c;
 }
