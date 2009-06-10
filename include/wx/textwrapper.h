@@ -19,7 +19,7 @@
 
 // this class is used to wrap the text on word boundary: wrapping is done by
 // calling OnStartLine() and OnOutputLine() functions
-class wxTextWrapper
+class WXDLLIMPEXP_CORE wxTextWrapper
 {
 public:
     wxTextWrapper() { m_eol = false; }
