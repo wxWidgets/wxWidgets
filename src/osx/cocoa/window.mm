@@ -204,7 +204,56 @@ long wxOSXTranslateCocoaKey( NSEvent* event )
             retval = WXK_TAB;
             break;
 
-        default :
+        case 75: // /
+            retval = WXK_NUMPAD_DIVIDE;
+            break;            
+        case 67: // *
+            retval = WXK_NUMPAD_MULTIPLY;
+            break;
+        case 78: // -
+            retval = WXK_NUMPAD_SUBTRACT;
+            break;
+        case 69: // +
+            retval = WXK_NUMPAD_ADD;
+            break;
+        case 76: // Enter
+            retval = WXK_NUMPAD_ENTER;
+            break;
+        case 65: // .
+            retval = WXK_NUMPAD_DECIMAL;
+            break;
+        case 82: // 0
+            retval = WXK_NUMPAD0;
+            break;
+        case 83: // 1
+            retval = WXK_NUMPAD1;
+            break;
+        case 84: // 2
+            retval = WXK_NUMPAD2;
+            break;
+        case 85: // 3
+            retval = WXK_NUMPAD3;
+            break;
+        case 86: // 4
+            retval = WXK_NUMPAD4;
+            break;
+        case 87: // 5
+            retval = WXK_NUMPAD5;
+            break;
+        case 88: // 6
+            retval = WXK_NUMPAD6;
+            break;
+        case 89: // 7
+            retval = WXK_NUMPAD7;
+            break;
+        case 91: // 8
+            retval = WXK_NUMPAD8;
+            break;
+        case 92: // 9
+            retval = WXK_NUMPAD9;
+            break;
+        default:
+            //retval = [event keyCode];
             break;
     }
     return retval;
@@ -224,25 +273,11 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charStrin
     wxevent.m_rawFlags = modifiers;
     
     wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
-    switch (eventType)
-    {
-        case NSKeyDown :
-            wxevent.SetEventType( wxEVT_KEY_DOWN )  ;
-            break;
-        case NSKeyUp :
-            wxevent.SetEventType( wxEVT_KEY_UP )  ;
-            break;
-        case NSFlagsChanged :
-            // setup common code here
-            break;
-        default :
-            break ;
-    }
 
     wxString chars;
     if ( eventType != NSFlagsChanged )
     {
-        NSString* nschars = [nsEvent characters];
+        NSString* nschars = (wxevent.GetEventType() != wxEVT_CHAR) ? [nsEvent charactersIgnoringModifiers] : [nsEvent characters];
         if ( charString )
         {
             // if charString is set, it did not come from key up / key down
@@ -261,7 +296,37 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charStrin
     long keyval = 0;
     
     if (wxevent.GetEventType() != wxEVT_CHAR)
+    {
         keyval = wxOSXTranslateCocoaKey(nsEvent) ;
+        switch (eventType)
+        {
+            case NSKeyDown :
+                wxevent.SetEventType( wxEVT_KEY_DOWN )  ;
+                break;
+            case NSKeyUp :
+                wxevent.SetEventType( wxEVT_KEY_UP )  ;
+                break;
+            case NSFlagsChanged :
+                switch (keyval)
+                {
+                    case WXK_CONTROL:
+                        wxevent.SetEventType( wxevent.m_controlDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
+                        break;
+                    case WXK_SHIFT:
+                        wxevent.SetEventType( wxevent.m_shiftDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
+                        break;
+                    case WXK_ALT:
+                        wxevent.SetEventType( wxevent.m_altDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
+                        break;
+                    case WXK_COMMAND:
+                        wxevent.SetEventType( wxevent.m_metaDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
+                        break;
+                }
+                break;
+            default :
+                break ;
+        }
+    }
 
     if ( !keyval )
     {
@@ -641,7 +706,8 @@ unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget WXUNUSED(slf),
         return NSDragOperationNone;
 
     wxDragResult result = wxDragNone;
-    wxPoint pt = wxFromNSPoint( m_osxView, [sender draggingLocation] );
+    NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
+    wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
 
     if ( sourceDragMask & NSDragOperationLink )
         result = wxDragLink;
@@ -706,7 +772,8 @@ unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget WXUNUSED(slf),
         return NSDragOperationNone;
 
     wxDragResult result = wxDragNone;
-    wxPoint pt = wxFromNSPoint( m_osxView, [sender draggingLocation] );
+    NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
+    wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
 
     if ( sourceDragMask & NSDragOperationLink )
         result = wxDragLink;
@@ -746,7 +813,8 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
     wxWindow* wxpeer = GetWXPeer();
     wxDropTarget* target = wxpeer->GetDropTarget();
     wxDragResult result = wxDragNone;
-    wxPoint pt = wxFromNSPoint( m_osxView, [sender draggingLocation] );
+    NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
+    wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
 
     if ( sourceDragMask & NSDragOperationLink )
         result = wxDragLink;
@@ -758,7 +826,10 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
     PasteboardRef pboardRef;    
     PasteboardCreate((CFStringRef)[pboard name], &pboardRef);
     target->SetCurrentDragPasteboard(pboardRef);
-    result = target->OnData(pt.x, pt.y, result);
+
+    if (target->OnDrop(pt.x, pt.y))
+        result = target->OnData(pt.x, pt.y, result);
+
     CFRelease(pboardRef);
      
     return result != wxDragNone;
@@ -777,8 +848,12 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     if ( !DoHandleMouseEvent(event) )
     {
-        wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-        superimpl(slf, (SEL)_cmd, event);
+        // for plain NSView mouse events would propagate to parents otherwise
+        if (!m_wxPeer->MacIsUserPane())
+        {
+            wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+            superimpl(slf, (SEL)_cmd, event);
+        }
     }
 }
 
@@ -795,8 +870,8 @@ void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
     if (m_lastKeyDownEvent && !DoHandleCharEvent(m_lastKeyDownEvent, text) )
     {
-            wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-            superimpl(slf, (SEL)_cmd, text);
+        wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+        superimpl(slf, (SEL)_cmd, text);
     }
     m_lastKeyDownEvent = NULL;
 }
@@ -1196,6 +1271,7 @@ bool wxWidgetCocoaImpl::SetFocus()
         return false;
         
     [[m_osxView window] makeFirstResponder: m_osxView] ;
+    [[m_osxView window] makeKeyAndOrderFront:nil] ;
     return true;
 }
 
@@ -1397,7 +1473,7 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 
 bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
-    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+    wxKeyEvent wxevent(wxEVT_CHAR);
     SetupKeyEvent( wxevent, event, text );
     wxevent.SetEventObject(GetWXPeer());  
 
@@ -1416,7 +1492,8 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
     if ([event type] == NSKeyDown)
     {
         m_lastKeyDownEvent = event;
-        [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+        if ( !result )
+            [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
     }
     return result;
 }
