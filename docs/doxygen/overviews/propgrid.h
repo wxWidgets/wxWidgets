@@ -961,4 +961,9 @@ without warnings or errors.
     wxPGEditor::CreateControls(). wxPropertyGrid automatically passes all
     events from editor to wxPGEditor::OnEvent() and wxPGProperty::OnEvent(),
     as appropriate.
+
+  - wxPython: Previously some of the reimplemented member functions needed a
+    'Py' prefix. This is no longer necessary. For instance, if you previously
+    implemented PyStringToValue() for your custom property, you should now
+    just implement StringToValue().
 */
