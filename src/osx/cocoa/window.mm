@@ -416,8 +416,8 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
             wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
             wxevent.m_wheelDelta = 10;
             wxevent.m_linesPerAction = 1;
-            NSLog(@"deltaX %f, deltaY %f",[nsEvent deltaX], [nsEvent deltaY]);
-            if ( abs([nsEvent deltaX]) > abs([nsEvent deltaY]) )
+
+            if ( fabs([nsEvent deltaX]) > fabs([nsEvent deltaY]) )
             {
                 wxevent.m_wheelAxis = 1;
                 wxevent.m_wheelRotation = [nsEvent deltaX] * 10.0;
