@@ -71,12 +71,6 @@ public:
 
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
-    virtual void GetTextExtent(const wxString& string,
-        int *x, int *y,
-        int *descent = NULL,
-        int *externalLeading = NULL,
-        const wxFont *theFont = (const wxFont *) NULL)
-        const;
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
         int range, bool refresh = true );
@@ -280,6 +274,11 @@ protected:
     int                   m_scrollPosY;
 
     // implement the base class pure virtuals
+    virtual void DoGetTextExtent(const wxString& string,
+                                 int *x, int *y,
+                                 int *descent = NULL,
+                                 int *externalLeading = NULL,
+                                 const wxFont *font = NULL) const;
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
     virtual void DoGetPosition( int *x, int *y ) const;

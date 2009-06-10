@@ -557,10 +557,11 @@ int wxWindowDFB::GetCharWidth() const
     return dc.GetCharWidth();
 }
 
-void wxWindowDFB::GetTextExtent(const wxString& string,
-                             int *x, int *y,
-                             int *descent, int *externalLeading,
-                             const wxFont *theFont) const
+void wxWindowDFB::DoGetTextExtent(const wxString& string,
+                                  int *x, int *y,
+                                  int *descent,
+                                  int *externalLeading,
+                                  const wxFont *theFont) const
 {
     wxWindowDC dc((wxWindow*)this);
     dc.GetTextExtent(string, x, y, descent, externalLeading, (wxFont*)theFont);

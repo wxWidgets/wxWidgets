@@ -82,20 +82,6 @@ public:
 
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
-    virtual void GetTextExtent( const wxString& string,
-                               int *x, int *y,
-                               int *descent = NULL,
-                               int *externalLeading = NULL,
-                               const wxFont *theFont = NULL )
-                               const;
-protected:
-    virtual void DoEnable( bool enable );
-#if wxUSE_MENUS
-    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
-#endif
-
-    virtual void DoFreeze();
-    virtual void DoThaw();
 
 public:
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
@@ -306,6 +292,20 @@ protected:
     void                MacUpdateControlFont() ;
 
     // implement the base class pure virtuals
+    virtual void DoGetTextExtent(const wxString& string,
+                                 int *x, int *y,
+                                 int *descent = NULL,
+                                 int *externalLeading = NULL,
+                                 const wxFont *theFont = NULL ) const;
+
+    virtual void DoEnable( bool enable );
+#if wxUSE_MENUS
+    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+#endif
+
+    virtual void DoFreeze();
+    virtual void DoThaw();
+
     virtual wxSize DoGetBestSize() const;
     virtual wxSize DoGetSizeFromClientSize( const wxSize & size ) const;
     virtual void DoClientToScreen( int *x, int *y ) const;

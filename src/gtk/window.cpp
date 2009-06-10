@@ -2922,12 +2922,12 @@ int wxWindowGTK::GetCharWidth() const
     return (int) PANGO_PIXELS(rect.width);
 }
 
-void wxWindowGTK::GetTextExtent( const wxString& string,
-                                 int *x,
-                                 int *y,
-                                 int *descent,
-                                 int *externalLeading,
-                                 const wxFont *theFont ) const
+void wxWindowGTK::DoGetTextExtent( const wxString& string,
+                                   int *x,
+                                   int *y,
+                                   int *descent,
+                                   int *externalLeading,
+                                   const wxFont *theFont ) const
 {
     wxFont fontToUse = theFont ? *theFont : GetFont();
 

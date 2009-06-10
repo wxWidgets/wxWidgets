@@ -1069,12 +1069,14 @@ public:
 
         // get the width/height/... of the text using current or specified
         // font
-    virtual void GetTextExtent(const wxString& string,
-                               int *x, int *y,
-                               int *descent = NULL,
-                               int *externalLeading = NULL,
-                               const wxFont *theFont = (const wxFont *) NULL)
-                               const = 0;
+    void GetTextExtent(const wxString& string,
+                       int *x, int *y,
+                       int *descent = NULL,
+                       int *externalLeading = NULL,
+                       const wxFont *font = NULL) const
+    {
+        DoGetTextExtent(string, x, y, descent, externalLeading, font);
+    }
 
     wxSize GetTextExtent(const wxString& string) const
     {
@@ -1601,6 +1603,13 @@ protected:
     //     general, absolutely not needed. So instead we implement all
     //     overloaded Something()s in terms of DoSomething() which will be the
     //     only one to be virtual.
+
+    // text extent
+    virtual void DoGetTextExtent(const wxString& string,
+                                 int *x, int *y,
+                                 int *descent = NULL,
+                                 int *externalLeading = NULL,
+                                 const wxFont *font = NULL) const = 0;
 
     // coordinates translation
     virtual void DoClientToScreen( int *x, int *y ) const = 0;

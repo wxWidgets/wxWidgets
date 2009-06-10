@@ -1076,10 +1076,11 @@ int wxWindowX11::GetCharWidth() const
 #endif
 }
 
-void wxWindowX11::GetTextExtent(const wxString& string,
-                                int *x, int *y,
-                                int *descent, int *externalLeading,
-                                const wxFont *theFont) const
+void wxWindowX11::DoGetTextExtent(const wxString& string,
+                                  int *x, int *y,
+                                  int *descent,
+                                  int *externalLeading,
+                                  const wxFont *theFont) const
 {
     wxFont fontToUse = GetFont();
     if (theFont) fontToUse = *theFont;

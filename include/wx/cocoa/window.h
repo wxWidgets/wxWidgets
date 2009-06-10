@@ -173,7 +173,7 @@ public:
     // Get character size
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
-    virtual void GetTextExtent(const wxString& string, int *x, int *y,
+    virtual void DoGetTextExtent(const wxString& string, int *x, int *y,
                              int *descent = NULL,
                              int *externalLeading = NULL,
                              const wxFont *theFont = NULL) const;

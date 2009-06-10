@@ -1661,12 +1661,12 @@ int wxWindowOS2::GetCharWidth() const
     return(vFontMetrics.lAveCharWidth);
 } // end of wxWindowOS2::GetCharWidth
 
-void wxWindowOS2::GetTextExtent( const wxString& rString,
-                                 int* pX,
-                                 int* pY,
-                                 int* pDescent,
-                                 int* pExternalLeading,
-                                 const wxFont* WXUNUSED(pTheFont) ) const
+void wxWindowOS2::DoGetTextExtent( const wxString& rString,
+                                   int* pX,
+                                   int* pY,
+                                   int* pDescent,
+                                   int* pExternalLeading,
+                                   const wxFont* WXUNUSED(pTheFont) ) const
 {
     POINTL      avPoint[TXTBOX_COUNT];
     POINTL      vPtMin;
@@ -1750,7 +1750,7 @@ void wxWindowOS2::GetTextExtent( const wxString& rString,
             *pExternalLeading = 0;
     }
     ::WinReleasePS(hPS);
-} // end of wxWindow::GetTextExtent
+} // end of wxWindow::DoGetTextExtent
 
 bool wxWindowOS2::IsMouseInWindow() const
 {

@@ -84,16 +84,6 @@ public:
 
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
-    virtual void GetTextExtent(const wxString& string,
-                               int *x, int *y,
-                               int *descent = NULL,
-                               int *externalLeading = NULL,
-                               const wxFont *theFont = (const wxFont *) NULL)
-                               const;
-
-#if wxUSE_MENUS_NATIVE
-    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
-#endif // wxUSE_MENUS_NATIVE
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true );
@@ -226,6 +216,16 @@ public:
     wxInsertChildFunction  m_insertCallback;
 
     // implement the base class pure virtuals
+    virtual void DoGetTextExtent(const wxString& string,
+                               int *x, int *y,
+                               int *descent = NULL,
+                               int *externalLeading = NULL,
+                               const wxFont *theFont = NULL) const;
+
+#if wxUSE_MENUS_NATIVE
+    virtual bool DoPopupMenu( wxMenu *menu, int x, int y );
+#endif // wxUSE_MENUS_NATIVE
+
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
     virtual void DoGetPosition( int *x, int *y ) const;

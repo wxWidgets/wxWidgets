@@ -2133,10 +2133,11 @@ int wxWindowMSW::GetCharWidth() const
 #endif
 }
 
-void wxWindowMSW::GetTextExtent(const wxString& string,
-                             int *x, int *y,
-                             int *descent, int *externalLeading,
-                             const wxFont *fontToUse) const
+void wxWindowMSW::DoGetTextExtent(const wxString& string,
+                                  int *x, int *y,
+                                  int *descent,
+                                  int *externalLeading,
+                                  const wxFont *fontToUse) const
 {
     wxASSERT_MSG( !fontToUse || fontToUse->Ok(),
                     _T("invalid font in GetTextExtent()") );
