@@ -1489,10 +1489,11 @@ public:
         @param font
             Font to use instead of the current window font (optional).
     */
-    virtual void GetTextExtent(const wxString& string, int* w, int* h,
-                               int* descent = NULL,
-                               int* externalLeading = NULL,
-                               const wxFont* font = NULL) const;
+    void GetTextExtent(const wxString& string,
+                        int* w, int* h,
+                       int* descent = NULL,
+                       int* externalLeading = NULL,
+                       const wxFont* font = NULL) const;
 
     /**
         Gets the dimensions of the string as it would be drawn on the
