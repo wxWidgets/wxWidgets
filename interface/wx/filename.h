@@ -892,7 +892,7 @@ public:
         @return Returns @true if the directory was successfully created, @false
                 otherwise.
     */
-    bool Mkdir(int perm = wxS_DIR_DEFAULT, int flags = 0);
+    bool Mkdir(int perm = wxS_DIR_DEFAULT, int flags = 0) const;
 
     /**
         Creates a directory.
@@ -1009,7 +1009,7 @@ public:
         @return Returns @true if the directory was successfully deleted, @false
                 otherwise.
     */
-    bool Rmdir(int flags = 0);
+    bool Rmdir(int flags = 0) const;
 
     /**
         Deletes the specified directory from the file system.

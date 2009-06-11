@@ -1073,7 +1073,7 @@ wxString wxFileName::GetTempDir()
     return dir;
 }
 
-bool wxFileName::Mkdir( int perm, int flags )
+bool wxFileName::Mkdir( int perm, int flags ) const
 {
     return wxFileName::Mkdir(GetPath(), perm, flags);
 }
@@ -1117,7 +1117,7 @@ bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
     return ::wxMkdir( dir, perm );
 }
 
-bool wxFileName::Rmdir(int flags)
+bool wxFileName::Rmdir(int flags) const
 {
     return wxFileName::Rmdir( GetPath(), flags );
 }
