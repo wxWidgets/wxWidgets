@@ -19,12 +19,9 @@
 class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
 {
 public:
-    wxStandardPaths()
-    {
-        UseAppInfo(AppInfo_AppName | AppInfo_VendorName);
-    }
-
-    ~wxStandardPaths() { }
+    // ctor calls IgnoreAppBuildSubDirs() and also sets up the object to use
+    // both vendor and application name by default
+    wxStandardPaths();
 
     // implement base class pure virtuals
     virtual wxString GetExecutablePath() const;
@@ -36,12 +33,44 @@ public:
     virtual wxString GetPluginsDir() const;
     virtual wxString GetDocumentsDir() const;
 
+
+    // MSW-specific methods
+
+    // This class supposes that data, plugins &c files are located under the
+    // program directory which is the directory containing the application
+    // binary itself. But sometimes this binary may be in a subdirectory of the
+    // main program directory, e.g. this happens in at least the following
+    // common cases:
+    //  1. The program is in "bin" subdirectory of the installation directory.
+    //  2. The program is in "debug" subdirectory of the directory containing
+    //     sources and data files during development
+    //
+    // By calling this function you instruct the class to remove the last
+    // component of the path if it matches its argument. Notice that it may be
+    // called more than once, e.g. you can call both IgnoreAppSubDir("bin") and
+    // IgnoreAppSubDir("debug") to take care of both production and development
+    // cases above but that each call will only remove the last path component.
+    // Finally note that the argument can contain wild cards so you can also
+    // call IgnoreAppSubDir("vc*msw*") to ignore all build directories at once
+    // when using wxWidgets-inspired output directories names.
+    void IgnoreAppSubDir(const wxString& subdirPattern);
+
+    // This function is used to ignore all common build directories and is
+    // called from the ctor -- use DontIgnoreAppSubDir() to undo this.
+    void IgnoreAppBuildSubDirs();
+
+    // Undo the effects of all preceding IgnoreAppSubDir() calls.
+    void DontIgnoreAppSubDir();
+
 protected:
     // get the path corresponding to the given standard CSIDL_XXX constant
     static wxString DoGetDirectory(int csidl);
 
     // return the directory of the application itself
-    static wxString GetAppDir();
+    wxString GetAppDir() const;
+
+    // directory returned by GetAppDir()
+    mutable wxString m_appDir;
 };
 
 // ----------------------------------------------------------------------------
