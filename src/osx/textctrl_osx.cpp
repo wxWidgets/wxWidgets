@@ -580,6 +580,8 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         event.Skip(true) ;
     }
 
+    // osx_cocoa sends its event upon insertText
+#if wxOSX_USE_CARBON
     if ( ( key >= 0x20 && key < WXK_START ) ||
          ( key >= WXK_NUMPAD0 && key <= WXK_DIVIDE ) ||
          key == WXK_RETURN ||
@@ -590,6 +592,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         event1.SetEventObject( this );
         wxPostEvent( GetEventHandler(), event1 );
     }
+#endif
 }
 
 // ----------------------------------------------------------------------------

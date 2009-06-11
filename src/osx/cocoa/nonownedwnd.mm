@@ -291,6 +291,26 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
     }
 }
 
+- (id)windowWillReturnFieldEditor:(NSWindow *)sender toObject:(id)anObject
+{
+    wxUnusedVar(sender);
+
+    if ([anObject isKindOfClass:[wxNSTextField class]])
+    {
+        wxNSTextField* tf = (wxNSTextField*) anObject;
+        wxNSTextFieldEditor* editor = [tf fieldEditor];
+        if ( editor == nil )
+        {
+            editor = [[wxNSTextFieldEditor alloc] init];
+            [editor setFieldEditor:YES];
+            [tf setFieldEditor:editor];
+        }
+        return editor;
+    }
+
+    return nil;
+}
+
 @end
 
 IMPLEMENT_DYNAMIC_CLASS( wxNonOwnedWindowCocoaImpl , wxNonOwnedWindowImpl )
