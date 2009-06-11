@@ -212,6 +212,12 @@ protected :
     return self;
 }
 
+- (void) dealloc
+{
+    [fieldEditor release];
+    [super dealloc];
+}
+
 - (void) setFieldEditor:(wxNSTextFieldEditor*) editor
 {
     fieldEditor = editor;
