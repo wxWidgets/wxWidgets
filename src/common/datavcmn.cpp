@@ -517,20 +517,20 @@ void wxDataViewVirtualListModel::RowPrepended()
 void wxDataViewVirtualListModel::RowInserted( unsigned int before )
 {
     m_lastIndex++;
-    wxDataViewItem item( wxUIntToPtr(before) );
+    wxDataViewItem item( wxUIntToPtr(before+1) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowAppended()
 {
     m_lastIndex++;
-    wxDataViewItem item( wxUIntToPtr(m_lastIndex) );
+    wxDataViewItem item( wxUIntToPtr(m_lastIndex+1) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
 void wxDataViewVirtualListModel::RowDeleted( unsigned int row )
 {
-    wxDataViewItem item( wxUIntToPtr(row) );
+    wxDataViewItem item( wxUIntToPtr(row+1) );
     wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
     m_lastIndex++;
 }
@@ -544,7 +544,7 @@ void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
     unsigned int i;
     for (i = 0; i < sorted.GetCount(); i++)
     {
-            wxDataViewItem item( wxUIntToPtr(sorted[i]) );
+            wxDataViewItem item( wxUIntToPtr(sorted[i]+1) );
             array.Add( item );
     }
     wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
@@ -564,12 +564,12 @@ void wxDataViewVirtualListModel::RowValueChanged( unsigned int row, unsigned int
 
 unsigned int wxDataViewVirtualListModel::GetRow( const wxDataViewItem &item ) const
 {
-    return wxPtrToUInt( item.GetID() );
+    return wxPtrToUInt( item.GetID() ) -1;
 }
 
 wxDataViewItem wxDataViewVirtualListModel::GetItem( unsigned int row ) const
 {
-    return wxDataViewItem( wxUIntToPtr(row)  );
+    return wxDataViewItem( wxUIntToPtr(row+1) );
 }
 
 bool wxDataViewVirtualListModel::HasDefaultCompare() const
@@ -582,8 +582,8 @@ int wxDataViewVirtualListModel::Compare(const wxDataViewItem& item1,
                                       unsigned int WXUNUSED(column),
                                       bool ascending) const
 {
-    unsigned int pos1 = wxPtrToUInt(item1.GetID());
-    unsigned int pos2 = wxPtrToUInt(item2.GetID());
+    unsigned int pos1 = wxPtrToUInt(item1.GetID())-1;
+    unsigned int pos2 = wxPtrToUInt(item2.GetID())-1;
 
     if (ascending)
        return pos1 - pos2;

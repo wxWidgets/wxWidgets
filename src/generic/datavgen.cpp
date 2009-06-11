@@ -1820,7 +1820,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             }
             else
             {
-                dataitem = wxDataViewItem( wxUIntToPtr(item) );
+                dataitem = wxDataViewItem( wxUIntToPtr(item+1) );
             }
 
             model->GetValue( value, dataitem, col->GetModelColumn());
@@ -2028,7 +2028,7 @@ bool Walker( wxDataViewTreeNode * node, DoJob & func )
 
 bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxDataViewItem & item)
 {
-    if (!m_root)
+    if (IsVirtualList())
     {
         m_count++;
         UpdateDisplay();
@@ -2066,14 +2066,15 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
 static void DestroyTreeHelper( wxDataViewTreeNode * node);
 
 bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
-                                    const wxDataViewItem& item)
+                                       const wxDataViewItem& item)
 {
-    if (!m_root)
+    if (IsVirtualList())
     {
         m_count--;
         if( m_currentRow > GetRowCount() )
             m_currentRow = m_count - 1;
 
+        // TODO: why empty the entire selection?
         m_selection.Empty();
 
         UpdateDisplay();
@@ -2777,15 +2778,17 @@ private:
 
 wxDataViewItem wxDataViewMainWindow::GetItemByRow(unsigned int row) const
 {
-    if (!m_root)
+    if (IsVirtualList())
     {
-        return wxDataViewItem( wxUIntToPtr(row) );
+        return wxDataViewItem( wxUIntToPtr(row+1) );
     }
     else
     {
         RowToItemJob job( row, -2 );
         Walker( m_root , job );
-        return job.GetResult();
+        wxDataViewItem res = job.GetResult();
+//        wxPrintf( "row %d, item %d\n", row, (int) res.GetID() );
+        return res;
     }
 }
 
@@ -3199,7 +3202,7 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
 
 int wxDataViewMainWindow::RecalculateCount()
 {
-    if (!m_root)
+    if (IsVirtualList())
     {
         wxDataViewIndexListModel *list_model =
             (wxDataViewIndexListModel*) GetOwner()->GetModel();
@@ -3272,9 +3275,9 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
     if( model == NULL )
         return -1;
 
-    if (!m_root)
+    if (IsVirtualList())
     {
-        return wxPtrToUInt( item.GetID() );
+        return wxPtrToUInt( item.GetID() ) -1;
     }
     else
     {
