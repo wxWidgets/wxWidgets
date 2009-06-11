@@ -89,14 +89,12 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
 
 #if defined( __WXMAC__ ) && !defined(__WXUNIVERSAL__)
     // on Mac we use the disclosure triangle
-    // we need a light gray line above and below, lets approximate with the frame
     m_pStaticLine = NULL;
-    m_pButton = new wxDisclosureTriangle( this, wxID_ANY, GetBtnLabel(),
-                                         wxDefaultPosition, wxDefaultSize, wxSIMPLE_BORDER );
-    m_pButton->SetBackgroundColour( wxColour( 221, 226, 239 ) );
+    m_pButton = new wxDisclosureTriangle(this, wxID_ANY, GetBtnLabel(),
+                                         wxDefaultPosition, wxDefaultSize,
+                                         style & wxBORDER_MASK);
     m_sz = new wxBoxSizer(wxHORIZONTAL);
-    // m_sz->Add(4,4); where shall we put it?
-    m_sz->Add( m_pButton, 1);
+    m_sz->Add(m_pButton, wxSizerFlags(1).Expand());
 #else
     // create children and lay them out using a wxBoxSizer
     // (so that we automatically get RTL features)
