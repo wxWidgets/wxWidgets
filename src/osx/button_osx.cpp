@@ -44,7 +44,7 @@ bool wxButton::Create(wxWindow *parent,
         return false;
 
     m_labelOrig = m_label = label ;
-    
+
     m_peer = wxWidgetImpl::CreateButton( this, parent, id, label, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate( pos, size );
@@ -95,9 +95,9 @@ bool wxDisclosureTriangle::Create(wxWindow *parent, wxWindowID id, const wxStrin
     m_peer = wxWidgetImpl::CreateDisclosureTriangle(this, parent, id, label, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate( pos, size );
-    // passing the text in the param doesn't seem to work, so lets do if again
+    // passing the text in the param doesn't seem to work, so lets do it again
     SetLabel( label );
-    
+
     return true;
 }
 
@@ -123,6 +123,14 @@ bool wxDisclosureTriangle::OSXHandleClicked( double WXUNUSED(timestampsec) )
 
 wxSize wxDisclosureTriangle::DoGetBestSize() const
 {
-    return wxWindow::DoGetBestSize();
+    wxSize size = wxWindow::DoGetBestSize();
+
+    // under Carbon the base class GetBestSize() implementation doesn't seem to
+    // take the label into account at all, correct for it here
+#if wxOSX_USE_CARBON
+    size.x += GetTextExtent(GetLabel()).x;
+#endif // wxOSX_USE_CARBON
+
+    return size;
 }
 
