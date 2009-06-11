@@ -678,6 +678,47 @@ wxString wxNativeFontInfo::ToUserString() const
         else
             desc << _T(' ') << face;
     }
+    else // no face name specified
+    {
+        // use the family
+        wxString familyStr;
+        switch ( GetFamily() )
+        {
+            case wxFONTFAMILY_DECORATIVE:
+                familyStr = "decorative";
+                break;
+
+            case wxFONTFAMILY_ROMAN:
+                familyStr = "roman";
+                break;
+
+            case wxFONTFAMILY_SCRIPT:
+                familyStr = "script";
+                break;
+
+            case wxFONTFAMILY_SWISS:
+                familyStr = "swiss";
+                break;
+
+            case wxFONTFAMILY_MODERN:
+                familyStr = "modern";
+                break;
+
+            case wxFONTFAMILY_TELETYPE:
+                familyStr = "teletype";
+                break;
+
+            case wxFONTFAMILY_DEFAULT:
+            case wxFONTFAMILY_UNKNOWN:
+                break;
+
+            default:
+                wxFAIL_MSG( "unknown font family" );
+        }
+
+        if ( !familyStr.empty() )
+            desc << " '" << familyStr << " family'";
+    }
 
     int size = GetPointSize();
     if ( size != wxNORMAL_FONT->GetPointSize() )
@@ -705,13 +746,6 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
     // or semicolons: we must be able to understand that quoted text is
     // a single token:
     wxString toparse(s);
-    /*
-    wxString::iterator i = toparse.find("'");
-    if (i != wxString::npos)
-    {
-        for (; *i != '\'' && *i != toparse.end(); i++)
-            ;
-    }*/
 
     // parse a more or less free form string
     wxStringTokenizer tokenizer(toparse, _T(";, "), wxTOKEN_STRTOK);
@@ -819,10 +853,32 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
         // bar")
         if ( !face.empty() )
         {
+            wxString familyStr;
+            if ( face.EndsWith(" family", &familyStr) )
+            {
+                // it's not a facename but rather a font family
+                wxFontFamily family;
+                if ( familyStr == "decorative" )
+                    family = wxFONTFAMILY_DECORATIVE;
+                else if ( familyStr == "roman" )
+                    family = wxFONTFAMILY_ROMAN;
+                else if ( familyStr == "script" )
+                    family = wxFONTFAMILY_SCRIPT;
+                else if ( familyStr == "swiss" )
+                    family = wxFONTFAMILY_SWISS;
+                else if ( familyStr == "modern" )
+                    family = wxFONTFAMILY_MODERN;
+                else if ( familyStr == "teletype" )
+                    family = wxFONTFAMILY_TELETYPE;
+                else
+                    return false;
+                
+                SetFamily(family);
+            }
             // NB: the check on the facename is implemented in wxFontBase::SetFaceName
             //     and not in wxNativeFontInfo::SetFaceName thus we need to explicitely
             //     call here wxFontEnumerator::IsValidFacename
-            if (
+            else if (
 #if wxUSE_FONTENUM
                     !wxFontEnumerator::IsValidFacename(face) ||
 #endif // wxUSE_FONTENUM

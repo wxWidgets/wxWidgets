@@ -35,7 +35,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
+all: access animate artprov aui calendar caret clipboard collpane combo config console controls dataview dialogs dialup display dnd docview dragimag drawing erase event except exec font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup power printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer xrc
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -48,8 +48,8 @@ clean:
 	$(MAKE) -C caret -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C clipboard -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C collpane -f makefile.gcc $(MAKEARGS) clean
-	$(MAKE) -C config -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C combo -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C config -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C console -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C controls -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C dataview -f makefile.gcc $(MAKEARGS) clean
@@ -62,8 +62,8 @@ clean:
 	$(MAKE) -C drawing -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C erase -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C event -f makefile.gcc $(MAKEARGS) clean
-	$(MAKE) -C exec -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C except -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C exec -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C font -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C grid -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C help -f makefile.gcc $(MAKEARGS) clean
@@ -86,6 +86,7 @@ clean:
 	$(MAKE) -C opengl -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C ownerdrw -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C popup -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C power -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C printing -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C propgrid -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C regtest -f makefile.gcc $(MAKEARGS) clean
@@ -100,6 +101,8 @@ clean:
 	$(MAKE) -C splitter -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C statbar -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C stc -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C svg -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C taborder -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C taskbar -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C text -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C thread -f makefile.gcc $(MAKEARGS) clean
@@ -111,6 +114,7 @@ clean:
 	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wizard -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C xrc -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) clean
 
 access: 
@@ -137,11 +141,11 @@ clipboard:
 collpane: 
 	$(MAKE) -C collpane -f makefile.gcc $(MAKEARGS) all
 
-config: 
-	$(MAKE) -C config -f makefile.gcc $(MAKEARGS) all
-
 combo: 
 	$(MAKE) -C combo -f makefile.gcc $(MAKEARGS) all
+
+config: 
+	$(MAKE) -C config -f makefile.gcc $(MAKEARGS) all
 
 console: 
 	$(MAKE) -C console -f makefile.gcc $(MAKEARGS) all
@@ -179,11 +183,11 @@ erase:
 event: 
 	$(MAKE) -C event -f makefile.gcc $(MAKEARGS) all
 
-exec: 
-	$(MAKE) -C exec -f makefile.gcc $(MAKEARGS) all
-
 except: 
 	$(MAKE) -C except -f makefile.gcc $(MAKEARGS) all
+
+exec: 
+	$(MAKE) -C exec -f makefile.gcc $(MAKEARGS) all
 
 font: 
 	$(MAKE) -C font -f makefile.gcc $(MAKEARGS) all
@@ -251,6 +255,9 @@ ownerdrw:
 popup: 
 	$(MAKE) -C popup -f makefile.gcc $(MAKEARGS) all
 
+power: 
+	$(MAKE) -C power -f makefile.gcc $(MAKEARGS) all
+
 printing: 
 	$(MAKE) -C printing -f makefile.gcc $(MAKEARGS) all
 
@@ -293,6 +300,12 @@ statbar:
 stc: 
 	$(MAKE) -C stc -f makefile.gcc $(MAKEARGS) all
 
+svg: 
+	$(MAKE) -C svg -f makefile.gcc $(MAKEARGS) all
+
+taborder: 
+	$(MAKE) -C taborder -f makefile.gcc $(MAKEARGS) all
+
 taskbar: 
 	$(MAKE) -C taskbar -f makefile.gcc $(MAKEARGS) all
 
@@ -326,16 +339,20 @@ wizard:
 wrapsizer: 
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) all
 
+xrc: 
+	$(MAKE) -C xrc -f makefile.gcc $(MAKEARGS) all
+
 memcheck: 
 	$(MAKE) -C memcheck -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all clean access animate artprov aui calendar caret clipboard collpane config \
-	combo console controls dataview dialogs dialup display dnd docview dragimag \
-	drawing erase event exec except font grid help htlbox html image internat ipc joytest \
+.PHONY: all clean access animate artprov aui calendar caret clipboard collpane combo \
+	config console controls dataview dialogs dialup display dnd docview dragimag \
+	drawing erase event except exec font grid help htlbox html image internat ipc joytest \
 	keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto \
-	opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll \
-	shaped sockets sound splash splitter statbar stc taskbar text thread toolbar \
-	treectrl typetest validate vscroll widgets wizard wrapsizer memcheck
+	opengl ownerdrw popup power printing propgrid regtest render richtext sashtest \
+	scroll shaped sockets sound splash splitter statbar stc svg taborder taskbar text \
+	thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer xrc \
+	memcheck
 
 
 SHELL := $(COMSPEC)

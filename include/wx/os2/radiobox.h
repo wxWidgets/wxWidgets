@@ -28,7 +28,7 @@ public:
                       ,int                nNum = 0
                       ,const wxString     asChoices[] = NULL
                       ,int                nMajorDim = 0
-                      ,long               lStyle = wxRA_HORIZONTAL
+                      ,long               lStyle = wxRA_SPECIFY_COLS
                       ,const wxValidator& rVal = wxDefaultValidator
                       ,const wxString&    rsName = wxRadioBoxNameStr
                      )
@@ -54,7 +54,7 @@ public:
                       ,const wxSize&        rSize
                       ,const wxArrayString& asChoices
                       ,int                  nMajorDim = 0
-                      ,long                 lStyle = wxRA_HORIZONTAL
+                      ,long                 lStyle = wxRA_SPECIFY_COLS
                       ,const wxValidator&   rVal = wxDefaultValidator
                       ,const wxString&      rsName = wxRadioBoxNameStr
                      )
@@ -82,7 +82,7 @@ public:
                 ,int                nNum = 0
                 ,const wxString     asChoices[] = NULL
                 ,int                nMajorDim = 0
-                ,long               lStyle = wxRA_HORIZONTAL
+                ,long               lStyle = wxRA_SPECIFY_COLS
                 ,const wxValidator& rVal = wxDefaultValidator
                 ,const wxString&    rsName = wxRadioBoxNameStr
                );
@@ -94,7 +94,7 @@ public:
                 ,const wxSize&        rSize
                 ,const wxArrayString& asChoices
                 ,int                  nMajorDim = 0
-                ,long                 lStyle = wxRA_HORIZONTAL
+                ,long                 lStyle = wxRA_SPECIFY_COLS
                 ,const wxValidator&   rVal = wxDefaultValidator
                 ,const wxString&      rsName = wxRadioBoxNameStr
                );

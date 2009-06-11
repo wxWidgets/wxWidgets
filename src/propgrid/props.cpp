@@ -478,21 +478,13 @@ bool wxUIntProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(ar
     return false;
 }
 
-#ifdef ULLONG_MAX
-  #define wxUINT64_MAX ULLONG_MAX
-  #define wxUINT64_MIN wxULL(0)
-#else
-  #define wxUINT64_MAX wxULL(0xFFFFFFFFFFFFFFFF)
-  #define wxUINT64_MIN wxULL(0)
-#endif
-
 bool wxUIntProperty::ValidateValue( wxVariant& value, wxPGValidationInfo& validationInfo ) const
 {
     // Check for min/max
     wxULongLong_t ll;
     if ( wxPGVariantToULongLong(value, &ll) )
     {
-        wxULongLong_t min = wxUINT64_MIN;
+        wxULongLong_t min = 0;
         wxULongLong_t max = wxUINT64_MAX;
         wxVariant variant;
 
@@ -1495,15 +1487,18 @@ void wxFlagsProperty::RefreshChildren()
     m_oldValue = flags;
 }
 
-void wxFlagsProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
+wxVariant wxFlagsProperty::ChildChanged( wxVariant& thisValue,
+                                         int childIndex,
+                                         wxVariant& childValue ) const
 {
     long oldValue = thisValue.GetLong();
     long val = childValue.GetLong();
     unsigned long vi = m_choices.GetValue(childIndex);
+
     if ( val )
-        thisValue = (long)(oldValue | vi);
-    else
-        thisValue = (long)(oldValue & ~(vi));
+        return (long) (oldValue | vi);
+
+    return (long) (oldValue & ~(vi));
 }
 
 bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )

@@ -1103,9 +1103,10 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxHtmlWindow::OnSize(wxSizeEvent& event)
 {
+    event.Skip();
+
     wxDELETE(m_backBuffer);
 
-    wxScrolledWindow::OnSize(event);
     CreateLayout();
 
     // Recompute selection if necessary:

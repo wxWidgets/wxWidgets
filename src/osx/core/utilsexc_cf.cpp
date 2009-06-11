@@ -110,7 +110,7 @@ int wxGUIAppTraits::AddProcessCallback(wxEndProcessData *proc_data, int fd)
 // put it in because it's already compiled for wxCocoa and wxMac GUI lib.
 #if wxUSE_STDPATHS
 static wxStandardPathsCF gs_stdPaths;
-wxStandardPathsBase& wxGUIAppTraits::GetStandardPaths()
+wxStandardPaths& wxGUIAppTraits::GetStandardPaths()
 {
     return gs_stdPaths;
 }

@@ -89,8 +89,9 @@ public:
     virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=true );
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );
     virtual bool DoLoadFile( wxImage *image, wxInputStream& stream, bool verbose, int index );
-    virtual int GetImageCount( wxInputStream& stream );
+    
 protected:
+    virtual int DoGetImageCount( wxInputStream& stream );
     virtual bool DoCanRead( wxInputStream& stream );
 #endif // wxUSE_STREAMS
 
@@ -145,8 +146,9 @@ public:
 #if wxUSE_STREAMS
     virtual bool SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool WXUNUSED(verbose=true) ){return false ;}
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );
-    virtual int GetImageCount( wxInputStream& stream );
+
 protected:
+    virtual int DoGetImageCount( wxInputStream& stream );
     virtual bool DoCanRead( wxInputStream& stream );
 #endif // wxUSE_STREAMS
 

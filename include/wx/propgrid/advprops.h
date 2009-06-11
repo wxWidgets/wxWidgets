@@ -19,14 +19,13 @@
 // -----------------------------------------------------------------------
 
 
+#ifndef SWIG
+
 //
 // Additional Value Type Handlers
 //
-#ifndef SWIG
 bool WXDLLIMPEXP_PROPGRID
 operator==(const wxArrayInt& array1, const wxArrayInt& array2);
-#endif
-
 
 //
 // Additional Property Editors
@@ -38,6 +37,8 @@ WX_PG_DECLARE_EDITOR_WITH_DECL(SpinCtrl,WXDLLIMPEXP_PROPGRID)
 #if wxUSE_DATEPICKCTRL
 WX_PG_DECLARE_EDITOR_WITH_DECL(DatePickerCtrl,WXDLLIMPEXP_PROPGRID)
 #endif
+
+#endif  // !SWIG
 
 // -----------------------------------------------------------------------
 
@@ -156,7 +157,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 // -----------------------------------------------------------------------
 // Declare part of custom colour property macro pairs.
 
-#if wxUSE_IMAGE || defined(SWIG)
+#if wxUSE_IMAGE
     #include "wx/image.h"
 #endif
 
@@ -182,8 +183,9 @@ public:
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxWindow* primary, wxEvent& event );
-    virtual void ChildChanged( wxVariant& thisValue,
-                               int childIndex, wxVariant& childValue ) const;
+    virtual wxVariant ChildChanged( wxVariant& thisValue,
+                                    int childIndex,
+                                    wxVariant& childValue ) const;
     virtual void RefreshChildren();
 
 protected:
@@ -356,7 +358,7 @@ protected:
 
 #endif
 
-#if wxUSE_CHOICEDLG || defined(SWIG)
+#if wxUSE_CHOICEDLG
 
 /** @class wxMultiChoiceProperty
     @ingroup classes

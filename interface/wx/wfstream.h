@@ -57,7 +57,7 @@ public:
 
     This class represents data written to a file.
     There are actually two such groups of classes: this one is based on wxFFile
-    whereas wxFileInputStream is based in the wxFile class.
+    whereas wxFileOutputStream is based in the wxFile class.
 
     Note that wxOutputStream::SeekO() can seek beyond the end of the stream
     (file) and will thus not return ::wxInvalidOffset for that.
@@ -65,7 +65,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @see wxBufferedOutputStream, wxFFileInputStream, wxFileInputStream
+    @see wxBufferedOutputStream, wxFFileInputStream, wxFileOutputStream, wxFileInputStream
 */
 class wxFFileOutputStream : public wxOutputStream
 {
@@ -107,7 +107,7 @@ public:
 
     This class represents data written to a file.
     There are actually two such groups of classes: this one is based on wxFile
-    whereas wxFFileInputStream is based in the wxFFile class.
+    whereas wxFFileOutputStream is based in the wxFFile class.
 
     Note that wxOutputStream::SeekO() can seek beyond the end of the stream
     (file) and will thus not return ::wxInvalidOffset for that.
@@ -115,7 +115,7 @@ public:
     @library{wxbase}
     @category{streams}
 
-    @see wxBufferedOutputStream, wxFileInputStream, wxFFileInputStream
+    @see wxBufferedOutputStream, wxFileInputStream, wxFFileOutputStream, wxFFileInputStream
 */
 class wxFileOutputStream : public wxOutputStream
 {

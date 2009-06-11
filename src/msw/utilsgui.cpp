@@ -304,10 +304,8 @@ int WXDLLEXPORT wxGetWindowId(WXHWND hWnd)
 // Metafile helpers
 // ----------------------------------------------------------------------------
 
-extern void PixelToHIMETRIC(LONG *x, LONG *y)
+void PixelToHIMETRIC(LONG *x, LONG *y, HDC hdcRef)
 {
-    ScreenHDC hdcRef;
-
     int iWidthMM = GetDeviceCaps(hdcRef, HORZSIZE),
         iHeightMM = GetDeviceCaps(hdcRef, VERTSIZE),
         iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
@@ -319,10 +317,8 @@ extern void PixelToHIMETRIC(LONG *x, LONG *y)
     *y /= iHeightPels;
 }
 
-extern void HIMETRICToPixel(LONG *x, LONG *y)
+void HIMETRICToPixel(LONG *x, LONG *y, HDC hdcRef)
 {
-    ScreenHDC hdcRef;
-
     int iWidthMM = GetDeviceCaps(hdcRef, HORZSIZE),
         iHeightMM = GetDeviceCaps(hdcRef, VERTSIZE),
         iWidthPels = GetDeviceCaps(hdcRef, HORZRES),
@@ -332,6 +328,16 @@ extern void HIMETRICToPixel(LONG *x, LONG *y)
     *x /= (iWidthMM * 100);
     *y *= iHeightPels;
     *y /= (iHeightMM * 100);
+}
+
+void HIMETRICToPixel(LONG *x, LONG *y)
+{
+    HIMETRICToPixel(x, y, ScreenHDC());
+}
+
+void PixelToHIMETRIC(LONG *x, LONG *y)
+{
+    PixelToHIMETRIC(x, y, ScreenHDC());
 }
 
 void wxDrawLine(HDC hdc, int x1, int y1, int x2, int y2)

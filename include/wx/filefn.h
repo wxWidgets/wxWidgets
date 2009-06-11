@@ -187,12 +187,54 @@ enum wxFileKind
     // huge file support (or at least not all functions needed for it by wx)
     // currently
 
+    // types
+
     #ifdef wxHAS_HUGE_FILES
         typedef wxLongLong_t wxFileOffset;
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
     #else
         typedef off_t wxFileOffset;
     #endif
+
+    // at least Borland 5.5 doesn't like "struct ::stat" so don't use the scope
+    // resolution operator present in wxPOSIX_IDENT for it
+    #ifdef __BORLANDC__
+        #define wxPOSIX_STRUCT(s)    struct s
+    #else
+        #define wxPOSIX_STRUCT(s)    struct wxPOSIX_IDENT(s)
+    #endif
+
+    // Notice that Watcom is the only compiler to have a wide char
+    // version of struct stat as well as a wide char stat function variant.
+    // This was dropped since OW 1.4 "for consistency across platforms".
+    //
+    // Borland is also special in that it uses _stat with Unicode functions
+    // (for MSVC compatibility?) but stat with ANSI ones
+    #ifdef __BORLANDC__
+        #if wxHAS_HUGE_FILES
+            #define wxStructStat struct stati64
+        #else
+            #if wxUSE_UNICODE
+                #define wxStructStat struct _stat
+            #else
+                #define wxStructStat struct stat
+            #endif
+        #endif
+    #else // !__BORLANDC__
+        #ifdef wxHAS_HUGE_FILES
+            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
+                #define wxStructStat struct _wstati64
+            #else
+                #define wxStructStat struct _stati64
+            #endif
+        #else
+            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
+                #define wxStructStat struct _wstat
+            #else
+                #define wxStructStat struct _stat
+            #endif
+        #endif
+    #endif // __BORLANDC__/!__BORLANDC__
 
 
     // functions
@@ -208,14 +250,6 @@ enum wxFileKind
     #else // by default assume MSVC-compatible names
         #define wxPOSIX_IDENT(func)    _ ## func
         #define wxHAS_UNDERSCORES_IN_POSIX_IDENTS
-    #endif
-
-    // at least Borland 5.5 doesn't like "struct ::stat" so don't use the scope
-    // resolution operator present in wxPOSIX_IDENT for it
-    #ifdef __BORLANDC__
-        #define wxPOSIX_STRUCT(s)    struct s
-    #else
-        #define wxPOSIX_STRUCT(s)    struct wxPOSIX_IDENT(s)
     #endif
 
     // first functions not working with strings, i.e. without ANSI/Unicode
@@ -269,111 +303,80 @@ enum wxFileKind
     #define   wxEof        wxPOSIX_IDENT(eof)
 
     // then the functions taking strings
+
+    // first the ANSI versions
+    #define   wxCRT_OpenA       wxPOSIX_IDENT(open)
+    #define   wxCRT_AccessA     wxPOSIX_IDENT(access)
+    #define   wxCRT_MkDirA      wxPOSIX_IDENT(mkdir)
+    #define   wxCRT_RmDirA      wxPOSIX_IDENT(rmdir)
+    #ifdef wxHAS_HUGE_FILES
+        #define   wxCRT_StatA       wxPOSIX_IDENT(stati64)
+    #else
+        // Unfortunately Watcom is not consistent
+        #if defined(__OS2__) && defined(__WATCOMC__)
+            #define   wxCRT_StatA       _stat
+        #else
+            #define   wxCRT_StatA       wxPOSIX_IDENT(stat)
+        #endif
+    #endif
+
+    // then wide char ones
+    #if wxUSE_UNICODE
+        // special workaround for buggy wopen() in bcc 5.5
+        #if defined(__BORLANDC__) && \
+            (__BORLANDC__ >= 0x550 && __BORLANDC__ <= 0x551)
+                WXDLLIMPEXP_BASE int wxCRT_OpenW(const wxChar *pathname,
+                                                 int flags, mode_t mode);
+        #else
+            #define wxCRT_OpenW       _wopen
+        #endif
+
+        #define   wxCRT_AccessW     _waccess
+        #define   wxCRT_MkDirW      _wmkdir
+        #define   wxCRT_RmDirW      _wrmdir
+        #ifdef wxHAS_HUGE_FILES
+            #define   wxCRT_StatW       _wstati64
+        #else
+            #define   wxCRT_StatW       _wstat
+        #endif
+    #endif // wxUSE_UNICODE
+
+
+    // finally the default char-type versions
     #if wxUSE_UNICODE
         #if wxUSE_UNICODE_MSLU
             // implement the missing file functions in Win9x ourselves
-            #if defined( __VISUALC__ ) \
-                || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
-                || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
-                || ( defined(__BORLANDC__) && (__BORLANDC__ > 0x460) ) \
-                || defined(__DMC__)
+            WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name,
+                                               int flags, int mode);
+            WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name,
+                                                 int mode);
+            WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
+            WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
 
-                WXDLLIMPEXP_BASE int wxMSLU__wopen(const wxChar *name,
-                                                   int flags, int mode);
-                WXDLLIMPEXP_BASE int wxMSLU__waccess(const wxChar *name,
-                                                     int mode);
-                WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wxChar *name);
-                WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
-
-                WXDLLIMPEXP_BASE int
-                wxMSLU__wstat(const wxChar *name, wxPOSIX_STRUCT(stat) *buffer);
-                WXDLLIMPEXP_BASE int
-                wxMSLU__wstati64(const wxChar *name,
-                                 wxPOSIX_STRUCT(stati64) *buffer);
-            #endif // Windows compilers with MSLU support
+            WXDLLIMPEXP_BASE int
+            wxMSLU__wstat(const wxChar *name, wxStructStat *buffer);
 
             #define   wxCRT_Open       wxMSLU__wopen
 
             #define   wxCRT_Access     wxMSLU__waccess
             #define   wxCRT_MkDir      wxMSLU__wmkdir
             #define   wxCRT_RmDir      wxMSLU__wrmdir
-            #ifdef wxHAS_HUGE_FILES
-                #define   wxCRT_Stat   wxMSLU__wstati64
-            #else
-                #define   wxCRT_Stat   wxMSLU__wstat
-            #endif
+            #define   wxCRT_Stat       wxMSLU__wstat
         #else // !wxUSE_UNICODE_MSLU
-            #ifdef __BORLANDC__
-                #if __BORLANDC__ >= 0x550 && __BORLANDC__ <= 0x551
-                    WXDLLIMPEXP_BASE int wxCRT_Open(const wxChar *pathname,
-                                                    int flags, mode_t mode);
-                #else
-                    #define   wxCRT_Open       _wopen
-                #endif
-                #define   wxCRT_Access     _waccess
-                #define   wxCRT_MkDir      _wmkdir
-                #define   wxCRT_RmDir      _wrmdir
-                #ifdef wxHAS_HUGE_FILES
-                    #define   wxCRT_Stat       _wstati64
-                #else
-                    #define   wxCRT_Stat       _wstat
-                #endif
-            #else
-                #define   wxCRT_Open       _wopen
-                #define   wxCRT_Access     _waccess
-                #define   wxCRT_MkDir      _wmkdir
-                #define   wxCRT_RmDir      _wrmdir
-                #ifdef wxHAS_HUGE_FILES
-                    #define   wxCRT_Stat       _wstati64
-                #else
-                    #define   wxCRT_Stat       _wstat
-                #endif
-            #endif
+            #define wxCRT_Open      wxCRT_OpenW
+            #define wxCRT_Access    wxCRT_AccessW
+            #define wxCRT_MkDir     wxCRT_MkDirW
+            #define wxCRT_RmDir     wxCRT_RmDirW
+            #define wxCRT_Stat      wxCRT_StatW
         #endif // wxUSE_UNICODE_MSLU/!wxUSE_UNICODE_MSLU
     #else // !wxUSE_UNICODE
-        #define   wxCRT_Open       wxPOSIX_IDENT(open)
-        #define   wxCRT_Access     wxPOSIX_IDENT(access)
-        #define   wxCRT_MkDir      wxPOSIX_IDENT(mkdir)
-        #define   wxCRT_RmDir      wxPOSIX_IDENT(rmdir)
-        #ifdef wxHAS_HUGE_FILES
-            #define   wxCRT_Stat       wxPOSIX_IDENT(stati64)
-        #else
-            // Unfortunately Watcom is not consistent, so:-
-            #if defined(__OS2__) && defined(__WATCOMC__)
-                #define   wxCRT_Stat       _stat
-            #else
-                #define   wxCRT_Stat       wxPOSIX_IDENT(stat)
-            #endif
-        #endif
+        #define wxCRT_Open      wxCRT_OpenA
+        #define wxCRT_Access    wxCRT_AccessA
+        #define wxCRT_MkDir     wxCRT_MkDirA
+        #define wxCRT_RmDir     wxCRT_RmDirA
+        #define wxCRT_Stat      wxCRT_StatA
     #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-    // Types: Notice that Watcom is the only compiler to have a wide char
-    // version of struct stat as well as a wide char stat function variant.
-    // This was dropped since OW 1.4 "for consistency across platforms".
-    //
-    // Borland is also special in that it uses _stat with Unicode functions
-    // (for MSVC compatibility?) but stat with ANSI ones
-    #ifdef __BORLANDC__
-        #if wxUSE_UNICODE
-            #define wxStructStat struct _stat
-        #else
-            #define wxStructStat struct stat
-        #endif
-    #else // !__BORLANDC__
-        #ifdef wxHAS_HUGE_FILES
-            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
-                #define wxStructStat struct _wstati64
-            #else
-                #define wxStructStat struct _stati64
-            #endif
-        #else
-            #if wxUSE_UNICODE && wxONLY_WATCOM_EARLIER_THAN(1,4)
-                #define wxStructStat struct _wstat
-            #else
-                #define wxStructStat struct _stat
-            #endif
-        #endif
-    #endif // __BORLANDC__/!__BORLANDC__
 
     // constants (unless already defined by the user code)
     #ifdef wxHAS_UNDERSCORES_IN_POSIX_IDENTS
@@ -443,16 +446,16 @@ enum wxFileKind
     #define wxHAS_NATIVE_LSTAT
 #else // Unix or Windows using unknown compiler, assume POSIX supported
     typedef off_t wxFileOffset;
-    #ifdef _LARGE_FILES
+    #ifdef HAVE_LARGEFILE_SUPPORT
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
         wxCOMPILE_TIME_ASSERT( sizeof(off_t) == sizeof(wxLongLong_t),
                                 BadFileSizeType );
         // wxFile is present and supports large files
-        #ifdef wxUSE_FILE
+        #if wxUSE_FILE
             #define wxHAS_LARGE_FILES
         #endif
         // wxFFile is present and supports large files
-        #if SIZEOF_LONG == 8 || defined HAVE_FSEEKO
+        #if wxUSE_FFILE && (SIZEOF_LONG == 8 || defined HAVE_FSEEKO)
             #define wxHAS_LARGE_FFILES
         #endif
     #else
@@ -722,6 +725,7 @@ WXDLLIMPEXP_BASE bool wxEndsWithPathSeparator(const wxString& filename);
 #if WXWIN_COMPATIBILITY_2_8
 // split the full path into path (including drive for DOS), name and extension
 // (understands both '/' and '\\')
+// Deprecated in favour of wxFileName::SplitPath
 wxDEPRECATED( WXDLLIMPEXP_BASE void wxSplitPath(const wxString& fileName,
                                                 wxString *pstrPath,
                                                 wxString *pstrName,

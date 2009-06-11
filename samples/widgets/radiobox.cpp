@@ -122,7 +122,7 @@ protected:
     // ------------
 
     // the check/radio boxes for styles
-    wxCheckBox *m_chkVert;
+    wxCheckBox *m_chkSpecifyRows;
     wxCheckBox *m_chkEnableItem;
     wxCheckBox *m_chkShowItem;
     wxRadioBox *m_radioDir;
@@ -191,7 +191,7 @@ RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
                   : WidgetsPage(book, imaglist, radio_xpm)
 {
     // init everything
-    m_chkVert = (wxCheckBox *)NULL;
+    m_chkSpecifyRows = (wxCheckBox *)NULL;
     m_chkEnableItem = (wxCheckBox *)NULL;
     m_chkShowItem = (wxCheckBox *)NULL;
 
@@ -213,7 +213,11 @@ void RadioWidgetsPage::CreateContent()
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
-    m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical layout"));
+    m_chkSpecifyRows = CreateCheckBoxAndAddToSizer
+                       (
+                        sizerLeft,
+                        "Major specifies &rows count"
+                       );
 
     static const wxString layoutDir[] =
     {
@@ -315,7 +319,7 @@ void RadioWidgetsPage::Reset()
     m_textLabel->SetValue(_T("I'm a radiobox"));
     m_textLabelBtns->SetValue(_T("item"));
 
-    m_chkVert->SetValue(false);
+    m_chkSpecifyRows->SetValue(false);
     m_chkEnableItem->SetValue(true);
     m_chkShowItem->SetValue(true);
     m_radioDir->SetSelection(RadioDir_Default);
@@ -364,8 +368,8 @@ void RadioWidgetsPage::CreateRadio()
                                     labelBtn.c_str(), (unsigned long)n + 1);
     }
 
-    int flags = m_chkVert->GetValue() ? wxRA_VERTICAL
-                                      : wxRA_HORIZONTAL;
+    int flags = m_chkSpecifyRows->GetValue() ? wxRA_SPECIFY_ROWS
+                                             : wxRA_SPECIFY_COLS;
 
     flags |= ms_defaultFlags;
 
@@ -491,7 +495,7 @@ void RadioWidgetsPage::OnUpdateUISelection(wxUpdateUIEvent& event)
 void RadioWidgetsPage::OnUpdateUIReset(wxUpdateUIEvent& event)
 {
     // only enable it if something is not set to default
-    bool enable = m_chkVert->GetValue();
+    bool enable = m_chkSpecifyRows->GetValue();
 
     if ( !enable )
     {

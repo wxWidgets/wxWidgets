@@ -49,9 +49,22 @@ class wxStandardPaths
 {
 public:
     /**
+        MSW-specific function undoing the effect of IgnoreAppSubDir() calls.
+
+        After a call to this function the program directory will be exactly the
+        directory containing the main application binary, i.e. it undoes the
+        effect of any previous IgnoreAppSubDir() calls including the ones done
+        indirectly by IgnoreAppBuildSubDirs() called from the class
+        constructor.
+
+        @since 2.9.1
+     */
+    void DontIgnoreAppSubDir();
+
+    /**
         Returns reference to the unique global standard paths object.
     */
-    static wxStandardPathsBase& Get();
+    static wxStandardPaths& Get();
 
     /**
         Return the directory for the document files used by this application.
@@ -214,6 +227,53 @@ public:
         @c "C:\Documents and Settings\username\Local Settings\Application Data\appname"
     */
     virtual wxString GetUserLocalDataDir() const;
+
+    /**
+        MSW-specific function to customize application directory detection.
+
+        This class supposes that data, plugins &c files are located under the
+        program directory which is the directory containing the application
+        binary itself. But sometimes this binary may be in a subdirectory of
+        the main program directory, e.g. this happens in at least the following
+        common cases:
+         - The program is in "bin" subdirectory of the installation directory.
+         - The program is in "debug" subdirectory of the directory containing
+           sources and data files during development
+
+        By calling this function you instruct the class to remove the last
+        component of the path if it matches its argument. Notice that it may be
+        called more than once, e.g. you can call both IgnoreAppSubDir("bin") and
+        IgnoreAppSubDir("debug") to take care of both production and development
+        cases above but that each call will only remove the last path component.
+        Finally note that the argument can contain wild cards so you can also
+        call IgnoreAppSubDir("vc*msw*") to ignore all build directories at once
+        when using wxWidgets-inspired output directories names.
+
+        @since 2.9.1
+
+        @see IgnoreAppBuildSubDirs()
+
+        @param subdirPattern
+            The subdirectory containing the application binary which should be
+            ignored when determining the top application directory. The pattern
+            is case-insensitive and may contain wild card characters @c '?' and
+            @c '*'.
+     */
+    void IgnoreAppSubDir(const wxString& subdirPattern);
+
+    /**
+        MSW-specific function to ignore all common build directories.
+
+        This function calls IgnoreAppSubDir() with all common values for build
+        directory, e.g. @c "debug" and @c "release".
+
+        It is called by the class constructor and so the build directories are
+        always ignored by default. You may use DontIgnoreAppSubDir() to avoid
+        ignoring them if this is inappropriate for your application.
+
+        @since 2.9.1
+     */
+    void IgnoreAppBuildSubDirs();
 
     /**
         Lets wxStandardPaths know about the real program installation prefix on a Unix

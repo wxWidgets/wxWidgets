@@ -100,11 +100,6 @@ void *wxGUIAppTraits::BeforeChildWaitLoop()
     return NULL;
 }
 
-void wxGUIAppTraits::AlwaysYield()
-{
-    wxYield();
-}
-
 void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
 {
 }

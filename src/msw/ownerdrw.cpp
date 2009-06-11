@@ -294,14 +294,9 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 // draw the item
 bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
                               const wxRect& rc,
-                              wxODAction act,
+                              wxODAction,
                               wxODStatus st)
 {
-    // we do nothing on focus change
-    if ( act == wxODFocusChanged )
-        return true;
-
-
     // this flag determines whether or not an edge will
     // be drawn around the bitmap. In most "windows classic"
     // applications, a 1-pixel highlight edge is drawn around
@@ -379,8 +374,8 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
         AutoHBRUSH hbr(colBack);
         SelectInHDC selBrush(hdc, hbr);
 
-        RECT rectFill = { rc.GetLeft(), rc.GetTop(),
-                            rc.GetRight() + 1, rc.GetBottom() + 1 };
+        RECT rectFill;
+        wxCopyRectToRECT(rc, rectFill);
 
         if ( (st & wxODSelected) && m_bmpChecked.Ok() && draw_bitmap_edge )
         {
@@ -418,7 +413,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
             (LPARAM)strMenuText.wx_str(),
             strMenuText.length(),
             xText,
-            rc.y + (rc.GetHeight() - sizeRect.cy + 1)/2, // centre vertically
+            rc.y + (rc.height - sizeRect.cy) / 2, // centre vertically
             rc.GetWidth() - margin,
             sizeRect.cy,
             flags
@@ -436,7 +431,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
             ::DrawState(hdc, NULL, NULL,
                     (LPARAM)m_strAccel.wx_str(),
                     m_strAccel.length(),
-                    rc.GetWidth()-16-accel_width, rc.y+(int) ((rc.GetHeight()-sizeRect.cy)/2.0),
+                    rc.width - 16 - accel_width, rc.y + (rc.height - sizeRect.cy) / 2,
                     0, 0,
                     DST_TEXT |
                     (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));

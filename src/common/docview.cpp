@@ -105,13 +105,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileHistory, wxObject)
 namespace
 {
 
-wxWindow *wxFindSuitableParent()
-{
-    wxWindow * const win = wxGetTopLevelParent(wxWindow::FindFocus());
-
-    return win ? win : wxTheApp->GetTopWindow();
-}
-
 wxString FindExtension(const wxString& path)
 {
     wxString ext;
@@ -489,8 +482,7 @@ bool wxDocument::OnSaveModified()
                      GetUserReadableName()
                     ),
                     wxTheApp->GetAppDisplayName(),
-                    wxYES_NO | wxCANCEL | wxICON_QUESTION | wxCENTRE,
-                    wxFindSuitableParent()
+                    wxYES_NO | wxCANCEL | wxICON_QUESTION | wxCENTRE
                  ) )
         {
             case wxNO:
@@ -1566,15 +1558,11 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
     int FilterIndex = -1;
 
-    wxWindow* parent = wxFindSuitableParent();
-
     wxString pathTmp = wxFileSelectorEx(_("Open File"),
                                         GetLastDirectory(),
                                         wxEmptyString,
                                         &FilterIndex,
-                                        descrBuf,
-                                        0,
-                                        parent);
+                                        descrBuf);
 
     wxDocTemplate *theTemplate = NULL;
     if (!pathTmp.empty())
@@ -1589,8 +1577,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 
             wxMessageBox(_("Sorry, could not open this file."),
                          msgTitle,
-                         wxOK | wxICON_EXCLAMATION | wxCENTRE,
-                         parent);
+                         wxOK | wxICON_EXCLAMATION | wxCENTRE);
 
             path = wxEmptyString;
             return NULL;
@@ -1613,8 +1600,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
             // allowed templates in runtime.
             wxMessageBox(_("Sorry, the format for this file is unknown."),
                          _("Open File"),
-                         wxOK | wxICON_EXCLAMATION | wxCENTRE,
-                         parent);
+                         wxOK | wxICON_EXCLAMATION | wxCENTRE);
         }
     }
     else
@@ -1696,8 +1682,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
                             _("Select a document template"),
                             _("Templates"),
                             strings,
-                            (void **)data.get(),
-                            wxFindSuitableParent()
+                            (void **)data.get()
                           );
     }
 
@@ -1771,8 +1756,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
                             _("Select a document view"),
                             _("Views"),
                             strings,
-                            (void **)data.get(),
-                            wxFindSuitableParent()
+                            (void **)data.get()
                           );
 
     }

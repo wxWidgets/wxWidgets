@@ -166,6 +166,30 @@ public:
 #ifdef wxHAS_UNIX_DOMAIN_SOCKETS
     void CreateUnix();
 #endif // wxHAS_UNIX_DOMAIN_SOCKETS
+    void Create(Family family)
+    {
+        switch ( family )
+        {
+            case FAMILY_INET:
+                CreateINET();
+                break;
+
+#if wxUSE_IPV6
+            case FAMILY_INET6:
+                CreateINET6();
+                break;
+#endif // wxUSE_IPV6
+
+#ifdef wxHAS_UNIX_DOMAIN_SOCKETS
+            case FAMILY_UNIX:
+                CreateUnix();
+                break;
+#endif // wxHAS_UNIX_DOMAIN_SOCKETS
+
+            default:
+                wxFAIL_MSG( "unsupported socket address family" );
+        }
+    }
 
     // simple accessors
     Family GetFamily() const { return m_family; }

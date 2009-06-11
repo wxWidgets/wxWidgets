@@ -26,8 +26,8 @@
 #ifdef __WXCOCOA__
 #include "wx/cocoa/autorelease.h"
 #else
-#include "wx/osx/uma.h"
-#include <Carbon/Carbon.h>
+#include "wx/osx/private.h"
+
 #include <WebKit/WebKit.h>
 #include <WebKit/HIWebView.h>
 #include <WebKit/CarbonUtils.h>
@@ -44,8 +44,12 @@
 IMPLEMENT_DYNAMIC_CLASS(wxWebKitCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxWebKitCtrl, wxControl)
+#if defined(__WXMAC__) && wxOSX_USE_CARBON
     EVT_SIZE(wxWebKitCtrl::OnSize)
+#endif
 END_EVENT_TABLE()
+
+#if defined(__WXOSX__) && wxOSX_USE_CARBON
 
 // ----------------------------------------------------------------------------
 // Carbon Events handlers
@@ -281,6 +285,7 @@ static pascal OSStatus wxWebKitCtrlEventHandler( EventHandlerCallRef handler , E
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxWebKitCtrlEventHandler )
 
+#endif
 
 // ----------------------------------------------------------------------------
 // wxWebKit Events
@@ -444,15 +449,13 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
 #else
     m_macIsUserPane = false;
     wxControl::Create(parent, winID, pos, size, style , validator , name);
+#if wxOSX_USE_CARBON
     m_peer = new wxMacControl(this);
     WebInitForCarbon();
     HIWebViewCreate( m_peer->GetControlRefAddr() );
 
     m_webView = (WebView*) HIWebViewGetWebView( m_peer->GetControlRef() );
 
-    MacPostControlCreate(pos, size);
-    HIViewSetVisible( m_peer->GetControlRef(), true );
-    [m_webView setHidden:false];
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     if ( UMAGetSystemVersion() >= 0x1030 )
         HIViewChangeFeatures( m_peer->GetControlRef() , kHIViewIsOpaque , 0 ) ;
@@ -460,6 +463,17 @@ bool wxWebKitCtrl::Create(wxWindow *parent,
     InstallControlEventHandler( m_peer->GetControlRef() , GetwxWebKitCtrlEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this,
         (EventHandlerRef *)&m_webKitCtrlEventHandler);
+#else
+    NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
+    m_webView = [[WebView alloc] initWithFrame:r frameName:@"webkitFrame" groupName:@"webkitGroup"];
+
+    m_peer = new wxWidgetCocoaImpl( this, m_webView );
+#endif
+    MacPostControlCreate(pos, size);
+#if wxOSX_USE_CARBON
+    HIViewSetVisible( m_peer->GetControlRef(), true );
+#endif
+    [m_webView setHidden:false];
 
 #endif
 
@@ -690,6 +704,7 @@ wxString wxWebKitCtrl::RunScript(const wxString& javascript){
 }
 
 void wxWebKitCtrl::OnSize(wxSizeEvent &event){
+#if defined(__WXMAC_) && wxOSX_USE_CARBON
     // This is a nasty hack because WebKit seems to lose its position when it is embedded
     // in a control that is not itself the content view for a TLW.
     // I put it in OnSize because these calcs are not perfect, and in fact are basically
@@ -757,14 +772,17 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
     if (IsShown())
         [(WebView*)m_webView display];
     event.Skip();
+#endif
 }
 
 void wxWebKitCtrl::MacVisibilityChanged(){
+#if defined(__WXMAC__) && wxOSX_USE_CARBON
     bool isHidden = !IsControlVisible( m_peer->GetControlRef());
     if (!isHidden)
         [(WebView*)m_webView display];
 
     [m_webView setHidden:isHidden];
+#endif
 }
 
 //------------------------------------------------------------
@@ -892,6 +910,8 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - (void)webView:(WebView *)sender decidePolicyForNewWindowAction:(NSDictionary *)actionInformation request:(NSURLRequest *)request newFrameName:(NSString *)frameName decisionListener:(id < WebPolicyDecisionListener >)listener
 {
+    wxUnusedVar(sender);
+    wxUnusedVar(actionInformation);
     wxWebKitNewWindowEvent thisEvent(webKitWindow);
 
     NSString *url = [[request URL] absoluteString];

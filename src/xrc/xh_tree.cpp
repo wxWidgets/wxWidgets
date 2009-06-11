@@ -55,6 +55,10 @@ wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
                 wxDefaultValidator,
                 GetName());
 
+    wxImageList *imagelist = GetImageList();
+    if ( imagelist )
+        tree->AssignImageList(imagelist);
+
     SetupWindow(tree);
 
     return tree;

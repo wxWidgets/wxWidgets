@@ -1878,8 +1878,9 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 {
     wxCHECK_RET( !IsHiddenRoot(item), _T("can't select hidden root item") );
 
-    if ( IsSelected(item) == select )
+    if ( select == IsSelected(item) )
     {
+        // nothing to do, the item is already in the requested state
         return;
     }
 
@@ -1902,20 +1903,31 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
             (void)HandleTreeEvent(changedEvent);
         }
     }
-    else
+    else // single selection
     {
-        wxASSERT_MSG( select,
-                      _T("SelectItem(false) works only for multiselect") );
+        wxTreeItemId itemOld, itemNew;
+        if ( select )
+        {
+            itemOld = GetSelection();
+            itemNew = item;
+        }
+        else // deselecting the currently selected item
+        {
+            itemOld = item;
+            // leave itemNew invalid
+        }
 
         // in spite of the docs (MSDN Jan 99 edition), we don't seem to receive
         // the notification from the control (i.e. TVN_SELCHANG{ED|ING}), so
         // send them ourselves
 
-        wxTreeEvent changingEvent(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
+        wxTreeEvent
+            changingEvent(wxEVT_COMMAND_TREE_SEL_CHANGING, this, itemNew);
+        changingEvent.SetOldItem(itemOld);
 
         if ( IsTreeEventAllowed(changingEvent) )
         {
-            if ( !TreeView_SelectItem(GetHwnd(), HITEM(item)) )
+            if ( !TreeView_SelectItem(GetHwnd(), HITEM(itemNew)) )
             {
                 wxLogLastError(wxT("TreeView_SelectItem"));
             }
@@ -1924,7 +1936,8 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
                 SetFocusedItem(item);
 
                 wxTreeEvent changedEvent(wxEVT_COMMAND_TREE_SEL_CHANGED,
-                                         this, item);
+                                         this, itemNew);
+                changedEvent.SetOldItem(itemOld);
                 (void)HandleTreeEvent(changedEvent);
             }
         }
@@ -3372,7 +3385,6 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 return MSWHandleTreeKeyDownEvent(
                         info->wVKey, (wxIsAltDown() ? KF_ALTDOWN : 0) << 16);
             }
-            break;
 
 
         // Vista's tree control has introduced some problems with our

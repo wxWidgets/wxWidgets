@@ -176,6 +176,24 @@ DocumentIstream& DoodleSegment::LoadObject(DocumentIstream& istream)
 
 IMPLEMENT_CLASS(wxTextDocument, wxDocument)
 
+bool wxTextDocument::OnCreate(const wxString& path, long flags)
+{
+    if ( !wxDocument::OnCreate(path, flags) )
+        return false;
+
+    // subscribe to changes in the text control to update the document state
+    // when it's modified
+    GetTextCtrl()->Connect
+    (
+        wxEVT_COMMAND_TEXT_UPDATED,
+        wxCommandEventHandler(wxTextDocument::OnTextChange),
+        NULL,
+        this
+    );
+
+    return true;
+}
+    
 // Since text windows have their own method for saving to/loading from files,
 // we override DoSave/OpenDocument instead of Save/LoadObject
 bool wxTextDocument::DoSaveDocument(const wxString& filename)
@@ -203,6 +221,13 @@ void wxTextDocument::Modify(bool modified)
     {
         wnd->DiscardEdits();
     }
+}
+
+void wxTextDocument::OnTextChange(wxCommandEvent& event)
+{
+    Modify(true);
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------

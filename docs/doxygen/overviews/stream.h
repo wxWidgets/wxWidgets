@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        stream.h
-// Purpose:     topic overview
+// Purpose:     stream classes overview
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
@@ -33,16 +33,25 @@ Classes:
 
 @section overview_stream_intro Introduction
 
-wxWidgets provides its own set of stream classes in order to be
-independent of the standard C++ stream class and their different
-implementations.
+@subsection overview_stream_intro_std wxWidgets and Standard Streams
 
-Besides, using @c std::iostream on Linux makes impossible to write programs that are
-binary compatible across different Linux distributions.
+wxWidgets provides its own set of stream classes in order to support platforms
+not providing standard C++ streams implementation and also to make it possible
+to provide binary versions of wxWidgets application not depending on any
+particular standard library version. The wxWidgets stream classes also provide
+some functionality not available in the standard library such as support for
+several compression formats and possibility to work with sockets or text
+controls (for output only in the latter case).
 
-Therefore, wxStreams have been added to wxWidgets so that an applications can
-reliably compile and run on all supported platforms without dependence on a
-particular release of libg++.
+Nevertheless wxWidgets programs can also use standard stream classes and are
+encouraged to do so if the above considerations don't apply. Moreover,
+wxStdInputStream and wxStdOutputStream classes are provided to provide a degree
+of interoperability between the two and make it possible to use any wxWidgets
+stream as a standard stream (the converse possibility to use a standard stream
+as a wxWidgets stream is planned for a future release).
+
+
+@subsection overview_stream_intro_overview Stream Classes
 
 wxStream classes are divided in two main groups:
 

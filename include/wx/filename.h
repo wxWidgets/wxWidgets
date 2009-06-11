@@ -316,11 +316,11 @@ public:
 #endif // wxUSE_FFILE
 
     // directory creation and removal.
-    bool Mkdir(int perm = wxS_DIR_DEFAULT, int flags = 0);
+    bool Mkdir(int perm = wxS_DIR_DEFAULT, int flags = 0) const;
     static bool Mkdir(const wxString &dir, int perm = wxS_DIR_DEFAULT,
                       int flags = 0);
 
-    bool Rmdir(int flags = 0);
+    bool Rmdir(int flags = 0) const;
     static bool Rmdir(const wxString &dir, int flags = 0);
 
     // operations on the path

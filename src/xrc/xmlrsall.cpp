@@ -87,6 +87,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_DIRPICKERCTRL
     AddHandler(new wxDirPickerCtrlXmlHandler);
 #endif
+#if wxUSE_EDITABLELISTBOX
+    AddHandler(new wxEditableListBoxXmlHandler);
+#endif
 #if wxUSE_FILEPICKERCTRL
     AddHandler(new wxFilePickerCtrlXmlHandler);
 #endif

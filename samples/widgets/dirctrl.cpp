@@ -133,7 +133,9 @@ protected:
     wxCheckBox *m_chkDirOnly,
                *m_chk3D,
                *m_chkFirst,
-               *m_chkLabels;
+               *m_chkLabels,
+               *m_chkMulti;
+
     // filters
     wxCheckBox *m_fltr[3];
 
@@ -185,6 +187,7 @@ void DirCtrlWidgetsPage::CreateContent()
     m_chk3D      = CreateCheckBoxAndAddToSizer(sizerUseFlags, _T("wxDIRCTRL_3D_INTERNAL"));
     m_chkFirst   = CreateCheckBoxAndAddToSizer(sizerUseFlags, _T("wxDIRCTRL_SELECT_FIRST"));
     m_chkLabels  = CreateCheckBoxAndAddToSizer(sizerUseFlags, _T("wxDIRCTRL_EDIT_LABELS"));
+    m_chkMulti   = CreateCheckBoxAndAddToSizer(sizerUseFlags, _T("wxDIRCTRL_MULTIPLE"));
     sizerLeft->Add(sizerUseFlags, wxSizerFlags().Expand().Border());
 
     wxSizer *sizerFilters =
@@ -245,13 +248,14 @@ void DirCtrlWidgetsPage::CreateDirCtrl()
         ( m_chkDirOnly->IsChecked() ? wxDIRCTRL_DIR_ONLY : 0 ) |
         ( m_chk3D->IsChecked() ? wxDIRCTRL_3D_INTERNAL : 0 ) |
         ( m_chkFirst->IsChecked() ? wxDIRCTRL_SELECT_FIRST : 0 ) |
-        ( m_chkLabels->IsChecked() ? wxDIRCTRL_EDIT_LABELS : 0 )
+        ( m_chkLabels->IsChecked() ? wxDIRCTRL_EDIT_LABELS : 0 ) |
+        ( m_chkMulti->IsChecked() ? wxDIRCTRL_MULTIPLE : 0)
     );
 
     wxString filter;
-    for (int i = 0; i < 3; ++i) 
+    for (int i = 0; i < 3; ++i)
     {
-        if (m_fltr[i]->IsChecked()) 
+        if (m_fltr[i]->IsChecked())
         {
             if (!filter.IsEmpty())
                 filter += wxT("|");

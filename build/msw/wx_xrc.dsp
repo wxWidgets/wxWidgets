@@ -602,6 +602,10 @@ SOURCE=..\..\include\wx\xrc\xh_dlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_editlbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_filepicker.h
 # End Source File
 # Begin Source File
@@ -831,6 +835,10 @@ SOURCE=..\..\src\xrc\xh_dirpicker.cpp
 # Begin Source File
 
 SOURCE=..\..\src\xrc\xh_dlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xrc\xh_editlbox.cpp
 # End Source File
 # Begin Source File
 

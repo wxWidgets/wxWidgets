@@ -51,7 +51,9 @@ enum
     // Use 3D borders on internal controls
     wxDIRCTRL_3D_INTERNAL    = 0x0080,
     // Editable labels
-    wxDIRCTRL_EDIT_LABELS    = 0x0100
+    wxDIRCTRL_EDIT_LABELS    = 0x0100,
+    // Allow multiple selection
+    wxDIRCTRL_MULTIPLE       = 0x0200
 };
 
 //-----------------------------------------------------------------------------
@@ -128,11 +130,16 @@ public:
 
     // Get dir or filename
     virtual wxString GetPath() const;
+    virtual void GetPaths(wxArrayString& paths) const;
 
     // Get selected filename path only (else empty string).
     // I.e. don't count a directory as a selection
     virtual wxString GetFilePath() const;
+    virtual void GetFilePaths(wxArrayString& paths) const;
     virtual void SetPath(const wxString& path);
+
+    virtual void SelectPath(const wxString& path, bool select = true);
+    virtual void SelectPaths(const wxArrayString& paths);
 
     virtual void ShowHidden( bool show );
     virtual bool GetShowHidden() { return m_showHidden; }
@@ -147,6 +154,8 @@ public:
 
     virtual wxTreeCtrl* GetTreeCtrl() const { return m_treeCtrl; }
     virtual wxDirFilterListCtrl* GetFilterListCtrl() const { return m_filterListCtrl; }
+
+    virtual void UnselectAll();
 
     // Helper
     virtual void SetupSections();
@@ -165,7 +174,6 @@ public:
 
     // Collapse the entire tree
     virtual void CollapseTree();
-
 
     // overridden base class methods
     virtual void SetFocus();

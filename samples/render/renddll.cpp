@@ -27,10 +27,10 @@ class MyDllRenderer : public wxDelegateRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)
-    virtual void DrawHeaderButton(wxWindow *win,
+    virtual void DrawHeaderButton(wxWindow * WXUNUSED(win),
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int flags = 0)
+                                  int WXUNUSED(flags) = 0)
     {
         dc.SetBrush(*wxCYAN_BRUSH);
         dc.SetTextForeground(*wxRED);

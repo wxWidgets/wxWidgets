@@ -148,17 +148,9 @@ bool wxApp::SetDisplayMode(const wxVideoMode& mode)
 
 void wxApp::WakeUpIdle()
 {
-#if wxUSE_THREADS
-    if (!wxThread::IsMain())
-        wxMutexGuiEnter();
-#endif
-
+    // we don't need a mutex here, since we use the wxConsoleEventLoop
+    // and wxConsoleEventLoop::WakeUp() is thread-safe
     wxEventLoopBase * const loop = wxEventLoop::GetActive();
     if ( loop )
         loop->WakeUp();
-
-#if wxUSE_THREADS
-    if (!wxThread::IsMain())
-        wxMutexGuiLeave();
-#endif
 }

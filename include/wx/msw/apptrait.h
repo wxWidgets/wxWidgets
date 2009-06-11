@@ -21,7 +21,6 @@ class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 public:
     virtual wxEventLoopBase *CreateEventLoop();
     virtual void *BeforeChildWaitLoop();
-    virtual void AlwaysYield();
     virtual void AfterChildWaitLoop(void *data);
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
@@ -41,7 +40,6 @@ class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 public:
     virtual wxEventLoopBase *CreateEventLoop();
     virtual void *BeforeChildWaitLoop();
-    virtual void AlwaysYield();
     virtual void AfterChildWaitLoop(void *data);
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);

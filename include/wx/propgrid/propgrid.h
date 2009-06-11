@@ -74,6 +74,7 @@ public:
     wxPGCachedString    m_strbool;
     wxPGCachedString    m_strlist;
 
+    wxPGCachedString    m_strDefaultValue;
     wxPGCachedString    m_strMin;
     wxPGCachedString    m_strMax;
     wxPGCachedString    m_strUnits;
@@ -101,6 +102,10 @@ extern WXDLLIMPEXP_PROPGRID wxPGGlobalVarsClass* wxPGGlobalVars;
 #define wxPGVariant_False           (wxPGGlobalVars->m_vFalse)
 
 #define wxPGVariant_Bool(A)     (A?wxPGVariant_True:wxPGVariant_False)
+
+// When wxPG is loaded dynamically after the application is already running
+// then the built-in module system won't pick this one up.  Add it manually.
+WXDLLIMPEXP_PROPGRID void wxPGInitResourceModule();
 
 #endif // !SWIG
 
@@ -579,30 +584,10 @@ class WXDLLIMPEXP_PROPGRID
     friend class wxPropertyGridManager;
     friend class wxPGCanvas;
 
-#ifndef SWIG
     DECLARE_DYNAMIC_CLASS(wxPropertyGrid)
-#endif
 public:
 
-#ifdef SWIG
-    %pythonAppend wxPropertyGrid {
-        self._setOORInfo(self)
-        self.DoDefaultTypeMappings()
-        self.edited_objects = {}
-        self.DoDefaultValueTypeMappings()
-        if not hasattr(self.__class__,'_vt2setter'):
-            self.__class__._vt2setter = {}
-    }
-    %pythonAppend wxPropertyGrid() ""
-
-    wxPropertyGrid( wxWindow *parent, wxWindowID id = wxID_ANY,
-                    const wxPoint& pos = wxDefaultPosition,
-                    const wxSize& size = wxDefaultSize,
-                    long style = wxPG_DEFAULT_STYLE,
-                    const wxChar* name = wxPyPropertyGridNameStr );
-    %RenameCtor(PrePropertyGrid,  wxPropertyGrid());
-#else
-
+#ifndef SWIG
     /**
         Two step constructor.
 
@@ -610,6 +595,7 @@ public:
         wxPropertyGrid
     */
     wxPropertyGrid();
+#endif
 
     /** The default constructor. The styles to be used are styles valid for
         the wxWindow and wxScrolledWindow.
@@ -624,7 +610,6 @@ public:
 
     /** Destructor */
     virtual ~wxPropertyGrid();
-#endif
 
     /** Adds given key combination to trigger given action.
 
@@ -907,6 +892,20 @@ public:
         Thaw() ).
      */
     bool IsFrozen() const { return (m_frozen>0)?true:false; }
+
+    /**
+        Call this any time your code causes wxPropertyGrid's top-level parent
+        to change.
+
+        @param newTLP
+            New top-level parent that is about to be set. Old top-level parent
+            window should still exist as the current one.
+
+        @remarks This function is automatically called from wxPropertyGrid::
+                 Reparent() and wxPropertyGridManager::Reparent(). You only
+                 need to use it if you reparent wxPropertyGrid indirectly.
+    */
+    void OnTLPChanging( wxWindow* newTLP );
 
     /** Redraws given property.
     */
@@ -1431,7 +1430,7 @@ public:
     virtual void Freeze();
     virtual void SetExtraStyle( long exStyle );
     virtual void Thaw();
-
+    virtual bool Reparent( wxWindowBase *newParent );
 
 protected:
     virtual wxSize DoGetBestSize() const;
@@ -1621,10 +1620,7 @@ protected:
     // handling mess).
     wxWindow*           m_curFocused;
 
-    // wxPGTLWHandler
-    wxEvtHandler*       m_tlwHandler;
-
-    // Top level parent
+    // Last known top-level parent
     wxWindow*           m_tlp;
 
     // Sort function
@@ -1729,6 +1725,8 @@ protected:
     void OnScrollEvent( wxScrollWinEvent &event );
 
     void OnSysColourChanged( wxSysColourChangedEvent &event );
+
+    void OnTLPClose( wxCloseEvent& event );
 
 protected:
 
@@ -1863,6 +1861,11 @@ inline int wxPGProperty::GetDisplayedCommonValueCount() const
             return (int) pg->GetCommonValueCount();
     }
     return 0;
+}
+
+inline void wxPGProperty::SetDefaultValue( wxVariant& value )
+{
+    SetAttribute(wxPG_ATTR_DEFAULT_VALUE, value);
 }
 
 inline void wxPGProperty::SetEditor( const wxString& editorName )

@@ -34,6 +34,7 @@
 class WXDLLIMPEXP_FWD_BASE wxFileName;
 
 class WXDLLIMPEXP_FWD_CORE wxIconBundle;
+class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 class WXDLLIMPEXP_FWD_CORE wxMenuBar;
 class WXDLLIMPEXP_FWD_CORE wxDialog;
@@ -442,7 +443,7 @@ protected:
     // wxXML_ENTITY_NODE name="tag", content=""
     //    |-- wxXML_TEXT_NODE or
     //        wxXML_CDATA_SECTION_NODE name="" content="content"
-    wxString GetNodeContent(wxXmlNode *node);
+    wxString GetNodeContent(const wxXmlNode *node);
 
     // Check to see if a parameter exists.
     bool HasParam(const wxString& param);
@@ -452,6 +453,9 @@ protected:
 
     // Finds the parameter value or returns the empty string.
     wxString GetParamValue(const wxString& param);
+
+    // Returns the parameter value from given node.
+    wxString GetParamValue(const wxXmlNode* node);
 
     // Add a style flag (e.g. wxMB_DOCKABLE) to the list of flags
     // understood by this handler.
@@ -504,14 +508,27 @@ protected:
                        const wxArtClient& defaultArtClient = wxART_OTHER,
                        wxSize size = wxDefaultSize);
 
+    // Gets a bitmap from an XmlNode.
+    wxBitmap GetBitmap(const wxXmlNode* node,
+                       const wxArtClient& defaultArtClient = wxART_OTHER,
+                       wxSize size = wxDefaultSize);
+
     // Gets an icon.
     wxIcon GetIcon(const wxString& param = wxT("icon"),
+                   const wxArtClient& defaultArtClient = wxART_OTHER,
+                   wxSize size = wxDefaultSize);
+
+    // Gets an icon from an XmlNode.
+    wxIcon GetIcon(const wxXmlNode* node,
                    const wxArtClient& defaultArtClient = wxART_OTHER,
                    wxSize size = wxDefaultSize);
 
     // Gets an icon bundle.
     wxIconBundle GetIconBundle(const wxString& param,
                                const wxArtClient& defaultArtClient = wxART_OTHER);
+
+    // Gets an image list.
+    wxImageList *GetImageList(const wxString& param = wxT("imagelist"));
 
 #if wxUSE_ANIMATIONCTRL
     // Gets an animation.

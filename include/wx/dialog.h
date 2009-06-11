@@ -53,6 +53,13 @@ enum wxDialogLayoutAdaptationMode
     wxDIALOG_ADAPTATION_MODE_DISABLED = 2   // disable this dialog overriding global status
 };
 
+enum wxDialogModality
+{
+    wxDIALOG_MODALITY_NONE = 0,             
+    wxDIALOG_MODALITY_WINDOW_MODAL = 1,      
+    wxDIALOG_MODALITY_APP_MODAL = 2         
+};
+
 extern WXDLLIMPEXP_DATA_CORE(const char) wxDialogNameStr[];
 
 class WXDLLIMPEXP_CORE wxDialogBase : public wxTopLevelWindow
@@ -71,7 +78,10 @@ public:
     virtual int ShowModal() = 0;
     virtual void EndModal(int retCode) = 0;
     virtual bool IsModal() const = 0;
-
+    // show the dialog frame-modally (needs a parent), using app-modal
+    // dialogs on platforms that don't support it
+    virtual bool ShowWindowModal () ;
+    virtual void SendWindowModalDialogEvent ( wxEventType type );
 
     // Modal dialogs have a return code - usually the id of the last
     // pressed button
@@ -90,8 +100,11 @@ public:
     void SetEscapeId(int escapeId);
     int GetEscapeId() const { return m_escapeId; }
 
-    // Returns the parent to use for modal dialogs if the user did not specify it
-    // explicitly
+    // Find the parent to use for modal dialog: try to use the specified parent
+    // but fall back to the current active window or main application window as
+    // last resort if it is unsuitable.
+    //
+    // This function always returns a valid top level window or NULL.
     wxWindow *GetParentForModalDialog(wxWindow *parent = NULL) const;
 
 #if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
@@ -156,6 +169,8 @@ public:
     static bool IsLayoutAdaptationEnabled() { return sm_layoutAdaptation; }
     static void EnableLayoutAdaptation(bool enable) { sm_layoutAdaptation = enable; }
 
+    // modality kind
+    wxDialogModality GetModality() const;
 protected:
     // emulate click of a button with the given id if it's present in the dialog
     //
@@ -177,7 +192,6 @@ protected:
     // call Validate() and TransferDataFromWindow() and close dialog with
     // wxID_OK return code
     void AcceptAndClose();
-
 
     // The return code from modal dialog
     int m_returnCode;
@@ -210,6 +224,10 @@ protected:
 private:
     // common part of all ctors
     void Init();
+
+    // helper of GetParentForModalDialog(): returns the passed in window if it
+    // can be used as our parent or NULL if it can't
+    wxWindow *CheckIfCanBeUsedAsParent(wxWindow *parent) const;
 
     // handle Esc key presses
     void OnCharHook(wxKeyEvent& event);
@@ -321,6 +339,31 @@ public:
         #include "wx/os2/dialog.h"
     #endif
 #endif
+
+class WXDLLIMPEXP_CORE wxWindowModalDialogEvent  : public wxCommandEvent
+{
+public:
+    wxWindowModalDialogEvent (wxEventType commandType = wxEVT_NULL, int id = 0)
+        : wxCommandEvent(commandType, id) { }
+
+    wxDialog *GetDialog() const
+        { return wxStaticCast(GetEventObject(), wxDialog); }
+        
+    int GetReturnCode() const 
+        { return GetDialog()->GetReturnCode(); }
+
+    virtual wxEvent *Clone() const { return new wxWindowModalDialogEvent (*this); }
+
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxWindowModalDialogEvent )
+};
+
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_WINDOW_MODAL_DIALOG_CLOSED , wxWindowModalDialogEvent );
+
+typedef void (wxEvtHandler::*wxWindowModalDialogEventFunction)(wxWindowModalDialogEvent &);
+
+#define wxWindowModalDialogEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxWindowModalDialogEventFunction, func)
 
 #endif
     // _WX_DIALOG_H_BASE_

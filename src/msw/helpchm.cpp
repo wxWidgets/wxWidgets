@@ -156,8 +156,8 @@ wxCHMHelpController::DoDisplayTextPopup(const wxChar *text,
     popup.pszText = text;
     popup.pt.x = pos.x;
     popup.pt.y = pos.y;
-    popup.clrForeground =
-    popup.clrBackground = (COLORREF)-1;
+    popup.clrForeground = ::GetSysColor(COLOR_INFOTEXT);
+    popup.clrBackground = ::GetSysColor(COLOR_INFOBK);
     popup.rcMargins.top =
     popup.rcMargins.left =
     popup.rcMargins.right =

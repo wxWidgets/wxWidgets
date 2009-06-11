@@ -23,6 +23,7 @@ wxLANGUAGE_ARABIC_UAE                  ar_AE  LANG_ARABIC      SUBLANG_ARABIC_UA
 wxLANGUAGE_ARABIC_YEMEN                ar_YE  LANG_ARABIC      SUBLANG_ARABIC_YEMEN                RTL     "Arabic (Yemen)"
 wxLANGUAGE_ARMENIAN                    hy     LANG_ARMENIAN    SUBLANG_DEFAULT                     LTR    "Armenian"
 wxLANGUAGE_ASSAMESE                    as     LANG_ASSAMESE    SUBLANG_DEFAULT                     LTR    "Assamese"
+wxLANGUAGE_ASTURIAN                    ast    -                -                                   LTR    "Asturian"
 wxLANGUAGE_AYMARA                      ay     -                -                                   LTR    "Aymara"
 wxLANGUAGE_AZERI                       az     LANG_AZERI       SUBLANG_DEFAULT                     LTR    "Azeri"
 wxLANGUAGE_AZERI_CYRILLIC              az     LANG_AZERI       SUBLANG_AZERI_CYRILLIC              LTR    "Azeri (Cyrillic)"

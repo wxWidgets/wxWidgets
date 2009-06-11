@@ -268,6 +268,8 @@ public:
     void OnShowNextSibling(wxCommandEvent& WXUNUSED(event))
         { DoShowRelativeItem(&wxTreeCtrl::GetNextSibling, "next sibling"); }
 
+    void OnScrollTo(wxCommandEvent& event);
+
     void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
 
@@ -359,5 +361,6 @@ enum
     TreeTest_ShowParent,
     TreeTest_ShowPrevSibling,
     TreeTest_ShowNextSibling,
+    TreeTest_ScrollTo,
     TreeTest_Ctrl = 1000
 };

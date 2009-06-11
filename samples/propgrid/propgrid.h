@@ -76,8 +76,9 @@ public:
                     const wxVector3f& value = wxVector3f() );
     virtual ~wxVectorProperty();
 
-    virtual void ChildChanged( wxVariant& thisValue,
-                            int childIndex, wxVariant& childValue ) const;
+    virtual wxVariant ChildChanged( wxVariant& thisValue,
+                                    int childIndex,
+                                    wxVariant& childValue ) const;
     virtual void RefreshChildren();
 
 protected:
@@ -108,8 +109,9 @@ public:
                         const wxTriangle& value = wxTriangle() );
     virtual ~wxTriangleProperty();
 
-    virtual void ChildChanged( wxVariant& thisValue,
-                            int childIndex, wxVariant& childValue ) const;
+    virtual wxVariant ChildChanged( wxVariant& thisValue,
+                                    int childIndex,
+                                    wxVariant& childValue ) const;
     virtual void RefreshChildren();
 
 protected:

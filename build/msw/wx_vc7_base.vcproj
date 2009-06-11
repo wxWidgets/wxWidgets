@@ -789,6 +789,9 @@
 				RelativePath="..\..\src\common\stdpbase.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\stdstream.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\stopwatch.cpp">
 			</File>
 			<File
@@ -1515,6 +1518,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\stdpaths.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\stdstream.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\stockitem.h">

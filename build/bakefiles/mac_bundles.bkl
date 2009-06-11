@@ -62,7 +62,7 @@
                 echo -n "APPL????" >$(BUNDLE)/PkgInfo
 
                 <!-- move the binary: -->
-                mv $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
+                ln -f $(ref("__targetdir",id))$(ref("__targetname",id)) $(BUNDLE)/MacOS/$(id)
 
                 <!-- copy the application icon: -->
                 cp -f $(BUNDLE_ICON) $(BUNDLE)/Resources/wxmac.icns

@@ -873,6 +873,25 @@ bool wxIsPlatform64Bit()
                 machine.Contains(wxT("alpha"));
 }
 
+#ifdef __LINUX__
+wxLinuxDistributionInfo wxGetLinuxDistributionInfo()
+{
+    const wxString id = wxGetCommandOutput(wxT("lsb_release --id"));
+    const wxString desc = wxGetCommandOutput(wxT("lsb_release --description"));
+    const wxString rel = wxGetCommandOutput(wxT("lsb_release --release"));
+    const wxString codename = wxGetCommandOutput(wxT("lsb_release --codename"));
+    
+    wxLinuxDistributionInfo ret;
+    
+    id.StartsWith("Distributor ID:\t", &ret.Id);
+    desc.StartsWith("Description:\t", &ret.Description);
+    rel.StartsWith("Release:\t", &ret.Release);
+    codename.StartsWith("Codename:\t", &ret.CodeName);
+
+    return ret;
+}
+#endif
+
 // these functions are in src/osx/utilsexc_base.cpp for wxMac
 #ifndef __WXMAC__
 

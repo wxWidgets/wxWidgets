@@ -256,7 +256,8 @@ bool wxChoice::OSXHandleClicked( double WXUNUSED(timestampsec) )
 wxSize wxChoice::DoGetBestSize() const
 {
     int lbWidth = GetCount() > 0 ? 20 : 100;  // some defaults
-    int lbHeight = 20;
+    wxSize baseSize = wxWindow::DoGetBestSize();
+    int lbHeight = baseSize.y;
     int wLine;
 
     {
@@ -280,7 +281,6 @@ wxSize wxChoice::DoGetBestSize() const
         wxCoord width, height ;
         dc.GetTextExtent( wxT("X"), &width, &height);
         int cx = width ;
-        lbHeight += 4;
 
         lbWidth += cx ;
     }

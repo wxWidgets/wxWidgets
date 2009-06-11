@@ -1092,7 +1092,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (*m_multitext) << _T(" Appended.");
     m_multitext->SetInsertionPoint(0);
     m_multitext->WriteText( _T("Prepended. ") );
-    m_multitext->SetForegroundColour(*wxRED);
+    m_multitext->SetForegroundColour(*wxYELLOW);
     m_multitext->SetBackgroundColour(*wxLIGHT_GREY);
 
 #if wxUSE_TOOLTIPS

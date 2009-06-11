@@ -98,7 +98,10 @@ public:
     // constructor, destructor, etc.
     wxIFFDecoder(wxInputStream *s);
     ~wxIFFDecoder() { Destroy(); }
+    
+    // NOTE: this function modifies the current stream position
     bool CanRead();
+    
     int ReadIFF();
     bool ConvertToImage(wxImage *image) const;
 };
@@ -232,9 +235,6 @@ bool wxIFFDecoder::CanRead()
     unsigned char buf[12];
 
     if ( !m_f->Read(buf, WXSIZEOF(buf)) )
-        return false;
-
-    if ( m_f->SeekI(-(wxFileOffset)WXSIZEOF(buf), wxFromCurrent) == wxInvalidOffset )
         return false;
 
     return (memcmp(buf, "FORM", 4) == 0) && (memcmp(buf+8, "ILBM", 4) == 0);
@@ -787,6 +787,7 @@ bool wxIFFHandler::DoCanRead(wxInputStream& stream)
     wxIFFDecoder decod(&stream);
 
     return decod.CanRead();
+         // it's ok to modify the stream position here
 }
 
 #endif // wxUSE_STREAMS

@@ -344,7 +344,8 @@ void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
         }
         //else: we had already done the above when we started
 
-        UpdateResizingMarker(xPhysical);
+        // This results in ugly flicker
+        // UpdateResizingMarker(xPhysical);
     }
 }
 

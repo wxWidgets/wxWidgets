@@ -44,6 +44,7 @@
 #include "wx/fontenum.h"
 #include "wx/fontmap.h"
 #include "wx/artprov.h"
+#include "wx/imaglist.h"
 #include "wx/dir.h"
 #include "wx/xml/xml.h"
 
@@ -82,6 +83,48 @@ inline bool IsObjectNode(wxXmlNode *node)
     return node->GetType() == wxXML_ELEMENT_NODE &&
              (node->GetName() == wxS("object") ||
                 node->GetName() == wxS("object_ref"));
+}
+
+// special XML attribute with name of input file, see GetFileNameFromNode()
+const char *ATTR_INPUT_FILENAME = "__wx:filename";
+
+// helper to get filename corresponding to an XML node
+wxString
+GetFileNameFromNode(wxXmlNode *node, const wxXmlResourceDataRecords& files)
+{
+    // this loop does two things: it looks for ATTR_INPUT_FILENAME among
+    // parents and if it isn't used, it finds the root of the XML tree 'node'
+    // is in
+    for ( ;; )
+    {
+        // in some rare cases (specifically, when an <object_ref> is used, see
+        // wxXmlResource::CreateResFromNode() and MergeNodesOver()), we work
+        // with XML nodes that are not rooted in any document from 'files'
+        // (because a new node was created by CreateResFromNode() to merge the
+        // content of <object_ref> and the referenced <object>); in that case,
+        // we hack around the problem by putting the information about input
+        // file into a custom attribute
+        if ( node->HasAttribute(ATTR_INPUT_FILENAME) )
+            return node->GetAttribute(ATTR_INPUT_FILENAME);
+
+        if ( !node->GetParent() )
+            break; // we found the root of this XML tree
+
+        node = node->GetParent();
+    }
+
+    // NB: 'node' now points to the root of XML document
+
+    for ( wxXmlResourceDataRecords::const_iterator i = files.begin();
+          i != files.end(); ++i )
+    {
+        if ( (*i)->Doc->GetRoot() == node )
+        {
+            return (*i)->File;
+        }
+    }
+
+    return wxEmptyString; // not found
 }
 
 } // anonymous namespace
@@ -714,10 +757,11 @@ wxXmlResource::GetResourceNodeAndLocation(const wxString& name,
     return NULL;
 }
 
-static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
+static void MergeNodesOver(wxXmlNode& dest, wxXmlNode& overwriteWith,
+                           const wxString& overwriteFilename)
 {
     // Merge attributes:
-    for ( wxXmlAttribute *attr = with.GetAttributes();
+    for ( wxXmlAttribute *attr = overwriteWith.GetAttributes();
           attr; attr = attr->GetNext() )
     {
         wxXmlAttribute *dattr;
@@ -736,7 +780,7 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
    }
 
     // Merge child nodes:
-    for (wxXmlNode* node = with.GetChildren(); node; node = node->GetNext())
+    for (wxXmlNode* node = overwriteWith.GetChildren(); node; node = node->GetNext())
     {
         wxString name = node->GetAttribute(wxT("name"), wxEmptyString);
         wxXmlNode *dnode;
@@ -747,28 +791,32 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
                  dnode->GetAttribute(wxT("name"), wxEmptyString) == name &&
                  dnode->GetType() == node->GetType() )
             {
-                MergeNodes(*dnode, *node);
+                MergeNodesOver(*dnode, *node, overwriteFilename);
                 break;
             }
         }
 
         if ( !dnode )
         {
+            wxXmlNode *copyOfNode = new wxXmlNode(*node);
+            // remember referenced object's file, see GetFileNameFromNode()
+            copyOfNode->AddAttribute(ATTR_INPUT_FILENAME, overwriteFilename);
+
             static const wxChar *AT_END = wxT("end");
             wxString insert_pos = node->GetAttribute(wxT("insert_at"), AT_END);
             if ( insert_pos == AT_END )
             {
-                dest.AddChild(new wxXmlNode(*node));
+                dest.AddChild(copyOfNode);
             }
             else if ( insert_pos == wxT("begin") )
             {
-                dest.InsertChild(new wxXmlNode(*node), dest.GetChildren());
+                dest.InsertChild(copyOfNode, dest.GetChildren());
             }
         }
     }
 
-    if ( dest.GetType() == wxXML_TEXT_NODE && with.GetContent().length() )
-         dest.SetContent(with.GetContent());
+    if ( dest.GetType() == wxXML_TEXT_NODE && overwriteWith.GetContent().length() )
+         dest.SetContent(overwriteWith.GetContent());
 }
 
 wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
@@ -797,10 +845,31 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
             return NULL;
         }
 
-        wxXmlNode copy(*refNode);
-        MergeNodes(copy, *node);
+        if ( !node->GetChildren() )
+        {
+            // In the typical, simple case, <object_ref> is used to link
+            // to another node and doesn't have any content of its own that
+            // would overwrite linked object's properties. In this case,
+            // we can simply create the resource from linked node.
 
-        return CreateResFromNode(&copy, parent, instance);
+            return CreateResFromNode(refNode, parent, instance);
+        }
+        else
+        {
+            // In the more complicated (but rare) case, <object_ref> has
+            // subnodes that partially overwrite content of the referenced
+            // object. In this case, we need to merge both XML trees and
+            // load the resource from result of the merge.
+
+            wxXmlNode copy(*refNode);
+            MergeNodesOver(copy, *node, GetFileNameFromNode(node, Data()));
+
+            // remember referenced object's file, see GetFileNameFromNode()
+            copy.AddAttribute(ATTR_INPUT_FILENAME,
+                              GetFileNameFromNode(refNode, Data()));
+
+            return CreateResFromNode(&copy, parent, instance);
+        }
     }
 
     if (handlerToUse)
@@ -1265,9 +1334,32 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
                                          const wxArtClient& defaultArtClient,
                                          wxSize size)
 {
+    // it used to be possible to pass an empty string here to indicate that the
+    // bitmap name should be read from this node itself but this is not
+    // supported any more because GetBitmap(m_node) can be used directly
+    // instead
+    wxASSERT_MSG( !param.empty(), "bitmap parameter name can't be empty" );
+
+    const wxXmlNode* const node = GetParamNode(param);
+
+    if ( !node )
+    {
+        // this is not an error as bitmap parameter could be optional
+        return wxNullBitmap;
+    }
+
+    return GetBitmap(node, defaultArtClient, size);
+}
+
+wxBitmap wxXmlResourceHandler::GetBitmap(const wxXmlNode* node,
+                                         const wxArtClient& defaultArtClient,
+                                         wxSize size)
+{
+    wxCHECK_MSG( node, wxNullBitmap, "bitmap node can't be NULL" );
+
     /* If the bitmap is specified as stock item, query wxArtProvider for it: */
     wxString art_id, art_client;
-    if ( GetStockArtAttrs(GetParamNode(param), defaultArtClient,
+    if ( GetStockArtAttrs(node, defaultArtClient,
                           art_id, art_client) )
     {
         wxBitmap stockArt(wxArtProvider::GetBitmap(art_id, art_client, size));
@@ -1276,7 +1368,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     }
 
     /* ...or load the bitmap from file: */
-    wxString name = GetParamValue(param);
+    wxString name = GetParamValue(node);
     if (name.empty()) return wxNullBitmap;
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
@@ -1284,7 +1376,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     {
         ReportParamError
         (
-            param,
+            node->GetName(),
             wxString::Format("cannot open bitmap resource \"%s\"", name)
         );
         return wxNullBitmap;
@@ -1299,7 +1391,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     {
         ReportParamError
         (
-            param,
+            node->GetName(),
             wxString::Format("cannot create bitmap from \"%s\"", name)
         );
         return wxNullBitmap;
@@ -1313,10 +1405,29 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
                                      const wxArtClient& defaultArtClient,
                                      wxSize size)
 {
+    // see comment in GetBitmap(wxString) overload
+    wxASSERT_MSG( !param.empty(), "icon parameter name can't be empty" );
+
+    const wxXmlNode* const node = GetParamNode(param);
+
+    if ( !node )
+    {
+        // this is not an error as icon parameter could be optional
+        return wxIcon();
+    }
+
+    return GetIcon(node, defaultArtClient, size);
+}
+
+wxIcon wxXmlResourceHandler::GetIcon(const wxXmlNode* node,
+                                     const wxArtClient& defaultArtClient,
+                                     wxSize size)
+{
     wxIcon icon;
-    icon.CopyFromBitmap(GetBitmap(param, defaultArtClient, size));
+    icon.CopyFromBitmap(GetBitmap(node, defaultArtClient, size));
     return icon;
 }
+
 
 wxIconBundle wxXmlResourceHandler::GetIconBundle(const wxString& param,
                                                  const wxArtClient& defaultArtClient)
@@ -1366,6 +1477,46 @@ wxIconBundle wxXmlResourceHandler::GetIconBundle(const wxString& param,
 }
 
 
+wxImageList *wxXmlResourceHandler::GetImageList(const wxString& param)
+{
+    wxXmlNode * const imagelist_node = GetParamNode(param);
+    if ( !imagelist_node )
+        return NULL;
+
+    wxXmlNode * const oldnode = m_node;
+    m_node = imagelist_node;
+
+    // size
+    wxSize size = GetSize();
+    size.SetDefaults(wxSize(wxSystemSettings::GetMetric(wxSYS_ICON_X),
+                            wxSystemSettings::GetMetric(wxSYS_ICON_Y)));
+
+    // mask: true by default
+    bool mask = HasParam(wxT("mask")) ? GetBool(wxT("mask"), true) : true;
+
+    // now we have everything we need to create the image list
+    wxImageList *imagelist = new wxImageList(size.x, size.y, mask);
+
+    // add images
+    wxString parambitmap = wxT("bitmap");
+    if ( HasParam(parambitmap) )
+    {
+        wxXmlNode *n = m_node->GetChildren();
+        while (n)
+        {
+            if (n->GetType() == wxXML_ELEMENT_NODE && n->GetName() == parambitmap)
+            {
+                // add icon instead of bitmap to keep the bitmap mask
+                imagelist->Add(GetIcon(n));
+            }
+            n = n->GetNext();
+        }
+    }
+
+    m_node = oldnode;
+    return imagelist;
+}
+
 wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
 {
     wxCHECK_MSG(m_node, NULL, wxT("You can't access handler data before it was initialized!"));
@@ -1396,9 +1547,9 @@ bool wxXmlResourceHandler::IsOfClass(wxXmlNode *node, const wxString& classname)
 
 
 
-wxString wxXmlResourceHandler::GetNodeContent(wxXmlNode *node)
+wxString wxXmlResourceHandler::GetNodeContent(const wxXmlNode *node)
 {
-    wxXmlNode *n = node;
+    const wxXmlNode *n = node;
     if (n == NULL) return wxEmptyString;
     n = n->GetChildren();
 
@@ -1422,6 +1573,10 @@ wxString wxXmlResourceHandler::GetParamValue(const wxString& param)
         return GetNodeContent(GetParamNode(param));
 }
 
+wxString wxXmlResourceHandler::GetParamValue(const wxXmlNode* node)
+{
+    return GetNodeContent(node);
+}
 
 
 wxSize wxXmlResourceHandler::GetSize(const wxString& param,
@@ -1764,30 +1919,6 @@ void wxXmlResourceHandler::ReportParamError(const wxString& param,
 {
     m_resource->ReportError(GetParamNode(param), message);
 }
-
-namespace
-{
-
-wxString
-GetFileNameFromNode(wxXmlNode *node, const wxXmlResourceDataRecords& files)
-{
-    wxXmlNode *root = node;
-    while ( root->GetParent() )
-        root = root->GetParent();
-
-    for ( wxXmlResourceDataRecords::const_iterator i = files.begin();
-          i != files.end(); ++i )
-    {
-        if ( (*i)->Doc->GetRoot() == root )
-        {
-            return (*i)->File;
-        }
-    }
-
-    return wxEmptyString; // not found
-}
-
-} // anonymous namespace
 
 void wxXmlResource::ReportError(wxXmlNode *context, const wxString& message)
 {

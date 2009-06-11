@@ -170,8 +170,8 @@ wxString RegExTestCase::Conv(const char *str)
 
     if (!buf || wxWcscmp(wxConvCurrent->cWX2WC(buf), wstr) != 0)
         return convError();
-    else
-        return buf;
+
+    return buf;
 }
 
 // Parse flags

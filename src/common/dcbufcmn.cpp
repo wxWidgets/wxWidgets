@@ -115,6 +115,11 @@ void wxBufferedDC::UseBuffer(wxCoord w, wxCoord h)
     }
 
     SelectObject(*m_buffer);
+
+    // now that the DC is valid we can inherit the attributes (fonts, colours,
+    // layout direction, ...) from the original DC
+    if ( m_dc->IsOk() )
+        CopyAttributes(*m_dc);
 }
 
 void wxBufferedDC::UnMask()

@@ -32,7 +32,7 @@ public:
                const wxSize& size = wxDefaultSize,
                int n = 0, const wxString choices[] = NULL,
                int majorDim = 0,
-               long style = wxRA_HORIZONTAL,
+               long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
     {
@@ -49,7 +49,7 @@ public:
                const wxSize& size,
                const wxArrayString& choices,
                int majorDim = 0,
-               long style = wxRA_HORIZONTAL,
+               long style = wxRA_SPECIFY_COLS,
                const wxValidator& val = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
     {
@@ -68,7 +68,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 int n = 0, const wxString choices[] = NULL,
                 int majorDim = 0,
-                long style = wxRA_HORIZONTAL,
+                long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);
     bool Create(wxWindow *parent,
@@ -78,7 +78,7 @@ public:
                 const wxSize& size,
                 const wxArrayString& choices,
                 int majorDim = 0,
-                long style = wxRA_HORIZONTAL,
+                long style = wxRA_SPECIFY_COLS,
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxRadioBoxNameStr);
 
@@ -147,6 +147,7 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
 
 #if wxUSE_TOOLTIPS

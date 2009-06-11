@@ -171,7 +171,7 @@ grid$(EXEEXT): $(GRID_OBJECTS) $(__grid___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >grid.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	mv grid$(EXEEXT) grid.app/Contents/MacOS/grid
+@COND_PLATFORM_MACOSX_1@	ln -f grid$(EXEEXT) grid.app/Contents/MacOS/grid
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns grid.app/Contents/Resources/wxmac.icns
@@ -184,15 +184,6 @@ grid_griddemo.o: $(srcdir)/griddemo.cpp
 grid_griddemo_rc.o: $(srcdir)/griddemo.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
-
-@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
-@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
-@COND_USE_STC_1@	cd $(srcdir)/src/stc && ./gen_iface.py
-@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
-@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d

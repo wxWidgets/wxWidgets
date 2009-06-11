@@ -1,13 +1,13 @@
-////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // Name:        progdlgg.h
 // Purpose:     wxProgressDialog class
 // Author:      Karsten Ballueder
-// Modified by:
+// Modified by: Francesco Montorsi
 // Created:     09.05.1999
 // RCS-ID:      $Id$
 // Copyright:   (c) Karsten Ballueder
 // Licence:     wxWindows licence
-////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 #ifndef __PROGDLGH_G__
 #define __PROGDLGH_G__
@@ -23,55 +23,35 @@ class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxGauge;
 class WXDLLIMPEXP_FWD_CORE wxStaticText;
 
-/* Progress dialog which shows a moving progress bar.
-    Taken from the Mahogany project.*/
-
+/*
+    Progress dialog which shows a moving progress bar.
+    Taken from the Mahogany project.
+*/
 class WXDLLIMPEXP_CORE wxProgressDialog : public wxDialog
 {
-DECLARE_DYNAMIC_CLASS(wxProgressDialog)
 public:
-    /* Creates and displays dialog, disables event handling for other
-       frames or parent frame to avoid recursion problems.
-       @param title title for window
-       @param message message to display in window
-       @param maximum value for status bar, if <= 0, no bar is shown
-       @param parent window or NULL
-       @param style is the bit mask of wxPD_XXX constants from wx/defs.h
-    */
     wxProgressDialog(const wxString& title, const wxString& message,
                      int maximum = 100,
                      wxWindow *parent = NULL,
                      int style = wxPD_APP_MODAL | wxPD_AUTO_HIDE);
-    /* Destructor.
-        Re-enables event handling for other windows.
-    */
+
     virtual ~wxProgressDialog();
 
-    /* Update the status bar to the new value.
-       @param value new value
-       @param newmsg if used, new message to display
-       @return true if ABORT button has not been pressed
-    */
     virtual bool Update(int value, const wxString& newmsg = wxEmptyString, bool *skip = NULL);
-
-    /* Switches the dialog to use a gauge in indeterminate mode and calls
-       wxGauge::Pulse() to show to the user a bit of progress */
     virtual bool Pulse(const wxString& newmsg = wxEmptyString, bool *skip = NULL);
 
-    // Must provide overload to avoid hiding it (and warnings about it)
-    virtual void Update() { wxDialog::Update(); }
-
-    virtual bool Show( bool show = true );
-
-    /* Can be called to continue after the cancel button has been pressed, but
-       the program decided to continue the operation (e.g., user didn't
-       confirm it)
-    */
     void Resume();
 
     int GetValue() const;
     int GetRange() const;
     wxString GetMessage() const;
+
+    void SetRange(int maximum);
+
+    // Must provide overload to avoid hiding it (and warnings about it)
+    virtual void Update() { wxDialog::Update(); }
+
+    virtual bool Show( bool show = true );
 
 protected:
     // callback for optional abort button
@@ -168,6 +148,7 @@ private:
     class WXDLLIMPEXP_FWD_CORE wxWindowDisabler *m_winDisabler;
 
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxProgressDialog)
     wxDECLARE_NO_COPY_CLASS(wxProgressDialog);
 };
 

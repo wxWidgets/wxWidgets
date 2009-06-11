@@ -820,6 +820,10 @@ public:
     virtual void SetNextHandler(wxEvtHandler *handler);
     virtual void SetPreviousHandler(wxEvtHandler *handler);
 
+
+    // Watcom doesn't allow reducing access with using access declaration, see
+    // #10749
+#ifndef __WATCOMC__
 protected:
 
     // NOTE: we change the access specifier of the following wxEvtHandler functions
@@ -839,6 +843,7 @@ protected:
     using wxEvtHandler::ProcessPendingEvents;
     using wxEvtHandler::AddPendingEvent;
     using wxEvtHandler::QueueEvent;
+#endif // __WATCOMC__
 
 public:
 
@@ -1064,12 +1069,14 @@ public:
 
         // get the width/height/... of the text using current or specified
         // font
-    virtual void GetTextExtent(const wxString& string,
-                               int *x, int *y,
-                               int *descent = NULL,
-                               int *externalLeading = NULL,
-                               const wxFont *theFont = (const wxFont *) NULL)
-                               const = 0;
+    void GetTextExtent(const wxString& string,
+                       int *x, int *y,
+                       int *descent = NULL,
+                       int *externalLeading = NULL,
+                       const wxFont *font = NULL) const
+    {
+        DoGetTextExtent(string, x, y, descent, externalLeading, font);
+    }
 
     wxSize GetTextExtent(const wxString& string) const
     {
@@ -1597,6 +1604,13 @@ protected:
     //     overloaded Something()s in terms of DoSomething() which will be the
     //     only one to be virtual.
 
+    // text extent
+    virtual void DoGetTextExtent(const wxString& string,
+                                 int *x, int *y,
+                                 int *descent = NULL,
+                                 int *externalLeading = NULL,
+                                 const wxFont *font = NULL) const = 0;
+
     // coordinates translation
     virtual void DoClientToScreen( int *x, int *y ) const = 0;
     virtual void DoScreenToClient( int *x, int *y ) const = 0;
@@ -1688,6 +1702,11 @@ private:
     // implementation of the public GetPopupMenuSelectionFromUser() method
     int DoGetPopupMenuSelectionFromUser(wxMenu& menu, int x, int y);
 #endif // wxUSE_MENUS
+
+    // layout the window children when its size changes unless this was
+    // explicitly disabled with SetAutoLayout(false)
+    void InternalOnSize(wxSizeEvent& event);
+
 
     // the stack of windows which have captured the mouse
     static struct WXDLLIMPEXP_FWD_CORE wxWindowNext *ms_winCaptureNext;

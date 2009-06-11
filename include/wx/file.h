@@ -197,6 +197,10 @@ public:
   bool Write(const wxString& str, const wxMBConv& conv = wxMBConvUTF8())
     { return m_file.Write(str, conv); }
 
+  // flush data: can be called before closing file to ensure that data was
+  // correctly written out
+  bool Flush() { return m_file.Flush(); }
+
   // different ways to close the file
     // validate changes and delete the old file of name m_strName
   bool Commit();

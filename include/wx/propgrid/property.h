@@ -639,6 +639,8 @@ wxPG_PROP_CLASS_SPECIFIC_2          = 0x00100000
 */
 
 // Redefine attribute macros to use cached strings
+#undef wxPG_ATTR_DEFAULT_VALUE
+#define wxPG_ATTR_DEFAULT_VALUE           wxPGGlobalVars->m_strDefaultValue
 #undef wxPG_ATTR_MIN
 #define wxPG_ATTR_MIN                     wxPGGlobalVars->m_strMin
 #undef wxPG_ATTR_MAX
@@ -1058,9 +1060,8 @@ class WXDLLIMPEXP_PROPGRID wxPGProperty : public wxObject
     friend class wxPropertyGridPageState;
     friend class wxPropertyGridPopulator;
     friend class wxStringProperty;  // Proper "<composed>" support requires this
-#ifndef SWIG
+
     DECLARE_ABSTRACT_CLASS(wxPGProperty)
-#endif
 public:
     typedef wxUint32 FlagType;
 
@@ -1273,17 +1274,21 @@ public:
                           wxEvent& event );
 
     /**
-        Called after value of a child property has been altered.
+        Called after value of a child property has been altered. Must return
+        new value of the whole property (after any alterations warrented by
+        child's new value).
 
         Note that this function is usually called at the time that value of
-        this property, or given child property, is still pending for change.
+        this property, or given child property, is still pending for change,
+        and as such, result of GetValue() or m_value should not be relied
+        on.
 
         Sample pseudo-code implementation:
 
         @code
-        void MyProperty::ChildChanged( wxVariant& thisValue,
-                                       int childIndex,
-                                       wxVariant& childValue ) const
+        wxVariant MyProperty::ChildChanged( wxVariant& thisValue,
+                                            int childIndex,
+                                            wxVariant& childValue ) const
         {
             // Acquire reference to actual type of data stored in variant
             // (TFromVariant only exists if wxPropertyGrid's wxVariant-macros
@@ -1301,19 +1306,28 @@ public:
                     break;
                 ...
             }
+
+            // Return altered data
+            return data;
         }
         @endcode
 
         @param thisValue
-            Value of this property, that should be altered.
+            Value of this property. Changed value should be returned (in
+            previous versions of wxPropertyGrid it was only necessary to
+            write value back to this argument).
         @param childIndex
-            Index of child changed (you can use Item(childIndex) to get).
+            Index of child changed (you can use Item(childIndex) to get
+            child property).
         @param childValue
-            Value of the child property.
+            (Pending) value of the child property.
+
+        @return
+            Modified value of the whole property.
     */
-    virtual void ChildChanged( wxVariant& thisValue,
-                               int childIndex,
-                               wxVariant& childValue ) const;
+    virtual wxVariant ChildChanged( wxVariant& thisValue,
+                                    int childIndex,
+                                    wxVariant& childValue ) const;
 
     /** Returns pointer to an instance of used editor.
     */
@@ -1540,7 +1554,6 @@ public:
         return DoGetValue();
     }
 
-#ifndef SWIG
     /** Returns reference to the internal stored value. GetValue is preferred
         way to get the actual value, since GetValueRef ignores DoGetValue,
         which may override stored value.
@@ -1554,7 +1567,13 @@ public:
     {
         return m_value;
     }
-#endif
+
+    // Helper function (for wxPython bindings and such) for settings protected
+    // m_value.
+    wxVariant GetValuePlain() const
+    {
+        return m_value;
+    }
 
     /** Returns text representation of property's value.
 
@@ -1855,6 +1874,14 @@ public:
     void SetTextColour( const wxColour& colour,
                         bool recursively = false );
 
+    /** Set default value of a property. Synonymous to
+
+        @code
+            SetAttribute("DefaultValue", value);
+        @endcode
+    */
+    void SetDefaultValue( wxVariant& value );
+
 #ifndef SWIG
     /** Sets editor for a property.
 
@@ -1951,7 +1978,21 @@ public:
         else m_flags &= ~wxPG_PROP_COLLAPSED;
     }
 
+    /**
+        Sets given property flag(s).
+    */
     void SetFlag( FlagType flag ) { m_flags |= flag; }
+
+    /**
+        Sets or clears given property flag(s).
+    */
+    void ChangeFlag( FlagType flag, bool set )
+    {
+        if ( set )
+            m_flags |= flag;
+        else
+            m_flags &= ~flag;
+    }
 
     void SetFlagRecursively( FlagType flag, bool set );
 
@@ -1985,6 +2026,13 @@ public:
     {
         wxVariant val;  // Create NULL variant
         SetValue(val);
+    }
+
+    // Helper function (for wxPython bindings and such) for settings protected
+    // m_value.
+    void SetValuePlain( wxVariant value )
+    {
+        m_value = value;
     }
 
 #if wxUSE_VALIDATORS
@@ -2134,41 +2182,19 @@ public:
     wxPropertyGridPageState* GetParentState() const { return m_parentState; }
 #endif
 
+#ifndef SWIG
     wxPGProperty* GetItemAtY( unsigned int y,
                               unsigned int lh,
                               unsigned int* nextItemY ) const;
+#endif
+
+    /** Returns property at given virtual y coordinate.
+    */
+    wxPGProperty* GetItemAtY( unsigned int y ) const;
 
     /** Returns (direct) child property with given name (or NULL if not found).
     */
     wxPGProperty* GetPropertyByName( const wxString& name ) const;
-
-#ifdef SWIG
-     %extend {
-        DocStr(GetClientData,
-               "Returns the client data object for a property", "");
-        PyObject* GetClientData() {
-            wxPyClientData* data = (wxPyClientData*)self->GetClientObject();
-            if (data) {
-                Py_INCREF(data->m_obj);
-                return data->m_obj;
-            } else {
-                Py_INCREF(Py_None);
-                return Py_None;
-            }
-        }
-
-        DocStr(SetClientData,
-               "Associate the given client data.", "");
-        void SetClientData(PyObject* clientData) {
-            wxPyClientData* data = new wxPyClientData(clientData);
-            self->SetClientObject(data);
-        }
-    }
-    %pythoncode {
-         GetClientObject = GetClientData
-         SetClientObject = SetClientData
-    }
-#endif
 
 #ifndef SWIG
 

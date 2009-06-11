@@ -558,7 +558,7 @@ HGLOBAL wxDIB::ConvertFromBitmap(HBITMAP hbmp)
     {
         // this is an error which does risk to happen especially under Win9x
         // and which the user may understand so let him know about it
-        wxLogError(_("Failed to allocated %luKb of memory for bitmap data."),
+        wxLogError(_("Failed to allocate %luKb of memory for bitmap data."),
                    (unsigned long)(size / 1024));
 
         return NULL;

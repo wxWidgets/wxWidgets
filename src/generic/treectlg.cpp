@@ -2146,15 +2146,16 @@ void wxGenericTreeCtrl::DoSelectItem(const wxTreeItemId& itemId,
 
 void wxGenericTreeCtrl::SelectItem(const wxTreeItemId& itemId, bool select)
 {
+    wxGenericTreeItem * const item = (wxGenericTreeItem*) itemId.m_pItem;
+    wxCHECK_RET( item, wxT("SelectItem(): invalid tree item") );
+
     if ( select )
     {
-        DoSelectItem(itemId, !HasFlag(wxTR_MULTIPLE));
+        if ( !item->IsSelected() )
+            DoSelectItem(itemId, !HasFlag(wxTR_MULTIPLE));
     }
     else // deselect
     {
-        wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
-        wxCHECK_RET( item, wxT("SelectItem(): invalid tree item") );
-
         wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
         if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
             return;

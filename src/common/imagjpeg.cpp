@@ -479,7 +479,7 @@ bool wxJPEGHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[2];
 
-    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
         return false;
 
     return hdr[0] == 0xFF && hdr[1] == 0xD8;

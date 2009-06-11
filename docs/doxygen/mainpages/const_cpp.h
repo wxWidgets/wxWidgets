@@ -116,6 +116,7 @@ symbols, although this has not always been followed.
 @itemdef{__VMS__, VMS}
 @itemdef{__WINDOWS__, any Windows}
 @itemdef{__WINE__, Wine}
+@itemdef{_WIN32_WCE, Windows CE version}
 @endDefList
 
 
@@ -155,6 +156,7 @@ compiler used.
                         to the compiler version: 500 is 5.0.}
 @itemdef{__DJGPP__, DJGPP}
 @itemdef{__DIGITALMARS__, Digital Mars}
+@itemdef{__EVC4__, Embedded Visual C++ 4 (can be only used for building wxWinCE)}
 @itemdef{__GNUG__, Gnu C++ on any platform, see also wxCHECK_GCC_VERSION}
 @itemdef{__GNUWIN32__, Gnu-Win32 compiler, see also wxCHECK_W32API_VERSION}
 @itemdef{__MINGW32__, MinGW}
@@ -162,7 +164,7 @@ compiler used.
 @itemdef{__SUNCC__, Sun CC, see also wxCHECK_SUNCC_VERSION}
 @itemdef{__SYMANTECC__, Symantec C++}
 @itemdef{__VISAGECPP__, IBM Visual Age (OS/2)}
-@itemdef{__VISUALC__, Microsoft Visual C++, see also wxCHECK_VISUALC_VERSION.
+@itemdef{__VISUALC__, Microsoft Visual C++, see also ::wxCHECK_VISUALC_VERSION.
                     The value of this macro corresponds to the compiler version:
                     @c 1020 for @c 4.2 (the first supported version), @c 1100 for
                     @c 5.0, @c 1200 for @c 6.0 and so on. For convenience, the symbols
@@ -172,7 +174,6 @@ compiler used.
 @itemdef{__XLC__, AIX compiler}
 @itemdef{__WATCOMC__, Watcom C++. The value of this macro corresponds to
                     the compiler version, @c 1100 is @c 11.0 and @c 1200 is OpenWatcom.}
-@itemdef{_WIN32_WCE, Windows CE version}
 @endDefList
 
 
@@ -196,8 +197,12 @@ Currently the following symbols exist:
     implemented in a generic way, using a critical section.}
 @itemdef{wxHAS_CONFIG_TEMPLATE_RW, Defined if the currently used compiler
     supports template Read() and Write() methods in wxConfig.}
-@itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in size.}
-@itemdef{wxHAS_LARGE_FFILES, Defined if wxFFile supports files more than 4GB in size.}
+@itemdef{wxHAS_LARGE_FILES, Defined if wxFile supports files more than 4GB in
+    size (notice that you must include @c wx/filefn.h before testing for this
+    symbol).}
+@itemdef{wxHAS_LARGE_FFILES, Defined if wxFFile supports files more than 4GB in
+    size (notice that you must include @c wx/filefn.h before testing for this
+    symbol).}
 @itemdef{wxHAS_MULTIPLE_FILEDLG_FILTERS, Defined if wxFileDialog supports multiple ('|'-separated) filters.}
 @itemdef{wxHAS_POWER_EVENTS, Defined if wxPowerEvent are ever generated on the current platform.}
 @itemdef{wxHAS_RADIO_MENU_ITEMS,

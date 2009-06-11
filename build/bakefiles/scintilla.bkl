@@ -15,17 +15,19 @@
         $(TOP_SRCDIR)src/stc/scintilla/include
     </set>
 
-    <!-- automatically update generated files -->
-    <fragment format='autoconf'>
-@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
-@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
-@COND_USE_STC_1@	cd $(srcdir)/src/stc &amp;&amp; ./gen_iface.py
-@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
-@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
-    </fragment>
+    <!-- automatically update generated files when building the library -->
+    <if cond="BUILDING_LIB=='1'">
+        <fragment format='autoconf'>
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
+@COND_PYTHON@@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
+@COND_PYTHON@@COND_USE_STC_1@	cd $(srcdir)/src/stc &amp;&amp; ./gen_iface.py
+@COND_PYTHON@@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
+@COND_PYTHON@@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
+        </fragment>
+    </if>
 
     <lib id="wxscintilla" template="3rdparty_lib"
          cond="USE_STC=='1' and BUILDING_LIB=='1'">

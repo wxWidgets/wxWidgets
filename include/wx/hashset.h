@@ -22,14 +22,12 @@
 
 #if defined(HAVE_STD_UNORDERED_SET)
     #include <unordered_set>
-    #define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP )\
-        typedef std::unordered_set< KEY_T, HASH_T, KEY_EQ_T > CLASSNAME
+    #define WX_HASH_SET_BASE_TEMPLATE std::unordered_set
 #elif defined(HAVE_TR1_UNORDERED_SET)
     #include <tr1/unordered_set>
-    #define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP )\
-        typedef std::tr1::unordered_set< KEY_T, HASH_T, KEY_EQ_T > CLASSNAME
+    #define WX_HASH_SET_BASE_TEMPLATE std::tr1::unordered_set
 #else
-#error Update this code: unordered_set is available, but I do not know where.
+    #error Update this code: unordered_set is available, but I do not know where.
 #endif
 
 #elif wxUSE_STL && defined(HAVE_STL_HASH_MAP)
@@ -40,10 +38,38 @@
     #include <hash_set>
 #endif
 
-#define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP )\
-    typedef WX_HASH_MAP_NAMESPACE::hash_set< KEY_T, HASH_T, KEY_EQ_T > CLASSNAME
+#define WX_HASH_SET_BASE_TEMPLATE WX_HASH_MAP_NAMESPACE::hash_set
 
-#else // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+#endif // different hash_set/unordered_set possibilities
+
+#ifdef WX_HASH_SET_BASE_TEMPLATE
+
+// we need to define the class declared by _WX_DECLARE_HASH_SET as a class and
+// not a typedef to allow forward declaring it
+#define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME, CLASSEXP )  \
+CLASSEXP CLASSNAME                                                            \
+    : public WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >             \
+{                                                                             \
+public:                                                                       \
+    explicit CLASSNAME(size_type n = 3,                                       \
+                       const hasher& h = hasher(),                            \
+                       const key_equal& ke = key_equal(),                     \
+                       const allocator_type& a = allocator_type())            \
+        : WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >(n, h, ke, a)   \
+    {}                                                                        \
+    template <class InputIterator>                                            \
+    CLASSNAME(InputIterator f, InputIterator l,                               \
+              const hasher& h = hasher(),                                     \
+              const key_equal& ke = key_equal(),                              \
+              const allocator_type& a = allocator_type())                     \
+        : WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >(f, l, h, ke, a)\
+    {}                                                                        \
+    CLASSNAME(const WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >& s)  \
+        : WX_HASH_SET_BASE_TEMPLATE< KEY_T, HASH_T, KEY_EQ_T >(s)             \
+    {}                                                                        \
+}
+
+#else // no appropriate STL class, use our own implementation
 
 // this is a complex way of defining an easily inlineable identity function...
 #define _WX_DECLARE_HASH_SET_KEY_EX( KEY_T, CLASSNAME, CLASSEXP )            \
@@ -99,11 +125,12 @@ public:                                                                      \
     void erase( const const_iterator& it ) { erase( *it ); }                 \
                                                                              \
     /* count() == 0 | 1 */                                                   \
-    size_type count( const const_key_type& key )                             \
+    size_type count( const const_key_type& key ) const                       \
         { return GetNode( key ) ? 1 : 0; }                                   \
 }
 
-#endif // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
+#endif // STL/wx implementations
+
 
 // these macros are to be used in the user code
 #define WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, CLASSNAME) \

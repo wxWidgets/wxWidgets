@@ -300,6 +300,9 @@ wxMacListCtrlEventDelegate::wxMacListCtrlEventDelegate( wxListCtrl* list, int id
 
 bool wxMacListCtrlEventDelegate::ProcessEvent( wxEvent& event )
 {
+    int id = event.GetId();
+    wxObject* obj = event.GetEventObject();
+    
     // even though we use a generic list ctrl underneath, make sure
     // we present ourselves as wxListCtrl.
     event.SetEventObject( m_list );
@@ -307,10 +310,20 @@ bool wxMacListCtrlEventDelegate::ProcessEvent( wxEvent& event )
 
     if ( !event.IsKindOf( CLASSINFO( wxCommandEvent ) ) )
     {
-        if (m_list->HandleWindowEvent( event ))
+        if (m_list->GetEventHandler()->ProcessEvent( event ))
+        {
+            event.SetId(id);
+            event.SetEventObject(obj);
             return true;
+        }
     }
-    return wxEvtHandler::ProcessEvent(event);
+    // Also try with the original id
+    bool success = wxEvtHandler::ProcessEvent(event);
+    event.SetId(id);
+    event.SetEventObject(obj);
+    if (!success && id != m_id)
+        success = wxEvtHandler::ProcessEvent(event);
+    return success;
 }
 
 //-----------------------------------------------------------------------------
@@ -616,7 +629,8 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
 
 void wxListCtrl::OnDblClick(wxMouseEvent& event)
 {
-    m_current = -1;
+    if ( m_renameTimer->IsRunning() )
+        m_renameTimer->Stop();
     event.Skip();
 }
 
@@ -1656,6 +1670,9 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
                 if ( !IsVirtual() )
                     id = (DataBrowserItemID)m_dbImpl->GetItemFromLine(line);
 
+                if ( (state & wxLIST_STATE_FOCUSED) && (m_current == line)) 
+                    return line;
+
                 if ( (state == wxLIST_STATE_DONTCARE ) )
                     return line;
 
@@ -1675,6 +1692,9 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
                 DataBrowserItemID id = line + 1;
                 if ( !IsVirtual() )
                     id = (DataBrowserItemID)m_dbImpl->GetItemFromLine(line);
+
+                if ( (state & wxLIST_STATE_FOCUSED) && (m_current == line)) 
+                    return line;
 
                 if ( (state == wxLIST_STATE_DONTCARE ) )
                     return line;
@@ -1787,6 +1807,7 @@ bool wxListCtrl::DeleteItem(long item)
 // Deletes all items
 bool wxListCtrl::DeleteAllItems()
 {
+    m_current = -1;
     if (m_genericImpl)
         return m_genericImpl->DeleteAllItems();
 

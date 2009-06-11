@@ -72,6 +72,15 @@ IMPLEMENT_ABSTRACT_CLASS(wxWindowDFB, wxWindowBase)
 BEGIN_EVENT_TABLE(wxWindowDFB, wxWindowBase)
 END_EVENT_TABLE()
 
+//-----------------------------------------------------------------------------
+// global functions
+//-----------------------------------------------------------------------------
+
+wxWindow *wxGetActiveWindow()
+{
+    return wxWindow::FindFocus();
+}
+
 // ----------------------------------------------------------------------------
 // constructors and such
 // ----------------------------------------------------------------------------
@@ -548,10 +557,11 @@ int wxWindowDFB::GetCharWidth() const
     return dc.GetCharWidth();
 }
 
-void wxWindowDFB::GetTextExtent(const wxString& string,
-                             int *x, int *y,
-                             int *descent, int *externalLeading,
-                             const wxFont *theFont) const
+void wxWindowDFB::DoGetTextExtent(const wxString& string,
+                                  int *x, int *y,
+                                  int *descent,
+                                  int *externalLeading,
+                                  const wxFont *theFont) const
 {
     wxWindowDC dc((wxWindow*)this);
     dc.GetTextExtent(string, x, y, descent, externalLeading, (wxFont*)theFont);

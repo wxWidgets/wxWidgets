@@ -264,9 +264,6 @@ public:
         m_nativeFontInfo.SetEncoding(encoding);
     }
 
-    // native font info
-    bool HasNativeFontInfo() const { return true; }
-
     const wxNativeFontInfo& GetNativeFontInfo() const
         { return m_nativeFontInfo; }
 
@@ -644,10 +641,9 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
 
     lf.lfPitchAndFamily = (BYTE)(DEFAULT_PITCH) | ff_family;
 
-    if ( !wxStrlen(lf.lfFaceName) )
-    {
-        SetFaceName(facename);
-    }
+    // reset the facename so that CreateFontIndirect() will automatically choose a
+    // face name based only on the font family.
+    lf.lfFaceName[0] = '\0';
 }
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding encoding)
@@ -681,7 +677,7 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 {
     long l;
 
-    wxStringTokenizer tokenizer(s, wxS(";"));
+    wxStringTokenizer tokenizer(s, wxS(";"), wxTOKEN_RET_EMPTY_ALL);
 
     // first the version
     wxString token = tokenizer.GetNextToken();
@@ -753,10 +749,11 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         return false;
     lf.lfPitchAndFamily = (BYTE)l;
 
-    token = tokenizer.GetNextToken();
-    if(!token)
+    if ( !tokenizer.HasMoreTokens() )
         return false;
-    wxStrcpy(lf.lfFaceName, token.c_str());
+
+    // the face name may be empty
+    wxStrcpy(lf.lfFaceName, tokenizer.GetNextToken());
 
     return true;
 }
@@ -780,7 +777,7 @@ wxString wxNativeFontInfo::ToString() const
              lf.lfClipPrecision,
              lf.lfQuality,
              lf.lfPitchAndFamily,
-             (const wxChar*)lf.lfFaceName);
+             lf.lfFaceName);
 
     return s;
 }
@@ -1031,8 +1028,7 @@ wxFontEncoding wxFont::GetEncoding() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    return IsOk() && M_FONTDATA->HasNativeFontInfo() ? &(M_FONTDATA->GetNativeFontInfo())
-                                           : NULL;
+    return IsOk() ? &(M_FONTDATA->GetNativeFontInfo()) : NULL;
 }
 
 wxString wxFont::GetNativeFontInfoDesc() const
@@ -1057,15 +1053,10 @@ bool wxFont::IsFixedWidth() const
 {
     wxCHECK_MSG( IsOk(), false, wxT("invalid font") );
 
-    if ( M_FONTDATA->HasNativeFontInfo() )
-    {
-        // the two low-order bits specify the pitch of the font, the rest is
-        // family
-        BYTE pitch =
-            (BYTE)(M_FONTDATA->GetNativeFontInfo().lf.lfPitchAndFamily & PITCH_MASK);
+    // the two low-order bits specify the pitch of the font, the rest is
+    // family
+    BYTE pitch =
+        (BYTE)(M_FONTDATA->GetNativeFontInfo().lf.lfPitchAndFamily & PITCH_MASK);
 
-        return pitch == FIXED_PITCH;
-    }
-
-    return wxFontBase::IsFixedWidth();
+    return pitch == FIXED_PITCH;
 }

@@ -1115,7 +1115,8 @@ void wxDCImpl::InheritAttributes(wxWindow *win)
     SetFont(win->GetFont());
     SetTextForeground(win->GetForegroundColour());
     SetTextBackground(win->GetBackgroundColour());
-    SetBackground(wxBrush(win->GetBackgroundColour()));
+    SetBackground(win->GetBackgroundColour());
+    SetLayoutDirection(win->GetLayoutDirection());
 }
 
 //-----------------------------------------------------------------------------
@@ -1123,6 +1124,15 @@ void wxDCImpl::InheritAttributes(wxWindow *win)
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
+
+void wxDC::CopyAttributes(const wxDC& dc)
+{
+    SetFont(dc.GetFont());
+    SetTextForeground(dc.GetTextForeground());
+    SetTextBackground(dc.GetTextBackground());
+    SetBackground(dc.GetBackground());
+    SetLayoutDirection(dc.GetLayoutDirection());
+}
 
 void wxDC::DrawLabel(const wxString& text,
                          const wxBitmap& bitmap,

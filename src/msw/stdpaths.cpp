@@ -79,9 +79,13 @@ typedef HRESULT (WINAPI *SHGetSpecialFolderPath_t)(HWND, LPTSTR, int, BOOL);
 #ifndef SHGFP_TYPE_DEFAULT
     #define SHGFP_TYPE_DEFAULT 1
 #endif
+
 // ----------------------------------------------------------------------------
 // module globals
 // ----------------------------------------------------------------------------
+
+namespace
+{
 
 struct ShellFunctions
 {
@@ -101,13 +105,13 @@ struct ShellFunctions
 // in spite of using a static variable, this is MT-safe as in the worst case it
 // results in initializing the function pointer several times -- but this is
 // harmless
-static ShellFunctions gs_shellFuncs;
+ShellFunctions gs_shellFuncs;
 
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
 
-static void ResolveShellFunctions()
+void ResolveShellFunctions()
 {
 #if wxUSE_DYNLIB_CLASS
 
@@ -160,6 +164,8 @@ static void ResolveShellFunctions()
     gs_shellFuncs.initialized = true;
 #endif
 }
+
+} // anonymous namespace
 
 // ============================================================================
 // wxStandardPaths implementation
@@ -245,24 +251,14 @@ wxString wxStandardPaths::DoGetDirectory(int csidl)
     return dir;
 }
 
-/* static */
-wxString wxStandardPaths::GetAppDir()
+wxString wxStandardPaths::GetAppDir() const
 {
-    wxFileName fn(wxGetFullModuleName());
-
-    // allow running the apps directly from build directory in MSVC debug builds
-#ifdef _DEBUG
-    wxString lastdir;
-    if ( fn.GetDirCount() )
+    if ( m_appDir.empty() )
     {
-        lastdir = fn.GetDirs().Last();
-        lastdir.MakeLower();
-        if ( lastdir.Matches(_T("debug*")) || lastdir.Matches(_T("vc*msw*")) )
-            fn.RemoveLastDir();
+        m_appDir = wxFileName(wxGetFullModuleName()).GetPath();
     }
-#endif // _DEBUG
 
-    return fn.GetPath();
+    return m_appDir;
 }
 
 wxString wxStandardPaths::GetDocumentsDir() const
@@ -271,8 +267,72 @@ wxString wxStandardPaths::GetDocumentsDir() const
 }
 
 // ----------------------------------------------------------------------------
+// MSW-specific functions
+// ----------------------------------------------------------------------------
+
+void wxStandardPaths::IgnoreAppSubDir(const wxString& subdirPattern)
+{
+    wxFileName fn = wxFileName::DirName(GetAppDir());
+
+    if ( !fn.GetDirCount() )
+    {
+        // no last directory to ignore anyhow
+        return;
+    }
+
+    const wxString lastdir = fn.GetDirs().Last().Lower();
+    if ( lastdir.Matches(subdirPattern.Lower()) )
+    {
+        fn.RemoveLastDir();
+
+        // store the cached value so that subsequent calls to GetAppDir() will
+        // reuse it instead of using just the program binary directory
+        m_appDir = fn.GetPath();
+    }
+}
+
+void wxStandardPaths::IgnoreAppBuildSubDirs()
+{
+    IgnoreAppSubDir("debug");
+    IgnoreAppSubDir("release");
+
+    wxString compilerPrefix;
+#ifdef __VISUALC__
+    compilerPrefix = "vc";
+#elif defined(__GNUG__)
+    compilerPrefix = "gcc";
+#elif defined(__BORLANDC__)
+    compilerPrefix = "bcc";
+#elif defined(__DIGITALMARS__)
+    compilerPrefix = "dmc";
+#elif defined(__WATCOMC__)
+    compilerPrefix = "wat";
+#else
+    return;
+#endif
+
+    IgnoreAppSubDir(compilerPrefix + "_msw*");
+}
+
+void wxStandardPaths::DontIgnoreAppSubDir()
+{
+    // this will force the next call to GetAppDir() to use the program binary
+    // path as the application directory
+    m_appDir.clear();
+}
+
+// ----------------------------------------------------------------------------
 // public functions
 // ----------------------------------------------------------------------------
+
+wxStandardPaths::wxStandardPaths()
+{
+    // under MSW it's common to use both the applicatio nand vendor
+    UseAppInfo(AppInfo_AppName | AppInfo_VendorName);
+
+    // make it possible to run uninstalled application from the build directory
+    IgnoreAppBuildSubDirs();
+}
 
 wxString wxStandardPaths::GetExecutablePath() const
 {

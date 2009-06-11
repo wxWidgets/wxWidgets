@@ -127,7 +127,7 @@ void wxStatusBarUniv::DoDraw(wxControlRenderer *renderer)
             // have the corresponding style and even then only if we really can
             // resize this frame
             if ( n == (int)m_panes.GetCount() - 1 &&
-                 HasFlag(wxST_SIZEGRIP) &&
+                 HasFlag(wxSTB_SIZEGRIP) &&
                  GetParent()->HasFlag(wxRESIZE_BORDER) &&
                  parentTLW && !parentTLW->IsMaximized() )
             {

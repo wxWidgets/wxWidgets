@@ -588,7 +588,7 @@ void wxFontDialog::CreateControls()
     wxFontEnumerator enumerator;
     enumerator.EnumerateFacenames();
     wxArrayString facenames = enumerator.GetFacenames();
-    if (facenames)
+    if (!facenames.empty())
     {
         facenames.Add(_("<Any>"));
         facenames.Add(_("<Any Roman>"));

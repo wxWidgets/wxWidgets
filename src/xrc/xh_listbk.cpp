@@ -84,6 +84,19 @@ wxObject *wxListbookXmlHandler::DoCreateResource()
                     int imgIndex = imgList->Add(bmp);
                     m_listbook->SetPageImage(m_listbook->GetPageCount()-1, imgIndex );
                 }
+                else if ( HasParam(wxT("image")) )
+                {
+                    if ( m_listbook->GetImageList() )
+                    {
+                        m_listbook->SetPageImage(m_listbook->GetPageCount()-1,
+                                                 GetLong(wxT("image")) );
+                    }
+                    else // image without image list?
+                    {
+                        ReportError(n, "image can only be used in conjunction "
+                                       "with imagelist");
+                    }
+                }
             }
             else
             {
@@ -107,6 +120,10 @@ wxObject *wxListbookXmlHandler::DoCreateResource()
                    GetPosition(), GetSize(),
                    GetStyle(wxT("style")),
                    GetName());
+
+        wxImageList *imagelist = GetImageList();
+        if ( imagelist )
+            nb->AssignImageList(imagelist);
 
         wxListbook *old_par = m_listbook;
         m_listbook = nb;

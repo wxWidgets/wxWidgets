@@ -7,6 +7,10 @@
 // Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 // For compilers that support precompilation, includes "wx/wx.h"
 // and "wx/cppunit.h"
 #include "testprec.h"
@@ -24,14 +28,16 @@
 #ifdef __VISUALC__
     #pragma warning(disable:4100)
 #endif
+
 #include <cppunit/TestListener.h>
-#ifdef __VISUALC__
-    #pragma warning(default:4100)
-#endif
 #include <cppunit/Protector.h>
 #include <cppunit/Test.h>
 #include <cppunit/TestResult.h>
 #include <cppunit/TestFailure.h>
+
+#ifdef __VISUALC__
+    #pragma warning(default:4100)
+#endif
 #include "wx/afterstd.h"
 
 #include "wx/cmdline.h"
@@ -45,11 +51,18 @@
     #include "wx/osx/private.h"
 #endif
 
+#include "wx/socket.h"
+
 using namespace std;
 
 using CppUnit::Test;
 using CppUnit::TestSuite;
 using CppUnit::TestFactoryRegistry;
+
+
+// ----------------------------------------------------------------------------
+// helper classes
+// ----------------------------------------------------------------------------
 
 // exception class for MSVC debug CRT assertion failures
 #ifdef wxUSE_VC_CRTDBG
@@ -79,7 +92,7 @@ static string GetExceptionMessage()
     {
         msg << "wxWidgets assert: " << e.m_cond << " failed "
                "at " << e.m_file << ":" << e.m_line << " in " << e.m_func
-            << " with message " << e.m_msg;
+            << " with message '" << e.m_msg << "'";
     }
 #endif // wxDEBUG_LEVEL
 #ifdef wxUSE_VC_CRTDBG
@@ -244,6 +257,11 @@ private:
 
 IMPLEMENT_APP_NO_MAIN(TestApp)
 
+
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
 #ifdef wxUSE_VC_CRTDBG
 
 static int TestCrtReportHook(int reportType, char *message, int *)
@@ -295,6 +313,64 @@ int main(int argc, char **argv)
     return -1;
 }
 
+extern void SetFilterEventFunc(FilterEventFunc func)
+{
+    wxGetApp().SetFilterEventFunc(func);
+}
+
+extern void SetProcessEventFunc(ProcessEventFunc func)
+{
+    wxGetApp().SetProcessEventFunc(func);
+}
+
+extern bool IsNetworkAvailable()
+{
+    // NOTE: we could use wxDialUpManager here if it was in wxNet; since it's in
+    //       wxCore we use a simple rough test:
+    
+    wxSocketBase::Initialize();
+    
+    wxIPV4address addr;
+    if (!addr.Hostname("www.google.com") || !addr.Service("www"))
+    {
+        wxSocketBase::Shutdown();
+        return false;
+    }
+
+    wxSocketClient sock;
+    sock.SetTimeout(10);    // 10 secs
+    bool online = sock.Connect(addr);
+    
+    wxSocketBase::Shutdown();
+    
+    return online;
+}
+
+// helper of OnRun(): gets the test with the given name, returning NULL (and
+// not an empty test suite) if there is no such test
+static Test *GetTestByName(const wxString& name)
+{
+    Test *
+      test = TestFactoryRegistry::getRegistry(string(name.mb_str())).makeTest();
+    if ( test )
+    {
+        TestSuite * const suite = dynamic_cast<TestSuite *>(test);
+        if ( !suite || !suite->countTestCases() )
+        {
+            // it's a bogus test, don't use it
+            delete test;
+            test = NULL;
+        }
+    }
+
+    return test;
+}
+
+
+// ----------------------------------------------------------------------------
+// TestApp
+// ----------------------------------------------------------------------------
+
 TestApp::TestApp()
   : m_list(false),
     m_longlist(false)
@@ -312,7 +388,11 @@ bool TestApp::OnInit()
     if ( !TestAppBase::OnInit() )
         return false;
 
-    cout << "Test program for wxWidgets\n"
+#if wxUSE_GUI
+    cout << "Test program for wxWidgets GUI features\n"
+#else
+    cout << "Test program for wxWidgets non-GUI features\n"
+#endif
          << "build: " << WX_BUILD_OPTIONS_SIGNATURE << std::endl;
 
 #if wxUSE_GUI
@@ -404,36 +484,6 @@ bool TestApp::ProcessEvent(wxEvent& event)
         return (*m_processEventFunc)(event);
 
     return TestAppBase::ProcessEvent(event);
-}
-
-extern void SetFilterEventFunc(FilterEventFunc func)
-{
-    wxGetApp().SetFilterEventFunc(func);
-}
-
-extern void SetProcessEventFunc(ProcessEventFunc func)
-{
-    wxGetApp().SetProcessEventFunc(func);
-}
-
-// helper of OnRun(): gets the test with the given name, returning NULL (and
-// not an empty test suite) if there is no such test
-static Test *GetTestByName(const wxString& name)
-{
-    Test *
-      test = TestFactoryRegistry::getRegistry(string(name.mb_str())).makeTest();
-    if ( test )
-    {
-        TestSuite * const suite = dynamic_cast<TestSuite *>(test);
-        if ( !suite || !suite->countTestCases() )
-        {
-            // it's a bogus test, don't use it
-            delete test;
-            test = NULL;
-        }
-    }
-
-    return test;
 }
 
 // Run

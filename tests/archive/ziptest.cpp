@@ -261,11 +261,13 @@ CppUnit::Test *ziptest::makeTest(
         return NULL;
 
     if (genericInterface)
+    {
         return new ArchiveTestCase<wxArchiveClassFactory>(
                             descr, new wxZipClassFactory,
                             options, archiver, unarchiver);
-    else
-        return new ZipTestCase(descr, options, archiver, unarchiver);
+    }
+
+    return new ZipTestCase(descr, options, archiver, unarchiver);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ziptest);

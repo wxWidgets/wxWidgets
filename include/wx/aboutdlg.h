@@ -151,7 +151,7 @@ private:
 };
 
 // functions to show the about dialog box
-WXDLLIMPEXP_ADV void wxAboutBox(const wxAboutDialogInfo& info);
+WXDLLIMPEXP_ADV void wxAboutBox(const wxAboutDialogInfo& info, wxWindow* parent = NULL);
 
 #endif // wxUSE_ABOUTDLG
 

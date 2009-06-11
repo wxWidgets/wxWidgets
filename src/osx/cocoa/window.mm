@@ -33,25 +33,37 @@
 
 // Get the window with the focus
 
-WXWidget wxWidgetImpl::FindFocus()
+NSView* GetViewFromResponder( NSResponder* responder )
+{
+    NSView* view = nil;
+    if ( [responder isKindOfClass:[NSTextView class]] )
+    {
+        NSView* delegate =  [(NSTextView*)responder delegate];
+        if ( [delegate isKindOfClass:[NSTextField class] ] )
+            view = delegate;
+        else
+            view =  (NSView*) responder;
+    }
+    else
+    {
+        if ( [responder isKindOfClass:[NSView class]] )
+            view = (NSView*) responder;
+    }
+    return view;
+}
+
+NSView* GetFocusedViewInWindow( NSWindow* keyWindow )
 {
     NSView* focusedView = nil;
-    NSWindow* keyWindow = [[NSApplication sharedApplication] keyWindow];
     if ( keyWindow != nil )
-    {
-        NSResponder* responder = [keyWindow firstResponder];
-        if ( [responder isKindOfClass:[NSTextView class]] && 
-            [keyWindow fieldEditor:NO forObject:nil] != nil )
-        {
-            focusedView = [(NSTextView*)responder delegate];
-        }
-        else
-        {
-            if ( [responder isKindOfClass:[NSView class]] )
-                focusedView = (NSView*) responder;
-        }
-    }
+        focusedView = GetViewFromResponder([keyWindow firstResponder]);
+
     return focusedView;
+}
+
+WXWidget wxWidgetImpl::FindFocus()
+{
+    return GetFocusedViewInWindow( [[NSApplication sharedApplication] keyWindow] );
 }
 
 NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
@@ -204,7 +216,56 @@ long wxOSXTranslateCocoaKey( NSEvent* event )
             retval = WXK_TAB;
             break;
 
-        default :
+        case 75: // /
+            retval = WXK_NUMPAD_DIVIDE;
+            break;            
+        case 67: // *
+            retval = WXK_NUMPAD_MULTIPLY;
+            break;
+        case 78: // -
+            retval = WXK_NUMPAD_SUBTRACT;
+            break;
+        case 69: // +
+            retval = WXK_NUMPAD_ADD;
+            break;
+        case 76: // Enter
+            retval = WXK_NUMPAD_ENTER;
+            break;
+        case 65: // .
+            retval = WXK_NUMPAD_DECIMAL;
+            break;
+        case 82: // 0
+            retval = WXK_NUMPAD0;
+            break;
+        case 83: // 1
+            retval = WXK_NUMPAD1;
+            break;
+        case 84: // 2
+            retval = WXK_NUMPAD2;
+            break;
+        case 85: // 3
+            retval = WXK_NUMPAD3;
+            break;
+        case 86: // 4
+            retval = WXK_NUMPAD4;
+            break;
+        case 87: // 5
+            retval = WXK_NUMPAD5;
+            break;
+        case 88: // 6
+            retval = WXK_NUMPAD6;
+            break;
+        case 89: // 7
+            retval = WXK_NUMPAD7;
+            break;
+        case 91: // 8
+            retval = WXK_NUMPAD8;
+            break;
+        case 92: // 9
+            retval = WXK_NUMPAD9;
+            break;
+        default:
+            //retval = [event keyCode];
             break;
     }
     return retval;
@@ -224,25 +285,11 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charStrin
     wxevent.m_rawFlags = modifiers;
     
     wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
-    switch (eventType)
-    {
-        case NSKeyDown :
-            wxevent.SetEventType( wxEVT_KEY_DOWN )  ;
-            break;
-        case NSKeyUp :
-            wxevent.SetEventType( wxEVT_KEY_UP )  ;
-            break;
-        case NSFlagsChanged :
-            // setup common code here
-            break;
-        default :
-            break ;
-    }
 
     wxString chars;
     if ( eventType != NSFlagsChanged )
     {
-        NSString* nschars = [nsEvent characters];
+        NSString* nschars = (wxevent.GetEventType() != wxEVT_CHAR) ? [nsEvent charactersIgnoringModifiers] : [nsEvent characters];
         if ( charString )
         {
             // if charString is set, it did not come from key up / key down
@@ -261,7 +308,37 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charStrin
     long keyval = 0;
     
     if (wxevent.GetEventType() != wxEVT_CHAR)
+    {
         keyval = wxOSXTranslateCocoaKey(nsEvent) ;
+        switch (eventType)
+        {
+            case NSKeyDown :
+                wxevent.SetEventType( wxEVT_KEY_DOWN )  ;
+                break;
+            case NSKeyUp :
+                wxevent.SetEventType( wxEVT_KEY_UP )  ;
+                break;
+            case NSFlagsChanged :
+                switch (keyval)
+                {
+                    case WXK_CONTROL:
+                        wxevent.SetEventType( wxevent.m_controlDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
+                        break;
+                    case WXK_SHIFT:
+                        wxevent.SetEventType( wxevent.m_shiftDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
+                        break;
+                    case WXK_ALT:
+                        wxevent.SetEventType( wxevent.m_altDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
+                        break;
+                    case WXK_COMMAND:
+                        wxevent.SetEventType( wxevent.m_metaDown ? wxEVT_KEY_DOWN : wxEVT_KEY_UP);
+                        break;
+                }
+                break;
+            default :
+                break ;
+        }
+    }
 
     if ( !keyval )
     {
@@ -416,8 +493,8 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
             wxevent.SetEventType( wxEVT_MOUSEWHEEL ) ;
             wxevent.m_wheelDelta = 10;
             wxevent.m_linesPerAction = 1;
-            NSLog(@"deltaX %f, deltaY %f",[nsEvent deltaX], [nsEvent deltaY]);
-            if ( abs([nsEvent deltaX]) > abs([nsEvent deltaY]) )
+
+            if ( fabs([nsEvent deltaX]) > fabs([nsEvent deltaY]) )
             {
                 wxevent.m_wheelAxis = 1;
                 wxevent.m_wheelRotation = [nsEvent deltaX] * 10.0;
@@ -517,6 +594,8 @@ BOOL wxOSX_performDragOperation( id self, SEL _cmd, id <NSDraggingInfo> sender )
         
     return impl->performDragOperation(sender, self, _cmd) ? YES:NO ;
 }
+
+#endif
 
 void wxOSX_mouseEvent(NSView* self, SEL _cmd, NSEvent *event) 
 {
@@ -641,7 +720,8 @@ unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget WXUNUSED(slf),
         return NSDragOperationNone;
 
     wxDragResult result = wxDragNone;
-    wxPoint pt = wxFromNSPoint( m_osxView, [sender draggingLocation] );
+    NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
+    wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
 
     if ( sourceDragMask & NSDragOperationLink )
         result = wxDragLink;
@@ -706,7 +786,8 @@ unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget WXUNUSED(slf),
         return NSDragOperationNone;
 
     wxDragResult result = wxDragNone;
-    wxPoint pt = wxFromNSPoint( m_osxView, [sender draggingLocation] );
+    NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
+    wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
 
     if ( sourceDragMask & NSDragOperationLink )
         result = wxDragLink;
@@ -746,7 +827,8 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
     wxWindow* wxpeer = GetWXPeer();
     wxDropTarget* target = wxpeer->GetDropTarget();
     wxDragResult result = wxDragNone;
-    wxPoint pt = wxFromNSPoint( m_osxView, [sender draggingLocation] );
+    NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
+    wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
 
     if ( sourceDragMask & NSDragOperationLink )
         result = wxDragLink;
@@ -758,13 +840,14 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
     PasteboardRef pboardRef;    
     PasteboardCreate((CFStringRef)[pboard name], &pboardRef);
     target->SetCurrentDragPasteboard(pboardRef);
-    result = target->OnData(pt.x, pt.y, result);
+
+    if (target->OnDrop(pt.x, pt.y))
+        result = target->OnData(pt.x, pt.y, result);
+
     CFRelease(pboardRef);
      
     return result != wxDragNone;
 }
-
-#endif
 
 typedef void (*wxOSX_TextEventHandlerPtr)(NSView* self, SEL _cmd, NSString *event);
 typedef void (*wxOSX_EventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
@@ -777,14 +860,18 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
     if ( !DoHandleMouseEvent(event) )
     {
-        wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-        superimpl(slf, (SEL)_cmd, event);
+        // for plain NSView mouse events would propagate to parents otherwise
+        if (!m_wxPeer->MacIsUserPane())
+        {
+            wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+            superimpl(slf, (SEL)_cmd, event);
+        }
     }
 }
 
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    if ( [[slf window] firstResponder] != slf || !DoHandleKeyEvent(event) )
+    if ( GetFocusedViewInWindow([slf window]) != slf || m_hasEditor || !DoHandleKeyEvent(event) )
     {
         wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, event);
@@ -793,10 +880,10 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
-    if (m_lastKeyDownEvent && !DoHandleCharEvent(m_lastKeyDownEvent, text) )
+    if ( m_lastKeyDownEvent==NULL || m_hasEditor || !DoHandleCharEvent(m_lastKeyDownEvent, text) )
     {
-            wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
-            superimpl(slf, (SEL)_cmd, text);
+        wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
+        superimpl(slf, (SEL)_cmd, text);
     }
     m_lastKeyDownEvent = NULL;
 }
@@ -824,12 +911,14 @@ bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     // get the current focus before running becomeFirstResponder
     NSView* otherView = FindFocus(); 
+
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     BOOL r = superimpl(slf, (SEL)_cmd);
     if ( r )
     {
         DoNotifyFocusEvent( true, otherWindow );
     }
+
     return r;
 }
 
@@ -838,11 +927,13 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
     // get the current focus after running resignFirstResponder
+    // note that this value isn't reliable, it might return the same view that
+    // is resigning
     NSView* otherView = FindFocus(); 
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     // NSTextViews have an editor as true responder, therefore the might get the
-    // resign notification if their editor takes over, don't trigger any event hen
-    if ( r && otherWindow != this)
+    // resign notification if their editor takes over, don't trigger any event then
+    if ( r && !m_hasEditor)
     {
         DoNotifyFocusEvent( false, otherWindow );
     }
@@ -992,7 +1083,7 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     
     wxOSX_CLASS_ADD_METHOD(c, @selector(insertText:), (IMP) wxOSX_insertText, "v@:@" )
 
-    wxOSX_CLASS_ADD_METHOD(c, @selector(performKeyEquivalent:), (IMP) wxOSX_performKeyEquivalent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(performKeyEquivalent:), (IMP) wxOSX_performKeyEquivalent, "c@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(acceptsFirstResponder), (IMP) wxOSX_acceptsFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" )
@@ -1050,6 +1141,7 @@ void wxWidgetCocoaImpl::Init()
     m_osxView = NULL;
     m_isFlipped = true;
     m_lastKeyDownEvent = NULL;
+    m_hasEditor = false;
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
@@ -1196,6 +1288,7 @@ bool wxWidgetCocoaImpl::SetFocus()
         return false;
         
     [[m_osxView window] makeFirstResponder: m_osxView] ;
+    [[m_osxView window] makeKeyAndOrderFront:nil] ;
     return true;
 }
 
@@ -1397,7 +1490,7 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 
 bool wxWidgetCocoaImpl::DoHandleCharEvent(NSEvent *event, NSString *text)
 {
-    wxKeyEvent wxevent(wxEVT_KEY_DOWN);
+    wxKeyEvent wxevent(wxEVT_CHAR);
     SetupKeyEvent( wxevent, event, text );
     wxevent.SetEventObject(GetWXPeer());  
 
@@ -1413,10 +1506,17 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 
     // this will fire higher level events, like insertText, to help
     // us handle EVT_CHAR, etc.
-    if ([event type] == NSKeyDown)
+    if ( !m_hasEditor && [event type] == NSKeyDown)
     {
         m_lastKeyDownEvent = event;
-        [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+        if ( !result )
+        {
+            if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+                [[(NSScrollView*)m_osxView documentView] interpretKeyEvents:[NSArray arrayWithObject:event]];
+            else
+                [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+            result = true;
+        }
     }
     return result;
 }

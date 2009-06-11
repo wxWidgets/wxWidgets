@@ -23,10 +23,13 @@ import string
 
 import sys
 import types
+
+from common import *
 from xml.dom import minidom
 
 option_dict = { 
             "report"        : (False, "Print out the classes and methods found by this script."),
+            "verbose"       : (False, "Provide status updates and other information."),
           }
     
 parser = optparse.OptionParser(usage="usage: %prog [options] <doxyml files to parse>\n" + __description__, version="%prog 1.0")
@@ -44,11 +47,14 @@ options, arguments = parser.parse_args()
 class ClassDefinition:
     def __init__(self):
         self.name = ""
+        self.constructors = []
+        self.destructors = []
         self.methods = []
         self.brief_description = ""
         self.detailed_description = ""
         self.includes = []
         self.bases = []
+        self.enums = {}
         
     def __str__(self):
         str_repr = """
@@ -110,30 +116,77 @@ class DoxyMLParser:
     def __init__(self):
         self.classes = []
 
+    def find_class(self, name):
+        for aclass in self.classes:
+            if aclass.name == name:
+                return aclass
+                
+        return None
+
+    def get_enums_and_functions(self, filename, aclass):
+        file_path = os.path.dirname(filename)
+        enum_filename = os.path.join(file_path, aclass.name[2:] + "_8h.xml")
+        if os.path.exists(enum_filename):
+            root = minidom.parse(enum_filename).documentElement
+            for method in root.getElementsByTagName("memberdef"):
+                if method.getAttribute("kind") == "enum":
+                    self.parse_enum(aclass, method, root)
+
+    def is_derived_from_base(self, aclass, abase):
+        base = get_first_value(aclass.bases)
+        while base and base != "":
+            
+            if base == abase:
+                return True
+                
+            parentclass = self.find_class(base)
+            
+            if parentclass:
+                base = get_first_value(parentclass.bases)
+            else:
+                base = None
+                
+        return False
+
     def parse(self, filename):
         self.xmldoc = minidom.parse(filename).documentElement
         for node in self.xmldoc.getElementsByTagName("compounddef"):
-            self.classes.append(self.parse_class(node))
+            new_class = self.parse_class(node)
+            self.classes.append(new_class)
+            self.get_enums_and_functions(filename, new_class)
             
     def parse_class(self, class_node):
         new_class = ClassDefinition()
+        new_class.name = getTextValue(class_node.getElementsByTagName("compoundname")[0])
         for node in class_node.childNodes:
-            if node.nodeName == "compoundname":
-                new_class.name = getTextValue(node)
-                print "Parsing class %s" % new_class.name
-            elif node.nodeName == "basecompoundref":
+            if node.nodeName == "basecompoundref":
                 new_class.bases.append(getTextValue(node))
             elif node.nodeName == "briefdescription":
                 # let the post-processor determ
                 new_class.brief_description = node.toxml()
             elif node.nodeName == "detaileddescription":
                 new_class.detailed_description = node.toxml()
+            elif node.nodeName == "includes":
+                new_class.includes.append(getTextValue(node))
 
         self.parse_methods(new_class, class_node)
+
         return new_class
         
+    def parse_enum(self, new_class, enum, root):
+        enum_name = ""
+        enum_values = []
+        
+        for node in enum.childNodes:
+            if node.nodeName == "name":
+                enum_name = getTextValue(node)
+            elif node.nodeName == "enumvalue":
+                enum_values.append(getTextValue(node.getElementsByTagName("name")[0]))
+        
+        new_class.enums[enum_name] = enum_values
+        
     def parse_methods(self, new_class, root):
-        for method in root.getElementsByTagName("memberdef"):
+        for method in root.getElementsByTagName("memberdef"):                
             new_method = MethodDefinition()
             for node in method.childNodes:
                 if node.nodeName == "name":
@@ -150,8 +203,16 @@ class DoxyMLParser:
                         if child.nodeType == child.ELEMENT_NODE:
                             param[child.nodeName] = getTextValue(child)
                     new_method.params.append(param)
-            print "Adding %s" % (new_method.name + new_method.argsstring)
-            new_class.methods.append(new_method)
+            
+            if options.verbose:
+                print "Adding %s" % (new_method.name + new_method.argsstring)
+            
+            if new_method.name == new_class.name:
+                new_class.constructors.append(new_method)
+            elif new_method.name == "~" + new_class.name:
+                new_class.destructors.append(new_method)
+            else:
+                new_class.methods.append(new_method)
 
 if __name__ == "__main__":
     if len(arguments) < 1:

@@ -27,8 +27,8 @@
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
-#if !(defined(__WXGTK20__) || defined(__WXOSX_CARBON__)) || defined(__WXUNIVERSAL__)
-// #if !(defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
+#if !(defined(__WXGTK20__) || defined(__WXOSX__)) || defined(__WXUNIVERSAL__)
+// #if !(defined(__WXOSX__)) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_DATAVIEWCTRL
 #endif
 
@@ -525,8 +525,7 @@ public:
         { m_owner = owner; }
 
     // getters:
-    unsigned int GetModelColumn() const 
-        { return static_cast<unsigned int>(m_model_column); }
+    unsigned int GetModelColumn() const { return static_cast<unsigned int>(m_model_column); }
     wxDataViewCtrl *GetOwner() const        { return m_owner; }
     wxDataViewRenderer* GetRenderer() const { return m_renderer; }
 
@@ -929,7 +928,7 @@ private:
     long    m_min,m_max;
 };
 
-#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXMAC__)
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL) || defined(__WXOSX_CARBON__)
 
 // -------------------------------------
 // wxDataViewChoiceRenderer

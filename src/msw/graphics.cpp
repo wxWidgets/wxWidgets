@@ -11,11 +11,11 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/dc.h"
-
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#include "wx/dc.h"
 
 #if wxUSE_GRAPHICS_CONTEXT
 

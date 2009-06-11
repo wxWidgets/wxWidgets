@@ -471,6 +471,10 @@ SOURCE=..\..\src\common\stdpbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\stdstream.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\stopwatch.cpp
 # End Source File
 # Begin Source File
@@ -1448,6 +1452,10 @@ SOURCE=..\..\include\wx\stackwalk.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\stdpaths.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\stdstream.h
 # End Source File
 # Begin Source File
 

@@ -87,7 +87,7 @@ USE_RICHTEXT = 1
 USE_STC = 1
 
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
-USE_OPENGL = 0
+USE_OPENGL = 1
 
 # Build quality assurance classes library (USE_GUI must be 1)? [0,1]
 USE_QA = 0

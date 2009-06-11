@@ -76,6 +76,7 @@
             streams/memstream.cpp
             streams/socketstream.cpp
             streams/sstream.cpp
+            streams/stdstream.cpp
             streams/tempfile.cpp
             streams/textstreamtest.cpp
             streams/zlibstream.cpp
@@ -84,6 +85,7 @@
             thread/queue.cpp
             thread/tls.cpp
             uris/uris.cpp
+            uris/url.cpp
             vectors/vectors.cpp
             weakref/evtconnection.cpp
             weakref/weakref.cpp
@@ -91,8 +93,8 @@
             xml/xmltest.cpp
         </sources>
         <wx-lib>net</wx-lib>
-        <wx-lib>base</wx-lib>
         <wx-lib>xml</wx-lib>
+        <wx-lib>base</wx-lib>
     </exe>
 
 
@@ -119,6 +121,7 @@
             events/clone.cpp
             events/propagation.cpp
             font/fonttest.cpp
+            image/image.cpp
             image/rawbmp.cpp
             html/htmlwindow.cpp
             misc/guifuncs.cpp
@@ -147,6 +150,10 @@
 
     <wx-data id="data">
         <files>testdata.fc</files>
+        
+        <!-- test data for image/image.cpp test unit: -->
+        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg  
+               horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
     </wx-data>
 
     <template id="catalog">
@@ -157,16 +164,6 @@
 
     <wx-data id="fr" template="catalog"/>
 
-
-    <!-- BENCHMARKS -->
-
-    <exe id="printfbench" template="wx_sample_console,wx_test"
-                          template_append="wx_append_base">
-        <sources>
-            benchmarks/printfbench.cpp
-        </sources>
-        <wx-lib>base</wx-lib>
-    </exe>
 
     <fragment format="autoconf">
 # notice the ugly hack with using CXXWARNINGS: we can't use CPPFLAGS as

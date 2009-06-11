@@ -1079,10 +1079,11 @@ int wxWindowMGL::GetCharWidth() const
     return dc.GetCharWidth();
 }
 
-void wxWindowMGL::GetTextExtent(const wxString& string,
-                             int *x, int *y,
-                             int *descent, int *externalLeading,
-                             const wxFont *theFont) const
+void wxWindowMGL::DoGetTextExtent(const wxString& string,
+                                  int *x, int *y,
+                                  int *descent,
+                                  int *externalLeading,
+                                  const wxFont *theFont) const
 {
     wxScreenDC dc;
     if (!theFont)

@@ -78,6 +78,7 @@ protected:
     static wxHTTP *ms_proxyDefault;
     static bool ms_useDefaultProxy;
     wxHTTP *m_proxy;
+    bool m_useProxy;
 #endif // wxUSE_PROTOCOL_HTTP
 
 #if wxUSE_URL_NATIVE
@@ -87,13 +88,13 @@ protected:
     // Creates on the heap and returns a native
     // implementation object for the current platform.
     static wxURLNativeImp *CreateNativeImpObject();
-#endif
+#endif // wxUSE_URL_NATIVE
+
     wxProtoInfo *m_protoinfo;
     wxProtocol *m_protocol;
 
     wxURLError m_error;
     wxString m_url;
-    bool m_useProxy;
 
     void Init(const wxString&);
     bool ParseURL();

@@ -43,6 +43,7 @@
 #include "wx/colordlg.h"        // for wxGetColourFromUser
 #include "wx/settings.h"
 #include "wx/sysopt.h"
+#include "wx/numdlg.h"
 
 #include "listtest.h"
 
@@ -64,9 +65,6 @@ const wxChar *SMALL_VIRTUAL_VIEW_ITEMS[][2] =
     { _T("Pigeon"), _T("coo") },
     { _T("Sheep"), _T("baaah") },
 };
-
-// number of items in list/report view
-static const int NUM_ITEMS = 10;
 
 // number of items in icon/small icon view
 static const int NUM_ICONS = 9;
@@ -127,6 +125,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_VIRTUAL_VIEW, MyFrame::OnVirtualView)
     EVT_MENU(LIST_SMALL_VIRTUAL_VIEW, MyFrame::OnSmallVirtualView)
 
+    EVT_MENU(LIST_SET_ITEMS_COUNT, MyFrame::OnSetItemsCount)
+
     EVT_MENU(LIST_GOTO, MyFrame::OnGoTo)
     EVT_MENU(LIST_FOCUS_LAST, MyFrame::OnFocusLast)
     EVT_MENU(LIST_TOGGLE_FIRST, MyFrame::OnToggleFirstSel)
@@ -150,7 +150,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_FREEZE, MyFrame::OnFreeze)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
+#ifdef __WXOSX__
     EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
+#endif // __WXOSX__
+    EVT_MENU(LIST_FIND, MyFrame::OnFind)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
@@ -163,6 +166,7 @@ MyFrame::MyFrame(const wxChar *title)
     m_listCtrl = NULL;
     m_logWindow = NULL;
     m_smallVirtual = false;
+    m_numListItems = 10;
 
     // Give it an icon
     SetIcon( wxICON(mondrian) );
@@ -213,7 +217,10 @@ MyFrame::MyFrame(const wxChar *title)
     menuView->Append(LIST_SMALL_ICON_TEXT_VIEW, _T("Small icon &view with text\tF6"));
     menuView->Append(LIST_VIRTUAL_VIEW, _T("&Virtual view\tF7"));
     menuView->Append(LIST_SMALL_VIRTUAL_VIEW, _T("Small virtual vie&w\tF8"));
-#ifdef __WXMAC__
+    menuView->AppendSeparator();
+    menuView->Append(LIST_SET_ITEMS_COUNT, "Set &number of items");
+#ifdef __WXOSX__
+    menuView->AppendSeparator();
     menuView->AppendCheckItem(LIST_MAC_USE_GENERIC, _T("Mac: Use Generic Control"));
 #endif
 
@@ -229,10 +236,11 @@ MyFrame::MyFrame(const wxChar *title)
     menuList->Append(LIST_SHOW_VIEW_RECT, _T("Show &view rect"));
 #ifdef wxHAS_LISTCTRL_COLUMN_ORDER
     menuList->Append(LIST_SET_COL_ORDER, _T("Se&t columns order\tShift-Ctrl-O"));
-    menuList->Append(LIST_GET_COL_ORDER, _T("Show&w columns order\tCtrl-O"));
+    menuList->Append(LIST_GET_COL_ORDER, _T("Sho&w columns order\tCtrl-O"));
 #endif // wxHAS_LISTCTRL_COLUMN_ORDER
     menuList->AppendSeparator();
     menuList->Append(LIST_SORT, _T("Sor&t\tCtrl-T"));
+    menuList->Append(LIST_FIND, "Test Find() performance");
     menuList->AppendSeparator();
     menuList->Append(LIST_ADD, _T("&Append an item\tCtrl-P"));
     menuList->Append(LIST_EDIT, _T("&Edit the item\tCtrl-E"));
@@ -346,10 +354,14 @@ void MyFrame::OnToggleLines(wxCommandEvent& event)
     m_listCtrl->SetSingleStyle(wxLC_HRULES | wxLC_VRULES, event.IsChecked());
 }
 
+#ifdef __WXOSX__
+
 void MyFrame::OnToggleMacUseGeneric(wxCommandEvent& event)
 {
     wxSystemOptions::SetOption(wxT("mac.listctrl.always_use_generic"), event.IsChecked());
 }
+
+#endif // __WXOSX__
 
 void MyFrame::OnGoTo(wxCommandEvent& WXUNUSED(event))
 {
@@ -458,7 +470,7 @@ void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::InitWithListItems()
 {
-    for ( int i = 0; i < NUM_ITEMS; i++ )
+    for ( int i = 0; i < m_numListItems; i++ )
     {
         m_listCtrl->InsertItem(i, wxString::Format(_T("Item %d"), i));
     }
@@ -493,13 +505,13 @@ void MyFrame::InitWithReportItems()
 
     wxStopWatch sw;
 
-    for ( int i = 0; i < NUM_ITEMS; i++ )
+    for ( int i = 0; i < m_numListItems; i++ )
     {
         m_listCtrl->InsertItemInReportView(i);
     }
 
     m_logWindow->WriteText(wxString::Format(_T("%d items inserted in %ldms\n"),
-                                            NUM_ITEMS, sw.Time()));
+                                            m_numListItems, sw.Time()));
     m_listCtrl->Show();
 
     // we leave all mask fields to 0 and only change the colour
@@ -589,6 +601,31 @@ void MyFrame::OnSmallVirtualView(wxCommandEvent& WXUNUSED(event))
     RecreateList(wxLC_REPORT | wxLC_VIRTUAL);
 }
 
+void MyFrame::OnSetItemsCount(wxCommandEvent& WXUNUSED(event))
+{
+    int numItems = wxGetNumberFromUser
+                   (
+                        "Enter the initial number of items for "
+                        "the list and report views",
+                        "Number of items:",
+                        "wxWidgets wxListCtrl sample",
+                        m_numListItems,
+                        0,
+                        10000,
+                        this
+                   );
+    if ( numItems == -1 || numItems == m_numListItems )
+        return;
+
+    m_numListItems = numItems;
+
+    if ( m_listCtrl->HasFlag(wxLC_REPORT) &&
+            !m_listCtrl->HasFlag(wxLC_VIRTUAL) )
+        RecreateList(wxLC_REPORT);
+    else if ( m_listCtrl->HasFlag(wxLC_LIST) )
+        RecreateList(wxLC_LIST);
+}
+
 void MyFrame::InitWithVirtualItems()
 {
     m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
@@ -618,6 +655,18 @@ void MyFrame::OnSort(wxCommandEvent& WXUNUSED(event))
     m_logWindow->WriteText(wxString::Format(_T("Sorting %d items took %ld ms\n"),
                                             m_listCtrl->GetItemCount(),
                                             sw.Time()));
+}
+
+void MyFrame::OnFind(wxCommandEvent& WXUNUSED(event))
+{
+    wxStopWatch sw;
+
+    const int itemCount = m_listCtrl->GetItemCount();
+    for ( int i = 0; i < itemCount; i++ )
+        m_listCtrl->FindItem(-1, i);
+
+    wxLogMessage("Calling Find() for all %d items took %ld ms",
+                 itemCount, sw.Time());
 }
 
 void MyFrame::OnShowSelInfo(wxCommandEvent& WXUNUSED(event))

@@ -289,7 +289,9 @@ inline void wxCopyRectToRECT(const wxRect& rect, RECT& rc)
 // translations between HIMETRIC units (which OLE likes) and pixels (which are
 // liked by all the others) - implemented in msw/utilsexc.cpp
 extern void HIMETRICToPixel(LONG *x, LONG *y);
+extern void HIMETRICToPixel(LONG *x, LONG *y, HDC hdcRef);
 extern void PixelToHIMETRIC(LONG *x, LONG *y);
+extern void PixelToHIMETRIC(LONG *x, LONG *y, HDC hdcRef);
 
 // Windows convention of the mask is opposed to the wxWidgets one, so we need
 // to invert the mask each time we pass one/get one to/from Windows

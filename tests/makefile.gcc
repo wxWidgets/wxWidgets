@@ -77,6 +77,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_memstream.o \
 	$(OBJS)\test_socketstream.o \
 	$(OBJS)\test_sstream.o \
+	$(OBJS)\test_stdstream.o \
 	$(OBJS)\test_tempfile.o \
 	$(OBJS)\test_textstreamtest.o \
 	$(OBJS)\test_zlibstream.o \
@@ -85,6 +86,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_queue.o \
 	$(OBJS)\test_tls.o \
 	$(OBJS)\test_uris.o \
+	$(OBJS)\test_url.o \
 	$(OBJS)\test_vectors.o \
 	$(OBJS)\test_evtconnection.o \
 	$(OBJS)\test_weakref.o \
@@ -115,6 +117,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_clone.o \
 	$(OBJS)\test_gui_propagation.o \
 	$(OBJS)\test_gui_fonttest.o \
+	$(OBJS)\test_gui_image.o \
 	$(OBJS)\test_gui_rawbmp.o \
 	$(OBJS)\test_gui_htmlwindow.o \
 	$(OBJS)\test_gui_guifuncs.o \
@@ -124,16 +127,6 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_socket.o \
 	$(OBJS)\test_gui_clientsize.o \
 	$(OBJS)\test_gui_setsize.o
-PRINTFBENCH_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
-	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
-	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
-	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\include -W -Wall -I. $(__DLLFLAG_p) \
-	-DwxUSE_GUI=0 $(CPPUNIT_CFLAGS) $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
-	-Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
-PRINTFBENCH_OBJECTS =  \
-	$(OBJS)\printfbench_dummy.o \
-	$(OBJS)\printfbench_printfbench.o
 
 ### Conditionally set variables: ###
 
@@ -244,14 +237,6 @@ endif
 ifeq ($(USE_GUI),1)
 __LIB_PNG_p = -lwxpng$(WXDEBUGFLAG)
 endif
-ifeq ($(MONOLITHIC),0)
-__WXLIB_NET_p = \
-	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
-endif
-ifeq ($(MONOLITHIC),0)
-__WXLIB_XML_p = \
-	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml
-endif
 ifeq ($(BUILD),debug)
 __OPTIMIZEFLAG = -O0
 endif
@@ -306,6 +291,14 @@ ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
+__WXLIB_NET_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
+endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_XML_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml
+endif
+ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = \
 	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
@@ -349,17 +342,16 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_gui___depname) data fr $(OBJS)\printfbench.exe
+all: $(OBJS)\test.exe $(__test_gui___depname) data fr
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
 	-if exist $(OBJS)\test.exe del $(OBJS)\test.exe
 	-if exist $(OBJS)\test_gui.exe del $(OBJS)\test_gui.exe
-	-if exist $(OBJS)\printfbench.exe del $(OBJS)\printfbench.exe
 
 $(OBJS)\test.exe: $(TEST_OBJECTS)
-	$(CXX) -o $@ $(TEST_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(CPPUNIT_LIBS) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_XML_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+	$(CXX) -o $@ $(TEST_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(CPPUNIT_LIBS) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_XML_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample_rc.o
@@ -368,14 +360,11 @@ endif
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (testdata.fc) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+	for %%f in (horse.ani horse.bmp horse.cur horse.gif horse.ico horse.jpg horse.pcx horse.png horse.pnm horse.tga horse.tif horse.xpm) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 fr: 
 	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
 	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%%f copy .\intl\fr\%%f $(OBJS)\intl\fr
-
-$(OBJS)\printfbench.exe: $(PRINTFBENCH_OBJECTS)
-	$(CXX) -o $@ $(PRINTFBENCH_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(CPPUNIT_LIBS) $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
 $(OBJS)\test_dummy.o: ./dummy.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
@@ -524,6 +513,9 @@ $(OBJS)\test_socketstream.o: ./streams/socketstream.cpp
 $(OBJS)\test_sstream.o: ./streams/sstream.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_stdstream.o: ./streams/stdstream.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_tempfile.o: ./streams/tempfile.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
@@ -546,6 +538,9 @@ $(OBJS)\test_tls.o: ./thread/tls.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_uris.o: ./uris/uris.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_url.o: ./uris/url.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_vectors.o: ./vectors/vectors.cpp
@@ -614,6 +609,9 @@ $(OBJS)\test_gui_propagation.o: ./events/propagation.cpp
 $(OBJS)\test_gui_fonttest.o: ./font/fonttest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_gui_image.o: ./image/image.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_gui_rawbmp.o: ./image/rawbmp.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
@@ -640,12 +638,6 @@ $(OBJS)\test_gui_clientsize.o: ./window/clientsize.cpp
 
 $(OBJS)\test_gui_setsize.o: ./window/setsize.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\printfbench_dummy.o: ./dummy.cpp
-	$(CXX) -c -o $@ $(PRINTFBENCH_CXXFLAGS) $(CPPDEPS) $<
-
-$(OBJS)\printfbench_printfbench.o: ./benchmarks/printfbench.cpp
-	$(CXX) -c -o $@ $(PRINTFBENCH_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all clean data fr
 

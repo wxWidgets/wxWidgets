@@ -870,7 +870,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                             {
                                 wxDateTime dt;
                                 wxString::const_iterator end;
-                                if ( !dt.ParseDate(value) || end != value.end() )
+                                if ( !dt.ParseDate(value, &end) || end != value.end() )
                                 {
                                     errorMsg << wxString::Format(_("Option '%s': '%s' cannot be converted to a date."),
                                                                  name.c_str(), value.c_str())

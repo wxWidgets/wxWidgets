@@ -17,9 +17,10 @@
             mbconv.cpp
             strings.cpp
             tls.cpp
+            printfbench.cpp
         </sources>
-        <wx-lib>base</wx-lib>
         <wx-lib>net</wx-lib>
+        <wx-lib>base</wx-lib>
     </exe>
 
     <wx-data id="data">

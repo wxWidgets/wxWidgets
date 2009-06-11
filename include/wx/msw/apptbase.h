@@ -26,9 +26,6 @@ public:
     // some opaque data which will be passed later to AfterChildWaitLoop()
     virtual void *BeforeChildWaitLoop() = 0;
 
-    // process pending Windows messages, even in console app
-    virtual void AlwaysYield() = 0;
-
     // called after starting to wait for the child termination, the parameter
     // is the return value of BeforeChildWaitLoop()
     virtual void AfterChildWaitLoop(void *data) = 0;

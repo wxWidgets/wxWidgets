@@ -916,12 +916,47 @@ wxFileOffset wxInputStream::SeekI(wxFileOffset pos, wxSeekMode mode)
 {
     // RR: This code is duplicated in wxBufferedInputStream. This is
     // not really a good design, but buffered stream are different
-    // from all other in that they handle two stream-related objects,
+    // from all others in that they handle two stream-related objects:
     // the stream buffer and parent stream.
 
     // I don't know whether it should be put as well in wxFileInputStream::OnSysSeek
     if (m_lasterror==wxSTREAM_EOF)
         m_lasterror=wxSTREAM_NO_ERROR;
+
+    // avoid unnecessary seek operations (optimization)
+    wxFileOffset currentPos = TellI(), size = GetLength();
+    if ((mode == wxFromStart && currentPos == pos) ||
+        (mode == wxFromCurrent && pos == 0) ||
+        (mode == wxFromEnd && size != wxInvalidOffset && currentPos == size-pos))
+        return currentPos;
+
+    if (!IsSeekable() && mode == wxFromCurrent && pos > 0)
+    {
+        // rather than seeking, we can just read data and discard it;
+        // this allows to forward-seek also non-seekable streams!
+        char buf[BUF_TEMP_SIZE];
+        size_t bytes_read;
+
+        // read chunks of BUF_TEMP_SIZE bytes until we reach the new position
+        for ( ; pos >= BUF_TEMP_SIZE; pos -= bytes_read)
+        {
+            bytes_read = Read(buf, WXSIZEOF(buf)).LastRead();
+            if ( m_lasterror != wxSTREAM_NO_ERROR )
+                return wxInvalidOffset;
+            
+            wxASSERT(bytes_read == WXSIZEOF(buf));
+        }
+        
+        // read the last 'pos' bytes
+        bytes_read = Read(buf, (size_t)pos).LastRead();
+        if ( m_lasterror != wxSTREAM_NO_ERROR )
+            return wxInvalidOffset;
+        
+        wxASSERT(bytes_read == (size_t)pos);
+        
+        // we should now have seeked to the right position...
+        return TellI();
+    }
 
     /* RR: A call to SeekI() will automatically invalidate any previous
        call to Ungetch(), otherwise it would be possible to SeekI() to

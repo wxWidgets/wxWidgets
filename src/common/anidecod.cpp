@@ -113,10 +113,10 @@ wxColour wxANIDecoder::GetTransparentColour(unsigned int frame) const
 // ANI reading and decoding
 //---------------------------------------------------------------------------
 
-bool wxANIDecoder::CanRead(wxInputStream& stream) const
+bool wxANIDecoder::DoCanRead(wxInputStream& stream) const
 {
     wxInt32 FCC1, FCC2;
-    wxUint32 datalen ;
+    wxUint32 datalen;
 
     wxInt32 riff32;
     memcpy( &riff32, "RIFF", 4 );
@@ -127,8 +127,6 @@ bool wxANIDecoder::CanRead(wxInputStream& stream) const
     wxInt32 anih32;
     memcpy( &anih32, "anih", 4 );
 
-    if ( stream.SeekI(0) == wxInvalidOffset )
-        return false;
     if ( !stream.Read(&FCC1, 4) )
         return false;
 
@@ -222,8 +220,6 @@ bool wxANIDecoder::Load( wxInputStream& stream )
     wxInt32 seq32;
     memcpy( &seq32, "seq ", 4 );
 
-    if ( stream.SeekI(0) == wxInvalidOffset)
-        return false;
     if ( !stream.Read(&FCC1, 4) )
         return false;
     if ( FCC1 != riff32 )

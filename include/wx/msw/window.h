@@ -13,9 +13,15 @@
 #ifndef _WX_WINDOW_H_
 #define _WX_WINDOW_H_
 
-// ---------------------------------------------------------------------------
-// constants
-// ---------------------------------------------------------------------------
+// if this is set to 1, we use deferred window sizing to reduce flicker when
+// resizing complicated window hierarchies, but this can in theory result in
+// different behaviour than the old code so we keep the possibility to use it
+// by setting this to 0 (in the future this should be removed completely)
+#ifdef __WXWINCE__
+    #define wxUSE_DEFERRED_SIZING 0
+#else
+    #define wxUSE_DEFERRED_SIZING 1
+#endif
 
 // ---------------------------------------------------------------------------
 // wxWindow declaration for MSW
@@ -89,12 +95,6 @@ public:
 
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
-    virtual void GetTextExtent(const wxString& string,
-                               int *x, int *y,
-                               int *descent = NULL,
-                               int *externalLeading = NULL,
-                               const wxFont *theFont = (const wxFont *) NULL)
-                               const;
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true );
@@ -487,6 +487,11 @@ protected:
     int                   m_yThumbSize;
 
     // implement the base class pure virtuals
+    virtual void DoGetTextExtent(const wxString& string,
+                                 int *x, int *y,
+                                 int *descent = NULL,
+                                 int *externalLeading = NULL,
+                                 const wxFont *font = NULL) const;
     virtual void DoClientToScreen( int *x, int *y ) const;
     virtual void DoScreenToClient( int *x, int *y ) const;
     virtual void DoGetPosition( int *x, int *y ) const;
@@ -556,16 +561,24 @@ private:
     bool HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags);
     bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
+#if wxUSE_DEFERRED_SIZING
+protected:
+    // this function is called after the window was resized to its new size
+    virtual void MSWEndDeferWindowPos()
+    {
+        m_pendingPosition = wxDefaultPosition;
+        m_pendingSize = wxDefaultSize;
+    }
 
     // current defer window position operation handle (may be NULL)
     WXHANDLE m_hDWP;
 
-protected:
     // When deferred positioning is done these hold the pending changes, and
     // are used for the default values if another size/pos changes is done on
     // this window before the group of deferred changes is completed.
     wxPoint     m_pendingPosition;
     wxSize      m_pendingSize;
+#endif // wxUSE_DEFERRED_SIZING
 
 private:
 #ifdef __POCKETPC__

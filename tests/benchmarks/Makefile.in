@@ -48,7 +48,8 @@ BENCH_OBJECTS =  \
 	bench_ipcclient.o \
 	bench_mbconv.o \
 	bench_strings.o \
-	bench_tls.o
+	bench_tls.o \
+	bench_printfbench.o
 
 ### Conditionally set variables: ###
 
@@ -71,12 +72,12 @@ BENCH_OBJECTS =  \
 @COND_USE_RTTI_0@__RTTI_DEFINE_p = -DwxNO_RTTI
 @COND_USE_THREADS_0@__THREAD_DEFINE_p = -DwxNO_THREADS
 @COND_SHARED_1@__DLLFLAG_p = -DWXUSINGDLL
-COND_MONOLITHIC_0___WXLIB_BASE_p = \
-	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
-@COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
 COND_MONOLITHIC_0___WXLIB_NET_p = \
 	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_NET_p = $(COND_MONOLITHIC_0___WXLIB_NET_p)
+COND_MONOLITHIC_0___WXLIB_BASE_p = \
+	-lwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+@COND_MONOLITHIC_0@__WXLIB_BASE_p = $(COND_MONOLITHIC_0___WXLIB_BASE_p)
 COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
@@ -107,7 +108,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 bench$(EXEEXT): $(BENCH_OBJECTS)
-	$(CXX) -o $@ $(BENCH_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_NET_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
+	$(CXX) -o $@ $(BENCH_OBJECTS)    -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(LIBS)
 	
 	$(__bench___mac_setfilecmd)
 
@@ -144,15 +145,9 @@ bench_strings.o: $(srcdir)/strings.cpp
 bench_tls.o: $(srcdir)/tls.cpp
 	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/tls.cpp
 
+bench_printfbench.o: $(srcdir)/printfbench.cpp
+	$(CXXC) -c -o $@ $(BENCH_CXXFLAGS) $(srcdir)/printfbench.cpp
 
-@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
-@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
-@COND_USE_STC_1@	cd $(srcdir)/src/stc && ./gen_iface.py
-@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
-@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d

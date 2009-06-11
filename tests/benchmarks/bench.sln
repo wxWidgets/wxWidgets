@@ -1,4 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bench", "bench.vcproj", "{205F8D16-BA71-560B-A3DF-7A2A93B16CF6}"
 EndProject
 Global

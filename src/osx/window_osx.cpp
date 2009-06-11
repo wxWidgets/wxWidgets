@@ -1089,8 +1089,11 @@ int wxWindowMac::GetCharWidth() const
     return width;
 }
 
-void wxWindowMac::GetTextExtent(const wxString& str, int *x, int *y,
-                           int *descent, int *externalLeading, const wxFont *theFont ) const
+void wxWindowMac::DoGetTextExtent(const wxString& str,
+                                  int *x, int *y,
+                                  int *descent,
+                                  int *externalLeading,
+                                  const wxFont *theFont) const
 {
     const wxFont *fontToUse = theFont;
     wxFont tempFont;

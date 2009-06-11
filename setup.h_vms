@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 23 March 2009                                                      *
+ * Date : 27 May 2009                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -595,6 +595,16 @@ typedef pid_t GPid;
 
 #define wxUSE_UNICODE_UTF8 0
 #define wxUSE_UTF8_LOCALE_ONLY 0
+
+/*
+   Use GStreamer for Unix.
+
+   Default is 0 as this requires a lot of dependencies which might not be
+   available.
+
+   Recommended setting: 1 (wxMediaCtrl won't work by default without it)
+ */
+#define wxUSE_GSTREAMER 0
 
 /* --- start MSW options --- */
 

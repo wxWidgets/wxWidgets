@@ -1353,10 +1353,7 @@ void wxPGProperty::SetValueInEvent( wxVariant value ) const
 
 void wxPGProperty::SetFlagRecursively( FlagType flag, bool set )
 {
-    if ( set )
-        SetFlag(flag);
-    else
-        ClearFlag(flag);
+    ChangeFlag(flag, set);
 
     unsigned int i;
     for ( i = 0; i < GetChildCount(); i++ )
@@ -1375,7 +1372,7 @@ void wxPGProperty::RefreshEditor()
 
 wxVariant wxPGProperty::GetDefaultValue() const
 {
-    wxVariant defVal = GetAttribute(wxS("DefaultValue"));
+    wxVariant defVal = GetAttribute(wxPG_ATTR_DEFAULT_VALUE);
     if ( !defVal.IsNull() )
         return defVal;
 
@@ -2166,7 +2163,10 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
             }
 
             if ( allChildrenSpecified )
-                ChildChanged(*value, i, childValue);
+            {
+                *value = ChildChanged(*value, i, childValue);
+            }
+
             n++;
             if ( n == (unsigned int)list.GetCount() )
                 break;
@@ -2277,7 +2277,9 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
     return h;
 }
 
-wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y, unsigned int lh, unsigned int* nextItemY ) const
+wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
+                                        unsigned int lh,
+                                        unsigned int* nextItemY ) const
 {
     wxASSERT( nextItemY );
 
@@ -2349,6 +2351,12 @@ void wxPGProperty::Empty()
     m_children.clear();
 }
 
+wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y ) const
+{
+    unsigned int nextItem;
+    return GetItemAtY( y, GetGrid()->GetRowHeight(), &nextItem);
+}
+
 void wxPGProperty::DeleteChildren()
 {
     wxPropertyGridPageState* state = m_parentState;
@@ -2360,10 +2368,11 @@ void wxPGProperty::DeleteChildren()
     }
 }
 
-void wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
-                                 int WXUNUSED(childIndex),
-                                 wxVariant& WXUNUSED(childValue) ) const
+wxVariant wxPGProperty::ChildChanged( wxVariant& WXUNUSED(thisValue),
+                                      int WXUNUSED(childIndex),
+                                      wxVariant& WXUNUSED(childValue) ) const
 {
+    return wxNullVariant;
 }
 
 bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const

@@ -98,19 +98,6 @@ public:
     virtual bool     SetFont(const wxFont& rFont);
     virtual int      GetCharHeight(void) const;
     virtual int      GetCharWidth(void) const;
-    virtual void     GetTextExtent( const wxString& rString
-                                   ,int*            pX
-                                   ,int*            pY
-                                   ,int*            pDescent = NULL
-                                   ,int*            pExternalLeading = NULL
-                                   ,const wxFont*   pTheFont = (const wxFont *)NULL
-                                  ) const;
-#if wxUSE_MENUS_NATIVE
-    virtual bool     DoPopupMenu( wxMenu* pMenu
-                                 ,int     nX
-                                 ,int     nY
-                                );
-#endif // wxUSE_MENUS_NATIVE
 
     virtual void     SetScrollbar( int  nOrient
                                   ,int  nPos
@@ -460,6 +447,19 @@ protected:
     long                            m_lDlgCode;
 
     // implement the base class pure virtuals
+    virtual void     GetTextExtent( const wxString& rString
+                                   ,int*            pX
+                                   ,int*            pY
+                                   ,int*            pDescent = NULL
+                                   ,int*            pExternalLeading = NULL
+                                   ,const wxFont*   pTheFont = NULL
+                                  ) const;
+#if wxUSE_MENUS_NATIVE
+    virtual bool     DoPopupMenu( wxMenu* pMenu
+                                 ,int     nX
+                                 ,int     nY
+                                );
+#endif // wxUSE_MENUS_NATIVE
     virtual void DoClientToScreen( int* pX
                                   ,int* pY
                                  ) const;

@@ -360,6 +360,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/regex.cpp
     src/common/stdpbase.cpp
     src/common/sstream.cpp
+    src/common/stdstream.cpp
     src/common/stopwatch.cpp
     src/common/strconv.cpp
     src/common/stream.cpp
@@ -493,6 +494,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/stack.h
     wx/stackwalk.h
     wx/stdpaths.h
+    wx/stdstream.h
     wx/stockitem.h
     wx/stopwatch.h
     wx/strconv.h
@@ -691,6 +693,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/listctrlcmn.cpp
     src/common/matrix.cpp
     src/common/menucmn.cpp
+    src/common/mousemanager.cpp
     src/common/nbkbase.cpp
     src/common/overlaycmn.cpp
     src/common/paper.cpp
@@ -821,6 +824,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/listbox.h
     wx/mdi.h
     wx/menu.h
+    wx/mousemanager.h
     wx/msgdlg.h
     wx/nativewin.h
     wx/numdlg.h
@@ -847,6 +851,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/textctrl.h
     wx/textdlg.h
     wx/textentry.h
+    wx/textwrapper.h
     wx/toolbar.h
     wx/validate.h
     wx/valtext.h
@@ -1577,6 +1582,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="MSW_LOWLEVEL_SRC" hints="files">
+    src/msw/ole/activex.cpp
     src/msw/app.cpp
     src/msw/bitmap.cpp
     src/msw/brush.cpp
@@ -1623,6 +1629,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/window.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
+    wx/msw/ole/activex.h
     wx/msw/popupwin.h
     wx/msw/uxtheme.h
     wx/msw/uxthemep.h
@@ -1677,7 +1684,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/nativewin.cpp
     src/msw/notebook.cpp
     src/msw/ole/access.cpp
-    src/msw/ole/activex.cpp
     src/msw/ownerdrw.cpp
     src/msw/radiobox.cpp
     src/msw/radiobut.cpp
@@ -1750,7 +1756,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/msvcrt.h
     wx/msw/notebook.h
     wx/msw/ole/access.h
-    wx/msw/ole/activex.h
     wx/msw/ole/dataform.h
     wx/msw/ole/dataobj.h
     wx/msw/ole/dataobj2.h
@@ -2239,7 +2244,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OSX_CARBON_COCOA_SRC" hints="files">
 <if cond="PLATFORM_MACOSX=='1'">
     <!-- wxWebKit files -->
-    <!-- (TODO Move one level up) -->
+    src/html/htmlctrl/webkit/webkit.mm
     <!-- Native color/font dialogs -->
     src/osx/carbon/colordlgosx.mm
     src/osx/carbon/fontdlgosx.mm
@@ -2271,6 +2276,20 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/region.cpp
     <!-- cocoa bridge -->
     src/osx/carbon/utilscocoa.mm
+    <!-- Generic implementations used by wxOSX: -->
+    src/generic/caret.cpp
+    src/generic/clrpickerg.cpp
+    src/generic/collpaneg.cpp
+    src/generic/colrdlgg.cpp
+    src/generic/dirdlgg.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/filedlgg.cpp
+    src/generic/filepickerg.cpp
+    src/generic/fontdlgg.cpp
+    src/generic/fontpickerg.cpp
+    src/generic/listctrl.cpp
+    src/generic/prntdlgg.cpp
+    src/generic/statusbr.cpp
 </if>
 </set>
 
@@ -2309,23 +2328,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/toolbar.cpp
     src/osx/carbon/tooltip.cpp
     src/osx/carbon/window.cpp
-
-    src/html/htmlctrl/webkit/webkit.mm
-    <!-- Generic implementations used by wxMac: -->
-    src/generic/caret.cpp
-    src/generic/clrpickerg.cpp
-    src/generic/collpaneg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontdlgg.cpp
-    src/generic/fontpickerg.cpp
-    src/generic/listctrl.cpp
-    src/generic/prntdlgg.cpp
-    src/generic/statusbr.cpp
 </set>
 
 <!-- Header files like wx/osx/foo.h which include wx/osx/carbon/foo.h -->
 <set var="OSX_SHARED_HDR" hints="files">
+    <!-- wxWebKit headers -->
+    wx/html/webkit.h
+    <!-- other shared headers -->
     wx/osx/accel.h
     wx/osx/app.h
     wx/osx/bitmap.h
@@ -2403,6 +2412,20 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/treectrl.h
     wx/osx/uma.h
     wx/osx/window.h
+    <!-- Generic implementations used by wxOSX: -->
+    wx/generic/caret.h
+    wx/generic/clrpickerg.h
+    wx/generic/collpaneg.h
+    wx/generic/colrdlgg.h
+    wx/generic/dirdlgg.h
+    wx/generic/fdrepdlg.h
+    wx/generic/filedlgg.h
+    wx/generic/filepickerg.h
+    wx/generic/fontdlgg.h
+    wx/generic/fontpickerg.h
+    wx/generic/listctrl.h
+    wx/generic/prntdlgg.h
+    wx/generic/statusbr.h
 </set>
 <!-- wxMac Carbon header files -->
 <set var="OSX_CARBON_HDR" hints="files">
@@ -2418,18 +2441,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/carbon/region.h
     wx/osx/carbon/statbmp.h
     wx/osx/carbon/uma.h
-    <!-- Generic implementations used by wxMac: -->
-    wx/generic/caret.h
-    wx/generic/clrpickerg.h
-    wx/generic/collpaneg.h
-    wx/generic/fdrepdlg.h
-    wx/generic/filepickerg.h
-    wx/generic/fontdlgg.h
-    wx/generic/fontpickerg.h
-    wx/generic/listctrl.h
-    wx/generic/statusbr.h
-    <!-- wxWebKit headers -->
-    wx/html/webkit.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2467,16 +2478,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/toolbar.mm
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
-    src/generic/caret.cpp
-    src/generic/clrpickerg.cpp
-    src/generic/collpaneg.cpp
-    src/generic/fdrepdlg.cpp
-    src/generic/filepickerg.cpp
-    src/generic/fontdlgg.cpp
-    src/generic/fontpickerg.cpp
-    src/generic/listctrl.cpp
-    src/generic/prntdlgg.cpp
-    src/generic/statusbr.cpp
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
@@ -2927,8 +2928,8 @@ src/osx/iphone/window.mm
     src/generic/animateg.cpp
     src/osx/carbon/aboutdlg.cpp
     src/osx/carbon/drawer.cpp
+    src/osx/dataview_osx.cpp
     src/osx/carbon/dataview.cpp
-    src/osx/carbon/databrow.cpp
     src/osx/carbon/sound.cpp
     src/osx/carbon/taskbar.cpp
     src/osx/core/hidjoystick.cpp
@@ -2951,6 +2952,8 @@ src/osx/iphone/window.mm
     src/generic/animateg.cpp
     src/osx/carbon/sound.cpp
     src/osx/cocoa/aboutdlg.mm
+    src/osx/dataview_osx.cpp
+    src/osx/cocoa/dataview.mm
     src/osx/cocoa/taskbar.mm
     src/osx/core/hidjoystick.cpp
 </set>
@@ -2962,6 +2965,7 @@ src/osx/iphone/window.mm
     wx/osx/sound.h
     wx/osx/taskbarosx.h
     wx/osx/core/joystick.h
+    wx/osx/cocoa/dataview.h
 </set>
 
 <set var="ADVANCED_COCOA_SRC" hints="files">
@@ -3201,10 +3205,10 @@ src/osx/iphone/window.mm
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
-    src/xrc/xh_frame.cpp
-    src/xrc/xh_mdi.cpp
+    src/xrc/xh_editlbox.cpp
     src/xrc/xh_filepicker.cpp
     src/xrc/xh_fontpicker.cpp
+    src/xrc/xh_frame.cpp
     src/xrc/xh_gauge.cpp
     src/xrc/xh_gdctl.cpp
     src/xrc/xh_grid.cpp
@@ -3213,6 +3217,7 @@ src/osx/iphone/window.mm
     src/xrc/xh_listb.cpp
     src/xrc/xh_listbk.cpp
     src/xrc/xh_listc.cpp
+    src/xrc/xh_mdi.cpp
     src/xrc/xh_menu.cpp
     src/xrc/xh_notbk.cpp
     src/xrc/xh_odcombo.cpp
@@ -3265,6 +3270,7 @@ src/osx/iphone/window.mm
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h
+    wx/xrc/xh_editlbox.h
     wx/xrc/xh_filepicker.h
     wx/xrc/xh_fontpicker.h
     wx/xrc/xh_frame.h

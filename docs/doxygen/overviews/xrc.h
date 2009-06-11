@@ -384,6 +384,7 @@ This is the XML file (resource.xrc) for the XRC sample.
               </object>
             </object>
             <label>Page</label>
+            <image>0</image>
           </object>
           <object class="notebookpage">
             <object class="wxPanel">
@@ -397,8 +398,14 @@ This is the XML file (resource.xrc) for the XRC sample.
               </object>
             </object>
             <label>Page 2</label>
+            <image>1</image>
           </object>
           <usenotebooksizer>1</usenotebooksizer>
+        <imagelist>
+            <size>16,16</size>
+            <bitmap stock_id="wxART_QUESTION"/>
+            <bitmap stock_id="wxART_WARNING"/>
+        </imagelist>
         </object>
         <flag>wxEXPAND</flag>
       </object>

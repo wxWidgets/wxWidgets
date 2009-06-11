@@ -284,6 +284,14 @@ Deprecated methods and their replacements
   documented TryBefore/After() methods if you used to override these ones.
 - wxGetMultipleChoices() is deprecated, use wxGetSelectedChoices() which has
   the same signature but returns -1 and not 0 if the dialog was cancelled.
+- building the windows which are placed inside wxStaticBoxes as siblings of the
+  wxStaticBox is still allowed but it's deprecated as it gives some problems
+  on some ports (e.g. wxGTK).
+  You should now create windows placed inside a wxStaticBox as children of
+  the static box itself.
+- wxMouseState::{Left,Middle,Right}Down() were renamed to XXXIsDown() for
+  consistency with wxMouseEvent and the old names were deprecated.
+
 
 Major new features in this release
 ----------------------------------
@@ -313,6 +321,47 @@ Major new features in this release
 
 - Support for persistent objects automatically saving and restoring their state
   was added.
+
+
+2.9.1:
+------
+
+All:
+
+- Added wxStd{Input,Output}Stream classes (Jonathan Liu).
+- Include port number in host header in wxHTTP (Marcin 'Malcom' Malich).
+- Added wxTempFile::Flush().
+
+All (GUI):
+
+- wxWindow::SetAutoLayout() now works for all windows, not just panels.
+- Support wxListCtrl columns, items and image lists in XRC (Kinaou Hervé).
+- Added wxEditableListBox XRC handler.
+- Added multiple selection support to wxDirCtrl (Steve Lamerton).
+- wxGrid: add possibility to prevent resizing of individual rows/columns.
+- wxHTML: add support for table borders width (Laurent Humbertclaude).
+- Added wxMouseEventsManager.
+- Building OpenGL library is now enabled by default.
+- Improve wxTreeCtrl::ScrollTo() in generic version (Raanan Barzel).
+- Added wxDC::CopyAttributes() and use it in wxBufferedDC.
+- Added wxTextWrapper helper class useful for wrapping lines of text.
+
+GTK:
+
+- wxRadioBox constructor uses default consistent with other ports now.
+
+MSW:
+
+- Allow changing the height of wxChoice and wxComboBox.
+- Update CRT environment block in wxSetEnv() too.
+- Fix wxMDIChildFrame::SetSize() (Lars Rosenboom).
+- Fix wxTreeCtrl::UnselectItem() in single selection controls.
+- Allow customizing wxStandardPaths logic for program directory determination.
+
+i18n:
+
+- Korean translations added (Sungkee Jung).
+- Romanian translations added (Manuel Ciosici).
 
 
 2.9.0
@@ -434,7 +483,6 @@ All (GUI):
 - Added wxEventBlocker class (Francesco Montorsi).
 - Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
 - Added wxSizerFlags::Top() and Bottom().
-- Slovak translation added.
 - Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
 - Implemented background colour in wxRichTextCtrl.
 - Fixed crashes in helpview when opening a file.
@@ -583,6 +631,11 @@ wxX11:
 wxDFB:
 
 - Implement wxBitmap ctor from XBM data.
+
+i18n:
+-----
+
+- Slovak translations added (Ivan Masár).
 
 
 2.8.10:

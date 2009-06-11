@@ -429,12 +429,14 @@ Related Overviews: @ref overview_events
 @li wxIdleEvent: An idle event
 @li wxInitDialogEvent: A dialog initialisation event
 @li wxJoystickEvent: A joystick event
+@li wxKeyboardState: State of the keyboard modifiers.
 @li wxListEvent: A list control event
 @li wxMaximizeEvent: A maximize event
 @li wxMenuEvent: A menu event
 @li wxMouseCaptureChangedEvent: A mouse capture changed event
 @li wxMouseCaptureLostEvent: A mouse capture lost event
 @li wxMouseEvent: A mouse event
+@li wxMouseState: State of the mouse
 @li wxMoveEvent: A move event
 @li wxNavigationKeyEvent: An event set by navigation keys such as tab
 @li wxNotebookEvent: A notebook control event

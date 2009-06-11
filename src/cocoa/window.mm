@@ -1713,7 +1713,7 @@ int wxWindow::GetCharWidth() const
     return 5;
 }
 
-void wxWindow::GetTextExtent(const wxString& string, int *outX, int *outY,
+void wxWindow::DoGetTextExtent(const wxString& string, int *outX, int *outY,
         int *outDescent, int *outExternalLeading, const wxFont *inFont) const
 {
     // FIXME: This obviously ignores the window's font (if any) along with any size

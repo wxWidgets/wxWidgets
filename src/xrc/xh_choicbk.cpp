@@ -84,6 +84,19 @@ wxObject *wxChoicebookXmlHandler::DoCreateResource()
                     int imgIndex = imgList->Add(bmp);
                     m_choicebook->SetPageImage(m_choicebook->GetPageCount()-1, imgIndex );
                 }
+                else if ( HasParam(wxT("image")) )
+                {
+                    if ( m_choicebook->GetImageList() )
+                    {
+                        m_choicebook->SetPageImage(m_choicebook->GetPageCount()-1,
+                                                   GetLong(wxT("image")) );
+                    }
+                    else // image without image list?
+                    {
+                        ReportError(n, "image can only be used in conjunction "
+                                       "with imagelist");
+                    }
+                }
             }
             else
             {
@@ -107,6 +120,10 @@ wxObject *wxChoicebookXmlHandler::DoCreateResource()
                    GetPosition(), GetSize(),
                    GetStyle(wxT("style")),
                    GetName());
+
+        wxImageList *imagelist = GetImageList();
+        if ( imagelist )
+            nb->AssignImageList(imagelist);
 
         wxChoicebook *old_par = m_choicebook;
         m_choicebook = nb;

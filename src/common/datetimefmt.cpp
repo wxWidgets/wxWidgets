@@ -321,7 +321,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 #endif
     // we have to use our own implementation if the date is out of range of
     // strftime() or if we use non standard specificators
-#ifdef HAVE_STRFTIME
+#ifdef wxHAS_STRFTIME
     time_t time = GetTicks();
 
     if ( (time != (time_t)-1) && !wxStrstr(format, _T("%l")) )
@@ -365,7 +365,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
         }
     }
     //else: use generic code below
-#endif // HAVE_STRFTIME
+#endif // wxHAS_STRFTIME
 
     // we only parse ANSI C format specifications here, no POSIX 2
     // complications, no GNU extensions but we do add support for a "%l" format
@@ -442,7 +442,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 
                 case _T('c'):       // locale default date and time  representation
                 case _T('x'):       // locale default date representation
-#ifdef HAVE_STRFTIME
+#ifdef wxHAS_STRFTIME
                     //
                     // the problem: there is no way to know what do these format
                     // specifications correspond to for the current locale.
@@ -558,11 +558,11 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 
                         res += str;
                     }
-#else // !HAVE_STRFTIME
+#else // !wxHAS_STRFTIME
                     // Use "%m/%d/%y %H:%M:%S" format instead
                     res += wxString::Format(wxT("%02d/%02d/%04d %02d:%02d:%02d"),
                             tm.mon+1,tm.mday, tm.year, tm.hour, tm.min, tm.sec);
-#endif // HAVE_STRFTIME/!HAVE_STRFTIME
+#endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
                     break;
 
                 case _T('d'):       // day of a month (01-31)
@@ -599,11 +599,11 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
                     break;
 
                 case _T('p'):       // AM or PM string
-#ifdef HAVE_STRFTIME
+#ifdef wxHAS_STRFTIME
                     res += CallStrftime(_T("%p"), &tmTimeOnly);
-#else // !HAVE_STRFTIME
+#else // !wxHAS_STRFTIME
                     res += (tmTimeOnly.tm_hour > 12) ? wxT("pm") : wxT("am");
-#endif // HAVE_STRFTIME/!HAVE_STRFTIME
+#endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
                     break;
 
                 case _T('S'):       // second as a decimal number (00-61)
@@ -626,11 +626,11 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
 
                 case _T('X'):       // locale default time representation
                     // just use strftime() to format the time for us
-#ifdef HAVE_STRFTIME
+#ifdef wxHAS_STRFTIME
                     res += CallStrftime(_T("%X"), &tmTimeOnly);
-#else // !HAVE_STRFTIME
+#else // !wxHAS_STRFTIME
                     res += wxString::Format(wxT("%02d:%02d:%02d"),tm.hour, tm.min, tm.sec);
-#endif // HAVE_STRFTIME/!HAVE_STRFTIME
+#endif // wxHAS_STRFTIME/!wxHAS_STRFTIME
                     break;
 
                 case _T('y'):       // year without century (00-99)
@@ -642,7 +642,7 @@ wxString wxDateTime::Format(const wxString& formatp, const TimeZone& tz) const
                     break;
 
                 case _T('Z'):       // timezone name
-#ifdef HAVE_STRFTIME
+#ifdef wxHAS_STRFTIME
                     res += CallStrftime(_T("%Z"), &tmTimeOnly);
 #endif
                     break;

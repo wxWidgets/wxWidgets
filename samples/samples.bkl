@@ -21,8 +21,8 @@
     <subproject id="caret" template="sub"/>
     <subproject id="clipboard" template="sub"/>
     <subproject id="collpane" template="sub"/>
-    <subproject id="config" template="sub"/>
     <subproject id="combo" template="sub"/>
+    <subproject id="config" template="sub"/>
     <subproject id="console" template="sub"/>
     <subproject id="controls" template="sub"/>
     <subproject id="dataview" template="sub"/>
@@ -35,8 +35,8 @@
     <subproject id="drawing" template="sub"/>
     <subproject id="erase" template="sub"/>
     <subproject id="event" template="sub"/>
-    <subproject id="exec" template="sub"/>
     <subproject id="except" template="sub"/>
+    <subproject id="exec" template="sub"/>
     <subproject id="font" template="sub"/>
     <subproject id="grid" template="sub"/>
     <subproject id="help" template="sub"/>
@@ -59,6 +59,7 @@
     <subproject id="opengl" template="sub"/>
     <subproject id="ownerdrw" template="sub"/>
     <subproject id="popup" template="sub"/>
+    <subproject id="power" template="sub"/>
     <subproject id="printing" template="sub"/>
     <subproject id="propgrid" template="sub"/>
     <subproject id="regtest" template="sub"/>
@@ -73,6 +74,8 @@
     <subproject id="splitter" template="sub"/>
     <subproject id="statbar" template="sub"/>
     <subproject id="stc" template="sub"/>
+    <subproject id="svg" template="sub"/>
+    <subproject id="taborder" template="sub"/>
     <subproject id="taskbar" template="sub"/>
     <subproject id="text" template="sub"/>
     <subproject id="thread" template="sub"/>
@@ -84,6 +87,7 @@
     <subproject id="widgets" template="sub"/>
     <subproject id="wizard" template="sub"/>
     <subproject id="wrapsizer" template="sub"/>
+    <subproject id="xrc" template="sub"/>
 
     <!--
         These samples don't always build (they need non-default wxWidgets

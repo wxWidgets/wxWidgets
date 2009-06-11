@@ -457,6 +457,15 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
                 devMode->dmPaperLength = (short)(paperSize.y * 10);
                 devMode->dmFields |= DM_PAPERWIDTH;
                 devMode->dmFields |= DM_PAPERLENGTH;
+
+                // A printer driver may or may not also want DM_PAPERSIZE to
+                // be specified. Also, if the printer driver doesn't implement the DMPAPER_USER
+                // size, then this won't work, and even if you found the correct id by
+                // enumerating the driver's paper sizes, it probably won't change the actual size,
+                // it'll just select that custom paper type with its own current setting.
+                // For a discussion on this, see http://www.codeguru.com/forum/showthread.php?threadid=458617
+                // Although m_customWindowsPaperId is intended to work around this, it's
+                // unclear how it can help you set the custom paper size programmatically.
             }
             //else: neither paper type nor size specified, don't fill DEVMODE
             //      at all so that the system defaults are used

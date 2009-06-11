@@ -1099,6 +1099,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\mousemanager.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\msgout.cpp"
 				>
 			</File>
@@ -1310,22 +1314,6 @@
 			<File
 				RelativePath="..\..\src\msw\ole\activex.cpp"
 				>
-				<FileConfiguration
-					Name="Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Debug|Win32"
-					ExcludedFromBuild="true"
-				/>
-				<FileConfiguration
-					Name="DLL Universal Release|Win32"
-					ExcludedFromBuild="true"
-				/>
 			</File>
 			<File
 				RelativePath="..\..\src\msw\app.cpp"
@@ -7028,6 +7016,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\mousemanager.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\msgdlg.h"
 				>
 			</File>
@@ -7308,6 +7300,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\textwrapper.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\tglbtn.h"
 				>
 			</File>
@@ -7481,6 +7477,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xrc\xh_dlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_editlbox.h"
 				>
 			</File>
 			<File

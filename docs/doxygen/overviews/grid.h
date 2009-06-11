@@ -26,7 +26,7 @@ Classes: wxGrid
 
 wxGrid and its related classes are used for displaying and editing tabular
 data. wxGrid supports custom attributes for the table cells, allowing to
-completely customize its appearance and uses a separate grid table 
+completely customize its appearance and uses a separate grid table
 (wxGridTableBase-derived) class for the data management meaning that it
 can be used to display arbitrary amounts of data.
 
@@ -115,17 +115,43 @@ Here is a list of classes related to wxGrid:
 
 @section overview_grid_complexexample A more complex example
 
-@todo Yet to be written
+@todo To be written
 
 
 @section overview_grid_classrelations How the wxGrid classes relate to each other
 
-@todo Yet to be written
+@todo To be written
 
 
 @section overview_grid_keyboardmouse Keyboard and mouse actions
 
-@todo Yet to be written
+@todo To be written
+
+@section overview_grid_resizing Column and row sizes
+
+@b NB: This section will discuss the resizing of wxGrid rows only to avoid
+repetitions but everything in it also applies to grid columns, just replace @c
+Row in the method names with @c Col.
+
+Initially all wxGrid rows have the same height, which can be modified for all
+of them at once using wxGrid::SetDefaultRowSize(). However, unlike simpler
+controls such as wxListBox or wxListCtrl, wxGrid also allows its rows to be
+individually resized to have their own height using wxGrid::SetRowSize() (as a
+special case, a row may be hidden entirely by setting its size to 0, which is
+done by a helper wxGrid::HideRow() method). It is also possible to resize a row
+to fit its contents with wxGrid::AutoSizeRow() or do it for all rows at once
+with wxGrid::AutoSizeRows().
+
+Additionally, by default the user can also drag the row separator lines to
+resize the rows interactively. This can be forbidden completely by calling
+wxGrid::DisableDragRowSize() or just for the individual rows using
+wxGrid::DisableRowResize().
+
+If you do allow the user to resize the grid rows, it may be a good idea to save
+their heights and restore it when the grid is recreated the next time (possibly
+during a next program execution): the functions wxGrid::GetRowSizes() and
+wxGrid::SetRowSizes() can help with this, you will just need to serialize
+wxGridSizesInfo structure returned by the former in some way and deserialize it
+back before calling the latter.
 
 */
-

@@ -274,13 +274,15 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperTypeByPlatformId(int id)
 
 wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxSize& sz)
 {
-    typedef wxStringToPrintPaperTypeHashMap::iterator iterator;
-
-    for (iterator it = m_map->begin(), en = m_map->end(); it != en; ++it)
+    // Take the item ordering into account so that the more common types
+    // are likely to be taken into account first. This fixes problems with,
+    // for example, Letter reverting to A4 in the page setup dialog because
+    // it was wrongly translated to Note.
+    for ( size_t i = 0; i < GetCount(); i++ )
     {
-        wxPrintPaperType* paperType = it->second;
-        wxSize paperSize = paperType->GetSize() ;
-        if ( abs( paperSize.x - sz.x ) < 10 && abs( paperSize.y - sz.y ) < 10 )
+        wxPrintPaperType* const paperType = Item(i);
+        const wxSize paperSize = paperType->GetSize() ;
+        if ( abs(paperSize.x - sz.x) < 10 && abs(paperSize.y - sz.y) < 10 )
             return paperType;
     }
 

@@ -21,6 +21,8 @@
     #include "wx/utils.h"
 #endif
 
+#define wxHAS_HUGE_FILES
+
 //------------------------------------------------------------------------
 // Check for use of MSLU
 //------------------------------------------------------------------------
@@ -182,76 +184,45 @@ WXDLLIMPEXP_BASE FILE* wxMSLU__wfreopen(const wchar_t *name,
         return _wfreopen(name, mode, stream);
 }
 
-#if defined( __VISUALC__ ) \
-    || ( defined(__MINGW32__) && wxCHECK_W32API_VERSION( 0, 5 ) ) \
-    || ( defined(__MWERKS__) && defined(__WXMSW__) ) \
-    || ( defined(__BORLANDC__) && (__BORLANDC__ > 0x460) )
-
 WXDLLIMPEXP_BASE int wxMSLU__wopen(const wchar_t *name, int flags, int mode)
 {
     if ( wxUsingUnicowsDll() )
-#ifdef __BORLANDC__
-        return open(wxConvFile.cWX2MB(name), flags, mode);
-#else
-        return _open(wxConvFile.cWX2MB(name), flags, mode);
-#endif
+        return wxCRT_OpenA(wxConvFile.cWX2MB(name), flags, mode);
     else
-        return _wopen(name, flags, mode);
+        return wxCRT_OpenW(name, flags, mode);
 }
 
 WXDLLIMPEXP_BASE int wxMSLU__waccess(const wchar_t *name, int mode)
 {
     if ( wxUsingUnicowsDll() )
-        return _access(wxConvFile.cWX2MB(name), mode);
+        return wxCRT_AccessA(wxConvFile.cWX2MB(name), mode);
     else
-        return _waccess(name, mode);
+        return wxCRT_AccessW(name, mode);
 }
 
 WXDLLIMPEXP_BASE int wxMSLU__wmkdir(const wchar_t *name)
 {
     if ( wxUsingUnicowsDll() )
-        return _mkdir(wxConvFile.cWX2MB(name));
+        return wxCRT_MkDirA(wxConvFile.cWX2MB(name));
     else
-        return _wmkdir(name);
+        return wxCRT_MkDirW(name);
 }
 
 WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wchar_t *name)
 {
     if ( wxUsingUnicowsDll() )
-        return _rmdir(wxConvFile.cWX2MB(name));
+        return wxCRT_RmDirA(wxConvFile.cWX2MB(name));
     else
-        return _wrmdir(name);
+        return wxCRT_RmDirW(name);
 }
 
-WXDLLIMPEXP_BASE int wxMSLU__wstat(const wchar_t *name, struct _stat *buffer)
+WXDLLIMPEXP_BASE int wxMSLU__wstat(const wchar_t *name, wxStructStat *buffer)
 {
     if ( wxUsingUnicowsDll() )
-        return _stat((const char*)wxConvFile.cWX2MB(name), buffer);
+        return wxCRT_StatA((const char*)wxConvFile.cWX2MB(name), buffer);
     else
-        return _wstat(name, buffer);
+        return wxCRT_StatW(name, buffer);
 }
-
-#ifdef __BORLANDC__
-//here _stati64 is defined as stati64, see wx/filefn.h
-#undef _stati64
-WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wchar_t *name, struct _stati64 *buffer)
- {
-     if ( wxUsingUnicowsDll() )
-        return _stati64((const char*)wxConvFile.cWX2MB(name), (stati64 *) buffer);
-    else
-        return _wstati64(name, (stati64 *) buffer);
-}
-#else
-WXDLLIMPEXP_BASE int wxMSLU__wstati64(const wchar_t *name, struct _stati64 *buffer)
-{
-    if ( wxUsingUnicowsDll() )
-        return _stati64((const char*)wxConvFile.cWX2MB(name), buffer);
-    else
-        return _wstati64(name, buffer);
-}
-#endif //__BORLANDC__
-
-#endif // compilers having wopen() &c
 
 #endif // wxUSE_BASE
 

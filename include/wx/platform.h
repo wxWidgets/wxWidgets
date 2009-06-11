@@ -233,6 +233,10 @@
 #   endif
 #endif
 
+#if defined(__WXWINCE__) && defined(_MSC_VER) && (_MSC_VER == 1201)
+    #define __EVC4__
+#endif
+
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__) || defined(__WXGPE__)
 #   define __WXHANDHELD__
 #endif

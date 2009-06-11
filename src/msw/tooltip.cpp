@@ -83,7 +83,7 @@ static WNDPROC gs_wndprocToolTip = (WNDPROC)NULL;
 class wxToolInfo : public TOOLINFO
 {
 public:
-    wxToolInfo(HWND hwndOwner)
+    wxToolInfo(HWND hwndOwner, unsigned int id, const wxRect& rc)
     {
         // initialize all members
         ::ZeroMemory(this, sizeof(TOOLINFO));
@@ -95,7 +95,27 @@ public:
         cbSize = TTTOOLINFO_V1_SIZE;
 
         hwnd = hwndOwner;
-        uFlags = TTF_IDISHWND;
+
+        if (rc.IsEmpty())
+        {
+            uFlags = TTF_IDISHWND;
+            uId = (UINT_PTR)hwndOwner;
+        }
+        else
+        {
+            // this tooltip must be shown only if the mouse hovers a specific rect
+            // of the hwnd parameter!
+		    rect.left = rc.GetLeft();
+		    rect.right = rc.GetRight();
+		    rect.top = rc.GetTop();
+		    rect.bottom = rc.GetBottom();
+
+            // note that not setting TTF_IDISHWND from the uFlags member means that the
+            // ti.uId field should not contain the HWND but rather as MSDN says an
+            // "Application-defined identifier of the tool"; this is used internally by
+            // Windows to distinguish the different tooltips attached to the same window
+            uId = id;
+        }
 
         // we use TTF_TRANSPARENT to fix a problem which arises at least with
         // the text controls but may presumably happen with other controls
@@ -107,8 +127,6 @@ public:
         {
             uFlags |= TTF_TRANSPARENT;
         }
-
-        uId = (UINT_PTR)hwndOwner;
     }
 };
 
@@ -197,11 +215,17 @@ LRESULT APIENTRY wxToolTipWndProc(HWND hwndTT,
 
 void wxToolTip::Enable(bool flag)
 {
+    // Make sure the tooltip has been created
+    (void) GetToolTipCtrl();
+
     SendTooltipMessageToAll(ms_hwndTT, TTM_ACTIVATE, flag, 0);
 }
 
 void wxToolTip::SetDelay(long milliseconds)
 {
+    // Make sure the tooltip has been created
+    (void) GetToolTipCtrl();
+
     SendTooltipMessageToAll(ms_hwndTT, TTM_SETDELAYTIME,
                             TTDT_INITIAL, milliseconds);
 }
@@ -284,6 +308,21 @@ wxToolTip::wxToolTip(const wxString &tip)
          : m_text(tip)
 {
     m_window = NULL;
+
+    // make sure m_rect.IsEmpty() == true
+    m_rect.SetWidth(0);
+    m_rect.SetHeight(0);
+
+    // since m_rect is not valid, m_id is ignored by wxToolInfo ctor...
+    m_id = 0;
+}
+
+wxToolTip::wxToolTip(wxWindow* win, unsigned int id, const wxString &tip, const wxRect& rc)
+         : m_text(tip), m_rect(rc), m_id(id)
+{
+    m_window = NULL;
+
+    SetWindow(win);
 }
 
 wxToolTip::~wxToolTip()
@@ -297,9 +336,11 @@ wxToolTip::~wxToolTip()
 // others
 // ----------------------------------------------------------------------------
 
-void wxToolTip::Remove(WXHWND hWnd)
+/* static */
+void wxToolTip::Remove(WXHWND hWnd, unsigned int id, const wxRect& rc)
 {
-    wxToolInfo ti((HWND)hWnd);
+    wxToolInfo ti((HWND)hWnd, id, rc);
+
     (void)SendTooltipMessage(GetToolTipCtrl(), TTM_DELTOOL, &ti);
 }
 
@@ -308,7 +349,7 @@ void wxToolTip::Remove()
     // remove this tool from the tooltip control
     if ( m_window )
     {
-        Remove(m_window->GetHWND());
+        Remove(m_window->GetHWND(), m_id, m_rect);
     }
 }
 
@@ -316,7 +357,7 @@ void wxToolTip::Add(WXHWND hWnd)
 {
     HWND hwnd = (HWND)hWnd;
 
-    wxToolInfo ti(hwnd);
+    wxToolInfo ti(hwnd, m_id, m_rect);
 
     // another possibility would be to specify LPSTR_TEXTCALLBACK here as we
     // store the tooltip text ourselves anyhow, and provide it in response to
@@ -460,6 +501,17 @@ void wxToolTip::SetWindow(wxWindow *win)
 #endif // !defined(__WXUNIVERSAL__)
 }
 
+void wxToolTip::SetRect(const wxRect& rc)
+{
+    m_rect = rc;
+
+    if ( m_window )
+    {
+        wxToolInfo ti(GetHwndOf(m_window), m_id, m_rect);
+        (void)SendTooltipMessage(GetToolTipCtrl(), TTM_NEWTOOLRECT, &ti);
+    }
+}
+
 void wxToolTip::SetTip(const wxString& tip)
 {
     m_text = tip;
@@ -467,7 +519,7 @@ void wxToolTip::SetTip(const wxString& tip)
     if ( m_window )
     {
         // update the tip text shown by the control
-        wxToolInfo ti(GetHwndOf(m_window));
+        wxToolInfo ti(GetHwndOf(m_window), m_id, m_rect);
 
         // for some reason, changing the tooltip text directly results in
         // repaint of the controls under it, see #10520 -- but this doesn't

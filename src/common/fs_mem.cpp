@@ -186,9 +186,13 @@ void wxMemoryFSHandlerBase::AddFileWithMimeType(const wxString& filename,
                                                 const wxString& textdata,
                                                 const wxString& mimetype)
 {
-    AddFileWithMimeType(filename,
-                        (const void*) textdata.mb_str(), textdata.length(),
-                        mimetype);
+    AddFileWithMimeType
+    (
+        filename,
+        static_cast<const char *>(textdata.To8BitData()),
+        wxStrlen(static_cast<const char *>(textdata.To8BitData())),
+        mimetype
+    );
 }
 
 

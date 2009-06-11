@@ -34,7 +34,8 @@ BENCH_OBJECTS =  \
 	$(OBJS)\bench_ipcclient.o \
 	$(OBJS)\bench_mbconv.o \
 	$(OBJS)\bench_strings.o \
-	$(OBJS)\bench_tls.o
+	$(OBJS)\bench_tls.o \
+	$(OBJS)\bench_printfbench.o
 
 ### Conditionally set variables: ###
 
@@ -130,12 +131,12 @@ ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
 ifeq ($(MONOLITHIC),0)
-__WXLIB_BASE_p = \
-	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
-endif
-ifeq ($(MONOLITHIC),0)
 __WXLIB_NET_p = \
 	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net
+endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_BASE_p = \
+	-lwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)
 endif
 ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
@@ -185,7 +186,7 @@ clean:
 	-if exist $(OBJS)\bench.exe del $(OBJS)\bench.exe
 
 $(OBJS)\bench.exe: $(BENCH_OBJECTS)
-	$(CXX) -o $@ $(BENCH_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(LDFLAGS)  $(__WXLIB_BASE_p)  $(__WXLIB_NET_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
+	$(CXX) -o $@ $(BENCH_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(LDFLAGS)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lwininet
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
@@ -210,6 +211,9 @@ $(OBJS)\bench_strings.o: ./strings.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_tls.o: ./tls.cpp
+	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_printfbench.o: ./printfbench.cpp
 	$(CXX) -c -o $@ $(BENCH_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all clean data

@@ -222,7 +222,7 @@ public:
 
         @see SetStatusText(), OnCreateStatusBar(), GetStatusBar()
     */
-    virtual wxStatusBar* CreateStatusBar(int number = 1, long style = wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE,
+    virtual wxStatusBar* CreateStatusBar(int number = 1, long style = wxSTB_DEFAULT_STYLE,
                                          wxWindowID id = 0,
                                          const wxString& name = wxStatusLineNameStr);
 
@@ -372,6 +372,9 @@ public:
 
     /**
         Associates a status bar with the frame.
+
+        If @a statusBar is @NULL, then the status bar, if present, is detached from
+        the frame, but @e not deleted.
 
         @see CreateStatusBar(), wxStatusBar, GetStatusBar()
     */

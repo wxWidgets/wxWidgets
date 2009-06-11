@@ -170,7 +170,7 @@ widget$(EXEEXT): $(WIDGET_OBJECTS) $(__widget___win32rc)
 @COND_PLATFORM_MACOSX_1@	echo -n "APPL????" >widget.app/Contents/PkgInfo
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
-@COND_PLATFORM_MACOSX_1@	mv widget$(EXEEXT) widget.app/Contents/MacOS/widget
+@COND_PLATFORM_MACOSX_1@	ln -f widget$(EXEEXT) widget.app/Contents/MacOS/widget
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	
 @COND_PLATFORM_MACOSX_1@	cp -f $(top_srcdir)/src/osx/carbon/wxmac.icns widget.app/Contents/Resources/wxmac.icns
@@ -195,15 +195,6 @@ widget_widget.o: $(srcdir)/widget.cpp
 widget_widget_rc.o: $(srcdir)/widget.rc
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)  $(__EXCEPTIONS_DEFINE_p_2) $(__RTTI_DEFINE_p_2) $(__THREAD_DEFINE_p_2)   --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples $(__RCDEFDIR_p_1) --include-dir $(top_srcdir)/include
 
-
-@COND_USE_STC_1@$(srcdir)/include/wx/stc/stc.h: \
-@COND_USE_STC_1@$(srcdir)/src/stc/scintilla/include/Scintilla.iface \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.cpp.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/stc.h.in \
-@COND_USE_STC_1@$(srcdir)/src/stc/gen_iface.py
-@COND_USE_STC_1@	cd $(srcdir)/src/stc && ./gen_iface.py
-@COND_USE_STC_1@monolib_stc.o monodll_stc.o stcdll_stc.o stclib_stc.o: \
-@COND_USE_STC_1@    $(srcdir)/include/wx/stc/stc.h
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d

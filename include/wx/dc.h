@@ -702,6 +702,9 @@ private:
 class WXDLLIMPEXP_CORE wxDC : public wxObject
 {
 public:
+    // copy attributes (font, colours and writing direction) from another DC
+    void CopyAttributes(const wxDC& dc);
+
     virtual ~wxDC() { delete m_pimpl; }
 
     wxDCImpl *GetImpl()

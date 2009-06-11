@@ -4,8 +4,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test_vc9_test.vcpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_gui", "test_vc9_test_gui.vcproj", "{9BB295D9-A6AA-510D-AA0D-9375B5D91025}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "printfbench", "test_vc9_printfbench.vcproj", "{568BD6DD-9BBE-583D-9BCE-08F5755A6015}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -50,22 +48,6 @@ Global
 		{9BB295D9-A6AA-510D-AA0D-9375B5D91025}.DLL Universal Debug|Win32.Build.0 = DLL Universal Debug|Win32
 		{9BB295D9-A6AA-510D-AA0D-9375B5D91025}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
 		{9BB295D9-A6AA-510D-AA0D-9375B5D91025}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.Debug|Win32.ActiveCfg = Debug|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.Debug|Win32.Build.0 = Debug|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.Release|Win32.ActiveCfg = Release|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.Release|Win32.Build.0 = Release|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.Universal Debug|Win32.ActiveCfg = Universal Debug|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.Universal Debug|Win32.Build.0 = Universal Debug|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.Universal Release|Win32.ActiveCfg = Universal Release|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.Universal Release|Win32.Build.0 = Universal Release|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.DLL Release|Win32.Build.0 = DLL Release|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.DLL Universal Debug|Win32.ActiveCfg = DLL Universal Debug|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.DLL Universal Debug|Win32.Build.0 = DLL Universal Debug|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
-		{568BD6DD-9BBE-583D-9BCE-08F5755A6015}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

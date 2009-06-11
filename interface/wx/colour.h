@@ -41,6 +41,7 @@
     - ::wxBLUE
     - ::wxCYAN
     - ::wxGREEN
+    - ::wxYELLOW
     - ::wxLIGHT_GREY
     - ::wxRED
     - ::wxWHITE
@@ -186,6 +187,7 @@ wxColour* wxBLACK;
 wxColour* wxBLUE;
 wxColour* wxCYAN;
 wxColour* wxGREEN;
+wxColour* wxYELLOW;
 wxColour* wxLIGHT_GREY;
 wxColour* wxRED;
 wxColour* wxWHITE;

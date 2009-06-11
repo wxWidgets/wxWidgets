@@ -24,6 +24,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/textwrapper.h"
 #include "wx/private/stattext.h"
 
 #ifndef WX_PRECOMP

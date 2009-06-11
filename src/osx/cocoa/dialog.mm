@@ -50,9 +50,14 @@ void wxDialog::DoShowModal()
     while (IsModal()) 
     {
         wxMacAutoreleasePool autoreleasepool;
-        if ([NSApp runModalSession:session] != NSRunContinuesResponse)
-            break;
-        // TODO should we do some idle processing ?
+        // we cannot break based on the return value, because nested
+        // alerts might set this to stopped as well, so it would be
+        // unsafe
+        [NSApp runModalSession:session];
+
+        // do some idle processing 
+        if (wxTheApp) 
+            wxTheApp->ProcessIdle(); 
     }
     [NSApp endModalSession:session];
 

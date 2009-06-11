@@ -602,12 +602,19 @@ public:
     /**
         Sets the clipping region for this device context to the intersection of
         the given region described by the parameters of this method and the
-        previously set clipping region. You should call DestroyClippingRegion()
-        if you want to set the clipping region exactly to the region specified.
+        previously set clipping region.
 
         The clipping region is an area to which drawing is restricted. Possible
         uses for the clipping region are for clipping text or for speeding up
         window redraws when only a known area of the screen is damaged.
+
+        Notice that you need to call DestroyClippingRegion() if you want to set
+        the clipping region exactly to the region specified.
+
+        Also note that if the clipping region is empty, any previously set
+        clipping region is destroyed, i.e. it is equivalent to calling
+        DestroyClippingRegion(), and not to clipping out all drawing on the DC
+        as might be expected.
 
         @see DestroyClippingRegion(), wxRegion
     */
@@ -751,10 +758,11 @@ public:
     int GetBackgroundMode() const;
 
     /**
-        Gets the current font. Notice that even although each device context
-        object has some default font after creation, this method would return a
-        ::wxNullFont initially and only after calling SetFont() a valid font is
-        returned.
+        Gets the current font. 
+        
+        Notice that even although each device context object has some default font 
+        after creation, this method would return a ::wxNullFont initially and only 
+        after calling SetFont() a valid font is returned.
     */
     const wxFont& GetFont() const;
 
@@ -783,14 +791,19 @@ public:
     const wxColour& GetTextForeground() const;
 
     /**
-        @a mode may be one of wxSOLID and wxTRANSPARENT. This setting
-        determines whether text will be drawn with a background colour or not.
+        @a mode may be one of @c wxSOLID and @c wxTRANSPARENT. 
+        
+        This setting determines whether text will be drawn with a background 
+        colour or not.
     */
     void SetBackgroundMode(int mode);
 
     /**
-        Sets the current font for the DC. It must be a valid font, in
-        particular you should not pass wxNullFont to this method.
+        Sets the current font for the DC. 
+
+        If the argument is ::wxNullFont (or another invalid font; see wxFont::IsOk), 
+        the current font is selected out of the device context (leaving wxDC without 
+        any valid font), allowing the current font to be destroyed safely.
 
         @see wxFont
     */
@@ -810,9 +823,11 @@ public:
     void SetTextForeground(const wxColour& colour);
 
     /**
-        Sets the current layout direction for the device context. @a dir may be
-        either @c wxLayout_Default, @c wxLayout_LeftToRight or
-        @c wxLayout_RightToLeft.
+        Sets the current layout direction for the device context. 
+        
+        @param dir 
+           May be either @c wxLayout_Default, @c wxLayout_LeftToRight or
+           @c wxLayout_RightToLeft.
 
         @see GetLayoutDirection()
     */
@@ -1083,9 +1098,9 @@ public:
     /**
         Sets the current brush for the DC.
 
-        If the argument is wxNullBrush, the current brush is selected out of
-        the device context (leaving wxDC without any valid brush), allowing the
-        current brush to be destroyed safely.
+        If the argument is ::wxNullBrush (or another invalid brush; see wxBrush::IsOk), 
+        the current brush is selected out of the device context (leaving wxDC without 
+        any valid brush), allowing the current brush to be destroyed safely.
 
         @see wxBrush, wxMemoryDC (for the interpretation of colours when
              drawing into a monochrome bitmap)
@@ -1093,9 +1108,11 @@ public:
     void SetBrush(const wxBrush& brush);
 
     /**
-        Sets the current pen for the DC. If the argument is wxNullPen, the
-        current pen is selected out of the device context (leaving wxDC without
-        any valid pen), allowing the current brush to be destroyed safely.
+        Sets the current pen for the DC. 
+
+        If the argument is ::wxNullPen (or another invalid pen; see wxPen::IsOk), 
+        the current pen is selected out of the device context (leaving wxDC without any 
+        valid pen), allowing the current pen to be destroyed safely.
 
         @see wxMemoryDC for the interpretation of colours when drawing into a
              monochrome bitmap.
@@ -1105,6 +1122,19 @@ public:
     //@}
 
 
+    /**
+        Copy attributes from another DC.
+
+        The copied attributes currently are:
+            - Font
+            - Text foreground and background colours
+            - Background brush
+            - Layout direction
+
+        @param dc
+            A valid (i.e. its IsOk() must return @true) source device context.
+     */
+    void CopyAttributes(const wxDC& dc);
 
     /**
         Returns the depth (number of bits/pixel) of this DC.

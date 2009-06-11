@@ -546,6 +546,10 @@ SOURCE=..\..\src\common\menucmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\mousemanager.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\msgout.cpp
 # End Source File
 # Begin Source File
@@ -753,37 +757,6 @@ SOURCE=..\..\src\msw\ole\access.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\ole\activex.cpp
-
-!IF  "$(CFG)" == "core - Win32 DLL Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "core - Win32 Release"
-
-
-!ELSEIF  "$(CFG)" == "core - Win32 Debug"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -6206,6 +6179,10 @@ SOURCE=..\..\include\wx\minifram.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\mousemanager.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msgdlg.h
 # End Source File
 # Begin Source File
@@ -6486,6 +6463,10 @@ SOURCE=..\..\include\wx\textentry.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\textwrapper.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\tglbtn.h
 # End Source File
 # Begin Source File
@@ -6659,6 +6640,10 @@ SOURCE=..\..\include\wx\xrc\xh_dirpicker.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\xrc\xh_dlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\xrc\xh_editlbox.h
 # End Source File
 # Begin Source File
 

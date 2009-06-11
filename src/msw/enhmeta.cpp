@@ -218,6 +218,10 @@ public:
     wxEnhMetaFileDCImpl( wxEnhMetaFileDC *owner,
                          const wxString& filename, int width, int height,
                          const wxString& description );
+    wxEnhMetaFileDCImpl( wxEnhMetaFileDC *owner,
+                         const wxDC& referenceDC,
+                         const wxString& filename, int width, int height,
+                         const wxString& description );
     virtual ~wxEnhMetaFileDCImpl();
 
     // obtain a pointer to the new metafile (caller should delete it)
@@ -227,6 +231,10 @@ protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
+    void Create(HDC hdcRef,
+                const wxString& filename, int width, int height,
+                const wxString& description);
+
     // size passed to ctor and returned by DoGetSize()
     int m_width,
         m_height;
@@ -238,6 +246,24 @@ wxEnhMetaFileDCImpl::wxEnhMetaFileDCImpl( wxEnhMetaFileDC* owner,
                                  int width, int height,
                                  const wxString& description )
                    : wxMSWDCImpl( owner )
+{
+    Create(ScreenHDC(), filename, width, height, description);
+}
+
+wxEnhMetaFileDCImpl::wxEnhMetaFileDCImpl( wxEnhMetaFileDC* owner,
+                                 const wxDC& referenceDC,
+                                 const wxString& filename,
+                                 int width, int height,
+                                 const wxString& description )
+                   : wxMSWDCImpl( owner )
+{
+    Create(GetHdcOf(referenceDC), filename, width, height, description);
+}
+
+void wxEnhMetaFileDCImpl::Create(HDC hdcRef,
+                                 const wxString& filename,
+                                 int width, int height,
+                                 const wxString& description)
 {
     m_width = width;
     m_height = height;
@@ -252,7 +278,7 @@ wxEnhMetaFileDCImpl::wxEnhMetaFileDCImpl( wxEnhMetaFileDC* owner,
         rect.bottom = height;
 
         // CreateEnhMetaFile() wants them in HIMETRIC
-        PixelToHIMETRIC(&rect.right, &rect.bottom);
+        PixelToHIMETRIC(&rect.right, &rect.bottom, hdcRef);
 
         pRect = &rect;
     }
@@ -262,7 +288,6 @@ wxEnhMetaFileDCImpl::wxEnhMetaFileDCImpl( wxEnhMetaFileDC* owner,
         pRect = (LPRECT)NULL;
     }
 
-    ScreenHDC hdcRef;
     m_hDC = (WXHDC)::CreateEnhMetaFile(hdcRef, GetMetaFileName(filename),
                                        pRect, description.wx_str());
     if ( !m_hDC )
@@ -312,6 +337,18 @@ wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
                                  int width, int height,
                                  const wxString& description)
                : wxDC(new wxEnhMetaFileDCImpl(this,
+                                              filename,
+                                              width, height,
+                                              description))
+{
+}
+
+wxEnhMetaFileDC::wxEnhMetaFileDC(const wxDC& referenceDC,
+                                 const wxString& filename,
+                                 int width, int height,
+                                 const wxString& description)
+               : wxDC(new wxEnhMetaFileDCImpl(this,
+                                              referenceDC,
                                               filename,
                                               width, height,
                                               description))

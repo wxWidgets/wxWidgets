@@ -27,12 +27,21 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxStatusBarNameStr[];
 // ----------------------------------------------------------------------------
 
 // wxStatusBar styles
-#define wxST_SIZEGRIP         0x0010
-#define wxST_SHOW_TIPS        0x0020
+#define wxSTB_SIZEGRIP         0x0010
+#define wxSTB_SHOW_TIPS        0x0020
 
-#define wxST_DEFAULT_STYLE    (wxST_SIZEGRIP|wxST_SHOW_TIPS|wxFULL_REPAINT_ON_RESIZE)
+#define wxSTB_ELLIPSIZE_START   0x0040
+#define wxSTB_ELLIPSIZE_MIDDLE  0x0080
+#define wxSTB_ELLIPSIZE_END     0x0100
 
-// style flags for fields
+#define wxSTB_DEFAULT_STYLE    (wxSTB_SIZEGRIP|wxSTB_ELLIPSIZE_END|wxSTB_SHOW_TIPS|wxFULL_REPAINT_ON_RESIZE)
+
+
+// old compat style name:
+#define wxST_SIZEGRIP    wxSTB_SIZEGRIP
+
+
+// style flags for wxStatusBar fields
 #define wxSB_NORMAL    0x0000
 #define wxSB_FLAT      0x0001
 #define wxSB_RAISED    0x0002
@@ -81,7 +90,7 @@ protected:
     bool m_bEllipsized;
 };
 
-WX_DECLARE_OBJARRAY(wxStatusBarPane, wxStatusBarPaneArray);
+WX_DECLARE_EXPORTED_OBJARRAY(wxStatusBarPane, wxStatusBarPaneArray);
 
 // ----------------------------------------------------------------------------
 // wxStatusBar: a window near the bottom of the frame used for status info
@@ -105,6 +114,8 @@ public:
     // field text
     // ----------
 
+    // NOTE: even if it is not pure virtual, SetStatusText() must be overloaded by 
+    //       the derived classes to update the given text in the native control
     virtual void SetStatusText(const wxString& text, int number = 0)
         { m_panes[number].GetStack().Last() = text; }
     virtual wxString GetStatusText(int number = 0) const
@@ -172,7 +183,22 @@ public:
     virtual bool CanBeOutsideClientArea() const { return true; }
 
 protected:
+
+    // wxWindow overrides:
+
+#if wxUSE_TOOLTIPS
+   virtual void DoSetToolTip( wxToolTip *tip )
+        {
+            wxASSERT_MSG(!HasFlag(wxSTB_SHOW_TIPS),
+                         "Do not set tooltip(s) manually when using wxSTB_SHOW_TIPS!");
+            wxWindow::DoSetToolTip(tip);
+        }
+#endif
+   
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+
+    // internal helpers & data:
 
     // calculate the real field widths for the given total available size
     wxArrayInt CalculateAbsWidths(wxCoord widthTotal) const;

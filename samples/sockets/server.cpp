@@ -31,6 +31,14 @@
 
 #include "wx/socket.h"
 
+// this example is currently written to use only IP or only IPv6 sockets, it
+// should be extended to allow using either in the future
+#if wxUSE_IPV6
+    typedef wxIPV6address IPaddress;
+#else
+    typedef wxIPV4address IPaddress;
+#endif
+
 // --------------------------------------------------------------------------
 // resources
 // --------------------------------------------------------------------------
@@ -57,6 +65,7 @@ public:
   ~MyFrame();
 
   // event handlers (these functions should _not_ be virtual)
+  void OnUDPTest(wxCommandEvent& event);
   void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
   void OnServerEvent(wxSocketEvent& event);
@@ -107,6 +116,7 @@ private:
 enum
 {
   // menu items
+  SERVER_UDPTEST = 10,
   SERVER_QUIT = wxID_EXIT,
   SERVER_ABOUT = wxID_ABOUT,
 
@@ -122,6 +132,7 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(SERVER_QUIT,  MyFrame::OnQuit)
   EVT_MENU(SERVER_ABOUT, MyFrame::OnAbout)
+  EVT_MENU(SERVER_UDPTEST, MyFrame::OnUDPTest)
   EVT_SOCKET(SERVER_ID,  MyFrame::OnServerEvent)
   EVT_SOCKET(SOCKET_ID,  MyFrame::OnSocketEvent)
 END_EVENT_TABLE()
@@ -168,6 +179,8 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
 
   // Make menus
   m_menuFile = new wxMenu();
+  m_menuFile->Append(SERVER_UDPTEST, "&UDP test\tCtrl-U");
+  m_menuFile->AppendSeparator();
   m_menuFile->Append(SERVER_ABOUT, _("&About...\tCtrl-A"), _("Show about dialog"));
   m_menuFile->AppendSeparator();
   m_menuFile->Append(SERVER_QUIT, _("E&xit\tAlt-X"), _("Quit server"));
@@ -190,12 +203,10 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
   delete wxLog::SetActiveTarget(new wxLogTextCtrl(m_text));
 
   // Create the address - defaults to localhost:0 initially
-#if wxUSE_IPV6
-  wxIPV6address addr;
-#else
-  wxIPV4address addr;
-#endif
+  IPaddress addr;
   addr.Service(3000);
+
+  wxLogMessage("Creating server at %s:%u", addr.IPAddress(), addr.Service());
 
   // Create the socket
   m_server = new wxSocketServer(addr);
@@ -206,10 +217,13 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, wxID_ANY,
     wxLogMessage("Could not listen at the specified port !");
     return;
   }
+
+  IPaddress addrReal;
+  if ( !m_server->GetLocal(addrReal) )
+    wxLogMessage("ERROR: couldn't get the address we bound to");
   else
-  {
-    wxLogMessage("Server listening.");
-  }
+    wxLogMessage("Server listening at %s:%u",
+                 addrReal.IPAddress(), addrReal.Service());
 
   // Setup the event handler and subscribe to connection events
   m_server->SetEventHandler(*this, SERVER_ID);
@@ -240,6 +254,42 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
   wxMessageBox(_("wxSocket demo: Server\n(c) 1999 Guillermo Rodriguez Garcia\n"),
                _("About Server"),
                wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnUDPTest(wxCommandEvent& WXUNUSED(event))
+{
+    TestLogger logtest("UDP test");
+
+    IPaddress addr;
+    addr.Service(3000);
+    wxDatagramSocket sock(addr);
+
+    char buf[1024];
+    size_t n = sock.RecvFrom(addr, buf, sizeof(buf)).LastCount();
+    if ( !n )
+    {
+        wxLogMessage("ERROR: failed to receive data");
+        return;
+    }
+
+    wxLogMessage("Received \"%s\" from %s:%u.",
+                 wxString::From8BitData(buf, n),
+                 addr.IPAddress(), addr.Service());
+
+    for ( size_t i = 0; i < n; i++ )
+    {
+        char& c = buf[i];
+        if ( (c >= 'A' && c <= 'M') || (c >= 'a' && c <= 'm') )
+            c += 13;
+        else if ( (c >= 'N' && c <= 'Z') || (c >= 'n' && c <= 'z') )
+            c -= 13;
+    }
+
+    if ( sock.SendTo(addr, buf, n).LastCount() != n )
+    {
+        wxLogMessage("ERROR: failed to send data");
+        return;
+    }
 }
 
 void MyFrame::Test1(wxSocketBase *sock)
@@ -335,7 +385,12 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
 
   if (sock)
   {
-    wxLogMessage("New client connection accepted");
+    IPaddress addr;
+    if ( !sock->GetPeer(addr) )
+      wxLogMessage("New connection from unknown client accepted.");
+    else
+      wxLogMessage("New client connection from %s:%u accepted",
+                   addr.IPAddress(), addr.Service());
   }
   else
   {

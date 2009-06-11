@@ -89,6 +89,7 @@ enum wxBrushStyle
     @li ::wxBLUE_BRUSH
     @li ::wxCYAN_BRUSH
     @li ::wxGREEN_BRUSH
+    @li ::wxYELLOW_BRUSH
     @li ::wxGREY_BRUSH
     @li ::wxLIGHT_GREY_BRUSH
     @li ::wxMEDIUM_GREY_BRUSH
@@ -243,6 +244,13 @@ wxBrush* wxBLUE_BRUSH;
     (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
 */
 wxBrush* wxGREEN_BRUSH;
+
+/**
+    Yellow brush.
+    Except for the color it has all standard attributes
+    (@c wxBRUSHSTYLE_SOLID, no stipple bitmap, etc...).
+*/
+wxBrush* wxYELLOW_BRUSH;
 
 /**
     White brush.

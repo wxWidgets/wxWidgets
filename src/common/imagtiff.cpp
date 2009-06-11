@@ -286,7 +286,6 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     }
 
     uint32 w, h;
-    uint32 npixels;
     uint32 *raster;
 
     TIFFGetField( tif, TIFFTAG_IMAGEWIDTH, &w );
@@ -300,9 +299,20 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
                            (samplesInfo[0] == EXTRASAMPLE_ASSOCALPHA ||
                             samplesInfo[0] == EXTRASAMPLE_UNASSALPHA));
 
-    npixels = w * h;
+    // guard against integer overflow during multiplication which could result
+    // in allocating a too small buffer and then overflowing it
+    const double bytesNeeded = (double)w * (double)h * sizeof(uint32);
+    if ( bytesNeeded >= wxUINT32_MAX )
+    {
+        if ( verbose )
+            wxLogError( _("TIFF: Image size is abnormally big.") );
 
-    raster = (uint32*) _TIFFmalloc( npixels * sizeof(uint32) );
+        TIFFClose(tif);
+
+        return false;
+    }
+
+    raster = (uint32*) _TIFFmalloc( bytesNeeded );
 
     if (!raster)
     {
@@ -413,7 +423,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     return true;
 }
 
-int wxTIFFHandler::GetImageCount( wxInputStream& stream )
+int wxTIFFHandler::DoGetImageCount( wxInputStream& stream )
 {
     TIFF *tif = TIFFwxOpen( stream, "image", "r" );
 
@@ -426,6 +436,9 @@ int wxTIFFHandler::GetImageCount( wxInputStream& stream )
     } while (TIFFReadDirectory(tif));
 
     TIFFClose( tif );
+    
+    // NOTE: this function modifies the current stream position but it's ok
+    //       (see wxImageHandler::GetImageCount)
 
     return dircount;
 }
@@ -587,7 +600,7 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[2];
 
-    if ( !stream.Read(&hdr[0], WXSIZEOF(hdr)) )
+    if ( !stream.Read(&hdr[0], WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
         return false;
 
     return (hdr[0] == 'I' && hdr[1] == 'I') ||

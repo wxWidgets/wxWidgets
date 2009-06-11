@@ -87,7 +87,7 @@ enum wxArchitecture
     wxARCH_INVALID = -1,        //!< returned on error
 
     wxARCH_32,                  //!< 32 bit
-    wxARCH_64,
+    wxARCH_64,                  //!< 64 bit
 
     wxARCH_MAX
 };
@@ -107,19 +107,50 @@ enum wxEndianness
     wxENDIAN_MAX
 };
 
+/**
+    A structure containing informations about a Linux distribution as returned 
+    by the @c lsb_release utility.
+    
+    See wxGetLinuxDistributionInfo() or wxPlatformInfo::GetLinuxDistributionInfo()
+    for more info.
+*/
+struct wxLinuxDistributionInfo
+{
+    wxString Id;                //!< The id of the distribution; e.g. "Ubuntu"
+    wxString Release;           //!< The version of the distribution; e.g. "9.04"
+    wxString CodeName;          //!< The code name of the distribution; e.g. "jaunty"
+    wxString Description;       //!< The description of the distribution; e.g. "Ubuntu 9.04"
+    
+    bool operator==(const wxLinuxDistributionInfo& ldi) const;
+    bool operator!=(const wxLinuxDistributionInfo& ldi) const;
+};
+
 
 /**
     @class wxPlatformInfo
 
-    This class holds informations about the operating system and the toolkit that
-    the application is running under and some basic architecture info of the machine
-    where it's running.
+    This class holds informations about the operating system, the toolkit and the 
+    basic architecture of the machine where the application is currently running.
+    
+    This class does not only have @e getters for the informations above, it also has
+    @e setters. This allows you to e.g. save the current platform informations in a 
+    data file (maybe in string form) so that when you later load it, you can easily
+    retrieve (see the static getters for string->enum conversion functions) and store
+    inside a wxPlatformInfo instance (using its setters) the signature of the system 
+    which generated it.
+    
+    In general however you only need to use the static Get() function and then
+    access the various informations for the current platform:
+    @code
+        wxLogMessage("This application is running under %s.",
+                     wxPlatformInfo::Get().GetOperatingSystemIdName());
+    @endcode
 
     @library{wxbase}
     @category{cfg}
 
     @see ::wxGetOsVersion(), wxIsPlatformLittleEndian(), wxIsPlatform64Bit(),
-         wxAppTraits
+         wxAppTraits, @ref group_funcmacro_networkuseros
 */
 class wxPlatformInfo : public wxObject
 {
@@ -164,12 +195,40 @@ public:
              GetToolkitMinorVersion(), CheckOSVersion()
     */
     bool CheckToolkitVersion(int major, int minor) const;
+    
 
+    /**
+        Returns @true if this instance is fully initialized with valid values.
+    */
+    bool IsOk() const;
+
+    /**
+        Returns @true if this wxPlatformInfo describes wxUniversal build.
+    */
+    bool IsUsingUniversalWidgets() const;
+
+    /**
+        Inequality operator. Tests all class' internal variables.
+    */
+    bool operator!=(const wxPlatformInfo& t) const;
+
+    /**
+        Equality operator. Tests all class' internal variables.
+    */
+    bool operator==(const wxPlatformInfo& t) const;
+        
     /**
         Returns the global wxPlatformInfo object, initialized with the values
         for the currently running platform.
     */
     static const wxPlatformInfo& Get();
+    
+    /**
+        @name Static enum getters
+        
+        These getters allow for easy string-to-enumeration-value conversion.
+    */
+    //@{
 
     /**
         Converts the given string to a wxArchitecture enum value or to
@@ -179,21 +238,6 @@ public:
     static wxArchitecture GetArch(const wxString& arch);
 
     /**
-        Returns the name for the given wxArchitecture enumeration value.
-    */
-    static wxString GetArchName(wxArchitecture arch);
-
-    /**
-        Returns the name for the architecture of this wxPlatformInfo instance.
-    */
-    wxString GetArchName() const;
-
-    /**
-        Returns the architecture ID of this wxPlatformInfo instance.
-    */
-    wxArchitecture GetArchitecture() const;
-
-    /**
         Converts the given string to a wxEndianness enum value or to
         @c wxENDIAN_INVALID if the given string is not a valid endianness
         string (i.e. does not contain nor little nor big strings).
@@ -201,19 +245,96 @@ public:
     static wxEndianness GetEndianness(const wxString& end);
 
     /**
-        Returns the endianness ID of this wxPlatformInfo instance.
+        Converts the given string to a wxOperatingSystemId enum value or to @c
+        wxOS_UNKNOWN if the given string is not a valid operating system name.
     */
-    wxEndianness GetEndianness() const;
+    static wxOperatingSystemId GetOperatingSystemId(const wxString& name);
+
+    /**
+        Converts the given string to a wxWidgets port ID value or to @c wxPORT_UNKNOWN
+        if the given string does not match any of the wxWidgets canonical name ports
+        ("wxGTK", "wxMSW", etc) nor any of the short wxWidgets name ports ("gtk", "msw", etc).
+    */
+    static wxPortId GetPortId(const wxString& portname);
+    
+    //@}
+    
+    
+    /**
+        @name Static string-form getters
+        
+        These getters allow for easy enumeration-value-to-string conversion.
+    */
+    //@{
+
+    /**
+        Returns the name for the given wxArchitecture enumeration value.
+    */
+    static wxString GetArchName(wxArchitecture arch);
 
     /**
         Returns name for the given wxEndianness enumeration value.
     */
     static wxString GetEndiannessName(wxEndianness end);
+    
+    /**
+        Returns the operating system family name for the given wxOperatingSystemId
+        enumeration value: @c Unix for @c wxOS_UNIX, @c Macintosh for @c wxOS_MAC,
+        @c Windows for @c wxOS_WINDOWS, @c DOS for @c wxOS_DOS, @c OS/2 for @c wxOS_OS2.
+    */
+    static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os);
 
     /**
-        Returns the name for the endianness of this wxPlatformInfo instance.
+        Returns the name for the given operating system ID value.
+
+        This can be a long name (e.g. <tt>Microsoft Windows NT</tt>);
+        use GetOperatingSystemFamilyName() to retrieve a short, generic name.
     */
-    wxString GetEndiannessName() const;
+    static wxString GetOperatingSystemIdName(wxOperatingSystemId os);
+
+    /**
+        Returns the name of the given wxWidgets port ID value.
+        The @a usingUniversal argument specifies whether the port is in its native
+        or wxUniversal variant.
+
+        The returned string always starts with the "wx" prefix and is a mixed-case string.
+    */
+    static wxString GetPortIdName(wxPortId port, bool usingUniversal);
+
+    /**
+        Returns the short name of the given wxWidgets port ID value.
+        The @a usingUniversal argument specifies whether the port is in its native
+        or wxUniversal variant.
+
+        The returned string does not start with the "wx" prefix and is always lower case.
+    */
+    static wxString GetPortIdShortName(wxPortId port,
+                                       bool usingUniversal);
+
+    /**
+        Returns the operating system directory.
+        
+        See wxGetOSDirectory() for more info.
+    */
+    static wxString GetOperatingSystemDirectory();
+
+    //@}
+    
+    
+    /**
+        @name Getters
+    */
+    //@{
+
+    /**
+        Returns the architecture ID of this wxPlatformInfo instance.
+    */
+    wxArchitecture GetArchitecture() const;
+
+    /**
+        Returns the endianness ID of this wxPlatformInfo instance.
+    */
+    wxEndianness GetEndianness() const;
 
     /**
         Returns the run-time major version of the OS associated with this
@@ -232,86 +353,35 @@ public:
     int GetOSMinorVersion() const;
 
     /**
-        Returns the operating system family name for the given wxOperatingSystemId
-        enumeration value: @c Unix for @c wxOS_UNIX, @c Macintosh for @c wxOS_MAC,
-        @c Windows for @c wxOS_WINDOWS, @c DOS for @c wxOS_DOS, @c OS/2 for @c wxOS_OS2.
-    */
-    static wxString GetOperatingSystemFamilyName(wxOperatingSystemId os);
-
-    /**
-        Returns the operating system family name of the OS associated with this
-        wxPlatformInfo instance.
-    */
-    wxString GetOperatingSystemFamilyName() const;
-
-    /**
-        Converts the given string to a wxOperatingSystemId enum value or to @c
-        wxOS_UNKNOWN if the given string is not a valid operating system name.
-    */
-    static wxOperatingSystemId GetOperatingSystemId(const wxString& name);
-
-    /**
         Returns the operating system ID of this wxPlatformInfo instance.
     */
     wxOperatingSystemId GetOperatingSystemId() const;
-
+    
     /**
-        Returns the name for the given operating system ID value.
-
-        This can be a long name (e.g. <tt>Microsoft Windows NT</tt>);
-        use GetOperatingSystemFamilyName() to retrieve a short, generic name.
+        Returns the description of the operating system of this wxPlatformInfo instance.
+        
+        See wxGetOSDescription() for more info.
     */
-    static wxString GetOperatingSystemIdName(wxOperatingSystemId os);
-
-    /**
-        Returns the operating system name of the OS associated with this wxPlatformInfo
-        instance.
-    */
-    wxString GetOperatingSystemIdName() const;
-
-
-    /**
-        Converts the given string to a wxWidgets port ID value or to @c wxPORT_UNKNOWN
-        if the given string does not match any of the wxWidgets canonical name ports
-        ("wxGTK", "wxMSW", etc) nor any of the short wxWidgets name ports ("gtk", "msw", etc).
-    */
-    static wxPortId GetPortId(const wxString& portname);
+    wxString GetOperatingSystemDescription() const;
 
     /**
         Returns the wxWidgets port ID associated with this wxPlatformInfo instance.
     */
     wxPortId GetPortId() const;
-
+    
     /**
-        Returns the name of the given wxWidgets port ID value.
-        The @a usingUniversal argument specifies whether the port is in its native
-        or wxUniversal variant.
-
-        The returned string always starts with the "wx" prefix and is a mixed-case string.
+        Returns the Linux distribution info associated with this wxPlatformInfo instance.
+        
+        See wxGetLinuxDistributionInfo() for more info.
     */
-    static wxString GetPortIdName(wxPortId port, bool usingUniversal);
-
+    wxLinuxDistributionInfo GetLinuxDistributionInfo() const;
+    
     /**
-        Returns the name of the wxWidgets port ID associated with this wxPlatformInfo
-        instance.
+        Returns the desktop environment associated with this wxPlatformInfo instance.
+        
+        See wxAppTraits::GetDesktopEnvironment() for more info.
     */
-    wxString GetPortIdName() const;
-
-    /**
-        Returns the short name of the given wxWidgets port ID value.
-        The @a usingUniversal argument specifies whether the port is in its native
-        or wxUniversal variant.
-
-        The returned string does not start with the "wx" prefix and is always lower case.
-    */
-    static wxString GetPortIdShortName(wxPortId port,
-                                       bool usingUniversal);
-
-    /**
-        Returns the short name of the wxWidgets port ID associated with this
-        wxPlatformInfo instance.
-    */
-    wxString GetPortIdShortName() const;
+    wxString GetDesktopEnvironment() const;
 
     /**
         Returns the run-time major version of the toolkit associated with this
@@ -338,17 +408,58 @@ public:
         @see CheckToolkitVersion()
     */
     int GetToolkitMinorVersion() const;
+    
+    //@}
+
 
     /**
-        Returns @true if this instance is fully initialized with valid values.
+        @name String-form getters
     */
-    bool IsOk() const;
+    //@{
 
     /**
-        Returns @true if this wxPlatformInfo describes wxUniversal build.
+        Returns the name for the architecture of this wxPlatformInfo instance.
     */
-    bool IsUsingUniversalWidgets() const;
+    wxString GetArchName() const;
 
+    /**
+        Returns the name for the endianness of this wxPlatformInfo instance.
+    */
+    wxString GetEndiannessName() const;
+
+    /**
+        Returns the operating system family name of the OS associated with this
+        wxPlatformInfo instance.
+    */
+    wxString GetOperatingSystemFamilyName() const;
+    
+    /**
+        Returns the operating system name of the OS associated with this wxPlatformInfo
+        instance.
+    */
+    wxString GetOperatingSystemIdName() const;
+
+    /**
+        Returns the name of the wxWidgets port ID associated with this wxPlatformInfo
+        instance.
+    */
+    wxString GetPortIdName() const;
+
+    /**
+        Returns the short name of the wxWidgets port ID associated with this
+        wxPlatformInfo instance.
+    */
+    wxString GetPortIdShortName() const;
+    
+    //@}
+    
+
+    
+    /**
+        @name Setters
+    */
+    //@{
+    
     /**
         Sets the architecture enum value associated with this wxPlatformInfo instance.
     */
@@ -381,13 +492,20 @@ public:
     void SetToolkitVersion(int major, int minor);
 
     /**
-        Inequality operator. Tests all class' internal variables.
+        Sets the operating system description associated with this wxPlatformInfo instance.
     */
-    bool operator!=(const wxPlatformInfo& t) const;
-
+    void SetOperatingSystemDescription(const wxString& desc);
+ 
     /**
-        Equality operator. Tests all class' internal variables.
+        Sets the desktop environment associated with this wxPlatformInfo instance.
     */
-    bool operator==(const wxPlatformInfo& t) const;
+    void SetDesktopEnvironment(const wxString& de);
+    
+    /**
+        Sets the linux distribution info associated with this wxPlatformInfo instance.
+    */
+    void SetLinuxDistributionInfo(const wxLinuxDistributionInfo& di);
+    
+    //@}
 };
 

@@ -29,6 +29,7 @@ public:
 private:
     bool m_isInside;
     wxToolBar *m_toolbar;
+    wxSize m_toolSize;
 };
 
 #endif // wxUSE_XRC && wxUSE_TOOLBAR

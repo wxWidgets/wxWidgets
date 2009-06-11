@@ -152,8 +152,6 @@
 
 #define WXWIN_COMPATIBILITY_2_8 0
 
-#define wxEVENTS_COMPATIBILITY_2_8 0
-
 #define wxDIALOG_UNIT_COMPATIBILITY   0
 
 
@@ -302,8 +300,6 @@
 #define wxUSE_SOUND      0
 
 #define wxUSE_MEDIACTRL     0
-
-#define wxUSE_GSTREAMER    0
 
 #define wxUSE_XRC       0
 
@@ -571,6 +567,16 @@
 #define wxUSE_UNICODE_UTF8 0
 #define wxUSE_UTF8_LOCALE_ONLY 0
 
+/*
+   Use GStreamer for Unix.
+
+   Default is 0 as this requires a lot of dependencies which might not be
+   available.
+
+   Recommended setting: 1 (wxMediaCtrl won't work by default without it).
+ */
+#define wxUSE_GSTREAMER 0
+
 /* --- start MSW options --- */
 
 #ifndef wxUSE_UNICODE_MSLU
@@ -747,8 +753,11 @@
  * Define if compiler has __thread keyword.
  */
 #undef HAVE___THREAD_KEYWORD
+/*
+ * Define if large (64 bit file offsets) files are supported.
+ */
+#undef HAVE_LARGEFILE_SUPPORT
 
-/* compatibility */
 /*
  * Use OpenGL
  */

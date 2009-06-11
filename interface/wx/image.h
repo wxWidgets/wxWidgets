@@ -84,6 +84,26 @@ public:
     virtual ~wxImageHandler();
 
     /**
+        Returns @true if this handler supports the image format contained in the
+        given stream.
+        
+        This function doesn't modify the current stream position (because it
+        restores the original position before returning; this however requires the
+        stream to be seekable; see wxStreamBase::IsSeekable).
+    */
+    bool CanRead( wxInputStream& stream );    
+
+    /**
+        Returns @true if this handler supports the image format contained in the
+        file with the given name.
+        
+        This function doesn't modify the current stream position (because it
+        restores the original position before returning; this however requires the
+        stream to be seekable; see wxStreamBase::IsSeekable).
+    */
+    bool CanRead( const wxString& filename );
+    
+    /**
         Gets the preferred file extension associated with this handler.
 
         @see GetAltExtensions()
@@ -106,7 +126,9 @@ public:
 
         @param stream
             Opened input stream for reading image data.
-            Currently, the stream must support seeking.
+            This function doesn't modify the current stream position (because it
+            restores the original position before returning; this however requires the
+            stream to be seekable; see wxStreamBase::IsSeekable).
 
         @return Number of available images. For most image handlers, this is 1
                 (exceptions are TIFF and ICO formats as well as animated GIFs
@@ -1574,9 +1596,20 @@ public:
     
     
     /**
-        Returns @true if the current image handlers can read this file
+        Returns @true if at least one of the available image handlers can read 
+        the file with the given name.
+        
+        See wxImageHandler::CanRead for more info.
     */
     static bool CanRead(const wxString& filename);
+    
+    /**
+        Returns @true if at least one of the available image handlers can read 
+        the data in the given stream.
+        
+        See wxImageHandler::CanRead for more info.
+    */
+    static bool CanRead(wxInputStream& stream);
 
     //@{
     /**
@@ -1586,8 +1619,10 @@ public:
 
         For the overload taking the parameter @a filename, that's the name
         of the file to query.
-        For the overload taking the parameter @a stream, that's the ppened input
-        stream with image data. Currently, the stream must support seeking.
+        For the overload taking the parameter @a stream, that's the opened input
+        stream with image data.
+        
+        See wxImageHandler::GetImageCount() for more info.
 
         The parameter @a type may be one of the following values:
         @li wxBITMAP_TYPE_BMP: Load a Windows bitmap file.

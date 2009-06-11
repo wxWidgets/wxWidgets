@@ -139,7 +139,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_GRID_SELECT_CELL( GridFrame::OnSelectCell )
     EVT_GRID_RANGE_SELECT( GridFrame::OnRangeSelected )
     EVT_GRID_CELL_CHANGING( GridFrame::OnCellValueChanging )
-    EVT_GRID_CELL_CHANGE( GridFrame::OnCellValueChanged )
+    EVT_GRID_CELL_CHANGED( GridFrame::OnCellValueChanged )
     EVT_GRID_CELL_BEGIN_DRAG( GridFrame::OnCellBeginDrag )
 
     EVT_GRID_EDITOR_SHOWN( GridFrame::OnEditorShown )
@@ -376,6 +376,14 @@ GridFrame::GridFrame()
     grid->SetCellSize(7, 1, 3, 4);
     grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
     grid->SetCellValue(7, 1, _T("Big box!"));
+
+    // create a separator-like row: it's grey and it's non-resizeable
+    grid->DisableRowResize(10);
+    grid->SetRowSize(10, 30);
+    attr = new wxGridCellAttr;
+    attr->SetBackgroundColour(*wxLIGHT_GREY);
+    grid->SetRowAttr(10, attr);
+    grid->SetCellValue(10, 0, "You can't resize this row interactively -- try it");
 
     // this does exactly nothing except testing that SetAttr() handles NULL
     // attributes and does reference counting correctly
@@ -932,7 +940,10 @@ void GridFrame::OnCellLeftClick( wxGridEvent& ev )
 
 void GridFrame::OnRowSize( wxGridSizeEvent& ev )
 {
-    wxLogMessage(_T("Resized row %d"), ev.GetRowOrCol());
+    const int row = ev.GetRowOrCol();
+
+    wxLogMessage("Resized row %d, new height = %d",
+                 row, grid->GetRowSize(row));
 
     ev.Skip();
 }
@@ -940,7 +951,10 @@ void GridFrame::OnRowSize( wxGridSizeEvent& ev )
 
 void GridFrame::OnColSize( wxGridSizeEvent& ev )
 {
-    wxLogMessage(_T("Resized col %d"), ev.GetRowOrCol());
+    const int col = ev.GetRowOrCol();
+
+    wxLogMessage("Resized column %d, new width = %d",
+                 col, grid->GetColSize(col));
 
     ev.Skip();
 }

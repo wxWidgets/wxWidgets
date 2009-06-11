@@ -3604,6 +3604,9 @@ void wxAuiManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
     wxAuiPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
+    if(!pane.frame)
+        return;
+
     wxPoint pt = ::wxGetMousePosition();
 
 #if 0
@@ -3703,6 +3706,9 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
     // try to find the pane
     wxAuiPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
+
+    if(!pane.frame)
+        return;
 
     wxPoint pt = ::wxGetMousePosition();
 

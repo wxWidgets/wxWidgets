@@ -87,6 +87,19 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
                     int imgIndex = imgList->Add(bmp);
                     m_notebook->SetPageImage(m_notebook->GetPageCount()-1, imgIndex );
                 }
+                else if ( HasParam(wxT("image")) )
+                {
+                    if ( m_notebook->GetImageList() )
+                    {
+                        m_notebook->SetPageImage(m_notebook->GetPageCount()-1,
+                                                 GetLong(wxT("image")) );
+                    }
+                    else // image without image list?
+                    {
+                        ReportError(n, "image can only be used in conjunction "
+                                       "with imagelist");
+                    }
+                }
             }
             else
             {
@@ -110,6 +123,10 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
                    GetPosition(), GetSize(),
                    GetStyle(wxT("style")),
                    GetName());
+
+        wxImageList *imagelist = GetImageList();
+        if ( imagelist )
+            nb->AssignImageList(imagelist);
 
         SetupWindow(nb);
 

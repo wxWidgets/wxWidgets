@@ -302,7 +302,7 @@ bool wxPNGHandler::DoCanRead( wxInputStream& stream )
 {
     unsigned char hdr[4];
 
-    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
+    if ( !stream.Read(hdr, WXSIZEOF(hdr)) )     // it's ok to modify the stream position here
         return false;
 
     return memcmp(hdr, "\211PNG", WXSIZEOF(hdr)) == 0;
@@ -558,18 +558,16 @@ wxPNGHandler::LoadFile(wxImage *image,
     if (!image->Ok())
         goto error;
 
-    lines = (unsigned char **)malloc( (size_t)(height * sizeof(unsigned char *)) );
+    // initialize all line pointers to NULL to ensure that they can be safely
+    // free()d if an error occurs before all of them could be allocated
+    lines = (unsigned char **)calloc(height, sizeof(unsigned char *));
     if ( !lines )
         goto error;
 
     for (i = 0; i < height; i++)
     {
         if ((lines[i] = (unsigned char *)malloc( (size_t)(width * (sizeof(unsigned char) * 4)))) == NULL)
-        {
-            for ( unsigned int n = 0; n < i; n++ )
-                free( lines[n] );
             goto error;
-        }
     }
 
     png_read_image( png_ptr, lines );
@@ -690,9 +688,6 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     const int iBitDepth = image->HasOption(wxIMAGE_OPTION_PNG_BITDEPTH)
                             ? image->GetOptionInt(wxIMAGE_OPTION_PNG_BITDEPTH)
                             : 8;
-
-    wxASSERT_MSG( iBitDepth == 8 || iBitDepth == 16,
-                    _T("PNG bit depth must be 8 or 16") );
 
     bool bHasAlpha = image->HasAlpha();
     bool bHasMask = image->HasMask();

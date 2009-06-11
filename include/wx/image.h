@@ -97,10 +97,17 @@ public:
         { }
 
 #if wxUSE_STREAMS
-    virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );
-    virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=true );
+    // NOTE: LoadFile and SaveFile are not pure virtuals to allow derived classes
+    //       to implement only one of the two
+    virtual bool LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream), 
+                           bool WXUNUSED(verbose)=true, int WXUNUSED(index)=-1 )
+        { return false; }
+    virtual bool SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), 
+                           bool WXUNUSED(verbose)=true )
+        { return false; }
 
-    virtual int GetImageCount( wxInputStream& stream );
+    int GetImageCount( wxInputStream& stream );
+        // save the stream position, call DoGetImageCount() and restore the position
 
     bool CanRead( wxInputStream& stream ) { return CallDoCanRead(stream); }
     bool CanRead( const wxString& name );
@@ -125,6 +132,13 @@ public:
 
 protected:
 #if wxUSE_STREAMS
+    // NOTE: this function is allowed to change the current stream position
+    //       since GetImageCount() will take care of restoring it later
+    virtual int DoGetImageCount( wxInputStream& WXUNUSED(stream) ) 
+        { return 1; }       // default return value is 1 image
+    
+    // NOTE: this function is allowed to change the current stream position
+    //       since CallDoCanRead() will take care of restoring it later
     virtual bool DoCanRead( wxInputStream& stream ) = 0;
 
     // save the stream position, call DoCanRead() and restore the position

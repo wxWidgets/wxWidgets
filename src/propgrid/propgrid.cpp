@@ -152,6 +152,15 @@ public:
 IMPLEMENT_DYNAMIC_CLASS(wxPGGlobalVarsClassManager, wxModule)
 
 
+// When wxPG is loaded dynamically after the application is already running
+// then the built-in module system won't pick this one up.  Add it manually.
+void wxPGInitResourceModule()
+{
+    wxModule* module = new wxPGGlobalVarsClassManager;
+    module->Init();
+    wxModule::RegisterModule(module);
+}
+
 wxPGGlobalVarsClass* wxPGGlobalVars = NULL;
 
 
@@ -186,6 +195,7 @@ wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     m_strlong = wxS("long");
     m_strbool = wxS("bool");
     m_strlist = wxS("list");
+    m_strDefaultValue = wxS("DefaultValue");
     m_strMin = wxS("Min");
     m_strMax = wxS("Max");
     m_strUnits = wxS("Units");
@@ -226,46 +236,6 @@ wxPGGlobalVarsClass::~wxPGGlobalVarsClass()
 void wxPropertyGridInitGlobalsIfNeeded()
 {
 }
-
-// -----------------------------------------------------------------------
-// wxPGTLWHandler
-//   Intercepts Close-events sent to wxPropertyGrid's top-level parent,
-//   and tries to commit property value.
-// -----------------------------------------------------------------------
-
-class wxPGTLWHandler : public wxEvtHandler
-{
-public:
-
-    wxPGTLWHandler( wxPropertyGrid* pg )
-        : wxEvtHandler()
-    {
-        m_pg = pg;
-    }
-
-protected:
-
-    void OnClose( wxCloseEvent& event )
-    {
-        // ClearSelection forces value validation/commit.
-        if ( event.CanVeto() && !m_pg->ClearSelection() )
-        {
-            event.Veto();
-            return;
-        }
-
-        event.Skip();
-    }
-
-private:
-    wxPropertyGrid*     m_pg;
-
-    DECLARE_EVENT_TABLE()
-};
-
-BEGIN_EVENT_TABLE(wxPGTLWHandler, wxEvtHandler)
-    EVT_CLOSE(wxPGTLWHandler::OnClose)
-END_EVENT_TABLE()
 
 // -----------------------------------------------------------------------
 // wxPGCanvas
@@ -463,7 +433,6 @@ void wxPropertyGrid::Init1()
     m_propHover = NULL;
     m_eventObject = this;
     m_curFocused = NULL;
-    m_tlwHandler = NULL;
     m_sortFunction = NULL;
     m_inDoPropertyChanged = 0;
     m_inCommitChangesFromEditor = 0;
@@ -580,11 +549,9 @@ void wxPropertyGrid::Init2()
     // This helps with flicker
     SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 
-    // Hook the TLW
-    wxPGTLWHandler* handler = new wxPGTLWHandler(this);
-    m_tlp = ::wxGetTopLevelParent(this);
-    m_tlwHandler = handler;
-    m_tlp->PushEventHandler(handler);
+    // Hook the top-level parent
+    m_tlp = NULL;
+    OnTLPChanging(NULL);
 
     // set virtual size to this window size
     wxSize wndsize = GetSize();
@@ -621,9 +588,20 @@ wxPropertyGrid::~wxPropertyGrid()
     if ( m_iFlags & wxPG_FL_MOUSE_CAPTURED )
         m_canvas->ReleaseMouse();
 
-    wxPGTLWHandler* handler = (wxPGTLWHandler*) m_tlwHandler;
-    m_tlp->RemoveEventHandler(handler);
-    delete handler;
+    // Do TLP check, recommend use of OnTLPChanging()
+    wxWindow* tlp = ::wxGetTopLevelParent(this);
+    if ( tlp == m_tlp )
+    {
+        m_tlp->Disconnect( wxEVT_CLOSE_WINDOW,
+                           wxCloseEventHandler(wxPropertyGrid::OnTLPClose),
+                           NULL, this );
+    }
+    else if ( tlp )
+    {
+        wxLogError("Top-level parent of wxPropertyGrid has changed. "
+                   "Consider calling wxPropertyGrid::OnTLPChanging() "
+                   "when appropriate.");
+    }
 
     wxASSERT_MSG( !IsEditorsValueModified(),
                   wxS("Most recent change in property editor was lost!!! ")
@@ -836,6 +814,58 @@ wxSize wxPropertyGrid::DoGetBestSize() const
     const wxSize sz = wxSize(60, lineHeight*numLines + 40);
     CacheBestSize(sz);
     return sz;
+}
+
+ // -----------------------------------------------------------------------
+
+void wxPropertyGrid::OnTLPChanging( wxWindow* newTLP )
+{
+    //
+    // Parent changed so let's redetermine and re-hook the
+    // correct top-level window.
+    if ( m_tlp )
+    {
+        wxASSERT_MSG( m_tlp == ::wxGetTopLevelParent(this),
+                      "You must call OnTLPChanging() before the "
+                      "top-level parent has changed.");
+
+        m_tlp->Disconnect( wxEVT_CLOSE_WINDOW,
+                           wxCloseEventHandler(wxPropertyGrid::OnTLPClose),
+                           NULL, this );
+    }
+
+    if ( !newTLP )
+        newTLP = ::wxGetTopLevelParent(this);
+
+    m_tlp = newTLP;
+    m_tlp->Connect( wxEVT_CLOSE_WINDOW,
+                    wxCloseEventHandler(wxPropertyGrid::OnTLPClose),
+                    NULL, this );
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyGrid::OnTLPClose( wxCloseEvent& event )
+{
+    // ClearSelection forces value validation/commit.
+    if ( event.CanVeto() && !ClearSelection() )
+    {
+        event.Veto();
+        return;
+    }
+
+    event.Skip();
+}
+
+// -----------------------------------------------------------------------
+
+bool wxPropertyGrid::Reparent( wxWindowBase *newParent )
+{
+    OnTLPChanging((wxWindow*)newParent);
+
+    bool res = wxScrolledWindow::Reparent(newParent);
+
+    return res;
 }
 
 // -----------------------------------------------------------------------

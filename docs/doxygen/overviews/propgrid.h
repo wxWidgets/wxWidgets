@@ -23,6 +23,10 @@ strings, numbers, flag sets, fonts, colours and many others. It is possible,
 for example, to categorize properties, set up a complete tree-hierarchy,
 add more than two columns, and set arbitrary per-property attributes.
 
+  As this version of wxPropertyGrid has some backward-incompatible changes
+from version 1.4, everybody who need to maintain custom property classes
+should carefully read final section in @ref propgrid_compat.
+
 @li @ref propgrid_basics
 @li @ref propgrid_categories
 @li @ref propgrid_parentprops
@@ -39,6 +43,7 @@ add more than two columns, and set arbitrary per-property attributes.
 @li @ref propgrid_subclassing
 @li @ref propgrid_misc
 @li @ref propgrid_proplist
+@li @ref propgrid_compat
 
 @section propgrid_basics Creating and Populating wxPropertyGrid
 
@@ -637,7 +642,7 @@ void MyForm::OnPropertyGridChanging( wxPropertyGridEvent& event )
 
 There are various ways to make sure user enters only correct values. First, you
 can use wxValidators similar to as you would with ordinary controls. Use
-wxPropertyGridInterface::SetPropertyValidator() to assign wxValidator to 
+wxPropertyGridInterface::SetPropertyValidator() to assign wxValidator to
 property.
 
 Second, you can subclass a property and override wxPGProperty::ValidateValue(),
@@ -826,10 +831,10 @@ unique (base) name.
     @code
         pg->SetPropertyAttribute(wxT("MyFlagsProperty"),wxPG_BOOL_USE_CHECKBOX,true,wxPG_RECURSE);
     @endcode
-    
+
     Following will set all individual bool properties in your control to
     use check box:
-    
+
     @code
         pg->SetPropertyAttributeAll(wxPG_BOOL_USE_CHECKBOX, true);
     @endcode
@@ -885,5 +890,80 @@ which choice entry.
 
 See @ref pgproperty_properties
 
-*/
+@section propgrid_compat Changes from wxPropertyGrid 1.4
 
+Version of wxPropertyGrid bundled with wxWidgets 2.9+ has various backward-
+incompatible changes from version 1.4, which had a stable API and will remain
+as the last separate branch.
+
+Note that in general any behavior-breaking changes should not compile or run
+without warnings or errors.
+
+@subsection propgrid_compat_general General Changes
+
+  - Tab-traversal can no longer be used to travel between properties. Now
+    it only causes focus to move from main grid to editor of selected property.
+    Arrow keys are now your primary means of navigating between properties,
+    with keyboard. This change allowed fixing broken tab traversal on wxGTK
+    (which is open issue in wxPropertyGrid 1.4).
+
+  - A few member functions were removed from wxPropertyGridInterface.
+    Please use wxPGProperty's counterparts from now on.
+
+  - wxPGChoices now has proper Copy-On-Write behavior.
+
+  - wxPGChoices::SetExclusive() was renamed to AllocExclusive().
+
+  - wxPGProperty::SetPropertyChoicesExclusive() was removed. Instead, use
+    GetChoices().AllocExclusive().
+
+  - wxPGProperty::ClearModifiedStatus() is removed. Please use
+    SetModifiedStatus() instead.
+
+  - wxPropertyGridInterface::GetExpandedProperties() is removed. You should
+    now use wxPropertyGridInterface::GetEditableState() instead.
+
+  - Extended window style wxPG_EX_LEGACY_VALIDATORS was removed.
+
+  - wxPropertyGridManager now has same Get/SetSelection() semantics as
+    wxPropertyGrid.
+
+  - Various wxPropertyGridManager page-related functions now return pointer
+    to the page object instead of index.
+
+  - Instead of calling wxPropertyGrid::SetButtonShortcut(), use
+    wxPropertyGrid::SetActionTrigger(wxPG_ACTION_PRESS_BUTTON).
+
+  - wxPGProperty::GetCell() now returns a reference. AcquireCell() was removed.
+
+  - wxPGMultiButton::FinalizePosition() has been renamed to Finalize(),
+    and it has slightly different argument list.
+
+  - wxPropertyGridEvent::HasProperty() is removed. You can use GetProperty()
+    as immediate replacement when checking if event has a property.
+
+@subsection propgrid_compat_propdev Property and Editor Sub-classing Changes
+
+  - Confusing custom property macros have been eliminated.
+
+  - Implement wxPGProperty::ValueToString() instead of GetValueAsString().
+
+  - wxPGProperty::ChildChanged() must now return the modified value of
+    whole property instead of writing it back into 'thisValue' argument.
+
+  - Removed wxPropertyGrid::PrepareValueForDialogEditing(). Use
+    wxPropertyGrid::GetPendingEditedValue() instead.
+
+  - wxPGProperty::GetChoiceInfo() is removed, as all properties now carry
+    wxPGChoices instance (protected wxPGProperty::m_choices).
+
+  - Connect() should no longer be called in implementations of
+    wxPGEditor::CreateControls(). wxPropertyGrid automatically passes all
+    events from editor to wxPGEditor::OnEvent() and wxPGProperty::OnEvent(),
+    as appropriate.
+
+  - wxPython: Previously some of the reimplemented member functions needed a
+    'Py' prefix. This is no longer necessary. For instance, if you previously
+    implemented PyStringToValue() for your custom property, you should now
+    just implement StringToValue().
+*/

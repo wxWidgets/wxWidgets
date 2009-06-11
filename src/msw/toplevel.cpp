@@ -373,29 +373,10 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     // no dialogs support under MicroWin yet
     return CreateFrame(title, pos, size);
 #else // !__WXMICROWIN__
-    wxWindow *parent = GetParent();
-
-    // for the dialogs without wxDIALOG_NO_PARENT style, use the top level
-    // app window as parent - this avoids creating modal dialogs without
-    // parent
-    if ( !parent && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )
-    {
-        parent = wxTheApp->GetTopWindow();
-
-        if ( parent )
-        {
-            // don't use transient windows as parents, this is dangerous as it
-            // can lead to a crash if the parent is destroyed before the child
-            //
-            // also don't use the window which is currently hidden as then the
-            // dialog would be hidden as well
-            if ( (parent->GetExtraStyle() & wxWS_EX_TRANSIENT) ||
-                    !parent->IsShown() )
-            {
-                parent = NULL;
-            }
-        }
-    }
+    // static cast is valid as we're only ever called for dialogs
+    wxWindow * const
+        parent = static_cast<wxDialog *>(this)->
+                    GetParentForModalDialog(GetParent());
 
     m_hWnd = (WXHWND)::CreateDialogIndirect
                        (
@@ -1090,7 +1071,7 @@ bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
     DWORD dwStyle =   ::GetWindowLong(GetHwnd(), GWL_STYLE);
     DWORD dwExStyle = ::GetWindowLong(GetHwnd(), GWL_EXSTYLE);
     ::GetClientRect(GetHwnd(), &rect);
-    ::AdjustWindowRectEx(&rect, dwStyle, FALSE, dwExStyle);
+    ::AdjustWindowRectEx(&rect, dwStyle, ::GetMenu(GetHwnd()) != NULL, dwExStyle);
     ::OffsetRgn(hrgn, -rect.left, -rect.top);
 
     // Now call the shape API with the new region.

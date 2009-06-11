@@ -77,9 +77,9 @@ const size_t wxStringImpl::npos = (size_t) -1;
 
 // FIXME-UTF8: get rid of this, have only one wxEmptyString
 #if wxUSE_UNICODE_UTF8
-extern const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = "";
+const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = "";
 #endif
-extern const wxChar WXDLLIMPEXP_BASE *wxEmptyString = _T("");
+const wxChar WXDLLIMPEXP_BASE *wxEmptyString = _T("");
 
 #else
 
@@ -95,10 +95,10 @@ static const struct
 // empty C style string: points to 'string data' byte of g_strEmpty
 #if wxUSE_UNICODE_UTF8
 // FIXME-UTF8: get rid of this, have only one wxEmptyString
-extern const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = &g_strEmpty.dummy;
-extern const wxChar WXDLLIMPEXP_BASE *wxEmptyString = _T("");
+const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyStringImpl = &g_strEmpty.dummy;
+const wxChar WXDLLIMPEXP_BASE *wxEmptyString = _T("");
 #else
-extern const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyString = &g_strEmpty.dummy;
+const wxStringCharType WXDLLIMPEXP_BASE *wxEmptyString = &g_strEmpty.dummy;
 #endif
 
 #endif

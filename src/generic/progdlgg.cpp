@@ -522,6 +522,22 @@ wxString wxProgressDialog::GetMessage() const
     return m_msg->GetLabel();
 }
 
+void wxProgressDialog::SetRange(int maximum)
+{
+    wxASSERT_MSG(m_gauge, "The dialog should have been constructed with a range > 0");
+    wxASSERT_MSG(maximum > 0, "Invalid range");
+
+    m_gauge->SetRange(maximum);
+    m_maximum = maximum;
+
+#if defined(__WXMSW__) || defined(__WXPM__)
+    // we can't have values > 65,536 in the progress control under Windows, so
+    // scale everything down
+    m_factor = m_maximum / 65536 + 1;
+    m_maximum /= m_factor;
+#endif // __WXMSW__
+}
+
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------

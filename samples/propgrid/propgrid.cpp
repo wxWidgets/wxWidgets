@@ -493,7 +493,9 @@ void wxVectorProperty::RefreshChildren()
     Item(2)->SetValue( vector.z );
 }
 
-void wxVectorProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
+wxVariant wxVectorProperty::ChildChanged( wxVariant& thisValue,
+                                          int childIndex,
+                                          wxVariant& childValue ) const
 {
     wxVector3f vector;
     vector << thisValue;
@@ -503,7 +505,9 @@ void wxVectorProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVar
         case 1: vector.y = childValue.GetDouble(); break;
         case 2: vector.z = childValue.GetDouble(); break;
     }
-    thisValue << vector;
+    wxVariant newVariant;
+    newVariant << vector;
+    return newVariant;
 }
 
 
@@ -541,7 +545,9 @@ void wxTriangleProperty::RefreshChildren()
     Item(2)->SetValue( WXVARIANT(triangle.c) );
 }
 
-void wxTriangleProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxVariant& childValue ) const
+wxVariant wxTriangleProperty::ChildChanged( wxVariant& thisValue,
+                                            int childIndex,
+                                            wxVariant& childValue ) const
 {
     wxTriangle triangle;
     triangle << thisValue;
@@ -552,7 +558,9 @@ void wxTriangleProperty::ChildChanged( wxVariant& thisValue, int childIndex, wxV
         case 1: triangle.b = vector; break;
         case 2: triangle.c = vector; break;
     }
-    thisValue << triangle;
+    wxVariant newVariant;
+    newVariant << triangle;
+    return newVariant;
 }
 
 

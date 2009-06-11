@@ -75,9 +75,7 @@ public:
 */
 class WXDLLIMPEXP_PROPGRID wxPGEditor : public wxObject
 {
-#ifndef SWIG
     DECLARE_ABSTRACT_CLASS(wxPGEditor)
-#endif
 public:
 
     /** Constructor. */
@@ -223,9 +221,7 @@ wxPGEditor* wxPGEditor_##EDITOR = NULL;
 
 class WXDLLIMPEXP_PROPGRID wxPGTextCtrlEditor : public wxPGEditor
 {
-#ifndef SWIG
     DECLARE_DYNAMIC_CLASS(wxPGTextCtrlEditor)
-#endif
 public:
     wxPGTextCtrlEditor() {}
     virtual ~wxPGTextCtrlEditor();
@@ -270,9 +266,7 @@ public:
 
 class WXDLLIMPEXP_PROPGRID wxPGChoiceEditor : public wxPGEditor
 {
-#ifndef SWIG
     DECLARE_DYNAMIC_CLASS(wxPGChoiceEditor)
-#endif
 public:
     wxPGChoiceEditor() {}
     virtual ~wxPGChoiceEditor();
@@ -319,9 +313,7 @@ public:
 
 class WXDLLIMPEXP_PROPGRID wxPGComboBoxEditor : public wxPGChoiceEditor
 {
-#ifndef SWIG
     DECLARE_DYNAMIC_CLASS(wxPGComboBoxEditor)
-#endif
 public:
     wxPGComboBoxEditor() {}
     virtual ~wxPGComboBoxEditor();
@@ -392,9 +384,7 @@ public:
 //
 class WXDLLIMPEXP_PROPGRID wxPGCheckBoxEditor : public wxPGEditor
 {
-#ifndef SWIG
     DECLARE_DYNAMIC_CLASS(wxPGCheckBoxEditor)
-#endif
 public:
     wxPGCheckBoxEditor() {}
     virtual ~wxPGCheckBoxEditor();
@@ -456,9 +446,7 @@ public:
 */
 class WXDLLIMPEXP_PROPGRID wxPGEditorDialogAdapter : public wxObject
 {
-#ifndef SWIG
     DECLARE_ABSTRACT_CLASS(wxPGEditorDialogAdapter)
-#endif
 public:
     wxPGEditorDialogAdapter()
         : wxObject()

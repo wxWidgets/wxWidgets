@@ -141,6 +141,9 @@
         #ifndef _CRT_NON_CONFORMING_SWPRINTFS
             #define _CRT_NON_CONFORMING_SWPRINTFS 1
         #endif
+        #ifndef _SCL_SECURE_NO_WARNINGS
+            #define _SCL_SECURE_NO_WARNINGS 1
+        #endif
     #endif /* VC++ 8 */
 #endif /*  __VISUALC__ */
 
@@ -303,8 +306,7 @@ typedef short int WXTYPE;
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
         /*  VC++ 6.0 and 5.0 have std::wstring (what about earlier versions?) */
         #define HAVE_STD_WSTRING
-    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
-          && wxCHECK_GCC_VERSION(3, 3)
+    #elif defined(__MINGW32__) && wxCHECK_GCC_VERSION(3, 3)
         /*  GCC 3.1 has std::wstring; 3.0 never was in MinGW, 2.95 hasn't it */
         #define HAVE_STD_WSTRING
     #endif
@@ -374,10 +376,11 @@ typedef short int WXTYPE;
 
 
 #ifndef HAVE_WOSTREAM
-    // Mingw <= 3.4 and any version (so far) when targetting PalmOS don't have
-    // std::wostream
+    // Mingw <= 3.4 and all versions of Cygwin as well as any gcc version (so
+    // far) targeting PalmOS don't have std::wostream
     #if defined(__PALMOS__) || \
-        (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0))
+        (defined(__MINGW32__) && !wxCHECK_GCC_VERSION(4, 0)) || \
+        defined(__CYGWIN__)
         #define wxNO_WOSTREAM
     #endif
 
@@ -916,16 +919,20 @@ typedef wxUint16 wxWord;
 /* also define C99-like sized MIN/MAX constants */
 #define wxINT8_MIN CHAR_MIN
 #define wxINT8_MAX CHAR_MAX
+#define wxUINT8_MAX UCHAR_MAX
 
 #define wxINT16_MIN SHRT_MIN
 #define wxINT16_MAX SHRT_MAX
+#define wxUINT16_MAX USHRT_MAX
 
 #if SIZEOF_INT == 4
     #define wxINT32_MIN INT_MIN
     #define wxINT32_MAX INT_MAX
+    #define wxUINT32_MAX UINT_MAX
 #elif SIZEOF_LONG == 4
     #define wxINT32_MIN LONG_MIN
     #define wxINT32_MAX LONG_MAX
+    #define wxUINT32_MAX ULONG_MAX
 #else
     #error "Unknown 32 bit type"
 #endif
@@ -933,11 +940,13 @@ typedef wxUint16 wxWord;
 typedef wxUint32 wxDword;
 
 #ifdef LLONG_MAX
-    #define wxINT64_MAX LLONG_MAX
     #define wxINT64_MIN LLONG_MIN
+    #define wxINT64_MAX LLONG_MAX
+    #define wxUINT64_MAX ULLONG_MAX
 #else
-    #define wxINT64_MAX wxLL(9223372036854775807)
     #define wxINT64_MIN (wxLL(-9223372036854775807)-1)
+    #define wxINT64_MAX wxLL(9223372036854775807)
+    #define wxUINT64_MAX wxULL(0xFFFFFFFFFFFFFFFF)
 #endif
 
 /*  64 bit */

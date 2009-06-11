@@ -325,7 +325,7 @@ Client::CreateBuffer(int* msgsize)
         //returned buffer will contain test indicator, message size in kb and data
         bufsize = size*1024+2;
         buf = new char[bufsize];
-        buf[0] = 0xDE; //second byte contains size in kilobytes
+        buf[0] = (unsigned char)0xDE; //second byte contains size in kilobytes
         buf[1] = (char)(size);
         *msgsize = size*1024;
     }
@@ -334,7 +334,7 @@ Client::CreateBuffer(int* msgsize)
         //returned buffer will contain test indicator, message size in kb and data
         bufsize = (*msgsize)+2;
         buf = new char[bufsize];
-        buf[0] = 0xBE; //second byte contains size in bytes
+        buf[0] = (unsigned char)0xBE; //second byte contains size in bytes
         buf[1] = (char)(*msgsize);
     }
     return buf;
@@ -368,7 +368,7 @@ Client::StartWorker(workMode pMode) {
 
 void
 Client::StartWorker(workMode pMode, const wxString& pMessage) {
-    char* tmpbuf = strdup(pMessage.mb_str());
+    char* tmpbuf = wxStrdup(pMessage.mb_str());
     int msgsize = strlen(tmpbuf);
     char* buf = CreateBuffer(&msgsize);
     memset(buf+2,0x0,msgsize);

@@ -25,7 +25,7 @@ class WXDLLIMPEXP_FWD_BASE wxLog;
 class WXDLLIMPEXP_FWD_BASE wxMessageOutput;
 class WXDLLIMPEXP_FWD_BASE wxObject;
 class WXDLLIMPEXP_FWD_CORE wxRendererNative;
-class WXDLLIMPEXP_FWD_BASE wxStandardPathsBase;
+class WXDLLIMPEXP_FWD_BASE wxStandardPaths;
 class WXDLLIMPEXP_FWD_BASE wxString;
 class WXDLLIMPEXP_FWD_BASE wxTimer;
 class WXDLLIMPEXP_FWD_BASE wxTimerImpl;
@@ -75,7 +75,7 @@ public:
 
     // wxStandardPaths object is normally the same for wxBase and wxGUI
     // except in the case of wxMac and wxCocoa
-    virtual wxStandardPathsBase& GetStandardPaths();
+    virtual wxStandardPaths& GetStandardPaths();
 
 #if wxUSE_INTL
     // called during wxApp initialization to set the locale to correspond to

@@ -32,6 +32,13 @@
 </scheduler>
 
 <scheduler>
+    <name>release_quick</name>
+    <branch><RELEASE_BRANCH/></branch>
+    <treeStableTimer>900</treeStableTimer>
+    <fileNotImportant>docs/* interface/*</fileNotImportant>
+</scheduler>
+
+<scheduler>
     <name>stable_quick</name>
     <branch><STABLE_BRANCH/></branch>
     <treeStableTimer>900</treeStableTimer>
@@ -75,6 +82,10 @@
     <name><STABLE_BRANCH/></name>
 </slavelock>
 
+<slavelock>
+    <name><RELEASE_BRANCH/></name>
+</slavelock>
+
 <!--
     Map SVN user ids to email addresses.
 -->
@@ -97,7 +108,7 @@
 -->
 
 <mailnotifier>
-    <extraRecipient>wx-buildbot -at- lists.wxwidgets.org</extraRecipient>
+    <extraRecipient>wx-buildbot -at- googlegroups.com</extraRecipient>
 </mailnotifier>
 
 <!--

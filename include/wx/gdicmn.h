@@ -760,6 +760,7 @@ public:
         BRUSH_BLUE,
         BRUSH_CYAN,
         BRUSH_GREEN,
+        BRUSH_YELLOW,
         BRUSH_GREY,
         BRUSH_LIGHTGREY,
         BRUSH_MEDIUMGREY,
@@ -770,6 +771,7 @@ public:
         COLOUR_BLUE,
         COLOUR_CYAN,
         COLOUR_GREEN,
+        COLOUR_YELLOW,
         COLOUR_LIGHTGREY,
         COLOUR_RED,
         COLOUR_WHITE,
@@ -785,6 +787,7 @@ public:
         PEN_BLUE,
         PEN_CYAN,
         PEN_GREEN,
+        PEN_YELLOW,
         PEN_GREY,
         PEN_LIGHTGREY,
         PEN_MEDIUMGREY,
@@ -825,6 +828,7 @@ protected:
 #define wxBLUE_PEN          wxStockGDI::GetPen(wxStockGDI::PEN_BLUE)
 #define wxCYAN_PEN          wxStockGDI::GetPen(wxStockGDI::PEN_CYAN)
 #define wxGREEN_PEN         wxStockGDI::GetPen(wxStockGDI::PEN_GREEN)
+#define wxYELLOW_PEN        wxStockGDI::GetPen(wxStockGDI::PEN_YELLOW)
 #define wxGREY_PEN          wxStockGDI::GetPen(wxStockGDI::PEN_GREY)
 #define wxLIGHT_GREY_PEN    wxStockGDI::GetPen(wxStockGDI::PEN_LIGHTGREY)
 #define wxMEDIUM_GREY_PEN   wxStockGDI::GetPen(wxStockGDI::PEN_MEDIUMGREY)
@@ -836,6 +840,7 @@ protected:
 #define wxBLUE_BRUSH         wxStockGDI::GetBrush(wxStockGDI::BRUSH_BLUE)
 #define wxCYAN_BRUSH         wxStockGDI::GetBrush(wxStockGDI::BRUSH_CYAN)
 #define wxGREEN_BRUSH        wxStockGDI::GetBrush(wxStockGDI::BRUSH_GREEN)
+#define wxYELLOW_BRUSH       wxStockGDI::GetBrush(wxStockGDI::BRUSH_YELLOW)
 #define wxGREY_BRUSH         wxStockGDI::GetBrush(wxStockGDI::BRUSH_GREY)
 #define wxLIGHT_GREY_BRUSH   wxStockGDI::GetBrush(wxStockGDI::BRUSH_LIGHTGREY)
 #define wxMEDIUM_GREY_BRUSH  wxStockGDI::GetBrush(wxStockGDI::BRUSH_MEDIUMGREY)
@@ -847,6 +852,7 @@ protected:
 #define wxBLUE        wxStockGDI::GetColour(wxStockGDI::COLOUR_BLUE)
 #define wxCYAN        wxStockGDI::GetColour(wxStockGDI::COLOUR_CYAN)
 #define wxGREEN       wxStockGDI::GetColour(wxStockGDI::COLOUR_GREEN)
+#define wxYELLOW      wxStockGDI::GetColour(wxStockGDI::COLOUR_YELLOW)
 #define wxLIGHT_GREY  wxStockGDI::GetColour(wxStockGDI::COLOUR_LIGHTGREY)
 #define wxRED         wxStockGDI::GetColour(wxStockGDI::COLOUR_RED)
 #define wxWHITE       wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE)

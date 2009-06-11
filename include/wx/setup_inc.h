@@ -43,19 +43,6 @@
 // Recommended setting: 0 (please update your code)
 #define WXWIN_COMPATIBILITY_2_8 1
 
-// Use the 2.8-compatible events and Connect(): this is set to 0 by default as
-// the new events bring significant benefits in compile-time safety and
-// flexibility but can be disabled to somewhat reduce the compilation time and,
-// especially, to still allow building if the compiler template support is too
-// bad to compile the new code.
-//
-// Default is 0 but this is set to 1 automatically in wx/chkconf.h for the
-// compilers which can't build the new code (currently only g++ and MSVC >= 8
-// can)
-//
-// Recommended setting: 0
-#define wxEVENTS_COMPATIBILITY_2_8 0
-
 // MSW-only: Set to 0 for accurate dialog units, else 1 for old behaviour when
 // default system font is used for wxWindow::GetCharWidth/Height() instead of
 // the current font.
@@ -593,14 +580,6 @@
 // Recommended setting: 1
 #define wxUSE_MEDIACTRL     1
 
-// Use GStreamer for Unix.
-//
-// Default is 0 as this requires a lot of dependencies which might not be
-// available.
-//
-// Recommended setting: 1 (wxMediaCtrl won't work by default without it)
-#define wxUSE_GSTREAMER    0
-
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
 // Default is 1
@@ -1094,14 +1073,16 @@
 
 // Setting wxUSE_GLCANVAS to 1 enables OpenGL support. You need to have OpenGL
 // headers and libraries to be able to compile the library with wxUSE_GLCANVAS
-// set to 1. Note that for some compilers (notably Microsoft Visual C++) you
-// will need to manually add opengl32.lib and glu32.lib to the list of
-// libraries linked with your program if you use OpenGL.
+// set to 1 and, under Windows, also to add opengl32.lib and glu32.lib to the
+// list of libraries used to link your application (although this is done
+// implicitly for Microsoft Visual C++ users).
 //
-// Default is 0.
+// Default is 1 unless the compiler is known to ship without the necessary
+// headers (Digital Mars) or the platform doesn't support OpenGL (Windows CE).
 //
-// Recommended setting: 1 if you intend to use OpenGL, 0 otherwise
-#define wxUSE_GLCANVAS       0
+// Recommended setting: 1 if you intend to use OpenGL, can be safely set to 0
+// otherwise.
+#define wxUSE_GLCANVAS       1
 
 // wxRichTextCtrl allows editing of styled text.
 //

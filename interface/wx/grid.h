@@ -2037,6 +2037,8 @@ public:
 
     /**
         @name Column and Row Sizes
+
+        @see @ref overview_grid_resizing
      */
     //@{
 
@@ -2322,6 +2324,17 @@ public:
 
     /**
         @name User-Resizing and Dragging
+
+        Functions controlling various interactive mouse operations.
+
+        By default, columns and rows can be resized by dragging the edges of
+        their labels (this can be disabled using DisableDragColSize() and
+        DisableDragRowSize() methods). And if grid line dragging is enabled with
+        EnableDragGridSize() they can also be resized by dragging the right or
+        bottom edge of the grid cells.
+
+        Columns can also be moved to interactively change their order but this
+        needs to be explicitly enabled with EnableDragColMove().
      */
     //@{
 
@@ -2338,13 +2351,15 @@ public:
     bool CanDragColMove() const;
 
     /**
-        Returns @true if columns can be resized by dragging with the mouse.
+        Returns @true if the given column can be resized by dragging with the
+        mouse.
 
-        Columns can be resized by dragging the edges of their labels. If grid
-        line dragging is enabled they can also be resized by dragging the right
-        edge of the column in the grid cell area (see EnableDragGridSize()).
+        This function returns @true if resizing the columns interactively is
+        globally enabled, i.e. if DisableDragColSize() hadn't been called, and
+        if this column wasn't explicitly marked as non-resizable with
+        DisableColResize().
     */
-    bool CanDragColSize() const;
+    bool CanDragColSize(int col) const;
 
     /**
         Return @true if the dragging of grid lines to resize rows and columns
@@ -2353,13 +2368,42 @@ public:
     bool CanDragGridSize() const;
 
     /**
-        Returns @true if rows can be resized by dragging with the mouse.
+        Returns @true if the given row can be resized by dragging with the
+        mouse.
 
-        Rows can be resized by dragging the edges of their labels. If grid line
-        dragging is enabled they can also be resized by dragging the lower edge
-        of the row in the grid cell area (see EnableDragGridSize()).
+        This is the same as CanDragColSize() but for rows.
     */
-    bool CanDragRowSize() const;
+    bool CanDragRowSize(int row) const;
+
+    /**
+        Disable interactive resizing of the specified column.
+
+        This method allows to disable resizing of an individual column in a
+        grid where the columns are otherwise resizable (which is the case by
+        default).
+
+        Notice that currently there is no way to make some columns resizable in
+        a grid where columns can't be resized by default as there doesn't seem
+        to be any need for this in practice. There is also no way to make the
+        column marked as fixed using this method resizeable again because it is
+        supposed that fixed columns are used for static parts of the grid and
+        so should remain fixed during the entire grid lifetime.
+
+        Also notice that disabling interactive column resizing will not prevent
+        the program from changing the column size.
+
+        @see EnableDragColSize()
+     */
+    void DisableColResize(int col);
+
+    /**
+        Disable interactive resizing of the specified row.
+
+        This is the same as DisableColResize() but for rows.
+
+        @see EnableDragRowSize()
+     */
+    void DisableRowResize(int row);
 
     /**
         Disables column moving by dragging with the mouse.
@@ -2401,6 +2445,8 @@ public:
 
     /**
         Enables or disables column sizing by dragging with the mouse.
+
+        @see DisableColResize()
     */
     void EnableDragColSize(bool enable = true);
 
@@ -2412,6 +2458,8 @@ public:
 
     /**
         Enables or disables row sizing by dragging with the mouse.
+
+        @see DisableRowResize()
     */
     void EnableDragRowSize(bool enable = true);
 
@@ -3591,18 +3639,16 @@ public:
     This event class contains information about a row/column resize event.
 
     @beginEventTable{wxGridSizeEvent}
-    @event{EVT_GRID_COL_SIZE(func)}
-        The user resized a column by dragging it. Processes a
-        @c wxEVT_GRID_COL_SIZE event type.
-    @event{EVT_GRID_ROW_SIZE(func)}
-        The user resized a row by dragging it. Processes a
-        @c wxEVT_GRID_ROW_SIZE event type.
     @event{EVT_GRID_CMD_COL_SIZE(id, func)}
-        The user resized a column by dragging it; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_COL_SIZE event type.
+        The user resized a column, corresponds to @c wxEVT_GRID_COL_SIZE event
+        type.
     @event{EVT_GRID_CMD_ROW_SIZE(id, func)}
-        The user resized a row by dragging it; variant taking a window
-        identifier. Processes a @c wxEVT_GRID_ROW_SIZE event type.
+        The user resized a row, corresponds to @c wxEVT_GRID_ROW_SIZE event
+        type.
+    @event{EVT_GRID_COL_SIZE(func)}
+        Same as EVT_GRID_CMD_COL_SIZE() but uses `wxID_ANY` id.
+    @event{EVT_GRID_ROW_SIZE(func)}
+        Same as EVT_GRID_CMD_ROW_SIZE() but uses `wxID_ANY` id.
     @endEventTable
 
     @library{wxadv}

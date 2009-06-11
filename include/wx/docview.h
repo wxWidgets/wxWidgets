@@ -520,16 +520,38 @@ inline size_t wxDocManager::GetNoHistoryFiles() const
 class WXDLLIMPEXP_CORE wxDocChildFrameAnyBase
 {
 public:
+    // default ctor, use Create() after it
+    wxDocChildFrameAnyBase()
+    {
+        m_childDocument = NULL;
+        m_childView = NULL;
+        m_win = NULL;
+    }
+
+    // full ctor equivalent to using the default one and Create(0
     wxDocChildFrameAnyBase(wxDocument *doc, wxView *view, wxWindow *win)
-        : m_win(win)
+    {
+        Create(doc, view, win);
+    }
+
+    // method which must be called for an object created using the default ctor
+    //
+    // note that it returns bool just for consistency with Create() methods in
+    // other classes, we never return false from here
+    bool Create(wxDocument *doc, wxView *view, wxWindow *win)
     {
         m_childDocument = doc;
         m_childView = view;
+        m_win = win;
 
         if ( view )
             view->SetDocChildFrame(this);
+
+        return true;
     }
 
+    // dtor doesn't need to be virtual, an object should never be destroyed via
+    // a pointer to this class
     ~wxDocChildFrameAnyBase()
     {
         // prevent the view from deleting us if we're being deleted directly
@@ -564,7 +586,7 @@ protected:
 
     // the associated window: having it here is not terribly elegant but it
     // allows us to avoid having any virtual functions in this class
-    wxWindow * const m_win;
+    wxWindow* m_win;
 
 
     wxDECLARE_NO_COPY_CLASS(wxDocChildFrameAnyBase);
@@ -587,6 +609,9 @@ class WXDLLIMPEXP_CORE wxDocChildFrameAny : public ChildFrame,
 public:
     typedef ChildFrame BaseClass;
 
+    // default ctor, use Create after it
+    wxDocChildFrameAny() { }
+
     // ctor for a frame showing the given view of the specified document
     wxDocChildFrameAny(wxDocument *doc,
                        wxView *view,
@@ -597,13 +622,32 @@ public:
                        const wxSize& size = wxDefaultSize,
                        long style = wxDEFAULT_FRAME_STYLE,
                        const wxString& name = wxFrameNameStr)
-        : BaseClass(parent, id, title, pos, size, style, name),
-          wxDocChildFrameAnyBase(doc, view, this)
     {
+        Create(doc, view, parent, id, title, pos, size, style, name);
+    }
+
+    bool Create(wxDocument *doc,
+                wxView *view,
+                ParentFrame *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr)
+    {
+        if ( !wxDocChildFrameAnyBase::Create(doc, view, this) )
+            return false;
+
+        if ( !BaseClass::Create(parent, id, title, pos, size, style, name) )
+            return false;
+
         this->Connect(wxEVT_ACTIVATE,
                       wxActivateEventHandler(wxDocChildFrameAny::OnActivate));
         this->Connect(wxEVT_CLOSE_WINDOW,
                       wxCloseEventHandler(wxDocChildFrameAny::OnCloseWindow));
+
+        return true;
     }
 
     virtual bool Destroy()
@@ -659,6 +703,10 @@ typedef wxDocChildFrameAny<wxFrame, wxFrame> wxDocChildFrameBase;
 class WXDLLIMPEXP_CORE wxDocChildFrame : public wxDocChildFrameBase
 {
 public:
+    wxDocChildFrame()
+    {
+    }
+
     wxDocChildFrame(wxDocument *doc,
                     wxView *view,
                     wxFrame *parent,
@@ -671,6 +719,23 @@ public:
         : wxDocChildFrameBase(doc, view,
                               parent, id, title, pos, size, style, name)
     {
+    }
+
+    bool Create(wxDocument *doc,
+                wxView *view,
+                wxFrame *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr)
+    {
+        return wxDocChildFrameBase::Create
+               (
+                    doc, view,
+                    parent, id, title, pos, size, style, name
+               );
     }
 
 private:

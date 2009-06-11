@@ -164,6 +164,9 @@ class wxTextDocument : public wxDocument
 {
 public:
     wxTextDocument() : wxDocument() { }
+
+    virtual bool OnCreate(const wxString& path, long flags); 
+
     virtual wxTextCtrl* GetTextCtrl() const = 0;
 
     virtual bool IsModified() const;
@@ -172,6 +175,8 @@ public:
 protected:
     virtual bool DoSaveDocument(const wxString& filename);
     virtual bool DoOpenDocument(const wxString& filename);
+
+    void OnTextChange(wxCommandEvent& event);
 
     wxDECLARE_NO_COPY_CLASS(wxTextDocument);
     DECLARE_CLASS(wxTextDocument)

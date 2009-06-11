@@ -3240,12 +3240,12 @@ int wxWindowGTK::GetCharWidth() const
     return gdk_string_width( gfont, "g" );
 }
 
-void wxWindowGTK::GetTextExtent( const wxString& string,
-                                 int *x,
-                                 int *y,
-                                 int *descent,
-                                 int *externalLeading,
-                                 const wxFont *theFont ) const
+void wxWindowGTK::DoGetTextExtent(const wxString& string,
+                                  int *x,
+                                  int *y,
+                                  int *descent,
+                                  int *externalLeading,
+                                  const wxFont *theFont) const
 {
     wxFont fontToUse = theFont ? *theFont : GetFont();
 

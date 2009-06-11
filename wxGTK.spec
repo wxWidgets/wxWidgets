@@ -301,6 +301,7 @@ wx/sstream.h
 wx/stack.h
 wx/stackwalk.h
 wx/stdpaths.h
+wx/stdstream.h
 wx/stockitem.h
 wx/stopwatch.h
 wx/strconv.h

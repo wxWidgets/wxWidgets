@@ -218,6 +218,7 @@ bool wxXPMHandler::DoCanRead(wxInputStream& stream)
 {
     wxXPMDecoder decoder;
     return decoder.CanRead(stream);
+         // it's ok to modify the stream position here
 }
 
 #endif  // wxUSE_STREAMS
