@@ -78,11 +78,6 @@ protected :
     NSView* m_textView;
 } ;
 
-@interface wxNSSecureTextField : NSSecureTextField
-{
-}
-@end
-
 @implementation wxNSSecureTextField 
 
 + (void)initialize
@@ -128,16 +123,6 @@ protected :
 }
 @end
 
-@interface wxNSTextView : NSTextView
-{
-    wxNSTextScrollView* scrollView;
-}
-
-- (void)setScrollView: (wxNSTextScrollView *) sv;
-- (wxNSTextScrollView*) scrollView;
-
-@end
-
 @implementation wxNSTextScrollView
 
 + (void)initialize
@@ -150,79 +135,60 @@ protected :
     }
 }
 
-- (void)textDidChange:(NSNotification *)aNotification
+@end
+
+@implementation wxNSTextFieldEditor
+
+- (void) keyDown:(NSEvent*) event
 {
-    wxUnusedVar(aNotification);
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( impl )
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [self delegate] );
+    lastKeyDownEvent = event;
+    if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
+        [super keyDown:event];
+    lastKeyDownEvent = nil;
+}
+
+- (void) keyUp:(NSEvent*) event
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [self delegate] );
+    if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
+        [super keyUp:event];
+}
+
+- (void) flagsChanged:(NSEvent*) event
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [self delegate] );
+    if ( impl == NULL || !impl->DoHandleKeyEvent(event) )
+        [super flagsChanged:event];
+}
+
+- (BOOL) performKeyEquivalent:(NSEvent*) event
+{
+    BOOL retval = [super performKeyEquivalent:event];
+    return retval;
+}
+
+- (void) insertText:(id) str
+{
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( [self delegate] );
+    if ( impl == NULL || lastKeyDownEvent==nil || !impl->DoHandleCharEvent(lastKeyDownEvent, str) )
     {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if ( wxpeer ) {
-            wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, wxpeer->GetId());
-            event.SetEventObject( wxpeer );
-            event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-            wxpeer->HandleWindowEvent( event );
-        }
+        [super insertText:str];
     }
 }
 
-- (BOOL)textView:(NSTextView *)aTextView doCommandBySelector:(SEL)commandSelector
-{
-    wxUnusedVar(aTextView);
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( impl  )
-    {
-        wxWindow* wxpeer = (wxWindow*) impl->GetWXPeer();
-        if (commandSelector == @selector(insertNewline:))
-        {
-            if ( wxpeer && wxpeer->GetWindowStyle() & wxTE_PROCESS_ENTER ) 
-            {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, wxpeer->GetId());
-                event.SetEventObject( wxpeer );
-                event.SetString( static_cast<wxTextCtrl*>(wxpeer)->GetValue() );
-                wxpeer->HandleWindowEvent( event );
-            }
-        }
-    }
-    
-    return NO;
-}
-
-- (void)textDidEndEditing:(NSNotification *)aNotification
-{
-    wxUnusedVar(aNotification);
-    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( impl )
-    {
-        impl->DoNotifyFocusEvent( false, NULL );
-    }
-}
 @end
 
 @implementation wxNSTextView
 
-- (BOOL) becomeFirstResponder
++ (void)initialize
 {
-    BOOL val = [super becomeFirstResponder];
-    
-    if ( val )
+    static BOOL initialized = NO;
+    if (!initialized) 
     {
-        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( scrollView );
-        if (impl )
-            impl->DoNotifyFocusEvent( true, NULL );
-
+        initialized = YES;
+        wxOSXCocoaClassAddWXMethods( self );
     }
-    return val;
-}
-
-- (void)setScrollView: (wxNSTextScrollView *) sv
-{
-    scrollView = sv;
-}
-
-- (wxNSTextScrollView*) scrollView
-{
-    return scrollView;
 }
 
 @end
@@ -238,6 +204,24 @@ protected :
         wxOSXCocoaClassAddWXMethods( self );
     }
 }
+
+- (id) initWithFrame:(NSRect) frame
+{
+    self = [super initWithFrame:frame];
+    fieldEditor = nil;
+    return self;
+}
+
+- (void) setFieldEditor:(wxNSTextFieldEditor*) editor
+{
+    fieldEditor = editor;
+}
+
+- (wxNSTextFieldEditor*) fieldEditor
+{
+    return fieldEditor;
+}
+
 
 - (void) setEnabled:(BOOL) flag
 {
@@ -329,7 +313,8 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w ) : wxW
     [m_scrollView setDocumentView: tv];
 
     [tv setDelegate: w];
-    [tv setScrollView:sv];
+    
+    InstallEventHandler(tv);    
 }
 
 wxNSTextViewControl::~wxNSTextViewControl()
@@ -358,6 +343,7 @@ void wxNSTextViewControl::SetStringValue( const wxString &str)
     if (m_textView)
         [m_textView setString: wxCFStringRef( st , m_wxPeer->GetFont().GetEncoding() ).AsNSString()];
 }
+
 void wxNSTextViewControl::Copy() 
 {
     if (m_textView)
@@ -443,6 +429,7 @@ wxNSTextFieldControl::wxNSTextFieldControl( wxTextCtrl *wxPeer, WXWidget w ) : w
     m_textField = (NSTextField*) w;
     [m_textField setDelegate: w];
     m_selStart = m_selEnd = 0;
+    m_hasEditor = [w isKindOfClass:[NSTextField class]];
 }
 
 wxNSTextFieldControl::~wxNSTextFieldControl()

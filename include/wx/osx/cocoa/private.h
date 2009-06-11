@@ -155,6 +155,9 @@ protected:
     WXWidget m_osxView;
     NSEvent* m_lastKeyDownEvent;
     bool m_isFlipped;
+    // if it the control has an editor, that editor will already send some
+    // events, don't resend them 
+    bool m_hasEditor;
     
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetCocoaImpl)
 };
@@ -244,9 +247,34 @@ protected :
 
     @end
 
+    @interface wxNSTextFieldEditor : NSTextView
+    {
+        NSEvent* lastKeyDownEvent;
+    }
+
+    @end
+
     @interface wxNSTextField : NSTextField
     {
+        wxNSTextFieldEditor* fieldEditor;
     }
+
+    - (wxNSTextFieldEditor*) fieldEditor;
+    - (void) setFieldEditor:(wxNSTextFieldEditor*) fieldEditor;
+
+    @end
+
+    @interface wxNSSecureTextField : NSSecureTextField
+    {
+    }
+
+    @end
+
+
+    @interface wxNSTextView : NSTextView
+    {
+    }
+    
     @end
 
     @interface wxNSMenu : NSMenu

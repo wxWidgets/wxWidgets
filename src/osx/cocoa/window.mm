@@ -33,25 +33,37 @@
 
 // Get the window with the focus
 
-WXWidget wxWidgetImpl::FindFocus()
+NSView* GetViewFromResponder( NSResponder* responder )
+{
+    NSView* view = nil;
+    if ( [responder isKindOfClass:[NSTextView class]] )
+    {
+        NSView* delegate =  [(NSTextView*)responder delegate];
+        if ( [delegate isKindOfClass:[NSTextField class] ] )
+            view = delegate;
+        else
+            view =  (NSView*) responder;
+    }
+    else
+    {
+        if ( [responder isKindOfClass:[NSView class]] )
+            view = (NSView*) responder;
+    }
+    return view;
+}
+
+NSView* GetFocusedViewInWindow( NSWindow* keyWindow )
 {
     NSView* focusedView = nil;
-    NSWindow* keyWindow = [[NSApplication sharedApplication] keyWindow];
     if ( keyWindow != nil )
-    {
-        NSResponder* responder = [keyWindow firstResponder];
-        if ( [responder isKindOfClass:[NSTextView class]] && 
-            [keyWindow fieldEditor:NO forObject:nil] != nil )
-        {
-            focusedView = [(NSTextView*)responder delegate];
-        }
-        else
-        {
-            if ( [responder isKindOfClass:[NSView class]] )
-                focusedView = (NSView*) responder;
-        }
-    }
+        focusedView = GetViewFromResponder([keyWindow firstResponder]);
+
     return focusedView;
+}
+
+WXWidget wxWidgetImpl::FindFocus()
+{
+    return GetFocusedViewInWindow( [[NSApplication sharedApplication] keyWindow] );
 }
 
 NSRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
@@ -583,6 +595,8 @@ BOOL wxOSX_performDragOperation( id self, SEL _cmd, id <NSDraggingInfo> sender )
     return impl->performDragOperation(sender, self, _cmd) ? YES:NO ;
 }
 
+#endif
+
 void wxOSX_mouseEvent(NSView* self, SEL _cmd, NSEvent *event) 
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -835,8 +849,6 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
     return result != wxDragNone;
 }
 
-#endif
-
 typedef void (*wxOSX_TextEventHandlerPtr)(NSView* self, SEL _cmd, NSString *event);
 typedef void (*wxOSX_EventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
 typedef BOOL (*wxOSX_PerformKeyEventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
@@ -859,7 +871,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
-    if ( [[slf window] firstResponder] != slf || !DoHandleKeyEvent(event) )
+    if ( GetFocusedViewInWindow([slf window]) != slf || m_hasEditor || !DoHandleKeyEvent(event) )
     {
         wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, event);
@@ -868,7 +880,7 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
-    if (m_lastKeyDownEvent && !DoHandleCharEvent(m_lastKeyDownEvent, text) )
+    if ( m_lastKeyDownEvent==NULL || m_hasEditor || !DoHandleCharEvent(m_lastKeyDownEvent, text) )
     {
         wxOSX_TextEventHandlerPtr superimpl = (wxOSX_TextEventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
         superimpl(slf, (SEL)_cmd, text);
@@ -899,12 +911,14 @@ bool wxWidgetCocoaImpl::becomeFirstResponder(WXWidget slf, void *_cmd)
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     // get the current focus before running becomeFirstResponder
     NSView* otherView = FindFocus(); 
+
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     BOOL r = superimpl(slf, (SEL)_cmd);
     if ( r )
     {
         DoNotifyFocusEvent( true, otherWindow );
     }
+
     return r;
 }
 
@@ -913,11 +927,13 @@ bool wxWidgetCocoaImpl::resignFirstResponder(WXWidget slf, void *_cmd)
     wxOSX_FocusHandlerPtr superimpl = (wxOSX_FocusHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
     BOOL r = superimpl(slf, (SEL)_cmd);
     // get the current focus after running resignFirstResponder
+    // note that this value isn't reliable, it might return the same view that
+    // is resigning
     NSView* otherView = FindFocus(); 
     wxWidgetImpl* otherWindow = FindFromWXWidget(otherView);
     // NSTextViews have an editor as true responder, therefore the might get the
-    // resign notification if their editor takes over, don't trigger any event hen
-    if ( r && otherWindow != this)
+    // resign notification if their editor takes over, don't trigger any event then
+    if ( r && !m_hasEditor)
     {
         DoNotifyFocusEvent( false, otherWindow );
     }
@@ -1067,7 +1083,7 @@ void wxOSXCocoaClassAddWXMethods(Class c)
     
     wxOSX_CLASS_ADD_METHOD(c, @selector(insertText:), (IMP) wxOSX_insertText, "v@:@" )
 
-    wxOSX_CLASS_ADD_METHOD(c, @selector(performKeyEquivalent:), (IMP) wxOSX_performKeyEquivalent, "v@:@" )
+    wxOSX_CLASS_ADD_METHOD(c, @selector(performKeyEquivalent:), (IMP) wxOSX_performKeyEquivalent, "c@:@" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(acceptsFirstResponder), (IMP) wxOSX_acceptsFirstResponder, "c@:" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(becomeFirstResponder), (IMP) wxOSX_becomeFirstResponder, "c@:" )
@@ -1125,6 +1141,7 @@ void wxWidgetCocoaImpl::Init()
     m_osxView = NULL;
     m_isFlipped = true;
     m_lastKeyDownEvent = NULL;
+    m_hasEditor = false;
 }
 
 wxWidgetCocoaImpl::~wxWidgetCocoaImpl()
@@ -1489,11 +1506,17 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
 
     // this will fire higher level events, like insertText, to help
     // us handle EVT_CHAR, etc.
-    if ([event type] == NSKeyDown)
+    if ( !m_hasEditor && [event type] == NSKeyDown)
     {
         m_lastKeyDownEvent = event;
         if ( !result )
-            [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+        {
+            if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
+                [[(NSScrollView*)m_osxView documentView] interpretKeyEvents:[NSArray arrayWithObject:event]];
+            else
+                [m_osxView interpretKeyEvents:[NSArray arrayWithObject:event]];
+            result = true;
+        }
     }
     return result;
 }
