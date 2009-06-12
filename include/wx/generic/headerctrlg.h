@@ -137,9 +137,6 @@ private:
     // given column plus its minimal width and return the effective width
     int ConstrainByMinWidth(unsigned int col, int& xPhysical);
 
-    // update the current position of the resizing marker
-    void UpdateResizingMarker(int xPhysical);
-
     // update the information displayed while a column is being moved around
     void UpdateReorderingMarker(int xPhysical);
 

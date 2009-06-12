@@ -258,26 +258,14 @@ void wxHeaderCtrl::ClearMarkers()
     dcover.Clear();
 }
 
-void wxHeaderCtrl::UpdateResizingMarker(int xPhysical)
-{
-    wxClientDC dc(this);
-
-    wxDCOverlay dcover(m_overlay, &dc);
-    dcover.Clear();
-
-    // unfortunately drawing the marker over the parent window doesn't work as
-    // it's usually covered by another window (the main control view) so just
-    // draw the marker over the header itself, even if it makes it not very
-    // useful
-    dc.SetPen(*wxLIGHT_GREY_PEN);
-    dc.DrawLine(xPhysical, 0, xPhysical, GetClientSize().y);
-}
-
 void wxHeaderCtrl::EndDragging()
 {
-    ClearMarkers();
-
-    m_overlay.Reset();
+    // We currently only use markers for reordering, not for resizing
+    if (IsReordering())
+    {
+        ClearMarkers();
+        m_overlay.Reset();
+    }
 
     // don't use the special dragging cursor any more
     SetCursor(wxNullCursor);
@@ -344,8 +332,6 @@ void wxHeaderCtrl::StartOrContinueResizing(unsigned int col, int xPhysical)
         }
         //else: we had already done the above when we started
 
-        // This results in ugly flicker
-        // UpdateResizingMarker(xPhysical);
     }
 }
 
