@@ -32,6 +32,7 @@
 #include "wx/xrc/xh_dirpicker.h"
 #include "wx/xrc/xh_dlg.h"
 #include "wx/xrc/xh_editlbox.h"
+#include "wx/xrc/xh_filectrl.h"
 #include "wx/xrc/xh_filepicker.h"
 #include "wx/xrc/xh_fontpicker.h"
 #include "wx/xrc/xh_frame.h"

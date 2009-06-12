@@ -771,6 +771,20 @@ objects. If sizer child is used, it sets
 @endTable
 
 
+@subsubsection xrc_wxfilectrl wxFileCtrl
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{defaultdirectory, @ref overview_xrcformat_type_string,
+    Sets the current directory displayed in the control. }
+@row3col{defaultfilename, @ref overview_xrcformat_type_string,
+    Selects a certain file.}
+@row3col{wildcard, @ref overview_xrcformat_type_string,
+    Sets the wildcard, which can contain multiple file types, for example:
+    "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".}
+@endTable
+
+
 @subsubsection xrc_wxfilepickerctrl wxFilePickerCtrl
 
 @beginTable
@@ -780,7 +794,8 @@ objects. If sizer child is used, it sets
 @row3col{message, @ref overview_xrcformat_type_text,
     Message shown to the user in wxDirDialog shown by the control (required).}
 @row3col{wildcard, @ref overview_xrcformat_type_string,
-    Message shown to the user in wxDirDialog shown by the control (required).}
+    Sets the wildcard, which can contain multiple file types, for example:
+    "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif".}
 @endTable
 
 

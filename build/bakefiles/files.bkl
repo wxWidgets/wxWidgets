@@ -3196,6 +3196,7 @@ src/osx/iphone/window.mm
     src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
     src/xrc/xh_editlbox.cpp
+    src/xrc/xh_filectrl.cpp
     src/xrc/xh_filepicker.cpp
     src/xrc/xh_fontpicker.cpp
     src/xrc/xh_frame.cpp
@@ -3261,6 +3262,7 @@ src/osx/iphone/window.mm
     wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h
     wx/xrc/xh_editlbox.h
+    wx/xrc/xh_filectrl.h
     wx/xrc/xh_filepicker.h
     wx/xrc/xh_fontpicker.h
     wx/xrc/xh_frame.h

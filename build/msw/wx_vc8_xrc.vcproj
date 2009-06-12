@@ -1131,6 +1131,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_filectrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_filepicker.h"
 				>
 			</File>
@@ -1366,6 +1370,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_editlbox.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_filectrl.cpp"
 				>
 			</File>
 			<File

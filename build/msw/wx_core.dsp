@@ -6647,6 +6647,10 @@ SOURCE=..\..\include\wx\xrc\xh_editlbox.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\xrc\xh_filectrl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\xrc\xh_filepicker.h
 # End Source File
 # Begin Source File

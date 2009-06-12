@@ -7484,6 +7484,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_filectrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_filepicker.h"
 				>
 			</File>

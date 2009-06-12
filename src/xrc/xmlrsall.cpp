@@ -90,6 +90,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_EDITABLELISTBOX
     AddHandler(new wxEditableListBoxXmlHandler);
 #endif
+#if wxUSE_FILECTRL
+    AddHandler(new wxFileCtrlXmlHandler);
+#endif
 #if wxUSE_FILEPICKERCTRL
     AddHandler(new wxFilePickerCtrlXmlHandler);
 #endif
