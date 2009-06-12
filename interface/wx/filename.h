@@ -1035,7 +1035,7 @@ public:
     /**
         Changes the current working directory.
     */
-    bool SetCwd();
+    bool SetCwd() const;
 
     /**
         Changes the current working directory.
@@ -1080,7 +1080,7 @@ public:
     */
     bool SetTimes(const wxDateTime* dtAccess,
                   const wxDateTime* dtMod,
-                  const wxDateTime* dtCreate);
+                  const wxDateTime* dtCreate) const;
 
     /**
         Sets the volume specifier.
@@ -1162,7 +1162,7 @@ public:
     /**
         Sets the access and modification times to the current moment.
     */
-    bool Touch();
+    bool Touch() const;
 
     /**
         Returns @true if the filenames are different. The string @e filenames

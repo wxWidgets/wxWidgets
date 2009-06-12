@@ -592,7 +592,7 @@ wxString wxFileName::GetCwd(const wxString& volume)
     return cwd;
 }
 
-bool wxFileName::SetCwd()
+bool wxFileName::SetCwd() const
 {
     return wxFileName::SetCwd( GetPath() );
 }
@@ -1433,7 +1433,7 @@ bool wxFileName::ReplaceHomeDir(wxPathFormat format)
 
 bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
                                    wxString& targetFilename,
-                                   wxString* arguments)
+                                   wxString* arguments) const
 {
     wxString path, file, ext;
     wxFileName::SplitPath(shortcutPath, & path, & file, & ext);
@@ -2277,7 +2277,7 @@ wxString wxFileName::StripExtension(const wxString& fullpath)
 
 bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtMod,
-                          const wxDateTime *dtCreate)
+                          const wxDateTime *dtCreate) const
 {
 #if defined(__WIN32__)
     FILETIME ftAccess, ftCreate, ftWrite;
@@ -2350,7 +2350,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
     return false;
 }
 
-bool wxFileName::Touch()
+bool wxFileName::Touch() const
 {
 #if defined(__UNIX_LIKE__)
     // under Unix touching file is simple: just pass NULL to utime()
@@ -2608,7 +2608,7 @@ bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator )
     return false ;
 }
 
-bool wxFileName::MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator )
+bool wxFileName::MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator ) const
 {
     FSRef fsRef ;
     FSCatalogInfo catInfo;
