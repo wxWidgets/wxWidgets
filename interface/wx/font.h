@@ -19,23 +19,23 @@
 enum wxFontFamily
 {
     wxFONTFAMILY_DEFAULT = wxDEFAULT,           //!< Chooses a default font.
-    
+
     wxFONTFAMILY_DECORATIVE = wxDECORATIVE,     //!< A decorative font.
     wxFONTFAMILY_ROMAN = wxROMAN,               //!< A formal, serif font.
     wxFONTFAMILY_SCRIPT = wxSCRIPT,             //!< A handwriting font.
     wxFONTFAMILY_SWISS = wxSWISS,               //!< A sans-serif font.
-    
+
     /// A fixed pitch font. Note that wxFont currently does not make distinctions
     /// between @c wxFONTFAMILY_MODERN and @c wxFONTFAMILY_TELETYPE.
     wxFONTFAMILY_MODERN = wxMODERN,
-    
+
     /// A teletype (i.e. monospaced) font.
-    /// Monospace fonts have a fixed width like typewriters and often have strong angular 
-    /// or block serifs. Monospace font faces are often used code samples and have a simple, 
+    /// Monospace fonts have a fixed width like typewriters and often have strong angular
+    /// or block serifs. Monospace font faces are often used code samples and have a simple,
     /// functional font style.
     /// See also wxFont::IsFixedWidth() for an easy way to test for monospace property.
     wxFONTFAMILY_TELETYPE = wxTELETYPE,
-    
+
     /// Returned by wxFont::GetFamily() when the face name of the font cannot
     /// be classified into one of the previous wxFontFamily values.
     wxFONTFAMILY_UNKNOWN = wxFONTFAMILY_MAX,
@@ -53,8 +53,8 @@ enum wxFontStyle
 
     /// The font is slanted in an italic style.
     wxFONTSTYLE_ITALIC = wxITALIC,
-    
-    /// The font is slanted, but in a roman style. 
+
+    /// The font is slanted, but in a roman style.
     /// Note that under wxMSW this style is the same as @c wxFONTSTYLE_ITALIC.
     wxFONTSTYLE_SLANT = wxSLANT,
 
@@ -111,7 +111,7 @@ enum wxFontFlag
 
 /**
     Font encodings.
-    
+
     See wxFont::SetEncoding().
 */
 enum wxFontEncoding
@@ -298,7 +298,7 @@ public:
         @param style
             One of @c wxFONTSTYLE_NORMAL, @c wxFONTSTYLE_SLANT and @c wxFONTSTYLE_ITALIC.
         @param weight
-            Font weight, sometimes also referred to as font boldness. 
+            Font weight, sometimes also referred to as font boldness.
             One of the ::wxFontWeight enumeration values.
         @param underline
             The value can be @true or @false.
@@ -313,8 +313,8 @@ public:
                 <TR><TD>@c wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_DEFAULT</TD><TD>
                     Default application encoding: this is the encoding set by calls to
-                    SetDefaultEncoding() and which may be set to, say, KOI8 to create all 
-                    fonts by default with KOI8 encoding. Initially, the default application 
+                    SetDefaultEncoding() and which may be set to, say, KOI8 to create all
+                    fonts by default with KOI8 encoding. Initially, the default application
                     encoding is the same as default system encoding.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
@@ -359,8 +359,8 @@ public:
                 <TR><TD>@c wxFONTENCODING_SYSTEM</TD><TD>Default system encoding.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_DEFAULT</TD><TD>
                     Default application encoding: this is the encoding set by calls to
-                    SetDefaultEncoding() and which may be set to, say, KOI8 to create all 
-                    fonts by default with KOI8 encoding. Initially, the default application 
+                    SetDefaultEncoding() and which may be set to, say, KOI8 to create all
+                    fonts by default with KOI8 encoding. Initially, the default application
                     encoding is the same as default system encoding.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_ISO8859_1...15</TD><TD>ISO8859 encodings.</TD></TR>
                 <TR><TD>@c wxFONTENCODING_KOI8</TD><TD>The standard Russian encoding for Internet.</TD></TR>
@@ -401,21 +401,21 @@ public:
     */
     virtual ~wxFont();
 
-    
+
     /**
         @name Getters
     */
     //@{
-    
+
     /**
         Returns the encoding of this font.
-        
+
         Note that under wxGTK the returned value is always @c wxFONTENCODING_UTF8.
-        
+
         @see SetEncoding()
     */
     virtual wxFontEncoding GetEncoding() const;
-    
+
     /**
         Returns the face name associated with the font, or the empty string if
         there is no face information.
@@ -428,12 +428,12 @@ public:
         Gets the font family.
         As described in ::wxFontFamily docs the returned value acts as a rough,
         basic classification of the main font properties (look, spacing).
-        
+
         If the current font face name is not recognized by wxFont or by the
         underlying system, @c wxFONTFAMILY_UNKNOWN is returned.
-        
+
         Note that currently this function is rather unreliable (@c wxFONTFAMILY_UNKNOWN
-        is returned in too many cases) and not particularly useful. 
+        is returned in too many cases) and not particularly useful.
         Font families mostly make sense only for font creation; see SetFamily().
 
         @see SetFamily()
@@ -454,7 +454,7 @@ public:
     /**
         Returns a user-friendly string for this font object.
         Returned string is always non-empty.
-        
+
         The string does not encode all wxFont infos under all platforms;
         e.g. under wxMSW the font family is not present in the returned string.
 
@@ -474,7 +474,7 @@ public:
 
     /**
         Gets the pixel size.
-        
+
         Note that under wxMSW if you passed to SetPixelSize() (or to the ctor)
         a wxSize object with a null width value, you'll get a null width in
         the returned object.
@@ -482,7 +482,7 @@ public:
         @see SetPixelSize()
     */
     virtual wxSize GetPixelSize() const;
-    
+
     /**
         Gets the font style. See ::wxFontStyle for a list of valid styles.
 
@@ -507,7 +507,7 @@ public:
     /**
         Returns @true if the font is a fixed width (or monospaced) font,
         @false if it is a proportional one or font is invalid.
-        
+
         Note that this function under some platforms is different than just testing
         for the font family being equal to @c wxFONTFAMILY_TELETYPE because native
         platform-specific functions are used for the check (resulting in a more
@@ -519,14 +519,61 @@ public:
         Returns @true if this object is a valid font, @false otherwise.
     */
     virtual bool IsOk() const;
-    
+
     //@}
-    
-    
-    
+
+
+    /**
+        @name Similar fonts creation
+
+        The functions in this section create a font similar to the given one
+        but with its weight, style or size changed.
+     */
+    //@{
+
+    /**
+        Return a bold version of this font.
+     */
+    wxFont MakeBold() const;
+
+    /**
+        Return an italic version of this font.
+     */
+    wxFont MakeItalic() const;
+
+    /**
+        Return a larger version of this font.
+
+        The font size is multiplied by CSS specification inspired factor of @c
+        1.2.
+
+        @see MakeSmaller(), Scale()
+     */
+    wxFont MakeLarger() const;
+
+    /**
+        Return a smaller version of this font.
+
+        The font size is divided by CSS specification inspired factor of @c
+        1.2.
+
+        @see MakeLarger(), Scale()
+     */
+    wxFont MakeSmaller() const;
+
+    /**
+        Return a scaled version of this font.
+
+        The font size is multiplied by the given factor (which may be less than
+        1 to create a smaller version of the font).
+     */
+    wxFont Scale(float x) const;
+
+    //@}
+
     /**
         @name Setters
-        
+
         These functions internally recreate the native font object with the new
         specified property.
     */
@@ -534,10 +581,10 @@ public:
 
     /**
         Sets the encoding for this font.
-        
+
         Note that under wxGTK this function has no effect (because the underlying
         Pango library always uses @c wxFONTENCODING_UTF8).
-        
+
         @see GetEncoding()
     */
     virtual void SetEncoding(wxFontEncoding encoding);
@@ -552,7 +599,7 @@ public:
                  but specify the font family instead (see ::wxFontFamily and SetFamily()).
 
         @return @true if the given face name exists; if the face name doesn't exist
-                in the user's system then the font is invalidated (so that IsOk() will 
+                in the user's system then the font is invalidated (so that IsOk() will
                 return @false) and @false is returned.
 
         @see GetFaceName(), SetFamily()
@@ -561,7 +608,7 @@ public:
 
     /**
         Sets the font family.
-        
+
         As described in ::wxFontFamily docs the given @a family value acts as a rough,
         basic indication of the main font properties (look, spacing).
 
@@ -606,7 +653,7 @@ public:
         For more detailed information about the allowed syntaxes you can look at the
         documentation of the native API used for font-rendering
         (e.g. @c pango_font_description_from_string on GTK).
-        
+
         Note that unlike SetNativeFontInfo(), this function doesn't always restore all
         attributes of the wxFont object under all platforms; e.g. on wxMSW the font family
         is not restored (because GetNativeFontInfoUserDesc doesn't return it on wxMSW).
@@ -619,9 +666,9 @@ public:
 
     /**
         Sets the point size.
-        
-        The <em>point size</em> is defined as 1/72 of the anglo-Saxon inch 
-        (25.4 mm): it is approximately 0.0139 inch or 352.8 um. 
+
+        The <em>point size</em> is defined as 1/72 of the anglo-Saxon inch
+        (25.4 mm): it is approximately 0.0139 inch or 352.8 um.
 
         @param pointSize
             Size in points.
@@ -632,19 +679,19 @@ public:
 
     /**
         Sets the pixel size.
-        
+
         The height parameter of @a pixelSize must be positive while the width
         parameter may also be zero (to indicate that you're not interested in the
         width of the characters: a suitable width will be chosen for best rendering).
-        
-        This feature (specifying the font pixel size) is directly supported only 
-        under wxMSW and wxGTK currently; under other platforms a font with the 
+
+        This feature (specifying the font pixel size) is directly supported only
+        under wxMSW and wxGTK currently; under other platforms a font with the
         closest size to the given one is found using binary search (this maybe slower).
 
         @see GetPixelSize()
     */
     virtual void SetPixelSize(const wxSize& pixelSize);
-    
+
     /**
         Sets the font style.
 
@@ -674,7 +721,7 @@ public:
         @see GetWeight()
     */
     virtual void SetWeight(wxFontWeight weight);
-    
+
     //@}
 
 
@@ -698,8 +745,8 @@ public:
         Assignment operator, using @ref overview_refcount "reference counting".
     */
     wxFont& operator =(const wxFont& font);
-    
-    
+
+
     // statics
 
     /**
@@ -715,7 +762,7 @@ public:
         @see @ref overview_fontencoding, GetDefaultEncoding()
     */
     static void SetDefaultEncoding(wxFontEncoding encoding);
-    
+
     //@{
     /**
         This function takes the same parameters as the relative
@@ -754,7 +801,7 @@ wxFont wxNullFont;
 
 /**
     Equivalent to wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).
-    
+
     @see wxSystemSettings
 */
 wxFont wxNORMAL_FONT;

@@ -421,6 +421,26 @@ bool wxFontBase::SetFaceName(const wxString& facename)
     return true;
 }
 
+wxFont wxFont::MakeBold() const
+{
+    wxFont font(*this);
+    font.SetWeight(wxFONTWEIGHT_BOLD);
+    return font;
+}
+
+wxFont wxFont::MakeItalic() const
+{
+    wxFont font(*this);
+    font.SetStyle(wxFONTSTYLE_ITALIC);
+    return font;
+}
+
+wxFont wxFont::Scale(float x) const
+{
+    wxFont font(*this);
+    font.SetPointSize(int(x*GetPointSize() + 0.5));
+    return font;
+}
 
 // ----------------------------------------------------------------------------
 // wxNativeFontInfo

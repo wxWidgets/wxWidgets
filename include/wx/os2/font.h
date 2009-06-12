@@ -109,7 +109,7 @@ public:
     virtual void SetUnderlined(bool bUnderlined);
     virtual void SetEncoding(wxFontEncoding vEncoding);
 
-    WXDECLARE_COMPAT_SETTERS
+    wxDECLARE_COMMON_FONT_METHODS();
 
     //
     // For internal use only!
