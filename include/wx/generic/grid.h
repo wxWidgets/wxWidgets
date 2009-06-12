@@ -110,7 +110,7 @@ class wxGridDirectionOperations;
 //     class is not documented and is not public at all
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridCellWorker : public wxClientDataContainer, public wxObjectRefData
+class WXDLLIMPEXP_ADV wxGridCellWorker : public wxClientDataContainer, public wxRefCounter
 {
 public:
     wxGridCellWorker() { }
@@ -289,7 +289,7 @@ protected:
 // class may be returned by wxGridTable::GetAttr().
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridCellAttr : public wxClientDataContainer, public wxObjectRefData
+class WXDLLIMPEXP_ADV wxGridCellAttr : public wxClientDataContainer, public wxRefCounter
 {
 public:
     enum wxAttrKind
