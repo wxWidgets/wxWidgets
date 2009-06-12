@@ -1,15 +1,14 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        object.h
-// Purpose:     interface of wxObjectRefData
+// Purpose:     interface of wxRefCounter
 // Author:      wxWidgets team
 // RCS-ID:      $Id$
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-/**
-    @class wxObjectRefData
+/** @class wxObjectRefData
 
-    This class is used to store reference-counted data.
+    This class is just a typedef to wxRefCounter and is used by wxObject.
 
     Derive classes from this to store your own data. When retrieving information
     from a wxObject's reference data, you will need to cast to your own derived class.
@@ -131,32 +130,45 @@
     }
     @endcode
 
-
+    
     @library{wxbase}
     @category{rtti}
 
     @see wxObject, wxObjectDataPtr<T>, @ref overview_refcount
 */
-class wxObjectRefData
+typedef wxRefCounter wxObjectRefData;
+
+
+/**
+    @class wxRefCounter
+
+    This class is used to manage reference-counting.
+
+    @library{wxbase}
+    @category{rtti}
+
+    @see wxObject, wxObjectRefData, wxObjectDataPtr<T>, @ref overview_refcount
+*/
+class wxRefCounter
 {
 protected:
     /**
         Destructor.
 
-        It's declared @c protected so that wxObjectRefData instances
+        It's declared @c protected so that wxRefCounter instances
         will never be destroyed directly but only as result of a DecRef() call.
     */
-    virtual ~wxObjectRefData();
+    virtual ~wxRefCounter();
 
 public:
     /**
         Default constructor. Initialises the internal reference count to 1.
     */
-    wxObjectRefData();
+    wxRefCounter();
 
     /**
         Decrements the reference count associated with this shared data and, if
-        it reaches zero, destroys this instance of wxObjectRefData releasing its
+        it reaches zero, destroys this instance of wxRefCounter releasing its
         memory.
 
         Please note that after calling this function, the caller should
@@ -198,14 +210,14 @@ public:
     wxObject can be used to implement @ref overview_refcount "reference counted"
     objects, such as wxPen, wxBitmap and others
     (see @ref overview_refcount_list "this list").
-    See wxObjectRefData and @ref overview_refcount for more info about
+    See wxRefCounter and @ref overview_refcount for more info about
     reference counting.
 
     @library{wxbase}
     @category{rtti}
 
     @see wxClassInfo, @ref overview_debugging, @ref overview_refcount, 
-         wxObjectRefData, wxObjectDataPtr<T>
+         wxObjectDataRef, wxObjectDataPtr<T>
 */
 class wxObject
 {
