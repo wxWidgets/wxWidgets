@@ -69,6 +69,7 @@ protected:
 #ifdef __VISUALC__
     // "non dll-interface class 'wxStringPrintfMixin' used as base interface
     // for dll-interface class 'wxString'" -- this is OK in our case
+    #pragma warning (push)
     #pragma warning (disable:4275)
 #endif
 
@@ -97,7 +98,7 @@ private:
 };
 
 #ifdef __VISUALC__
-    #pragma warning (default:4275)
+    #pragma warning (pop)
 #endif
 
 // ----------------------------------------------------------------------------
