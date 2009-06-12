@@ -55,7 +55,7 @@
  * overloading wxVariant with unnecessary functionality.
  */
 
-class WXDLLIMPEXP_BASE wxVariantData : public wxObjectRefData
+class WXDLLIMPEXP_BASE wxVariantData : public wxRefCounter
 {
     friend class wxVariant;
 public:
