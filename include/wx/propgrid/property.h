@@ -68,8 +68,8 @@ class WXDLLIMPEXP_PROPGRID wxPGCellRenderer : public wxObjectRefData
 {
 public:
 
-    wxPGCellRenderer( int refCount = 1 )
-        : wxObjectRefData(refCount) { }
+    wxPGCellRenderer()
+        : wxObjectRefData() { }
     virtual ~wxPGCellRenderer() { }
 
     // Render flags
