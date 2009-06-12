@@ -404,10 +404,8 @@ inline T *wxCheckCast(const void *ptr, T * = NULL)
 
 class WXDLLIMPEXP_BASE wxObjectRefData
 {
-    friend class WXDLLIMPEXP_FWD_BASE wxObject;
-
 public:
-    wxObjectRefData(int refCount = 1) : m_count(refCount) { }
+    wxObjectRefData() { m_count = 1; }
 
     int GetRefCount() const { return m_count; }
 
@@ -422,6 +420,8 @@ protected:
 private:
     // our refcount:
     int m_count;
+
+    friend class WXDLLIMPEXP_FWD_BASE wxObject;
 };
 
 // ----------------------------------------------------------------------------
