@@ -882,12 +882,9 @@ wxBitmap BitmapComboBoxWidgetsPage::LoadBitmap(const wxString& WXUNUSED(filepath
 
 wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
 {
-    wxString filepath = wxFileSelector(wxT("Choose image file"),
+    wxString filepath = wxLoadFileSelector(wxT("image"),
                                        wxEmptyString,
                                        wxEmptyString,
-                                       wxEmptyString,
-                                       wxT("*.*"),
-                                       wxFD_OPEN | wxFD_FILE_MUST_EXIST,
                                        this);
 
     wxBitmap bitmap;
