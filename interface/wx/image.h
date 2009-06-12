@@ -276,10 +276,10 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
     The constants ::wxIMAGE_ALPHA_TRANSPARENT and ::wxIMAGE_ALPHA_OPAQUE can be
     used to indicate those values in a more readable form.
 
-    Unlike RGB data, not all images have an alpha channel and before using
-    wxImage::GetAlpha you should check if this image contains an alpha channel
-    with wxImage::HasAlpha. Note that currently only the PNG format has full
-    alpha channel support so only the images loaded from PNG files can have
+    While all images have RGB data, not all images have an alpha channel. Before
+    using wxImage::GetAlpha you should check if this image contains an alpha
+    channel with wxImage::HasAlpha. Note that currently only the PNG format has
+    full alpha channel support so only the images loaded from PNG files can have
     alpha and, if you initialize the image alpha channel yourself using
     wxImage::SetAlpha, you should save it in PNG format to avoid losing it.
 
