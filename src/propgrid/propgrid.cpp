@@ -5083,15 +5083,18 @@ void wxPropertyGrid::OnCaptureChange( wxMouseCaptureChangedEvent& WXUNUSED(event
 // -----------------------------------------------------------------------
 
 // noDefCheck = true prevents infinite recursion.
-wxPGEditor* wxPropertyGrid::RegisterEditorClass( wxPGEditor* editorClass,
-                                                 bool noDefCheck )
+wxPGEditor* wxPropertyGrid::DoRegisterEditorClass( wxPGEditor* editorClass,
+                                                   const wxString& editorName,
+                                                   bool noDefCheck )
 {
     wxASSERT( editorClass );
 
     if ( !noDefCheck && wxPGGlobalVars->m_mapEditorClasses.empty() )
         RegisterDefaultEditors();
 
-    wxString name = editorClass->GetName();
+    wxString name = editorName;
+    if ( name.length() == 0 )
+        name = editorClass->GetName();
 
     // Existing editor under this name?
     wxPGHashMapS2P::iterator vt_it = wxPGGlobalVars->m_mapEditorClasses.find(name);
