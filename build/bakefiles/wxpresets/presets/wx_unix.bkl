@@ -78,7 +78,7 @@ Format-specific notes:
         </option>
 
         <set var="WX_PORT_DEFAULT" overwrite="0">
-            $(DOLLAR)(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 1)
+            $(DOLLAR)(shell $(WX_CONFIG) --query-toolkit)
         </set>
         <option name="WX_PORT">
             <values>gtk1,gtk2,msw,x11,motif,mgl,mac,dfb</values>
@@ -89,7 +89,7 @@ Format-specific notes:
         </option>
 
         <set var="WX_SHARED_DEFAULT" overwrite="0">
-            $(DOLLAR)(shell if test -z `$(WX_CONFIG) --selected-config | cut -d '-' -f 5`; then echo 1; else echo 0; fi)
+            $(DOLLAR)(shell if test -z `$(WX_CONFIG) --query-linkage`; then echo 1; else echo 0; fi)
         </set>
         <option name="WX_SHARED">
             <values>0,1</values>
@@ -101,7 +101,7 @@ Format-specific notes:
         </option>
 
         <set var="WX_UNICODE_DEFAULT" overwrite="0">
-            $(DOLLAR)(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 2 | sed 's/unicode/1/;s/ansi/0/')
+            $(DOLLAR)(shell $(WX_CONFIG) --query-chartype | sed 's/unicode/1/;s/ansi/0/')
         </set>
         <option name="WX_UNICODE">
             <values>0,1</values>
@@ -113,7 +113,7 @@ Format-specific notes:
         </option>
 
         <set var="WX_DEBUG_DEFAULT" overwrite="0">
-            $(DOLLAR)(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 3 | sed 's/debug/1/;s/release/0/')
+            $(DOLLAR)(shell $(WX_CONFIG) --query-debugtype | sed 's/debug/1/;s/release/0/')
         </set>
         <option name="WX_DEBUG">
             <values>0,1</values>
@@ -125,7 +125,7 @@ Format-specific notes:
         </option>
 
         <set var="WX_VERSION_DEFAULT" overwrite="0">
-            $(DOLLAR)(shell $(WX_CONFIG) --selected-config | sed -e 's/.*-\([0-9]*\)\.\([0-9]*\)$$/\1\2/')
+            $(DOLLAR)(shell $(WX_CONFIG) --query-version | sed -e 's/\([0-9]*\)\.\([0-9]*\)/\1\2/')
         </set>
         <option name="WX_VERSION">
             <default-value>$(WX_VERSION_DEFAULT)</default-value>
@@ -176,6 +176,7 @@ Format-specific notes:
             $(WX_CONFIG_PORT_FLAG) $(WX_CONFIG_VERSION_FLAG)
         </set>
 
+        <set var="DEFAULT_CXX">`$(DOLLAR)(WX_CONFIG) --cxx`</set>
         <set var="WX_CFLAGS">`$(DOLLAR)(WX_CONFIG) --cflags $(WX_CONFIG_FLAGS)`</set>
         <set var="WX_CXXFLAGS">`$(DOLLAR)(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)`</set>
         <set var="WX_CPPFLAGS">`$(DOLLAR)(WX_CONFIG) --cppflags $(WX_CONFIG_FLAGS)`</set>
