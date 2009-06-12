@@ -958,7 +958,7 @@ void MyFrame::OnToolbarBgCol(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToolbarCustomBitmap(wxCommandEvent& WXUNUSED(event))
 {
-    m_pathBmp = wxLoadFileSelector(_T("custom bitmap"));
+    m_pathBmp = wxLoadFileSelector("custom bitmap", "");
 
     RecreateToolbar();
 }
