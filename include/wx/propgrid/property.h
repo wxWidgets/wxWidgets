@@ -64,12 +64,12 @@ struct wxPGPaintData
 
     Base class for wxPropertyGrid cell renderers.
 */
-class WXDLLIMPEXP_PROPGRID wxPGCellRenderer
+class WXDLLIMPEXP_PROPGRID wxPGCellRenderer : public wxObjectRefData
 {
 public:
 
-    wxPGCellRenderer( unsigned int refCount = 1 )
-        : m_refCount(refCount) { }
+    wxPGCellRenderer( int refCount = 1 )
+        : wxObjectRefData(refCount) { }
     virtual ~wxPGCellRenderer() { }
 
     // Render flags
@@ -145,22 +145,6 @@ public:
                      const wxRect& rect,
                      const wxPGCell& cell,
                      int flags ) const;
-
-    void IncRef()
-    {
-        m_refCount++;
-    }
-
-    void DecRef()
-    {
-        m_refCount--;
-        if ( !m_refCount )
-            delete this;
-    }
-protected:
-
-private:
-    unsigned int    m_refCount;
 };
 
 
@@ -697,7 +681,7 @@ protected:
 
 typedef void* wxPGChoicesId;
 
-class WXDLLIMPEXP_PROPGRID wxPGChoicesData
+class WXDLLIMPEXP_PROPGRID wxPGChoicesData : public wxObjectRefData
 {
     friend class wxPGChoices;
 public:
@@ -728,19 +712,8 @@ public:
         return m_items[i];
     }
 
-    void DecRef()
-    {
-        m_refCount--;
-        wxASSERT( m_refCount >= 0 );
-        if ( m_refCount == 0 )
-            delete this;
-    }
-
 private:
     wxVector<wxPGChoiceEntry>   m_items;
-
-    // So that multiple properties can use the same set
-    int             m_refCount;
 
     virtual ~wxPGChoicesData();
 };
@@ -785,7 +758,7 @@ public:
         if ( a.m_data != wxPGChoicesEmptyData )
         {
             m_data = a.m_data;
-            m_data->m_refCount++;
+            m_data->IncRef();
         }
     }
 
@@ -825,7 +798,7 @@ public:
     {
         wxASSERT(data);
         m_data = data;
-        data->m_refCount++;
+        data->IncRef();
     }
 
     /** Destructor. */
@@ -998,8 +971,8 @@ public:
     // Returns data, increases refcount.
     wxPGChoicesData* GetData()
     {
-        wxASSERT( m_data->m_refCount != 0xFFFFFFF );
-        m_data->m_refCount++;
+        wxASSERT( m_data->GetRefCount() != -1 );
+        m_data->IncRef();
         return m_data;
     }
 

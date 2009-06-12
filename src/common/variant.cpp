@@ -163,7 +163,7 @@ void wxVariant::Ref(const wxVariant& clone)
     if ( clone.m_data )
     {
         m_data = clone.m_data;
-        m_data->m_count++;
+        m_data->IncRef();
     }
 }
 
@@ -172,7 +172,7 @@ void wxVariant::UnRef()
 {
     if ( m_data )
     {
-        wxASSERT_MSG( m_data->m_count > 0, _T("invalid ref data count") );
+        wxASSERT_MSG( m_data->GetRefCount() > 0, _T("invalid ref data count") );
 
         m_data->DecRef();
         m_data = NULL;

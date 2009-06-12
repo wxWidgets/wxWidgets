@@ -197,8 +197,6 @@ wxGridCellWorker::~wxGridCellWorker()
 
 void wxGridCellAttr::Init(wxGridCellAttr *attrDefault)
 {
-    m_nRef = 1;
-
     m_isReadOnly = Unset;
 
     m_renderer = NULL;

@@ -5231,7 +5231,6 @@ wxPGChoiceEntry::wxPGChoiceEntry()
 
 wxPGChoicesData::wxPGChoicesData()
 {
-    m_refCount = 1;
 }
 
 wxPGChoicesData::~wxPGChoicesData()

@@ -2682,7 +2682,7 @@ void wxPGChoices::RemoveAt(size_t nIndex, size_t count)
 {
     AllocExclusive();
 
-    wxASSERT( m_data->m_refCount != 0xFFFFFFF );
+    wxASSERT( m_data->GetRefCount() != -1 );
     m_data->m_items.erase(m_data->m_items.begin()+nIndex,
                           m_data->m_items.begin()+nIndex+count);
 }
@@ -2798,7 +2798,7 @@ void wxPGChoices::AllocExclusive()
 {
     EnsureData();
 
-    if ( m_data->m_refCount != 1 )
+    if ( m_data->GetRefCount() != 1 )
     {
         wxPGChoicesData* data = new wxPGChoicesData();
         data->CopyDataFrom(m_data);
@@ -2816,7 +2816,7 @@ void wxPGChoices::AssignData( wxPGChoicesData* data )
     if ( data != wxPGChoicesEmptyData )
     {
         m_data = data;
-        data->m_refCount++;
+        data->IncRef();
     }
 }
 

@@ -55,11 +55,11 @@
  * overloading wxVariant with unnecessary functionality.
  */
 
-class WXDLLIMPEXP_BASE wxVariantData
+class WXDLLIMPEXP_BASE wxVariantData : public wxObjectRefData
 {
     friend class wxVariant;
 public:
-    wxVariantData() : m_count(1) { }
+    wxVariantData() { }
 
     // Override these to provide common functionality
     virtual bool Eq(wxVariantData& data) const = 0;
@@ -81,23 +81,11 @@ public:
     // a copy of the data.
     virtual wxVariantData* Clone() const { return NULL; }
 
-    void IncRef() { m_count++; }
-    void DecRef()
-    {
-        if ( --m_count == 0 )
-            delete this;
-    }
-
-    int GetRefCount() const { return m_count; }
-
 protected:
     // Protected dtor should make some incompatible code
     // break more louder. That is, they should do data->DecRef()
     // instead of delete data.
     virtual ~wxVariantData() { }
-
-private:
-    int     m_count;
 };
 
 /*

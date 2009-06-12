@@ -407,7 +407,7 @@ class WXDLLIMPEXP_BASE wxObjectRefData
     friend class WXDLLIMPEXP_FWD_BASE wxObject;
 
 public:
-    wxObjectRefData() : m_count(1) { }
+    wxObjectRefData(int refCount = 1) : m_count(refCount) { }
 
     int GetRefCount() const { return m_count; }
 

@@ -110,16 +110,10 @@ class wxGridDirectionOperations;
 //     class is not documented and is not public at all
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridCellWorker : public wxClientDataContainer
+class WXDLLIMPEXP_ADV wxGridCellWorker : public wxClientDataContainer, public wxObjectRefData
 {
 public:
-    wxGridCellWorker() { m_nRef = 1; }
-
-    // this class is ref counted: it is created with ref count of 1, so
-    // calling DecRef() once will delete it. Calling IncRef() allows to lock
-    // it until the matching DecRef() is called
-    void IncRef() { m_nRef++; }
-    void DecRef() { if ( --m_nRef == 0 ) delete this; }
+    wxGridCellWorker() { }
 
     // interpret renderer parameters: arbitrary string whose interpretatin is
     // left to the derived classes
@@ -131,8 +125,6 @@ protected:
     virtual ~wxGridCellWorker();
 
 private:
-    size_t m_nRef;
-
     // suppress the stupid gcc warning about the class having private dtor and
     // no friends
     friend class wxGridCellWorkerDummyFriend;
@@ -297,7 +289,7 @@ protected:
 // class may be returned by wxGridTable::GetAttr().
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxGridCellAttr : public wxClientDataContainer
+class WXDLLIMPEXP_ADV wxGridCellAttr : public wxClientDataContainer, public wxObjectRefData
 {
 public:
     enum wxAttrKind
@@ -335,12 +327,6 @@ public:
     // creates a new copy of this object
     wxGridCellAttr *Clone() const;
     void MergeWith(wxGridCellAttr *mergefrom);
-
-    // this class is ref counted: it is created with ref count of 1, so
-    // calling DecRef() once will delete it. Calling IncRef() allows to lock
-    // it until the matching DecRef() is called
-    void IncRef() { m_nRef++; }
-    void DecRef() { if ( --m_nRef == 0 ) delete this; }
 
     // setters
     void SetTextColour(const wxColour& colText) { m_colText = colText; }
@@ -418,9 +404,6 @@ private:
     // the common part of all ctors
     void Init(wxGridCellAttr *attrDefault = NULL);
 
-
-    // the ref count - when it goes to 0, we die
-    size_t   m_nRef;
 
     wxColour m_colText,
              m_colBack;

@@ -314,28 +314,16 @@ protected:
 
 /** Base class to derive new viterators.
 */
-class WXDLLIMPEXP_PROPGRID wxPGVIteratorBase
+class WXDLLIMPEXP_PROPGRID wxPGVIteratorBase : public wxObjectRefData
 {
     friend class wxPGVIterator;
 public:
-    wxPGVIteratorBase() { m_refCount = 1; }
+    wxPGVIteratorBase() { }
     virtual void Next() = 0;
-    void IncRef()
-    {
-        m_refCount++;
-    }
-    void DecRef()
-    {
-        m_refCount--;
-        if ( m_refCount <= 0 )
-            delete this;
-    }
 protected:
     virtual ~wxPGVIteratorBase() { }
 
     wxPropertyGridIterator  m_it;
-private:
-    int     m_refCount;
 };
 
 /** @class wxPGVIterator
