@@ -902,7 +902,14 @@ public:
         Pointer to the editor class instance that should be used.
     */
     static wxPGEditor* RegisterEditorClass( wxPGEditor* editor,
-                                            bool noDefCheck = false );
+                                            bool noDefCheck = false )
+    {
+        return DoRegisterEditorClass(editor, wxEmptyString, noDefCheck);
+    }
+
+    static wxPGEditor* DoRegisterEditorClass( wxPGEditor* editorClass,
+                                              const wxString& editorName,
+                                              bool noDefCheck = false );
 #endif
 
     /** Resets all colours to the original system values.
