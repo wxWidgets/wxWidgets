@@ -193,7 +193,7 @@ bool wxTextDocument::OnCreate(const wxString& path, long flags)
 
     return true;
 }
-    
+
 // Since text windows have their own method for saving to/loading from files,
 // we override DoSave/OpenDocument instead of Save/LoadObject
 bool wxTextDocument::DoSaveDocument(const wxString& filename)
@@ -203,7 +203,13 @@ bool wxTextDocument::DoSaveDocument(const wxString& filename)
 
 bool wxTextDocument::DoOpenDocument(const wxString& filename)
 {
-    return GetTextCtrl()->LoadFile(filename);
+    if ( !GetTextCtrl()->LoadFile(filename) )
+        return false;
+
+    // we're not modified by the user yet
+    Modify(false);
+
+    return true;
 }
 
 bool wxTextDocument::IsModified() const
