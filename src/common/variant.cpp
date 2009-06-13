@@ -62,13 +62,13 @@ WX_DEFINE_LIST(wxVariantList)
 IMPLEMENT_DYNAMIC_CLASS(wxVariant, wxObject)
 
 wxVariant::wxVariant()
+    : wxObject()
 {
-    m_data = NULL;
 }
 
 bool wxVariant::IsNull() const
 {
-     return (m_data == NULL);
+     return (m_refData == NULL);
 }
 
 void wxVariant::MakeNull()
@@ -84,8 +84,6 @@ void wxVariant::Clear()
 wxVariant::wxVariant(const wxVariant& variant)
     : wxObject()
 {
-    m_data = NULL;
-
     if (!variant.IsNull())
         Ref(variant);
 
@@ -93,14 +91,26 @@ wxVariant::wxVariant(const wxVariant& variant)
 }
 
 wxVariant::wxVariant(wxVariantData* data, const wxString& name) // User-defined data
+    : wxObject()
 {
-    m_data = data;
+    m_refData = data;
     m_name = name;
 }
 
 wxVariant::~wxVariant()
 {
-    UnRef();
+}
+
+wxObjectRefData *wxVariant::CreateRefData() const
+{
+    // We cannot create any particular wxVariantData.
+    wxFAIL_MSG("wxVariant::CreateRefData() cannot be implemented");
+    return NULL;
+}
+
+wxObjectRefData *wxVariant::CloneRefData(const wxObjectRefData *data) const
+{
+    return ((wxVariantData*) data)->Clone();
 }
 
 // Assignment
@@ -114,7 +124,7 @@ void wxVariant::operator= (const wxVariant& variant)
 void wxVariant::operator= (wxVariantData* variantData)
 {
     UnRef();
-    m_data = variantData;
+    m_refData = variantData;
 }
 
 bool wxVariant::operator== (const wxVariant& variant) const
@@ -147,60 +157,17 @@ wxString wxVariant::MakeString() const
 void wxVariant::SetData(wxVariantData* data)
 {
     UnRef();
-    m_data = data;
-}
-
-void wxVariant::Ref(const wxVariant& clone)
-{
-    // nothing to be done
-    if (m_data == clone.m_data)
-        return;
-
-    // delete reference to old data
-    UnRef();
-
-    // reference new data
-    if ( clone.m_data )
-    {
-        m_data = clone.m_data;
-        m_data->IncRef();
-    }
-}
-
-
-void wxVariant::UnRef()
-{
-    if ( m_data )
-    {
-        wxASSERT_MSG( m_data->GetRefCount() > 0, _T("invalid ref data count") );
-
-        m_data->DecRef();
-        m_data = NULL;
-    }
+    m_refData = data;
 }
 
 bool wxVariant::Unshare()
 {
-    if ( m_data && m_data->GetRefCount() > 1 )
-    {
-        // note that ref is not going to be destroyed in this case...
-        const wxVariantData* ref = m_data;
-        UnRef();
-
-        // ... so we can still access it
-        m_data = ref->Clone();
-
-        wxASSERT_MSG( (m_data && m_data->GetRefCount() == 1),
-                  _T("wxVariant::AllocExclusive() failed.") );
-
-        if (!m_data || m_data->GetRefCount() != 1)
-            return false;
-        else
-            return true;
-    }
-    //else: data is null or ref count is 1, so we are exclusive owners of m_refData anyhow
-    else
+    if ( !m_refData || m_refData->GetRefCount() == 1 )
         return true;
+
+    wxObject::UnShare();
+
+    return (m_refData && m_refData->GetRefCount() == 1);
 }
 
 
@@ -321,19 +288,19 @@ bool wxVariantDataLong::Read(wxString& str)
 
 wxVariant::wxVariant(long val, const wxString& name)
 {
-    m_data = new wxVariantDataLong(val);
+    m_refData = new wxVariantDataLong(val);
     m_name = name;
 }
 
 wxVariant::wxVariant(int val, const wxString& name)
 {
-    m_data = new wxVariantDataLong((long)val);
+    m_refData = new wxVariantDataLong((long)val);
     m_name = name;
 }
 
 wxVariant::wxVariant(short val, const wxString& name)
 {
-    m_data = new wxVariantDataLong((long)val);
+    m_refData = new wxVariantDataLong((long)val);
     m_name = name;
 }
 
@@ -354,14 +321,14 @@ bool wxVariant::operator!= (long value) const
 void wxVariant::operator= (long value)
 {
     if (GetType() == wxT("long") &&
-        m_data->GetRefCount() == 1)
+        m_refData->GetRefCount() == 1)
     {
         ((wxVariantDataLong*)GetData())->SetValue(value);
     }
     else
     {
         UnRef();
-        m_data = new wxVariantDataLong(value);
+        m_refData = new wxVariantDataLong(value);
     }
 }
 
@@ -469,7 +436,7 @@ bool wxVariantDoubleData::Read(wxString& str)
 
 wxVariant::wxVariant(double val, const wxString& name)
 {
-    m_data = new wxVariantDoubleData(val);
+    m_refData = new wxVariantDoubleData(val);
     m_name = name;
 }
 
@@ -490,14 +457,14 @@ bool wxVariant::operator!= (double value) const
 void wxVariant::operator= (double value)
 {
     if (GetType() == wxT("double") &&
-        m_data->GetRefCount() == 1)
+        m_refData->GetRefCount() == 1)
     {
         ((wxVariantDoubleData*)GetData())->SetValue(value);
     }
     else
     {
         UnRef();
-        m_data = new wxVariantDoubleData(value);
+        m_refData = new wxVariantDoubleData(value);
     }
 }
 
@@ -608,7 +575,7 @@ bool wxVariantDataBool::Read(wxString& str)
 
 wxVariant::wxVariant(bool val, const wxString& name)
 {
-    m_data = new wxVariantDataBool(val);
+    m_refData = new wxVariantDataBool(val);
     m_name = name;
 }
 
@@ -629,14 +596,14 @@ bool wxVariant::operator!= (bool value) const
 void wxVariant::operator= (bool value)
 {
     if (GetType() == wxT("bool") &&
-        m_data->GetRefCount() == 1)
+        m_refData->GetRefCount() == 1)
     {
         ((wxVariantDataBool*)GetData())->SetValue(value);
     }
     else
     {
         UnRef();
-        m_data = new wxVariantDataBool(value);
+        m_refData = new wxVariantDataBool(value);
     }
 }
 
@@ -749,19 +716,19 @@ bool wxVariantDataChar::Read(wxString& str)
 
 wxVariant::wxVariant(const wxUniChar& val, const wxString& name)
 {
-    m_data = new wxVariantDataChar(val);
+    m_refData = new wxVariantDataChar(val);
     m_name = name;
 }
 
 wxVariant::wxVariant(char val, const wxString& name)
 {
-    m_data = new wxVariantDataChar(val);
+    m_refData = new wxVariantDataChar(val);
     m_name = name;
 }
 
 wxVariant::wxVariant(wchar_t val, const wxString& name)
 {
-    m_data = new wxVariantDataChar(val);
+    m_refData = new wxVariantDataChar(val);
     m_name = name;
 }
 
@@ -777,14 +744,14 @@ bool wxVariant::operator==(const wxUniChar& value) const
 wxVariant& wxVariant::operator=(const wxUniChar& value)
 {
     if (GetType() == wxT("char") &&
-        m_data->GetRefCount() == 1)
+        m_refData->GetRefCount() == 1)
     {
         ((wxVariantDataChar*)GetData())->SetValue(value);
     }
     else
     {
         UnRef();
-        m_data = new wxVariantDataChar(value);
+        m_refData = new wxVariantDataChar(value);
     }
 
     return *this;
@@ -886,37 +853,37 @@ bool wxVariantDataString::Read(wxString& str)
 
 wxVariant::wxVariant(const wxString& val, const wxString& name)
 {
-    m_data = new wxVariantDataString(val);
+    m_refData = new wxVariantDataString(val);
     m_name = name;
 }
 
 wxVariant::wxVariant(const char* val, const wxString& name)
 {
-    m_data = new wxVariantDataString(wxString(val));
+    m_refData = new wxVariantDataString(wxString(val));
     m_name = name;
 }
 
 wxVariant::wxVariant(const wchar_t* val, const wxString& name)
 {
-    m_data = new wxVariantDataString(wxString(val));
+    m_refData = new wxVariantDataString(wxString(val));
     m_name = name;
 }
 
 wxVariant::wxVariant(const wxCStrData& val, const wxString& name)
 {
-    m_data = new wxVariantDataString(val.AsString());
+    m_refData = new wxVariantDataString(val.AsString());
     m_name = name;
 }
 
 wxVariant::wxVariant(const wxScopedCharBuffer& val, const wxString& name)
 {
-    m_data = new wxVariantDataString(wxString(val));
+    m_refData = new wxVariantDataString(wxString(val));
     m_name = name;
 }
 
 wxVariant::wxVariant(const wxScopedWCharBuffer& val, const wxString& name)
 {
-    m_data = new wxVariantDataString(wxString(val));
+    m_refData = new wxVariantDataString(wxString(val));
     m_name = name;
 }
 
@@ -937,14 +904,14 @@ bool wxVariant::operator!= (const wxString& value) const
 wxVariant& wxVariant::operator= (const wxString& value)
 {
     if (GetType() == wxT("string") &&
-        m_data->GetRefCount() == 1)
+        m_refData->GetRefCount() == 1)
     {
         ((wxVariantDataString*)GetData())->SetValue(value);
     }
     else
     {
         UnRef();
-        m_data = new wxVariantDataString(value);
+        m_refData = new wxVariantDataString(value);
     }
     return *this;
 }
@@ -1056,7 +1023,7 @@ bool wxVariantDataWxObjectPtr::Read(wxString& WXUNUSED(str))
 
 wxVariant::wxVariant( wxObject* val, const wxString& name)
 {
-    m_data = new wxVariantDataWxObjectPtr(val);
+    m_refData = new wxVariantDataWxObjectPtr(val);
     m_name = name;
 }
 
@@ -1073,12 +1040,12 @@ bool wxVariant::operator!= (wxObject* value) const
 void wxVariant::operator= (wxObject* value)
 {
     UnRef();
-    m_data = new wxVariantDataWxObjectPtr(value);
+    m_refData = new wxVariantDataWxObjectPtr(value);
 }
 
 wxObject* wxVariant::GetWxObjectPtr() const
 {
-    return (wxObject*) ((wxVariantDataWxObjectPtr*) m_data)->GetValue();
+    return (wxObject*) ((wxVariantDataWxObjectPtr*) m_refData)->GetValue();
 }
 
 // ----------------------------------------------------------------------------
@@ -1153,7 +1120,7 @@ bool wxVariantDataVoidPtr::Read(wxString& WXUNUSED(str))
 
 wxVariant::wxVariant( void* val, const wxString& name)
 {
-    m_data = new wxVariantDataVoidPtr(val);
+    m_refData = new wxVariantDataVoidPtr(val);
     m_name = name;
 }
 
@@ -1169,14 +1136,14 @@ bool wxVariant::operator!= (void* value) const
 
 void wxVariant::operator= (void* value)
 {
-    if (GetType() == wxT("void*") && (m_data->GetRefCount() == 1))
+    if (GetType() == wxT("void*") && (m_refData->GetRefCount() == 1))
     {
         ((wxVariantDataVoidPtr*)GetData())->SetValue(value);
     }
     else
     {
         UnRef();
-        m_data = new wxVariantDataVoidPtr(value);
+        m_refData = new wxVariantDataVoidPtr(value);
     }
 }
 
@@ -1188,7 +1155,7 @@ void* wxVariant::GetVoidPtr() const
 
     wxASSERT( GetType() == wxT("void*") );
 
-    return (void*) ((wxVariantDataVoidPtr*) m_data)->GetValue();
+    return (void*) ((wxVariantDataVoidPtr*) m_refData)->GetValue();
 }
 
 // ----------------------------------------------------------------------------
@@ -1279,7 +1246,7 @@ bool wxVariantDataDateTime::Read(wxString& str)
 
 wxVariant::wxVariant(const wxDateTime& val, const wxString& name) // Date
 {
-    m_data = new wxVariantDataDateTime(val);
+    m_refData = new wxVariantDataDateTime(val);
     m_name = name;
 }
 
@@ -1300,14 +1267,14 @@ bool wxVariant::operator!= (const wxDateTime& value) const
 void wxVariant::operator= (const wxDateTime& value)
 {
     if (GetType() == wxT("datetime") &&
-        m_data->GetRefCount() == 1)
+        m_refData->GetRefCount() == 1)
     {
         ((wxVariantDataDateTime*)GetData())->SetValue(value);
     }
     else
     {
         UnRef();
-        m_data = new wxVariantDataDateTime(value);
+        m_refData = new wxVariantDataDateTime(value);
     }
 }
 
@@ -1409,7 +1376,7 @@ bool wxVariantDataArrayString::Read(wxString& str)
 
 wxVariant::wxVariant(const wxArrayString& val, const wxString& name) // Strings
 {
-    m_data = new wxVariantDataArrayString(val);
+    m_refData = new wxVariantDataArrayString(val);
     m_name = name;
 }
 
@@ -1428,14 +1395,14 @@ bool wxVariant::operator!=(const wxArrayString& value) const
 void wxVariant::operator=(const wxArrayString& value)
 {
     if (GetType() == wxT("arrstring") &&
-        m_data->GetRefCount() == 1)
+        m_refData->GetRefCount() == 1)
     {
         ((wxVariantDataArrayString *)GetData())->SetValue(value);
     }
     else
     {
         UnRef();
-        m_data = new wxVariantDataArrayString(value);
+        m_refData = new wxVariantDataArrayString(value);
     }
 }
 
@@ -1580,7 +1547,7 @@ bool wxVariantDataList::Read(wxString& WXUNUSED(str))
 
 wxVariant::wxVariant(const wxVariantList& val, const wxString& name) // List of variants
 {
-    m_data = new wxVariantDataList(val);
+    m_refData = new wxVariantDataList(val);
     m_name = name;
 }
 
@@ -1600,14 +1567,14 @@ bool wxVariant::operator!= (const wxVariantList& value) const
 void wxVariant::operator= (const wxVariantList& value)
 {
     if (GetType() == wxT("list") &&
-        m_data->GetRefCount() == 1)
+        m_refData->GetRefCount() == 1)
     {
         ((wxVariantDataList*)GetData())->SetValue(value);
     }
     else
     {
         UnRef();
-        m_data = new wxVariantDataList(value);
+        m_refData = new wxVariantDataList(value);
     }
 }
 
@@ -1615,7 +1582,7 @@ wxVariantList& wxVariant::GetList() const
 {
     wxASSERT( (GetType() == wxT("list")) );
 
-    return (wxVariantList&) ((wxVariantDataList*) m_data)->GetValue();
+    return (wxVariantList&) ((wxVariantDataList*) m_refData)->GetValue();
 }
 
 // Make empty list
@@ -1674,14 +1641,14 @@ void wxVariant::ClearList()
 {
     if (!IsNull() && (GetType() == wxT("list")))
     {
-        ((wxVariantDataList*) m_data)->Clear();
+        ((wxVariantDataList*) m_refData)->Clear();
     }
     else
     {
         if (!GetType().IsSameAs(wxT("list")))
             UnRef();
 
-        m_data = new wxVariantDataList;
+        m_refData = new wxVariantDataList;
     }
 }
 
@@ -1692,7 +1659,7 @@ wxVariant wxVariant::operator[] (size_t idx) const
 
     if (GetType() == wxT("list"))
     {
-        wxVariantDataList* data = (wxVariantDataList*) m_data;
+        wxVariantDataList* data = (wxVariantDataList*) m_refData;
         wxASSERT_MSG( (idx < data->GetValue().GetCount()), wxT("Invalid index for array") );
         return *(data->GetValue().Item(idx)->GetData());
     }
@@ -1706,7 +1673,7 @@ wxVariant& wxVariant::operator[] (size_t idx)
 
     wxASSERT_MSG( (GetType() == wxT("list")), wxT("Invalid type for array operator") );
 
-    wxVariantDataList* data = (wxVariantDataList*) m_data;
+    wxVariantDataList* data = (wxVariantDataList*) m_refData;
     wxASSERT_MSG( (idx < data->GetValue().GetCount()), wxT("Invalid index for array") );
 
     return * (data->GetValue().Item(idx)->GetData());
@@ -1719,7 +1686,7 @@ size_t wxVariant::GetCount() const
 
     if (GetType() == wxT("list"))
     {
-        wxVariantDataList* data = (wxVariantDataList*) m_data;
+        wxVariantDataList* data = (wxVariantDataList*) m_refData;
         return data->GetValue().GetCount();
     }
     return 0;

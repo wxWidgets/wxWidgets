@@ -33,10 +33,6 @@
  * to allow it to store any type of data.
  * Derive from this to provide custom data handling.
  *
- * NB: To prevent addition of extra vtbl pointer to wxVariantData,
- *     we don't multiple-inherit from wxObjectRefData. Instead,
- *     we simply replicate the wxObject ref-counting scheme.
- *
  * NB: When you construct a wxVariantData, it will have refcount
  *     of one. Refcount will not be further increased when
  *     it is passed to wxVariant. This simulates old common
@@ -55,7 +51,7 @@
  * overloading wxVariant with unnecessary functionality.
  */
 
-class WXDLLIMPEXP_BASE wxVariantData : public wxRefCounter
+class WXDLLIMPEXP_BASE wxVariantData : public wxObjectRefData
 {
     friend class wxVariant;
 public:
@@ -77,7 +73,7 @@ public:
     // If it based on wxObject return the ClassInfo.
     virtual wxClassInfo* GetValueClassInfo() { return NULL; }
 
-    // Implement this to make wxVariant::AllocExcusive work. Returns
+    // Implement this to make wxVariant::UnShare work. Returns
     // a copy of the data.
     virtual wxVariantData* Clone() const { return NULL; }
 
@@ -125,14 +121,14 @@ public:
 
     // For compatibility with wxWidgets <= 2.6, this doesn't increase
     // reference count.
-    wxVariantData* GetData() const { return m_data; }
+    wxVariantData* GetData() const
+    {
+        return (wxVariantData*) m_refData;
+    }
     void SetData(wxVariantData* data) ;
 
     // make a 'clone' of the object
-    void Ref(const wxVariant& clone);
-
-    // destroy a reference
-    void UnRef();
+    void Ref(const wxVariant& clone) { wxObject::Ref(clone); }
 
     // ensure that the data is exclusive to this variant, and not shared
     bool Unshare();
@@ -314,7 +310,9 @@ public:
 
 // Attributes
 protected:
-    wxVariantData*  m_data;
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+
     wxString        m_name;
 
 private:
