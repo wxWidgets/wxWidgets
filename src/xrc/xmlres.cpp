@@ -1850,8 +1850,12 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
         wnd->SetExtraStyle(wnd->GetExtraStyle() | GetStyle(wxT("exstyle")));
     if (HasParam(wxT("bg")))
         wnd->SetBackgroundColour(GetColour(wxT("bg")));
+    if (HasParam(wxT("ownbg")))
+        wnd->SetOwnBackgroundColour(GetColour(wxT("ownbg")));
     if (HasParam(wxT("fg")))
         wnd->SetForegroundColour(GetColour(wxT("fg")));
+    if (HasParam(wxT("ownfg")))
+        wnd->SetOwnForegroundColour(GetColour(wxT("ownfg")));
     if (GetBool(wxT("enabled"), 1) == 0)
         wnd->Enable(false);
     if (GetBool(wxT("focused"), 0) == 1)
@@ -1863,7 +1867,9 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
         wnd->SetToolTip(GetText(wxT("tooltip")));
 #endif
     if (HasParam(wxT("font")))
-        wnd->SetFont(GetFont());
+        wnd->SetFont(GetFont(wxT("font")));
+    if (HasParam(wxT("ownfont")))
+        wnd->SetOwnFont(GetFont(wxT("ownfont")));
     if (HasParam(wxT("help")))
         wnd->SetHelpText(GetText(wxT("help")));
 }

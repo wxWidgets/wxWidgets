@@ -482,8 +482,14 @@ from properties lists below.
     (default: not set).}
 @row3col{fg, @ref overview_xrcformat_type_colour,
     Foreground colour of the window (default: window's default).}
+@row3col{ownfg, @ref overview_xrcformat_type_colour,
+    Non-inheritable foreground colour of the window, see
+    wxWindow::SetOwnForegroundColour() (default: none).}
 @row3col{bg, @ref overview_xrcformat_type_colour,
     Background colour of the window (default: window's default).}
+@row3col{ownbg, @ref overview_xrcformat_type_colour,
+    Non-inheritable background colour of the window, see
+    wxWindow::SetOwnBackgroundColour() (default: none).}
 @row3col{enabled, @ref overview_xrcformat_type_bool,
     If set to 0, the control is disabled (default: 1).}
 @row3col{hidden, @ref overview_xrcformat_type_bool,
@@ -492,6 +498,9 @@ from properties lists below.
     Tooltip to use for the control (default: not set).}
 @row3col{font, @ref overview_xrcformat_type_font,
     Font to use for the control (default: window's default).}
+@row3col{ownfont, @ref overview_xrcformat_type_font,
+    Non-inheritable font to use for the control, see
+    wxWindow::SetOwnFont() (default: none).}
 @row3col{help, @ref overview_xrcformat_type_text,
     Context-sensitive help for the control, used by wxHelpProvider
     (default: not set).}
