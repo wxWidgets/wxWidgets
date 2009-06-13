@@ -350,8 +350,10 @@ wxClassInfo::const_iterator wxClassInfo::end_classinfo()
 // wxObjectRefData
 // ----------------------------------------------------------------------------
 
-void wxObjectRefData::DecRef()
+void wxRefCounter::DecRef()
 {
+    wxASSERT_MSG( m_count > 0, "invalid ref data count" );
+
     if ( --m_count == 0 )
         delete this;
 }
@@ -386,8 +388,6 @@ void wxObject::UnRef()
 {
     if ( m_refData )
     {
-        wxASSERT_MSG( m_refData->m_count > 0, _T("invalid ref data count") );
-
         m_refData->DecRef();
         m_refData = NULL;
     }
