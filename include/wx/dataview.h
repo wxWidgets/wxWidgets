@@ -161,7 +161,7 @@ private:
 WX_DECLARE_LIST_WITH_DECL(wxDataViewModelNotifier, wxDataViewModelNotifiers,
                           class WXDLLIMPEXP_ADV);
 
-class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
+class WXDLLIMPEXP_ADV wxDataViewModel: public wxRefCounter
 {
 public:
     wxDataViewModel();

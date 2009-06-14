@@ -61,7 +61,7 @@
     wxDataViewIndexListModel, wxDataViewVirtualListModel, wxDataViewTreeStore,
     wxDataViewListStore.
 
-    Note that wxDataViewModel is reference counted, derives from wxObjectRefData
+    Note that wxDataViewModel is reference counted, derives from wxRefCounter
     and cannot be deleted directly as it can be shared by several wxDataViewCtrls.
     This implies that you need to decrease the reference count after
     associating the model with a control like this:
@@ -78,7 +78,7 @@
     @library{wxadv}
     @category{dvc}
 */
-class wxDataViewModel : public wxObjectRefData
+class wxDataViewModel : public wxRefCounter
 {
 public:
     /**
