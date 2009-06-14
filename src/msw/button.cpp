@@ -58,6 +58,11 @@
 
         #define TMT_CONTENTMARGINS 3602
     #endif
+
+    #ifndef BCM_SETIMAGELIST
+        #define BCM_SETIMAGELIST    0x1602
+        #define BCM_SETTEXTMARGIN   0x1604
+    #endif
 #endif // wxUSE_UXTHEME
 
 #ifndef WM_THEMECHANGED

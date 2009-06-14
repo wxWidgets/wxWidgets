@@ -36,7 +36,7 @@ bool wxBitmapButton::Create( wxWindow*          pParent,
                              const wxValidator& rValidator,
                              const wxString&    rsName )
 {
-    m_bmpNormal = rBitmap;
+    m_bitmaps[State_Normal] = rBitmap;
     SetName(rsName);
 #if wxUSE_VALIDATORS
     SetValidator(rValidator);
@@ -64,10 +64,10 @@ bool wxBitmapButton::Create( wxWindow*          pParent,
     else
         m_windowId = vId;
 
-    if (nWidth == wxDefaultCoord && rBitmap.Ok())
+    if (nWidth == wxDefaultCoord && rBitmap.IsOk())
         nWidth = rBitmap.GetWidth() + 4 * m_marginX;
 
-    if (nHeight == wxDefaultCoord && rBitmap.Ok())
+    if (nHeight == wxDefaultCoord && rBitmap.IsOk())
         nHeight = rBitmap.GetHeight() + 4 * m_marginY;
 
     ULONG                           ulOS2Style = WS_VISIBLE | WS_TABSTOP | BS_USERBUTTON;
@@ -108,21 +108,23 @@ bool wxBitmapButton::OS2OnDraw( WXDRAWITEMSTRUCT* pItem)
     if (!pUser)
         return false;
 
-    wxBitmap*  pBitmap;
+    wxBitmap   bitmap;
     bool       bIsSelected = pUser->fsState & BDS_HILITED;
     wxClientDC vDc(this);
 
-    if (bIsSelected && m_bmpSelected.Ok())
-        pBitmap = &m_bmpSelected;
-    else if ((pUser->fsState & BDS_DEFAULT) && m_bmpFocus.Ok())
-        pBitmap = &m_bmpFocus;
-    else if ((pUser->fsState & BDS_DISABLED) && m_bmpDisabled.Ok())
-        pBitmap = &m_bmpDisabled;
-    else
-        pBitmap = &m_bmpNormal;
+    if (bIsSelected)
+        bitmap = GetBitmapPressed();
+    else if (pUser->fsState & BDS_DEFAULT)
+        bitmap = GetBitmapFocus();
+    else if (pUser->fsState & BDS_DISABLED)
+        bitmap = GetBitmapDisabled();
 
-    if (!pBitmap->Ok() )
-        return false;
+    if (!bitmap.IsOk() )
+    {
+        bitmap = GetBitmapLabel();
+        if (!bitmap.IsOk() )
+            return false;
+    }
 
 
     //
@@ -133,8 +135,8 @@ bool wxBitmapButton::OS2OnDraw( WXDRAWITEMSTRUCT* pItem)
     wxPMDCImpl                      *impl = (wxPMDCImpl*) vDc.GetImpl();
     int                             nWidth     = impl->m_vRclPaint.xRight - impl->m_vRclPaint.xLeft;
     int                             nHeight    = impl->m_vRclPaint.yTop - impl->m_vRclPaint.yBottom;
-    int                             nBmpWidth  = pBitmap->GetWidth();
-    int                             nBmpHeight = pBitmap->GetHeight();
+    int                             nBmpWidth  = bitmap.GetWidth();
+    int                             nBmpHeight = bitmap.GetHeight();
 
     nX1 = (nWidth - nBmpWidth) / 2;
     nY1 = (nHeight - nBmpHeight) / 2;
@@ -153,14 +155,14 @@ bool wxBitmapButton::OS2OnDraw( WXDRAWITEMSTRUCT* pItem)
     //
     // Draw the bitmap
     //
-    vDc.DrawBitmap( *pBitmap, nX1, nY1, true );
+    vDc.DrawBitmap( bitmap, nX1, nY1, true );
 
     //
     // Draw focus / disabled state, if auto-drawing
     //
     if ((pUser->fsState == BDS_DISABLED) && bAutoDraw)
     {
-        DrawButtonDisable( vDc, *pBitmap );
+        DrawButtonDisable( vDc, bitmap );
     }
     else if ((pUser->fsState == BDS_DEFAULT) && bAutoDraw)
     {

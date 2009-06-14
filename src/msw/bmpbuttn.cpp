@@ -190,53 +190,55 @@ void wxBitmapButton::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxBitmapButton::OnMouseEnterOrLeave(wxMouseEvent& event)
 {
-    if ( IsEnabled() && m_bmpHover.Ok() )
+    if ( IsEnabled() && m_bitmaps[State_Current].IsOk() )
         Refresh();
 
     event.Skip();
 }
 
-void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
+void wxBitmapButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 {
-#if wxUSE_IMAGE
-    if ( !HasFlag(wxBU_AUTODRAW) && !m_disabledSetByUser && bitmap.IsOk() )
+    if ( bitmap.IsOk() )
     {
-        m_bmpDisabled = wxBitmap(bitmap.ConvertToImage().ConvertToGreyscale());
-    }
+        switch ( which )
+        {
+#if wxUSE_IMAGE
+            case State_Normal:
+                if ( !HasFlag(wxBU_AUTODRAW) && !m_disabledSetByUser )
+                {
+                    wxImage img(bitmap.ConvertToImage().ConvertToGreyscale());
+                    m_bitmaps[State_Disabled] = wxBitmap(img);
+                }
+                break;
 #endif // wxUSE_IMAGE
 
-    wxBitmapButtonBase::SetBitmapLabel(bitmap);
-}
+            case State_Focused:
+                // if the focus bitmap is specified but current one isn't, use
+                // the focus bitmap for hovering as well if this is consistent
+                // with the current Windows version look and feel
+                //
+                // rationale: this is compatible with the old wxGTK behaviour
+                // and also makes it much easier to do "the right thing" for
+                // all platforms (some of them, such as Windows XP, have "hot"
+                // buttons while others don't)
+                if ( !m_hoverSetByUser )
+                    m_bitmaps[State_Current] = bitmap;
+                break;
 
-void wxBitmapButton::SetBitmapFocus(const wxBitmap& focus)
-{
-    // if the focus bitmap is specified but hover one isn't, use the focus
-    // bitmap for hovering as well if this is consistent with the current
-    // Windows version look and feel
-    //
-    // rationale: this is compatible with the old wxGTK behaviour and also
-    // makes it much easier to do "the right thing" for all platforms (some of
-    // them, such as Windows XP, have "hot" buttons while others don't)
-    if ( focus.Ok() && !m_hoverSetByUser )
-        m_bmpHover = m_bmpFocus;
+            case State_Current:
+                // don't overwrite it with the focused bitmap
+                m_hoverSetByUser = true;
+                break;
 
-    wxBitmapButtonBase::SetBitmapFocus(focus);
-}
+            case State_Disabled:
+                // don't overwrite it with the version automatically created
+                // from the normal one
+                m_disabledSetByUser = true;
+                break;
+        }
+    }
 
-void wxBitmapButton::SetBitmapDisabled(const wxBitmap& disabled)
-{
-    if ( disabled.IsOk() )
-        m_disabledSetByUser = true;
-
-    wxBitmapButtonBase::SetBitmapDisabled(disabled);
-}
-
-void wxBitmapButton::SetBitmapHover(const wxBitmap& hover)
-{
-    if ( hover.IsOk() )
-        m_hoverSetByUser = true;
-
-    wxBitmapButtonBase::SetBitmapHover(hover);
+    wxBitmapButtonBase::DoSetBitmap(bitmap, which);
 }
 
 #if wxUSE_UXTHEME
@@ -331,33 +333,38 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     HDC hDC                = lpDIS->hDC;
     UINT state             = lpDIS->itemState;
     bool isSelected        = (state & ODS_SELECTED) != 0;
-    bool autoDraw          = (GetWindowStyleFlag() & wxBU_AUTODRAW) != 0;
+    bool autoDraw          = HasFlag(wxBU_AUTODRAW);
 
 
     // choose the bitmap to use depending on the button state
-    wxBitmap *bitmap;
+    wxBitmap bitmap;
 
-    if ( isSelected && m_bmpSelected.Ok() )
-        bitmap = &m_bmpSelected;
-    else if ( m_bmpHover.Ok() && IsMouseInWindow() )
-        bitmap = &m_bmpHover;
-    else if ((state & ODS_FOCUS) && m_bmpFocus.Ok())
-        bitmap = &m_bmpFocus;
-    else if ((state & ODS_DISABLED) && m_bmpDisabled.Ok())
-        bitmap = &m_bmpDisabled;
-    else
-        bitmap = &m_bmpNormal;
+    if ( isSelected )
+        bitmap = GetBitmapSelected();
+    else if ( IsMouseInWindow() )
+        bitmap = GetBitmapCurrent();
+    else if ( state & ODS_DISABLED )
+        bitmap = GetBitmapDisabled();
 
-    if ( !bitmap->Ok() )
-        return false;
+    if ( !bitmap.IsOk() )
+    {
+        if ( state & ODS_FOCUS )
+            bitmap = GetBitmapFocus();
+
+        if ( !bitmap.IsOk() )
+            bitmap = GetBitmapLabel();
+
+        if ( !bitmap.IsOk() )
+            return false;
+    }
 
     // centre the bitmap in the control area
     int x      = lpDIS->rcItem.left;
     int y      = lpDIS->rcItem.top;
     int width  = lpDIS->rcItem.right - x;
     int height = lpDIS->rcItem.bottom - y;
-    int wBmp   = bitmap->GetWidth();
-    int hBmp   = bitmap->GetHeight();
+    int wBmp   = bitmap.GetWidth();
+    int hBmp   = bitmap.GetHeight();
 
 #if wxUSE_UXTHEME
     if ( autoDraw && wxUxThemeEngine::GetIfActive() )
@@ -404,7 +411,7 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
         // draw the bitmap
         wxDCTemp dst((WXHDC)hDC);
-        dst.DrawBitmap(*bitmap, x1, y1, true);
+        dst.DrawBitmap(bitmap, x1, y1, true);
 
         return true;
     }
@@ -443,7 +450,7 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
 
     // draw the bitmap
     wxDCTemp dst((WXHDC)hDC);
-    dst.DrawBitmap(*bitmap, x1, y1, true);
+    dst.DrawBitmap(bitmap, x1, y1, true);
 
     // draw focus / disabled state, if auto-drawing
     if ( (state & ODS_DISABLED) && autoDraw )
@@ -544,7 +551,7 @@ wxBitmapButton::DrawButtonDisable( WXHDC dc,
                                    int left, int top, int right, int bottom,
                                    bool with_marg )
 {
-    if ( !m_brushDisabled.Ok() )
+    if ( !m_brushDisabled.IsOk() )
     {
         // draw a bitmap with two black and two background colour pixels
         wxBitmap bmp(2, 2);
@@ -579,10 +586,10 @@ wxBitmapButton::DrawButtonDisable( WXHDC dc,
 
 wxSize wxBitmapButton::DoGetBestSize() const
 {
-    if ( m_bmpNormal.Ok() )
+    if ( GetBitmapLabel().IsOk() )
     {
-        int width = m_bmpNormal.GetWidth(),
-            height = m_bmpNormal.GetHeight();
+        int width = GetBitmapLabel().GetWidth(),
+            height = GetBitmapLabel().GetHeight();
         int marginH = 0,
             marginV = 0;
 

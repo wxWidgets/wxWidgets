@@ -236,6 +236,10 @@ Changes in behaviour which may result in compilation errors
   You may use wxEventLoopBase::SuspendProcessingOfPendingEvents instead of
   locking wxPendingEventsLocker now.
 
+- wxBitmapButton::GetBitmapXXX() overloads returning non-const wxBitmap
+  references have been removed, modifying the returned bitmaps never worked and
+  now results in compile-time error.
+
 
 Deprecated methods and their replacements
 -----------------------------------------

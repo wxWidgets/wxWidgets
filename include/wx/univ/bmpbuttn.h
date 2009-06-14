@@ -59,8 +59,8 @@ protected:
     // called when one of the bitmap is changed by user
     virtual void OnSetBitmap();
 
-    // set bitmap to the given one if it's ok or to m_bmpNormal and return
-    // true if the bitmap really changed
+    // set bitmap to the given one if it's ok or to the normal bitmap and
+    // return true if the bitmap really changed
     bool ChangeBitmap(const wxBitmap& bmp);
 
 private:

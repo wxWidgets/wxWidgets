@@ -134,7 +134,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
         return false;
     }
 
-    m_bmpNormal = bitmap;
+    m_bitmaps[State_Normal] = bitmap;
 
     m_widget = gtk_button_new();
     g_object_ref(m_widget);
@@ -142,7 +142,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 
-    if (m_bmpNormal.Ok())
+    if (bitmap.IsOk())
     {
         OnSetBitmap();
     }
@@ -190,20 +190,20 @@ void wxBitmapButton::OnSetBitmap()
 
     wxBitmap the_one;
     if (!IsThisEnabled())
-        the_one = m_bmpDisabled;
+        the_one = GetBitmapDisabled();
     else if (m_isPressed)
-        the_one = m_bmpSelected;
+        the_one = GetBitmapPressed();
     else if (m_mouseHovers)
-        the_one = m_bmpHover;
+        the_one = GetBitmapHover();
     else if (HasFocus())
-        the_one = m_bmpFocus;
-    else
-        the_one = m_bmpNormal;
+        the_one = GetBitmapFocus();
 
-    if (!the_one.Ok())
-        the_one = m_bmpNormal;
-    if (!the_one.Ok())
-        return;
+    if (!the_one.IsOk())
+    {
+        the_one = GetBitmapLabel();
+        if (!the_one.IsOk())
+            return;
+    }
 
     GtkWidget* image = GTK_BIN(m_widget)->child;
     if (image == NULL)

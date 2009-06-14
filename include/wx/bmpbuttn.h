@@ -35,30 +35,6 @@ public:
         m_marginY = 0;
     }
 
-    // set the bitmaps
-    virtual void SetBitmapLabel(const wxBitmap& bitmap)
-        { m_bmpNormal = bitmap; OnSetBitmap(); }
-    virtual void SetBitmapSelected(const wxBitmap& sel)
-        { m_bmpSelected = sel; OnSetBitmap(); }
-    virtual void SetBitmapFocus(const wxBitmap& focus)
-        { m_bmpFocus = focus; OnSetBitmap(); }
-    virtual void SetBitmapDisabled(const wxBitmap& disabled)
-        { m_bmpDisabled = disabled; OnSetBitmap(); }
-    virtual void SetBitmapHover(const wxBitmap& hover)
-        { m_bmpHover = hover; OnSetBitmap(); }
-
-    // retrieve the bitmaps
-    const wxBitmap& GetBitmapLabel() const { return m_bmpNormal; }
-    const wxBitmap& GetBitmapSelected() const { return m_bmpSelected; }
-    const wxBitmap& GetBitmapFocus() const { return m_bmpFocus; }
-    const wxBitmap& GetBitmapDisabled() const { return m_bmpDisabled; }
-    const wxBitmap& GetBitmapHover() const { return m_bmpHover; }
-    wxBitmap& GetBitmapLabel() { return m_bmpNormal; }
-    wxBitmap& GetBitmapSelected() { return m_bmpSelected; }
-    wxBitmap& GetBitmapFocus() { return m_bmpFocus; }
-    wxBitmap& GetBitmapDisabled() { return m_bmpDisabled; }
-    wxBitmap& GetBitmapHover() { return m_bmpHover; }
-
     // set/get the margins around the button
     virtual void SetMargins(int x, int y) { m_marginX = x; m_marginY = y; }
     int GetMarginX() const { return m_marginX; }
@@ -77,12 +53,12 @@ protected:
     // function called when any of the bitmaps changes
     virtual void OnSetBitmap() { InvalidateBestSize(); Refresh(); }
 
+    virtual wxBitmap DoGetBitmap(State which) const { return m_bitmaps[which]; }
+    virtual void DoSetBitmap(const wxBitmap& bitmap, State which)
+        { m_bitmaps[which] = bitmap; OnSetBitmap(); }
+
     // the bitmaps for various states
-    wxBitmap m_bmpNormal,
-             m_bmpSelected,
-             m_bmpFocus,
-             m_bmpDisabled,
-             m_bmpHover;
+    wxBitmap m_bitmaps[State_Max];
 
     // the margins around the bitmap
     int m_marginX,

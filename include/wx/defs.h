@@ -523,6 +523,11 @@ typedef short int WXTYPE;
 #define wxDEPRECATED_INLINE(func, body) wxDEPRECATED(func) { body }
 
 /*
+    A macro to define a simple deprecated accessor.
+ */
+#define wxDEPRECATED_ACCESSOR(func, what) wxDEPRECATED_INLINE(func, return what;)
+
+/*
    Special variant of the macro above which should be used for the functions
    which are deprecated but called by wx itself: this often happens with
    deprecated virtual functions which are called by the library.

@@ -1120,6 +1120,29 @@ template <typename T> wxDELETEA(T*& array);
 #define wxDEPRECATED_INLINE(func, body)
 
 /**
+    A helper macro allowing to easily define a simple deprecated accessor.
+
+    Compared to wxDEPRECATED_INLINE() it saves a @c return statement and,
+    especially, a strangely looking semicolon inside a macro.
+
+    Example of use
+    @code
+    class wxFoo
+    {
+    public:
+        int GetValue() const { return m_value; }
+
+        // this one is deprecated because it was erroneously non-const
+        wxDEPRECATED_ACCESSOR( int GetValue(), m_value )
+
+    private:
+        int m_value;
+    };
+    @endcode
+ */
+#define wxDEPRECATED_ACCESSOR(func, what)
+
+/**
     Combination of wxDEPRECATED_BUT_USED_INTERNALLY() and wxDEPRECATED_INLINE().
 
     This macro should be used for deprecated functions called by the library
