@@ -31,6 +31,14 @@
            Creates a flat button. Windows and GTK+ only.
     @endStyleTable
 
+    By default, i.e. if none of the alignment styles are specified, the label
+    is centered both horizontally and vertically. If the button has both a
+    label and a bitmap, the alignment styles above specify the location of the
+    rectangle combining both the label and the bitmap and the bitmap position
+    set with wxButton::SetBitmapPosition() defines the relative position of the
+    bitmap with respect to the label (however currently non-default alignment
+    combinations are not implemented on all platforms).
+
     @beginEventEmissionTable{wxCommandEvent}
     @event{EVT_BUTTON(id, func)}
            Process a wxEVT_COMMAND_BUTTON_CLICKED event, when the button is clicked.

@@ -18,21 +18,14 @@
     support in wxButton.
 
     @beginStyleTable
-    @style{wxBU_AUTODRAW}
-           If this is specified, the button will be drawn automatically using
-           the label bitmap only, providing a 3D-look border. If this style is
-           not specified, the button will be drawn without borders and using
-           all provided bitmaps. Has effect only under MS Windows.
     @style{wxBU_LEFT}
-           Left-justifies the bitmap label. Has effect only under MS Windows.
+           Left-justifies the bitmap label.
     @style{wxBU_TOP}
            Aligns the bitmap label to the top of the button.
-           Has effect only under MS Windows.
     @style{wxBU_RIGHT}
-           Right-justifies the bitmap label. Has effect only under MS Windows.
+           Right-justifies the bitmap label.
     @style{wxBU_BOTTOM}
            Aligns the bitmap label to the bottom of the button.
-           Has effect only under MS Windows.
     @endStyleTable
 
     Note that the wxBU_EXACTFIT style supported by wxButton is not used by this
