@@ -43,9 +43,8 @@
 // small as possible
 #define wxBU_EXACTFIT        0x0001
 
+#include "wx/bitmap.h"
 #include "wx/control.h"
-
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxButtonNameStr[];
 
