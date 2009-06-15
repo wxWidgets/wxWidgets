@@ -510,7 +510,7 @@ void wxDataViewVirtualListModel::Reset( unsigned int new_size )
 void wxDataViewVirtualListModel::RowPrepended()
 {
     m_lastIndex++;
-    wxDataViewItem item( NULL );
+    wxDataViewItem item( wxUIntToPtr(1) );
     ItemAdded( wxDataViewItem(0), item );
 }
 
