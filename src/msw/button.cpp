@@ -137,8 +137,10 @@ const int OD_BUTTON_MARGIN = 4;
 class wxODButtonImageData : public wxButtonImageData
 {
 public:
-    wxODButtonImageData(wxButton *btn)
+    wxODButtonImageData(wxButton *btn, const wxBitmap& bitmap)
     {
+        SetBitmap(bitmap, wxButton::State_Normal);
+
         m_dir = wxLEFT;
 
         m_margin.x = btn->GetCharWidth();
@@ -192,10 +194,17 @@ class wxXPButtonImageData : public wxButtonImageData
 public:
     // we must be constructed with the size of our images as we need to create
     // the image list
-    wxXPButtonImageData(wxButton *btn, const wxSize& size)
-        : m_iml(size.x, size.y, true /* use mask */, wxButton::State_Max),
+    wxXPButtonImageData(wxButton *btn, const wxBitmap& bitmap)
+        : m_iml(bitmap.GetWidth(), bitmap.GetHeight(), true /* use mask */,
+                wxButton::State_Max),
           m_hwndBtn(GetHwndOf(btn))
     {
+        // initialize all bitmaps to normal state
+        for ( int n = 0; n < wxButton::State_Max; n++ )
+        {
+            m_iml.Add(bitmap);
+        }
+
         m_data.himl = GetHimagelistOf(&m_iml);
 
         // use default margins
@@ -215,22 +224,7 @@ public:
 
     virtual void SetBitmap(const wxBitmap& bitmap, wxButton::State which)
     {
-        const int imagesToAdd = which - m_iml.GetImageCount();
-        if ( imagesToAdd >= 0 )
-        {
-            if ( imagesToAdd > 0 )
-            {
-                const wxBitmap bmpNormal = GetBitmap(wxButton::State_Normal);
-                for ( int n = 0; n < imagesToAdd; n++ )
-                    m_iml.Add(bmpNormal);
-            }
-
-            m_iml.Add(bitmap);
-        }
-        else // we already have this bitmap
-        {
-            m_iml.Replace(which, bitmap);
-        }
+        m_iml.Replace(which, bitmap);
 
         UpdateImageInfo();
     }
@@ -851,20 +845,23 @@ WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         // as the theme size might have changed
         InvalidateBestSize();
     }
-    else if ( wxUxThemeEngine::GetIfActive() )
+#endif // wxUSE_UXTHEME
+    // must use m_mouseInWindow here instead of IsMouseInWindow()
+    // since we need to know the first time the mouse enters the window
+    // and IsMouseInWindow() would return true in this case
+    else if ( (nMsg == WM_MOUSEMOVE && !m_mouseInWindow) ||
+                nMsg == WM_MOUSELEAVE )
     {
-        // we need to Refresh() if mouse has entered or left window
-        // so we can update the hot tracking state
-        // must use m_mouseInWindow here instead of IsMouseInWindow()
-        // since we need to know the first time the mouse enters the window
-        // and IsMouseInWindow() would return true in this case
-        if ( ( nMsg == WM_MOUSEMOVE && !m_mouseInWindow ) ||
-             nMsg == WM_MOUSELEAVE )
+        if (
+#if wxUSE_UXTHEME
+                wxUxThemeEngine::GetIfActive() ||
+#endif // wxUSE_UXTHEME
+                m_imageData && m_imageData->GetBitmap(State_Current).IsOk()
+           )
         {
             Refresh();
         }
     }
-#endif // wxUSE_UXTHEME
 
     // let the base class do all real processing
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
@@ -887,12 +884,12 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 #if wxUSE_UXTHEME
         if ( wxUxThemeEngine::GetIfActive() )
         {
-            m_imageData = new wxXPButtonImageData(this, bitmap.GetSize());
+            m_imageData = new wxXPButtonImageData(this, bitmap);
         }
         else
 #endif // wxUSE_UXTHEME
         {
-            m_imageData = new wxODButtonImageData(this);
+            m_imageData = new wxODButtonImageData(this, bitmap);
             MakeOwnerDrawn();
         }
 
@@ -900,8 +897,10 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         // changed to account for it
         InvalidateBestSize();
     }
-
-    m_imageData->SetBitmap(bitmap, which);
+    else
+    {
+        m_imageData->SetBitmap(bitmap, which);
+    }
 }
 
 void wxButton::DoSetBitmapMargins(wxCoord x, wxCoord y)
@@ -925,6 +924,25 @@ void wxButton::DoSetBitmapPosition(wxDirection dir)
 // drawing helpers
 namespace
 {
+
+// return the button state using both the ODS_XXX flags specified in state
+// parameter and the current button state
+wxButton::State GetButtonState(wxButton *btn, UINT state)
+{
+    if ( state & ODS_DISABLED )
+        return wxButton::State_Disabled;
+
+    if ( state & ODS_SELECTED )
+        return wxButton::State_Pressed;
+
+    if ( btn->HasCapture() || btn->IsMouseInWindow() )
+        return wxButton::State_Current;
+
+    if ( state & ODS_FOCUS )
+        return wxButton::State_Focused;
+
+    return wxButton::State_Normal;
+}
 
 void DrawButtonText(HDC hdc,
                     RECT *pRect,
@@ -1064,48 +1082,40 @@ void DrawButtonFrame(HDC hdc, RECT& rectBtn,
 }
 
 #if wxUSE_UXTHEME
-void MSWDrawXPBackground(wxButton *button, HDC hdc, RECT& rectBtn, UINT state)
+void DrawXPBackground(wxButton *button, HDC hdc, RECT& rectBtn, UINT state)
 {
     wxUxThemeHandle theme(button, L"BUTTON");
-    int iState;
 
-    if ( state & ODS_SELECTED )
+    // this array is indexed by wxButton::State values and so must be kept in
+    // sync with it
+    static const uxStates[] =
     {
-        iState = PBS_PRESSED;
-    }
-    else if ( button->HasCapture() || button->IsMouseInWindow() )
-    {
-        iState = PBS_HOT;
-    }
-    else if ( state & ODS_FOCUS )
-    {
-        iState = PBS_DEFAULTED;
-    }
-    else if ( state & ODS_DISABLED )
-    {
-        iState = PBS_DISABLED;
-    }
-    else
-    {
-        iState = PBS_NORMAL;
-    }
+        PBS_NORMAL, PBS_HOT, PBS_PRESSED, PBS_DISABLED, PBS_DEFAULTED
+    };
+
+    int iState = uxStates[GetButtonState(button, state)];
+
+    wxUxThemeEngine * const engine = wxUxThemeEngine::Get();
 
     // draw parent background if needed
-    if ( wxUxThemeEngine::Get()->IsThemeBackgroundPartiallyTransparent(theme,
-                                                                       BP_PUSHBUTTON,
-                                                                       iState) )
+    if ( engine->IsThemeBackgroundPartiallyTransparent
+                 (
+                    theme,
+                    BP_PUSHBUTTON,
+                    iState
+                 ) )
     {
-        wxUxThemeEngine::Get()->DrawThemeParentBackground(GetHwndOf(button), hdc, &rectBtn);
+        engine->DrawThemeParentBackground(GetHwndOf(button), hdc, &rectBtn);
     }
 
     // draw background
-    wxUxThemeEngine::Get()->DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
-                                                &rectBtn, NULL);
+    engine->DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
+                                &rectBtn, NULL);
 
     // calculate content area margins
     MARGINS margins;
-    wxUxThemeEngine::Get()->GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
-                                            TMT_CONTENTMARGINS, &rectBtn, &margins);
+    engine->GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
+                            TMT_CONTENTMARGINS, &rectBtn, &margins);
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
 
     if ( button->UseBgCol() )
@@ -1184,7 +1194,7 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 #if wxUSE_UXTHEME
     if ( wxUxThemeEngine::GetIfActive() )
     {
-        MSWDrawXPBackground(this, hdc, rectBtn, state);
+        DrawXPBackground(this, hdc, rectBtn, state);
     }
     else
 #endif // wxUSE_UXTHEME
@@ -1231,7 +1241,10 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     // draw the image, if any
     if ( m_imageData )
     {
-        wxBitmap bmp = m_imageData->GetBitmap(State_Normal);
+        wxBitmap bmp = m_imageData->GetBitmap(GetButtonState(this, state));
+        if ( !bmp.IsOk() )
+            bmp = m_imageData->GetBitmap(State_Normal);
+
         const wxSize sizeBmp = bmp.GetSize();
         const wxSize margin = m_imageData->GetBitmapMargins();
         const wxSize sizeBmpWithMargins(sizeBmp + 2*margin);

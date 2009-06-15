@@ -121,18 +121,18 @@ protected:
     // ------------
 
     // the check/radio boxes for styles
-    wxCheckBox *m_chkBitmap,
-               *m_chkImage,
+    wxCheckBox *m_chkBitmapOnly,
+               *m_chkTextAndBitmap,
                *m_chkFit,
                *m_chkDefault;
 
     // more checkboxes for wxBitmapButton only
-    wxCheckBox *m_chkUseSelected,
+    wxCheckBox *m_chkUsePressed,
                *m_chkUseFocused,
-               *m_chkUseHover,
+               *m_chkUseCurrent,
                *m_chkUseDisabled;
 
-    // and an image position choice used if m_chkImage is on
+    // and an image position choice used if m_chkTextAndBitmap is on
     wxRadioBox *m_radioImagePos;
 
     wxRadioBox *m_radioHAlign,
@@ -181,13 +181,13 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
                   : WidgetsPage(book, imaglist, button_xpm)
 {
     // init everything
-    m_chkBitmap =
-    m_chkImage =
+    m_chkBitmapOnly =
+    m_chkTextAndBitmap =
     m_chkFit =
     m_chkDefault =
-    m_chkUseSelected =
+    m_chkUsePressed =
     m_chkUseFocused =
-    m_chkUseHover =
+    m_chkUseCurrent =
     m_chkUseDisabled = (wxCheckBox *)NULL;
 
     m_radioImagePos =
@@ -209,19 +209,24 @@ void ButtonWidgetsPage::CreateContent()
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
-    m_chkBitmap = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Bitmap button"));
-    m_chkImage = CreateCheckBoxAndAddToSizer(sizerLeft, _T("With &image"));
+    m_chkBitmapOnly = CreateCheckBoxAndAddToSizer(sizerLeft, "&Bitmap only");
+    m_chkTextAndBitmap = CreateCheckBoxAndAddToSizer(sizerLeft, "Text &and &bitmap");
     m_chkFit = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Fit exactly"));
     m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Default"));
 
     sizerLeft->AddSpacer(5);
 
     wxSizer *sizerUseLabels =
-        new wxStaticBoxSizer(wxVERTICAL, this, _T("&Use the following bitmaps?"));
-    m_chkUseSelected = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Pushed"));
-    m_chkUseFocused = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Focused"));
-    m_chkUseHover = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Hover"));
-    m_chkUseDisabled = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Disabled"));
+        new wxStaticBoxSizer(wxVERTICAL, this,
+                "&Use the following bitmaps in addition to the normal one?");
+    m_chkUsePressed = CreateCheckBoxAndAddToSizer(sizerUseLabels,
+        "&Pressed (small help icon)");
+    m_chkUseFocused = CreateCheckBoxAndAddToSizer(sizerUseLabels,
+        "&Focused (small error icon)");
+    m_chkUseCurrent = CreateCheckBoxAndAddToSizer(sizerUseLabels,
+        "&Current (small warning icon)");
+    m_chkUseDisabled = CreateCheckBoxAndAddToSizer(sizerUseLabels,
+        "&Disabled (broken image icon)");
     sizerLeft->Add(sizerUseLabels, wxSizerFlags().Expand().Border());
 
     sizerLeft->AddSpacer(10);
@@ -300,14 +305,14 @@ void ButtonWidgetsPage::CreateContent()
 
 void ButtonWidgetsPage::Reset()
 {
-    m_chkBitmap->SetValue(false);
+    m_chkBitmapOnly->SetValue(false);
     m_chkFit->SetValue(true);
-    m_chkImage->SetValue(false);
+    m_chkTextAndBitmap->SetValue(false);
     m_chkDefault->SetValue(false);
 
-    m_chkUseSelected->SetValue(true);
+    m_chkUsePressed->SetValue(true);
     m_chkUseFocused->SetValue(true);
-    m_chkUseHover->SetValue(true);
+    m_chkUseCurrent->SetValue(true);
     m_chkUseDisabled->SetValue(true);
 
     m_radioImagePos->SetSelection(ButtonImagePos_Left);
@@ -376,17 +381,19 @@ void ButtonWidgetsPage::CreateButton()
             break;
     }
 
-    const bool isBitmapButton = m_chkBitmap->GetValue();
-    if ( isBitmapButton )
+    bool showsBitmap = false;
+    if ( m_chkBitmapOnly->GetValue() )
     {
+        showsBitmap = true;
+
         wxBitmapButton *bbtn = new wxBitmapButton(this, ButtonPage_Button,
                                                   CreateBitmap(_T("normal")));
-        if ( m_chkUseSelected->GetValue() )
-            bbtn->SetBitmapSelected(CreateBitmap(_T("pushed")));
+        if ( m_chkUsePressed->GetValue() )
+            bbtn->SetBitmapPressed(CreateBitmap(_T("pushed")));
         if ( m_chkUseFocused->GetValue() )
             bbtn->SetBitmapFocus(CreateBitmap(_T("focused")));
-        if ( m_chkUseHover->GetValue() )
-            bbtn->SetBitmapHover(CreateBitmap(_T("hover")));
+        if ( m_chkUseCurrent->GetValue() )
+            bbtn->SetBitmapCurrent(CreateBitmap(_T("hover")));
         if ( m_chkUseDisabled->GetValue() )
             bbtn->SetBitmapDisabled(CreateBitmap(_T("disabled")));
         m_button = bbtn;
@@ -398,13 +405,10 @@ void ButtonWidgetsPage::CreateButton()
                                 flags);
     }
 
-    m_chkUseSelected->Enable(isBitmapButton);
-    m_chkUseFocused->Enable(isBitmapButton);
-    m_chkUseHover->Enable(isBitmapButton);
-    m_chkUseDisabled->Enable(isBitmapButton);
-
-    if ( m_chkImage->GetValue() )
+    if ( !showsBitmap && m_chkTextAndBitmap->GetValue() )
     {
+        showsBitmap = true;
+
         static const wxDirection positions[] =
         {
             wxLEFT, wxRIGHT, wxTOP, wxBOTTOM
@@ -412,7 +416,21 @@ void ButtonWidgetsPage::CreateButton()
 
         m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION),
                             positions[m_radioImagePos->GetSelection()]);
+
+        if ( m_chkUsePressed->GetValue() )
+            m_button->SetBitmapPressed(wxArtProvider::GetIcon(wxART_HELP));
+        if ( m_chkUseFocused->GetValue() )
+            m_button->SetBitmapFocus(wxArtProvider::GetIcon(wxART_ERROR));
+        if ( m_chkUseCurrent->GetValue() )
+            m_button->SetBitmapCurrent(wxArtProvider::GetIcon(wxART_WARNING));
+        if ( m_chkUseDisabled->GetValue() )
+            m_button->SetBitmapDisabled(wxArtProvider::GetIcon(wxART_MISSING_IMAGE));
     }
+
+    m_chkUsePressed->Enable(showsBitmap);
+    m_chkUseFocused->Enable(showsBitmap);
+    m_chkUseCurrent->Enable(showsBitmap);
+    m_chkUseDisabled->Enable(showsBitmap);
 
     if ( m_chkDefault->GetValue() )
     {
