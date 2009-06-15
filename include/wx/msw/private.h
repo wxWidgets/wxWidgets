@@ -799,7 +799,7 @@ private:
 #define GetHbrushOf(brush)      ((HBRUSH)(brush).GetResourceHandle())
 
 #define GetHmenu()              ((HMENU)GetHMenu())
-#define GetHmenuOf(menu)        ((HMENU)menu->GetHMenu())
+#define GetHmenuOf(menu)        ((HMENU)(menu)->GetHMenu())
 
 #define GetHcursor()            ((HCURSOR)GetHCURSOR())
 #define GetHcursorOf(cursor)    ((HCURSOR)(cursor).GetHCURSOR())
@@ -808,7 +808,7 @@ private:
 #define GetHfontOf(font)        ((HFONT)(font).GetHFONT())
 
 #define GetHimagelist()         ((HIMAGELIST)GetHIMAGELIST())
-#define GetHimagelistOf(imgl)   ((HIMAGELIST)imgl->GetHIMAGELIST())
+#define GetHimagelistOf(imgl)   ((HIMAGELIST)(imgl)->GetHIMAGELIST())
 
 #define GetHpalette()           ((HPALETTE)GetHPALETTE())
 #define GetHpaletteOf(pal)      ((HPALETTE)(pal).GetHPALETTE())
