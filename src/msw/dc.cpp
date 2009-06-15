@@ -44,14 +44,14 @@
 #include "wx/dynlib.h"
 
 #ifdef wxHAS_RAW_BITMAP
-#include "wx/rawbmp.h"
+    #include "wx/rawbmp.h"
 #endif
 
 #include <string.h>
 
-#ifndef __WIN32__
-    #include <print.h>
-#endif
+#include "wx/msw/private/dc.h"
+
+using namespace wxMSWImpl;
 
 #ifndef AC_SRC_ALPHA
     #define AC_SRC_ALPHA 1
@@ -148,119 +148,6 @@ wxAlphaBlend(HDC hdcDst, int xDst, int yDst,
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
-
-// various classes to change some DC property temporarily
-
-// text background and foreground colours
-class wxTextColoursChanger
-{
-public:
-    wxTextColoursChanger(HDC hdc, const wxMSWDCImpl& dc)
-        : m_hdc(hdc)
-    {
-        Change(dc.GetTextForeground(), dc.GetTextBackground());
-    }
-
-    wxTextColoursChanger(HDC hdc, const wxColour& colFg, const wxColour& colBg)
-        : m_hdc(hdc)
-    {
-        Change(colFg, colBg);
-    }
-
-    ~wxTextColoursChanger()
-    {
-        if ( m_oldColFg != CLR_INVALID )
-            ::SetTextColor(m_hdc, m_oldColFg);
-        if ( m_oldColBg != CLR_INVALID )
-            ::SetBkColor(m_hdc, m_oldColBg);
-    }
-
-protected:
-    // this ctor doesn't change mode immediately, call Change() later to do it
-    // only if needed
-    wxTextColoursChanger(HDC hdc)
-        : m_hdc(hdc)
-    {
-        m_oldColFg =
-        m_oldColBg = CLR_INVALID;
-    }
-
-    void Change(const wxColour& colFg, const wxColour& colBg)
-    {
-        if ( colFg.IsOk() )
-        {
-            m_oldColFg = ::SetTextColor(m_hdc, colFg.GetPixel());
-            if ( m_oldColFg == CLR_INVALID )
-            {
-                wxLogLastError(_T("SetTextColor"));
-            }
-        }
-        else
-        {
-            m_oldColFg = CLR_INVALID;
-        }
-
-        if ( colBg.IsOk() )
-        {
-            m_oldColBg = ::SetBkColor(m_hdc, colBg.GetPixel());
-            if ( m_oldColBg == CLR_INVALID )
-            {
-                wxLogLastError(_T("SetBkColor"));
-            }
-        }
-        else
-        {
-            m_oldColBg = CLR_INVALID;
-        }
-    }
-
-private:
-    const HDC m_hdc;
-    COLORREF m_oldColFg,
-             m_oldColBg;
-
-    wxDECLARE_NO_COPY_CLASS(wxTextColoursChanger);
-};
-
-// background mode
-class wxBkModeChanger
-{
-public:
-    // set background mode to opaque if mode != wxBRUSHSTYLE_TRANSPARENT
-    wxBkModeChanger(HDC hdc, int mode)
-        : m_hdc(hdc)
-    {
-        Change(mode);
-    }
-
-    ~wxBkModeChanger()
-    {
-        if ( m_oldMode )
-            ::SetBkMode(m_hdc, m_oldMode);
-    }
-
-protected:
-    // this ctor doesn't change mode immediately, call Change() later to do it
-    // only if needed
-    wxBkModeChanger(HDC hdc) : m_hdc(hdc) { m_oldMode = 0; }
-
-    void Change(int mode)
-    {
-        m_oldMode = ::SetBkMode(m_hdc, mode == wxBRUSHSTYLE_TRANSPARENT
-                                        ? TRANSPARENT
-                                        : OPAQUE);
-        if ( !m_oldMode )
-        {
-            wxLogLastError(_T("SetBkMode"));
-        }
-    }
-
-private:
-    const HDC m_hdc;
-    int m_oldMode;
-
-    wxDECLARE_NO_COPY_CLASS(wxBkModeChanger);
-};
 
 // instead of duplicating the same code which sets and then restores text
 // colours in each wxDC method working with wxSTIPPLE_MASK_OPAQUE brushes,

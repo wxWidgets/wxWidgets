@@ -43,6 +43,9 @@
 #include "wx/stockitem.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/button.h"
+#include "wx/msw/private/dc.h"
+
+using namespace wxMSWImpl;
 
 #if wxUSE_UXTHEME
     #include "wx/msw/uxtheme.h"
@@ -887,15 +890,17 @@ void wxButton::DoSetBitmapPosition(wxDirection dir)
 // ----------------------------------------------------------------------------
 
 // drawing helpers
-
-static void DrawButtonText(HDC hdc,
-                           RECT *pRect,
-                           const wxString& text,
-                           COLORREF col,
-                           int flags)
+namespace
 {
-    COLORREF colOld = SetTextColor(hdc, col);
-    int modeOld = SetBkMode(hdc, TRANSPARENT);
+
+void DrawButtonText(HDC hdc,
+                    RECT *pRect,
+                    const wxString& text,
+                    COLORREF col,
+                    int flags)
+{
+    wxTextColoursChanger changeFg(hdc, col, CLR_INVALID);
+    wxBkModeChanger changeBkMode(hdc, wxBRUSHSTYLE_TRANSPARENT);
 
     // center text horizontally in any case
     flags |= DT_CENTER;
@@ -927,58 +932,14 @@ static void DrawButtonText(HDC hdc,
         ::DrawText(hdc, text.wx_str(), text.length(), pRect,
                    flags | DT_SINGLELINE | DT_VCENTER);
     }
-
-    SetBkMode(hdc, modeOld);
-    SetTextColor(hdc, colOld);
 }
 
-static void DrawRect(HDC hdc, const RECT& r)
+void DrawRect(HDC hdc, const RECT& r)
 {
     wxDrawLine(hdc, r.left, r.top, r.right, r.top);
     wxDrawLine(hdc, r.right, r.top, r.right, r.bottom);
     wxDrawLine(hdc, r.right, r.bottom, r.left, r.bottom);
     wxDrawLine(hdc, r.left, r.bottom, r.left, r.top);
-}
-
-void wxButton::MakeOwnerDrawn()
-{
-    long style = GetWindowLong(GetHwnd(), GWL_STYLE);
-    if ( (style & BS_OWNERDRAW) != BS_OWNERDRAW )
-    {
-        // make it so
-        style |= BS_OWNERDRAW;
-        SetWindowLong(GetHwnd(), GWL_STYLE, style);
-    }
-}
-
-bool wxButton::SetBackgroundColour(const wxColour &colour)
-{
-    if ( !wxControl::SetBackgroundColour(colour) )
-    {
-        // nothing to do
-        return false;
-    }
-
-    MakeOwnerDrawn();
-
-    Refresh();
-
-    return true;
-}
-
-bool wxButton::SetForegroundColour(const wxColour &colour)
-{
-    if ( !wxControl::SetForegroundColour(colour) )
-    {
-        // nothing to do
-        return false;
-    }
-
-    MakeOwnerDrawn();
-
-    Refresh();
-
-    return true;
 }
 
 /*
@@ -1016,9 +977,8 @@ bool wxButton::SetForegroundColour(const wxColour &colour)
    BGGGGGGGGGGGGGGGGGB
    BBBBBBBBBBBBBBBBBBB
 */
-
-static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
-                            bool selected, bool pushed)
+void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
+                     bool selected, bool pushed)
 {
     RECT r;
     CopyRect(&r, &rectBtn);
@@ -1075,7 +1035,6 @@ static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
 }
 
 #if wxUSE_UXTHEME
-static
 void MSWDrawXPBackground(wxButton *button, WXDRAWITEMSTRUCT *wxdis)
 {
     LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
@@ -1146,6 +1105,53 @@ void MSWDrawXPBackground(wxButton *button, WXDRAWITEMSTRUCT *wxdis)
     }
 }
 #endif // wxUSE_UXTHEME
+
+} // anonymous namespace
+
+// ----------------------------------------------------------------------------
+// owner drawn buttons support
+// ----------------------------------------------------------------------------
+
+void wxButton::MakeOwnerDrawn()
+{
+    long style = GetWindowLong(GetHwnd(), GWL_STYLE);
+    if ( (style & BS_OWNERDRAW) != BS_OWNERDRAW )
+    {
+        // make it so
+        style |= BS_OWNERDRAW;
+        SetWindowLong(GetHwnd(), GWL_STYLE, style);
+    }
+}
+
+bool wxButton::SetBackgroundColour(const wxColour &colour)
+{
+    if ( !wxControl::SetBackgroundColour(colour) )
+    {
+        // nothing to do
+        return false;
+    }
+
+    MakeOwnerDrawn();
+
+    Refresh();
+
+    return true;
+}
+
+bool wxButton::SetForegroundColour(const wxColour &colour)
+{
+    if ( !wxControl::SetForegroundColour(colour) )
+    {
+        // nothing to do
+        return false;
+    }
+
+    MakeOwnerDrawn();
+
+    Refresh();
+
+    return true;
+}
 
 bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 {
