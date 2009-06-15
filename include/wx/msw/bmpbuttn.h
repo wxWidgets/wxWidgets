@@ -44,13 +44,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxButtonNameStr);
 
-    // Implementation
-    virtual bool SetBackgroundColour(const wxColour& colour);
-    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-    virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-    virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-    virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
-
 protected:
     // common part of all ctors
     void Init()
@@ -60,21 +53,7 @@ protected:
     }
 
     // reimplement some base class virtuals
-    virtual wxSize DoGetBestSize() const;
-    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
-
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
-
-
-    // invalidate m_brushDisabled when system colours change
-    void OnSysColourChanged(wxSysColourChangedEvent& event);
-
-    // change the currently bitmap if we have a hover one
-    void OnMouseEnterOrLeave(wxMouseEvent& event);
-
-
-    // the brush we use to draw disabled buttons
-    wxBrush m_brushDisabled;
 
     // true if disabled bitmap was set by user, false if we created it
     // ourselves from the normal one

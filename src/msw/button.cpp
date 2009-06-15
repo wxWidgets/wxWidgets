@@ -143,8 +143,13 @@ public:
 
         m_dir = wxLEFT;
 
-        m_margin.x = btn->GetCharWidth();
-        m_margin.y = btn->GetCharHeight() / 2;
+        // we use margins when we have both bitmap and text, but when we have
+        // only the bitmap it should take up the entire button area
+        if ( !btn->GetLabel().empty() )
+        {
+            m_margin.x = btn->GetCharWidth();
+            m_margin.y = btn->GetCharHeight() / 2;
+        }
     }
 
     virtual wxBitmap GetBitmap(wxButton::State which) const
@@ -159,7 +164,7 @@ public:
 
     virtual wxSize GetBitmapMargins() const
     {
-        return m_margin + wxSize(OD_BUTTON_MARGIN, OD_BUTTON_MARGIN);
+        return m_margin;
     }
 
     virtual void SetBitmapMargins(wxCoord x, wxCoord y)
@@ -189,6 +194,10 @@ private:
 
 #if wxUSE_UXTHEME
 
+// somehow the margin is one pixel greater than the value returned by
+// GetThemeMargins() call
+const int XP_BUTTON_EXTRA_MARGIN = 1;
+
 class wxXPButtonImageData : public wxButtonImageData
 {
 public:
@@ -215,6 +224,8 @@ public:
 
         // and default alignment
         m_data.uAlign = BUTTON_IMAGELIST_ALIGN_LEFT;
+
+        UpdateImageInfo();
     }
 
     virtual wxBitmap GetBitmap(wxButton::State which) const
@@ -561,9 +572,17 @@ void wxButton::SetLabel(const wxString& label)
 
 wxSize wxButton::DoGetBestSize() const
 {
-    wxSize size = wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this));
+    wxSize size;
+
+    // account for the text part
+    if ( !GetLabel().empty() )
+    {
+        size = wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this));
+    }
+
     if ( m_imageData )
     {
+        // account for the bitmap size
         const wxSize sizeBmp = m_imageData->GetBitmap(State_Normal).GetSize();
         const wxDirection dirBmp = m_imageData->GetBitmapPosition();
         if ( dirBmp == wxLEFT || dirBmp == wxRIGHT )
@@ -579,7 +598,45 @@ wxSize wxButton::DoGetBestSize() const
                 size.x = sizeBmp.x;
         }
 
+        // account for the user-specified margins
         size += 2*m_imageData->GetBitmapMargins();
+
+        // and also for the margins we always add internally
+        int marginH = 0,
+            marginV = 0;
+#if wxUSE_UXTHEME
+        if ( wxUxThemeEngine::GetIfActive() )
+        {
+            wxUxThemeHandle theme(const_cast<wxButton *>(this), L"BUTTON");
+
+            MARGINS margins;
+            wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
+                                                    BP_PUSHBUTTON, PBS_NORMAL,
+                                                    TMT_CONTENTMARGINS, NULL,
+                                                    &margins);
+
+            // XP doesn't draw themed buttons correctly when the client area is
+            // smaller than 8x8 - enforce this minimum size for small bitmaps
+            size.IncTo(wxSize(8, 8));
+
+            // don't add margins for the borderless buttons, they don't need
+            // them and it just makes them appear larger than needed
+            if ( !HasFlag(wxBORDER_NONE) )
+            {
+                marginH = margins.cxLeftWidth + margins.cxRightWidth
+                            + 2*XP_BUTTON_EXTRA_MARGIN;
+                marginV = margins.cyTopHeight + margins.cyBottomHeight
+                            + 2*XP_BUTTON_EXTRA_MARGIN;
+            }
+        }
+        else
+#endif // wxUSE_UXTHEME
+        {
+            marginH =
+            marginV = OD_BUTTON_MARGIN;
+        }
+
+        size.IncBy(marginH, marginV);
 
         CacheBestSize(size);
     }
@@ -853,10 +910,13 @@ WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                 nMsg == WM_MOUSELEAVE )
     {
         if (
+                IsEnabled() &&
+                (
 #if wxUSE_UXTHEME
                 wxUxThemeEngine::GetIfActive() ||
 #endif // wxUSE_UXTHEME
                 m_imageData && m_imageData->GetBitmap(State_Current).IsOk()
+                )
            )
         {
             Refresh();
@@ -882,7 +942,11 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     if ( !m_imageData )
     {
 #if wxUSE_UXTHEME
-        if ( wxUxThemeEngine::GetIfActive() )
+        // using image list doesn't work correctly if we don't have any label
+        // (even if we use BUTTON_IMAGELIST_ALIGN_CENTER alignment and
+        // BS_BITMAP style), at least under Windows 2003 so use owner drawn
+        // strategy for bitmap-only buttons
+        if ( !GetLabel().empty() && wxUxThemeEngine::GetIfActive() )
         {
             m_imageData = new wxXPButtonImageData(this, bitmap);
         }
@@ -901,6 +965,13 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     {
         m_imageData->SetBitmap(bitmap, which);
     }
+
+    Refresh();
+}
+
+wxSize wxButton::DoGetBitmapMargins() const
+{
+    return m_imageData ? m_imageData->GetBitmapMargins() : wxSize(0, 0);
 }
 
 void wxButton::DoSetBitmapMargins(wxCoord x, wxCoord y)
@@ -1117,6 +1188,7 @@ void DrawXPBackground(wxButton *button, HDC hdc, RECT& rectBtn, UINT state)
     engine->GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
                             TMT_CONTENTMARGINS, &rectBtn, &margins);
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
+    ::InflateRect(&rectBtn, -XP_BUTTON_EXTRA_MARGIN, -XP_BUTTON_EXTRA_MARGIN);
 
     if ( button->UseBgCol() )
     {
@@ -1189,6 +1261,8 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 
     RECT rectBtn;
     CopyRect(&rectBtn, &lpDIS->rcItem);
+
+    const wxString label = GetLabel();
 
     // draw the button background
 #if wxUSE_UXTHEME
@@ -1290,15 +1364,18 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 
 
     // finally draw the label
-    COLORREF colFg = state & ODS_DISABLED
-                        ? ::GetSysColor(COLOR_GRAYTEXT)
-                        : wxColourToRGB(GetForegroundColour());
+    if ( !label.empty() )
+    {
+        COLORREF colFg = state & ODS_DISABLED
+                            ? ::GetSysColor(COLOR_GRAYTEXT)
+                            : wxColourToRGB(GetForegroundColour());
 
-    // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000) systems
-    // but by happy coincidence ODS_NOACCEL is not used under them neither so
-    // DT_HIDEPREFIX should never be used there
-    DrawButtonText(hdc, &rectBtn, GetLabel(), colFg,
-                   state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
+        // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000)
+        // systems but by happy coincidence ODS_NOACCEL is not used under them
+        // neither so DT_HIDEPREFIX should never be used there
+        DrawButtonText(hdc, &rectBtn, label, colFg,
+                       state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
+    }
 
     return true;
 }

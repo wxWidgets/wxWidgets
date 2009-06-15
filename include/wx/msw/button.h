@@ -82,6 +82,7 @@ protected:
 
     virtual wxBitmap DoGetBitmap(State which) const;
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
+    virtual wxSize DoGetBitmapMargins() const;
     virtual void DoSetBitmapMargins(wxCoord x, wxCoord y);
     virtual void DoSetBitmapPosition(wxDirection dir);
 

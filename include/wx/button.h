@@ -155,8 +155,13 @@ protected:
     virtual void DoSetBitmap(const wxBitmap& WXUNUSED(bitmap),
                              State WXUNUSED(which))
         { }
+
+    virtual wxSize DoGetBitmapMargins() const
+        { return wxSize(0, 0); }
+
     virtual void DoSetBitmapMargins(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
         { }
+
     virtual void DoSetBitmapPosition(wxDirection WXUNUSED(dir))
         { }
 
