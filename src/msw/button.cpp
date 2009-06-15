@@ -112,6 +112,7 @@ class wxButtonImageData
 {
 public:
     wxButtonImageData() { }
+    virtual ~wxButtonImageData() { }
 
     virtual wxBitmap GetBitmap(wxButton::State which) const = 0;
     virtual void SetBitmap(const wxBitmap& bitmap, wxButton::State which) = 0;
@@ -119,7 +120,7 @@ public:
     virtual wxSize GetBitmapMargins() const = 0;
     virtual void SetBitmapMargins(wxCoord x, wxCoord y) = 0;
 
-    virtual bool IsHorizontal() const = 0;
+    virtual wxDirection GetBitmapPosition() const = 0;
     virtual void SetBitmapPosition(wxDirection dir) = 0;
 
 private:
@@ -129,10 +130,20 @@ private:
 namespace
 {
 
+// the gap between button edge and the interior area used by Windows for the
+// standard buttons
+const int OD_BUTTON_MARGIN = 4;
+
 class wxODButtonImageData : public wxButtonImageData
 {
 public:
-    wxODButtonImageData() { m_dir = wxLEFT; }
+    wxODButtonImageData(wxButton *btn)
+    {
+        m_dir = wxLEFT;
+
+        m_margin.x = btn->GetCharWidth();
+        m_margin.y = btn->GetCharHeight() / 2;
+    }
 
     virtual wxBitmap GetBitmap(wxButton::State which) const
     {
@@ -146,7 +157,7 @@ public:
 
     virtual wxSize GetBitmapMargins() const
     {
-        return m_margin;
+        return m_margin + wxSize(OD_BUTTON_MARGIN, OD_BUTTON_MARGIN);
     }
 
     virtual void SetBitmapMargins(wxCoord x, wxCoord y)
@@ -154,9 +165,9 @@ public:
         m_margin = wxSize(x, y);
     }
 
-    virtual bool IsHorizontal() const
+    virtual wxDirection GetBitmapPosition() const
     {
-        return m_dir == wxLEFT || m_dir == wxRIGHT;
+        return m_dir;
     }
 
     virtual void SetBitmapPosition(wxDirection dir)
@@ -243,10 +254,26 @@ public:
         }
     }
 
-    virtual bool IsHorizontal() const
+    virtual wxDirection GetBitmapPosition() const
     {
-        return m_data.uAlign == BUTTON_IMAGELIST_ALIGN_LEFT ||
-                    m_data.uAlign == BUTTON_IMAGELIST_ALIGN_RIGHT;
+        switch ( m_data.uAlign )
+        {
+            default:
+                wxFAIL_MSG( "invalid image alignment" );
+                // fall through
+
+            case BUTTON_IMAGELIST_ALIGN_LEFT:
+                return wxLEFT;
+
+            case BUTTON_IMAGELIST_ALIGN_RIGHT:
+                return wxRIGHT;
+
+            case BUTTON_IMAGELIST_ALIGN_TOP:
+                return wxTOP;
+
+            case BUTTON_IMAGELIST_ALIGN_BOTTOM:
+                return wxBOTTOM;
+        }
     }
 
     virtual void SetBitmapPosition(wxDirection dir)
@@ -544,7 +571,8 @@ wxSize wxButton::DoGetBestSize() const
     if ( m_imageData )
     {
         const wxSize sizeBmp = m_imageData->GetBitmap(State_Normal).GetSize();
-        if ( m_imageData->IsHorizontal() )
+        const wxDirection dirBmp = m_imageData->GetBitmapPosition();
+        if ( dirBmp == wxLEFT || dirBmp == wxRIGHT )
         {
             size.x += sizeBmp.x;
             if ( sizeBmp.y > size.y )
@@ -858,10 +886,15 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     {
 #if wxUSE_UXTHEME
         if ( wxUxThemeEngine::GetIfActive() )
+        {
             m_imageData = new wxXPButtonImageData(this, bitmap.GetSize());
+        }
         else
 #endif // wxUSE_UXTHEME
-            m_imageData = new wxODButtonImageData;
+        {
+            m_imageData = new wxODButtonImageData(this);
+            MakeOwnerDrawn();
+        }
 
         // if a bitmap was assigned to the bitmap, its best size must be
         // changed to account for it
@@ -977,7 +1010,7 @@ void DrawRect(HDC hdc, const RECT& r)
    BGGGGGGGGGGGGGGGGGB
    BBBBBBBBBBBBBBBBBBB
 */
-void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
+void DrawButtonFrame(HDC hdc, RECT& rectBtn,
                      bool selected, bool pushed)
 {
     RECT r;
@@ -1026,17 +1059,13 @@ void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
         wxDrawLine(hdc, r.left + 1, r.bottom - 1, r.right - 1, r.bottom - 1);
         wxDrawLine(hdc, r.right - 1, r.bottom - 1, r.right - 1, r.top);
     }
+
+    InflateRect(&rectBtn, -OD_BUTTON_MARGIN, -OD_BUTTON_MARGIN);
 }
 
 #if wxUSE_UXTHEME
-void MSWDrawXPBackground(wxButton *button, WXDRAWITEMSTRUCT *wxdis)
+void MSWDrawXPBackground(wxButton *button, HDC hdc, RECT& rectBtn, UINT state)
 {
-    LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
-    HDC hdc = lpDIS->hDC;
-    UINT state = lpDIS->itemState;
-    RECT rectBtn;
-    CopyRect(&rectBtn, &lpDIS->rcItem);
-
     wxUxThemeHandle theme(button, L"BUTTON");
     int iState;
 
@@ -1077,15 +1106,7 @@ void MSWDrawXPBackground(wxButton *button, WXDRAWITEMSTRUCT *wxdis)
     MARGINS margins;
     wxUxThemeEngine::Get()->GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
                                             TMT_CONTENTMARGINS, &rectBtn, &margins);
-    RECT rectClient;
-    ::CopyRect(&rectClient, &rectBtn);
-    ::InflateRect(&rectClient, -margins.cxLeftWidth, -margins.cyTopHeight);
-
-    // if focused and !nofocus rect
-    if ( (state & ODS_FOCUS) && !(state & ODS_NOFOCUSRECT) )
-    {
-        DrawFocusRect(hdc, &rectClient);
-    }
+    ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
 
     if ( button->UseBgCol() )
     {
@@ -1093,6 +1114,8 @@ void MSWDrawXPBackground(wxButton *button, WXDRAWITEMSTRUCT *wxdis)
         AutoHBRUSH hbrushBackground(colBg);
 
         // don't overwrite the focus rect
+        RECT rectClient;
+        ::CopyRect(&rectClient, &rectBtn);
         ::InflateRect(&rectClient, -1, -1);
         FillRect(hdc, &rectClient, hbrushBackground);
     }
@@ -1150,14 +1173,18 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 {
     LPDRAWITEMSTRUCT lpDIS = (LPDRAWITEMSTRUCT)wxdis;
     HDC hdc = lpDIS->hDC;
+
     UINT state = lpDIS->itemState;
+    bool pushed = (SendMessage(GetHwnd(), BM_GETSTATE, 0, 0) & BST_PUSHED) != 0;
+
     RECT rectBtn;
     CopyRect(&rectBtn, &lpDIS->rcItem);
 
+    // draw the button background
 #if wxUSE_UXTHEME
     if ( wxUxThemeEngine::GetIfActive() )
     {
-        MSWDrawXPBackground(this, wxdis);
+        MSWDrawXPBackground(this, hdc, rectBtn, state);
     }
     else
 #endif // wxUSE_UXTHEME
@@ -1172,36 +1199,84 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         bool selected = (state & ODS_SELECTED) != 0;
         if ( !selected )
         {
-            wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+            wxTopLevelWindow *
+                tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
             if ( tlw )
             {
                 selected = tlw->GetDefaultItem() == this;
             }
         }
-        bool pushed = (SendMessage(GetHwnd(), BM_GETSTATE, 0, 0) & BST_PUSHED) != 0;
 
         DrawButtonFrame(hdc, rectBtn, selected, pushed);
+    }
 
-        // if focused and !nofocus rect
-        if ( (state & ODS_FOCUS) && !(state & ODS_NOFOCUSRECT) )
+    // draw the focus rectangle if we need it
+    if ( (state & ODS_FOCUS) && !(state & ODS_NOFOCUSRECT) )
+    {
+        DrawFocusRect(hdc, &rectBtn);
+
+#if wxUSE_UXTHEME
+        if ( !wxUxThemeEngine::GetIfActive() )
+#endif // wxUSE_UXTHEME
         {
-            RECT rectFocus;
-            CopyRect(&rectFocus, &rectBtn);
-
-            // I don't know where does this constant come from, but this is how
-            // Windows draws them
-            InflateRect(&rectFocus, -4, -4);
-
-            DrawFocusRect(hdc, &rectFocus);
-        }
-
-        if ( pushed )
-        {
-            // the label is shifted by 1 pixel to create "pushed" effect
-            OffsetRect(&rectBtn, 1, 1);
+            if ( pushed )
+            {
+                // the label is shifted by 1 pixel to create "pushed" effect
+                OffsetRect(&rectBtn, 1, 1);
+            }
         }
     }
 
+
+    // draw the image, if any
+    if ( m_imageData )
+    {
+        wxBitmap bmp = m_imageData->GetBitmap(State_Normal);
+        const wxSize sizeBmp = bmp.GetSize();
+        const wxSize margin = m_imageData->GetBitmapMargins();
+        const wxSize sizeBmpWithMargins(sizeBmp + 2*margin);
+        wxRect rectButton(wxRectFromRECT(rectBtn));
+
+        // for simplicity, we start with centred rectangle and then move it to
+        // the appropriate edge
+        wxRect rectBitmap = wxRect(sizeBmp).CentreIn(rectButton);
+        switch ( m_imageData->GetBitmapPosition() )
+        {
+            default:
+                wxFAIL_MSG( "invalid direction" );
+                // fall through
+
+            case wxLEFT:
+                rectBitmap.x = rectButton.x + margin.x;
+                rectButton.x += sizeBmpWithMargins.x;
+                rectButton.width -= sizeBmpWithMargins.x;
+                break;
+
+            case wxRIGHT:
+                rectBitmap.x = rectButton.GetRight() - sizeBmp.x - margin.x;
+                rectButton.width -= sizeBmpWithMargins.x;
+                break;
+
+            case wxTOP:
+                rectBitmap.y = rectButton.y + margin.y;
+                rectButton.y += sizeBmpWithMargins.y;
+                rectButton.height -= sizeBmpWithMargins.y;
+                break;
+
+            case wxBOTTOM:
+                rectBitmap.y = rectButton.GetBottom() - sizeBmp.y - margin.y;
+                rectButton.height -= sizeBmpWithMargins.y;
+                break;
+        }
+
+        wxDCTemp dst((WXHDC)hdc);
+        dst.DrawBitmap(bmp, rectBitmap.GetPosition(), true);
+
+        wxCopyRectToRECT(rectButton, rectBtn);
+    }
+
+
+    // finally draw the label
     COLORREF colFg = state & ODS_DISABLED
                         ? ::GetSysColor(COLOR_GRAYTEXT)
                         : wxColourToRGB(GetForegroundColour());
