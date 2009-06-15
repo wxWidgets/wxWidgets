@@ -66,6 +66,12 @@ static DataBrowserItemID* CreateDataBrowserItemIDArray(size_t& noOfEntries, wxDa
   return itemIDs;
 }
 
+static const EventTypeSpec eventList[] =
+{
+    { kEventClassControl, kEventControlHit },
+    { kEventClassControl, kEventControlDraw }
+};
+
 static pascal OSStatus DataBrowserCtrlEventHandler(EventHandlerCallRef handler, EventRef EventReference, void* Data)
 {
   wxDataViewCtrl* DataViewCtrlPtr((wxDataViewCtrl*) Data); // the 'Data' variable always contains a pointer to the data view control that installed the handler
@@ -89,7 +95,9 @@ static pascal OSStatus DataBrowserCtrlEventHandler(EventHandlerCallRef handler, 
       {
         ControlRef            controlReference;
         DataBrowserPropertyID columnPropertyID;
+        DataBrowserSortOrder  order;
         unsigned long         columnIndex;
+        wxDataViewColumn*     column;
         OSStatus              status;
         wxDataViewEvent       DataViewEvent(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK,DataViewCtrlPtr->GetId());
 
@@ -101,10 +109,15 @@ static pascal OSStatus DataBrowserCtrlEventHandler(EventHandlerCallRef handler, 
         if (status == errDataBrowserPropertyNotFound) // user clicked into part of the header that does not have a property
           return ::CallNextEventHandler(handler,EventReference);
         wxCHECK(status == noErr,status);
+        column = DataViewCtrlPtr->GetColumn(columnIndex);
+       // set the column sort order:
+        status = ::GetDataBrowserSortOrder(controlReference,&order);
+        wxCHECK(status == noErr,status);
+        column->SetSortOrderVariable(order == kDataBrowserOrderIncreasing);
        // initialize wxWidget event handler:
         DataViewEvent.SetEventObject(DataViewCtrlPtr);
         DataViewEvent.SetColumn(columnIndex);
-        DataViewEvent.SetDataViewColumn(DataViewCtrlPtr->GetColumn(columnIndex));
+        DataViewEvent.SetDataViewColumn(column);
        // finally sent the equivalent wxWidget event:
         DataViewCtrlPtr->HandleWindowEvent(DataViewEvent);
         return ::CallNextEventHandler(handler,EventReference);
@@ -312,6 +325,9 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
 
   SetReferenceInNativeControl();
   verify_noerr(err);
+  
+  ::InstallControlEventHandler(this->m_controlRef, GetDataBrowserCtrlEventHandlerUPP(), GetEventTypeCount(eventList), eventList, peer, (EventHandlerRef *)&m_macDataViewCtrlEventHandler);
+  
  // setup standard callbacks:
   if (gDataBrowserTableViewGetContextualMenuUPP == NULL) gDataBrowserTableViewGetContextualMenuUPP = NewDataBrowserGetContextualMenuUPP(wxMacDataBrowserTableViewControl::DataBrowserGetContextualMenuProc);
   if (gDataBrowserTableViewItemCompareUPP       == NULL) gDataBrowserTableViewItemCompareUPP       = NewDataBrowserItemCompareUPP      (wxMacDataBrowserTableViewControl::DataBrowserCompareProc);
@@ -389,6 +405,11 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
   if ((style & wxDV_NO_HEADER) != 0)
     this->SetHeaderButtonHeight(0);
 } /* wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow*, wxPoint const&, wxSize const&, long) */
+
+wxMacDataBrowserTableViewControl::~wxMacDataBrowserTableViewControl(void)
+{
+  ::RemoveEventHandler((EventHandlerRef) m_macDataViewCtrlEventHandler);
+} /* wxMacDataBrowserTableViewControl::~wxMacDataBrowserTableViewControl(void) */
 
 //
 // callback handling

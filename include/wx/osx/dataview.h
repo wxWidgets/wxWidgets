@@ -406,6 +406,10 @@ public:
     {
         m_width = NewWidth;
     }
+    void SetSortOrderVariable(bool NewOrder)
+    {
+        m_ascending = NewOrder;
+    }
 
 private:
     // common part of all ctors
