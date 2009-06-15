@@ -26,7 +26,7 @@ public:
     virtual bool IsRunning() const { return m_id != 0; }
 
 protected:
-    unsigned long m_id;
+    WPARAM m_id;
 };
 
 #endif // wxUSE_TIMER
