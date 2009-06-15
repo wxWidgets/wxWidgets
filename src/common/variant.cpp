@@ -1475,8 +1475,12 @@ bool wxVariantDataLongLong::Write(wxSTD ostream& str) const
 
 bool wxVariantDataLongLong::Write(wxString& str) const
 {
-    str.Printf(wxS("%lld"), m_value);
+#ifdef wxLongLong_t
+    str.Printf(wxS("%lld"), m_value.GetValue());
     return true;
+#else
+    return false;
+#endif
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -1632,8 +1636,12 @@ bool wxVariantDataULongLong::Write(wxSTD ostream& str) const
 
 bool wxVariantDataULongLong::Write(wxString& str) const
 {
-    str.Printf(wxS("%llu"), m_value);
+#ifdef wxLongLong_t
+    str.Printf(wxS("%llu"), m_value.GetValue());
     return true;
+#else
+    return false;
+#endif
 }
 
 #if wxUSE_STD_IOSTREAM
