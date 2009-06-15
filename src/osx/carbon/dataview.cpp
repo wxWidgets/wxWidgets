@@ -995,11 +995,12 @@ wxRect wxMacDataViewDataBrowserListViewControl::GetRectangle(wxDataViewItem cons
 
 bool wxMacDataViewDataBrowserListViewControl::IsExpanded(wxDataViewItem const& item) const
 {
-  DataBrowserItemState state;
+  DataBrowserItemState state = 0;
 
+  if (this->GetItemState(reinterpret_cast<DataBrowserItemID>(item.GetID()),&state) != noErr)
+     return false;
 
-  return ((this->GetItemState(reinterpret_cast<DataBrowserItemID>(item.GetID()),&state) == noErr) &&
-          (state & kDataBrowserContainerIsOpen != 0));
+  return ((state & kDataBrowserContainerIsOpen) != 0);
 }
 
 bool wxMacDataViewDataBrowserListViewControl::Reload(void)
