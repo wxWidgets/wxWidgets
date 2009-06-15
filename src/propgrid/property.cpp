@@ -1634,18 +1634,20 @@ long wxPGProperty::GetAttributeAsLong( const wxString& name, long defVal ) const
 {
     wxVariant variant = m_attributes.FindValue(name);
 
-    return wxPGVariantToInt(variant, defVal);
+    if ( variant.IsNull() )
+        return defVal;
+
+    return variant.GetLong();
 }
 
 double wxPGProperty::GetAttributeAsDouble( const wxString& name, double defVal ) const
 {
-    double retVal;
     wxVariant variant = m_attributes.FindValue(name);
 
-    if ( wxPGVariantToDouble(variant, &retVal) )
-        return retVal;
+    if ( variant.IsNull() )
+        return defVal;
 
-    return defVal;
+    return variant.GetDouble();
 }
 
 wxVariant wxPGProperty::GetAttributesAsList() const

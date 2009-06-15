@@ -720,7 +720,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
 
     if ( ind == 0 )
     {
-        font.SetPointSize( wxPGVariantToInt(childValue) );
+        font.SetPointSize( childValue.GetLong() );
     }
     else if ( ind == 1 )
     {
@@ -1425,7 +1425,7 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
 {
     if ( name == wxPG_COLOUR_ALLOW_CUSTOM )
     {
-        int ival = wxPGVariantToInt(value);
+        int ival = value.GetLong();
 
         if ( ival && (m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
         {

@@ -920,11 +920,11 @@ void FormMain::OnPropertyGridChange( wxPropertyGridEvent& event )
         SetSize ( m_pPropGridManager->GetPropertyValueAsInt(property), -1, -1, -1, wxSIZE_USE_EXISTING );
     else if ( name == wxT("Y") )
     // wxPGVariantToInt is safe long int value getter
-        SetSize ( -1, wxPGVariantToInt(value), -1, -1, wxSIZE_USE_EXISTING );
+        SetSize ( -1, value.GetLong(), -1, -1, wxSIZE_USE_EXISTING );
     else if ( name == wxT("Width") )
         SetSize ( -1, -1, m_pPropGridManager->GetPropertyValueAsInt(property), -1, wxSIZE_USE_EXISTING );
     else if ( name == wxT("Height") )
-        SetSize ( -1, -1, -1, wxPGVariantToInt(value), wxSIZE_USE_EXISTING );
+        SetSize ( -1, -1, -1, value.GetLong(), wxSIZE_USE_EXISTING );
     else if ( name == wxT("Label") )
     {
         SetTitle ( m_pPropGridManager->GetPropertyValueAsString(property) );

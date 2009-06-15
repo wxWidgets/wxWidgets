@@ -21,6 +21,7 @@
 #include "wx/arrstr.h"
 #include "wx/list.h"
 #include "wx/cpp.h"
+#include "wx/longlong.h"
 
 #if wxUSE_DATETIME
     #include "wx/datetime.h"
@@ -260,6 +261,23 @@ public:
     void operator= (wxObject* value);
     wxObject* GetWxObjectPtr() const;
 
+#if wxUSE_LONGLONG
+    // wxLongLong
+    wxVariant(wxLongLong, const wxString& name = wxEmptyString);
+    bool operator==(wxLongLong value) const;
+    bool operator!=(wxLongLong value) const;
+    void operator=(wxLongLong value);
+    operator wxLongLong() const { return GetLongLong(); }
+    wxLongLong GetLongLong() const;
+
+    // wxULongLong
+    wxVariant(wxULongLong, const wxString& name = wxEmptyString);
+    bool operator==(wxULongLong value) const;
+    bool operator!=(wxULongLong value) const;
+    void operator=(wxULongLong value);
+    operator wxULongLong() const { return GetULongLong(); }
+    wxULongLong GetULongLong() const;
+#endif
 
     // ------------------------------
     // list operations
@@ -307,6 +325,10 @@ public:
 #if wxUSE_DATETIME
     bool Convert(wxDateTime* value) const;
 #endif // wxUSE_DATETIME
+#if wxUSE_LONGLONG
+    bool Convert(wxLongLong* value) const;
+    bool Convert(wxULongLong* value) const;
+#endif // wxUSE_LONGLONG
 
 // Attributes
 protected:

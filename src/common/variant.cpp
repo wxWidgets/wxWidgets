@@ -1415,6 +1415,320 @@ wxArrayString wxVariant::GetArrayString() const
 }
 
 // ----------------------------------------------------------------------------
+// wxVariantDataLongLong
+// ----------------------------------------------------------------------------
+
+#if wxUSE_LONGLONG
+
+class WXDLLIMPEXP_BASE wxVariantDataLongLong : public wxVariantData
+{
+public:
+    wxVariantDataLongLong() { m_value = 0; }
+    wxVariantDataLongLong(wxLongLong value) { m_value = value; }
+
+    wxLongLong GetValue() const { return m_value; }
+    void SetValue(wxLongLong value) { m_value = value; }
+
+    virtual bool Eq(wxVariantData& data) const;
+
+    virtual bool Read(wxString& str);
+    virtual bool Write(wxString& str) const;
+#if wxUSE_STD_IOSTREAM
+    virtual bool Read(wxSTD istream& str);
+    virtual bool Write(wxSTD ostream& str) const;
+#endif
+#if wxUSE_STREAMS
+    virtual bool Read(wxInputStream& str);
+    virtual bool Write(wxOutputStream &str) const;
+#endif // wxUSE_STREAMS
+
+    wxVariantData* Clone() const
+    {
+        return new wxVariantDataLongLong(m_value);
+    }
+
+    virtual wxString GetType() const { return wxS("longlong"); }
+
+protected:
+    wxLongLong m_value;
+};
+
+bool wxVariantDataLongLong::Eq(wxVariantData& data) const
+{
+    wxASSERT_MSG( (data.GetType() == wxS("longlong")), 
+                  "wxVariantDataLongLong::Eq: argument mismatch" );
+
+    wxVariantDataLongLong& otherData = (wxVariantDataLongLong&) data;
+
+    return (otherData.m_value == m_value);
+}
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataLongLong::Write(wxSTD ostream& str) const
+{
+    wxString s;
+    Write(s);
+    str << (const char*) s.mb_str();
+    return true;
+}
+#endif
+
+bool wxVariantDataLongLong::Write(wxString& str) const
+{
+    str.Printf(wxS("%lld"), m_value);
+    return true;
+}
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataLongLong::Read(wxSTD istream& WXUNUSED(str))
+{
+    wxFAIL_MSG(wxS("Unimplemented"));
+    return false;
+}
+#endif
+
+#if wxUSE_STREAMS
+bool wxVariantDataLongLong::Write(wxOutputStream& str) const
+{
+    wxTextOutputStream s(str);
+    s.Write32(m_value.GetLo());
+    s.Write32(m_value.GetHi());
+    return true;
+}
+
+bool wxVariantDataLongLong::Read(wxInputStream& str)
+{
+   wxTextInputStream s(str);
+   unsigned long lo = s.Read32();
+   long hi = s.Read32();
+   m_value = wxLongLong(hi, lo);
+   return true;
+}
+#endif // wxUSE_STREAMS
+
+bool wxVariantDataLongLong::Read(wxString& str)
+{
+#ifdef wxLongLong_t
+    wxLongLong_t value_t;
+    if ( !str.ToLongLong(&value_t) )
+        return false;
+    m_value = value_t;
+    return true;
+#else
+    return false;
+#endif
+}
+
+// wxVariant
+
+wxVariant::wxVariant(wxLongLong val, const wxString& name)
+{
+    m_refData = new wxVariantDataLongLong(val);
+    m_name = name;
+}
+
+bool wxVariant::operator==(wxLongLong value) const
+{
+    wxLongLong thisValue;
+    if ( !Convert(&thisValue) )
+        return false;
+    else
+        return (value == thisValue);
+}
+
+bool wxVariant::operator!=(wxLongLong value) const
+{
+    return (!((*this) == value));
+}
+
+void wxVariant::operator=(wxLongLong value)
+{
+    if ( GetType() == wxS("longlong") &&
+         m_refData->GetRefCount() == 1 )
+    {
+        ((wxVariantDataLongLong*)GetData())->SetValue(value);
+    }
+    else
+    {
+        UnRef();
+        m_refData = new wxVariantDataLongLong(value);
+    }
+}
+
+wxLongLong wxVariant::GetLongLong() const
+{
+    wxLongLong value;
+    if ( Convert(&value) )
+    {
+        return value;
+    }
+    else
+    {
+        wxFAIL_MSG(wxT("Could not convert to a long long"));
+        return 0;
+    }
+}
+
+#endif // wxUSE_LONGLONG
+
+// ----------------------------------------------------------------------------
+// wxVariantDataULongLong
+// ----------------------------------------------------------------------------
+
+#if wxUSE_LONGLONG
+
+class WXDLLIMPEXP_BASE wxVariantDataULongLong : public wxVariantData
+{
+public:
+    wxVariantDataULongLong() { m_value = 0; }
+    wxVariantDataULongLong(wxULongLong value) { m_value = value; }
+
+    wxULongLong GetValue() const { return m_value; }
+    void SetValue(wxULongLong value) { m_value = value; }
+
+    virtual bool Eq(wxVariantData& data) const;
+
+    virtual bool Read(wxString& str);
+    virtual bool Write(wxString& str) const;
+#if wxUSE_STD_IOSTREAM
+    virtual bool Read(wxSTD istream& str);
+    virtual bool Write(wxSTD ostream& str) const;
+#endif
+#if wxUSE_STREAMS
+    virtual bool Read(wxInputStream& str);
+    virtual bool Write(wxOutputStream &str) const;
+#endif // wxUSE_STREAMS
+
+    wxVariantData* Clone() const
+    {
+        return new wxVariantDataULongLong(m_value);
+    }
+
+    virtual wxString GetType() const { return wxS("ulonglong"); }
+
+protected:
+    wxULongLong m_value;
+};
+
+bool wxVariantDataULongLong::Eq(wxVariantData& data) const
+{
+    wxASSERT_MSG( (data.GetType() == wxS("ulonglong")), 
+                  "wxVariantDataULongLong::Eq: argument mismatch" );
+
+    wxVariantDataULongLong& otherData = (wxVariantDataULongLong&) data;
+
+    return (otherData.m_value == m_value);
+}
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataULongLong::Write(wxSTD ostream& str) const
+{
+    wxString s;
+    Write(s);
+    str << (const char*) s.mb_str();
+    return true;
+}
+#endif
+
+bool wxVariantDataULongLong::Write(wxString& str) const
+{
+    str.Printf(wxS("%llu"), m_value);
+    return true;
+}
+
+#if wxUSE_STD_IOSTREAM
+bool wxVariantDataULongLong::Read(wxSTD istream& WXUNUSED(str))
+{
+    wxFAIL_MSG(wxS("Unimplemented"));
+    return false;
+}
+#endif
+
+#if wxUSE_STREAMS
+bool wxVariantDataULongLong::Write(wxOutputStream& str) const
+{
+    wxTextOutputStream s(str);
+    s.Write32(m_value.GetLo());
+    s.Write32(m_value.GetHi());
+    return true;
+}
+
+bool wxVariantDataULongLong::Read(wxInputStream& str)
+{
+   wxTextInputStream s(str);
+   unsigned long lo = s.Read32();
+   long hi = s.Read32();
+   m_value = wxULongLong(hi, lo);
+   return true;
+}
+#endif // wxUSE_STREAMS
+
+bool wxVariantDataULongLong::Read(wxString& str)
+{
+#ifdef wxLongLong_t
+    wxULongLong_t value_t;
+    if ( !str.ToULongLong(&value_t) )
+        return false;
+    m_value = value_t;
+    return true;
+#else
+    return false;
+#endif
+}
+
+// wxVariant
+
+wxVariant::wxVariant(wxULongLong val, const wxString& name)
+{
+    m_refData = new wxVariantDataULongLong(val);
+    m_name = name;
+}
+
+bool wxVariant::operator==(wxULongLong value) const
+{
+    wxULongLong thisValue;
+    if ( !Convert(&thisValue) )
+        return false;
+    else
+        return (value == thisValue);
+}
+
+bool wxVariant::operator!=(wxULongLong value) const
+{
+    return (!((*this) == value));
+}
+
+void wxVariant::operator=(wxULongLong value)
+{
+    if ( GetType() == wxS("ulonglong") &&
+         m_refData->GetRefCount() == 1 )
+    {
+        ((wxVariantDataULongLong*)GetData())->SetValue(value);
+    }
+    else
+    {
+        UnRef();
+        m_refData = new wxVariantDataULongLong(value);
+    }
+}
+
+wxULongLong wxVariant::GetULongLong() const
+{
+    wxULongLong value;
+    if ( Convert(&value) )
+    {
+        return value;
+    }
+    else
+    {
+        wxFAIL_MSG(wxT("Could not convert to a long long"));
+        return 0;
+    }
+}
+
+#endif // wxUSE_LONGLONG
+
+// ----------------------------------------------------------------------------
 // wxVariantDataList
 // ----------------------------------------------------------------------------
 
@@ -1699,14 +2013,32 @@ size_t wxVariant::GetCount() const
 bool wxVariant::Convert(long* value) const
 {
     wxString type(GetType());
-    if (type == wxT("double"))
+    if (type == wxS("double"))
         *value = (long) (((wxVariantDoubleData*)GetData())->GetValue());
-    else if (type == wxT("long"))
+    else if (type == wxS("long"))
         *value = ((wxVariantDataLong*)GetData())->GetValue();
-    else if (type == wxT("bool"))
+    else if (type == wxS("bool"))
         *value = (long) (((wxVariantDataBool*)GetData())->GetValue());
-    else if (type == wxT("string"))
+    else if (type == wxS("string"))
         *value = wxAtol(((wxVariantDataString*)GetData())->GetValue());
+#if wxUSE_LONGLONG
+    else if (type == wxS("longlong"))
+    {
+        wxLongLong v = ((wxVariantDataLongLong*)GetData())->GetValue();
+        // Don't convert if return value would be vague
+        if ( v < LONG_MIN || v > LONG_MAX )
+            return false;
+        *value = v.ToLong();
+    }
+    else if (type == wxS("ulonglong"))
+    {
+        wxULongLong v = ((wxVariantDataULongLong*)GetData())->GetValue();
+        // Don't convert if return value would be vague
+        if ( v.GetHi() )
+            return false;
+        *value = (long) v.ToULong();
+    }
+#endif
     else
         return false;
 
@@ -1750,6 +2082,16 @@ bool wxVariant::Convert(double* value) const
         *value = (double) (((wxVariantDataBool*)GetData())->GetValue());
     else if (type == wxT("string"))
         *value = (double) wxAtof(((wxVariantDataString*)GetData())->GetValue());
+#if wxUSE_LONGLONG
+    else if (type == wxS("longlong"))
+    {
+        *value = ((wxVariantDataLongLong*)GetData())->GetValue().ToDouble();
+    }
+    else if (type == wxS("ulonglong"))
+    {
+        *value = ((wxVariantDataULongLong*)GetData())->GetValue().ToDouble();
+    }
+#endif
     else
         return false;
 
@@ -1794,6 +2136,91 @@ bool wxVariant::Convert(wxString* value) const
     *value = MakeString();
     return true;
 }
+
+#if wxUSE_LONGLONG
+bool wxVariant::Convert(wxLongLong* value) const
+{
+    wxString type(GetType());
+    if (type == wxS("longlong"))
+        *value = ((wxVariantDataLongLong*)GetData())->GetValue();
+    else if (type == wxS("long"))
+        *value = ((wxVariantDataLong*)GetData())->GetValue();
+    else if (type == wxS("string"))
+    {
+        wxString s = ((wxVariantDataString*)GetData())->GetValue();
+#ifdef wxLongLong_t
+        wxLongLong_t value_t;
+        if ( !s.ToLongLong(&value_t) )
+            return false;
+        *value = value_t;
+#else
+        long l_value;
+        if ( !s.ToLong(&l_value) )
+            return false;
+        *value = l_value;
+#endif
+    }
+    else if (type == wxS("bool"))
+        *value = (long) (((wxVariantDataBool*)GetData())->GetValue());
+    else if (type == wxS("double"))
+    {
+        value->Assign(((wxVariantDoubleData*)GetData())->GetValue());
+    }
+    else if (type == wxS("ulonglong"))
+        *value = ((wxVariantDataULongLong*)GetData())->GetValue();
+    else
+        return false;
+
+    return true;
+}
+
+bool wxVariant::Convert(wxULongLong* value) const
+{
+    wxString type(GetType());
+    if (type == wxS("ulonglong"))
+        *value = ((wxVariantDataULongLong*)GetData())->GetValue();
+    else if (type == wxS("long"))
+        *value = ((wxVariantDataLong*)GetData())->GetValue();
+    else if (type == wxS("string"))
+    {
+        wxString s = ((wxVariantDataString*)GetData())->GetValue();
+#ifdef wxLongLong_t
+        wxULongLong_t value_t;
+        if ( !s.ToULongLong(&value_t) )
+            return false;
+        *value = value_t;
+#else
+        unsigned long l_value;
+        if ( !s.ToULong(&l_value) )
+            return false;
+        *value = l_value;
+#endif
+    }
+    else if (type == wxS("bool"))
+        *value = (long) (((wxVariantDataBool*)GetData())->GetValue());
+    else if (type == wxS("double"))
+    {
+        double value_d = ((wxVariantDoubleData*)GetData())->GetValue();
+
+        if ( value_d < 0.0 )
+            return false;
+
+#ifdef wxLongLong_t
+        *value = (wxULongLong_t) value_d;
+#else
+        wxLongLong temp;
+        temp.Assign(value_d);
+        *value = temp;
+#endif
+    }
+    else if (type == wxS("longlong"))
+        *value = ((wxVariantDataLongLong*)GetData())->GetValue();
+    else
+        return false;
+
+    return true;
+}
+#endif // wxUSE_LONGLONG
 
 #if wxUSE_DATETIME
 bool wxVariant::Convert(wxDateTime* value) const

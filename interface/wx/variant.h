@@ -142,6 +142,16 @@ public:
     wxVariant(double value, const wxString& name = wxEmptyString);
 
     /**
+        Constructs a variant from a wxLongLong.
+    */
+    wxVariant(wxLongLong value, const wxString& name = wxEmptyString);
+
+    /**
+        Constructs a variant from a wxULongLong.
+    */
+    wxVariant(wxULongLong value, const wxString& name = wxEmptyString);
+
+    /**
         Constructs a variant from a list of variants
     */
     wxVariant(const wxVariantList& value, const wxString& name = wxEmptyString);
@@ -250,6 +260,8 @@ public:
     bool Convert(double* value) const;
     bool Convert(wxString* value) const;
     bool Convert(wxChar* value) const;
+    bool Convert(wxLongLong* value) const;
+    bool Convert(wxULongLong* value) const;
     bool Convert(wxDateTime* value) const;
     //@}
 
@@ -291,6 +303,11 @@ public:
     long GetLong() const;
 
     /**
+        Returns the signed 64-bit integer value.
+    */
+    wxLongLong GetLongLong() const;
+
+    /**
         Returns a constant reference to the variant name.
     */
     const wxString& GetName() const;
@@ -310,7 +327,9 @@ public:
         - "double"
         - "list"
         - "long"
+        - "longlong"
         - "string"
+        - "ulonglong"
         - "arrstring"
         - "void*"
 
@@ -318,6 +337,11 @@ public:
         (not the empty string).
     */
     wxString GetType() const;
+
+    /**
+        Returns the unsigned 64-bit integer value.
+    */
+    wxULongLong GetULongLong() const;
 
     /**
         Gets the void pointer value.
@@ -390,6 +414,8 @@ public:
     bool operator !=(long value) const;
     bool operator !=(bool value) const;
     bool operator !=(double value) const;
+    bool operator !=(wxLongLong value) const;
+    bool operator !=(wxULongLong value) const;
     bool operator !=(void* value) const;
     bool operator !=(wxObject* value) const;
     bool operator !=(const wxVariantList& value) const;
@@ -410,6 +436,8 @@ public:
     void operator =(long value);
     void operator =(bool value);
     void operator =(double value);
+    bool operator =(wxLongLong value) const;
+    bool operator =(wxULongLong value) const;
     void operator =(void* value);
     void operator =(wxObject* value);
     void operator =(const wxVariantList& value);
@@ -428,6 +456,8 @@ public:
     bool operator ==(long value) const;
     bool operator ==(bool value) const;
     bool operator ==(double value) const;
+    bool operator ==(wxLongLong value) const;
+    bool operator ==(wxULongLong value) const;
     bool operator ==(void* value) const;
     bool operator ==(wxObject* value) const;
     bool operator ==(const wxVariantList& value) const;
@@ -437,10 +467,13 @@ public:
 
     //@{
     /**
-        Operator for implicit conversion to a long, using GetLong().
+        Operators for implicit conversion, using appropriate getter member
+        function.
     */
     double operator double() const;
     long operator long() const;
+    wxLongLong operator wxLongLong() const;
+    wxULongLong operator wxULongLong() const;
     //@}
 
     /**
