@@ -50,6 +50,38 @@ wxObject *wxButtonXmlHandler::DoCreateResource()
 
     if (GetBool(wxT("default"), 0))
         button->SetDefault();
+
+    if ( GetParamNode("bitmap") )
+    {
+        wxDirection dir;
+        const wxString dirstr = GetParamValue("direction");
+        if ( dirstr.empty() || dirstr == "wxLEFT" )
+            dir = wxLEFT;
+        else if ( dirstr == "wxRIGHT" )
+            dir = wxRIGHT;
+        else if ( dirstr == "wxTOP" )
+            dir = wxTOP;
+        else if ( dirstr == "wxBOTTOM" )
+            dir = wxBOTTOM;
+        else
+        {
+            ReportError
+            (
+                GetParamNode("bitmapposition"),
+                wxString::Format
+                (
+                    "Invalid bitmap position \"%s\": must be one of "
+                    "wxLEFT|wxRIGHT|wxTOP|wxBOTTOM.",
+                    dirstr
+                )
+            );
+
+            dir = wxLEFT;
+        }
+
+        button->SetBitmap(GetBitmap("bitmap", wxART_BUTTON), dir);
+    }
+
     SetupWindow(button);
 
     return button;

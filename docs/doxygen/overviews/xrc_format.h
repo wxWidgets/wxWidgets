@@ -590,9 +590,13 @@ Example:
 @beginTable
 @hdr3col{property, type, description}
 @row3col{label, @ref overview_xrcformat_type_text,
-     Label to display on the button (required).}
+    Label to display on the button (may be empty if only bitmap is used).}
+@row3col{bitmap, @ref overview_xrcformat_type_bitmap,
+    Bitmap to display in the button (optional).}
+@row3col{bitmapposition, @c wxLEFT|wxRIGHT|wxTOP|wxBOTTOM,
+    Position of the bitmap in the button, see wxButton::SetBitmapPosition().}
 @row3col{default, @ref overview_xrcformat_type_bool,
-     Should this button be the default button in dialog (default: 0)?}
+    Should this button be the default button in dialog (default: 0)?}
 @endTable
 
 
