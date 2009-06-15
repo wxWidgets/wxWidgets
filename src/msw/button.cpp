@@ -983,12 +983,12 @@ void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
     RECT r;
     CopyRect(&r, &rectBtn);
 
-    HPEN hpenBlack   = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DDKSHADOW)),
-         hpenGrey    = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DSHADOW)),
-         hpenLightGr = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DLIGHT)),
-         hpenWhite   = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DHILIGHT));
+    AutoHPEN hpenBlack(GetSysColor(COLOR_3DDKSHADOW)),
+             hpenGrey(GetSysColor(COLOR_3DSHADOW)),
+             hpenLightGr(GetSysColor(COLOR_3DLIGHT)),
+             hpenWhite(GetSysColor(COLOR_3DHILIGHT));
 
-    HPEN hpenOld = (HPEN)SelectObject(hdc, hpenBlack);
+    SelectInHDC selectPen(hdc, hpenBlack);
 
     r.right--;
     r.bottom--;
@@ -1026,12 +1026,6 @@ void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
         wxDrawLine(hdc, r.left + 1, r.bottom - 1, r.right - 1, r.bottom - 1);
         wxDrawLine(hdc, r.right - 1, r.bottom - 1, r.right - 1, r.top);
     }
-
-    (void)SelectObject(hdc, hpenOld);
-    DeleteObject(hpenWhite);
-    DeleteObject(hpenLightGr);
-    DeleteObject(hpenGrey);
-    DeleteObject(hpenBlack);
 }
 
 #if wxUSE_UXTHEME
@@ -1096,12 +1090,11 @@ void MSWDrawXPBackground(wxButton *button, WXDRAWITEMSTRUCT *wxdis)
     if ( button->UseBgCol() )
     {
         COLORREF colBg = wxColourToRGB(button->GetBackgroundColour());
-        HBRUSH hbrushBackground = ::CreateSolidBrush(colBg);
+        AutoHBRUSH hbrushBackground(colBg);
 
         // don't overwrite the focus rect
         ::InflateRect(&rectClient, -1, -1);
         FillRect(hdc, &rectClient, hbrushBackground);
-        ::DeleteObject(hbrushBackground);
     }
 }
 #endif // wxUSE_UXTHEME
@@ -1172,9 +1165,8 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         COLORREF colBg = wxColourToRGB(GetBackgroundColour());
 
         // first, draw the background
-        HBRUSH hbrushBackground = ::CreateSolidBrush(colBg);
+        AutoHBRUSH hbrushBackground(colBg);
         FillRect(hdc, &rectBtn, hbrushBackground);
-        ::DeleteObject(hbrushBackground);
 
         // draw the border for the current state
         bool selected = (state & ODS_SELECTED) != 0;
