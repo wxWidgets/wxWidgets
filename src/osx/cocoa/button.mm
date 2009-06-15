@@ -270,6 +270,23 @@ void wxWidgetCocoaImpl::PerformClick()
 
 @end
 
+static const char * disc_triangle_xpm[] = {
+"10 9 4 1",
+"   c None",
+".  c #737373",
+"+  c #989898",
+"-  c #c6c6c6",
+" .-       ",
+" ..+-     ",
+" ....+    ",
+" ......-  ",
+" .......- ",
+" ......-  ",
+" ....+    ",
+" ..+-     ",
+" .-       ",
+};
+
 @implementation wxDisclosureNSButton
 
 + (void)initialize
@@ -313,15 +330,16 @@ wxCFRef<NSImage*> downArray ;
 
 - (void) updateImage
 {
+    static wxBitmap trianglebm(disc_triangle_xpm);
     if ( downArray.get() == NULL )
     {
-        downArray.reset( [wxDisclosureNSButton rotateImage:[NSImage imageNamed:NSImageNameRightFacingTriangleTemplate]] );
+        downArray.reset( [wxDisclosureNSButton rotateImage:trianglebm.GetNSImage()] );
     }
     
     if ( isOpen )
         [self setImage:(NSImage*)downArray.get()];
     else
-        [self setImage:[NSImage imageNamed:NSImageNameRightFacingTriangleTemplate]];
+        [self setImage:trianglebm.GetNSImage()];
 }
 
 + (NSImage *)rotateImage: (NSImage *)image
