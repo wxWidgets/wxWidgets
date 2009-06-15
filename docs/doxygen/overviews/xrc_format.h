@@ -136,7 +136,7 @@ These come in two varieties:
  -# Object's properties. A @em property is a value describing part of object's
     behaviour, for example the "label" property on wxButton defines its label.
     In the most common form, property is a single element with text content
-    ("<label>Cancel</label>"), but they may use nested subelements too (e.g.
+    ("\<label\>Cancel\</label\>"), but they may use nested subelements too (e.g.
     @ref overview_xrcformat_type_font "font property"). A property can only be
     listed once in an object's definition.
  -# Child objects. Window childs, sizers, sizer items or notebook pages
@@ -992,7 +992,7 @@ wxLC_SMALL_ICON style.
 Report mode list controls (i.e. created with @c wxLC_REPORT style) can in
 addition have one or more @ref xrc_wxlistcol child elements.
 
-@subsubsection xrc_wxlistcol listcol
+@paragraph xrc_wxlistcol listcol
 
 The @c listcol class can only be used for wxListCtrl children. It can have the
 following properties:
@@ -1012,7 +1012,7 @@ The columns are appended to the control in order of their appearance and may be
 referenced by 0-based index in the @c col attributes of subsequent @c listitem
 objects.
 
-@subsubsection xrc_wxlistitem listitem
+@paragraph xrc_wxlistitem listitem
 
 The @c listitem is a child object for the class @ref xrc_wxlistctrl.
 It can have the following properties:
@@ -1051,7 +1051,7 @@ It can have the following properties:
 @row3col{state, @ref overview_xrcformat_type_style,
     The item state. Can be any combination of the following values:
         - @c wxLIST_STATE_FOCUSED: The item has the focus.
-        - @c wxLIST_STATE_SELECTED: The item is selected.
+        - @c wxLIST_STATE_SELECTED: The item is selected.}
 @row3col{text, @ref overview_xrcformat_type_string,
     The text label for the item. }
 @row3col{textcolour, @ref overview_xrcformat_type_colour,
