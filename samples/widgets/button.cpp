@@ -60,6 +60,14 @@ enum
 // radio boxes
 enum
 {
+    ButtonImagePos_Left,
+    ButtonImagePos_Right,
+    ButtonImagePos_Top,
+    ButtonImagePos_Bottom
+};
+
+enum
+{
     ButtonHAlign_Left,
     ButtonHAlign_Centre,
     ButtonHAlign_Right
@@ -124,6 +132,9 @@ protected:
                *m_chkUseHover,
                *m_chkUseDisabled;
 
+    // and an image position choice used if m_chkImage is on
+    wxRadioBox *m_radioImagePos;
+
     wxRadioBox *m_radioHAlign,
                *m_radioVAlign;
 
@@ -179,6 +190,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
     m_chkUseHover =
     m_chkUseDisabled = (wxCheckBox *)NULL;
 
+    m_radioImagePos =
     m_radioHAlign =
     m_radioVAlign = (wxRadioBox *)NULL;
 
@@ -202,21 +214,26 @@ void ButtonWidgetsPage::CreateContent()
     m_chkFit = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Fit exactly"));
     m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Default"));
 
-#ifndef __WXUNIVERSAL__
-    // only wxUniv currently supports buttons with images
-    m_chkImage->Disable();
-#endif // !wxUniv
-
     sizerLeft->AddSpacer(5);
 
     wxSizer *sizerUseLabels =
-        new wxStaticBoxSizer(wxVERTICAL, this, _T("&Use the following labels?"));
+        new wxStaticBoxSizer(wxVERTICAL, this, _T("&Use the following bitmaps?"));
     m_chkUseSelected = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Pushed"));
     m_chkUseFocused = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Focused"));
     m_chkUseHover = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Hover"));
     m_chkUseDisabled = CreateCheckBoxAndAddToSizer(sizerUseLabels, _T("&Disabled"));
     sizerLeft->Add(sizerUseLabels, wxSizerFlags().Expand().Border());
 
+    sizerLeft->AddSpacer(10);
+
+    static const wxString dirs[] =
+    {
+        "left", "right", "top", "bottom",
+    };
+    m_radioImagePos = new wxRadioBox(this, wxID_ANY, "Image &position",
+                                     wxDefaultPosition, wxDefaultSize,
+                                     WXSIZEOF(dirs), dirs);
+    sizerLeft->Add(m_radioImagePos, 0, wxGROW | wxALL, 5);
     sizerLeft->AddSpacer(15);
 
     // should be in sync with enums Button[HV]Align!
@@ -293,6 +310,7 @@ void ButtonWidgetsPage::Reset()
     m_chkUseHover->SetValue(true);
     m_chkUseDisabled->SetValue(true);
 
+    m_radioImagePos->SetSelection(ButtonImagePos_Left);
     m_radioHAlign->SetSelection(ButtonHAlign_Centre);
     m_radioVAlign->SetSelection(ButtonVAlign_Centre);
 }
@@ -385,12 +403,16 @@ void ButtonWidgetsPage::CreateButton()
     m_chkUseHover->Enable(isBitmapButton);
     m_chkUseDisabled->Enable(isBitmapButton);
 
-#ifdef __WXUNIVERSAL__
     if ( m_chkImage->GetValue() )
     {
-        m_button->SetImageLabel(wxArtProvider::GetIcon(wxART_INFORMATION));
+        static const wxDirection positions[] =
+        {
+            wxLEFT, wxRIGHT, wxTOP, wxBOTTOM
+        };
+
+        m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION),
+                            positions[m_radioImagePos->GetSelection()]);
     }
-#endif // wxUniv
 
     if ( m_chkDefault->GetValue() )
     {

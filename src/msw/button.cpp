@@ -37,6 +37,7 @@
     #include "wx/dcscreen.h"
     #include "wx/dcclient.h"
     #include "wx/toplevel.h"
+    #include "wx/imaglist.h"
 #endif
 
 #include "wx/stockitem.h"
@@ -59,9 +60,26 @@
         #define TMT_CONTENTMARGINS 3602
     #endif
 
+    // provide the necessary declarations ourselves if they're missing from
+    // headers
     #ifndef BCM_SETIMAGELIST
         #define BCM_SETIMAGELIST    0x1602
         #define BCM_SETTEXTMARGIN   0x1604
+
+        enum
+        {
+            BUTTON_IMAGELIST_ALIGN_LEFT,
+            BUTTON_IMAGELIST_ALIGN_RIGHT,
+            BUTTON_IMAGELIST_ALIGN_TOP,
+            BUTTON_IMAGELIST_ALIGN_BOTTOM
+        };
+
+        struct BUTTON_IMAGELIST
+        {
+            HIMAGELIST himl;
+            RECT margin;
+            UINT uAlign;
+        };
     #endif
 #endif // wxUSE_UXTHEME
 
@@ -80,6 +98,213 @@
 #ifndef DT_HIDEPREFIX
     #define DT_HIDEPREFIX       0x00100000
 #endif
+
+// ----------------------------------------------------------------------------
+// button image data
+// ----------------------------------------------------------------------------
+
+// we use different data classes for owner drawn buttons and for themed XP ones
+
+class wxButtonImageData
+{
+public:
+    wxButtonImageData() { }
+
+    virtual wxBitmap GetBitmap(wxButton::State which) const = 0;
+    virtual void SetBitmap(const wxBitmap& bitmap, wxButton::State which) = 0;
+
+    virtual wxSize GetBitmapMargins() const = 0;
+    virtual void SetBitmapMargins(wxCoord x, wxCoord y) = 0;
+
+    virtual bool IsHorizontal() const = 0;
+    virtual void SetBitmapPosition(wxDirection dir) = 0;
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxButtonImageData);
+};
+
+namespace
+{
+
+class wxODButtonImageData : public wxButtonImageData
+{
+public:
+    wxODButtonImageData() { m_dir = wxLEFT; }
+
+    virtual wxBitmap GetBitmap(wxButton::State which) const
+    {
+        return m_bitmaps[which];
+    }
+
+    virtual void SetBitmap(const wxBitmap& bitmap, wxButton::State which)
+    {
+        m_bitmaps[which] = bitmap;
+    }
+
+    virtual wxSize GetBitmapMargins() const
+    {
+        return m_margin;
+    }
+
+    virtual void SetBitmapMargins(wxCoord x, wxCoord y)
+    {
+        m_margin = wxSize(x, y);
+    }
+
+    virtual bool IsHorizontal() const
+    {
+        return m_dir == wxLEFT || m_dir == wxRIGHT;
+    }
+
+    virtual void SetBitmapPosition(wxDirection dir)
+    {
+        m_dir = dir;
+    }
+
+private:
+    // just store the values passed to us to be able to retrieve them later
+    // from the drawing code
+    wxBitmap m_bitmaps[wxButton::State_Max];
+    wxSize m_margin;
+    wxDirection m_dir;
+
+    wxDECLARE_NO_COPY_CLASS(wxODButtonImageData);
+};
+
+#if wxUSE_UXTHEME
+
+class wxXPButtonImageData : public wxButtonImageData
+{
+public:
+    // we must be constructed with the size of our images as we need to create
+    // the image list
+    wxXPButtonImageData(wxButton *btn, const wxSize& size)
+        : m_iml(size.x, size.y, true /* use mask */, wxButton::State_Max),
+          m_hwndBtn(GetHwndOf(btn))
+    {
+        m_data.himl = GetHimagelistOf(&m_iml);
+
+        // use default margins
+        m_data.margin.left =
+        m_data.margin.right = btn->GetCharWidth();
+        m_data.margin.top =
+        m_data.margin.bottom = btn->GetCharHeight() / 2;
+
+        // and default alignment
+        m_data.uAlign = BUTTON_IMAGELIST_ALIGN_LEFT;
+    }
+
+    virtual wxBitmap GetBitmap(wxButton::State which) const
+    {
+        return m_iml.GetBitmap(which);
+    }
+
+    virtual void SetBitmap(const wxBitmap& bitmap, wxButton::State which)
+    {
+        const int imagesToAdd = which - m_iml.GetImageCount();
+        if ( imagesToAdd >= 0 )
+        {
+            if ( imagesToAdd > 0 )
+            {
+                const wxBitmap bmpNormal = GetBitmap(wxButton::State_Normal);
+                for ( int n = 0; n < imagesToAdd; n++ )
+                    m_iml.Add(bmpNormal);
+            }
+
+            m_iml.Add(bitmap);
+        }
+        else // we already have this bitmap
+        {
+            m_iml.Replace(which, bitmap);
+        }
+
+        UpdateImageInfo();
+    }
+
+    virtual wxSize GetBitmapMargins() const
+    {
+        return wxSize(m_data.margin.left, m_data.margin.top);
+    }
+
+    virtual void SetBitmapMargins(wxCoord x, wxCoord y)
+    {
+        RECT& margin = m_data.margin;
+        margin.left =
+        margin.right = x;
+        margin.top =
+        margin.bottom = y;
+
+        if ( !::SendMessage(m_hwndBtn, BCM_SETTEXTMARGIN, 0, (LPARAM)&margin) )
+        {
+            wxLogDebug("SendMessage(BCM_SETTEXTMARGIN) failed");
+        }
+    }
+
+    virtual bool IsHorizontal() const
+    {
+        return m_data.uAlign == BUTTON_IMAGELIST_ALIGN_LEFT ||
+                    m_data.uAlign == BUTTON_IMAGELIST_ALIGN_RIGHT;
+    }
+
+    virtual void SetBitmapPosition(wxDirection dir)
+    {
+        UINT alignNew;
+        switch ( dir )
+        {
+            default:
+                wxFAIL_MSG( "invalid direction" );
+                // fall through
+
+            case wxLEFT:
+                alignNew = BUTTON_IMAGELIST_ALIGN_LEFT;
+                break;
+
+            case wxRIGHT:
+                alignNew = BUTTON_IMAGELIST_ALIGN_RIGHT;
+                break;
+
+            case wxTOP:
+                alignNew = BUTTON_IMAGELIST_ALIGN_TOP;
+                break;
+
+            case wxBOTTOM:
+                alignNew = BUTTON_IMAGELIST_ALIGN_BOTTOM;
+                break;
+        }
+
+        if ( alignNew != m_data.uAlign )
+        {
+            m_data.uAlign = alignNew;
+            UpdateImageInfo();
+        }
+    }
+
+private:
+    void UpdateImageInfo()
+    {
+        if ( !::SendMessage(m_hwndBtn, BCM_SETIMAGELIST, 0, (LPARAM)&m_data) )
+        {
+            wxLogDebug("SendMessage(BCM_SETIMAGELIST) failed");
+        }
+    }
+
+    // we store image list separately to be able to use convenient wxImageList
+    // methods instead of working with raw HIMAGELIST
+    wxImageList m_iml;
+
+    // store the rest of the data in BCM_SETIMAGELIST-friendly form
+    BUTTON_IMAGELIST m_data;
+
+    // the button we're associated with
+    const HWND m_hwndBtn;
+
+
+    wxDECLARE_NO_COPY_CLASS(wxXPButtonImageData);
+};
+
+#endif // wxUSE_UXTHEME
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // macros
@@ -259,6 +484,8 @@ wxButton::~wxButton()
     {
         UnsetTmpDefault();
     }
+
+    delete m_imageData;
 }
 
 // ----------------------------------------------------------------------------
@@ -310,7 +537,29 @@ void wxButton::SetLabel(const wxString& label)
 
 wxSize wxButton::DoGetBestSize() const
 {
-    return wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this));
+    wxSize size = wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this));
+    if ( m_imageData )
+    {
+        const wxSize sizeBmp = m_imageData->GetBitmap(State_Normal).GetSize();
+        if ( m_imageData->IsHorizontal() )
+        {
+            size.x += sizeBmp.x;
+            if ( sizeBmp.y > size.y )
+                size.y = sizeBmp.y;
+        }
+        else // bitmap on top/below the text
+        {
+            size.y += sizeBmp.y;
+            if ( sizeBmp.x > size.x )
+                size.x = sizeBmp.x;
+        }
+
+        size += 2*m_imageData->GetBitmapMargins();
+
+        CacheBestSize(size);
+    }
+
+    return size;
 }
 
 /* static */
@@ -588,6 +837,49 @@ WXLRESULT wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
     // let the base class do all real processing
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
+
+// ----------------------------------------------------------------------------
+// button images
+// ----------------------------------------------------------------------------
+
+wxBitmap wxButton::DoGetBitmap(State which) const
+{
+    return m_imageData ? m_imageData->GetBitmap(which) : wxBitmap();
+}
+
+void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+{
+    // allocate the image data when the first bitmap is set
+    if ( !m_imageData )
+    {
+#if wxUSE_UXTHEME
+        if ( wxUxThemeEngine::GetIfActive() )
+            m_imageData = new wxXPButtonImageData(this, bitmap.GetSize());
+        else
+#endif // wxUSE_UXTHEME
+            m_imageData = new wxODButtonImageData;
+
+        // if a bitmap was assigned to the bitmap, its best size must be
+        // changed to account for it
+        InvalidateBestSize();
+    }
+
+    m_imageData->SetBitmap(bitmap, which);
+}
+
+void wxButton::DoSetBitmapMargins(wxCoord x, wxCoord y)
+{
+    wxCHECK_RET( m_imageData, "SetBitmap() must be called first" );
+
+    m_imageData->SetBitmapMargins(x, y);
+}
+
+void wxButton::DoSetBitmapPosition(wxDirection dir)
+{
+    wxCHECK_RET( m_imageData, "SetBitmap() must be called first" );
+
+    m_imageData->SetBitmapPosition(dir);
 }
 
 // ----------------------------------------------------------------------------

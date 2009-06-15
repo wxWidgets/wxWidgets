@@ -99,7 +99,7 @@ public:
 
     // set the image position relative to the text, i.e. wxLEFT means that the
     // image is to the left of the text (this is the default)
-    virtual void SetBitmapPosition(wxDirection WXUNUSED(dir)) { }
+    void SetBitmapPosition(wxDirection dir);
 
 
     // make this button the default button in its top level window
@@ -130,19 +130,25 @@ public:
     void SetBitmapSelected(const wxBitmap& bitmap) { SetBitmapPressed(bitmap); }
     void SetBitmapHover(const wxBitmap& bitmap) { SetBitmapCurrent(bitmap); }
 
-protected:
-    // choose the default border for this window
-    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
+    // this enum is not part of wx public API, it is public because it is used
+    // in non wxButton-derived classes internally
+    //
+    // also notice that MSW code relies on the values of the enum elements, do
+    // not change them without revising src/msw/button.cpp
     enum State
     {
         State_Normal,
-        State_Pressed,    // a.k.a. "selected" in public API for some reason
         State_Current,    // a.k.a. hot or "hovering"
+        State_Pressed,    // a.k.a. "selected" in public API for some reason
         State_Disabled,
         State_Focused,
         State_Max
     };
+
+protected:
+    // choose the default border for this window
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     virtual wxBitmap DoGetBitmap(State WXUNUSED(which)) const
         { return wxBitmap(); }
@@ -150,6 +156,8 @@ protected:
                              State WXUNUSED(which))
         { }
     virtual void DoSetBitmapMargins(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
+        { }
+    virtual void DoSetBitmapPosition(wxDirection WXUNUSED(dir))
         { }
 
 
