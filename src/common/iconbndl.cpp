@@ -57,13 +57,13 @@ wxIconBundle::wxIconBundle()
 {
 }
 
+#if wxUSE_STREAMS
 wxIconBundle::wxIconBundle(const wxString& file, wxBitmapType type)
             : wxGDIObject()
 {
     AddIcon(file, type);
 }
 
-#if wxUSE_STREAMS
 wxIconBundle::wxIconBundle(wxInputStream& stream, wxBitmapType type)
             : wxGDIObject()
 {
@@ -91,6 +91,8 @@ void wxIconBundle::DeleteIcons()
 {
     UnRef();
 }
+
+#if wxUSE_STREAMS
 
 namespace
 {
@@ -163,11 +165,11 @@ void wxIconBundle::AddIcon(const wxString& file, wxBitmapType type)
     );
 }
 
-#if wxUSE_STREAMS
 void wxIconBundle::AddIcon(wxInputStream& stream, wxBitmapType type)
 {
     DoAddIcon(*this, stream, type, _("Failed to load image %d from stream."));
 }
+
 #endif // wxUSE_STREAMS
 
 wxIcon wxIconBundle::GetIcon(const wxSize& size) const
