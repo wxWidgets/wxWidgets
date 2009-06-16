@@ -3204,13 +3204,9 @@ int wxDataViewMainWindow::RecalculateCount()
 {
     if (IsVirtualList())
     {
-        wxDataViewIndexListModel *list_model =
-            (wxDataViewIndexListModel*) GetOwner()->GetModel();
-#ifndef __WXMAC__
-        return list_model->GetLastIndex() + 1;
-#else
-        return list_model->GetLastIndex() - 1;
-#endif
+        wxDataViewVirtualListModel *list_model =
+            (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+        return list_model->GetCount();
     }
     else
     {

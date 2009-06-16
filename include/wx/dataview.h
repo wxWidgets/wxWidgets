@@ -274,11 +274,11 @@ public:
 
     // internal
     virtual bool IsVirtualListModel() const { return false; }
-    unsigned int GetLastIndex() const { return m_lastIndex; }
+    unsigned int GetCount() const { return m_hash.GetCount(); }
 
 private:
     wxDataViewItemArray m_hash;
-    unsigned int m_lastIndex;
+    unsigned int m_nextFreeID;
     bool m_ordered;
 };
 
@@ -339,11 +339,10 @@ public:
 
     // internal
     virtual bool IsVirtualListModel() const { return true; }
-    unsigned int GetLastIndex() const { return m_lastIndex; }
+    unsigned int GetCount() const { return m_size; }
 
 private:
-    wxDataViewItemArray m_hash;
-    unsigned int m_lastIndex;
+    unsigned int m_size;
     bool m_ordered;
 };
 #endif

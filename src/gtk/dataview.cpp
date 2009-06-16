@@ -3407,13 +3407,14 @@ GtkTreeModelFlags wxDataViewCtrlInternal::get_flags()
 
 gboolean wxDataViewCtrlInternal::get_iter( GtkTreeIter *iter, GtkTreePath *path )
 {
+
     if (m_wx_model->IsVirtualListModel())
     {
-        wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
-
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
+    
         unsigned int i = (unsigned int)gtk_tree_path_get_indices (path)[0];
-
-        if (i >= wx_model->GetLastIndex() + 1)
+        
+        if (i >= wx_model->GetCount())
             return FALSE;
 
         iter->stamp = m_gtk_model->stamp;
@@ -3496,7 +3497,7 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
 {
     if (m_wx_model->IsVirtualListModel())
     {
-        wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
 
         // user_data is just the index +1
         int n = ( (wxUIntPtr) iter->user_data ) -1;
@@ -3504,7 +3505,7 @@ gboolean wxDataViewCtrlInternal::iter_next( GtkTreeIter *iter )
         if (n == -1)
             return FALSE;
 
-        if (n >= (int) wx_model->GetLastIndex())
+        if (n >= (int) wx_model->GetCount())
             return FALSE;
 
         // user_data is just the index +1 (+2 because we need the next)
@@ -3537,7 +3538,7 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
             return FALSE;
 
         iter->stamp = m_gtk_model->stamp;
-        iter->user_data = (gpointer) 0;
+        iter->user_data = (gpointer) 1;
 
         return TRUE;
     }
@@ -3568,6 +3569,11 @@ gboolean wxDataViewCtrlInternal::iter_has_child( GtkTreeIter *iter )
 {
     if (m_wx_model->IsVirtualListModel())
     {
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
+
+        if (iter == NULL)
+            return (gint) wx_model->GetCount();
+        
         // this is a list, nodes have no children
         return FALSE;
     }
@@ -3594,10 +3600,10 @@ gint wxDataViewCtrlInternal::iter_n_children( GtkTreeIter *iter )
 {
     if (m_wx_model->IsVirtualListModel())
     {
-        wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
 
         if (iter == NULL)
-            return (gint) wx_model->GetLastIndex() + 1;
+            return (gint) wx_model->GetCount();
 
         return 0;
     }
@@ -3627,7 +3633,7 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
 {
     if (m_wx_model->IsVirtualListModel())
     {
-        wxDataViewIndexListModel *wx_model = (wxDataViewIndexListModel*) m_wx_model;
+        wxDataViewVirtualListModel *wx_model = (wxDataViewVirtualListModel*) m_wx_model;
 
         if (parent)
             return FALSE;
@@ -3635,12 +3641,12 @@ gboolean wxDataViewCtrlInternal::iter_nth_child( GtkTreeIter *iter, GtkTreeIter 
         if (n < 0)
             return FALSE;
 
-        if (n >= (gint) wx_model->GetLastIndex() + 1)
+        if (n >= (gint) wx_model->GetCount())
             return FALSE;
 
         iter->stamp = m_gtk_model->stamp;
         // user_data is just the index +1
-        iter->user_data = (gpointer) (n-1);
+        iter->user_data = (gpointer) (n+1);
 
         return TRUE;
     }
