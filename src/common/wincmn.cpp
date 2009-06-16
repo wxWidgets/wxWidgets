@@ -154,7 +154,7 @@ wxWindowBase::wxWindowBase()
     m_exStyle =
     m_windowStyle = 0;
 
-    m_backgroundStyle = wxBG_STYLE_SYSTEM;
+    m_backgroundStyle = wxBG_STYLE_ERASE;
 
 #if wxUSE_CONSTRAINTS
     // no constraints whatsoever
@@ -1333,8 +1333,6 @@ bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
         return false;
 
     m_hasBgCol = colour.IsOk();
-    if ( m_backgroundStyle != wxBG_STYLE_CUSTOM )
-        m_backgroundStyle = m_hasBgCol ? wxBG_STYLE_COLOUR : wxBG_STYLE_SYSTEM;
 
     m_inheritBgCol = m_hasBgCol;
     m_backgroundColour = colour;

@@ -2586,8 +2586,8 @@ void wxWindowGTK::OnInternalIdle()
         RealizeTabOrder();
     }
 
-    // Update style if the window was not yet realized
-    // and SetBackgroundStyle(wxBG_STYLE_CUSTOM) was called
+    // Update style if the window was not yet realized when
+    // SetBackgroundStyle() was called
     if (m_needsStyleChange)
     {
         SetBackgroundStyle(GetBackgroundStyle());
@@ -3655,54 +3655,74 @@ void wxWindowGTK::GtkSendPaintEvents()
         }
     }
 
-    if (GetThemeEnabled() && (GetBackgroundStyle() == wxBG_STYLE_SYSTEM))
+    switch ( GetBackgroundStyle() )
     {
-        // find ancestor from which to steal background
-        wxWindow *parent = wxGetTopLevelParent((wxWindow *)this);
-        if (!parent)
-            parent = (wxWindow*)this;
-
-        if (GTK_WIDGET_MAPPED(parent->m_widget))
-        {
-            wxRegionIterator upd( m_nativeUpdateRegion );
-            while (upd)
+        case wxBG_STYLE_ERASE:
             {
-                GdkRectangle rect;
-                rect.x = upd.GetX();
-                rect.y = upd.GetY();
-                rect.width = upd.GetWidth();
-                rect.height = upd.GetHeight();
+                wxWindowDC dc( (wxWindow*)this );
+                dc.SetDeviceClippingRegion( m_updateRegion );
 
-                gtk_paint_flat_box( parent->m_widget->style,
-                            m_wxwindow->window,
-                            (GtkStateType)GTK_WIDGET_STATE(m_wxwindow),
-                            GTK_SHADOW_NONE,
-                            &rect,
-                            parent->m_widget,
-                            (char *)"base",
-                            0, 0, -1, -1 );
+                // Work around gtk-qt <= 0.60 bug whereby the window colour
+                // remains grey
+                if ( UseBgCol() &&
+                        wxSystemOptions::
+                            GetOptionInt("gtk.window.force-background-colour") )
+                {
+                    dc.SetBackground(GetBackgroundColour());
+                    dc.Clear();
+                }
 
-                ++upd;
+                wxEraseEvent erase_event( GetId(), &dc );
+                erase_event.SetEventObject( this );
+
+                if ( HandleWindowEvent(erase_event) )
+                {
+                    // background erased, don't do it again
+                    break;
+                }
             }
-        }
-    }
-    else
-    {
-        wxWindowDC dc( (wxWindow*)this );
-        dc.SetDeviceClippingRegion( m_updateRegion );
+            // fall through
 
-        // Work around gtk-qt <= 0.60 bug whereby the window colour
-        // remains grey
-        if (GetBackgroundStyle() == wxBG_STYLE_COLOUR && GetBackgroundColour().Ok() && wxSystemOptions::GetOptionInt(wxT("gtk.window.force-background-colour")) == 1)
-        {
-            dc.SetBackground(wxBrush(GetBackgroundColour()));
-            dc.Clear();
-        }
+        case wxBG_STYLE_SYSTEM:
+            if ( GetThemeEnabled() )
+            {
+                // find ancestor from which to steal background
+                wxWindow *parent = wxGetTopLevelParent((wxWindow *)this);
+                if (!parent)
+                    parent = (wxWindow*)this;
 
-        wxEraseEvent erase_event( GetId(), &dc );
-        erase_event.SetEventObject( this );
+                if (GTK_WIDGET_MAPPED(parent->m_widget))
+                {
+                    wxRegionIterator upd( m_nativeUpdateRegion );
+                    while (upd)
+                    {
+                        GdkRectangle rect;
+                        rect.x = upd.GetX();
+                        rect.y = upd.GetY();
+                        rect.width = upd.GetWidth();
+                        rect.height = upd.GetHeight();
 
-        HandleWindowEvent(erase_event);
+                        gtk_paint_flat_box( parent->m_widget->style,
+                                    m_wxwindow->window,
+                                    (GtkStateType)GTK_WIDGET_STATE(m_wxwindow),
+                                    GTK_SHADOW_NONE,
+                                    &rect,
+                                    parent->m_widget,
+                                    (char *)"base",
+                                    0, 0, -1, -1 );
+
+                        ++upd;
+                    }
+                }
+            }
+            break;
+
+        case wxBG_STYLE_PAINT:
+            // nothing to do: window will be painted over in EVT_PAINT
+            break;
+
+        default:
+            wxFAIL_MSG( "unsupported background style" );
     }
 
     wxNcPaintEvent nc_paint_event( GetId() );
@@ -3767,8 +3787,7 @@ bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
 
     // apply style change (forceStyle=true so that new style is applied
     // even if the bg colour changed from valid to wxNullColour)
-    if (GetBackgroundStyle() != wxBG_STYLE_CUSTOM)
-        GTKApplyWidgetStyle(true);
+    GTKApplyWidgetStyle(true);
 
     return true;
 }
@@ -3896,7 +3915,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 {
     wxWindowBase::SetBackgroundStyle(style);
 
-    if (style == wxBG_STYLE_CUSTOM)
+    if ( style == wxBG_STYLE_PAINT )
     {
         GdkWindow *window;
         if ( m_wxwindow )
@@ -3934,6 +3953,7 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
         // even if the bg colour changed from valid to wxNullColour):
         GTKApplyWidgetStyle(true);
     }
+
     return true;
 }
 

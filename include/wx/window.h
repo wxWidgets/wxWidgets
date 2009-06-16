@@ -1032,9 +1032,10 @@ public:
     wxColour GetForegroundColour() const;
 
         // Set/get the background style.
-        // Pass one of wxBG_STYLE_SYSTEM, wxBG_STYLE_COLOUR, wxBG_STYLE_CUSTOM
-    virtual bool SetBackgroundStyle(wxBackgroundStyle style) { m_backgroundStyle = style; return true; }
-    virtual wxBackgroundStyle GetBackgroundStyle() const { return m_backgroundStyle; }
+    virtual bool SetBackgroundStyle(wxBackgroundStyle style)
+        { m_backgroundStyle = style; return true; }
+    wxBackgroundStyle GetBackgroundStyle() const
+        { return m_backgroundStyle; }
 
         // returns true if the control has "transparent" areas such as a
         // wxStaticText and wxCheckBox and the background should be adapted

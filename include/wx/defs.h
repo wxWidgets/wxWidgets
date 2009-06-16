@@ -1836,13 +1836,32 @@ enum wxBorder
 /*
  * Background styles. See wxWindow::SetBackgroundStyle
  */
-
 enum wxBackgroundStyle
 {
-  wxBG_STYLE_SYSTEM,
-  wxBG_STYLE_COLOUR,
-  wxBG_STYLE_CUSTOM,
-  wxBG_STYLE_TRANSPARENT
+    // background is erased in the EVT_ERASE_BACKGROUND handler or using the
+    // system default background if no such handler is defined (this is the
+    // default style)
+    wxBG_STYLE_ERASE,
+
+    // background is erased by the system, no EVT_ERASE_BACKGROUND event is
+    // generated at all
+    wxBG_STYLE_SYSTEM,
+
+    // background is erased in EVT_PAINT handler and not erased at all before
+    // it, this should be used if the paint handler paints over the entire
+    // window to avoid flicker
+    wxBG_STYLE_PAINT,
+
+
+    // this is a Mac-only style, don't use in portable code
+    wxBG_STYLE_TRANSPARENT,
+
+    // this style is deprecated and doesn't do anything, don't use
+    wxBG_STYLE_COLOUR,
+
+    // this style is deprecated and is synonymous with wxBG_STYLE_PAINT, use
+    // the new name
+    wxBG_STYLE_CUSTOM = wxBG_STYLE_PAINT
 };
 
 /*

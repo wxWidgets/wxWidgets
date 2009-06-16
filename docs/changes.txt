@@ -124,6 +124,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
 
 - wxLoadFileSelector() now allows the user to select existing files only.
 
+- Erase background events are now not generated at all when background style is
+  changed. See the updated wxWindow::SetBackgroundStyle() description in the
+  manual for more details.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
