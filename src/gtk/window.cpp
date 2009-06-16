@@ -1208,6 +1208,11 @@ bool wxWindowGTK::GTKProcessEvent(wxEvent& event) const
     return HandleWindowEvent(event);
 }
 
+bool wxWindowGTK::GTKShouldIgnoreEvent() const
+{
+    return !m_hasVMT || g_blockEventsOnDrag;
+}
+
 int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
 {
     if (!m_hasVMT)

@@ -154,6 +154,12 @@ public:
     // anything else. If it returns -1, the handler should continue as usual
     int GTKCallbackCommonPrologue(struct _GdkEventAny *event) const;
 
+    // Simplified form of GTKCallbackCommonPrologue() which can be used from
+    // GTK callbacks without return value to check if the event should be
+    // ignored: if this returns true, the event shouldn't be handled
+    bool GTKShouldIgnoreEvent() const;
+
+
     // override this if some events should never be consumed by wxWidgets but
     // but have to be left for the native control
     //
@@ -276,7 +282,7 @@ public:
     // extra (wxGTK-specific) flags
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
     bool                 m_nativeSizeEvent:1;   // wxGLCanvas sends wxSizeEvent upon "alloc_size"
-    bool                 m_hasVMT:1;
+    bool                 m_hasVMT:1;            // set after PostCreation() is called
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
     bool                 m_clipPaintRegion:1;   // true after ScrollWindow()
     wxRegion             m_nativeUpdateRegion;  // not transformed for RTL
