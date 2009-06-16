@@ -988,12 +988,34 @@ bool wxDocManager::Initialize()
 
 wxString wxDocManager::GetLastDirectory() const
 {
-    // use the system-dependent default location for the document files if
-    // we're being opened for the first time
+    // if we haven't determined the last used directory yet, do it now
     if ( m_lastDirectory.empty() )
     {
+        // we're going to modify m_lastDirectory in this const method, so do it
+        // via non-const self pointer instead of const this one
         wxDocManager * const self = const_cast<wxDocManager *>(this);
-        self->m_lastDirectory = wxStandardPaths::Get().GetAppDocumentsDir();
+
+        // first try to reuse the directory of the most recently opened file:
+        // this ensures that if the user opens a file, closes the program and
+        // runs it again the "Open file" dialog will open in the directory of
+        // the last file he used
+        wxString lastOpened = GetHistoryFile(0);
+        if ( !lastOpened.empty() )
+        {
+            const wxFileName fn(lastOpened);
+            if ( fn.DirExists() )
+            {
+                self->m_lastDirectory = fn.GetPath();
+            }
+            //else: should we try the next one?
+        }
+
+        // if we don't have any files in the history (yet?), use the
+        // system-dependent default location for the document files
+        if ( m_lastDirectory.empty() )
+        {
+            self->m_lastDirectory = wxStandardPaths::Get().GetAppDocumentsDir();
+        }
     }
 
     return m_lastDirectory;
