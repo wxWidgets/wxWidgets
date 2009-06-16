@@ -75,14 +75,6 @@ gtk_button_style_set_callback(GtkWidget* widget, GtkStyle*, wxButton* win)
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
 
-wxButton::wxButton()
-{
-}
-
-wxButton::~wxButton()
-{
-}
-
 bool wxButton::Create(wxWindow *parent,
                       wxWindowID id,
                       const wxString &label,
@@ -262,7 +254,7 @@ wxSize wxButton::DoGetBestSize() const
 {
     // the default button in wxGTK is bigger than the other ones because of an
     // extra border around it, but we don't want to take it into account in
-    // our size calculations (otherwsie the result is visually ugly), so
+    // our size calculations (otherwise the result is visually ugly), so
     // always return the size of non default button from here
     const bool isDefault = GTK_WIDGET_HAS_DEFAULT(m_widget);
     if ( isDefault )
@@ -282,8 +274,10 @@ wxSize wxButton::DoGetBestSize() const
     if (!HasFlag(wxBU_EXACTFIT))
     {
         wxSize defaultSize = GetDefaultSize();
-        if (ret.x < defaultSize.x) ret.x = defaultSize.x;
-        if (ret.y < defaultSize.y) ret.y = defaultSize.y;
+        if (ret.x < defaultSize.x)
+            ret.x = defaultSize.x;
+        if (ret.y < defaultSize.y)
+            ret.y = defaultSize.y;
     }
 
     CacheBestSize(ret);
@@ -295,6 +289,83 @@ wxVisualAttributes
 wxButton::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     return GetDefaultAttributesFromGTKWidget(gtk_button_new);
+}
+
+// ----------------------------------------------------------------------------
+// bitmaps support
+// ----------------------------------------------------------------------------
+
+wxBitmap wxButton::DoGetBitmap(State which) const
+{
+    return m_bitmaps[which];
+}
+
+void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+{
+#ifdef __WXGTK26__
+    // normal image is special: setting it enables images for the button and
+    // resetting it to nothing disables all of them
+    if ( which == State_Normal )
+    {
+        if ( !gtk_check_version(2,6,0) )
+        {
+            GtkWidget *image = gtk_button_get_image(GTK_BUTTON(m_widget));
+            if ( image && !bitmap.IsOk() )
+            {
+                gtk_container_remove(GTK_CONTAINER(m_widget), image);
+                InvalidateBestSize();
+            }
+            else if ( !image && bitmap.IsOk() )
+            {
+                image = gtk_image_new();
+                gtk_button_set_image(GTK_BUTTON(m_widget), image);
+                InvalidateBestSize();
+            }
+            //else: image presence or absence didn't change
+
+            if ( bitmap.IsOk() )
+            {
+                gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
+            }
+        }
+    }
+#endif // GTK+ 2.6+
+
+    m_bitmaps[which] = bitmap;
+}
+
+void wxButton::DoSetBitmapPosition(wxDirection dir)
+{
+#ifdef __WXGTK210__
+    if ( !gtk_check_version(2,10,0) )
+    {
+        GtkPositionType gtkpos;
+        switch ( dir )
+        {
+            default:
+                wxFAIL_MSG( "invalid position" );
+                // fall through
+
+            case wxLEFT:
+                gtkpos = GTK_POS_LEFT;
+                break;
+
+            case wxRIGHT:
+                gtkpos = GTK_POS_RIGHT;
+                break;
+
+            case wxTOP:
+                gtkpos = GTK_POS_TOP;
+                break;
+
+            case wxBOTTOM:
+                gtkpos = GTK_POS_BOTTOM;
+                break;
+        }
+
+        gtk_button_set_image_position(GTK_BUTTON(m_widget), gtkpos);
+    }
+#endif // GTK+ 2.10+
 }
 
 #endif // wxUSE_BUTTON

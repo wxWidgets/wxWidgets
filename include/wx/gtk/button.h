@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/gtk/button.h
-// Purpose:
+// Purpose:     wxGTK wxButton class declaration
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
@@ -14,10 +14,10 @@
 // wxButton
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxButton: public wxButtonBase
+class WXDLLIMPEXP_CORE wxButton : public wxButtonBase
 {
 public:
-    wxButton();
+    wxButton() { }
     wxButton(wxWindow *parent, wxWindowID id,
            const wxString& label = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
@@ -28,8 +28,6 @@ public:
         Create(parent, id, label, pos, size, style, validator, name);
     }
 
-    virtual ~wxButton();
-
     bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
@@ -39,7 +37,7 @@ public:
 
     virtual wxWindow *SetDefault();
     virtual void SetLabel( const wxString &label );
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Enable( bool enable = true );
 
     // implementation
     // --------------
@@ -56,7 +54,13 @@ protected:
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
 
+    virtual wxBitmap DoGetBitmap(State which) const;
+    virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
+    virtual void DoSetBitmapPosition(wxDirection dir);
+
 private:
+    wxBitmap m_bitmaps[State_Max];
+
     DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
