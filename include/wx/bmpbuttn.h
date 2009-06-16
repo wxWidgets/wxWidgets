@@ -52,8 +52,8 @@ public:
 
     // deprecated synonym for SetBitmapLabel()
 #if WXWIN_COMPATIBILITY_2_6
-    wxDEPRECATED_INLINE( void SetLabel(const wxBitmap& bitmap).
-       SetBitmapLabel(bitmap); );
+    wxDEPRECATED_INLINE( void SetLabel(const wxBitmap& bitmap),
+       SetBitmapLabel(bitmap); )
 
     // prevent virtual function hiding
     virtual void SetLabel(const wxString& label)
