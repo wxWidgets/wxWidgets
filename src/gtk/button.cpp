@@ -123,7 +123,23 @@ bool wxButton::Create(wxWindow *parent,
         return false;
     }
 
-    m_widget = gtk_button_new_with_mnemonic("");
+    // create either a standard button with text label (which may still contain
+    // an image under GTK+ 2.6+) or a bitmap-only button if we don't have any
+    // label
+    const bool useLabel = !label.empty() || wxIsStockID(id);
+    if ( useLabel )
+    {
+        m_widget = gtk_button_new_with_mnemonic("");
+    }
+    else // no label, suppose we will have a bitmap
+    {
+        m_widget = gtk_button_new();
+
+        GtkWidget *image = gtk_image_new();
+        gtk_widget_show(image);
+        gtk_container_add(GTK_CONTAINER(m_widget), image);
+    }
+
     g_object_ref(m_widget);
 
     float x_alignment = 0.5;
@@ -140,7 +156,8 @@ bool wxButton::Create(wxWindow *parent,
 
     gtk_button_set_alignment(GTK_BUTTON(m_widget), x_alignment, y_alignment);
 
-    SetLabel(label);
+    if ( useLabel )
+        SetLabel(label);
 
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
@@ -392,15 +409,35 @@ void wxButton::GTKDoShowBitmap(const wxBitmap& bitmap)
 {
     wxASSERT_MSG( bitmap.IsOk(), "invalid bitmap" );
 
-#ifdef __WXGTK26__
-    if ( !gtk_check_version(2,6,0) )
+    GtkWidget *image;
+    if ( GetLabel().empty() )
     {
-        GtkWidget *image = gtk_button_get_image(GTK_BUTTON(m_widget));
-        wxCHECK_RET( image, "must have image widget" );
-
-        gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
+        image = GTK_BIN(m_widget)->child;
     }
+    else // have both label and bitmap
+    {
+#ifdef __WXGTK26__
+        if ( !gtk_check_version(2,6,0) )
+        {
+            image = gtk_button_get_image(GTK_BUTTON(m_widget));
+        }
+        else
 #endif // __WXGTK26__
+        {
+            // buttons with both label and bitmap are only supported with GTK+
+            // 2.6 so far
+            //
+            // it shouldn't be difficult to implement them ourselves for the
+            // previous GTK+ versions by stuffing a container with a label and
+            // an image inside GtkButton but there doesn't seem to be much
+            // point in doing this for ancient GTK+ versions
+            return;
+        }
+    }
+
+    wxCHECK_RET( image && GTK_IS_IMAGE(image), "must have image widget" );
+
+    gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
 }
 
 wxBitmap wxButton::DoGetBitmap(State which) const
@@ -413,10 +450,17 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     switch ( which )
     {
         case State_Normal:
+            if ( GetLabel().empty() )
+            {
+                // we only have the bitmap in this button, never remove it but
+                // do invalidate the best size when the bitmap (and presumably
+                // its size) changes
+                InvalidateBestSize();
+            }
 #ifdef __WXGTK26__
             // normal image is special: setting it enables images for the button and
             // resetting it to nothing disables all of them
-            if ( !gtk_check_version(2,6,0) )
+            else if ( !gtk_check_version(2,6,0) )
             {
                 GtkWidget *image = gtk_button_get_image(GTK_BUTTON(m_widget));
                 if ( image && !bitmap.IsOk() )
