@@ -705,6 +705,7 @@ public:
 // VC6 produces a warning if we a macro expanding to nothing to
 // DECLARE_LOG_FUNCTION2:
 #if defined(__VISUALC__) && __VISUALC__ < 1300
+    #pragma warning(push)
     // "not enough actual parameters for macro 'DECLARE_LOG_FUNCTION2_EXP'"
     #pragma warning(disable:4003)
 #endif
@@ -818,7 +819,7 @@ DECLARE_LOG_FUNCTION2(SysError, unsigned long, lErrCode);
 #endif // wxUSE_LOG_TRACE/!wxUSE_LOG_TRACE
 
 #if defined(__VISUALC__) && __VISUALC__ < 1300
-    #pragma warning(default:4003)
+    #pragma warning(pop)
 #endif
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
