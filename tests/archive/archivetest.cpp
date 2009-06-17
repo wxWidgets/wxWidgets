@@ -647,7 +647,7 @@ void ArchiveTestCase<ClassFactoryT>::CreateArchive(wxOutputStream& out,
         TestEntry& entry = *i->second;
 
         if (fn.IsDir()) {
-            fn.Mkdir(0777, wxPATH_MKDIR_FULL);
+            wxFileName::Mkdir(fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
         } else {
             wxFileName::Mkdir(fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
             wxFFileOutputStream fileout(fn.GetFullPath());
