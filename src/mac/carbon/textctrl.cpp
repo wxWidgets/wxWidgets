@@ -428,9 +428,12 @@ void wxTextCtrl::CreatePeer(
         // Non non-CG mode, borders are not refreshed properly when the focus
         // leaves the text control, when using wxMacMLTEHIViewControl.
         // This is still true on 10.5.
+        // In fact, even on CG, this causes problems with wxSpinCtrls, whose
+        // focus rings don't refresh when switching between spin controls and spin buttons.
+        // So for now, don't use wxMacLTEHIViewControl unless we really have to.
         
         if ( (m_windowStyle & wxTE_MULTILINE)
-#if wxMAC_USE_CORE_GRAPHICS
+#if 0 // wxMAC_USE_CORE_GRAPHICS
              || ( UMAGetSystemVersion() >= 0x1050 )
 #endif
              )
