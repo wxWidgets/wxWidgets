@@ -155,7 +155,7 @@ protected:
     void OnFocus( wxFocusEvent& event )
     {
         // Unfortunately the fix below completely disables the combobox on Mac OS 10.4 (and presumably below)
-        if (UMAGetSystemVersion() <= 0x1040)
+        if (UMAGetSystemVersion() < 0x1050)
         {
             event.Skip();
             return;            
