@@ -413,7 +413,6 @@ wxCONSTRUCTOR_DUMMY(wxWindow)
 
 BEGIN_EVENT_TABLE(wxWindowMSW, wxWindowBase)
     EVT_SYS_COLOUR_CHANGED(wxWindowMSW::OnSysColourChanged)
-    EVT_ERASE_BACKGROUND(wxWindowMSW::OnEraseBackground)
 #ifdef __WXWINCE__
     EVT_INIT_DIALOG(wxWindowMSW::OnInitDialog)
 #endif
@@ -4706,51 +4705,58 @@ void wxWindowMSW::OnPaint(wxPaintEvent& event)
 
 bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 {
-    wxDCTemp dc(hdc, GetClientSize());
-    wxDCTempImpl *impl = (wxDCTempImpl*) dc.GetImpl();
-
-    impl->SetHDC(hdc);
-    impl->SetWindow((wxWindow *)this);
-
-    wxEraseEvent event(m_windowId, &dc);
-    event.SetEventObject(this);
-    bool rc = HandleWindowEvent(event);
-
-    // must be called manually as ~wxDC doesn't do anything for wxDCTemp
-    impl->SelectOldObjects(hdc);
-
-    return rc;
-}
-
-void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
-{
     // standard non top level controls (i.e. except the dialogs) always erase
     // their background themselves in HandleCtlColor() or have some control-
     // specific ways to set the colours (common controls)
     if ( IsOfStandardClass() && !IsTopLevel() )
+        return false;
+
+    switch ( GetBackgroundStyle() )
     {
-        event.Skip();
-        return;
+        case wxBG_STYLE_ERASE:
+            // we need to generate an erase background event
+            {
+                wxDCTemp dc(hdc, GetClientSize());
+                wxDCTempImpl *impl = (wxDCTempImpl*) dc.GetImpl();
+
+                impl->SetHDC(hdc);
+                impl->SetWindow((wxWindow *)this);
+
+                wxEraseEvent event(m_windowId, &dc);
+                event.SetEventObject(this);
+                bool rc = HandleWindowEvent(event);
+
+                // must be called manually as ~wxDC doesn't do anything for
+                // wxDCTemp
+                impl->SelectOldObjects(hdc);
+
+                if ( rc )
+                {
+                    // background erase by the user-defined handler
+                    return true;
+                }
+            }
+            // fall through
+
+        case wxBG_STYLE_SYSTEM:
+            if ( !DoEraseBackground(hdc) )
+            {
+                // let the default processing to take place if we didn't erase
+                // the background ourselves
+                return false;
+            }
+            break;
+
+        case wxBG_STYLE_PAINT:
+            // no need to do anything here at all, background will be entirely
+            // redrawn in WM_PAINT handler
+            break;
+
+        default:
+            wxFAIL_MSG( "unknown background style" );
     }
 
-    if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
-    {
-        // don't skip the event here, custom background means that the app
-        // is drawing it itself in its OnPaint(), so don't draw it at all
-        // now to avoid flicker
-        return;
-    }
-
-    wxDC *dc = event.GetDC();
-    if (!dc) return;
-    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc->GetImpl();
-
-    // do default background painting
-    if ( !DoEraseBackground(GetHdcOf(*impl)) )
-    {
-        // let the system paint the background
-        event.Skip();
-    }
+    return true;
 }
 
 bool wxWindowMSW::DoEraseBackground(WXHDC hDC)

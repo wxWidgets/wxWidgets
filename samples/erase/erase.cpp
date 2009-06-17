@@ -59,6 +59,8 @@ public:
     void UseBuffer(bool useBuffer) { m_useBuffer = useBuffer; Refresh(); }
     bool UsesBuffer() const { return m_useBuffer; }
 
+    void EraseBgInPaint(bool erase) { m_eraseBgInPaint = erase; Refresh(); }
+
 private:
     void OnPaint( wxPaintEvent &event );
     void OnChar( wxKeyEvent &event );
@@ -73,6 +75,9 @@ private:
     // use wxMemoryDC in OnPaint()?
     bool m_useBuffer;
 
+    // erase background in OnPaint()?
+    bool m_eraseBgInPaint;
+
 
     DECLARE_EVENT_TABLE()
 };
@@ -84,6 +89,7 @@ public:
 
 private:
     void OnUseBuffer(wxCommandEvent& event);
+    void OnEraseBgInPaint(wxCommandEvent& event);
     void OnChangeBgStyle(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -113,6 +119,7 @@ enum
 {
     // menu items
     Erase_Menu_UseBuffer = 100,
+    Erase_Menu_EraseBgInPaint,
     Erase_Menu_BgStyleErase,
     Erase_Menu_BgStyleSystem,
     Erase_Menu_BgStylePaint,
@@ -144,7 +151,8 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(Erase_Menu_UseBuffer,  MyFrame::OnUseBuffer)
+    EVT_MENU(Erase_Menu_UseBuffer, MyFrame::OnUseBuffer)
+    EVT_MENU(Erase_Menu_EraseBgInPaint, MyFrame::OnEraseBgInPaint)
     EVT_MENU_RANGE(Erase_Menu_BgStyleErase, Erase_Menu_BgStylePaint,
                    MyFrame::OnChangeBgStyle)
 
@@ -165,6 +173,8 @@ MyFrame::MyFrame()
 
     wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
     menuFile->AppendCheckItem(Erase_Menu_UseBuffer, "&Use memory DC\tCtrl-M");
+    menuFile->AppendCheckItem(Erase_Menu_EraseBgInPaint,
+                              "&Erase background in EVT_PAINT\tCtrl-R");
     menuFile->AppendSeparator();
     menuFile->AppendRadioItem(Erase_Menu_BgStyleErase,
                               "Use wxBG_STYLE_&ERASE\tCtrl-E");
@@ -192,6 +202,11 @@ MyFrame::MyFrame()
 void MyFrame::OnUseBuffer(wxCommandEvent& event)
 {
     m_canvas->UseBuffer(event.IsChecked());
+}
+
+void MyFrame::OnEraseBgInPaint(wxCommandEvent& event)
+{
+    m_canvas->EraseBgInPaint(event.IsChecked());
 }
 
 void MyFrame::OnChangeBgStyle(wxCommandEvent& event)
@@ -233,6 +248,7 @@ MyCanvas::MyCanvas(wxFrame *parent)
         : wxScrolledWindow(parent, wxID_ANY)
 {
     m_useBuffer = false;
+    m_eraseBgInPaint = false;
 
     SetScrollbars( 10, 10, 40, 100, 0, 0 );
 
@@ -269,6 +285,20 @@ void MyCanvas::OnChar( wxKeyEvent &event )
 
 void MyCanvas::DoPaint(wxDC& dc)
 {
+    if ( m_eraseBgInPaint )
+    {
+        dc.SetBackground(*wxLIGHT_GREY);
+        dc.Clear();
+
+        dc.DrawText("Background erased in OnPaint", 65, 110);
+    }
+    else if ( GetBackgroundStyle() == wxBG_STYLE_PAINT )
+    {
+        dc.SetTextForeground(*wxRED);
+        dc.DrawText("You must enable erasing background in OnPaint to avoid "
+                    "display corruption", 65, 110);
+    }
+
     dc.SetBrush( *wxBLACK_BRUSH );
     dc.DrawRectangle( 10,10,60,50 );
 
