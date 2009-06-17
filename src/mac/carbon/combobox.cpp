@@ -154,6 +154,13 @@ protected:
     
     void OnFocus( wxFocusEvent& event )
     {
+        // Unfortunately the fix below completely disables the combobox on Mac OS 10.4 (and presumably below)
+        if (UMAGetSystemVersion() <= 0x1040)
+        {
+            event.Skip();
+            return;            
+        }
+
         // in case the textcontrol gets the focus we propagate
         // it to the parent's handlers.
         wxFocusEvent evt2(event.GetEventType(),m_cb->GetId());
