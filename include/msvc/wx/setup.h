@@ -121,6 +121,9 @@
         #if wxUSE_AUI && !defined(wxNO_AUI_LIB)
             #pragma comment(lib, wxMSW_LIB_NAME("aui"))
         #endif
+        #if wxUSE_PROPGRID && !defined(wxNO_PROPGRID_LIB)
+            #pragma comment(lib, wxMSW_LIB_NAME("propgrid"))
+        #endif
         #if wxUSE_RICHTEXT && !defined(wxNO_RICHTEXT_LIB)
             #pragma comment(lib, wxMSW_LIB_NAME("richtext"))
         #endif
