@@ -425,7 +425,15 @@ void wxTextCtrl::CreatePeer(
 
     if ( UMAGetSystemVersion() >= 0x1030 && !forceMLTE )
     {
-        if ( (m_windowStyle & wxTE_MULTILINE) || ( UMAGetSystemVersion() >= 0x1050 ) )
+        // Non non-CG mode, borders are not refreshed properly when the focus
+        // leaves the text control, when using wxMacMLTEHIViewControl.
+        // This is still true on 10.5.
+        
+        if ( (m_windowStyle & wxTE_MULTILINE)
+#if wxMAC_USE_CORE_GRAPHICS
+             || ( UMAGetSystemVersion() >= 0x1050 )
+#endif
+             )
             m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
 
