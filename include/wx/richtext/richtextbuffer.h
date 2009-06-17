@@ -70,7 +70,7 @@
 #include "wx/dataobj.h"
 #endif
 
-// Setting wxRICHTEXT_USE_OWN_CARET to 1 implements a non-flashing
+// Setting wxRICHTEXT_USE_OWN_CARET to 1 implements a
 // cursor reliably without using wxClientDC in case there
 // are platform-specific problems with the generic caret.
 #if defined(wxMAC_USE_CORE_GRAPHICS) && wxMAC_USE_CORE_GRAPHICS
