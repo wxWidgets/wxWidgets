@@ -421,24 +421,42 @@ bool wxFontBase::SetFaceName(const wxString& facename)
     return true;
 }
 
-wxFont wxFont::MakeBold() const
+wxFont& wxFont::MakeBold()
+{
+    SetWeight(wxFONTWEIGHT_BOLD);
+    return *this;
+}
+
+wxFont wxFont::Bold() const
 {
     wxFont font(*this);
-    font.SetWeight(wxFONTWEIGHT_BOLD);
+    font.MakeBold();
     return font;
 }
 
-wxFont wxFont::MakeItalic() const
+wxFont& wxFont::MakeItalic()
+{
+    SetStyle(wxFONTSTYLE_ITALIC);
+    return *this;
+}
+
+wxFont wxFont::Italic() const
 {
     wxFont font(*this);
     font.SetStyle(wxFONTSTYLE_ITALIC);
     return font;
 }
 
-wxFont wxFont::Scale(float x) const
+wxFont& wxFont::Scale(float x)
+{
+    SetPointSize(int(x*GetPointSize() + 0.5));
+    return *this;
+}
+
+wxFont wxFont::Scaled(float x) const
 {
     wxFont font(*this);
-    font.SetPointSize(int(x*GetPointSize() + 0.5));
+    font.Scale(x);
     return font;
 }
 

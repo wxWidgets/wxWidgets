@@ -526,20 +526,29 @@ public:
     /**
         @name Similar fonts creation
 
-        The functions in this section create a font similar to the given one
-        but with its weight, style or size changed.
+        The functions in this section either modify the font in place or create
+        a new font similar to the given one but with its weight, style or size
+        changed.
      */
     //@{
 
     /**
         Return a bold version of this font.
+
+        @see MakeBold()
+
+        @since 2.9.1
      */
-    wxFont MakeBold() const;
+    wxFont Bold() const;
 
     /**
         Return an italic version of this font.
+
+        @see MakeItalic()
+
+        @since 2.9.1
      */
-    wxFont MakeItalic() const;
+    wxFont Italic() const;
 
     /**
         Return a larger version of this font.
@@ -547,9 +556,41 @@ public:
         The font size is multiplied by CSS specification inspired factor of @c
         1.2.
 
-        @see MakeSmaller(), Scale()
+        @see Larger(), MakeSmaller(), Scale()
+
+        @since 2.9.1
      */
-    wxFont MakeLarger() const;
+    wxFont Larger() const;
+
+    /**
+        Changes this font to be bold.
+
+        @see Bold()
+
+        @since 2.9.1
+     */
+    wxFont& MakeBold();
+
+    /**
+        Changes this font to be italic.
+
+        @see Italic()
+
+        @since 2.9.1
+     */
+    wxFont& MakeItalic();
+
+    /**
+        Changes this font to be larger.
+
+        The font size is multiplied by CSS specification inspired factor of @c
+        1.2.
+
+        @see Larger(), MakeSmaller(), Scale()
+
+        @since 2.9.1
+     */
+    wxFont& MakeLarger();
 
     /**
         Return a smaller version of this font.
@@ -557,17 +598,47 @@ public:
         The font size is divided by CSS specification inspired factor of @c
         1.2.
 
-        @see MakeLarger(), Scale()
+        @see MakeLarger(), Scale(), Smaller()
+
+        @since 2.9.1
      */
-    wxFont MakeSmaller() const;
+    wxFont& MakeSmaller();
+
+    /**
+        Changes the size of this font.
+
+        The font size is multiplied by the given factor (which may be less than
+        1 to create a smaller version of the font).
+
+        @see Scaled(), MakeLarger(), MakeSmaller()
+
+        @since 2.9.1
+     */
+    wxFont& Scale(float x);
 
     /**
         Return a scaled version of this font.
 
         The font size is multiplied by the given factor (which may be less than
         1 to create a smaller version of the font).
+
+        @see Scale(), Larger(), Smaller()
+
+        @since 2.9.1
      */
-    wxFont Scale(float x) const;
+    wxFont Scaled(float x) const;
+
+    /**
+        Return a smaller version of this font.
+
+        The font size is divided by CSS specification inspired factor of @c
+        1.2.
+
+        @see Larger(), MakeSmaller(), Scaled()
+
+        @since 2.9.1
+     */
+    wxFont Smaller() const;
 
     //@}
 

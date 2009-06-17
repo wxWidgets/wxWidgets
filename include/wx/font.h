@@ -297,12 +297,18 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
 #define wxDECLARE_COMMON_FONT_METHODS() \
     wxDECLARE_FONT_COMPAT_SETTER \
  \
+    /* functions for modifying font in place */ \
+    wxFont& MakeBold(); \
+    wxFont& MakeItalic(); \
+    wxFont& MakeLarger() { return Scale(1.2f); } \
+    wxFont& MakeSmaller() { return Scale(1/1.2f); } \
+    wxFont& Scale(float x); \
     /* functions for creating fonts based on this one */ \
-    wxFont MakeBold() const; \
-    wxFont MakeItalic() const; \
-    wxFont MakeLarger() const { return Scale(1.2f); } \
-    wxFont MakeSmaller() const { return Scale(1/1.2f); } \
-    wxFont Scale(float x) const
+    wxFont Bold() const; \
+    wxFont Italic() const; \
+    wxFont Larger() const { return Scaled(1.2f); } \
+    wxFont Smaller() const { return Scaled(1/1.2f); } \
+    wxFont Scaled(float x) const
 
 // include the real class declaration
 #if defined(__WXPALMOS__)
