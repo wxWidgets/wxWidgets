@@ -523,7 +523,7 @@ public:
 
     @see wxVariant, wxGetVariantCast()
 */
-class wxVariantData
+class wxVariantData : public wxObjectRefData
 {
 public:
     /**
