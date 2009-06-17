@@ -26,6 +26,7 @@
     #include "wx/settings.h"
 #endif
 
+#include "wx/timer.h"
 #include "wx/textfile.h"
 #include "wx/ffile.h"
 #include "wx/filename.h"
@@ -59,6 +60,18 @@ wxDEFINE_EVENT( wxEVT_COMMAND_RICHTEXT_BUFFER_RESET, wxRichTextEvent );
 
 #if wxRICHTEXT_USE_OWN_CARET
 
+class wxRichTextCaret;
+class wxRichTextCaretTimer: public wxTimer
+{
+  public:
+    wxRichTextCaretTimer(wxRichTextCaret* caret)
+    {
+        m_caret = caret;
+    }
+    virtual void Notify();
+    wxRichTextCaret* m_caret;
+};
+
 /*!
  * wxRichTextCaret
  *
@@ -73,12 +86,12 @@ public:
     // ctors
     // -----
         // default - use Create()
-    wxRichTextCaret() { Init(); }
+    wxRichTextCaret(): m_timer(this)  { Init(); }
         // creates a block caret associated with the given window
     wxRichTextCaret(wxRichTextCtrl *window, int width, int height)
-        : wxCaret(window, width, height) { Init(); m_richTextCtrl = window; }
+        : wxCaret(window, width, height), m_timer(this) { Init(); m_richTextCtrl = window; }
     wxRichTextCaret(wxRichTextCtrl *window, const wxSize& size)
-        : wxCaret(window, size) { Init(); m_richTextCtrl = window; }
+        : wxCaret(window, size), m_timer(this) { Init(); m_richTextCtrl = window; }
 
     virtual ~wxRichTextCaret();
 
@@ -99,6 +112,8 @@ public:
     bool GetNeedsUpdate() const { return m_needsUpdate; }
     void SetNeedsUpdate(bool needsUpdate = true ) { m_needsUpdate = needsUpdate; }
 
+    void Notify();
+
 protected:
     virtual void DoShow();
     virtual void DoHide();
@@ -115,7 +130,8 @@ private:
                   m_yOld;
     bool          m_hasFocus;       // true => our window has focus
     bool          m_needsUpdate;    // must be repositioned
-
+    bool          m_flashOn;
+    wxRichTextCaretTimer m_timer;
     wxRichTextCtrl* m_richTextCtrl;
 };
 #endif
@@ -3480,10 +3496,14 @@ void wxRichTextCaret::Init()
     m_yOld = -1;
     m_richTextCtrl = NULL;
     m_needsUpdate = false;
+    m_needsUpdate = false;
+    m_flashOn = true;
 }
 
 wxRichTextCaret::~wxRichTextCaret()
 {
+    if (m_timer.IsRunning())
+        m_timer.Stop();
 }
 
 // ----------------------------------------------------------------------------
@@ -3492,11 +3512,19 @@ wxRichTextCaret::~wxRichTextCaret()
 
 void wxRichTextCaret::DoShow()
 {
+    m_flashOn = true;
+    
+    if (!m_timer.IsRunning())
+        m_timer.Start(GetBlinkTime());
+
     Refresh();
 }
 
 void wxRichTextCaret::DoHide()
 {
+    if (m_timer.IsRunning())
+        m_timer.Stop();
+
     Refresh();
 }
 
@@ -3573,18 +3601,27 @@ void wxRichTextCaret::DoDraw(wxDC *dc)
     dc->SetBrush(*(m_hasFocus ? wxBLACK_BRUSH : wxTRANSPARENT_BRUSH));
     dc->SetPen(*wxBLACK_PEN);
 
-    // VZ: unfortunately, the rectangle comes out a pixel smaller when this is
-    //     done under wxGTK - no idea why
-    //dc->SetLogicalFunction(wxINVERT);
-
     wxPoint pt(m_x, m_y);
 
     if (m_richTextCtrl)
     {
         pt = m_richTextCtrl->GetLogicalPoint(pt);
     }
-    dc->DrawRectangle(pt.x, pt.y, m_width, m_height);
+    if (IsVisible() && m_flashOn)
+        dc->DrawRectangle(pt.x, pt.y, m_width, m_height);
 }
+
+void wxRichTextCaret::Notify()
+{
+    m_flashOn = !m_flashOn;
+    Refresh();
+}
+
+void wxRichTextCaretTimer::Notify()
+{
+    m_caret->Notify();
+}
+
 #endif
     // wxRICHTEXT_USE_OWN_CARET
 
