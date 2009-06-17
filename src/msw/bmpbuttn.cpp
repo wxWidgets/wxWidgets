@@ -180,6 +180,11 @@ void wxBitmapButton::DoSetBitmap(const wxBitmap& bitmap, State which)
                 // from the normal one
                 m_disabledSetByUser = true;
                 break;
+
+            default:
+                // nothing special to do but include the default clause to
+                // suppress gcc warnings
+                ;
         }
     }
 
