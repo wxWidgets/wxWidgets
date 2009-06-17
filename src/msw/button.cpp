@@ -145,7 +145,7 @@ public:
 
         // we use margins when we have both bitmap and text, but when we have
         // only the bitmap it should take up the entire button area
-        if ( !btn->GetLabel().empty() )
+        if ( btn->ShowsLabel() )
         {
             m_margin.x = btn->GetCharWidth();
             m_margin.y = btn->GetCharHeight() / 2;
@@ -575,7 +575,7 @@ wxSize wxButton::DoGetBestSize() const
     wxSize size;
 
     // account for the text part
-    if ( !GetLabel().empty() )
+    if ( ShowsLabel() )
     {
         size = wxMSWButton::ComputeBestSize(const_cast<wxButton *>(this));
     }
@@ -946,7 +946,7 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
         // (even if we use BUTTON_IMAGELIST_ALIGN_CENTER alignment and
         // BS_BITMAP style), at least under Windows 2003 so use owner drawn
         // strategy for bitmap-only buttons
-        if ( !GetLabel().empty() && wxUxThemeEngine::GetIfActive() )
+        if ( ShowsLabel() && wxUxThemeEngine::GetIfActive() )
         {
             m_imageData = new wxXPButtonImageData(this, bitmap);
         }
@@ -1262,8 +1262,6 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     RECT rectBtn;
     CopyRect(&rectBtn, &lpDIS->rcItem);
 
-    const wxString label = GetLabel();
-
     // draw the button background
 #if wxUSE_UXTHEME
     if ( wxUxThemeEngine::GetIfActive() )
@@ -1364,7 +1362,7 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 
 
     // finally draw the label
-    if ( !label.empty() )
+    if ( ShowsLabel() )
     {
         COLORREF colFg = state & ODS_DISABLED
                             ? ::GetSysColor(COLOR_GRAYTEXT)
@@ -1373,7 +1371,7 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
         // notice that DT_HIDEPREFIX doesn't work on old (pre-Windows 2000)
         // systems but by happy coincidence ODS_NOACCEL is not used under them
         // neither so DT_HIDEPREFIX should never be used there
-        DrawButtonText(hdc, &rectBtn, label, colFg,
+        DrawButtonText(hdc, &rectBtn, GetLabel(), colFg,
                        state & ODS_NOACCEL ? DT_HIDEPREFIX : 0);
     }
 

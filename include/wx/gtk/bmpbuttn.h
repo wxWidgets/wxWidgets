@@ -41,7 +41,8 @@ public:
                 const wxString& name = wxButtonNameStr)
     {
         if ( !wxBitmapButtonBase::Create(parent, id, "",
-                                         pos, size, style,
+                                         pos, size,
+                                         style | wxBU_NOTEXT,
                                          validator, name) )
             return false;
 

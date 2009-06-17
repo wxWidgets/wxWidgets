@@ -131,7 +131,9 @@ bool wxBitmapButton::Create(wxWindow *parent,
                             const wxString& name)
 {
     if ( !wxBitmapButtonBase::Create(parent, id, "",
-                                     pos, size, style, validator, name) )
+                                     pos, size,
+                                     style | wxBU_NOTEXT,
+                                     validator, name) )
         return false;
 
     SetBitmapLabel(bitmap);

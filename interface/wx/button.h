@@ -17,18 +17,23 @@
 
     @beginStyleTable
     @style{wxBU_LEFT}
-           Left-justifies the label. Windows and GTK+ only.
+        Left-justifies the label. Windows and GTK+ only.
     @style{wxBU_TOP}
-           Aligns the label to the top of the button. Windows and GTK+ only.
+        Aligns the label to the top of the button. Windows and GTK+ only.
     @style{wxBU_RIGHT}
-           Right-justifies the bitmap label. Windows and GTK+ only.
+        Right-justifies the bitmap label. Windows and GTK+ only.
     @style{wxBU_BOTTOM}
-           Aligns the label to the bottom of the button. Windows and GTK+ only.
+        Aligns the label to the bottom of the button. Windows and GTK+ only.
     @style{wxBU_EXACTFIT}
-           Creates the button as small as possible instead of making it of the
-           standard size (which is the default behaviour ).
+        Creates the button as small as possible instead of making it of the
+        standard size (which is the default behaviour ).
+    @style{wxBU_NOTEXT}
+        Disables the display of the text label in the button even if it has one
+        or its id is one of the standard stock ids with an associated label:
+        without using this style a button which is only supposed to show a
+        bitmap but uses a standard id would display a label too.
     @style{wxBORDER_NONE}
-           Creates a flat button. Windows and GTK+ only.
+        Creates a flat button. Windows and GTK+ only.
     @endStyleTable
 
     By default, i.e. if none of the alignment styles are specified, the label

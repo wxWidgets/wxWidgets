@@ -126,7 +126,8 @@ bool wxButton::Create(wxWindow *parent,
     // create either a standard button with text label (which may still contain
     // an image under GTK+ 2.6+) or a bitmap-only button if we don't have any
     // label
-    const bool useLabel = !label.empty() || wxIsStockID(id);
+    const bool
+        useLabel = !(style & wxBU_NOTEXT) && (!label.empty() || wxIsStockID(id));
     if ( useLabel )
     {
         m_widget = gtk_button_new_with_mnemonic("");
@@ -236,6 +237,10 @@ void wxButton::SetLabel( const wxString &lbl )
         label = wxGetStockLabel(m_windowId);
 
     wxControl::SetLabel(label);
+
+    // don't use label if it was explicitly disabled
+    if ( HasFlag(wxBU_NOTEXT) )
+        return;
 
     if (wxIsStockID(m_windowId) && wxIsStockLabel(m_windowId, label))
     {
@@ -410,7 +415,7 @@ void wxButton::GTKDoShowBitmap(const wxBitmap& bitmap)
     wxASSERT_MSG( bitmap.IsOk(), "invalid bitmap" );
 
     GtkWidget *image;
-    if ( GetLabel().empty() )
+    if ( DontShowLabel() )
     {
         image = GTK_BIN(m_widget)->child;
     }
@@ -450,7 +455,7 @@ void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
     switch ( which )
     {
         case State_Normal:
-            if ( GetLabel().empty() )
+            if ( DontShowLabel() )
             {
                 // we only have the bitmap in this button, never remove it but
                 // do invalidate the best size when the bitmap (and presumably

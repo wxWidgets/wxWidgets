@@ -43,6 +43,13 @@
 // small as possible
 #define wxBU_EXACTFIT        0x0001
 
+// this flag can be used to disable using the text label in the button: it is
+// mostly useful when creating buttons showing bitmap and having stock id as
+// without it both the standard label corresponding to the stock id and the
+// bitmap would be shown
+#define wxBU_NOTEXT          0x0002
+
+
 #include "wx/bitmap.h"
 #include "wx/control.h"
 
@@ -145,6 +152,19 @@ public:
         State_Focused,
         State_Max
     };
+
+    // return true if this button shouldn't show the text label, either because
+    // it doesn't have it or because it was explicitly disabled with wxBU_NOTEXT
+    bool DontShowLabel() const
+    {
+        return HasFlag(wxBU_NOTEXT) || GetLabel().empty();
+    }
+
+    // return true if we do show the label
+    bool ShowsLabel() const
+    {
+        return !DontShowLabel();
+    }
 
 protected:
     // choose the default border for this window
