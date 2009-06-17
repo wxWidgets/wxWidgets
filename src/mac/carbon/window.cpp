@@ -1381,6 +1381,17 @@ bool wxWindowMac::MacCanFocus() const
     }
 }
 
+static bool wxIsWindowOrParentDisabled(wxWindow* w)
+{
+    while (w && !w->IsTopLevel())
+    {
+        if (!w->IsEnabled())
+            return true;
+        w = w->GetParent();
+    }
+    return false;
+}
+
 void wxWindowMac::SetFocus()
 {
     if ( m_peer == NULL )
@@ -1388,6 +1399,9 @@ void wxWindowMac::SetFocus()
         
     if ( !AcceptsFocus() )
         return ;
+
+    if (wxIsWindowOrParentDisabled(this))
+        return;
 
     wxWindow* former = FindFocus() ;
     if ( former == this )
