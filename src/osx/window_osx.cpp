@@ -83,8 +83,6 @@
 #endif
 
 BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
-    EVT_NC_PAINT(wxWindowMac::OnNcPaint)
-    EVT_ERASE_BACKGROUND(wxWindowMac::OnEraseBackground)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
 END_EVENT_TABLE()
 
@@ -482,8 +480,8 @@ bool wxWindowMac::MacGetBoundsForControl(
     x = (int)pos.x;
     y = (int)pos.y;
 
-    w = WidthDefault( size.x ); 
-    h = HeightDefault( size.y ); 
+    w = WidthDefault( size.x );
+    h = HeightDefault( size.y );
 
     x += MacGetLeftBorderSize() ;
     y += MacGetTopBorderSize() ;
@@ -519,7 +517,7 @@ void wxWindowMac::DoGetSize(int *x, int *y) const
 void wxWindowMac::DoGetPosition(int *x, int *y) const
 {
     int x1, y1;
-    
+
     m_peer->GetPosition( x1, y1 ) ;
 
     // get the wx window position from the native one
@@ -648,13 +646,13 @@ wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
     int innerwidth, innerheight;
     int left, top;
     int outerwidth, outerheight;
-    
+
     m_peer->GetContentArea( left, top, innerwidth, innerheight );
     m_peer->GetSize( outerwidth, outerheight );
-    
+
     sizeTotal.x += outerwidth-innerwidth;
     sizeTotal.y += outerheight-innerheight;
-    
+
     sizeTotal.x += MacGetLeftBorderSize() + MacGetRightBorderSize() ;
     sizeTotal.y += MacGetTopBorderSize() + MacGetBottomBorderSize() ;
 
@@ -667,7 +665,7 @@ void wxWindowMac::DoGetClientSize( int *x, int *y ) const
     int ww, hh;
 
     int left, top;
-    
+
     m_peer->GetContentArea( left, top, ww, hh );
 
     if (m_hScrollBar  && m_hScrollBar->IsShown() )
@@ -770,7 +768,7 @@ void wxWindowMac::MacInvalidateBorders()
     // now we know that we have something to do at all
 
     int tx,ty,tw,th;
-    
+
     m_peer->GetSize( tw, th );
     m_peer->GetPosition( tx, ty );
 
@@ -778,7 +776,7 @@ void wxWindowMac::MacInvalidateBorders()
     wxRect rightupdate( tx+tw, ty, outerBorder, th );
     wxRect topupdate( tx-outerBorder, ty-outerBorder, tw + 2 * outerBorder, outerBorder );
     wxRect bottomupdate( tx-outerBorder, ty + th, tw + 2 * outerBorder, outerBorder );
-    
+
     if (GetParent()) {
         GetParent()->m_peer->SetNeedsDisplay(&leftupdate);
         GetParent()->m_peer->SetNeedsDisplay(&rightupdate);
@@ -845,7 +843,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         MacInvalidateBorders() ;
 
         m_cachedClippedRectValid = false ;
-        
+
         m_peer->Move( bounds.x, bounds.y, bounds.width, bounds.height);
 
         wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
@@ -881,7 +879,7 @@ wxSize wxWindowMac::DoGetBestSize() const
     else
     {
         wxRect r ;
-        
+
         m_peer->GetBestRect(&r);
 
         if ( r.GetWidth() == 0 && r.GetHeight() == 0 )
@@ -907,9 +905,9 @@ wxSize wxWindowMac::DoGetBestSize() const
             }
         }
 
-        int bestWidth = r.width + MacGetLeftBorderSize() + 
+        int bestWidth = r.width + MacGetLeftBorderSize() +
                     MacGetRightBorderSize();
-        int bestHeight = r.height + MacGetTopBorderSize() + 
+        int bestHeight = r.height + MacGetTopBorderSize() +
                      MacGetBottomBorderSize();
         if ( bestHeight < 10 )
             bestHeight = 13 ;
@@ -1122,9 +1120,9 @@ void wxWindowMac::DoGetTextExtent(const wxString& str,
 
     wxDouble h , d , e , w;
     ctx->GetTextExtent( str, &w, &h, &d, &e );
-    
+
     delete ctx;
-    
+
     if ( externalLeading )
         *externalLeading = (wxCoord)(e+0.5);
     if ( descent )
@@ -1147,7 +1145,7 @@ void wxWindowMac::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
 
     if ( !IsShownOnScreen() )
         return ;
-        
+
     m_peer->SetNeedsDisplay( rect ) ;
 }
 
@@ -1180,39 +1178,6 @@ wxWindow *wxGetActiveWindow()
 void wxWindowMac::WarpPointer(int WXUNUSED(x_pos), int WXUNUSED(y_pos))
 {
     // We really don't move the mouse programmatically under Mac.
-}
-
-void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
-{
-    if ( MacGetTopLevelWindow() == NULL )
-        return ;
-/*
-#if TARGET_API_MAC_OSX
-    if ( !m_backgroundColour.Ok() || GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
-    {
-    }
-    else
-#endif
-*/
-    if ( GetBackgroundStyle() == wxBG_STYLE_COLOUR )
-    {
-        event.GetDC()->Clear() ;
-    }
-    else if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
-    {
-        // don't skip the event here, custom background means that the app
-        // is drawing it itself in its OnPaint(), so don't draw it at all
-        // now to avoid flicker
-    }
-    else
-    {
-        event.Skip() ;
-    }
-}
-
-void wxWindowMac::OnNcPaint( wxNcPaintEvent& event )
-{
-    event.Skip() ;
 }
 
 int wxWindowMac::GetScrollPos(int orient) const
@@ -1316,7 +1281,7 @@ void  wxWindowMac::MacPaintGrowBox()
         wxASSERT( cgContext ) ;
 
         int tx,ty,tw,th;
-    
+
         m_peer->GetSize( tw, th );
         m_peer->GetPosition( tx, ty );
 
@@ -1349,7 +1314,7 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
 
     // back to the surrounding frame rectangle
     int tx,ty,tw,th;
-    
+
     m_peer->GetSize( tw, th );
     m_peer->GetPosition( tx, ty );
 
@@ -1387,7 +1352,7 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
                 HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
             }
         }
-        
+
         if ( hasFocus )
         {
             HIThemeDrawFocusRect( &cgrect , true , cgContext , kHIThemeOrientationNormal ) ;
@@ -1693,7 +1658,7 @@ void wxWindowMac::MacUpdateClippedRects() const
     Rect rIncludingOuterStructures ;
 
     int tx,ty,tw,th;
-    
+
     m_peer->GetSize( tw, th );
     m_peer->GetPosition( tx, ty );
 
@@ -1780,37 +1745,44 @@ void wxWindowMac::MacUpdateClippedRects() const
 bool wxWindowMac::MacDoRedraw( long time )
 {
     bool handled = false ;
-    
+
     wxRegion formerUpdateRgn = m_updateRegion;
     wxRegion clientUpdateRgn = formerUpdateRgn;
 
-    wxSize sz = GetClientSize() ;
-    wxPoint origin = GetClientAreaOrigin() ;
-    
-    clientUpdateRgn.Intersect(origin.x , origin.y , origin.x + sz.x , origin.y + sz.y);
-    
+    const wxRect clientRect = GetClientRect();
+
+    clientUpdateRgn.Intersect(clientRect);
+
     // first send an erase event to the entire update area
+    const wxBackgroundStyle bgStyle = GetBackgroundStyle();
+    if ( bgStyle == wxBG_STYLE_ERASE )
     {
         // for the toplevel window this really is the entire area
         // for all the others only their client area, otherwise they
         // might be drawing with full alpha and eg put blue into
         // the grow-box area of a scrolled window (scroll sample)
-        wxDC* dc = new wxWindowDC(this);
+        wxWindowDC dc(this);
         if ( IsTopLevel() )
-            dc->SetDeviceClippingRegion(formerUpdateRgn);
+            dc.SetDeviceClippingRegion(formerUpdateRgn);
         else
-            dc->SetDeviceClippingRegion(clientUpdateRgn);
+            dc.SetDeviceClippingRegion(clientUpdateRgn);
 
-        wxEraseEvent eevent( GetId(), dc );
+        wxEraseEvent eevent( GetId(), &dc );
         eevent.SetEventObject( this );
-        HandleWindowEvent( eevent );
-        delete dc ;
+        if ( !ProcessWindowEvent( eevent ) )
+        {
+            if ( bgStyle == wxBG_STYLE_SYSTEM && MacGetTopLevelWindow() )
+            {
+                dc.Clear();
+            }
+        }
     }
 
     MacPaintGrowBox();
 
-    // calculate a client-origin version of the update rgn and set m_updateRegion to that
-    clientUpdateRgn.Offset( -origin.x , -origin.y );
+    // calculate a client-origin version of the update rgn and set
+    // m_updateRegion to that
+    clientUpdateRgn.Offset(-clientRect.GetPosition());
     m_updateRegion = clientUpdateRgn ;
 
     if ( !m_updateRegion.Empty() )
@@ -1855,7 +1827,7 @@ void wxWindowMac::MacPaintChildrenBorders()
 
         child->GetPosition( &x, &y );
         child->GetSize( &w, &h );
-        
+
         if ( m_updateRegion.Contains(clientOrigin.x+x-10, clientOrigin.y+y-10, w+20, h+20) )
         {
             // paint custom borders
@@ -1872,7 +1844,7 @@ void wxWindowMac::MacPaintChildrenBorders()
 
 WXWindow wxWindowMac::MacGetTopLevelWindowRef() const
 {
-    wxNonOwnedWindow* tlw = MacGetTopLevelWindow(); 
+    wxNonOwnedWindow* tlw = MacGetTopLevelWindow();
     return tlw ? tlw->GetWXWindow() : NULL ;
 }
 
@@ -2180,7 +2152,7 @@ wxInt32 wxWindowMac::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENT
 #if wxOSX_USE_COCOA_OR_CARBON
     if ( OSXHandleClicked( GetEventTime((EventRef)event) ) )
         return noErr;
-        
+
     return eventNotHandledErr ;
 #else
     return 0;
@@ -2286,7 +2258,7 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
 }
 
 //
-// wxWidgetImpl 
+// wxWidgetImpl
 //
 
 WX_DECLARE_HASH_MAP(WXWidget, wxWidgetImpl*, wxPointerHash, wxPointerEqual, MacControlMap);
@@ -2298,7 +2270,7 @@ wxWindowMac *wxFindWindowFromWXWidget(WXWidget inControl )
     wxWidgetImpl* impl = wxWidgetImpl::FindFromWXWidget( inControl );
     if ( impl )
         return impl->GetWXPeer();
-    
+
     return NULL;
 }
 
