@@ -1755,27 +1755,44 @@ bool wxWindowMac::MacDoRedraw( long time )
 
     // first send an erase event to the entire update area
     const wxBackgroundStyle bgStyle = GetBackgroundStyle();
-    if ( bgStyle == wxBG_STYLE_ERASE )
+    switch ( bgStyle )
     {
-        // for the toplevel window this really is the entire area
-        // for all the others only their client area, otherwise they
-        // might be drawing with full alpha and eg put blue into
-        // the grow-box area of a scrolled window (scroll sample)
-        wxWindowDC dc(this);
-        if ( IsTopLevel() )
-            dc.SetDeviceClippingRegion(formerUpdateRgn);
-        else
-            dc.SetDeviceClippingRegion(clientUpdateRgn);
-
-        wxEraseEvent eevent( GetId(), &dc );
-        eevent.SetEventObject( this );
-        if ( !ProcessWindowEvent( eevent ) )
-        {
-            if ( bgStyle == wxBG_STYLE_SYSTEM && MacGetTopLevelWindow() )
+        case wxBG_STYLE_ERASE:
+        case wxBG_STYLE_SYSTEM:
             {
-                dc.Clear();
+                // for the toplevel window this really is the entire area for
+                // all the others only their client area, otherwise they might
+                // be drawing with full alpha and eg put blue into the grow-box
+                // area of a scrolled window (scroll sample)
+                wxWindowDC dc(this);
+                if ( IsTopLevel() )
+                    dc.SetDeviceClippingRegion(formerUpdateRgn);
+                else
+                    dc.SetDeviceClippingRegion(clientUpdateRgn);
+
+                if ( bgStyle == wxBG_STYLE_ERASE )
+                {
+                    wxEraseEvent eevent( GetId(), &dc );
+                    eevent.SetEventObject( this );
+                    if ( ProcessWindowEvent( eevent ) )
+                        break;
+                }
+
+                if ( MacGetTopLevelWindow() )
+                {
+                    dc.SetBackground(GetBackgroundColour());
+                    dc.Clear();
+                }
             }
-        }
+            break;
+
+        case wxBG_STYLE_PAINT:
+            // nothing to do, user-defined EVT_PAINT handler will overwrite the
+            // entire window client area
+            break;
+
+        default:
+            wxFAIL_MSG( "unsupported background style" );
     }
 
     MacPaintGrowBox();
