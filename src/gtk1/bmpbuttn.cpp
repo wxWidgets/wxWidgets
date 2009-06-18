@@ -141,14 +141,14 @@ bool wxBitmapButton::Create( wxWindow *parent,
         return false;
     }
 
-    m_bmpNormal = bitmap;
+    m_bitmaps[State_Normal] = bitmap;
 
     m_widget = gtk_button_new();
 
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 
-    if (m_bmpNormal.Ok())
+    if (bitmap.IsOk())
     {
         OnSetBitmap();
     }
@@ -195,16 +195,18 @@ void wxBitmapButton::OnSetBitmap()
 
     wxBitmap the_one;
     if (!IsThisEnabled())
-        the_one = m_bmpDisabled;
-    else if (m_isSelected)
-        the_one = m_bmpSelected;
-    else if (m_hasFocus)
-        the_one = m_bmpFocus;
-    else
-        the_one = m_bmpNormal;
+        the_one = GetBitmapDisabled();
+   else if (m_isSelected)
+     the_one = GetBitmapPressed();
+   else if (HasFocus())
+     the_one = GetBitmapFocus();
 
-    if (!the_one.Ok()) the_one = m_bmpNormal;
-    if (!the_one.Ok()) return;
+   if (!the_one.IsOk())
+     {
+	the_one = GetBitmapLabel();
+	if (!the_one.IsOk())
+	  return;
+     }
 
     GdkBitmap *mask = NULL;
     if (the_one.GetMask()) mask = the_one.GetMask()->GetBitmap();
