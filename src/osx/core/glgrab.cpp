@@ -146,8 +146,8 @@ CGImageRef grabViaOpenGL(CGDirectDisplayID display, CGRect srcRect)
     glReadBuffer(GL_FRONT);
     
     
-    width = srcRect.size.width;
-    height = srcRect.size.height;
+    width = (GLint)srcRect.size.width;
+    height = (GLint)srcRect.size.height;
     
     
     bytewidth = width * 4; // Assume 4 bytes/pixel for now

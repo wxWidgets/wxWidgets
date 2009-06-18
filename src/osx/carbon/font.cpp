@@ -784,7 +784,7 @@ void * wxFont::MacGetATSUStyle() const
 #if WXWIN_COMPATIBILITY_2_8
 wxUint32 wxFont::MacGetATSUFontID() const 
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL, 0, wxT("invalid font") );
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();
@@ -794,7 +794,7 @@ wxUint32 wxFont::MacGetATSUFontID() const
 
 wxUint32 wxFont::MacGetATSUAdditionalQDStyles() const
 {
-    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+    wxCHECK_MSG( M_FONTDATA != NULL, 0, wxT("invalid font") );
 
     // cast away constness otherwise lazy font resolution is not possible
     const_cast<wxFont *>(this)->RealizeResource();

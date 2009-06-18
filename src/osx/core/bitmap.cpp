@@ -1654,8 +1654,11 @@ public:
         SetType(wxBITMAP_TYPE_PICT_RESOURCE);
     };
 
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-          int desiredWidth, int desiredHeight);
+    virtual bool LoadFile(wxBitmap *bitmap,
+                          const wxString& name,
+                          wxBitmapType type,
+                          int desiredWidth,
+                          int desiredHeight);
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxPICTResourceHandler, wxBitmapHandler)
@@ -1663,7 +1666,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPICTResourceHandler, wxBitmapHandler)
 
 bool wxPICTResourceHandler::LoadFile(wxBitmap *bitmap,
                                      const wxString& name,
-                                     long WXUNUSED(flags),
+                                     wxBitmapType WXUNUSED(type),
                                      int WXUNUSED(desiredWidth),
                                      int WXUNUSED(desiredHeight))
 {

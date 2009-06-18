@@ -874,6 +874,7 @@ bool wxAuiManager_HasLiveResize(wxAuiManager& manager)
     // With Core Graphics on Mac, it's not possible to show sash feedback,
     // so we'll always use live update instead.
 #if defined(__WXMAC__)
+    wxUnusedVar(manager);
     return true;
 #else
     return (manager.GetFlags() & wxAUI_MGR_LIVE_RESIZE) == wxAUI_MGR_LIVE_RESIZE;

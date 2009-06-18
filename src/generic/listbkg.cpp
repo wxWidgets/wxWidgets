@@ -298,9 +298,9 @@ bool wxListbook::SetPageImage(size_t n, int imageId)
 
 void wxListbook::SetImageList(wxImageList *imageList)
 {
+#ifdef CAN_USE_REPORT_VIEW
     wxListView * const list = GetListView();
 
-#ifdef CAN_USE_REPORT_VIEW
     // If imageList presence has changed, we update the list control view
     if ( (imageList != NULL) != (GetImageList() != NULL) )
     {

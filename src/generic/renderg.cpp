@@ -647,17 +647,10 @@ wxRendererGeneric::DrawPushButton(wxWindow *win,
 }
 
 void
-#ifdef __WXMAC__
 wxRendererGeneric::DrawItemSelectionRect(wxWindow * win,
                                          wxDC& dc,
                                          const wxRect& rect,
                                          int flags)
-#else
-wxRendererGeneric::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
-                                         wxDC& dc,
-                                         const wxRect& rect,
-                                         int flags)
-#endif
 {
     wxBrush brush;
     if ( flags & wxCONTROL_SELECTED )
@@ -687,6 +680,9 @@ wxRendererGeneric::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
         dc.SetPen( *wxTRANSPARENT_PEN );
 
     dc.DrawRectangle( rect );
+
+    // it's unused everywhere except in wxOSX/Carbon
+    wxUnusedVar(win);
 }
 
 void

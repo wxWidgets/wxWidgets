@@ -64,17 +64,13 @@ wxScreenDCImpl::~wxScreenDCImpl()
 
 wxBitmap wxScreenDCImpl::DoGetAsBitmap(const wxRect *subrect) const
 {
-    CGRect srcRect = CGRectMake(0, 0, m_width, m_height);
-    if (subrect)
-    {
-        srcRect.origin.x = subrect->GetX();
-        srcRect.origin.y = subrect->GetY();
-        srcRect.size.width = subrect->GetWidth();
-        srcRect.size.height = subrect->GetHeight();
-    }
-    wxBitmap bmp = wxBitmap(srcRect.size.width, srcRect.size.height, 32);
-#if wxOSX_USE_IPHONE
-#else
+    wxRect rect = subrect ? *subrect : wxRect(0, 0, m_width, m_height);
+
+    wxBitmap bmp(rect.GetSize(), 32);
+
+#if !wxOSX_USE_IPHONE
+    CGRect srcRect = CGRectMake(rect.x, rect.y, rect.width, rect.height);
+
     CGContextRef context = (CGContextRef)bmp.GetHBITMAP();
     
     CGContextSaveGState(context);
