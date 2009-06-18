@@ -52,7 +52,7 @@
 #endif
 #endif
 
-#if __WXOSX_COCOA__
+#if wxOSX_USE_COCOA
 #include "wx/osx/private.h"
 #endif
 
