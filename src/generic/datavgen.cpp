@@ -2030,7 +2030,9 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
 {
     if (IsVirtualList())
     {
-        m_count++;
+        wxDataViewVirtualListModel *list_model =
+            (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+        m_count = list_model->GetCount();
         UpdateDisplay();
         return true;
     }
@@ -2070,7 +2072,10 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
 {
     if (IsVirtualList())
     {
-        m_count--;
+        wxDataViewVirtualListModel *list_model =
+            (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+        m_count = list_model->GetCount();
+        
         if( m_currentRow > GetRowCount() )
             m_currentRow = m_count - 1;
 
@@ -2786,9 +2791,7 @@ wxDataViewItem wxDataViewMainWindow::GetItemByRow(unsigned int row) const
     {
         RowToItemJob job( row, -2 );
         Walker( m_root , job );
-        wxDataViewItem res = job.GetResult();
-//        wxPrintf( "row %d, item %d\n", row, (int) res.GetID() );
-        return res;
+        return job.GetResult();
     }
 }
 
@@ -3206,6 +3209,7 @@ int wxDataViewMainWindow::RecalculateCount()
     {
         wxDataViewVirtualListModel *list_model =
             (wxDataViewVirtualListModel*) GetOwner()->GetModel();
+            
         return list_model->GetCount();
     }
     else
