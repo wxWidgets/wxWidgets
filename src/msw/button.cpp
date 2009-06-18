@@ -601,42 +601,45 @@ wxSize wxButton::DoGetBestSize() const
         // account for the user-specified margins
         size += 2*m_imageData->GetBitmapMargins();
 
-        // and also for the margins we always add internally
-        int marginH = 0,
-            marginV = 0;
-#if wxUSE_UXTHEME
-        if ( wxUxThemeEngine::GetIfActive() )
+        // and also for the margins we always add internally (unless we have no
+        // border at all in which case the button has exactly the same size as
+        // bitmap and so no margins should be used)
+        if ( !HasFlag(wxBORDER_NONE) )
         {
-            wxUxThemeHandle theme(const_cast<wxButton *>(this), L"BUTTON");
-
-            MARGINS margins;
-            wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
-                                                    BP_PUSHBUTTON, PBS_NORMAL,
-                                                    TMT_CONTENTMARGINS, NULL,
-                                                    &margins);
-
-            // XP doesn't draw themed buttons correctly when the client area is
-            // smaller than 8x8 - enforce this minimum size for small bitmaps
-            size.IncTo(wxSize(8, 8));
-
-            // don't add margins for the borderless buttons, they don't need
-            // them and it just makes them appear larger than needed
-            if ( !HasFlag(wxBORDER_NONE) )
+            int marginH = 0,
+                marginV = 0;
+#if wxUSE_UXTHEME
+            if ( wxUxThemeEngine::GetIfActive() )
             {
+                wxUxThemeHandle theme(const_cast<wxButton *>(this), L"BUTTON");
+
+                MARGINS margins;
+                wxUxThemeEngine::Get()->GetThemeMargins(theme, NULL,
+                                                        BP_PUSHBUTTON,
+                                                        PBS_NORMAL,
+                                                        TMT_CONTENTMARGINS,
+                                                        NULL,
+                                                        &margins);
+
+                // XP doesn't draw themed buttons correctly when the client
+                // area is smaller than 8x8 - enforce this minimum size for
+                // small bitmaps
+                size.IncTo(wxSize(8, 8));
+
                 marginH = margins.cxLeftWidth + margins.cxRightWidth
                             + 2*XP_BUTTON_EXTRA_MARGIN;
                 marginV = margins.cyTopHeight + margins.cyBottomHeight
                             + 2*XP_BUTTON_EXTRA_MARGIN;
             }
-        }
-        else
+            else
 #endif // wxUSE_UXTHEME
-        {
-            marginH =
-            marginV = OD_BUTTON_MARGIN;
-        }
+            {
+                marginH =
+                marginV = OD_BUTTON_MARGIN;
+            }
 
-        size.IncBy(marginH, marginV);
+            size.IncBy(marginH, marginV);
+        }
 
         CacheBestSize(size);
     }
@@ -1263,48 +1266,51 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
     CopyRect(&rectBtn, &lpDIS->rcItem);
 
     // draw the button background
+    if ( !HasFlag(wxBORDER_NONE) )
+    {
 #if wxUSE_UXTHEME
-    if ( wxUxThemeEngine::GetIfActive() )
-    {
-        DrawXPBackground(this, hdc, rectBtn, state);
-    }
-    else
-#endif // wxUSE_UXTHEME
-    {
-        COLORREF colBg = wxColourToRGB(GetBackgroundColour());
-
-        // first, draw the background
-        AutoHBRUSH hbrushBackground(colBg);
-        FillRect(hdc, &rectBtn, hbrushBackground);
-
-        // draw the border for the current state
-        bool selected = (state & ODS_SELECTED) != 0;
-        if ( !selected )
+        if ( wxUxThemeEngine::GetIfActive() )
         {
-            wxTopLevelWindow *
-                tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-            if ( tlw )
+            DrawXPBackground(this, hdc, rectBtn, state);
+        }
+        else
+#endif // wxUSE_UXTHEME
+        {
+            COLORREF colBg = wxColourToRGB(GetBackgroundColour());
+
+            // first, draw the background
+            AutoHBRUSH hbrushBackground(colBg);
+            FillRect(hdc, &rectBtn, hbrushBackground);
+
+            // draw the border for the current state
+            bool selected = (state & ODS_SELECTED) != 0;
+            if ( !selected )
             {
-                selected = tlw->GetDefaultItem() == this;
+                wxTopLevelWindow *
+                    tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+                if ( tlw )
+                {
+                    selected = tlw->GetDefaultItem() == this;
+                }
             }
+
+            DrawButtonFrame(hdc, rectBtn, selected, pushed);
         }
 
-        DrawButtonFrame(hdc, rectBtn, selected, pushed);
-    }
-
-    // draw the focus rectangle if we need it
-    if ( (state & ODS_FOCUS) && !(state & ODS_NOFOCUSRECT) )
-    {
-        DrawFocusRect(hdc, &rectBtn);
+        // draw the focus rectangle if we need it
+        if ( (state & ODS_FOCUS) && !(state & ODS_NOFOCUSRECT) )
+        {
+            DrawFocusRect(hdc, &rectBtn);
 
 #if wxUSE_UXTHEME
-        if ( !wxUxThemeEngine::GetIfActive() )
+            if ( !wxUxThemeEngine::GetIfActive() )
 #endif // wxUSE_UXTHEME
-        {
-            if ( pushed )
             {
-                // the label is shifted by 1 pixel to create "pushed" effect
-                OffsetRect(&rectBtn, 1, 1);
+                if ( pushed )
+                {
+                    // the label is shifted by 1 pixel to create "pushed" effect
+                    OffsetRect(&rectBtn, 1, 1);
+                }
             }
         }
     }
