@@ -423,10 +423,10 @@ AC_DEFUN([WX_ARG_ENABLE],
           eval "$AS_TR_SH(wx_cv_use_$1)"
 
           if test x"$enablestring" = xdisable; then
-            if test $$3 = yes; then
-              result=no
-            else
+            if test $$3 = no; then
               result=yes
+            else
+              result=no
             fi
           else
             result=$$3
