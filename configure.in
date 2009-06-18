@@ -7417,6 +7417,14 @@ if test "x$INTELCXX" = "xyes" ; then
 elif test "$GXX" = yes ; then
     CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
+
+    dnl when building under Mac we currently get hundreds of deprecation
+    dnl warnings for Carbon symbols from the standard headers -- disable them
+    dnl as we already know that they're deprecated and nothing else can be seen
+    dnl with these warnings on
+    if test "$wxUSE_MAC" = 1 ; then
+        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
+    fi
 fi
 
 
