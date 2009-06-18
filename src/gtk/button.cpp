@@ -253,6 +253,10 @@ void wxButton::SetLabel( const wxString &lbl )
         }
     }
 
+    // this call is necessary if the button had been initially created without
+    // a (text) label -- then we didn't use gtk_button_new_with_mnemonic() and
+    // so "use-underline" GtkButton property remained unset
+    gtk_button_set_use_underline(GTK_BUTTON(m_widget), TRUE);
     const wxString labelGTK = GTKConvertMnemonics(label);
     gtk_button_set_label(GTK_BUTTON(m_widget), wxGTK_CONV(labelGTK));
     gtk_button_set_use_stock(GTK_BUTTON(m_widget), FALSE);
