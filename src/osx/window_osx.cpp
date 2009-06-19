@@ -1778,7 +1778,7 @@ bool wxWindowMac::MacDoRedraw( long time )
                         break;
                 }
 
-                if ( MacGetTopLevelWindow() )
+                if ( UseBgCol() && MacGetTopLevelWindow() )
                 {
                     dc.SetBackground(GetBackgroundColour());
                     dc.Clear();
