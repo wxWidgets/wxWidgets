@@ -43,13 +43,28 @@ bool wxButton::Create(wxWindow *parent,
     if ( !wxButtonBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    m_labelOrig = m_label = label ;
+    m_labelOrig =
+    m_label = label ;
 
     m_peer = wxWidgetImpl::CreateButton( this, parent, id, label, pos, size, style, GetExtraStyle() );
 
     MacPostControlCreate( pos, size );
 
     return true;
+}
+
+void wxButton::SetLabel(const wxString& label)
+{
+    if ( GetId() == wxID_HELP || HasFlag(wxBU_NOTEXT) )
+    {
+        // just store the label internally but don't really use it for the
+        // button
+        m_labelOrig =
+        m_label = label;
+        return;
+    }
+
+    wxButtonBase::SetLabel(label);
 }
 
 wxWindow *wxButton::SetDefault()

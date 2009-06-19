@@ -45,6 +45,7 @@ public:
 
     static wxSize GetDefaultSize();
 
+    virtual void SetLabel(const wxString& label);
     virtual wxWindow *SetDefault();
     virtual void Command(wxCommandEvent& event);
 
