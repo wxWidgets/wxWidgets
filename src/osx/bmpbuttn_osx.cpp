@@ -61,11 +61,15 @@ bool wxBitmapButton::Create( wxWindow *parent,
     return true;
 }
 
-void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
+void wxBitmapButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 {
-    InvalidateBestSize();
+    wxBitmapButtonBase::DoSetBitmap(bitmap, which);
 
-    m_peer->SetBitmap( bitmap );
+    // we don't support any other states currently
+    if ( which == State_Normal )
+    {
+        m_peer->SetBitmap( bitmap );
+    }
 }
 
 wxSize wxBitmapButton::DoGetBestSize() const
