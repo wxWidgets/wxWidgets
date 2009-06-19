@@ -1354,6 +1354,11 @@ wxTreeItemId wxTreeCtrl::GetSelection() const
     wxCHECK_MSG( !HasFlag(wxTR_MULTIPLE), wxTreeItemId(),
                  wxT("this only works with single selection controls") );
 
+    return GetFocusedItem();
+}
+
+wxTreeItemId wxTreeCtrl::GetFocusedItem() const
+{
     return wxTreeItemId(TreeView_GetSelection(GetHwnd()));
 }
 
