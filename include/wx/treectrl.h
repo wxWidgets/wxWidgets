@@ -210,6 +210,10 @@ public:
         //     control with a lot of items (~ O(number of items)).
     virtual size_t GetSelections(wxArrayTreeItemIds& selections) const = 0;
 
+        // get the last item to be clicked when the control has wxTR_MULTIPLE
+        // equivalent to GetSelection() if not wxTR_MULTIPLE
+    virtual wxTreeItemId GetFocusedItem() const = 0;
+
         // get the parent of this item (may return NULL if root)
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const = 0;
 

@@ -128,6 +128,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   changed. See the updated wxWindow::SetBackgroundStyle() description in the
   manual for more details.
 
+- wxTreeCtrl::GetSelection now asserts if the tree has the wxTR_MULTIPLE style.
+  Instead use GetSelections() for multiple items; or if you want only the 
+  single item last touched, the new wxTreeCtrl::GetFocusedItem.
+
 
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------

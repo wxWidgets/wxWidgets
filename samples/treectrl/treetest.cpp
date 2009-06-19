@@ -479,7 +479,7 @@ void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
@@ -500,7 +500,7 @@ void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCount(wxCommandEvent& WXUNUSED(event))
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
@@ -511,7 +511,7 @@ void MyFrame::OnCount(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCountRec(wxCommandEvent& WXUNUSED(event))
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
@@ -522,7 +522,7 @@ void MyFrame::OnCountRec(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::DoSort(bool reverse)
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
@@ -531,7 +531,7 @@ void MyFrame::DoSort(bool reverse)
 
 void MyFrame::OnHighlight(wxCommandEvent& WXUNUSED(event))
 {
-    wxTreeItemId id = m_treeCtrl->GetSelection();
+    wxTreeItemId id = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( id );
 
@@ -551,7 +551,7 @@ void MyFrame::OnHighlight(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 {
-    wxTreeItemId root = m_treeCtrl->GetSelection();
+    wxTreeItemId root = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( root );
 
@@ -580,7 +580,7 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSelect(wxCommandEvent& WXUNUSED(event))
 {
-    m_treeCtrl->SelectItem(m_treeCtrl->GetSelection());
+    m_treeCtrl->SelectItem(m_treeCtrl->GetFocusedItem());
 }
 
 void MyFrame::OnSelectRoot(wxCommandEvent& WXUNUSED(event))
@@ -598,7 +598,7 @@ void MyFrame::OnUnselect(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::DoSetBold(bool bold)
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
@@ -607,7 +607,7 @@ void MyFrame::DoSetBold(bool bold)
 
 void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
@@ -616,7 +616,7 @@ void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDeleteChildren(wxCommandEvent& WXUNUSED(event))
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
@@ -763,19 +763,25 @@ void MyFrame::OnIncSpacing(wxCommandEvent& WXUNUSED(event))
 {
     unsigned int indent = m_treeCtrl->GetSpacing();
     if (indent < 100)
+    {
         m_treeCtrl->SetSpacing( indent+5 );
+        m_treeCtrl->Refresh();
+    }
 }
 
 void MyFrame::OnDecSpacing(wxCommandEvent& WXUNUSED(event))
 {
     unsigned int indent = m_treeCtrl->GetSpacing();
     if (indent > 10)
+    {
         m_treeCtrl->SetSpacing( indent-5 );
+        m_treeCtrl->Refresh();
+    } 
 }
 
 void MyFrame::OnToggleIcon(wxCommandEvent& WXUNUSED(event))
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
@@ -784,7 +790,7 @@ void MyFrame::OnToggleIcon(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnToggleState(wxCommandEvent& WXUNUSED(event))
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
@@ -804,7 +810,7 @@ void MyFrame::DoShowFirstOrLast(TreeFunc0_t pfn, const wxString& label)
 
 void MyFrame::DoShowRelativeItem(TreeFunc1_t pfn, const wxString& label)
 {
-    wxTreeItemId item = m_treeCtrl->GetSelection();
+    wxTreeItemId item = m_treeCtrl->GetFocusedItem();
 
     CHECK_ITEM( item );
 
