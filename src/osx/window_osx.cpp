@@ -1021,7 +1021,7 @@ void wxWindowMac::SetLabel(const wxString& title)
 {
     m_label = title ;
 
-    if ( m_peer && m_peer->IsOk() && !(IsKindOf( CLASSINFO(wxButton) ) && GetId() == wxID_HELP) )
+    if ( m_peer && m_peer->IsOk() )
         m_peer->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
 
     // do not trigger refreshes upon invisible and possible partly created objects
