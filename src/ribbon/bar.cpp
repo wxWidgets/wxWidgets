@@ -334,15 +334,16 @@ void wxRibbonBar::RecalculateTabSizes()
 			if(width >= total_small_width)
 			{
 				// Do (2)
+				size_t i;
 				wxRibbonPageTabInfoArray sorted_pages;
-				for(size_t i = 0; i < numtabs; ++i)
+				for(i = 0; i < numtabs; ++i)
 				{
 					// Sneaky obj array trickery to not copy the tab descriptors
 					sorted_pages.Add(&m_pages.Item(i));
 				}
 				sorted_pages.Sort(OrderPageTabInfoBySmallWidthAsc);
 				width -= tabsep * (numtabs - 1);
-				for(size_t i = 0; i < numtabs; ++i)
+				for(i = 0; i < numtabs; ++i)
 				{
 					wxRibbonPageTabInfo& info = sorted_pages.Item(i);
 					if(info.small_must_have_separator_width * (int)(numtabs - i) <= width)
@@ -355,7 +356,7 @@ void wxRibbonBar::RecalculateTabSizes()
 					}
 					width -= info.rect.width;
 				}
-				for(size_t i = 0; i < numtabs; ++i)
+				for(i = 0; i < numtabs; ++i)
 				{
 					wxRibbonPageTabInfo& info = m_pages.Item(i);
 					info.rect.x = x;
