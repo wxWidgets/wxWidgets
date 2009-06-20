@@ -252,6 +252,9 @@ void wxFontRefData::Free()
 #endif
     m_cgFont.reset();
 #if wxOSX_USE_ATSU_TEXT
+#if wxOSX_USE_CARBON
+    m_macThemeFontID = kThemeCurrentPortFont ;
+#endif
     if ( m_macATSUStyle )
     {
         ::ATSUDisposeStyle((ATSUStyle)m_macATSUStyle);
