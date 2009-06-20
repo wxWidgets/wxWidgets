@@ -1198,9 +1198,9 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
         if (pinfo.GetMinSize() != wxDefaultSize)
         {
             if (pinfo.GetBestSize().x < pinfo.GetMinSize().x)
-                pinfo.GetBestSize().x = pinfo.GetMinSize().x;
+                pinfo.SetBestSize(pinfo.GetMinSize().x,pinfo.GetBestSize().y);
             if (pinfo.GetBestSize().y < pinfo.GetMinSize().y)
-                pinfo.GetBestSize().y = pinfo.GetMinSize().y;
+                pinfo.SetBestSize(pinfo.GetBestSize().x,pinfo.GetMinSize().y);
         }
     }
 
