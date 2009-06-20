@@ -626,7 +626,8 @@ void wxDataViewCtrl::FinishCustomItemEditing(void)
 }
 
 /*static*/
-wxVisualAttributes wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant variant)
+wxVisualAttributes
+wxDataViewCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 {
     wxVisualAttributes attr;
 

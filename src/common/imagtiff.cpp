@@ -312,7 +312,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
         return false;
     }
 
-    raster = (uint32*) _TIFFmalloc( bytesNeeded );
+    raster = (uint32*) _TIFFmalloc( (uint32)bytesNeeded );
 
     if (!raster)
     {

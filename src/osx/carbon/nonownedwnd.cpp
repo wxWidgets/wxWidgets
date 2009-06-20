@@ -1646,9 +1646,9 @@ void wxNonOwnedWindowCarbonImpl::ScreenToWindow( int *x, int *y )
     HIViewFindByID( HIViewGetRoot( m_macWindow ), kHIViewWindowContentID , &contentView) ;
     HIPointConvert( &p, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceView, contentView );
     if ( x )
-        *x = p.x;
+        *x = (int)p.x;
     if ( y )
-        *y = p.y;
+        *y = (int)p.y;
 }
 
 void wxNonOwnedWindowCarbonImpl::WindowToScreen( int *x, int *y )
@@ -1659,9 +1659,9 @@ void wxNonOwnedWindowCarbonImpl::WindowToScreen( int *x, int *y )
     HIViewFindByID( HIViewGetRoot( m_macWindow ), kHIViewWindowContentID , &contentView) ;
     HIPointConvert( &p, kHICoordSpaceView, contentView, kHICoordSpace72DPIGlobal, NULL );
     if ( x )
-        *x = p.x;
+        *x = (int)p.x;
     if ( y )
-        *y = p.y;
+        *y = (int)p.y;
 }
 
 wxNonOwnedWindowImpl* wxNonOwnedWindowImpl::CreateNonOwnedWindow( wxNonOwnedWindow* wxpeer, wxWindow* parent, const wxPoint& pos, const wxSize& size,

@@ -260,8 +260,8 @@ private:
 
         if (year_cnt == 1 && month_cnt == 1 && day_cnt == 1)
             return fmt;
-        else
-            return x_format;
+
+        return x_format;
     }
 
     bool SetFormat(const wxString& fmt)

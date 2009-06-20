@@ -1513,7 +1513,7 @@ wxWidgetImplType* CreateDataView(wxWindowMac* wxpeer, wxWindowMac* WXUNUSED(pare
   dataViewColumnPtr->GetRenderer()->GetNativeData()->SetColumnPtr(tableColumn);
   dataViewColumnPtr->GetRenderer()->GetNativeData()->SetItem(item);
   dataViewColumnPtr->GetRenderer()->GetNativeData()->SetItemCell(cell);
-  (void) dataViewColumnPtr->GetRenderer()->Render();
+  (void) dataViewColumnPtr->GetRenderer()->MacRender();
 }
 
 //
@@ -2106,7 +2106,7 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer(wxString const& varianttype, 
   this->SetNativeData(new wxDataViewRendererNativeData([[wxCustomCell alloc] init]));
 }
 
-bool wxDataViewCustomRenderer::Render()
+bool wxDataViewCustomRenderer::MacRender()
 {
   [this->GetNativeData()->GetItemCell() setObjectValue:[[[wxCustomRendererObject alloc] initWithRenderer:this
                                                                                                     item:this->GetNativeData()->GetItem()
@@ -2132,7 +2132,7 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(wxString const& varianttype, wxDa
   [cell release];
 }
 
-bool wxDataViewTextRenderer::Render()
+bool wxDataViewTextRenderer::MacRender()
 {
   if (this->GetValue().GetType() == this->GetVariantType())
   {
@@ -2162,7 +2162,7 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(wxString const& varianttype, 
   [cell release];
 }
 
-bool wxDataViewBitmapRenderer::Render()
+bool wxDataViewBitmapRenderer::MacRender()
  // This method returns 'true' if
  //  - the passed bitmap is valid and it could be assigned to the native data browser;
  //  - the passed bitmap is invalid (or is not initialized); this case simulates a non-existing bitmap.
@@ -2198,7 +2198,7 @@ wxDataViewChoiceRenderer::wxDataViewChoiceRenderer(wxArrayString const& choices,
   [cell release];
 }
 
-bool wxDataViewChoiceRenderer::Render()
+bool wxDataViewChoiceRenderer::MacRender()
 {
   if (this->GetValue().GetType() == this->GetVariantType())
   {
@@ -2236,7 +2236,7 @@ wxDataViewDateRenderer::wxDataViewDateRenderer(wxString const& varianttype, wxDa
   [dateFormatter release];
 }
 
-bool wxDataViewDateRenderer::Render()
+bool wxDataViewDateRenderer::MacRender()
 {
   if (this->GetValue().GetType() == this->GetVariantType())
   {
@@ -2298,7 +2298,7 @@ wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(wxString const& variantty
   [cell release];
 }
 
-bool wxDataViewIconTextRenderer::Render()
+bool wxDataViewIconTextRenderer::MacRender()
 {
   if (this->GetValue().GetType() == this->GetVariantType())
   {
@@ -2339,7 +2339,7 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer(wxString const& varianttype, 
   [cell release];
 }
 
-bool wxDataViewToggleRenderer::Render()
+bool wxDataViewToggleRenderer::MacRender()
 {
   if (this->GetValue().GetType() == this->GetVariantType())
   {
@@ -2371,7 +2371,7 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer(wxString const& label, wx
   [cell release];
 }
 
-bool wxDataViewProgressRenderer::Render()
+bool wxDataViewProgressRenderer::MacRender()
 {
   if (this->GetValue().GetType() == this->GetVariantType())
   {

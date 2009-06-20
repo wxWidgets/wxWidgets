@@ -224,7 +224,7 @@ pascal Boolean wxMacDataBrowserTableViewControl::DataBrowserCompareProc(ControlR
   if (ControlPtr != NULL)
     return ControlPtr->DataBrowserCompareProc(itemOneID,itemTwoID,sortProperty);
   else
-    return errDataBrowserPropertyNotSupported;
+    return FALSE;
 } /* wxMacDataBrowserTableViewControl::DataBrowserCompareProc(ControlRef, DataBrowserItemID, DataBrowserItemID, DataBrowserPropertyID) */
 
 pascal void wxMacDataBrowserTableViewControl::DataBrowserGetContextualMenuProc(ControlRef browser, MenuRef* menu, UInt32* helpType, CFStringRef* helpItemString, AEDesc* selection)
@@ -289,30 +289,30 @@ pascal DataBrowserTrackingResult wxMacDataBrowserTableViewControl::DataBrowserTr
   if (ControlPtr != NULL)
     return ControlPtr->DataBrowserTrackingProc(itemID,propertyID,theRect,startPt,modifiers);
   else
-    return kDataBrowserNothingHit; 
+    return kDataBrowserNothingHit;
 } /* wxMacDataBrowserTableViewControl::DataBrowserTrackingProc(ControlRef, DataBrowserItemID, DataBrowserPropertyID, Rect const*, Point, EventModifiers) */
 
 pascal Boolean wxMacDataBrowserTableViewControl::DataBrowserAcceptDragProc(ControlRef browser, DragReference dragRef, DataBrowserItemID itemID)
 {
   wxMacDataBrowserTableViewControl* controlPtr(dynamic_cast<wxMacDataBrowserTableViewControl*>(wxMacControl::GetReferenceFromNativeControl(browser)));
-  
-  
+
+
   return ((controlPtr != NULL) && controlPtr->DataBrowserAcceptDragProc(dragRef,itemID));
 } /* wxMacDataBrowserTableViewControl::DataBrowserAcceptDragProc(ControlRef, DragReference, DataBrowserItemID) */
 
 pascal Boolean wxMacDataBrowserTableViewControl::DataBrowserAddDragItemProc(ControlRef browser, DragReference dragRef, DataBrowserItemID itemID, ItemReference* itemRef)
 {
   wxMacDataBrowserTableViewControl* controlPtr(dynamic_cast<wxMacDataBrowserTableViewControl*>(wxMacControl::GetReferenceFromNativeControl(browser)));
-  
-  
+
+
   return ((controlPtr != NULL) && controlPtr->DataBrowserAddDragItemProc(dragRef,itemID,itemRef));
 } /* wxMacDataBrowserTableViewControl::DataBrowserAddDragItemProc(ControlRef, DragReference, DataBrowserItemID, ItemReference*) */
 
 pascal Boolean wxMacDataBrowserTableViewControl::DataBrowserReceiveDragProc(ControlRef browser, DragReference dragRef, DataBrowserItemID itemID)
 {
   wxMacDataBrowserTableViewControl* controlPtr(dynamic_cast<wxMacDataBrowserTableViewControl*>(wxMacControl::GetReferenceFromNativeControl(browser)));
-  
-  
+
+
   return ((controlPtr != NULL) && controlPtr->DataBrowserReceiveDragProc(dragRef,itemID));
 } /* wxMacDataBrowserTableViewControl::DataBrowserReceiveDragProc(ControlRef, DragReference, DataBrowserItemID) */
 
@@ -325,9 +325,9 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
 
   SetReferenceInNativeControl();
   verify_noerr(err);
-  
+
   ::InstallControlEventHandler(this->m_controlRef, GetDataBrowserCtrlEventHandlerUPP(), GetEventTypeCount(eventList), eventList, peer, (EventHandlerRef *)&m_macDataViewCtrlEventHandler);
-  
+
  // setup standard callbacks:
   if (gDataBrowserTableViewGetContextualMenuUPP == NULL) gDataBrowserTableViewGetContextualMenuUPP = NewDataBrowserGetContextualMenuUPP(wxMacDataBrowserTableViewControl::DataBrowserGetContextualMenuProc);
   if (gDataBrowserTableViewItemCompareUPP       == NULL) gDataBrowserTableViewItemCompareUPP       = NewDataBrowserItemCompareUPP      (wxMacDataBrowserTableViewControl::DataBrowserCompareProc);
@@ -388,7 +388,7 @@ wxMacDataBrowserTableViewControl::wxMacDataBrowserTableViewControl(wxWindow* pee
   }
 
   OptionBits attributes; // variable definition
-  
+
   if (this->GetAttributes(&attributes) == noErr) // get default settings
   {
     if ((style & wxDV_VERT_RULES) != 0)
@@ -591,7 +591,7 @@ OSStatus wxMacDataBrowserTableViewControl::IsUsedPropertyID(DataBrowserPropertyI
  // lead to a large overhead for the call but returns an error code if the property id does not exist, here we use the function that returns
  // the column position for the property id:
   DataBrowserTableViewColumnIndex index;
-  
+
   return ::GetDataBrowserTableViewColumnPosition(this->m_controlRef,propertyID,&index);
 } /* wxMacDataBrowserTableViewControl::IsUsedPropertyId(DataBrowserPropertyID) const */
 
@@ -635,10 +635,10 @@ OSStatus wxMacDataBrowserTableViewControl::AddItems(DataBrowserItemID container,
 OSStatus wxMacDataBrowserTableViewControl::GetFreeItemID(DataBrowserItemID* id) const
 {
   ItemCount noOfItems;
- 
+
   OSStatus status;
-  
-  
+
+
   status = this->GetItemCount(&noOfItems);
   wxCHECK_MSG(status == noErr,status,_("Could not retrieve number of items"));
   if (noOfItems == 0)
@@ -693,7 +693,7 @@ OSStatus wxMacDataBrowserTableViewControl::IsUsedItemID(DataBrowserItemID itemID
  // lead to a large overhead for the call but returns an error code if the property id does not exist, here we use the function that returns
  // the column position for the property id:
   DataBrowserTableViewColumnIndex index;
-  
+
   return ::GetDataBrowserTableViewItemRow(this->m_controlRef,itemID,&index);
 } /* wxMacDataBrowserTableViewControl::IsUsedItemID(DataBrowserItemID) const */
 
@@ -720,7 +720,7 @@ size_t wxMacDataBrowserTableViewControl::GetSelectedItemIDs(wxArrayDataBrowserIt
 {
   DataBrowserItemID* itemIDPtr;
   Handle handle(::NewHandle(0));
-  
+
   size_t noOfItems;
 
 
@@ -839,8 +839,8 @@ wxMacDataViewDataBrowserListViewControl::wxMacDataViewDataBrowserListViewControl
 bool wxMacDataViewDataBrowserListViewControl::ClearColumns(void)
 {
   UInt32 noOfColumns;
-  
-  
+
+
   wxCHECK_MSG(this->GetColumnCount(&noOfColumns) == noErr,false,_("Could not determine number of columns."));
   for (UInt32 i=0; i<noOfColumns; ++i)
     wxCHECK_MSG(this->RemoveColumnByIndex(0) == noErr,false,_("Could not remove column."));
@@ -904,7 +904,7 @@ bool wxMacDataViewDataBrowserListViewControl::InsertColumn(unsigned int pos, wxD
   if (noOfColumns == 1)
   {
     wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
-    
+
     wxCHECK_MSG(dataViewCtrlPtr != NULL,false,_("wxWidget's control not initialized."));
     dataViewCtrlPtr->AddChildren(wxDataViewItem());
     return true;
@@ -1189,7 +1189,10 @@ void wxMacDataViewDataBrowserListViewControl::Resort(void)
 //
 // other methods (inherited from wxDataViewWidgetImpl)
 //
-void wxMacDataViewDataBrowserListViewControl::HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
+void
+wxMacDataViewDataBrowserListViewControl::HitTest(const wxPoint& WXUNUSED(point),
+                                                 wxDataViewItem& item,
+                                                 wxDataViewColumn*& columnPtr) const
 {
  // not yet implemented:
   item = wxDataViewItem();
@@ -1209,8 +1212,8 @@ void wxMacDataViewDataBrowserListViewControl::SetRowHeight(wxDataViewItem const&
 void wxMacDataViewDataBrowserListViewControl::OnSize(void)
 {
   UInt32 noOfColumns;
-  
-  
+
+
   this->GetColumnCount(&noOfColumns);
   if (noOfColumns <= 1) // no horizontal scroll bar and the only column expands to the width of the whole control
   {
@@ -1229,9 +1232,9 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserCompareProc(DataBrow
   DataBrowserSortOrder sortOrder;
 
   DataBrowserTableViewColumnIndex modelColumnIndex;
-  
+
   wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
-  
+
 
   wxCHECK_MSG(dataViewCtrlPtr != NULL,            false,_("Pointer to data view control not set correctly."));
   wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,false,_("Pointer to model not set correctly."));
@@ -1239,7 +1242,7 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserCompareProc(DataBrow
   {
    // variable definition and initialization:
     wxDataViewColumn* ColumnPtr(this->GetColumnPtr(sortProperty));
-    
+
     wxCHECK_MSG(ColumnPtr != NULL,false,_("Could not determine column index."));
     modelColumnIndex = ColumnPtr->GetModelColumn();
   }
@@ -1282,7 +1285,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
   {
    // variable definitions:
     wxDataViewCtrl* dataViewCtrlPtr;
-    
+
     dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
     wxCHECK_MSG(dataViewCtrlPtr != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
     if (dataViewCtrlPtr->IsDeleting())
@@ -1292,14 +1295,14 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
      // variable definitions:
       OSStatus          errorStatus;
       wxDataViewColumn* dataViewColumnPtr;
-      
+
       wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
       dataViewColumnPtr = this->GetColumnPtr(propertyID);
       wxCHECK_MSG((dataViewColumnPtr != NULL) && (dataViewColumnPtr->GetRenderer() != NULL),errDataBrowserNotConfigured,_("There is no column or renderer for the specified column index."));
 
       wxDataViewItem dvItem(reinterpret_cast<void*>(itemID));
       unsigned int   col = dataViewColumnPtr->GetModelColumn();
-            
+
       switch (dataViewColumnPtr->GetRenderer()->GetNativeData()->GetPropertyType())
       {
         case kDataBrowserCheckboxType:
@@ -1353,7 +1356,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
               wxMacCFStringHolder modifiedString(stringReference);
 #endif
               wxVariant           modifiedData(modifiedString.AsString());
-              
+
                 if (dataViewCtrlPtr->GetModel()->SetValue(modifiedData, dvItem, col) &&
                     dataViewCtrlPtr->GetModel()->ValueChanged(dvItem, col))
                     return noErr;
@@ -1376,7 +1379,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
       wxVariant         variant;
       wxDataViewColumn* dataViewColumnPtr;
       wxDataViewCtrl*   dataViewCtrlPtr;
-      
+
       dataViewCtrlPtr = dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer());
       wxCHECK_MSG(dataViewCtrlPtr             != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
       wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
@@ -1388,7 +1391,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
       {
         dataViewColumnPtr->GetRenderer()->GetNativeData()->SetItemDataRef(itemData);
         dataViewColumnPtr->GetRenderer()->SetValue(variant);
-        wxCHECK_MSG(dataViewColumnPtr->GetRenderer()->Render(),errDataBrowserNotConfigured,_("Rendering failed."));
+        wxCHECK_MSG(dataViewColumnPtr->GetRenderer()->MacRender(),errDataBrowserNotConfigured,_("Rendering failed."));
       }
       return noErr;
     }
@@ -1400,11 +1403,11 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
           {
            // variable definitions:
             wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
-            
+
             wxCHECK_MSG(dataViewCtrlPtr != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
            // initialize wxWidget event:
             wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSING,dataViewCtrlPtr->GetId()); // variable definition
-            
+
             dataViewEvent.SetEventObject(dataViewCtrlPtr);
             dataViewEvent.SetItem       (wxDataViewItem(reinterpret_cast<void*>(itemID)));
             dataViewEvent.SetModel      (dataViewCtrlPtr->GetModel());
@@ -1417,7 +1420,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
           {
            // variable definitions:
             wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
-            
+
             wxCHECK_MSG(dataViewCtrlPtr != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
            // initialize wxWidget event:
             wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDING,dataViewCtrlPtr->GetId()); // variable definition
@@ -1434,7 +1437,7 @@ OSStatus wxMacDataViewDataBrowserListViewControl::DataBrowserGetSetItemDataProc(
           {
            // variable definition:
             wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
-            
+
             wxCHECK_MSG(dataViewCtrlPtr             != NULL,errDataBrowserNotConfigured,_("Pointer to data view control not set correctly."));
             wxCHECK_MSG(dataViewCtrlPtr->GetModel() != NULL,errDataBrowserNotConfigured,_("Pointer to model not set correctly."));
             return ::SetDataBrowserItemDataBooleanValue(itemData,dataViewCtrlPtr->GetModel()->IsContainer(wxDataViewItem(reinterpret_cast<void*>(itemID))));
@@ -1461,7 +1464,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
         {
          // initialize wxWidget event:
           wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_COLLAPSED,dataViewCtrlPtr->GetId()); // variable definition
-          
+
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
          // finally send the equivalent wxWidget event:
@@ -1473,7 +1476,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
         {
          // initialize wxWidget event:
           wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EXPANDED,dataViewCtrlPtr->GetId()); // variable definition
-          
+
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
          // finally send the equivalent wxWidget event:
@@ -1486,30 +1489,9 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
         dataViewCtrlPtr->FinishCustomItemEditing(); // stop editing of a custom item first (if necessary)
         {
          // initialize wxWidget event:
-          DataBrowserPropertyID propertyID;  
+          DataBrowserPropertyID propertyID;
           wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_STARTED,dataViewCtrlPtr->GetId()); // variable definition
-          
-          dataViewEvent.SetEventObject(dataViewCtrlPtr);
-          dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
-          if (this->GetPropertyID(itemData,&propertyID) == noErr)
-          {
-           // variable definition and initialization:
-            DataBrowserTableViewColumnIndex columnIndex;
-            
-            wxCHECK_RET(this->GetColumnIndex(propertyID,&columnIndex),_("Column index not found."));
-            dataViewEvent.SetColumn(columnIndex);
-            dataViewEvent.SetDataViewColumn(this->GetColumnPtr(propertyID));          
-          }
-         // finally send the equivalent wxWidget event:
-          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
-        } /* block */
-        break;
-      case kDataBrowserEditStopped:
-        {
-         // initialize wxWidget event:
-          DataBrowserPropertyID propertyID;  
-          wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE,dataViewCtrlPtr->GetId()); // variable definition
-          
+
           dataViewEvent.SetEventObject(dataViewCtrlPtr);
           dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
           if (this->GetPropertyID(itemData,&propertyID) == noErr)
@@ -1519,7 +1501,28 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
 
             wxCHECK_RET(this->GetColumnIndex(propertyID,&columnIndex),_("Column index not found."));
             dataViewEvent.SetColumn(columnIndex);
-            dataViewEvent.SetDataViewColumn(this->GetColumnPtr(propertyID));          
+            dataViewEvent.SetDataViewColumn(this->GetColumnPtr(propertyID));
+          }
+         // finally send the equivalent wxWidget event:
+          dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
+        } /* block */
+        break;
+      case kDataBrowserEditStopped:
+        {
+         // initialize wxWidget event:
+          DataBrowserPropertyID propertyID;
+          wxDataViewEvent dataViewEvent(wxEVT_COMMAND_DATAVIEW_ITEM_EDITING_DONE,dataViewCtrlPtr->GetId()); // variable definition
+
+          dataViewEvent.SetEventObject(dataViewCtrlPtr);
+          dataViewEvent.SetItem(wxDataViewItem(reinterpret_cast<void*>(itemID)));
+          if (this->GetPropertyID(itemData,&propertyID) == noErr)
+          {
+           // variable definition and initialization:
+            DataBrowserTableViewColumnIndex columnIndex;
+
+            wxCHECK_RET(this->GetColumnIndex(propertyID,&columnIndex),_("Column index not found."));
+            dataViewEvent.SetColumn(columnIndex);
+            dataViewEvent.SetDataViewColumn(this->GetColumnPtr(propertyID));
           }
          // finally send the equivalent wxWidget event:
           dataViewCtrlPtr->GetEventHandler()->ProcessEvent(dataViewEvent);
@@ -1571,7 +1574,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
             wxDataViewColumn* const columnPtr = dataViewCtrlPtr->GetColumnPtr(i);
            // variable definition:
             UInt16 columnWidth;
-            
+
             wxCHECK_RET(this->GetColumnWidth(columnPtr->GetNativeData()->GetPropertyID(),&columnWidth) == noErr,_("Column width could not be determined"));
             columnPtr->SetWidthVariable(columnWidth);
           }
@@ -1582,7 +1585,7 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
           {
             DataBrowserSortOrder            sortOrder;
             DataBrowserTableViewColumnIndex columnIndex;
-            
+
             if ((this->GetSortOrder(&sortOrder) == noErr) && (this->GetColumnIndex(propertyID,&columnIndex) == noErr))
             {
              // variable definition and initialization:
@@ -1609,14 +1612,20 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(Da
     }
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserItemNotificationProc(DataBrowserItemID, DataBrowserItemNotification, DataBrowserItemDataRef) */
 
-void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, DataBrowserItemState state, Rect const* rectangle, SInt16 bitDepth, Boolean colorDevice)
+void
+wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID itemID,
+        DataBrowserPropertyID propertyID,
+        DataBrowserItemState state,
+        Rect const* rectangle,
+        SInt16 WXUNUSED(bitDepth),
+        Boolean WXUNUSED(colorDevice))
 {
   DataBrowserTableViewColumnIndex columnIndex;
 
   wxDataViewColumn* dataViewColumnPtr;
 
   wxDataViewCtrl* dataViewCtrlPtr;
-  
+
   wxDataViewCustomRenderer* dataViewCustomRendererPtr;
 
   wxVariant dataToRender;
@@ -1659,33 +1668,33 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
   content.right  -= wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 
   wxDC *dc = dataViewCustomRendererPtr->GetDC();
-  
+
   int active_border_fudge = 0;
   if (dataViewCtrlPtr->HasFocus() && !dataViewCtrlPtr->HasFlag( wxBORDER_NONE ))
      active_border_fudge = 1;
   else
      active_border_fudge = -2;
-  
+
   wxRect cellrect( static_cast<int>(rectangle->left + active_border_fudge),
                    static_cast<int>(rectangle->top + active_border_fudge),
                    static_cast<int>(1+rectangle->right-rectangle->left),
                    static_cast<int>(rectangle->bottom-rectangle->top) );
-                   
+
   bool is_active = IsControlActive( this->m_controlRef );
   if (state == kDataBrowserItemIsSelected)
   {
-      
-      wxColour col( wxMacCreateCGColorFromHITheme( (is_active) ? 
+
+      wxColour col( wxMacCreateCGColorFromHITheme( (is_active) ?
                              kThemeBrushAlternatePrimaryHighlightColor
                              : kThemeBrushSecondaryHighlightColor ) );
-      
+
       wxRect rect = cellrect;
       Rect itemrect;
       GetDataBrowserItemPartBounds( this->m_controlRef, itemID, propertyID,
          kDataBrowserPropertyEnclosingPart, &itemrect );
       rect.x = itemrect.left-2;
       rect.width = itemrect.right-itemrect.left+3;
-      
+
       wxBrush selBrush( col );
       wxPen oldpen( dc->GetPen() );
       wxBrush oldbrush( dc->GetBrush() );
@@ -1698,18 +1707,24 @@ void wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowse
 
   wxDataViewModel *model = dataViewCtrlPtr->GetModel();
   if ((columnIndex == 0) || !model->IsContainer(dataItem) || model->HasContainerColumns(dataItem))
-  {  
+  {
       // make sure that 'Render' can draw only in the allowed area:
       dc->SetClippingRegion(content.left,content.top,content.right-content.left+1,content.bottom-content.top+1);
-      (void) (dataViewCustomRendererPtr->Render( cellrect, dc, 
+      (void) (dataViewCustomRendererPtr->Render( cellrect, dc,
                                             ((state == kDataBrowserItemIsSelected) ? wxDATAVIEW_CELL_SELECTED : 0)));
       dc->DestroyClippingRegion(); // probably not necessary
   }
-  
+
   dataViewCustomRendererPtr->SetDC(NULL);
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserDrawItemProc(DataBrowserItemID, DataBrowserPropertyID, DataBrowserItemState, Rect const*, SInt16, Boolean) */
 
-Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserEditItemProc(DataBrowserItemID itemID, DataBrowserPropertyID propertyID, CFStringRef theString, Rect* maxEditTextRect, Boolean* shrinkToFit)
+Boolean
+wxMacDataViewDataBrowserListViewControl::DataBrowserEditItemProc(
+    DataBrowserItemID WXUNUSED(itemID),
+    DataBrowserPropertyID WXUNUSED(propertyID),
+    CFStringRef WXUNUSED(theString),
+    Rect* WXUNUSED(maxEditTextRect),
+    Boolean* WXUNUSED(shrinkToFit))
 {
   return false;
 } /* wxMacDataViewDataBrowserListViewControl::DataBrowserEditItemProc(DataBrowserItemID, DataBrowserPropertyID, CFStringRef, Rect*, Boolean*) */
@@ -1724,9 +1739,9 @@ DataBrowserTrackingResult wxMacDataViewDataBrowserListViewControl::DataBrowserTr
   wxDataViewColumn* dataViewColumnPtr;
 
   wxDataViewCtrl* dataViewCtrlPtr;
-  
+
   wxDataViewCustomRenderer* dataViewCustomRendererPtr;
-  
+
   wxDataViewItem dataViewCustomRendererItem;
 
 
@@ -1754,7 +1769,7 @@ DataBrowserTrackingResult wxMacDataViewDataBrowserListViewControl::DataBrowserTr
   {
    // variable definition:
     wxRect wxRectangle;
-    
+
     ::wxMacNativeToRect(theRect,&wxRectangle);
     dataViewCustomRendererPtr->StartEditing(dataViewCustomRendererItem,wxRectangle);
     dataViewCtrlPtr->SetCustomRendererItem(dataViewCustomRendererItem);
@@ -1784,7 +1799,7 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAcceptDragProc(DragR
     ItemReference          itemRef;
     wxDataObjectComposite* dataObjects;
     wxMemoryBuffer         buffer;
-    
+
     ::GetDragItemReferenceNumber(dragRef,indexDraggedItem,&itemRef); // the index begins with 1!
     dataObjects = this->GetDnDDataObjects(dragRef,itemRef);
    // create wxWidget's event:
@@ -1818,7 +1833,7 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAddDragItemProc(Drag
   Boolean addDragItem;
 
   wxDataViewCtrl* dataViewCtrlPtr;
-  
+
   wxDataViewItem dataViewItem;
 
 
@@ -1838,7 +1853,7 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAddDragItemProc(Drag
  // the object a wxDataObjectComposite object is used;
  // currently, the composite object only contains a TAB concatenated string of all data:
   wxDataObjectComposite* dataObject(new wxDataObjectComposite());
-  
+
   dataObject->Add(new wxTextDataObject(::ConcatenateDataViewItemValues(dataViewCtrlPtr,dataViewItem)));
   dataViewEvent.SetDataObject(dataObject);
  // check if event has not been vetoed:
@@ -1858,12 +1873,12 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAddDragItemProc(Drag
     {
      // constant definition for abbreviational purposes:
       size_t const noOfFormats = dataViewEvent.GetDataObject()->GetFormatCount();
-      
+
       if (noOfFormats > 0)
       {
        // variable definition:
         wxDataFormat* dataFormats;
-        
+
         dataFormats = new wxDataFormat[noOfFormats];
         dataViewEvent.GetDataObject()->GetAllFormats(dataFormats,wxDataObject::Get);
         for (size_t i=0; i<noOfFormats; ++i)
@@ -1878,7 +1893,7 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAddDragItemProc(Drag
                 size_t const dataSize = dataViewEvent.GetDataObject()->GetDataSize(wxDF_TEXT);
                // variable definition and initialization:
                 wxMemoryBuffer dataObject(dataSize);
-                
+
                 dataViewEvent.GetDataObject()->GetDataHere(wxDF_TEXT,dataObject.GetWriteBuf(dataSize));
                 dataObject.UngetWriteBuf(dataSize);
                 if (::AddDragItemFlavor(dragRef,*itemRef,'TEXT',dataObject.GetData(),dataSize,0) != noErr)
@@ -1891,14 +1906,14 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserAddDragItemProc(Drag
                 size_t const dataSize = dataViewEvent.GetDataObject()->GetDataSize(wxDF_TEXT);
                // as there is no direct access to the data copy it to a memory buffer:
                 wxMemoryBuffer dataObject(dataSize);
-                
+
                 dataViewEvent.GetDataObject()->GetDataHere(wxDF_TEXT,dataObject.GetWriteBuf(dataSize));
                 dataObject.UngetWriteBuf(dataSize);
                // if the data is stored in unicode format the internal representation is utf-8 (not mentioned in the documentation but in the source code);
                // DnD uses fixed utf-16 representation -> use the OSX functions for a conversion:
                 CFDataRef   osxData  (::CFDataCreateWithBytesNoCopy(kCFAllocatorDefault,reinterpret_cast<UInt8*>(dataObject.GetData()),dataSize,kCFAllocatorNull));
                 CFStringRef osxString(::CFStringCreateFromExternalRepresentation(kCFAllocatorDefault,osxData,kCFStringEncodingUTF8));
-                
+
                // the osxString contains now the data and therefore the previously occupied memory can be released and re-used:
                 ::CFRelease(osxData);
                 osxData = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,osxString,kCFStringEncodingUTF16,32);
@@ -1957,7 +1972,7 @@ Boolean wxMacDataViewDataBrowserListViewControl::DataBrowserReceiveDragProc(Drag
     ItemReference          itemRef;
     wxDataObjectComposite* dataObjects;
     wxMemoryBuffer         buffer;
-    
+
    // collect native information:
     ::GetDragItemReferenceNumber(dragRef,indexDraggedItem,&itemRef); // the index begins with 1!
     dataObjects = this->GetDnDDataObjects(dragRef,itemRef);
@@ -2003,7 +2018,7 @@ wxDataFormat wxMacDataViewDataBrowserListViewControl::GetDnDDataFormat(wxDataObj
     size_t       indexFormat;
 
     wxDataFormat* formats;
-    
+
    // get all formats and check afterwards if the formats are compatible; if they are compatible the preferred format is returned otherwise
    // wxDF_INVALID is returned;
    // currently compatible types (ordered by priority are):
@@ -2066,7 +2081,7 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
     {
      // variable definition:
       FlavorType flavorDataObject;
-      
+
       if (::GetFlavorType(dragRef,itemRef,indexFlavor,&flavorDataObject) == noErr) // GetFlavorType uses a 1 based index!
         switch (flavorDataObject)
         {
@@ -2076,7 +2091,7 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
              // variable definitions:
               Size           nativeDataSize;
               wxMemoryBuffer nativeData;
-              
+
               if ((::GetFlavorDataSize(dragRef,itemRef,'TEXT',&nativeDataSize) == noErr) &&
                   (::GetFlavorData(dragRef,itemRef,'TEXT',nativeData.GetWriteBuf(nativeDataSize),&nativeDataSize,0) == noErr))
               {
@@ -2096,11 +2111,11 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
             {
              // variable definition:
               Size nativeDataSize;
-              
+
               if (::GetFlavorDataSize(dragRef,itemRef,'utxt',&nativeDataSize) == noErr)
               {
                 CFMutableDataRef draggedData;
-                
+
                 draggedData = ::CFDataCreateMutable(kCFAllocatorDefault,nativeDataSize);
                 ::CFDataSetLength(draggedData,nativeDataSize);
                 if (::GetFlavorData(dragRef,itemRef,'utxt',::CFDataGetMutableBytePtr(draggedData),&nativeDataSize,0) == noErr)
@@ -2108,7 +2123,7 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
                  // convert internally used UTF-16 representation to a UTF-8 representation:
                   CFDataRef   osxData;
                   CFStringRef osxString;
-                  
+
                   osxString = ::CFStringCreateFromExternalRepresentation(kCFAllocatorDefault,draggedData,kCFStringEncodingUTF16); // BOM character is handled by this function automatically
                   osxData   = ::CFStringCreateExternalRepresentation(kCFAllocatorDefault,osxString,kCFStringEncodingUTF8,32);
                   if (textDataObject == NULL)
@@ -2147,11 +2162,11 @@ wxDataObjectComposite* wxMacDataViewDataBrowserListViewControl::GetDnDDataObject
 wxDataViewColumn* wxMacDataViewDataBrowserListViewControl::GetColumnPtr(DataBrowserPropertyID propertyID) const
 {
   wxDataViewCtrl* dataViewCtrlPtr(dynamic_cast<wxDataViewCtrl*>(this->GetWXPeer()));
-  
+
   if (dataViewCtrlPtr != NULL)
   {
     size_t const noOfColumns = dataViewCtrlPtr->GetColumnCount();
-    
+
     for (size_t i=0; i<noOfColumns; ++i)
       if (dataViewCtrlPtr->GetColumnPtr(i)->GetNativeData()->GetPropertyID() == propertyID)
         return dataViewCtrlPtr->GetColumnPtr(i);
@@ -2225,7 +2240,7 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer(wxString const& varianttype, 
   this->SetNativeData(new wxDataViewRendererNativeData(kDataBrowserCustomType));
 }
 
-bool wxDataViewCustomRenderer::Render()
+bool wxDataViewCustomRenderer::MacRender()
 {
   return true;
 }
@@ -2241,7 +2256,7 @@ wxDataViewTextRenderer::wxDataViewTextRenderer(wxString const& varianttype, wxDa
   this->SetNativeData(new wxDataViewRendererNativeData(kDataBrowserTextType));
 }
 
-bool wxDataViewTextRenderer::Render()
+bool wxDataViewTextRenderer::MacRender()
 {
   wxCHECK_MSG(this->GetValue().GetType() == this->GetVariantType(),false,wxString(_("Text renderer cannot render value; value type: ")) << this->GetValue().GetType());
 
@@ -2260,7 +2275,7 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer(wxString const& varianttype, 
   this->SetNativeData(new wxDataViewRendererNativeData(kDataBrowserIconType));
 }
 
-bool wxDataViewBitmapRenderer::Render()
+bool wxDataViewBitmapRenderer::MacRender()
  // This method returns 'true' if
  //  - the passed bitmap is valid and it could be assigned to the native data browser;
  //  - the passed bitmap is invalid (or is not initialized); this case simulates a non-existing bitmap.
@@ -2279,13 +2294,16 @@ IMPLEMENT_CLASS(wxDataViewBitmapRenderer,wxDataViewRenderer)
 // ---------------------------------------------------------
 // wxDataViewIconTextRenderer
 // ---------------------------------------------------------
-wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(wxString const& varianttype, wxDataViewCellMode mode, int align)
+wxDataViewIconTextRenderer::wxDataViewIconTextRenderer(
+    const wxString& varianttype,
+    wxDataViewCellMode mode,
+    int WXUNUSED(align))
                            :wxDataViewRenderer(varianttype,mode)
 {
   this->SetNativeData(new wxDataViewRendererNativeData(kDataBrowserIconAndTextType));
 }
 
-bool wxDataViewIconTextRenderer::Render()
+bool wxDataViewIconTextRenderer::MacRender()
 {
   wxCHECK_MSG(this->GetValue().GetType() == this->GetVariantType(),false,wxString(_("Icon & text renderer cannot render value; value type: ")) << this->GetValue().GetType());
 
@@ -2307,13 +2325,16 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewIconTextRenderer,wxDataViewRenderer)
 // ---------------------------------------------------------
 // wxDataViewToggleRenderer
 // ---------------------------------------------------------
-wxDataViewToggleRenderer::wxDataViewToggleRenderer(wxString const& varianttype, wxDataViewCellMode mode, int align)
+wxDataViewToggleRenderer::wxDataViewToggleRenderer(
+    const wxString& varianttype,
+    wxDataViewCellMode mode,
+    int WXUNUSED(align))
                          :wxDataViewRenderer(varianttype,mode)
 {
   this->SetNativeData(new wxDataViewRendererNativeData(kDataBrowserCheckboxType));
 }
 
-bool wxDataViewToggleRenderer::Render()
+bool wxDataViewToggleRenderer::MacRender()
 {
   wxCHECK_MSG(this->GetValue().GetType() == this->GetVariantType(),false,wxString(_("Toggle renderer cannot render value; value type: ")) << this->GetValue().GetType());
   return (::SetDataBrowserItemDataButtonValue(this->GetNativeData()->GetItemDataRef(),this->GetValue().GetBool()) == noErr);
@@ -2324,13 +2345,17 @@ IMPLEMENT_ABSTRACT_CLASS(wxDataViewToggleRenderer,wxDataViewRenderer)
 // ---------------------------------------------------------
 // wxDataViewProgressRenderer
 // ---------------------------------------------------------
-wxDataViewProgressRenderer::wxDataViewProgressRenderer(wxString const& label, wxString const& varianttype, wxDataViewCellMode mode, int align)
+wxDataViewProgressRenderer::wxDataViewProgressRenderer(
+    const wxString& WXUNUSED(label),
+    wxString const& varianttype,
+    wxDataViewCellMode mode,
+    int align)
                            :wxDataViewRenderer(varianttype,mode,align)
 {
   this->SetNativeData(new wxDataViewRendererNativeData(kDataBrowserProgressBarType));
 }
 
-bool wxDataViewProgressRenderer::Render()
+bool wxDataViewProgressRenderer::MacRender()
 {
   wxCHECK_MSG(this->GetValue().GetType() == this->GetVariantType(),false,wxString(_("Progress renderer cannot render value type; value type: ")) << this->GetValue().GetType());
   return ((::SetDataBrowserItemDataMinimum(this->GetNativeData()->GetItemDataRef(),  0)                        == noErr) &&
@@ -2349,7 +2374,7 @@ wxDataViewDateRenderer::wxDataViewDateRenderer(wxString const& varianttype, wxDa
   this->SetNativeData(new wxDataViewRendererNativeData(kDataBrowserDateTimeType));
 }
 
-bool wxDataViewDateRenderer::Render()
+bool wxDataViewDateRenderer::MacRender()
 {
   wxCHECK_MSG(this->GetValue().GetType() == this->GetVariantType(),false,wxString(_("Date renderer cannot render value; value type: ")) << this->GetValue().GetType());
   return (::SetDataBrowserItemDataDateTime(this->GetNativeData()->GetItemDataRef(),this->GetValue().GetDateTime().Subtract(wxDateTime(1,wxDateTime::Jan,1904)).GetSeconds().GetLo()) == noErr);
