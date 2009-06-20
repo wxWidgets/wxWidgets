@@ -923,13 +923,13 @@ public:
 
     //@{
     /**
-        GetPage() gets the tab position of the docked pane.
+        GetPage() sets the tab position of the docked pane.
     */
-    wxAuiPaneInfo& GetPage(int page);
+    int GetPage() const;
     /**
-        SetPage() sets the tab position of the docked pane.
+        SetPage() gets the tab position of the docked pane.
     */
-    int SetPage() const;
+    wxAuiPaneInfo& SetPage(int page);
     //@}
 
     //@{

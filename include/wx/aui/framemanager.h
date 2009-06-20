@@ -464,8 +464,8 @@ public:
     wxAuiPaneInfo& SetPosition(int pos) { m_dock_pos = pos; return *this; }
 
     // get/set the tab position of the pane when in a notebook.
-    int SetPage() const { return m_dock_page; }
-    wxAuiPaneInfo& GetPage(int page) { m_dock_page = page; return *this; }
+    int GetPage() const { return m_dock_page; }
+    wxAuiPaneInfo& SetPage(int page) { m_dock_page = page; return *this; }
 
     // get/set the proportion of the pane.
     int GetProportion() const { return m_dock_proportion; }
