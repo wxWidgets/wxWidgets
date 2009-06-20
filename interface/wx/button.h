@@ -33,7 +33,11 @@
         without using this style a button which is only supposed to show a
         bitmap but uses a standard id would display a label too.
     @style{wxBORDER_NONE}
-        Creates a flat button. Windows and GTK+ only.
+        Creates a button without border. This is currently implemented in MSW,
+        GTK2 and OSX ports but in the latter only applies to buttons with
+        bitmaps and using bitmap of one of the standard sizes only, namely
+        128*128, 48*48, 24*24 or 16*16. In all the other cases wxBORDER_NONE is
+        ignored under OSX.
     @endStyleTable
 
     By default, i.e. if none of the alignment styles are specified, the label

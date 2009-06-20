@@ -22,138 +22,119 @@
 
 #include "wx/osx/private.h"
 
-//---------------------------------------------------------------------------
-// Helper functions
-
-static wxBitmap wxMakeStdSizeBitmap(const wxBitmap& bitmap)
+namespace
 {
-    // in Mac OS X the icon controls (which are used for borderless bitmap
-    // buttons) can have only one of the few standard sizes and if they
-    // don't, the OS rescales them automatically resulting in really ugly
-    // images, so centre the image in a square of standard size instead
 
-    // the supported sizes, sorted in decreasng order
-    static const int stdSizes[] = { 128, 48, 32, 16, 0 };
-
-    const int width = bitmap.GetWidth();
-    const int height = bitmap.GetHeight();
-
-    wxBitmap newBmp(bitmap);
-    
-    int n;
-    for ( n = 0; n < (int)WXSIZEOF(stdSizes); n++ )
-    {
-        const int sizeStd = stdSizes[n];
-        if ( width > sizeStd || height > sizeStd )
-        {
-            // it will become -1 if the bitmap is larger than the biggest
-            // supported size, this is intentional
-            n--;
-
-            break;
-        }
-    }
-
-    if ( n != -1 )
-    {
-        const int sizeStd = stdSizes[n];
-        if ( width != sizeStd || height != sizeStd )
-        {
-            wxASSERT_MSG( width <= sizeStd && height <= sizeStd,
-                          _T("bitmap shouldn't be cropped") );
-
-            wxImage square_image = bitmap.ConvertToImage();
-            newBmp = square_image.Size
-                     (
-                         wxSize(sizeStd, sizeStd),
-                         wxPoint((sizeStd - width)/2, (sizeStd-height)/2)
-                     );
-        }
-    }
-    //else: let the system rescale the bitmap
-
-    return newBmp;
-}
-
-//---------------------------------------------------------------------------
-
+// define a derived class to override SetBitmap() and also to provide
+// InitButtonContentInfo() helper used by CreateBitmapButton()
 class wxMacBitmapButton : public wxMacControl
 {
 public:
-    wxMacBitmapButton( wxWindowMac* peer ) : wxMacControl(peer)
+    wxMacBitmapButton(wxWindowMac* peer, const wxBitmap& bitmap, int style)
+        : wxMacControl(peer)
     {
+        // decide what kind of contents the button will have: we want to use an
+        // icon for buttons with wxBORDER_NONE style as bevel buttons always do
+        // have a border but icons are limited to a few standard sizes only and
+        // are resized by the system with extremely ugly results if they don't
+        // fit (in the past we also tried being smart and pasting a bitmap
+        // instead of a larger square icon to avoid resizing but this resulted
+        // in buttons having different size than specified by wx API and
+        // breaking the layouts and still didn't look good so we don't even try
+        // to do this any more)
+        m_isIcon = (style & wxBORDER_NONE) &&
+                        bitmap.IsOk() && IsOfStandardSize(bitmap);
     }
-    
-    void SetBitmap(const wxBitmap& bitmap)
-    {
-        wxBitmap bmp;
-        if ( GetWXPeer()->HasFlag( wxBORDER_NONE ) )
-        {
-            bmp = wxMakeStdSizeBitmap(bitmap);
-            // TODO set bitmap in peer as well
-        }
-        else
-            bmp = bitmap;
 
+    virtual void SetBitmap(const wxBitmap& bitmap)
+    {
+        // unfortunately we can't avoid the ugly resizing problem mentioned
+        // above if a bitmap of supported size was used initially but was
+        // replaced with another one later as the control was already created
+        // as an icon control (although maybe we ought to recreate it?)
         ControlButtonContentInfo info;
+        InitButtonContentInfo(info, bitmap);
 
-        if ( GetWXPeer()->HasFlag( wxBORDER_NONE ) )
-        {        
-            wxMacCreateBitmapButton( &info, bmp, kControlContentIconRef );
-            if ( info.contentType != kControlNoContent )
-                SetData( kControlIconPart, kControlIconContentTag, info );
-        }
-        else
-        {
-            wxMacCreateBitmapButton( &info, bmp );
-            if ( info.contentType != kControlNoContent )
-                SetData( kControlButtonPart, kControlBevelButtonContentTag, info );
-        }
+        if ( info.contentType == kControlContentIconRef )
+            SetData(kControlIconPart, kControlIconContentTag, info);
+        else if ( info.contentType != kControlNoContent )
+            SetData(kControlButtonPart, kControlBevelButtonContentTag, info);
 
-        wxMacReleaseBitmapButton( &info );
+        wxMacReleaseBitmapButton(&info);
     }
+
+    void InitButtonContentInfo(ControlButtonContentInfo& info,
+                               const wxBitmap& bitmap)
+    {
+        wxMacCreateBitmapButton(&info, bitmap,
+                                m_isIcon ? kControlContentIconRef : 0);
+    }
+
+private:
+    // helper function: returns true if the given bitmap is of one of standard
+    // sizes supported by OS X icons
+    static bool IsOfStandardSize(const wxBitmap& bmp)
+    {
+        const int w = bmp.GetWidth();
+
+        return bmp.GetHeight() == w &&
+                (w == 128 || w == 48 || w == 32 || w == 16);
+    }
+
+
+    // true if this is an icon control, false if it's a bevel button
+    bool m_isIcon;
+
+    wxDECLARE_NO_COPY_CLASS(wxMacBitmapButton);
 };
 
-wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* parent, 
-                                    wxWindowID WXUNUSED(id), 
+} // anonymous namespace
+
+wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
+                                    wxWindowMac* parent,
+                                    wxWindowID WXUNUSED(id),
                                     const wxBitmap& bitmap,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long style, 
+                                    long style,
                                     long WXUNUSED(extraStyle))
 {
-    OSStatus err = noErr;
-    ControlButtonContentInfo info;
+    wxMacBitmapButton* peer = new wxMacBitmapButton(wxpeer, bitmap, style);
 
+    OSStatus err;
+    WXWindow macParent = MAC_WXHWND(parent->MacGetTopLevelWindowRef());
     Rect bounds = wxMacGetBoundsForControl( wxpeer, pos, size );
-    wxMacControl* peer = new wxMacBitmapButton( wxpeer );
-    wxBitmap bmp;
 
-    if ( bitmap.Ok() && (style & wxBORDER_NONE) )
+    ControlButtonContentInfo info;
+    peer->InitButtonContentInfo(info, bitmap);
+
+    if ( info.contentType == kControlContentIconRef )
     {
-        bmp = wxMakeStdSizeBitmap(bitmap);
-        // TODO set bitmap in peer as well
+        err = CreateIconControl
+              (
+                macParent,
+                &bounds,
+                &info,
+                false,
+                peer->GetControlRefAddr()
+              );
     }
-    else
-        bmp = bitmap;
-
-
-    if ( style & wxBORDER_NONE )
+    else // normal bevel button
     {
-		// contrary to the docs this control only works with iconrefs
-        wxMacCreateBitmapButton( &info, bmp, kControlContentIconRef );
-        err = CreateIconControl(
-                MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
-                &bounds, &info, false, peer->GetControlRefAddr() );
-    }
-    else
-    {
-        wxMacCreateBitmapButton( &info, bmp );
-        err = CreateBevelButtonControl(
-                MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, CFSTR(""),
-                ((style & wxBU_AUTODRAW) ? kControlBevelButtonSmallBevel : kControlBevelButtonNormalBevel ),
-                kControlBehaviorOffsetContents, &info, 0, 0, 0, peer->GetControlRefAddr() );
+        err = CreateBevelButtonControl
+              (
+                macParent,
+                &bounds,
+                CFSTR(""),
+                style & wxBU_AUTODRAW ? kControlBevelButtonSmallBevel
+                                      : kControlBevelButtonNormalBevel,
+                kControlBehaviorOffsetContents,
+                &info,
+                0,  // menu id (no associated menu)
+                0,  // menu behaviour (unused)
+                0,  // menu placement (unused too)
+                peer->GetControlRefAddr()
+              );
     }
 
     verify_noerr( err );
@@ -161,4 +142,5 @@ wxWidgetImplType* wxWidgetImpl::CreateBitmapButton( wxWindowMac* wxpeer,
     wxMacReleaseBitmapButton( &info );
     return peer;
 }
-#endif
+
+#endif // wxUSE_BMPBUTTON
