@@ -463,6 +463,10 @@ public:
     int GetPosition() const { return m_dock_pos; }
     wxAuiPaneInfo& SetPosition(int pos) { m_dock_pos = pos; return *this; }
 
+    // get/set the tab position of the pane when in a notebook.
+    int SetPage() const { return m_dock_page; }
+    wxAuiPaneInfo& GetPage(int page) { m_dock_page = page; return *this; }
+
     // get/set the proportion of the pane.
     int GetProportion() const { return m_dock_proportion; }
     wxAuiPaneInfo& SetProportion(int proportion) { m_dock_proportion = proportion; return *this; }
@@ -639,6 +643,7 @@ private:
     int m_dock_layer;       // layer number (0 = innermost layer)
     int m_dock_row;         // row number on the docking bar (0 = first row)
     int m_dock_pos;         // position inside the row (0 = first position)
+    int m_dock_page;        // tab position if we are in a notebook (0 = leftmost tab)
 
     wxSize m_best_size;     // size that the layout engine will prefer
     wxSize m_min_size;      // minimum size the pane window can tolerate

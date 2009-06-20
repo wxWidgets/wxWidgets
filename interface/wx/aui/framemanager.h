@@ -85,7 +85,7 @@ enum wxAuiManagerOption
     @section auimanager_layers Layers, Rows and Directions, Positions
 
     Inside wxAUI, the docking layout is figured out by checking several pane
-    parameters. Four of these are important for determining where a pane will
+    parameters. Five of these are important for determining where a pane will
     end up:
 
     @li Direction: Each docked pane has a direction, Top, Bottom, Left, Right,
@@ -109,6 +109,11 @@ enum wxAuiManagerOption
         look very similar to multiple rows, but is different because all panes
         in a lower level yield to panes in higher levels. The best way to
         understand layers is by running the wxAUI sample.
+    @li Page: More then one pane can be docked in the exact same Direction,
+        Position, Row and Layer. When this happens a tabbed notebook will be formed.
+        Tab position will be decided based on the Page values of the panes with
+        those that have a lower value appearing on the left, with 0 being the 
+        absolute left.
 
 
     @beginEventEmissionTable{wxAuiManagerEvent}
@@ -903,7 +908,7 @@ public:
 
     //@{
     /**
-        GetPosition() sets the position of the docked pane.
+        GetPosition() gets the position of the docked pane.
     */
     int GetPosition() const;
     /**
@@ -914,6 +919,17 @@ public:
     @deprecated Use SetPosition() instead.
     */
     wxAuiPaneInfo& Position(int pos);
+    //@}
+
+    //@{
+    /**
+        GetPage() gets the tab position of the docked pane.
+    */
+    wxAuiPaneInfo& GetPage(int page);
+    /**
+        SetPage() sets the tab position of the docked pane.
+    */
+    int SetPage() const;
     //@}
 
     //@{
