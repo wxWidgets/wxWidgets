@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        tests/controls/clientsize.cpp
-// Purpose:     Client vs. window size handling unit test
-// Author:      Vaclav Slavik
+// Name:        tests/graphics/measuring.cpp
+// Purpose:     Tests for wxGraphicsRenderer::CreateMeasuringContext
+// Author:      Kevin Ollivier
 // Created:     2008-02-12
 // RCS-ID:      $Id: clientsize.cpp 53740 2008-05-25 02:56:22Z VZ $
-// Copyright:   (c) 2008 Vaclav Slavik <vslavik@fastmail.fm>
+// Copyright:   (c) 2008 Kevin Ollivier <kevino@theolliviers.com>
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
