@@ -716,9 +716,9 @@ void wxToolBar::DoGetSize( int *width, int *height ) const
         }
  
         if ( width != NULL )
-            *width = windowFrame.size.width;
+            *width = (int)windowFrame.size.width;
         if ( height != NULL )
-            *height = toolbarHeight;
+            *height = (int)toolbarHeight;
     }
     else
         wxToolBarBase::DoGetSize( width, height );

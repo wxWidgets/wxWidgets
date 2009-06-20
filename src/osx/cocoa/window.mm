@@ -284,7 +284,7 @@ void SetupKeyEvent( wxKeyEvent &wxevent , NSEvent * nsEvent, NSString* charStrin
     wxevent.m_rawCode = [nsEvent keyCode];
     wxevent.m_rawFlags = modifiers;
     
-    wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
+    wxevent.SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
 
     wxString chars;
     if ( eventType != NSFlagsChanged )
@@ -373,7 +373,7 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
     wxevent.m_controlDown = modifiers & NSControlKeyMask;
     wxevent.m_altDown = modifiers & NSAlternateKeyMask;
     wxevent.m_metaDown = modifiers & NSCommandKeyMask;
-    wxevent.SetTimestamp( [nsEvent timestamp] * 1000.0 ) ;
+    wxevent.SetTimestamp( (int)([nsEvent timestamp] * 1000) ) ;
 
     UInt32 mouseChord = 0; 
 
@@ -497,11 +497,11 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSEvent * nsEvent )
             if ( fabs([nsEvent deltaX]) > fabs([nsEvent deltaY]) )
             {
                 wxevent.m_wheelAxis = 1;
-                wxevent.m_wheelRotation = [nsEvent deltaX] * 10.0;
+                wxevent.m_wheelRotation = (int)([nsEvent deltaX] * 10);
             }
             else
             {
-                wxevent.m_wheelRotation = [nsEvent deltaY] * 10.0;
+                wxevent.m_wheelRotation = (int)([nsEvent deltaY] * 10);
             }
         }
         break ;
@@ -1230,8 +1230,8 @@ void wxWidgetCocoaImpl::GetPosition( int &x, int &y ) const
 void wxWidgetCocoaImpl::GetSize( int &width, int &height ) const
 {
     NSRect rect = [m_osxView frame];
-    width = rect.size.width;
-    height = rect.size.height;
+    width = (int)rect.size.width;
+    height = (int)rect.size.height;
 }
 
 void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &height ) const
@@ -1243,14 +1243,14 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
         NSRect bounds = [m_osxView bounds];
         NSRect rect = [cv frame];
         
-        int y = rect.origin.y;
-        int x = rect.origin.x;
+        int y = (int)rect.origin.y;
+        int x = (int)rect.origin.x;
         if ( ![ m_osxView isFlipped ] )
-            y = bounds.size.height - (rect.origin.y + rect.size.height);
+            y = (int)(bounds.size.height - (rect.origin.y + rect.size.height));
         left = x;
         top = y;
-        width = rect.size.width;
-        height = rect.size.height;
+        width = (int)rect.size.width;
+        height = (int)rect.size.height;
     }
     else
     {
@@ -1373,7 +1373,7 @@ wxInt32 wxWidgetCocoaImpl::GetMinimum() const
 {
     if (  [m_osxView respondsToSelector:@selector(getMinValue:)] )
     {
-        return [m_osxView minValue];
+        return (int)[m_osxView minValue];
     }
     return 0;
 }
@@ -1382,7 +1382,7 @@ wxInt32 wxWidgetCocoaImpl::GetMaximum() const
 {
     if (  [m_osxView respondsToSelector:@selector(getMaxValue:)] )
     {
-        return [m_osxView maxValue];
+        return (int)[m_osxView maxValue];
     }
     return 0;
 }
@@ -1410,8 +1410,8 @@ void wxWidgetCocoaImpl::GetBestRect( wxRect *r ) const
         [m_osxView sizeToFit];
         NSRect best = [m_osxView frame];
         [m_osxView setFrame:former];
-        r->width = best.size.width;
-        r->height = best.size.height;
+        r->width = (int)best.size.width;
+        r->height = (int)best.size.height;
     }
 }
 

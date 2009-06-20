@@ -23,18 +23,18 @@ NSRect wxToNSRect( NSView* parent, const wxRect& r )
     int y = r.y;
     int x = r.x ;
     if ( parent == NULL || ![ parent isFlipped ] )
-        y = frame.size.height - ( r.y + r.height );
+        y = (int)(frame.size.height - ( r.y + r.height ));
     return NSMakeRect(x, y, r.width , r.height);
 }
 
 wxRect wxFromNSRect( NSView* parent, const NSRect& rect )
 {
     NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
-    int y = rect.origin.y;
-    int x = rect.origin.x;
+    int y = (int)rect.origin.y;
+    int x = (int)rect.origin.x;
     if ( parent == NULL || ![ parent isFlipped ] )
-        y = frame.size.height - (rect.origin.y + rect.size.height);
-    return wxRect( x, y, rect.size.width, rect.size.height );
+        y = (int)(frame.size.height - (rect.origin.y + rect.size.height));
+    return wxRect( x, y, (int)rect.size.width, (int)rect.size.height );
 }
 
 NSPoint wxToNSPoint( NSView* parent, const wxPoint& p )
@@ -43,17 +43,17 @@ NSPoint wxToNSPoint( NSView* parent, const wxPoint& p )
     int x = p.x ;
     int y = p.y;
     if ( parent == NULL || ![ parent isFlipped ] )
-        y = frame.size.height - ( p.y );
+        y = (int)(frame.size.height - ( p.y ));
     return NSMakePoint(x, y);
 }
 
 wxPoint wxFromNSPoint( NSView* parent, const NSPoint& p )
 {
     NSRect frame = parent ? [parent bounds] : [[NSScreen mainScreen] frame];
-    int x = p.x;
-    int y = p.y;
+    int x = (int)p.x;
+    int y = (int)p.y;
     if ( parent == NULL || ![ parent isFlipped ] )
-        y = frame.size.height - ( p.y );
+        y = (int)(frame.size.height - ( p.y ));
     return wxPoint( x, y);
 }
 
@@ -217,8 +217,8 @@ typedef void (*wxOSX_NoResponderHandlerPtr)(NSView* self, SEL _cmd, SEL selector
 {
     NSRect frame = [win frame];
     wxRect wxframe = wxFromNSRect( NULL, frame );
-    wxframe.SetWidth( proposedFrameSize.width );
-    wxframe.SetHeight( proposedFrameSize.height );
+    wxframe.SetWidth( (int)proposedFrameSize.width );
+    wxframe.SetHeight( (int)proposedFrameSize.height );
     wxNSWindow* window = (wxNSWindow*) win;
     wxNonOwnedWindowCocoaImpl* windowimpl = [window implementation];
     if ( windowimpl )
@@ -548,8 +548,8 @@ void wxNonOwnedWindowCocoaImpl::GetPosition( int &x, int &y ) const
 void wxNonOwnedWindowCocoaImpl::GetSize( int &width, int &height ) const
 {
     NSRect rect = [m_macWindow frame];
-    width = rect.size.width;
-    height = rect.size.height;
+    width = (int)rect.size.width;
+    height = (int)rect.size.height;
 }
 
 void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &top, int &width, int &height ) const
@@ -557,10 +557,10 @@ void wxNonOwnedWindowCocoaImpl::GetContentArea( int& left, int &top, int &width,
     NSRect outer = NSMakeRect(100,100,100,100);
     NSRect content = [NSWindow contentRectForFrameRect:outer styleMask:[m_macWindow styleMask] ];
     NSRect rect = [[m_macWindow contentView] frame];
-    left = rect.origin.x;
-    top = rect.origin.y;
-    width = rect.size.width;
-    height = rect.size.height;
+    left = (int)rect.origin.x;
+    top = (int)rect.origin.y;
+    width = (int)rect.size.width;
+    height = (int)rect.size.height;
 }
     
 bool wxNonOwnedWindowCocoaImpl::SetShape(const wxRegion& WXUNUSED(region))
