@@ -5313,6 +5313,7 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
             dc.SetBackgroundMode(wxTRANSPARENT);
     }
 
+	wxCoord x_orig = x;
     while (hasTabs)
     {
         // the string has a tab
@@ -5324,7 +5325,7 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
         bool not_found = true;
         for (int i = 0; i < tabCount && not_found; ++i)
         {
-            nextTabPos = tabArray.Item(i);
+            nextTabPos = tabArray.Item(i) + x_orig;
             // Find the next tab position.
             // Even if we're at the end of the tab array, we must still draw the chunk.
 
