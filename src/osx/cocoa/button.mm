@@ -50,7 +50,7 @@ wxSize wxButton::DoGetBestSize() const
     }
 
     wxRect r ;
-        
+
     m_peer->GetBestRect(&r);
 
     if ( r.GetWidth() == 0 && r.GetHeight() == 0 )
@@ -60,7 +60,7 @@ wxSize wxButton::DoGetBestSize() const
     sz.y = r.GetHeight();
 
     int wBtn = 96;
-    
+
     if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
         sz.x = wBtn;
 
@@ -126,7 +126,7 @@ wxSize wxButton::GetDefaultSize()
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
@@ -165,18 +165,18 @@ wxSize wxButton::GetDefaultSize()
 @end
 
 
-wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID id, 
+wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID id,
                                     const wxString& WXUNUSED(label),
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
-                                    long WXUNUSED(extraStyle)) 
+                                    long WXUNUSED(style),
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSButton* v = [[wxNSButton alloc] initWithFrame:r];
-    
+
     if ( id == wxID_HELP )
     {
         [v setBezelStyle:NSHelpButtonBezelStyle];
@@ -185,70 +185,21 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     {
         [v setBezelStyle:NSRoundedBezelStyle];
     }
-    
+
     [v setButtonType:NSMomentaryPushInButton];
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;
-/*
-    OSStatus err;
-    Rect bounds = wxMacGetBoundsForControl( wxpeer , pos , size ) ;
-    wxMacControl* peer = new wxMacControl(wxpeer) ;
-    if ( id == wxID_HELP )
-    {
-        ControlButtonContentInfo info ;
-        info.contentType = kControlContentIconRef ;
-        GetIconRef(kOnSystemDisk, kSystemIconsCreator, kHelpIcon, &info.u.iconRef);
-        err = CreateRoundButtonControl(
-            MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
-            &bounds, kControlRoundButtonNormalSize,
-            &info, peer->GetControlRefAddr() );
-    }
-    else if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
-    {
-        // Button height is static in Mac, can't be changed, so we need to force it here
-        int maxHeight;
-        switch (wxpeer->GetWindowVariant() ) 
-        {
-            case wxWINDOW_VARIANT_NORMAL:
-            case wxWINDOW_VARIANT_LARGE:
-                maxHeight = 20 ;
-                break;
-            case wxWINDOW_VARIANT_SMALL:
-                maxHeight = 17;
-            case wxWINDOW_VARIANT_MINI:
-                maxHeight = 15;
-            default:
-                break;
-        }
-        bounds.bottom = bounds.top + maxHeight ;
-        wxpeer->SetMaxSize( wxSize( wxpeer->GetMaxWidth() , maxHeight ));
-        err = CreatePushButtonControl(
-            MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
-            &bounds, CFSTR(""), peer->GetControlRefAddr() );
-    }
-    else
-    {
-        ControlButtonContentInfo info ;
-        info.contentType = kControlNoContent ;
-        err = CreateBevelButtonControl(
-            MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds, CFSTR(""),
-            kControlBevelButtonLargeBevel, kControlBehaviorPushbutton,
-            &info, 0, 0, 0, peer->GetControlRefAddr() );
-    }
-    verify_noerr( err );
-    return peer;
-    */
 }
 
 void wxWidgetCocoaImpl::SetDefaultButton( bool isDefault )
-{ 
+{
     if ( isDefault && [m_osxView isKindOfClass:[NSButton class]] )
         // NOTE: setKeyEquivalent: nil will trigger an assert
         // instead do not call in that case.
         [(NSButton*)m_osxView setKeyEquivalent: @"\r" ];
 }
 
-void wxWidgetCocoaImpl::PerformClick() 
+void wxWidgetCocoaImpl::PerformClick()
 {
 }
 
@@ -292,7 +243,7 @@ static const char * disc_triangle_xpm[] = {
 + (void)initialize
 {
     static BOOL initialized = NO;
-    if (!initialized) 
+    if (!initialized)
     {
         initialized = YES;
         wxOSXCocoaClassAddWXMethods( self );
@@ -335,7 +286,7 @@ wxCFRef<NSImage*> downArray ;
     {
         downArray.reset( [wxDisclosureNSButton rotateImage:trianglebm.GetNSImage()] );
     }
-    
+
     if ( isOpen )
         [self setImage:(NSImage*)downArray.get()];
     else
@@ -347,19 +298,19 @@ wxCFRef<NSImage*> downArray ;
     NSSize imageSize = [image size];
     NSSize newImageSize = NSMakeSize(imageSize.height, imageSize.width);
     NSImage* newImage = [[NSImage alloc] initWithSize: newImageSize];
- 
+
     [newImage lockFocus];
-    
+
     NSAffineTransform* tm = [NSAffineTransform transform];
     [tm translateXBy:newImageSize.width/2 yBy:newImageSize.height/2];
     [tm rotateByDegrees:-90];
     [tm translateXBy:-newImageSize.width/2 yBy:-newImageSize.height/2];
     [tm concat];
-    
-    
+
+
     [image drawInRect:NSMakeRect(0,0,newImageSize.width, newImageSize.height)
         fromRect:NSZeroRect operation:NSCompositeCopy fraction:1.0];
-    
+
     [newImage unlockFocus];
     return newImage;
 }
@@ -373,7 +324,7 @@ public :
         wxWidgetCocoaImpl(peer, w)
     {
     }
-    
+
     ~wxDisclosureTriangleCocoaImpl()
     {
     }
@@ -386,14 +337,14 @@ public :
     }
 };
 
-wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer, 
-                                    wxWindowMac* WXUNUSED(parent), 
-                                    wxWindowID WXUNUSED(id), 
+wxWidgetImplType* wxWidgetImpl::CreateDisclosureTriangle( wxWindowMac* wxpeer,
+                                    wxWindowMac* WXUNUSED(parent),
+                                    wxWindowID WXUNUSED(id),
                                     const wxString& label,
-                                    const wxPoint& pos, 
+                                    const wxPoint& pos,
                                     const wxSize& size,
-                                    long WXUNUSED(style), 
-                                    long WXUNUSED(extraStyle)) 
+                                    long WXUNUSED(style),
+                                    long WXUNUSED(extraStyle))
 {
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxDisclosureNSButton* v = [[wxDisclosureNSButton alloc] initWithFrame:r];
