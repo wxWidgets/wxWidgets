@@ -3513,7 +3513,7 @@ wxRect wxAuiManager::CalculateHintRect(wxWindow* pane_window,
     wxAuiPaneInfoArray panes;
     wxAuiDockUIPartArray uiparts;
     wxAuiPaneInfo hint = GetPane(pane_window);
-    hint.GetName() = wxT("__HINT__");
+    hint.SetName(wxT("__HINT__"));
     hint.SetBorder(true);
     hint.Show();
 
