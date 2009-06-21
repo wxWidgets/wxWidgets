@@ -3794,7 +3794,7 @@ void wxAuiManager::OnFloatingPaneResized(wxWindow* wnd, const wxSize& size)
     wxAuiPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
-    pane.GetFloatingSize() = size;
+    pane.SetFloatingSize(size);
 }
 
 
