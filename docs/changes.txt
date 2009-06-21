@@ -349,6 +349,7 @@ All:
 
 All (GUI):
 
+- Added support for showing bitmaps in wxButton.
 - wxWindow::SetAutoLayout() now works for all windows, not just panels.
 - Support wxListCtrl columns, items and image lists in XRC (Kinaou Hervé).
 - Added support for wxFileCtrl to XRC (Kinaou Hervé).

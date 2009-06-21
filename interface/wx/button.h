@@ -34,8 +34,8 @@
         bitmap but uses a standard id would display a label too.
     @style{wxBORDER_NONE}
         Creates a button without border. This is currently implemented in MSW,
-        GTK2 and OSX ports but in the latter only applies to buttons with
-        bitmaps and using bitmap of one of the standard sizes only, namely
+        GTK2 and OSX/Carbon ports but in the latter only applies to buttons
+        with bitmaps and using bitmap of one of the standard sizes only, namely
         128*128, 48*48, 24*24 or 16*16. In all the other cases wxBORDER_NONE is
         ignored under OSX.
     @endStyleTable
@@ -54,14 +54,16 @@
     @endEventTable
 
 
-    Since version 2.9.1 wxButton supports showing both text and an image, see
+    Since version 2.9.1 wxButton supports showing both text and an image
+    (currently only when using wxMSW, wxGTK or wxOSX/Cocoa ports), see
     SetBitmap() and SetBitmapLabel(), SetBitmapDisabled() &c methods. In the
     previous wxWidgets versions this functionality was only available in (the
     now trivial) wxBitmapButton class which was only capable of showing an
     image without text.
 
     A button may have either a single image for all states or different images
-    for the following states:
+    for the following states (different images are not currently supported
+    under OS X where the normal image is used for all states):
     @li @b normal: the default state
     @li @b disabled: bitmap shown when the button is disabled.
     @li @b pressed: bitmap shown when the button is pushed (e.g. while the user

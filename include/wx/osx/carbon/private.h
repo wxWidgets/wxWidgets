@@ -335,7 +335,9 @@ public :
 
     wxInt32             GetValue() const;
     void                SetValue( wxInt32 v );
+    wxBitmap            GetBitmap() const;
     void                SetBitmap( const wxBitmap& bitmap );
+    void                SetBitmapPosition( wxDirection dir );
     void                SetupTabs( const wxNotebook &notebook );
 
     void                GetBestRect( wxRect *r ) const;

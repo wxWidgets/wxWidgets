@@ -1467,9 +1467,19 @@ wxMacControl* wxMacControl::GetReferenceFromNativeControl(ControlRef control)
     return NULL;
 }
 
+wxBitmap wxMacControl::GetBitmap() const
+{
+    return wxNullBitmap;
+}
+
 void wxMacControl::SetBitmap( const wxBitmap& WXUNUSED(bmp) )
 {
     // implemented in the respective subclasses
+}
+
+void wxMacControl::SetBitmapPosition( wxDirection WXUNUSED(dir) )
+{
+    // implemented in the same subclasses that implement SetBitmap()
 }
 
 void wxMacControl::SetScrollThumb( wxInt32 WXUNUSED(pos), wxInt32 WXUNUSED(viewsize) )

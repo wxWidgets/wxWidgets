@@ -67,6 +67,28 @@ void wxButton::SetLabel(const wxString& label)
     wxButtonBase::SetLabel(label);
 }
 
+// there is no support for button bitmaps in wxOSX/Carbon so there is no need
+// for these methods there
+#if wxOSX_USE_COCOA
+
+wxBitmap wxButton::DoGetBitmap(State which) const
+{
+    return which == State_Normal ? m_peer->GetBitmap() : wxBitmap();
+}
+
+void wxButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+{
+    if ( which == State_Normal )
+        m_peer->SetBitmap(bitmap);
+}
+
+void wxButton::DoSetBitmapPosition(wxDirection dir)
+{
+    m_peer->SetBitmapPosition(dir);
+}
+
+#endif // wxOSX_USE_COCOA
+
 wxWindow *wxButton::SetDefault()
 {
     wxWindow *btnOldDefault = wxButtonBase::SetDefault();

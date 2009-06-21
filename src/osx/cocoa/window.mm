@@ -1387,11 +1387,56 @@ wxInt32 wxWidgetCocoaImpl::GetMaximum() const
     return 0;
 }
 
+wxBitmap wxWidgetCocoaImpl::GetBitmap() const
+{
+    wxBitmap bmp;
+
+    // TODO: how to create a wxBitmap from NSImage?
+#if 0
+    if ( [m_osxView respondsToSelector:@selector(image:)] )
+        bmp = [m_osxView image];
+#endif
+
+    return bmp;
+}
+
 void wxWidgetCocoaImpl::SetBitmap( const wxBitmap& bitmap )
 {
     if (  [m_osxView respondsToSelector:@selector(setImage:)] )
     {
         [m_osxView setImage:bitmap.GetNSImage()];
+    }
+}
+
+void wxWidgetCocoaImpl::SetBitmapPosition( wxDirection dir )
+{
+    if ( [m_osxView respondsToSelector:@selector(setImagePosition:)] )
+    {
+        NSCellImagePosition pos;
+        switch ( dir )
+        {
+            case wxLEFT:
+                pos = NSImageLeft;
+                break;
+
+            case wxRIGHT:
+                pos = NSImageRight;
+                break;
+
+            case wxTOP:
+                pos = NSImageAbove;
+                break;
+
+            case wxBOTTOM:
+                pos = NSImageBelow;
+                break;
+
+            default:
+                wxFAIL_MSG( "invalid image position" );
+                pos = NSNoImage;
+        }
+
+        [m_osxView setImagePosition:pos];
     }
 }
 

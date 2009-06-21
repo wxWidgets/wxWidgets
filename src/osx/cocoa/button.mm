@@ -164,6 +164,35 @@ wxSize wxButton::GetDefaultSize()
 
 @end
 
+namespace
+{
+
+class wxButtonCocoaImpl : public wxWidgetCocoaImpl
+{
+public:
+    wxButtonCocoaImpl(wxWindowMac *wxpeer, wxNSButton *v)
+        : wxWidgetCocoaImpl(wxpeer, v)
+    {
+    }
+
+    virtual void SetBitmap(const wxBitmap& bitmap)
+    {
+        [GetNSButton() setBezelStyle:bitmap.IsOk() ? NSRegularSquareBezelStyle
+                                                   : NSRoundedBezelStyle];
+
+        wxWidgetCocoaImpl::SetBitmap(bitmap);
+    }
+
+private:
+    NSButton *GetNSButton() const
+    {
+        wxASSERT( [m_osxView isKindOfClass:[NSButton class]] );
+
+        return static_cast<NSButton *>(m_osxView);
+    }
+};
+
+} // anonymous namespace
 
 wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
                                     wxWindowMac* WXUNUSED(parent),
@@ -187,8 +216,7 @@ wxWidgetImplType* wxWidgetImpl::CreateButton( wxWindowMac* wxpeer,
     }
 
     [v setButtonType:NSMomentaryPushInButton];
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
-    return c;
+    return new wxButtonCocoaImpl( wxpeer, v );
 }
 
 void wxWidgetCocoaImpl::SetDefaultButton( bool isDefault )
