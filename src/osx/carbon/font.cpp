@@ -1058,7 +1058,10 @@ void wxNativeFontInfo::EnsureValid()
         // ATSUFontID and FMFont are equivalent
         FMFontStyle intrinsicStyle = 0 ;
         OSStatus status = FMGetFontFromFontFamilyInstance( m_qdFontFamily , m_qdFontStyle , (FMFont*)&m_atsuFontID , &intrinsicStyle);
-        wxASSERT_MSG( status == noErr , wxT("couldn't get an ATSUFont from font family") );
+        if ( status != noErr )
+        {
+            wxFAIL_MSG( wxT("couldn't get an ATSUFont from font family") );
+        }
         m_atsuAdditionalQDStyles = m_qdFontStyle & (~intrinsicStyle );
         m_atsuFontValid = true;
     }

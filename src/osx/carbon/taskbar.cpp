@@ -470,7 +470,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 // actually seperate programs that also require a special undocumented id
 // hack and other such fun stuff).
 //-----------------------------------------------------------------------------
-wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType nType)
+wxTaskBarIcon::wxTaskBarIcon(wxTaskBarIconType WXUNUSED_UNLESS_DEBUG(nType))
 {
     wxASSERT_MSG(
         nType == DOCK,
