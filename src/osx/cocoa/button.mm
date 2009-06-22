@@ -14,12 +14,7 @@
 #include "wx/button.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/panel.h"
-    #include "wx/toplevel.h"
-    #include "wx/dcclient.h"
 #endif
-
-#include "wx/stockitem.h"
 
 #include "wx/osx/private.h"
 
@@ -28,97 +23,22 @@ wxSize wxButton::DoGetBestSize() const
     if ( GetId() == wxID_HELP )
         return wxSize( 23 , 23 ) ;
 
-    wxSize sz = GetDefaultSize() ;
-
-    switch (GetWindowVariant())
-    {
-        case wxWINDOW_VARIANT_NORMAL:
-        case wxWINDOW_VARIANT_LARGE:
-            sz.y = 23 ;
-            break;
-
-        case wxWINDOW_VARIANT_SMALL:
-            sz.y = 17 ;
-            break;
-
-        case wxWINDOW_VARIANT_MINI:
-            sz.y = 15 ;
-            break;
-
-        default:
-            break;
-    }
-
     wxRect r ;
-
     m_peer->GetBestRect(&r);
 
-    if ( r.GetWidth() == 0 && r.GetHeight() == 0 )
-    {
-    }
-    sz.x = r.GetWidth();
-    sz.y = r.GetHeight();
+    wxSize sz = r.GetSize();
 
-    int wBtn = 96;
+    const int wBtnStd = GetDefaultSize().x;
 
-    if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
-        sz.x = wBtn;
-
-#if wxOSX_USE_CARBON
-    Rect    bestsize = { 0 , 0 , 0 , 0 } ;
-    m_peer->GetBestRect( &bestsize ) ;
-
-    int wBtn;
-    if ( EmptyRect( &bestsize ) || ( GetWindowStyle() & wxBU_EXACTFIT) )
-    {
-        Point bounds;
-
-        ControlFontStyleRec controlFont;
-        OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
-        verify_noerr( err );
-
-        wxCFStringRef str( m_label,  GetFont().GetEncoding() );
-
-#if wxOSX_USE_ATSU_TEXT
-        SInt16 baseline;
-        if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
-        {
-            err = GetThemeTextDimensions(
-                (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
-                m_font.MacGetThemeFontID(), kThemeStateActive, false, &bounds, &baseline );
-            verify_noerr( err );
-        }
-        else
-#endif
-        {
-            wxClientDC dc(const_cast<wxButton*>(this));
-            wxCoord width, height ;
-            dc.GetTextExtent( m_label , &width, &height);
-            bounds.h = width;
-            bounds.v = height;
-        }
-
-        wBtn = bounds.h + sz.y;
-    }
-    else
-    {
-        wBtn = bestsize.right - bestsize.left ;
-        // non 'normal' window variants don't return the correct height
-        // sz.y = bestsize.bottom - bestsize.top ;
-    }
-    if ((wBtn > sz.x) || ( GetWindowStyle() & wxBU_EXACTFIT))
-        sz.x = wBtn;
-#endif
+    if ( (sz.x < wBtnStd) && !HasFlag(wxBU_EXACTFIT) )
+        sz.x = wBtnStd;
 
     return sz ;
 }
 
 wxSize wxButton::GetDefaultSize()
 {
-    int wBtn = 70 ;
-    int hBtn = 20 ;
-
-    return wxSize(wBtn, hBtn);
+    return wxSize(84, 23);
 }
 
 @implementation wxNSButton
