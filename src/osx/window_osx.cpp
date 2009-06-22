@@ -1019,7 +1019,12 @@ void wxWindowMac::DoSetClientSize(int clientwidth, int clientheight)
 
 void wxWindowMac::SetLabel(const wxString& title)
 {
+    if ( title == m_label )
+        return;
+
     m_label = title ;
+
+    InvalidateBestSize();
 
     if ( m_peer && m_peer->IsOk() )
         m_peer->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
