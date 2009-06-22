@@ -475,6 +475,8 @@ void ButtonWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 void ButtonWidgetsPage::OnButtonChangeLabel(wxCommandEvent& WXUNUSED(event))
 {
     m_button->SetLabel(m_textLabel->GetValue());
+
+    m_sizerButton->Layout();
 }
 
 void ButtonWidgetsPage::OnButton(wxCommandEvent& WXUNUSED(event))
