@@ -2112,6 +2112,36 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
     }
 }
 
+wxSize wxWindowMSW::DoGetBorderSize() const
+{
+    wxCoord border;
+    switch ( GetBorder() )
+    {
+        case wxBORDER_STATIC:
+        case wxBORDER_SIMPLE:
+            border = 1;
+            break;
+
+        case wxBORDER_SUNKEN:
+            border = 2;
+            break;
+
+        case wxBORDER_RAISED:
+        case wxBORDER_DOUBLE:
+            border = 3;
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unknown border style") );
+            // fall through
+
+        case wxBORDER_NONE:
+            border = 0;
+    }
+
+    return 2*wxSize(border, border);
+}
+
 // ---------------------------------------------------------------------------
 // text metrics
 // ---------------------------------------------------------------------------

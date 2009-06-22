@@ -705,8 +705,19 @@ wxSize wxWindowBase::GetEffectiveMinSize() const
 
 wxSize wxWindowBase::GetBestSize() const
 {
-    if ((!m_windowSizer) && (m_bestSizeCache.IsFullySpecified()))
+    if ( !m_windowSizer && m_bestSizeCache.IsFullySpecified() )
         return m_bestSizeCache;
+
+    // call DoGetBestClientSize() first, if a derived class overrides it wants
+    // it to be used
+    wxSize size = DoGetBestClientSize();
+    if ( size != wxDefaultSize )
+    {
+        size += DoGetBorderSize();
+
+        CacheBestSize(size);
+        return size;
+    }
 
     return DoGetBestSize();
 }

@@ -590,7 +590,7 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
     //else: it shouldn't change
 }
 
-wxSize wxListBox::DoGetBestSize() const
+wxSize wxListBox::DoGetBestClientSize() const
 {
     // find the widest string
     int wLine;
@@ -609,22 +609,17 @@ wxSize wxListBox::DoGetBestSize() const
         wListbox = 100;
 
     // the listbox should be slightly larger than the widest string
-    int cx, cy;
-    wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
+    wListbox += 3*GetCharWidth();
 
-    wListbox += 3*cx;
-
-    // Add room for the scrollbar
+    // add room for the scrollbar
     wListbox += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 
     // don't make the listbox too tall (limit height to 10 items) but don't
     // make it too small neither
-    int hListbox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*
+    int hListbox = SendMessage(GetHwnd(), LB_GETITEMHEIGHT, 0, 0)*
                     wxMin(wxMax(m_noItems, 3), 10);
 
-    wxSize best(wListbox, hListbox);
-    CacheBestSize(best);
-    return best;
+    return wxSize(wListbox, hListbox);
 }
 
 // ----------------------------------------------------------------------------

@@ -46,7 +46,7 @@ protected:
     // implement/override some base class virtuals
     virtual void DoSetSize(int x, int y, int w, int h,
                            int sizeFlags = wxSIZE_AUTO);
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestClientSize() const;
 
     virtual wxString DoGetLabel() const;
     virtual void DoSetLabel(const wxString& str);

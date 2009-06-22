@@ -1633,6 +1633,11 @@ protected:
     // same size as it would have after a call to Fit()
     virtual wxSize DoGetBestSize() const;
 
+    // this method can be overridden instead of DoGetBestSize() if it computes
+    // the best size of the client area of the window only, excluding borders
+    // (GetBorderSize() will be used to add them)
+    virtual wxSize DoGetBestClientSize() const { return wxDefaultSize; }
+
     // this is the virtual function to be overriden in any derived class which
     // wants to change how SetSize() or Move() works - it is called by all
     // versions of these functions in the base class
@@ -1646,6 +1651,19 @@ protected:
     virtual void DoSetSizeHints( int minW, int minH,
                                  int maxW, int maxH,
                                  int incW, int incH );
+
+    // return the total size of the window borders, i.e. the sum of the widths
+    // of the left and the right border in the x component of the returned size
+    // and the sum of the heights of the top and bottom borders in the y one
+    //
+    // NB: this is new/temporary API only implemented by wxMSW so far and
+    //     subject to change, don't use
+    virtual wxSize DoGetBorderSize() const
+    {
+        wxFAIL_MSG( "must be overridden if called" );
+
+        return wxDefaultSize;
+    }
 
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just
