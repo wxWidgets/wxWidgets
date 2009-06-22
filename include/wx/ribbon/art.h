@@ -150,11 +150,11 @@ public:
 						wxSize client_size) = 0;
 };
 
-class WXDLLIMPEXP_AUI wxRibbonDefaultArtProvider : public wxRibbonArtProvider
+class WXDLLIMPEXP_AUI wxRibbonMSWArtProvider : public wxRibbonArtProvider
 {
 public:
-	wxRibbonDefaultArtProvider();
-	virtual ~wxRibbonDefaultArtProvider();
+	wxRibbonMSWArtProvider();
+	virtual ~wxRibbonMSWArtProvider();
 
 	wxRibbonArtProvider* Clone();
 	void SetFlags(long flags);
@@ -259,6 +259,21 @@ protected:
 	int m_panel_x_separation_size;
 	int m_panel_y_separation_size;
 };
+
+#if defined(__WXMSW__)
+typedef wxRibbonMSWArtProvider wxRibbonDefaultArtProvider;
+#elif defined(__WXOSX_CARBON__) || \
+      defined(__WXOSX_COCOA__) || \
+	  defined(__WXOSX_IPHONE__) || \
+	  defined(__WXCOCOA__)
+// TODO: Once implemented, change typedef to OSX
+// typedef wxRibbonOSXArtProvider wxRibbonDefaultArtProvider;
+typedef wxRibbonMSWArtProvider wxRibbonDefaultArtProvider;
+#else
+// TODO: Once implemented, change typedef to AUI
+// typedef wxRibbonAUIArtProvider wxRibbonDefaultArtProvider;
+typedef wxRibbonMSWArtProvider wxRibbonDefaultArtProvider;
+#endif
 
 #endif // wxUSE_RIBBON
 

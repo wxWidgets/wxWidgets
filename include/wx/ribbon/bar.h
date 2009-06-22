@@ -125,12 +125,15 @@ protected:
 	void AddPage(wxRibbonPage *page);
 	void RecalculateTabSizes();
 	void RecalculateMinSize();
+	void ScrollTabBar(int npixels);
+	void RefreshTabBar();
 
 	void OnPaint(wxPaintEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
 	void DoEraseBackground(wxDC& dc);
     void OnSize(wxSizeEvent& evt);
 	void OnMouseLeftDown(wxMouseEvent& evt);
+	void OnMouseLeftUp(wxMouseEvent& evt);
 	void OnMouseMiddleDown(wxMouseEvent& evt);
 	void OnMouseMiddleUp(wxMouseEvent& evt);
 	void OnMouseRightDown(wxMouseEvent& evt);
@@ -140,6 +143,8 @@ protected:
 	void DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type);
 
     wxRibbonPageTabInfoArray m_pages;
+	wxRect m_tab_scroll_left_button_rect;
+	wxRect m_tab_scroll_right_button_rect;
 	long m_flags;
 	int m_tabs_total_width_ideal;
 	int m_tabs_total_width_minimum;
@@ -149,8 +154,8 @@ protected:
 	int m_tab_scroll_amount;
 	int m_current_page;
 	int m_current_hovered_page;
-	int m_tab_scroll_left_button_width;
-	int m_tab_scroll_right_button_width;
+	int m_tab_scroll_left_button_state;
+	int m_tab_scroll_right_button_state;
 	bool m_tab_scroll_buttons_shown;
 
 #ifndef SWIG

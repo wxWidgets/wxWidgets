@@ -28,7 +28,7 @@
 #include "wx/msw/private.h"
 #endif
 
-wxRibbonDefaultArtProvider::wxRibbonDefaultArtProvider()
+wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
 {
 	// TODO: 'Intelligent' colour picking rather than hardcoded defaults
 	m_tab_label_colour = wxColour(21, 66, 139);
@@ -63,13 +63,13 @@ wxRibbonDefaultArtProvider::wxRibbonDefaultArtProvider()
 	m_panel_y_separation_size = 1;
 }
 
-wxRibbonDefaultArtProvider::~wxRibbonDefaultArtProvider()
+wxRibbonMSWArtProvider::~wxRibbonMSWArtProvider()
 {
 }
 
-wxRibbonArtProvider* wxRibbonDefaultArtProvider::Clone()
+wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
 {
-	wxRibbonDefaultArtProvider *copy = new wxRibbonDefaultArtProvider;
+	wxRibbonMSWArtProvider *copy = new wxRibbonMSWArtProvider;
 
 	copy->m_tab_label_colour = m_tab_label_colour;
 	copy->m_tab_separator_colour = m_tab_separator_colour;
@@ -105,12 +105,12 @@ wxRibbonArtProvider* wxRibbonDefaultArtProvider::Clone()
 	return copy;
 }
 
-void wxRibbonDefaultArtProvider::SetFlags(long flags)
+void wxRibbonMSWArtProvider::SetFlags(long flags)
 {
 	m_flags = flags;
 }
 
-int wxRibbonDefaultArtProvider::GetMetric(int id)
+int wxRibbonMSWArtProvider::GetMetric(int id)
 {
 	switch(id)
 	{
@@ -127,7 +127,7 @@ int wxRibbonDefaultArtProvider::GetMetric(int id)
 	return 0;
 }
 
-void wxRibbonDefaultArtProvider::SetMetric(int id, int new_val)
+void wxRibbonMSWArtProvider::SetMetric(int id, int new_val)
 {
 	switch(id)
 	{
@@ -142,7 +142,7 @@ void wxRibbonDefaultArtProvider::SetMetric(int id, int new_val)
 	}
 }
 
-void wxRibbonDefaultArtProvider::SetFont(int id, const wxFont& font)
+void wxRibbonMSWArtProvider::SetFont(int id, const wxFont& font)
 {
 	switch(id)
 	{
@@ -152,7 +152,7 @@ void wxRibbonDefaultArtProvider::SetFont(int id, const wxFont& font)
 	}
 }
 
-wxFont wxRibbonDefaultArtProvider::GetFont(int id)
+wxFont wxRibbonMSWArtProvider::GetFont(int id)
 {
 	switch(id)
 	{
@@ -164,7 +164,7 @@ wxFont wxRibbonDefaultArtProvider::GetFont(int id)
 	return wxNullFont;
 }
 
-wxColour wxRibbonDefaultArtProvider::GetColour(int id)
+wxColour wxRibbonMSWArtProvider::GetColour(int id)
 {
 	switch(id)
 	{
@@ -194,7 +194,7 @@ wxColour wxRibbonDefaultArtProvider::GetColour(int id)
 	return wxColour();
 }
 
-void wxRibbonDefaultArtProvider::SetColour(int id, const wxColor& colour)
+void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
 {
 	switch(id)
 	{
@@ -302,7 +302,7 @@ static void DrawParallelGradientLines(wxDC& dc,
 }
 
 
-void wxRibbonDefaultArtProvider::DrawTabCtrlBackground(
+void wxRibbonMSWArtProvider::DrawTabCtrlBackground(
 						wxDC& dc,
 						wxWindow* WXUNUSED(wnd),
 						const wxRect& rect)
@@ -322,7 +322,7 @@ void wxRibbonDefaultArtProvider::DrawTabCtrlBackground(
 	}
 }
 
-void wxRibbonDefaultArtProvider::DrawTab(
+void wxRibbonMSWArtProvider::DrawTab(
 				 wxDC& dc,
 				 wxWindow* WXUNUSED(wnd),
 				 const wxRibbonPageTabInfo& tab)
@@ -418,7 +418,7 @@ void wxRibbonDefaultArtProvider::DrawTab(
 	}
 }
 
-void wxRibbonDefaultArtProvider::DrawTabSeparator(
+void wxRibbonMSWArtProvider::DrawTabSeparator(
 						wxDC& dc,
 						wxWindow* wnd,
 						const wxRect& rect,
@@ -444,7 +444,7 @@ void wxRibbonDefaultArtProvider::DrawTabSeparator(
 	dc.DrawBitmap(m_cached_tab_separator, rect.x, rect.y, false);
 }
 
-void wxRibbonDefaultArtProvider::ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility)
+void wxRibbonMSWArtProvider::ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility)
 {
 	if(!m_cached_tab_separator.IsOk() || m_cached_tab_separator.GetSize() != rect.GetSize())
 	{
@@ -483,7 +483,7 @@ void wxRibbonDefaultArtProvider::ReallyDrawTabSeparator(wxWindow* wnd, const wxR
 	m_cached_tab_separator_visibility = visibility;
 }
 
-void wxRibbonDefaultArtProvider::DrawPageBackground(
+void wxRibbonMSWArtProvider::DrawPageBackground(
 						wxDC& dc,
 						wxWindow* WXUNUSED(wnd),
 						const wxRect& rect)
@@ -536,7 +536,7 @@ void wxRibbonDefaultArtProvider::DrawPageBackground(
 	}
 }
 
-void wxRibbonDefaultArtProvider::DrawScrollButton(
+void wxRibbonMSWArtProvider::DrawScrollButton(
 						wxDC& dc,
 						wxWindow* WXUNUSED(wnd),
 						const wxRect& rect,
@@ -595,28 +595,33 @@ void wxRibbonDefaultArtProvider::DrawScrollButton(
 	}
 
 	{
+		// NB: Code for handling hovered/active state is temporary
 		wxPoint arrow_points[3];
 		if((style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) == wxRIBBON_SCROLL_BTN_LEFT)
 		{
 			arrow_points[0] = wxPoint(rect.width / 2 - 2, rect.height / 2);
+			if(style & wxRIBBON_SCROLL_BTN_ACTIVE)
+				arrow_points[0].y += 1;
 			arrow_points[1] = arrow_points[0] + wxPoint(3, -3);
 			arrow_points[2] = arrow_points[0] + wxPoint(3,  3);
 		}
 		else
 		{
 			arrow_points[0] = wxPoint(rect.width / 2 + 2, rect.height / 2);
+			if(style & wxRIBBON_SCROLL_BTN_ACTIVE)
+				arrow_points[0].y += 1;
 			arrow_points[1] = arrow_points[0] - wxPoint(3,  3);
 			arrow_points[2] = arrow_points[0] - wxPoint(3, -3);
 		}
 
 		dc.SetPen(*wxTRANSPARENT_PEN);
-		wxBrush B(m_tab_label_colour);
+		wxBrush B(style & wxRIBBON_SCROLL_BTN_HOVERED ? m_tab_active_background_colour : m_tab_label_colour);
 		dc.SetBrush(B);
 		dc.DrawPolygon(sizeof(arrow_points)/sizeof(wxPoint), arrow_points, rect.x, rect.y);
 	}
 }
 
-void wxRibbonDefaultArtProvider::DrawPanelBackground(
+void wxRibbonMSWArtProvider::DrawPanelBackground(
 						wxDC& dc,
 						wxRibbonPanel* wnd,
 						const wxRect& rect)
@@ -686,7 +691,7 @@ void wxRibbonDefaultArtProvider::DrawPanelBackground(
 	}
 }
 
-void wxRibbonDefaultArtProvider::GetBarTabWidth(
+void wxRibbonMSWArtProvider::GetBarTabWidth(
 						wxDC& dc,
 						wxWindow* WXUNUSED(wnd),
 						const wxString& label,
@@ -734,7 +739,7 @@ void wxRibbonDefaultArtProvider::GetBarTabWidth(
 	}
 }
 
-int wxRibbonDefaultArtProvider::GetTabCtrlHeight(
+int wxRibbonMSWArtProvider::GetTabCtrlHeight(
 						wxDC& dc,
 						wxWindow* WXUNUSED(wnd),
 						const wxRibbonPageTabInfoArray& pages)
@@ -763,7 +768,7 @@ int wxRibbonDefaultArtProvider::GetTabCtrlHeight(
 	return wxMax(text_height, icon_height);
 }
 
-wxSize wxRibbonDefaultArtProvider::GetScrollButtonMinimumSize(
+wxSize wxRibbonMSWArtProvider::GetScrollButtonMinimumSize(
 						wxDC& WXUNUSED(dc),
 						wxWindow* WXUNUSED(wnd),
 						long WXUNUSED(style))
@@ -771,7 +776,7 @@ wxSize wxRibbonDefaultArtProvider::GetScrollButtonMinimumSize(
 	return wxSize(12, 12);
 }
 
-wxSize wxRibbonDefaultArtProvider::GetPanelSize(
+wxSize wxRibbonMSWArtProvider::GetPanelSize(
 						wxDC& dc,
 						const wxRibbonPanel* wnd,
 						wxSize client_size)
