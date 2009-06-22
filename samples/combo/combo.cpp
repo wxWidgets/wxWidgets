@@ -532,11 +532,17 @@ public:
         m_animTimer.SetOwner( this, wxID_ANY );
         m_animTimer.Start( 10, wxTIMER_CONTINUOUS );
 
-        OnTimerEvent(*((wxTimerEvent*)NULL));  // Event is never used, so we can give NULL
+        DoOnTimer();
         return false;
     }
 
+private:
     void OnTimerEvent( wxTimerEvent& WXUNUSED(event) )
+    {
+        DoOnTimer();
+    }
+
+    void DoOnTimer()
     {
         bool stopTimer = false;
 
@@ -592,8 +598,6 @@ public:
         }
     }
 
-protected:
-
     // Popup animation related
     wxLongLong  m_animStart;
     wxTimer     m_animTimer;
@@ -601,7 +605,6 @@ protected:
     wxBitmap    m_animBackBitmap;
     int         m_animFlags;
 
-private:
     DECLARE_EVENT_TABLE()
 };
 
