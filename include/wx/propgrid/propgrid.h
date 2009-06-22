@@ -894,8 +894,9 @@ public:
     bool IsFrozen() const { return (m_frozen>0)?true:false; }
 
     /**
-        Call this any time your code causes wxPropertyGrid's top-level parent
-        to change.
+        It is recommended that you call this function any time your code causes
+        wxPropertyGrid's top-level parent to change. wxPropertyGrid's OnIdle()
+        handler should be able to detect most changes, but it is not perfect.
 
         @param newTLP
             New top-level parent that is about to be set. Old top-level parent
@@ -1629,6 +1630,12 @@ protected:
 
     // Last known top-level parent
     wxWindow*           m_tlp;
+
+    // Last closed top-level parent
+    wxWindow*           m_tlpClosed;
+
+    // Local time ms when tlp was closed.
+    wxLongLong          m_tlpClosedTime;
 
     // Sort function
     wxPGSortCallback    m_sortFunction;

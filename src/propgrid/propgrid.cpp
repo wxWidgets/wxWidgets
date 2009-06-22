@@ -551,7 +551,9 @@ void wxPropertyGrid::Init2()
 
     // Hook the top-level parent
     m_tlp = NULL;
-    OnTLPChanging(NULL);
+    m_tlpClosed = NULL;
+    m_tlpClosedTime = 0;
+    OnTLPChanging(::wxGetTopLevelParent(this));
 
     // set virtual size to this window size
     wxSize wndsize = GetSize();
@@ -588,20 +590,8 @@ wxPropertyGrid::~wxPropertyGrid()
     if ( m_iFlags & wxPG_FL_MOUSE_CAPTURED )
         m_canvas->ReleaseMouse();
 
-    // Do TLP check, recommend use of OnTLPChanging()
-    wxWindow* tlp = ::wxGetTopLevelParent(this);
-    if ( tlp == m_tlp )
-    {
-        m_tlp->Disconnect( wxEVT_CLOSE_WINDOW,
-                           wxCloseEventHandler(wxPropertyGrid::OnTLPClose),
-                           NULL, this );
-    }
-    else if ( tlp )
-    {
-        wxLogError("Top-level parent of wxPropertyGrid has changed. "
-                   "Consider calling wxPropertyGrid::OnTLPChanging() "
-                   "when appropriate.");
-    }
+    // Call with NULL to disconnect event handling
+    OnTLPChanging(NULL);
 
     wxASSERT_MSG( !IsEditorsValueModified(),
                   wxS("Most recent change in property editor was lost!!! ")
@@ -816,31 +806,42 @@ wxSize wxPropertyGrid::DoGetBestSize() const
     return sz;
 }
 
- // -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 
 void wxPropertyGrid::OnTLPChanging( wxWindow* newTLP )
 {
+    wxLongLong currentTime = ::wxGetLocalTimeMillis();
+
     //
     // Parent changed so let's redetermine and re-hook the
     // correct top-level window.
     if ( m_tlp )
     {
-        wxASSERT_MSG( m_tlp == ::wxGetTopLevelParent(this),
-                      "You must call OnTLPChanging() before the "
-                      "top-level parent has changed.");
-
         m_tlp->Disconnect( wxEVT_CLOSE_WINDOW,
                            wxCloseEventHandler(wxPropertyGrid::OnTLPClose),
                            NULL, this );
+        m_tlpClosed = m_tlp;
+        m_tlpClosedTime = currentTime;
     }
 
-    if ( !newTLP )
-        newTLP = ::wxGetTopLevelParent(this);
+    if ( newTLP )
+    {
+        // Only accept new tlp if same one was not just dismissed.
+        if ( newTLP != m_tlpClosed ||
+             m_tlpClosedTime+250 < currentTime )
+        {
+            newTLP->Connect( wxEVT_CLOSE_WINDOW,
+                             wxCloseEventHandler(wxPropertyGrid::OnTLPClose),
+                             NULL, this );
+            m_tlpClosed = NULL;
+        }
+        else
+        {
+            newTLP = NULL;
+        }
+    }
 
     m_tlp = newTLP;
-    m_tlp->Connect( wxEVT_CLOSE_WINDOW,
-                    wxCloseEventHandler(wxPropertyGrid::OnTLPClose),
-                    NULL, this );
 }
 
 // -----------------------------------------------------------------------
@@ -853,6 +854,11 @@ void wxPropertyGrid::OnTLPClose( wxCloseEvent& event )
         event.Veto();
         return;
     }
+
+    // Ok, it can close, set tlp pointer to NULL. Some other event
+    // handler can of course veto the close, but our OnIdle() should
+    // then be able to regain the tlp pointer.
+    OnTLPChanging(NULL);
 
     event.Skip();
 }
@@ -4957,6 +4963,14 @@ void wxPropertyGrid::OnIdle( wxIdleEvent& WXUNUSED(event) )
 
     if ( newFocused != m_curFocused )
         HandleFocusChange( newFocused );
+
+    //
+    // Check if top-level parent has changed
+    wxWindow* tlp = ::wxGetTopLevelParent(this);
+    if ( tlp != m_tlp )
+    {
+        OnTLPChanging(tlp);
+    }
 }
 
 bool wxPropertyGrid::IsEditorFocused() const
