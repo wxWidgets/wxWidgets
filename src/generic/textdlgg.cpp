@@ -107,7 +107,7 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
 #endif // wxUSE_VALIDATORS
 
     // 3) buttons if any
-    wxSizer *buttonSizer = CreateSeparatedButtonSizer(style & ButtonSizerFlags);
+    wxSizer *buttonSizer = CreateSeparatedButtonSizer(style & (wxOK | wxCANCEL));
     if ( buttonSizer )
     {
         topsizer->Add(buttonSizer, wxSizerFlags(flagsBorder2).Expand());
