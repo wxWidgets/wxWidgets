@@ -361,6 +361,9 @@ public:
 
     // must be called after all buttons have been created to finish toolbar
     // initialisation
+    //
+    // derived class versions should call the base one first, before doing
+    // platform-specific stuff
     virtual bool Realize();
 
     // tools state
@@ -601,6 +604,10 @@ protected:
 
     // un-toggle all buttons in the same radio group
     void UnToggleRadioGroup(wxToolBarToolBase *tool);
+
+    // make the size of the buttons big enough to fit the largest bitmap size
+    void AdjustToolBitmapSize();
+
 
     // the list of all our tools
     wxToolBarToolsList m_tools;

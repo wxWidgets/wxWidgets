@@ -839,7 +839,7 @@ bool wxToolBar::MacInstallNativeToolbar(bool usesNative)
 
 bool wxToolBar::Realize()
 {
-    if (m_tools.GetCount() == 0)
+    if ( !wxToolBarBase::Realize() )
         return false;
 
     int maxWidth = 0;
