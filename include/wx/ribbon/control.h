@@ -38,7 +38,9 @@ public:
 	virtual void SetArtProvider(wxRibbonArtProvider* art);
 	wxRibbonArtProvider* GetArtProvider() const {return m_art;}
 
-	// TODO: Virtual methods for non-continuous resizing
+	virtual bool IsSizingContinuous() const {return true;}
+	virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
+	virtual wxSize GetNextLargerSize(wxOrientation direction) const;
 
 protected:
 	wxRibbonArtProvider* m_art;

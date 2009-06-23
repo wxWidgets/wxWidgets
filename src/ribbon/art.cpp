@@ -790,4 +790,50 @@ wxSize wxRibbonMSWArtProvider::GetPanelSize(
 	return client_size;
 }
 
+wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
+						wxDC& WXUNUSED(dc),
+						const wxRibbonPage* WXUNUSED(wnd),
+						wxSize page_old_size,
+						wxSize page_new_size)
+{
+	wxRect new_rect, old_rect;
+
+	if(page_new_size.GetWidth() != page_old_size.GetWidth())
+	{
+		if(page_new_size.GetHeight() != page_old_size.GetHeight())
+		{
+			// Width and height both changed
+			return wxRect(page_new_size);
+		}
+		else
+		{
+			// Only width changed
+			int right_edge_width = 5;
+
+			new_rect = wxRect(page_new_size.GetWidth() - right_edge_width, 0, right_edge_width, page_new_size.GetHeight());
+			old_rect = wxRect(page_old_size.GetWidth() - right_edge_width, 0, right_edge_width, page_old_size.GetHeight());
+		}
+	}
+	else
+	{
+		if(page_new_size.GetHeight() == page_old_size.GetHeight())
+		{
+			// Nothing changed (should never happen)
+			return wxRect(0, 0, 0, 0);
+		}
+		else
+		{
+			// Only height changed
+			int bottom_edge_height = 5;
+
+			new_rect = wxRect(0, page_new_size.GetHeight() - bottom_edge_height, page_new_size.GetWidth(), bottom_edge_height);
+			old_rect = wxRect(0, page_old_size.GetHeight() - bottom_edge_height, page_old_size.GetWidth(), bottom_edge_height);
+		}
+	}
+
+	new_rect.Union(old_rect);
+	new_rect.Intersect(wxRect(page_new_size));
+	return new_rect;
+}
+
 #endif // wxUSE_RIBBON

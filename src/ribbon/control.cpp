@@ -32,4 +32,35 @@ void wxRibbonControl::SetArtProvider(wxRibbonArtProvider* art)
 	m_art = art;
 }
 
+wxSize wxRibbonControl::GetNextSmallerSize(wxOrientation direction) const
+{
+	// Dummy implementation for code which doesn't check for IsSizingContinuous() == true
+	wxSize size(GetSize());
+	wxSize minimum(GetMinSize());
+	if((direction & wxHORIZONTAL) && size.x > minimum.x)
+	{
+		size.x--;
+	}
+	if((direction & wxVERTICAL) && size.y > minimum.y)
+	{
+		size.y--;
+	}
+	return size;
+}
+
+wxSize wxRibbonControl::GetNextLargerSize(wxOrientation direction) const
+{
+	// Dummy implementation for code which doesn't check for IsSizingContinuous() == true
+	wxSize size(GetSize());
+	if(direction & wxHORIZONTAL)
+	{
+		size.x++;
+	}
+	if(direction & wxVERTICAL)
+	{
+		size.y++;
+	}
+	return size;
+}
+
 #endif // wxUSE_RIBBON

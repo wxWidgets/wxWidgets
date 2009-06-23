@@ -71,6 +71,7 @@ enum wxRibbonScrollButtonStyle
 	wxRIBBON_SCROLL_BTN_FOR_MASK = 48,
 };
 
+class wxRibbonPage;
 class wxRibbonPanel;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
@@ -148,6 +149,12 @@ public:
 						wxDC& dc,
 						const wxRibbonPanel* wnd,
 						wxSize client_size) = 0;
+
+	virtual wxRect GetPageBackgroundRedrawArea(
+						wxDC& dc,
+						const wxRibbonPage* wnd,
+						wxSize page_old_size,
+						wxSize page_new_size) = 0;
 };
 
 class WXDLLIMPEXP_AUI wxRibbonMSWArtProvider : public wxRibbonArtProvider
@@ -222,6 +229,12 @@ public:
 						wxDC& dc,
 						const wxRibbonPanel* wnd,
 						wxSize client_size);
+
+	wxRect GetPageBackgroundRedrawArea(
+						wxDC& dc,
+						const wxRibbonPage* wnd,
+						wxSize page_old_size,
+						wxSize page_new_size);
 
 protected:
 	void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility);

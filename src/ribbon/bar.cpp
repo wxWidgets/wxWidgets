@@ -651,9 +651,8 @@ void wxRibbonBar::OnSize(wxSizeEvent& WXUNUSED(evt))
 		GetClientSize(&w, &h);
 		wxRibbonPage* wnd = m_pages.Item(m_current_page).page;
 		wnd->SetSize(w, h - m_tab_height);
-		wnd->Layout();
 	}
-	Refresh();
+	RefreshTabBar();
 }
 
 wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)

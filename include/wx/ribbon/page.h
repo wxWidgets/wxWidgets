@@ -60,10 +60,15 @@ protected:
 
 	void OnEraseBackground(wxEraseEvent& evt);
 	void OnPaint(wxPaintEvent& evt);
+	void OnSize(wxSizeEvent& evt);
+
+	bool ExpandPanels(wxOrientation direction, int maximum_amount);
+	bool CollapsePanels(wxOrientation direction, int minimum_amount);
 
 	void CommonInit(const wxString& label, const wxBitmap& icon);
 
 	wxBitmap m_icon;
+	wxSize m_old_size;
 	int m_scroll_amount;
 	bool m_scroll_buttons_visible;
 

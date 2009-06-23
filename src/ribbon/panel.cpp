@@ -124,4 +124,49 @@ void wxRibbonPanel::OnPaint(wxPaintEvent& WXUNUSED(evt))
 	wxPaintDC dc(this);
 }
 
+bool wxRibbonPanel::IsSizingContinuous() const
+{
+	// TODO: Handle (rare) case of a continuously resizing panel, or delegate to a sizer
+	return false;
+}
+
+wxSize wxRibbonPanel::GetNextSmallerSize(wxOrientation direction) const
+{
+	// TODO: Do proper children / sizer related calculations
+	wxSize current(GetSize());
+	wxSize minimum(GetMinSize());
+	if(direction & wxHORIZONTAL)
+	{
+		current.x = (current.x * 4) / 5;
+		if(current.x < minimum.x)
+		{
+			current.x = minimum.x;
+		}
+	}
+	if(direction & wxVERTICAL)
+	{
+		current.y = (current.y * 4) / 5;
+		if(current.y < minimum.y)
+		{
+			current.y = minimum.y;
+		}
+	}
+	return current;
+}
+
+wxSize wxRibbonPanel::GetNextLargerSize(wxOrientation direction) const
+{
+	// TODO: Do proper children / sizer related calculations
+	wxSize current(GetSize());
+	if(direction & wxHORIZONTAL)
+	{
+		current.x = (current.x * 5) / 4;
+	}
+	if(direction & wxVERTICAL)
+	{
+		current.y = (current.y * 5) / 4;
+	}
+	return current;
+}
+
 #endif // wxUSE_RIBBON
