@@ -1022,7 +1022,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     int bh = bmp.GetHeight();
     wxBitmap bmpSource = bmp;  // we need a non-const instance
     m_buffer = new unsigned char[bw*bh*4];
-    wxUint32* data = (wxUint32*)buffer;
+    wxUint32* data = (wxUint32*)m_buffer;
 
     // Create a surface object and copy the bitmap pixel data to it.  if the
     // image has alpha (or a mask represented as alpha) then we'll use a
@@ -1376,7 +1376,7 @@ void wxCairoContext::PopState()
 void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
-    DrawGraphicsBitmapInternal(bitmap, x, y, w, h);
+    DrawBitmap(bitmap, x, y, w, h);
 
 }
 
