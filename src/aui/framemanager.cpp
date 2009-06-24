@@ -82,6 +82,115 @@ IMPLEMENT_CLASS(wxAuiManager, wxEvtHandler)
 
 const int auiToolBarLayer = 10;
 
+wxAuiPaneInfo::wxAuiPaneInfo()
+:
+#if WXWIN_COMPATIBILITY_2_8
+  name(m_name)
+, caption(m_caption)
+, window(m_window)
+, frame(m_frame)
+, state(m_state)
+, dock_direction(m_dock_direction)
+, dock_layer(m_dock_layer)
+, dock_row(m_dock_row)
+, dock_pos(m_dock_pos)
+, best_size(m_best_size)
+, min_size(m_min_size)
+, max_size(m_max_size)
+, floating_pos(m_floating_pos)
+, floating_size(m_floating_size)
+, dock_proportion(m_dock_proportion)
+, buttons(m_buttons)
+, rect(m_rect)
+#else // !WXWIN_COMPATIBILITY_2_8
+#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
+, m_name(wxT(""))
+, m_caption(wxT(""))
+, m_window(NULL)
+, m_frame(NULL)
+, m_state(0)
+, m_dock_direction(wxAUI_DOCK_LEFT)
+, m_dock_layer(0)
+, m_dock_row(0)
+, m_dock_pos(0)
+, m_dock_page(0)
+, m_best_size(wxDefaultSize)
+, m_min_size(wxDefaultSize)
+, m_max_size(wxDefaultSize)
+, m_floating_pos(wxDefaultPosition)
+, m_floating_size(wxDefaultSize)
+, m_dock_proportion(0)
+{
+    SetDefaultPane();
+}
+
+#ifndef SWIG
+wxAuiPaneInfo::wxAuiPaneInfo(const wxAuiPaneInfo& c)
+#if WXWIN_COMPATIBILITY_2_8
+: name(m_name)
+, caption(m_caption)
+, window(m_window)
+, frame(m_frame)
+, state(m_state)
+, dock_direction(m_dock_direction)
+, dock_layer(m_dock_layer)
+, dock_row(m_dock_row)
+, dock_pos(m_dock_pos)
+, best_size(m_best_size)
+, min_size(m_min_size)
+, max_size(m_max_size)
+, floating_pos(m_floating_pos)
+, floating_size(m_floating_size)
+, dock_proportion(m_dock_proportion)
+, buttons(m_buttons)
+, rect(m_rect)
+#else // !WXWIN_COMPATIBILITY_2_8
+#endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
+{
+    m_name = c.m_name;
+    m_caption = c.m_caption;
+    m_window = c.m_window;
+    m_frame = c.m_frame;
+    m_state = c.m_state;
+    m_dock_direction = c.m_dock_direction;
+    m_dock_layer = c.m_dock_layer;
+    m_dock_row = c.m_dock_row;
+    m_dock_pos = c.m_dock_pos;
+    m_dock_page = c.m_dock_page;
+    m_best_size = c.m_best_size;
+    m_min_size = c.m_min_size;
+    m_max_size = c.m_max_size;
+    m_floating_pos = c.m_floating_pos;
+    m_floating_size = c.m_floating_size;
+    m_dock_proportion = c.m_dock_proportion;
+    m_buttons = c.m_buttons;
+    m_rect = c.m_rect;
+}
+
+wxAuiPaneInfo& wxAuiPaneInfo::operator=(const wxAuiPaneInfo& c)
+{
+    m_name = c.m_name;
+    m_caption = c.m_caption;
+    m_window = c.m_window;
+    m_frame = c.m_frame;
+    m_state = c.m_state;
+    m_dock_direction = c.m_dock_direction;
+    m_dock_layer = c.m_dock_layer;
+    m_dock_row = c.m_dock_row;
+    m_dock_pos = c.m_dock_pos;
+    m_dock_page = c.m_dock_page;
+    m_best_size = c.m_best_size;
+    m_min_size = c.m_min_size;
+    m_max_size = c.m_max_size;
+    m_floating_pos = c.m_floating_pos;
+    m_floating_size = c.m_floating_size;
+    m_dock_proportion = c.m_dock_proportion;
+    m_buttons = c.m_buttons;
+    m_rect = c.m_rect;
+    return *this;
+}
+#endif // !SWIG
+
 #ifndef __WXGTK20__
 
 
