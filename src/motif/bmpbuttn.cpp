@@ -89,7 +89,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
     if( size.y != -1 ) best.y = size.y;
 
     PostCreation();
-    DoSetBitmap();
+    OnSetBitmap();
 
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, best.x, best.y);
@@ -222,7 +222,7 @@ void wxBitmapButton::ChangeBackgroundColour()
     wxDoChangeBackgroundColour(m_mainWidget, m_backgroundColour, true);
 
     // Must reset the bitmaps since the colours have changed.
-    DoSetBitmap();
+    OnSetBitmap();
 }
 
 wxSize wxBitmapButton::DoGetBestSize() const
