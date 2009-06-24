@@ -12,6 +12,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#if 0//temp: (MJM)
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
@@ -4485,3 +4486,4 @@ bool wxAuiNotebook::ShowWindowMenu()
 }
 
 #endif // wxUSE_AUI
+#endif // 0

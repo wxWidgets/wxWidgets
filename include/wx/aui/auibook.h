@@ -8,6 +8,7 @@
 // Licence:     wxWindows Library Licence, Version 3.1
 ///////////////////////////////////////////////////////////////////////////////
 
+#if 0//temp: (MJM)
 
 
 #ifndef _WX_AUINOTEBOOK_H_
@@ -752,3 +753,4 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
 
 #endif  // wxUSE_AUI
 #endif  // _WX_AUINOTEBOOK_H_
+#endif // 0

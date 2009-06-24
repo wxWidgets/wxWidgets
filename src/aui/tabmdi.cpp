@@ -17,6 +17,7 @@
 // headers
 // ---------------------------------------------------------------------------
 
+#if 0//temp: (MJM)
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -836,3 +837,4 @@ void wxAuiMDIClientWindow::OnSize(wxSizeEvent& evt)
 
 #endif //wxUSE_AUI
 #endif // wxUSE_MDI
+#endif // 0

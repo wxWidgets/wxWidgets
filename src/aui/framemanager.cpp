@@ -1020,6 +1020,7 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
                 wxAuiPaneInfo().SetName(wxT("mdiclient")).
                 SetCenterPane().SetBorder(false));
     }
+#if 0//temp: (MJM)
     else if (m_frame->IsKindOf(CLASSINFO(wxAuiMDIParentFrame)))
     {
         wxAuiMDIParentFrame* mdi_frame = (wxAuiMDIParentFrame*)m_frame;
@@ -1030,6 +1031,7 @@ void wxAuiManager::SetManagedWindow(wxWindow* wnd)
                 wxAuiPaneInfo().SetName(wxT("mdiclient")).
                 SetCenterPane().SetBorder(false));
     }
+#endif //0
 
 #endif
 
