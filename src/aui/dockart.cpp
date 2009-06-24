@@ -44,9 +44,9 @@
 
 #ifdef __WXGTK__
 #include <gtk/gtk.h>
-#include "wx/renderer.h"
 #endif
 
+#include "wx/renderer.h"
 #include "wx/arrimpl.cpp"
 
 // -- wxAuiDefaultDockArt class implementation --

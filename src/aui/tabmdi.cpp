@@ -17,10 +17,11 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#if 0//temp: (MJM)
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if 0
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif

@@ -12,8 +12,10 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if 0//temp: (MJM)
+
 #include "wx/wxprec.h"
+
+#if 0//temp: (MJM)
 
 #ifdef __BORLANDC__
     #pragma hdrstop
