@@ -365,6 +365,10 @@ public:
     int GetPage() const { return m_dock_page; }
     wxAuiPaneInfo& SetPage(int page) { m_dock_page = page; return *this; }
 
+    // get/set the bitmap associated with this pane.
+    wxBitmap GetBitmap() const { return m_dock_bitmap; }
+    wxAuiPaneInfo& SetBitmap(wxBitmap bitmap) { m_dock_bitmap = bitmap; return *this; }
+
     // get/set the proportion of the pane.
     int GetProportion() const { return m_dock_proportion; }
     wxAuiPaneInfo& SetProportion(int proportion) { m_dock_proportion = proportion; return *this; }
@@ -542,6 +546,7 @@ private:
     int m_dock_row;         // row number on the docking bar (0 = first row)
     int m_dock_pos;         // position inside the row (0 = first position)
     int m_dock_page;        // tab position if we are in a notebook (0 = leftmost tab)
+    wxBitmap m_dock_bitmap; // bitmap associated with the pane, shown on tab(if in a notebook) or on titlebar(if one is present)
 
     wxSize m_best_size;     // size that the layout engine will prefer
     wxSize m_min_size;      // minimum size the pane window can tolerate

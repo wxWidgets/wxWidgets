@@ -934,6 +934,21 @@ public:
 
     //@{
     /**
+        GetBitmap() sets the icon associated with this pane.
+        This icon will be shown on a panes tab when it appears as part of a notebook, and optionally on the
+        titlebar as well.
+    */
+    wxBitmap GetBitmap();
+    /**
+        SetBitmap() sets the icon associated with this pane.
+        This icon will be shown on a panes tab when it appears as part of a notebook, and optionally on the
+        titlebar as well.
+    */
+    wxAuiPaneInfo& SetBitmap(wxBitmap bitmap);
+    //@}
+
+    //@{
+    /**
         GetProportion() gets the proportion of the docked pane.
     */
     int GetProportion() const;

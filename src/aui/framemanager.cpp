@@ -157,6 +157,7 @@ wxAuiPaneInfo::wxAuiPaneInfo(const wxAuiPaneInfo& c)
     m_dock_row = c.m_dock_row;
     m_dock_pos = c.m_dock_pos;
     m_dock_page = c.m_dock_page;
+    m_dock_bitmap = c.m_dock_bitmap;
     m_best_size = c.m_best_size;
     m_min_size = c.m_min_size;
     m_max_size = c.m_max_size;
@@ -179,6 +180,7 @@ wxAuiPaneInfo& wxAuiPaneInfo::operator=(const wxAuiPaneInfo& c)
     m_dock_row = c.m_dock_row;
     m_dock_pos = c.m_dock_pos;
     m_dock_page = c.m_dock_page;
+    m_dock_bitmap = c.m_dock_bitmap;
     m_best_size = c.m_best_size;
     m_min_size = c.m_min_size;
     m_max_size = c.m_max_size;
