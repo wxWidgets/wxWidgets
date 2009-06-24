@@ -128,6 +128,7 @@ class wxAuiPaneInfo;
 class wxAuiDockInfo;
 class wxAuiDockArt;
 class wxAuiManagerEvent;
+class wxAuiTabContainer;
 
 #ifndef SWIG
 WX_DECLARE_USER_EXPORTED_OBJARRAY(wxAuiDockInfo, wxAuiDockInfoArray, WXDLLIMPEXP_AUI);
@@ -922,7 +923,8 @@ public:
         typePaneSizer,
         typeBackground,
         typePaneBorder,
-        typePaneButton
+        typePaneButton,
+        typePaneTab
     };
 
     int type;                // ui part type (see enum above)
@@ -932,6 +934,7 @@ public:
     wxAuiPaneButton* button;    // which pane button the item is associated with
     wxSizer* cont_sizer;     // the part's containing sizer
     wxSizerItem* sizer_item; // the sizer item of the part
+    wxAuiTabContainer* m_tab_container;
     wxRect rect;             // client coord rectangle of the part itself
 };
 

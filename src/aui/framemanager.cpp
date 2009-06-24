@@ -1984,6 +1984,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
         part.orientation = orientation;
         part.cont_sizer = horz_pane_sizer;
         part.sizer_item = sizer_item;
+        part.m_tab_container = NULL;
         uiparts.Add(part);
     }
 
@@ -2001,6 +2002,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
         part.orientation = orientation;
         part.cont_sizer = vert_pane_sizer;
         part.sizer_item = sizer_item;
+        part.m_tab_container = NULL;
         int caption_part_idx = uiparts.GetCount();
         uiparts.Add(part);
 
@@ -2022,6 +2024,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
             part.orientation = orientation;
             part.cont_sizer = caption_sizer;
             part.sizer_item = sizer_item;
+            part.m_tab_container = NULL;
             uiparts.Add(part);
         }
 
@@ -2059,6 +2062,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     part.orientation = orientation;
     part.cont_sizer = vert_pane_sizer;
     part.sizer_item = sizer_item;
+    part.m_tab_container = NULL;
     uiparts.Add(part);
 
 
@@ -2103,6 +2107,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
         part.orientation = orientation;
         part.cont_sizer = cont;
         part.sizer_item = sizer_item;
+        part.m_tab_container = NULL;
         uiparts.Add(part);
     }
     else
@@ -2135,6 +2140,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         part.button = NULL;
         part.cont_sizer = cont;
         part.sizer_item = sizer_item;
+        part.m_tab_container = NULL;
         uiparts.Add(part);
     }
 
@@ -2178,6 +2184,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 part.orientation = (orientation==wxHORIZONTAL) ? wxVERTICAL:wxHORIZONTAL;
                 part.cont_sizer = dock_sizer;
                 part.sizer_item = sizer_item;
+                part.m_tab_container = NULL;
                 uiparts.Add(part);
 
                 offset += amount;
@@ -2198,6 +2205,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         part.orientation = orientation;
         part.cont_sizer = dock_sizer;
         part.sizer_item = sizer_item;
+        part.m_tab_container = NULL;
         uiparts.Add(part);
     }
     else
@@ -2222,6 +2230,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 part.orientation = (orientation==wxHORIZONTAL) ? wxVERTICAL:wxHORIZONTAL;
                 part.cont_sizer = dock_sizer;
                 part.sizer_item = sizer_item;
+                part.m_tab_container = NULL;
                 uiparts.Add(part);
             }
 
@@ -2241,6 +2250,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
     part.orientation = orientation;
     part.cont_sizer = cont;
     part.sizer_item = sizer_item;
+    part.m_tab_container = NULL;
     uiparts.Add(part);
 
     if (dock.IsHorizontal())
@@ -2263,6 +2273,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         part.orientation = orientation;
         part.cont_sizer = cont;
         part.sizer_item = sizer_item;
+        part.m_tab_container = NULL;
         uiparts.Add(part);
     }
 }
@@ -2602,6 +2613,7 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
                 part.button = NULL;
                 part.cont_sizer = middle;
                 part.sizer_item = sizer_item;
+                part.m_tab_container = NULL;
                 uiparts.Add(part);
             }
         }
@@ -2648,6 +2660,7 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         part.button = NULL;
         part.cont_sizer = middle;
         part.sizer_item = sizer_item;
+        part.m_tab_container = NULL;
         uiparts.Add(part);
     }
 
