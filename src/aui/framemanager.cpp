@@ -663,10 +663,24 @@ static void SetActivePane(wxAuiPaneInfoArray& panes, wxWindow* active_pane)
 }
 
 
-// this function is used to sort panes by dock position
+// this function is used to sort panes primarily by dock position and secondly by page
 static int PaneSortFunc(wxAuiPaneInfo** p1, wxAuiPaneInfo** p2)
 {
-    return ((*p1)->GetPosition() < (*p2)->GetPosition()) ? -1 : 1;
+    if((*p1)->GetPosition() < (*p2)->GetPosition())
+    {
+        return -1;
+    }
+    else if((*p1)->GetPosition() == (*p2)->GetPosition())
+    {
+        if((*p1)->GetPage() < (*p2)->GetPage())
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+    }
 }
 
 
