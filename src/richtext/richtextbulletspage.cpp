@@ -301,7 +301,9 @@ void wxRichTextBulletsPage::CreateControls()
     if (wxRichTextBuffer::GetRenderer())
         wxRichTextBuffer::GetRenderer()->EnumerateStandardBulletNames(standardBulletNames);
 
-    m_bulletNameCtrl->Append(standardBulletNames);
+    size_t i;
+    for (i = 0; i < standardBulletNames.GetCount(); i++)
+        m_bulletNameCtrl->Append(wxGetTranslation(standardBulletNames[i]));
 
     wxArrayString facenames = wxRichTextCtrl::GetAvailableFontNames();
     facenames.Sort();
@@ -348,7 +350,22 @@ bool wxRichTextBulletsPage::TransferDataFromWindow()
         else if (index == wxRICHTEXT_BULLETINDEX_STANDARD)
         {
             bulletStyle |= wxTEXT_ATTR_BULLET_STYLE_STANDARD;
-            attr->SetBulletName(m_bulletNameCtrl->GetValue());
+            wxArrayString standardBulletNames;
+            if (wxRichTextBuffer::GetRenderer() && m_bulletNameCtrl->GetSelection() != wxNOT_FOUND)
+            {
+                int sel = m_bulletNameCtrl->GetSelection();
+                wxString selName = m_bulletNameCtrl->GetString(sel);
+
+                // Try to get the untranslated name using the current selection index of the combobox.
+                // into account.
+                wxRichTextBuffer::GetRenderer()->EnumerateStandardBulletNames(standardBulletNames);
+                if (sel < (int) standardBulletNames.GetCount() && m_bulletNameCtrl->GetValue() == selName)
+                    attr->SetBulletName(standardBulletNames[sel]);
+                else            
+                    attr->SetBulletName(m_bulletNameCtrl->GetValue());
+            }
+            else
+                attr->SetBulletName(m_bulletNameCtrl->GetValue());
         }
 
         if (m_parenthesesCtrl->GetValue())
@@ -466,7 +483,22 @@ bool wxRichTextBulletsPage::TransferDataToWindow()
         m_numberCtrl->SetValue(0);
 
     if (attr->HasBulletName())
-        m_bulletNameCtrl->SetValue(attr->GetBulletName());
+    {
+        wxArrayString standardBulletNames;
+        if (wxRichTextBuffer::GetRenderer())
+        {
+            // Try to set the control by index in order to take translated combo control strings
+            // into account.
+            wxRichTextBuffer::GetRenderer()->EnumerateStandardBulletNames(standardBulletNames);
+            int idx = standardBulletNames.Index(attr->GetBulletName());
+            if (idx != -1 && idx < (int) m_bulletNameCtrl->GetCount())
+                m_bulletNameCtrl->SetSelection(idx);
+            else
+                m_bulletNameCtrl->SetValue(attr->GetBulletName());
+        }
+        else
+            m_bulletNameCtrl->SetValue(attr->GetBulletName());
+    }
     else
         m_bulletNameCtrl->SetValue(wxEmptyString);
 
