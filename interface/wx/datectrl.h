@@ -146,8 +146,11 @@ public:
     virtual void SetRange(const wxDateTime& dt1, const wxDateTime& dt2) = 0;
 
     /**
-        Changes the current value of the control. The date should be valid and
-        included in the currently selected range, if any.
+        Changes the current value of the control.
+
+        The date should be valid unless the control was created with @c
+        wxDP_ALLOWNONE style and included in the currently selected range, if
+        any.
 
         Calling this method does not result in a date change event.
     */
