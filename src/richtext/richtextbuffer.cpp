@@ -6489,10 +6489,10 @@ bool wxRichTextStdRenderer::DrawBitmapBullet(wxRichTextParagraph* WXUNUSED(parag
 /// Enumerate the standard bullet names currently supported
 bool wxRichTextStdRenderer::EnumerateStandardBulletNames(wxArrayString& bulletNames)
 {
-    bulletNames.Add(wxT("standard/circle"));
-    bulletNames.Add(wxT("standard/square"));
-    bulletNames.Add(wxT("standard/diamond"));
-    bulletNames.Add(wxT("standard/triangle"));
+    bulletNames.Add(wxTRANSLATE("standard/circle"));
+    bulletNames.Add(wxTRANSLATE("standard/square"));
+    bulletNames.Add(wxTRANSLATE("standard/diamond"));
+    bulletNames.Add(wxTRANSLATE("standard/triangle"));
 
     return true;
 }
