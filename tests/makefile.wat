@@ -278,6 +278,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_fileconf.obj &
 	$(OBJS)\test_datetimetest.obj &
 	$(OBJS)\test_evthandler.obj &
+	$(OBJS)\test_evtsource.obj &
 	$(OBJS)\test_timertest.obj &
 	$(OBJS)\test_exec.obj &
 	$(OBJS)\test_filekind.obj &
@@ -285,6 +286,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_filesystest.obj &
 	$(OBJS)\test_fontmaptest.obj &
 	$(OBJS)\test_formatconvertertest.obj &
+	$(OBJS)\test_fswatchertest.obj &
 	$(OBJS)\test_hashes.obj &
 	$(OBJS)\test_intltest.obj &
 	$(OBJS)\test_lists.obj &
@@ -451,6 +453,9 @@ $(OBJS)\test_datetimetest.obj :  .AUTODEPEND .\datetime\datetimetest.cpp
 $(OBJS)\test_evthandler.obj :  .AUTODEPEND .\events\evthandler.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
+$(OBJS)\test_evtsource.obj :  .AUTODEPEND .\events\evtsource.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
 $(OBJS)\test_timertest.obj :  .AUTODEPEND .\events\timertest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
@@ -470,6 +475,9 @@ $(OBJS)\test_fontmaptest.obj :  .AUTODEPEND .\fontmap\fontmaptest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_formatconvertertest.obj :  .AUTODEPEND .\formatconverter\formatconvertertest.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_fswatchertest.obj :  .AUTODEPEND .\fswatcher\fswatchertest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_hashes.obj :  .AUTODEPEND .\hashes\hashes.cpp

@@ -63,6 +63,7 @@ TEST_OBJECTS =  \
 	test_fileconf.o \
 	test_datetimetest.o \
 	test_evthandler.o \
+	test_evtsource.o \
 	test_timertest.o \
 	test_exec.o \
 	test_filekind.o \
@@ -70,6 +71,7 @@ TEST_OBJECTS =  \
 	test_filesystest.o \
 	test_fontmaptest.o \
 	test_formatconvertertest.o \
+	test_fswatchertest.o \
 	test_hashes.o \
 	test_intltest.o \
 	test_lists.o \
@@ -369,6 +371,9 @@ test_datetimetest.o: $(srcdir)/datetime/datetimetest.cpp $(TEST_ODEP)
 test_evthandler.o: $(srcdir)/events/evthandler.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/evthandler.cpp
 
+test_evtsource.o: $(srcdir)/events/evtsource.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/evtsource.cpp
+
 test_timertest.o: $(srcdir)/events/timertest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/events/timertest.cpp
 
@@ -389,6 +394,9 @@ test_fontmaptest.o: $(srcdir)/fontmap/fontmaptest.cpp $(TEST_ODEP)
 
 test_formatconvertertest.o: $(srcdir)/formatconverter/formatconvertertest.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/formatconverter/formatconvertertest.cpp
+
+test_fswatchertest.o: $(srcdir)/fswatcher/fswatchertest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/fswatcher/fswatchertest.cpp
 
 test_hashes.o: $(srcdir)/hashes/hashes.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/hashes/hashes.cpp

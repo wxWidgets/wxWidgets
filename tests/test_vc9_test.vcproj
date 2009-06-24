@@ -908,6 +908,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\events\evtsource.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\exec\exec.cpp"
 				>
 			</File>
@@ -945,6 +949,10 @@
 			</File>
 			<File
 				RelativePath=".\formatconverter\formatconvertertest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\fswatcher\fswatchertest.cpp"
 				>
 			</File>
 			<File

@@ -40,6 +40,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_fileconf.obj \
 	$(OBJS)\test_datetimetest.obj \
 	$(OBJS)\test_evthandler.obj \
+	$(OBJS)\test_evtsource.obj \
 	$(OBJS)\test_timertest.obj \
 	$(OBJS)\test_exec.obj \
 	$(OBJS)\test_filekind.obj \
@@ -47,6 +48,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filesystest.obj \
 	$(OBJS)\test_fontmaptest.obj \
 	$(OBJS)\test_formatconvertertest.obj \
+	$(OBJS)\test_fswatchertest.obj \
 	$(OBJS)\test_hashes.obj \
 	$(OBJS)\test_intltest.obj \
 	$(OBJS)\test_lists.obj \
@@ -492,6 +494,9 @@ $(OBJS)\test_datetimetest.obj: .\datetime\datetimetest.cpp
 $(OBJS)\test_evthandler.obj: .\events\evthandler.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\events\evthandler.cpp
 
+$(OBJS)\test_evtsource.obj: .\events\evtsource.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\events\evtsource.cpp
+
 $(OBJS)\test_timertest.obj: .\events\timertest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\events\timertest.cpp
 
@@ -512,6 +517,9 @@ $(OBJS)\test_fontmaptest.obj: .\fontmap\fontmaptest.cpp
 
 $(OBJS)\test_formatconvertertest.obj: .\formatconverter\formatconvertertest.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\formatconverter\formatconvertertest.cpp
+
+$(OBJS)\test_fswatchertest.obj: .\fswatcher\fswatchertest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\fswatcher\fswatchertest.cpp
 
 $(OBJS)\test_hashes.obj: .\hashes\hashes.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\hashes\hashes.cpp

@@ -39,6 +39,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_fileconf.o \
 	$(OBJS)\test_datetimetest.o \
 	$(OBJS)\test_evthandler.o \
+	$(OBJS)\test_evtsource.o \
 	$(OBJS)\test_timertest.o \
 	$(OBJS)\test_exec.o \
 	$(OBJS)\test_filekind.o \
@@ -46,6 +47,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filesystest.o \
 	$(OBJS)\test_fontmaptest.o \
 	$(OBJS)\test_formatconvertertest.o \
+	$(OBJS)\test_fswatchertest.o \
 	$(OBJS)\test_hashes.o \
 	$(OBJS)\test_intltest.o \
 	$(OBJS)\test_lists.o \
@@ -399,6 +401,9 @@ $(OBJS)\test_datetimetest.o: ./datetime/datetimetest.cpp
 $(OBJS)\test_evthandler.o: ./events/evthandler.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_evtsource.o: ./events/evtsource.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_timertest.o: ./events/timertest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
@@ -418,6 +423,9 @@ $(OBJS)\test_fontmaptest.o: ./fontmap/fontmaptest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_formatconvertertest.o: ./formatconverter/formatconvertertest.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_fswatchertest.o: ./fswatcher/fswatchertest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_hashes.o: ./hashes/hashes.cpp
