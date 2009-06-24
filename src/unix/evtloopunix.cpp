@@ -177,6 +177,14 @@ wxConsoleEventLoop::wxConsoleEventLoop()
 wxConsoleEventLoop::~wxConsoleEventLoop()
 {
     delete m_wakeupPipe;
+
+    // CHECK maybe this should be done from Exit() and not here
+    wxEventLoopSourceHashMap::iterator it = m_sourceMap.begin();
+    for ( ; it != m_sourceMap.end(); ++it)
+    {
+        wxEventLoopSource src = it->first;
+        m_dispatcher->UnregisterFD(src.GetResource());
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -226,9 +234,7 @@ bool wxConsoleEventLoop::AddSource(const wxEventLoopSource& source,
     // we are not creating another map of handlers
     wxFDIOHandler* h = new wxFDIOEventLoopSourceHandler(handler);
 
-    m_dispatcher->RegisterFD(source.GetResource(), h, flags);
-
-    return true;
+    return m_dispatcher->RegisterFD(source.GetResource(), h, flags);
 }
 
 bool wxConsoleEventLoop::RemoveSource(const wxEventLoopSource& source)
@@ -239,9 +245,9 @@ bool wxConsoleEventLoop::RemoveSource(const wxEventLoopSource& source)
     if (!wxEventLoopBase::RemoveSource(source))
         return false;
 
-    m_dispatcher->UnregisterFD(source.GetResource());
+    wxLogDebug("Unregistering fd=%d", source.GetResource());
 
-    return true;
+    return m_dispatcher->UnregisterFD(source.GetResource());
 }
 
 //-----------------------------------------------------------------------------

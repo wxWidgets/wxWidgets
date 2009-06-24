@@ -21,7 +21,7 @@
 
 #if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
 
-#define wxTRACE_Event_Source wxT("EventSource")
+#define wxTRACE_Event_Source "EventSource"
 
 // handler used to process events on event loop sources
 class WXDLLIMPEXP_BASE wxEventLoopSourceHandler
@@ -65,6 +65,10 @@ class WXDLLIMPEXP_BASE wxEventLoopSource
 {
 public:
     typedef int Resource;
+    enum
+    {
+        INVALID_RESOURCE = -1
+    };
 
     // hashing function
     class Hash
@@ -92,6 +96,9 @@ public:
         Equal& operator=(const Equal&) { return *this; }
     };
 
+    // empty ctor, beacuse we often store event sources as values
+    wxEventLoopSource() : m_res(INVALID_RESOURCE) { }
+
     // ctor setting internal value to the os resource res
     wxEventLoopSource(int res) : m_res(res) { }
 
@@ -105,6 +112,11 @@ public:
     Resource GetResource() const
     {
         return m_res;
+    }
+
+    bool IsOk() const
+    {
+        return m_res != INVALID_RESOURCE;
     }
 
 protected:
@@ -208,8 +220,8 @@ public:
                             wxEventLoopSourceHandler* handler,
                             int WXUNUSED(flags))
     {
-        if (!handler)
-            return false;
+        wxCHECK_MSG( source.IsOk(), false, "Invalid source" );
+        wxCHECK_MSG( handler, false, "Null handler" );
 
         wxEventLoopSourceHashMap::value_type val(source, handler);
         bool ret = m_sourceMap.insert(val).second;
@@ -220,7 +232,9 @@ public:
     // Returns true if the source was successfully removed, false otherwise
     virtual bool RemoveSource(const wxEventLoopSource& source)
     {
-        return 1 == m_sourceMap.erase(source);
+        wxCHECK_MSG( source.IsOk(), false, "Invalid source" );
+
+        return m_sourceMap.erase(source) == 1;
     }
 
 #endif
