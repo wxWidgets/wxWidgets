@@ -55,7 +55,7 @@ wxFileSystemWatcherBase::wxFileSystemWatcherBase() :
 
 wxFileSystemWatcherBase::~wxFileSystemWatcherBase()
 {
-    wxWatchMap::iterator it = m_watches.begin();
+    wxFSWatchEntries::iterator it = m_watches.begin();
     for ( ; it != m_watches.end(); ++it )
     {
        wxASSERT(it->second);
@@ -79,14 +79,14 @@ bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
     wxCHECK_MSG(m_watches.find(canonical) == m_watches.end(), false,
                     wxString::Format("path %s is already watched", canonical));
 
-    wxWatch* watch = CreateWatch(path2, events);
+    wxFSWatchEntry* watch = CreateWatch(path2, events);
     if (!DoAdd(*watch)) {
         delete watch;
         return false;
     }
 
     // CHECK are we sure we got identity here (IOW canonical path) ?
-    wxWatchMap::value_type val(canonical, watch);
+    wxFSWatchEntries::value_type val(canonical, watch);
 
     // always succeeds, checked above
     return m_watches.insert(val).second;

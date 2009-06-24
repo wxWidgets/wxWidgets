@@ -17,37 +17,6 @@
 
 #include "wx/evtloop.h"
 
-class WXDLLIMPEXP_BASE wxWatch
-{
-public:
-    wxWatch(const wxFileName& path, int events) :
-        m_path(path), m_events(events)
-    { }
-
-    // default copy ctor, assignment operator and dtor are ok :-)
-
-    const wxFileName& GetPath() const
-    {
-        return m_path;
-    }
-
-    int GetFlags() const
-    {
-        return m_events;
-    }
-
-    int GetWatchFD() const
-    {
-        return m_wd;
-    }
-
-private:
-    wxFileName m_path;
-    int m_events;
-    int m_wd;
-};
-
-
 class WXDLLIMPEXP_BASE wxInotifyFileSystemWatcher :
         public wxFileSystemWatcherBase
 {
@@ -73,12 +42,9 @@ public:
 protected:
     virtual bool Init();
 
-    virtual wxWatch* CreateWatch(const wxFileName& path, int events)
-    {
-        return new wxWatch(path, events);
-    }
+    virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events);
 
-    virtual bool DoAdd(const wxWatch& watch);
+    virtual bool DoAdd(const wxFSWatchEntry& watch);
 };
 
 #endif

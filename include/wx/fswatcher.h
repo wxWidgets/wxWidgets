@@ -31,6 +31,10 @@
  * Possible types of file system events.
  * This is a subset that will work fine an all platforms (actually, we will
  * see how it works on Mac).
+ *
+ * We got 2 types of error events:
+ * - warning: these are not fatal and further events can still be generated
+ * - error: indicates fatal error and causes that no more events will happen
  */
 enum
 {
@@ -135,14 +139,6 @@ public:
         return m_changeType & (wxFSW_EVENT_ERROR | wxFSW_EVENT_WARNING);
     }
 
-    wxString GetErrorDescription() const
-    {
-        if (!IsError())
-            return _("");
-
-        return "Error!";
-    }
-
     /**
      * Returns a wxString describing an event useful for debugging or testing
      */
@@ -162,14 +158,14 @@ protected:
 /**
  * Simple container to store information about one watched file
  */
-class wxWatch;
+class wxFSWatchEntry;
 
-WX_DECLARE_STRING_HASH_MAP(wxWatch*, wxWatchMap);
+WX_DECLARE_STRING_HASH_MAP(wxFSWatchEntry*, wxFSWatchEntries);
 
 /**
  * Encapsulation of platform-specific file system event mechanism
  */
-class wxWatcherService;
+class wxFSWatcherService;
 
 /**
  * Main entry point for clients interested in file system events.
@@ -232,62 +228,39 @@ protected:
     virtual void OnChange(int changeType, const wxFileName& path,
                                         const wxFileName& newPath)
     {
-        // TODO well, are we supposed to put up the event again and send it
-        // to m_owner? maybe it was better to pass wxFileSystemWatcherEvent...
+        wxFileSystemWatcherEvent evt(changeType, path, newPath);
+        m_owner->ProcessEvent(evt);
     }
 
-    virtual void OnWarning(int changeType, const wxFileName& path,
-                                        const wxFileName& newPath)
+    virtual void OnWarning(const wxString& errorMessage)
     {
+        wxLogTrace(wxTRACE_FSWATCHER,
+                    wxString::Format("Warning received: '%s'", errorMessage));
     }
 
-    virtual void OnError(int changeType, const wxFileName& path,
-                                        const wxFileName& newPath)
+    virtual void OnError(const wxString& errorMessage)
     {
-    }
-
-
-//    void SendEvent(wxFileSystemWatcherEvent& evt)
-//    {
-//        m_owner->SafelyProcessEvent(evt);
-//    }
-
-    /**
-     * Dispatches the event to appriopriate handler.
-     */
-    void DispatchEvent(wxFileSystemWatcherEvent& evt)
-    {
-        switch (evt.GetChangeType())
-        {
-        case wxFSW_EVENT_WARNING:
-            OnWarning(evt.GetChangeType(), evt.GetPath(), evt.GetNewPath());
-            return;
-        case wxFSW_EVENT_ERROR:
-            OnError(evt.GetChangeType(), evt.GetPath(), evt.GetNewPath());
-            return;
-        default:
-            OnChange(evt.GetChangeType(), evt.GetPath(), evt.GetNewPath());
-            return;
-        }
+        wxLogTrace(wxTRACE_FSWATCHER,
+                    wxString::Format("Error received: '%s'", errorMessage));
     }
 
     /**
-     * Function resposible for creating platform specific wxWatch. This is
+     * Function resposible for creating platform specific wxFSWatchEntry. This is
      * supposed to be simple factory function so it should never fail (i.e.
      * never return a NULL pointer)
      */
-    virtual wxWatch* CreateWatch(const wxFileName& path, int events) = 0;
+    virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events) = 0;
 
     /**
-     * Actual adding of wxWatch to be watched for file system events
+     * Actual adding of wxFSWatchEntry to be watched for file system events
      */
-    virtual bool DoAdd(const wxWatch& watch) = 0;
+    virtual bool DoAdd(const wxFSWatchEntry& watch) = 0;
 
-    wxWatchMap m_watches;        // path=>wxWatch* map
-    wxWatcherService* m_service; // file system events service
+    wxFSWatchEntries m_watches;        // path=>wxFSWatchEntry* map
+    wxFSWatcherService* m_service; // file system events service
     wxEvtHandler* m_owner;       // handler for file system events
 
-    friend class wxWatcherService;
+    friend class wxFSWatcherService;
 };
 
 // include the platform specific file defining wxFileSystemWatcher
