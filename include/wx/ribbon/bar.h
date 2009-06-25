@@ -127,6 +127,7 @@ protected:
 	void RecalculateMinSize();
 	void ScrollTabBar(int npixels);
 	void RefreshTabBar();
+	void RepositionPage(wxRibbonPage *page);
 
 	void OnPaint(wxPaintEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);

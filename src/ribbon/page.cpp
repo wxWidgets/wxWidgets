@@ -29,6 +29,88 @@
 #include "wx/msw/private.h"
 #endif
 
+// As scroll buttons need to be rendered on top of a page's child windows, the
+// buttons themselves have to be proper child windows (rather than just painted
+// onto the page). In order to get proper clipping of a page's children (with
+// regard to the scroll button), the scroll buttons are created as children of
+// the ribbon bar rather than children of the page. This could not have been
+// achieved by creating buttons as children of the page and then doing some Z-order
+// manipulation, as this causes problems on win32 due to ribbon panels having the
+// transparent flag set.
+class wxRibbonPageScrollButton : public wxRibbonControl
+{
+public:
+	wxRibbonPageScrollButton(wxWindow* parent,
+				 wxWindowID id = wxID_ANY,
+				 const wxPoint& pos = wxDefaultPosition,
+				 const wxSize& size = wxDefaultSize,
+				 long style = 0);
+
+	virtual ~wxRibbonPageScrollButton();
+
+protected:
+	virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+
+	void OnEraseBackground(wxEraseEvent& evt);
+	void OnPaint(wxPaintEvent& evt);
+	void OnMouseEnter(wxMouseEvent& evt);
+	void OnMouseLeave(wxMouseEvent& evt);
+
+	long m_flags;
+
+	DECLARE_CLASS(wxRibbonPageScrollButton)
+	DECLARE_EVENT_TABLE()
+};
+
+IMPLEMENT_CLASS(wxRibbonPageScrollButton, wxRibbonControl)
+
+BEGIN_EVENT_TABLE(wxRibbonPageScrollButton, wxRibbonControl)
+  EVT_ENTER_WINDOW(wxRibbonPageScrollButton::OnMouseEnter)
+  EVT_ERASE_BACKGROUND(wxRibbonPageScrollButton::OnEraseBackground)
+  EVT_LEAVE_WINDOW(wxRibbonPageScrollButton::OnMouseLeave)
+  EVT_PAINT(wxRibbonPageScrollButton::OnPaint)
+END_EVENT_TABLE()
+
+wxRibbonPageScrollButton::wxRibbonPageScrollButton(wxWindow* parent,
+				 wxWindowID id,
+				 const wxPoint& pos,
+				 const wxSize& size,
+				 long style) : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
+{
+	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+	m_flags = (style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) | wxRIBBON_SCROLL_BTN_FOR_PAGE;
+}
+
+wxRibbonPageScrollButton::~wxRibbonPageScrollButton()
+{
+}
+
+void wxRibbonPageScrollButton::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
+{
+	// Do nothing - all painting done in main paint handler
+}
+
+void wxRibbonPageScrollButton::OnPaint(wxPaintEvent& WXUNUSED(evt))
+{
+	wxAutoBufferedPaintDC dc(this);
+	if(m_art)
+	{
+		m_art->DrawScrollButton(dc, GetParent(), GetSize(), m_flags);
+	}
+}
+
+void wxRibbonPageScrollButton::OnMouseEnter(wxMouseEvent& WXUNUSED(evt))
+{
+	m_flags |= wxRIBBON_SCROLL_BTN_HOVERED;
+	Refresh(false);
+}
+
+void wxRibbonPageScrollButton::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
+{
+	m_flags &= ~wxRIBBON_SCROLL_BTN_HOVERED;
+	Refresh(false);
+}
+
 IMPLEMENT_CLASS(wxRibbonPage, wxRibbonControl)
 
 BEGIN_EVENT_TABLE(wxRibbonPage, wxRibbonControl)
@@ -39,6 +121,8 @@ END_EVENT_TABLE()
 
 wxRibbonPage::wxRibbonPage()
 {
+	m_scroll_left_btn = NULL;
+	m_scroll_right_btn = NULL;
 	m_scroll_amount = 0;
 	m_scroll_buttons_visible = false;
 }
@@ -81,6 +165,8 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmap& icon)
 	SetLabel(label);
 	m_old_size = wxSize(0, 0);
 	m_icon = icon;
+	m_scroll_left_btn = NULL;
+	m_scroll_right_btn = NULL;
 	m_scroll_amount = 0;
 	m_scroll_buttons_visible = false;
 
@@ -138,6 +224,34 @@ wxOrientation wxRibbonPage::GetMajorAxis() const
 	}
 }
 
+void wxRibbonPage::SetSizeWithScrollButtonAdjusment(int x, int y, int width, int height)
+{
+	if(m_scroll_buttons_visible)
+	{
+		if(GetMajorAxis() == wxHORIZONTAL)
+		{
+			if(m_scroll_left_btn)
+			{
+				int w = m_scroll_left_btn->GetSize().GetWidth();
+				m_scroll_left_btn->SetPosition(wxPoint(x, y));
+				x += w;
+				width -= w;
+			}
+			if(m_scroll_right_btn)
+			{
+				int w = m_scroll_right_btn->GetSize().GetWidth();
+				width -= w;
+				m_scroll_right_btn->SetPosition(wxPoint(x + width, y));
+			}
+		}
+		else
+		{
+			// TODO (once horizontal case is confirmed as working)
+		}
+	}
+	SetSize(x, y, width, height);
+}
+
 void wxRibbonPage::OnSize(wxSizeEvent& evt)
 {
 	Layout();
@@ -156,65 +270,170 @@ bool wxRibbonPage::Layout()
 		return true;
 	}
 
-	wxPoint origin(m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE), m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE));
-
-	if(GetMajorAxis() == wxHORIZONTAL)
+	wxPoint origin_(m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE), m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_TOP_SIZE));
+	wxPoint origin(origin_);
+	wxOrientation major_axis = GetMajorAxis();
+	int gap;
+	int minor_axis_size;
+	if(major_axis == wxHORIZONTAL)
 	{
-		for(int iteration = 1; iteration <= 2; ++iteration)
-		{
-			int gap = m_art->GetMetric(wxRIBBON_ART_PANEL_X_SEPARATION_SIZE);
-			int height = GetSize().GetHeight() - origin.y - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
-			for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-				  node;
-				  node = node->GetNext() )
-			{
-				wxWindow* child = node->GetData();
-				int w, h;
-				child->GetSize(&w, &h);
-				child->SetSize(origin.x, origin.y, w, height);
-				origin.x += w + gap;
-			}
-			if(iteration == 1)
-			{
-				int available_space = GetSize().GetWidth() - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE) - origin.x + gap;
-				if(available_space > 0)
-				{
-					if(ExpandPanels(wxHORIZONTAL, available_space))
-					{
-						break;
-					}
-				}
-				else if (available_space < 0)
-				{
-					if(!CollapsePanels(wxHORIZONTAL, -available_space))
-					{
-						break;
-					}
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
+		gap = m_art->GetMetric(wxRIBBON_ART_PANEL_X_SEPARATION_SIZE);
+		minor_axis_size = GetSize().GetHeight() - origin.y - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE);
 	}
 	else
 	{
-		int gap = m_art->GetMetric(wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE);
-		int width = GetSize().GetWidth() - origin.x - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
+		gap = m_art->GetMetric(wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE);
+		minor_axis_size = GetSize().GetWidth() - origin.x - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE);
+	}
+
+	for(int iteration = 1; iteration <= 2; ++iteration)
+	{
 		for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-              node;
-              node = node->GetNext() )
+			  node;
+			  node = node->GetNext() )
 		{
 			wxWindow* child = node->GetData();
+			if(child == m_scroll_left_btn || child == m_scroll_right_btn)
+				continue;
 			int w, h;
 			child->GetSize(&w, &h);
-			child->SetSize(origin.x, origin.y, width, h);
-			origin.y += h + gap;
+			if(major_axis == wxHORIZONTAL)
+			{
+				child->SetSize(origin.x, origin.y, w, minor_axis_size);
+				origin.x += w + gap;
+			}
+			else
+			{
+				child->SetSize(origin.x, origin.y, minor_axis_size, h);
+				origin.y += h + gap;
+			}
+		}
+		if(iteration == 1)
+		{
+			int available_space;
+			if(major_axis == wxHORIZONTAL)
+				available_space = GetSize().GetWidth() - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE) - origin.x + gap;
+			else
+				available_space = GetSize().GetHeight() - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE) - origin.y + gap;
+			if(available_space > 0)
+			{
+				if(!ExpandPanels(major_axis, available_space))
+					break;
+			}
+			else if(available_space < 0)
+			{
+				if(m_scroll_buttons_visible)
+				{
+					// Scroll buttons already visible - not going to be able to downsize any more
+					m_scroll_amount_limit = -available_space;
+				}
+				else
+				{
+					if(!CollapsePanels(major_axis, -available_space))
+					{
+						m_scroll_amount_limit = -available_space;
+						ShowScrollButtons();
+						break;
+					}
+				}
+			}
+			else
+			{
+				break;
+			}
+			origin = origin_; // Reset the origin
 		}
 	}
 
 	return true;
+}
+
+void wxRibbonPage::ShowScrollButtons()
+{
+	bool show_left = true;
+	bool show_right = true;
+	bool reposition = false;
+	m_scroll_buttons_visible = true;
+	if(m_scroll_amount == 0)
+	{
+		show_left = false;
+	}
+	if(m_scroll_amount >= m_scroll_amount_limit)
+	{
+		show_right = false;
+		m_scroll_amount = m_scroll_amount_limit;
+	}
+
+	if(show_left)
+	{
+		if(m_scroll_left_btn == NULL)
+		{
+			wxMemoryDC temp_dc;
+			wxSize size;
+			long direction;
+			if(GetMajorAxis() == wxHORIZONTAL)
+			{
+				direction = wxRIBBON_SCROLL_BTN_LEFT;
+				size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+				size.SetHeight(GetSize().GetHeight());
+			}
+			else
+			{
+				direction = wxRIBBON_SCROLL_BTN_UP;
+				size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+				size.SetWidth(GetSize().GetWidth());
+			}
+			m_scroll_left_btn = new wxRibbonPageScrollButton(GetParent(), wxID_ANY, wxDefaultPosition, size, direction);
+			reposition = true;
+		}
+	}
+	else
+	{
+		if(m_scroll_left_btn != NULL)
+		{
+			delete m_scroll_left_btn;
+			m_scroll_left_btn = NULL;
+			reposition = true;
+		}
+	}
+
+	if(show_right)
+	{
+		if(m_scroll_right_btn == NULL)
+		{
+			wxMemoryDC temp_dc;
+			wxSize size;
+			long direction;
+			if(GetMajorAxis() == wxHORIZONTAL)
+			{
+				direction = wxRIBBON_SCROLL_BTN_RIGHT;
+				size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+				size.SetHeight(GetSize().GetHeight());
+			}
+			else
+			{
+				direction = wxRIBBON_SCROLL_BTN_DOWN;
+				size = m_art->GetScrollButtonMinimumSize(temp_dc, GetParent(), direction);
+				size.SetWidth(GetSize().GetWidth());
+			}
+			m_scroll_right_btn = new wxRibbonPageScrollButton(GetParent(), wxID_ANY, wxDefaultPosition, size, direction);
+			reposition = true;
+		}
+	}
+	else
+	{
+		if(m_scroll_right_btn != NULL)
+		{
+			delete m_scroll_right_btn;
+			m_scroll_right_btn = NULL;
+			reposition = true;
+		}
+	}
+
+	if(reposition)
+	{
+		wxDynamicCast(GetParent(), wxRibbonBar)->RepositionPage(this);
+	}
 }
 
 static int GetSizeInOrientation(wxSize size, wxOrientation orientation)

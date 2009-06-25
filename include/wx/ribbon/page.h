@@ -21,6 +21,7 @@
 #include "wx/bitmap.h"
 
 class wxRibbonBar;
+class wxRibbonPageScrollButton;
 
 class WXDLLIMPEXP_RIBBON wxRibbonPage : public wxRibbonControl
 {
@@ -50,6 +51,7 @@ public:
 	wxBitmap& GetIcon() {return m_icon;}
 	virtual wxSize GetMinSize() const;
 	virtual wxSize DoGetBestSize() const;
+	void SetSizeWithScrollButtonAdjusment(int x, int y, int width, int height);
 
 	virtual bool Layout();
 
@@ -64,12 +66,17 @@ protected:
 
 	bool ExpandPanels(wxOrientation direction, int maximum_amount);
 	bool CollapsePanels(wxOrientation direction, int minimum_amount);
+	void ShowScrollButtons();
 
 	void CommonInit(const wxString& label, const wxBitmap& icon);
 
 	wxBitmap m_icon;
 	wxSize m_old_size;
+	// NB: Scroll button windows are siblings rather than children (to get correct clipping of children)
+	wxRibbonPageScrollButton* m_scroll_left_btn;
+	wxRibbonPageScrollButton* m_scroll_right_btn;
 	int m_scroll_amount;
+	int m_scroll_amount_limit;
 	bool m_scroll_buttons_visible;
 
 #ifndef SWIG

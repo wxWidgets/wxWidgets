@@ -647,12 +647,16 @@ void wxRibbonBar::OnSize(wxSizeEvent& WXUNUSED(evt))
 	RecalculateTabSizes();
 	if(m_current_page != -1)
 	{
-		int w, h;
-		GetClientSize(&w, &h);
-		wxRibbonPage* wnd = m_pages.Item(m_current_page).page;
-		wnd->SetSize(w, h - m_tab_height);
+		RepositionPage(m_pages.Item(m_current_page).page);
 	}
 	RefreshTabBar();
+}
+
+void wxRibbonBar::RepositionPage(wxRibbonPage *page)
+{
+	int w, h;
+	GetClientSize(&w, &h);
+	page->SetSizeWithScrollButtonAdjusment(0, m_tab_height, w, h - m_tab_height);
 }
 
 wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)

@@ -29,11 +29,7 @@ public:
 					const wxPoint& pos = wxDefaultPosition,
 					const wxSize& size = wxDefaultSize, long style = 0,
 					const wxValidator& validator = wxDefaultValidator,
-					const wxString& name = wxControlNameStr)
-	: wxControl(parent, id, pos, size, style, validator, name)
-    {
-		m_art = NULL;
-    }
+					const wxString& name = wxControlNameStr);
 
 	virtual void SetArtProvider(wxRibbonArtProvider* art);
 	wxRibbonArtProvider* GetArtProvider() const {return m_art;}

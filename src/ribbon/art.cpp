@@ -539,7 +539,7 @@ void wxRibbonMSWArtProvider::DrawPageBackground(
 void wxRibbonMSWArtProvider::DrawScrollButton(
 						wxDC& dc,
 						wxWindow* WXUNUSED(wnd),
-						const wxRect& rect,
+						const wxRect& rect_,
 						long style)
 {
 	switch(style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK)
@@ -551,6 +551,25 @@ void wxRibbonMSWArtProvider::DrawScrollButton(
 	case wxRIBBON_SCROLL_BTN_DOWN:
 		// TODO
 		return;
+	}
+
+	wxRect rect(rect_);
+
+	if((style & wxRIBBON_SCROLL_BTN_FOR_MASK) == wxRIBBON_SCROLL_BTN_FOR_PAGE)
+	{
+		// Page scroll buttons do not have the luxury of rendering on top of anything
+		// else, and their size includes some padding, hence the background painting
+		// and size adjustment.
+		dc.SetPen(*wxTRANSPARENT_PEN);
+		dc.SetBrush(m_tab_ctrl_background_brush);
+		dc.DrawRectangle(rect);
+		dc.SetClippingRegion(rect);
+		rect.y--;
+		rect.width--;
+		if((style & wxRIBBON_SCROLL_BTN_DIRECTION_MASK) == wxRIBBON_SCROLL_BTN_LEFT)
+		{
+			rect.x++;
+		}
 	}
 
 	{
@@ -802,13 +821,13 @@ wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
 	{
 		if(page_new_size.GetHeight() != page_old_size.GetHeight())
 		{
-			// Width and height both changed
+			// Width and height both changed - redraw everything
 			return wxRect(page_new_size);
 		}
 		else
 		{
-			// Only width changed
-			int right_edge_width = 5;
+			// Only width changed - redraw right hand side
+			const int right_edge_width = 4;
 
 			new_rect = wxRect(page_new_size.GetWidth() - right_edge_width, 0, right_edge_width, page_new_size.GetHeight());
 			old_rect = wxRect(page_old_size.GetWidth() - right_edge_width, 0, right_edge_width, page_old_size.GetHeight());
@@ -818,13 +837,13 @@ wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
 	{
 		if(page_new_size.GetHeight() == page_old_size.GetHeight())
 		{
-			// Nothing changed (should never happen)
+			// Nothing changed (should never happen) - redraw nothing
 			return wxRect(0, 0, 0, 0);
 		}
 		else
 		{
-			// Only height changed
-			int bottom_edge_height = 5;
+			// Only height changed - redraw bottom
+			const int bottom_edge_height = 4;
 
 			new_rect = wxRect(0, page_new_size.GetHeight() - bottom_edge_height, page_new_size.GetWidth(), bottom_edge_height);
 			old_rect = wxRect(0, page_old_size.GetHeight() - bottom_edge_height, page_old_size.GetWidth(), bottom_edge_height);
