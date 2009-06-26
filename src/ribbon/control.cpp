@@ -27,6 +27,22 @@
 
 IMPLEMENT_CLASS(wxRibbonControl, wxControl)
 
+wxRibbonControl::wxRibbonControl(wxWindow *parent, wxWindowID id,
+					const wxPoint& pos,
+					const wxSize& size, long style,
+					const wxValidator& validator,
+					const wxString& name)
+	: wxControl(parent, id, pos, size, style, validator, name)
+{
+	m_art = NULL;
+
+	wxRibbonControl *ribbon_parent = wxDynamicCast(parent, wxRibbonControl);
+	if(ribbon_parent)
+	{
+		m_art = ribbon_parent->GetArtProvider();
+	}
+}
+
 void wxRibbonControl::SetArtProvider(wxRibbonArtProvider* art)
 {
 	m_art = art;

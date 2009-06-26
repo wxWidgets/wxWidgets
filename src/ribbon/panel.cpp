@@ -105,15 +105,18 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long
 
 void wxRibbonPanel::OnEraseBackground(wxEraseEvent& evt)
 {
-	wxDC* dc = evt.GetDC();
-	if(dc != NULL)
+	if(m_art != NULL)
 	{
-		m_art->DrawPanelBackground(*dc, this, GetSize());
-	}
-	else
-	{
-		wxClientDC cdc(this);
-		m_art->DrawPanelBackground(cdc, this, GetSize());
+		wxDC* dc = evt.GetDC();
+		if(dc != NULL)
+		{
+			m_art->DrawPanelBackground(*dc, this, GetSize());
+		}
+		else
+		{
+			wxClientDC cdc(this);
+			m_art->DrawPanelBackground(cdc, this, GetSize());
+		}
 	}
 }
 

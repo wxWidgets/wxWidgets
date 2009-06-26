@@ -51,15 +51,19 @@ public:
 	wxBitmap& GetIcon() {return m_icon;}
 	virtual wxSize GetMinSize() const;
 	virtual wxSize DoGetBestSize() const;
-	void SetSizeWithScrollButtonAdjusment(int x, int y, int width, int height);
+	void SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height);
 
+	virtual bool Show(bool show = true);
 	virtual bool Layout();
+	virtual bool ScrollLines(int lines);
+	bool ScrollPixels(int pixels);
 
 	wxOrientation GetMajorAxis() const;
 
 protected:
 	virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
+	void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 	void OnEraseBackground(wxEraseEvent& evt);
 	void OnPaint(wxPaintEvent& evt);
 	void OnSize(wxSizeEvent& evt);
@@ -67,6 +71,7 @@ protected:
 	bool ExpandPanels(wxOrientation direction, int maximum_amount);
 	bool CollapsePanels(wxOrientation direction, int minimum_amount);
 	void ShowScrollButtons();
+	void HideScrollButtons();
 
 	void CommonInit(const wxString& label, const wxBitmap& icon);
 
@@ -77,6 +82,7 @@ protected:
 	wxRibbonPageScrollButton* m_scroll_right_btn;
 	int m_scroll_amount;
 	int m_scroll_amount_limit;
+	int size_in_major_axis_for_children;
 	bool m_scroll_buttons_visible;
 
 #ifndef SWIG

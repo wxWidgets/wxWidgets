@@ -217,12 +217,8 @@ bool wxRibbonBar::SetActivePage(size_t page)
 	m_current_page = (int)page;
 	m_pages.Item(page).active = true;
 	{
-		wxWindow *wnd = m_pages.Item(page).page;
-		wxPoint position(0, m_tab_height);
-		wnd->SetPosition(position);
-		wxSize size(GetClientSize());
-		size.DecBy(position.x, position.y);
-		wnd->SetSize(size);
+		wxRibbonPage* wnd = m_pages.Item(page).page;
+		RepositionPage(wnd);
 		wnd->Layout();
 		wnd->Show();
 	}
@@ -656,7 +652,7 @@ void wxRibbonBar::RepositionPage(wxRibbonPage *page)
 {
 	int w, h;
 	GetClientSize(&w, &h);
-	page->SetSizeWithScrollButtonAdjusment(0, m_tab_height, w, h - m_tab_height);
+	page->SetSizeWithScrollButtonAdjustment(0, m_tab_height, w, h - m_tab_height);
 }
 
 wxRibbonPageTabInfo* wxRibbonBar::HitTestTabs(wxPoint position, int* index)
