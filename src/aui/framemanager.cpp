@@ -4012,6 +4012,9 @@ void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
 
         switch (part.type)
         {
+            case wxAuiDockUIPart::typePaneTab:
+            part.m_tab_container->DrawTabs(dc, m_frame, part.rect);
+                break;
             case wxAuiDockUIPart::typeDockSizer:
             case wxAuiDockUIPart::typePaneSizer:
                 m_art->DrawSash(*dc, m_frame, part.orientation, part.rect);
