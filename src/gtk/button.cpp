@@ -409,9 +409,15 @@ wxButton::State wxButton::GTKGetCurrentState() const
 
 void wxButton::GTKUpdateBitmap()
 {
-    State state = GTKGetCurrentState();
+    // if we don't show bitmaps at all, there is nothing to update
+    if ( m_bitmaps[State_Normal].IsOk() )
+    {
+        // if we do show them, this will return a state for which we do have a
+        // valid bitmap
+        State state = GTKGetCurrentState();
 
-    GTKDoShowBitmap(m_bitmaps[state]);
+        GTKDoShowBitmap(m_bitmaps[state]);
+    }
 }
 
 void wxButton::GTKDoShowBitmap(const wxBitmap& bitmap)
