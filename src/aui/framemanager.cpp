@@ -2827,13 +2827,6 @@ void wxAuiManager::Update()
                 p.GetWindow()->Show(p.IsShown());
         }
 
-        // We have to do the hiding and showing of panes before we call LayoutAll
-        // As LayoutAll may wany to hide frames even though they are technically "visible"
-        // If they are in a notebook.
-
-        // create a layout for all of the panes
-        sizer = LayoutAll(m_panes, m_docks, m_uiparts, false);
-
         // if "active panes" are no longer allowed, clear
         // any optionActive values from the pane states
         if ((m_flags & wxAUI_MGR_ALLOW_ACTIVE_PANE) == 0)
@@ -2842,6 +2835,13 @@ void wxAuiManager::Update()
         }
     }
 
+
+	// We have to do the hiding and showing of panes before we call LayoutAll
+    // As LayoutAll may wany to hide frames even though they are technically "visible"
+    // If they are in a notebook.
+
+    // create a layout for all of the panes
+    sizer = LayoutAll(m_panes, m_docks, m_uiparts, false);
 
     // keep track of the old window rectangles so we can
     // refresh those windows whose rect has changed
@@ -4018,7 +4018,7 @@ void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
         switch (part.type)
         {
             case wxAuiDockUIPart::typePaneTab:
-            part.m_tab_container->DrawTabs(dc, m_frame, part.rect);
+                part.m_tab_container->DrawTabs(dc, m_frame, part.rect);
                 break;
             case wxAuiDockUIPart::typeDockSizer:
             case wxAuiDockUIPart::typePaneSizer:
