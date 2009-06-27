@@ -676,11 +676,8 @@ static int PaneSortFunc(wxAuiPaneInfo** p1, wxAuiPaneInfo** p2)
         {
             return -1;
         }
-        else
-        {
-            return 1;
-        }
     }
+    return 1;
 }
 
 
