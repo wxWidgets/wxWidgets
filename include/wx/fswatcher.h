@@ -70,6 +70,13 @@ public:
     {
     }
 
+    wxFileSystemWatcherEvent(int changeType, const wxString& errorMsg,
+							 int watchid = wxID_ANY) :
+		wxEvent(watchid, wxEVT_FSWATCHER),
+		m_changeType(changeType), m_errorMsg(errorMsg)
+    {
+    }
+
     wxFileSystemWatcherEvent(int changeType,
                              const wxFileName& path, const wxFileName& newPath,
                              int watchid = wxID_ANY) :
@@ -139,6 +146,11 @@ public:
         return m_changeType & (wxFSW_EVENT_ERROR | wxFSW_EVENT_WARNING);
     }
 
+    wxString GetErrorDescription() const
+    {
+    	return m_errorMsg;
+    }
+
     /**
      * Returns a wxString describing an event useful for debugging or testing
      */
@@ -148,7 +160,14 @@ protected:
     int m_changeType;
     wxFileName m_path;
     wxFileName m_newPath;
+    wxString m_errorMsg;
 };
+
+typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)
+												(wxFileSystemWatcherEvent&);
+
+#define wxFileSystemWatcherEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxFileSystemWatcherEventFunction, func)
 
 
 // ----------------------------------------------------------------------------
@@ -194,23 +213,23 @@ public:
      * of particular type.
      */
     virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
-                        const wxString& filter = wxEmptyString);
+                        const wxString& filter = wxEmptyString) = 0;
 
     /**
      * Removes path from the list of watched paths.
      */
-    virtual bool Remove(const wxFileName& path) = 0;
+    virtual bool Remove(const wxFileName& path);
 
     /**
      * Same as above, but also removes every file belonging to the tree rooted
      * at path.
      */
-    virtual bool RemoveTree(const wxFileName& path) = 0;
+    virtual bool RemoveTree(const wxFileName& path);
 
     /**
      * Stops watching all paths.
      */
-    virtual bool RemoveAll() = 0;
+    virtual bool RemoveAll();
 
     void SetOwner(wxEvtHandler* handler)
     {
@@ -256,9 +275,14 @@ protected:
      */
     virtual bool DoAdd(const wxFSWatchEntry& watch) = 0;
 
+    /**
+	 * Actual removing of wxFSWatchEntry from list of watched paths
+	 */
+    virtual bool DoRemove(const wxFSWatchEntry& watch) = 0;
+
     wxFSWatchEntries m_watches;        // path=>wxFSWatchEntry* map
-    wxFSWatcherService* m_service; // file system events service
-    wxEvtHandler* m_owner;       // handler for file system events
+    wxFSWatcherService* m_service;     // file system events service
+    wxEvtHandler* m_owner;             // handler for file system events
 
     friend class wxFSWatcherService;
 };
@@ -266,9 +290,7 @@ protected:
 // include the platform specific file defining wxFileSystemWatcher
 // inheriting from wxFileSystemWatcherBase
 
-// TODO add HAVE_INOTIFY to the building system
-//#ifdef HAVE_INOTIFY
-#if __UNIX__
+#if HAVE_INOTIFY_H
     #include "wx/unix/fswatcher.h"
     #define wxFileSystemWatcher wxInotifyFileSystemWatcher
 #elif defined(__WXMSW__)

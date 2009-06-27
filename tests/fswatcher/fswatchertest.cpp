@@ -100,6 +100,18 @@ public:
         return m_file.Touch();
     }
 
+    bool ReadFile()
+	{
+    	wxFile f(m_file.GetFullPath());
+    	CPPUNIT_ASSERT(f.IsOpened());
+
+    	char buf[1];
+    	ssize_t count = f.Read(buf, sizeof(buf));
+    	CPPUNIT_ASSERT(count > 0);
+
+		return true;
+	}
+
     bool ModifyFile()
     {
         CPPUNIT_ASSERT(m_file.FileExists());
@@ -217,12 +229,16 @@ public:
         m_loop->Exit();
     }
 
+    // sends idle event, so we get called in a moment
+    void SendIdle()
+    {
+    	wxIdleEvent* e = new wxIdleEvent();
+    	QueueEvent(e);
+    }
+
     void Run()
     {
-        // ensure we will be called in a moment
-        wxIdleEvent* e = new wxIdleEvent();
-        QueueEvent(e);
-
+    	SendIdle();
         m_loop->Run();
     }
 
@@ -233,9 +249,10 @@ public:
 
         if (more)
         {
-            wxIdleEvent* e = new wxIdleEvent();
-            QueueEvent(e);
+            SendIdle();
         }
+
+//        wxLogDebug(wxString::Format("--- OnIdle %d ---", m_count));
     }
 
     // returns whether we should produce more idle events
@@ -249,6 +266,11 @@ public:
         case 1:
             CPPUNIT_ASSERT(GenerateEvent());
             break;
+        case 2:
+        	// actual test
+			CPPUNIT_ASSERT(CheckResult());
+			Exit();
+			break;
 
         // TODO a mechanism that will break the loop in case we
         // don't receive a file system event
@@ -285,8 +307,6 @@ public:
         wxFileName dir = EventGenerator::GetWatchDir();
         CPPUNIT_ASSERT(m_watcher->Add(dir, wxFSW_EVENT_ALL));
 
-        wxLogDebug("EventHandler initialized");
-
         return true;
     }
 
@@ -322,15 +342,9 @@ public:
         m_lastEvent = wxDynamicCast(evt.Clone(), wxFileSystemWatcherEvent);
         m_events.Add(m_lastEvent);
 
-        // actual test
-        // XXX maybe call this after we receive all events, not just first
-        CPPUNIT_ASSERT(CheckResult());
-
         // test finished
+        SendIdle();
         tested = true;
-
-        // FIXME this way we only check the first event, right...
-        Exit();
     }
 
     virtual bool CheckResult()
@@ -407,11 +421,15 @@ private:
         CPPUNIT_TEST( TestEventCreate );
         CPPUNIT_TEST( TestEventDelete );
         CPPUNIT_TEST( TestEventRename );
+        CPPUNIT_TEST( TestEventModify );
+        CPPUNIT_TEST( TestEventAccess );
     CPPUNIT_TEST_SUITE_END();
 
     void TestEventCreate();
     void TestEventDelete();
     void TestEventRename();
+    void TestEventModify();
+    void TestEventAccess();
 
     DECLARE_NO_COPY_CLASS(FileSystemWatcherTestCase)
 };
@@ -531,77 +549,67 @@ void FileSystemWatcherTestCase::TestEventRename()
     tester.Run();
 }
 
-#if 0
 // ----------------------------------------------------------------------------
-// TestEventCreate
+// TestEventModify
 // ----------------------------------------------------------------------------
-void FileSystemWatcherTestCase::TestEventCreate()
+void FileSystemWatcherTestCase::TestEventModify()
 {
-    wxLogDebug("TestEventCreate()");
+    wxLogDebug("TestEventModify()");
 
     class EventTester : public EventHandler
     {
     public:
         virtual bool GenerateEvent()
         {
-            CPPUNIT_ASSERT(eg.CreateFile());
+            CPPUNIT_ASSERT(eg.ModifyFile());
             return true;
         }
 
         virtual wxFileSystemWatcherEvent ExpectedEvent()
         {
-            wxFileSystemWatcherEvent event(wxFSW_EVENT_CREATE);
+            wxFileSystemWatcherEvent event(wxFSW_EVENT_MODIFY);
             event.SetPath(eg.m_file);
             event.SetNewPath(eg.m_file);
             return event;
         }
     };
 
+    // we need to create a file to modify
+    EventGenerator::Get().CreateFile();
+
     EventTester tester;
     tester.Run();
 }
 
-
 // ----------------------------------------------------------------------------
-// TestEventCreate
+// TestEventAccess
 // ----------------------------------------------------------------------------
-void FileSystemWatcherTestCase::TestEventCreate()
+void FileSystemWatcherTestCase::TestEventAccess()
 {
-    wxLogDebug("TestEventCreate()");
+    wxLogDebug("TestEventAccess()");
 
     class EventTester : public EventHandler
     {
     public:
         virtual bool GenerateEvent()
         {
-            CPPUNIT_ASSERT(eg.CreateFile());
+            CPPUNIT_ASSERT(eg.ReadFile());
             return true;
         }
 
         virtual wxFileSystemWatcherEvent ExpectedEvent()
         {
-            wxFileSystemWatcherEvent event(wxFSW_EVENT_CREATE);
+            wxFileSystemWatcherEvent event(wxFSW_EVENT_ACCESS);
             event.SetPath(eg.m_file);
             event.SetNewPath(eg.m_file);
             return event;
         }
     };
 
+    // we need to create a file to read from it and write sth to it
+	EventGenerator::Get().CreateFile();
+	EventGenerator::Get().ModifyFile();
+
     EventTester tester;
     tester.Run();
 }
-
-
-// TODO
-//    CPPUNIT_ASSERT(eg.RenameFile());
-//    CPPUNIT_ASSERT(eg.DeleteFile());
-//    CPPUNIT_ASSERT(eg.ModifyFile());
-//    CPPUNIT_ASSERT(eg.RenameFile());
-//    CPPUNIT_ASSERT(eg.TouchFile());
-//    CPPUNIT_ASSERT(eg.DeleteFile());
-    //wxFSW_EVENT_CREATE = 0x01,
-    //wxFSW_EVENT_DELETE = 0x02,
-    //wxFSW_EVENT_RENAME = 0x04,
-    //wxFSW_EVENT_MODIFY = 0x08,
-    //wxFSW_EVENT_ACCESS = 0x10,
-#endif

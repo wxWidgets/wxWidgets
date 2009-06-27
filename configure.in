@@ -5402,8 +5402,26 @@ if test "$wxUSE_PLUGINS" = "yes" ; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl File system watcher checks
+dnl ---------------------------------------------------------------------------
+if test "$wxUSE_FSWATCHER" = "yes"; then
+	AC_DEFINE(wxUSE_FSWATCHER)
+
+	if test "$wxUSE_UNIX" = "yes" ; then
+	    AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
+		if test "$ac_cv_header_sys_inotify_h" = "yes"; then
+	        AC_DEFINE(HAVE_INOTIFY_H)
+	    else
+	        AC_MSG_WARN([sys/inotify.h not available, \
+	        				wxInotifyFileSystemWatcher disabled])
+	    fi
+    fi
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl Register non-GUI class options for makefiles and setup.h
 dnl ---------------------------------------------------------------------------
+
 
 if test "$wxUSE_STL" = "yes"; then
   AC_DEFINE(wxUSE_STL)
@@ -5421,9 +5439,6 @@ if test "$wxUSE_TIMER" = "yes"; then
   AC_DEFINE(wxUSE_TIMER)
 fi
 
-if test "$wxUSE_FSWATCHER" = "yes"; then
-  AC_DEFINE(wxUSE_FSWATCHER)
-fi
 
 dnl Unix implementation needs additional checks because audio support
 dnl comes in many favours:

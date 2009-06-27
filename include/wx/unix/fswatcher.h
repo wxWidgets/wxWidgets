@@ -28,16 +28,8 @@ public:
 
     virtual ~wxInotifyFileSystemWatcher();
 
-    virtual bool Add(const wxFileName& path, int events = wxFSW_EVENT_ALL);
-
     virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
                          const wxString& filter = wxEmptyString);
-
-    virtual bool Remove(const wxFileName& path);
-
-    virtual bool RemoveTree(const wxFileName& path);
-
-    virtual bool RemoveAll();
 
 protected:
     virtual bool Init();
@@ -45,6 +37,8 @@ protected:
     virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events);
 
     virtual bool DoAdd(const wxFSWatchEntry& watch);
+
+    virtual bool DoRemove(const wxFSWatchEntry& watch);
 };
 
 #endif
