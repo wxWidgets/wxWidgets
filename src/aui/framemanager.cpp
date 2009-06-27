@@ -2771,8 +2771,6 @@ void wxAuiManager::Update()
     // delete old sizer first
     m_frame->SetSizer(NULL);
 
-    // create a layout for all of the panes
-    sizer = LayoutAll(m_panes, m_docks, m_uiparts, false);
 
     // hide or show panes as necessary,
     // and float panes as necessary
@@ -2828,6 +2826,13 @@ void wxAuiManager::Update()
             if (p.GetWindow()->IsShown() != p.IsShown())
                 p.GetWindow()->Show(p.IsShown());
         }
+
+        // We have to do the hiding and showing of panes before we call LayoutAll
+        // As LayoutAll may wany to hide frames even though they are technically "visible"
+        // If they are in a notebook.
+
+        // create a layout for all of the panes
+        sizer = LayoutAll(m_panes, m_docks, m_uiparts, false);
 
         // if "active panes" are no longer allowed, clear
         // any optionActive values from the pane states
