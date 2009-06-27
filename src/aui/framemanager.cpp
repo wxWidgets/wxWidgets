@@ -2511,15 +2511,22 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         }
 
 
-        // if the dock mode is proportional and not fixed-pixel,
+        // If the dock mode is proportional and not fixed-pixel,
         // reassign the dock_pos to the sequential 0, 1, 2, 3;
         // e.g. remove gaps like 1, 2, 30, 500
+        // If panes currently share a position they must continue to do so
+        // e.g. 1, 5, 5, 9 -> 0, 1, 1, 2
         if (!dock.fixed)
         {
+            int i=0;
+            int lastposition=-1;
             for (j = 0; j < dock_pane_count; ++j)
             {
                 wxAuiPaneInfo& pane = *dock.panes.Item(j);
-                pane.SetPosition(j);
+                if(pane.GetPosition()!=lastposition)
+                    ++i;
+                lastposition=pane.GetPosition();
+                pane.SetPosition(i);
             }
         }
 
