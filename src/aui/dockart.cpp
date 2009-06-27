@@ -1584,7 +1584,11 @@ void wxAuiTabContainer::SetMeasuringFont(const wxFont& font)
 
 void wxAuiTabContainer::SetRect(const wxRect& rect)
 {
-    m_rect = rect;
+    m_target_rect = rect;
+    m_rect.x = 0;
+    m_rect.y = 0;
+    m_rect.width = rect.width;
+    m_rect.height = rect.height;
 
     if (m_art)
     {
@@ -1805,8 +1809,7 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 
 void wxAuiTabContainer::DrawTabs(wxDC* dc, wxWindow* wnd,const wxRect& rect)
 {
-    m_rect=rect;
-    m_art->SetSizingInfo(m_rect.GetSize(), m_pages.GetCount());
+    SetRect(rect);
     Render(dc,wnd);
 }
 
@@ -2105,8 +2108,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     }
 
 
-    raw_dc->Blit(m_rect.x, m_rect.y,
-                 m_rect.GetWidth(), m_rect.GetHeight(),
+    raw_dc->Blit(m_target_rect.x, m_target_rect.y,
+                 m_target_rect.GetWidth(), m_target_rect.GetHeight(),
                  &dc, 0, 0);
 }
 

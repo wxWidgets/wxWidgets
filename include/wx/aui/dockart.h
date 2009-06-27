@@ -421,6 +421,7 @@ protected:
     wxAuiTabContainerButtonArray m_buttons;
     wxAuiTabContainerButtonArray m_tab_close_buttons;
     wxRect m_rect;
+    wxRect m_target_rect;
     size_t m_tab_offset;
     unsigned int m_flags;
 };
