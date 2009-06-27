@@ -101,16 +101,16 @@ public:
     }
 
     bool ReadFile()
-	{
-    	wxFile f(m_file.GetFullPath());
-    	CPPUNIT_ASSERT(f.IsOpened());
+    {
+        wxFile f(m_file.GetFullPath());
+        CPPUNIT_ASSERT(f.IsOpened());
 
-    	char buf[1];
-    	ssize_t count = f.Read(buf, sizeof(buf));
-    	CPPUNIT_ASSERT(count > 0);
+        char buf[1];
+        ssize_t count = f.Read(buf, sizeof(buf));
+        CPPUNIT_ASSERT(count > 0);
 
-		return true;
-	}
+    	return true;
+    }
 
     bool ModifyFile()
     {
@@ -232,13 +232,13 @@ public:
     // sends idle event, so we get called in a moment
     void SendIdle()
     {
-    	wxIdleEvent* e = new wxIdleEvent();
-    	QueueEvent(e);
+        wxIdleEvent* e = new wxIdleEvent();
+        QueueEvent(e);
     }
 
     void Run()
     {
-    	SendIdle();
+        SendIdle();
         m_loop->Run();
     }
 
@@ -267,10 +267,10 @@ public:
             CPPUNIT_ASSERT(GenerateEvent());
             break;
         case 2:
-        	// actual test
-			CPPUNIT_ASSERT(CheckResult());
-			Exit();
-			break;
+            // actual test
+    		CPPUNIT_ASSERT(CheckResult());
+    		Exit();
+    		break;
 
         // TODO a mechanism that will break the loop in case we
         // don't receive a file system event
@@ -607,8 +607,8 @@ void FileSystemWatcherTestCase::TestEventAccess()
     };
 
     // we need to create a file to read from it and write sth to it
-	EventGenerator::Get().CreateFile();
-	EventGenerator::Get().ModifyFile();
+    EventGenerator::Get().CreateFile();
+    EventGenerator::Get().ModifyFile();
 
     EventTester tester;
     tester.Run();

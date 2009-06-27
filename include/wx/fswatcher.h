@@ -71,9 +71,9 @@ public:
     }
 
     wxFileSystemWatcherEvent(int changeType, const wxString& errorMsg,
-							 int watchid = wxID_ANY) :
-		wxEvent(watchid, wxEVT_FSWATCHER),
-		m_changeType(changeType), m_errorMsg(errorMsg)
+    						 int watchid = wxID_ANY) :
+    	wxEvent(watchid, wxEVT_FSWATCHER),
+    	m_changeType(changeType), m_errorMsg(errorMsg)
     {
     }
 
@@ -148,7 +148,7 @@ public:
 
     wxString GetErrorDescription() const
     {
-    	return m_errorMsg;
+        return m_errorMsg;
     }
 
     /**
@@ -164,7 +164,7 @@ protected:
 };
 
 typedef void (wxEvtHandler::*wxFileSystemWatcherEventFunction)
-												(wxFileSystemWatcherEvent&);
+    											(wxFileSystemWatcherEvent&);
 
 #define wxFileSystemWatcherEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxFileSystemWatcherEventFunction, func)
@@ -276,8 +276,8 @@ protected:
     virtual bool DoAdd(const wxFSWatchEntry& watch) = 0;
 
     /**
-	 * Actual removing of wxFSWatchEntry from list of watched paths
-	 */
+     * Actual removing of wxFSWatchEntry from list of watched paths
+     */
     virtual bool DoRemove(const wxFSWatchEntry& watch) = 0;
 
     wxFSWatchEntries m_watches;        // path=>wxFSWatchEntry* map

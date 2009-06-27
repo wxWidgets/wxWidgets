@@ -92,82 +92,82 @@ bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
 
 bool wxFileSystemWatcherBase::Remove(const wxFileName& path)
 {
-	// normalize
-	wxFileName path2 = path;
-	if ( !path2.Normalize() )
-	{
-		wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
-														path2.GetFullPath()));
-		return false;
-	}
+    // normalize
+    wxFileName path2 = path;
+    if ( !path2.Normalize() )
+    {
+    	wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
+    													path2.GetFullPath()));
+    	return false;
+    }
 
-	// get watch entry
-	wxString canonical = path2.GetFullPath();
-	wxFSWatchEntries::iterator it = m_watches.find(canonical);
-	wxCHECK_MSG(it != m_watches.end(), false,
-					wxString::Format("path %s is not watched", canonical));
+    // get watch entry
+    wxString canonical = path2.GetFullPath();
+    wxFSWatchEntries::iterator it = m_watches.find(canonical);
+    wxCHECK_MSG(it != m_watches.end(), false,
+    				wxString::Format("path %s is not watched", canonical));
 
-	// remove
-	wxFSWatchEntry* watch = it->second;
-	m_watches.erase(it);
-	bool ret = DoRemove(*watch);
-	delete watch;
+    // remove
+    wxFSWatchEntry* watch = it->second;
+    m_watches.erase(it);
+    bool ret = DoRemove(*watch);
+    delete watch;
 
-	return ret;
+    return ret;
 }
 
 bool wxFileSystemWatcherBase::RemoveTree(const wxFileName& path)
 {
-	if (!path.DirExists())
-		return false;
+    if (!path.DirExists())
+    	return false;
 
-	// OPT could be optimised if we stored information about relationships
-	// between paths
-	class RemoveTraverser : public wxDirTraverser
-	{
-	public:
-		RemoveTraverser(wxFileSystemWatcherBase* watcher) :
-			m_watcher(watcher)
-		{
-		}
+    // OPT could be optimised if we stored information about relationships
+    // between paths
+    class RemoveTraverser : public wxDirTraverser
+    {
+    public:
+    	RemoveTraverser(wxFileSystemWatcherBase* watcher) :
+    		m_watcher(watcher)
+    	{
+    	}
 
-		virtual wxDirTraverseResult OnFile(const wxString& filename)
-		{
-			m_watcher->Remove(wxFileName(filename));
-			return wxDIR_CONTINUE;
-		}
+    	virtual wxDirTraverseResult OnFile(const wxString& filename)
+    	{
+    		m_watcher->Remove(wxFileName(filename));
+    		return wxDIR_CONTINUE;
+    	}
 
-		virtual wxDirTraverseResult OnDir(const wxString& dirname)
-		{
-			m_watcher->RemoveTree(wxFileName(dirname));
-			return wxDIR_CONTINUE;
-		}
+    	virtual wxDirTraverseResult OnDir(const wxString& dirname)
+    	{
+    		m_watcher->RemoveTree(wxFileName(dirname));
+    		return wxDIR_CONTINUE;
+    	}
 
-	private:
-		wxFileSystemWatcherBase* m_watcher;
-	};
+    private:
+    	wxFileSystemWatcherBase* m_watcher;
+    };
 
-	wxDir dir(path.GetFullPath());
-	RemoveTraverser traverser(this);
-	dir.Traverse(traverser);
+    wxDir dir(path.GetFullPath());
+    RemoveTraverser traverser(this);
+    dir.Traverse(traverser);
 
-	return true;
+    return true;
 }
 
 bool wxFileSystemWatcherBase::RemoveAll()
 {
-	wxFSWatchEntries::iterator it = m_watches.begin();
-	for ( ; it != m_watches.end(); ++it)
-	{
-		wxFSWatchEntry* watch = it->second;
+    wxFSWatchEntries::iterator it = m_watches.begin();
+    for ( ; it != m_watches.end(); ++it)
+    {
+    	wxFSWatchEntry* watch = it->second;
 
-		// ignore return, we want to remove as much as possible
-		DoRemove(*watch);
+    	// ignore return, we want to remove as much as possible
+    	DoRemove(*watch);
 
-		delete watch;
-	}
+    	delete watch;
+    }
 
-	return true;
+    return true;
 }
 
 #endif // wxUSE_FSWATCHER

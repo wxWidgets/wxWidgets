@@ -196,7 +196,7 @@ public:
         char buf[128 * sizeof(inotify_event)];
         int left = ReadEventsToBuf(buf, sizeof(buf));
         if (left == -1)
-        	return -1;
+            return -1;
 
         // len > 0, we have events
         char* memory = buf;
@@ -232,12 +232,12 @@ protected:
     void ProcessNativeEvent(const inotify_event& e)
     {
         wxLogTrace(wxTRACE_FSWATCHER, "Event: wd=%d, mask=%u, len=%u, name=%s",
-												e.wd, e.mask, e.len, e.name);
+    											e.wd, e.mask, e.len, e.name);
 
         // get watch entry for this event
         wxFSWatchEntryDescriptors::iterator it = m_watchMap.find(e.wd);
         wxASSERT_MSG(it != m_watchMap.end(),
-									  "Event for wd not on the watch list!");
+    								  "Event for wd not on the watch list!");
         wxFSWatchEntry& w = *(it->second);
 
         // TODO we can have multiple flags set, possibly resulting in
@@ -245,26 +245,26 @@ protected:
         int flags = Native2WatcherFlags(e.mask);
         if (flags & wxFSW_EVENT_WARNING || flags & wxFSW_EVENT_ERROR)
         {
-        	wxString errMsg = GetErrorDescription(flags);
-        	wxFileSystemWatcherEvent event(flags, errMsg);
-        	SendEvent(event);
+            wxString errMsg = GetErrorDescription(flags);
+            wxFileSystemWatcherEvent event(flags, errMsg);
+            SendEvent(event);
         }
         // filter out ignored events and those not asked for.
         // we never filter out warnings or exceptions
         else if ((flags == 0) || !(flags & w.GetFlags()))
         {
-			return;
+    		return;
         }
         else
         {
-        	// only when dir is watched, we have non-empty e.name
-			wxFileName path = w.GetPath();
-			if (path.IsDir())
-				path = wxFileName(path.GetPath(), e.name);
+            // only when dir is watched, we have non-empty e.name
+    		wxFileName path = w.GetPath();
+    		if (path.IsDir())
+    			path = wxFileName(path.GetPath(), e.name);
 
-			// TODO figure out renames: proper paths!
-			wxFileSystemWatcherEvent event(flags, path, path);
-			SendEvent(event);
+    		// TODO figure out renames: proper paths!
+    		wxFileSystemWatcherEvent event(flags, path, path);
+    		SendEvent(event);
         }
     }
 
@@ -287,8 +287,8 @@ protected:
 
     int ReadEventsToBuf(char* buf, int size)
     {
-	   wxCHECK_MSG( m_source.IsOk(), false,
-					"Inotify not initialized or invalid inotify descriptor" );
+       wxCHECK_MSG( m_source.IsOk(), false,
+    				"Inotify not initialized or invalid inotify descriptor" );
 
         // TODO remove memset after making sure this code works reliably
         memset(buf, 0, size);
@@ -318,25 +318,25 @@ protected:
     {
         // FIXME remove in the future. just for reference
 #if 0
-	#define IN_ACCESS    0x00000001 /* File was accessed.  */
-	#define IN_MODIFY    0x00000002 /* File was modified.  */
-	#define IN_ATTRIB    0x00000004 /* Metadata changed.  */
-	#define IN_CLOSE_WRITE   0x00000008 /* Writtable file was closed.  */
-	#define IN_CLOSE_NOWRITE 0x00000010 /* Unwrittable file closed.  */
-	#define IN_CLOSE     (IN_CLOSE_WRITE | IN_CLOSE_NOWRITE) /* Close.  */
-	#define IN_OPEN      0x00000020 /* File was opened.  */
-	#define IN_MOVED_FROM    0x00000040 /* File was moved from X.  */
-	#define IN_MOVED_TO      0x00000080 /* File was moved to Y.  */
-	#define IN_MOVE      (IN_MOVED_FROM | IN_MOVED_TO) /* Moves.  */
-	#define IN_CREATE    0x00000100 /* Subfile was created.  */
-	#define IN_DELETE    0x00000200 /* Subfile was deleted.  */
-	#define IN_DELETE_SELF   0x00000400 /* Self was deleted.  */
-	#define IN_MOVE_SELF     0x00000800 /* Self was moved.  */
+    #define IN_ACCESS    0x00000001 /* File was accessed.  */
+    #define IN_MODIFY    0x00000002 /* File was modified.  */
+    #define IN_ATTRIB    0x00000004 /* Metadata changed.  */
+    #define IN_CLOSE_WRITE   0x00000008 /* Writtable file was closed.  */
+    #define IN_CLOSE_NOWRITE 0x00000010 /* Unwrittable file closed.  */
+    #define IN_CLOSE     (IN_CLOSE_WRITE | IN_CLOSE_NOWRITE) /* Close.  */
+    #define IN_OPEN      0x00000020 /* File was opened.  */
+    #define IN_MOVED_FROM    0x00000040 /* File was moved from X.  */
+    #define IN_MOVED_TO      0x00000080 /* File was moved to Y.  */
+    #define IN_MOVE      (IN_MOVED_FROM | IN_MOVED_TO) /* Moves.  */
+    #define IN_CREATE    0x00000100 /* Subfile was created.  */
+    #define IN_DELETE    0x00000200 /* Subfile was deleted.  */
+    #define IN_DELETE_SELF   0x00000400 /* Self was deleted.  */
+    #define IN_MOVE_SELF     0x00000800 /* Self was moved.  */
 
-	/* Events sent by the kernel.  */
-	#define IN_UNMOUNT	 0x00002000	/* Backing fs was unmounted.  */
-	#define IN_Q_OVERFLOW	 0x00004000	/* Event queued overflowed.  */
-	#define IN_IGNORED	 0x00008000	/* File was ignored.  */
+    /* Events sent by the kernel.  */
+    #define IN_UNMOUNT	 0x00002000	/* Backing fs was unmounted.  */
+    #define IN_Q_OVERFLOW	 0x00004000	/* Event queued overflowed.  */
+    #define IN_IGNORED	 0x00008000	/* File was ignored.  */
 #endif
 
         // TODO this needs more thinking
@@ -358,7 +358,7 @@ protected:
             { IN_Q_OVERFLOW,    wxFSW_EVENT_WARNING},
 
             // ignored, because this is genereted mainly by watcher::Remove()
-            { IN_IGNORED,    	0 }
+            { IN_IGNORED,        0 }
         };
 
         unsigned int i=0;
@@ -382,13 +382,13 @@ protected:
      */
     static const wxString GetErrorDescription(int flag)
     {
-    	switch ( flag )
-    	{
-    	case IN_UNMOUNT:
-    		return _("File system containing watched object was unmounted");
-    	case IN_Q_OVERFLOW:
-			return _("Event queue overflowed");
-    	}
+        switch ( flag )
+        {
+        case IN_UNMOUNT:
+        	return _("File system containing watched object was unmounted");
+        case IN_Q_OVERFLOW:
+    		return _("Event queue overflowed");
+        }
 
         // never reached
         wxFAIL_MSG(wxString::Format("Unknown inotify event mask %u", flag));
@@ -431,7 +431,7 @@ wxInotifyFileSystemWatcher::wxInotifyFileSystemWatcher() :
 }
 
 wxInotifyFileSystemWatcher::wxInotifyFileSystemWatcher(const wxFileName& path,
-		                                               int events) :
+    	                                               int events) :
     wxFileSystemWatcherBase()
 {
     Init();
@@ -457,62 +457,62 @@ bool wxInotifyFileSystemWatcher::DoAdd(const wxFSWatchEntry& watch)
 
 bool wxInotifyFileSystemWatcher::DoRemove(const wxFSWatchEntry& watch)
 {
-	return m_service->Remove(&watch);
+    return m_service->Remove(&watch);
 }
 
 wxFSWatchEntry* wxInotifyFileSystemWatcher::CreateWatch(const wxFileName& path,
-														int events)
+    													int events)
 {
     return new wxFSWatchEntry(path, events);
 }
 
 bool wxInotifyFileSystemWatcher::AddTree(const wxFileName& path, int events,
-										 const wxString& filter)
+    									 const wxString& filter)
 {
-	if (!path.DirExists())
-		return false;
+    if (!path.DirExists())
+    	return false;
 
-	// OPT could be optimised if we stored information about relationships
-	// between paths
-	// TODO apply filter
-	class AddTraverser : public wxDirTraverser
-	{
-	public:
-		AddTraverser(wxFileSystemWatcherBase* watcher, int events,
-						const wxString& filter) :
-			m_watcher(watcher), m_events(events), m_filter(filter)
-		{
-		}
+    // OPT could be optimised if we stored information about relationships
+    // between paths
+    // TODO apply filter
+    class AddTraverser : public wxDirTraverser
+    {
+    public:
+    	AddTraverser(wxFileSystemWatcherBase* watcher, int events,
+    					const wxString& filter) :
+    		m_watcher(watcher), m_events(events), m_filter(filter)
+    	{
+    	}
 
-		// CHECK we choose which files to delegate to Add(), maybe we should pass
-		// all of them to Add() and let it choose? this is useful when adding a
-		// file to a dir that is already watched, then not only should we know
-		// about that, but Add() should also behave well then
-		virtual wxDirTraverseResult OnFile(const wxString& filename)
-		{
-			return wxDIR_CONTINUE;
-		}
+    	// CHECK we choose which files to delegate to Add(), maybe we should pass
+    	// all of them to Add() and let it choose? this is useful when adding a
+    	// file to a dir that is already watched, then not only should we know
+    	// about that, but Add() should also behave well then
+    	virtual wxDirTraverseResult OnFile(const wxString& filename)
+    	{
+    		return wxDIR_CONTINUE;
+    	}
 
-		virtual wxDirTraverseResult OnDir(const wxString& dirname)
-		{
-	    	wxLogTrace(wxTRACE_FSWATCHER, "--- AddTree adding '%s' ---",
-																	dirname);
-	    	// we add as much as possible and ignore errors
-			m_watcher->Add(wxFileName(dirname), m_events);
-			return wxDIR_CONTINUE;
-		}
+    	virtual wxDirTraverseResult OnDir(const wxString& dirname)
+    	{
+        	wxLogTrace(wxTRACE_FSWATCHER, "--- AddTree adding '%s' ---",
+    																dirname);
+        	// we add as much as possible and ignore errors
+    		m_watcher->Add(wxFileName(dirname), m_events);
+    		return wxDIR_CONTINUE;
+    	}
 
-	private:
-		wxFileSystemWatcherBase* m_watcher;
-		int m_events;
-		wxString m_filter;
-	};
+    private:
+    	wxFileSystemWatcherBase* m_watcher;
+    	int m_events;
+    	wxString m_filter;
+    };
 
-	wxDir dir(path.GetFullPath());
-	AddTraverser traverser(this, events, filter);
-	dir.Traverse(traverser);
+    wxDir dir(path.GetFullPath());
+    AddTraverser traverser(this, events, filter);
+    dir.Traverse(traverser);
 
-	return true;
+    return true;
 }
 
 #endif // wxUSE_FSWATCHER
