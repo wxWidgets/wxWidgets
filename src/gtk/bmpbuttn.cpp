@@ -16,4 +16,30 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxButton)
 
+bool wxBitmapButton::Create(wxWindow *parent,
+                            wxWindowID id,
+                            const wxBitmap& bitmap,
+                            const wxPoint& pos,
+                            const wxSize& size,
+                            long style,
+                            const wxValidator& validator,
+                            const wxString& name)
+{
+    if ( !wxBitmapButtonBase::Create(parent, id, "",
+                                     pos, size,
+                                     style | wxBU_NOTEXT,
+                                     validator, name) )
+        return false;
+
+    if ( bitmap.IsOk() )
+    {
+        SetBitmapLabel(bitmap);
+
+        // we need to adjust the size after setting the bitmap as it may be too
+        // big for the default button size
+        SetInitialSize(size);
+    }
+
+    return true;
+}
 #endif // wxUSE_BMPBUTTON

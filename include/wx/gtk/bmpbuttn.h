@@ -38,19 +38,9 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxButtonNameStr)
-    {
-        if ( !wxBitmapButtonBase::Create(parent, id, "",
-                                         pos, size,
-                                         style | wxBU_NOTEXT,
-                                         validator, name) )
-            return false;
+                const wxString& name = wxButtonNameStr);
 
-        SetBitmapLabel(bitmap);
-
-        return true;
-    }
-
+private:
     DECLARE_DYNAMIC_CLASS(wxBitmapButton)
 };
 
