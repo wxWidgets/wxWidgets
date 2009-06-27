@@ -499,6 +499,7 @@ public:
         optionGripperTop      = 1 << 15,
         optionMaximized       = 1 << 16,
         optionDockFixed       = 1 << 17,
+        optionActiveNotebook  = 1 << 18,
 
         buttonClose           = 1 << 21,
         buttonMaximize        = 1 << 22,
