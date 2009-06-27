@@ -1956,7 +1956,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
                                  wxAuiDockInfo& dock,
                                  wxAuiPaneInfo& pane,
                                  wxAuiDockUIPartArray& uiparts,
-                                 bool spacer_only)
+                                 bool spacer_only,bool allowtitlebar)
 {
     wxAuiDockUIPart part;
     wxSizerItem* sizer_item;
@@ -1981,7 +1981,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     wxAuiProportionalBoxSizer* horz_pane_sizer = new wxAuiProportionalBoxSizer(wxHORIZONTAL);
     wxAuiProportionalBoxSizer* vert_pane_sizer = new wxAuiProportionalBoxSizer(wxVERTICAL);
 
-    if (pane.HasGripper())
+    if (allowtitlebar && pane.HasGripper())
     {
         if (pane.HasGripperTop())
             sizer_item = vert_pane_sizer ->Add(1, gripper_size, 0, wxEXPAND);
@@ -1999,7 +1999,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
         uiparts.Add(part);
     }
 
-    if (pane.HasCaption())
+    if (allowtitlebar && pane.HasCaption())
     {
         // create the caption sizer
         wxAuiProportionalBoxSizer* caption_sizer = new wxAuiProportionalBoxSizer(wxHORIZONTAL);

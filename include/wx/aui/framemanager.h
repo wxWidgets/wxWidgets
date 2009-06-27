@@ -664,7 +664,7 @@ protected:
                        wxAuiDockInfo& dock,
                        wxAuiPaneInfo& pane,
                        wxAuiDockUIPartArray& uiparts,
-                       bool spacer_only);
+                       bool spacer_only, bool allowtitlebar=true);
 
     void LayoutAddDock(wxSizer* container,
                        wxAuiDockInfo& dock,
