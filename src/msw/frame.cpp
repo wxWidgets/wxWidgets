@@ -958,6 +958,11 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
             return win->MSWCommand(cmd, id);
     }
 
+#if defined(WINCE_WITHOUT_COMMANDBAR)
+    if (GetToolBar() && GetToolBar()->FindById(id))
+        return GetToolBar()->MSWCommand(cmd, id);
+#endif
+
     // handle here commands from menus and accelerators for our menu bar items,
     // all the rest is handled by wxWindow itself
     if ( !control && (cmd == 0 /* menu */ || cmd == 1 /* accel */) )
