@@ -914,6 +914,7 @@ public:
 class WXDLLIMPEXP_AUI wxAuiDockUIPart
 {
 public:
+    virtual ~wxAuiDockUIPart();
     enum
     {
         typeCaption,
