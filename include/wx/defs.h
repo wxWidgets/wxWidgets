@@ -2855,9 +2855,11 @@ typedef const void* WXWidget;
 /*  This is required because of clashing macros in windows.h, which may be */
 /*  included before or after wxWidgets classes, and therefore must be */
 /*  disabled here before any significant wxWidgets headers are included. */
+#ifdef __cplusplus
 #ifdef __WXMSW__
 #include "wx/msw/winundef.h"
 #endif /*  __WXMSW__ */
+#endif /* __cplusplus */
 
 /*  --------------------------------------------------------------------------- */
 /*  macro to define a class without copy ctor nor assignment operator */
