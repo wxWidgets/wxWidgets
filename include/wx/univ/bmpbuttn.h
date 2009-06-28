@@ -40,7 +40,7 @@ public:
 
     virtual void SetMargins(int x, int y)
     {
-        SetImageMargins(x, y);
+        SetBitmapMargins(x, y);
 
         wxBitmapButtonBase::SetMargins(x, y);
     }
