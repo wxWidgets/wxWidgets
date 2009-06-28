@@ -4504,6 +4504,16 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
                                       event.m_y - part->rect.y);
             m_frame->CaptureMouse();
         }
+        else if(part->type == wxAuiDockUIPart::typePaneTab)
+        {
+            wxAuiPaneInfo* hitpane;
+            if(part->m_tab_container->TabHitTest(event.m_x,event.m_y,&hitpane))
+            {
+                SetActivePane(m_panes, hitpane->GetWindow());
+                part->m_tab_container->SetActivePage(hitpane->GetWindow());
+                Repaint();
+            }
+        }
 #ifdef __WXMAC__
         else
         {
