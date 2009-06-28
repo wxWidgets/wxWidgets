@@ -25,14 +25,6 @@ bool wxBitmapButton::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name)
 {
-    // we use wxBU_NOTEXT to let the base class Create() know that we are not
-    // going to show the label -- this is a hack, but like this it can support
-    // bitmaps with all GTK+ versions, not just 2.6+ which support both labels
-    // and bitmaps
-    //
-    // and we also use wxBU_EXACTFIT to avoid being resized up to the standard
-    // button size as this doesn't make sense for bitmap buttons which are not
-    // standard anyhow
     if ( !wxBitmapButtonBase::Create(parent, id, pos, size, style,
                                      validator, name) )
         return false;
