@@ -34,6 +34,18 @@ bool wxButton::Create(wxWindow *parent,
     const wxValidator& validator,
     const wxString& name)
 {
+    // FIXME: this hack is needed because we're called from
+    //        wxBitmapButton::Create() with this style and we currently use a
+    //        different wxWidgetImpl method (CreateBitmapButton() rather than
+    //        CreateButton()) for creating bitmap buttons, but we really ought
+    //        to unify the creation of buttons of all kinds and then remove
+    //        this check
+    if ( style & wxBU_NOTEXT )
+    {
+        return wxControl::Create(parent, id, lbl, pos, size, style,
+                                 validator, name);
+    }
+
     wxString label(lbl);
     if (label.empty() && wxIsStockID(id) && !(id == wxID_HELP))
         label = wxGetStockLabel(id);

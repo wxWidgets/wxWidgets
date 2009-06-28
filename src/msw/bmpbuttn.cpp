@@ -130,9 +130,7 @@ bool wxBitmapButton::Create(wxWindow *parent,
                             const wxValidator& wxVALIDATOR_PARAM(validator),
                             const wxString& name)
 {
-    if ( !wxBitmapButtonBase::Create(parent, id, "",
-                                     pos, size,
-                                     style | wxBU_NOTEXT,
+    if ( !wxBitmapButtonBase::Create(parent, id, pos, size, style,
                                      validator, name) )
         return false;
 

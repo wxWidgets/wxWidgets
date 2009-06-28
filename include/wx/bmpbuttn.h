@@ -41,6 +41,29 @@ public:
 #endif // wxHAS_BUTTON_BITMAP
     }
 
+    bool Create(wxWindow *parent,
+                wxWindowID winid,
+                const wxBitmap& bitmap,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style,
+                const wxValidator& validator,
+                const wxString& name)
+    {
+        // We use wxBU_NOTEXT to let the base class Create() know that we are
+        // not going to show the label: this is a hack needed for wxGTK where
+        // we can show both label and bitmap only with GTK 2.6+ but we always
+        // can show just one of them and this style allows us to choose which
+        // one we need.
+        //
+        // And we also use wxBU_EXACTFIT to avoid being resized up to the
+        // standard button size as this doesn't make sense for bitmap buttons
+        // which are not standard anyhow and should fit their bitmap size.
+        return wxButton::Create(parent, id, pos, size,
+                                style | wxBU_NOTEXT | wxBU_EXACTFIT,
+                                validator, name);
+    }
+
     // set/get the margins around the button
     virtual void SetMargins(int x, int y)
     {

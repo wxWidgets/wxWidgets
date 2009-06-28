@@ -37,8 +37,8 @@ bool wxBitmapButton::Create( wxWindow *parent,
 {
     m_macIsUserPane = false;
 
-    if ( !wxControl::Create( parent, id, pos, size, style | wxBU_NOTEXT,
-                             validator, name ) )
+    if ( !wxBitmapButtonBase::Create(parent, id, pos, size, style,
+                                     validator, name) )
         return false;
 
     if ( style & wxBU_AUTODRAW )
