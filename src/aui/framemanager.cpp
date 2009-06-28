@@ -4512,6 +4512,7 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
                 m_action_part = part;
                 m_action_start = wxPoint(event.m_x, event.m_y);
                 m_frame->CaptureMouse();
+                part->pane = &part->m_tab_container->GetPage(part->m_tab_container->GetActivePage());
 
                 m_hover_button2->cur_state = wxAUI_BUTTON_STATE_PRESSED;
                 Repaint();
@@ -4842,8 +4843,6 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
                 passhittest = (m_action_part->m_tab_container->ButtonHitTest(event.m_x,event.m_y,&m_hover_button2));
                 buttonid=m_hover_button2->id;
                 m_hover_button2->cur_state = wxAUI_BUTTON_STATE_NORMAL;
-                //Update();
-                //Repaint();
                 m_hover_button2=NULL;
             }
             else
