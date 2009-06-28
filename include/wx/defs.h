@@ -1824,7 +1824,7 @@ enum wxBorder
 #define wxICON_INFORMATION      0x00000800
 #define wxICON_STOP             wxICON_HAND
 #define wxICON_ASTERISK         wxICON_INFORMATION
-#define wxICON_MASK             (0x00000100|0x00000200|0x00000400|0x00000800)
+#define wxICON_MASK             (wxICON_EXCLAMATION|wxICON_HAND|wxICON_QUESTION|wxICON_INFORMATION)
 
 #define  wxFORWARD              0x00001000
 #define  wxBACKWARD             0x00002000
@@ -1832,6 +1832,7 @@ enum wxBorder
 #define  wxHELP                 0x00008000
 #define  wxMORE                 0x00010000
 #define  wxSETUP                0x00020000
+#define wxICON_NONE             0x00040000
 
 /*
  * Background styles. See wxWindow::SetBackgroundStyle
