@@ -1374,7 +1374,7 @@ void wxAuiDefaultTabArt::DrawButton(wxDC& dc,
 }
 
 int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
-                                     const wxAuiPaneInfoArray& pages,
+                                     const wxAuiPaneInfoPtrArray& pages,
                                      int active_idx)
 {
     wxMenu menuPopup;
@@ -1382,7 +1382,7 @@ int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
     size_t i, count = pages.GetCount();
     for (i = 0; i < count; ++i)
     {
-        const wxAuiPaneInfo& page = pages.Item(i);
+        const wxAuiPaneInfo& page = *pages.Item(i);
         wxString caption = page.caption;
 
         // if there is no caption, make it a space.  This will prevent
@@ -1403,8 +1403,10 @@ int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
     pt = wnd->ScreenToClient(pt);
 
     // find out the screen coordinate at the bottom of the tab ctrl
-    wxRect cli_rect = wnd->GetClientRect();
-    pt.y = cli_rect.y + cli_rect.height;
+    //wxRect cli_rect = wnd->GetClientRect();
+    //pt.y = cli_rect.y + cli_rect.height;
+    //temp: (MJM) - must fix it so that dropdown appears in the same place always, currently position will fluctuate
+    //based on where on button we pushed
 
     wxAuiCommandCapture* cc = new wxAuiCommandCapture;
     wnd->PushEventHandler(cc);
@@ -1419,7 +1421,7 @@ int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
 }
 
 int wxAuiDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd,
-                                           const wxAuiPaneInfoArray& pages,
+                                           const wxAuiPaneInfoPtrArray& pages,
                                            const wxSize& required_bmp_size)
 {
     wxClientDC dc(wnd);
@@ -1440,7 +1442,7 @@ int wxAuiDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd,
     size_t i, page_count = pages.GetCount();
     for (i = 0; i < page_count; ++i)
     {
-        wxAuiPaneInfo& page = pages.Item(i);
+        wxAuiPaneInfo& page = *pages.Item(i);
 
         wxBitmap bmp;
         if (measure_bmp.IsOk())

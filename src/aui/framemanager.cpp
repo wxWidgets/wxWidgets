@@ -4860,6 +4860,10 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
                 e.SetButton(buttonid);
                 ProcessMgrEvent(e);
             }
+            else
+            {
+                Update();
+            }
         }
     }
     else if (m_action == actionClickCaption)
@@ -5209,6 +5213,15 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     else if (evt.button == wxAUI_BUTTON_RIGHT)
     {
         m_action_part->m_tab_container->SetActivePage(m_action_part->m_tab_container->GetActivePage()+1);
+        Update();
+    }
+    else if (evt.button == wxAUI_BUTTON_WINDOWLIST)
+    {
+        int selection = m_action_part->m_tab_container->GetArtProvider()->ShowDropDown(m_frame, m_action_part->m_tab_container->GetPages(), m_action_part->m_tab_container->GetActivePage());
+        if (selection != -1)
+        {
+            m_action_part->m_tab_container->SetActivePage(selection);
+        }
         Update();
     }
 }

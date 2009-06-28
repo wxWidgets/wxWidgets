@@ -248,14 +248,14 @@ public:
 
     virtual int ShowDropDown(
                          wxWindow* wnd,
-                         const wxAuiPaneInfoArray& items,
+                         const wxAuiPaneInfoPtrArray& items,
                          int active_idx) = 0;
 
     virtual int GetIndentSize() = 0;
 
     virtual int GetBestTabCtrlSize(
                          wxWindow* wnd,
-                         const wxAuiPaneInfoArray& pages,
+                         const wxAuiPaneInfoPtrArray& pages,
                          const wxSize& required_bmp_size) = 0;
 };
 
@@ -312,11 +312,11 @@ public:
 
     int ShowDropDown(
                  wxWindow* wnd,
-                 const wxAuiPaneInfoArray& items,
+                 const wxAuiPaneInfoPtrArray& items,
                  int active_idx);
 
     int GetBestTabCtrlSize(wxWindow* wnd,
-                 const wxAuiPaneInfoArray& pages,
+                 const wxAuiPaneInfoPtrArray& pages,
                  const wxSize& required_bmp_size);
 
 protected:
