@@ -1863,7 +1863,7 @@ wxGraphicsFont wxCairoRenderer::CreateFont( const wxFont &font , const wxColour 
         return wxNullGraphicsFont;
 }
 
-wxGraphicsBitmap wxGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
+wxGraphicsBitmap wxCairoRenderer::CreateBitmap( const wxBitmap& bmp )
 {
     if ( bmp.Ok() )
     {
@@ -1875,7 +1875,7 @@ wxGraphicsBitmap wxGraphicsRenderer::CreateBitmap( const wxBitmap& bmp )
         return wxNullGraphicsBitmap;
 }
 
-wxGraphicsBitmap wxGraphicsRenderer::CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  )
+wxGraphicsBitmap wxCairoRenderer::CreateSubBitmap( const wxGraphicsBitmap &bitmap, wxDouble x, wxDouble y, wxDouble w, wxDouble h  )
 {
     wxFAIL_MSG("wxCairoRenderer::CreateSubBitmap is not implemented.");
     return wxNullGraphicsBitmap;
