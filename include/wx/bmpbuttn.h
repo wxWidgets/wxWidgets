@@ -43,7 +43,6 @@ public:
 
     bool Create(wxWindow *parent,
                 wxWindowID winid,
-                const wxBitmap& bitmap,
                 const wxPoint& pos,
                 const wxSize& size,
                 long style,
@@ -59,7 +58,8 @@ public:
         // And we also use wxBU_EXACTFIT to avoid being resized up to the
         // standard button size as this doesn't make sense for bitmap buttons
         // which are not standard anyhow and should fit their bitmap size.
-        return wxButton::Create(parent, id, pos, size,
+        return wxButton::Create(parent, winid, "",
+                                pos, size,
                                 style | wxBU_NOTEXT | wxBU_EXACTFIT,
                                 validator, name);
     }
