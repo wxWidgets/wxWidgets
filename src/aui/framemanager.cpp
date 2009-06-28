@@ -4519,10 +4519,17 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
             }
             else if(part->m_tab_container->TabHitTest(event.m_x,event.m_y,&hitpane))
             {
-                SetActivePane(m_panes, hitpane->GetWindow());
                 part->m_tab_container->SetActivePage(hitpane->GetWindow());
+                SetActivePane(m_panes, hitpane->GetWindow());
                 Update();
                 Repaint();
+                
+                m_action = actionClickCaption;
+                m_action_part = part;
+                m_action_part->pane = hitpane;
+                m_action_start = wxPoint(event.m_x, event.m_y);
+                m_action_offset = wxPoint(event.m_x - part->pane->rect.x,event.m_y-part->rect.y);
+                m_frame->CaptureMouse();
             }
         }
 #ifdef __WXMAC__
@@ -4849,7 +4856,7 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
             {
                 UpdateButtonOnScreen(m_action_part, event);
                 passhittest = (m_action_part == HitTest(event.GetX(), event.GetY()));
-                buttonid=m_hover_button2->id;
+                buttonid=m_action_part->button->button_id;
             }
             if (passhittest)
             {
@@ -4996,6 +5003,10 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                     pane_info->SetFloatingPosition(wxPoint(pt.x - m_action_offset.x,
                                                       pt.y - m_action_offset.y));
 
+                    if(m_action_part->type == wxAuiDockUIPart::typePaneTab)
+                    {
+                        m_action_part->m_tab_container->RemovePage(pane_info->GetWindow());
+                    }
                     // float the window
                     if (pane_info->IsMaximized())
                         RestorePane(*pane_info);
