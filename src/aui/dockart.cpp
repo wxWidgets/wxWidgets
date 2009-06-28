@@ -1675,11 +1675,14 @@ bool wxAuiTabContainer::SetActivePage(wxWindow* wnd)
         wxAuiPaneInfo& page = *m_pages.Item(i);
         if (page.window == wnd)
         {
+            page.GetWindow()->Show(true);
             page.SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
             found = true;
+            MakeTabVisible(i,wnd);
         }
         else
         {
+            page.GetWindow()->Show(false);
             page.SetFlag(wxAuiPaneInfo::optionActiveNotebook,false);
         }
     }
@@ -2293,6 +2296,9 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxAuiPaneInfo** hit) const
 bool wxAuiTabContainer::ButtonHitTest(int x, int y,
                                       wxAuiTabContainerButton** hit) const
 {
+    //Remap the x and y to our internal rect
+    x += m_rect.x-m_target_rect.x;
+    y += m_rect.y-m_target_rect.y;
     if (!m_rect.Contains(x,y))
         return false;
 
