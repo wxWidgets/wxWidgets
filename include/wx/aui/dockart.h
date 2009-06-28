@@ -372,8 +372,8 @@ public:
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
 
-    bool AddPage(const wxAuiPaneInfo& info);
-    bool InsertPage(wxWindow* page, const wxAuiPaneInfo& info, size_t idx);
+    bool AddPage(wxAuiPaneInfo& info);
+    bool InsertPage(wxWindow* page, wxAuiPaneInfo& info, size_t idx);
     bool MovePage(wxWindow* page, size_t new_idx);
     bool RemovePage(wxWindow* page);
     bool SetActivePage(wxWindow* page);
@@ -387,7 +387,7 @@ public:
     size_t GetPageCount() const;
     wxAuiPaneInfo& GetPage(size_t idx);
     const wxAuiPaneInfo& GetPage(size_t idx) const;
-    wxAuiPaneInfoArray& GetPages();
+    wxAuiPaneInfoPtrArray& GetPages();
     void SetNormalFont(const wxFont& normal_font);
     void SetSelectedFont(const wxFont& selected_font);
     void SetMeasuringFont(const wxFont& measuring_font);
@@ -417,7 +417,7 @@ protected:
 protected:
 
     wxAuiTabArt* m_art;
-    wxAuiPaneInfoArray m_pages;
+    wxAuiPaneInfoPtrArray m_pages;
     wxAuiTabContainerButtonArray m_buttons;
     wxAuiTabContainerButtonArray m_tab_close_buttons;
     wxRect m_rect;

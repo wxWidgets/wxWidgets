@@ -1026,7 +1026,7 @@ wxAuiToolBarItem* wxAuiToolBar::AddLabel(int tool_id,
 
     if (item.id == wxID_ANY) 
         item.id = wxNewId(); 
- 	
+
     m_items.Add(item);
     return &m_items.Last();
 }
