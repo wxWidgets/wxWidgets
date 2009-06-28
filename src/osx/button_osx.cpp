@@ -42,7 +42,7 @@ bool wxButton::Create(wxWindow *parent,
     //        this check
     if ( style & wxBU_NOTEXT )
     {
-        return wxControl::Create(parent, id, lbl, pos, size, style,
+        return wxControl::Create(parent, id, pos, size, style,
                                  validator, name);
     }
 
