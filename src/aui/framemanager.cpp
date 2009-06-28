@@ -2324,7 +2324,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
 
             if(firstpaneinnotebook && pane.GetPosition()==firstpaneinnotebook->GetPosition())
             {
-                // This page is part of an existing notebook so ass it to the container.
+                // This page is part of an existing notebook so add it to the container.
                 // If it is the active page then it is visible, otherwise hide it.
                 notebookcontainer->AddPage(pane);
                 if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
@@ -2340,7 +2340,6 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 else
                 {
                     pane.GetWindow()->Show(false);
-                    continue;
                 }
             }
             else
@@ -4507,10 +4506,21 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
         else if(part->type == wxAuiDockUIPart::typePaneTab)
         {
             wxAuiPaneInfo* hitpane;
-            if(part->m_tab_container->TabHitTest(event.m_x,event.m_y,&hitpane))
+            if(part->m_tab_container->ButtonHitTest(event.m_x,event.m_y,&m_hover_button2))
+            {
+                m_action = actionClickButton;
+                m_action_part = part;
+                m_action_start = wxPoint(event.m_x, event.m_y);
+                m_frame->CaptureMouse();
+
+                m_hover_button2->cur_state = wxAUI_BUTTON_STATE_PRESSED;
+                Repaint();
+            }
+            else if(part->m_tab_container->TabHitTest(event.m_x,event.m_y,&hitpane))
             {
                 SetActivePane(m_panes, hitpane->GetWindow());
                 part->m_tab_container->SetActivePage(hitpane->GetWindow());
+                Update();
                 Repaint();
             }
         }
@@ -4818,21 +4828,37 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
     }
     else if (m_action == actionClickButton)
     {
-        m_hover_button = NULL;
         m_frame->ReleaseMouse();
+        m_hover_button = NULL;
+        wxAuiPaneInfo& pane = *m_action_part->pane;
 
         if (m_action_part)
         {
-            UpdateButtonOnScreen(m_action_part, event);
-
             // make sure we're still over the item that was originally clicked
-            if (m_action_part == HitTest(event.GetX(), event.GetY()))
+            bool passhittest=false;
+            int buttonid=0;
+            if(m_action_part->type == wxAuiDockUIPart::typePaneTab)
+            {
+                passhittest = (m_action_part->m_tab_container->ButtonHitTest(event.m_x,event.m_y,&m_hover_button2));
+                buttonid=m_hover_button2->id;
+                m_hover_button2->cur_state = wxAUI_BUTTON_STATE_NORMAL;
+                //Update();
+                //Repaint();
+                m_hover_button2=NULL;
+            }
+            else
+            {
+                UpdateButtonOnScreen(m_action_part, event);
+                passhittest = (m_action_part == HitTest(event.GetX(), event.GetY()));
+                buttonid=m_hover_button2->id;
+            }
+            if (passhittest)
             {
                 // fire button-click event
                 wxAuiManagerEvent e(wxEVT_AUI_PANE_BUTTON);
                 e.SetManager(this);
-                e.SetPane(m_action_part->pane);
-                e.SetButton(m_action_part->button->button_id);
+                e.SetPane(&pane);
+                e.SetButton(buttonid);
                 ProcessMgrEvent(e);
             }
         }
@@ -5174,6 +5200,16 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
         if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
             pane.IsFloatable())
                 pane.Float();
+        Update();
+    }
+    else if (evt.button == wxAUI_BUTTON_LEFT)
+    {
+        m_action_part->m_tab_container->SetActivePage(m_action_part->m_tab_container->GetActivePage()-1);
+        Update();
+    }
+    else if (evt.button == wxAUI_BUTTON_RIGHT)
+    {
+        m_action_part->m_tab_container->SetActivePage(m_action_part->m_tab_container->GetActivePage()+1);
         Update();
     }
 }

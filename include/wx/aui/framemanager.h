@@ -564,6 +564,7 @@ private:
 
 
 class WXDLLIMPEXP_FWD_AUI wxAuiFloatingFrame;
+class WXDLLIMPEXP_FWD_AUI wxAuiTabContainerButton;//temp: (MJM)
 
 class WXDLLIMPEXP_AUI wxAuiManager : public wxEvtHandler
 {
@@ -759,6 +760,7 @@ protected:
     wxRect m_action_hintrect;    // hint rectangle for the action
     wxRect m_last_rect;
     wxAuiDockUIPart* m_hover_button;// button uipart being hovered over
+    wxAuiTabContainerButton* m_hover_button2;//temp: (MJM)
     wxRect m_last_hint;          // last hint rectangle
     wxPoint m_last_mouse_move;   // last mouse move position (see OnMotion)
     int  m_currentDragItem;
