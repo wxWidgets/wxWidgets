@@ -1000,7 +1000,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
 
     if (major < 10)
         style |= wxTR_ROW_LINES;
-        
+
     if (style & wxTR_HAS_BUTTONS)
         style |= wxTR_NO_LINES;
 #endif // __WXMAC__
@@ -1779,7 +1779,7 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
     }
 
     wxGenericTreeItem *parent = item->GetParent();
-    
+
     // if the selected item will be deleted, select the parent ...
     wxGenericTreeItem *to_be_selected = parent;
     if (parent)
@@ -2231,61 +2231,42 @@ void wxGenericTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 
 void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
 {
-    if (!item.IsOk()) return;
+    if (!item.IsOk())
+        return;
 
-    // We have to call this here because the label in
-    // question might just have been added and no screen
-    // update taken place.
+    // update the control before scrolling it
     if (m_dirty)
 #if defined( __WXMSW__ ) || defined(__WXMAC__)
         Update();
 #else
         DoDirtyProcessing();
 #endif
+
     wxGenericTreeItem *gitem = (wxGenericTreeItem*) item.m_pItem;
 
-    // now scroll to the item
-    int item_y = gitem->GetY();
+    int itemY = gitem->GetY();
 
     int start_x = 0;
     int start_y = 0;
     GetViewStart( &start_x, &start_y );
-    start_y *= PIXELS_PER_UNIT;
 
-    int client_h = 0;
-    int client_w = 0;
-    GetClientSize( &client_w, &client_h );
+    const int clientHeight = GetClientSize().y;
 
-    if (item_y < start_y+3)
+    const int itemHeight = GetLineHeight(gitem) + 2;
+
+    if ( itemY + itemHeight > start_y*PIXELS_PER_UNIT + clientHeight )
     {
-        // going down
-        int x = 0;
-        int y = 0;
-        m_anchor->GetSize( x, y, this );
-        y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
-        x += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
-        int x_pos = GetScrollPos( wxHORIZONTAL );
-        // Item should appear at top
-        SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT,
-                       x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT,
-                       x_pos, item_y/PIXELS_PER_UNIT );
+        // need to scroll up by enough to show this item fully
+        itemY += itemHeight - clientHeight;
     }
-    else if (item_y+GetLineHeight(gitem) > start_y+client_h)
+    else if ( itemY > start_y*PIXELS_PER_UNIT )
     {
-        // going up
-        int x = 0;
-        int y = 0;
-        m_anchor->GetSize( x, y, this );
-        y += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
-        x += PIXELS_PER_UNIT+2; // one more scrollbar unit + 2 pixels
-        item_y += PIXELS_PER_UNIT+2;
-        int x_pos = GetScrollPos( wxHORIZONTAL );
-        // Item should appear at bottom
-        SetScrollbars( PIXELS_PER_UNIT, PIXELS_PER_UNIT,
-                       x/PIXELS_PER_UNIT, y/PIXELS_PER_UNIT,
-                       x_pos,
-                       (item_y+GetLineHeight(gitem)-client_h)/PIXELS_PER_UNIT );
+        // item is already fully visible, don't do anything
+        return;
     }
+    //else: scroll down to make this item the top one displayed
+
+    Scroll(-1, itemY/PIXELS_PER_UNIT);
 }
 
 // FIXME: tree sorting functions are not reentrant and not MT-safe!
