@@ -1,0 +1,38 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "auidemo", "auidemo_vc8.vcproj", "{20204E28-E81E-5B99-8D20-57ED35C41DCD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		DLL Universal Release|Win32 = DLL Universal Release|Win32
+		DLL Universal Debug|Win32 = DLL Universal Debug|Win32
+		DLL Release|Win32 = DLL Release|Win32
+		DLL Debug|Win32 = DLL Debug|Win32
+		Universal Release|Win32 = Universal Release|Win32
+		Universal Debug|Win32 = Universal Debug|Win32
+		Release|Win32 = Release|Win32
+		Debug|Win32 = Debug|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.DLL Universal Release|Win32.ActiveCfg = DLL Universal Release|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.DLL Universal Release|Win32.Build.0 = DLL Universal Release|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.DLL Universal Debug|Win32.ActiveCfg = DLL Universal Debug|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.DLL Universal Debug|Win32.Build.0 = DLL Universal Debug|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.DLL Release|Win32.ActiveCfg = DLL Release|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.DLL Release|Win32.Build.0 = DLL Release|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.Universal Release|Win32.ActiveCfg = Universal Release|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.Universal Release|Win32.Build.0 = Universal Release|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.Universal Debug|Win32.ActiveCfg = Universal Debug|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.Universal Debug|Win32.Build.0 = Universal Debug|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.Release|Win32.ActiveCfg = Release|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.Release|Win32.Build.0 = Release|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{20204E28-E81E-5B99-8D20-57ED35C41DCD}.Debug|Win32.Build.0 = Debug|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

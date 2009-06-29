@@ -44,7 +44,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 
 ### Targets: ###
 
-all: access animate artprov aui calendar caret clipboard collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
+all: access animate artprov aui auinew calendar caret clipboard collpane config combo console controls dataview dialogs dialup display dnd docview dragimag drawing erase event exec except font grid help htlbox html image internat ipc joytest keyboard layout listctrl mdi mediaplayer menu minimal nativdlg notebook oleauto opengl ownerdrw popup printing propgrid regtest render richtext sashtest scroll shaped sockets sound splash splitter statbar stc taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wrapsizer
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -66,6 +66,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>aui.bat
 	call aui.bat
 	@del aui.bat
+	@echo cd auinew >auinew.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>auinew.bat
+	call auinew.bat
+	@del auinew.bat
 	@echo cd calendar >calendar.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>calendar.bat
 	call calendar.bat
@@ -362,6 +366,12 @@ aui:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>aui.bat
 	call aui.bat
 	@del aui.bat
+
+auinew: 
+	@echo cd auinew >auinew.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>auinew.bat
+	call auinew.bat
+	@del auinew.bat
 
 calendar: 
 	@echo cd calendar >calendar.bat
