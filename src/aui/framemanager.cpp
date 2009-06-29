@@ -541,6 +541,28 @@ static void DoInsertPane(wxAuiPaneInfoArray& panes,
     }
 }
 
+static void DoInsertPage(wxAuiPaneInfoArray& panes,
+                         int dock_direction,
+                         int dock_layer,
+                         int dock_row,
+                         int dock_pos,
+                         int dock_page)
+{
+    int i, pane_count;
+    for (i = 0, pane_count = panes.GetCount(); i < pane_count; ++i)
+    {
+        wxAuiPaneInfo& pane = panes.Item(i);
+        if (!pane.IsFloating() &&
+            pane.GetDirection() == dock_direction &&
+            pane.GetLayer() == dock_layer &&
+            pane.GetRow() == dock_row &&
+            pane.GetPosition() == dock_pos &&
+            pane.GetPage() >= dock_page
+            )
+                pane.SetPage(pane.GetPage()+1);
+    }
+}
+
 // FindDocks() is an internal function that returns a list of docks which meet
 // the specified conditions in the parameters and returns a sorted array
 // (sorted by layer and then row)
@@ -2190,7 +2212,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
 
             if(firstpaneinnotebook && pane.GetPosition()==firstpaneinnotebook->GetPosition())
             {
-                // This page is part of an existing notebook so ass it to the container.
+                // This page is part of an existing notebook so add it to the container.
                 // If it is the active page then it is visible, otherwise hide it.
                 notebookcontainer->AddPage(pane);
                 if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
@@ -2205,9 +2227,20 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 }
                 else
                 {
-                    pane.GetWindow()->Show(false);
-                    continue;
+                    // Only hide the window if it belongs to us.
+                    // It might not belong to us if we are in the middle of a drop calculation for
+                    // a floating frame, hiding it in this case would make the floating frame blank.
+                    if(pane.GetWindow()->GetParent()==m_frame)
+                    {
+                        pane.GetWindow()->Show(false);
+                    }
                 }
+                // If we are only doing a drop calculation then we only want the first
+                // pane in the notebook and the hint window to be added as spacers are
+                // not affected by the window being hidden and therefore make the hint
+                // calculation incorrect.
+                if(spacer_only&&pane.GetName()!= wxT("__HINT__"))
+                    continue;
             }
             else
             {
@@ -2247,12 +2280,18 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     else
                     {
                         activenotebookpagefound = false;
-                        pane.GetWindow()->Show(false);
+                        // Only hide the window if it belongs to us.
+                        // It might not belong to us if we are in the middle of a drop calculation for
+                        // a floating frame, hiding it in this case would make the floating frame blank.
+                        if(pane.GetWindow()->GetParent()==m_frame)
+                        {
+                            pane.GetWindow()->Show(false);
+                        }
                     }
                 }
                 else
                 {
-                    // We are a normal pane not part of a notebook so set the notebook tracknig variables to NULL.
+                    // We are a normal pane not part of a notebook so set the notebook tracking variables to NULL.
                     firstpaneinnotebook = NULL;
                     notebookcontainer = NULL;
                 }
@@ -2339,8 +2378,20 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 }
                 else
                 {
-                    pane.GetWindow()->Show(false);
+                    // Only hide the window if it belongs to us.
+                    // It might not belong to us if we are in the middle of a drop calculation for
+                    // a floating frame, hiding it in this case would make the floating frame blank.
+                    if(pane.GetWindow()->GetParent()==m_frame)
+                    {
+                        pane.GetWindow()->Show(false);
+                    }
                 }
+                // If we are only doing a drop calculation then we only want the first
+                // pane in the notebook and the hint window to be added as spacers are
+                // not affected by the window being hidden and therefore make the hint
+                // calculation incorrect.
+                if(spacer_only&&pane.GetName()!= wxT("__HINT__"))
+                    continue;
             }
             else
             {
@@ -2397,12 +2448,18 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     else
                     {
                         activenotebookpagefound = false;
-                        pane.GetWindow()->Show(false);
+                        // Only hide the window if it belongs to us.
+                        // It might not belong to us if we are in the middle of a drop calculation for
+                        // a floating frame, hiding it in this case would make the floating frame blank.
+                        if(pane.GetWindow()->GetParent()==m_frame)
+                        {
+                            pane.GetWindow()->Show(false);
+                        }
                     }
                 }
                 else
                 {
-                    // We are a normal pane not part of a notebook so set the notebook tracknig variables to NULL.
+                    // We are a normal pane not part of a notebook so set the notebook tracking variables to NULL.
                     firstpaneinnotebook = NULL;
                     notebookcontainer = NULL;
                 }
@@ -3457,8 +3514,47 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
     if (!part)
         return false;
 
-    if (part->type == wxAuiDockUIPart::typePaneBorder ||
-        part->type == wxAuiDockUIPart::typeCaption ||
+    if (part->type == wxAuiDockUIPart::typePaneTab)
+    {
+        wxAuiPaneInfo* hitpane=NULL;
+        int page;
+        // If we are above a tab then insert before it, otherwise insert at the end
+        if(!part->m_tab_container->TabHitTest(pt.x,pt.y,&hitpane))
+        {
+            hitpane = &part->m_tab_container->GetPage(part->m_tab_container->GetPageCount()-1);
+            page = hitpane->GetPage()+1;
+        }
+        else
+        {
+            page = hitpane->GetPage();
+        }
+
+        
+        DoInsertPage(panes,
+                         hitpane->GetDirection(),
+                         hitpane->GetLayer(),
+                         hitpane->GetRow(),
+                         hitpane->GetPosition(),
+                         page);
+             drop.Dock().
+             SetDirection(hitpane->GetDirection()).
+             SetLayer(hitpane->GetLayer()).
+             SetRow(hitpane->GetRow()).
+             SetPosition(hitpane->GetPosition()).
+             SetPage(page);
+        return ProcessDockResult(target, drop);
+    }
+    else if(part->type == wxAuiDockUIPart::typeCaption)
+    {
+        drop.Dock().
+        SetDirection(part->pane->GetDirection()).
+        SetLayer(part->pane->GetLayer()).
+        SetRow(part->pane->GetRow()).
+        SetPosition(part->pane->GetPosition()).
+        SetPage(part->pane->GetPage()+1);
+        return ProcessDockResult(target, drop);
+    }
+    else if (part->type == wxAuiDockUIPart::typePaneBorder ||
         part->type == wxAuiDockUIPart::typeGripper ||
         part->type == wxAuiDockUIPart::typePaneButton ||
         part->type == wxAuiDockUIPart::typePane ||
@@ -3876,17 +3972,43 @@ wxRect wxAuiManager::CalculateHintRect(wxWindow* pane_window,
     sizer->SetDimension(0, 0, client_size.x, client_size.y);
     sizer->Layout();
 
+    // First check if the hint is somewhere in a notebook, if it is then take the hint rect from the active notebook page.
     for (i = 0, part_count = uiparts.GetCount();
          i < part_count; ++i)
     {
         wxAuiDockUIPart& part = uiparts.Item(i);
 
-        if (part.type == wxAuiDockUIPart::typePaneBorder &&
-            part.pane && part.pane->GetName() == wxT("__HINT__"))
+        if (part.type == wxAuiDockUIPart::typePaneTab)
         {
-            rect = wxRect(part.sizer_item->GetPosition(),
+            wxAuiPaneInfoPtrArray& pages = part.m_tab_container->GetPages();
+            int page_count = pages.GetCount();
+            int j = 0;
+            for (j = 0; j < page_count;j++)
+            {
+                if(pages[j]->GetName() == wxT("__HINT__"))
+                {
+                    rect = wxRect(part.m_tab_container->GetPage(part.m_tab_container->GetActivePage()).GetWindow()->GetPosition(),
+                    part.m_tab_container->GetPage(part.m_tab_container->GetActivePage()).GetWindow()->GetSize());
+                    break;
+                }
+            }
+        }
+    }
+    // If it is not in the notebook then take the hint from the pane border.
+    if (rect.IsEmpty())
+    {
+        for (i = 0, part_count = uiparts.GetCount();
+            i < part_count; ++i)
+        {
+            wxAuiDockUIPart& part = uiparts.Item(i);
+
+            if (part.type == wxAuiDockUIPart::typePaneBorder &&
+            part.pane && part.pane->GetName() == wxT("__HINT__"))
+            {
+                rect = wxRect(part.sizer_item->GetPosition(),
                           part.sizer_item->GetSize());
-            break;
+                break;
+            }
         }
     }
 

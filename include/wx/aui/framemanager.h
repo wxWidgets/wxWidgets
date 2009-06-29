@@ -256,7 +256,7 @@ public:
     // get/set if the pane is floating.
     // opposite of IsDocked.
     bool IsFloating() const { return HasFlag(optionFloating); }
-    wxAuiPaneInfo& Float() { return SetFlag(optionFloating, true); }
+    wxAuiPaneInfo& Float() { SetFlag(wxAuiPaneInfo::optionActiveNotebook,false); return SetFlag(optionFloating, true); }
     // get/set if the pane is docked.
     // opposite of IsFloating.
     bool IsDocked() const { return !HasFlag(optionFloating); }
