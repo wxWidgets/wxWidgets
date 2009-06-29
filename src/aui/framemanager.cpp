@@ -4521,15 +4521,17 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
             {
                 part->m_tab_container->SetActivePage(hitpane->GetWindow());
                 SetActivePane(m_panes, hitpane->GetWindow());
-                Update();
-                Repaint();
+
+                m_action_offset = wxPoint(event.m_x-hitpane->rect.x,event.m_y-part->rect.y);
                 
                 m_action = actionClickCaption;
                 m_action_part = part;
                 m_action_part->pane = hitpane;
                 m_action_start = wxPoint(event.m_x, event.m_y);
-                m_action_offset = wxPoint(event.m_x - part->pane->rect.x,event.m_y-part->rect.y);
                 m_frame->CaptureMouse();
+                
+                DoFrameLayout();
+                Repaint();
             }
         }
 #ifdef __WXMAC__
