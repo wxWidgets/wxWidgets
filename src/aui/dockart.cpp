@@ -903,9 +903,9 @@ void wxAuiDefaultTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
 
     int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - 4;
 
-    if (m_flags & wxAUI_NB_CLOSE_BUTTON)
+    if (m_flags & wxAUI_MGR_NB_CLOSE_BUTTON)
         tot_width -= m_active_close_bmp.GetWidth();
-    if (m_flags & wxAUI_NB_WINDOWLIST_BUTTON)
+    if (m_flags & wxAUI_MGR_NB_WINDOWLIST_BUTTON)
         tot_width -= m_active_windowlist_bmp.GetWidth();
 
     if (tab_count > 0)
@@ -937,11 +937,11 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
     wxColor bottom_color   = wxAuiStepColour(m_base_colour, 170);
     wxRect r;
 
-   if (m_flags &wxAUI_NB_BOTTOM)
+   if (m_flags &wxAUI_MGR_NB_BOTTOM)
        r = wxRect(rect.x, rect.y, rect.width+2, rect.height);
-   // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-   // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-   else //for wxAUI_NB_TOP
+   // TODO: else if (m_flags &wxAUI_MGR_NB_LEFT) {}
+   // TODO: else if (m_flags &wxAUI_MGR_NB_RIGHT) {}
+   else //for wxAUI_MGR_NB_TOP
        r = wxRect(rect.x, rect.y, rect.width+2, rect.height-3);
 
     dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
@@ -953,14 +953,14 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
    int y = rect.GetHeight();
    int w = rect.GetWidth();
 
-   if (m_flags &wxAUI_NB_BOTTOM)
+   if (m_flags &wxAUI_MGR_NB_BOTTOM)
    {
        dc.SetBrush(wxBrush(bottom_color));
        dc.DrawRectangle(-1, 0, w+2, 4);
    }
-   // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-   // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-   else //for wxAUI_NB_TOP
+   // TODO: else if (m_flags &wxAUI_MGR_NB_LEFT) {}
+   // TODO: else if (m_flags &wxAUI_MGR_NB_RIGHT) {}
+   else //for wxAUI_MGR_NB_TOP
    {
        dc.SetBrush(m_base_colour_brush);
        dc.DrawRectangle(-1, y-4, w+2, 4);
@@ -1061,7 +1061,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
 
     wxPoint border_points[6];
-    if (m_flags &wxAUI_NB_BOTTOM)
+    if (m_flags &wxAUI_MGR_NB_BOTTOM)
     {
         border_points[0] = wxPoint(tab_x,             tab_y);
         border_points[1] = wxPoint(tab_x,             tab_y+tab_height-6);
@@ -1070,7 +1070,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         border_points[4] = wxPoint(tab_x+tab_width,   tab_y+tab_height-6);
         border_points[5] = wxPoint(tab_x+tab_width,   tab_y);
     }
-    else //if (m_flags & wxAUI_NB_TOP) {}
+    else //if (m_flags & wxAUI_MGR_NB_TOP) {}
     {
         border_points[0] = wxPoint(tab_x,             tab_y+tab_height-4);
         border_points[1] = wxPoint(tab_x,             tab_y+2);
@@ -1079,8 +1079,8 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         border_points[4] = wxPoint(tab_x+tab_width,   tab_y+2);
         border_points[5] = wxPoint(tab_x+tab_width,   tab_y+tab_height-4);
     }
-    // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-    // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
+    // TODO: else if (m_flags &wxAUI_MGR_NB_LEFT) {}
+    // TODO: else if (m_flags &wxAUI_MGR_NB_RIGHT) {}
 
     int drawn_tab_yoff = border_points[1].y;
     int drawn_tab_height = border_points[0].y - border_points[1].y;
@@ -1156,11 +1156,11 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     // this gets rid of the top one of those lines in the tab control
     if (page.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
     {
-        if (m_flags &wxAUI_NB_BOTTOM)
+        if (m_flags &wxAUI_MGR_NB_BOTTOM)
             dc.SetPen(wxPen(wxColour(wxAuiStepColour(m_base_colour, 170))));
-        // TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-        // TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-        else //for wxAUI_NB_TOP
+        // TODO: else if (m_flags &wxAUI_MGR_NB_LEFT) {}
+        // TODO: else if (m_flags &wxAUI_MGR_NB_RIGHT) {}
+        else //for wxAUI_MGR_NB_TOP
             dc.SetPen(m_base_colour_pen);
         dc.DrawLine(border_points[0].x+1,
                     border_points[0].y,
@@ -1297,7 +1297,7 @@ wxSize wxAuiDefaultTabArt::GetTabSize(wxDC& dc,
     tab_width += 16;
     tab_height += 10;
 
-    if (m_flags & wxAUI_NB_TAB_FIXED_WIDTH)
+    if (m_flags & wxAUI_MGR_NB_TAB_FIXED_WIDTH)
     {
         tab_width = m_fixed_tab_width;
     }
@@ -1541,18 +1541,18 @@ void wxAuiTabContainer::SetFlags(unsigned int flags)
     RemoveButton(wxAUI_BUTTON_CLOSE);
 
 
-    if (flags & wxAUI_NB_SCROLL_BUTTONS)
+    if (flags & wxAUI_MGR_NB_SCROLL_BUTTONS)
     {
         AddButton(wxAUI_BUTTON_LEFT, wxLEFT);
         AddButton(wxAUI_BUTTON_RIGHT, wxRIGHT);
     }
 
-    if (flags & wxAUI_NB_WINDOWLIST_BUTTON)
+    if (flags & wxAUI_MGR_NB_WINDOWLIST_BUTTON)
     {
         AddButton(wxAUI_BUTTON_WINDOWLIST, wxRIGHT);
     }
 
-    if (flags & wxAUI_NB_CLOSE_BUTTON)
+    if (flags & wxAUI_MGR_NB_CLOSE_BUTTON)
     {
         AddButton(wxAUI_BUTTON_CLOSE, wxRIGHT);
     }
@@ -1826,8 +1826,8 @@ void wxAuiTabContainer::CalculateRequiredWidth(wxDC& dc,wxWindow* wnd,int& total
 
         // determine if a close button is on this tab
         bool close_button = false;
-        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
-            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.HasFlag(wxAuiPaneInfo::optionActiveNotebook)))
+        if ((m_flags & wxAUI_MGR_NB_CLOSE_ON_ALL_TABS) != 0 ||
+            ((m_flags & wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.HasFlag(wxAuiPaneInfo::optionActiveNotebook)))
         {
             close_button = true;
         }
@@ -2055,8 +2055,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         wxAuiTabContainerButton& tab_button = m_tab_close_buttons.Item(i);
 
         // determine if a close button is on this tab
-        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
-            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.HasFlag(wxAuiPaneInfo::optionActiveNotebook)))
+        if ((m_flags & wxAUI_MGR_NB_CLOSE_ON_ALL_TABS) != 0 ||
+            ((m_flags & wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.HasFlag(wxAuiPaneInfo::optionActiveNotebook)))
         {
             if (tab_button.cur_state == wxAUI_BUTTON_STATE_HIDDEN)
             {
