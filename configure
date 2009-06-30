@@ -46179,7 +46179,7 @@ if test "$wxUSE_AUI" = "yes"; then
 _ACEOF
 
    USE_AUI=1
-   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS aui"
+   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS aui auinew"
 fi
 
 USE_PROPGRID=0
