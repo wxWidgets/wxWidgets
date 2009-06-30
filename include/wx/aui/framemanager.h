@@ -580,6 +580,19 @@ public:
     void SetFlags(unsigned int flags);
     unsigned int GetFlags() const;
 
+    // get/set a style property flag for this manager
+    bool HasFlag(int flag) const
+    {
+        return (m_flags & flag) != 0;
+    }
+    void SetFlag(int flag, bool option_state)
+    {
+        if (option_state)
+            m_flags |= flag;
+        else
+            m_flags &= ~flag;
+    }
+
     void SetManagedWindow(wxWindow* managed_wnd);
     wxWindow* GetManagedWindow() const;
 
