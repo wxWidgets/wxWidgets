@@ -77,6 +77,7 @@ class MyFrame : public wxFrame
         ID_TabsRight,
         ID_TabsBottom,
         ID_TabWindowList,
+        ID_FixedWidth,
         ID_CloseButton,
         ID_CloseButtonActiveTab,
         ID_CloseButtonAllTabs,
@@ -571,6 +572,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_TabsRight, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TabsBottom, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TabWindowList, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_FixedWidth, MyFrame::OnManagerFlag)
     EVT_MENU(ID_CloseButton, MyFrame::OnManagerFlag)
     EVT_MENU(ID_CloseButtonActiveTab, MyFrame::OnManagerFlag)
     EVT_MENU(ID_CloseButtonAllTabs, MyFrame::OnManagerFlag)
@@ -655,6 +657,8 @@ MyFrame::MyFrame(wxWindow* parent,
     options_menu->AppendRadioItem(ID_TabsRight, _("Notebook tabs on right"));
     options_menu->AppendSeparator();
     options_menu->AppendCheckItem(ID_TabWindowList, _("Show pulldown list of tabs in notebook"));
+    options_menu->AppendSeparator();
+    options_menu->AppendCheckItem(ID_FixedWidth, _("Use fixed tab width for notebook tabs"));
     options_menu->AppendSeparator();
     options_menu->AppendRadioItem(ID_CloseButtonActiveTab, _("Close button on active tab of notebook"));
     options_menu->AppendRadioItem(ID_CloseButtonAllTabs, _("Close button on all tabs of notebook"));
@@ -928,7 +932,7 @@ MyFrame::MyFrame(wxWindow* parent,
     //create some more panes that should form into a notebook
     {
         m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
-                  SetName(wxT("tabtest1")).SetCaption(wxT("Tree Pane")).
+                  SetName(wxT("tabtest1")).SetCaption(wxT("Tree Pane (Long Caption)")).
                   SetDirectionLeft().SetLayer(1).SetPosition(1).
                   SetCloseButton(true).SetMaximizeButton(true).SetPage(1).SetBitmap(wxArtProvider::GetBitmap(wxART_ERROR)));
         m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
@@ -1061,8 +1065,6 @@ void MyFrame::OnGradient(wxCommandEvent& event)
 
 void MyFrame::OnManagerFlag(wxCommandEvent& event)
 {
-    unsigned int flag = 0;
-
 #if !defined(__WXMSW__) && !defined(__WXMAC__) && !defined(__WXGTK__)
     if (event.GetId() == ID_TransparentDrag ||
         event.GetId() == ID_TransparentHint ||
@@ -1088,54 +1090,49 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
     {
         m_mgr.SetFlag(wxAUI_MGR_NB_WINDOWLIST_BUTTON,event.IsChecked());
     }
+    else if(id == ID_FixedWidth)
+    {
+        m_mgr.SetFlag(wxAUI_MGR_NB_TAB_FIXED_WIDTH,event.IsChecked());
+    }
     else if (id == ID_TabsTop ||
         id == ID_TabsLeft ||
         id == ID_TabsRight ||
         id == ID_TabsBottom
         )
     {
-        unsigned int flags = m_mgr.GetFlags();
-        flags &= ~wxAUI_MGR_NB_TOP;
-        flags &= ~wxAUI_MGR_NB_LEFT;
-        flags &= ~wxAUI_MGR_NB_RIGHT;
-        flags &= ~wxAUI_MGR_NB_BOTTOM;
-        m_mgr.SetFlags(flags);
+        m_mgr.SetFlag(wxAUI_MGR_NB_TOP,false);
+        m_mgr.SetFlag(wxAUI_MGR_NB_LEFT,false);
+        m_mgr.SetFlag(wxAUI_MGR_NB_RIGHT,false);
+        m_mgr.SetFlag(wxAUI_MGR_NB_BOTTOM,false);
     }
     else if (id == ID_TransparentHint ||
         id == ID_VenetianBlindsHint ||
         id == ID_RectangleHint ||
         id == ID_NoHint)
     {
-        unsigned int flags = m_mgr.GetFlags();
-        flags &= ~wxAUI_MGR_TRANSPARENT_HINT;
-        flags &= ~wxAUI_MGR_VENETIAN_BLINDS_HINT;
-        flags &= ~wxAUI_MGR_RECTANGLE_HINT;
-        m_mgr.SetFlags(flags);
+        m_mgr.SetFlag(wxAUI_MGR_TRANSPARENT_HINT,false);
+        m_mgr.SetFlag(wxAUI_MGR_VENETIAN_BLINDS_HINT,false);
+        m_mgr.SetFlag(wxAUI_MGR_RECTANGLE_HINT,false);
     }
 
     switch (id)
     {
-        case ID_AllowFloating: flag = wxAUI_MGR_ALLOW_FLOATING; break;
-        case ID_TransparentDrag: flag = wxAUI_MGR_TRANSPARENT_DRAG; break;
-        case ID_HintFade: flag = wxAUI_MGR_HINT_FADE; break;
-        case ID_NoVenetianFade: flag = wxAUI_MGR_NO_VENETIAN_BLINDS_FADE; break;
-        case ID_AllowActivePane: flag = wxAUI_MGR_ALLOW_ACTIVE_PANE; break;
-        case ID_TransparentHint: flag = wxAUI_MGR_TRANSPARENT_HINT; break;
-        case ID_VenetianBlindsHint: flag = wxAUI_MGR_VENETIAN_BLINDS_HINT; break;
-        case ID_RectangleHint: flag = wxAUI_MGR_RECTANGLE_HINT; break;
-        case ID_LiveUpdate: flag = wxAUI_MGR_LIVE_RESIZE; break;
-        case ID_TabsTop: flag = wxAUI_MGR_NB_TOP; break;
-        case ID_TabsLeft: flag = wxAUI_MGR_NB_LEFT; break;
-        case ID_TabsRight: flag = wxAUI_MGR_NB_RIGHT; break;
-        case ID_TabsBottom: flag = wxAUI_MGR_NB_BOTTOM; break;
-        case ID_CloseButton: flag = wxAUI_MGR_NB_CLOSE_BUTTON; break;
-        case ID_CloseButtonActiveTab: flag = wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB; break;
-        case ID_CloseButtonAllTabs: flag = wxAUI_MGR_NB_CLOSE_ON_ALL_TABS; break;
-    }
-
-    if (flag)
-    {
-        m_mgr.SetFlags(m_mgr.GetFlags() ^ flag);
+        case ID_AllowFloating: m_mgr.SetFlag(wxAUI_MGR_ALLOW_FLOATING,true); break;
+        case ID_TransparentDrag: m_mgr.SetFlag(wxAUI_MGR_TRANSPARENT_DRAG,true); break;
+        case ID_HintFade: m_mgr.SetFlag(wxAUI_MGR_HINT_FADE,true); break;
+        case ID_NoVenetianFade: m_mgr.SetFlag(wxAUI_MGR_NO_VENETIAN_BLINDS_FADE,true); break;
+        case ID_AllowActivePane: m_mgr.SetFlag(wxAUI_MGR_ALLOW_ACTIVE_PANE,true); break;
+        case ID_TransparentHint: m_mgr.SetFlag(wxAUI_MGR_TRANSPARENT_HINT,true); break;
+        case ID_VenetianBlindsHint: m_mgr.SetFlag(wxAUI_MGR_VENETIAN_BLINDS_HINT,true); break;
+        case ID_RectangleHint: m_mgr.SetFlag(wxAUI_MGR_RECTANGLE_HINT,true); break;
+        case ID_LiveUpdate: m_mgr.SetFlag(wxAUI_MGR_LIVE_RESIZE,true); break;
+        case ID_TabsTop: m_mgr.SetFlag(wxAUI_MGR_NB_TOP,true); break;
+        case ID_TabsLeft: m_mgr.SetFlag(wxAUI_MGR_NB_LEFT,true); break;
+        case ID_TabsRight: m_mgr.SetFlag(wxAUI_MGR_NB_RIGHT,true); break;
+        case ID_TabsBottom: m_mgr.SetFlag(wxAUI_MGR_NB_BOTTOM,true); break;
+        case ID_CloseButton: m_mgr.SetFlag(wxAUI_MGR_NB_CLOSE_BUTTON,true); break;
+        case ID_CloseButtonActiveTab: m_mgr.SetFlag(wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB,true); break;
+        case ID_CloseButtonAllTabs: m_mgr.SetFlag(wxAUI_MGR_NB_CLOSE_ON_ALL_TABS,true); break;
     }
 
     m_mgr.Update();
