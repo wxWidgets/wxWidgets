@@ -1846,6 +1846,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     // afforded on screen
     int total_width = 0;
     int visible_width = 0;
+    size_t tab_offset=m_tab_offset;
     for (i = 0; i < page_count; ++i)
     {
         wxAuiPaneInfo& page = *m_pages.Item(i);
@@ -1875,7 +1876,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         else
             total_width += size.x;
 
-        if (i >= m_tab_offset)
+        if (i >= tab_offset)
         {
             if (i+1 < page_count)
                 visible_width += x_extent;
@@ -1884,7 +1885,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         }
     }
 
-    if (total_width > m_rect.GetWidth() || m_tab_offset != 0)
+    if (total_width > m_rect.GetWidth())
     {
         // show left/right buttons
         for (i = 0; i < button_count; ++i)
@@ -1899,6 +1900,9 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     }
     else
     {
+        // If all tabs can fit on screen then we don't want to apply offset even if we still have an offset, so set to 0.
+        tab_offset=0;
+
         // hide left/right buttons
         for (i = 0; i < button_count; ++i)
         {
@@ -1917,7 +1921,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         wxAuiTabContainerButton& button = m_buttons.Item(i);
         if (button.id == wxAUI_BUTTON_LEFT)
         {
-            if (m_tab_offset == 0)
+            if (tab_offset == 0)
                 button.cur_state |= wxAUI_BUTTON_STATE_DISABLED;
             else
                 button.cur_state &= ~wxAUI_BUTTON_STATE_DISABLED;
@@ -2021,7 +2025,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 
 
     // buttons before the tab offset must be set to hidden
-    for (i = 0; i < m_tab_offset; ++i)
+    for (i = 0; i < tab_offset; ++i)
     {
         m_tab_close_buttons.Item(i).cur_state = wxAUI_BUTTON_STATE_HIDDEN;
     }
@@ -2038,7 +2042,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     rect.y = 0;
     rect.height = m_rect.height;
 
-    for (i = m_tab_offset; i < page_count; ++i)
+    for (i = tab_offset; i < page_count; ++i)
     {
         wxAuiPaneInfo& page = *m_pages.Item(i);
         wxAuiTabContainerButton& tab_button = m_tab_close_buttons.Item(i);
@@ -2093,7 +2097,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 
 
     // draw the active tab again so it stands in the foreground
-    if (active >= m_tab_offset && active < m_pages.GetCount())
+    if (active >= tab_offset && active < m_pages.GetCount())
     {
         wxAuiPaneInfo& page = *m_pages.Item(active);
 
