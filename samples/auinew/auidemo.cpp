@@ -857,7 +857,7 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("above")).SetCaption(wxT("Tree Pane")).
                   SetDirectionLeft().SetLayer(1).SetPosition(0).
-                  SetCloseButton(true).SetMaximizeButton(true));
+                  SetCloseButton(true).SetMaximizeButton(true).SetBitmap(wxArtProvider::GetBitmap(wxART_QUESTION)));
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("below")).SetCaption(wxT("Tree Pane")).
                   SetDirectionLeft().SetLayer(1).SetPosition(4).
@@ -894,13 +894,13 @@ MyFrame::MyFrame(wxWindow* parent,
                   Float().SetCloseButton(true).SetMaximizeButton(true).SetFloatingPosition(10,20).
 				  SetFloatingSize(40,40).SetPage(3));
 	}*/
-                  
+
     //create some more panes that should form into a notebook
     {
         m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("tabtest1")).SetCaption(wxT("Tree Pane")).
                   SetDirectionLeft().SetLayer(1).SetPosition(1).
-                  SetCloseButton(true).SetMaximizeButton(true).SetPage(1));
+                  SetCloseButton(true).SetMaximizeButton(true).SetPage(1).SetBitmap(wxArtProvider::GetBitmap(wxART_ERROR)));
         m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("tabtest3")).SetCaption(wxT("Tree Pane 3")).
                   SetDirectionLeft().SetLayer(1).SetPosition(1).

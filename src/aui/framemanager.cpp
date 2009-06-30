@@ -3555,7 +3555,7 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
     if (part->type == wxAuiDockUIPart::typePaneTab)
     {
         // Figure out if the pane is already part of the notebook, which will happen when dragging a tab in a notebook.
-        bool isalreadyinnotebook = part->m_tab_container->GetPages().Index(&drop);
+        int isalreadyinnotebook = part->m_tab_container->GetPages().Index(&drop);
 
         wxAuiPaneInfo* hitpane=NULL;
         int page;
