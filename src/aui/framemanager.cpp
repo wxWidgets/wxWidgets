@@ -2168,6 +2168,21 @@ int wxAuiManager::GetNotebookFlags()
     return flags;
 }
 
+void LayoutAddNotebook(wxAuiTabContainer* notebookcontainer,wxSizerItem* sizer_item,wxSizer* dock_sizer,int sash_size,wxAuiDockUIPart& part,wxAuiDockInfo& dock,wxAuiDockUIPartArray& uiparts,wxAuiPaneInfo* pane)
+{
+    sizer_item = dock_sizer->Add(sash_size, 30, 0, wxEXPAND);
+
+    part.type = wxAuiDockUIPart::typePaneTab;
+    part.dock = &dock;
+    part.pane = pane;
+    part.button = NULL;
+    part.orientation = wxHORIZONTAL;
+    part.cont_sizer = dock_sizer;
+    part.sizer_item = sizer_item;
+    part.m_tab_container = notebookcontainer;
+    uiparts.Add(part);
+}
+
 void wxAuiManager::LayoutAddDock(wxSizer* cont,
                                  wxAuiDockInfo& dock,
                                  wxAuiDockUIPartArray& uiparts,
@@ -2263,13 +2278,20 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
             }
             else
             {
-                if(!activenotebookpagefound && firstpaneinnotebook)
+                if(firstpaneinnotebook)
                 {
-                    // The previous page was a notebook that did not have an active page and we are not part of,
-                    // set the first page in that notebook to be the active page.
-                    firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
-                    firstpaneinnotebook->GetWindow()->Show(true);
-                    activenotebookpagefound=true;
+                    if(HasFlag(wxAUI_MGR_NB_BOTTOM))
+                    {
+                        LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                    }
+                    if(!activenotebookpagefound)
+                    {
+                        // The previous page was a notebook that did not have an active page and we are not part of,
+                        // set the first page in that notebook to be the active page.
+                        firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
+                        firstpaneinnotebook->GetWindow()->Show(true);
+                        activenotebookpagefound=true;
+                    }
                 }
 
                 // If the next pane has the same position as us then we are the first page in a notebook.
@@ -2281,17 +2303,11 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     int flags = GetNotebookFlags();
                     notebookcontainer->SetFlags(flags);
                     notebookcontainer->AddPage(pane);
-                    sizer_item = dock_sizer->Add(sash_size, 30, 0, wxEXPAND);
-
-                    part.type = wxAuiDockUIPart::typePaneTab;
-                    part.dock = &dock;
-                    part.pane = dock.panes.Item(pane_i);
-                    part.button = NULL;
-                    part.orientation = (orientation==wxHORIZONTAL) ? wxVERTICAL:wxHORIZONTAL;
-                    part.cont_sizer = dock_sizer;
-                    part.sizer_item = sizer_item;
-                    part.m_tab_container = notebookcontainer;
-                    uiparts.Add(part);
+                    
+                    if(HasFlag(wxAUI_MGR_NB_TOP)||!HasFlag(wxAUI_MGR_NB_BOTTOM))
+                    {
+                        LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                    }
 
                     if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
                     {
@@ -2345,11 +2361,18 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         }
         // Done adding panes, if the last pane we added was part of a notebook which didn't have an active page set
         // then set the first pange in that notebook to be the active page.
-        if(!activenotebookpagefound && firstpaneinnotebook)
+        if(firstpaneinnotebook)
         {
-            firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
-            firstpaneinnotebook->GetWindow()->Show(true);
-            activenotebookpagefound=true;
+            if(HasFlag(wxAUI_MGR_NB_BOTTOM))
+            {
+                LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+            }
+            if(!activenotebookpagefound && firstpaneinnotebook)
+            {
+                firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
+                firstpaneinnotebook->GetWindow()->Show(true);
+                activenotebookpagefound=true;
+            }
         }
 
         // at the end add a very small stretchable background area
@@ -2416,13 +2439,20 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
             }
             else
             {
-                if(!activenotebookpagefound && firstpaneinnotebook)
+                if(firstpaneinnotebook)
                 {
-                    // The previous page was a notebook that did not have an active page and we are not part of,
-                    // set the first page in that notebook to be the active page.
-                    firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
-                    firstpaneinnotebook->GetWindow()->Show(true);
-                    activenotebookpagefound=true;
+                    if(HasFlag(wxAUI_MGR_NB_BOTTOM))
+                    {
+                        LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                    }
+                    if(!activenotebookpagefound)
+                    {
+                        // The previous page was a notebook that did not have an active page and we are not part of,
+                        // set the first page in that notebook to be the active page.
+                        firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
+                        firstpaneinnotebook->GetWindow()->Show(true);
+                        activenotebookpagefound=true;
+                    }
                 }
 
                 // if this is not the first pane being added,
@@ -2451,17 +2481,11 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     int flags= GetNotebookFlags();
                     notebookcontainer->SetFlags(flags);
                     notebookcontainer->AddPage(pane);
-                    sizer_item = dock_sizer->Add(sash_size, 30, 0, wxEXPAND);
-
-                    part.type = wxAuiDockUIPart::typePaneTab;
-                    part.dock = &dock;
-                    part.pane = dock.panes.Item(pane_i);
-                    part.button = NULL;
-                    part.orientation = (orientation==wxHORIZONTAL) ? wxVERTICAL:wxHORIZONTAL;
-                    part.cont_sizer = dock_sizer;
-                    part.sizer_item = sizer_item;
-                    part.m_tab_container = notebookcontainer;
-                    uiparts.Add(part);
+                    
+                    if(HasFlag(wxAUI_MGR_NB_TOP)||!HasFlag(wxAUI_MGR_NB_BOTTOM))
+                    {
+                        LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                    }
 
                     if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
                     {
@@ -2493,11 +2517,20 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         }
         // Done adding panes, if the last pane we added was part of a notebook which didn't have an active page set
         // then set the first pange in that notebook to be the active page.
-        if(!activenotebookpagefound && firstpaneinnotebook)
+        if(firstpaneinnotebook)
         {
-            firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
-            firstpaneinnotebook->GetWindow()->Show(true);
-            activenotebookpagefound=true;
+            if(HasFlag(wxAUI_MGR_NB_BOTTOM))
+            {
+                LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+            }
+            if(!activenotebookpagefound)
+            {
+                // The previous page was a notebook that did not have an active page and we are not part of,
+                // set the first page in that notebook to be the active page.
+                firstpaneinnotebook->SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
+                firstpaneinnotebook->GetWindow()->Show(true);
+                activenotebookpagefound=true;
+            }
         }
     }
 
