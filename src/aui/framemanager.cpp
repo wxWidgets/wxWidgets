@@ -860,6 +860,7 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
     m_action_window = NULL;
     m_last_mouse_move = wxPoint();
     m_hover_button = NULL;
+    m_hover_button2 = NULL;
     m_art = new wxAuiDefaultDockArt;
     m_hint_wnd = NULL;
     m_flags = flags;
@@ -2168,9 +2169,9 @@ int wxAuiManager::GetNotebookFlags()
     return flags;
 }
 
-void LayoutAddNotebook(wxAuiTabContainer* notebookcontainer,wxSizerItem* sizer_item,wxSizer* dock_sizer,int sash_size,wxAuiDockUIPart& part,wxAuiDockInfo& dock,wxAuiDockUIPartArray& uiparts,wxAuiPaneInfo* pane)
+void LayoutAddNotebook(wxAuiTabContainer* notebookcontainer,wxSizer* dock_sizer,int sash_size,wxAuiDockUIPart& part,wxAuiDockInfo& dock,wxAuiDockUIPartArray& uiparts,wxAuiPaneInfo* pane)
 {
-    sizer_item = dock_sizer->Add(sash_size, 30, 0, wxEXPAND);
+    wxSizerItem* sizer_item = dock_sizer->Add(sash_size, 30, 0, wxEXPAND);
 
     part.type = wxAuiDockUIPart::typePaneTab;
     part.dock = &dock;
@@ -2282,7 +2283,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     if(HasFlag(wxAUI_MGR_NB_BOTTOM))
                     {
-                        LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                        LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
                     }
                     if(!activenotebookpagefound)
                     {
@@ -2306,7 +2307,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     
                     if(HasFlag(wxAUI_MGR_NB_TOP)||!HasFlag(wxAUI_MGR_NB_BOTTOM))
                     {
-                        LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                        LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
                     }
 
                     if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
@@ -2365,7 +2366,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         {
             if(HasFlag(wxAUI_MGR_NB_BOTTOM))
             {
-                LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
             }
             if(!activenotebookpagefound && firstpaneinnotebook)
             {
@@ -2443,7 +2444,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     if(HasFlag(wxAUI_MGR_NB_BOTTOM))
                     {
-                        LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                        LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
                     }
                     if(!activenotebookpagefound)
                     {
@@ -2484,7 +2485,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     
                     if(HasFlag(wxAUI_MGR_NB_TOP)||!HasFlag(wxAUI_MGR_NB_BOTTOM))
                     {
-                        LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                        LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
                     }
 
                     if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
@@ -2521,7 +2522,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         {
             if(HasFlag(wxAUI_MGR_NB_BOTTOM))
             {
-                LayoutAddNotebook(notebookcontainer,sizer_item,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
             }
             if(!activenotebookpagefound)
             {
@@ -5332,35 +5333,73 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
     else
     {
         wxAuiDockUIPart* part = HitTest(event.GetX(), event.GetY());
-        if (part && part->type == wxAuiDockUIPart::typePaneButton)
+        if (part)
         {
-            if (part != m_hover_button)
+            if(part->type == wxAuiDockUIPart::typePaneButton)
             {
-                // make the old button normal
-                if (m_hover_button)
+                if (m_hover_button2)
                 {
-                    UpdateButtonOnScreen(m_hover_button, event);
+                    m_hover_button2->cur_state = wxAUI_BUTTON_STATE_NORMAL;
                     Repaint();
                 }
+                if (part != m_hover_button)
+                {
+                    // make the old button normal
+                    if (m_hover_button)
+                    {
+                        UpdateButtonOnScreen(m_hover_button, event);
+                        Repaint();
+                    }
 
-                // mouse is over a button, so repaint the
-                // button in hover mode
-                UpdateButtonOnScreen(part, event);
-                m_hover_button = part;
+                    // mouse is over a button, so repaint the
+                    // button in hover mode
+                    UpdateButtonOnScreen(part, event);
+                    m_hover_button = part;
 
+                }
+                return;
             }
+            else if(part->type == wxAuiDockUIPart::typePaneTab)
+            {
+                wxAuiTabContainerButton* hitbutton;
+                if(part->m_tab_container->ButtonHitTest(event.m_x,event.m_y,&hitbutton))
+                {
+                    // make the old button normal
+                    if (m_hover_button)
+                    {
+                        UpdateButtonOnScreen(m_hover_button, event);
+                        Repaint();
+                    }
+                    if(m_hover_button2 != hitbutton)
+                    {
+                        if (m_hover_button2)
+                        {
+                            m_hover_button2->cur_state = wxAUI_BUTTON_STATE_NORMAL;
+                            Repaint();
+                        }
+
+                        m_hover_button2 = hitbutton;
+                        m_hover_button2->cur_state = wxAUI_BUTTON_STATE_HOVER;
+                        Repaint();
+                    }
+                    
+                    return;
+                }
+            }
+        }
+        if (m_hover_button||m_hover_button2)
+        {
+            m_hover_button = NULL;
+            if(m_hover_button2)
+            {
+                m_hover_button2->cur_state = wxAUI_BUTTON_STATE_NORMAL;
+            }
+            Repaint();
+            m_hover_button2 = NULL;
         }
         else
         {
-            if (m_hover_button)
-            {
-                m_hover_button = NULL;
-                Repaint();
-            }
-            else
-            {
-                event.Skip();
-            }
+            event.Skip();
         }
     }
 }
