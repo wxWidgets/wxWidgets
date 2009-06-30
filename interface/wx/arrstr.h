@@ -279,10 +279,12 @@ class wxSortedArrayString : public wxArrayString
 public:
 
     /**
-        Copy constructor. Note that when an array is assigned to a sorted array,
-        its contents is automatically sorted during construction.
+        Conversion constructor.
+
+        Constructs a sorted array with the same contents as the (possibly
+        unsorted) "array" argument.
     */
-    wxArrayString(const wxArrayString& array);
+    wxSortedArrayString(const wxArrayString& array);
 
     /**
         @copydoc wxArrayString::Add()
