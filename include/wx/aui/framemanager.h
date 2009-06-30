@@ -740,6 +740,8 @@ protected:
 
     /// Ends a resize action, or for live update, resizes the sash
     bool DoEndResizeAction(wxMouseEvent& event);
+    
+    int GetNotebookFlags();
 
 public:
 

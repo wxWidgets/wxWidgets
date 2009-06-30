@@ -72,6 +72,15 @@ class MyFrame : public wxFrame
         ID_CopyPerspectiveCode,
         ID_AllowFloating,
         ID_AllowActivePane,
+        ID_TabsTop,
+        ID_TabsLeft,
+        ID_TabsRight,
+        ID_TabsBottom,
+        ID_TabWindowList,
+        ID_CloseButton,
+        ID_CloseButtonActiveTab,
+        ID_CloseButtonAllTabs,
+        ID_NoCloseButton,
         ID_TransparentHint,
         ID_VenetianBlindsHint,
         ID_RectangleHint,
@@ -557,6 +566,15 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MyFrame::ID_CreatePerspective, MyFrame::OnCreatePerspective)
     EVT_MENU(MyFrame::ID_CopyPerspectiveCode, MyFrame::OnCopyPerspectiveCode)
     EVT_MENU(ID_AllowFloating, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_TabsTop, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_TabsLeft, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_TabsRight, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_TabsBottom, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_TabWindowList, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_CloseButton, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_CloseButtonActiveTab, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_CloseButtonAllTabs, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_NoCloseButton, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TransparentHint, MyFrame::OnManagerFlag)
     EVT_MENU(ID_VenetianBlindsHint, MyFrame::OnManagerFlag)
     EVT_MENU(ID_RectangleHint, MyFrame::OnManagerFlag)
@@ -631,6 +649,18 @@ MyFrame::MyFrame(wxWindow* parent,
     view_menu->Append(ID_SizeReportContent, _("Use a Size Reporter for the Content Pane"));
 
     wxMenu* options_menu = new wxMenu;
+    options_menu->AppendRadioItem(ID_TabsTop, _("Notebook tabs at top"));
+    options_menu->AppendRadioItem(ID_TabsBottom, _("Notebook tabs at bottom"));
+    options_menu->AppendRadioItem(ID_TabsLeft, _("Notebook tabs on left"));
+    options_menu->AppendRadioItem(ID_TabsRight, _("Notebook tabs on right"));
+    options_menu->AppendSeparator();
+    options_menu->AppendCheckItem(ID_TabWindowList, _("Show pulldown list of tabs in notebook"));
+    options_menu->AppendSeparator();
+    options_menu->AppendRadioItem(ID_CloseButtonActiveTab, _("Close button on active tab of notebook"));
+    options_menu->AppendRadioItem(ID_CloseButtonAllTabs, _("Close button on all tabs of notebook"));
+    options_menu->AppendRadioItem(ID_CloseButton, _("Close button on right of notebook"));
+    options_menu->AppendRadioItem(ID_NoCloseButton, _("No close button on notebook"));
+    options_menu->AppendSeparator();
     options_menu->AppendRadioItem(ID_TransparentHint, _("Transparent Hint"));
     options_menu->AppendRadioItem(ID_VenetianBlindsHint, _("Venetian Blinds Hint"));
     options_menu->AppendRadioItem(ID_RectangleHint, _("Rectangle Hint"));
@@ -1045,7 +1075,33 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
 
     int id = event.GetId();
 
-    if (id == ID_TransparentHint ||
+    if (id == ID_CloseButton ||
+        id == ID_CloseButtonActiveTab ||
+        id == ID_CloseButtonAllTabs ||
+        id == ID_NoCloseButton)
+    {
+        m_mgr.SetFlag(wxAUI_MGR_NB_CLOSE_BUTTON,false);
+        m_mgr.SetFlag(wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB,false);
+        m_mgr.SetFlag(wxAUI_MGR_NB_CLOSE_ON_ALL_TABS,false);
+    }
+    else if (id == ID_TabWindowList)
+    {
+        m_mgr.SetFlag(wxAUI_MGR_NB_WINDOWLIST_BUTTON,event.IsChecked());
+    }
+    else if (id == ID_TabsTop ||
+        id == ID_TabsLeft ||
+        id == ID_TabsRight ||
+        id == ID_TabsBottom
+        )
+    {
+        unsigned int flags = m_mgr.GetFlags();
+        flags &= ~wxAUI_MGR_NB_TOP;
+        flags &= ~wxAUI_MGR_NB_LEFT;
+        flags &= ~wxAUI_MGR_NB_RIGHT;
+        flags &= ~wxAUI_MGR_NB_BOTTOM;
+        m_mgr.SetFlags(flags);
+    }
+    else if (id == ID_TransparentHint ||
         id == ID_VenetianBlindsHint ||
         id == ID_RectangleHint ||
         id == ID_NoHint)
@@ -1068,6 +1124,13 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         case ID_VenetianBlindsHint: flag = wxAUI_MGR_VENETIAN_BLINDS_HINT; break;
         case ID_RectangleHint: flag = wxAUI_MGR_RECTANGLE_HINT; break;
         case ID_LiveUpdate: flag = wxAUI_MGR_LIVE_RESIZE; break;
+        case ID_TabsTop: flag = wxAUI_MGR_NB_TOP; break;
+        case ID_TabsLeft: flag = wxAUI_MGR_NB_LEFT; break;
+        case ID_TabsRight: flag = wxAUI_MGR_NB_RIGHT; break;
+        case ID_TabsBottom: flag = wxAUI_MGR_NB_BOTTOM; break;
+        case ID_CloseButton: flag = wxAUI_MGR_NB_CLOSE_BUTTON; break;
+        case ID_CloseButtonActiveTab: flag = wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB; break;
+        case ID_CloseButtonAllTabs: flag = wxAUI_MGR_NB_CLOSE_ON_ALL_TABS; break;
     }
 
     if (flag)

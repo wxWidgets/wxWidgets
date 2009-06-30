@@ -2149,6 +2149,25 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     }
 }
 
+int wxAuiManager::GetNotebookFlags()
+{
+    int flags;
+    if(HasFlag(wxAUI_MGR_NB_BOTTOM))
+        flags |= wxAUI_MGR_NB_BOTTOM;
+    else
+        flags |= wxAUI_MGR_NB_TOP;
+    if(HasFlag(wxAUI_MGR_NB_WINDOWLIST_BUTTON))
+        flags |= wxAUI_MGR_NB_WINDOWLIST_BUTTON;
+    if(HasFlag(wxAUI_MGR_NB_CLOSE_BUTTON))
+        flags |= wxAUI_MGR_NB_CLOSE_BUTTON;
+    else if(HasFlag(wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB))
+        flags |= wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB;
+    else if(HasFlag(wxAUI_MGR_NB_CLOSE_ON_ALL_TABS))
+        flags |= wxAUI_MGR_NB_CLOSE_ON_ALL_TABS;
+
+    return flags;
+}
+
 void wxAuiManager::LayoutAddDock(wxSizer* cont,
                                  wxAuiDockInfo& dock,
                                  wxAuiDockUIPartArray& uiparts,
@@ -2259,6 +2278,8 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     firstpaneinnotebook = &pane;
                     notebookcontainer =  new wxAuiTabContainer();
+                    int flags = GetNotebookFlags();
+                    notebookcontainer->SetFlags(flags);
                     notebookcontainer->AddPage(pane);
                     sizer_item = dock_sizer->Add(sash_size, 30, 0, wxEXPAND);
 
@@ -2427,6 +2448,8 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     firstpaneinnotebook = &pane;
                     notebookcontainer =  new wxAuiTabContainer();
+                    int flags= GetNotebookFlags();
+                    notebookcontainer->SetFlags(flags);
                     notebookcontainer->AddPage(pane);
                     sizer_item = dock_sizer->Add(sash_size, 30, 0, wxEXPAND);
 
