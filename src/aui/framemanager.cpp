@@ -5357,10 +5357,24 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
 
     if (evt.button == wxAUI_BUTTON_CLOSE)
     {
+        wxAuiPaneInfo* closepane = evt.pane;
+
+        // If the close button is on a notebook tab then we want to close that tab and not the one from the event.
+        wxPoint pt = m_action_start;
+        wxAuiDockUIPart* part = HitTest(pt.x, pt.y);
+        if (part && part->type == wxAuiDockUIPart::typePaneTab)
+        {
+            wxAuiPaneInfo* hitpane=NULL;
+            if(part->m_tab_container->TabHitTest(pt.x,pt.y,&hitpane))
+            {
+                closepane = hitpane;
+            }
+        }
+        
         // fire pane close event
         wxAuiManagerEvent e(wxEVT_AUI_PANE_CLOSE);
         e.SetManager(this);
-        e.SetPane(evt.pane);
+        e.SetPane(closepane);
         ProcessMgrEvent(e);
 
         if (!e.GetVeto())
@@ -5372,7 +5386,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
             wxAuiPaneInfo& check = GetPane(pane.GetWindow());
             if (check.IsOk())
             {
-                ClosePane(pane);
+                ClosePane(*closepane);
             }
 
             Update();
