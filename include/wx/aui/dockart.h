@@ -413,6 +413,8 @@ public:
 protected:
 
     virtual void Render(wxDC* dc, wxWindow* wnd);
+    
+    void CalculateRequiredWidth(wxDC& dc,wxWindow* wnd,int& total_width,int& visible_width) const;
 
 protected:
 

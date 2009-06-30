@@ -1816,6 +1816,49 @@ void wxAuiTabContainer::DrawTabs(wxDC* dc, wxWindow* wnd,const wxRect& rect)
     Render(dc,wnd);
 }
 
+void wxAuiTabContainer::CalculateRequiredWidth(wxDC& dc,wxWindow* wnd,int& total_width,int& visible_width) const
+{
+    size_t i;
+    size_t page_count = m_pages.GetCount();
+    for (i = 0; i < page_count; ++i)
+    {
+        wxAuiPaneInfo& page = *m_pages.Item(i);
+
+        // determine if a close button is on this tab
+        bool close_button = false;
+        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
+            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.HasFlag(wxAuiPaneInfo::optionActiveNotebook)))
+        {
+            close_button = true;
+        }
+
+
+        int x_extent = 0;
+        wxSize size = m_art->GetTabSize(dc,
+                            wnd,
+                            page.caption,
+                            page.GetBitmap(),
+                            page.HasFlag(wxAuiPaneInfo::optionActiveNotebook),
+                            close_button ?
+                              wxAUI_BUTTON_STATE_NORMAL :
+                              wxAUI_BUTTON_STATE_HIDDEN,
+                            &x_extent);
+
+        if (i+1 < page_count)
+            total_width += x_extent;
+        else
+            total_width += size.x;
+
+        if (i >= m_tab_offset)
+        {
+            if (i+1 < page_count)
+                visible_width += x_extent;
+            else
+                visible_width += size.x;
+        }
+    }
+}
+
 // Render() renders the tab catalog to the specified DC
 // It is a virtual function and can be overridden to
 // provide custom drawing capabilities
@@ -1846,45 +1889,9 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     // afforded on screen
     int total_width = 0;
     int visible_width = 0;
+    CalculateRequiredWidth(dc,wnd,total_width,visible_width);
+
     size_t tab_offset=m_tab_offset;
-    for (i = 0; i < page_count; ++i)
-    {
-        wxAuiPaneInfo& page = *m_pages.Item(i);
-
-        // determine if a close button is on this tab
-        bool close_button = false;
-        if ((m_flags & wxAUI_NB_CLOSE_ON_ALL_TABS) != 0 ||
-            ((m_flags & wxAUI_NB_CLOSE_ON_ACTIVE_TAB) != 0 && page.HasFlag(wxAuiPaneInfo::optionActiveNotebook)))
-        {
-            close_button = true;
-        }
-
-
-        int x_extent = 0;
-        wxSize size = m_art->GetTabSize(dc,
-                            wnd,
-                            page.caption,
-                            page.GetBitmap(),
-                            page.HasFlag(wxAuiPaneInfo::optionActiveNotebook),
-                            close_button ?
-                              wxAUI_BUTTON_STATE_NORMAL :
-                              wxAUI_BUTTON_STATE_HIDDEN,
-                            &x_extent);
-
-        if (i+1 < page_count)
-            total_width += x_extent;
-        else
-            total_width += size.x;
-
-        if (i >= tab_offset)
-        {
-            if (i+1 < page_count)
-                visible_width += x_extent;
-            else
-                visible_width += size.x;
-        }
-    }
-
     if (total_width > m_rect.GetWidth())
     {
         // show left/right buttons
@@ -2282,9 +2289,21 @@ bool wxAuiTabContainer::TabHitTest(int x, int y, wxAuiPaneInfo** hit) const
             return false;
     }
 
-    size_t i, page_count = m_pages.GetCount();
+    // find out if size of tabs is larger than can be
+    // afforded on screen
+    int total_width = 0;
+    int visible_width = 0;
+    wxMemoryDC dc;
+    CalculateRequiredWidth(dc,m_pages.Item(0)->GetWindow(),total_width,visible_width);
 
-    for (i = m_tab_offset; i < page_count; ++i)
+    size_t tab_offset=m_tab_offset;
+    if (total_width <= m_rect.GetWidth())
+    {
+        tab_offset=0;
+    }
+
+    size_t i, page_count = m_pages.GetCount();
+    for (i = tab_offset; i < page_count; ++i)
     {
         wxAuiPaneInfo& page = *m_pages.Item(i);
         if (page.rect.Contains(x,y))
