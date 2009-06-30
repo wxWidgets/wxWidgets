@@ -3554,17 +3554,30 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
     if (part->type == wxAuiDockUIPart::typePaneTab)
     {
+        // Figure out if the pane is already part of the notebook, which will happen when dragging a tab in a notebook.
+        bool isalreadyinnotebook = part->m_tab_container->GetPages().Index(&drop);
+
         wxAuiPaneInfo* hitpane=NULL;
         int page;
         // If we are above a tab then insert before it, otherwise insert at the end
         if(!part->m_tab_container->TabHitTest(pt.x,pt.y,&hitpane))
         {
+            // Insert at end.
             hitpane = &part->m_tab_container->GetPage(part->m_tab_container->GetPageCount()-1);
             page = hitpane->GetPage()+1;
         }
         else
         {
-            page = hitpane->GetPage();
+            // Insert after pane we are hovering over.
+            if( isalreadyinnotebook && drop.GetPage()<hitpane->GetPage() )
+            {
+                page = hitpane->GetPage()+1;
+            }
+            else
+            {
+                // Insert before pane we are hovering over.
+                page = hitpane->GetPage();
+            }
         }
 
         
@@ -5155,6 +5168,28 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
 
             if (!pane_info->IsToolbar())
             {
+                // If it is a notebook pane then we don't want to float it unless we have left the notebook tab bar.
+                // Instead we want to move it around within the notebook.
+
+                if(m_action_part->type==wxAuiDockUIPart::typePaneTab)
+                {
+                    wxAuiDockUIPart* hitpart = HitTest(event.GetX(), event.GetY());
+                    if(m_action_part==hitpart)
+                    {
+                        wxAuiPaneInfo comp = *pane_info;
+                        DoDrop(m_docks, m_panes, *pane_info, mouse_pos, wxPoint(0,0));
+                        // Only call update if the pane has actually moved within the notebook to prevent flickering.
+                        if(comp.GetPage() != pane_info->GetPage())
+                        {
+                            Update();
+                            Repaint();
+                            m_action_part = HitTest(event.GetX(), event.GetY());
+                            m_action_part->pane = pane_info;
+                        }
+                        return;
+                    }
+                }
+                
                 if ((m_flags & wxAUI_MGR_ALLOW_FLOATING) &&
                     pane_info->IsFloatable())
                 {
