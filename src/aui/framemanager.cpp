@@ -2944,11 +2944,13 @@ void wxAuiManager::GetDockSizeConstraint(double* width_pct, double* height_pct) 
 }
 
 
+// Used inside Update to store the tab offset of previous notebooks so that they can be restored if a notebook
+// with the same hash still exists. This prevents tab offsets from resetting every time we drag a pane for example.
+WX_DECLARE_STRING_HASH_MAP( int, NotebookOffsetHash );
 
 // Update() updates the layout.  Whenever changes are made to
 // one or more panes, this function should be called.  It is the
 // external entry point for running the layout engine.
-
 void wxAuiManager::Update()
 {
     m_hover_button = NULL;
@@ -3071,15 +3073,51 @@ void wxAuiManager::Update()
             p.SetFlag(wxAuiPaneInfo::optionActive,false);
         }
     }
-
-
     // We have to do the hiding and showing of panes before we call LayoutAll
     // As LayoutAll may wany to hide frames even though they are technically "visible"
     // If they are in a notebook.
 
+    // cache the offset positions for any notebooks we have, so that if we are just resizing a dock for example our notebook tabs don't jump around.
+    NotebookOffsetHash cachednotebookoffsets;
+    int uiparts_count = m_uiparts.GetCount();
+    for (i = 0; i < uiparts_count; i++)
+    {
+        wxAuiDockUIPart& part = m_uiparts.Item(i);
+        if(part.m_tab_container)
+        {
+            wxAuiPaneInfo &pane = part.m_tab_container->GetPage(0);
+            wxString notebookpositionhash;
+            notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetDirection());
+            notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetPosition());
+            notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetRow());
+            notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetLayer());
+            cachednotebookoffsets[notebookpositionhash] = part.m_tab_container->GetPageCount() - part.m_tab_container->GetTabOffset();
+        }
+    }
+
     // create a layout for all of the panes
     sizer = LayoutAll(m_panes, m_docks, m_uiparts, false);
 
+    // restore the offset positions for any notebooks we have, so that if we are just resizing a dock for example our notebook tabs don't jump around.
+    uiparts_count = m_uiparts.GetCount();
+    for (i = 0; i < uiparts_count; i++)
+    {
+        wxAuiDockUIPart& part = m_uiparts.Item(i);
+        if(part.m_tab_container)
+        {
+            wxAuiPaneInfo &pane = part.m_tab_container->GetPage(0);
+            wxString notebookpositionhash;
+            notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetDirection());
+            notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetPosition());
+            notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetRow());
+            notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetLayer());
+            if(cachednotebookoffsets.find(notebookpositionhash)!=cachednotebookoffsets.end())
+            {
+                part.m_tab_container->SetTabOffset(part.m_tab_container->GetPageCount()-cachednotebookoffsets[notebookpositionhash]);
+            }
+        }
+    }
+    
     // keep track of the old window rectangles so we can
     // refresh those windows whose rect has changed
     wxAuiRectArray old_pane_rects;
@@ -5342,13 +5380,13 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     }
     else if (evt.button == wxAUI_BUTTON_LEFT)
     {
-        m_action_part->m_tab_container->SetActivePage(m_action_part->m_tab_container->GetActivePage()-1);
-        Update();
+        m_action_part->m_tab_container->SetTabOffset(m_action_part->m_tab_container->GetTabOffset()-1);
+        Repaint();
     }
     else if (evt.button == wxAUI_BUTTON_RIGHT)
     {
-        m_action_part->m_tab_container->SetActivePage(m_action_part->m_tab_container->GetActivePage()+1);
-        Update();
+        m_action_part->m_tab_container->SetTabOffset(m_action_part->m_tab_container->GetTabOffset()+1);
+        Repaint();
     }
     else if (evt.button == wxAUI_BUTTON_WINDOWLIST)
     {
@@ -5357,7 +5395,8 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
         {
             m_action_part->m_tab_container->SetActivePage(selection);
         }
-        Update();
+        DoFrameLayout();
+        Repaint();
     }
 }
 

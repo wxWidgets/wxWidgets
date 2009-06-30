@@ -1680,7 +1680,7 @@ bool wxAuiTabContainer::SetActivePage(wxWindow* wnd)
             page.GetWindow()->Show(true);
             page.SetFlag(wxAuiPaneInfo::optionActiveNotebook,true);
             found = true;
-            MakeTabVisible(i,wnd);
+            MakeTabVisible(i);
         }
         else
         {
@@ -2240,8 +2240,9 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
 }
 
 // Make the tab visible if it wasn't already
-void wxAuiTabContainer::MakeTabVisible(int tabPage, wxWindow* win)
+void wxAuiTabContainer::MakeTabVisible(int tabPage)
 {
+    wxWindow* win = m_pages.Item(tabPage)->GetWindow();
     wxClientDC dc(win);
     if (!IsTabVisible(tabPage, GetTabOffset(), & dc, win))
     {

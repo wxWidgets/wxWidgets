@@ -407,7 +407,7 @@ public:
     bool IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWindow* wnd);
 
     // Make the tab visible if it wasn't already
-    void MakeTabVisible(int tabPage, wxWindow* win);
+    void MakeTabVisible(int tabPage);
 
     void DrawTabs(wxDC* dc, wxWindow* wnd,const wxRect& rect);
 protected:
