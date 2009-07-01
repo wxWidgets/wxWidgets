@@ -538,6 +538,10 @@ SOURCE=..\..\include\wx\ribbon\bar.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\ribbon\buttonbar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\ribbon\control.h
 # End Source File
 # Begin Source File
@@ -559,6 +563,10 @@ SOURCE=..\..\src\ribbon\art.cpp
 # Begin Source File
 
 SOURCE=..\..\src\ribbon\bar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ribbon\buttonbar.cpp
 # End Source File
 # Begin Source File
 

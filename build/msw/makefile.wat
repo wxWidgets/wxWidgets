@@ -4368,6 +4368,7 @@ RIBBONDLL_OBJECTS =  &
 	$(OBJS)\ribbondll_dummy.obj &
 	$(OBJS)\ribbondll_art.obj &
 	$(OBJS)\ribbondll_bar.obj &
+	$(OBJS)\ribbondll_buttonbar.obj &
 	$(OBJS)\ribbondll_control.obj &
 	$(OBJS)\ribbondll_page.obj &
 	$(OBJS)\ribbondll_panel.obj
@@ -4383,6 +4384,7 @@ RIBBONLIB_OBJECTS =  &
 	$(OBJS)\ribbonlib_dummy.obj &
 	$(OBJS)\ribbonlib_art.obj &
 	$(OBJS)\ribbonlib_bar.obj &
+	$(OBJS)\ribbonlib_buttonbar.obj &
 	$(OBJS)\ribbonlib_control.obj &
 	$(OBJS)\ribbonlib_page.obj &
 	$(OBJS)\ribbonlib_panel.obj
@@ -15107,6 +15109,9 @@ $(OBJS)\ribbondll_art.obj :  .AUTODEPEND ..\..\src\ribbon\art.cpp
 $(OBJS)\ribbondll_bar.obj :  .AUTODEPEND ..\..\src\ribbon\bar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONDLL_CXXFLAGS) $<
 
+$(OBJS)\ribbondll_buttonbar.obj :  .AUTODEPEND ..\..\src\ribbon\buttonbar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONDLL_CXXFLAGS) $<
+
 $(OBJS)\ribbondll_control.obj :  .AUTODEPEND ..\..\src\ribbon\control.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONDLL_CXXFLAGS) $<
 
@@ -15123,6 +15128,9 @@ $(OBJS)\ribbonlib_art.obj :  .AUTODEPEND ..\..\src\ribbon\art.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
 
 $(OBJS)\ribbonlib_bar.obj :  .AUTODEPEND ..\..\src\ribbon\bar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
+
+$(OBJS)\ribbonlib_buttonbar.obj :  .AUTODEPEND ..\..\src\ribbon\buttonbar.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(RIBBONLIB_CXXFLAGS) $<
 
 $(OBJS)\ribbonlib_control.obj :  .AUTODEPEND ..\..\src\ribbon\control.cpp

@@ -1321,6 +1321,7 @@ RIBBONDLL_OBJECTS =  \
 	$(OBJS)\ribbondll_version.res \
 	$(OBJS)\ribbondll_art.obj \
 	$(OBJS)\ribbondll_bar.obj \
+	$(OBJS)\ribbondll_buttonbar.obj \
 	$(OBJS)\ribbondll_control.obj \
 	$(OBJS)\ribbondll_page.obj \
 	$(OBJS)\ribbondll_panel.obj
@@ -1339,6 +1340,7 @@ RIBBONLIB_OBJECTS =  \
 	$(OBJS)\ribbonlib_dummy.obj \
 	$(OBJS)\ribbonlib_art.obj \
 	$(OBJS)\ribbonlib_bar.obj \
+	$(OBJS)\ribbonlib_buttonbar.obj \
 	$(OBJS)\ribbonlib_control.obj \
 	$(OBJS)\ribbonlib_page.obj \
 	$(OBJS)\ribbonlib_panel.obj
@@ -14599,6 +14601,9 @@ $(OBJS)\ribbondll_art.obj: ..\..\src\ribbon\art.cpp
 $(OBJS)\ribbondll_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\bar.cpp
 
+$(OBJS)\ribbondll_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\buttonbar.cpp
+
 $(OBJS)\ribbondll_control.obj: ..\..\src\ribbon\control.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONDLL_CXXFLAGS) ..\..\src\ribbon\control.cpp
 
@@ -14616,6 +14621,9 @@ $(OBJS)\ribbonlib_art.obj: ..\..\src\ribbon\art.cpp
 
 $(OBJS)\ribbonlib_bar.obj: ..\..\src\ribbon\bar.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\bar.cpp
+
+$(OBJS)\ribbonlib_buttonbar.obj: ..\..\src\ribbon\buttonbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\buttonbar.cpp
 
 $(OBJS)\ribbonlib_control.obj: ..\..\src\ribbon\control.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RIBBONLIB_CXXFLAGS) ..\..\src\ribbon\control.cpp

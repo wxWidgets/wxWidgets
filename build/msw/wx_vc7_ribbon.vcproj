@@ -774,6 +774,9 @@
 				RelativePath="..\..\include\wx\ribbon\bar.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\ribbon\buttonbar.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\ribbon\control.h">
 			</File>
 			<File
@@ -792,6 +795,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\ribbon\bar.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\ribbon\buttonbar.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\ribbon\control.cpp">
