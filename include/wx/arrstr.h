@@ -87,6 +87,17 @@ public:
     }
 
     int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
+
+private:
+    void Insert()
+    {
+        wxFAIL_MSG( "wxSortedArrayString::Insert() is not to be used" );
+    }
+
+    void Sort()
+    {
+        wxFAIL_MSG( "wxSortedArrayString::Sort() is not to be used" );
+    }
 };
 
 #else // if !wxUSE_STL

@@ -310,6 +310,8 @@ public:
         @warning This function should not be used with sorted arrays because it
                  could break the order of items and, for example, subsequent calls
                  to Index() would then not work!
+
+        @warning In STL mode, Insert is private and simply invokes wxFAIL_MSG.
     */
     void Insert(const wxString& str, size_t nIndex,
                 size_t copies = 1);
@@ -320,6 +322,8 @@ public:
                  break the order of items and, for example, subsequent calls to Index()
                  would then not work! Also, sorting a wxSortedArrayString doesn't make
                  sense because its elements are always already sorted.
+
+        @warning In STL mode, Sort is private and simply invokes wxFAIL_MSG.
     */
     void Sort(bool reverseOrder = false);
     void Sort(CompareFunction compareFunction);
