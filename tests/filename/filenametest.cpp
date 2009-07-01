@@ -65,6 +65,8 @@ static struct TestFileNameInfo
     { "../../foo", "", "../..", "foo", "", false, wxPATH_UNIX },
     { "foo.bar", "", "", "foo", "bar", false, wxPATH_UNIX },
     { "~/foo.bar", "", "~", "foo", "bar", true, wxPATH_UNIX },
+    { "~user/foo.bar", "", "~user", "foo", "bar", true, wxPATH_UNIX },
+    { "~user/", "", "~user", "", "", true, wxPATH_UNIX },
     { "/foo", "", "/", "foo", "", true, wxPATH_UNIX },
     { "Mahogany-0.60/foo.bar", "", "Mahogany-0.60", "foo", "bar", false, wxPATH_UNIX },
     { "/tmp/wxwin.tar.bz", "", "/tmp", "wxwin.tar", "bz", true, wxPATH_UNIX },
@@ -314,10 +316,10 @@ void FileNameTestCase::TestNormalize()
         // test wxPATH_NORM_DOTS
         { "a/.././b/c/../../", wxPATH_NORM_DOTS, "", wxPATH_UNIX },
 
-        // test wxPATH_NORM_TILDE
-        // NB: do the tilde expansion also under Windows to test if it works there too
+        // test wxPATH_NORM_TILDE: notice that ~ is only interpreted specially
+        // when it is the first character in the file name
         { "/a/b/~", wxPATH_NORM_TILDE, "/a/b/~", wxPATH_UNIX },
-        { "/~/a/b", wxPATH_NORM_TILDE, "HOME/a/b", wxPATH_UNIX },
+        { "/~/a/b", wxPATH_NORM_TILDE, "/~/a/b", wxPATH_UNIX },
         { "~/a/b", wxPATH_NORM_TILDE, "HOME/a/b", wxPATH_UNIX },
 
         // test wxPATH_NORM_CASE
