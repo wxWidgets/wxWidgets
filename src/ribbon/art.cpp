@@ -28,6 +28,9 @@
 #include "wx/msw/private.h"
 #endif
 
+wxRibbonArtProvider::wxRibbonArtProvider() {}
+wxRibbonArtProvider::~wxRibbonArtProvider() {}
+
 wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
 {
 	// TODO: 'Intelligent' colour picking rather than hardcoded defaults
@@ -103,6 +106,11 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
 	copy->m_panel_y_separation_size = m_panel_y_separation_size;
 
 	return copy;
+}
+
+long wxRibbonMSWArtProvider::GetFlags()
+{
+	return m_flags;
 }
 
 void wxRibbonMSWArtProvider::SetFlags(long flags)

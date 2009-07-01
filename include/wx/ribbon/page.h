@@ -32,8 +32,6 @@ public:
 				 wxWindowID id = wxID_ANY,
 				 const wxString& label = wxEmptyString,
 				 const wxBitmap& icon = wxNullBitmap,
-				 const wxPoint& pos = wxDefaultPosition,
-				 const wxSize& size = wxDefaultSize,
 				 long style = 0);
 
 	virtual ~wxRibbonPage();
@@ -42,8 +40,6 @@ public:
 				wxWindowID id = wxID_ANY,
 				const wxString& label = wxEmptyString,
 				const wxBitmap& icon = wxNullBitmap,
-				const wxPoint& pos = wxDefaultPosition,
-				const wxSize& size = wxDefaultSize,
 				long style = 0);
 
 	void SetArtProvider(wxRibbonArtProvider* art);

@@ -76,11 +76,11 @@ class wxRibbonPanel;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
 
-class WXDLLIMPEXP_AUI wxRibbonArtProvider
+class WXDLLIMPEXP_RIBBON wxRibbonArtProvider
 {
 public:
-	wxRibbonArtProvider() { }
-	virtual ~wxRibbonArtProvider() { }
+	wxRibbonArtProvider();
+	virtual ~wxRibbonArtProvider();
 
 	virtual wxRibbonArtProvider* Clone() = 0;
     virtual void SetFlags(long flags) = 0;
@@ -157,7 +157,7 @@ public:
 						wxSize page_new_size) = 0;
 };
 
-class WXDLLIMPEXP_AUI wxRibbonMSWArtProvider : public wxRibbonArtProvider
+class WXDLLIMPEXP_RIBBON wxRibbonMSWArtProvider : public wxRibbonArtProvider
 {
 public:
 	wxRibbonMSWArtProvider();
@@ -165,7 +165,7 @@ public:
 
 	wxRibbonArtProvider* Clone();
 	void SetFlags(long flags);
-	long GetFlags() {return m_flags;}
+	long GetFlags();
 
 	int GetMetric(int id);
     void SetMetric(int id, int new_val);

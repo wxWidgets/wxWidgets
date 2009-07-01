@@ -42,6 +42,22 @@ public:
 /**
     @class wxRibbonBar
 
+    Top-level control in a ribbon user interface. Serves as a tabbed container
+    for wxRibbonPage - a ribbon user interface typically has a ribbon bar,
+    which contains one or more wxRibbonPages, which in turn each contain one
+    or more wxRibbonPanels, which in turn contain controls.
+    
+    While a wxRibbonBar has tabs similar to a wxNotebook, it does not follow
+    the same API for adding pages. Containers like wxNotebook can contain any
+    type of window as a page, hence the normal procedure is to create the
+    sub-window and then call wxBookCtrlBase::AddPage(). As wxRibbonBar can only
+    have wxRibbonPage as children (and a wxRibbonPage can only have a
+    wxRibbonBar as parent), when a page is created, it is automatically added
+    to the bar - there is no AddPage equivalent to call.
+    
+    @sa wxRibbonPage
+    @sa wxRibbonPanel
+    
     @beginStyleTable
     @style{wxRIBBON_BAR_DEFAULT_STYLE}
            Defined as wxRIBBON_BAR_FLOW_HORIZONTAL |
@@ -90,21 +106,24 @@ public:
 class wxRibbonBar : public wxRibbonControl
 {
 public:
+    /**
+        Default constructor. 
+    */
 	  wxRibbonBar();
 
+    /**
+      Construct a ribbon bar with the given parameters.
+    */
 	  wxRibbonBar(wxWindow* parent,
 				  wxWindowID id = wxID_ANY,
 				  const wxPoint& pos = wxDefaultPosition,
 				  const wxSize& size = wxDefaultSize,
 				  long style = wxRIBBON_BAR_DEFAULT_STYLE);
 
+    /**
+        Destructor.
+    */
 	  virtual ~wxRibbonBar();
-
-	  bool Create(wxWindow* parent,
-				wxWindowID id = wxID_ANY,
-				const wxPoint& pos = wxDefaultPosition,
-				const wxSize& size = wxDefaultSize,
-				long style = wxRIBBON_BAR_DEFAULT_STYLE);
 
     /**
         Set the margin widths (in pixels) on the left and right sides of the
