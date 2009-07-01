@@ -3671,13 +3671,17 @@ if test "$wxUSE_OPENGL" = "yes" -o "$wxUSE_OPENGL" = "auto"; then
                 wxUSE_OPENGL=no
                 USE_OPENGL=0
             fi
-        else
-            dnl libraries are available... change 'auto' in 'yes'
-            wxUSE_OPENGL=yes
         fi
     else
         AC_MSG_WARN([wxGLCanvas not implemented for this port, library will be compiled without it.])
         wxUSE_OPENGL="no"
+    fi
+
+    if test "$wxUSE_OPENGL" = "auto"; then
+        dnl if the OpenGL libraries were unavailable, this would have been
+        dnl changed to "no" above, if it wasn't, change it to "yes" as we've
+        dnl verified that we can indeed use OpenGL
+        wxUSE_OPENGL=yes
     fi
 
     if test "$wxUSE_OPENGL" = "yes"; then

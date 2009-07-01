@@ -33400,13 +33400,15 @@ echo "$as_me: WARNING: OpenGL libraries not available, disabling support for Ope
                 wxUSE_OPENGL=no
                 USE_OPENGL=0
             fi
-        else
-                        wxUSE_OPENGL=yes
         fi
     else
         { echo "$as_me:$LINENO: WARNING: wxGLCanvas not implemented for this port, library will be compiled without it." >&5
 echo "$as_me: WARNING: wxGLCanvas not implemented for this port, library will be compiled without it." >&2;}
         wxUSE_OPENGL="no"
+    fi
+
+    if test "$wxUSE_OPENGL" = "auto"; then
+                                wxUSE_OPENGL=yes
     fi
 
     if test "$wxUSE_OPENGL" = "yes"; then
