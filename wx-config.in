@@ -53,7 +53,8 @@ usage()
     wx-config returns information about the wxWidgets libraries available on
   your system.  It may be used to retrieve the information required to build
   applications using these libraries using --cppflags, --cflags,  --cxxflags
-  and --libs options.
+  and --libs options. And you may query the properties of this configuration
+  using --query-{host,toolkit,widgetset,chartype,debugtype,version,linkage}.
 
     If multiple builds of wxWidgets  are available,  you can use the options
   --prefix, --host, --toolkit, --unicode, --debug, --static, --universal and
@@ -258,6 +259,15 @@ for arg do
         fi
         ;;
 
+    --query-*)
+        _name=`echo $arg | sed 's/^--query-//'`
+        if match_field "$_name" $wxconfig_schema
+        then
+            query_options="${query_options:+$query_options }$_name"
+            continue
+        fi
+        ;;
+
     --*)
         _name=`option_name $arg`
         if validate_arg wxconfig flag   "$_name" yes ||
@@ -284,7 +294,7 @@ done
 check_yesno_option universal widgetset univ
 check_yesno_option unicode chartype unicode ansi
 check_yesno_option debug debugtype debug release
-check_yesno_option static linkage '-static'
+check_yesno_option static linkage static
 
 
 # Dump everything we just read in debug mode.
@@ -308,6 +318,7 @@ if [ -n "$WXDEBUG" ]; then
     for o in $output_options; do
         decho "    $o = `eval echo \"\\\$output_option_$o\"`"
     done
+    decho "  query options     = $query_options"
 
 fi
 
@@ -319,13 +330,13 @@ fi
 # --------------------------------------------------------------
 
 # get_mask [ _hash ]
-# Construct a config filename mask from a psuedo-hash of component variables.
+# Construct a config filename mask from a pseudo-hash of component variables.
 # The optional argument is the prefix of the hash to use.  If not specified
 # this will return a mask derived from the command line options that were used.
 get_mask()
 {
     [ $# -gt 0 ] || set m
-    eval echo "\${$1_host}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}-\${$1_debugtype}\${$1_linkage}-\${$1_version}\${$1_flavour}"
+    eval echo "\${$1_host:+\$$1_host-}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}-\${$1_debugtype}\${$1_linkage:+-\$$1_linkage}-\${$1_version}\${$1_flavour}"
 }
 
 # Returns true if this script is for a cross compiled config.
@@ -343,20 +354,21 @@ is_cross && target="@host_alias@"
 
 # Define a pseudo-hash to contain the specification of this wx-config
 # instance and its associated library.
-this_host="${target:+${target}-}"
+this_host="${target:+${target}}"
 this_toolkit="@TOOLKIT_DIR@@TOOLKIT_VERSION@"
 this_widgetset="@WIDGET_SET@"
 this_chartype="@WX_CHARTYPE@"
 this_debugtype="@WX_DEBUGTYPE@"
 this_flavour="@WX_FLAVOUR@"
 this_version="@WX_RELEASE@"
-this_linkage=`[ "x@SHARED@" = "x1" ] || echo '-static'`
+this_linkage=`[ "x@SHARED@" = "x1" ] || echo 'static'`
 
 this_config=`get_mask this`
 
+
 # Extract the user specification from the options parsed.
 m_host=${input_option_host:+"${input_option_host}-?"}
-m_host=${m_host:-${input_option_host-$this_host}}
+m_host=${m_host:-$this_host}
 m_toolkit=${input_option_toolkit:-'[^-]+'}
 m_widgetset=${input_option_widgetset-'(univ)?'}
 m_chartype=${input_option_chartype:-'(unicode|ansi)'}
@@ -364,7 +376,7 @@ m_debugtype=${input_option_debugtype:-'(debug|release)'}
 m_flavour=${input_option_flavour:+-$input_option_flavour}
 m_flavour=${m_flavour:-${input_option_flavour-'(-[^-]+)?'}}
 m_version=${input_option_version:-'[0-9]+\.[0-9]+'}
-m_linkage=${input_option_linkage-'(-static)?'}
+m_linkage=${input_option_linkage-'?(static)?'}
 
 configmask="^`get_mask`$"
 
@@ -875,6 +887,9 @@ bindir="@bindir@"
 [ -z "$output_option_ld"            ] || echo "@EXE_LINKER@"
 [ -z "$flag_option_selected_config" ] || echo "$this_config"
 
+for q in $query_options; do
+    eval echo "\$this_$q"
+done
 
 # --rezflags is deprecated and disabled (2005/11/29)
 if [ -n "$output_option_rezflags" ]; then
