@@ -2000,7 +2000,9 @@ SEARCH_INCLUDE="\
     /usr/local/include        \
     /usr/local/X11/include    \
     /usr/local/include/X11    \
+    /usr/local/X11R7/include  \
     /usr/local/X11R6/include  \
+    /usr/local/include/X11R7  \
     /usr/local/include/X11R6  \
                               \
     /usr/Motif-2.1/include    \
@@ -2012,9 +2014,11 @@ SEARCH_INCLUDE="\
                               \
     /usr/include/Xm           \
                               \
+    /usr/X11R7/include        \
     /usr/X11R6/include        \
     /usr/X11R6.4/include      \
                               \
+    /usr/include/X11R7        \
     /usr/include/X11R6        \
                               \
     /usr/X11/include          \
