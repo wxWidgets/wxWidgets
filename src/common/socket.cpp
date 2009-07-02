@@ -1610,6 +1610,11 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
 
             // we're now successfully connected
             m_connected = true;
+            m_establishing = false;
+
+            // error was previously set to wxSOCKET_WOULDBLOCK, but this is not
+            // the case any longer
+            SetError(wxSOCKET_NOERROR);
             break;
 
         case wxSOCKET_LOST:
