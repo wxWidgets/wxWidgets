@@ -869,19 +869,19 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
             kATSUSizeTag ,
             kATSUColorTag ,
     };
-    ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+    ByteCount atsuSizes[WXSIZEOF(atsuTags)] =
     {
             sizeof( Fixed ) ,
             sizeof( RGBColor ) ,
     };
-    ATSUAttributeValuePtr atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+    ATSUAttributeValuePtr atsuValues[WXSIZEOF(atsuTags)] =
     {
             &atsuSize ,
             &atsuColor ,
     };
 
     status = ::ATSUSetAttributes(
-        m_macATSUIStyle, sizeof(atsuTags) / sizeof(ATSUAttributeTag) ,
+        m_macATSUIStyle, WXSIZEOF(atsuTags),
         atsuTags, atsuSizes, atsuValues);
 
     wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
@@ -2268,15 +2268,15 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
             {
                 kATSULineRotationTag ,
             };
-            ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+            ByteCount atsuSizes[WXSIZEOF(atsuTags)] =
             {
                 sizeof( Fixed ) ,
             };
-            ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+            ATSUAttributeValuePtr    atsuValues[WXSIZEOF(atsuTags)] =
             {
                 &atsuAngle ,
             };
-            status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
+            status = ::ATSUSetLayoutControls(atsuLayout , WXSIZEOF(atsuTags),
                                              atsuTags, atsuSizes, atsuValues );
         }
 
@@ -2285,15 +2285,15 @@ void wxMacCoreGraphicsContext::DoDrawRotatedText(const wxString &str,
             {
                 kATSUCGContextTag ,
             };
-            ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+            ByteCount atsuSizes[WXSIZEOF(atsuTags)] =
             {
                 sizeof( CGContextRef ) ,
             };
-            ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+            ATSUAttributeValuePtr    atsuValues[WXSIZEOF(atsuTags)] =
             {
                 &m_cgContext ,
             };
-            status = ::ATSUSetLayoutControls(atsuLayout , sizeof(atsuTags) / sizeof(ATSUAttributeTag),
+            status = ::ATSUSetLayoutControls(atsuLayout , WXSIZEOF(atsuTags),
                                              atsuTags, atsuSizes, atsuValues );
         }
 

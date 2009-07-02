@@ -515,7 +515,7 @@ bool wxSymbolPickerDialog::TransferDataToWindow()
     {
         // Insert items into subset combo
         int i;
-        for (i = 0; i < (int) (sizeof(g_UnicodeSubsetTable)/sizeof(g_UnicodeSubsetTable[0])); i++)
+        for (i = 0; i < (int) WXSIZEOF(g_UnicodeSubsetTable); i++)
         {
             m_subsetCtrl->Append(g_UnicodeSubsetTable[i].m_name);
         }
@@ -617,7 +617,7 @@ void wxSymbolPickerDialog::OnSymbolSelected( wxCommandEvent& event )
     {
         // Need to make the subset selection reflect the current symbol
         int i;
-        for (i = 0; i < (int) (sizeof(g_UnicodeSubsetTable)/sizeof(g_UnicodeSubsetTable[0])); i++)
+        for (i = 0; i < (int) WXSIZEOF(g_UnicodeSubsetTable); i++)
         {
             if (sel >= g_UnicodeSubsetTable[i].m_low && sel <= g_UnicodeSubsetTable[i].m_high)
             {

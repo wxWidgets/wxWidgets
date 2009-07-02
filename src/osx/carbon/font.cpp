@@ -442,7 +442,7 @@ void wxFontRefData::MacFindFont()
             kATSUQDCondensedTag ,
             kATSUQDExtendedTag ,
         };
-        ByteCount atsuSizes[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        ByteCount atsuSizes[WXSIZEOF(atsuTags)] =
         {
             sizeof( ATSUFontID ) ,
             sizeof( Fixed ) ,
@@ -460,7 +460,7 @@ void wxFontRefData::MacFindFont()
         Fixed atsuSize = IntToFixed( m_info.m_pointSize );
         ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
         FMFontStyle addQDStyle = m_info.m_atsuAdditionalQDStyles;
-        ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
+        ATSUAttributeValuePtr    atsuValues[WXSIZEOF(atsuTags)] =
         {
             &m_info.m_atsuFontID ,
             &atsuSize ,
@@ -474,7 +474,7 @@ void wxFontRefData::MacFindFont()
 
         status = ::ATSUSetAttributes(
                                      (ATSUStyle)m_macATSUStyle,
-                                     sizeof(atsuTags) / sizeof(ATSUAttributeTag) ,
+                                     WXSIZEOF(atsuTags),
                                      atsuTags, atsuSizes, atsuValues);
 
         wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
