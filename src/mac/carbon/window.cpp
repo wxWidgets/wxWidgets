@@ -92,8 +92,8 @@ BEGIN_EVENT_TABLE(wxWindowMac, wxWindowBase)
 #if TARGET_API_MAC_OSX
     EVT_PAINT(wxWindowMac::OnPaint)
 #endif
-    EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
-    EVT_KILL_FOCUS(wxWindowMac::OnSetFocus)
+//    EVT_SET_FOCUS(wxWindowMac::OnSetFocus)
+//    EVT_KILL_FOCUS(wxWindowMac::OnSetFocus)
     EVT_MOUSE_EVENTS(wxWindowMac::OnMouseEvent)
 END_EVENT_TABLE()
 
@@ -352,7 +352,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             thisWindow->GetCaret()->OnKillFocus();
 #endif
 
-                        wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
+                        wxLogTrace(_T("focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
 
                         // remove this as soon as posting the synthesized event works properly
                         static bool inKillFocusEvent = false ;
@@ -363,6 +363,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             wxFocusEvent event( wxEVT_KILL_FOCUS, thisWindow->GetId());
                             event.SetEventObject(thisWindow);
                             thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                            thisWindow->wxWindowMac::OnSetFocus(event);
                             inKillFocusEvent = false ;
                         }
                     }
@@ -373,7 +374,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     {
                         // set focus
                         // panel wants to track the window which was the last to have focus in it
-                        wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
+                        wxLogTrace(_T("focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
                         wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
                         thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
 
@@ -385,6 +386,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         wxFocusEvent event(wxEVT_SET_FOCUS, thisWindow->GetId());
                         event.SetEventObject(thisWindow);
                         thisWindow->GetEventHandler()->ProcessEvent(event) ;
+                        thisWindow->wxWindowMac::OnSetFocus(event);
                     }
                 }
             }
@@ -446,7 +448,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                             thisWindow->GetCaret()->OnKillFocus();
 #endif
 
-                        wxLogTrace(_T("Focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
+                        wxLogTrace(_T("focus"), _T("focus lost(%p)"), wx_static_cast(void*, thisWindow));
 
                         static bool inKillFocusEvent = false ;
 
@@ -462,7 +464,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     else
                     {
                         // panel wants to track the window which was the last to have focus in it
-                        wxLogTrace(_T("Focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
+                        wxLogTrace(_T("focus"), _T("focus set(%p)"), wx_static_cast(void*, thisWindow));
                         wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
                         thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
 
@@ -1410,10 +1412,10 @@ void wxWindowMac::SetFocus()
     // as we cannot rely on the control features to find out whether we are in full keyboard mode,
     // we can only leave in case of an error
 
-    wxLogTrace(_T("Focus"), _T("SetFocus(%p)"), wx_static_cast(void*, this));
+    wxLogTrace(_T("focus"), _T("SetFocus(%p)"), wx_static_cast(void*, this));
 
     OSStatus err = m_peer->SetFocus( kControlFocusNextPart ) ;
-    wxLogTrace(_T("Focus"), _T("m_peer->SetFocus received %d"), err);
+    wxLogTrace(_T("focus"), _T("m_peer->SetFocus received %d"), err);
 
     if ( err == errCouldntSetFocus )
         return ;
@@ -2911,7 +2913,7 @@ wxWindow *wxWindowBase::DoFindFocus()
 {
     ControlRef control ;
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
-    wxLogTrace(_T("Focus"), _T("FindFocus(windowref=%p, peer =%p, wxwindow = %p)"),
+    wxLogTrace(_T("focus"), _T("FindFocus(windowref=%p, peer =%p, wxwindow = %p)"),
                 wx_static_cast(void*, GetUserFocusWindow()), wx_static_cast(void*, control)
                , wx_static_cast(void*, wxFindControlFromMacControl( control )));
     return (wxWindow*)wxFindControlFromMacControl( control ) ;
@@ -2919,17 +2921,6 @@ wxWindow *wxWindowBase::DoFindFocus()
 
 void wxWindowMac::OnSetFocus( wxFocusEvent& event )
 {
-    // panel wants to track the window which was the last to have focus in it,
-    // so we want to set ourselves as the window which last had focus
-    //
-    // notice that it's also important to do it upwards the tree because
-    // otherwise when the top level panel gets focus, it won't set it back to
-    // us, but to some other sibling
-
-    // CS: don't know if this is still needed:
-    //wxChildFocusEvent eventFocus(this);
-    //(void)GetEventHandler()->ProcessEvent(eventFocus);
-
     if ( m_peer != NULL && MacGetTopLevelWindow() && m_peer->NeedsFocusRect() )
     {
 #if wxMAC_USE_CORE_GRAPHICS
@@ -2964,8 +2955,6 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
         }
 #endif
     }
-
-    event.Skip();
 }
 
 void wxWindowMac::OnInternalIdle()

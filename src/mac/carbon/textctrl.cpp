@@ -433,7 +433,7 @@ void wxTextCtrl::CreatePeer(
         // So for now, don't use wxMacLTEHIViewControl unless we really have to.
         
         if ( (m_windowStyle & wxTE_MULTILINE)
-#if 0 // wxMAC_USE_CORE_GRAPHICS
+#if 1 // wxMAC_USE_CORE_GRAPHICS
              || ( UMAGetSystemVersion() >= 0x1050 )
 #endif
              )
