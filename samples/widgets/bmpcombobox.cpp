@@ -128,6 +128,8 @@ protected:
     void OnButtonAddMany(wxCommandEvent& event);
 
     void OnComboBox(wxCommandEvent& event);
+    void OnDropDown(wxCommandEvent& event);
+    void OnCloseUp(wxCommandEvent& event);
     void OnComboText(wxCommandEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
@@ -225,6 +227,8 @@ BEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(BitmapComboBoxPage_SetFromFile, BitmapComboBoxWidgetsPage::OnUpdateUIItemManipulator)
     EVT_UPDATE_UI(BitmapComboBoxPage_DeleteSel, BitmapComboBoxWidgetsPage::OnUpdateUIItemManipulator)
 
+    EVT_COMBOBOX_DROPDOWN(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnDropDown)
+    EVT_COMBOBOX_CLOSEUP(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnCloseUp)
     EVT_COMBOBOX(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnComboBox)
     EVT_TEXT(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnComboText)
     EVT_TEXT_ENTER(BitmapComboBoxPage_Combo, BitmapComboBoxWidgetsPage::OnComboText)
@@ -936,6 +940,16 @@ wxBitmap BitmapComboBoxWidgetsPage::CreateBitmap(const wxColour& colour)
     bmp.SetMask(mask);
 
     return bmp;
+}
+
+void BitmapComboBoxWidgetsPage::OnDropDown(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Combobox dropped down"));
+}
+
+void BitmapComboBoxWidgetsPage::OnCloseUp(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Combobox closed up"));
 }
 
 #endif // wxUSE_BITMAPCOMBOBOX
