@@ -8,3 +8,19 @@
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
+
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#if wxUSE_RIBBON
+
+#ifndef WX_PRECOMP
+#endif
+
+
+
+#endif
+    // wxUSE_RIBBON
