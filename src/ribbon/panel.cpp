@@ -30,8 +30,8 @@
 IMPLEMENT_CLASS(wxRibbonPanel, wxRibbonControl)
 
 BEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
-  EVT_ERASE_BACKGROUND(wxRibbonPanel::OnEraseBackground)
-  EVT_PAINT(wxRibbonPanel::OnPaint)
+    EVT_ERASE_BACKGROUND(wxRibbonPanel::OnEraseBackground)
+    EVT_PAINT(wxRibbonPanel::OnPaint)
 END_EVENT_TABLE()
 
 wxRibbonPanel::wxRibbonPanel()
@@ -39,15 +39,15 @@ wxRibbonPanel::wxRibbonPanel()
 }
 
 wxRibbonPanel::wxRibbonPanel(wxWindow* parent,
-				  wxWindowID id,
-				  const wxString& label,
-				  const wxBitmap& minimised_icon,
-				  const wxPoint& pos,
-				  const wxSize& size,
-				  long style)
-	: wxRibbonControl(parent, id, pos, size, style | wxTRANSPARENT_WINDOW)
+                  wxWindowID id,
+                  const wxString& label,
+                  const wxBitmap& minimised_icon,
+                  const wxPoint& pos,
+                  const wxSize& size,
+                  long style)
+    : wxRibbonControl(parent, id, pos, size, style | wxTRANSPARENT_WINDOW)
 {
-	CommonInit(label, minimised_icon, style | wxTRANSPARENT_WINDOW);
+    CommonInit(label, minimised_icon, style | wxTRANSPARENT_WINDOW);
 }
 
 wxRibbonPanel::~wxRibbonPanel()
@@ -55,121 +55,121 @@ wxRibbonPanel::~wxRibbonPanel()
 }
 
 bool wxRibbonPanel::Create(wxWindow* parent,
-				wxWindowID id,
-				const wxString& label,
-				const wxBitmap& icon,
-				const wxPoint& pos,
-				const wxSize& size,
-				long style)
+                wxWindowID id,
+                const wxString& label,
+                const wxBitmap& icon,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style)
 {
-	style |= wxTRANSPARENT_WINDOW;
+    style |= wxTRANSPARENT_WINDOW;
 
-	if(!wxRibbonControl::Create(parent, id, pos, size, style))
-	{
-		return false;
-	}
+    if(!wxRibbonControl::Create(parent, id, pos, size, style))
+    {
+        return false;
+    }
 
-	CommonInit(label, icon, style);
+    CommonInit(label, icon, style);
 
-	return true;
+    return true;
 }
 
 void wxRibbonPanel::SetArtProvider(wxRibbonArtProvider* art)
 {
-	m_art = art;
+    m_art = art;
 }
 
 void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long style)
 {
-	SetName(label);
-	SetLabel(label);
+    SetName(label);
+    SetLabel(label);
 
-	m_flags = style;
-	m_minimised_icon = icon;
+    m_flags = style;
+    m_minimised_icon = icon;
 
-	if(m_art == NULL)
-	{
-		wxRibbonControl* parent = wxDynamicCast(GetParent(), wxRibbonControl);
-		if(parent != NULL)
-		{
-			m_art = parent->GetArtProvider();
-		}
-	}
+    if(m_art == NULL)
+    {
+        wxRibbonControl* parent = wxDynamicCast(GetParent(), wxRibbonControl);
+        if(parent != NULL)
+        {
+            m_art = parent->GetArtProvider();
+        }
+    }
 
-	// Temporary
-	SetMinSize(wxSize(100, 87));
-	SetSize(GetMinSize());
+    // Temporary
+    SetMinSize(wxSize(100, 87));
+    SetSize(GetMinSize());
 
-	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 }
 
 void wxRibbonPanel::OnEraseBackground(wxEraseEvent& evt)
 {
-	if(m_art != NULL)
-	{
-		wxDC* dc = evt.GetDC();
-		if(dc != NULL)
-		{
-			m_art->DrawPanelBackground(*dc, this, GetSize());
-		}
-		else
-		{
-			wxClientDC cdc(this);
-			m_art->DrawPanelBackground(cdc, this, GetSize());
-		}
-	}
+    if(m_art != NULL)
+    {
+        wxDC* dc = evt.GetDC();
+        if(dc != NULL)
+        {
+            m_art->DrawPanelBackground(*dc, this, GetSize());
+        }
+        else
+        {
+            wxClientDC cdc(this);
+            m_art->DrawPanelBackground(cdc, this, GetSize());
+        }
+    }
 }
 
 void wxRibbonPanel::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
-	// No foreground painting done by the panel itself, but a paint DC
-	// must be created anyway.
-	wxPaintDC dc(this);
+    // No foreground painting done by the panel itself, but a paint DC
+    // must be created anyway.
+    wxPaintDC dc(this);
 }
 
 bool wxRibbonPanel::IsSizingContinuous() const
 {
-	// TODO: Handle (rare) case of a continuously resizing panel, or delegate to a sizer
-	return false;
+    // TODO: Handle (rare) case of a continuously resizing panel, or delegate to a sizer
+    return false;
 }
 
 wxSize wxRibbonPanel::GetNextSmallerSize(wxOrientation direction) const
 {
-	// TODO: Do proper children / sizer related calculations
-	wxSize current(GetSize());
-	wxSize minimum(GetMinSize());
-	if(direction & wxHORIZONTAL)
-	{
-		current.x = (current.x * 4) / 5;
-		if(current.x < minimum.x)
-		{
-			current.x = minimum.x;
-		}
-	}
-	if(direction & wxVERTICAL)
-	{
-		current.y = (current.y * 4) / 5;
-		if(current.y < minimum.y)
-		{
-			current.y = minimum.y;
-		}
-	}
-	return current;
+    // TODO: Do proper children / sizer related calculations
+    wxSize current(GetSize());
+    wxSize minimum(GetMinSize());
+    if(direction & wxHORIZONTAL)
+    {
+        current.x = (current.x * 4) / 5;
+        if(current.x < minimum.x)
+        {
+            current.x = minimum.x;
+        }
+    }
+    if(direction & wxVERTICAL)
+    {
+        current.y = (current.y * 4) / 5;
+        if(current.y < minimum.y)
+        {
+            current.y = minimum.y;
+        }
+    }
+    return current;
 }
 
 wxSize wxRibbonPanel::GetNextLargerSize(wxOrientation direction) const
 {
-	// TODO: Do proper children / sizer related calculations
-	wxSize current(GetSize());
-	if(direction & wxHORIZONTAL)
-	{
-		current.x = (current.x * 5) / 4;
-	}
-	if(direction & wxVERTICAL)
-	{
-		current.y = (current.y * 5) / 4;
-	}
-	return current;
+    // TODO: Do proper children / sizer related calculations
+    wxSize current(GetSize());
+    if(direction & wxHORIZONTAL)
+    {
+        current.x = (current.x * 5) / 4;
+    }
+    if(direction & wxVERTICAL)
+    {
+        current.y = (current.y * 5) / 4;
+    }
+    return current;
 }
 
 #endif // wxUSE_RIBBON

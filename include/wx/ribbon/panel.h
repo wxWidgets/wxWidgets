@@ -20,58 +20,58 @@
 
 enum wxRibbonPanelOption
 {
-	wxRIBBON_PANEL_NO_AUTO_MINIMISE	= 1 << 0,
-	wxRIBBON_PANEL_EXT_BUTTON		= 1 << 3,
-	wxRIBBON_PANEL_MINIMISE_BUTTON	= 1 << 4,
-	
-	wxRIBBON_PANEL_DEFAULT_STYLE = 0,
+    wxRIBBON_PANEL_NO_AUTO_MINIMISE    = 1 << 0,
+    wxRIBBON_PANEL_EXT_BUTTON        = 1 << 3,
+    wxRIBBON_PANEL_MINIMISE_BUTTON    = 1 << 4,
+    
+    wxRIBBON_PANEL_DEFAULT_STYLE = 0,
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonPanel : public wxRibbonControl
 {
 public:
-	wxRibbonPanel();
+    wxRibbonPanel();
 
-	wxRibbonPanel(wxWindow* parent,
-				  wxWindowID id = wxID_ANY,
-				  const wxString& label = wxEmptyString,
-				  const wxBitmap& minimised_icon = wxNullBitmap,
-				  const wxPoint& pos = wxDefaultPosition,
-				  const wxSize& size = wxDefaultSize,
-				  long style = wxRIBBON_PANEL_DEFAULT_STYLE);
+    wxRibbonPanel(wxWindow* parent,
+                  wxWindowID id = wxID_ANY,
+                  const wxString& label = wxEmptyString,
+                  const wxBitmap& minimised_icon = wxNullBitmap,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = wxRIBBON_PANEL_DEFAULT_STYLE);
 
-	virtual ~wxRibbonPanel();
+    virtual ~wxRibbonPanel();
 
-	bool Create(wxWindow* parent,
-				wxWindowID id = wxID_ANY,
-				const wxString& label = wxEmptyString,
-				const wxBitmap& icon = wxNullBitmap,
-				const wxPoint& pos = wxDefaultPosition,
-				const wxSize& size = wxDefaultSize,
-				long style = wxRIBBON_PANEL_DEFAULT_STYLE);
+    bool Create(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxString& label = wxEmptyString,
+                const wxBitmap& icon = wxNullBitmap,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxRIBBON_PANEL_DEFAULT_STYLE);
 
-	wxBitmap& GetMinimisedIcon() {return m_minimised_icon;}
+    wxBitmap& GetMinimisedIcon() {return m_minimised_icon;}
 
-	void SetArtProvider(wxRibbonArtProvider* art);
+    void SetArtProvider(wxRibbonArtProvider* art);
 
-	virtual bool IsSizingContinuous() const;
-	virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
-	virtual wxSize GetNextLargerSize(wxOrientation direction) const;
+    virtual bool IsSizingContinuous() const;
+    virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
+    virtual wxSize GetNextLargerSize(wxOrientation direction) const;
 
 protected:
-	wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
-	void OnEraseBackground(wxEraseEvent& evt);
-	void OnPaint(wxPaintEvent& evt);
+    void OnEraseBackground(wxEraseEvent& evt);
+    void OnPaint(wxPaintEvent& evt);
 
-	void CommonInit(const wxString& label, const wxBitmap& icon, long style);
+    void CommonInit(const wxString& label, const wxBitmap& icon, long style);
 
-	wxBitmap m_minimised_icon;
-	long m_flags;
+    wxBitmap m_minimised_icon;
+    long m_flags;
 
 #ifndef SWIG
-	DECLARE_CLASS(wxRibbonPanel)
-	DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxRibbonPanel)
+    DECLARE_EVENT_TABLE()
 #endif
 };
 

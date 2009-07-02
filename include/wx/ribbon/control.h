@@ -23,26 +23,26 @@ class wxRibbonArtProvider;
 class WXDLLIMPEXP_RIBBON wxRibbonControl : public wxControl
 {
 public:
-	wxRibbonControl() { m_art = NULL; }
+    wxRibbonControl() { m_art = NULL; }
 
     wxRibbonControl(wxWindow *parent, wxWindowID id,
-					const wxPoint& pos = wxDefaultPosition,
-					const wxSize& size = wxDefaultSize, long style = 0,
-					const wxValidator& validator = wxDefaultValidator,
-					const wxString& name = wxControlNameStr);
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize, long style = 0,
+                    const wxValidator& validator = wxDefaultValidator,
+                    const wxString& name = wxControlNameStr);
 
-	virtual void SetArtProvider(wxRibbonArtProvider* art);
-	wxRibbonArtProvider* GetArtProvider() const {return m_art;}
+    virtual void SetArtProvider(wxRibbonArtProvider* art);
+    wxRibbonArtProvider* GetArtProvider() const {return m_art;}
 
-	virtual bool IsSizingContinuous() const {return true;}
-	virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
-	virtual wxSize GetNextLargerSize(wxOrientation direction) const;
+    virtual bool IsSizingContinuous() const {return true;}
+    virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
+    virtual wxSize GetNextLargerSize(wxOrientation direction) const;
 
 protected:
-	wxRibbonArtProvider* m_art;
+    wxRibbonArtProvider* m_art;
 
 #ifndef SWIG
-	DECLARE_CLASS(wxRibbonControl)
+    DECLARE_CLASS(wxRibbonControl)
 #endif
 };
 

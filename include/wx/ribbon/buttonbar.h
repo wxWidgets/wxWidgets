@@ -19,9 +19,9 @@
 
 enum wxRibbonButtonBarButtonKind
 {
-	wxRIBBON_BUTTONBAR_BUTTON_NORMAL	= 1 << 0,
-	wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN	= 1 << 1,
-	wxRIBBON_BUTTONBAR_BUTTON_HYBRID	= wxRIBBON_BUTTONBAR_BUTTON_NORMAL | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN,
+    wxRIBBON_BUTTONBAR_BUTTON_NORMAL    = 1 << 0,
+    wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN    = 1 << 1,
+    wxRIBBON_BUTTONBAR_BUTTON_HYBRID    = wxRIBBON_BUTTONBAR_BUTTON_NORMAL | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN,
 };
 
 class wxRibbonButtonBarButtonBase;
@@ -29,71 +29,74 @@ class wxRibbonButtonBarButtonBase;
 class WXDLLIMPEXP_RIBBON wxRibbonButtonBar : public wxRibbonControl
 {
 public:
-	wxRibbonButtonBar();
+    wxRibbonButtonBar();
 
-	wxRibbonButtonBar(wxWindow* parent,
-				  wxWindowID id = wxID_ANY,
-				  const wxPoint& pos = wxDefaultPosition,
-				  const wxSize& size = wxDefaultSize,
-				  long style = 0);
+    wxRibbonButtonBar(wxWindow* parent,
+                  wxWindowID id = wxID_ANY,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = 0);
 
-	virtual ~wxRibbonButtonBar();
+    virtual ~wxRibbonButtonBar();
 
-	bool Create(wxWindow* parent,
-				wxWindowID id = wxID_ANY,
-				const wxPoint& pos = wxDefaultPosition,
-				const wxSize& size = wxDefaultSize,
-				long style = 0);
+    bool Create(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0);
 
-	virtual wxRibbonButtonBarButtonBase* AddButton(
-				int button_id,
-				const wxString& label,
-				const wxBitmap& bitmap,
-				const wxString& help_string = wxEmptyString,
-				wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL);
+    virtual wxRibbonButtonBarButtonBase* AddButton(
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString,
+                wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL);
 
-	virtual wxRibbonButtonBarButtonBase* AddDropdownButton(
-				int button_id,
-				const wxString& label,
-				const wxBitmap& bitmap,
-				const wxString& help_string = wxEmptyString);
+    virtual wxRibbonButtonBarButtonBase* AddDropdownButton(
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
 
-	virtual wxRibbonButtonBarButtonBase* AddHybridButton(
-				int button_id,
-				const wxString& label,
-				const wxBitmap& bitmap,
-				const wxString& help_string = wxEmptyString);
-	
-	virtual wxRibbonButtonBarButtonBase* AddButton(
-				int button_id,
-				const wxString& label,
-				const wxBitmap& bitmap,
-				const wxBitmap& bitmap_small = wxNullBitmap,
-				const wxBitmap& bitmap_disabled = wxNullBitmap,
-				const wxBitmap& bitmap_small_disabled = wxNullBitmap,
-				wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL,
-				const wxString& help_string = wxEmptyString,
-				wxObject* client_data = NULL);
+    virtual wxRibbonButtonBarButtonBase* AddHybridButton(
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxString& help_string = wxEmptyString);
+    
+    virtual wxRibbonButtonBarButtonBase* AddButton(
+                int button_id,
+                const wxString& label,
+                const wxBitmap& bitmap,
+                const wxBitmap& bitmap_small = wxNullBitmap,
+                const wxBitmap& bitmap_disabled = wxNullBitmap,
+                const wxBitmap& bitmap_small_disabled = wxNullBitmap,
+                wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL,
+                const wxString& help_string = wxEmptyString,
+                wxObject* client_data = NULL);
 
-	virtual void CleatButtons();
-	virtual bool DeleteButton(int button_id);
-	virtual void EnableButton(int button_id, bool enable = true);
+    virtual void CleatButtons();
+    virtual bool DeleteButton(int button_id);
+    virtual void EnableButton(int button_id, bool enable = true);
 
-	virtual bool IsSizingContinuous() const;
-	virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
-	virtual wxSize GetNextLargerSize(wxOrientation direction) const;
+    virtual bool IsSizingContinuous() const;
+    virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
+    virtual wxSize GetNextLargerSize(wxOrientation direction) const;
 
 protected:
-	wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
-	void OnEraseBackground(wxEraseEvent& evt);
-	void OnPaint(wxPaintEvent& evt);
+    void OnEraseBackground(wxEraseEvent& evt);
+    void OnPaint(wxPaintEvent& evt);
 
-	void CommonInit(long style);
+    void CommonInit(long style);
+
+    wxSize m_bitmap_size_large;
+    wxSize m_bitmap_size_small;
 
 #ifndef SWIG
-	DECLARE_CLASS(wxRibbonButtonBar)
-	DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxRibbonButtonBar)
+    DECLARE_EVENT_TABLE()
 #endif
 };
 

@@ -19,35 +19,35 @@
 */
 enum wxRibbonArtSetting
 {
-	wxRIBBON_ART_TAB_SEPARATION_SIZE,
-	wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE,
-	wxRIBBON_ART_PAGE_BORDER_TOP_SIZE,
-	wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE,
-	wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE,
-	wxRIBBON_ART_PANEL_X_SEPARATION_SIZE,
-	wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE,
-	wxRIBBON_ART_PANEL_LABEL_FONT,
-	wxRIBBON_ART_TAB_LABEL_FONT,
-	wxRIBBON_ART_TAB_LABEL_COLOUR,
-	wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
-	wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
-	wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR,
-	wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_COLOUR,
-	wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
-	wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR,
-	wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR,
-	wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR,
-	wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
-	wxRIBBON_ART_TAB_BORDER_COLOUR,
-	wxRIBBON_ART_PANEL_BORDER_COLOUR,
-	wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR,
-	wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
-	wxRIBBON_ART_PANEL_LABEL_COLOUR,
-	wxRIBBON_ART_PAGE_BORDER_COLOUR,
-	wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR,
-	wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR,
-	wxRIBBON_ART_PAGE_BACKGROUND_COLOUR,
-	wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_TAB_SEPARATION_SIZE,
+    wxRIBBON_ART_PAGE_BORDER_LEFT_SIZE,
+    wxRIBBON_ART_PAGE_BORDER_TOP_SIZE,
+    wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE,
+    wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE,
+    wxRIBBON_ART_PANEL_X_SEPARATION_SIZE,
+    wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE,
+    wxRIBBON_ART_PANEL_LABEL_FONT,
+    wxRIBBON_ART_TAB_LABEL_FONT,
+    wxRIBBON_ART_TAB_LABEL_COLOUR,
+    wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
+    wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
+    wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_TAB_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_TAB_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_TAB_HOVER_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_COLOUR,
+    wxRIBBON_ART_TAB_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_TAB_BORDER_COLOUR,
+    wxRIBBON_ART_PANEL_BORDER_COLOUR,
+    wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR,
+    wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PANEL_LABEL_COLOUR,
+    wxRIBBON_ART_PAGE_BORDER_COLOUR,
+    wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_PAGE_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR,
 };
 
 /**
@@ -59,27 +59,27 @@ enum wxRibbonArtSetting
 */
 enum wxRibbonScrollButtonStyle
 {
-	wxRIBBON_SCROLL_BTN_LEFT = 0, /**< Button will scroll to the left. */
-	wxRIBBON_SCROLL_BTN_RIGHT = 1, /**< Button will scroll to the right. */
-	wxRIBBON_SCROLL_BTN_UP = 2, /**< Button will scroll upward. */
-	wxRIBBON_SCROLL_BTN_DOWN = 3, /**< Button will scroll downward. */
+    wxRIBBON_SCROLL_BTN_LEFT = 0, /**< Button will scroll to the left. */
+    wxRIBBON_SCROLL_BTN_RIGHT = 1, /**< Button will scroll to the right. */
+    wxRIBBON_SCROLL_BTN_UP = 2, /**< Button will scroll upward. */
+    wxRIBBON_SCROLL_BTN_DOWN = 3, /**< Button will scroll downward. */
 
   /** A mask to extract direction from a combination of flags. */
-	wxRIBBON_SCROLL_BTN_DIRECTION_MASK = 3,
+    wxRIBBON_SCROLL_BTN_DIRECTION_MASK = 3,
 
-	wxRIBBON_SCROLL_BTN_NORMAL = 0, /**< Button is not active or hovered. */
-	wxRIBBON_SCROLL_BTN_HOVERED = 4, /**< Button has a cursor hovering over it. */
-	wxRIBBON_SCROLL_BTN_ACTIVE = 8, /**< Button is being pressed. */
+    wxRIBBON_SCROLL_BTN_NORMAL = 0, /**< Button is not active or hovered. */
+    wxRIBBON_SCROLL_BTN_HOVERED = 4, /**< Button has a cursor hovering over it. */
+    wxRIBBON_SCROLL_BTN_ACTIVE = 8, /**< Button is being pressed. */
 
   /** A mask to extract state from a combination of flags. */
-	wxRIBBON_SCROLL_BTN_STATE_MASK = 12,
+    wxRIBBON_SCROLL_BTN_STATE_MASK = 12,
 
-	wxRIBBON_SCROLL_BTN_FOR_OTHER = 0, /**< Button is not for scrolling tabs nor pages. */
-	wxRIBBON_SCROLL_BTN_FOR_TABS = 16, /**< Button is for scrolling tabs. */
-	wxRIBBON_SCROLL_BTN_FOR_PAGE = 32, /**< Button is for scrolling pages. */
+    wxRIBBON_SCROLL_BTN_FOR_OTHER = 0, /**< Button is not for scrolling tabs nor pages. */
+    wxRIBBON_SCROLL_BTN_FOR_TABS = 16, /**< Button is for scrolling tabs. */
+    wxRIBBON_SCROLL_BTN_FOR_PAGE = 32, /**< Button is for scrolling pages. */
 
   /** A mask to extract purpose from a combination of flags. */
-	wxRIBBON_SCROLL_BTN_FOR_MASK = 48,
+    wxRIBBON_SCROLL_BTN_FOR_MASK = 48,
 };
 
 /**
@@ -110,17 +110,17 @@ public:
     /**
         Constructor.
     */
-	  wxRibbonArtProvider();
+    wxRibbonArtProvider();
     
     /**
         Destructor.
     */
-	  virtual ~wxRibbonArtProvider();
+    virtual ~wxRibbonArtProvider();
 
     /**
         Create a new art provider which is a clone of this one.
     */
-	  virtual wxRibbonArtProvider* Clone() = 0;
+    virtual wxRibbonArtProvider* Clone() = 0;
     
     /**
         Set the style flags.
@@ -134,13 +134,13 @@ public:
     /**
         Get the previously set style flags.
     */
-	  virtual long GetFlags() = 0;
+    virtual long GetFlags() = 0;
 
     /**
         Get the value of a certain integer setting.
         @a id can be one of the size values of @ref wxRibbonArtSetting.
     */
-	  virtual int GetMetric(int id) = 0;
+    virtual int GetMetric(int id) = 0;
     
     /**
         Set the value of a certain integer setting to the value @e new_val.
@@ -193,10 +193,10 @@ public:
         @param rect
             The rectangle within which to draw.
     */
-	  virtual void DrawTabCtrlBackground(
-						wxDC& dc,
-						wxWindow* wnd,
-						const wxRect& rect) = 0;
+    virtual void DrawTabCtrlBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) = 0;
 
     /**
         Draw a single tab in the tab region of a ribbon bar.
@@ -214,9 +214,9 @@ public:
             be at least the minimum value returned by GetBarTabWidth(), and
             height will be the value returned by GetTabCtrlHeight().
     */
-	  virtual void DrawTab(wxDC& dc,
-						wxWindow* wnd,
-						const wxRibbonPageTabInfo& tab) = 0;
+    virtual void DrawTab(wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRibbonPageTabInfo& tab) = 0;
 
     /**
         Draw a separator between two tabs in a ribbon bar.
@@ -233,11 +233,11 @@ public:
             The opacity with which to draw the separator. Values are in the range
             [0, 1], with 0 being totally transparent, and 1 being totally opaque.
     */
-	  virtual void DrawTabSeparator(wxDC& dc,
-						wxWindow* wnd,
-						const wxRect& rect,
-						double visibility) = 0;
-            
+    virtual void DrawTabSeparator(wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        double visibility) = 0;
+
     /**
         Draw the background of a ribbon page.
         
@@ -251,10 +251,10 @@ public:
         
         @sa GetPageBackgroundRedrawArea
     */
-	  virtual void DrawPageBackground(
-						wxDC& dc,
-						wxWindow* wnd,
-						const wxRect& rect) = 0;
+    virtual void DrawPageBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) = 0;
 
     /**
         Draw a ribbon-style scroll button.
@@ -276,11 +276,11 @@ public:
             A combination of flags from @ref wxRibbonScrollButtonStyle, including
             a direction, a for flag, and one or more states.
     */
-	  virtual void DrawScrollButton(
-						wxDC& dc,
-						wxWindow* wnd,
-						const wxRect& rect,
-						long style) = 0;
+    virtual void DrawScrollButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        long style) = 0;
 
     /**
         Draw the background and chrome for a ribbon panel. This should draw
@@ -295,10 +295,10 @@ public:
         @param rect
             The rectangle within which to draw.
     */
-	  virtual void DrawPanelBackground(
-						wxDC& dc,
-						wxRibbonPanel* wnd,
-						const wxRect& rect) = 0;
+    virtual void DrawPanelBackground(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect) = 0;
 
     /**
         Calculate the ideal and minimum width (in pixels) of a tab in a ribbon
@@ -324,15 +324,15 @@ public:
             A size less than the @a small_must_have_separator size, and greater
             than or equal to zero, which is the minimum pixel width for the tab.
     */
-	  virtual void GetBarTabWidth(
-						wxDC& dc,
-            wxWindow* wnd,
-            const wxString& label,
-            const wxBitmap& bitmap,
-						int* ideal,
-						int* small_begin_need_separator,
-						int* small_must_have_separator,
-						int* minimum) = 0;
+    virtual void GetBarTabWidth(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxString& label,
+                        const wxBitmap& bitmap,
+                        int* ideal,
+                        int* small_begin_need_separator,
+                        int* small_must_have_separator,
+                        int* minimum) = 0;
 
     /**
         Calculate the height (in pixels) of the tab region of a ribbon bar.
@@ -347,10 +347,10 @@ public:
         @param pages
             The tabs which will acquire the returned height.
     */
-	  virtual int GetTabCtrlHeight(
-						wxDC& dc,
-						wxWindow* wnd,
-						const wxRibbonPageTabInfoArray& pages) = 0;
+    virtual int GetTabCtrlHeight(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRibbonPageTabInfoArray& pages) = 0;
 
     /**
         Calculate the minimum size (in pixels) of a scroll button.
@@ -365,10 +365,10 @@ public:
             should be ignored, as a button should retain a constant size,
             regardless of its state).
     */
-	  virtual wxSize GetScrollButtonMinimumSize(
-						wxDC& dc,
-						wxWindow* wnd,
-						long style) = 0;
+    virtual wxSize GetScrollButtonMinimumSize(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        long style) = 0;
 
     /**
         Calculate the size of a panel for a given client size. This should
@@ -382,10 +382,10 @@ public:
         @param client_size
             The client size.
     */
-	  virtual wxSize GetPanelSize(
-						wxDC& dc,
-						const wxRibbonPanel* wnd,
-						wxSize client_size) = 0;
+    virtual wxSize GetPanelSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize client_size) = 0;
 
     /**
         Calculate the portion of a page background which needs to be redrawn
@@ -404,9 +404,9 @@ public:
         @param page_new_size
             The size of the page after the resize.
     */
-	  virtual wxRect GetPageBackgroundRedrawArea(
-						wxDC& dc,
-						const wxRibbonPage* wnd,
-						wxSize page_old_size,
-						wxSize page_new_size) = 0;
+    virtual wxRect GetPageBackgroundRedrawArea(
+                        wxDC& dc,
+                        const wxRibbonPage* wnd,
+                        wxSize page_old_size,
+                        wxSize page_new_size) = 0;
 };

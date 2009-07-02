@@ -24,19 +24,19 @@ public:
     /**
         Constructor.
     */
-	  wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
-					   int win_id = 0,
-					   wxRibbonPage* page = NULL);
+      wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
+                       int win_id = 0,
+                       wxRibbonPage* page = NULL);
 
     /**
         Returns the page being changed to, or being clicked on.
     */
-	  wxRibbonPage* GetPage();
+    wxRibbonPage* GetPage();
     
     /**
         Sets the page relating to this event.
     */
-	  void SetPage(wxRibbonPage* page);
+    void SetPage(wxRibbonPage* page);
 };
 
 /**
@@ -60,26 +60,26 @@ public:
     
     @beginStyleTable
     @style{wxRIBBON_BAR_DEFAULT_STYLE}
-           Defined as wxRIBBON_BAR_FLOW_HORIZONTAL |
-           wxRIBBON_BAR_SHOW_PAGE_LABELS | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
+        Defined as wxRIBBON_BAR_FLOW_HORIZONTAL |
+        wxRIBBON_BAR_SHOW_PAGE_LABELS | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
     @style{wxRIBBON_BAR_FOLDBAR_STYLE}
-           Defined as wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
-           | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
-           wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS
+        Defined as wxRIBBON_BAR_FLOW_VERTICAL | wxRIBBON_BAR_SHOW_PAGE_ICONS
+        | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS |
+        wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS
     @style{wxRIBBON_BAR_SHOW_PAGE_LABELS}
-           Causes labels to be shown on the tabs in the ribbon bar.
+        Causes labels to be shown on the tabs in the ribbon bar.
     @style{wxRIBBON_BAR_SHOW_PAGE_ICONS}
-           Causes icons to be shown on the tabs in the ribbon bar.
+        Causes icons to be shown on the tabs in the ribbon bar.
     @style{wxRIBBON_BAR_FLOW_HORIZONTAL}
-          Causes panels within pages to stack horizontally.
+        Causes panels within pages to stack horizontally.
     @style{wxRIBBON_BAR_FLOW_VERTICAL}
-          Causes panels within pages to stack vertically.
+        Causes panels within pages to stack vertically.
     @style{wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS}
-          Causes extension buttons to be shown on panels (where the panel has
-          such a button).
-	  @style{wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS}
-          Causes minimise buttons to be shown on panels (where the panel has
-          such a button).
+        Causes extension buttons to be shown on panels (where the panel has
+        such a button).
+    @style{wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS}
+        Causes minimise buttons to be shown on panels (where the panel has
+        such a button).
     @endStyleTable
 
 
@@ -109,21 +109,21 @@ public:
     /**
         Default constructor. 
     */
-	  wxRibbonBar();
+    wxRibbonBar();
 
     /**
       Construct a ribbon bar with the given parameters.
     */
-	  wxRibbonBar(wxWindow* parent,
-				  wxWindowID id = wxID_ANY,
-				  const wxPoint& pos = wxDefaultPosition,
-				  const wxSize& size = wxDefaultSize,
-				  long style = wxRIBBON_BAR_DEFAULT_STYLE);
+    wxRibbonBar(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxRIBBON_BAR_DEFAULT_STYLE);
 
     /**
         Destructor.
     */
-	  virtual ~wxRibbonBar();
+    virtual ~wxRibbonBar();
 
     /**
         Set the margin widths (in pixels) on the left and right sides of the
@@ -136,14 +136,14 @@ public:
         margin could be used for rendering a help button, and/or MDI buttons,
         but again, this is not currently implemented.
     */
-	  void SetTabCtrlMargins(int left, int right);
+    void SetTabCtrlMargins(int left, int right);
 
     /**
         Set the art provider to be used be the ribbon bar. Also sets the art
         provider on all current wxRibbonPage children, and any wxRibbonPage
         children added in the future.
     */
-	  void SetArtProvider(wxRibbonArtProvider* art);
+    void SetArtProvider(wxRibbonArtProvider* art);
 
     /**
         Set the active page by index, without triggering any events.
@@ -153,7 +153,7 @@ public:
         @return @true if the specified page is now active, @false if it could
             not be activated (for example because the page index is invalid).
     */
-	  bool SetActivePage(size_t page);
+    bool SetActivePage(size_t page);
     
     /**
         Set the active page, without triggering any events.
@@ -164,7 +164,7 @@ public:
             not be activated (for example because the given page is not a child
             of the ribbon bar).
     */
-	  bool SetActivePage(wxRibbonPage* page);
+    bool SetActivePage(wxRibbonPage* page);
     
     /**
         Get the index of the active page.

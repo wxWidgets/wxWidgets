@@ -21,64 +21,64 @@
 
 enum wxRibbonBarOption
 {
-	wxRIBBON_BAR_SHOW_PAGE_LABELS	= 1 << 0,
-	wxRIBBON_BAR_SHOW_PAGE_ICONS	= 1 << 1,
-	wxRIBBON_BAR_FLOW_HORIZONTAL	= 0,
-	wxRIBBON_BAR_FLOW_VERTICAL		= 1 << 2,
-	wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS = 1 << 3,
-	wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS = 1 << 4,
+    wxRIBBON_BAR_SHOW_PAGE_LABELS    = 1 << 0,
+    wxRIBBON_BAR_SHOW_PAGE_ICONS    = 1 << 1,
+    wxRIBBON_BAR_FLOW_HORIZONTAL    = 0,
+    wxRIBBON_BAR_FLOW_VERTICAL        = 1 << 2,
+    wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS = 1 << 3,
+    wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS = 1 << 4,
 
-	wxRIBBON_BAR_DEFAULT_STYLE =  wxRIBBON_BAR_FLOW_HORIZONTAL
-								| wxRIBBON_BAR_SHOW_PAGE_LABELS
-								| wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS,
+    wxRIBBON_BAR_DEFAULT_STYLE =  wxRIBBON_BAR_FLOW_HORIZONTAL
+                                | wxRIBBON_BAR_SHOW_PAGE_LABELS
+                                | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS,
 
-	wxRIBBON_BAR_FOLDBAR_STYLE =  wxRIBBON_BAR_FLOW_VERTICAL
-								| wxRIBBON_BAR_SHOW_PAGE_ICONS
-								| wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
-								| wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS,
+    wxRIBBON_BAR_FOLDBAR_STYLE =  wxRIBBON_BAR_FLOW_VERTICAL
+                                | wxRIBBON_BAR_SHOW_PAGE_ICONS
+                                | wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS
+                                | wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS,
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonBarEvent : public wxNotifyEvent
 {
 public:
-	wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
-					   int win_id = 0,
-					   wxRibbonPage* page = NULL)
-		: wxNotifyEvent(command_type, win_id)
-		, m_page(page)
-	{
-	}
+    wxRibbonBarEvent(wxEventType command_type = wxEVT_NULL,
+                       int win_id = 0,
+                       wxRibbonPage* page = NULL)
+        : wxNotifyEvent(command_type, win_id)
+        , m_page(page)
+    {
+    }
 #ifndef SWIG
-	wxRibbonBarEvent(const wxRibbonBarEvent& c) : wxNotifyEvent(c)
-	{
-		m_page = c.m_page;
-	}
+    wxRibbonBarEvent(const wxRibbonBarEvent& c) : wxNotifyEvent(c)
+    {
+        m_page = c.m_page;
+    }
 #endif
-	wxEvent *Clone() const { return new wxRibbonBarEvent(*this); }
+    wxEvent *Clone() const { return new wxRibbonBarEvent(*this); }
 
-	wxRibbonPage* GetPage() {return m_page;}
-	void SetPage(wxRibbonPage* page) {m_page = page;}
+    wxRibbonPage* GetPage() {return m_page;}
+    void SetPage(wxRibbonPage* page) {m_page = page;}
 
 protected:
-	wxRibbonPage* m_page;
+    wxRibbonPage* m_page;
 
 #ifndef SWIG
 private:
-	DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRibbonBarEvent)
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRibbonBarEvent)
 #endif
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonPageTabInfo
 {
 public:
-	wxRect rect;
-	wxRibbonPage *page;
-	int ideal_width;
-	int small_begin_need_separator_width;
-	int small_must_have_separator_width;
-	int minimum_width;
-	bool active;
-	bool hovered;
+    wxRect rect;
+    wxRibbonPage *page;
+    int ideal_width;
+    int small_begin_need_separator_width;
+    int small_must_have_separator_width;
+    int minimum_width;
+    bool active;
+    bool hovered;
 };
 
 #ifndef SWIG
@@ -88,80 +88,80 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxRibbonPageTabInfo, wxRibbonPageTabInfoArray,
 class WXDLLIMPEXP_RIBBON wxRibbonBar : public wxRibbonControl
 {
 public:
-	wxRibbonBar();
+    wxRibbonBar();
 
-	wxRibbonBar(wxWindow* parent,
-				  wxWindowID id = wxID_ANY,
-				  const wxPoint& pos = wxDefaultPosition,
-				  const wxSize& size = wxDefaultSize,
-				  long style = wxRIBBON_BAR_DEFAULT_STYLE);
+    wxRibbonBar(wxWindow* parent,
+                  wxWindowID id = wxID_ANY,
+                  const wxPoint& pos = wxDefaultPosition,
+                  const wxSize& size = wxDefaultSize,
+                  long style = wxRIBBON_BAR_DEFAULT_STYLE);
 
-	virtual ~wxRibbonBar();
+    virtual ~wxRibbonBar();
 
-	bool Create(wxWindow* parent,
-				wxWindowID id = wxID_ANY,
-				const wxPoint& pos = wxDefaultPosition,
-				const wxSize& size = wxDefaultSize,
-				long style = wxRIBBON_BAR_DEFAULT_STYLE);
+    bool Create(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxRIBBON_BAR_DEFAULT_STYLE);
 
-	void SetTabCtrlMargins(int left, int right);
+    void SetTabCtrlMargins(int left, int right);
 
-	void SetArtProvider(wxRibbonArtProvider* art);
+    void SetArtProvider(wxRibbonArtProvider* art);
 
-	bool SetActivePage(size_t page);
-	bool SetActivePage(wxRibbonPage* page);
+    bool SetActivePage(size_t page);
+    bool SetActivePage(wxRibbonPage* page);
     int GetActivePage() const;
 
-	virtual wxSize DoGetBestSize() const;
-	virtual bool HasMultiplePages() const { return true; }
+    virtual wxSize DoGetBestSize() const;
+    virtual bool HasMultiplePages() const { return true; }
 
 protected:
-	friend class wxRibbonPage;
+    friend class wxRibbonPage;
 
-	wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
-	wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = NULL);
+    wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    wxRibbonPageTabInfo* HitTestTabs(wxPoint position, int* index = NULL);
 
-	void CommonInit(long style);
-	void AddPage(wxRibbonPage *page);
-	void RecalculateTabSizes();
-	void RecalculateMinSize();
-	void ScrollTabBar(int npixels);
-	void RefreshTabBar();
-	void RepositionPage(wxRibbonPage *page);
+    void CommonInit(long style);
+    void AddPage(wxRibbonPage *page);
+    void RecalculateTabSizes();
+    void RecalculateMinSize();
+    void ScrollTabBar(int npixels);
+    void RefreshTabBar();
+    void RepositionPage(wxRibbonPage *page);
 
-	void OnPaint(wxPaintEvent& evt);
+    void OnPaint(wxPaintEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
-	void DoEraseBackground(wxDC& dc);
+    void DoEraseBackground(wxDC& dc);
     void OnSize(wxSizeEvent& evt);
-	void OnMouseLeftDown(wxMouseEvent& evt);
-	void OnMouseLeftUp(wxMouseEvent& evt);
-	void OnMouseMiddleDown(wxMouseEvent& evt);
-	void OnMouseMiddleUp(wxMouseEvent& evt);
-	void OnMouseRightDown(wxMouseEvent& evt);
-	void OnMouseRightUp(wxMouseEvent& evt);
-	void OnMouseMove(wxMouseEvent& evt);
-	void OnMouseLeave(wxMouseEvent& evt);
-	void DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type);
+    void OnMouseLeftDown(wxMouseEvent& evt);
+    void OnMouseLeftUp(wxMouseEvent& evt);
+    void OnMouseMiddleDown(wxMouseEvent& evt);
+    void OnMouseMiddleUp(wxMouseEvent& evt);
+    void OnMouseRightDown(wxMouseEvent& evt);
+    void OnMouseRightUp(wxMouseEvent& evt);
+    void OnMouseMove(wxMouseEvent& evt);
+    void OnMouseLeave(wxMouseEvent& evt);
+    void DoMouseButtonCommon(wxMouseEvent& evt, wxEventType tab_event_type);
 
     wxRibbonPageTabInfoArray m_pages;
-	wxRect m_tab_scroll_left_button_rect;
-	wxRect m_tab_scroll_right_button_rect;
-	long m_flags;
-	int m_tabs_total_width_ideal;
-	int m_tabs_total_width_minimum;
-	int m_tab_margin_left;
-	int m_tab_margin_right;
-	int m_tab_height;
-	int m_tab_scroll_amount;
-	int m_current_page;
-	int m_current_hovered_page;
-	int m_tab_scroll_left_button_state;
-	int m_tab_scroll_right_button_state;
-	bool m_tab_scroll_buttons_shown;
+    wxRect m_tab_scroll_left_button_rect;
+    wxRect m_tab_scroll_right_button_rect;
+    long m_flags;
+    int m_tabs_total_width_ideal;
+    int m_tabs_total_width_minimum;
+    int m_tab_margin_left;
+    int m_tab_margin_right;
+    int m_tab_height;
+    int m_tab_scroll_amount;
+    int m_current_page;
+    int m_current_hovered_page;
+    int m_tab_scroll_left_button_state;
+    int m_tab_scroll_right_button_state;
+    bool m_tab_scroll_buttons_shown;
 
 #ifndef SWIG
-	DECLARE_CLASS(wxRibbonBar)
-	DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxRibbonBar)
+    DECLARE_EVENT_TABLE()
 #endif
 };
 
