@@ -279,7 +279,7 @@ public:
         exist and will be deleted afterwards) in which case a Unix domain
         socket is created.
 
-        @note Using Internet domain sockets if extremely insecure for IPC as
+        @note Using Internet domain sockets is extremely insecure for IPC as
               there is absolutely no access control for them, use Unix domain
               sockets whenever possible!
     */
