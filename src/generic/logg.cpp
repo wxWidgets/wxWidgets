@@ -1142,7 +1142,7 @@ static int OpenLogFile(wxFile& file, wxString *pFilename, wxWindow *parent)
 
     // open file
     // ---------
-    bool bOk;
+    bool bOk = true; // suppress warning about it being possible uninitialized
     if ( wxFile::Exists(filename) ) {
         bool bAppend = false;
         wxString strMsg;
