@@ -436,10 +436,12 @@ bool hvConnection::OnExec(const wxString& WXUNUSED(topic),
 
 bool hvConnection::OnPoke(const wxString& WXUNUSED(topic),
                           const wxString& item,
-                          wxChar *data,
-                          int WXUNUSED(size),
-                          wxIPCFormat WXUNUSED(format))
+                          const void *buf,
+                          size_t size,
+                          wxIPCFormat format)
 {
+    const wxString data = GetTextFromData(buf, size, format);
+
     //    wxLogStatus("Poke command: %s = %s", item.c_str(), data);
     //topic is not tested
 
@@ -483,20 +485,6 @@ bool hvConnection::OnPoke(const wxString& WXUNUSED(topic),
         }
     }
 
-    return true;
-}
-
-wxChar *hvConnection::OnRequest(const wxString& WXUNUSED(topic),
-                                const wxString& WXUNUSED(item),
-                                int * WXUNUSED(size),
-                                wxIPCFormat WXUNUSED(format))
-{
-    return NULL;
-}
-
-bool hvConnection::OnStartAdvise(const wxString& WXUNUSED(topic),
-                                 const wxString& WXUNUSED(item))
-{
     return true;
 }
 
