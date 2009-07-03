@@ -213,7 +213,11 @@ public:
     {
         m_socket->m_reading = false;
 
-        m_socket->m_impl->ReenableEvents(wxSOCKET_INPUT_FLAG);
+        // connection could have been lost while reading, in this case calling
+        // ReenableEvents() would assert and is not necessary anyhow
+        wxSocketImpl * const impl = m_socket->m_impl;
+        if ( impl && impl->m_fd != INVALID_SOCKET )
+            impl->ReenableEvents(wxSOCKET_INPUT_FLAG);
     }
 
 private:
@@ -231,13 +235,15 @@ public:
         wxASSERT_MSG( !m_socket->m_writing, "write reentrancy?" );
 
         m_socket->m_writing = true;
-
-        m_socket->m_impl->ReenableEvents(wxSOCKET_OUTPUT_FLAG);
     }
 
     ~wxSocketWriteGuard()
     {
         m_socket->m_writing = false;
+
+        wxSocketImpl * const impl = m_socket->m_impl;
+        if ( impl && impl->m_fd != INVALID_SOCKET )
+            impl->ReenableEvents(wxSOCKET_OUTPUT_FLAG);
     }
 
 private:
