@@ -165,7 +165,7 @@ void wxArgumentType::SetDefaultValue(const wxString& defval, const wxString& def
     // Note: we adjust the aesthetic form of the m_strDefaultValue string for the "modify mode"
     //       of ifacecheck: we may need to write it out in an interface header
 
-    wxString *p wxDUMMY_INITIALIZE(NULL);
+    wxString *p = NULL;
     for (int i=0; i<2; i++)     // to avoid copying&pasting the code!
     {
         if (i == 0) p = &m_strDefaultValue;

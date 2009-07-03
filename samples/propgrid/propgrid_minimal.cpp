@@ -13,14 +13,14 @@
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/advprops.h"
 
-class MyFrame : public wxFrame 
-{ 
-public: 
-    MyFrame(wxWindow* parent); 
- 
-    void OnAction(wxCommandEvent& event); 
-    void OnPropertyGridChange(wxPropertyGridEvent& event); 
-    void OnPropertyGridChanging(wxPropertyGridEvent& event); 
+class MyFrame : public wxFrame
+{
+public:
+    MyFrame(wxWindow* parent);
+
+    void OnAction(wxCommandEvent& event);
+    void OnPropertyGridChange(wxPropertyGridEvent& event);
+    void OnPropertyGridChanging(wxPropertyGridEvent& event);
 
 private:
     wxPropertyGrid* m_pg;
@@ -36,11 +36,11 @@ END_EVENT_TABLE()
 MyFrame::MyFrame(wxWindow* parent)
     : wxFrame(parent, wxID_ANY, wxT("PropertyGrid Test"))
 {
-    wxMenu *Menu = new wxMenu; 
-    Menu->Append(wxID_HIGHEST+1, wxT("Action")); 
-    wxMenuBar *MenuBar = new wxMenuBar(); 
-    MenuBar->Append(Menu, wxT("Action")); 
-    SetMenuBar(MenuBar); 
+    wxMenu *Menu = new wxMenu;
+    Menu->Append(wxID_HIGHEST+1, wxT("Action"));
+    wxMenuBar *MenuBar = new wxMenuBar();
+    MenuBar->Append(Menu, wxT("Action"));
+    SetMenuBar(MenuBar);
 
     wxPropertyGrid *pg = new wxPropertyGrid(this,-1,wxDefaultPosition,wxSize(400,400),
                         wxPG_SPLITTER_AUTO_CENTER |
@@ -59,20 +59,20 @@ void MyFrame::OnPropertyGridChange(wxPropertyGridEvent &event)
     wxPGProperty* p = event.GetProperty();
 
     if ( p )
-        wxLogDebug("OnPropertyGridChange(%s, value=%s)", 
+        wxLogVerbose("OnPropertyGridChange(%s, value=%s)",
                    p->GetName().c_str(), p->GetValueAsString().c_str());
     else
-        wxLogDebug("OnPropertyGridChange(NULL)");
+        wxLogVerbose("OnPropertyGridChange(NULL)");
 }
 
 void MyFrame::OnPropertyGridChanging(wxPropertyGridEvent &event)
 {
     wxPGProperty* p = event.GetProperty();
 
-    wxLogDebug("OnPropertyGridChanging(%s)", p->GetName().c_str());
+    wxLogVerbose("OnPropertyGridChanging(%s)", p->GetName().c_str());
 }
 
-void MyFrame::OnAction(wxCommandEvent &) 
+void MyFrame::OnAction(wxCommandEvent &)
 {
 }
 

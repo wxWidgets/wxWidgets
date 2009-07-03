@@ -328,7 +328,7 @@ void MyDialog::OnAlignButton(wxCommandEvent& WXUNUSED(ev))
    Layout();
 }
 
-void MyDialog::OnPaneChanged(wxCollapsiblePaneEvent &event)
+void MyDialog::OnPaneChanged(wxCollapsiblePaneEvent& WXUNUSED(event))
 {
     wxLogDebug(wxT("The pane has just been %s by the user"),
                event.GetCollapsed() ? wxT("collapsed") : wxT("expanded"));

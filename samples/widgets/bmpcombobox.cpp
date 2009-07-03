@@ -942,12 +942,12 @@ wxBitmap BitmapComboBoxWidgetsPage::CreateBitmap(const wxColour& colour)
     return bmp;
 }
 
-void BitmapComboBoxWidgetsPage::OnDropDown(wxCommandEvent& event)
+void BitmapComboBoxWidgetsPage::OnDropDown(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Combobox dropped down"));
 }
 
-void BitmapComboBoxWidgetsPage::OnCloseUp(wxCommandEvent& event)
+void BitmapComboBoxWidgetsPage::OnCloseUp(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Combobox closed up"));
 }

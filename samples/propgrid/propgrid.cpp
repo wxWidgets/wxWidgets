@@ -1929,7 +1929,7 @@ void wxMyPropertyGridPage::OnPropertySelect( wxPropertyGridEvent& WXUNUSED(event
 void wxMyPropertyGridPage::OnPropertyChange( wxPropertyGridEvent& event )
 {
     wxPGProperty* p = event.GetProperty();
-    wxLogDebug(wxT("wxMyPropertyGridPage::OnPropertyChange('%s', to value '%s')"),
+    wxLogVerbose(wxT("wxMyPropertyGridPage::OnPropertyChange('%s', to value '%s')"),
                p->GetName().c_str(),
                p->GetDisplayedString().c_str());
 }
@@ -1937,7 +1937,7 @@ void wxMyPropertyGridPage::OnPropertyChange( wxPropertyGridEvent& event )
 void wxMyPropertyGridPage::OnPropertyChanging( wxPropertyGridEvent& event )
 {
     wxPGProperty* p = event.GetProperty();
-    wxLogDebug(wxT("wxMyPropertyGridPage::OnPropertyChanging('%s', to value '%s')"),
+    wxLogVerbose(wxT("wxMyPropertyGridPage::OnPropertyChanging('%s', to value '%s')"),
                p->GetName().c_str(),
                event.GetValue().GetString().c_str());
 }
@@ -2433,7 +2433,7 @@ void FormMain::OnDelPropRClick( wxCommandEvent& WXUNUSED(event) )
 
 // -----------------------------------------------------------------------
 
-void FormMain::OnContextMenu( wxContextMenuEvent& event )
+void FormMain::OnContextMenu( wxContextMenuEvent& WXUNUSED(event) )
 {
     wxLogDebug(wxT("FormMain::OnContextMenu(%i,%i)"),
         event.GetPosition().x,event.GetPosition().y);
