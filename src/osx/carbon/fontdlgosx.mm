@@ -137,14 +137,14 @@
 
 extern "C" int RunMixedFontDialog(wxFontDialog* dialog) ;
 
-int RunMixedFontDialog(wxFontDialog* WXUNUSED(dialog))
+int RunMixedFontDialog(wxFontDialog* dialog)
 {
+#if wxOSX_USE_COCOA
+    wxFontData& fontdata= ((wxFontDialog*)dialog)->GetFontData() ;
+#else
+    wxUnusedVar(dialog);
+#endif
     int retval = wxID_CANCEL ;
-
-    if ( !NSApplicationLoad() )
-    {
-        wxFAIL_MSG("Couldn't load Cocoa in Carbon Environment");
-    }
 
     wxAutoNSAutoreleasePool pool;
 
@@ -172,11 +172,34 @@ int RunMixedFontDialog(wxFontDialog* WXUNUSED(dialog))
     }
 
     [accessoryView resetFlags];
+#if wxOSX_USE_COCOA
+    wxFont font = *wxNORMAL_FONT ;
+    if ( fontdata.m_initialFont.Ok() )
+    {
+        font = fontdata.m_initialFont ;
+    }
+
+    [[NSFontPanel sharedFontPanel] setPanelFont: font.OSXGetNSFont() isMultiple:NO];
+
+    if(fontdata.m_fontColour.Ok())
+        [[NSColorPanel sharedColorPanel] setColor:
+            [NSColor colorWithCalibratedRed:fontdata.m_fontColour.Red() / 255.0
+                                        green:fontdata.m_fontColour.Green() / 255.0
+                                        blue:fontdata.m_fontColour.Blue() / 255.0
+                                        alpha:1.0]
+        ];
+    else
+        [[NSColorPanel sharedColorPanel] setColor:[NSColor blackColor]];
+#endif
 
     NSModalSession session = [NSApp beginModalSessionForWindow:fontPanel];
 
-    [NSApp runModalSession:session];
-
+    for (;;) 
+    {
+        if ([NSApp runModalSession:session] != NSRunContinuesResponse)
+            break;
+    }
+    
     [NSApp endModalSession:session];
 
     // if we don't reenable it, FPShowHideFontPanel does not work
@@ -184,13 +207,41 @@ int RunMixedFontDialog(wxFontDialog* WXUNUSED(dialog))
 #if wxOSX_USE_CARBON
     if( FPIsFontPanelVisible())
         FPShowHideFontPanel() ;
+#else
+    [fontPanel close];
 #endif
 
     if ( [accessoryView closedWithOk])
     {
+#if wxOSX_USE_COCOA
+        NSFont* theFont = [fontPanel panelConvertFont:[NSFont userFontOfSize:0]];
+
+        //Get more information about the user's chosen font
+        NSFontTraitMask theTraits = [[NSFontManager sharedFontManager] traitsOfFont:theFont];
+        int theFontWeight = [[NSFontManager sharedFontManager] weightOfFont:theFont];
+        int theFontSize = (int) [theFont pointSize];
+
+        wxFontFamily fontFamily = wxFONTFAMILY_DEFAULT;
+        //Set the wx font to the appropriate data
+        if(theTraits & NSFixedPitchFontMask)
+            fontFamily = wxFONTFAMILY_TELETYPE;
+
+        fontdata.m_chosenFont = wxFont( theFontSize, fontFamily,
+            theTraits & NSItalicFontMask ? wxFONTSTYLE_ITALIC : 0,
+            theFontWeight < 5 ? wxLIGHT : theFontWeight >= 9 ? wxBOLD : wxNORMAL,
+            false, wxStringWithNSString([theFont familyName]) );
+
+        //Get the shared color panel along with the chosen color and set the chosen color
+        NSColor* theColor = [[[NSColorPanel sharedColorPanel] color] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+
+        fontdata.m_fontColour.Set((unsigned char) ([theColor redComponent] * 255.0),
+                                    (unsigned char) ([theColor greenComponent] * 255.0),
+                                    (unsigned char) ([theColor blueComponent] * 255.0));
+#endif
         retval = wxID_OK ;
     }
-
+    [fontPanel setAccessoryView:nil];
+    [accessoryView release];
 
     return retval ;
 }
@@ -334,18 +385,6 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
 {
     m_fontData = data;
 
-    //
-    //  This is the key call - this initializes
-    //  events and window stuff for cocoa for carbon
-    //  applications.
-    //
-    //  This is also the only call here that is
-    //  10.2+ specific (the rest is OSX only),
-    //  which, ironically, the carbon font
-    //  panel requires.
-    //
-    bool bOK = NSApplicationLoad();
-
     //autorelease pool - req'd for carbon
     NSAutoreleasePool *thePool;
     thePool = [[NSAutoreleasePool alloc] init];
@@ -396,7 +435,7 @@ bool wxFontDialog::Create(wxWindow *parent, const wxFontData& data)
     //We're done - free up the pool
     [thePool release];
 
-    return bOK;
+    return true;
 }
 
 int wxFontDialog::ShowModal()
