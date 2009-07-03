@@ -298,15 +298,22 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
     // called from OnPaint, even with the window's paint dc as source (see wxHTMLWindow)
     NSBitmapImageRep *rep = [[[NSBitmapImageRep alloc] initWithFocusedViewRect: [view bounds]] retain];
     [view unlockFocus];
+    
+    wxBitmap bitmap(width, height);
+    if ( [rep respondsToSelector:@selector(CGImage)] )
+    {
+        CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
 
-    CGImageRef cgImageRef = (CGImageRef)[rep CGImage];
-
-    wxBitmap bitmap(CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
-    CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
-    // since our context is upside down we dont use CGContextDrawImage
-    wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
-    CGImageRelease(cgImageRef);
-    cgImageRef = NULL;
+        CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
+        // since our context is upside down we dont use CGContextDrawImage
+        wxMacDrawCGImage( (CGContextRef) bitmap.GetHBITMAP() , &r, cgImageRef ) ;
+        CGImageRelease(cgImageRef);
+        cgImageRef = NULL;
+    }
+    else
+    {
+        // TODO for 10.4 in case we can support this for osx_cocoa
+    }
     [rep release];
 
     return bitmap;
