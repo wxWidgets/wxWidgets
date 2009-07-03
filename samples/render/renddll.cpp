@@ -30,7 +30,9 @@ public:
     virtual void DrawHeaderButton(wxWindow * WXUNUSED(win),
                                   wxDC& dc,
                                   const wxRect& rect,
-                                  int WXUNUSED(flags) = 0)
+                                  int WXUNUSED(flags) = 0,
+                                  wxHeaderSortIconType WXUNUSED(sortArrow) = wxHDR_SORT_ICON_NONE,
+                                  wxHeaderButtonParams* WXUNUSED(params) = NULL)
     {
         dc.SetBrush(*wxCYAN_BRUSH);
         dc.SetTextForeground(*wxRED);
