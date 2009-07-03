@@ -1626,7 +1626,9 @@ void wxSocketBase::OnRequest(wxSocketNotify notification)
         case wxSOCKET_LOST:
             flag = wxSOCKET_LOST_FLAG;
 
-            // if we lost the connection the socket is now closed
+            // if we lost the connection the socket is now closed and not
+            // connected any more
+            m_connected = false;
             m_closed = true;
             break;
 
