@@ -274,27 +274,22 @@ public:
     void SetBorders(int b);
 
     /**
-        This function sets font sizes and faces.
+        This function sets font sizes and faces. See wxHtmlDCRenderer::SetFonts
+        for detailed description.
 
-        @param normal_face
-            This is face name for normal (i.e. non-fixed) font.
-            It can be either empty string (then the default face is chosen) or
-            platform-specific face name. Examples are "helvetica" under Unix or
-            "Times New Roman" under Windows.
-        @param fixed_face
-            The same thing for fixed face ( \<TT\>..\</TT\> )
-        @param sizes
-            This is an array of 7 items of int type.
-            The values represent size of font with HTML size from -2 to +4
-            ( \<FONT SIZE=-2\> to \<FONT SIZE=+4\> ).
-            Default sizes are used if sizes is @NULL.
-
-        Default font sizes are defined by constants wxHTML_FONT_SIZE_1,
-        wxHTML_FONT_SIZE_2, ..., wxHTML_FONT_SIZE_7.
-        Note that they differ among platforms. Default face names are empty strings.
+        @see SetSize()
     */
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
                   const int* sizes = NULL);
+
+    /**
+        Sets default font sizes and/or default font size. 
+        See wxHtmlDCRenderer::SetStandardFonts for detailed description.
+        @see SetFonts()
+    */
+    void SetStandardFonts(int size = -1,
+                          const wxString& normal_face = wxEmptyString,
+                          const wxString& fixed_face = wxEmptyString);
 
     /**
         Sets HTML page and display it. This won't @b load the page!!
