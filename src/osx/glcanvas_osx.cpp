@@ -164,12 +164,12 @@ bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
     if ( !ctx )
         return false;
 
-    WXGLContext ctxOld = aglGetCurrentContext();
-    aglSetCurrentContext(ctx);
+    WXGLContext ctxOld = WXGLGetCurrentContext();
+    WXGLSetCurrentContext(ctx);
 
     wxString extensions = wxString::FromAscii(glGetString(GL_EXTENSIONS));
 
-    aglSetCurrentContext(ctxOld);
+    WXGLSetCurrentContext(ctxOld);
     WXGLDestroyPixelFormat(fmt);
     WXGLDestroyContext(ctx);
 

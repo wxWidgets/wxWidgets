@@ -24,6 +24,7 @@
 WXDLLIMPEXP_GL WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext );
 WXDLLIMPEXP_GL void WXGLDestroyContext( WXGLContext context );
 WXDLLIMPEXP_GL WXGLContext WXGLGetCurrentContext();
+WXDLLIMPEXP_GL bool WXGLSetCurrentContext(WXGLContext context);
 WXDLLIMPEXP_GL void WXGLSwapBuffers( WXGLContext context );
 
 WXDLLIMPEXP_GL WXGLPixelFormat WXGLChoosePixelFormat(const int *attribList);
