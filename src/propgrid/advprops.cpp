@@ -1306,8 +1306,10 @@ void wxSystemColourProperty::OnCustomPaint( wxDC& dc, const wxRect& rect,
 {
     wxColour col;
 
-    if ( paintdata.m_choiceItem >= 0 && paintdata.m_choiceItem < (int)m_choices.GetCount() &&
-         paintdata.m_choiceItem != GetCustomColourIndex() )
+    if ( paintdata.m_choiceItem >= 0 &&
+         paintdata.m_choiceItem < (int)m_choices.GetCount() &&
+         (paintdata.m_choiceItem != GetCustomColourIndex() ||
+          m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
     {
         int colInd = m_choices[paintdata.m_choiceItem].GetValue();
         col = GetColour( colInd );
