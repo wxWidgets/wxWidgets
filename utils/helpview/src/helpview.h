@@ -67,7 +67,7 @@ public:
     hvConnection();
     virtual ~hvConnection();
 
-    bool OnExecute(const wxString& topic, wxChar*data, int size, wxIPCFormat format);
+    bool OnExec(const wxString& topic, const wxString& data);
     wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
     bool OnPoke(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
     bool OnStartAdvise(const wxString& topic, const wxString& item);

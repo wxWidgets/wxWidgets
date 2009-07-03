@@ -407,14 +407,12 @@ hvConnection::~hvConnection()
     wxGetApp().GetConnections().DeleteObject(this);
 }
 
-bool hvConnection::OnExecute(const wxString& WXUNUSED(topic),
-                             wxChar *data,
-                             int WXUNUSED(size),
-                             wxIPCFormat WXUNUSED(format))
+bool hvConnection::OnExec(const wxString& WXUNUSED(topic),
+                          const wxString& data)
 {
     //    wxLogStatus("Execute command: %s", data);
 
-    if ( !wxStrncmp( data, wxT("--intstring"), 11 ) )
+    if ( data == "--intstring" )
     {
         long i;
         wxString argStr = data;
