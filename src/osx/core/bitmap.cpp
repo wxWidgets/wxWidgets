@@ -496,8 +496,13 @@ IconRef wxBitmapRefData::GetIconRef()
                      }
                 }
                 HUnlock( data );
+
                 OSStatus err = SetIconFamilyData( iconFamily, dataType , data );
-                wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") );
+                if ( err != noErr )
+                {
+                    wxFAIL_MSG("Error when adding bitmap");
+                }
+
                 DisposeHandle( data );
             }
             else
