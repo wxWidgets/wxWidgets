@@ -20,6 +20,7 @@
 #if wxUSE_RIBBON
 
 #include "wx/ribbon/bar.h"
+#include "wx/ribbon/buttonbar.h"
 
 #ifndef WX_PRECOMP
 #endif
@@ -51,7 +52,8 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
     m_tab_ctrl_background_brush = wxBrush(wxColour(191, 219, 255));
     m_panel_label_background_brush = wxBrush(wxColour(193, 216, 241));
     m_tab_label_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
-    m_panel_label_font = wxFont(8, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
+    m_button_bar_label_font = m_tab_label_font;
+    m_panel_label_font = m_tab_label_font;
     m_tab_border_pen = wxPen(wxColour(153, 187, 232));
     m_panel_border_pen = wxPen(wxColour(197, 210, 223));
     m_panel_border_gradient_pen = wxPen(wxColour(158, 191, 219));
@@ -91,6 +93,7 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
     copy->m_tab_ctrl_background_brush = m_tab_ctrl_background_brush;
     copy->m_panel_label_background_brush = m_panel_label_background_brush;
     copy->m_tab_label_font = m_tab_label_font;
+    copy->m_button_bar_label_font = m_button_bar_label_font;
     copy->m_panel_label_font = m_panel_label_font;
     copy->m_page_border_pen = m_page_border_pen;
     copy->m_panel_border_pen = m_panel_border_pen;
@@ -155,6 +158,7 @@ void wxRibbonMSWArtProvider::SetFont(int id, const wxFont& font)
     switch(id)
     {
         case wxRIBBON_ART_TAB_LABEL_FONT: m_tab_label_font = font;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_FONT: m_button_bar_label_font = font;
         case wxRIBBON_ART_PANEL_LABEL_FONT: m_panel_label_font = font;
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
@@ -165,6 +169,7 @@ wxFont wxRibbonMSWArtProvider::GetFont(int id)
     switch(id)
     {
         case wxRIBBON_ART_TAB_LABEL_FONT: return m_tab_label_font;
+        case wxRIBBON_ART_BUTTON_BAR_LABEL_FONT: return m_button_bar_label_font;
         case wxRIBBON_ART_PANEL_LABEL_FONT: return m_panel_label_font;
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
@@ -491,6 +496,82 @@ void wxRibbonMSWArtProvider::ReallyDrawTabSeparator(wxWindow* wnd, const wxRect&
     m_cached_tab_separator_visibility = visibility;
 }
 
+static wxColour InterpolateColour(const wxColour& start_colour,
+                                const wxColour& end_colour,
+                                int position,
+                                int start_position,
+                                int end_position)
+{
+    if(position <= start_position)
+    {
+        return start_colour;
+    }
+    if(position >= end_position)
+    {
+        return end_colour;
+    }
+    position -= start_position;
+    end_position -= start_position;
+    int r = end_colour.Red() - start_colour.Red();
+    int g = end_colour.Green() - start_colour.Green();
+    int b = end_colour.Blue() - start_colour.Blue();
+    r = start_colour.Red()   + (((r * position * 100) / end_position) / 100);
+    g = start_colour.Green() + (((g * position * 100) / end_position) / 100);
+    b = start_colour.Blue()  + (((b * position * 100) / end_position) / 100);
+    return wxColour(r, g, b);
+}
+
+void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
+        wxWindow* WXUNUSED(wnd), const wxRect& rect, wxRibbonPage* page,
+        wxPoint offset)
+{
+    wxRect background(page->GetSize());
+    background.x += 2;
+    background.width -= 4;
+    background.height -= 2;
+
+    // upper_rect, lower_rect, paint_rect are all in page co-ordinates
+    wxRect upper_rect(background);
+    upper_rect.height /= 5;
+
+    wxRect lower_rect(background);
+    lower_rect.y += upper_rect.height;
+    lower_rect.height -= upper_rect.height;
+
+    wxRect paint_rect(rect);
+    paint_rect.x += offset.x;
+    paint_rect.y += offset.y;
+
+    if(paint_rect.Intersects(upper_rect))
+    {
+        wxRect rect(paint_rect.Intersect(upper_rect));
+        rect.x -= offset.x;
+        rect.y -= offset.y;
+        wxColour starting_colour(InterpolateColour(m_page_background_top_colour,
+            m_page_background_top_gradient_colour, paint_rect.y, upper_rect.y,
+            upper_rect.y + upper_rect.height));
+        wxColour ending_colour(InterpolateColour(m_page_background_top_colour,
+            m_page_background_top_gradient_colour,
+            paint_rect.y + paint_rect.height, upper_rect.y,
+            upper_rect.y + upper_rect.height));
+        DrawVerticalGradientRectangle(dc, rect, starting_colour, ending_colour);
+    }
+
+    if(paint_rect.Intersects(lower_rect))
+    {
+        wxRect rect(paint_rect.Intersect(lower_rect));
+        rect.x -= offset.x;
+        rect.y -= offset.y;
+        wxColour starting_colour(InterpolateColour(m_page_background_colour,
+            m_page_background_gradient_colour, paint_rect.y, upper_rect.y,
+            upper_rect.y + upper_rect.height));
+        wxColour ending_colour(InterpolateColour(m_page_background_colour,
+            m_page_background_gradient_colour, paint_rect.y + paint_rect.height,
+            upper_rect.y, upper_rect.y + upper_rect.height));
+        DrawVerticalGradientRectangle(dc, rect, starting_colour, ending_colour);
+    }
+}
+
 void wxRibbonMSWArtProvider::DrawPageBackground(
                         wxDC& dc,
                         wxWindow* WXUNUSED(wnd),
@@ -718,6 +799,49 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
     }
 }
 
+void wxRibbonMSWArtProvider::DrawButtonBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect)
+{
+    // Assume the button bar is a child of a ribbon page
+    wxPoint offset(wnd->GetPosition());
+    wxRibbonPage* page = NULL;
+    wxWindow* parent;
+    for(parent = wnd->GetParent(); parent; parent = parent->GetParent())
+    {
+        page = wxDynamicCast(parent, wxRibbonPage);
+        if(page != NULL)
+        {
+            break;
+        }
+        offset += parent->GetPosition();
+    }
+    if(page != NULL)
+    {
+        DrawPartialPageBackground(dc, wnd, rect, page, offset);
+        return;
+    }
+
+    // No page found - fallback to painting with a stock brush
+    dc.SetBrush(*wxWHITE_BRUSH);
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
+}
+
+void wxRibbonMSWArtProvider::DrawButtonBarButton(
+                        wxDC& dc,
+                        wxWindow* WXUNUSED(wnd),
+                        const wxRect& rect,
+                        wxRibbonButtonBarButtonKind kind,
+                        long state,
+                        const wxString& label,
+                        const wxBitmap& bitmap_large,
+                        const wxBitmap& bitmap_small)
+{
+    // TODO
+}
+
 void wxRibbonMSWArtProvider::GetBarTabWidth(
                         wxDC& dc,
                         wxWindow* WXUNUSED(wnd),
@@ -861,6 +985,112 @@ wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
     new_rect.Union(old_rect);
     new_rect.Intersect(wxRect(page_new_size));
     return new_rect;
+}
+
+static bool CanButtonBarLabelBreakAtPosition(const wxString& label, size_t pos)
+{
+    return label[pos] == ' ';
+}
+
+bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonBarButtonState size,
+                        const wxString& label,
+                        wxSize bitmap_size_large,
+                        wxSize bitmap_size_small,
+                        wxSize* button_size,
+                        wxRect* normal_region,
+                        wxRect* dropdown_region)
+{
+    const int drop_button_width = 8;
+
+    dc.SetFont(m_button_bar_label_font);
+    switch(size)
+    {
+    case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
+        // Small bitmap, no label
+        *button_size = bitmap_size_small + wxSize(4, 4);
+        switch(kind)
+        {
+        case wxRIBBON_BUTTONBAR_BUTTON_NORMAL:
+            *normal_region = wxRect(*button_size);
+            *dropdown_region = wxRect(0, 0, 0, 0);
+            break;
+        case wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN:
+            *button_size += wxSize(drop_button_width, 0);
+            *dropdown_region = wxRect(*button_size);
+            *normal_region = wxRect(0, 0, 0, 0);
+            break;
+        case wxRIBBON_BUTTONBAR_BUTTON_HYBRID:
+            *normal_region = wxRect(*button_size);
+            *dropdown_region = wxRect(button_size->GetWidth(), 0,
+                drop_button_width, button_size->GetHeight());
+            *button_size += wxSize(drop_button_width, 0);
+            break;
+        }
+        break;
+    case wxRIBBON_BUTTONBAR_BUTTON_MEDIUM:
+        // Small bitmap, with label to the right
+        {
+            GetButtonBarButtonSize(dc, wnd, kind, wxRIBBON_BUTTONBAR_BUTTON_SMALL,
+                label, bitmap_size_large, bitmap_size_small, button_size,
+                normal_region, dropdown_region);
+            int text_size = dc.GetTextExtent(label).GetWidth();
+            button_size->SetWidth(button_size->GetWidth() + text_size);
+            switch(kind)
+            {
+            case wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN:
+                dropdown_region->SetWidth(normal_region->GetWidth() + text_size);
+                break;
+            case wxRIBBON_BUTTONBAR_BUTTON_HYBRID:
+                dropdown_region->SetX(dropdown_region->GetX() + text_size);
+                // no break
+            case wxRIBBON_BUTTONBAR_BUTTON_NORMAL:
+                normal_region->SetWidth(normal_region->GetWidth() + text_size);
+                break;
+            }
+            break;
+        }
+    case wxRIBBON_BUTTONBAR_BUTTON_LARGE:
+        // Large bitmap, with label below (possibly split over 2 lines)
+        {
+            wxSize icon_size(bitmap_size_large);
+            icon_size += wxSize(4, 4);
+            wxCoord label_height;
+            wxCoord best_width;
+            dc.GetTextExtent(label, &best_width, &label_height);
+            int best_num_lines = 1;
+            int last_line_extra_width = 0;
+            if(kind != wxRIBBON_BUTTONBAR_BUTTON_NORMAL)
+            {
+                last_line_extra_width += 8;
+                best_num_lines = 2; // label on top line, button below
+            }
+            size_t i;
+            for(i = 0; i < label.Len(); ++i)
+            {
+                if(CanButtonBarLabelBreakAtPosition(label, i))
+                {
+                    int width = wxMax(
+                        dc.GetTextExtent(label.Mid(0, i - 1)).GetWidth(),
+                        dc.GetTextExtent(label.Mid(i + 1)).GetWidth() + last_line_extra_width);
+                    if(width < best_width)
+                    {
+                        best_width = width;
+                        best_num_lines = 2;
+                    }
+                }
+            }
+            label_height *= best_num_lines;
+            icon_size.SetWidth(wxMax(icon_size.GetWidth(), best_width + 2));
+            icon_size.SetHeight(icon_size.GetHeight() + label_height);
+            *button_size = icon_size;
+            break;
+        }
+    };
+    return true;
 }
 
 #endif // wxUSE_RIBBON

@@ -26,6 +26,7 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PANEL_X_SEPARATION_SIZE,
     wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE,
     wxRIBBON_ART_PANEL_LABEL_FONT,
+    wxRIBBON_ART_BUTTON_BAR_LABEL_FONT,
     wxRIBBON_ART_TAB_LABEL_FONT,
     wxRIBBON_ART_TAB_LABEL_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
@@ -75,6 +76,8 @@ class wxRibbonPage;
 class wxRibbonPanel;
 class wxRibbonPageTabInfo;
 class wxRibbonPageTabInfoArray;
+enum wxRibbonButtonBarButtonKind;
+enum wxRibbonButtonBarButtonState;
 
 class WXDLLIMPEXP_RIBBON wxRibbonArtProvider
 {
@@ -125,6 +128,21 @@ public:
                         wxRibbonPanel* wnd,
                         const wxRect& rect) = 0;
 
+    virtual void DrawButtonBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) = 0;
+
+    virtual void DrawButtonBarButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        wxRibbonButtonBarButtonKind kind,
+                        long state,
+                        const wxString& label,
+                        const wxBitmap& bitmap_large,
+                        const wxBitmap& bitmap_small) = 0;
+
     virtual void GetBarTabWidth(
                         wxDC& dc,
                         wxWindow* wnd,
@@ -155,6 +173,18 @@ public:
                         const wxRibbonPage* wnd,
                         wxSize page_old_size,
                         wxSize page_new_size) = 0;
+
+    virtual bool GetButtonBarButtonSize(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonBarButtonState size,
+                        const wxString& label,
+                        wxSize bitmap_size_large,
+                        wxSize bitmap_size_small,
+                        wxSize* button_size,
+                        wxRect* normal_region,
+                        wxRect* dropdown_region) = 0;
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonMSWArtProvider : public wxRibbonArtProvider
@@ -205,6 +235,21 @@ public:
                         wxRibbonPanel* wnd,
                         const wxRect& rect);
 
+    virtual void DrawButtonBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect);
+
+    virtual void DrawButtonBarButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        wxRibbonButtonBarButtonKind kind,
+                        long state,
+                        const wxString& label,
+                        const wxBitmap& bitmap_large,
+                        const wxBitmap& bitmap_small);
+
     void GetBarTabWidth(
                         wxDC& dc,
                         wxWindow* wnd,
@@ -236,8 +281,22 @@ public:
                         wxSize page_old_size,
                         wxSize page_new_size);
 
+    virtual bool GetButtonBarButtonSize(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonBarButtonState size,
+                        const wxString& label,
+                        wxSize bitmap_size_large,
+                        wxSize bitmap_size_small,
+                        wxSize* button_size,
+                        wxRect* normal_region,
+                        wxRect* dropdown_region);
+
 protected:
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility);
+    void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect,
+         wxRibbonPage* page, wxPoint offset);
 
     wxBitmap m_cached_tab_separator;
     wxColour m_tab_label_colour;
@@ -258,6 +317,7 @@ protected:
     wxBrush m_panel_label_background_brush;
     wxFont m_tab_label_font;
     wxFont m_panel_label_font;
+    wxFont m_button_bar_label_font;
     wxPen m_page_border_pen;
     wxPen m_panel_border_pen;
     wxPen m_panel_border_gradient_pen;
