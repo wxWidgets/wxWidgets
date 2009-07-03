@@ -2433,10 +2433,12 @@ void FormMain::OnDelPropRClick( wxCommandEvent& WXUNUSED(event) )
 
 // -----------------------------------------------------------------------
 
-void FormMain::OnContextMenu( wxContextMenuEvent& WXUNUSED(event) )
+void FormMain::OnContextMenu( wxContextMenuEvent& event )
 {
     wxLogDebug(wxT("FormMain::OnContextMenu(%i,%i)"),
         event.GetPosition().x,event.GetPosition().y);
+
+    wxUnusedVar(event);
 
     //event.Skip();
 }
