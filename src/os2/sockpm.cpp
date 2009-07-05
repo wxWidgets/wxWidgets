@@ -23,14 +23,14 @@
 
 static void wxSocket_PM_Input(void *data)
 {
-    wxSocketImpl *handler = static_cast<wxSocketImpl *>(data);
+    wxSocketImplUnix *handler = static_cast<wxSocketImplUnix *>(data);
 
     handler->OnReadWaiting();
 }
 
 static void wxSocket_PM_Output(void *data)
 {
-    wxSocketImpl *handler = static_cast<wxSocketImpl *>(data);
+    wxSocketImplUnix *handler = static_cast<wxSocketImplUnix *>(data);
 
     handler->OnWriteWaiting();
 }
@@ -38,7 +38,7 @@ static void wxSocket_PM_Output(void *data)
 class PMSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(wxSocketImpl *handler, int fd, SocketDir d)
+    virtual int AddInput(wxSocketImplUnix *handler, int fd, SocketDir d)
     {
       if (d == FD_OUTPUT)
           return wxTheApp->AddSocketHandler(fd, wxSockWriteMask,

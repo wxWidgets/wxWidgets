@@ -28,10 +28,19 @@ void wxSocket_GDK_Input(gpointer data,
                         gint WXUNUSED(source),
                         GdkInputCondition condition)
 {
-    wxSocketImpl * const handler = static_cast<wxSocketImpl *>(data);
+    wxSocketImplUnix * const handler = static_cast<wxSocketImplUnix *>(data);
 
     if ( condition & GDK_INPUT_READ )
+    {
         handler->OnReadWaiting();
+
+        // we could have lost connection while reading in which case we
+        // shouldn't call OnWriteWaiting() as the socket is now closed and it
+        // would assert
+        if ( handler->m_fd == INVALID_SOCKET )
+            return;
+    }
+
     if ( condition & GDK_INPUT_WRITE )
         handler->OnWriteWaiting();
 }
@@ -40,7 +49,7 @@ void wxSocket_GDK_Input(gpointer data,
 class GTKSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(wxSocketImpl *handler, int fd, SocketDir d)
+    virtual int AddInput(wxSocketImplUnix *handler, int fd, SocketDir d)
     {
         return gdk_input_add
                (
