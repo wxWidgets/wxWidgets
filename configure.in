@@ -5406,6 +5406,7 @@ dnl File system watcher checks
 dnl ---------------------------------------------------------------------------
 if test "$wxUSE_FSWATCHER" = "yes"; then
 	AC_DEFINE(wxUSE_FSWATCHER)
+	SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS fswatcher"
 
 	if test "$wxUSE_UNIX" = "yes" ; then
 	    AC_CHECK_HEADERS(sys/inotify.h,,, [AC_INCLUDES_DEFAULT()])
