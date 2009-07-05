@@ -27,17 +27,19 @@ class MyDllRenderer : public wxDelegateRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)
-    virtual void DrawHeaderButton(wxWindow * WXUNUSED(win),
-                                  wxDC& dc,
-                                  const wxRect& rect,
-                                  int WXUNUSED(flags) = 0,
-                                  wxHeaderSortIconType WXUNUSED(sortArrow) = wxHDR_SORT_ICON_NONE,
-                                  wxHeaderButtonParams* WXUNUSED(params) = NULL)
+    virtual int DrawHeaderButton(wxWindow * WXUNUSED(win),
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int WXUNUSED(flags) = 0,
+                                 wxHeaderSortIconType WXUNUSED(sortArrow) = wxHDR_SORT_ICON_NONE,
+                                 wxHeaderButtonParams* WXUNUSED(params) = NULL)
     {
         dc.SetBrush(*wxCYAN_BRUSH);
         dc.SetTextForeground(*wxRED);
         dc.DrawRoundedRectangle(rect, 10);
-        dc.DrawLabel(_T("MyDllRenderer"), wxNullBitmap, rect, wxALIGN_CENTER);
+        dc.DrawLabel("MyDllRenderer", wxNullBitmap, rect, wxALIGN_CENTER);
+
+        return dc.GetTextExtent("MyDllRenderer").x;
     }
 
     virtual wxRendererVersion GetVersion() const
