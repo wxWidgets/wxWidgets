@@ -37,10 +37,8 @@ private:
     // event handlers
     void OnClear(wxCommandEvent& WXUNUSED(event)) { m_evtConsole->Clear(); }
     void OnQuit(wxCommandEvent& WXUNUSED(event)) { Close(true); }
-    void OnStartMonitoring(wxCommandEvent& event);
-    void OnStopMonitoring(wxCommandEvent& event);
+    void OnWatch(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-
 
     void OnAdd(wxCommandEvent& event);
     void OnRemove(wxCommandEvent& event);
@@ -48,7 +46,7 @@ private:
     void OnFileSystemEvent(wxFileSystemWatcherEvent& event);
     void LogEvent(const wxFileSystemWatcherEvent& event);
 
-    wxTextCtrl *m_evtConsole;            // events console
+    wxTextCtrl *m_evtConsole;         // events console
     wxListView *m_filesList;          // list of watched paths
     wxFileSystemWatcher* m_watcher;   // file system watcher
 
@@ -110,8 +108,7 @@ MyFrame::MyFrame(const wxString& title)
     {
         MENU_ID_QUIT = wxID_EXIT,
         MENU_ID_CLEAR = wxID_CLEAR,
-        MENU_ID_START = 101,
-        MENU_ID_STOP = 102,
+        MENU_ID_WATCH = 101,
 
         BTN_ID_ADD = 200,
         BTN_ID_REMOVE = 201,
@@ -126,11 +123,9 @@ MyFrame::MyFrame(const wxString& title)
     menuFile->AppendSeparator();
     menuFile->Append(MENU_ID_QUIT, "E&xit\tAlt-X", "Quit this program");
 
-    // "Monitoring" menu
+    // "Watch" menu
     wxMenu *menuMon = new wxMenu;
-    wxMenuItem* it = menuMon->AppendRadioItem(MENU_ID_START,
-                                           "&Start monitoring\tCtrl-S");
-    menuMon->AppendRadioItem(MENU_ID_STOP, "S&top monitoring\tCtrl-T");
+    wxMenuItem* it = menuMon->AppendCheckItem(MENU_ID_WATCH, "&Watch\tCtrl-W");
     // started by default, because file system watcher is started by default
     it->Check(true);
 
@@ -141,7 +136,7 @@ MyFrame::MyFrame(const wxString& title)
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, "&File");
-    menuBar->Append(menuMon, "&Monitoring");
+    menuBar->Append(menuMon, "&Watch");
     menuBar->Append(menuHelp, "&Help");
 
     // ... and attach this menu bar to the frame
@@ -217,10 +212,8 @@ MyFrame::MyFrame(const wxString& title)
             wxCommandEventHandler(MyFrame::OnClear));
     Connect(MENU_ID_QUIT, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(MyFrame::OnQuit));
-    Connect(MENU_ID_START, wxEVT_COMMAND_MENU_SELECTED,
-            wxCommandEventHandler(MyFrame::OnStartMonitoring));
-    Connect(MENU_ID_STOP, wxEVT_COMMAND_MENU_SELECTED,
-            wxCommandEventHandler(MyFrame::OnStopMonitoring));
+    Connect(MENU_ID_WATCH, wxEVT_COMMAND_MENU_SELECTED,
+            wxCommandEventHandler(MyFrame::OnWatch));
     Connect(wxID_ABOUT, wxEVT_COMMAND_MENU_SELECTED,
             wxCommandEventHandler(MyFrame::OnAbout));
 
@@ -260,16 +253,14 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxOK | wxICON_INFORMATION, this);
 }
 
-void MyFrame::OnStartMonitoring(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnWatch(wxCommandEvent& event)
 {
-    wxLogDebug("%s", __WXFUNCTION__);
-    (void) m_watcher->Start();
-}
+    wxLogDebug("%s start=%d", __WXFUNCTION__, event.IsChecked());
 
-void MyFrame::OnStopMonitoring(wxCommandEvent& WXUNUSED(event))
-{
-    wxLogDebug("%s", __WXFUNCTION__);
-    (void) m_watcher->Stop();
+    if (event.IsChecked())
+        (void) m_watcher->Start();
+    else
+        (void) m_watcher->Stop();
 }
 
 void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
@@ -284,9 +275,7 @@ void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
 
     if (!m_watcher->Add(wxFileName::DirName(dir), wxFSW_EVENT_ALL))
     {
-        wxString s;
-        s.Printf("Error adding '%s' to watched paths", dir);
-        wxMessageBox(s, "Error!", wxOK, this);
+        wxLogError("Error adding '%s' to watched paths", dir);
     }
     else
     {
@@ -305,9 +294,7 @@ void MyFrame::OnRemove(wxCommandEvent& WXUNUSED(event))
     // TODO we know it is a dir, but it doesn't have to be
     if (!m_watcher->Remove(wxFileName::DirName(path)))
     {
-        wxString s;
-        s.Printf("Error removing '%s' from watched paths", path);
-        wxMessageBox(s, "Error!", wxOK, this);
+        wxLogError("Error removing '%s' from watched paths", path);
     }
     else
     {
