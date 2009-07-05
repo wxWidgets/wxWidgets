@@ -28,7 +28,7 @@ void wxSocket_GDK_Input(gpointer data,
                         gint WXUNUSED(source),
                         GdkInputCondition condition)
 {
-    wxFDIOHandler * const handler = static_cast<wxFDIOHandler *>(data);
+    wxSocketImpl * const handler = static_cast<wxSocketImpl *>(data);
 
     if ( condition & GDK_INPUT_READ )
         handler->OnReadWaiting();
@@ -40,7 +40,7 @@ void wxSocket_GDK_Input(gpointer data,
 class GTKSocketManager : public wxSocketInputBasedManager
 {
 public:
-    virtual int AddInput(wxFDIOHandler *handler, int fd, SocketDir d)
+    virtual int AddInput(wxSocketImpl *handler, int fd, SocketDir d)
     {
         return gdk_input_add
                (
