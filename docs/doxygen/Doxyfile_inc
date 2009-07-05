@@ -12,7 +12,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
-PROJECT_NUMBER         = 2.9.0
+PROJECT_NUMBER         = 2.9.1
 OUTPUT_DIRECTORY       = out
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
