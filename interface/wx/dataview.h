@@ -2318,6 +2318,8 @@ public:
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP_POSSIBLE event.
     @event{EVT_DATAVIEW_ITEM_DROP(id, func)}
            Process a @c wxEVT_COMMAND_DATAVIEW_ITEM_DROP event.
+    @event{EVT_DATAVIEW_CACHE_HINT(id, func)}
+           Process a @c wxEVT_COMMAND_DATAVIEW_CACHE_HINT event.
     @endEventTable
     
     @library{wxadv}
@@ -2419,5 +2421,15 @@ public:
         Gets the data buffer for a drop data transfer.
     */
     void *GetDataBuffer() const;
+
+    /**
+        Return the first row that will be displayed.
+    */
+    int GetCacheFrom() const;
+
+    /**
+        Return the last row that will be displayed.
+    */
+    int GetCacheTo() const;
 };
 
