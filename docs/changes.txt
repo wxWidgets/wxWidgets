@@ -371,6 +371,7 @@ GTK:
 
 MSW:
 
+- Translate wxMessageDialog labels to the language of the current locale.
 - Allow changing the height of wxChoice and wxComboBox.
 - Update CRT environment block in wxSetEnv() too.
 - Fix wxMDIChildFrame::SetSize() (Lars Rosenboom).
