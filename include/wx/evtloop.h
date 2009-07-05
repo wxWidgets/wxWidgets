@@ -217,15 +217,18 @@ public:
     // Returns true if the source was successfully added, false if it failed
     // (this may happen for example when this source is already monitored)
     virtual bool AddSource(const wxEventLoopSource& source,
-                            wxEventLoopSourceHandler* handler,
-                            int WXUNUSED(flags))
+                            wxEventLoopSourceHandler* handler, int flags)
     {
         wxCHECK_MSG( source.IsOk(), false, "Invalid source" );
         wxCHECK_MSG( handler, false, "Null handler" );
 
         wxEventLoopSourceHashMap::value_type val(source, handler);
-        bool ret = m_sourceMap.insert(val).second;
-        return ret;
+        if (!m_sourceMap.insert(val).second)
+        {
+            return false;
+        }
+
+        return DoAddSource(source, handler, flags);
     }
 
     // removes the source from the list of monitored sources.
@@ -234,7 +237,12 @@ public:
     {
         wxCHECK_MSG( source.IsOk(), false, "Invalid source" );
 
-        return m_sourceMap.erase(source) == 1;
+        if (!m_sourceMap.erase(source) == 1)
+        {
+            return false;
+        }
+
+        return DoRemoveSource(source);
     }
 
 #endif
@@ -303,6 +311,19 @@ protected:
     // YieldFor() helpers:
     bool m_isInsideYield;
     long m_eventsToProcessInsideYield;
+
+    virtual bool DoAddSource(const wxEventLoopSource&,
+                             wxEventLoopSourceHandler*, int)
+    {
+        wxFAIL_MSG("not implemented");
+        return false;
+    }
+
+    virtual bool DoRemoveSource(const wxEventLoopSource&)
+    {
+        wxFAIL_MSG("not implemented");
+        return false;
+    }
 
 #if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
     WX_DECLARE_HASH_MAP(wxEventLoopSource, wxEventLoopSourceHandler*,

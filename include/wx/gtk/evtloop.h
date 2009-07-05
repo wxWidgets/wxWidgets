@@ -17,6 +17,14 @@
 
 typedef union  _GdkEvent        GdkEvent;
 
+// maps event loop sources to gtk source ids
+//
+// TODO maybe there should be only one map for sources, storing different
+// information for different implementations
+WX_DECLARE_HASH_MAP(wxEventLoopSource, int,
+              wxEventLoopSource::Hash, wxEventLoopSource::Equal,
+              wxEventLoopSourceIdMap);
+
 class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxEventLoopBase
 {
 public:
@@ -32,14 +40,21 @@ public:
 
     void StoreGdkEventForLaterProcessing(GdkEvent* ev)
         { m_arrGdkEvents.Add(ev); }
-    
+
 protected:
+    // adding/removing sources
+    virtual bool DoAddSource(const wxEventLoopSource& source,
+                                wxEventLoopSourceHandler* handler, int flags);
+    virtual bool DoRemoveSource(const wxEventLoopSource& source);
 
     // the exit code of this event loop
     int m_exitcode;
 
     // used to temporarily store events in DoYield()
     wxArrayPtrVoid m_arrGdkEvents;
+
+    // map of event loop sources gtk ids
+    wxEventLoopSourceIdMap m_sourceIdMap;
 
     wxDECLARE_NO_COPY_CLASS(wxGUIEventLoop);
 };

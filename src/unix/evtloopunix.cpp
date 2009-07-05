@@ -219,15 +219,13 @@ protected:
 };
 
 
-bool wxConsoleEventLoop::AddSource(const wxEventLoopSource& source,
+bool wxConsoleEventLoop::DoAddSource(const wxEventLoopSource& source,
                                     wxEventLoopSourceHandler* handler,
                                     int flags)
 {
     wxLogTrace(wxTRACE_Event_Source,
-            "wxConsoleEventLoop::AddSource() adding source");
-
-    if (!wxEventLoopBase::AddSource(source, handler, flags))
-        return false;
+                "wxConsoleEventLoop::AddSource() source=%d",
+                source.GetResource());
 
     // translating into wxFDIOHandler
     // XXX this is a memory leak of course, but this is really temporary, so
@@ -237,15 +235,11 @@ bool wxConsoleEventLoop::AddSource(const wxEventLoopSource& source,
     return m_dispatcher->RegisterFD(source.GetResource(), h, flags);
 }
 
-bool wxConsoleEventLoop::RemoveSource(const wxEventLoopSource& source)
+bool wxConsoleEventLoop::DoRemoveSource(const wxEventLoopSource& source)
 {
     wxLogTrace(wxTRACE_Event_Source,
-            "wxConsoleEventLoop::RemoveSource() removing source");
-
-    if (!wxEventLoopBase::RemoveSource(source))
-        return false;
-
-    wxLogDebug("Unregistering fd=%d", source.GetResource());
+                "wxConsoleEventLoop::RemoveSource() source=%d",
+                source.GetResource());
 
     return m_dispatcher->UnregisterFD(source.GetResource());
 }

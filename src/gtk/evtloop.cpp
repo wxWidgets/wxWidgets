@@ -32,6 +32,7 @@
 #endif // WX_PRECOMP
 
 #include <gtk/gtk.h>
+#include <glib.h>
 
 // ============================================================================
 // wxEventLoop implementation
@@ -79,6 +80,70 @@ void wxGUIEventLoop::WakeUp()
     //       nothing when we don't...
     if ( wxTheApp )
         wxTheApp->WakeUpIdle();
+}
+
+// ----------------------------------------------------------------------------
+// wxEventLoop adding & removing sources
+// ----------------------------------------------------------------------------
+
+extern "C" {
+static gboolean wx_on_channel_event(GIOChannel *channel,
+                                    GIOCondition condition, gpointer data)
+{
+    ;
+    wxLogTrace(wxTRACE_Event_Source, "wx_on_channel_event, gtk_source_id=%d",
+                g_io_channel_unix_get_fd(channel));
+
+    wxEventLoopSourceHandler* handler =
+                                static_cast<wxEventLoopSourceHandler*>(data);
+
+    if (condition & G_IO_IN)
+    {
+        handler->OnReadWaiting();
+    }
+    else if (condition & G_IO_ERR || condition & G_IO_NVAL)
+    {
+        handler->OnExceptionWaiting();
+    }
+    else
+    {
+        wxFAIL_MSG(wxString::Format("Inavlid condition=%d", condition));
+    }
+
+    // we never want to remove source here, so always return true
+    return TRUE;
+}
+}
+
+bool wxGUIEventLoop::DoAddSource(const wxEventLoopSource& source,
+                                 wxEventLoopSourceHandler* handler, int flags)
+{
+    wxLogTrace(wxTRACE_Event_Source,
+               "wxGUIEventLoop::DoAddSource() source=%d",
+               source.GetResource());
+
+    GIOChannel* channel = g_io_channel_unix_new(source.GetResource());
+    int gtk_id = g_io_add_watch(channel,
+                                (GIOCondition)(G_IO_IN | G_IO_ERR | G_IO_NVAL),
+                                &wx_on_channel_event, handler);
+    g_io_channel_unref(channel);
+
+    wxEventLoopSourceIdMap::value_type val(source, gtk_id);
+    return m_sourceIdMap.insert(val).second;
+}
+
+bool wxGUIEventLoop::DoRemoveSource(const wxEventLoopSource& source)
+{
+    wxLogTrace(wxTRACE_Event_Source,
+               "wxGUIEventLoop::DoRemoveSource() source=%d",
+               source.GetResource());
+
+    wxEventLoopSourceIdMap::iterator it = m_sourceIdMap.find(source);
+    wxCHECK_MSG( it != m_sourceIdMap.end(), false, "Source not on the list" );
+
+    int gtk_id = it->second;
+    m_sourceIdMap.erase(it);
+    return g_source_remove(gtk_id);
 }
 
 // ----------------------------------------------------------------------------
@@ -138,11 +203,11 @@ static void wxgtk_main_do_event(GdkEvent *event, wxGUIEventLoop* evtloop)
     // categorize the GDK event according to wxEventCategory.
     // See http://library.gnome.org/devel/gdk/unstable/gdk-Events.html#GdkEventType
     // for more info.
-    
+
     // NOTE: GDK_* constants which were not present in the GDK2.0 can be tested for
     //       only at compile-time; when running the program (compiled with a recent GDK)
-    //       on a system with an older GDK lib we can be sure there won't be problems 
-    //       because event->type will never assume those values corresponding to 
+    //       on a system with an older GDK lib we can be sure there won't be problems
+    //       because event->type will never assume those values corresponding to
     //       new event types (since new event types are always added in GDK with non
     //       conflicting values for ABI compatibility).
 

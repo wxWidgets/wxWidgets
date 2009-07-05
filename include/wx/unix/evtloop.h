@@ -39,12 +39,12 @@ public:
     virtual bool IsOk() const { return m_dispatcher != NULL; }
     virtual bool YieldFor(long WXUNUSED(eventsToProcess)) { return true; }
 
-    // adding/removing sources
-    virtual bool AddSource(const wxEventLoopSource& source,
-                                wxEventLoopSourceHandler* handler, int flags);
-    virtual bool RemoveSource(const wxEventLoopSource& source);
-
 protected:
+    // adding/removing sources
+    virtual bool DoAddSource(const wxEventLoopSource& source,
+                                wxEventLoopSourceHandler* handler, int flags);
+    virtual bool DoRemoveSource(const wxEventLoopSource& source);
+
     virtual void OnNextIteration();
 
 private:
