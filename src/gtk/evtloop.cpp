@@ -122,9 +122,16 @@ bool wxGUIEventLoop::DoAddSource(const wxEventLoopSource& source,
                "wxGUIEventLoop::DoAddSource() source=%d",
                source.GetResource());
 
+    int condition = 0;
+    if (flags & wxEVENT_SOURCE_INPUT)
+        condition |= G_IO_IN | G_IO_PRI;
+    if (flags & wxEVENT_SOURCE_OUTPUT)
+        condition |= G_IO_OUT;
+    if (flags & wxEVENT_SOURCE_EXCEPTION)
+        condition |= G_IO_ERR | G_IO_HUP | G_IO_NVAL;
+
     GIOChannel* channel = g_io_channel_unix_new(source.GetResource());
-    int gtk_id = g_io_add_watch(channel,
-                                (GIOCondition)(G_IO_IN | G_IO_ERR | G_IO_NVAL),
+    int gtk_id = g_io_add_watch(channel, (GIOCondition)condition,
                                 &wx_on_channel_event, handler);
     g_io_channel_unref(channel);
 

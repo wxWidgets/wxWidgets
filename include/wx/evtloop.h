@@ -225,6 +225,7 @@ public:
         wxEventLoopSourceHashMap::value_type val(source, handler);
         if (!m_sourceMap.insert(val).second)
         {
+            wxFAIL_MSG( "Source already registered");
             return false;
         }
 
@@ -237,8 +238,9 @@ public:
     {
         wxCHECK_MSG( source.IsOk(), false, "Invalid source" );
 
-        if (!m_sourceMap.erase(source) == 1)
+        if (m_sourceMap.erase(source) != 1)
         {
+            wxFAIL_MSG( "Source not registered" );
             return false;
         }
 
