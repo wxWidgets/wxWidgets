@@ -117,6 +117,7 @@ All (GUI):
   where invalid sizes caused incorrect second invocation of page setup
   dialog.
 - Added background colour setting to wxRichTextCtrl font dialog.
+- Corrected writing direction for Farsi.
 
 wxMSW:
 
