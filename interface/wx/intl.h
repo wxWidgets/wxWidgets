@@ -17,7 +17,7 @@
 */
 enum wxLanguage
 {
-    /// User's default/preferred language as got from OS.
+    /// User's default/preffered language as got from OS.
     wxLANGUAGE_DEFAULT,
 
     /// Unknown language, returned if wxLocale::GetSystemLanguage fails.
@@ -48,6 +48,7 @@ enum wxLanguage
     wxLANGUAGE_ARABIC_YEMEN,
     wxLANGUAGE_ARMENIAN,
     wxLANGUAGE_ASSAMESE,
+    wxLANGUAGE_ASTURIAN,
     wxLANGUAGE_AYMARA,
     wxLANGUAGE_AZERI,
     wxLANGUAGE_AZERI_CYRILLIC,
