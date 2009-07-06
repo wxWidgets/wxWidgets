@@ -69,7 +69,7 @@ public:
                 int button_id,
                 const wxString& label,
                 const wxBitmap& bitmap,
-                const wxString& help_string = wxEmptyString,
+                const wxString& help_string,
                 wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL);
 
     virtual wxRibbonButtonBarButtonBase* AddDropdownButton(
@@ -112,6 +112,7 @@ protected:
 
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
+    void OnSize(wxSizeEvent& evt);
 
     void CommonInit(long style);
     void MakeLayouts();

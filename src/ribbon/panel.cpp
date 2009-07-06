@@ -32,11 +32,14 @@ IMPLEMENT_CLASS(wxRibbonPanel, wxRibbonControl)
 BEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
     EVT_ERASE_BACKGROUND(wxRibbonPanel::OnEraseBackground)
     EVT_PAINT(wxRibbonPanel::OnPaint)
+    EVT_SIZE(wxRibbonPanel::OnSize)
 END_EVENT_TABLE()
 
 wxRibbonPanel::wxRibbonPanel()
 {
 }
+
+#define FORCED_STYLE 0
 
 wxRibbonPanel::wxRibbonPanel(wxWindow* parent,
                   wxWindowID id,
@@ -45,9 +48,9 @@ wxRibbonPanel::wxRibbonPanel(wxWindow* parent,
                   const wxPoint& pos,
                   const wxSize& size,
                   long style)
-    : wxRibbonControl(parent, id, pos, size, style | wxTRANSPARENT_WINDOW)
+    : wxRibbonControl(parent, id, pos, size, style | FORCED_STYLE)
 {
-    CommonInit(label, minimised_icon, style | wxTRANSPARENT_WINDOW);
+    CommonInit(label, minimised_icon, style | FORCED_STYLE);
 }
 
 wxRibbonPanel::~wxRibbonPanel()
@@ -62,7 +65,7 @@ bool wxRibbonPanel::Create(wxWindow* parent,
                 const wxSize& size,
                 long style)
 {
-    style |= wxTRANSPARENT_WINDOW;
+    style |= FORCED_STYLE;
 
     if(!wxRibbonControl::Create(parent, id, pos, size, style))
     {
@@ -96,46 +99,66 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long
         }
     }
 
-    // Temporary
-    SetMinSize(wxSize(100, 87));
-    SetSize(GetMinSize());
-
+    SetAutoLayout(true);
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetMinSize(wxSize(20, 20));
 }
 
-void wxRibbonPanel::OnEraseBackground(wxEraseEvent& evt)
+void wxRibbonPanel::OnSize(wxSizeEvent& evt)
 {
-    if(m_art != NULL)
-    {
-        wxDC* dc = evt.GetDC();
-        if(dc != NULL)
-        {
-            m_art->DrawPanelBackground(*dc, this, GetSize());
-        }
-        else
-        {
-            wxClientDC cdc(this);
-            m_art->DrawPanelBackground(cdc, this, GetSize());
-        }
-    }
+    if(GetAutoLayout())
+        Layout();
+
+    evt.Skip();
+}
+
+void wxRibbonPanel::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
+{
+    // All painting done in main paint handler to minimise flicker
 }
 
 void wxRibbonPanel::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
-    // No foreground painting done by the panel itself, but a paint DC
-    // must be created anyway.
-    wxPaintDC dc(this);
+    wxAutoBufferedPaintDC dc(this);
+
+    if(m_art != NULL)
+    {
+        m_art->DrawPanelBackground(dc, this, GetSize());
+    }
 }
 
 bool wxRibbonPanel::IsSizingContinuous() const
 {
-    // TODO: Handle (rare) case of a continuously resizing panel, or delegate to a sizer
+    // A panel never sizes continuously, even if all of its children can,
+    // as it would appear out of place along side non-continuous panels.
     return false;
 }
 
 wxSize wxRibbonPanel::GetNextSmallerSize(wxOrientation direction) const
 {
-    // TODO: Do proper children / sizer related calculations
+    // TODO: Check for, and delegate to, a sizer
+
+    // Simple (and common) case of single ribbon child
+    if(GetChildren().GetCount() == 1)
+    {
+        wxWindow* child = GetChildren().Item(0)->GetData();
+        wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
+        if(ribbon_child != NULL)
+        {
+            wxSize smaller = ribbon_child->GetNextSmallerSize(direction);
+            if(smaller == ribbon_child->GetSize())
+            {
+                return GetSize();
+            }
+            else
+            {
+                wxMemoryDC dc;
+                return m_art->GetPanelSize(dc, this, smaller, NULL);
+            }
+        }
+    }
+
+    // Fallback: Decrease by 20% (or minimum size, whichever larger)
     wxSize current(GetSize());
     wxSize minimum(GetMinSize());
     if(direction & wxHORIZONTAL)
@@ -159,7 +182,29 @@ wxSize wxRibbonPanel::GetNextSmallerSize(wxOrientation direction) const
 
 wxSize wxRibbonPanel::GetNextLargerSize(wxOrientation direction) const
 {
-    // TODO: Do proper children / sizer related calculations
+    // TODO: Check for, and delegate to, a sizer
+
+    // Simple (and common) case of single ribbon child
+    if(GetChildren().GetCount() == 1)
+    {
+        wxWindow* child = GetChildren().Item(0)->GetData();
+        wxRibbonControl* ribbon_child = wxDynamicCast(child, wxRibbonControl);
+        if(ribbon_child != NULL)
+        {
+            wxSize larger = ribbon_child->GetNextLargerSize(direction);
+            if(larger == ribbon_child->GetSize())
+            {
+                return GetSize();
+            }
+            else
+            {
+                wxMemoryDC dc;
+                return m_art->GetPanelSize(dc, this, larger, NULL);
+            }
+        }
+    }
+
+    // Fallback: Increase by 25% (equal to a prior or subsequent 20% decrease)
     wxSize current(GetSize());
     if(direction & wxHORIZONTAL)
     {
@@ -170,6 +215,74 @@ wxSize wxRibbonPanel::GetNextLargerSize(wxOrientation direction) const
         current.y = (current.y * 5) / 4;
     }
     return current;
+}
+
+wxSize wxRibbonPanel::GetMinSize() const
+{
+    // TODO: Ask sizer
+
+    // Common case of no sizer and single child taking up the entire panel
+    if(GetChildren().GetCount() == 1)
+    {
+        wxWindow* child = GetChildren().Item(0)->GetData();
+        wxMemoryDC dc;
+        return m_art->GetPanelSize(dc, this, child->GetMinSize(), NULL);
+    }
+
+    return wxRibbonControl::GetMinSize();
+}
+
+wxSize wxRibbonPanel::DoGetBestSize() const
+{
+    // TODO: Ask sizer
+
+    // Common case of no sizer and single child taking up the entire panel
+    if(GetChildren().GetCount() == 1)
+    {
+        wxWindow* child = GetChildren().Item(0)->GetData();
+        wxMemoryDC dc;
+        return m_art->GetPanelSize(dc, this, child->GetBestSize(), NULL);
+    }
+
+    return wxRibbonControl::DoGetBestSize();
+}
+
+bool wxRibbonPanel::Realize()
+{
+    bool status = true;
+
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                  node;
+                  node = node->GetNext())
+    {
+        wxRibbonControl* child = wxDynamicCast(node->GetData(), wxRibbonControl);
+        if(child == NULL)
+        {
+            continue;
+        }
+        if(!child->Realize())
+        {
+            status = false;
+        }
+    }
+
+    return Layout() && status;
+}
+
+bool wxRibbonPanel::Layout()
+{
+    // TODO: Delegate to a sizer
+
+    // Common case of no sizer and single child taking up the entire panel
+    if(GetChildren().GetCount() == 1)
+    {
+        wxWindow* child = GetChildren().Item(0)->GetData();
+        wxPoint position;
+        wxMemoryDC dc;
+        wxSize size = m_art->GetPanelClientSize(dc, this, GetSize(), &position);
+        child->SetSize(position.x, position.y, size.GetWidth(), size.GetHeight());
+    }
+    return true;
 }
 
 #endif // wxUSE_RIBBON

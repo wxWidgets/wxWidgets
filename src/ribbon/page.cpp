@@ -103,7 +103,7 @@ void wxRibbonPageScrollButton::OnPaint(wxPaintEvent& WXUNUSED(evt))
     wxAutoBufferedPaintDC dc(this);
     if(m_art)
     {
-        m_art->DrawScrollButton(dc, GetParent(), GetSize(), m_flags);
+        m_art->DrawScrollButton(dc, this, GetSize(), m_flags);
     }
 }
 
@@ -224,38 +224,35 @@ void wxRibbonPage::SetArtProvider(wxRibbonArtProvider* art)
     }
 }
 
-void wxRibbonPage::OnEraseBackground(wxEraseEvent& evt)
+void wxRibbonPage::AdjustRectToIncludeScrollButtons(wxRect* rect) const
 {
-    wxDC* dc = evt.GetDC();
-    wxRect rect(GetClientSize());
     if(m_scroll_buttons_visible)
     {
         if(m_scroll_left_btn)
         {
-            rect.SetX(rect.GetX() - m_scroll_left_btn->GetSize().GetWidth());
-            rect.SetWidth(rect.GetWidth() + m_scroll_left_btn->GetSize().GetWidth());
+            rect->SetX(rect->GetX() - m_scroll_left_btn->GetSize().GetWidth());
+            rect->SetWidth(rect->GetWidth() + m_scroll_left_btn->GetSize().GetWidth());
         }
         if(m_scroll_right_btn)
         {
-            rect.SetWidth(rect.GetWidth() + m_scroll_right_btn->GetSize().GetWidth());
+            rect->SetWidth(rect->GetWidth() + m_scroll_right_btn->GetSize().GetWidth());
         }
     }
-    if(dc != NULL)
-    {
-        m_art->DrawPageBackground(*dc, this, rect);
-    }
-    else
-    {
-        wxClientDC cdc(this);
-        m_art->DrawPageBackground(cdc, this, rect);
-    }
+}
+
+void wxRibbonPage::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
+{
+    // All painting done in main paint handler to minimise flicker
 }
 
 void wxRibbonPage::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     // No foreground painting done by the page itself, but a paint DC
     // must be created anyway.
-    wxPaintDC dc(this);
+    wxAutoBufferedPaintDC dc(this);
+    wxRect rect(GetSize());
+    AdjustRectToIncludeScrollButtons(&rect);
+    m_art->DrawPageBackground(dc, this, rect);
 }
 
 wxOrientation wxRibbonPage::GetMajorAxis() const
@@ -363,9 +360,9 @@ void wxRibbonPage::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     // remembered internally and used in Layout() where appropiate.
 
     if(GetMajorAxis() == wxHORIZONTAL)
-        size_in_major_axis_for_children = width;
+        m_size_in_major_axis_for_children = width;
     else
-        size_in_major_axis_for_children = height;
+        m_size_in_major_axis_for_children = height;
 
     wxRibbonControl::DoSetSize(x, y, width, height, sizeFlags);
 }
@@ -379,6 +376,31 @@ void wxRibbonPage::OnSize(wxSizeEvent& evt)
     Refresh(true, &invalid_rect);
 
     m_old_size = evt.GetSize();
+
+    evt.Skip();
+}
+
+bool wxRibbonPage::Realize()
+{
+    bool status = true;
+
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                  node;
+                  node = node->GetNext())
+    {
+        wxRibbonControl* child = wxDynamicCast(node->GetData(), wxRibbonControl);
+        if(child == NULL)
+        {
+            continue;
+        }
+        if(!child->Realize())
+        {
+            status = false;
+        }
+        child->SetSize(child->GetMinSize());
+    }
+
+    return Layout() && status;
 }
 
 bool wxRibbonPage::Layout()
@@ -443,9 +465,9 @@ bool wxRibbonPage::Layout()
         {
             int available_space;
             if(major_axis == wxHORIZONTAL)
-                available_space = size_in_major_axis_for_children - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE) - origin.x + gap;
+                available_space = m_size_in_major_axis_for_children - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_RIGHT_SIZE) - origin.x + gap;
             else
-                available_space = size_in_major_axis_for_children - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE) - origin.y + gap;
+                available_space = m_size_in_major_axis_for_children - m_art->GetMetric(wxRIBBON_ART_PAGE_BORDER_BOTTOM_SIZE) - origin.y + gap;
             if(m_scroll_buttons_visible)
             {
                 available_space -= m_scroll_amount;

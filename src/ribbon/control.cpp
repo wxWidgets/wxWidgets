@@ -79,4 +79,9 @@ wxSize wxRibbonControl::GetNextLargerSize(wxOrientation direction) const
     return size;
 }
 
+bool wxRibbonControl::Realize()
+{
+    return true;
+}
+
 #endif // wxUSE_RIBBON

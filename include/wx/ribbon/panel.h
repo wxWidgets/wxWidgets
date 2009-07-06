@@ -54,6 +54,11 @@ public:
 
     void SetArtProvider(wxRibbonArtProvider* art);
 
+    virtual bool Realize();
+    virtual bool Layout();
+    virtual wxSize GetMinSize() const;
+    virtual wxSize DoGetBestSize() const;
+
     virtual bool IsSizingContinuous() const;
     virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
     virtual wxSize GetNextLargerSize(wxOrientation direction) const;
@@ -61,6 +66,7 @@ public:
 protected:
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
+    void OnSize(wxSizeEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
 

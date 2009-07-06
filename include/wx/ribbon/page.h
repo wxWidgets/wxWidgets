@@ -48,7 +48,9 @@ public:
     virtual wxSize GetMinSize() const;
     virtual wxSize DoGetBestSize() const;
     void SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height);
+    void AdjustRectToIncludeScrollButtons(wxRect* rect) const;
 
+    virtual bool Realize();
     virtual bool Show(bool show = true);
     virtual bool Layout();
     virtual bool ScrollLines(int lines);
@@ -78,7 +80,7 @@ protected:
     wxRibbonPageScrollButton* m_scroll_right_btn;
     int m_scroll_amount;
     int m_scroll_amount_limit;
-    int size_in_major_axis_for_children;
+    int m_size_in_major_axis_for_children;
     bool m_scroll_buttons_visible;
 
 #ifndef SWIG

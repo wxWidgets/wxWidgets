@@ -8,7 +8,6 @@
 // Copyright:   (C) Peter Cawley
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
-<<<<<<< .mine
 
 #include "wx/wxprec.h"
 
@@ -35,6 +34,7 @@ IMPLEMENT_CLASS(wxRibbonButtonBar, wxRibbonControl)
 BEGIN_EVENT_TABLE(wxRibbonButtonBar, wxRibbonControl)
     EVT_ERASE_BACKGROUND(wxRibbonButtonBar::OnEraseBackground)
     EVT_PAINT(wxRibbonButtonBar::OnPaint)
+    EVT_SIZE(wxRibbonButtonBar::OnSize)
 END_EVENT_TABLE()
 
 class wxRibbonButtonBarButtonSizeInfo
@@ -108,7 +108,7 @@ wxRibbonButtonBar::wxRibbonButtonBar(wxWindow* parent,
                   const wxPoint& pos,
                   const wxSize& size,
                   long style)
-    : wxRibbonControl(parent, id, pos, size, 0)
+    : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
 {
     m_layouts_valid = false;
 
@@ -141,7 +141,7 @@ bool wxRibbonButtonBar::Create(wxWindow* parent,
                 const wxSize& size,
                 long style)
 {
-    if(!wxRibbonControl::Create(parent, id, pos, size, 0))
+    if(!wxRibbonControl::Create(parent, id, pos, size, wxBORDER_NONE))
     {
         return false;
     }
@@ -394,19 +394,90 @@ bool wxRibbonButtonBar::IsSizingContinuous() const
 
 wxSize wxRibbonButtonBar::GetNextSmallerSize(wxOrientation direction) const
 {
-    // TODO
-    return GetSize();
+    wxSize result = GetSize();
+    size_t nlayouts = m_layouts.GetCount();
+    size_t i;
+    for(i = 0; i < nlayouts; ++i)
+    {
+        wxRibbonButtonBarLayout* layout = m_layouts.Item(i);
+        wxSize size = layout->overall_size;
+        switch(direction)
+        {
+        case wxHORIZONTAL:
+            if(size.x < result.x && size.y <= result.y)
+            {
+                result.x = size.x;
+                break;
+            }
+            else
+                continue;
+        case wxVERTICAL:
+            if(size.x <= result.x && size.y < result.y)
+            {
+                result.y = size.y;
+                break;
+            }
+            else
+                continue;
+        case wxBOTH:
+            if(size.x < result.x && size.y < result.y)
+            {
+                result = size;
+                break;
+            }
+            else
+                continue;
+        }
+        break;
+    }
+    return result;
 }
 
 wxSize wxRibbonButtonBar::GetNextLargerSize(wxOrientation direction) const
 {
-    // TODO
-    return GetSize();
+    wxSize result = GetSize();
+    size_t nlayouts = m_layouts.GetCount();
+    size_t i = nlayouts;
+    while(i > 0)
+    {
+        --i;
+        wxRibbonButtonBarLayout* layout = m_layouts.Item(i);
+        wxSize size = layout->overall_size;
+        switch(direction)
+        {
+        case wxHORIZONTAL:
+            if(size.x > result.x && size.y <= result.y)
+            {
+                result.x = size.x;
+                break;
+            }
+            else
+                continue;
+        case wxVERTICAL:
+            if(size.x <= result.x && size.y > result.y)
+            {
+                result.y = size.y;
+                break;
+            }
+            else
+                continue;
+        case wxBOTH:
+            if(size.x > result.x && size.y > result.y)
+            {
+                result = size;
+                break;
+            }
+            else
+                continue;
+        }
+        break;
+    }
+    return result;
 }
 
 void wxRibbonButtonBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 {
-    // All painting done in main paint handler
+    // All painting done in main paint handler to minimise flicker
 }
 
 void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
@@ -435,6 +506,11 @@ void wxRibbonButtonBar::OnPaint(wxPaintEvent& WXUNUSED(evt))
         m_art->DrawButtonBarButton(dc, this, rect, base->kind,
             base->state | button.size, base->label, *bitmap, *bitmap_small);
     }
+}
+
+void wxRibbonButtonBar::OnSize(wxSizeEvent& WXUNUSED(evt))
+{
+    Refresh();
 }
 
 void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
@@ -497,25 +573,8 @@ void wxRibbonButtonBar::MakeLayouts()
             layout->buttons.Add(instance);
         }
         layout->overall_size.SetWidth(cursor.x);
+        m_layouts.Add(layout);
     }
 }
 
 #endif // wxUSE_RIBBON
-=======
-
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-    #pragma hdrstop
-#endif
-
-#if wxUSE_RIBBON
-
-#ifndef WX_PRECOMP
-#endif
-
-
-
-#endif
-    // wxUSE_RIBBON
->>>>>>> .r61314

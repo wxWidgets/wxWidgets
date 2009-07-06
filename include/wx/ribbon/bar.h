@@ -115,6 +115,8 @@ public:
     virtual wxSize DoGetBestSize() const;
     virtual bool HasMultiplePages() const { return true; }
 
+    virtual bool Realize();
+
 protected:
     friend class wxRibbonPage;
 

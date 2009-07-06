@@ -166,7 +166,14 @@ public:
     virtual wxSize GetPanelSize(
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize client_size) = 0;
+                        wxSize client_size,
+                        wxPoint* client_offset) = 0;
+
+    virtual wxSize GetPanelClientSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize size,
+                        wxPoint* client_offset) = 0;
 
     virtual wxRect GetPageBackgroundRedrawArea(
                         wxDC& dc,
@@ -273,7 +280,14 @@ public:
     wxSize GetPanelSize(
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize client_size);
+                        wxSize client_size,
+                        wxPoint* client_offset);
+
+    wxSize GetPanelClientSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize size,
+                        wxPoint* client_offset);
 
     wxRect GetPageBackgroundRedrawArea(
                         wxDC& dc,

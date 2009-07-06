@@ -38,6 +38,9 @@ public:
     virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
     virtual wxSize GetNextLargerSize(wxOrientation direction) const;
 
+    virtual bool Realize();
+    bool Realise() {return Realize();}
+
 protected:
     wxRibbonArtProvider* m_art;
 

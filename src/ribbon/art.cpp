@@ -235,43 +235,12 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
     }
 }
 
-// Originally from wxAUI's dockart.cpp
 static void DrawVerticalGradientRectangle(wxDC& dc,
                                   const wxRect& rect,
                                   const wxColour& start_colour,
                                   const wxColour& end_colour)
 {
-    int rd, gd, bd, high = 0;
-    rd = end_colour.Red() - start_colour.Red();
-    gd = end_colour.Green() - start_colour.Green();
-    bd = end_colour.Blue() - start_colour.Blue();
-
-    if(rd == 0 && gd == 0 && bd == 0)
-    {
-        wxBrush b(start_colour);
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.SetBrush(b);
-        dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
-        return;
-    }
-
-    high = rect.GetHeight() - 1;
-
-    for (int i = 0; i <= high; ++i)
-    {
-        int r,g,b;
-
-        r = start_colour.Red() + (high <= 0 ? 0 : (((i*rd*100)/high)/100));
-        g = start_colour.Green() + (high <= 0 ? 0 : (((i*gd*100)/high)/100));
-        b = start_colour.Blue() + (high <= 0 ? 0 : (((i*bd*100)/high)/100));
-
-        wxPen p(wxColour((unsigned char)r,
-                        (unsigned char)g,
-                        (unsigned char)b));
-        dc.SetPen(p);
-
-        dc.DrawLine(rect.x, rect.y+i, rect.x+rect.width, rect.y+i);
-    }
+    dc.GradientFillLinear(rect, start_colour, end_colour, wxSOUTH);
 }
 
 static void DrawParallelGradientLines(wxDC& dc,
@@ -526,6 +495,7 @@ void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
         wxPoint offset)
 {
     wxRect background(page->GetSize());
+    page->AdjustRectToIncludeScrollButtons(&background);
     background.x += 2;
     background.width -= 4;
     background.height -= 2;
@@ -544,7 +514,8 @@ void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
 
     if(paint_rect.Intersects(upper_rect))
     {
-        wxRect rect(paint_rect.Intersect(upper_rect));
+        wxRect rect(upper_rect);
+        rect.Intersect(paint_rect);
         rect.x -= offset.x;
         rect.y -= offset.y;
         wxColour starting_colour(InterpolateColour(m_page_background_top_colour,
@@ -559,15 +530,16 @@ void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
 
     if(paint_rect.Intersects(lower_rect))
     {
-        wxRect rect(paint_rect.Intersect(lower_rect));
+        wxRect rect(lower_rect);
+        rect.Intersect(paint_rect);
         rect.x -= offset.x;
         rect.y -= offset.y;
         wxColour starting_colour(InterpolateColour(m_page_background_colour,
-            m_page_background_gradient_colour, paint_rect.y, upper_rect.y,
-            upper_rect.y + upper_rect.height));
+            m_page_background_gradient_colour, paint_rect.y, lower_rect.y,
+            lower_rect.y + lower_rect.height));
         wxColour ending_colour(InterpolateColour(m_page_background_colour,
             m_page_background_gradient_colour, paint_rect.y + paint_rect.height,
-            upper_rect.y, upper_rect.y + upper_rect.height));
+            lower_rect.y, lower_rect.y + lower_rect.height));
         DrawVerticalGradientRectangle(dc, rect, starting_colour, ending_colour);
     }
 }
@@ -734,6 +706,8 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
                         wxRibbonPanel* wnd,
                         const wxRect& rect)
 {
+    DrawButtonBarBackground(dc, wnd, rect);
+
     wxRect true_rect(rect);
     if(m_flags & wxRIBBON_BAR_FLOW_VERTICAL)
     {
@@ -829,6 +803,8 @@ void wxRibbonMSWArtProvider::DrawButtonBarBackground(
     dc.DrawRectangle(rect.x, rect.y, rect.width, rect.height);
 }
 
+static bool CanButtonBarLabelBreakAtPosition(const wxString& label, size_t pos);
+
 void wxRibbonMSWArtProvider::DrawButtonBarButton(
                         wxDC& dc,
                         wxWindow* WXUNUSED(wnd),
@@ -839,7 +815,52 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
                         const wxBitmap& bitmap_large,
                         const wxBitmap& bitmap_small)
 {
-    // TODO
+    dc.SetFont(m_button_bar_label_font);
+    switch(state & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
+    {
+    case wxRIBBON_BUTTONBAR_BUTTON_LARGE:
+        {
+            const int padding = 2;
+            dc.DrawBitmap(bitmap_large,
+                rect.x + (rect.width - bitmap_large.GetWidth()) / 2,
+                rect.y + padding, true);
+            int ypos = rect.y + padding + bitmap_large.GetHeight() + padding;
+            wxCoord label_w, label_h;
+            dc.GetTextExtent(label, &label_w, &label_h);
+            if(label_w + 2 * padding <= rect.width)
+            {
+                dc.DrawText(label, rect.x + (rect.width - label_w) / 2, ypos);
+            }
+            else
+            {
+                size_t breaki = label.Len();
+                do
+                {
+                    --breaki;
+                    if(CanButtonBarLabelBreakAtPosition(label, breaki))
+                    {
+                        wxString label_top = label.Mid(0, breaki);
+                        dc.GetTextExtent(label_top, &label_w, &label_h);
+                        if(label_w + 2 * padding <= rect.width)
+                        {
+                            dc.DrawText(label_top,
+                                rect.x + (rect.width - label_w) / 2, ypos);
+                            ypos += label_h;
+                            wxString label_bottom = label.Mid(breaki + 1);
+                            dc.GetTextExtent(label_bottom, &label_w, &label_h);
+                            dc.DrawText(label_bottom,
+                                rect.x + (rect.width - label_w) / 2, ypos);
+                            break;
+                        }
+                    }
+                } while(breaki > 0);
+            }
+        }
+        break;
+    default:
+        // TODO
+        break;
+    }
 }
 
 void wxRibbonMSWArtProvider::GetBarTabWidth(
@@ -930,15 +951,41 @@ wxSize wxRibbonMSWArtProvider::GetScrollButtonMinimumSize(
 wxSize wxRibbonMSWArtProvider::GetPanelSize(
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize client_size)
+                        wxSize client_size,
+                        wxPoint* client_offset)
 {
     dc.SetFont(m_panel_label_font);
     wxSize label_size = dc.GetTextExtent(wnd->GetLabel());
 
     client_size.IncBy(0, label_size.GetHeight());
-    client_size.IncBy(4, 8); // Guesswork at the moment
+    client_size.IncBy(6, 8); // Guesswork at the moment
+
+    if(client_offset != NULL)
+    {
+        *client_offset = wxPoint(4, 2);
+    }
 
     return client_size;
+}
+
+wxSize wxRibbonMSWArtProvider::GetPanelClientSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize size,
+                        wxPoint* client_offset)
+{
+    dc.SetFont(m_panel_label_font);
+    wxSize label_size = dc.GetTextExtent(wnd->GetLabel());
+
+    size.DecBy(0, label_size.GetHeight());
+    size.DecBy(6, 8); // Guesswork at the moment
+
+    if(client_offset != NULL)
+    {
+        *client_offset = wxPoint(4, 2);
+    }
+
+    return size;
 }
 
 wxRect wxRibbonMSWArtProvider::GetPageBackgroundRedrawArea(
@@ -1084,7 +1131,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                 }
             }
             label_height *= best_num_lines;
-            icon_size.SetWidth(wxMax(icon_size.GetWidth(), best_width + 2));
+            icon_size.SetWidth(wxMax(icon_size.GetWidth(), best_width) + 6);
             icon_size.SetHeight(icon_size.GetHeight() + label_height);
             *button_size = icon_size;
             break;

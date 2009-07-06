@@ -91,19 +91,33 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     page->Hide(); // Most likely case is that this new page is not the active tab
     page->SetArtProvider(m_art);
 
-    m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
-    RecalculateMinSize();
-    RecalculateTabSizes();
-
     if(m_pages.GetCount() == 1)
     {
         SetActivePage((size_t)0);
-        Refresh();
     }
-    else
+}
+
+bool wxRibbonBar::Realize()
+{
+    bool status = true;
+    size_t numtabs = m_pages.GetCount();
+    size_t i;
+    for(i = 0; i < numtabs; ++i)
     {
-        RefreshTabBar();
+        wxRibbonPageTabInfo& info = m_pages.Item(i);
+        if(!info.page->Realize())
+        {
+            status = false;
+        }
     }
+
+    wxMemoryDC dcTemp;
+    m_tab_height = m_art->GetTabCtrlHeight(dcTemp, this, m_pages);
+    RecalculateMinSize();
+    RecalculateTabSizes();
+    Refresh();
+
+    return status;
 }
 
 void wxRibbonBar::OnMouseMove(wxMouseEvent& evt)
@@ -474,7 +488,7 @@ wxRibbonBar::wxRibbonBar(wxWindow* parent,
                          wxWindowID id,
                          const wxPoint& pos,
                          const wxSize& size,
-                         long style) : wxRibbonControl(parent, id, pos, size, style)
+                         long style) : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
 {
     CommonInit(style);
 }
@@ -490,7 +504,7 @@ bool wxRibbonBar::Create(wxWindow* parent,
                 const wxSize& size,
                 long style)
 {
-    if(!wxRibbonControl::Create(parent, id, pos, size, style))
+    if(!wxRibbonControl::Create(parent, id, pos, size, wxBORDER_NONE))
         return false;
 
     CommonInit(style);
@@ -633,12 +647,12 @@ void wxRibbonBar::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
 
 void wxRibbonBar::DoEraseBackground(wxDC& dc)
 {
-    wxRect tabs(GetClientSize());
+    wxRect tabs(GetSize());
     tabs.height = m_tab_height;
     m_art->DrawTabCtrlBackground(dc, this, tabs);
 }
 
-void wxRibbonBar::OnSize(wxSizeEvent& WXUNUSED(evt))
+void wxRibbonBar::OnSize(wxSizeEvent& evt)
 {
     RecalculateTabSizes();
     if(m_current_page != -1)
@@ -646,12 +660,14 @@ void wxRibbonBar::OnSize(wxSizeEvent& WXUNUSED(evt))
         RepositionPage(m_pages.Item(m_current_page).page);
     }
     RefreshTabBar();
+
+    evt.Skip();
 }
 
 void wxRibbonBar::RepositionPage(wxRibbonPage *page)
 {
     int w, h;
-    GetClientSize(&w, &h);
+    GetSize(&w, &h);
     page->SetSizeWithScrollButtonAdjustment(0, m_tab_height, w, h - m_tab_height);
 }
 
