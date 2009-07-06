@@ -1,5 +1,5 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.9.0-rc1
+SET WXW_VER=2.9.0-rc5
 if (%WXW_VER%)==() SET WXW_VER=SVN
 
 echo docs building for %WXW_VER%
@@ -17,7 +17,7 @@ set DAILY=c:\daily
 set INNO=c:\wx\inno\wx29b
 
 rem svn already in my path...
-set PATH=%PATH%;c:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
+set PATH=%PATH%;c:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1;c:\wx\doxygen\bin
 
 echo %PATH% >>  c:\temp.log
 rem add bakefile build...
@@ -65,6 +65,7 @@ rem Now create standalone copies of docs (chm and htb)
 cd %WXWIN%\docs\doxygen
 del out\html\*.html
 del out\html\*.htb
+del out\html\*.zip
 del out\*.chm
 call regen chm
 
