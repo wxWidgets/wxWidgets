@@ -357,6 +357,10 @@ SOURCE=.\lists\lists.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\log\logtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\longlong\longlongtest.cpp
 # End Source File
 # Begin Source File
