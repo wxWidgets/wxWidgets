@@ -1030,7 +1030,10 @@ wxVariant wxSystemColourProperty::DoTranslateVal( wxColourPropertyValue& v ) con
 int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
 {
     size_t i;
-    size_t i_max = m_choices.GetCount() - 1;
+    size_t i_max = m_choices.GetCount();
+
+    if ( !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+        i_max -= 1;
 
     for ( i=0; i<i_max; i++ )
     {
@@ -1088,7 +1091,8 @@ void wxSystemColourProperty::OnSetValue()
             return;
         }
 
-        if ( cpv.m_type < wxPG_COLOUR_WEB_BASE )
+        if ( cpv.m_type < wxPG_COLOUR_WEB_BASE ||
+             (m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
         {
             ind = GetIndexForValue(cpv.m_type);
         }
@@ -1112,7 +1116,8 @@ void wxSystemColourProperty::OnSetValue()
 
         ind = ColToInd(col);
 
-        if ( ind == wxNOT_FOUND )
+        if ( ind == wxNOT_FOUND &&
+             !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
             ind = GetCustomColourIndex();
     }
 
@@ -1151,7 +1156,8 @@ wxString wxSystemColourProperty::ValueToString( wxVariant& value,
 
         // If custom colour was selected, use invalid index, so that
         // ColourToString() will return properly formatted colour text.
-        if ( index == GetCustomColourIndex() )
+        if ( index == GetCustomColourIndex() &&
+             !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
             index = wxNOT_FOUND;
     }
     else
@@ -1358,6 +1364,7 @@ bool wxSystemColourProperty::StringToValue( wxVariant& value, const wxString& te
         colourRGB.clear();
 
     if ( colourRGB.length() == 0 && m_choices.GetCount() &&
+         !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) &&
          colourName == m_choices.GetLabel(GetCustomColourIndex()) )
     {
         if ( !(argFlags & wxPG_EDITABLE_VALUE ))
