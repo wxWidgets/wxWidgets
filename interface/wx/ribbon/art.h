@@ -299,6 +299,58 @@ public:
                         wxDC& dc,
                         wxRibbonPanel* wnd,
                         const wxRect& rect) = 0;
+    
+    /**
+        Draw the background for a wxRibbonButtonBar control.
+        
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto (which will typically be the
+            button bar itself, though this is not guaranteed).
+        @param rect
+            The rectangle within which to draw.
+    */
+    virtual void DrawButtonBarBackground(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect) = 0;
+
+    /**
+        Draw a single button for a wxRibbonButtonBar control.
+        
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto.
+        @param rect
+            The rectangle within which to draw. The size of this rectangle will
+            be a size previously returned by GetButtonBarButtonSize(), and the
+            rectangle will be entirely within a rectangle on the same device
+            context previously painted with DrawButtonBarBackground().
+        @param kind
+            The kind of button to draw (normal, dropdown or hybrid).
+        @param state
+            Combination of a size flag and state flags from the
+            wxRibbonButtonBarButtonState enumeration.
+        @param label
+            The label of the button.
+        @param bitmap_large
+            The large bitmap of the button (or the large disabled bitmap when
+            wxRIBBON_BUTTONBAR_BUTTON_DISABLED is set in @a state).
+        @param bitmap_small
+            The small bitmap of the button (or the small disabled bitmap when
+            wxRIBBON_BUTTONBAR_BUTTON_DISABLED is set in @a state).
+    */
+    virtual void DrawButtonBarButton(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        const wxRect& rect,
+                        wxRibbonButtonBarButtonKind kind,
+                        long state,
+                        const wxString& label,
+                        const wxBitmap& bitmap_large,
+                        const wxBitmap& bitmap_small) = 0;
 
     /**
         Calculate the ideal and minimum width (in pixels) of a tab in a ribbon
@@ -376,16 +428,45 @@ public:
         chrome.
         
         @param dc
-            A device context to use when one is required for size calculations.
+            A device context to use if one is required for size calculations.
         @param wnd
             The ribbon panel in question.
         @param client_size
             The client size.
+        @param[out] client_offset
+            The offset where the client rectangle begins within the panel (may
+            be NULL).
+            
+        @sa GetPanelClientSize()
     */
     virtual wxSize GetPanelSize(
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize client_size) = 0;
+                        wxSize client_size,
+                        wxPoint* client_offset) = 0;
+    
+    /**
+        Calculate the client size of a panel for a given overall size. This
+        should act as the inverse to GetPanelSize(), and decrement the given
+        size by enough to fit the panel label and other chrome.
+        
+        @param dc
+            A device context to use if one is required for size calculations.
+        @param wnd
+            The ribbon panel in question.
+        @param size
+            The overall size to calculate client size for.
+        @param[out] client_offset
+            The offset where the returned client size begins within the given
+            @a size (may be NULL).
+        
+        @sa GetPanelSize()
+    */
+    virtual wxSize GetPanelClientSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize size,
+                        wxPoint* client_offset) = 0;
 
     /**
         Calculate the portion of a page background which needs to be redrawn
@@ -409,4 +490,47 @@ public:
                         const wxRibbonPage* wnd,
                         wxSize page_old_size,
                         wxSize page_new_size) = 0;
+    
+    /**
+        Calculate the size of a button within a wxRibbonButtonBar.
+        
+        @param dc
+            A device context to use when one is required for size calculations.
+        @param wnd
+            The window onto which the button will eventually be drawn (which is
+            normally a wxRibbonButtonBar, though this is not guaranteed).
+        @param kind
+            The kind of button.
+        @param size
+            The size-class to calculate the size for. Buttons on a button bar
+            can have three distinct sizes: wxRIBBON_BUTTONBAR_BUTTON_SMALL,
+            wxRIBBON_BUTTONBAR_BUTTON_MEDIUM, and wxRIBBON_BUTTONBAR_BUTTON_LARGE.
+            If the requested size-class is not applicable, then @false should
+            be returned.
+        @param label
+            The label of the button.
+        @param bitmap_size_large
+            The size of all "large" bitmaps on the button bar.
+        @param bitmap_size_small
+            The size of all "small" bitmaps on the button bar.
+        @param[out] button_size
+            The size, in pixels, of the button.
+        @param[out] normal_region
+            The region of the button which constitutes the normal button.
+        @param[out] dropdown_region
+            The region of the button which constitutes the dropdown button.
+        
+        @return @true if a size exists for the button, @false otherwise.
+    */
+    virtual bool GetButtonBarButtonSize(
+                        wxDC& dc,
+                        wxWindow* wnd,
+                        wxRibbonButtonBarButtonKind kind,
+                        wxRibbonButtonBarButtonState size,
+                        const wxString& label,
+                        wxSize bitmap_size_large,
+                        wxSize bitmap_size_small,
+                        wxSize* button_size,
+                        wxRect* normal_region,
+                        wxRect* dropdown_region) = 0;
 };

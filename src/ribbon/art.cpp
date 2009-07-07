@@ -857,6 +857,16 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
             }
         }
         break;
+    case wxRIBBON_BUTTONBAR_BUTTON_MEDIUM:
+        {
+            dc.DrawBitmap(bitmap_small, rect.x + 1,
+                    rect.y + (rect.height - bitmap_small.GetHeight())/2, true);
+            wxCoord label_w, label_h;
+            dc.GetTextExtent(label, &label_w, &label_h);
+            dc.DrawText(label, rect.x + bitmap_small.GetWidth() + 3,
+                rect.y + (rect.height - label_h) / 2);
+            break;
+        }
     default:
         // TODO
         break;
@@ -1130,7 +1140,8 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
                     }
                 }
             }
-            label_height *= best_num_lines;
+            label_height *= 2; // Assume two lines even when only one is used
+                               // (to give all buttons a consistent height)
             icon_size.SetWidth(wxMax(icon_size.GetWidth(), best_width) + 6);
             icon_size.SetHeight(icon_size.GetHeight() + label_height);
             *button_size = icon_size;

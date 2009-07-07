@@ -66,8 +66,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 #include "auto_crop_selection.xpm"
+#include "circle.xpm"
+#include "cross.xpm"
 #include "expand_selection_v.xpm"
 #include "expand_selection_h.xpm"
+#include "square.xpm"
+#include "triangle.xpm"
 
 MyFrame::MyFrame()
     : wxFrame(NULL, wxID_ANY, wxT("wxRibbon Sample Application"), wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
@@ -88,7 +92,12 @@ MyFrame::MyFrame()
         selection->AddButton(wxID_ANY, wxT("Expand Horizontally"), wxBitmap(expand_selection_h_xpm), wxEmptyString);
         selection->AddButton(wxID_ANY, wxT("Contract"), wxBitmap(auto_crop_selection_xpm), wxEmptyString);
 
-        new wxRibbonPanel(home, wxID_ANY, wxT("Editing"));
+        wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Shapes"));
+        wxRibbonButtonBar *shapes = new wxRibbonButtonBar(shapes_panel);
+        shapes->AddButton(wxID_ANY, wxT("Circle"), wxBitmap(circle_xpm), wxEmptyString);
+        shapes->AddButton(wxID_ANY, wxT("Cross"), wxBitmap(cross_xpm), wxEmptyString);
+        shapes->AddButton(wxID_ANY, wxT("Triangle"), wxBitmap(triangle_xpm), wxEmptyString);
+        shapes->AddButton(wxID_ANY, wxT("Square"), wxBitmap(square_xpm), wxEmptyString);
     }
     {
         wxRibbonPage* insert = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Insert"));

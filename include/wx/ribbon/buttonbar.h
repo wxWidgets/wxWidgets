@@ -71,6 +71,9 @@ public:
                 const wxBitmap& bitmap,
                 const wxString& help_string,
                 wxRibbonButtonBarButtonKind kind = wxRIBBON_BUTTONBAR_BUTTON_NORMAL);
+    // NB: help_string cannot be optional as that would cause the signature
+    // to be identical to the full version of AddButton when 3 arguments are
+    // given.
 
     virtual wxRibbonButtonBarButtonBase* AddDropdownButton(
                 int button_id,
@@ -116,6 +119,7 @@ protected:
 
     void CommonInit(long style);
     void MakeLayouts();
+    bool TryCollapseLayout(wxRibbonButtonBarLayout* original, size_t first_btn);
     static wxBitmap MakeResizedBitmap(const wxBitmap& original, wxSize size);
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
     void FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
@@ -124,6 +128,7 @@ protected:
     wxArrayRibbonButtonBarLayout m_layouts;
     wxArrayRibbonButtonBarButtonBase m_buttons;
 
+    wxPoint m_layout_offset;
     wxSize m_bitmap_size_large;
     wxSize m_bitmap_size_small;
     int m_current_layout;

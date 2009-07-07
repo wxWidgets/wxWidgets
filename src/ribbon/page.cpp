@@ -570,6 +570,10 @@ void wxRibbonPage::ShowScrollButtons()
                 size.SetWidth(GetSize().GetWidth());
             }
             m_scroll_left_btn = new wxRibbonPageScrollButton(this, wxID_ANY, GetPosition(), size, direction);
+            if(!IsShown())
+            {
+                m_scroll_left_btn->Hide();
+            }
             reposition = true;
         }
     }
@@ -604,6 +608,10 @@ void wxRibbonPage::ShowScrollButtons()
             }
             wxPoint initial_pos = GetPosition() + GetSize() - size;
             m_scroll_right_btn = new wxRibbonPageScrollButton(this, wxID_ANY, initial_pos, size, direction);
+            if(!IsShown())
+            {
+                m_scroll_right_btn->Hide();
+            }
             reposition = true;
         }
     }

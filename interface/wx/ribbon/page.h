@@ -58,7 +58,7 @@ public:
         wxRibbonBar when the page is created, or the art provider changed on the
         bar.
     
-        The new art provider will be propagated to the children of the frame.
+        The new art provider will be propagated to the children of the page.
     */
     void SetArtProvider(wxRibbonArtProvider* art);
 
@@ -85,6 +85,28 @@ public:
         SetSize() to also set the size of siblings.
     */
     void SetSizeWithScrollButtonAdjustment(int x, int y, int width, int height);
+    
+    /**
+        Expand a rectangle of the page to include external scroll buttons (if
+        any). When no scroll buttons are shown, has no effect.
+        
+        @param[in,out] rect
+            The rectangle to adjust. The width and height will not be reduced,
+            and the x and y will not be increased.
+    */
+    void AdjustRectToIncludeScrollButtons(wxRect* rect) const;
+    
+    /**
+        Perform a full re-layout of all panels on the page.
+        
+        Should be called after panels are added to the page, or the sizing
+        behaviour of a panel on the page changes (i.e. due to children being
+        added to it). Usually called automatically when wxRibbonBar::Realize()
+        is called.
+        
+        Will invoke wxRibbonPanel::Realize() for all child panels.
+    */
+    virtual bool Realize();
 
     /**
         Scroll the page by some amount up / down / left / right.

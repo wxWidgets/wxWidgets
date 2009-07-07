@@ -88,4 +88,15 @@ public:
         @see IsSizingContinuous()
     */
     virtual wxSize GetNextLargerSize(wxOrientation direction) const;
+    
+    /**
+        Perform initial size and layout calculations after children have been
+        added, and/or realize children.
+    */
+    virtual bool Realize();
+    
+    /**
+        Alias for Realize().
+    */
+    bool Realise();
 };

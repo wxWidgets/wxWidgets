@@ -45,8 +45,35 @@
 class wxRibbonPanel : public wxRibbonControl
 {
 public:
+    /**
+        Default constructor. 
+    */
     wxRibbonPanel();
 
+    /**
+        Constructs a ribbon panel.
+    
+        @param parent
+            Pointer to a parent window, which is typically a wxRibbonPage,
+            though it can be any window.
+        @param id
+            Window identifier.
+        @param label
+            Label to be used in the wxRibbonPanel's chrome.
+        @param minimised_icon
+            Icon to be used in place of the panel's children when the panel
+            is minimised.
+        @param pos
+            The initial position of the panel. Not relevant when the parent is
+            a ribbon page, as the position and size of the panel will be
+            dictated by the page.
+        @param size
+            The initial size of the panel. Not relevant when the parent is a
+            ribbon page, as the position and size of the panel will be
+            dictated by the page.
+        @param style
+            Style flags for the panel.
+    */
     wxRibbonPanel(wxWindow* parent,
                   wxWindowID id = wxID_ANY,
                   const wxString& label = wxEmptyString,
@@ -55,8 +82,16 @@ public:
                   const wxSize& size = wxDefaultSize,
                   long style = wxRIBBON_PANEL_DEFAULT_STYLE);
 
+    /**
+        Destructor.
+    */
     virtual ~wxRibbonPanel();
 
+    /**
+        Two-stage window creation.
+        
+        Should be called after the default constructor to create the panel.
+    */
     bool Create(wxWindow* parent,
                 wxWindowID id = wxID_ANY,
                 const wxString& label = wxEmptyString,
@@ -65,7 +100,23 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxRIBBON_PANEL_DEFAULT_STYLE);
 
+    /**
+        Get the bitmap to be used in place of the panel children when it is
+        minimised.
+    */
     wxBitmap& GetMinimisedIcon();
 
+    /**
+        Set the art provider to be used. Normally called automatically by
+        wxRibbonPage when the panel is created, or the art provider changed on the
+        page.
+    
+        The new art provider will be propagated to the children of the panel.
+    */
     void SetArtProvider(wxRibbonArtProvider* art);
+    
+    /**
+        Realize all children of the panel.
+    */
+    bool Realize();
 };

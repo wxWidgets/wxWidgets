@@ -55,6 +55,9 @@ public:
     wxRibbonBar as parent), when a page is created, it is automatically added
     to the bar - there is no AddPage equivalent to call.
     
+    After all pages have been created, and all controls and panels placed on
+    those pages, Realize() must be called.
+    
     @sa wxRibbonPage
     @sa wxRibbonPanel
     
@@ -172,4 +175,14 @@ public:
         In the rare case of no page being active, -1 is returned.
     */
     int GetActivePage() const;
+    
+    /**
+        Perform initial layout and size calculations of the bar and its
+        children. This must be called after all of the bar's children have been
+        created (and their children created, etc.) - if it is not, then windows
+        may not be laid out or sized correctly.
+        
+        Also calls wxRibbonPage::Realize() on each child page.
+    */
+    virtual bool Realize();
 };

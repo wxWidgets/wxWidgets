@@ -51,7 +51,8 @@ local grammars = {}
 do
   local C, P, R, S, V = lpeg.C, lpeg.P, lpeg.R, lpeg.S, lpeg.V
   local Ct = lpeg.Ct
-  local ws = S" \r\n\t" ^ 0
+  local comment = P"/*" * (1 - P"*/") ^ 0 * P"*/"
+  local ws = (S" \r\n\t" + comment) ^ 0
   local function tokens(...)
     local result = ws
     for i, arg in ipairs{...} do
@@ -76,7 +77,7 @@ do
     value = C(R"09" ^ 1) / tonumber,
   }
   function make_remaining_grammars(cpp)
-    local char = R("az","AZ","09") + S"_+=$%^&*(){[}]@:;#<,>. "
+    local char = R"\32\126" - S[['"\]] -- Most of lower ASCII
     local colour = char
     for i = 2, cpp do
       colour = colour * char
