@@ -30,7 +30,7 @@ class WXDLLIMPEXP_BASE wxFSWatchEntry
 {
 public:
     wxFSWatchEntry(const wxFileName& path, int events) :
-        m_path(path), m_events(events)
+        m_path(path), m_events(events), m_wd(-1)
     { }
 
     // default copy ctor, assignment operator and dtor are ok
@@ -45,9 +45,14 @@ public:
         return m_events;
     }
 
-    int GetWatchFD() const
+    int GetWD() const
     {
         return m_wd;
+    }
+
+    void SetWD(int wd)
+    {
+        m_wd = wd;
     }
 
 private:
@@ -92,18 +97,28 @@ class wxFSWatcherService
 {
 public:
     wxFSWatcherService(wxFileSystemWatcherBase* watcher) :
-        m_watcher(watcher)
+        m_watcher(watcher), m_loop(0),
+        m_source(wxEventLoopSource::INVALID_RESOURCE)
     {
         m_handler = new wxFSWSourceHandler(this);
     }
 
     ~wxFSWatcherService()
     {
+        // we close inotify only if initialized before
+        if (IsOk())
+        {
+            Close();
+        }
+
         delete m_handler;
     }
 
     bool Init()
     {
+        wxCHECK_MSG( !m_source.IsOk(), false,
+                    "Inotify appears to be already initialized" );
+
         int fd = inotify_init();
         if (fd == -1)
         {
@@ -113,42 +128,35 @@ public:
         }
 
         m_source.SetResource(fd);
-        wxEventLoopBase* loop = wxEventLoopBase::GetActive();
-        wxCHECK_MSG( loop, false,
-                        "wxFileSystemWatcher requires a running event loop" );
-
-        return loop->AddSource(m_source.GetResource(), m_handler,
-                            wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_EXCEPTION);
+        return RegisterSource();
     }
 
     bool Close()
     {
         wxCHECK_MSG( m_source.IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
+        wxCHECK_MSG( m_loop, false,
+                    "m_loop shouldn't be null if inotify is initialized" );
 
-        wxEventLoopBase* loop = wxEventLoopBase::GetActive();
-        wxASSERT(loop);
-
-        // ignore errors here
-        loop->RemoveSource(m_source.GetResource());
+        // ignore errors
+        (void) UnregisterSource();
 
         int ret = close(m_source.GetResource());
         if (ret == -1)
         {
             wxLogSysError(_("Unable to close inotify instance"));
         }
+        m_source.SetResource(wxEventLoopSource::INVALID_RESOURCE);
 
         return ret != -1;
     }
 
-    bool Add(const wxFSWatchEntry* watch)
+    bool Add(wxFSWatchEntry* watch)
     {
         wxCHECK_MSG( m_source.IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
 
-        int flags = Watcher2NativeFlags(watch->GetFlags());
-        int wd = inotify_add_watch(m_source.GetResource(),
-                               watch->GetPath().GetFullPath().fn_str(), flags);
+        int wd = DoAddInotify(watch);
         if (wd == -1)
         {
             wxLogSysError(_("Unable to add inotify watch"));
@@ -165,23 +173,24 @@ public:
         return true;
     }
 
-    bool Remove(const wxFSWatchEntry* watch)
+    bool Remove(wxFSWatchEntry* watch)
     {
         wxCHECK_MSG( m_source.IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
 
-        int wd = inotify_rm_watch(m_source.GetResource(), watch->GetWatchFD());
-        if (wd == -1)
+        int ret = DoRemoveInotify(watch);
+        if (ret == -1)
         {
             wxLogSysError(_("Unable to remove inotify watch"));
             return false;
         }
 
-        if (m_watchMap.erase(wd) != 1)
+        if (m_watchMap.erase(watch->GetWD()) != 1)
         {
             wxFAIL_MSG( wxString::Format("Path %s is not watched",
                                             watch->GetPath().GetFullPath()) );
         }
+        watch->SetWD(-1);
 
         return true;
     }
@@ -229,13 +238,79 @@ public:
     }
 
 protected:
+#if 0
+    void DumpMap()
+    {
+        wxLogTrace(wxTRACE_FSWATCHER, "Watch map:");
+        wxFSWatchEntryDescriptors::iterator it = m_watchMap.begin();
+        for ( ; it != m_watchMap.end(); ++it) {
+            wxLogTrace(wxTRACE_FSWATCHER, "%d => %s", it->first,
+                    it->second->GetPath().GetFullPath());
+        }
+    }
+#endif
+
+    bool RegisterSource()
+    {
+        wxCHECK_MSG( m_source.IsOk(), false,
+                    "Inotify not initialized or invalid inotify descriptor" );
+        wxCHECK_MSG( m_loop == NULL, false, "Event loop should be NULL");
+
+        m_loop = wxEventLoopBase::GetActive();
+        wxCHECK_MSG( m_loop, false,
+                    "wxFileSystemWatcher requires an active event loop" );
+
+        bool ret = m_loop->AddSource(m_source, m_handler,
+                            wxEVENT_SOURCE_INPUT | wxEVENT_SOURCE_EXCEPTION);
+        return ret;
+    }
+
+    bool UnregisterSource()
+    {
+        wxCHECK_MSG( m_source.IsOk(), false,
+                    "Inotify not initialized or invalid inotify descriptor" );
+        wxCHECK_MSG( m_loop, false,
+                    "m_loop shouldn't be null if inotify is initialized" );
+
+        bool ret = m_loop->RemoveSource(m_source);
+        m_loop = NULL;
+        return ret;
+    }
+
+    int DoAddInotify(wxFSWatchEntry* watch)
+    {
+        int flags = Watcher2NativeFlags(watch->GetFlags());
+        int wd = inotify_add_watch(m_source.GetResource(),
+                                   watch->GetPath().GetFullPath().fn_str(),
+                                   flags);
+        // finally we can set watch descriptor
+        watch->SetWD(wd);
+        return wd;
+    }
+
+    int DoRemoveInotify(wxFSWatchEntry* watch)
+    {
+        return inotify_rm_watch(m_source.GetResource(), watch->GetWD());
+    }
+
     void ProcessNativeEvent(const inotify_event& e)
     {
         wxLogTrace(wxTRACE_FSWATCHER, "Event: wd=%d, mask=%u, len=%u, name=%s",
     											e.wd, e.mask, e.len, e.name);
 
+        // after removing inotify watch we get IN_IGNORED for it, but the watch
+        // will be already removed from our list at that time
+        // TODO maybe we want like to report that? this wouldn't be portable...
+        if (e.mask & IN_IGNORED)
+        {
+            wxLogTrace(wxTRACE_FSWATCHER, "Event IN_IGNORED for removed path, "
+                       "wd=%d", e.wd);
+            return;
+        }
+
         // get watch entry for this event
         wxFSWatchEntryDescriptors::iterator it = m_watchMap.find(e.wd);
+
         wxASSERT_MSG(it != m_watchMap.end(),
     								  "Event for wd not on the watch list!");
         wxFSWatchEntry& w = *(it->second);
@@ -397,8 +472,9 @@ protected:
 
     wxFileSystemWatcherBase* m_watcher;   // watcher we communicate with
     wxFSWSourceHandler* m_handler;        // handler for inotify event source
-    wxEventLoopSource m_source;           // our event loop source
     wxFSWatchEntryDescriptors m_watchMap; // inotify wd=>wxFSWatchEntry* map
+    wxEventLoopBase* m_loop;              // event loop we have registered with
+    wxEventLoopSource m_source;           // our event loop source
 };
 
 
@@ -450,12 +526,12 @@ wxInotifyFileSystemWatcher::~wxInotifyFileSystemWatcher()
 }
 
 // actuall adding: just delegate to wxFSWatcherService
-bool wxInotifyFileSystemWatcher::DoAdd(const wxFSWatchEntry& watch)
+bool wxInotifyFileSystemWatcher::DoAdd(wxFSWatchEntry& watch)
 {
     return m_service->Add(&watch);
 }
 
-bool wxInotifyFileSystemWatcher::DoRemove(const wxFSWatchEntry& watch)
+bool wxInotifyFileSystemWatcher::DoRemove(wxFSWatchEntry& watch)
 {
     return m_service->Remove(&watch);
 }
@@ -488,7 +564,7 @@ bool wxInotifyFileSystemWatcher::AddTree(const wxFileName& path, int events,
     	// all of them to Add() and let it choose? this is useful when adding a
     	// file to a dir that is already watched, then not only should we know
     	// about that, but Add() should also behave well then
-    	virtual wxDirTraverseResult OnFile(const wxString& filename)
+    	virtual wxDirTraverseResult OnFile(const wxString& WXUNUSED(filename))
     	{
     		return wxDIR_CONTINUE;
     	}

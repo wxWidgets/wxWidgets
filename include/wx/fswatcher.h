@@ -193,6 +193,7 @@ class wxFSWatcherService;
 class WXDLLIMPEXP_BASE wxFileSystemWatcherBase: public wxEvtHandler
 {
 public:
+    // TODO what is the state of newly constr watcher (started?)
     wxFileSystemWatcherBase();
 
     virtual ~wxFileSystemWatcherBase();
@@ -227,9 +228,20 @@ public:
     virtual bool RemoveTree(const wxFileName& path);
 
     /**
-     * Stops watching all paths.
+     * Clears the list of currently watched paths.
      */
     virtual bool RemoveAll();
+
+    /**
+     * Returns the number of watched paths
+     */
+    int GetWatchedPathCount() const;
+
+    /**
+     * Retrevies all watched paths and places them in wxArrayString. Returns
+     * the number of paths.
+     */
+    int GetWatchedPaths(wxArrayString* paths) const;
 
     void SetOwner(wxEvtHandler* handler)
     {
@@ -247,6 +259,8 @@ protected:
     virtual void OnChange(int changeType, const wxFileName& path,
                                         const wxFileName& newPath)
     {
+        wxLogTrace(wxTRACE_FSWATCHER, "OnChange(): event for path '%s'",
+                    path.GetFullPath());
         wxFileSystemWatcherEvent evt(changeType, path, newPath);
         m_owner->ProcessEvent(evt);
     }
@@ -273,12 +287,12 @@ protected:
     /**
      * Actual adding of wxFSWatchEntry to be watched for file system events
      */
-    virtual bool DoAdd(const wxFSWatchEntry& watch) = 0;
+    virtual bool DoAdd(wxFSWatchEntry& watch) = 0;
 
     /**
      * Actual removing of wxFSWatchEntry from list of watched paths
      */
-    virtual bool DoRemove(const wxFSWatchEntry& watch) = 0;
+    virtual bool DoRemove(wxFSWatchEntry& watch) = 0;
 
     wxFSWatchEntries m_watches;        // path=>wxFSWatchEntry* map
     wxFSWatcherService* m_service;     // file system events service

@@ -33,6 +33,7 @@ public:
 private:
     // file system watcher creation
     void OnEventLoopEnter();
+    void CreateWatcher();
 
     // event handlers
     void OnClear(wxCommandEvent& WXUNUSED(event)) { m_evtConsole->Clear(); }
@@ -233,10 +234,15 @@ void MyFrame::OnEventLoopEnter()
     if (m_watcher)
         return;
 
-    m_watcher = new wxFileSystemWatcher();
-    m_watcher->SetOwner(this);
+    CreateWatcher();
     Connect(wxEVT_FSWATCHER,
             wxFileSystemWatcherEventHandler(MyFrame::OnFileSystemEvent));
+}
+
+void MyFrame::CreateWatcher()
+{
+    m_watcher = new wxFileSystemWatcher();
+    m_watcher->SetOwner(this);
 }
 
 // ============================================================================
@@ -258,9 +264,14 @@ void MyFrame::OnWatch(wxCommandEvent& event)
     wxLogDebug("%s start=%d", __WXFUNCTION__, event.IsChecked());
 
     if (event.IsChecked())
-        (void) m_watcher->Start();
+    {
+        CreateWatcher();
+    }
     else
-        (void) m_watcher->Stop();
+    {
+        m_filesList->DeleteAllItems();
+        delete m_watcher;
+    }
 }
 
 void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))

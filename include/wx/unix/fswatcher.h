@@ -36,9 +36,9 @@ protected:
 
     virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events);
 
-    virtual bool DoAdd(const wxFSWatchEntry& watch);
+    virtual bool DoAdd(wxFSWatchEntry& watch);
 
-    virtual bool DoRemove(const wxFSWatchEntry& watch);
+    virtual bool DoRemove(wxFSWatchEntry& watch);
 };
 
 #endif

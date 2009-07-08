@@ -170,4 +170,22 @@ bool wxFileSystemWatcherBase::RemoveAll()
     return true;
 }
 
+int wxFileSystemWatcherBase::GetWatchedPathCount() const
+{
+    return m_watches.size();
+}
+
+int wxFileSystemWatcherBase::GetWatchedPaths(wxArrayString* paths) const
+{
+    wxCHECK_MSG( paths != NULL, -1, "Null array passed to retrieve paths");
+
+    wxFSWatchEntries::const_iterator it = m_watches.begin();
+    for ( ; it != m_watches.end(); ++it)
+    {
+        paths->push_back(it->first);
+    }
+
+    return m_watches.size();
+}
+
 #endif // wxUSE_FSWATCHER
