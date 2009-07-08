@@ -75,15 +75,12 @@ class IfaceCheckLog : public wxLog
 public:
     IfaceCheckLog() {}
 
-    void DoLog(wxLogLevel, const wxString& msg, time_t)
+    virtual void DoLogText(const wxString& msg)
     {
         // send all messages to stdout (normal behaviour is to sent them to stderr)
-        wxPrintf(msg);
-        wxPrintf("\n");
-        Flush();
+        wxPuts(msg);
+        fflush(stdout);
     }
-
-    wxSUPPRESS_DOLOG_HIDE_WARNING()
 };
 
 class IfaceCheckApp : public wxAppConsole
