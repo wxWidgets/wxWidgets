@@ -164,8 +164,12 @@ public:
 
     // these functions allow to completely disable all log messages
 
-    // is logging disabled now?
+    // is logging enabled at all now?
     static bool IsEnabled() { return ms_doLog; }
+
+    // is logging at this level enabled?
+    static bool IsLevelEnabled(wxLogLevel level)
+        { return IsEnabled() && level <= ms_logLevel; }
 
     // change the flag state, return the previous one
     static bool EnableLogging(bool doIt = true)

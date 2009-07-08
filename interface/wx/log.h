@@ -725,6 +725,19 @@ public:
     static void DontCreateOnDemand();
 
     /**
+        Globally enable or disable logging.
+
+        Calling this function with @false argument disables all log messages.
+
+        @see wxLogNull, IsEnabled()
+
+        @return
+            The old state, i.e. @true if logging was previously enabled and
+            @false if it was disabled.
+     */
+    static bool EnableLogging(bool enable = true);
+
+    /**
         Shows all the messages currently in buffer and clears it.
         If the buffer is already empty, nothing happens.
     */
@@ -744,6 +757,11 @@ public:
 
     /**
         Returns the current log level limit.
+
+        All messages at levels strictly greater than the value returned by this
+        function are not logged at all.
+
+        @see SetLogLevel(), IsLevelEnabled()
     */
     static wxLogLevel GetLogLevel();
 
@@ -781,6 +799,23 @@ public:
         See also: AddTraceMask(), RemoveTraceMask()
     */
     static bool IsAllowedTraceMask(const wxString& mask);
+
+    /**
+        Returns true if logging is enabled at all now.
+
+        @see IsLevelEnabled(), EnableLogging()
+     */
+    static bool IsEnabled();
+
+    /**
+        Returns true if logging at this level is enabled.
+
+        This function only returns @true if logging is globally enabled and if
+        this level is less than or equal to the global log level value.
+
+        @see IsEnabled(), SetLogLevel(), GetLogLevel()
+     */
+    static bool IsLevelEnabled(wxLogLevel level);
 
     /**
         Remove the @a mask from the list of allowed masks for
