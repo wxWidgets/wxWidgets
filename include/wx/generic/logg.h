@@ -34,9 +34,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogString(const wxString& szString, time_t t);
-
-    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+    virtual void DoLogText(const wxString& msg);
 
 private:
     // the control we use
@@ -63,9 +61,9 @@ public:
     virtual void Flush();
 
 protected:
-    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
-
-    wxSUPPRESS_DOLOG_HIDE_WARNING()
+    virtual void DoLogRecord(wxLogLevel level,
+                             const wxString& msg,
+                             const wxLogRecordInfo& info);
 
     // return the title to be used for the log dialog, depending on m_bErrors
     // and m_bWarnings values
@@ -142,11 +140,7 @@ public:
     virtual void OnFrameDelete(wxFrame *frame);
 
 protected:
-    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
-    virtual void DoLogString(const wxString& szString, time_t t);
-
-    wxSUPPRESS_DOLOG_HIDE_WARNING()
-    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg);
 
 private:
     wxLogFrame *m_pLogFrame;      // the log frame

@@ -55,6 +55,10 @@ typedef unsigned long wxLogLevel;
 
 #include "wx/dynarray.h"
 
+#if wxUSE_THREADS
+    #include "wx/thread.h"
+#endif // wxUSE_THREADS
+
 // wxUSE_LOG_DEBUG enables the debug log messages
 #ifndef wxUSE_LOG_DEBUG
     #if wxDEBUG_LEVEL
@@ -117,6 +121,33 @@ enum wxLogLevelValues
 #include "wx/iosfwrap.h"
 
 // ----------------------------------------------------------------------------
+// information about a log record, i.e. unit of log output
+// ----------------------------------------------------------------------------
+
+struct wxLogRecordInfo
+{
+    wxLogRecordInfo()
+    {
+        timestamp = 0;
+
+#if wxUSE_THREADS
+        threadId = 0;
+#endif // wxUSE_THREADS
+    }
+
+    // default copy ctor, assignment operator and dtor are ok
+
+
+    // time of record generation
+    time_t timestamp;
+
+#if wxUSE_THREADS
+    // id of the thread which logged this record
+    wxThreadIdType threadId;
+#endif // wxUSE_THREADS
+};
+
+// ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages
 // normally, only a single instance of this class exists but it's not enforced
 // ----------------------------------------------------------------------------
@@ -125,7 +156,11 @@ class WXDLLIMPEXP_BASE wxLog
 {
 public:
     // ctor
-    wxLog(){}
+    wxLog() { }
+
+    // make dtor virtual for all derived classes
+    virtual ~wxLog();
+
 
     // these functions allow to completely disable all log messages
 
@@ -135,10 +170,6 @@ public:
     // change the flag state, return the previous one
     static bool EnableLogging(bool doIt = true)
         { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
-
-    // static sink function - see DoLog() for function to overload in the
-    // derived classes
-    static void OnLog(wxLogLevel level, const wxString& szString, time_t t);
 
     // message buffering
 
@@ -175,7 +206,7 @@ public:
     static void Resume() { ms_suspendCount--; }
 
     // functions controlling the default wxLog behaviour
-    // verbose mode is activated by standard command-line '-verbose'
+    // verbose mode is activated by standard command-line '--verbose'
     // option
     static void SetVerbose(bool bVerbose = true) { ms_bVerbose = bVerbose; }
 
@@ -234,22 +265,50 @@ public:
     static const wxString& GetTimestamp() { return ms_timestamp; }
 
 
-    // helpers
+
+    // helpers: all functions in this section are mostly for internal use only,
+    // don't call them from your code even if they are not formally deprecated
 
     // put the time stamp into the string if ms_timestamp != NULL (don't
     // change it otherwise)
     static void TimeStamp(wxString *str);
 
-    // this method should only be called from derived classes DoLog()
-    // implementations and shouldn't be called directly, use logging functions
-    // instead
-    void Log(wxLogLevel level, const wxString& msg, time_t t)
+    // these methods should only be called from derived classes DoLogRecord(),
+    // DoLogTextAtLevel() and DoLogText() implementations respectively and
+    // shouldn't be called directly, use logging functions instead
+    void LogRecord(wxLogLevel level,
+                   const wxString& msg,
+                   const wxLogRecordInfo& info)
     {
-        DoLog(level, msg, t);
+        DoLogRecord(level, msg, info);
     }
 
-    // make dtor virtual for all derived classes
-    virtual ~wxLog();
+    void LogTextAtLevel(wxLogLevel level, const wxString& msg)
+    {
+        DoLogTextAtLevel(level, msg);
+    }
+
+    void LogText(const wxString& msg)
+    {
+        DoLogText(msg);
+    }
+
+    // this is a helper used by wxLogXXX() functions, don't call it directly
+    // and see DoLog() for function to overload in the derived classes
+    static void OnLog(wxLogLevel level,
+                      const wxString& msg,
+                      const wxLogRecordInfo& info);
+
+    // version called when no information about the location of the log record
+    // generation is available (but the time stamp is), it mainly exists for
+    // backwards compatibility, don't use it in new code
+    static void OnLog(wxLogLevel level, const wxString& msg, time_t t);
+
+    // a helper calling the above overload with current time
+    static void OnLog(wxLogLevel level, const wxString& msg)
+    {
+        OnLog(level, msg, time(NULL));
+    }
 
 
     // this method exists for backwards compatibility only, don't use
@@ -257,8 +316,10 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_6
     // this function doesn't do anything any more, don't call it
-    wxDEPRECATED( static wxChar *SetLogBuffer(wxChar *buf, size_t size = 0) );
-#endif
+    wxDEPRECATED_INLINE(
+        static wxChar *SetLogBuffer(wxChar *, size_t = 0), return NULL;
+    );
+#endif // WXWIN_COMPATIBILITY_2_6
 
     // don't use integer masks any more, use string trace masks instead
 #if WXWIN_COMPATIBILITY_2_8
@@ -269,13 +330,34 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
-    // the logging functions that can be overridden
+    // the logging functions that can be overridden: DoLogRecord() is called
+    // for every "record", i.e. a unit of log output, to be logged and by
+    // default formats the message and passes it to DoLogTextAtLevel() which in
+    // turn passes it to DoLogText() by default
+    
+    // override this method if you want to change message formatting or do
+    // dynamic filtering
+    virtual void DoLogRecord(wxLogLevel level,
+                             const wxString& msg,
+                             const wxLogRecordInfo& info);
 
-    // default DoLog() prepends the time stamp and a prefix corresponding
-    // to the message to szString and then passes it to DoLogString()
-    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
+    // override this method to redirect output to different channels depending
+    // on its level only; if even the level doesn't matter, override
+    // DoLogText() instead
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg);
+
+    // this function is not pure virtual as it might not be needed if you do
+    // the logging in overridden DoLogRecord() or DoLogTextAtLevel() directly
+    // but if you do not override them in your derived class you must override
+    // this one as the default implementation of it simply asserts
+    virtual void DoLogText(const wxString& msg);
+
+
+    // the rest of the functions are for backwards compatibility only, don't
+    // use them in new code; if you're updating your existing code you need to
+    // switch to overriding DoLogRecord/Text() above (although as long as these
+    // functions exist, log classes using them will continue to work)
 #if WXWIN_COMPATIBILITY_2_8
-    // these shouldn't be used by new code
     wxDEPRECATED_BUT_USED_INTERNALLY(
         virtual void DoLog(wxLogLevel level, const char *szString, time_t t)
     );
@@ -283,47 +365,28 @@ protected:
     wxDEPRECATED_BUT_USED_INTERNALLY(
         virtual void DoLog(wxLogLevel level, const wchar_t *wzString, time_t t)
     );
-#endif // WXWIN_COMPATIBILITY_2_8
 
-    void LogString(const wxString& szString, time_t t)
-        { DoLogString(szString, t); }
-
-    // default DoLogString does nothing but is not pure virtual because if
-    // you override DoLog() you might not need it at all
-    virtual void DoLogString(const wxString& szString, time_t t);
-#if WXWIN_COMPATIBILITY_2_8
     // these shouldn't be used by new code
-    virtual void DoLogString(const char *WXUNUSED(szString),
-                             time_t WXUNUSED(t)) {}
-    virtual void DoLogString(const wchar_t *WXUNUSED(szString),
-                             time_t WXUNUSED(t)) {}
+    wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
+        virtual void DoLogString(const char *WXUNUSED(szString),
+                                 time_t WXUNUSED(t)),
+    )
+
+    wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
+        virtual void DoLogString(const wchar_t *WXUNUSED(wzString),
+                                 time_t WXUNUSED(t)),
+    )
 #endif // WXWIN_COMPATIBILITY_2_8
 
-    // this macro should be used in the derived classes to avoid warnings about
-    // hiding the other DoLog() overloads when overriding DoLog(wxString) --
-    // but don't use it with MSVC which doesn't give this warning but does give
-    // warning when a deprecated function is overridden
-#if WXWIN_COMPATIBILITY_2_8 && !defined(__VISUALC__)
-    #define wxSUPPRESS_DOLOG_HIDE_WARNING()                                   \
-        virtual void DoLog(wxLogLevel, const char *, time_t) { }              \
-        virtual void DoLog(wxLogLevel, const wchar_t *, time_t) { }
-
-    #define wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()                             \
-        virtual void DoLogString(const char *, time_t) { }                    \
-        virtual void DoLogString(const wchar_t *, time_t) { }
-#else
-    #define wxSUPPRESS_DOLOG_HIDE_WARNING()
-    #define wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
-#endif
 
     // log a message indicating the number of times the previous message was
-    // repeated if ms_prevCounter > 0, does nothing otherwise; return the old
-    // value of ms_prevCounter
+    // repeated if previous repetition counter is strictly positive, does
+    // nothing otherwise; return the old value of repetition counter
     unsigned LogLastRepeatIfNeeded();
 
 private:
     // implement of LogLastRepeatIfNeeded(): it assumes that the
-    // caller had already locked ms_prevCS
+    // caller had already locked GetPreviousLogCS()
     unsigned LogLastRepeatIfNeededUnlocked();
 
     // static variables
@@ -332,11 +395,6 @@ private:
     // if true, don't log the same message multiple times, only log it once
     // with the number of times it was repeated
     static bool        ms_bRepetCounting;
-
-    static wxString    ms_prevString;   // previous message that was logged
-    static unsigned    ms_prevCounter;  // how many times it was repeated
-    static time_t      ms_prevTimeStamp;// timestamp of the previous message
-    static wxLogLevel  ms_prevLevel;    // level of the previous message
 
     static wxLog      *ms_pLogger;      // currently active log sink
     static bool        ms_doLog;        // false => all logging disabled
@@ -378,15 +436,7 @@ public:
     virtual void Flush();
 
 protected:
-#if wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
-    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
-
-    wxSUPPRESS_DOLOG_HIDE_WARNING()
-#endif // wxUSE_LOG_DEBUG || wxUSE_LOG_TRACE
-
-    virtual void DoLogString(const wxString& szString, time_t t);
-
-    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg);
 
 private:
     wxString m_str;
@@ -404,9 +454,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogString(const wxString& szString, time_t t);
-
-    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+    virtual void DoLogText(const wxString& msg);
 
     FILE *m_fp;
 
@@ -424,9 +472,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogString(const wxString& szString, time_t t);
-
-    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+    virtual void DoLogText(const wxString& msg);
 
     // using ptr here to avoid including <iostream.h> from this file
     wxSTD ostream *m_ostr;
@@ -499,10 +545,10 @@ public:
     void DetachOldLog() { m_logOld = NULL; }
 
 protected:
-    // pass the chain to the old logger if needed
-    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
-
-    wxSUPPRESS_DOLOG_HIDE_WARNING()
+    // pass the record to the old logger if needed
+    virtual void DoLogRecord(wxLogLevel level,
+                             const wxString& msg,
+                             const wxLogRecordInfo& info);
 
 private:
     // the current log target

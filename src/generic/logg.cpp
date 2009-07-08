@@ -224,16 +224,13 @@ void wxVLogStatus(wxFrame *pFrame, const wxString& format, va_list argptr)
   wxString msg;
 
   wxLog *pLog = wxLog::GetActiveTarget();
-  if ( pLog != NULL ) {
+  if ( pLog != NULL )
+  {
     msg.PrintfV(format, argptr);
 
     wxASSERT( gs_pFrame == NULL ); // should be reset!
     gs_pFrame = pFrame;
-#ifdef __WXWINCE__
-    wxLog::OnLog(wxLOG_Status, msg, 0);
-#else
-    wxLog::OnLog(wxLOG_Status, msg, time(NULL));
-#endif
+    wxLog::OnLog(wxLOG_Status, msg);
     gs_pFrame = NULL;
   }
 }
@@ -403,16 +400,19 @@ void wxLogGui::Flush()
 }
 
 // log all kinds of messages
-void wxLogGui::DoLog(wxLogLevel level, const wxString& szString, time_t t)
+void wxLogGui::DoLogRecord(wxLogLevel level,
+                           const wxString& msg,
+                           const wxLogRecordInfo& info)
 {
-    switch ( level ) {
+    switch ( level )
+    {
         case wxLOG_Info:
             if ( GetVerbose() )
         case wxLOG_Message:
             {
-                m_aMessages.Add(szString);
+                m_aMessages.Add(msg);
                 m_aSeverity.Add(wxLOG_Message);
-                m_aTimes.Add((long)t);
+                m_aTimes.Add((long)info.timestamp);
                 m_bHasMessages = true;
             }
             break;
@@ -430,15 +430,9 @@ void wxLogGui::DoLog(wxLogLevel level, const wxString& szString, time_t t)
                 }
 
                 if ( pFrame && pFrame->GetStatusBar() )
-                    pFrame->SetStatusText(szString);
+                    pFrame->SetStatusText(msg);
             }
 #endif // wxUSE_STATUSBAR
-            break;
-
-        case wxLOG_FatalError:
-            // show this one immediately
-            wxMessageBox(szString, _("Fatal error"), wxICON_HAND);
-            wxExit();
             break;
 
         case wxLOG_Error:
@@ -461,16 +455,16 @@ void wxLogGui::DoLog(wxLogLevel level, const wxString& szString, time_t t)
                 m_bWarnings = true;
             }
 
-            m_aMessages.Add(szString);
+            m_aMessages.Add(msg);
             m_aSeverity.Add((int)level);
-            m_aTimes.Add((long)t);
+            m_aTimes.Add((long)info.timestamp);
             m_bHasMessages = true;
             break;
 
         default:
             // let the base class deal with debug/trace messages as well as any
             // custom levels
-            wxLog::DoLog(level, szString, t);
+            wxLog::DoLogRecord(level, msg, info);
     }
 }
 
@@ -523,7 +517,7 @@ private:
     // do show the message in the text control
     void DoShowLogMessage(const wxString& message)
     {
-        m_pTextCtrl->AppendText(message);
+        m_pTextCtrl->AppendText(message + wxS('\n'));
     }
 
     wxTextCtrl  *m_pTextCtrl;
@@ -713,44 +707,21 @@ void wxLogWindow::Show(bool bShow)
     m_pLogFrame->Show(bShow);
 }
 
-void wxLogWindow::DoLog(wxLogLevel level, const wxString& szString, time_t t)
+void wxLogWindow::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
 {
     // first let the previous logger show it
-    wxLogPassThrough::DoLog(level, szString, t);
+    wxLogPassThrough::DoLogTextAtLevel(level, msg);
 
-    if ( m_pLogFrame ) {
-        switch ( level ) {
-            case wxLOG_Status:
-                // by default, these messages are ignored by wxLog, so process
-                // them ourselves
-                if ( !szString.empty() )
-                {
-                    wxString str;
-                    str << _("Status: ") << szString;
-                    LogString(str, t);
-                }
-                break;
+    if ( !m_pLogFrame )
+        return;
 
-                // don't put trace messages in the text window for 2 reasons:
-                // 1) there are too many of them
-                // 2) they may provoke other trace messages thus sending a program
-                //    into an infinite loop
-            case wxLOG_Trace:
-                break;
-
-            default:
-                // and this will format it nicely and call our DoLogString()
-                wxLog::DoLog(level, szString, t);
-        }
-    }
-}
-
-void wxLogWindow::DoLogString(const wxString& szString, time_t WXUNUSED(t))
-{
-    wxString msg;
-
-    TimeStamp(&msg);
-    msg << szString << wxT('\n');
+    // don't put trace messages in the text window for 2 reasons:
+    // 1) there are too many of them
+    // 2) they may provoke other trace messages (e.g. wxMSW code uses
+    //    wxLogTrace to log Windows messages and adding text to the control
+    //    sends more of them) thus sending a program into an infinite loop
+    if ( level == wxLOG_Trace )
+        return;
 
     m_pLogFrame->AddLogMessage(msg);
 }
@@ -1197,13 +1168,9 @@ wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
     m_pTextCtrl = pTextCtrl;
 }
 
-void wxLogTextCtrl::DoLogString(const wxString& szString, time_t WXUNUSED(t))
+void wxLogTextCtrl::DoLogText(const wxString& msg)
 {
-    wxString msg;
-    TimeStamp(&msg);
-
-    msg << szString << wxT('\n');
-    m_pTextCtrl->AppendText(msg);
+    m_pTextCtrl->AppendText(msg + wxS('\n'));
 }
 
 #endif // wxUSE_LOG && wxUSE_TEXTCTRL
