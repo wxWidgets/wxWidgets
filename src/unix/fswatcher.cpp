@@ -45,12 +45,12 @@ public:
         return m_events;
     }
 
-    int GetWD() const
+    int GetWatchDescriptor() const
     {
         return m_wd;
     }
 
-    void SetWD(int wd)
+    void SetWatchDescriptor(int wd)
     {
         m_wd = wd;
     }
@@ -97,7 +97,7 @@ class wxFSWatcherService
 {
 public:
     wxFSWatcherService(wxFileSystemWatcherBase* watcher) :
-        m_watcher(watcher), m_loop(0),
+        m_watcher(watcher), m_loop(NULL),
         m_source(wxEventLoopSource::INVALID_RESOURCE)
     {
         m_handler = new wxFSWSourceHandler(this);
@@ -185,12 +185,12 @@ public:
             return false;
         }
 
-        if (m_watchMap.erase(watch->GetWD()) != 1)
+        if (m_watchMap.erase(watch->GetWatchDescriptor()) != 1)
         {
             wxFAIL_MSG( wxString::Format("Path %s is not watched",
                                             watch->GetPath().GetFullPath()) );
         }
-        watch->SetWD(-1);
+        watch->SetWatchDescriptor(-1);
 
         return true;
     }
@@ -284,13 +284,13 @@ protected:
                                    watch->GetPath().GetFullPath().fn_str(),
                                    flags);
         // finally we can set watch descriptor
-        watch->SetWD(wd);
+        watch->SetWatchDescriptor(wd);
         return wd;
     }
 
     int DoRemoveInotify(wxFSWatchEntry* watch)
     {
-        return inotify_rm_watch(m_source.GetResource(), watch->GetWD());
+        return inotify_rm_watch(m_source.GetResource(), watch->GetWatchDescriptor());
     }
 
     void ProcessNativeEvent(const inotify_event& e)

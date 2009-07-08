@@ -170,7 +170,7 @@ bool wxFileSystemWatcherBase::RemoveAll()
     return true;
 }
 
-int wxFileSystemWatcherBase::GetWatchedPathCount() const
+int wxFileSystemWatcherBase::GetWatchedPathsCount() const
 {
     return m_watches.size();
 }

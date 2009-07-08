@@ -193,7 +193,6 @@ class wxFSWatcherService;
 class WXDLLIMPEXP_BASE wxFileSystemWatcherBase: public wxEvtHandler
 {
 public:
-    // TODO what is the state of newly constr watcher (started?)
     wxFileSystemWatcherBase();
 
     virtual ~wxFileSystemWatcherBase();
@@ -235,11 +234,14 @@ public:
     /**
      * Returns the number of watched paths
      */
-    int GetWatchedPathCount() const;
+    int GetWatchedPathsCount() const;
 
     /**
      * Retrevies all watched paths and places them in wxArrayString. Returns
      * the number of paths.
+     *
+     * TODO think about API here: we need to return more information (like is
+     * the path watched recursively)
      */
     int GetWatchedPaths(wxArrayString* paths) const;
 

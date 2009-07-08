@@ -271,6 +271,7 @@ void MyFrame::OnWatch(wxCommandEvent& event)
     {
         m_filesList->DeleteAllItems();
         delete m_watcher;
+        m_watcher = NULL;
     }
 }
 
