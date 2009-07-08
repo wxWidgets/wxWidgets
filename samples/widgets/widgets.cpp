@@ -229,30 +229,15 @@ public:
     }
 
 private:
-    wxSUPPRESS_DOLOG_HIDE_WARNING()
-    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
-
     // implement sink functions
-    virtual void DoLog(wxLogLevel level, const wxString& str, time_t t)
+    virtual void DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
     {
-        // don't put trace messages into listbox or we can get into infinite
-        // recursion
         if ( level == wxLOG_Trace )
         {
             if ( m_logOld )
-                m_logOld->Log(level, str, t);
+                m_logOld->LogTextAtLevel(level, msg);
+            return;
         }
-        else
-        {
-            wxLog::DoLog(level, str, t);
-        }
-    }
-
-    virtual void DoLogString(const wxString& str, time_t WXUNUSED(t))
-    {
-        wxString msg;
-        TimeStamp(&msg);
-        msg += str;
 
         #ifdef __WXUNIVERSAL__
             m_lbox->AppendAndEnsureVisible(msg);
