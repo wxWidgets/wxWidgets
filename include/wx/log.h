@@ -82,6 +82,8 @@ typedef unsigned long wxLogLevel;
 // forward declarations
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_FWD_BASE wxObject;
+
 #if wxUSE_GUI
     class WXDLLIMPEXP_FWD_CORE wxFrame;
 #endif // wxUSE_GUI
@@ -819,10 +821,15 @@ public:
         DoLogWithNum, DoLogWithNumUtf8
     )
 
+    // unfortunately we can't use "void *" here as we get overload ambiguities
+    // with Log(wxFormatString, ...) when the first argument is a "char *" or
+    // "wchar_t *" then -- so we only allow passing wxObject here, which is
+    // ugly but fine in practice as this overload is only used by wxLogStatus()
+    // whose first argument is a wxFrame
     WX_DEFINE_VARARG_FUNC_VOID
     (
         Log,
-        2, (void *, const wxFormatString&),
+        2, (wxObject *, const wxFormatString&),
         DoLogWithPtr, DoLogWithPtrUtf8
     )
 
@@ -885,16 +892,16 @@ public:
                                (f1, wxFormatString(f2)))
 
     WX_VARARG_WATCOM_WORKAROUND(void, Log,
-                               2, (void *, const wxString&),
+                               2, (wxObject *, const wxString&),
                                (f1, wxFormatString(f2)))
     WX_VARARG_WATCOM_WORKAROUND(void, Log,
-                               2, (void *, const wxCStrData&),
+                               2, (wxObject *, const wxCStrData&),
                                (f1, wxFormatString(f2)))
     WX_VARARG_WATCOM_WORKAROUND(void, Log,
-                               2, (void *, const char *),
+                               2, (wxObject *, const char *),
                                (f1, wxFormatString(f2)))
     WX_VARARG_WATCOM_WORKAROUND(void, Log,
-                               2, (void *, const wchar_t *),
+                               2, (wxObject *, const wchar_t *),
                                (f1, wxFormatString(f2)))
 
     WX_VARARG_WATCOM_WORKAROUND(void, LogAtLevel,
