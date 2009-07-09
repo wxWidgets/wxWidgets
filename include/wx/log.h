@@ -374,11 +374,13 @@ protected:
     wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
         virtual void DoLogString(const char *WXUNUSED(szString),
                                  time_t WXUNUSED(t)),
+        wxEMPTY_PARAMETER_VALUE
     )
 
     wxDEPRECATED_BUT_USED_INTERNALLY_INLINE(
         virtual void DoLogString(const wchar_t *WXUNUSED(wzString),
                                  time_t WXUNUSED(t)),
+        wxEMPTY_PARAMETER_VALUE
     )
 #endif // WXWIN_COMPATIBILITY_2_8
 
