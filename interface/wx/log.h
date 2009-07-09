@@ -37,8 +37,23 @@ typedef unsigned long wxLogLevel;
 /**
     Information about a log record (unit of the log output).
  */
-struct wxLogRecordInfo
+class wxLogRecordInfo
 {
+public:
+    /// The name of the file where this log message was generated.
+    const char *filename;
+
+    /// The line number at which this log message was generated.
+    int line;
+
+    /**
+        The name of the function where the log record was generated.
+
+        This field may be @NULL if the compiler doesn't support @c __FUNCTION__
+        (but most modern compilers do).
+     */
+    const char *func;
+
     /// Time when the log message was generated.
     time_t timestamp;
 
@@ -587,19 +602,23 @@ public:
 
     @section log_derivingyours Deriving your own log target
 
-    There are two functions which must be implemented by any derived class to
-    actually process the log messages: DoLog() and DoLogString().
-    The second function receives a string which just has to be output in some way
-    and the easiest way to write a new log target is to override just this function
-    in the derived class.
+    There are several methods which may be overridden in the derived class to
+    customize log messages handling: DoLogRecord(), DoLogTextAtLevel() and
+    DoLogText().
 
-    If more control over the output format is needed, then the first function must
-    be overridden which allows to construct custom messages depending on the log level
-    or even do completely different things depending on the message severity
-    (for example, throw away all messages except warnings and errors, show warnings
-    on the screen and forward the error messages to the user's (or programmer's) cell
-    phone - maybe depending on whether the timestamp tells us if it is day or
-    night in the current time zone).
+    The last method is the simplest one: you should override it if you simply
+    want to redirect the log output elsewhere, without taking into account the
+    level of the message. If you do want to handle messages of different levels
+    differently, then you should override DoLogTextAtLevel().
+
+    Finally, if more control over the output format is needed, then the first
+    function must be overridden as it allows to construct custom messages
+    depending on the log level or even do completely different things depending
+    on the message severity (for example, throw away all messages except
+    warnings and errors, show warnings on the screen and forward the error
+    messages to the user's (or programmer's) cell phone -- maybe depending on
+    whether the timestamp tells us if it is day or night in the current time
+    zone).
 
     There also functions to support message buffering. Why are they needed?
     Some of wxLog implementations, most notably the standard wxLogGui class,
@@ -609,9 +628,7 @@ public:
     Flush() shows them all and clears the buffer contents.
     This function doesn't do anything if the buffer is already empty.
 
-    See also:
-    @li Flush()
-    @li FlushActive()
+    @see FlushActive()
 
 
     @section log_tracemasks Using trace masks

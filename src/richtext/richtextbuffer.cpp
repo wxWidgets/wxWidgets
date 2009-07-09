@@ -4671,7 +4671,9 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             int s1 = selectionRange.GetStart()-1;
             int fragmentLen = s1 - r1 + 1;
             if (fragmentLen < 0)
+            {
                 wxLogDebug(wxT("Mid(%d, %d"), (int)(r1 - offset), (int)fragmentLen);
+            }
             wxString stringFragment = str.Mid(r1 - offset, fragmentLen);
 
             DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, false);
@@ -4702,7 +4704,9 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 
             int fragmentLen = s2 - s1 + 1;
             if (fragmentLen < 0)
+            {
                 wxLogDebug(wxT("Mid(%d, %d"), (int)(s1 - offset), (int)fragmentLen);
+            }
             wxString stringFragment = str.Mid(s1 - offset, fragmentLen);
 
             DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, true);
@@ -4733,7 +4737,9 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 
             int fragmentLen = r2 - s2 + 1;
             if (fragmentLen < 0)
+            {
                 wxLogDebug(wxT("Mid(%d, %d"), (int)(s2 - offset), (int)fragmentLen);
+            }
             wxString stringFragment = str.Mid(s2 - offset, fragmentLen);
 
             DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, false);

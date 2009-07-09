@@ -84,7 +84,9 @@ bool wxBMPHandler::SaveDib(wxImage *image,
     if ( !image->Ok() )
     {
         if ( verbose )
+        {
             wxLogError(_("BMP: Couldn't save invalid image."));
+        }
         return false;
     }
 
@@ -118,7 +120,9 @@ bool wxBMPHandler::SaveDib(wxImage *image,
             )
         {
             if ( verbose )
+            {
                 wxLogError(_("BMP: wxImage doesn't have own wxPalette."));
+            }
             return false;
         }
         bpp = 8;
@@ -222,7 +226,9 @@ bool wxBMPHandler::SaveDib(wxImage *image,
            )
         {
             if (verbose)
+            {
                 wxLogError(_("BMP: Couldn't write the file (Bitmap) header."));
+                }
             return false;
         }
     }
@@ -243,7 +249,9 @@ bool wxBMPHandler::SaveDib(wxImage *image,
            )
         {
             if (verbose)
+            {
                 wxLogError(_("BMP: Couldn't write the file (BitmapInfo) header."));
+            }
             return false;
         }
     }
@@ -317,7 +325,9 @@ bool wxBMPHandler::SaveDib(wxImage *image,
             if ( !stream.Write(rgbquad, palette_size*4) )
             {
                 if (verbose)
+                {
                     wxLogError(_("BMP: Couldn't write RGB color map."));
+                }
                 delete[] rgbquad;
 #if wxUSE_PALETTE
                 delete palette;
@@ -450,7 +460,9 @@ bool wxBMPHandler::SaveDib(wxImage *image,
         if ( !stream.Write(buffer, row_width) )
         {
             if (verbose)
+            {
                 wxLogError(_("BMP: Couldn't write data."));
+            }
             delete[] buffer;
 #if wxUSE_PALETTE
             delete palette;
@@ -498,7 +510,9 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
         if ( !cmap )
         {
             if (verbose)
+            {
                 wxLogError(_("BMP: Couldn't allocate memory."));
+            }
             return false;
         }
     }
@@ -518,7 +532,9 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     if ( !ptr )
     {
         if ( verbose )
+        {
             wxLogError( _("BMP: Couldn't allocate memory.") );
+        }
         return false;
     }
 
@@ -531,7 +547,9 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
         if ( !alpha )
         {
             if ( verbose )
+            {
                 wxLogError(_("BMP: Couldn't allocate memory."));
+            }
             return false;
         }
     }
@@ -924,13 +942,17 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     if ( width > 32767 )
     {
         if (verbose)
+        {
             wxLogError( _("DIB Header: Image width > 32767 pixels for file.") );
+        }
         return false;
     }
     if ( height > 32767 )
     {
         if (verbose)
+        {
             wxLogError( _("DIB Header: Image height > 32767 pixels for file.") );
+        }
         return false;
     }
 
@@ -944,7 +966,9 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     if ( bpp != 1 && bpp != 4 && bpp != 8 && bpp != 16 && bpp != 24 && bpp != 32 )
     {
         if (verbose)
+        {
             wxLogError( _("DIB Header: Unknown bitdepth in file.") );
+        }
         return false;
     }
 
@@ -954,7 +978,9 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
          comp != BI_BITFIELDS )
     {
         if (verbose)
+        {
             wxLogError( _("DIB Header: Unknown encoding in file.") );
+        }
         return false;
     }
 
@@ -969,7 +995,9 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
         ((comp == BI_BITFIELDS) && (bpp != 16 && bpp != 32)))
     {
         if (verbose)
+        {
             wxLogError( _("DIB Header: Encoding doesn't match bitdepth.") );
+        }
         return false;
     }
 
@@ -978,7 +1006,9 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
                     verbose, IsBmp, true) )
     {
         if (verbose)
+        {
             wxLogError( _("Error in reading image DIB.") );
+        }
         return false;
     }
 
@@ -991,7 +1021,9 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
                         verbose, IsBmp, false) )
         {
             if (verbose)
+            {
                 wxLogError( _("ICO: Error in reading mask DIB.") );
+            }
             return false;
         }
         image->SetMaskFromImage(mask, 255, 255, 255);
@@ -1069,13 +1101,17 @@ bool wxICOHandler::SaveFile(wxImage *image,
     if ( image->GetHeight () > 127 )
     {
         if ( verbose )
+        {
             wxLogError(_("ICO: Image too tall for an icon."));
+        }
         return false;
     }
     if ( image->GetWidth () > 255 )
     {
         if ( verbose )
+        {
             wxLogError(_("ICO: Image too wide for an icon."));
+        }
         return false;
     }
 
@@ -1101,7 +1137,9 @@ bool wxICOHandler::SaveFile(wxImage *image,
     if ( !stream.IsOk() )
     {
         if ( verbose )
+        {
             wxLogError(_("ICO: Error writing the image file!"));
+        }
         return false;
     }
 
@@ -1160,7 +1198,9 @@ bool wxICOHandler::SaveFile(wxImage *image,
         if ( !bResult )
         {
             if ( verbose )
+            {
                 wxLogError(_("ICO: Error writing the image file!"));
+            }
             return false;
         }
         IsMask = true;
@@ -1169,7 +1209,9 @@ bool wxICOHandler::SaveFile(wxImage *image,
         if ( !bResult )
         {
             if ( verbose )
+            {
                 wxLogError(_("ICO: Error writing the image file!"));
+            }
             return false;
         }
         wxUint32 Size = cStream.GetSize();
@@ -1224,7 +1266,9 @@ bool wxICOHandler::SaveFile(wxImage *image,
         if ( !stream.IsOk() )
         {
             if ( verbose )
+            {
                 wxLogError(_("ICO: Error writing the image file!"));
+            }
             return false;
         }
 
@@ -1234,7 +1278,9 @@ bool wxICOHandler::SaveFile(wxImage *image,
         if ( !bResult )
         {
             if ( verbose )
+            {
                 wxLogError(_("ICO: Error writing the image file!"));
+            }
             return false;
         }
         IsMask = true;
@@ -1243,7 +1289,9 @@ bool wxICOHandler::SaveFile(wxImage *image,
         if ( !bResult )
         {
             if ( verbose )
+            {
                 wxLogError(_("ICO: Error writing the image file!"));
+            }
             return false;
         }
 

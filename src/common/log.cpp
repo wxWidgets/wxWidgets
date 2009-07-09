@@ -137,81 +137,8 @@ PreviousLogInfo gs_prevLog;
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// implementation of Log functions
-//
-// NB: unfortunately we need all these distinct functions, we can't make them
-//     macros and not all compilers inline vararg functions.
+// helper global functions
 // ----------------------------------------------------------------------------
-
-// generic log function
-void wxVLogGeneric(wxLogLevel level, const wxString& format, va_list argptr)
-{
-    if ( wxLog::IsEnabled() )
-    {
-        wxLog::OnLog(level, wxString::FormatV(format, argptr));
-    }
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void wxDoLogGenericWchar(wxLogLevel level, const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogGeneric(level, format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void wxDoLogGenericUtf8(wxLogLevel level, const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogGeneric(level, format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-    #define IMPLEMENT_LOG_FUNCTION_WCHAR(level)                         \
-      void wxDoLog##level##Wchar(const wxChar *format, ...)             \
-      {                                                                 \
-        va_list argptr;                                                 \
-        va_start(argptr, format);                                       \
-        wxVLog##level(format, argptr);                                  \
-        va_end(argptr);                                                 \
-      }
-#else
-    #define IMPLEMENT_LOG_FUNCTION_WCHAR(level)
-#endif
-
-#if wxUSE_UNICODE_UTF8
-    #define IMPLEMENT_LOG_FUNCTION_UTF8(level)                          \
-      void wxDoLog##level##Utf8(const char *format, ...)                \
-      {                                                                 \
-        va_list argptr;                                                 \
-        va_start(argptr, format);                                       \
-        wxVLog##level(format, argptr);                                  \
-        va_end(argptr);                                                 \
-      }
-#else
-    #define IMPLEMENT_LOG_FUNCTION_UTF8(level)
-#endif
-
-#define IMPLEMENT_LOG_FUNCTION(level)                               \
-  void wxVLog##level(const wxString& format, va_list argptr)        \
-  {                                                                 \
-    if ( wxLog::IsEnabled() )                                       \
-      wxLog::OnLog(wxLOG_##level, wxString::FormatV(format, argptr));  \
-  }                                                                 \
-  IMPLEMENT_LOG_FUNCTION_WCHAR(level)                               \
-  IMPLEMENT_LOG_FUNCTION_UTF8(level)
-
-IMPLEMENT_LOG_FUNCTION(Error)
-IMPLEMENT_LOG_FUNCTION(Warning)
-IMPLEMENT_LOG_FUNCTION(Message)
-IMPLEMENT_LOG_FUNCTION(Info)
-IMPLEMENT_LOG_FUNCTION(Status)
 
 void wxSafeShowMessage(const wxString& title, const wxString& text)
 {
@@ -222,291 +149,6 @@ void wxSafeShowMessage(const wxString& title, const wxString& text)
     fflush(stderr);
 #endif
 }
-
-// fatal errors can't be suppressed nor handled by the custom log target and
-// always terminate the program
-void wxVLogFatalError(const wxString& format, va_list argptr)
-{
-    wxSafeShowMessage(wxS("Fatal Error"), wxString::FormatV(format, argptr));
-
-#ifdef __WXWINCE__
-    ExitThread(3);
-#else
-    abort();
-#endif
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void wxDoLogFatalErrorWchar(const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogFatalError(format, argptr);
-
-    // some compilers warn about unreachable code and it shouldn't matter
-    // for the others anyhow...
-    //va_end(argptr);
-}
-#endif // wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void wxDoLogFatalErrorUtf8(const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogFatalError(format, argptr);
-
-    // some compilers warn about unreachable code and it shouldn't matter
-    // for the others anyhow...
-    //va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-// same as info, but only if 'verbose' mode is on
-void wxVLogVerbose(const wxString& format, va_list argptr)
-{
-    if ( wxLog::IsEnabled() ) {
-        if ( wxLog::GetActiveTarget() != NULL && wxLog::GetVerbose() )
-            wxLog::OnLog(wxLOG_Info, wxString::FormatV(format, argptr));
-    }
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void wxDoLogVerboseWchar(const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogVerbose(format, argptr);
-    va_end(argptr);
-}
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void wxDoLogVerboseUtf8(const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogVerbose(format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-// ----------------------------------------------------------------------------
-// debug and trace functions
-// ----------------------------------------------------------------------------
-
-#if wxUSE_LOG_DEBUG
-    void wxVLogDebug(const wxString& format, va_list argptr)
-    {
-        if ( wxLog::IsEnabled() )
-        {
-            wxLog::OnLog(wxLOG_Debug, wxString::FormatV(format, argptr));
-        }
-    }
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-    void wxDoLogDebugWchar(const wxChar *format, ...)
-    {
-        va_list argptr;
-        va_start(argptr, format);
-        wxVLogDebug(format, argptr);
-        va_end(argptr);
-    }
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-    void wxDoLogDebugUtf8(const char *format, ...)
-    {
-        va_list argptr;
-        va_start(argptr, format);
-        wxVLogDebug(format, argptr);
-        va_end(argptr);
-    }
-#endif // wxUSE_UNICODE_UTF8
-#endif // wxUSE_LOG_DEBUG
-
-#if wxUSE_LOG_TRACE
-  void wxVLogTrace(const wxString& mask, const wxString& format, va_list argptr)
-  {
-    if ( wxLog::IsEnabled() && wxLog::IsAllowedTraceMask(mask) ) {
-      wxString msg;
-      msg << wxS("(") << mask << wxS(") ") << wxString::FormatV(format, argptr);
-
-      wxLog::OnLog(wxLOG_Trace, msg);
-    }
-  }
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-  void wxDoLogTraceWchar(const wxString& mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-  void wxDoLogTraceUtf8(const wxString& mask, const char *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // wxUSE_UNICODE_UTF8
-
-// deprecated (but not declared as such because we don't want to complicate
-// DECLARE_LOG_FUNCTION macros even more) overloads for wxTraceMask
-#if WXWIN_COMPATIBILITY_2_8
-  void wxVLogTrace(wxTraceMask mask, const wxString& format, va_list argptr)
-  {
-    // we check that all of mask bits are set in the current mask, so
-    // that wxLogTrace(wxTraceRefCount | wxTraceOle) will only do something
-    // if both bits are set.
-    if ( wxLog::IsEnabled() && ((wxLog::GetTraceMask() & mask) == mask) ) {
-      wxLog::OnLog(wxLOG_Trace, wxString::FormatV(format, argptr));
-    }
-  }
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-  void wxDoLogTraceWchar(wxTraceMask mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-  void wxDoLogTraceUtf8(wxTraceMask mask, const char *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // wxUSE_UNICODE_UTF8
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
-#ifdef __WATCOMC__
-#if WXWIN_COMPATIBILITY_2_8
-  // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  void wxDoLogTraceWchar(int mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-#endif // WXWIN_COMPATIBILITY_2_8
-
-  void wxDoLogTraceWchar(const char *mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-
-  void wxDoLogTraceWchar(const wchar_t *mask, const wxChar *format, ...)
-  {
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogTrace(mask, format, argptr);
-    va_end(argptr);
-  }
-
-#if WXWIN_COMPATIBILITY_2_8
-  void wxVLogTrace(int mask, const wxString& format, va_list argptr)
-    { wxVLogTrace((wxTraceMask)mask, format, argptr); }
-#endif // WXWIN_COMPATIBILITY_2_8
-  void wxVLogTrace(const char *mask, const wxString& format, va_list argptr)
-    { wxVLogTrace(wxString(mask), format, argptr); }
-  void wxVLogTrace(const wchar_t *mask, const wxString& format, va_list argptr)
-    { wxVLogTrace(wxString(mask), format, argptr); }
-#endif // __WATCOMC__
-#endif // wxUSE_LOG_TRACE
-
-
-// wxLogSysError: one uses the last error code, for other  you must give it
-// explicitly
-
-// return the system error message description
-static inline wxString wxLogSysErrorHelper(long err)
-{
-    return wxString::Format(_(" (error %ld: %s)"), err, wxSysErrorMsg(err));
-}
-
-void WXDLLIMPEXP_BASE wxVLogSysError(const wxString& format, va_list argptr)
-{
-    wxVLogSysError(wxSysErrorCode(), format, argptr);
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void WXDLLIMPEXP_BASE wxDoLogSysErrorWchar(const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(format, argptr);
-    va_end(argptr);
-}
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void WXDLLIMPEXP_BASE wxDoLogSysErrorUtf8(const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-void WXDLLIMPEXP_BASE wxVLogSysError(long err, const wxString& format, va_list argptr)
-{
-    if ( wxLog::IsEnabled() )
-    {
-        wxLog::OnLog(wxLOG_Error,
-                     wxString::FormatV(format, argptr) + wxLogSysErrorHelper(err));
-    }
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void WXDLLIMPEXP_BASE wxDoLogSysErrorWchar(long lErrCode, const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(lErrCode, format, argptr);
-    va_end(argptr);
-}
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void WXDLLIMPEXP_BASE wxDoLogSysErrorUtf8(long lErrCode, const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(lErrCode, format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
-
-#ifdef __WATCOMC__
-// workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-void WXDLLIMPEXP_BASE wxDoLogSysErrorWchar(unsigned long lErrCode, const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogSysError(lErrCode, format, argptr);
-    va_end(argptr);
-}
-
-void WXDLLIMPEXP_BASE wxVLogSysError(unsigned long err, const wxString& format, va_list argptr)
-    { wxVLogSysError((long)err, format, argptr); }
-#endif // __WATCOMC__
 
 // ----------------------------------------------------------------------------
 // wxLog class implementation
@@ -581,35 +223,65 @@ wxLog::OnLog(wxLogLevel level,
              const wxString& msg,
              const wxLogRecordInfo& info)
 {
-    if ( IsEnabled() && ms_logLevel >= level )
+    // fatal errors can't be suppressed nor handled by the custom log target
+    // and always terminate the program
+    if ( level == wxLOG_FatalError )
     {
-        wxLog *pLogger = GetActiveTarget();
-        if ( pLogger )
-        {
-            if ( GetRepetitionCounting() )
-            {
-                wxCRIT_SECT_LOCKER(lock, GetPreviousLogCS());
+        wxSafeShowMessage(wxS("Fatal Error"), msg);
 
-                if ( msg == gs_prevLog.msg )
-                {
-                    gs_prevLog.numRepeated++;
-
-                    // nothing else to do, in particular, don't log the
-                    // repeated message
-                    return;
-                }
-
-                pLogger->LogLastRepeatIfNeededUnlocked();
-
-                // reset repetition counter for a new message
-                gs_prevLog.msg = msg;
-                gs_prevLog.level = level;
-                gs_prevLog.info = info;
-            }
-
-            pLogger->DoLogRecord(level, msg, info);
-        }
+#ifdef __WXWINCE__
+        ExitThread(3);
+#else
+        abort();
+#endif
     }
+
+    wxLog *pLogger = GetActiveTarget();
+    if ( !pLogger )
+        return;
+
+    if ( GetRepetitionCounting() )
+    {
+        wxCRIT_SECT_LOCKER(lock, GetPreviousLogCS());
+
+        if ( msg == gs_prevLog.msg )
+        {
+            gs_prevLog.numRepeated++;
+
+            // nothing else to do, in particular, don't log the
+            // repeated message
+            return;
+        }
+
+        pLogger->LogLastRepeatIfNeededUnlocked();
+
+        // reset repetition counter for a new message
+        gs_prevLog.msg = msg;
+        gs_prevLog.level = level;
+        gs_prevLog.info = info;
+    }
+
+    // handle extra data which may be passed to us by wxLogXXX()
+    wxString prefix, suffix;
+    wxUIntPtr num;
+    if ( info.GetNumValue(wxLOG_KEY_SYS_ERROR_CODE, &num) )
+    {
+        long err = static_cast<long>(num);
+        if ( !err )
+            err = wxSysErrorCode();
+
+        suffix.Printf(_(" (error %ld: %s)"), err, wxSysErrorMsg(err));
+    }
+
+#if wxUSE_LOG_TRACE
+    wxString str;
+    if ( level == wxLOG_Trace && info.GetStrValue(wxLOG_KEY_TRACE_MASK, &str) )
+    {
+        prefix = "(" + str + ") ";
+    }
+#endif // wxUSE_LOG_TRACE
+
+    pLogger->DoLogRecord(level, prefix + msg + suffix, info);
 }
 
 void wxLog::DoLogRecord(wxLogLevel level,

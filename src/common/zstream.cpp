@@ -224,7 +224,9 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
       // by the parent strean,
       m_lasterror = wxSTREAM_READ_ERROR;
       if (m_parent_i_stream->Eof())
+      {
           wxLogError(_("Can't read inflate stream: unexpected EOF in underlying stream."));
+      }
       break;
 
     default:

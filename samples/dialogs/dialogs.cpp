@@ -1521,10 +1521,9 @@ void MyFrame::OnNotifMsgShow(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnNotifMsgHide(wxCommandEvent& WXUNUSED(event))
 {
-    if ( m_notifMsg )
+    if ( m_notifMsg && !m_notifMsg->Close() )
     {
-        if ( !m_notifMsg->Close() )
-            wxLogStatus("Failed to hide manual notification message");
+        wxLogStatus("Failed to hide manual notification message");
     }
 }
 

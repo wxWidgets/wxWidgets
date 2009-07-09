@@ -1635,7 +1635,9 @@ bool wxLocale::Init(const wxString& name,
         m_pszOldLocale = NULL;
 
     if ( m_pszOldLocale == NULL )
+    {
         wxLogError(_("locale '%s' can not be set."), szLocale);
+    }
 
     // the short name will be used to look for catalog files as well,
     // so we need something here

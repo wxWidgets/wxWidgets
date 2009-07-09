@@ -819,7 +819,9 @@ void wxSocketBase::Init()
         // this Initialize() will be undone by wxSocketModule::OnExit(), all
         // the other calls to it should be matched by a call to Shutdown()
         if (!Initialize())
+        {
             wxLogError("Cannot initialize wxSocketBase");
+        }
     }
 }
 

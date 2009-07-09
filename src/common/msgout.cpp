@@ -176,7 +176,7 @@ void wxMessageOutputLog::Output(const wxString& str)
 
     out.Replace(wxT("\t"), wxT("        "));
 
-    ::wxLogMessage(wxT("%s"), out.c_str());
+    wxLogMessage(wxT("%s"), out.c_str());
 }
 
 #endif // wxUSE_BASE

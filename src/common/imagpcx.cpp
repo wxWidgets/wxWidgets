@@ -439,7 +439,9 @@ bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     if (!CanRead(stream))
     {
         if (verbose)
+        {
             wxLogError(_("PCX: this is not a PCX file."));
+        }
 
         return false;
     }

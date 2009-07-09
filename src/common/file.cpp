@@ -560,7 +560,9 @@ void wxTempFile::Discard()
 {
     m_file.Close();
     if ( wxRemove(m_strTemp) != 0 )
+    {
         wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
+    }
 }
 
 #endif // wxUSE_FILE

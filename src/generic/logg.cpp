@@ -201,59 +201,9 @@ static int OpenLogFile(wxFile& file, wxString *filename = NULL, wxWindow *parent
 
 #endif // CAN_SAVE_FILES
 
-// ----------------------------------------------------------------------------
-// global variables
-// ----------------------------------------------------------------------------
-
-// we use a global variable to store the frame pointer for wxLogStatus - bad,
-// but it's the easiest way
-static wxFrame *gs_pFrame = NULL; // FIXME MT-unsafe
-
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// global functions
-// ----------------------------------------------------------------------------
-
-// accepts an additional argument which tells to which frame the output should
-// be directed
-void wxVLogStatus(wxFrame *pFrame, const wxString& format, va_list argptr)
-{
-  wxString msg;
-
-  wxLog *pLog = wxLog::GetActiveTarget();
-  if ( pLog != NULL )
-  {
-    msg.PrintfV(format, argptr);
-
-    wxASSERT( gs_pFrame == NULL ); // should be reset!
-    gs_pFrame = pFrame;
-    wxLog::OnLog(wxLOG_Status, msg);
-    gs_pFrame = NULL;
-  }
-}
-
-#if !wxUSE_UTF8_LOCALE_ONLY
-void wxDoLogStatusWchar(wxFrame *pFrame, const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogStatus(pFrame, format, argptr);
-    va_end(argptr);
-}
-#endif // !wxUSE_UTF8_LOCALE_ONLY
-
-#if wxUSE_UNICODE_UTF8
-void wxDoLogStatusUtf8(wxFrame *pFrame, const char *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-    wxVLogStatus(pFrame, format, argptr);
-    va_end(argptr);
-}
-#endif // wxUSE_UNICODE_UTF8
 
 // ----------------------------------------------------------------------------
 // wxLogGui implementation (FIXME MT-unsafe)
@@ -420,8 +370,16 @@ void wxLogGui::DoLogRecord(wxLogLevel level,
         case wxLOG_Status:
 #if wxUSE_STATUSBAR
             {
+                wxFrame *pFrame = NULL;
+
+                // check if the frame was passed to us explicitly
+                wxUIntPtr ptr;
+                if ( info.GetNumValue(wxLOG_KEY_FRAME, &ptr) )
+                {
+                    pFrame = static_cast<wxFrame *>(wxUIntToPtr(ptr));
+                }
+
                 // find the top window and set it's status text if it has any
-                wxFrame *pFrame = gs_pFrame;
                 if ( pFrame == NULL ) {
                     wxWindow *pWin = wxTheApp->GetTopWindow();
                     if ( pWin != NULL && pWin->IsKindOf(CLASSINFO(wxFrame)) ) {
@@ -1080,7 +1038,9 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
     }
 
     if ( !rc || !file.Write(GetLogMessages()) || !file.Close() )
+    {
         wxLogError(_("Can't save log contents to file."));
+    }
 }
 
 #endif // CAN_SAVE_FILES

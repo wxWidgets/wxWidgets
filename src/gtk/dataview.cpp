@@ -2572,9 +2572,11 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
     wx_model->GetValue( value, item, cell->GetOwner()->GetModelColumn() );
 
     if (value.GetType() != cell->GetVariantType())
+    {
         wxLogError( wxT("Wrong type, required: %s but: %s"),
                     value.GetType().c_str(),
                     cell->GetVariantType().c_str() );
+    }
 
     cell->SetValue( value );
 

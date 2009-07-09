@@ -69,7 +69,10 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
         case wxT('5'): // RAW Grey
         case wxT('6'): break;
         default:
-            if (verbose) wxLogError(_("PNM: File format is not recognized."));
+            if (verbose)
+            {
+                wxLogError(_("PNM: File format is not recognized."));
+            }
             return false;
     }
 
@@ -85,7 +88,9 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
     if (!ptr)
     {
         if (verbose)
+        {
            wxLogError( _("PNM: Couldn't allocate memory.") );
+        }
         return false;
     }
 
@@ -103,7 +108,10 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
             *ptr++=(unsigned char)value; // B
             if ( !buf_stream )
             {
-                if (verbose) wxLogError(_("PNM: File seems truncated."));
+                if (verbose)
+                {
+                    wxLogError(_("PNM: File seems truncated."));
+                }
                 return false;
             }
         }
@@ -122,7 +130,10 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
 
             if ( !buf_stream )
               {
-                if (verbose) wxLogError(_("PNM: File seems truncated."));
+                if (verbose)
+                {
+                    wxLogError(_("PNM: File seems truncated."));
+                }
                 return false;
               }
           }
@@ -141,7 +152,10 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
             *ptr++=value; // B
             if ( !buf_stream )
             {
-                if (verbose) wxLogError(_("PNM: File seems truncated."));
+                if (verbose)
+                {
+                    wxLogError(_("PNM: File seems truncated."));
+                }
                 return false;
             }
         }

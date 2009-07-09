@@ -270,7 +270,9 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!tif)
     {
         if (verbose)
+        {
             wxLogError( _("TIFF: Error loading image.") );
+        }
 
         return false;
     }
@@ -278,7 +280,9 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!TIFFSetDirectory( tif, (tdir_t)index ))
     {
         if (verbose)
+        {
             wxLogError( _("Invalid TIFF image index.") );
+        }
 
         TIFFClose( tif );
 
@@ -305,7 +309,9 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if ( bytesNeeded >= wxUINT32_MAX )
     {
         if ( verbose )
+        {
             wxLogError( _("TIFF: Image size is abnormally big.") );
+        }
 
         TIFFClose(tif);
 
@@ -317,7 +323,9 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!raster)
     {
         if (verbose)
+        {
             wxLogError( _("TIFF: Couldn't allocate memory.") );
+        }
 
         TIFFClose( tif );
 
@@ -328,7 +336,9 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!image->Ok())
     {
         if (verbose)
+        {
             wxLogError( _("TIFF: Couldn't allocate memory.") );
+        }
 
         _TIFFfree( raster );
         TIFFClose( tif );
@@ -342,7 +352,9 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     if (!TIFFReadRGBAImage( tif, w, h, raster, 0 ))
     {
         if (verbose)
+        {
             wxLogError( _("TIFF: Error reading image.") );
+        }
 
         _TIFFfree( raster );
         image->Destroy();
@@ -450,7 +462,9 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     if (!tif)
     {
         if (verbose)
+        {
             wxLogError( _("TIFF: Error saving image.") );
+        }
 
         return false;
     }
@@ -530,7 +544,9 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
         if (!buf)
         {
             if (verbose)
+            {
                 wxLogError( _("TIFF: Couldn't allocate memory.") );
+            }
 
             TIFFClose( tif );
 
@@ -576,7 +592,9 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
         if ( TIFFWriteScanline(tif, buf ? buf : ptr, (uint32)row, 0) < 0 )
         {
             if (verbose)
+            {
                 wxLogError( _("TIFF: Error writing image.") );
+            }
 
             TIFFClose( tif );
             if (buf)

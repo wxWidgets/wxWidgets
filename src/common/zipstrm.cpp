@@ -1269,7 +1269,9 @@ bool wxZipEndRec::Read(wxInputStream& stream, wxMBConv& conv)
 
     if (m_DiskNumber != 0 || m_StartDisk != 0 ||
             m_EntriesHere != m_TotalEntries)
+    {
         wxLogWarning(_("assuming this is a multi-part zip concatenated"));
+    }
 
     return true;
 }
