@@ -845,9 +845,10 @@ public :
     wxMacDataBrowserCellValue(DataBrowserItemDataRef data) : m_data(data) {}
     virtual ~wxMacDataBrowserCellValue() {}
     
-   virtual void Set( CFStringRef value );
+    virtual void Set( CFStringRef value );
     virtual void Set( const wxString& value );
     virtual void Set( int value ) ;
+    virtual void Check( bool check );
     
     virtual int GetIntValue() const ;
     virtual wxString GetStringValue() const ;

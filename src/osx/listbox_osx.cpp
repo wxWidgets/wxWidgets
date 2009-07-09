@@ -388,4 +388,20 @@ void wxListBox::HandleLineEvent( unsigned int n, bool doubleClick )
     HandleWindowEvent(event);
 }
 
+//
+// common list cell value operations
+// 
+
+void wxListWidgetCellValue::Check( bool check )
+{
+    Set( check ? 1 : 0 );
+}
+
+bool wxListWidgetCellValue::IsChecked() const
+{
+    return GetIntValue() != 0;
+}
+    
+
+
 #endif // wxUSE_LISTBOX
