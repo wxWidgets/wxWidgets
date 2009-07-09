@@ -452,8 +452,10 @@ public:
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_INLINE( static void SetTraceMask(wxTraceMask ulMask),
         ms_ulTraceMask = ulMask; )
-    wxDEPRECATED_BUT_USED_INTERNALLY_INLINE( static wxTraceMask GetTraceMask(),
-        return ms_ulTraceMask; )
+
+    // this one can't be marked deprecated as it's used in our own wxLogger
+    // below but it still is deprecated and shouldn't be used
+    static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
 #endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
