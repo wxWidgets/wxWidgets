@@ -23,20 +23,49 @@
  *    override wxFileSystemWatcherBase::OnWarning and
  *    wxFileSystemWatcherBase::OnError to be notified when an error condition
  *    arises.
- *  - You may redirect the notifications of file system changes as well as of
- *    error conditions to any wxEvtHandler derived object by using
- *    wxFileSystemWatcherBase::SetOwner.
- *    Then use wxEvtHandler::Connect or wxEvtHandler::Bind to link
- *    @c wxEVT_FSWATCHER to the event handler which will receive
- *    wxFileSystemWatcherEvent.
- *  - You may use a derived class and wxEvtHandler::Connect or
- *    wxEvtHandler::Bind @c wxEVT_FSWATCHER to an event handler defined in
+ *  - You may use a derived class and the @c EVT_FSWATCHER macro or
+ *    wxEvtHandler::Connect to redirect events to an event handler defined in
  *    the derived class. If the default constructor is used, the file system
  *    watcher object will be its own owner object, since it is derived from
  *    wxEvtHandler.
+ *  - You may redirect the notifications of file system changes as well as of
+ *    error conditions to any wxEvtHandler derived object by using
+ *    wxFileSystemWatcherBase::SetOwner.
+ *    Then use the @c EVT_FSWATCHER macro or wxEvtHandler::Connect to send the
+ *    events to the event handler which will receive wxFileSystemWatcherEvent.
  *
- *  @library{wxbase}
- *  @category{misc}
+ * For example:
+ *
+ * @code
+ * class MyWatcher : public wxFileSystemWatcher
+ * {
+ * protected:
+ *     void OnChange(int changeType, const wxFileName& path, const wxFileName& newPath)
+ *     {
+ *         // do whatever you like with the event
+ *     }
+ * };
+ *
+ * class MyApp : public wxApp
+ * {
+ * public:
+ *     ...
+ *     void OnEventLoopEnter(wxEventLoopBase* WXUNUSED(loop))
+ *     {
+ *         // you have to construct the watcher here, because it needs an active loop
+ *         m_watcher = new MyWatcher();
+ *
+ *         // please notify me when a new log file is created
+ *         m_watcher->Add(wxFileName::DirName("/var/log", wxFSW_EVENT_CREATE);
+ *     }
+ *
+ * private:
+ *     MyWatcher* m_watcher;
+ * };
+ * @endcode
+ *
+ * @library{wxbase}
+ * @category{file}
  */
 class wxFileSystemWatcherBase: public wxEvtHandler
 {
@@ -61,14 +90,14 @@ public:
      * Any events concerning this particular path will be sent either to
      * connected handler or passed to OnChange(), OnWarning() or OnError().
      *
-     * @note When adding a dir, immediate children will be watched
+     * @note When adding a directory, immediate children will be watched
      * as well.
      */
     virtual bool Add(const wxFileName& path, int events = wxFSW_EVENT_ALL);
 
     /**
-     * This is the same as Add(), but recursively adds every file/dir in the
-     * tree rooted at @a path. Additionally a file mask can be specified to
+     * This is the same as Add(), but recursively adds every file/directory in
+     * the tree rooted at @a path. Additionally a file mask can be specified to
      * include only files matching that particular mask.
      */
     virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
@@ -80,8 +109,8 @@ public:
     virtual bool Remove(const wxFileName& path);
 
     /**
-     * Same as Remove(), but also removes every file/dir belonging to the tree
-     * rooted at @a path.
+     * Same as Remove(), but also removes every file/directory belonging to
+     * the tree rooted at @a path.
      */
     virtual bool RemoveTree(const wxFileName& path);
 
@@ -93,24 +122,28 @@ public:
     /**
      * Returns the number of watched paths
      */
-    int GetWatchedPathCount();
+    int GetWatchedPathCount() const;
 
     /**
-     * Retrevies all watched paths and places them in @a paths. Returns
+     * Retrieves all watched paths and places them in @a paths. Returns
      * the number of watched paths, which is also the number of entries added
      * to @a paths.
      */
-    int GetWatchedPaths(wxArrayString* paths);
+    int GetWatchedPaths(wxArrayString* paths) const;
 
     /**
      * Associates the file system watcher with the given @a handler object.
+     *
+     * Basically this means that all events will be passed to this handler
+     * object unless you have change the default behaviour by overriding
+     * OnChange(), OnWarning() or OnError().
      */
     void SetOwner(wxEvtHandler* handler);
 
 protected:
     /**
-     * This member should be overridden by the user if SetOwner() wasn't
-     * called.
+     * You may either connect your event handler to intercept file system
+     * watcher events or override this member and handle them here.
      *
      * Perform whatever action which is to be taken on file system change.
      */
@@ -118,8 +151,8 @@ protected:
                                         const wxFileName& newPath);
 
     /**
-     * This member should be overridden by the user if SetOwner() wasn't
-     * called.
+     * You may either connect your event handler to intercept file system
+     * watcher events or override this member and handle them here.
      *
      * Perform whatever action which is to be taken when a warning condition
      * arises.
@@ -127,8 +160,8 @@ protected:
     virtual void OnWarning(const wxString& errorMessage);
 
     /**
-     * This member should be overridden by the user if SetOwner() wasn't
-     * called.
+     * You may either connect your event handler to intercept file system
+     * watcher events or override this member and handle them here.
      *
      * Perform whatever action which is to be taken when an error condition
      * arises.
@@ -143,8 +176,8 @@ protected:
  *
  * A class of events sent when a file system event occurs. Types of events
  * reported may vary depending on a platfrom, however all platforms report
- * at least creation of new file (directory) and access, modification, move
- * or deletion of an existing one.
+ * at least creation of new file/directory and access, modification, move
+ * (rename) or deletion of an existing one.
  *
  * @library{wxcore}
  * @category{events}
@@ -161,7 +194,9 @@ public:
     const wxFileName& GetPath() const;
 
     /**
-     * Returns the new path of the renamed file/dir if this is a rename event.
+     * Returns the new path of the renamed file/directory if this is a rename
+     * event.
+     *
      * Otherwise it returns the same path as GetPath().
      */
     const wxFileName& GetNewPath() const;
@@ -171,10 +206,6 @@ public:
      * the list of possible file system change types.
      */
     int GetChangeType() const;
-
-    virtual wxEvent* Clone() const;
-
-    virtual wxEventCategory GetEventCategory() const;
 
     /**
      * Returns @c true if this error is an error event
@@ -203,11 +234,11 @@ public:
  */
 enum wxFSWFlags
 {
-    wxFSW_EVENT_CREATE = 0x01,  ///< File or dir was created
-    wxFSW_EVENT_DELETE = 0x02,  ///< File or dir was deleted
-    wxFSW_EVENT_RENAME = 0x04,  ///< File or dir was renamed
-    wxFSW_EVENT_MODIFY = 0x08,  ///< File or dir was modified
-    wxFSW_EVENT_ACCESS = 0x10,  ///< File or dir was accessed
+    wxFSW_EVENT_CREATE = 0x01,  ///< File or directory was created
+    wxFSW_EVENT_DELETE = 0x02,  ///< File or directory was deleted
+    wxFSW_EVENT_RENAME = 0x04,  ///< File or directory was renamed
+    wxFSW_EVENT_MODIFY = 0x08,  ///< File or directory was modified
+    wxFSW_EVENT_ACCESS = 0x10,  ///< File or directory was accessed
 
     wxFSW_EVENT_WARNING = 0x20, ///< A warning condition has arised
     wxFSW_EVENT_ERROR = 0x40,   ///< An error condition has arised
