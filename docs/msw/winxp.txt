@@ -11,12 +11,17 @@ wxWidgets programs but is required for all Windows applications).
 
 wxWidgets now includes manifest resources in wx.rc, so it should be enough to
 include "wx/msw/wx.rc" in your application's resource file and you get
-XP look automatically. If it doesn't work, follow the instructions below:
+XP look automatically. Notice that MSVC 2005 and later embed manifest in the
+executables it produces and wxWidgets doesn't use its own manifest when using
+this compiler. And if you don't want to use wxWidgets manifest with another
+compiler you may define wxUSE_NO_MANIFEST as 1 prior to including wx/msw/wx.rc.
 
-For your convenience, below is an example manifest. It should be put in a
-file called "yourapp.exe.manifest" and put in the same directory where
-"yourapp.exe" resides. Alternatively, you can include the manifest in your
-applications resource section. Please see the MSDN documentation at
+
+Finally, if all else fails you may always use a manifest manually. For this you
+need to create your own manifest file and put it in a file called
+"yourapp.exe.manifest" in the same directory where "yourapp.exe" resides.
+Alternatively, you can include the manifest in your applications resource
+section. Please see the MSDN documentation at
 
 http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnwxp/html/xptheming.asp
 
@@ -49,16 +54,3 @@ file to test theme support using the controls sample:
 </dependency>
 </assembly>
 --- cut here ---
-
-
-There are a few minor problems with theme support in wxWidgets currently
-which will be fixed in the next releases:
-
-- the buttons with non-default colours are owner-drawn and thus don't
-  follow the visual style look but always have the default 3D look of
-  the previous Windows versions - don't change the buttons colours if
-  you want them to look nicely under Windows XP
-
-- wxCheckListBox control doesn't have the same appearance as the native
-  checkboxes in Windows XP
-
