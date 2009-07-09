@@ -838,14 +838,23 @@ public:
     )
 
     // special versions for wxLogTrace() which is passed either string or
-    // integer (TODO) mask as first argument determining whether the message
-    // should be logged or not
+    // integer mask as first argument determining whether the message should be
+    // logged or not
     WX_DEFINE_VARARG_FUNC_VOID
     (
         LogTrace,
         2, (const wxString&, const wxFormatString&),
         DoLogTrace, DoLogTraceUtf8
     )
+
+#if WXWIN_COMPATIBILITY_2_8
+    WX_DEFINE_VARARG_FUNC_VOID
+    (
+        LogTrace,
+        2, (wxTraceMask, const wxFormatString&),
+        DoLogTraceMask, DoLogTraceMaskUtf8
+    )
+#endif // WXWIN_COMPATIBILITY_2_8
 
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
@@ -913,6 +922,21 @@ public:
     WX_VARARG_WATCOM_WORKAROUND(void, LogTrace,
                                2, (const wxString&, const wchar_t *),
                                (f1, wxFormatString(f2)))
+
+#if WXWIN_COMPATIBILITY_2_8
+    WX_VARARG_WATCOM_WORKAROUND(void, LogTrace,
+                               2, (wxTraceMask, wxTraceMask),
+                               (f1, wxFormatString(f2)))
+    WX_VARARG_WATCOM_WORKAROUND(void, LogTrace,
+                               2, (wxTraceMask, const wxCStrData&),
+                               (f1, wxFormatString(f2)))
+    WX_VARARG_WATCOM_WORKAROUND(void, LogTrace,
+                               2, (wxTraceMask, const char *),
+                               (f1, wxFormatString(f2)))
+    WX_VARARG_WATCOM_WORKAROUND(void, LogTrace,
+                               2, (wxTraceMask, const wchar_t *),
+                               (f1, wxFormatString(f2)))
+#endif // WXWIN_COMPATIBILITY_2_8
 #endif // __WATCOMC__
 
 private:
@@ -968,6 +992,21 @@ private:
         DoCallOnLog(format, argptr);
         va_end(argptr);
     }
+
+#if WXWIN_COMPATIBILITY_2_8
+    void DoLogTraceMask(wxTraceMask mask, const wxChar *format, ...)
+    {
+        if ( (wxLog::GetTraceMask() & mask) != mask )
+            return;
+
+        Store(wxLOG_KEY_TRACE_MASK, mask);
+
+        va_list argptr;
+        va_start(argptr, format);
+        DoCallOnLog(format, argptr);
+        va_end(argptr);
+    }
+#endif // WXWIN_COMPATIBILITY_2_8
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
 #if wxUSE_UNICODE_UTF8
@@ -1022,6 +1061,21 @@ private:
         DoCallOnLog(format, argptr);
         va_end(argptr);
     }
+
+#if WXWIN_COMPATIBILITY_2_8
+    void DoLogTraceMaskUtf8(wxTraceMask mask, const char *format, ...)
+    {
+        if ( (wxLog::GetTraceMask() & mask) != mask )
+            return;
+
+        Store(wxLOG_KEY_TRACE_MASK, mask);
+
+        va_list argptr;
+        va_start(argptr, format);
+        DoCallOnLog(format, argptr);
+        va_end(argptr);
+    }
+#endif // WXWIN_COMPATIBILITY_2_8
 #endif // wxUSE_UNICODE_UTF8
 
     void DoCallOnLog(wxLogLevel level, const wxString& format, va_list argptr)
