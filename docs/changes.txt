@@ -253,6 +253,12 @@ Changes in behaviour which may result in compilation errors
   references have been removed, modifying the returned bitmaps never worked and
   now results in compile-time error.
 
+- wxLogXXX() are now macros, not functions. Because of this calling them with
+  an explicit scope resolution operator ("::wxLogError()") doesn't work any
+  longer, just remove it. Also notice that using them inside an "if" statement
+  without enclosing parentheses results in warnings from g++ with -Wparentheses,
+  add parentheses around the if statement body to work around it.
+
 
 Deprecated methods and their replacements
 -----------------------------------------
