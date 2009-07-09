@@ -535,13 +535,15 @@ void wxDataViewVirtualListModel::RowAppended()
 
 void wxDataViewVirtualListModel::RowDeleted( unsigned int row )
 {
+    m_size--;
     wxDataViewItem item( wxUIntToPtr(row+1) );
     wxDataViewModel::ItemDeleted( wxDataViewItem(0), item );
-    m_size--;
 }
 
 void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
 {
+    m_size -= rows.GetCount();
+    
     wxArrayInt sorted = rows;
     sorted.Sort( my_sort );
 
@@ -553,8 +555,6 @@ void wxDataViewVirtualListModel::RowsDeleted( const wxArrayInt &rows )
             array.Add( item );
     }
     wxDataViewModel::ItemsDeleted( wxDataViewItem(0), array );
-
-    m_size -= rows.GetCount();
 }
 
 void wxDataViewVirtualListModel::RowChanged( unsigned int row )
