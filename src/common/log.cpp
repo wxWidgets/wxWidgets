@@ -694,6 +694,8 @@ void wxLog::DoLogText(const wxString& WXUNUSED(msg))
 #endif // WXWIN_COMPATIBILITY_2_8
 }
 
+#if WXWIN_COMPATIBILITY_2_8
+
 void wxLog::DoLog(wxLogLevel WXUNUSED(level), const char *szString, time_t t)
 {
     DoLogString(szString, t);
@@ -703,6 +705,8 @@ void wxLog::DoLog(wxLogLevel WXUNUSED(level), const wchar_t *wzString, time_t t)
 {
     DoLogString(wzString, t);
 }
+
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // wxLog active target management
