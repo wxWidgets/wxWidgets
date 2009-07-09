@@ -108,7 +108,7 @@ void wxCheckListBox::Check(unsigned int n, bool check)
 void wxCheckListBox::GetValueCallback( unsigned int n, wxListWidgetColumn* col , wxListWidgetCellValue& value )
 {
     if ( col == m_checkColumn )
-        value.Set( IsChecked( n ) );
+        value.Check( IsChecked( n ) );
     else
         wxListBox::GetValueCallback( n, col, value );
 }
@@ -117,7 +117,7 @@ void wxCheckListBox::SetValueCallback( unsigned int n, wxListWidgetColumn* col ,
 {
     if ( col == m_checkColumn )
     {
-        Check( n, value.GetIntValue() != 0 );
+        Check( n, value.IsChecked() );
         
         wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, GetId() );
         event.SetInt( n );

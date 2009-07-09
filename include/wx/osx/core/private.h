@@ -480,7 +480,9 @@ public :
    virtual void Set( CFStringRef value ) = 0;
     virtual void Set( const wxString& value ) = 0;
     virtual void Set( int value ) = 0;
+    virtual void Check( bool check );
     
+    virtual bool IsChecked() const;
     virtual int GetIntValue() const = 0;
     virtual wxString GetStringValue() const = 0;
 } ;
