@@ -369,21 +369,64 @@ void wxRibbonPage::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxRibbonPage::OnSize(wxSizeEvent& evt)
 {
-    Layout();
+    wxSize new_size = evt.GetSize();
 
     wxMemoryDC temp_dc;
-    wxRect invalid_rect = m_art->GetPageBackgroundRedrawArea(temp_dc, this, m_old_size, evt.GetSize());
+    wxRect invalid_rect = m_art->GetPageBackgroundRedrawArea(temp_dc, this, m_old_size, new_size);
     Refresh(true, &invalid_rect);
 
-    m_old_size = evt.GetSize();
+    m_old_size = new_size;
+
+    if(new_size.GetX() > 0 && new_size.GetY() > 0)
+    {
+        Layout();
+    }
+    else
+    {
+        // Simplify other calculations by pretending new size is zero in both
+        // X and Y
+        new_size.Set(0, 0);
+        // When size == 0, no point in doing any layout
+    }
 
     evt.Skip();
+}
+
+void wxRibbonPage::RemoveChild(wxWindowBase *child)
+{
+    // Remove all references to the child from the collapse stack
+    size_t count = m_collapse_stack.GetCount();
+    size_t src, dst;
+    for(src = 0, dst = 0; src < count; ++src, ++dst)
+    {
+        wxRibbonControl *item = m_collapse_stack.Item(src);
+        if(item == child)
+        {
+            ++src;
+            if(src == count)
+            {
+                break;
+            }
+        }
+        if(src != dst)
+        {
+            m_collapse_stack.Item(dst) = item;
+        }
+    }
+    if(src > dst)
+    {
+        m_collapse_stack.RemoveAt(dst, src - dst);
+    }
+
+    // ... and then proceed as normal
+    wxRibbonControl::RemoveChild(child);
 }
 
 bool wxRibbonPage::Realize()
 {
     bool status = true;
 
+    m_collapse_stack.Clear();
     for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                   node;
                   node = node->GetNext())
@@ -400,7 +443,12 @@ bool wxRibbonPage::Realize()
         child->SetSize(child->GetMinSize());
     }
 
-    return Layout() && status;
+    if(GetSize().GetX() > 0 && GetSize().GetY() > 0)
+    {
+        status = Layout() && status;
+    }
+
+    return status;
 }
 
 bool wxRibbonPage::Layout()
@@ -704,6 +752,7 @@ bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
                 }
                 smallest_panel->SetSize(size);
                 maximum_amount -= amount;
+                m_collapse_stack.Add(smallest_panel);
                 expanded_something = true;
             }
             else
@@ -715,6 +764,7 @@ bool wxRibbonPage::ExpandPanels(wxOrientation direction, int maximum_amount)
                 {
                     smallest_panel->SetSize(larger);
                     maximum_amount -= GetSizeInOrientation(delta, direction);
+                    m_collapse_stack.Add(smallest_panel);
                     expanded_something = true;
                 }
                 else
@@ -746,35 +796,46 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
     {
         int largest_size = 0;
         wxRibbonPanel* largest_panel = NULL;
-        for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-                  node;
-                  node = node->GetNext() )
+        if(!m_collapse_stack.IsEmpty())
         {
-            wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
-            if(panel == NULL)
+            // For a more consistent panel layout, try to collapse panels which
+            // were recently expanded.
+            largest_panel = wxDynamicCast(m_collapse_stack.Last(), wxRibbonPanel);
+            m_collapse_stack.RemoveAt(m_collapse_stack.GetCount() - 1);
+        }
+        else
+        {
+            for(wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                      node;
+                      node = node->GetNext() )
             {
-                continue;
-            }
-            if(panel->IsSizingContinuous())
-            {
-                int size = GetSizeInOrientation(panel->GetSize(), direction);
-                if(size > largest_size)
+                wxRibbonPanel* panel = wxDynamicCast(node->GetData(), wxRibbonPanel);
+                if(panel == NULL)
                 {
-                    largest_size = size;
-                    largest_panel = panel;
+                    continue;
                 }
-            }
-            else
-            {
-                wxSize current = panel->GetSize();
-                int size = GetSizeInOrientation(current, direction);
-                if(size > largest_size)
+                if(panel->IsSizingContinuous())
                 {
-                    wxSize smaller = panel->GetNextSmallerSize(direction);
-                    if(smaller != current && GetSizeInOrientation(smaller, direction) < size)
+                    int size = GetSizeInOrientation(panel->GetSize(), direction);
+                    if(size > largest_size)
                     {
                         largest_size = size;
                         largest_panel = panel;
+                    }
+                }
+                else
+                {
+                    wxSize current = panel->GetSize();
+                    int size = GetSizeInOrientation(current, direction);
+                    if(size > largest_size)
+                    {
+                        wxSize smaller = panel->GetNextSmallerSize(direction);
+                        if(smaller != current &&
+                            GetSizeInOrientation(smaller, direction) < size)
+                        {
+                            largest_size = size;
+                            largest_panel = panel;
+                        }
                     }
                 }
             }
@@ -787,8 +848,9 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
                 int amount = minimum_amount;
                 if(amount > 32)
                 {
-                    // For "large" contraction, reduce this panel a bit, and then re-allocate
-                    // the remainder of the quota (which may come to this panel again anyway)
+                    // For "large" contraction, reduce this panel a bit, and
+                    // then re-allocate the remainder of the quota (which may
+                    // come to this panel again anyway)
                     amount = 32;
                 }
                 if(direction & wxHORIZONTAL)

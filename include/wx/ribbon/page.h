@@ -58,6 +58,8 @@ public:
 
     wxOrientation GetMajorAxis() const;
 
+    virtual void RemoveChild(wxWindowBase *child);
+
 protected:
     virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
@@ -73,6 +75,7 @@ protected:
 
     void CommonInit(const wxString& label, const wxBitmap& icon);
 
+    wxArrayRibbonControl m_collapse_stack;
     wxBitmap m_icon;
     wxSize m_old_size;
     // NB: Scroll button windows are siblings rather than children (to get correct clipping of children)

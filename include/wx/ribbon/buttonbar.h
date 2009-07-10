@@ -105,8 +105,6 @@ public:
 
     virtual void SetArtProvider(wxRibbonArtProvider* art);
     virtual bool IsSizingContinuous() const;
-    virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
-    virtual wxSize GetNextLargerSize(wxOrientation direction) const;
 
     virtual wxSize GetMinSize() const;
     virtual wxSize DoGetBestSize() const;
@@ -116,6 +114,11 @@ protected:
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnSize(wxSizeEvent& evt);
+
+    virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
+                                      wxSize relative_to) const;
+    virtual wxSize DoGetNextLargerSize(wxOrientation direction,
+                                     wxSize relative_to) const;
 
     void CommonInit(long style);
     void MakeLayouts();

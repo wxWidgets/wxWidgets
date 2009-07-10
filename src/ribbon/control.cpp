@@ -48,10 +48,10 @@ void wxRibbonControl::SetArtProvider(wxRibbonArtProvider* art)
     m_art = art;
 }
 
-wxSize wxRibbonControl::GetNextSmallerSize(wxOrientation direction) const
+wxSize wxRibbonControl::DoGetNextSmallerSize(wxOrientation direction,
+                                           wxSize size) const
 {
     // Dummy implementation for code which doesn't check for IsSizingContinuous() == true
-    wxSize size(GetSize());
     wxSize minimum(GetMinSize());
     if((direction & wxHORIZONTAL) && size.x > minimum.x)
     {
@@ -64,10 +64,10 @@ wxSize wxRibbonControl::GetNextSmallerSize(wxOrientation direction) const
     return size;
 }
 
-wxSize wxRibbonControl::GetNextLargerSize(wxOrientation direction) const
+wxSize wxRibbonControl::DoGetNextLargerSize(wxOrientation direction,
+                                          wxSize size) const
 {
     // Dummy implementation for code which doesn't check for IsSizingContinuous() == true
-    wxSize size(GetSize());
     if(direction & wxHORIZONTAL)
     {
         size.x++;
@@ -77,6 +77,28 @@ wxSize wxRibbonControl::GetNextLargerSize(wxOrientation direction) const
         size.y++;
     }
     return size;
+}
+
+wxSize wxRibbonControl::GetNextSmallerSize(wxOrientation direction,
+                                           wxSize relative_to) const
+{
+    return DoGetNextSmallerSize(direction, relative_to);
+}
+
+wxSize wxRibbonControl::GetNextLargerSize(wxOrientation direction,
+                                          wxSize relative_to) const
+{
+    return DoGetNextLargerSize(direction, relative_to);
+}
+
+wxSize wxRibbonControl::GetNextSmallerSize(wxOrientation direction) const
+{
+    return DoGetNextSmallerSize(direction, GetSize());
+}
+
+wxSize wxRibbonControl::GetNextLargerSize(wxOrientation direction) const
+{
+    return DoGetNextLargerSize(direction, GetSize());
 }
 
 bool wxRibbonControl::Realize()

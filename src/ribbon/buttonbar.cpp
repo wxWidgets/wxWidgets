@@ -441,9 +441,9 @@ bool wxRibbonButtonBar::IsSizingContinuous() const
     return false;
 }
 
-wxSize wxRibbonButtonBar::GetNextSmallerSize(wxOrientation direction) const
+wxSize wxRibbonButtonBar::DoGetNextSmallerSize(wxOrientation direction,
+                                             wxSize result) const
 {
-    wxSize result = GetSize();
     size_t nlayouts = m_layouts.GetCount();
     size_t i;
     for(i = 0; i < nlayouts; ++i)
@@ -482,9 +482,9 @@ wxSize wxRibbonButtonBar::GetNextSmallerSize(wxOrientation direction) const
     return result;
 }
 
-wxSize wxRibbonButtonBar::GetNextLargerSize(wxOrientation direction) const
+wxSize wxRibbonButtonBar::DoGetNextLargerSize(wxOrientation direction,
+                                            wxSize result) const
 {
-    wxSize result = GetSize();
     size_t nlayouts = m_layouts.GetCount();
     size_t i = nlayouts;
     while(i > 0)

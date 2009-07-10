@@ -28,6 +28,7 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PANEL_LABEL_FONT,
     wxRIBBON_ART_BUTTON_BAR_LABEL_FONT,
     wxRIBBON_ART_TAB_LABEL_FONT,
+    wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR,
     wxRIBBON_ART_TAB_LABEL_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
@@ -43,11 +44,17 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR,
     wxRIBBON_ART_PAGE_BORDER_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_PAGE_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PAGE_HOVER_BACKGROUND_GRADIENT_COLOUR,
 };
 
 enum wxRibbonScrollButtonStyle
@@ -128,6 +135,12 @@ public:
                         wxRibbonPanel* wnd,
                         const wxRect& rect) = 0;
 
+    virtual void DrawMinimisedPanel(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect,
+                        wxBitmap& bitmap) = 0;
+
     virtual void DrawButtonBarBackground(
                         wxDC& dc,
                         wxWindow* wnd,
@@ -192,6 +205,11 @@ public:
                         wxSize* button_size,
                         wxRect* normal_region,
                         wxRect* dropdown_region) = 0;
+
+    virtual wxSize GetMinimisedPanelMinimumSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize* desired_bitmap_size) = 0;
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonMSWArtProvider : public wxRibbonArtProvider
@@ -242,12 +260,18 @@ public:
                         wxRibbonPanel* wnd,
                         const wxRect& rect);
 
-    virtual void DrawButtonBarBackground(
+    void DrawMinimisedPanel(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect,
+                        wxBitmap& bitmap);
+
+    void DrawButtonBarBackground(
                         wxDC& dc,
                         wxWindow* wnd,
                         const wxRect& rect);
 
-    virtual void DrawButtonBarButton(
+    void DrawButtonBarButton(
                         wxDC& dc,
                         wxWindow* wnd,
                         const wxRect& rect,
@@ -295,7 +319,7 @@ public:
                         wxSize page_old_size,
                         wxSize page_new_size);
 
-    virtual bool GetButtonBarButtonSize(
+    bool GetButtonBarButtonSize(
                         wxDC& dc,
                         wxWindow* wnd,
                         wxRibbonButtonBarButtonKind kind,
@@ -307,12 +331,20 @@ public:
                         wxRect* normal_region,
                         wxRect* dropdown_region);
 
+    wxSize GetMinimisedPanelMinimumSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize* desired_bitmap_size);
+
 protected:
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility);
     void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect,
-         wxRibbonPage* page, wxPoint offset);
+        bool allow_hovered = true);
+    void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect,
+         wxRibbonPage* page, wxPoint offset, bool hovered = false);
 
     wxBitmap m_cached_tab_separator;
+    wxColour m_button_bar_label_colour;
     wxColour m_tab_label_colour;
     wxColour m_tab_separator_colour;
     wxColour m_tab_separator_gradient_colour;
@@ -323,12 +355,18 @@ protected:
     wxColour m_tab_hover_background_top_colour;
     wxColour m_tab_hover_background_top_gradient_colour;
     wxColour m_panel_label_colour;
+    wxColour m_panel_hover_label_colour;
     wxColour m_page_background_colour;
     wxColour m_page_background_gradient_colour;
     wxColour m_page_background_top_colour;
     wxColour m_page_background_top_gradient_colour;
+    wxColour m_page_hover_background_colour;
+    wxColour m_page_hover_background_gradient_colour;
+    wxColour m_page_hover_background_top_colour;
+    wxColour m_page_hover_background_top_gradient_colour;
     wxBrush m_tab_ctrl_background_brush;
     wxBrush m_panel_label_background_brush;
+    wxBrush m_panel_hover_label_background_brush;
     wxFont m_tab_label_font;
     wxFont m_panel_label_font;
     wxFont m_button_bar_label_font;

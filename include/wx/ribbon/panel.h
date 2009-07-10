@@ -51,6 +51,11 @@ public:
                 long style = wxRIBBON_PANEL_DEFAULT_STYLE);
 
     wxBitmap& GetMinimisedIcon() {return m_minimised_icon;}
+    const wxBitmap& GetMinimisedIcon() const {return m_minimised_icon;}
+    bool IsMinimised() const;
+    bool IsMinimised(wxSize at_size) const;
+    bool IsHovered() const;
+    bool CanAutoMinimise() const;
 
     void SetArtProvider(wxRibbonArtProvider* art);
 
@@ -60,20 +65,34 @@ public:
     virtual wxSize DoGetBestSize() const;
 
     virtual bool IsSizingContinuous() const;
-    virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
-    virtual wxSize GetNextLargerSize(wxOrientation direction) const;
+
+    virtual void AddChild(wxWindowBase *child);
+    virtual void RemoveChild(wxWindowBase *child);
 
 protected:
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
+    wxSize GetMinNotMinimisedSize() const;
 
+    virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
+                                      wxSize relative_to) const;
+    virtual wxSize DoGetNextLargerSize(wxOrientation direction,
+                                     wxSize relative_to) const;
+
+    void DoSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
     void OnSize(wxSizeEvent& evt);
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
+    void OnMouseEnter(wxMouseEvent& evt);
+    void OnMouseLeave(wxMouseEvent& evt);
 
     void CommonInit(const wxString& label, const wxBitmap& icon, long style);
 
     wxBitmap m_minimised_icon;
+    wxBitmap m_minimised_icon_resized;
+    wxSize m_minimised_size;
     long m_flags;
+    long m_hovered_count;
+    bool m_minimised;
 
 #ifndef SWIG
     DECLARE_CLASS(wxRibbonPanel)

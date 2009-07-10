@@ -17,6 +17,7 @@
 #if wxUSE_RIBBON
 
 #include "wx/control.h"
+#include "wx/dynarray.h"
 
 class wxRibbonArtProvider;
 
@@ -35,8 +36,10 @@ public:
     wxRibbonArtProvider* GetArtProvider() const {return m_art;}
 
     virtual bool IsSizingContinuous() const {return true;}
-    virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
-    virtual wxSize GetNextLargerSize(wxOrientation direction) const;
+    wxSize GetNextSmallerSize(wxOrientation direction, wxSize relative_to) const;
+    wxSize GetNextLargerSize(wxOrientation direction, wxSize relative_to) const;
+    wxSize GetNextSmallerSize(wxOrientation direction) const;
+    wxSize GetNextLargerSize(wxOrientation direction) const;
 
     virtual bool Realize();
     bool Realise() {return Realize();}
@@ -44,10 +47,17 @@ public:
 protected:
     wxRibbonArtProvider* m_art;
 
+    virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
+                                        wxSize relative_to) const;
+    virtual wxSize DoGetNextLargerSize(wxOrientation direction,
+                                       wxSize relative_to) const;
+
 #ifndef SWIG
     DECLARE_CLASS(wxRibbonControl)
 #endif
 };
+
+WX_DEFINE_USER_EXPORTED_ARRAY(wxRibbonControl*, wxArrayRibbonControl, class WXDLLIMPEXP_RIBBON);
 
 #endif // wxUSE_RIBBON
 
