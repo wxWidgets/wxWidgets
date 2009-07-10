@@ -18,6 +18,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_MENUS
+
 #include "wx/menu.h"
 
 #ifndef WX_PRECOMP
@@ -995,3 +997,5 @@ wxMenuItem *wxMenuBar::FindItem(int id, wxMenu **itemMenu) const
 
     return item;
 }
+
+#endif

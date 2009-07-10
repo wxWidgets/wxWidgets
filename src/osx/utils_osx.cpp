@@ -41,7 +41,7 @@
 
 #include "wx/osx/private.h"
 
-#ifdef wxOSX_USE_COCOA
+#if wxOSX_USE_COCOA
 // to get the themeing APIs
 #include <Carbon/Carbon.h>
 #endif

@@ -11,6 +11,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_MENUS
+
 #include "wx/menuitem.h"
 #include "wx/stockitem.h"
 
@@ -251,3 +253,5 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
 {
     return new wxMenuItem(parentMenu, id, name, help, kind, subMenu);
 }
+
+#endif

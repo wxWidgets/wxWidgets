@@ -67,8 +67,10 @@
 #include "wx/osx/uma.h"
 #else
 #include "wx/osx/private.h"
+#if wxOSX_USE_COCOA
 // bring in themeing
 #include <Carbon/Carbon.h>
+#endif
 #endif
 
 #define MAC_SCROLLBAR_SIZE 15
@@ -242,7 +244,11 @@ bool wxWindowMac::Create(wxWindowMac *parent,
 
 #ifndef __WXUNIVERSAL__
     // Don't give scrollbars to wxControls unless they ask for them
-    if ( (! IsKindOf(CLASSINFO(wxControl)) && ! IsKindOf(CLASSINFO(wxStatusBar)))
+    if ( (! IsKindOf(CLASSINFO(wxControl)) 
+#if wxUSE_STATUSBAR
+        && ! IsKindOf(CLASSINFO(wxStatusBar))
+#endif
+        )
          || (IsKindOf(CLASSINFO(wxControl)) && ((style & wxHSCROLL) || (style & wxVSCROLL))))
     {
         MacCreateScrollBars( style ) ;
@@ -257,10 +263,12 @@ bool wxWindowMac::Create(wxWindowMac *parent,
 
 void wxWindowMac::MacChildAdded()
 {
+#if wxUSE_SCROLLBAR
     if ( m_vScrollBar )
         m_vScrollBar->Raise() ;
     if ( m_hScrollBar )
         m_hScrollBar->Raise() ;
+#endif
 }
 
 void wxWindowMac::MacPostControlCreate(const wxPoint& WXUNUSED(pos), const wxSize& size)
@@ -667,13 +675,14 @@ void wxWindowMac::DoGetClientSize( int *x, int *y ) const
     int left, top;
 
     m_peer->GetContentArea( left, top, ww, hh );
-
+#if wxUSE_SCROLLBAR
     if (m_hScrollBar  && m_hScrollBar->IsShown() )
         hh -= m_hScrollBar->GetSize().y ;
 
     if (m_vScrollBar  && m_vScrollBar->IsShown() )
         ww -= m_vScrollBar->GetSize().x ;
 
+#endif
     if (x)
        *x = ww;
     if (y)
@@ -889,16 +898,21 @@ wxSize wxWindowMac::DoGetBestSize() const
             r.width =
             r.height = 16 ;
 
-            if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
+            if ( 0 ) 
+            {
+            }
+#if wxUSE_SCROLLBAR
+            else if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
             {
                 r.height = 16 ;
             }
-    #if wxUSE_SPINBTN
+#endif
+#if wxUSE_SPINBTN
             else if ( IsKindOf( CLASSINFO( wxSpinButton ) ) )
             {
                 r.height = 24 ;
             }
-    #endif
+#endif
             else
             {
                 // return wxWindowBase::DoGetBestSize() ;
@@ -1187,6 +1201,7 @@ void wxWindowMac::WarpPointer(int WXUNUSED(x_pos), int WXUNUSED(y_pos))
 
 int wxWindowMac::GetScrollPos(int orient) const
 {
+#if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL )
     {
        if ( m_hScrollBar )
@@ -1197,7 +1212,7 @@ int wxWindowMac::GetScrollPos(int orient) const
        if ( m_vScrollBar )
            return m_vScrollBar->GetThumbPosition() ;
     }
-
+#endif
     return 0;
 }
 
@@ -1205,6 +1220,7 @@ int wxWindowMac::GetScrollPos(int orient) const
 // of positions that we can scroll.
 int wxWindowMac::GetScrollRange(int orient) const
 {
+#if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL )
     {
        if ( m_hScrollBar )
@@ -1215,12 +1231,13 @@ int wxWindowMac::GetScrollRange(int orient) const
        if ( m_vScrollBar )
            return m_vScrollBar->GetRange() ;
     }
-
+#endif
     return 0;
 }
 
 int wxWindowMac::GetScrollThumb(int orient) const
 {
+#if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL )
     {
        if ( m_hScrollBar )
@@ -1231,12 +1248,13 @@ int wxWindowMac::GetScrollThumb(int orient) const
        if ( m_vScrollBar )
            return m_vScrollBar->GetThumbSize() ;
     }
-
+#endif
     return 0;
 }
 
 void wxWindowMac::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
+#if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL )
     {
        if ( m_hScrollBar )
@@ -1247,6 +1265,7 @@ void wxWindowMac::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
        if ( m_vScrollBar )
            m_vScrollBar->SetThumbPosition( pos ) ;
     }
+#endif
 }
 
 void
@@ -1280,6 +1299,7 @@ void  wxWindowMac::MacPaintGrowBox()
     if ( IsTopLevel() )
         return ;
 
+#if wxUSE_SCROLLBAR
     if ( MacHasScrollBarCorner() )
     {
         CGContextRef cgContext = (CGContextRef) MacGetCGContextRef() ;
@@ -1308,6 +1328,7 @@ void  wxWindowMac::MacPaintGrowBox()
         CGContextFillRect( cgContext, cgrect );
         CGContextRestoreGState( cgContext );
     }
+#endif
 }
 
 void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(rightOrigin) )
@@ -1368,16 +1389,18 @@ void wxWindowMac::MacPaintBorders( int WXUNUSED(leftOrigin) , int WXUNUSED(right
 
 void wxWindowMac::RemoveChild( wxWindowBase *child )
 {
+#if wxUSE_SCROLLBAR
     if ( child == m_hScrollBar )
         m_hScrollBar = NULL ;
     if ( child == m_vScrollBar )
         m_vScrollBar = NULL ;
-
+#endif
     wxWindowBase::RemoveChild( child ) ;
 }
 
 void wxWindowMac::DoUpdateScrollbarVisibility()
 {
+#if wxUSE_SCROLLBAR
     bool triggerSizeEvent = false;
 
     if ( m_hScrollBar )
@@ -1409,18 +1432,21 @@ void wxWindowMac::DoUpdateScrollbarVisibility()
         event.SetEventObject(this);
         HandleWindowEvent(event);
     }
+#endif
 }
 
 // New function that will replace some of the above.
 void wxWindowMac::SetScrollbar(int orient, int pos, int thumb,
                                int range, bool refresh)
 {
+#if wxUSE_SCROLLBAR
     if ( orient == wxHORIZONTAL && m_hScrollBar )
         m_hScrollBar->SetScrollbar(pos, thumb, range, thumb, refresh);
     else if ( orient == wxVERTICAL && m_vScrollBar )
         m_vScrollBar->SetScrollbar(pos, thumb, range, thumb, refresh);
 
     DoUpdateScrollbarVisibility();
+#endif
 }
 
 // Does a physical scroll
@@ -1449,10 +1475,12 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         child = node->GetData();
         if (child == NULL)
             continue;
+#if wxUSE_SCROLLBAR
         if (child == m_vScrollBar)
             continue;
         if (child == m_hScrollBar)
             continue;
+#endif
         if (child->IsTopLevel())
             continue;
 
@@ -1473,6 +1501,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 
 void wxWindowMac::MacOnScroll( wxScrollEvent &event )
 {
+#if wxUSE_SCROLLBAR
     if ( event.GetEventObject() == m_vScrollBar || event.GetEventObject() == m_hScrollBar )
     {
         wxScrollWinEvent wevent;
@@ -1499,6 +1528,7 @@ void wxWindowMac::MacOnScroll( wxScrollEvent &event )
 
         HandleWindowEvent(wevent);
     }
+#endif
 }
 
 wxWindow *wxWindowBase::DoFindFocus()
@@ -1836,10 +1866,12 @@ void wxWindowMac::MacPaintChildrenBorders()
         child = node->GetData();
         if (child == NULL)
             continue;
+#if wxUSE_SCROLLBAR
         if (child == m_vScrollBar)
             continue;
         if (child == m_hScrollBar)
             continue;
+#endif
         if (child->IsTopLevel())
             continue;
         if (!child->IsShown())
@@ -1872,6 +1904,7 @@ WXWindow wxWindowMac::MacGetTopLevelWindowRef() const
 
 bool wxWindowMac::MacHasScrollBarCorner() const
 {
+#if wxUSE_SCROLLBAR
     /* Returns whether the scroll bars in a wxScrolledWindow should be
      * shortened. Scroll bars should be shortened if either:
      *
@@ -1932,10 +1965,14 @@ bool wxWindowMac::MacHasScrollBarCorner() const
         // No parent frame found
         return false ;
     }
+#else
+    return false;
+#endif
 }
 
 void wxWindowMac::MacCreateScrollBars( long style )
 {
+#if wxUSE_SCROLLBAR
     wxASSERT_MSG( m_vScrollBar == NULL && m_hScrollBar == NULL , wxT("attempt to create window twice") ) ;
 
     if ( style & ( wxVSCROLL | wxHSCROLL ) )
@@ -1972,17 +2009,23 @@ void wxWindowMac::MacCreateScrollBars( long style )
     // because the create does not take into account the client area origin
     // we might have a real position shift
     MacRepositionScrollBars() ;
+#endif
 }
 
 bool wxWindowMac::MacIsChildOfClientArea( const wxWindow* child ) const
 {
-    bool result = ((child == NULL) || ((child != m_hScrollBar) && (child != m_vScrollBar)));
+    bool result = ((child == NULL)
+#if wxUSE_SCROLLBAR
+     || ((child != m_hScrollBar) && (child != m_vScrollBar))
+#endif
+     );
 
     return result ;
 }
 
 void wxWindowMac::MacRepositionScrollBars()
 {
+#if wxUSE_SCROLLBAR
     if ( !m_hScrollBar && !m_vScrollBar )
         return ;
 
@@ -2005,6 +2048,7 @@ void wxWindowMac::MacRepositionScrollBars()
         m_vScrollBar->SetSize( vPoint.x , vPoint.y, vSize.x, vSize.y , wxSIZE_ALLOW_MINUS_ONE );
     if ( m_hScrollBar )
         m_hScrollBar->SetSize( hPoint.x , hPoint.y, hSize.x, hSize.y, wxSIZE_ALLOW_MINUS_ONE );
+#endif
 }
 
 bool wxWindowMac::AcceptsFocus() const

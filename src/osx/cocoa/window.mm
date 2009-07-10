@@ -854,7 +854,7 @@ typedef void (*wxOSX_EventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
 typedef BOOL (*wxOSX_PerformKeyEventHandlerPtr)(NSView* self, SEL _cmd, NSEvent *event);
 typedef BOOL (*wxOSX_FocusHandlerPtr)(NSView* self, SEL _cmd);
 typedef BOOL (*wxOSX_ResetCursorRectsHandlerPtr)(NSView* self, SEL _cmd);
-typedef BOOL (*wxOSX_DrawRectHandlerPtr)(NSView* self, SEL _cmd, NSRect rect);
+typedef void (*wxOSX_DrawRectHandlerPtr)(NSView* self, SEL _cmd, NSRect rect);
 
 void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 {
@@ -1169,10 +1169,12 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
 
 void wxWidgetCocoaImpl::Raise()
 {
+    // Not implemented
 }
     
 void wxWidgetCocoaImpl::Lower()
 {
+    // Not implemented
 }
 
 void wxWidgetCocoaImpl::ScrollRect( const wxRect *WXUNUSED(rect), int WXUNUSED(dx), int WXUNUSED(dy) )
