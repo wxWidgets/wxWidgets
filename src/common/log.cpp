@@ -263,7 +263,7 @@ wxLog::OnLog(wxLogLevel level,
 
     // handle extra data which may be passed to us by wxLogXXX()
     wxString prefix, suffix;
-    wxUIntPtr num;
+    wxUIntPtr num = 0;
     if ( info.GetNumValue(wxLOG_KEY_SYS_ERROR_CODE, &num) )
     {
         long err = static_cast<long>(num);
