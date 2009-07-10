@@ -18,6 +18,7 @@
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/panel.h"
 #include "wx/dcbuffer.h"
+#include "wx/display.h"
 
 #if wxUSE_RIBBON
 
@@ -33,7 +34,9 @@ IMPLEMENT_CLASS(wxRibbonPanel, wxRibbonControl)
 BEGIN_EVENT_TABLE(wxRibbonPanel, wxRibbonControl)
     EVT_ENTER_WINDOW(wxRibbonPanel::OnMouseEnter)
     EVT_ERASE_BACKGROUND(wxRibbonPanel::OnEraseBackground)
+    EVT_KILL_FOCUS(wxRibbonPanel::OnKillFocus)
     EVT_LEAVE_WINDOW(wxRibbonPanel::OnMouseLeave)
+    EVT_LEFT_DOWN(wxRibbonPanel::OnMouseClick)
     EVT_PAINT(wxRibbonPanel::OnPaint)
     EVT_SIZE(wxRibbonPanel::OnSize)
 END_EVENT_TABLE()
@@ -49,7 +52,7 @@ wxRibbonPanel::wxRibbonPanel(wxWindow* parent,
                   const wxPoint& pos,
                   const wxSize& size,
                   long style)
-    : wxRibbonControl(parent, id, pos, size, style)
+    : wxRibbonControl(parent, id, pos, size, wxBORDER_NONE)
 {
     CommonInit(label, minimised_icon, style);
 }
@@ -66,7 +69,7 @@ bool wxRibbonPanel::Create(wxWindow* parent,
                 const wxSize& size,
                 long style)
 {
-    if(!wxRibbonControl::Create(parent, id, pos, size, style))
+    if(!wxRibbonControl::Create(parent, id, pos, size, wxBORDER_NONE))
     {
         return false;
     }
@@ -87,6 +90,9 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long
     SetLabel(label);
 
     m_minimised_size = wxDefaultSize; // Unknown / none
+    m_preferred_expand_direction = wxSOUTH;
+    m_expanded_dummy = NULL;
+    m_expanded_panel = NULL;
     m_flags = style;
     m_minimised_icon = icon;
     m_minimised = false;
@@ -221,6 +227,13 @@ bool wxRibbonPanel::IsSizingContinuous() const
 wxSize wxRibbonPanel::DoGetNextSmallerSize(wxOrientation direction,
                                          wxSize relative_to) const
 {
+    if(m_expanded_panel != NULL)
+    {
+        // Next size depends upon children, who are currently in the
+        // expanded panel
+        return m_expanded_panel->DoGetNextSmallerSize(direction, relative_to);
+    }
+
     // TODO: Check for, and delegate to, a sizer
 
     // Simple (and common) case of single ribbon child
@@ -276,6 +289,13 @@ wxSize wxRibbonPanel::DoGetNextSmallerSize(wxOrientation direction,
 wxSize wxRibbonPanel::DoGetNextLargerSize(wxOrientation direction,
                                         wxSize relative_to) const
 {
+    if(m_expanded_panel != NULL)
+    {
+        // Next size depends upon children, who are currently in the
+        // expanded panel
+        return m_expanded_panel->DoGetNextLargerSize(direction, relative_to);
+    }
+
     if(IsMinimised(relative_to))
     {
         wxSize current = relative_to;
@@ -349,6 +369,13 @@ bool wxRibbonPanel::CanAutoMinimise() const
 
 wxSize wxRibbonPanel::GetMinSize() const
 {
+    if(m_expanded_panel != NULL)
+    {
+        // Minimum size depends upon children, who are currently in the
+        // expanded panel
+        return m_expanded_panel->GetMinSize();
+    }
+
     if(CanAutoMinimise())
     {
         return m_minimised_size;
@@ -414,7 +441,7 @@ bool wxRibbonPanel::Realize()
         wxSize bitmap_size;
         wxSize panel_min_size = GetMinNotMinimisedSize();
         m_minimised_size = m_art->GetMinimisedPanelMinimumSize(temp_dc, this,
-            &bitmap_size);
+            &bitmap_size, &m_preferred_expand_direction);
         if(m_minimised_icon.IsOk() && m_minimised_icon.GetSize() != bitmap_size)
         {
             wxImage img(m_minimised_icon.ConvertToImage());
@@ -470,6 +497,238 @@ bool wxRibbonPanel::Layout()
         child->SetSize(position.x, position.y, size.GetWidth(), size.GetHeight());
     }
     return true;
+}
+
+void wxRibbonPanel::OnMouseClick(wxMouseEvent& WXUNUSED(evt))
+{
+    if(IsMinimised())
+    {
+        if(m_expanded_panel != NULL)
+        {
+            HideExpanded();
+        }
+        else
+        {
+            ShowExpanded();
+        }
+    }
+}
+
+wxRibbonPanel* wxRibbonPanel::GetExpandedDummy()
+{
+    return m_expanded_dummy;
+}
+
+wxRibbonPanel* wxRibbonPanel::GetExpandedPanel()
+{
+    return m_expanded_panel;
+}
+
+bool wxRibbonPanel::ShowExpanded()
+{
+    if(!IsMinimised())
+    {
+        return false;
+    }
+
+    wxSize size = GetBestSize();
+    wxPoint pos = GetExpandedPosition(wxRect(GetScreenPosition(), GetSize()),
+        size, m_preferred_expand_direction).GetTopLeft();
+
+    // Need a top-level frame to contain the expanded panel
+    wxFrame *container = new wxFrame(NULL, wxID_ANY, GetLabel(),
+        pos, size, wxFRAME_NO_TASKBAR | wxBORDER_NONE);
+
+    m_expanded_panel = new wxRibbonPanel(container, wxID_ANY,
+        GetLabel(), m_minimised_icon, wxPoint(0, 0), size, m_flags);
+
+    m_expanded_panel->SetArtProvider(m_art);
+    m_expanded_panel->m_expanded_dummy = this;
+
+    // Move all children to the new panel.
+    // Conceptually it might be simpler to reparent this entire panel to the
+    // container and create a new panel to sit in its place while expanded.
+    // This approach has a problem though - when the panel is reinserted into
+    // its original parent, it'll be at a different position in the child list
+    // and thus assume a new position.
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                  node;
+                  node = node->GetNext())
+    {
+        wxWindow *child = node->GetData();
+        child->Reparent(m_expanded_panel);
+        child->Show();
+    }
+
+    // TODO: Move sizer to new panel
+
+    m_expanded_panel->Realize();
+    Refresh();
+    container->Show();
+    m_expanded_panel->SetFocus();
+
+    return true;
+}
+
+void wxRibbonPanel::OnKillFocus(wxFocusEvent& evt)
+{
+    if(m_expanded_dummy)
+    {
+        wxWindow *receiver = evt.GetWindow();
+        if(receiver == NULL || receiver != m_expanded_dummy)
+        {
+            HideExpanded();
+        }
+    }
+}
+
+bool wxRibbonPanel::HideExpanded()
+{
+    if(m_expanded_dummy == NULL)
+    {
+        if(m_expanded_panel)
+        {
+            return m_expanded_panel->HideExpanded();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // Move children back to original panel
+    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+                  node;
+                  node = node->GetNext())
+    {
+        wxWindow *child = node->GetData();
+        child->Reparent(m_expanded_dummy);
+        child->Hide();
+    }
+
+    // TODO: Move sizer back
+
+    m_expanded_dummy->m_expanded_panel = NULL;
+    m_expanded_dummy->Realize();
+    m_expanded_dummy->Refresh();
+    wxWindow *parent = GetParent();
+    Destroy();
+    parent->Destroy();
+
+    return true;
+}
+
+wxRect wxRibbonPanel::GetExpandedPosition(wxRect panel,
+                                          wxSize expanded_size,
+                                          wxDirection direction)
+{
+    // Strategy:
+    // 1) Determine primary position based on requested direction
+    // 2) Move the position so that it sits entirely within a display
+    //    (for single monitor systems, this moves it into the display region,
+    //     but for multiple monitors, it does so without splitting it over
+    //     more than one display)
+    // 2.1) Move in the primary axis
+    // 2.2) Move in the secondary axis
+
+    wxPoint pos;
+    bool primary_x = false;
+    int secondary_x = 0;
+    int secondary_y = 0;
+    switch(direction)
+    {
+    case wxNORTH:
+        pos.x = panel.GetX() + (panel.GetWidth() - expanded_size.GetWidth()) / 2;
+        pos.y = panel.GetY() - expanded_size.GetHeight();
+        primary_x = true;
+        secondary_y = 1;
+        break;
+    case wxEAST:
+        pos.x = panel.GetRight();
+        pos.y = panel.GetY() + (panel.GetHeight() - expanded_size.GetHeight()) / 2;
+        secondary_x = -1;
+        break;
+    case wxSOUTH:
+        pos.x = panel.GetX() + (panel.GetWidth() - expanded_size.GetWidth()) / 2;
+        pos.y = panel.GetBottom();
+        primary_x = true;
+        secondary_y = -1;
+        break;
+    case wxWEST:
+    default:
+        pos.x = panel.GetX() - expanded_size.GetWidth();
+        pos.y = panel.GetY() + (panel.GetHeight() - expanded_size.GetHeight()) / 2;
+        secondary_x = 1;
+        break;
+    }
+    wxRect expanded(pos, expanded_size);
+
+    wxRect best(expanded);
+    int best_distance = INT_MAX;
+
+    const unsigned display_n = wxDisplay::GetCount();
+    unsigned display_i;
+    for(display_i = 0; display_i < display_n; ++display_i)
+    {
+        wxRect display = wxDisplay(display_i).GetGeometry();
+
+        if(display.Contains(expanded))
+        {
+            return expanded;
+        }
+        else if(display.Intersects(expanded))
+        {
+            wxRect new_rect(expanded);
+            int distance = 0;
+
+            if(primary_x)
+            {
+                if(expanded.GetRight() > display.GetRight())
+                {
+                    distance = expanded.GetRight() - display.GetRight();
+                    new_rect.x -= distance;
+                }
+                else if(expanded.GetLeft() < display.GetLeft())
+                {
+                    distance = display.GetLeft() - expanded.GetLeft();
+                    new_rect.x += distance;
+                }
+            }
+            else
+            {
+                if(expanded.GetBottom() > display.GetBottom())
+                {
+                    distance = expanded.GetBottom() - display.GetBottom();
+                    new_rect.y -= distance;
+                }
+                else if(expanded.GetTop() < display.GetTop())
+                {
+                    distance = display.GetTop() - expanded.GetTop();
+                    new_rect.y += distance;
+                }
+            }
+            if(!display.Contains(new_rect))
+            {
+                // Tried moving in primary axis, but failed.
+                // Hence try moving in the secondary axis.
+                int dx = secondary_x * (panel.GetWidth() + expanded_size.GetWidth());
+                int dy = secondary_y * (panel.GetHeight() + expanded_size.GetHeight());
+                new_rect.x += dx;
+                new_rect.y += dy;
+
+                // Squaring makes secondary moves more expensive (and also
+                // prevents a negative cost)
+                distance += dx * dx + dy * dy;
+            }
+            if(display.Contains(new_rect) && distance < best_distance)
+            {
+                best = new_rect;
+                best_distance = distance;
+            }
+        }
+    }
+
+    return best;
 }
 
 #endif // wxUSE_RIBBON

@@ -42,10 +42,17 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_TAB_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR,
+    wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR,
+    wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_COLOUR,
     wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_COLOUR,
     wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR,
+    wxRIBBON_ART_PANEL_MINIMISED_LABEL_COLOUR,
+    wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_PAGE_BORDER_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR,
@@ -209,7 +216,8 @@ public:
     virtual wxSize GetMinimisedPanelMinimumSize(
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize* desired_bitmap_size) = 0;
+                        wxSize* desired_bitmap_size,
+                        wxDirection* expanded_panel_direction) = 0;
 };
 
 class WXDLLIMPEXP_RIBBON wxRibbonMSWArtProvider : public wxRibbonArtProvider
@@ -334,7 +342,8 @@ public:
     wxSize GetMinimisedPanelMinimumSize(
                         wxDC& dc,
                         const wxRibbonPanel* wnd,
-                        wxSize* desired_bitmap_size);
+                        wxSize* desired_bitmap_size,
+                        wxDirection* expanded_panel_direction);
 
 protected:
     void ReallyDrawTabSeparator(wxWindow* wnd, const wxRect& rect, double visibility);
@@ -342,6 +351,9 @@ protected:
         bool allow_hovered = true);
     void DrawPartialPageBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect,
          wxRibbonPage* page, wxPoint offset, bool hovered = false);
+    void DrawPanelBorder(wxDC& dc, const wxRect& rect, wxPen& primary_colour,
+        wxPen& secondary_colour);
+    void RemovePanelPadding(wxRect* rect);
 
     wxBitmap m_cached_tab_separator;
     wxColour m_button_bar_label_colour;
@@ -355,7 +367,12 @@ protected:
     wxColour m_tab_hover_background_top_colour;
     wxColour m_tab_hover_background_top_gradient_colour;
     wxColour m_panel_label_colour;
+    wxColour m_panel_minimised_label_colour;
     wxColour m_panel_hover_label_colour;
+    wxColour m_panel_active_background_colour;
+    wxColour m_panel_active_background_gradient_colour;
+    wxColour m_panel_active_background_top_colour;
+    wxColour m_panel_active_background_top_gradient_colour;
     wxColour m_page_background_colour;
     wxColour m_page_background_gradient_colour;
     wxColour m_page_background_top_colour;
@@ -373,6 +390,8 @@ protected:
     wxPen m_page_border_pen;
     wxPen m_panel_border_pen;
     wxPen m_panel_border_gradient_pen;
+    wxPen m_panel_minimised_border_pen;
+    wxPen m_panel_minimised_border_gradient_pen;
     wxPen m_tab_border_pen;
     double m_cached_tab_separator_visibility;
     long m_flags;

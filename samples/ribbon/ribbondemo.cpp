@@ -66,10 +66,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 #include "auto_crop_selection.xpm"
+#include "auto_crop_selection_small.xpm"
 #include "circle.xpm"
+#include "circle_small.xpm"
 #include "cross.xpm"
 #include "expand_selection_v.xpm"
 #include "expand_selection_h.xpm"
+#include "selection_panel.xpm"
 #include "square.xpm"
 #include "triangle.xpm"
 
@@ -86,15 +89,15 @@ MyFrame::MyFrame()
         new wxRibbonPanel(home, wxID_ANY, wxT("Paragraph"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
         new wxRibbonPanel(home, wxID_ANY, wxT("Styles"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
 
-        wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Selection"));
+        wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Selection"), wxBitmap(selection_panel_xpm));
         wxRibbonButtonBar *selection = new wxRibbonButtonBar(selection_panel);
         selection->AddButton(wxID_ANY, wxT("Expand Vertically"), wxBitmap(expand_selection_v_xpm), wxEmptyString);
         selection->AddButton(wxID_ANY, wxT("Expand Horizontally"), wxBitmap(expand_selection_h_xpm), wxEmptyString);
-        selection->AddButton(wxID_ANY, wxT("Contract"), wxBitmap(auto_crop_selection_xpm), wxEmptyString);
+        selection->AddButton(wxID_ANY, wxT("Contract"), wxBitmap(auto_crop_selection_xpm), wxBitmap(auto_crop_selection_small_xpm));
 
-        wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Shapes"));
+        wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Shapes"), wxBitmap(circle_small_xpm));
         wxRibbonButtonBar *shapes = new wxRibbonButtonBar(shapes_panel);
-        shapes->AddButton(wxID_ANY, wxT("Circle"), wxBitmap(circle_xpm), wxEmptyString);
+        shapes->AddButton(wxID_ANY, wxT("Circle"), wxBitmap(circle_xpm), wxBitmap(circle_small_xpm));
         shapes->AddButton(wxID_ANY, wxT("Cross"), wxBitmap(cross_xpm), wxEmptyString);
         shapes->AddButton(wxID_ANY, wxT("Triangle"), wxBitmap(triangle_xpm), wxEmptyString);
         shapes->AddButton(wxID_ANY, wxT("Square"), wxBitmap(square_xpm), wxEmptyString);

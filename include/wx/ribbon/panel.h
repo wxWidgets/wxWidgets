@@ -57,6 +57,9 @@ public:
     bool IsHovered() const;
     bool CanAutoMinimise() const;
 
+    bool ShowExpanded();
+    bool HideExpanded();
+
     void SetArtProvider(wxRibbonArtProvider* art);
 
     virtual bool Realize();
@@ -68,6 +71,9 @@ public:
 
     virtual void AddChild(wxWindowBase *child);
     virtual void RemoveChild(wxWindowBase *child);
+
+    wxRibbonPanel* GetExpandedDummy();
+    wxRibbonPanel* GetExpandedPanel();
 
 protected:
     wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
@@ -84,12 +90,20 @@ protected:
     void OnPaint(wxPaintEvent& evt);
     void OnMouseEnter(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
+    void OnMouseClick(wxMouseEvent& evt);
+    void OnKillFocus(wxFocusEvent& evt);
 
     void CommonInit(const wxString& label, const wxBitmap& icon, long style);
+    static wxRect GetExpandedPosition(wxRect panel,
+                                      wxSize expanded_size,
+                                      wxDirection direction);
 
     wxBitmap m_minimised_icon;
     wxBitmap m_minimised_icon_resized;
     wxSize m_minimised_size;
+    wxDirection m_preferred_expand_direction;
+    wxRibbonPanel* m_expanded_dummy;
+    wxRibbonPanel* m_expanded_panel;
     long m_flags;
     long m_hovered_count;
     bool m_minimised;
