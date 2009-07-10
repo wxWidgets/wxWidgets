@@ -249,7 +249,7 @@ WX_UIFont wxFont::OSXCreateUIFont(wxOSXSystemFont font, wxNativeFontInfo* info)
         if ( traits & NSFontItalicTrait )
             fontstyle = wxFONTSTYLE_ITALIC ;
         */
-        wxCFStringRef fontname( [uifont familyName] );
+        wxCFStringRef fontname( wxCFRetain([uifont familyName]) );
         info->Init(size,wxFONTFAMILY_DEFAULT,fontstyle,fontweight,underlined,
             fontname.AsString(), wxFONTENCODING_DEFAULT);
         
@@ -269,6 +269,17 @@ WX_UIFont wxFont::OSXCreateUIFont(const wxNativeFontInfo* info)
 // ----------------------------------------------------------------------------
 // NSImage Utils
 // ----------------------------------------------------------------------------
+
+#if wxOSX_USE_IPHONE
+
+WX_UIImage  wxOSXCreateUIImageFromCGImage( CGImageRef image )
+{
+    UIImage  *newImage = [UIImage imageWithCGImage:image]; 
+    [newImage autorelease];
+    return( newImage );
+}
+
+#endif
 
 #if wxOSX_USE_COCOA
 
