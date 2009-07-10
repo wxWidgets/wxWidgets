@@ -22,6 +22,13 @@
 
 #if wxUSE_GUI
 
+OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
+                               CGContextRef    inContext,
+                               const CGRect *  inBounds,
+                               CGImageRef      inImage) ;
+
+WX_UIImage WXDLLIMPEXP_CORE wxOSXCreateUIImageFromCGImage( CGImageRef image );
+
 class WXDLLIMPEXP_CORE wxWidgetIPhoneImpl : public wxWidgetImpl
 {
 public :
@@ -48,6 +55,7 @@ public :
     virtual void        Move(int x, int y, int width, int height);
     virtual void        GetPosition( int &x, int &y ) const;
     virtual void        GetSize( int &width, int &height ) const;
+    virtual void        SetControlSize( wxWindowVariant variant );
 
     virtual void        SetNeedsDisplay( const wxRect* where = NULL );
     virtual bool        GetNeedsDisplay() const;
@@ -59,6 +67,47 @@ public :
 
     void                RemoveFromParent();
     void                Embed( wxWidgetImpl *parent );
+    
+    void                SetDefaultButton( bool isDefault );
+    void                PerformClick();
+    virtual void        SetLabel(const wxString& title, wxFontEncoding encoding);
+
+    void                SetCursor( const wxCursor & cursor );
+    void                CaptureMouse();
+    void                ReleaseMouse();
+
+    wxInt32             GetValue() const;
+    void                SetValue( wxInt32 v );
+    void                SetBitmap( const wxBitmap& bitmap );
+    void                SetupTabs( const wxNotebook &notebook );
+    void                GetBestRect( wxRect *r ) const;
+    bool                IsEnabled() const;
+    void                Enable( bool enable );
+    bool                ButtonClickDidStateChange() { return true ;}
+    void                SetMinimum( wxInt32 v );
+    void                SetMaximum( wxInt32 v );
+    wxInt32             GetMinimum() const;
+    wxInt32             GetMaximum() const;
+    void                PulseGauge();
+    void                SetScrollThumb( wxInt32 value, wxInt32 thumbSize );
+
+    void                SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true );
+
+    void                InstallEventHandler( WXWidget control = NULL );
+    
+    virtual void        DoNotifyFocusEvent(bool receivedFocus, wxWidgetImpl* otherWindow); 
+
+    // thunk connected calls
+ 
+    virtual void        drawRect(CGRect* rect, WXWidget slf, void* _cmd);
+    virtual void        touchEvent(WX_NSSet touches, WX_UIEvent event, WXWidget slf, void* _cmd);
+    virtual bool        becomeFirstResponder(WXWidget slf, void* _cmd);
+    virtual bool        resignFirstResponder(WXWidget slf, void* _cmd);
+
+    // action
+    
+    virtual void        touchUpInsideAction(void* sender, WX_UIEvent evt, WXWidget slf, void* _cmd);
+
 protected:
     WXWidget m_osxView;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxWidgetIPhoneImpl)
@@ -122,6 +171,26 @@ protected :
     void *              m_macFullScreenData ;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowIPhoneImpl)
 };    
+
+#ifdef __OBJC__
+
+    WXDLLIMPEXP_CORE CGRect wxToNSRect( UIView* parent, const wxRect& r );
+    WXDLLIMPEXP_CORE wxRect wxFromNSRect( UIView* parent, const CGRect& rect );
+    WXDLLIMPEXP_CORE CGPoint wxToNSPoint( UIView* parent, const wxPoint& p );
+    WXDLLIMPEXP_CORE wxPoint wxFromNSPoint( UIView* parent, const CGPoint& p );
+    
+    CGRect WXDLLIMPEXP_CORE wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , 
+        bool adjustForOrigin = true );
+
+    @interface wxUIButton : UIButton
+    {
+    }
+    
+    @end
+
+    void WXDLLIMPEXP_CORE wxOSXIPhoneClassAddWXMethods(Class c);
+
+#endif
 
 #endif // wxUSE_GUI
 
