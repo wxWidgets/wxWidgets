@@ -22,7 +22,7 @@ BEGIN_EVENT_TABLE(wxSlider, wxControl)
 END_EVENT_TABLE()
 
  // The dimensions of the different styles of sliders (from Aqua document)
-#ifdef wxOSX_USE_COCOA
+#if wxOSX_USE_COCOA
     #define wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS 28
     #define wxSLIDER_DIMENSIONACROSS_ARROW 21
 #else
