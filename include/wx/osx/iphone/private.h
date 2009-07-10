@@ -78,7 +78,11 @@ public :
 
     wxInt32             GetValue() const;
     void                SetValue( wxInt32 v );
-    void                SetBitmap( const wxBitmap& bitmap );
+
+    virtual wxBitmap    GetBitmap() const;
+    virtual void        SetBitmap( const wxBitmap& bitmap );
+    virtual void        SetBitmapPosition( wxDirection dir );
+	
     void                SetupTabs( const wxNotebook &notebook );
     void                GetBestRect( wxRect *r ) const;
     bool                IsEnabled() const;

@@ -519,6 +519,16 @@ void wxWidgetIPhoneImpl::SetBitmap( const wxBitmap& bitmap )
 {
 }
 
+wxBitmap wxWidgetIPhoneImpl::GetBitmap() const
+{
+    wxBitmap bmp;
+    return bmp;
+}
+
+void wxWidgetIPhoneImpl::SetBitmapPosition( wxDirection dir )
+{
+}
+
 void wxWidgetIPhoneImpl::SetupTabs( const wxNotebook &notebook )
 {
 }
