@@ -1073,7 +1073,7 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
     if ( win == m_targetWindow )
         return; // nothing to do
 
-#ifdef __WXMAC__
+#if defined( __WXOSX__ ) && wxUSE_SCROLLBAR
     if (wxDynamicCast(win, wxScrollBar))
         return;
 #endif
