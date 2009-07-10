@@ -1019,7 +1019,7 @@ IconRef wxBitmap::CreateIconRef() const
 }
 #endif
 
-#if wxOSX_USE_COCOA_OR_IPHONE
+#if wxOSX_USE_COCOA
 
 WX_NSImage wxBitmap::GetNSImage() const
 {
@@ -1029,6 +1029,15 @@ WX_NSImage wxBitmap::GetNSImage() const
 
 #endif
 
+#if wxOSX_USE_IPHONE
+
+WX_UIImage wxBitmap::GetUIImage() const
+{
+    wxCFRef< CGImageRef > cgimage(CreateCGImage());
+    return wxOSXCreateUIImageFromCGImage( cgimage );
+}
+
+#endif
 wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 {
     wxCHECK_MSG( Ok() &&
