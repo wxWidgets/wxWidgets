@@ -474,7 +474,11 @@ static bool wxHasRealChildren(const wxWindowBase* win)
           node = node->GetNext() )
     {
         wxWindow *win = node->GetData();
-        if ( !win->IsTopLevel() && win->IsShown() && !win->IsKindOf(CLASSINFO(wxScrollBar)))
+        if ( !win->IsTopLevel() && win->IsShown() 
+#if wxUSE_SCROLLBAR
+            && !win->IsKindOf(CLASSINFO(wxScrollBar))
+#endif
+            )
             realChildCount ++;
     }
     return (realChildCount > 0);
