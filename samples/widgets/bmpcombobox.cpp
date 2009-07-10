@@ -139,8 +139,6 @@ protected:
     void OnTextButtonAll(wxCommandEvent& event);
 
     void OnUpdateUIInsert(wxUpdateUIEvent& event);
-    void OnUpdateUIAddSeveral(wxUpdateUIEvent& event);
-    void OnUpdateUIAddSeveralWithImages(wxUpdateUIEvent& event);
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteButton(wxUpdateUIEvent& event);
     void OnUpdateUIItemManipulator(wxUpdateUIEvent& event);
@@ -218,8 +216,6 @@ BEGIN_EVENT_TABLE(BitmapComboBoxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(BitmapComboBoxPage_Reset, BitmapComboBoxWidgetsPage::OnUpdateUIResetButton)
     EVT_UPDATE_UI(BitmapComboBoxPage_Insert, BitmapComboBoxWidgetsPage::OnUpdateUIInsert)
     EVT_UPDATE_UI(BitmapComboBoxPage_LoadFromFile, BitmapComboBoxWidgetsPage::OnUpdateUIInsert)
-    EVT_UPDATE_UI(BitmapComboBoxPage_AddSeveral, BitmapComboBoxWidgetsPage::OnUpdateUIAddSeveral)
-    EVT_UPDATE_UI(BitmapComboBoxPage_AddSeveralWithImages, BitmapComboBoxWidgetsPage::OnUpdateUIAddSeveralWithImages)
     EVT_UPDATE_UI(BitmapComboBoxPage_Clear, BitmapComboBoxWidgetsPage::OnUpdateUIClearButton)
     EVT_UPDATE_UI(BitmapComboBoxPage_DeleteText, BitmapComboBoxWidgetsPage::OnUpdateUIClearButton)
     EVT_UPDATE_UI(BitmapComboBoxPage_Delete, BitmapComboBoxWidgetsPage::OnUpdateUIDeleteButton)
@@ -794,18 +790,6 @@ void BitmapComboBoxWidgetsPage::OnUpdateUIClearButton(wxUpdateUIEvent& event)
 {
     if (m_combobox)
         event.Enable(m_combobox->GetCount() != 0);
-}
-
-void BitmapComboBoxWidgetsPage::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
-{
-    if (m_combobox)
-        event.Enable(!(m_combobox->GetWindowStyle() & wxCB_SORT));
-}
-
-void BitmapComboBoxWidgetsPage::OnUpdateUIAddSeveralWithImages(wxUpdateUIEvent& event)
-{
-    if (m_combobox)
-        event.Enable(!(m_combobox->GetWindowStyle() & wxCB_SORT));
 }
 
 void BitmapComboBoxWidgetsPage::OnComboText(wxCommandEvent& event)
