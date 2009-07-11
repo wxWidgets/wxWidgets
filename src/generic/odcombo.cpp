@@ -504,7 +504,7 @@ int wxVListBoxComboPopup::Append(const wxString& item)
 
         for ( i=0; i<strings.GetCount(); i++ )
         {
-            if ( item.Cmp(strings.Item(i)) < 0 )
+            if ( item.CmpNoCase(strings.Item(i)) < 0 )
             {
                 pos = (int)i;
                 break;
@@ -1039,7 +1039,7 @@ int wxOwnerDrawnComboBox::DoInsertItems(const wxArrayStringsAdapter& items,
 
         for ( unsigned int i = 0; i < count; ++i )
         {
-            int n = GetVListBoxComboPopup()->Append(items[i]);
+            n = GetVListBoxComboPopup()->Append(items[i]);
             AssignNewItemClientData(n, clientData, i, type);
         }
 
