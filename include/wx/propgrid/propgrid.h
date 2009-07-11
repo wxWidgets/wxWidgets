@@ -1284,6 +1284,21 @@ public:
         m_iFlags |= wxPG_FL_VALUE_CHANGE_IN_EVENT;
     }
 
+    /**
+        You can use this member function, for instance, to detect in
+        wxPGProperty::OnEvent() if wxPGProperty::SetValueInEvent() was
+        already called in wxPGEditor::OnEvent(). It really only detects
+        if was value was changed using wxPGProperty::SetValueInEvent(), which
+        is usually used when a 'picker' dialog is displayed. If value was
+        written by "normal means" in wxPGProperty::StringToValue() or
+        IntToValue(), then this function will return false (on the other hand,
+        wxPGProperty::OnEvent() is not even called in those cases).
+    */
+    bool WasValueChangedInEvent() const
+    {
+        return (m_iFlags & wxPG_FL_VALUE_CHANGE_IN_EVENT) ? true : false;
+    }
+
     /** Returns true if given event is from first of an array of buttons
         (as can be in case when wxPGMultiButton is used).
     */

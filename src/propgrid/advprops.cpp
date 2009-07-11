@@ -1259,7 +1259,7 @@ bool wxSystemColourProperty::OnEvent( wxPropertyGrid* propgrid,
             askColour = true;
     }
 
-    if ( askColour )
+    if ( askColour && !propgrid->WasValueChangedInEvent() )
     {
         // We need to handle button click in case editor has been
         // switched to one that has wxButton as well.
