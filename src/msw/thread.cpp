@@ -1387,7 +1387,7 @@ bool WXDLLIMPEXP_BASE wxGuiOwnedByMainThread()
 void WXDLLIMPEXP_BASE wxWakeUpMainThread()
 {
     // sending any message would do - hopefully WM_NULL is harmless enough
-    if ( !::PostThreadMessage(ms_idMainThread, WM_NULL, 0, 0) )
+    if ( !::PostThreadMessage(wxThread::GetMainId(), WM_NULL, 0, 0) )
     {
         // should never happen
         wxLogLastError(wxT("PostThreadMessage(WM_NULL)"));
