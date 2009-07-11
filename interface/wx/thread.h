@@ -989,7 +989,10 @@ public:
 
     /**
         Returns the platform specific thread ID of the current thread as a long.
+
         This can be used to uniquely identify threads, even if they are not wxThreads.
+
+        @see GetMainId()
     */
     static wxThreadIdType GetCurrentId();
 
@@ -1006,6 +1009,15 @@ public:
         @since 2.9.0
     */
     wxThreadKind GetKind() const;
+
+    /**
+        Returns the thread ID of the main thread.
+
+        @see IsMain()
+
+        @since 2.9.1
+     */
+    static wxThreadIdType GetMainId();
 
     /**
         Gets the priority of the thread, between zero and 100.
@@ -1035,6 +1047,11 @@ public:
 
     /**
         Returns @true if the calling thread is the main application thread.
+
+        Main thread in the context of wxWidgets is the one which initialized
+        the library.
+
+        @see GetMainId(), GetCurrentId()
     */
     static bool IsMain();
 

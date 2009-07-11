@@ -57,7 +57,7 @@ enum wxThreadState
 
 // id of the main thread - the one which can call GUI functions without first
 // calling wxMutexGuiEnter()
-static ULONG                        s_ulIdMainThread = 1;
+wxThreadIdType                      wxThread::ms_idMainThread = 0;
 wxMutex*                            p_wxMainMutex;
 
 // OS2 substitute for Tls pointer the current parent thread object
@@ -547,19 +547,6 @@ wxThread *wxThread::This()
     return pThread;
 }
 
-bool wxThread::IsMain()
-{
-    PTIB ptib;
-    PPIB ppib;
-
-    ::DosGetInfoBlocks(&ptib, &ppib);
-
-    if (ptib->tib_ptib2->tib2_ultid == s_ulIdMainThread)
-        return true;
-
-    return false;
-}
-
 #ifdef Yield
     #undef Yield
 #endif
@@ -582,13 +569,13 @@ int wxThread::GetCPUCount()
     return CPUCount;
 }
 
-unsigned long wxThread::GetCurrentId()
+wxThreadIdType wxThread::GetCurrentId()
 {
     PTIB                            ptib;
     PPIB                            ppib;
 
     ::DosGetInfoBlocks(&ptib, &ppib);
-    return (unsigned long) ptib->tib_ptib2->tib2_ultid;
+    return (wxThreadIdType) ptib->tib_ptib2->tib2_ultid;
 }
 
 bool wxThread::SetConcurrency(size_t level)
@@ -937,12 +924,8 @@ bool wxThreadModule::OnInit()
     gs_pCritsectGui = new wxCriticalSection();
     gs_pCritsectGui->Enter();
 
-    PTIB ptib;
-    PPIB ppib;
+    wxThread::ms_idMainThread = wxThread::GetCurrentId();
 
-    ::DosGetInfoBlocks(&ptib, &ppib);
-
-    s_ulIdMainThread = ptib->tib_ptib2->tib2_ultid;
     return true;
 }
 
