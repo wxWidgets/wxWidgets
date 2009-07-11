@@ -1242,9 +1242,24 @@ bool wxSystemColourProperty::IntToValue( wxVariant& variant, int number, int WXU
 }
 
 // Need to do some extra event handling.
-bool wxSystemColourProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(primary), wxEvent& event )
+bool wxSystemColourProperty::OnEvent( wxPropertyGrid* propgrid,
+                                      wxWindow* WXUNUSED(primary),
+                                      wxEvent& event )
 {
+    bool askColour = false;
+
     if ( propgrid->IsMainButtonEvent(event) )
+    {
+        askColour = true;
+    }
+    else if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    {
+        if ( GetIndex() == GetCustomColourIndex() &&
+             !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+            askColour = true;
+    }
+
+    if ( askColour )
     {
         // We need to handle button click in case editor has been
         // switched to one that has wxButton as well.
