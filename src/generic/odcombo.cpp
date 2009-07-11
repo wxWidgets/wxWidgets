@@ -506,7 +506,7 @@ int wxVListBoxComboPopup::Append(const wxString& item)
 
         for ( i=0; i<strings.GetCount(); i++ )
         {
-            if ( item.Cmp(strings.Item(i)) < 0 )
+            if ( item.CmpNoCase(strings.Item(i)) < 0 )
             {
                 pos = (int)i;
                 break;
