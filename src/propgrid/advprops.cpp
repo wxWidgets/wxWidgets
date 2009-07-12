@@ -62,6 +62,8 @@
     #include "wx/msw/dc.h"
 #endif
 
+#include "wx/odcombo.h"
+
 // -----------------------------------------------------------------------
 
 #if defined(__WXMSW__)
@@ -1250,19 +1252,29 @@ bool wxSystemColourProperty::OnEvent( wxPropertyGrid* propgrid,
 
     if ( propgrid->IsMainButtonEvent(event) )
     {
+        // We need to handle button click in case editor has been
+        // switched to one that has wxButton as well.
         askColour = true;
     }
     else if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
     {
-        if ( GetIndex() == GetCustomColourIndex() &&
-             !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
-            askColour = true;
+		// Must override index detection since at this point GetIndex()
+		// will return old value.
+		wxOwnerDrawnComboBox* cb =
+			static_cast<wxOwnerDrawnComboBox*>(propgrid->GetEditorControl());
+
+		if ( cb )
+		{
+			int index = cb->GetSelection();
+
+			if ( index == GetCustomColourIndex() &&
+				 !(m_flags & wxPG_PROP_HIDE_CUSTOM_COLOUR) )
+				askColour = true;
+		}
     }
 
     if ( askColour && !propgrid->WasValueChangedInEvent() )
     {
-        // We need to handle button click in case editor has been
-        // switched to one that has wxButton as well.
         wxVariant variant;
         if ( QueryColourFromUser(variant) )
             return true;
