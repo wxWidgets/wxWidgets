@@ -100,13 +100,6 @@ inline wxCriticalSection& GetTraceMaskCS()
     return s_csTrace;
 }
 
-inline wxCriticalSection& GetPreviousLogCS()
-{
-    static wxCriticalSection s_csPrev;
-
-    return s_csPrev;
-}
-
 inline wxCriticalSection& GetLevelsCS()
 {
     static wxCriticalSection s_csLevels;
@@ -294,8 +287,6 @@ wxLog::OnLogInMainThread(wxLogLevel level,
 {
     if ( GetRepetitionCounting() )
     {
-        wxCRIT_SECT_LOCKER(lock, GetPreviousLogCS());
-
         if ( msg == gs_prevLog.msg )
         {
             gs_prevLog.numRepeated++;
