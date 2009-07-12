@@ -43,6 +43,7 @@
 #include "wx/textfile.h"
 #include "wx/thread.h"
 #include "wx/crt.h"
+#include "wx/vector.h"
 
 // other standard headers
 #ifndef __WXWINCE__
@@ -68,32 +69,52 @@ const char *wxLOG_COMPONENT = "";
 
 #if wxUSE_THREADS
 
+namespace
+{
+
+// contains messages logged by the other threads and waiting to be shown until
+// Flush() is called in the main one
+typedef wxVector<wxLogRecord> wxLogRecords;
+wxLogRecords gs_bufferedLogRecords;
+
+
 // define static functions providing access to the critical sections we use
 // instead of just using static critical section variables as log functions may
 // be used during static initialization and while this is certainly not
 // advisable it's still better to not crash (as we'd do if we used a yet
 // uninitialized critical section) if it happens
 
-static inline wxCriticalSection& GetTraceMaskCS()
+// this critical section is used for buffering the messages from threads other
+// than main, i.e. it protects all accesses to gs_bufferedLogRecords above
+inline wxCriticalSection& GetBackgroundLogCS()
+{
+    static wxCriticalSection s_csBackground;
+
+    return s_csBackground;
+}
+
+inline wxCriticalSection& GetTraceMaskCS()
 {
     static wxCriticalSection s_csTrace;
 
     return s_csTrace;
 }
 
-static inline wxCriticalSection& GetPreviousLogCS()
+inline wxCriticalSection& GetPreviousLogCS()
 {
     static wxCriticalSection s_csPrev;
 
     return s_csPrev;
 }
 
-static inline wxCriticalSection& GetLevelsCS()
+inline wxCriticalSection& GetLevelsCS()
 {
     static wxCriticalSection s_csLevels;
 
     return s_csLevels;
 }
+
+} // anonymous namespace
 
 #endif // wxUSE_THREADS
 
@@ -256,6 +277,28 @@ wxLog::OnLog(wxLogLevel level,
     if ( !pLogger )
         return;
 
+#if wxUSE_THREADS
+    if ( !wxThread::IsMain() )
+    {
+        wxCriticalSectionLocker lock(GetBackgroundLogCS());
+
+        gs_bufferedLogRecords.push_back(wxLogRecord(level, msg, info));
+
+        // ensure that our Flush() will be called soon
+        wxWakeUpIdle();
+
+        return;
+    }
+#endif // wxUSE_THREADS
+
+    pLogger->OnLogInMainThread(level, msg, info);
+}
+
+void
+wxLog::OnLogInMainThread(wxLogLevel level,
+                         const wxString& msg,
+                         const wxLogRecordInfo& info)
+{
     if ( GetRepetitionCounting() )
     {
         wxCRIT_SECT_LOCKER(lock, GetPreviousLogCS());
@@ -269,7 +312,7 @@ wxLog::OnLog(wxLogLevel level,
             return;
         }
 
-        pLogger->LogLastRepeatIfNeededUnlocked();
+        LogLastRepeatIfNeededUnlocked();
 
         // reset repetition counter for a new message
         gs_prevLog.msg = msg;
@@ -297,7 +340,7 @@ wxLog::OnLog(wxLogLevel level,
     }
 #endif // wxUSE_LOG_TRACE
 
-    pLogger->DoLogRecord(level, prefix + msg + suffix, info);
+    DoLogRecord(level, prefix + msg + suffix, info);
 }
 
 void wxLog::DoLogRecord(wxLogLevel level,
@@ -557,6 +600,32 @@ void wxLog::TimeStamp(wxString *str)
 
 void wxLog::Flush()
 {
+#if wxUSE_THREADS
+    wxASSERT_MSG( wxThread::IsMain(),
+                  "should be called from the main thread only" );
+
+    // check if we have queued messages from other threads
+    wxLogRecords bufferedLogRecords;
+
+    {
+        wxCriticalSectionLocker lock(GetBackgroundLogCS());
+        bufferedLogRecords.swap(gs_bufferedLogRecords);
+
+        // release the lock now to not keep it while we are logging the
+        // messages below, allowing background threads to run
+    }
+
+    if ( !bufferedLogRecords.empty() )
+    {
+        for ( wxLogRecords::const_iterator it = bufferedLogRecords.begin();
+              it != bufferedLogRecords.end();
+              ++it )
+        {
+            OnLogInMainThread(it->level, it->msg, it->info);
+        }
+    }
+#endif // wxUSE_THREADS
+
     LogLastRepeatIfNeeded();
 }
 
@@ -566,6 +635,8 @@ void wxLog::Flush()
 
 void wxLogBuffer::Flush()
 {
+    wxLog::Flush();
+
     if ( !m_str.empty() )
     {
         wxMessageOutputBest out;

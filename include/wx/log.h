@@ -290,6 +290,26 @@ private:
 #define wxLOG_KEY_TRACE_MASK "wx.trace_mask"
 
 // ----------------------------------------------------------------------------
+// log record: a unit of log output
+// ----------------------------------------------------------------------------
+
+struct wxLogRecord
+{
+    wxLogRecord(wxLogLevel level_,
+                const wxString& msg_,
+                const wxLogRecordInfo& info_)
+        : level(level_),
+          msg(msg_),
+          info(info_)
+    {
+    }
+
+    wxLogLevel level;
+    wxString msg;
+    wxLogRecordInfo info;
+};
+
+// ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages
 // normally, only a single instance of this class exists but it's not enforced
 // ----------------------------------------------------------------------------
@@ -563,6 +583,13 @@ private:
     // implement of LogLastRepeatIfNeeded(): it assumes that the
     // caller had already locked GetPreviousLogCS()
     unsigned LogLastRepeatIfNeededUnlocked();
+
+    // called from OnLog() if it's called from the main thread and from Flush()
+    // when it plays back the buffered messages logged from the other threads
+    void OnLogInMainThread(wxLogLevel level,
+                           const wxString& msg,
+                           const wxLogRecordInfo& info);
+
 
     // static variables
     // ----------------

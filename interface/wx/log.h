@@ -756,14 +756,22 @@ public:
 
     /**
         Shows all the messages currently in buffer and clears it.
+
         If the buffer is already empty, nothing happens.
+
+        It should only be called from the main application thread.
+
+        If you override this method in a derived class, call the base class
+        version first, before doing anything else, to ensure that any buffered
+        messages from the other threads are logged.
     */
     virtual void Flush();
 
     /**
         Flushes the current log target if any, does nothing if there is none.
 
-        @see Flush()
+        As Flush() itself, this method should only be called from the main
+        application thread.
     */
     static void FlushActive();
 

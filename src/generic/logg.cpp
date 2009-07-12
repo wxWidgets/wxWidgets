@@ -53,10 +53,6 @@
 #include "wx/arrstr.h"
 #include "wx/msgout.h"
 
-#if wxUSE_THREADS
-    #include "wx/thread.h"
-#endif // wxUSE_THREADS
-
 #ifdef  __WXMSW__
     // for OutputDebugString()
     #include  "wx/msw/private.h"
@@ -298,6 +294,8 @@ wxLogGui::DoShowMultipleLogMessages(const wxArrayString& messages,
 
 void wxLogGui::Flush()
 {
+    wxLog::Flush();
+
     if ( !m_bHasMessages )
         return;
 
@@ -451,14 +449,11 @@ public:
 #endif // CAN_SAVE_FILES
     void OnClear(wxCommandEvent& event);
 
-    // this function is safe to call from any thread (notice that it should be
-    // also called from the main thread to ensure that the messages logged from
-    // it appear in correct order with the messages from the other threads)
-    void AddLogMessage(const wxString& message);
-
-    // actually append the messages logged from secondary threads to the text
-    // control during idle time in the main thread
-    virtual void OnInternalIdle();
+    // do show the message in the text control
+    void ShowLogMessage(const wxString& message)
+    {
+        m_pTextCtrl->AppendText(message + wxS('\n'));
+    }
 
 private:
     // use standard ids for our commands!
@@ -472,23 +467,8 @@ private:
     // common part of OnClose() and OnCloseWindow()
     void DoClose();
 
-    // do show the message in the text control
-    void DoShowLogMessage(const wxString& message)
-    {
-        m_pTextCtrl->AppendText(message + wxS('\n'));
-    }
-
     wxTextCtrl  *m_pTextCtrl;
     wxLogWindow *m_log;
-
-    // queue of messages logged from other threads which need to be displayed
-    wxArrayString m_pendingMessages;
-
-#if wxUSE_THREADS
-    // critical section to protect access to m_pendingMessages
-    wxCriticalSection m_critSection;
-#endif // wxUSE_THREADS
-
 
     DECLARE_EVENT_TABLE()
     wxDECLARE_NO_COPY_CLASS(wxLogFrame);
@@ -602,43 +582,6 @@ void wxLogFrame::OnClear(wxCommandEvent& WXUNUSED(event))
     m_pTextCtrl->Clear();
 }
 
-void wxLogFrame::OnInternalIdle()
-{
-    {
-        wxCRIT_SECT_LOCKER(locker, m_critSection);
-
-        const size_t count = m_pendingMessages.size();
-        for ( size_t n = 0; n < count; n++ )
-        {
-            DoShowLogMessage(m_pendingMessages[n]);
-        }
-
-        m_pendingMessages.clear();
-    } // release m_critSection
-
-    wxFrame::OnInternalIdle();
-}
-
-void wxLogFrame::AddLogMessage(const wxString& message)
-{
-    wxCRIT_SECT_LOCKER(locker, m_critSection);
-
-#if wxUSE_THREADS
-    if ( !wxThread::IsMain() || !m_pendingMessages.empty() )
-    {
-        // message needs to be queued for later showing
-        m_pendingMessages.Add(message);
-
-        wxWakeUpIdle();
-    }
-    else // we are the main thread and no messages are queued, so we can
-         // log the message directly
-#endif // wxUSE_THREADS
-    {
-        DoShowLogMessage(message);
-    }
-}
-
 wxLogFrame::~wxLogFrame()
 {
     m_log->OnFrameDelete(this);
@@ -681,7 +624,7 @@ void wxLogWindow::DoLogTextAtLevel(wxLogLevel level, const wxString& msg)
     if ( level == wxLOG_Trace )
         return;
 
-    m_pLogFrame->AddLogMessage(msg);
+    m_pLogFrame->ShowLogMessage(msg);
 }
 
 wxFrame *wxLogWindow::GetFrame() const

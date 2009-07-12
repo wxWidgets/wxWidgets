@@ -258,5 +258,20 @@ automatically switches to using wxLogStderr if it isn't.
 The dialog sample illustrates this approach by defining a custom log target
 customizing the dialog used by wxLogGui for the single messages.
 
+
+@section overview_log_mt Logging in Multi-Threaded Applications
+
+Starting with wxWidgets 2.9.1, logging functions can be safely called from any
+thread. Messages logged from threads other than the main one will be buffered
+until wxLog::Flush() is called in the main thread (which usually happens during
+idle time, i.e. after processing all pending events) and will be really output
+only then. Notice that the default GUI logger already only output the messages
+when it is flushed, so by default messages from the other threads will be shown
+more or less at the same moment as usual. However if you define a custom log
+target, messages may be logged out of order, e.g. messages from the main thread
+with later timestamp may appear before messages with earlier timestamp logged
+from other threads. wxLog does however guarantee that messages logged by each
+thread will appear in order in which they were logged.
+
 */
 
