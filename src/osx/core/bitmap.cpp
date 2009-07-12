@@ -287,8 +287,8 @@ bool wxBitmapRefData::Create( int w , int h , int d )
     m_depth = d ;
     m_hBitmap = NULL ;
 
-    m_bytesPerRow = GetBestBytesPerRow( w * 4 ) ;
-    size_t size = m_bytesPerRow * h ;
+    m_bytesPerRow = GetBestBytesPerRow( m_width * 4 ) ;
+    size_t size = m_bytesPerRow * m_height ;
     void* data = m_memBuf.GetWriteBuf( size ) ;
     if ( data != NULL )
     {
