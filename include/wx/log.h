@@ -580,10 +580,6 @@ protected:
     unsigned LogLastRepeatIfNeeded();
 
 private:
-    // implement of LogLastRepeatIfNeeded(): it assumes that the
-    // caller had already locked GetPreviousLogCS()
-    unsigned LogLastRepeatIfNeededUnlocked();
-
     // called from OnLog() if it's called from the main thread and from Flush()
     // when it plays back the buffered messages logged from the other threads
     void OnLogInMainThread(wxLogLevel level,

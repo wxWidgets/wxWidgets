@@ -193,13 +193,6 @@ void wxSafeShowMessage(const wxString& title, const wxString& text)
 
 unsigned wxLog::LogLastRepeatIfNeeded()
 {
-    wxCRIT_SECT_LOCKER(lock, GetPreviousLogCS());
-
-    return LogLastRepeatIfNeededUnlocked();
-}
-
-unsigned wxLog::LogLastRepeatIfNeededUnlocked()
-{
     const unsigned count = gs_prevLog.numRepeated;
 
     if ( gs_prevLog.numRepeated )
@@ -312,7 +305,7 @@ wxLog::OnLogInMainThread(wxLogLevel level,
             return;
         }
 
-        LogLastRepeatIfNeededUnlocked();
+        LogLastRepeatIfNeeded();
 
         // reset repetition counter for a new message
         gs_prevLog.msg = msg;
