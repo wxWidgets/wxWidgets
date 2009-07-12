@@ -357,6 +357,7 @@ All:
 - Include port number in host header in wxHTTP (Marcin 'Malcom' Malich).
 - Added wxTempFile::Flush().
 - Added support for wxLongLong and wxULongLong in wxVariant.
+- Added wxVector::swap().
 
 All (GUI):
 

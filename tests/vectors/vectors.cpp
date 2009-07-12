@@ -83,6 +83,7 @@ private:
         CPPUNIT_TEST( Objects );
         CPPUNIT_TEST( NonPODs );
         CPPUNIT_TEST( Resize );
+        CPPUNIT_TEST( Swap );
     CPPUNIT_TEST_SUITE_END();
 
     void PushPopTest();
@@ -92,6 +93,7 @@ private:
     void Objects();
     void NonPODs();
     void Resize();
+    void Swap();
 
     DECLARE_NO_COPY_CLASS(VectorsTestCase)
 };
@@ -264,5 +266,26 @@ void VectorsTestCase::Resize()
     CPPUNIT_ASSERT_EQUAL( 17, v[1].GetValue() );
     CPPUNIT_ASSERT_EQUAL( 17, v[2].GetValue() );
     CPPUNIT_ASSERT_EQUAL( 17, v[3].GetValue() );
+}
+
+void VectorsTestCase::Swap()
+{
+    wxVector<int> v1, v2;
+    v1.push_back(17);
+    v1.swap(v2);
+    CPPUNIT_ASSERT( v1.empty() );
+    CPPUNIT_ASSERT_EQUAL( 1, v2.size() );
+    CPPUNIT_ASSERT_EQUAL( 17, v2[0] );
+
+    v1.push_back(9);
+    v2.swap(v1);
+    CPPUNIT_ASSERT_EQUAL( 1, v1.size() );
+    CPPUNIT_ASSERT_EQUAL( 17, v1[0] );
+    CPPUNIT_ASSERT_EQUAL( 1, v2.size() );
+    CPPUNIT_ASSERT_EQUAL( 9, v2[0] );
+
+    v2.clear();
+    v1.swap(v2);
+    CPPUNIT_ASSERT( v1.empty() );
 }
 
