@@ -77,35 +77,35 @@ namespace
 typedef wxVector<wxLogRecord> wxLogRecords;
 wxLogRecords gs_bufferedLogRecords;
 
-
-// define static functions providing access to the critical sections we use
-// instead of just using static critical section variables as log functions may
-// be used during static initialization and while this is certainly not
-// advisable it's still better to not crash (as we'd do if we used a yet
-// uninitialized critical section) if it happens
+// this macro allows to define an object which will be initialized before any
+// other function in this file is called: this is necessary to allow log
+// functions to be used during static initialization (this is not advisable
+// anyhow but we should at least try to not crash) and to also ensure that they
+// are initialized by the time static initialization is done, i.e. before any
+// threads are created hopefully
+//
+// the net effect of all this is that you can use Get##name##CS() function to
+// access the critical function without worrying about it being not initialized
+//
+// see also WX_DEFINE_GLOBAL_CONV2() in src/common/strconv.cpp
+#define WX_DEFINE_LOG_CS(name)                                                \
+    inline wxCriticalSection& Get##name##CS()                                 \
+    {                                                                         \
+        static wxCriticalSection s_cs##name;                                  \
+        return s_cs##name;                                                    \
+    }                                                                         \
+                                                                              \
+    wxCriticalSection *gs_##name##CSPtr = &Get##name##CS()
 
 // this critical section is used for buffering the messages from threads other
 // than main, i.e. it protects all accesses to gs_bufferedLogRecords above
-inline wxCriticalSection& GetBackgroundLogCS()
-{
-    static wxCriticalSection s_csBackground;
+WX_DEFINE_LOG_CS(BackgroundLog);
 
-    return s_csBackground;
-}
+// this one is used for protecting ms_aTraceMasks from concurrent access
+WX_DEFINE_LOG_CS(TraceMask);
 
-inline wxCriticalSection& GetTraceMaskCS()
-{
-    static wxCriticalSection s_csTrace;
-
-    return s_csTrace;
-}
-
-inline wxCriticalSection& GetLevelsCS()
-{
-    static wxCriticalSection s_csLevels;
-
-    return s_csLevels;
-}
+// and this one is used for gs_componentLevels 
+WX_DEFINE_LOG_CS(Levels);
 
 } // anonymous namespace
 
