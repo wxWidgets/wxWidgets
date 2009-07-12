@@ -31,6 +31,9 @@
     #endif // VC++ 7+
 #endif // WXWIN_COMPATIBILITY_2_8
 
+// all calls to wxLogXXX() functions from this file will use this log component
+#define wxLOG_COMPONENT "test"
+
 // ----------------------------------------------------------------------------
 // test loggers
 // ----------------------------------------------------------------------------
@@ -42,19 +45,28 @@ class TestLogBase : public wxLog
 public:
     TestLogBase() { }
 
-    wxString GetLog(wxLogLevel level) const
+    const wxString& GetLog(wxLogLevel level) const
     {
         return m_logs[level];
+    }
+
+    const wxLogRecordInfo& GetInfo(wxLogLevel level) const
+    {
+        return m_logsInfo[level];
     }
 
     void Clear()
     {
         for ( unsigned n = 0; n < WXSIZEOF(m_logs); n++ )
+        {
             m_logs[n].clear();
+            m_logsInfo[n] = wxLogRecordInfo();
+        }
     }
 
 protected:
     wxString m_logs[wxLOG_Trace + 1];
+    wxLogRecordInfo m_logsInfo[wxLOG_Trace + 1];
 
     wxDECLARE_NO_COPY_CLASS(TestLogBase);
 };
@@ -68,9 +80,10 @@ public:
 protected:
     virtual void DoLogRecord(wxLogLevel level,
                              const wxString& msg,
-                             const wxLogRecordInfo& WXUNUSED(info))
+                             const wxLogRecordInfo& info)
     {
         m_logs[level] = msg;
+        m_logsInfo[level] = info;
     }
 
 private:
@@ -147,6 +160,7 @@ private:
     CPPUNIT_TEST_SUITE( LogTestCase );
         CPPUNIT_TEST( Functions );
         CPPUNIT_TEST( Null );
+        CPPUNIT_TEST( Component );
 #if wxDEBUG_LEVEL
         CPPUNIT_TEST( Trace );
 #endif // wxDEBUG_LEVEL
@@ -158,6 +172,7 @@ private:
 
     void Functions();
     void Null();
+    void Component();
 #if wxDEBUG_LEVEL
     void Trace();
 #endif // wxDEBUG_LEVEL
@@ -218,6 +233,42 @@ void LogTestCase::Null()
 
     wxLogWarning("%s warning", "Important");
     CPPUNIT_ASSERT_EQUAL( "Important warning", m_log->GetLog(wxLOG_Warning) );
+}
+
+void LogTestCase::Component()
+{
+    wxLogMessage("Message");
+    CPPUNIT_ASSERT_EQUAL( wxLOG_COMPONENT,
+                          m_log->GetInfo(wxLOG_Message).component );
+
+    // completely disable logging for this component
+    wxLog::SetComponentLevel("test/ignore", wxLOG_FatalError);
+
+    // but enable it for one of its subcomponents
+    wxLog::SetComponentLevel("test/ignore/not", wxLOG_Max);
+
+    #undef wxLOG_COMPONENT
+    #define wxLOG_COMPONENT "test/ignore"
+
+    // this shouldn't be output as this component is ignored
+    wxLogError("Error");
+    CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Error) );
+
+    // and so are its subcomponents
+    #undef wxLOG_COMPONENT
+    #define wxLOG_COMPONENT "test/ignore/sub/subsub"
+    wxLogError("Error");
+    CPPUNIT_ASSERT_EQUAL( "", m_log->GetLog(wxLOG_Error) );
+
+    // but one subcomponent is not
+    #undef wxLOG_COMPONENT
+    #define wxLOG_COMPONENT "test/ignore/not"
+    wxLogError("Error");
+    CPPUNIT_ASSERT_EQUAL( "Error", m_log->GetLog(wxLOG_Error) );
+
+    // restore the original value
+    #undef wxLOG_COMPONENT
+    #define wxLOG_COMPONENT "test"
 }
 
 #if wxDEBUG_LEVEL

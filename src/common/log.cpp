@@ -63,6 +63,9 @@
     #include "wx/msw/private.h" // includes windows.h
 #endif
 
+#undef wxLOG_COMPONENT
+const char *wxLOG_COMPONENT = "";
+
 #if wxUSE_THREADS
 
 // define static functions providing access to the critical sections we use
@@ -83,6 +86,13 @@ static inline wxCriticalSection& GetPreviousLogCS()
     static wxCriticalSection s_csPrev;
 
     return s_csPrev;
+}
+
+static inline wxCriticalSection& GetLevelsCS()
+{
+    static wxCriticalSection s_csLevels;
+
+    return s_csLevels;
 }
 
 #endif // wxUSE_THREADS
@@ -129,6 +139,12 @@ struct PreviousLogInfo
 };
 
 PreviousLogInfo gs_prevLog;
+
+
+// map containing all components for which log level was explicitly set
+//
+// NB: all accesses to it must be protected by GetLevelsCS() critical section
+wxStringToNumHashMap gs_componentLevels;
 
 } // anonymous namespace
 
@@ -437,6 +453,47 @@ void wxLog::DoCreateOnDemand()
     ms_bAutoCreate = true;
 }
 
+// ----------------------------------------------------------------------------
+// wxLog components levels
+// ----------------------------------------------------------------------------
+
+/* static */
+void wxLog::SetComponentLevel(const wxString& component, wxLogLevel level)
+{
+    if ( component.empty() )
+    {
+        SetLogLevel(level);
+    }
+    else
+    {
+        wxCRIT_SECT_LOCKER(lock, GetLevelsCS());
+
+        gs_componentLevels[component] = level;
+    }
+}
+
+/* static */
+wxLogLevel wxLog::GetComponentLevel(wxString component)
+{
+    wxCRIT_SECT_LOCKER(lock, GetLevelsCS());
+
+    while ( !component.empty() )
+    {
+        wxStringToNumHashMap::const_iterator
+            it = gs_componentLevels.find(component);
+        if ( it != gs_componentLevels.end() )
+            return static_cast<wxLogLevel>(it->second);
+
+        component = component.BeforeLast('/');
+    }
+
+    return GetLogLevel();
+}
+
+// ----------------------------------------------------------------------------
+// wxLog trace masks
+// ----------------------------------------------------------------------------
+
 void wxLog::AddTraceMask(const wxString& str)
 {
     wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
@@ -460,6 +517,25 @@ void wxLog::ClearTraceMasks()
     ms_aTraceMasks.Clear();
 }
 
+/*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
+{
+    wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
+
+    for ( wxArrayString::iterator it = ms_aTraceMasks.begin(),
+                                  en = ms_aTraceMasks.end();
+         it != en; ++it )
+    {
+        if ( *it == mask)
+            return true;
+    }
+
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// wxLog miscellaneous other methods
+// ----------------------------------------------------------------------------
+
 void wxLog::TimeStamp(wxString *str)
 {
 #if wxUSE_DATETIME
@@ -482,21 +558,6 @@ void wxLog::TimeStamp(wxString *str)
 void wxLog::Flush()
 {
     LogLastRepeatIfNeeded();
-}
-
-/*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
-{
-    wxCRIT_SECT_LOCKER(lock, GetTraceMaskCS());
-
-    for ( wxArrayString::iterator it = ms_aTraceMasks.begin(),
-                                  en = ms_aTraceMasks.end();
-         it != en; ++it )
-    {
-        if ( *it == mask)
-            return true;
-    }
-
-    return false;
 }
 
 // ----------------------------------------------------------------------------

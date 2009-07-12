@@ -828,11 +828,14 @@ public:
         Returns true if logging at this level is enabled.
 
         This function only returns @true if logging is globally enabled and if
-        this level is less than or equal to the global log level value.
+        @a level is less than or equal to the maximal log level enabled for the
+        given @a component.
 
-        @see IsEnabled(), SetLogLevel(), GetLogLevel()
+        @see IsEnabled(), SetLogLevel(), GetLogLevel(), SetComponentLevel()
+
+        @since 2.9.1
      */
-    static bool IsLevelEnabled(wxLogLevel level);
+    static bool IsLevelEnabled(wxLogLevel level, wxString component);
 
     /**
         Remove the @a mask from the list of allowed masks for
@@ -859,8 +862,32 @@ public:
     static wxLog* SetActiveTarget(wxLog* logtarget);
 
     /**
+        Sets the log level for the given component.
+
+        For example, to disable all but error messages from wxWidgets network
+        classes you may use
+        @code
+            wxLog::SetComponentLevel("wx/net", wxLOG_Error);
+        @endcode
+
+        SetLogLevel() may be used to set the global log level.
+
+        @param component
+            Non-empty component name, possibly using slashes (@c /) to separate
+            it into several parts.
+        @param level
+            Maximal level of log messages from this component which will be
+            handled instead of being simply discarded.
+
+        @since 2.9.1
+     */
+    static void SetComponentLevel(const wxString& component, wxLogLevel level);
+
+    /**
         Specifies that log messages with level greater (numerically) than
         @a logLevel should be ignored and not sent to the active log target.
+
+        @see SetComponentLevel()
     */
     static void SetLogLevel(wxLogLevel logLevel);
 

@@ -120,10 +120,58 @@ classes are. Some of advantages in using wxWidgets log functions are:
     about data file writing error.
 
 
+@section overview_log_enable Log Messages Selection
+
+By default, most log messages are enabled. In particular, this means that
+errors logged by wxWidgets code itself (e.g. when it fails to perform some
+operation, for instance wxFile::Open() logs an error when it fails to open a
+file) will be processed and shown to the user. To disable the logging entirely
+you can use wxLog::EnableLogging() method or, more usually, wxLogNull class
+which temporarily disables logging and restores it back to the original setting
+when it is destroyed.
+
+To limit logging to important messages only, you may use wxLog::SetLogLevel()
+with e.g. wxLOG_Warning value -- this will completely disable all logging
+messages with the severity less than warnings, so wxLogMessage() output won't
+be shown to the user any more.
+
+Moreover, the log level can be set separately for different log components.
+Before showing how this can be useful, let us explain what log components are:
+they are simply arbitrary strings identifying the component, or module, which
+generated the message. They are hierarchical in the sense that "foo/bar/baz"
+component is supposed to be a child of "foo". And all components are children
+of the unnamed root component.
+
+By default, all messages logged by wxWidgets originate from "wx" component or
+one of its subcomponents such as "wx/net/ftp", while the messages logged by
+your own code are assigned empty log component. To change this, you need to
+define @c wxLOG_COMPONENT to a string uniquely identifying each component, e.g.
+you could give it the value "MyProgram" by default and re-define it as
+"MyProgram/DB" in the module working with the database and "MyProgram/DB/Trans"
+in its part managing the transactions. Then you could use
+wxLog::SetComponentLevel() in the following ways:
+    @code
+        // disable all database error messages, everybody knows databases never
+        // fail anyhow
+        wxLog::SetComponentLevel("MyProgram/DB", wxLOG_FatalError);
+
+        // but enable tracing for the transactions as somehow our changes don't
+        // get committed sometimes
+        wxLog::SetComponentLevel("MyProgram/DB/Trans", wxLOG_Trace);
+
+        // also enable tracing messages from wxWidgets dynamic module loading
+        // mechanism
+        wxLog::SetComponentLevel("wx/base/module", wxLOG_Trace);
+    @endcode
+Notice that the log level set explicitly for the transactions code overrides
+the log level of the parent component but that all other database code
+subcomponents inherit its setting by default and so won't generate any log
+messages at all.
+
 @section overview_log_targets Log Targets
 
 After having enumerated all the functions which are normally used to log the
-messages, and why would you want to use them we now describe how all this
+messages, and why would you want to use them, we now describe how all this
 works.
 
 wxWidgets has the notion of a <em>log target</em>: it is just a class deriving

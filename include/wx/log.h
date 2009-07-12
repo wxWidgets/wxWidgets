@@ -78,6 +78,19 @@ typedef unsigned long wxLogLevel;
     #endif
 #endif // wxUSE_LOG_TRACE
 
+// wxLOG_COMPONENT identifies the component which generated the log record and
+// can be #define'd to a user-defined value when compiling the user code to use
+// component-based filtering (see wxLog::SetComponentLevel())
+#ifndef wxLOG_COMPONENT
+    // this is a variable and not a macro in order to allow the user code to
+    // just #define wxLOG_COMPONENT without #undef'ining it first
+    extern WXDLLIMPEXP_DATA_BASE(const char *) wxLOG_COMPONENT;
+
+    #ifdef WXBUILDING
+        #define wxLOG_COMPONENT "wx"
+    #endif
+#endif
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -133,18 +146,20 @@ public:
     // default ctor creates an uninitialized object
     wxLogRecordInfo()
     {
-        memset(this, 0, sizeof(this));
+        memset(this, 0, sizeof(*this));
     }
 
     // normal ctor, used by wxLogger specifies the location of the log
     // statement; its time stamp and thread id are set up here
     wxLogRecordInfo(const char *filename_,
                     int line_,
-                    const char *func_)
+                    const char *func_,
+                    const char *component_)
     {
         filename = filename_;
         func = func_;
         line = line_;
+        component = component_;
 
         timestamp = time(NULL);
 
@@ -187,6 +202,10 @@ public:
     // the name of the function where the log record was generated (may be NULL
     // if the compiler doesn't support __FUNCTION__)
     const char *func;
+
+    // the name of the component which generated this message, may be NULL if
+    // not set (i.e. wxLOG_COMPONENT not defined)
+    const char *component;
 
     // time of record generation
     time_t timestamp;
@@ -250,7 +269,7 @@ public:
 private:
     void Copy(const wxLogRecordInfo& other)
     {
-        memcpy(this, &other, sizeof(wxLogRecordInfo));
+        memcpy(this, &other, sizeof(*this));
         if ( other.m_data )
            m_data = new ExtraData(*other.m_data);
     }
@@ -285,20 +304,61 @@ public:
     virtual ~wxLog();
 
 
-    // these functions allow to completely disable all log messages
+    // log messages selection
+    // ----------------------
+
+    // these functions allow to completely disable all log messages or disable
+    // log messages at level less important than specified
 
     // is logging enabled at all now?
     static bool IsEnabled() { return ms_doLog; }
-
-    // is logging at this level enabled?
-    static bool IsLevelEnabled(wxLogLevel level)
-        { return IsEnabled() && level <= ms_logLevel; }
 
     // change the flag state, return the previous one
     static bool EnableLogging(bool doIt = true)
         { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
 
+
+    // return the current global log level
+    static wxLogLevel GetLogLevel() { return ms_logLevel; }
+
+    // set global log level: messages with level > logLevel will not be logged
+    static void SetLogLevel(wxLogLevel logLevel) { ms_logLevel = logLevel; }
+
+    // set the log level for the given component
+    static void SetComponentLevel(const wxString& component, wxLogLevel level);
+
+    // return the effective log level for this component, falling back to
+    // parent component and to the default global log level if necessary
+    //
+    // NB: component argument is passed by value and not const reference in an
+    //     attempt to encourage compiler to avoid an extra copy: as we modify
+    //     the component internally, we'd create one anyhow and like this it
+    //     can be avoided if the string is a temporary anyhow
+    static wxLogLevel GetComponentLevel(wxString component);
+
+
+    // is logging of messages from this component enabled at this level?
+    //
+    // usually always called with wxLOG_COMPONENT as second argument
+    static bool IsLevelEnabled(wxLogLevel level, wxString component)
+    {
+        return IsEnabled() && level <= GetComponentLevel(component);
+    }
+
+
+    // enable/disable messages at wxLOG_Verbose level (only relevant if the
+    // current log level is greater or equal to it)
+    //
+    // notice that verbose mode can be activated by the standard command-line
+    // '--verbose' option
+    static void SetVerbose(bool bVerbose = true) { ms_bVerbose = bVerbose; }
+
+    // check if verbose messages are enabled
+    static bool GetVerbose() { return ms_bVerbose; }
+
+
     // message buffering
+    // -----------------
 
     // flush shows all messages if they're not logged immediately (FILE
     // and iostream logs don't need it, but wxGuiLog does to avoid showing
@@ -331,14 +391,6 @@ public:
 
     // must be called for each Suspend()!
     static void Resume() { ms_suspendCount--; }
-
-    // functions controlling the default wxLog behaviour
-    // verbose mode is activated by standard command-line '--verbose'
-    // option
-    static void SetVerbose(bool bVerbose = true) { ms_bVerbose = bVerbose; }
-
-    // Set log level.  Log messages with level > logLevel will not be logged.
-    static void SetLogLevel(wxLogLevel logLevel) { ms_logLevel = logLevel; }
 
     // should GetActiveTarget() try to create a new log object if the
     // current is NULL?
@@ -377,16 +429,8 @@ public:
     static void DisableTimestamp() { SetTimestamp(wxEmptyString); }
 
 
-    // accessors
-
-    // gets the verbose status
-    static bool GetVerbose() { return ms_bVerbose; }
-
     // is this trace mask in the list?
     static bool IsAllowedTraceMask(const wxString& mask);
-
-    // return the current loglevel limit
-    static wxLogLevel GetLogLevel() { return ms_logLevel; }
 
     // get the current timestamp format string (maybe empty)
     static const wxString& GetTimestamp() { return ms_timestamp; }
@@ -742,9 +786,10 @@ public:
     wxLogger(wxLogLevel level,
              const char *filename,
              int line,
-             const char *func)
+             const char *func,
+             const char *component)
         : m_level(level),
-          m_info(filename, line, func)
+          m_info(filename, line, func, component)
     {
     }
 
@@ -778,7 +823,8 @@ public:
     void LogV(const wxString& format, va_list argptr)
     {
         // remember that fatal errors can't be disabled
-        if ( m_level == wxLOG_FatalError || wxLog::IsLevelEnabled(m_level) )
+        if ( m_level == wxLOG_FatalError ||
+                wxLog::IsLevelEnabled(m_level, m_info.component) )
             DoCallOnLog(format, argptr);
     }
 
@@ -980,7 +1026,7 @@ private:
 
     void DoLogAtLevel(wxLogLevel level, const wxChar *format, ...)
     {
-        if ( !wxLog::IsLevelEnabled(level) )
+        if ( !wxLog::IsLevelEnabled(level, m_info.component) )
             return;
 
         va_list argptr;
@@ -1049,7 +1095,7 @@ private:
 
     void DoLogAtLevelUtf8(wxLogLevel level, const char *format, ...)
     {
-        if ( !wxLog::IsLevelEnabled(level) )
+        if ( !wxLog::IsLevelEnabled(level, m_info.component) )
             return;
 
         va_list argptr;
@@ -1155,7 +1201,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 // creates wxLogger object for the current location
 #define wxMAKE_LOGGER(level) \
-    wxLogger(wxLOG_##level, __FILE__, __LINE__, __WXFUNCTION__)
+    wxLogger(wxLOG_##level, __FILE__, __LINE__, __WXFUNCTION__, wxLOG_COMPONENT)
 
 // this macro generates the expression which logs whatever follows it in
 // parentheses at the level specified as argument
@@ -1188,7 +1234,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 //       easily fixed by adding curly braces around wxLogError() and at least
 //       the code still does do the right thing.
 #define wxDO_LOG_IF_ENABLED(level)                                            \
-    if ( !wxLog::IsLevelEnabled(wxLOG_##level) )                              \
+    if ( !wxLog::IsLevelEnabled(wxLOG_##level, wxLOG_COMPONENT) )             \
     {}                                                                        \
     else                                                                      \
         wxDO_LOG(level)
@@ -1208,12 +1254,14 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 // this one is special as it only logs if we're in verbose mode
 #define wxLogVerbose                                                          \
-    if ( !(wxLog::IsLevelEnabled(wxLOG_Info) && wxLog::GetVerbose()) )        \
+    if ( !(wxLog::IsLevelEnabled(wxLOG_Info, wxLOG_COMPONENT) &&              \
+            wxLog::GetVerbose()) )                                            \
     {}                                                                        \
     else                                                                      \
         wxDO_LOG(Info)
 #define wxVLogVerbose(format, argptr)                                         \
-    if ( !(wxLog::IsLevelEnabled(wxLOG_Info) && wxLog::GetVerbose()) )        \
+    if ( !(wxLog::IsLevelEnabled(wxLOG_Info, wxLOG_COMPONENT) &&              \
+            wxLog::GetVerbose()) )                                            \
     {}                                                                        \
     else                                                                      \
         wxDO_LOGV(Info, format, argptr)
@@ -1230,7 +1278,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 // always evaluated, unlike for the other log functions
 #define wxLogGeneric wxMAKE_LOGGER(Max).LogAtLevel
 #define wxVLogGeneric(level, format, argptr) \
-    if ( !wxLog::IsLevelEnabled(wxLOG_##level) )                              \
+    if ( !wxLog::IsLevelEnabled(wxLOG_##level, wxLOG_COMPONENT) )             \
     {}                                                                        \
     else                                                                      \
         wxDO_LOGV(level, format, argptr)
@@ -1242,7 +1290,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 #define wxLOG_KEY_SYS_ERROR_CODE "wx.sys_error"
 
 #define wxLogSysError                                                         \
-    if ( !wxLog::IsLevelEnabled(wxLOG_Error) )                                \
+    if ( !wxLog::IsLevelEnabled(wxLOG_Error, wxLOG_COMPONENT) )               \
     {}                                                                        \
     else                                                                      \
         wxMAKE_LOGGER(Error).MaybeStore(wxLOG_KEY_SYS_ERROR_CODE).Log
@@ -1259,7 +1307,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     #define wxLOG_KEY_FRAME "wx.frame"
 
     #define wxLogStatus                                                       \
-        if ( !wxLog::IsLevelEnabled(wxLOG_Status) )                           \
+        if ( !wxLog::IsLevelEnabled(wxLOG_Status, wxLOG_COMPONENT) )          \
         {}                                                                    \
         else                                                                  \
             wxMAKE_LOGGER(Status).MaybeStore(wxLOG_KEY_FRAME).Log
@@ -1379,7 +1427,7 @@ public:
 
 #if wxUSE_LOG_TRACE
     #define wxLogTrace                                                        \
-        if ( !wxLog::IsLevelEnabled(wxLOG_Trace) )                            \
+        if ( !wxLog::IsLevelEnabled(wxLOG_Trace, wxLOG_COMPONENT) )           \
         {}                                                                    \
         else                                                                  \
             wxMAKE_LOGGER(Trace).LogTrace
