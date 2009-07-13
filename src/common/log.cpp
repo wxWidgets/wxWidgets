@@ -72,6 +72,26 @@ const char *wxLOG_COMPONENT = "";
 
 wxTLS_TYPE(wxThreadSpecificInfo) wxThreadInfoVar;
 
+// this macro allows to define an object which will be initialized before any
+// other function in this file is called: this is necessary to allow log
+// functions to be used during static initialization (this is not advisable
+// anyhow but we should at least try to not crash) and to also ensure that they
+// are initialized by the time static initialization is done, i.e. before any
+// threads are created hopefully
+//
+// the net effect of all this is that you can use Get##name() function to
+// access the object without worrying about it being not initialized
+//
+// see also WX_DEFINE_GLOBAL_CONV2() in src/common/strconv.cpp
+#define WX_DEFINE_GLOBAL_VAR(type, name)                                      \
+    inline type& Get##name()                                                  \
+    {                                                                         \
+        static type s_##name;                                                 \
+        return s_##name;                                                      \
+    }                                                                         \
+                                                                              \
+    type *gs_##name##Ptr = &Get##name()
+
 namespace
 {
 
@@ -80,25 +100,7 @@ namespace
 typedef wxVector<wxLogRecord> wxLogRecords;
 wxLogRecords gs_bufferedLogRecords;
 
-// this macro allows to define an object which will be initialized before any
-// other function in this file is called: this is necessary to allow log
-// functions to be used during static initialization (this is not advisable
-// anyhow but we should at least try to not crash) and to also ensure that they
-// are initialized by the time static initialization is done, i.e. before any
-// threads are created hopefully
-//
-// the net effect of all this is that you can use Get##name##CS() function to
-// access the critical function without worrying about it being not initialized
-//
-// see also WX_DEFINE_GLOBAL_CONV2() in src/common/strconv.cpp
-#define WX_DEFINE_LOG_CS(name)                                                \
-    inline wxCriticalSection& Get##name##CS()                                 \
-    {                                                                         \
-        static wxCriticalSection s_cs##name;                                  \
-        return s_cs##name;                                                    \
-    }                                                                         \
-                                                                              \
-    wxCriticalSection *gs_##name##CSPtr = &Get##name##CS()
+#define WX_DEFINE_LOG_CS(name) WX_DEFINE_GLOBAL_VAR(wxCriticalSection, name##CS)
 
 // this critical section is used for buffering the messages from threads other
 // than main, i.e. it protects all accesses to gs_bufferedLogRecords above
@@ -107,7 +109,7 @@ WX_DEFINE_LOG_CS(BackgroundLog);
 // this one is used for protecting ms_aTraceMasks from concurrent access
 WX_DEFINE_LOG_CS(TraceMask);
 
-// and this one is used for gs_componentLevels 
+// and this one is used for GetComponentLevels() 
 WX_DEFINE_LOG_CS(Levels);
 
 } // anonymous namespace
@@ -161,7 +163,7 @@ PreviousLogInfo gs_prevLog;
 // map containing all components for which log level was explicitly set
 //
 // NB: all accesses to it must be protected by GetLevelsCS() critical section
-wxStringToNumHashMap gs_componentLevels;
+WX_DEFINE_GLOBAL_VAR(wxStringToNumHashMap, ComponentLevels);
 
 } // anonymous namespace
 
@@ -544,7 +546,7 @@ void wxLog::SetComponentLevel(const wxString& component, wxLogLevel level)
     {
         wxCRIT_SECT_LOCKER(lock, GetLevelsCS());
 
-        gs_componentLevels[component] = level;
+        GetComponentLevels()[component] = level;
     }
 }
 
@@ -553,11 +555,12 @@ wxLogLevel wxLog::GetComponentLevel(wxString component)
 {
     wxCRIT_SECT_LOCKER(lock, GetLevelsCS());
 
+    const wxStringToNumHashMap& componentLevels = GetComponentLevels();
     while ( !component.empty() )
     {
         wxStringToNumHashMap::const_iterator
-            it = gs_componentLevels.find(component);
-        if ( it != gs_componentLevels.end() )
+            it = componentLevels.find(component);
+        if ( it != componentLevels.end() )
             return static_cast<wxLogLevel>(it->second);
 
         component = component.BeforeLast('/');
