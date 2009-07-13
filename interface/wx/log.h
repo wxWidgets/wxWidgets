@@ -759,24 +759,36 @@ public:
 
         If the buffer is already empty, nothing happens.
 
-        It should only be called from the main application thread.
-
         If you override this method in a derived class, call the base class
-        version first, before doing anything else, to ensure that any buffered
-        messages from the other threads are logged.
+        version first, before doing anything else.
     */
     virtual void Flush();
 
     /**
         Flushes the current log target if any, does nothing if there is none.
 
-        As Flush() itself, this method should only be called from the main
-        application thread.
+        When this method is called from the main thread context, it also
+        flushes any previously buffered messages logged by the other threads.
+        When it is called from the other threads it simply calls Flush() on the
+        currently active log target, so it mostly makes sense to do this if a
+        thread has its own logger set with SetThreadActiveTarget().
     */
     static void FlushActive();
 
     /**
         Returns the pointer to the active log target (may be @NULL).
+
+        Notice that if SetActiveTarget() hadn't been previously explicitly
+        called, this function will by default try to create a log target by
+        calling wxAppTraits::CreateLogTarget() which may be overridden in a
+        user-defined traits class to change the default behaviour. You may also
+        call DontCreateOnDemand() to disable this behaviour.
+
+        When this function is called from threads other than main one,
+        auto-creation doesn't happen. But if the thread has a thread-specific
+        log target previously set by SetThreadActiveTarget(), it is returned
+        instead of the global one. Otherwise, the global log target is
+        returned.
     */
     static wxLog* GetActiveTarget();
 
@@ -866,6 +878,8 @@ public:
         To suppress logging use a new instance of wxLogNull not @NULL.  If the
         active log target is set to @NULL a new default log target will be
         created when logging occurs.
+
+        @see SetThreadActiveTarget()
     */
     static wxLog* SetActiveTarget(wxLog* logtarget);
 
@@ -905,6 +919,32 @@ public:
         repetitions is logged.
     */
     static void SetRepetitionCounting(bool repetCounting = true);
+
+    /**
+        Sets a thread-specific log target.
+
+        The log target passed to this function will be used for all messages
+        logged by the current thread using the usual wxLog functions. This
+        shouldn't be called from the main thread which never uses a thread-
+        specific log target but can be used for the other threads to handle
+        thread logging completely separately; instead of buffering thread log
+        messages in the main thread logger.
+
+        Notice that unlike for SetActiveTarget(), wxWidgets does not destroy
+        the thread-specific log targets when the thread terminates so doing
+        this is your responsibility.
+
+        This method is only available if @c wxUSE_THREADS is 1, i.e. wxWidgets
+        was compiled with threads support.
+
+        @param logger
+            The new thread-specific log target, possibly @NULL.
+        @return
+            The previous thread-specific log target, initially @NULL.
+
+        @since 2.9.1
+     */
+    static wxLog *SetThreadActiveTarget(wxLog *logger);
 
     /**
         Sets the timestamp format prepended by the default log targets to all

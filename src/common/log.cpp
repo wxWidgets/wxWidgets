@@ -42,6 +42,7 @@
 #include "wx/msgout.h"
 #include "wx/textfile.h"
 #include "wx/thread.h"
+#include "wx/private/threadinfo.h"
 #include "wx/crt.h"
 #include "wx/vector.h"
 
@@ -68,6 +69,8 @@
 const char *wxLOG_COMPONENT = "";
 
 #if wxUSE_THREADS
+
+wxTLS_TYPE(wxThreadSpecificInfo) wxThreadInfoVar;
 
 namespace
 {
@@ -259,31 +262,48 @@ wxLog::OnLog(wxLogLevel level,
 #endif
     }
 
-    wxLog *pLogger = GetActiveTarget();
-    if ( !pLogger )
-        return;
+    wxLog *logger;
 
 #if wxUSE_THREADS
     if ( !wxThread::IsMain() )
     {
-        wxCriticalSectionLocker lock(GetBackgroundLogCS());
+        logger = wxThreadInfo.logger;
+        if ( !logger )
+        {
+            if ( ms_pLogger )
+            {
+                // buffer the messages until they can be shown from the main
+                // thread
+                wxCriticalSectionLocker lock(GetBackgroundLogCS());
 
-        gs_bufferedLogRecords.push_back(wxLogRecord(level, msg, info));
+                gs_bufferedLogRecords.push_back(wxLogRecord(level, msg, info));
 
-        // ensure that our Flush() will be called soon
-        wxWakeUpIdle();
+                // ensure that our Flush() will be called soon
+                wxWakeUpIdle();
+            }
+            //else: we don't have any logger at all, there is no need to log
+            //      anything
 
-        return;
+            return;
+        }
+        //else: we have a thread-specific logger, we can send messages to it
+        //      directly
     }
+    else
 #endif // wxUSE_THREADS
+    {
+        logger = ms_pLogger;
+        if ( !logger )
+            return;
+    }
 
-    pLogger->OnLogInMainThread(level, msg, info);
+    logger->CallDoLogNow(level, msg, info);
 }
 
 void
-wxLog::OnLogInMainThread(wxLogLevel level,
-                         const wxString& msg,
-                         const wxLogRecordInfo& info)
+wxLog::CallDoLogNow(wxLogLevel level,
+                    const wxString& msg,
+                    const wxLogRecordInfo& info)
 {
     if ( GetRepetitionCounting() )
     {
@@ -429,6 +449,19 @@ void wxLog::DoLog(wxLogLevel WXUNUSED(level), const wchar_t *wzString, time_t t)
 
 wxLog *wxLog::GetActiveTarget()
 {
+#if wxUSE_THREADS
+    if ( !wxThread::IsMain() )
+    {
+        // check if we have a thread-specific log target
+        wxLog * const logger = wxThreadInfo.logger;
+
+        // the code below should be only executed for the main thread as
+        // CreateLogTarget() is not meant for auto-creating log targets for
+        // worker threads so skip it in any case
+        return logger ? logger : ms_pLogger;
+    }
+#endif // wxUSE_THREADS
+
     if ( ms_bAutoCreate && ms_pLogger == NULL ) {
         // prevent infinite recursion if someone calls wxLogXXX() from
         // wxApp::CreateLogTarget()
@@ -464,6 +497,22 @@ wxLog *wxLog::SetActiveTarget(wxLog *pLogger)
 
     return pOldLogger;
 }
+
+#if wxUSE_THREADS
+/* static */
+wxLog *wxLog::SetThreadActiveTarget(wxLog *logger)
+{
+    wxASSERT_MSG( !wxThread::IsMain(), "use SetActiveTarget() for main thread" );
+
+    wxLog * const oldLogger = wxThreadInfo.logger;
+    if ( oldLogger )
+        oldLogger->Flush();
+
+    wxThreadInfo.logger = logger;
+
+    return oldLogger;
+}
+#endif // wxUSE_THREADS
 
 void wxLog::DontCreateOnDemand()
 {
@@ -582,12 +631,10 @@ void wxLog::TimeStamp(wxString *str)
 #endif // wxUSE_DATETIME
 }
 
-void wxLog::Flush()
-{
 #if wxUSE_THREADS
-    wxASSERT_MSG( wxThread::IsMain(),
-                  "should be called from the main thread only" );
 
+void wxLog::FlushThreadMessages()
+{
     // check if we have queued messages from other threads
     wxLogRecords bufferedLogRecords;
 
@@ -605,12 +652,34 @@ void wxLog::Flush()
               it != bufferedLogRecords.end();
               ++it )
         {
-            OnLogInMainThread(it->level, it->msg, it->info);
+            CallDoLogNow(it->level, it->msg, it->info);
         }
     }
+}
+
 #endif // wxUSE_THREADS
 
+void wxLog::Flush()
+{
     LogLastRepeatIfNeeded();
+}
+
+/* static */
+void wxLog::FlushActive()
+{
+    if ( ms_suspendCount )
+        return;
+
+    wxLog * const log = GetActiveTarget();
+    if ( log )
+    {
+#if wxUSE_THREADS
+        if ( wxThread::IsMain() )
+            log->FlushThreadMessages();
+#endif // wxUSE_THREADS
+
+        log->Flush();
+    }
 }
 
 // ----------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     06/16/98
 // RCS-ID:      $Id$
-// Copyright:   (c) 1998-2002 wxWidgets team
+// Copyright:   (c) 1998-2009 wxWidgets team
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -720,8 +720,8 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
     wxMessageDialog dialog(this,
                            _T("wxWidgets multithreaded application sample\n")
                            _T("(c) 1998 Julian Smart, Guilhem Lavaux\n")
-                           _T("(c) 1999 Vadim Zeitlin\n")
-                           _T("(c) 2000 Robert Roebling"),
+                           _T("(c) 2000 Robert Roebling\n")
+                           _T("(c) 1999,2009 Vadim Zeitlin"),
                            _T("About wxThread sample"),
                            wxOK | wxICON_INFORMATION);
 
@@ -1003,6 +1003,14 @@ wxThread::ExitCode MyWorkerThread::Entry()
 
 wxThread::ExitCode MyGUIThread::Entry()
 {
+    // this goes to the main window
+    wxLogMessage("GUI thread starting");
+
+    // use a thread-specific log target for this thread to show that its
+    // messages don't appear in the main window while it runs
+    wxLogBuffer logBuf;
+    wxLog::SetThreadActiveTarget(&logBuf);
+
     for (int i=0; i<GUITHREAD_NUM_UPDATES && !TestDestroy(); i++)
     {
         // inform the GUI toolkit that we're going to use GUI functions
@@ -1029,10 +1037,22 @@ wxThread::ExitCode MyGUIThread::Entry()
         event.SetInt(i+1);
         wxQueueEvent( m_dlg, event.Clone() );
 
+        if ( !((i + 1) % 10) )
+        {
+            // this message will go to the buffer
+            wxLogMessage("Step #%d.", i + 1);
+        }
+
         // give the main thread the time to refresh before we lock the GUI mutex again
         // FIXME: find a better way to do this!
         wxMilliSleep(100);
     }
+
+    // now remove the thread-specific thread target
+    wxLog::SetThreadActiveTarget(NULL);
+
+    // so that this goes to the main window again
+    wxLogMessage("GUI thread finished.");
 
     return (ExitCode)0;
 }

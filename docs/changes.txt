@@ -358,6 +358,12 @@ All:
 - Added wxTempFile::Flush().
 - Added support for wxLongLong and wxULongLong in wxVariant.
 - Added wxVector::swap().
+- Many wxLog improvements:
+ * wxLogXXX() functions are now thread-safe.
+ * Log levels can now be set independently for different log components.
+ * wxLog::DoLogRecord() has access to the location of the log message
+   (file, line and function name) and id of the thread which generated it.
+ * SetThreadActiveTarget() allows to set up thread-specific log targets.
 
 All (GUI):
 

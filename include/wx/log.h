@@ -385,24 +385,22 @@ public:
     // 17 modal dialogs one after another)
     virtual void Flush();
 
-    // flush the active target if any
-    static void FlushActive()
-    {
-        if ( !ms_suspendCount )
-        {
-            wxLog *log = GetActiveTarget();
-            if ( log )
-                log->Flush();
-        }
-    }
+    // flush the active target if any and also output any pending messages from
+    // background threads
+    static void FlushActive();
 
-    // only one sink is active at each moment
-    // get current log target, will call wxApp::CreateLogTarget() to
-    // create one if none exists
+    // only one sink is active at each moment get current log target, will call
+    // wxAppTraits::CreateLogTarget() to create one if none exists
     static wxLog *GetActiveTarget();
 
-    // change log target, pLogger may be NULL
-    static wxLog *SetActiveTarget(wxLog *pLogger);
+    // change log target, logger may be NULL
+    static wxLog *SetActiveTarget(wxLog *logger);
+
+#if wxUSE_THREADS
+    // change log target for the current thread only, shouldn't be called from
+    // the main thread as it doesn't use thread-specific log target
+    static wxLog *SetThreadActiveTarget(wxLog *logger);
+#endif // wxUSE_THREADS
 
     // suspend the message flushing of the main target until the next call
     // to Resume() - this is mainly for internal use (to prevent wxYield()
@@ -580,11 +578,18 @@ protected:
     unsigned LogLastRepeatIfNeeded();
 
 private:
-    // called from OnLog() if it's called from the main thread and from Flush()
+#if wxUSE_THREADS
+    // called from FlushActive() to really log any buffered messages logged
+    // from the other threads
+    void FlushThreadMessages();
+#endif // wxUSE_THREADS
+
+    // called from OnLog() if it's called from the main thread or if we have a
+    // (presumably MT-safe) thread-specific logger and by FlushThreadMessages()
     // when it plays back the buffered messages logged from the other threads
-    void OnLogInMainThread(wxLogLevel level,
-                           const wxString& msg,
-                           const wxLogRecordInfo& info);
+    void CallDoLogNow(wxLogLevel level,
+                      const wxString& msg,
+                      const wxLogRecordInfo& info);
 
 
     // static variables
