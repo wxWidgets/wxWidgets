@@ -328,15 +328,32 @@ public:
     // ----------------------
 
     // these functions allow to completely disable all log messages or disable
-    // log messages at level less important than specified
+    // log messages at level less important than specified for the current
+    // thread
 
     // is logging enabled at all now?
-    static bool IsEnabled() { return ms_doLog; }
+    static bool IsEnabled()
+    {
+#if wxUSE_THREADS
+        if ( !wxThread::IsMain() )
+            return IsThreadLoggingEnabled();
+#endif // wxUSE_THREADS
+
+        return ms_doLog;
+    }
 
     // change the flag state, return the previous one
-    static bool EnableLogging(bool doIt = true)
-        { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
+    static bool EnableLogging(bool enable = true)
+    {
+#if wxUSE_THREADS
+        if ( !wxThread::IsMain() )
+            return EnableThreadLogging(enable);
+#endif // wxUSE_THREADS
 
+        bool doLogOld = ms_doLog;
+        ms_doLog = enable;
+        return doLogOld;
+    }
 
     // return the current global log level
     static wxLogLevel GetLogLevel() { return ms_logLevel; }
@@ -582,6 +599,11 @@ private:
     // called from FlushActive() to really log any buffered messages logged
     // from the other threads
     void FlushThreadMessages();
+
+    // these functions are called for non-main thread only by IsEnabled() and
+    // EnableLogging() respectively
+    static bool IsThreadLoggingEnabled();
+    static bool EnableThreadLogging(bool enable = true);
 #endif // wxUSE_THREADS
 
     // called from OnLog() if it's called from the main thread or if we have a

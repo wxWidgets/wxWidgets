@@ -657,6 +657,20 @@ void wxLog::FlushThreadMessages()
     }
 }
 
+/* static */
+bool wxLog::IsThreadLoggingEnabled()
+{
+    return !wxThreadInfo.loggingDisabled;
+}
+
+/* static */
+bool wxLog::EnableThreadLogging(bool enable)
+{
+    const bool wasEnabled = !wxThreadInfo.loggingDisabled;
+    wxThreadInfo.loggingDisabled = !enable;
+    return wasEnabled;
+}
+
 #endif // wxUSE_THREADS
 
 void wxLog::Flush()

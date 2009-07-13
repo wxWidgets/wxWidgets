@@ -744,7 +744,8 @@ public:
     /**
         Globally enable or disable logging.
 
-        Calling this function with @false argument disables all log messages.
+        Calling this function with @false argument disables all log messages
+        for the current thread.
 
         @see wxLogNull, IsEnabled()
 
@@ -845,7 +846,7 @@ public:
     static bool IsEnabled();
 
     /**
-        Returns true if logging at this level is enabled.
+        Returns true if logging at this level is enabled for the current thread.
 
         This function only returns @true if logging is globally enabled and if
         @a level is less than or equal to the maximal log level enabled for the

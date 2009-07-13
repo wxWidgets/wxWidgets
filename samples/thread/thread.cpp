@@ -793,6 +793,11 @@ void MyFrame::OnWorkerEvent(wxThreadEvent& event)
 
 void MyFrame::OnStartGUIThread(wxCommandEvent& WXUNUSED(event))
 {
+    // we use this to check that disabling logging only affects the main thread
+    // but the messages from the worker thread will still be logged
+    wxLogNull noLog;
+    wxLogMessage("You shouldn't see this message because of wxLogNull");
+
     MyImageDialog dlg(this);
 
     dlg.ShowModal();
@@ -1003,6 +1008,11 @@ wxThread::ExitCode MyWorkerThread::Entry()
 
 wxThread::ExitCode MyGUIThread::Entry()
 {
+    // uncomment this to check that disabling logging here does disable it for
+    // this thread -- but not the main one if you also comment out wxLogNull
+    // line in MyFrame::OnStartGUIThread()
+    //wxLogNull noLog;
+
     // this goes to the main window
     wxLogMessage("GUI thread starting");
 

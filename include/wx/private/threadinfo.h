@@ -30,7 +30,18 @@ class WXDLLIMPEXP_FWD_BASE wxLog;
 // NB: this must be a POD to be stored in TLS
 struct wxThreadSpecificInfo
 {
+    // the thread-specific logger or NULL if the thread is using the global one
+    // (this is not used for the main thread which always uses the global
+    // logger)
     wxLog *logger;
+
+    // true if logging is currently disabled for this thread (this is also not
+    // used for the main thread which uses wxLog::ms_doLog)
+    //
+    // NB: we use a counter-intuitive "disabled" flag instead of "enabled" one
+    //     because the default, for 0-initialized struct, should be to enable
+    //     logging
+    bool loggingDisabled;
 };
 
 // currently this is defined in src/common/log.cpp
