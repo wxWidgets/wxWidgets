@@ -102,7 +102,6 @@
 <emaillookup name="wx-devs">
     <xi:include href="include/wx-devs.xml"/>
     <!-- Overrides... -->
-    <email id="JMS">jaakko.salli -at- dnainternet.net</email>
 </emaillookup>
 
 <!--
