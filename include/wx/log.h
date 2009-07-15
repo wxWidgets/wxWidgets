@@ -606,6 +606,13 @@ private:
     static bool EnableThreadLogging(bool enable = true);
 #endif // wxUSE_THREADS
 
+    // get the active log target for the main thread, auto-creating it if
+    // necessary
+    //
+    // this is called from GetActiveTarget() and OnLog() when they're called
+    // from the main thread
+    static wxLog *GetMainThreadActiveTarget();
+
     // called from OnLog() if it's called from the main thread or if we have a
     // (presumably MT-safe) thread-specific logger and by FlushThreadMessages()
     // when it plays back the buffered messages logged from the other threads

@@ -294,7 +294,7 @@ wxLog::OnLog(wxLogLevel level,
     else
 #endif // wxUSE_THREADS
     {
-        logger = ms_pLogger;
+        logger = GetMainThreadActiveTarget();
         if ( !logger )
             return;
     }
@@ -464,6 +464,12 @@ wxLog *wxLog::GetActiveTarget()
     }
 #endif // wxUSE_THREADS
 
+    return GetMainThreadActiveTarget();
+}
+
+/* static */
+wxLog *wxLog::GetMainThreadActiveTarget()
+{
     if ( ms_bAutoCreate && ms_pLogger == NULL ) {
         // prevent infinite recursion if someone calls wxLogXXX() from
         // wxApp::CreateLogTarget()
