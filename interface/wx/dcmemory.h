@@ -55,6 +55,18 @@ public:
         a bitmap into the DC before drawing on it.
     */
     wxMemoryDC();
+
+    /**
+        Constructs a new memory device context having the same characteristics
+        as the given existing device context.
+
+        This constructor creates a memory device context @e compatible with @a
+        dc in wxMSW, the argument is ignored in the other ports. If @a dc is
+        @NULL, a device context compatible with the screen is created, just as
+        with the default constructor.
+     */
+    wxMemoryDC(wxDC *dc);
+
     /**
         Constructs a new memory device context and calls SelectObject() with
         the given bitmap.
