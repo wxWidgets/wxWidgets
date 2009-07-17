@@ -63,18 +63,7 @@ void wxEventLoopBase::WakeUpIdle()
 
 bool wxEventLoopBase::ProcessIdle()
 {
-    if (!wxTheApp)
-        return false;
-
-    // process pending wx events before sending idle events
-    wxTheApp->ProcessPendingEvents();
-
-    // synthetize an idle event and send it to wxApp
-    wxIdleEvent event;
-    event.SetEventObject(wxTheApp);
-    wxTheApp->ProcessEvent(event);
-
-    return event.MoreRequested();
+    return wxTheApp && wxTheApp->ProcessIdle();
 }
 
 bool wxEventLoopBase::Yield(bool onlyIfNeeded)
@@ -135,7 +124,7 @@ int wxEventLoopManual::Run()
 
                 // generate and process idle events for as long as we don't
                 // have anything else to do
-                while ( !Pending() && (wxTheApp && wxTheApp->ProcessIdle()) )
+                while ( !Pending() && ProcessIdle() )
                     ;
 
                 // if the "should exit" flag is set, the loop should terminate
