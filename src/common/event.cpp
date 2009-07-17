@@ -1087,14 +1087,18 @@ wxEvtHandler::~wxEvtHandler()
     // Remove us from wxPendingEvents if necessary.
     if(wxPendingEventsLocker)
         wxENTER_CRIT_SECT(*wxPendingEventsLocker);
+#endif // wxUSE_THREADS
+
     if ( wxPendingEvents )
     {
         // Delete all occurences of this from the list of pending events
         while (wxPendingEvents->DeleteObject(this)) { } // Do nothing
     }
+
+#if wxUSE_THREADS
     if(wxPendingEventsLocker)
         wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
-#endif
+#endif // wxUSE_THREADS
 
     // we only delete object data, not untyped
     if ( m_clientDataType == wxClientData_Object )
