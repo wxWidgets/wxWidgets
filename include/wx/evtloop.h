@@ -195,6 +195,9 @@ protected:
 
     // should we exit the loop?
     bool m_shouldExit;
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxEventLoopManual);
 };
 
 #endif // platforms using "manual" loop
