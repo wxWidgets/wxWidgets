@@ -1709,9 +1709,10 @@ enum wxBorder
 #define wxLB_MULTIPLE       0x0040
 #define wxLB_EXTENDED       0x0080
 /*  wxLB_OWNERDRAW is Windows-only */
+#define wxLB_NEEDED_SB      0x0000
 #define wxLB_OWNERDRAW      0x0100
-#define wxLB_NEEDED_SB      0x0200
-#define wxLB_ALWAYS_SB      0x0400
+#define wxLB_ALWAYS_SB      0x0200
+#define wxLB_NO_SB          0x0400
 #define wxLB_HSCROLL        wxHSCROLL
 /*  always show an entire number of rows */
 #define wxLB_INT_HEIGHT     0x0800

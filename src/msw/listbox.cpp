@@ -77,6 +77,7 @@ wxBEGIN_FLAGS( wxListBoxStyle )
     wxFLAGS_MEMBER(wxLB_HSCROLL)
     wxFLAGS_MEMBER(wxLB_ALWAYS_SB)
     wxFLAGS_MEMBER(wxLB_NEEDED_SB)
+    wxFLAGS_MEMBER(wxLB_NO_SB)
     wxFLAGS_MEMBER(wxLB_SORT)
 
 wxEND_FLAGS( wxListBoxStyle )
@@ -207,10 +208,6 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
-    // always show the vertical scrollbar if necessary -- otherwise it is
-    // impossible to use the control with the mouse
-    msStyle |= WS_VSCROLL;
-
     // we always want to get the notifications
     msStyle |= LBS_NOTIFY;
 
@@ -226,8 +223,16 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     else if ( style & wxLB_EXTENDED )
         msStyle |= LBS_EXTENDEDSEL;
 
-    if ( m_windowStyle & wxLB_ALWAYS_SB )
-        msStyle |= LBS_DISABLENOSCROLL;
+    wxASSERT_MSG( !(style & wxLB_ALWAYS_SB) || !(style & wxLB_NO_SB),
+                  _T( "Conflicting styles wxLB_ALWAYS_SB and wxLB_NO_SB." ) );
+
+    if ( !(style & wxLB_NO_SB) )
+    {
+        msStyle |= WS_VSCROLL;
+        if ( style & wxLB_ALWAYS_SB )
+            msStyle |= LBS_DISABLENOSCROLL;
+    }
+
     if ( m_windowStyle & wxLB_HSCROLL )
         msStyle |= WS_HSCROLL;
     if ( m_windowStyle & wxLB_SORT )

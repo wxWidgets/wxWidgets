@@ -383,6 +383,7 @@ All (GUI):
 - Added wxDC::CopyAttributes() and use it in wxBufferedDC.
 - Added wxTextWrapper helper class useful for wrapping lines of text.
 - Added EVT_DATAVIEW_CACHE_HINT() event (Trigve).
+- Added wxLB_NO_SB style (implemented for MSW only; Dario Senic).
 
 GTK:
 
