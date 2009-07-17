@@ -50,15 +50,16 @@ class CBuilder:
         wxc_classname = 'wxC' + aclass.name[2:].capitalize()
 
         for amethod in aclass.constructors:
-            if amethod.name.startswith('m_'):
-                # for some reason, public members are listed as methods
-                continue
             retval += """
 // %s
 %s%s;\n\n
 """ % (amethod.brief_description, wxc_classname + '* ' + wxc_classname + '_' + amethod.name, amethod.argsstring)
 
         for amethod in aclass.methods:
+            if amethod.name.startswith('m_'):
+                # for some reason, public members are listed as methods
+                continue
+        
             args = '(' + wxc_classname + '* obj'
             if amethod.argsstring.find('()') != -1:
                 args += ')'
