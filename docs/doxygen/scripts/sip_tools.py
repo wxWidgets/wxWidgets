@@ -18,7 +18,7 @@ class SIPBuilder:
                 continue
         
             header_name = aclass.name[2:].lower()
-            filename = os.path.join(output_dir, header_name + ".sip")
+            filename = os.path.join(output_dir, "_" + header_name + ".sip")
             enums_text = make_enums(aclass)
             method_text = self.make_sip_methods(aclass)
             base_class = get_first_value(aclass.bases)

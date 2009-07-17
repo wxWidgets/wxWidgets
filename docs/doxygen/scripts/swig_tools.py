@@ -18,7 +18,7 @@ class SWIGBuilder:
                 #print "Skipping %s" % aclass.name
                 continue
                 
-            filename = os.path.join(output_dir, header_name + ".i")
+            filename = os.path.join(output_dir, "_" + header_name + ".i")
             enums_text = make_enums(aclass)
             method_text = self.make_swig_methods(aclass)
             text = """
