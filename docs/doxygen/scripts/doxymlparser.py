@@ -27,23 +27,6 @@ import types
 from common import *
 from xml.dom import minidom
 
-option_dict = { 
-            "report"        : (False, "Print out the classes and methods found by this script."),
-            "verbose"       : (False, "Provide status updates and other information."),
-          }
-    
-parser = optparse.OptionParser(usage="usage: %prog [options] <doxyml files to parse>\n" + __description__, version="%prog 1.0")
-
-for opt in option_dict:
-    default = option_dict[opt][0]
-    
-    action = "store"
-    if type(default) == types.BooleanType:
-        action = "store_true"
-    parser.add_option("--" + opt, default=default, action=action, dest=opt, help=option_dict[opt][1])
-
-options, arguments = parser.parse_args()
-
 class ClassDefinition:
     def __init__(self):
         self.name = ""
@@ -113,8 +96,9 @@ def doxyMLToText(node):
     return text
 
 class DoxyMLParser:
-    def __init__(self):
+    def __init__(self, verbose = False):
         self.classes = []
+        self.verbose = verbose
 
     def find_class(self, name):
         for aclass in self.classes:
@@ -204,7 +188,7 @@ class DoxyMLParser:
                             param[child.nodeName] = getTextValue(child)
                     new_method.params.append(param)
             
-            if options.verbose:
+            if self.verbose:
                 print "Adding %s" % (new_method.name + new_method.argsstring)
             
             if new_method.name == new_class.name:
@@ -215,11 +199,28 @@ class DoxyMLParser:
                 new_class.methods.append(new_method)
 
 if __name__ == "__main__":
+    option_dict = { 
+                "report"        : (False, "Print out the classes and methods found by this script."),
+                "verbose"       : (False, "Provide status updates and other information."),
+              }
+        
+    parser = optparse.OptionParser(usage="usage: %prog [options] <doxyml files to parse>\n" + __description__, version="%prog 1.0")
+    
+    for opt in option_dict:
+        default = option_dict[opt][0]
+        
+        action = "store"
+        if type(default) == types.BooleanType:
+            action = "store_true"
+        parser.add_option("--" + opt, default=default, action=action, dest=opt, help=option_dict[opt][1])
+    
+    options, arguments = parser.parse_args()
+
     if len(arguments) < 1:
         parser.print_usage()
         sys.exit(1)
     
-    doxyparse = DoxyMLParser()
+    doxyparse = DoxyMLParser(verbose = options.verbose)
     for arg in arguments:
         doxyparse.parse(arg)        
 
