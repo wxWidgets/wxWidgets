@@ -150,9 +150,11 @@ public:
         Also notice that this function is not currently available on all
         platforms (although as of wxWidgets 2.9.0 it is implemented in all
         major ports), so it may return @false to indicate that the labels
-        couldn't be changed. If it returns @true (currently only under wxMac),
-        the labels were set successfully. Typically, if the function was used
-        successfully, the main dialog message may need to be changed, e.g.:
+        couldn't be changed. If it returns @true, the labels were set
+        successfully.
+
+        Typically, if the function was used successfully, the main dialog
+        message may need to be changed, e.g.:
         @code
         wxMessageDialog dlg(...);
         if ( dlg.SetYesNoLabels(_("&Quit"), _("&Don't quit")) )
