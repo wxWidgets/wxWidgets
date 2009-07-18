@@ -774,7 +774,8 @@ protected:
         actionClickButton,
         actionClickCaption,
         actionDragToolbarPane,
-        actionDragFloatingPane
+        actionDragFloatingPane,
+        actionDragMovablePane
     };
 
 protected:

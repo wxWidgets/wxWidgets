@@ -5246,6 +5246,28 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
     {
         m_frame->ReleaseMouse();
     }
+    else if (m_action == actionDragMovablePane)
+    {
+        // Try to find the pane.
+        wxAuiPaneInfo& pane = GetPane(m_action_window);
+        wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
+
+        // Hide the hint as it is no longer needed.
+        HideHint();
+
+        // Move the pane to new position.
+        wxPoint pt = event.GetPosition();
+        DoDrop(m_docks, m_panes, pane, pt, wxPoint(0,0));
+
+        // Update the layout so that the new position becomes visible to the user.
+        Update();
+        Repaint();
+        
+        // Cancel the action and release the mouse.
+        m_action = actionNone;
+        m_frame->ReleaseMouse();
+        m_action_window = NULL;
+    }
     else if (m_action == actionDragToolbarPane)
     {
         m_frame->ReleaseMouse();
@@ -5411,6 +5433,11 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                     if (frame_size.x <= m_action_offset.x)
                         m_action_offset.x = 30;
                 }
+                else if(pane_info->IsMovable())
+                {
+                    m_action = actionDragMovablePane;
+                    m_action_window = pane_info->GetWindow();
+                }
             }
             else
             {
@@ -5427,6 +5454,33 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
             m_action_window->Move(pt.x - m_action_offset.x,
                                 pt.y - m_action_offset.y);
         }
+    }
+    else if (m_action == actionDragMovablePane)
+    {
+        // If the movable pane is part of a notebook and the mouse has moved back over the notebook tabs then we set the 
+        // event type back to a caption click so that we can move the actual tab around instead of drawing hints.
+        if(m_action_part->type==wxAuiDockUIPart::typePaneTab)
+        {
+            wxAuiDockUIPart* hitpart = HitTest(event.GetX(), event.GetY());
+            if(m_action_part==hitpart)
+            {
+                HideHint();
+                m_action = actionClickCaption;
+                m_action_window = NULL;
+                return;
+            }
+        }
+
+        // Try to find the pane.
+        wxAuiPaneInfo& pane = GetPane(m_action_window);
+        wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
+
+        // Draw a hint for where the window will be moved.
+        wxPoint pt = event.GetPosition();
+        DrawHintRect(m_action_window, pt, wxPoint(0,0));
+
+        // Reduces flicker.
+        m_frame->Update();
     }
     else if (m_action == actionDragToolbarPane)
     {

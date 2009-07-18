@@ -891,7 +891,7 @@ MyFrame::MyFrame(wxWindow* parent,
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("above")).SetCaption(wxT("Tree Pane")).
                   SetDirectionLeft().SetLayer(1).SetPosition(0).
-                  SetCloseButton(true).SetMaximizeButton(true).SetBitmap(wxArtProvider::GetBitmap(wxART_QUESTION)));
+                  SetCloseButton(true).SetMaximizeButton(true).SetBitmap(wxArtProvider::GetBitmap(wxART_QUESTION)).SetFloatable(false).SetMovable(true));
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("below")).SetCaption(wxT("Tree Pane")).
                   SetDirectionLeft().SetLayer(1).SetPosition(4).
