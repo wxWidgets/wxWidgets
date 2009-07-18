@@ -283,6 +283,7 @@ void MyFrame::SplitHorizontal(wxCommandEvent& WXUNUSED(event) )
     m_left->Show(true);
     m_right->Show(true);
     m_splitter->SplitHorizontally( m_left, m_right );
+    m_replacewindow = NULL;
 
 #if wxUSE_STATUSBAR
     SetStatusText(_T("Splitter split horizontally"), 1);
@@ -296,6 +297,7 @@ void MyFrame::SplitVertical(wxCommandEvent& WXUNUSED(event) )
     m_left->Show(true);
     m_right->Show(true);
     m_splitter->SplitVertically( m_left, m_right );
+    m_replacewindow = NULL;
 
 #if wxUSE_STATUSBAR
     SetStatusText(_T("Splitter split vertically"), 1);
