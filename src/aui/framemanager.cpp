@@ -2190,16 +2190,16 @@ int wxAuiManager::GetNotebookFlags()
     return flags;
 }
 
-void LayoutAddNotebook(wxAuiTabContainer* notebookcontainer,wxSizer* dock_sizer,int sash_size,wxAuiDockUIPart& part,wxAuiDockInfo& dock,wxAuiDockUIPartArray& uiparts,wxAuiPaneInfo* pane)
+void LayoutAddNotebook(wxAuiTabContainer* notebookcontainer,wxSizer* notebook_sizer,int sash_size,wxAuiDockUIPart& part,wxAuiDockInfo& dock,wxAuiDockUIPartArray& uiparts,wxAuiPaneInfo* pane)
 {
-    wxSizerItem* sizer_item = dock_sizer->Add(sash_size, notebookTabHeight, 0, wxEXPAND);
+    wxSizerItem* sizer_item = notebook_sizer->Add(sash_size, notebookTabHeight, 0, wxEXPAND);
 
     part.type = wxAuiDockUIPart::typePaneTab;
     part.dock = &dock;
     part.pane = pane;
     part.button = NULL;
     part.orientation = wxHORIZONTAL;
-    part.cont_sizer = dock_sizer;
+    part.cont_sizer = notebook_sizer;
     part.sizer_item = sizer_item;
     part.m_tab_container = notebookcontainer;
     uiparts.Add(part);
@@ -2254,6 +2254,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         // to the same notebook.
         wxAuiPaneInfo* firstpaneinnotebook = NULL;
         wxAuiTabContainer* notebookcontainer = NULL;
+        wxSizer* notebook_sizer = NULL;
         // Variable to keep track of whether an active page has been set for the current notebook, so that if we pass
         // an entire notebook without encountering an active page we can set the first page as the active one.
         bool activenotebookpagefound = false;
@@ -2304,7 +2305,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     if(HasFlag(wxAUI_MGR_NB_BOTTOM))
                     {
-                        LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                        LayoutAddNotebook(notebookcontainer,notebook_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
                     }
                     if(!activenotebookpagefound)
                     {
@@ -2322,13 +2323,15 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     firstpaneinnotebook = &pane;
                     notebookcontainer =  new wxAuiTabContainer();
+                    notebook_sizer = new wxAuiProportionalBoxSizer(wxVERTICAL);
+                    dock_sizer->Add(notebook_sizer, pane.GetProportion(), wxEXPAND);
                     int flags = GetNotebookFlags();
                     notebookcontainer->SetFlags(flags);
                     notebookcontainer->AddPage(pane);
                     
                     if(HasFlag(wxAUI_MGR_NB_TOP)||!HasFlag(wxAUI_MGR_NB_BOTTOM))
                     {
-                        LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                        LayoutAddNotebook(notebookcontainer,notebook_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
                     }
 
                     if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
@@ -2353,6 +2356,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     // We are a normal pane not part of a notebook so set the notebook tracking variables to NULL.
                     firstpaneinnotebook = NULL;
                     notebookcontainer = NULL;
+                    notebook_sizer = NULL;
                 }
             }
             
@@ -2377,7 +2381,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 offset += amount;
             }
 
-            LayoutAddPane(dock_sizer, dock, pane, uiparts, spacer_only, firstpaneinnotebook==NULL);
+            LayoutAddPane(notebook_sizer?notebook_sizer:dock_sizer, dock, pane, uiparts, spacer_only, firstpaneinnotebook==NULL);
 
             offset += pane_sizes.Item(pane_i);
         }
@@ -2387,7 +2391,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         {
             if(HasFlag(wxAUI_MGR_NB_BOTTOM))
             {
-                LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                LayoutAddNotebook(notebookcontainer,notebook_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
             }
             if(!activenotebookpagefound && firstpaneinnotebook)
             {
@@ -2416,6 +2420,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         // to the same notebook.
         wxAuiPaneInfo* firstpaneinnotebook = NULL;
         wxAuiTabContainer* notebookcontainer = NULL;
+        wxSizer* notebook_sizer = NULL;
         // Variable to keep track of whether an active page has been set for the current notebook, so that if we pass
         // an entire notebook without encountering an active page we can set the first page as the active one.
         bool activenotebookpagefound = false;
@@ -2465,7 +2470,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     if(HasFlag(wxAUI_MGR_NB_BOTTOM))
                     {
-                        LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                        LayoutAddNotebook(notebookcontainer,notebook_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
                     }
                     if(!activenotebookpagefound)
                     {
@@ -2500,13 +2505,15 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 {
                     firstpaneinnotebook = &pane;
                     notebookcontainer =  new wxAuiTabContainer();
+                    notebook_sizer = new wxAuiProportionalBoxSizer(wxVERTICAL);
+                    dock_sizer->Add(notebook_sizer, pane.GetProportion(), wxEXPAND);
                     int flags= GetNotebookFlags();
                     notebookcontainer->SetFlags(flags);
                     notebookcontainer->AddPage(pane);
                     
                     if(HasFlag(wxAUI_MGR_NB_TOP)||!HasFlag(wxAUI_MGR_NB_BOTTOM))
                     {
-                        LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                        LayoutAddNotebook(notebookcontainer,notebook_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
                     }
 
                     if(pane.HasFlag(wxAuiPaneInfo::optionActiveNotebook))
@@ -2531,11 +2538,12 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                     // We are a normal pane not part of a notebook so set the notebook tracking variables to NULL.
                     firstpaneinnotebook = NULL;
                     notebookcontainer = NULL;
+                    notebook_sizer = NULL;
                 }
             }
 
             // Add the pane itself to the layout, if it is part of a notebook then don't allow it to have a title bar.
-            LayoutAddPane(dock_sizer, dock, pane, uiparts, spacer_only, firstpaneinnotebook==NULL);
+            LayoutAddPane(notebook_sizer?notebook_sizer:dock_sizer, dock, pane, uiparts, spacer_only, firstpaneinnotebook==NULL);
         }
         // Done adding panes, if the last pane we added was part of a notebook which didn't have an active page set
         // then set the first pange in that notebook to be the active page.
@@ -2543,7 +2551,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         {
             if(HasFlag(wxAUI_MGR_NB_BOTTOM))
             {
-                LayoutAddNotebook(notebookcontainer,dock_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
+                LayoutAddNotebook(notebookcontainer,notebook_sizer,sash_size,part,dock,uiparts,firstpaneinnotebook);
             }
             if(!activenotebookpagefound)
             {
@@ -3176,7 +3184,7 @@ void wxAuiManager::Update()
             notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetPosition());
             notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetRow());
             notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetLayer());
-            cachednotebookoffsets[notebookpositionhash] = part.m_tab_container->GetPageCount() - part.m_tab_container->GetTabOffset();
+            cachednotebookoffsets[notebookpositionhash] = part.m_tab_container->GetTabOffset();
         }
     }
 
@@ -3202,12 +3210,12 @@ void wxAuiManager::Update()
                 int numtabs = part.m_tab_container->GetPageCount();
                 int newtaboffset;
                 
-                // If we have removed tabs then the offset might be greater then the number of tabs in which case we set it to 0
-                // Otherwise we set it to the number of tabs minus the offset
+                // If we have removed tabs then the offset might be greater then the number of tabs in which case we set it to the number of tabs
+                // Otherwise we set it to the old offset
                 if(oldtaboffset>numtabs)
-                    newtaboffset = 0;
+                    newtaboffset = numtabs;
                 else
-                    newtaboffset = numtabs-oldtaboffset;
+                    newtaboffset = oldtaboffset;
                 
                 part.m_tab_container->SetTabOffset(newtaboffset);
             }
