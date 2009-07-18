@@ -102,13 +102,13 @@ private:
 #endif
 
 // ----------------------------------------------------------------------------
-// implementation which sends output to stderr
+// implementation which sends output to stderr or specified file
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_BASE wxMessageOutputStderr : public wxMessageOutput
 {
 public:
-    wxMessageOutputStderr() { }
+    wxMessageOutputStderr(FILE *fp = stderr) : m_fp(fp) { }
 
     virtual void Output(const wxString& str);
 
@@ -116,6 +116,8 @@ protected:
     // return the string with "\n" appended if it doesn't already terminate
     // with it (in which case it's returned unchanged)
     wxString AppendLineFeedIfNeeded(const wxString& str);
+
+    FILE *m_fp;
 };
 
 // ----------------------------------------------------------------------------
