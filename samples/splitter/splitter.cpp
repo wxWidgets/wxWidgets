@@ -286,14 +286,13 @@ MyFrame::MyFrame()
     SetStatusText(_T("Min pane size = 0"), 1);
 #endif // wxUSE_STATUSBAR
 
-    m_replacewindow = (wxWindow *)0;
+    m_replacewindow = NULL;
 }
 
 MyFrame::~MyFrame()
 {
     if (m_replacewindow) {
         m_replacewindow->Destroy();
-        m_replacewindow = (wxWindow *)0;
     }
 }
 
@@ -311,6 +310,7 @@ void MyFrame::OnSplitHorizontal(wxCommandEvent& WXUNUSED(event) )
     m_left->Show(true);
     m_right->Show(true);
     m_splitter->SplitHorizontally( m_left, m_right );
+    m_replacewindow = NULL;
 
 #if wxUSE_STATUSBAR
     SetStatusText(_T("Splitter split horizontally"), 1);
@@ -324,6 +324,7 @@ void MyFrame::OnSplitVertical(wxCommandEvent& WXUNUSED(event) )
     m_left->Show(true);
     m_right->Show(true);
     m_splitter->SplitVertically( m_left, m_right );
+    m_replacewindow = NULL;
 
 #if wxUSE_STATUSBAR
     SetStatusText(_T("Splitter split vertically"), 1);
@@ -415,15 +416,16 @@ void MyFrame::OnSetGravity(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnReplace(wxCommandEvent& WXUNUSED(event) )
 {
-    if (m_replacewindow == 0) {
+    if (m_replacewindow == NULL) {
         m_replacewindow = m_splitter->GetWindow2();
         m_splitter->ReplaceWindow(m_replacewindow, new wxPanel(m_splitter, wxID_ANY));
         m_replacewindow->Hide();
     } else {
         wxWindow *empty = m_splitter->GetWindow2();
+        wxASSERT(empty != m_replacewindow);
         m_splitter->ReplaceWindow(empty, m_replacewindow);
         m_replacewindow->Show();
-        m_replacewindow = 0;
+        m_replacewindow = NULL;
         empty->Destroy();
     }
 }
