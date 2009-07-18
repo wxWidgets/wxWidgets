@@ -48,20 +48,20 @@ enum wxAuiManagerOption
     wxAUI_MGR_HINT_FADE                = 1 << 6,
     wxAUI_MGR_NO_VENETIAN_BLINDS_FADE  = 1 << 7,
     wxAUI_MGR_LIVE_RESIZE              = 1 << 8,
-    wxAUI_MGR_NB_TOP                   = 1 << 9,
-    wxAUI_MGR_NB_LEFT                  = 1 << 10,  // not implemented yet
-    wxAUI_MGR_NB_RIGHT                 = 1 << 11,  // not implemented yet
-    wxAUI_MGR_NB_BOTTOM                = 1 << 12,
-    wxAUI_MGR_NB_TAB_SPLIT             = 1 << 13,  // not implemented yet
-    wxAUI_MGR_NB_TAB_MOVE              = 1 << 14,  // not implemented yet
-    wxAUI_MGR_NB_TAB_EXTERNAL_MOVE     = 1 << 15,  // not implemented yet
-    wxAUI_MGR_NB_TAB_FIXED_WIDTH       = 1 << 16,
-    wxAUI_MGR_NB_SCROLL_BUTTONS        = 1 << 17,
-    wxAUI_MGR_NB_WINDOWLIST_BUTTON     = 1 << 18,
-    wxAUI_MGR_NB_CLOSE_BUTTON          = 1 << 19,
-    wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB   = 1 << 20,
-    wxAUI_MGR_NB_CLOSE_ON_ALL_TABS     = 1 << 21,
-    wxAUI_MGR_NB_MIDDLE_CLICK_CLOSE    = 1 << 22,  // not implemented yet
+    wxAUI_MGR_MIDDLE_CLICK_CLOSE       = 1 << 9,
+    wxAUI_MGR_NB_TOP                   = 1 << 10,
+    wxAUI_MGR_NB_LEFT                  = 1 << 11,  // not implemented yet
+    wxAUI_MGR_NB_RIGHT                 = 1 << 12,  // not implemented yet
+    wxAUI_MGR_NB_BOTTOM                = 1 << 13,
+    wxAUI_MGR_NB_TAB_SPLIT             = 1 << 14,  // not implemented yet
+    wxAUI_MGR_NB_TAB_MOVE              = 1 << 15,  // not implemented yet
+    wxAUI_MGR_NB_TAB_EXTERNAL_MOVE     = 1 << 16,  // not implemented yet
+    wxAUI_MGR_NB_TAB_FIXED_WIDTH       = 1 << 17,
+    wxAUI_MGR_NB_SCROLL_BUTTONS        = 1 << 18,
+    wxAUI_MGR_NB_WINDOWLIST_BUTTON     = 1 << 19,
+    wxAUI_MGR_NB_CLOSE_BUTTON          = 1 << 20,
+    wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB   = 1 << 21,
+    wxAUI_MGR_NB_CLOSE_ON_ALL_TABS     = 1 << 22, 
 
     wxAUI_MGR_DEFAULT = wxAUI_MGR_ALLOW_FLOATING |
                         wxAUI_MGR_TRANSPARENT_HINT |
@@ -72,7 +72,7 @@ enum wxAuiManagerOption
                         wxAUI_MGR_NB_TAB_MOVE |
                         wxAUI_MGR_NB_SCROLL_BUTTONS |
                         wxAUI_MGR_NB_CLOSE_ON_ACTIVE_TAB |
-                        wxAUI_MGR_NB_MIDDLE_CLICK_CLOSE
+                        wxAUI_MGR_MIDDLE_CLICK_CLOSE
 };
 
 
@@ -758,6 +758,7 @@ protected:
     void OnSetCursor(wxSetCursorEvent& evt);
     void OnLeftDown(wxMouseEvent& evt);
     void OnLeftUp(wxMouseEvent& evt);
+    void OnMiddleUp(wxMouseEvent& evt);
     void OnMotion(wxMouseEvent& evt);
     void OnCaptureLost(wxMouseCaptureLostEvent& evt);
     void OnLeaveWindow(wxMouseEvent& evt);

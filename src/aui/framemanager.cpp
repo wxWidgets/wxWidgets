@@ -847,6 +847,7 @@ BEGIN_EVENT_TABLE(wxAuiManager, wxEvtHandler)
     EVT_SET_CURSOR(wxAuiManager::OnSetCursor)
     EVT_LEFT_DOWN(wxAuiManager::OnLeftDown)
     EVT_LEFT_UP(wxAuiManager::OnLeftUp)
+    EVT_MIDDLE_UP(wxAuiManager::OnMiddleUp)
     EVT_MOTION(wxAuiManager::OnMotion)
     EVT_LEAVE_WINDOW(wxAuiManager::OnLeaveWindow)
     EVT_MOUSE_CAPTURE_LOST(wxAuiManager::OnCaptureLost)
@@ -5301,6 +5302,51 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
 
     m_action = actionNone;
     m_last_mouse_move = wxPoint(); // see comment in OnMotion()
+}
+
+void wxAuiManager::OnMiddleUp(wxMouseEvent& evt)
+{
+
+    // if the wxAUI_NB_MIDDLE_CLICK_CLOSE is specified, middle
+    // click should act like a tab close action.  However, first
+    // give the owner an opportunity to handle the middle up event
+    // for custom action
+
+    wxAuiDockUIPart* part = HitTest(evt.GetX(), evt.GetY());
+    if(!part||!part->pane)
+    {
+        evt.Skip();
+        return;
+    }
+    if (part && part->type == wxAuiDockUIPart::typePaneTab)
+    {
+        wxAuiPaneInfo* hitpane=NULL;
+        if(part->m_tab_container->TabHitTest(evt.GetX(),evt.GetY(),&hitpane))
+        {
+            part->pane = hitpane;
+        }
+    }
+
+    /*temp (MJM)  - The below veto stuff will have to be reimplemented for new wxAuiNotebook to maintain backwards compatibility
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, m_windowId);
+    e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
+    e.SetEventObject(this);
+    if (GetEventHandler()->ProcessEvent(e))
+        return;
+    if (!e.IsAllowed())
+        return;
+    */
+
+    // check if we are supposed to close on middle-up
+    /*if ((m_flags & wxAUI_MIDDLE_CLICK_CLOSE) == 0)
+        return;*/
+
+    // simulate the user pressing the close button on the tab
+    wxAuiManagerEvent e(wxEVT_AUI_PANE_BUTTON);
+    e.SetEventObject(this);
+    e.SetPane(part->pane);
+    e.SetButton(wxAUI_BUTTON_CLOSE);
+    OnPaneButton(e);
 }
 
 
