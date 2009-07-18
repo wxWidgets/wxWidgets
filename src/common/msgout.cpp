@@ -147,6 +147,8 @@ void wxMessageOutputStderr::Output(const wxString& str)
         fprintf(m_fp, "%s", (const char*) buf);
     else // print at least something
         fprintf(m_fp, "%s", (const char*) strWithLF.ToAscii());
+
+    fflush(m_fp);
 }
 
 // ----------------------------------------------------------------------------
