@@ -398,7 +398,7 @@ public:
     // -----------------
 
     // flush shows all messages if they're not logged immediately (FILE
-    // and iostream logs don't need it, but wxGuiLog does to avoid showing
+    // and iostream logs don't need it, but wxLogGui does to avoid showing
     // 17 modal dialogs one after another)
     virtual void Flush();
 
