@@ -165,6 +165,25 @@ PreviousLogInfo gs_prevLog;
 // NB: all accesses to it must be protected by GetLevelsCS() critical section
 WX_DEFINE_GLOBAL_VAR(wxStringToNumHashMap, ComponentLevels);
 
+// ----------------------------------------------------------------------------
+// wxLogOutputBest: wxLog wrapper around wxMessageOutputBest
+// ----------------------------------------------------------------------------
+
+class wxLogOutputBest : public wxLog
+{
+public:
+    wxLogOutputBest() { }
+
+protected:
+    virtual void DoLogText(const wxString& msg)
+    {
+        wxMessageOutputBest().Output(msg);
+    }
+
+private:
+    wxDECLARE_NO_COPY_CLASS(wxLogOutputBest);
+};
+
 } // anonymous namespace
 
 // ============================================================================
@@ -481,7 +500,7 @@ wxLog *wxLog::GetMainThreadActiveTarget()
             if ( wxTheApp != NULL )
                 ms_pLogger = wxTheApp->GetTraits()->CreateLogTarget();
             else
-                ms_pLogger = new wxLogStderr;
+                ms_pLogger = new wxLogOutputBest;
 
             s_bInGetActiveTarget = false;
 
