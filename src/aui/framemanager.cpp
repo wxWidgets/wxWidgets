@@ -82,6 +82,8 @@ IMPLEMENT_CLASS(wxAuiManager, wxEvtHandler)
 
 const int auiToolBarLayer = 10;
 
+const int notebookTabHeight = 30;//temp: (MJM) -> This should be set by the art somewhere not hardcoded
+
 wxAuiPaneInfo::wxAuiPaneInfo()
 :
 #if WXWIN_COMPATIBILITY_2_8
@@ -2167,8 +2169,10 @@ int wxAuiManager::GetNotebookFlags()
         flags |= wxAUI_MGR_NB_WINDOWLIST_BUTTON;
     }
         
-   if(HasFlag(wxAUI_MGR_NB_TAB_FIXED_WIDTH))
+    if(HasFlag(wxAUI_MGR_NB_TAB_FIXED_WIDTH))
+    {
         flags |= wxAUI_MGR_NB_TAB_FIXED_WIDTH;
+    }
         
     if(HasFlag(wxAUI_MGR_NB_CLOSE_BUTTON))
     {
@@ -2188,7 +2192,7 @@ int wxAuiManager::GetNotebookFlags()
 
 void LayoutAddNotebook(wxAuiTabContainer* notebookcontainer,wxSizer* dock_sizer,int sash_size,wxAuiDockUIPart& part,wxAuiDockInfo& dock,wxAuiDockUIPartArray& uiparts,wxAuiPaneInfo* pane)
 {
-    wxSizerItem* sizer_item = dock_sizer->Add(sash_size, 30, 0, wxEXPAND);
+    wxSizerItem* sizer_item = dock_sizer->Add(sash_size, notebookTabHeight, 0, wxEXPAND);
 
     part.type = wxAuiDockUIPart::typePaneTab;
     part.dock = &dock;
@@ -3136,8 +3140,15 @@ void wxAuiManager::Update()
         }
         else
         {
-            if (p.GetWindow()->IsShown() != p.IsShown())
-                p.GetWindow()->Show(p.IsShown());
+            // Only hide/show windows that are not part of a notebook, notebook windows will be taken care of inside LayoutAll()
+            // Doing so here can cause flicker, especially under MSW.
+            if(!( (i<pane_count-1 && p.GetPosition() == m_panes.Item(i+1).GetPosition() && !m_panes.Item(i+1).IsFloating())
+               || (i > 0 && p.GetPosition() == m_panes.Item(i-1).GetPosition() && !m_panes.Item(i-1).IsFloating())
+              ))
+            {
+                if (p.GetWindow()->IsShown() != p.IsShown())
+                    p.GetWindow()->Show(p.IsShown());
+            }
         }
 
         // if "active panes" are no longer allowed, clear
@@ -3187,7 +3198,18 @@ void wxAuiManager::Update()
             notebookpositionhash << wxString::Format(wxT("%d;"), pane.GetLayer());
             if(cachednotebookoffsets.find(notebookpositionhash)!=cachednotebookoffsets.end())
             {
-                part.m_tab_container->SetTabOffset(part.m_tab_container->GetPageCount()-cachednotebookoffsets[notebookpositionhash]);
+                int oldtaboffset = cachednotebookoffsets[notebookpositionhash];
+                int numtabs = part.m_tab_container->GetPageCount();
+                int newtaboffset;
+                
+                // If we have removed tabs then the offset might be greater then the number of tabs in which case we set it to 0
+                // Otherwise we set it to the number of tabs minus the offset
+                if(oldtaboffset>numtabs)
+                    newtaboffset = 0;
+                else
+                    newtaboffset = numtabs-oldtaboffset;
+                
+                part.m_tab_container->SetTabOffset(newtaboffset);
             }
         }
     }
@@ -4892,7 +4914,35 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         m_action_part->type == wxAuiDockUIPart::typePaneSizer)
     {
         wxAuiDockInfo& dock = *m_action_part->dock;
-        wxAuiPaneInfo& pane = *m_action_part->pane;
+        wxAuiPaneInfo* pane = m_action_part->pane;
+
+        // If the pane is part of a notebook then its window might not currently be the visible one within the notebook
+        // So we must then find which window in the notebook is the visible one and use the pane for that instead.
+        if(!pane->GetWindow()->IsShown())
+        {
+            int i;
+            int dock_pane_count = dock.panes.GetCount();
+            // First find where in the panes array our current pane is
+            for (i = 0; i < dock_pane_count; ++i)
+            {
+                wxAuiPaneInfo& p = *dock.panes.Item(i);
+                if (p.GetWindow() == pane->GetWindow())
+                {
+                    // Our current pane will be the last pane in the notebook,
+                    // so now search backwards through the notebook till we find the visible pane.
+                    int j;
+                    for (j = i - 1; j >= 0; --j)
+                    {
+                        if(dock.panes.Item(j)->GetWindow()->IsShown() && dock.panes.Item(j)->GetPosition() == pane->GetPosition())
+                        {
+                            pane = dock.panes.Item(j);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
 
         int total_proportion = 0;
         int dock_pixels = 0;
@@ -4906,7 +4956,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
             event.m_y - m_action_offset.y);
 
         // determine the pane rectangle by getting the pane part
-        wxAuiDockUIPart* pane_part = GetPanePart(pane.GetWindow());
+        wxAuiDockUIPart* pane_part = GetPanePart(pane->GetWindow());
         wxASSERT_MSG(pane_part,
             wxT("Pane border part not found -- shouldn't happen"));
 
@@ -4926,33 +4976,43 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         // determine the total proportion of all resizable panes,
         // and the total size of the dock minus the size of all
         // the fixed panes
-        int i, dock_pane_count = dock.panes.GetCount();
+        int i;
+        int dock_pane_count = dock.panes.GetCount();
         int pane_position = -1;
         for (i = 0; i < dock_pane_count; ++i)
         {
             wxAuiPaneInfo& p = *dock.panes.Item(i);
-            if (p.GetWindow() == pane.GetWindow())
+            if (p.GetWindow() == pane->GetWindow())
                 pane_position = i;
-
-            // while we're at it, subtract the pane sash
-            // width from the dock width, because this would
-            // skew our proportion calculations
-            if (i > 0)
-                dock_pixels -= sash_size;
-
-            // also, the whole size (including decorations) of
-            // all fixed panes must also be subtracted, because they
-            // are not part of the proportion calculation
-            if (p.IsFixed())
+            
+            // Don't include all the panes from a notenook in the calculation, only the first one.
+            if(i==0 || p.GetPosition()!=dock.panes.Item(i-1)->GetPosition())
             {
-                if (dock.IsHorizontal())
-                    dock_pixels -= p.GetBestSize().x;
+                // If this pane is part of a notebook then subtract the height of the notebook tabs as well.
+                if(i<dock_pane_count-1 && p.GetPosition()==dock.panes.Item(i+1)->GetPosition())
+                {
+                    dock_pixels-=notebookTabHeight;
+                }
+                // while we're at it, subtract the pane sash
+                // width from the dock width, because this would
+                // skew our proportion calculations
+                if (i > 0)
+                    dock_pixels -= sash_size;
+
+                // also, the whole size (including decorations) of
+                // all fixed panes must also be subtracted, because they
+                // are not part of the proportion calculation
+                if (p.IsFixed())
+                {
+                    if (dock.IsHorizontal())
+                        dock_pixels -= p.GetBestSize().x;
+                    else
+                        dock_pixels -= p.GetBestSize().y;
+                }
                 else
-                    dock_pixels -= p.GetBestSize().y;
-            }
-            else
-            {
-                total_proportion += p.GetProportion();
+                {
+                    total_proportion += p.GetProportion();
+                }
             }
         }
 
@@ -4969,7 +5029,8 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         for (i = pane_position+1; i < dock_pane_count; ++i)
         {
             wxAuiPaneInfo& p = *dock.panes.Item(i);
-            if (!p.IsFixed())
+            // We must not select a pane from the same notebook as the 'lender' to 'steal' space from. (If the 'lender' is in a notebook)
+            if (!p.IsFixed() && p.GetPosition()!=dock.panes.Item(i-1)->GetPosition())
             {
                 borrow_pane = i;
                 break;
@@ -4998,23 +5059,23 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
         // that this is not enough to ensure that the minimum size will
         // not be violated, because the whole frame might later be shrunk,
         // causing the size of the pane to violate it's minimum size
-        if (pane.GetMinSize().IsFullySpecified())
+        if (pane->GetMinSize().IsFullySpecified())
         {
             min_size = 0;
 
-            if (pane.HasBorder())
+            if (pane->HasBorder())
                 min_size += (pane_border_size*2);
 
             // calculate minimum size with decorations (border,caption)
             if (pane_part->orientation == wxVERTICAL)
             {
-                min_size += pane.GetMinSize().y;
-                if (pane.HasCaption())
+                min_size += pane->GetMinSize().y;
+                if (pane->HasCaption())
                     min_size += caption_size;
             }
             else
             {
-                min_size += pane.GetMinSize().x;
+                min_size += pane->GetMinSize().x;
             }
         }
 
@@ -5032,7 +5093,7 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
 
 
 
-        int prop_diff = new_proportion - pane.GetProportion();
+        int prop_diff = new_proportion - pane->GetProportion();
 
         // borrow the space from our neighbor pane to the
         // right or bottom (depending on orientation);
@@ -5052,8 +5113,55 @@ bool wxAuiManager::DoEndResizeAction(wxMouseEvent& event)
 
         
         dock.panes.Item(borrow_pane)->SetProportion(prop_borrow);
-        pane.SetProportion(new_proportion);
-
+        // If the above proportion change was to a pane in a notebook then all other panes in the notebook
+        // must have the same change, so we do this below.
+        for(i=borrow_pane-1;i>0;i--)
+        {
+            if(dock.panes.Item(borrow_pane)->GetPosition()==dock.panes.Item(i)->GetPosition())
+            {
+                dock.panes.Item(i)->SetProportion(prop_borrow);
+            }
+            else
+            {
+                break;
+            }
+        }
+        for(i=borrow_pane+1;i<dock_pane_count;i++)
+        {
+            if(dock.panes.Item(borrow_pane)->GetPosition()==dock.panes.Item(i)->GetPosition())
+            {
+                dock.panes.Item(i)->SetProportion(prop_borrow);
+            }
+            else
+            {
+                break;
+            }
+        }
+        pane->SetProportion(new_proportion);
+        // If the above proportion change was to a pane in a notebook then all other panes in the notebook
+        // must have the same change, so we do this below.
+        for(i=pane_position-1;i>0;i--)
+        {
+            if(pane->GetPosition()==dock.panes.Item(i)->GetPosition())
+            {
+                dock.panes.Item(i)->SetProportion(new_proportion);
+            }
+            else
+            {
+                break;
+            }
+        }
+        for(i=pane_position+1;i<dock_pane_count;i++)
+        {
+            if(pane->GetPosition()==dock.panes.Item(i)->GetPosition())
+            {
+                dock.panes.Item(i)->SetProportion(new_proportion);
+            }
+            else
+            {
+                break;
+            }
+        }
 
         // repaint
         Update();
