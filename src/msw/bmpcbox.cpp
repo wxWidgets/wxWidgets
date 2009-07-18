@@ -183,6 +183,20 @@ wxBitmapComboBox::~wxBitmapComboBox()
     Clear();
 }
 
+wxSize wxBitmapComboBox::DoGetBestSize() const
+{
+    wxSize best = wxComboBox::DoGetBestSize();
+    wxSize bitmapSize = GetBitmapSize();
+
+    wxCoord useHeightBitmap = EDIT_HEIGHT_FROM_CHAR_HEIGHT(bitmapSize.y);
+    if ( best.y < useHeightBitmap )
+    {
+        best.y = useHeightBitmap;
+        CacheBestSize(best);
+    }
+    return best;
+}
+
 // ----------------------------------------------------------------------------
 // Item manipulation
 // ----------------------------------------------------------------------------
