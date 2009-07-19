@@ -3149,14 +3149,18 @@ void wxAuiManager::Update()
         }
         else
         {
-            // Only hide/show windows that are not part of a notebook, notebook windows will be taken care of inside LayoutAll()
-            // Doing so here can cause flicker, especially under MSW.
-            if(!( (i<pane_count-1 && p.GetPosition() == m_panes.Item(i+1).GetPosition() && !m_panes.Item(i+1).IsFloating())
-               || (i > 0 && p.GetPosition() == m_panes.Item(i-1).GetPosition() && !m_panes.Item(i-1).IsFloating())
-              ))
+            if (p.GetWindow()->IsShown() != p.IsShown())
             {
-                if (p.GetWindow()->IsShown() != p.IsShown())
-                    p.GetWindow()->Show(p.IsShown());
+                // Only reveal windows that are not part of a notebook, notebook windows will be taken care of inside LayoutAll()
+                // Doing so here as well can cause flicker(especially under MSW) due to windows being shown here and then hidden inside LayoutAll()
+                // All windows must be hidden here though, even notebook ones.
+                if(!p.IsShown())
+                    p.GetWindow()->Show(false);
+                else if(!( (i<pane_count-1 && p.GetPosition() == m_panes.Item(i+1).GetPosition() && !m_panes.Item(i+1).IsFloating())
+                        || (i > 0 && p.GetPosition() == m_panes.Item(i-1).GetPosition() && !m_panes.Item(i-1).IsFloating()) ))
+                {
+                    p.GetWindow()->Show(true);
+                }
             }
         }
 
