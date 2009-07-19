@@ -147,6 +147,7 @@ class wxAuiPaneButton;
 class wxAuiPaneInfo;
 class wxAuiDockInfo;
 class wxAuiDockArt;
+class wxAuiTabArt;
 class wxAuiManagerEvent;
 class wxAuiTabContainer;
 
@@ -621,6 +622,9 @@ public:
     void SetArtProvider(wxAuiDockArt* art_provider);
     wxAuiDockArt* GetArtProvider() const;
 
+    void SetTabArtProvider(wxAuiTabArt* art_provider);
+    wxAuiTabArt* GetTabArtProvider() const;
+
     wxAuiPaneInfo& GetPane(wxWindow* window);
     wxAuiPaneInfo& GetPane(const wxString& name);
     wxAuiPaneInfoArray& GetAllPanes();
@@ -782,7 +786,8 @@ protected:
 protected:
 
     wxWindow* m_frame;           // the window being managed
-    wxAuiDockArt* m_art;            // dock art object which does all drawing
+    wxAuiDockArt* m_art;         // dock art object which does all drawing
+    wxAuiTabArt* m_tab_art;      // tab art object which does all teh drawing for notebooks.
     unsigned int m_flags;        // manager flags wxAUI_MGR_*
 
     wxAuiPaneInfoArray m_panes;     // array of panes structures

@@ -122,10 +122,10 @@ wxAuiNotebook::~wxAuiNotebook()
 
 void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
 {
-    //temp: (MJM)
-    //SetArtProvider(art);
+    m_mgr.SetTabArtProvider(art);
 
-    UpdateTabCtrlHeight();
+    //temp: (MJM)
+    //UpdateTabCtrlHeight();
 }
 
 // SetTabCtrlHeight() is the highest-level override of the

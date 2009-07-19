@@ -316,6 +316,90 @@ protected:
     unsigned int m_flags;
 };
 
+class WXDLLIMPEXP_AUI wxAuiSimpleTabArt : public wxAuiTabArt
+{
+
+public:
+
+    wxAuiSimpleTabArt();
+    virtual ~wxAuiSimpleTabArt();
+
+    wxAuiTabArt* Clone();
+    void SetFlags(unsigned int flags);
+
+    void SetSizingInfo(const wxSize& tab_ctrl_size,
+                       size_t tab_count);
+
+    void SetNormalFont(const wxFont& font);
+    void SetSelectedFont(const wxFont& font);
+    void SetMeasuringFont(const wxFont& font);
+
+    void DrawBackground(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& rect);
+
+    void DrawTab(wxDC& dc,
+                 wxWindow* wnd,
+                 const wxAuiPaneInfo& pane,
+                 const wxRect& in_rect,
+                 int close_button_state,
+                 wxRect* out_tab_rect,
+                 wxRect* out_button_rect,
+                 int* x_extent);
+
+    void DrawButton(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxRect& in_rect,
+                 int bitmap_id,
+                 int button_state,
+                 int orientation,
+                 wxRect* out_rect);
+
+    int GetIndentSize();
+
+    wxSize GetTabSize(
+                 wxDC& dc,
+                 wxWindow* wnd,
+                 const wxString& caption,
+                 const wxBitmap& bitmap,
+                 bool active,
+                 int close_button_state,
+                 int* x_extent);
+
+    int ShowDropDown(
+                 wxWindow* wnd,
+                 const wxAuiPaneInfoPtrArray& items,
+                 int active_idx);
+
+    int GetBestTabCtrlSize(wxWindow* wnd,
+                 const wxAuiPaneInfoPtrArray& pages,
+                 const wxSize& required_bmp_size);
+
+protected:
+
+    wxFont m_normal_font;
+    wxFont m_selected_font;
+    wxFont m_measuring_font;
+    wxPen m_normal_bkpen;
+    wxPen m_selected_bkpen;
+    wxBrush m_normal_bkbrush;
+    wxBrush m_selected_bkbrush;
+    wxBrush m_bkbrush;
+    wxBitmap m_active_close_bmp;
+    wxBitmap m_disabled_close_bmp;
+    wxBitmap m_active_left_bmp;
+    wxBitmap m_disabled_left_bmp;
+    wxBitmap m_active_right_bmp;
+    wxBitmap m_disabled_right_bmp;
+    wxBitmap m_active_windowlist_bmp;
+    wxBitmap m_disabled_windowlist_bmp;
+
+    int m_fixed_tab_width;
+    unsigned int m_flags;
+};
+
 class WXDLLIMPEXP_AUI wxAuiTabContainerButton
 {
 public:
@@ -337,7 +421,7 @@ class WXDLLIMPEXP_AUI wxAuiTabContainer
 {
 public:
 
-    wxAuiTabContainer();
+    wxAuiTabContainer(wxAuiTabArt* art_provider);
     virtual ~wxAuiTabContainer();
 
     void SetArtProvider(wxAuiTabArt* art);
@@ -392,7 +476,7 @@ protected:
 
 protected:
 
-    wxAuiTabArt* m_art;
+    wxAuiTabArt* m_tab_art;
     wxAuiPaneInfoPtrArray m_pages;
     wxAuiTabContainerButtonArray m_buttons;
     wxAuiTabContainerButtonArray m_tab_close_buttons;

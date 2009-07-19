@@ -865,6 +865,7 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
     m_hover_button = NULL;
     m_hover_button2 = NULL;
     m_art = new wxAuiDefaultDockArt;
+    m_tab_art = new wxAuiDefaultTabArt();
     m_hint_wnd = NULL;
     m_flags = flags;
     m_skipping = false;
@@ -897,6 +898,7 @@ wxAuiManager::~wxAuiManager()
 #endif
 
     delete m_art;
+    delete m_tab_art;
 }
 
 // creates a floating frame for the windows
@@ -1209,6 +1211,11 @@ wxAuiDockArt* wxAuiManager::GetArtProvider() const
     return m_art;
 }
 
+wxAuiTabArt* wxAuiManager::GetTabArtProvider() const
+{
+    return m_tab_art;
+}
+
 void wxAuiManager::ProcessMgrEvent(wxAuiManagerEvent& event)
 {
     // first, give the owner frame a chance to override
@@ -1233,6 +1240,15 @@ void wxAuiManager::SetArtProvider(wxAuiDockArt* art_provider)
 
     // assign the new art provider
     m_art = art_provider;
+}
+
+void wxAuiManager::SetTabArtProvider(wxAuiTabArt* art_provider)
+{
+    // delete the last art provider, if any
+    delete m_tab_art;
+
+    // assign the new art provider
+    m_tab_art = art_provider;
 }
 
 
@@ -2323,7 +2339,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 if(pane_i<pane_count-1 && pane.GetPosition()==dock.panes.Item(pane_i+1)->GetPosition())
                 {
                     firstpaneinnotebook = &pane;
-                    notebookcontainer =  new wxAuiTabContainer();
+                    notebookcontainer =  new wxAuiTabContainer(m_tab_art);
                     notebook_sizer = new wxAuiProportionalBoxSizer(wxVERTICAL);
                     dock_sizer->Add(notebook_sizer, pane.GetProportion(), wxEXPAND);
                     int flags = GetNotebookFlags();
@@ -2505,7 +2521,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
                 if(pane_i<pane_count-1 && pane.GetPosition()==dock.panes.Item(pane_i+1)->GetPosition())
                 {
                     firstpaneinnotebook = &pane;
-                    notebookcontainer =  new wxAuiTabContainer();
+                    notebookcontainer =  new wxAuiTabContainer(m_tab_art);
                     notebook_sizer = new wxAuiProportionalBoxSizer(wxVERTICAL);
                     dock_sizer->Add(notebook_sizer, pane.GetProportion(), wxEXPAND);
                     int flags= GetNotebookFlags();

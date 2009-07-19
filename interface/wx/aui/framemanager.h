@@ -187,6 +187,12 @@ public:
     wxAuiDockArt* GetArtProvider() const;
 
     /**
+        Returns the current tab art provider being used.
+        @see wxAuiTabArt.
+    */
+    wxAuiTabArt* GetTabArtProvider() const;
+
+    /**
         Returns the current dock constraint values.
         See SetDockSizeConstraint() for more information.
     */
@@ -287,6 +293,16 @@ public:
         @see wxAuiDockArt.
     */
     void SetArtProvider(wxAuiDockArt* art_provider);
+
+    /**
+        Instructs wxAuiManager to use art provider specified by parameter
+        @a art_provider for all notebook drawing calls.
+        This allows plugable look-and-feel features. The previous tab art provider object,
+        if any, will be deleted by wxAuiManager.
+
+        @see wxAuiTabArt.
+    */
+    void SetTabArtProvider(wxAuiTabArt* art_provider);
 
     /**
         When a user creates a new dock by dragging a window into a docked position,

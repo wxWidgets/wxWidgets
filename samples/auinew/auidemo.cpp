@@ -72,6 +72,8 @@ class MyFrame : public wxFrame
         ID_CopyPerspectiveCode,
         ID_AllowFloating,
         ID_AllowActivePane,
+        ID_TabsGloss,
+        ID_TabsSimple,
         ID_TabsTop,
         ID_TabsLeft,
         ID_TabsRight,
@@ -567,6 +569,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(MyFrame::ID_CreatePerspective, MyFrame::OnCreatePerspective)
     EVT_MENU(MyFrame::ID_CopyPerspectiveCode, MyFrame::OnCopyPerspectiveCode)
     EVT_MENU(ID_AllowFloating, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_TabsGloss, MyFrame::OnManagerFlag)
+    EVT_MENU(ID_TabsSimple, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TabsTop, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TabsLeft, MyFrame::OnManagerFlag)
     EVT_MENU(ID_TabsRight, MyFrame::OnManagerFlag)
@@ -651,6 +655,9 @@ MyFrame::MyFrame(wxWindow* parent,
     view_menu->Append(ID_SizeReportContent, _("Use a Size Reporter for the Content Pane"));
 
     wxMenu* options_menu = new wxMenu;
+    options_menu->AppendRadioItem(ID_TabsGloss, _("Glossy Theme (Default)"));
+    options_menu->AppendRadioItem(ID_TabsSimple, _("Simple Theme"));
+    options_menu->AppendSeparator();
     options_menu->AppendRadioItem(ID_TabsTop, _("Notebook tabs at top"));
     options_menu->AppendRadioItem(ID_TabsBottom, _("Notebook tabs at bottom"));
     options_menu->AppendRadioItem(ID_TabsLeft, _("Notebook tabs on left"));
@@ -896,38 +903,38 @@ MyFrame::MyFrame(wxWindow* parent,
                   SetName(wxT("below")).SetCaption(wxT("Tree Pane")).
                   SetDirectionLeft().SetLayer(1).SetPosition(4).
                   SetCloseButton(true).SetMaximizeButton(true));
-	//create some panes that should form into a notebook
-	/*{
-		m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
-					  SetName(wxT("below2")).SetCaption(wxT("Tree Pane")).
-					  SetDirectionLeft().SetLayer(1).SetPosition(0).SetRow(2).
-					  SetCloseButton(true).SetMaximizeButton(true));
-		m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
-					  SetName(wxT("below22")).SetCaption(wxT("Tree Pane")).
-					  SetDirectionLeft().SetLayer(1).SetPosition(0).SetRow(2).SetPage(5).
-					  SetCloseButton(true).SetMaximizeButton(true));
-	}*/
+    //create some panes that should form into a notebook
+    /*{
+        m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
+                      SetName(wxT("below2")).SetCaption(wxT("Tree Pane")).
+                      SetDirectionLeft().SetLayer(1).SetPosition(0).SetRow(2).
+                      SetCloseButton(true).SetMaximizeButton(true));
+        m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
+                      SetName(wxT("below22")).SetCaption(wxT("Tree Pane")).
+                      SetDirectionLeft().SetLayer(1).SetPosition(0).SetRow(2).SetPage(5).
+                      SetCloseButton(true).SetMaximizeButton(true));
+    }*/
                   
 
-	/*m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
+    /*m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("floating0")).SetCaption(wxT("Tree Pane")).
                   Float().SetCloseButton(true).SetMaximizeButton(true).SetFloatingPosition(10,15).
-				  SetFloatingSize(40,40));
-	//create some floating panes that should form into a notebook
-	{
-		m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
+                  SetFloatingSize(40,40));
+    //create some floating panes that should form into a notebook
+    {
+        m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("floating1")).SetCaption(wxT("Tree Pane")).
                   Float().SetCloseButton(true).SetMaximizeButton(true).SetFloatingPosition(10,20).
-				  SetFloatingSize(40,40).SetPage(1));
-		m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
+                  SetFloatingSize(40,40).SetPage(1));
+        m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("floating2")).SetCaption(wxT("Tree Pane")).
                   Float().SetCloseButton(true).SetMaximizeButton(true).SetFloatingPosition(10,20).
-				  SetFloatingSize(40,40).SetPage(2));
-		m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
+                  SetFloatingSize(40,40).SetPage(2));
+        m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("floating3")).SetCaption(wxT("Tree Pane")).
                   Float().SetCloseButton(true).SetMaximizeButton(true).SetFloatingPosition(10,20).
-				  SetFloatingSize(40,40).SetPage(3));
-	}*/
+                  SetFloatingSize(40,40).SetPage(3));
+    }*/
 
     //create some more panes that should form into a notebook
     {
@@ -939,15 +946,15 @@ MyFrame::MyFrame(wxWindow* parent,
                   SetName(wxT("tabtest3")).SetCaption(wxT("Tree Pane 3")).
                   SetDirectionLeft().SetLayer(1).SetPosition(1).
                   SetCloseButton(true).SetMaximizeButton(true).SetPage(3));
-		m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
+        m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("tabtest2")).SetCaption(wxT("Tree Pane 2")).
                   SetDirectionLeft().SetLayer(1).SetPosition(1).
                   SetCloseButton(true).SetMaximizeButton(true).SetPage(2).SetFlag(wxAuiPaneInfo::optionActiveNotebook,true));
-		m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
+        m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("tabtest5")).SetCaption(wxT("Tree Pane 4")).
                   SetDirectionLeft().SetLayer(1).SetPosition(1).
                   SetCloseButton(true).SetMaximizeButton(true).SetPage(4));
-		m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
+        m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
                   SetName(wxT("tabtest6")).SetCaption(wxT("Tree Pane 5")).
                   SetDirectionLeft().SetLayer(1).SetPosition(1).
                   SetCloseButton(true).SetMaximizeButton(true).SetPage(5));
@@ -1113,6 +1120,14 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         m_mgr.SetFlag(wxAUI_MGR_TRANSPARENT_HINT,false);
         m_mgr.SetFlag(wxAUI_MGR_VENETIAN_BLINDS_HINT,false);
         m_mgr.SetFlag(wxAUI_MGR_RECTANGLE_HINT,false);
+    }
+    else if (id == ID_TabsGloss)
+    {
+        m_mgr.SetTabArtProvider(new wxAuiDefaultTabArt);
+    }
+    else if (id == ID_TabsSimple)
+    {
+        m_mgr.SetTabArtProvider(new wxAuiSimpleTabArt);
     }
 
     switch (id)
