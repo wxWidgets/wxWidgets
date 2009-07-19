@@ -306,11 +306,17 @@ void FileCtrlWidgetsPage::OnRadioBox( wxCommandEvent& WXUNUSED( event ) )
 void FileCtrlWidgetsPage::OnFileCtrl( wxFileCtrlEvent& event )
 {
     if ( event.GetEventType() == wxEVT_FILECTRL_FOLDERCHANGED )
+    {
         wxLogMessage("Folder changed event, new folder: %s", event.GetDirectory());
+    }
     else if ( event.GetEventType() == wxEVT_FILECTRL_FILEACTIVATED )
+    {
         wxLogMessage("File activated event: %s", wxJoin(event.GetFiles(), ' '));
+    }
     else if ( event.GetEventType() == wxEVT_FILECTRL_SELECTIONCHANGED )
+    {
         wxLogMessage("Selection changed event: %s", wxJoin(event.GetFiles(), ' '));
+    }
 }
 
 #endif // wxUSE_FILECTRL

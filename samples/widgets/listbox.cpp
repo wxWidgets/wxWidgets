@@ -448,7 +448,10 @@ ListboxWidgetsPage::GetValidIndexFromText(const wxTextCtrl *text, int *n) const
         // want to retrieve the value as this is only done in answer to a user
         // action
         if ( n )
+        {
             wxLogWarning("Invalid index \"%s\"", text->GetValue());
+        }
+
         return false;
     }
 

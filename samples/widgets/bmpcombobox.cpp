@@ -890,7 +890,9 @@ wxBitmap BitmapComboBoxWidgetsPage::QueryBitmap(wxString* pStr)
     }
 
     if (bitmap.IsOk())
+    {
         wxLogDebug(wxT("%i, %i"),bitmap.GetWidth(), bitmap.GetHeight());
+    }
 
     ::wxSetCursor( *wxSTANDARD_CURSOR );
 
