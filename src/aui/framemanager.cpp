@@ -5658,6 +5658,27 @@ void wxAuiManager::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 
 void wxAuiManager::OnChildFocus(wxChildFocusEvent& event)
 {
+    //temp: (MJM) -> Look if implementing the below fixes some of the strange things we are seeing when dragging notebook panes
+    // This used to be part of the wxAuiNotebook OnChildFocus handler
+    /*
+    // if we're dragging a tab, don't change the current selection.
+    // This code prevents a bug that used to happen when the hint window
+    // was hidden.  In the bug, the focus would return to the notebook
+    // child, which would then enter this handler and call
+    // SetSelection, which is not desired turn tab dragging.
+
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    size_t i, pane_count = all_panes.GetCount();
+    for (i = 0; i < pane_count; ++i)
+    {
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.GetName() == wxT("dummy"))
+            continue;
+        wxTabFrame* tabframe = (wxTabFrame*)pane.GetWindow();
+        if (tabframe->m_tabs->IsDragging())
+            return;
+    }*/
+    
     // when a child pane has it's focus set, we should change the
     // pane's active state to reflect this. (this is only true if
     // active panes are allowed by the owner)
