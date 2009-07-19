@@ -223,13 +223,20 @@ void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
                                               const wxString& text)
 {
     wxCollapsiblePane *pane = new wxCollapsiblePane(this, wxID_ANY, title);
-    wxStaticText *txt = new wxStaticText(pane->GetPane(), wxID_ANY, text,
+    wxWindow * const paneContents = pane->GetPane();
+    wxStaticText *txt = new wxStaticText(paneContents, wxID_ANY, text,
                                          wxDefaultPosition, wxDefaultSize,
                                          wxALIGN_CENTRE);
 
     // don't make the text unreasonably wide
     static const int maxWidth = wxGetDisplaySize().x/3;
     txt->Wrap(maxWidth);
+
+
+    // we need a sizer to make this text expand to fill the entire pane area
+    wxSizer * const sizerPane = new wxBoxSizer(wxHORIZONTAL);
+    sizerPane->Add(txt, wxSizerFlags(1).Expand());
+    paneContents->SetSizer(sizerPane);
 
     // NB: all the wxCollapsiblePanes must be added with a null proportion value
     m_sizerText->Add(pane, wxSizerFlags(0).Expand().Border(wxBOTTOM));
