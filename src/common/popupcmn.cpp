@@ -34,6 +34,7 @@
     #include "wx/log.h"
 #endif //WX_PRECOMP
 
+#include "wx/display.h"
 #include "wx/recguard.h"
 
 #ifdef __WXUNIVERSAL__
@@ -134,13 +135,31 @@ bool wxPopupWindowBase::Create(wxWindow* WXUNUSED(parent), int WXUNUSED(flags))
 void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
                                  const wxSize& size)
 {
-    wxSize sizeScreen = wxGetDisplaySize(),
-           sizeSelf = GetSize();
+    // determine the position and size of the screen we clamp the popup to
+    wxPoint posScreen;
+    wxSize sizeScreen;
+
+    const int displayNum = wxDisplay::GetFromPoint(ptOrigin);
+    if ( displayNum != wxNOT_FOUND )
+    {
+        const wxRect rectScreen = wxDisplay(displayNum).GetGeometry();
+        posScreen = rectScreen.GetPosition();
+        sizeScreen = rectScreen.GetSize();
+    }
+    else // outside of any display?
+    {
+        // just use the primary one then
+        posScreen = wxPoint(0, 0);
+        sizeScreen = wxGetDisplaySize();
+    }
+
+
+    const wxSize sizeSelf = GetSize();
 
     // is there enough space to put the popup below the window (where we put it
     // by default)?
     wxCoord y = ptOrigin.y + size.y;
-    if ( y + sizeSelf.y > sizeScreen.y )
+    if ( y + sizeSelf.y > posScreen.y + sizeScreen.y )
     {
         // check if there is enough space above
         if ( ptOrigin.y > sizeSelf.y )
@@ -153,7 +172,7 @@ void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
 
     // now check left/right too
     wxCoord x = ptOrigin.x;
-            
+
     if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
     {
         // shift the window to the left instead of the right.
@@ -163,8 +182,8 @@ void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
     else
         x += size.x;
 
-    
-    if ( x + sizeSelf.x > sizeScreen.x )
+
+    if ( x + sizeSelf.x > posScreen.x + sizeScreen.x )
     {
         // check if there is enough space to the left
         if ( ptOrigin.x > sizeSelf.x )
