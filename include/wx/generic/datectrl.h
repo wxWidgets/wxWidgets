@@ -57,7 +57,6 @@ public:
                       const wxDateTime& upperdate = wxDefaultDateTime);
 
     // extra methods available only in this (generic) implementation
-    bool SetFormat(const wxString& fmt);
     wxCalendarCtrl *GetCalendar() const;
 
 
