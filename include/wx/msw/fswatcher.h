@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/fswatcher.h
-// Purpose:     wxMswFileSystemWatcher
+// Purpose:     wxMSWFileSystemWatcher
 // Author:      Bartosz Bekier
 // Created:     2009-05-26
 // RCS-ID:      $Id$
@@ -15,10 +15,31 @@
 
 #if wxUSE_FSWATCHER
 
-class WXDLLIMPEXP_BASE wxMswFileSystemWatcher : public wxFileSystemWatcherBase
+class wxFSWatcherService;
+
+class WXDLLIMPEXP_BASE wxMSWFileSystemWatcher : public wxFileSystemWatcherBase
 {
 public:
+    wxMSWFileSystemWatcher();
 
+    wxMSWFileSystemWatcher(const wxFileName& path,
+                                    int events = wxFSW_EVENT_ALL);
+
+    virtual ~wxMSWFileSystemWatcher();
+
+    virtual bool AddTree(const wxFileName& path, int events = wxFSW_EVENT_ALL,
+                         const wxString& filter = wxEmptyString);
+
+protected:
+    bool Init();
+
+    virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events);
+
+    virtual bool DoAdd(wxFSWatchEntry& watch);
+
+    virtual bool DoRemove(wxFSWatchEntry& watch);
+
+    wxFSWatcherService* m_service;
 };
 
 #endif // wxUSE_FSWATCHER

@@ -15,6 +15,7 @@
 
 #if wxUSE_FSWATCHER
 
+#include "wx/log.h"
 #include "wx/event.h"
 #include "wx/evtloop.h"
 #include "wx/filename.h"
@@ -129,7 +130,11 @@ public:
 
     virtual wxEvent* Clone() const
     {
-        return new wxFileSystemWatcherEvent(*this);
+        wxFileSystemWatcherEvent* evt = new wxFileSystemWatcherEvent(*this);
+        evt->m_errorMsg = m_errorMsg.c_str();
+        evt->m_path = wxFileName(m_path.GetFullPath().c_str());
+        evt->m_newPath = wxFileName(m_newPath.GetFullPath().c_str());
+		return evt;
     }
 
     virtual wxEventCategory GetEventCategory() const
@@ -245,6 +250,11 @@ public:
      */
     int GetWatchedPaths(wxArrayString* paths) const;
 
+    wxEvtHandler* GetOwner()
+    {
+        return m_owner;
+    }
+
     void SetOwner(wxEvtHandler* handler)
     {
         if (!handler)
@@ -254,30 +264,6 @@ public:
     }
 
 protected:
-
-    /**
-     * Event handlers. Override these if you are deriving file system watcher
-     */
-    virtual void OnChange(int changeType, const wxFileName& path,
-                                        const wxFileName& newPath)
-    {
-        wxLogTrace(wxTRACE_FSWATCHER, "OnChange(): event for path '%s'",
-                    path.GetFullPath());
-        wxFileSystemWatcherEvent evt(changeType, path, newPath);
-        m_owner->ProcessEvent(evt);
-    }
-
-    virtual void OnWarning(const wxString& errorMessage)
-    {
-        wxLogTrace(wxTRACE_FSWATCHER,
-                    wxString::Format("Warning received: '%s'", errorMessage));
-    }
-
-    virtual void OnError(const wxString& errorMessage)
-    {
-        wxLogTrace(wxTRACE_FSWATCHER,
-                    wxString::Format("Error received: '%s'", errorMessage));
-    }
 
     /**
      * Function resposible for creating platform specific wxFSWatchEntry. This is
@@ -311,7 +297,7 @@ protected:
     #define wxFileSystemWatcher wxInotifyFileSystemWatcher
 #elif defined(__WXMSW__)
     #include "wx/msw/fswatcher.h"
-    #define wxFileSystemWatcher wxMswFileSystemWatcher
+    #define wxFileSystemWatcher wxMSWFileSystemWatcher
 #elif defined(__WXCOCOA__)
     #include "wx/msw/fswatcher.h"
     #define wxFileSystemWatcher wxKqueueFileSystemWatcher
