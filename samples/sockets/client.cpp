@@ -618,7 +618,9 @@ void MyFrame::OnTestURL(wxCommandEvent& WXUNUSED(event))
     // Get the data
     wxStringOutputStream sout;
     if ( data->Read(sout).GetLastError() != wxSTREAM_EOF )
+    {
         wxLogError("Error reading the input stream.");
+    }
 
     wxLogMessage("Text retrieved from URL \"%s\" follows:\n%s",
                  urlname, sout.GetString());

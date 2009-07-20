@@ -2456,7 +2456,9 @@ void wxMenuBar::OnDismissMenu(bool dismissMenuBar)
 void wxMenuBar::OnDismiss()
 {
     if ( ReleaseMouseCapture() )
+    {
         wxLogTrace(_T("mousecapture"), _T("Releasing mouse from wxMenuBar::OnDismiss"));
+    }
 
     if ( m_current != -1 )
     {

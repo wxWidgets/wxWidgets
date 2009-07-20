@@ -1434,7 +1434,9 @@ void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
         {
             DWORD err = ::GetLastError();
             if ( err )
+            {
                 wxLogApiError(_T("SendMessage(WM_MDISETMENU)"), err);
+            }
         }
     }
 

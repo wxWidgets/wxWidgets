@@ -802,10 +802,14 @@ void MyFrame::DoShowFirstOrLast(TreeFunc0_t pfn, const wxString& label)
     const wxTreeItemId item = (m_treeCtrl->*pfn)();
 
     if ( !item.IsOk() )
+    {
         wxLogMessage("There is no %s item", label);
+    }
     else
+    {
         wxLogMessage("The %s item is \"%s\"",
                      label, m_treeCtrl->GetItemText(item));
+    }
 }
 
 void MyFrame::DoShowRelativeItem(TreeFunc1_t pfn, const wxString& label)
@@ -825,10 +829,14 @@ void MyFrame::DoShowRelativeItem(TreeFunc1_t pfn, const wxString& label)
     wxTreeItemId new_item = (m_treeCtrl->*pfn)(item);
 
     if ( !new_item.IsOk() )
+    {
         wxLogMessage("There is no %s item", label);
+    }
     else
+    {
         wxLogMessage("The %s item is \"%s\"",
                      label, m_treeCtrl->GetItemText(new_item));
+    }
 }
 
 void MyFrame::OnScrollTo(wxCommandEvent& WXUNUSED(event))
@@ -1588,12 +1596,16 @@ void MyTreeCtrl::OnRMouseDClick(wxMouseEvent& event)
 {
     wxTreeItemId id = HitTest(event.GetPosition());
     if ( !id )
+    {
         wxLogMessage(wxT("No item under mouse"));
+    }
     else
     {
         MyTreeItemData *item = (MyTreeItemData *)GetItemData(id);
         if ( item )
+        {
             wxLogMessage(wxT("Item '%s' under mouse"), item->GetDesc());
+        }
     }
 
     event.Skip();

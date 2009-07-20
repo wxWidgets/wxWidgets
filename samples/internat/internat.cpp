@@ -245,8 +245,10 @@ bool MyApp::OnInit()
     // Initialize the catalogs we'll be using
     const wxLanguageInfo* pInfo = wxLocale::GetLanguageInfo(m_lang);
     if (!m_locale.AddCatalog("internat"))
+    {
         wxLogError(_("Couldn't find/load the 'internat' catalog for locale '%s'."),
                    pInfo ? pInfo->GetLocaleName() : _("unknown"));
+    }
 
     // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
     // a localized error message:
@@ -427,9 +429,13 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
     }
 
     if ( wxLocale::IsAvailable(info->Language) )
+    {
         wxLogMessage(_("Locale \"%s\" is available."), s_locale.c_str());
+    }
     else
+    {
         wxLogWarning(_("Locale \"%s\" is not available."), s_locale.c_str());
+    }
 }
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))

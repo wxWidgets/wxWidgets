@@ -564,7 +564,9 @@ wxWindowMSW::~wxWindowMSW()
         //if (::IsWindow(GetHwnd()))
         {
             if ( !::DestroyWindow(GetHwnd()) )
+            {
                 wxLogLastError(wxT("DestroyWindow"));
+            }
         }
 
         // remove hWnd <-> wxWindow association
@@ -1258,7 +1260,9 @@ void wxWindowMSW::AssociateHandle(WXWidget handle)
     if ( m_hWnd )
     {
       if ( !::DestroyWindow(GetHwnd()) )
+      {
         wxLogLastError(wxT("DestroyWindow"));
+      }
     }
 
     WXHWND wxhwnd = (WXHWND)handle;
@@ -4694,9 +4698,13 @@ bool wxWindowMSW::HandlePaint()
 {
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )
+    {
         wxLogLastError(wxT("CreateRectRgn"));
+    }
     if ( ::GetUpdateRgn(GetHwnd(), hRegion, FALSE) == ERROR )
+    {
         wxLogLastError(wxT("GetUpdateRgn"));
+    }
 
     m_updateRegion = wxRegion((WXHRGN) hRegion);
 

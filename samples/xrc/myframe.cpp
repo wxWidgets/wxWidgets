@@ -136,18 +136,26 @@ MyFrame::MyFrame(wxWindow* parent)
 void MyFrame::OnUnloadResourceMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxXmlResource::Get()->Unload(wxT("rc/basicdlg.xrc")) )
+    {
         wxLogMessage(_T("Basic dialog resource has now been unloaded, you ")
                      _T("won't be able to use it before loading it again"));
+    }
     else
+    {
         wxLogWarning(_T("Failed to unload basic dialog resource"));
+    }
 }
 
 void MyFrame::OnReloadResourceMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxXmlResource::Get()->Load(wxT("rc/basicdlg.xrc")) )
+    {
         wxLogStatus(_T("Basic dialog resource has been loaded."));
+    }
     else
+    {
         wxLogError(_T("Failed to load basic dialog resource"));
+    }
 }
 
 void MyFrame::OnExitToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))

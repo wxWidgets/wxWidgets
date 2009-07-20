@@ -1426,7 +1426,7 @@ void MyPanel::OnCombo( wxCommandEvent &event )
 {
     if (!m_combo)
         return;
-    
+
     wxLogMessage(_T("EVT_COMBOBOX: item %d/%d (event/control), string \"%s\"/\"%s\""),
                  (int)event.GetInt(),
                  m_combo->GetSelection(),
@@ -1437,16 +1437,20 @@ void MyPanel::OnCombo( wxCommandEvent &event )
 void MyPanel::OnComboTextChanged(wxCommandEvent& event)
 {
     if (m_combo)
+    {
         wxLogMessage(wxT("EVT_TEXT for the combobox: \"%s\" (event) or \"%s\" (control)."),
                      event.GetString().c_str(),
                      m_combo->GetValue().c_str());
+    }
 }
 
 void MyPanel::OnComboTextEnter(wxCommandEvent& WXUNUSED(event))
 {
     if (m_combo)
+    {
         wxLogMessage(_T("Enter pressed in the combobox: value is '%s'."),
                      m_combo->GetValue().c_str());
+    }
 }
 
 void MyPanel::OnComboButtons( wxCommandEvent &event )
@@ -2033,9 +2037,13 @@ void MyComboBox::OnChar(wxKeyEvent& event)
     wxLogMessage(_T("MyComboBox::OnChar"));
 
     if ( event.GetKeyCode() == 'w' )
+    {
         wxLogMessage(_T("MyComboBox: 'w' will be ignored."));
+    }
     else
+    {
         event.Skip();
+    }
 }
 
 void MyComboBox::OnKeyDown(wxKeyEvent& event)
@@ -2043,9 +2051,13 @@ void MyComboBox::OnKeyDown(wxKeyEvent& event)
     wxLogMessage(_T("MyComboBox::OnKeyDown"));
 
     if ( event.GetKeyCode() == 'w' )
+    {
         wxLogMessage(_T("MyComboBox: 'w' will be ignored."));
+    }
     else
+    {
         event.Skip();
+    }
 }
 
 void MyComboBox::OnKeyUp(wxKeyEvent& event)

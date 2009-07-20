@@ -388,7 +388,9 @@ void TempDir::RemoveDir(wxString& path)
         wxRmdir(tmp + wxFileName(dirs[i], wxPATH_UNIX).GetFullPath());
 
     if (!wxRmdir(m_tmp))
+    {
         wxLogSysError(_T("can't remove temporary dir '%s'"), m_tmp.c_str());
+    }
 }
 
 

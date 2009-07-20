@@ -182,7 +182,9 @@ MyFrame::~MyFrame()
 void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 {
     if (!m_animationCtrl->Play())
+    {
         wxLogError(wxT("Invalid animation"));
+    }
 }
 
 void MyFrame::OnStop(wxCommandEvent& WXUNUSED(event))

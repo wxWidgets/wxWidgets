@@ -580,7 +580,9 @@ bool wxSpinCtrl::Reparent(wxWindowBase *newParent)
     // destroy the old spin button
     UnsubclassWin();
     if ( !::DestroyWindow(GetHwnd()) )
+    {
         wxLogLastError(wxT("DestroyWindow"));
+    }
 
     // create and initialize the new one
     if ( !wxSpinButton::Create(GetParent(), GetId(),

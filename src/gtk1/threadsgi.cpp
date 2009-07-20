@@ -66,7 +66,9 @@ wxMutex::wxMutex()
 wxMutex::~wxMutex()
 {
   if (m_locked > 0)
+  {
     wxLogDebug( "wxMutex warning: freeing a locked mutex (%d locks)\n", m_locked );
+  }
   delete p_internal;
 }
 

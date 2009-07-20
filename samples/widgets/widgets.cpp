@@ -904,9 +904,13 @@ void WidgetsFrame::OnDisableAutoComplete(wxCommandEvent& WXUNUSED(event))
     wxCHECK_RET( entry, "menu item should be disabled" );
 
     if ( entry->AutoComplete(wxArrayString()) )
+    {
         wxLogMessage("Disabled auto completion.");
+    }
     else
+    {
         wxLogMessage("AutoComplete() failed.");
+    }
 }
 
 void WidgetsFrame::OnAutoCompleteFixed(wxCommandEvent& WXUNUSED(event))
@@ -926,9 +930,13 @@ void WidgetsFrame::OnAutoCompleteFixed(wxCommandEvent& WXUNUSED(event))
     completion_choices.push_back("this string is for test");
 
     if ( entry->AutoComplete(completion_choices) )
+    {
         wxLogMessage("Enabled auto completion of a set of fixed strings.");
+    }
     else
+    {
         wxLogMessage("AutoComplete() failed.");
+    }
 }
 
 void WidgetsFrame::OnAutoCompleteFilenames(wxCommandEvent& WXUNUSED(event))
@@ -937,9 +945,13 @@ void WidgetsFrame::OnAutoCompleteFilenames(wxCommandEvent& WXUNUSED(event))
     wxCHECK_RET( entry, "menu item should be disabled" );
 
     if ( entry->AutoCompleteFileNames() )
+    {
         wxLogMessage("Enable auto completion of file names.");
+    }
     else
+    {
         wxLogMessage("AutoCompleteFileNames() failed.");
+    }
 }
 
 void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
@@ -956,9 +968,13 @@ void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
     s_hint = hint;
 
     if ( entry->SetHint(hint) )
+    {
         wxLogMessage("Set hint to \"%s\".", hint);
+    }
     else
+    {
         wxLogMessage("Text hints not supported.");
+    }
 }
 
 #endif // wxUSE_MENUS

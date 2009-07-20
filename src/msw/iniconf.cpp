@@ -350,7 +350,9 @@ bool wxIniConfig::DoWriteString(const wxString& szKey, const wxString& szValue)
                                        m_strLocalFilename.wx_str()) != 0;
 
   if ( !bOk )
+  {
     wxLogLastError(wxT("WritePrivateProfileString"));
+  }
 
   return bOk;
 }
@@ -405,7 +407,9 @@ bool wxIniConfig::DeleteEntry(const wxString& szKey, bool bGroupIfEmptyAlso)
                                        NULL, m_strLocalFilename.wx_str()) != 0;
 
   if ( !bOk )
+  {
     wxLogLastError(wxT("WritePrivateProfileString"));
+  }
 
   return bOk;
 }
@@ -420,7 +424,9 @@ bool wxIniConfig::DeleteGroup(const wxString& szKey)
                                        NULL, m_strLocalFilename.wx_str()) != 0;
 
   if ( !bOk )
+  {
     wxLogLastError(wxT("WritePrivateProfileString"));
+  }
 
   return bOk;
 }

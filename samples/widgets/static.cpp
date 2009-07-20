@@ -541,8 +541,12 @@ void StaticWidgetsPage::OnButtonLabelWithMarkupText(wxCommandEvent& WXUNUSED(eve
 void StaticWidgetsPage::OnMouseEvent(wxMouseEvent& event)
 {
     if ( event.GetEventObject() == m_statText )
+    {
         wxLogMessage("Clicked on static text");
+    }
     else
+    {
         wxLogMessage("Clicked on static box");
+    }
 }
 

@@ -214,7 +214,9 @@ bool IfaceCheckApp::Compare()
                  interfaces.GetCount());
 
     if (!m_strToMatch.IsEmpty())
+    {
         wxLogMessage("Processing only header files matching '%s' expression.", m_strToMatch);
+    }
 
     for (unsigned int i=0; i<interfaces.GetCount(); i++)
     {
@@ -224,8 +226,10 @@ bool IfaceCheckApp::Compare()
             (interfaces[i].GetAvailability() & m_gccInterface.GetInterfacePort()) == 0) {
 
             if (g_verbose)
+            {
                 wxLogMessage("skipping class '%s' since it's not available for the %s port.",
                            interfaces[i].GetName(), m_gccInterface.GetInterfacePortName());
+            }
 
             continue;       // skip this method
         }
@@ -299,8 +303,10 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
             (m.GetAvailability() & m_gccInterface.GetInterfacePort()) == 0) {
 
             if (g_verbose)
+            {
                 wxLogMessage("skipping method '%s' since it's not available for the %s port.",
                            m.GetAsString(), m_gccInterface.GetInterfacePortName());
+            }
 
             continue;       // skip this method
         }
@@ -355,7 +361,9 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
 
                     // modify interface header
                     if (FixMethod(iface->GetHeader(), &m, &tmp))
+                    {
                         wxLogMessage("Adjusted attributes of '%s' method", m.GetAsString());
+                    }
 
                     proceed = false;
                     break;
@@ -397,7 +405,9 @@ int IfaceCheckApp::CompareClasses(const wxClass* iface, const wxClass* api)
                         // TODO: decide which of these overloads is the most "similar" to m
                         //       and eventually modify it
                         if (m_modify)
+                        {
                             wxLogWarning("\tmanual fix is required");
+                        }
                     }
                     else
                     {
@@ -574,7 +584,9 @@ bool IfaceCheckApp::FixMethod(const wxString& header, const wxMethod* iface, con
         return false;
 
     if (g_verbose)
+    {
         wxLogMessage("\tthe final row offset for following methods is %d lines.", nOffset);
+    }
 
     // update the other method's locations for those methods which belong to the modified header
     // and are placed _below_ the modified method

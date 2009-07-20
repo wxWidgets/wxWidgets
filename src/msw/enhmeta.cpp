@@ -94,8 +94,10 @@ void wxEnhMetaFile::Init()
     {
         m_hMF = (WXHANDLE)::GetEnhMetaFile(m_filename.fn_str());
         if ( !m_hMF )
+        {
             wxLogSysError(_("Failed to load metafile from file \"%s\"."),
                           m_filename.c_str());
+        }
     }
 }
 

@@ -362,7 +362,9 @@ void wxListBox::DoSetItemClientData(unsigned int n, void *clientData)
                  wxT("invalid index in wxListBox::SetClientData") );
 
     if ( ListBox_SetItemData(GetHwnd(), n, clientData) == LB_ERR )
+    {
         wxLogDebug(wxT("LB_SETITEMDATA failed"));
+    }
 }
 
 // Return number of selections and an array of selected integers

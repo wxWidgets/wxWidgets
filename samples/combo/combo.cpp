@@ -1042,9 +1042,13 @@ void MyFrame::OnComboBoxUpdate( wxCommandEvent& event )
         return;
 
     if ( event.GetEventType() == wxEVT_COMMAND_COMBOBOX_SELECTED )
+    {
         wxLogDebug(wxT("EVT_COMBOBOX(id=%i,selection=%i)"),event.GetId(),event.GetSelection());
+    }
     else if ( event.GetEventType() == wxEVT_COMMAND_TEXT_UPDATED )
+    {
         wxLogDebug(wxT("EVT_TEXT(id=%i,string=\"%s\")"),event.GetId(),event.GetString().c_str());
+    }
 }
 
 void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )

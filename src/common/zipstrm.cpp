@@ -1874,13 +1874,19 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t size)
             m_lasterror = wxSTREAM_READ_ERROR;
 
             if (m_entry.GetSize() != TellI())
+            {
                 wxLogError(_("reading zip stream (entry %s): bad length"),
                            m_entry.GetName().c_str());
+            }
             else if (m_crcAccumulator != m_entry.GetCrc())
+            {
                 wxLogError(_("reading zip stream (entry %s): bad crc"),
                            m_entry.GetName().c_str());
+            }
             else
+            {
                 m_lasterror = wxSTREAM_EOF;
+            }
         }
     }
 

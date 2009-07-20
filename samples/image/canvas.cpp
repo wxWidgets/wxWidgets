@@ -82,7 +82,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
 #if wxUSE_LIBPNG
     if ( !image.SaveFile( dir + _T("test.png"), wxBITMAP_TYPE_PNG ))
+    {
         wxLogError(wxT("Can't save file"));
+    }
 
     image.Destroy();
 
@@ -92,14 +94,22 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.png")) )
+    {
         wxLogError(wxT("Can't load PNG image"));
+    }
     else
+    {
         my_horse_png = wxBitmap( image );
+    }
 
     if ( !image.LoadFile( dir + _T("toucan.png")) )
+    {
         wxLogError(wxT("Can't load PNG image"));
+    }
     else
+    {
         my_toucan = wxBitmap(image);
+    }
 
     my_toucan_flipped_horiz = wxBitmap(image.Mirror(true));
     my_toucan_flipped_vert = wxBitmap(image.Mirror(false));
@@ -116,7 +126,9 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.jpg")) )
+    {
         wxLogError(wxT("Can't load JPG image"));
+    }
     else
     {
         my_horse_jpeg = wxBitmap( image );
@@ -129,87 +141,129 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     }
 
     if ( !image.LoadFile( dir + _T("cmyk.jpg")) )
+    {
         wxLogError(_T("Can't load CMYK JPG image"));
+    }
     else
+    {
         my_cmyk_jpeg = wxBitmap(image);
+    }
 #endif // wxUSE_LIBJPEG
 
 #if wxUSE_GIF
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.gif" )) )
+    {
         wxLogError(wxT("Can't load GIF image"));
+    }
     else
+    {
         my_horse_gif = wxBitmap( image );
+    }
 #endif
 
 #if wxUSE_PCX
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.pcx"), wxBITMAP_TYPE_PCX ) )
+    {
         wxLogError(wxT("Can't load PCX image"));
+    }
     else
+    {
         my_horse_pcx = wxBitmap( image );
+    }
 #endif
 
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.bmp"), wxBITMAP_TYPE_BMP ) )
+    {
         wxLogError(wxT("Can't load BMP image"));
+    }
     else
+    {
         my_horse_bmp = wxBitmap( image );
+    }
 
 #if wxUSE_XPM
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.xpm"), wxBITMAP_TYPE_XPM ) )
+    {
         wxLogError(wxT("Can't load XPM image"));
+    }
     else
+    {
         my_horse_xpm = wxBitmap( image );
+    }
 
     if ( !image.SaveFile( dir + _T("test.xpm"), wxBITMAP_TYPE_XPM ))
+    {
         wxLogError(wxT("Can't save file"));
+    }
 #endif
 
 #if wxUSE_PNM
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.pnm"), wxBITMAP_TYPE_PNM ) )
+    {
         wxLogError(wxT("Can't load PNM image"));
+    }
     else
+    {
         my_horse_pnm = wxBitmap( image );
+    }
 
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse_ag.pnm"), wxBITMAP_TYPE_PNM ) )
+    {
         wxLogError(wxT("Can't load PNM image"));
+    }
     else
+    {
         my_horse_asciigrey_pnm = wxBitmap( image );
+    }
 
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse_rg.pnm"), wxBITMAP_TYPE_PNM ) )
+    {
         wxLogError(wxT("Can't load PNM image"));
+    }
     else
+    {
         my_horse_rawgrey_pnm = wxBitmap( image );
+    }
 #endif
 
 #if wxUSE_LIBTIFF
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.tif"), wxBITMAP_TYPE_TIF ) )
+    {
         wxLogError(wxT("Can't load TIFF image"));
+    }
     else
+    {
         my_horse_tiff = wxBitmap( image );
+    }
 #endif
 
 #if wxUSE_LIBTIFF
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.tga"), wxBITMAP_TYPE_TGA ) )
+    {
         wxLogError(wxT("Can't load TGA image"));
+    }
     else
+    {
         my_horse_tga = wxBitmap( image );
+    }
 #endif
 
     CreateAntiAliasedBitmap();
@@ -225,28 +279,42 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.ico"), wxBITMAP_TYPE_ICO, 0 ) )
+    {
         wxLogError(wxT("Can't load first ICO image"));
+    }
     else
+    {
         my_horse_ico32 = wxBitmap( image );
+    }
 
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.ico"), wxBITMAP_TYPE_ICO, 1 ) )
+    {
         wxLogError(wxT("Can't load second ICO image"));
+    }
     else
+    {
         my_horse_ico16 = wxBitmap( image );
+    }
 
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.ico") ) )
+    {
         wxLogError(wxT("Can't load best ICO image"));
+    }
     else
+    {
         my_horse_ico = wxBitmap( image );
+    }
 
     image.Destroy();
 
     if ( !image.LoadFile( dir + _T("horse.cur"), wxBITMAP_TYPE_CUR ) )
+    {
         wxLogError(wxT("Can't load best ICO image"));
+    }
     else
     {
         my_horse_cur = wxBitmap( image );
@@ -256,9 +324,13 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     m_ani_images = wxImage::GetImageCount ( dir + _T("horse3.ani"), wxBITMAP_TYPE_ANI );
     if (m_ani_images==0)
+    {
         wxLogError(wxT("No ANI-format images found"));
+    }
     else
+    {
         my_horse_ani = new wxBitmap [m_ani_images];
+    }
 
     int i;
     for (i=0; i < m_ani_images; i++)
@@ -286,14 +358,20 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         size_t dataSize = (size_t)len;
         void *data = malloc(dataSize);
         if ( file.Read(data, dataSize) != len )
+        {
             wxLogError(_T("Reading bitmap file failed"));
+        }
         else
         {
             wxMemoryInputStream mis(data, dataSize);
             if ( !image.LoadFile(mis) )
+            {
                 wxLogError(wxT("Can't load BMP image from stream"));
+            }
             else
+            {
                 my_horse_bmp2 = wxBitmap( image );
+            }
         }
 
         free(data);

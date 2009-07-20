@@ -234,8 +234,10 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
             (m.m_strDefaultValueForCmp.IsNumber() && m_strDefaultValueForCmp.StartsWith("wx")))
         {
             if (g_verbose)
+            {
                 wxLogMessage("Supposing '%s'  default value to be the same of '%s'...",
                            m_strDefaultValueForCmp, m.m_strDefaultValueForCmp);
+            }
 
             return true;
         }
@@ -260,8 +262,10 @@ bool wxArgumentType::operator==(const wxArgumentType& m) const
         }
 
         if (g_verbose)
+        {
             wxLogMessage("Argument type '%s = %s' has different default value from '%s = %s'",
                        m_strType, m_strDefaultValueForCmp, m.m_strType, m.m_strDefaultValueForCmp);
+        }
         return false;
     }
 
@@ -330,14 +334,18 @@ bool wxMethod::MatchesExceptForAttributes(const wxMethod& m) const
         GetName() != m.GetName())
     {
         if (g_verbose)
+        {
             wxLogMessage("The method '%s' does not match method '%s'; different names/rettype", GetName(), m.GetName());
+        }
         return false;
     }
 
     if (m_args.GetCount()!=m.m_args.GetCount()) {
         if (g_verbose)
+        {
             wxLogMessage("Method '%s' has %d arguments while '%s' has %d arguments",
                        m_strName, m_args.GetCount(), m_strName, m.m_args.GetCount());
+        }
         return false;
     }
 
@@ -372,7 +380,9 @@ bool wxMethod::operator==(const wxMethod& m) const
         GetAccessSpecifier() != m.GetAccessSpecifier())
     {
         if (g_verbose)
+        {
             wxLogMessage("The method '%s' does not match method '%s'; different attributes", GetName(), m.GetName());
+        }
 
         return false;
     }
@@ -1009,8 +1019,10 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
                 // they're never used as return/argument types by wxWidgets methods
 
                 if (g_verbose)
+                {
                     wxLogWarning("Type node '%s' with ID '%s' does not have name attribute",
                                n, child->GetAttribute("id"));
+                }
 
                 types[id] = "TOFIX";
             }
@@ -1028,8 +1040,10 @@ bool wxXmlGccInterface::Parse(const wxString& filename)
     while (toResolveTypes.size()>0)
     {
         if (g_verbose)
+        {
             wxLogMessage("%d types were collected; %d types need yet to be resolved...",
                        types.size(), toResolveTypes.size());
+        }
 
         for (wxToResolveTypeHashMap::iterator i = toResolveTypes.begin();
              i != toResolveTypes.end();)
@@ -1468,7 +1482,9 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
     int nodes = 0;
 
     if (g_verbose)
+    {
         wxLogMessage("Parsing %s...", filename);
+    }
 
     if (!doc.Load(filename)) {
         wxLogError("can't load %s", filename);
@@ -1576,10 +1592,14 @@ bool wxXmlDoxygenInterface::ParseCompoundDefinition(const wxString& filename)
 
             // add a new class
             if (klass.IsOk())
+            {
                 m_classes.Add(klass);
+            }
             else if (g_verbose)
+            {
                 wxLogWarning("discarding class '%s' with %d methods...",
                            klass.GetName(), klass.GetMethodCount());
+            }
         }
 
         child = child->GetNext();

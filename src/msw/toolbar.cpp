@@ -1600,7 +1600,9 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
             // it can also return S_FALSE which seems to simply say that it
             // didn't draw anything but no error really occurred
             if ( FAILED(hr) )
+            {
                 wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+            }
         }
     }
 
@@ -1623,7 +1625,9 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
             // it can also return S_FALSE which seems to simply say that it
             // didn't draw anything but no error really occurred
             if ( FAILED(hr) )
+            {
                 wxLogApiError(_T("DrawThemeParentBackground(toolbar)"), hr);
+            }
         }
     }
 

@@ -1222,7 +1222,9 @@ bool wxICOHandler::SaveFile(wxImage *image,
         if ( !cStream.Ok() )
         {
             if ( verbose )
+            {
                 wxLogError(_("ICO: Error writing the image file!"));
+            }
             return false;
         }
 #endif // 0

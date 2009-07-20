@@ -340,7 +340,9 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
                     static_cast<DEVMODE *>(lockDevMode.Get())
                 );
     if ( !hDC )
+    {
         wxLogLastError(_T("CreateDC(printer)"));
+    }
 
     return (WXHDC) hDC;
 #endif // PostScript/Windows printing

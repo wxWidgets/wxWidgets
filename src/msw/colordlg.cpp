@@ -152,7 +152,9 @@ int wxColourDialog::ShowModal()
         // occurred
         const DWORD err = CommDlgExtendedError();
         if ( err )
+        {
             wxLogError(_("Colour selection dialog failed with error %0lx."), err);
+        }
 
         return wxID_CANCEL;
     }

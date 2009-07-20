@@ -3245,10 +3245,14 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 {
     /*
     if (p)
+    {
         wxLogDebug(wxT("SelectProperty( %s (%s[%i]) )"),p->m_label.c_str(),
             p->m_parent->m_label.c_str(),p->GetIndexInParent());
+    }
     else
+    {
         wxLogDebug(wxT("SelectProperty( NULL, -1 )"));
+    }
     */
 
     if ( m_inDoSelectProperty )

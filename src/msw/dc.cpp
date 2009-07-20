@@ -183,13 +183,17 @@ public:
     {
         m_modeOld = ::SetStretchBltMode(m_hdc, COLORONCOLOR);
         if ( !m_modeOld )
+        {
             wxLogLastError(_T("SetStretchBltMode"));
+        }
     }
 
     ~StretchBltModeChanger()
     {
         if ( !::SetStretchBltMode(m_hdc, m_modeOld) )
+        {
             wxLogLastError(_T("SetStretchBltMode"));
+        }
     }
 
 private:

@@ -435,7 +435,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
 
     mainSizer->Add( m_notebook, 1, wxGROW );
     mainSizer->Add( m_log, 0, wxGROW );
-    
+
     SetSizerAndFit(mainSizer);
 }
 
@@ -819,7 +819,9 @@ void MyFrame::OnActivated( wxDataViewEvent &event )
     wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_ACTIVATED, Item: %s", title );
 
     if (m_ctrl[0]->IsExpanded( event.GetItem() ))
+    {
         wxLogMessage( "Item: %s is expanded", title );
+    }
 }
 
 void MyFrame::OnSelectionChanged( wxDataViewEvent &event )
@@ -850,15 +852,15 @@ void MyFrame::OnStartEditing( wxDataViewEvent &event )
     if (artist == "Ludwig van Beethoven")
     {
         event.Veto();
-        
+
         if (!m_log)
            return;
-           
+
         wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING vetoed. Artist: %s", artist );
     }
     else
         wxLogMessage( "wxEVT_COMMAND_DATAVIEW_ITEM_START_EDITING not vetoed. Artist: %s", artist );
-    
+
 }
 
 void MyFrame::OnEditingStarted( wxDataViewEvent &event )

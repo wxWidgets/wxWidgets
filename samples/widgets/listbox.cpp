@@ -593,9 +593,13 @@ void ListboxWidgetsPage::OnListbox(wxCommandEvent& event)
     m_textDelete->SetValue(wxString::Format(_T("%ld"), sel));
 
     if (event.IsSelection())
+    {
         wxLogMessage(_T("Listbox item %ld selected"), sel);
+    }
     else
+    {
         wxLogMessage(_T("Listbox item %ld deselected"), sel);
+    }
 }
 
 void ListboxWidgetsPage::OnListboxDClick(wxCommandEvent& event)

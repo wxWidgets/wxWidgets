@@ -193,7 +193,9 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
 
         //open the HID interface...
         if ( (*m_ppDevice)->open(m_ppDevice, 0) != S_OK )
+        {
             wxLogDebug(_T("HID device: open failed"));
+        }
 
         //
         //Now the hard part - in order to scan things we need "cookies"
@@ -316,7 +318,9 @@ void wxHIDDevice::AddCookieInQueue(CFTypeRef Data, int i)
     //3rd Param flags (none yet)
     AddCookie(Data, i);
     if ( (*m_ppQueue)->addElement(m_ppQueue, m_pCookies[i], 0) != S_OK )
+    {
         wxLogDebug(_T("HID device: adding element failed"));
+    }
 }
 
 // ----------------------------------------------------------------------------

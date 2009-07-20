@@ -307,7 +307,9 @@ bool wxShell(const wxString& command /*=wxEmptyString*/)
     int result = system(command);
 
     if (result == -1)
+    {
         wxLogSysError(_("can't execute '%s'"), command.c_str());
+    }
 
     return result == 0;
 }
@@ -407,7 +409,9 @@ bool wxRedirectableFd::Reopen(const wxString& name, int flags)
     }
 
     if (!result)
+    {
         wxLogSysError(_("error opening '%s'"), name.c_str());
+    }
 
     return result;
 }
@@ -466,7 +470,9 @@ long wxExecute(wxChar **argv, int flags, wxProcess *process)
     int result = spawnvp(mode, argv[0], argv);
 
     if (result == -1)
+    {
         wxLogSysError(_("can't execute '%s'"), argv[0]);
+    }
 
 #if wxUSE_STREAMS
     if (redirect)

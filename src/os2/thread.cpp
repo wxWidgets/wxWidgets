@@ -124,7 +124,9 @@ wxMutexInternal::~wxMutexInternal()
     if (m_vMutex)
     {
         if (::DosCloseMutexSem(m_vMutex))
+        {
             wxLogLastError(_T("DosCloseMutexSem(mutex)"));
+        }
     }
 }
 

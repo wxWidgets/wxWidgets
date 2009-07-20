@@ -2331,9 +2331,13 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
 
     /*
     if ( current )
+    {
         wxLogDebug(wxT("%s::GetItemAtY(%i) -> %s"),this->GetLabel().c_str(),y,current->GetLabel().c_str());
+    }
     else
+    {
         wxLogDebug(wxT("%s::GetItemAtY(%i) -> NULL"),this->GetLabel().c_str(),y);
+    }
     */
 
     return (wxPGProperty*) result;

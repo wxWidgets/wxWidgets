@@ -618,9 +618,13 @@ void ComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
                   _T("event and combobox values should be the same") );
 
     if (event.GetEventType() == wxEVT_COMMAND_TEXT_ENTER)
+    {
         wxLogMessage(_T("Combobox enter pressed (now '%s')"), s.c_str());
+    }
     else
+    {
         wxLogMessage(_T("Combobox text changed (now '%s')"), s.c_str());
+    }
 }
 
 void ComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)

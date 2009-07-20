@@ -59,10 +59,14 @@ void MyFrame::OnPropertyGridChange(wxPropertyGridEvent &event)
     wxPGProperty* p = event.GetProperty();
 
     if ( p )
+    {
         wxLogVerbose("OnPropertyGridChange(%s, value=%s)",
                    p->GetName().c_str(), p->GetValueAsString().c_str());
+    }
     else
+    {
         wxLogVerbose("OnPropertyGridChange(NULL)");
+    }
 }
 
 void MyFrame::OnPropertyGridChanging(wxPropertyGridEvent &event)
