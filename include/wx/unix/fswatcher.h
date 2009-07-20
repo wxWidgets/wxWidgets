@@ -32,7 +32,7 @@ public:
                          const wxString& filter = wxEmptyString);
 
 protected:
-    virtual bool Init();
+    bool Init();
 
     virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events);
 
