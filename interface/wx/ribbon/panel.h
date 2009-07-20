@@ -47,6 +47,8 @@ class wxRibbonPanel : public wxRibbonControl
 public:
     /**
         Default constructor. 
+        With this constructor, Create() should be called in order to create
+        the ribbon panel.
     */
     wxRibbonPanel();
 
@@ -81,16 +83,11 @@ public:
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
                   long style = wxRIBBON_PANEL_DEFAULT_STYLE);
-
+    
     /**
-        Destructor.
-    */
-    virtual ~wxRibbonPanel();
-
-    /**
-        Two-stage window creation.
-        
-        Should be called after the default constructor to create the panel.
+        Create a ribbon panel in two-step ribbon panel construction.
+        Should only be called when the default constructor is used, and
+        arguments have the same meaning as in the full constructor.
     */
     bool Create(wxWindow* parent,
                 wxWindowID id = wxID_ANY,
@@ -101,10 +98,67 @@ public:
                 long style = wxRIBBON_PANEL_DEFAULT_STYLE);
 
     /**
+        Destructor.
+    */
+    virtual ~wxRibbonPanel();
+
+    /**
         Get the bitmap to be used in place of the panel children when it is
         minimised.
     */
     wxBitmap& GetMinimisedIcon();
+    const wxBitmap& GetMinimisedIcon() const;
+    
+    /**
+        Query if the panel is currently minimised.
+    */
+    bool IsMinimised() const;
+    
+    /**
+        Query if the panel would be minimised at a given size.
+    */
+    bool IsMinimised(wxSize at_size) const;
+    
+    /**
+        Query is the mouse is currently hovered over the panel.
+        @return @true if the cursor is within the bounds of the panel (i.e.
+            hovered over the panel or one of its children), @false otherwise.
+    */
+    bool IsHovered() const;
+    
+    /**
+        Query if the panel can automatically minimise itself at small sizes.
+    */
+    bool CanAutoMinimise() const;
+    
+    /**
+        Show the panel externally expanded.
+        
+        When a panel is minimised, it can be shown full-size in a pop-out
+        window, which is refered to as being (externally) expanded. Note that
+        when a panel is expanded, there exist two panels - the original panel
+        (which is refered to as the dummy panel) and the expanded panel. The
+        original is termed a dummy as it sits in the ribbon bar doing nothing,
+        while the expanded panel holds the panel children.
+        
+        @return @true if the panel was expanded, @false if it was not (possibly
+            due to it not being minimised, or already being expanded).
+            
+        @see HideExpanded()
+        @see GetExpandedPanel()
+    */
+    bool ShowExpanded();
+    
+    /**
+        Hide the panel's external expansion.
+        
+        @return @true if the panel was un-expanded, @false if it was not
+            (normally due to it not being expanded in the first place).
+        
+        @see HideExpanded()
+        @see GetExpandedPanel()
+    */
+    bool HideExpanded();
 
     /**
         Set the art provider to be used. Normally called automatically by
@@ -119,4 +173,28 @@ public:
         Realize all children of the panel.
     */
     bool Realize();
+    
+    /**
+        Get the dummy panel of an expanded panel.
+        
+        Note that this should be called on an expanded panel to get the dummy
+        associated with it - it will return NULL when called on the dummy
+        itself.
+        
+        @see ShowExpanded()
+        @see GetExpandedPanel()
+    */
+    wxRibbonPanel* GetExpandedDummy();
+    
+    /**
+        Get the expanded panel of a dummy panel.
+        
+        Note that this should be called on a dummy panel to get the expanded
+        panel associated with it - it will return NULL when called on the
+        expanded panel itself.
+        
+        @see ShowExpanded()
+        @see GetExpandedDummy()
+    */
+    wxRibbonPanel* GetExpandedPanel();
 };

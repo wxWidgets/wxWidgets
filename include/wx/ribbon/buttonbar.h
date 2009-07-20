@@ -34,6 +34,7 @@ enum wxRibbonButtonBarButtonState
 
     wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED    = 1 << 3,
     wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED  = 1 << 4,
+    wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK        = wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED | wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_HOVERED,
     wxRIBBON_BUTTONBAR_BUTTON_NORMAL_ACTIVE     = 1 << 5,
     wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN_ACTIVE   = 1 << 6,
     wxRIBBON_BUTTONBAR_BUTTON_DISABLED          = 1 << 7,
@@ -42,6 +43,7 @@ enum wxRibbonButtonBarButtonState
 
 class wxRibbonButtonBarButtonBase;
 class wxRibbonButtonBarLayout;
+class wxRibbonButtonBarButtonInstance;
 
 WX_DEFINE_USER_EXPORTED_ARRAY(wxRibbonButtonBarLayout*, wxArrayRibbonButtonBarLayout, class WXDLLIMPEXP_RIBBON);
 WX_DEFINE_USER_EXPORTED_ARRAY(wxRibbonButtonBarButtonBase*, wxArrayRibbonButtonBarButtonBase, class WXDLLIMPEXP_RIBBON);
@@ -114,6 +116,9 @@ protected:
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnSize(wxSizeEvent& evt);
+    void OnMouseMove(wxMouseEvent& evt);
+    void OnMouseLeave(wxMouseEvent& evt);
+    void OnMouseUp(wxMouseEvent& evt);
 
     virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
                                       wxSize relative_to) const;
@@ -122,7 +127,7 @@ protected:
 
     void CommonInit(long style);
     void MakeLayouts();
-    bool TryCollapseLayout(wxRibbonButtonBarLayout* original, size_t first_btn);
+    bool TryCollapseLayout(wxRibbonButtonBarLayout* original, size_t first_btn, size_t* last_button);
     static wxBitmap MakeResizedBitmap(const wxBitmap& original, wxSize size);
     static wxBitmap MakeDisabledBitmap(const wxBitmap& original);
     void FetchButtonSizeInfo(wxRibbonButtonBarButtonBase* button,
@@ -130,6 +135,7 @@ protected:
 
     wxArrayRibbonButtonBarLayout m_layouts;
     wxArrayRibbonButtonBarButtonBase m_buttons;
+    wxRibbonButtonBarButtonInstance* m_hovered_button;
 
     wxPoint m_layout_offset;
     wxSize m_bitmap_size_large;
@@ -142,6 +148,63 @@ protected:
     DECLARE_EVENT_TABLE()
 #endif
 };
+
+class WXDLLIMPEXP_RIBBON wxRibbonButtonBarEvent : public wxCommandEvent
+{
+public:
+    wxRibbonButtonBarEvent(wxEventType command_type = wxEVT_NULL,
+                       int win_id = 0,
+                       wxRibbonButtonBar* bar = NULL)
+        : wxCommandEvent(command_type, win_id)
+        , m_bar(bar)
+    {
+    }
+#ifndef SWIG
+    wxRibbonButtonBarEvent(const wxRibbonButtonBarEvent& e) : wxCommandEvent(e)
+    {
+        m_bar = e.m_bar;
+    }
+#endif
+    wxEvent *Clone() const { return new wxRibbonButtonBarEvent(*this); }
+
+    wxRibbonButtonBar* GetBar() {return m_bar;}
+    void SetBar(wxRibbonButtonBar* bar) {m_bar = bar;}
+    bool PopupMenu(wxMenu* menu);
+
+protected:
+    wxRibbonButtonBar* m_bar;
+
+#ifndef SWIG
+private:
+    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRibbonButtonBarEvent)
+#endif
+};
+
+#ifndef SWIG
+
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONBUTTON_CLICKED, wxRibbonButtonBarEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_RIBBON, wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED, wxRibbonButtonBarEvent);
+
+typedef void (wxEvtHandler::*wxRibbonButtonBarEventFunction)(wxRibbonButtonBarEvent&);
+
+#define wxRibbonButtonBarEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxRibbonButtonBarEventFunction, func)
+
+#define EVT_RIBBONBUTTONBAR_CLICKED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_RIBBONBUTTON_CLICKED, winid, wxRibbonButtonBarEventHandler(fn))
+#define EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED, winid, wxRibbonButtonBarEventHandler(fn))
+#else
+
+// wxpython/swig event work
+%constant wxEventType wxEVT_COMMAND_RIBBONBUTTON_CLICKED;
+%constant wxEventType wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED;
+
+%pythoncode {
+    EVT_RIBBONBUTTONBAR_CLICKED = wx.PyEventBinder( wxEVT_COMMAND_RIBBONBUTTON_CLICKED, 1 )
+    EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED = wx.PyEventBinder( wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED, 1 )
+}
+#endif
 
 #endif // wxUSE_RIBBON
 

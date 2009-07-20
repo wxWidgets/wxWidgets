@@ -21,6 +21,7 @@
 #include "wx/ribbon/bar.h"
 #include "wx/ribbon/buttonbar.h"
 #include "wx/sizer.h"
+#include "wx/menu.h"
 
 // -- application --
 
@@ -41,7 +42,31 @@ public:
     MyFrame();
     ~MyFrame();
 
+    enum
+    {
+        ID_CIRCLE = wxID_HIGHEST + 1,
+        ID_CROSS,
+        ID_TRIANGLE,
+        ID_SQUARE,
+        ID_POLYGON,
+        ID_SELECTION_EXPAND_H,
+        ID_SELECTION_EXPAND_V,
+        ID_SELECTION_CONTRACT,
+    };
+
+    void OnCircleButton(wxRibbonButtonBarEvent& evt);
+    void OnCrossButton(wxRibbonButtonBarEvent& evt);
+    void OnTriangleButton(wxRibbonButtonBarEvent& evt);
+    void OnTriangleDropdown(wxRibbonButtonBarEvent& evt);
+    void OnSquareButton(wxRibbonButtonBarEvent& evt);
+    void OnPolygonDropdown(wxRibbonButtonBarEvent& evt);
+    void OnSelectionExpandVButton(wxRibbonButtonBarEvent& evt);
+    void OnSelectionExpandHButton(wxRibbonButtonBarEvent& evt);
+    void OnSelectionContractButton(wxRibbonButtonBarEvent& evt);
+
 protected:
+    void AddText(wxString msg);
+
     wxRibbonBar* m_ribbon;
     wxTextCtrl* m_logwindow;
 
@@ -63,6 +88,15 @@ bool MyApp::OnInit()
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_EXPAND_H, MyFrame::OnSelectionExpandHButton)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_EXPAND_V, MyFrame::OnSelectionExpandVButton)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_SELECTION_CONTRACT, MyFrame::OnSelectionContractButton)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_CIRCLE, MyFrame::OnCircleButton)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_CROSS, MyFrame::OnCrossButton)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_TRIANGLE, MyFrame::OnTriangleButton)
+EVT_RIBBONBUTTONBAR_CLICKED(ID_SQUARE, MyFrame::OnSquareButton)
+EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(ID_TRIANGLE, MyFrame::OnTriangleDropdown)
+EVT_RIBBONBUTTONBAR_DROPDOWN_CLICKED(ID_POLYGON, MyFrame::OnPolygonDropdown)
 END_EVENT_TABLE()
 
 #include "auto_crop_selection.xpm"
@@ -72,6 +106,7 @@ END_EVENT_TABLE()
 #include "cross.xpm"
 #include "expand_selection_v.xpm"
 #include "expand_selection_h.xpm"
+#include "hexagon.xpm"
 #include "selection_panel.xpm"
 #include "square.xpm"
 #include "triangle.xpm"
@@ -85,22 +120,22 @@ MyFrame::MyFrame()
     {
         wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Home"));
         new wxRibbonPanel(home, wxID_ANY, wxT("Clipboard"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON | wxRIBBON_PANEL_NO_AUTO_MINIMISE);
-        new wxRibbonPanel(home, wxID_ANY, wxT("Font"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
-        new wxRibbonPanel(home, wxID_ANY, wxT("Paragraph"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
-        new wxRibbonPanel(home, wxID_ANY, wxT("Styles"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
 
         wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Selection"), wxBitmap(selection_panel_xpm));
         wxRibbonButtonBar *selection = new wxRibbonButtonBar(selection_panel);
-        selection->AddButton(wxID_ANY, wxT("Expand Vertically"), wxBitmap(expand_selection_v_xpm), wxEmptyString);
-        selection->AddButton(wxID_ANY, wxT("Expand Horizontally"), wxBitmap(expand_selection_h_xpm), wxEmptyString);
-        selection->AddButton(wxID_ANY, wxT("Contract"), wxBitmap(auto_crop_selection_xpm), wxBitmap(auto_crop_selection_small_xpm));
+        selection->AddButton(ID_SELECTION_EXPAND_V, wxT("Expand Vertically"), wxBitmap(expand_selection_v_xpm), wxEmptyString);
+        selection->AddButton(ID_SELECTION_EXPAND_H, wxT("Expand Horizontally"), wxBitmap(expand_selection_h_xpm), wxEmptyString);
+        selection->AddButton(ID_SELECTION_CONTRACT, wxT("Contract"), wxBitmap(auto_crop_selection_xpm), wxBitmap(auto_crop_selection_small_xpm));
 
         wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Shapes"), wxBitmap(circle_small_xpm));
         wxRibbonButtonBar *shapes = new wxRibbonButtonBar(shapes_panel);
-        shapes->AddButton(wxID_ANY, wxT("Circle"), wxBitmap(circle_xpm), wxBitmap(circle_small_xpm));
-        shapes->AddButton(wxID_ANY, wxT("Cross"), wxBitmap(cross_xpm), wxEmptyString);
-        shapes->AddButton(wxID_ANY, wxT("Triangle"), wxBitmap(triangle_xpm), wxEmptyString);
-        shapes->AddButton(wxID_ANY, wxT("Square"), wxBitmap(square_xpm), wxEmptyString);
+        shapes->AddButton(ID_CIRCLE, wxT("Circle"), wxBitmap(circle_xpm), wxBitmap(circle_small_xpm));
+        shapes->AddButton(ID_CROSS, wxT("Cross"), wxBitmap(cross_xpm), wxEmptyString);
+        shapes->AddHybridButton(ID_TRIANGLE, wxT("Triangle"), wxBitmap(triangle_xpm));
+        shapes->AddButton(ID_SQUARE, wxT("Square"), wxBitmap(square_xpm), wxEmptyString);
+        shapes->AddDropdownButton(ID_POLYGON, wxT("Other Polygon"), wxBitmap(hexagon_xpm), wxEmptyString);
+
+        new wxRibbonPanel(home, wxID_ANY, wxT("Font"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_EXT_BUTTON);
     }
     {
         wxRibbonPage* insert = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Insert"));
@@ -133,4 +168,66 @@ MyFrame::MyFrame()
 
 MyFrame::~MyFrame()
 {
+}
+
+void MyFrame::OnSelectionExpandHButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    AddText(wxT("Expand selection horizontally button clicked."));
+}
+
+void MyFrame::OnSelectionExpandVButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    AddText(wxT("Expand selection vertically button clicked."));
+}
+
+void MyFrame::OnSelectionContractButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    AddText(wxT("Contract selection button clicked."));
+}
+
+void MyFrame::OnCircleButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    AddText(wxT("Circle button clicked."));
+}
+
+void MyFrame::OnCrossButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    AddText(wxT("Cross button clicked."));
+}
+
+void MyFrame::OnTriangleButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    AddText(wxT("Triangle button clicked."));
+}
+
+void MyFrame::OnTriangleDropdown(wxRibbonButtonBarEvent& evt)
+{
+    wxMenu menu;
+    menu.Append(wxID_ANY, wxT("Item 1"));
+    menu.Append(wxID_ANY, wxT("Item 2"));
+    menu.Append(wxID_ANY, wxT("Item 3"));
+
+    evt.PopupMenu(&menu);
+}
+
+void MyFrame::OnSquareButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
+{
+    AddText(wxT("Square button clicked."));
+}
+
+void MyFrame::OnPolygonDropdown(wxRibbonButtonBarEvent& evt)
+{
+    wxMenu menu;
+    menu.Append(wxID_ANY, wxT("Item 1"));
+    menu.Append(wxID_ANY, wxT("Item 2"));
+    menu.Append(wxID_ANY, wxT("Item 3"));
+
+    evt.PopupMenu(&menu);
+}
+
+void MyFrame::AddText(wxString msg)
+{
+    m_logwindow->AppendText(msg);
+    m_logwindow->AppendText(wxT("\n"));
+    m_logwindow->SetFocus();
 }

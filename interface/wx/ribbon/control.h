@@ -72,7 +72,25 @@ public:
       
         @see IsSizingContinuous()
     */
-    virtual wxSize GetNextSmallerSize(wxOrientation direction) const;
+    wxSize GetNextSmallerSize(wxOrientation direction) const;
+    
+    /**
+        If sizing is not continuous, then return a suitable size for the control
+        which is smaller than the given size.
+    
+        @param direction
+            The direction(s) in which the size should reduce.
+        @param relative_to
+            The size for which a smaller size should be found.
+        @return
+            @a relative_to if there is no smaller size, otherwise a suitable
+            size which is smaller in the given direction(s), and the same as
+            @a relative_to in the other direction (if any).
+      
+        @see IsSizingContinuous()
+        @see DoGetNextSmallerSize()
+    */
+    wxSize GetNextSmallerSize(wxOrientation direction, wxSize relative_to) const;
     
     /**
         If sizing is not continuous, then return a suitable size for the control
@@ -87,7 +105,25 @@ public:
     
         @see IsSizingContinuous()
     */
-    virtual wxSize GetNextLargerSize(wxOrientation direction) const;
+    wxSize GetNextLargerSize(wxOrientation direction) const;
+    
+    /**
+        If sizing is not continuous, then return a suitable size for the control
+        which is larger then the given size.
+    
+        @param direction
+            The direction(s) in which the size should increase.
+        @param relative_to
+            The size for which a larger size should be found.
+        @return
+            @a relative_to if there is no larger size, otherwise a suitable
+            size which is larger in the given direction(s), and the same as
+            @a relative_to in the other direction (if any).
+    
+        @see IsSizingContinuous()
+        @see DoGetNextLargerSize()
+    */
+    wxSize GetNextLargerSize(wxOrientation direction, wxSize relative_to) const;
     
     /**
         Perform initial size and layout calculations after children have been
@@ -99,4 +135,21 @@ public:
         Alias for Realize().
     */
     bool Realise();
+    
+protected:
+    /**
+        Implementation of GetNextSmallerSize().
+        Controls which have non-continuous sizing must override this virtual
+        function rather than GetNextSmallerSize().
+    */
+    virtual wxSize DoGetNextSmallerSize(wxOrientation direction,
+                                        wxSize relative_to) const;
+
+    /**
+        Implementation of GetNextLargerSize().
+        Controls which have non-continuous sizing must override this virtual
+        function rather than GetNextLargerSize().
+    */
+    virtual wxSize DoGetNextLargerSize(wxOrientation direction,
+                                       wxSize relative_to) const;
 };

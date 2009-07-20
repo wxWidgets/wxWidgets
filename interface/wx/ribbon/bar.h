@@ -110,14 +110,27 @@ class wxRibbonBar : public wxRibbonControl
 {
 public:
     /**
-        Default constructor. 
+        Default constructor.
+        With this constructor, Create() should be called in order to create
+        the ribbon bar.
     */
     wxRibbonBar();
 
     /**
-      Construct a ribbon bar with the given parameters.
+        Construct a ribbon bar with the given parameters.
     */
     wxRibbonBar(wxWindow* parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxRIBBON_BAR_DEFAULT_STYLE);
+    
+    /**
+        Create a ribbon bar in two-step ribbon bar construction.
+        Should only be called when the default constructor is used, and
+        arguments have the same meaning as in the full constructor.
+    */
+    bool Create(wxWindow* parent,
                 wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,

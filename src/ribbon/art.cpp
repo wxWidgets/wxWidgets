@@ -60,6 +60,10 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
     m_page_hover_background_gradient_colour = wxColour(221, 232, 247);
     m_page_hover_background_top_colour = wxColour(225, 239, 253);
     m_page_hover_background_top_gradient_colour = wxColour(232, 240, 252);
+    m_button_bar_hover_background_colour = wxColour(255, 215, 80);
+    m_button_bar_hover_background_gradient_colour = wxColour(255, 231, 153);
+    m_button_bar_hover_background_top_colour = wxColour(255, 252, 217);
+    m_button_bar_hover_background_top_gradient_colour = wxColour(255, 231, 147);
     m_tab_ctrl_background_brush = wxBrush(wxColour(191, 219, 255));
     m_panel_label_background_brush = wxBrush(wxColour(193, 216, 241));
     m_panel_hover_label_background_brush = wxBrush(wxColour(200, 224, 255));
@@ -67,11 +71,13 @@ wxRibbonMSWArtProvider::wxRibbonMSWArtProvider()
     m_button_bar_label_font = m_tab_label_font;
     m_panel_label_font = m_tab_label_font;
     m_tab_border_pen = wxPen(wxColour(153, 187, 232));
+    m_button_bar_hover_border_pen = wxPen(wxColour(194, 170, 121));
     m_panel_border_pen = wxPen(wxColour(197, 210, 223));
     m_panel_border_gradient_pen = wxPen(wxColour(158, 191, 219));
     m_panel_minimised_border_pen = wxPen(wxColour(165, 191, 213));
     m_panel_minimised_border_gradient_pen = wxPen(wxColour(148, 185, 213));
     m_page_border_pen = wxPen(wxColour(141, 178, 227));
+
     m_cached_tab_separator_visibility = -10.0; // valid visibilities are in range [0, 1]
     m_tab_separation_size = 3;
     m_page_border_left = 2;
@@ -115,6 +121,10 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
     copy->m_page_hover_background_gradient_colour = m_page_hover_background_gradient_colour;
     copy->m_page_hover_background_top_colour = m_page_hover_background_top_colour;
     copy->m_page_hover_background_top_gradient_colour = m_page_hover_background_top_gradient_colour;
+    copy->m_button_bar_hover_background_colour = m_button_bar_hover_background_colour;
+    copy->m_button_bar_hover_background_gradient_colour = m_button_bar_hover_background_gradient_colour;
+    copy->m_button_bar_hover_background_top_colour = m_button_bar_hover_background_top_colour;
+    copy->m_button_bar_hover_background_top_gradient_colour = m_button_bar_hover_background_top_gradient_colour;
     copy->m_tab_ctrl_background_brush = m_tab_ctrl_background_brush;
     copy->m_panel_label_background_brush = m_panel_label_background_brush;
     copy->m_panel_hover_label_background_brush = m_panel_hover_label_background_brush;
@@ -127,6 +137,7 @@ wxRibbonArtProvider* wxRibbonMSWArtProvider::Clone()
     copy->m_panel_minimised_border_pen = m_panel_minimised_border_pen;
     copy->m_panel_minimised_border_gradient_pen = m_panel_minimised_border_gradient_pen;
     copy->m_tab_border_pen = m_tab_border_pen;
+    copy->m_button_bar_hover_border_pen = m_button_bar_hover_border_pen;
     copy->m_flags = m_flags;
     copy->m_tab_separation_size = m_tab_separation_size;
     copy->m_page_border_left = m_page_border_left;
@@ -210,6 +221,11 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id)
     switch(id)
     {
         case wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR: return m_button_bar_label_colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR: return m_button_bar_hover_border_pen.GetColour();
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_COLOUR: return m_button_bar_hover_background_top_colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: return m_button_bar_hover_background_top_gradient_colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR: return m_button_bar_hover_background_colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR: return m_button_bar_hover_background_gradient_colour;
         case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR: return m_tab_ctrl_background_brush.GetColour();
         case wxRIBBON_ART_TAB_LABEL_COLOUR: return m_tab_label_colour;
         case wxRIBBON_ART_TAB_SEPARATOR_COLOUR: return m_tab_separator_colour;
@@ -254,6 +270,11 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
     switch(id)
     {
         case wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR: m_button_bar_label_colour = colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR: m_button_bar_hover_border_pen.SetColour(colour);
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_COLOUR: m_button_bar_hover_background_top_colour = colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR: m_button_bar_hover_background_top_gradient_colour = colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR: m_button_bar_hover_background_colour = colour;
+        case wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR: m_button_bar_hover_background_gradient_colour = colour;
         case wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR: m_tab_ctrl_background_brush.SetColour(colour);
         case wxRIBBON_ART_TAB_LABEL_COLOUR: m_tab_label_colour = colour;
         case wxRIBBON_ART_TAB_SEPARATOR_COLOUR: m_tab_separator_colour = colour;
@@ -552,9 +573,14 @@ void wxRibbonMSWArtProvider::DrawPartialPageBackground(wxDC& dc,
 {
     wxRect background(page->GetSize());
     page->AdjustRectToIncludeScrollButtons(&background);
-    background.x += 2;
-    background.width -= 4;
     background.height -= 2;
+    // Page background isn't dependant upon the width of the page
+    // (at least not the part of it intended to be painted by this
+    // function). Set to wider than the page itself for when externally
+    // expanded panels need a background - the expanded panel can be wider
+    // than the bar.
+    background.x = 0;
+    background.width = INT_MAX;
 
     // upper_rect, lower_rect, paint_rect are all in page co-ordinates
     wxRect upper_rect(background);
@@ -768,6 +794,18 @@ void wxRibbonMSWArtProvider::DrawScrollButton(
         dc.SetBrush(B);
         dc.DrawPolygon(sizeof(arrow_points)/sizeof(wxPoint), arrow_points, rect.x, rect.y);
     }
+}
+
+void wxRibbonMSWArtProvider::DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour)
+{
+    wxPoint arrow_points[3];
+    wxBrush brush(colour);
+    arrow_points[0] = wxPoint(1, 2);
+    arrow_points[1] = arrow_points[0] + wxPoint(-3, -3);
+    arrow_points[2] = arrow_points[0] + wxPoint( 3, -3);
+    dc.SetPen(*wxTRANSPARENT_PEN);
+    dc.SetBrush(brush);
+    dc.DrawPolygon(sizeof(arrow_points)/sizeof(wxPoint), arrow_points, x, y);
 }
 
 void wxRibbonMSWArtProvider::RemovePanelPadding(wxRect* rect)
@@ -1079,7 +1117,96 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
                         const wxBitmap& bitmap_large,
                         const wxBitmap& bitmap_small)
 {
+    if(state & wxRIBBON_BUTTONBAR_BUTTON_HOVER_MASK)
+    {
+        dc.SetPen(m_button_bar_hover_border_pen);
+
+        wxRect bg_rect(rect);
+        bg_rect.x++;
+        bg_rect.y++;
+        bg_rect.width -= 2;
+        bg_rect.height -= 2;
+
+        wxRect bg_rect_top(bg_rect);
+        bg_rect_top.height /= 3;
+        bg_rect.y += bg_rect_top.height;
+        bg_rect.height -= bg_rect_top.height;
+
+        if(kind == wxRIBBON_BUTTONBAR_BUTTON_HYBRID)
+        {
+            switch(state & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
+            {
+            case wxRIBBON_BUTTONBAR_BUTTON_LARGE:
+                {
+                    int iYBorder = rect.y + bitmap_large.GetHeight() + 4;
+                    wxRect partial_bg(rect);
+                    if(state & wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED)
+                    {
+                        partial_bg.SetBottom(iYBorder - 1);
+                    }
+                    else
+                    {
+                        partial_bg.height -= (iYBorder - partial_bg.y + 1);
+                        partial_bg.y = iYBorder + 1;
+                    }
+                    dc.DrawLine(rect.x, iYBorder, rect.x + rect.width, iYBorder);
+                    bg_rect.Intersect(partial_bg);
+                    bg_rect_top.Intersect(partial_bg);
+                }
+                break;
+            case wxRIBBON_BUTTONBAR_BUTTON_MEDIUM:
+                {
+                    int iArrowWidth = 9;
+                    if(state & wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED)
+                    {
+                        bg_rect.width -= iArrowWidth;
+                        bg_rect_top.width -= iArrowWidth;
+                        dc.DrawLine(bg_rect_top.x + bg_rect_top.width,
+                            rect.y, bg_rect_top.x + bg_rect_top.width,
+                            rect.y + rect.height);
+                    }
+                    else
+                    {
+                        --iArrowWidth;
+                        bg_rect.x += bg_rect.width - iArrowWidth;
+                        bg_rect_top.x += bg_rect_top.width - iArrowWidth;
+                        bg_rect.width = iArrowWidth;
+                        bg_rect_top.width = iArrowWidth;
+                        dc.DrawLine(bg_rect_top.x - 1, rect.y,
+                            bg_rect_top.x - 1, rect.y + rect.height);
+                    }
+                }
+                break;
+            case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
+                break;
+            }
+        }
+
+        DrawVerticalGradientRectangle(dc, bg_rect_top,
+            m_button_bar_hover_background_top_colour,
+            m_button_bar_hover_background_top_gradient_colour);
+
+        DrawVerticalGradientRectangle(dc, bg_rect,
+            m_button_bar_hover_background_colour,
+            m_button_bar_hover_background_gradient_colour);
+
+        wxPoint border_points[9];
+        border_points[0] = wxPoint(2, 0);
+        border_points[1] = wxPoint(rect.width - 3, 0);
+        border_points[2] = wxPoint(rect.width - 1, 2);
+        border_points[3] = wxPoint(rect.width - 1, rect.height - 3);
+        border_points[4] = wxPoint(rect.width - 3, rect.height - 1);
+        border_points[5] = wxPoint(2, rect.height - 1);
+        border_points[6] = wxPoint(0, rect.height - 3);
+        border_points[7] = wxPoint(0, 2);
+        border_points[8] = border_points[0];
+
+        dc.DrawLines(sizeof(border_points)/sizeof(wxPoint), border_points,
+            rect.x, rect.y);
+    }
+
     dc.SetFont(m_button_bar_label_font);
+    dc.SetTextForeground(m_button_bar_label_colour);
     switch(state & wxRIBBON_BUTTONBAR_BUTTON_SIZE_MASK)
     {
     case wxRIBBON_BUTTONBAR_BUTTON_LARGE:
@@ -1089,11 +1216,18 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
                 rect.x + (rect.width - bitmap_large.GetWidth()) / 2,
                 rect.y + padding, true);
             int ypos = rect.y + padding + bitmap_large.GetHeight() + padding;
+            int arrow_width = kind == wxRIBBON_BUTTONBAR_BUTTON_NORMAL ? 0 : 8;
             wxCoord label_w, label_h;
             dc.GetTextExtent(label, &label_w, &label_h);
             if(label_w + 2 * padding <= rect.width)
             {
                 dc.DrawText(label, rect.x + (rect.width - label_w) / 2, ypos);
+                if(arrow_width != 0)
+                {
+                    DrawDropdownArrow(dc, rect.x + rect.width / 2,
+                        ypos + (label_h * 3) / 2,
+                        m_button_bar_label_colour);
+                }
             }
             else
             {
@@ -1112,8 +1246,16 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
                             ypos += label_h;
                             wxString label_bottom = label.Mid(breaki + 1);
                             dc.GetTextExtent(label_bottom, &label_w, &label_h);
-                            dc.DrawText(label_bottom,
-                                rect.x + (rect.width - label_w) / 2, ypos);
+                            label_w += arrow_width;
+                            int iX = rect.x + (rect.width - label_w) / 2;
+                            dc.DrawText(label_bottom, iX, ypos);
+                            if(arrow_width != 0)
+                            {
+                                DrawDropdownArrow(dc, 
+                                    iX + 2 +label_w - arrow_width,
+                                    ypos + label_h / 2 + 1,
+                                    m_button_bar_label_colour);
+                            }
                             break;
                         }
                     }
@@ -1123,12 +1265,20 @@ void wxRibbonMSWArtProvider::DrawButtonBarButton(
         break;
     case wxRIBBON_BUTTONBAR_BUTTON_MEDIUM:
         {
-            dc.DrawBitmap(bitmap_small, rect.x + 1,
+            int x_cursor = rect.x + 2;
+            dc.DrawBitmap(bitmap_small, x_cursor,
                     rect.y + (rect.height - bitmap_small.GetHeight())/2, true);
+            x_cursor += bitmap_small.GetWidth() + 2;
             wxCoord label_w, label_h;
             dc.GetTextExtent(label, &label_w, &label_h);
-            dc.DrawText(label, rect.x + bitmap_small.GetWidth() + 3,
+            dc.DrawText(label, x_cursor,
                 rect.y + (rect.height - label_h) / 2);
+            x_cursor += label_w + 3;
+            if(kind != wxRIBBON_BUTTONBAR_BUTTON_NORMAL)
+            {
+                DrawDropdownArrow(dc, x_cursor, rect.y + rect.height / 2,
+                    m_button_bar_label_colour);
+            }
             break;
         }
     default:
@@ -1236,7 +1386,7 @@ wxSize wxRibbonMSWArtProvider::GetPanelSize(
 
     if(client_offset != NULL)
     {
-        *client_offset = wxPoint(4, 2);
+        *client_offset = wxPoint(3, 2);
     }
 
     return client_size;
@@ -1256,7 +1406,7 @@ wxSize wxRibbonMSWArtProvider::GetPanelClientSize(
 
     if(client_offset != NULL)
     {
-        *client_offset = wxPoint(4, 2);
+        *client_offset = wxPoint(3, 2);
     }
 
     return size;
@@ -1332,7 +1482,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
     {
     case wxRIBBON_BUTTONBAR_BUTTON_SMALL:
         // Small bitmap, no label
-        *button_size = bitmap_size_small + wxSize(4, 4);
+        *button_size = bitmap_size_small + wxSize(6, 4);
         switch(kind)
         {
         case wxRIBBON_BUTTONBAR_BUTTON_NORMAL:
@@ -1363,7 +1513,7 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
             switch(kind)
             {
             case wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN:
-                dropdown_region->SetWidth(normal_region->GetWidth() + text_size);
+                dropdown_region->SetWidth(dropdown_region->GetWidth() + text_size);
                 break;
             case wxRIBBON_BUTTONBAR_BUTTON_HYBRID:
                 dropdown_region->SetX(dropdown_region->GetX() + text_size);
@@ -1409,6 +1559,23 @@ bool wxRibbonMSWArtProvider::GetButtonBarButtonSize(
             icon_size.SetWidth(wxMax(icon_size.GetWidth(), best_width) + 6);
             icon_size.SetHeight(icon_size.GetHeight() + label_height);
             *button_size = icon_size;
+            switch(kind)
+            {
+            case wxRIBBON_BUTTONBAR_BUTTON_DROPDOWN:
+                *dropdown_region = wxRect(icon_size);
+                break;
+            case wxRIBBON_BUTTONBAR_BUTTON_HYBRID:
+                *normal_region = wxRect(icon_size);
+                normal_region->height -= 2 + label_height;
+                dropdown_region->x = 0;
+                dropdown_region->y = normal_region->height;
+                dropdown_region->width = icon_size.GetWidth();
+                dropdown_region->height = icon_size.GetHeight() - normal_region->height;
+                break;
+            case wxRIBBON_BUTTONBAR_BUTTON_NORMAL:
+                *normal_region = wxRect(icon_size);
+                break;
+            }
             break;
         }
     };

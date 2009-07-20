@@ -29,6 +29,11 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_BUTTON_BAR_LABEL_FONT,
     wxRIBBON_ART_TAB_LABEL_FONT,
     wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_LABEL_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
@@ -354,6 +359,7 @@ protected:
     void DrawPanelBorder(wxDC& dc, const wxRect& rect, wxPen& primary_colour,
         wxPen& secondary_colour);
     void RemovePanelPadding(wxRect* rect);
+    void DrawDropdownArrow(wxDC& dc, int x, int y, const wxColour& colour);
 
     wxBitmap m_cached_tab_separator;
     wxColour m_button_bar_label_colour;
@@ -381,6 +387,10 @@ protected:
     wxColour m_page_hover_background_gradient_colour;
     wxColour m_page_hover_background_top_colour;
     wxColour m_page_hover_background_top_gradient_colour;
+    wxColour m_button_bar_hover_background_colour;
+    wxColour m_button_bar_hover_background_gradient_colour;
+    wxColour m_button_bar_hover_background_top_colour;
+    wxColour m_button_bar_hover_background_top_gradient_colour;
     wxBrush m_tab_ctrl_background_brush;
     wxBrush m_panel_label_background_brush;
     wxBrush m_panel_hover_label_background_brush;
@@ -393,6 +403,7 @@ protected:
     wxPen m_panel_minimised_border_pen;
     wxPen m_panel_minimised_border_gradient_pen;
     wxPen m_tab_border_pen;
+    wxPen m_button_bar_hover_border_pen;
     double m_cached_tab_separator_visibility;
     long m_flags;
     int m_tab_separation_size;

@@ -21,7 +21,9 @@ class wxRibbonPage : public wxRibbonControl
 {
 public:
     /**
-        Default constructor. 
+        Default constructor.
+        With this constructor, Create() should be called in order to create
+        the ribbon page.
     */
     wxRibbonPage();
 
@@ -52,6 +54,17 @@ public:
         Destructor.
     */
     virtual ~wxRibbonPage();
+    
+    /**
+        Create a ribbon page in two-step ribbon page construction.
+        Should only be called when the default constructor is used, and
+        arguments have the same meaning as in the full constructor.
+    */
+    bool Create(wxRibbonBar* parent,
+                wxWindowID id = wxID_ANY,
+                const wxString& label = wxEmptyString,
+                const wxBitmap& icon = wxNullBitmap,
+                long style = 0);
 
     /**
         Set the art provider to be used. Normally called automatically by

@@ -27,7 +27,14 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_PANEL_X_SEPARATION_SIZE,
     wxRIBBON_ART_PANEL_Y_SEPARATION_SIZE,
     wxRIBBON_ART_PANEL_LABEL_FONT,
+    wxRIBBON_ART_BUTTON_BAR_LABEL_FONT,
     wxRIBBON_ART_TAB_LABEL_FONT,
+    wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BORDER_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_BUTTON_BAR_HOVER_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_LABEL_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
@@ -41,13 +48,26 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_TAB_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_COLOUR,
     wxRIBBON_ART_PANEL_BORDER_GRADIENT_COLOUR,
+    wxRIBBON_ART_PANEL_MINIMISED_BORDER_COLOUR,
+    wxRIBBON_ART_PANEL_MINIMISED_BORDER_GRADIENT_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_BACKGROUND_COLOUR,
     wxRIBBON_ART_PANEL_LABEL_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_LABEL_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PANEL_HOVER_LABEL_COLOUR,
+    wxRIBBON_ART_PANEL_MINIMISED_LABEL_COLOUR,
+    wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PANEL_ACTIVE_BACKGROUND_GRADIENT_COLOUR,
     wxRIBBON_ART_PAGE_BORDER_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_TOP_GRADIENT_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_COLOUR,
     wxRIBBON_ART_PAGE_BACKGROUND_GRADIENT_COLOUR,
+    wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_COLOUR,
+    wxRIBBON_ART_PAGE_HOVER_BACKGROUND_TOP_GRADIENT_COLOUR,
+    wxRIBBON_ART_PAGE_HOVER_BACKGROUND_COLOUR,
+    wxRIBBON_ART_PAGE_HOVER_BACKGROUND_GRADIENT_COLOUR,
 };
 
 /**
@@ -287,11 +307,16 @@ public:
         the border, background, label, and any other items of a panel which
         are outside the client area of a panel.
         
+        Note that when a panel is minimised, this function is not called - only
+        DrawMinimisedPanel() is called, so a background should be explicitly
+        painted by that if required.
+        
         @param dc
             The device context to draw onto.
         @param wnd
             The window which is being drawn onto, which is always the panel
-            whose background and chrome is being drawn.
+            whose background and chrome is being drawn. The panel label and
+            other panel attributes can be obtained by querying this.
         @param rect
             The rectangle within which to draw.
     */
@@ -299,6 +324,30 @@ public:
                         wxDC& dc,
                         wxRibbonPanel* wnd,
                         const wxRect& rect) = 0;
+    
+    /**
+        Draw a minimised ribbon panel.
+        
+        @param dc
+            The device context to draw onto.
+        @param wnd
+            The window which is being drawn onto, which is always the panel
+            which is minimised. The panel label can be obtained from this
+            window. The minimised icon obtained from querying the window may
+            not be the size requested by GetMinimisedPanelMinimumSize() - the
+            @a bitmap argument contains the icon in the requested size.
+        @param rect
+            The rectangle within which to draw. The size of the rectangle will
+            be at least the size returned by GetMinimisedPanelMinimumSize().
+        @param bitmap
+            A copy of the panel's minimised bitmap rescaled to the size
+            returned by GetMinimisedPanelMinimumSize().
+    */
+    virtual void DrawMinimisedPanel(
+                        wxDC& dc,
+                        wxRibbonPanel* wnd,
+                        const wxRect& rect,
+                        wxBitmap& bitmap) = 0;
     
     /**
         Draw the background for a wxRibbonButtonBar control.
@@ -533,4 +582,21 @@ public:
                         wxSize* button_size,
                         wxRect* normal_region,
                         wxRect* dropdown_region) = 0;
+    
+    /**
+        Calculate the size of a minimised ribbon panel.
+        
+        @param dc
+            A device context to use when one is required for size calculations.
+        @param wnd
+            The ribbon panel in question. Attributes like the panel label can
+            be queried from this.
+        @param[out] desired_bitmap_size
+            
+    */
+    virtual wxSize GetMinimisedPanelMinimumSize(
+                        wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxSize* desired_bitmap_size,
+                        wxDirection* expanded_panel_direction) = 0;
 };

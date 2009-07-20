@@ -16,6 +16,7 @@
 
 #include "wx/ribbon/art.h"
 #include "wx/ribbon/bar.h"
+#include "wx/ribbon/buttonbar.h"
 #include "wx/ribbon/panel.h"
 #include "wx/dcbuffer.h"
 #include "wx/display.h"
@@ -96,7 +97,8 @@ void wxRibbonPanel::CommonInit(const wxString& label, const wxBitmap& icon, long
     m_flags = style;
     m_minimised_icon = icon;
     m_minimised = false;
-    m_hovered_count = false;
+    m_hovered_count = 0;
+    m_mouse_hovered_self = false;
 
     if(m_art == NULL)
     {
@@ -125,13 +127,29 @@ bool wxRibbonPanel::IsHovered() const
 void wxRibbonPanel::OnMouseEnter(wxMouseEvent& WXUNUSED(evt))
 {
     ++m_hovered_count;
+    m_mouse_hovered_self = true;
     Refresh();
+}
+
+void wxRibbonPanel::OnMouseEnterChild(wxMouseEvent& evt)
+{
+    ++m_hovered_count;
+    Refresh();
+    evt.Skip();
 }
 
 void wxRibbonPanel::OnMouseLeave(wxMouseEvent& WXUNUSED(evt))
 {
     --m_hovered_count;
+    m_mouse_hovered_self = false;
     Refresh();
+}
+
+void wxRibbonPanel::OnMouseLeaveChild(wxMouseEvent& evt)
+{
+    --m_hovered_count;
+    Refresh();
+    evt.Skip();
 }
 
 void wxRibbonPanel::AddChild(wxWindowBase *child)
@@ -142,14 +160,14 @@ void wxRibbonPanel::AddChild(wxWindowBase *child)
     // for children of the window. The panel wants to be in the hovered state
     // whenever the mouse cursor is within its boundary, so the events need to
     // be attached to children too.
-    child->Connect(wxEVT_ENTER_WINDOW, (wxObjectEventFunction)&wxRibbonPanel::OnMouseEnter, NULL, this);
-    child->Connect(wxEVT_LEAVE_WINDOW, (wxObjectEventFunction)&wxRibbonPanel::OnMouseLeave, NULL, this);
+    child->Connect(wxEVT_ENTER_WINDOW, (wxObjectEventFunction)&wxRibbonPanel::OnMouseEnterChild, NULL, this);
+    child->Connect(wxEVT_LEAVE_WINDOW, (wxObjectEventFunction)&wxRibbonPanel::OnMouseLeaveChild, NULL, this);
 }
 
 void wxRibbonPanel::RemoveChild(wxWindowBase *child)
 {
-    child->Disconnect(wxEVT_ENTER_WINDOW, (wxObjectEventFunction)&wxRibbonPanel::OnMouseEnter, NULL, this);
-    child->Disconnect(wxEVT_LEAVE_WINDOW, (wxObjectEventFunction)&wxRibbonPanel::OnMouseLeave, NULL, this);
+    child->Disconnect(wxEVT_ENTER_WINDOW, (wxObjectEventFunction)&wxRibbonPanel::OnMouseEnterChild, NULL, this);
+    child->Disconnect(wxEVT_LEAVE_WINDOW, (wxObjectEventFunction)&wxRibbonPanel::OnMouseLeaveChild, NULL, this);
 
     wxRibbonControl::RemoveChild(child);
 }
@@ -530,6 +548,10 @@ bool wxRibbonPanel::ShowExpanded()
     {
         return false;
     }
+    if(m_expanded_dummy != NULL || m_expanded_panel != NULL)
+    {
+        return false;
+    }
 
     wxSize size = GetBestSize();
     wxPoint pos = GetExpandedPosition(wxRect(GetScreenPosition(), GetSize()),
@@ -551,13 +573,26 @@ bool wxRibbonPanel::ShowExpanded()
     // This approach has a problem though - when the panel is reinserted into
     // its original parent, it'll be at a different position in the child list
     // and thus assume a new position.
-    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-                  node;
-                  node = node->GetNext())
+    // NB: Children iterators not used as behaviour is not well defined
+    // when iterating over a container which is being emptied
+    while(!GetChildren().IsEmpty())
     {
-        wxWindow *child = node->GetData();
+        wxWindow *child = GetChildren().GetFirst()->GetData();
         child->Reparent(m_expanded_panel);
         child->Show();
+    }
+
+    // Mouse enter / leave events for children will now be sent to the new
+    // panel, so transfer ownership of their hover counts to it.
+    if(m_mouse_hovered_self)
+    {
+        m_expanded_panel->m_hovered_count += (m_hovered_count - 1);
+        m_hovered_count = 1;
+    }
+    else
+    {
+        m_expanded_panel->m_hovered_count += m_hovered_count;
+        m_hovered_count = 0;
     }
 
     // TODO: Move sizer to new panel
@@ -570,15 +605,89 @@ bool wxRibbonPanel::ShowExpanded()
     return true;
 }
 
+bool wxRibbonPanel::ShouldSendEventToDummy(wxEvent& evt)
+{
+    // For an expanded panel, filter events between being sent up to the
+    // floating top level window or to the dummy panel sitting in the ribbon
+    // bar.
+
+    // TODO: Make this less hacky, more versitile, etc.
+    return evt.GetEventType() == wxEVT_COMMAND_RIBBONBUTTON_CLICKED
+        || evt.GetEventType() == wxEVT_COMMAND_RIBBONBUTTON_DROPDOWN_CLICKED;
+}
+
+bool wxRibbonPanel::TryAfter(wxEvent& evt)
+{
+    if(m_expanded_dummy && ShouldSendEventToDummy(evt))
+    {
+        wxPropagateOnce propagateOnce(evt);
+        return m_expanded_dummy->GetEventHandler()->ProcessEvent(evt);
+    }
+    else
+    {
+        return wxRibbonControl::TryAfter(evt);
+    }
+}
+
+static bool IsAncestorOf(wxWindow *ancestor, wxWindow *window)
+{
+    while(window != NULL)
+    {
+        wxWindow *parent = window->GetParent();
+        if(parent == ancestor)
+            return true;
+        else
+            window = parent;
+    }
+    return false;
+}
+
 void wxRibbonPanel::OnKillFocus(wxFocusEvent& evt)
 {
     if(m_expanded_dummy)
     {
         wxWindow *receiver = evt.GetWindow();
-        if(receiver == NULL || receiver != m_expanded_dummy)
+        if(IsAncestorOf(this, receiver))
+        {
+            m_child_with_focus = receiver;
+            receiver->Connect(wxEVT_KILL_FOCUS,
+                wxFocusEventHandler(wxRibbonPanel::OnChildKillFocus),
+                NULL, this);
+        }
+        else if(receiver == NULL || receiver != m_expanded_dummy)
         {
             HideExpanded();
         }
+    }
+}
+
+void wxRibbonPanel::OnChildKillFocus(wxFocusEvent& evt)
+{
+    if(m_child_with_focus == NULL)
+        return; // Should never happen, but a check can't hurt
+
+    m_child_with_focus->Disconnect(wxEVT_KILL_FOCUS,
+      wxFocusEventHandler(wxRibbonPanel::OnChildKillFocus), NULL, this);
+    m_child_with_focus = NULL;
+
+    wxWindow *receiver = evt.GetWindow();
+    if(receiver == this || IsAncestorOf(this, receiver))
+    {
+        m_child_with_focus = receiver;
+        receiver->Connect(wxEVT_KILL_FOCUS,
+            wxFocusEventHandler(wxRibbonPanel::OnChildKillFocus), NULL, this);
+        evt.Skip();
+    }
+    else if(receiver == NULL || receiver != m_expanded_dummy)
+    {
+        HideExpanded();
+        // Do not skip event, as the panel has been de-expanded, causing the
+        // child with focus to be reparented (and hidden). If the event
+        // continues propogation then bad things happen.
+    }
+    else
+    {
+        evt.Skip();
     }
 }
 
@@ -597,13 +706,26 @@ bool wxRibbonPanel::HideExpanded()
     }
 
     // Move children back to original panel
-    for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-                  node;
-                  node = node->GetNext())
+    // NB: Children iterators not used as behaviour is not well defined
+    // when iterating over a container which is being emptied
+    while(!GetChildren().IsEmpty())
     {
-        wxWindow *child = node->GetData();
+        wxWindow *child = GetChildren().GetFirst()->GetData();
         child->Reparent(m_expanded_dummy);
         child->Hide();
+    }
+
+    // Mouse enter / leave events for children will now be sent to the dummy,
+    // so transfer ownership of their hover counts to it.
+    if(m_mouse_hovered_self)
+    {
+        m_expanded_dummy->m_hovered_count += (m_hovered_count - 1);
+        m_hovered_count = 1;
+    }
+    else
+    {
+        m_expanded_dummy->m_hovered_count += m_hovered_count;
+        m_hovered_count = 0;
     }
 
     // TODO: Move sizer back

@@ -89,9 +89,15 @@ protected:
     void OnEraseBackground(wxEraseEvent& evt);
     void OnPaint(wxPaintEvent& evt);
     void OnMouseEnter(wxMouseEvent& evt);
+    void OnMouseEnterChild(wxMouseEvent& evt);
     void OnMouseLeave(wxMouseEvent& evt);
+    void OnMouseLeaveChild(wxMouseEvent& evt);
     void OnMouseClick(wxMouseEvent& evt);
     void OnKillFocus(wxFocusEvent& evt);
+    void OnChildKillFocus(wxFocusEvent& evt);
+
+    bool ShouldSendEventToDummy(wxEvent& evt);
+    virtual bool TryAfter(wxEvent& evt);
 
     void CommonInit(const wxString& label, const wxBitmap& icon, long style);
     static wxRect GetExpandedPosition(wxRect panel,
@@ -104,9 +110,11 @@ protected:
     wxDirection m_preferred_expand_direction;
     wxRibbonPanel* m_expanded_dummy;
     wxRibbonPanel* m_expanded_panel;
+    wxWindow* m_child_with_focus;
     long m_flags;
     long m_hovered_count;
     bool m_minimised;
+    bool m_mouse_hovered_self;
 
 #ifndef SWIG
     DECLARE_CLASS(wxRibbonPanel)
