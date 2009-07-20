@@ -349,19 +349,7 @@ protected:
 
     void SendEvent(wxFileSystemWatcherEvent& evt)
     {
-        switch (evt.GetChangeType())
-        {
-        case wxFSW_EVENT_WARNING:
-            m_watcher->OnWarning(evt.GetErrorDescription());
-            return;
-        case wxFSW_EVENT_ERROR:
-            m_watcher->OnError(evt.GetErrorDescription());
-            return;
-        default:
-            m_watcher->OnChange(evt.GetChangeType(), evt.GetPath(),
-                                                        evt.GetNewPath());
-            return;
-        }
+        m_watcher->GetOwner()->ProcessEvent(evt);
     }
 
     int ReadEventsToBuf(char* buf, int size)
