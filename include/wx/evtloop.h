@@ -19,9 +19,9 @@
 // wxEventLoopSource: source of i/o for wxEventLoop
 // ----------------------------------------------------------------------------
 
-#if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
-
 #define wxTRACE_Event_Source "EventSource"
+
+#if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
 
 // handler used to process events on event loop sources
 class WXDLLIMPEXP_BASE wxEventLoopSourceHandler
@@ -314,6 +314,7 @@ protected:
     bool m_isInsideYield;
     long m_eventsToProcessInsideYield;
 
+#if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
     virtual bool DoAddSource(const wxEventLoopSource&,
                              wxEventLoopSourceHandler*, int)
     {
@@ -327,7 +328,6 @@ protected:
         return false;
     }
 
-#if defined(__UNIX__) && wxUSE_CONSOLE_EVENTLOOP
     WX_DECLARE_HASH_MAP(wxEventLoopSource, wxEventLoopSourceHandler*,
             wxEventLoopSource::Hash, wxEventLoopSource::Equal,
             wxEventLoopSourceHashMap);
