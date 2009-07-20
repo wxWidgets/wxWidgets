@@ -32,10 +32,10 @@
 using namespace std;
 
 // helper to print wxFileName. needed by CPPUNIT_ASSERT_EQUAL
-ostream& operator<<(ostream& out, const wxFileName& fn)
-{
-    return out << fn.GetFullPath();
-}
+extern ostream& operator<<(ostream& out, const wxFileName& fn);
+//{
+//    return out << fn.GetFullPath();
+//}
 
 // class generating file system events
 class EventGenerator
@@ -244,6 +244,8 @@ public:
 
     void OnIdle(wxIdleEvent& /*evt*/)
     {
+//      wxLogDebug(wxString::Format("--- OnIdle %d ---", m_count));
+
         bool more = Action();
         m_count++;
 
@@ -251,8 +253,6 @@ public:
         {
             SendIdle();
         }
-
-//        wxLogDebug(wxString::Format("--- OnIdle %d ---", m_count));
     }
 
     // returns whether we should produce more idle events
@@ -478,7 +478,7 @@ void FileSystemWatcherTestCase::TestEventCreate()
 
     EventTester tester;
 
-    wxLogDebug("TestEventCreate tester created()");
+    wxLogTrace(wxTRACE_FSWATCHER, "TestEventCreate tester created()");
 
     tester.Run();
 }
@@ -593,7 +593,12 @@ void FileSystemWatcherTestCase::TestEventAccess()
     public:
         virtual bool GenerateEvent()
         {
-            CPPUNIT_ASSERT(eg.ReadFile());
+            // funny, ReadFile generates ACCESS in inotify and under MSW
+            // it does not... Touch generates MODIFY, but at least the test
+            // doesn't pass for now instead of hanging
+            CPPUNIT_ASSERT(eg.TouchFile());
+
+//            CPPUNIT_ASSERT(eg.ReadFile());
             return true;
         }
 
