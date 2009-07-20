@@ -333,9 +333,6 @@ void wxAppConsoleBase::WakeUpIdle()
 
 bool wxAppConsoleBase::ProcessIdle()
 {
-    // process pending wx events before sending idle events
-    ProcessPendingEvents();
-
     // synthesize an idle event and check if more of them are needed
     wxIdleEvent event;
     event.SetEventObject(this);

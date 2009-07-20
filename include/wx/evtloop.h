@@ -197,6 +197,12 @@ protected:
     bool m_shouldExit;
 
 private:
+    // process all already pending events and dispatch a new one (blocking
+    // until it appears in the event queue if necessary)
+    //
+    // returns the return value of Dispatch()
+    bool ProcessEvents();
+
     wxDECLARE_NO_COPY_CLASS(wxEventLoopManual);
 };
 
