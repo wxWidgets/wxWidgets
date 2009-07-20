@@ -62,17 +62,17 @@ bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
     if (!path.FileExists() && !path.DirExists())
         return false;
 
-    wxFileName path2 = path;
-    if ( !path2.Normalize() )
+	wxFileName path2(path);
+	if ( !path2.Normalize() )
     {
         wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
-                                                path2.GetFullPath()));
+                                     path2.GetFullPath()));
         return false;
     }
 
     wxString canonical = path2.GetFullPath();
     wxCHECK_MSG(m_watches.find(canonical) == m_watches.end(), false,
-                    wxString::Format("path %s is already watched", canonical));
+                wxString::Format("path %s is already watched", canonical));
 
     // XXX now that I see it, it should be different structure
     // than wxFSWatchEntry and then subclasses would delete wxFSWatchEntry
@@ -91,11 +91,11 @@ bool wxFileSystemWatcherBase::Add(const wxFileName& path, int events)
 bool wxFileSystemWatcherBase::Remove(const wxFileName& path)
 {
     // normalize
-    wxFileName path2 = path;
+    wxFileName path2(path);
     if ( !path2.Normalize() )
     {
     	wxFAIL_MSG(wxString::Format("Unable to normalize path '%s'",
-    													path2.GetFullPath()));
+                                     path2.GetFullPath()));
     	return false;
     }
 
@@ -103,7 +103,7 @@ bool wxFileSystemWatcherBase::Remove(const wxFileName& path)
     wxString canonical = path2.GetFullPath();
     wxFSWatchEntries::iterator it = m_watches.find(canonical);
     wxCHECK_MSG(it != m_watches.end(), false,
-    				wxString::Format("path %s is not watched", canonical));
+                wxString::Format("path %s is not watched", canonical));
 
     // remove
     wxFSWatchEntry* watch = it->second;

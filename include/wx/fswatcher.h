@@ -131,9 +131,9 @@ public:
     virtual wxEvent* Clone() const
     {
         wxFileSystemWatcherEvent* evt = new wxFileSystemWatcherEvent(*this);
-        evt->m_errorMsg = m_errorMsg.c_str();
-        evt->m_path = wxFileName(m_path.GetFullPath().c_str());
-        evt->m_newPath = wxFileName(m_newPath.GetFullPath().c_str());
+        evt->m_errorMsg = m_errorMsg.Clone();
+        evt->m_path = wxFileName(m_path.GetFullPath().Clone());
+        evt->m_newPath = wxFileName(m_newPath.GetFullPath().Clone());
 		return evt;
     }
 
@@ -250,7 +250,7 @@ public:
      */
     int GetWatchedPaths(wxArrayString* paths) const;
 
-    wxEvtHandler* GetOwner()
+    wxEvtHandler* GetOwner() const
     {
         return m_owner;
     }
@@ -266,9 +266,9 @@ public:
 protected:
 
     /**
-     * Function resposible for creating platform specific wxFSWatchEntry. This is
-     * supposed to be simple factory function so it should never fail (i.e.
-     * never return a NULL pointer)
+     * Function resposible for creating platform specific wxFSWatchEntry. This
+     * is supposed to be simple factory function so it should never fail
+     * (i.e. never return a NULL pointer )
      */
     virtual wxFSWatchEntry* CreateWatch(const wxFileName& path, int events) = 0;
 
@@ -278,7 +278,7 @@ protected:
     virtual bool DoAdd(wxFSWatchEntry& watch) = 0;
 
     /**
-     * Actual removing of wxFSWatchEntry from list of watched paths
+     * Actual removing of wxFSWatchEntry from list of watched paths.
      */
     virtual bool DoRemove(wxFSWatchEntry& watch) = 0;
 

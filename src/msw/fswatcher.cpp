@@ -19,6 +19,7 @@
 
 #include "wx/fswatcher.h"
 #include "wx/thread.h"
+#include "wx/sharedptr.h"
 #include "wx/msw/private.h"
 
 // ============================================================================
@@ -44,6 +45,7 @@ public:
 
     ~wxFSWatchEntry()
     {
+		wxLogTrace(wxTRACE_FSWATCHER, "Deleting entry '%s'", m_path.GetFullPath());
         if (m_handle != INVALID_HANDLE_VALUE)
         {
             if (!CloseHandle(m_handle))
@@ -105,20 +107,21 @@ private:
                                    NULL);
         if (handle == INVALID_HANDLE_VALUE)
         {
-            wxLogSysError(_("Unable to open dir '%s'"), path);
+            wxLogSysError(_("Failed to open directory \"%s\" for monitoring."),
+                            path);
         }
 
         return handle;
     }
 
-    wxFileName m_path;
-    int m_events;
+    const wxFileName m_path;
+    const int m_events;
 
-    HANDLE m_handle;
-    char m_buffer[BUFFER_SIZE];
+    HANDLE m_handle;             // handle to opened directory
+    char m_buffer[BUFFER_SIZE];  // buffer for fs events
     OVERLAPPED* m_overlapped;
 
-    DECLARE_NO_COPY_CLASS(wxFSWatchEntry);
+    wxDECLARE_NO_COPY_CLASS(wxFSWatchEntry);
 };
 
 
@@ -127,7 +130,8 @@ private:
 // ============================================================================
 
 // open dir HANDLE => wxFSWatchEntry* map
-WX_DECLARE_VOIDPTR_HASH_MAP(wxFSWatchEntry*, wxFSWatchEntryHandles);
+WX_DECLARE_VOIDPTR_HASH_MAP(wxSharedPtr<wxFSWatchEntry>,wxFSWatchEntryHandles);
+
 
 class wxIOCPService
 {
@@ -149,16 +153,17 @@ public:
         }
     }
 
-    // associates a handle with completion port
-    bool Add(HANDLE handle, void* completionKey)
+    // associates a wxFSWatchEntry with completion port
+    bool Add(wxSharedPtr<wxFSWatchEntry> watch)
     {
         wxCHECK_MSG( m_iocp != INVALID_HANDLE_VALUE, false, "IOCP not init" );
-        wxCHECK_MSG( handle != INVALID_HANDLE_VALUE, false, "Invalid handle" );
+        wxCHECK_MSG( watch->IsOk(), false, "Invalid watch" );
 
-        wxLogTrace(wxTRACE_FSWATCHER, "Adding handle=%p", handle);
+        wxLogTrace(wxTRACE_FSWATCHER, "Adding handle=%p", watch->GetHandle());
 
         // associate with IOCP
-        HANDLE ret = CreateIoCompletionPort(handle, m_iocp, (ULONG_PTR)completionKey, 0);
+        HANDLE ret = CreateIoCompletionPort(watch->GetHandle(), m_iocp,
+                                            (ULONG_PTR)watch.get(), 0);
         if (ret == NULL)
         {
             wxLogSysError(_("Unable to associate handle with "
@@ -167,11 +172,13 @@ public:
         }
         else if (ret != m_iocp)
         {
-            wxFAIL_MSG(_("Unexptedly new I/O completion port was created"));
+            wxFAIL_MSG(_("Unexpectedly new I/O completion port was created"));
             return false;
         }
 
-        return true;
+        // add to watch map
+        wxFSWatchEntryHandles::value_type val(watch->GetHandle(), watch);
+        return m_watchMap.insert(val).second;
     }
 
     // post completion packet
@@ -181,7 +188,7 @@ public:
         int ret = PostQueuedCompletionStatus(m_iocp, 0, NULL, NULL);
         if (!ret)
         {
-            wxLogSysError(_("Unable to post completion packet"));
+            wxLogSysError(_("Unable to post completion status"));
         }
 
         return ret;
@@ -189,18 +196,17 @@ public:
 
     // Wait for completion status to arrive.
     // This function can block forever in it's wait for completion status.
-    // Use PostEmptyStatus() to wake it up (and end the thread)
+    // Use PostEmptyStatus() to wake it up (and end the worker thread)
     bool GetStatus(unsigned long* count, wxFSWatchEntry** watch,
                    OVERLAPPED** overlapped)
     {
         wxCHECK_MSG( m_iocp != INVALID_HANDLE_VALUE, false, "IOCP not init" );
         wxCHECK_MSG( count != NULL, false, "Null out parameter 'count'");
-        wxCHECK_MSG( watch != NULL, false,
-                     "Null out parameter 'watch'");
+        wxCHECK_MSG( watch != NULL, false, "Null out parameter 'watch'");
         wxCHECK_MSG( overlapped != NULL, false,
                      "Null out parameter 'overlapped'");
 
-        wxLogTrace(wxTRACE_FSWATCHER, "Waiting on a completion port...");
+        wxLogTrace(wxTRACE_FSWATCHER, "[iocp] Waiting on a completion port...");
 
         int ret = GetQueuedCompletionStatus(m_iocp, count,
                                             (PULONG_PTR)watch,
@@ -210,8 +216,13 @@ public:
             wxLogSysError(_("Unable to dequeue completion packet"));
         }
 
-        //wxLogTrace(wxTRACE_FSWATCHER, "Read packet: count=%u, key=%p, overlapped=%p",
-        //          *count, *watch, *overlapped);
+        wxLogTrace(wxTRACE_FSWATCHER, "[iocp] Read packet: count=%u, key=%p,"
+                   " overlapped=%p", *count, *watch, *overlapped);
+        if (*watch)
+        {
+            wxLogTrace(wxTRACE_FSWATCHER, "[iocp] Use count=%d",
+                   m_watchMap.find((*watch)->GetHandle())->second.use_count());
+        }
 
         return ret;
     }
@@ -229,6 +240,7 @@ protected:
     }
 
     HANDLE m_iocp;
+    wxFSWatchEntryHandles m_watchMap;
 };
 
 
@@ -244,9 +256,9 @@ public:
     // finishes this thread
     bool Finish()
     {
-        wxLogTrace(wxTRACE_FSWATCHER, "Post empty status!");
+        wxLogTrace(wxTRACE_FSWATCHER, "Posting empty status!");
 
-        // send "empty" packet to ourselves, just to wake
+        // send "empty" packet to i/o completion port, just to wake
         return m_iocp->PostEmptyStatus();
     }
 
@@ -270,10 +282,10 @@ protected:
     void ProcessNativeEvent(const FILE_NOTIFY_INFORMATION& e,
                             wxFSWatchEntry* watch)
     {
-        wxLogTrace(wxTRACE_FSWATCHER, "Event: off=%d, action=%d, len=%d, name='%s'",
-                  e.NextEntryOffset, e.Action, e.FileNameLength, e.FileName);
+        wxLogTrace(wxTRACE_FSWATCHER, "[iocp] Event: off=%d, action=%d,"
+                   " len=%d, name='%s'",
+                   e.NextEntryOffset, e.Action, e.FileNameLength, e.FileName);
 
-        // CHECK can we have multiple flags set? rather no, but check
         int flags = Native2WatcherFlags(e.Action);
         if (flags & wxFSW_EVENT_WARNING || flags & wxFSW_EVENT_ERROR)
         {
@@ -349,9 +361,6 @@ protected:
             wxLogDebug("mapping: %d=%d", flag_mapping[i][0],
                                             flag_mapping[i][1]);
 #endif
-            // TODO need to account for more flags set at once?
-            // rather not, because actions have numbers 1,2,3...
-            // it wouldn't work as flags
             if (flags == flag_mapping[i][0])
                 return flag_mapping[i][1];
         }
@@ -375,7 +384,7 @@ public:
 
     ~wxFSWatcherService()
     {
-        // order the thread to finish & wait
+        // order the worker thread to finish & wait
         m_workerThread.Finish();
         wxThread::ExitCode rc = m_workerThread.Wait();
         if (rc != 0)
@@ -383,9 +392,7 @@ public:
             wxLogError(_("Ungraceful wokrer thread termination"));
         }
 
-        // we need to remove them as the last thing here, because IOCP thread
-        // may still try to access some of them
-        // (actually watches should already be removed)
+        // remove all watches
         (void) RemoveAll();
     }
 
@@ -393,11 +400,9 @@ public:
     bool RemoveAll()
     {
         // TODO add _logic_ remove?
-        wxFSWatchEntryHandles::iterator it = m_watchMap.begin();
-        for ( ; it != m_watchMap.end(); ++it )
-        {
-            delete it->second;
-        }
+
+        // this is enough, we use shared_ptr for wxFSWatchEntry, so they are
+        // removed when there are no references left to them
         m_watchMap.clear();
 
         return true;
@@ -431,16 +436,21 @@ public:
         wxCHECK_MSG( m_watchMap.find(watch->GetHandle()) == m_watchMap.end(),
                      false, "Path '%s' is already watched");
 
+        // conctruct shared_ptr
+        // TODO it'd probably be the best to use shared_ptr at all times, but
+        // this requires changing the API for all platforms. think about it
+        wxSharedPtr<wxFSWatchEntry> ptr(watch);
+
         // setting up wait for directory changes
-        if (!DoSetUpWatch(*watch))
+        if (!DoSetUpWatch(*ptr))
             return false;
 
         // associating handle with completion port
-        if (!m_iocp.Add(watch->GetHandle(), watch))
+        if (!m_iocp.Add(ptr))
             return false;
 
         // add watch to our map (always succeedes, checked above)
-        wxFSWatchEntryHandles::value_type val(watch->GetHandle(), watch);
+        wxFSWatchEntryHandles::value_type val(ptr->GetHandle(), ptr);
         return m_watchMap.insert(val).second;
     }
 
@@ -450,18 +460,19 @@ public:
         // TODO logic implementation, as for now we only have _basic_ cleanup
 
         m_watchMap.erase(watch->GetHandle());
-        delete watch;
-
-        return true;
+		return true;
     }
 
     // TODO ensuring that we have not already set watch for this handle/dir?
     bool SetUpWatch(wxFSWatchEntry& watch)
     {
-        wxCHECK_MSG( watch.GetHandle() != INVALID_HANDLE_VALUE, false,
-                     "Unitialized watch: invalid handle" );
-        wxCHECK_MSG( m_watchMap.find(watch.GetHandle()) != m_watchMap.end(),
-                     false, "Watch not on the watch list");
+        wxCHECK_MSG( watch.IsOk(), false, "Invalid watch" );
+        if (m_watchMap.find(watch.GetHandle()) == m_watchMap.end())
+        {
+            wxLogTrace(wxTRACE_FSWATCHER, "Watch for path='%s' not on the watch"
+                        " list", watch.GetPath().GetFullPath());
+            return false;
+        }
 
         wxLogTrace(wxTRACE_FSWATCHER, "Setting up watch for file system changes...");
         return DoSetUpWatch(watch);
@@ -519,27 +530,19 @@ bool wxIOCPThread::ReadEvents()
 
     // this is our exit condition, so we return false
     if (!count || !watch)
-    {
         return false;
-    }
 
-    wxLogTrace(wxTRACE_FSWATCHER, "Read entry: path='%s'", watch->GetPath().GetFullPath());
-
-    // reissue the watch. ignore possible errors, we will return true anyway
-    (void) m_service->SetUpWatch(*watch);
+    wxLogTrace(wxTRACE_FSWATCHER, "[iocp] Read entry: path='%s'", watch->GetPath().GetFullPath());
 
     // extract events from buffer
-    // we copy buffer because we cannot ensure someone will not remove a watch
-    // from event handler CHECK maybe use wxMemoryBuffer? it'd be cool
-    char buffer[wxFSWatchEntry::BUFFER_SIZE];
-    memcpy(buffer, watch->GetBuffer(), sizeof(buffer));
-	char* memory = buffer;
+	const char* memory = static_cast<const char*>(watch->GetBuffer());
     int offset = 0;
     int event_count = 0;
     do
     {
         event_count++;
-        FILE_NOTIFY_INFORMATION* e = static_cast<FILE_NOTIFY_INFORMATION*>((void*)memory);
+        const FILE_NOTIFY_INFORMATION* e =
+              static_cast<const FILE_NOTIFY_INFORMATION*>((const void*)memory);
 
         // process one native event
         ProcessNativeEvent(*e, watch);
@@ -549,12 +552,15 @@ bool wxIOCPThread::ReadEvents()
     }
     while (offset);
 
+    // reissue the watch. ignore possible errors, we will return true anyway
+    (void) m_service->SetUpWatch(*watch);
+
     return true;
 }
 
 void wxIOCPThread::SendEvent(wxFileSystemWatcherEvent& evt)
 {
-    wxLogTrace(wxTRACE_FSWATCHER, "EVT: %s", evt.ToString());
+    wxLogTrace(wxTRACE_FSWATCHER, "[iocp] EVT: %s", evt.ToString());
     m_service->SendEvent(evt);
 }
 
@@ -574,6 +580,7 @@ wxMSWFileSystemWatcher::wxMSWFileSystemWatcher(const wxFileName& path,
 {
     if (!Init())
         return;
+
     Add(path, events);
 }
 
@@ -585,13 +592,13 @@ bool wxMSWFileSystemWatcher::Init()
     {
         delete m_service;
     }
+
     return ret;
 }
 
 wxMSWFileSystemWatcher::~wxMSWFileSystemWatcher()
 {
-    // it is subclass resposibility to remove all paths - we own wxFSWatchEntry
-    // structures
+    // it is subclass resposibility to remove all paths
     RemoveAll();
     delete m_service;
 }
